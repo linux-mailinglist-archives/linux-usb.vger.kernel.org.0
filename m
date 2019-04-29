@@ -2,78 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5F1DF75
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 11:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 552E9DF78
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 11:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727639AbfD2Jat (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 05:30:49 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:45497 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727259AbfD2Jas (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 05:30:48 -0400
-Received: by mail-lf1-f67.google.com with SMTP id t11so7286144lfl.12
-        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 02:30:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=U2nlqxL152YLC8xQ5ty7B2o8ABIvpmarGKYSJrerfTo=;
-        b=sAxKMLc+lx3FYUAmSsiS1fBd5Xs1/bHqFbq0F2uIlhsPsl5FxcK2QBpB2wWsc+pX5S
-         oMZC0XbiQq1FFedcBU5D6kTigkStFG4cHCd+AU9y3MJxsRlyw7frhMGxMctEjHKJe2BB
-         hVvmBBTHy1RtOYb3k+RE4zqLTvhk9hb6QNvRwPE/qfc80G/BjAmwxnBQiS0BURUvNfab
-         5aepfGkGH7IJCcPzhTKX1VYSprChg2duXZ2NWBj1mGRvhj2O6ad2QrBrfWyPju5hLy0L
-         bHieE0qWX/468OZVJV1B22K1IB/giL0Fkq5nzk84zCdv3FnK0euQ9Z1ima0v1K0RXcmP
-         AgeA==
-X-Gm-Message-State: APjAAAXR3szlylWTKcy16ZqMOtv0fwGq6rKa9Fgvd5SYNPXZnaeWV6nZ
-        iPkj/7lyamFAAhCMnA1gksM=
-X-Google-Smtp-Source: APXvYqwezKoTo4PC9+FCnNOn+sdBge4JnquQhZ5US/qYRjHE1FejPm1/cxsoZXKkTNOofYIIlnCzdA==
-X-Received: by 2002:ac2:538a:: with SMTP id g10mr23278229lfh.141.1556530247064;
-        Mon, 29 Apr 2019 02:30:47 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id q78sm643054lje.93.2019.04.29.02.30.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 02:30:46 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.91)
-        (envelope-from <johan@kernel.org>)
-        id 1hL2cZ-000326-AT; Mon, 29 Apr 2019 11:30:47 +0200
-Date:   Mon, 29 Apr 2019 11:30:47 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH 0/5] USB: fix tty unthrottle races
-Message-ID: <20190429093047.GH26546@localhost>
-References: <20190425160540.10036-1-johan@kernel.org>
+        id S1727726AbfD2JbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 05:31:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50240 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727259AbfD2Ja7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Apr 2019 05:30:59 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8D6BE206BF;
+        Mon, 29 Apr 2019 09:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556530259;
+        bh=VO7Rb4W3ogbvtrPaSlbogEaUH6r/2rtnFPYsqHdsg3Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2KTt+cb/EwBIgKOgpGvZWIWog1sv563ZGuMl65pg2PSZAKQvdJ58Wbs4HUAvaVdSX
+         SNTYt0R/m55Q8Fq5ePAFehj3YUoKuqEQ65PVDaLYnz/hlktVtFibZB8YosEnZz6Eny
+         zE5NinJMZJ0jHDBUtYh+iizrYjSlCaQv+GbqF2JM=
+Date:   Mon, 29 Apr 2019 11:30:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Biju Das <biju.das@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Simon Horman <horms@verge.net.au>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH V5 06/13] dt-bindings: usb: renesas_usbhs: Add support
+ for r8a77470
+Message-ID: <20190429093056.GA11049@kroah.com>
+References: <1554907730-14792-1-git-send-email-biju.das@bp.renesas.com>
+ <1554907730-14792-7-git-send-email-biju.das@bp.renesas.com>
+ <OSBPR01MB2103DD45B93A448E2C8C6911B8390@OSBPR01MB2103.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190425160540.10036-1-johan@kernel.org>
+In-Reply-To: <OSBPR01MB2103DD45B93A448E2C8C6911B8390@OSBPR01MB2103.jpnprd01.prod.outlook.com>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 25, 2019 at 06:05:35PM +0200, Johan Hovold wrote:
-> This series fixes a couple of long-standing issues in USB serial and
-> cdc-acm which essentially share the same implementation.
+On Mon, Apr 29, 2019 at 09:16:01AM +0000, Biju Das wrote:
+> Hi Greg,
 > 
-> As noted by Oliver a few years back, read-urb completion can race with
-> unthrottle() running on another CPU and this can potentially lead to
-> memory corruption. This particular bug in cdc-acm was unfortunately
-> reintroduced a year later.
-> 
-> There's also a second race due to missing memory barriers which could
-> theoretically lead to the port staying throttled until reopened on
-> weakly ordered systems. A second set of memory barriers should address
-> that.
+> Does this patch looks ok to you? 
 
-> Note that the cdc-acm patches have so far only been compile tested.
+Sure, but as it was never sent to me, why would you ask me?  :)
 
-I've tested also the cdc-acm changes now.
-
-So unless anyone complains, I'll apply the USB-serial ones in a few
-days, and maybe Greg can pick up the cdc-acm patches.
-
-Johan
