@@ -2,133 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB732E7B4
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 18:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BD1E824
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 18:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728629AbfD2Q0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 12:26:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52118 "EHLO mail.kernel.org"
+        id S1728781AbfD2QwQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 12:52:16 -0400
+Received: from nat-hk.nvidia.com ([203.18.50.4]:25119 "EHLO nat-hk.nvidia.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728518AbfD2Q0I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Apr 2019 12:26:08 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8DC32173E;
-        Mon, 29 Apr 2019 16:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556555167;
-        bh=bj7+n3P2zt1GsKkIXPcHMBO06qBROIEGOQ+zCdPaqFs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Yxj4nj4RhtP2Dp8y/Di6Rzz6NsAcd3KJTq9TajPpD+r5Gpv8iiusYuRWYLRP/Ev17
-         OJkUjzbPoUFvwDC86helwDwR7/ou0qo/ZS3tLiMZsOVx+/oeRBhg1DxHke921YYTcA
-         i+JXFDh2Yjnbl5k3YHlkRVjeV0rA3JZobObf87P8=
-Received: by mail-qt1-f181.google.com with SMTP id b3so12574269qtc.12;
-        Mon, 29 Apr 2019 09:26:06 -0700 (PDT)
-X-Gm-Message-State: APjAAAWB39dkjkWlCN0miW3oExTEEUj5vDuePIp7AbFsbaGwXGopUKE9
-        a0TGQEw5QJXaKeXHRYef15Fl+A8QlTkcjOTcpQ==
-X-Google-Smtp-Source: APXvYqxmrpfobhstOL9g61ZfeyOcZLaz4w2E+msmiFaUvM+oogy+DnVE7G6vyrl1NOxtstfN8MjFYEzeOYV5F2BJoGI=
-X-Received: by 2002:a0c:d2f2:: with SMTP id x47mr48617546qvh.90.1556555166043;
- Mon, 29 Apr 2019 09:26:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <1556261237-13823-1-git-send-email-chunfeng.yun@mediatek.com>
- <1556261237-13823-4-git-send-email-chunfeng.yun@mediatek.com>
- <20190426204906.GB15074@bogus> <1556453788.10179.224.camel@mhfsdcap03>
-In-Reply-To: <1556453788.10179.224.camel@mhfsdcap03>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 29 Apr 2019 11:25:54 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKXKRetoy4u_yAMgS+RA0vaRhzjR0zpLjKMtgRvFHXn7A@mail.gmail.com>
-Message-ID: <CAL_JsqKXKRetoy4u_yAMgS+RA0vaRhzjR0zpLjKMtgRvFHXn7A@mail.gmail.com>
-Subject: Re: [PATCH v4 3/6] dt-bindings: usb: mtu3: add properties about USB
- Role Switch
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1728520AbfD2QwP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Apr 2019 12:52:15 -0400
+Received: from hkpgpgate101.nvidia.com (Not Verified[10.18.92.100]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cc72bc60000>; Tue, 30 Apr 2019 00:52:23 +0800
+Received: from HKMAIL101.nvidia.com ([10.18.16.10])
+  by hkpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 29 Apr 2019 09:52:10 -0700
+X-PGP-Universal: processed;
+        by hkpgpgate101.nvidia.com on Mon, 29 Apr 2019 09:52:10 -0700
+Received: from HKMAIL104.nvidia.com (10.18.16.13) by HKMAIL101.nvidia.com
+ (10.18.16.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 29 Apr
+ 2019 16:52:10 +0000
+Received: from NAM05-BY2-obe.outbound.protection.outlook.com (104.47.50.53) by
+ HKMAIL104.nvidia.com (10.18.16.13) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Mon, 29 Apr 2019 16:52:10 +0000
+Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.177.125.216) by
+ BYAPR12MB2982.namprd12.prod.outlook.com (20.178.53.19) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1835.12; Mon, 29 Apr 2019 16:52:07 +0000
+Received: from BYAPR12MB2727.namprd12.prod.outlook.com
+ ([fe80::4d1a:e522:4592:ce22]) by BYAPR12MB2727.namprd12.prod.outlook.com
+ ([fe80::4d1a:e522:4592:ce22%5]) with mapi id 15.20.1835.016; Mon, 29 Apr 2019
+ 16:52:07 +0000
+From:   Ajay Gupta <ajayg@nvidia.com>
+To:     Wei Yongjun <weiyongjun1@huawei.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
+Subject: RE: [PATCH -next] usb: typec: ucsi: ccg: fix missing unlock on error
+ in ccg_cmd_write_flash_row()
+Thread-Topic: [PATCH -next] usb: typec: ucsi: ccg: fix missing unlock on error
+ in ccg_cmd_write_flash_row()
+Thread-Index: AQHU/oV5o0CCDtyt+EyUkiwVnQnz76ZTWIGQ
+Date:   Mon, 29 Apr 2019 16:52:07 +0000
+Message-ID: <BYAPR12MB2727BC9EE576B4FEE9AD3A19DC390@BYAPR12MB2727.namprd12.prod.outlook.com>
+References: <20190429122630.59334-1-weiyongjun1@huawei.com>
+In-Reply-To: <20190429122630.59334-1-weiyongjun1@huawei.com>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-04-29T16:52:06.4504134Z;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic;
+ Sensitivity=Unrestricted
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ajayg@nvidia.com; 
+x-originating-ip: [216.228.112.22]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 06fad105-c69d-4c57-97cd-08d6ccc3040e
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR12MB2982;
+x-ms-traffictypediagnostic: BYAPR12MB2982:
+x-microsoft-antispam-prvs: <BYAPR12MB2982609C67DFCC77540D3383DC390@BYAPR12MB2982.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3826;
+x-forefront-prvs: 0022134A87
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(346002)(366004)(396003)(376002)(136003)(13464003)(199004)(189003)(476003)(25786009)(6506007)(26005)(4326008)(11346002)(256004)(446003)(66446008)(102836004)(68736007)(86362001)(99286004)(52536014)(7696005)(76176011)(186003)(5660300002)(66476007)(66556008)(66946007)(73956011)(64756008)(53546011)(97736004)(486006)(14444005)(76116006)(66066001)(6436002)(6246003)(9686003)(74316002)(8936002)(14454004)(478600001)(8676002)(305945005)(53936002)(7736002)(55016002)(229853002)(33656002)(81156014)(81166006)(71190400001)(3846002)(71200400001)(2906002)(110136005)(54906003)(6116002)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB2982;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nvidia.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: qp9fMNrEL3ZlqH6imS8pWd7qAKyEFkSGtx0zdspscAr3Gagja6YRR6cfYprwhePF8h7j68muVrjsX5NeR400sMF+y17taYKYaYw00HWDbDfRV/f93VeIw/jv/PqnlfvudvNE7RkU9NXthXCvsoPqrYW7YsY4+NBBoJlb/cmt5MHnxi/AT131ZSS5dTAOn52rljfSLCRytrElVcwF7Qc86txroy9en2xaLAcGcQd177ovxa8MMuDQhm5Viqjk/q3aFRWRqf2bRTq0NQC7GgxdSXRUyMGTTKGE4wJM8a/D1a4anvztFDMmC/Y3KNnYXzJa3uxkj7aGALaVcMFSf7Kk2R2a+pRn2fAYwCqBHoN1xKK0cjcHAqDWLfCPUOEwFY9H9jZ2iJ92dBPW7cNwd9/WI0MMLtW1ummQPYL25kH9NQo=
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06fad105-c69d-4c57-97cd-08d6ccc3040e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2019 16:52:07.6506
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2982
+X-OriginatorOrg: Nvidia.com
+Content-Language: en-US
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1556556743; bh=XAj8L7i2Fnbl66s8ySCJahxYB1mMklO8odCsdcH8lKA=;
+        h=X-PGP-Universal:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
+         Message-ID:References:In-Reply-To:Accept-Language:X-MS-Has-Attach:
+         X-MS-TNEF-Correlator:msip_labels:authentication-results:
+         x-originating-ip:x-ms-publictraffictype:
+         x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
+         x-ms-traffictypediagnostic:x-microsoft-antispam-prvs:
+         x-ms-oob-tlc-oobclassifiers:x-forefront-prvs:
+         x-forefront-antispam-report:received-spf:
+         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
+         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
+         X-MS-Exchange-CrossTenant-originalarrivaltime:
+         X-MS-Exchange-CrossTenant-fromentityheader:
+         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
+         Content-Language:Content-Type:Content-Transfer-Encoding;
+        b=BJalll4gNPeDExUmKVoZJ7O4vqoXkfriHQLauDi2a0cz97eapdeCpMZLeNfQGLcMn
+         bFvS/otFuB1qJ3jzy08FPE3SO+Jqo6LQ8VEMF3O7lRI1VMY7rxMj1xcX+rRwW+UEwu
+         cT7JfHppzUyIVZ64atyXnjV+PHlL/NMrtNYdQCFip+Ct1NyDDLjsfkxWIR77SHbLB8
+         YtYqjP574loudglBHIJslWb6wlWtlgIAE4b+TraM9EVkxFKxYfhhNUbNMxIyoXcqDF
+         a+iyOqeImJuFmvWdDOL9TRfq8/bcepsngskkODvIfuXJUkk4/Wtovlwa2n1SLrK2dE
+         vD6A13hllBFHQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 28, 2019 at 7:16 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> On Fri, 2019-04-26 at 15:49 -0500, Rob Herring wrote:
-> > On Fri, Apr 26, 2019 at 02:47:14PM +0800, Chunfeng Yun wrote:
-> > > Now the USB Role Switch is supported, so add properties about it
-> > >
-> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > ---
-> > > v4: no changes
-> > > v3: no changes
-> > >
-> > > v2 changes:
-> > >   1. fix typo
-> > >   2. refer new binding about connector property
-> > > ---
-> > >  .../devicetree/bindings/usb/mediatek,mtu3.txt          | 10 ++++++++--
-> > >  1 file changed, 8 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt b/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
-> > > index 3382b5cb471d..6e004c4a89af 100644
-> > > --- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
-> > > +++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
-> > > @@ -27,7 +27,9 @@ Optional properties:
-> > >   - ranges : allows valid 1:1 translation between child's address space and
-> > >     parent's address space
-> > >   - extcon : external connector for vbus and idpin changes detection, needed
-> > > -   when supports dual-role mode.
-> > > +   when supports dual-role mode; it's consiedered valid for compatibility
-> > > +   reasons, and not allowed for new bindings, use the property
-> > > +   usb-role-switch instead.
-> > >   - vbus-supply : reference to the VBUS regulator, needed when supports
-> > >     dual-role mode.
-> > >   - pinctrl-names : a pinctrl state named "default" is optional, and need be
-> > > @@ -36,7 +38,8 @@ Optional properties:
-> > >     is not set.
-> > >   - pinctrl-0 : pin control group
-> > >     See: Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
-> > > -
-> > > + - usb-role-switch : use USB Role Switch to support dual-role switch, but
-> > > +   not extcon
-> >
-> > Coordinate with the Renesas and HiSilicon folks implementing the same
-> > thing and put this in a common spot.
-> I'll prepare a patch for it, and CC Biju and Yu
->
-> > However, I think this should not
-> > even be needed as knowing the controller capabilities (based on the
-> > compatible) and knowing the type of connector should be enough
-> > information to tell you if dual role is supported or not.
-> Some Dual-Role controller drivers already used extcon framework to
-> handle role switch, if try to support the new USB Role Switch framework,
-> the driver may want to know which way will be used.
+Hi Wei
 
-Wouldn't it know by presence of 'extcon' property or not?
+> -----Original Message-----
+> From: Wei Yongjun <weiyongjun1@huawei.com>
+> Sent: Monday, April 29, 2019 5:27 AM
+> To: Heikki Krogerus <heikki.krogerus@linux.intel.com>; Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org>; Ajay Gupta <ajayg@nvidia.com>; Wolfram Sang
+> <wsa@the-dreams.de>
+> Cc: Wei Yongjun <weiyongjun1@huawei.com>; linux-usb@vger.kernel.org;
+> kernel-janitors@vger.kernel.org
+> Subject: [PATCH -next] usb: typec: ucsi: ccg: fix missing unlock on error=
+ in
+> ccg_cmd_write_flash_row()
+>=20
+> Add the missing unlock before return from function ccg_cmd_write_flash_ro=
+w()
+> in the error handling case.
+Thanks for fixing this. The change looks good.
 
-> Sometimes users also want to use dual-role even use the type-A, such as
-> use sys interface to handle role switch, so only knowing the connector
-> type can't tell driver which way to use
+> nvpublic
+>=20
+> Fixes: 5c9ae5a87573 ("usb: typec: ucsi: ccg: add firmware flashing suppor=
+t")
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index 4632b91a04a6..9d46aa9e4e35 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -631,6 +631,7 @@ ccg_cmd_write_flash_row(struct ucsi_ccg *uc, u16 row,
+>  	ret =3D i2c_master_send(client, buf, CCG4_ROW_SIZE + 2);
+>  	if (ret !=3D CCG4_ROW_SIZE + 2) {
+>  		dev_err(uc->dev, "REG_FLASH_RW_MEM write fail %d\n", ret);
+> +		mutex_unlock(&uc->lock);
+>  		return ret < 0 ? ret : -EIO;
+>  	}
+>=20
+>=20
 
-That use case doesn't sound like something that should be in DT
-though. That would be possible for any controller that supports
-dual-role. Though perhaps that requires some specific Vbus wiring? Or
-a cable with Vbus disconnected. Either way, doesn't sound USB
-compliant.
-
-Rob
