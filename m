@@ -2,45 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E92AE04A
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 12:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AC8E08D
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 12:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727725AbfD2KKO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 06:10:14 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60412 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727428AbfD2KKO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Apr 2019 06:10:14 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 34C32AC50;
-        Mon, 29 Apr 2019 10:10:13 +0000 (UTC)
-Message-ID: <1556532601.20085.11.camel@suse.com>
-Subject: Re: [PATCH 5/5] USB: cdc-acm: clean up throttle handling
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Date:   Mon, 29 Apr 2019 12:10:01 +0200
-In-Reply-To: <20190425160540.10036-6-johan@kernel.org>
-References: <20190425160540.10036-1-johan@kernel.org>
-         <20190425160540.10036-6-johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727746AbfD2KaB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 06:30:01 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:45250 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727560AbfD2KaB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 06:30:01 -0400
+X-IronPort-AV: E=Sophos;i="5.60,409,1549897200"; 
+   d="scan'208";a="14357472"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 29 Apr 2019 19:29:59 +0900
+Received: from be1yocto.ree.adwin.renesas.com (unknown [172.29.43.62])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 12CB4401E4FA;
+        Mon, 29 Apr 2019 19:29:56 +0900 (JST)
+From:   Biju Das <biju.das@bp.renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Biju Das <biju.das@bp.renesas.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Simon Horman <horms@verge.net.au>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH RESEND] dt-bindings: usb: renesas_usbhs: Add support for r8a77470
+Date:   Mon, 29 Apr 2019 11:22:57 +0100
+Message-Id: <1556533377-8116-1-git-send-email-biju.das@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Do, 2019-04-25 at 18:05 +0200, Johan Hovold wrote:
-> Clean up the throttle implementation by dropping the redundant
-> throttle_req flag which was a remnant from back when USB serial had only
-> a single read URB, something which was later carried over to cdc-acm.
-> 
-> Also convert the throttled flag to an atomic bit flag.
-> 
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+Document support for RZ/G1C (R8A77470) SoC.
+
+Signed-off-by: Biju Das <biju.das@bp.renesas.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+ This patch is based on usb-next.
+
+ * Resending the patch to Greg and linux-usb@vger.kernel.org
+ (Ref: https://patchwork.kernel.org/patch/10894125/)
+---
+ Documentation/devicetree/bindings/usb/renesas_usbhs.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/renesas_usbhs.txt b/Documentation/devicetree/bindings/usb/renesas_usbhs.txt
+index d93b6a1..b8acc2a 100644
+--- a/Documentation/devicetree/bindings/usb/renesas_usbhs.txt
++++ b/Documentation/devicetree/bindings/usb/renesas_usbhs.txt
+@@ -6,6 +6,7 @@ Required properties:
+ 	- "renesas,usbhs-r8a7743" for r8a7743 (RZ/G1M) compatible device
+ 	- "renesas,usbhs-r8a7744" for r8a7744 (RZ/G1N) compatible device
+ 	- "renesas,usbhs-r8a7745" for r8a7745 (RZ/G1E) compatible device
++	- "renesas,usbhs-r8a77470" for r8a77470 (RZ/G1C) compatible device
+ 	- "renesas,usbhs-r8a774a1" for r8a774a1 (RZ/G2M) compatible device
+ 	- "renesas,usbhs-r8a774c0" for r8a774c0 (RZ/G2E) compatible device
+ 	- "renesas,usbhs-r8a7790" for r8a7790 (R-Car H2) compatible device
+-- 
+2.7.4
+
