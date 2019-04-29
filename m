@@ -2,106 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB77E655
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 17:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA17E509
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 16:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728573AbfD2P0T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 11:26:19 -0400
-Received: from gateway36.websitewelcome.com ([192.185.188.18]:37153 "EHLO
-        gateway36.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728214AbfD2P0T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 11:26:19 -0400
-X-Greylist: delayed 1500 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Apr 2019 11:26:18 EDT
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway36.websitewelcome.com (Postfix) with ESMTP id DB194400C4DD9
-        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 08:58:40 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id L7RohzrtrdnCeL7RohkLp1; Mon, 29 Apr 2019 09:40:00 -0500
-X-Authority-Reason: nr=8
-Received: from [189.250.54.97] (port=50000 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.91)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hL7Rm-000tKB-Vr; Mon, 29 Apr 2019 09:39:59 -0500
-Date:   Mon, 29 Apr 2019 09:39:57 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Valentina Manea <valentina.manea.m@gmail.com>,
+        id S1728395AbfD2Ood (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 10:44:33 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:48686 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725838AbfD2Ood (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 10:44:33 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-45-jwDIhfeQPpe1TZfWbs-_nQ-1; Mon, 29 Apr 2019 15:44:29 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 29 Apr 2019 15:44:27 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 29 Apr 2019 15:44:27 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Gustavo A. R. Silva'" <gustavo@embeddedor.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Kees Cook <keescook@chromium.org>
-Subject: [PATCH] usbip: vhci_hcd: Mark expected switch fall-through
-Message-ID: <20190429143957.GA6725@embeddedor>
+Subject: RE: [PATCH] usbip: vhci_hcd: Mark expected switch fall-through
+Thread-Topic: [PATCH] usbip: vhci_hcd: Mark expected switch fall-through
+Thread-Index: AQHU/plu2318l/GBi0OLId5OVcMGj6ZTNpSw
+Date:   Mon, 29 Apr 2019 14:44:27 +0000
+Message-ID: <1daec8c8929e4d18b2059ab1dfbfdf4a@AcuMS.aculab.com>
+References: <20190429143957.GA6725@embeddedor>
+In-Reply-To: <20190429143957.GA6725@embeddedor>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.54.97
-X-Source-L: No
-X-Exim-ID: 1hL7Rm-000tKB-Vr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [189.250.54.97]:50000
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 5
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+X-MC-Unique: jwDIhfeQPpe1TZfWbs-_nQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In preparation to enabling -Wimplicit-fallthrough, mark switch
-cases where we are expecting to fall through.
-
-This patch fixes the following warning:
-
-In file included from drivers/usb/usbip/vhci_hcd.c:15:
-drivers/usb/usbip/vhci_hcd.c: In function ‘vhci_hub_control’:
-drivers/usb/usbip/usbip_common.h:63:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
-   if (flag & usbip_debug_flag)  \
-      ^
-drivers/usb/usbip/usbip_common.h:77:2: note: in expansion of macro ‘usbip_dbg_with_flag’
-  usbip_dbg_with_flag(usbip_debug_vhci_rh, fmt , ##args)
-  ^~~~~~~~~~~~~~~~~~~
-drivers/usb/usbip/vhci_hcd.c:509:4: note: in expansion of macro ‘usbip_dbg_vhci_rh’
-    usbip_dbg_vhci_rh(
-    ^~~~~~~~~~~~~~~~~
-drivers/usb/usbip/vhci_hcd.c:511:3: note: here
-   case USB_PORT_FEAT_U2_TIMEOUT:
-   ^~~~
-
-Warning level 3 was used: -Wimplicit-fallthrough=3
-
-This patch is part of the ongoing efforts to enable
--Wimplicit-fallthrough.
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/usb/usbip/vhci_hcd.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 667d9c0ec905..000ab7225717 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -508,6 +508,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		case USB_PORT_FEAT_U1_TIMEOUT:
- 			usbip_dbg_vhci_rh(
- 				" SetPortFeature: USB_PORT_FEAT_U1_TIMEOUT\n");
-+			/* Fall through */
- 		case USB_PORT_FEAT_U2_TIMEOUT:
- 			usbip_dbg_vhci_rh(
- 				" SetPortFeature: USB_PORT_FEAT_U2_TIMEOUT\n");
--- 
-2.21.0
+RnJvbTogR3VzdGF2byBBLiBSLiBTaWx2YQ0KPiBTZW50OiAyOSBBcHJpbCAyMDE5IDE1OjQwDQo+
+IEluIHByZXBhcmF0aW9uIHRvIGVuYWJsaW5nIC1XaW1wbGljaXQtZmFsbHRocm91Z2gsIG1hcmsg
+c3dpdGNoDQo+IGNhc2VzIHdoZXJlIHdlIGFyZSBleHBlY3RpbmcgdG8gZmFsbCB0aHJvdWdoLg0K
+Li4uDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi91c2JpcC92aGNpX2hjZC5jIGIvZHJpdmVy
+cy91c2IvdXNiaXAvdmhjaV9oY2QuYw0KPiBpbmRleCA2NjdkOWMwZWM5MDUuLjAwMGFiNzIyNTcx
+NyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvdXNiaXAvdmhjaV9oY2QuYw0KPiArKysgYi9k
+cml2ZXJzL3VzYi91c2JpcC92aGNpX2hjZC5jDQo+IEBAIC01MDgsNiArNTA4LDcgQEAgc3RhdGlj
+IGludCB2aGNpX2h1Yl9jb250cm9sKHN0cnVjdCB1c2JfaGNkICpoY2QsIHUxNiB0eXBlUmVxLCB1
+MTYgd1ZhbHVlLA0KPiAgCQljYXNlIFVTQl9QT1JUX0ZFQVRfVTFfVElNRU9VVDoNCj4gIAkJCXVz
+YmlwX2RiZ192aGNpX3JoKA0KPiAgCQkJCSIgU2V0UG9ydEZlYXR1cmU6IFVTQl9QT1JUX0ZFQVRf
+VTFfVElNRU9VVFxuIik7DQo+ICsJCQkvKiBGYWxsIHRocm91Z2ggKi8NCj4gIAkJY2FzZSBVU0Jf
+UE9SVF9GRUFUX1UyX1RJTUVPVVQ6DQo+ICAJCQl1c2JpcF9kYmdfdmhjaV9yaCgNCj4gIAkJCQki
+IFNldFBvcnRGZWF0dXJlOiBVU0JfUE9SVF9GRUFUX1UyX1RJTUVPVVRcbiIpOw0KDQpUaGF0IGRv
+ZXNuJ3QgbG9vayByaWdodCwgYm90aCBkZWJ1ZyBtZXNzYWdlcyBzZWVtIHRvIGdldCBwcmludGVk
+Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
+YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
+Tm86IDEzOTczODYgKFdhbGVzKQ0K
 
