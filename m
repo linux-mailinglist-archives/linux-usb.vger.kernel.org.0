@@ -2,61 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6969EE20C
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 14:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E622E2A9
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 14:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728002AbfD2MQm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 08:16:42 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7140 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727956AbfD2MQm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Apr 2019 08:16:42 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id E5B03775C5A6F9D27CCD;
-        Mon, 29 Apr 2019 20:16:37 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
- 14.3.439.0; Mon, 29 Apr 2019 20:16:28 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ajay Gupta <ajayg@nvidia.com>, Wolfram Sang <wsa@the-dreams.de>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-usb@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-Subject: [PATCH -next] usb: typec: ucsi: ccg: fix missing unlock on error in ccg_cmd_write_flash_row()
-Date:   Mon, 29 Apr 2019 12:26:30 +0000
-Message-ID: <20190429122630.59334-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1728025AbfD2MbO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 08:31:14 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:9580 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727956AbfD2MbO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 08:31:14 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cc6ee8c0001>; Mon, 29 Apr 2019 05:31:08 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 29 Apr 2019 05:31:12 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Mon, 29 Apr 2019 05:31:12 -0700
+Received: from HQMAIL108.nvidia.com (172.18.146.13) by HQMAIL106.nvidia.com
+ (172.18.146.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 29 Apr
+ 2019 12:31:11 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL108.nvidia.com
+ (172.18.146.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 29 Apr 2019 12:31:11 +0000
+Received: from jilin-desktop.nvidia.com (Not Verified[10.19.120.158]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5cc6ee8e0003>; Mon, 29 Apr 2019 05:31:11 -0700
+From:   Jim Lin <jilin@nvidia.com>
+To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jim Lin <jilin@nvidia.com>
+Subject: [PATCH v2 1/1] usb: xhci: Add Clear_TT_Buffer
+Date:   Mon, 29 Apr 2019 20:31:05 +0800
+Message-ID: <1556541065-22352-1-git-send-email-jilin@nvidia.com>
+X-Mailer: git-send-email 2.1.4
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1556541068; bh=+xT3Jg0/1RRzt4fbMaSe9vxbzVcVrE3H3fjd063reoE=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:Content-Type;
+        b=aUV+akMyqVBDK5o2T7w3TgV8NAkOcD0yWtc50Ytxp2Uil2pjt6NZi/y3U4/yoil2P
+         Ck24JeRnDU2zDBTjpudBVAyLtQ3HbXNAGBnNPfpz7T8TSZFenNDyiUln0tYUmKxHuw
+         dSIJzEL7rq0oYx+By2EakqOst3WPnJoZZgbfE08Z/ZuJII6rHiMCixsf7EaQAULQde
+         OW56pcuNlmhuTtt2VVIHfI6ACzNCDwJM0vubRtPxc7LgC/e5k3JHjLtxtYaM41f9Ft
+         xUdmVcniPdnk5n5nJVhwnFg6M3sJYoWO8ZNE8Zmzdt2cLm4eTmCBSDTrNPeQobrAKs
+         QJSCkrPWvK4Aw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the missing unlock before return from function ccg_cmd_write_flash_row()
-in the error handling case.
+USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+processing for full-/low-speed endpoints connected via a TT, the host
+software must use the Clear_TT_Buffer request to the TT to ensure
+that the buffer is not in the busy state".
 
-Fixes: 5c9ae5a87573 ("usb: typec: ucsi: ccg: add firmware flashing support")
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+In our case, a full-speed speaker (ConferenceCam) is behind a high-
+speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+request we may continue to get STALL with the folllowing requests,
+like Set_Interface.
+
+Here we add Clear_TT_Buffer for the following Set_Interface requests
+to get ACK successfully.
+
+Signed-off-by: Jim Lin <jilin@nvidia.com>
 ---
- drivers/usb/typec/ucsi/ucsi_ccg.c | 1 +
- 1 file changed, 1 insertion(+)
+v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
+    , remove its claiming in xhci.h
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 4632b91a04a6..9d46aa9e4e35 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -631,6 +631,7 @@ ccg_cmd_write_flash_row(struct ucsi_ccg *uc, u16 row,
- 	ret = i2c_master_send(client, buf, CCG4_ROW_SIZE + 2);
- 	if (ret != CCG4_ROW_SIZE + 2) {
- 		dev_err(uc->dev, "REG_FLASH_RW_MEM write fail %d\n", ret);
-+		mutex_unlock(&uc->lock);
- 		return ret < 0 ? ret : -EIO;
+ drivers/usb/host/xhci-ring.c | 28 ++++++++++++++++++++++++++++
+ drivers/usb/host/xhci.c      |  7 +++++++
+ drivers/usb/host/xhci.h      |  1 +
+ 3 files changed, 36 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 9215a28dad40..02b1ebad81e7 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1786,6 +1786,33 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
+ 	return NULL;
+ }
+ 
++static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci,
++	unsigned int slot_id, struct xhci_td *td)
++{
++	struct xhci_virt_device *dev;
++	struct xhci_slot_ctx *slot_ctx;
++	int saved_devnum;
++
++	/*
++	 * As part of low/full-speed endpoint-halt processing
++	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
++	 */
++	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
++	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub) &&
++	    !xhci->clearing_tt) {
++		xhci->clearing_tt = 1;
++		dev = xhci->devs[slot_id];
++		slot_ctx = xhci_get_slot_ctx(xhci, dev->out_ctx);
++		/* Update devnum temporarily for usb_hub_clear_tt_buffer */
++		saved_devnum = td->urb->dev->devnum;
++		td->urb->dev->devnum = (int) le32_to_cpu(slot_ctx->dev_state) &
++			DEV_ADDR_MASK;
++		if (usb_hub_clear_tt_buffer(td->urb))
++			xhci->clearing_tt = 0;
++		td->urb->dev->devnum = saved_devnum;
++	}
++}
++
+ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
+ 		unsigned int slot_id, unsigned int ep_index,
+ 		unsigned int stream_id, struct xhci_td *td,
+@@ -1804,6 +1831,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
+ 	if (reset_type == EP_HARD_RESET) {
+ 		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
+ 		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
++		xhci_clear_hub_tt_buffer(xhci, slot_id, td);
  	}
-
-
+ 	xhci_ring_cmd_db(xhci);
+ }
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 7fa58c99f126..4890c3518aa3 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -5132,6 +5132,12 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+ }
+ EXPORT_SYMBOL_GPL(xhci_gen_setup);
+ 
++static void xhci_clear_tt_buffer_complete(struct usb_hcd *hcd,
++		struct usb_host_endpoint *ep)
++{
++	hcd_to_xhci(hcd)->clearing_tt = 0;
++}
++
+ static const struct hc_driver xhci_hc_driver = {
+ 	.description =		"xhci-hcd",
+ 	.product_desc =		"xHCI Host Controller",
+@@ -5192,6 +5198,7 @@ static const struct hc_driver xhci_hc_driver = {
+ 	.enable_usb3_lpm_timeout =	xhci_enable_usb3_lpm_timeout,
+ 	.disable_usb3_lpm_timeout =	xhci_disable_usb3_lpm_timeout,
+ 	.find_raw_port_number =	xhci_find_raw_port_number,
++	.clear_tt_buffer_complete = xhci_clear_tt_buffer_complete,
+ };
+ 
+ void xhci_init_driver(struct hc_driver *drv,
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 9334cdee382a..87e9574a6102 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1864,6 +1864,7 @@ struct xhci_hcd {
+ 	unsigned		hw_lpm_support:1;
+ 	/* Broken Suspend flag for SNPS Suspend resume issue */
+ 	unsigned		broken_suspend:1;
++	unsigned		clearing_tt:1;
+ 	/* cached usb2 extened protocol capabilites */
+ 	u32                     *ext_caps;
+ 	unsigned int            num_ext_caps;
+-- 
+2.1.4
 
