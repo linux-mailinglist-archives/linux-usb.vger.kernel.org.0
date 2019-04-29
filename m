@@ -2,75 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D67E4CD
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 16:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB77E655
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 17:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728258AbfD2Oc4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 10:32:56 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51580 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725838AbfD2Oc4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Apr 2019 10:32:56 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 9093EAF22;
-        Mon, 29 Apr 2019 14:32:55 +0000 (UTC)
-Message-ID: <1556548362.20085.17.camel@suse.com>
-Subject: Re: [PATCH] UAS: fix alignment of scatter/gather segments
-From:   Oliver Neukum <oneukum@suse.com>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "gregKH@linuxfoundation.org" <gregKH@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Date:   Mon, 29 Apr 2019 16:32:42 +0200
-In-Reply-To: <e22543f3d87b4867aefdf9c71e2ec4a2@AcuMS.aculab.com>
-References: <20190429122026.4249-1-oneukum@suse.com>
-         <f378babbf2f349e59d98a5ab99958d78@AcuMS.aculab.com>
-         <1556545099.20085.14.camel@suse.com>
-         <e22543f3d87b4867aefdf9c71e2ec4a2@AcuMS.aculab.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1728573AbfD2P0T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 11:26:19 -0400
+Received: from gateway36.websitewelcome.com ([192.185.188.18]:37153 "EHLO
+        gateway36.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728214AbfD2P0T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 11:26:19 -0400
+X-Greylist: delayed 1500 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Apr 2019 11:26:18 EDT
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway36.websitewelcome.com (Postfix) with ESMTP id DB194400C4DD9
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 08:58:40 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id L7RohzrtrdnCeL7RohkLp1; Mon, 29 Apr 2019 09:40:00 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.54.97] (port=50000 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.91)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hL7Rm-000tKB-Vr; Mon, 29 Apr 2019 09:39:59 -0500
+Date:   Mon, 29 Apr 2019 09:39:57 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH] usbip: vhci_hcd: Mark expected switch fall-through
+Message-ID: <20190429143957.GA6725@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.54.97
+X-Source-L: No
+X-Exim-ID: 1hL7Rm-000tKB-Vr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [189.250.54.97]:50000
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 5
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mo, 2019-04-29 at 14:19 +0000, David Laight wrote:
-> From: Oliver Neukum
-> > Sent: 29 April 2019 14:38
-> > On Mo, 2019-04-29 at 13:31 +0000, David Laight wrote:
-> > > From: Oliver Neukum
-> > > > 
-> > > > +	 * USB has unusual scatter-gather requirements: the length of each
-> > > > +	 * scatterlist element except the last must be divisible by the
-> > > > +	 * Bulk maxpacket value.  Fortunately this value is always a
-> > > > +	 * power of 2.  Inform the block layer about this requirement.
-> > > > +	 */
-> > > 
-> > > That isn't the correct restriction for XHCI.
-> > > It has its own perverse restrictions.
-> > > I think they are all handled within the xhci driver.
-> > 
-> > Yes, but that does not matter. You just cannot assume that only
-> > XHCI will be used with UAS. In particular virtual drivers will
-> > be used.
-> 
-> True, but there is no need to enforce a 2k (IIRC) alignment for XHCI.
-> Perhaps you need a different property from the controller.
+In preparation to enabling -Wimplicit-fallthrough, mark switch
+cases where we are expecting to fall through.
 
-AFAICT controllers do not export that property.
+This patch fixes the following warning:
 
-> Even if you decide the code is 'good enough' (I don't know what the
-> cost is of enforcing a 2k alignment instead of 512 bytes)
-> the comment is just plain wrong.
+In file included from drivers/usb/usbip/vhci_hcd.c:15:
+drivers/usb/usbip/vhci_hcd.c: In function ‘vhci_hub_control’:
+drivers/usb/usbip/usbip_common.h:63:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if (flag & usbip_debug_flag)  \
+      ^
+drivers/usb/usbip/usbip_common.h:77:2: note: in expansion of macro ‘usbip_dbg_with_flag’
+  usbip_dbg_with_flag(usbip_debug_vhci_rh, fmt , ##args)
+  ^~~~~~~~~~~~~~~~~~~
+drivers/usb/usbip/vhci_hcd.c:509:4: note: in expansion of macro ‘usbip_dbg_vhci_rh’
+    usbip_dbg_vhci_rh(
+    ^~~~~~~~~~~~~~~~~
+drivers/usb/usbip/vhci_hcd.c:511:3: note: here
+   case USB_PORT_FEAT_U2_TIMEOUT:
+   ^~~~
 
-Usually block IO will be pages. They are 4K aligned.
-In terms of performance this code is unlikely to matter.
-But it is needed for correctness.
+Warning level 3 was used: -Wimplicit-fallthrough=3
 
-What would you want for the comment?
+This patch is part of the ongoing efforts to enable
+-Wimplicit-fallthrough.
 
-	Regards
-		Oliver
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/usb/usbip/vhci_hcd.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 667d9c0ec905..000ab7225717 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -508,6 +508,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		case USB_PORT_FEAT_U1_TIMEOUT:
+ 			usbip_dbg_vhci_rh(
+ 				" SetPortFeature: USB_PORT_FEAT_U1_TIMEOUT\n");
++			/* Fall through */
+ 		case USB_PORT_FEAT_U2_TIMEOUT:
+ 			usbip_dbg_vhci_rh(
+ 				" SetPortFeature: USB_PORT_FEAT_U2_TIMEOUT\n");
+-- 
+2.21.0
 
