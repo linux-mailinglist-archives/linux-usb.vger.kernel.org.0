@@ -2,70 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DD4E1C2
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 14:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDD3E1DF
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 14:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbfD2MBU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 08:01:20 -0400
-Received: from dc2-smtprelay2.synopsys.com ([198.182.61.142]:33020 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727913AbfD2MBU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 08:01:20 -0400
-Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
+        id S1728002AbfD2MFc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 08:05:32 -0400
+Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:36062 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727913AbfD2MFc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 08:05:32 -0400
+Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id C9A0CC0078;
-        Mon, 29 Apr 2019 12:01:17 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 947A9C0021;
+        Mon, 29 Apr 2019 12:05:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1556539277; bh=x4HnyVeTY5jFjuU2MozaGoXK/l8uY04RPiloG4U+brg=;
+        t=1556539532; bh=c+QUALNkWW5wNzbd99cDz+XcgUCrztrwP9YNXR/jNIk=;
         h=From:To:CC:Subject:Date:References:From;
-        b=lpZ8EU7PJhRcxjDazXCWg4D0seuoSBrCbNMPOLg6ink1irGEJBQjg3KQf9DEURL/8
-         cUNoPgINOa3tuToZqtgZJiDcwqFm0McP2QrKRV6hIGQ99ij8GMcHKL9DFEerKeMpEr
-         wCgfutYb6rsSnvf7WCQnjyBcFtJJ6wHyi9hxQcXUMjdT4llxWNMGc/HsDMrvE3JbP2
-         MUAfdxbKVmGTXVhaICtgJA2fczVi1gI2RWkmheQyhUxRpuw1FIkdrKPB66l56067c2
-         Gb+p3sDSrF9t/SIZ5qTuMKMR6gjDMLKNGV3UD210/GjfvVAUt67YKQTWQKp0xL6C2A
-         ZgNIAXx/UihdQ==
-Received: from US01WEHTC2.internal.synopsys.com (us01wehtc2.internal.synopsys.com [10.12.239.237])
-        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
+        b=BgVcqwvVStkuq02l6audyRA/mp7UgBIKPeNOiUw7+kn4K8RQ4hIJRjozeTKX2cqx+
+         mDWaP5gat8ozeFtk0ztno+K639/Hi5HJ0L8XXSW7cPez0PAUBwVOmkk7yw1kEj9yFE
+         6G7S1Ld5wI+U6Al3MrUGCHakUS3a4o2usNiUBS2BX6LwmuOBZVundohk8fVvzdHJfX
+         dgwJKD/vwyHPe0eRGiqFZIRZ3l4clXOvLad3+thGDhTXcvXk5BFmSKo+gEa8roEk4J
+         w9XQbB5miApANJeziHgNQbDeq6y4chu4F0zFveiYhKW1QY+FBs3+1AfYAYehza6UV5
+         AzQEysQpVqkcg==
+Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 4C27CA0091;
-        Mon, 29 Apr 2019 12:01:19 +0000 (UTC)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 5783BA0071;
+        Mon, 29 Apr 2019 12:05:31 +0000 (UTC)
 Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC2.internal.synopsys.com (10.12.239.237) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Mon, 29 Apr 2019 05:01:19 -0700
+ US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Mon, 29 Apr 2019 05:05:31 -0700
 Received: from NAM03-BY2-obe.outbound.protection.outlook.com (10.13.134.195)
  by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Mon, 29 Apr 2019 05:01:18 -0700
+ 14.3.408.0; Mon, 29 Apr 2019 05:05:30 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=synopsys.onmicrosoft.com; s=selector1-synopsys-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vRfHd422jPqIG6PQz0dzOOkUgm+K0ucUiCiH7AHpbMU=;
- b=RvCcthM+g3u6TIThE/mf9XpJDEOwSLHWR5sMBUEKy++BAOYfXjyDvdQsvHvnY3BwNCdJE+X4Yae+PGySnwrOTgFV++RT/06AlBVj8Raii4Ti8n9+3AUcQpa7Tcv/caHUi3FSj2r0OkbISSvUYdKeK9MFSWE137I8j4tsfCWUSOI=
+ bh=Edmwkntly4fpfC9C6ZGu7zzsX/VrubJ6otNlVcodGVw=;
+ b=jI9qpTer9B1v9Yky4ASHuuAqBV6RHC2y1ytjL0UoOlTe8s/WsrR6GEpEvrKnT0cJnQQ3Nwy2piEXv2SzyhhpMH7rB5rfMMl6TARZ2RgE2zKiWZwB//Bk2iabzvN8j2/S9EjBYmtlts4N7TipCCB/5q5x3LEUydFa+nlaj4VMACk=
 Received: from SN1PR12MB2431.namprd12.prod.outlook.com (52.132.195.146) by
  SN1PR12MB2351.namprd12.prod.outlook.com (52.132.194.32) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1835.13; Mon, 29 Apr 2019 12:01:16 +0000
+ 15.20.1835.13; Mon, 29 Apr 2019 12:05:29 +0000
 Received: from SN1PR12MB2431.namprd12.prod.outlook.com
  ([fe80::1982:4b45:2adf:9a1f]) by SN1PR12MB2431.namprd12.prod.outlook.com
  ([fe80::1982:4b45:2adf:9a1f%4]) with mapi id 15.20.1835.010; Mon, 29 Apr 2019
- 12:01:16 +0000
+ 12:05:29 +0000
 From:   Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
 To:     Doug Anderson <dianders@chromium.org>
 CC:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v1 14/14] usb: dwc2: Add enter/exit hibernation from
- system issued suspend/resume
-Thread-Topic: [PATCH v1 14/14] usb: dwc2: Add enter/exit hibernation from
- system issued suspend/resume
-Thread-Index: AQHU9qKj4BXfhuera0qVm1faf23VEw==
-Date:   Mon, 29 Apr 2019 12:01:16 +0000
-Message-ID: <SN1PR12MB24313212A9F1574A4D00C3B3A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
+        John Youn <John.Youn@synopsys.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 00/14] usb: dwc2: Fix and improve power saving modes.
+Thread-Topic: [PATCH v1 00/14] usb: dwc2: Fix and improve power saving modes.
+Thread-Index: AQHU9qJP9TPmzBH3xU6dprNhQakiQw==
+Date:   Mon, 29 Apr 2019 12:05:29 +0000
+Message-ID: <SN1PR12MB2431C9312AD486935C9B728AA7390@SN1PR12MB2431.namprd12.prod.outlook.com>
 References: <cover.1555672441.git.arturp@synopsys.com>
- <c62b99a6e4ad6de2982de988e9f9bcd0c6ec4daa.1555672441.git.arturp@synopsys.com>
- <CAD=FV=VDVhA0qzBN13=3C44mAzhDaQBUia_QADqyggSSFwKXqQ@mail.gmail.com>
+ <87k1fis1b5.fsf@linux.intel.com>
+ <SN1PR12MB2431EB450993E07730C3672FA73D0@SN1PR12MB2431.namprd12.prod.outlook.com>
+ <CAD=FV=WKJMks9oCdUVS9vTKp9yD_VPE_uaAmTM9HgNoz8tt4pA@mail.gmail.com>
+ <SN1PR12MB24312AEFA71B7EEF6FE4EB59A73E0@SN1PR12MB2431.namprd12.prod.outlook.com>
+ <CAD=FV=WmtKYt5hn8s1PrjEgFcJqyc-8UWbyEmjPPVq0o4YgD5w@mail.gmail.com>
+ <CAD=FV=WM7k-6moen+sgzZXnX-Zcw_BY9L=RTTrmt6pSHpXPLng@mail.gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -74,23 +77,23 @@ authentication-results: spf=none (sender IP is )
  smtp.mailfrom=arturp@synopsys.com; 
 x-originating-ip: [84.53.141.196]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3c01cc6e-f455-4997-94a1-08d6cc9a6232
+x-ms-office365-filtering-correlation-id: 9bbab8fd-136d-408f-0a0f-08d6cc9af91c
 x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:SN1PR12MB2351;
 x-ms-traffictypediagnostic: SN1PR12MB2351:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <SN1PR12MB2351333A0EDB3545722ABC36A7390@SN1PR12MB2351.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1051;
+x-ms-exchange-purlcount: 4
+x-microsoft-antispam-prvs: <SN1PR12MB2351EC1C04AF8C6353ADADD7A7390@SN1PR12MB2351.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:849;
 x-forefront-prvs: 0022134A87
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(346002)(39850400004)(376002)(396003)(136003)(199004)(189003)(8676002)(486006)(305945005)(71200400001)(71190400001)(7736002)(74316002)(66476007)(73956011)(66946007)(102836004)(316002)(478600001)(66556008)(64756008)(66446008)(186003)(15650500001)(76116006)(91956017)(86362001)(33656002)(81156014)(81166006)(6916009)(68736007)(53546011)(26005)(66066001)(8936002)(6506007)(446003)(476003)(229853002)(53936002)(7696005)(99286004)(6306002)(76176011)(6246003)(6436002)(9686003)(25786009)(52536014)(966005)(3846002)(6116002)(107886003)(54906003)(256004)(14454004)(14444005)(2906002)(5660300002)(55016002)(4326008)(97736004)(21314003);DIR:OUT;SFP:1102;SCL:1;SRVR:SN1PR12MB2351;H:SN1PR12MB2431.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(346002)(39850400004)(376002)(396003)(136003)(31014005)(199004)(189003)(8676002)(486006)(305945005)(71200400001)(71190400001)(7736002)(74316002)(66476007)(73956011)(66946007)(102836004)(316002)(478600001)(66556008)(64756008)(66446008)(186003)(76116006)(91956017)(93886005)(86362001)(33656002)(81156014)(81166006)(6916009)(68736007)(53546011)(26005)(66066001)(8936002)(6506007)(446003)(476003)(229853002)(53936002)(7696005)(99286004)(6306002)(76176011)(6246003)(30864003)(6436002)(9686003)(25786009)(52536014)(966005)(3846002)(6116002)(54906003)(256004)(14454004)(14444005)(2906002)(5660300002)(55016002)(4326008)(97736004);DIR:OUT;SFP:1102;SCL:1;SRVR:SN1PR12MB2351;H:SN1PR12MB2431.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: synopsys.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: GnW4KloZuPobl9OG+2vLgBaU56X2Pjp+dbL9mj+Okq6m4KItOpb1UCfa/xOkHZs8i4BuA3kShfJ5j/Wp3WcdJpcXcWe2JYyroembcgzg6npk2v2Nw3k1vI1WXVD3Qr4p6S+D7JaV0HFg7HJ/6o3b0OlnrnEN39YlDGMyzAdNMwSN1HmuV3t6QwC8SP5VE7O0uuPehJj/Bp3XFZ7GzzVAo9LwptPKAQhGi4V1eAOj9mvTIytJsFzO/ReeIXfrkmWz2X7A7wK0x4cwgO31nBc8QHSY1X/MOsKoqY7K4a3gnqMJShQ5dCw/YmMA11TOfNJ3Egnx2fFaqBIYltIAWRx/RpaGB+H0O8I56IxSLBQKDBI7cIYfoFAKIP8mgaatACVPFvN7c80pjnK1OmdBxNKLMmwovETDSAVzThj7FxKpCd4=
+x-microsoft-antispam-message-info: 5Wc1Y8YBXpoUhlqh9ACikeNiLM3jbvpnFDSLBoA016EpZ7BQDp29z+HkyrFRc03Tm+1Qjp4GSNTM96YXVkQ/GQcrhn92L25sEEtVR0x06J5P+aNHl4J6OaXb5dRbrmWHTRskxTfHEM3D6MF0FEDRFjpb8+YjKOhFZXFLl+2qMfe9/2Jadl7+hSQV8rrpZn5sf2cVkDXU268E9QTiU4/99Ll+hyYh+w/nqDHIYwJFLOSkMrFIt2/67yZpvnlVNR2MZpB6FdKds94iTFX/xAGhYelnInTmqUSRL2bzcj8j7m4hzYmLuacJMVSz0QZhBdX9fSpakeM3ZDyF4vQx4ib1wuzdlkoGzQJ1gQiST1yCuqg3F4HOyP3hiwfBXGgLCRl6pjUKTLrNwkODyPagyuuM0j2QSXOchzLz2fb3wNHEsuM=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c01cc6e-f455-4997-94a1-08d6cc9a6232
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2019 12:01:16.2834
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9bbab8fd-136d-408f-0a0f-08d6cc9af91c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2019 12:05:29.4136
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
@@ -104,309 +107,334 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,=0A=
 =0A=
-On 4/27/2019 01:01, Doug Anderson wrote:=0A=
+On 4/27/2019 01:06, Doug Anderson wrote:=0A=
 > Hi,=0A=
 > =0A=
-> On Fri, Apr 19, 2019 at 1:05 PM Artur Petrosyan=0A=
-> <Arthur.Petrosyan@synopsys.com> wrote:=0A=
+> On Fri, Apr 26, 2019 at 9:01 AM Doug Anderson <dianders@chromium.org> wro=
+te:=0A=
 >>=0A=
->> Added a new flow of entering and exiting hibernation when PC is=0A=
->> hibernated or suspended.=0A=
+>> Hi,=0A=
 >>=0A=
->> Signed-off-by: Artur Petrosyan <arturp@synopsys.com>=0A=
->> ---=0A=
->>   drivers/usb/dwc2/hcd.c | 128 +++++++++++++++++++++++++++++++----------=
---------=0A=
->>   1 file changed, 81 insertions(+), 47 deletions(-)=0A=
->>=0A=
->> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c=0A=
->> index 45d4a3e1ebd2..f1e92a287cb1 100644=0A=
->> --- a/drivers/usb/dwc2/hcd.c=0A=
->> +++ b/drivers/usb/dwc2/hcd.c=0A=
->> @@ -4510,35 +4510,54 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd=
-)=0A=
->>          if (hsotg->op_state =3D=3D OTG_STATE_B_PERIPHERAL)=0A=
->>                  goto unlock;=0A=
->>=0A=
->> -       if (hsotg->params.power_down !=3D DWC2_POWER_DOWN_PARAM_PARTIAL =
-||=0A=
->> +       if (hsotg->params.power_down =3D=3D DWC2_POWER_DOWN_PARAM_NONE |=
-|=0A=
->>              hsotg->flags.b.port_connect_status =3D=3D 0)=0A=
->>                  goto skip_power_saving;=0A=
->>=0A=
->> -       /*=0A=
->> -        * Drive USB suspend and disable port Power=0A=
->> -        * if usb bus is not suspended.=0A=
->> -        */=0A=
->> -       if (!hsotg->bus_suspended) {=0A=
->> -               hprt0 =3D dwc2_read_hprt0(hsotg);=0A=
->> -               hprt0 |=3D HPRT0_SUSP;=0A=
->> -               hprt0 &=3D ~HPRT0_PWR;=0A=
->> -               dwc2_writel(hsotg, hprt0, HPRT0);=0A=
->> -               spin_unlock_irqrestore(&hsotg->lock, flags);=0A=
->> -               dwc2_vbus_supply_exit(hsotg);=0A=
->> -               spin_lock_irqsave(&hsotg->lock, flags);=0A=
->> -       }=0A=
->> +       switch (hsotg->params.power_down) {=0A=
->> +       case DWC2_POWER_DOWN_PARAM_PARTIAL:=0A=
->> +               /*=0A=
->> +                * Drive USB suspend and disable port Power=0A=
->> +                * if usb bus is not suspended.=0A=
->> +                */=0A=
->> +               if (!hsotg->bus_suspended) {=0A=
->> +                       hprt0 =3D dwc2_read_hprt0(hsotg);=0A=
->> +                       hprt0 |=3D HPRT0_SUSP;=0A=
->> +                       hprt0 &=3D ~HPRT0_PWR;=0A=
->> +                       dwc2_writel(hsotg, hprt0, HPRT0);=0A=
->> +                       spin_unlock_irqrestore(&hsotg->lock, flags);=0A=
->> +                       dwc2_vbus_supply_exit(hsotg);=0A=
->> +                       spin_lock_irqsave(&hsotg->lock, flags);=0A=
->> +               }=0A=
->>=0A=
->> -       /* Enter partial_power_down */=0A=
->> -       ret =3D dwc2_enter_partial_power_down(hsotg);=0A=
->> -       if (ret) {=0A=
->> -               if (ret !=3D -ENOTSUPP)=0A=
->> -                       dev_err(hsotg->dev,=0A=
->> -                               "enter partial_power_down failed\n");=0A=
->> +               /* Enter partial_power_down */=0A=
->> +               ret =3D dwc2_enter_partial_power_down(hsotg);=0A=
->> +               if (ret) {=0A=
->> +                       if (ret !=3D -ENOTSUPP)=0A=
->> +                               dev_err(hsotg->dev,=0A=
->> +                                       "enter partial_power_down failed=
-\n");=0A=
->> +                       goto skip_power_saving;=0A=
->> +               }=0A=
->> +               hsotg->bus_suspended =3D true;=0A=
->> +               break;=0A=
->> +       case DWC2_POWER_DOWN_PARAM_HIBERNATION:=0A=
->> +               if (!hsotg->bus_suspended) {=0A=
-> =0A=
-> Do you have any idea why for DWC2_POWER_DOWN_PARAM_PARTIAL we still=0A=
-> call dwc2_enter_partial_power_down() even if bus_suspended is true,=0A=
-> but for hibernate you don't call dwc2_enter_hibernation()?=0A=
-For Hibernation I do call dwc2_enter_hibernation().=0A=
+>> On Fri, Apr 26, 2019 at 12:11 AM Artur Petrosyan=0A=
+>> <Arthur.Petrosyan@synopsys.com> wrote:=0A=
+>>>=0A=
+>>> Hi Doug,=0A=
+>>>=0A=
+>>> On 4/26/2019 00:13, Doug Anderson wrote:=0A=
+>>>> Hi,=0A=
+>>>>=0A=
+>>>> On Thu, Apr 25, 2019 at 7:01 AM Artur Petrosyan=0A=
+>>>> <Arthur.Petrosyan@synopsys.com> wrote:=0A=
+>>>>>=0A=
+>>>>> Hi,=0A=
+>>>>>=0A=
+>>>>> On 4/25/2019 16:43, Felipe Balbi wrote:=0A=
+>>>>>> Artur Petrosyan <Arthur.Petrosyan@synopsys.com> writes:=0A=
+>>>>>>> This patch set, fixes and improves partial power down and hibernati=
+on power=0A=
+>>>>>>> saving modes. Also, adds support for entering/exiting hibernation b=
+y=0A=
+>>>>>>> system issued suspend/resume.=0A=
+>>>>>>>=0A=
+>>>>>>> This series contains patches which were submitted to LKML. However,=
+ a part=0A=
+>>>>>>> of those patches didn't reach to LKML because of local issue relate=
+d to=0A=
+>>>>>>> smtp server.=0A=
+>>>>>>>=0A=
+>>>>>>> The patches which reached to LKML are:=0A=
+>>>>>>>=0A=
+>>>>>>> - usb: dwc2: Add part. power down exit from dwc2_conn_id_status_cha=
+nge().=0A=
+>>>>>>> - usb: dwc2: Add port conn. sts. checking in _dwc2_hcd_resume() fun=
+ction.=0A=
+>>>>>>> - usb: dwc2: Fix suspend state in host mode for partial power down.=
 =0A=
-> =0A=
-> =0A=
->> +                       /* Enter hibernation */=0A=
->> +                       spin_unlock_irqrestore(&hsotg->lock, flags);=0A=
->> +                       ret =3D dwc2_enter_hibernation(hsotg, 1);=0A=
->> +                       spin_lock_irqsave(&hsotg->lock, flags);=0A=
->> +                       if (ret && ret !=3D -ENOTSUPP)=0A=
->> +                               dev_err(hsotg->dev,=0A=
->> +                                       "%s: enter hibernation failed\n"=
-,=0A=
->> +                                       __func__);=0A=
-> =0A=
-> nit: no __func__ in dev_xxx() error messages.  The device plus the=0A=
-> message should be enough.  Only resort to __func__ if you're forced to=0A=
-> do an error message without a "struct device *".=0A=
-This code comes form previous implementations I have not touched it not =0A=
-to back anything.=0A=
+>>>>>>> - usb: dwc2: Fix wakeup detected and session request interrupt hand=
+lers.=0A=
+>>>>>>> - usb: dwc2: Add descriptive debug messages for Partial Power Down =
+mode.=0A=
+>>>>>>> - usb: dwc2: Fix dwc2_restore_device_registers() function.=0A=
+>>>>>>>=0A=
+>>>>>>> The patches which didn't reach to LKML are:=0A=
+>>>>>>>=0A=
+>>>>>>> - usb: dwc2: Add enter/exit hibernation from system issued suspend/=
+resume=0A=
+>>>>>>> - usb: dwc2: Clear GINTSTS_RESTOREDONE bit after restore is generat=
+ed.=0A=
+>>>>>>> - usb: dwc2: Clear fifo_map when resetting core.=0A=
+>>>>>>> - usb: dwc2: Allow exiting hibernation from gpwrdn rst detect=0A=
+>>>>>>> - usb: dwc2: Fix hibernation between host and device modes.=0A=
+>>>>>>> - usb: dwc2: Update dwc2_handle_usb_suspend_intr function.=0A=
+>>>>>>> - usb: dwc2: Add default param to control power optimization.=0A=
+>>>>>>> - usb: dwc2: Reset DEVADDR after exiting gadget hibernation.=0A=
+>>>>>>>=0A=
+>>>>>>> Submitting all of the patches together in this version.=0A=
+>>>>>>>=0A=
+>>>>>>> Changes from V0:=0A=
+>>>>>>>     - Replaced 1 with DWC2_POWER_DOWN_PARAM_PARTIAL in commit=0A=
+>>>>>>>       "9eed02b9fe96 usb: dwc2: Fix wakeup detected and session requ=
+est=0A=
+>>>>>>>       interrupt handlers.=0A=
+>>>>>>>=0A=
+>>>>>>>=0A=
+>>>>>>> Artur Petrosyan (14):=0A=
+>>>>>>>      usb: dwc2: Fix dwc2_restore_device_registers() function.=0A=
+>>>>>>>      usb: dwc2: Add descriptive debug messages for Partial Power Do=
+wn mode.=0A=
+>>>>>>>      usb: dwc2: Fix wakeup detected and session request interrupt h=
+andlers.=0A=
+>>>>>>>      usb: dwc2: Fix suspend state in host mode for partial power do=
+wn.=0A=
+>>>>>>>      usb: dwc2: Add port conn. sts. checking in _dwc2_hcd_resume()=
 =0A=
-> =0A=
-> nit: as per my comments in an earlier patch, remove special case for -ENO=
-TSUPP=0A=
-> =0A=
-> Also, presumably you want to match the error handling in=0A=
-> DWC2_POWER_DOWN_PARAM_PARTIAL and do a "goto skip_power_saving" when=0A=
-> you see an error?=0A=
-When there is an error power_saving should be skipped.=0A=
+>>>>>>>        function.=0A=
+>>>>>>>      usb: dwc2: Add part. power down exit from=0A=
+>>>>>>>        dwc2_conn_id_status_change().=0A=
+>>>>>>>      usb: dwc2: Reset DEVADDR after exiting gadget hibernation.=0A=
+>>>>>>>      usb: dwc2: Add default param to control power optimization.=0A=
+>>>>>>>      usb: dwc2: Update dwc2_handle_usb_suspend_intr function.=0A=
+>>>>>>>      usb: dwc2: Fix hibernation between host and device modes.=0A=
+>>>>>>>      usb: dwc2: Allow exiting hibernation from gpwrdn rst detect=0A=
+>>>>>>>      usb: dwc2: Clear fifo_map when resetting core.=0A=
+>>>>>>>      usb: dwc2: Clear GINTSTS_RESTOREDONE bit after restore is gene=
+rated.=0A=
+>>>>>>>      usb: dwc2: Add enter/exit hibernation from system issued=0A=
+>>>>>>>        suspend/resume=0A=
+>>>>>>=0A=
+>>>>>> patches don't apply.=0A=
+>>>>>>=0A=
+>>>>>=0A=
+>>>>> Do we need to wait for Minas's acknowledge or there is problem relate=
+d=0A=
+>>>>> to the patches?=0A=
+>>>>=0A=
+>>>> It looks like the problem is that my patches won the race and Felipe=
 =0A=
-> =0A=
-> =0A=
->> +               } else {=0A=
->> +                       goto skip_power_saving;=0A=
->> +               }=0A=
->> +               break;=0A=
->> +       default:=0A=
->>                  goto skip_power_saving;=0A=
->>          }=0A=
->>=0A=
->> -       hsotg->bus_suspended =3D true;=0A=
->> -=0A=
-> =0A=
-> It's a bit weird to remove this, but I guess it just got moved to the=0A=
-> partial power down case?  ...and in the hibernate case you're relying=0A=
-> on the hibernate function to set this?  Yet another frustratingly=0A=
-> asymmetric code structure...Enter hibernation implements setting bus_susp=
-end so I don't touch this.=0A=
-Actually this patch set fixes issues it doesn't clean up everything =0A=
-related to hibernation or partial power down.=0A=
+>>>> applied them before yours.  Thus, presumably, it'll be up to you to=0A=
+>>>> rebase your patches atop mine and re-submit.  Specifically, you can=0A=
+>>>> do:=0A=
+>>>>=0A=
+>>>> git remote add linux_usb_balbi=0A=
+>>>> git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git=0A=
+>>>> git fetch linux_usb_balbi=0A=
+>>>> git checkout linux_usb_balbi/testing/next=0A=
+>>>>=0A=
+>>>> If you do that and then try to apply your patches you'll find that=0A=
+>>>> they no longer apply.  AKA try running:=0A=
+>>>>=0A=
+>>>> for patch in 10909749 10909737 10909739 10909745 10909533 \=0A=
+>>>>      10909531 10909747 10909535 10909523 10909741 10909525 \=0A=
+>>>>      10909751 10909527 10909743; do=0A=
+>>>>     curl -L https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__pat=
+chwork.kernel.org_patch_-24-257Bpatch-257D_mbox&d=3DDwIBaQ&c=3DDPL6_X_6JkXF=
+x7AXWqB0tg&r=3D9hPBFKCJ_nBjJhGVrrlYOeOQjP_HlVzYqrC_D7niMJI&m=3DgzzEDEbxflLM=
+gk9I-7Re9ytRMvyc_B8iZEmg2xGZN5E&s=3DaWT1hYtXeIeY8ClQ0sNYxwkmJFKDz4iaa4DchNw=
+x3_w&e=3D | git am=0A=
+>>>> done=0A=
+>>>>=0A=
+>>>> You'll see:=0A=
+>>>>=0A=
+>>>>> Applying: usb: dwc2: Fix wakeup detected and session request interrup=
+t handlers.=0A=
+>>>>> error: patch failed: drivers/usb/dwc2/core_intr.c:435=0A=
+>>>>> error: drivers/usb/dwc2/core_intr.c: patch does not apply=0A=
+>>>>> Patch failed at 0001 usb: dwc2: Fix wakeup detected and session reque=
+st interrupt handlers.=0A=
+>>>>=0A=
+>>>> NOTE: before reposting it might be a good idea to apply the last 3=0A=
+>>>> patches in my series as per [1] before sending up your series.  Since=
 =0A=
-> =0A=
-> =0A=
->>          /* Ask phy to be suspended */=0A=
->>          if (!IS_ERR_OR_NULL(hsotg->uphy)) {=0A=
->>                  spin_unlock_irqrestore(&hsotg->lock, flags);=0A=
->> @@ -4564,17 +4583,17 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)=
+>>>> Felipe has already applied patches #1 and #2 in that series presumably=
 =0A=
->>          int ret =3D 0;=0A=
->>          u32 hprt0;=0A=
->>=0A=
->> -       hprt0 =3D dwc2_read_hprt0(hsotg);=0A=
->> -=0A=
->>          spin_lock_irqsave(&hsotg->lock, flags);=0A=
->>=0A=
->> -       if (dwc2_is_device_mode(hsotg))=0A=
->> +       if (!hsotg->bus_suspended)=0A=
-> =0A=
-> As per my comments above I don't have a good grasp on what=0A=
-> "bus_suspended" is for.  ...that being said, if your change here is=0A=
-> actually correct then you probably (?) want to remove the "if=0A=
-> (hsotg->bus_suspended)" check later in this same function.=0A=
-> =0A=
-> Said another way, you've now got code that looks like:=0A=
-> =0A=
-> if (!hsotg->bus_suspended)=0A=
->    goto exit;=0A=
-> =0A=
-> /* code that I think doesn't touch bus_suspended */=0A=
-> =0A=
-> if (hsotg->bus_suspended) {=0A=
->    /* do something */=0A=
-> } else {=0A=
->    /* do something else */=0A=
-> }=0A=
-> =0A=
-> Presumably the "do something" is now dead code?=0A=
-> =0A=
-That part is not dad because if hsotg->bus_suspended is true =0A=
-resuming/exiting from suspend/partial power down/hibernation should be =0A=
-performed.=0A=
-On the other hand if hsotg->bus_suspended is false there is no need to =0A=
-resume.=0A=
+>>>> he'll also apply #3 - #5.=0A=
+>>>>=0A=
+>>>> I know it'a also up to me to try testing our your patches.  It's still=
 =0A=
-So of course if core is not suspended the code responsible for resuming =0A=
-should not be called. In that sense the code can be called dead.=0A=
+>>>> on my list to give it a shot...=0A=
+>>>>=0A=
+>>>> [1] https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__lkml.kernel=
+.org_r_CAD-3DFV-3DWA07-2BgUkVvsikN-3DiDHZLUJQtzjkKtiBHAEDw4gLNWY7w-40mail.g=
+mail.com&d=3DDwIBaQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3D9hPBFKCJ_nBjJhGVrrlYOeOQ=
+jP_HlVzYqrC_D7niMJI&m=3DgzzEDEbxflLMgk9I-7Re9ytRMvyc_B8iZEmg2xGZN5E&s=3D9QP=
+_h5ZlnT7ayUE1_6EVEgu8FaI3_kWm9xuzs1qrvdI&e=3D=0A=
+>>>>=0A=
+>>>> P.S: It's helpful if you CC LKML on patches and discussions about=0A=
+>>>> them.  That allows the magic "permalink via message ID" on=0A=
+>>>> lkml.kernel.org and also allows your patches to be found on=0A=
+>>>> lore.kernel.org/patchwork/=0A=
+>>>>=0A=
+>>>> -Doug=0A=
+>>>>=0A=
+>>>=0A=
+>>> Besides the issue that comes from the patch "usb: dwc2: Fix wakeup=0A=
+>>> detected and session request interrupt handlers." there is one more=0A=
+>>> serious conflict with one of your patches.=0A=
+>>>=0A=
+>>> So the patch "usb: dwc2: bus suspend/resume for hosts with=0A=
+>>> DWC2_POWER_DOWN_PARAM_NONE" have had also been added to the=0A=
+>>> "balbi/testing/next" before my patch series which conflicts with two of=
 =0A=
-> =0A=
->>                  goto unlock;=0A=
->>=0A=
->>          if (hsotg->lx_state !=3D DWC2_L2)=0A=
->>                  goto unlock;=0A=
->>=0A=
->> -       if (hsotg->params.power_down !=3D DWC2_POWER_DOWN_PARAM_PARTIAL =
-||=0A=
->> +       hprt0 =3D dwc2_read_hprt0(hsotg);=0A=
->> +=0A=
->> +       if (hsotg->params.power_down =3D=3D DWC2_POWER_DOWN_PARAM_NONE |=
-|=0A=
->>              hprt0 & HPRT0_CONNSTS) {=0A=
->>                  hsotg->lx_state =3D DWC2_L0;=0A=
->>                  goto unlock;=0A=
->> @@ -4597,36 +4616,51 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)=
+>>> my patches.=0A=
+>>>=0A=
+>>> 1. usb: dwc2: Fix suspend state in host mode for partial power down.=0A=
+>>> 2. usb: dwc2: Add enter/exit hibernation from system issued suspend/res=
+ume=0A=
+>>>=0A=
+>>> This patch introduced by you "usb: dwc2: bus suspend/resume for hosts=
 =0A=
->>                  spin_lock_irqsave(&hsotg->lock, flags);=0A=
->>          }=0A=
+>>> with DWC2_POWER_DOWN_PARAM_NONE" got a little bit of issue. It=0A=
+>>> eliminates entering hibernation through system issued suspend by=0A=
+>>> checking "if (hsotg->params.power_down > DWC2_POWER_DOWN_PARAM_PARTIAL)=
+"=0A=
 >>=0A=
->> -       /* Exit partial_power_down */=0A=
->> -       ret =3D dwc2_exit_partial_power_down(hsotg, true);=0A=
->> -       if (ret && (ret !=3D -ENOTSUPP))=0A=
->> -               dev_err(hsotg->dev, "exit partial_power_down failed\n");=
+>> To be fair, the patch does not make entering hibernation worse, does=0A=
+>> it?  Specifically, I'll point to this part of the diff:=0A=
+>>=0A=
+>> - if (hsotg->params.power_down !=3D DWC2_POWER_DOWN_PARAM_PARTIAL) {=0A=
+>> + if (hsotg->params.power_down > DWC2_POWER_DOWN_PARAM_PARTIAL) {=0A=
+>>=0A=
+>> As you can see, if power_down =3D=3D DWC2_POWER_DOWN_PARAM_HIBERNATION t=
+he=0A=
+>> flow for this "if" test is exactly the same before and after my patch.=
 =0A=
->> +       switch (hsotg->params.power_down) {=0A=
->> +       case DWC2_POWER_DOWN_PARAM_PARTIAL:=0A=
 >>=0A=
->> -       hsotg->lx_state =3D DWC2_L0;=0A=
->> +               /* Exit partial_power_down */=0A=
->> +               ret =3D dwc2_exit_partial_power_down(hsotg, true);=0A=
->> +               if (ret && (ret !=3D -ENOTSUPP))=0A=
->> +                       dev_err(hsotg->dev, "exit partial_power_down fai=
-led\n");=0A=
 >>=0A=
->> -       spin_unlock_irqrestore(&hsotg->lock, flags);=0A=
->> +               hsotg->lx_state =3D DWC2_L0;=0A=
->>=0A=
->> -       if (hsotg->bus_suspended) {=0A=
->> -               spin_lock_irqsave(&hsotg->lock, flags);=0A=
->> -               hsotg->flags.b.port_suspend_change =3D 1;=0A=
->>                  spin_unlock_irqrestore(&hsotg->lock, flags);=0A=
->> -               dwc2_port_resume(hsotg);=0A=
->> -       } else {=0A=
->> -               dwc2_vbus_supply_init(hsotg);=0A=
->>=0A=
->> -               /* Wait for controller to correctly update D+/D- level *=
-/=0A=
->> -               usleep_range(3000, 5000);=0A=
->> +               if (hsotg->bus_suspended) {=0A=
->> +                       spin_lock_irqsave(&hsotg->lock, flags);=0A=
->> +                       hsotg->flags.b.port_suspend_change =3D 1;=0A=
->> +                       spin_unlock_irqrestore(&hsotg->lock, flags);=0A=
->> +                       dwc2_port_resume(hsotg);=0A=
->> +               } else {=0A=
->> +                       dwc2_vbus_supply_init(hsotg);=0A=
->>=0A=
->> -               /*=0A=
->> -                * Clear Port Enable and Port Status changes.=0A=
->> -                * Enable Port Power.=0A=
->> -                */=0A=
->> -               dwc2_writel(hsotg, HPRT0_PWR | HPRT0_CONNDET |=0A=
->> +                       /* Wait for controller to correctly update D+/D-=
- level */=0A=
->> +                       usleep_range(3000, 5000);=0A=
->> +=0A=
->> +                       /*=0A=
->> +                        * Clear Port Enable and Port Status changes.=0A=
->> +                        * Enable Port Power.=0A=
->> +                        */=0A=
->> +                       dwc2_writel(hsotg, HPRT0_PWR | HPRT0_CONNDET |=
+>>> . As per the patch you mention that it fixes suspend/resume flow for=0A=
+>>> Altera SOCFPGA and Chrome OS 3.14 kernel tree. I assume that the board=
 =0A=
->>                                  HPRT0_ENACHG, HPRT0);=0A=
->> -               /* Wait for controller to detect Port Connect */=0A=
->> -               usleep_range(5000, 7000);=0A=
->> +                       /* Wait for controller to detect Port Connect */=
-=0A=
->> +                       usleep_range(5000, 7000);=0A=
->> +               }=0A=
->> +               break;=0A=
->> +       case DWC2_POWER_DOWN_PARAM_HIBERNATION:=0A=
->> +=0A=
->> +               /* Exit host hibernation. */=0A=
->> +               if (hsotg->hibernated)=0A=
->> +                       dwc2_exit_hibernation(hsotg, 0, 0, 1);=0A=
->> +               break;=0A=
->> +       default:=0A=
->> +               goto unlock;=0A=
->>          }=0A=
+>>> has the Partial Power Down enabled core that is why it works out.=0A=
 >>=0A=
->> +       spin_unlock_irqrestore(&hsotg->lock, flags);=0A=
->> +=0A=
-> =0A=
-> I'm pretty curious if you tested DWC2_POWER_DOWN_PARAM_PARTIAL after=0A=
-> applying your patch series.  As far as I can tell your switch=0A=
-> statement for DWC2_POWER_DOWN_PARAM_PARTIAL will "break" with the=0A=
-> spinlock already unlocked.  ...so you'll run spin_unlock_irqrestore=0A=
-> twice.  Is that really legit?=0A=
-I have tested the patches on HAPS-DX and Linaro HiKey 960 boards.=0A=
+>> I mentioned some of this in my cover letter [1].  To rehash, I said=0A=
+>> "Turning on partial power down on rk3288 doesn't "just work".  I don't=
 =0A=
-> =0A=
-> =0A=
-> =0A=
-> NOTE: in case it helps you, I've attempted to rebase this atop my=0A=
-> series.  Please double-check that I didn't mess anything up, though=0A=
-> =0A=
-> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__chromium.googlesou=
-rce.com_chromiumos_third-5Fparty_kernel_-2Blog_refs_sandbox_dianders_190426=
--2Ddwc2-2Dstuff&d=3DDwIBaQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3D9hPBFKCJ_nBjJhGVr=
-rlYOeOQjP_HlVzYqrC_D7niMJI&m=3D2xJPvFyQhKsjBCMYd6_Kpb7_r7HPUAoeJHcQmBH80Gc&=
-s=3DwEgbdpKgC9t9CfXpI8awXLos9GuRcsNEkpW09dgMxiw&e=3D=0A=
-> =0A=
-> =0A=
-> ...with that a quick test seems to show that partial power down is=0A=
-> sorta working on rk3288 now.  I _think_ I saw one case where hotplug=0A=
-> failed but I've seen several where it works.  ...unfortunately it=0A=
-> seems to break when I do hotplug on the port where I have=0A=
-> "snps,reset-phy-on-wake" set.=0A=
-You can provide debug logs for that scenario I will try to help you fix =0A=
-issues with that.=0A=
+>> get hotplug events.  This is despite dwc2 auto-detecting that we are=0A=
+>> power optimized."=0A=
+>>=0A=
+>> ...it is certainly possible that partial power down would work on=0A=
+>> rk3288 if someone had the time to debug it.=0A=
+>>=0A=
+>> NOTE: I don't have an Altera SOCFPGA, but I'll mention that a previous=
 =0A=
+>> iteration of my patch (written by Kever Yang at Rockchip) was reverted=
+=0A=
+>> because it _broke_ Altera SOCFPGAS.  Given my requests to test the new=
+=0A=
+>> version have been met with silence, I'm inclined to land this and hope=
+=0A=
+>> it's all good.  If there are problems then hopefully some actual=0A=
+>> details can be provided.  Last time there were none provided.=0A=
+>>=0A=
+>>=0A=
+>>> However, we don't just support the Partial Power Down feature enabled=
+=0A=
+>>> cores. We also support Hibernation feature enabled cores.=0A=
+>>=0A=
+>> Sure, but the code that is actually landed upstream (even before my=0A=
+>> series) almost certainly doesn't function for Hibernation.  As pointed=
+=0A=
+>> out above the entire "_dwc2_hcd_suspend()" function had a great big:=0A=
+>>=0A=
+>> if (hsotg->params.power_down !=3D DWC2_POWER_DOWN_PARAM_PARTIAL)=0A=
+>>    goto skip_power_saving;=0A=
+>>=0A=
+>> ...which, as far as I could tell, meant that Hibernation could not=0A=
+>> possible work.=0A=
+>>=0A=
+>>=0A=
+>>> The patch set that had been introduced by me which includes "usb: dwc2:=
+=0A=
+>>> Add enter/exit hibernation from system issued suspend/resume" patch add=
+s=0A=
+>>> support for both hibernation and Partial Power Down feature enabled=0A=
+>>> cores and fixes several of Partial Power Down and hibernation related=
+=0A=
+>>> issues.=0A=
+>>>=0A=
+>>> This patch set may fix all of the issues related with Altera SOCFPGA or=
+=0A=
+>>> Chrome OS 3.14 kernel tree.=0A=
+>>>=0A=
+>>> That is why we asked you to test the patch set before we could ACK or=
+=0A=
+>>> have chance to debug your patch deeper to see the help of it and to=0A=
+>>> provide you information related to it.=0A=
+>>=0A=
+>> It may well fix my problems and maybe I can use partial power down=0A=
+>> now.  That'd be nice.  It was on my list and I would have worked on it=
+=0A=
+>> last week except that your patches weren't on the mailing list then.=0A=
+>> ...so I moved on to some other work.  To avoid context switching too=0A=
+>> much I needed to get to a stopping point before testing your patches.=0A=
+>> I was hoping to have some nice rebased patches from you to test today,=
+=0A=
+>> but maybe I'll try a hand at rebasing them myself.=0A=
+>>=0A=
+>> NOTE also that though I ported this change from the Chrome OS 3.14=0A=
+>> kernel tree, I'm actually currently working on the Chrome OS 4.19=0A=
+>> tree.  I also made sure to test the changes on mainline Linux.=0A=
+>>=0A=
+>>=0A=
+>>> So now I can rebase my changes to the "balbi/testing/next" but I will=
+=0A=
+>>> have to take the logic of skipping Hibernation out otherwise we will=0A=
+>>> have problems with hibernation enabled cores.=0A=
+>>=0A=
+>> As per above, please have a careful look at my patches and you'll see=0A=
+>> that I was not introducing code that skipped hibernation.  I was=0A=
+>> keeping the same flow as the old code that skipped hibernation.  So if=
+=0A=
+>> you are making hibernation work there should be no problems removing=0A=
+>> that.=0A=
+>>=0A=
+>>=0A=
+>>> We can ask Balbi to permanently suspend adding of the patch "usb: dwc2:=
+=0A=
+>>> bus suspend/resume for hosts with DWC2_POWER_DOWN_PARAM_NONE" and my=0A=
+>>> patch series to his "testing/next". After you can have a chance to test=
+=0A=
+>>> my patch series we can see if the patches are acknowledged and ask Balb=
+i=0A=
+>>>    to add them.=0A=
+>>=0A=
+>> Personally I'd prefer if Felipe finished landing my series and then=0A=
+>> you rebased atop it.  As I said I'm convinced I'm not making your=0A=
+>> hibernation case any worse.  If you know of actual things that are=0A=
+>> made worse by my series then that would be a reason not to land it,=0A=
+>> but so far I haven't been convinced.=0A=
+>>=0A=
+>>=0A=
+>> [1] https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__lkml.kernel.o=
+rg_r_20190418001356.124334-2D2-2Ddianders-40chromium.org&d=3DDwIFaQ&c=3DDPL=
+6_X_6JkXFx7AXWqB0tg&r=3D9hPBFKCJ_nBjJhGVrrlYOeOQjP_HlVzYqrC_D7niMJI&m=3Dmdz=
+-R9O5TUR_zXEeeCZO2341dvcwZro2cedCZzIIans&s=3D6qAU20vyvZqIWdkRGSUWEdiTr57arb=
+Jf2uHECkCuwQg&e=3D=0A=
+> =0A=
+> To add a bit of breadcrumbs, I did the rebase atop my patches and also=0A=
+> did some basic review of yours.  Other than a few nits I think I found=0A=
+> at least one bug where you're unlocking a spinlock twice in the=0A=
+> partial power down case.=0A=
+Yeah thank you so much for the review it really helps to make =0A=
+conclusions on the implementations. I have tested those patches on =0A=
+HAPS-DX platform and have not got any problem. Hibernation and partial =0A=
+power down flows are working ok.=0A=
+> =0A=
+> I continue to be convinced that the right thing to do is to finish=0A=
+> landing my series and then once you've spun yours atop mine we can=0A=
+> look at landing it.=0A=
+> =0A=
+> Here's all my picks atop Felipe's tree that show how I resolved=0A=
+> things:  https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__chromium.=
+googlesource.com_chromiumos_third-5Fparty_kernel_-2Blog_refs_sandbox_diande=
+rs_190426-2Ddwc2-2Dstuff&d=3DDwIFaQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3D9hPBFKCJ=
+_nBjJhGVrrlYOeOQjP_HlVzYqrC_D7niMJI&m=3Dmdz-R9O5TUR_zXEeeCZO2341dvcwZro2ced=
+CZzIIans&s=3DmVfBGtiMQg2XVHXmGCWcd584g0DYRH1JDVnEnJWE6P8&e=3D=0A=
+> =0A=
 > =0A=
 > -Doug=0A=
 > =0A=
+=0A=
+I will make my changes then will go ahead and rebase.=0A=
 =0A=
 =0A=
 -- =0A=
