@@ -2,199 +2,329 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FEEE1E6
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 14:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EABAAE204
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 14:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728198AbfD2MGI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 08:06:08 -0400
-Received: from mail-it1-f199.google.com ([209.85.166.199]:43420 "EHLO
-        mail-it1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727997AbfD2MGI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 08:06:08 -0400
-Received: by mail-it1-f199.google.com with SMTP id v7so97971itf.8
-        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 05:06:07 -0700 (PDT)
+        id S1727936AbfD2MNA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 08:13:00 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:40061 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727913AbfD2MNA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 08:13:00 -0400
+Received: by mail-pl1-f193.google.com with SMTP id b3so4985780plr.7
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 05:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VKyjEr/Rfjfh0O04poPnaaNgITAAHAf6lPMgH9siAVU=;
+        b=LzlIWvcGbYmx2nUcOL1hUxDzKluSvNRPNX+4PqCvlqSWAeCEBWlaZmCuQh1jwQsgZc
+         MgG56Pa/GEDl8DkzH3xnEDU3F3f0/+wqZrOEQ/tAqPkVtWj5ipT45ReTBB7yq5xWy/yZ
+         fQT49Hpc6241hQIwANTz1P/f/WekEU4iiO5iCtNqk/Yk8+krZ5XAWFVkcuchm3SvaM6S
+         EoU1AZJrsNp8UG89n2iTnJ0PygRTsKymQ63qWTVQIGWqlfxufKygMvJze2cl0+2rQXM0
+         YFsO0i2xYOT+6lI3bC8yWjQMvSJnQlK1x8U+KDKSEq84pZEiz+G4pgrrM/8Hlm4lQF52
+         TsLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=wj6fLx0DbQ6fBhMkAy+RVA3Qi0FbrV2Dz7SLdx6mXsY=;
-        b=VAekXsaPEtoLbv3wIxyVBaoptvYYmBPFFOCVAWOySqNtnvJOk/DE+IvJoiSTg7rDNh
-         4o5k/t/AEUgxy9ATNLclmxSjEfmdjDsoKje60tfo+1FiWNaj3E41Xlt8SvZaAOV37qcO
-         dmWO5tgrXF/oe36DqcAP+sDMQTPfZvz0+7Zeggx6CaUosVEyu9H+Q621lyq2hEUvnY4i
-         04fmKWsJGAn/EGkV6lhEmBAW7gP97psBwY4p3gX10PTRIEjHLlocr7DjVthNvQ3mvJMI
-         0UrwRpj3hkLUKcdzSdCkaTbgDACiFsSojc4us2AYmgNWUNPqIEGv/Ud1Lshr3V6UoRuJ
-         zmIg==
-X-Gm-Message-State: APjAAAXtnKHA0g9or+217tOU8C/mb58aw5VIHzknsYehieirAYKwElu0
-        eyuT8YcS3JHFApQjqT1yD5IHg7ri0uHt6V49N1tCrg3g6ns/
-X-Google-Smtp-Source: APXvYqyyrwio/l9VPnBGrCfTpcNZABNUSruyO028bEFLLyvoWMSoMYKDXEQhqESPhr1N5A/uKzEO5kcJdF3hNxoB0G1h889N74En
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VKyjEr/Rfjfh0O04poPnaaNgITAAHAf6lPMgH9siAVU=;
+        b=SLLPKfwST6dzMQVTshSHz9mXu9hwss9/xoGH9wVOqKCcwcde/Bt7HKx0sQewgIGlk/
+         lFQLxVEwEdyoHJYOVKZ2OIRFP0LrLV2cQajSbu1moZdhwfsXz8aDe3de4T+5YuiUt8b6
+         ynDqt90GKndZbNnOyaqxRVbNABtCDGFIPfDKw/jQUR2Uau82Q02R4LmaUKNQTlwghuWS
+         3Osle6lChtkRn66Dx3kxKFmn62CnTgYZsAeONi7YteiF1CpJVdRO88eRnMal0QotxrDB
+         c5x8VQZ/moUifsNJ09AOE/cyYm0IUTH99KOD5PK1ckAKPVSe9Nd46ZUsS5xJWVUglqjG
+         xy6Q==
+X-Gm-Message-State: APjAAAUxoRZfWYth/aV69W0Sw9v2noElVdDA7DvkrJH+UFeidzJrtHJw
+        YFhs5PogNO7RCiGoX0BQPeY=
+X-Google-Smtp-Source: APXvYqzOD/ywPO7aJaEMeOKX2Q6LrcPLJ/qFakyRzTNLuGn+jwLdB6oq5ftlsImUgie/7a6AQTXPFg==
+X-Received: by 2002:a17:902:e402:: with SMTP id ci2mr26351096plb.154.1556539979065;
+        Mon, 29 Apr 2019 05:12:59 -0700 (PDT)
+Received: from localhost.localdomain (111-249-15-202.dynamic-ip.hinet.net. [111.249.15.202])
+        by smtp.gmail.com with ESMTPSA id i3sm47312810pfa.90.2019.04.29.05.12.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Apr 2019 05:12:58 -0700 (PDT)
+From:   Charles Yeh <charlesyeh522@gmail.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     charles-yeh@prolific.com.tw, Charles Yeh <charlesyeh522@gmail.com>
+Subject: [PATCH] [PATCH v2] USB:serial:pl2303:Add new PID to support PL2303HXN (TYPE_HXN)
+Date:   Mon, 29 Apr 2019 20:12:37 +0800
+Message-Id: <20190429121237.13136-1-charlesyeh522@gmail.com>
+X-Mailer: git-send-email 2.21.0.windows.1
 MIME-Version: 1.0
-X-Received: by 2002:a24:50cc:: with SMTP id m195mr17995253itb.160.1556539567199;
- Mon, 29 Apr 2019 05:06:07 -0700 (PDT)
-Date:   Mon, 29 Apr 2019 05:06:07 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fb811f0587aa1b7f@google.com>
-Subject: KASAN: use-after-free Write in v4l2_device_release
-From:   syzbot <syzbot+62d0ec9a8d05fffcf12e@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ezequiel@collabora.com,
-        hans.verkuil@cisco.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, niklas.soderlund+renesas@ragnatech.se,
-        sakari.ailus@linux.intel.com, sque@chromium.org,
-        syzkaller-bugs@googlegroups.com, tfiga@chromium.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Prolific has developed a new USB to UART chip: PL2303HXN
+PL2303HXN : PL2303GC/PL2303GS/PL2303GT/PL2303GL/PL2303GE/PL2303GB
+The Vendor request used by the PL2303HXN (TYPE_HXN) is different from
+the existing PL2303 series (TYPE_HX & TYPE_01).
+Therefore, different Vendor requests are used to issue related commands.
 
-syzbot found the following crash on:
+1. Added a new TYPE_HXN type in pl2303_type_data, and then executes
+   new Vendor request,new flow control and other related instructions
+   if TYPE_HXN is recognized.
 
-HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=13f56538a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-dashboard link: https://syzkaller.appspot.com/bug?extid=62d0ec9a8d05fffcf12e
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+2. Because the new PL2303HXN only accept the new Vendor request,
+   the old Vendor request cannot be accepted (the error message
+   will be returned)
+   So first determine the TYPE_HX or TYPE_HXN through
+   PL2303_READ_TYPE_HX_STATUS in pl2303_startup.
 
-Unfortunately, I don't have any reproducer for this crash yet.
+  2.1 If the return message is "1", then the PL2303 is the existing
+      TYPE_HX/ TYPE_01 series.
+      The other settings in pl2303_startup are to continue execution.
+  2.2 If the return message is "not 1", then the PL2303 is the new
+      TYPE_HXN series.
+      The other settings in pl2303_startup are ignored.
+      (PL2303HXN will directly use the default value in the hardware,
+       no need to add additional settings through the software)
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+62d0ec9a8d05fffcf12e@syzkaller.appspotmail.com
+3. In pl2303_open: Because TYPE_HXN is different from the instruction of reset
+   down/up stream used by TYPE_HX.
+   Therefore, we will also execute different instructions here.
 
-==================================================================
-BUG: KASAN: use-after-free in v4l2_device_release+0x3ce/0x408  
-drivers/media/v4l2-core/v4l2-dev.c:197
-Write of size 8 at addr ffff88809a266c08 by task v4l_id/7544
+4. In pl2303_set_termios: The UART flow control instructions used by
+   TYPE_HXN/TYPE_HX/TYPE_01 are different.
+   Therefore, we will also execute different instructions here.
 
-CPU: 1 PID: 7544 Comm: v4l_id Not tainted 5.1.0-rc3-319004-g43151d6 #6
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xe8/0x16e lib/dump_stack.c:113
-  print_address_description+0x6c/0x236 mm/kasan/report.c:187
-  kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
-  v4l2_device_release+0x3ce/0x408 drivers/media/v4l2-core/v4l2-dev.c:197
-  device_release+0x7d/0x210 drivers/base/core.c:1064
-  kobject_cleanup lib/kobject.c:662 [inline]
-  kobject_release lib/kobject.c:691 [inline]
-  kref_put include/linux/kref.h:67 [inline]
-  kobject_put+0x1df/0x4f0 lib/kobject.c:708
-  put_device+0x21/0x30 drivers/base/core.c:2205
-  video_put drivers/media/v4l2-core/v4l2-dev.c:174 [inline]
-  v4l2_release+0x2d1/0x390 drivers/media/v4l2-core/v4l2-dev.c:469
-  __fput+0x2df/0x8c0 fs/file_table.c:278
-  task_work_run+0x149/0x1c0 kernel/task_work.c:113
-  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-  exit_to_usermode_loop+0x243/0x270 arch/x86/entry/common.c:166
-  prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
-  do_syscall_64+0x40c/0x4f0 arch/x86/entry/common.c:293
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x7fc1f5f952b0
-Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
-07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
-RSP: 002b:00007ffd270a0138 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007fc1f5f952b0
-RDX: 00007fc1f624bdf0 RSI: 0000000000000001 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007fc1f624bdf0 R09: 000000000000000a
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-R13: 00007ffd270a0290 R14: 0000000000000000 R15: 0000000000000000
+5. In pl2303_vendor_read & pl2303_vendor_write, since TYPE_HXN is different
+   from the vendor request instruction used by TYPE_HX/TYPE_01,
+   it will also execute different instructions here.
 
-Allocated by task 5354:
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_kmalloc mm/kasan/common.c:497 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:470
-  slab_post_alloc_hook mm/slab.h:437 [inline]
-  slab_alloc_node mm/slub.c:2756 [inline]
-  __kmalloc_node_track_caller+0xf3/0x320 mm/slub.c:4372
-  alloc_dr drivers/base/devres.c:103 [inline]
-  devm_kmalloc+0x8c/0x190 drivers/base/devres.c:793
-  devm_kzalloc include/linux/device.h:679 [inline]
-  usb_raremono_probe+0x34/0x235 drivers/media/radio/radio-raremono.c:298
-  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
-  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-
-Freed by task 5354:
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:459
-  slab_free_hook mm/slub.c:1429 [inline]
-  slab_free_freelist_hook+0x5e/0x140 mm/slub.c:1456
-  slab_free mm/slub.c:3003 [inline]
-  kfree+0xce/0x290 mm/slub.c:3958
-  release_nodes+0x4ac/0x920 drivers/base/devres.c:508
-  devres_release_all+0x79/0xc8 drivers/base/devres.c:529
-  __device_release_driver drivers/base/dd.c:1086 [inline]
-  device_release_driver_internal+0x23a/0x4f0 drivers/base/dd.c:1113
-  bus_remove_device+0x302/0x5c0 drivers/base/bus.c:556
-  device_del+0x467/0xb90 drivers/base/core.c:2269
-  usb_disable_device+0x242/0x790 drivers/usb/core/message.c:1237
-  usb_disconnect+0x298/0x870 drivers/usb/core/hub.c:2197
-  hub_port_connect drivers/usb/core/hub.c:4940 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0xcd2/0x3b00 drivers/usb/core/hub.c:5432
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff88809a266600
-  which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 1544 bytes inside of
-  4096-byte region [ffff88809a266600, ffff88809a267600)
-The buggy address belongs to the page:
-page:ffffea0002689800 count:1 mapcount:0 mapping:ffff88812c3f4600 index:0x0  
-compound_mapcount: 0
-flags: 0xfff00000010200(slab|head)
-raw: 00fff00000010200 dead000000000100 dead000000000200 ffff88812c3f4600
-raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff88809a266b00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff88809a266b80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff88809a266c00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                       ^
-  ffff88809a266c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff88809a266d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
+Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/serial/pl2303.c | 107 +++++++++++++++++++++++++++++-------
+ drivers/usb/serial/pl2303.h |   6 ++
+ 2 files changed, 92 insertions(+), 21 deletions(-)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index bb3f9aa4a909..d938091ba4cc 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -47,6 +47,12 @@ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_MOTOROLA) },
+ 	{ USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_ZTEK) },
+ 	{ USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_TB) },
++	{ USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GC) },
++	{ USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GB) },
++	{ USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GT) },
++	{ USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GL) },
++	{ USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GE) },
++	{ USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GS) },
+ 	{ USB_DEVICE(IODATA_VENDOR_ID, IODATA_PRODUCT_ID) },
+ 	{ USB_DEVICE(IODATA_VENDOR_ID, IODATA_PRODUCT_ID_RSAQ5) },
+ 	{ USB_DEVICE(ATEN_VENDOR_ID, ATEN_PRODUCT_ID),
+@@ -129,9 +135,11 @@ MODULE_DEVICE_TABLE(usb, id_table);
+ 
+ #define VENDOR_WRITE_REQUEST_TYPE	0x40
+ #define VENDOR_WRITE_REQUEST		0x01
++#define VENDOR_WRITE_NREQUEST		0x80
+ 
+ #define VENDOR_READ_REQUEST_TYPE	0xc0
+ #define VENDOR_READ_REQUEST		0x01
++#define VENDOR_READ_NREQUEST		0x81
+ 
+ #define UART_STATE_INDEX		8
+ #define UART_STATE_MSR_MASK		0x8b
+@@ -145,11 +153,19 @@ MODULE_DEVICE_TABLE(usb, id_table);
+ #define UART_OVERRUN_ERROR		0x40
+ #define UART_CTS			0x80
+ 
++#define PL2303_READ_TYPE_HX_STATUS	0x8080
++#define PL2303_TYPE_HXN_FLOW_CTRL	0x0A
++#define PL2303_TYPE_HXN_CTRL_RTS_CTS	0xFA
++#define PL2303_TYPE_HXN_CTRL_XON_XOFF	0xEE
++#define PL2303_TYPE_HXN_NONE_FLOW	0xFF
++#define PL2303_TYPE_HXN_RESET_DOWN_UPSTREAM	0x07
++
+ static void pl2303_set_break(struct usb_serial_port *port, bool enable);
+ 
+ enum pl2303_type {
+ 	TYPE_01,	/* Type 0 and 1 (difference unknown) */
+ 	TYPE_HX,	/* HX version of the pl2303 chip */
++	TYPE_HXN,	/* HXN version of the pl2303 chip */
+ 	TYPE_COUNT
+ };
+ 
+@@ -179,16 +195,26 @@ static const struct pl2303_type_data pl2303_type_data[TYPE_COUNT] = {
+ 	[TYPE_HX] = {
+ 		.max_baud_rate =	12000000,
+ 	},
++	[TYPE_HXN] = {
++		.max_baud_rate =	12000000,
++	},
+ };
+ 
+ static int pl2303_vendor_read(struct usb_serial *serial, u16 value,
+ 							unsigned char buf[1])
+ {
+ 	struct device *dev = &serial->interface->dev;
++	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
+ 	int res;
++	u8 request;
++
++	if (spriv->type == &pl2303_type_data[TYPE_HXN])
++		request = VENDOR_READ_NREQUEST;
++	else
++		request = VENDOR_READ_REQUEST;
+ 
+ 	res = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
+-			VENDOR_READ_REQUEST, VENDOR_READ_REQUEST_TYPE,
++			request, VENDOR_READ_REQUEST_TYPE,
+ 			value, 0, buf, 1, 100);
+ 	if (res != 1) {
+ 		dev_err(dev, "%s - failed to read [%04x]: %d\n", __func__,
+@@ -207,12 +233,19 @@ static int pl2303_vendor_read(struct usb_serial *serial, u16 value,
+ static int pl2303_vendor_write(struct usb_serial *serial, u16 value, u16 index)
+ {
+ 	struct device *dev = &serial->interface->dev;
++	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
+ 	int res;
++	u8 request;
+ 
+ 	dev_dbg(dev, "%s - [%04x] = %02x\n", __func__, value, index);
+ 
++	if (spriv->type == &pl2303_type_data[TYPE_HXN])
++		request = VENDOR_WRITE_NREQUEST;
++	else
++		request = VENDOR_WRITE_REQUEST;
++
+ 	res = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
+-			VENDOR_WRITE_REQUEST, VENDOR_WRITE_REQUEST_TYPE,
++			request, VENDOR_WRITE_REQUEST_TYPE,
+ 			value, index, NULL, 0, 100);
+ 	if (res) {
+ 		dev_err(dev, "%s - failed to write [%04x]: %d\n", __func__,
+@@ -292,6 +325,7 @@ static int pl2303_startup(struct usb_serial *serial)
+ 	struct pl2303_serial_private *spriv;
+ 	enum pl2303_type type = TYPE_01;
+ 	unsigned char *buf;
++	int res;
+ 
+ 	spriv = kzalloc(sizeof(*spriv), GFP_KERNEL);
+ 	if (!spriv)
+@@ -313,26 +347,37 @@ static int pl2303_startup(struct usb_serial *serial)
+ 		type = TYPE_01;		/* type 1 */
+ 	dev_dbg(&serial->interface->dev, "device type: %d\n", type);
+ 
++	if (type == TYPE_HX) {
++		res = usb_control_msg(serial->dev,
++			usb_rcvctrlpipe(serial->dev, 0),
++			VENDOR_READ_REQUEST, VENDOR_READ_REQUEST_TYPE,
++			PL2303_READ_TYPE_HX_STATUS, 0, buf, 1, 100);
++		if (res != 1)
++			type = TYPE_HXN;
++	}
++
+ 	spriv->type = &pl2303_type_data[type];
+ 	spriv->quirks = (unsigned long)usb_get_serial_data(serial);
+ 	spriv->quirks |= spriv->type->quirks;
+ 
+ 	usb_set_serial_data(serial, spriv);
+ 
+-	pl2303_vendor_read(serial, 0x8484, buf);
+-	pl2303_vendor_write(serial, 0x0404, 0);
+-	pl2303_vendor_read(serial, 0x8484, buf);
+-	pl2303_vendor_read(serial, 0x8383, buf);
+-	pl2303_vendor_read(serial, 0x8484, buf);
+-	pl2303_vendor_write(serial, 0x0404, 1);
+-	pl2303_vendor_read(serial, 0x8484, buf);
+-	pl2303_vendor_read(serial, 0x8383, buf);
+-	pl2303_vendor_write(serial, 0, 1);
+-	pl2303_vendor_write(serial, 1, 0);
+-	if (spriv->quirks & PL2303_QUIRK_LEGACY)
+-		pl2303_vendor_write(serial, 2, 0x24);
+-	else
+-		pl2303_vendor_write(serial, 2, 0x44);
++	if (type != TYPE_HXN) {
++		pl2303_vendor_read(serial, 0x8484, buf);
++		pl2303_vendor_write(serial, 0x0404, 0);
++		pl2303_vendor_read(serial, 0x8484, buf);
++		pl2303_vendor_read(serial, 0x8383, buf);
++		pl2303_vendor_read(serial, 0x8484, buf);
++		pl2303_vendor_write(serial, 0x0404, 1);
++		pl2303_vendor_read(serial, 0x8484, buf);
++		pl2303_vendor_read(serial, 0x8383, buf);
++		pl2303_vendor_write(serial, 0, 1);
++		pl2303_vendor_write(serial, 1, 0);
++		if (spriv->quirks & PL2303_QUIRK_LEGACY)
++			pl2303_vendor_write(serial, 2, 0x24);
++		else
++			pl2303_vendor_write(serial, 2, 0x44);
++	}
+ 
+ 	kfree(buf);
+ 
+@@ -679,13 +724,27 @@ static void pl2303_set_termios(struct tty_struct *tty,
+ 	if (C_CRTSCTS(tty)) {
+ 		if (spriv->quirks & PL2303_QUIRK_LEGACY)
+ 			pl2303_vendor_write(serial, 0x0, 0x41);
+-		else
++		else if (spriv->type == &pl2303_type_data[TYPE_HXN]) {
++			pl2303_vendor_write(serial, PL2303_TYPE_HXN_FLOW_CTRL,
++						PL2303_TYPE_HXN_CTRL_RTS_CTS);
++		} else {
+ 			pl2303_vendor_write(serial, 0x0, 0x61);
++		}
+ 	} else if (I_IXON(tty) && !I_IXANY(tty) && START_CHAR(tty) == 0x11 &&
+ 			STOP_CHAR(tty) == 0x13) {
+-		pl2303_vendor_write(serial, 0x0, 0xc0);
++		if (spriv->type == &pl2303_type_data[TYPE_HXN]) {
++			pl2303_vendor_write(serial, PL2303_TYPE_HXN_FLOW_CTRL,
++						PL2303_TYPE_HXN_CTRL_XON_XOFF);
++		} else {
++			pl2303_vendor_write(serial, 0x0, 0xc0);
++		}
+ 	} else {
+-		pl2303_vendor_write(serial, 0x0, 0x0);
++		if (spriv->type == &pl2303_type_data[TYPE_HXN]) {
++			pl2303_vendor_write(serial, PL2303_TYPE_HXN_FLOW_CTRL,
++						PL2303_TYPE_HXN_NONE_FLOW);
++		} else {
++			pl2303_vendor_write(serial, 0x0, 0x0);
++		}
+ 	}
+ 
+ 	kfree(buf);
+@@ -726,8 +785,14 @@ static int pl2303_open(struct tty_struct *tty, struct usb_serial_port *port)
+ 		usb_clear_halt(serial->dev, port->read_urb->pipe);
+ 	} else {
+ 		/* reset upstream data pipes */
+-		pl2303_vendor_write(serial, 8, 0);
+-		pl2303_vendor_write(serial, 9, 0);
++		if (spriv->type == &pl2303_type_data[TYPE_HXN]) {
++			pl2303_vendor_write(serial,
++					PL2303_TYPE_HXN_RESET_DOWN_UPSTREAM,
++					 0);
++		} else {
++			pl2303_vendor_write(serial, 8, 0);
++			pl2303_vendor_write(serial, 9, 0);
++		}
+ 	}
+ 
+ 	/* Setup termios */
+diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
+index 559941ca884d..fb9dd2ba4456 100644
+--- a/drivers/usb/serial/pl2303.h
++++ b/drivers/usb/serial/pl2303.h
+@@ -20,6 +20,12 @@
+ #define PL2303_PRODUCT_ID_HCR331	0x331a
+ #define PL2303_PRODUCT_ID_MOTOROLA	0x0307
+ #define PL2303_PRODUCT_ID_ZTEK		0xe1f1
++#define PL2303_PRODUCT_ID_GC		0x23A3
++#define PL2303_PRODUCT_ID_GB		0x23B3
++#define PL2303_PRODUCT_ID_GT		0x23C3
++#define PL2303_PRODUCT_ID_GL		0x23D3
++#define PL2303_PRODUCT_ID_GE		0x23E3
++#define PL2303_PRODUCT_ID_GS		0x23F3
+ 
+ 
+ #define ATEN_VENDOR_ID		0x0557
+-- 
+2.20.1
+
