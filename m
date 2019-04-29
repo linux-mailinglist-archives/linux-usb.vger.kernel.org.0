@@ -2,99 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9061EAFC
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 21:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E0AEB50
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 22:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729164AbfD2TmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 15:42:01 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:55018 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728928AbfD2TmB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 15:42:01 -0400
-Received: (qmail 8527 invoked by uid 2102); 29 Apr 2019 15:42:00 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 29 Apr 2019 15:42:00 -0400
-Date:   Mon, 29 Apr 2019 15:42:00 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Oliver Neukum <oneukum@suse.com>
-cc:     David Laight <David.Laight@ACULAB.COM>,
-        "gregKH@linuxfoundation.org" <gregKH@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] UAS: fix alignment of scatter/gather segments
-In-Reply-To: <1556563340.20085.28.camel@suse.com>
-Message-ID: <Pine.LNX.4.44L0.1904291534560.1632-100000@iolanthe.rowland.org>
+        id S1729187AbfD2UFs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 16:05:48 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:45400 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729140AbfD2UFr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 16:05:47 -0400
+Received: by mail-io1-f66.google.com with SMTP id e8so10096000ioe.12
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 13:05:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tC2ii7OkMypP9Br4uPDYWWFU7NBDDS8QRme9Wy6zm/8=;
+        b=VPQPK6m9aXVfE7U+nfP2sHm8K/C8Uc7J9cmPfFadccMVRpv9vhuNhkwrTXEk9i1zp5
+         AW45C/NCwsI7EnxiZwVTH34VaDp4t2IGm7wve+YFEck0ZXNsNqCshsYFKnpvgUJrIm92
+         62fzrz8Zw58pA5fJayV70fhGGqOkY4QlZ8gaIAmngFAKLEuKt0iyOvWPozz4+BAa7+bS
+         Ks+xQUuG8JbAnSIfAtl4zQ1IlmFrZQaIuEPgojeGwqA0a4gClLLzk/Q2K0OZY1zpHUSl
+         fbtFq9OtT9F3YVEoib7pkO2FX/BE5CU/xooSfULjIqF2DnSQU+mCTLcfeHTO7AqiBIST
+         k4tQ==
+X-Gm-Message-State: APjAAAXyLzYuTodP+GS2Vu5IYxgIMCUoGUXpUuraeVwAPcJNfBkjSqZt
+        OJU1qZX+eehOIge/e+bbPxjWLA==
+X-Google-Smtp-Source: APXvYqxivxOcXaQhwX8xCEpSH/9z5tK+xILufw0tv9Y5/ccJdVJ6UOC1csH3kacmPD5O/YpVwnzcUg==
+X-Received: by 2002:a5d:8245:: with SMTP id n5mr12201452ioo.41.1556568346959;
+        Mon, 29 Apr 2019 13:05:46 -0700 (PDT)
+Received: from google.com ([2620:15c:183:0:20b8:dee7:5447:d05])
+        by smtp.gmail.com with ESMTPSA id b72sm255077itc.30.2019.04.29.13.05.45
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Apr 2019 13:05:46 -0700 (PDT)
+Date:   Mon, 29 Apr 2019 14:05:41 -0600
+From:   Raul Rangel <rrangel@chromium.org>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] xhci: Convert xhci_handshake() to use
+ readl_poll_timeout_atomic()
+Message-ID: <20190429200541.GA116440@google.com>
+References: <20190208014816.21869-1-andrew.smirnov@gmail.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190208014816.21869-1-andrew.smirnov@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 29 Apr 2019, Oliver Neukum wrote:
+On Thu, Feb 07, 2019 at 05:48:16PM -0800, Andrey Smirnov wrote:
+> Xhci_handshake() implements the algorithm already captured by
+> readl_poll_timeout_atomic(). Convert the former to use the latter to
+> avoid repetition.
+> 
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Tested-by: Raul E Rangel <rrangel@chromium.org>
+Reviewed-by: Raul E Rangel <rrangel@chromium.org>
 
-> On Mo, 2019-04-29 at 13:55 -0400, Alan Stern wrote:
-> > On Mon, 29 Apr 2019, Oliver Neukum wrote:
-> > 
-> > > On Mo, 2019-04-29 at 12:08 -0400, Alan Stern wrote:
-> > > > On Mon, 29 Apr 2019, Oliver Neukum wrote:
-> > > > 
-> > > > > On Mo, 2019-04-29 at 15:06 +0000, David Laight wrote:
-> > > > 
-> > > > > But the statement the old comment made are no longer correct.
-> > > > 
-> > > > Perhaps David would be satisfied if the comment were changed to say 
-> > > > that _some_ USB controller drivers have this unusual alignment 
-> > > > requirement.
-> > > 
-> > > It would seem to me that every controller that does not do
-> > > scatter/gather has this requirement. In other words, this is
-> > > the true requirement of USB. It does not come from the
-> > > controller. It comes from the protocol's need to not
-> > > send a short package.
-> > 
-> > Are you sure that xHCI has this requirement?  I haven't checked the
-> 
-> I am sure that it has not. UAS would never have worked.
-> Like in the case of storage this patch is necessary
-> for virtual controllers.
+This fixes a bug on the AMD Stoneyridge platform. usleep(1) sometimes
+takes over 10ms. This means a 5 second timeout can easily take over 15
+seconds which will trigger the watchdog and reboot the system.
 
-Okay, yes, I agree with what you say.  With the addition that some
-controllers which _do_ support scatter-gather also have this
-requirement.
-
-In fact, xhci-hcd may be the only driver that doesn't need this special 
-alignment.
-
-Alan Stern
-
-> > spec.  I know that UHCI, OHCI, and EHCI do need this alignment (and
-> > OHCI and EHCI do in fact have hardware support for scatter-gather).
-> > 
-> > More precisely, what matters is whether the controller is able to merge
-> > two different DMA segments into a single packet.  UHCI can't.  OHCI and
-> 
-> Correct. However, we cannot blindly assume in a class driver that
-> certain controllers will be used.
-> 
-> > EHCI can, but only if the first segment ends at a page boundary and the
-> > second begins at a page boundary -- it's easier just to say that the
-> > segments have to be maxpacket-aligned.
-> > 
-> > > The second, old, comment is about controllers.
-> > 
-> > Well, if the drivers would use bounce buffers to work around the 
-> > controllers' issues then they wouldn't have this special requirement.  
-> > So it really is a combination of what the hardware can do and what the 
-> > driver can do.
-> 
-> Yes, but the point of using an API to specify restrictions to the
-> upper layer is to avoid using bounce buffers. Besides, bounce
-> buffers in block IO is interesting in terms of VM implications.
-> 
-> 	Regards
-> 		Oliver
-> 
-> 
-> 
-
+Thanks for the patch.
