@@ -2,60 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF442E6C7
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 17:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC767E707
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 17:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728572AbfD2PnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 11:43:02 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:60930 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728438AbfD2PnC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Apr 2019 11:43:02 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2DD0580D;
-        Mon, 29 Apr 2019 08:43:02 -0700 (PDT)
-Received: from [10.1.194.37] (e113632-lin.cambridge.arm.com [10.1.194.37])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BFB23F5C1;
-        Mon, 29 Apr 2019 08:42:59 -0700 (PDT)
-Subject: Re: [PATCH v6 00/13] Add support for usb on Hikey960
-To:     Yu Chen <chenyu56@huawei.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     john.stultz@linaro.org, suzhuangluan@hisilicon.com,
-        kongfei@hisilicon.com, liuyu712@hisilicon.com,
-        wanghu17@hisilicon.com, butao@hisilicon.com, chenyao11@huawei.com,
-        fangshengzhou@hisilicon.com, lipengcheng8@huawei.com,
-        songxiaowei@hisilicon.com, xuyiping@hisilicon.com,
-        xuyoujun4@huawei.com, yudongbin@hisilicon.com,
-        zangleigang@hisilicon.com
-References: <20190420064019.57522-1-chenyu56@huawei.com>
-From:   Valentin Schneider <valentin.schneider@arm.com>
-Message-ID: <766eb894-f939-02d2-5a3b-03fb51f7c4ee@arm.com>
-Date:   Mon, 29 Apr 2019 16:42:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190420064019.57522-1-chenyu56@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S1728702AbfD2P5i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 11:57:38 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44602 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728516AbfD2P5i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Apr 2019 11:57:38 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 6E259AD45;
+        Mon, 29 Apr 2019 15:57:37 +0000 (UTC)
+Message-ID: <1556553445.20085.21.camel@suse.com>
+Subject: Re: [PATCH] UAS: fix alignment of scatter/gather segments
+From:   Oliver Neukum <oneukum@suse.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "gregKH@linuxfoundation.org" <gregKH@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Date:   Mon, 29 Apr 2019 17:57:25 +0200
+In-Reply-To: <ff7152940ce84722a284baf7b8566dde@AcuMS.aculab.com>
+References: <20190429122026.4249-1-oneukum@suse.com>
+         <f378babbf2f349e59d98a5ab99958d78@AcuMS.aculab.com>
+         <1556545099.20085.14.camel@suse.com>
+         <e22543f3d87b4867aefdf9c71e2ec4a2@AcuMS.aculab.com>
+         <1556548362.20085.17.camel@suse.com>
+         <ff7152940ce84722a284baf7b8566dde@AcuMS.aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mo, 2019-04-29 at 15:06 +0000, David Laight wrote:
+> From: Oliver Neukum
+> > On Mo, 2019-04-29 at 14:19 +0000, David Laight wrote:
 
-On 20/04/2019 07:40, Yu Chen wrote:
-> The patchset adds support for usb functionality of Hikey960, includes:
-> - usb phy driver for Hisilicon Kirin Soc hi3660
-> - usb driver for HiKey960 board
-> - some adjustment in dwc3 and usb role driver
-> - dts for support usb of HiKey960
+> > AFAICT controllers do not export that property.
 > 
+> Perhaps they need to ....
 
-Still works fine on my Debian setup:
+Feel free to make a patch.
 
-Tested-by: Valentin Schneider <valentin.schneider@arm.com>
+> > > Even if you decide the code is 'good enough' (I don't know what the
+> > > cost is of enforcing a 2k alignment instead of 512 bytes)
+> > > the comment is just plain wrong.
+> > 
+> > Usually block IO will be pages. They are 4K aligned.
+> > In terms of performance this code is unlikely to matter.
+> 
+> Presumably there are some cases where the buffer isn't 4k aligned.
+> I'm guessing things like 'dd' of raw disks?
 
-Thanks,
-Valentin
+Possibly.
+
+> If the buffer has the wrong alignment then I presume a bounce buffer
+> has to be allocated?
+> The USB controller drivers are likely to need to be able to do that
+> anyway because buffers from the network stack can have almost
+> arbitrary alignment (I remember that code being horrid, I don't
+> remember a data copy in the TX path).
+
+You can ask the network layer to undo scatter/gather.
+I don't see an issue.
+
+> > But it is needed for correctness.
+> 
+> If you are doing it for 'correctness' then you need the correct size.
+
+Why? Any larger size will do.
+
+> If you are doing it because you've seen too small an alignment you
+> should be mentioning the failing system.
+
+Why?
+
+> > What would you want for the comment?
+> 
+> You need to be more specific about the alignment requirements than
+> the old comment, not far less specific.
+
+But the statement the old comment made are no longer correct.
+
+	Regards
+		Oliver
+
