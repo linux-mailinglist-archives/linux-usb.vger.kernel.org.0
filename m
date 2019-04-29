@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 787D9E95B
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 19:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F88CE965
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 19:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728844AbfD2Rkh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 13:40:37 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:38585 "EHLO
+        id S1728839AbfD2Rm4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 13:42:56 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:38718 "EHLO
         mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728748AbfD2Rkh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 13:40:37 -0400
-Received: by mail-vs1-f65.google.com with SMTP id s2so6409505vsi.5
-        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 10:40:36 -0700 (PDT)
+        with ESMTP id S1728748AbfD2Rm4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 13:42:56 -0400
+Received: by mail-vs1-f65.google.com with SMTP id s2so6414054vsi.5
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 10:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/YqeYR8BHi6e2nYbZ0JtDVuDtXVxEemhz8ckz0C4ye8=;
-        b=iGtCYbxfGMURLhY6nNYPv17tjN3enKlDHxiv+2k1dQgGHU3B8nPork7lVlvUF39QZ+
-         DgIJyP4na21RkFHDd9XNiwt1uom0DqhXF2z9N/mc51yMznt/H0jQaxzrHzgo9GrEBZVx
-         7ALU5ZjfW5Q4mbZlKQ4E5OxQyPeND6E6peMCQ=
+        bh=aeYRo4DWnU986cYWhjGEnN+h3JgjXMfOdPXnL4w08GQ=;
+        b=fvpH0+z9/mV5i6pYl9OAUXis10RjTQeAAdDiUQEH151BarKXyLHHjd9WpMKjUS6b9q
+         zaYidDBw6ItEDgm6YOuQHikDFaAKU+M7Oe+xQ1UDLCLh29BcIAEN9H+sLdGT1ejTdIZS
+         +ibcNa/SUoFJSE0cXLU9UXzh1VJfchQ1ZEm9g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/YqeYR8BHi6e2nYbZ0JtDVuDtXVxEemhz8ckz0C4ye8=;
-        b=SGDZYO6R7WcpOIHGv8xBWFEM/2e4tUFVovSzjJUB0QPbsUaK+oor62O44Zz4FDIU9u
-         Blk3nE4mOsglvD1EUaDZFmwRrJcUBfxMEW5o9smIku0oGukNzqGVdKqP8E3gNVPSRCHt
-         NUEH6Va+Nlc8V5nJC757xGVurnEGA3YmVsKLQziEI2KP7D33pelaZVVpk1Nv6VVTzV+8
-         h037m2fbFhhsVXMAqqqWNjx4x8nHhL/lILPyMoaEx1+xeyBl+yYVaB3nEMzEcmQdn9LG
-         XLRy4GmuWcpdVm1mwMkWMeWjkF8TllE1CbbwYl2mcw9D1KgBiGorqve7PEc/aPyvfCaR
-         GQ+Q==
-X-Gm-Message-State: APjAAAUkSvseObnaLrb8XFcj+oRMmH4ddbVg+eIda93auybrZ28xW8P1
-        M3xrrvY9ONV4YC+F7KvWiUx5iaFA6mY=
-X-Google-Smtp-Source: APXvYqxY9AWlL51tQgJ5lq9Ih/z7TEfAVFD6J9ye9hy/dGIH2mu97lEOqCQxOdIunHm3XbX1gZ/U8A==
-X-Received: by 2002:a67:bd01:: with SMTP id y1mr31077903vsq.167.1556559635429;
-        Mon, 29 Apr 2019 10:40:35 -0700 (PDT)
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
-        by smtp.gmail.com with ESMTPSA id p44sm4255651uae.7.2019.04.29.10.40.34
+        bh=aeYRo4DWnU986cYWhjGEnN+h3JgjXMfOdPXnL4w08GQ=;
+        b=GYJ1rPmVShEcvevgl3xYpQPfDQcIowGvoyK82qlO5ycPf5/4e8urfZiGmAJo1xLgJR
+         hCARnpZiQD3dDNIgHNx5HMTDrLqwXY3QEK1LR0P0KZ6kS57UB/CyEGFJj4yl9owkw6sN
+         FVsOwCxMgdKvCNdfWcvfDFhSDNcx4YPGHM4n7uemsedoIS60jrwR6JY6cjrkpP0vMCks
+         peRIE7ltxQanPdJuNr9vdDxJUZerjSjS5U0nS3ke+K5yowIo+NL1Du3RpKlkzFz1BiUk
+         Ezx8Ujmcor97vHgUzgXVcdub+dTd00le7CIyBB7pvOqCeUgASDMhonqZ2VQv1RhA0Rdv
+         PtsA==
+X-Gm-Message-State: APjAAAUF4dJ03pI0Hyao8AnKXzc52AGQsVO0ZqovDt8/fHzQobPrf9Bq
+        FolECJWmWijc9Yrz6KQGT1DARe0ACtE=
+X-Google-Smtp-Source: APXvYqyT4kOuoGbYI1rlAC3xOunshbP76XB1qpCYFGNWOpTSvzyGHv18NfNMg7YLS7ZeN30PiAWOPA==
+X-Received: by 2002:a67:82c8:: with SMTP id e191mr34030607vsd.24.1556559774038;
+        Mon, 29 Apr 2019 10:42:54 -0700 (PDT)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id h78sm15955543vka.48.2019.04.29.10.42.53
         for <linux-usb@vger.kernel.org>
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 10:40:34 -0700 (PDT)
-Received: by mail-vs1-f47.google.com with SMTP id y196so287163vsc.10
-        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 10:40:34 -0700 (PDT)
-X-Received: by 2002:a67:ffce:: with SMTP id w14mr11636268vsq.111.1556559633924;
- Mon, 29 Apr 2019 10:40:33 -0700 (PDT)
+        Mon, 29 Apr 2019 10:42:53 -0700 (PDT)
+Received: by mail-vs1-f41.google.com with SMTP id s2so6413985vsi.5
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 10:42:53 -0700 (PDT)
+X-Received: by 2002:a67:ffce:: with SMTP id w14mr11643582vsq.111.1556559772553;
+ Mon, 29 Apr 2019 10:42:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1555672441.git.arturp@synopsys.com> <15bba89b920e29e27de4cfaac546834fba5d1a76.1555672441.git.arturp@synopsys.com>
- <CAD=FV=U4BXuT1rM--UBo6vTfCHpm=qsWydoO_bNXYRDxu22twA@mail.gmail.com> <SN1PR12MB2431B8BC296AF49152702868A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
-In-Reply-To: <SN1PR12MB2431B8BC296AF49152702868A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
+References: <cover.1555672441.git.arturp@synopsys.com> <c62b99a6e4ad6de2982de988e9f9bcd0c6ec4daa.1555672441.git.arturp@synopsys.com>
+ <CAD=FV=VDVhA0qzBN13=3C44mAzhDaQBUia_QADqyggSSFwKXqQ@mail.gmail.com> <SN1PR12MB24313212A9F1574A4D00C3B3A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
+In-Reply-To: <SN1PR12MB24313212A9F1574A4D00C3B3A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 29 Apr 2019 10:40:22 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XFd-Uk_beUr+5djbi-93eWENGu5z5td7V3KPqpuoeiig@mail.gmail.com>
-Message-ID: <CAD=FV=XFd-Uk_beUr+5djbi-93eWENGu5z5td7V3KPqpuoeiig@mail.gmail.com>
-Subject: Re: [PATCH v1 08/14] usb: dwc2: Add default param to control power optimization.
+Date:   Mon, 29 Apr 2019 10:42:40 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WmXZFf8dutJn22xJ2NRSpiUyjmkJVAy6h0ykqmUG4tkw@mail.gmail.com>
+Message-ID: <CAD=FV=WmXZFf8dutJn22xJ2NRSpiUyjmkJVAy6h0ykqmUG4tkw@mail.gmail.com>
+Subject: Re: [PATCH v1 14/14] usb: dwc2: Add enter/exit hibernation from
+ system issued suspend/resume
 To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -69,131 +70,243 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-On Mon, Apr 29, 2019 at 4:30 AM Artur Petrosyan
+On Mon, Apr 29, 2019 at 5:01 AM Artur Petrosyan
 <Arthur.Petrosyan@synopsys.com> wrote:
 >
 > Hi,
 >
-> On 4/27/2019 00:46, Doug Anderson wrote:
+> On 4/27/2019 01:01, Doug Anderson wrote:
 > > Hi,
 > >
-> > On Fri, Apr 19, 2019 at 11:53 AM Artur Petrosyan
+> > On Fri, Apr 19, 2019 at 1:05 PM Artur Petrosyan
 > > <Arthur.Petrosyan@synopsys.com> wrote:
 > >>
-> >> - Added a default param "power_saving" to enable or
-> >>    disable hibernation or partial power down features.
-> >>
-> >> - Printed hibernation param in hw_params_show and
-> >>    power_saving param in params_show.
+> >> Added a new flow of entering and exiting hibernation when PC is
+> >> hibernated or suspended.
 > >>
 > >> Signed-off-by: Artur Petrosyan <arturp@synopsys.com>
-> >> Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
 > >> ---
-> >>   drivers/usb/dwc2/core.h    |  3 +++
-> >>   drivers/usb/dwc2/debugfs.c |  2 ++
-> >>   drivers/usb/dwc2/params.c  | 19 +++++++++++++------
-> >>   3 files changed, 18 insertions(+), 6 deletions(-)
+> >>   drivers/usb/dwc2/hcd.c | 128 +++++++++++++++++++++++++++++++------------------
+> >>   1 file changed, 81 insertions(+), 47 deletions(-)
 > >>
-> >> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-> >> index 30bab8463c96..9221933ab64e 100644
-> >> --- a/drivers/usb/dwc2/core.h
-> >> +++ b/drivers/usb/dwc2/core.h
-> >> @@ -373,6 +373,8 @@ enum dwc2_ep0_state {
-> >>    *                      case.
-> >>    *                      0 - No (default)
-> >>    *                      1 - Yes
-> >> + * @power_saving:      Specifies if power saving is enabled or not. If it is
-> >> + *                     enabled power_down functionality will be enabled.
-> >>    * @power_down:         Specifies whether the controller support power_down.
-> >>    *                     If power_down is enabled, the controller will enter
-> >>    *                     power_down in both peripheral and host mode when
+> >> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+> >> index 45d4a3e1ebd2..f1e92a287cb1 100644
+> >> --- a/drivers/usb/dwc2/hcd.c
+> >> +++ b/drivers/usb/dwc2/hcd.c
+> >> @@ -4510,35 +4510,54 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
+> >>          if (hsotg->op_state == OTG_STATE_B_PERIPHERAL)
+> >>                  goto unlock;
+> >>
+> >> -       if (hsotg->params.power_down != DWC2_POWER_DOWN_PARAM_PARTIAL ||
+> >> +       if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE ||
+> >>              hsotg->flags.b.port_connect_status == 0)
+> >>                  goto skip_power_saving;
+> >>
+> >> -       /*
+> >> -        * Drive USB suspend and disable port Power
+> >> -        * if usb bus is not suspended.
+> >> -        */
+> >> -       if (!hsotg->bus_suspended) {
+> >> -               hprt0 = dwc2_read_hprt0(hsotg);
+> >> -               hprt0 |= HPRT0_SUSP;
+> >> -               hprt0 &= ~HPRT0_PWR;
+> >> -               dwc2_writel(hsotg, hprt0, HPRT0);
+> >> -               spin_unlock_irqrestore(&hsotg->lock, flags);
+> >> -               dwc2_vbus_supply_exit(hsotg);
+> >> -               spin_lock_irqsave(&hsotg->lock, flags);
+> >> -       }
+> >> +       switch (hsotg->params.power_down) {
+> >> +       case DWC2_POWER_DOWN_PARAM_PARTIAL:
+> >> +               /*
+> >> +                * Drive USB suspend and disable port Power
+> >> +                * if usb bus is not suspended.
+> >> +                */
+> >> +               if (!hsotg->bus_suspended) {
+> >> +                       hprt0 = dwc2_read_hprt0(hsotg);
+> >> +                       hprt0 |= HPRT0_SUSP;
+> >> +                       hprt0 &= ~HPRT0_PWR;
+> >> +                       dwc2_writel(hsotg, hprt0, HPRT0);
+> >> +                       spin_unlock_irqrestore(&hsotg->lock, flags);
+> >> +                       dwc2_vbus_supply_exit(hsotg);
+> >> +                       spin_lock_irqsave(&hsotg->lock, flags);
+> >> +               }
+> >>
+> >> -       /* Enter partial_power_down */
+> >> -       ret = dwc2_enter_partial_power_down(hsotg);
+> >> -       if (ret) {
+> >> -               if (ret != -ENOTSUPP)
+> >> -                       dev_err(hsotg->dev,
+> >> -                               "enter partial_power_down failed\n");
+> >> +               /* Enter partial_power_down */
+> >> +               ret = dwc2_enter_partial_power_down(hsotg);
+> >> +               if (ret) {
+> >> +                       if (ret != -ENOTSUPP)
+> >> +                               dev_err(hsotg->dev,
+> >> +                                       "enter partial_power_down failed\n");
+> >> +                       goto skip_power_saving;
+> >> +               }
+> >> +               hsotg->bus_suspended = true;
+> >> +               break;
+> >> +       case DWC2_POWER_DOWN_PARAM_HIBERNATION:
+> >> +               if (!hsotg->bus_suspended) {
 > >
-> > Why are you adding a new parameter?  power_saving should be exactly
-> > the same as "power_down != DWC2_POWER_DOWN_PARAM_NONE".  Just use that
-> > anywhere you need it.
-> Customers should have a parameter using which they will disable entire
-> power saving hibernation and Partial Power Down support.
+> > Do you have any idea why for DWC2_POWER_DOWN_PARAM_PARTIAL we still
+> > call dwc2_enter_partial_power_down() even if bus_suspended is true,
+> > but for hibernate you don't call dwc2_enter_hibernation()?
+> For Hibernation I do call dwc2_enter_hibernation().
+
+Maybe you didn't understand the question.  I'll be clearer.
+
+Imagine _dwc2_hcd_suspend() is called but "bus_suspended" is already
+true at the start of the function.
+
+If we're in DWC2_POWER_DOWN_PARAM_PARTIAL, _dwc2_hcd_suspend() _will_
+call dwc2_enter_partial_power_down()
+
+If we're in DWC2_POWER_DOWN_PARAM_HIBERNATION, _dwc2_hcd_suspend()
+_will NOT_ call dwc2_enter_partial_power_down()
+
+
+This is all part of the whole asymmetry between PARTIAL and
+HIBERNATION that makes it hard to understand.
+
+
+> >> +                       /* Enter hibernation */
+> >> +                       spin_unlock_irqrestore(&hsotg->lock, flags);
+> >> +                       ret = dwc2_enter_hibernation(hsotg, 1);
+> >> +                       spin_lock_irqsave(&hsotg->lock, flags);
+> >> +                       if (ret && ret != -ENOTSUPP)
+> >> +                               dev_err(hsotg->dev,
+> >> +                                       "%s: enter hibernation failed\n",
+> >> +                                       __func__);
+> >
+> > nit: no __func__ in dev_xxx() error messages.  The device plus the
+> > message should be enough.  Only resort to __func__ if you're forced to
+> > do an error message without a "struct device *".
+> This code comes form previous implementations I have not touched it not
+> to back anything.
+
+Please fix.  Even if you had internal code that did this it still
+needs to be fixed when going upstream.  It is highly unlikely you'll
+break something when removing something like this.
+
+
+
+> > nit: as per my comments in an earlier patch, remove special case for -ENOTSUPP
+> >
+> > Also, presumably you want to match the error handling in
+> > DWC2_POWER_DOWN_PARAM_PARTIAL and do a "goto skip_power_saving" when
+> > you see an error?
+> When there is an error power_saving should be skipped.
+
+OK, so you agree?
+
+
+> >> +               } else {
+> >> +                       goto skip_power_saving;
+> >> +               }
+> >> +               break;
+> >> +       default:
+> >>                  goto skip_power_saving;
+> >>          }
+> >>
+> >> -       hsotg->bus_suspended = true;
+> >> -
+> >
+> > It's a bit weird to remove this, but I guess it just got moved to the
+> > partial power down case?  ...and in the hibernate case you're relying
+> > on the hibernate function to set this?  Yet another frustratingly
+> > asymmetric code structure...
+> Enter hibernation implements setting bus_suspend so I don't touch this.
+> Actually this patch set fixes issues it doesn't clean up everything
+> related to hibernation or partial power down.
+
+Yet more asymmetry.
+
+
+> >>          /* Ask phy to be suspended */
+> >>          if (!IS_ERR_OR_NULL(hsotg->uphy)) {
+> >>                  spin_unlock_irqrestore(&hsotg->lock, flags);
+> >> @@ -4564,17 +4583,17 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
+> >>          int ret = 0;
+> >>          u32 hprt0;
+> >>
+> >> -       hprt0 = dwc2_read_hprt0(hsotg);
+> >> -
+> >>          spin_lock_irqsave(&hsotg->lock, flags);
+> >>
+> >> -       if (dwc2_is_device_mode(hsotg))
+> >> +       if (!hsotg->bus_suspended)
+> >
+> > As per my comments above I don't have a good grasp on what
+> > "bus_suspended" is for.  ...that being said, if your change here is
+> > actually correct then you probably (?) want to remove the "if
+> > (hsotg->bus_suspended)" check later in this same function.
+> >
+> > Said another way, you've now got code that looks like:
+> >
+> > if (!hsotg->bus_suspended)
+> >    goto exit;
+> >
+> > /* code that I think doesn't touch bus_suspended */
+> >
+> > if (hsotg->bus_suspended) {
+> >    /* do something */
+> > } else {
+> >    /* do something else */
+> > }
+> >
+> > Presumably the "do something" is now dead code?
+> >
+> That part is not dad because if hsotg->bus_suspended is true
+> resuming/exiting from suspend/partial power down/hibernation should be
+> performed.
+> On the other hand if hsotg->bus_suspended is false there is no need to
+> resume.
 >
-> power_down is used to see which power saving mode we got
-> (hibernation/partial power down).
->
+> So of course if core is not suspended the code responsible for resuming
+> should not be called. In that sense the code can be called dead.
+
+I think I didn't explain it well.  Does this patch help you?
+
+https://chromium.googlesource.com/chromiumos/third_party/kernel/+/4e84efdbeb74bcb8b24e2b1fea24153981acc185%5E%21/
+
+
+> >> +       spin_unlock_irqrestore(&hsotg->lock, flags);
+> >> +
 > >
-> > Having two parameters like you're doing is just asking for them to get
-> > out of sync.  ...and, in fact, I think they will get out of sync.  On
-> > rk3288, for instance:
-> >
-> > -> dwc2_set_default_params()
-> > ---> power_saving = true
-> > ---> dwc2_set_param_power_down()
-> > -----> power_down = DWC2_POWER_DOWN_PARAM_PARTIAL
-> > -> set_params(), which is actually dwc2_set_rk_params()
-> > ---> power_down = 0
-> Setting power_down = 0  is a wrong and old option of disabling power
-> saving feature because if we set power_down = 0 then it shows that there
-> is no support for any power saving mode. That is why this patch is
-> introduced to provide an easier way of disabling power saving modes.
+> > I'm pretty curious if you tested DWC2_POWER_DOWN_PARAM_PARTIAL after
+> > applying your patch series.  As far as I can tell your switch
+> > statement for DWC2_POWER_DOWN_PARAM_PARTIAL will "break" with the
+> > spinlock already unlocked.  ...so you'll run spin_unlock_irqrestore
+> > twice.  Is that really legit?
+> I have tested the patches on HAPS-DX and Linaro HiKey 960 boards.
 
-If setting "power_down = 0" is wrong then please update your patch to
-remove all the mainline code that sets power_down to 0.  Presumably
-this means you'd want to convert that code over to using "power_saving
-= False".  Perhaps then I can see your vision of how this works more
-clearly.
+How is it possible that you don't end up spin unlocking more than
+once?  This seems like a pretty serious problem.
 
-NOTE: I'm curious how you envision what someone would do if they had a
-core that supported hibernation but they only wanted to enable partial
-power down.  I guess then they'd have to set "power_saving = True" and
-then "power_down = DWC2_POWER_DOWN_PARAM_PARTIAL"?  I guess your
-vision of the world is:
+My guess is that whatever tests you ran didn't actually exercise this
+function.  Personally I could only get it to exercise by doing
+suspend/resume.
+
+...and when I did, sure enough I saw:
+
+BUG: spinlock already unlocked on CPU#2, kworker/u8:32/5812
 
 
-// Example 1: Core supports power savings but we want disabled
-// (no code since this is the default)
+> > ...with that a quick test seems to show that partial power down is
+> > sorta working on rk3288 now.  I _think_ I saw one case where hotplug
+> > failed but I've seen several where it works.  ...unfortunately it
+> > seems to break when I do hotplug on the port where I have
+> > "snps,reset-phy-on-wake" set.
+> You can provide debug logs for that scenario I will try to help you fix
+> issues with that.
 
-// Example 2: Pick the best power saving available
-params->power_saving = True
-
-// Example 3: Supports hibernation, but we only want partial:
-params->power_saving = True
-params->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL
-
-
-My vision of the world is:
-
-// Example 1: Core supports power savings but we want disabled
-params->power_down = DWC2_POWER_DOWN_PARAM_NONE
-
-// Example 2: Pick the best power saving available
-// (no code since this is the default)
-
-// Example 3: Supports hibernation, but we only want partial:
-params->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL
+All you need to do is make sure you run the function
+_dwc2_hcd_suspend() with power down mode set to
+"DWC2_POWER_DOWN_PARAM_PARTIAL".  ...or walk through the code and see
+that spin_unlock_irqrestore() will certainly be called twice.
 
 
-I like that in my vision of the world "pick the best" is the default
-(though I suppose we need to fix the driver so it actually works) and
-that there's only one variable so you don't have extra confusion.
-
-
-> > ...so at the end of dwc2_init_params() you will have power_saving =
-> > true but power_down set to DWC2_POWER_DOWN_PARAM_NONE.  That seems
-> > bad.  ...and, in fact:
-> >
-> > # grep '^power' /sys/kernel/debug/*.usb/params
-> > /sys/kernel/debug/ff540000.usb/params:power_saving                  : 1
-> > /sys/kernel/debug/ff540000.usb/params:power_down                    : 0
-> > /sys/kernel/debug/ff580000.usb/params:power_saving                  : 1
-> > /sys/kernel/debug/ff580000.usb/params:power_down                    : 0
-> >
-> >
-> > ...so while you could fix all of the various set_params() functions,
-> > it seems better to just drop this patch since I don't think it buys
-> > anything.
-> I don't think we should drop this patch. Because, it is introducing the
-> correct way of disabling power saving (hibernation/partial power down
-> modes). Explanation is listed above.
-
-I personally see no benefit still.  It's just as clear to me for
-someone to set "power_down = DWC2_POWER_DOWN_PARAM_NONE" as it is to
-set "power_savings = False".
 
 -Doug
