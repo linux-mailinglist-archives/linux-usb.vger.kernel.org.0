@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCADE933
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 19:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61410E936
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Apr 2019 19:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728861AbfD2Re1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 13:34:27 -0400
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:38765 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728798AbfD2ReX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 13:34:23 -0400
-Received: by mail-ua1-f65.google.com with SMTP id t15so3784611uao.5
-        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 10:34:21 -0700 (PDT)
+        id S1728877AbfD2Rf1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 13:35:27 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:38282 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728839AbfD2Rf1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 13:35:27 -0400
+Received: by mail-vs1-f66.google.com with SMTP id s2so6399223vsi.5
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 10:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OxWXMuOgGwPkufba0enFIvrOumzCG6nakeorSSUZITE=;
-        b=oN7bJtuVChJsMZ/9210hby91zLgHRrKtpPjxNLyffJfOD0tZ58sGG38HX4nF7JiUFl
-         ODXNNwRPlIOlydEA/kDYcbXt42ImC5SJpMzy6rVhVzJBgrLMAoVR9/jCc9zxU0cWCky5
-         XEqsMq33eg1Vlx4hvZpLnf/rPrkZFgdmcSzmw=
+        bh=VGcKmHmoHhH7w+k85P8y65zqU9P6f6SiYpVWe4wDZSk=;
+        b=Ba9rwZNQkcNzVGaKPKsTjwBZvG/uw0dCPJEjMM+QoprufEm7tw2tE2PSFqRo2TQZHD
+         wEGfGlVJCyx1qoxtIOuTIU0/yNbcsupeguY6xHarPyWG+36+J7TaTBg7QYgX3Tm8UCeP
+         APspBgE7y4rBinLEFCRTRzKYGAEO9mw3uQ+F4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OxWXMuOgGwPkufba0enFIvrOumzCG6nakeorSSUZITE=;
-        b=Jd5gUxQB0axZR5FR5sPLuJYanWPcKoI913XHf7qW1rCVGMhoVT28k+2BpM11HzQkZQ
-         BDovhUIlwHlVMKPSqePLlsGsd/KzfW9rxXNOEOVpShGgnMN/+19f7r8SPuoiAdNLii+E
-         KHGmvscZiCnySMskvsc7xOhqvSW2I0k2jFj/zWFVj6j7H1Yqu/+lUkc4gJOdQCzyWc7t
-         gci8QL600Tqy/LsLNrz1J1U1gVUnjlFDN7HalWbLOiHRcASmn/p98kiYBZYFah7qTd1a
-         UTDFqT1p6yEHZT0tkP+G9hSP93qAt9/Wi1R/+vQGlofAAvt9tA6npj/Lf/ZUnyfofKnp
-         gN0A==
-X-Gm-Message-State: APjAAAVPg0fBQ6wbBiyobaAnHSmBvOHGcfkSATz4PL40XwVwCoiYT3Op
-        AWE5VLhq+OMmuEnsxpeG567MYJlwAaM=
-X-Google-Smtp-Source: APXvYqyEnTiRVMeww4R11nuKnE0BhvUnaWcaz2Y9XYnODSCIpDYIViNhukZJAU50BXFED6tOo2Yn4w==
-X-Received: by 2002:ab0:2b13:: with SMTP id e19mr6758563uar.15.1556559261179;
-        Mon, 29 Apr 2019 10:34:21 -0700 (PDT)
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
-        by smtp.gmail.com with ESMTPSA id w184sm25674363vkd.0.2019.04.29.10.34.20
+        bh=VGcKmHmoHhH7w+k85P8y65zqU9P6f6SiYpVWe4wDZSk=;
+        b=kdFT3pvav6ndHvCwxlpIQtvgjhkvo18nhP9Wdndj0ST3Dhq3x8Qcy8ZecDD+VjtkW1
+         VCw5PHqpnyPWUngUPF3p458BjbD3A22Q7HzQolSs69mPLyHGmcAyZfrxBLjM516pQDyP
+         W/2ODf2mdXfo0AUUFBI/Jgqb2aI9AgiU0MFfT3eVrkPkojKXeyk1I57KyL6hu49Stf6a
+         rIIOLI5sK4DwTh9xQZeNDpwDzAInYULXUMVjE8Epj4+SBa9LXigHpzFIirDu2VMymn5v
+         ISdSRAjozmXM0AnDpawMHbw/Wj5Td4xwZyaGyF6kuo6QamkXyIYJFlndiWe+aG17fA0e
+         PFow==
+X-Gm-Message-State: APjAAAUCcAeOtS67nHmi6PM5XXeI8gUY2r7DAGRhjvXvinJg/r6XwvPY
+        HuLeLwRJ4YP4IOyOxjrDPYlD89aS2Nc=
+X-Google-Smtp-Source: APXvYqzelEasLPuLVV834mCr+KEjcXA0BislbceGj5TFQ40sqZtNAyTy/Ttu4hkp9xMQEChCl6VBpg==
+X-Received: by 2002:a67:8117:: with SMTP id c23mr4081898vsd.78.1556559325740;
+        Mon, 29 Apr 2019 10:35:25 -0700 (PDT)
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
+        by smtp.gmail.com with ESMTPSA id u10sm15662131vku.34.2019.04.29.10.35.23
         for <linux-usb@vger.kernel.org>
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 10:34:20 -0700 (PDT)
-Received: by mail-vs1-f47.google.com with SMTP id d8so6418630vsp.2
-        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 10:34:20 -0700 (PDT)
-X-Received: by 2002:a67:ffce:: with SMTP id w14mr11616335vsq.111.1556559259937;
- Mon, 29 Apr 2019 10:34:19 -0700 (PDT)
+        Mon, 29 Apr 2019 10:35:23 -0700 (PDT)
+Received: by mail-vs1-f54.google.com with SMTP id e2so6358348vsc.13
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 10:35:23 -0700 (PDT)
+X-Received: by 2002:a67:e88c:: with SMTP id x12mr8028284vsn.87.1556559323186;
+ Mon, 29 Apr 2019 10:35:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1555075927.git.arturp@synopsys.com> <b4129291df7b2d061e93c03862c081b6a35b2e7f.1555075927.git.arturp@synopsys.com>
- <CAD=FV=U4muZuc-Wh-1xf5eFDSnyDVXK4BQHeJihWJpaU1ooB0g@mail.gmail.com> <SN1PR12MB2431BD7144CBA0C34C58CE8CA7390@SN1PR12MB2431.namprd12.prod.outlook.com>
-In-Reply-To: <SN1PR12MB2431BD7144CBA0C34C58CE8CA7390@SN1PR12MB2431.namprd12.prod.outlook.com>
+References: <cover.1555672441.git.arturp@synopsys.com> <0dc725c7e9956eedaf03bb5d68a7d5e856d8cb5a.1555672441.git.arturp@synopsys.com>
+ <CAD=FV=UjPPnGVjfch8En+S5UndTDK06HK-7QRHdK3oOr+kCiEw@mail.gmail.com> <SN1PR12MB24316A556FF0EC6E7899A9F0A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
+In-Reply-To: <SN1PR12MB24316A556FF0EC6E7899A9F0A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 29 Apr 2019 10:34:08 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XhXc8dD8n-XEBG=tSC4Av+JW9hN-U=d3JP8vCiX5DopQ@mail.gmail.com>
-Message-ID: <CAD=FV=XhXc8dD8n-XEBG=tSC4Av+JW9hN-U=d3JP8vCiX5DopQ@mail.gmail.com>
-Subject: Re: [PATCH 01/14] usb: dwc2: Fix dwc2_restore_device_registers() function.
+Date:   Mon, 29 Apr 2019 10:35:12 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UdKhbgG6r+xNUx9e+2quXi_vN7NwDBxPHs-0hKmSJKzQ@mail.gmail.com>
+Message-ID: <CAD=FV=UdKhbgG6r+xNUx9e+2quXi_vN7NwDBxPHs-0hKmSJKzQ@mail.gmail.com>
+Subject: Re: [PATCH v1 04/14] usb: dwc2: Fix suspend state in host mode for
+ partial power down.
 To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -69,119 +70,75 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-On Mon, Apr 29, 2019 at 3:51 AM Artur Petrosyan
+On Mon, Apr 29, 2019 at 4:03 AM Artur Petrosyan
 <Arthur.Petrosyan@synopsys.com> wrote:
 >
-> On 4/27/2019 00:43, Doug Anderson wrote:
+> Hi,
+>
+> On 4/27/2019 00:45, Doug Anderson wrote:
 > > Hi,
 > >
-> > On Fri, Apr 12, 2019 at 6:38 AM Artur Petrosyan
-> > <arthur.petrosyan@synopsys.com> wrote:
+> > On Fri, Apr 19, 2019 at 1:05 PM Artur Petrosyan
+> > <Arthur.Petrosyan@synopsys.com> wrote:
 > >>
-> >> - Added backup of DCFG register.
-> >> - Added Set the Power-On Programming done bit.
+> >> - In dwc2_port_suspend() function added waiting for the
+> >>    HPRT0.PrtSusp register field to be set.
 > >>
-> >> Signed-off-by: Artur Petrosyan <arturp@synopsys.com>
-> >> ---
-> >>   drivers/usb/dwc2/gadget.c | 10 ++++++++++
-> >>   1 file changed, 10 insertions(+)
+> >> - In _dwc2_hcd_suspend() function added checking of
+> >>    "hsotg->flags.b.port_connect_status" port connection
+> >>    status if port connection status is 0 then skipping
+> >>    power saving (entering partial power down mode).
+> >>    Because if there is no device connected there would
+> >>    be no need to enter partial power down mode.
 > >>
-> >> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-> >> index 6812a8a3a98b..dcb0fbb8bc42 100644
-> >> --- a/drivers/usb/dwc2/gadget.c
-> >> +++ b/drivers/usb/dwc2/gadget.c
-> >> @@ -5004,6 +5004,7 @@ int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup)
-> >>   {
-> >>          struct dwc2_dregs_backup *dr;
-> >>          int i;
-> >> +       u32 dctl;
+> >> - Added "hsotg->bus_suspended = true" beceuse after
+> >
+> > s/beceuse/because
+> >
+> >>    entering partial power down in host mode the
+> >>    bus_suspended flag must be set.
+> >
+> > The above statement sounds to me like trying to win an argument by
+> > saying "I'm right because I'm right."  Can you give more details about
+> > why "bus_suspended" must be set?  See below also.
+> >
+> There is no intention of winning any argument.
+
+I was trying to say that your statement does not convey any
+information about the "why".  It just says: "I now set this variable
+because it needs to be set".  This tells me nothing useful because
+presumably if it did't need to be set then you wouldn't have set it.
+I want to know more information about how the code was broken before
+you did this.  What specifically requires this variable to be set?
+
+
+> Are you familiar with "bus_suspended" flag ? have you looked at what is
+> it used for ?
+>
+>   * @bus_suspended:     True if bus is suspended
+>
+> So when entering to hibernation is performed bus is suspended. To
+> indicate that "hsotg->bus_suspended" is assigned to true.
+
+Perhaps you can help me understand what the difference is between
+"port suspend" and "bus suspend" on dwc2.  I think this is where my
+confusion lies since there are functions for both and they do subtly
+different things.  ...but both functions set bus_suspended.
+
+
+> >> @@ -4514,6 +4519,8 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
+> >>                  goto skip_power_saving;
+> >>          }
 > >>
-> >>          dev_dbg(hsotg->dev, "%s\n", __func__);
-> >>
-> >> @@ -5019,6 +5020,15 @@ int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup)
-> >>          if (!remote_wakeup)
-> >>                  dwc2_writel(hsotg, dr->dctl, DCTL);
-> >>
-> >> +       if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_PARTIAL) {
-> >> +               dwc2_writel(hsotg, dr->dcfg, DCFG);
+> >> +       hsotg->bus_suspended = true;
 > >> +
-> >> +               /* Set the Power-On Programming done bit */
-> >> +               dctl = dwc2_readl(hsotg, DCTL);
-> >> +               dctl |= DCTL_PWRONPRGDONE;
-> >> +               dwc2_writel(hsotg, dctl, DCTL);
-> >> +       }
 > >
-> > I can't vouch one way or the other for the correctness of this change,
-> > but I will say that it's frustrating how asymmetric hibernate and
-> > partial power down are.  It makes things really hard to reason about.
-> > Is there any way you could restructure this so it happens in the same
-> > way between hibernate and partial power down?
-> >
->
-> > Specifically looking at the similar sequence in
-> > dwc2_gadget_exit_hibernation() (which calls this function), I see:
-> >
-> > 1. There are some extra delays.  Are those needed for partial power down?
-> Do you mean delays in dwc2_gadget_exit_hibernation() ? If yes they are
-> needed for hibernation flow. What relates to delays in hibernation
-> needed for partial power down. Anything that is implemented in the
-> hibernation delays or other things are part of hibernation and are not
-> used in partial power down because they are two different flows of power
-> saving.
+> > I'm a bit unsure about this.  Specifically I note that
+> > _dwc2_hcd_resume() has a special case "if (hsotg->bus_suspended)".
+> > Does that now become dead code?
+> No it doesn't became a dead code.
 
-OK, if they aren't needed for partial power down then that's fine.
-When I see two functions doing nearly the same sets of writes but one
-has delays and the other doesn't it makes me wonder if that was on
-purpose or not.
-
-
-> > 2. For exiting hibernation the setting of "DCTL_PWRONPRGDONE" only
-> > happens if "not remote wakeup".  Is it truly on purpose that you don't
-> > do that?
-> Currently partial power down doesn't support remote wakeup flow.
-
-Oh.  What happens if you have partial power down enabled and try to
-enable remote wakeup?  Does it give an error?
-
-
-> > 3. I see that dctl gets "DCTL_PWRONPRGDONE" set as part of the
-> > sequence in the "not remote wakeup" case before calling this function.
-> > ...but then part of the function (that you didn't change) clobbers it,
-> > I think.
-> >
-> Setting device programming done bit in dwc2_gadget_exit_hibernation()
-> comes from older code and from debugging I noticed that if it is not
-> done at that point then the flow brakes.
->
-> So in partial power down flow we need to set that bit wile restoring
-> device registers. That is why the implementation is such.
->
-> >
-> > I have no idea if any of that is a problem but the fact that the
-> > hibernate and partial power down code runs through such different
-> > paths makes it really hard to know / reason about.  Many of those
-> > differences exist before your patch, but you're adding a new
-> > difference rather than trying to unify and that worries me.
-> >
-> >
->
-> So to make it easy to reason about I think we should debug it. Please
-> point out where it fails. Have you tested this flow and did you see any
-> wrong behavior of hibernation or partial power down? if yes please
-> provide the debug logs so that they can be investigated.
->
-> All of these patches have been tested on HAPS-DX and and Linaro HiKey
-> 960 board. These patches fix Hibernation and Partial Power down issues.
-
-I have no real way to test this code.  I'm only setup to use dwc2 as a
-USB host since my target device is a laptop with type A ports on it.
-Although one of the ports could be made a gadget and I could force the
-mode and use an A-to-A cable, I don't have any use cases here nor do I
-really have any experience using dwc2 as a gadget.
-
-...so if you and others are happy with the code I won't stand in the
-way--I was just reviewing the rest of the series so I figured I'd do a
-cursory pass on this patch too.
+Can you explain when it gets triggered, then?
 
 
 -Doug
