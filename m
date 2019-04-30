@@ -2,84 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D14FAC5
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 15:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A120DFAD6
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 15:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbfD3NtU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 09:49:20 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43348 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725938AbfD3NtU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Apr 2019 09:49:20 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5FC84AC44;
-        Tue, 30 Apr 2019 13:49:19 +0000 (UTC)
-Message-ID: <1556632146.20085.36.camel@suse.com>
-Subject: Re: KASAN: invalid-free in disconnect_rio
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Cesar Miquel <miquel@df.uba.ar>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        id S1726563AbfD3Nv6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 09:51:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56934 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726105AbfD3Nv6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Apr 2019 09:51:58 -0400
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 699B4217D4;
+        Tue, 30 Apr 2019 13:51:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556632316;
+        bh=FK7HvOl0jhVPsMklvQn4u+qk2YgkQYXDQ9T+ToRvAXA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R3Eq5UQpEL1ulohhuEsrUMBN4yHKbGSE7eO2Aq5wIH53jMAkaDaUoTMiGUdGhJCfo
+         WFhwmfPa6Mrtcx1/G4u31gKPjxJ6BYpGPQdVcYXQ1Q/02mGIz/C3dfMquL9S1tZz6S
+         qK033DJlKnFFTeKQbT8FT5KXlVEifZYTDv2KtKUw=
+Received: by mail-qt1-f171.google.com with SMTP id g7so16210459qtc.0;
+        Tue, 30 Apr 2019 06:51:56 -0700 (PDT)
+X-Gm-Message-State: APjAAAXV1whIOfQDJx8iOBBUMFWmuoyk7+9/IaTu489PX4E9kKDp8sxQ
+        cDS+4ZpQyyQe+qo56ZnPQdKpjBXzePwSd+FiVw==
+X-Google-Smtp-Source: APXvYqysWBnERRiggEZsMb3Mmr6NNKePq261OyqR1iKPSacnJ82Idt1QSfZ2Dzyk1tH321Fn4H2E6up6IIy0+QNvHz4=
+X-Received: by 2002:aed:3f6b:: with SMTP id q40mr14911616qtf.26.1556632315591;
+ Tue, 30 Apr 2019 06:51:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190416215351.242246-1-dianders@chromium.org>
+ <20190416215351.242246-2-dianders@chromium.org> <20190430005357.GA13695@bogus>
+ <CAD=FV=V3_NcBHdg5A8LvGMoVd_eLN0q=pXo_3f2GCdi5u2GP-Q@mail.gmail.com>
+In-Reply-To: <CAD=FV=V3_NcBHdg5A8LvGMoVd_eLN0q=pXo_3f2GCdi5u2GP-Q@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 30 Apr 2019 08:51:43 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJGMBhqRw0D9ehsV=A7cQ4cPah=Ot335npraBdGm1Yhag@mail.gmail.com>
+Message-ID: <CAL_JsqJGMBhqRw0D9ehsV=A7cQ4cPah=Ot335npraBdGm1Yhag@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: usb: dwc2: Document quirk to reset
+ PHY upon wakeup
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Alexandru M Stan <amstan@chromium.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Randy Li <ayaka@soulik.info>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ryan Case <ryandcase@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rio500-users@lists.sourceforge.net,
-        syzbot <syzbot+35f04d136fc975a70da4@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Date:   Tue, 30 Apr 2019 15:49:06 +0200
-In-Reply-To: <CAAeHK+w-miwjw78hbUmACgVhr+hbCN31SF+fNeEtdMn7-9=O+A@mail.gmail.com>
-References: <0000000000008d15ee058653b53e@google.com>
-         <1556629116.20085.32.camel@suse.com>
-         <CAAeHK+w-miwjw78hbUmACgVhr+hbCN31SF+fNeEtdMn7-9=O+A@mail.gmail.com>
+        Mark Rutland <mark.rutland@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Di, 2019-04-30 at 15:02 +0200, Andrey Konovalov wrote:
-> On Tue, Apr 30, 2019 at 2:58 PM Oliver Neukum <oneukum@suse.com> wrote:
-> > 
-> > On Fr, 2019-04-12 at 04:36 -0700, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot found the following crash on:
-> > > 
-> > > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-> > > git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=174ce2e3200000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=35f04d136fc975a70da4
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138150f3200000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1290c22d200000
-> > > 
-> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > Reported-by: syzbot+35f04d136fc975a70da4@syzkaller.appspotmail.com
-> > > 
-> > > usb 6-1: USB disconnect, device number 2
-> > > rio500 3-1:0.110: USB Rio disconnected.
-> > > usb 4-1: USB disconnect, device number 2
-> > > ==================================================================
-> > > usb 1-1: USB disconnect, device number 2
-> > > BUG: KASAN: double-free or invalid-free in slab_free mm/slub.c:3003 [inline]
-> > > BUG: KASAN: double-free or invalid-free in kfree+0xce/0x290 mm/slub.c:3958
-> > > usb 2-1: USB disconnect, device number 2
-> > > 
-> > 
-> > Try as I might, I don't understand this. I can see a memory leak,
-> > but not a double free.
-> 
-> I took a look at this some time ago, and I was under the impression
-> that this driver doesn't handle multiple devices being connected at
-> the same time well.
+On Tue, Apr 30, 2019 at 12:29 AM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Mon, Apr 29, 2019 at 5:54 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Tue, Apr 16, 2019 at 02:53:48PM -0700, Douglas Anderson wrote:
+> > > On Rockchip rk3288 there's a hardware quirk where we need to assert
+> > > the reset signal to the PHY when we get a remote wakeup on one of the
+> > > two ports.  Document this quirk in the bindings.
+> > >
+> > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> > > ---
+> > >
+> > > Changes in v2: None
+> > >
+> > >  Documentation/devicetree/bindings/usb/dwc2.txt | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/usb/dwc2.txt b/Documentation/devicetree/bindings/usb/dwc2.txt
+> > > index 6dc3c4a34483..f70f3aee4bfc 100644
+> > > --- a/Documentation/devicetree/bindings/usb/dwc2.txt
+> > > +++ b/Documentation/devicetree/bindings/usb/dwc2.txt
+> > > @@ -37,6 +37,8 @@ Refer to phy/phy-bindings.txt for generic phy consumer properties
+> > >  - g-rx-fifo-size: size of rx fifo size in gadget mode.
+> > >  - g-np-tx-fifo-size: size of non-periodic tx fifo size in gadget mode.
+> > >  - g-tx-fifo-size: size of periodic tx fifo per endpoint (except ep0) in gadget mode.
+> > > +- snps,reset-phy-on-wake: If present indicates that we need to reset the PHY when
+> > > +                          we detect a wakeup.  This is due to a hardware errata.
+> >
+> > Synopsys or Rockchip errata?
+> >
+> > Ideally, this should be implied by the controller or phy compatible.
+>
+> I have no idea.  The errata was described to me by Rockchip but I
+> don't know if it's common to more than one board.
+>
+> You're right that we could do it on the controller compatible, but we
+> have to be careful.  The two ports on rk3288 currently have the same
+> compatible string but the errata only applies to one of them.  ...so
+> I'd have to cue on not just the compatible string but also detect
+> whether we're on the "OTG" port of the "host only" port.  That's not
+> too hard, though since it is probe-able.
+>
+> I'm happy to spin this but I'll wait to hear from Felipe.  This is
+> already in his testing tree, so presumably I should do a follow-up
+> patch.  ...but if he wants me to re-post I can do that too.
 
+Okay, I guess it is fine as-is.
 
-You are right. A global variable is used. A fix is being worked on.
-
-	Regards
-		Oliver
-
+Rob
