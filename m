@@ -2,110 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4A7FCF9
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2001FD12
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbfD3PfV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 11:35:21 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:50283 "EHLO
+        id S1726065AbfD3PkK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 11:40:10 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:55205 "EHLO
         wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726014AbfD3PfU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:35:20 -0400
+        by vger.kernel.org with ESMTP id S1725906AbfD3PkK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:40:10 -0400
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 95C746CF;
-        Tue, 30 Apr 2019 11:35:19 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Tue, 30 Apr 2019 11:35:19 -0400
+        by mailout.west.internal (Postfix) with ESMTP id 0C4D779C;
+        Tue, 30 Apr 2019 11:40:08 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 30 Apr 2019 11:40:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=lUhLByuCWkwkjJrzNCYlklmu1AZ
-        KvcruJii4RaKrLXk=; b=gccH8deaYaHtej3yNluzRWg7QUJlI659Biii8gdM+Sg
-        f0eGGW2Rd5kzG4+YbDYY8ftNUijxzDlnf5apvL5v/E/87Cne/RJjdxMxkEwfmS4p
-        eKncdIuxVsb7H9z7OU7rwYC+fDXywrM2eY5XsZT3IDj9SRocmzSLnj0k1r1HWux4
-        EqBiwJxrInPuCPh9+nJs1VNUaq7mUJwR5OXsXm6LSDdkt896isJaOSfZmiaBRcxV
-        hxujSTiwmxPO8lr/E7xZDY4C+WM2GiqColwtO8fhlLF3a31za8P3mFrKOyg3ukc+
-        XXRhRR1yNhj/Ycs2e2cfjO5687Get0hwFlve7z/PIZA==
+        :content-type:in-reply-to; s=fm3; bh=im7oD5qEY2zhcFnJGGzg2Qlw0IY
+        OGi07CNykA7KpG74=; b=FqYKtQqQ/6eMcn2BKplv+JRDlcoyz5PdmBzSx8kHGGV
+        TF/E0rvdRiXSvZ1LjFYqIaifS4nWequszxQ2L4qk/wIDPwEQb+AYRqlrM/2xmSDt
+        ZvT2VxgA9SNG/jO6cv30eTgkfmmwL9Y+sLRd2tEIcQ+ObDqGJ06T4kBoKMm6NhsV
+        /JbmhqNc05AyI555wr5Hg03CQGSL2qb8YaUjN8VhYtIV/VcKrpDncyB6u0/B/T39
+        0M4T0HBXCf0ZNdSLxBO+aJEBuLdoqLB1g1jUcrdkarFyIV7TONwK9qy105Qzw4TI
+        v1OS40C63GDmXkJD+CzgbZfnnc/pl6F89on2UBMrnLw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=lUhLBy
-        uCWkwkjJrzNCYlklmu1AZKvcruJii4RaKrLXk=; b=PneItX3IUUZH8xHqv/p6XL
-        /ZPwYaqTGLgjrurBGpXc6j1xKRuheMqhdxqjNBLexHOTL5iPjU8vs+olxyozC8he
-        MWGK7viX2tOvg3HU07J5CEk4/G9u5gFv/tnYtz2uE+xtaVrXNZ5VfggD7+PxnFVU
-        ICWVvaCOOytD7ZHIgTzFECJTVjoWRT0deiug79dKsNn9COCQ6KUkc+fvtMgnFG6Z
-        fiBi64e4cFQ1ShDk4ZYt5H2mqqz5ddcdWaRNyy0VbO23mMr7ertFkVM7T/2Y1/Mw
-        lKq5zPoDSuEZnDfrSj53/lPUe3qF0SOoB3DwrU+mWrg78W1dJ0NrMQRmID2X++tw
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=im7oD5
+        qEY2zhcFnJGGzg2Qlw0IYOGi07CNykA7KpG74=; b=YLbWNhEbJPL9tS44Iiaqwm
+        WN8qZEOw+YA2mOuVFiPzPwwLa/8OA4waAm9i0UT4ziFZatywspiJRMhHRSesxv5Z
+        g4LSLSLwHlw+uTAQo/tHpmApdH3sUtpJuogCgySe8nl7fP1iQbM71287e5EUjYyd
+        SNPKs24e78+mmAk0uENriafIg4kQvum5s+j2XSp1U7mJuFLb2Za2rraS9KjVJy5P
+        j0fbtQtptk0wpjLdsjoqxnhCd4uXQP0J6KZD+1LjhTtcvTobA6C9lX/mgt5VuMPe
+        Hipnd9yEbTHoeIN3cWlsVmjbC/ZyBa1tZm8lVTNusfCkd+t6pB/WssufnbmC0IKg
         ==
-X-ME-Sender: <xms:NmvIXI3eZ_jgXO2SVWsx285A9RC2sae2TKX1Tohku_JjYtcMRvV0dA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrieehgdefudcutefuodetggdotefrodftvf
+X-ME-Sender: <xms:WGzIXIcinPOrH_7j973CBKsOJQLB0icS3dE8hIVllvEqSbQZ7NU5-Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrieehgdefvdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecuogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenuc
-    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucffohhmrghinhepghhithhhuhgsrd
-    gtohhmpdgrphhpshhpohhtrdgtohhmnecukfhppeekfedrkeeirdekledruddtjeenucfr
-    rghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptd
-X-ME-Proxy: <xmx:NmvIXEpsL08XzciNi3FXWkmc77WCF640MdIYZnD7PLLE-8II4HMjUg>
-    <xmx:NmvIXHN-f8q_tsDEGX8YJ0xglms4P-0WPngqzpoqSwZNs7VPHkU-wQ>
-    <xmx:NmvIXNphjoOPVKK94FfDy93jwJmv2NaM3FJsltqK7aAwRCPRAeIG3A>
-    <xmx:N2vIXDvdxndjdJfCHRN-OXvXkmIgfXgbX-92dVYM2xMhCykIH0R9mA>
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
+    fuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpeffhffvuffkfhggtggujggf
+    sehttdertddtredvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrd
+    gtohhmqeenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhgohhordhglhdprghpphhs
+    phhothdrtghomhenucfkphepkeefrdekiedrkeelrddutdejnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhenucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:WGzIXMDLv2g20YuJ82OjmnuuA2kiPwrZLo9oN_bUp96vLyTJ7nZi0A>
+    <xmx:WGzIXIpevVaZdu_ueJ5dqLAJjhnBrsV-XjW6bXbtcEexOa7dK5UkWw>
+    <xmx:WGzIXBTGoriUMXlH2B_E1vVzaKBYsA-puOg0ioscmR_UNV49Sz_iNg>
+    <xmx:WGzIXE0zUZ00VjdPzF5TISIwOjik-iSgmv3V5XigjPn8rPYNCCTWYQ>
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 3A6B1103CF;
-        Tue, 30 Apr 2019 11:35:18 -0400 (EDT)
-Date:   Tue, 30 Apr 2019 17:35:16 +0200
+        by mail.messagingengine.com (Postfix) with ESMTPA id 32D37E4176;
+        Tue, 30 Apr 2019 11:40:06 -0400 (EDT)
+Date:   Tue, 30 Apr 2019 17:40:00 +0200
 From:   Greg KH <greg@kroah.com>
-To:     syzbot <syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: WARNING: Detected a wedged cx25840 chip; the device will not
- work.
-Message-ID: <20190430153516.GA23459@kroah.com>
-References: <00000000000048aa750587c052ef@google.com>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        syzbot <syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING: Support for this device (Terratec Grabster AV400) is
+ experimental.
+Message-ID: <20190430154000.GB23459@kroah.com>
+References: <0000000000004101370587c052fb@google.com>
+ <Pine.LNX.4.44L0.1904301058150.1465-100000@iolanthe.rowland.org>
+ <CAAeHK+zYQ0QF_vo+iYns2d0O7RZ=Uq0kxi1mWc1W_0bBxMGR0A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00000000000048aa750587c052ef@google.com>
+In-Reply-To: <CAAeHK+zYQ0QF_vo+iYns2d0O7RZ=Uq0kxi1mWc1W_0bBxMGR0A@mail.gmail.com>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 07:36:07AM -0700, syzbot wrote:
-> Hello,
+On Tue, Apr 30, 2019 at 05:14:28PM +0200, Andrey Konovalov wrote:
+> On Tue, Apr 30, 2019 at 5:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Tue, 30 Apr 2019, syzbot wrote:
+> >
+> > > Hello,
+> > >
+> > > syzbot found the following crash on:
+> > >
+> > > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=141ca62d200000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=af8f8d2ac0d39b0ed3a0
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1405bedd200000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ce3bbb200000
+> > >
+> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
+> > >
+> > > usb 1-1: New USB device found, idVendor=0ccd, idProduct=0039, bcdDevice=
+> > > d.3c
+> > > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> > > usb 1-1: config 0 descriptor??
+> > > pvrusb2: Hardware description: Terratec Grabster AV400
+> > > pvrusb2: **********
+> > > pvrusb2: WARNING: Support for this device (Terratec Grabster AV400) is
+> > > experimental.
+> > > pvrusb2: Important functionality might not be entirely working.
+> > > pvrusb2: Please consider contacting the driver author to help with further
+> > > stabilization of the driver.
+> > > pvrusb2: **********
+> > >
+> > >
+> > > ---
+> > > This bug is generated by a bot. It may contain errors.
+> > > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > This does seem like a bug in syzbot.  Why does it think this pr_info()
+> > output indicates a crash?  Is it fooled by the capitalized "WARNING" at
+> > the start of one of the lines?
 > 
-> syzbot found the following crash on:
+> Well, as of [1] WARN*() should only be used to indicate a kernel bug.
+> Normally, WARN*() prints a line that start with a warning, which is
+> followed by a stack trace. Unfortunately the stack trace is not always
+> present (kernel memory is badly corrupted, console deadlocked, etc.),
+> so syzbot detects the "WARNING:" line as a beginning of a WARN*()
+> reported bug. In this case the driver does something like
+> `pr_info("WARNING: ...", ...)`, which confuses syzbot. I'd say it's
+> the kernel that needs to be changed here to use some other kind of
+> prefix for printing warning messages.
 > 
-> HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12df67c3200000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-> dashboard link: https://syzkaller.appspot.com/bug?extid=170a86bf206dd2c6217e
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108a28f3200000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145d8a2d200000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
-> 
-> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> pvrusb2: Hardware description: Gotview USB 2.0 DVD 2
-> pvrusb2: Invalid write control endpoint
-> usb 1-1: USB disconnect, device number 2
-> pvrusb2: Invalid write control endpoint
-> pvrusb2: WARNING: Detected a wedged cx25840 chip; the device will not work.
-> pvrusb2: WARNING: Try power cycling the pvrusb2 device.
-> pvrusb2: WARNING: Disabling further access to the device to prevent other
-> foul-ups.
-> pvrusb2: Device being rendered inoperable
-> cx25840 0-0044: Unable to detect h/w, assuming cx23887
-> cx25840 0-0044: cx23887 A/V decoder found @ 0x88 (pvrusb2_a)
-> pvrusb2: Attached sub-driver cx25840
-> pvrusb2: Attempted to execute control transfer when device not ok
-> pvrusb2: Attempted to execute control transfer when device not ok
+> [1] https://github.com/torvalds/linux/commit/96c6a32ccb55a366054fd82cc63523bb7f7493d3
 
-As the driver said, power cycle your device, it crashed :)
+Ok, we can change these to "Warning" then.  Want to send a patch?
 
-Seriously, I think your script detection failed here, sorry.
+thanks,
 
 greg k-h
