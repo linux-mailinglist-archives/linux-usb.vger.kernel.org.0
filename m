@@ -2,173 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE42FCEA
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4A7FCF9
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbfD3Pbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 11:31:35 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:40672 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfD3Pbe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:31:34 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x3UFVIjv111448;
-        Tue, 30 Apr 2019 10:31:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1556638278;
-        bh=4QGSJ62ES/Rz1i9PeLAfB7uPMJpr8cbFT9IZNWvLw44=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=LVUwgkJEySc1NQiMsX7SfPcrMmupuezK/cY5XOVpW+9wsYmba8CupcBX2Z/8ciJTn
-         eMabujMf2PJ5J2ait6x+tEDoU/sViesLPsZcoq4kWsF5adYVLcbnyUoyCeXl/RYe1z
-         wrzaZdhGIF5WnPsr0JL9TqciPofjnJuHifm+FjLk=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x3UFVICH095519
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Apr 2019 10:31:18 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 30
- Apr 2019 10:31:18 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 30 Apr 2019 10:31:18 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x3UFVIqs113684;
-        Tue, 30 Apr 2019 10:31:18 -0500
-Date:   Tue, 30 Apr 2019 10:31:18 -0500
-From:   Bin Liu <b-liu@ti.com>
-To:     "Matwey V. Kornilov" <matwey@sai.msu.ru>
-CC:     <gregkh@linuxfoundation.org>, <matwey.kornilov@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 6/6] usb: musb: Decrease URB starting latency in
- musb_advance_schedule()
-Message-ID: <20190430153118.GI20993@uda0271908>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
-        gregkh@linuxfoundation.org, matwey.kornilov@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20190403185310.8437-1-matwey@sai.msu.ru>
- <20190403185310.8437-7-matwey@sai.msu.ru>
+        id S1726155AbfD3PfV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 11:35:21 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:50283 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726014AbfD3PfU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:35:20 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 95C746CF;
+        Tue, 30 Apr 2019 11:35:19 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 30 Apr 2019 11:35:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=lUhLByuCWkwkjJrzNCYlklmu1AZ
+        KvcruJii4RaKrLXk=; b=gccH8deaYaHtej3yNluzRWg7QUJlI659Biii8gdM+Sg
+        f0eGGW2Rd5kzG4+YbDYY8ftNUijxzDlnf5apvL5v/E/87Cne/RJjdxMxkEwfmS4p
+        eKncdIuxVsb7H9z7OU7rwYC+fDXywrM2eY5XsZT3IDj9SRocmzSLnj0k1r1HWux4
+        EqBiwJxrInPuCPh9+nJs1VNUaq7mUJwR5OXsXm6LSDdkt896isJaOSfZmiaBRcxV
+        hxujSTiwmxPO8lr/E7xZDY4C+WM2GiqColwtO8fhlLF3a31za8P3mFrKOyg3ukc+
+        XXRhRR1yNhj/Ycs2e2cfjO5687Get0hwFlve7z/PIZA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=lUhLBy
+        uCWkwkjJrzNCYlklmu1AZKvcruJii4RaKrLXk=; b=PneItX3IUUZH8xHqv/p6XL
+        /ZPwYaqTGLgjrurBGpXc6j1xKRuheMqhdxqjNBLexHOTL5iPjU8vs+olxyozC8he
+        MWGK7viX2tOvg3HU07J5CEk4/G9u5gFv/tnYtz2uE+xtaVrXNZ5VfggD7+PxnFVU
+        ICWVvaCOOytD7ZHIgTzFECJTVjoWRT0deiug79dKsNn9COCQ6KUkc+fvtMgnFG6Z
+        fiBi64e4cFQ1ShDk4ZYt5H2mqqz5ddcdWaRNyy0VbO23mMr7ertFkVM7T/2Y1/Mw
+        lKq5zPoDSuEZnDfrSj53/lPUe3qF0SOoB3DwrU+mWrg78W1dJ0NrMQRmID2X++tw
+        ==
+X-ME-Sender: <xms:NmvIXI3eZ_jgXO2SVWsx285A9RC2sae2TKX1Tohku_JjYtcMRvV0dA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrieehgdefudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecuogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenuc
+    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucffohhmrghinhepghhithhhuhgsrd
+    gtohhmpdgrphhpshhpohhtrdgtohhmnecukfhppeekfedrkeeirdekledruddtjeenucfr
+    rghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecuvehluhhsth
+    gvrhfuihiivgeptd
+X-ME-Proxy: <xmx:NmvIXEpsL08XzciNi3FXWkmc77WCF640MdIYZnD7PLLE-8II4HMjUg>
+    <xmx:NmvIXHN-f8q_tsDEGX8YJ0xglms4P-0WPngqzpoqSwZNs7VPHkU-wQ>
+    <xmx:NmvIXNphjoOPVKK94FfDy93jwJmv2NaM3FJsltqK7aAwRCPRAeIG3A>
+    <xmx:N2vIXDvdxndjdJfCHRN-OXvXkmIgfXgbX-92dVYM2xMhCykIH0R9mA>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 3A6B1103CF;
+        Tue, 30 Apr 2019 11:35:18 -0400 (EDT)
+Date:   Tue, 30 Apr 2019 17:35:16 +0200
+From:   Greg KH <greg@kroah.com>
+To:     syzbot <syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: WARNING: Detected a wedged cx25840 chip; the device will not
+ work.
+Message-ID: <20190430153516.GA23459@kroah.com>
+References: <00000000000048aa750587c052ef@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190403185310.8437-7-matwey@sai.msu.ru>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <00000000000048aa750587c052ef@google.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg and all devs,
+On Tue, Apr 30, 2019 at 07:36:07AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12df67c3200000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+> dashboard link: https://syzkaller.appspot.com/bug?extid=170a86bf206dd2c6217e
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108a28f3200000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145d8a2d200000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
+> 
+> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> pvrusb2: Hardware description: Gotview USB 2.0 DVD 2
+> pvrusb2: Invalid write control endpoint
+> usb 1-1: USB disconnect, device number 2
+> pvrusb2: Invalid write control endpoint
+> pvrusb2: WARNING: Detected a wedged cx25840 chip; the device will not work.
+> pvrusb2: WARNING: Try power cycling the pvrusb2 device.
+> pvrusb2: WARNING: Disabling further access to the device to prevent other
+> foul-ups.
+> pvrusb2: Device being rendered inoperable
+> cx25840 0-0044: Unable to detect h/w, assuming cx23887
+> cx25840 0-0044: cx23887 A/V decoder found @ 0x88 (pvrusb2_a)
+> pvrusb2: Attached sub-driver cx25840
+> pvrusb2: Attempted to execute control transfer when device not ok
+> pvrusb2: Attempted to execute control transfer when device not ok
 
-On Wed, Apr 03, 2019 at 09:53:10PM +0300, Matwey V. Kornilov wrote:
-> Previously, the algorithm was the following:
-> 
->  1. giveback current URB
->  2. if current qh is not empty
->     then start next URB
->  3. if current qh is empty
->     then dispose the qh, find next qh if any, and start URB.
-> 
-> It may take a while to run urb->callback inside URB giveback which is
-> run synchronously in musb. In order to improve the latency we rearrange
-> the function behaviour for the case when qh is not empty: next URB is
-> started before URB giveback. When qh is empty then the behaviour is
-> intentionally kept in order not to break existing inter qh scheduling:
-> URB giveback could potentionally enqueue other URB to the empty qh
-> preventing it from being disposed.
+As the driver said, power cycle your device, it crashed :)
 
-This patch changes the sequence of urb giveback in musb.
+Seriously, I think your script detection failed here, sorry.
 
-	before				after
-	------				-----
-1. giveback current urb			1. start next urb if qh != empty
-2. start next urb if qh != empty	2. giveback current urb
-
-I see there is a potential that the urb giveback could be out of order,
-for example, if urb giveback in BH and the next urb finishes before BH
-runs.
-
-If this potential is possible, is it a problem for any class driver?
-
-Thanks,
--Bin.
-
-> 
-> Before this patch, time spent in urb->callback led to the following
-> glitches between the host and a hub during isoc transfer (line 4):
-> 
->     11.624492 d=  0.000124 [130.6 +  1.050] [  4] SPLIT
->     11.624492 d=  0.000000 [130.6 +  1.467] [  3] IN   : 3.5
->     11.624493 d=  0.000000 [130.6 +  1.967] [ 37] DATA0: aa 08 [skipped...]
->     11.625617 d=  0.001124 [131.7 +  1.050] [  4] SPLIT
->     11.625617 d=  0.000000 [131.7 +  1.467] [  3] IN   : 3.5
->     11.625867 d=  0.000250 [132.1 +  1.050] [  4] SPLIT
->     11.625867 d=  0.000000 [132.1 +  1.467] [  3] IN   : 3.5
->     11.625868 d=  0.000001 [132.1 +  1.983] [  3] DATA0: 00 00
->     11.626617 d=  0.000749 [132.7 +  1.050] [  4] SPLIT
->     11.626617 d=  0.000000 [132.7 +  1.467] [  3] IN   : 3.5
->     11.626867 d=  0.000250 [133.1 +  1.050] [  4] SPLIT
->     11.626867 d=  0.000000 [133.1 +  1.467] [  3] IN   : 3.5
->     11.626868 d=  0.000000 [133.1 +  1.967] [  3] DATA0: 00 00
-> 
-> After the hub, they look as the following and may lead to broken
-> perepherial transfer (as in case of PWC based webcam):
-> 
->     11.332004 d=  0.000997 [ 30.0 +  3.417] [  3] IN   : 5.5
->     11.332007 d=  0.000003 [ 30.0 +  6.833] [800] DATA0: 8a 1c [skipped...]
->     11.334004 d=  0.001997 [ 32.0 +  3.417] [  3] IN   : 5.5
->     11.334007 d=  0.000003 [ 32.0 +  6.750] [  3] DATA0: 00 00
->     11.335004 d=  0.000997 [ 33   +  3.417] [  3] IN   : 5.5
->     11.335007 d=  0.000003 [ 33   +  6.750] [  3] DATA0: 00 00
-> 
-> Removing this glitches makes us able to successfully run 10fps
-> video stream from the webcam attached via USB hub. That was
-> previously impossible.
-> 
-> Signed-off-by: Matwey V. Kornilov <matwey@sai.msu.ru>
-> ---
->  drivers/usb/musb/musb_host.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-> index ed99ecd4e63a..75be92873b5b 100644
-> --- a/drivers/usb/musb/musb_host.c
-> +++ b/drivers/usb/musb/musb_host.c
-> @@ -85,6 +85,11 @@ static bool musb_qh_empty(struct musb_qh *qh)
->  	return list_empty(&qh->hep->urb_list);
->  }
->  
-> +static bool musb_qh_singular(struct musb_qh *qh)
-> +{
-> +	return list_is_singular(&qh->hep->urb_list);
-> +}
-> +
->  static void musb_qh_unlink_hep(struct musb_qh *qh)
->  {
->  	if (!qh->hep)
-> @@ -362,6 +367,19 @@ static void musb_advance_schedule(struct musb *musb, struct urb *urb,
->  		break;
->  	}
->  
-> +	if (ready && !musb_qh_singular(qh)) {
-> +		struct urb *next_urb = list_next_entry(urb, urb_list);
-> +
-> +		musb_dbg(musb, "... next ep%d %cX urb %p", hw_ep->epnum, is_in ? 'R' : 'T', next_urb);
-> +		musb_start_urb(musb, is_in, qh, next_urb);
-> +
-> +		qh->is_ready = 0;
-> +		musb_giveback(musb, urb, status);
-> +		qh->is_ready = ready;
-> +
-> +		return;
-> +	}
-> +
->  	qh->is_ready = 0;
->  	musb_giveback(musb, urb, status);
->  	qh->is_ready = ready;
-> -- 
-> 2.16.4
-> 
+greg k-h
