@@ -2,113 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5C9FC8B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0504FCA0
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726028AbfD3POl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 11:14:41 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:35831 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbfD3POl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:14:41 -0400
-Received: by mail-pf1-f193.google.com with SMTP id t21so7218052pfh.2
-        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 08:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d8dn/0dTKiykpcgtb/y9QsyEoWiQzsibeWC7CLJMvwc=;
-        b=NNZiJIi2WT1N0507K72evR/BwmrEwAGuAarbetxNWBhkR9dS73mA51rISAyU5CMJnx
-         xOZtroOnkEue6rrtt4jkSD1X54vzGc/BQWyOZwJweYHq+6hD7AKb2SrYdFKVvnLLwwJU
-         MnMM/EecZ9vKnJaVgVjNGb9WRoOXQwC+hX1vi5bTQg+CcVcxayzzHBN8FqbU2lW8ChsR
-         OSF1uouxhbqtiZjQq4d+Jzg8B/Lpw3vOKqSrI21L6gHA4wpC47FJ+KTAAoNF8tpixhOa
-         tgP2/gN3dYrC5R1xvbk8r6qJqSzC7jqqUxEXXymcLJGlXFEQO7SWie46y980eZeayUSo
-         /vAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d8dn/0dTKiykpcgtb/y9QsyEoWiQzsibeWC7CLJMvwc=;
-        b=DvjMVQ13qzjn0z4bG22lkxRYuq2Yo3iHFh9f7f23uQvUmlp4hFb/u8tPu1F7ijXicd
-         TXftm2GLGlyLkMeyApOmzkXGfaxPicD/IT51INMk3dmlrPMO0qY4BUDm1iKmwazdjR9N
-         cnY2Br3XgumJufhUoiJMVy85KyNhwMFnp4qhSy9gUFZH04zD+baHLhQVNDQrxSnmhm01
-         enpbk9wKTn+K5uQPlIcjeMxEUe/WVc1ldie34P+1K58HnlpcmO9vjKw7vEn0O6vHVa+F
-         H718uPfNmYXwTdYiKtXTM0JXpgu4Ki15HqO2QBqcNrKzsoctiPn+86q/xUH7cDCVIv2L
-         YCZg==
-X-Gm-Message-State: APjAAAVQ2ndoVEf4CMXwkMsifcb2di/m946x/uKgMHsuNl/Tf40vx+ga
-        e5Unxkkn5EiaFzktn9vz/sMa6ZyIWWWYRh/VSvscxA==
-X-Google-Smtp-Source: APXvYqyvAA3eJRPNypOhfXPzlmZ04818wxauB/jQRH57quac32ODx5CTPaelKgpLLLI28p0EZrCHsD2dpQjnLdwCCSA=
-X-Received: by 2002:a65:628b:: with SMTP id f11mr1068488pgv.95.1556637280087;
- Tue, 30 Apr 2019 08:14:40 -0700 (PDT)
+        id S1726066AbfD3PUG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 11:20:06 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:35872 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbfD3PUG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:20:06 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x3UFK4gH098216;
+        Tue, 30 Apr 2019 10:20:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1556637604;
+        bh=Uqo1rYPaiEdr4WtmfXLxd7DkqOaPj2fMGdePDnnl2i8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=tr6x7iaRXQIkUMyXxmftS3aio0H0hFRiuhtVzIVZLXg20nP2zKZWP05N3iPvHL6MC
+         yjF6/icVrJsHFziYpKRtc0/WtPk5kOwlWYcsTFeciiGjPGo+Rvs+632+AQdzG2fzoT
+         cwMdSgXJjPdtkOVSA4LMYiZYRgTXqCf4JbzXLLIQ=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x3UFK4nw081846
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 30 Apr 2019 10:20:04 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 30
+ Apr 2019 10:20:03 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 30 Apr 2019 10:20:04 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x3UFK3Am096959;
+        Tue, 30 Apr 2019 10:20:03 -0500
+Date:   Tue, 30 Apr 2019 10:20:03 -0500
+From:   Bin Liu <b-liu@ti.com>
+To:     "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER" 
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 0/6] musb: Improve performance for hub-attached webcams
+Message-ID: <20190430152003.GH20993@uda0271908>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        "Matwey V. Kornilov" <matwey.kornilov@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER" <linux-usb@vger.kernel.org>
+References: <20190403185310.8437-1-matwey@sai.msu.ru>
+ <CAJs94EZsDOo6wp2rZmsETLs7uPE3CCv1bNOsewxehyw8R52scA@mail.gmail.com>
 MIME-Version: 1.0
-References: <0000000000004101370587c052fb@google.com> <Pine.LNX.4.44L0.1904301058150.1465-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1904301058150.1465-100000@iolanthe.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 30 Apr 2019 17:14:28 +0200
-Message-ID: <CAAeHK+zYQ0QF_vo+iYns2d0O7RZ=Uq0kxi1mWc1W_0bBxMGR0A@mail.gmail.com>
-Subject: Re: WARNING: Support for this device (Terratec Grabster AV400) is experimental.
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJs94EZsDOo6wp2rZmsETLs7uPE3CCv1bNOsewxehyw8R52scA@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 5:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Tue, 30 Apr 2019, syzbot wrote:
->
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=141ca62d200000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=af8f8d2ac0d39b0ed3a0
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1405bedd200000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ce3bbb200000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
-> >
-> > usb 1-1: New USB device found, idVendor=0ccd, idProduct=0039, bcdDevice=
-> > d.3c
-> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > usb 1-1: config 0 descriptor??
-> > pvrusb2: Hardware description: Terratec Grabster AV400
-> > pvrusb2: **********
-> > pvrusb2: WARNING: Support for this device (Terratec Grabster AV400) is
-> > experimental.
-> > pvrusb2: Important functionality might not be entirely working.
-> > pvrusb2: Please consider contacting the driver author to help with further
-> > stabilization of the driver.
-> > pvrusb2: **********
-> >
-> >
-> > ---
-> > This bug is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> This does seem like a bug in syzbot.  Why does it think this pr_info()
-> output indicates a crash?  Is it fooled by the capitalized "WARNING" at
-> the start of one of the lines?
+Hi Matwey,
 
-Well, as of [1] WARN*() should only be used to indicate a kernel bug.
-Normally, WARN*() prints a line that start with a warning, which is
-followed by a stack trace. Unfortunately the stack trace is not always
-present (kernel memory is badly corrupted, console deadlocked, etc.),
-so syzbot detects the "WARNING:" line as a beginning of a WARN*()
-reported bug. In this case the driver does something like
-`pr_info("WARNING: ...", ...)`, which confuses syzbot. I'd say it's
-the kernel that needs to be changed here to use some other kind of
-prefix for printing warning messages.
+On Wed, Apr 24, 2019 at 06:42:30PM +0300, Matwey V. Kornilov wrote:
+> Ping
 
-[1] https://github.com/torvalds/linux/commit/96c6a32ccb55a366054fd82cc63523bb7f7493d3
+Sorry for my late response. This series does improve isoch transfers for
+webcam on musb. A few of my cameras used to fail to stream 640x480@30fps
+now the test passed with your patches. Thank you for the work.
+
+But since the patch changes the way handling urb giveback, I would need
+more time to run more tests.
+
+-Bin.
+
+> 
+> ср, 3 апр. 2019 г. в 21:53, Matwey V. Kornilov <matwey@sai.msu.ru>:
+> >
+> > The series is concerned to issues with isochronous transfer while
+> > streaming the USB webcam data. I discovered the issue first time
+> > when attached PWC USB webcam to AM335x-based BeagleBone Black SBC.
+> > It appeared that the root issue was in numerous missed IN requests
+> > during isochronous transfer where each missing leaded to the frame
+> > drop. Since every IN request is triggered in MUSB driver
+> > individually, it is important to queue the send IN request as
+> > earlier as possible when the previous IN completed. At the same
+> > time the URB giveback handler of the device driver has also to be
+> > called there, that leads to arbitrarily delay depending on the
+> > device driver performance. The details with the references are
+> > described in [1].
+> >
+> > The issue has two parts:
+> >
+> >   1) peripheral driver URB callback performance
+> >   2) MUSB host driver performance
+> >
+> > It appeared that the first part is related to the wrong memory
+> > allocation strategy in the most USB webcam drivers. Non-cached
+> > memory is used in assumption that coherent DMA memory leads to
+> > the better performance than non-coherent memory in conjunction with
+> > the proper synchronization. Yet the assumption might be valid for
+> > x86 platforms some time ago, the issue was fixed for PWC driver in:
+> >
+> >     1161db6776bd ("media: usb: pwc: Don't use coherent DMA buffers for ISO transfer")
+> >
+> > that leads to 3.5x performance gain. The more generic fix for this
+> > common issue are coming for the rest drivers [2].
+> >
+> > The patch allowed successfully running full-speed USB PWC webcams
+> > attached directly to BeagleBone Black USB port.
+> >
+> > However, the second part of the issue is still present for
+> > peripheral device attached through the high-speed USB hub due to
+> > its 125us frame time. The patch series is intended to reorganize
+> > musb_advance_schedule() to allow host to send IN request quicker.
+> >
+> > The patch series is organized as the following. First three patches
+> > improve readability of the existing code in
+> > musb_advance_schedule(). Patches 4 and 5 introduce updated
+> > signature for musb_start_urb(). The last patch introduce new
+> > code-path in musb_advance_schedule() which allows for faster
+> > response.
+> >
+> > References:
+> >
+> > [1] https://www.spinics.net/lists/linux-usb/msg165735.html
+> > [2] https://www.spinics.net/lists/linux-media/msg144279.html
+> >
+> > Matwey V. Kornilov (6):
+> >   usb: musb: Use USB_DIR_IN when calling musb_advance_schedule()
+> >   usb: musb: Introduce musb_qh_empty() helper function
+> >   usb: musb: Introduce musb_qh_free() helper function
+> >   usb: musb: Rename musb_start_urb() to musb_start_next_urb()
+> >   usb: musb: Introduce musb_start_urb()
+> >   usb: musb: Decrease URB starting latency in musb_advance_schedule()
+> >
+> >  drivers/usb/musb/musb_host.c | 114 +++++++++++++++++++++++++++----------------
+> >  1 file changed, 71 insertions(+), 43 deletions(-)
+> >
+> > --
+> > 2.16.4
+> >
+> 
+> 
+> -- 
+> With best regards,
+> Matwey V. Kornilov
