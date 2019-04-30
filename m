@@ -2,76 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB41EFE6
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 07:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FBDEFEC
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 07:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725799AbfD3FZ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 01:25:59 -0400
-Received: from mail-vk1-f195.google.com ([209.85.221.195]:40516 "EHLO
-        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725446AbfD3FZ6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 01:25:58 -0400
-Received: by mail-vk1-f195.google.com with SMTP id l17so2829799vke.7
-        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 22:25:58 -0700 (PDT)
+        id S1726152AbfD3F3y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 01:29:54 -0400
+Received: from mail-vk1-f193.google.com ([209.85.221.193]:45172 "EHLO
+        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726069AbfD3F3x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 01:29:53 -0400
+Received: by mail-vk1-f193.google.com with SMTP id h127so2827029vkd.12
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 22:29:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dAZB9m78vyMqVnCUT5sxg+zHI1l8qWvxtWApzbGtN1A=;
-        b=iRmEmm4IrU6e+wZHgKHwQwIr0tcTTb9ixCcFFUV+Q+c6fi2SKUyMCAt/qUlgKI5Zjz
-         JohZhhouXMXuxCAlnL7+6YHVlqjsv5zhMjn+o41T14oN8A6DN+HAOIRuUdSHnW9rAwE2
-         LY5Jyu7Yvsvk8uDEVZrh9r7avMXSXUJJPl1cs=
+        bh=oI6/mbFrFRIlv6U0u6swyj6hDvHAkiQ0dv4jYaZhLCk=;
+        b=ck+wpiOtoHFncK/l3p2502NKVY3mfQ215NIogmFrEWBa6w1fEQdMgG1MU88zbsZqih
+         m9bKZLCFITPnSS3fJ0EsRU0OIV7/QON22ZmROKou6SXtgBzULdEg5LGSeko8kTvukeI3
+         p+qusiDWOsdxykgPSZpQiwM5hGHYA5olAXU30=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dAZB9m78vyMqVnCUT5sxg+zHI1l8qWvxtWApzbGtN1A=;
-        b=cFJIJRxV/in1O+pIcWlj3Orihr5imiisBEpHZ+AHT8L2t0AsVSdrga0WgDwA/Hh0Uh
-         n/owNRRm0VpPMHw06gW6XlbX7Nij8dxrGXSFc59Zb41H/Ik8bNwy+g7MKBdrhWZEj0nL
-         KviO3KxlxLV0IQQoza8E79d5CA9vNVyCN/z8nzvyB23LDJ96OGRM1ZXU7uvbeg/nmHSJ
-         rXsuIXokyZEr41JkRtnXTJvs1fx7+3Vz0dy5hZdfjHF9o7phnN4sB7tmgx5AeAvLQIkp
-         EAyoXU94N6aAA9cmQB+69pssaXBfBjaQbfb/yEDfBpU5ngocieAdojWk/mPflzctYBo/
-         WB8g==
-X-Gm-Message-State: APjAAAX13Xa+ow86yOKtyQHk3drOx1WQ+4zKWoBIKaphZSOYfk6k8QUY
-        bw5p5biUvp0Gk42Ds3RIdj4TxPziH54=
-X-Google-Smtp-Source: APXvYqzV49ANV6/moEhRzSSJKu7AUFDgkEjgb/tXc6aGOnPl4MsBFpM/V1JGgmEGP0xFDnaqjDGehA==
-X-Received: by 2002:a1f:b4ce:: with SMTP id d197mr34597716vkf.57.1556601957385;
-        Mon, 29 Apr 2019 22:25:57 -0700 (PDT)
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
-        by smtp.gmail.com with ESMTPSA id c192sm25191119vka.10.2019.04.29.22.25.55
+        bh=oI6/mbFrFRIlv6U0u6swyj6hDvHAkiQ0dv4jYaZhLCk=;
+        b=X0fbsD+qdwz+C1XLMjYI86YtZ2ToQsnfOg2DAZtvAMeif8yjAiXwmrJHi/oBxBcevV
+         72GuMrvfh3YL+ZNOafdd9T//LmSmKG2QosSQDrZoUFvIOu5AVTwOC1SfdAsPS4yCsR69
+         2YXX3PjNFzJJCHLp556zm/eEeOfTZeaOf0o17ejGRYDn5td/OlVn/job8jbk8sBt+j6s
+         a0MxlUD46RPsgwRT85hnbWoDGsgQSufw7C7NUVdTGRYrqS3EOWZlm7LkG+AirCTH3LKB
+         cdqSMyTNg8T4+g0q3/7b8lmUZRD+NxoVkRACEJrFRvOftdOojnmBb2Vv7W3bxl9OhP/g
+         MHCA==
+X-Gm-Message-State: APjAAAUn1lYBzmhWAXmdU8WK838jyLhiauy43DbhYhVvQfV8ZbifPnkC
+        Fx/Um19jxHy2I0LfU5yyokdFJ4wUhgA=
+X-Google-Smtp-Source: APXvYqy4uK2zF7+nEzG9bkntplpSDpCeRL2bj88XxAVJFvhu/7vsq1AziPlmQ6MVYRakFWiuxHAxQQ==
+X-Received: by 2002:a1f:1b87:: with SMTP id b129mr29716695vkb.9.1556602192089;
+        Mon, 29 Apr 2019 22:29:52 -0700 (PDT)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id z192sm23171333vkd.45.2019.04.29.22.29.48
         for <linux-usb@vger.kernel.org>
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 22:25:56 -0700 (PDT)
-Received: by mail-vs1-f53.google.com with SMTP id g127so7290016vsd.6
-        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 22:25:55 -0700 (PDT)
-X-Received: by 2002:a67:e88c:: with SMTP id x12mr9502003vsn.87.1556601955497;
- Mon, 29 Apr 2019 22:25:55 -0700 (PDT)
+        Mon, 29 Apr 2019 22:29:48 -0700 (PDT)
+Received: by mail-ua1-f53.google.com with SMTP id n16so4321673uae.10
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 22:29:48 -0700 (PDT)
+X-Received: by 2002:ab0:2692:: with SMTP id t18mr1729807uao.106.1556602187963;
+ Mon, 29 Apr 2019 22:29:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190418001356.124334-1-dianders@chromium.org>
- <20190418001356.124334-4-dianders@chromium.org> <20190430012328.GA25660@bogus>
-In-Reply-To: <20190430012328.GA25660@bogus>
+References: <20190416215351.242246-1-dianders@chromium.org>
+ <20190416215351.242246-2-dianders@chromium.org> <20190430005357.GA13695@bogus>
+In-Reply-To: <20190430005357.GA13695@bogus>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 29 Apr 2019 22:25:52 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UdtgAZBxuwjrrXtKT1sMfaELF8V193BF=UHg9fvM+yRw@mail.gmail.com>
-Message-ID: <CAD=FV=UdtgAZBxuwjrrXtKT1sMfaELF8V193BF=UHg9fvM+yRw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] Documentation: dt-bindings: Add
- snps,need-phy-for-wake for dwc2 USB
+Date:   Mon, 29 Apr 2019 22:29:44 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V3_NcBHdg5A8LvGMoVd_eLN0q=pXo_3f2GCdi5u2GP-Q@mail.gmail.com>
+Message-ID: <CAD=FV=V3_NcBHdg5A8LvGMoVd_eLN0q=pXo_3f2GCdi5u2GP-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: usb: dwc2: Document quirk to reset
+ PHY upon wakeup
 To:     Rob Herring <robh@kernel.org>
 Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
         Alexandru M Stan <amstan@chromium.org>,
         "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        William Wu <william.wu@rock-chips.com>,
-        linux-usb@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        Randy Li <ayaka@soulik.info>, Chris <zyw@rock-chips.com>,
+        linux-usb@vger.kernel.org, Randy Li <ayaka@soulik.info>,
         Matthias Kaehlcke <mka@chromium.org>,
         Ryan Case <ryandcase@chromium.org>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
         Julius Werner <jwerner@chromium.org>,
-        Dinh Nguyen <dinguyen@opensource.altera.com>,
         Elaine Zhang <zhangqing@rock-chips.com>,
         devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -84,59 +78,50 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-On Mon, Apr 29, 2019 at 6:23 PM Rob Herring <robh@kernel.org> wrote:
+On Mon, Apr 29, 2019 at 5:54 PM Rob Herring <robh@kernel.org> wrote:
 >
-> On Wed, Apr 17, 2019 at 05:13:54PM -0700, Douglas Anderson wrote:
-> > Some SoCs with a dwc2 USB controller may need to keep the PHY on to
-> > support remote wakeup.  Allow specifying this as a device tree
-> > property.
+> On Tue, Apr 16, 2019 at 02:53:48PM -0700, Douglas Anderson wrote:
+> > On Rockchip rk3288 there's a hardware quirk where we need to assert
+> > the reset signal to the PHY when we get a remote wakeup on one of the
+> > two ports.  Document this quirk in the bindings.
 > >
 > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 > > ---
-> > For relevant prior discussion on this patch, see:
-> >
-> > https://lkml.kernel.org/r/1435017144-2971-3-git-send-email-dianders@chromium.org
-> >
-> > I didn't make any changes from the prior version since I never found
-> > out what Rob thought of my previous arguments.  If folks want a
-> > change, perhaps they could choose from these options:
-> >
-> > 1. Assume that all dwc2 hosts would like to keep their PHY on for
-> >    suspend if there's a USB wakeup enabled, thus we totally drop this
-> >    binding.  This doesn't seem super great to me since I'd bet that
-> >    many devices that use dwc2 weren't designed for USB wakeup (they
-> >    may not keep enough clocks or rails on) so we might be wasting
-> >    power for nothing.
->
-> 1b. Use SoC specific compatible strings to enable/disable remote
-> wake-up. We can debate what the default is I guess.
-
-Unfortunately it's more than just SoC.  While you need the SoC to be
-able to support this type of wakeup, you also need the board design,
-firmware design, regulator design, etc.  ...so I don't think we can
-just use the SoC specific compatible string.
-
-In fact, while testing this I found that USB wakeup was totally broken
-unless I enabled "deep suspend" mode on my system.  Something about
-the clocks / wakeup sources in the shallow suspend totally blocked it
-and I couldn't figure out what.
-
-...so I believe it really needs to be something where someone has
-said: I tested it out on this board and everything is setup properly
-to support USB wakeup.
-
-
-> > 2. Rename this property to "snps,wakeup-from-suspend-with-phy" to make
-> >    it more obvious that this property is intended both to document
-> >    that wakeup from suspend is possible and that we need the PHY for
-> >    said wakeup.
-> > 3. Rename this property to "snps,can-wakeup-from-suspend" and assume
-> >    it's implicit that if we can wakeup from suspend that we need to
-> >    keep the PHY on.  If/when someone shows that a device exists using
-> >    dwc2 where we can wakeup from suspend without the PHY they can add
-> >    a new property.
 > >
 > > Changes in v2: None
 > >
-> >  Documentation/devicetree/bindings/usb/dwc2.txt | 3 +++
-> >  1 file changed, 3 insertions(+)
+> >  Documentation/devicetree/bindings/usb/dwc2.txt | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/dwc2.txt b/Documentation/devicetree/bindings/usb/dwc2.txt
+> > index 6dc3c4a34483..f70f3aee4bfc 100644
+> > --- a/Documentation/devicetree/bindings/usb/dwc2.txt
+> > +++ b/Documentation/devicetree/bindings/usb/dwc2.txt
+> > @@ -37,6 +37,8 @@ Refer to phy/phy-bindings.txt for generic phy consumer properties
+> >  - g-rx-fifo-size: size of rx fifo size in gadget mode.
+> >  - g-np-tx-fifo-size: size of non-periodic tx fifo size in gadget mode.
+> >  - g-tx-fifo-size: size of periodic tx fifo per endpoint (except ep0) in gadget mode.
+> > +- snps,reset-phy-on-wake: If present indicates that we need to reset the PHY when
+> > +                          we detect a wakeup.  This is due to a hardware errata.
+>
+> Synopsys or Rockchip errata?
+>
+> Ideally, this should be implied by the controller or phy compatible.
+
+I have no idea.  The errata was described to me by Rockchip but I
+don't know if it's common to more than one board.
+
+You're right that we could do it on the controller compatible, but we
+have to be careful.  The two ports on rk3288 currently have the same
+compatible string but the errata only applies to one of them.  ...so
+I'd have to cue on not just the compatible string but also detect
+whether we're on the "OTG" port of the "host only" port.  That's not
+too hard, though since it is probe-able.
+
+I'm happy to spin this but I'll wait to hear from Felipe.  This is
+already in his testing tree, so presumably I should do a follow-up
+patch.  ...but if he wants me to re-post I can do that too.
+
+
+-Doug
