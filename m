@@ -2,103 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63888FB3C
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 16:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DB1FB53
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 16:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbfD3ORH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 10:17:07 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:35384 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726015AbfD3ORH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 10:17:07 -0400
-Received: (qmail 2055 invoked by uid 2102); 30 Apr 2019 10:17:06 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 30 Apr 2019 10:17:06 -0400
-Date:   Tue, 30 Apr 2019 10:17:06 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     "Tangnianyao (ICT)" <tangnianyao@huawei.com>
-cc:     mathias.nyman@intel.com, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] Question about reset order for xhci controller and pci
-In-Reply-To: <b4176223-e44f-5454-0a02-b75a65384fa6@huawei.com>
-Message-ID: <Pine.LNX.4.44L0.1904301013580.1465-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1726698AbfD3OXt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 10:23:49 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49340 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726362AbfD3OXt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Apr 2019 10:23:49 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 64199AD6B;
+        Tue, 30 Apr 2019 14:23:48 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     gregKH@linuxfoundation.org, miquel@df.uba.ar,
+        linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 1/3] rio500: refuse more than one device at a time
+Date:   Tue, 30 Apr 2019 16:23:24 +0200
+Message-Id: <20190430142326.25815-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 30 Apr 2019, Tangnianyao (ICT) wrote:
+This driver is using a global variable. It cannot handle more than
+one device at a time. The issue has been exisying since the dawn
+of the driver.
 
-> On 2019/4/29 22:06, Alan Stern wrote:
-> 
-> Hi, Alan
-> 
-> > On Mon, 29 Apr 2019, Tangnianyao (ICT) wrote:
-> > 
-> >> Using command "echo 1 > /sys/bus/pci/devices/0000:7a:02.0/reset"
-> >> on centos7.5 system to reset xhci.
-> >>
-> >> On 2019/4/26 11:07, Tangnianyao (ICT) wrote:
-> >>> Hi,all
-> >>>
-> >>> I've meet a problem about reset xhci and it may be caused by the
-> >>> reset order of pci and xhci.
-> >>> Using xhci-pci, when users send reset command in os(centos or red-hat os),
-> >>> it would first reset PCI device by pci_reset_function. During this
-> >>> process, it would disable BME(Bus Master Enable) and set BME=0, and
-> >>> then enable it and set BME=1.
-> >>> And then it comes to xhci reset process. First, it would send an
-> >>> endpoint stop command in xhci_urb_dequeue. However, this stop ep command
-> >>> fails to finish. The reason is that BME is set to 0 in former process and
-> >>> xhci RUN/STOP changes to 0, and when BME is set to 1 again, RUN/STOP doesn't
-> >>> recover to 1.
-> >>> I've checked BME behavior in xhci spec, it shows that "If the BME bit is set to 0
-> >>> when xHC is running, the xHC may treat this as a Host Controller Error, asserting
-> >>> HCE(1) and immediately halt(R/S=0 and HCH=1). Recovery from this state will
-> >>> require an HCRST." It seems that the stop ep command failure is reasonable.
-> >>> Maybe I've missed something and please let me know.
-> > 
-> > Your email subject says "Question about...".  What is the question?
-> > 
-> Sorry I didn't descibe it clearly.
-> When sending a reset command, now the reset order is first BME and then xhci.
-> BME reset would make xhci controller stop, resulting in xhci reset failure,
-> because it can't finish stop ep command in xhci_urb_dequeue.
-> I'm not sure if this situation is in expectation.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: syzbot+35f04d136fc975a70da4@syzkaller.appspotmail.com
+---
+ drivers/usb/misc/rio500.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Probably it isn't.
-
-> > Also, given that your question concerns what happens when you write to
-> > /sys/bus/pci/..., perhaps you should consider mailing it to some PCI
-> > maintainers as well as to the USB maintainers.
-> > ok, I will mailing it to PCI maintainer as well.
-> 
-> > Perhaps the reset was not meant to be used the way you are doing it.  
-> > A more conservative approach would be to unbind xhci-hcd from the 
-> > device before doing the reset and then rebind it afterward.
-> > 
-> > Alan Stern
-> >
-> >
-> > .
-> >
-> 
-> I think this approach not work. When reset BME, xhci controller is stopped and
-> can't recover even BME is set enable later. According to xhci spec, it's appropriate.
-> When rebind it afterward, with xhci stop, xhci driver would consider the
-> xhci controller already died and it fails to work again.
-> 
-> To recover xhci, now I rmmod xhci-pci.ko and then insmod it again.
-
-That's basically what I meant.  "rmmod xhci-pci" does an unbind, and 
-"insmod xhci-pci.ko" does a rebind.
-
-So long as you do the unbind before the reset and the rebind after the
-reset, you should be okay.  Perhaps you misunderstood what I wrote; it 
-sounds like you're doing the reset first and then the unbind.
-
-Alan Stern
+diff --git a/drivers/usb/misc/rio500.c b/drivers/usb/misc/rio500.c
+index 13e4889bc34f..a4b6fbea975f 100644
+--- a/drivers/usb/misc/rio500.c
++++ b/drivers/usb/misc/rio500.c
+@@ -449,7 +449,12 @@ static int probe_rio(struct usb_interface *intf,
+ 	struct rio_usb_data *rio = &rio_instance;
+ 	int retval;
+ 
+-	dev_info(&intf->dev, "USB Rio found at address %d\n", dev->devnum);
++	if (rio->present) {
++		dev_info(&intf->dev, "Second USB Rio at address %d refused\n", dev->devnum);
++		return -EBUSY;
++	} else {
++		dev_info(&intf->dev, "USB Rio found at address %d\n", dev->devnum);
++	}
+ 
+ 	retval = usb_register_dev(intf, &usb_rio_class);
+ 	if (retval) {
+-- 
+2.16.4
 
