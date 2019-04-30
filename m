@@ -2,160 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 926E4EE51
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 03:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87604EE5A
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 03:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729831AbfD3BWt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 21:22:49 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34887 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729828AbfD3BWs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 21:22:48 -0400
-Received: by mail-pf1-f193.google.com with SMTP id t21so6227521pfh.2;
-        Mon, 29 Apr 2019 18:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=14BtYvopEGYF3ZyX/uprrfiK7My6iDbeW5Kct6Ko73U=;
-        b=nplkksJwpY6fgI5iJvv5KU0Ks/zSTkh+fr7UVRw5o0CqPzmEuk+VHDefPvenM/2HrO
-         NCjOx+1e0KMG94NEfDxm5qVGCjPklp2QnqVBWIJ1AeDxiYf9bI6MKpBkZ8q3KKpdwwv3
-         V3dev3KJ0lzk4mCS3llYiGEhf+jofS7Q+HyzSYBEAP/rGnd07j2Pb6mlfP3mrxK5pfbs
-         9uDA1JnssqHBgqdfNIh+WofAKY3qFwFu+PX3btxPf2chTknzY3cS/X0280i80xEOvVHG
-         qegRmBwatwTzkqMwG5Tn8bvjYU3DwCskpM9dXmVRuxEn3dA/r29URAryWJ50XsUSMEBh
-         E8pg==
+        id S1729860AbfD3BXb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Apr 2019 21:23:31 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:42495 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729801AbfD3BXb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 21:23:31 -0400
+Received: by mail-ot1-f65.google.com with SMTP id f23so10438638otl.9;
+        Mon, 29 Apr 2019 18:23:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=14BtYvopEGYF3ZyX/uprrfiK7My6iDbeW5Kct6Ko73U=;
-        b=bkiN7k3tU2RovOsvdUjBd5hkWP8FDTSvcFvXhNO6N3/yF8PAHIEJdZcnTE8cMgnxhK
-         W7tq9Y9s25NuXF33WWg3RIIbrQcxkG0Gqw2spW5mxD+f7yuErzCzf5jKoZVbw31bYrKy
-         0QyIrphqTS5m8nTTI6A0KOSyhS7b3cs524PEQbWti4IKzWXx4sZc2fYXSHVi7gMYOlnO
-         wvZC4vQcd9kA/q/cDP0Z/rPb8gWtszudEH63GmpaI6m346fX9ncTkIhvsTdkkK9FtMsN
-         SzZE4JDqPEvcvebmFKXgaf0Pi+LTjrmUmvx9UkO2w504+lmu//0pjUyOncDlnXSH9WNq
-         kbvQ==
-X-Gm-Message-State: APjAAAVxjm2uvqXhzT9QhCdg5ncbTEfs4f+F1o/cAb7Tg8KrxQzourlr
-        3N6ThyHzcuLqyftIqtYSoec=
-X-Google-Smtp-Source: APXvYqwbKT8sggQIxWyPbcv7B73rzvWgAB9NGay/Tkv1ZV8WIg4+0s0TZsiTmORgm/fT02eiQ2iFfw==
-X-Received: by 2002:a63:7:: with SMTP id 7mr4583794pga.108.1556587367869;
-        Mon, 29 Apr 2019 18:22:47 -0700 (PDT)
-Received: from localhost (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
-        by smtp.gmail.com with ESMTPSA id s74sm353739pfs.26.2019.04.29.18.22.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 18:22:47 -0700 (PDT)
-From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-X-Google-Original-From: "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-To:     peter_hong@fintek.com.tw, johan@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: [PATCH V9 4/4] USB: serial: f81232: implement break control
-Date:   Tue, 30 Apr 2019 09:22:32 +0800
-Message-Id: <1556587352-19500-4-git-send-email-hpeter+linux_kernel@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1556587352-19500-1-git-send-email-hpeter+linux_kernel@gmail.com>
-References: <1556587352-19500-1-git-send-email-hpeter+linux_kernel@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fLCNptbAqgGLbxmiV5m9esJWTcO9d7PGiLKbWNbQI4Y=;
+        b=pyInkl149oIz0fINvWOVMsdn8AcUZzZMsqlSa7v85gg4KE35r4uck69xNm/ho+Knq4
+         IzzSs7aMjmL5Eaj+6oFFGMJWvwrQoIb3956nOZPBgl3FX6H5fMKhpHk4dISx6fGnCukc
+         zWcgPF4nwZgI4lIXvZOm/tg7YfbuPlwiXFtfB2h/uxfRlZpdfJ/8UyWyA+fnAe3Ff7OC
+         QROaB0oudBdvbMfvRBtSD+tbC8do0lojlFgN9sX8VFKXonOOnxrqrUmwEr5RLCjdVOMu
+         BDIasEacD+4LbgEW4TtTbCw8lBLG5F3IVAHSYy+J1fDNCrHxwhSklxul5vl/eleUX3uo
+         4SXg==
+X-Gm-Message-State: APjAAAVREX0ePY2/L7rj+HhgwSdB4P5sCe+xd3U7Q/FVfRHH8h9196zA
+        u1H5Svz8POQS9r/0gW369Q==
+X-Google-Smtp-Source: APXvYqxr8Cm+FM9VThpkbETtAkluspE6CKnCHzDXX3Pa3YrGOQn38oLZRa/gk3PUp+5WlkzbxZyFuQ==
+X-Received: by 2002:a9d:6153:: with SMTP id c19mr5171001otk.110.1556587410598;
+        Mon, 29 Apr 2019 18:23:30 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w13sm922030otl.26.2019.04.29.18.23.29
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Apr 2019 18:23:29 -0700 (PDT)
+Date:   Mon, 29 Apr 2019 20:23:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>, heiko@sntech.de,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        amstan@chromium.org, linux-rockchip@lists.infradead.org,
+        William Wu <william.wu@rock-chips.com>,
+        linux-usb@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Randy Li <ayaka@soulik.info>, zyw@rock-chips.com,
+        mka@chromium.org, ryandcase@chromium.org,
+        Amelie Delaunay <amelie.delaunay@st.com>, jwerner@chromium.org,
+        dinguyen@opensource.altera.com,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 3/5] Documentation: dt-bindings: Add
+ snps,need-phy-for-wake for dwc2 USB
+Message-ID: <20190430012328.GA25660@bogus>
+References: <20190418001356.124334-1-dianders@chromium.org>
+ <20190418001356.124334-4-dianders@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190418001356.124334-4-dianders@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Implement Fintek F81232 break on/off with LCR register.
-It's the same with 16550A LCR register layout.
+On Wed, Apr 17, 2019 at 05:13:54PM -0700, Douglas Anderson wrote:
+> Some SoCs with a dwc2 USB controller may need to keep the PHY on to
+> support remote wakeup.  Allow specifying this as a device tree
+> property.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> For relevant prior discussion on this patch, see:
+> 
+> https://lkml.kernel.org/r/1435017144-2971-3-git-send-email-dianders@chromium.org
+> 
+> I didn't make any changes from the prior version since I never found
+> out what Rob thought of my previous arguments.  If folks want a
+> change, perhaps they could choose from these options:
+> 
+> 1. Assume that all dwc2 hosts would like to keep their PHY on for
+>    suspend if there's a USB wakeup enabled, thus we totally drop this
+>    binding.  This doesn't seem super great to me since I'd bet that
+>    many devices that use dwc2 weren't designed for USB wakeup (they
+>    may not keep enough clocks or rails on) so we might be wasting
+>    power for nothing.
 
-Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
----
-v9:
-	1: no change
+1b. Use SoC specific compatible strings to enable/disable remote 
+wake-up. We can debate what the default is I guess.
 
-v8:
-	1: no change
-
-v7:
-	1: no change
-
-v6:
-	1: no change
-
-v5:
-	1: no change
-
-v4:
-	1: no change
-
-v3:
-	1: using shadow_lcr to save LCR in f81232_break_ctl()
-
- drivers/usb/serial/f81232.c | 29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
-index 6a1e6a27ce16..562c9babd144 100644
---- a/drivers/usb/serial/f81232.c
-+++ b/drivers/usb/serial/f81232.c
-@@ -65,6 +65,7 @@ struct f81232_private {
- 	struct mutex lock;
- 	u8 modem_control;
- 	u8 modem_status;
-+	u8 shadow_lcr;
- 	speed_t baud_base;
- 	struct work_struct lsr_work;
- 	struct work_struct interrupt_work;
-@@ -377,13 +378,23 @@ static void f81232_process_read_urb(struct urb *urb)
- 
- static void f81232_break_ctl(struct tty_struct *tty, int break_state)
- {
--	/* FIXME - Stubbed out for now */
-+	struct usb_serial_port *port = tty->driver_data;
-+	struct f81232_private *priv = usb_get_serial_port_data(port);
-+	int status;
- 
--	/*
--	 * break_state = -1 to turn on break, and 0 to turn off break
--	 * see drivers/char/tty_io.c to see it used.
--	 * last_set_data_urb_value NEVER has the break bit set in it.
--	 */
-+	mutex_lock(&priv->lock);
-+
-+	if (break_state)
-+		priv->shadow_lcr |= UART_LCR_SBC;
-+	else
-+		priv->shadow_lcr &= ~UART_LCR_SBC;
-+
-+	status = f81232_set_register(port, LINE_CONTROL_REGISTER,
-+					priv->shadow_lcr);
-+	if (status)
-+		dev_err(&port->dev, "set break failed: %d\n", status);
-+
-+	mutex_unlock(&priv->lock);
- }
- 
- static int f81232_find_clk(speed_t baudrate)
-@@ -519,6 +530,7 @@ static int f81232_port_disable(struct usb_serial_port *port)
- static void f81232_set_termios(struct tty_struct *tty,
- 		struct usb_serial_port *port, struct ktermios *old_termios)
- {
-+	struct f81232_private *priv = usb_get_serial_port_data(port);
- 	u8 new_lcr = 0;
- 	int status = 0;
- 	speed_t baudrate;
-@@ -572,11 +584,16 @@ static void f81232_set_termios(struct tty_struct *tty,
- 		break;
- 	}
- 
-+	mutex_lock(&priv->lock);
-+
-+	new_lcr |= (priv->shadow_lcr & UART_LCR_SBC);
- 	status = f81232_set_register(port, LINE_CONTROL_REGISTER, new_lcr);
- 	if (status) {
- 		dev_err(&port->dev, "%s failed to set LCR: %d\n",
- 			__func__, status);
- 	}
-+
-+	mutex_unlock(&priv->lock);
- }
- 
- static int f81232_tiocmget(struct tty_struct *tty)
--- 
-2.7.4
-
+> 2. Rename this property to "snps,wakeup-from-suspend-with-phy" to make
+>    it more obvious that this property is intended both to document
+>    that wakeup from suspend is possible and that we need the PHY for
+>    said wakeup.
+> 3. Rename this property to "snps,can-wakeup-from-suspend" and assume
+>    it's implicit that if we can wakeup from suspend that we need to
+>    keep the PHY on.  If/when someone shows that a device exists using
+>    dwc2 where we can wakeup from suspend without the PHY they can add
+>    a new property.
+> 
+> Changes in v2: None
+> 
+>  Documentation/devicetree/bindings/usb/dwc2.txt | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
