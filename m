@@ -2,297 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EDEF101
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 09:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E5AF2A0
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 11:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726326AbfD3HQN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 03:16:13 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7711 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725769AbfD3HQN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Apr 2019 03:16:13 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id C21A5762FFF8842A5C5D;
-        Tue, 30 Apr 2019 15:16:10 +0800 (CST)
-Received: from [127.0.0.1] (10.142.63.192) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Tue, 30 Apr 2019
- 15:15:59 +0800
-CC:     "Liuyu (R)" <liuyu712@hisilicon.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <john.stultz@linaro.org>, <suzhuangluan@hisilicon.com>,
-        <kongfei@hisilicon.com>, <wanghu17@hisilicon.com>,
-        <butao@hisilicon.com>, <chenyao11@huawei.com>,
-        <fangshengzhou@hisilicon.com>, <lipengcheng8@huawei.com>,
-        <songxiaowei@hisilicon.com>, <xuyiping@hisilicon.com>,
-        <xuyoujun4@huawei.com>, <yudongbin@hisilicon.com>,
-        <zangleigang@hisilicon.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        =?UTF-8?B?c2h1ZmFuX2xlZSjmnY7mm7jluIYp?= <shufan_lee@richtek.com>
-Subject: Re: [PATCH v6 13/13] dts: hi3660: Add support for usb on Hikey960
-To:     Rob Herring <robh@kernel.org>
-References: <20190420064019.57522-1-chenyu56@huawei.com>
- <20190420064019.57522-14-chenyu56@huawei.com> <20190425220016.GC32028@bogus>
-From:   Chen Yu <chenyu56@huawei.com>
-Message-ID: <6b5c219c-3941-5add-5e91-5efbd9b9d85c@huawei.com>
-Date:   Tue, 30 Apr 2019 15:15:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.5.2
-MIME-Version: 1.0
-In-Reply-To: <20190425220016.GC32028@bogus>
-Content-Type: text/plain; charset="utf-8"
+        id S1726345AbfD3JQ0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 30 Apr 2019 05:16:26 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:45357 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726165AbfD3JQ0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 05:16:26 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-34-USjcvSGtMuWsnYZLV05f2w-1; Tue, 30 Apr 2019 10:16:22 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
+ (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue,
+ 30 Apr 2019 10:16:21 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Tue, 30 Apr 2019 10:16:21 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Alan Stern' <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+CC:     "gregKH@linuxfoundation.org" <gregKH@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH] UAS: fix alignment of scatter/gather segments
+Thread-Topic: [PATCH] UAS: fix alignment of scatter/gather segments
+Thread-Index: AQHU/rSuaPqmHe5MjEO6F2S1cXOj3qZUY+mA
+Date:   Tue, 30 Apr 2019 09:16:21 +0000
+Message-ID: <734e89837b454acea32b990fa2aff902@AcuMS.aculab.com>
+References: <1556557130.20085.24.camel@suse.com>
+ <Pine.LNX.4.44L0.1904291346170.1632-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1904291346170.1632-100000@iolanthe.rowland.org>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.142.63.192]
-X-CFilter-Loop: Reflected
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-MC-Unique: USjcvSGtMuWsnYZLV05f2w-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+From: Alan Stern
+> Sent: 29 April 2019 18:55
+> On Mon, 29 Apr 2019, Oliver Neukum wrote:
+> 
+> > On Mo, 2019-04-29 at 12:08 -0400, Alan Stern wrote:
+> > > On Mon, 29 Apr 2019, Oliver Neukum wrote:
+> > >
+> > > > On Mo, 2019-04-29 at 15:06 +0000, David Laight wrote:
+> > >
+> > > > But the statement the old comment made are no longer correct.
+> > >
+> > > Perhaps David would be satisfied if the comment were changed to say
+> > > that _some_ USB controller drivers have this unusual alignment
+> > > requirement.
+> >
+> > It would seem to me that every controller that does not do
+> > scatter/gather has this requirement. In other words, this is
+> > the true requirement of USB. It does not come from the
+> > controller. It comes from the protocol's need to not
+> > send a short package.
 
-On 2019/4/26 6:00, Rob Herring wrote:
-> On Sat, Apr 20, 2019 at 02:40:19PM +0800, Yu Chen wrote:
->> This patch adds support for usb on Hikey960.
->>
->> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
->> Cc: Wei Xu <xuwei5@hisilicon.com>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: John Stultz <john.stultz@linaro.org>
->> Cc: Binghui Wang <wangbinghui@hisilicon.com>
->> Signed-off-by: Yu Chen <chenyu56@huawei.com>
->> ---
->> v2:
->> * Remove device_type property.
->> * Add property "usb-role-switch".
->> v3:
->> * Make node "usb_phy" a subnode of usb3_otg_bc register.
->> * Remove property "typec-vbus-enable-val" of hisi_hikey_usb.
->> v4:
->> * Remove property "hisilicon,usb3-otg-bc-syscon" of usb-phy.
->> ---
->> ---
->>  arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts | 53 ++++++++++++++++
->>  arch/arm64/boot/dts/hisilicon/hi3660.dtsi         | 73 +++++++++++++++++++++++
->>  2 files changed, 126 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
->> index e035cf195b19..d4e11c56b250 100644
->> --- a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
->> +++ b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
->> @@ -13,6 +13,7 @@
->>  #include <dt-bindings/gpio/gpio.h>
->>  #include <dt-bindings/input/input.h>
->>  #include <dt-bindings/interrupt-controller/irq.h>
->> +#include <dt-bindings/usb/pd.h>
->>  
->>  / {
->>  	model = "HiKey960";
->> @@ -196,6 +197,26 @@
->>  			method = "smc";
->>  		};
->>  	};
->> +
->> +	hisi_hikey_usb: hisi_hikey_usb {
->> +		compatible = "hisilicon,hikey960_usb";
->> +		typec-vbus-gpios = <&gpio25 2 GPIO_ACTIVE_HIGH>;
->> +		otg-switch-gpios = <&gpio25 6 GPIO_ACTIVE_HIGH>;
->> +		hub-vdd33-en-gpios = <&gpio5 6 GPIO_ACTIVE_HIGH>;
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&usbhub5734_pmx_func>;
->> +
->> +		port {
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +
->> +			hikey_usb_ep: endpoint@0 {
->> +				reg = <0>;
->> +				remote-endpoint = <&dwc3_role_switch_notify>;
->> +			};
->> +		};
->> +	};
->> +
->>  };
->>  
->>  /*
->> @@ -526,6 +547,38 @@
->>  &i2c1 {
->>  	status = "okay";
->>  
->> +	rt1711h: rt1711h@4e {
->> +		compatible = "richtek,rt1711h";
-> 
-> The binding doc for this should state it should have a 'connector' node.
-> 
-Hi shufan,
-Is the 'connector' node an essential node of rt1711h?
-Currently it is missing in Documentation/devicetree/bindings/usb/richtek,rt1711h.txt.
-Do you think the 'connector' node should add as this patch in the binding doc?
+The hardware requirement is that packets that need to be joined
+together to make a long request must be 'full'.
+In many cases this means a zero length packet must be sent to
+correctly terminate a request that is a multiple of the packet size.
+Since the software has to add the zero length packet there is
+no real difference between a single scatter-gather transmit and
+multiple single packet trnasmits.
 
->> +		reg = <0x4e>;
->> +		status = "ok";
-> 
-> Can drop this, it is the default.
-> 
-OK.
+For USB2 bulk transfers the packet size is 512, and for USB3 1024.
+The old comment suggested 2048 for some unsupported interface.
 
->> +		interrupt-parent = <&gpio27>;
->> +		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&usb_cfg_func>;
->> +
->> +		usb_con: connector {
->> +			compatible = "usb-c-connector";
->> +			label = "USB-C";
->> +			data-role = "dual";
->> +			power-role = "dual";
->> +			try-power-role = "sink";
->> +			source-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)>;
->> +			sink-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)
->> +				PDO_VAR(5000, 5000, 1000)>;
->> +			op-sink-microwatt = <10000000>;
->> +		};
->> +
->> +		port {
+> Are you sure that xHCI has this requirement?  I haven't checked the
+> spec.  I know that UHCI, OHCI, and EHCI do need this alignment (and
+> OHCI and EHCI do in fact have hardware support for scatter-gather).
 > 
-> The connector node should have a 'ports' child with 'port@0' being the 
-> HS connection.
-> 
-This port and endpoint of the port are used for role_switch matching by
-fwnode_graph_devcon_match. I'm not too sure the 'ports' under connector is used in
-rt1711h driver？
-Hi shufan_lee,
-    Can you confirm this?
+> More precisely, what matters is whether the controller is able to merge
+> two different DMA segments into a single packet.  UHCI can't.  OHCI and
+> EHCI can, but only if the first segment ends at a page boundary and the
+> second begins at a page boundary -- it's easier just to say that the
+> segments have to be maxpacket-aligned.
 
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +
->> +			rt1711h_ep: endpoint@0 {
->> +				reg = <0>;
->> +				remote-endpoint = <&dwc3_role_switch>;
->> +			};
->> +		};
->> +	};
->> +
->>  	adv7533: adv7533@39 {
->>  		status = "ok";
->>  		compatible = "adi,adv7533";
->> diff --git a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
->> index 2f19e0e5b7cf..173467505ada 100644
->> --- a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
->> +++ b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
->> @@ -355,6 +355,12 @@
->>  			#clock-cells = <1>;
->>  		};
->>  
->> +		pmctrl: pmctrl@fff31000 {
->> +			compatible = "hisilicon,hi3660-pmctrl", "syscon";
->> +			reg = <0x0 0xfff31000 0x0 0x1000>;
->> +			#clock-cells = <1>;
->> +		};
->> +
->>  		pmuctrl: crg_ctrl@fff34000 {
->>  			compatible = "hisilicon,hi3660-pmuctrl", "syscon";
->>  			reg = <0x0 0xfff34000 0x0 0x1000>;
->> @@ -1134,5 +1140,72 @@
->>  				};
->>  			};
->>  		};
->> +
->> +		usb3_otg_bc: usb3_otg_bc@ff200000 {
->> +			compatible = "syscon", "simple-mfd";
->> +			reg = <0x0 0xff200000 0x0 0x1000>;
->> +
->> +			usb_phy: usb-phy {
->> +				compatible = "hisilicon,hi3660-usb-phy";
->> +				#phy-cells = <0>;
->> +				hisilicon,pericrg-syscon = <&crg_ctrl>;
->> +				hisilicon,pctrl-syscon = <&pctrl>;
->> +				hisilicon,eye-diagram-param = <0x22466e4>;
->> +			};
->> +		};
->> +
->> +		usb3: hisi_dwc3 {
->> +			compatible = "hisilicon,hi3660-dwc3";
->> +			#address-cells = <2>;
->> +			#size-cells = <2>;
->> +			ranges;
-> 
-> If there are not any wrapper registers, then get rid of the hisi_dwc3 
-> node. For just clocks and resets we just put everything in one node.
-> 
-I will try to fix this.
->> +
->> +			clocks = <&crg_ctrl HI3660_CLK_ABB_USB>,
->> +				 <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
->> +			clock-names = "clk_usb3phy_ref", "aclk_usb3otg";
->> +
->> +			assigned-clocks = <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
->> +			assigned-clock-rates = <229000000>;
->> +			resets = <&crg_rst 0x90 8>,
->> +				 <&crg_rst 0x90 7>,
->> +				 <&crg_rst 0x90 6>,
->> +				 <&crg_rst 0x90 5>;
->> +
->> +			dwc3: dwc3@ff100000 {
->> +				compatible = "snps,dwc3";
->> +				reg = <0x0 0xff100000 0x0 0x100000>;
->> +				interrupts = <0 159 4>, <0 161 4>;
->> +				phys = <&usb_phy>;
->> +				phy-names = "usb3-phy";
->> +				dr_mode = "otg";
->> +				maximum-speed = "super-speed";
->> +				phy_type = "utmi";
->> +				snps,dis-del-phy-power-chg-quirk;
-> 
->> +				snps,lfps_filter_quirk;
->> +				snps,dis_u2_susphy_quirk;
->> +				snps,dis_u3_susphy_quirk;
->> +				snps,tx_de_emphasis_quirk;
->> +				snps,tx_de_emphasis = <1>;
->> +				snps,dis_enblslpm_quirk;
-> 
-> Pretty sure these aren't documented because we don't use '_' in property 
-> names.
-> 
-Do you mean property as "snps,dis_enblslpm_quirk"? These properties are
-documented in Documentation/devicetree/bindings/usb/dwc3.txt.
+XHCI (for USB2 or USB3) can handle almost arbitrary fragments.
+There are a couple of annoying restrictions (IIRC):
+- Fragments cannot cross a 64k boundary.
+  (How much would it cost the hardware to have a 32bit (or even 64bit)
+  counter.)
+- The 'Link TRB' between ring segments must be aligned to a packet boundary.
+I believe the Linux XHCI driver now handles both these cases.
+(It hadn't used to - which is why I know anything about USB3 and XHCI.)
 
->> +				snps,gctl-reset-quirk;
->> +				usb-role-switch;
->> +				role-switch-default-host;
->> +
->> +				port {
->> +					#address-cells = <1>;
->> +					#size-cells = <0>;
->> +
->> +					dwc3_role_switch: endpoint@0 {
->> +						reg = <0>;
->> +						remote-endpoint = <&rt1711h_ep>;
->> +					};
->> +
->> +					dwc3_role_switch_notify: endpoint@1 {
->> +						reg = <1>;
->> +						remote-endpoint = <&hikey_usb_ep>;
->> +					};
->> +				};
->> +			};
->> +		};
->>  	};
->>  };
->> -- 
->> 2.15.0-rc2
->>
-> 
-> .
-> 
+I also recall issues with non word aligned buffers for some controllers.
 
-Thanks
-- Yu Chen
+> > The second, old, comment is about controllers.
+> 
+> Well, if the drivers would use bounce buffers to work around the
+> controllers' issues then they wouldn't have this special requirement.
+> So it really is a combination of what the hardware can do and what the
+> driver can do.
+
+Indeed.
+So any comment should refer to what the linux usb drivers requires
+of their 'user', not what happens on the USB wire.
+
+It might me that you do end up having to request 1k aligned
+buffers for XHCI, but the comment should say that you are
+adding a far stronger restriction than that required by the
+driver and controller.
+
+Given that XHCI is the most common interface (at least on x86)
+if the 1k alignment forces extra bounce buffers in any code
+paths it could be a performance issue.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
