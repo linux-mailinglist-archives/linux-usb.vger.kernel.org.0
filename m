@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B4AFCAE
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206E5FCE1
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbfD3PXW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 11:23:22 -0400
-Received: from mail-vk1-f194.google.com ([209.85.221.194]:41813 "EHLO
-        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfD3PXW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:23:22 -0400
-Received: by mail-vk1-f194.google.com with SMTP id q193so1906895vkf.8
-        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 08:23:22 -0700 (PDT)
+        id S1726015AbfD3P2p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 11:28:45 -0400
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:41461 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725906AbfD3P2p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:28:45 -0400
+Received: by mail-ua1-f68.google.com with SMTP id s30so1668006uas.8
+        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 08:28:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vEDUu1mzojfttPFnsI8BLY/6XWBdLDT7OktJ1KG8wg8=;
-        b=lEOu5ISpyiG6SYi/Spqo6aWLzjf3i3+XbXoen+uaV9tV3XDOu8kTX1gG6hAaf2WEm2
-         QE4wglp6LO8uGG1sCDGBS8yV6E3TkUWvkoAoau7wGvIwoGQ+544+T3wrIeyCS3pwmtOk
-         9qNfqOVpfRT/ZhEOS4IXMi6bZhCQ0bd4MMIe0=
+        bh=psxi8sV7eLiIF2qdnqe7ws85kk7WgDvg8LIHII21pqQ=;
+        b=MRnAbiQQZrENnFVqNVQM3wn9WZUfrhCjLXSuXHXDuSuMKcIXRioW5qp2YA6xxhrklS
+         6PA5t30rFUy4SUv2Q10p3TMKSuFD7QmhIn/z52d1VhvpteTDlsH7xSokckh2OrVyRAR6
+         OZvFsa4Q6GYkPxLbtIHHpq5isnp7SjPjoY43c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vEDUu1mzojfttPFnsI8BLY/6XWBdLDT7OktJ1KG8wg8=;
-        b=GjDeiz2DO9qleriQ12js2s9sVm3TtEOUmxUqcRqeoBYoVcTWzLdA4krkf3by3I+zZ0
-         HAQn3s0rQp2MHXBhO2y57DCBU88qB5gzH+gBlaUG82vBAsSVVH7VSL8oK0bBacpE3z7t
-         cw6sg+fBgBxUwiNEDQAHt0JS+PlwTj4mP0BTkcAxKrjLyuXdeDgt3yoSFutO8kV8HyMO
-         FEdLR+KRF5Lqb8V6wZb63E/M43CWI7eK86X4SKTJYgu+iBTWYA2yxmoKYQQ5mhe1wWrS
-         Qz46jjNqyVRyopBMO4CWrCtNZwg8IWSvHf0l4metmhbEkl7cag2iCYS1MWnTMMlex+Bb
-         RSLw==
-X-Gm-Message-State: APjAAAUHZUGM22KizdfX9UaO35L/A2gOyLAjm28ZMn0lcg5jmXyr0c+f
-        QRI9kma4SoTqP1lpLdAhJ9dFYfKXov4=
-X-Google-Smtp-Source: APXvYqz0iKz1jv5+KDC2HAvOyGqs4D51tvixdGXI8uMESU1dpj4MxP2kbTsZEA2rM9Fgk4ZqAX6oig==
-X-Received: by 2002:a1f:264b:: with SMTP id m72mr4768533vkm.43.1556637801302;
-        Tue, 30 Apr 2019 08:23:21 -0700 (PDT)
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
-        by smtp.gmail.com with ESMTPSA id s16sm4791221vks.39.2019.04.30.08.23.19
+        bh=psxi8sV7eLiIF2qdnqe7ws85kk7WgDvg8LIHII21pqQ=;
+        b=hlZU6SmSmmibVrngOILldoXx3TMHiWDwQLquHHTGq5aSsF9GYZUIWKUQq0S4gitmuK
+         +8oaKW4yEQQbdfL7mrwp9dgNGJ6zhpcswtN+OvDHkUEBRoodVAi5GE7JonNAzL9dFFKi
+         R2lOxXQzUvizKS+4+A/gzaoEOlvjCI3Marpo/N0oz5yJ/LzEEXhk1iFPiIfeaYJNan0r
+         KbqSIDUdfCKr+XhX2tZHkDssZB9C2AbiZweP+LK4bL9DGYW56FxOhrI6g5Ft661gOSQS
+         9jW9R6wJ5wzIFFIf7d/kFrxFroXZyH37D+dsWex2nkZgubA7TUHPtcMqajMrNQ/hf/vB
+         brcA==
+X-Gm-Message-State: APjAAAV7ZJh1UHxkTD6yWu+QLk6wHKnBTMcDMbE3Wnf5vIUq4r8IFX7o
+        +PGZN2BSGQ/pTvFbJ3slWaN8dlh7oPk=
+X-Google-Smtp-Source: APXvYqz/3PBVpaWtgFdat3rhnCsm2miZyhpEWxXTePocMtrvjX3O5ljRuicePyb42ror7FUJ0c7QQQ==
+X-Received: by 2002:ab0:64d2:: with SMTP id j18mr11174033uaq.127.1556638123502;
+        Tue, 30 Apr 2019 08:28:43 -0700 (PDT)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
+        by smtp.gmail.com with ESMTPSA id k128sm2845246vkb.54.2019.04.30.08.28.41
         for <linux-usb@vger.kernel.org>
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 08:23:20 -0700 (PDT)
-Received: by mail-vs1-f43.google.com with SMTP id e2so8193712vsc.13
-        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 08:23:19 -0700 (PDT)
-X-Received: by 2002:a67:7cd1:: with SMTP id x200mr5313157vsc.144.1556637799296;
- Tue, 30 Apr 2019 08:23:19 -0700 (PDT)
+        Tue, 30 Apr 2019 08:28:42 -0700 (PDT)
+Received: by mail-ua1-f47.google.com with SMTP id p13so4889602uaa.11
+        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 08:28:41 -0700 (PDT)
+X-Received: by 2002:ab0:324b:: with SMTP id r11mr11542291uan.124.1556638121492;
+ Tue, 30 Apr 2019 08:28:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1555672441.git.arturp@synopsys.com> <15bba89b920e29e27de4cfaac546834fba5d1a76.1555672441.git.arturp@synopsys.com>
- <CAD=FV=U4BXuT1rM--UBo6vTfCHpm=qsWydoO_bNXYRDxu22twA@mail.gmail.com>
- <SN1PR12MB2431B8BC296AF49152702868A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
- <CAD=FV=XFd-Uk_beUr+5djbi-93eWENGu5z5td7V3KPqpuoeiig@mail.gmail.com> <SN1PR12MB243103882D0C119575275915A73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
-In-Reply-To: <SN1PR12MB243103882D0C119575275915A73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
+References: <cover.1555075927.git.arturp@synopsys.com> <b4129291df7b2d061e93c03862c081b6a35b2e7f.1555075927.git.arturp@synopsys.com>
+ <CAD=FV=U4muZuc-Wh-1xf5eFDSnyDVXK4BQHeJihWJpaU1ooB0g@mail.gmail.com>
+ <SN1PR12MB2431BD7144CBA0C34C58CE8CA7390@SN1PR12MB2431.namprd12.prod.outlook.com>
+ <CAD=FV=XhXc8dD8n-XEBG=tSC4Av+JW9hN-U=d3JP8vCiX5DopQ@mail.gmail.com> <SN1PR12MB2431D122F3EF3085493F60ECA73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
+In-Reply-To: <SN1PR12MB2431D122F3EF3085493F60ECA73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 30 Apr 2019 08:23:07 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UD6MCRGik3RWQ1ZjvHUT-zTrR3+oOiN42GignFAXd1wA@mail.gmail.com>
-Message-ID: <CAD=FV=UD6MCRGik3RWQ1ZjvHUT-zTrR3+oOiN42GignFAXd1wA@mail.gmail.com>
-Subject: Re: [PATCH v1 08/14] usb: dwc2: Add default param to control power optimization.
+Date:   Tue, 30 Apr 2019 08:28:29 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Ux_egPvzCbm_fMMwT97WPXABsbdeHRQr+KUjbZ4RTijw@mail.gmail.com>
+Message-ID: <CAD=FV=Ux_egPvzCbm_fMMwT97WPXABsbdeHRQr+KUjbZ4RTijw@mail.gmail.com>
+Subject: Re: [PATCH 01/14] usb: dwc2: Fix dwc2_restore_device_registers() function.
 To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -71,48 +71,91 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-On Tue, Apr 30, 2019 at 5:45 AM Artur Petrosyan
+On Mon, Apr 29, 2019 at 11:59 PM Artur Petrosyan
 <Arthur.Petrosyan@synopsys.com> wrote:
 >
-> > If setting "power_down = 0" is wrong then please update your patch to
-> > remove all the mainline code that sets power_down to 0.  Presumably
-> > this means you'd want to convert that code over to using "power_saving
-> > = False".  Perhaps then I can see your vision of how this works more
-> > clearly.
-> Yes this is a good idea.
+> On 4/29/2019 21:34, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Mon, Apr 29, 2019 at 3:51 AM Artur Petrosyan
+> > <Arthur.Petrosyan@synopsys.com> wrote:
+> >>
+> >> On 4/27/2019 00:43, Doug Anderson wrote:
+> >>> Hi,
+> >>>
+> >>> On Fri, Apr 12, 2019 at 6:38 AM Artur Petrosyan
+> >>> <arthur.petrosyan@synopsys.com> wrote:
+> >>>>
+> >>>> - Added backup of DCFG register.
+> >>>> - Added Set the Power-On Programming done bit.
+> >>>>
+> >>>> Signed-off-by: Artur Petrosyan <arturp@synopsys.com>
+> >>>> ---
+> >>>>    drivers/usb/dwc2/gadget.c | 10 ++++++++++
+> >>>>    1 file changed, 10 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> >>>> index 6812a8a3a98b..dcb0fbb8bc42 100644
+> >>>> --- a/drivers/usb/dwc2/gadget.c
+> >>>> +++ b/drivers/usb/dwc2/gadget.c
+> >>>> @@ -5004,6 +5004,7 @@ int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup)
+> >>>>    {
+> >>>>           struct dwc2_dregs_backup *dr;
+> >>>>           int i;
+> >>>> +       u32 dctl;
+> >>>>
+> >>>>           dev_dbg(hsotg->dev, "%s\n", __func__);
+> >>>>
+> >>>> @@ -5019,6 +5020,15 @@ int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup)
+> >>>>           if (!remote_wakeup)
+> >>>>                   dwc2_writel(hsotg, dr->dctl, DCTL);
+> >>>>
+> >>>> +       if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_PARTIAL) {
+> >>>> +               dwc2_writel(hsotg, dr->dcfg, DCFG);
+> >>>> +
+> >>>> +               /* Set the Power-On Programming done bit */
+> >>>> +               dctl = dwc2_readl(hsotg, DCTL);
+> >>>> +               dctl |= DCTL_PWRONPRGDONE;
+> >>>> +               dwc2_writel(hsotg, dctl, DCTL);
+> >>>> +       }
+> >>>
+> >>> I can't vouch one way or the other for the correctness of this change,
+> >>> but I will say that it's frustrating how asymmetric hibernate and
+> >>> partial power down are.  It makes things really hard to reason about.
+> >>> Is there any way you could restructure this so it happens in the same
+> >>> way between hibernate and partial power down?
+> >>>
+> >>
+> >>> Specifically looking at the similar sequence in
+> >>> dwc2_gadget_exit_hibernation() (which calls this function), I see:
+> >>>
+> >>> 1. There are some extra delays.  Are those needed for partial power down?
+> >> Do you mean delays in dwc2_gadget_exit_hibernation() ? If yes they are
+> >> needed for hibernation flow. What relates to delays in hibernation
+> >> needed for partial power down. Anything that is implemented in the
+> >> hibernation delays or other things are part of hibernation and are not
+> >> used in partial power down because they are two different flows of power
+> >> saving.
+> >
+> > OK, if they aren't needed for partial power down then that's fine.
+> > When I see two functions doing nearly the same sets of writes but one
+> > has delays and the other doesn't it makes me wonder if that was on
+> > purpose or not.
+> >
+> >
+> >>> 2. For exiting hibernation the setting of "DCTL_PWRONPRGDONE" only
+> >>> happens if "not remote wakeup".  Is it truly on purpose that you don't
+> >>> do that?
+> >> Currently partial power down doesn't support remote wakeup flow.
+> >
+> > Oh.  What happens if you have partial power down enabled and try to
+> > enable remote wakeup?  Does it give an error?
+> As far as I have been debugging I have not seen error in that case.
+>
+> Do you mean like it should print a message saying that current partial
+> power down code doesn't support remote wakeup?
 
-Actually, I have a feeling it won't work, at least not without more
-changes.  ...and that's part of the problem with your patch.
-
-Specifically dwc2 works by first filling in the "default" parameters.
-Then the per-platform config function runs and overrides the defaults.
-If the per-platform config function overrides the "power_saving"
-parameter then it will be too late.
-
-
-> > NOTE: I'm curious how you envision what someone would do if they had a
-> > core that supported hibernation but they only wanted to enable partial
-> > power down.  I guess then they'd have to set "power_saving = True" and
-> > then "power_down = DWC2_POWER_DOWN_PARAM_PARTIAL"?  I guess your
-> > vision of the world is:
-> I have implemented everything based on programming guide and data book.
-> Core can only support hibernation or partial power down based on the
-> configuration parameters. There cannot be two modes simultaneously of
-> power saving only one of them.
-
-Ah, this is new information to me.  I assumed they were supersets of
-each other, so if you supported hibernation you also supported partial
-power down.  Thanks for clearing that up!
-
-
-> The power_down flag is set to DWC2_POWER_DOWN_PARAM_PARTIAL ,
-> DWC2_POWER_DOWN_PARAM_HIBERNATION or DWC2_POWER_DOWN_PARAM_NONE while
-> checking the hw parameters. So it just indicates which power down mode
-> is supporting the core.
-
-I don't think this is what the params are about.  The params are about
-the currently configured parameters, not about what the core supports.
-This is why all the other code checks the actual value of the params
-to decide whether to do power savings.
+Not sure.  ...why don't we just forget about this question?  I don't
+have enough gadget knowledge nor any way to test.
 
 -Doug
