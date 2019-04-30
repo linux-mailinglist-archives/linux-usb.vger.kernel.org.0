@@ -2,121 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D31CFB28
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 16:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECDAFB34
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 16:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbfD3ONj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 10:13:39 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:35356 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726563AbfD3ONj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 10:13:39 -0400
-Received: (qmail 1597 invoked by uid 2102); 30 Apr 2019 10:13:38 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 30 Apr 2019 10:13:38 -0400
-Date:   Tue, 30 Apr 2019 10:13:38 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Eric Biggers <ebiggers@kernel.org>
-cc:     syzbot <syzbot+a9fefd18c7b240f19c54@syzkaller.appspotmail.com>,
-        <andreyknvl@google.com>, <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <rafael@kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in hex_string
-In-Reply-To: <20190429210917.GA251866@gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1904301007320.1465-100000@iolanthe.rowland.org>
+        id S1726362AbfD3OQF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 10:16:05 -0400
+Received: from mail01.preh.com ([80.149.130.22]:46254 "EHLO mail01.preh.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726015AbfD3OQE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Apr 2019 10:16:04 -0400
+From:   Kloetzke Jan <Jan.Kloetzke@preh.de>
+To:     Oliver Neukum <oneukum@suse.com>,
+        =?utf-8?B?SmFuIEtsw7Z0emtl?= <jan@kloetzke.net>,
+        David Miller <davem@davemloft.net>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Kloetzke Jan <Jan.Kloetzke@preh.de>
+Subject: [PATCH v2] usbnet: fix kernel crash after disconnect
+Thread-Topic: [PATCH v2] usbnet: fix kernel crash after disconnect
+Thread-Index: AQHU/18dyV1WEybtp0WgCkArhegqtA==
+Date:   Tue, 30 Apr 2019 14:15:07 +0000
+Message-ID: <20190430141440.9469-1-Jan.Kloetzke@preh.de>
+References: <1556563688.20085.31.camel@suse.com>
+In-Reply-To: <1556563688.20085.31.camel@suse.com>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-exclaimer-md-config: 142fe46c-4d13-4ac1-9970-1f36f118897a
+x-tm-snts-smtp: F3E4B2CF7EDBFE907604E668AE1C5937C7EDCBBCF80B5A9536C223D3EB23FD8C2000:8
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C26ED2F505691B4389703F9226B036F3@preh.de>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=preh.de; s=key1; c=relaxed/relaxed;
+ h=from:to:cc:subject:date:message-id:references:content-type:mime-version;
+ bh=sNbOqU7Z17TWcAp2dBHoOLNECx2E9fJeaxEEvfKSq4w=;
+ b=Auti/CG8nuk2BsnKX/stukyuvS5TIYztcozHrczZRNyu9rZivvJHVcca6oFechBaZ7Nw/tQDMVJd
+        3mYYySqR+w03SSGLx24/JqmQ8HvB1wuGG0Tsb0xIbVOvciJAi7BIShnW47n/oyr5SoSQNVEwaJ8F
+        iZNr3Mi+iiogwkJPHPbCtyfWwzZfsWWPNoqin/6oWA3yqwJaSn0lYtS+2agWvD3F77GOO7SPplqj
+        dA1H1qdxZtYRRel42Nm9jO8w4H/ppdxcEvwKp5jMGGwwQTF4VwFwMYcUsjcWw2kfEEXVmzvfsqqB
+        JOg+QssgQSilXwy5sx6tN2Es0Uc3+PK3Z8rdVA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 29 Apr 2019, Eric Biggers wrote:
-
-> On Mon, Apr 29, 2019 at 04:07:04PM -0400, Alan Stern wrote:
-
-> > Accessing beyond the end of the descriptor.
-> > 
-> > #syz test: https://github.com/google/kasan.git usb-fuzzer
-> > 
-> > --- a/drivers/video/fbdev/udlfb.c
-> > +++ b/drivers/video/fbdev/udlfb.c
-> > @@ -1511,6 +1511,7 @@ static int dlfb_parse_vendor_descriptor(
-> >  	char *buf;
-> >  	char *desc_end;
-> >  	int total_len;
-> > +	int width;
-> >  
-> >  	buf = kzalloc(MAX_VENDOR_DESCRIPTOR_SIZE, GFP_KERNEL);
-> >  	if (!buf)
-> > @@ -1529,9 +1530,10 @@ static int dlfb_parse_vendor_descriptor(
-> >  	}
-> >  
-> >  	if (total_len > 5) {
-> > +		width = min(total_len, 11);
-> >  		dev_info(&intf->dev,
-> > -			 "vendor descriptor length: %d data: %11ph\n",
-> > -			 total_len, desc);
-> > +			 "vendor descriptor length: %d data: %*ph\n",
-> > +			 total_len, width, desc);
-> >  
-> >  		if ((desc[0] != total_len) || /* descriptor length */
-> >  		    (desc[1] != 0x5f) ||   /* vendor descriptor type */
-> > 
-> > 
-> 
-> Why not write just:
-> 
->                 dev_info(&intf->dev,
->                          "vendor descriptor length: %d data: %*ph\n",
->                          total_len, min(total_len, 11), desc);
-
-I did consider doing that.  In the end I decided adding an extra
-temporary variable made the code a little more readable.  (For some 
-reason, extra recursion -- a function call embedded in a function 
-argument -- seems to demand more mental effort than an extra 
-temporary.  Maybe my brain is just getting old...)
-
-> Also, aren't there more out-of-bounds reads in the code just after?  It only
-> checks for at least 1 byte available, but then it reads up to 7 bytes:
-> 
-> 		while (desc < desc_end) {
-> 			u8 length;
-> 			u16 key;
-> 
-> 			key = *desc++;
-> 			key |= (u16)*desc++ << 8;
-> 			length = *desc++;
-> 
-> 			switch (key) {
-> 			case 0x0200: { /* max_area */
-> 				u32 max_area = *desc++;
-> 				max_area |= (u32)*desc++ << 8;
-> 				max_area |= (u32)*desc++ << 16;
-> 				max_area |= (u32)*desc++ << 24;
-> 				dev_warn(&intf->dev,
-> 					 "DL chip limited to %d pixel modes\n",
-> 					 max_area);
-> 				dlfb->sku_pixel_limit = max_area;
-> 				break;
-> 			}
-> 			default:
-> 				break;
-> 			}
-> 			desc += length;
-> 		}
-
-Quite right.  Please feel free to submit a patch fixing all these 
-problems.
-
-> Also I couldn't help but notice it's also using 'char' rather than 'u8',
-> so bytes >= 0x80 are read incorrectly as they're sign extended...
-
-As I recall, the C standard doesn't specify whether char is signed or
-unsigned; it can vary with the implementation.  However you are
-certainly correct that to ensure there is no sign extension, the code
-should use unsigned char or u8.
-
-Alan Stern
-
+V2hlbiBkaXNjb25uZWN0aW5nIGNkY19uY20gdGhlIGtlcm5lbCBzcG9yYWRpY2FsbHkgY3Jhc2hl
+cyBzaG9ydGx5DQphZnRlciB0aGUgZGlzY29ubmVjdDoNCg0KICBbICAgNTcuODY4ODEyXSBVbmFi
+bGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2UgYXQgdmlydHVhbCBh
+ZGRyZXNzIDAwMDAwMDAwDQogIC4uLg0KICBbICAgNTguMDA2NjUzXSBQQyBpcyBhdCAweDANCiAg
+WyAgIDU4LjAwOTIwMl0gTFIgaXMgYXQgY2FsbF90aW1lcl9mbisweGVjLzB4MWI0DQogIFsgICA1
+OC4wMTM1NjddIHBjIDogWzwwMDAwMDAwMDAwMDAwMDAwPl0gbHIgOiBbPGZmZmZmZjgwMDgwZjUx
+MzA+XSBwc3RhdGU6IDAwMDAwMTQ1DQogIFsgICA1OC4wMjA5NzZdIHNwIDogZmZmZmZmODAwODAw
+M2RhMA0KICBbICAgNTguMDI0Mjk1XSB4Mjk6IGZmZmZmZjgwMDgwMDNkYTAgeDI4OiAwMDAwMDAw
+MDAwMDAwMDAxDQogIFsgICA1OC4wMjk2MThdIHgyNzogMDAwMDAwMDAwMDAwMDAwYSB4MjY6IDAw
+MDAwMDAwMDAwMDAxMDANCiAgWyAgIDU4LjAzNDk0MV0geDI1OiAwMDAwMDAwMDAwMDAwMDAwIHgy
+NDogZmZmZmZmODAwODAwM2U2OA0KICBbICAgNTguMDQwMjYzXSB4MjM6IDAwMDAwMDAwMDAwMDAw
+MDAgeDIyOiAwMDAwMDAwMDAwMDAwMDAwDQogIFsgICA1OC4wNDU1ODddIHgyMTogMDAwMDAwMDAw
+MDAwMDAwMCB4MjA6IGZmZmZmZmM2OGZhYzE4MDgNCiAgWyAgIDU4LjA1MDkxMF0geDE5OiAwMDAw
+MDAwMDAwMDAwMTAwIHgxODogMDAwMDAwMDAwMDAwMDAwMA0KICBbICAgNTguMDU2MjMyXSB4MTc6
+IDAwMDAwMDdmODg1YWZmOGMgeDE2OiAwMDAwMDA3Zjg4M2E5ZjEwDQogIFsgICA1OC4wNjE1NTZd
+IHgxNTogMDAwMDAwMDAwMDAwMDAwMSB4MTQ6IDAwMDAwMDAwMDAwMDAwNmUNCiAgWyAgIDU4LjA2
+Njg3OF0geDEzOiAwMDAwMDAwMDAwMDAwMDAwIHgxMjogMDAwMDAwMDAwMDAwMDBiYQ0KICBbICAg
+NTguMDcyMjAxXSB4MTE6IGZmZmZmZmM2OWZmMWRiMzAgeDEwOiAwMDAwMDAwMDAwMDAwMDIwDQog
+IFsgICA1OC4wNzc1MjRdIHg5IDogODAwMDEwMDAwODAwMTAwMCB4OCA6IDAwMDAwMDAwMDAwMDAw
+MDENCiAgWyAgIDU4LjA4Mjg0N10geDcgOiAwMDAwMDAwMDAwMDAwODAwIHg2IDogZmZmZmZmODAw
+ODAwM2U3MA0KICBbICAgNTguMDg4MTY5XSB4NSA6IGZmZmZmZmM2OWZmMTdhMjggeDQgOiAwMDAw
+MDAwMGZmZmYxMzhiDQogIFsgICA1OC4wOTM0OTJdIHgzIDogMDAwMDAwMDAwMDAwMDAwMCB4MiA6
+IDAwMDAwMDAwMDAwMDAwMDANCiAgWyAgIDU4LjA5ODgxNF0geDEgOiAwMDAwMDAwMDAwMDAwMDAw
+IHgwIDogMDAwMDAwMDAwMDAwMDAwMA0KICAuLi4NCiAgWyAgIDU4LjIwNTgwMF0gWzwgICAgICAg
+ICAgKG51bGwpPl0gICAgICAgICAgIChudWxsKQ0KICBbICAgNTguMjEwNTIxXSBbPGZmZmZmZjgw
+MDgwZjUyOTg+XSBleHBpcmVfdGltZXJzKzB4YTAvMHgxNGMNCiAgWyAgIDU4LjIxNTkzN10gWzxm
+ZmZmZmY4MDA4MGY1NDJjPl0gcnVuX3RpbWVyX3NvZnRpcnErMHhlOC8weDEyOA0KICBbICAgNTgu
+MjIxNzAyXSBbPGZmZmZmZjgwMDgwODExMjA+XSBfX2RvX3NvZnRpcnErMHgyOTgvMHgzNDgNCiAg
+WyAgIDU4LjIyNzExOF0gWzxmZmZmZmY4MDA4MGE2MzA0Pl0gaXJxX2V4aXQrMHg3NC8weGJjDQog
+IFsgICA1OC4yMzIwMDldIFs8ZmZmZmZmODAwODBlMTdkYz5dIF9faGFuZGxlX2RvbWFpbl9pcnEr
+MHg3OC8weGFjDQogIFsgICA1OC4yMzc4NTddIFs8ZmZmZmZmODAwODA4MGNmND5dIGdpY19oYW5k
+bGVfaXJxKzB4ODAvMHhhYw0KICAuLi4NCg0KVGhlIGNyYXNoIGhhcHBlbnMgcm91Z2hseSAxMjUu
+LjEzMG1zIGFmdGVyIHRoZSBkaXNjb25uZWN0LiBUaGlzDQpjb3JyZWxhdGVzIHdpdGggdGhlICdk
+ZWxheScgdGltZXIgdGhhdCBpcyBzdGFydGVkIG9uIGNlcnRhaW4gVVNCIHR4L3J4DQplcnJvcnMg
+aW4gdGhlIFVSQiBjb21wbGV0aW9uIGhhbmRsZXIuDQoNClRoZSBzdXNwZWN0ZWQgcHJvYmxlbSBp
+cyBhIHJhY2Ugb2YgdXNibmV0X3N0b3AoKSB3aXRoDQp1c2JuZXRfc3RhcnRfeG1pdCgpLiBJbiB1
+c2JuZXRfc3RvcCgpIHdlIGNhbGwgdXNibmV0X3Rlcm1pbmF0ZV91cmJzKCkNCnRvIGNhbmNlbCBh
+bGwgVVJCcyBpbiBmbGlnaHQuIFRoaXMgb25seSBtYWtlcyBzZW5zZSBpZiBubyBuZXcgVVJCcyBh
+cmUNCnN1Ym1pdHRlZCBjb25jdXJyZW50bHksIHRob3VnaC4gQnV0IHRoZSB1c2JuZXRfc3RhcnRf
+eG1pdCgpIGNhbiBydW4gYXQNCnRoZSBzYW1lIHRpbWUgb24gYW5vdGhlciBDUFUgd2hpY2ggYWxt
+b3N0IHVuY29uZGl0aW9uYWxseSBzdWJtaXRzIGFuDQpVUkIuIFRoZSBlcnJvciBjYWxsYmFjayBv
+ZiB0aGUgbmV3IFVSQiB3aWxsIHRoZW4gc2NoZWR1bGUgdGhlIHRpbWVyDQphZnRlciBpdCB3YXMg
+YWxyZWFkeSBzdG9wcGVkLg0KDQpUaGUgZml4IGFkZHMgYSBjaGVjayBpZiB0aGUgdHggcXVldWUg
+aXMgc3RvcHBlZCBhZnRlciB0aGUgdHggbGlzdCBsb2NrDQpoYXMgYmVlbiB0YWtlbi4gVGhpcyBz
+aG91bGQgcmVsaWFibHkgcHJldmVudCB0aGUgc3VibWlzc2lvbiBvZiBuZXcgVVJCcw0Kd2hpbGUg
+dXNibmV0X3Rlcm1pbmF0ZV91cmJzKCkgZG9lcyBpdHMgam9iLiBUaGUgc2FtZSB0aGluZyBpcyBk
+b25lIG9uDQp0aGUgcnggc2lkZSBldmVuIHRob3VnaCBpdCBtaWdodCBiZSBzYWZlIGR1ZSB0byBv
+dGhlciBmbGFncyB0aGF0IGFyZQ0KY2hlY2tlZCB0aGVyZS4NCg0KU2lnbmVkLW9mZi1ieTogSmFu
+IEtsw7Z0emtlIDxKYW4uS2xvZXR6a2VAcHJlaC5kZT4NCi0tLQ0KIGRyaXZlcnMvbmV0L3VzYi91
+c2JuZXQuYyB8IDYgKysrKysrDQogMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQ0KDQpk
+aWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvdXNiL3VzYm5ldC5jIGIvZHJpdmVycy9uZXQvdXNiL3Vz
+Ym5ldC5jDQppbmRleCA1MDQyODJhZjI3ZTUuLjM2YmIwYTRmYzMyMCAxMDA2NDQNCi0tLSBhL2Ry
+aXZlcnMvbmV0L3VzYi91c2JuZXQuYw0KKysrIGIvZHJpdmVycy9uZXQvdXNiL3VzYm5ldC5jDQpA
+QCAtNTA2LDYgKzUwNiw3IEBAIHN0YXRpYyBpbnQgcnhfc3VibWl0IChzdHJ1Y3QgdXNibmV0ICpk
+ZXYsIHN0cnVjdCB1cmIgKnVyYiwgZ2ZwX3QgZmxhZ3MpDQogDQogCWlmIChuZXRpZl9ydW5uaW5n
+IChkZXYtPm5ldCkgJiYNCiAJICAgIG5ldGlmX2RldmljZV9wcmVzZW50IChkZXYtPm5ldCkgJiYN
+CisJICAgIHRlc3RfYml0KEVWRU5UX0RFVl9PUEVOLCAmZGV2LT5mbGFncykgJiYNCiAJICAgICF0
+ZXN0X2JpdCAoRVZFTlRfUlhfSEFMVCwgJmRldi0+ZmxhZ3MpICYmDQogCSAgICAhdGVzdF9iaXQg
+KEVWRU5UX0RFVl9BU0xFRVAsICZkZXYtPmZsYWdzKSkgew0KIAkJc3dpdGNoIChyZXR2YWwgPSB1
+c2Jfc3VibWl0X3VyYiAodXJiLCBHRlBfQVRPTUlDKSkgew0KQEAgLTE0MzEsNiArMTQzMiwxMSBA
+QCBuZXRkZXZfdHhfdCB1c2JuZXRfc3RhcnRfeG1pdCAoc3RydWN0IHNrX2J1ZmYgKnNrYiwNCiAJ
+CXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmRldi0+dHhxLmxvY2ssIGZsYWdzKTsNCiAJCWdvdG8g
+ZHJvcDsNCiAJfQ0KKwlpZiAoV0FSTl9PTihuZXRpZl9xdWV1ZV9zdG9wcGVkKG5ldCkpKSB7DQor
+CQl1c2JfYXV0b3BtX3B1dF9pbnRlcmZhY2VfYXN5bmMoZGV2LT5pbnRmKTsNCisJCXNwaW5fdW5s
+b2NrX2lycXJlc3RvcmUoJmRldi0+dHhxLmxvY2ssIGZsYWdzKTsNCisJCWdvdG8gZHJvcDsNCisJ
+fQ0KIA0KICNpZmRlZiBDT05GSUdfUE0NCiAJLyogaWYgdGhpcyB0cmlnZ2VycyB0aGUgZGV2aWNl
+IGlzIHN0aWxsIGEgc2xlZXAgKi8NCi0tIA0KMi4xMS4wDQo=
