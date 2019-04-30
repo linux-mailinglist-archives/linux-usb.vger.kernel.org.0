@@ -2,91 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FA6FC0C
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 16:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0B2FC10
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726053AbfD3O75 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 10:59:57 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:41826 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726066AbfD3O7o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 10:59:44 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x3UExhl8115325;
-        Tue, 30 Apr 2019 09:59:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1556636383;
-        bh=Csc3XJYNGiQsPbSGWqKjkQ4XMQ7gfjP+pEmSkLDDBsA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=l63usmv4ncspyYSB1Xvvd05edSbLqAxMENZhEgnD+s6gXvtfHv0M3TwUpgSR+RdgU
-         5brdy60mjjBdK3llh6pxenm9ve9bJIAE4ko9gFK52N2FIT3KkpvM9aXfszl6PEARZA
-         1rOnlQU+sa8C1v9mOy+QU+Z8Px+xaLIk0+4f40BM=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x3UExha4045790
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Apr 2019 09:59:43 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 30
- Apr 2019 09:59:43 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 30 Apr 2019 09:59:42 -0500
-Received: from uda0271908.am.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x3UExgrI071248;
-        Tue, 30 Apr 2019 09:59:42 -0500
-From:   Bin Liu <b-liu@ti.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Bin Liu <b-liu@ti.com>
-Subject: [PATCH 0/6] musb patches for v5.2-rc1
-Date:   Tue, 30 Apr 2019 09:59:42 -0500
-Message-ID: <20190430145942.1128-9-b-liu@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190430145942.1128-1-b-liu@ti.com>
-References: <20190430145942.1128-1-b-liu@ti.com>
+        id S1726184AbfD3PAP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 11:00:15 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:35620 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726050AbfD3PAO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:00:14 -0400
+Received: (qmail 3262 invoked by uid 2102); 30 Apr 2019 11:00:13 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 30 Apr 2019 11:00:13 -0400
+Date:   Tue, 30 Apr 2019 11:00:13 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING: Support for this device (Terratec Grabster AV400) is
+ experimental.
+In-Reply-To: <0000000000004101370587c052fb@google.com>
+Message-ID: <Pine.LNX.4.44L0.1904301058150.1465-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On Tue, 30 Apr 2019, syzbot wrote:
 
-Here are the musb patches for v5.2 rc1. There are all small fixes or
-improvements. Please let me know if any change is needed.
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=141ca62d200000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+> dashboard link: https://syzkaller.appspot.com/bug?extid=af8f8d2ac0d39b0ed3a0
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1405bedd200000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ce3bbb200000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
+> 
+> usb 1-1: New USB device found, idVendor=0ccd, idProduct=0039, bcdDevice=  
+> d.3c
+> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> usb 1-1: config 0 descriptor??
+> pvrusb2: Hardware description: Terratec Grabster AV400
+> pvrusb2: **********
+> pvrusb2: WARNING: Support for this device (Terratec Grabster AV400) is  
+> experimental.
+> pvrusb2: Important functionality might not be entirely working.
+> pvrusb2: Please consider contacting the driver author to help with further  
+> stabilization of the driver.
+> pvrusb2: **********
+> 
+> 
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-There is one of the patches marked for stable. I will send it to stable
-tree later after they get into v5.2 rc.
+This does seem like a bug in syzbot.  Why does it think this pr_info() 
+output indicates a crash?  Is it fooled by the capitalized "WARNING" at 
+the start of one of the lines?
 
-Thanks,
--Bin.
----
-
-Kefeng Wang (1):
-  usb: musb: dsps: Use dev_get_drvdata()
-
-Paul Cercueil (3):
-  dt-bindings: usb: Add usb-phy property to the jz4740-musb node
-  usb: musb: jz4740: Let the platform probe the PHY
-  usb: musb: jz4740: obtain USB PHY from devicetree
-
-Samuel Holland (1):
-  soc: sunxi: Fix missing dependency on REGMAP_MMIO
-
-Tony Lindgren (1):
-  usb: musb: omap2430: Add support for idling phy when musb is idle
-
- .../bindings/usb/ingenic,jz4740-musb.txt      |  8 ++++++++
- drivers/soc/sunxi/Kconfig                     |  1 +
- drivers/usb/musb/Kconfig                      |  2 +-
- drivers/usb/musb/jz4740.c                     | 19 +++++++------------
- drivers/usb/musb/musb_dsps.c                  |  6 ++----
- drivers/usb/musb/omap2430.c                   |  6 ++++++
- 6 files changed, 25 insertions(+), 17 deletions(-)
-
--- 
-2.17.1
+Alan Stern
 
