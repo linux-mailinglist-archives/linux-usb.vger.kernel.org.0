@@ -2,112 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A773CFD30
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32640FEC9
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 19:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbfD3PuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 11:50:12 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:56469 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726061AbfD3PuL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:50:11 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 7F833581;
-        Tue, 30 Apr 2019 11:50:10 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 30 Apr 2019 11:50:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=Ka2lC0fzN77DodlXYYV3lz1zRFB
-        CP1FnsPu7ZLb1emw=; b=h0lrshccUp92VOV8cTUkafQlL3gF8O+uFxhkNin14U8
-        kgWPQY/jLWIHIoH9OV6wPrMBhCqU0AGHYMbOeOwQd8cJrinXL9SKcHSgQTyy3tjA
-        eyTR1en+rM6XTwMUnE5YbFdr81bynNZjGpAALBl9TxnDDkRXRbzQXuj2P4Lz7bJb
-        HHKEOVo54MR3HDvTA6t2JMqxQDOA3pLz0yU8QmiTfqQgZpFN3Gi+Ob/dDqX/aP7a
-        HS+gH3YPMRyeNehcaRp+cHFofxyXptAIsNATFAXjJ+RbnlDK5L6KBiOxxxE7N8af
-        Kq7Jf8zX0+hw91BxdcmACf21mWmthbdEbwy5EpYa+ig==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Ka2lC0
-        fzN77DodlXYYV3lz1zRFBCP1FnsPu7ZLb1emw=; b=6qvv9l877BSmrp9CzTh+zm
-        bwKQRdTA2lIcid9jldDfpkVZBRRT+F1GBbLqqM3EGwP71RP3dTDjB4s85LhuvG+z
-        bZDWAt9LJAV/RavMaKUUKdUQiCStVuBh5ftOhtuHbmjXheGd7K64ZqVTBp05j9t9
-        tdyJpxJpoOHU5DGPWOqK2YohzGnqtiGNFLoDhK07F5/Bq4Ka5ED7Y7XSWiOB6WnD
-        zsyUTbcpWoPzYPgeOt48134qlXDZcT7n6JuTXEbHGCT9gN/L71ZyOU49RwvA+DIs
-        ip91tmjfbE8jKXhfJJDj71jQ7PwTrc/9UoKumkWxTx2jm5AZr2N1rKh/iZK0Jkbg
-        ==
-X-ME-Sender: <xms:sW7IXBM7KWn--CbJGVmvuGkOLW1Gjxu_8yfC1WtR1Sc3-3nwUKn3LQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrieehgdefgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecuogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenuc
-    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucffohhmrghinhepghhithhhuhgsrd
-    gtohhmpdgrphhpshhpohhtrdgtohhmnecukfhppeekfedrkeeirdekledruddtjeenucfr
-    rghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptd
-X-ME-Proxy: <xmx:sW7IXCO_nSNF7nF79r7uguB0814e-1XHl3IH10oy7s-4BE-3oWkp6w>
-    <xmx:sW7IXJkXdmmdmtVxJldsF88-dkiLNfeQRFI8yKpeXgN2zxE0ebT9BQ>
-    <xmx:sW7IXAtVbGbkCss6KgdXl7AOQQ-3yyNS76NqzSBwxcu9oxGcw4NpTw>
-    <xmx:sm7IXCGsNoL07s4DpeiE-FwB5hHWypCo8kY6MFPAawpPYpLYD6I4WA>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id F0F58E48A7;
-        Tue, 30 Apr 2019 11:50:08 -0400 (EDT)
-Date:   Tue, 30 Apr 2019 17:50:05 +0200
-From:   Greg KH <greg@kroah.com>
-To:     syzbot <syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: WARNING: Detected a wedged cx25840 chip; the device will not
- work.
-Message-ID: <20190430155005.GA20649@kroah.com>
-References: <00000000000048aa750587c052ef@google.com>
- <20190430153516.GA23459@kroah.com>
+        id S1726048AbfD3RZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 13:25:58 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:46841 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbfD3RZ6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 13:25:58 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n2so7133690pgg.13
+        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 10:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b1DzYDHHMbPUeqMoDW3yyKVFzl5dp1X1tpd8mfSFUCM=;
+        b=g5CaxFLepwBRV+fZdbdUIzpj8w2kHwz9ygdaWgBIEjAcbZyjM9cWhm0nLyITorTmSY
+         ExdaN2iDSLgn+2lfNQJ9mLJS1qVnJIMXcx1PNoVeZpMGp2w44MUfNilKAt1WyNMDnfAc
+         s3uSvru5O80ScQqYEs6MPJ//qet6xLhNrMqi5ZZGnIpYHuJcgPRfyvghnCoEoV6rUj5F
+         MnxiXDNKcJ77JCmSM2I++I5dU1g9uLwj26Nmo94pOSBCdwONccqfrK3Y7U8+AH7Vvedb
+         Q/RaqTdzZvJA+27E6AvRJ2Fw82sQKPgYfuyS+RvaV5uHu8gWxPhL/JizsfraWfeHH5qH
+         FmjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b1DzYDHHMbPUeqMoDW3yyKVFzl5dp1X1tpd8mfSFUCM=;
+        b=KOZsOpi+nqduDEpcutsAsK3HlhmVjgQfBMsMUbSRfB9dk6/IWItc4jfDQqRUbCZ6YH
+         Ju4EfPB0NCyG5CbE9iN1doqBwd8RyzF62AxjydbNLd1InGHpan4ScE/EcDm7R8DZTLlF
+         JYH/t3l00Ovl0v7fQUnOQ9YS0qoECifTd/JIpHLsMdl/lPYWd8EOQ+swd6ZYcTEHfaw4
+         ZD36MwGXQYj8g/X6Qj3kkSc4JWhhRFSXBCKHNTLvDqxWNN5u5m4k6SqaCxI6NRW8Gm+J
+         KwNoHKm6vrymdyBlU3b5hnBs9Xl3xPb1Uk4kFtFAMXohSeYT1mZ//IF72xihMHkkOP31
+         D32A==
+X-Gm-Message-State: APjAAAVDYhgbEuqUz9k+HazSzq9AiY0/zO5W9GAXj8ZifYoR1OzVffkI
+        OkL55EBu6qqPLC5lRv2c5emrXjla34eGgPWhx8kC6g==
+X-Google-Smtp-Source: APXvYqxKoFOLcBHV9onh2oXJOsDo42NNxClYegTos4ScfdggCUdMvMzUJpr+4tr+0OZA48aC5U9cQc80U3ISbHps4Kc=
+X-Received: by 2002:a62:46c7:: with SMTP id o68mr12353818pfi.54.1556645157228;
+ Tue, 30 Apr 2019 10:25:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190430153516.GA23459@kroah.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+References: <0000000000004101370587c052fb@google.com>
+In-Reply-To: <0000000000004101370587c052fb@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 30 Apr 2019 19:25:45 +0200
+Message-ID: <CAAeHK+zn-26NHw8seueTyQV1o=O9x0U3m9-jV4V70Ctfutk8Fg@mail.gmail.com>
+Subject: Re: WARNING: Support for this device (Terratec Grabster AV400) is experimental.
+To:     syzbot <syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: multipart/mixed; boundary="000000000000a3be3f0587c2b106"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 05:35:16PM +0200, Greg KH wrote:
-> On Tue, Apr 30, 2019 at 07:36:07AM -0700, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following crash on:
-> > 
-> > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=12df67c3200000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=170a86bf206dd2c6217e
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108a28f3200000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145d8a2d200000
-> > 
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
-> > 
-> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > pvrusb2: Hardware description: Gotview USB 2.0 DVD 2
-> > pvrusb2: Invalid write control endpoint
-> > usb 1-1: USB disconnect, device number 2
-> > pvrusb2: Invalid write control endpoint
-> > pvrusb2: WARNING: Detected a wedged cx25840 chip; the device will not work.
-> > pvrusb2: WARNING: Try power cycling the pvrusb2 device.
-> > pvrusb2: WARNING: Disabling further access to the device to prevent other
-> > foul-ups.
-> > pvrusb2: Device being rendered inoperable
-> > cx25840 0-0044: Unable to detect h/w, assuming cx23887
-> > cx25840 0-0044: cx23887 A/V decoder found @ 0x88 (pvrusb2_a)
-> > pvrusb2: Attached sub-driver cx25840
-> > pvrusb2: Attempted to execute control transfer when device not ok
-> > pvrusb2: Attempted to execute control transfer when device not ok
-> 
-> As the driver said, power cycle your device, it crashed :)
-> 
-> Seriously, I think your script detection failed here, sorry.
+--000000000000a3be3f0587c2b106
+Content-Type: text/plain; charset="UTF-8"
 
-Ah, same issue as the other "WARNING" message, sorry for the noise.
+On Tue, Apr 30, 2019 at 4:36 PM syzbot
+<syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=141ca62d200000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+> dashboard link: https://syzkaller.appspot.com/bug?extid=af8f8d2ac0d39b0ed3a0
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1405bedd200000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ce3bbb200000
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
+>
+> usb 1-1: New USB device found, idVendor=0ccd, idProduct=0039, bcdDevice=
+> d.3c
+> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> usb 1-1: config 0 descriptor??
+> pvrusb2: Hardware description: Terratec Grabster AV400
+> pvrusb2: **********
+> pvrusb2: WARNING: Support for this device (Terratec Grabster AV400) is
+> experimental.
+> pvrusb2: Important functionality might not be entirely working.
+> pvrusb2: Please consider contacting the driver author to help with further
+> stabilization of the driver.
+> pvrusb2: **********
+
+#syz test: https://github.com/google/kasan.git usb-fuzzer
+
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
+
+--000000000000a3be3f0587c2b106
+Content-Type: text/x-patch; charset="US-ASCII"; name="pvrusb2.patch"
+Content-Disposition: attachment; filename="pvrusb2.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_jv42brmq0>
+X-Attachment-Id: f_jv42brmq0
+
+Y29tbWl0IGYxNWNmYTgwOWVjMDM1ZWViYzBiZWMwN2JjOWUxZGQyMTIzMjgxYTUKQXV0aG9yOiBB
+bmRyZXkgS29ub3ZhbG92IDxhbmRyZXlrbnZsQGdvb2dsZS5jb20+CkRhdGU6ICAgV2VkIEFwciAx
+NyAxOTo0MDo0MCAyMDE5ICswMjAwCgogICAgbWVkaWE6IHB2cnVzYjI6IHVzZSBhIGRpZmZlcmVu
+dCBmb3JtYXQgZm9yIHdhcm5pbmdzCiAgICAKICAgIFdoZW4gdGhlIHB2cnVzYjIgZHJpdmVyIGRl
+dGVjdHMgdGhhdCB0aGVyZSdzIHNvbWV0aGluZyB3cm9uZyB3aXRoIHRoZQogICAgZGV2aWNlLCBp
+dCBwcmludHMgYSB3YXJuaW5nIG1lc3NhZ2UuIFJpZ2h0IG5vdyB0aG9zZSBtZXNzYWdlIGFyZSBw
+cmludGVkCiAgICBpbiB0d28gZGlmZmVyZW50IGZvcm1hdHM6CiAgICAKICAgIDEuICoqKldBUk5J
+TkcqKiogbWVzc2FnZSBoZXJlCiAgICAyLiBXQVJOSU5HOiBtZXNzYWdlIGhlcmUKICAgIAogICAg
+VGhlcmUncyBhbiBpc3N1ZSB3aXRoIHRoZSBzZWNvbmQgZm9ybWF0LiBTeXprYWxsZXIgcmVjb2du
+aXplcyBpdCBhcyBhCiAgICBtZXNzYWdlIHByb2R1Y2VkIGJ5IGEgV0FSTl9PTigpLCB3aGljaCBp
+cyB1c2VkIHRvIGluZGljYXRlIGEgYnVnIGluIHRoZQogICAga2VybmVsLiBIb3dldmVyIHB2cnVz
+YjIgcHJpbnRzIHRob3NlIHdhcm5pbmdzIHRvIGluZGljYXRlIGFuIGlzc3VlIHdpdGgKICAgIHRo
+ZSBkZXZpY2UsIG5vdCB0aGUgYnVnIGluIHRoZSBrZXJuZWwuCiAgICAKICAgIFRoaXMgcGF0Y2gg
+Y2hhbmdlcyB0aGUgcHZydXNiMiBkcml2ZXIgdG8gY29uc2lzdGVudGx5IHVzZSB0aGUgZmlyc3QK
+ICAgIHdhcm5pbmcgbWVzc2FnZSBmb3JtYXQuIFRoaXMgd2lsbCB1bmJsb2NrIHN5emthbGxlciB0
+ZXN0aW5nIG9mIHRoaXMKICAgIGRyaXZlci4KICAgIAogICAgU2lnbmVkLW9mZi1ieTogQW5kcmV5
+IEtvbm92YWxvdiA8YW5kcmV5a252bEBnb29nbGUuY29tPgoKZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+bWVkaWEvdXNiL3B2cnVzYjIvcHZydXNiMi1oZHcuYyBiL2RyaXZlcnMvbWVkaWEvdXNiL3B2cnVz
+YjIvcHZydXNiMi1oZHcuYwppbmRleCA0NDZhOTk5ZGQyY2UuLmEwZjdiMTAwNDVkMiAxMDA2NDQK
+LS0tIGEvZHJpdmVycy9tZWRpYS91c2IvcHZydXNiMi9wdnJ1c2IyLWhkdy5jCisrKyBiL2RyaXZl
+cnMvbWVkaWEvdXNiL3B2cnVzYjIvcHZydXNiMi1oZHcuYwpAQCAtMTY3OCw3ICsxNjc4LDcgQEAg
+c3RhdGljIGludCBwdnIyX2RlY29kZXJfZW5hYmxlKHN0cnVjdCBwdnIyX2hkdyAqaGR3LGludCBl
+bmFibGVmbCkKIAl9CiAJaWYgKCFoZHctPmZsYWdfZGVjb2Rlcl9taXNzZWQpIHsKIAkJcHZyMl90
+cmFjZShQVlIyX1RSQUNFX0VSUk9SX0xFR1MsCi0JCQkgICAiV0FSTklORzogTm8gZGVjb2RlciBw
+cmVzZW50Iik7CisJCQkgICAiKioqV0FSTklORyoqKiBObyBkZWNvZGVyIHByZXNlbnQiKTsKIAkJ
+aGR3LT5mbGFnX2RlY29kZXJfbWlzc2VkID0gITA7CiAJCXRyYWNlX3N0Yml0KCJmbGFnX2RlY29k
+ZXJfbWlzc2VkIiwKIAkJCSAgICBoZHctPmZsYWdfZGVjb2Rlcl9taXNzZWQpOwpAQCAtMjM2NCw3
+ICsyMzY0LDcgQEAgc3RydWN0IHB2cjJfaGR3ICpwdnIyX2hkd19jcmVhdGUoc3RydWN0IHVzYl9p
+bnRlcmZhY2UgKmludGYsCiAJaWYgKGhkd19kZXNjLT5mbGFnX2lzX2V4cGVyaW1lbnRhbCkgewog
+CQlwdnIyX3RyYWNlKFBWUjJfVFJBQ0VfSU5GTywgIioqKioqKioqKioiKTsKIAkJcHZyMl90cmFj
+ZShQVlIyX1RSQUNFX0lORk8sCi0JCQkgICAiV0FSTklORzogU3VwcG9ydCBmb3IgdGhpcyBkZXZp
+Y2UgKCVzKSBpcyBleHBlcmltZW50YWwuIiwKKwkJCSAgICIqKipXQVJOSU5HKioqIFN1cHBvcnQg
+Zm9yIHRoaXMgZGV2aWNlICglcykgaXMgZXhwZXJpbWVudGFsLiIsCiAJCQkJCQkJICAgICAgaGR3
+X2Rlc2MtPmRlc2NyaXB0aW9uKTsKIAkJcHZyMl90cmFjZShQVlIyX1RSQUNFX0lORk8sCiAJCQkg
+ICAiSW1wb3J0YW50IGZ1bmN0aW9uYWxpdHkgbWlnaHQgbm90IGJlIGVudGlyZWx5IHdvcmtpbmcu
+Iik7CmRpZmYgLS1naXQgYS9kcml2ZXJzL21lZGlhL3VzYi9wdnJ1c2IyL3B2cnVzYjItaTJjLWNv
+cmUuYyBiL2RyaXZlcnMvbWVkaWEvdXNiL3B2cnVzYjIvcHZydXNiMi1pMmMtY29yZS5jCmluZGV4
+IDhmMDIzMDg1YzJkOS4uNDNlNTRiZGJkNGFhIDEwMDY0NAotLS0gYS9kcml2ZXJzL21lZGlhL3Vz
+Yi9wdnJ1c2IyL3B2cnVzYjItaTJjLWNvcmUuYworKysgYi9kcml2ZXJzL21lZGlhL3VzYi9wdnJ1
+c2IyL3B2cnVzYjItaTJjLWNvcmUuYwpAQCAtMzQzLDExICszNDMsMTEgQEAgc3RhdGljIGludCBp
+MmNfaGFja19jeDI1ODQwKHN0cnVjdCBwdnIyX2hkdyAqaGR3LAogCiAJaWYgKChyZXQgIT0gMCkg
+fHwgKCpyZGF0YSA9PSAweDA0KSB8fCAoKnJkYXRhID09IDB4MGEpKSB7CiAJCXB2cjJfdHJhY2Uo
+UFZSMl9UUkFDRV9FUlJPUl9MRUdTLAotCQkJICAgIldBUk5JTkc6IERldGVjdGVkIGEgd2VkZ2Vk
+IGN4MjU4NDAgY2hpcDsgdGhlIGRldmljZSB3aWxsIG5vdCB3b3JrLiIpOworCQkJICAgIioqKldB
+Uk5JTkcqKiogRGV0ZWN0ZWQgYSB3ZWRnZWQgY3gyNTg0MCBjaGlwOyB0aGUgZGV2aWNlIHdpbGwg
+bm90IHdvcmsuIik7CiAJCXB2cjJfdHJhY2UoUFZSMl9UUkFDRV9FUlJPUl9MRUdTLAotCQkJICAg
+IldBUk5JTkc6IFRyeSBwb3dlciBjeWNsaW5nIHRoZSBwdnJ1c2IyIGRldmljZS4iKTsKKwkJCSAg
+ICIqKipXQVJOSU5HKioqIFRyeSBwb3dlciBjeWNsaW5nIHRoZSBwdnJ1c2IyIGRldmljZS4iKTsK
+IAkJcHZyMl90cmFjZShQVlIyX1RSQUNFX0VSUk9SX0xFR1MsCi0JCQkgICAiV0FSTklORzogRGlz
+YWJsaW5nIGZ1cnRoZXIgYWNjZXNzIHRvIHRoZSBkZXZpY2UgdG8gcHJldmVudCBvdGhlciBmb3Vs
+LXVwcy4iKTsKKwkJCSAgICIqKipXQVJOSU5HKioqIERpc2FibGluZyBmdXJ0aGVyIGFjY2VzcyB0
+byB0aGUgZGV2aWNlIHRvIHByZXZlbnQgb3RoZXIgZm91bC11cHMuIik7CiAJCS8vIFRoaXMgYmxv
+Y2tzIGFsbCBmdXJ0aGVyIGNvbW11bmljYXRpb24gd2l0aCB0aGUgcGFydC4KIAkJaGR3LT5pMmNf
+ZnVuY1sweDQ0XSA9IE5VTEw7CiAJCXB2cjJfaGR3X3JlbmRlcl91c2VsZXNzKGhkdyk7CmRpZmYg
+LS1naXQgYS9kcml2ZXJzL21lZGlhL3VzYi9wdnJ1c2IyL3B2cnVzYjItc3RkLmMgYi9kcml2ZXJz
+L21lZGlhL3VzYi9wdnJ1c2IyL3B2cnVzYjItc3RkLmMKaW5kZXggNmI2NTFmOGI1NGRmLi4zN2Rj
+Mjk5YTFjYTIgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbWVkaWEvdXNiL3B2cnVzYjIvcHZydXNiMi1z
+dGQuYworKysgYi9kcml2ZXJzL21lZGlhL3VzYi9wdnJ1c2IyL3B2cnVzYjItc3RkLmMKQEAgLTM1
+Myw3ICszNTMsNyBAQCBzdHJ1Y3QgdjRsMl9zdGFuZGFyZCAqcHZyMl9zdGRfY3JlYXRlX2VudW0o
+dW5zaWduZWQgaW50ICpjb3VudHB0ciwKIAkJYmNudCA9IHB2cjJfc3RkX2lkX3RvX3N0cihidWYs
+c2l6ZW9mKGJ1ZiksZm1zayk7CiAJCXB2cjJfdHJhY2UoCiAJCQlQVlIyX1RSQUNFX0VSUk9SX0xF
+R1MsCi0JCQkiV0FSTklORzogRmFpbGVkIHRvIGNsYXNzaWZ5IHRoZSBmb2xsb3dpbmcgc3RhbmRh
+cmQocyk6ICUuKnMiLAorCQkJIioqKldBUk5JTkcqKiogRmFpbGVkIHRvIGNsYXNzaWZ5IHRoZSBm
+b2xsb3dpbmcgc3RhbmRhcmQocyk6ICUuKnMiLAogCQkJYmNudCxidWYpOwogCX0KIAo=
+--000000000000a3be3f0587c2b106--
