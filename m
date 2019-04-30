@@ -2,101 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A68F992
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 15:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D14FAC5
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 15:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbfD3NKV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 09:10:21 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34492 "EHLO mx1.suse.de"
+        id S1726105AbfD3NtU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 09:49:20 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43348 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726264AbfD3NKV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Apr 2019 09:10:21 -0400
+        id S1725938AbfD3NtU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Apr 2019 09:49:20 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5F1CCADD4;
-        Tue, 30 Apr 2019 13:10:20 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 5FC84AC44;
+        Tue, 30 Apr 2019 13:49:19 +0000 (UTC)
+Message-ID: <1556632146.20085.36.camel@suse.com>
+Subject: Re: KASAN: invalid-free in disconnect_rio
 From:   Oliver Neukum <oneukum@suse.com>
-To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCHv3] UAS: fix alignment of scatter/gather segments
-Date:   Tue, 30 Apr 2019 15:10:00 +0200
-Message-Id: <20190430131000.9723-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.16.4
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Cesar Miquel <miquel@df.uba.ar>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rio500-users@lists.sourceforge.net,
+        syzbot <syzbot+35f04d136fc975a70da4@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Date:   Tue, 30 Apr 2019 15:49:06 +0200
+In-Reply-To: <CAAeHK+w-miwjw78hbUmACgVhr+hbCN31SF+fNeEtdMn7-9=O+A@mail.gmail.com>
+References: <0000000000008d15ee058653b53e@google.com>
+         <1556629116.20085.32.camel@suse.com>
+         <CAAeHK+w-miwjw78hbUmACgVhr+hbCN31SF+fNeEtdMn7-9=O+A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is the UAS version of
+On Di, 2019-04-30 at 15:02 +0200, Andrey Konovalov wrote:
+> On Tue, Apr 30, 2019 at 2:58 PM Oliver Neukum <oneukum@suse.com> wrote:
+> > 
+> > On Fr, 2019-04-12 at 04:36 -0700, syzbot wrote:
+> > > Hello,
+> > > 
+> > > syzbot found the following crash on:
+> > > 
+> > > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+> > > git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=174ce2e3200000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=35f04d136fc975a70da4
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138150f3200000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1290c22d200000
+> > > 
+> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > Reported-by: syzbot+35f04d136fc975a70da4@syzkaller.appspotmail.com
+> > > 
+> > > usb 6-1: USB disconnect, device number 2
+> > > rio500 3-1:0.110: USB Rio disconnected.
+> > > usb 4-1: USB disconnect, device number 2
+> > > ==================================================================
+> > > usb 1-1: USB disconnect, device number 2
+> > > BUG: KASAN: double-free or invalid-free in slab_free mm/slub.c:3003 [inline]
+> > > BUG: KASAN: double-free or invalid-free in kfree+0xce/0x290 mm/slub.c:3958
+> > > usb 2-1: USB disconnect, device number 2
+> > > 
+> > 
+> > Try as I might, I don't understand this. I can see a memory leak,
+> > but not a double free.
+> 
+> I took a look at this some time ago, and I was under the impression
+> that this driver doesn't handle multiple devices being connected at
+> the same time well.
 
-747668dbc061b3e62bc1982767a3a1f9815fcf0e
-usb-storage: Set virt_boundary_mask to avoid SG overflows
 
-We are not as likely to be vulnerable as storage, as it is unlikelier
-that UAS is run over a controller without native support for SG,
-but the issue exists.
-The issue has been existing since the inception of the driver.
+You are right. A global variable is used. A fix is being worked on.
 
-v2: improved comments
-v3: removed vi artifacts from log text
-
-Fixes: 115bb1ffa54c ("USB: Add UAS driver")
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/storage/uas.c | 35 ++++++++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 6d71b8fff9df..3856f34b89b8 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -789,24 +789,33 @@ static int uas_slave_alloc(struct scsi_device *sdev)
- {
- 	struct uas_dev_info *devinfo =
- 		(struct uas_dev_info *)sdev->host->hostdata;
-+	int maxp;
- 
- 	sdev->hostdata = devinfo;
- 
- 	/*
--	 * USB has unusual DMA-alignment requirements: Although the
--	 * starting address of each scatter-gather element doesn't matter,
--	 * the length of each element except the last must be divisible
--	 * by the Bulk maxpacket value.  There's currently no way to
--	 * express this by block-layer constraints, so we'll cop out
--	 * and simply require addresses to be aligned at 512-byte
--	 * boundaries.  This is okay since most block I/O involves
--	 * hardware sectors that are multiples of 512 bytes in length,
--	 * and since host controllers up through USB 2.0 have maxpacket
--	 * values no larger than 512.
-+	 * We have two requirements here. We must satisfy the requirements
-+	 * of the physical HC and the demands of the protocol, as we
-+	 * definitely want no additional memory allocation in this path
-+	 * ruling out using bounce buffers.
- 	 *
--	 * But it doesn't suffice for Wireless USB, where Bulk maxpacket
--	 * values can be as large as 2048.  To make that work properly
--	 * will require changes to the block layer.
-+	 * For a transmission on USB to continue we must never send
-+	 * a package that is smaller than maxpacket. Hence the length of each
-+         * scatterlist element except the last must be divisible by the
-+         * Bulk maxpacket value.
-+	 * If the HC does not ensure that through SG,
-+	 * the upper layer must do that. We must assume nothing
-+	 * about the capabilities off the HC, so we use the most
-+	 * pessimistic requirement.
-+	 */
-+
-+	maxp = usb_maxpacket(devinfo->udev, devinfo->data_in_pipe, 0);
-+	blk_queue_virt_boundary(sdev->request_queue, maxp - 1);
-+
-+	/*
-+	 * The protocol has no requirements on alignment in the strict sense.
-+	 * Controllers may or may not have alignment restrictions.
-+	 * As this is not exported, we use an extremely conservative guess.
- 	 */
- 	blk_queue_update_dma_alignment(sdev->request_queue, (512 - 1));
- 
--- 
-2.16.4
+	Regards
+		Oliver
 
