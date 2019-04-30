@@ -2,202 +2,297 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B00F0F6
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 09:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EDEF101
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 09:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbfD3HK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 03:10:59 -0400
-Received: from dc2-smtprelay2.synopsys.com ([198.182.61.142]:53236 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726202AbfD3HK7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 03:10:59 -0400
-Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id C0FECC011F;
-        Tue, 30 Apr 2019 07:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1556608256; bh=piVtXTlZv9bAqVFt8vhgadk+WBPyTOUDuVLxQjnFioY=;
-        h=From:To:CC:Subject:Date:References:From;
-        b=OKrFK4RfG28fDe7tZ/fqgixbC9THBSO+tjPk0QPWGx0dCd4GuGzFKM62ti8ZZ1jka
-         QWix3J5HgbroIPlYYD7LBvlXhOUmqQo/icJ3wXdXEa1AH5347wHPNrTwq5mlk9ifoq
-         xCDdD9zqD84vGky6j+HUzT7PdUWWDiGnHf4k+9PP4mLgOSB6t/m91v1pKJHUYnWVKP
-         /j4d5DDYEy6q1Y56uI0IfhWkopFHCItcDDXU/eDd0t+aNnq1Nuj5tR2+qjwP+SyNag
-         +YIgeCRwvy15+OMa6ifIA0xonhTDYuWiyOjUCWyl4MiTPFvmMCHPhyBwPIKx+qe4np
-         omhZUVnE9r6fg==
-Received: from US01WEHTC2.internal.synopsys.com (us01wehtc2.internal.synopsys.com [10.12.239.237])
-        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id EBD3BA005D;
-        Tue, 30 Apr 2019 07:10:58 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC2.internal.synopsys.com (10.12.239.237) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Tue, 30 Apr 2019 00:10:58 -0700
-Received: from NAM05-BY2-obe.outbound.protection.outlook.com (10.13.134.195)
- by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Tue, 30 Apr 2019 00:10:58 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.onmicrosoft.com; s=selector1-synopsys-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UIlkG4llJVIx87k64T7d01dtytozulKghfQjlUeNxpI=;
- b=Jz3RBjo2OTQ+Yor4K0V37Qc0f+xJl2mT6QaqHvgkqlJ6g7877Mhw9IRDsAjy9QIw+vW287MaGEF/rw0hvoREF2c2G7CSUkpqe0fwG3vJm4Q5YI5DiwCJxigUkAfA8wKgrwUWVIEnwj8FWAnCqKJ9YFPTLDa5Q4KKmMuTuHkZYM0=
-Received: from SN1PR12MB2431.namprd12.prod.outlook.com (52.132.195.146) by
- SN1PR12MB2416.namprd12.prod.outlook.com (52.132.195.24) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1835.12; Tue, 30 Apr 2019 07:10:57 +0000
-Received: from SN1PR12MB2431.namprd12.prod.outlook.com
- ([fe80::1982:4b45:2adf:9a1f]) by SN1PR12MB2431.namprd12.prod.outlook.com
- ([fe80::1982:4b45:2adf:9a1f%4]) with mapi id 15.20.1835.010; Tue, 30 Apr 2019
- 07:10:57 +0000
-From:   Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-To:     Doug Anderson <dianders@chromium.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v1 04/14] usb: dwc2: Fix suspend state in host mode for
- partial power down.
-Thread-Topic: [PATCH v1 04/14] usb: dwc2: Fix suspend state in host mode for
- partial power down.
-Thread-Index: AQHU9qJndp/MtkcCnkCl/ua6u6qX5g==
-Date:   Tue, 30 Apr 2019 07:10:57 +0000
-Message-ID: <SN1PR12MB243146421A3AFF32CCC341EAA73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
-References: <cover.1555672441.git.arturp@synopsys.com>
- <0dc725c7e9956eedaf03bb5d68a7d5e856d8cb5a.1555672441.git.arturp@synopsys.com>
- <CAD=FV=UjPPnGVjfch8En+S5UndTDK06HK-7QRHdK3oOr+kCiEw@mail.gmail.com>
- <SN1PR12MB24316A556FF0EC6E7899A9F0A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
- <CAD=FV=UdKhbgG6r+xNUx9e+2quXi_vN7NwDBxPHs-0hKmSJKzQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=arturp@synopsys.com; 
-x-originating-ip: [84.53.141.191]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 843c56b7-303a-4286-e2e9-08d6cd3afe17
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:SN1PR12MB2416;
-x-ms-traffictypediagnostic: SN1PR12MB2416:
-x-microsoft-antispam-prvs: <SN1PR12MB2416D50364C849A14D368A09A73A0@SN1PR12MB2416.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 00235A1EEF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39850400004)(366004)(136003)(396003)(376002)(346002)(189003)(199004)(66556008)(25786009)(66476007)(66446008)(66946007)(76116006)(73956011)(52536014)(4326008)(55016002)(64756008)(316002)(26005)(186003)(71200400001)(91956017)(6506007)(53936002)(53546011)(486006)(446003)(5660300002)(14444005)(102836004)(86362001)(54906003)(476003)(71190400001)(256004)(93886005)(6116002)(3846002)(66066001)(6916009)(8676002)(81166006)(14454004)(305945005)(15650500001)(7736002)(74316002)(33656002)(478600001)(6436002)(107886003)(99286004)(6246003)(9686003)(76176011)(7696005)(2906002)(8936002)(229853002)(97736004)(81156014)(68736007);DIR:OUT;SFP:1102;SCL:1;SRVR:SN1PR12MB2416;H:SN1PR12MB2431.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: XeSu57Jepx1Tnymh/EL8gx0phLlujR426G6dJeR2N6hGG8lWHw/wt4iHnj36loaMQkHj3LGrmcSQW9tEAe3upwAkkb2NGV89tR1DrK6PZ+EzuJlA1+BCsNH30V/rDTSZ6iHtkfEjBNYxdn4Fs+miohowymk3lo8G12oIVSjs7lEbNth+eluXiD5YacdKy4+YMF79rGO3opUsI3ZdSfA/k+lakgNMFMM8Xy2cNHqbS1jd37iXxGczZIyKm5hH+Wh2zSzTScd9P5E6YA0CLSXwfK7fXRwjhaqTFEASyWN7df1gapt/bzrjKB3f76Um4Y/7fBO+e/3X6Pmlpj9qk/wwtT0rWGAIz/YlNYuf2EeP3lLkXLZQF9ckNBG/9zPUZNsBoso+MgrtVDT1mEUnZpyVch1XTbmq2joJi9UnVeor4Y0=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726326AbfD3HQN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 03:16:13 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7711 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725769AbfD3HQN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Apr 2019 03:16:13 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id C21A5762FFF8842A5C5D;
+        Tue, 30 Apr 2019 15:16:10 +0800 (CST)
+Received: from [127.0.0.1] (10.142.63.192) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Tue, 30 Apr 2019
+ 15:15:59 +0800
+CC:     "Liuyu (R)" <liuyu712@hisilicon.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <john.stultz@linaro.org>, <suzhuangluan@hisilicon.com>,
+        <kongfei@hisilicon.com>, <wanghu17@hisilicon.com>,
+        <butao@hisilicon.com>, <chenyao11@huawei.com>,
+        <fangshengzhou@hisilicon.com>, <lipengcheng8@huawei.com>,
+        <songxiaowei@hisilicon.com>, <xuyiping@hisilicon.com>,
+        <xuyoujun4@huawei.com>, <yudongbin@hisilicon.com>,
+        <zangleigang@hisilicon.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        =?UTF-8?B?c2h1ZmFuX2xlZSjmnY7mm7jluIYp?= <shufan_lee@richtek.com>
+Subject: Re: [PATCH v6 13/13] dts: hi3660: Add support for usb on Hikey960
+To:     Rob Herring <robh@kernel.org>
+References: <20190420064019.57522-1-chenyu56@huawei.com>
+ <20190420064019.57522-14-chenyu56@huawei.com> <20190425220016.GC32028@bogus>
+From:   Chen Yu <chenyu56@huawei.com>
+Message-ID: <6b5c219c-3941-5add-5e91-5efbd9b9d85c@huawei.com>
+Date:   Tue, 30 Apr 2019 15:15:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 843c56b7-303a-4286-e2e9-08d6cd3afe17
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2019 07:10:57.2718
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2416
-X-OriginatorOrg: synopsys.com
+In-Reply-To: <20190425220016.GC32028@bogus>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.142.63.192]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,=0A=
-=0A=
-On 4/29/2019 21:35, Doug Anderson wrote:=0A=
-> Hi,=0A=
-> =0A=
-> On Mon, Apr 29, 2019 at 4:03 AM Artur Petrosyan=0A=
-> <Arthur.Petrosyan@synopsys.com> wrote:=0A=
->>=0A=
->> Hi,=0A=
->>=0A=
->> On 4/27/2019 00:45, Doug Anderson wrote:=0A=
->>> Hi,=0A=
->>>=0A=
->>> On Fri, Apr 19, 2019 at 1:05 PM Artur Petrosyan=0A=
->>> <Arthur.Petrosyan@synopsys.com> wrote:=0A=
->>>>=0A=
->>>> - In dwc2_port_suspend() function added waiting for the=0A=
->>>>     HPRT0.PrtSusp register field to be set.=0A=
->>>>=0A=
->>>> - In _dwc2_hcd_suspend() function added checking of=0A=
->>>>     "hsotg->flags.b.port_connect_status" port connection=0A=
->>>>     status if port connection status is 0 then skipping=0A=
->>>>     power saving (entering partial power down mode).=0A=
->>>>     Because if there is no device connected there would=0A=
->>>>     be no need to enter partial power down mode.=0A=
->>>>=0A=
->>>> - Added "hsotg->bus_suspended =3D true" beceuse after=0A=
->>>=0A=
->>> s/beceuse/because=0A=
->>>=0A=
->>>>     entering partial power down in host mode the=0A=
->>>>     bus_suspended flag must be set.=0A=
->>>=0A=
->>> The above statement sounds to me like trying to win an argument by=0A=
->>> saying "I'm right because I'm right."  Can you give more details about=
-=0A=
->>> why "bus_suspended" must be set?  See below also.=0A=
->>>=0A=
->> There is no intention of winning any argument.=0A=
-> =0A=
-> I was trying to say that your statement does not convey any=0A=
-> information about the "why".  It just says: "I now set this variable=0A=
-> because it needs to be set".  This tells me nothing useful because=0A=
-> presumably if it did't need to be set then you wouldn't have set it.=0A=
-> I want to know more information about how the code was broken before=0A=
-> you did this.  What specifically requires this variable to be set?=0A=
-Specifically that variable is set when core enters to hibernation or =0A=
-partial power down.=0A=
-> =0A=
-> =0A=
->> Are you familiar with "bus_suspended" flag ? have you looked at what is=
-=0A=
->> it used for ?=0A=
->>=0A=
->>    * @bus_suspended:     True if bus is suspended=0A=
->>=0A=
->> So when entering to hibernation is performed bus is suspended. To=0A=
->> indicate that "hsotg->bus_suspended" is assigned to true.=0A=
-> =0A=
-> Perhaps you can help me understand what the difference is between=0A=
-> "port suspend" and "bus suspend" on dwc2.  I think this is where my=0A=
-> confusion lies since there are functions for both and they do subtly=0A=
-> different things.  ...but both functions set bus_suspended.=0A=
-dwc2_port_suspend() is a function which is called when set port feature=0A=
-"USB_PORT_FEAT_SUSPEND" is asserted. Yet, bus_suspended is a variable. =0A=
-That variable should be set any time that host enters to hibernation or =0A=
-partial power down.=0A=
-=0A=
-> =0A=
-> =0A=
->>>> @@ -4514,6 +4519,8 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd=
-)=0A=
->>>>                   goto skip_power_saving;=0A=
->>>>           }=0A=
->>>>=0A=
->>>> +       hsotg->bus_suspended =3D true;=0A=
->>>> +=0A=
->>>=0A=
->>> I'm a bit unsure about this.  Specifically I note that=0A=
->>> _dwc2_hcd_resume() has a special case "if (hsotg->bus_suspended)".=0A=
->>> Does that now become dead code?=0A=
->> No it doesn't became a dead code.=0A=
-> =0A=
-> Can you explain when it gets triggered, then?=0A=
-_dwc2_hcd_resume() is triggered by the system.=0A=
-As an example lets assume you have hibernated the PC and then you turn =0A=
-the PC on. When you turn the PC back on in that case _dwc2_hcd_resume() =0A=
-function is called to resume from suspended state (Hibernation/partial =0A=
-power down)=0A=
-> =0A=
-> =0A=
-> -Doug=0A=
-> =0A=
-=0A=
-=0A=
--- =0A=
-Regards,=0A=
-Artur=0A=
+Hi Rob,
+
+On 2019/4/26 6:00, Rob Herring wrote:
+> On Sat, Apr 20, 2019 at 02:40:19PM +0800, Yu Chen wrote:
+>> This patch adds support for usb on Hikey960.
+>>
+>> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+>> Cc: Wei Xu <xuwei5@hisilicon.com>
+>> Cc: Rob Herring <robh+dt@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: John Stultz <john.stultz@linaro.org>
+>> Cc: Binghui Wang <wangbinghui@hisilicon.com>
+>> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+>> ---
+>> v2:
+>> * Remove device_type property.
+>> * Add property "usb-role-switch".
+>> v3:
+>> * Make node "usb_phy" a subnode of usb3_otg_bc register.
+>> * Remove property "typec-vbus-enable-val" of hisi_hikey_usb.
+>> v4:
+>> * Remove property "hisilicon,usb3-otg-bc-syscon" of usb-phy.
+>> ---
+>> ---
+>>  arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts | 53 ++++++++++++++++
+>>  arch/arm64/boot/dts/hisilicon/hi3660.dtsi         | 73 +++++++++++++++++++++++
+>>  2 files changed, 126 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
+>> index e035cf195b19..d4e11c56b250 100644
+>> --- a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
+>> +++ b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
+>> @@ -13,6 +13,7 @@
+>>  #include <dt-bindings/gpio/gpio.h>
+>>  #include <dt-bindings/input/input.h>
+>>  #include <dt-bindings/interrupt-controller/irq.h>
+>> +#include <dt-bindings/usb/pd.h>
+>>  
+>>  / {
+>>  	model = "HiKey960";
+>> @@ -196,6 +197,26 @@
+>>  			method = "smc";
+>>  		};
+>>  	};
+>> +
+>> +	hisi_hikey_usb: hisi_hikey_usb {
+>> +		compatible = "hisilicon,hikey960_usb";
+>> +		typec-vbus-gpios = <&gpio25 2 GPIO_ACTIVE_HIGH>;
+>> +		otg-switch-gpios = <&gpio25 6 GPIO_ACTIVE_HIGH>;
+>> +		hub-vdd33-en-gpios = <&gpio5 6 GPIO_ACTIVE_HIGH>;
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&usbhub5734_pmx_func>;
+>> +
+>> +		port {
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +
+>> +			hikey_usb_ep: endpoint@0 {
+>> +				reg = <0>;
+>> +				remote-endpoint = <&dwc3_role_switch_notify>;
+>> +			};
+>> +		};
+>> +	};
+>> +
+>>  };
+>>  
+>>  /*
+>> @@ -526,6 +547,38 @@
+>>  &i2c1 {
+>>  	status = "okay";
+>>  
+>> +	rt1711h: rt1711h@4e {
+>> +		compatible = "richtek,rt1711h";
+> 
+> The binding doc for this should state it should have a 'connector' node.
+> 
+Hi shufan,
+Is the 'connector' node an essential node of rt1711h?
+Currently it is missing in Documentation/devicetree/bindings/usb/richtek,rt1711h.txt.
+Do you think the 'connector' node should add as this patch in the binding doc?
+
+>> +		reg = <0x4e>;
+>> +		status = "ok";
+> 
+> Can drop this, it is the default.
+> 
+OK.
+
+>> +		interrupt-parent = <&gpio27>;
+>> +		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&usb_cfg_func>;
+>> +
+>> +		usb_con: connector {
+>> +			compatible = "usb-c-connector";
+>> +			label = "USB-C";
+>> +			data-role = "dual";
+>> +			power-role = "dual";
+>> +			try-power-role = "sink";
+>> +			source-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)>;
+>> +			sink-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)
+>> +				PDO_VAR(5000, 5000, 1000)>;
+>> +			op-sink-microwatt = <10000000>;
+>> +		};
+>> +
+>> +		port {
+> 
+> The connector node should have a 'ports' child with 'port@0' being the 
+> HS connection.
+> 
+This port and endpoint of the port are used for role_switch matching by
+fwnode_graph_devcon_match. I'm not too sure the 'ports' under connector is used in
+rt1711h driver？
+Hi shufan_lee,
+    Can you confirm this?
+
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +
+>> +			rt1711h_ep: endpoint@0 {
+>> +				reg = <0>;
+>> +				remote-endpoint = <&dwc3_role_switch>;
+>> +			};
+>> +		};
+>> +	};
+>> +
+>>  	adv7533: adv7533@39 {
+>>  		status = "ok";
+>>  		compatible = "adi,adv7533";
+>> diff --git a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+>> index 2f19e0e5b7cf..173467505ada 100644
+>> --- a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+>> +++ b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+>> @@ -355,6 +355,12 @@
+>>  			#clock-cells = <1>;
+>>  		};
+>>  
+>> +		pmctrl: pmctrl@fff31000 {
+>> +			compatible = "hisilicon,hi3660-pmctrl", "syscon";
+>> +			reg = <0x0 0xfff31000 0x0 0x1000>;
+>> +			#clock-cells = <1>;
+>> +		};
+>> +
+>>  		pmuctrl: crg_ctrl@fff34000 {
+>>  			compatible = "hisilicon,hi3660-pmuctrl", "syscon";
+>>  			reg = <0x0 0xfff34000 0x0 0x1000>;
+>> @@ -1134,5 +1140,72 @@
+>>  				};
+>>  			};
+>>  		};
+>> +
+>> +		usb3_otg_bc: usb3_otg_bc@ff200000 {
+>> +			compatible = "syscon", "simple-mfd";
+>> +			reg = <0x0 0xff200000 0x0 0x1000>;
+>> +
+>> +			usb_phy: usb-phy {
+>> +				compatible = "hisilicon,hi3660-usb-phy";
+>> +				#phy-cells = <0>;
+>> +				hisilicon,pericrg-syscon = <&crg_ctrl>;
+>> +				hisilicon,pctrl-syscon = <&pctrl>;
+>> +				hisilicon,eye-diagram-param = <0x22466e4>;
+>> +			};
+>> +		};
+>> +
+>> +		usb3: hisi_dwc3 {
+>> +			compatible = "hisilicon,hi3660-dwc3";
+>> +			#address-cells = <2>;
+>> +			#size-cells = <2>;
+>> +			ranges;
+> 
+> If there are not any wrapper registers, then get rid of the hisi_dwc3 
+> node. For just clocks and resets we just put everything in one node.
+> 
+I will try to fix this.
+>> +
+>> +			clocks = <&crg_ctrl HI3660_CLK_ABB_USB>,
+>> +				 <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
+>> +			clock-names = "clk_usb3phy_ref", "aclk_usb3otg";
+>> +
+>> +			assigned-clocks = <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
+>> +			assigned-clock-rates = <229000000>;
+>> +			resets = <&crg_rst 0x90 8>,
+>> +				 <&crg_rst 0x90 7>,
+>> +				 <&crg_rst 0x90 6>,
+>> +				 <&crg_rst 0x90 5>;
+>> +
+>> +			dwc3: dwc3@ff100000 {
+>> +				compatible = "snps,dwc3";
+>> +				reg = <0x0 0xff100000 0x0 0x100000>;
+>> +				interrupts = <0 159 4>, <0 161 4>;
+>> +				phys = <&usb_phy>;
+>> +				phy-names = "usb3-phy";
+>> +				dr_mode = "otg";
+>> +				maximum-speed = "super-speed";
+>> +				phy_type = "utmi";
+>> +				snps,dis-del-phy-power-chg-quirk;
+> 
+>> +				snps,lfps_filter_quirk;
+>> +				snps,dis_u2_susphy_quirk;
+>> +				snps,dis_u3_susphy_quirk;
+>> +				snps,tx_de_emphasis_quirk;
+>> +				snps,tx_de_emphasis = <1>;
+>> +				snps,dis_enblslpm_quirk;
+> 
+> Pretty sure these aren't documented because we don't use '_' in property 
+> names.
+> 
+Do you mean property as "snps,dis_enblslpm_quirk"? These properties are
+documented in Documentation/devicetree/bindings/usb/dwc3.txt.
+
+>> +				snps,gctl-reset-quirk;
+>> +				usb-role-switch;
+>> +				role-switch-default-host;
+>> +
+>> +				port {
+>> +					#address-cells = <1>;
+>> +					#size-cells = <0>;
+>> +
+>> +					dwc3_role_switch: endpoint@0 {
+>> +						reg = <0>;
+>> +						remote-endpoint = <&rt1711h_ep>;
+>> +					};
+>> +
+>> +					dwc3_role_switch_notify: endpoint@1 {
+>> +						reg = <1>;
+>> +						remote-endpoint = <&hikey_usb_ep>;
+>> +					};
+>> +				};
+>> +			};
+>> +		};
+>>  	};
+>>  };
+>> -- 
+>> 2.15.0-rc2
+>>
+> 
+> .
+> 
+
+Thanks
+- Yu Chen
+
