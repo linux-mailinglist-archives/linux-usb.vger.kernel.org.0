@@ -2,166 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC9FEEF2
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 05:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB41EFE6
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 07:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729937AbfD3DHz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Apr 2019 23:07:55 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:3707 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729883AbfD3DHz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Apr 2019 23:07:55 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cc7bc050002>; Mon, 29 Apr 2019 20:07:49 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 29 Apr 2019 20:07:53 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 29 Apr 2019 20:07:53 -0700
-Received: from HQMAIL110.nvidia.com (172.18.146.15) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 30 Apr
- 2019 03:07:52 +0000
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by hqmail110.nvidia.com
- (172.18.146.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 30 Apr
- 2019 03:07:47 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 30 Apr 2019 03:07:47 +0000
-Received: from jilin-desktop.nvidia.com (Not Verified[10.19.120.158]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cc7bc020001>; Mon, 29 Apr 2019 20:07:47 -0700
-From:   Jim Lin <jilin@nvidia.com>
-To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jim Lin <jilin@nvidia.com>
-Subject: [PATCH v3 1/1] usb: xhci: Add Clear_TT_Buffer
-Date:   Tue, 30 Apr 2019 11:06:32 +0800
-Message-ID: <1556593592-3078-1-git-send-email-jilin@nvidia.com>
-X-Mailer: git-send-email 2.1.4
+        id S1725799AbfD3FZ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 01:25:59 -0400
+Received: from mail-vk1-f195.google.com ([209.85.221.195]:40516 "EHLO
+        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725446AbfD3FZ6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 01:25:58 -0400
+Received: by mail-vk1-f195.google.com with SMTP id l17so2829799vke.7
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 22:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dAZB9m78vyMqVnCUT5sxg+zHI1l8qWvxtWApzbGtN1A=;
+        b=iRmEmm4IrU6e+wZHgKHwQwIr0tcTTb9ixCcFFUV+Q+c6fi2SKUyMCAt/qUlgKI5Zjz
+         JohZhhouXMXuxCAlnL7+6YHVlqjsv5zhMjn+o41T14oN8A6DN+HAOIRuUdSHnW9rAwE2
+         LY5Jyu7Yvsvk8uDEVZrh9r7avMXSXUJJPl1cs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dAZB9m78vyMqVnCUT5sxg+zHI1l8qWvxtWApzbGtN1A=;
+        b=cFJIJRxV/in1O+pIcWlj3Orihr5imiisBEpHZ+AHT8L2t0AsVSdrga0WgDwA/Hh0Uh
+         n/owNRRm0VpPMHw06gW6XlbX7Nij8dxrGXSFc59Zb41H/Ik8bNwy+g7MKBdrhWZEj0nL
+         KviO3KxlxLV0IQQoza8E79d5CA9vNVyCN/z8nzvyB23LDJ96OGRM1ZXU7uvbeg/nmHSJ
+         rXsuIXokyZEr41JkRtnXTJvs1fx7+3Vz0dy5hZdfjHF9o7phnN4sB7tmgx5AeAvLQIkp
+         EAyoXU94N6aAA9cmQB+69pssaXBfBjaQbfb/yEDfBpU5ngocieAdojWk/mPflzctYBo/
+         WB8g==
+X-Gm-Message-State: APjAAAX13Xa+ow86yOKtyQHk3drOx1WQ+4zKWoBIKaphZSOYfk6k8QUY
+        bw5p5biUvp0Gk42Ds3RIdj4TxPziH54=
+X-Google-Smtp-Source: APXvYqzV49ANV6/moEhRzSSJKu7AUFDgkEjgb/tXc6aGOnPl4MsBFpM/V1JGgmEGP0xFDnaqjDGehA==
+X-Received: by 2002:a1f:b4ce:: with SMTP id d197mr34597716vkf.57.1556601957385;
+        Mon, 29 Apr 2019 22:25:57 -0700 (PDT)
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
+        by smtp.gmail.com with ESMTPSA id c192sm25191119vka.10.2019.04.29.22.25.55
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Apr 2019 22:25:56 -0700 (PDT)
+Received: by mail-vs1-f53.google.com with SMTP id g127so7290016vsd.6
+        for <linux-usb@vger.kernel.org>; Mon, 29 Apr 2019 22:25:55 -0700 (PDT)
+X-Received: by 2002:a67:e88c:: with SMTP id x12mr9502003vsn.87.1556601955497;
+ Mon, 29 Apr 2019 22:25:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1556593669; bh=FwjnhXjjHjZ2pU++sQhaTIujmWXVbwgbV8T8yW0hDX8=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:Content-Type;
-        b=TgxO+DVI0IboqaJ1eINjvKFypxcyNhPz7yDd7JZ6hrgpIHngLsRySlpJ23pP0SPNE
-         h0O4tva/9C+uzIyo9YaTXIbltGP1eIpE6YLS7jJR+zRG/F8Csv92fCmZNkcubzwKkS
-         Ogs7ysa7JAjqRDcd7Rs2EB+/gmdmOJ7385y81i/rgvoLaGQ6uBZw6+GHd+FYek03Ny
-         UFgDvokuZ+bQSvnB7Qo8uNArUf+GFwM1W4AQ4Vqnb3Q3PCT0D58R1Pl428lvCzu9HW
-         FTp+HrDTuYeY9EwICm9/691xgNVjlYbBFQSXwhPk2XVVzJ/TQ9/4T3CC7W2cncRust
-         /XO0QwvZm4wAQ==
+References: <20190418001356.124334-1-dianders@chromium.org>
+ <20190418001356.124334-4-dianders@chromium.org> <20190430012328.GA25660@bogus>
+In-Reply-To: <20190430012328.GA25660@bogus>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 29 Apr 2019 22:25:52 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UdtgAZBxuwjrrXtKT1sMfaELF8V193BF=UHg9fvM+yRw@mail.gmail.com>
+Message-ID: <CAD=FV=UdtgAZBxuwjrrXtKT1sMfaELF8V193BF=UHg9fvM+yRw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] Documentation: dt-bindings: Add
+ snps,need-phy-for-wake for dwc2 USB
+To:     Rob Herring <robh@kernel.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Alexandru M Stan <amstan@chromium.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        William Wu <william.wu@rock-chips.com>,
+        linux-usb@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Randy Li <ayaka@soulik.info>, Chris <zyw@rock-chips.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ryan Case <ryandcase@chromium.org>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Dinh Nguyen <dinguyen@opensource.altera.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-processing for full-/low-speed endpoints connected via a TT, the host
-software must use the Clear_TT_Buffer request to the TT to ensure
-that the buffer is not in the busy state".
+Hi,
 
-In our case, a full-speed speaker (ConferenceCam) is behind a high-
-speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-request we may continue to get STALL with the folllowing requests,
-like Set_Interface.
+On Mon, Apr 29, 2019 at 6:23 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Wed, Apr 17, 2019 at 05:13:54PM -0700, Douglas Anderson wrote:
+> > Some SoCs with a dwc2 USB controller may need to keep the PHY on to
+> > support remote wakeup.  Allow specifying this as a device tree
+> > property.
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> > For relevant prior discussion on this patch, see:
+> >
+> > https://lkml.kernel.org/r/1435017144-2971-3-git-send-email-dianders@chromium.org
+> >
+> > I didn't make any changes from the prior version since I never found
+> > out what Rob thought of my previous arguments.  If folks want a
+> > change, perhaps they could choose from these options:
+> >
+> > 1. Assume that all dwc2 hosts would like to keep their PHY on for
+> >    suspend if there's a USB wakeup enabled, thus we totally drop this
+> >    binding.  This doesn't seem super great to me since I'd bet that
+> >    many devices that use dwc2 weren't designed for USB wakeup (they
+> >    may not keep enough clocks or rails on) so we might be wasting
+> >    power for nothing.
+>
+> 1b. Use SoC specific compatible strings to enable/disable remote
+> wake-up. We can debate what the default is I guess.
 
-Here we add Clear_TT_Buffer for the following Set_Interface requests
-to get ACK successfully.
+Unfortunately it's more than just SoC.  While you need the SoC to be
+able to support this type of wakeup, you also need the board design,
+firmware design, regulator design, etc.  ...so I don't think we can
+just use the SoC specific compatible string.
 
-Signed-off-by: Jim Lin <jilin@nvidia.com>
----
-v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
-    , remove its claiming in xhci.h
-v3: Add description for clearing_tt (xhci.h)
+In fact, while testing this I found that USB wakeup was totally broken
+unless I enabled "deep suspend" mode on my system.  Something about
+the clocks / wakeup sources in the shallow suspend totally blocked it
+and I couldn't figure out what.
 
- drivers/usb/host/xhci-ring.c | 28 ++++++++++++++++++++++++++++
- drivers/usb/host/xhci.c      |  7 +++++++
- drivers/usb/host/xhci.h      |  2 ++
- 3 files changed, 37 insertions(+)
+...so I believe it really needs to be something where someone has
+said: I tested it out on this board and everything is setup properly
+to support USB wakeup.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 9215a28dad40..02b1ebad81e7 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1786,6 +1786,33 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
- 	return NULL;
- }
- 
-+static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci,
-+	unsigned int slot_id, struct xhci_td *td)
-+{
-+	struct xhci_virt_device *dev;
-+	struct xhci_slot_ctx *slot_ctx;
-+	int saved_devnum;
-+
-+	/*
-+	 * As part of low/full-speed endpoint-halt processing
-+	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
-+	 */
-+	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
-+	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub) &&
-+	    !xhci->clearing_tt) {
-+		xhci->clearing_tt = 1;
-+		dev = xhci->devs[slot_id];
-+		slot_ctx = xhci_get_slot_ctx(xhci, dev->out_ctx);
-+		/* Update devnum temporarily for usb_hub_clear_tt_buffer */
-+		saved_devnum = td->urb->dev->devnum;
-+		td->urb->dev->devnum = (int) le32_to_cpu(slot_ctx->dev_state) &
-+			DEV_ADDR_MASK;
-+		if (usb_hub_clear_tt_buffer(td->urb))
-+			xhci->clearing_tt = 0;
-+		td->urb->dev->devnum = saved_devnum;
-+	}
-+}
-+
- static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
- 		unsigned int slot_id, unsigned int ep_index,
- 		unsigned int stream_id, struct xhci_td *td,
-@@ -1804,6 +1831,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
- 	if (reset_type == EP_HARD_RESET) {
- 		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
- 		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
-+		xhci_clear_hub_tt_buffer(xhci, slot_id, td);
- 	}
- 	xhci_ring_cmd_db(xhci);
- }
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 7fa58c99f126..4890c3518aa3 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -5132,6 +5132,12 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
- }
- EXPORT_SYMBOL_GPL(xhci_gen_setup);
- 
-+static void xhci_clear_tt_buffer_complete(struct usb_hcd *hcd,
-+		struct usb_host_endpoint *ep)
-+{
-+	hcd_to_xhci(hcd)->clearing_tt = 0;
-+}
-+
- static const struct hc_driver xhci_hc_driver = {
- 	.description =		"xhci-hcd",
- 	.product_desc =		"xHCI Host Controller",
-@@ -5192,6 +5198,7 @@ static const struct hc_driver xhci_hc_driver = {
- 	.enable_usb3_lpm_timeout =	xhci_enable_usb3_lpm_timeout,
- 	.disable_usb3_lpm_timeout =	xhci_disable_usb3_lpm_timeout,
- 	.find_raw_port_number =	xhci_find_raw_port_number,
-+	.clear_tt_buffer_complete = xhci_clear_tt_buffer_complete,
- };
- 
- void xhci_init_driver(struct hc_driver *drv,
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 9334cdee382a..dab1476e5bdf 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1864,6 +1864,8 @@ struct xhci_hcd {
- 	unsigned		hw_lpm_support:1;
- 	/* Broken Suspend flag for SNPS Suspend resume issue */
- 	unsigned		broken_suspend:1;
-+	/* Clear_TT_Buffer in progress */
-+	unsigned		clearing_tt:1;
- 	/* cached usb2 extened protocol capabilites */
- 	u32                     *ext_caps;
- 	unsigned int            num_ext_caps;
--- 
-2.1.4
 
+> > 2. Rename this property to "snps,wakeup-from-suspend-with-phy" to make
+> >    it more obvious that this property is intended both to document
+> >    that wakeup from suspend is possible and that we need the PHY for
+> >    said wakeup.
+> > 3. Rename this property to "snps,can-wakeup-from-suspend" and assume
+> >    it's implicit that if we can wakeup from suspend that we need to
+> >    keep the PHY on.  If/when someone shows that a device exists using
+> >    dwc2 where we can wakeup from suspend without the PHY they can add
+> >    a new property.
+> >
+> > Changes in v2: None
+> >
+> >  Documentation/devicetree/bindings/usb/dwc2.txt | 3 +++
+> >  1 file changed, 3 insertions(+)
