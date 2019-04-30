@@ -2,83 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DCDFB99
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 16:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C43FBA0
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 16:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726309AbfD3OgI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 10:36:08 -0400
-Received: from mail-it1-f200.google.com ([209.85.166.200]:35208 "EHLO
-        mail-it1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbfD3OgH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 10:36:07 -0400
-Received: by mail-it1-f200.google.com with SMTP id a64so2508208ith.0
-        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 07:36:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=VMgx+6iCouIm6T5SwvF74+0r6jbRUy69gSjvtJBIKSQ=;
-        b=N4iLCfafGZK6zy/11qzGa1UWRbL7wEtGDWULZRufaKeCSvIGE3oC/MmqlQvbGQA4E7
-         u1dFLkhcDhLNnSWvqoyakQo0ttmxF43oLMlwwEF1jOvAjR9DCMDGFuCH7/amtMKqqCtZ
-         BH8+zKqgSlRhDYhNeZplLgSN717F3bj+SiFCnjj/rEwTMstz+9V9zjkrRKr73im8k3jm
-         kTNJxEmSYu0ubbu70JAEd+X63DlMB8NqpA0aTJnaDyvhOrxWJ36N9vCZSSdwmAUyHBlg
-         cfyHtJ9M6Y7v4/RjKAmyE7hMSxwvMkhRhPa3OteVg0Xe9gdVhqzUVp4ggHTis5CNKwQU
-         6OxQ==
-X-Gm-Message-State: APjAAAWBWxNDqGxyJK8z2P2yTK6hEiKTBDcD5qBHrDpHiWvrlVT/96F7
-        5TJLHV8cBeEEerhBnSam3whv7Ku/4sspARnnwhGHhbvoKD83
-X-Google-Smtp-Source: APXvYqww/ewYXb9i3zqf03E6NoKS0d1c1UmjiyQxO4HoOQO7SuLXd192xFmZI/8UqdLnSUPSIFEXRwaZjXMr0X+UDcLq/KkO++/U
+        id S1727617AbfD3OhP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 10:37:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53154 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726303AbfD3OhP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Apr 2019 10:37:15 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B90E120835;
+        Tue, 30 Apr 2019 14:37:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556635034;
+        bh=jskeg3SR1dgm17UY2N0VqSC0ev0vGZ156lqX+0VWeR8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=vkg8t/v/Towx7Q0H6mlUsT7npsrE79pCepPbclSLHC2JCqkbbAfjEYrKM4IVXKmwi
+         f7IxfWM3XH8a66t3D8ldusu44erx6Jc9qdLGLMZAytQPheuwIVpL6fTXmwhFZYJkYu
+         Ifmshnrde1dWV8yrArigFkSM++rGRo6rtH8RAceU=
+Date:   Tue, 30 Apr 2019 16:37:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.1-rc8
+Message-ID: <20190430143711.GA24385@kroah.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:660c:9c2:: with SMTP id i2mr3941634itl.80.1556634967014;
- Tue, 30 Apr 2019 07:36:07 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 07:36:07 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004101370587c052fb@google.com>
-Subject: WARNING: Support for this device (Terratec Grabster AV400) is experimental.
-From:   syzbot <syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+The following changes since commit 79a3aaa7b82e3106be97842dedfd8429248896e6:
 
-syzbot found the following crash on:
+  Linux 5.1-rc3 (2019-03-31 14:39:29 -0700)
 
-HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=141ca62d200000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-dashboard link: https://syzkaller.appspot.com/bug?extid=af8f8d2ac0d39b0ed3a0
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1405bedd200000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ce3bbb200000
+are available in the Git repository at:
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.1-rc8
 
-usb 1-1: New USB device found, idVendor=0ccd, idProduct=0039, bcdDevice=  
-d.3c
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-pvrusb2: Hardware description: Terratec Grabster AV400
-pvrusb2: **********
-pvrusb2: WARNING: Support for this device (Terratec Grabster AV400) is  
-experimental.
-pvrusb2: Important functionality might not be entirely working.
-pvrusb2: Please consider contacting the driver author to help with further  
-stabilization of the driver.
-pvrusb2: **********
+for you to fetch changes up to c114944d7d67f24e71562fcfc18d550ab787e4d4:
 
+  USB: w1 ds2490: Fix bug caused by improper use of altsetting array (2019-04-25 11:11:41 +0200)
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+----------------------------------------------------------------
+USB fixes for 5.1-rc8/final
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Here are some small USB fixes for a bunch of warnings/errors that the
+syzbot has been finding with it's new-found ability to stress-test the
+USB layer.
+
+All of these are tiny, but fix real issues, and are marked for stable as
+well.  All of these have had lots of testing in linux-next as well.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (5):
+      USB: core: Fix unterminated string returned by usb_string()
+      USB: dummy-hcd: Fix failure to give back unlinked URBs
+      USB: core: Fix bug caused by duplicate interface PM usage counter
+      USB: yurex: Fix protection fault after device removal
+      USB: w1 ds2490: Fix bug caused by improper use of altsetting array
+
+Malte Leip (1):
+      usb: usbip: fix isoc packet num validation in get_pipe
+
+ Documentation/driver-api/usb/power-management.rst | 14 +++++++++-----
+ drivers/usb/core/driver.c                         | 13 -------------
+ drivers/usb/core/message.c                        |  4 +++-
+ drivers/usb/gadget/udc/dummy_hcd.c                | 19 +++++++++++++++----
+ drivers/usb/misc/yurex.c                          |  1 +
+ drivers/usb/storage/realtek_cr.c                  | 13 +++++--------
+ drivers/usb/usbip/stub_rx.c                       | 12 +++---------
+ drivers/usb/usbip/usbip_common.h                  |  7 +++++++
+ drivers/w1/masters/ds2490.c                       |  6 +++---
+ include/linux/usb.h                               |  2 --
+ 10 files changed, 46 insertions(+), 45 deletions(-)
