@@ -2,103 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C65B7FD1D
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B1CFD2D
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbfD3Pos (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 11:44:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57898 "EHLO mail.kernel.org"
+        id S1726006AbfD3PtX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 11:49:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725906AbfD3Por (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Apr 2019 11:44:47 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725906AbfD3PtW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Apr 2019 11:49:22 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA30C21734;
-        Tue, 30 Apr 2019 15:44:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A297121734;
+        Tue, 30 Apr 2019 15:49:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556639087;
-        bh=rrcsqZYKEnEJrIdXuKxxMtHlVHbhSKZ1Kz45Y55dS2U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FirvzScPjS7RmCBuQQS2UfrvORNpS6ms7ZN8jkKNd/7jz8fuGSfnsarVTtu+qTtam
-         kWtSTyY4vCTCPe1lNlvQzSiLcAPFcveskn0IRfmsrv3rKIixB8Mzp/gK+sGFIOXXFQ
-         VWrcQBTR5q9vwahfuQp4KuIM0UZclWBjJVQ9Gnjo=
-Date:   Tue, 30 Apr 2019 17:44:44 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+        s=default; t=1556639362;
+        bh=yCYkO8N4121wxKLTF87LoI1Jml4WNkrjnoiQJbB2u0Q=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=XCLSYGRbNQ/VNh1KsMX90+coyBttlMIZv5lOet5FFy5ZiFoWNeVI6D18mOoUUzm4U
+         HumBpe3rfHfOnyx2Kxhf85DYkLWdAHPSbnEqp5EooLP5MBmLk79cbdS9wU/AM+6jdw
+         w3nhu/HkpQ0aQONkjyGe9hapoOLU5sgFDMTCBWig=
+Subject: Re: [PATCH] usbip: vhci_hcd: Mark expected switch fall-through
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
 Cc:     David Laight <David.Laight@aculab.com>,
         Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] usbip: vhci_hcd: Mark expected switch fall-through
-Message-ID: <20190430154444.GA4224@kroah.com>
+        Kees Cook <keescook@chromium.org>, shuah <shuah@kernel.org>
 References: <20190429143957.GA6725@embeddedor>
  <1daec8c8929e4d18b2059ab1dfbfdf4a@AcuMS.aculab.com>
  <287c8504-eafa-ebbb-aa39-babb86fdeb94@embeddedor.com>
+ <20190430154444.GA4224@kroah.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <722d3830-cd03-47ba-8587-db3aff076278@kernel.org>
+Date:   Tue, 30 Apr 2019 09:49:07 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <287c8504-eafa-ebbb-aa39-babb86fdeb94@embeddedor.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190430154444.GA4224@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 10:05:51AM -0500, Gustavo A. R. Silva wrote:
+On 4/30/19 9:44 AM, Greg Kroah-Hartman wrote:
+> On Mon, Apr 29, 2019 at 10:05:51AM -0500, Gustavo A. R. Silva wrote:
+>>
+>>
+>> On 4/29/19 9:44 AM, David Laight wrote:
+>>> From: Gustavo A. R. Silva
+>>>> Sent: 29 April 2019 15:40
+>>>> In preparation to enabling -Wimplicit-fallthrough, mark switch
+>>>> cases where we are expecting to fall through.
+>>> ...
+>>>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+>>>> index 667d9c0ec905..000ab7225717 100644
+>>>> --- a/drivers/usb/usbip/vhci_hcd.c
+>>>> +++ b/drivers/usb/usbip/vhci_hcd.c
+>>>> @@ -508,6 +508,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+>>>>   		case USB_PORT_FEAT_U1_TIMEOUT:
+>>>>   			usbip_dbg_vhci_rh(
+>>>>   				" SetPortFeature: USB_PORT_FEAT_U1_TIMEOUT\n");
+>>>> +			/* Fall through */
+>>>>   		case USB_PORT_FEAT_U2_TIMEOUT:
+>>>>   			usbip_dbg_vhci_rh(
+>>>>   				" SetPortFeature: USB_PORT_FEAT_U2_TIMEOUT\n");
+>>>
+>>> That doesn't look right, both debug messages seem to get printed.
+>>>
+>>
+>> At first sight, I thought the same way, then I took a look into
+>> commit:
+>>
+>> 1c9de5bf428612458427943b724bea51abde520a
+>>
+>> and noticed that the original developer properly added fall-through
+>> comments in other places in the same switch() code, that gave me the
+>> impression he knew what he was doing; then I noticed the following
+>> error message in case USB_PORT_FEAT_U2_TIMEOUT:
+>>
+>> 	if (hcd->speed != HCD_USB3) {
+>> 		pr_err("USB_PORT_FEAT_U1/2_TIMEOUT req not "
+>> 		       "supported for USB 2.0 roothub\n");
+>> 		goto error;
+>> 	}
+>>
+>> this error message is what makes me think the fall-through is
+>> intentional; otherwise I think it would look like this instead:
+>>
+>> 	if (hcd->speed != HCD_USB3) {
+>> 		pr_err("USB_PORT_FEAT_U2_TIMEOUT req not "
+>> 		       "supported for USB 2.0 roothub\n");
+>> 		goto error;
+>> 	}
 > 
-> 
-> On 4/29/19 9:44 AM, David Laight wrote:
-> > From: Gustavo A. R. Silva
-> >> Sent: 29 April 2019 15:40
-> >> In preparation to enabling -Wimplicit-fallthrough, mark switch
-> >> cases where we are expecting to fall through.
-> > ...
-> >> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> >> index 667d9c0ec905..000ab7225717 100644
-> >> --- a/drivers/usb/usbip/vhci_hcd.c
-> >> +++ b/drivers/usb/usbip/vhci_hcd.c
-> >> @@ -508,6 +508,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
-> >>  		case USB_PORT_FEAT_U1_TIMEOUT:
-> >>  			usbip_dbg_vhci_rh(
-> >>  				" SetPortFeature: USB_PORT_FEAT_U1_TIMEOUT\n");
-> >> +			/* Fall through */
-> >>  		case USB_PORT_FEAT_U2_TIMEOUT:
-> >>  			usbip_dbg_vhci_rh(
-> >>  				" SetPortFeature: USB_PORT_FEAT_U2_TIMEOUT\n");
-> > 
-> > That doesn't look right, both debug messages seem to get printed.
-> > 
-> 
-> At first sight, I thought the same way, then I took a look into
-> commit:
-> 
-> 1c9de5bf428612458427943b724bea51abde520a
-> 
-> and noticed that the original developer properly added fall-through
-> comments in other places in the same switch() code, that gave me the
-> impression he knew what he was doing; then I noticed the following
-> error message in case USB_PORT_FEAT_U2_TIMEOUT:
-> 
-> 	if (hcd->speed != HCD_USB3) {
-> 		pr_err("USB_PORT_FEAT_U1/2_TIMEOUT req not "
-> 		       "supported for USB 2.0 roothub\n");
-> 		goto error;
-> 	}
-> 
-> this error message is what makes me think the fall-through is
-> intentional; otherwise I think it would look like this instead:
-> 
-> 	if (hcd->speed != HCD_USB3) {
-> 		pr_err("USB_PORT_FEAT_U2_TIMEOUT req not "
-> 		       "supported for USB 2.0 roothub\n");
-> 		goto error;
-> 	}
+> I think you are right, that's horrid, but correct :(
 
-I think you are right, that's horrid, but correct :(
+Yes. This hub_control is poorly organized and could use cleanup.
+> 
+> Will go queue this up, thanks.
+> 
 
-Will go queue this up, thanks.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-greg k-h
+Thanks Greg!. It is on my list of things to Ack today.
+
+-- Shuah
