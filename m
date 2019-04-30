@@ -2,160 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 206E5FCE1
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE42FCEA
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbfD3P2p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 11:28:45 -0400
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:41461 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfD3P2p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:28:45 -0400
-Received: by mail-ua1-f68.google.com with SMTP id s30so1668006uas.8
-        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 08:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=psxi8sV7eLiIF2qdnqe7ws85kk7WgDvg8LIHII21pqQ=;
-        b=MRnAbiQQZrENnFVqNVQM3wn9WZUfrhCjLXSuXHXDuSuMKcIXRioW5qp2YA6xxhrklS
-         6PA5t30rFUy4SUv2Q10p3TMKSuFD7QmhIn/z52d1VhvpteTDlsH7xSokckh2OrVyRAR6
-         OZvFsa4Q6GYkPxLbtIHHpq5isnp7SjPjoY43c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=psxi8sV7eLiIF2qdnqe7ws85kk7WgDvg8LIHII21pqQ=;
-        b=hlZU6SmSmmibVrngOILldoXx3TMHiWDwQLquHHTGq5aSsF9GYZUIWKUQq0S4gitmuK
-         +8oaKW4yEQQbdfL7mrwp9dgNGJ6zhpcswtN+OvDHkUEBRoodVAi5GE7JonNAzL9dFFKi
-         R2lOxXQzUvizKS+4+A/gzaoEOlvjCI3Marpo/N0oz5yJ/LzEEXhk1iFPiIfeaYJNan0r
-         KbqSIDUdfCKr+XhX2tZHkDssZB9C2AbiZweP+LK4bL9DGYW56FxOhrI6g5Ft661gOSQS
-         9jW9R6wJ5wzIFFIf7d/kFrxFroXZyH37D+dsWex2nkZgubA7TUHPtcMqajMrNQ/hf/vB
-         brcA==
-X-Gm-Message-State: APjAAAV7ZJh1UHxkTD6yWu+QLk6wHKnBTMcDMbE3Wnf5vIUq4r8IFX7o
-        +PGZN2BSGQ/pTvFbJ3slWaN8dlh7oPk=
-X-Google-Smtp-Source: APXvYqz/3PBVpaWtgFdat3rhnCsm2miZyhpEWxXTePocMtrvjX3O5ljRuicePyb42ror7FUJ0c7QQQ==
-X-Received: by 2002:ab0:64d2:: with SMTP id j18mr11174033uaq.127.1556638123502;
-        Tue, 30 Apr 2019 08:28:43 -0700 (PDT)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id k128sm2845246vkb.54.2019.04.30.08.28.41
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 08:28:42 -0700 (PDT)
-Received: by mail-ua1-f47.google.com with SMTP id p13so4889602uaa.11
-        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 08:28:41 -0700 (PDT)
-X-Received: by 2002:ab0:324b:: with SMTP id r11mr11542291uan.124.1556638121492;
- Tue, 30 Apr 2019 08:28:41 -0700 (PDT)
+        id S1725942AbfD3Pbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 11:31:35 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:40672 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725906AbfD3Pbe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:31:34 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x3UFVIjv111448;
+        Tue, 30 Apr 2019 10:31:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1556638278;
+        bh=4QGSJ62ES/Rz1i9PeLAfB7uPMJpr8cbFT9IZNWvLw44=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=LVUwgkJEySc1NQiMsX7SfPcrMmupuezK/cY5XOVpW+9wsYmba8CupcBX2Z/8ciJTn
+         eMabujMf2PJ5J2ait6x+tEDoU/sViesLPsZcoq4kWsF5adYVLcbnyUoyCeXl/RYe1z
+         wrzaZdhGIF5WnPsr0JL9TqciPofjnJuHifm+FjLk=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x3UFVICH095519
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 30 Apr 2019 10:31:18 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 30
+ Apr 2019 10:31:18 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 30 Apr 2019 10:31:18 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x3UFVIqs113684;
+        Tue, 30 Apr 2019 10:31:18 -0500
+Date:   Tue, 30 Apr 2019 10:31:18 -0500
+From:   Bin Liu <b-liu@ti.com>
+To:     "Matwey V. Kornilov" <matwey@sai.msu.ru>
+CC:     <gregkh@linuxfoundation.org>, <matwey.kornilov@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 6/6] usb: musb: Decrease URB starting latency in
+ musb_advance_schedule()
+Message-ID: <20190430153118.GI20993@uda0271908>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        gregkh@linuxfoundation.org, matwey.kornilov@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20190403185310.8437-1-matwey@sai.msu.ru>
+ <20190403185310.8437-7-matwey@sai.msu.ru>
 MIME-Version: 1.0
-References: <cover.1555075927.git.arturp@synopsys.com> <b4129291df7b2d061e93c03862c081b6a35b2e7f.1555075927.git.arturp@synopsys.com>
- <CAD=FV=U4muZuc-Wh-1xf5eFDSnyDVXK4BQHeJihWJpaU1ooB0g@mail.gmail.com>
- <SN1PR12MB2431BD7144CBA0C34C58CE8CA7390@SN1PR12MB2431.namprd12.prod.outlook.com>
- <CAD=FV=XhXc8dD8n-XEBG=tSC4Av+JW9hN-U=d3JP8vCiX5DopQ@mail.gmail.com> <SN1PR12MB2431D122F3EF3085493F60ECA73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
-In-Reply-To: <SN1PR12MB2431D122F3EF3085493F60ECA73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 30 Apr 2019 08:28:29 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Ux_egPvzCbm_fMMwT97WPXABsbdeHRQr+KUjbZ4RTijw@mail.gmail.com>
-Message-ID: <CAD=FV=Ux_egPvzCbm_fMMwT97WPXABsbdeHRQr+KUjbZ4RTijw@mail.gmail.com>
-Subject: Re: [PATCH 01/14] usb: dwc2: Fix dwc2_restore_device_registers() function.
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190403185310.8437-7-matwey@sai.msu.ru>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Greg and all devs,
 
-On Mon, Apr 29, 2019 at 11:59 PM Artur Petrosyan
-<Arthur.Petrosyan@synopsys.com> wrote:
->
-> On 4/29/2019 21:34, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Mon, Apr 29, 2019 at 3:51 AM Artur Petrosyan
-> > <Arthur.Petrosyan@synopsys.com> wrote:
-> >>
-> >> On 4/27/2019 00:43, Doug Anderson wrote:
-> >>> Hi,
-> >>>
-> >>> On Fri, Apr 12, 2019 at 6:38 AM Artur Petrosyan
-> >>> <arthur.petrosyan@synopsys.com> wrote:
-> >>>>
-> >>>> - Added backup of DCFG register.
-> >>>> - Added Set the Power-On Programming done bit.
-> >>>>
-> >>>> Signed-off-by: Artur Petrosyan <arturp@synopsys.com>
-> >>>> ---
-> >>>>    drivers/usb/dwc2/gadget.c | 10 ++++++++++
-> >>>>    1 file changed, 10 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-> >>>> index 6812a8a3a98b..dcb0fbb8bc42 100644
-> >>>> --- a/drivers/usb/dwc2/gadget.c
-> >>>> +++ b/drivers/usb/dwc2/gadget.c
-> >>>> @@ -5004,6 +5004,7 @@ int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup)
-> >>>>    {
-> >>>>           struct dwc2_dregs_backup *dr;
-> >>>>           int i;
-> >>>> +       u32 dctl;
-> >>>>
-> >>>>           dev_dbg(hsotg->dev, "%s\n", __func__);
-> >>>>
-> >>>> @@ -5019,6 +5020,15 @@ int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup)
-> >>>>           if (!remote_wakeup)
-> >>>>                   dwc2_writel(hsotg, dr->dctl, DCTL);
-> >>>>
-> >>>> +       if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_PARTIAL) {
-> >>>> +               dwc2_writel(hsotg, dr->dcfg, DCFG);
-> >>>> +
-> >>>> +               /* Set the Power-On Programming done bit */
-> >>>> +               dctl = dwc2_readl(hsotg, DCTL);
-> >>>> +               dctl |= DCTL_PWRONPRGDONE;
-> >>>> +               dwc2_writel(hsotg, dctl, DCTL);
-> >>>> +       }
-> >>>
-> >>> I can't vouch one way or the other for the correctness of this change,
-> >>> but I will say that it's frustrating how asymmetric hibernate and
-> >>> partial power down are.  It makes things really hard to reason about.
-> >>> Is there any way you could restructure this so it happens in the same
-> >>> way between hibernate and partial power down?
-> >>>
-> >>
-> >>> Specifically looking at the similar sequence in
-> >>> dwc2_gadget_exit_hibernation() (which calls this function), I see:
-> >>>
-> >>> 1. There are some extra delays.  Are those needed for partial power down?
-> >> Do you mean delays in dwc2_gadget_exit_hibernation() ? If yes they are
-> >> needed for hibernation flow. What relates to delays in hibernation
-> >> needed for partial power down. Anything that is implemented in the
-> >> hibernation delays or other things are part of hibernation and are not
-> >> used in partial power down because they are two different flows of power
-> >> saving.
-> >
-> > OK, if they aren't needed for partial power down then that's fine.
-> > When I see two functions doing nearly the same sets of writes but one
-> > has delays and the other doesn't it makes me wonder if that was on
-> > purpose or not.
-> >
-> >
-> >>> 2. For exiting hibernation the setting of "DCTL_PWRONPRGDONE" only
-> >>> happens if "not remote wakeup".  Is it truly on purpose that you don't
-> >>> do that?
-> >> Currently partial power down doesn't support remote wakeup flow.
-> >
-> > Oh.  What happens if you have partial power down enabled and try to
-> > enable remote wakeup?  Does it give an error?
-> As far as I have been debugging I have not seen error in that case.
->
-> Do you mean like it should print a message saying that current partial
-> power down code doesn't support remote wakeup?
+On Wed, Apr 03, 2019 at 09:53:10PM +0300, Matwey V. Kornilov wrote:
+> Previously, the algorithm was the following:
+> 
+>  1. giveback current URB
+>  2. if current qh is not empty
+>     then start next URB
+>  3. if current qh is empty
+>     then dispose the qh, find next qh if any, and start URB.
+> 
+> It may take a while to run urb->callback inside URB giveback which is
+> run synchronously in musb. In order to improve the latency we rearrange
+> the function behaviour for the case when qh is not empty: next URB is
+> started before URB giveback. When qh is empty then the behaviour is
+> intentionally kept in order not to break existing inter qh scheduling:
+> URB giveback could potentionally enqueue other URB to the empty qh
+> preventing it from being disposed.
 
-Not sure.  ...why don't we just forget about this question?  I don't
-have enough gadget knowledge nor any way to test.
+This patch changes the sequence of urb giveback in musb.
 
--Doug
+	before				after
+	------				-----
+1. giveback current urb			1. start next urb if qh != empty
+2. start next urb if qh != empty	2. giveback current urb
+
+I see there is a potential that the urb giveback could be out of order,
+for example, if urb giveback in BH and the next urb finishes before BH
+runs.
+
+If this potential is possible, is it a problem for any class driver?
+
+Thanks,
+-Bin.
+
+> 
+> Before this patch, time spent in urb->callback led to the following
+> glitches between the host and a hub during isoc transfer (line 4):
+> 
+>     11.624492 d=  0.000124 [130.6 +  1.050] [  4] SPLIT
+>     11.624492 d=  0.000000 [130.6 +  1.467] [  3] IN   : 3.5
+>     11.624493 d=  0.000000 [130.6 +  1.967] [ 37] DATA0: aa 08 [skipped...]
+>     11.625617 d=  0.001124 [131.7 +  1.050] [  4] SPLIT
+>     11.625617 d=  0.000000 [131.7 +  1.467] [  3] IN   : 3.5
+>     11.625867 d=  0.000250 [132.1 +  1.050] [  4] SPLIT
+>     11.625867 d=  0.000000 [132.1 +  1.467] [  3] IN   : 3.5
+>     11.625868 d=  0.000001 [132.1 +  1.983] [  3] DATA0: 00 00
+>     11.626617 d=  0.000749 [132.7 +  1.050] [  4] SPLIT
+>     11.626617 d=  0.000000 [132.7 +  1.467] [  3] IN   : 3.5
+>     11.626867 d=  0.000250 [133.1 +  1.050] [  4] SPLIT
+>     11.626867 d=  0.000000 [133.1 +  1.467] [  3] IN   : 3.5
+>     11.626868 d=  0.000000 [133.1 +  1.967] [  3] DATA0: 00 00
+> 
+> After the hub, they look as the following and may lead to broken
+> perepherial transfer (as in case of PWC based webcam):
+> 
+>     11.332004 d=  0.000997 [ 30.0 +  3.417] [  3] IN   : 5.5
+>     11.332007 d=  0.000003 [ 30.0 +  6.833] [800] DATA0: 8a 1c [skipped...]
+>     11.334004 d=  0.001997 [ 32.0 +  3.417] [  3] IN   : 5.5
+>     11.334007 d=  0.000003 [ 32.0 +  6.750] [  3] DATA0: 00 00
+>     11.335004 d=  0.000997 [ 33   +  3.417] [  3] IN   : 5.5
+>     11.335007 d=  0.000003 [ 33   +  6.750] [  3] DATA0: 00 00
+> 
+> Removing this glitches makes us able to successfully run 10fps
+> video stream from the webcam attached via USB hub. That was
+> previously impossible.
+> 
+> Signed-off-by: Matwey V. Kornilov <matwey@sai.msu.ru>
+> ---
+>  drivers/usb/musb/musb_host.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
+> index ed99ecd4e63a..75be92873b5b 100644
+> --- a/drivers/usb/musb/musb_host.c
+> +++ b/drivers/usb/musb/musb_host.c
+> @@ -85,6 +85,11 @@ static bool musb_qh_empty(struct musb_qh *qh)
+>  	return list_empty(&qh->hep->urb_list);
+>  }
+>  
+> +static bool musb_qh_singular(struct musb_qh *qh)
+> +{
+> +	return list_is_singular(&qh->hep->urb_list);
+> +}
+> +
+>  static void musb_qh_unlink_hep(struct musb_qh *qh)
+>  {
+>  	if (!qh->hep)
+> @@ -362,6 +367,19 @@ static void musb_advance_schedule(struct musb *musb, struct urb *urb,
+>  		break;
+>  	}
+>  
+> +	if (ready && !musb_qh_singular(qh)) {
+> +		struct urb *next_urb = list_next_entry(urb, urb_list);
+> +
+> +		musb_dbg(musb, "... next ep%d %cX urb %p", hw_ep->epnum, is_in ? 'R' : 'T', next_urb);
+> +		musb_start_urb(musb, is_in, qh, next_urb);
+> +
+> +		qh->is_ready = 0;
+> +		musb_giveback(musb, urb, status);
+> +		qh->is_ready = ready;
+> +
+> +		return;
+> +	}
+> +
+>  	qh->is_ready = 0;
+>  	musb_giveback(musb, urb, status);
+>  	qh->is_ready = ready;
+> -- 
+> 2.16.4
+> 
