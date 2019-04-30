@@ -2,151 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0504FCA0
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B4AFCAE
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726066AbfD3PUG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 11:20:06 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:35872 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725942AbfD3PUG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:20:06 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x3UFK4gH098216;
-        Tue, 30 Apr 2019 10:20:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1556637604;
-        bh=Uqo1rYPaiEdr4WtmfXLxd7DkqOaPj2fMGdePDnnl2i8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=tr6x7iaRXQIkUMyXxmftS3aio0H0hFRiuhtVzIVZLXg20nP2zKZWP05N3iPvHL6MC
-         yjF6/icVrJsHFziYpKRtc0/WtPk5kOwlWYcsTFeciiGjPGo+Rvs+632+AQdzG2fzoT
-         cwMdSgXJjPdtkOVSA4LMYiZYRgTXqCf4JbzXLLIQ=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x3UFK4nw081846
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Apr 2019 10:20:04 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 30
- Apr 2019 10:20:03 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 30 Apr 2019 10:20:04 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x3UFK3Am096959;
-        Tue, 30 Apr 2019 10:20:03 -0500
-Date:   Tue, 30 Apr 2019 10:20:03 -0500
-From:   Bin Liu <b-liu@ti.com>
-To:     "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER" 
-        <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 0/6] musb: Improve performance for hub-attached webcams
-Message-ID: <20190430152003.GH20993@uda0271908>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        "Matwey V. Kornilov" <matwey.kornilov@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER" <linux-usb@vger.kernel.org>
-References: <20190403185310.8437-1-matwey@sai.msu.ru>
- <CAJs94EZsDOo6wp2rZmsETLs7uPE3CCv1bNOsewxehyw8R52scA@mail.gmail.com>
+        id S1726048AbfD3PXW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 11:23:22 -0400
+Received: from mail-vk1-f194.google.com ([209.85.221.194]:41813 "EHLO
+        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725906AbfD3PXW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:23:22 -0400
+Received: by mail-vk1-f194.google.com with SMTP id q193so1906895vkf.8
+        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 08:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vEDUu1mzojfttPFnsI8BLY/6XWBdLDT7OktJ1KG8wg8=;
+        b=lEOu5ISpyiG6SYi/Spqo6aWLzjf3i3+XbXoen+uaV9tV3XDOu8kTX1gG6hAaf2WEm2
+         QE4wglp6LO8uGG1sCDGBS8yV6E3TkUWvkoAoau7wGvIwoGQ+544+T3wrIeyCS3pwmtOk
+         9qNfqOVpfRT/ZhEOS4IXMi6bZhCQ0bd4MMIe0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vEDUu1mzojfttPFnsI8BLY/6XWBdLDT7OktJ1KG8wg8=;
+        b=GjDeiz2DO9qleriQ12js2s9sVm3TtEOUmxUqcRqeoBYoVcTWzLdA4krkf3by3I+zZ0
+         HAQn3s0rQp2MHXBhO2y57DCBU88qB5gzH+gBlaUG82vBAsSVVH7VSL8oK0bBacpE3z7t
+         cw6sg+fBgBxUwiNEDQAHt0JS+PlwTj4mP0BTkcAxKrjLyuXdeDgt3yoSFutO8kV8HyMO
+         FEdLR+KRF5Lqb8V6wZb63E/M43CWI7eK86X4SKTJYgu+iBTWYA2yxmoKYQQ5mhe1wWrS
+         Qz46jjNqyVRyopBMO4CWrCtNZwg8IWSvHf0l4metmhbEkl7cag2iCYS1MWnTMMlex+Bb
+         RSLw==
+X-Gm-Message-State: APjAAAUHZUGM22KizdfX9UaO35L/A2gOyLAjm28ZMn0lcg5jmXyr0c+f
+        QRI9kma4SoTqP1lpLdAhJ9dFYfKXov4=
+X-Google-Smtp-Source: APXvYqz0iKz1jv5+KDC2HAvOyGqs4D51tvixdGXI8uMESU1dpj4MxP2kbTsZEA2rM9Fgk4ZqAX6oig==
+X-Received: by 2002:a1f:264b:: with SMTP id m72mr4768533vkm.43.1556637801302;
+        Tue, 30 Apr 2019 08:23:21 -0700 (PDT)
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
+        by smtp.gmail.com with ESMTPSA id s16sm4791221vks.39.2019.04.30.08.23.19
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Apr 2019 08:23:20 -0700 (PDT)
+Received: by mail-vs1-f43.google.com with SMTP id e2so8193712vsc.13
+        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 08:23:19 -0700 (PDT)
+X-Received: by 2002:a67:7cd1:: with SMTP id x200mr5313157vsc.144.1556637799296;
+ Tue, 30 Apr 2019 08:23:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJs94EZsDOo6wp2rZmsETLs7uPE3CCv1bNOsewxehyw8R52scA@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <cover.1555672441.git.arturp@synopsys.com> <15bba89b920e29e27de4cfaac546834fba5d1a76.1555672441.git.arturp@synopsys.com>
+ <CAD=FV=U4BXuT1rM--UBo6vTfCHpm=qsWydoO_bNXYRDxu22twA@mail.gmail.com>
+ <SN1PR12MB2431B8BC296AF49152702868A7390@SN1PR12MB2431.namprd12.prod.outlook.com>
+ <CAD=FV=XFd-Uk_beUr+5djbi-93eWENGu5z5td7V3KPqpuoeiig@mail.gmail.com> <SN1PR12MB243103882D0C119575275915A73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
+In-Reply-To: <SN1PR12MB243103882D0C119575275915A73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 30 Apr 2019 08:23:07 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UD6MCRGik3RWQ1ZjvHUT-zTrR3+oOiN42GignFAXd1wA@mail.gmail.com>
+Message-ID: <CAD=FV=UD6MCRGik3RWQ1ZjvHUT-zTrR3+oOiN42GignFAXd1wA@mail.gmail.com>
+Subject: Re: [PATCH v1 08/14] usb: dwc2: Add default param to control power optimization.
+To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Matwey,
+Hi,
 
-On Wed, Apr 24, 2019 at 06:42:30PM +0300, Matwey V. Kornilov wrote:
-> Ping
+On Tue, Apr 30, 2019 at 5:45 AM Artur Petrosyan
+<Arthur.Petrosyan@synopsys.com> wrote:
+>
+> > If setting "power_down = 0" is wrong then please update your patch to
+> > remove all the mainline code that sets power_down to 0.  Presumably
+> > this means you'd want to convert that code over to using "power_saving
+> > = False".  Perhaps then I can see your vision of how this works more
+> > clearly.
+> Yes this is a good idea.
 
-Sorry for my late response. This series does improve isoch transfers for
-webcam on musb. A few of my cameras used to fail to stream 640x480@30fps
-now the test passed with your patches. Thank you for the work.
+Actually, I have a feeling it won't work, at least not without more
+changes.  ...and that's part of the problem with your patch.
 
-But since the patch changes the way handling urb giveback, I would need
-more time to run more tests.
+Specifically dwc2 works by first filling in the "default" parameters.
+Then the per-platform config function runs and overrides the defaults.
+If the per-platform config function overrides the "power_saving"
+parameter then it will be too late.
 
--Bin.
 
-> 
-> ср, 3 апр. 2019 г. в 21:53, Matwey V. Kornilov <matwey@sai.msu.ru>:
-> >
-> > The series is concerned to issues with isochronous transfer while
-> > streaming the USB webcam data. I discovered the issue first time
-> > when attached PWC USB webcam to AM335x-based BeagleBone Black SBC.
-> > It appeared that the root issue was in numerous missed IN requests
-> > during isochronous transfer where each missing leaded to the frame
-> > drop. Since every IN request is triggered in MUSB driver
-> > individually, it is important to queue the send IN request as
-> > earlier as possible when the previous IN completed. At the same
-> > time the URB giveback handler of the device driver has also to be
-> > called there, that leads to arbitrarily delay depending on the
-> > device driver performance. The details with the references are
-> > described in [1].
-> >
-> > The issue has two parts:
-> >
-> >   1) peripheral driver URB callback performance
-> >   2) MUSB host driver performance
-> >
-> > It appeared that the first part is related to the wrong memory
-> > allocation strategy in the most USB webcam drivers. Non-cached
-> > memory is used in assumption that coherent DMA memory leads to
-> > the better performance than non-coherent memory in conjunction with
-> > the proper synchronization. Yet the assumption might be valid for
-> > x86 platforms some time ago, the issue was fixed for PWC driver in:
-> >
-> >     1161db6776bd ("media: usb: pwc: Don't use coherent DMA buffers for ISO transfer")
-> >
-> > that leads to 3.5x performance gain. The more generic fix for this
-> > common issue are coming for the rest drivers [2].
-> >
-> > The patch allowed successfully running full-speed USB PWC webcams
-> > attached directly to BeagleBone Black USB port.
-> >
-> > However, the second part of the issue is still present for
-> > peripheral device attached through the high-speed USB hub due to
-> > its 125us frame time. The patch series is intended to reorganize
-> > musb_advance_schedule() to allow host to send IN request quicker.
-> >
-> > The patch series is organized as the following. First three patches
-> > improve readability of the existing code in
-> > musb_advance_schedule(). Patches 4 and 5 introduce updated
-> > signature for musb_start_urb(). The last patch introduce new
-> > code-path in musb_advance_schedule() which allows for faster
-> > response.
-> >
-> > References:
-> >
-> > [1] https://www.spinics.net/lists/linux-usb/msg165735.html
-> > [2] https://www.spinics.net/lists/linux-media/msg144279.html
-> >
-> > Matwey V. Kornilov (6):
-> >   usb: musb: Use USB_DIR_IN when calling musb_advance_schedule()
-> >   usb: musb: Introduce musb_qh_empty() helper function
-> >   usb: musb: Introduce musb_qh_free() helper function
-> >   usb: musb: Rename musb_start_urb() to musb_start_next_urb()
-> >   usb: musb: Introduce musb_start_urb()
-> >   usb: musb: Decrease URB starting latency in musb_advance_schedule()
-> >
-> >  drivers/usb/musb/musb_host.c | 114 +++++++++++++++++++++++++++----------------
-> >  1 file changed, 71 insertions(+), 43 deletions(-)
-> >
-> > --
-> > 2.16.4
-> >
-> 
-> 
-> -- 
-> With best regards,
-> Matwey V. Kornilov
+> > NOTE: I'm curious how you envision what someone would do if they had a
+> > core that supported hibernation but they only wanted to enable partial
+> > power down.  I guess then they'd have to set "power_saving = True" and
+> > then "power_down = DWC2_POWER_DOWN_PARAM_PARTIAL"?  I guess your
+> > vision of the world is:
+> I have implemented everything based on programming guide and data book.
+> Core can only support hibernation or partial power down based on the
+> configuration parameters. There cannot be two modes simultaneously of
+> power saving only one of them.
+
+Ah, this is new information to me.  I assumed they were supersets of
+each other, so if you supported hibernation you also supported partial
+power down.  Thanks for clearing that up!
+
+
+> The power_down flag is set to DWC2_POWER_DOWN_PARAM_PARTIAL ,
+> DWC2_POWER_DOWN_PARAM_HIBERNATION or DWC2_POWER_DOWN_PARAM_NONE while
+> checking the hw parameters. So it just indicates which power down mode
+> is supporting the core.
+
+I don't think this is what the params are about.  The params are about
+the currently configured parameters, not about what the core supports.
+This is why all the other code checks the actual value of the params
+to decide whether to do power savings.
+
+-Doug
