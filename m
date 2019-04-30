@@ -2,199 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4E6F04C
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 08:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5215BF0A1
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 08:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbfD3GIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 02:08:09 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:58102 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725554AbfD3GIJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Apr 2019 02:08:09 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 0394B9A3133819C6DFC7;
-        Tue, 30 Apr 2019 14:08:06 +0800 (CST)
-Received: from [127.0.0.1] (10.142.63.192) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Tue, 30 Apr 2019
- 14:07:57 +0800
-CC:     <liuyu712@hisilicon.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <john.stultz@linaro.org>, <suzhuangluan@hisilicon.com>,
-        <kongfei@hisilicon.com>, <wanghu17@hisilicon.com>,
-        <butao@hisilicon.com>, <chenyao11@huawei.com>,
-        <fangshengzhou@hisilicon.com>, <lipengcheng8@huawei.com>,
-        <songxiaowei@hisilicon.com>, <xuyiping@hisilicon.com>,
-        <xuyoujun4@huawei.com>, <yudongbin@hisilicon.com>,
-        <zangleigang@hisilicon.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "Sergei Shtylyov" <sergei.shtylyov@cogentembedded.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>
-Subject: Re: [PATCH v6 02/13] dt-bindings: misc: Add bindings for HiSilicon
- usb hub and data role switch functionality on HiKey960
-To:     Rob Herring <robh@kernel.org>
-References: <20190420064019.57522-1-chenyu56@huawei.com>
- <20190420064019.57522-3-chenyu56@huawei.com> <20190425213532.GA32028@bogus>
-From:   Chen Yu <chenyu56@huawei.com>
-Message-ID: <f925304a-17ef-1574-b671-77d4ad0331d8@huawei.com>
-Date:   Tue, 30 Apr 2019 14:07:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.5.2
+        id S1726129AbfD3GjG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 02:39:06 -0400
+Received: from smtprelay-out1.synopsys.com ([198.182.61.142]:52034 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725810AbfD3GjF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 02:39:05 -0400
+Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 050F9C011B;
+        Tue, 30 Apr 2019 06:39:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1556606343; bh=CQqJooDmIEy1WbgWYtMWSi8JNuqq27Vax4fBR/O3DUk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=JnOpm7XtdRo99cnvwDUWwSzHI2ZNs/sNv2s6pDtqcJppx+L9EWriXwCyV2vRZbthd
+         ohP8zyScC73AjZHLpIueTG5WeOUYsOo50rjGkH7hLTQ3jTo33dEZTAgRhXjfyxizLF
+         F0Wyl/2HJstczpSXN1Kwo+oIBAIYzMklhf7UkG72EsYLYg3UsIj9mESXwgYowPAIhk
+         mIVrm2tPjV7H+JdVf7r/zg6oJwFhHsGB8Qli8rqFmXMN8zRO7nn3jVJ8FV6KbEChIM
+         PPq+dQQtYUwMSAeApVshtxB53xcHXV7gIe5yMcM24/GPJ3+THHSiNM7HXKAbzp9ZHy
+         xTxVaiJCuQ/9Q==
+Received: from [10.116.70.206] (hminas-7480.internal.synopsys.com [10.116.70.206])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id ACE30A0091;
+        Tue, 30 Apr 2019 06:39:02 +0000 (UTC)
+Subject: Re: [PATCH] usb: gadget: dwc2: fix zlp handling
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <410670D7E743164D87FA6160E7907A56013A7FDFE7@am04wembxa.internal.synopsys.com>
+ <20190401105045.6527-1-andrzej.p@collabora.com>
+ <410670D7E743164D87FA6160E7907A56013A7FE140@am04wembxa.internal.synopsys.com>
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Message-ID: <15944aa5-8784-c6ae-8c0d-ec6efb2e0150@synopsys.com>
+Date:   Tue, 30 Apr 2019 10:39:00 +0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190425213532.GA32028@bogus>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <410670D7E743164D87FA6160E7907A56013A7FE140@am04wembxa.internal.synopsys.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.142.63.192]
-X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+Hi Felipe,
 
-On 2019/4/26 5:35, Rob Herring wrote:
-> On Sat, Apr 20, 2019 at 02:40:08PM +0800, Yu Chen wrote:
->> This patch adds binding documentation to support usb hub and usb
->> data role switch of Hisilicon HiKey960 Board.
-> 
-> Sorry I've been slow to really review this, but I needed to look at the 
-> schematics to see what exactly is going on here.
-> 
-> I think this needs some changes to better reflect the h/w and utilize 
-> existing bindings. It should really be designed ignoring the muxing to 
-> start with. Define the binding for the TypeC connector and then the host 
-> hub and make sure they can coexist. Then overlay what you need to switch 
-> between the 2 modes which AFAICT is just a single GPIO. 
-> 
+On 4/1/2019 3:33 PM, Minas Harutyunyan wrote:
+> On 4/1/2019 2:51 PM, Andrzej Pietrasiewicz wrote:
+>> The patch 10209abe87f5ebfd482a00323f5236d6094d0865
+>> usb: dwc2: gadget: Add scatter-gather mode
 >>
->> Cc: Kishon Vijay Abraham I <kishon@ti.com>
->> Cc: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: John Stultz <john.stultz@linaro.org>
->> Cc: Binghui Wang <wangbinghui@hisilicon.com>
->> Signed-off-by: Yu Chen <chenyu56@huawei.com>
->> ---
->> v1:
->> * Fix some format errors as suggested by Sergei.
->> * Modify gpio description to use gpiod API.
->> v2:
->> * Remove information about Hikey.
->> * Fix gpio description.
->> * Remove device_type of endpoint.
->> v3:
->> * Remove property typec-vbus-enable-val.
->> * Add description of pinctrl-names.
->> * Add example for "hisilicon,gpio-hubv1"
->> * Add flag in gpiod properties.
->> ---
->> ---
->>  .../bindings/misc/hisilicon-hikey-usb.txt          | 52 ++++++++++++++++++++++
->>  1 file changed, 52 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt
+>> avoided a NULL pointer dereference (hs_ep->req == NULL) by
+>> calling dwc2_gadget_fill_nonisoc_xfer_dma_one() directly instead of through
+>> the dwc2_gadget_config_nonisoc_xfer_ddma() wrapper, which unconditionally
+>> dereferenced the said pointer.
 >>
->> diff --git a/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt b/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt
->> new file mode 100644
->> index 000000000000..422e844df719
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt
->> @@ -0,0 +1,52 @@
->> +Support usb hub and usb data role switch of Hisilicon HiKey960 Board.
->> +
->> +-----------------------------
->> +
->> +Required properties:
->> +- compatible: "hisilicon,gpio-hubv1","hisilicon,hikey960-usb"
->> +- typec-vbus-gpios: gpio to control the vbus of typeC port
+>> However, this was based on an incorrect assumption that in the context of
+>> dwc2_hsotg_program_zlp() the pointer is always NULL, which is not the case.
+>> The result were SB CV MSC tests failing starting from Test Case 6.
+>>
+>> Instead, this patch reverts to calling the wrapper and adds a check for
+>> the pointer being NULL inside the wrapper.
+>>
+>> Fixes: 10209abe87f5 (usb: dwc2: gadget: Add scatter-gather mode)
+>> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 > 
-> This should be a gpio regulator and then connected to 'vbus-supply' in a 
-> usb-connector node (see .../bindings/connectors/usb-connector.txt). 
-Currently usb-connector node has no "vbus-supply" property and
-I do not find process that handles vbus-supply in RT1711H TypeC driver.
-
+> Acked-by: Minas Harutyunyan <hminas@synopsys.com>
 > 
-> Then you also need the RT1711HWSC TypeC controller in DT. That is 
-> typically the parent device of the connector node. 
-> 
->> +- otg-switch-gpios: gpio to switch DP & DM between the hub and typeC port
-> 
-> This probably belongs in USB controller node.
-> 
-The otg-switch-gpios controls a mux like fsusb30mux. It is related to
-the board design of HiKey960. And the state of the mux is decided by
-the typeC port state. So I think it is not so good to make it belongs
-in USB controller node.
-
->> +- hub-vdd33-en-gpios: gpio to enable the power of hub
-> 
-> This too should be a gpio regulator and then in a hub node. We have 2 
-> ways to represent hubs. Either as an I2C device or as a child of the 
-> host controller. The latter is preferred, but I'm not too sure how the 
-> OF graph connection linking the controller to the TypeC connector will 
-> work with the usb bus binding.
-> 
-There is no particular code except the power control for the hub.
-The i2c on the hub is not used. So it can not be an I2C device.
-Is there such an example that make the hub as a child of the host controller
-and control its power?
-
->> +- pinctrl-names: pin configuration state name ("default")
->> +- pinctrl-0: pinctrl config
+>> ---
+>>    drivers/usb/dwc2/gadget.c | 20 ++++++++++++--------
+>>    1 file changed, 12 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+>> index 6812a8a3a98b..e76b2e040b4c 100644
+>> --- a/drivers/usb/dwc2/gadget.c
+>> +++ b/drivers/usb/dwc2/gadget.c
+>> @@ -835,19 +835,22 @@ static void dwc2_gadget_fill_nonisoc_xfer_ddma_one(struct dwc2_hsotg_ep *hs_ep,
+>>     * with corresponding information based on transfer data.
+>>     */
+>>    static void dwc2_gadget_config_nonisoc_xfer_ddma(struct dwc2_hsotg_ep *hs_ep,
+>> -						 struct usb_request *ureq,
+>> -						 unsigned int offset,
+>> +						 dma_addr_t dma_buff,
+>>    						 unsigned int len)
+>>    {
+>> +	struct usb_request *ureq = NULL;
+>>    	struct dwc2_dma_desc *desc = hs_ep->desc_list;
+>>    	struct scatterlist *sg;
+>>    	int i;
+>>    	u8 desc_count = 0;
+>>    
+>> +	if (hs_ep->req)
+>> +		ureq = &hs_ep->req->req;
 >> +
->> +Example
->> +-----
+>>    	/* non-DMA sg buffer */
+>> -	if (!ureq->num_sgs) {
+>> +	if (!ureq || !ureq->num_sgs) {
+>>    		dwc2_gadget_fill_nonisoc_xfer_ddma_one(hs_ep, &desc,
+>> -			ureq->dma + offset, len, true);
+>> +			dma_buff, len, true);
+>>    		return;
+>>    	}
+>>    
+>> @@ -1135,7 +1138,7 @@ static void dwc2_hsotg_start_req(struct dwc2_hsotg *hsotg,
+>>    			offset = ureq->actual;
+>>    
+>>    		/* Fill DDMA chain entries */
+>> -		dwc2_gadget_config_nonisoc_xfer_ddma(hs_ep, ureq, offset,
+>> +		dwc2_gadget_config_nonisoc_xfer_ddma(hs_ep, ureq->dma + offset,
+>>    						     length);
+>>    
+>>    		/* write descriptor chain address to control register */
+>> @@ -2028,12 +2031,13 @@ static void dwc2_hsotg_program_zlp(struct dwc2_hsotg *hsotg,
+>>    		dev_dbg(hsotg->dev, "Receiving zero-length packet on ep%d\n",
+>>    			index);
+>>    	if (using_desc_dma(hsotg)) {
+>> +		/* Not specific buffer needed for ep0 ZLP */
+>> +		dma_addr_t dma = hs_ep->desc_list_dma;
 >> +
->> +	hisi_hikey_usb: hisi_hikey_usb {
->> +		compatible = "hisilicon,hikey960-usb";
->> +		typec-vbus-gpios = <&gpio25 2 GPIO_ACTIVE_HIGH>;
->> +		otg-switch-gpios = <&gpio25 6 GPIO_ACTIVE_HIGH>;
->> +		hub-vdd33-en-gpios = <&gpio5 6 GPIO_ACTIVE_HIGH>;
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&usbhub5734_pmx_func>;
->> +
->> +		port {
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +
->> +			hikey_usb_ep: endpoint@0 {
->> +				reg = <0>;
->> +				remote-endpoint = <&dwc3_role_switch_notify>;
->> +			};
->> +		};
->> +	};
->> +
->> +	hisi_hikey_usb: hisi_hikey_usb {
-> 
-> Perhaps doesn't matter with my above feedback, but I don't understand 
-> the point of this 2nd example.
-> 
-OK. I will remove it.
->> +		compatible = "hisilicon,gpio-hubv1";
->> +		typec-vbus-gpios = <&gpio25 2 GPIO_ACTIVE_LOW>;
->> +		otg-switch-gpios = <&gpio25 6 GPIO_ACTIVE_HIGH>;
->> +		hub-vdd33-en-gpios = <&gpio5 6 GPIO_ACTIVE_HIGH>;
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&usbhub5734_pmx_func>;
->> +
->> +		port {
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +
->> +			hikey_usb_ep: endpoint@0 {
->> +				reg = <0>;
->> +				remote-endpoint = <&dwc3_role_switch_notify>;
->> +			};
->> +		};
->> +	};
->> -- 
->> 2.15.0-rc2
+>>    		if (!index)
+>>    			dwc2_gadget_set_ep0_desc_chain(hsotg, hs_ep);
+>>    
+>> -		/* Not specific buffer needed for ep0 ZLP */
+>> -		dwc2_gadget_fill_nonisoc_xfer_ddma_one(hs_ep, &hs_ep->desc_list,
+>> -			hs_ep->desc_list_dma, 0, true);
+>> +		dwc2_gadget_config_nonisoc_xfer_ddma(hs_ep, dma, 0);
+>>    	} else {
+>>    		dwc2_writel(hsotg, DXEPTSIZ_MC(1) | DXEPTSIZ_PKTCNT(1) |
+>>    			    DXEPTSIZ_XFERSIZE(0),
 >>
 > 
-> .
 > 
 
-Thanks
-- Yu Chen
+This patch is fix for "usb: dwc2: gadget: Add scatter-gather mode" patch 
+to allow pass USB CV.
+Could you please merge to your testing/next this patch also.
 
+Thanks,
+Minas
