@@ -2,66 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32640FEC9
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 19:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC44FECD
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 19:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbfD3RZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 13:25:58 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46841 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725942AbfD3RZ6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 13:25:58 -0400
-Received: by mail-pg1-f194.google.com with SMTP id n2so7133690pgg.13
-        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 10:25:57 -0700 (PDT)
+        id S1726595AbfD3R01 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 13:26:27 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:36459 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726522AbfD3R00 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 13:26:26 -0400
+Received: by mail-pl1-f194.google.com with SMTP id w20so6429912plq.3
+        for <linux-usb@vger.kernel.org>; Tue, 30 Apr 2019 10:26:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=b1DzYDHHMbPUeqMoDW3yyKVFzl5dp1X1tpd8mfSFUCM=;
-        b=g5CaxFLepwBRV+fZdbdUIzpj8w2kHwz9ygdaWgBIEjAcbZyjM9cWhm0nLyITorTmSY
-         ExdaN2iDSLgn+2lfNQJ9mLJS1qVnJIMXcx1PNoVeZpMGp2w44MUfNilKAt1WyNMDnfAc
-         s3uSvru5O80ScQqYEs6MPJ//qet6xLhNrMqi5ZZGnIpYHuJcgPRfyvghnCoEoV6rUj5F
-         MnxiXDNKcJ77JCmSM2I++I5dU1g9uLwj26Nmo94pOSBCdwONccqfrK3Y7U8+AH7Vvedb
-         Q/RaqTdzZvJA+27E6AvRJ2Fw82sQKPgYfuyS+RvaV5uHu8gWxPhL/JizsfraWfeHH5qH
-         FmjA==
+        bh=bs5X7Iibdz9o1xQ5xU77R8AeJdh4gzQBAsKMHV6sbaQ=;
+        b=CXGKcSn62AeReTYymbEMWJpRCQAUGIUYJ6jujKBRaezB0HYqfK3exW46W/GnKqd2ce
+         0K7QtyG9wK1id2v5YLT2RkM7JTZI84gX9OS51Xrmix8cLT7uTwAWbPPQybZoZ3gogmbT
+         eEB0fvQW2aUWn0A8WPMSIKFvSNUbaOLybhULoyHX/TzFF1U6v9CyTRZYkYpAM/s6RbXR
+         UzYmuJn5qWRoMvlHBXkjodmNRVujYY/qytrnLtv26zcjcZTvgzMhI0p/k3UllCA2W2dH
+         NS5EnyN4S2JDW+t7Cqx6woC7sZ7P158vPRJGbUW1hSL+5TlL/YagKh3C5tCKvthMHVs+
+         4D2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=b1DzYDHHMbPUeqMoDW3yyKVFzl5dp1X1tpd8mfSFUCM=;
-        b=KOZsOpi+nqduDEpcutsAsK3HlhmVjgQfBMsMUbSRfB9dk6/IWItc4jfDQqRUbCZ6YH
-         Ju4EfPB0NCyG5CbE9iN1doqBwd8RyzF62AxjydbNLd1InGHpan4ScE/EcDm7R8DZTLlF
-         JYH/t3l00Ovl0v7fQUnOQ9YS0qoECifTd/JIpHLsMdl/lPYWd8EOQ+swd6ZYcTEHfaw4
-         ZD36MwGXQYj8g/X6Qj3kkSc4JWhhRFSXBCKHNTLvDqxWNN5u5m4k6SqaCxI6NRW8Gm+J
-         KwNoHKm6vrymdyBlU3b5hnBs9Xl3xPb1Uk4kFtFAMXohSeYT1mZ//IF72xihMHkkOP31
-         D32A==
-X-Gm-Message-State: APjAAAVDYhgbEuqUz9k+HazSzq9AiY0/zO5W9GAXj8ZifYoR1OzVffkI
-        OkL55EBu6qqPLC5lRv2c5emrXjla34eGgPWhx8kC6g==
-X-Google-Smtp-Source: APXvYqxKoFOLcBHV9onh2oXJOsDo42NNxClYegTos4ScfdggCUdMvMzUJpr+4tr+0OZA48aC5U9cQc80U3ISbHps4Kc=
-X-Received: by 2002:a62:46c7:: with SMTP id o68mr12353818pfi.54.1556645157228;
- Tue, 30 Apr 2019 10:25:57 -0700 (PDT)
+        bh=bs5X7Iibdz9o1xQ5xU77R8AeJdh4gzQBAsKMHV6sbaQ=;
+        b=pc+0T2q2dlTs5CE/PPf7Ltq4OadZsX1NGKD2eFy2NmfwwNZZjoM+FUMPoB2LM5KSFs
+         jSDImEkxQiiUoJINXP8v+hbqTQ/moiawHPTrC3qCEPeu+FzR17HX2L4tJnj+PTTENi2W
+         p9k6f49WietzrXlzpAR1lkMY7oVFMfVzNqhL9J19J9hr4MnWNJ32V2vBqnXb8fjfswxU
+         ZyQeYvtq50fLV11L/xqLwY9pCHn+wn3tMFc3gKKOysPmSV3xyMmps/7S8PiMlwGec6ev
+         RfUm/0l8KeW0PGKOHwuotxbA5MJmt8zVug3y4Y5aMKk2OJ7OMj0ImNijZ8IndPUUftZE
+         CbsQ==
+X-Gm-Message-State: APjAAAWqMi9poWgVPH+N5dW6HLLvw3kcoaXGLa6ykE6xPB/Q7fdW45cs
+        Hqybu5coi/ofY8V0JaFJpLFqY7bLQkqkDGE5TKYqIA==
+X-Google-Smtp-Source: APXvYqyqEuRumZ25aIJGjeNWrMpTdO7Blva4fZ9CGJMBFDR7/KiCGcO+8AVxa6p9ixobAx6ee+PwMufIphWSSzOPawg=
+X-Received: by 2002:a17:902:2aa6:: with SMTP id j35mr25981080plb.236.1556645185329;
+ Tue, 30 Apr 2019 10:26:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000004101370587c052fb@google.com>
-In-Reply-To: <0000000000004101370587c052fb@google.com>
+References: <00000000000048aa750587c052ef@google.com>
+In-Reply-To: <00000000000048aa750587c052ef@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 30 Apr 2019 19:25:45 +0200
-Message-ID: <CAAeHK+zn-26NHw8seueTyQV1o=O9x0U3m9-jV4V70Ctfutk8Fg@mail.gmail.com>
-Subject: Re: WARNING: Support for this device (Terratec Grabster AV400) is experimental.
-To:     syzbot <syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com>
+Date:   Tue, 30 Apr 2019 19:26:13 +0200
+Message-ID: <CAAeHK+xAqa9Mz6y0ug8KxYuMYN7D2xP9xYbccKwJyjk_B4ew3g@mail.gmail.com>
+Subject: Re: WARNING: Detected a wedged cx25840 chip; the device will not work.
+To:     syzbot <syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: multipart/mixed; boundary="000000000000a3be3f0587c2b106"
+Content-Type: multipart/mixed; boundary="00000000000050981a0587c2b34c"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000a3be3f0587c2b106
+--00000000000050981a0587c2b34c
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, Apr 30, 2019 at 4:36 PM syzbot
-<syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com> wrote:
+<syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
@@ -69,28 +69,31 @@ On Tue, Apr 30, 2019 at 4:36 PM syzbot
 >
 > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
 > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=141ca62d200000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12df67c3200000
 > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-> dashboard link: https://syzkaller.appspot.com/bug?extid=af8f8d2ac0d39b0ed3a0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=170a86bf206dd2c6217e
 > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1405bedd200000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ce3bbb200000
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108a28f3200000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145d8a2d200000
 >
 > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
+> Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
 >
-> usb 1-1: New USB device found, idVendor=0ccd, idProduct=0039, bcdDevice=
-> d.3c
 > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 1-1: config 0 descriptor??
-> pvrusb2: Hardware description: Terratec Grabster AV400
-> pvrusb2: **********
-> pvrusb2: WARNING: Support for this device (Terratec Grabster AV400) is
-> experimental.
-> pvrusb2: Important functionality might not be entirely working.
-> pvrusb2: Please consider contacting the driver author to help with further
-> stabilization of the driver.
-> pvrusb2: **********
+> pvrusb2: Hardware description: Gotview USB 2.0 DVD 2
+> pvrusb2: Invalid write control endpoint
+> usb 1-1: USB disconnect, device number 2
+> pvrusb2: Invalid write control endpoint
+> pvrusb2: WARNING: Detected a wedged cx25840 chip; the device will not work.
+> pvrusb2: WARNING: Try power cycling the pvrusb2 device.
+> pvrusb2: WARNING: Disabling further access to the device to prevent other
+> foul-ups.
+> pvrusb2: Device being rendered inoperable
+> cx25840 0-0044: Unable to detect h/w, assuming cx23887
+> cx25840 0-0044: cx23887 A/V decoder found @ 0x88 (pvrusb2_a)
+> pvrusb2: Attached sub-driver cx25840
+> pvrusb2: Attempted to execute control transfer when device not ok
+> pvrusb2: Attempted to execute control transfer when device not ok
 
 #syz test: https://github.com/google/kasan.git usb-fuzzer
 
@@ -106,12 +109,12 @@ On Tue, Apr 30, 2019 at 4:36 PM syzbot
 > syzbot can test patches for this bug, for details see:
 > https://goo.gl/tpsmEJ#testing-patches
 
---000000000000a3be3f0587c2b106
+--00000000000050981a0587c2b34c
 Content-Type: text/x-patch; charset="US-ASCII"; name="pvrusb2.patch"
 Content-Disposition: attachment; filename="pvrusb2.patch"
 Content-Transfer-Encoding: base64
-Content-ID: <f_jv42brmq0>
-X-Attachment-Id: f_jv42brmq0
+Content-ID: <f_jv42ce1v0>
+X-Attachment-Id: f_jv42ce1v0
 
 Y29tbWl0IGYxNWNmYTgwOWVjMDM1ZWViYzBiZWMwN2JjOWUxZGQyMTIzMjgxYTUKQXV0aG9yOiBB
 bmRyZXkgS29ub3ZhbG92IDxhbmRyZXlrbnZsQGdvb2dsZS5jb20+CkRhdGU6ICAgV2VkIEFwciAx
@@ -177,4 +180,4 @@ c2l6ZW9mKGJ1ZiksZm1zayk7CiAJCXB2cjJfdHJhY2UoCiAJCQlQVlIyX1RSQUNFX0VSUk9SX0xF
 R1MsCi0JCQkiV0FSTklORzogRmFpbGVkIHRvIGNsYXNzaWZ5IHRoZSBmb2xsb3dpbmcgc3RhbmRh
 cmQocyk6ICUuKnMiLAorCQkJIioqKldBUk5JTkcqKiogRmFpbGVkIHRvIGNsYXNzaWZ5IHRoZSBm
 b2xsb3dpbmcgc3RhbmRhcmQocyk6ICUuKnMiLAogCQkJYmNudCxidWYpOwogCX0KIAo=
---000000000000a3be3f0587c2b106--
+--00000000000050981a0587c2b34c--
