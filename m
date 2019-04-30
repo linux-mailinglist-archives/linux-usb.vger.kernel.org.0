@@ -2,104 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F859F0A5
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 08:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3625F0C5
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 08:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726129AbfD3Gls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 02:41:48 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7146 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725790AbfD3Gls (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Apr 2019 02:41:48 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 63D569E02EAB98E9051E;
-        Tue, 30 Apr 2019 14:41:46 +0800 (CST)
-Received: from [127.0.0.1] (10.67.78.74) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Tue, 30 Apr 2019
- 14:41:43 +0800
-Subject: Re: [RFC] Question about reset order for xhci controller and pci
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <Pine.LNX.4.44L0.1904291002290.1632-100000@iolanthe.rowland.org>
-From:   "Tangnianyao (ICT)" <tangnianyao@huawei.com>
-Message-ID: <b4176223-e44f-5454-0a02-b75a65384fa6@huawei.com>
-Date:   Tue, 30 Apr 2019 14:41:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.0
-MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.1904291002290.1632-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="gbk"
+        id S1726413AbfD3G5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 02:57:44 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:8461 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725554AbfD3G5o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 02:57:44 -0400
+X-UUID: 2d217474e79a4b76987e911cdbe6e632-20190430
+X-UUID: 2d217474e79a4b76987e911cdbe6e632-20190430
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1809240108; Tue, 30 Apr 2019 14:57:39 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 30 Apr
+ 2019 14:57:37 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 30 Apr 2019 14:57:37 +0800
+Message-ID: <1556607457.10179.259.camel@mhfsdcap03>
+Subject: Re: [PATCH v4 3/6] dt-bindings: usb: mtu3: add properties about USB
+ Role Switch
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        "Badhri Jagan Sridharan" <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Linux USB List" <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "Biju Das" <biju.das@bp.renesas.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 30 Apr 2019 14:57:37 +0800
+In-Reply-To: <CAL_JsqKXKRetoy4u_yAMgS+RA0vaRhzjR0zpLjKMtgRvFHXn7A@mail.gmail.com>
+References: <1556261237-13823-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1556261237-13823-4-git-send-email-chunfeng.yun@mediatek.com>
+         <20190426204906.GB15074@bogus> <1556453788.10179.224.camel@mhfsdcap03>
+         <CAL_JsqKXKRetoy4u_yAMgS+RA0vaRhzjR0zpLjKMtgRvFHXn7A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.78.74]
-X-CFilter-Loop: Reflected
+MIME-Version: 1.0
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 2019/4/29 22:06, Alan Stern wrote:
-
-Hi, Alan
-
-> On Mon, 29 Apr 2019, Tangnianyao (ICT) wrote:
+On Mon, 2019-04-29 at 11:25 -0500, Rob Herring wrote:
+> On Sun, Apr 28, 2019 at 7:16 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+> >
+> > On Fri, 2019-04-26 at 15:49 -0500, Rob Herring wrote:
+> > > On Fri, Apr 26, 2019 at 02:47:14PM +0800, Chunfeng Yun wrote:
+> > > > Now the USB Role Switch is supported, so add properties about it
+> > > >
+> > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > ---
+> > > > v4: no changes
+> > > > v3: no changes
+> > > >
+> > > > v2 changes:
+> > > >   1. fix typo
+> > > >   2. refer new binding about connector property
+> > > > ---
+> > > >  .../devicetree/bindings/usb/mediatek,mtu3.txt          | 10 ++++++++--
+> > > >  1 file changed, 8 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt b/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
+> > > > index 3382b5cb471d..6e004c4a89af 100644
+> > > > --- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
+> > > > +++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
+> > > > @@ -27,7 +27,9 @@ Optional properties:
+> > > >   - ranges : allows valid 1:1 translation between child's address space and
+> > > >     parent's address space
+> > > >   - extcon : external connector for vbus and idpin changes detection, needed
+> > > > -   when supports dual-role mode.
+> > > > +   when supports dual-role mode; it's consiedered valid for compatibility
+> > > > +   reasons, and not allowed for new bindings, use the property
+> > > > +   usb-role-switch instead.
+> > > >   - vbus-supply : reference to the VBUS regulator, needed when supports
+> > > >     dual-role mode.
+> > > >   - pinctrl-names : a pinctrl state named "default" is optional, and need be
+> > > > @@ -36,7 +38,8 @@ Optional properties:
+> > > >     is not set.
+> > > >   - pinctrl-0 : pin control group
+> > > >     See: Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
+> > > > -
+> > > > + - usb-role-switch : use USB Role Switch to support dual-role switch, but
+> > > > +   not extcon
+> > >
+> > > Coordinate with the Renesas and HiSilicon folks implementing the same
+> > > thing and put this in a common spot.
+> > I'll prepare a patch for it, and CC Biju and Yu
+> >
+> > > However, I think this should not
+> > > even be needed as knowing the controller capabilities (based on the
+> > > compatible) and knowing the type of connector should be enough
+> > > information to tell you if dual role is supported or not.
+> > Some Dual-Role controller drivers already used extcon framework to
+> > handle role switch, if try to support the new USB Role Switch framework,
+> > the driver may want to know which way will be used.
 > 
->> Using command "echo 1 > /sys/bus/pci/devices/0000:7a:02.0/reset"
->> on centos7.5 system to reset xhci.
->>
->> On 2019/4/26 11:07, Tangnianyao (ICT) wrote:
->>> Hi,all
->>>
->>> I've meet a problem about reset xhci and it may be caused by the
->>> reset order of pci and xhci.
->>> Using xhci-pci, when users send reset command in os(centos or red-hat os),
->>> it would first reset PCI device by pci_reset_function. During this
->>> process, it would disable BME(Bus Master Enable) and set BME=0, and
->>> then enable it and set BME=1.
->>> And then it comes to xhci reset process. First, it would send an
->>> endpoint stop command in xhci_urb_dequeue. However, this stop ep command
->>> fails to finish. The reason is that BME is set to 0 in former process and
->>> xhci RUN/STOP changes to 0, and when BME is set to 1 again, RUN/STOP doesn't
->>> recover to 1.
->>> I've checked BME behavior in xhci spec, it shows that "If the BME bit is set to 0
->>> when xHC is running, the xHC may treat this as a Host Controller Error, asserting
->>> HCE(1) and immediately halt(R/S=0 and HCH=1). Recovery from this state will
->>> require an HCRST." It seems that the stop ep command failure is reasonable.
->>> Maybe I've missed something and please let me know.
+> Wouldn't it know by presence of 'extcon' property or not?
+
+non-presence of 'extcon' doesn't mean the driver need USB Role Switch,
+e.g. support manual role switch decided by user, of course, we can check
+some cases and then decide whether need USB Role Switch or not, maybe
+provide a property will make it easier.
+
 > 
-> Your email subject says "Question about...".  What is the question?
+> > Sometimes users also want to use dual-role even use the type-A, such as
+> > use sys interface to handle role switch, so only knowing the connector
+> > type can't tell driver which way to use
 > 
-Sorry I didn't descibe it clearly.
-When sending a reset command, now the reset order is first BME and then xhci.
-BME reset would make xhci controller stop, resulting in xhci reset failure,
-because it can't finish stop ep command in xhci_urb_dequeue.
-I'm not sure if this situation is in expectation.
+> That use case doesn't sound like something that should be in DT
+> though. That would be possible for any controller that supports
+> dual-role. 
+I give manual role switch by sysfs interface a higher priority than
+other ways, if manual switch is enabled, e.g. 'extcon' will be ignored.
+this may be different from other USB dual-role controller drivers.
 
-> Also, given that your question concerns what happens when you write to
-> /sys/bus/pci/..., perhaps you should consider mailing it to some PCI
-> maintainers as well as to the USB maintainers.
-> ok, I will mailing it to PCI maintainer as well.
+> Though perhaps that requires some specific Vbus wiring? Or
+> a cable with Vbus disconnected. 
+Yes, some projects use PMIC or Charger to detect Vbus, but some don't
+have Vbus detection circuit, and some even don't provide vbus pin
 
-> Perhaps the reset was not meant to be used the way you are doing it.  
-> A more conservative approach would be to unbind xhci-hcd from the 
-> device before doing the reset and then rebind it afterward.
+> Either way, doesn't sound USB compliant.
+Yes, it's more related with customer usage, or cost down, anyway, it's
+better to support cases as many as possible.
+
 > 
-> Alan Stern
->
->
-> .
->
-
-I think this approach not work. When reset BME, xhci controller is stopped and
-can't recover even BME is set enable later. According to xhci spec, it's appropriate.
-When rebind it afterward, with xhci stop, xhci driver would consider the
-xhci controller already died and it fails to work again.
-
-To recover xhci, now I rmmod xhci-pci.ko and then insmod it again.
-
-Thanks,
-Tang
+> Rob
 
 
