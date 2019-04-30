@@ -2,114 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B1CFD2D
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A773CFD30
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 17:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726006AbfD3PtX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Apr 2019 11:49:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59180 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725906AbfD3PtW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Apr 2019 11:49:22 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A297121734;
-        Tue, 30 Apr 2019 15:49:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556639362;
-        bh=yCYkO8N4121wxKLTF87LoI1Jml4WNkrjnoiQJbB2u0Q=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=XCLSYGRbNQ/VNh1KsMX90+coyBttlMIZv5lOet5FFy5ZiFoWNeVI6D18mOoUUzm4U
-         HumBpe3rfHfOnyx2Kxhf85DYkLWdAHPSbnEqp5EooLP5MBmLk79cbdS9wU/AM+6jdw
-         w3nhu/HkpQ0aQONkjyGe9hapoOLU5sgFDMTCBWig=
-Subject: Re: [PATCH] usbip: vhci_hcd: Mark expected switch fall-through
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>, shuah <shuah@kernel.org>
-References: <20190429143957.GA6725@embeddedor>
- <1daec8c8929e4d18b2059ab1dfbfdf4a@AcuMS.aculab.com>
- <287c8504-eafa-ebbb-aa39-babb86fdeb94@embeddedor.com>
- <20190430154444.GA4224@kroah.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <722d3830-cd03-47ba-8587-db3aff076278@kernel.org>
-Date:   Tue, 30 Apr 2019 09:49:07 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726167AbfD3PuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Apr 2019 11:50:12 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:56469 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726061AbfD3PuL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 11:50:11 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 7F833581;
+        Tue, 30 Apr 2019 11:50:10 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 30 Apr 2019 11:50:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=Ka2lC0fzN77DodlXYYV3lz1zRFB
+        CP1FnsPu7ZLb1emw=; b=h0lrshccUp92VOV8cTUkafQlL3gF8O+uFxhkNin14U8
+        kgWPQY/jLWIHIoH9OV6wPrMBhCqU0AGHYMbOeOwQd8cJrinXL9SKcHSgQTyy3tjA
+        eyTR1en+rM6XTwMUnE5YbFdr81bynNZjGpAALBl9TxnDDkRXRbzQXuj2P4Lz7bJb
+        HHKEOVo54MR3HDvTA6t2JMqxQDOA3pLz0yU8QmiTfqQgZpFN3Gi+Ob/dDqX/aP7a
+        HS+gH3YPMRyeNehcaRp+cHFofxyXptAIsNATFAXjJ+RbnlDK5L6KBiOxxxE7N8af
+        Kq7Jf8zX0+hw91BxdcmACf21mWmthbdEbwy5EpYa+ig==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Ka2lC0
+        fzN77DodlXYYV3lz1zRFBCP1FnsPu7ZLb1emw=; b=6qvv9l877BSmrp9CzTh+zm
+        bwKQRdTA2lIcid9jldDfpkVZBRRT+F1GBbLqqM3EGwP71RP3dTDjB4s85LhuvG+z
+        bZDWAt9LJAV/RavMaKUUKdUQiCStVuBh5ftOhtuHbmjXheGd7K64ZqVTBp05j9t9
+        tdyJpxJpoOHU5DGPWOqK2YohzGnqtiGNFLoDhK07F5/Bq4Ka5ED7Y7XSWiOB6WnD
+        zsyUTbcpWoPzYPgeOt48134qlXDZcT7n6JuTXEbHGCT9gN/L71ZyOU49RwvA+DIs
+        ip91tmjfbE8jKXhfJJDj71jQ7PwTrc/9UoKumkWxTx2jm5AZr2N1rKh/iZK0Jkbg
+        ==
+X-ME-Sender: <xms:sW7IXBM7KWn--CbJGVmvuGkOLW1Gjxu_8yfC1WtR1Sc3-3nwUKn3LQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrieehgdefgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecuogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenuc
+    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucffohhmrghinhepghhithhhuhgsrd
+    gtohhmpdgrphhpshhpohhtrdgtohhmnecukfhppeekfedrkeeirdekledruddtjeenucfr
+    rghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecuvehluhhsth
+    gvrhfuihiivgeptd
+X-ME-Proxy: <xmx:sW7IXCO_nSNF7nF79r7uguB0814e-1XHl3IH10oy7s-4BE-3oWkp6w>
+    <xmx:sW7IXJkXdmmdmtVxJldsF88-dkiLNfeQRFI8yKpeXgN2zxE0ebT9BQ>
+    <xmx:sW7IXAtVbGbkCss6KgdXl7AOQQ-3yyNS76NqzSBwxcu9oxGcw4NpTw>
+    <xmx:sm7IXCGsNoL07s4DpeiE-FwB5hHWypCo8kY6MFPAawpPYpLYD6I4WA>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id F0F58E48A7;
+        Tue, 30 Apr 2019 11:50:08 -0400 (EDT)
+Date:   Tue, 30 Apr 2019 17:50:05 +0200
+From:   Greg KH <greg@kroah.com>
+To:     syzbot <syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: WARNING: Detected a wedged cx25840 chip; the device will not
+ work.
+Message-ID: <20190430155005.GA20649@kroah.com>
+References: <00000000000048aa750587c052ef@google.com>
+ <20190430153516.GA23459@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20190430154444.GA4224@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190430153516.GA23459@kroah.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/30/19 9:44 AM, Greg Kroah-Hartman wrote:
-> On Mon, Apr 29, 2019 at 10:05:51AM -0500, Gustavo A. R. Silva wrote:
->>
->>
->> On 4/29/19 9:44 AM, David Laight wrote:
->>> From: Gustavo A. R. Silva
->>>> Sent: 29 April 2019 15:40
->>>> In preparation to enabling -Wimplicit-fallthrough, mark switch
->>>> cases where we are expecting to fall through.
->>> ...
->>>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
->>>> index 667d9c0ec905..000ab7225717 100644
->>>> --- a/drivers/usb/usbip/vhci_hcd.c
->>>> +++ b/drivers/usb/usbip/vhci_hcd.c
->>>> @@ -508,6 +508,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
->>>>   		case USB_PORT_FEAT_U1_TIMEOUT:
->>>>   			usbip_dbg_vhci_rh(
->>>>   				" SetPortFeature: USB_PORT_FEAT_U1_TIMEOUT\n");
->>>> +			/* Fall through */
->>>>   		case USB_PORT_FEAT_U2_TIMEOUT:
->>>>   			usbip_dbg_vhci_rh(
->>>>   				" SetPortFeature: USB_PORT_FEAT_U2_TIMEOUT\n");
->>>
->>> That doesn't look right, both debug messages seem to get printed.
->>>
->>
->> At first sight, I thought the same way, then I took a look into
->> commit:
->>
->> 1c9de5bf428612458427943b724bea51abde520a
->>
->> and noticed that the original developer properly added fall-through
->> comments in other places in the same switch() code, that gave me the
->> impression he knew what he was doing; then I noticed the following
->> error message in case USB_PORT_FEAT_U2_TIMEOUT:
->>
->> 	if (hcd->speed != HCD_USB3) {
->> 		pr_err("USB_PORT_FEAT_U1/2_TIMEOUT req not "
->> 		       "supported for USB 2.0 roothub\n");
->> 		goto error;
->> 	}
->>
->> this error message is what makes me think the fall-through is
->> intentional; otherwise I think it would look like this instead:
->>
->> 	if (hcd->speed != HCD_USB3) {
->> 		pr_err("USB_PORT_FEAT_U2_TIMEOUT req not "
->> 		       "supported for USB 2.0 roothub\n");
->> 		goto error;
->> 	}
+On Tue, Apr 30, 2019 at 05:35:16PM +0200, Greg KH wrote:
+> On Tue, Apr 30, 2019 at 07:36:07AM -0700, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following crash on:
+> > 
+> > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=12df67c3200000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=170a86bf206dd2c6217e
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108a28f3200000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145d8a2d200000
+> > 
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
+> > 
+> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> > pvrusb2: Hardware description: Gotview USB 2.0 DVD 2
+> > pvrusb2: Invalid write control endpoint
+> > usb 1-1: USB disconnect, device number 2
+> > pvrusb2: Invalid write control endpoint
+> > pvrusb2: WARNING: Detected a wedged cx25840 chip; the device will not work.
+> > pvrusb2: WARNING: Try power cycling the pvrusb2 device.
+> > pvrusb2: WARNING: Disabling further access to the device to prevent other
+> > foul-ups.
+> > pvrusb2: Device being rendered inoperable
+> > cx25840 0-0044: Unable to detect h/w, assuming cx23887
+> > cx25840 0-0044: cx23887 A/V decoder found @ 0x88 (pvrusb2_a)
+> > pvrusb2: Attached sub-driver cx25840
+> > pvrusb2: Attempted to execute control transfer when device not ok
+> > pvrusb2: Attempted to execute control transfer when device not ok
 > 
-> I think you are right, that's horrid, but correct :(
-
-Yes. This hub_control is poorly organized and could use cleanup.
+> As the driver said, power cycle your device, it crashed :)
 > 
-> Will go queue this up, thanks.
-> 
+> Seriously, I think your script detection failed here, sorry.
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-Thanks Greg!. It is on my list of things to Ack today.
-
--- Shuah
+Ah, same issue as the other "WARNING" message, sorry for the noise.
