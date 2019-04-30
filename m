@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36517FC02
+	by mail.lfdr.de (Postfix) with ESMTP id D48E4FC03
 	for <lists+linux-usb@lfdr.de>; Tue, 30 Apr 2019 16:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbfD3O7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1726294AbfD3O7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Tue, 30 Apr 2019 10:59:45 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:50718 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725976AbfD3O7o (ORCPT
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:36736 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726006AbfD3O7o (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Apr 2019 10:59:44 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x3UExhgT099566;
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x3UExhZd103370;
         Tue, 30 Apr 2019 09:59:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1556636383;
-        bh=8TyrOpAFv43hh7ZU7QY3FbOD3tIE0MS9xDmWrg0cELQ=;
+        bh=TKwqF1mn5UZq6Ne7irRh1Ifzitv+7iEKMhnWYsCLUI4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=BNc+nzmLx/qeA4ptcJh27KnqMJ15NYGf7wONukmyN9x5anwZcbwRGxdudhL0YGJog
-         mXWGOLQP4Aimhggp5IxfWufU4KG5P25skTKbqS0srQYFQefSuzjpw2yAIAfZoRcBuz
-         BZvXWmdNLngL512Zv+NieF07umKNZ6kAqgx9OLs8=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x3UExhvM094135
+        b=yXaMQw2MswpLddt6NmjmNitBTfRVuggg3X3FintZGBzhH7q2mi2GhTfiXpD8djb8j
+         dTuQFb9iKJQD90TIuobnL8CsRCImaPrg94KwDN5rLhWhaHtBde/xrDXPXthqAtgFsM
+         8DwZzjJYh0RcffrQKSeUAxUmikY3ZXC5YqoHcsg8=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x3UExhqv045784
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Tue, 30 Apr 2019 09:59:43 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 30
  Apr 2019 09:59:42 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
  Frontend Transport; Tue, 30 Apr 2019 09:59:42 -0500
 Received: from uda0271908.am.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x3UExgrE071248;
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x3UExgrF071248;
         Tue, 30 Apr 2019 09:59:42 -0500
 From:   Bin Liu <b-liu@ti.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Bin Liu <b-liu@ti.com>
-Subject: [PATCH 4/7] dt-bindings: usb: Add usb-phy property to the jz4740-musb node
-Date:   Tue, 30 Apr 2019 09:59:38 -0500
-Message-ID: <20190430145942.1128-5-b-liu@ti.com>
+Subject: [PATCH 5/7] usb: musb: jz4740: Let the platform probe the PHY
+Date:   Tue, 30 Apr 2019 09:59:39 -0500
+Message-ID: <20190430145942.1128-6-b-liu@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190430145942.1128-1-b-liu@ti.com>
 References: <20190430145942.1128-1-b-liu@ti.com>
@@ -55,43 +55,35 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Paul Cercueil <paul@crapouillou.net>
 
-Add a required 'usb-phy' property, to obtain a phandle to the USB PHY
-from devicetree.
+By registering a generic USB PHY from within the driver, we may shadow
+the USB PHY registered by the platform, which might be different.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Bin Liu <b-liu@ti.com>
 ---
- .../devicetree/bindings/usb/ingenic,jz4740-musb.txt       | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/usb/musb/jz4740.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt b/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt
-index 620355cee63f..16808721f3ff 100644
---- a/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt
-+++ b/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt
-@@ -8,9 +8,15 @@ Required properties:
- - interrupt-names: must be "mc"
- - clocks: phandle to the "udc" clock
- - clock-names: must be "udc"
-+- phys: phandle to the USB PHY
+diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+index a60627bf7be3..ad35e09f90bd 100644
+--- a/drivers/usb/musb/jz4740.c
++++ b/drivers/usb/musb/jz4740.c
+@@ -74,7 +74,6 @@ static struct musb_hdrc_platform_data jz4740_musb_platform_data = {
  
- Example:
+ static int jz4740_musb_init(struct musb *musb)
+ {
+-	usb_phy_generic_register();
+ 	musb->xceiv = usb_get_phy(USB_PHY_TYPE_USB2);
+ 	if (IS_ERR(musb->xceiv)) {
+ 		pr_err("HS UDC: no transceiver configured\n");
+@@ -183,7 +182,6 @@ static int jz4740_remove(struct platform_device *pdev)
+ 	struct jz4740_glue	*glue = platform_get_drvdata(pdev);
  
-+usb_phy: usb-phy@0 {
-+	compatible = "usb-nop-xceiv";
-+	#phy-cells = <0>;
-+};
-+
- udc: usb@13040000 {
- 	compatible = "ingenic,jz4740-musb";
- 	reg = <0x13040000 0x10000>;
-@@ -21,4 +27,6 @@ udc: usb@13040000 {
+ 	platform_device_unregister(glue->musb);
+-	usb_phy_generic_unregister(pdev);
+ 	clk_disable_unprepare(glue->clk);
  
- 	clocks = <&cgu JZ4740_CLK_UDC>;
- 	clock-names = "udc";
-+
-+	phys = <&usb_phy>;
- };
+ 	return 0;
 -- 
 2.17.1
 
