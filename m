@@ -2,152 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 304FB10AD3
-	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2019 18:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A79510B4D
+	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2019 18:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbfEAQNu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 May 2019 12:13:50 -0400
-Received: from gateway31.websitewelcome.com ([192.185.144.94]:27031 "EHLO
-        gateway31.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726554AbfEAQNt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 May 2019 12:13:49 -0400
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id 9EB9623F1C
-        for <linux-usb@vger.kernel.org>; Wed,  1 May 2019 11:13:48 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id LrrghCT3K4FKpLrrghczpL; Wed, 01 May 2019 11:13:48 -0500
-X-Authority-Reason: nr=8
-Received: from [189.250.119.203] (port=32916 helo=[192.168.1.76])
-        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.91)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hLrrf-001oEy-PH; Wed, 01 May 2019 11:13:48 -0500
-Subject: Re: [PATCH] usb: isp1760-hcd: Fix fall-through annotations
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arvid Brodin <arvid.brodin@enea.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190501153934.GA20025@embeddedor>
- <20190501160327.GA19281@kroah.com>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=gustavo@embeddedor.com; keydata=
- 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
- VtSixD1uOgytAP7RWS474w==
-Message-ID: <562edc29-07ff-eaf5-5239-a30cd0add70c@embeddedor.com>
-Date:   Wed, 1 May 2019 11:13:44 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726505AbfEAQ1Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 May 2019 12:27:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35952 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726388AbfEAQ1P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 May 2019 12:27:15 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D2CA520835;
+        Wed,  1 May 2019 16:27:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556728034;
+        bh=QNpnCPkV3/b0tnrMUodSGF1+h/20QEARntDWcAUOpKM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sqp5SVDa4nhuGj8W5aMwN2LXkCdkQZqPMRHJ0VE6EbJWrWjaF0XZGB7QCW274ngeN
+         zt8SRq8ojVn1IhRh/oZ3E0Wy07Izd3E5uDkZWFr/uBGJsx4yPe5DgRGTm9sOupSDwM
+         ntW4IqK7hZ0hGVZgH9EWQzCtWQeGNe8R7Kt7YyZc=
+Received: by mail-qk1-f169.google.com with SMTP id d5so10443998qko.12;
+        Wed, 01 May 2019 09:27:13 -0700 (PDT)
+X-Gm-Message-State: APjAAAW4DateloU5ER4cMe3XJxfJjHjGZTmVwvD/o38ts8iLpVZFsGff
+        T4iT3mnuLUigZU3lOHwcg0JPUoolr1VqZA+U3Q==
+X-Google-Smtp-Source: APXvYqyCXQr3u7uAxcUVOILBuMuhFCX+sPtcLyuqXIgJyVLjwYMn8i16UWe/OA76g5f5zMY/VN+/wMpT65IW9JfEWjg=
+X-Received: by 2002:a37:4711:: with SMTP id u17mr19046164qka.326.1556728033039;
+ Wed, 01 May 2019 09:27:13 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190501160327.GA19281@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.119.203
-X-Source-L: No
-X-Exim-ID: 1hLrrf-001oEy-PH
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.76]) [189.250.119.203]:32916
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+References: <20190420064019.57522-1-chenyu56@huawei.com> <20190420064019.57522-3-chenyu56@huawei.com>
+ <20190425213532.GA32028@bogus> <f925304a-17ef-1574-b671-77d4ad0331d8@huawei.com>
+In-Reply-To: <f925304a-17ef-1574-b671-77d4ad0331d8@huawei.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 1 May 2019 11:27:01 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+Xf===cii0me0pwjZ2mcxXmYXDjNH7UpOftUphHCxd1w@mail.gmail.com>
+Message-ID: <CAL_Jsq+Xf===cii0me0pwjZ2mcxXmYXDjNH7UpOftUphHCxd1w@mail.gmail.com>
+Subject: Re: [PATCH v6 02/13] dt-bindings: misc: Add bindings for HiSilicon
+ usb hub and data role switch functionality on HiKey960
+To:     Chen Yu <chenyu56@huawei.com>
+Cc:     liuyu712@hisilicon.com, Linux USB List <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Suzhuangluan <suzhuangluan@hisilicon.com>, kongfei@hisilicon.com,
+        wanghu17@hisilicon.com, butao@hisilicon.com, chenyao11@huawei.com,
+        fangshengzhou@hisilicon.com,
+        Li Pengcheng <lipengcheng8@huawei.com>,
+        Song Xiaowei <songxiaowei@hisilicon.com>,
+        Yiping Xu <xuyiping@hisilicon.com>, xuyoujun4@huawei.com,
+        yudongbin@hisilicon.com, zangleigang <zangleigang@hisilicon.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Apr 30, 2019 at 1:08 AM Chen Yu <chenyu56@huawei.com> wrote:
+>
+> Hi Rob,
+>
+> On 2019/4/26 5:35, Rob Herring wrote:
+> > On Sat, Apr 20, 2019 at 02:40:08PM +0800, Yu Chen wrote:
+> >> This patch adds binding documentation to support usb hub and usb
+> >> data role switch of Hisilicon HiKey960 Board.
+> >
+> > Sorry I've been slow to really review this, but I needed to look at the
+> > schematics to see what exactly is going on here.
+> >
+> > I think this needs some changes to better reflect the h/w and utilize
+> > existing bindings. It should really be designed ignoring the muxing to
+> > start with. Define the binding for the TypeC connector and then the host
+> > hub and make sure they can coexist. Then overlay what you need to switch
+> > between the 2 modes which AFAICT is just a single GPIO.
+> >
+> >>
+> >> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> >> Cc: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+> >> Cc: Rob Herring <robh+dt@kernel.org>
+> >> Cc: Mark Rutland <mark.rutland@arm.com>
+> >> Cc: John Stultz <john.stultz@linaro.org>
+> >> Cc: Binghui Wang <wangbinghui@hisilicon.com>
+> >> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+> >> ---
+> >> v1:
+> >> * Fix some format errors as suggested by Sergei.
+> >> * Modify gpio description to use gpiod API.
+> >> v2:
+> >> * Remove information about Hikey.
+> >> * Fix gpio description.
+> >> * Remove device_type of endpoint.
+> >> v3:
+> >> * Remove property typec-vbus-enable-val.
+> >> * Add description of pinctrl-names.
+> >> * Add example for "hisilicon,gpio-hubv1"
+> >> * Add flag in gpiod properties.
+> >> ---
+> >> ---
+> >>  .../bindings/misc/hisilicon-hikey-usb.txt          | 52 ++++++++++++++++++++++
+> >>  1 file changed, 52 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt b/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt
+> >> new file mode 100644
+> >> index 000000000000..422e844df719
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt
+> >> @@ -0,0 +1,52 @@
+> >> +Support usb hub and usb data role switch of Hisilicon HiKey960 Board.
+> >> +
+> >> +-----------------------------
+> >> +
+> >> +Required properties:
+> >> +- compatible: "hisilicon,gpio-hubv1","hisilicon,hikey960-usb"
+> >> +- typec-vbus-gpios: gpio to control the vbus of typeC port
+> >
+> > This should be a gpio regulator and then connected to 'vbus-supply' in a
+> > usb-connector node (see .../bindings/connectors/usb-connector.txt).
+> Currently usb-connector node has no "vbus-supply" property and
+> I do not find process that handles vbus-supply in RT1711H TypeC driver.
 
+The patch[1] adding that is posted to the list and may not have landed yet.
 
-On 5/1/19 11:03 AM, Greg Kroah-Hartman wrote:
-> On Wed, May 01, 2019 at 10:39:34AM -0500, Gustavo A. R. Silva wrote:
->> In preparation to enabling -Wimplicit-fallthrough, mark switch
->> cases where we are expecting to fall through.
->>
->> This patch fixes the following warning:
->>
->> drivers/usb/isp1760/isp1760-hcd.c: In function ‘collect_qtds’:
->> drivers/usb/isp1760/isp1760-hcd.c:788:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
->>       mem_reads8(hcd->regs, qtd->payload_addr,
->>       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>         qtd->data_buffer,
->>         ~~~~~~~~~~~~~~~~~
->>         qtd->actual_length);
->>         ~~~~~~~~~~~~~~~~~~~
->> drivers/usb/isp1760/isp1760-hcd.c:792:5: note: here
->>      case OUT_PID:
->>      ^~~~
->>
->> Warning level 3 was used: -Wimplicit-fallthrough=3
->>
->> Notice that, in this particular case, the code comments are modified
->> in accordance with what GCC is expecting to find.
->>
->> This patch is part of the ongoing efforts to enable
->> -Wimplicit-fallthrough.
->>
->> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
->> ---
->> Notice that this code has been out there since 2011, and who
->> introduced the question mark was the original developer.
->>
->> It'd be good if someone can confirm that the fall-through
->> has been intentional all this time.
-> 
-> Yes, it looks intentional.  Messy, and as no one has complained since
-> 2011, let's leave it alone, I'll queue this up.
-> 
+Whether the RT1711H TypeC driver handles it or not is not a binding problem.
 
-Great.
+> > Then you also need the RT1711HWSC TypeC controller in DT. That is
+> > typically the parent device of the connector node.
+> >
+> >> +- otg-switch-gpios: gpio to switch DP & DM between the hub and typeC port
+> >
+> > This probably belongs in USB controller node.
+> >
+> The otg-switch-gpios controls a mux like fsusb30mux. It is related to
+> the board design of HiKey960. And the state of the mux is decided by
+> the typeC port state. So I think it is not so good to make it belongs
+> in USB controller node.
 
-Thanks, Greg.
---
-Gustavo
+Let me put it this way. The gpio property belongs wherever the mux is
+represented. In this case, I would expect the graph port representing
+the HS port to have 2 endpoints representing the 2 mux outputs. We
+don't generally put properties in the endpoint or port nodes, but the
+parent nodes.
+
+> >> +- hub-vdd33-en-gpios: gpio to enable the power of hub
+> >
+> > This too should be a gpio regulator and then in a hub node. We have 2
+> > ways to represent hubs. Either as an I2C device or as a child of the
+> > host controller. The latter is preferred, but I'm not too sure how the
+> > OF graph connection linking the controller to the TypeC connector will
+> > work with the usb bus binding.
+> >
+> There is no particular code except the power control for the hub.
+> The i2c on the hub is not used. So it can not be an I2C device.
+> Is there such an example that make the hub as a child of the host controller
+> and control its power?
+
+Yes, bindings/usb/usb-device.txt.
+
+Rob
+
+[1] https://www.spinics.net/lists/kernel/msg3089136.html
