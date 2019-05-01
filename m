@@ -2,167 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A79510B4D
-	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2019 18:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AECD10CC3
+	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2019 20:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbfEAQ1Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 May 2019 12:27:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35952 "EHLO mail.kernel.org"
+        id S1726144AbfEASiX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 May 2019 14:38:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726388AbfEAQ1P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 May 2019 12:27:15 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        id S1726077AbfEASiX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 May 2019 14:38:23 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D2CA520835;
-        Wed,  1 May 2019 16:27:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B40D2085A;
+        Wed,  1 May 2019 18:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556728034;
-        bh=QNpnCPkV3/b0tnrMUodSGF1+h/20QEARntDWcAUOpKM=;
+        s=default; t=1556735902;
+        bh=v72lZ0mNNyG4uZ5ndNBI1kcDK5K/AMuSayYUTPc3KmY=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sqp5SVDa4nhuGj8W5aMwN2LXkCdkQZqPMRHJ0VE6EbJWrWjaF0XZGB7QCW274ngeN
-         zt8SRq8ojVn1IhRh/oZ3E0Wy07Izd3E5uDkZWFr/uBGJsx4yPe5DgRGTm9sOupSDwM
-         ntW4IqK7hZ0hGVZgH9EWQzCtWQeGNe8R7Kt7YyZc=
-Received: by mail-qk1-f169.google.com with SMTP id d5so10443998qko.12;
-        Wed, 01 May 2019 09:27:13 -0700 (PDT)
-X-Gm-Message-State: APjAAAW4DateloU5ER4cMe3XJxfJjHjGZTmVwvD/o38ts8iLpVZFsGff
-        T4iT3mnuLUigZU3lOHwcg0JPUoolr1VqZA+U3Q==
-X-Google-Smtp-Source: APXvYqyCXQr3u7uAxcUVOILBuMuhFCX+sPtcLyuqXIgJyVLjwYMn8i16UWe/OA76g5f5zMY/VN+/wMpT65IW9JfEWjg=
-X-Received: by 2002:a37:4711:: with SMTP id u17mr19046164qka.326.1556728033039;
- Wed, 01 May 2019 09:27:13 -0700 (PDT)
+        b=IAL62/s0AAB91djQRkfxl70b/gOmJnv3jihZ1jK0iyjVPntL2b24zn1mzkEMsVTvu
+         FW7FaNNXrHKxQaWphgz44g+oqLXJ6x07Xm7gHMgZ6NAaby7oxzl1OMCBnfaltWubc3
+         vt7IQggy57Xrq/zwJk1AZHejYtMAoJtsFQd87dHg=
+Received: by mail-qt1-f180.google.com with SMTP id j6so21010267qtq.1;
+        Wed, 01 May 2019 11:38:22 -0700 (PDT)
+X-Gm-Message-State: APjAAAViZ39gX1OXbRbgQKWwIX6i9tf/xq0vQsb4kCJslfKMjVOuzwn0
+        38ZHlgnU/ayqa8YX443ngt0fUTtkD9LRTaZPUg==
+X-Google-Smtp-Source: APXvYqzv1teS15/DSUMuFzoBJjdr3g1ZKU5TuoEQs8UKcGWGgtMpNz17lIOdTkhgDQOXQk//a7aRWJfXCsqoDUinmbw=
+X-Received: by 2002:ac8:610f:: with SMTP id a15mr51742092qtm.257.1556735901386;
+ Wed, 01 May 2019 11:38:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190420064019.57522-1-chenyu56@huawei.com> <20190420064019.57522-3-chenyu56@huawei.com>
- <20190425213532.GA32028@bogus> <f925304a-17ef-1574-b671-77d4ad0331d8@huawei.com>
-In-Reply-To: <f925304a-17ef-1574-b671-77d4ad0331d8@huawei.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 1 May 2019 11:27:01 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+Xf===cii0me0pwjZ2mcxXmYXDjNH7UpOftUphHCxd1w@mail.gmail.com>
-Message-ID: <CAL_Jsq+Xf===cii0me0pwjZ2mcxXmYXDjNH7UpOftUphHCxd1w@mail.gmail.com>
-Subject: Re: [PATCH v6 02/13] dt-bindings: misc: Add bindings for HiSilicon
- usb hub and data role switch functionality on HiKey960
-To:     Chen Yu <chenyu56@huawei.com>
-Cc:     liuyu712@hisilicon.com, Linux USB List <linux-usb@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Suzhuangluan <suzhuangluan@hisilicon.com>, kongfei@hisilicon.com,
-        wanghu17@hisilicon.com, butao@hisilicon.com, chenyao11@huawei.com,
-        fangshengzhou@hisilicon.com,
-        Li Pengcheng <lipengcheng8@huawei.com>,
-        Song Xiaowei <songxiaowei@hisilicon.com>,
-        Yiping Xu <xuyiping@hisilicon.com>, xuyoujun4@huawei.com,
-        yudongbin@hisilicon.com, zangleigang <zangleigang@hisilicon.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>
+References: <20190428024847.5046-1-peter.chen@nxp.com> <20190428024847.5046-7-peter.chen@nxp.com>
+In-Reply-To: <20190428024847.5046-7-peter.chen@nxp.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 1 May 2019 13:38:09 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLPK8kuYTT7ekZbAzywp2kr9xKA0_X3BAqVn5hShbPM+w@mail.gmail.com>
+Message-ID: <CAL_JsqLPK8kuYTT7ekZbAzywp2kr9xKA0_X3BAqVn5hShbPM+w@mail.gmail.com>
+Subject: Re: [PATCH 6/7] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 1:08 AM Chen Yu <chenyu56@huawei.com> wrote:
+On Sat, Apr 27, 2019 at 9:51 PM Peter Chen <peter.chen@nxp.com> wrote:
 >
-> Hi Rob,
+> Add imx7ulp USBOTG1 support.
 >
-> On 2019/4/26 5:35, Rob Herring wrote:
-> > On Sat, Apr 20, 2019 at 02:40:08PM +0800, Yu Chen wrote:
-> >> This patch adds binding documentation to support usb hub and usb
-> >> data role switch of Hisilicon HiKey960 Board.
-> >
-> > Sorry I've been slow to really review this, but I needed to look at the
-> > schematics to see what exactly is going on here.
-> >
-> > I think this needs some changes to better reflect the h/w and utilize
-> > existing bindings. It should really be designed ignoring the muxing to
-> > start with. Define the binding for the TypeC connector and then the host
-> > hub and make sure they can coexist. Then overlay what you need to switch
-> > between the 2 modes which AFAICT is just a single GPIO.
-> >
-> >>
-> >> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> >> Cc: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-> >> Cc: Rob Herring <robh+dt@kernel.org>
-> >> Cc: Mark Rutland <mark.rutland@arm.com>
-> >> Cc: John Stultz <john.stultz@linaro.org>
-> >> Cc: Binghui Wang <wangbinghui@hisilicon.com>
-> >> Signed-off-by: Yu Chen <chenyu56@huawei.com>
-> >> ---
-> >> v1:
-> >> * Fix some format errors as suggested by Sergei.
-> >> * Modify gpio description to use gpiod API.
-> >> v2:
-> >> * Remove information about Hikey.
-> >> * Fix gpio description.
-> >> * Remove device_type of endpoint.
-> >> v3:
-> >> * Remove property typec-vbus-enable-val.
-> >> * Add description of pinctrl-names.
-> >> * Add example for "hisilicon,gpio-hubv1"
-> >> * Add flag in gpiod properties.
-> >> ---
-> >> ---
-> >>  .../bindings/misc/hisilicon-hikey-usb.txt          | 52 ++++++++++++++++++++++
-> >>  1 file changed, 52 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt b/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt
-> >> new file mode 100644
-> >> index 000000000000..422e844df719
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.txt
-> >> @@ -0,0 +1,52 @@
-> >> +Support usb hub and usb data role switch of Hisilicon HiKey960 Board.
-> >> +
-> >> +-----------------------------
-> >> +
-> >> +Required properties:
-> >> +- compatible: "hisilicon,gpio-hubv1","hisilicon,hikey960-usb"
-> >> +- typec-vbus-gpios: gpio to control the vbus of typeC port
-> >
-> > This should be a gpio regulator and then connected to 'vbus-supply' in a
-> > usb-connector node (see .../bindings/connectors/usb-connector.txt).
-> Currently usb-connector node has no "vbus-supply" property and
-> I do not find process that handles vbus-supply in RT1711H TypeC driver.
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> ---
+>  arch/arm/boot/dts/imx7ulp.dtsi | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/imx7ulp.dtsi b/arch/arm/boot/dts/imx7ulp.dtsi
+> index fca6e50f37c8..e2944f98eac6 100644
+> --- a/arch/arm/boot/dts/imx7ulp.dtsi
+> +++ b/arch/arm/boot/dts/imx7ulp.dtsi
+> @@ -30,6 +30,7 @@
+>                 serial1 = &lpuart5;
+>                 serial2 = &lpuart6;
+>                 serial3 = &lpuart7;
+> +               usbphy0 = &usbphy1;
 
-The patch[1] adding that is posted to the list and may not have landed yet.
+Drop this. You shouldn't need an alias.
 
-Whether the RT1711H TypeC driver handles it or not is not a binding problem.
+>         };
+>
+>         cpus {
+> @@ -133,6 +134,35 @@
+>                         clock-names = "ipg", "per";
+>                 };
+>
+> +               usbotg1: usb@40330000 {
+> +                       compatible = "fsl,imx7ulp-usb", "fsl,imx6ul-usb",
+> +                               "fsl,imx27-usb";
+> +                       reg = <0x40330000 0x200>;
+> +                       interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+> +                       clocks = <&pcc2 IMX7ULP_CLK_USB0>;
+> +                       fsl,usbphy = <&usbphy1>;
 
-> > Then you also need the RT1711HWSC TypeC controller in DT. That is
-> > typically the parent device of the connector node.
-> >
-> >> +- otg-switch-gpios: gpio to switch DP & DM between the hub and typeC port
-> >
-> > This probably belongs in USB controller node.
-> >
-> The otg-switch-gpios controls a mux like fsusb30mux. It is related to
-> the board design of HiKey960. And the state of the mux is decided by
-> the typeC port state. So I think it is not so good to make it belongs
-> in USB controller node.
+Don't use this for new users. Use the phy binding instead.
 
-Let me put it this way. The gpio property belongs wherever the mux is
-represented. In this case, I would expect the graph port representing
-the HS port to have 2 endpoints representing the 2 mux outputs. We
-don't generally put properties in the endpoint or port nodes, but the
-parent nodes.
-
-> >> +- hub-vdd33-en-gpios: gpio to enable the power of hub
-> >
-> > This too should be a gpio regulator and then in a hub node. We have 2
-> > ways to represent hubs. Either as an I2C device or as a child of the
-> > host controller. The latter is preferred, but I'm not too sure how the
-> > OF graph connection linking the controller to the TypeC connector will
-> > work with the usb bus binding.
-> >
-> There is no particular code except the power control for the hub.
-> The i2c on the hub is not used. So it can not be an I2C device.
-> Is there such an example that make the hub as a child of the host controller
-> and control its power?
-
-Yes, bindings/usb/usb-device.txt.
-
-Rob
-
-[1] https://www.spinics.net/lists/kernel/msg3089136.html
+> +                       fsl,usbmisc = <&usbmisc1 0>;
+> +                       ahb-burst-config = <0x0>;
+> +                       tx-burst-size-dword = <0x8>;
+> +                       rx-burst-size-dword = <0x8>;
+> +                       status = "disabled";
+> +               };
+> +
+> +               usbmisc1: usbmisc@40330200 {
+> +                       #index-cells = <1>;
+> +                       compatible = "fsl,imx7ulp-usbmisc", "fsl,imx7d-usbmisc",
+> +                               "fsl,imx6q-usbmisc";
+> +                       reg = <0x40330200 0x200>;
+> +               };
+> +
+> +               usbphy1: usbphy@0x40350000 {
+> +                       compatible = "fsl,imx7ulp-usbphy",
+> +                               "fsl,imx6ul-usbphy", "fsl,imx23-usbphy";
+> +                       reg = <0x40350000 0x1000>;
+> +                       interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +                       clocks = <&pcc2 IMX7ULP_CLK_USB_PHY>;
+> +               };
+> +
+>                 usdhc0: mmc@40370000 {
+>                         compatible = "fsl,imx7ulp-usdhc", "fsl,imx6sx-usdhc";
+>                         reg = <0x40370000 0x10000>;
+> --
+> 2.14.1
+>
