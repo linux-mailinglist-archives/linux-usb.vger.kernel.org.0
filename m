@@ -2,121 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AECD10CC3
-	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2019 20:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CD610EDD
+	for <lists+linux-usb@lfdr.de>; Wed,  1 May 2019 23:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbfEASiX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 May 2019 14:38:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54822 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726077AbfEASiX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 May 2019 14:38:23 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B40D2085A;
-        Wed,  1 May 2019 18:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556735902;
-        bh=v72lZ0mNNyG4uZ5ndNBI1kcDK5K/AMuSayYUTPc3KmY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IAL62/s0AAB91djQRkfxl70b/gOmJnv3jihZ1jK0iyjVPntL2b24zn1mzkEMsVTvu
-         FW7FaNNXrHKxQaWphgz44g+oqLXJ6x07Xm7gHMgZ6NAaby7oxzl1OMCBnfaltWubc3
-         vt7IQggy57Xrq/zwJk1AZHejYtMAoJtsFQd87dHg=
-Received: by mail-qt1-f180.google.com with SMTP id j6so21010267qtq.1;
-        Wed, 01 May 2019 11:38:22 -0700 (PDT)
-X-Gm-Message-State: APjAAAViZ39gX1OXbRbgQKWwIX6i9tf/xq0vQsb4kCJslfKMjVOuzwn0
-        38ZHlgnU/ayqa8YX443ngt0fUTtkD9LRTaZPUg==
-X-Google-Smtp-Source: APXvYqzv1teS15/DSUMuFzoBJjdr3g1ZKU5TuoEQs8UKcGWGgtMpNz17lIOdTkhgDQOXQk//a7aRWJfXCsqoDUinmbw=
-X-Received: by 2002:ac8:610f:: with SMTP id a15mr51742092qtm.257.1556735901386;
- Wed, 01 May 2019 11:38:21 -0700 (PDT)
+        id S1726328AbfEAV6E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 May 2019 17:58:04 -0400
+Received: from gateway30.websitewelcome.com ([192.185.196.18]:12883 "EHLO
+        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726144AbfEAV6E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 May 2019 17:58:04 -0400
+X-Greylist: delayed 1472 seconds by postgrey-1.27 at vger.kernel.org; Wed, 01 May 2019 17:58:03 EDT
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id C91CC1561
+        for <linux-usb@vger.kernel.org>; Wed,  1 May 2019 16:33:30 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id Lwr4h8WjV2PzOLwr4hcLKx; Wed, 01 May 2019 16:33:30 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.119.203] (port=56366 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.91)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hLwr3-004Of0-QI; Wed, 01 May 2019 16:33:29 -0500
+Date:   Wed, 1 May 2019 16:33:29 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH v2] USB: serial: io_edgeport: mark expected switch
+ fall-throughs
+Message-ID: <20190501213329.GA26972@embeddedor>
 MIME-Version: 1.0
-References: <20190428024847.5046-1-peter.chen@nxp.com> <20190428024847.5046-7-peter.chen@nxp.com>
-In-Reply-To: <20190428024847.5046-7-peter.chen@nxp.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 1 May 2019 13:38:09 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLPK8kuYTT7ekZbAzywp2kr9xKA0_X3BAqVn5hShbPM+w@mail.gmail.com>
-Message-ID: <CAL_JsqLPK8kuYTT7ekZbAzywp2kr9xKA0_X3BAqVn5hShbPM+w@mail.gmail.com>
-Subject: Re: [PATCH 6/7] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.119.203
+X-Source-L: No
+X-Exim-ID: 1hLwr3-004Of0-QI
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [189.250.119.203]:56366
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 10
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 27, 2019 at 9:51 PM Peter Chen <peter.chen@nxp.com> wrote:
->
-> Add imx7ulp USBOTG1 support.
->
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
->  arch/arm/boot/dts/imx7ulp.dtsi | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->
-> diff --git a/arch/arm/boot/dts/imx7ulp.dtsi b/arch/arm/boot/dts/imx7ulp.dtsi
-> index fca6e50f37c8..e2944f98eac6 100644
-> --- a/arch/arm/boot/dts/imx7ulp.dtsi
-> +++ b/arch/arm/boot/dts/imx7ulp.dtsi
-> @@ -30,6 +30,7 @@
->                 serial1 = &lpuart5;
->                 serial2 = &lpuart6;
->                 serial3 = &lpuart7;
-> +               usbphy0 = &usbphy1;
+In preparation to enabling -Wimplicit-fallthrough, mark switch
+cases where we are expecting to fall through.
 
-Drop this. You shouldn't need an alias.
+This patch fixes the following warnings:
 
->         };
->
->         cpus {
-> @@ -133,6 +134,35 @@
->                         clock-names = "ipg", "per";
->                 };
->
-> +               usbotg1: usb@40330000 {
-> +                       compatible = "fsl,imx7ulp-usb", "fsl,imx6ul-usb",
-> +                               "fsl,imx27-usb";
-> +                       reg = <0x40330000 0x200>;
-> +                       interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
-> +                       clocks = <&pcc2 IMX7ULP_CLK_USB0>;
-> +                       fsl,usbphy = <&usbphy1>;
+drivers/usb/serial/io_edgeport.c: In function ‘process_rcvd_data’:
+drivers/usb/serial/io_edgeport.c:1750:7: warning: this statement may fall through [-Wimplicit-fallthrough=]
+    if (bufferLength == 0) {
+       ^
+drivers/usb/serial/io_edgeport.c:1755:3: note: here
+   case EXPECT_HDR2:
+   ^~~~
+drivers/usb/serial/io_edgeport.c:1810:8: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     if (bufferLength == 0) {
+        ^
+drivers/usb/serial/io_edgeport.c:1816:3: note: here
+   case EXPECT_DATA: /* Expect data */
+   ^~~~
 
-Don't use this for new users. Use the phy binding instead.
+Warning level 3 was used: -Wimplicit-fallthrough=3
 
-> +                       fsl,usbmisc = <&usbmisc1 0>;
-> +                       ahb-burst-config = <0x0>;
-> +                       tx-burst-size-dword = <0x8>;
-> +                       rx-burst-size-dword = <0x8>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               usbmisc1: usbmisc@40330200 {
-> +                       #index-cells = <1>;
-> +                       compatible = "fsl,imx7ulp-usbmisc", "fsl,imx7d-usbmisc",
-> +                               "fsl,imx6q-usbmisc";
-> +                       reg = <0x40330200 0x200>;
-> +               };
-> +
-> +               usbphy1: usbphy@0x40350000 {
-> +                       compatible = "fsl,imx7ulp-usbphy",
-> +                               "fsl,imx6ul-usbphy", "fsl,imx23-usbphy";
-> +                       reg = <0x40350000 0x1000>;
-> +                       interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> +                       clocks = <&pcc2 IMX7ULP_CLK_USB_PHY>;
-> +               };
-> +
->                 usdhc0: mmc@40370000 {
->                         compatible = "fsl,imx7ulp-usdhc", "fsl,imx6sx-usdhc";
->                         reg = <0x40370000 0x10000>;
-> --
-> 2.14.1
->
+Notice that, in this particular case, the code comments are modified
+in accordance with what GCC is expecting to find.
+
+This patch is part of the ongoing efforts to enable
+-Wimplicit-fallthrough.
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+Changes in v2:
+ - Warning level 3 is now used: -Wimplicit-fallthrough=3
+   instead of warning level 2.
+ - All warnings in the switch statement are addressed now.
+
+Notice that these are the last remaining fall-through warnings
+in the USB subsystem. :)
+
+Thanks
+--
+Gustavo
+
+ drivers/usb/serial/io_edgeport.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
+index 4ca31c0e4174..7ad10328f4e2 100644
+--- a/drivers/usb/serial/io_edgeport.c
++++ b/drivers/usb/serial/io_edgeport.c
+@@ -1751,7 +1751,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
+ 				edge_serial->rxState = EXPECT_HDR2;
+ 				break;
+ 			}
+-			/* otherwise, drop on through */
++			/* Fall through - otherwise, drop on through */
+ 		case EXPECT_HDR2:
+ 			edge_serial->rxHeader2 = *buffer;
+ 			++buffer;
+@@ -1813,6 +1813,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
+ 				}
+ 				/* Else, drop through */
+ 			}
++			/* Fall through */
+ 		case EXPECT_DATA: /* Expect data */
+ 			if (bufferLength < edge_serial->rxBytesRemaining) {
+ 				rxLen = bufferLength;
+-- 
+2.21.0
+
