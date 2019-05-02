@@ -2,215 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 845A811718
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 12:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0B211736
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 12:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726444AbfEBKUo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 06:20:44 -0400
-Received: from mail-eopbgr680042.outbound.protection.outlook.com ([40.107.68.42]:12258
-        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726266AbfEBKUn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 May 2019 06:20:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector1-xilinx-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DelSUgzr2E2GjnnLNTRfI/axJe2JT9QGJ4FoqYHMZz4=;
- b=AdrPn6VfK+fJHyC/8FiOw1LcqX/Z+IhUNsEuxKnSl+TV4jJtuozqf7V6fak018b7i5hO2H8DF//5lRsgGj23hBlIH5cWGa8lKp9mzckAbKsjdEsg1G06F6VxUcgTrk0sHR2twD90M1JiUsjMCJCJrJvz+xQWGeQyIUDtBGFG2ZU=
-Received: from MWHPR02CA0014.namprd02.prod.outlook.com (2603:10b6:300:4b::24)
- by DM5PR0201MB3397.namprd02.prod.outlook.com (2603:10b6:4:76::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1856.11; Thu, 2 May
- 2019 10:20:40 +0000
-Received: from BL2NAM02FT003.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e46::209) by MWHPR02CA0014.outlook.office365.com
- (2603:10b6:300:4b::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1856.10 via Frontend
- Transport; Thu, 2 May 2019 10:20:39 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.100)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.100; helo=xsj-pvapsmtpgw02;
-Received: from xsj-pvapsmtpgw02 (149.199.60.100) by
- BL2NAM02FT003.mail.protection.outlook.com (10.152.76.204) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1856.11
- via Frontend Transport; Thu, 2 May 2019 10:20:38 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66]:60481 helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw02 with esmtp (Exim 4.63)
-        (envelope-from <anurag.kumar.vulisha@xilinx.com>)
-        id 1hM8pS-0006co-7J; Thu, 02 May 2019 03:20:38 -0700
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <anurag.kumar.vulisha@xilinx.com>)
-        id 1hM8pN-0001np-46; Thu, 02 May 2019 03:20:33 -0700
-Received: from xsj-pvapsmtp01 (smtp.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id x42AKRAu023324;
-        Thu, 2 May 2019 03:20:27 -0700
-Received: from [172.23.64.8] (helo=xhdvnc108.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <anuragku@xilinx.com>)
-        id 1hM8pG-0001mn-Gb; Thu, 02 May 2019 03:20:26 -0700
-Received: by xhdvnc108.xilinx.com (Postfix, from userid 15427)
-        id A950A604BC; Thu,  2 May 2019 15:50:25 +0530 (IST)
-From:   Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <v.anuragkumar@gmail.com>,
-        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-Subject: [PATCH 3/3] usb: dwc3: gadget: Add support for disabling U1 and U2 entries
-Date:   Thu, 2 May 2019 15:50:23 +0530
-Message-ID: <1556792423-4833-4-git-send-email-anurag.kumar.vulisha@xilinx.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1556792423-4833-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
-References: <1556792423-4833-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.100;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(39860400002)(136003)(346002)(376002)(396003)(2980300002)(189003)(199004)(8936002)(76176011)(36756003)(8676002)(81156014)(81166006)(90966002)(26005)(316002)(51416003)(14444005)(63266004)(106002)(5660300002)(54906003)(356004)(478600001)(50226002)(305945005)(336012)(2616005)(476003)(4326008)(126002)(107886003)(70206006)(426003)(70586007)(103686004)(6266002)(52956003)(36386004)(11346002)(446003)(486006)(48376002)(50466002)(186003)(47776003)(2906002)(16586007)(110136005)(42186006)(5001870100001);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR0201MB3397;H:xsj-pvapsmtpgw02;FPR:;SPF:Pass;LANG:en;PTR:xapps1.xilinx.com,unknown-60-100.xilinx.com;MX:1;A:1;
+        id S1726270AbfEBK0C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 06:26:02 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:40625 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726231AbfEBK0C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 06:26:02 -0400
+Received: by mail-lf1-f68.google.com with SMTP id o16so1464876lfl.7;
+        Thu, 02 May 2019 03:26:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=h2cWxngpT20ZMfG3eOK3pNNe/GlsC/KIDAQpK5RfIwg=;
+        b=BIr6nPRwjadS7Rbnhlm4RxIdDabgyPyj7reDPc9MzQKBLxZLR9TAdhSKV6hLKxbiI5
+         Ind9JEz8+VJ83RW28e8TFjT9A1PiT0J2oq5uNap1S7pPuZ07iCB2plYtvYnoOULgfWzV
+         ePX98uXaRKb4uGMk6PE3s324XkjuZRv0AYNVDbIVCfCrIeiBQFU4Pd4902LzrmF6mLU8
+         m63XgSvQd6IhqoZfMCockysxRgZGnO/zI9PCZA/d5x8ydApkv6R0DVmORW6E2cj3xyxK
+         d3NbAiT2EMbHddOeEAexwxKjVdm75mJmo/1vXJ62Xe5rsNUGcegyp8wSuwZSrsFmcR1B
+         qhng==
+X-Gm-Message-State: APjAAAXDuCQpnnUA/Za56EbgPI5ykxW4zjyFaSjvIWr91tLOUc6UV/q+
+        gCBMPv88TO37DsXoowNQs+4=
+X-Google-Smtp-Source: APXvYqyLVM37TMfk9L9nCPHALYb1CpY8WCN2mVZesSegxWseGQ5TVBvqvuoedXc67VIzvMAl7Pg7Wg==
+X-Received: by 2002:ac2:4465:: with SMTP id y5mr1550419lfl.82.1556792760262;
+        Thu, 02 May 2019 03:26:00 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id k4sm5931777lja.18.2019.05.02.03.25.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 03:25:59 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.91)
+        (envelope-from <johan@kernel.org>)
+        id 1hM8um-0004gG-I2; Thu, 02 May 2019 12:26:09 +0200
+Date:   Thu, 2 May 2019 12:26:08 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v2] USB: serial: io_edgeport: mark expected switch
+ fall-throughs
+Message-ID: <20190502102608.GS26546@localhost>
+References: <20190501213329.GA26972@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7eb54a25-3e62-4eb9-cecc-08d6cee7d2f4
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4709054)(2017052603328);SRVR:DM5PR0201MB3397;
-X-MS-TrafficTypeDiagnostic: DM5PR0201MB3397:
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-Microsoft-Antispam-PRVS: <DM5PR0201MB339752D8D394F147022CD797A7340@DM5PR0201MB3397.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-Forefront-PRVS: 0025434D2D
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: nlpRceHzRqY81nsIdArFOZrKAbu0duob81PEVYCiBesWiHvq2kZUPW4EiJAbhoOB0MiNisXntrs4M1cEbvcUtdZqF5Wg97me2C371migSCs2HLVRgIVaompXOpIAfEA+sXQRD0e06Go2Bi7mtJvLOalRMxLhUGisqg+J4yHimRQl9S0ztdY12BINKmuEkL68pY/uMFNAd1zNLiv+zyuU2aZgCanKOmvIuedKYb24k++R9S5/4jNEgEyDU3fBxBbETDPkVWquwoad5lpVfScMk/c4rSBdFtTHBvotsiS2Q8Gt7zu9EhAmUPXU7EN+OvIiMSaN7g9xNmMj9W9J3btnMncUD1wD+AzsQ8hOjJhav7Cc1gti4aIcqV10+Ns9qZZS9mlbFlwd05o6LHODa2cAVsohdGoYMCCeB745AH/kPlU=
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2019 10:20:38.9118
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7eb54a25-3e62-4eb9-cecc-08d6cee7d2f4
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.100];Helo=[xsj-pvapsmtpgw02]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR0201MB3397
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190501213329.GA26972@embeddedor>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Gadget applications may have a requirement to disable the U1 and U2
-entry based on the usecase. For example, when performing performance
-benchmarking on mass storage gadget the U1 and U2 entries can be disabled.
-Another example is when periodic transfers like ISOC transfers are used
-with bInterval of 1 which doesn't require the link to enter into U1 or U2
-state (since ping is issued from host for every uframe interval). In this
-case the U1 and U2 entry can be disabled. This can be done by setting
-U1DevExitLat and U2DevExitLat values to 0 in the BOS descriptor. Host on
-seeing 0 value for U1DevExitLat and U2DevExitLat, it doesn't send SET_SEL
-commands to the gadget. Thus entry of U1 and U2 states can be avioded.
-This patch updates the same
+On Wed, May 01, 2019 at 04:33:29PM -0500, Gustavo A. R. Silva wrote:
+> In preparation to enabling -Wimplicit-fallthrough, mark switch
+> cases where we are expecting to fall through.
+> 
+> This patch fixes the following warnings:
+> 
+> drivers/usb/serial/io_edgeport.c: In function ‘process_rcvd_data’:
+> drivers/usb/serial/io_edgeport.c:1750:7: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     if (bufferLength == 0) {
+>        ^
+> drivers/usb/serial/io_edgeport.c:1755:3: note: here
+>    case EXPECT_HDR2:
+>    ^~~~
+> drivers/usb/serial/io_edgeport.c:1810:8: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>      if (bufferLength == 0) {
+>         ^
+> drivers/usb/serial/io_edgeport.c:1816:3: note: here
+>    case EXPECT_DATA: /* Expect data */
+>    ^~~~
+> 
+> Warning level 3 was used: -Wimplicit-fallthrough=3
+> 
+> Notice that, in this particular case, the code comments are modified
+> in accordance with what GCC is expecting to find.
+> 
+> This patch is part of the ongoing efforts to enable
+> -Wimplicit-fallthrough.
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> ---
+> Changes in v2:
+>  - Warning level 3 is now used: -Wimplicit-fallthrough=3
+>    instead of warning level 2.
+>  - All warnings in the switch statement are addressed now.
+> 
+> Notice that these are the last remaining fall-through warnings
+> in the USB subsystem. :)
 
-Signed-off-by: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
----
- drivers/usb/dwc3/core.c   |  4 ++++
- drivers/usb/dwc3/core.h   |  4 ++++
- drivers/usb/dwc3/gadget.c | 19 +++++++++++++++++++
- drivers/usb/dwc3/gadget.h |  6 ++++++
- 4 files changed, 33 insertions(+)
+>  drivers/usb/serial/io_edgeport.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
+> index 4ca31c0e4174..7ad10328f4e2 100644
+> --- a/drivers/usb/serial/io_edgeport.c
+> +++ b/drivers/usb/serial/io_edgeport.c
+> @@ -1751,7 +1751,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
+>  				edge_serial->rxState = EXPECT_HDR2;
+>  				break;
+>  			}
+> -			/* otherwise, drop on through */
+> +			/* Fall through - otherwise, drop on through */
+>  		case EXPECT_HDR2:
+>  			edge_serial->rxHeader2 = *buffer;
+>  			++buffer;
+> @@ -1813,6 +1813,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
+>  				}
+>  				/* Else, drop through */
+>  			}
+> +			/* Fall through */
+>  		case EXPECT_DATA: /* Expect data */
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index a1b126f..4f0912c 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1285,6 +1285,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 				"snps,dis_u2_susphy_quirk");
- 	dwc->dis_enblslpm_quirk = device_property_read_bool(dev,
- 				"snps,dis_enblslpm_quirk");
-+	dwc->dis_u1_entry_quirk = device_property_read_bool(dev,
-+				"snps,dis_u1_entry_quirk");
-+	dwc->dis_u2_entry_quirk = device_property_read_bool(dev,
-+				"snps,dis_u2_entry_quirk");
- 	dwc->dis_rxdet_inp3_quirk = device_property_read_bool(dev,
- 				"snps,dis_rxdet_inp3_quirk");
- 	dwc->dis_u2_freeclk_exists_quirk = device_property_read_bool(dev,
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 1528d39..fa398e2 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1015,6 +1015,8 @@ struct dwc3_scratchpad_array {
-  * @dis_u2_susphy_quirk: set if we disable usb2 suspend phy
-  * @dis_enblslpm_quirk: set if we clear enblslpm in GUSB2PHYCFG,
-  *                      disabling the suspend signal to the PHY.
-+ * @dis_u1_entry_quirk: set if link entering into U1 state needs to be disabled.
-+ * @dis_u2_entry_quirk: set if link entering into U2 state needs to be disabled.
-  * @dis_rxdet_inp3_quirk: set if we disable Rx.Detect in P3
-  * @dis_u2_freeclk_exists_quirk : set if we clear u2_freeclk_exists
-  *			in GUSB2PHYCFG, specify that USB2 PHY doesn't
-@@ -1206,6 +1208,8 @@ struct dwc3 {
- 	unsigned		dis_u3_susphy_quirk:1;
- 	unsigned		dis_u2_susphy_quirk:1;
- 	unsigned		dis_enblslpm_quirk:1;
-+	unsigned		dis_u1_entry_quirk:1;
-+	unsigned		dis_u2_entry_quirk:1;
- 	unsigned		dis_rxdet_inp3_quirk:1;
- 	unsigned		dis_u2_freeclk_exists_quirk:1;
- 	unsigned		dis_del_phy_power_chg_quirk:1;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index e293400..f2d3112 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2073,6 +2073,24 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
- 	return 0;
- }
- 
-+static void dwc3_gadget_config_params(struct usb_gadget *g,
-+				      struct usb_dcd_config_params *params)
-+{
-+	struct dwc3		*dwc = gadget_to_dwc(g);
-+
-+	/* U1 Device exit Latency */
-+	if (dwc->dis_u1_entry_quirk)
-+		params->bU1devExitLat = 0;
-+	else
-+		params->bU1devExitLat = DWC3_DEFAULT_U1_DEV_EXIT_LAT;
-+
-+	/* U2 Device exit Latency */
-+	if (dwc->dis_u2_entry_quirk)
-+		params->bU2DevExitLat = 0;
-+	else
-+		params->bU2DevExitLat = DWC3_DEFAULT_U2_DEV_EXIT_LAT;
-+}
-+
- static void dwc3_gadget_set_speed(struct usb_gadget *g,
- 				  enum usb_device_speed speed)
- {
-@@ -2142,6 +2160,7 @@ static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.udc_start		= dwc3_gadget_start,
- 	.udc_stop		= dwc3_gadget_stop,
- 	.udc_set_speed		= dwc3_gadget_set_speed,
-+	.get_config_params	= dwc3_gadget_config_params,
- };
- 
- /* -------------------------------------------------------------------------- */
-diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
-index 3ed738e..5faf4d1 100644
---- a/drivers/usb/dwc3/gadget.h
-+++ b/drivers/usb/dwc3/gadget.h
-@@ -48,6 +48,12 @@ struct dwc3;
- /* DEPXFERCFG parameter 0 */
- #define DWC3_DEPXFERCFG_NUM_XFER_RES(n)	((n) & 0xffff)
- 
-+/* U1 Device exit Latency */
-+#define DWC3_DEFAULT_U1_DEV_EXIT_LAT	0x0A	/* Less then 10 microsec */
-+
-+/* U2 Device exit Latency */
-+#define DWC3_DEFAULT_U2_DEV_EXIT_LAT	0x1FF	/* Less then 511 microsec */
-+
- /* -------------------------------------------------------------------------- */
- 
- #define to_dwc3_request(r)	(container_of(r, struct dwc3_request, request))
--- 
-2.1.1
+Looks like you forgot to take the original review feedback you got into
+account:
 
+	https://lkml.kernel.org/r/87k1zf4k24.fsf@miraculix.mork.no
+
+Johan
