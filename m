@@ -2,284 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D77119AF
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 15:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD2511A79
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 15:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726295AbfEBNEM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 09:04:12 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:57006 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726282AbfEBNEM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 09:04:12 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42Ct92x028048;
-        Thu, 2 May 2019 08:04:08 -0500
-Authentication-Results: ppops.net;
-        spf=none smtp.mailfrom=mkulkarni@opensource.cirrus.com
-Received: from mail2.cirrus.com (mail2.cirrus.com [141.131.128.20])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2s6xhv2w54-1;
-        Thu, 02 May 2019 08:04:08 -0500
-Received: from EDIEX02.ad.cirrus.com (unknown [198.61.84.81])
-        by mail2.cirrus.com (Postfix) with ESMTP id 08843605A699;
-        Thu,  2 May 2019 08:04:08 -0500 (CDT)
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 2 May
- 2019 14:04:07 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Thu, 2 May 2019 14:04:07 +0100
-Received: from mkulkarni-laptop.ad.cirrus.com (mkulkarni-laptop.ad.cirrus.com [198.90.199.28])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5B40E45;
-        Thu,  2 May 2019 14:04:07 +0100 (BST)
-Message-ID: <1556802247.8016.16.camel@opensource.cirrus.com>
-Subject: Re: Query on usb/core/devio.c
-From:   Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     USB list <linux-usb@vger.kernel.org>
-Date:   Thu, 2 May 2019 14:04:07 +0100
-In-Reply-To: <1556035954.6050.1.camel@opensource.cirrus.com>
-References: <Pine.LNX.4.44L0.1904011620370.1506-100000@iolanthe.rowland.org>
-         <1556035954.6050.1.camel@opensource.cirrus.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+        id S1726283AbfEBNrt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 09:47:49 -0400
+Received: from gateway34.websitewelcome.com ([192.185.150.114]:38273 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726268AbfEBNrs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 09:47:48 -0400
+X-Greylist: delayed 1455 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 May 2019 09:47:47 EDT
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 09230963D3
+        for <linux-usb@vger.kernel.org>; Thu,  2 May 2019 08:22:34 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id MBfVhKyvH2PzOMBfWhoc4N; Thu, 02 May 2019 08:22:34 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.119.203] (port=51198 helo=[192.168.1.76])
+        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.91)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hMBfU-004AjH-F8; Thu, 02 May 2019 08:22:33 -0500
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>
+References: <20190501213329.GA26972@embeddedor>
+ <20190502102608.GS26546@localhost>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=gustavo@embeddedor.com; keydata=
+ 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
+ VtSixD1uOgytAP7RWS474w==
+Subject: Re: [PATCH v2] USB: serial: io_edgeport: mark expected switch
+ fall-throughs
+Message-ID: <df1feb28-58d0-7ac8-644d-0b48e5078edf@embeddedor.com>
+Date:   Thu, 2 May 2019 08:22:30 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <20190502102608.GS26546@localhost>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905020090
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.119.203
+X-Source-L: No
+X-Exim-ID: 1hMBfU-004AjH-F8
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.76]) [189.250.119.203]:51198
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-04-23 at 17:12 +0100, Mayuresh Kulkarni wrote:
-> On Mon, 2019-04-01 at 16:22 -0400, Alan Stern wrote:
-> > 
-> > Mayuresh:
-> > 
-> > Whatever happened to this discussion?  Did you reach a decision on 
-> > whether the proposed API addition would suit your needs?
-> > 
-> > Alan Stern
-> Hi Alan,
+
+
+On 5/2/19 5:26 AM, Johan Hovold wrote:
+> On Wed, May 01, 2019 at 04:33:29PM -0500, Gustavo A. R. Silva wrote:
+>> In preparation to enabling -Wimplicit-fallthrough, mark switch
+>> cases where we are expecting to fall through.
+>>
+>> This patch fixes the following warnings:
+>>
+>> drivers/usb/serial/io_edgeport.c: In function ‘process_rcvd_data’:
+>> drivers/usb/serial/io_edgeport.c:1750:7: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>>     if (bufferLength == 0) {
+>>        ^
+>> drivers/usb/serial/io_edgeport.c:1755:3: note: here
+>>    case EXPECT_HDR2:
+>>    ^~~~
+>> drivers/usb/serial/io_edgeport.c:1810:8: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>>      if (bufferLength == 0) {
+>>         ^
+>> drivers/usb/serial/io_edgeport.c:1816:3: note: here
+>>    case EXPECT_DATA: /* Expect data */
+>>    ^~~~
+>>
+>> Warning level 3 was used: -Wimplicit-fallthrough=3
+>>
+>> Notice that, in this particular case, the code comments are modified
+>> in accordance with what GCC is expecting to find.
+>>
+>> This patch is part of the ongoing efforts to enable
+>> -Wimplicit-fallthrough.
+>>
+>> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+>> ---
+>> Changes in v2:
+>>  - Warning level 3 is now used: -Wimplicit-fallthrough=3
+>>    instead of warning level 2.
+>>  - All warnings in the switch statement are addressed now.
+>>
+>> Notice that these are the last remaining fall-through warnings
+>> in the USB subsystem. :)
 > 
-> Apologies for not being able to respond to this email thread before.
-> Around mid-Dec of 2018, I got allocated to some other completely different
-> project for couple of months.
+>>  drivers/usb/serial/io_edgeport.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
+>> index 4ca31c0e4174..7ad10328f4e2 100644
+>> --- a/drivers/usb/serial/io_edgeport.c
+>> +++ b/drivers/usb/serial/io_edgeport.c
+>> @@ -1751,7 +1751,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
+>>  				edge_serial->rxState = EXPECT_HDR2;
+>>  				break;
+>>  			}
+>> -			/* otherwise, drop on through */
+>> +			/* Fall through - otherwise, drop on through */
+>>  		case EXPECT_HDR2:
+>>  			edge_serial->rxHeader2 = *buffer;
+>>  			++buffer;
+>> @@ -1813,6 +1813,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
+>>  				}
+>>  				/* Else, drop through */
+>>  			}
+>> +			/* Fall through */
+>>  		case EXPECT_DATA: /* Expect data */
 > 
-> Just at the of start of Apr 2019, I am back to the USB-audio project and this
-> discussion.
-> So almost perfect timing for your nudge.
+> Looks like you forgot to take the original review feedback you got into
+> account:
 > 
-> I am in process of setting up my environment and should have some result at-
-> most 
-> by early next week. I am attempting to verify the use-case of suspend/resume
-> with: host wake and remote wake.
-> 
-> Thanks again for your nudge.
+> 	https://lkml.kernel.org/r/87k1zf4k24.fsf@miraculix.mork.no
 > 
 
-Hi Alan et al,
+Oh, the thing is that the fall-through comments have to be placed at
+the very bottom of the case. Also, based on that feedback, this time
+I left the "Else, drop through" comment in place, so people can be
+informed that such fall-through is conditional.
 
-I added the proposed IOCTLs of suspend/resume to the platform I am using
-internally. With that, I am able to verify below cases -
-1. suspend -> wait-for-resume: resume caused by remote-wake from our USB device
-2. suspend -> wait-for-resume: resume caused by host-wake (i.e. my test
-application sends a message to our USB device).
+What do you think about this:
 
-In both the instances, after wait-for-resume, I can see host scheduling L2 and
-actual L2 happens after the auto-suspend time-out expires (I am using default
-value for it).
+diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
+index 4ca31c0e4174..52f27fc82563 100644
+--- a/drivers/usb/serial/io_edgeport.c
++++ b/drivers/usb/serial/io_edgeport.c
+@@ -1751,7 +1751,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
+                                edge_serial->rxState = EXPECT_HDR2;
+                                break;
+                        }
+-                       /* otherwise, drop on through */
++                       /* Fall through - otherwise, drop on through */
+                case EXPECT_HDR2:
+                        edge_serial->rxHeader2 = *buffer;
+                        ++buffer;
+@@ -1813,6 +1813,11 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
+                                }
+                                /* Else, drop through */
+                        }
++                       /* Beware that, currently, there are at least three
++                        * break statements in this case block, so the
++                        * fall-through marked below is NOT unconditional.
++                        */
++                       /* Fall through */
+                case EXPECT_DATA: /* Expect data */
+                        if (bufferLength < edge_serial->rxBytesRemaining) {
+                                rxLen = bufferLength;
 
-Below are the URB snoops for each case -
 
-Remote-wake -
-Here I cause the remote-wake activity on our USB-device approx. 20 sec after
-calling wait-for-resume.
 
-[  218.299803] usb 1-1: ioctl-suspend
-[  218.299978] usb 1-1: wait-for-resume
+Thanks
+--
+Gustavo
 
-[  222.022157] msm-dwc3 a800000.ssusb: DWC3 in low power mode
 
-[  239.065016] msm-dwc3 a800000.ssusb: DWC3 exited from low power mode
-
-[  239.145063] usb 1-1: driver-resume: runtime-active = 1
-[  239.145444] usb 1-1: wait-for-resume...done
-
-Host-wake -
-Here I send the new command approx. 8 seconds after calling wait-for-resume.
-
-[  152.760438] usb 1-1: ioctl-suspend
-[  152.760717] usb 1-1: wait-for-resume
-
-[  156.068823] msm-dwc3 a800000.ssusb: DWC3 in low power mode
-
-[  160.765638] usb 1-1: suspended..resume now
-
-[  160.768442] msm-dwc3 a800000.ssusb: DWC3 exited from low power mode
-
-[  160.823889] usb 1-1: driver-resume: runtime-active = 1
-[  160.823998] usb 1-1: resume done..active now
-
-With that said, shall I send a patch of above changes for review, rebased to
-usb-next branch - https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-/log/?h=usb-next?
-
-Thanks,
-
-> > 
-> > 
-> > 
-> > On Tue, 20 Nov 2018, Mayuresh Kulkarni wrote:
-> > 
-> > > 
-> > > 
-> > > On Fri, 2018-11-16 at 11:08 -0500, Alan Stern wrote:
-> > > > 
-> > > > 
-> > > > On Fri, 16 Nov 2018, Mayuresh Kulkarni wrote:
-> > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > Thanks for the comments. Based on the info so far, attempting to
-> > > > > summarize
-> > > > > the
-> > > > > probable solution, to ensure that I understand it clearly -
-> > > > > 
-> > > > > Facts -
-> > > > > 1. USBFS driver grabs a PM ref-count in .open and drops it in .close
-> > > > > which
-> > > > > means
-> > > > > USB device cannot suspend untill user-space closes it (even if all
-> > > > > interface
-> > > > > drivers report "idle" to usb-core).
-> > > > > 2. Since the .ioctl "knows" that .open has ensured to keep device
-> > > > > active, it
-> > > > > does not call PM runtime APIs.
-> > > > > 
-> > > > > Proposal -
-> > > > > 1. Add new ioctl: suspend & wait-for-resume
-> > > > > 2. suspend ioctl: decrements PM ref count and return
-> > > > > 3. wait-for-resume ioctl: wait for resume or timeout or signal
-> > > > Do you really want to have a timeout for this ioctl?  Maybe it isn't 
-> > > > important -- I don't know.
-> > > > 
-> > > Agreed, the timeout probably is not needed in this proposal.
-> > > 
-> > > > 
-> > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > 4. Modify .ioctl implementation to do PM runtime calls except for
-> > > > > above
-> > > > > "new"
-> > > > > ioctl calls (so pm_runtime_get_sync -> ioctl -> response ->
-> > > > > pm_runtime_put_sync). This also means, pm runtime get/put will be in
-> > > > > both
-> > > > > .open/.close.
-> > > > That's not exactly what I had in mind.  Open will do:
-> > > > 
-> > > > 	ps->runtime_active = true;
-> > > > 
-> > > > The new suspend ioctl will do this:
-> > > > 
-> > > > 	if (ps->runtime_active) {
-> > > > 		usb_autosuspend_device(ps->dev);
-> > > > 		ps->runtime_active = false;
-> > > > 	}
-> > > > 
-> > > > and the old ioctls (and close) will do this at the start:
-> > > > 
-> > > > 	if (!ps->runtime_active) {
-> > > > 		if (usb_autoresume_device(ps->dev))
-> > > > 			return -EIO;	/* Could not resume */
-> > > > 		ps->runtime_active = true;
-> > > > 	}		
-> > > > 
-> > > > This means that after any interaction with the device, you will have to 
-> > > > call the suspend ioctl again if you want the device to go back to 
-> > > > sleep.
-> > > > 
-> > > Thanks, looks good.
-> > > 
-> > > > 
-> > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > Use-case analysis -
-> > > > > 1. Remote-wake: Due to device's remote wake, wait-for-resume will
-> > > > > return
-> > > > > successfully. The user space caller then need to queue a request to
-> > > > > "know"
-> > > > > the
-> > > > > reason of remote-wake.
-> > > > > 2. Host-wake: The user-space caller issues any ioctl supported by
-> > > > > .ioctl
-> > > > > method.
-> > > > > Due to (4) above, the device will be resumed and the ioctl will be
-> > > > > performed.
-> > > > Correct.
-> > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > For (2) in use-case analysis, the user-space caller's wait-for-resume
-> > > > > will
-> > > > > also
-> > > > > return, but since it knows that it has initiated the ioctl, it may or
-> > > > > may
-> > > > > not
-> > > > > decide to queue a request. Instead, when ioctl returns it can call
-> > > > > wait-
-> > > > > for-
-> > > > > resume again.
-> > > > Yes.  Of course, your app will have some way to check for user
-> > > > interaction with the device.  Doing these checks while the device is
-> > > > suspended would be counter-productive, since the check itself would
-> > > > wake up the device.  So you will probably want to do a check as soon as
-> > > > you know the device has woken up, regardless of the cause.  If you 
-> > > > don't, you run the risk of not noticing a user interaction.
-> > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > Am I getting in sync with your comments?
-> > > > > 
-> > > > > What issue(s) you anticipate in above proposal due to inherent race
-> > > > > condition
-> > > > > between host and remote-wake?
-> > > > Only what I mentioned above, that your program should check for user 
-> > > > interaction whenever it knows the device has woken up.
-> > > > 
-> > > Thanks, looks good.
-> > > 
-> > > > 
-> > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > Based on my meagre understanding of usb-core, it feels
-> > > > > like usb_lock_device/usb_unlock_device calls around remote-wake and
-> > > > > usbfs
-> > > > > ioctl
-> > > > > should help with race condition, right?
-> > > > No, they will not help.  This is not a race between two different parts
-> > > > of the kernel both trying to communicate with the device; it is a race
-> > > > between the kernel and the user.  usb_lock_device doesn't prevent the 
-> > > > user from interacting with the device.  :-)
-> > > > 
-> > > > Alan Stern
-> > > I will go back and review this proposal internally. Possibly also attempt
-> > > to
-> > > implement a quick version of it and see how it behaves. Will keep this
-> > > email
-> > > thread posted with relevant updates.
-> > > 
-> > > Thanks Alan and Oliver for the all inputs and comments so far.
