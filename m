@@ -2,128 +2,284 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DCD11958
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 14:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D77119AF
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 15:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726282AbfEBMt3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 08:49:29 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:33849 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbfEBMt3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 08:49:29 -0400
-Received: by mail-io1-f71.google.com with SMTP id w9so1728201ioc.1
-        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 05:49:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
-         :content-transfer-encoding;
-        bh=EdFVC5S60Y+bv3d5pdvArFduSX28U6lrqd5FfJfZmAw=;
-        b=BMOzeuZcy26pTcmnEh0OFgWul6bdiSePSEY7DL+0LLFLCzWiQFj8nA5Q4PFGzNTMQU
-         TUaYKLqSCZMjdTaynoRbPHgtA9FKq6MFGLvIo8ZFNoUehDtUPuw8/3puMwKd5qh22wFK
-         3/xiu3zDc5ht0s4iEg7RZzESrl8Uivk2NxMyMKamkvBi3OEdJ6Bg/Nhn/xaMtR30/HQE
-         nYUBiYilCknYpbI/lE1n/OCgi6MG4yCcd7lM1k/UX1KQTb8J3uP765Y19gcyj2R55kAJ
-         Wg9b+Za6jPB3wVjEPp0Qk/YVd6BTVnOiZc+1fnzqwOXUlpkgf2hHJmK3cKyrQj2GCfSM
-         U55g==
-X-Gm-Message-State: APjAAAW3OugGDnjjxFU7EEKlEaQsxmg3Otmb5EuYqNv99Vc1hXmkElFU
-        Mix53J/ik3MtJUPR6PUD1CV7SynNXVbC6c0i7ZgvPp63bPh8
-X-Google-Smtp-Source: APXvYqzqmEvLfxIttO7dkCQ65xNcrPttbrL4TaYtkuofj4pTwYBaZHLiCGY10P5pvzDb0HfI9wVFWWeVpAWWyFRGHNBvtKsURbdx
+        id S1726295AbfEBNEM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 09:04:12 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:57006 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726282AbfEBNEM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 09:04:12 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42Ct92x028048;
+        Thu, 2 May 2019 08:04:08 -0500
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=mkulkarni@opensource.cirrus.com
+Received: from mail2.cirrus.com (mail2.cirrus.com [141.131.128.20])
+        by mx0a-001ae601.pphosted.com with ESMTP id 2s6xhv2w54-1;
+        Thu, 02 May 2019 08:04:08 -0500
+Received: from EDIEX02.ad.cirrus.com (unknown [198.61.84.81])
+        by mail2.cirrus.com (Postfix) with ESMTP id 08843605A699;
+        Thu,  2 May 2019 08:04:08 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 2 May
+ 2019 14:04:07 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Thu, 2 May 2019 14:04:07 +0100
+Received: from mkulkarni-laptop.ad.cirrus.com (mkulkarni-laptop.ad.cirrus.com [198.90.199.28])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5B40E45;
+        Thu,  2 May 2019 14:04:07 +0100 (BST)
+Message-ID: <1556802247.8016.16.camel@opensource.cirrus.com>
+Subject: Re: Query on usb/core/devio.c
+From:   Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     USB list <linux-usb@vger.kernel.org>
+Date:   Thu, 2 May 2019 14:04:07 +0100
+In-Reply-To: <1556035954.6050.1.camel@opensource.cirrus.com>
+References: <Pine.LNX.4.44L0.1904011620370.1506-100000@iolanthe.rowland.org>
+         <1556035954.6050.1.camel@opensource.cirrus.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8b09:: with SMTP id g9mr2306017iok.137.1556800566222;
- Thu, 02 May 2019 05:36:06 -0700 (PDT)
-Date:   Thu, 02 May 2019 05:36:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bc655f0587e6e01f@google.com>
-Subject: KASAN: global-out-of-bounds Read in hdpvr_probe
-From:   syzbot <syzbot+aac8d0d7205f112045d2@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, hverkuil@xs4all.nl,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905020090
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8sDQoNCnN5emJvdCBmb3VuZCB0aGUgZm9sbG93aW5nIGNyYXNoIG9uOg0KDQpIRUFEIGNv
-bW1pdDogICAgNDMxNTFkNmMgdXNiLWZ1enplcjogbWFpbiB1c2IgZ2FkZ2V0IGZ1enplciBkcml2
-ZXINCmdpdCB0cmVlOiAgICAgICBodHRwczovL2dpdGh1Yi5jb20vZ29vZ2xlL2thc2FuLmdpdCB1
-c2ItZnV6emVyDQpjb25zb2xlIG91dHB1dDogaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20v
-eC9sb2cudHh0P3g9MTU0NTk3NDJhMDAwMDANCmtlcm5lbCBjb25maWc6ICBodHRwczovL3N5emth
-bGxlci5hcHBzcG90LmNvbS94Ly5jb25maWc/eD00MTgzZWVlZjY1MGQxMjM0DQpkYXNoYm9hcmQg
-bGluazogaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20vYnVnP2V4dGlkPWFhYzhkMGQ3MjA1
-ZjExMjA0NWQyDQpjb21waWxlcjogICAgICAgZ2NjIChHQ0MpIDkuMC4wIDIwMTgxMjMxIChleHBl
-cmltZW50YWwpDQpzeXogcmVwcm86ICAgICAgaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20v
-eC9yZXByby5zeXo/eD0xNjZmYzM2MmEwMDAwMA0KQyByZXByb2R1Y2VyOiAgIGh0dHBzOi8vc3l6
-a2FsbGVyLmFwcHNwb3QuY29tL3gvcmVwcm8uYz94PTEzMDA2NTE0YTAwMDAwDQoNCklNUE9SVEFO
-VDogaWYgeW91IGZpeCB0aGUgYnVnLCBwbGVhc2UgYWRkIHRoZSBmb2xsb3dpbmcgdGFnIHRvIHRo
-ZSBjb21taXQ6DQpSZXBvcnRlZC1ieTogc3l6Ym90K2FhYzhkMGQ3MjA1ZjExMjA0NWQyQHN5emth
-bGxlci5hcHBzcG90bWFpbC5jb20NCg0KdXNiIDEtMTogY29uZmlnIDAgaW50ZXJmYWNlIDIzNyBh
-bHRzZXR0aW5nIDAgYnVsayBlbmRwb2ludCAweDgxIGhhcyBpbnZhbGlkICANCm1heHBhY2tldCAw
-DQp1c2IgMS0xOiBOZXcgVVNCIGRldmljZSBmb3VuZCwgaWRWZW5kb3I9MjA0MCwgaWRQcm9kdWN0
-PTQ5ODIsICANCmJjZERldmljZT1kMy44Zg0KdXNiIDEtMTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5n
-czogTWZyPTAsIFByb2R1Y3Q9MCwgU2VyaWFsTnVtYmVyPTANCnVzYiAxLTE6IGNvbmZpZyAwIGRl
-c2NyaXB0b3I/Pw0KaGRwdnIgMS0xOjAuMjM3OiBmaXJtd2FyZSB2ZXJzaW9uIDB4MWUgZGF0ZWQg
-PCAgDQo977+9P03vv71XC++/ve+/ve+/ve+/ve+/vSbvv70/77+9J2UWAe+/vRzvv71d77+9yq0i
-Qm1bNe+/vWYNCmlyLWtiZC1pMmMgMC0wMDcxOiBJUiBmb3IgSERQVlIgaXMga25vd24gdG8gY2F1
-c2UgcHJvYmxlbXMgZHVyaW5nICANCnJlY29yZGluZywgdXNlIGVuYWJsZV9oZHB2ciBtb2RwYXJh
-bSB0byBlbmFibGUNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PQ0KQlVHOiBLQVNBTjogZ2xvYmFsLW91dC1vZi1ib3VuZHMg
-aW4gaGRwdnJfcHJvYmUuY29sZCsweDExZTgvMHgxMjdkICANCmRyaXZlcnMvbWVkaWEvdXNiL2hk
-cHZyL2hkcHZyLWNvcmUuYzozNzUNClJlYWQgb2Ygc2l6ZSA0IGF0IGFkZHIgZmZmZmZmZmY5MmYz
-MDA4MCBieSB0YXNrIGt3b3JrZXIvMDoxLzEyDQoNCkNQVTogMCBQSUQ6IDEyIENvbW06IGt3b3Jr
-ZXIvMDoxIE5vdCB0YWludGVkIDUuMS4wLXJjMy0zMTkwMDQtZzQzMTUxZDYgIzYNCkhhcmR3YXJl
-IG5hbWU6IEdvb2dsZSBHb29nbGUgQ29tcHV0ZSBFbmdpbmUvR29vZ2xlIENvbXB1dGUgRW5naW5l
-LCBCSU9TICANCkdvb2dsZSAwMS8wMS8yMDExDQpXb3JrcXVldWU6IHVzYl9odWJfd3EgaHViX2V2
-ZW50DQpDYWxsIFRyYWNlOg0KICBfX2R1bXBfc3RhY2sgbGliL2R1bXBfc3RhY2suYzo3NyBbaW5s
-aW5lXQ0KICBkdW1wX3N0YWNrKzB4ZTgvMHgxNmUgbGliL2R1bXBfc3RhY2suYzoxMTMNCiAgcHJp
-bnRfYWRkcmVzc19kZXNjcmlwdGlvbisweDZjLzB4MjM2IG1tL2thc2FuL3JlcG9ydC5jOjE4Nw0K
-ICBrYXNhbl9yZXBvcnQuY29sZCsweDFhLzB4M2MgbW0va2FzYW4vcmVwb3J0LmM6MzE3DQogIGhk
-cHZyX3Byb2JlLmNvbGQrMHgxMWU4LzB4MTI3ZCBkcml2ZXJzL21lZGlhL3VzYi9oZHB2ci9oZHB2
-ci1jb3JlLmM6Mzc1DQogIHVzYl9wcm9iZV9pbnRlcmZhY2UrMHgzMWQvMHg4MjAgZHJpdmVycy91
-c2IvY29yZS9kcml2ZXIuYzozNjENCiAgcmVhbGx5X3Byb2JlKzB4MmRhLzB4YjEwIGRyaXZlcnMv
-YmFzZS9kZC5jOjUwOQ0KICBkcml2ZXJfcHJvYmVfZGV2aWNlKzB4MjFkLzB4MzUwIGRyaXZlcnMv
-YmFzZS9kZC5jOjY3MQ0KICBfX2RldmljZV9hdHRhY2hfZHJpdmVyKzB4MWQ4LzB4MjkwIGRyaXZl
-cnMvYmFzZS9kZC5jOjc3OA0KICBidXNfZm9yX2VhY2hfZHJ2KzB4MTYzLzB4MWUwIGRyaXZlcnMv
-YmFzZS9idXMuYzo0NTQNCiAgX19kZXZpY2VfYXR0YWNoKzB4MjIzLzB4M2EwIGRyaXZlcnMvYmFz
-ZS9kZC5jOjg0NA0KICBidXNfcHJvYmVfZGV2aWNlKzB4MWYxLzB4MmEwIGRyaXZlcnMvYmFzZS9i
-dXMuYzo1MTQNCiAgZGV2aWNlX2FkZCsweGFkMi8weDE2ZTAgZHJpdmVycy9iYXNlL2NvcmUuYzoy
-MTA2DQogIHVzYl9zZXRfY29uZmlndXJhdGlvbisweGRmNy8weDE3NDAgZHJpdmVycy91c2IvY29y
-ZS9tZXNzYWdlLmM6MjAyMw0KICBnZW5lcmljX3Byb2JlKzB4YTIvMHhkYSBkcml2ZXJzL3VzYi9j
-b3JlL2dlbmVyaWMuYzoyMTANCiAgdXNiX3Byb2JlX2RldmljZSsweGMwLzB4MTUwIGRyaXZlcnMv
-dXNiL2NvcmUvZHJpdmVyLmM6MjY2DQogIHJlYWxseV9wcm9iZSsweDJkYS8weGIxMCBkcml2ZXJz
-L2Jhc2UvZGQuYzo1MDkNCiAgZHJpdmVyX3Byb2JlX2RldmljZSsweDIxZC8weDM1MCBkcml2ZXJz
-L2Jhc2UvZGQuYzo2NzENCiAgX19kZXZpY2VfYXR0YWNoX2RyaXZlcisweDFkOC8weDI5MCBkcml2
-ZXJzL2Jhc2UvZGQuYzo3NzgNCiAgYnVzX2Zvcl9lYWNoX2RydisweDE2My8weDFlMCBkcml2ZXJz
-L2Jhc2UvYnVzLmM6NDU0DQogIF9fZGV2aWNlX2F0dGFjaCsweDIyMy8weDNhMCBkcml2ZXJzL2Jh
-c2UvZGQuYzo4NDQNCiAgYnVzX3Byb2JlX2RldmljZSsweDFmMS8weDJhMCBkcml2ZXJzL2Jhc2Uv
-YnVzLmM6NTE0DQogIGRldmljZV9hZGQrMHhhZDIvMHgxNmUwIGRyaXZlcnMvYmFzZS9jb3JlLmM6
-MjEwNg0KICB1c2JfbmV3X2RldmljZS5jb2xkKzB4NTM3LzB4Y2NmIGRyaXZlcnMvdXNiL2NvcmUv
-aHViLmM6MjUzNA0KICBodWJfcG9ydF9jb25uZWN0IGRyaXZlcnMvdXNiL2NvcmUvaHViLmM6NTA4
-OSBbaW5saW5lXQ0KICBodWJfcG9ydF9jb25uZWN0X2NoYW5nZSBkcml2ZXJzL3VzYi9jb3JlL2h1
-Yi5jOjUyMDQgW2lubGluZV0NCiAgcG9ydF9ldmVudCBkcml2ZXJzL3VzYi9jb3JlL2h1Yi5jOjUz
-NTAgW2lubGluZV0NCiAgaHViX2V2ZW50KzB4MTM4ZS8weDNiMDAgZHJpdmVycy91c2IvY29yZS9o
-dWIuYzo1NDMyDQogIHByb2Nlc3Nfb25lX3dvcmsrMHg5MGYvMHgxNTgwIGtlcm5lbC93b3JrcXVl
-dWUuYzoyMjY5DQogIHByb2Nlc3Nfc2NoZWR1bGVkX3dvcmtzIGtlcm5lbC93b3JrcXVldWUuYzoy
-MzMxIFtpbmxpbmVdDQogIHdvcmtlcl90aHJlYWQrMHg3YjAvMHhlMjAga2VybmVsL3dvcmtxdWV1
-ZS5jOjI0MTcNCiAga3RocmVhZCsweDMxMy8weDQyMCBrZXJuZWwva3RocmVhZC5jOjI1Mw0KICBy
-ZXRfZnJvbV9mb3JrKzB4M2EvMHg1MCBhcmNoL3g4Ni9lbnRyeS9lbnRyeV82NC5TOjM1Mg0KDQpU
-aGUgYnVnZ3kgYWRkcmVzcyBiZWxvbmdzIHRvIHRoZSB2YXJpYWJsZToNCiAgdmlkZW9fbnIrMHgy
-MC8weDFiZTANCg0KTWVtb3J5IHN0YXRlIGFyb3VuZCB0aGUgYnVnZ3kgYWRkcmVzczoNCiAgZmZm
-ZmZmZmY5MmYyZmY4MDogZmEgZmEgZmEgZmEgMDQgZmEgZmEgZmEgZmEgZmEgZmEgZmEgMDQgZmEg
-ZmEgZmENCiAgZmZmZmZmZmY5MmYzMDAwMDogZmEgZmEgZmEgZmEgMDQgZmEgZmEgZmEgZmEgZmEg
-ZmEgZmEgMDAgMDAgMDAgMDANCj4gZmZmZmZmZmY5MmYzMDA4MDogZmEgZmEgZmEgZmEgMDAgMDAg
-MDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgMDANCiAgICAgICAgICAgICAgICAgICAgXg0KICBm
-ZmZmZmZmZjkyZjMwMTAwOiAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAw
-MCAwMCAwMA0KICBmZmZmZmZmZjkyZjMwMTgwOiAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAw
-MCAwMCAwMCAwMCAwMCAwMCAwMA0KPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQoNCg0KLS0tDQpUaGlzIGJ1ZyBpcyBnZW5l
-cmF0ZWQgYnkgYSBib3QuIEl0IG1heSBjb250YWluIGVycm9ycy4NClNlZSBodHRwczovL2dvby5n
-bC90cHNtRUogZm9yIG1vcmUgaW5mb3JtYXRpb24gYWJvdXQgc3l6Ym90Lg0Kc3l6Ym90IGVuZ2lu
-ZWVycyBjYW4gYmUgcmVhY2hlZCBhdCBzeXprYWxsZXJAZ29vZ2xlZ3JvdXBzLmNvbS4NCg0Kc3l6
-Ym90IHdpbGwga2VlcCB0cmFjayBvZiB0aGlzIGJ1ZyByZXBvcnQuIFNlZToNCmh0dHBzOi8vZ29v
-LmdsL3Rwc21FSiNzdGF0dXMgZm9yIGhvdyB0byBjb21tdW5pY2F0ZSB3aXRoIHN5emJvdC4NCnN5
-emJvdCBjYW4gdGVzdCBwYXRjaGVzIGZvciB0aGlzIGJ1ZywgZm9yIGRldGFpbHMgc2VlOg0KaHR0
-cHM6Ly9nb28uZ2wvdHBzbUVKI3Rlc3RpbmctcGF0Y2hlcw0K
+On Tue, 2019-04-23 at 17:12 +0100, Mayuresh Kulkarni wrote:
+> On Mon, 2019-04-01 at 16:22 -0400, Alan Stern wrote:
+> > 
+> > Mayuresh:
+> > 
+> > Whatever happened to this discussion?  Did you reach a decision on 
+> > whether the proposed API addition would suit your needs?
+> > 
+> > Alan Stern
+> Hi Alan,
+> 
+> Apologies for not being able to respond to this email thread before.
+> Around mid-Dec of 2018, I got allocated to some other completely different
+> project for couple of months.
+> 
+> Just at the of start of Apr 2019, I am back to the USB-audio project and this
+> discussion.
+> So almost perfect timing for your nudge.
+> 
+> I am in process of setting up my environment and should have some result at-
+> most 
+> by early next week. I am attempting to verify the use-case of suspend/resume
+> with: host wake and remote wake.
+> 
+> Thanks again for your nudge.
+> 
+
+Hi Alan et al,
+
+I added the proposed IOCTLs of suspend/resume to the platform I am using
+internally. With that, I am able to verify below cases -
+1. suspend -> wait-for-resume: resume caused by remote-wake from our USB device
+2. suspend -> wait-for-resume: resume caused by host-wake (i.e. my test
+application sends a message to our USB device).
+
+In both the instances, after wait-for-resume, I can see host scheduling L2 and
+actual L2 happens after the auto-suspend time-out expires (I am using default
+value for it).
+
+Below are the URB snoops for each case -
+
+Remote-wake -
+Here I cause the remote-wake activity on our USB-device approx. 20 sec after
+calling wait-for-resume.
+
+[  218.299803] usb 1-1: ioctl-suspend
+[  218.299978] usb 1-1: wait-for-resume
+
+[  222.022157] msm-dwc3 a800000.ssusb: DWC3 in low power mode
+
+[  239.065016] msm-dwc3 a800000.ssusb: DWC3 exited from low power mode
+
+[  239.145063] usb 1-1: driver-resume: runtime-active = 1
+[  239.145444] usb 1-1: wait-for-resume...done
+
+Host-wake -
+Here I send the new command approx. 8 seconds after calling wait-for-resume.
+
+[  152.760438] usb 1-1: ioctl-suspend
+[  152.760717] usb 1-1: wait-for-resume
+
+[  156.068823] msm-dwc3 a800000.ssusb: DWC3 in low power mode
+
+[  160.765638] usb 1-1: suspended..resume now
+
+[  160.768442] msm-dwc3 a800000.ssusb: DWC3 exited from low power mode
+
+[  160.823889] usb 1-1: driver-resume: runtime-active = 1
+[  160.823998] usb 1-1: resume done..active now
+
+With that said, shall I send a patch of above changes for review, rebased to
+usb-next branch - https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+/log/?h=usb-next?
+
+Thanks,
+
+> > 
+> > 
+> > 
+> > On Tue, 20 Nov 2018, Mayuresh Kulkarni wrote:
+> > 
+> > > 
+> > > 
+> > > On Fri, 2018-11-16 at 11:08 -0500, Alan Stern wrote:
+> > > > 
+> > > > 
+> > > > On Fri, 16 Nov 2018, Mayuresh Kulkarni wrote:
+> > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > Thanks for the comments. Based on the info so far, attempting to
+> > > > > summarize
+> > > > > the
+> > > > > probable solution, to ensure that I understand it clearly -
+> > > > > 
+> > > > > Facts -
+> > > > > 1. USBFS driver grabs a PM ref-count in .open and drops it in .close
+> > > > > which
+> > > > > means
+> > > > > USB device cannot suspend untill user-space closes it (even if all
+> > > > > interface
+> > > > > drivers report "idle" to usb-core).
+> > > > > 2. Since the .ioctl "knows" that .open has ensured to keep device
+> > > > > active, it
+> > > > > does not call PM runtime APIs.
+> > > > > 
+> > > > > Proposal -
+> > > > > 1. Add new ioctl: suspend & wait-for-resume
+> > > > > 2. suspend ioctl: decrements PM ref count and return
+> > > > > 3. wait-for-resume ioctl: wait for resume or timeout or signal
+> > > > Do you really want to have a timeout for this ioctl?  Maybe it isn't 
+> > > > important -- I don't know.
+> > > > 
+> > > Agreed, the timeout probably is not needed in this proposal.
+> > > 
+> > > > 
+> > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > 4. Modify .ioctl implementation to do PM runtime calls except for
+> > > > > above
+> > > > > "new"
+> > > > > ioctl calls (so pm_runtime_get_sync -> ioctl -> response ->
+> > > > > pm_runtime_put_sync). This also means, pm runtime get/put will be in
+> > > > > both
+> > > > > .open/.close.
+> > > > That's not exactly what I had in mind.  Open will do:
+> > > > 
+> > > > 	ps->runtime_active = true;
+> > > > 
+> > > > The new suspend ioctl will do this:
+> > > > 
+> > > > 	if (ps->runtime_active) {
+> > > > 		usb_autosuspend_device(ps->dev);
+> > > > 		ps->runtime_active = false;
+> > > > 	}
+> > > > 
+> > > > and the old ioctls (and close) will do this at the start:
+> > > > 
+> > > > 	if (!ps->runtime_active) {
+> > > > 		if (usb_autoresume_device(ps->dev))
+> > > > 			return -EIO;	/* Could not resume */
+> > > > 		ps->runtime_active = true;
+> > > > 	}		
+> > > > 
+> > > > This means that after any interaction with the device, you will have to 
+> > > > call the suspend ioctl again if you want the device to go back to 
+> > > > sleep.
+> > > > 
+> > > Thanks, looks good.
+> > > 
+> > > > 
+> > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > Use-case analysis -
+> > > > > 1. Remote-wake: Due to device's remote wake, wait-for-resume will
+> > > > > return
+> > > > > successfully. The user space caller then need to queue a request to
+> > > > > "know"
+> > > > > the
+> > > > > reason of remote-wake.
+> > > > > 2. Host-wake: The user-space caller issues any ioctl supported by
+> > > > > .ioctl
+> > > > > method.
+> > > > > Due to (4) above, the device will be resumed and the ioctl will be
+> > > > > performed.
+> > > > Correct.
+> > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > For (2) in use-case analysis, the user-space caller's wait-for-resume
+> > > > > will
+> > > > > also
+> > > > > return, but since it knows that it has initiated the ioctl, it may or
+> > > > > may
+> > > > > not
+> > > > > decide to queue a request. Instead, when ioctl returns it can call
+> > > > > wait-
+> > > > > for-
+> > > > > resume again.
+> > > > Yes.  Of course, your app will have some way to check for user
+> > > > interaction with the device.  Doing these checks while the device is
+> > > > suspended would be counter-productive, since the check itself would
+> > > > wake up the device.  So you will probably want to do a check as soon as
+> > > > you know the device has woken up, regardless of the cause.  If you 
+> > > > don't, you run the risk of not noticing a user interaction.
+> > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > Am I getting in sync with your comments?
+> > > > > 
+> > > > > What issue(s) you anticipate in above proposal due to inherent race
+> > > > > condition
+> > > > > between host and remote-wake?
+> > > > Only what I mentioned above, that your program should check for user 
+> > > > interaction whenever it knows the device has woken up.
+> > > > 
+> > > Thanks, looks good.
+> > > 
+> > > > 
+> > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > Based on my meagre understanding of usb-core, it feels
+> > > > > like usb_lock_device/usb_unlock_device calls around remote-wake and
+> > > > > usbfs
+> > > > > ioctl
+> > > > > should help with race condition, right?
+> > > > No, they will not help.  This is not a race between two different parts
+> > > > of the kernel both trying to communicate with the device; it is a race
+> > > > between the kernel and the user.  usb_lock_device doesn't prevent the 
+> > > > user from interacting with the device.  :-)
+> > > > 
+> > > > Alan Stern
+> > > I will go back and review this proposal internally. Possibly also attempt
+> > > to
+> > > implement a quick version of it and see how it behaves. Will keep this
+> > > email
+> > > thread posted with relevant updates.
+> > > 
+> > > Thanks Alan and Oliver for the all inputs and comments so far.
