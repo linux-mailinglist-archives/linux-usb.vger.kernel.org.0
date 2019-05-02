@@ -2,185 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7ED121A3
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 20:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBEC121FD
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 20:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbfEBSG6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 14:06:58 -0400
-Received: from gateway30.websitewelcome.com ([192.185.197.25]:25821 "EHLO
-        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726399AbfEBSG6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 14:06:58 -0400
-X-Greylist: delayed 1276 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 May 2019 14:06:57 EDT
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway30.websitewelcome.com (Postfix) with ESMTP id DF3DBCCEE
-        for <linux-usb@vger.kernel.org>; Thu,  2 May 2019 12:45:40 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id MFm8h7fheYTGMMFm8hCC2e; Thu, 02 May 2019 12:45:40 -0500
-X-Authority-Reason: nr=8
-Received: from [189.250.119.203] (port=37948 helo=[192.168.1.76])
-        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.91)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hMFm8-002UHD-Fu; Thu, 02 May 2019 12:45:40 -0500
-Subject: Re: [PATCH] USB: serial: io_edgeport: fix up switch fall-through
- comments
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-References: <20190502173515.GA13801@kroah.com>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=gustavo@embeddedor.com; keydata=
- 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
- VtSixD1uOgytAP7RWS474w==
-Message-ID: <3bc6210d-91e4-94e5-ea8e-077066c1b7cb@embeddedor.com>
-Date:   Thu, 2 May 2019 12:45:39 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726407AbfEBSgW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 14:36:22 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:38125 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726249AbfEBSgV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 14:36:21 -0400
+Received: by mail-vs1-f65.google.com with SMTP id v141so1997716vsc.5
+        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 11:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rep+RFn3BdJQf0oo+RGjYfMB+zeAYnLgZKuY9nUKCQA=;
+        b=k4niFnqgC6uT+WkOQ6wgsJcYaNgMLnTL7lVhPfpNfF/fWu3Z/FxIjhBpaj3wtHigDP
+         oknx0uZtfuzo6ralUpJB0Vr5FJRCJ1w1O59dD+RG6do4ZDLCDZyWqsCtlvlAScWcCJFJ
+         NlsBZybNdO639hEBLlKY4YqWfytlkksQKfBpM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rep+RFn3BdJQf0oo+RGjYfMB+zeAYnLgZKuY9nUKCQA=;
+        b=rHQtUYi/LA59qgWhtriMbmGzYu71ccz9lGr9lvabiO66cAsbP8rxJo285LOdeMb5yy
+         IvMKCg8/p3NGelsZBdR0uFj7+A0PjJs/QMWtCwhDFPV0yYzZRpGPpmXoXnyj4EhGLDfo
+         4r73L9pCaCg5OLBwMcQQAMyi1/g+EXNUuhOE/hUfU8BiAdVgUheKX+5X/Irr3YkS6SoJ
+         W7Nk6rYKjMczRabchUuIdc07uIMuauLAq4Y7QLC8pxVVVRytBJ4LmFFVCF0QBXbspuyO
+         6IlZxt5deQ+/n9dnZ92mKdxmf4IUmzmckcjtruWvoMuk/iWKhNOYHJ/jr/0zkhMDVpMn
+         qccw==
+X-Gm-Message-State: APjAAAVkf/YJrOYOYM3UTP5p5gU7srW6WSeEOEC1YI7ShEjgcWnhSSxS
+        XxmbaSwLZh+dg8Du7qUwYt+rCmWiwQI=
+X-Google-Smtp-Source: APXvYqw0GZf2tWMFyqODfFcCwjsbNyx/RRlCN0ERGT3v/vhPzvKfwV5xY9mR4V0gkPazLxezKu/Vqw==
+X-Received: by 2002:a67:bd01:: with SMTP id y1mr2775597vsq.167.1556822180776;
+        Thu, 02 May 2019 11:36:20 -0700 (PDT)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id r21sm7836177uao.12.2019.05.02.11.36.15
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 11:36:16 -0700 (PDT)
+Received: by mail-vs1-f48.google.com with SMTP id e2so1985428vsc.13
+        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 11:36:15 -0700 (PDT)
+X-Received: by 2002:a67:7cd1:: with SMTP id x200mr3103185vsc.144.1556822175074;
+ Thu, 02 May 2019 11:36:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190502173515.GA13801@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.119.203
-X-Source-L: No
-X-Exim-ID: 1hMFm8-002UHD-Fu
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.76]) [189.250.119.203]:37948
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+References: <20190418001356.124334-1-dianders@chromium.org>
+ <20190418001356.124334-4-dianders@chromium.org> <87pnpas1fx.fsf@linux.intel.com>
+In-Reply-To: <87pnpas1fx.fsf@linux.intel.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 2 May 2019 11:36:01 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XTBgKnnswhfoQH3qWjpbp831e1L1+j+QCjxx2h=aQoog@mail.gmail.com>
+Message-ID: <CAD=FV=XTBgKnnswhfoQH3qWjpbp831e1L1+j+QCjxx2h=aQoog@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] Documentation: dt-bindings: Add
+ snps,need-phy-for-wake for dwc2 USB
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Alexandru M Stan <amstan@chromium.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        William Wu <william.wu@rock-chips.com>,
+        linux-usb@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Randy Li <ayaka@soulik.info>, Chris <zyw@rock-chips.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ryan Case <ryandcase@chromium.org>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Dinh Nguyen <dinguyen@opensource.altera.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
+On Thu, Apr 25, 2019 at 5:40 AM Felipe Balbi
+<felipe.balbi@linux.intel.com> wrote:
+>
+> Douglas Anderson <dianders@chromium.org> writes:
+>
+> > Some SoCs with a dwc2 USB controller may need to keep the PHY on to
+> > support remote wakeup.  Allow specifying this as a device tree
+> > property.
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> > For relevant prior discussion on this patch, see:
+> >
+> > https://lkml.kernel.org/r/1435017144-2971-3-git-send-email-dianders@chromium.org
+> >
+> > I didn't make any changes from the prior version since I never found
+> > out what Rob thought of my previous arguments.  If folks want a
+> > change, perhaps they could choose from these options:
+> >
+> > 1. Assume that all dwc2 hosts would like to keep their PHY on for
+> >    suspend if there's a USB wakeup enabled, thus we totally drop this
+> >    binding.  This doesn't seem super great to me since I'd bet that
+> >    many devices that use dwc2 weren't designed for USB wakeup (they
+> >    may not keep enough clocks or rails on) so we might be wasting
+> >    power for nothing.
+> > 2. Rename this property to "snps,wakeup-from-suspend-with-phy" to make
+> >    it more obvious that this property is intended both to document
+> >    that wakeup from suspend is possible and that we need the PHY for
+> >    said wakeup.
+> > 3. Rename this property to "snps,can-wakeup-from-suspend" and assume
+> >    it's implicit that if we can wakeup from suspend that we need to
+> >    keep the PHY on.  If/when someone shows that a device exists using
+> >    dwc2 where we can wakeup from suspend without the PHY they can add
+> >    a new property.
+> >
+> > Changes in v2: None
+> >
+> >  Documentation/devicetree/bindings/usb/dwc2.txt | 3 +++
+> >  1 file changed, 3 insertions(+)
+>
+> checking file Documentation/devicetree/bindings/usb/dwc2.txt
+> Hunk #1 FAILED at 37.
+> Hunk #2 succeeded at 52 (offset -1 lines).
+> 1 out of 2 hunks FAILED
 
-On 5/2/19 12:35 PM, Greg Kroah-Hartman wrote:
-> Gustavo has been working to fix up all of the switch statements that
-> "fall through" such that we can eventually turn on
-> -Wimplicit-fallthrough.  As part of that, the io_edgeport.c driver is a
-> bit "messy" with the parsing logic of a data packet.  Clean that logic
-> up a bit by unindenting one level of the logic, and properly label
-> /* Fall through */ to make gcc happy.
-> 
-> Reported-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
+Can you try applying this and the next two patches again?  ...or let
+me know that you'd like me to repost?
 
-Acked-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Thanks!
 
-
-Thanks, Greg.
---
-Gustavo
-
-> diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
-> index 4ca31c0e4174..48a439298a68 100644
-> --- a/drivers/usb/serial/io_edgeport.c
-> +++ b/drivers/usb/serial/io_edgeport.c
-> @@ -1751,7 +1751,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
->  				edge_serial->rxState = EXPECT_HDR2;
->  				break;
->  			}
-> -			/* otherwise, drop on through */
-> +			/* Fall through */
->  		case EXPECT_HDR2:
->  			edge_serial->rxHeader2 = *buffer;
->  			++buffer;
-> @@ -1790,29 +1790,20 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
->  						edge_serial->rxHeader2, 0);
->  				edge_serial->rxState = EXPECT_HDR1;
->  				break;
-> -			} else {
-> -				edge_serial->rxPort =
-> -				    IOSP_GET_HDR_PORT(edge_serial->rxHeader1);
-> -				edge_serial->rxBytesRemaining =
-> -				    IOSP_GET_HDR_DATA_LEN(
-> -						edge_serial->rxHeader1,
-> -						edge_serial->rxHeader2);
-> -				dev_dbg(dev, "%s - Data for Port %u Len %u\n",
-> -					__func__,
-> -					edge_serial->rxPort,
-> -					edge_serial->rxBytesRemaining);
-> -
-> -				/* ASSERT(DevExt->RxPort < DevExt->NumPorts);
-> -				 * ASSERT(DevExt->RxBytesRemaining <
-> -				 *		IOSP_MAX_DATA_LENGTH);
-> -				 */
-> -
-> -				if (bufferLength == 0) {
-> -					edge_serial->rxState = EXPECT_DATA;
-> -					break;
-> -				}
-> -				/* Else, drop through */
->  			}
-> +
-> +			edge_serial->rxPort = IOSP_GET_HDR_PORT(edge_serial->rxHeader1);
-> +			edge_serial->rxBytesRemaining = IOSP_GET_HDR_DATA_LEN(edge_serial->rxHeader1,
-> +									      edge_serial->rxHeader2);
-> +			dev_dbg(dev, "%s - Data for Port %u Len %u\n", __func__,
-> +				edge_serial->rxPort,
-> +				edge_serial->rxBytesRemaining);
-> +
-> +			if (bufferLength == 0) {
-> +				edge_serial->rxState = EXPECT_DATA;
-> +				break;
-> +			}
-> +			/* Fall through */
->  		case EXPECT_DATA: /* Expect data */
->  			if (bufferLength < edge_serial->rxBytesRemaining) {
->  				rxLen = bufferLength;
-> 
+-Doug
