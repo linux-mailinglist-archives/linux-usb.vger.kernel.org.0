@@ -2,81 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AA411EE1
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 17:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9174F11FB9
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 18:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728385AbfEBPlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 11:41:55 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:36380 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727737AbfEBPly (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 11:41:54 -0400
-Received: by mail-oi1-f196.google.com with SMTP id l203so2071419oia.3
-        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 08:41:54 -0700 (PDT)
+        id S1726451AbfEBQJc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 12:09:32 -0400
+Received: from mail-ot1-f74.google.com ([209.85.210.74]:52754 "EHLO
+        mail-ot1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726381AbfEBQJb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 12:09:31 -0400
+Received: by mail-ot1-f74.google.com with SMTP id h26so1160294otm.19
+        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 09:09:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=0zwnbqr+PBvZo/W8N/FG9Sj4vOUMec1PwHeXju5Ge14=;
-        b=iNhbsSn5EdGbm5UeV7vwC/NOlDODSvzwOXxCIlSWMeNOdILtNtpQzyhEVzJeULkIYA
-         rLH8rRlxLCdJ8HnJjpy70e5Lv4Xk7iQ9Zll6aYGBZvSRLQeQVTBKgnKMWAqWwFNlPJz/
-         81qfCIgy8h/qIO7paDSkm8gOAZfPmOrig0NVXQffDlkV9/adF4C8K85rJgoJtIdkRYE+
-         E83NERKRRLL0671axWJidLv8ipWAzfakdqFBNITeqVJqdMSITeE+OoOtV1WgTmrHzhWt
-         1D3+u7Gb0syFnB2w+I6a6hWpI8A+Y8tIb3PDgXKIfasxagBXYM6KeVwO+RZ9xgw7Rtky
-         rf9Q==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=9xnFArciGrfO3ikzi57uVyk4LiBtt5n+h3mmuIaB6Rs=;
+        b=Vt4bcNsmsQwdwzx2rVuQYIWmGuM1MudabGBak4VgLE+ddD/qUSnWDH10FuKsZhsUu7
+         ASj1xuuqygmryeruOZ2dQ1Yg+mscR1z5ARgj9GmIwNnHumfdBPpzcO8Uj8vH6+0pwt4i
+         8fMLi0L39i87GEfUtHLRLrfU7RUcdlqJwWMUy2voRATPxqUKhs6cJXKImmZTTnKRH9nk
+         pIG+kvLZmz/WtMs/p1ZlKfCGWZK8WO1Vj3d9Kkr5Z1fS+GGSvpblZwkEzC8//aOdkpLZ
+         8TpLSvaQUxZeobuTFS4dzX+ALGm2AUn5YX/+RgIhlGK4LZS2TcSHKcfEckG1PJbgMdix
+         qUFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=0zwnbqr+PBvZo/W8N/FG9Sj4vOUMec1PwHeXju5Ge14=;
-        b=fm9/YjSdQBdnkjEbrPfVXta0/6B7jrnW+2J8YnW3e1TxwN/f64QeAHUOxKY/p3ZXPi
-         MfCKJMy2SAw5VHBkLrOCbZB6izF7xYqnr8CYTkHrpsailgt/qwDEMMDha6NFOO6Ih5+B
-         Z8KyPNaeOeLp0A6J5/cre1ANyugDG+L3mSl+mqVO7l41pRZZtJxoheduf7dJETiMmjj1
-         p39ASyaqg6em3DhEVGCocSwWXuKkrowaF22nOxq/dlgzjzmN8wOjserWudLiUzkRYmk7
-         xutFAoLNXSk4xQBufRoU93545nMRXx97fBnxSokRe8fWlPDJ6W7Ik/+hi0Sx/0NtngbJ
-         79sQ==
-X-Gm-Message-State: APjAAAWS1GcP2ZuByDdRk+MLSHpKRyu1mk6Qd821DPMzSBnXtFxHN6+Z
-        ADtZxZYoSivINhxJShYKUIbfk+Nb3DOYVUc/YN+Dm9YUzEY=
-X-Google-Smtp-Source: APXvYqxFgIy4Dv06Mq9IDnVYQhab+LYToQfIODFrLfV/ahpSBhYVvlWYClNWF6VnyRC2+gKT6TJb7MNg7+3LVOpUQhM=
-X-Received: by 2002:aca:441:: with SMTP id 62mr1686843oie.123.1556811713540;
- Thu, 02 May 2019 08:41:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <CACX8e9MkgUH4giW8SVwQb3rJSq3RK-jth4SJbkpkKF3E29bgFg@mail.gmail.com>
-In-Reply-To: <CACX8e9MkgUH4giW8SVwQb3rJSq3RK-jth4SJbkpkKF3E29bgFg@mail.gmail.com>
-From:   Shiv Dev <shivfsdev@gmail.com>
-Date:   Thu, 2 May 2019 21:11:42 +0530
-Message-ID: <CACX8e9NPUKbZTD0-+_Yrzd6mUGmsHrYFQuj3RPsS5AQ7rLQymQ@mail.gmail.com>
-Subject: Re: not seeing console logs using usb serial
-To:     linux-usb@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=9xnFArciGrfO3ikzi57uVyk4LiBtt5n+h3mmuIaB6Rs=;
+        b=SBCbFfzgc0wLwSr+yM65v/CciFu2d2XDwkAhkMa553z9nczs2mgPmLFm5e2tnTb2jg
+         QgKM0fj43Lt1bCu/uvXkQMOdLcTyo8YXH3nM4nVEATbPdwdcBpUebvawNMy3lJAPyZTv
+         bqY5yw8rq+mrA+ecFTmyCKEiCT5z0bd0bJVHAe/h7VHakp7Pfizj5TJI1DdCzJzi5RX3
+         5jMQ3fuJfvcIJTVuM6ahGXdjks2DOd9jslTr0hOswhE6Mx6nhcxcMEu3ZaBe7ULtBjDP
+         Nps/35UPShXBMP6dWFGPGlStPkyoEUnwK2hcejdEbOnkZ6zmc0xNHjTKMA/RwTbIvtVB
+         a8+g==
+X-Gm-Message-State: APjAAAWGNhzKSL9xDeX1l8+DwTYi1PV48HNiJGzcDZNjtUnCNogxQi7H
+        Vfi9dKKGeisfb75ACA9kjsMTAk6XitqanfJs
+X-Google-Smtp-Source: APXvYqy8YCK4eRinKnCx8RTSwYf19+aTe9vQutpcjXxTYJgt5fPqvSjbBajWajCcC8+blskSFg7fljUPrPBvWBIo
+X-Received: by 2002:a9d:6156:: with SMTP id c22mr2991816otk.363.1556813370975;
+ Thu, 02 May 2019 09:09:30 -0700 (PDT)
+Date:   Thu,  2 May 2019 18:09:26 +0200
+Message-Id: <b3761c6479a49b60316325ebc22da904e36d4538.1556813333.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
+Subject: [PATCH] media: pvrusb2: use a different format for warnings
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Mike Isely <isely@pobox.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>,
+        syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com,
+        syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+When the pvrusb2 driver detects that there's something wrong with the
+device, it prints a warning message. Right now those message are
+printed in two different formats:
 
-I am using a USB serial cable and want to see the kernel logs on the
-console, and towards that have the below line in /etc/default/grub
+1. ***WARNING*** message here
+2. WARNING: message here
 
-console=ttyUSB0,115200 console=tty0
+There's an issue with the second format. Syzkaller recognizes it as a
+message produced by a WARN_ON(), which is used to indicate a bug in the
+kernel. However pvrusb2 prints those warnings to indicate an issue with
+the device, not the bug in the kernel.
 
-Hardware: Intel compute stick
-OS      : ubuntu 18.04
-kernel : 4.18.0-18
-Driver  : pl2303
+This patch changes the pvrusb2 driver to consistently use the first
+warning message format. This will unblock syzkaller testing of this
+driver.
 
-I do not see the kernel logs, and it drops to a dracut shell because
-the root is encrypted.
+Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
+Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c      | 4 ++--
+ drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c | 6 +++---
+ drivers/media/usb/pvrusb2/pvrusb2-std.c      | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-I am however able to write to the /dev/ttyUSB0 device, and am able to
-see the output in minicom at the other end, which means that the
-requisite driver is loaded in initramfs.
-dracut:/# echo 'hello' > /dev/ttyUSB0
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+index 446a999dd2ce..a0f7b10045d2 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+@@ -1678,7 +1678,7 @@ static int pvr2_decoder_enable(struct pvr2_hdw *hdw,int enablefl)
+ 	}
+ 	if (!hdw->flag_decoder_missed) {
+ 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+-			   "WARNING: No decoder present");
++			   "***WARNING*** No decoder present");
+ 		hdw->flag_decoder_missed = !0;
+ 		trace_stbit("flag_decoder_missed",
+ 			    hdw->flag_decoder_missed);
+@@ -2364,7 +2364,7 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
+ 	if (hdw_desc->flag_is_experimental) {
+ 		pvr2_trace(PVR2_TRACE_INFO, "**********");
+ 		pvr2_trace(PVR2_TRACE_INFO,
+-			   "WARNING: Support for this device (%s) is experimental.",
++			   "***WARNING*** Support for this device (%s) is experimental.",
+ 							      hdw_desc->description);
+ 		pvr2_trace(PVR2_TRACE_INFO,
+ 			   "Important functionality might not be entirely working.");
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+index 8f023085c2d9..43e54bdbd4aa 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+@@ -343,11 +343,11 @@ static int i2c_hack_cx25840(struct pvr2_hdw *hdw,
+ 
+ 	if ((ret != 0) || (*rdata == 0x04) || (*rdata == 0x0a)) {
+ 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+-			   "WARNING: Detected a wedged cx25840 chip; the device will not work.");
++			   "***WARNING*** Detected a wedged cx25840 chip; the device will not work.");
+ 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+-			   "WARNING: Try power cycling the pvrusb2 device.");
++			   "***WARNING*** Try power cycling the pvrusb2 device.");
+ 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+-			   "WARNING: Disabling further access to the device to prevent other foul-ups.");
++			   "***WARNING*** Disabling further access to the device to prevent other foul-ups.");
+ 		// This blocks all further communication with the part.
+ 		hdw->i2c_func[0x44] = NULL;
+ 		pvr2_hdw_render_useless(hdw);
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-std.c b/drivers/media/usb/pvrusb2/pvrusb2-std.c
+index 6b651f8b54df..37dc299a1ca2 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-std.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-std.c
+@@ -353,7 +353,7 @@ struct v4l2_standard *pvr2_std_create_enum(unsigned int *countptr,
+ 		bcnt = pvr2_std_id_to_str(buf,sizeof(buf),fmsk);
+ 		pvr2_trace(
+ 			PVR2_TRACE_ERROR_LEGS,
+-			"WARNING: Failed to classify the following standard(s): %.*s",
++			"***WARNING*** Failed to classify the following standard(s): %.*s",
+ 			bcnt,buf);
+ 	}
+ 
+-- 
+2.21.0.593.g511ec345e18-goog
 
-Not sure what I am missing here. Please help.
-
-Not sure if this is the correct mailing list. Would linux-console be a
-more appropriate list?
-
-Regards,
-Shiv
