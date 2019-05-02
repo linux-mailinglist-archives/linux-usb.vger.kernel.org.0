@@ -2,104 +2,293 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C42122BF
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 21:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB4212433
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 23:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726495AbfEBTtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 15:49:08 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40512 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726209AbfEBTtI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 15:49:08 -0400
-Received: by mail-ot1-f66.google.com with SMTP id w6so3238598otl.7;
-        Thu, 02 May 2019 12:49:07 -0700 (PDT)
+        id S1726120AbfEBVgb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 17:36:31 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:44815 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfEBVgb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 17:36:31 -0400
+Received: by mail-ed1-f66.google.com with SMTP id b8so3537161edm.11
+        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 14:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XMyMp2LSouBV7Ofq2zMtxUo3SjP91QAnOCTWvlY6Kro=;
+        b=Z64IQ0khHZAEYiKkUQrA0wW7PWVzgQtT3E9ZqJufFIk5M0h2iTx4rIg1IucHPoBUJ9
+         QsNr4s54JT/nV1QhQiG4EPEQlU4apgfMq1dHEbJa3wl6koCz/P4QQCqeDauXLkR7eQVp
+         mst1G6FxddFEbgDuU9hPrT2Ym8fp9tekc3SX4HjdvDGc0xCd+xhyd95DzHdOosdYb6ie
+         Vj+tkf8L7AqPhzHj1FuMrAbSm8obNIEfWN9wMe5YRmLYv+ZA2OevwwXHxQ2k6Qn3VRg7
+         dcKb0V/zpt7/8dEnzGtumSrC6pKg2t9jL5juGmOGZphFPt6FAuV5kQC01R45H8AAmAUJ
+         ofAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FGfxNsDw3M/Z12wiu2wAdnzAwwHu4M4I58DLCLbAH48=;
-        b=QQwHmsK8omy42O3otCY1DyojaqYe7wwKILP4sIpJpkug6TsiKo41S9vkcxVuMx3DNp
-         pU/7YjlwEUm15wLams8mSotUrYv8GT6MMhctiGx+qGOsFxbRaCbCZptmYmKDO5EwT8sW
-         qHiocKoAh7ejM9fYnAze+pslc3ne4tNElDfE7Ut0Pbwd9RgwbHKuYQYnIk04nxKW9yRr
-         fQxW5xFiPhXKYSMmnbDAY5XtCr+N7IAHEBRt/0rPnLM8FPNIMBR0kKDkKsACVufC3782
-         iAX1E5uXxyb+P8ooEGmOlNUybjfwxofWbYJWkdVUvatqX0i6MH4gYZWeNVaCgLH0vhZf
-         s/KA==
-X-Gm-Message-State: APjAAAUf3K+vUIO8dtx/wt5q6GVxI9wzUmMf/ugMtIn0Lioi3zBMcupL
-        5vRF01JBBNMS+Y4xSlhfFw==
-X-Google-Smtp-Source: APXvYqzYJ9AupEd9Umw0x6xgTlB7dtQUdfi0f3hYSCZGFwwsr29XCXUyJ7qIx36e0LDiOwYhqSkwBQ==
-X-Received: by 2002:a9d:73d9:: with SMTP id m25mr3984524otk.356.1556826546929;
-        Thu, 02 May 2019 12:49:06 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 189sm89076oid.35.2019.05.02.12.49.05
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 May 2019 12:49:05 -0700 (PDT)
-Date:   Thu, 2 May 2019 14:49:05 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XMyMp2LSouBV7Ofq2zMtxUo3SjP91QAnOCTWvlY6Kro=;
+        b=MouPsmXr6uwU7DbDsq+p6lAPKSO/+p//L79r5qZAPRyW45CUw0gXbGw44sd6IeQGwb
+         fD13H6tAeOOf1v4BNK4+hSE7GYiZ9XtkIs0Dg91PbpMEBU8k77fX60BJt+x5OOvmr8MN
+         9NyQcBsPbxWlkNqT+IfmMu32PRC+9ebY1kFCqn1e9Z0oMZyVzPKPaA/F3LYOQxtFP8/y
+         TUSidXpBS46Bn6uj3dkVfdEzyrYs8QfOJd+UY5HhJlDjTen4ZD0IUyi41mDufy3PYeuD
+         KHAaaBggovCOhRdbgt3OMKKExgQLrR4xOjh/ctC45Iw2Q19uGR9DLk6dLqd6ReGe4fXb
+         waFA==
+X-Gm-Message-State: APjAAAVMNzUBDAMZYSvfgGMEMAVSzTprThMtsw1jNTX1IhPdIrJcIBLy
+        6Hn2Dh48jsfUu+e22cCZj14=
+X-Google-Smtp-Source: APXvYqzFMj5M+jOvT0Ykeyma0msDUYKVDXItJlfPfCmrIJls0hSEUvPdrIqQh69s9JH7bxOCXKb9KA==
+X-Received: by 2002:a50:f5d0:: with SMTP id x16mr4088394edm.287.1556832988648;
+        Thu, 02 May 2019 14:36:28 -0700 (PDT)
+Received: from [192.168.1.60] (0126800801.0.fullrate.ninja. [2.110.44.75])
+        by smtp.gmail.com with ESMTPSA id j5sm63216edd.43.2019.05.02.14.36.26
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 02 May 2019 14:36:27 -0700 (PDT)
+Message-ID: <1556832986.22007.15.camel@gmail.com>
+Subject: Re: [PATCH 0/3] usb: gadget: Add support for disabling U1 and U2
+ entries
+From:   claus.stovgaard@gmail.com
+To:     Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Biju Das <biju.das@bp.renesas.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-Subject: Re: [PATCH] dt-binding: usb: add usb-role-switch property
-Message-ID: <20190502194905.GA22144@bogus>
-References: <5756e05930f5e6a3940ad9d019399c8e63d24f18.1556454324.git.chunfeng.yun@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5756e05930f5e6a3940ad9d019399c8e63d24f18.1556454324.git.chunfeng.yun@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, v.anuragkumar@gmail.com,
+        Rob Weber <rob@gnarbox.com>
+Date:   Thu, 02 May 2019 23:36:26 +0200
+In-Reply-To: <1556792423-4833-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+References: <1556792423-4833-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.24.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 28, 2019 at 08:27:46PM +0800, Chunfeng Yun wrote:
-> Add a property usb-role-switch to tell Dual-Role controller driver
-> that use USB Role Switch framework to handle the role switch between
-> host mode and device mode, it's useful when the driver has already
-> supported other ways, such as extcon framework etc.
-> 
-> Cc: Biju Das <biju.das@bp.renesas.com>
-> Cc: Yu Chen <chenyu56@huawei.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v1:
-> the property is discussed in:
-> [v2,2/7] dt-bindings: usb: renesas_usb3: add usb-role-switch property
-> https://patchwork.kernel.org/patch/10852497/
-> 
-> Mediatek and Hisilicon also try to use it:
-> [v4,3/6] dt-bindings: usb: mtu3: add properties about USB Role Switch
-> https://patchwork.kernel.org/patch/10918385/
-> [v4,6/6] usb: mtu3: register a USB Role Switch for dual role mode
-> https://patchwork.kernel.org/patch/10918367/
-> 
-> [v6,10/13] usb: dwc3: Registering a role switch in the DRD code
-> https://patchwork.kernel.org/patch/10909981/
-> ---
->  Documentation/devicetree/bindings/usb/generic.txt | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/generic.txt b/Documentation/devicetree/bindings/usb/generic.txt
-> index 0a74ab8dfdc2..c73950b72513 100644
-> --- a/Documentation/devicetree/bindings/usb/generic.txt
-> +++ b/Documentation/devicetree/bindings/usb/generic.txt
-> @@ -30,6 +30,9 @@ Optional properties:
->  			optional for OTG device.
->   - adp-disable: tells OTG controllers we want to disable OTG ADP, ADP is
->  			optional for OTG device.
-> + - usb-role-switch: tells Dual-Role USB controller driver that we want to use
-> +			USB Role Switch framework to handle the role switch
-> +			between host mode and device mode.
+Hi
 
-Please describe this in terms of h/w functionality, not drivers and 
-Linux things.
+On tor, 2019-05-02 at 15:50 +0530, Anurag Kumar Vulisha wrote:
+> Gadget applications may have a requirement to disable the U1 and U2
+> entry based on the usecase. For example, when performing performance
+> benchmarking on mass storage gadget the U1 and U2 entries can be
+> disabled.
+> Another example is when periodic transfers like ISOC transfers are
+> used
+> with bInterval of 1 which doesn't require the link to enter into U1
+> or U2
+> state (since ping is issued from host for every uframe interval). In
+> this
+> case the U1 and U2 entry can be disabled. This can be done by setting
+> U1DevExitLat and U2DevExitLat values to 0 in the BOS descriptor. Host
+> on
+> seeing 0 value for U1DevExitLat and U2DevExitLat, it doesn't send
+> SET_SEL
+> commands to the gadget. Thus entry of U1 and U2 states can be
+> avioded.
+> This patch updates the same.
+> 
 
-Rob
+Will just vote for this feature, as I will also be able to use it for
+solving Rob Webers and my issue [1]
+
+Just today I was making another solution for this feature, using the
+configfs instead of the devicetree. Though thinks your solution is
+better, as it uses the U1DevExitLat and U2DevExitLat instead. I just
+added my solution to the bottem of the mail for reference.
+
+[1] https://www.spinics.net/lists/linux-usb/msg179393.html
+
+---
+
+From 798ea2f5f365ecdf2dbcf436a2a0302e208c6c73 Mon Sep 17 00:00:00 2001
+From: "Claus H. Stovgaard" <cst@phaseone.com>
+Date: Thu, 2 May 2019 17:54:45 +0200
+Subject: [PATCH] usb: gadget: configfs: Add lpm_Ux_disable
+
+When combining dwc3 with an redriver for a USB Type-C device solution,
+it
+sometimes have problems with leaving U1/U2 for certain hosts, resulting
+in
+link training errors and reconnects. This patch create an interface via
+configfs for disabling U1/U2, enabling a workaround for devices based
+on
+dwc3.
+
+Signed-off-by: Claus H. Stovgaard <cst@phaseone.com>
+---
+ drivers/usb/dwc3/ep0.c        |  9 ++++++-
+ drivers/usb/gadget/configfs.c | 56
++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/gadget.h    |  6 ++++-
+ 3 files changed, 69 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 8efde17..5b2d26b 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -379,6 +379,8 @@ static int dwc3_ep0_handle_u1(struct dwc3 *dwc,
+enum usb_device_state state,
+ 	if ((dwc->speed != DWC3_DSTS_SUPERSPEED) &&
+ 			(dwc->speed != DWC3_DSTS_SUPERSPEED_PLUS))
+ 		return -EINVAL;
++	if (dwc->gadget_driver->lpm_U1_disable)
++		return -EINVAL;
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+ 	if (set)
+@@ -401,6 +403,8 @@ static int dwc3_ep0_handle_u2(struct dwc3 *dwc,
+enum usb_device_state state,
+ 	if ((dwc->speed != DWC3_DSTS_SUPERSPEED) &&
+ 			(dwc->speed != DWC3_DSTS_SUPERSPEED_PLUS))
+ 		return -EINVAL;
++	if (dwc->gadget_driver->lpm_U2_disable)
++		return -EINVAL;
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+ 	if (set)
+@@ -626,7 +630,10 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc,
+struct usb_ctrlrequest *ctrl)
+ 			 * nothing is pending from application.
+ 			 */
+ 			reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+-			reg |= (DWC3_DCTL_ACCEPTU1ENA |
+DWC3_DCTL_ACCEPTU2ENA);
++			if (!dwc->gadget_driver->lpm_U1_disable)
++				reg |= DWC3_DCTL_ACCEPTU1ENA;
++			if (!dwc->gadget_driver->lpm_U2_disable)
++				reg |= DWC3_DCTL_ACCEPTU2ENA;
+ 			dwc3_writel(dwc->regs, DWC3_DCTL, reg);
+ 		}
+ 		break;
+diff --git a/drivers/usb/gadget/configfs.c
+b/drivers/usb/gadget/configfs.c
+index 0251299..2ee9d10 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -229,6 +229,56 @@ static ssize_t gadget_dev_desc_bcdUSB_store(struct
+config_item *item,
+ 	return len;
+ }
+ 
++static ssize_t gadget_dev_desc_lpm_U1_disable_show(struct config_item
+*item,
++		char *page)
++{
++	struct gadget_info *gi = to_gadget_info(item);
++
++	return sprintf(page, "%d\n",
++		       gi->composite.gadget_driver.lpm_U1_disable);
++}
++
++static ssize_t gadget_dev_desc_lpm_U1_disable_store(struct config_item
+*item,
++		const char *page, size_t len)
++{
++	struct gadget_info *gi = to_gadget_info(item);
++	bool disable;
++	int ret;
++
++	ret = strtobool(page, &disable);
++	if (!ret) {
++		gi->composite.gadget_driver.lpm_U1_disable = disable;
++		ret = len;
++	}
++
++	return ret;
++}
++
++static ssize_t gadget_dev_desc_lpm_U2_disable_show(struct config_item
+*item,
++		char *page)
++{
++	struct gadget_info *gi = to_gadget_info(item);
++
++	return sprintf(page, "%d\n",
++		       gi->composite.gadget_driver.lpm_U2_disable);
++}
++
++static ssize_t gadget_dev_desc_lpm_U2_disable_store(struct config_item
+*item,
++		const char *page, size_t len)
++{
++	struct gadget_info *gi = to_gadget_info(item);
++	bool disable;
++	int ret;
++
++	ret = strtobool(page, &disable);
++	if (!ret) {
++		gi->composite.gadget_driver.lpm_U2_disable = disable;
++		ret = len;
++	}
++
++	return ret;
++}
++
+ static ssize_t gadget_dev_desc_UDC_show(struct config_item *item, char
+*page)
+ {
+ 	char *udc_name = to_gadget_info(item)-
+>composite.gadget_driver.udc_name;
+@@ -299,6 +349,8 @@ CONFIGFS_ATTR(gadget_dev_desc_, idVendor);
+ CONFIGFS_ATTR(gadget_dev_desc_, idProduct);
+ CONFIGFS_ATTR(gadget_dev_desc_, bcdDevice);
+ CONFIGFS_ATTR(gadget_dev_desc_, bcdUSB);
++CONFIGFS_ATTR(gadget_dev_desc_, lpm_U1_disable);
++CONFIGFS_ATTR(gadget_dev_desc_, lpm_U2_disable);
+ CONFIGFS_ATTR(gadget_dev_desc_, UDC);
+ 
+ static struct configfs_attribute *gadget_root_attrs[] = {
+@@ -310,6 +362,8 @@ static struct configfs_attribute
+*gadget_root_attrs[] = {
+ 	&gadget_dev_desc_attr_idProduct,
+ 	&gadget_dev_desc_attr_bcdDevice,
+ 	&gadget_dev_desc_attr_bcdUSB,
++	&gadget_dev_desc_attr_lpm_U1_disable,
++	&gadget_dev_desc_attr_lpm_U2_disable,
+ 	&gadget_dev_desc_attr_UDC,
+ 	NULL,
+ };
+@@ -1408,6 +1462,8 @@ static const struct usb_gadget_driver
+configfs_driver_template = {
+ 		.name		= "configfs-gadget",
+ 	},
+ 	.match_existing_only = 1,
++	.lpm_U1_disable = 0,
++	.lpm_U2_disable = 0,
+ };
+ 
+ static struct config_group *gadgets_make(
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 7595056..25fe72b 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -619,7 +619,9 @@ static inline int usb_gadget_activate(struct
+usb_gadget *gadget)
+  *	this driver will be bound to any available UDC.
+  * @pending: UDC core private data used for deferred probe of this
+driver.
+  * @match_existing_only: If udc is not found, return an error and
+don't add this
+- *      gadget driver to list of pending driver
++ *      gadget driver to list of pending driver.
++ * @lpm_U1_disable: Instruct the UDC to disable U1 if possible.
++ * @lpm_U2_disable: Instruct the UDC to disable U2 if possible.
+  *
+  * Devices are disabled till a gadget driver successfully bind()s,
+which
+  * means the driver will handle setup() requests needed to enumerate
+(and
+@@ -684,6 +686,8 @@ struct usb_gadget_driver {
+ 	char			*udc_name;
+ 	struct list_head	pending;
+ 	unsigned                match_existing_only:1;
++	unsigned		lpm_U1_disable:1;
++	unsigned		lpm_U2_disable:1;
+ };
+ 
+ 
+-- 
+2.7.4
+
