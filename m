@@ -2,35 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3528411BB4
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 16:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414B911BBA
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 16:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbfEBOrd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 10:47:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54982 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726197AbfEBOrd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 May 2019 10:47:33 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 588FB20651;
-        Thu,  2 May 2019 14:47:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556808451;
-        bh=mUEsG/SRoI8Ieb161/tWDISH+t6jDgm6B4+KcuOh3AU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=daoNFnVLgHi38BNQTCjcJHVMB3FJn5fa190DI9hpsfgdcKxn3knE8h6al6P4cILPh
-         f+Z1Xany8A1U7D87Tn8muq7h7PpYkrXw8ctMwqk6+VzBfxF7XURgRPPILL+BpxRZ5X
-         jToGz+zj+t/AOVd7od5hCcDaJIs66thXngIokvGg=
-Date:   Thu, 2 May 2019 16:47:29 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        id S1726394AbfEBOsG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 10:48:06 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:46677 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbfEBOsG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 10:48:06 -0400
+Received: by mail-lj1-f193.google.com with SMTP id h21so2401807ljk.13;
+        Thu, 02 May 2019 07:48:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TRsUL+/lAkniHNhKMMSf6UQnO5lUvvQWskmDhwJ5gVo=;
+        b=aUYgGFQYmPyR/FKPMUqoQFurJk9trKoKIgDz08XEsnvimM6Efhrle30oZPn90o7ksF
+         cxnGwkrY1e/fsIA7K59oZLz62H4qzRRv4Ct+3w0inK6JFY+Hm2Ejxe6Me9eMO1/zjrD+
+         e+QghwCGm3MGoAu+BOLflbrcT358Qat2DSkbnUIfAnzSqvAePSGYizIdS+0GHwWBPkdX
+         r6Qe730Roq7qo+nZiyiBIs0U7trusbD8BRhZrFeJ1QUhLH55d0Z53Z1aWY0vlMTylSN0
+         GSgBaTdzN/F3mxtp+SPnTCWLfj7Ipr+gBhffSJNo9agvUT0TR2mzXHeKv+9JFazFj6Bz
+         QRBA==
+X-Gm-Message-State: APjAAAV2V+J48OQJbUgx77QZ4705T8FDwB8RkN9W1J53Ru0TX7i4vTuZ
+        eYnC7sieooHEFS1YYt/Ei1A=
+X-Google-Smtp-Source: APXvYqxZsE2YBL/XpPCmdhnPx9C9hLu50MtUOZLaQChBJzwTG5MF++8SRvEv0a/loPukkLR+USB8vQ==
+X-Received: by 2002:a2e:2b8c:: with SMTP id r12mr2283031ljr.115.1556808483573;
+        Thu, 02 May 2019 07:48:03 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id m28sm9465085lfc.71.2019.05.02.07.48.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 07:48:02 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.91)
+        (envelope-from <johan@kernel.org>)
+        id 1hMD0O-0003US-E7; Thu, 02 May 2019 16:48:13 +0200
+Date:   Thu, 2 May 2019 16:48:12 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
 Subject: Re: [PATCH v2] USB: serial: io_edgeport: mark expected switch
  fall-throughs
-Message-ID: <20190502144729.GB17960@kroah.com>
+Message-ID: <20190502144812.GW26546@localhost>
 References: <20190501213329.GA26972@embeddedor>
  <20190502102608.GS26546@localhost>
  <df1feb28-58d0-7ac8-644d-0b48e5078edf@embeddedor.com>
@@ -38,9 +52,8 @@ References: <20190501213329.GA26972@embeddedor>
  <f3fd7ece-98ff-4b67-6115-5f599e183508@embeddedor.com>
  <20190502144041.GA17960@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <20190502144041.GA17960@kroah.com>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
@@ -50,67 +63,7 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Thu, May 02, 2019 at 04:40:41PM +0200, Greg Kroah-Hartman wrote:
 > On Thu, May 02, 2019 at 09:28:37AM -0500, Gustavo A. R. Silva wrote:
-> > 
-> > 
-> > On 5/2/19 8:56 AM, Johan Hovold wrote:
-> > > On Thu, May 02, 2019 at 08:22:30AM -0500, Gustavo A. R. Silva wrote:
-> > >>
-> > >>
-> > >> On 5/2/19 5:26 AM, Johan Hovold wrote:
-> > >>> On Wed, May 01, 2019 at 04:33:29PM -0500, Gustavo A. R. Silva wrote:
-> > >>>> In preparation to enabling -Wimplicit-fallthrough, mark switch
-> > >>>> cases where we are expecting to fall through.
-> > >>>>
-> > >>>> This patch fixes the following warnings:
-> > >>>>
-> > >>>> drivers/usb/serial/io_edgeport.c: In function ‘process_rcvd_data’:
-> > >>>> drivers/usb/serial/io_edgeport.c:1750:7: warning: this statement may fall through [-Wimplicit-fallthrough=]
-> > >>>>     if (bufferLength == 0) {
-> > >>>>        ^
-> > >>>> drivers/usb/serial/io_edgeport.c:1755:3: note: here
-> > >>>>    case EXPECT_HDR2:
-> > >>>>    ^~~~
-> > >>>> drivers/usb/serial/io_edgeport.c:1810:8: warning: this statement may fall through [-Wimplicit-fallthrough=]
-> > >>>>      if (bufferLength == 0) {
-> > >>>>         ^
-> > >>>> drivers/usb/serial/io_edgeport.c:1816:3: note: here
-> > >>>>    case EXPECT_DATA: /* Expect data */
-> > >>>>    ^~~~
-> > >>>>
-> > >>>> Warning level 3 was used: -Wimplicit-fallthrough=3
-> > >>>>
-> > >>>> Notice that, in this particular case, the code comments are modified
-> > >>>> in accordance with what GCC is expecting to find.
-> > >>>>
-> > >>>> This patch is part of the ongoing efforts to enable
-> > >>>> -Wimplicit-fallthrough.
-> > >>>>
-> > >>>> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-> > >>>> ---
-> > >>>> Changes in v2:
-> > >>>>  - Warning level 3 is now used: -Wimplicit-fallthrough=3
-> > >>>>    instead of warning level 2.
-> > >>>>  - All warnings in the switch statement are addressed now.
-> > >>>>
-> > >>>> Notice that these are the last remaining fall-through warnings
-> > >>>> in the USB subsystem. :)
-> > >>>
-> > >>>>  drivers/usb/serial/io_edgeport.c | 3 ++-
-> > >>>>  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >>>>
-> > >>>> diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
-> > >>>> index 4ca31c0e4174..7ad10328f4e2 100644
-> > >>>> --- a/drivers/usb/serial/io_edgeport.c
-> > >>>> +++ b/drivers/usb/serial/io_edgeport.c
-> > >>>> @@ -1751,7 +1751,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
-> > >>>>  				edge_serial->rxState = EXPECT_HDR2;
-> > >>>>  				break;
-> > >>>>  			}
-> > >>>> -			/* otherwise, drop on through */
-> > >>>> +			/* Fall through - otherwise, drop on through */
-> > >>>>  		case EXPECT_HDR2:
-> > >>>>  			edge_serial->rxHeader2 = *buffer;
-> > >>>>  			++buffer;
+
 > > >>>> @@ -1813,6 +1813,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
 > > >>>>  				}
 > > >>>>  				/* Else, drop through */
@@ -170,78 +123,12 @@ On Thu, May 02, 2019 at 04:40:41PM +0200, Greg Kroah-Hartman wrote:
 > 
 > I love it how no one is blaming the original author of this code (i.e.
 > me...)
-> 
+>
 > Let me see if I can fix it up to be more "sane", this is my fault.
 
-How about the following patch?  Johan, this look nicer to you?  It makes
-more sense to me.
+Thanks, that'd be great. I haven't looked at it myself in a long time,
+but judging from the old thread it did not seem impossible at least.
 
-And in looking at the history, I can't claim total credit for this
-monstrosity, it was originally written by someone else, I just "cleaned
-it up" back in 2001, to get it into mergable shape.  Clearly "mergable
-shape" was much looser back then :)
+Getting rid of some of that deep nesting would be good either way. :)
 
-thanks,
-
-greg k-h
-
-----------------
-
-diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
-index 4ca31c0e4174..732081b3718f 100644
---- a/drivers/usb/serial/io_edgeport.c
-+++ b/drivers/usb/serial/io_edgeport.c
-@@ -1751,7 +1751,8 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
- 				edge_serial->rxState = EXPECT_HDR2;
- 				break;
- 			}
--			/* otherwise, drop on through */
-+			/* Fall through */
-+
- 		case EXPECT_HDR2:
- 			edge_serial->rxHeader2 = *buffer;
- 			++buffer;
-@@ -1790,29 +1791,21 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
- 						edge_serial->rxHeader2, 0);
- 				edge_serial->rxState = EXPECT_HDR1;
- 				break;
--			} else {
--				edge_serial->rxPort =
--				    IOSP_GET_HDR_PORT(edge_serial->rxHeader1);
--				edge_serial->rxBytesRemaining =
--				    IOSP_GET_HDR_DATA_LEN(
--						edge_serial->rxHeader1,
--						edge_serial->rxHeader2);
--				dev_dbg(dev, "%s - Data for Port %u Len %u\n",
--					__func__,
--					edge_serial->rxPort,
--					edge_serial->rxBytesRemaining);
--
--				/* ASSERT(DevExt->RxPort < DevExt->NumPorts);
--				 * ASSERT(DevExt->RxBytesRemaining <
--				 *		IOSP_MAX_DATA_LENGTH);
--				 */
--
--				if (bufferLength == 0) {
--					edge_serial->rxState = EXPECT_DATA;
--					break;
--				}
--				/* Else, drop through */
- 			}
-+
-+			edge_serial->rxPort = IOSP_GET_HDR_PORT(edge_serial->rxHeader1);
-+			edge_serial->rxBytesRemaining = IOSP_GET_HDR_DATA_LEN(edge_serial->rxHeader1,
-+									      edge_serial->rxHeader2);
-+			dev_dbg(dev, "%s - Data for Port %u Len %u\n", __func__,
-+				edge_serial->rxPort,
-+				edge_serial->rxBytesRemaining);
-+
-+			if (bufferLength == 0) {
-+				edge_serial->rxState = EXPECT_DATA;
-+				break;
-+			}
-+			/* Fall through */
-+
- 		case EXPECT_DATA: /* Expect data */
- 			if (bufferLength < edge_serial->rxBytesRemaining) {
- 				rxLen = bufferLength;
+Johan
