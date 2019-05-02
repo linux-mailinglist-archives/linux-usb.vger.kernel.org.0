@@ -2,65 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06296118CD
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 14:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D5F1192C
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 14:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbfEBMOr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 08:14:47 -0400
-Received: from mga03.intel.com ([134.134.136.65]:60991 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726282AbfEBMOr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 May 2019 08:14:47 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 May 2019 05:14:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,421,1549958400"; 
-   d="scan'208";a="154129005"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 May 2019 05:14:44 -0700
-Subject: Re: [PATCH v2] xhci: Convert xhci_handshake() to use
- readl_poll_timeout_atomic()
-To:     Raul Rangel <rrangel@chromium.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20190208014816.21869-1-andrew.smirnov@gmail.com>
- <20190429200541.GA116440@google.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <c102196e-1250-307f-0b2e-d76c62a161a0@linux.intel.com>
-Date:   Thu, 2 May 2019 15:17:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1726387AbfEBMdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 08:33:11 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:7814 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726267AbfEBMdK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 08:33:10 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ccae3660000>; Thu, 02 May 2019 05:32:38 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 02 May 2019 05:33:09 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 02 May 2019 05:33:09 -0700
+Received: from [10.19.120.147] (10.124.1.5) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 2 May
+ 2019 12:33:08 +0000
+Subject: Re: [PATCH v3 1/1] usb: xhci: Add Clear_TT_Buffer
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
+References: <1556593592-3078-1-git-send-email-jilin@nvidia.com>
+ <f1688e22-05d9-ca43-5df2-2a5436631851@linux.intel.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+From:   Jim Lin <jilin@nvidia.com>
+Message-ID: <e82d0e4b-3621-ed5b-b25c-ebf3feec91bd@nvidia.com>
+Date:   Thu, 2 May 2019 20:32:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
-In-Reply-To: <20190429200541.GA116440@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <f1688e22-05d9-ca43-5df2-2a5436631851@linux.intel.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL104.nvidia.com (172.18.146.11) To
+ HQMAIL101.nvidia.com (172.20.187.10)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1556800358; bh=ZS8vh8KD8anSfPWwEZxAwvj2iOB9xyaClvsaxRdp4e0=;
+        h=X-PGP-Universal:Subject:To:References:CC:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding;
+        b=YUm4ZS0s9B2rGQNv6BXsxM0TguIl26kD0X296JliOvM/M2foKWqlE8EHk4IJiQzas
+         CIk0H75bQ9EYAUjk2UNvTUJ+KBmLLbmhgrf14eBd7H7+FUnlNKoo7+/ugcviicO1ot
+         /un0YxBTalQMM8k3JdF7Sem0/Ao52Im1gzFtDkEOk/IzFNQkkn6Bw1OqEV5Lsn39rV
+         Lt0HpRr2PnxhbscpOORgNY/L9BEuCOsLQpPKqAue0sprjzcOxTkgtPwZp+e/jK2QdU
+         b+uAuW+uvM0CCkFRSRpAIkeDImHn8PGViGwgmes/hhoka20pZ1+PE4Wwn4od4k4CyK
+         J3mW3pTgd0pmg==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29.4.2019 23.05, Raul Rangel wrote:
-> On Thu, Feb 07, 2019 at 05:48:16PM -0800, Andrey Smirnov wrote:
->> Xhci_handshake() implements the algorithm already captured by
->> readl_poll_timeout_atomic(). Convert the former to use the latter to
->> avoid repetition.
+
+
+On 2019=E5=B9=B405=E6=9C=8802=E6=97=A5 18:56, Mathias Nyman wrote:
+> On 30.4.2019 6.06, Jim Lin wrote:
+>> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+>> processing for full-/low-speed endpoints connected via a TT, the host
+>> software must use the Clear_TT_Buffer request to the TT to ensure
+>> that the buffer is not in the busy state".
+>
+> Good point, xhci isn't making sure TT buffers get cleared when they=20
+> should.
+>
 >>
->> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> Tested-by: Raul E Rangel <rrangel@chromium.org>
-> Reviewed-by: Raul E Rangel <rrangel@chromium.org>
-> 
-> This fixes a bug on the AMD Stoneyridge platform. usleep(1) sometimes
-> takes over 10ms. This means a 5 second timeout can easily take over 15
-> seconds which will trigger the watchdog and reboot the system.
-> 
-> Thanks for the patch.
+>> In our case, a full-speed speaker (ConferenceCam) is behind a high-
+>> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+>> request we may continue to get STALL with the folllowing requests,
+>> like Set_Interface.
+>>
+>> Here we add Clear_TT_Buffer for the following Set_Interface requests
+>> to get ACK successfully.
+>>
+>> Signed-off-by: Jim Lin <jilin@nvidia.com>
+>> ---
+>> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
+>>      , remove its claiming in xhci.h
+>> v3: Add description for clearing_tt (xhci.h)
+>>
+>>   drivers/usb/host/xhci-ring.c | 28 ++++++++++++++++++++++++++++
+>>   drivers/usb/host/xhci.c      |  7 +++++++
+>>   drivers/usb/host/xhci.h      |  2 ++
+>>   3 files changed, 37 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>> index 9215a28dad40..02b1ebad81e7 100644
+>> --- a/drivers/usb/host/xhci-ring.c
+>> +++ b/drivers/usb/host/xhci-ring.c
+>> @@ -1786,6 +1786,33 @@ struct xhci_segment *trb_in_td(struct xhci_hcd=20
+>> *xhci,
+>>       return NULL;
+>>   }
+>>   +static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci,
+>> +    unsigned int slot_id, struct xhci_td *td)
+>> +{
+>> +    struct xhci_virt_device *dev;
+>> +    struct xhci_slot_ctx *slot_ctx;
+>> +    int saved_devnum;
+>> +
+>> +    /*
+>> +     * As part of low/full-speed endpoint-halt processing
+>> +     * we must clear the TT buffer (USB 2.0 specification 11.17.5).
+>> +     */
+>> +    if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
+>> +        (td->urb->dev->tt->hub !=3D xhci_to_hcd(xhci)->self.root_hub) &=
+&
+>> +        !xhci->clearing_tt) {
+>> +        xhci->clearing_tt =3D 1;
+>
+> one xhci->clearing_tt under is not enough, there might be several HS=20
+> hubs, or
+> multi TT hubs with halted endpoints at the same time that need TT=20
+> clearing.
+>
+> How about a flag per endpoint?
+>
+> For example Aadding a EP_CLEARING_TT flag for ep_state in struct=20
+> xhci_virt_ep?
+> just like EP_STOP_CMD_PENDING, or EP_HALTED
+>
+>> +        dev =3D xhci->devs[slot_id];
+>> +        slot_ctx =3D xhci_get_slot_ctx(xhci, dev->out_ctx);
+>> +        /* Update devnum temporarily for usb_hub_clear_tt_buffer */
+>> +        saved_devnum =3D td->urb->dev->devnum;
+>> +        td->urb->dev->devnum =3D (int) le32_to_cpu(slot_ctx->dev_state)=
+ &
+>> +            DEV_ADDR_MASK;
+>
+> Changing the struct usb_device devnum on the fly seems like a bit of a=20
+> hack, and probably
+> causes issues elsewhere. Devnum is tied to uevents, usbfs, sysfs etc.
+>
+> We need another solution, some options:
+>
+> - Let usb_hub_clear_tt_buffer() figure out address and not just use=20
+> devnum if host =3D=3D xhci.
+> - Add address to struct usb_device, (would have both address and=20
+> devnum), use it when needed.
+> - Provide address as parameter to usb_clear_tt_buffer() (api change,=20
+> changes other host drivers)
+> - Force devnum to be same as address, usb core can't choose address=20
+> for xhci devices.
+>
+> -Mathias
+Thanks for review. Will try.
 
-Adding to queue
-
--Mathias
-
+--nvpublic
