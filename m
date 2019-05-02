@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 415B811FC1
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 18:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A7A11FC8
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 18:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbfEBQKB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 12:10:01 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:40968 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726300AbfEBQKB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 12:10:01 -0400
-Received: by mail-pl1-f196.google.com with SMTP id d9so1243226pls.8
-        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 09:10:01 -0700 (PDT)
+        id S1726383AbfEBQKw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 12:10:52 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45886 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726349AbfEBQKw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 12:10:52 -0400
+Received: by mail-pf1-f196.google.com with SMTP id e24so1341896pfi.12
+        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 09:10:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tL3Pud+YJBNQiO93dRarRa44+urFtai9+XXdaXC1EX8=;
-        b=Uvr7eYDD/u9aWB5XeiFkGkmMbcelulOeVmqQHiPNC2nzMhwcnYR4+lUYoOpWkPOzDk
-         WdZFHHq+gptNhRKAm3jIP7r3Rt8dM+1ScsteT2tAHKYQLm397E4YNxFFXHB1tJ17Pr71
-         cQJl7nL0hUVEwvelRott1dHL/TNQY+gaIQTShEzmXgZIrNQcl4zpwNuV4CAg+K1GAyYL
-         zQceMqLx64TWFVEi5oLoIskYJvElCbKVOTSeW6vLbtpbmyAbGVjRK4GmKFsAZ2zj0QqV
-         VLjwgBaIqgxKv4iGzBpB9wnRFhq/2LGGx+otORB2k0+HN1RXbikKMPQMIzxT+Dx329Zy
-         3HnQ==
+        bh=D3YDkpmzHxdhUQMUnx3mTJcJgwOyUC8yFEPxSbnfe4M=;
+        b=lOtHHm/JaVfqdlgeAOquhuVyu/dUB945WnJQES1DDfTDywnbi8blc5HPqurF0Quafv
+         zXA3X+4eAxak0MlMzNdDhmUGdsSp24ntiBrWwg5EoVJekstJtwtacHCLahHj30s3ul3u
+         zVV36QdJ8dzSLyP9FRjyn2lAPrsOkIWHlFI/rLyOQ44eLAGuhKiq3RsiWbG/37MHM8RN
+         wUjokFXA7wer7yNDIfnzgFKwH2CXXPXdTderQqIMsk9+cFq7cQBTSDnmME3+/xJar8dF
+         4iZ5eRH4/A4x5PL8wIhjuPjW+JmqUBz2Q2TYZs89SAy4S6eCyyobW2YuMIosdaMFXYXd
+         ih8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tL3Pud+YJBNQiO93dRarRa44+urFtai9+XXdaXC1EX8=;
-        b=UEchFcDJ5Y4SbgunqLSP8pBaLkktMCoObl+qqRQ1ljEmnr0qO+cezWYRLYo59mp3NE
-         AVRbYWzZhIszinhL1pMFFlmFRy0cMhEvDWac+0eHp+SciayoAcYJXiQd7xlt4pyQNtjn
-         CQfm9KzXJ0k6d6hOJXGni6jWrtXkPRJMv2xMHOOYPmeB5+KNwF3hEuv/X4B31GDozFdp
-         5rMycSrnynHD/O8hvM+5dQfznc646ZOi4SMOVxWACfllJEnNqcrgqVNFfq7W9v4vXLkE
-         jzaupG8D+VFpoZ6A+ok8qIMGJrr28IvDTHmoeQPL+dwdZ1HkrfjZrJKZRLx3lmZkU+52
-         tvjw==
-X-Gm-Message-State: APjAAAWUbJAgWmyEbbptoq1DemnErPuRk1LKCRDihY9GkzxnSK8hALfH
-        ULpGZ5g2ix0xShXJAjkTEuw/DM9XdEBH65dXADN2hQ==
-X-Google-Smtp-Source: APXvYqweiMYDaxRdcX6bGs9e5ycuS+mIRgrgR9TjYwmXsa0frVpfhEjm9i8hQX6HSpAqSO8yl/Bh4U950qcyLeHLpMs=
-X-Received: by 2002:a17:902:7207:: with SMTP id ba7mr4392261plb.329.1556813400075;
- Thu, 02 May 2019 09:10:00 -0700 (PDT)
+        bh=D3YDkpmzHxdhUQMUnx3mTJcJgwOyUC8yFEPxSbnfe4M=;
+        b=ICUM8nFsL1BXLdV4fQrD2glHibeqgY6iFh8pLcmDmgheu0qcr7BtR6P7AUZHIeziok
+         z6AepLDU4rxDhQioS+vx0tG49fJ+iFyI+QN+P6OECCto2GYeku7iAOckUxKKvBHrsLor
+         AtCqZfs17zTLPaCSBYy21XvO5ikW0/w5UYBW7hCtzoqSbrAW/FqGRdIC3BDdSa+2gJsM
+         zniViKOvSxOJ805moGorpMP3BPuyJ1o2XK2sDW5gZBhFxgLJ5mVnYUCQ7n2Mmsczf6Tt
+         eQ5ZXrTv/2UrQ6LCY8KjjnJo++eZN2Qhq2p1pQ3ENrldpaPu99ww3dqWx2iQYXx/fIAf
+         +R/g==
+X-Gm-Message-State: APjAAAUbAjqYZKX1zxgDQdKJarIj9c1DpNn+ksENU/JrQoJUIQ07WsD9
+        0wbHPHOFrSIUCud7frfYiuSBeE2Giux9rkqS4oOGhQ==
+X-Google-Smtp-Source: APXvYqzfALkDWAxRy5p0qxtcbo6+h1HGtE8n83+tgVY8D4QEgmEEsiQq4qpbSnmbHqhL4/c9nFEI8uiYTq+yH2URBoI=
+X-Received: by 2002:aa7:8289:: with SMTP id s9mr5046731pfm.208.1556813451177;
+ Thu, 02 May 2019 09:10:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000004101370587c052fb@google.com> <Pine.LNX.4.44L0.1904301058150.1465-100000@iolanthe.rowland.org>
- <CAAeHK+zYQ0QF_vo+iYns2d0O7RZ=Uq0kxi1mWc1W_0bBxMGR0A@mail.gmail.com> <20190430154000.GB23459@kroah.com>
-In-Reply-To: <20190430154000.GB23459@kroah.com>
+References: <000000000000b7a84a0587c3f3e5@google.com> <Pine.LNX.4.44L0.1904301530070.1465-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1904301530070.1465-100000@iolanthe.rowland.org>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 2 May 2019 18:09:48 +0200
-Message-ID: <CAAeHK+w6NfdqLRCxO8J24YqdmTRkipyG3GaCZBaYdNE5b+Ojeg@mail.gmail.com>
-Subject: Re: WARNING: Support for this device (Terratec Grabster AV400) is experimental.
-To:     Greg KH <greg@kroah.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
+Date:   Thu, 2 May 2019 18:10:40 +0200
+Message-ID: <CAAeHK+x40G6B9penzkSHNqTXSg9ZfxrfD0hsmtJgm-O95nzcjw@mail.gmail.com>
+Subject: Re: WARNING: Detected a wedged cx25840 chip; the device will not work.
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mike Isely <isely@pobox.com>,
+        syzbot <syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com>,
+        linux-media@vger.kernel.org,
+        Kernel development list <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -60,69 +60,98 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 5:40 PM Greg KH <greg@kroah.com> wrote:
+On Tue, Apr 30, 2019 at 9:34 PM Alan Stern <stern@rowland.harvard.edu> wrote:
 >
-> On Tue, Apr 30, 2019 at 05:14:28PM +0200, Andrey Konovalov wrote:
-> > On Tue, Apr 30, 2019 at 5:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Tue, 30 Apr 2019, syzbot wrote:
-> > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following crash on:
-> > > >
-> > > > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-> > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=141ca62d200000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=af8f8d2ac0d39b0ed3a0
-> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1405bedd200000
-> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ce3bbb200000
-> > > >
-> > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > > Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
-> > > >
-> > > > usb 1-1: New USB device found, idVendor=0ccd, idProduct=0039, bcdDevice=
-> > > > d.3c
-> > > > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > > > usb 1-1: config 0 descriptor??
-> > > > pvrusb2: Hardware description: Terratec Grabster AV400
-> > > > pvrusb2: **********
-> > > > pvrusb2: WARNING: Support for this device (Terratec Grabster AV400) is
-> > > > experimental.
-> > > > pvrusb2: Important functionality might not be entirely working.
-> > > > pvrusb2: Please consider contacting the driver author to help with further
-> > > > stabilization of the driver.
-> > > > pvrusb2: **********
-> > > >
-> > > >
-> > > > ---
-> > > > This bug is generated by a bot. It may contain errors.
-> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > >
-> > > This does seem like a bug in syzbot.  Why does it think this pr_info()
-> > > output indicates a crash?  Is it fooled by the capitalized "WARNING" at
-> > > the start of one of the lines?
+> On Tue, 30 Apr 2019, syzbot wrote:
+>
+> > Hello,
 > >
-> > Well, as of [1] WARN*() should only be used to indicate a kernel bug.
-> > Normally, WARN*() prints a line that start with a warning, which is
-> > followed by a stack trace. Unfortunately the stack trace is not always
-> > present (kernel memory is badly corrupted, console deadlocked, etc.),
-> > so syzbot detects the "WARNING:" line as a beginning of a WARN*()
-> > reported bug. In this case the driver does something like
-> > `pr_info("WARNING: ...", ...)`, which confuses syzbot. I'd say it's
-> > the kernel that needs to be changed here to use some other kind of
-> > prefix for printing warning messages.
+> > syzbot has tested the proposed patch but the reproducer still triggered
+> > crash:
+> > WARNING in sysfs_remove_group
 > >
-> > [1] https://github.com/torvalds/linux/commit/96c6a32ccb55a366054fd82cc63523bb7f7493d3
+> > pvrusb2: Attached sub-driver tuner
+> > pvrusb2: ***WARNING*** pvrusb2 driver initialization failed due to the
+> > failure of one or more sub-device kernel modules.
+> > pvrusb2: You need to resolve the failing condition before this driver can
+> > function.  There should be some earlier messages giving more information
+> > about the problem.
+> > ------------[ cut here ]------------
+> > sysfs group 'power' not found for kobject '0-0044'
+> > WARNING: CPU: 1 PID: 586 at fs/sysfs/group.c:254 sysfs_remove_group
+> > fs/sysfs/group.c:254 [inline]
+> > WARNING: CPU: 1 PID: 586 at fs/sysfs/group.c:254
+> > sysfs_remove_group+0x15a/0x1b0 fs/sysfs/group.c:245
+> > Kernel panic - not syncing: panic_on_warn set ...
+> > CPU: 1 PID: 586 Comm: pvrusb2-context Not tainted 5.1.0-rc3-g43151d6-dirty
+> > #1
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > Google 01/01/2011
+> > Call Trace:
+> >   __dump_stack lib/dump_stack.c:77 [inline]
+> >   dump_stack+0xe8/0x16e lib/dump_stack.c:113
+> >   panic+0x29d/0x5f2 kernel/panic.c:214
+> >   __warn.cold+0x20/0x48 kernel/panic.c:571
+> >   report_bug+0x262/0x2a0 lib/bug.c:186
+> >   fixup_bug arch/x86/kernel/traps.c:179 [inline]
+> >   fixup_bug arch/x86/kernel/traps.c:174 [inline]
+> >   do_error_trap+0x130/0x1f0 arch/x86/kernel/traps.c:272
+> >   do_invalid_op+0x37/0x40 arch/x86/kernel/traps.c:291
+> >   invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:973
+> > RIP: 0010:sysfs_remove_group fs/sysfs/group.c:254 [inline]
+> > RIP: 0010:sysfs_remove_group+0x15a/0x1b0 fs/sysfs/group.c:245
+> > Code: 48 89 d9 49 8b 14 24 48 b8 00 00 00 00 00 fc ff df 48 c1 e9 03 80 3c
+> > 01 00 75 41 48 8b 33 48 c7 c7 a0 31 7a 8e e8 e6 c2 6e ff <0f> 0b eb 95 e8
+> > 0d de d3 ff e9 d2 fe ff ff 48 89 df e8 00 de d3 ff
+> > RSP: 0018:ffff88809ced7b70 EFLAGS: 00010286
+> > RAX: 0000000000000000 RBX: ffffffff8f037e80 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: ffffffff815b2132 RDI: ffffed10139daf60
+> > RBP: 0000000000000000 R08: ffff88809ce96200 R09: ffffed1015a23edb
+> > R10: ffffed1015a23eda R11: ffff8880ad11f6d7 R12: ffff888218b8e630
+> > R13: ffffffff8f038520 R14: 1ffff110139daf97 R15: ffff888218b8e628
+> >   dpm_sysfs_remove+0xa2/0xc0 drivers/base/power/sysfs.c:737
+> >   device_del+0x175/0xb90 drivers/base/core.c:2246
+> > usb 4-1: new high-speed USB device number 3 using dummy_hcd
+> >   device_unregister+0x27/0xd0 drivers/base/core.c:2301
+> >   i2c_unregister_device drivers/i2c/i2c-core-base.c:814 [inline]
+> >   __unregister_client drivers/i2c/i2c-core-base.c:1422 [inline]
+> >   __unregister_client+0x7d/0x90 drivers/i2c/i2c-core-base.c:1418
+> >   device_for_each_child+0x100/0x170 drivers/base/core.c:2401
+> >   i2c_del_adapter drivers/i2c/i2c-core-base.c:1485 [inline]
+> >   i2c_del_adapter+0x35b/0x640 drivers/i2c/i2c-core-base.c:1447
+> >   pvr2_i2c_core_done+0x6e/0xbb
+> > drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:662
+> >   pvr2_hdw_destroy+0x17e/0x380 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2669
+> >   pvr2_context_destroy+0x89/0x240
+> > drivers/media/usb/pvrusb2/pvrusb2-context.c:79
+> >   pvr2_context_check drivers/media/usb/pvrusb2/pvrusb2-context.c:146 [inline]
+> >   pvr2_context_thread_func+0x65e/0x870
+> > drivers/media/usb/pvrusb2/pvrusb2-context.c:167
+> >   kthread+0x313/0x420 kernel/kthread.c:253
+> >   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+> > Kernel Offset: disabled
+> > Rebooting in 86400 seconds..
+> >
+> >
+> > Tested on:
+> >
+> > commit:         43151d6c usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=15433634a00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=274aad0cf966c3bc
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > patch:          https://syzkaller.appspot.com/x/patch.diff?x=13df3d24a00000
 >
-> Ok, we can change these to "Warning" then.  Want to send a patch?
+> It seems pretty clear that this problem is caused by the
+> pvr2_context_thread trying to unregister the device before the main
+> probe routine has finished registering it.
+>
+> I'm not familiar enough with this driver to want to fix the problem,
+> however.  Someone else who knows the code better should work on it.
 
-Done.
+Yeah, it's a different bug than I intended to fix. I've sent patch for
+the original issue (using "WARNING:") though.
 
 >
-> thanks,
+> Alan Stern
 >
-> greg k-h
