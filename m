@@ -2,53 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6B1122B6
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 21:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A83122B9
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 21:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726267AbfEBTrW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 15:47:22 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:40010 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbfEBTrW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 15:47:22 -0400
-Received: by mail-io1-f67.google.com with SMTP id m9so3284760iok.7
-        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 12:47:21 -0700 (PDT)
+        id S1726520AbfEBTro (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 15:47:44 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:34482 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfEBTrn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 15:47:43 -0400
+Received: by mail-it1-f196.google.com with SMTP id p18so6428431itm.1
+        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 12:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kN2LIb+QfrL8sIiIPydwyFeqIMx0USBkBKWhvSqCdeo=;
-        b=JwM5v2d9KH7VGzJ73U1rGQ4UATz/oHxS5kXnZhwrTaLmE1qGi4HM6fQMJFl6+fg8+f
-         92982zb09pcP8df/GXCtdec5nuHNPGqEAK8S4U8/BfmmRKHEZvFfQETtmzsm3u2i+bu/
-         nOsJYsbqOmEaNGQE3nLIjiSsecQB6aq7Ra65g=
+        bh=BlRlXXCdCQ8ojS85wg4oVL7jRwgqCApJr9d2CW9N/kk=;
+        b=hlmMwKaTwo8QkQ4w59AlaHa1gPjDqmFKP51ibnEIOqxvpVM4+UHLOj35EdfiGp9C1i
+         g7B7YmNkJtO8upmjc7K+jEym4Fyf4w+4UzkCuroDMQxsNLAS1DjyfCCM3mi9zNkZHmaX
+         W9BdloyTGe2xFOCDO8SMbUzbt1HoTTeAB47cI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kN2LIb+QfrL8sIiIPydwyFeqIMx0USBkBKWhvSqCdeo=;
-        b=Jt6J5VKSXKS0/d9iflRDtHJjNnyb102peoFPmSPADPr4FfzJRdqcIsxkO+/AbSRA02
-         PZvsE6ZqYgJA8ZTTvKUk/UAV5XbqI8YtwfbLIIur/c4mOAYFjiIGcPmN/uDPB5k/wpyw
-         MYtwf+zrOdE8SQW3JHHf5f+jdv1QtCuwb7Sm20DykMLyn53fxmIM1YgWEAFj2jER46gs
-         abFYDcdD2YRIxn78dI7ES580ykXJXuakjYPe4peE2LPlgiv5vnwTR9od5KTcHek4ApFs
-         uNJsBUO5z90jyf81puGScpjRO0JxstKHBNS8wvzg3ytvVWQkmavFsHSnUGqiiRGs3DFc
-         b2ug==
-X-Gm-Message-State: APjAAAWI09dJfdQmYrDwHFh03LXEs56FQZ+4Of18EIixF0zahLbIdk3O
-        EbuohZHOhHdRAv8EqbTHfuMvewlYoE4=
-X-Google-Smtp-Source: APXvYqxctf1vnpMemVTqvGRy5BaSsYuC0FjClI7ZmiBti3yUwRd5i+u7uLmhR6kGGiZYdqPHbA71iA==
-X-Received: by 2002:a6b:5a0e:: with SMTP id o14mr3747821iob.213.1556826441504;
-        Thu, 02 May 2019 12:47:21 -0700 (PDT)
+        bh=BlRlXXCdCQ8ojS85wg4oVL7jRwgqCApJr9d2CW9N/kk=;
+        b=W/1ea9SvRor/buiOYQ22CaO0m6PSEgcMB12Z6ty+e3t1dwkmAcMrpingsyVupKzXkJ
+         b28CRFGa5CFYK7Zue+DQI/ekrd2skjrhc1EjssGg+sfsm1zHA7qhoM5hLTojmu+Xuvnr
+         ODKlwwsFfmA3TtKZ9weErFgvg309E3HoP2TXs7uwR9+dFd5cbMyzdu5elTHpD/6rFCR+
+         BAoBmjGY9Va9jgT59P13kPQZ5O96TXmBXXgEYqCHZ1eE4XXNrva9+G605B8WtIbjo0D2
+         CE5kBZbQyKeEnVlTdNDAC1nttw0lvI/bfSg6SEfH411lxmGkVgt5pcms5m65LrtYgLSm
+         Ho4A==
+X-Gm-Message-State: APjAAAVX2GjUfFgqSupzPiSo1IFLkR4PZIsikcVHE6ByTBbNC3akG7JG
+        koSN5Tltbs65WjMniLS6+mFdyA==
+X-Google-Smtp-Source: APXvYqzxV1flOpU2yjAYsjvpcGQ06uNmg+YUXTWwTD4S3a4FvSgciwOuQPCWH1C2VXlxaZHzEYUFTg==
+X-Received: by 2002:a02:3b55:: with SMTP id i21mr4012523jaf.128.1556826463209;
+        Thu, 02 May 2019 12:47:43 -0700 (PDT)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id a124sm50177itc.18.2019.05.02.12.47.20
+        by smtp.gmail.com with ESMTPSA id n4sm14741ioh.52.2019.05.02.12.47.42
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 12:47:20 -0700 (PDT)
+        Thu, 02 May 2019 12:47:42 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org
+To:     valentina.manea.m@gmail.com, shuah@kernel.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usbip: usbip_host: cleanup do_rebind() return path
-Date:   Thu,  2 May 2019 13:47:18 -0600
-Message-Id: <20190502194718.15256-1-skhan@linuxfoundation.org>
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: add sleep between detach and usbip list -l
+Date:   Thu,  2 May 2019 13:47:40 -0600
+Message-Id: <20190502194740.15344-1-skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,40 +56,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Cleanup do_rebind() return path and use common return path.
+Add a sleep between detach and check for exportable devices to avoid
+the following segfault from libc-2.27.so
+
+[ 6268.136108] usbip[5565]: segfault at 0 ip 00007f2a947bddfd sp 00007ffd1a8705e8 error 4 in libc-2.27.so[7f2a94703000+1e7000]
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- drivers/usb/usbip/stub_main.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ tools/testing/selftests/drivers/usb/usbip/usbip_test.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-index bf8a5feb0ee9..2e4bfccd4bfc 100644
---- a/drivers/usb/usbip/stub_main.c
-+++ b/drivers/usb/usbip/stub_main.c
-@@ -201,7 +201,7 @@ static DRIVER_ATTR_RW(match_busid);
+diff --git a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+index 128f0ab24307..beacf24a8df7 100755
+--- a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
++++ b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+@@ -171,10 +171,14 @@ echo "Detach invalid port tests - expect invalid port error message";
+ src/usbip detach -p 100;
+ echo "=============================================================="
  
- static int do_rebind(char *busid, struct bus_id_priv *busid_priv)
- {
--	int ret;
-+	int ret = 0;
++# let detach complete. Avoid segfaults from libc-2.27.so
++sleep 3;
++
+ echo "Expect to see export-able devices";
+ src/usbip list -l;
+ echo "=============================================================="
  
- 	/* device_attach() callers should hold parent lock for USB */
- 	if (busid_priv->udev->dev.parent)
-@@ -209,11 +209,9 @@ static int do_rebind(char *busid, struct bus_id_priv *busid_priv)
- 	ret = device_attach(&busid_priv->udev->dev);
- 	if (busid_priv->udev->dev.parent)
- 		device_unlock(busid_priv->udev->dev.parent);
--	if (ret < 0) {
-+	if (ret < 0)
- 		dev_err(&busid_priv->udev->dev, "rebind failed\n");
--		return ret;
--	}
--	return 0;
-+	return ret;
- }
++
+ echo "Remove usbip_host module";
+ rmmod usbip_host;
  
- static void stub_device_rebind(void)
 -- 
 2.17.1
 
