@@ -2,127 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0B211736
-	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 12:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E96C117AC
+	for <lists+linux-usb@lfdr.de>; Thu,  2 May 2019 12:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbfEBK0C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 06:26:02 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:40625 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726231AbfEBK0C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 06:26:02 -0400
-Received: by mail-lf1-f68.google.com with SMTP id o16so1464876lfl.7;
-        Thu, 02 May 2019 03:26:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=h2cWxngpT20ZMfG3eOK3pNNe/GlsC/KIDAQpK5RfIwg=;
-        b=BIr6nPRwjadS7Rbnhlm4RxIdDabgyPyj7reDPc9MzQKBLxZLR9TAdhSKV6hLKxbiI5
-         Ind9JEz8+VJ83RW28e8TFjT9A1PiT0J2oq5uNap1S7pPuZ07iCB2plYtvYnoOULgfWzV
-         ePX98uXaRKb4uGMk6PE3s324XkjuZRv0AYNVDbIVCfCrIeiBQFU4Pd4902LzrmF6mLU8
-         m63XgSvQd6IhqoZfMCockysxRgZGnO/zI9PCZA/d5x8ydApkv6R0DVmORW6E2cj3xyxK
-         d3NbAiT2EMbHddOeEAexwxKjVdm75mJmo/1vXJ62Xe5rsNUGcegyp8wSuwZSrsFmcR1B
-         qhng==
-X-Gm-Message-State: APjAAAXDuCQpnnUA/Za56EbgPI5ykxW4zjyFaSjvIWr91tLOUc6UV/q+
-        gCBMPv88TO37DsXoowNQs+4=
-X-Google-Smtp-Source: APXvYqyLVM37TMfk9L9nCPHALYb1CpY8WCN2mVZesSegxWseGQ5TVBvqvuoedXc67VIzvMAl7Pg7Wg==
-X-Received: by 2002:ac2:4465:: with SMTP id y5mr1550419lfl.82.1556792760262;
-        Thu, 02 May 2019 03:26:00 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id k4sm5931777lja.18.2019.05.02.03.25.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 03:25:59 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.91)
-        (envelope-from <johan@kernel.org>)
-        id 1hM8um-0004gG-I2; Thu, 02 May 2019 12:26:09 +0200
-Date:   Thu, 2 May 2019 12:26:08 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v2] USB: serial: io_edgeport: mark expected switch
- fall-throughs
-Message-ID: <20190502102608.GS26546@localhost>
-References: <20190501213329.GA26972@embeddedor>
+        id S1726450AbfEBKyK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 May 2019 06:54:10 -0400
+Received: from mga02.intel.com ([134.134.136.20]:15382 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726442AbfEBKyJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 May 2019 06:54:09 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 May 2019 03:54:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,421,1549958400"; 
+   d="scan'208";a="154108748"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 May 2019 03:54:07 -0700
+Subject: Re: [PATCH v3 1/1] usb: xhci: Add Clear_TT_Buffer
+To:     Jim Lin <jilin@nvidia.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>
+References: <1556593592-3078-1-git-send-email-jilin@nvidia.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <f1688e22-05d9-ca43-5df2-2a5436631851@linux.intel.com>
+Date:   Thu, 2 May 2019 13:56:39 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190501213329.GA26972@embeddedor>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <1556593592-3078-1-git-send-email-jilin@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 01, 2019 at 04:33:29PM -0500, Gustavo A. R. Silva wrote:
-> In preparation to enabling -Wimplicit-fallthrough, mark switch
-> cases where we are expecting to fall through.
+On 30.4.2019 6.06, Jim Lin wrote:
+> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+> processing for full-/low-speed endpoints connected via a TT, the host
+> software must use the Clear_TT_Buffer request to the TT to ensure
+> that the buffer is not in the busy state".
+
+Good point, xhci isn't making sure TT buffers get cleared when they should.
+
 > 
-> This patch fixes the following warnings:
+> In our case, a full-speed speaker (ConferenceCam) is behind a high-
+> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+> request we may continue to get STALL with the folllowing requests,
+> like Set_Interface.
 > 
-> drivers/usb/serial/io_edgeport.c: In function ‘process_rcvd_data’:
-> drivers/usb/serial/io_edgeport.c:1750:7: warning: this statement may fall through [-Wimplicit-fallthrough=]
->     if (bufferLength == 0) {
->        ^
-> drivers/usb/serial/io_edgeport.c:1755:3: note: here
->    case EXPECT_HDR2:
->    ^~~~
-> drivers/usb/serial/io_edgeport.c:1810:8: warning: this statement may fall through [-Wimplicit-fallthrough=]
->      if (bufferLength == 0) {
->         ^
-> drivers/usb/serial/io_edgeport.c:1816:3: note: here
->    case EXPECT_DATA: /* Expect data */
->    ^~~~
+> Here we add Clear_TT_Buffer for the following Set_Interface requests
+> to get ACK successfully.
 > 
-> Warning level 3 was used: -Wimplicit-fallthrough=3
-> 
-> Notice that, in this particular case, the code comments are modified
-> in accordance with what GCC is expecting to find.
-> 
-> This patch is part of the ongoing efforts to enable
-> -Wimplicit-fallthrough.
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
 > ---
-> Changes in v2:
->  - Warning level 3 is now used: -Wimplicit-fallthrough=3
->    instead of warning level 2.
->  - All warnings in the switch statement are addressed now.
+> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
+>      , remove its claiming in xhci.h
+> v3: Add description for clearing_tt (xhci.h)
 > 
-> Notice that these are the last remaining fall-through warnings
-> in the USB subsystem. :)
-
->  drivers/usb/serial/io_edgeport.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>   drivers/usb/host/xhci-ring.c | 28 ++++++++++++++++++++++++++++
+>   drivers/usb/host/xhci.c      |  7 +++++++
+>   drivers/usb/host/xhci.h      |  2 ++
+>   3 files changed, 37 insertions(+)
 > 
-> diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
-> index 4ca31c0e4174..7ad10328f4e2 100644
-> --- a/drivers/usb/serial/io_edgeport.c
-> +++ b/drivers/usb/serial/io_edgeport.c
-> @@ -1751,7 +1751,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
->  				edge_serial->rxState = EXPECT_HDR2;
->  				break;
->  			}
-> -			/* otherwise, drop on through */
-> +			/* Fall through - otherwise, drop on through */
->  		case EXPECT_HDR2:
->  			edge_serial->rxHeader2 = *buffer;
->  			++buffer;
-> @@ -1813,6 +1813,7 @@ static void process_rcvd_data(struct edgeport_serial *edge_serial,
->  				}
->  				/* Else, drop through */
->  			}
-> +			/* Fall through */
->  		case EXPECT_DATA: /* Expect data */
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 9215a28dad40..02b1ebad81e7 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -1786,6 +1786,33 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
+>   	return NULL;
+>   }
+>   
+> +static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci,
+> +	unsigned int slot_id, struct xhci_td *td)
+> +{
+> +	struct xhci_virt_device *dev;
+> +	struct xhci_slot_ctx *slot_ctx;
+> +	int saved_devnum;
+> +
+> +	/*
+> +	 * As part of low/full-speed endpoint-halt processing
+> +	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
+> +	 */
+> +	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
+> +	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub) &&
+> +	    !xhci->clearing_tt) {
+> +		xhci->clearing_tt = 1;
 
-Looks like you forgot to take the original review feedback you got into
-account:
+one xhci->clearing_tt under is not enough, there might be several HS hubs, or
+multi TT hubs with halted endpoints at the same time that need TT clearing.
 
-	https://lkml.kernel.org/r/87k1zf4k24.fsf@miraculix.mork.no
+How about a flag per endpoint?
 
-Johan
+For example Aadding a EP_CLEARING_TT flag for ep_state in struct xhci_virt_ep?
+just like EP_STOP_CMD_PENDING, or EP_HALTED
+
+> +		dev = xhci->devs[slot_id];
+> +		slot_ctx = xhci_get_slot_ctx(xhci, dev->out_ctx);
+> +		/* Update devnum temporarily for usb_hub_clear_tt_buffer */
+> +		saved_devnum = td->urb->dev->devnum;
+> +		td->urb->dev->devnum = (int) le32_to_cpu(slot_ctx->dev_state) &
+> +			DEV_ADDR_MASK;
+
+Changing the struct usb_device devnum on the fly seems like a bit of a hack, and probably
+causes issues elsewhere. Devnum is tied to uevents, usbfs, sysfs etc.
+
+We need another solution, some options:
+
+- Let usb_hub_clear_tt_buffer() figure out address and not just use devnum if host == xhci.
+- Add address to struct usb_device, (would have both address and devnum), use it when needed.
+- Provide address as parameter to usb_clear_tt_buffer() (api change, changes other host drivers)
+- Force devnum to be same as address, usb core can't choose address for xhci devices.
+
+-Mathias
