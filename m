@@ -2,125 +2,266 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC7E130A4
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 16:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA59A130D4
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 17:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbfECOqR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 May 2019 10:46:17 -0400
-Received: from mail-eopbgr1410119.outbound.protection.outlook.com ([40.107.141.119]:6204
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725283AbfECOqR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 May 2019 10:46:17 -0400
+        id S1728138AbfECPDn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 May 2019 11:03:43 -0400
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:38246 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725283AbfECPDn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 11:03:43 -0400
+Received: by mail-ua1-f67.google.com with SMTP id t15so2114067uao.5
+        for <linux-usb@vger.kernel.org>; Fri, 03 May 2019 08:03:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vSe1MTsVNHSnD+ebCNGY3AwRhVcb5MQaUbovXh7my90=;
- b=hqheZAj5Xf8K05G+V+m6yoG7Jl0m7eZ5QSO43urNfyAo1Etkml4694VK9xnHflWhgRXuwcoZ9s8ioMsJYeTfXJuTDawb08bo6p7t2rJNwxyAlyRGcmx2kKqnLrDQ8pmTqbF4izKUjftvyB1QCZ9n9nHNDxK45NXOA4fCWaODlSE=
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
- TY1PR01MB1804.jpnprd01.prod.outlook.com (52.133.162.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.12; Fri, 3 May 2019 14:46:13 +0000
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1835.018; Fri, 3 May 2019
- 14:46:13 +0000
-From:   Chris Brandt <Chris.Brandt@renesas.com>
-To:     Rob Herring <robh@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: How do I tell a dual role PHY to always be host or peripheral?
-Thread-Topic: How do I tell a dual role PHY to always be host or peripheral?
-Thread-Index: AdUBviCBWw/9JFukQV+j6l9bw9U4zQ==
-Date:   Fri, 3 May 2019 14:46:13 +0000
-Message-ID: <TY1PR01MB1562C3DF1D5D538AF0156B738A350@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Chris.Brandt@renesas.com; 
-x-originating-ip: [75.60.247.61]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 288c1739-c762-47a0-3e17-08d6cfd616e6
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1804;
-x-ms-traffictypediagnostic: TY1PR01MB1804:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <TY1PR01MB180440E6795BE640D03D43128A350@TY1PR01MB1804.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0026334A56
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(376002)(39850400004)(366004)(136003)(199004)(189003)(186003)(66066001)(256004)(25786009)(7736002)(478600001)(6436002)(305945005)(2201001)(9686003)(6306002)(53936002)(55016002)(33656002)(486006)(6506007)(2906002)(3846002)(6116002)(99286004)(7696005)(110136005)(5660300002)(71200400001)(102836004)(74316002)(26005)(81166006)(8936002)(81156014)(8676002)(476003)(14454004)(316002)(52536014)(966005)(72206003)(2501003)(68736007)(86362001)(66946007)(73956011)(64756008)(66446008)(66476007)(66556008)(71190400001)(76116006);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1804;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 2CE/FtvAZCil6zm7K7pRZAjE+HaONaUpvKlsRu9oAQsctj2PQZeVoMBvTZvVlwxKNkMuQXli7C8/GuaiBYOLuRQtXnxg7dcAosgv5Jaemdw/j3VDI70my0tdAZ7TDBUoOoWcxCHi/idQ1YZNMdXJVf/2XVHqNUHl//MnyfaBAjEydVvAFPk7+fQxqT9ySb1dDlkF16ejJFHdWx+cjcr7NHCeVllE/4PT7qZ6lYzOV/ZGonVr3sD265I6RsvuCaQv3MJ8wcCpqcmWeHGVjhEO26QsQEuAOIAoEBoGJ4GavUp4rgUyXqsx8gm17QB6ERkF09GUwHGalNGvfFtr4jh4ItwmnM21LUf1JGXLoajqWoEFkE2p+T6EikM7KZsPlR8ikQJLyFK0ulP4TpiUMVNOOhQsTOE+yF9M3kyhgyKVJMw=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/2zB92Wp7OJKMoHTQAGZBoeHpTeZv+wAfkk5Wp8/82I=;
+        b=Mx0fWWvVhpczsqJaUFU1eRmw+T3uPX1WqlKj2E7W8b/n99kkVbfP9JspiOpaZLUVky
+         in5uLVHMBmxQRyX50+F0j6bFQTxfVZ/jJoVP2mwPVT0u36RZoq28wxcG52d6z1fhpbD4
+         Ow0i4UBsPq0npH8UFycS+tjrjwkRFr5GtuViw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/2zB92Wp7OJKMoHTQAGZBoeHpTeZv+wAfkk5Wp8/82I=;
+        b=o23AFjSDCVGvYhJu3Mk8gKmNFQAw5shJPsoIWvSDisE4AlSZocuk2eX+gvb7T+Im3O
+         SsqrtBEw8rnDPKopDPwzrOEbzJ1xvNQ+QUCxmiNYugD3x/G3EfLEL6TPvO9U4ssaWtUr
+         RZOBEE07DfGMgh+OxsAibLP5Nj3ONcINKbDneYr2UsrMiKosb+dmjBQLOc9Nk3vzFleM
+         PALhL/l9sKccD3VoKjoTZ6Seh54BtZ9+GGmrdAnHXvbXtne+Vyk4le0EYZPUoTN2FKG4
+         AJ0qeQDlqS7Eupn6wypDLjO1E+uPHWcjBmS+37JifQ/UhiUQIhU7dsPsx+FMJiJhcyhQ
+         B4aw==
+X-Gm-Message-State: APjAAAVLxml45dOltDlop3EGMTqemhueDHS1KtI68ZjFDiY+t0oJdRpz
+        tDpVVH8zq4Evez2togYUNwdGVznZ2Qk=
+X-Google-Smtp-Source: APXvYqwrklhyckNoCyT5r2MC6p69lSyKjaXkI+103szLQ+vMOiNbq+XG66Acb2kgEuY+lhkUoN6ZcA==
+X-Received: by 2002:ab0:d89:: with SMTP id i9mr5339384uak.96.1556895821577;
+        Fri, 03 May 2019 08:03:41 -0700 (PDT)
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
+        by smtp.gmail.com with ESMTPSA id c2sm2297520vsc.32.2019.05.03.08.03.36
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 May 2019 08:03:38 -0700 (PDT)
+Received: by mail-vs1-f46.google.com with SMTP id b23so3794808vso.1
+        for <linux-usb@vger.kernel.org>; Fri, 03 May 2019 08:03:36 -0700 (PDT)
+X-Received: by 2002:a67:d29e:: with SMTP id z30mr5820475vsi.111.1556895816252;
+ Fri, 03 May 2019 08:03:36 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 288c1739-c762-47a0-3e17-08d6cfd616e6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2019 14:46:13.1281
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1804
+References: <20190418001356.124334-1-dianders@chromium.org>
+ <20190418001356.124334-2-dianders@chromium.org> <SN1PR12MB243108D1EF3239EC4F730ACDA7390@SN1PR12MB2431.namprd12.prod.outlook.com>
+ <CAD=FV=UOmfNeuZPrDcZRdwAkF4yRifCpBGUuZTsmmz0UVEZ+yA@mail.gmail.com>
+ <SN1PR12MB24317F315C5A4DFE70F9CB0DA73A0@SN1PR12MB2431.namprd12.prod.outlook.com>
+ <CAD=FV=UWGOWiCpy5qUY8oFHPyxdYJe7OsdWBDuCNcXBu5BJoGA@mail.gmail.com> <SN1PR12MB243156982D5BD74F11680597A7350@SN1PR12MB2431.namprd12.prod.outlook.com>
+In-Reply-To: <SN1PR12MB243156982D5BD74F11680597A7350@SN1PR12MB2431.namprd12.prod.outlook.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 3 May 2019 08:03:24 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XzsKe5n_ThcrByW79UznpkmHf0YNRNKH8G3eFtUSsYZQ@mail.gmail.com>
+Message-ID: <CAD=FV=XzsKe5n_ThcrByW79UznpkmHf0YNRNKH8G3eFtUSsYZQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] usb: dwc2: bus suspend/resume for hosts with DWC2_POWER_DOWN_PARAM_NONE
+To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "amstan@chromium.org" <amstan@chromium.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        William Wu <william.wu@rock-chips.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Randy Li <ayaka@soulik.info>,
+        "zyw@rock-chips.com" <zyw@rock-chips.com>,
+        "mka@chromium.org" <mka@chromium.org>,
+        "ryandcase@chromium.org" <ryandcase@chromium.org>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        "jwerner@chromium.org" <jwerner@chromium.org>,
+        "dinguyen@opensource.altera.com" <dinguyen@opensource.altera.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I'm preparing patches to add USB support (host and device) for the=20
-RZ/A2M SoC. The internal HW is similar to the R-Car Gen 3 (USB 2.0, not
-USB 3.0).
-So I'm reusing drivers/phy/renesas/phy-rcar-gen3-usb2.c
+Hi,
 
-But, I'm not doing OTG, so I need to tell the PHY that it explicitly=20
-needs to be configured as host or peripheral mode.
-The controllers are individual (host or peripheral), but they use the=20
-same internal PHY.
-
-Looking at:
-
-https://www.kernel.org/doc/Documentation/devicetree/bindings/usb/generic.tx=
+On Fri, May 3, 2019 at 1:20 AM Artur Petrosyan
+<Arthur.Petrosyan@synopsys.com> wrote:
+>
+> On 5/1/2019 05:57, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Mon, Apr 29, 2019 at 11:06 PM Artur Petrosyan
+> > <Arthur.Petrosyan@synopsys.com> wrote:
+> >>
+> >> Hi,
+> >>
+> >> On 4/29/2019 21:34, Doug Anderson wrote:
+> >>> Hi,
+> >>>
+> >>> On Mon, Apr 29, 2019 at 1:43 AM Artur Petrosyan
+> >>> <Arthur.Petrosyan@synopsys.com> wrote:
+> >>>>
+> >>>> Hi,
+> >>>>
+> >>>> On 4/18/2019 04:15, Douglas Anderson wrote:
+> >>>>> This is an attempt to rehash commit 0cf884e819e0 ("usb: dwc2: add b=
+us
+> >>>>> suspend/resume for dwc2") on ToT.  That commit was reverted in comm=
+it
+> >>>>> b0bb9bb6ce01 ("Revert "usb: dwc2: add bus suspend/resume for dwc2""=
+)
+> >>>>> because apparently it broke the Altera SOCFPGA.
+> >>>>>
+> >>>>> With all the changes that have happened to dwc2 in the meantime, it=
+'s
+> >>>>> possible that the Altera SOCFPGA will just magically work with this
+> >>>>> change now.  ...and it would be good to get bus suspend/resume
+> >>>>> implemented.
+> >>>>>
+> >>>>> This change is a forward port of one that's been living in the Chro=
+me
+> >>>>> OS 3.14 kernel tree.
+> >>>>>
+> >>>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> >>>>> ---
+> >>>>> This patch was last posted at:
+> >>>>>
+> >>>>> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__lkml.kernel.=
+org_r_1446237173-2D15263-2D1-2Dgit-2Dsend-2Demail-2Ddianders-40chromium.org=
+&d=3DDwIDAg&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3D9hPBFKCJ_nBjJhGVrrlYOeOQjP_HlVzY=
+qrC_D7niMJI&m=3DMMfe-4lZePyty6F5zfQ54kiYGuJWNulyRat944LkOsc&s=3DnExFpAPP_0p=
+lZfO5LMG1B-mqt1vyCvE35elVcyVgs8Y&e=3D
+> >>>>>
+> >>>>> ...and appears to have died the death of silence.  Maybe it could g=
+et
+> >>>>> some bake time in linuxnext if we can't find any proactive testing?
+> >>>>>
+> >>>>> I will also freely admit that I don't know tons about the theory
+> >>>>> behind this patch.  I'm mostly just re-hashing the original commit
+> >>>>> from Kever that was reverted since:
+> >>>>> * Turning on partial power down on rk3288 doesn't "just work".  I
+> >>>>>      don't get hotplug events.  This is despite dwc2 auto-detecting=
+ that
+> >>>>>      we are power optimized.
+> >>>> What do you mean by doesn't "just work" ? It seem to me that even af=
+ter
+> >>>> adding this patch you don't get issues fixed.
+> >>>> You mention that you don't get the hotplug events. Please provide dw=
+c2
+> >>>> debug logs and register dumps on this issue.
+> >>>
+> >>> I mean that partial power down in the currently upstream driver
+> >>> doesn't work.  AKA: if I turn on partial power down in the upstream
+> >>> driver then hotplug events break.  I can try to provide some logs.  O=
+n
+> >>> what exact version of the code do you want logs?  Just your series?
+> >>> Just my series?  Mainline?  Some attempt at combining both series?  A=
+s
+> >>> I said things seem to sorta work with the combined series.  I can try
+> >>> to clarify if that's the series you want me to test with.  ...or I ca=
+n
+> >>> wait for your next version?
+> >> As I said this patch doesn't fix the issue with hotplug. With this pat=
+ch
+> >> or without the hotplug behaves as it was. I have tested it on our setu=
+p.
+> >>
+> >> Have you debugged your patch? Does it make any difference on your setu=
+p
+> >> ? Does it fix the issue with hotplug?
+> >
+> > I think we're still not taking on the same page.
+> >
+> > My patch makes no attempt to make partial power down mode work.  My
+> > patch attempts to make things work a little better when using
+> > DWC2_POWER_DOWN_PARAM_NONE.  There is no use testing my patch with
+> > partial power down as it shouldn't have any impact there.
+> >
+> >
+> >>> I am by no means an expert on dwc2, but an assumption made in my patc=
+h
+> >>> is that even cores that can't support partial power down can still
+> >>> save some amount of power when hcd_suspend is called.
+> >> Have you tried to debug dwc2 with power_down =3D=3D DWC2_POWER_DOWN_PA=
+RAM_NONE ?
+> >>>
+> >>> Some evidence that this should be possible: looking at mainline Linux
+> >>> and at dwc2_port_suspend(), I see:
+> >>>
+> >>> * It is currently called even when we have DWC2_POWER_DOWN_PARAM_NONE
+> >> Currently (without your and my patches) (looking at mainline Linux) th=
+e
+> >> function dwc2_port_suspend() is called anyway because its call is issu=
+ed
+> >> by the system. But it performs entering to suspend only in case of
+> >> DWC2_POWER_DOWN_PARAM_PARTIAL.
+> >>
+> >> This is not an assumption. What I am pointing out is based on debuggin=
+g
+> >> and before making assumptions without debugging for me seems not ok.
+> >>
+> >> Currently without your patch and without my patches. In the
+> >> dwc2_port_suspend() it will enter to suspend only in case that
+> >> power_down =3D=3D DWC2_POWER_DOWN_PARAM_PARTIAL. Because if you look a=
+t the
+> >> code more carefully you will see
+> >>
+> >>          if (hsotg->params.power_down !=3D DWC2_POWER_DOWN_PARAM_PARTI=
+AL)
+> >>                  goto skip_power_saving;
+> >>
+> >> This says if power_down is not DWC2_POWER_DOWN_PARAM_PARTIAL then skip
+> >> power saving.
+> >>
+> >> So but after your patch. If power_down is DWC2_POWER_DOWN_PARAM_NONE i=
 t
+> >> tries to suspend.
+> >
+> > We must be looking at different code.  I'm looking at Linux's tree, AKA=
+:
+> >
+> > https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__git.kernel.org_p=
+ub_scm_linux_kernel_git_torvalds_linux.git_tree_drivers_usb_dwc2_hcd.c-23n3=
+488&d=3DDwIFaQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3D9hPBFKCJ_nBjJhGVrrlYOeOQjP_Hl=
+VzYqrC_D7niMJI&m=3DIWkDOOGTr0q-H1piDv2KOZe_Hnrz18g6rXFx-DsTuv4&s=3DAHu2iOKk=
+ybliRGtIfN7cF5p070UdvUKTYJsyAKYojis&e=3D
+> Here you are looking at the old code. After that there are several of
+> changes related to suspend/resume functions.
 
-Technically, I should not add "dr_mode" to the USB controller nodes (and
-let the PHY driver check that) because the "controller" is not dual=20
-role, only PHY is.
+In my email, see that I said I actually checked out mainline kernel
+(and I gave you the exact version: "v5.1-rc7-5-g83a50840e72a") and
+added printouts in dwc2_port_suspend() next to where it set HPRT0_SUSP
+and PCGCTL_STOPPCLK in dwc2_port_suspend().
 
-I was adding a new property "renesas,is_peripheral" to the=20
-phy-rcar-gen3-usb2.c PHY driver that it would check if it was not OTG which=
- of course
-works.
+[  454.906364] dwc2 ff540000.usb: I'm setting HPRT0_SUSP
+[  454.906367] dwc2 ff540000.usb: I'm setting PCGCTL_STOPPCLK
 
-However, if I look at the PHY dt-bindings of:
-  Documentation/devicetree/bindings/phy/brcm,brcmstb-usb-phy.txt
-  Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.txt
-
-They are both using the name "dr_mode" in the PHY node.
-
-So, instead of adding something like "renesas,is_peripheral" to the=20
-current R-Car USB2 PHY driver, can I just use the generic name "dr_mode"?
-
-The PHY driver code change is pretty simple:
-
-	if (channel->is_otg_channel) {
-		x x x (existing code today)
-+	} else
-+		if (usb_get_dr_mode(channel->dev) =3D=3D USB_DR_MODE_PERIPHERAL)
-+			writel(0x80000000, usb2_base + USB2_COMMCTRL);
-+		else
-+			writel(0x00000000, usb2_base + USB2_COMMCTRL);
+The version "v5.1-rc7-5-g83a50840e72a" is not old code.
 
 
+> This is the link to the code with changes. Latest version of those
+> functions.
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d=
+rivers/usb/dwc2/hcd.c#n4489
+>
+> Your changes are sitting on that latest version of code. Not the old
+> version of it.
 
-I figured I would ask BEFORE I start submitting patches for review.
+You are pointing me at _dwc2_hcd_suspend() whereas I pointed at
+dwc2_port_suspend().  Why?
+
+I am saying that dwc2_port_suspend() _does_ set "HPRT0_SUSP" and
+"PCGCTL_STOPPCLK" even with DWC2_POWER_DOWN_PARAM_NONE.  Do you
+disagree?
+
+I completely agree that on mainline _dwc2_hcd_suspend() _does not_ set
+these bits with DWC2_POWER_DOWN_PARAM_NONE.  That is what my patch
+fixes.
 
 
-Thank you,
-Chris
-
+-Doug
