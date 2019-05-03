@@ -2,81 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 466FB124F6
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 01:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112B51277F
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 08:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726128AbfEBXQq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 May 2019 19:16:46 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:59914 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbfEBXQq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 May 2019 19:16:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=n5x69FJgELdhvkEg4/gATqUht1/dFh4DazrcFh8xpQc=; b=xs6XERi76DtaOu8Qv7EkJHc/pO
-        XuSSfFrLG8GA15W7XB/k1fAjJajKlR9yFFzAXu6w0qeEMBenKtBhpNthbfh/zaCgmsPQ/NYURgWit
-        SbcMLGX4NHsT4kHcoYLf1G1I90pC2xRZf/W/q2KHUD5CYprdWZkw0Ev/G4O0LtfEX9rxldpE4CmdI
-        cgltl9oja/JTzuyBXWJcKHHdMNngYecfGmvxZGZUrou9OY1nHbSXDELYTrMzo2MKJKdJx+zQfY4Sx
-        1qmG7LaGsacK6ChUmmOMSyl2Tx++eyTh8sSUD5kiwQqRYORyLWiKWklsepD4h7/WeIPpYLS9i8a8C
-        8iOVypZw==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hMKwW-0005MF-OS; Thu, 02 May 2019 23:16:45 +0000
-Subject: Re: not seeing console logs using usb serial
-To:     Shiv Dev <shivfsdev@gmail.com>, linux-usb@vger.kernel.org
-References: <CACX8e9MkgUH4giW8SVwQb3rJSq3RK-jth4SJbkpkKF3E29bgFg@mail.gmail.com>
- <CACX8e9NPUKbZTD0-+_Yrzd6mUGmsHrYFQuj3RPsS5AQ7rLQymQ@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <adcdd800-ef3f-f1a7-6832-279b53c0d6ff@infradead.org>
-Date:   Thu, 2 May 2019 16:16:41 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726244AbfECGI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 May 2019 02:08:59 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:45830 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbfECGI7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 02:08:59 -0400
+Received: by mail-lf1-f66.google.com with SMTP id t11so3562388lfl.12
+        for <linux-usb@vger.kernel.org>; Thu, 02 May 2019 23:08:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PbLj7/MYB4ffyjWBFDcrh5vX+uBxm5QKj5D+y/GQtpM=;
+        b=OE+cNj1WLQraNM3wYMeo3t6Is511oElziB1hVbllEopzMfDEIJ3W/qSJkE4nBx8oUA
+         mL6iaTfvakOpTAjFvjOOIIVI0gk7CeTN/Bpx5nMiScsSkE9Nw+OGT0UlDvPDgL5lVeHv
+         ojdtC4gy3sFOVAXEC6z+696rwlpWxtkZAo0nFupANpZgDowvxfr/3OGN88ak3KTcIqKX
+         2OQlJPUJ8meMJCDqTP1pAz0o8DKw+dfE3XyADeMvzREo9kFpqWHXJ49x+wZvCPA/mm47
+         6C6ujYCsfS5Bzi5XDurQ+Bn+x6QXB7Nouc2J6ixWwfr2NfaKXi9VjMDwtIXh4+SVB2Pe
+         D6gA==
+X-Gm-Message-State: APjAAAWwzgA1hA7iWt0xT/soaRwZc6BbQeUXB3PHvWWR8WHLEfc0O0p9
+        XjvSlvAdUNvgb1vZd/qJX4xhwlL6
+X-Google-Smtp-Source: APXvYqxWSvDj7/Oy3/9I3kBbMSnJAwcc5c9yeOtVsC8YZDtx6gsPl9+k2XeOxMBckhlgiDe8XZLSjg==
+X-Received: by 2002:ac2:51da:: with SMTP id u26mr4069062lfm.32.1556863737618;
+        Thu, 02 May 2019 23:08:57 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id p19sm236464lfc.48.2019.05.02.23.08.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 23:08:56 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.91)
+        (envelope-from <johan@kernel.org>)
+        id 1hMRNc-0001iA-Qx; Fri, 03 May 2019 08:09:08 +0200
+Date:   Fri, 3 May 2019 08:09:08 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: Re: [PATCH] USB: serial: io_edgeport: fix up switch fall-through
+ comments
+Message-ID: <20190503060908.GY26546@localhost>
+References: <20190502173515.GA13801@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <CACX8e9NPUKbZTD0-+_Yrzd6mUGmsHrYFQuj3RPsS5AQ7rLQymQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190502173515.GA13801@kroah.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/2/19 8:41 AM, Shiv Dev wrote:
-> Hi,
+On Thu, May 02, 2019 at 07:35:15PM +0200, Greg Kroah-Hartman wrote:
+> Gustavo has been working to fix up all of the switch statements that
+> "fall through" such that we can eventually turn on
+> -Wimplicit-fallthrough.  As part of that, the io_edgeport.c driver is a
+> bit "messy" with the parsing logic of a data packet.  Clean that logic
+> up a bit by unindenting one level of the logic, and properly label
+> /* Fall through */ to make gcc happy.
 > 
-> I am using a USB serial cable and want to see the kernel logs on the
-> console, and towards that have the below line in /etc/default/grub
-> 
-> console=ttyUSB0,115200 console=tty0
-> 
-> Hardware: Intel compute stick
-> OS      : ubuntu 18.04
-> kernel : 4.18.0-18
-> Driver  : pl2303
-> 
-> I do not see the kernel logs, and it drops to a dracut shell because
-> the root is encrypted.
+> Reported-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Sounds to me like the kernel isn't being booted so there are no logs
-to see.  If the kernel was booted, it wouldn't then drop to a dracut shell.
+Now applied, thanks.
 
-> I am however able to write to the /dev/ttyUSB0 device, and am able to
-> see the output in minicom at the other end, which means that the
-> requisite driver is loaded in initramfs.
-> dracut:/# echo 'hello' > /dev/ttyUSB0
-> 
-> Not sure what I am missing here. Please help.
-> 
-> Not sure if this is the correct mailing list. Would linux-console be a
-> more appropriate list?
-> 
-> Regards,
-> Shiv
+Gustavo, how many of these warnings are there left in the kernel now
+that the last one in USB is gone? :)
 
-
--- 
-~Randy
+Johan
