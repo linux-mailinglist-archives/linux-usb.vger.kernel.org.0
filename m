@@ -2,140 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 321E712F97
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 15:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3D113004
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 16:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfECNwN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 May 2019 09:52:13 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.1]:51083 "EHLO
-        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726047AbfECNwN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 09:52:13 -0400
-Received: from [85.158.142.103] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-1.bemta.az-a.eu-central-1.aws.symcld.net id 8D/BB-22995-A874CCC5; Fri, 03 May 2019 13:52:10 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRWlGSWpSXmKPExsUyo1hfUrfT/Uy
-  MwY2PJhZvHv9jtzjW9oTdonnxejaLRctamS2WXr/IZHFx/U5Gi9a9R9gtrjydyujA4bFm3hpG
-  j52z7rJ7dDU1s3tsWtXJ5rF/7hp2j8+b5Dz2fv7NEsAexZqZl5RfkcCase/eOaaCCWIVz05vZ
-  Gtg7BTqYuTiEBJYwyjx+/xT5i5GTg5eAROJZV+ng9nCAkESDS2LgWwODjYBXYmuO6Yg9SICpx
-  klnj37zwLiMAv0M0pc7L0H1sAioCJxpuMRmM0pECsxc/smMFtI4CSjxNQ9CiA2s4CmROv23+w
-  gtoSAhsSGm8eYIBYLSpyc+YQFokZeonnrbLDFQgKyEkcvxUKUK0ic3TKREcJOkjjXd4VtAqPA
-  LCRTZyGZNAvJpAWMzKsYLZOKMtMzSnITM3N0DQ0MdA0NjXWNdI2MLfUSq3QT9VJLdZNT80qKE
-  oGyeonlxXrFlbnJOSl6eaklmxiBEZRSyPR+B+P99vRDjJIcTEqivAaiZ2KE+JLyUyozEosz4o
-  tKc1KLDzHKcHAoSfDmuQLlBItS01Mr0jJzgLEMk5bg4FES4Z0MkuYtLkjMLc5Mh0idYtTl+NL
-  +aC6zEEtefl6qlDhvEEiRAEhRRmke3AhYWrnEKCslzMvIwMAgxFOQWpSbWYIq/4pRnINRSZj3
-  IcgUnsy8ErhNr4COYAI64vmkUyBHlCQipKQaGF3vNJoJK/Ap3NA7VzH5i/6mZx8NX2de8e/65
-  DGDo1p13qPbtrXbay9e/rLusFjbxm1vvTuZlsrz9G5Mu+Kyy1h7S8YU41pZpdvKlvJts9yLmd
-  flcEmUdDYkH7knqmvTOcng2xqrO2tNucvsbzVd63+pvODP+dpMdlu3vddYwy9qXPu872R6vRJ
-  LcUaioRZzUXEiAAZDf64mAwAA
-X-Env-Sender: cst@phaseone.com
-X-Msg-Ref: server-5.tower-228.messagelabs.com!1556891529!5892599!1
-X-Originating-IP: [152.115.47.25]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.31.5; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 6064 invoked from network); 3 May 2019 13:52:09 -0000
-Received: from unknown (HELO Exchange2.phaseone.com) (152.115.47.25)
-  by server-5.tower-228.messagelabs.com with AES256-SHA encrypted SMTP; 3 May 2019 13:52:09 -0000
-Received: from cstu16.phaseone.com (172.16.2.207) by Exchange2.phaseone.com
- (172.16.1.180) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 3 May
- 2019 15:52:06 +0200
-Message-ID: <1556891523.24062.31.camel@phaseone.com>
-Subject: Re: [PATCH 0/3] usb: gadget: Add support for disabling U1 and U2
- entries
-From:   "Claus H. Stovgaard" <cst@phaseone.com>
-To:     Anurag Kumar Vulisha <anuragku@xilinx.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "v.anuragkumar@gmail.com" <v.anuragkumar@gmail.com>,
-        Rob Weber <rob@gnarbox.com>
-Date:   Fri, 3 May 2019 15:52:03 +0200
-In-Reply-To: <BYAPR02MB55917AF9083F9718B713FBB4A7350@BYAPR02MB5591.namprd02.prod.outlook.com>
-References: <1556792423-4833-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
-         <1556832986.22007.15.camel@gmail.com>
-         <BYAPR02MB55917AF9083F9718B713FBB4A7350@BYAPR02MB5591.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+        id S1727991AbfECOXb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 May 2019 10:23:31 -0400
+Received: from gateway30.websitewelcome.com ([192.185.193.11]:38730 "EHLO
+        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727956AbfECOXb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 10:23:31 -0400
+X-Greylist: delayed 1365 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 May 2019 10:23:30 EDT
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 7BC8CCB44
+        for <linux-usb@vger.kernel.org>; Fri,  3 May 2019 09:00:45 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id MYk1hAwh42qH7MYk1hTdH2; Fri, 03 May 2019 09:00:45 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.111.227] (port=54524 helo=[192.168.1.76])
+        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.91)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hMYk1-000vjj-3z; Fri, 03 May 2019 09:00:45 -0500
+Subject: Re: [PATCH] USB: serial: io_edgeport: fix up switch fall-through
+ comments
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <20190502173515.GA13801@kroah.com>
+ <20190503060908.GY26546@localhost>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=gustavo@embeddedor.com; keydata=
+ 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
+ VtSixD1uOgytAP7RWS474w==
+Message-ID: <31a4c7d8-48f0-9da4-8153-28b58ccc2662@embeddedor.com>
+Date:   Fri, 3 May 2019 09:00:44 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.2.207]
-X-ClientProxiedBy: Exchange3.phaseone.com (172.16.1.184) To
- Exchange2.phaseone.com (172.16.1.180)
+In-Reply-To: <20190503060908.GY26546@localhost>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.111.227
+X-Source-L: No
+X-Exim-ID: 1hMYk1-000vjj-3z
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.76]) [189.250.111.227]:54524
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Anurag
 
-On Fri, 2019-05-03 at 07:34 +0000, Anurag Kumar Vulisha wrote:
-> Hi Claus,
-> Thanks for testing and voting for this patch.
 
-I have first tested your patches today. My test setup is a ZynqMP
-device, running kernel 4.14 (Xilinx version) with your patches.
-I then create an overlay for the devicetree with the new parameters,
-and unbind/bind the dwc3 driver.
-
-Next I have a host running Windows 10 and a MacBook pro with Type-C
-ports. For logging the communication I use a Total Phase Beagle USB3
-5000 V2 analyzer.
-
-The test showed that OS-X does as expected. When BOS descriptor
-(bU1DevExtLat and bU2DevExtLat) returns 0, it does not enable LPM.
-
-Windows 10 on the other hand does not, and even though it received 0 as
-bU1DevExtLat and bU2DevExtLat it send Set Sel with U1SEL 85 us, U1PEL 0
-us, U2SEL 85 us and U2PEL 0 us.
-Next the Windows 10 host sends the U1 Enable and the U2 enable as Set
-Device Feature, resulting in the system entering U2.
-
-> > 
-> > Just today I was making another solution for this feature, using
-> > the
-> > configfs instead of the devicetree. Though thinks your solution is
-> > better, as it uses the U1DevExitLat and U2DevExitLat instead. I
-> > just
-> > added my solution to the bottem of the mail for reference.
-> > 
-> > [1] https://www.spinics.net/lists/linux-usb/msg179393.html
-> > 
-> Your approach below is also good, but you are just avoiding the
-> gadget dwc3
-> controller from entering into U1 and U2 states by disabling the
-> ACCEPTU1ENA
-> and ACCEPTU2ENA bits in DCTL but not preventing the host from sending
-> the
-> LG0_U1 and LGO_U2 link command signaling to the gadget. The host will
-> keep
-> on trying to get the link into U1 or U2 by sending LGO_U1 or LGO_U2
-> and the
-> gadget rejects these signals by sending LXU link command. To avoid
-> this extra
-> overhead I thought that sending zero  value in the BOS descriptor's
-> U1DevExitLat and U2DevExitLat fields would be the best option. Host
-> on seeing
-> U 1 & U2 Exit Latencies doesn't initiate LPM U1 and U2 commands.
+On 5/3/19 1:09 AM, Johan Hovold wrote:
+> On Thu, May 02, 2019 at 07:35:15PM +0200, Greg Kroah-Hartman wrote:
+>> Gustavo has been working to fix up all of the switch statements that
+>> "fall through" such that we can eventually turn on
+>> -Wimplicit-fallthrough.  As part of that, the io_edgeport.c driver is a
+>> bit "messy" with the parsing logic of a data packet.  Clean that logic
+>> up a bit by unindenting one level of the logic, and properly label
+>> /* Fall through */ to make gcc happy.
+>>
+>> Reported-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> Thanks,
-> Anurag Kumar Vulisha
+> Now applied, thanks.
+> 
+> Gustavo, how many of these warnings are there left in the kernel now
+> that the last one in USB is gone? :)
+> 
 
-Correct that it does not prevent the host from sending LG0_U1 and
-LG0_U2, and there is your solution better on hosts using the BOS
-descriptor for disabling LPM. So based on my test with Windows 10, I
-think we should combine the solutions. To prevent LG0_U1/LG0_U2 when
-possible and still being able to completely disable U1/U2.
+Today, we woke up with 37 of these warnings left in linux-next. :)
 
-Regarding interface for controlling it. I am very novice regarding
-Linux kernel development, but would think the BOS descriptor control
-would be better from a configfs interface then devicetree as I don't
-see BOS descriptor as hardware specific. I am more in doubt about the
-forcing of U1/U2 as I did with setting hardware registers, as it
-control hardware registers. So will like to hear from other more
-experienced developers.
+There were more than 2000 when I first started auditing them.
 
-Regards
-Claus
+Thanks
+--
+Gustavo
