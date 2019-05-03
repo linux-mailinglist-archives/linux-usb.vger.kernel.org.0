@@ -2,108 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E8A1287A
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 09:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CB9128BA
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 09:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726156AbfECHLU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 May 2019 03:11:20 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:34519 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726047AbfECHLU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 03:11:20 -0400
-Received: by mail-lj1-f196.google.com with SMTP id s7so4405009ljh.1
-        for <linux-usb@vger.kernel.org>; Fri, 03 May 2019 00:11:18 -0700 (PDT)
+        id S1726518AbfECH2R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 May 2019 03:28:17 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:39112 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726041AbfECH2R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 03:28:17 -0400
+Received: by mail-wr1-f67.google.com with SMTP id a9so6473881wrp.6
+        for <linux-usb@vger.kernel.org>; Fri, 03 May 2019 00:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lsS6iGGKkw8PQ8EZRahWc1dfNOwoNKDYRw7nDJz2nc8=;
+        b=RWT/msteoAdlCA3+uzfj0ppgKvHt5eyDJAcnm6Y6XXKX04qf5QS5KruPvS2oRr9Uga
+         GLiFsuwWVO4JlQgxmLw8AZ2A/VaA70W68YlUUv7JKtPwzYKecxJwbF52tG2lSafFmtp8
+         6jusNV55fy2pQpDZ3Qbbnx4CEH5LmnPqBH2c8hs68JhH/MVGyURrvXwKyNloCej6rJbx
+         Nr9pGp4ouWyIxAYPwZ5ChPjtXgA2hAu6b7Y0seSVmvkvS7u2dxK4ylM9SX/81oU64xwV
+         EWJoHy2tQRUQfkMiXDKRB116nBVWKLUepKrRxtMpYISeMyIyGqLiamZQg5PGcGnRaRjw
+         21lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=an9LwTm/mCbxF5uZXSG/ahglTllrhTSitjuyMM/AZ+U=;
-        b=E9Gha+Kmt00tyBa5UezofvYed3RpHMv3HE7aNxKgET8+VOeYaWo2LaFICKPpSHdGxN
-         TCzbjwQYmDAChjlcVYsN663sH+wtwxs6LMAvCTxmpnzqWIVJtpslxSFUR/tn2TNupbSv
-         Ytknjd43zBo/Pv7d+lg6WOvn0QtpybIV9fbc43N8TL+rkDW7T81ddwrBvim8qpR1gk+/
-         vdwo8QoU8g9EpXuiZxgkSsNRbizkjaddfwoZuD6zbu3Ok8B2OtQqPqlnJM9V53p4PPHP
-         fXgJnMBOEEwy2ni2StSDsdwBAB/c96/Cv2BLtMQ8ArDZ4akmP8ACMf71PtrE0huZYxS9
-         9/4g==
-X-Gm-Message-State: APjAAAVq1vcGDevWC15PbGF+sDYnDNZvHCxSFXhEj8c+KxIsmV07CcdM
-        dFEmnJ5WdWYHlKXUns/ZjexRO5ED
-X-Google-Smtp-Source: APXvYqzlR0h9qy1g1FmxUHDUbnNgToARcrxmjMXSgrqL1yQ69NEVGAzm2Z+nP+33pQPKvrnWOmH/Fw==
-X-Received: by 2002:a2e:9283:: with SMTP id d3mr4264035ljh.8.1556867477880;
-        Fri, 03 May 2019 00:11:17 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id w19sm263712lfk.56.2019.05.03.00.11.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 03 May 2019 00:11:16 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.91)
-        (envelope-from <johan@kernel.org>)
-        id 1hMSLw-0004gL-Uf; Fri, 03 May 2019 09:11:29 +0200
-Date:   Fri, 3 May 2019 09:11:28 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Charles Yeh <charlesyeh522@gmail.com>
-Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-usb@vger.kernel.org, charles-yeh@prolific.com.tw
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lsS6iGGKkw8PQ8EZRahWc1dfNOwoNKDYRw7nDJz2nc8=;
+        b=COa20ekZ3AjY+NvRaLVzKEXRTZYi3yx0kEFXQuvTTZNk6obUBlW9ZV/GUfQahYy1tK
+         Xp0vPGPmUgmlc0FUFWRQwItodDbFCejI4emUuLBIpGGNtz8VUllyknBfQKvHjn9o/FZ3
+         jxM9snNBMJefhvj0FWE69Kr2jwJrgabkYQ96N63/ionxVC9+TGqQs5s9cSystu46ZsLi
+         K4Zuj1eHNuuFiEPKYhJaDkASfdvjCuJ7VyUBLpVKskmSDenILlakrl1mlfO6kZzqZmgq
+         rHuIV3SAVrzSJ78ypqSWE9XIdy0l2xa5tQjS1D+DfOof1Zbi3nf4WADWtWWtZaPHjy7X
+         VryA==
+X-Gm-Message-State: APjAAAUPtWV62G2ZBeqCn6joctY490hqEvQZKrPRfZnrWwtMVQxviyTP
+        6HXoey4vX98A0hPBiESTRGzQmnP2MIsUQUu4kdIKVEFa
+X-Google-Smtp-Source: APXvYqyQ4gYFMSJLJTfnw4aJoEynkl2cNQ8HVZVJ5aJriAleVh9e1q4jbXdh2cz8GZkKGCt0YIVSGceveRwgFkfDgfQ=
+X-Received: by 2002:a5d:4b0c:: with SMTP id v12mr6008008wrq.330.1556868495853;
+ Fri, 03 May 2019 00:28:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190429121237.13136-1-charlesyeh522@gmail.com> <20190503071128.GB26546@localhost>
+In-Reply-To: <20190503071128.GB26546@localhost>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Fri, 3 May 2019 15:28:04 +0800
+Message-ID: <CAAZvQQ6EmDu-Rh_LTGCpz7T=3BbCvP=tUDRo=HCCgqscwn8+zA@mail.gmail.com>
 Subject: Re: [PATCH] [PATCH v2] USB:serial:pl2303:Add new PID to support
  PL2303HXN (TYPE_HXN)
-Message-ID: <20190503071128.GB26546@localhost>
-References: <20190429121237.13136-1-charlesyeh522@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190429121237.13136-1-charlesyeh522@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 08:12:37PM +0800, Charles Yeh wrote:
-> Prolific has developed a new USB to UART chip: PL2303HXN
-> PL2303HXN : PL2303GC/PL2303GS/PL2303GT/PL2303GL/PL2303GE/PL2303GB
-> The Vendor request used by the PL2303HXN (TYPE_HXN) is different from
-> the existing PL2303 series (TYPE_HX & TYPE_01).
-> Therefore, different Vendor requests are used to issue related commands.
-> 
-> 1. Added a new TYPE_HXN type in pl2303_type_data, and then executes
->    new Vendor request,new flow control and other related instructions
->    if TYPE_HXN is recognized.
-> 
-> 2. Because the new PL2303HXN only accept the new Vendor request,
->    the old Vendor request cannot be accepted (the error message
->    will be returned)
->    So first determine the TYPE_HX or TYPE_HXN through
->    PL2303_READ_TYPE_HX_STATUS in pl2303_startup.
-> 
->   2.1 If the return message is "1", then the PL2303 is the existing
->       TYPE_HX/ TYPE_01 series.
->       The other settings in pl2303_startup are to continue execution.
->   2.2 If the return message is "not 1", then the PL2303 is the new
->       TYPE_HXN series.
->       The other settings in pl2303_startup are ignored.
->       (PL2303HXN will directly use the default value in the hardware,
->        no need to add additional settings through the software)
-> 
-> 3. In pl2303_open: Because TYPE_HXN is different from the instruction of reset
->    down/up stream used by TYPE_HX.
->    Therefore, we will also execute different instructions here.
-> 
-> 4. In pl2303_set_termios: The UART flow control instructions used by
->    TYPE_HXN/TYPE_HX/TYPE_01 are different.
->    Therefore, we will also execute different instructions here.
-> 
-> 5. In pl2303_vendor_read & pl2303_vendor_write, since TYPE_HXN is different
->    from the vendor request instruction used by TYPE_HX/TYPE_01,
->    it will also execute different instructions here.
-> 
-> Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
-> ---
+Johan Hovold <johan@kernel.org> =E6=96=BC 2019=E5=B9=B45=E6=9C=883=E6=97=A5=
+ =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=883:11=E5=AF=AB=E9=81=93=EF=BC=9A
+> What changed in v2? You forgot to add a changelog here.
+>
+> Looks like this one is not based on the current driver code (e.g. my
+> usb-next branch as we discussed), and also does not address some of the
+> issues raised so far (e.g. you're overwriting the entire flow control
+> register on updates).
+>
 
-What changed in v2? You forgot to add a changelog here.
+I used the Kernel tree:
+git://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git
 
-Looks like this one is not based on the current driver code (e.g. my
-usb-next branch as we discussed), and also does not address some of the
-issues raised so far (e.g. you're overwriting the entire flow control
-register on updates).
+but the pl2303.c inside does not have the "pl2303_update_reg" you mentioned=
+.
 
-I didn't have time to finish the prep work I promised to do, but don't
-worry, I haven't forgotten.
-
-Johan
+Charles.
