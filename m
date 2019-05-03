@@ -2,237 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A4312A45
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 11:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321E712F97
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 15:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726047AbfECJPZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 May 2019 05:15:25 -0400
-Received: from mga11.intel.com ([192.55.52.93]:56549 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725777AbfECJPZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 May 2019 05:15:25 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 May 2019 02:15:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,425,1549958400"; 
-   d="asc'?scan'208";a="167285026"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga004.fm.intel.com with ESMTP; 03 May 2019 02:15:22 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB changes for v5.2 merge window
-Date:   Fri, 03 May 2019 12:15:18 +0300
-Message-ID: <87pnozq4pl.fsf@linux.intel.com>
+        id S1727032AbfECNwN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 May 2019 09:52:13 -0400
+Received: from mail1.bemta26.messagelabs.com ([85.158.142.1]:51083 "EHLO
+        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726047AbfECNwN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 09:52:13 -0400
+Received: from [85.158.142.103] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-1.bemta.az-a.eu-central-1.aws.symcld.net id 8D/BB-22995-A874CCC5; Fri, 03 May 2019 13:52:10 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRWlGSWpSXmKPExsUyo1hfUrfT/Uy
+  MwY2PJhZvHv9jtzjW9oTdonnxejaLRctamS2WXr/IZHFx/U5Gi9a9R9gtrjydyujA4bFm3hpG
+  j52z7rJ7dDU1s3tsWtXJ5rF/7hp2j8+b5Dz2fv7NEsAexZqZl5RfkcCase/eOaaCCWIVz05vZ
+  Gtg7BTqYuTiEBJYwyjx+/xT5i5GTg5eAROJZV+ng9nCAkESDS2LgWwODjYBXYmuO6Yg9SICpx
+  klnj37zwLiMAv0M0pc7L0H1sAioCJxpuMRmM0pECsxc/smMFtI4CSjxNQ9CiA2s4CmROv23+w
+  gtoSAhsSGm8eYIBYLSpyc+YQFokZeonnrbLDFQgKyEkcvxUKUK0ic3TKREcJOkjjXd4VtAqPA
+  LCRTZyGZNAvJpAWMzKsYLZOKMtMzSnITM3N0DQ0MdA0NjXWNdI2MLfUSq3QT9VJLdZNT80qKE
+  oGyeonlxXrFlbnJOSl6eaklmxiBEZRSyPR+B+P99vRDjJIcTEqivAaiZ2KE+JLyUyozEosz4o
+  tKc1KLDzHKcHAoSfDmuQLlBItS01Mr0jJzgLEMk5bg4FES4Z0MkuYtLkjMLc5Mh0idYtTl+NL
+  +aC6zEEtefl6qlDhvEEiRAEhRRmke3AhYWrnEKCslzMvIwMAgxFOQWpSbWYIq/4pRnINRSZj3
+  IcgUnsy8ErhNr4COYAI64vmkUyBHlCQipKQaGF3vNJoJK/Ap3NA7VzH5i/6mZx8NX2de8e/65
+  DGDo1p13qPbtrXbay9e/rLusFjbxm1vvTuZlsrz9G5Mu+Kyy1h7S8YU41pZpdvKlvJts9yLmd
+  flcEmUdDYkH7knqmvTOcng2xqrO2tNucvsbzVd63+pvODP+dpMdlu3vddYwy9qXPu872R6vRJ
+  LcUaioRZzUXEiAAZDf64mAwAA
+X-Env-Sender: cst@phaseone.com
+X-Msg-Ref: server-5.tower-228.messagelabs.com!1556891529!5892599!1
+X-Originating-IP: [152.115.47.25]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.31.5; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 6064 invoked from network); 3 May 2019 13:52:09 -0000
+Received: from unknown (HELO Exchange2.phaseone.com) (152.115.47.25)
+  by server-5.tower-228.messagelabs.com with AES256-SHA encrypted SMTP; 3 May 2019 13:52:09 -0000
+Received: from cstu16.phaseone.com (172.16.2.207) by Exchange2.phaseone.com
+ (172.16.1.180) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 3 May
+ 2019 15:52:06 +0200
+Message-ID: <1556891523.24062.31.camel@phaseone.com>
+Subject: Re: [PATCH 0/3] usb: gadget: Add support for disabling U1 and U2
+ entries
+From:   "Claus H. Stovgaard" <cst@phaseone.com>
+To:     Anurag Kumar Vulisha <anuragku@xilinx.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "v.anuragkumar@gmail.com" <v.anuragkumar@gmail.com>,
+        Rob Weber <rob@gnarbox.com>
+Date:   Fri, 3 May 2019 15:52:03 +0200
+In-Reply-To: <BYAPR02MB55917AF9083F9718B713FBB4A7350@BYAPR02MB5591.namprd02.prod.outlook.com>
+References: <1556792423-4833-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+         <1556832986.22007.15.camel@gmail.com>
+         <BYAPR02MB55917AF9083F9718B713FBB4A7350@BYAPR02MB5591.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.2.207]
+X-ClientProxiedBy: Exchange3.phaseone.com (172.16.1.184) To
+ Exchange2.phaseone.com (172.16.1.180)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi Anurag
 
+On Fri, 2019-05-03 at 07:34 +0000, Anurag Kumar Vulisha wrote:
+> Hi Claus,
+> Thanks for testing and voting for this patch.
 
-Hi Greg,
+I have first tested your patches today. My test setup is a ZynqMP
+device, running kernel 4.14 (Xilinx version) with your patches.
+I then create an overlay for the devicetree with the new parameters,
+and unbind/bind the dwc3 driver.
 
-here's my pull request for the next merge window. A bit later than
-usuall this time around, due to internal high-priority tasks. Sorry
-about that.
+Next I have a host running Windows 10 and a MacBook pro with Type-C
+ports. For logging the communication I use a Total Phase Beagle USB3
+5000 V2 analyzer.
 
-Let me know if you need anything to be changed.
+The test showed that OS-X does as expected. When BOS descriptor
+(bU1DevExtLat and bU2DevExtLat) returns 0, it does not enable LPM.
 
-cheers
+Windows 10 on the other hand does not, and even though it received 0 as
+bU1DevExtLat and bU2DevExtLat it send Set Sel with U1SEL 85 us, U1PEL 0
+us, U2SEL 85 us and U2PEL 0 us.
+Next the Windows 10 host sends the U1 Enable and the U2 enable as Set
+Device Feature, resulting in the system entering U2.
 
- _______________=20
-< Busy as a bee >
- ---------------=20
-        \   ^__^
-         \  (oo)\_______
-            (__)\       )\/\
-                ||----w |
-                ||     ||
+> > 
+> > Just today I was making another solution for this feature, using
+> > the
+> > configfs instead of the devicetree. Though thinks your solution is
+> > better, as it uses the U1DevExitLat and U2DevExitLat instead. I
+> > just
+> > added my solution to the bottem of the mail for reference.
+> > 
+> > [1] https://www.spinics.net/lists/linux-usb/msg179393.html
+> > 
+> Your approach below is also good, but you are just avoiding the
+> gadget dwc3
+> controller from entering into U1 and U2 states by disabling the
+> ACCEPTU1ENA
+> and ACCEPTU2ENA bits in DCTL but not preventing the host from sending
+> the
+> LG0_U1 and LGO_U2 link command signaling to the gadget. The host will
+> keep
+> on trying to get the link into U1 or U2 by sending LGO_U1 or LGO_U2
+> and the
+> gadget rejects these signals by sending LXU link command. To avoid
+> this extra
+> overhead I thought that sending zero  value in the BOS descriptor's
+> U1DevExitLat and U2DevExitLat fields would be the best option. Host
+> on seeing
+> U 1 & U2 Exit Latencies doesn't initiate LPM U1 and U2 commands.
+> 
+> Thanks,
+> Anurag Kumar Vulisha
 
-The following changes since commit 085b7755808aa11f78ab9377257e1dad2e6fa4bb:
+Correct that it does not prevent the host from sending LG0_U1 and
+LG0_U2, and there is your solution better on hosts using the BOS
+descriptor for disabling LPM. So based on my test with Windows 10, I
+think we should combine the solutions. To prevent LG0_U1/LG0_U2 when
+possible and still being able to completely disable U1/U2.
 
-  Linux 5.1-rc6 (2019-04-21 10:45:57 -0700)
+Regarding interface for controlling it. I am very novice regarding
+Linux kernel development, but would think the BOS descriptor control
+would be better from a configfs interface then devicetree as I don't
+see BOS descriptor as hardware specific. I am more in doubt about the
+forcing of U1/U2 as I did with setting hardware registers, as it
+control hardware registers. So will like to hear from other more
+experienced developers.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/usb-for-=
-v5.2
-
-for you to fetch changes up to 2e487d280525b91b03976203b15aba365ec5b4e6:
-
-  usb: dwc3: Rename DWC3_DCTL_LPM_ERRATA (2019-05-03 09:13:49 +0300)
-
-=2D---------------------------------------------------------------
-USB: changes for v5.2 merge window
-
-With a total of 50 non-merge commits, this is not a large pull
-request. Most of the changes are, again, in dwc2 (37%) and dwc3 (32%)
-with the rest of it scattered among other UDCs, function drivers and
-device-tree bindings.
-
-No really big feature this time around apart from support to Amlogic
-being added to both dwc3 and dwc2 drivers.
-
-=2D---------------------------------------------------------------
-Alan Stern (3):
-      USB: dummy-hcd: Fix failure to give back unlinked URBs
-      USB: UDC: net2280: Remove redundant "if" condition
-      USB: UDC: net22{80,72}: remove mistaken test of req->zero
-
-Alexandre Belloni (5):
-      usb: gadget: udc: lpc32xx: simplify probe
-      usb: gadget: udc: lpc32xx: simplify vbus handling
-      usb: gadget: udc: lpc32xx: properly setup phy interrupts
-      usb: gadget: udc: lpc32xx: add support for stotg04 phy
-      usb: gadget: udc: lpc32xx: rework interrupt handling
-
-Andy Shevchenko (1):
-      usb: dwc3: Free resource immediately after use
-
-Arnd Bergmann (1):
-      usb: gadget: fsl: fix link error against usb-gadget module
-
-Chunfeng Yun (2):
-      usb: dwc2: get optional clock by devm_clk_get_optional()
-      usb: introduce usb_ep_type_string() function
-
-Douglas Anderson (6):
-      usb: dwc2: bus suspend/resume for hosts with DWC2_POWER_DOWN_PARAM_NO=
-NE
-      USB: Export usb_wakeup_enabled_descendants()
-      dt-bindings: usb: dwc2: Document quirk to reset PHY upon wakeup
-      usb: dwc2: optionally assert phy reset when waking up
-      ARM: dts: rockchip: Hook resets up to USB PHYs on rk3288.
-      ARM: dts: rockchip: Add quirk for resetting rk3288's dwc2 host on wak=
-eup
-
-Fei Yang (1):
-      usb: gadget: f_fs: don't free buffer prematurely
-
-Jonas Bonn (3):
-      usb: gadget: atmel_usba_udc: simplify setting of interrupt-enabled ma=
-sk
-      usb: gadget: atmel: support USB suspend
-      usb: gadget: atmel: tie wake lock to running clock
-
-Jules Maselbas (5):
-      usb: dwc2: Move UTMI_PHY_DATA defines closer
-      usb: dwc2: gadget: Remove duplicated phy init
-      usb: dwc2: gadget: Replace phyif with phy_utmi_width
-      usb: dwc2: Move phy init into core
-      usb: dwc2: gadget: Move gadget phy init into core phy init
-
-Marc Gonzalez (1):
-      usb: dwc3: Allow building USB_DWC3_QCOM without EXTCON
-
-Marek Szyprowski (1):
-      usb: dwc3: move synchronize_irq() out of the spinlock protected block
-
-Martin Blumenstingl (1):
-      dt-bindings: usb: dwc2: document the vbus-supply property
-
-Minas Harutyunyan (7):
-      usb: dwc2: gadget: Reject LPM token during Control transfers
-      usb: dwc2: Delayed status support
-      usb: dwc2: gadget: Increase descriptors count for ISOC's
-      usb: dwc2: Set actual frame number for completed ISOC transfer
-      usb: dwc2: Fix channel disable flow
-      usb: dwc2: Set lpm mode parameters depend on HW configuration
-      dwc2: gadget: Fix completed transfer size calculation in DDMA
-
-Neil Armstrong (4):
-      dt-bindings: usb: dwc2: Add Amlogic G12A DWC2 Compatible
-      dt-bindings: usb: dwc3: Add Amlogic G12A DWC3 Glue Bindings
-      usb: dwc2: Add Amlogic G12A DWC2 Params
-      usb: dwc3: Add Amlogic G12A DWC3 glue
-
-Robin Murphy (1):
-      usb: dwc3: of-simple: Convert to bulk clk API
-
-Romain Izard (2):
-      usb: gadget: f_ncm: Fix NTP-32 support
-      usb: gadget: f_ncm: Add OS descriptor support
-
-Sergey Senozhatsky (1):
-      usb: gadget: do not use __constant_cpu_to_le16
-
-Thinh Nguyen (5):
-      usb: dwc3: gadget: Set lpm_capable
-      usb: dwc3: Do core validation early on probe
-      usb: dwc3: debug: Print GET_STATUS(device) tracepoint
-      usb: dwc3: Fix default lpm_nyet_threshold value
-      usb: dwc3: Rename DWC3_DCTL_LPM_ERRATA
-
- .../devicetree/bindings/usb/amlogic,dwc3.txt       |  88 +++
- Documentation/devicetree/bindings/usb/dwc2.txt     |   7 +
- arch/arm/boot/dts/rk3288.dtsi                      |   7 +
- drivers/usb/common/common.c                        |  16 +
- drivers/usb/core/hcd.c                             |  17 +-
- drivers/usb/core/hub.c                             |   7 +-
- drivers/usb/dwc2/core.c                            | 199 +++++++
- drivers/usb/dwc2/core.h                            |  14 +-
- drivers/usb/dwc2/core_intr.c                       |  12 +
- drivers/usb/dwc2/gadget.c                          | 101 ++--
- drivers/usb/dwc2/hcd.c                             | 326 +++--------
- drivers/usb/dwc2/hw.h                              |   8 +-
- drivers/usb/dwc2/params.c                          |  35 +-
- drivers/usb/dwc2/platform.c                        |  20 +-
- drivers/usb/dwc3/Kconfig                           |  16 +-
- drivers/usb/dwc3/Makefile                          |   1 +
- drivers/usb/dwc3/core.c                            |  18 +-
- drivers/usb/dwc3/core.h                            |   3 +-
- drivers/usb/dwc3/debug.h                           |   3 +
- drivers/usb/dwc3/dwc3-meson-g12a.c                 | 604 +++++++++++++++++=
-++++
- drivers/usb/dwc3/dwc3-of-simple.c                  |  95 +---
- drivers/usb/dwc3/gadget.c                          |   5 +-
- drivers/usb/gadget/function/f_fs.c                 |   3 +-
- drivers/usb/gadget/function/f_ncm.c                |  57 +-
- drivers/usb/gadget/function/f_uac1_legacy.c        |   6 +-
- drivers/usb/gadget/function/u_ncm.h                |   3 +
- drivers/usb/gadget/udc/aspeed-vhub/epn.c           |   6 +-
- drivers/usb/gadget/udc/atmel_usba_udc.c            |  84 ++-
- drivers/usb/gadget/udc/atmel_usba_udc.h            |   1 +
- drivers/usb/gadget/udc/dummy_hcd.c                 |  35 +-
- drivers/usb/gadget/udc/lpc32xx_udc.c               | 167 +++---
- drivers/usb/gadget/udc/net2272.c                   |   3 +-
- drivers/usb/gadget/udc/net2280.c                   |   5 +-
- drivers/usb/phy/Kconfig                            |   2 +-
- include/linux/usb/ch9.h                            |   8 +
- include/linux/usb/hcd.h                            |   5 +
- 36 files changed, 1418 insertions(+), 569 deletions(-)
- create mode 100644 drivers/usb/dwc3/dwc3-meson-g12a.c
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlzMBqYACgkQzL64meEa
-mQZUFA/9G/VtQ0WhvzsG/X/a9FoBpM/WU1nDAcVIwzbz7my11b5Q/w2elIrV6OwA
-+vAfygrM0uD3myBbT6oC3BV3VvuFJLPkWvcwFfcvyR5Dn2XIm0XUkz49pQgruEJJ
-DAeYlaWpJQxw7hWVPbgfOFiJd7qXWLoUr4xcmotXcc+P5frcwBKs9814aiMP5Tuh
-e1JKd+aoqn1DsGWcdOy2bEqHrPy1pRrJUA7gwFTW03o27JfrGSuh35iCCpxgsR6v
-HBCgsvK2SFkRD4WOI7SaLvMMoZEtR5w1nBjQIHRJz7JYp1QVc7c8AG0pbQp0ihwu
-Uqte02tTnqtACdrbYk8qF7Gw0tZNw/AKGiXc+0OeX+kM7DAM6p8Wdd3pGYrUjNJr
-baL7tm2gfP9fzthz3pJm/fgtSJcZj/m/byX4mkjNMLD9nj8OCyteAdDlkBXzNqhn
-1rVthV5cl83pU442MpYYsMrLuLzDjs/tY57hN0WTH/5sYkJEvpQbhg9ZA8C6n8i+
-CpIoMqz1tDtapJlbBsYMEACZWr6RQADeh8jiDq9z7Kup4ag/Q4hOvbC1L4BtVSPQ
-Ik2RGV1x33Yyu2RE7TsIyfSJ1nc4a0xOwuM/5xB1uxIse+eIsR3ZwejB1+ZNtUSj
-cWlvhqRqNfD9RsZiVXxDIqVLBA+HIU1V36s2pGth01a+9e2lcWk=
-=FF3B
------END PGP SIGNATURE-----
---=-=-=--
+Regards
+Claus
