@@ -2,157 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F33713107
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 17:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248F71314E
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 17:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727833AbfECPQU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 May 2019 11:16:20 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:41938 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbfECPQU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 11:16:20 -0400
-Received: by mail-vs1-f65.google.com with SMTP id g187so3805236vsc.8
-        for <linux-usb@vger.kernel.org>; Fri, 03 May 2019 08:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/7DMlLhZpYsWuofw8OIODIFO7gaAmV2hSfavk1PWNjw=;
-        b=XUmZiwqwzLoqpAUVe8w0tkVHbFRykUE91OYgujzpgaBCx48baPDuGmg0M6jQyV4YII
-         OWTb+7Zdpdig3RsJGJk/hfTgq68bJikh98t4m/Hra5MvlqkXrXqojZor8kcLrun7IcVq
-         NOfXaNbyYGwDM79mwwB5iVPjXFMqHWmAq2c4c=
+        id S1726724AbfECPgl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 May 2019 11:36:41 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:40158 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726476AbfECPgl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 11:36:41 -0400
+Received: by mail-lf1-f65.google.com with SMTP id o16so4708223lfl.7
+        for <linux-usb@vger.kernel.org>; Fri, 03 May 2019 08:36:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/7DMlLhZpYsWuofw8OIODIFO7gaAmV2hSfavk1PWNjw=;
-        b=oWeeOqGegeJSNWYZ7Yjmo6hORd4MDH8uGZn5nhv5B3+PhOF+dG8BSFpCZSr51jxpoh
-         IBTANrIq4QWlJ5F79mF9XAqrwaVN7/jogIFbZ8WE8xD93G+HCnmMrafsakQHsFCIAEmv
-         pCY/79WyxVNfKeFMTcabvUnm/2vjvgbVe7XxPj37tPRzACEptsPuSzg0BBtKOkxrSINi
-         9y14DYTF6wC/sY9Igxt7l1L13Mha1IPwAU4VwmOQkHhTz5KLeghvGv7Ajs0GQaaajw0Z
-         Wqt0NtaFw6kxdHFjb5/saBjqFevu8i0NDbjEst1qDqJ1yQ26iwka5YFXnX6il8VbZf+q
-         CcwA==
-X-Gm-Message-State: APjAAAXq+iSNLPVQJZ24cWqEC50CsL6IQyvUxqTEYsQ7uCsA/xU7AVHq
-        cB2KM8zx1d7J8Gv2Nkn17czJgaSKUjU=
-X-Google-Smtp-Source: APXvYqxB+PKYKgVE5q4rOxIz24sXnRTOGgOxiMnvbPZNyHoZ3s+mdLg96Y+ViTuDRUcg5LjiyBiIFA==
-X-Received: by 2002:a67:83c5:: with SMTP id f188mr5686485vsd.163.1556896513907;
-        Fri, 03 May 2019 08:15:13 -0700 (PDT)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id z127sm964836vsc.5.2019.05.03.08.15.13
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 03 May 2019 08:15:13 -0700 (PDT)
-Received: by mail-ua1-f45.google.com with SMTP id o33so2113614uae.12
-        for <linux-usb@vger.kernel.org>; Fri, 03 May 2019 08:15:13 -0700 (PDT)
-X-Received: by 2002:ab0:2709:: with SMTP id s9mr4499637uao.21.1556896064408;
- Fri, 03 May 2019 08:07:44 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=dR3kyFm9Abb8q2X1aNuTXlRWzE8nF0LaC35OZqk5RaI=;
+        b=Nbz/ggYab+RMQa2rCamFrAGGHj9y2/ZuzihhkL2+sPINdmZ4QGsrkThKm2sLsQyydJ
+         PiXUnzxZ/RnQZ2ecXuBpjaF0dQdFKDqQSWkEm6QkOBDx67pexpDwsm3pDWktuN572vhj
+         ynoQaRg9Io/9jZcDY8VnafJEMMBxIMEzcWmNbWujPZhy99+WYu306PBSaGHHMHC3Fa8o
+         wL0pgrnUZdCQ5yNr9amK0B5vl+YSvTZlWIRkLerXMmzbqxQ2WWifvudVGdnYGkwerdpb
+         NNwpZGspb8hr1jTS2Q1u8zKuaTcVz8C2LYSiZs65Uf/Xd6AZQRDjwXo0yDzucY9B3EOU
+         B3ZQ==
+X-Gm-Message-State: APjAAAVmLeak51w/kkksDRIODX5FXUdYQFkTfsQlfHfLEPMD7qVSNmFP
+        G9J0i43dAzUFwbNrynexTi+a5qOu
+X-Google-Smtp-Source: APXvYqxrV6aRb4kJAIgbSGUqoSxrI1jaV4sB1pDP/xaBBBu7Ul3fKB50Xg7fARhRPlWLlQaz43qDQw==
+X-Received: by 2002:ac2:4ac2:: with SMTP id m2mr5497349lfp.154.1556897799303;
+        Fri, 03 May 2019 08:36:39 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id p4sm452776lji.41.2019.05.03.08.36.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 May 2019 08:36:38 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.91)
+        (envelope-from <johan@kernel.org>)
+        id 1hMaF0-0001c9-7x; Fri, 03 May 2019 17:36:50 +0200
+Date:   Fri, 3 May 2019 17:36:50 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB-serial updates for 5.2-rc1
+Message-ID: <20190503153650.GA6170@localhost>
 MIME-Version: 1.0
-References: <20190418001356.124334-1-dianders@chromium.org>
- <20190418001356.124334-2-dianders@chromium.org> <CAD=FV=UGjQz9Di=NL_r_g1Hofqv-FWBywfSm9Vu6gGr22wzPrA@mail.gmail.com>
- <SN1PR12MB243136608514210F3E3E536EA7350@SN1PR12MB2431.namprd12.prod.outlook.com>
-In-Reply-To: <SN1PR12MB243136608514210F3E3E536EA7350@SN1PR12MB2431.namprd12.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 3 May 2019 08:07:32 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=V97+_cQ1aD=w_a3SifGOG3M5DPvcnvxYVUJMkX_WLTFg@mail.gmail.com>
-Message-ID: <CAD=FV=V97+_cQ1aD=w_a3SifGOG3M5DPvcnvxYVUJMkX_WLTFg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] usb: dwc2: bus suspend/resume for hosts with DWC2_POWER_DOWN_PARAM_NONE
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Alexandru M Stan <amstan@chromium.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        William Wu <william.wu@rock-chips.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Randy Li <ayaka@soulik.info>, Chris <zyw@rock-chips.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ryan Case <ryandcase@chromium.org>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The following changes since commit 79a3aaa7b82e3106be97842dedfd8429248896e6:
 
-On Fri, May 3, 2019 at 1:25 AM Artur Petrosyan
-<Arthur.Petrosyan@synopsys.com> wrote:
->
-> On 5/2/2019 03:58, Doug Anderson wrote:
-> > Hi,
-> >
-> >
-> > On Wed, Apr 17, 2019 at 5:15 PM Douglas Anderson <dianders@chromium.org=
-> wrote:
-> >>
-> >> This is an attempt to rehash commit 0cf884e819e0 ("usb: dwc2: add bus
-> >> suspend/resume for dwc2") on ToT.  That commit was reverted in commit
-> >> b0bb9bb6ce01 ("Revert "usb: dwc2: add bus suspend/resume for dwc2"")
-> >> because apparently it broke the Altera SOCFPGA.
-> >>
-> >> With all the changes that have happened to dwc2 in the meantime, it's
-> >> possible that the Altera SOCFPGA will just magically work with this
-> >> change now.  ...and it would be good to get bus suspend/resume
-> >> implemented.
-> >>
-> >> This change is a forward port of one that's been living in the Chrome
-> >> OS 3.14 kernel tree.
-> >>
-> >> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> >> ---
-> >> This patch was last posted at:
-> >>
-> >> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__lkml.kernel.org=
-_r_1446237173-2D15263-2D1-2Dgit-2Dsend-2Demail-2Ddianders-40chromium.org&d=
-=3DDwIBaQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3D9hPBFKCJ_nBjJhGVrrlYOeOQjP_HlVzYqr=
-C_D7niMJI&m=3D7rxT8EFX9mqUDtTL4P7iuzYNsYROe9rxHGCresSKPTg&s=3DlTaNUA2XIYPat=
-417fkd1A4Zpvb5eyYtTc1H_NIfW8Vw&e=3D
-> >>
-> >> ...and appears to have died the death of silence.  Maybe it could get
-> >> some bake time in linuxnext if we can't find any proactive testing?
-> >>
-> >> I will also freely admit that I don't know tons about the theory
-> >> behind this patch.  I'm mostly just re-hashing the original commit
-> >> from Kever that was reverted since:
-> >> * Turning on partial power down on rk3288 doesn't "just work".  I
-> >>    don't get hotplug events.  This is despite dwc2 auto-detecting that
-> >>    we are power optimized.
-> >> * If we don't do something like this commit we don't get into as low
-> >>    of a power mode.
-> >
-> > OK, I spent the day digging more into this patch to confirm that it's
-> > really the right thing to do.  ...and it still seems to be.
-> >
-> > First off: I'm pretty sure the above sentence "If we don't do
-> > something like this commit we don't get into as low of a power mode."
-> > is totally wrong.  Luckily it's "after the cut" and not part of the
-> > commit message.  Specifically I did a bunch of power testing and I
-> > couldn't find any instance saving power after this patch.
-> >
-> > ...but, then I looked more carefully at all the history of this
-> > commit.  I ended up at:
-> >
-> > https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__chromium-2Drevie=
-w.googlesource.com_c_chromiumos_third-5Fparty_kernel_-2B_306265_&d=3DDwIBaQ=
-&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3D9hPBFKCJ_nBjJhGVrrlYOeOQjP_HlVzYqrC_D7niMJI=
-&m=3D7rxT8EFX9mqUDtTL4P7iuzYNsYROe9rxHGCresSKPTg&s=3DLiyyIyaCPmr88nJeI7TCGt=
-oJBFLRWir_reikYtAHHDw&e=3D
-> Looking at this code review I see that this patch fixes whatever issues
-> you have on Chrome OS 3.14. But your patch has landed on the top of
-> latest Kernel version. With the latest version I think you would not
-> have the regression issue.
-> So you are fixing Chrome OS 3.14.
+  Linux 5.1-rc3 (2019-03-31 14:39:29 -0700)
 
-I'm confused why you ignored the rest of my email where I said I also
-ported it to 4.19 (which, from a dwc2 host point of view, is pretty
-much mainline) and saw that the patch was still needed.
+are available in the Git repository at:
 
--Doug
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.2-rc1
+
+for you to fetch changes up to 7f6fc50242d11d4fedab9cf6c5e8af368c076ccd:
+
+  USB: serial: f81232: implement break control (2019-05-03 09:19:55 +0200)
+
+----------------------------------------------------------------
+USB-serial updates for 5.2-rc1
+
+Here are the USB-serial updates for 5.2-rc1, including:
+
+ - flow-control related fixes for pl2303
+ - fix for an initial-termios issue
+ - fix for a couple of unthrottle() races
+ - fix for f81232 interrupt-handling issues
+ - improved f81232 overrun handling
+ - support for higher f81232 line speeds
+ - support for f81232 break control
+
+Included are also various clean ups.
+
+All but the last four commits have been in linux-next and with no
+reported issues.
+
+Signed-off-by: Johan Hovold <johan@kernel.org>
+
+----------------------------------------------------------------
+Greg Kroah-Hartman (1):
+      USB: serial: io_edgeport: fix up switch fall-through comments
+
+Ji-Ze Hong (Peter Hong) (4):
+      USB: serial: f81232: fix interrupt worker not stop
+      USB: serial: f81232: clear overrun flag
+      USB: serial: f81232: add high baud rate support
+      USB: serial: f81232: implement break control
+
+Johan Hovold (17):
+      USB: serial: pl2303: fix non-supported xon/xoff
+      USB: serial: pl2303: fix tranceiver suspend mode
+      USB: serial: digi_acceleport: clean up modem-control handling
+      USB: serial: digi_acceleport: clean up set_termios
+      USB: serial: fix initial-termios handling
+      USB: serial: ark3116: drop redundant init_termios
+      USB: serial: cypress_m8: drop unused driver data flag
+      USB: serial: cypress_m8: drop unused termios
+      USB: serial: cypress_m8: clean up initial-termios handling
+      USB: serial: iuu_phoenix: drop bogus initial cflag
+      USB: serial: iuu_phoenix: simplify init_termios
+      USB: serial: oti6858: simplify init_termios
+      USB: serial: spcp8x5: simplify init_termios
+      USB: serial: fix unthrottle races
+      USB: serial: clean up throttle handling
+      USB: serial: drop unnecessary goto
+      USB: serial: drop unused iflag macro
+
+ drivers/usb/serial/ark3116.c         |  11 --
+ drivers/usb/serial/cypress_m8.c      |  49 ++-------
+ drivers/usb/serial/digi_acceleport.c |  41 ++++----
+ drivers/usb/serial/f81232.c          | 198 ++++++++++++++++++++++++++++++++---
+ drivers/usb/serial/generic.c         |  76 +++++++-------
+ drivers/usb/serial/io_edgeport.c     |  37 +++----
+ drivers/usb/serial/iuu_phoenix.c     |   4 +-
+ drivers/usb/serial/oti6858.c         |   5 +-
+ drivers/usb/serial/pl2303.c          |  58 ++++++++--
+ drivers/usb/serial/spcp8x5.c         |   5 +-
+ drivers/usb/serial/usb-serial.c      |  11 +-
+ include/linux/usb/serial.h           |   8 +-
+ 12 files changed, 324 insertions(+), 179 deletions(-)
