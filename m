@@ -2,127 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B55E1285E
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 09:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E8A1287A
+	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 09:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbfECHCI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 May 2019 03:02:08 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35142 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726438AbfECHCI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 03:02:08 -0400
-Received: by mail-lj1-f194.google.com with SMTP id z26so4373960ljj.2;
-        Thu, 02 May 2019 23:59:11 -0700 (PDT)
+        id S1726156AbfECHLU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 May 2019 03:11:20 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34519 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726047AbfECHLU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 03:11:20 -0400
+Received: by mail-lj1-f196.google.com with SMTP id s7so4405009ljh.1
+        for <linux-usb@vger.kernel.org>; Fri, 03 May 2019 00:11:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Iqk3xergUOsKAugJuc5t6KOxZcaZnh5miw46WUEvyZ8=;
-        b=d99CEB95BnT5kT6nYuwo4XUE9+LijDslkebppPl3zeWTrN7tRjObi/3iIb2XB9/knw
-         njZIDnYYS2q4uQb/rGd+x1PQpS1WdjjLgufi8wNBbBW5o3cqyslT8bQGdy7zctj/3S7n
-         ASILmFXb7rBiDNgUEQa7IZnaUjJSXMibotux51Vq4MmrimBDovr7ARBGv/KMb36RiAwa
-         TR1kUWlSvhqiGO+ILc9TjR5mxfbeees/F8LY/55/EBSqwRuNUTrthlZfL9rYMml5oH96
-         lR1EBQRrtXYj8tcaYwZhtEQwHlsbjj8oPiF4waxO9IibriqctMlpWTezzNeDL2jKCXCV
-         WE4A==
-X-Gm-Message-State: APjAAAVE0SBOK4ZbGKm26mitXjbGMgYsa0FOmwuYqYxegbcTbQ+qvbQ7
-        m+CkSpOpEEGlvvLDPSCg6AM=
-X-Google-Smtp-Source: APXvYqwaLakM0EHUo6NfD8Mw26aclhii8edWJbqB5mPdjVZ+4De+RAEx471f5MRfpEibtEo5pHLNyA==
-X-Received: by 2002:a2e:655a:: with SMTP id z87mr4194357ljb.150.1556866745836;
-        Thu, 02 May 2019 23:59:05 -0700 (PDT)
+        bh=an9LwTm/mCbxF5uZXSG/ahglTllrhTSitjuyMM/AZ+U=;
+        b=E9Gha+Kmt00tyBa5UezofvYed3RpHMv3HE7aNxKgET8+VOeYaWo2LaFICKPpSHdGxN
+         TCzbjwQYmDAChjlcVYsN663sH+wtwxs6LMAvCTxmpnzqWIVJtpslxSFUR/tn2TNupbSv
+         Ytknjd43zBo/Pv7d+lg6WOvn0QtpybIV9fbc43N8TL+rkDW7T81ddwrBvim8qpR1gk+/
+         vdwo8QoU8g9EpXuiZxgkSsNRbizkjaddfwoZuD6zbu3Ok8B2OtQqPqlnJM9V53p4PPHP
+         fXgJnMBOEEwy2ni2StSDsdwBAB/c96/Cv2BLtMQ8ArDZ4akmP8ACMf71PtrE0huZYxS9
+         9/4g==
+X-Gm-Message-State: APjAAAVq1vcGDevWC15PbGF+sDYnDNZvHCxSFXhEj8c+KxIsmV07CcdM
+        dFEmnJ5WdWYHlKXUns/ZjexRO5ED
+X-Google-Smtp-Source: APXvYqzlR0h9qy1g1FmxUHDUbnNgToARcrxmjMXSgrqL1yQ69NEVGAzm2Z+nP+33pQPKvrnWOmH/Fw==
+X-Received: by 2002:a2e:9283:: with SMTP id d3mr4264035ljh.8.1556867477880;
+        Fri, 03 May 2019 00:11:17 -0700 (PDT)
 Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id u12sm227951ljk.89.2019.05.02.23.59.04
+        by smtp.gmail.com with ESMTPSA id w19sm263712lfk.56.2019.05.03.00.11.16
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 23:59:04 -0700 (PDT)
+        Fri, 03 May 2019 00:11:16 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.91)
         (envelope-from <johan@kernel.org>)
-        id 1hMSA9-0004aP-7Z; Fri, 03 May 2019 08:59:17 +0200
-Date:   Fri, 3 May 2019 08:59:17 +0200
+        id 1hMSLw-0004gL-Uf; Fri, 03 May 2019 09:11:29 +0200
+Date:   Fri, 3 May 2019 09:11:28 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-Cc:     peter_hong@fintek.com.tw, johan@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: Re: [PATCH V9 4/4] USB: serial: f81232: implement break control
-Message-ID: <20190503065917.GA26546@localhost>
-References: <1556587352-19500-1-git-send-email-hpeter+linux_kernel@gmail.com>
- <1556587352-19500-4-git-send-email-hpeter+linux_kernel@gmail.com>
+To:     Charles Yeh <charlesyeh522@gmail.com>
+Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-usb@vger.kernel.org, charles-yeh@prolific.com.tw
+Subject: Re: [PATCH] [PATCH v2] USB:serial:pl2303:Add new PID to support
+ PL2303HXN (TYPE_HXN)
+Message-ID: <20190503071128.GB26546@localhost>
+References: <20190429121237.13136-1-charlesyeh522@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1556587352-19500-4-git-send-email-hpeter+linux_kernel@gmail.com>
+In-Reply-To: <20190429121237.13136-1-charlesyeh522@gmail.com>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 09:22:32AM +0800, Ji-Ze Hong (Peter Hong) wrote:
-> Implement Fintek F81232 break on/off with LCR register.
-> It's the same with 16550A LCR register layout.
+On Mon, Apr 29, 2019 at 08:12:37PM +0800, Charles Yeh wrote:
+> Prolific has developed a new USB to UART chip: PL2303HXN
+> PL2303HXN : PL2303GC/PL2303GS/PL2303GT/PL2303GL/PL2303GE/PL2303GB
+> The Vendor request used by the PL2303HXN (TYPE_HXN) is different from
+> the existing PL2303 series (TYPE_HX & TYPE_01).
+> Therefore, different Vendor requests are used to issue related commands.
 > 
-> Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
+> 1. Added a new TYPE_HXN type in pl2303_type_data, and then executes
+>    new Vendor request,new flow control and other related instructions
+>    if TYPE_HXN is recognized.
+> 
+> 2. Because the new PL2303HXN only accept the new Vendor request,
+>    the old Vendor request cannot be accepted (the error message
+>    will be returned)
+>    So first determine the TYPE_HX or TYPE_HXN through
+>    PL2303_READ_TYPE_HX_STATUS in pl2303_startup.
+> 
+>   2.1 If the return message is "1", then the PL2303 is the existing
+>       TYPE_HX/ TYPE_01 series.
+>       The other settings in pl2303_startup are to continue execution.
+>   2.2 If the return message is "not 1", then the PL2303 is the new
+>       TYPE_HXN series.
+>       The other settings in pl2303_startup are ignored.
+>       (PL2303HXN will directly use the default value in the hardware,
+>        no need to add additional settings through the software)
+> 
+> 3. In pl2303_open: Because TYPE_HXN is different from the instruction of reset
+>    down/up stream used by TYPE_HX.
+>    Therefore, we will also execute different instructions here.
+> 
+> 4. In pl2303_set_termios: The UART flow control instructions used by
+>    TYPE_HXN/TYPE_HX/TYPE_01 are different.
+>    Therefore, we will also execute different instructions here.
+> 
+> 5. In pl2303_vendor_read & pl2303_vendor_write, since TYPE_HXN is different
+>    from the vendor request instruction used by TYPE_HX/TYPE_01,
+>    it will also execute different instructions here.
+> 
+> Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
 > ---
 
->  static void f81232_break_ctl(struct tty_struct *tty, int break_state)
->  {
-> -	/* FIXME - Stubbed out for now */
-> +	struct usb_serial_port *port = tty->driver_data;
-> +	struct f81232_private *priv = usb_get_serial_port_data(port);
-> +	int status;
->  
-> -	/*
-> -	 * break_state = -1 to turn on break, and 0 to turn off break
-> -	 * see drivers/char/tty_io.c to see it used.
-> -	 * last_set_data_urb_value NEVER has the break bit set in it.
-> -	 */
-> +	mutex_lock(&priv->lock);
-> +
-> +	if (break_state)
-> +		priv->shadow_lcr |= UART_LCR_SBC;
-> +	else
-> +		priv->shadow_lcr &= ~UART_LCR_SBC;
-> +
-> +	status = f81232_set_register(port, LINE_CONTROL_REGISTER,
-> +					priv->shadow_lcr);
-> +	if (status)
-> +		dev_err(&port->dev, "set break failed: %d\n", status);
-> +
-> +	mutex_unlock(&priv->lock);
->  }
+What changed in v2? You forgot to add a changelog here.
 
-> @@ -519,6 +530,7 @@ static int f81232_port_disable(struct usb_serial_port *port)
->  static void f81232_set_termios(struct tty_struct *tty,
->  		struct usb_serial_port *port, struct ktermios *old_termios)
->  {
-> +	struct f81232_private *priv = usb_get_serial_port_data(port);
->  	u8 new_lcr = 0;
->  	int status = 0;
->  	speed_t baudrate;
-> @@ -572,11 +584,16 @@ static void f81232_set_termios(struct tty_struct *tty,
->  		break;
->  	}
->  
-> +	mutex_lock(&priv->lock);
-> +
-> +	new_lcr |= (priv->shadow_lcr & UART_LCR_SBC);
->  	status = f81232_set_register(port, LINE_CONTROL_REGISTER, new_lcr);
->  	if (status) {
->  		dev_err(&port->dev, "%s failed to set LCR: %d\n",
->  			__func__, status);
->  	}
-> +
-> +	mutex_unlock(&priv->lock);
+Looks like this one is not based on the current driver code (e.g. my
+usb-next branch as we discussed), and also does not address some of the
+issues raised so far (e.g. you're overwriting the entire flow control
+register on updates).
 
-You forgot to update shadow_lcr here so the line settings would be
-corrupted (e.g set to 5 bit words) whenever a break is signalled.
+I didn't have time to finish the prep work I promised to do, but don't
+worry, I haven't forgotten.
 
-Did you not test this version of the patch?
-
-I added the missing update, but please test the code that's in my
-usb-next branch in a minute and confirm everything works as expected.
-
-All four patches now applied.
-
-Thanks,
 Johan
