@@ -2,90 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2260913481
-	for <lists+linux-usb@lfdr.de>; Fri,  3 May 2019 22:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705CE13724
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2019 05:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727014AbfECUuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 May 2019 16:50:04 -0400
-Received: from mail-wm1-f51.google.com ([209.85.128.51]:55202 "EHLO
-        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726022AbfECUuD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 16:50:03 -0400
-Received: by mail-wm1-f51.google.com with SMTP id b10so8580198wmj.4;
-        Fri, 03 May 2019 13:50:02 -0700 (PDT)
+        id S1726320AbfEDDh5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 May 2019 23:37:57 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:45064 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbfEDDh5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 May 2019 23:37:57 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i21so3642986pgi.12;
+        Fri, 03 May 2019 20:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=zlQ6dBfiL4jG+H+7ODXfiGEF1Mx9HAA5I1OkQsfcDT4=;
+        b=pUmHZvTdj/NE1RyG31wjZdqVvlWAeWUNdpPrp5odUQvY0nX1fcBlYkZeq3FjE3SjTU
+         p8QDNxF1GMQycaDsZ9zpKLxNvjObLuV4vQgyLHpFH6RVggBhgEFRu/9xpS5ISBV9IhA4
+         O3T/I+Sf0Mmk2Q2gi8iDO0Fy9nNPx3OX2y4JMIqbIka8ahxLtlqt8eC72BFfwLkketqV
+         dDIT6vlSoqM/CFXQwtTclQY9gSDKFzPSIZyHBKPAMEfo6fS+OmZAtwbpCSZqyJBScLag
+         lU/Nmbi5172OnH1fTDhFm6EitYCVh7ymV9ll1YGJ/l8DnmJyRCstayUNECEwoyj55vKj
+         EFUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=3WRefylpHoq+bmA7wobTBIMipAzUtIxZ32oIEUbNhnE=;
-        b=TPIpMq3HbAOhfdMbRJU+GqbLr16pSHc22BKzSqjJah8dneY3X41Ms3cST5caLh70Ij
-         k/BCu3CnOADUd/FPMt4kc9bkAqm0o1L8XPAJeQwHqImpWar0wKVPeds3TlsGAXDYyuFd
-         JV1Hqo+cPsWlYmXCvLqZGpdoF1iuT71nghZFYektRxsR2WD4GihJcgLcPQF8wh4Fy7Tp
-         GWs7pK8qiZ/15z6j+G97Ae7UaMo1YIxZ5t1HGS3pz9JdwEjefwg5MoJ3IHUMUetm4J4C
-         5tbG6zfApvPPe83pXCiETYVdLrYRB60Nzgz0JmF77SksAUhHhvh2Iu9QsK93h/602y1t
-         MtKQ==
-X-Gm-Message-State: APjAAAWXa7H5R0aMZX1p39xSvcef+TPyQYko97KC4ecpNwulhiIgVDSP
-        CEhphmJi6AzfUA5Dz+P4kfQ=
-X-Google-Smtp-Source: APXvYqxklGno0XFB4B8cXBfafnXg63KYZCefaROZACKbwwyBii0hsOJbnj4lXJGrDnQZPPJlsVlyag==
-X-Received: by 2002:a7b:c00e:: with SMTP id c14mr7539524wmb.110.1556916601167;
-        Fri, 03 May 2019 13:50:01 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.114])
-        by smtp.googlemail.com with ESMTPSA id q2sm2204786wrd.48.2019.05.03.13.49.59
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 03 May 2019 13:50:00 -0700 (PDT)
-Date:   Fri, 3 May 2019 22:49:58 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Jules Maselbas <jmaselbas@kalray.eu>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: [BUG BISECT] USB on Exynos4412 fails after usb: dwc2: gadget:
- Replace phyif with phy_utmi_width
-Message-ID: <20190503204958.GA12532@kozik-lap>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=zlQ6dBfiL4jG+H+7ODXfiGEF1Mx9HAA5I1OkQsfcDT4=;
+        b=mqZ4fUA/z6co2obkBonK6ivc9QR3Wny0yROe3EKPtzINq4SBE97/g23Ig/VmSjAHWr
+         kyOsrtt6N7YmBBoilOg7/YQgrMIk4L/S/JnNFYPg3KJb0bmAXNnXrJcwN4mVy9PTFHS7
+         +3MKQIWyHaDythtpm6C/h7jXiYhH8ZHZf39QPpDwvvLqf+Iry7K7iCmfdeR5kLu/+Qn3
+         AK5O69sJX+9707Stzpo9BTVX2oCQ/7/8hMlsHKT12y8HpNWdZD2ZqLREqRy5Iirw8s2g
+         7RbnkJ1pNv4h2N7ho90BXR4bf/9JkvLvs8wVxr+ZSn48ROr1lYpP9LVZEic9rpAp+tV3
+         4Tlw==
+X-Gm-Message-State: APjAAAVOzEcX+tFkR7kuidVGa2Vniz3nMiC5MCW7lPTgL0OPqerKkDrf
+        3wfkHb9PZBWcnInjCxb8+Tw=
+X-Google-Smtp-Source: APXvYqwFs9WCfX5Zns1dn/waQc5SAS6QITJ6vgSKTUyyWuGBEXbL9xHN98CCy4vtFPl/cPoSYfICzQ==
+X-Received: by 2002:a63:fd06:: with SMTP id d6mr15467012pgh.183.1556941076981;
+        Fri, 03 May 2019 20:37:56 -0700 (PDT)
+Received: from oslab.tsinghua.edu.cn ([2402:f000:4:72:808::3ca])
+        by smtp.gmail.com with ESMTPSA id f71sm6768795pfc.109.2019.05.03.20.37.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 May 2019 20:37:56 -0700 (PDT)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] usb: host: xhci_debugfs: Fix a null pointer dereference in xhci_debugfs_create_endpoint()
+Date:   Sat,  4 May 2019 11:37:48 +0800
+Message-Id: <20190504033748.17964-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+In xhci_debugfs_create_slot(), kzalloc() can fail and
+dev->debugfs_private will be NULL.
+In xhci_debugfs_create_endpoint(), dev->debugfs_private is used without
+any null-pointer check, and can cause a null pointer dereference.
 
-Bisect pointed commit 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif
-with phy_utmi_width") as reason for failures of USB on Exynos4412,
-Odroid U3 board (ARMv7, exynos_defconfig, TFTP boot with nfsroot from
-NFSv4):
+To fix this bug, a null-pointer check is added in
+xhci_debugfs_create_endpoint().
 
-[    4.333996] usb 1-2: new high-speed USB device number 3 using exynos-ehci
-[    4.503942] usb 1-2: device descriptor read/64, error -71
-[    4.793970] usb 1-2: device descriptor read/64, error -71
-[    4.914748] usb usb1-port2: attempt power cycle
-[    6.224267] usb 1-3: new high-speed USB device number 5 using exynos-ehci
-[    6.393983] usb 1-3: device descriptor read/64, error -71
-[    6.684243] usb 1-3: device descriptor read/64, error -71
-[    6.954259] usb 1-3: new high-speed USB device number 6 using exynos-ehci
-[    7.123980] usb 1-3: device descriptor read/64, error -71
-[    7.413969] usb 1-3: device descriptor read/64, error -71
-[    7.534778] usb usb1-port3: attempt power cycle
+This bug is found by a runtime fuzzing tool named FIZZER written by us.
 
-The boot failure is effect of lack of network adapter (USB, smsc95xx).
-Expected:
-[    4.285831] usb 1-3: New USB device found, idVendor=0424, idProduct=3503, bcdDevice=a1.a0
-[    4.288986] usb 1-3: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-[    4.299596] hub 1-3:1.0: USB hub found
-[    4.300027] hub 1-3:1.0: 3 ports detected
-[    5.895541] smsc95xx 1-2:1.0 eth0: link up, 100Mbps, full-duplex, lpa 0xCDE1
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+ drivers/usb/host/xhci-debugfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Full kernel log is here:
-https://krzk.eu/#/builders/25/builds/1330/steps/14/logs/serial0
-https://krzk.eu/#/builders/25/builds/1330
-
-Let me know if you need any more details.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
+index cadc01336bf8..7ba6afc7ef23 100644
+--- a/drivers/usb/host/xhci-debugfs.c
++++ b/drivers/usb/host/xhci-debugfs.c
+@@ -440,6 +440,9 @@ void xhci_debugfs_create_endpoint(struct xhci_hcd *xhci,
+ 	struct xhci_ep_priv	*epriv;
+ 	struct xhci_slot_priv	*spriv = dev->debugfs_private;
+ 
++	if (!spriv)
++		return;
++
+ 	if (spriv->eps[ep_index])
+ 		return;
+ 
+-- 
+2.17.0
 
