@@ -2,52 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E594138AC
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2019 12:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61331139B4
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2019 14:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726962AbfEDKVO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 May 2019 06:21:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33180 "EHLO mail.kernel.org"
+        id S1726320AbfEDMSA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 May 2019 08:18:00 -0400
+Received: from mleia.com ([178.79.152.223]:42728 "EHLO mail.mleia.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726208AbfEDKVO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 4 May 2019 06:21:14 -0400
-Received: from localhost (unknown [171.76.113.243])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 718F420675;
-        Sat,  4 May 2019 10:21:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556965273;
-        bh=rQTWEeZZ9og7kvu5nLySRWym5zK+gidejdVifNmQJmc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T5PsgJllpDgabG60xxfaFbbCrFtJkz55oU0/QPZxaqCOGx/FwcEo2Rgg1ZiOfk6OW
-         WE8NYGRJ6ZYGDjE9RMMSIH85y1T0FxfdpcXLtpRILVRoT1vPV1ptpoaxxZnDeA3gmy
-         R4/M9+gdaMDLQdjHw5dicOxmFiP9+CPeckPLfIK8=
-Date:   Sat, 4 May 2019 15:51:01 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
+        id S1725981AbfEDMSA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 4 May 2019 08:18:00 -0400
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 5F5AD46792C;
+        Sat,  4 May 2019 13:17:58 +0100 (BST)
+Subject: Re: [PATCH -next] usb: gadget: udc: lpc32xx: fix return value check
+ in lpc32xx_udc_probe()
+To:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] dmaengine: fsl-edma: Fix typo in Vybrid name
-Message-ID: <20190504102101.GY3845@vkoul-mobl.Dlink>
-References: <20190504095225.23883-1-krzk@kernel.org>
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org
+References: <20190504070407.56915-1-weiyongjun1@huawei.com>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <5a3a89cf-eee3-136c-1c5a-58024e946a24@mleia.com>
+Date:   Sat, 4 May 2019 15:17:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190504095225.23883-1-krzk@kernel.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190504070407.56915-1-weiyongjun1@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20190504_131758_411217_35442B8F 
+X-CRM114-Status: GOOD (  18.24  )
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 04-05-19, 11:52, Krzysztof Kozlowski wrote:
-> Fix typo in comment for Vybrid SoC family.
+Hi Wei Yongjun,
 
-Applied both in the series and ignore the (3rd?) usb patch! thanks
+On 05/04/2019 10:04 AM, Wei Yongjun wrote:
+> In case of error, the function devm_ioremap_resource() returns ERR_PTR()
+> and never returns NULL. The NULL test in the return value check should
+> be replaced with IS_ERR().
+> 
+> This issue was detected by using the Coccinelle software.
+> 
+> Fixes: 408b56ca5c8e ("usb: gadget: udc: lpc32xx: simplify probe")
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> ---
+>  drivers/usb/gadget/udc/lpc32xx_udc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
+> index d8f1c60793ed..00fb79c6d025 100644
+> --- a/drivers/usb/gadget/udc/lpc32xx_udc.c
+> +++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+> @@ -3070,9 +3070,9 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	udc->udp_baseaddr = devm_ioremap_resource(dev, res);
+> -	if (!udc->udp_baseaddr) {
+> +	if (IS_ERR(udc->udp_baseaddr)) {
+>  		dev_err(udc->dev, "IO map failure\n");
+> -		return -ENOMEM;
+> +		return PTR_ERR(udc->udp_baseaddr);
+>  	}
+>  
+>  	/* Get USB device clock */
 
--- 
-~Vinod
+thank you for the change, it is a correct fix.
+
+I do suppose that dev_err() in the context can be evenly removed, but
+likely it should be another change.
+
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+
+--
+Best wishes,
+Vladimir
