@@ -2,51 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A33913735
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2019 06:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9491137C7
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2019 08:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725801AbfEDEAL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 May 2019 00:00:11 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:55634 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725385AbfEDEAK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 May 2019 00:00:10 -0400
-Received: from localhost (unknown [75.104.87.19])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id D73F514D79773;
-        Fri,  3 May 2019 21:00:05 -0700 (PDT)
-Date:   Sat, 04 May 2019 00:00:01 -0400 (EDT)
-Message-Id: <20190504.000001.652024295667504645.davem@davemloft.net>
-To:     linux@roeck-us.net
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, garsilva@embeddedor.com
-Subject: Re: [PATCH] usbnet: ipheth: Remove unnecessary NULL pointer check
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <1556670933-755-1-git-send-email-linux@roeck-us.net>
-References: <1556670933-755-1-git-send-email-linux@roeck-us.net>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 03 May 2019 21:00:10 -0700 (PDT)
+        id S1725826AbfEDGdo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 May 2019 02:33:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45238 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725808AbfEDGdo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 4 May 2019 02:33:44 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D23CB206DF;
+        Sat,  4 May 2019 06:33:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556951623;
+        bh=84mKmofQ1I0p0ojHmcWzw7M3BuEpFKyAKsoEA/IlW5g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BXJGMfyllchGZ/ImhgWiTIVtvq8a84Rs+uoCs5UAPoes8jbBZ4efgHSvmI5lkzQCq
+         GzfxzuURe4t1gtaNj41Tx0+cJCJQTmY+EeQpZLe/DdWaknhPFwqefc+PLrUEyEuYAq
+         iRAoEJcz2gGYVQf7yO20V01JF66M23pztyCk2O54=
+Date:   Sat, 4 May 2019 08:33:40 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: xhci_debugfs: Fix a null pointer dereference
+ in xhci_debugfs_create_endpoint()
+Message-ID: <20190504063340.GA26311@kroah.com>
+References: <20190504033748.17964-1-baijiaju1990@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190504033748.17964-1-baijiaju1990@gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
-Date: Tue, 30 Apr 2019 17:35:33 -0700
-
-> ipheth_carrier_set() is called from two locations. In
-> ipheth_carrier_check_work(), its parameter 'dev' is set with
-> container_of(work, ...) and can not be NULL. In ipheth_open(),
-> dev is extracted from netdev_priv(net) and dereferenced before
-> the call to ipheth_carrier_set(). The NULL pointer check of dev
-> in ipheth_carrier_set() is therefore unnecessary and can be removed.
+On Sat, May 04, 2019 at 11:37:48AM +0800, Jia-Ju Bai wrote:
+> In xhci_debugfs_create_slot(), kzalloc() can fail and
+> dev->debugfs_private will be NULL.
+> In xhci_debugfs_create_endpoint(), dev->debugfs_private is used without
+> any null-pointer check, and can cause a null pointer dereference.
 > 
-> Cc: Gustavo A. R. Silva <garsilva@embeddedor.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> To fix this bug, a null-pointer check is added in
+> xhci_debugfs_create_endpoint().
+> 
+> This bug is found by a runtime fuzzing tool named FIZZER written by us.
+> 
+> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-Applied to net-next.
+Very rare case, but nice fix.  You should put "potential" in your
+subject line as this is something that no one should ever hit :)
+
+Anyway:
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
