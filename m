@@ -2,84 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6511B1388E
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2019 11:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E594138AC
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2019 12:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727055AbfEDJxC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 May 2019 05:53:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55408 "EHLO mail.kernel.org"
+        id S1726962AbfEDKVO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 May 2019 06:21:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725981AbfEDJxC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 4 May 2019 05:53:02 -0400
-Received: from localhost.localdomain (unknown [194.230.155.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726208AbfEDKVO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 4 May 2019 06:21:14 -0400
+Received: from localhost (unknown [171.76.113.243])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F08B2206DF;
-        Sat,  4 May 2019 09:52:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 718F420675;
+        Sat,  4 May 2019 10:21:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556963581;
-        bh=4xZE1hhgibu5lcOsNSkgzQ4lXnfNOgjAsG93TP2Du3U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kIzdCpa6xr5dRpkpZwgR3RpjnexnNhGsahyRYKoLpUbz9RmcYfsAOy/s/bIvXVt9D
-         oZ0QY6YKQNnny/W3e4/rkaVqrVsBWn9Dnu2MZZtugW8hSkrBi0CQBt2Tgd6AoPInVd
-         s0ycZ8lvH6PgNNuy3E2hXUNLu8a1+lydEdfhhnO0=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
+        s=default; t=1556965273;
+        bh=rQTWEeZZ9og7kvu5nLySRWym5zK+gidejdVifNmQJmc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T5PsgJllpDgabG60xxfaFbbCrFtJkz55oU0/QPZxaqCOGx/FwcEo2Rgg1ZiOfk6OW
+         WE8NYGRJ6ZYGDjE9RMMSIH85y1T0FxfdpcXLtpRILVRoT1vPV1ptpoaxxZnDeA3gmy
+         R4/M9+gdaMDLQdjHw5dicOxmFiP9+CPeckPLfIK8=
+Date:   Sat, 4 May 2019 15:51:01 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
         Minas Harutyunyan <hminas@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 2/2] dmaengine: fsl-edma: Adjust indentation
-Date:   Sat,  4 May 2019 11:52:25 +0200
-Message-Id: <20190504095225.23883-3-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190504095225.23883-1-krzk@kernel.org>
+Subject: Re: [PATCH 1/2] dmaengine: fsl-edma: Fix typo in Vybrid name
+Message-ID: <20190504102101.GY3845@vkoul-mobl.Dlink>
 References: <20190504095225.23883-1-krzk@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190504095225.23883-1-krzk@kernel.org>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix indentation and remove unneeded space after 'return' keyword.  This
-fixes checkpatch warning:
-    WARNING: Statements should start on a tabstop
+On 04-05-19, 11:52, Krzysztof Kozlowski wrote:
+> Fix typo in comment for Vybrid SoC family.
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/dma/fsl-edma.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Applied both in the series and ignore the (3rd?) usb patch! thanks
 
-diff --git a/drivers/dma/fsl-edma.c b/drivers/dma/fsl-edma.c
-index 75e8a7ba3a22..d641ef85a634 100644
---- a/drivers/dma/fsl-edma.c
-+++ b/drivers/dma/fsl-edma.c
-@@ -144,21 +144,21 @@ fsl_edma_irq_init(struct platform_device *pdev, struct fsl_edma_engine *fsl_edma
- 				fsl_edma_irq_handler, 0, "eDMA", fsl_edma);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Can't register eDMA IRQ.\n");
--			 return  ret;
-+			return ret;
- 		}
- 	} else {
- 		ret = devm_request_irq(&pdev->dev, fsl_edma->txirq,
- 				fsl_edma_tx_handler, 0, "eDMA tx", fsl_edma);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Can't register eDMA tx IRQ.\n");
--			return  ret;
-+			return ret;
- 		}
- 
- 		ret = devm_request_irq(&pdev->dev, fsl_edma->errirq,
- 				fsl_edma_err_handler, 0, "eDMA err", fsl_edma);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Can't register eDMA err IRQ.\n");
--			return  ret;
-+			return ret;
- 		}
- 	}
- 
 -- 
-2.17.1
-
+~Vinod
