@@ -2,91 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4B21381F
-	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2019 09:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4514613875
+	for <lists+linux-usb@lfdr.de>; Sat,  4 May 2019 11:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726258AbfEDHa6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 May 2019 03:30:58 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:38944 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbfEDHa6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 May 2019 03:30:58 -0400
-Received: by mail-pl1-f195.google.com with SMTP id e92so3805885plb.6;
-        Sat, 04 May 2019 00:30:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=EwweiBCfeJ/cKJj/kqdEZt5KyrfkU7tGiFKFsGG/ynM=;
-        b=ge81vD4ktejLRqGTFd9opeJ/bQJ81OT/HtLTZzaN081dOnSgLk/b4K2qCWI3DuNOFL
-         hfc4X2tNsk30NvPs1jLB+XcdWr20To+HKWCNte0d21hYM1a1a3ttIoQiVLyjK5uLvCxa
-         oTMnOHFyaCUcu/vlLC+M1HGJnrERA1RECs9fwpDdoE60z3e16wsUl42bRcglYlOSKszs
-         eMeuMwtXjpPLHTUCkZfhYQZ5sbBS//NQ9P3FMM3GVL5EKiucHHGacmZT3j9U8Znnlcyq
-         LWl3+W5m//QptC1QEeeWS73cG4dRjlK94XBzIDJ5oXfwDlnwtOIu5KfjbTkVD5xBBC1Z
-         4l7Q==
+        id S1726217AbfEDJig convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 4 May 2019 05:38:36 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:36369 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725823AbfEDJif (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 May 2019 05:38:35 -0400
+Received: by mail-oi1-f196.google.com with SMTP id l203so6275458oia.3;
+        Sat, 04 May 2019 02:38:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=EwweiBCfeJ/cKJj/kqdEZt5KyrfkU7tGiFKFsGG/ynM=;
-        b=iZZKs1gOGgDXJ8tUZ9GQlpebNb+0uqHRZ4jjug/8Qg0GaW8opuuXjB/M3bLPrdLQ1P
-         yMXDKBem3JXgMlokH5Mr9Y6JX2v8EUnVJkQjanI5RcAOHcKmxgUhiCX0T+/qSjESrv6u
-         Fb0KGLVgEBtyV7qfr8oRQa1Nfu3++/4q/A2wrGxVSYHTNlftJTG+Bke0bOSVyq/47LBS
-         pRUXIb3fSq0zIVAf2N10APx+pBd/21wNadI8zPPnofGXCcb0mRtuTlwHLKYNKouS3b91
-         vA0dFEX3Iy5YHfEYwGWGkkt+76AtqGIoOXfp+Vg92py8/e11ZI9OUzswIyneawKtKx/m
-         foGA==
-X-Gm-Message-State: APjAAAU8h27rtCdSZfE3wczdSrW/i6jpdwsDVIOHAUpC4wn1hIqfVlr6
-        YMZGn5tJCDnocs4Yys4In58zcK/t
-X-Google-Smtp-Source: APXvYqwQuHJjllCV9Zt2vI8TIT03UGNOh62eAd7zsJvPGi1g80RArlbgZHfIrLj+U/y4d+XrSyu0jg==
-X-Received: by 2002:a17:902:2702:: with SMTP id c2mr16524210plb.277.1556955057920;
-        Sat, 04 May 2019 00:30:57 -0700 (PDT)
-Received: from ?IPv6:2402:f000:1:1501:200:5efe:166.111.71.43? ([2402:f000:1:1501:200:5efe:a66f:472b])
-        by smtp.gmail.com with ESMTPSA id j6sm5711397pfe.107.2019.05.04.00.30.55
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 04 May 2019 00:30:56 -0700 (PDT)
-Subject: Re: [PATCH] usb: host: xhci_debugfs: Fix a null pointer dereference
- in xhci_debugfs_create_endpoint()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190504033748.17964-1-baijiaju1990@gmail.com>
- <20190504063340.GA26311@kroah.com>
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Message-ID: <db68433e-d655-217a-4a73-4bb83069addc@gmail.com>
-Date:   Sat, 4 May 2019 15:30:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=HFseoIWdZ0CgvYQXA3eAJnk39OPJTIq5Z9waS1ZE/Jc=;
+        b=MLaA2HE++m5V4WSryK46H1oRcZYNNYjQ2OJNoCy1cZLuDhVOFP8hUXqIXwWv9vVb6t
+         HUkEEAGwMbRUPzKAQW5J5smYBnJ80A1voiHLSeKHwbCvl03GwT+6IuLkHOUx1JI5TFQP
+         JYRMIOUCa3IgBso2QXyYPVEf9aeEcf955H0LH9eCwAFF3DwFW5HO1v1ZRpcNvggpkFr9
+         LQ4do+TXESwwflNu7Me3T6u4yvbaF8Kdg1xxS92CjhuR4xC8al0khaXmxwnx9htdTmj/
+         tvxIQv5odfm3fIqCQVAaqaTOc3hYUtyYa9xzJpMLJj5uE0DW+/ea7IkT6HhIPx4j5kTO
+         kcaA==
+X-Gm-Message-State: APjAAAU4AxqfOu2G4q+soLKHSb7sbtKrk42Cj2HiyrBaibBESPYy5kDJ
+        EpxSWm7omIK8T3itSvJjAo5E9RghijkpM8JCP2s=
+X-Google-Smtp-Source: APXvYqzSnqDL5V1V0nXKvVXGhTqE7hzRVYiJdoDEV0gao7+HsCWuCIR5ouFQqReU4n19/y4ehX0kTkLO0aUKFmOKP0g=
+X-Received: by 2002:aca:eb11:: with SMTP id j17mr2029311oih.67.1556962714541;
+ Sat, 04 May 2019 02:38:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190504063340.GA26311@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20190403185310.8437-1-matwey@sai.msu.ru> <20190403185310.8437-7-matwey@sai.msu.ru>
+ <20190430153118.GI20993@uda0271908>
+In-Reply-To: <20190430153118.GI20993@uda0271908>
+From:   "Matwey V. Kornilov" <matwey@sai.msu.ru>
+Date:   Sat, 4 May 2019 12:38:22 +0300
+Message-ID: <CAJs94EZLDotLHQmfhvzyRZWDAEL6hnUTmkXKMoVrO_JBJcHX4A@mail.gmail.com>
+Subject: Re: [PATCH 6/6] usb: musb: Decrease URB starting latency in musb_advance_schedule()
+To:     Bin Liu <b-liu@ti.com>, "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?0JzQsNGC0LLQtdC5INCa0L7RgNC90LjQu9C+0LI=?= 
+        <matwey.kornilov@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+вт, 30 апр. 2019 г. в 18:31, Bin Liu <b-liu@ti.com>:
+>
+> Hi Greg and all devs,
+>
+> On Wed, Apr 03, 2019 at 09:53:10PM +0300, Matwey V. Kornilov wrote:
+> > Previously, the algorithm was the following:
+> >
+> >  1. giveback current URB
+> >  2. if current qh is not empty
+> >     then start next URB
+> >  3. if current qh is empty
+> >     then dispose the qh, find next qh if any, and start URB.
+> >
+> > It may take a while to run urb->callback inside URB giveback which is
+> > run synchronously in musb. In order to improve the latency we rearrange
+> > the function behaviour for the case when qh is not empty: next URB is
+> > started before URB giveback. When qh is empty then the behaviour is
+> > intentionally kept in order not to break existing inter qh scheduling:
+> > URB giveback could potentionally enqueue other URB to the empty qh
+> > preventing it from being disposed.
+>
+> This patch changes the sequence of urb giveback in musb.
+>
+>         before                          after
+>         ------                          -----
+> 1. giveback current urb                 1. start next urb if qh != empty
+> 2. start next urb if qh != empty        2. giveback current urb
+>
+> I see there is a potential that the urb giveback could be out of order,
+> for example, if urb giveback in BH and the next urb finishes before BH
+> runs.
+
+Could you please give more details? Frankly speaking, I am not sure
+that I understand the reordering issue origin correctly.
+I see in the existing implementation that the function call order is
+the following:
+
+1. glue interrupt handler (for instance dsps_interrupt() in my am335x
+case) holds musb->lock;
+2. musb_interrupt()
+3. musb_host_rx() (or *_tx())
+4. musb_advance_schedule()
+5. musb_giveback() releases and reacquires musb->lock around:
+6. usb_hcd_giveback_urb()
+
+So, when musb_giveback() is called inside musb_advance_schedule() then
+the second instance of musb_advance_schedule() can be started
+simultaneously when the following interrupt is being handled at other
+CPU core. And we can see two usb_hcd_giveback_urb() running
+concurrently.
+Is it correct?
+
+>
+> If this potential is possible, is it a problem for any class driver?
+>
+> Thanks,
+> -Bin.
+>
+> >
+> > Before this patch, time spent in urb->callback led to the following
+> > glitches between the host and a hub during isoc transfer (line 4):
+> >
+> >     11.624492 d=  0.000124 [130.6 +  1.050] [  4] SPLIT
+> >     11.624492 d=  0.000000 [130.6 +  1.467] [  3] IN   : 3.5
+> >     11.624493 d=  0.000000 [130.6 +  1.967] [ 37] DATA0: aa 08 [skipped...]
+> >     11.625617 d=  0.001124 [131.7 +  1.050] [  4] SPLIT
+> >     11.625617 d=  0.000000 [131.7 +  1.467] [  3] IN   : 3.5
+> >     11.625867 d=  0.000250 [132.1 +  1.050] [  4] SPLIT
+> >     11.625867 d=  0.000000 [132.1 +  1.467] [  3] IN   : 3.5
+> >     11.625868 d=  0.000001 [132.1 +  1.983] [  3] DATA0: 00 00
+> >     11.626617 d=  0.000749 [132.7 +  1.050] [  4] SPLIT
+> >     11.626617 d=  0.000000 [132.7 +  1.467] [  3] IN   : 3.5
+> >     11.626867 d=  0.000250 [133.1 +  1.050] [  4] SPLIT
+> >     11.626867 d=  0.000000 [133.1 +  1.467] [  3] IN   : 3.5
+> >     11.626868 d=  0.000000 [133.1 +  1.967] [  3] DATA0: 00 00
+> >
+> > After the hub, they look as the following and may lead to broken
+> > perepherial transfer (as in case of PWC based webcam):
+> >
+> >     11.332004 d=  0.000997 [ 30.0 +  3.417] [  3] IN   : 5.5
+> >     11.332007 d=  0.000003 [ 30.0 +  6.833] [800] DATA0: 8a 1c [skipped...]
+> >     11.334004 d=  0.001997 [ 32.0 +  3.417] [  3] IN   : 5.5
+> >     11.334007 d=  0.000003 [ 32.0 +  6.750] [  3] DATA0: 00 00
+> >     11.335004 d=  0.000997 [ 33   +  3.417] [  3] IN   : 5.5
+> >     11.335007 d=  0.000003 [ 33   +  6.750] [  3] DATA0: 00 00
+> >
+> > Removing this glitches makes us able to successfully run 10fps
+> > video stream from the webcam attached via USB hub. That was
+> > previously impossible.
+> >
+> > Signed-off-by: Matwey V. Kornilov <matwey@sai.msu.ru>
+> > ---
+> >  drivers/usb/musb/musb_host.c | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> >
+> > diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
+> > index ed99ecd4e63a..75be92873b5b 100644
+> > --- a/drivers/usb/musb/musb_host.c
+> > +++ b/drivers/usb/musb/musb_host.c
+> > @@ -85,6 +85,11 @@ static bool musb_qh_empty(struct musb_qh *qh)
+> >       return list_empty(&qh->hep->urb_list);
+> >  }
+> >
+> > +static bool musb_qh_singular(struct musb_qh *qh)
+> > +{
+> > +     return list_is_singular(&qh->hep->urb_list);
+> > +}
+> > +
+> >  static void musb_qh_unlink_hep(struct musb_qh *qh)
+> >  {
+> >       if (!qh->hep)
+> > @@ -362,6 +367,19 @@ static void musb_advance_schedule(struct musb *musb, struct urb *urb,
+> >               break;
+> >       }
+> >
+> > +     if (ready && !musb_qh_singular(qh)) {
+> > +             struct urb *next_urb = list_next_entry(urb, urb_list);
+> > +
+> > +             musb_dbg(musb, "... next ep%d %cX urb %p", hw_ep->epnum, is_in ? 'R' : 'T', next_urb);
+> > +             musb_start_urb(musb, is_in, qh, next_urb);
+> > +
+> > +             qh->is_ready = 0;
+> > +             musb_giveback(musb, urb, status);
+> > +             qh->is_ready = ready;
+> > +
+> > +             return;
+> > +     }
+> > +
+> >       qh->is_ready = 0;
+> >       musb_giveback(musb, urb, status);
+> >       qh->is_ready = ready;
+> > --
+> > 2.16.4
+> >
 
 
-On 2019/5/4 14:33, Greg KH wrote:
-> On Sat, May 04, 2019 at 11:37:48AM +0800, Jia-Ju Bai wrote:
->> In xhci_debugfs_create_slot(), kzalloc() can fail and
->> dev->debugfs_private will be NULL.
->> In xhci_debugfs_create_endpoint(), dev->debugfs_private is used without
->> any null-pointer check, and can cause a null pointer dereference.
->>
->> To fix this bug, a null-pointer check is added in
->> xhci_debugfs_create_endpoint().
->>
->> This bug is found by a runtime fuzzing tool named FIZZER written by us.
->>
->> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-> Very rare case, but nice fix.  You should put "potential" in your
-> subject line as this is something that no one should ever hit :)
 
-Okay, Greg, thanks for this advice :)
-
-
-Best wishes,
-Jia-Ju Bai
+-- 
+With best regards,
+Matwey V. Kornilov.
+Sternberg Astronomical Institute, Lomonosov Moscow State University, Russia
+119234, Moscow, Universitetsky pr-k 13, +7 (495) 9392382
