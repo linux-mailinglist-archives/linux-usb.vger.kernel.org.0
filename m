@@ -2,112 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2AD15044
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 17:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D21015113
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 18:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbfEFPam (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 11:30:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51598 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726034AbfEFPal (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 6 May 2019 11:30:41 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AC7A221019;
-        Mon,  6 May 2019 15:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557156640;
-        bh=y4bAG5gq6U3haHrnf1MAV7rGMGFLAEB6Ibt6G1yZvZ8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aCPzxtAo0cqsJZqURdeQaqK83/p0unGaJCJFcRgDP3xUetjGuPbKSaaz4RyQZOCGf
-         /URNPAAIMkGZjS1uhIVqAHOYluDNONqThbPpvu6Ld1kr9ug6sBG0HSGe7yCwjzvQbi
-         J/2K1pqUToZdrV4joYCJYB6MSw6KfCpGLH9VsV8Y=
-Received: by mail-qk1-f174.google.com with SMTP id p19so4450698qkm.10;
-        Mon, 06 May 2019 08:30:40 -0700 (PDT)
-X-Gm-Message-State: APjAAAUTFHW6Yv+1imJFWhtyF/17+TEb5rhfhqGn9GCPR2W7S0CtxeeK
-        SRSAGAi16LWES0Ho67wyE+JECLI+j6sBIV7NTw==
-X-Google-Smtp-Source: APXvYqznvmDWZUjkaxr0sSjLP51EjpfxMMduwQvYSJXU0WPFWR7Y+y3kDu4pbxxZImHKPkVymEqchQsoW0f0gHPW8x4=
-X-Received: by 2002:a37:4711:: with SMTP id u17mr20161936qka.326.1557156639851;
- Mon, 06 May 2019 08:30:39 -0700 (PDT)
+        id S1726426AbfEFQUw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 12:20:52 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:38824 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726160AbfEFQUw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 12:20:52 -0400
+Received: by mail-pl1-f194.google.com with SMTP id a59so6615751pla.5;
+        Mon, 06 May 2019 09:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rwhJD74xfD/UXtBBnubuC2BkNBqZahNTcck6QOIWCQQ=;
+        b=BVD+eEv22cofmtuysgxgU27eatoy7VtaMG+XH5ppIZitrkrJRlzq1NW69R/bvgR5d8
+         1OkWrkcydsBTKzaFRWVDS9csU+wXdyrpW3FpqIassCS5CzDVneJpJT4eXO0V3/VhmSqF
+         qNRIVDpd8jy0YeekzYsi9SWKSyO0yvSiaNDRAGCUs/RAsFIxZJwi/cO8Sd01f/Mm7Tin
+         4IMIscJsesC1isZUqDSoHOr7wRsyW/Sl4+8NsCTWgOIoMqN1hUtoqd86STFRAZa6X4/K
+         kQR/M4mcECQw2kJVD/oJaD6eh5wch/DMrKmJHQ74UUirnrZIPpLNv57+lPmfBUH+ZPT8
+         Ugmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rwhJD74xfD/UXtBBnubuC2BkNBqZahNTcck6QOIWCQQ=;
+        b=P18rwo++PtxomF5d9349M/LcREWPJ6g8CNCmbFJrYM7SfOdb6F/R+92Eo4wYtyHPiX
+         gy+77jMrxgUoR+1RmC6+bMNHnbT/efItsLkx164gZWXXmapC1+tSBfJ8mViFwyjJM/rV
+         UT1RY1hGX/HUJznRm3bUVbr6hcU/NgrGbcJjXBC1NIJj+kTMtCdkNlymkHo3sSMZwsRw
+         N7Iy+GjE0dch9/+UBfTRJSUcRhfFvDLuz/x8a8HC3xP0d4vLAXZhsq73jO0Hv43h2oh/
+         78ugENAUa0oh/81vFQGfE45Ldpd4RXZ5/mZicGlHXAPtI5SIFUeZqhbFfecb8+PXxTob
+         4Jhg==
+X-Gm-Message-State: APjAAAXLsFsQXwzfPTolsr+aZgl2Tu5tZ/+s52jTosrljCoCMJFsYqT9
+        nvZKEOFOoKNq2jSYrrFza4lCFsBg
+X-Google-Smtp-Source: APXvYqx1AaDT6JXFCF2yVVs31A0dxBBaQlvZMLooiC+UlO61cPKdoXveF88gss+9vqbA1/fQTRKwPw==
+X-Received: by 2002:a17:902:d88b:: with SMTP id b11mr12930180plz.186.1557159651393;
+        Mon, 06 May 2019 09:20:51 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n18sm24028204pfi.48.2019.05.06.09.20.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 06 May 2019 09:20:50 -0700 (PDT)
+Date:   Mon, 6 May 2019 09:20:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Angus Ainslie (Purism)" <angus@akkea.ca>
+Cc:     angus.ainslie@puri.sm,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: tcpm: Add functions to read the VBUS
+ voltage
+Message-ID: <20190506162049.GA26804@roeck-us.net>
+References: <20190506140830.25376-1-angus@akkea.ca>
+ <20190506140830.25376-3-angus@akkea.ca>
 MIME-Version: 1.0
-References: <20190428024847.5046-1-peter.chen@nxp.com> <20190428024847.5046-7-peter.chen@nxp.com>
- <CAL_JsqLPK8kuYTT7ekZbAzywp2kr9xKA0_X3BAqVn5hShbPM+w@mail.gmail.com> <VI1PR04MB5327641FD0A21BB4C93A85A58B370@VI1PR04MB5327.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB5327641FD0A21BB4C93A85A58B370@VI1PR04MB5327.eurprd04.prod.outlook.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 6 May 2019 10:30:27 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+OywH+_caxtrBJF=nMVxFeHsuL8jbLq=a6VBXWiZ0ktA@mail.gmail.com>
-Message-ID: <CAL_Jsq+OywH+_caxtrBJF=nMVxFeHsuL8jbLq=a6VBXWiZ0ktA@mail.gmail.com>
-Subject: Re: [PATCH 6/7] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190506140830.25376-3-angus@akkea.ca>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 4, 2019 at 10:13 PM Peter Chen <peter.chen@nxp.com> wrote:
->
->
-> > > ---
-> > >  arch/arm/boot/dts/imx7ulp.dtsi | 30 ++++++++++++++++++++++++++++++
-> > >  1 file changed, 30 insertions(+)
-> > >
-> > > diff --git a/arch/arm/boot/dts/imx7ulp.dtsi
-> > > b/arch/arm/boot/dts/imx7ulp.dtsi index fca6e50f37c8..e2944f98eac6
-> > > 100644
-> > > --- a/arch/arm/boot/dts/imx7ulp.dtsi
-> > > +++ b/arch/arm/boot/dts/imx7ulp.dtsi
-> > > @@ -30,6 +30,7 @@
-> > >                 serial1 = &lpuart5;
-> > >                 serial2 = &lpuart6;
-> > >                 serial3 = &lpuart7;
-> > > +               usbphy0 = &usbphy1;
-> >
-> > Drop this. You shouldn't need an alias.
-> >
->
-> It is a derived USB PHY and used on most of i.mx chipidea USB controllers.
-> At the source code, we use aligned id to know the controller number.
->
->         ret = of_alias_get_id(np, "usbphy");
->         if (ret < 0)
->                 dev_dbg(&pdev->dev, "failed to get alias id, errno %d\n", ret);
->         mxs_phy->port_id = ret;
+On Mon, May 06, 2019 at 08:08:29AM -0600, Angus Ainslie (Purism) wrote:
+> Put some diagnostics in the tcpm log when there's an over
+> or under voltage situation.
+> 
+> Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
 
-fsl,anatop property should probably have cell to specify this.
+Subject is missing 'tcpci'.
 
->
-> > >         };
-> > >
-> > >         cpus {
-> > > @@ -133,6 +134,35 @@
-> > >                         clock-names = "ipg", "per";
-> > >                 };
-> > >
-> > > +               usbotg1: usb@40330000 {
-> > > +                       compatible = "fsl,imx7ulp-usb", "fsl,imx6ul-usb",
-> > > +                               "fsl,imx27-usb";
-> > > +                       reg = <0x40330000 0x200>;
-> > > +                       interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
-> > > +                       clocks = <&pcc2 IMX7ULP_CLK_USB0>;
-> > > +                       fsl,usbphy = <&usbphy1>;
-> >
-> > Don't use this for new users. Use the phy binding instead.
-> >
->
-> It is not a new user, the USB PHY used at imx7ulp is the same with imx6's.
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c | 44 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index c1f7073a56de..c6e0e48b9a2a 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -261,6 +261,39 @@ static int tcpci_set_pd_rx(struct tcpc_dev *tcpc, bool enable)
+>  	return 0;
+>  }
+>  
+> +static int tcpci_get_vbus_voltage(struct tcpc_dev *tcpc)
+> +{
+> +	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+> +	u16 vbus_reg;
+> +	unsigned int vbus_voltage;
+> +	int ret, scale;
+> +
+> +	ret = tcpci_read16(tcpci, TCPC_VBUS_VOLTAGE, &vbus_reg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	vbus_voltage = vbus_reg & 0x3f;
+> +	switch ((ret >> 10) & 3) {
 
-New SoC is a new user. The chipidea core already supports using 'phys'
-so you should be able to just use the common code.
+Did you test this code ?
 
-Rob
+> +	case 0:
+> +		scale = 1;
+> +		break;
+> +	case 1:
+> +		scale = 2;
+> +		break;
+> +	case 2:
+> +		scale = 4;
+> +		break;
+> +	case 3:
+> +		tcpm_log(tcpci->port, "invalid VBUS scale");
+> +		return -1;
+
+Any special reason for not using standard error codes ?
+The code above does, meaning this is a hardcodesd -EPERM, which doesn't
+really make any sense.
+
+> +	}
+> +
+> +	if (scale != 1)
+> +		vbus_voltage *= scale;
+
+I don't immediately see why this is better than, say,
+
+	scale = (vbus_reg >> 10) & 3;
+	if (scale == 3)
+		return -Esomething;	// -EPROTO, maybe
+	return vbus_voltage << scale;
+
+> +
+> +	return vbus_voltage;
+> +}
+> +
+>  static int tcpci_get_vbus(struct tcpc_dev *tcpc)
+>  {
+>  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+> @@ -463,6 +496,17 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+>  	else if (status & TCPC_ALERT_TX_FAILED)
+>  		tcpm_pd_transmit_complete(tcpci->port, TCPC_TX_FAILED);
+>  
+> +	if (status & (TCPC_ALERT_V_ALARM_LO | TCPC_ALERT_V_ALARM_HI)) {
+> +		int ret;
+> +
+> +		ret = tcpci_get_vbus_voltage(&tcpci->tcpc);
+> +
+Unnecessary empty line.
+
+> +		if (IS_ERR(ret))
+> +			tcpm_log(tcpci->port, "Can't read VBUS voltage");
+
+VBUS_VOLTAGE is an optional register. This is not an error. Besides, the
+message doesn't match the event and is useless.
+
+> +		else
+> +			tcpm_log(tcpci->port, "Invalid VBUS voltage %d", ret);
+
+Displaying a raw number without context is not very useful.
+'ret' is the voltage in multiples of 25mV. Besides, the error is that a low
+or high voltage was detected. That doesn't mean the voltage is still invalid.
+The error message should reflect that situation. Something like
+
+		"VBUS {low, high} detected, VBUS=x.yy V"
+
+would be much more useful (with VBUS=x.yy being optional).
+
+Also, please no tcpm log. The tcpci driver needs to implement
+its own logging if that is desired.
+
+> +	}
+> +
+>  	return IRQ_HANDLED;
+>  }
+>  EXPORT_SYMBOL_GPL(tcpci_irq);
+> -- 
+> 2.17.1
+> 
