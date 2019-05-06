@@ -2,138 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B8615500
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 22:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C6315523
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 22:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726547AbfEFUlm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 16:41:42 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:52514 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726381AbfEFUlm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 16:41:42 -0400
-Received: (qmail 5462 invoked by uid 2102); 6 May 2019 16:41:41 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 6 May 2019 16:41:41 -0400
-Date:   Mon, 6 May 2019 16:41:41 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <mchehab@kernel.org>, <syzkaller-bugs@googlegroups.com>,
-        <wen.yang99@zte.com.cn>
-Subject: Re: general protection fault in smsusb_init_device
-In-Reply-To: <0000000000008d89900586ccd37b@google.com>
-Message-ID: <Pine.LNX.4.44L0.1905061638380.1585-100000@iolanthe.rowland.org>
+        id S1726572AbfEFU6d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 16:58:33 -0400
+Received: from mail-eopbgr80075.outbound.protection.outlook.com ([40.107.8.75]:34805
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726363AbfEFU6d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 6 May 2019 16:58:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=p1hq.onmicrosoft.com;
+ s=selector1-phaseone-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3IRyLohPtFzcZDKVR3ivuyKULe5rrILs+UtovUaTDzQ=;
+ b=R2hG9rL5TLqnjKBmFD7aXMlPLEEpp1Rlj9Rw1JZi0FmCtING5IiWs7EjtkKb0Ru+hnh36Zv1LyuouPfGWmOeUqxehWn80jyLHYEpZJTyGKL6P8OAXq8TT92VCjD27w3eF9N/1XTkV3dLs+WUlyM0x/A6WC1VW07Z94sEHjMdDIM=
+Received: from DB8PR01MB6027.eurprd01.prod.exchangelabs.com (10.255.18.203) by
+ DB8PR01MB5930.eurprd01.prod.exchangelabs.com (10.255.17.202) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.10; Mon, 6 May 2019 20:58:28 +0000
+Received: from DB8PR01MB6027.eurprd01.prod.exchangelabs.com
+ ([fe80::b938:19d5:d32c:61ff]) by DB8PR01MB6027.eurprd01.prod.exchangelabs.com
+ ([fe80::b938:19d5:d32c:61ff%3]) with mapi id 15.20.1856.012; Mon, 6 May 2019
+ 20:58:28 +0000
+From:   "Claus H. Stovgaard" <cst@phaseone.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "v.anuragkumar@gmail.com" <v.anuragkumar@gmail.com>
+Subject: Re: [PATCH 3/3] usb: dwc3: gadget: Add support for disabling U1 and
+ U2 entries
+Thread-Topic: [PATCH 3/3] usb: dwc3: gadget: Add support for disabling U1 and
+ U2 entries
+Thread-Index: AQHVBE5z5fF2b2KOL0m3xowevYRPmg==
+Date:   Mon, 6 May 2019 20:58:27 +0000
+Message-ID: <1557176302.18203.20.camel@phaseone.com>
+References: <1556792423-4833-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+         <1556792423-4833-4-git-send-email-anurag.kumar.vulisha@xilinx.com>
+         <30102591E157244384E984126FC3CB4F639E7BA8@us01wembx1.internal.synopsys.com>
+In-Reply-To: <30102591E157244384E984126FC3CB4F639E7BA8@us01wembx1.internal.synopsys.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [2.110.44.75]
+x-mailer: Evolution 3.24.6 
+x-clientproxiedby: HE1PR0202CA0031.eurprd02.prod.outlook.com
+ (2603:10a6:3:e4::17) To DB8PR01MB6027.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:eb::11)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=cst@phaseone.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e5a19076-147c-4fe7-12ff-08d6d2659555
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:DB8PR01MB5930;
+x-ms-traffictypediagnostic: DB8PR01MB5930:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <DB8PR01MB5930FF2522CB83D1E8F9DFF9DA300@DB8PR01MB5930.eurprd01.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0029F17A3F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(366004)(346002)(39850400004)(136003)(376002)(189003)(199004)(6512007)(305945005)(966005)(478600001)(229853002)(81166006)(7736002)(52116002)(6306002)(99286004)(6246003)(5660300002)(68736007)(486006)(66946007)(66066001)(66476007)(25786009)(4326008)(53936002)(66556008)(64756008)(73956011)(256004)(66446008)(55236004)(386003)(6506007)(102836004)(103116003)(71190400001)(26005)(76176011)(50226002)(71200400001)(8676002)(6436002)(8936002)(81156014)(6486002)(110136005)(54906003)(316002)(14454004)(476003)(2616005)(86362001)(36756003)(446003)(11346002)(6116002)(186003)(3846002)(2906002)(7416002)(99106002)(6606295002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR01MB5930;H:DB8PR01MB6027.eurprd01.prod.exchangelabs.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: phaseone.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: w7BAYoKNHD2eAhqTpcxqP/+DPVA9ptrVVgU7BPe/KgleNTILr+1OXRl1NYVNnyei/JzaICBQaURQHT8KnbK0vMfhtoSTkCDDuCdTxptEdcixw48CITklemG+PDyNYczIoMrgGuq12146H+O6MDVw73GwEEPTaI0QQp5ySs82NcaPjgTaniSwPduSqRBE8PC97cwGa4xb+19hv/TfmHDKj5Np6LQOeHcIH3vFiskJJXOfspqwkZBOCQepYDxQw2AVio8ACh9ylzkBkwtdDOUJtpu8Qy6ATSnnQ8ZVGaMo8SMOuaOszHqBO3sfNIXOlzUgpywAWcZ27swZZ0JSPlFfIPkLU7V2RXm1vi+jwA06QFidIkHv4/nTDxVSiVr2v9CpP0xr4u0N+usjrSSM7XD4/54EV7fVFoeAFkwZ4LB9sSk=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FEAA0156C49356438C41068A5B7ACC39@eurprd01.prod.exchangelabs.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-OriginatorOrg: phaseone.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5a19076-147c-4fe7-12ff-08d6d2659555
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2019 20:58:28.4242
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: cbe5b4c6-877a-4fe4-be65-3be424dd0574
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR01MB5930
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 18 Apr 2019, syzbot wrote:
-
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    d34f9519 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=128ec3fd200000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c73d1bb5aeaeae20
-> dashboard link: https://syzkaller.appspot.com/bug?extid=53f029db71c19a47325a
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16138e67200000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=128dddbf200000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com
-> 
-> usb 1-1: config 0 descriptor??
-> usb 1-1: string descriptor 0 read error: -71
-> smsusb:smsusb_probe: board id=18, interface number 0
-> kasan: CONFIG_KASAN_INLINE enabled
-> kasan: GPF could be caused by NULL-ptr deref or user memory access
-> general protection fault: 0000 [#1] SMP KASAN PTI
-> CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.1.0-rc5-319617-gd34f951 #4
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:smsusb_init_device+0x366/0x937  
-> drivers/media/usb/siano/smsusb.c:429
-
-The driver assumes endpoint 1in exists, and doesn't check the existence 
-of the endpoints it uses.
-
-Alan Stern
-
-
-#syz test: https://github.com/google/kasan.git usb-fuzzer
-
- drivers/media/usb/siano/smsusb.c |   32 +++++++++++++++++++-------------
- 1 file changed, 19 insertions(+), 13 deletions(-)
-
-Index: usb-devel/drivers/media/usb/siano/smsusb.c
-===================================================================
---- usb-devel.orig/drivers/media/usb/siano/smsusb.c
-+++ usb-devel/drivers/media/usb/siano/smsusb.c
-@@ -400,6 +400,7 @@ static int smsusb_init_device(struct usb
- 	struct smsusb_device_t *dev;
- 	void *mdev;
- 	int i, rc;
-+	int in_maxp;
- 
- 	/* create device object */
- 	dev = kzalloc(sizeof(struct smsusb_device_t), GFP_KERNEL);
-@@ -411,6 +412,23 @@ static int smsusb_init_device(struct usb
- 	dev->udev = interface_to_usbdev(intf);
- 	dev->state = SMSUSB_DISCONNECTED;
- 
-+	for (i = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
-+		struct usb_endpoint_descriptor *desc =
-+				&intf->cur_altsetting->endpoint[i].desc;
-+
-+		if (desc->bEndpointAddress & USB_DIR_IN) {
-+			dev->in_ep = desc->bEndpointAddress;
-+			in_maxp = usb_endpoint_maxp(desc);
-+		} else {
-+			dev->out_ep = desc->bEndpointAddress;
-+		}
-+	}
-+
-+	pr_debug("in_ep = %02x, out_ep = %02x\n",
-+		dev->in_ep, dev->out_ep);
-+	if (!dev->in_ep || !dev->out_ep)	/* Missing endpoints? */
-+		return -EINVAL;
-+
- 	params.device_type = sms_get_board(board_id)->type;
- 
- 	switch (params.device_type) {
-@@ -425,24 +443,12 @@ static int smsusb_init_device(struct usb
- 		/* fall-thru */
- 	default:
- 		dev->buffer_size = USB2_BUFFER_SIZE;
--		dev->response_alignment =
--		    le16_to_cpu(dev->udev->ep_in[1]->desc.wMaxPacketSize) -
--		    sizeof(struct sms_msg_hdr);
-+		dev->response_alignment = in_maxp - sizeof(struct sms_msg_hdr);
- 
- 		params.flags |= SMS_DEVICE_FAMILY2;
- 		break;
- 	}
- 
--	for (i = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
--		if (intf->cur_altsetting->endpoint[i].desc. bEndpointAddress & USB_DIR_IN)
--			dev->in_ep = intf->cur_altsetting->endpoint[i].desc.bEndpointAddress;
--		else
--			dev->out_ep = intf->cur_altsetting->endpoint[i].desc.bEndpointAddress;
--	}
--
--	pr_debug("in_ep = %02x, out_ep = %02x\n",
--		dev->in_ep, dev->out_ep);
--
- 	params.device = &dev->udev->dev;
- 	params.usb_device = dev->udev;
- 	params.buffer_size = dev->buffer_size;
-
+SGkgVGhpbmggYW5kIEFudXJhZw0KDQpPbiBtYW4sIDIwMTktMDUtMDYgYXQgMTk6MjEgKzAwMDAs
+IFRoaW5oIE5ndXllbiB3cm90ZToNCg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2Mz
+L2NvcmUuYyBiL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQo+ID4gaW5kZXggYTFiMTI2Zi4uNGYw
+OTEyYyAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYw0KPiA+ICsrKyBi
+L2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQo+ID4gQEAgLTEyODUsNiArMTI4NSwxMCBAQCBzdGF0
+aWMgdm9pZCBkd2MzX2dldF9wcm9wZXJ0aWVzKHN0cnVjdCBkd2MzDQo+ID4gKmR3YykNCj4gPiAg
+CQkJCSJzbnBzLGRpc191Ml9zdXNwaHlfcXVpcmsiKTsNCj4gPiAgCWR3Yy0+ZGlzX2VuYmxzbHBt
+X3F1aXJrID0gZGV2aWNlX3Byb3BlcnR5X3JlYWRfYm9vbChkZXYsDQo+ID4gIAkJCQkic25wcyxk
+aXNfZW5ibHNscG1fcXVpcmsiKTsNCj4gPiArCWR3Yy0+ZGlzX3UxX2VudHJ5X3F1aXJrID0gZGV2
+aWNlX3Byb3BlcnR5X3JlYWRfYm9vbChkZXYsDQo+ID4gKwkJCQkic25wcyxkaXNfdTFfZW50cnlf
+cXVpcmsiKTsNCj4gPiArCWR3Yy0+ZGlzX3UyX2VudHJ5X3F1aXJrID0gZGV2aWNlX3Byb3BlcnR5
+X3JlYWRfYm9vbChkZXYsDQo+ID4gKwkJCQkic25wcyxkaXNfdTJfZW50cnlfcXVpcmsiKTsNCj4g
+DQo+IFBsZWFzZSB1c2UgIi0iIHJhdGhlciB0aGFuICJfIiBpbiB0aGUgcHJvcGVydHkgbmFtZXMu
+DQoNCkkgaGF2ZSB0aG91Z2h0IGFib3V0IHRoaXMgZmVhdHVyZSBvdmVyIHRoZSB3ZWVrZW5kLCBh
+bmQgdGhpbmsgdGhlDQpuYW1pbmcgc2hvdWxkIGJlIGNoYW5nZWQgdG8gc29tZXRoaW5nIGxpa2Ug
+InNucHMsYm9zLXUxLWV4aXQtbGF0LWluLXVzIiANCmFuZCBuYW1lZCB0aGUgc2FtZSBpbiB0aGUg
+Y29kZS4gQW5kIHRoZW4gYmUgdGhlIHZhbHVlIHVzZWQgYnkgdGhlDQpnZXRfY29uZmlnX3BhcmFt
+cy4gRS5nLiB0aGUgZGV2aWNlLXRyZWUgaXMgdXNlZCB0byBzZXQgdGhlIHZhbHVlcw0KZGlyZWN0
+bHkgdXNlZCBmb3IgYlV4ZGV2RXhpdExhdCBpbnN0ZWFkIG9mIG5hbWVkIHNvbWV0aGluZyBub3Qg
+cmVsYXRlZA0KdG8gZXhpdCBsYXRlbmN5Lg0KDQpXaXRoIHRoaXMgdGhlIG5hbWUgYW5kIGZ1bmN0
+aW9uIGlzIGEgMSB0byAxIG1hdGNoLCBhbmQgeW91IGNhbiBhbW9uZw0Kb3RoZXJzIHNldCBpdCB0
+byAwIGZvciBvcHRhaW5pbmcgd2hhdCBBbnVyYWcgd2FudHMuDQoNClJlZ2FyZGluZyB0aGUgZGlz
+YWJsaW5nIG9mIFUxIC8gVTIuIEkgc2VuZCB0aGlzIHRvIEFudXJhZw0KaHR0cHM6Ly9tYXJjLmlu
+Zm8vP2w9bGludXgtdXNiJm09MTU1NjgzMjk5MzExOTU0Jnc9Mg0KSGVyZSBpIGNyZWF0ZWQgYSBj
+b25maWdmcyBpbnRlcmZhY2Ugd2l0aCB0aGUgbmFtZXMgImxwbV9VMV9kaXNhYmxlIiBhbmQNCiJs
+cG1fVTJfZGlzYWJsZSIgZm9yIGNvbnRyb2xsaW5nIHRoZSBEVENMIG9mIGR3YzMsIGFuZCByZWpl
+Y3QNClNFVF9GRUFUVVJFKFUxL1UyKQ0KDQpXaWxsIHNlbmQgdGhpcyBpbiBzZXBlcmF0ZSBwYXRj
+aCB0b21vcnJvdywgaW4gdGhlIGhvcGUgdGhhdCBBbnVyYWdzDQpmZWF0dXJlIGNhbiBiZWNvbWUg
+YSB3YXkgZm9yIGNvbnRyb2xsaW5nIGV4aXQgbGF0ZW5jeSwgYW5kIG15IHBhdGNoDQpiZWNvbWUg
+YSB3YXkgZm9yIGRpc2FibGluZyBVMS9VMg0KDQpCUg0KQ2xhdXMNCg==
