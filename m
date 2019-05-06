@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A2C146FC
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 11:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12F4146FD
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 11:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726381AbfEFJDg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 05:03:36 -0400
-Received: from mail-ed1-f52.google.com ([209.85.208.52]:39687 "EHLO
-        mail-ed1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbfEFJDf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 05:03:35 -0400
-Received: by mail-ed1-f52.google.com with SMTP id e24so14494322edq.6
-        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 02:03:34 -0700 (PDT)
+        id S1726394AbfEFJDh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 05:03:37 -0400
+Received: from mail-ed1-f48.google.com ([209.85.208.48]:35992 "EHLO
+        mail-ed1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbfEFJDh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 05:03:37 -0400
+Received: by mail-ed1-f48.google.com with SMTP id a8so14504971edx.3
+        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 02:03:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+clA/uLxzrbGv8CZw4s4OPLp17oMRzn1Ei0D2USaI50=;
-        b=cj1y7k4YRUc7VlDobtP5i6KJmJ8L+niQWdKV3Vh6Le6nuEM8gQa7u4n5hZVVOsgXqF
-         /S8QN4toICjp3C7CKsOANYWgQMt2RH1uowI/8j60pRhHfJQ1h0ILSI58Z+Vg+S68n+7U
-         Qqe6sS+AC2ukIM3zAONchYNJgJSb6aQntWixBPpGV663D2rvAu6IDYSOosONQzdpRS47
-         exu2PhVaiuTRFfbPJsH/IXjkM5zdNhdd+83zUU52jOEUgeSWXAAlJvY+2qsgwQlBtZbX
-         USRia0Umo2CH4Cxt7UpYs83A+gnLtSSAzOayDtBd56lOxgT368JvnHToZdDO1ZBgplT+
-         vHFg==
+        bh=JDZQR05OK1riU31qrLbvijPaK7vQcBevecbMeDTYZg0=;
+        b=ClWh2/XLd8BvZuX6tCfQpmy91pghxWgBGyOUW1AM4mVwcDurhBZRqaIQmMDob3k4iP
+         53iw74Ao806MhaTIBiHqPNoaJ15APsjXqXZ6uSycbh9iU/qUSKhlirXZRFQzt7LoQrqi
+         ldX6UGlsbnQ3TU69RxyDVB7oEasshOX98A/nMiwpjkP+7d1Q7fHDa38EPCLlu+74DMPC
+         LmH46nC6vBg4maN6gLbtT9RA7LfktBO8n2DFdSrFwQ7P69pvNaGoAwV9OoDsK04DmCJS
+         61V/gPqU2dHYPSYkJNxD+8svwIwe2aWsvd/+LhH1GMFpM2au50aUvYu7jGWWk9yj33fo
+         +3mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+clA/uLxzrbGv8CZw4s4OPLp17oMRzn1Ei0D2USaI50=;
-        b=dpN+WDedbjC4Re1HZStXbw/hT4jhdaXl7W0YgTdVJKJYs+uqtPQAyLD3vgAcoC3684
-         G3k6PibrjeIzrgZgBmSP2379llT1nbxRr7IxTbzWzBffzULr9KOmKu07TBb3s6HV4pPp
-         4/rvaAPLeLON9Bbaof1FfPw0LAyUuOJ/Rv0FZKaE7kyS4ZyLWfSx+xKxfmysVdfdOL5d
-         y96L7/oPk9uuRAWNlq9Z7oXADtTVrNONZodsyDGwvxT6xwPPNgKLt9Sil82tJBS+Eeo1
-         VYmX8O199pXIxvEdOssWHYk3o8kd76mFafEFF5ULc5+EkjIPmRhzfETxlgXORaiRHWfM
-         m9ig==
-X-Gm-Message-State: APjAAAUKr2ZvUHZ1JaUX/R7+TjF3723RhrJY1c0PmLN4ZC7rXvjJV8JU
-        6VPUpVuBjDWK7CrO3mr5vBUSDXnIRv0=
-X-Google-Smtp-Source: APXvYqx7tQS7wQ4Zwlh261WS5TsKYNyfJc6oZ/64bnqpV5oh4kesY+aZPqWe5hEUGA+SqPl/L646Lg==
-X-Received: by 2002:a50:9765:: with SMTP id d34mr24971431edb.195.1557133413511;
-        Mon, 06 May 2019 02:03:33 -0700 (PDT)
-Received: from localhost (frost.work.nullroute.eu.org. [2001:778:e27f:a23:36c4:e19f:3c1:8a8])
-        by smtp.gmail.com with ESMTPSA id i5sm1489172ejb.24.2019.05.06.02.03.32
+        bh=JDZQR05OK1riU31qrLbvijPaK7vQcBevecbMeDTYZg0=;
+        b=KrCIBGoLMY5TArv6aG0odcdgdZRYeO+tJ8pOQtDLWbIN9uZIPZOajx1nWkhoVOEAMk
+         KaHz7NRG29jbSvGctNhQQ73l/nVu/lTvqYHYFcQxIUMuA8CRxVlORHPsUQ8E9RVRLZqq
+         gorK8GryxsEWOO+EXXACDxAwWGpaQdxI82c+RxnfvB1zqvv+ljplLj3FtaGpb8NgCqeZ
+         uKJektG2hrFVpiBqyBZsdloRosRegKOMA/7j4J3LSWAnMCDgQ/SMDdGsIETr6id+CMEh
+         WJPz6Md8V2vYC+Q7NINtz1PN1Y1A7kaZUWCz48HHO1236YnziNUj5xVyKCENg4l9wtSx
+         ZaYg==
+X-Gm-Message-State: APjAAAUfef4GBYC/LZwOxwVDsuzIsj5wuL3K64iPal71ruOkAW6mvOKN
+        p1CFQMotUGJZshacyptFLga0RW02HI8=
+X-Google-Smtp-Source: APXvYqwfLLXMfrYOXdS4caxH1+rQiQ9b84yH74PCaPU0gLYBP3NgEThFvyfATctelnY5TBi2SZbE3A==
+X-Received: by 2002:a50:97ed:: with SMTP id f42mr24692382edb.141.1557133415110;
+        Mon, 06 May 2019 02:03:35 -0700 (PDT)
+Received: from localhost (frost.nullroute.eu.org. [2001:778:e27f:a23:36c4:e19f:3c1:8a8])
+        by smtp.gmail.com with ESMTPSA id b4sm2897592eda.9.2019.05.06.02.03.34
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 06 May 2019 02:03:32 -0700 (PDT)
+        Mon, 06 May 2019 02:03:34 -0700 (PDT)
 From:   =?UTF-8?q?Mantas=20Mikul=C4=97nas?= <grawity@gmail.com>
 To:     linux-usb@vger.kernel.org
 Cc:     gregkh@linuxfoundation.org,
         =?UTF-8?q?Mantas=20Mikul=C4=97nas?= <grawity@gmail.com>
-Subject: [PATCH 10/34] lsusb.py: avoid shadowing Python's built-in 'str'
-Date:   Mon,  6 May 2019 12:02:17 +0300
-Message-Id: <20190506090241.169665-11-grawity@gmail.com>
+Subject: [PATCH 11/34] lsusb.py: replace usb.ids binary search with dict lookup
+Date:   Mon,  6 May 2019 12:02:18 +0300
+Message-Id: <20190506090241.169665-12-grawity@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190506090241.169665-1-grawity@gmail.com>
 References: <20190506090241.169665-1-grawity@gmail.com>
@@ -62,81 +62,122 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+There is no significant gain in reinventing the wheel here.
+
 Signed-off-by: Mantas Mikulėnas <grawity@gmail.com>
 ---
- lsusb.py.in | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ lsusb.py.in | 53 +++++++++++++++++++++++------------------------------
+ 1 file changed, 23 insertions(+), 30 deletions(-)
 
 diff --git a/lsusb.py.in b/lsusb.py.in
-index 93fe6b5..5338d82 100644
+index 5338d82..26ab745 100644
 --- a/lsusb.py.in
 +++ b/lsusb.py.in
-@@ -45,11 +45,11 @@ def readlink(path, name):
+@@ -84,9 +84,9 @@ class UsbProduct:
+ 	def __eq__(self, oth):
+ 		return (self.vid, self.pid) == (oth.vid, oth.pid)
  
- class UsbClass:
- 	"Container for USB Class/Subclass/Protocol"
--	def __init__(self, cl, sc, pr, str = ""):
-+	def __init__(self, cl, sc, pr, strg = ""):
- 		self.pclass = cl
- 		self.subclass = sc
- 		self.proto = pr
--		self.desc = str
-+		self.desc = strg
- 	def __repr__(self):
- 		return self.desc
- 	def __lt__(self, oth):
-@@ -481,13 +481,13 @@ class UsbDevice:
- 		self.children.sort(key=usbsortkey)
+-usbvendors = []
+-usbproducts = []
+-usbclasses = []
++usbvendors = {}
++usbproducts = {}
++usbclasses = {}
  
- 	def __str__(self):
--		#str = " " * self.level + self.fname
-+		#strg = " " * self.level + self.fname
- 		if self.iclass == 9:
- 			col = cols[2]
- 			if noemptyhub and len(self.children) == 0:
- 				return ""
- 			if nohub:
--				str = ""
-+				strg = ""
- 		else:
- 			col = cols[1]
- 		if not nohub or self.iclass != 9:
-@@ -495,27 +495,27 @@ class UsbDevice:
- 				plural = " "
- 			else:
- 				plural = "s"
--			str = "%-16s %s%04x:%04x%s %02x %s%6sMbit/s %5s %iIF%s (%s%s%s)" % \
-+			strg = "%-16s %s%04x:%04x%s %02x %s%6sMbit/s %5s %iIF%s (%s%s%s)" % \
- 				(" " * self.level + self.fname, 
- 				 cols[1], self.vid, self.pid, cols[0],
- 				 self.iclass, self.usbver, self.speed, self.maxpower,
- 				 self.nointerfaces, plural, col, self.name, cols[0])
- 			#if self.driver != "usb":
--			#	str += " %s" % self.driver
-+			#	strg += " %s" % self.driver
- 			if self.iclass == 9 and not showhubint:
--				str += " %shub%s\n" % (cols[2], cols[0])
-+				strg += " %shub%s\n" % (cols[2], cols[0])
- 			else:
--				str += "\n"
-+				strg += "\n"
- 				if showeps:
- 					ep = UsbEndpoint(self, self.level+len(self.fname))
- 					ep.read("ep_00")
--					str += ep.__str__()
-+					strg += ep.__str__()
- 				if showint:	
- 					for iface in self.interfaces:
--						str += iface.__str__()
-+						strg += iface.__str__()
- 		for child in self.children:
--			str += child.__str__()
--		return str
-+			strg += child.__str__()
-+		return strg
+ def ishexdigit(str):
+ 	"return True if all digits are valid hex digits"
+@@ -125,7 +125,7 @@ def parse_usb_ids():
+ 		if ishexdigit(ln[0:4]):
+ 			mode = modes.Vendor
+ 			vid = int(ln[:4], 16)
+-			usbvendors.append(UsbVendor(vid, ln[6:]))
++			usbvendors[vid] = UsbVendor(vid, ln[6:])
+ 			continue
+ 		if ln[0] == '\t' and ishexdigit(ln[1:3]):
+ 			# usb.ids has a device id of 01xy, sigh
+@@ -135,7 +135,7 @@ def parse_usb_ids():
+ 				did = int(ln[1:5], 16)
+ 			# USB devices
+ 			if mode == modes.Vendor:
+-				usbproducts.append(UsbProduct(vid, did, ln[7:]))
++				usbproducts[vid, did] = UsbProduct(vid, did, ln[7:])
+ 				continue
+ 			elif mode == modes.Class:
+ 				nm = ln[5:]
+@@ -143,17 +143,17 @@ def parse_usb_ids():
+ 					strg = cstrg + ":" + nm
+ 				else:
+ 					strg = cstrg + ":"
+-				usbclasses.append(UsbClass(vid, did, -1, strg))
++				usbclasses[vid, did, -1] = UsbClass(vid, did, -1, strg)
+ 				continue
+ 		if ln[0] == 'C':
+ 			mode = modes.Class
+ 			cid = int(ln[2:4], 16)
+ 			cstrg = ln[6:]
+-			usbclasses.append(UsbClass(cid, -1, -1, cstrg))
++			usbclasses[cid, -1, -1] = UsbClass(cid, -1, -1, cstrg)
+ 			continue
+ 		if mode == modes.Class and ln[0] == '\t' and ln[1] == '\t' and ishexdigit(ln[2:4]):
+ 			prid = int(ln[2:4], 16)
+-			usbclasses.append(UsbClass(cid, did, prid, strg + ":" + ln[6:]))
++			usbclasses[cid, did, prid] = UsbClass(cid, did, prid, strg + ":" + ln[6:])
+ 			continue
+ 		mode = modes.Misc
+ 
+@@ -179,18 +179,14 @@ def bin_search(first, last, item, list):
+ def find_usb_prod(vid, pid):
+ 	"Return device name from USB Vendor:Product list"
+ 	strg = ""
+-	dev = UsbVendor(vid, "")
+-	lnvend = len(usbvendors)
+-	ix = bin_search(0, lnvend, dev, usbvendors)
+-	if ix != -1:
+-		strg = usbvendors[ix].__repr__()
++	vendor = usbvendors.get(vid)
++	if vendor:
++		strg = vendor.__repr__()
+ 	else:
+ 		return ""
+-	dev = UsbProduct(vid, pid, "")
+-	lnprod = len(usbproducts)
+-	ix = bin_search(0, lnprod, dev, usbproducts)
+-	if ix != -1:
+-		return strg + " " + usbproducts[ix].__repr__()
++	product = usbproducts.get((vid, pid))
++	if product:
++		return strg + " " + product.__repr__()
+ 	return strg
+ 
+ def find_usb_class(cid, sid, pid):
+@@ -198,18 +194,15 @@ def find_usb_class(cid, sid, pid):
+ 	if cid == 0xff and sid == 0xff and pid == 0xff:
+ 		return "Vendor Specific"
+ 	lnlst = len(usbclasses)
+-	dev = UsbClass(cid, sid, pid, "")
+-	ix = bin_search(0, lnlst, dev, usbclasses)
+-	if ix != -1:
+-		return usbclasses[ix].__repr__()
+-	dev = UsbClass(cid, sid, -1, "")
+-	ix = bin_search(0, lnlst, dev, usbclasses)
+-	if ix != -1:
+-		return usbclasses[ix].__repr__()
+-	dev = UsbClass(cid, -1, -1, "")
+-	ix = bin_search(0, lnlst, dev, usbclasses)
+-	if ix != -1:
+-		return usbclasses[ix].__repr__()
++	cls = usbclasses.get((cid, sid, pid))
++	if cls:
++		return cls.__repr__()
++	cls = usbclasses.get((cid, sid, -1))
++	if cls:
++		return cls.__repr__()
++	cls = usbclasses.get((cid, -1, -1))
++	if cls:
++		return cls.__repr__()
+ 	return ""
  
  
- def usage():
 -- 
 2.21.0
 
