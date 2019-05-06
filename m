@@ -2,89 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 509F514A6A
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 14:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB6314A63
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 14:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbfEFM51 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 08:57:27 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41919 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbfEFM51 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 08:57:27 -0400
-Received: by mail-pl1-f195.google.com with SMTP id d9so6342970pls.8;
-        Mon, 06 May 2019 05:57:26 -0700 (PDT)
+        id S1726197AbfEFM5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 08:57:14 -0400
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:34985 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbfEFM5N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 08:57:13 -0400
+Received: by mail-oi1-f182.google.com with SMTP id w197so9468963oia.2
+        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 05:57:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+F4BP6Z6pdgPYBmGiDkA2x8IUuujt5MWxpyaN1c1LKs=;
-        b=ci7YCJu8+XUKg2RH1l7XMjiZfMGXRlgke94KizZTcHgAu/4ILy9koavEnzpOFp6d3r
-         bnicWCemdUKK2FDI4I7bL2+Smk55v/5HqkV3SYS8/TxVGXTjAz3rVeCNvmXV2U+8yUso
-         xnbWkC7aO+qaROgZHWtU9/PbAkwGFxbNkUJDqPwDYVDghdWEpYy5ukkwFBV9Lgre1vlh
-         s3H3YsGq+6nafuECKlm6LkEeVLE7YNwFibHgzGwa1mExr+kYcyy2h6n2YpDuXCy45OQd
-         gIQv/pYHU7/d9/X7E9ancWi8L5uTFMNKWrE6L95rvMQSXjMMQ0JBpttEqkzMk3MpckWF
-         VPtA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZwDr9F1GyVYnDUev2ADHdr1+dJLHGyMU3IyJaRX2Wps=;
+        b=EQVrtoKY90SnYXJeKKpR2NiulBmi+M8WX7u2C5IvBab7+4tDTIHdBauHn+a5d5QC9q
+         en+zIfQjNekTSy8A6jygV/qZUAawk7sk0D0rHFKNhQuJVYng84+Ghj4DItQfazvcLpZY
+         7MP/Cnocjl2+NyMkCJNATL1A0YfFpWR6LoWMSHHR48MUTNGFkuGVE9yYG6ZCxXys90uM
+         lDU8hgEKUBb9VKJ+i4BMbbNKxYZ0hFx4tJnHjBWYI6AivMqQFoLr3oe+kcYgprOiGf/0
+         9VzudB/Wr8haImxGQ0Hp87EyjdbIr/hg6F8x5MeR22YsShdmyOctlBWFUcRhkjmquSSC
+         k2jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+F4BP6Z6pdgPYBmGiDkA2x8IUuujt5MWxpyaN1c1LKs=;
-        b=rJDQJpg3FZ6xf9mva4hQhTlyz8HKt4HJ6V2CCbZLc40kY6NdlyHWo1YkOsLGzVQ3+S
-         RMJs5crlJTVX6d4/SIlksVz4x5FKVYV8Gbgo+mgntIEKBugq4XUJK0jMPkzSapeMel0I
-         27aBk1cPQj9JqO886Z1n+rBV5ga+WPKGp6v6A9XPwwqEjoydg6SwIGYMZsFI6qjX4/Z2
-         jGqK2cnENJ3l0byz0L2ZzvqzDYIgmnoisKRI1auh12M3oIUPAHZgk5NjqZ6OW0c8MDQK
-         JUFcZTs5J5Ddu70ACgKOz36EnYO7owZy8T9I6e0vk/b013vEvU3XJKDFHaw4wcab3H9a
-         BPJQ==
-X-Gm-Message-State: APjAAAWVD8bbOqBb7PvwfNsJNLgglfbPA2+AdScPeg5Aw2A1q0tAgQdG
-        GpfomHtIV0PFLacPqNi8Ddk/Tefn05s=
-X-Google-Smtp-Source: APXvYqzptrCaNBB1gCCDzvNE3XVvaRMoRZesFUuCFxpdpCnucKJPfLFldDhcTXa/OCsExmHmkkUx8A==
-X-Received: by 2002:a17:902:9a48:: with SMTP id x8mr32230389plv.133.1557147446632;
-        Mon, 06 May 2019 05:57:26 -0700 (PDT)
-Received: from localhost.localdomain ([125.142.23.13])
-        by smtp.googlemail.com with ESMTPSA id a6sm13696382pfn.181.2019.05.06.05.57.24
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 06 May 2019 05:57:26 -0700 (PDT)
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah@kernel.org, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suwan Kim <suwan.kim027@gmail.com>
-Subject: [PATCH 2/2] usbip: Remove repeated setting of hcd->state in vhci_bus_resume()
-Date:   Mon,  6 May 2019 21:55:50 +0900
-Message-Id: <20190506125550.7826-2-suwan.kim027@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190506125550.7826-1-suwan.kim027@gmail.com>
-References: <20190506125550.7826-1-suwan.kim027@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZwDr9F1GyVYnDUev2ADHdr1+dJLHGyMU3IyJaRX2Wps=;
+        b=U66z+sHu0avfBs1/DpWOFgKgbqmMAxVUiXGMTcs5GaJj7Q1V0xtrdux4asmRW+vbE8
+         VQqfdZcONbUvdKjurgmeRA3w932LHdD6676/z/sQ4RrDpReUMMPexlQiGkxKV5qvSYqz
+         tn1jA5tWZOWmdMguHpyTAWRc7uWJEMnvsbnWv0QMGyzd+VzDwZneMqwdJ0C4MRRc+Ha/
+         8iF8hqq1zj+w3+uEGG0udDs6oe+pbdP5/BrDaWD101g0P2tOoVLdQpNkBJjkUx5yyphM
+         kUUpVBaNiwNGXc68m2RcQwGAiS8zBF64CkplzqSvbh62sx75YRi03BPbGSQEak2D3jHM
+         rxZQ==
+X-Gm-Message-State: APjAAAUqjWJF8kDiBbo95MLGVjyDWNIHYGuZXoRxmVvuCmrThwmyh1zR
+        vE8Z05BcB0NtCzm25i6l3YWcup0Dj7ZJ9f2JIZXrLjr7
+X-Google-Smtp-Source: APXvYqwV6ukBoGI5TOAZY8vJ7e6gxScsCw3ccNY+gDbMe48Yr5Ho9jTLR+qXZdhctgA9Gl0y6LTM6YdnhB3i5zywP/U=
+X-Received: by 2002:aca:1a16:: with SMTP id a22mr452563oia.174.1557147432976;
+ Mon, 06 May 2019 05:57:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190506090241.169665-1-grawity@gmail.com> <20190506123221.GA25920@kroah.com>
+In-Reply-To: <20190506123221.GA25920@kroah.com>
+From:   =?UTF-8?Q?Mantas_Mikul=C4=97nas?= <grawity@gmail.com>
+Date:   Mon, 6 May 2019 15:57:01 +0300
+Message-ID: <CAPWNY8VMZQRysyUj77Tjqu3fmr_0Xsg3fnBvhAyfwXu-X9V2fA@mail.gmail.com>
+Subject: Re: usbutils - various patches to the lsusb.py script
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When hcd resumes, hcd_bus_resume() calls vhci_bus_resume() which sets
-hcd->state as HC_STATE_RUNNING. But after calling vhci_bus_resume(),
-hcd_bus_resume() also sets hcd->state as HC_STATE_RUNNING. So, setting
-hcd->state in vhci_hcd_resume() is unnecessary.
+On Mon, May 6, 2019 at 3:32 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, May 06, 2019 at 12:02:07PM +0300, Mantas Mikul=C4=97nas wrote:
+> > Hi,
+> >
+> > I accidentally ended up hacking on the lsusb.py script and now have an
+> > assorted collection of patches:
+> >
+> > - Output (controllers, hubs, etc.) sorted numerically.
+> > - Color enabled by default when on a tty.
+> > - Added --long-options.
+> > - Replaced hand-rolled binary search with ordinary dict lookups;
+> >   lost the -w (--warn-if-unsorted) option in the process.
+> > - Cosmetic changes to make it look more like Python and less like C.
+> > - Some changes to the output formatting that I liked to have in my own
+> >   local version.
+> >
+> >
+>
+> I've applied all of these patches now, except for the usb.ids error
+> message that I responded to.  Note, I do not know python well, if at
+> all, so I just had to take your word for most of these :)
+>
+> I don't like the usb.ids error message that happens here, it's not
+> essential that that file be found, especially given that most distros do
+> not ship it anymore as they have switched over to the hw database
+> format.  So maybe we can just drop the "error" as the tool does work
+> without it, or look for the hwids data instead?
 
-Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
----
- drivers/usb/usbip/vhci_hcd.c | 2 --
- 1 file changed, 2 deletions(-)
+Yeah, it's probably fine to drop it (especially because the v010
+parser bugs that prompted the change had already received fixes in
+master).
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index e6f378d00fb6..335d61676fb4 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -1252,8 +1252,6 @@ static int vhci_bus_resume(struct usb_hcd *hcd)
- 	spin_lock_irqsave(&vhci->lock, flags);
- 	if (!HCD_HW_ACCESSIBLE(hcd))
- 		rc = -ESHUTDOWN;
--	else
--		hcd->state = HC_STATE_RUNNING;
- 	spin_unlock_irqrestore(&vhci->lock, flags);
- 
- 	return rc;
--- 
-2.20.1
+I do want to make the tool use hwdb (I suppose the dependency is fine
+given that lsusb.c already uses it), but as the only existing parser
+for hwdb.bin is the C library with cpp macros sprinkled on top, I
+suspect doing it from python will hurt a bit.
 
+--=20
+Mantas Mikul=C4=97nas
