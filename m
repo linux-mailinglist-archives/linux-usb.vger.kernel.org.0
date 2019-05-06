@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BABC21471C
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 11:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F601471D
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 11:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726482AbfEFJEJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 05:04:09 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:39265 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbfEFJEI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 05:04:08 -0400
-Received: by mail-ed1-f66.google.com with SMTP id e24so14496009edq.6
-        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 02:04:08 -0700 (PDT)
+        id S1726489AbfEFJEL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 05:04:11 -0400
+Received: from mail-ed1-f53.google.com ([209.85.208.53]:34257 "EHLO
+        mail-ed1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726485AbfEFJEK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 05:04:10 -0400
+Received: by mail-ed1-f53.google.com with SMTP id w35so12829569edd.1
+        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 02:04:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4hhwm4lBg9HRuwT0FnIfL6HYTBXHE5SPpyNzz+vcVPs=;
-        b=ZW0lt7djcnIZuqfsqx7YgJsxXsZhQP3TYNxNtLWcZDSM9XnB7pbAz4D91r0DvqQ5QT
-         /FpnVKUUy3rMF5C5sWiJsjFYgxzeUIVUjvRPYhL1wYgPwAk0Pi7datzqzlXS/dM79Fcc
-         gKhcOCnLsdlPvvEi8OaQBYTGbzKJAnB8tBrv1jtspZVTQxpjCS0HlrLtZ2m/As4+JfvL
-         dnrZWPdWp0lerswVgJAKfMpX6n2f7L935mo95cORwBMimzeyGaFlYfqkdIJlX9sWep4z
-         l/jHYpVpB97R7nh35THEx8jP1BKvi0+vb68+AftUEHM4I6ig7u5UDFFCkNmr/wdHK6ce
-         FO6A==
+        bh=Uxja2ki1JGEhbEbbyqD/3v2K77rNFNejJCKxXP5YgsA=;
+        b=FBvknOVnUQMwnkpxRga0UyiFnIuqeu4NpU6BRi+j2x1UAJEO8ATuNovlL6lPqHBWtV
+         K0Q67FqJ8c1xMBX/snJpjeVWpaIHe9tprYy5ngzjPnJDCyY1Jdd41VsYtlkuzrHE2uAX
+         GQUKerOloMW7t6Elmxl5TLBlQ1koer1d7e+nW8X+5a7GizvlplJM2HkM+n0oDak5SyNS
+         4IObJvLCR6VNnAtLA/oZayUnn5m4+1xGA/u6D5DT96HdaIlbrHqfVH+LztaFG2My2g89
+         thErDAE8cwofzs2VEcsbdYqGJrD9GLq4ArPFyRYQ6a3StGLpT+fM5VVOSLqQLrdG8njR
+         X8RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4hhwm4lBg9HRuwT0FnIfL6HYTBXHE5SPpyNzz+vcVPs=;
-        b=dPJnsCX3meNO8YrDTNdqg9CG4UtbUvdTAEFIKHIp3xGEn2fqoMl9/q6qTtPku8hhzk
-         MuGgsUTIguF81cLzbkcMrSDsQqS0v+EZjXUOdj/5bfuoc4kd/y2iZ2Hs8S10WJGV9wql
-         7iaBkhyYyVsGONR+9krp7n6IgeVfB7oqzKglDsRUC9WjzTq1ECLjhQ87NK3CdsFqiuGh
-         ld6B7GSxkgdDoLbDpCwVOt8jUESZ/GEcZ3JpWXoZU2S3mbkOHo3jsAX36Y7hcPCP/AOu
-         EeQFJnqPdJDLwX0TXvgiVxPQ5eKKbrjSpL5WKSMw8EO8JPGlfhAIjiFbWphliiBZtCIM
-         VChg==
-X-Gm-Message-State: APjAAAV/waeJ1L0hnW2G01fzUXAKsY8Eru2JvHxJASqu/bGLRKpTa3//
-        KJDDsjTR+YOcA23RXy3WLjF2thHzHKg=
-X-Google-Smtp-Source: APXvYqz0mWuVw0U5glwdG0b2g1jAXQME2eS59FPyCXxmBzDhXhQFQyy7z2QecVGuh4XNAyI4c2vBPA==
-X-Received: by 2002:a50:986b:: with SMTP id h40mr6575625edb.10.1557133446907;
-        Mon, 06 May 2019 02:04:06 -0700 (PDT)
-Received: from localhost (frost.nullroute.eu.org. [2001:778:e27f:a23:36c4:e19f:3c1:8a8])
-        by smtp.gmail.com with ESMTPSA id e47sm2916997ede.26.2019.05.06.02.04.05
+        bh=Uxja2ki1JGEhbEbbyqD/3v2K77rNFNejJCKxXP5YgsA=;
+        b=Re+yo7O0hWDlbQgIxm2997+cTsGl+tvZ8EfJLoCdcWOLOVIntMRneXV50FUQv/SAxY
+         ebdq4NsEQIQLzDq7ddmFV8/U7VxFZ1hh1OxXGohFsPnsB/Ix3ZHupajDAwu6zWO/lJEZ
+         EwOZ5hq8YPYodSxn/1uxNcPrWvdBNKagGdwuP1EfoWBH9XkDZq4z3sn19ZXgk/IpWBh7
+         FBBu8VHcwrUnl0gGQzPCIBh/3Vvmy9cG3tZ4L0J3vbFRnfrG62ctwvNrqVct+FL9HXJe
+         Ltezm+oY0YspuUXQUpTNWVGxE35c9q6jow/3Hx7Y4gRD3Qw7SwSQFHmbY0G8xqzk5sFb
+         kqZA==
+X-Gm-Message-State: APjAAAUGQvPkw4GsYZkGS4SbFaUhyxp3Rr4UOMs3Lk/rxEtNkraM22BH
+        rAkJ2FPidzfK52t4VSen0RCrrX/Vo/o=
+X-Google-Smtp-Source: APXvYqzHGTNF3cvOQJgf/65OLaIXu+MRYCGHPNa7OGXQ8qKh2XrF7UNfkDXYnmyMe1OYjkrgL/+Q5Q==
+X-Received: by 2002:a50:ad77:: with SMTP id z52mr7018925edc.174.1557133448560;
+        Mon, 06 May 2019 02:04:08 -0700 (PDT)
+Received: from localhost (frost.work.nullroute.eu.org. [2001:778:e27f:a23:36c4:e19f:3c1:8a8])
+        by smtp.gmail.com with ESMTPSA id n3sm1497212eja.70.2019.05.06.02.04.07
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 06 May 2019 02:04:06 -0700 (PDT)
+        Mon, 06 May 2019 02:04:07 -0700 (PDT)
 From:   =?UTF-8?q?Mantas=20Mikul=C4=97nas?= <grawity@gmail.com>
 To:     linux-usb@vger.kernel.org
 Cc:     gregkh@linuxfoundation.org,
         =?UTF-8?q?Mantas=20Mikul=C4=97nas?= <grawity@gmail.com>
-Subject: [PATCH 30/34] lsusb.py: convert readattr() and readlink() to methods of the container
-Date:   Mon,  6 May 2019 12:02:37 +0300
-Message-Id: <20190506090241.169665-31-grawity@gmail.com>
+Subject: [PATCH 31/34] lsusb.py: use color by default
+Date:   Mon,  6 May 2019 12:02:38 +0300
+Message-Id: <20190506090241.169665-32-grawity@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190506090241.169665-1-grawity@gmail.com>
 References: <20190506090241.169665-1-grawity@gmail.com>
@@ -64,136 +64,68 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Signed-off-by: Mantas Mikulėnas <grawity@gmail.com>
 ---
- lsusb.py.in | 69 +++++++++++++++++++++++++----------------------------
- 1 file changed, 33 insertions(+), 36 deletions(-)
+ lsusb.py.in | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/lsusb.py.in b/lsusb.py.in
-index 361615d..a9559ce 100644
+index a9559ce..7fa5493 100644
 --- a/lsusb.py.in
 +++ b/lsusb.py.in
-@@ -46,15 +46,6 @@ usbvendors = {}
- usbproducts = {}
- usbclasses = {}
+@@ -456,6 +456,7 @@ def usage():
+ 	print("  -u, --hide-empty-hubs suppress empty hubs")
+ 	print("  -U, --hide-hubs       suppress all hubs")
+ 	print("  -c, --color           use colors")
++	print("  -C, --no-color        disable colors")
+ 	print("  -e, --endpoints       display endpoint info")
+ 	print("  -f FILE, --usbids-path FILE")
+ 	print("                        override filename for /usr/share/usb.ids")
+@@ -478,6 +479,7 @@ def main(argv):
+ 	"main entry point"
+ 	global showint, showhubint, noemptyhub, nohub
+ 	global cols, usbids, showeps
++	usecols = None
  
--def readattr(path, name):
--	"Read attribute from sysfs and return as string"
--	f = open(prefix + path + "/" + name);
--	return f.readline().rstrip("\n");
--
--def readlink(path, name):
--	"Read symlink and return basename"
--	return os.path.basename(os.readlink(prefix + path + "/" + name));
--
- def ishexdigit(str):
- 	"return True if all digits are valid hex digits"
- 	for dg in str:
-@@ -231,7 +222,13 @@ def find_dev(driver, usbname):
+ 	long_options = [
+ 		"help",
+@@ -486,12 +488,13 @@ def main(argv):
+ 		"hide-empty-hubs",
+ 		"hide-hubs",
+ 		"color",
++		"no-color",
+ 		"usbids-path=",
+ 		"endpoints",
+ 	]
  
+ 	try:
+-		(optlist, args) = getopt.gnu_getopt(argv[1:], "hiIuUwcef:", long_options)
++		(optlist, args) = getopt.gnu_getopt(argv[1:], "hiIuUwcCef:", long_options)
+ 	except getopt.GetoptError as exc:
+ 		print("Error:", exc, file=sys.stderr)
+ 		sys.exit(2)
+@@ -510,7 +513,9 @@ def main(argv):
+ 			noemptyhub = True
+ 			nohub = True
+ 		elif opt[0] in {"-c", "--color"}:
+-			cols = (norm, bold, red, green, amber, blue)
++			usecols = True
++		elif opt[0] in {"-C", "--no-color"}:
++			usecols = False
+ 		elif opt[0] == "-w":
+ 			print("Warning: option -w is no longer supported", file=sys.stderr)
+ 		elif opt[0] in {"-f", "--usbids-path"}:
+@@ -521,6 +526,12 @@ def main(argv):
+ 		print("Error: excess args %s ..." % args[0], file=sys.stderr)
+ 		sys.exit(2)
  
- class UsbObject:
--	pass
-+	def read_attr(self, name):
-+		path = prefix + self.path + "/" + name
-+		return open(path).readline().rstrip("\n")
++	if usecols is None:
++		usecols = sys.stdout.isatty() and os.environ.get("TERM", "dumb") != "dumb"
 +
-+	def read_link(self, name):
-+		path = prefix + self.path + "/" + name
-+		return os.path.basename(os.readlink(path))
- 
- class UsbEndpoint(UsbObject):
- 	"Container for USB endpoint info"
-@@ -252,14 +249,14 @@ class UsbEndpoint(UsbObject):
- 	def read(self, fname):
- 		self.fname = fname
- 		self.path = self.parent.path + "/" + fname
--		self.epaddr = int(readattr(self.path, "bEndpointAddress"), 16)
--		ival = int(readattr(self.path, "bInterval"), 16)
-+		self.epaddr = int(self.read_attr("bEndpointAddress"), 16)
-+		ival = int(self.read_attr("bInterval"), 16)
- 		if ival:
--			self.ival = "(%s)" % readattr(self.path, "interval")
--		self.len = int(readattr(self.path, "bLength"), 16)
--		self.type = readattr(self.path, "type")
--		self.attr = int(readattr(self.path, "bmAttributes"), 16)
--		self.max = int(readattr(self.path, "wMaxPacketSize"), 16)
-+			self.ival = "(%s)" % self.read_attr("interval")
-+		self.len = int(self.read_attr("bLength"), 16)
-+		self.type = self.read_attr("type")
-+		self.attr = int(self.read_attr("bmAttributes"), 16)
-+		self.max = int(self.read_attr("wMaxPacketSize"), 16)
- 
- 	def __repr__(self):
- 		return "<UsbEndpoint[%r]>" % self.fname
-@@ -292,12 +289,12 @@ class UsbInterface(UsbObject):
- 	def read(self, fname):
- 		self.fname = fname
- 		self.path = self.parent.path + "/" + fname
--		self.iclass = int(readattr(self.path, "bInterfaceClass"),16)
--		self.isclass = int(readattr(self.path, "bInterfaceSubClass"),16)
--		self.iproto = int(readattr(self.path, "bInterfaceProtocol"),16)
--		self.noep = int(readattr(self.path, "bNumEndpoints"))
-+		self.iclass = int(self.read_attr("bInterfaceClass"),16)
-+		self.isclass = int(self.read_attr("bInterfaceSubClass"),16)
-+		self.iproto = int(self.read_attr("bInterfaceProtocol"),16)
-+		self.noep = int(self.read_attr("bNumEndpoints"))
++	if usecols:
++		cols = (norm, bold, red, green, amber, blue)
++
+ 	if usbids[0]:
  		try:
--			self.driver = readlink(self.path, "driver")
-+			self.driver = self.read_link("driver")
- 			self.devname = find_dev(self.driver, self.path)
- 		except:
- 			pass
-@@ -353,14 +350,14 @@ class UsbDevice(UsbObject):
- 	def read(self, fname):
- 		self.fname = fname
- 		self.path = fname
--		self.iclass = int(readattr(self.path, "bDeviceClass"), 16)
--		self.isclass = int(readattr(self.path, "bDeviceSubClass"), 16)
--		self.iproto = int(readattr(self.path, "bDeviceProtocol"), 16)
--		self.vid = int(readattr(self.path, "idVendor"), 16)
--		self.pid = int(readattr(self.path, "idProduct"), 16)
-+		self.iclass = int(self.read_attr("bDeviceClass"), 16)
-+		self.isclass = int(self.read_attr("bDeviceSubClass"), 16)
-+		self.iproto = int(self.read_attr("bDeviceProtocol"), 16)
-+		self.vid = int(self.read_attr("idVendor"), 16)
-+		self.pid = int(self.read_attr("idProduct"), 16)
- 		try:
--			self.name = readattr(self.path, "manufacturer") + " " \
--				  + readattr(self.path, "product")
-+			self.name = self.read_attr("manufacturer") + " " \
-+				  + self.read_attr("product")
- 		except:
- 			pass
- 		if self.name:
-@@ -376,22 +373,22 @@ class UsbDevice(UsbObject):
- 			if not self.name:
- 				self.name = oldnm
- 		try:
--			ser = readattr(self.path, "serial")
-+			ser = self.read_attr("serial")
- 			# Some USB devs report "serial" as serial no. suppress
- 			if (ser and ser != "serial"):
- 				self.name += " " + ser
- 		except:
- 			pass
--		self.usbver = readattr(self.path, "version")
--		self.speed = readattr(self.path, "speed")
--		self.maxpower = readattr(self.path, "bMaxPower")
--		self.noports = int(readattr(self.path, "maxchild"))
-+		self.usbver = self.read_attr("version")
-+		self.speed = self.read_attr("speed")
-+		self.maxpower = self.read_attr("bMaxPower")
-+		self.noports = int(self.read_attr("maxchild"))
- 		try:
--			self.nointerfaces = int(readattr(self.path, "bNumInterfaces"))
-+			self.nointerfaces = int(self.read_attr("bNumInterfaces"))
- 		except:
- 			self.nointerfaces = 0
- 		try:
--			self.driver = readlink(self.path, "driver")
-+			self.driver = self.read_link("driver")
- 			self.devname = find_dev(self.driver, self.path)
- 		except:
- 			pass
+ 			parse_usb_ids()
 -- 
 2.21.0
 
