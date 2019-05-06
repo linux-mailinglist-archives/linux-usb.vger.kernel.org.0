@@ -2,109 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D43214AC8
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 15:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCC414B10
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 15:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726037AbfEFNTV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 09:19:21 -0400
-Received: from mga12.intel.com ([192.55.52.136]:46398 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725853AbfEFNTV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 6 May 2019 09:19:21 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 May 2019 06:19:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,438,1549958400"; 
-   d="scan'208";a="155548586"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 May 2019 06:19:18 -0700
-Subject: Re: [PATCH 1/2] usb: xhci: Make it possible to not have a secondary
- HCD (3.0)
-To:     Nicolas Boichat <drinkcat@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Hoan Tran <hoan@os.amperecomputing.com>
-References: <20190502045631.229386-1-drinkcat@chromium.org>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <6844539f-3d5e-e3ff-b498-390cdc731880@linux.intel.com>
-Date:   Mon, 6 May 2019 16:21:53 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1726272AbfEFNlE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 09:41:04 -0400
+Received: from zimbra2.kalray.eu ([92.103.151.219]:33120 "EHLO
+        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726016AbfEFNlD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 09:41:03 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 5E1B227E59D7;
+        Mon,  6 May 2019 15:41:02 +0200 (CEST)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 981cAAX-GEZG; Mon,  6 May 2019 15:41:01 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id DB8E327E59D8;
+        Mon,  6 May 2019 15:41:01 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu DB8E327E59D8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1557150061;
+        bh=OADeaGAz0uYT8nrQHJE7xV25+MHIPpYEzjS7hX9kLgY=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=Lyg2tqnpiCgnNQPY5WQX+w281rq8W9T6Z47Chu1wjA3B+x/tjR7GSa6oSQH1Fkjl6
+         OEhgnaZhtJnOJOktCEQj0k77/nl6hI1svSvjuTt5LaYrT4uo3eaMMPFLYbk3U0RTwN
+         lSOv4j5zpQJC3OrXftYJkglhWDjeAsMNcIKCGxes=
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id FLou36KQFGDv; Mon,  6 May 2019 15:41:01 +0200 (CEST)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id BB7B827E59D7;
+        Mon,  6 May 2019 15:41:01 +0200 (CEST)
+Date:   Mon, 6 May 2019 15:40:57 +0200
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
+Message-ID: <20190506134057.wdkq4owexgzi4r2h@tellis.lin.mbt.kalray.eu>
+References: <20190503204958.GA12532@kozik-lap>
+ <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
+ <20190506130046.20898-1-m.szyprowski@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <20190502045631.229386-1-drinkcat@chromium.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190506130046.20898-1-m.szyprowski@samsung.com>
+User-Agent: NeoMutt/20180716-1557-a6ba22
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2.5.2019 7.56, Nicolas Boichat wrote:
-> Some XHCI controllers may not have any USB 3.0 port, in this case, it
-> is not useful to create add hcd->shared_hcd, which has 2 main
-> downsides:
->   - A useless USB 3.0 root hub is created.
->   - A warning is thrown on boot:
-> hub 2-0:1.0: config failed, hub doesn't have any ports! (err -19)
+Hi,
+
+On Mon, May 06, 2019 at 03:00:46PM +0200, Marek Szyprowski wrote:
+> Samsung Exynos SoCs require to force UTMI width to 8bit, otherwise the
+> host side of the shared USB2 PHY doesn't work.
 > 
-> The change is mostly about checking if hcd->shared_hcd is NULL before
-> accessing it. The one special case is in xhci_run, where we need to
-> call xhci_run_finished immediately, if there is no secondary hcd.
-
-To me it looks like this creates an controller starting issue for
-xHC hardware that have both usb2 and usb3 ports.
-
-When we have usb3 ports xhci->shared_hcd is not set yet when xhci_run is called
-the first time. We will end up starting the xHC before properly setting up the secondary hcd.
-
-See further down for details
-
-> 
-> Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Fixes: 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif with phy_utmi_width")
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
+>  drivers/usb/dwc2/params.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> This is a respin of https://lore.kernel.org/patchwork/patch/863993/,
-> hopefully addressing the comments there. Note that I dropped the change
-> in xhci-plat.c, as I do not have a device to test it, but made a
-> similar change in xhci-mtk.c, in the next patch.
+> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+> index 6900eea57526..9ece4affb9d4 100644
+> --- a/drivers/usb/dwc2/params.c
+> +++ b/drivers/usb/dwc2/params.c
+> @@ -76,6 +76,7 @@ static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)
+>  	struct dwc2_core_params *p = &hsotg->params;
+>  
+>  	p->power_down = 0;
+> +	p->phy_utmi_width = 8;
+
+Nice catch.
+
+I though that 8bits would be the default value, I am curious to know why it's not ny default at 8.
+
+Thanks.
+
+
+---
+Jules
+
+>  }
+>  
+>  static void dwc2_set_rk_params(struct dwc2_hsotg *hsotg)
+> -- 
+> 2.17.1
 > 
-> (the @apm.com addresses seem to bounce, so I added some
-> @amperecomputing.com instead, if somebody there can track back the
-> original issue, I'm happy to provide a patch for xhci-plat.c as well)
-> 
-> drivers/usb/host/xhci-hub.c |  7 ++++--
->   drivers/usb/host/xhci.c     | 45 +++++++++++++++++++++++++++----------
->   2 files changed, 38 insertions(+), 14 deletions(-)
-> 
-
-...
-
-> @@ -698,6 +703,10 @@ int xhci_run(struct usb_hcd *hcd)
->   
->   	xhci_debugfs_init(xhci);
->   
-> +	/* There is no secondary HCD, start the host controller immediately. */
-> +	if (!xhci->shared_hcd)
-> +		return xhci_run_finished(xhci);
-> +
-
-PCI xHC controllers with both usb2 and usb3 ports will be started before usb3 parts are properly set up.
-
-xhci_pci_probe()
-   usb_hcd_pci_probe()
-     usb_add_hcd()
-       hcd->driver->start(hcd)  // .start = xhci_run
-         xhci_run()
-           if (!xhci->shared_hcd)  // TRUE as xhci->shared_hcd is not yet set,
-	    return xhci_run_finished(xhci)  // starting controller too early here
-   xhci->shared_hcd = usb_create_shared_hcd()   // now xhci->shared_hcd is set.
-
--Mathias
