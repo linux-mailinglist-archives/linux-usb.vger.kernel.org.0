@@ -2,109 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C748414A2A
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 14:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CFD14A61
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 14:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726016AbfEFMrz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 08:47:55 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:35934 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbfEFMrz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 08:47:55 -0400
-Received: by mail-oi1-f193.google.com with SMTP id l203so9433374oia.3
-        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 05:47:55 -0700 (PDT)
+        id S1726201AbfEFM5E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 08:57:04 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:38494 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726063AbfEFM5D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 08:57:03 -0400
+Received: by mail-pg1-f194.google.com with SMTP id j26so6433624pgl.5;
+        Mon, 06 May 2019 05:57:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=jEiLUZdOUaVTCenzTYvw5tE0xb8UTmVOpukXn+mEM6Y=;
-        b=YgzlbEY/g+uaGTZ0Gh5rsLpQaz9zWbEgc0EQwdeLLU4MsPy56/HWN7aEakMQ4c+b+X
-         1OuMYHVCiivV/hFsNO5iz428kfZdHUbTsJC+ksHj5yLJkKFrcHIoal5R7y4ceptSoYeh
-         YfOWiux236sax2SJMTvoqzz17T9DmSkigXHvvda8KQmGQ7Eb3QsygiluaYeUk0t3tl5r
-         0dVi0wOHoWHvftUQurmYLLDiTwqfsjIFrT4WfB10aqgSh3FW53iRhgQW6QM/6Lrhl2/P
-         K4DvJeK2dhl84OwDKp7CffbXVq2+iLm9+1tGspQZJ36B/JSD4tOZ4TnAMdCnPJaZj4W+
-         +y6A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gzoB/vSPy7jV2JtU428m1t1ku5bTXMAWeaZM/6A39iU=;
+        b=W4r0BE66i2CPd5/7c7uxJhGlxwXYx50xJM+iuUZu5QVKq0cKxK9cTqA9iDnUu+aeXo
+         RsSe0/Pnp0b0Q0v+rveMzRPIMyfXd72Q3AN0VMgaiNEE74shO9fANQs9+LjtdEwww7tP
+         1WI22QUqPenHKQWiU9ro+gqWySQu2SnDHoHWThdaS2hEuEDdnECwYL0crgI6qFPDYIy4
+         GzuCo5g7tVBrJ/LDsPdAEclfIxzbBnY03KknA1AiO4BDKGsg3CCr9KagzBL2SrAdsp0s
+         Zp6l0d7BnF6pwXiRxFkjqdS/4V51GQ1gRQ13/g8306Pe9GT9voMVtt+KeWNCHti95M3Y
+         bNBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=jEiLUZdOUaVTCenzTYvw5tE0xb8UTmVOpukXn+mEM6Y=;
-        b=Vvt6z2ntu1TPnMrMRh3DBccRFIioe26A+Rs3aFO6Lqh+AWwdlPCxGujIfSlSgiWYQz
-         pklc522BN0RoTFwmihWZyjHw++hqP2FfgsCkl/a21hIePwanrtJpQOS8x9lC+/5c1tj0
-         BUpaANyuAbr+82ZynNdKNti5hEsyPJ+mdJcxLd3DaUqov0HYFEzfrCx7XPRysGZcBvBm
-         m0LcO9TXsH+vDyQuZ59zGZYuVk+btH10bIQqGZePqRfZZPHdn/YIlgR/2mJFKllEOVha
-         lCDOwmwluV9qgHmKUuMk2aAvW+ThZaCfBY0MsOdZDUSii01u3ivumdtDNKxzsTLoM+Sz
-         QybQ==
-X-Gm-Message-State: APjAAAX1X2qbyhI+P/0qluFDe6lwUH7q/63L9gyCbbsweMk2nVDN7F/3
-        jpZ94b3wFB1SLDMWF22XtgOb0ob2+/Nl0Fakfmw0FN1FQ40=
-X-Google-Smtp-Source: APXvYqxef4snHtmBm6dG6RwOeYPFe6RxuuSxNbcNb3VQH3o9qeKErI5BRApVFARjTvV97UA+YjQvrt4LI56jbgzobS4=
-X-Received: by 2002:aca:1a16:: with SMTP id a22mr427282oia.174.1557146874781;
- Mon, 06 May 2019 05:47:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gzoB/vSPy7jV2JtU428m1t1ku5bTXMAWeaZM/6A39iU=;
+        b=e9w5d8CGCuMlEFxuPmEImyIl2iJcfX9pPXg6IoDHyzYiAwNpcebjr2xKMp88v37Yv3
+         0lJoEawlKxtjNNlS9qLHJvtyRnYJAUHJ5/wuUNPtoyeqvMvFQaacSmteoZgVYoKWm6fO
+         K8W4NmC0UUhxjr7td7PIXjtddPFPLeeDJYGQXqF5zArD5tkmGtKCaRISMAoZ+bpA54nh
+         aBMA8SAcJ+bUdZuvJMrgQUCSXW7i5Ij2o4mizcnFBG+5x3mPdUfky6Ut0W6GiuYtWhRg
+         x2WlPqWZvNU3XPXj26IesD7tTwj2Exhqiet6LIrv5FvkpeMLsmgEzywW/YOu12GolT4v
+         jLgg==
+X-Gm-Message-State: APjAAAVxyFbe5AtmTatBpVZemu4y1+EfvKYdC1l/Om1fcG9L8jjoRKHf
+        +65xJ6KW9FuaNwpP/+h8i00hWg6yZAo=
+X-Google-Smtp-Source: APXvYqylMnmETjINQ99AZRx+UbFu7b0p8HUWnziDFoYNJN5BSre2S5wBOQLcAuCFAOF+tK1ATHHE4g==
+X-Received: by 2002:a63:1e0c:: with SMTP id e12mr30293701pge.218.1557147423234;
+        Mon, 06 May 2019 05:57:03 -0700 (PDT)
+Received: from localhost.localdomain ([125.142.23.13])
+        by smtp.googlemail.com with ESMTPSA id a6sm13696382pfn.181.2019.05.06.05.57.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 06 May 2019 05:57:02 -0700 (PDT)
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suwan Kim <suwan.kim027@gmail.com>
+Subject: [PATCH 1/2] usbip: Remove repeated setting of hcd->state in vhci_bus_suspend()
+Date:   Mon,  6 May 2019 21:55:49 +0900
+Message-Id: <20190506125550.7826-1-suwan.kim027@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190506090241.169665-1-grawity@gmail.com> <20190506090241.169665-9-grawity@gmail.com>
- <20190506122922.GA25449@kroah.com>
-In-Reply-To: <20190506122922.GA25449@kroah.com>
-From:   =?UTF-8?Q?Mantas_Mikul=C4=97nas?= <grawity@gmail.com>
-Date:   Mon, 6 May 2019 15:47:43 +0300
-Message-ID: <CAPWNY8XTmzWi05GGKBDJGPaYUttSF7G5GdDEXRo4Q16RLNHJ6A@mail.gmail.com>
-Subject: Re: [PATCH 08/34] lsusb.py: do not entirely hide usb.ids exceptions
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 6, 2019 at 3:29 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, May 06, 2019 at 12:02:15PM +0300, Mantas Mikul=C4=97nas wrote:
-> > Signed-off-by: Mantas Mikul=C4=97nas <grawity@gmail.com>
-> > ---
-> >  lsusb.py.in | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/lsusb.py.in b/lsusb.py.in
-> > index f9e273d..0d7ff95 100644
-> > --- a/lsusb.py.in
-> > +++ b/lsusb.py.in
-> > @@ -610,9 +610,8 @@ def main(argv):
-> >       if usbids[0]:
-> >               try:
-> >                       parse_usb_ids()
-> > -             except:
-> > -                     print(" WARNING: Failure to read usb.ids", file=
-=3Dsys.stderr)
-> > -                     #print(sys.exc_info(), file=3Dsys.stderr)
-> > +             except IOError as e:
-> > +                     print("Warning: Failure to read usb.ids:", e, fil=
-e=3Dsys.stderr)
->
-> This patch is a bit "annoying" in that now I see the error:
->         Warning: Failure to read usb.ids: [Errno 2] No such file or direc=
-tory: '/usr/share/kcmusb/usb.ids'
->
-> When I never would care about /usr/share/kcmusb, the "problem" is that
-> the usb.ids file is no where in any of the other "default" choices in
-> the system.
->
-> So I suggest either saying "here's all the places I did not find it", or
-> just stick to the error that we have today, as this feels worse to me.
->
-> thanks,
->
-> greg k-h
+When hcd suspends execution, hcd_bus_suspend() calls vhci_bus_suspend()
+which sets hcd->state as HC_STATE_SUSPENDED. But after calling
+vhci_bus_suspend(), hcd_bus_suspend() also sets hcd->state as
+HC_STATE_SUSPENDED.
+So, setting hcd->state in vhci_hcd_suspend() is unnecessary.
 
-Ah, I guess I'll have to redo that. Maybe it would be best to suppress
-errors for default paths, but still show them for user-specified paths
-(--usbids-path)?
+Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+---
+ drivers/usb/usbip/vhci_hcd.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-(Actually, I assumed @usbids@ as the 1st item would be substituted on
-most systems. However, I don't quite understand why e.g. the KDE
-kcmusb path was added here... Is the list meant to have all possible
-paths, or is it meant to require the distro to specify the path? It's
-currently a mix of both.)
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 667d9c0ec905..e6f378d00fb6 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -1238,10 +1238,6 @@ static int vhci_bus_suspend(struct usb_hcd *hcd)
+ 
+ 	dev_dbg(&hcd->self.root_hub->dev, "%s\n", __func__);
+ 
+-	spin_lock_irqsave(&vhci->lock, flags);
+-	hcd->state = HC_STATE_SUSPENDED;
+-	spin_unlock_irqrestore(&vhci->lock, flags);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.20.1
 
---=20
-Mantas Mikul=C4=97nas
