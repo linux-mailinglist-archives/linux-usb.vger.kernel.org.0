@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C593314709
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 11:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB9B1470B
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 11:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726448AbfEFJDz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 05:03:55 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:39234 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726439AbfEFJDy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 05:03:54 -0400
-Received: by mail-ed1-f68.google.com with SMTP id e24so14495220edq.6
-        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 02:03:53 -0700 (PDT)
+        id S1726425AbfEFJD5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 05:03:57 -0400
+Received: from mail-ed1-f53.google.com ([209.85.208.53]:37689 "EHLO
+        mail-ed1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726439AbfEFJD4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 05:03:56 -0400
+Received: by mail-ed1-f53.google.com with SMTP id w37so14496936edw.4
+        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 02:03:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NovldSKLd1vNLf7VuMVfUoBxxCGFuTHVQRSwge9eons=;
-        b=V1CwGujtY6rRZ7gLQ2capExbXtXmlG0yi+AtK2kSBDsKG/zwbqWbFBYrryQQRSI/+1
-         uQX/KWhNTB0iACLUfodD4FzZc2F06wXxlhcPuDL26bgKTZRoFm+LDN4PFav+IF00mPty
-         gA90qGmyM+7OsUVcvULTt8OJ1bNygbFfbTH3lNhlI/a5+bDcHvGYbRKtXSee4PWAMJy2
-         s1nOdIZJgvEqqKjAB9/TGxGFVKYLuq+D80CgR6gIUE6AT8obNWYJ4zpCThavpQYrCkb0
-         RwLASZ1J3rJ/J+YLTqcMNHF0drfLL90RbPBGGnTI9mRUKZGhRNPiCZrLFr/bP5zVK7Xq
-         eI6Q==
+        bh=iIq2Yi+7vpIWQsgTfDhCTURtpMBh22kuG0Wc9/8Cwng=;
+        b=T3Ta1+1uYcwnpVENHolx2f5ljyhA3TpAFb5XAfDCH/zUC88BUfBZspVbi4S4qcML04
+         vEOWwx/lVJnBGtOzNgvdci4CvspT91v0Q1mqrNIIX9+ct0oVH14dNf+DaR8ZhAyocGZU
+         3/gcTuCcX6rULx8bStqp9UN2pE/MsmhbwcYKbnEreNBUP8k8lP28cQJPg2yt3yIzMSLD
+         DHtZEgfin4kcxVE0yrS7np3e4tQYEOqMT7T8JXVQmocYw6nRTcRUKQiHfR3dBrqBT2+Y
+         GKUd2tROREhPlMeOsTXQHTQgaVyHjbLU0caBpxaCUOy5LQomXKc+3q65jwNEs+sQfkft
+         LeoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NovldSKLd1vNLf7VuMVfUoBxxCGFuTHVQRSwge9eons=;
-        b=S9pmdrvqLKaGT7iaO5ZEz7MezbvML6faE9yaozCWklbzJ3NQqse4F3jgOxCGIOgGZu
-         ZWPehA7TQvYrjGugejMVT8wd95wArbHDJqtTMHi/Vcun4FH5YlZjG7NmxH5YiYz8VmtB
-         E3Wn1vdIk6xBB2LsP+UAPOg328Rj55E/S7/NC+qkmjZfjaqAGvoY2GSoi+RYzevcXhFJ
-         pQVRmFDhZ2LvDCFW3e829V0/1uhgpn42igdL82WVYxToWF8koBEYAhBfpyU9YaWa2/pi
-         zq0HTzmi0XF3M9gRk/kZGaHl6ORbVz630V0lkGoAz+hSz8kuu6LXSddWlHL7FpnRrgu7
-         kPAg==
-X-Gm-Message-State: APjAAAUqw2WFkl4L3sDz+gIjZuIC8hQHOMmLpM5hR/pWePTEscW8eY2O
-        EZH9Bthfe3Y4OacwBe+Drt5DuMblW48=
-X-Google-Smtp-Source: APXvYqwGGNJ90luByTnuj45aP/LnHsc7TRuFkycXuoBYSu1aPdCTbEH+FLR1xUWFNbsvqh6G2CQJRA==
-X-Received: by 2002:a50:ad77:: with SMTP id z52mr7017606edc.174.1557133432715;
-        Mon, 06 May 2019 02:03:52 -0700 (PDT)
+        bh=iIq2Yi+7vpIWQsgTfDhCTURtpMBh22kuG0Wc9/8Cwng=;
+        b=nMMdtxJkuar04vfu1CBWGKcBBpyf8AAL+ybj2Zu8AD/aPi1JXF1UoFwPy5hNoPHeE4
+         mKnjZ4ND6LVH5PbfQ21nFY3dV3hlvD2ncMYqR9M01wS2zY7KM3znlUB35oFe4TodueRQ
+         zY71e9fgIYtZnmc9fc3FeG+sXbCL4FKolP3cDpPNpQ9GqWtD2Gr1N9fBow40yOfJ3WdX
+         8XrA15hab+OrUXUSis3jewQmWDZJzP9SCATpOGzCzCXRWfKIMo8tAbEh+E6oS7Qf5+4X
+         N+xDO+yz8KvrQNmbf4+459PvU4rLI9j2gFLOv2XmnUyEe07PXePbFsOcAcGQvdDYLhzy
+         kW5Q==
+X-Gm-Message-State: APjAAAXtGjLuxSO6ZC3py/RxAkejZaFpOK85NBezjvAs6b8CKiVd+AtU
+        GqfZLlfvaVpBlWWSMs1VXPLrrEHNSPQ=
+X-Google-Smtp-Source: APXvYqwDhvVE6wtuFG42FXVmwLBod1xPP8fum0ZWORz06ORqjP/JFFtJzAfzipZ4PAK31jII1owp8A==
+X-Received: by 2002:a17:906:3154:: with SMTP id e20mr18058578eje.263.1557133434231;
+        Mon, 06 May 2019 02:03:54 -0700 (PDT)
 Received: from localhost (frost.work.nullroute.eu.org. [2001:778:e27f:a23:36c4:e19f:3c1:8a8])
-        by smtp.gmail.com with ESMTPSA id w14sm1467717ejv.58.2019.05.06.02.03.51
+        by smtp.gmail.com with ESMTPSA id z4sm1469562ejm.8.2019.05.06.02.03.53
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 06 May 2019 02:03:52 -0700 (PDT)
+        Mon, 06 May 2019 02:03:53 -0700 (PDT)
 From:   =?UTF-8?q?Mantas=20Mikul=C4=97nas?= <grawity@gmail.com>
 To:     linux-usb@vger.kernel.org
 Cc:     gregkh@linuxfoundation.org,
         =?UTF-8?q?Mantas=20Mikul=C4=97nas?= <grawity@gmail.com>
-Subject: [PATCH 22/34] lsusb.py: use a constant for the magic class number 9
-Date:   Mon,  6 May 2019 12:02:29 +0300
-Message-Id: <20190506090241.169665-23-grawity@gmail.com>
+Subject: [PATCH 23/34] lsusb.py: Usb* classes: call read() automatically from constructor
+Date:   Mon,  6 May 2019 12:02:30 +0300
+Message-Id: <20190506090241.169665-24-grawity@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190506090241.169665-1-grawity@gmail.com>
 References: <20190506090241.169665-1-grawity@gmail.com>
@@ -64,49 +64,132 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Signed-off-by: Mantas Mikulėnas <grawity@gmail.com>
 ---
- lsusb.py.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ lsusb.py.in | 41 +++++++++++++++++++++--------------------
+ 1 file changed, 21 insertions(+), 20 deletions(-)
 
 diff --git a/lsusb.py.in b/lsusb.py.in
-index 2c1e5e2..e9e18dc 100644
+index e9e18dc..09363d3 100644
 --- a/lsusb.py.in
 +++ b/lsusb.py.in
-@@ -17,6 +17,8 @@ import os
- import re
- import sys
+@@ -238,16 +238,18 @@ def find_dev(driver, usbname):
  
-+HUB_ICLASS = 0x09
+ class UsbEndpoint:
+ 	"Container for USB endpoint info"
+-	def __init__(self, parent = None, indent = 18):
++	def __init__(self, parent, fname, indent=18):
+ 		self.parent = parent
+ 		self.indent = indent
+-		self.fname = ""
++		self.fname = fname
+ 		self.epaddr = 0
+ 		self.len = 0
+ 		self.ival = ""
+ 		self.type = ""
+ 		self.attr = 0
+ 		self.max = 0
++		if self.fname:
++			self.read(self.fname)
+ 
+ 	def read(self, fname):
+ 		fullpath = ""
+@@ -271,11 +273,11 @@ class UsbEndpoint:
+ 
+ class UsbInterface:
+ 	"Container for USB interface info"
+-	def __init__(self, parent = None, level = 1):
++	def __init__(self, parent, fname, level=1):
+ 		self.parent = parent
+ 		self.level = level
+ 		self.fullpath = ""
+-		self.fname = ""
++		self.fname = fname
+ 		self.iclass = 0
+ 		self.isclass = 0
+ 		self.iproto = 0
+@@ -284,6 +286,9 @@ class UsbInterface:
+ 		self.devname = ""
+ 		self.protoname = ""
+ 		self.eps = []
++		if self.fname:
++			self.read(self.fname)
 +
- # Global options
- showint = False
- showhubint = False
-@@ -413,7 +415,7 @@ class UsbDevice:
- 		self.children.sort(key=usbsortkey)
+ 	def read(self, fname):
+ 		fullpath = ""
+ 		if self.parent:
+@@ -302,10 +307,9 @@ class UsbInterface:
+ 			pass
+ 		self.protoname = find_usb_class(self.iclass, self.isclass, self.iproto)
+ 		if showeps:
+-			for epfnm in os.listdir(prefix + fullpath):
+-				if epfnm[:3] == "ep_":
+-					ep = UsbEndpoint(self, self.level+len(self.fname))
+-					ep.read(epfnm)
++			for dirent in os.listdir(prefix + fullpath):
++				if dirent[:3] == "ep_":
++					ep = UsbEndpoint(self, dirent, self.level + len(self.fname))
+ 					self.eps.append(ep)
  
  	def __str__(self):
--		if self.iclass == 9:
-+		if self.iclass == HUB_ICLASS:
- 			col = cols[2]
- 			if noemptyhub and len(self.children) == 0:
- 				return ""
-@@ -421,7 +423,7 @@ class UsbDevice:
- 				strg = ""
- 		else:
- 			col = cols[1]
--		if not nohub or self.iclass != 9:
-+		if not nohub or self.iclass != HUB_ICLASS:
- 			if self.nointerfaces == 1:
- 				plural = " "
+@@ -326,10 +330,10 @@ class UsbInterface:
+ 
+ class UsbDevice:
+ 	"Container for USB device info"
+-	def __init__(self, parent = None, level = 0):
++	def __init__(self, parent, fname, level=0):
+ 		self.parent = parent
+ 		self.level = level
+-		self.fname = ""
++		self.fname = fname
+ 		self.fullpath = ""
+ 		self.iclass = 0
+ 		self.isclass = 0
+@@ -346,6 +350,9 @@ class UsbDevice:
+ 		self.devname = ""
+ 		self.interfaces = []
+ 		self.children = []
++		if self.fname:
++			self.read(self.fname)
++			self.readchildren()
+ 
+ 	def read(self, fname):
+ 		self.fname = fname
+@@ -402,13 +409,10 @@ class UsbDevice:
+ 			if not dirent[0:1].isdigit():
+ 				continue
+ 			if os.access(prefix + dirent + "/bInterfaceClass", os.R_OK):
+-				iface = UsbInterface(self, self.level+1)
+-				iface.read(dirent)
++				iface = UsbInterface(self, dirent, self.level+1)
+ 				self.interfaces.append(iface)
  			else:
-@@ -431,7 +433,7 @@ class UsbDevice:
- 				 cols[1], self.vid, self.pid, cols[0],
- 				 self.iclass, self.usbver, self.speed, self.maxpower,
- 				 self.nointerfaces, plural, col, self.name, cols[0])
--			if self.iclass == 9 and not showhubint:
-+			if self.iclass == HUB_ICLASS and not showhubint:
- 				strg += " %shub%s\n" % (cols[2], cols[0])
+-				usbdev = UsbDevice(self, self.level+1)
+-				usbdev.read(dirent)
+-				usbdev.readchildren()
++				usbdev = UsbDevice(self, dirent, self.level+1)
+ 				self.children.append(usbdev)
+ 		usbsortkey = lambda obj: [int(x) for x in re.split(r"[-:.]", obj.fname)]
+ 		self.interfaces.sort(key=usbsortkey)
+@@ -438,8 +442,7 @@ class UsbDevice:
  			else:
  				strg += "\n"
+ 				if showeps:
+-					ep = UsbEndpoint(self, self.level+len(self.fname))
+-					ep.read("ep_00")
++					ep = UsbEndpoint(self, "ep_00", self.level+len(self.fname))
+ 					strg += str(ep)
+ 				if showint:	
+ 					for iface in self.interfaces:
+@@ -472,9 +475,7 @@ def read_usb():
+ 	for dirent in os.listdir(prefix):
+ 		if not dirent[0:3] == "usb":
+ 			continue
+-		usbdev = UsbDevice(None, 0)
+-		usbdev.read(dirent)
+-		usbdev.readchildren()
++		usbdev = UsbDevice(None, dirent, 0)
+ 		root_hubs.append(usbdev)
+ 	root_hubs.sort(key=lambda x: int(x.fname[3:]))
+ 	for usbdev in root_hubs:
 -- 
 2.21.0
 
