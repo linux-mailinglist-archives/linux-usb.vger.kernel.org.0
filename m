@@ -2,93 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5573714FE9
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 17:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAB515033
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 17:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbfEFPSl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 11:18:41 -0400
-Received: from smtp-out.xnet.cz ([178.217.244.18]:10696 "EHLO smtp-out.xnet.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725994AbfEFPSl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 6 May 2019 11:18:41 -0400
-Received: from meh.true.cz (meh.true.cz [108.61.167.218])
-        (Authenticated sender: petr@true.cz)
-        by smtp-out.xnet.cz (Postfix) with ESMTPSA id 09BEF4862;
-        Mon,  6 May 2019 17:18:38 +0200 (CEST)
-Received: by meh.true.cz (OpenSMTPD) with ESMTP id 173092c3;
-        Mon, 6 May 2019 17:18:36 +0200 (CEST)
-From:   =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>
-To:     Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
-Cc:     =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: usb: smsc: fix warning reported by kbuild test robot
-Date:   Mon,  6 May 2019 17:18:23 +0200
-Message-Id: <1557155903-29405-1-git-send-email-ynezz@true.cz>
-X-Mailer: git-send-email 1.9.1
+        id S1726793AbfEFP1k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 11:27:40 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44764 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726561AbfEFP1k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 11:27:40 -0400
+Received: by mail-pg1-f193.google.com with SMTP id z16so6611990pgv.11;
+        Mon, 06 May 2019 08:27:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zpDGMHGZGjU57Bv5cyzy6qLIvEc4KUp16pqAv3K1HCE=;
+        b=PRJaOhUdl8up0EP2C9y8sbEe9zfMOVTxZ99qI6BPT4zPbcfSlAklbujOETZxlKWCVg
+         YcGBpK/OVR0ZC9+kwfmrodZVNvAI3l+vyUshBb5a3Z/ZloWAvhwiNrYfrHuiYg4MPcmA
+         frRhWqSx5WZnigUeZ7Ho8vx/kKJ1g+ReFyfW2hKDK/ELGQKm7ZOBGNwA6BZSg7Hfqbpi
+         wYGXiHlIYzbIQpUGTc5WSaiJrkxZPrdkhI2X9neBz0ocaeDRYyn5i3261nRowsTIBuo1
+         dQrZrRcrz3cusIwgCl2vhEpBLWwpzYGWZMVCgBZDkAbZYLii92tPP5CMPCailnB37dMq
+         bhpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zpDGMHGZGjU57Bv5cyzy6qLIvEc4KUp16pqAv3K1HCE=;
+        b=GWffhkvSI9Jq++cufevIXH+saAvJ3GrcZFrWCBGR1Kju9a2FYmiQ5uTevuhxSrSBoK
+         GTvT+VICsQgGVM2euwtgrOCvjXtuoVmkuMlyBMtm8mR1Hq6sUAY6Jcm2SJqVuOrwlYzc
+         89XjO6sf/Jr+PFwHxeOq50BAefn3SkmTJOSyEaxA8uz8UR6Wc8AO4Ll5rvxK7voQd0i6
+         r9sozJ6IOI4mNcoA2bSJnDQHlrizmTfjMg/MqQdUfqnNG6WZZ8NUaUlvsVNB1TJVfdb5
+         oiEfc/KzzNvrJk23LA7udgbXYxbNbt5RST23g4/yY/n6M2+4P9ueu+u8vc9xuWC/jDOo
+         JaIA==
+X-Gm-Message-State: APjAAAXrUKIaJzCTBRgMYsTPbznDcMS2wu402PJrU/iQoOj/35dtiVXM
+        CE0c2qa9AKeSrvOFkAGlyXc=
+X-Google-Smtp-Source: APXvYqyE4gMn2Det1yuOE/78XSA9nJCiYD/DRFnTJuXZDxupA9qvfOdc/+GihwJd1vTwAFHlOuM3BQ==
+X-Received: by 2002:a65:64ca:: with SMTP id t10mr32751484pgv.177.1557156459247;
+        Mon, 06 May 2019 08:27:39 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n13sm3065030pgh.6.2019.05.06.08.27.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 06 May 2019 08:27:38 -0700 (PDT)
+Date:   Mon, 6 May 2019 08:27:36 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     "Angus Ainslie (Purism)" <angus@akkea.ca>, angus.ainslie@puri.sm,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] usb: typec: tcpm: Clear the fault status register
+Message-ID: <20190506152736.GA29049@roeck-us.net>
+References: <20190506140830.25376-1-angus@akkea.ca>
+ <20190506140830.25376-4-angus@akkea.ca>
+ <CAOMZO5C6XQUWBi39jKeVJg3Jj6auB0mF3h8bWMYZ_prXwgc9Fg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOMZO5C6XQUWBi39jKeVJg3Jj6auB0mF3h8bWMYZ_prXwgc9Fg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch fixes following warning reported by kbuild test robot:
+On Mon, May 06, 2019 at 12:11:41PM -0300, Fabio Estevam wrote:
+> Hi Angus,
+> 
+> On Mon, May 6, 2019 at 11:10 AM Angus Ainslie (Purism) <angus@akkea.ca> wrote:
+> >
+> > If the fault status register doesn't get cleared then
+> > the ptn5110 interrupt gets stuck on. As the fault register gets
+> > set everytime the ptn5110 powers on the interrupt is always stuck.
+> >
+> > Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
+> 
+> Since this is a bug fix, I would suggest adding a Fixes tag and Cc
+> stable if appropriate.
+> 
+> I would also put this patch as the first one in the series, so that it
+> can be easily applied to older stable trees.
 
- In function ‘memcpy’,
-     inlined from ‘smsc75xx_init_mac_address’ at drivers/net/usb/smsc75xx.c:778:3,
-     inlined from ‘smsc75xx_bind’ at drivers/net/usb/smsc75xx.c:1501:2:
- ./include/linux/string.h:355:9: warning: argument 2 null where non-null expected [-Wnonnull]
-   return __builtin_memcpy(p, q, size);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
- drivers/net/usb/smsc75xx.c: In function ‘smsc75xx_bind’:
- ./include/linux/string.h:355:9: note: in a call to built-in function ‘__builtin_memcpy’
+Unfortunately there is an added tcpm_log() ... and I am opposed to exporting
+that.
 
-I've replaced the offending memcpy with ether_addr_copy, because I'm
-100% sure, that of_get_mac_address can't return NULL as it returns valid
-pointer or ERR_PTR encoded value, nothing else.
-
-I'm hesitant to just change IS_ERR into IS_ERR_OR_NULL check, as this
-would make the warning disappear also, but it would be confusing to
-check for impossible return value just to make a compiler happy.
-
-Fixes: adfb3cb2c52e ("net: usb: support of_get_mac_address new ERR_PTR error")
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Petr Štetiar <ynezz@true.cz>
----
- drivers/net/usb/smsc75xx.c | 2 +-
- drivers/net/usb/smsc95xx.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
-index d27b627..e4c2f3a 100644
---- a/drivers/net/usb/smsc75xx.c
-+++ b/drivers/net/usb/smsc75xx.c
-@@ -775,7 +775,7 @@ static void smsc75xx_init_mac_address(struct usbnet *dev)
- 	/* maybe the boot loader passed the MAC address in devicetree */
- 	mac_addr = of_get_mac_address(dev->udev->dev.of_node);
- 	if (!IS_ERR(mac_addr)) {
--		memcpy(dev->net->dev_addr, mac_addr, ETH_ALEN);
-+		ether_addr_copy(dev->net->dev_addr, mac_addr);
- 		return;
- 	}
- 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index ab23911..a0e1199 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -918,7 +918,7 @@ static void smsc95xx_init_mac_address(struct usbnet *dev)
- 	/* maybe the boot loader passed the MAC address in devicetree */
- 	mac_addr = of_get_mac_address(dev->udev->dev.of_node);
- 	if (!IS_ERR(mac_addr)) {
--		memcpy(dev->net->dev_addr, mac_addr, ETH_ALEN);
-+		ether_addr_copy(dev->net->dev_addr, mac_addr);
- 		return;
- 	}
- 
--- 
-1.9.1
-
+Guenter
