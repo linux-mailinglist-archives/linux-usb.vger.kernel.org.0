@@ -2,61 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B86145E4
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 10:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 866F5146F0
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 11:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbfEFISJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 04:18:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58314 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725836AbfEFISI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 6 May 2019 04:18:08 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5DEC3AEE8;
-        Mon,  6 May 2019 08:18:07 +0000 (UTC)
-Message-ID: <1557130666.12778.3.camel@suse.com>
-Subject: Re: [PATCH v2] usbnet: fix kernel crash after disconnect
-From:   Oliver Neukum <oneukum@suse.com>
-To:     David Miller <davem@davemloft.net>, Jan.Kloetzke@preh.de
-Cc:     jan@kloetzke.net, linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Date:   Mon, 06 May 2019 10:17:46 +0200
-In-Reply-To: <20190505.004556.492323065607253635.davem@davemloft.net>
-References: <1556563688.20085.31.camel@suse.com>
-         <20190430141440.9469-1-Jan.Kloetzke@preh.de>
-         <20190505.004556.492323065607253635.davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1725886AbfEFJDA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 05:03:00 -0400
+Received: from mail-ed1-f49.google.com ([209.85.208.49]:34142 "EHLO
+        mail-ed1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbfEFJDA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 05:03:00 -0400
+Received: by mail-ed1-f49.google.com with SMTP id w35so12826121edd.1
+        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 02:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qk2JoXMn4xFUELTZzmeIesazSLXtyS+86vxNenYt/i0=;
+        b=SPk9UbqNHVEhkIvctbOKpuT/NH5RDJXML+2QgUNuhkCo9P2N/o9h4Qr7TbGh/rOq00
+         +iAmtkSyxqYn/yLPM4Q67vqQlgxvPFuQ+etwZjCrfK17jzCFFYzdQL3Hf3N/xujzCsYf
+         8jC4+t4r/KpmyoAs6TN8RWM+O9bHga6uDfxfdXyguscZf3rBbgVt3JdDz6j/lj9yaJ5Y
+         /KbV9z7rhX7R6LwCjcCytP4VMtOJIyIGbmxiD9WLUl8/dloHanaDZ2zScsgttPl5LaY1
+         Py0X46D3dDt0HNXvjMbL7u0NDWiFX4h4xuGN58KBcCbXIZlxA4SQvcdxmHXLHZVmb+lw
+         sQ3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qk2JoXMn4xFUELTZzmeIesazSLXtyS+86vxNenYt/i0=;
+        b=Rol6PSJ80dj15PpJpnrf9ieIN0twC+p2p7NHfjycE5p0RLsDpw6idAbj5Z+Tkx2r1x
+         DQBYw6lRG+Hno5U9SpFKbLWEo34lDDxIRVGxYvTjw4shJfqMt0KBQiIOpq8K8lGT5WU+
+         vGfvxQZUVcOyrldiS490vb+SowcSL+xDWmlxG1ygeCN9x21X42Qe3q6OtWehP+ZWb0P8
+         v3etN6EVggTiFeDwQBRftyXjJXTTSYmKH4lUL4M6QpcF/GwGQgKJLixqAP6UTsDh6xi5
+         flGmldj9Cw+9m8fkNsgA0wXeAaUGysf52GAaTphI5qPRL3JlTfQpb7NVJjXKLUefKk1K
+         uMzg==
+X-Gm-Message-State: APjAAAVlfw1o7Kk0R3haILCVKN28GMQG2jr/GXYymh0gHo79CNaUn1p0
+        g+vywmRbz+HOhTySq0VeRH46AJbZdGM=
+X-Google-Smtp-Source: APXvYqxDJFkziYrv6ESUV2igf661eziyJaRVJBoKjAmHaXEbOovdX16dUdv7GKDbIn2gntb7cUkcrA==
+X-Received: by 2002:a17:906:60a:: with SMTP id s10mr17808330ejb.198.1557133378428;
+        Mon, 06 May 2019 02:02:58 -0700 (PDT)
+Received: from localhost (frost.nullroute.eu.org. [2001:778:e27f:a23:36c4:e19f:3c1:8a8])
+        by smtp.gmail.com with ESMTPSA id c49sm5335eda.58.2019.05.06.02.02.56
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 06 May 2019 02:02:57 -0700 (PDT)
+From:   =?UTF-8?q?Mantas=20Mikul=C4=97nas?= <grawity@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org
+Subject: usbutils - various patches to the lsusb.py script
+Date:   Mon,  6 May 2019 12:02:07 +0300
+Message-Id: <20190506090241.169665-1-grawity@gmail.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On So, 2019-05-05 at 00:45 -0700, David Miller wrote:
-> From: Kloetzke Jan <Jan.Kloetzke@preh.de>
-> Date: Tue, 30 Apr 2019 14:15:07 +0000
-> 
-> > @@ -1431,6 +1432,11 @@ netdev_tx_t usbnet_start_xmit (struct sk_buff *skb,
-> >               spin_unlock_irqrestore(&dev->txq.lock, flags);
-> >               goto drop;
-> >       }
-> > +     if (WARN_ON(netif_queue_stopped(net))) {
-> > +             usb_autopm_put_interface_async(dev->intf);
-> > +             spin_unlock_irqrestore(&dev->txq.lock, flags);
-> > +             goto drop;
-> > +     }
-> 
-> If this is known to happen and is expected, then we should not warn.
-> 
-
 Hi,
 
-yes this is the point. Can ndo_start_xmit() and ndo_stop() race?
-If not, why does the patch fix the observed issue and what
-prevents the race? Something is not clear here.
+I accidentally ended up hacking on the lsusb.py script and now have an
+assorted collection of patches:
 
-	Regards
-		Oliver
+- Output (controllers, hubs, etc.) sorted numerically.
+- Color enabled by default when on a tty.
+- Added --long-options.
+- Replaced hand-rolled binary search with ordinary dict lookups;
+  lost the -w (--warn-if-unsorted) option in the process.
+- Cosmetic changes to make it look more like Python and less like C.
+- Some changes to the output formatting that I liked to have in my own
+  local version.
+
 
