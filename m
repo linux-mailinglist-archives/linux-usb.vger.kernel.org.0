@@ -2,61 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA55F14E03
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 16:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C664814F7F
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 17:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728041AbfEFO5u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 10:57:50 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:52194 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727261AbfEFO5t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 10:57:49 -0400
-Received: (qmail 4141 invoked by uid 2102); 6 May 2019 10:57:48 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 6 May 2019 10:57:48 -0400
-Date:   Mon, 6 May 2019 10:57:48 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Jim Lin <jilin@nvidia.com>
-cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
-        <hminas@synopsys.com>, <kai.heng.feng@canonical.com>,
-        <drinkcat@chromium.org>, <prime.zeng@hisilicon.com>,
-        <malat@debian.org>, <nsaenzjulienne@suse.de>, <jflat@chromium.org>,
-        <linus.walleij@linaro.org>, <clabbe@baylibre.com>,
-        <colin.king@canonical.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/1] usb: xhci: Add Clear_TT_Buffer
-In-Reply-To: <1557153262-22972-1-git-send-email-jilin@nvidia.com>
-Message-ID: <Pine.LNX.4.44L0.1905061053550.1585-100000@iolanthe.rowland.org>
+        id S1726414AbfEFPLj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 11:11:39 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:33955 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726241AbfEFPLj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 11:11:39 -0400
+Received: by mail-lf1-f67.google.com with SMTP id v18so7220536lfi.1;
+        Mon, 06 May 2019 08:11:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3n8DB0gQwJicPY+O/w22a7ewwEDUX9hB2LtejHOoNts=;
+        b=EO7ChWYsyrakC76AmReTFv00un3dIoEiTYk+qJhQMzSoqijYHKzXWuCJ0I0/VU5+S8
+         WCnjKlHFzlziDSMNgOzSqKrJJGfa3uTmljF6dAGFDmaPbA55EH3n8aKu2IIHoAFAuMmG
+         a3Mr+XOjgvi+w8w4UBryQEXVVV+LqcPovPz59VSYG0uI4APCFnbHIYmkF6FtivdqaB1e
+         NjNmVGEpJn8QGiNNiFe5xdSXAJs3el23/a3uvA0X/R7m+IJGGJv+ZkOcHdOIdCW9zLnV
+         JnQN4fv0vXOUpC//Uh3srp6E2xGbDxgcfsD77JMk2WCiSFIUqTXoah9mtf5wKUn8Qmu2
+         sbPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3n8DB0gQwJicPY+O/w22a7ewwEDUX9hB2LtejHOoNts=;
+        b=TfLrbUqgo2E02DUR1vwEl0lM/vAaU510j/mPf+54Xn6gWn97XNrSgBcmJBeL3ZdS4Q
+         O5Wwv4mB45OCzLXpAJbzb7VJJ6/N+GtGmWtX/ryEpva/VFH555TgEjCpV4eqFOO7pg22
+         nx4+hi4FIuOKcLH1nMP+m0dBpCas0hEwmKygaOXtBsxhB4awPI440A38A+3rK8iQtq+V
+         yAqkGlBswmYwdwDTCrs/8F3w5pVD9N9D9ts+4veEFII1DUWt+0qhYJUq0QawuIJSszo9
+         +gk/dJsqvdjiORBR//alpIP0Su8rS0Rfcj7gMJ6k4jpQfvz8GUowbSITpclSfSxBFnLQ
+         CwZg==
+X-Gm-Message-State: APjAAAXPG318iLIFaxw7SAkT7bpNqs7D4KhdrT5uoqhMljw68dFznFKv
+        mgfY+aXMDHCTbvd3ojasJ24+fwi87Tr4UDMF2MKTQQln
+X-Google-Smtp-Source: APXvYqyQGsKPS9Hdd59Ha7rPHw1HVuuhjHYyGU+XfzoaZ3HVWK85YhYX+8My/y5uNGX2MbxZeqyZlipR/byBJ4J/xt4=
+X-Received: by 2002:ac2:434a:: with SMTP id o10mr2019737lfl.122.1557155497459;
+ Mon, 06 May 2019 08:11:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <20190506140830.25376-1-angus@akkea.ca> <20190506140830.25376-4-angus@akkea.ca>
+In-Reply-To: <20190506140830.25376-4-angus@akkea.ca>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 6 May 2019 12:11:41 -0300
+Message-ID: <CAOMZO5C6XQUWBi39jKeVJg3Jj6auB0mF3h8bWMYZ_prXwgc9Fg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] usb: typec: tcpm: Clear the fault status register
+To:     "Angus Ainslie (Purism)" <angus@akkea.ca>
+Cc:     angus.ainslie@puri.sm, Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 6 May 2019, Jim Lin wrote:
+Hi Angus,
 
-> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-> processing for full-/low-speed endpoints connected via a TT, the host
-> software must use the Clear_TT_Buffer request to the TT to ensure
-> that the buffer is not in the busy state".
-> 
-> In our case, a full-speed speaker (ConferenceCam) is behind a high-
-> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-> request we may continue to get STALL with the folllowing requests,
-> like Set_Interface.
-> 
-> Here we add Clear_TT_Buffer for the following Set_Interface requests
-> to get ACK successfully.
-> 
-> Originally usb_hub_clear_tt_buffer uses urb->dev->devnum as device
-> address while sending Clear_TT_Buffer command, but this doesn't work
-> for XHCI.
+On Mon, May 6, 2019 at 11:10 AM Angus Ainslie (Purism) <angus@akkea.ca> wrote:
+>
+> If the fault status register doesn't get cleared then
+> the ptn5110 interrupt gets stuck on. As the fault register gets
+> set everytime the ptn5110 powers on the interrupt is always stuck.
+>
+> Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
 
-Why doesn't it work for xHCI?  Clear-TT-Buffer is part of the USB 2.0 
-spec; it should work exactly the same for xHCI as for a USB-2.0 host 
-controller.
+Since this is a bug fix, I would suggest adding a Fixes tag and Cc
+stable if appropriate.
 
-Alan Stern
-
+I would also put this patch as the first one in the series, so that it
+can be easily applied to older stable trees.
