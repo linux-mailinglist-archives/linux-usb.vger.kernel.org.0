@@ -2,97 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB6314A63
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 14:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A32914A81
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 15:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726197AbfEFM5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 08:57:14 -0400
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:34985 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726283AbfEFM5N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 08:57:13 -0400
-Received: by mail-oi1-f182.google.com with SMTP id w197so9468963oia.2
-        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 05:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZwDr9F1GyVYnDUev2ADHdr1+dJLHGyMU3IyJaRX2Wps=;
-        b=EQVrtoKY90SnYXJeKKpR2NiulBmi+M8WX7u2C5IvBab7+4tDTIHdBauHn+a5d5QC9q
-         en+zIfQjNekTSy8A6jygV/qZUAawk7sk0D0rHFKNhQuJVYng84+Ghj4DItQfazvcLpZY
-         7MP/Cnocjl2+NyMkCJNATL1A0YfFpWR6LoWMSHHR48MUTNGFkuGVE9yYG6ZCxXys90uM
-         lDU8hgEKUBb9VKJ+i4BMbbNKxYZ0hFx4tJnHjBWYI6AivMqQFoLr3oe+kcYgprOiGf/0
-         9VzudB/Wr8haImxGQ0Hp87EyjdbIr/hg6F8x5MeR22YsShdmyOctlBWFUcRhkjmquSSC
-         k2jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZwDr9F1GyVYnDUev2ADHdr1+dJLHGyMU3IyJaRX2Wps=;
-        b=U66z+sHu0avfBs1/DpWOFgKgbqmMAxVUiXGMTcs5GaJj7Q1V0xtrdux4asmRW+vbE8
-         VQqfdZcONbUvdKjurgmeRA3w932LHdD6676/z/sQ4RrDpReUMMPexlQiGkxKV5qvSYqz
-         tn1jA5tWZOWmdMguHpyTAWRc7uWJEMnvsbnWv0QMGyzd+VzDwZneMqwdJ0C4MRRc+Ha/
-         8iF8hqq1zj+w3+uEGG0udDs6oe+pbdP5/BrDaWD101g0P2tOoVLdQpNkBJjkUx5yyphM
-         kUUpVBaNiwNGXc68m2RcQwGAiS8zBF64CkplzqSvbh62sx75YRi03BPbGSQEak2D3jHM
-         rxZQ==
-X-Gm-Message-State: APjAAAUqjWJF8kDiBbo95MLGVjyDWNIHYGuZXoRxmVvuCmrThwmyh1zR
-        vE8Z05BcB0NtCzm25i6l3YWcup0Dj7ZJ9f2JIZXrLjr7
-X-Google-Smtp-Source: APXvYqwV6ukBoGI5TOAZY8vJ7e6gxScsCw3ccNY+gDbMe48Yr5Ho9jTLR+qXZdhctgA9Gl0y6LTM6YdnhB3i5zywP/U=
-X-Received: by 2002:aca:1a16:: with SMTP id a22mr452563oia.174.1557147432976;
- Mon, 06 May 2019 05:57:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190506090241.169665-1-grawity@gmail.com> <20190506123221.GA25920@kroah.com>
-In-Reply-To: <20190506123221.GA25920@kroah.com>
-From:   =?UTF-8?Q?Mantas_Mikul=C4=97nas?= <grawity@gmail.com>
-Date:   Mon, 6 May 2019 15:57:01 +0300
-Message-ID: <CAPWNY8VMZQRysyUj77Tjqu3fmr_0Xsg3fnBvhAyfwXu-X9V2fA@mail.gmail.com>
-Subject: Re: usbutils - various patches to the lsusb.py script
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1726190AbfEFNA4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 09:00:56 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:49285 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725886AbfEFNA4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 09:00:56 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190506130053euoutp01e8ed9b968e78be2de6a5fb358ea574bb~cGYpqJLtZ1351013510euoutp018;
+        Mon,  6 May 2019 13:00:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190506130053euoutp01e8ed9b968e78be2de6a5fb358ea574bb~cGYpqJLtZ1351013510euoutp018
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1557147653;
+        bh=Q6MAYfpfyHu8aSZ3bUWW5jR63Rk5nop3PVjLGiZRUjw=;
+        h=From:To:Cc:Subject:Date:In-reply-to:References:From;
+        b=tfSz93eGaCltC1t36KDopuaXIpUVAhXzIXFgaOuewyYMxCVu009Pvhw5XZEsvdmXv
+         RwYi82g1uRDVOfijLT3LCGRYpjbhF6ACUrLKHBDzneSgnEtyGbv7BPzxZ2NjXzBCZ2
+         8aI8Sha0wQgmvx1NfrktjQNnN7jgsvRTV9/FJ8Nw=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190506130053eucas1p1eb3544a522d9225357c5d719ce96cdba~cGYpRpE8o2766527665eucas1p1c;
+        Mon,  6 May 2019 13:00:53 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id B7.D2.04377.40030DC5; Mon,  6
+        May 2019 14:00:52 +0100 (BST)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea~cGYopf_4e2185021850eucas1p2F;
+        Mon,  6 May 2019 13:00:52 +0000 (GMT)
+X-AuditID: cbfec7f4-113ff70000001119-96-5cd030041958
+Received: from eusync4.samsung.com ( [203.254.199.214]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 6F.7B.04140.40030DC5; Mon,  6
+        May 2019 14:00:52 +0100 (BST)
+Received: from AMDC2765.DIGITAL.local ([106.120.51.73]) by
+        eusync4.samsung.com (Oracle Communications Messaging Server 7.0.5.31.0 64bit
+        (built May  5 2014)) with ESMTPA id <0PR300JEW2TC4H40@eusync4.samsung.com>;
+        Mon, 06 May 2019 14:00:52 +0100 (BST)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
+Date:   Mon, 06 May 2019 15:00:46 +0200
+Message-id: <20190506130046.20898-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+In-reply-to: <20190503204958.GA12532@kozik-lap>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDIsWRmVeSWpSXmKPExsWy7djP87osBhdiDNoP61lsnLGe1WL+zSSL
+        xl972S1mzTjNanH+/AZ2i8u75rBZzDi/j8li0bJWZou1R+6yO3B6nF5/k9Fj06pONo95JwM9
+        +rasYvTYsv8zo8fnTXIBbFFcNimpOZllqUX6dglcGfs3TWUv2MZW8WLRSaYGxq2sXYycHBIC
+        JhIT5/5m72Lk4hASWMEo0dX9nBnC+cwo8eTQTCaYqhMHDjBCJJYxSqzueA9V9Z9R4tSDl8wg
+        VWwChhJdb7vYQGwRgQSJI5vfg8WZBfqYJO63a4LYwgKeEmvXfQGrYRFQlZh2+jbYHbwCthLn
+        Jy1hgdgmL7F6wwGwXk4BfYldCyaygSyTEJjDJnHr3Cx2iCIXiWev70I1yEhcntzNAlHUzCjx
+        8Nxadginh1HictMMRogqa4nDxy+yQpzEJzFp23SgFRxAcV6JjjYhiBIPiWdH+lkgXmtilOht
+        WsE6gVFiASPDKkbx1NLi3PTUYqO81HK94sTc4tK8dL3k/NxNjMA4PP3v+JcdjLv+JB1iFOBg
+        VOLhXaByPkaINbGsuDL3EKMEB7OSCG/is3MxQrwpiZVVqUX58UWlOanFhxilOViUxHmrGR5E
+        CwmkJ5akZqemFqQWwWSZODilGhjV6iqfbvr5faKvrVONe81qS1E9LjYO36Yz3z+pnjgruf+1
+        wISpx7L6bG46fVwfOcHSPFb7jd4tgzKz0O9d7/eX3v6XcfL1//hNUzkfHjF9evpkUcq1VUd3
+        WR/co3j+mCn/ZOuMU+/CVk9uL05Rrf3RoXS/6dpuqcUK2RnXtwXF7eO6kunUW39TiaU4I9FQ
+        i7moOBEA3NNlX78CAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKLMWRmVeSWpSXmKPExsVy+t/xa7osBhdiDHbdYLXYOGM9q8X8m0kW
+        jb/2slvMmnGa1eL8+Q3sFpd3zWGzmHF+H5PFomWtzBZrj9xld+D0OL3+JqPHplWdbB7zTgZ6
+        9G1ZxeixZf9nRo/Pm+QC2KK4bFJSczLLUov07RK4MvZvmspesI2t4sWik0wNjFtZuxg5OSQE
+        TCROHDjA2MXIxSEksIRRYvnkFawQTiOTxMMjjxlBqtgEDCW63naxgdgiAgkSS95uZgcpYhaY
+        wCSx58xjsISwgKfE2nVfwGwWAVWJaadvg63gFbCVOD9pCQvEOnmJ1RsOMIPYnAL6ErsWTASr
+        FxLQk9h7qYllAiPPAkaGVYwiqaXFuem5xUZ6xYm5xaV56XrJ+bmbGIGBte3Yzy07GLveBR9i
+        FOBgVOLh9VA6HyPEmlhWXJl7iFGCg1lJhDfx2bkYId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwd
+        AgdjhATSE0tSs1NTC1KLYLJMHJxSDYxaPqsrWh5MvPHds3s774XLejmTzqq22287WlsUZns3
+        dsXtfeksXOG7Z22b7nCuSKvt2q0Jly5e8T4z2X5SUXzwu/Xrl3323S3NKS45c+/v1c1ivy+Y
+        8EZOaMqIUkkLLXzDzPhGue/oHH5pEXMRKc7gNdNbN59476ISr3dVJ0/zcEiqg65r0WElluKM
+        REMt5qLiRABxH+vCKAIAAA==
+X-CMS-MailID: 20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea
+References: <20190503204958.GA12532@kozik-lap>
+        <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 6, 2019 at 3:32 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, May 06, 2019 at 12:02:07PM +0300, Mantas Mikul=C4=97nas wrote:
-> > Hi,
-> >
-> > I accidentally ended up hacking on the lsusb.py script and now have an
-> > assorted collection of patches:
-> >
-> > - Output (controllers, hubs, etc.) sorted numerically.
-> > - Color enabled by default when on a tty.
-> > - Added --long-options.
-> > - Replaced hand-rolled binary search with ordinary dict lookups;
-> >   lost the -w (--warn-if-unsorted) option in the process.
-> > - Cosmetic changes to make it look more like Python and less like C.
-> > - Some changes to the output formatting that I liked to have in my own
-> >   local version.
-> >
-> >
->
-> I've applied all of these patches now, except for the usb.ids error
-> message that I responded to.  Note, I do not know python well, if at
-> all, so I just had to take your word for most of these :)
->
-> I don't like the usb.ids error message that happens here, it's not
-> essential that that file be found, especially given that most distros do
-> not ship it anymore as they have switched over to the hw database
-> format.  So maybe we can just drop the "error" as the tool does work
-> without it, or look for the hwids data instead?
+Samsung Exynos SoCs require to force UTMI width to 8bit, otherwise the
+host side of the shared USB2 PHY doesn't work.
 
-Yeah, it's probably fine to drop it (especially because the v010
-parser bugs that prompted the change had already received fixes in
-master).
+Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
+Fixes: 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif with phy_utmi_width")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/usb/dwc2/params.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I do want to make the tool use hwdb (I suppose the dependency is fine
-given that lsusb.c already uses it), but as the only existing parser
-for hwdb.bin is the C library with cpp macros sprinkled on top, I
-suspect doing it from python will hurt a bit.
+diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+index 6900eea57526..9ece4affb9d4 100644
+--- a/drivers/usb/dwc2/params.c
++++ b/drivers/usb/dwc2/params.c
+@@ -76,6 +76,7 @@ static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)
+ 	struct dwc2_core_params *p = &hsotg->params;
+ 
+ 	p->power_down = 0;
++	p->phy_utmi_width = 8;
+ }
+ 
+ static void dwc2_set_rk_params(struct dwc2_hsotg *hsotg)
+-- 
+2.17.1
 
---=20
-Mantas Mikul=C4=97nas
