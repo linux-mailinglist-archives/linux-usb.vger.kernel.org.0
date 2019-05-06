@@ -2,91 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC36D140B3
-	for <lists+linux-usb@lfdr.de>; Sun,  5 May 2019 17:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42581143A7
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 04:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726965AbfEEPkW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 May 2019 11:40:22 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:48434 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726524AbfEEPkW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 May 2019 11:40:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rT3xoMkezWbZrfZ/DsjT+vdesqGpf6yK3V9dQLDcRU4=; b=2VLRGUWQ2FCcbKWWqIpsP6xggD
-        tsCxva7g5DxwtN9Pbh4lbWUE4OqUzpkHePp8whFW6sUCGOga90chTiktQXP5vQSN1TVfkRvYmKwyA
-        /s90nUJkzCOjfHFghuHMYNleFXeb53wbT75DNmiOeXNJv4voqeqCIidGDem35d6LhZFI7MZiQDAwB
-        MhujOGq6BZ7Jw4KttruEP33AqHrAeLReIbR2oYgtEqgz5DjN3evjutC/XIqxnuyQqRsuzMwoF8IXJ
-        OuEtKMC4uCZVvkSmyIn765oKGeBFjEYggQXnipshazsAm+TYu7fgLvPJl0Z06tXo7c85iPrvt5BDN
-        ZEmp1UMA==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hNJFS-0002vP-6i; Sun, 05 May 2019 15:40:19 +0000
-Subject: Re: [next PATCH] usb: mtu3: fix up undefined reference to
- usb_debug_root
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <2b79c411c5d07a6846967c41803b328e300df8c6.1557035810.git.chunfeng.yun@mediatek.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <493f7e77-2c84-9812-2c27-760496610522@infradead.org>
-Date:   Sun, 5 May 2019 08:40:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        id S1726470AbfEFCwe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 May 2019 22:52:34 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:37089 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725813AbfEFCwe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 May 2019 22:52:34 -0400
+Received: by mail-pf1-f193.google.com with SMTP id g3so5951451pfi.4;
+        Sun, 05 May 2019 19:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CsgcPbm3Dp5JXoSh6cvFY36zj5G0VmTyOZ3CnWwDI0U=;
+        b=JO3wJxv7ihXzs3bR3FH/sFfOzk3+azqzgyvUlBgXAbzXnxJ2p4TqNGLH3AUe+wHlPP
+         UpDU9Sz+9FYm4VtfkJ0TQziNXcMZDhCGAk8NWRMGM91f2LlEmDBCavjTt4GMvhrCR407
+         WjtXli8JR0Tzl9L577vmPz8WkVjRj/LQLoWGsNIFIx+biBxEXTar+iqgd5Neeqru5vP5
+         su6S2hOhTUAqVJfI+K4/Xd30QRpy+jCpecfObGyUBtMxufZAm7iX4N51BeOiqxyMIKUY
+         I83adWEKVydKz+mjXxpyh86hXy6Ofh7j1CDGLIpQOGXoVmICmb3gocaYIGA6fnftHax7
+         a36Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CsgcPbm3Dp5JXoSh6cvFY36zj5G0VmTyOZ3CnWwDI0U=;
+        b=d+4KXWMbjvUHB1JJH3DyhNRsSaN7bMjpX3fooSn0Rcw19xy9k6kUZZu4d4Z1/4TPwG
+         Gvd9VZaTblgX0M+jzIAC/NCUKgzaiqhd8gCodBsTA45V+S9DUGLXvfiEcyvgrLTk6BYh
+         ycmA8u8rL4ayVHK4bkgduR6p48WlMCwml5dO5oq3bHzHAsUdyaMq3exFEL8WiIl3jKK8
+         W6bAgjEnA2HRRtciByy4h00lfy5pvbTp5bbKdB+q46OtL2alOL2HVTWSr7pdtnfpkckG
+         iNpEmatElKmmpXkmYzS9UscHWMmugoGiZveQSH/u5dXIDAilnYQ/eKYxNP/F9nGAPdJZ
+         alyw==
+X-Gm-Message-State: APjAAAXK5foP/WGNnfooDhak02KZ03EPtDG2PevzwGMZ1oc3YP6bFnbp
+        wpOovSfWUcr4dMP2sx1tkR4=
+X-Google-Smtp-Source: APXvYqy/Ta/53RuTG1MXgCarkn5vcAY72jk48KgAoascbD1BMXj8NzzrPpyGX4sZAu3WCC4E2NguPA==
+X-Received: by 2002:a65:6205:: with SMTP id d5mr29513098pgv.61.1557111153399;
+        Sun, 05 May 2019 19:52:33 -0700 (PDT)
+Received: from [192.168.1.38] (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
+        by smtp.gmail.com with ESMTPSA id q80sm19364518pfa.66.2019.05.05.19.52.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 05 May 2019 19:52:32 -0700 (PDT)
+Subject: Re: [PATCH V9 4/4] USB: serial: f81232: implement break control
+To:     Johan Hovold <johan@kernel.org>
+Cc:     peter_hong@fintek.com.tw, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+References: <1556587352-19500-1-git-send-email-hpeter+linux_kernel@gmail.com>
+ <1556587352-19500-4-git-send-email-hpeter+linux_kernel@gmail.com>
+ <20190503065917.GA26546@localhost>
+From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+Message-ID: <84cff579-79bd-9456-aa85-cb4510d916ed@gmail.com>
+Date:   Mon, 6 May 2019 10:52:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <2b79c411c5d07a6846967c41803b328e300df8c6.1557035810.git.chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20190503065917.GA26546@localhost>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/4/19 11:02 PM, Chunfeng Yun wrote:
-> When CONFIG_USB is not set, and CONFIG_USB_GADGET is set,
-> there is an issue:
-> 
-> ld:
-> drivers/usb/mtu3/mtu3_debugfs.o: in function 'ssusb_debugfs_create_root':
-> mtu3_debugfs.c:(.text+0xba3): undefined reference to 'usb_debug_root'
-> 
-> usb_debug_root is only built when CONFIG_USB is enabled, so here drop it
-> and use NULL instead.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Hi Johan,
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Johan Hovold 於 2019/5/3 下午 02:59 寫道:
+>> @@ -519,6 +530,7 @@ static int f81232_port_disable(struct usb_serial_port *port)
+>>   static void f81232_set_termios(struct tty_struct *tty,
+>>   		struct usb_serial_port *port, struct ktermios *old_termios)
+>>   {
+>> +	struct f81232_private *priv = usb_get_serial_port_data(port);
+>>   	u8 new_lcr = 0;
+>>   	int status = 0;
+>>   	speed_t baudrate;
+>> @@ -572,11 +584,16 @@ static void f81232_set_termios(struct tty_struct *tty,
+>>   		break;
+>>   	}
+>>   
+>> +	mutex_lock(&priv->lock);
+>> +
+>> +	new_lcr |= (priv->shadow_lcr & UART_LCR_SBC);
+>>   	status = f81232_set_register(port, LINE_CONTROL_REGISTER, new_lcr);
+>>   	if (status) {
+>>   		dev_err(&port->dev, "%s failed to set LCR: %d\n",
+>>   			__func__, status);
+>>   	}
+>> +
+>> +	mutex_unlock(&priv->lock);
+> 
+> You forgot to update shadow_lcr here so the line settings would be
+> corrupted (e.g set to 5 bit words) whenever a break is signalled.
+> 
+> Did you not test this version of the patch?
+> 
+> I added the missing update, but please test the code that's in my
+> usb-next branch in a minute and confirm everything works as expected.
+> 
+
+Thanks for mention and patch the lost parts. I had only tested the
+break signal and forgot to test full LCR. I'll add it to my test items
+and it tested well on new usb-next branch after your fix.
+
+BTW, Should I disable break control when port close ?
 
 Thanks.
 
-> ---
->  drivers/usb/mtu3/mtu3_debugfs.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_debugfs.c b/drivers/usb/mtu3/mtu3_debugfs.c
-> index c96e5dab0a48..3ed666f94dd9 100644
-> --- a/drivers/usb/mtu3/mtu3_debugfs.c
-> +++ b/drivers/usb/mtu3/mtu3_debugfs.c
-> @@ -528,8 +528,7 @@ void ssusb_dr_debugfs_init(struct ssusb_mtk *ssusb)
->  
->  void ssusb_debugfs_create_root(struct ssusb_mtk *ssusb)
->  {
-> -	ssusb->dbgfs_root =
-> -		debugfs_create_dir(dev_name(ssusb->dev), usb_debug_root);
-> +	ssusb->dbgfs_root = debugfs_create_dir(dev_name(ssusb->dev), NULL);
->  }
->  
->  void ssusb_debugfs_remove_root(struct ssusb_mtk *ssusb)
-> 
-
-
 -- 
-~Randy
+With Best Regards,
+Peter Hong
