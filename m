@@ -2,245 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD5214F5A
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 17:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B66414DA0
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 16:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbfEFOec (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 10:34:32 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:5366 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726583AbfEFOec (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 10:34:32 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cd045d40000>; Mon, 06 May 2019 07:33:56 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 06 May 2019 07:34:30 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 06 May 2019 07:34:30 -0700
-Received: from HQMAIL106.nvidia.com (172.18.146.12) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 6 May
- 2019 14:34:29 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL106.nvidia.com
- (172.18.146.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 6 May 2019 14:34:29 +0000
-Received: from jilin-desktop.nvidia.com (Not Verified[10.19.120.147]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cd045f30000>; Mon, 06 May 2019 07:34:29 -0700
-From:   Jim Lin <jilin@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <stern@rowland.harvard.edu>, <hminas@synopsys.com>,
-        <kai.heng.feng@canonical.com>, <drinkcat@chromium.org>,
-        <prime.zeng@hisilicon.com>, <malat@debian.org>,
-        <nsaenzjulienne@suse.de>, <jflat@chromium.org>,
-        <linus.walleij@linaro.org>, <clabbe@baylibre.com>,
-        <colin.king@canonical.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jim Lin <jilin@nvidia.com>
-Subject: [PATCH v4 1/1] usb: xhci: Add Clear_TT_Buffer
-Date:   Mon, 6 May 2019 22:34:22 +0800
-Message-ID: <1557153262-22972-1-git-send-email-jilin@nvidia.com>
-X-Mailer: git-send-email 2.1.4
+        id S1728951AbfEFOxn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 10:53:43 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:53581 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729285AbfEFOrS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 10:47:18 -0400
+Received: by mail-it1-f194.google.com with SMTP id l10so20673187iti.3
+        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 07:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DpOTHTN61DNh0jzA3oEB6+Erb5rOcYNfwyvkegv2Kn0=;
+        b=YHXOsoSNPP+91o/8xFKA+1I+O1WnTJI+Pr6esCtIaRNNgKIicPD2Gh0yARBvQhzH0Y
+         BakP/wZbniH9i/FfRVNfXkbYa0M8K+BKP5yMHcKdDJoWja4VJaCdSZHiG1MuGKQCDZ64
+         ph3u/3UFn0JyCX0VYhubw5krtx5184RP3j64o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DpOTHTN61DNh0jzA3oEB6+Erb5rOcYNfwyvkegv2Kn0=;
+        b=dmnkwTqczQrrOdGz/kU0zR3rWNIaRcqJrxySQvh5Mwuu9LuL2irqCA6fvcBPqI1wOL
+         qTleLPemjJwh2bg9qoEoTpF2f9QqdwIt0oU38nr14uJlxjeweipHusiEfGx6axTpN+KP
+         GxiiZTf9KeflQ+dWGMC9gDtyKFCelWaOjew+tYJHxlRAcO25NETO6bWtSi+mNGU3xodL
+         DpbbZmcvkzVRcoYOf0jfYw7T5p95J2CNObIzmlFMcTmXCJsCprRbLPLaTSpHMl0I/iYI
+         sgnf1QyC1+QqjS4bD9jZ/JAztro7UZq6zdFaTNdtTo69fszqC/9QcFRmiKCiyGbQwVOx
+         g+hA==
+X-Gm-Message-State: APjAAAV4OW8cswiZC+j4ZqiGOKiwu4/I74QZQ4mTExSUrnBYmLgEoNoT
+        r+xEaYF6+KTJOb2gy5KswX0lDw==
+X-Google-Smtp-Source: APXvYqxKSTCiJxdwYirrcVpxqxAb++n6X86LP1uUdw7zskem8MIedd+9DqDZSsQjNfBe0xXVMemvsw==
+X-Received: by 2002:a05:660c:799:: with SMTP id h25mr18380320itk.85.1557154037724;
+        Mon, 06 May 2019 07:47:17 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id q125sm3478606iod.88.2019.05.06.07.47.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 06 May 2019 07:47:16 -0700 (PDT)
+Subject: Re: [PATCH] selftests: add sleep between detach and usbip list -l
+To:     Greg KH <greg@kroah.com>
+Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        linux-usb@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20190502194740.15344-1-skhan@linuxfoundation.org>
+ <20190505091356.GB25646@kroah.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <ed0a3115-ee5a-97b6-b69c-073c9595d734@linuxfoundation.org>
+Date:   Mon, 6 May 2019 08:47:15 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1557153236; bh=Q/DEh0KWbfxsLAH92wY6N5X/0pxwczeiWJVLn2rXiz0=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:Content-Type;
-        b=aIQvJMFdJT/Bxvg9Dzyu2zyfHOxF4gVaoLQabwfl2LTdgtZ6e9Q3/8waaiO3VO2O0
-         QS0qR05gslyEQVeHTHNhSPfnQY+3oaFdUGqiQMBnmhKOnSiKClZwQQCj4CzLw075Nc
-         yzefh3hABlD35I/1iOOzvW96rVDaIHWP+PPdXT4wKUvn2WHUZhL2mR5tV4E29jwzdl
-         jToknEh0Wt8KZLHphNSC//f83UVGCG6JzwRlNS+zcn6idAgiMQCbz497pRDq0YQO+4
-         Rs95Nhtet9stpgC5EfkT5o5qZ4aP8v38pvxIZnfQ9DcRcC+5aSW8znl1pJ/ARUF+5t
-         2Zh/XDrdiyc7g==
+In-Reply-To: <20190505091356.GB25646@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-processing for full-/low-speed endpoints connected via a TT, the host
-software must use the Clear_TT_Buffer request to the TT to ensure
-that the buffer is not in the busy state".
+On 5/5/19 3:13 AM, Greg KH wrote:
+> On Thu, May 02, 2019 at 01:47:40PM -0600, Shuah Khan wrote:
+>> Add a sleep between detach and check for exportable devices to avoid
+>> the following segfault from libc-2.27.so
+>>
+>> [ 6268.136108] usbip[5565]: segfault at 0 ip 00007f2a947bddfd sp 00007ffd1a8705e8 error 4 in libc-2.27.so[7f2a94703000+1e7000]
+>>
+>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+>> ---
+>>   tools/testing/selftests/drivers/usb/usbip/usbip_test.sh | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+>> index 128f0ab24307..beacf24a8df7 100755
+>> --- a/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+>> +++ b/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+>> @@ -171,10 +171,14 @@ echo "Detach invalid port tests - expect invalid port error message";
+>>   src/usbip detach -p 100;
+>>   echo "=============================================================="
+>>   
+>> +# let detach complete. Avoid segfaults from libc-2.27.so
+>> +sleep 3;
+> 
+> That feels very "arbitrary", why do we "know" it will take at most 3
+> seconds?  I guess there's not much else we can do here except maybe
+> somehow watch sysfs until the device is really gone?
+> 
 
-In our case, a full-speed speaker (ConferenceCam) is behind a high-
-speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-request we may continue to get STALL with the folllowing requests,
-like Set_Interface.
+Yeah. Number 3 is somewhat arbitrary. It helps the host process the
+detach request from the client and update the sysfs. Detach returns
+as soon as client side is done, and the test is running the next
+command on the host side. If I were run these commands manually, it
+gives enough settling time. I am looking for a quick way to allow
+settling time in this automated test.
 
-Here we add Clear_TT_Buffer for the following Set_Interface requests
-to get ACK successfully.
 
-Originally usb_hub_clear_tt_buffer uses urb->dev->devnum as device
-address while sending Clear_TT_Buffer command, but this doesn't work
-for XHCI.
-We have to extend usb_hub_clear_tt_buffer parameter to specify device
-number that will have the TT state of its hub cleared.
-
-Signed-off-by: Jim Lin <jilin@nvidia.com>
----
-v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
-    , remove its claiming in xhci.h
-v3: Add description for clearing_tt (xhci.h)
-v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
-    to protect for Clear_TT_Buffer to be run serially.
-    Remove xhci_clear_tt_buffer_complete as it's not necessary.
-    Same reason as the above.
-    Extend usb_hub_clear_tt_buffer parameter
-
- drivers/usb/core/hub.c            |  5 +++--
- drivers/usb/dwc2/hcd_intr.c       |  2 +-
- drivers/usb/host/ehci-q.c         |  2 +-
- drivers/usb/host/fotg210-hcd.c    |  2 +-
- drivers/usb/host/xhci-ring.c      | 22 ++++++++++++++++++++++
- drivers/usb/isp1760/isp1760-hcd.c |  5 +++--
- include/linux/usb/hcd.h           |  2 +-
- 7 files changed, 32 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 15a2934dc29d..4dec054c9776 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -840,6 +840,7 @@ int usb_hub_set_port_power(struct usb_device *hdev, struct usb_hub *hub,
- /**
-  * usb_hub_clear_tt_buffer - clear control/bulk TT state in high speed hub
-  * @urb: an URB associated with the failed or incomplete split transaction
-+ * @devnum : device number that will have the TT state of its hub cleared
-  *
-  * High speed HCDs use this to tell the hub driver that some split control or
-  * bulk transaction failed in a way that requires clearing internal state of
-@@ -851,7 +852,7 @@ int usb_hub_set_port_power(struct usb_device *hdev, struct usb_hub *hub,
-  *
-  * Return: 0 if successful. A negative error code otherwise.
-  */
--int usb_hub_clear_tt_buffer(struct urb *urb)
-+int usb_hub_clear_tt_buffer(struct urb *urb, int devnum)
- {
- 	struct usb_device	*udev = urb->dev;
- 	int			pipe = urb->pipe;
-@@ -873,7 +874,7 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
- 	/* info that CLEAR_TT_BUFFER needs */
- 	clear->tt = tt->multi ? udev->ttport : 1;
- 	clear->devinfo = usb_pipeendpoint (pipe);
--	clear->devinfo |= udev->devnum << 4;
-+	clear->devinfo |= devnum << 4;
- 	clear->devinfo |= usb_pipecontrol(pipe)
- 			? (USB_ENDPOINT_XFER_CONTROL << 11)
- 			: (USB_ENDPOINT_XFER_BULK << 11);
-diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
-index 88b5dcf3aefc..a3bb6911a62a 100644
---- a/drivers/usb/dwc2/hcd_intr.c
-+++ b/drivers/usb/dwc2/hcd_intr.c
-@@ -125,7 +125,7 @@ static void dwc2_hc_handle_tt_clear(struct dwc2_hsotg *hsotg,
- 
- 	if (qtd->urb->status != -EPIPE && qtd->urb->status != -EREMOTEIO) {
- 		chan->qh->tt_buffer_dirty = 1;
--		if (usb_hub_clear_tt_buffer(usb_urb))
-+		if (usb_hub_clear_tt_buffer(usb_urb, usb_urb->dev->devnum))
- 			/* Clear failed; let's hope things work anyway */
- 			chan->qh->tt_buffer_dirty = 0;
- 	}
-diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-index aa2f77f1506d..9f64c260239e 100644
---- a/drivers/usb/host/ehci-q.c
-+++ b/drivers/usb/host/ehci-q.c
-@@ -169,7 +169,7 @@ static void ehci_clear_tt_buffer(struct ehci_hcd *ehci, struct ehci_qh *qh,
- 		if (!ehci_is_TDI(ehci)
- 				|| urb->dev->tt->hub !=
- 				   ehci_to_hcd(ehci)->self.root_hub) {
--			if (usb_hub_clear_tt_buffer(urb) == 0)
-+			if (!usb_hub_clear_tt_buffer(urb, urb->dev->devnum))
- 				qh->clearing_tt = 1;
- 		} else {
- 
-diff --git a/drivers/usb/host/fotg210-hcd.c b/drivers/usb/host/fotg210-hcd.c
-index 0da68df259c8..bd29ed0fbd46 100644
---- a/drivers/usb/host/fotg210-hcd.c
-+++ b/drivers/usb/host/fotg210-hcd.c
-@@ -2123,7 +2123,7 @@ static void fotg210_clear_tt_buffer(struct fotg210_hcd *fotg210,
- 
- 		if (urb->dev->tt->hub !=
- 				fotg210_to_hcd(fotg210)->self.root_hub) {
--			if (usb_hub_clear_tt_buffer(urb) == 0)
-+			if (!usb_hub_clear_tt_buffer(urb, urb->dev->devnum))
- 				qh->clearing_tt = 1;
- 		}
- 	}
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 9215a28dad40..aa2a21e6cde3 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1786,6 +1786,27 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
- 	return NULL;
- }
- 
-+static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci,
-+	unsigned int slot_id, struct xhci_td *td)
-+{
-+	struct xhci_virt_device *dev;
-+	struct xhci_slot_ctx *slot_ctx;
-+	int devnum;
-+
-+	/*
-+	 * As part of low/full-speed endpoint-halt processing
-+	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
-+	 */
-+	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
-+	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub)) {
-+		dev = xhci->devs[slot_id];
-+		slot_ctx = xhci_get_slot_ctx(xhci, dev->out_ctx);
-+		devnum = (int) le32_to_cpu(slot_ctx->dev_state) &
-+			DEV_ADDR_MASK;
-+		usb_hub_clear_tt_buffer(td->urb, devnum);
-+	}
-+}
-+
- static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
- 		unsigned int slot_id, unsigned int ep_index,
- 		unsigned int stream_id, struct xhci_td *td,
-@@ -1804,6 +1825,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
- 	if (reset_type == EP_HARD_RESET) {
- 		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
- 		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
-+		xhci_clear_hub_tt_buffer(xhci, slot_id, td);
- 	}
- 	xhci_ring_cmd_db(xhci);
- }
-diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/isp1760-hcd.c
-index 8142c6b4c4cf..f1d68092becb 100644
---- a/drivers/usb/isp1760/isp1760-hcd.c
-+++ b/drivers/usb/isp1760/isp1760-hcd.c
-@@ -1166,7 +1166,8 @@ static void handle_done_ptds(struct usb_hcd *hcd)
- 					(qtd->urb->status != -EPIPE) &&
- 					(qtd->urb->status != -EREMOTEIO)) {
- 				qh->tt_buffer_dirty = 1;
--				if (usb_hub_clear_tt_buffer(qtd->urb))
-+				if (usb_hub_clear_tt_buffer(qtd->urb,
-+						qtd->urb->dev->devnum))
- 					/* Clear failed; let's hope things work
- 					   anyway */
- 					qh->tt_buffer_dirty = 0;
-@@ -1633,7 +1634,7 @@ static void dequeue_urb_from_qtd(struct usb_hcd *hcd, struct isp1760_qh *qh,
- 
- 	if ((urb->dev->speed != USB_SPEED_HIGH) && urb_was_running) {
- 		qh->tt_buffer_dirty = 1;
--		if (usb_hub_clear_tt_buffer(urb))
-+		if (usb_hub_clear_tt_buffer(urb, urb->dev->devnum))
- 			/* Clear failed; let's hope things work anyway */
- 			qh->tt_buffer_dirty = 0;
- 	}
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 695931b03684..01720f1f7d62 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -559,7 +559,7 @@ struct usb_tt_clear {
- 	struct usb_host_endpoint	*ep;
- };
- 
--extern int usb_hub_clear_tt_buffer(struct urb *urb);
-+extern int usb_hub_clear_tt_buffer(struct urb *urb, int devnum);
- extern void usb_ep0_reinit(struct usb_device *);
- 
- /* (shifted) direction/type/recipient from the USB 2.0 spec, table 9.2 */
--- 
-2.1.4
-
+thanks,
+-- Shuah
