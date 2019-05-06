@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD912146F9
-	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 11:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9A2146FA
+	for <lists+linux-usb@lfdr.de>; Mon,  6 May 2019 11:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726369AbfEFJDb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 May 2019 05:03:31 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:43908 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbfEFJDb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 05:03:31 -0400
-Received: by mail-ed1-f65.google.com with SMTP id w33so12159726edb.10
-        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 02:03:29 -0700 (PDT)
+        id S1726371AbfEFJDd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 May 2019 05:03:33 -0400
+Received: from mail-ed1-f50.google.com ([209.85.208.50]:41101 "EHLO
+        mail-ed1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbfEFJDc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 May 2019 05:03:32 -0400
+Received: by mail-ed1-f50.google.com with SMTP id m4so14500865edd.8
+        for <linux-usb@vger.kernel.org>; Mon, 06 May 2019 02:03:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4yz+s+2fTy3r5t4w3+3GvHAC5iEHvch9zSIFBySmEhA=;
-        b=EticedEHXoHx6LX0snf9vwtRNuAIlDSKmDlDGHWP6DRnvI4xn4sRpdNSCcStjVKt6G
-         DTJTWhd02SCkel2pu5zJ8BZ1gRMtW9Squ2+KWzHS8RmtlqfkZ7gnzr4MsVxTNjZJqpuz
-         VbKMOpNUfrSG88Cfw8kAuIfrqA2/ZAENsNcvkoypMr+ktz5AwJFdi8KpjZ8X9q29p7g7
-         y7/0RzjOZhqbYNcRdU+O2G/IloOoyxtvSKWC6bTcN8DUtB2aP8tmuOn/S3s0A2d5kVC0
-         OOyAuQGi/0TpBz6SKTyB2z+SQmlKJnQ+KwFt2PWpQ6A+68/gSZzia7aGV5Fe7BBOPd8m
-         lViA==
+        bh=PlkR8zEhx2Qim5Zs0mqHecGcHRL4gqAzc2uemQftQuo=;
+        b=G88l682d6c+rzYW3sw0YmM96Zvhogqjj78uKowL+cua9BHmHJIFGyb15IEmvGFT2g4
+         BQaoIRCsHf0wKhDTK9N0uYAkJv2B/10nQoaQgGc5SyVAdPQnUgFTiR5CFXZJrHqfpymk
+         u/FW+EM3b/n7zL60Z0GLaKA6WIymPhg/WwWHExbLpQ3PPptxVZUCjsJkfkohTUal3v6R
+         GtkOC8lZUb/tgtAqJ6l5aCn1+EjwxHC4WBVpHUpUdhcBwg9MOBBsCkR3ewVkGfOMltz9
+         I83QPaPjADZzr8XA54kB+xC8yLcwTezoKxY28cDLYGfm2rWue2bSbKoYUIpJbfLtZ8sf
+         wLTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4yz+s+2fTy3r5t4w3+3GvHAC5iEHvch9zSIFBySmEhA=;
-        b=SUIBkg2NGlZkobVMj+OM8YBdxWhG2OxrkDPJJ6RvsUjx2ndlYleCtvOa9mjWCI/GSV
-         aPAJs+aboecAHNuKlRCbA5xAXZF+mNjG/t2EGHgIniCta73yJUgsTRCWSVZvWQwQIDsg
-         hnY84dF5EFQVwB33doxmFXMf9uak/Wm9wJikLI9lWm5H8ishEcUpzZ4OkM6i8DWnH4s+
-         yFVl4hpAzzYOYxQCz+c4HLW/V9O/8N49zrA5m6FmmqUC2IchYJYnkICKn9kXik2y8Po1
-         HyJFD6FSqVnUL/ZZz3bl7JZeX+JpCb+Uju1zYsBGMmKUuqIrQhoEXVYNPBFPAhUK66Vm
-         aIyw==
-X-Gm-Message-State: APjAAAUb56RROWwxQi5CrFBl/nuGfrfbToLD8PPaUHpDo61hTBo+p2bw
-        3u2kG4D3LID90/DjByEMcyCuXgz31oc=
-X-Google-Smtp-Source: APXvYqwltc4eKpnmkR3z0NxUB6EcAOvV14csKwysnsYHfHHkN80XdqHRxDlTeGPv3Shc6RQaFga7Lg==
-X-Received: by 2002:a17:906:11d2:: with SMTP id o18mr17886486eja.123.1557133408415;
-        Mon, 06 May 2019 02:03:28 -0700 (PDT)
+        bh=PlkR8zEhx2Qim5Zs0mqHecGcHRL4gqAzc2uemQftQuo=;
+        b=UygF6XSKoMsoX/8xx+3KLgv7CERqqaybVTWt3cyFFDobAMQ+Jj2OwG+3NL8CaoQNJJ
+         SEVK195cTi8WOE1uHr5V+oblKnBO4/MJpW2D4F9XR44CRpJem3OL4BdsGBEKqotJI1Wc
+         gOPWRtWL3E8zAxsUDR6hRVQcXLvpAR4dPozoyoNRLeRog5vf0Mb3rlYHnT1ACQCEc8/d
+         FmWGVsTt/eEbcCnJ6AE2xp1qDoI7C2OcJvZc+WE/snR1AtII7//lf29R4NXJ3s66fghL
+         08TL4ZYw9WLNB1xMwQR98pZ/jd0uZDA42y2XKXit4F7jlzpYRcM4uv5BIXmL8ThOhGkU
+         mICQ==
+X-Gm-Message-State: APjAAAUTBztrY/UeosYI8G/uc+ZwGsePt4okj/rnrQyvaS6ozNOL4Kzk
+        dMTdkBOldY+1dc5gVPB4FWNmLGSLwrQ=
+X-Google-Smtp-Source: APXvYqyZo7oZ4EG/sPn5x3xamMgomwO5+0szzMTC+yyPc5mZZQ64RL+nPYDFssxQvDjho7n/TY96XA==
+X-Received: by 2002:a17:906:3601:: with SMTP id q1mr18532076ejb.163.1557133410338;
+        Mon, 06 May 2019 02:03:30 -0700 (PDT)
 Received: from localhost (frost.nullroute.eu.org. [2001:778:e27f:a23:36c4:e19f:3c1:8a8])
-        by smtp.gmail.com with ESMTPSA id f1sm2824844edm.59.2019.05.06.02.03.27
+        by smtp.gmail.com with ESMTPSA id b4sm2905482edc.16.2019.05.06.02.03.29
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 06 May 2019 02:03:27 -0700 (PDT)
+        Mon, 06 May 2019 02:03:29 -0700 (PDT)
 From:   =?UTF-8?q?Mantas=20Mikul=C4=97nas?= <grawity@gmail.com>
 To:     linux-usb@vger.kernel.org
 Cc:     gregkh@linuxfoundation.org,
         =?UTF-8?q?Mantas=20Mikul=C4=97nas?= <grawity@gmail.com>
-Subject: [PATCH 07/34] lsusb.py: support long options
-Date:   Mon,  6 May 2019 12:02:14 +0300
-Message-Id: <20190506090241.169665-8-grawity@gmail.com>
+Subject: [PATCH 08/34] lsusb.py: do not entirely hide usb.ids exceptions
+Date:   Mon,  6 May 2019 12:02:15 +0300
+Message-Id: <20190506090241.169665-9-grawity@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190506090241.169665-1-grawity@gmail.com>
 References: <20190506090241.169665-1-grawity@gmail.com>
@@ -64,100 +64,25 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Signed-off-by: Mantas Mikulėnas <grawity@gmail.com>
 ---
- lsusb.py.in | 48 ++++++++++++++++++++++++++++++------------------
- 1 file changed, 30 insertions(+), 18 deletions(-)
+ lsusb.py.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/lsusb.py.in b/lsusb.py.in
-index e09b4cf..f9e273d 100644
+index f9e273d..0d7ff95 100644
 --- a/lsusb.py.in
 +++ b/lsusb.py.in
-@@ -523,15 +523,15 @@ def usage():
- 	print("Usage: lsusb.py [options]")
- 	print()
- 	print("Options:")
--	#     "|-------|-------|-------|-------|-------"
--	print("  -h            display this help")
--	print("  -i            display interface information")
--	print("  -I            display interface information, even for hubs")
--	print("  -u            suppress empty hubs")
--	print("  -U            suppress all hubs")
--	print("  -c            use colors")
--	print("  -e            display endpoint info")
--	print("  -f FILE       override filename for /usr/share/usb.ids")
-+	print("  -h, --help            display this help")
-+	print("  -i, --interfaces      display interface information")
-+	print("  -I, --hub-interfaces  display interface information, even for hubs")
-+	print("  -u, --hide-empty-hubs suppress empty hubs")
-+	print("  -U, --hide-hubs       suppress all hubs")
-+	print("  -c, --color           use colors")
-+	print("  -e, --endpoints       display endpoint info")
-+	print("  -f FILE, --usbids-path FILE")
-+	print("                        override filename for /usr/share/usb.ids")
- 	print()
- 	print("Use lsusb.py -ciu to get a nice overview of your USB devices.")
+@@ -610,9 +610,8 @@ def main(argv):
+ 	if usbids[0]:
+ 		try:
+ 			parse_usb_ids()
+-		except:
+-			print(" WARNING: Failure to read usb.ids", file=sys.stderr)
+-			#print(sys.exc_info(), file=sys.stderr)
++		except IOError as e:
++			print("Warning: Failure to read usb.ids:", e, file=sys.stderr)
+ 	read_usb()
  
-@@ -555,40 +555,52 @@ def main(argv):
- 	"main entry point"
- 	global showint, showhubint, noemptyhub, nohub
- 	global cols, usbids, showeps
-+
-+	long_options = [
-+		"help",
-+		"interfaces",
-+		"hub-interfaces",
-+		"hide-empty-hubs",
-+		"hide-hubs",
-+		"color",
-+		"usbids-path=",
-+		"endpoints",
-+	]
-+
- 	try:
--		(optlist, args) = getopt.gnu_getopt(argv[1:], "hiIuUwcef:", ("help",))
-+		(optlist, args) = getopt.gnu_getopt(argv[1:], "hiIuUwcef:", long_options)
- 	except getopt.GetoptError as exc:
- 		print("Error:", exc, file=sys.stderr)
- 		sys.exit(2)
- 	for opt in optlist:
--		if opt[0] == "-h" or opt[0] == "--help":
-+		if opt[0] in {"-h", "--help"}:
- 			usage()
- 			sys.exit(0)
--		if opt[0] == "-i":
-+		if opt[0] in {"-i", "--interfaces"}:
- 			showint = True
- 			continue
--		if opt[0] == "-I":
-+		if opt[0] in {"-I", "--hub-interfaces"}:
- 			showint = True
- 			showhubint = True
- 			continue
--		if opt[0] == "-u":
-+		if opt[0] in {"-u", "--hide-empty-hubs"}:
- 			noemptyhub = True
- 			continue
--		if opt[0] == "-U":
-+		if opt[0] in {"-U", "--hide-hubs"}:
- 			noemptyhub = True
- 			nohub = True
- 			continue
--		if opt[0] == "-c":
-+		if opt[0] in {"-c", "--color"}:
- 			cols = (norm, bold, red, green, amber, blue)
- 			continue
- 		if opt[0] == "-w":
- 			print("Warning: option -w is no longer supported", file=sys.stderr)
- 			continue
--		if opt[0] == "-f":
-+		if opt[0] in {"-f", "--usbids-path"}:
- 			#usbids = (opt[1], *usbids)
- 			usbids = (opt[1],)
- 			continue
--		if opt[0] == "-e":
-+		if opt[0] in {"-e", "--endpoints"}:
- 			showeps = True
- 			continue
- 	if len(args) > 0:
+ # Entry point
 -- 
 2.21.0
 
