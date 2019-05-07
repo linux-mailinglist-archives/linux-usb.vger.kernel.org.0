@@ -2,244 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAD6163D7
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 14:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12E316411
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 14:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726521AbfEGMiM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 08:38:12 -0400
-Received: from wp126.webpack.hosteurope.de ([80.237.132.133]:59536 "EHLO
-        wp126.webpack.hosteurope.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726224AbfEGMiM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 08:38:12 -0400
-Received: from [2003:a:659:3f00:21a:4dff:fe85:1148] (helo=hermes.fivetechno.de); authenticated
-        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1hNzMF-0003iM-5U; Tue, 07 May 2019 14:38:07 +0200
-X-Virus-Scanned: by amavisd-new 2.11.1 using newest ClamAV at
-        linuxbbg.five-lan.de
-Received: from [192.168.34.101] (p5098d998.dip0.t-ipconnect.de [80.152.217.152])
-        (authenticated bits=0)
-        by hermes.fivetechno.de (8.15.2/8.14.5/SuSE Linux 0.8) with ESMTPSA id x47Cc523032092
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Tue, 7 May 2019 14:38:05 +0200
-Subject: Re: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        id S1726478AbfEGM4d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 08:56:33 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:48121 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726000AbfEGM4d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 08:56:33 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190507125631euoutp02e6b6639ad8400dbe5083f21c39356db9~cZ_IC4Gj02423324233euoutp02g;
+        Tue,  7 May 2019 12:56:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190507125631euoutp02e6b6639ad8400dbe5083f21c39356db9~cZ_IC4Gj02423324233euoutp02g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1557233791;
+        bh=xUjT1aKwWvPSI6nVT4VtoO7jy++v6QMY5/tvZAbO3t0=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=KpxrKWesAN50VLLKddrB9PB3wK4lTEW97WTVdo4ZTKJmXtFtcIstb3G2B4L1lxfYT
+         GhxnsbIwUfaB+jfYRKUDOPiJ4jJXPqzggWW0SjMrAamPbofNUKq6ZAEaljvKtSKUu6
+         hwaBO001G6X7CgSSd10NADcLzj6RDZmuLO1yDcz0=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190507125631eucas1p145b5499a857fcf20e1c4429f28bede47~cZ_HoxoSf1873518735eucas1p1i;
+        Tue,  7 May 2019 12:56:31 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id DA.04.04325.E7081DC5; Tue,  7
+        May 2019 13:56:30 +0100 (BST)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190507125630eucas1p1c5fd171a8dc2a6b8eb9dd317fe245f0c~cZ_GuytwV1097010970eucas1p1Y;
+        Tue,  7 May 2019 12:56:30 +0000 (GMT)
+X-AuditID: cbfec7f5-b8fff700000010e5-46-5cd1807e2c82
+Received: from eusync1.samsung.com ( [203.254.199.211]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id D6.B6.04140.E7081DC5; Tue,  7
+        May 2019 13:56:30 +0100 (BST)
+Received: from AMDC2765.DIGITAL.local ([106.120.51.73]) by
+        eusync1.samsung.com (Oracle Communications Messaging Server 7.0.5.31.0 64bit
+        (built May  5 2014)) with ESMTPA id <0PR4001CRXA2KE30@eusync1.samsung.com>;
+        Tue, 07 May 2019 13:56:30 +0100 (BST)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mans Rullgard <mans@mansr.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
+        Markus Reichl <m.reichl@fivetechno.de>,
         Krzysztof Kozlowski <krzk@kernel.org>
-References: <20190503204958.GA12532@kozik-lap>
- <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
- <20190506130046.20898-1-m.szyprowski@samsung.com>
- <39c7b687-449e-5e89-4c70-527d4e779fd9@fivetechno.de>
- <eefff244-f311-e59e-d914-9a18b5a21620@samsung.com>
- <26ff3deb-4b8d-7dd2-2418-d56f6dcea313@samsung.com>
-From:   Markus Reichl <m.reichl@fivetechno.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=m.reichl@fivetechno.de; prefer-encrypt=mutual; keydata=
- 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
- ZnS2JHg/17+ErCtiUzuJ5EGMPA==
-Organization: five technologies GmbH
-Message-ID: <e5ded84a-a6a2-f998-f6d8-5af7c7b432e2@fivetechno.de>
-Date:   Tue, 7 May 2019 14:38:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <26ff3deb-4b8d-7dd2-2418-d56f6dcea313@samsung.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="jQd3EMdFc47qTRaKrCGVpjLKjKCzoyw4f"
-X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1557232691;5b6394b7;
-X-HE-SMSGID: 1hNzMF-0003iM-5U
+Subject: [PATCH] usb: core: verify devicetree nodes for disabled interfaces
+Date:   Tue, 07 May 2019 14:56:15 +0200
+Message-id: <20190507125615.9381-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHIsWRmVeSWpSXmKPExsWy7djPc7p1DRdjDH7OMbLYOGM9q0Xz4vVs
+        FufPb2C3uLxrDpvFjPP7mCwWLWtltnh55Aejxdojd9ktfjyczuTA6XHrTr3HplWdbB77565h
+        93hz+hS7R9+WVYwenzfJBbBFcdmkpOZklqUW6dslcGWcb57JVHCcr+J0607WBsYVPF2MnBwS
+        AiYS7/u/sYDYQgIrGCWubGPuYuQCsj8zSmz4MY0dpqhh9ktGiMQyRokZb1tZIJz/jBKrt24A
+        q2ITMJToetvFBmKLCCRIHNn8nhnEZhboZpL4skwAxBYW8JY4t/0M2DoWAVWJDdvWMoLYvAI2
+        Eq0bPjNCbJOXWL3hANgZEgKNbBLTDs1kgUi4SFx88BeqSEbi8uRuFoiiZkaJh+fWskM4PYwS
+        l5tmQFVZSxw+fpEV4gw+iUnbpgON5QCK80p0tAlBlHhI9B7+AhYWEoiV2LY1aAKj+AJGhlWM
+        4qmlxbnpqcXGeanlesWJucWleel6yfm5mxiBsXb63/GvOxj3/Uk6xCjAwajEw/ui4GKMEGti
+        WXFl7iFGCQ5mJRHexGfnYoR4UxIrq1KL8uOLSnNSiw8xSnOwKInzVjM8iBYSSE8sSc1OTS1I
+        LYLJMnFwSjUw8rjcLf7UX8r5LmWDZkz1aWbujXfuCuxe9njPt0cJR9Y/qio4U/7RZt1kS9sz
+        s+4/2zfperKqSeIZ9dkSDycKfeuYesv5dMyhVQvOBa3N5w46/f7ArcsZW/SfdneK3L6kv+RQ
+        wVXhRuv+oO/n11qlnBcy8+L7cMj90W222jlaNw7+9JgiKXhsrb0SS3FGoqEWc1FxIgCcaiYm
+        sQIAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLJMWRmVeSWpSXmKPExsVy+t/xy7p1DRdjDL6dYLPYOGM9q0Xz4vVs
+        FufPb2C3uLxrDpvFjPP7mCwWLWtltnh55Aejxdojd9ktfjyczuTA6XHrTr3HplWdbB77565h
+        93hz+hS7R9+WVYwenzfJBbBFcdmkpOZklqUW6dslcGWcb57JVHCcr+J0607WBsYVPF2MnBwS
+        AiYSDbNfMoLYQgJLGCUmPbLqYuQCshuZJFb+nMQGkmATMJToetsFZosIJEgsebuZHaSIWaCb
+        SaK56TcrSEJYwFvi3PYzLCA2i4CqxIZta8Gm8grYSLRu+MwIsU1eYvWGA8wTGLkWMDKsYhRJ
+        LS3OTc8tNtIrTswtLs1L10vOz93ECAyUbcd+btnB2PUu+BCjAAejEg/vi4KLMUKsiWXFlbmH
+        GCU4mJVEeBOfnYsR4k1JrKxKLcqPLyrNSS0+xCjNwaIkztshcDBGSCA9sSQ1OzW1ILUIJsvE
+        wSnVwNgQdtXALI491JP9TPHPh+Hya5jCZultFT7YuIp5H8sUY+lTO+doTOx3ZDm735hD9vrX
+        5Kf3drV1cxkzfC7UyXNzNb88Y6trxv43KwVlbnQszFh18hjL0eULSw66fDwY7Xgj9J2QqfWr
+        hsf361ZNvv79n+/mzck3+N8fqWgQvhsgF/dlwvSr+ZlKLMUZiYZazEXFiQBdkFXGEAIAAA==
+X-CMS-MailID: 20190507125630eucas1p1c5fd171a8dc2a6b8eb9dd317fe245f0c
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190507125630eucas1p1c5fd171a8dc2a6b8eb9dd317fe245f0c
+References: <CGME20190507125630eucas1p1c5fd171a8dc2a6b8eb9dd317fe245f0c@eucas1p1.samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---jQd3EMdFc47qTRaKrCGVpjLKjKCzoyw4f
-Content-Type: multipart/mixed; boundary="qx0FfzwKdsQXFjs26GgsoSMGadaHSWCLD";
- protected-headers="v1"
-From: Markus Reichl <m.reichl@fivetechno.de>
-To: Marek Szyprowski <m.szyprowski@samsung.com>, linux-usb@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Minas Harutyunyan <hminas@synopsys.com>,
- Felipe Balbi <felipe.balbi@linux.intel.com>,
- Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
- Jules Maselbas <jmaselbas@kalray.eu>, Krzysztof Kozlowski <krzk@kernel.org>
-Message-ID: <e5ded84a-a6a2-f998-f6d8-5af7c7b432e2@fivetechno.de>
-Subject: Re: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
-References: <20190503204958.GA12532@kozik-lap>
- <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
- <20190506130046.20898-1-m.szyprowski@samsung.com>
- <39c7b687-449e-5e89-4c70-527d4e779fd9@fivetechno.de>
- <eefff244-f311-e59e-d914-9a18b5a21620@samsung.com>
- <26ff3deb-4b8d-7dd2-2418-d56f6dcea313@samsung.com>
-In-Reply-To: <26ff3deb-4b8d-7dd2-2418-d56f6dcea313@samsung.com>
+Commit 01fdf179f4b0 ("usb: core: skip interfaces disabled in devicetree")
+add support for disabling given USB device interface by adding nodes to
+the USB host controller device. The mentioned commit however identifies
+the given USB interface node only by the 'reg' property in the host
+controller children nodes and then checks for their the 'status'. The USB
+device interface nodes however also has to have a 'compatible' property as
+described in Documentation/devicetree/bindings/usb/usb-device.txt. This is
+important, because USB host controller might have child-nodes for other
+purposes. For example, Exynos EHCI and OHCI drivers already define
+child-nodes for each physical root hub port and assigns respective PHY
+controller and parameters for them. This conflicts with the proposed
+approach and verifying for the presence of the compatible property fixes
+this issue without changing the devicetree bindings and the way the PHY
+controllers are handled by Exynos EHCI/OHCI drivers.
 
---qx0FfzwKdsQXFjs26GgsoSMGadaHSWCLD
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+Reported-by: Markus Reichl <m.reichl@fivetechno.de>
+Fixes: 01fdf179f4b0 ("usb: core: skip interfaces disabled in devicetree")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/usb/core/message.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hi Marek,
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 82239f27c4cc..cd455c4add25 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -2007,6 +2007,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+ 		struct usb_interface *intf = cp->interface[i];
+ 
+ 		if (intf->dev.of_node &&
++		    of_device_is_compatible(intf->dev.of_node, NULL) &&
+ 		    !of_device_is_available(intf->dev.of_node)) {
+ 			dev_info(&dev->dev, "skipping disabled interface %d\n",
+ 				 intf->cur_altsetting->desc.bInterfaceNumber);
+-- 
+2.17.1
 
-Am 07.05.19 um 14:03 schrieb Marek Szyprowski:
-> Hi All,
->=20
-> On 2019-05-07 11:17, Marek Szyprowski wrote:
->> Hi Markus,
->>
->> On 2019-05-07 10:12, Markus Reichl wrote:
->>> Hi Marek,
->>>
->>> your patch did not help on stable v5.1
->>>
->>> [=C2=A0=C2=A0=C2=A0 3.255963] samsung-usb2-phy 125b0000.exynos-usbphy=
-:=20
->>> 125b0000.exynos-usbphy supply vbus not found, using dummy regulator
->>> [=C2=A0=C2=A0=C2=A0 4.044547] usbcore: registered new interface drive=
-r smsc95xx
->>> [=C2=A0=C2=A0=C2=A0 4.112261] usb usb1: New USB device found, idVendo=
-r=3D1d6b,=20
->>> idProduct=3D0002, bcdDevice=3D 5.01
->>> [=C2=A0=C2=A0=C2=A0 4.120363] usb usb1: New USB device strings: Mfr=3D=
-3, Product=3D2,=20
->>> SerialNumber=3D1
->>> [=C2=A0=C2=A0=C2=A0 4.127560] usb usb1: Product: EHCI Host Controller=
-
->>> [=C2=A0=C2=A0=C2=A0 4.132415] usb usb1: Manufacturer: Linux=20
->>> 5.1.0-00005-geb4efae48eb5 ehci_hcd
->>> [=C2=A0=C2=A0=C2=A0 4.139446] usb usb1: SerialNumber: 12580000.ehci
->>> [=C2=A0=C2=A0=C2=A0 4.183056] usb3503 0-0008: switched to HUB mode
->>> [=C2=A0=C2=A0=C2=A0 4.183121] usb3503 0-0008: usb3503_probe: probed i=
-n hub mode
->>> [=C2=A0=C2=A0=C2=A0 4.488344] usb 1-2: new high-speed USB device numb=
-er 2 using=20
->>> exynos-ehci
->>> [=C2=A0=C2=A0=C2=A0 4.675605] usb 1-2: New USB device found, idVendor=
-=3D0424,=20
->>> idProduct=3D3503, bcdDevice=3Da1.a0
->>> [=C2=A0=C2=A0=C2=A0 4.678166] usb 1-2: New USB device strings: Mfr=3D=
-0, Product=3D0,=20
->>> SerialNumber=3D0
->>> [=C2=A0=C2=A0=C2=A0 4.686140] usb 1-2: skipping disabled interface 0
->>>
->>> root@odroid-x2:~# lsusb
->>> Bus 001 Device 002: ID 0424:3503 Standard Microsystems Corp.
->>> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
->>
->> This patch fixes the issue introduced by "usb: dwc2: gadget: Replace=20
->> phyif with phy_utmi_width" commit, which is queued only to linux-next =
-
->> so far. Stable v5.1 doesn't include it, so the fix doesn't change=20
->> anything on v5.1.
->>
->> I've checked and OdroidU3 works fine with v5.1 release, but X2 fails=20
->> to detect USB devices. I will investigate this in a few minutes...
->=20
->=20
-> Broken USB on X2 is caused by commit=20
-> 01fdf179f4b064d4c9d30b39aba178caf32649f4 ("usb: core: skip interfaces=20
-> disabled in devicetree").
->=20
-> I looks that the mentioned commit conflicts with the Exynos EHCI and=20
-> OHCI bindings and the way the PHY ports are defined for those drivers. =
-
-> It worked on U3 only by the pure coincidence. This is probably a=20
-> "minimal" fix for this issue:
-
-Thanks Marek, below fix enables USB on Odroid-X2 with stable v5.1.
-
->=20
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 82239f27c4cc..cd455c4add25 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -2007,6 +2007,7 @@ int usb_set_configuration(struct usb_device *dev,=
-=20
-> int configuration)
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 struct usb_interface *intf =3D cp->interface[i];
->=20
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 if (intf->dev.of_node &&
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of_device_is_compatible(intf->dev.of=
-_node, NULL) &&
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !of_device_is_available(intf->=
-dev.of_node)) {
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_in=
-fo(&dev->dev, "skipping disabled=20
-> interface %d\n",
-> intf->cur_altsetting->desc.bInterfaceNumber);
->=20
-> I will try to describe the problem in details and discuss it on the usb=
-=20
-> mailing list.
->=20
-> Best regards
->=20
-
-Gru=C3=9F,
---=20
-Markus Reichl
-
-
---qx0FfzwKdsQXFjs26GgsoSMGadaHSWCLD--
-
---jQd3EMdFc47qTRaKrCGVpjLKjKCzoyw4f
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAEBCAAdFiEEVKeIeBh0ZWJOldzLOiXeDmsa/bIFAlzRfCoACgkQOiXeDmsa
-/bK2LwwAx+0GgxHLGk0tMs5zq91YuX1lPr7gH0Kgha1DXAV70khVvjJ6o+gPsEDS
-aEr28vKc+nOnWGRi3ihgcc6s8hbFsbQUkg3PG2jGc1T0h/WVwgDdFT3dhi/J6D8R
-L1dnqsg1YFBJGaZgx81q4InyMOds5alMG4A9ibbEyOJuWc8aqx/VwjsNsPZ16sfP
-sh3MMYOxo736aEU6gBFl0mjybEpNrDI4w3I8EAXneky1nF5lK5KGpL9Zg1BFQuKb
-2NZlsLD7xmdsQ/J6+B62wBWLOw1oN0A1q2VAGNCxF7sata8QC2+NxCdNbIaaJtz1
-WYTclML+ltdbx2gGgW0HAxIl6EpRABSO3NXDKlo2RVQhfCgsjZBEXmqfJl2BrZpO
-9qlC74Q+9IEdF2UhFQg9Goo42WY238G0or1K1+O3bzcqLp9RT7q+sXx8NxhrcAGy
-gIw++POPpDq29xawqeJ8wnTZK2DkjO8DjbUVx20S6qSNs9g8N96NU5SUJ2ySu8+3
-5+7YIoQW
-=jBwf
------END PGP SIGNATURE-----
-
---jQd3EMdFc47qTRaKrCGVpjLKjKCzoyw4f--
