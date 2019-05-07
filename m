@@ -2,128 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7B7165EC
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 16:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F08165F1
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 16:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbfEGOm7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 10:42:59 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:51818 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726324AbfEGOm7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 10:42:59 -0400
-Received: (qmail 2035 invoked by uid 2102); 7 May 2019 10:42:58 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 7 May 2019 10:42:58 -0400
-Date:   Tue, 7 May 2019 10:42:58 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Johan Hovold <johan@kernel.org>
-cc:     syzbot <syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com>,
-        <andreyknvl@google.com>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <mchehab@kernel.org>, <syzkaller-bugs@googlegroups.com>,
-        <wen.yang99@zte.com.cn>
-Subject: Re: general protection fault in smsusb_init_device
-In-Reply-To: <20190507083430.GD4333@localhost>
-Message-ID: <Pine.LNX.4.44L0.1905071035450.1632-100000@iolanthe.rowland.org>
+        id S1726634AbfEGOnt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 10:43:49 -0400
+Received: from mail-eopbgr1400139.outbound.protection.outlook.com ([40.107.140.139]:57754
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725859AbfEGOns (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 May 2019 10:43:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aM0Nd0hS5cwxiqbVjrIhyckr+/lsIhaa8E7lQbaaI9M=;
+ b=BvCwVyEV+OLyE03Fd0hbJF1HR8X55VAiTq+UN24vqef5iq5Nm1zyCNdQGh8z/ZunEp09l/gpXrC0c0LVp7cNzGoyBCeT2fREK9jvtctaDJddwsRvkuXqjXtwMhVXAprDVzblAjM/h0sShKEWQ4/4GMN4O0SW03RTZVV3xtBABIM=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1835.jpnprd01.prod.outlook.com (52.133.163.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.10; Tue, 7 May 2019 14:43:41 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1856.012; Tue, 7 May 2019
+ 14:43:41 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 03/10] phy: renesas: rcar-gen3-usb2: Check dr_mode when
+ not using OTG
+Thread-Topic: [PATCH 03/10] phy: renesas: rcar-gen3-usb2: Check dr_mode when
+ not using OTG
+Thread-Index: AQHVBGYbvpIQ5ioroEGpDalH9Ovnd6ZfhsEAgAAEBrCAAC6vgIAAAodw
+Date:   Tue, 7 May 2019 14:43:41 +0000
+Message-ID: <TY1PR01MB1562C153ABE676047F568BBD8A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20190506234631.113226-1-chris.brandt@renesas.com>
+ <20190506234631.113226-4-chris.brandt@renesas.com>
+ <17bcc673-5fed-ce4f-3d61-af34bfa5d769@cogentembedded.com>
+ <TY1PR01MB1562550164C7977D28C90F128A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <34544f59-76aa-710a-a6ec-7d7d7f31a023@cogentembedded.com>
+In-Reply-To: <34544f59-76aa-710a-a6ec-7d7d7f31a023@cogentembedded.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [24.206.39.126]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 50f26ac9-4f6b-4522-a6ff-08d6d2fa6605
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1835;
+x-ms-traffictypediagnostic: TY1PR01MB1835:
+x-microsoft-antispam-prvs: <TY1PR01MB183521668A620E1A497A06488A310@TY1PR01MB1835.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 0030839EEE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(376002)(39860400002)(136003)(366004)(199004)(189003)(102836004)(25786009)(4744005)(186003)(9686003)(6506007)(53936002)(26005)(55016002)(66066001)(52536014)(66946007)(73956011)(99286004)(76116006)(76176011)(5660300002)(64756008)(66446008)(4326008)(6246003)(71200400001)(68736007)(256004)(7696005)(66556008)(71190400001)(66476007)(6116002)(72206003)(74316002)(316002)(3846002)(6636002)(54906003)(86362001)(2906002)(110136005)(229853002)(11346002)(81156014)(446003)(486006)(476003)(33656002)(81166006)(8676002)(478600001)(7736002)(305945005)(14454004)(6436002)(8936002);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1835;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: uPZDp5PeF7+tmUu0T2UI8Phz9EfG3VsbTRbk5xqa3+OFSnGO4FwGKskR81QELEXiLtOAPb/eE7gwxEnV+qgi+dxxvM1yqMFNm/0tz00VKebQZ2YpAPgfg50Ki3yqZAOMpOQrbeO4UrDi64pSP/VegEkmGPtGyMgV+A/mL2kfOuu7KjlnjC9bXADHoAwxK3Yki+gEoqbv9c+JlpPILgYvCDE21FJPf9Kelv483UKlSWV+BGU1iI3AdJNvOxUZa3eOYZBF6bPdHdmXgs0mlgUUq/5oHlToC5pZ6WVuTKUqGFmvMBhP/MkFD/yy30xtct81+B8h4rbsK0qLMwx5xw3bN0DNBl3VKM5RhbuRgNeOFac45N2eorEXBVzpmp23OjZBtnjF/VN1hSpNjo0BSsymQ30MjtJ0XKEH8Mzirs5bsPw=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50f26ac9-4f6b-4522-a6ff-08d6d2fa6605
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2019 14:43:41.2545
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1835
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 7 May 2019, Johan Hovold wrote:
-
-> On Mon, May 06, 2019 at 04:41:41PM -0400, Alan Stern wrote:
-> > On Thu, 18 Apr 2019, syzbot wrote:
-> > 
-> > > Hello,
-> > > 
-> > > syzbot found the following crash on:
-> > > 
-> > > HEAD commit:    d34f9519 usb-fuzzer: main usb gadget fuzzer driver
-> > > git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=128ec3fd200000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c73d1bb5aeaeae20
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=53f029db71c19a47325a
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16138e67200000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=128dddbf200000
-> > > 
-> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > Reported-by: syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com
-> > > 
-> > > usb 1-1: config 0 descriptor??
-> > > usb 1-1: string descriptor 0 read error: -71
-> > > smsusb:smsusb_probe: board id=18, interface number 0
-> > > kasan: CONFIG_KASAN_INLINE enabled
-> > > kasan: GPF could be caused by NULL-ptr deref or user memory access
-> > > general protection fault: 0000 [#1] SMP KASAN PTI
-> > > CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.1.0-rc5-319617-gd34f951 #4
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> > > Google 01/01/2011
-> > > Workqueue: usb_hub_wq hub_event
-> > > RIP: 0010:smsusb_init_device+0x366/0x937  
-> > > drivers/media/usb/siano/smsusb.c:429
-> > 
-> > The driver assumes endpoint 1in exists, and doesn't check the existence 
-> > of the endpoints it uses.
-> > 
-> > Alan Stern
-> > 
-> > 
-> > #syz test: https://github.com/google/kasan.git usb-fuzzer
-> > 
-> >  drivers/media/usb/siano/smsusb.c |   32 +++++++++++++++++++-------------
-> >  1 file changed, 19 insertions(+), 13 deletions(-)
-> > 
-> > Index: usb-devel/drivers/media/usb/siano/smsusb.c
-> > ===================================================================
-> > --- usb-devel.orig/drivers/media/usb/siano/smsusb.c
-> > +++ usb-devel/drivers/media/usb/siano/smsusb.c
-> > @@ -400,6 +400,7 @@ static int smsusb_init_device(struct usb
-> >  	struct smsusb_device_t *dev;
-> >  	void *mdev;
-> >  	int i, rc;
-> > +	int in_maxp;
-> >  
-> >  	/* create device object */
-> >  	dev = kzalloc(sizeof(struct smsusb_device_t), GFP_KERNEL);
-> > @@ -411,6 +412,23 @@ static int smsusb_init_device(struct usb
-> >  	dev->udev = interface_to_usbdev(intf);
-> >  	dev->state = SMSUSB_DISCONNECTED;
-> >  
-> > +	for (i = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
-> > +		struct usb_endpoint_descriptor *desc =
-> > +				&intf->cur_altsetting->endpoint[i].desc;
-> > +
-> > +		if (desc->bEndpointAddress & USB_DIR_IN) {
-> > +			dev->in_ep = desc->bEndpointAddress;
-> > +			in_maxp = usb_endpoint_maxp(desc);
-> > +		} else {
-> > +			dev->out_ep = desc->bEndpointAddress;
-> > +		}
-> > +	}
-> > +
-> > +	pr_debug("in_ep = %02x, out_ep = %02x\n",
-> > +		dev->in_ep, dev->out_ep);
-> > +	if (!dev->in_ep || !dev->out_ep)	/* Missing endpoints? */
-> > +		return -EINVAL;
-> 
-> Looks like you're now leaking dev here, and so is the current code in
-> the later error paths.
-> 
-> Since this return value will be returned from probe, you may want to use
-> -ENXIO or -ENODEV instead of -EINVAL.
-> 
-> Looks good otherwise.
-
-Thanks for the review.  You're right about the memory leak (although 
-you're wrong about the later error paths: smsusb_term_device() 
-deallocates dev).  And -ENODEV does seem like a better return code.
-
-I'll update the patch as you suggest.
-
-Alan Stern
-
+T24gVHVlLCBNYXkgMDcsIDIwMTkgMSwgU2VyZ2VpIFNodHlseW92IHdyb3RlOg0KPiAgICBEb24n
+dCB5b3UgcmVtZW1iZXIgYW5vdGhlciBydWxlOiB1c2Uge30gaW4gYWxsIGJyYW5jaGVzIGlmIGF0
+IGxlYXN0DQo+IG9uZSBicmFuY2ggdXNlcyB7fT8NCg0KQWgsIEkgc2VlIGl0IG5vdy4NCg0KRG9j
+dW1lbnRhdGlvbi9wcm9jZXNzL2NvZGluZy1zdHlsZS5yc3Q6DQoNClRoaXMgZG9lcyBub3QgYXBw
+bHkgaWYgb25seSBvbmUgYnJhbmNoIG9mIGEgY29uZGl0aW9uYWwgc3RhdGVtZW50IGlzIGEgc2lu
+Z2xlDQpzdGF0ZW1lbnQ7IGluIHRoZSBsYXR0ZXIgY2FzZSB1c2UgYnJhY2VzIGluIGJvdGggYnJh
+bmNoZXM6DQoNCi4uIGNvZGUtYmxvY2s6OiBjDQoNCglpZiAoY29uZGl0aW9uKSB7DQoJCWRvX3Ro
+aXMoKTsNCgkJZG9fdGhhdCgpOw0KCX0gZWxzZSB7DQoJCW90aGVyd2lzZSgpOw0KCX0NCg0KDQpJ
+IHdpbGwgY2hhbmdlIGl0Lg0KVGhhbmtzIQ0KDQpDaHJpcw0K
