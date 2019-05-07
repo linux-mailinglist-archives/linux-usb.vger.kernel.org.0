@@ -2,83 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0431606D
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 11:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D3916082
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 11:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726946AbfEGJQj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 05:16:39 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:36470 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726677AbfEGJQj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 05:16:39 -0400
-Received: by mail-lf1-f68.google.com with SMTP id y10so4591954lfl.3;
-        Tue, 07 May 2019 02:16:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DlEglguaiieWainmB6CookFpKtGQoycaJbZ7vQH3U5E=;
-        b=h0fU9kKxjSE2GvZwLgXko/HuxiSvxwI1RFmbz8OH7icR/m9c+L/sc1LY261fEiqIQ9
-         mshYbAjbaBltLS42RbSBgiD7JLCu7maYwYXw9q2Usn5weAa7cwaBOtLYGOsqRazp2Btj
-         Te8FRJk4dolQfT+O1tbwX8r8cdS1OpHBPEAraqSSnSse4nG1783oYZBrAzb20nCFSW13
-         i5qm6x+zsYlCgYpgZmF0hmr6CEB+hf0VgqW1wh+lZIj+Oikrzhvvp8+bM+vVEWZZQX0r
-         rrHdUg2KMr1Ipx92mVQoFkKEV3KBzQTk8Ak9G/cLy7J3JlABp8/P7usCYSY5nTjWQu6A
-         AFZA==
-X-Gm-Message-State: APjAAAWHKY1sZVQRhJOc8GHwfQkSpQ3tWlGQ87ew8ovIH/IHyJx8/uI0
-        uPtDV99gNg/1nA81lCNGvdM=
-X-Google-Smtp-Source: APXvYqwUWM5dimsGaY25oe2quIiXimhjh2gmbGxD928C4b55GW28qRQQnInQRQnRzvDFeii/QvuG3A==
-X-Received: by 2002:a19:4811:: with SMTP id v17mr15464511lfa.10.1557220597601;
-        Tue, 07 May 2019 02:16:37 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id w3sm3085894lji.42.2019.05.07.02.16.35
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 02:16:36 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.91)
-        (envelope-from <johan@kernel.org>)
-        id 1hNwDE-0007EU-37; Tue, 07 May 2019 11:16:36 +0200
-Date:   Tue, 7 May 2019 11:16:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, peter_hong@fintek.com.tw,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: Re: [PATCH V9 4/4] USB: serial: f81232: implement break control
-Message-ID: <20190507091636.GE4333@localhost>
-References: <1556587352-19500-1-git-send-email-hpeter+linux_kernel@gmail.com>
- <1556587352-19500-4-git-send-email-hpeter+linux_kernel@gmail.com>
- <20190503065917.GA26546@localhost>
- <84cff579-79bd-9456-aa85-cb4510d916ed@gmail.com>
+        id S1727196AbfEGJRV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 05:17:21 -0400
+Received: from mail-eopbgr1410109.outbound.protection.outlook.com ([40.107.141.109]:20625
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726824AbfEGJRV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 May 2019 05:17:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4qTrQJ/Q34mEUbcNc2+6OxdWHpu9YjWZHxyTd27UTMY=;
+ b=Jx83/KmVKv4n7QMmxusBr4hRZIZ9W5eg+SSK/A4vzKWTo2u2lXZVKfed1XsLd+olEb8wpo3sdqttLwHNSm9cHrTuEmRgB6EVczdEFxzmtkKcCMSduv+xjCvT1Afu3vB8YjNOJK2fq4HZBWucIUF/YdqnX1LxycFJ3rXv2gJiK8k=
+Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com (20.176.240.146) by
+ OSBPR01MB3174.jpnprd01.prod.outlook.com (20.176.240.146) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.11; Tue, 7 May 2019 09:17:17 +0000
+Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com
+ ([fe80::4d29:3383:d67d:d562]) by OSBPR01MB3174.jpnprd01.prod.outlook.com
+ ([fe80::4d29:3383:d67d:d562%3]) with mapi id 15.20.1856.012; Tue, 7 May 2019
+ 09:17:17 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Chris Brandt <Chris.Brandt@renesas.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Chris Brandt <Chris.Brandt@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>
+Subject: RE: [PATCH 00/10] usb: Add host and device support for RZ/A2
+Thread-Topic: [PATCH 00/10] usb: Add host and device support for RZ/A2
+Thread-Index: AQHVBGYHqBe7JTZ/4k2vKamrKGugU6ZfYQSw
+Date:   Tue, 7 May 2019 09:17:16 +0000
+Message-ID: <OSBPR01MB317442B092744C8D312682DCD8310@OSBPR01MB3174.jpnprd01.prod.outlook.com>
+References: <20190506234631.113226-1-chris.brandt@renesas.com>
+In-Reply-To: <20190506234631.113226-1-chris.brandt@renesas.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c51c267f-b69d-4c08-2bb0-08d6d2cccd4c
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB3174;
+x-ms-traffictypediagnostic: OSBPR01MB3174:
+x-microsoft-antispam-prvs: <OSBPR01MB3174E3D2D70EFCF0D2D88299D8310@OSBPR01MB3174.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-forefront-prvs: 0030839EEE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(136003)(39860400002)(346002)(396003)(366004)(199004)(189003)(76116006)(6436002)(4326008)(6636002)(305945005)(9686003)(25786009)(64756008)(66446008)(73956011)(229853002)(66556008)(66476007)(66946007)(11346002)(476003)(7736002)(4744005)(446003)(86362001)(6116002)(52536014)(74316002)(3846002)(316002)(54906003)(71200400001)(71190400001)(486006)(6862004)(6506007)(99286004)(66066001)(68736007)(102836004)(53936002)(76176011)(7696005)(55016002)(478600001)(81166006)(81156014)(8676002)(14454004)(8936002)(14444005)(26005)(186003)(6246003)(33656002)(256004)(2906002)(5660300002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB3174;H:OSBPR01MB3174.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: qDl3W9fa35g7ubNRHL7NJ8Cv/MRtDTXBNRWjMexuPLXSVvi3/WSa+MJRDwNiudQ/CbouxAm+RuApf7u0i22/fB2WQhX4XVM5irvVaqbFU7DrVP1dGF/fMUB08srx/6OV/o8XQvCyeFCY+1z7r6MiN2bSRUUhsNyTfakCrumu9AKGN4TK2fAUNIUzZ4RvhF8t03xwUQPzABKA4pqvFqzet6fnjx3UYcU72xo0FWXZfFk50bA0B0YxRFWTCyrPd1cPNOqqa5X5OzCa9ffGoqXBjbQGh67sRCnSaCSCGqgN8t74dH1XtF7QLeDV9cnh//zT+OW4j5DlGhOjQSzY+Cyu+0n1+a5zmlxuhP54z0GKLCMbUyzdcQ/9hGKVVD6EsoztT4gqDSgu9TzFihRhSlHwCZ8aXewrjicUy1onEvT3R4o=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <84cff579-79bd-9456-aa85-cb4510d916ed@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c51c267f-b69d-4c08-2bb0-08d6d2cccd4c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2019 09:17:17.4343
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3174
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 06, 2019 at 10:52:27AM +0800, Ji-Ze Hong (Peter Hong) wrote:
+Hi Chris-san,
 
-> > You forgot to update shadow_lcr here so the line settings would be
-> > corrupted (e.g set to 5 bit words) whenever a break is signalled.
-> > 
-> > Did you not test this version of the patch?
-> > 
-> > I added the missing update, but please test the code that's in my
-> > usb-next branch in a minute and confirm everything works as expected.
-> > 
-> 
-> Thanks for mention and patch the lost parts. I had only tested the
-> break signal and forgot to test full LCR. I'll add it to my test items
-> and it tested well on new usb-next branch after your fix.
+> From: Chris Brandt, Sent: Tuesday, May 7, 2019 8:46 AM
+>=20
+> For the most part, the RZ/A2 has the same USB 2.0 host and device
+> HW as the R-Car Gen3, so we can reuse a lot of the code.
+>=20
+> However, there are a couple extra register bits, and the CFIFO
+> register 8-bit access works a little different (weird, no idea why).
 
-Thanks for confirming!
+This is just my gut feeling, but if we set the BIGEND bit in the CFIFOSEL
+of RZ/A2M (R-Car Gen3 doesn't have such a bit though), could the original
+code work correctly?
 
-> BTW, Should I disable break control when port close ?
+Best regards,
+Yoshihiro Shimoda
 
-Yes, that would be good even if many tty drivers currently fail to do
-so.
-
-Johan
