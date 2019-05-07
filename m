@@ -2,103 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7A616ABA
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 20:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C302116C33
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 22:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727010AbfEGSxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 14:53:17 -0400
-Received: from smtprelay-out1.synopsys.com ([198.182.61.142]:56418 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726464AbfEGSxR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 14:53:17 -0400
-Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A6E6AC01D6;
-        Tue,  7 May 2019 18:53:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1557255190; bh=/bJFOGwRieHqxEusettdT/vBPglvJRx+y/MLRwTz3z8=;
-        h=From:To:CC:Subject:Date:References:From;
-        b=Jiw/RLfu/a1ikO29cRvv/45GwgPj5oMh3IWjlQKvhGJ9QNo4VVwckP5PPx6SZ7cla
-         lVC7UZCavTOkDn5wUPEFTlPG3OksdhEdWm6Cfzjyp3DfJQ8irqtmvUxVI/1cPixwRl
-         o68c0x1GAxuHb0DjIMru83atf19Un2Kq1tXn0N/2NaQNNRxYlno63CsiqtDTT3W/Pf
-         uCrVw0/VHZOyPHRBpYIbdOuWeBTJP8gUoOw1NzlzrO5q3IG3WUwxMYdis7XSMWhJGl
-         qNd8sKVQjpPAgU/bcRNEipjtp11r3RUOlHSCNfYVD7b80M0kXhNR501x7l8WYb7dWZ
-         xowRUPQ9H+F2A==
-Received: from US01WXQAHTC1.internal.synopsys.com (us01wxqahtc1.internal.synopsys.com [10.12.238.230])
-        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id CC435A0084;
-        Tue,  7 May 2019 18:53:15 +0000 (UTC)
-Received: from us01wembx1.internal.synopsys.com ([169.254.1.223]) by
- US01WXQAHTC1.internal.synopsys.com ([::1]) with mapi id 14.03.0415.000; Tue,
- 7 May 2019 11:53:15 -0700
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     "Claus H. Stovgaard" <cst@phaseone.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
+        id S1726799AbfEGU1R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 16:27:17 -0400
+Received: from mail-eopbgr1410091.outbound.protection.outlook.com ([40.107.141.91]:65342
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726295AbfEGU1Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 May 2019 16:27:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yEkMWcX6HsBOxYZkqcwobddpvndEpU5m9hFIBHHReHc=;
+ b=ToUZDcuhyo3wJAu2LAzJv/dgaxKJkeZxApcspJ2gceHNLWxDq4e9PnYLYys2iHhBvfu6QlnehdJyRdSsdl4XxrLbEioBPWN4Nj2wKG6fVMQ75/AzhV82Pq9Ie3TjFMXW36xQzLnl3S4/WeaEwf+oTNUnVBhplXaIvRedNiAFnHo=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1788.jpnprd01.prod.outlook.com (52.133.160.150) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.11; Tue, 7 May 2019 20:27:12 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1856.012; Tue, 7 May 2019
+ 20:27:12 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-Subject: Re: [PATCH] usb: gadget: configfs: Add lpm_Ux_disable
-Thread-Topic: [PATCH] usb: gadget: configfs: Add lpm_Ux_disable
-Thread-Index: AQHVBLXbiuLSRZBxxUeout6SXcNukg==
-Date:   Tue, 7 May 2019 18:53:15 +0000
-Message-ID: <30102591E157244384E984126FC3CB4F639E9057@us01wembx1.internal.synopsys.com>
-References: <1557220655-123090-1-git-send-email-cst@phaseone.com>
- <1557221830.114189.8.camel@phaseone.com>
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 01/10] phy: renesas: rcar-gen3-usb2: Add uses_usb_x1
+ option
+Thread-Topic: [PATCH 01/10] phy: renesas: rcar-gen3-usb2: Add uses_usb_x1
+ option
+Thread-Index: AQHVBGYQ+cfCaNX+ik+H7Wxy1mef+qZfTXmAgAB2sVCAABgIAIAANL0g
+Date:   Tue, 7 May 2019 20:27:11 +0000
+Message-ID: <TY1PR01MB1562A5D204AD0104862D09FE8A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20190506234631.113226-1-chris.brandt@renesas.com>
+ <20190506234631.113226-2-chris.brandt@renesas.com>
+ <CAMuHMdV3yW44Y1D2Vn1mNJK8pNF3db20An9Sde8=18r8y7m9LQ@mail.gmail.com>
+ <TY1PR01MB15621F21D3A3F1F550D85CD68A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <CAMuHMdWBR-069LJZ12pe1azystGp7egzYjKYFVkuRwMoukvzrQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWBR-069LJZ12pe1azystGp7egzYjKYFVkuRwMoukvzrQ@mail.gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [10.13.184.19]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [24.206.39.126]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6ba0c359-612e-43db-7b70-08d6d32a62ff
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1788;
+x-ms-traffictypediagnostic: TY1PR01MB1788:
+x-microsoft-antispam-prvs: <TY1PR01MB178808FCD52A97D10AD133E48A310@TY1PR01MB1788.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0030839EEE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(346002)(376002)(39860400002)(136003)(396003)(189003)(199004)(229853002)(6436002)(4744005)(25786009)(186003)(6116002)(6246003)(55016002)(7736002)(99286004)(5660300002)(11346002)(9686003)(76176011)(102836004)(68736007)(7696005)(6506007)(72206003)(54906003)(53936002)(8936002)(14454004)(446003)(316002)(486006)(478600001)(81156014)(8676002)(81166006)(476003)(33656002)(4326008)(71190400001)(71200400001)(6916009)(86362001)(256004)(26005)(66946007)(66446008)(64756008)(3846002)(73956011)(76116006)(66476007)(66556008)(66066001)(305945005)(74316002)(2906002)(52536014);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1788;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: jRijiSlj7rsN6h/BkV/ObW10f9rnVCgs6c/9TFLSfakIwHDbiGn4Cs+VrzVkUD6OSWc9DSMgV5TBtMoBL8SO9pX7Z8NmyazDlzvFndQKhFh/dBAJDtL1IjvuVwsd6WcgMK0usHm/HAAjFk7UAFx/LSf819hAOMpM7YE3/FxkkuwztX6IR9+z5LnjLk+sp1rSNUYbpeEFP1wQVLX/hdqJXqjFGoEAikwx+VDlciDKXH7/yKJzp0k7RPbvqTpuyMQnYDJO7twJtYDLSSGprXj23etZs1REguID9GHjwD5lh0w1SNeXmumfOgN2n6Fw1q6DhqA2UwdoJO9mLYWSiq7iIqxaZvhds724onMZ2XLU9VXCv+tmG2sY9nBtBX/eeJfA6njyrX2aIwOJudIzcHWjf9cZIiOVyuAWQQhl6njUt9g=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ba0c359-612e-43db-7b70-08d6d32a62ff
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2019 20:27:12.0039
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1788
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Claus,=0A=
-=0A=
-Claus H. Stovgaard wrote:=0A=
-> On Tue, 2019-05-07 at 11:09 +0200, Claus H. Stovgaard wrote:=0A=
->> When combining dwc3 with an redriver for a USB Type-C device=0A=
->> solution, it=0A=
->> sometimes have problems with leaving U1/U2 for certain hosts,=0A=
->> resulting in=0A=
->> link training errors and reconnects. This create an interface via=0A=
->> configfs for disabling U1/U2, enabling a workaround for devices based=0A=
->> on=0A=
->> dwc3.=0A=
->>=0A=
-> Sorry messed up a bit with a missing cover letter.=0A=
-> This feature relates to Anurag patch [1] and a thread [2] from earlier =
-=0A=
->=0A=
-> Where Anurags patch focus on setting U1/U2 latency in the BOS=0A=
-> descriptor from the devicetree, this patch focuses on having a configfs=
-=0A=
-> interface for forcing the UDC (here the dwc3) to not enable U1/U2 and=0A=
-> reject the SET_SEL(U1/U2).=0A=
->=0A=
-> Looking forward to input.=0A=
->=0A=
-> [1] https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__www.spinics.ne=
-t_lists_linux-2Dusb_msg179732.html&d=3DDwIDaQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=
-=3Du9FYoxKtyhjrGFcyixFYqTjw1ZX0VsG2d8FCmzkTY-w&m=3DwKdyWmYpbW791LAm7rYwvFYx=
-5E0bjENyXZzHvK4vyFo&s=3Des7kki6iuLJUp2rJnzP9alXKyfJPNSfyxTVCKKDd_rQ&e=3D=0A=
-> [2] https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__www.spinics.ne=
-t_lists_linux-2Dusb_msg179393.html&d=3DDwIDaQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=
-=3Du9FYoxKtyhjrGFcyixFYqTjw1ZX0VsG2d8FCmzkTY-w&m=3DwKdyWmYpbW791LAm7rYwvFYx=
-5E0bjENyXZzHvK4vyFo&s=3DcFTmO9wPf7b6TZxFUAAIJM0Z_wM1ttNIc1rct0uR6co&e=3D=0A=
->=0A=
->=0A=
-=0A=
-I'm not sure who will submit the patch to make change to DWC3 for=0A=
-disabling U1/U2 (Anurag or you), but can you split your patch between=0A=
-dwc3 and configfs.=0A=
-=0A=
-Thanks,=0A=
-Thinh=0A=
+SGkgR2VlcnQsDQoNCk9uIFR1ZSwgTWF5IDA3LCAyMDE5IDEsIEdlZXJ0IFV5dHRlcmhvZXZlbiB3
+cm90ZToNCj4gPiBTbyB3aXRoIHRoYXQgc2FpZCwgZG9lcyBhIHVzZXMtdXNiLXgxIHByb3BlcnR5
+IG1ha2UgbW9yZSBzZW5zZT8NCj4gDQo+IE5vIDstKQ0KDQpTby4uLi4NCg0KSSBndWVzcyB0aGUg
+Zmlyc3QgcGF0Y2ggaW4gdGhlIHNlcmllcyBuZWVkcyB0byBhZGQgdGhpcyB0byB0aGUgLmR0c2k6
+DQoNCgl1c2JfeDFfY2xrOiB1c2JfeDEgew0KCQkjY2xvY2stY2VsbHMgPSA8MD47DQoJCWNvbXBh
+dGlibGUgPSAiZml4ZWQtY2xvY2siOw0KCQkvKiBJZiBjbGsgcHJlc2VudCwgdmFsdWUgbXVzdCBi
+ZSBzZXQgYnkgYm9hcmQgKi8NCgkJY2xvY2stZnJlcXVlbmN5ID0gPDA+Ow0KCX07DQoNClRoZW4g
+SSBjYW4gcmVmZXJlbmNlICJ1c2JfeDEiIGluIHRoZSBkcml2ZXIgYW5kIHNlZSBpZiBpdCBpcyBz
+ZXQgdG8gDQpub24temVyby4NCg0KV2hhdCBkbyB5b3UgdGhpbms/DQoNCg0KQ2hyaXMNCg0K
