@@ -2,179 +2,244 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FE11639A
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 14:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAD6163D7
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 14:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbfEGMUd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 08:20:33 -0400
-Received: from node.akkea.ca ([192.155.83.177]:50710 "EHLO node.akkea.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725858AbfEGMUd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 May 2019 08:20:33 -0400
-Received: by node.akkea.ca (Postfix, from userid 33)
-        id 749404E204B; Tue,  7 May 2019 12:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1557231632; bh=uNQSdULdLhLXke+sVh9CJSn8ILWLrlBcNdJ0iCE+fHg=;
-        h=To:Subject:Date:From:Cc:In-Reply-To:References;
-        b=HBxCcCtHYigQMIa+28XmuqqpJnFns+o8aJFMkt0DsO17Oafu8ciamepG/5uLSR3s0
-         FZV9VUzZ2IG2AQTGwM2DUsUVaw4vkvvQfoK46fXFsDlvfT4dh/d29x6AEmStyzqvgr
-         LgI5nfUvntOUGyWtYTcxCdwHnVozqZWNva6mO0VI=
-To:     Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 2/3] usb: typec: tcpm: Add functions to read the VBUS  voltage
-X-PHP-Originating-Script: 1000:rcube.php
+        id S1726521AbfEGMiM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 08:38:12 -0400
+Received: from wp126.webpack.hosteurope.de ([80.237.132.133]:59536 "EHLO
+        wp126.webpack.hosteurope.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726224AbfEGMiM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 08:38:12 -0400
+Received: from [2003:a:659:3f00:21a:4dff:fe85:1148] (helo=hermes.fivetechno.de); authenticated
+        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1hNzMF-0003iM-5U; Tue, 07 May 2019 14:38:07 +0200
+X-Virus-Scanned: by amavisd-new 2.11.1 using newest ClamAV at
+        linuxbbg.five-lan.de
+Received: from [192.168.34.101] (p5098d998.dip0.t-ipconnect.de [80.152.217.152])
+        (authenticated bits=0)
+        by hermes.fivetechno.de (8.15.2/8.14.5/SuSE Linux 0.8) with ESMTPSA id x47Cc523032092
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Tue, 7 May 2019 14:38:05 +0200
+Subject: Re: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+References: <20190503204958.GA12532@kozik-lap>
+ <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
+ <20190506130046.20898-1-m.szyprowski@samsung.com>
+ <39c7b687-449e-5e89-4c70-527d4e779fd9@fivetechno.de>
+ <eefff244-f311-e59e-d914-9a18b5a21620@samsung.com>
+ <26ff3deb-4b8d-7dd2-2418-d56f6dcea313@samsung.com>
+From:   Markus Reichl <m.reichl@fivetechno.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=m.reichl@fivetechno.de; prefer-encrypt=mutual; keydata=
+ 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
+ ZnS2JHg/17+ErCtiUzuJ5EGMPA==
+Organization: five technologies GmbH
+Message-ID: <e5ded84a-a6a2-f998-f6d8-5af7c7b432e2@fivetechno.de>
+Date:   Tue, 7 May 2019 14:38:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 07 May 2019 06:20:32 -0600
-From:   Angus Ainslie <angus@akkea.ca>
-Cc:     angus.ainslie@puri.sm,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck7@gmail.com>
-In-Reply-To: <20190506162049.GA26804@roeck-us.net>
-References: <20190506140830.25376-1-angus@akkea.ca>
- <20190506140830.25376-3-angus@akkea.ca>
- <20190506162049.GA26804@roeck-us.net>
-Message-ID: <0c8b8a38c50f0d80276bd6d2a443fc82@www.akkea.ca>
-X-Sender: angus@akkea.ca
-User-Agent: Roundcube Webmail/1.1.3
+In-Reply-To: <26ff3deb-4b8d-7dd2-2418-d56f6dcea313@samsung.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="jQd3EMdFc47qTRaKrCGVpjLKjKCzoyw4f"
+X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1557232691;5b6394b7;
+X-HE-SMSGID: 1hNzMF-0003iM-5U
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2019-05-06 10:20, Guenter Roeck wrote:
-> On Mon, May 06, 2019 at 08:08:29AM -0600, Angus Ainslie (Purism) wrote:
->> Put some diagnostics in the tcpm log when there's an over
->> or under voltage situation.
->> 
->> Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
-> 
-> Subject is missing 'tcpci'.
-> 
->> ---
->>  drivers/usb/typec/tcpm/tcpci.c | 44 
->> ++++++++++++++++++++++++++++++++++
->>  1 file changed, 44 insertions(+)
->> 
->> diff --git a/drivers/usb/typec/tcpm/tcpci.c 
->> b/drivers/usb/typec/tcpm/tcpci.c
->> index c1f7073a56de..c6e0e48b9a2a 100644
->> --- a/drivers/usb/typec/tcpm/tcpci.c
->> +++ b/drivers/usb/typec/tcpm/tcpci.c
->> @@ -261,6 +261,39 @@ static int tcpci_set_pd_rx(struct tcpc_dev *tcpc, 
->> bool enable)
->>  	return 0;
->>  }
->> 
->> +static int tcpci_get_vbus_voltage(struct tcpc_dev *tcpc)
->> +{
->> +	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
->> +	u16 vbus_reg;
->> +	unsigned int vbus_voltage;
->> +	int ret, scale;
->> +
->> +	ret = tcpci_read16(tcpci, TCPC_VBUS_VOLTAGE, &vbus_reg);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	vbus_voltage = vbus_reg & 0x3f;
->> +	switch ((ret >> 10) & 3) {
-> 
-> Did you test this code ?
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--jQd3EMdFc47qTRaKrCGVpjLKjKCzoyw4f
+Content-Type: multipart/mixed; boundary="qx0FfzwKdsQXFjs26GgsoSMGadaHSWCLD";
+ protected-headers="v1"
+From: Markus Reichl <m.reichl@fivetechno.de>
+To: Marek Szyprowski <m.szyprowski@samsung.com>, linux-usb@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Minas Harutyunyan <hminas@synopsys.com>,
+ Felipe Balbi <felipe.balbi@linux.intel.com>,
+ Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+ Jules Maselbas <jmaselbas@kalray.eu>, Krzysztof Kozlowski <krzk@kernel.org>
+Message-ID: <e5ded84a-a6a2-f998-f6d8-5af7c7b432e2@fivetechno.de>
+Subject: Re: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
+References: <20190503204958.GA12532@kozik-lap>
+ <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
+ <20190506130046.20898-1-m.szyprowski@samsung.com>
+ <39c7b687-449e-5e89-4c70-527d4e779fd9@fivetechno.de>
+ <eefff244-f311-e59e-d914-9a18b5a21620@samsung.com>
+ <26ff3deb-4b8d-7dd2-2418-d56f6dcea313@samsung.com>
+In-Reply-To: <26ff3deb-4b8d-7dd2-2418-d56f6dcea313@samsung.com>
 
-It turned out this wasn't how the device was failing so the code path 
-never got executed. I'll figure out how to get it to run before v2.
+--qx0FfzwKdsQXFjs26GgsoSMGadaHSWCLD
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
->> +	case 0:
->> +		scale = 1;
->> +		break;
->> +	case 1:
->> +		scale = 2;
->> +		break;
->> +	case 2:
->> +		scale = 4;
->> +		break;
->> +	case 3:
->> +		tcpm_log(tcpci->port, "invalid VBUS scale");
->> +		return -1;
-> 
-> Any special reason for not using standard error codes ?
-> The code above does, meaning this is a hardcodesd -EPERM, which doesn't
-> really make any sense.
-> 
+Hi Marek,
 
-Ok I'll find a better return value.
+Am 07.05.19 um 14:03 schrieb Marek Szyprowski:
+> Hi All,
+>=20
+> On 2019-05-07 11:17, Marek Szyprowski wrote:
+>> Hi Markus,
+>>
+>> On 2019-05-07 10:12, Markus Reichl wrote:
+>>> Hi Marek,
+>>>
+>>> your patch did not help on stable v5.1
+>>>
+>>> [=C2=A0=C2=A0=C2=A0 3.255963] samsung-usb2-phy 125b0000.exynos-usbphy=
+:=20
+>>> 125b0000.exynos-usbphy supply vbus not found, using dummy regulator
+>>> [=C2=A0=C2=A0=C2=A0 4.044547] usbcore: registered new interface drive=
+r smsc95xx
+>>> [=C2=A0=C2=A0=C2=A0 4.112261] usb usb1: New USB device found, idVendo=
+r=3D1d6b,=20
+>>> idProduct=3D0002, bcdDevice=3D 5.01
+>>> [=C2=A0=C2=A0=C2=A0 4.120363] usb usb1: New USB device strings: Mfr=3D=
+3, Product=3D2,=20
+>>> SerialNumber=3D1
+>>> [=C2=A0=C2=A0=C2=A0 4.127560] usb usb1: Product: EHCI Host Controller=
 
->> +	}
->> +
->> +	if (scale != 1)
->> +		vbus_voltage *= scale;
-> 
-> I don't immediately see why this is better than, say,
-> 
-> 	scale = (vbus_reg >> 10) & 3;
-> 	if (scale == 3)
-> 		return -Esomething;	// -EPROTO, maybe
-> 	return vbus_voltage << scale;
-> 
+>>> [=C2=A0=C2=A0=C2=A0 4.132415] usb usb1: Manufacturer: Linux=20
+>>> 5.1.0-00005-geb4efae48eb5 ehci_hcd
+>>> [=C2=A0=C2=A0=C2=A0 4.139446] usb usb1: SerialNumber: 12580000.ehci
+>>> [=C2=A0=C2=A0=C2=A0 4.183056] usb3503 0-0008: switched to HUB mode
+>>> [=C2=A0=C2=A0=C2=A0 4.183121] usb3503 0-0008: usb3503_probe: probed i=
+n hub mode
+>>> [=C2=A0=C2=A0=C2=A0 4.488344] usb 1-2: new high-speed USB device numb=
+er 2 using=20
+>>> exynos-ehci
+>>> [=C2=A0=C2=A0=C2=A0 4.675605] usb 1-2: New USB device found, idVendor=
+=3D0424,=20
+>>> idProduct=3D3503, bcdDevice=3Da1.a0
+>>> [=C2=A0=C2=A0=C2=A0 4.678166] usb 1-2: New USB device strings: Mfr=3D=
+0, Product=3D0,=20
+>>> SerialNumber=3D0
+>>> [=C2=A0=C2=A0=C2=A0 4.686140] usb 1-2: skipping disabled interface 0
+>>>
+>>> root@odroid-x2:~# lsusb
+>>> Bus 001 Device 002: ID 0424:3503 Standard Microsystems Corp.
+>>> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+>>
+>> This patch fixes the issue introduced by "usb: dwc2: gadget: Replace=20
+>> phyif with phy_utmi_width" commit, which is queued only to linux-next =
 
-That looks more concise than what I can up with.
+>> so far. Stable v5.1 doesn't include it, so the fix doesn't change=20
+>> anything on v5.1.
+>>
+>> I've checked and OdroidU3 works fine with v5.1 release, but X2 fails=20
+>> to detect USB devices. I will investigate this in a few minutes...
+>=20
+>=20
+> Broken USB on X2 is caused by commit=20
+> 01fdf179f4b064d4c9d30b39aba178caf32649f4 ("usb: core: skip interfaces=20
+> disabled in devicetree").
+>=20
+> I looks that the mentioned commit conflicts with the Exynos EHCI and=20
+> OHCI bindings and the way the PHY ports are defined for those drivers. =
 
->> +
->> +	return vbus_voltage;
->> +}
->> +
->>  static int tcpci_get_vbus(struct tcpc_dev *tcpc)
->>  {
->>  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
->> @@ -463,6 +496,17 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->>  	else if (status & TCPC_ALERT_TX_FAILED)
->>  		tcpm_pd_transmit_complete(tcpci->port, TCPC_TX_FAILED);
->> 
->> +	if (status & (TCPC_ALERT_V_ALARM_LO | TCPC_ALERT_V_ALARM_HI)) {
->> +		int ret;
->> +
->> +		ret = tcpci_get_vbus_voltage(&tcpci->tcpc);
->> +
-> Unnecessary empty line.
-> 
->> +		if (IS_ERR(ret))
->> +			tcpm_log(tcpci->port, "Can't read VBUS voltage");
-> 
-> VBUS_VOLTAGE is an optional register. This is not an error. Besides, 
-> the
-> message doesn't match the event and is useless.
-> 
->> +		else
->> +			tcpm_log(tcpci->port, "Invalid VBUS voltage %d", ret);
-> 
-> Displaying a raw number without context is not very useful.
-> 'ret' is the voltage in multiples of 25mV. Besides, the error is that a 
-> low
-> or high voltage was detected. That doesn't mean the voltage is still 
-> invalid.
-> The error message should reflect that situation. Something like
-> 
-> 		"VBUS {low, high} detected, VBUS=x.yy V"
-> 
-> would be much more useful (with VBUS=x.yy being optional).
-> 
-> Also, please no tcpm log. The tcpci driver needs to implement
-> its own logging if that is desired.
-> 
+> It worked on U3 only by the pure coincidence. This is probably a=20
+> "minimal" fix for this issue:
 
-Ok I'll clear up the logging.
+Thanks Marek, below fix enables USB on Odroid-X2 with stable v5.1.
 
->> +	}
->> +
->>  	return IRQ_HANDLED;
->>  }
->>  EXPORT_SYMBOL_GPL(tcpci_irq);
->> --
->> 2.17.1
->> 
+>=20
+> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+> index 82239f27c4cc..cd455c4add25 100644
+> --- a/drivers/usb/core/message.c
+> +++ b/drivers/usb/core/message.c
+> @@ -2007,6 +2007,7 @@ int usb_set_configuration(struct usb_device *dev,=
+=20
+> int configuration)
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 struct usb_interface *intf =3D cp->interface[i];
+>=20
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 if (intf->dev.of_node &&
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of_device_is_compatible(intf->dev.of=
+_node, NULL) &&
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !of_device_is_available(intf->=
+dev.of_node)) {
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_in=
+fo(&dev->dev, "skipping disabled=20
+> interface %d\n",
+> intf->cur_altsetting->desc.bInterfaceNumber);
+>=20
+> I will try to describe the problem in details and discuss it on the usb=
+=20
+> mailing list.
+>=20
+> Best regards
+>=20
 
+Gru=C3=9F,
+--=20
+Markus Reichl
+
+
+--qx0FfzwKdsQXFjs26GgsoSMGadaHSWCLD--
+
+--jQd3EMdFc47qTRaKrCGVpjLKjKCzoyw4f
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCAAdFiEEVKeIeBh0ZWJOldzLOiXeDmsa/bIFAlzRfCoACgkQOiXeDmsa
+/bK2LwwAx+0GgxHLGk0tMs5zq91YuX1lPr7gH0Kgha1DXAV70khVvjJ6o+gPsEDS
+aEr28vKc+nOnWGRi3ihgcc6s8hbFsbQUkg3PG2jGc1T0h/WVwgDdFT3dhi/J6D8R
+L1dnqsg1YFBJGaZgx81q4InyMOds5alMG4A9ibbEyOJuWc8aqx/VwjsNsPZ16sfP
+sh3MMYOxo736aEU6gBFl0mjybEpNrDI4w3I8EAXneky1nF5lK5KGpL9Zg1BFQuKb
+2NZlsLD7xmdsQ/J6+B62wBWLOw1oN0A1q2VAGNCxF7sata8QC2+NxCdNbIaaJtz1
+WYTclML+ltdbx2gGgW0HAxIl6EpRABSO3NXDKlo2RVQhfCgsjZBEXmqfJl2BrZpO
+9qlC74Q+9IEdF2UhFQg9Goo42WY238G0or1K1+O3bzcqLp9RT7q+sXx8NxhrcAGy
+gIw++POPpDq29xawqeJ8wnTZK2DkjO8DjbUVx20S6qSNs9g8N96NU5SUJ2ySu8+3
+5+7YIoQW
+=jBwf
+-----END PGP SIGNATURE-----
+
+--jQd3EMdFc47qTRaKrCGVpjLKjKCzoyw4f--
