@@ -2,110 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F53165A2
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 16:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2205B165A7
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 16:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbfEGO2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 10:28:30 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:33061 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbfEGO2a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 10:28:30 -0400
-Received: by mail-lj1-f196.google.com with SMTP id f23so14560982ljc.0
-        for <linux-usb@vger.kernel.org>; Tue, 07 May 2019 07:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=EedFfExEAPHM+PZr6GR11mpG+D5zRor5kGwA4BVlfyY=;
-        b=uf+CmDK2YI6m644TB+xuy6UsPlkwrb+ZxcN4czm3KYEALhBCKTcLpg9aF3iTBitvvo
-         KjNtWx3/I5gEVcMv0rgFmiB7FYtFV0UpoNntXVYY21xu+U7JHLFc2VuoYnrAtbnW2J+g
-         rdpY4n1XVGQ2nZX4SDrXpOLbYDEabk13f5+kCLQw9IXPmHCApwZ7X905CrNJAEnsmbRt
-         V+y60q9tlTxyr/yrTE0Ozjiqf8myMTEbQ/jehp4tMlkUu8M7qRRIp4RiDOFuOoN/3Dek
-         anD0kRP2TMU2L4pW4z4noSxNErlaZxVevHpjiWtNfqVN0GJzKk+alg8SCLhUZLVIDWXM
-         wzHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=EedFfExEAPHM+PZr6GR11mpG+D5zRor5kGwA4BVlfyY=;
-        b=luFm9ACT+6+8hA+5TeTP8i7pLzIdcvARbZflIb4HvKBFPVTOaczeO49UaGW4roZWG0
-         ITh5GTSmzI3EE+FDtM7Ejc7igZFVMbfSx2IrXnTy4hDihbI0wDB0s++LheuMQiwljsHb
-         RBKyjEgMlrgmf9b3/avtfRAUfwqzPxXLEuHGy/Cu9lA4UZiQIke0yzyOJ8WRDWT6Tfx/
-         OqGPLxqQ4JDqpOzOzwhve98JYW4be3hbxhkgUbH4AFZTzirbMCIHtbBr//A/CLG+/S1d
-         DgcwH+i7Agcif7+lcGlxkGi5xymhTHPILhmfmQa+zGttwqyySTHV7VsuE5iHSM5tAtEA
-         D7Sg==
-X-Gm-Message-State: APjAAAWZZicpKZOYdBLHEfCUJc72z4ejP4QaszcYC0OuZAehi4hbD24b
-        /rYub4/DTDGQPUMs3Z+mGw1dpc2QbTA=
-X-Google-Smtp-Source: APXvYqw0mASzMSi5rdO7Sb18cOgjD5LYFYcr/D6t9bnbMaeljY+qkhroQl+x8E1AOmi4OEMvYCIjsg==
-X-Received: by 2002:a2e:8347:: with SMTP id l7mr17756852ljh.17.1557239307989;
-        Tue, 07 May 2019 07:28:27 -0700 (PDT)
-Received: from wasted.cogentembedded.com ([31.173.83.143])
-        by smtp.gmail.com with ESMTPSA id j24sm3154312lfh.28.2019.05.07.07.28.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 07:28:26 -0700 (PDT)
-Subject: Re: [PATCH 03/10] phy: renesas: rcar-gen3-usb2: Check dr_mode when
- not using OTG
-To:     Chris Brandt <Chris.Brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simon Horman <horms@verge.net.au>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-References: <20190506234631.113226-1-chris.brandt@renesas.com>
- <20190506234631.113226-4-chris.brandt@renesas.com>
- <17bcc673-5fed-ce4f-3d61-af34bfa5d769@cogentembedded.com>
- <TY1PR01MB1562550164C7977D28C90F128A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <34544f59-76aa-710a-a6ec-7d7d7f31a023@cogentembedded.com>
-Date:   Tue, 7 May 2019 17:28:25 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        id S1726674AbfEGO3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 10:29:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37494 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726583AbfEGO3E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 May 2019 10:29:04 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D04912087F;
+        Tue,  7 May 2019 14:29:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557239344;
+        bh=vyN83eUQuZ49QPjApP1odWAbjm/bP3buAMjXwh3dTJs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=piiFL/o1lSEfne1qkRIeoTjU6hKxwb1iX+v0Da9b9X+B6vQzkbNbbFpJWHimdwi37
+         nJZDYKeRp/X447OXTSFlZdtXLS8WhNVgz3Wrey+uky4F+Xt6bluTejNyMTToToKEoF
+         ogHiXKZfCJmn2ZZKsxm2EcGDnaJm6WJMpt4yrnBA=
+Date:   Tue, 7 May 2019 16:29:02 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nikolai Kondrashov <spbnick@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: merge usbhid-dump into usbutils repo?
+Message-ID: <20190507142902.GA29491@kroah.com>
+References: <20190507140042.GA26528@kroah.com>
+ <8f35c8e9-9ee0-a883-30e4-8b532316137d@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <TY1PR01MB1562550164C7977D28C90F128A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f35c8e9-9ee0-a883-30e4-8b532316137d@gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 05/07/2019 02:45 PM, Chris Brandt wrote:
-
->>> --- a/drivers/phy/renesas/phy-rcar-gen3-usb2.c
->>> +++ b/drivers/phy/renesas/phy-rcar-gen3-usb2.c
->>> @@ -408,7 +408,12 @@ static int rcar_gen3_phy_usb2_init(struct phy *p)
->>>  		if (rcar_gen3_needs_init_otg(channel))
->>>  			rcar_gen3_init_otg(channel);
->>>  		rphy->otg_initialized = true;
->>> -	}
->>> +	} else
->>
->>    Wait, don't we neeed {} here?
->>
->>> +		/* Not OTG, so dr_mode should be set in PHY node */
->>> +		if (usb_get_dr_mode(channel->dev) == USB_DR_MODE_PERIPHERAL)
->>> +			writel(0x80000000, usb2_base + USB2_COMMCTRL);
->>> +		else
->>> +			writel(0x00000000, usb2_base + USB2_COMMCTRL);
+On Tue, May 07, 2019 at 05:23:05PM +0300, Nikolai Kondrashov wrote:
+> Hi Greg,
 > 
-> Technically there is only 1 statement after the else (the 'if' which 
-> will also include the 'else') statement. The coding rules say not to use
-> { } if there is only 1 statement.
+> On 5/7/19 5:00 PM, Greg KH wrote:
+> > So, what do you think about the two options here?
+> 
+> I would absolutely be glad if you could take usbhid-dump under your wing!
+> 
+> I have little time for the DIGImend project these days, for which it was
+> developed. I have a bit of financing from Patreon and occasional tablet
+> manufacturer to work on the drivers, but that leaves very little time for the
+> tools.
+> 
+> I wouldn't mind submitting any patches required to usbutils repo instead.
+> And it's true the thing haven't needed much updates recently.
+> Please also feel free to adjust it to your tastes too.
+> 
+> Thanks for looking after it!
 
-   Don't you remember another rule: use {} in all branches if at least 
-one branch uses {}?
+Wonderful, so for now, I'll push what I have done with the merging of
+the two repos together and make a public 012 release of usbutils, to fix
+the issues the distros have already pointed out with usbhid-dump being
+gone.
 
-> Chris
+And then we can go from there forward, thanks for the quick response!
 
-MBR, Sergei
+> P.S. It's awesome to see you receive Red Hat's Kernel CI effort so
+> positively. Everyone's cheering for your feedback every time here :)
 
+Hey, people testing my stable queue in a very-fast manner, why wouldn't
+I like it?  :)
 
+thanks,
+
+greg k-h
