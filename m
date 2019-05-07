@@ -2,97 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D3916082
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 11:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CBE16096
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 11:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727196AbfEGJRV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 05:17:21 -0400
-Received: from mail-eopbgr1410109.outbound.protection.outlook.com ([40.107.141.109]:20625
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726824AbfEGJRV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 May 2019 05:17:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4qTrQJ/Q34mEUbcNc2+6OxdWHpu9YjWZHxyTd27UTMY=;
- b=Jx83/KmVKv4n7QMmxusBr4hRZIZ9W5eg+SSK/A4vzKWTo2u2lXZVKfed1XsLd+olEb8wpo3sdqttLwHNSm9cHrTuEmRgB6EVczdEFxzmtkKcCMSduv+xjCvT1Afu3vB8YjNOJK2fq4HZBWucIUF/YdqnX1LxycFJ3rXv2gJiK8k=
-Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com (20.176.240.146) by
- OSBPR01MB3174.jpnprd01.prod.outlook.com (20.176.240.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.11; Tue, 7 May 2019 09:17:17 +0000
-Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com
- ([fe80::4d29:3383:d67d:d562]) by OSBPR01MB3174.jpnprd01.prod.outlook.com
- ([fe80::4d29:3383:d67d:d562%3]) with mapi id 15.20.1856.012; Tue, 7 May 2019
- 09:17:17 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Chris Brandt <Chris.Brandt@renesas.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Chris Brandt <Chris.Brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simon Horman <horms@verge.net.au>
-Subject: RE: [PATCH 00/10] usb: Add host and device support for RZ/A2
-Thread-Topic: [PATCH 00/10] usb: Add host and device support for RZ/A2
-Thread-Index: AQHVBGYHqBe7JTZ/4k2vKamrKGugU6ZfYQSw
-Date:   Tue, 7 May 2019 09:17:16 +0000
-Message-ID: <OSBPR01MB317442B092744C8D312682DCD8310@OSBPR01MB3174.jpnprd01.prod.outlook.com>
-References: <20190506234631.113226-1-chris.brandt@renesas.com>
-In-Reply-To: <20190506234631.113226-1-chris.brandt@renesas.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c51c267f-b69d-4c08-2bb0-08d6d2cccd4c
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB3174;
-x-ms-traffictypediagnostic: OSBPR01MB3174:
-x-microsoft-antispam-prvs: <OSBPR01MB3174E3D2D70EFCF0D2D88299D8310@OSBPR01MB3174.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-forefront-prvs: 0030839EEE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(136003)(39860400002)(346002)(396003)(366004)(199004)(189003)(76116006)(6436002)(4326008)(6636002)(305945005)(9686003)(25786009)(64756008)(66446008)(73956011)(229853002)(66556008)(66476007)(66946007)(11346002)(476003)(7736002)(4744005)(446003)(86362001)(6116002)(52536014)(74316002)(3846002)(316002)(54906003)(71200400001)(71190400001)(486006)(6862004)(6506007)(99286004)(66066001)(68736007)(102836004)(53936002)(76176011)(7696005)(55016002)(478600001)(81166006)(81156014)(8676002)(14454004)(8936002)(14444005)(26005)(186003)(6246003)(33656002)(256004)(2906002)(5660300002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB3174;H:OSBPR01MB3174.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: qDl3W9fa35g7ubNRHL7NJ8Cv/MRtDTXBNRWjMexuPLXSVvi3/WSa+MJRDwNiudQ/CbouxAm+RuApf7u0i22/fB2WQhX4XVM5irvVaqbFU7DrVP1dGF/fMUB08srx/6OV/o8XQvCyeFCY+1z7r6MiN2bSRUUhsNyTfakCrumu9AKGN4TK2fAUNIUzZ4RvhF8t03xwUQPzABKA4pqvFqzet6fnjx3UYcU72xo0FWXZfFk50bA0B0YxRFWTCyrPd1cPNOqqa5X5OzCa9ffGoqXBjbQGh67sRCnSaCSCGqgN8t74dH1XtF7QLeDV9cnh//zT+OW4j5DlGhOjQSzY+Cyu+0n1+a5zmlxuhP54z0GKLCMbUyzdcQ/9hGKVVD6EsoztT4gqDSgu9TzFihRhSlHwCZ8aXewrjicUy1onEvT3R4o=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727198AbfEGJRi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 05:17:38 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:49041 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726657AbfEGJRh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 05:17:37 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190507091735euoutp025cbbef7e703b71fe7e16c567f48eb451~cW__LI2e-3186131861euoutp02y
+        for <linux-usb@vger.kernel.org>; Tue,  7 May 2019 09:17:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190507091735euoutp025cbbef7e703b71fe7e16c567f48eb451~cW__LI2e-3186131861euoutp02y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1557220655;
+        bh=eC9RKKUhFBEdPO3sH6QeAj7KbWtJ/CGboccWZibZgX8=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=vd+mQzVNEUXzScrjvvZm4pnl6yphua3RRpQ0rNUFT5DZQhQSVmjA/ma6U1JG1TBHV
+         94BM9r+ojyoIPuKNYgFI78X8Nxyf6eSj7h7nc2N1GbyLck4DcHaxNp1q34t8OMpemg
+         c3rW9PM94c9oe75axl6/lmmoEu8JLFH2gxA86LXA=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190507091734eucas1p22e5ac264e405a085172e7e99cf7e69e3~cW_9YScXm1524515245eucas1p2S;
+        Tue,  7 May 2019 09:17:34 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 0D.82.04325.E2D41DC5; Tue,  7
+        May 2019 10:17:34 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190507091733eucas1p22eb2b950569e82bc947d628292c2e0e4~cW_8ZVmns1522515225eucas1p2P;
+        Tue,  7 May 2019 09:17:33 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190507091733eusmtrp274614b2df408d26303169fd1a9db22a3~cW_8LTpdq1581815818eusmtrp2d;
+        Tue,  7 May 2019 09:17:33 +0000 (GMT)
+X-AuditID: cbfec7f5-b8fff700000010e5-c2-5cd14d2e2169
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id E0.39.04146.D2D41DC5; Tue,  7
+        May 2019 10:17:33 +0100 (BST)
+Received: from [106.120.50.25] (unknown [106.120.50.25]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190507091732eusmtip177e46be4523d9745c5be7c7caeb63838~cW_7wRE993014030140eusmtip1j;
+        Tue,  7 May 2019 09:17:32 +0000 (GMT)
+Subject: Re: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos
+ SoCs
+To:     Markus Reichl <m.reichl@fivetechno.de>, linux-usb@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <eefff244-f311-e59e-d914-9a18b5a21620@samsung.com>
+Date:   Tue, 7 May 2019 11:17:31 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+        Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c51c267f-b69d-4c08-2bb0-08d6d2cccd4c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2019 09:17:17.4343
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3174
+In-Reply-To: <39c7b687-449e-5e89-4c70-527d4e779fd9@fivetechno.de>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDKsWRmVeSWpSXmKPExsWy7djP87p6vhdjDKa8ErfYOGM9q8X8m0kW
+        jb/2slvMmnGa1eL8+Q3sFpd3zWGzmHF+H5PFomWtzBYvj/xgdOD0uHWn3uP0+puMHptWdbJ5
+        zDsZ6NG3ZRWjx5b9nxk9Pm+SC2CP4rJJSc3JLEst0rdL4MroWPOSreAsb8X1w5NZGhi/c3Ux
+        cnJICJhIHNqyiaWLkYtDSGAFo8Sn9r3sEM4XRolpi+4yglQJCXxmlNgz3Ram4/apFqii5YwS
+        l7v/M0M4bxkl3nx4ywRSJSzgL3Fsxw6whIhAB6PExvc7wJYwCzxklPja18QCUsUmYCjR9baL
+        DcTmFbCTWP8RZC4nB4uAisSF6Y+Bujk4RAViJBZ9hioRlDg58wlYK6eAo8Tdp39YQWxmAXmJ
+        7W/nMEPY4hK3nsxnAtklIXCJXWLiqSWsIHMkBFwkPn7MgnhBWOLV8S3sELaMxP+dMPXNjBIP
+        z61lh3B6gH5rmsEIUWUtcfj4RbBBzAKaEut36UOEHSWWLexlhJjPJ3HjrSDEDXwSk7ZNZ4YI
+        80p0tAlBVKtJzDq+Dm7twQuXmCcwKs1C8tksJN/MQvLNLIS9CxhZVjGKp5YW56anFhvnpZbr
+        FSfmFpfmpesl5+duYgSmqdP/jn/dwbjvT9IhRgEORiUe3glOF2KEWBPLiitzDzFKcDArifAm
+        PjsXI8SbklhZlVqUH19UmpNafIhRmoNFSZy3muFBtJBAemJJanZqakFqEUyWiYNTqoHxXJ2S
+        u4ZldcukzvpFp95+vZTVdqnC9tlC8242pQlXGyTFum/2dddzLuvsTN18f5PYHKcr2/dvEvAL
+        P69V88hyy9O3j+bU+vRU7fx/SyfkmMqGE686ucuv3LrXp3KjSC9IuCPu3U2R4PeH2l32sK58
+        qpjPmJSoo/LOcn6X6fHPQWU3J69M/z5NiaU4I9FQi7moOBEASH/kU08DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIIsWRmVeSWpSXmKPExsVy+t/xu7q6vhdjDE6/FrfYOGM9q8X8m0kW
+        jb/2slvMmnGa1eL8+Q3sFpd3zWGzmHF+H5PFomWtzBYvj/xgdOD0uHWn3uP0+puMHptWdbJ5
+        zDsZ6NG3ZRWjx5b9nxk9Pm+SC2CP0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7Uy
+        MlXSt7NJSc3JLEst0rdL0MvoWPOSreAsb8X1w5NZGhi/c3UxcnJICJhI3D7Vwt7FyMUhJLCU
+        UeLlvklsEAkZiZPTGlghbGGJP9e62CCKXjNKnH7/gAUkISzgK7G85z0LSEJEoINR4syao8wg
+        DrPAQ0aJC00/oOa+ZZRomryEHaSFTcBQouttF9gOXgE7ifUfW8DiLAIqEhemP2YGsUUFYiRO
+        TN3CDlEjKHFy5hOwdZwCjhJ3n/4Bu4lZwExi3uaHzBC2vMT2t3OgbHGJW0/mM01gFJqFpH0W
+        kpZZSFpmIWlZwMiyilEktbQ4Nz232FCvODG3uDQvXS85P3cTIzA6tx37uXkH46WNwYcYBTgY
+        lXh4H9heiBFiTSwrrsw9xCjBwawkwpv47FyMEG9KYmVValF+fFFpTmrxIUZToOcmMkuJJucD
+        E0deSbyhqaG5haWhubG5sZmFkjhvh8DBGCGB9MSS1OzU1ILUIpg+Jg5OqQZGledn5KOljm0r
+        860S3nvs0ZO1U3nqpRf/iP42dfKRqad4JD7PWW6uPCF7klGzqM3lpy3++rc2775sYPeSt0j+
+        4b5VHT3vLhz9fWjaRpHbb1/2M/X8eiq9q4KtW1ClZFbL4/jvDi8clu7v2ia978lSkxm+oitX
+        n52qnToz9JfQz0txk1+db3nj/UKJpTgj0VCLuag4EQBk1dOw5AIAAA==
+X-CMS-MailID: 20190507091733eucas1p22eb2b950569e82bc947d628292c2e0e4
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea
+References: <20190503204958.GA12532@kozik-lap>
+        <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
+        <20190506130046.20898-1-m.szyprowski@samsung.com>
+        <39c7b687-449e-5e89-4c70-527d4e779fd9@fivetechno.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chris-san,
+Hi Markus,
 
-> From: Chris Brandt, Sent: Tuesday, May 7, 2019 8:46 AM
->=20
-> For the most part, the RZ/A2 has the same USB 2.0 host and device
-> HW as the R-Car Gen3, so we can reuse a lot of the code.
->=20
-> However, there are a couple extra register bits, and the CFIFO
-> register 8-bit access works a little different (weird, no idea why).
+On 2019-05-07 10:12, Markus Reichl wrote:
+> Hi Marek,
+>
+> your patch did not help on stable v5.1
+>
+> [    3.255963] samsung-usb2-phy 125b0000.exynos-usbphy: 125b0000.exynos-usbphy supply vbus not found, using dummy regulator
+> [    4.044547] usbcore: registered new interface driver smsc95xx
+> [    4.112261] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 5.01
+> [    4.120363] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+> [    4.127560] usb usb1: Product: EHCI Host Controller
+> [    4.132415] usb usb1: Manufacturer: Linux 5.1.0-00005-geb4efae48eb5 ehci_hcd
+> [    4.139446] usb usb1: SerialNumber: 12580000.ehci
+> [    4.183056] usb3503 0-0008: switched to HUB mode
+> [    4.183121] usb3503 0-0008: usb3503_probe: probed in hub mode
+> [    4.488344] usb 1-2: new high-speed USB device number 2 using exynos-ehci
+> [    4.675605] usb 1-2: New USB device found, idVendor=0424, idProduct=3503, bcdDevice=a1.a0
+> [    4.678166] usb 1-2: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> [    4.686140] usb 1-2: skipping disabled interface 0
+>
+> root@odroid-x2:~# lsusb
+> Bus 001 Device 002: ID 0424:3503 Standard Microsystems Corp.
+> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
-This is just my gut feeling, but if we set the BIGEND bit in the CFIFOSEL
-of RZ/A2M (R-Car Gen3 doesn't have such a bit though), could the original
-code work correctly?
+This patch fixes the issue introduced by "usb: dwc2: gadget: Replace 
+phyif with phy_utmi_width" commit, which is queued only to linux-next so 
+far. Stable v5.1 doesn't include it, so the fix doesn't change anything 
+on v5.1.
 
-Best regards,
-Yoshihiro Shimoda
+I've checked and OdroidU3 works fine with v5.1 release, but X2 fails to 
+detect USB devices. I will investigate this in a few minutes...
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
