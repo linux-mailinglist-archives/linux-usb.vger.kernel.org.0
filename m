@@ -2,82 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EE915EAE
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 09:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760CD15EC2
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 10:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbfEGH6F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 03:58:05 -0400
-Received: from mga02.intel.com ([134.134.136.20]:8399 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726085AbfEGH6F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 May 2019 03:58:05 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 May 2019 00:58:04 -0700
-X-ExtLoop1: 1
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 May 2019 00:57:59 -0700
-Subject: Re: [PATCH v4 1/1] usb: xhci: Add Clear_TT_Buffer
-To:     Alan Stern <stern@rowland.harvard.edu>, Jim Lin <jilin@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        hminas@synopsys.com, kai.heng.feng@canonical.com,
-        drinkcat@chromium.org, prime.zeng@hisilicon.com, malat@debian.org,
-        nsaenzjulienne@suse.de, jflat@chromium.org,
-        linus.walleij@linaro.org, clabbe@baylibre.com,
-        colin.king@canonical.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <Pine.LNX.4.44L0.1905061053550.1585-100000@iolanthe.rowland.org>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <9ea9fd3e-cf1a-9015-6d21-377c2fd41e66@linux.intel.com>
-Date:   Tue, 7 May 2019 11:00:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1726723AbfEGICI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 04:02:08 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:45082 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726085AbfEGICI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 04:02:08 -0400
+Received: by mail-vs1-f67.google.com with SMTP id o10so9787885vsp.12;
+        Tue, 07 May 2019 01:02:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=43ZU946SQ92CMpYex7l7cURwZU0nmkJIjZBNyh5A/iw=;
+        b=poUcP7Cs/qYiyG+4VynBvqvOmEoulaXsmyO6YKiBK82cj0aq3EyV/cZk5v/LDPfaJl
+         lRJoxbzvHOEiZZyRIbM1WsyKvxuVAdvxFSByfIHyVUWHjgHwqhqGg+LLbF4QndR1qwqH
+         u9OQVVuTPEH/FJI8nmJR/TuGRQTymAi27T25wghuMupC6FTVH2DrL947W5qvBqe7vWFd
+         5vIN3xj/T7s+Uk/auUB3da2eu0tp1w1uJIpjwX8HuwPqm5yNKDYdL9iGy/1n6VZ6J9Pz
+         kyRcEhlTbTCZ6cwq+FGw6Rr9C/GfzV1f89g/zJDftAmlHy/Ng3j5r9nLpMGW+s9yVELs
+         L1Cw==
+X-Gm-Message-State: APjAAAVv36286GwomNaVvCL0Yjv7THl7RfV5LQgZv4vXP3eKuDrgYj4n
+        nMAZa53preTbcWLP1ioBgbSU0IBieVNF3wI7l38=
+X-Google-Smtp-Source: APXvYqxyWwXpdASz9ehwyctNLAOr+5D/eECRWmWTQy1RWxuuNHMHLAK/raEq/fOx3i/5SMseULHQa4EzlJV+FzNHVP8=
+X-Received: by 2002:a67:e2ca:: with SMTP id i10mr8188079vsm.96.1557216127141;
+ Tue, 07 May 2019 01:02:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.1905061053550.1585-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190506234631.113226-1-chris.brandt@renesas.com> <20190506234631.113226-2-chris.brandt@renesas.com>
+In-Reply-To: <20190506234631.113226-2-chris.brandt@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 May 2019 10:01:55 +0200
+Message-ID: <CAMuHMdV3yW44Y1D2Vn1mNJK8pNF3db20An9Sde8=18r8y7m9LQ@mail.gmail.com>
+Subject: Re: [PATCH 01/10] phy: renesas: rcar-gen3-usb2: Add uses_usb_x1 option
+To:     Chris Brandt <chris.brandt@renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6.5.2019 17.57, Alan Stern wrote:
-> On Mon, 6 May 2019, Jim Lin wrote:
-> 
->> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
->> processing for full-/low-speed endpoints connected via a TT, the host
->> software must use the Clear_TT_Buffer request to the TT to ensure
->> that the buffer is not in the busy state".
->>
->> In our case, a full-speed speaker (ConferenceCam) is behind a high-
->> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
->> request we may continue to get STALL with the folllowing requests,
->> like Set_Interface.
->>
->> Here we add Clear_TT_Buffer for the following Set_Interface requests
->> to get ACK successfully.
->>
->> Originally usb_hub_clear_tt_buffer uses urb->dev->devnum as device
->> address while sending Clear_TT_Buffer command, but this doesn't work
->> for XHCI.
-> 
-> Why doesn't it work for xHCI?  Clear-TT-Buffer is part of the USB 2.0
-> spec; it should work exactly the same for xHCI as for a USB-2.0 host
-> controller.
-> 
-> Alan Stern
-> 
+Hi Chris,
 
-For other host controllers udev->devnum is the same as the address of the
-usb device, chosen and set by usb core.
+On Tue, May 7, 2019 at 1:47 AM Chris Brandt <chris.brandt@renesas.com> wrote:
+> The RZ/A2 has optional dedicated 48MHz crystal inputs, which adds a new
+> register setting when used.
+>
+> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
 
-With xHC the controller hardware assigns the address, and won't be the same as
-devnum.
+Thanks for your patch!
 
-The Clear-TT-Buffer request sent to the hub includes the address of the LS/FS
-child device in wValue field. usb_hub_clear_tt_buffer() uses udev->devnum to set the
-address wValue. This won't work for devices connected to xHC
-    
--Mathias
+> --- a/drivers/phy/renesas/phy-rcar-gen3-usb2.c
+> +++ b/drivers/phy/renesas/phy-rcar-gen3-usb2.c
+
+> @@ -630,6 +635,9 @@ static int rcar_gen3_phy_usb2_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> +       if (of_property_read_bool(dev->of_node, "renesas,uses_usb_x1"))
+> +               channel->uses_usb_x1 = true;
+> +
+
+Perhaps this can be checked some other way (e.g. by checking for a non-zero
+clock rate of the USB_X1 clock referenced from DT), thus removing the need for
+adding a custom property?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
