@@ -2,144 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C197B15F6F
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 10:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E443515F80
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 10:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbfEGIed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 04:34:33 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45502 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726291AbfEGIed (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 04:34:33 -0400
-Received: by mail-lj1-f194.google.com with SMTP id r76so2443825lja.12;
-        Tue, 07 May 2019 01:34:31 -0700 (PDT)
+        id S1727136AbfEGIiB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 04:38:01 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:45600 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726517AbfEGIiB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 04:38:01 -0400
+Received: by mail-lf1-f66.google.com with SMTP id n22so3644034lfe.12
+        for <linux-usb@vger.kernel.org>; Tue, 07 May 2019 01:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=H56LWvRoJenj3gjF/AqdoHfS2q4UJwGAV40zvmjB1F8=;
+        b=WSNc9E++2ZiSjXAwx0aZUTX1qfObMgJ5OvXyTboldnayvobrppJPm2DoAuOCJSoVxP
+         lp6fi37TUkNRefBszMSbd+q5cxChgY8axLrLpYqv/UNNNfWqW1rcc5pTQwS3grcac4C/
+         7I3w6IC9C4LVzgrgcNdbntSiGg6N7CxqhH8btge6Dh0v8krPz9HUywLJ433+dFPhUDBN
+         ODlTR+K6Wrdoj+Oy5t4hL0NqRtADW6vdSHfANl3fGXNd9ux+tS1gR/AMfZSITiJ9TpIb
+         70O8xMkZi/VrnlHVzWOwIlTeaCvlIkgSUfSZ/d0aPDlt8Y4P9bmfn9wbT0RXBBJH1RVU
+         isbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JVwysLC6toX2nyIeQoEP1UKJSN5udlnWwblQh6x6pT0=;
-        b=blBmAm0OpW0B8WbcjIwqSDGTJPb31Qdt4XuH8z7CduanKt2BUn5kSaigkD4c9Kg312
-         sH/xHeR3T3xUDXfDGoVeCLuN4enVw8dKX2D1leq5Xq9s64a0xrV5VJDQc01gliPUKkrH
-         tF+b2nywJHI2r9DN7047vIv8qS/4cKYJwL+5d9pYgejRuI2sYrpp9ict5Y+ZFGVW6b8+
-         9O+YTyDVSZFNBroSM1hdWwaEOwhSXkqTbBREpJuI6yPt+u/MxrJ8oQFG04P+2kjSyLkD
-         Q22BbCU6WpN2qH0jkccnr7RZYyUNwKnsHa2Z14cK/yfQrFjc0OVQ4nt+TUUb52VqG3eT
-         ANfg==
-X-Gm-Message-State: APjAAAXq4Tz6lTMBbNxVoueHOP8yPOG+IlimPocF7tJdqAiDakvBvjlF
-        6gG4jKtInlP/w8UudyAgV4Y=
-X-Google-Smtp-Source: APXvYqz2fBtz+GXsvkihKxsOKNeL6Kpuy9x3cAuWG48o19KNu9qW6OyOXPHMXK2/1GINfd/FZYqRTQ==
-X-Received: by 2002:a2e:3311:: with SMTP id d17mr16663969ljc.52.1557218071028;
-        Tue, 07 May 2019 01:34:31 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id d23sm2820976ljj.38.2019.05.07.01.34.29
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=H56LWvRoJenj3gjF/AqdoHfS2q4UJwGAV40zvmjB1F8=;
+        b=IbZ/CWL/pXhvDqwooh3JjnNGVdDujxPTP+Qc/t5cKZNhBY0cOpvx+wXIgMqaHaT4rd
+         AouNz5etVevZ+OSiSVgOvwd+4Z51Keh+Mi8kcQhNkWk37jtGYr7iKwUPn2hR3HDo81VB
+         zCE0ioZLULcnu7dksh2ixBjwrWvEfq2ygJLi2SJibujVneUiG4zdPd2YZpnx6TNX4OH1
+         jZIzrV1IAWArerLmrv11mj0G/PkJVmx97WYbz7eASddQuOf0iwXM7c7ADQqeio1UTKUv
+         ZhCG/PO5rviZtosiOUfzBY+SOU942sqRCKGcssF8n1mkt2LK1Xu1iZgrlWGM/cv+DjCH
+         fkyA==
+X-Gm-Message-State: APjAAAXS3EVF9C/BprfPwNVOyLxgrnUfWtq26VAMcLTl+C1MsMD3LUnw
+        Qm+w3jR1J31jbEB34eiWfOimzw==
+X-Google-Smtp-Source: APXvYqwy2oWfRQEzrfzKXkmx3BByGTTvYGOnGz9B/N3HP9OzEfVDwRmTfl8W5mkaDsKD6t0VlSuymw==
+X-Received: by 2002:ac2:42d5:: with SMTP id n21mr11557068lfl.162.1557218279099;
+        Tue, 07 May 2019 01:37:59 -0700 (PDT)
+Received: from [192.168.0.199] ([31.173.80.92])
+        by smtp.gmail.com with ESMTPSA id r8sm1168087lfp.55.2019.05.07.01.37.57
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 01:34:29 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.91)
-        (envelope-from <johan@kernel.org>)
-        id 1hNvYU-0006uI-C9; Tue, 07 May 2019 10:34:30 +0200
-Date:   Tue, 7 May 2019 10:34:30 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com,
-        wen.yang99@zte.com.cn
-Subject: Re: general protection fault in smsusb_init_device
-Message-ID: <20190507083430.GD4333@localhost>
-References: <0000000000008d89900586ccd37b@google.com>
- <Pine.LNX.4.44L0.1905061638380.1585-100000@iolanthe.rowland.org>
+        Tue, 07 May 2019 01:37:58 -0700 (PDT)
+Subject: Re: [PATCH 02/10] dt-bindings: rcar-gen3-phy-usb2: Document
+ uses_usb_x1
+To:     Chris Brandt <chris.brandt@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20190506234631.113226-1-chris.brandt@renesas.com>
+ <20190506234631.113226-3-chris.brandt@renesas.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <b3c3e21d-35aa-d222-e8d4-e5f63286044e@cogentembedded.com>
+Date:   Tue, 7 May 2019 11:37:53 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1905061638380.1585-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190506234631.113226-3-chris.brandt@renesas.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 06, 2019 at 04:41:41PM -0400, Alan Stern wrote:
-> On Thu, 18 Apr 2019, syzbot wrote:
-> 
-> > Hello,
-> > 
-> > syzbot found the following crash on:
-> > 
-> > HEAD commit:    d34f9519 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=128ec3fd200000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=c73d1bb5aeaeae20
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=53f029db71c19a47325a
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16138e67200000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=128dddbf200000
-> > 
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com
-> > 
-> > usb 1-1: config 0 descriptor??
-> > usb 1-1: string descriptor 0 read error: -71
-> > smsusb:smsusb_probe: board id=18, interface number 0
-> > kasan: CONFIG_KASAN_INLINE enabled
-> > kasan: GPF could be caused by NULL-ptr deref or user memory access
-> > general protection fault: 0000 [#1] SMP KASAN PTI
-> > CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.1.0-rc5-319617-gd34f951 #4
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> > Google 01/01/2011
-> > Workqueue: usb_hub_wq hub_event
-> > RIP: 0010:smsusb_init_device+0x366/0x937  
-> > drivers/media/usb/siano/smsusb.c:429
-> 
-> The driver assumes endpoint 1in exists, and doesn't check the existence 
-> of the endpoints it uses.
-> 
-> Alan Stern
-> 
-> 
-> #syz test: https://github.com/google/kasan.git usb-fuzzer
-> 
->  drivers/media/usb/siano/smsusb.c |   32 +++++++++++++++++++-------------
->  1 file changed, 19 insertions(+), 13 deletions(-)
-> 
-> Index: usb-devel/drivers/media/usb/siano/smsusb.c
-> ===================================================================
-> --- usb-devel.orig/drivers/media/usb/siano/smsusb.c
-> +++ usb-devel/drivers/media/usb/siano/smsusb.c
-> @@ -400,6 +400,7 @@ static int smsusb_init_device(struct usb
->  	struct smsusb_device_t *dev;
->  	void *mdev;
->  	int i, rc;
-> +	int in_maxp;
->  
->  	/* create device object */
->  	dev = kzalloc(sizeof(struct smsusb_device_t), GFP_KERNEL);
-> @@ -411,6 +412,23 @@ static int smsusb_init_device(struct usb
->  	dev->udev = interface_to_usbdev(intf);
->  	dev->state = SMSUSB_DISCONNECTED;
->  
-> +	for (i = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
-> +		struct usb_endpoint_descriptor *desc =
-> +				&intf->cur_altsetting->endpoint[i].desc;
-> +
-> +		if (desc->bEndpointAddress & USB_DIR_IN) {
-> +			dev->in_ep = desc->bEndpointAddress;
-> +			in_maxp = usb_endpoint_maxp(desc);
-> +		} else {
-> +			dev->out_ep = desc->bEndpointAddress;
-> +		}
-> +	}
-> +
-> +	pr_debug("in_ep = %02x, out_ep = %02x\n",
-> +		dev->in_ep, dev->out_ep);
-> +	if (!dev->in_ep || !dev->out_ep)	/* Missing endpoints? */
-> +		return -EINVAL;
+Hello!
 
-Looks like you're now leaking dev here, and so is the current code in
-the later error paths.
+On 07.05.2019 2:46, Chris Brandt wrote:
 
-Since this return value will be returned from probe, you may want to use
--ENXIO or -ENODEV instead of -EINVAL.
+> Document the optional renesas,uses_usb_x1 property.
+> 
+> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
+> ---
+>   Documentation/devicetree/bindings/phy/rcar-gen3-phy-usb2.txt | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/rcar-gen3-phy-usb2.txt b/Documentation/devicetree/bindings/phy/rcar-gen3-phy-usb2.txt
+> index d46188f450bf..26bf377102d3 100644
+> --- a/Documentation/devicetree/bindings/phy/rcar-gen3-phy-usb2.txt
+> +++ b/Documentation/devicetree/bindings/phy/rcar-gen3-phy-usb2.txt
+> @@ -46,6 +46,8 @@ channel as USB OTG:
+>   	       regulator will be managed during the PHY power on/off sequence.
+>   - renesas,no-otg-pins: boolean, specify when a board does not provide proper
+>   		       otg pins.
+> +- renesas,use_usb_x1: boolean, the dedicated 48MHz crystal inputs USB_X1 are
 
-Looks good otherwise.
+    Hyphens are preferred to underscores in the DT property names.
 
-Johan
+> +                      used for the PLL source
+>   
+>   Example (R-Car H3):
+
+MBR, Sergei
+
