@@ -2,179 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1BE16258
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 12:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CA216282
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 13:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbfEGKzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 06:55:11 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:43893 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727200AbfEGKyP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 06:54:15 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190507105413euoutp014394efe5e339abbae2bfe7960ef97e23~cYTWCfoAY0863608636euoutp01D
-        for <linux-usb@vger.kernel.org>; Tue,  7 May 2019 10:54:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190507105413euoutp014394efe5e339abbae2bfe7960ef97e23~cYTWCfoAY0863608636euoutp01D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1557226453;
-        bh=9W6OuaewdZkpfk30RkEcPYHoP0nC0huCNPm4PsSVD4Q=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Vn7lMm8tVJY7c6/vDm4SoP2nDhcpXen0WuGP5TN9zMgSxQ/wNQjfOZwe7M+f6MjYf
-         AU+JrhKcmNWAgf84FyP73f4ELyMXC5tZG3R+KuKxP37F+zQOFk6wiRL7QbUiBmCtoo
-         e3re4cCHYoyRGhVEy2CkskSryFmvuiFepIceN7dg=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190507105412eucas1p1ab15fb1ba532a3608725ed38b383c17d~cYTVZ_IJR2502325023eucas1p1H;
-        Tue,  7 May 2019 10:54:12 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 09.91.04298.4D361DC5; Tue,  7
-        May 2019 11:54:12 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190507105411eucas1p28930411f88189db4004c22b7e3de13d9~cYTUhX1Dv0943109431eucas1p2u;
-        Tue,  7 May 2019 10:54:11 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190507105411eusmtrp2f8419432ffd4d0e86eabf80d1589d599~cYTUTa4--0675206752eusmtrp2K;
-        Tue,  7 May 2019 10:54:11 +0000 (GMT)
-X-AuditID: cbfec7f2-f2dff700000010ca-8a-5cd163d41831
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id CB.E7.04146.3D361DC5; Tue,  7
-        May 2019 11:54:11 +0100 (BST)
-Received: from [106.120.50.25] (unknown [106.120.50.25]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190507105411eusmtip1ec57196972d907f4242d222fd3c79046~cYTT9hc4E2266522665eusmtip1p;
-        Tue,  7 May 2019 10:54:11 +0000 (GMT)
-Subject: Re: [PATCH] usb: dwc2: Use generic PHY width in params setup
-To:     Jules Maselbas <jmaselbas@kalray.eu>,
-        Minas Harutyunyan <hminas@synopsys.com>
-Cc:     Markus Reichl <m.reichl@fivetechno.de>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        id S1726505AbfEGLAW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 07:00:22 -0400
+Received: from mail-eopbgr1400120.outbound.protection.outlook.com ([40.107.140.120]:51445
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726095AbfEGLAW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 May 2019 07:00:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zyaVeHdLdmFqUy4wCx0mrTzfY42aMIXZJJTs6W30ZxQ=;
+ b=WAJ1YzZ08rvR19LksfUk7S4rz/JVrWjFBpHT48YzrxDQcuHFZGapHrjolG+EmNMEgXhg8cxylpV3QADGU7SKOCr3xJp98SD26kyx6+JfpeHAUXQuCRLwju87JeDLrspGLOKbPtUDO3+2fWTTI5CGn0M8PWOuXvEWlGXC3VLg1kA=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY2SPR01MB0015.jpnprd01.prod.outlook.com (20.177.150.9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.10; Tue, 7 May 2019 11:00:18 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1856.012; Tue, 7 May 2019
+ 11:00:18 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <dac9e8d9-6552-b21e-2991-5f8df11d8439@samsung.com>
-Date:   Tue, 7 May 2019 12:54:10 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190507100852.11263-2-jmaselbas@kalray.eu>
-Content-Transfer-Encoding: 7bit
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 01/10] phy: renesas: rcar-gen3-usb2: Add uses_usb_x1
+ option
+Thread-Topic: [PATCH 01/10] phy: renesas: rcar-gen3-usb2: Add uses_usb_x1
+ option
+Thread-Index: AQHVBGYQ+cfCaNX+ik+H7Wxy1mef+qZfTXmAgAAw/eA=
+Date:   Tue, 7 May 2019 11:00:18 +0000
+Message-ID: <TY1PR01MB1562D08E4F5A6C635024BE718A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20190506234631.113226-1-chris.brandt@renesas.com>
+ <20190506234631.113226-2-chris.brandt@renesas.com>
+ <CAMuHMdV3yW44Y1D2Vn1mNJK8pNF3db20An9Sde8=18r8y7m9LQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdV3yW44Y1D2Vn1mNJK8pNF3db20An9Sde8=18r8y7m9LQ@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCKsWRmVeSWpSXmKPExsWy7djP87pXki/GGLx8qWYx/2aSRfPi9WwW
-        jb/2slvMmnGa1WLRslZmi5dHfjA6sHnculPvcXr9TUaPeScDPfbPXcPusWX/Z0aPz5vkAtii
-        uGxSUnMyy1KL9O0SuDJmXWUpaBKuaO7qYG1gnMffxcjBISFgIrH7RVYXIxeHkMAKRomdHV9Z
-        IJwvjBJH1pxggnA+M0qcal/M2MXICdYx5+cjdojEckaJv/d/sUI4bxklrky/yARSJSzgKtHa
-        9owRZIeIQLDE3jk5IDXMIA0Pp71iBalhEzCU6HrbxQZSwytgJzGtSwEkzCKgInFl/hwWkLCo
-        QIzEos9sIGFeAUGJkzOfsIDYnAKWEpemrgezmQXkJba/ncMMYYtL3HoyH+xoCYF17BL39qxk
-        g3jTReL2T2mI+4UlXh3fwg5hy0j83wlT3wx02rm17BBOD6PE5aYZUB9bSxw+fpEVZBCzgKbE
-        +l36EGFHiferm9kh5vNJ3HgrCHEDn8SkbdOZIcK8Eh1tQhDVahKzjq+DW3vwwiXmCYxKs5B8
-        NgvJN7OQfDMLYe8CRpZVjOKppcW56anFhnmp5XrFibnFpXnpesn5uZsYgWnn9L/jn3Ywfr2U
-        dIhRgINRiYf3hcuFGCHWxLLiytxDjBIczEoivInPzsUI8aYkVlalFuXHF5XmpBYfYpTmYFES
-        561meBAtJJCeWJKanZpakFoEk2Xi4JRqYFTq2hyuszSiz/ccJ1MCwxqjTvviBY37LL2ORZrx
-        znFYq7b16r7uxZvEi1tebeafvHDKPPcGx8W/9sTlhTkl6+7akVj9z6/kzfEzWu7ZCyfdv8c7
-        N+ujUqj1ZPM7Z/cpm2vterwnIvJv71umrtoDii2NSTHKfRPXLHq5uvbkpB7zZ3/vXT78oVqJ
-        pTgj0VCLuag4EQA2O8npNwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsVy+t/xu7qXky/GGJxbpm0x/2aSRfPi9WwW
-        jb/2slvMmnGa1WLRslZmi5dHfjA6sHnculPvcXr9TUaPeScDPfbPXcPusWX/Z0aPz5vkAtii
-        9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DJmXWUp
-        aBKuaO7qYG1gnMffxcjJISFgIjHn5yP2LkYuDiGBpYwSUxq6WCASMhInpzWwQtjCEn+udbFB
-        FL1mlHg88Rs7SEJYwFWite0ZI4gtIhAscWNyGwtIEbPAckaJ1Wt+gyWEBB4wSvw5B7aOTcBQ
-        oustyCQODl4BO4lpXQogYRYBFYkr8+eALRYViJE4MXUL2HxeAUGJkzOfgMU5BSwlLk1dD2Yz
-        C5hJzNv8kBnClpfY/nYOlC0ucevJfKYJjEKzkLTPQtIyC0nLLCQtCxhZVjGKpJYW56bnFhvq
-        FSfmFpfmpesl5+duYgRG27ZjPzfvYLy0MfgQowAHoxIP7wPbCzFCrIllxZW5hxglOJiVRHgT
-        n52LEeJNSaysSi3Kjy8qzUktPsRoCvTcRGYp0eR8YCLIK4k3NDU0t7A0NDc2NzazUBLn7RA4
-        GCMkkJ5YkpqdmlqQWgTTx8TBKdXAaBVccfREm2LUhX3+aQt55zSdOel2P+V98adimzPftv/R
-        2mWXxLTD+XJWXMRDG51K3ZRLc6Ise1Zkb+fJvR1r1sfNWVD7aRtbzo6ejIkOmvOnq25k9db9
-        pJWt52O27lSuyAZFucM825dJfeKwerVeJOXvz0udL3SlfgVYK5nuMPOrSM/82JmlxFKckWio
-        xVxUnAgAQO45KswCAAA=
-X-CMS-MailID: 20190507105411eucas1p28930411f88189db4004c22b7e3de13d9
-X-Msg-Generator: CA
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 67e00e27-3e90-4c89-f25c-08d6d2db3136
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY2SPR01MB0015;
+x-ms-traffictypediagnostic: TY2SPR01MB0015:
+x-microsoft-antispam-prvs: <TY2SPR01MB00150D84A6D26456D08981F58A310@TY2SPR01MB0015.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0030839EEE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(39860400002)(136003)(396003)(346002)(376002)(189003)(199004)(3846002)(33656002)(316002)(55016002)(9686003)(52536014)(99286004)(68736007)(54906003)(446003)(74316002)(256004)(486006)(72206003)(11346002)(14454004)(186003)(102836004)(7696005)(6506007)(476003)(305945005)(26005)(76176011)(8936002)(478600001)(25786009)(6116002)(8676002)(81166006)(81156014)(2906002)(86362001)(7736002)(53936002)(6246003)(6916009)(5660300002)(4326008)(66066001)(71200400001)(71190400001)(66946007)(73956011)(76116006)(229853002)(66476007)(6436002)(66556008)(64756008)(66446008)(4744005);DIR:OUT;SFP:1102;SCL:1;SRVR:TY2SPR01MB0015;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: uFbpVKQNZmaJhb88SP9fjph5fQjSv1KQRTHacazGWuDtCRJxn5wRXR4RPO+2vVxugYOKtG7yIoiV8fgGDcToX3Eazw2dFLS3tr/ohBgUhCBqJxTUujnZvUc23kmG5Ue6PdRi7S+D9jG+tsA4a7wgZe653QPCWc4JG4Yj7nz1AkGYMyrjmuZApCYk0i7fX7/nxqG9dLM3HTT8wTSswKAF4xuHIBONUn3/m8w5hWaaVrqm5H51nqUyDl/LkHqvI5o6Xoy6zOtU2DzvPnizaYcWksBsR03R4nSc7Jo5E6KjyTCAPwzpShcbUB35kUniC+YGMUgM5YPJ9Jpc3eOYHypGGs1Vrpd48mNT4Jf08F7tM28FJD66sSpEip299sfNu6TMD1PuwZFrt/mmln5tg/qOIQN2jcyLhtSrBGVYnrW9llc=
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190507100949epcas4p2d0f64a47bbba46bfff3eece00b9bdb3d
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190507100949epcas4p2d0f64a47bbba46bfff3eece00b9bdb3d
-References: <20190503204958.GA12532@kozik-lap>
-        <20190507100852.11263-1-jmaselbas@kalray.eu>
-        <CGME20190507100949epcas4p2d0f64a47bbba46bfff3eece00b9bdb3d@epcas4p2.samsung.com>
-        <20190507100852.11263-2-jmaselbas@kalray.eu>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67e00e27-3e90-4c89-f25c-08d6d2db3136
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2019 11:00:18.3168
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2SPR01MB0015
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jules,
-
-On 2019-05-07 12:08, Jules Maselbas wrote:
-> Setting params.phy_utmi_width in dwc2_lowlevel_hw_init() is pointless since
-> it's value will be overwritten by dwc2_init_params().
->
-> This change make sure to take in account the generic PHY width information
-> during parmas initialization, done in dwc2_set_param_phy_utmi_width().
->
-> By doing so, the phy_utmi_width params can still be overridden by
-> devicetree specific params and will also be checked against hardware
-> capabilities.
->
-> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
-
-Right, this fixes the issue spotten on Exynos4412 SoCs.
-
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-
-IMHO it would also make sense to add:
-
-Fixes: 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif with phy_utmi_width")
-
-> ---
->   drivers/usb/dwc2/params.c   | 9 +++++++++
->   drivers/usb/dwc2/platform.c | 9 ---------
->   2 files changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-> index 6900eea57526..5949262ff669 100644
-> --- a/drivers/usb/dwc2/params.c
-> +++ b/drivers/usb/dwc2/params.c
-> @@ -253,6 +253,15 @@ static void dwc2_set_param_phy_utmi_width(struct dwc2_hsotg *hsotg)
->   	val = (hsotg->hw_params.utmi_phy_data_width ==
->   	       GHWCFG4_UTMI_PHY_DATA_WIDTH_8) ? 8 : 16;
->   
-> +	if (hsotg->phy) {
-> +		/*
-> +		 * If using the generic PHY framework, check if the PHY bus
-> +		 * width is 8-bit and set the phyif appropriately.
-> +		 */
-> +		if (phy_get_bus_width(hsotg->phy) == 8)
-> +			val = 8;
-> +	}
-> +
->   	hsotg->params.phy_utmi_width = val;
->   }
->   
-> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-> index d10a7f8daec3..e98d7812da2d 100644
-> --- a/drivers/usb/dwc2/platform.c
-> +++ b/drivers/usb/dwc2/platform.c
-> @@ -271,15 +271,6 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
->   
->   	hsotg->plat = dev_get_platdata(hsotg->dev);
->   
-> -	if (hsotg->phy) {
-> -		/*
-> -		 * If using the generic PHY framework, check if the PHY bus
-> -		 * width is 8-bit and set the phyif appropriately.
-> -		 */
-> -		if (phy_get_bus_width(hsotg->phy) == 8)
-> -			hsotg->params.phy_utmi_width = 8;
-> -	}
-> -
->   	/* Clock */
->   	hsotg->clk = devm_clk_get_optional(hsotg->dev, "otg");
->   	if (IS_ERR(hsotg->clk)) {
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+SGkgR2VlcnQsDQoNCk9uIFR1ZSwgTWF5IDA3LCAyMDE5LCBHZWVydCBVeXR0ZXJob2V2ZW4gd3Jv
+dGU6DQo+ID4gKyAgICAgICBpZiAob2ZfcHJvcGVydHlfcmVhZF9ib29sKGRldi0+b2Zfbm9kZSwg
+InJlbmVzYXMsdXNlc191c2JfeDEiKSkNCj4gPiArICAgICAgICAgICAgICAgY2hhbm5lbC0+dXNl
+c191c2JfeDEgPSB0cnVlOw0KPiA+ICsNCj4gDQo+IFBlcmhhcHMgdGhpcyBjYW4gYmUgY2hlY2tl
+ZCBzb21lIG90aGVyIHdheSAoZS5nLiBieSBjaGVja2luZyBmb3IgYSBub24tDQo+IHplcm8NCj4g
+Y2xvY2sgcmF0ZSBvZiB0aGUgVVNCX1gxIGNsb2NrIHJlZmVyZW5jZWQgZnJvbSBEVCksIHRodXMg
+cmVtb3ZpbmcgdGhlIG5lZWQNCj4gZm9yDQo+IGFkZGluZyBhIGN1c3RvbSBwcm9wZXJ0eT8NCg0K
+DQpHb29kIHBvaW50LiBJJ3ZlIGRvbmUgdGhhdCBmb3Igb3RoZXIgZHJpdmVycyBiZWZvcmUgYW5k
+IGl0IHdvcmtlZCB3ZWxsLg0KDQpJJ2xsIHRha2UgdGhpcyBvdXQuLi5vbmUgbGVzcyBwcm9wZXJ0
+eSB0byBzZXQgOikNCg0KUXVlc3Rpb246IFNpbmNlIHRoZSBkcml2ZXIgZGVwZW5kcyBvbiB0aGlz
+LCBzaG91bGQgSSBtZW50aW9uIHRoaXMgaW4gdGhlDQpkdC1iaW5kaW5ncyBkb2N1bWVudGF0aW9u
+ID8NCg0KVGhhbmtzLA0KQ2hyaXMNCg==
