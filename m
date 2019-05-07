@@ -2,77 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2205B165A7
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 16:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27D5165A9
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 16:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbfEGO3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 10:29:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726583AbfEGO3E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 May 2019 10:29:04 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D04912087F;
-        Tue,  7 May 2019 14:29:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557239344;
-        bh=vyN83eUQuZ49QPjApP1odWAbjm/bP3buAMjXwh3dTJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=piiFL/o1lSEfne1qkRIeoTjU6hKxwb1iX+v0Da9b9X+B6vQzkbNbbFpJWHimdwi37
-         nJZDYKeRp/X447OXTSFlZdtXLS8WhNVgz3Wrey+uky4F+Xt6bluTejNyMTToToKEoF
-         ogHiXKZfCJmn2ZZKsxm2EcGDnaJm6WJMpt4yrnBA=
-Date:   Tue, 7 May 2019 16:29:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nikolai Kondrashov <spbnick@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: merge usbhid-dump into usbutils repo?
-Message-ID: <20190507142902.GA29491@kroah.com>
-References: <20190507140042.GA26528@kroah.com>
- <8f35c8e9-9ee0-a883-30e4-8b532316137d@gmail.com>
+        id S1726730AbfEGO3e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 10:29:34 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:51756 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726583AbfEGO3e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 10:29:34 -0400
+Received: (qmail 1841 invoked by uid 2102); 7 May 2019 10:29:33 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 7 May 2019 10:29:33 -0400
+Date:   Tue, 7 May 2019 10:29:33 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+cc:     Jim Lin <jilin@nvidia.com>, <gregkh@linuxfoundation.org>,
+        <mathias.nyman@intel.com>, <hminas@synopsys.com>,
+        <kai.heng.feng@canonical.com>, <drinkcat@chromium.org>,
+        <prime.zeng@hisilicon.com>, <malat@debian.org>,
+        <nsaenzjulienne@suse.de>, <jflat@chromium.org>,
+        <linus.walleij@linaro.org>, <clabbe@baylibre.com>,
+        <colin.king@canonical.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/1] usb: xhci: Add Clear_TT_Buffer
+In-Reply-To: <9ea9fd3e-cf1a-9015-6d21-377c2fd41e66@linux.intel.com>
+Message-ID: <Pine.LNX.4.44L0.1905071022140.1632-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f35c8e9-9ee0-a883-30e4-8b532316137d@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 07, 2019 at 05:23:05PM +0300, Nikolai Kondrashov wrote:
-> Hi Greg,
+On Tue, 7 May 2019, Mathias Nyman wrote:
+
+> On 6.5.2019 17.57, Alan Stern wrote:
+> > On Mon, 6 May 2019, Jim Lin wrote:
+> > 
+> >> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+> >> processing for full-/low-speed endpoints connected via a TT, the host
+> >> software must use the Clear_TT_Buffer request to the TT to ensure
+> >> that the buffer is not in the busy state".
+> >>
+> >> In our case, a full-speed speaker (ConferenceCam) is behind a high-
+> >> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+> >> request we may continue to get STALL with the folllowing requests,
+> >> like Set_Interface.
+> >>
+> >> Here we add Clear_TT_Buffer for the following Set_Interface requests
+> >> to get ACK successfully.
+> >>
+> >> Originally usb_hub_clear_tt_buffer uses urb->dev->devnum as device
+> >> address while sending Clear_TT_Buffer command, but this doesn't work
+> >> for XHCI.
+> > 
+> > Why doesn't it work for xHCI?  Clear-TT-Buffer is part of the USB 2.0
+> > spec; it should work exactly the same for xHCI as for a USB-2.0 host
+> > controller.
+> > 
+> > Alan Stern
+> > 
 > 
-> On 5/7/19 5:00 PM, Greg KH wrote:
-> > So, what do you think about the two options here?
+> For other host controllers udev->devnum is the same as the address of the
+> usb device, chosen and set by usb core.
 > 
-> I would absolutely be glad if you could take usbhid-dump under your wing!
+> With xHC the controller hardware assigns the address, and won't be the same as
+> devnum.
 > 
-> I have little time for the DIGImend project these days, for which it was
-> developed. I have a bit of financing from Patreon and occasional tablet
-> manufacturer to work on the drivers, but that leaves very little time for the
-> tools.
-> 
-> I wouldn't mind submitting any patches required to usbutils repo instead.
-> And it's true the thing haven't needed much updates recently.
-> Please also feel free to adjust it to your tastes too.
-> 
-> Thanks for looking after it!
+> The Clear-TT-Buffer request sent to the hub includes the address of the LS/FS
+> child device in wValue field. usb_hub_clear_tt_buffer() uses udev->devnum to set the
+> address wValue. This won't work for devices connected to xHC
 
-Wonderful, so for now, I'll push what I have done with the merging of
-the two repos together and make a public 012 release of usbutils, to fix
-the issues the distros have already pointed out with usbhid-dump being
-gone.
+I see.  Thanks for the explanation; it makes sense now.  The patch
+description should explain this too.
 
-And then we can go from there forward, thanks for the quick response!
+Wouldn't it be better to add a field containing the device address to
+struct usb_device?  And also export it, either in sysfs or debugfs?  
+It seems like the kind of thing that might be important for debugging.  
+If we did this then the usb_hub_clear_tt_buffer API wouldn't need to be
+changed.
 
-> P.S. It's awesome to see you receive Red Hat's Kernel CI effort so
-> positively. Everyone's cheering for your feedback every time here :)
+Alan Stern
 
-Hey, people testing my stable queue in a very-fast manner, why wouldn't
-I like it?  :)
-
-thanks,
-
-greg k-h
