@@ -2,122 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E318915E5C
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 09:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74EE915EAE
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 09:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726927AbfEGHjI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 03:39:08 -0400
-Received: from mx2.suse.de ([195.135.220.15]:57326 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726922AbfEGHjG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 May 2019 03:39:06 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 4B3C5AF58;
-        Tue,  7 May 2019 07:39:05 +0000 (UTC)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     gregKH@linuxfoundation.org, miquel@df.uba.ar,
-        linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCHv2 4/4] USB: rio500: update Documentation
-Date:   Tue,  7 May 2019 09:38:37 +0200
-Message-Id: <20190507073837.19234-4-oneukum@suse.com>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20190507073837.19234-1-oneukum@suse.com>
-References: <20190507073837.19234-1-oneukum@suse.com>
+        id S1726492AbfEGH6F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 03:58:05 -0400
+Received: from mga02.intel.com ([134.134.136.20]:8399 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726085AbfEGH6F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 May 2019 03:58:05 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 May 2019 00:58:04 -0700
+X-ExtLoop1: 1
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 May 2019 00:57:59 -0700
+Subject: Re: [PATCH v4 1/1] usb: xhci: Add Clear_TT_Buffer
+To:     Alan Stern <stern@rowland.harvard.edu>, Jim Lin <jilin@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        hminas@synopsys.com, kai.heng.feng@canonical.com,
+        drinkcat@chromium.org, prime.zeng@hisilicon.com, malat@debian.org,
+        nsaenzjulienne@suse.de, jflat@chromium.org,
+        linus.walleij@linaro.org, clabbe@baylibre.com,
+        colin.king@canonical.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <Pine.LNX.4.44L0.1905061053550.1585-100000@iolanthe.rowland.org>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <9ea9fd3e-cf1a-9015-6d21-377c2fd41e66@linux.intel.com>
+Date:   Tue, 7 May 2019 11:00:34 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
+MIME-Version: 1.0
+In-Reply-To: <Pine.LNX.4.44L0.1905061053550.1585-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Added the newly added limit and updated the text a bit
+On 6.5.2019 17.57, Alan Stern wrote:
+> On Mon, 6 May 2019, Jim Lin wrote:
+> 
+>> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+>> processing for full-/low-speed endpoints connected via a TT, the host
+>> software must use the Clear_TT_Buffer request to the TT to ensure
+>> that the buffer is not in the busy state".
+>>
+>> In our case, a full-speed speaker (ConferenceCam) is behind a high-
+>> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+>> request we may continue to get STALL with the folllowing requests,
+>> like Set_Interface.
+>>
+>> Here we add Clear_TT_Buffer for the following Set_Interface requests
+>> to get ACK successfully.
+>>
+>> Originally usb_hub_clear_tt_buffer uses urb->dev->devnum as device
+>> address while sending Clear_TT_Buffer command, but this doesn't work
+>> for XHCI.
+> 
+> Why doesn't it work for xHCI?  Clear-TT-Buffer is part of the USB 2.0
+> spec; it should work exactly the same for xHCI as for a USB-2.0 host
+> controller.
+> 
+> Alan Stern
+> 
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- Documentation/usb/rio.txt | 54 +++++++++++++----------------------------------
- 1 file changed, 15 insertions(+), 39 deletions(-)
+For other host controllers udev->devnum is the same as the address of the
+usb device, chosen and set by usb core.
 
-diff --git a/Documentation/usb/rio.txt b/Documentation/usb/rio.txt
-index ca9adcf56355..63adb030e0e9 100644
---- a/Documentation/usb/rio.txt
-+++ b/Documentation/usb/rio.txt
-@@ -76,54 +76,25 @@ Additional Information and userspace tools
- Requirements
- ============
- 
--A host with a USB port.  Ideally, either a UHCI (Intel) or OHCI
--(Compaq and others) hardware port should work.
-+A host with a USB port running a Linux kernel with RIO 500 support enabled.
- 
--A Linux development kernel (2.3.x) with USB support enabled or a
--backported version to linux-2.2.x.  See http://www.linux-usb.org for
--more information on accomplishing this.
-+The driver is a module called rio500, which should be automatically loaded
-+as you plug in your device.
-+If that fails you can manually load it with
- 
--A Linux kernel with RIO 500 support enabled.
-+  modprobe rio500
- 
--'lspci' which is only needed to determine the type of USB hardware
--available in your machine.
--
--Configuration
--
--Using `lspci -v`, determine the type of USB hardware available.
--
--  If you see something like::
--
--    USB Controller: ......
--    Flags: .....
--    I/O ports at ....
--
--  Then you have a UHCI based controller.
--
--  If you see something like::
--
--     USB Controller: .....
--     Flags: ....
--     Memory at .....
--
--  Then you have a OHCI based controller.
--
--Using `make menuconfig` or your preferred method for configuring the
--kernel, select 'Support for USB', 'OHCI/UHCI' depending on your
--hardware (determined from the steps above), 'USB Diamond Rio500 support', and
--'Preliminary USB device filesystem'.  Compile and install the modules
--(you may need to execute `depmod -a` to update the module
--dependencies).
--
--Add a device for the USB rio500::
-+Udev should automatically create a device node as soon as plug in your device.
-+If that fails, you can manually add a device for the USB rio500::
- 
-   mknod /dev/usb/rio500 c 180 64
- 
--Set appropriate permissions for /dev/usb/rio500 (don't forget about
-+In that case,
-+set appropriate permissions for /dev/usb/rio500 (don't forget about
- group and world permissions).  Both read and write permissions are
- required for proper operation.
- 
--Load the appropriate modules (if compiled as modules):
-+Load the appropriate modules (if ddcompiled as modules):
- 
-   OHCI::
- 
-@@ -140,6 +111,11 @@ Load the appropriate modules (if compiled as modules):
- That's it.  The Rio500 Utils at: http://rio500.sourceforge.net should
- be able to access the rio500.
- 
-+Limits
-+======
-+
-+You can use only a single rio500 device at a time with your computer.
-+
- Bugs
- ====
- 
--- 
-2.16.4
+With xHC the controller hardware assigns the address, and won't be the same as
+devnum.
 
+The Clear-TT-Buffer request sent to the hub includes the address of the LS/FS
+child device in wValue field. usb_hub_clear_tt_buffer() uses udev->devnum to set the
+address wValue. This won't work for devices connected to xHC
+    
+-Mathias
