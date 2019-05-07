@@ -2,196 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A4015FFD
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 10:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E583815F26
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 10:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbfEGI7X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 04:59:23 -0400
-Received: from wp126.webpack.hosteurope.de ([80.237.132.133]:37334 "EHLO
-        wp126.webpack.hosteurope.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726072AbfEGI7X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 04:59:23 -0400
-X-Greylist: delayed 2812 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 May 2019 04:59:21 EDT
-Received: from [2003:a:659:3f00:21a:4dff:fe85:1148] (helo=hermes.fivetechno.de); authenticated
-        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1hNvD6-00022c-Lw; Tue, 07 May 2019 10:12:24 +0200
-X-Virus-Scanned: by amavisd-new 2.11.1 using newest ClamAV at
-        linuxbbg.five-lan.de
-Received: from [192.168.34.101] (p5098d998.dip0.t-ipconnect.de [80.152.217.152])
-        (authenticated bits=0)
-        by hermes.fivetechno.de (8.15.2/8.14.5/SuSE Linux 0.8) with ESMTPSA id x478CMHp011619
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Tue, 7 May 2019 10:12:23 +0200
-Subject: Re: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-References: <20190503204958.GA12532@kozik-lap>
- <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
- <20190506130046.20898-1-m.szyprowski@samsung.com>
-From:   Markus Reichl <m.reichl@fivetechno.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=m.reichl@fivetechno.de; prefer-encrypt=mutual; keydata=
- mQGNBFs02GcBDADRBOYE75/gs54okjHfQ1LK8FfNH5yMq1/3MxhqP7gsCol5ZGbdNhJ7lnxX
- jIEIlYfd6EgJMJV6E69uHe4JF9RO0BDdIy79ruoxnYaurxB40qPtb+YyTy3YjeNF3NBRE+4E
- ffvY5AQvt3aIUP83u7xbNzMfV4JuxaopB+yiQkGo0eIAYqdy+L+5sHkxj/MptMAfDKvM8rvT
- 4LaeqiGG4b8xsQRQNqbfIq1VbNEx/sPXFv6XDYMehYcbppMW6Zpowd46aZ5/CqP6neQYiCu2
- rT1pf/s3hIJ6hdauk3V5U8GH/vupCNKA2M2inrnsRDVsYfrGHC59JAB545/Vt8VNJT5BAPKP
- ka4lgIofVmErILAhLtxu3iSH6gnHWTroccM/j0kHOmrMrAmCcLrenLMmB6a/m7Xve5J7F96z
- LAWW6niQyN757MpgVQWsDkY2c5tQeTIHRlsZ5AXxOFzA44IuDNIS7pa603AJWC+ZVqujr80o
- rChE99LDPe1zZUd2Une43jEAEQEAAbQmTWFya3VzIFJlaWNobCA8bS5yZWljaGxAZml2ZXRl
- Y2huby5kZT6JAbAEEwEKABoECwkIBwIVCgIWAQIZAAWCWzTYZwKeAQKbAwAKCRA6Jd4Oaxr9
- snO7DAC/0qxsFcwX7ZfEz0oVkOTBPFOElMfx0/YSyznTCbqjgrKtQgTNXUtlKUNFI3xhMHRV
- GGybOUUNw37RZ5K3tdaO9RE7TiKjzetMeaCVBULoUU2Hho5/EavESnfCmfmtqvwWRJ7haE7c
- cxvMZFPfcDq6XJyz5ZBKGyCMxOiYETmWRFgHIenIfyptGxw40tvuLNbUkw5DaiuifPem55EI
- /K5drO7xEIt+E9HnhiOX6++fYYBlOvHxIeXNalNbZU09HEYozZgqnaFa6a4Gy7oC1sbzHUtR
- ktkR9X/RvBWWLFp177ZM2u431WqC0Yt4CYKDkGhNMu/vGwDFssmGtz33bn+PNkCQeGjo0yHL
- sFM2zLmwsGFp183AMn8m1H6Znc0DSaTTGzEvpU4GWp7iPQcdQ8mwTi43cyfREC+CIRAdX8xw
- ON3gXGiOS09Eg3CCUYdCv2+hySEs+HqHCkzjqc+GlasyeX50hGRcxLjcuYBcjBG8F/hcIjDy
- 2FRe/bKA4ErfOp+5AY0EWzTYZwEMAJm5mH5FezwN867L3qq2lCK8+U3jXSNxjzv5AVjxV3vx
- AmgqFyFX2nE1fJoh78alPdla/+2cO5ZWp3flIB2uzBpSXzR6KlyFS/GVgI/phn+IzKNNkvl7
- VL3S+y7QC0MF5U+xg9HvRH8pPwFfby/GorHk/0pluvrAIbPUO1z72VhPzBNTP1kZQ7It9oNO
- JpLzsxv2xjfQ3vi6EoJ/9ttLnU4C6atmiRGBoL4GUVQynjhknj/XACmED47FtKJBX1cns2bm
- zRy8Hco1RcRgdlyB/1yFaNdxNkhb1h63Y5gnGXpN+5OLn7XWBvdIgV0tw7adLvO8ojiKC9j1
- zPKi1NvhYV6YY3HuhH995ykKXpVi18Za11K9ZTpjUwB31SLCphrEQakQZqYSzCTn8g+np2Ed
- Af3/rC1Q7ShazM4ZI6r2p8JXEJG6Teg7w+NPUEWlMMUIlGgnKZVKh5ybynYzu8wiOLuk+oY7
- 3Iga4BAQfrjdebhoPizg0WeFHtCmlqIh+p9SMQARAQABiQGfBBgBCgAJBYJbNNhnApsMAAoJ
- EDol3g5rGv2ylhYMAMN4XNQRguuQYYXGMopKkTSOo5x0FQtvWsdUU4owtjyWeQLfrgEmAMve
- wNlowi91HS1PwesoXBLd1OoMEIEG362zzm43mYvF0kMz9qmSPLq45yD1Bu1mAyvIKxaqY7wF
- jwYaUgeQnjGiAovaaWZ6pBN/3fzTFxwlP6mwEaQEyRjg5OuBpyRJ5Ulg21n04BFHfpZ1EFSg
- GX8uWeaGGm6RqRubQzOPS8bguGaU5Col/nk9WMbCh/XwkhZxE0eeGVQkuzUAzk7aRwwNkM9o
- nt7DQh+2Mh+fNIvc58Hj8oQhUEHl/o6Nq9hkNL/pDkKy/cMJblusTVgWpIS2p0Bax8qZ+2s6
- TgmiK6Vn8TpvQjxJOMxo0JhO7FtR3yHWAt/TnhBJ6D3ZzRsZ+7H+hbr/n2oQLPJbN9yQXbRA
- Dy4kfA5uNx2cEwVz8GrBR5xpBddDe2l396/FmKXLW2WJXE+RFfZvYuI31qBsx0uVeA15r+jg
- ZnS2JHg/17+ErCtiUzuJ5EGMPA==
-Organization: five technologies GmbH
-Message-ID: <39c7b687-449e-5e89-4c70-527d4e779fd9@fivetechno.de>
-Date:   Tue, 7 May 2019 10:12:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726933AbfEGIPx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 7 May 2019 04:15:53 -0400
+Received: from relay1.mentorg.com ([192.94.38.131]:40628 "EHLO
+        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726000AbfEGIPw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 04:15:52 -0400
+Received: from nat-ies.mentorg.com ([192.94.31.2] helo=SVR-IES-MBX-03.mgc.mentorg.com)
+        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
+        id 1hNvGM-00056w-Tu from Carsten_Schmid@mentor.com ; Tue, 07 May 2019 01:15:47 -0700
+Received: from SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) by
+ SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) with Microsoft SMTP Server
+ (TLS) id 15.0.1320.4; Tue, 7 May 2019 09:15:43 +0100
+Received: from SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17]) by
+ SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17%22]) with mapi id
+ 15.00.1320.000; Tue, 7 May 2019 09:15:42 +0100
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+Subject: Resend: [PATCH] usb: xhci: avoid null pointer deref when bos field is
+ NULL
+Thread-Topic: Resend: [PATCH] usb: xhci: avoid null pointer deref when bos
+ field is NULL
+Thread-Index: AdUErLHt88u1cSPLSjaT+s5tPXB13A==
+Date:   Tue, 7 May 2019 08:15:42 +0000
+Message-ID: <86f265cb7e18410994e433ad522c0cf1@SVR-IES-MBX-03.mgc.mentorg.com>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-In-Reply-To: <20190506130046.20898-1-m.szyprowski@samsung.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="jaQbzrRu5YUNCCshYysHQXwri4Q0c42fX"
-X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1557219561;e95e4547;
-X-HE-SMSGID: 1hNvD6-00022c-Lw
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---jaQbzrRu5YUNCCshYysHQXwri4Q0c42fX
-Content-Type: multipart/mixed; boundary="SeKTbUyioFhKb6yGXBGhLlzIZWi9Rm3iK";
- protected-headers="v1"
-From: Markus Reichl <m.reichl@fivetechno.de>
-To: Marek Szyprowski <m.szyprowski@samsung.com>, linux-usb@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Minas Harutyunyan <hminas@synopsys.com>,
- Felipe Balbi <felipe.balbi@linux.intel.com>,
- Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
- Jules Maselbas <jmaselbas@kalray.eu>, Krzysztof Kozlowski <krzk@kernel.org>
-Message-ID: <39c7b687-449e-5e89-4c70-527d4e779fd9@fivetechno.de>
-Subject: Re: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
-References: <20190503204958.GA12532@kozik-lap>
- <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
- <20190506130046.20898-1-m.szyprowski@samsung.com>
-In-Reply-To: <20190506130046.20898-1-m.szyprowski@samsung.com>
+Hi,
 
---SeKTbUyioFhKb6yGXBGhLlzIZWi9Rm3iK
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+two weeks ago i sent this mail to the linux-usb mailing list but got no answer.
+Maybe this has fallen through your filters?
 
-Hi Marek,
+So resending it and adding Mathias in CC.
 
-your patch did not help on stable v5.1
+Best regards
+Carsten
 
-[    3.255963] samsung-usb2-phy 125b0000.exynos-usbphy: 125b0000.exynos-u=
-sbphy supply vbus not found, using dummy regulator
-[    4.044547] usbcore: registered new interface driver smsc95xx
-[    4.112261] usb usb1: New USB device found, idVendor=3D1d6b, idProduct=
-=3D0002, bcdDevice=3D 5.01
-[    4.120363] usb usb1: New USB device strings: Mfr=3D3, Product=3D2, Se=
-rialNumber=3D1
-[    4.127560] usb usb1: Product: EHCI Host Controller
-[    4.132415] usb usb1: Manufacturer: Linux 5.1.0-00005-geb4efae48eb5 eh=
-ci_hcd
-[    4.139446] usb usb1: SerialNumber: 12580000.ehci
-[    4.183056] usb3503 0-0008: switched to HUB mode
-[    4.183121] usb3503 0-0008: usb3503_probe: probed in hub mode
-[    4.488344] usb 1-2: new high-speed USB device number 2 using exynos-e=
-hci
-[    4.675605] usb 1-2: New USB device found, idVendor=3D0424, idProduct=3D=
-3503, bcdDevice=3Da1.a0
-[    4.678166] usb 1-2: New USB device strings: Mfr=3D0, Product=3D0, Ser=
-ialNumber=3D0
-[    4.686140] usb 1-2: skipping disabled interface 0
+-----Ursprüngliche Nachricht-----
+Von: Schmid, Carsten 
+Gesendet: Donnerstag, 25. April 2019 17:20
+An: linux-usb@vger.kernel.org
+Betreff: [PATCH] usb: xhci: avoid null pointer deref when bos field is NULL
 
-root@odroid-x2:~# lsusb
-Bus 001 Device 002: ID 0424:3503 Standard Microsystems Corp.
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Hi,
 
+some weeks ago, when stabilizing a production kernel,
+i have fixed a bug in the xhci driver.
+Mathias (Nyman) was involved checking the patch, and he wrote:
+......................
+Subject: Re: help needed - kernel crash in USB driver
+
+Hi Zainie
+
+I can look at a upstream fix for usb core,
+but we will have to wait for the 5.1 kernel two week merge window
+to finish before we can send anything upstream.
+
+While waiting for that the customer proposal will work,
+it will avoid this one particular null pointer dereference case.
+
+Their patch also otherwise makes sense.
+Even if it doesn't fix the root cause there is no need for the
+xhci driver to touch udev->bos when disabling usb2 lpm.
+We should encourage them to send it upstream to get it as a
+generic driver improvement as well.
+
+Thanks
+Mathias
+................
+
+I now had the time to port the patch onto 5.1 kernel tree, and can provide the patch.
+It's the first time i give a patch for upstream approval.
+Tried to follow the rules, and used checkpatch.pl as written.
+Please find the result below.
+
+Best regards
+Carsten
 
 
-Am 06.05.19 um 15:00 schrieb Marek Szyprowski:
-> Samsung Exynos SoCs require to force UTMI width to 8bit, otherwise the
-> host side of the shared USB2 PHY doesn't work.
->=20
-> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Fixes: 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif with phy_utmi_wi=
-dth")
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->  drivers/usb/dwc2/params.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-> index 6900eea57526..9ece4affb9d4 100644
-> --- a/drivers/usb/dwc2/params.c
-> +++ b/drivers/usb/dwc2/params.c
-> @@ -76,6 +76,7 @@ static void dwc2_set_s3c6400_params(struct dwc2_hsotg=
- *hsotg)
->  	struct dwc2_core_params *p =3D &hsotg->params;
-> =20
->  	p->power_down =3D 0;
-> +	p->phy_utmi_width =3D 8;
->  }
-> =20
->  static void dwc2_set_rk_params(struct dwc2_hsotg *hsotg)
->=20
+From b497444e3632ff4a0aa88d7cb84ce2a75f55295a Mon Sep 17 00:00:00 2001
+From: Carsten Schmid <carsten_schmid@mentor.com>
+Date: Fri, 8 Mar 2019 15:15:52 +0100
+Subject: [PATCH] usb: xhci: avoid null pointer deref when bos field is NULL
 
-Gru=C3=9F,
---=20
-Markus Reichl
+With defective USB sticks we see the following error happen:
+usb 1-3: new high-speed USB device number 6 using xhci_hcd
+usb 1-3: device descriptor read/64, error -71
+usb 1-3: device descriptor read/64, error -71
+usb 1-3: new high-speed USB device number 7 using xhci_hcd
+usb 1-3: device descriptor read/64, error -71
+usb 1-3: unable to get BOS descriptor set
+usb 1-3: New USB device found, idVendor=0781, idProduct=5581
+usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+...
+BUG: unable to handle kernel NULL pointer dereference at 0000000000000008
 
+This comes from the following place:
+[ 1660.215380] IP: xhci_set_usb2_hardware_lpm+0xdf/0x3d0 [xhci_hcd]
+[ 1660.222092] PGD 0 P4D 0
+[ 1660.224918] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[ 1660.425520] CPU: 1 PID: 38 Comm: kworker/1:1 Tainted: P     U  W  O    4.14.67-apl #1
+[ 1660.434277] Workqueue: usb_hub_wq hub_event [usbcore]
+[ 1660.439918] task: ffffa295b6ae4c80 task.stack: ffffad4580150000
+[ 1660.446532] RIP: 0010:xhci_set_usb2_hardware_lpm+0xdf/0x3d0 [xhci_hcd]
+[ 1660.453821] RSP: 0018:ffffad4580153c70 EFLAGS: 00010046
+[ 1660.459655] RAX: 0000000000000000 RBX: ffffa295b4d7c000 RCX: 0000000000000002
+[ 1660.467625] RDX: 0000000000000002 RSI: ffffffff984a55b2 RDI: ffffffff984a55b2
+[ 1660.475586] RBP: ffffad4580153cc8 R08: 0000000000d6520a R09: 0000000000000001
+[ 1660.483556] R10: ffffad4580a004a0 R11: 0000000000000286 R12: ffffa295b4d7c000
+[ 1660.491525] R13: 0000000000010648 R14: ffffa295a84e1800 R15: 0000000000000000
+[ 1660.499494] FS:  0000000000000000(0000) GS:ffffa295bfc80000(0000) knlGS:0000000000000000
+[ 1660.508530] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1660.514947] CR2: 0000000000000008 CR3: 000000025a114000 CR4: 00000000003406a0
+[ 1660.522917] Call Trace:
+[ 1660.525657]  usb_set_usb2_hardware_lpm+0x3d/0x70 [usbcore]
+[ 1660.531792]  usb_disable_device+0x242/0x260 [usbcore]
+[ 1660.537439]  usb_disconnect+0xc1/0x2b0 [usbcore]
+[ 1660.542600]  hub_event+0x596/0x18f0 [usbcore]
+[ 1660.547467]  ? trace_preempt_on+0xdf/0x100
+[ 1660.552040]  ? process_one_work+0x1c1/0x410
+[ 1660.556708]  process_one_work+0x1d2/0x410
+[ 1660.561184]  ? preempt_count_add.part.3+0x21/0x60
+[ 1660.566436]  worker_thread+0x2d/0x3f0
+[ 1660.570522]  kthread+0x122/0x140
+[ 1660.574123]  ? process_one_work+0x410/0x410
+[ 1660.578792]  ? kthread_create_on_node+0x60/0x60
+[ 1660.583849]  ret_from_fork+0x3a/0x50
+[ 1660.587839] Code: 00 49 89 c3 49 8b 84 24 50 16 00 00 8d 4a ff 48 8d 04 c8 48 89 ca 4c 8b 10 45 8b 6a 04 48 8b 00 48 89 45 c0 49 8b 86 80 03 00 00 <48> 8b 40 08 8b 40 03 0f 1f 44 00 00 45 85 ff 0f 84 81 01 00 00
+[ 1660.608980] RIP: xhci_set_usb2_hardware_lpm+0xdf/0x3d0 [xhci_hcd] RSP: ffffad4580153c70
+[ 1660.617921] CR2: 0000000000000008
 
---SeKTbUyioFhKb6yGXBGhLlzIZWi9Rm3iK--
+Tracking this down shows that udev->bos is NULL in the following code:
+(xhci.c, in xhci_set_usb2_hardware_lpm)
+	field = le32_to_cpu(udev->bos->ext_cap->bmAttributes);  <<<<<<< here
 
---jaQbzrRu5YUNCCshYysHQXwri4Q0c42fX
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+	xhci_dbg(xhci, "%s port %d USB2 hardware LPM\n",
+			enable ? "enable" : "disable", port_num + 1);
 
------BEGIN PGP SIGNATURE-----
+	if (enable) {
+		/* Host supports BESL timeout instead of HIRD */
+		if (udev->usb2_hw_lpm_besl_capable) {
+			/* if device doesn't have a preferred BESL value use a
+			 * default one which works with mixed HIRD and BESL
+			 * systems. See XHCI_DEFAULT_BESL definition in xhci.h
+			 */
+			if ((field & USB_BESL_SUPPORT) &&
+			    (field & USB_BESL_BASELINE_VALID))
+				hird = USB_GET_BESL_BASELINE(field);
+			else
+				hird = udev->l1_params.besl;
 
-iQGzBAEBCAAdFiEEVKeIeBh0ZWJOldzLOiXeDmsa/bIFAlzRPeYACgkQOiXeDmsa
-/bJ4BAv/aFOkWeqjyJQlgtAY665B6v4yvYO7Xds4CECjPByYCSv1+0zc5MamdQGt
-RcPsPqaGZ+HQ1E+3GIAsD2PtyKRst38iYr8JkYo3u/PEQXW+ZRMCQS9VNOQjcs2A
-RnwEISl9BVmu/FcSRqL/7SrrTXZPF4+UwTziFu1PsCbx7pCaaLxfZF6zenTxaI3c
-Lt4SofevaxV9ExdRLgvMhw/hk9FtzfAkQqWvAAYF5xreKTOlYi+xKvebIdJ66YUj
-Otir2ZAEqfVxCLs1AFxvlNNLJ0IHqBNkiwJlPhP9oP9jyMymlTViGgC/Ar5LFA+O
-a7BXnr+Cg7xJSHJuW13dyObnau9SDLrpk2OG+LWVXSPcfsuUpu0PwAhrSLvIjkgb
-6rryONAA/JlDd463j1TkqSOG4LFk2slw6a/SM2dY9qW5CoYT4QFWtMzvRHKuy+BT
-KFA9rg2mmKxP98DXi/9+/FEDL0ywrs1p1GDjH9/nsxGWB1r/P1BJIsdg/gMlbEaF
-T+BPl3zG
-=3jNv
------END PGP SIGNATURE-----
+The failing case is when disabling LPM. So it is sufficient to avoid
+access to udev->bos by moving the instruction into the "enable" clause.
 
---jaQbzrRu5YUNCCshYysHQXwri4Q0c42fX--
+Signed-off-by: Carsten Schmid <carsten_schmid@mentor.com>
+---
+ drivers/usb/host/xhci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 7fa58c9..981d1a8 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4289,7 +4289,6 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
+ 	pm_addr = ports[port_num]->addr + PORTPMSC;
+ 	pm_val = readl(pm_addr);
+ 	hlpm_addr = ports[port_num]->addr + PORTHLPMC;
+-	field = le32_to_cpu(udev->bos->ext_cap->bmAttributes);
+ 
+ 	xhci_dbg(xhci, "%s port %d USB2 hardware LPM\n",
+ 			enable ? "enable" : "disable", port_num + 1);
+@@ -4301,6 +4300,7 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
+ 			 * default one which works with mixed HIRD and BESL
+ 			 * systems. See XHCI_DEFAULT_BESL definition in xhci.h
+ 			 */
++			field = le32_to_cpu(udev->bos->ext_cap->bmAttributes);
+ 			if ((field & USB_BESL_SUPPORT) &&
+ 			    (field & USB_BESL_BASELINE_VALID))
+ 				hird = USB_GET_BESL_BASELINE(field);
+-- 
+2.7.4
+
