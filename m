@@ -2,94 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8931167F1
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 18:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708131680A
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 18:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbfEGQc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 12:32:58 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:32893 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbfEGQc6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 12:32:58 -0400
-Received: by mail-vs1-f68.google.com with SMTP id z145so10797982vsc.0;
-        Tue, 07 May 2019 09:32:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xfZ+nPfJalivsFUof8XfkbfxeRXadcob2dPu22J78FE=;
-        b=fXgkkodcnkRkgqOKPo7Lo23rHK9gmlTUyDkeg8WbYvjt/AmJJTseE8R446j9Ibxr3K
-         eTv9g9c2TMbp8916ViJXf8vs0VKRiVXjkzkrdii+/HiFcoxWsnlohQh0re3RcIpKxeb5
-         SfX8F9KBw0whfZMsDqbazwNBBaN7HYIfFDgd0qj26zZw3hY1sg+pY/D4xdVovmWyvg85
-         oHhrpXFw3wOBVmWPWGgs3r/7IHhWaPiX4jkBCJpgflDhXakQcKaoHAkgGnVmxQeYy7kA
-         /sn79S8T02Cu65B2f5ZhCF5B/mREmgHsRLie3fLPE+giL5HseVMmapLi3oVNaHmt4E2V
-         R+Fw==
-X-Gm-Message-State: APjAAAUqlm+y6FuIXWwdFJbO+TdYYepo7tdk/hNchdZ9DPiwzA8y1mkW
-        VCTNWYoQNWshLoRxaq6zK/Elo8r65jA7que6tME=
-X-Google-Smtp-Source: APXvYqwnBOm/31+1n0uOIej23iQ7zEwFHV7MPPxuNGseA0JkCWZ9jKf5bC8Pf3dai9+n75aDdCcSS3EpAwX0z+b1ukA=
-X-Received: by 2002:a67:ba07:: with SMTP id l7mr16617093vsn.11.1557246776403;
- Tue, 07 May 2019 09:32:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190506234631.113226-1-chris.brandt@renesas.com>
- <20190506234631.113226-2-chris.brandt@renesas.com> <CAMuHMdV3yW44Y1D2Vn1mNJK8pNF3db20An9Sde8=18r8y7m9LQ@mail.gmail.com>
- <TY1PR01MB15621F21D3A3F1F550D85CD68A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY1PR01MB15621F21D3A3F1F550D85CD68A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 7 May 2019 18:32:44 +0200
-Message-ID: <CAMuHMdWBR-069LJZ12pe1azystGp7egzYjKYFVkuRwMoukvzrQ@mail.gmail.com>
-Subject: Re: [PATCH 01/10] phy: renesas: rcar-gen3-usb2: Add uses_usb_x1 option
-To:     Chris Brandt <Chris.Brandt@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simon Horman <horms@verge.net.au>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        id S1726790AbfEGQjs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 12:39:48 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:52368 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726476AbfEGQjs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 12:39:48 -0400
+Received: (qmail 5705 invoked by uid 2102); 7 May 2019 12:39:47 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 7 May 2019 12:39:47 -0400
+Date:   Tue, 7 May 2019 12:39:47 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     mchehab@kernel.org
+cc:     andreyknvl@google.com,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <syzkaller-bugs@googlegroups.com>, <wen.yang99@zte.com.cn>
+Subject: [PATCH] media: usb: siano: Fix general protection fault in smsusb
+In-Reply-To: <0000000000004a08f805883ead54@google.com>
+Message-ID: <Pine.LNX.4.44L0.1905071237310.1632-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chris,
+The syzkaller USB fuzzer found a general-protection-fault bug in the
+smsusb part of the Siano DVB driver.  The fault occurs during probe
+because the driver assumes without checking that the device has both
+IN and OUT endpoints and the IN endpoint is ep1.
 
-On Tue, May 7, 2019 at 5:43 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
-> On Tue, May 07, 2019, Geert Uytterhoeven wrote:
-> > > +       if (of_property_read_bool(dev->of_node, "renesas,uses_usb_x1"))
-> > > +               channel->uses_usb_x1 = true;
-> > > +
-> >
-> > Perhaps this can be checked some other way (e.g. by checking for a non-
-> > zero
-> > clock rate of the USB_X1 clock referenced from DT), thus removing the need
-> > for
-> > adding a custom property?
->
-> Currently, there is no USB_X1 in DT like there is for RZ/A1.
->
-> For RZ/A2, those are dedicated pins that belong to the USB HW block
-> itself. They do not feed into the system CPG or any dividers, so I
-> never included it in the .dtsi.
+By slightly rearranging the driver's initialization code, we can make
+the appropriate checks early on and thus avoid the problem.  If the
+expected endpoints aren't present, the new code safely returns -ENODEV
+from the probe routine.
 
-Like pcie_bus_clk on R-Car?
-We do have that in DT, with a "clock" link to it from the PCIe device node.
-After all, it is provided by an external clock crystal, and consumed by the
-PCIe device.
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-and-tested-by: syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com
+CC: <stable@vger.kernel.org>
 
-> So with that said, does a uses-usb-x1 property make more sense?
+---
 
-No ;-)
 
-Gr{oetje,eeting}s,
+[as1897]
 
-                        Geert
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ drivers/media/usb/siano/smsusb.c |   33 ++++++++++++++++++++-------------
+ 1 file changed, 20 insertions(+), 13 deletions(-)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Index: usb-devel/drivers/media/usb/siano/smsusb.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/siano/smsusb.c
++++ usb-devel/drivers/media/usb/siano/smsusb.c
+@@ -400,6 +400,7 @@ static int smsusb_init_device(struct usb
+ 	struct smsusb_device_t *dev;
+ 	void *mdev;
+ 	int i, rc;
++	int in_maxp;
+ 
+ 	/* create device object */
+ 	dev = kzalloc(sizeof(struct smsusb_device_t), GFP_KERNEL);
+@@ -411,6 +412,24 @@ static int smsusb_init_device(struct usb
+ 	dev->udev = interface_to_usbdev(intf);
+ 	dev->state = SMSUSB_DISCONNECTED;
+ 
++	for (i = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
++		struct usb_endpoint_descriptor *desc =
++				&intf->cur_altsetting->endpoint[i].desc;
++
++		if (desc->bEndpointAddress & USB_DIR_IN) {
++			dev->in_ep = desc->bEndpointAddress;
++			in_maxp = usb_endpoint_maxp(desc);
++		} else {
++			dev->out_ep = desc->bEndpointAddress;
++		}
++	}
++
++	pr_debug("in_ep = %02x, out_ep = %02x\n", dev->in_ep, dev->out_ep);
++	if (!dev->in_ep || !dev->out_ep) {	/* Missing endpoints? */
++		smsusb_term_device(intf);
++		return -ENODEV;
++	}
++
+ 	params.device_type = sms_get_board(board_id)->type;
+ 
+ 	switch (params.device_type) {
+@@ -425,24 +444,12 @@ static int smsusb_init_device(struct usb
+ 		/* fall-thru */
+ 	default:
+ 		dev->buffer_size = USB2_BUFFER_SIZE;
+-		dev->response_alignment =
+-		    le16_to_cpu(dev->udev->ep_in[1]->desc.wMaxPacketSize) -
+-		    sizeof(struct sms_msg_hdr);
++		dev->response_alignment = in_maxp - sizeof(struct sms_msg_hdr);
+ 
+ 		params.flags |= SMS_DEVICE_FAMILY2;
+ 		break;
+ 	}
+ 
+-	for (i = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
+-		if (intf->cur_altsetting->endpoint[i].desc. bEndpointAddress & USB_DIR_IN)
+-			dev->in_ep = intf->cur_altsetting->endpoint[i].desc.bEndpointAddress;
+-		else
+-			dev->out_ep = intf->cur_altsetting->endpoint[i].desc.bEndpointAddress;
+-	}
+-
+-	pr_debug("in_ep = %02x, out_ep = %02x\n",
+-		dev->in_ep, dev->out_ep);
+-
+ 	params.device = &dev->udev->dev;
+ 	params.usb_device = dev->udev;
+ 	params.buffer_size = dev->buffer_size;
+
