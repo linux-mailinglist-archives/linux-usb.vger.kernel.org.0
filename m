@@ -2,87 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD87415D4F
-	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 08:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AED15DA8
+	for <lists+linux-usb@lfdr.de>; Tue,  7 May 2019 08:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbfEGGWh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 02:22:37 -0400
-Received: from smtprelay-out1.synopsys.com ([198.182.61.142]:51094 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725858AbfEGGWh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 02:22:37 -0400
-Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7B4ECC01FB;
-        Tue,  7 May 2019 06:22:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1557210151; bh=rtlCcy+5EB/RInI7Lu8gsi7Il/2pYlW9pVRFC5xLwm4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ZffoboO1PJXaeS/kTlekLEZwwi02jdKfjxZoG/kA3mg/NQt3w6cblF4rTn8uwT52G
-         vrqzr50Px6UlUxVmLO2NcHVW7cjC0UHeR7qbdL2ShZUzNclazsIDxvj1LVdHtT7lEy
-         exMJDvGUD/EmxjoiwgHUVT51twG4u4Z9Fj+l7igLMRkovzn+cRUbMVa8ApqKs+ftee
-         ZvLlkmdZPXduO6CAnctFXmRPu2EX6igsuxx3iTGzYvGTVIhsuLVA53fH6cXpXxHVBZ
-         pW+8bRbCHMTM83fNjBCKZ0bDpD6GeC0vz8d5A7BMMo7BEtanYbyCrfJkK5D7xrqXR5
-         1Pe93Rn6RUk+Q==
-Received: from [10.116.70.206] (hminas-7480.internal.synopsys.com [10.116.70.206])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id DCEBCA0095;
-        Tue,  7 May 2019 06:22:34 +0000 (UTC)
-Subject: Re: [PATCH] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        id S1726584AbfEGGnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 02:43:11 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:43539 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbfEGGnK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 02:43:10 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190507064309euoutp02d711602d71bd70af60f137562b507581~cU4IjO5v60974509745euoutp02Y
+        for <linux-usb@vger.kernel.org>; Tue,  7 May 2019 06:43:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190507064309euoutp02d711602d71bd70af60f137562b507581~cU4IjO5v60974509745euoutp02Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1557211389;
+        bh=BsqkkSMuCsEmyJ3V2rYQxYceeCfOy0Y7L6gGt4Spf3s=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=qTy0iPFtYmZi03/AjMneeWNEhTcO+bg9fokPCkGqxeV9tzjntEXrqXCTZ2s45A/28
+         lcd2bZfi10cfNBoVTqggXsZzq1AVonbLn169S29b7XHiRScQQCJ2NAWshMb9J0KWo9
+         nA17nipCYJqzl4jTvA+ZAh4NKALv03T+og1sqW7w=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190507064308eucas1p1d18fb0bcffeae47f0dea517ed61ad8b3~cU4HmnCz10899108991eucas1p1b;
+        Tue,  7 May 2019 06:43:08 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 06.78.04325.CF821DC5; Tue,  7
+        May 2019 07:43:08 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190507064307eucas1p1b6cfe0e7d91ed94230215a4c6e576879~cU4Gpe2d-2026920269eucas1p1R;
+        Tue,  7 May 2019 06:43:07 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190507064307eusmtrp24021940e32e21a29a66485f3f544c25e~cU4GbfT422403724037eusmtrp23;
+        Tue,  7 May 2019 06:43:07 +0000 (GMT)
+X-AuditID: cbfec7f5-b8fff700000010e5-c6-5cd128fcb108
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id A4.5E.04140.BF821DC5; Tue,  7
+        May 2019 07:43:07 +0100 (BST)
+Received: from [106.120.50.25] (unknown [106.120.50.25]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190507064306eusmtip2e3f736eaa88fef487c482ceb418ca6d6~cU4F5nhMK0504905049eusmtip2i;
+        Tue,  7 May 2019 06:43:06 +0000 (GMT)
+Subject: Re: [BUG BISECT] USB on Exynos4412 fails after usb: dwc2: gadget:
+ Replace phyif with phy_utmi_width
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jules Maselbas <jmaselbas@kalray.eu>
 Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-References: <20190503204958.GA12532@kozik-lap>
- <CGME20190506130052eucas1p25afd4e15648e9efc6fd011e46081fbea@eucas1p2.samsung.com>
- <20190506130046.20898-1-m.szyprowski@samsung.com>
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Message-ID: <2f09e746-b3da-cac3-56f4-941fa2bca9d4@synopsys.com>
-Date:   Tue, 7 May 2019 10:22:33 +0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <bf605524-705a-8dc1-e54c-413564efc29b@samsung.com>
+Date:   Tue, 7 May 2019 08:43:05 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+        Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190506130046.20898-1-m.szyprowski@samsung.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <d198f061-3ed6-11d9-4e92-0e0fb2705238@synopsys.com>
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOKsWRmVeSWpSXmKPExsWy7djPc7p/NC7GGPx9ym8x/2aSxawZp1kt
+        zp/fwG5xedccNosZ5/cxWSxa1sps8W7KbWYHdo/T628yemxa1cnmMe9koMeW/Z8ZPT5vkgtg
+        jeKySUnNySxLLdK3S+DKePLDq2CKSMWOmXwNjF2CXYwcHBICJhIzL1Z3MXJxCAmsYJQ4v3wv
+        E4TzhVHi3ZdeKOczo0TX/adsXYycYB1tH7ZBJZYzSjzs3QLlvGWUWP7tPTtIlbBAnsT2XRPZ
+        QRIiAq2MEt0N11lAHGaBb4wSc1u6WUGq2AQMJbredoHN5RWwk7hwCWQhJweLgIpEa/NzVpAL
+        RQViJBZ9hioRlDg58wkLiM0p4CDRv2cN2BhmAXmJ5q2zmSFscYlbT+aDXSQhsIld4sbNuUwQ
+        d7tIfDsygxHCFpZ4dXwLO4QtI/F/J0xDM9A/59ayQzg9jBKXm2A6rCUOH78IdhGzgKbE+l36
+        kOBzlNj3khXC5JO48VYQ4gY+iUnbpjNDhHklOtqEIGaoScw6vg5u68ELl5gnMCrNQvLZLCTf
+        zELyzSyEtQsYWVYxiqeWFuempxYb56WW6xUn5haX5qXrJefnbmIEJp/T/45/3cG470/SIUYB
+        DkYlHt4JThdihFgTy4orcw8xSnAwK4nwJj47FyPEm5JYWZValB9fVJqTWnyIUZqDRUmct5rh
+        QbSQQHpiSWp2ampBahFMlomDU6qB8fyqw5+++B7Jv6hYyMF6V/1NT9Upi1Sj1J+qPn5eXuEW
+        ck5+f/zr54fJLkhaxDKReW7dsaZ3Kc+Oir/0YRF74c0R927RLP/XFrMcJQ4IN5ZW8Mr5mMz8
+        3CKznnmTZlTYK0Omg286lNsqxezOdmxmSGxaNLdw3fny7O82mzkvlDczfetKeC+pxFKckWio
+        xVxUnAgA3vsN0ToDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDIsWRmVeSWpSXmKPExsVy+t/xe7q/NS7GGBy8yWsx/2aSxawZp1kt
+        zp/fwG5xedccNosZ5/cxWSxa1sps8W7KbWYHdo/T628yemxa1cnmMe9koMeW/Z8ZPT5vkgtg
+        jdKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0No+1MjJV0rezSUnNySxLLdK3S9DLePLD
+        q2CKSMWOmXwNjF2CXYycHBICJhJtH7YxdTFycQgJLGWUuLCpiR0iISNxcloDK4QtLPHnWhcb
+        RNFrRolD++YwgySEBfIktu+ayA6SEBFoZZR43PkbrIpZ4BujxMkdd6BadjBKPNt4iBGkhU3A
+        UKLrLcgsTg5eATuJC5d6mUBsFgEVidbm52D7RAViJE5M3cIOUSMocXLmExYQm1PAQaJ/zxqw
+        GmYBM4l5mx8yQ9jyEs1bZ0PZ4hK3nsxnmsAoNAtJ+ywkLbOQtMxC0rKAkWUVo0hqaXFuem6x
+        kV5xYm5xaV66XnJ+7iZGYMxtO/Zzyw7GrnfBhxgFOBiVeHgf2F6IEWJNLCuuzD3EKMHBrCTC
+        m/jsXIwQb0piZVVqUX58UWlOavEhRlOg5yYyS4km5wPTQV5JvKGpobmFpaG5sbmxmYWSOG+H
+        wMEYIYH0xJLU7NTUgtQimD4mDk6pBkZG6W1c/lyLK99qTFjhcP/Tlwvu6hFM6cvfqx2L2lnq
+        syDG56Z7X0PLp3siK0Sulv8uVZ7b9sPYcqvgFMV/adwFszsEtWo4eIsU85t3TDsQV2Wqqzl/
+        btndmHsXYo4lawrIJ3bUf19cbT73zOSrwav3NE4RSnv50PMZX2CB3T4V8esL6lI0byixFGck
+        GmoxFxUnAgBtvrXbzwIAAA==
+X-CMS-MailID: 20190507064307eucas1p1b6cfe0e7d91ed94230215a4c6e576879
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190507062136epcas1p3729d57b9d22f834ccd2de0a081ddfbde
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190507062136epcas1p3729d57b9d22f834ccd2de0a081ddfbde
+References: <20190503204958.GA12532@kozik-lap>
+        <CGME20190507062136epcas1p3729d57b9d22f834ccd2de0a081ddfbde@epcas1p3.samsung.com>
+        <d198f061-3ed6-11d9-4e92-0e0fb2705238@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/6/2019 5:01 PM, Marek Szyprowski wrote:
-> Samsung Exynos SoCs require to force UTMI width to 8bit, otherwise the
-> host side of the shared USB2 PHY doesn't work.
-> 
-> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Fixes: 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif with phy_utmi_width")
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Hi Minas,
 
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+On 2019-05-07 08:21, Minas Harutyunyan wrote:
+> Hi Krzysztof,
+>
+> On 5/4/2019 12:50 AM, Krzysztof Kozlowski wrote:
+>> Hi,
+>>
+>> Bisect pointed commit 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif
+>> with phy_utmi_width") as reason for failures of USB on Exynos4412,
+>> Odroid U3 board (ARMv7, exynos_defconfig, TFTP boot with nfsroot from
+>> NFSv4):
+>>
+>> [    4.333996] usb 1-2: new high-speed USB device number 3 using 
+>> exynos-ehci
+>> [    4.503942] usb 1-2: device descriptor read/64, error -71
+>> [    4.793970] usb 1-2: device descriptor read/64, error -71
+>> [    4.914748] usb usb1-port2: attempt power cycle
+>> [    6.224267] usb 1-3: new high-speed USB device number 5 using 
+>> exynos-ehci
+>> [    6.393983] usb 1-3: device descriptor read/64, error -71
+>> [    6.684243] usb 1-3: device descriptor read/64, error -71
+>> [    6.954259] usb 1-3: new high-speed USB device number 6 using 
+>> exynos-ehci
+>> [    7.123980] usb 1-3: device descriptor read/64, error -71
+>> [    7.413969] usb 1-3: device descriptor read/64, error -71
+>> [    7.534778] usb usb1-port3: attempt power cycle
+>>
+>> The boot failure is effect of lack of network adapter (USB, smsc95xx).
+>> Expected:
+>> [    4.285831] usb 1-3: New USB device found, idVendor=0424, 
+>> idProduct=3503, bcdDevice=a1.a0
+>> [    4.288986] usb 1-3: New USB device strings: Mfr=0, Product=0, 
+>> SerialNumber=0
+>> [    4.299596] hub 1-3:1.0: USB hub found
+>> [    4.300027] hub 1-3:1.0: 3 ports detected
+>> [    5.895541] smsc95xx 1-2:1.0 eth0: link up, 100Mbps, full-duplex, 
+>> lpa 0xCDE1
+>>
+>> Full kernel log is here:
+>> https://urldefense.proofpoint.com/v2/url?u=https-3A__krzk.eu_-23_builders_25_builds_1330_steps_14_logs_serial0&d=DwIBaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=6z9Al9FrHR_ZqbbtSAsD16pvOL2S3XHxQnSzq8kusyI&m=OiD-VOiMNPgl24seQpn5JKZq7f85A4LNzaz8zX0YrKs&s=WBsxDt_1PXo9t9AxxJkUTTLE6zx_UDc7ac_U3EydCzI&e= 
+>>
+>> https://urldefense.proofpoint.com/v2/url?u=https-3A__krzk.eu_-23_builders_25_builds_1330&d=DwIBaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=6z9Al9FrHR_ZqbbtSAsD16pvOL2S3XHxQnSzq8kusyI&m=OiD-VOiMNPgl24seQpn5JKZq7f85A4LNzaz8zX0YrKs&s=Lxk4ZiitEFaod88HTY0hthrdRy_TtktU53P6UDtaCoE&e= 
+>>
+>>
+>> Let me know if you need any more details.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+>>
+>
+> But fail seen on ehci driver not dwc2.
 
-> ---
->   drivers/usb/dwc2/params.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-> index 6900eea57526..9ece4affb9d4 100644
-> --- a/drivers/usb/dwc2/params.c
-> +++ b/drivers/usb/dwc2/params.c
-> @@ -76,6 +76,7 @@ static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)
->   	struct dwc2_core_params *p = &hsotg->params;
->   
->   	p->power_down = 0;
-> +	p->phy_utmi_width = 8;
->   }
->   
->   static void dwc2_set_rk_params(struct dwc2_hsotg *hsotg)
-> 
+Right, but dwc2 and ehci share common USB2 PHY on Exynos4 SoCs, although 
+they use different ports of it.
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
