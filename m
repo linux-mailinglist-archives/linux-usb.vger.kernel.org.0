@@ -2,170 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE405179AB
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 14:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6439179B8
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 14:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728543AbfEHMqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 08:46:07 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:45964 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726796AbfEHMqH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 08:46:07 -0400
-Received: by mail-io1-f71.google.com with SMTP id z2so9738702iog.12
-        for <linux-usb@vger.kernel.org>; Wed, 08 May 2019 05:46:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=nIkx3XObc3rOajuepyLthZiX9rDW6umNcF9C59KOXUc=;
-        b=QSIfeaIV09VAljnuD/5jMoXj4WrwEL7FfAl3KEOuCEm6NTBeGycqpJr8qhibrXRRLh
-         S7mEA3ITSf79kdo10SFhmhFhZgiX0danlh5QdiKqyyUm+qs4FzpdOHrcOq9jyd6+U6PC
-         yE74t3pXEx78QTqTfBWu1MTBl20MGTTSBaF5XT3GPjS6d92qdBlINMSROiG2ULS7or2h
-         5gOdMV+kVuDZ/7dMtgeZcBaXb8Yq8qKpoMGytNAd2/GS185qJ2u1ZUg+RKYrlQJaraLG
-         eUuQhc/mm0HKrZRZ4r1WNZ61Ublkk4r5YMxc15uuNdHSPP662FZv7ZcpHuqrzr5QYr6o
-         ovPA==
-X-Gm-Message-State: APjAAAU/dqyrSh0ZsQgIJFBAPCE+SZVvXKrTnCZShn8dxJlZ35wWhAlm
-        BI1Rz+Ls/kOQAMg5Aoh0Gn9Fq39UBTX18JrEujhO1ml4TJyP
-X-Google-Smtp-Source: APXvYqxbaE8JI0qE0JRSPcwLEL3eUNfrnfUUAmcuTHbd+H2TPTo2EOaImfCwhjxn5p452B0uz0Q9WHSR4NsUIon8xIPkxTkhlkA5
+        id S1727414AbfEHMsk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 08:48:40 -0400
+Received: from mail-eopbgr1410091.outbound.protection.outlook.com ([40.107.141.91]:29568
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726444AbfEHMsk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 May 2019 08:48:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3OOqSGnnYTF3iY5GuKym2WzLYHUoAxLbuRfA7pFfLqg=;
+ b=eg/90kF/6717ygiX93sbUMaAOmWvxqNxJy+h9qH6B4CRfuMx28JDYMAEE1mm93ogCTeli3b5mBeHOEgdOsqDwQkXBRQdMh7V/yyAR1/ARsjltozauHWbBSsr3dNCr0vEUhLmnWYgChNUXayIqwROKIxLm+h2p3UuTg0KfJknuxY=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1787.jpnprd01.prod.outlook.com (52.133.164.10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.12; Wed, 8 May 2019 12:48:36 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1856.012; Wed, 8 May 2019
+ 12:48:36 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Simon Horman <horms@verge.net.au>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 10/10] ARM: dts: r7s9210-rza2mevb: Add USB host support
+Thread-Topic: [PATCH 10/10] ARM: dts: r7s9210-rza2mevb: Add USB host support
+Thread-Index: AQHVBGY/mP4xZNO/3kWcH4UIHFLGMKZg++mAgAAyy1A=
+Date:   Wed, 8 May 2019 12:48:36 +0000
+Message-ID: <TY1PR01MB15624892AE0A749A63053DA98A320@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20190506234631.113226-1-chris.brandt@renesas.com>
+ <20190506234631.113226-11-chris.brandt@renesas.com>
+ <20190508094230.5j2skmmlkzlmy2ls@verge.net.au>
+In-Reply-To: <20190508094230.5j2skmmlkzlmy2ls@verge.net.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 67433bd4-d960-4df0-752e-08d6d3b37ca3
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1787;
+x-ms-traffictypediagnostic: TY1PR01MB1787:
+x-microsoft-antispam-prvs: <TY1PR01MB17878523225A394FEEF328328A320@TY1PR01MB1787.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0031A0FFAF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(346002)(376002)(396003)(39860400002)(366004)(189003)(199004)(6246003)(4744005)(66946007)(66446008)(76116006)(26005)(74316002)(14454004)(66476007)(33656002)(2906002)(66556008)(64756008)(4326008)(73956011)(72206003)(99286004)(478600001)(7736002)(25786009)(9686003)(55016002)(53936002)(7696005)(76176011)(54906003)(71200400001)(71190400001)(316002)(229853002)(6916009)(52536014)(186003)(102836004)(6506007)(68736007)(3846002)(305945005)(486006)(8936002)(6116002)(256004)(81166006)(66066001)(81156014)(86362001)(6436002)(8676002)(446003)(476003)(5660300002)(11346002)(21314003);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1787;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: GzuBOPrUwT0x7jVZwnMYOxmnaA7P/TMYDLdRrghMkXw3zSp7ZQQTeqTJxsE8Lr8XqETKqMF++jfgBWOHE3NL7FzrLGq0qAWiUYPkbO9tSWffHDe0Wu2OM3m+umDVedF8t9GSfTGn9mYQ20uGT4+ox7UuF41Y2Wcob/eHo47FjEzCDWFyVw4nBuJkagY63ZwT3k6yu3zILdFDou4QDXWugxffCg91uzdoVuangFQVH3UFs2czqcaibMIa/rUkQ8OjEDihvzzx3xjwVg2RgJzcqpbfGs9kK05wTBEjBNnhk9rgtbwI2tJ0ST7o7CTIvuzmQyV21P3ygqdGTucCXimVCRFr9Skgl7NY5qK7vUVDIta93jcLKbY0hfu9TK6n+fa8ilerpH8vQAjbNUAwKf837JwuUw8/v4BS594hcZybfz8=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a05:660c:78e:: with SMTP id h14mr3240173itk.49.1557319566073;
- Wed, 08 May 2019 05:46:06 -0700 (PDT)
-Date:   Wed, 08 May 2019 05:46:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000089a6e505885fb73d@google.com>
-Subject: BUG: sleeping function called from invalid context in line6_pcm_acquire
-From:   syzbot <syzbot+a07d0142e74fdd595cfb@syzkaller.appspotmail.com>
-To:     alsa-devel@alsa-project.org, andreyknvl@google.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, perex@perex.cz,
-        syzkaller-bugs@googlegroups.com, tiwai@suse.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67433bd4-d960-4df0-752e-08d6d3b37ca3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2019 12:48:36.1896
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1787
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Simon,
 
-syzbot found the following crash on:
+On Wed, May 08, 2019, Simon Horman wrote:
+> Please add a space between the usb2_phy0 and ehci0 nodes.
+> Likewise below between the usb2_phy1 and ehci1 nodes.
+>=20
+> Otherwise this patch looks good to me.
 
-HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=10f0943ca00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-dashboard link: https://syzkaller.appspot.com/bug?extid=a07d0142e74fdd595cfb
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+I also see that you renamed some patch titles from
+  "ARM: dts: r7s9210-rza2mevb: xxx"=20
+to
+  "ARM: dts: rza2mevb: xxx"
 
-Unfortunately, I don't have any reproducer for this crash yet.
+when you applied them.
+So I will make that change as well.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+a07d0142e74fdd595cfb@syzkaller.appspotmail.com
-
-BUG: sleeping function called from invalid context at  
-kernel/locking/mutex.c:908
-in_atomic(): 1, irqs_disabled(): 0, pid: 0, name: swapper/1
-1 lock held by swapper/1/0:
-  #0: 000000004ff5b49f ((&toneport->timer)){+.-.}, at: lockdep_copy_map  
-include/linux/lockdep.h:170 [inline]
-  #0: 000000004ff5b49f ((&toneport->timer)){+.-.}, at:  
-call_timer_fn+0xce/0x5f0 kernel/time/timer.c:1315
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.1.0-rc3-319004-g43151d6 #6
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  <IRQ>
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xe8/0x16e lib/dump_stack.c:113
-  ___might_sleep.cold+0x11c/0x136 kernel/sched/core.c:6190
-  __mutex_lock_common kernel/locking/mutex.c:908 [inline]
-  __mutex_lock+0xcd/0x12b0 kernel/locking/mutex.c:1072
-  line6_pcm_acquire+0x35/0x210 sound/usb/line6/pcm.c:311
-  call_timer_fn+0x161/0x5f0 kernel/time/timer.c:1325
-  expire_timers kernel/time/timer.c:1362 [inline]
-  __run_timers kernel/time/timer.c:1681 [inline]
-  __run_timers kernel/time/timer.c:1649 [inline]
-  run_timer_softirq+0x58b/0x1400 kernel/time/timer.c:1694
-  __do_softirq+0x22a/0x8cd kernel/softirq.c:293
-  invoke_softirq kernel/softirq.c:374 [inline]
-  irq_exit+0x187/0x1b0 kernel/softirq.c:414
-  exiting_irq arch/x86/include/asm/apic.h:536 [inline]
-  smp_apic_timer_interrupt+0xfe/0x4a0 arch/x86/kernel/apic/apic.c:1062
-  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:807
-  </IRQ>
-RIP: 0010:native_safe_halt+0x2/0x10 arch/x86/include/asm/irqflags.h:58
-Code: 89 04 24 e8 50 6a a3 f3 48 8b 04 24 e9 d9 fe ff ff 48 89 df e8 3f 6a  
-a3 f3 eb 8a 90 90 90 90 90 90 90 90 90 90 90 90 90 fb f4 <c3> 0f 1f 00 66  
-2e 0f 1f 84 00 00 00 00 00 f4 c3 90 90 90 90 90 90
-RSP: 0018:ffff8880a84bfdc0 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
-RAX: 0000000000000007 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffff8880a84a20bc
-RBP: ffffed1015094310 R08: ffff8880a84a1880 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff8880a84a1880
-R13: 0000000000000001 R14: 0000000000000000 R15: ffff8880a84a1880
-  arch_safe_halt arch/x86/include/asm/paravirt.h:156 [inline]
-  default_idle+0x24/0x2b0 arch/x86/kernel/process.c:576
-  cpuidle_idle_call kernel/sched/idle.c:153 [inline]
-  do_idle+0x321/0x400 kernel/sched/idle.c:262
-  cpu_startup_entry+0x19/0x20 kernel/sched/idle.c:353
-  start_secondary+0x30f/0x410 arch/x86/kernel/smpboot.c:267
-  secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:243
-==================================================================
-BUG: KASAN: null-ptr-deref in memset include/linux/string.h:337 [inline]
-BUG: KASAN: null-ptr-deref in submit_audio_out_urb+0x91e/0x1780  
-sound/usb/line6/playback.c:246
-Write of size 20 at addr 0000000000000010 by task swapper/1/0
-
-CPU: 1 PID: 0 Comm: swapper/1 Tainted: G        W          
-5.1.0-rc3-319004-g43151d6 #6
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  <IRQ>
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xe8/0x16e lib/dump_stack.c:113
-  kasan_report.cold+0x5/0x3c mm/kasan/report.c:321
-  memset+0x20/0x40 mm/kasan/common.c:115
-  memset include/linux/string.h:337 [inline]
-  submit_audio_out_urb+0x91e/0x1780 sound/usb/line6/playback.c:246
-  line6_submit_audio_out_all_urbs+0xce/0x120 sound/usb/line6/playback.c:295
-  line6_stream_start+0x15b/0x1f0 sound/usb/line6/pcm.c:199
-  line6_pcm_acquire+0x139/0x210 sound/usb/line6/pcm.c:322
-  call_timer_fn+0x161/0x5f0 kernel/time/timer.c:1325
-  expire_timers kernel/time/timer.c:1362 [inline]
-  __run_timers kernel/time/timer.c:1681 [inline]
-  __run_timers kernel/time/timer.c:1649 [inline]
-  run_timer_softirq+0x58b/0x1400 kernel/time/timer.c:1694
-  __do_softirq+0x22a/0x8cd kernel/softirq.c:293
-  invoke_softirq kernel/softirq.c:374 [inline]
-  irq_exit+0x187/0x1b0 kernel/softirq.c:414
-  exiting_irq arch/x86/include/asm/apic.h:536 [inline]
-  smp_apic_timer_interrupt+0xfe/0x4a0 arch/x86/kernel/apic/apic.c:1062
-  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:807
-  </IRQ>
-RIP: 0010:native_safe_halt+0x2/0x10 arch/x86/include/asm/irqflags.h:58
-Code: 89 04 24 e8 50 6a a3 f3 48 8b 04 24 e9 d9 fe ff ff 48 89 df e8 3f 6a  
-a3 f3 eb 8a 90 90 90 90 90 90 90 90 90 90 90 90 90 fb f4 <c3> 0f 1f 00 66  
-2e 0f 1f 84 00 00 00 00 00 f4 c3 90 90 90 90 90 90
-RSP: 0018:ffff8880a84bfdc0 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
-RAX: 0000000000000007 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffff8880a84a20bc
-RBP: ffffed1015094310 R08: ffff8880a84a1880 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff8880a84a1880
-R13: 0000000000000001 R14: 0000000000000000 R15: ffff8880a84a1880
-  arch_safe_halt arch/x86/include/asm/paravirt.h:156 [inline]
-  default_idle+0x24/0x2b0 arch/x86/kernel/process.c:576
-  cpuidle_idle_call kernel/sched/idle.c:153 [inline]
-  do_idle+0x321/0x400 kernel/sched/idle.c:262
-  cpu_startup_entry+0x19/0x20 kernel/sched/idle.c:353
-  start_secondary+0x30f/0x410 arch/x86/kernel/smpboot.c:267
-  secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:243
-==================================================================
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Chris
