@@ -2,171 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1B9171D3
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 08:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A000171FA
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 08:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726221AbfEHGlm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 02:41:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58540 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725884AbfEHGll (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 May 2019 02:41:41 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CD52B20989;
-        Wed,  8 May 2019 06:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557297700;
-        bh=5VfiQakJiPGMt0g71UJ5S0pfbX5f2t20n5P1wQDvFN0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tDLkuPR8VSii4fjwWcMr9fg94ONMRB5hpJvnSa87Oa3hccuRy32pBGb4LyAT15yzk
-         QV2aHRueURg58IZDAB42Hl2SDF1WgLagWJ/wekP/lgRSUmZLXTObbo1Ukdorou8E2V
-         eucffPVgoDqKyyF/aU2biwBn8het3WJLzcHPlAyU=
-Date:   Wed, 8 May 2019 08:41:38 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yinbo Zhu <yinbo.zhu@nxp.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Xiaobo Xie <xiaobo.xie@nxp.com>,
-        Jerry Huang <jerry.huang@nxp.com>,
-        Ran Wang <ran.wang_1@nxp.com>,
-        Ramneek Mehresh <ramneek.mehresh@freescale.com>,
-        Nikhil Badola <nikhil.badola@freescale.com>,
-        Suresh Gupta <suresh.gupta@freescale.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Suresh Gupta <B42813@freescale.com>
-Subject: Re: [PATCH v4 2/5] usb: phy: Workaround for USB erratum-A005728
-Message-ID: <20190508064138.GD14085@kroah.com>
-References: <20190125060356.14294-2-yinbo.zhu@nxp.com>
- <Pine.LNX.4.44L0.1901281034080.1450-100000@iolanthe.rowland.org>
- <VI1PR04MB4158EB9135C9536D612F0967E9320@VI1PR04MB4158.eurprd04.prod.outlook.com>
+        id S1726527AbfEHG7r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 02:59:47 -0400
+Received: from mail-vk1-f194.google.com ([209.85.221.194]:36392 "EHLO
+        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726179AbfEHG7r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 02:59:47 -0400
+Received: by mail-vk1-f194.google.com with SMTP id d74so4707797vka.3;
+        Tue, 07 May 2019 23:59:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hb3fPf5B0g2t3lQ+CxtsUvfMJ5uLadXuXQz78ww3fYU=;
+        b=G7QEGx7GDDKHzNKCTQgVo1xdT5l5jA8HnO0Lb5xhAZRokOEALifEnhY2APdS3XVR3n
+         uwn3kRwE1GADfAV1B07F4wIONZrTYGiQHTbUtTTSoix+Ci92IjKahK+jwFIUvF41dGMz
+         Kra0KVz55NW7xU0xjxRPJ0yoAgaJETk6vFMuYiMpBZ72Wn8S/wpiCobtIwR0CrpFty7m
+         CFXiyHZanCw8hqLA4p8sax3hfBV8ezXrm+rB9hbnUWJn8ad0H8aILXHuRAoR/7AwEjeb
+         fLLwnbskRMNDKGwdqCb/WqiHddsp/WP9t6TTOxnf3KUwmDEZdkfIGctmeFn3kHZV6ALt
+         n/Tg==
+X-Gm-Message-State: APjAAAVUMiIKAoyuqnkxk/ZFgU2VnjTZXq0FFjYVNI0GhdnKe/sHjJev
+        aTcm4wFJC8rxh/PPaOXDPqzGxvgykrHDPJuagQE=
+X-Google-Smtp-Source: APXvYqzDHFkWbgySn+FGkvYLb5zdM4esJpytVoVC/45AAGMJR0HiALWM3MGwMRiitZNx7TU69wuIUv49l3BaA9SVOfQ=
+X-Received: by 2002:a1f:ff0b:: with SMTP id p11mr12708100vki.83.1557298786234;
+ Tue, 07 May 2019 23:59:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <VI1PR04MB4158EB9135C9536D612F0967E9320@VI1PR04MB4158.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+References: <20190506234631.113226-1-chris.brandt@renesas.com>
+ <20190506234631.113226-2-chris.brandt@renesas.com> <CAMuHMdV3yW44Y1D2Vn1mNJK8pNF3db20An9Sde8=18r8y7m9LQ@mail.gmail.com>
+ <TY1PR01MB15621F21D3A3F1F550D85CD68A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <CAMuHMdWBR-069LJZ12pe1azystGp7egzYjKYFVkuRwMoukvzrQ@mail.gmail.com> <TY1PR01MB1562A5D204AD0104862D09FE8A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY1PR01MB1562A5D204AD0104862D09FE8A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 8 May 2019 08:59:33 +0200
+Message-ID: <CAMuHMdXyuXOGxa=xVwEFWRWB_yHLGG4kLs-ECesSnoD2ctEVRQ@mail.gmail.com>
+Subject: Re: [PATCH 01/10] phy: renesas: rcar-gen3-usb2: Add uses_usb_x1 option
+To:     Chris Brandt <Chris.Brandt@renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 08, 2019 at 03:26:09AM +0000, Yinbo Zhu wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Alan Stern [mailto:stern@rowland.harvard.edu]
-> > Sent: 2019年1月28日 23:37
-> > To: Yinbo Zhu <yinbo.zhu@nxp.com>
-> > Cc: Xiaobo Xie <xiaobo.xie@nxp.com>; Jerry Huang <jerry.huang@nxp.com>;
-> > Ran Wang <ran.wang_1@nxp.com>; Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org>; Ramneek Mehresh
-> > <ramneek.mehresh@freescale.com>; Nikhil Badola
-> > <nikhil.badola@freescale.com>; Suresh Gupta <suresh.gupta@freescale.com>;
-> > linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org; Suresh Gupta
-> > <B42813@freescale.com>
-> > Subject: Re: [PATCH v4 2/5] usb: phy: Workaround for USB erratum-A005728
-> > 
-> > On Fri, 25 Jan 2019, Yinbo Zhu wrote:
-> > 
-> > > From: Suresh Gupta <B42813@freescale.com>
-> > >
-> > > PHY_CLK_VALID bit for UTMI PHY in USBDR does not set even if PHY is
-> > > providing valid clock. Workaround for this involves resetting of PHY
-> > > and check PHY_CLK_VALID bit multiple times. If PHY_CLK_VALID bit is
-> > > still not set even after 5 retries, it would be safe to deaclare that
-> > > PHY clock is not available.
-> > > This erratum is applicable for USBDR less then ver 2.4.
-> > >
-> > > Signed-off-by: Suresh Gupta <B42813@freescale.com>
-> > > Signed-off-by: Yinbo Zhu <yinbo.zhu@nxp.com>
-> > > ---
-> > > Change in v4:
-> > > 		Incorrect indentation of the continuation line.
-> > > 		replace pr_err with dev_err.
-> > >
-> > >  drivers/usb/host/ehci-fsl.c |   38
-> > +++++++++++++++++++++++++++-----------
-> > >  drivers/usb/host/ehci-fsl.h |    3 +++
-> > >  2 files changed, 30 insertions(+), 11 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
-> > > index 38674b7..373a816 100644
-> > > --- a/drivers/usb/host/ehci-fsl.c
-> > > +++ b/drivers/usb/host/ehci-fsl.c
-> > > @@ -183,6 +183,17 @@ static int fsl_ehci_drv_probe(struct platform_device
-> > *pdev)
-> > >  	return retval;
-> > >  }
-> > >
-> > > +static bool usb_phy_clk_valid(struct usb_hcd *hcd) {
-> > > +	void __iomem *non_ehci = hcd->regs;
-> > > +	bool ret = true;
-> > > +
-> > > +	if (!(ioread32be(non_ehci + FSL_SOC_USB_CTRL) & PHY_CLK_VALID))
-> > > +		ret = false;
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > >  static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
-> > >  			       enum fsl_usb2_phy_modes phy_mode,
-> > >  			       unsigned int port_offset)
-> > > @@ -226,6 +237,17 @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
-> > >  		/* fall through */
-> > >  	case FSL_USB2_PHY_UTMI:
-> > >  	case FSL_USB2_PHY_UTMI_DUAL:
-> > > +		/* PHY_CLK_VALID bit is de-featured from all controller
-> > > +		 * versions below 2.4 and is to be checked only for
-> > > +		 * internal UTMI phy
-> > > +		 */
-> > > +		if (pdata->controller_ver > FSL_USB_VER_2_4 &&
-> > > +		    pdata->have_sysif_regs && !usb_phy_clk_valid(hcd)) {
-> > > +			dev_err(dev,
-> > > +				"%s: USB PHY clock invalid\n", dev_name(dev));
-> > 
-> > This looks silly; it prints the device name twice (once because that's what
-> > dev_err() does, and then again because you explicitly told it to print the device
-> > name).
-> > 
-> > Look at how dev_err() is used in other parts of the driver and do the same thing.
-> > 
-> > > +			return -EINVAL;
-> > > +		}
-> > > +
-> > >  		if (pdata->have_sysif_regs && pdata->controller_ver) {
-> > >  			/* controller version 1.6 or above */
-> > >  			tmp = ioread32be(non_ehci + FSL_SOC_USB_CTRL); @@ -249,17
-> > +271,11
-> > > @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
-> > >  		break;
-> > >  	}
-> > >
-> > > -	/*
-> > > -	 * check PHY_CLK_VALID to determine phy clock presence before writing
-> > > -	 * to portsc
-> > > -	 */
-> > > -	if (pdata->check_phy_clk_valid) {
-> > > -		if (!(ioread32be(non_ehci + FSL_SOC_USB_CTRL) &
-> > > -		    PHY_CLK_VALID)) {
-> > > -			dev_warn(hcd->self.controller,
-> > > -				 "USB PHY clock invalid\n");
-> > > -			return -EINVAL;
-> > > -		}
-> > > +	if (pdata->have_sysif_regs &&
-> > > +	    pdata->controller_ver > FSL_USB_VER_1_6 &&
-> > > +		!usb_phy_clk_valid(hcd)) {
-> > > +		dev_warn(hcd->self.controller, "USB PHY clock invalid\n");
-> > 
-> > Once again, you have a continuation line that is indented by the same amount as
-> > the code in the inner block.  Please fix this properly.
-> Hi Alan stern,
-> 
-> Above code indented is in oder to ensure that every line less than 80 characters,
-> Otherwise, check-patch tool to check patch that will has error.
+Hi Chris,
 
-No, that's is not what Alan is asking you to do here.  Please fix this
-up to match other multi-line if statements.
+On Tue, May 7, 2019 at 10:27 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
+> On Tue, May 07, 2019 1, Geert Uytterhoeven wrote:
+> > > So with that said, does a uses-usb-x1 property make more sense?
+> >
+> > No ;-)
+>
+> So....
+>
+> I guess the first patch in the series needs to add this to the .dtsi:
+>
+>         usb_x1_clk: usb_x1 {
+>                 #clock-cells = <0>;
+>                 compatible = "fixed-clock";
+>                 /* If clk present, value must be set by board */
+>                 clock-frequency = <0>;
+>         };
+>
+> Then I can reference "usb_x1" in the driver and see if it is set to
+> non-zero.
+>
+> What do you think?
 
-greg k-h
+Exactly!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
