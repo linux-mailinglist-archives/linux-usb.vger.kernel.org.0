@@ -2,64 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B79316EBE
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 03:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE8616ECE
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 04:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726444AbfEHB7j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 21:59:39 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34225 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726378AbfEHB7j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 21:59:39 -0400
-Received: by mail-pf1-f195.google.com with SMTP id n19so1074225pfa.1;
-        Tue, 07 May 2019 18:59:39 -0700 (PDT)
+        id S1726411AbfEHCDh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 22:03:37 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39130 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726371AbfEHCDg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 22:03:36 -0400
+Received: by mail-pl1-f193.google.com with SMTP id g9so1680802plm.6;
+        Tue, 07 May 2019 19:03:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LKDYwa6gUv5wCTyZ99PrxN7F5ZX+WfRDRB+TBVrMR/M=;
-        b=bO3R80TSFgE++pk0ozdsgJgulasRz6lSf+dyLKEVUTZnfrzKlw4n41cPixoi/YaXAm
-         qDKvTGfvQ+qMhD+bh7vb7BD5GTw+DMtuB25imranm80XSc2CleG5G0YkZ8T1DDB59CeE
-         bILBcf4cuYFCFWQFJnz02u5w12qvjgsFJeB3LpSXWcQbS63aSCBVz8sNJA2+XT3F8uyf
-         /WPfZpv53QTIJLeOG97HFQkXLaKUlzppqEogTcYfC9a4r/0Ane+aLN/ScxQNT3mWRuly
-         5dI+eBPVKfxjv5p/hCZu610r2FW/KiwoGYi2/rPiTcRBXNP8uBHaE/KH93zXb8w9CEWK
-         dmAA==
+        bh=3kIazKZf6YmvWTo0nRkCfEyQWIpfS50NodxpYJkF6U0=;
+        b=No8w8axxDVVJ74jzVtwx3mn6iWP5zI0oIoSt6MwdLrQomPaG6OQ3OHoynPnUVmuNK3
+         yQOek8CmgeSkNx9AIMsRL4/nYsHnqNz7Np2Icw+bku7F7jae5Ge7Mz8/0NFMw7fLf5Zm
+         xt92LcIQfRCKSgc7t524eVU15iCk25sJ0GTrfpb0/sC92d59MY0QQfJ/W2wh4iYge/3Z
+         tbOs1BEZr2VUPFQ39DgR/teUNZZxYEU365X6D8bteS6bwj5BP5R2rnUh3ay/tQjHqGt1
+         V2mrl7fx20Ut8DJ5iqC98Ys/oM/ALnAx+RHavDUtEExWCG4K1SyRCk1XqObndYk2kRJo
+         njCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=LKDYwa6gUv5wCTyZ99PrxN7F5ZX+WfRDRB+TBVrMR/M=;
-        b=C+kcWKfM4RtoXnyXtmHvVArc6muUqb8qSsp/VdcXLTxqAzzd/jfRaYHzNwRmBQnA0Z
-         v6ekA3c99cjNQVANjTaPBolMa+d+RVAQlLtT8Yl5O8Iw3D8ILuHUpWWnt5Qied3dOBUc
-         FCNOR1XMKKlmOzenRMTCFqz/MeYKcXrgq1oek5r9Oc9BJIZVllyuq/qQOWVKz+IKY3FJ
-         CGpUb+UI1SDfSy4tR3gC6Wfm35/djreg1wteCrNIXrs1h7ZKjiFyr0zpB19MDMaQi2Mm
-         maT5KwfRvHXFN4zOoiKvGBzKl5DDw7LQo+M3RyhTkZiLKW34SnRk5vpkyoe9H4sePHS+
-         dwpA==
-X-Gm-Message-State: APjAAAWRRo/GFDVTm/wKOfoMC+fs2L6/HHoYnAzD3SovpflVbXG+hOXe
-        BiiPRCD0ugYPHAC3NPbVZLPpR2zX
-X-Google-Smtp-Source: APXvYqxDuhJVVTLedW1BLuHfADxWqaSKHmzJSrRoR+NS1/eEc5b2m3SHitJ4rvGEcpem027CijC6qA==
-X-Received: by 2002:a63:fb01:: with SMTP id o1mr43420797pgh.135.1557280778532;
-        Tue, 07 May 2019 18:59:38 -0700 (PDT)
+        bh=3kIazKZf6YmvWTo0nRkCfEyQWIpfS50NodxpYJkF6U0=;
+        b=m1dKIkcaOdF0pL/pIverFDmQVD4PEpngCmJcWIpwd5neGCsP4z4jJaL4MbYIfEliIP
+         xegPuChj4Wm2b6X5JVk3bKhKLoAexwqMlFzK86fKr1thwoB3PuYbyVM9F/F2XG7HTMMn
+         khWVUY7gNl8svWss/uV/U9A9ieToI0xvidZyVop6xzyH/iRfEgorvbyvUBkdRFhiDrMz
+         uvYUH+MHK9oCn7ZKQ7fNsmeNOZMwMGUuzgMfJApMX3/LbURsEafnGUmkswFM+wW1g9Rv
+         uUraVH/PASpFxCF+pKZ52Vy5Erljp5Xpsbu+xc7J2sO+EeXMowVK0W8qeXGrMHqpAGzS
+         T+sg==
+X-Gm-Message-State: APjAAAWyXsdbVm9dppYLjQVIXWlNgdzOgCC0QwZjb4qdhqDrwbBCkdDb
+        ZJShYmMfP7+gbrZc/A87/GMQG1kE
+X-Google-Smtp-Source: APXvYqyqnfA6xKp2YkxiecUmGzzVut2GDkUlrNGLCJbIy8SUOxVIue6FzmhsSExQWZR8OgeAmDQ2Mw==
+X-Received: by 2002:a17:902:da4:: with SMTP id 33mr44003839plv.20.1557281015703;
+        Tue, 07 May 2019 19:03:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a18sm14455836pfr.22.2019.05.07.18.59.37
+        by smtp.gmail.com with ESMTPSA id z187sm11670431pfb.132.2019.05.07.19.03.34
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 18:59:37 -0700 (PDT)
-Subject: Re: [PATCH 1/1] usb: typec: tcpci: add functions to read the VBUS
- voltage
-To:     "Angus Ainslie (Purism)" <angus@akkea.ca>
+        Tue, 07 May 2019 19:03:35 -0700 (PDT)
+Subject: Re: [PATCH v2 1/1] usb: typec: tcpci: Clear the fault status register
+To:     "Angus Ainslie (Purism)" <angus@akkea.ca>, angus.ainslie@puri.sm
 Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190508004027.16558-1-angus@akkea.ca>
- <20190508004027.16558-2-angus@akkea.ca>
+References: <20190508002749.14816-1-angus@akkea.ca>
+ <20190508002749.14816-2-angus@akkea.ca>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f70df755-9462-54af-cd7d-83d35c1dd3f8@roeck-us.net>
-Date:   Tue, 7 May 2019 18:59:36 -0700
+Message-ID: <aed487a4-3f7c-55e8-9c84-feaa1c7f583d@roeck-us.net>
+Date:   Tue, 7 May 2019 19:03:33 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190508004027.16558-2-angus@akkea.ca>
+In-Reply-To: <20190508002749.14816-2-angus@akkea.ca>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -68,86 +67,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/7/19 5:40 PM, Angus Ainslie (Purism) wrote:
-> Show an error when the VBUS voltage is out of range.
+On 5/7/19 5:27 PM, Angus Ainslie (Purism) wrote:
+> If the fault status register doesn't get cleared then
+> the ptn5110 interrupt gets stuck on. As the fault register gets
+> set everytime the ptn5110 powers on the interrupt is always stuck.
 > 
+> Fixes: fault status register stuck
 > Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
 > ---
->   drivers/usb/typec/tcpm/tcpci.c | 35 ++++++++++++++++++++++++++++++++++
->   1 file changed, 35 insertions(+)
+>   drivers/usb/typec/tcpm/tcpci.c | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index a5746657b190..223941e11ef3 100644
+> index c1f7073a56de..a5746657b190 100644
 > --- a/drivers/usb/typec/tcpm/tcpci.c
 > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -261,6 +261,26 @@ static int tcpci_set_pd_rx(struct tcpc_dev *tcpc, bool enable)
->   	return 0;
->   }
+> @@ -463,6 +463,17 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+>   	else if (status & TCPC_ALERT_TX_FAILED)
+>   		tcpm_pd_transmit_complete(tcpci->port, TCPC_TX_FAILED);
 >   
-> +static int tcpci_get_vbus_voltage(struct tcpc_dev *tcpc)
-> +{
-> +	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> +	u16 vbus_reg;
-> +	unsigned int vbus_voltage;
-> +	int ret, scale;
-> +
-> +	ret = tcpci_read16(tcpci, TCPC_VBUS_VOLTAGE, &vbus_reg);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	vbus_voltage = vbus_reg & 0x3f;
-> +
-> +	scale = (vbus_reg >> 10) & 3;
-> +	if (scale == 3)
-> +		return -EIO;
-> +
-> +	return (vbus_voltage << scale) * 25;
-> +}
-> +
->   static int tcpci_get_vbus(struct tcpc_dev *tcpc)
->   {
->   	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> @@ -401,6 +421,7 @@ static int tcpci_init(struct tcpc_dev *tcpc)
->   irqreturn_t tcpci_irq(struct tcpci *tcpci)
->   {
->   	u16 status;
-> +	int ret;
->   
->   	tcpci_read16(tcpci, TCPC_ALERT, &status);
->   
-> @@ -474,6 +495,20 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->   		tcpci_write16(tcpci, TCPC_FAULT_STATUS, fault_status);
->   	}
->   
-> +	if (status & (TCPC_ALERT_V_ALARM_LO | TCPC_ALERT_V_ALARM_HI)) {
-> +		ret = tcpci_get_vbus_voltage(&tcpci->tcpc);
-> +
-Extra empty line.
+> +	if (status & TCPC_ALERT_FAULT) {
 
-> +		if (ret >= 0) {
-> +			if (status & TCPC_ALERT_V_ALARM_LO)
-> +				dev_err(tcpci->dev, "Low VBUS voltage %d mV\n",
-> +						ret);
-> +
-> +			if (status & TCPC_ALERT_V_ALARM_HI)
-> +				dev_err(tcpci->dev, "High VBUS voltage %d mV\n",
-> +						ret);
-> +		}
-
-This doesn't report anything if reading the VBUS voltage
-returns an error.
-
-Also, per TCPCI specification, you probably want to check
-POWER_CONTROL.VBUS_VOLTAGE Monitor to see if it is enabled
-in the first place.
-
-On a higher level, the driver doesn't currently set limits for low
-and high voltage alarms, and it doesn't enable those alarms. As such,
-I wonder if/how you can get those alerts. Can you clarify ?
+Wait - the driver doesn't set TCPC_ALERT_FAULT in the alert mask
+register. How can the chip report it if fault alerts are not enabled ?
+What am I missing here ?
 
 Thanks,
 Guenter
 
+> +		u16 fault_status;
+> +
+> +		tcpci_read16(tcpci, TCPC_FAULT_STATUS, &fault_status);
+> +
+> +		dev_warn(tcpci->dev, "FAULT ALERT status 0x%x\n", fault_status);
+> +
+> +		/* clear the fault status */
+> +		tcpci_write16(tcpci, TCPC_FAULT_STATUS, fault_status);
 > +	}
 > +
 >   	return IRQ_HANDLED;
