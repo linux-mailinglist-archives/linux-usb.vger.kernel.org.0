@@ -2,174 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E71E717975
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 14:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0DF1799F
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 14:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728083AbfEHM25 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 08:28:57 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:19078 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727750AbfEHM25 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 08:28:57 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cd2cb830000>; Wed, 08 May 2019 05:28:51 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 08 May 2019 05:28:55 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 08 May 2019 05:28:55 -0700
-Received: from HQMAIL108.nvidia.com (172.18.146.13) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 May
- 2019 12:28:54 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL108.nvidia.com
- (172.18.146.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 8 May 2019 12:28:54 +0000
-Received: from jilin-desktop.nvidia.com (Not Verified[10.19.120.147]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cd2cb840002>; Wed, 08 May 2019 05:28:54 -0700
-From:   Jim Lin <jilin@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <stern@rowland.harvard.edu>, <kai.heng.feng@canonical.com>,
-        <drinkcat@chromium.org>, <keescook@chromium.org>,
-        <nsaenzjulienne@suse.de>, <jflat@chromium.org>, <malat@debian.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jim Lin <jilin@nvidia.com>
-Subject: [PATCH v5 1/1] usb: xhci: Add Clear_TT_Buffer
-Date:   Wed, 8 May 2019 20:28:49 +0800
-Message-ID: <1557318529-7081-1-git-send-email-jilin@nvidia.com>
-X-Mailer: git-send-email 2.1.4
+        id S1726602AbfEHMo0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 08:44:26 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:43470 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725889AbfEHMo0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 08:44:26 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 29F3D283978
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+To:     John Stultz <john.stultz@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     "Yang, Fei" <fei.yang@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen Yu <chenyu56@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+Message-ID: <3b57eb64-4c25-4582-7b0d-59143060b5a5@collabora.com>
+Date:   Wed, 8 May 2019 14:44:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1557318531; bh=cRmvK/tiTBL9p7PfWTIm69LLVYs81XAUbkfC2etvNNA=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:Content-Type;
-        b=qtuU64U18ALZDb6EPsTx9aVBZte2t1f3xoZFNf1yTtg/oqMzbYf9IdVQyOrV3XSlO
-         9IrS3MQRiSBAQBLu5S3XbaPgCIZcNq9P3V1hGEWUM5N9gkv9Gc7tufhHfN/+67d/IT
-         w0GCjsAzfMdxgGKVAs+woUMULeZNeDnc3FTHnwzapubmPAcGwlUyhD+Idbz+b/zj3Q
-         Sp2yoi2sq+YfP6AHjjcC1Gl9VYky6l6d5EfT90/iuTwkVCshg1u02vNlV2co4kw0JU
-         2hvnOqJ4t/tvqmoTXzwDuwIrARqqAgOygfAdDFYd2mJPZgnzjzYsGsp54mvoboshWs
-         7duCw24Bpgd/g==
+In-Reply-To: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-processing for full-/low-speed endpoints connected via a TT, the host
-software must use the Clear_TT_Buffer request to the TT to ensure
-that the buffer is not in the busy state".
+Hi John,
 
-In our case, a full-speed speaker (ConferenceCam) is behind a high-
-speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-request we may continue to get STALL with the folllowing requests,
-like Set_Interface.
+W dniu 08.05.2019 o 04:18, John Stultz pisze:
+> Since commit 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather
+> buffers"), I've been seeing trouble with adb transfers in Android on
+> HiKey960, HiKey and now Dragonboard 845c.
+> 
+> Sometimes things crash, but often the transfers just stop w/o any
+> obvious error messages.
+> 
 
-Solution is for XHCI driver to invoke usb_hub_clear_tt_buffer() to
-send Clear_TT_Buffer request to the hub of the device for the
-following Set_Interface requests to the device to get ACK
-successfully.
+<snip>
 
-The Clear_TT_Buffer request sent to the hub includes the address of
-the LS/FS child device in wValue field. usb_hub_clear_tt_buffer()
-uses udev->devnum to set the address wValue. This won't work for
-devices connected to xHC.
+> 
+> Andrzej: Do you have any ideas or suggestions on this? I'm happy to
+> test or run any debug patches, if it would help narrow the issue down.
+> 
 
-For other host controllers udev->devnum is the same as the address of
-the usb device, chosen and set by usb core. With xHC the controller
-hardware assigns the address, and won't be the same as devnum.
+Can you please try the below patch?
 
-In the fix we get that address from slot context if it's XHC.
+One more thing to consider is "functionfs read size 512 > requested size 24,
+splitting request into multiple reads." in your original report, but let's
+try this first:
 
-Signed-off-by: Jim Lin <jilin@nvidia.com>
+ From f2b8f27cfa42cafe1f56d8abbe2c76fa0072e368 Mon Sep 17 00:00:00 2001
+From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Date: Wed, 8 May 2019 13:52:40 +0200
+Subject: [PATCH] usb: gadget: Zero ffs_io_data
+
+In some cases the "Allocate & copy" block in ffs_epfile_io() is not
+executed. Consequently, in such a case ffs_alloc_buffer() is never called
+and struct ffs_io_data is not initialized properly. This in turn leads to
+problems when ffs_free_buffer() is called at the end of ffs_epfile_io().
+
+This patch uses kzalloc() instead of kmalloc() in the aio case and memset()
+in non-aio case to properly initialize struct ffs_io_data.
+
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 ---
-v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
-    , remove its claiming in xhci.h
-v3: Add description for clearing_tt (xhci.h)
-v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
-    to protect for Clear_TT_Buffer to be run serially.
-    Remove xhci_clear_tt_buffer_complete as it's not necessary.
-    Same reason as the above.
-    Extend usb_hub_clear_tt_buffer parameter
-v5: Not extending usb_hub_clear_tt_buffer parameter
-    Add description.
+  drivers/usb/gadget/function/f_fs.c | 6 ++++--
+  1 file changed, 4 insertions(+), 2 deletions(-)
 
- drivers/usb/core/hub.c       | 17 ++++++++++++++++-
- drivers/usb/host/xhci-ring.c | 13 +++++++++++++
- 2 files changed, 29 insertions(+), 1 deletion(-)
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 47be961f1bf3..41d57ae8bc15 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1182,11 +1182,12 @@ static ssize_t ffs_epfile_write_iter(struct kiocb 
+*kiocb, struct iov_iter *from)
+  	ENTER();
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 15a2934dc29d..00d994908217 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -35,6 +35,7 @@
- 
- #include "hub.h"
- #include "otg_whitelist.h"
-+#include "../host/xhci.h"
- 
- #define USB_VENDOR_GENESYS_LOGIC		0x05e3
- #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
-@@ -858,6 +859,10 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
- 	struct usb_tt		*tt = udev->tt;
- 	unsigned long		flags;
- 	struct usb_tt_clear	*clear;
-+	struct xhci_hcd *xhci;
-+	struct xhci_virt_device *dev;
-+	struct xhci_slot_ctx *slot_ctx;
-+	int devnum;
- 
- 	/* we've got to cope with an arbitrary number of pending TT clears,
- 	 * since each TT has "at least two" buffers that can need it (and
-@@ -873,7 +878,17 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
- 	/* info that CLEAR_TT_BUFFER needs */
- 	clear->tt = tt->multi ? udev->ttport : 1;
- 	clear->devinfo = usb_pipeendpoint (pipe);
--	clear->devinfo |= udev->devnum << 4;
-+	/* If slot_id is nonzero, then it's XHCI */
-+	if (udev->slot_id) {
-+		xhci = hcd_to_xhci(bus_to_hcd(udev->bus));
-+		dev = xhci->devs[udev->slot_id];
-+		slot_ctx = xhci_get_slot_ctx(xhci, dev->out_ctx);
-+		/* Device address is assigned by XHC */
-+		devnum = (int) le32_to_cpu(slot_ctx->dev_state) &
-+			DEV_ADDR_MASK;
-+		clear->devinfo |= devnum << 4;
-+	} else
-+		clear->devinfo |= udev->devnum << 4;
- 	clear->devinfo |= usb_pipecontrol(pipe)
- 			? (USB_ENDPOINT_XFER_CONTROL << 11)
- 			: (USB_ENDPOINT_XFER_BULK << 11);
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 9215a28dad40..985f85d23b8d 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1786,6 +1786,18 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
- 	return NULL;
- }
- 
-+static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci,
-+	unsigned int slot_id, struct xhci_td *td)
-+{
-+	/*
-+	 * As part of low/full-speed endpoint-halt processing
-+	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
-+	 */
-+	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
-+	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub))
-+		usb_hub_clear_tt_buffer(td->urb);
-+}
-+
- static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
- 		unsigned int slot_id, unsigned int ep_index,
- 		unsigned int stream_id, struct xhci_td *td,
-@@ -1804,6 +1816,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
- 	if (reset_type == EP_HARD_RESET) {
- 		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
- 		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
-+		xhci_clear_hub_tt_buffer(xhci, slot_id, td);
- 	}
- 	xhci_ring_cmd_db(xhci);
- }
+  	if (!is_sync_kiocb(kiocb)) {
+-		p = kmalloc(sizeof(io_data), GFP_KERNEL);
++		p = kzalloc(sizeof(io_data), GFP_KERNEL);
+  		if (unlikely(!p))
+  			return -ENOMEM;
+  		p->aio = true;
+  	} else {
++		memset(p, 0, sizeof(*p));
+  		p->aio = false;
+  	}
+
+@@ -1218,11 +1219,12 @@ static ssize_t ffs_epfile_read_iter(struct kiocb *kiocb, 
+struct iov_iter *to)
+  	ENTER();
+
+  	if (!is_sync_kiocb(kiocb)) {
+-		p = kmalloc(sizeof(io_data), GFP_KERNEL);
++		p = kzalloc(sizeof(io_data), GFP_KERNEL);
+  		if (unlikely(!p))
+  			return -ENOMEM;
+  		p->aio = true;
+  	} else {
++		memset(p, 0, sizeof(*p));
+  		p->aio = false;
+  	}
+
 -- 
-2.1.4
-
+2.17.1
