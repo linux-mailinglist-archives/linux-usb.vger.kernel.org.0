@@ -2,92 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A000171FA
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 08:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDEB117201
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 09:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbfEHG7r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 02:59:47 -0400
-Received: from mail-vk1-f194.google.com ([209.85.221.194]:36392 "EHLO
-        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbfEHG7r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 02:59:47 -0400
-Received: by mail-vk1-f194.google.com with SMTP id d74so4707797vka.3;
-        Tue, 07 May 2019 23:59:46 -0700 (PDT)
+        id S1726685AbfEHHBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 03:01:31 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:33355 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726179AbfEHHBb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 03:01:31 -0400
+Received: by mail-lj1-f194.google.com with SMTP id f23so16525147ljc.0;
+        Wed, 08 May 2019 00:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LlkeWsi6LmpJS+erXuy96JNFrHh+hmFbNQBGbb+jt0s=;
+        b=KR/4UD8TzdEJ8dkuISmY8CnlmVWHb8M/fEDMAQJqu6U5N874Tq/31m2QEXw7ey7HN2
+         jlU1CpGJhQCuMl5fdU90KQvf6HNOSMeqSg/VAEuQHI9mWfvNDd87TsOxQTw5Gi8qyUkE
+         2HLG0eMH/eUqFy+piudOLBvux+7DFTQ5xy0PEIlNZcEWFvayja2nnjBEjuECGwEwAe0d
+         MSyAxlDY6ymKS6+C+/LQ8ApcsMCh/bkG91s0+moZMIwvgyprW010AOXF4SJdKXMs/VvQ
+         IvGqu16hm+kqJzidK4LO+Xv27p4L8rogD/sjzdSEtlNWlI48QI9y2+aGrCs3831/x6nf
+         p22Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Hb3fPf5B0g2t3lQ+CxtsUvfMJ5uLadXuXQz78ww3fYU=;
-        b=G7QEGx7GDDKHzNKCTQgVo1xdT5l5jA8HnO0Lb5xhAZRokOEALifEnhY2APdS3XVR3n
-         uwn3kRwE1GADfAV1B07F4wIONZrTYGiQHTbUtTTSoix+Ci92IjKahK+jwFIUvF41dGMz
-         Kra0KVz55NW7xU0xjxRPJ0yoAgaJETk6vFMuYiMpBZ72Wn8S/wpiCobtIwR0CrpFty7m
-         CFXiyHZanCw8hqLA4p8sax3hfBV8ezXrm+rB9hbnUWJn8ad0H8aILXHuRAoR/7AwEjeb
-         fLLwnbskRMNDKGwdqCb/WqiHddsp/WP9t6TTOxnf3KUwmDEZdkfIGctmeFn3kHZV6ALt
-         n/Tg==
-X-Gm-Message-State: APjAAAVUMiIKAoyuqnkxk/ZFgU2VnjTZXq0FFjYVNI0GhdnKe/sHjJev
-        aTcm4wFJC8rxh/PPaOXDPqzGxvgykrHDPJuagQE=
-X-Google-Smtp-Source: APXvYqzDHFkWbgySn+FGkvYLb5zdM4esJpytVoVC/45AAGMJR0HiALWM3MGwMRiitZNx7TU69wuIUv49l3BaA9SVOfQ=
-X-Received: by 2002:a1f:ff0b:: with SMTP id p11mr12708100vki.83.1557298786234;
- Tue, 07 May 2019 23:59:46 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LlkeWsi6LmpJS+erXuy96JNFrHh+hmFbNQBGbb+jt0s=;
+        b=pOsDCBxYH6A0CgjLL6Q4qROrrbHfz2Pz3QxRfQDrpKTxOn1NxkGYWI9s9yMWlzVcSs
+         8UQ2zc2PatG/9O8cmZrlK9tQfN8/bXH2DQmB6gPBI4cak3rSmmjlovqf1YfuYa1E8jnN
+         MfhlbxzuDHtjdRS0EAzl7kMUppcBK1E2Jl6fFdk1yuU5ytP+SvFxatj04JAhw/zPXAL1
+         9EP7KfoDiM94qTFbgAwB2dSQmytn86ennfgHcXGQMWQ/9DFtzI9LqStR2m7+Vi/+d+Dw
+         JfYs082fFQB843Ps+eP/jIZJjmPjzh4bgL2pvcTJyS1Q3NdliHJXSlSLaMZVE6Me2HHs
+         Y5dA==
+X-Gm-Message-State: APjAAAWa5TdTdg1xtWQ3a5cKiUsIdmRPWYy1RpEvGKAsJp/U9RrsdD3x
+        lJoiD13LxA8Vgw81p/tL0vg=
+X-Google-Smtp-Source: APXvYqwEcmDSKZI8nPp7flMQUUXOqApyNGLAjuBp9uXH19ysfrzB9szdYO6x+9xRYmK7D15erwg9Ug==
+X-Received: by 2002:a2e:1296:: with SMTP id 22mr19939937ljs.11.1557298889143;
+        Wed, 08 May 2019 00:01:29 -0700 (PDT)
+Received: from [192.168.0.140] (rev-10.ethnet.com.pl. [87.204.29.10])
+        by smtp.gmail.com with ESMTPSA id q5sm3358417lfj.1.2019.05.08.00.01.27
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 08 May 2019 00:01:28 -0700 (PDT)
+Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+To:     John Stultz <john.stultz@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     "Yang, Fei" <fei.yang@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen Yu <chenyu56@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+From:   Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+Message-ID: <5d58059c-1b10-665f-983b-a1d018a30d1f@gmail.com>
+Date:   Wed, 8 May 2019 09:01:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <20190506234631.113226-1-chris.brandt@renesas.com>
- <20190506234631.113226-2-chris.brandt@renesas.com> <CAMuHMdV3yW44Y1D2Vn1mNJK8pNF3db20An9Sde8=18r8y7m9LQ@mail.gmail.com>
- <TY1PR01MB15621F21D3A3F1F550D85CD68A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <CAMuHMdWBR-069LJZ12pe1azystGp7egzYjKYFVkuRwMoukvzrQ@mail.gmail.com> <TY1PR01MB1562A5D204AD0104862D09FE8A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY1PR01MB1562A5D204AD0104862D09FE8A310@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 8 May 2019 08:59:33 +0200
-Message-ID: <CAMuHMdXyuXOGxa=xVwEFWRWB_yHLGG4kLs-ECesSnoD2ctEVRQ@mail.gmail.com>
-Subject: Re: [PATCH 01/10] phy: renesas: rcar-gen3-usb2: Add uses_usb_x1 option
-To:     Chris Brandt <Chris.Brandt@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simon Horman <horms@verge.net.au>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chris,
+Hi John,
 
-On Tue, May 7, 2019 at 10:27 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
-> On Tue, May 07, 2019 1, Geert Uytterhoeven wrote:
-> > > So with that said, does a uses-usb-x1 property make more sense?
-> >
-> > No ;-)
->
-> So....
->
-> I guess the first patch in the series needs to add this to the .dtsi:
->
->         usb_x1_clk: usb_x1 {
->                 #clock-cells = <0>;
->                 compatible = "fixed-clock";
->                 /* If clk present, value must be set by board */
->                 clock-frequency = <0>;
->         };
->
-> Then I can reference "usb_x1" in the driver and see if it is set to
-> non-zero.
->
-> What do you think?
++= Marek
 
-Exactly!
+W dniu 08.05.2019 o 04:18, John Stultz pisze:
+> Since commit 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather
+> buffers"), I've been seeing trouble with adb transfers in Android on
+> HiKey960, HiKey and now Dragonboard 845c.
+> 
+> Sometimes things crash, but often the transfers just stop w/o any
+> obvious error messages.
+> 
+> Initially I thought it was an issue with the HiKey960 dwc3 usb patches
+> being upstreamed, and was using the following hack workaround:
+>    https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey960-5.1&id=dcdadaaec9db7a7b78ea9b838dd1453359a2f388
+> 
+> Then dwc2 added sg support, and I ended up having to revert it to get
+> by on HiKey:
+>    https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey-5.1&id=6e91b4c7bd1e94bdd835263403c53e85a677b848
+> 
+> (See thread here: https://lkml.org/lkml/2019/3/8/765)
+> 
+> And now I've reproduced the same issue (with the same dwc3 workaround)
+> on the already upstream code for Dragonboard 845c.
+> 
+> Fei Yang has also reached out and mentioned he was seeing similar
+> problems with the f_fs sg support.
+> 
+> Andrzej: Do you have any ideas or suggestions on this? I'm happy to
+> test or run any debug patches, if it would help narrow the issue down.
+> 
 
-Gr{oetje,eeting}s,
+There is a patch:
 
-                        Geert
+https://www.spinics.net/lists/linux-usb/msg178536.html
+https://www.spinics.net/lists/linux-usb/msg179653.html
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+which fixes a subtle bug, but hasn't been applied yet.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Can you please try it?
+
+> If not, should we consider reverting the f_fs sg support?
+> 
+
+Andrzej
