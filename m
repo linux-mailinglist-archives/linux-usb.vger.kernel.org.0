@@ -2,112 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCA616E75
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 02:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A654816E98
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 03:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbfEHAtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 20:49:17 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35363 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726276AbfEHAtR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 20:49:17 -0400
-Received: by mail-pl1-f194.google.com with SMTP id w24so9019400plp.2;
-        Tue, 07 May 2019 17:49:17 -0700 (PDT)
+        id S1726491AbfEHBSB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 21:18:01 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:45830 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726481AbfEHBSA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 21:18:00 -0400
+Received: by mail-qk1-f193.google.com with SMTP id j1so5532460qkk.12
+        for <linux-usb@vger.kernel.org>; Tue, 07 May 2019 18:18:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=t4DaXEI4RXMI2Ha+KEPle/O32l3yeez/gfD+bCb4ZQ4=;
-        b=F8rQiUnmcH2ZQ6T6EsdGNIYwJaFrYnhANeh2O3g9QAtOyXM951IYNgzhCNRT8I7Dxo
-         I1sI2H4OI51rJvym7+GjIqXnlKt0+/w7bSjayfEop/ZNb9pBXwQwcafhE2DRYSZk5Iq9
-         jRL+SRAYOyz/+UL6VlymYt/W6+skYtN4rm5LinKbLi09DCzFoJCe5xSSBVeq5iJuF7UR
-         FK1Q0pCeb/C0uAGTOKzA9qQ2TaXN4DZgEe0i1A8c3kj06SwUOCXaHvuzChRzXvBYZTOr
-         NybUy3MD0fhlWaebK+uftz87dUIyy58dJwL2H0c3D4zJ1bc+tgMSGT9P+ASV+humz7aD
-         Z6WQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O+01/fhDqtai1N/X2yLycMXv1SIs+oDpJCrUUWcrjMA=;
+        b=FjutGs8Upc4X6Ku/pI/PhsHhXsb8sSJIphZ2Bg6gKbUsba2yYhZiL0CQ1dmLmyiNMY
+         1DoyzoBrbX/9wIuVbbJxqDoh6T5/SjSLneERnFf2MvvZ4dEnh5JkyfUIml41Djky5/16
+         mUowZUTgIE3HBR+V4Tj+h5zLTs801GBy08Ld8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=t4DaXEI4RXMI2Ha+KEPle/O32l3yeez/gfD+bCb4ZQ4=;
-        b=eYSB4Yuhr5I/oD/lsLiows3651w9q+DoIzdWp4HOgirIR7EtvqgVZ7S93mlOPoG6f6
-         B2V+8W00pRY7/0eG/BBLUexfKcJ0NKqXrlVHNcwX8ZRzJAy9f6ZtwJcZcl5pFLOVYAPQ
-         rNb4aGl0m7eGw+5IAmYX7DfGCtuqeiqtWSRW7kKduNRBlrrADZqQitHzvJRudhaRh1pF
-         4FF0GzYlS8A2Of91UUFYIeTVkKzQ6qOMKVl/bNSwzEU7avj0n6SW2SqNBATSit6rGYKI
-         FTjIU9R+rkWlsQh9JWMo049siUGpFRMnNDXxBDFh6foZLxDfxLThhSbdUGvwplH/OuPi
-         6Ztg==
-X-Gm-Message-State: APjAAAWSSXQn3waHduxEWBkf6gbyWzOtXdvxhPWG7kL3hL/yUYOmXYP4
-        LKZa0179wGOc4bocDxl4jv0XzDer
-X-Google-Smtp-Source: APXvYqw/aIXMWSlLjL40RmduVaHWQFjjTA4VY4w9rLLBTv02WyjtlPhVUAfRy1dooDCIHTvF6/9j7w==
-X-Received: by 2002:a17:902:a3:: with SMTP id a32mr43580938pla.111.1557276556732;
-        Tue, 07 May 2019 17:49:16 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j22sm18332187pfn.129.2019.05.07.17.49.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 17:49:15 -0700 (PDT)
-Subject: Re: [PATCH v2 1/1] usb: typec: tcpci: Clear the fault status register
-To:     "Angus Ainslie (Purism)" <angus@akkea.ca>, angus.ainslie@puri.sm
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190508002749.14816-1-angus@akkea.ca>
- <20190508002749.14816-2-angus@akkea.ca>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5f0bec69-9579-f153-c3fd-d7b8deea75c4@roeck-us.net>
-Date:   Tue, 7 May 2019 17:49:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O+01/fhDqtai1N/X2yLycMXv1SIs+oDpJCrUUWcrjMA=;
+        b=nDJgcQnntz/ydnSS4RfIXA6zPDuutArhNQFu+kiOP2J73QArPYRrDdbU1Y1l2ul13v
+         j3k5RQbTTT3uJLyEFBrBWVSTUvwsWxKRnDcyeEQ9/auxRQIqrtvtcJMUFBDtomj5m6WG
+         JD+rnMATentQ8JX22CTiq4u3SmqmfMHsJifyeufAvcb01QxbT0/mMjoCj12698T5sPvV
+         gn7wLd5lD+AtHh8K6Dx4U1lKUcCR4iN5FFzlLgvGDJIfv1XKHhi3SNLR/rIaUeo7QXU6
+         WwghDbztSt9fsfKqV7JcQ1BAn3jRvqx4L8OO4YZwQFeHi8qvNfszv+zctdn4bV5t8wEc
+         n4ew==
+X-Gm-Message-State: APjAAAUrekyalPPSjGx/0+7NJYUEBIAqhyo3YqmSA5NcBFS48upA6eni
+        sSxWqcgEtJjwKX92cd8Jn0EHhZJ0aOcyE+eyIaMJtw==
+X-Google-Smtp-Source: APXvYqxL08Ax+gOyBauc0IC54ns9XncT6heXSua50dh6BBwY1PpGYWMo0JAbDc87rrA5Nn7hmelfVODRA0RtyuYUK6Y=
+X-Received: by 2002:a37:2e05:: with SMTP id u5mr6103515qkh.124.1557278279873;
+ Tue, 07 May 2019 18:17:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190508002749.14816-2-angus@akkea.ca>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190502045631.229386-1-drinkcat@chromium.org> <6844539f-3d5e-e3ff-b498-390cdc731880@linux.intel.com>
+In-Reply-To: <6844539f-3d5e-e3ff-b498-390cdc731880@linux.intel.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Wed, 8 May 2019 10:17:48 +0900
+Message-ID: <CANMq1KArM_sttW0-hq9sS4gVfWnZbHevfJ+YEg0YQ3ML_Okygg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: xhci: Make it possible to not have a secondary
+ HCD (3.0)
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Hoan Tran <hoan@os.amperecomputing.com>,
+        chunfeng.yun@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/7/19 5:27 PM, Angus Ainslie (Purism) wrote:
-> If the fault status register doesn't get cleared then
-> the ptn5110 interrupt gets stuck on. As the fault register gets
-> set everytime the ptn5110 powers on the interrupt is always stuck.
-> 
-> Fixes: fault status register stuck
+On Mon, May 6, 2019 at 10:19 PM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+> On 2.5.2019 7.56, Nicolas Boichat wrote:
+> > Some XHCI controllers may not have any USB 3.0 port, in this case, it
+> > is not useful to create add hcd->shared_hcd, which has 2 main
+> > downsides:
+> >   - A useless USB 3.0 root hub is created.
+> >   - A warning is thrown on boot:
+> > hub 2-0:1.0: config failed, hub doesn't have any ports! (err -19)
+> >
+> > The change is mostly about checking if hcd->shared_hcd is NULL before
+> > accessing it. The one special case is in xhci_run, where we need to
+> > call xhci_run_finished immediately, if there is no secondary hcd.
+>
+> To me it looks like this creates an controller starting issue for
+> xHC hardware that have both usb2 and usb3 ports.
+>
+> When we have usb3 ports xhci->shared_hcd is not set yet when xhci_run is called
+> the first time. We will end up starting the xHC before properly setting up the secondary hcd.
+>
+> See further down for details
 
-That is not how Fixes: tags are supposed to work. This should probably be
+Thanks Mathias and Chunfeng, I need to test this on platforms that
+actually support USB 3.0 (both PCI and MTK), as you both highlighted,
+there might be issues.
 
-Fixes: 74e656d6b0551 ("staging: typec: Type-C Port Controller Interface driver (tcpci)")
+I'll do that a spin a v2. It might take a while though (this is not a
+very critical issue).
 
-Otherwise
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
-> ---
->   drivers/usb/typec/tcpm/tcpci.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index c1f7073a56de..a5746657b190 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -463,6 +463,17 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->   	else if (status & TCPC_ALERT_TX_FAILED)
->   		tcpm_pd_transmit_complete(tcpci->port, TCPC_TX_FAILED);
->   
-> +	if (status & TCPC_ALERT_FAULT) {
-> +		u16 fault_status;
-> +
-> +		tcpci_read16(tcpci, TCPC_FAULT_STATUS, &fault_status);
-> +
-> +		dev_warn(tcpci->dev, "FAULT ALERT status 0x%x\n", fault_status);
-> +
-> +		/* clear the fault status */
-> +		tcpci_write16(tcpci, TCPC_FAULT_STATUS, fault_status);
-> +	}
-> +
->   	return IRQ_HANDLED;
->   }
->   EXPORT_SYMBOL_GPL(tcpci_irq);
-> 
-
+> >
+> > Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+> > ---
+> >
+> > This is a respin of https://lore.kernel.org/patchwork/patch/863993/,
+> > hopefully addressing the comments there. Note that I dropped the change
+> > in xhci-plat.c, as I do not have a device to test it, but made a
+> > similar change in xhci-mtk.c, in the next patch.
+> >
+> > (the @apm.com addresses seem to bounce, so I added some
+> > @amperecomputing.com instead, if somebody there can track back the
+> > original issue, I'm happy to provide a patch for xhci-plat.c as well)
+> >
+> > drivers/usb/host/xhci-hub.c |  7 ++++--
+> >   drivers/usb/host/xhci.c     | 45 +++++++++++++++++++++++++++----------
+> >   2 files changed, 38 insertions(+), 14 deletions(-)
+> >
+>
+> ...
+>
+> > @@ -698,6 +703,10 @@ int xhci_run(struct usb_hcd *hcd)
+> >
+> >       xhci_debugfs_init(xhci);
+> >
+> > +     /* There is no secondary HCD, start the host controller immediately. */
+> > +     if (!xhci->shared_hcd)
+> > +             return xhci_run_finished(xhci);
+> > +
+>
+> PCI xHC controllers with both usb2 and usb3 ports will be started before usb3 parts are properly set up.
+>
+> xhci_pci_probe()
+>    usb_hcd_pci_probe()
+>      usb_add_hcd()
+>        hcd->driver->start(hcd)  // .start = xhci_run
+>          xhci_run()
+>            if (!xhci->shared_hcd)  // TRUE as xhci->shared_hcd is not yet set,
+>             return xhci_run_finished(xhci)  // starting controller too early here
+>    xhci->shared_hcd = usb_create_shared_hcd()   // now xhci->shared_hcd is set.
+>
+> -Mathias
