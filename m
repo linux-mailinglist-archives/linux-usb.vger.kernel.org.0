@@ -2,92 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F2F17BBB
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 16:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846A317BC0
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 16:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727626AbfEHOkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 10:40:24 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34016 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727354AbfEHOkY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 10:40:24 -0400
-Received: by mail-pf1-f193.google.com with SMTP id n19so2060219pfa.1;
-        Wed, 08 May 2019 07:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qU+b830HjTDROUNUT/+w1uv0y2kFrc/lnnYO3ZmFuyQ=;
-        b=n1wAnDEoWZeIZveeMXxtGy1V2bRZ4r92eFhDUCyLpO2y4n2tZdYl1zOSrUDeVDVwPT
-         FIlxCREmkh0hDpQn+0AH9X4/g0xloD3hCY0JQwQAa6LqRb+XMB9sKbcjg+HQxOaS1p4N
-         KcooeenPbGttAMpVjWaN47R8FmUIFv3ckNBHn2+bCaCYXbpCpPE0O1e0qChY5eqvWVPJ
-         bI3dfe7UV1QesyxqSFRWDWdgdqlQ5U18hnq6nJIh5/gd07qzwlbEpyUasfpDOKy1iyDH
-         SRo2TN8jyPNN5yZXUZx/KSttbSQv6qwda7NUD7RkvDktdG7WOLXhiaC/UEmUaLcLs7D6
-         61MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qU+b830HjTDROUNUT/+w1uv0y2kFrc/lnnYO3ZmFuyQ=;
-        b=ocwr6Y21+wu4BdverycZZTrSlUWL5NM3WsEFINA0GBdc7c6KQpblOCc39mNdfKo183
-         ALz+Ysn1Jcn0emYZoKpVBgJxNhKeJ2M/SVhakc/Y5Iij1UWlkO2NEXc5ucoo2JC6izFp
-         9GWCm2HdzLvB8rskCiVzzLUByq8qDgSnW/S3DLDRwdkNllVvISKDRM4hHUoq2M/c8AzG
-         9Ae9GdAqXVInW4U6DZ2xPaYpzHjJ7fxE4FXDjt7Rfxm2l07Hs/r+X660hBOePWRx2iX6
-         EvkYp/6uJGe/GAJQZdfBgFUmDbaF8hul4YEMY8Wt7ikyX1IXg/SpnWacL/lpt0nLdW5I
-         guWg==
-X-Gm-Message-State: APjAAAV3b2PChhnC8M7Ia7T+xUOm3E5nv3AX6Pj0ma7tx6wP1UhZRGxi
-        92EeQu+YZdoGuQADETJ4M6t4/12dstA=
-X-Google-Smtp-Source: APXvYqyP65HG3rORTR+4E+EuA4ikj7IagPu+Hf+70+EumxbD21ROxTl1cat427U0GyTRpgH1XjK5kA==
-X-Received: by 2002:a63:10c:: with SMTP id 12mr48465705pgb.276.1557326423339;
-        Wed, 08 May 2019 07:40:23 -0700 (PDT)
-Received: from localhost.localdomain ([125.142.23.13])
-        by smtp.gmail.com with ESMTPSA id o73sm7255366pfi.137.2019.05.08.07.40.21
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 08 May 2019 07:40:22 -0700 (PDT)
-Date:   Wed, 8 May 2019 23:40:18 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v2] usb: host: xhci: Support running urb giveback in
- tasklet context
-Message-ID: <20190508144016.GA2569@localhost.localdomain>
-References: <20190401141611.10087-1-suwan.kim027@gmail.com>
- <20190507160219.GB2427@localhost.localdomain>
- <0529be1d-57d6-18b8-6f62-49f4b3931e1a@linux.intel.com>
+        id S1728043AbfEHOlm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 10:41:42 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:40034 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726928AbfEHOll (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 10:41:41 -0400
+Received: (qmail 4140 invoked by uid 2102); 8 May 2019 10:41:41 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 8 May 2019 10:41:41 -0400
+Date:   Wed, 8 May 2019 10:41:41 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Jim Lin <jilin@nvidia.com>
+cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
+        <kai.heng.feng@canonical.com>, <drinkcat@chromium.org>,
+        <keescook@chromium.org>, <nsaenzjulienne@suse.de>,
+        <jflat@chromium.org>, <malat@debian.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 1/1] usb: xhci: Add Clear_TT_Buffer
+In-Reply-To: <1557320740-17853-1-git-send-email-jilin@nvidia.com>
+Message-ID: <Pine.LNX.4.44L0.1905081039380.1699-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0529be1d-57d6-18b8-6f62-49f4b3931e1a@linux.intel.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 08, 2019 at 03:04:33PM +0300, Mathias Nyman wrote:
-> On 7.5.2019 19.02, Suwan Kim wrote:
-> > On Mon, Apr 01, 2019 at 11:16:11PM +0900, Suwan Kim wrote:
-> > > Patch "USB: HCD: support giveback of URB in tasklet context"[1]
-> > > introduced giveback of urb in tasklet context. [1] This patch was
-> > > applied to ehci but not xhci. [2] This patch significantly reduces
-> > > the hard irq time of xhci. Especially for uvc driver, the hard irq
-> > > including the uvc completion function runs quite long but applying
-> > > this patch reduces the hard irq time of xhci.
-> > > 
-> > 
-> > I sent this patch a month ago but got no answer.
-> > Is there any feedback for this?
-> > Please let me know if there are any faults or it needs more tests.
-> > 
+On Wed, 8 May 2019, Jim Lin wrote:
+
+> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+> processing for full-/low-speed endpoints connected via a TT, the host
+> software must use the Clear_TT_Buffer request to the TT to ensure
+> that the buffer is not in the busy state".
 > 
-> I'll add this to a internal tree first, and let it sit there for a few
-> weeks, trying to catch possible bugs this change could expose.
+> In our case, a full-speed speaker (ConferenceCam) is behind a high-
+> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+> request we may continue to get STALL with the folllowing requests,
+> like Set_Interface.
+> 
+> Solution is for XHCI driver to invoke usb_hub_clear_tt_buffer() to
+> send Clear_TT_Buffer request to the hub of the device for the
+> following Set_Interface requests to the device to get ACK
+> successfully.
+> 
+> The Clear_TT_Buffer request sent to the hub includes the address of
+> the LS/FS child device in wValue field. usb_hub_clear_tt_buffer()
+> uses udev->devnum to set the address wValue. This won't work for
+> devices connected to xHC.
+> 
+> For other host controllers udev->devnum is the same as the address of
+> the usb device, chosen and set by usb core. With xHC the controller
+> hardware assigns the address, and won't be the same as devnum.
+> 
+> In the fix we get that address from slot context if it's XHC.
+> 
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
+> ---
+> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
+>     , remove its claiming in xhci.h
+> v3: Add description for clearing_tt (xhci.h)
+> v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
+>     to protect for Clear_TT_Buffer to be run serially.
+>     Remove xhci_clear_tt_buffer_complete as it's not necessary.
+>     Same reason as the above.
+>     Extend usb_hub_clear_tt_buffer parameter
+> v5: Not extending usb_hub_clear_tt_buffer parameter
+>     Add description.
+> v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
+> 
+>  drivers/usb/core/hub.c       | 17 ++++++++++++++++-
+>  drivers/usb/host/xhci-ring.c | 12 ++++++++++++
+>  2 files changed, 28 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 15a2934dc29d..00d994908217 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -35,6 +35,7 @@
+>  
+>  #include "hub.h"
+>  #include "otg_whitelist.h"
+> +#include "../host/xhci.h"
+>  
+>  #define USB_VENDOR_GENESYS_LOGIC		0x05e3
+>  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
+> @@ -858,6 +859,10 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
+>  	struct usb_tt		*tt = udev->tt;
+>  	unsigned long		flags;
+>  	struct usb_tt_clear	*clear;
+> +	struct xhci_hcd *xhci;
+> +	struct xhci_virt_device *dev;
+> +	struct xhci_slot_ctx *slot_ctx;
+> +	int devnum;
+>  
+>  	/* we've got to cope with an arbitrary number of pending TT clears,
+>  	 * since each TT has "at least two" buffers that can need it (and
+> @@ -873,7 +878,17 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
+>  	/* info that CLEAR_TT_BUFFER needs */
+>  	clear->tt = tt->multi ? udev->ttport : 1;
+>  	clear->devinfo = usb_pipeendpoint (pipe);
+> -	clear->devinfo |= udev->devnum << 4;
+> +	/* If slot_id is nonzero, then it's XHCI */
+> +	if (udev->slot_id) {
+> +		xhci = hcd_to_xhci(bus_to_hcd(udev->bus));
+> +		dev = xhci->devs[udev->slot_id];
+> +		slot_ctx = xhci_get_slot_ctx(xhci, dev->out_ctx);
+> +		/* Device address is assigned by XHC */
+> +		devnum = (int) le32_to_cpu(slot_ctx->dev_state) &
+> +			DEV_ADDR_MASK;
+> +		clear->devinfo |= devnum << 4;
 
-Thank you for spending your time for it! I also have been testing it
-in my daily desktop and until now, there are no special issues.
-If some bugs occur, i will report it to the mailing list.
+This is a horrendous layering violation!  The hub driver shouldn't need 
+to know anything about how the xHCI driver works.
 
-Regards
+Please don't do it this way.  Instead, add a field to store the 
+hardware address in the usb_device structure, as discussed earlier.
 
-Suwan Kim
+Alan Stern
+
+> +	} else
+> +		clear->devinfo |= udev->devnum << 4;
+>  	clear->devinfo |= usb_pipecontrol(pipe)
+>  			? (USB_ENDPOINT_XFER_CONTROL << 11)
+>  			: (USB_ENDPOINT_XFER_BULK << 11);
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 9215a28dad40..739737faf752 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -1786,6 +1786,17 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
+>  	return NULL;
+>  }
+>  
+> +static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td)
+> +{
+> +	/*
+> +	 * As part of low/full-speed endpoint-halt processing
+> +	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
+> +	 */
+> +	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
+> +	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub))
+> +		usb_hub_clear_tt_buffer(td->urb);
+> +}
+> +
+>  static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
+>  		unsigned int slot_id, unsigned int ep_index,
+>  		unsigned int stream_id, struct xhci_td *td,
+> @@ -1804,6 +1815,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
+>  	if (reset_type == EP_HARD_RESET) {
+>  		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
+>  		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
+> +		xhci_clear_hub_tt_buffer(xhci, td);
+>  	}
+>  	xhci_ring_cmd_db(xhci);
+>  }
+> 
+
