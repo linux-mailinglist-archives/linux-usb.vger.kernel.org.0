@@ -2,153 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5607C172F5
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 09:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DAA17306
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 09:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726543AbfEHHyS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 03:54:18 -0400
-Received: from nat-hk.nvidia.com ([203.18.50.4]:43663 "EHLO nat-hk.nvidia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726470AbfEHHyS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 May 2019 03:54:18 -0400
-Received: from hkpgpgate101.nvidia.com (Not Verified[10.18.92.77]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cd28b270000>; Wed, 08 May 2019 15:54:15 +0800
-Received: from HKMAIL102.nvidia.com ([10.18.16.11])
-  by hkpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 08 May 2019 00:54:15 -0700
-X-PGP-Universal: processed;
-        by hkpgpgate101.nvidia.com on Wed, 08 May 2019 00:54:15 -0700
-Received: from HKMAIL102.nvidia.com (10.18.16.11) by HKMAIL102.nvidia.com
- (10.18.16.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 May
- 2019 07:54:14 +0000
-Received: from NAM01-BN3-obe.outbound.protection.outlook.com (104.47.33.51) by
- HKMAIL102.nvidia.com (10.18.16.11) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Wed, 8 May 2019 07:54:14 +0000
-Received: from DM6PR12MB2651.namprd12.prod.outlook.com (20.176.116.24) by
- DM6PR12MB3641.namprd12.prod.outlook.com (20.178.199.91) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.11; Wed, 8 May 2019 07:54:11 +0000
-Received: from DM6PR12MB2651.namprd12.prod.outlook.com
- ([fe80::69b0:2225:280c:c54c]) by DM6PR12MB2651.namprd12.prod.outlook.com
- ([fe80::69b0:2225:280c:c54c%2]) with mapi id 15.20.1856.012; Wed, 8 May 2019
- 07:54:11 +0000
-From:   EJ Hsu <ejh@nvidia.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH] usb: gadget: storage: Remove warning message
-Thread-Topic: [PATCH] usb: gadget: storage: Remove warning message
-Thread-Index: AQHVBU2vm9wb5tWfZU+lvdWeNBHLi6ZgxzsAgAAUBkA=
-Date:   Wed, 8 May 2019 07:54:11 +0000
-Message-ID: <DM6PR12MB26513FAC2C39FA72CE019775CF320@DM6PR12MB2651.namprd12.prod.outlook.com>
-References: <1557285840-16958-1-git-send-email-ejh@nvidia.com>
- <20190508064026.GC14085@kroah.com>
-In-Reply-To: <20190508064026.GC14085@kroah.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ejh@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-05-08T07:54:09.1314960Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic;
- Sensitivity=Unrestricted
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=ejh@nvidia.com; 
-x-originating-ip: [59.124.78.18]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 48c120b0-b3b2-44a2-c089-08d6d38a5bc7
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:DM6PR12MB3641;
-x-ms-traffictypediagnostic: DM6PR12MB3641:
-x-microsoft-antispam-prvs: <DM6PR12MB3641552D99EE70302121707ECF320@DM6PR12MB3641.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-forefront-prvs: 0031A0FFAF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(396003)(376002)(366004)(346002)(136003)(13464003)(189003)(199004)(51914003)(54906003)(53936002)(8676002)(66946007)(446003)(256004)(3846002)(7736002)(74316002)(6116002)(4744005)(6436002)(9686003)(66066001)(26005)(476003)(478600001)(99286004)(52536014)(71190400001)(68736007)(71200400001)(186003)(55016002)(33656002)(316002)(6506007)(53546011)(6916009)(6246003)(5660300002)(14444005)(486006)(102836004)(11346002)(76116006)(14454004)(305945005)(2906002)(76176011)(73956011)(15650500001)(7696005)(66556008)(229853002)(86362001)(81166006)(25786009)(8936002)(81156014)(66446008)(64756008)(66476007)(4326008);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR12MB3641;H:DM6PR12MB2651.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: wawiMUJQZb0RIrNxa4wm6pxie2B3mWSEiyubo3lgv+tLXCgPy/ty0lXeZM9kBJWp9nnTPfr/QhCaOLvPmo/lURYEfz/SX9ofmEdb3DKhMRiBzBziUXREY6YKwlyJwywSew0NpeFTgg4QUkNz97/+adm5vYdG46ygg3DADhK2VsrZRARHLt6PcjI4g1As7pvcwmWSxd9uGtlXOpjYejOPPR3Ss958Scpa6Y1EJc+lTktx7Zx6O0BipGDEGFjj07M0pjHZaQaCtiDawQOwswGgC9MuzFy4345PLswoLwKXZEjMWTs1z4HFzP2s6OFoRme0ADcRdlxGkHdiEhQHrZPYmJkOotpPDB6rtA+/i/nIIwz+3qgX/AYr5eQLiusUn4LnVLkkD/542ZGgVu8oevgXHRwuavXHj1jv6pUx44DYR6g=
+        id S1726808AbfEHHzx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 03:55:53 -0400
+Received: from mail-eopbgr820082.outbound.protection.outlook.com ([40.107.82.82]:56288
+        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726415AbfEHHzw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 May 2019 03:55:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector1-xilinx-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ntZ1DgLIHPzxyWjXS/i+t9vKfZShLt9v6y3eqbMIIEI=;
+ b=C/wDZ53A3EZZcdOYBZhK++Eeo/df1P2N4YF4O3lp1+5OB6f1WE8Y9QUw8uAQQD6wsf7/d/Gu8EiQC58PwmYshhphL1L63K62Nqj2q6iyESqzTpBh2UARk58+eAFW/79GXajbQHFR3ov+PS8lg0eIG6WzsG29E+oUneb9QZS9xMQ=
+Received: from MN2PR02CA0032.namprd02.prod.outlook.com (2603:10b6:208:fc::45)
+ by DM5PR02MB3830.namprd02.prod.outlook.com (2603:10b6:4:b0::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1856.12; Wed, 8 May
+ 2019 07:55:10 +0000
+Received: from CY1NAM02FT054.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::206) by MN2PR02CA0032.outlook.office365.com
+ (2603:10b6:208:fc::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1878.20 via Frontend
+ Transport; Wed, 8 May 2019 07:55:09 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ CY1NAM02FT054.mail.protection.outlook.com (10.152.74.100) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1856.11
+ via Frontend Transport; Wed, 8 May 2019 07:55:08 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
+        (envelope-from <anurag.kumar.vulisha@xilinx.com>)
+        id 1hOHPw-0004Y6-E8; Wed, 08 May 2019 00:55:08 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <anurag.kumar.vulisha@xilinx.com>)
+        id 1hOHPr-0005yM-9u; Wed, 08 May 2019 00:55:03 -0700
+Received: from xsj-pvapsmtp01 (maildrop.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id x487sqF4027151;
+        Wed, 8 May 2019 00:54:53 -0700
+Received: from [172.23.64.8] (helo=xhdvnc108.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <anuragku@xilinx.com>)
+        id 1hOHPg-0005s9-KO; Wed, 08 May 2019 00:54:52 -0700
+Received: by xhdvnc108.xilinx.com (Postfix, from userid 15427)
+        id C80BC604D8; Wed,  8 May 2019 13:24:51 +0530 (IST)
+From:   Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "Claus H. Stovgaard" <cst@phaseone.com>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <v.anuragkumar@gmail.com>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+Subject: [PATCH v2 0/3] usb: gadget: Add support for disabling U1 and U2 entries
+Date:   Wed, 8 May 2019 13:24:48 +0530
+Message-ID: <1557302091-7455-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+X-Mailer: git-send-email 2.1.1
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(376002)(39860400002)(346002)(136003)(396003)(2980300002)(199004)(189003)(63266004)(7416002)(47776003)(305945005)(356004)(6666004)(90966002)(81166006)(486006)(81156014)(103686004)(26005)(2616005)(186003)(8936002)(51416003)(426003)(8676002)(476003)(336012)(2906002)(50226002)(16586007)(126002)(4326008)(6266002)(316002)(6306002)(42186006)(110136005)(70586007)(5660300002)(70206006)(14444005)(107886003)(54906003)(106002)(478600001)(48376002)(966005)(52956003)(50466002)(36756003)(36386004)(6606295002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR02MB3830;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48c120b0-b3b2-44a2-c089-08d6d38a5bc7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2019 07:54:11.6798
+Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2966770b-a25f-415a-a58a-08d6d38a7e36
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4709054)(2017052603328);SRVR:DM5PR02MB3830;
+X-MS-TrafficTypeDiagnostic: DM5PR02MB3830:
+X-MS-Exchange-PUrlCount: 1
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-Microsoft-Antispam-PRVS: <DM5PR02MB383097B712FB76222FB0FCE7A7320@DM5PR02MB3830.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 0031A0FFAF
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: 848ofKxSide2kz0vOQHCMH3F5BFB8QzXRUmztvYUI5DDh3yfMrecykWhNZZy/h4fd8zrzRXf/toxz7yXtnzDWnUs2RB1uyEHCvThIQ3pHSKdiBpKAKAZVy6o9xpZ2eXR2ARTspeeiacAnwlA0Wr4XzGcZM1KpmM3g18cZo9D0RXcCHLcWdm578TRK4cLllJ0/I0YdcNZDXUVjmM7p5NbGDvtvDGF3zehczVJfQL4L0NuPjKW5xEoDLo38MjDvO0xfKKokPgglP0SDrORCeoBaMNnxSLG6hav0J6JJ/93Y8ViLf7UVQZ0AR1lo1hAZetBr8F1N663viD5ZNnBCEa1oNEnMrZ1T/3f4lIP+6WLG9vjIeduJZLfdGaslAYgnki23k2/gbCx6xHknDr4GHrAH8uiB2zhZCWknHnZS70WSRI=
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2019 07:55:08.9654
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3641
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1557302055; bh=kDRKDedPAYwWzMia4HbCYPQp7xkWbvIDa+rYlmUyUUU=;
-        h=X-PGP-Universal:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
-         Message-ID:References:In-Reply-To:Accept-Language:X-MS-Has-Attach:
-         X-MS-TNEF-Correlator:msip_labels:authentication-results:
-         x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
-         x-ms-traffictypediagnostic:x-microsoft-antispam-prvs:
-         x-ms-oob-tlc-oobclassifiers:x-forefront-prvs:
-         x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=TBTQ00OSPxL32HNNrC+NBf9tIbNjmd6SJ/ux+uPe1whadIf/mCXnk3V8uoYWdrdoD
-         0njsRYL5zmE8axcBB3BXh58HHEfm/rN4S4+fS1Wid4wBqv251xQpHYXBMczXHTsTPz
-         3XIrJ6VDSoLunkB8hUaVXADMnA2PnA+AAbUUeugPr8H95BHsVtGTqCN6hkljluvvU5
-         ztN7bBeJ2fpMt6HGhlA8VbG8cJHoPVjt+IfgCX8OZtfxWYmf41clrxF60P06HQkfpo
-         7qF2fR24gYgxe1cttpGqKDUq3x2TP9wsnHEhiNhV3sx1ySZmBiQdaokM8hbcUvYbCk
-         FJFcNk1QzQw9g==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2966770b-a25f-415a-a58a-08d6d38a7e36
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB3830
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks for the info. Will remove it in the V2.
+Gadget applications may have a requirement to disable the U1 and U2
+entry based on the usecase. Below are few usecases where the disabling
+U1/U2 entries may be possible.
 
-Regards,
-EJ
+Usecase 1:
+When combining dwc3 with an redriver for a USB Type-C device solution, it
+sometimes have problems with leaving U1/U2 for certain hosts, resulting in
+link training errors and reconnects. For this U1/U2 state entries may be
+avoided.
 
------Original Message-----
-From: Greg KH <gregkh@linuxfoundation.org>=20
-Sent: Wednesday, May 8, 2019 2:40 PM
-To: EJ Hsu <ejh@nvidia.com>
-Cc: balbi@kernel.org; linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: storage: Remove warning message
+Usecase 2:
+When performing performance benchmarking on mass storage gadget the
+U1 and U2 entries can be disabled.
 
-On Wed, May 08, 2019 at 11:24:00AM +0800, EJ Hsu wrote:
-> --- a/drivers/usb/gadget/function/storage_common.h
-> +++ b/drivers/usb/gadget/function/storage_common.h
-> @@ -1,4 +1,7 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2019, NVIDIA CORPORATION.  All rights reserved.
-> + */
+Usecase 3:
+When periodic transfers like ISOC transfers are used with bInterval
+of 1 which doesn't require the link to enter into U1 or U2 state entry
+(since ping is issued from host for every uframe interval). In this
+case the U1 and U2 entry can be disabled.
 
-Same here, why are you claiming copyright for this whole file?
+Disablement of U1/U2 can be done by setting U1DevExitLat and U2DevExitLat
+values to 0 in the BOS descriptor. Host on seeing 0 value for U1DevExitLat
+and U2DevExitLat, it doesn't send SET_SEL requests to the gadget. There
+may be some hosts which may send SET_SEL requests even after seeing 0 in
+the UxDevExitLat of BOS descriptor. To aviod U1/U2 entries for these type
+of hosts, dwc3 controller can be programmed to reject those U1/U2 requests
+by not enabling ACCEPTUxENA bits in DCTL register.
 
-That is just flat out not acceptable at all, again, go talk to your lawye=
-rs.  If you insist on this, I will insist on having one of your lawyers o=
-n the signed-off-by: line as well so that they know what they are agreein=
-g with.
+This patch series updates the same.
 
-not ok.
+Changes in v2:
+	1. As suggested by Thinh Nguyen changed the "snps,dis_u1_entry_quirk"
+	   to "snps,dis-u1-entry-quirk"
+	2. Merged the changes done by Claus H. Stovgaard in ep0.c for rejecting
+	   U1/U2 requests into this patch. Changes done by Claus can be found
+	   here https://marc.info/?l=linux-kernel&m=155722068820568&w=2
 
-greg k-h
--------------------------------------------------------------------------=
-----------
-This email message is for the sole use of the intended recipient(s) and m=
-ay contain
-confidential information.  Any unauthorized review, use, disclosure or di=
-stribution
-is prohibited.  If you are not the intended recipient, please contact the=
-=20sender by
-reply email and destroy all copies of the original message.
--------------------------------------------------------------------------=
-----------
+Anurag Kumar Vulisha (3):
+  doc: dt: bindings: usb: dwc3: Update entries for disabling U1 and U2
+  usb: gadget: send usb_gadget as an argument in get_config_params
+  usb: dwc3: gadget: Add support for disabling U1 and U2 entries
+
+ Documentation/devicetree/bindings/usb/dwc3.txt |  2 ++
+ drivers/usb/dwc3/core.c                        |  4 ++++
+ drivers/usb/dwc3/core.h                        |  4 ++++
+ drivers/usb/dwc3/ep0.c                         |  9 ++++++++-
+ drivers/usb/dwc3/gadget.c                      | 19 +++++++++++++++++++
+ drivers/usb/dwc3/gadget.h                      |  6 ++++++
+ drivers/usb/gadget/composite.c                 |  2 +-
+ include/linux/usb/gadget.h                     |  3 ++-
+ 8 files changed, 46 insertions(+), 3 deletions(-)
+
+-- 
+2.1.1
+
