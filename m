@@ -2,111 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE8616ECE
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 04:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E1216ED8
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 04:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbfEHCDh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 May 2019 22:03:37 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39130 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfEHCDg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 22:03:36 -0400
-Received: by mail-pl1-f193.google.com with SMTP id g9so1680802plm.6;
-        Tue, 07 May 2019 19:03:36 -0700 (PDT)
+        id S1726508AbfEHCSv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 May 2019 22:18:51 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:53766 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726371AbfEHCSu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 May 2019 22:18:50 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 198so1081053wme.3
+        for <linux-usb@vger.kernel.org>; Tue, 07 May 2019 19:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3kIazKZf6YmvWTo0nRkCfEyQWIpfS50NodxpYJkF6U0=;
-        b=No8w8axxDVVJ74jzVtwx3mn6iWP5zI0oIoSt6MwdLrQomPaG6OQ3OHoynPnUVmuNK3
-         yQOek8CmgeSkNx9AIMsRL4/nYsHnqNz7Np2Icw+bku7F7jae5Ge7Mz8/0NFMw7fLf5Zm
-         xt92LcIQfRCKSgc7t524eVU15iCk25sJ0GTrfpb0/sC92d59MY0QQfJ/W2wh4iYge/3Z
-         tbOs1BEZr2VUPFQ39DgR/teUNZZxYEU365X6D8bteS6bwj5BP5R2rnUh3ay/tQjHqGt1
-         V2mrl7fx20Ut8DJ5iqC98Ys/oM/ALnAx+RHavDUtEExWCG4K1SyRCk1XqObndYk2kRJo
-         njCg==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=2VQYmcOhfKzkM0UugtZ6mKBvbFSRbfp3capv5V8nMNw=;
+        b=Xzb1Bg7BQV7IlwuVho+Y2FAzS7+4V/AblssRM+CZs1Q6GtbB2f3dDtLYt6344mfRrr
+         1lY7KOT8XsEDplUFVBKcgJ/GOBz1C6oWAN33mepUNA4gBj1gEcjBqelBA4coWfwv55RQ
+         CTxT1ixJianc5C/PwzTAxgf3ykxLPTzmpS6ihRcJ0Kenf+B3tU3qV3RzuBQ4BisncGRK
+         yexLD40nG3Db8ePlVgikd1XuYCVmvRVu8PY/eRFyY8u5cWowYuOhLf5ZHn4mk151yXho
+         D7YyiadnfxqSb1UMIxkeH7MQ906jiqrjuMj2noJ/NjBIDq+P/LBOXMqY6ik3cwAWpdAs
+         dH9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3kIazKZf6YmvWTo0nRkCfEyQWIpfS50NodxpYJkF6U0=;
-        b=m1dKIkcaOdF0pL/pIverFDmQVD4PEpngCmJcWIpwd5neGCsP4z4jJaL4MbYIfEliIP
-         xegPuChj4Wm2b6X5JVk3bKhKLoAexwqMlFzK86fKr1thwoB3PuYbyVM9F/F2XG7HTMMn
-         khWVUY7gNl8svWss/uV/U9A9ieToI0xvidZyVop6xzyH/iRfEgorvbyvUBkdRFhiDrMz
-         uvYUH+MHK9oCn7ZKQ7fNsmeNOZMwMGUuzgMfJApMX3/LbURsEafnGUmkswFM+wW1g9Rv
-         uUraVH/PASpFxCF+pKZ52Vy5Erljp5Xpsbu+xc7J2sO+EeXMowVK0W8qeXGrMHqpAGzS
-         T+sg==
-X-Gm-Message-State: APjAAAWyXsdbVm9dppYLjQVIXWlNgdzOgCC0QwZjb4qdhqDrwbBCkdDb
-        ZJShYmMfP7+gbrZc/A87/GMQG1kE
-X-Google-Smtp-Source: APXvYqyqnfA6xKp2YkxiecUmGzzVut2GDkUlrNGLCJbIy8SUOxVIue6FzmhsSExQWZR8OgeAmDQ2Mw==
-X-Received: by 2002:a17:902:da4:: with SMTP id 33mr44003839plv.20.1557281015703;
-        Tue, 07 May 2019 19:03:35 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z187sm11670431pfb.132.2019.05.07.19.03.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 19:03:35 -0700 (PDT)
-Subject: Re: [PATCH v2 1/1] usb: typec: tcpci: Clear the fault status register
-To:     "Angus Ainslie (Purism)" <angus@akkea.ca>, angus.ainslie@puri.sm
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190508002749.14816-1-angus@akkea.ca>
- <20190508002749.14816-2-angus@akkea.ca>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <aed487a4-3f7c-55e8-9c84-feaa1c7f583d@roeck-us.net>
-Date:   Tue, 7 May 2019 19:03:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=2VQYmcOhfKzkM0UugtZ6mKBvbFSRbfp3capv5V8nMNw=;
+        b=FQtLPzLZ+MH0fDX4bI9CeWJh4Dljm4P2GTapE7h9C9YF7lfTRdrmBCqWtD3i2yE1XW
+         OJEzzNMV/50BFOydYNKVBvB6RVr/h5uBarnTzvkgrpYJP68La1wd6Lwc6Qr9dbr9Fhc7
+         8ki/dde0eNMaAJa0jIxaQtMM1wJ/G+eiNDEMO1h1GibXSGsX5N7b7rkTB7XrBe94MmYN
+         RoHXEP1EhhpUOEfqwV3mK4IymnfvH2wyroceu7ORHlagVgdJP5Vlw83zym2ZjCGdQ4jD
+         LwjoGfwmm3nTiWff/qdXiOGz0epwU6LFw2dnxm4YiMt+YRuZizMtl24ghPDoPMCO+ywP
+         6kIw==
+X-Gm-Message-State: APjAAAXI5PuwELb9e0CyrBoU88xkOCcsfczyEml49g3KaqBKwGEgOwxY
+        bj3R+W+/05VYF3kLJQ2f5wG6GrksI/8r77LjTF2idg==
+X-Google-Smtp-Source: APXvYqxb9e/yUxVyvriVVzvxf06ff1qHb493UqijikoLDgmvw8T5PcvPPnrbBZbzN/ZbQb3/QTqSJLORpY29COaBfGo=
+X-Received: by 2002:a1c:a751:: with SMTP id q78mr929450wme.64.1557281928986;
+ Tue, 07 May 2019 19:18:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190508002749.14816-2-angus@akkea.ca>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Tue, 7 May 2019 19:18:36 -0700
+Message-ID: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+Subject: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+To:     Felipe Balbi <balbi@kernel.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+Cc:     "Yang, Fei" <fei.yang@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen Yu <chenyu56@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/7/19 5:27 PM, Angus Ainslie (Purism) wrote:
-> If the fault status register doesn't get cleared then
-> the ptn5110 interrupt gets stuck on. As the fault register gets
-> set everytime the ptn5110 powers on the interrupt is always stuck.
-> 
-> Fixes: fault status register stuck
-> Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
-> ---
->   drivers/usb/typec/tcpm/tcpci.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index c1f7073a56de..a5746657b190 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -463,6 +463,17 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->   	else if (status & TCPC_ALERT_TX_FAILED)
->   		tcpm_pd_transmit_complete(tcpci->port, TCPC_TX_FAILED);
->   
-> +	if (status & TCPC_ALERT_FAULT) {
+Since commit 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather
+buffers"), I've been seeing trouble with adb transfers in Android on
+HiKey960, HiKey and now Dragonboard 845c.
 
-Wait - the driver doesn't set TCPC_ALERT_FAULT in the alert mask
-register. How can the chip report it if fault alerts are not enabled ?
-What am I missing here ?
+Sometimes things crash, but often the transfers just stop w/o any
+obvious error messages.
 
-Thanks,
-Guenter
+Initially I thought it was an issue with the HiKey960 dwc3 usb patches
+being upstreamed, and was using the following hack workaround:
+  https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey960-5.1&id=dcdadaaec9db7a7b78ea9b838dd1453359a2f388
 
-> +		u16 fault_status;
-> +
-> +		tcpci_read16(tcpci, TCPC_FAULT_STATUS, &fault_status);
-> +
-> +		dev_warn(tcpci->dev, "FAULT ALERT status 0x%x\n", fault_status);
-> +
-> +		/* clear the fault status */
-> +		tcpci_write16(tcpci, TCPC_FAULT_STATUS, fault_status);
-> +	}
-> +
->   	return IRQ_HANDLED;
->   }
->   EXPORT_SYMBOL_GPL(tcpci_irq);
-> 
+Then dwc2 added sg support, and I ended up having to revert it to get
+by on HiKey:
+  https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey-5.1&id=6e91b4c7bd1e94bdd835263403c53e85a677b848
 
+(See thread here: https://lkml.org/lkml/2019/3/8/765)
+
+And now I've reproduced the same issue (with the same dwc3 workaround)
+on the already upstream code for Dragonboard 845c.
+
+Fei Yang has also reached out and mentioned he was seeing similar
+problems with the f_fs sg support.
+
+Andrzej: Do you have any ideas or suggestions on this? I'm happy to
+test or run any debug patches, if it would help narrow the issue down.
+
+If not, should we consider reverting the f_fs sg support?
+
+thanks
+-john
