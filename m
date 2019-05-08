@@ -2,143 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5769D17B64
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 16:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F2F17BBB
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 16:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727981AbfEHOPO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 10:15:14 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:39732 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727949AbfEHOPO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 10:15:14 -0400
-Received: (qmail 1923 invoked by uid 2102); 8 May 2019 10:15:13 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 8 May 2019 10:15:13 -0400
-Date:   Wed, 8 May 2019 10:15:13 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Yinbo Zhu <yinbo.zhu@nxp.com>
-cc:     Xiaobo Xie <xiaobo.xie@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ramneek Mehresh <ramneek.mehresh@freescale.com>,
-        Nikhil Badola <nikhil.badola@freescale.com>,
-        Ran Wang <ran.wang_1@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jiafei Pan <jiafei.pan@nxp.com>,
-        Suresh Gupta <B42813@freescale.com>
-Subject: Re: [PATCH v5 2/5] usb: phy: Workaround for USB erratum-A005728
-In-Reply-To: <20190508060608.33882-2-yinbo.zhu@nxp.com>
-Message-ID: <Pine.LNX.4.44L0.1905081013490.1699-100000@iolanthe.rowland.org>
+        id S1727626AbfEHOkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 10:40:24 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34016 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727354AbfEHOkY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 10:40:24 -0400
+Received: by mail-pf1-f193.google.com with SMTP id n19so2060219pfa.1;
+        Wed, 08 May 2019 07:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=qU+b830HjTDROUNUT/+w1uv0y2kFrc/lnnYO3ZmFuyQ=;
+        b=n1wAnDEoWZeIZveeMXxtGy1V2bRZ4r92eFhDUCyLpO2y4n2tZdYl1zOSrUDeVDVwPT
+         FIlxCREmkh0hDpQn+0AH9X4/g0xloD3hCY0JQwQAa6LqRb+XMB9sKbcjg+HQxOaS1p4N
+         KcooeenPbGttAMpVjWaN47R8FmUIFv3ckNBHn2+bCaCYXbpCpPE0O1e0qChY5eqvWVPJ
+         bI3dfe7UV1QesyxqSFRWDWdgdqlQ5U18hnq6nJIh5/gd07qzwlbEpyUasfpDOKy1iyDH
+         SRo2TN8jyPNN5yZXUZx/KSttbSQv6qwda7NUD7RkvDktdG7WOLXhiaC/UEmUaLcLs7D6
+         61MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qU+b830HjTDROUNUT/+w1uv0y2kFrc/lnnYO3ZmFuyQ=;
+        b=ocwr6Y21+wu4BdverycZZTrSlUWL5NM3WsEFINA0GBdc7c6KQpblOCc39mNdfKo183
+         ALz+Ysn1Jcn0emYZoKpVBgJxNhKeJ2M/SVhakc/Y5Iij1UWlkO2NEXc5ucoo2JC6izFp
+         9GWCm2HdzLvB8rskCiVzzLUByq8qDgSnW/S3DLDRwdkNllVvISKDRM4hHUoq2M/c8AzG
+         9Ae9GdAqXVInW4U6DZ2xPaYpzHjJ7fxE4FXDjt7Rfxm2l07Hs/r+X660hBOePWRx2iX6
+         EvkYp/6uJGe/GAJQZdfBgFUmDbaF8hul4YEMY8Wt7ikyX1IXg/SpnWacL/lpt0nLdW5I
+         guWg==
+X-Gm-Message-State: APjAAAV3b2PChhnC8M7Ia7T+xUOm3E5nv3AX6Pj0ma7tx6wP1UhZRGxi
+        92EeQu+YZdoGuQADETJ4M6t4/12dstA=
+X-Google-Smtp-Source: APXvYqyP65HG3rORTR+4E+EuA4ikj7IagPu+Hf+70+EumxbD21ROxTl1cat427U0GyTRpgH1XjK5kA==
+X-Received: by 2002:a63:10c:: with SMTP id 12mr48465705pgb.276.1557326423339;
+        Wed, 08 May 2019 07:40:23 -0700 (PDT)
+Received: from localhost.localdomain ([125.142.23.13])
+        by smtp.gmail.com with ESMTPSA id o73sm7255366pfi.137.2019.05.08.07.40.21
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 08 May 2019 07:40:22 -0700 (PDT)
+Date:   Wed, 8 May 2019 23:40:18 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] usb: host: xhci: Support running urb giveback in
+ tasklet context
+Message-ID: <20190508144016.GA2569@localhost.localdomain>
+References: <20190401141611.10087-1-suwan.kim027@gmail.com>
+ <20190507160219.GB2427@localhost.localdomain>
+ <0529be1d-57d6-18b8-6f62-49f4b3931e1a@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0529be1d-57d6-18b8-6f62-49f4b3931e1a@linux.intel.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 8 May 2019, Yinbo Zhu wrote:
-
-> From: Suresh Gupta <B42813@freescale.com>
+On Wed, May 08, 2019 at 03:04:33PM +0300, Mathias Nyman wrote:
+> On 7.5.2019 19.02, Suwan Kim wrote:
+> > On Mon, Apr 01, 2019 at 11:16:11PM +0900, Suwan Kim wrote:
+> > > Patch "USB: HCD: support giveback of URB in tasklet context"[1]
+> > > introduced giveback of urb in tasklet context. [1] This patch was
+> > > applied to ehci but not xhci. [2] This patch significantly reduces
+> > > the hard irq time of xhci. Especially for uvc driver, the hard irq
+> > > including the uvc completion function runs quite long but applying
+> > > this patch reduces the hard irq time of xhci.
+> > > 
+> > 
+> > I sent this patch a month ago but got no answer.
+> > Is there any feedback for this?
+> > Please let me know if there are any faults or it needs more tests.
+> > 
 > 
-> PHY_CLK_VALID bit for UTMI PHY in USBDR does not set even
-> if PHY is providing valid clock. Workaround for this
-> involves resetting of PHY and check PHY_CLK_VALID bit
-> multiple times. If PHY_CLK_VALID bit is still not set even
-> after 5 retries, it would be safe to deaclare that PHY
-> clock is not available.
-> This erratum is applicable for USBDR less then ver 2.4.
-> 
-> Signed-off-by: Suresh Gupta <B42813@freescale.com>
-> Signed-off-by: Yinbo Zhu <yinbo.zhu@nxp.com>
-> ---
-> Change in v5:
-> 		remove dev_err function unnecessary parameters 
-> 
->  drivers/usb/host/ehci-fsl.c |   37 ++++++++++++++++++++++++++-----------
->  drivers/usb/host/ehci-fsl.h |    3 +++
->  2 files changed, 29 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
-> index 38674b7..1634ac8 100644
-> --- a/drivers/usb/host/ehci-fsl.c
-> +++ b/drivers/usb/host/ehci-fsl.c
-> @@ -183,6 +183,17 @@ static int fsl_ehci_drv_probe(struct platform_device *pdev)
->  	return retval;
->  }
->  
-> +static bool usb_phy_clk_valid(struct usb_hcd *hcd)
-> +{
-> +	void __iomem *non_ehci = hcd->regs;
-> +	bool ret = true;
-> +
-> +	if (!(ioread32be(non_ehci + FSL_SOC_USB_CTRL) & PHY_CLK_VALID))
-> +		ret = false;
-> +
-> +	return ret;
-> +}
-> +
->  static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
->  			       enum fsl_usb2_phy_modes phy_mode,
->  			       unsigned int port_offset)
-> @@ -226,6 +237,16 @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
->  		/* fall through */
->  	case FSL_USB2_PHY_UTMI:
->  	case FSL_USB2_PHY_UTMI_DUAL:
-> +		/* PHY_CLK_VALID bit is de-featured from all controller
-> +		 * versions below 2.4 and is to be checked only for
-> +		 * internal UTMI phy
-> +		 */
-> +		if (pdata->controller_ver > FSL_USB_VER_2_4 &&
-> +		    pdata->have_sysif_regs && !usb_phy_clk_valid(hcd)) {
-> +			dev_err(dev, "USB PHY clock invalid\n");
-> +			return -EINVAL;
-> +		}
-> +
->  		if (pdata->have_sysif_regs && pdata->controller_ver) {
->  			/* controller version 1.6 or above */
->  			tmp = ioread32be(non_ehci + FSL_SOC_USB_CTRL);
-> @@ -249,17 +270,11 @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
->  		break;
->  	}
->  
-> -	/*
-> -	 * check PHY_CLK_VALID to determine phy clock presence before writing
-> -	 * to portsc
-> -	 */
-> -	if (pdata->check_phy_clk_valid) {
-> -		if (!(ioread32be(non_ehci + FSL_SOC_USB_CTRL) &
-> -		    PHY_CLK_VALID)) {
-> -			dev_warn(hcd->self.controller,
-> -				 "USB PHY clock invalid\n");
-> -			return -EINVAL;
-> -		}
-> +	if (pdata->have_sysif_regs &&
-> +	    pdata->controller_ver > FSL_USB_VER_1_6 &&
-> +		!usb_phy_clk_valid(hcd)) {
+> I'll add this to a internal tree first, and let it sit there for a few
+> weeks, trying to catch possible bugs this change could expose.
 
-This is still wrong.  The line above should be indented four characters 
-less than it is: the '!' should line up with the 'p' in the line above 
-it.
+Thank you for spending your time for it! I also have been testing it
+in my daily desktop and until now, there are no special issues.
+If some bugs occur, i will report it to the mailing list.
 
-Alan Stern
+Regards
 
-> +		dev_warn(hcd->self.controller, "USB PHY clock invalid\n");
-> +		return -EINVAL;
->  	}
->  
->  	ehci_writel(ehci, portsc, &ehci->regs->port_status[port_offset]);
-> diff --git a/drivers/usb/host/ehci-fsl.h b/drivers/usb/host/ehci-fsl.h
-> index cbc4220..9d18c6e 100644
-> --- a/drivers/usb/host/ehci-fsl.h
-> +++ b/drivers/usb/host/ehci-fsl.h
-> @@ -50,4 +50,7 @@
->  #define UTMI_PHY_EN             (1<<9)
->  #define ULPI_PHY_CLK_SEL        (1<<10)
->  #define PHY_CLK_VALID		(1<<17)
-> +
-> +/* Retry count for checking UTMI PHY CLK validity */
-> +#define UTMI_PHY_CLK_VALID_CHK_RETRY 5
->  #endif				/* _EHCI_FSL_H */
-> 
-
+Suwan Kim
