@@ -2,99 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 578B917185
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 08:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABB4171C1
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 08:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbfEHG0x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 02:26:53 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:19621 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725884AbfEHG0w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 02:26:52 -0400
-X-UUID: 3f9020aaaf04425997874e36e2301ec3-20190508
-X-UUID: 3f9020aaaf04425997874e36e2301ec3-20190508
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1509536441; Wed, 08 May 2019 14:26:45 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 8 May
- 2019 14:26:43 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 8 May 2019 14:26:42 +0800
-Message-ID: <1557296802.10179.272.camel@mhfsdcap03>
-Subject: Re: [v2 PATCH] dt-binding: usb: add usb-role-switch property
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Yu Chen <chenyu56@huawei.com>, Min Guo <min.guo@mediatek.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-Date:   Wed, 8 May 2019 14:26:42 +0800
-In-Reply-To: <20190507141305.GA19816@kuha.fi.intel.com>
-References: <38ff51264e971d5c58940c8435b9d8d274662d50.1557195204.git.chunfeng.yun@mediatek.com>
-         <20190507141305.GA19816@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        id S1726686AbfEHGh0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 02:37:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57444 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725910AbfEHGhZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 May 2019 02:37:25 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DC3E32054F;
+        Wed,  8 May 2019 06:37:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557297445;
+        bh=T0FrpxoRHBchoQt2g4MiY1olLJ9HjffT47QH8iMBIkw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ek2LsxxVpZtrm8idGE2/+QUmm8gmMmawn3+cQfl8wpTQrSsfu8qxG31xPYY5D5Gc7
+         DBFU17xMcgPEq5sdQOyOV1vDjG+rUvBO5WUozXb6tEhx84Ql4BCgLvmfCdQJ4vqkb5
+         0dBIY6mB4mG4thokr9BGHrvXvq7uhzL4IVBgY24U=
+Date:   Wed, 8 May 2019 08:37:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Angus Ainslie (Purism)" <angus@akkea.ca>, angus.ainslie@puri.sm,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] usb: typec: tcpci: Clear the fault status register
+Message-ID: <20190508063723.GA14085@kroah.com>
+References: <20190508002749.14816-1-angus@akkea.ca>
+ <20190508002749.14816-2-angus@akkea.ca>
+ <5f0bec69-9579-f153-c3fd-d7b8deea75c4@roeck-us.net>
 MIME-Version: 1.0
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f0bec69-9579-f153-c3fd-d7b8deea75c4@roeck-us.net>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-05-07 at 17:13 +0300, Heikki Krogerus wrote:
-> On Tue, May 07, 2019 at 10:22:58AM +0800, Chunfeng Yun wrote:
-> > diff --git a/Documentation/devicetree/bindings/usb/generic.txt b/Documentation/devicetree/bindings/usb/generic.txt
-> > index 0a74ab8dfdc2..f5a6ad053ecc 100644
-> > --- a/Documentation/devicetree/bindings/usb/generic.txt
-> > +++ b/Documentation/devicetree/bindings/usb/generic.txt
-> > @@ -30,6 +30,11 @@ Optional properties:
-> >  			optional for OTG device.
-> >   - adp-disable: tells OTG controllers we want to disable OTG ADP, ADP is
-> >  			optional for OTG device.
-> > + - usb-role-switch: tells Dual-Role USB controllers we want to handle the role
-> > +			switch between host and device according to the state
-> > +			detected by the USB connector, typically for Type-C,
-> > +			Type-B(micro).
-> > +			see connector/usb-connector.txt.
+On Tue, May 07, 2019 at 05:49:14PM -0700, Guenter Roeck wrote:
+> On 5/7/19 5:27 PM, Angus Ainslie (Purism) wrote:
+> > If the fault status register doesn't get cleared then
+> > the ptn5110 interrupt gets stuck on. As the fault register gets
+> > set everytime the ptn5110 powers on the interrupt is always stuck.
+> > 
+> > Fixes: fault status register stuck
 > 
-> That does not look correct to me. Firstly, USB role switches are not
-> always dual-role USB controllers. 
-Thanks for review, I look through some drivers, you are right, some phys
-also switch the roles.
+> That is not how Fixes: tags are supposed to work. This should probably be
+> 
+> Fixes: 74e656d6b0551 ("staging: typec: Type-C Port Controller Interface driver (tcpci)")
 
-> Secondly, stating what determines
-> the role irrelevant IMO.
-> 
-> Since this is a boolean property, the description for it should simply
-> explain what does it tell about the capabilities of the device that
-> has it. The description should not make any assumptions about the
-> users of the property, and since the property is a "generic" USB
-> property, I'm not sure it should make any assumptions about the type
-> of the device that has the property either. Also, I would really like
-> the description to show the type of the property.
-Ok I'll add it.
+Nit:
+Fixes: 74e656d6b055 ("staging: typec: Type-C Port Controller Interface driver (tcpci)")
 
-> 
-> Why not just say something like this:
-> 
-> "Boolean property informing that the device is capable of assigning
-> the USB data role (USB host or USB device) for a given USB connector."
-will modify it.
-
-> 
-> 
-> thanks,
-> 
-
+You only need 12 characters of the sha1 :)
 
