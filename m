@@ -2,98 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6439179B8
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 14:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D46D179E0
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 15:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727414AbfEHMsk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 08:48:40 -0400
-Received: from mail-eopbgr1410091.outbound.protection.outlook.com ([40.107.141.91]:29568
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726444AbfEHMsk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 May 2019 08:48:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3OOqSGnnYTF3iY5GuKym2WzLYHUoAxLbuRfA7pFfLqg=;
- b=eg/90kF/6717ygiX93sbUMaAOmWvxqNxJy+h9qH6B4CRfuMx28JDYMAEE1mm93ogCTeli3b5mBeHOEgdOsqDwQkXBRQdMh7V/yyAR1/ARsjltozauHWbBSsr3dNCr0vEUhLmnWYgChNUXayIqwROKIxLm+h2p3UuTg0KfJknuxY=
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
- TY1PR01MB1787.jpnprd01.prod.outlook.com (52.133.164.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.12; Wed, 8 May 2019 12:48:36 +0000
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1856.012; Wed, 8 May 2019
- 12:48:36 +0000
-From:   Chris Brandt <Chris.Brandt@renesas.com>
-To:     Simon Horman <horms@verge.net.au>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH 10/10] ARM: dts: r7s9210-rza2mevb: Add USB host support
-Thread-Topic: [PATCH 10/10] ARM: dts: r7s9210-rza2mevb: Add USB host support
-Thread-Index: AQHVBGY/mP4xZNO/3kWcH4UIHFLGMKZg++mAgAAyy1A=
-Date:   Wed, 8 May 2019 12:48:36 +0000
-Message-ID: <TY1PR01MB15624892AE0A749A63053DA98A320@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-References: <20190506234631.113226-1-chris.brandt@renesas.com>
- <20190506234631.113226-11-chris.brandt@renesas.com>
- <20190508094230.5j2skmmlkzlmy2ls@verge.net.au>
-In-Reply-To: <20190508094230.5j2skmmlkzlmy2ls@verge.net.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Chris.Brandt@renesas.com; 
-x-originating-ip: [75.60.247.61]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 67433bd4-d960-4df0-752e-08d6d3b37ca3
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1787;
-x-ms-traffictypediagnostic: TY1PR01MB1787:
-x-microsoft-antispam-prvs: <TY1PR01MB17878523225A394FEEF328328A320@TY1PR01MB1787.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0031A0FFAF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(346002)(376002)(396003)(39860400002)(366004)(189003)(199004)(6246003)(4744005)(66946007)(66446008)(76116006)(26005)(74316002)(14454004)(66476007)(33656002)(2906002)(66556008)(64756008)(4326008)(73956011)(72206003)(99286004)(478600001)(7736002)(25786009)(9686003)(55016002)(53936002)(7696005)(76176011)(54906003)(71200400001)(71190400001)(316002)(229853002)(6916009)(52536014)(186003)(102836004)(6506007)(68736007)(3846002)(305945005)(486006)(8936002)(6116002)(256004)(81166006)(66066001)(81156014)(86362001)(6436002)(8676002)(446003)(476003)(5660300002)(11346002)(21314003);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1787;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: GzuBOPrUwT0x7jVZwnMYOxmnaA7P/TMYDLdRrghMkXw3zSp7ZQQTeqTJxsE8Lr8XqETKqMF++jfgBWOHE3NL7FzrLGq0qAWiUYPkbO9tSWffHDe0Wu2OM3m+umDVedF8t9GSfTGn9mYQ20uGT4+ox7UuF41Y2Wcob/eHo47FjEzCDWFyVw4nBuJkagY63ZwT3k6yu3zILdFDou4QDXWugxffCg91uzdoVuangFQVH3UFs2czqcaibMIa/rUkQ8OjEDihvzzx3xjwVg2RgJzcqpbfGs9kK05wTBEjBNnhk9rgtbwI2tJ0ST7o7CTIvuzmQyV21P3ygqdGTucCXimVCRFr9Skgl7NY5qK7vUVDIta93jcLKbY0hfu9TK6n+fa8ilerpH8vQAjbNUAwKf837JwuUw8/v4BS594hcZybfz8=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727251AbfEHNF4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 09:05:56 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:7445 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726281AbfEHNFz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 09:05:55 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cd2d40e0000>; Wed, 08 May 2019 06:05:18 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Wed, 08 May 2019 06:05:53 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Wed, 08 May 2019 06:05:53 -0700
+Received: from HQMAIL110.nvidia.com (172.18.146.15) by HQMAIL104.nvidia.com
+ (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 May
+ 2019 13:05:53 +0000
+Received: from HQMAIL103.nvidia.com (172.20.187.11) by hqmail110.nvidia.com
+ (172.18.146.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 May
+ 2019 13:05:44 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL103.nvidia.com
+ (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 8 May 2019 13:05:44 +0000
+Received: from jilin-desktop.nvidia.com (Not Verified[10.19.120.147]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5cd2d4270000>; Wed, 08 May 2019 06:05:44 -0700
+From:   Jim Lin <jilin@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <stern@rowland.harvard.edu>, <kai.heng.feng@canonical.com>,
+        <drinkcat@chromium.org>, <keescook@chromium.org>,
+        <nsaenzjulienne@suse.de>, <jflat@chromium.org>, <malat@debian.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jim Lin <jilin@nvidia.com>
+Subject: [PATCH v6 1/1] usb: xhci: Add Clear_TT_Buffer
+Date:   Wed, 8 May 2019 21:05:40 +0800
+Message-ID: <1557320740-17853-1-git-send-email-jilin@nvidia.com>
+X-Mailer: git-send-email 2.1.4
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67433bd4-d960-4df0-752e-08d6d3b37ca3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2019 12:48:36.1896
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1787
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1557320718; bh=/FVEb59wikJoX7BaHTsMpWroI5KnrSWScZxrVwCl8e4=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:Content-Type;
+        b=cNZhoOVhfp1NcyMcbcItOHLHfXuzZ+Mwm8X19KXu2l/Ox+yTkDkZXFZy9TCi8Awph
+         nqk2UY23Ref5udOUqn+aw6Uav08E6FHzGw4lADxm6Eu9gU12IIAM3kFf62P6ZEDuxv
+         r0UY+ViH1ZbjNgT3Zsa5f8wFb2EOGTyMyocrszn2aGIiRCy4Tqqju2hWbfpk4KFrxw
+         V00GJ8rcR2WHn4/BRCJwN0yONDTQvDZ/Iw5R/9eLaHvIImvfuugnAAR4YPgVVNdFGb
+         +C6qaXCNjnRz++Pb1/hDB9FZQNXf/NJ0YHIw/LzOlewnDJp/5n6TC7EVVGlCEssBfG
+         +5tW/IHOrziVA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Simon,
+USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+processing for full-/low-speed endpoints connected via a TT, the host
+software must use the Clear_TT_Buffer request to the TT to ensure
+that the buffer is not in the busy state".
 
-On Wed, May 08, 2019, Simon Horman wrote:
-> Please add a space between the usb2_phy0 and ehci0 nodes.
-> Likewise below between the usb2_phy1 and ehci1 nodes.
->=20
-> Otherwise this patch looks good to me.
+In our case, a full-speed speaker (ConferenceCam) is behind a high-
+speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+request we may continue to get STALL with the folllowing requests,
+like Set_Interface.
 
-I also see that you renamed some patch titles from
-  "ARM: dts: r7s9210-rza2mevb: xxx"=20
-to
-  "ARM: dts: rza2mevb: xxx"
+Solution is for XHCI driver to invoke usb_hub_clear_tt_buffer() to
+send Clear_TT_Buffer request to the hub of the device for the
+following Set_Interface requests to the device to get ACK
+successfully.
 
-when you applied them.
-So I will make that change as well.
+The Clear_TT_Buffer request sent to the hub includes the address of
+the LS/FS child device in wValue field. usb_hub_clear_tt_buffer()
+uses udev->devnum to set the address wValue. This won't work for
+devices connected to xHC.
 
-Chris
+For other host controllers udev->devnum is the same as the address of
+the usb device, chosen and set by usb core. With xHC the controller
+hardware assigns the address, and won't be the same as devnum.
+
+In the fix we get that address from slot context if it's XHC.
+
+Signed-off-by: Jim Lin <jilin@nvidia.com>
+---
+v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
+    , remove its claiming in xhci.h
+v3: Add description for clearing_tt (xhci.h)
+v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
+    to protect for Clear_TT_Buffer to be run serially.
+    Remove xhci_clear_tt_buffer_complete as it's not necessary.
+    Same reason as the above.
+    Extend usb_hub_clear_tt_buffer parameter
+v5: Not extending usb_hub_clear_tt_buffer parameter
+    Add description.
+v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
+
+ drivers/usb/core/hub.c       | 17 ++++++++++++++++-
+ drivers/usb/host/xhci-ring.c | 12 ++++++++++++
+ 2 files changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 15a2934dc29d..00d994908217 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -35,6 +35,7 @@
+ 
+ #include "hub.h"
+ #include "otg_whitelist.h"
++#include "../host/xhci.h"
+ 
+ #define USB_VENDOR_GENESYS_LOGIC		0x05e3
+ #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
+@@ -858,6 +859,10 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
+ 	struct usb_tt		*tt = udev->tt;
+ 	unsigned long		flags;
+ 	struct usb_tt_clear	*clear;
++	struct xhci_hcd *xhci;
++	struct xhci_virt_device *dev;
++	struct xhci_slot_ctx *slot_ctx;
++	int devnum;
+ 
+ 	/* we've got to cope with an arbitrary number of pending TT clears,
+ 	 * since each TT has "at least two" buffers that can need it (and
+@@ -873,7 +878,17 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
+ 	/* info that CLEAR_TT_BUFFER needs */
+ 	clear->tt = tt->multi ? udev->ttport : 1;
+ 	clear->devinfo = usb_pipeendpoint (pipe);
+-	clear->devinfo |= udev->devnum << 4;
++	/* If slot_id is nonzero, then it's XHCI */
++	if (udev->slot_id) {
++		xhci = hcd_to_xhci(bus_to_hcd(udev->bus));
++		dev = xhci->devs[udev->slot_id];
++		slot_ctx = xhci_get_slot_ctx(xhci, dev->out_ctx);
++		/* Device address is assigned by XHC */
++		devnum = (int) le32_to_cpu(slot_ctx->dev_state) &
++			DEV_ADDR_MASK;
++		clear->devinfo |= devnum << 4;
++	} else
++		clear->devinfo |= udev->devnum << 4;
+ 	clear->devinfo |= usb_pipecontrol(pipe)
+ 			? (USB_ENDPOINT_XFER_CONTROL << 11)
+ 			: (USB_ENDPOINT_XFER_BULK << 11);
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 9215a28dad40..739737faf752 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1786,6 +1786,17 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
+ 	return NULL;
+ }
+ 
++static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td)
++{
++	/*
++	 * As part of low/full-speed endpoint-halt processing
++	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
++	 */
++	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
++	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub))
++		usb_hub_clear_tt_buffer(td->urb);
++}
++
+ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
+ 		unsigned int slot_id, unsigned int ep_index,
+ 		unsigned int stream_id, struct xhci_td *td,
+@@ -1804,6 +1815,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
+ 	if (reset_type == EP_HARD_RESET) {
+ 		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
+ 		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
++		xhci_clear_hub_tt_buffer(xhci, td);
+ 	}
+ 	xhci_ring_cmd_db(xhci);
+ }
+-- 
+2.1.4
+
