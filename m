@@ -2,163 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 846A317BC0
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 16:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F98017D4C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 17:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728043AbfEHOlm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 10:41:42 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:40034 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726928AbfEHOll (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 10:41:41 -0400
-Received: (qmail 4140 invoked by uid 2102); 8 May 2019 10:41:41 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 8 May 2019 10:41:41 -0400
-Date:   Wed, 8 May 2019 10:41:41 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Jim Lin <jilin@nvidia.com>
-cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
-        <kai.heng.feng@canonical.com>, <drinkcat@chromium.org>,
-        <keescook@chromium.org>, <nsaenzjulienne@suse.de>,
-        <jflat@chromium.org>, <malat@debian.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 1/1] usb: xhci: Add Clear_TT_Buffer
-In-Reply-To: <1557320740-17853-1-git-send-email-jilin@nvidia.com>
-Message-ID: <Pine.LNX.4.44L0.1905081039380.1699-100000@iolanthe.rowland.org>
+        id S1726914AbfEHP1k convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 8 May 2019 11:27:40 -0400
+Received: from unicorn.mansr.com ([81.2.72.234]:36280 "EHLO unicorn.mansr.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726522AbfEHP1j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 May 2019 11:27:39 -0400
+Received: by unicorn.mansr.com (Postfix, from userid 51770)
+        id CDBEB149B7; Wed,  8 May 2019 16:27:37 +0100 (BST)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v2] usb: core: verify devicetree nodes for disabled interfaces
+References: <106fc58c-1a4f-6605-41d7-b6031c5751a3@samsung.com>
+        <CGME20190508104442eucas1p2ebdffa348465f2c28177601014614853@eucas1p2.samsung.com>
+        <20190508104434.3409-1-m.szyprowski@samsung.com>
+        <yw1xtve5uq1y.fsf@mansr.com>
+        <e7f32280-57ec-6298-1a5d-8d2d4dc26667@samsung.com>
+Date:   Wed, 08 May 2019 16:27:37 +0100
+In-Reply-To: <e7f32280-57ec-6298-1a5d-8d2d4dc26667@samsung.com> (Marek
+        Szyprowski's message of "Wed, 8 May 2019 15:49:22 +0200")
+Message-ID: <yw1xpnotufti.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 8 May 2019, Jim Lin wrote:
+Marek Szyprowski <m.szyprowski@samsung.com> writes:
 
-> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-> processing for full-/low-speed endpoints connected via a TT, the host
-> software must use the Clear_TT_Buffer request to the TT to ensure
-> that the buffer is not in the busy state".
-> 
-> In our case, a full-speed speaker (ConferenceCam) is behind a high-
-> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-> request we may continue to get STALL with the folllowing requests,
-> like Set_Interface.
-> 
-> Solution is for XHCI driver to invoke usb_hub_clear_tt_buffer() to
-> send Clear_TT_Buffer request to the hub of the device for the
-> following Set_Interface requests to the device to get ACK
-> successfully.
-> 
-> The Clear_TT_Buffer request sent to the hub includes the address of
-> the LS/FS child device in wValue field. usb_hub_clear_tt_buffer()
-> uses udev->devnum to set the address wValue. This won't work for
-> devices connected to xHC.
-> 
-> For other host controllers udev->devnum is the same as the address of
-> the usb device, chosen and set by usb core. With xHC the controller
-> hardware assigns the address, and won't be the same as devnum.
-> 
-> In the fix we get that address from slot context if it's XHC.
-> 
-> Signed-off-by: Jim Lin <jilin@nvidia.com>
-> ---
-> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
->     , remove its claiming in xhci.h
-> v3: Add description for clearing_tt (xhci.h)
-> v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
->     to protect for Clear_TT_Buffer to be run serially.
->     Remove xhci_clear_tt_buffer_complete as it's not necessary.
->     Same reason as the above.
->     Extend usb_hub_clear_tt_buffer parameter
-> v5: Not extending usb_hub_clear_tt_buffer parameter
->     Add description.
-> v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
-> 
->  drivers/usb/core/hub.c       | 17 ++++++++++++++++-
->  drivers/usb/host/xhci-ring.c | 12 ++++++++++++
->  2 files changed, 28 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 15a2934dc29d..00d994908217 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -35,6 +35,7 @@
->  
->  #include "hub.h"
->  #include "otg_whitelist.h"
-> +#include "../host/xhci.h"
->  
->  #define USB_VENDOR_GENESYS_LOGIC		0x05e3
->  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
-> @@ -858,6 +859,10 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
->  	struct usb_tt		*tt = udev->tt;
->  	unsigned long		flags;
->  	struct usb_tt_clear	*clear;
-> +	struct xhci_hcd *xhci;
-> +	struct xhci_virt_device *dev;
-> +	struct xhci_slot_ctx *slot_ctx;
-> +	int devnum;
->  
->  	/* we've got to cope with an arbitrary number of pending TT clears,
->  	 * since each TT has "at least two" buffers that can need it (and
-> @@ -873,7 +878,17 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
->  	/* info that CLEAR_TT_BUFFER needs */
->  	clear->tt = tt->multi ? udev->ttport : 1;
->  	clear->devinfo = usb_pipeendpoint (pipe);
-> -	clear->devinfo |= udev->devnum << 4;
-> +	/* If slot_id is nonzero, then it's XHCI */
-> +	if (udev->slot_id) {
-> +		xhci = hcd_to_xhci(bus_to_hcd(udev->bus));
-> +		dev = xhci->devs[udev->slot_id];
-> +		slot_ctx = xhci_get_slot_ctx(xhci, dev->out_ctx);
-> +		/* Device address is assigned by XHC */
-> +		devnum = (int) le32_to_cpu(slot_ctx->dev_state) &
-> +			DEV_ADDR_MASK;
-> +		clear->devinfo |= devnum << 4;
+> Hi
+>
+> On 2019-05-08 13:46, Måns Rullgård wrote:
+>> Marek Szyprowski <m.szyprowski@samsung.com> writes:
+>>> Commit 01fdf179f4b0 ("usb: core: skip interfaces disabled in devicetree")
+>>> add support for disabling given USB device interface by adding nodes to
+>>> the USB host controller device. The mentioned commit however identifies
+>>> the given USB interface node only by the 'reg' property in the host
+>>> controller children nodes and then checks for their the 'status'. The USB
+>>> device interface nodes however also has to have a 'compatible' property as
+>>> described in Documentation/devicetree/bindings/usb/usb-device.txt. This is
+>>> important, because USB host controller might have child-nodes for other
+>>> purposes. For example, Exynos EHCI and OHCI drivers already define
+>>> child-nodes for each physical root hub port and assigns respective PHY
+>>> controller and parameters for them. This conflicts with the proposed
+>>> approach and verifying for the presence of the compatible property fixes
+>>> this issue without changing the bindings and the way the PHY controllers
+>>> are handled by Exynos EHCI/OHCI drivers.
+>>>
+>>> Reported-by: Markus Reichl <m.reichl@fivetechno.de>
+>>> Fixes: 01fdf179f4b0 ("usb: core: skip interfaces disabled in devicetree")
+>>> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>>> ---
+>>>   drivers/usb/core/message.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+>>> index e844bb7b5676..6f7d047392bd 100644
+>>> --- a/drivers/usb/core/message.c
+>>> +++ b/drivers/usb/core/message.c
+>>> @@ -2009,6 +2009,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+>>>   		struct usb_interface *intf = cp->interface[i];
+>>>
+>>>   		if (intf->dev.of_node &&
+>>> +		    of_find_property(intf->dev.of_node, "compatible", NULL) &&
+>>>   		    !of_device_is_available(intf->dev.of_node)) {
+>>>   			dev_info(&dev->dev, "skipping disabled interface %d\n",
+>>>   				 intf->cur_altsetting->desc.bInterfaceNumber);
+>>> -- 
+>> I don't think this is the right approach.  We don't want to be adding
+>> such checks everywhere the of_node is used.  A better way might be to
+>> not set of_node at all in the absence of a proper "compatible" string.
+>
+> Right, this will be a better approach. I've just checked the code and a 
+> simple check for 'compatible' property presence can be easily added in 
+> drivers/usb/core/of.c in usb_of_get_device_node() and 
+> usb_of_get_interface_node() functions.
+>
+> The second check could be added in drivers/usb/core/hub.c in 
+> usb_new_device() - to ensure that the device's vid/pid matches of_node 
+> compatible string.
+>
+> Is this okay? Or just add a latter one?
 
-This is a horrendous layering violation!  The hub driver shouldn't need 
-to know anything about how the xHCI driver works.
+I'm not sure where the best place to check is.  Someone else will have
+to weigh in on that.
 
-Please don't do it this way.  Instead, add a field to store the 
-hardware address in the usb_device structure, as discussed earlier.
+>> Then there's the problem of how to resolve the incompatibility between
+>> the generic USB and Exynos bindings.  One possible fix could be to use
+>> a child node of the controller node to represent the root hub.  Since
+>> the driver currently doesn't work at all if a devicetree has nodes for
+>> USB devices, there should be no compatibility concerns.
+>
+> So far we don't have any use case for adding devicetree nodes for usb 
+> devices under Exynos EHCI/OHCI hcd, so this shouldn't be a problem for now.
 
-Alan Stern
+None that you know of, that is.  Regardless, the bindings are
+inconsistent, and that needs to be fixed.
 
-> +	} else
-> +		clear->devinfo |= udev->devnum << 4;
->  	clear->devinfo |= usb_pipecontrol(pipe)
->  			? (USB_ENDPOINT_XFER_CONTROL << 11)
->  			: (USB_ENDPOINT_XFER_BULK << 11);
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 9215a28dad40..739737faf752 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1786,6 +1786,17 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
->  	return NULL;
->  }
->  
-> +static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td)
-> +{
-> +	/*
-> +	 * As part of low/full-speed endpoint-halt processing
-> +	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
-> +	 */
-> +	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
-> +	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub))
-> +		usb_hub_clear_tt_buffer(td->urb);
-> +}
-> +
->  static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
->  		unsigned int slot_id, unsigned int ep_index,
->  		unsigned int stream_id, struct xhci_td *td,
-> @@ -1804,6 +1815,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
->  	if (reset_type == EP_HARD_RESET) {
->  		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
->  		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
-> +		xhci_clear_hub_tt_buffer(xhci, td);
->  	}
->  	xhci_ring_cmd_db(xhci);
->  }
-> 
-
+-- 
+Måns Rullgård
