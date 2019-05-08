@@ -2,120 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8EF17F10
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 19:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9E817F82
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 20:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727939AbfEHR2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 13:28:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41372 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727657AbfEHR2H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 May 2019 13:28:07 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 320E0216F4;
-        Wed,  8 May 2019 17:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557336486;
-        bh=eIo+PcE7Ep+/ctNlCY8O7UDHkmpxPP9eIOH2j7a7EPE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=cUU1ApB4RvQ8W7pFwOX+gnBcC7+mV8cBLaA3YyXRsWHer73SoUv/O8AyKyfcdOe1+
-         +MBo4L/jCo6m1gmNM5yzxUN6KuKVgUNLVhvILUc1e8YDXeGWVlKYNpnFLVirK9uMc1
-         gifAAAKLQ7EvRb/VYM3nHViFmpHX1IE+NyJi6gRw=
-Subject: Re: [PATCH 1/2] usbip: Remove repeated setting of hcd->state in
- vhci_bus_suspend()
-To:     Suwan Kim <suwan.kim027@gmail.com>
-Cc:     valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <20190506125550.7826-1-suwan.kim027@gmail.com>
- <440389ab-62c3-7bc2-0e9b-0b302a88c929@kernel.org>
- <20190507154918.GA2427@localhost.localdomain>
-From:   shuah <shuah@kernel.org>
-Message-ID: <0ad76300-9b7f-f368-0533-1f88de649d10@kernel.org>
-Date:   Wed, 8 May 2019 11:28:05 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190507154918.GA2427@localhost.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1727691AbfEHSHp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 14:07:45 -0400
+Received: from mail-eopbgr1400109.outbound.protection.outlook.com ([40.107.140.109]:27088
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726544AbfEHSHp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 May 2019 14:07:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5KBOWG33IGhBtG045h6tD3RlR9D+C1Ri/Ad0/07j5bs=;
+ b=jp/3y7nMkfhKdFY4EnRrNB9hZo4Ny4Aks3ZoNOi+FF0dNjXLBOHyOpUvxYfKk84kcMiuYIgvWxIZ6GrIA70MR/R+VBAmVTgpKUaC0/7mN9lMiHLbyIfcAhLExfKtQVGNB2qy0WdZwBtfnY+tJBJ2VObDwJ8Yl1iR/+SCScR6HPM=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1563.jpnprd01.prod.outlook.com (52.133.160.144) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.15; Wed, 8 May 2019 18:07:40 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1856.012; Wed, 8 May 2019
+ 18:07:40 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>
+Subject: RE: [PATCH 00/10] usb: Add host and device support for RZ/A2
+Thread-Topic: [PATCH 00/10] usb: Add host and device support for RZ/A2
+Thread-Index: AQHVBGYH7aUZDb07sEevR4eh25Pg7qZfYocAgAIgbZA=
+Date:   Wed, 8 May 2019 18:07:40 +0000
+Message-ID: <TY1PR01MB1562C5FCC551A2857A6D15E78A320@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20190506234631.113226-1-chris.brandt@renesas.com>
+ <OSBPR01MB317442B092744C8D312682DCD8310@OSBPR01MB3174.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSBPR01MB317442B092744C8D312682DCD8310@OSBPR01MB3174.jpnprd01.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dba9d94b-5b41-490e-ddbb-08d6d3e00f93
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1563;
+x-ms-traffictypediagnostic: TY1PR01MB1563:
+x-microsoft-antispam-prvs: <TY1PR01MB1563488AF85FA4FD08F78B578A320@TY1PR01MB1563.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3631;
+x-forefront-prvs: 0031A0FFAF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(39860400002)(346002)(136003)(396003)(366004)(199004)(189003)(305945005)(7736002)(99286004)(55016002)(71200400001)(71190400001)(66066001)(6436002)(6246003)(66476007)(76116006)(74316002)(54906003)(66446008)(64756008)(6862004)(73956011)(66946007)(4326008)(66556008)(14454004)(53936002)(229853002)(316002)(446003)(186003)(11346002)(72206003)(25786009)(476003)(486006)(8936002)(81156014)(81166006)(2906002)(256004)(14444005)(8676002)(6636002)(86362001)(26005)(478600001)(5660300002)(6506007)(52536014)(102836004)(68736007)(9686003)(6116002)(3846002)(33656002)(7696005)(76176011);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1563;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: tSdsD4MJdDr8xeXmBj2L/2DvZuJAKjR6U+wevjJISGaZnv516tSM4ZtUu0B/QUDG22AfQvhhZrSK0IY4w/X9bARGRu7mgv3A5PZen4BDMkihKl8jW1yod8x1RYqeT5YmGbsUHA7UEK3exlsSLYLjfKUwitIbv2SS2zpIPXN926Rl7pBJQFp49EJQ1Xd+YB3yljf8hoP3H1UMrwQqEeVLBxlx7zNKZpSzNj7tMJ5iBU2X6PzjuX5Mac8IS/bOlP1CLmm+E0ZLRH3KeyQzbIFjitQNgZCUz0DyVLWpOAYF2Xv+y/RCnLt4a6miJj2bahVEemHR34Xx4bWleq0YAzsyqeLxoZ9QfzW7mV1qFRem5eyDeqYuzpFgOZXvNQraHVVdvq0M9mue6sAER6Ivp137p8lIU3r+4zIxF+erRBQJOWc=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dba9d94b-5b41-490e-ddbb-08d6d3e00f93
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2019 18:07:40.5136
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1563
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/7/19 9:49 AM, Suwan Kim wrote:
-> Hi Shuah,
-> 
-> On Mon, May 06, 2019 at 09:13:02AM -0600, shuah wrote:
->> On 5/6/19 6:55 AM, Suwan Kim wrote:
->>> When hcd suspends execution, hcd_bus_suspend() calls vhci_bus_suspend()
->>> which sets hcd->state as HC_STATE_SUSPENDED. But after calling
->>> vhci_bus_suspend(), hcd_bus_suspend() also sets hcd->state as
->>> HC_STATE_SUSPENDED.
->>> So, setting hcd->state in vhci_hcd_suspend() is unnecessary.
->>>
->>> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
->>> ---
->>>    drivers/usb/usbip/vhci_hcd.c | 4 ----
->>>    1 file changed, 4 deletions(-)
->>>
->>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
->>> index 667d9c0ec905..e6f378d00fb6 100644
->>> --- a/drivers/usb/usbip/vhci_hcd.c
->>> +++ b/drivers/usb/usbip/vhci_hcd.c
->>> @@ -1238,10 +1238,6 @@ static int vhci_bus_suspend(struct usb_hcd *hcd)
->>>    	dev_dbg(&hcd->self.root_hub->dev, "%s\n", __func__);
->>> -	spin_lock_irqsave(&vhci->lock, flags);
->>> -	hcd->state = HC_STATE_SUSPENDED;
->>> -	spin_unlock_irqrestore(&vhci->lock, flags);
->>> -
->>>    	return 0;
->>>    }
->>>
->>
->> Tell me more about why you think this change is needed? How did you test
->> this change?
-> 
-> I think that host controller specific functions, vhci_bus_resume()
-> or vhci_bus_suspend() in the case of vhci, usually process host
-> controller specific data (struct vhci_hcd) not a generic data
-> (struct usb_hcd). The generic data is usually processed by generic HCD
-> layer. But vhci_bus_resume() and vhci_bus_suspend() set generic data
-> (hcd->state) and moreover this variable is set in generic HCD layer
-> once again(hcd_bus_resume() and hcd_bus_suspend()).
-> 
-> So, i think host controller specific functions (vhci_bus_resume()
-> and vhci_bus_suspend()) don't need to set the generic data that is
-> "hcd->state = HC_STATE_RUNNING or HC_STATE_SUSPEND".
-> 
+Hi Shimoda=1B$B$5$s=1B(B
 
-It depends. In this case, vhci_hcd is virtual driver and maintains
-port status for devices that are remote. It checks hcd->state in
-vhci_hub_status().
+> From: Yoshihiro Shimoda
+> Sent: Tuesday, May 07, 2019 5:17 AM
+> > For the most part, the RZ/A2 has the same USB 2.0 host and device
+> > HW as the R-Car Gen3, so we can reuse a lot of the code.
+> >
+> > However, there are a couple extra register bits, and the CFIFO
+> > register 8-bit access works a little different (weird, no idea why).
+>=20
+> This is just my gut feeling, but if we set the BIGEND bit in the CFIFOSEL
+> of RZ/A2M (R-Car Gen3 doesn't have such a bit though), could the original
+> code work correctly?
 
-It updates the hcd->state in suspend with vhci->lock hold and checks
-status from vhci_hub_status(). Removing updating hcd->state from 
-vhci_bus_suspend()will open a window where vhci_hub_status() might
-find it wrong state.
+I just tried to set CFIFOSEL.BIGEND =3D 1
 
-Same thing for HC_STATE_RUNNING. There are few other drivers that
-do the same for similar reasons. xhci_hcd, and dummy_hcd and a few
-more. This is the same comment on your patch that removes
-HC_STATE_RUNNING update from resume.
+ * Set CFIFOSEL.BIGEND =3D 1
+ * Write 8-bit values to CFIFO (same method as R-Car)
+ * Set CFIFOSEL.BIGEND =3D 0
 
-> For test, I loaded vhci-hcd module, suspended and resumed my computer
-> and checked hcd->state variable. There is no difference compared with
-> not modified version because my patch just removes repeated and
-> unnecessary part.
-> 
+The result is bad.
 
-This won't fully test the condition since there are remote devices
-attached and triggering suspend while attach/detach is in progress.
 
-thanks,
--- Shuah
+But, then I tried this:
+ * Set CFIFOSEL.MBW =3D 0   (CFIFO port access =3D 8-bit)
+ * Write 8-bit values to CFIFO
+ * Set CFIFOSEL.MBW =3D 2   (CFIFO port access =3D 32-bit)
+
+Code:
+u16 cfifosel =3D usbhs_read(priv, fifo->sel);
+
+usbhs_write(priv, fifo->sel, cfifosel & 0xF3FF); // MBW =3D 8-bit
+
+		for (i =3D 0; i < len; i++)
+			iowrite8(buf[i], addr); //same address each time
+
+usbhs_write(priv, fifo->sel, cfifosel);	// MBW =3D 32-bit
+
+
+This method works good.
+
+  (I assume this method would work with R-Car also)
+
+But...then we have extra register reads and writes.
+Register accesses are slower, so performance is lower.
+
+So, I prefer my original method:
+	if (usbhsc_flags_has(priv, USBHSF_CFIFO_BYTE_ADDR))
+		for (i =3D 0; i < len; i++)
+			iowrite8(buf[i], addr + (i & 0x03));
+	else
+		for (i =3D 0; i < len; i++)
+			iowrite8(buf[i], addr + (0x03 - (i & 0x03)));
+
+
+Do you agree?
+
+Chris
 
