@@ -2,253 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D08917640
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 12:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C73F1764D
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 12:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726821AbfEHKuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 06:50:44 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:14210 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726140AbfEHKuo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 06:50:44 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cd2b47e0000>; Wed, 08 May 2019 03:50:38 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 08 May 2019 03:50:42 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 08 May 2019 03:50:42 -0700
-Received: from [10.19.66.43] (10.124.1.5) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 May
- 2019 10:50:40 +0000
-Subject: Re: [PATCH V2 4/8] dt-bindings: usb: Add NVIDIA Tegra XUSB device
- mode controller binding
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <1552302716-18554-1-git-send-email-nkristam@nvidia.com>
- <1552302716-18554-5-git-send-email-nkristam@nvidia.com>
- <20190425151401.GF24213@ulmo> <20190503143007.GA20469@ulmo>
-X-Nvconfidentiality: public
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <1e86cec5-24e3-6ddb-b3b8-f70a4e949494@nvidia.com>
-Date:   Wed, 8 May 2019 16:21:53 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190503143007.GA20469@ulmo>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL101.nvidia.com (172.20.187.10)
-Content-Type: text/plain; charset="windows-1252"
+        id S1727090AbfEHKwl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 06:52:41 -0400
+Received: from mail-eopbgr20081.outbound.protection.outlook.com ([40.107.2.81]:61670
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726281AbfEHKwk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 May 2019 06:52:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IEwdnRNb0dQnFatowUgaozQwav2yrmUA9bOT5poJmlg=;
+ b=SCRQyE2OlTAFevdaWvI9f/wySvivukaLWWutPuuoVt2TKHjoxtaAURN9bRLW9W6r9mRjGReU3I9+7y1D6RNIyL0Jx3g7Fk1EHK9tuzNLKn6Soi0f57ft3OB1uldlndtK1rmJC1zBx8sytTjwSHEVCFrVbXpdLVHU5DuhqMXf4+8=
+Received: from VI1PR04MB4558.eurprd04.prod.outlook.com (20.177.55.216) by
+ VI1PR04MB4046.eurprd04.prod.outlook.com (10.171.182.157) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.11; Wed, 8 May 2019 10:52:37 +0000
+Received: from VI1PR04MB4558.eurprd04.prod.outlook.com
+ ([fe80::7c70:2812:86ad:7e1c]) by VI1PR04MB4558.eurprd04.prod.outlook.com
+ ([fe80::7c70:2812:86ad:7e1c%3]) with mapi id 15.20.1856.012; Wed, 8 May 2019
+ 10:52:37 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "thinhn@synopsys.com" <thinhn@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: [PATCH v2] usb: dwc3: move core validation to be after clks enable
+Thread-Topic: [PATCH v2] usb: dwc3: move core validation to be after clks
+ enable
+Thread-Index: AQHVBYwmwgoFIPzeoU+y0VWKj8yWsw==
+Date:   Wed, 8 May 2019 10:52:37 +0000
+Message-ID: <1557311367-5863-1-git-send-email-jun.li@nxp.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1557312638; bh=oh9YF2oWwrkyw4dmV2yT/BAb6zjzPFPiQyZkDx7vtT4=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=ki9HS2zRYz7dWQj1PxjtTCQ4EMql0RsKkwjCcinsgdShrSEm7sydciUzjPJo2Z0ZX
-         AiANn5GTyZQ4wIqQpBLkkcKZTV/0LlI7jK25DQQMB6WhK2smrTW3InQldyJTp+4atw
-         OzPtkrMUFk3kqwZQbIggzEDlIPGXuejixOsZR3eny0tEWXvaTVHO61INtXwkzmIwNj
-         lFrM1Tu9A8+Z1M8amypD7pjsBt7duZ6iQpFpi1W6ksKUGjF79Kuq8A0jXQtX1s0tmL
-         7kZCjhlOAo0t7U3V85CArPX85j5QAE0H/T3qR0fePIMWQaZbxM3xdiZ8+jOaQI/Zrd
-         F0ttgTq5jn7vw==
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.7.4
+x-clientproxiedby: HK0PR03CA0032.apcprd03.prod.outlook.com
+ (2603:1096:203:2f::20) To VI1PR04MB4558.eurprd04.prod.outlook.com
+ (2603:10a6:803:6f::24)
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 53a6f603-1a3b-4e00-4a9a-08d6d3a348b5
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4046;
+x-ms-traffictypediagnostic: VI1PR04MB4046:
+x-microsoft-antispam-prvs: <VI1PR04MB4046A0908B29D407E9905EC789320@VI1PR04MB4046.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-forefront-prvs: 0031A0FFAF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(376002)(136003)(396003)(366004)(346002)(189003)(199004)(44832011)(14454004)(36756003)(68736007)(256004)(14444005)(7736002)(6486002)(486006)(478600001)(2616005)(476003)(6436002)(6116002)(2906002)(4326008)(2501003)(3846002)(54906003)(110136005)(25786009)(316002)(6512007)(53936002)(66066001)(8936002)(386003)(50226002)(6506007)(102836004)(186003)(81166006)(26005)(8676002)(81156014)(99286004)(305945005)(52116002)(66476007)(66556008)(66446008)(64756008)(86362001)(66946007)(73956011)(5660300002)(71200400001)(71190400001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4046;H:VI1PR04MB4558.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Ce4FDakzlEP/ZJlrLU6Ji5O158CGm2+Jy39GPY/xXet1Fhvfc8NkbuOpLrgShdZpU3rTdUo4sNVB2mNv7rJNH2fI6A+tH1X61wFEe1rGwpWXTOSPGzkyy2G5I0it/tR8UDzpFwdDAlWOqP5+obCTL38ZZGiKQ8ufsW29iAJIOOimUQQZP9NZ3R13F5VRNhekptoKgbUJ8n8ZK81zZliBRzG/YiRbo9Vn6MDPlafc9kZ6v54JyZvMD5FQ2GKLwd0YP0S4+a0IM48wzJyd5Y7lS5Jf601Zy40/UU3NqTEZ+4qVAAeq+v17QmygqwRjcZLS941A2WBU6kQ26MAIC7OLq2GLV93BcsOzHGaUYBHWRGC7fJJdITk9dNmWMU3lgQEEjF+mSI9bIQoWM3CsdIzWyzInfINz0RUTUzFLxv71srM=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53a6f603-1a3b-4e00-4a9a-08d6d3a348b5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2019 10:52:37.5176
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4046
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 03-05-2019 20:00, Thierry Reding wrote:
-> On Thu, Apr 25, 2019 at 05:14:01PM +0200, Thierry Reding wrote:
->> On Mon, Mar 11, 2019 at 04:41:52PM +0530, Nagarjuna Kristam wrote:
->>> Add device-tree binding documentation for the XUSB device mode controller
->>> present on tegra210 SoC. This controller supports USB 3.0 specification
->>
->> Tegra210, please. "... supports the USB 3.0 ...". Also end sentences
->> with a fullstop.
->>
-Will update
->>>
->>> Based on work by Andrew Bresticker <abrestic@chromium.org>.
->>>
->>> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
->>> ---
->>>  .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  | 105 +++++++++++++++++++++
->>>  1 file changed, 105 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
->>> new file mode 100644
->>> index 0000000..990655d
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
->>> @@ -0,0 +1,105 @@
->>> +Device tree binding for NVIDIA Tegra XUSB device mode controller (XUDC)
->>> +=======================================================================
->>> +
->>> +The Tegra XUDC controller supports both USB 2.0 HighSpeed/FullSpeed and
->>> +USB 3.0 SuperSpeed protocols.
->>> +
->>> +Required properties:
->>> +--------------------
->>> +- compatible: For Tegra210, must contain "nvidia,tegra210-xudc".
->>> +- reg: Must contain the base and length of the XUSB device registers, XUSB device
->>> +  PCI Config registers and XUSB device controller registers.
->>> +- interrupts: Must contain the XUSB device interrupt
->>> +- clocks: Must contain an entry for ell clocks used.
->>
->> s/ell/all/
->>
-will do
->>> +  See ../clock/clock-bindings.txt for details.
->>> +- clock-names: Must include the following entries:
->>> +   - xusb_device
->>> +   - xusb_ss
->>> +   - xusb_ss_src
->>> +   - xusb_hs_src
->>> +   - xusb_fs_src
->>
->> It'd be good to explain what each of these are.
-> 
-> Perhaps we should also drop the xusb_ prefix here. That's already
-> implied by this being the XUDC controller bindings.
-> 
-xusb_ prefix is added to be in sync with USB host driver. considering that this file
-already for XUSB hardware, it can be removed.
-Will add details and remove xusb_ prefix. 
->>
->>> +- nvidia,xusb-padctl: phandle to the XUSB pad controller that is used to
->>> +  configure the USB pads used by the XUDC controller
->>> +- power-domains: A list of PM domain specifiers that reference each power-domain
->>> +  used by the XUSB device mode controller. This list must comprise of a specifier
->>> +  for the XUSBA and XUSBB power-domains. See ../power/power_domain.txt and
->>> +  ../arm/tegra/nvidia,tegra20-pmc.txt for details.
->>> +- power-domain-names: A list of names that represent each of the specifiers in
->>> +  the 'power-domains' property. Must include 'xusb_ss' and 'xusb_device'
-> 
-> Same here, I'd drop the xusb_ prefix. I think the "device" power domain
-> is also usually referred to as "XUSB_DEV", so perhaps make that "dev"
-> instead?
-> 
-> Thierry
-> 
-will update accordingly. and apply event at clocks naming for "device" to "dev".
->>> +
->>> +For Tegra210:
->>> +- avddio-usb-supply: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
->>> +- hvdd-usb-supply: USB controller power supply. Must supply 3.3 V.
->>> +- avdd-pll-utmip-supply: UTMI PLL power supply. Must supply 1.8 V.
->>
->> My understanding is that this last supply is really needed for the XUSB
->> pad controller to bring up the PLL. In fact, I've just moved the same
->> supply to the XUSB pad controller from the XUSB controller for all of
->> the supported boards because having this in the XUSB controller would
->> fail under some circumstances.
->>
-Will remove avdd-pll-utmip-supply from xudc driver, as its now part of padctl
-
->>> +
->>> +- phys: Must contain an entry for each entry in phy-names.
->>> +  See ../phy/phy-bindings.txt for details.
->>> +- extcon-usb: Must contains an extcon-usb entry which detects
->>
->> In the example below, this is simply "extcon".
->>
-yes, its extcon only, will update accordingly.
->>> +  USB VBUS pin. See ../extcon/extcon-usb-gpio.txt for details.
->>> +
->>> +Optional properties:
->>> +--------------------
->>> +- phy-names: Should include an entry for each PHY used by the controller.
->>> +  Names must be "usb2", and "usb3" if support SuperSpeed device mode.
->>> +  - "usb3" phy, SuperSpeed (SSTX+/SSTX-/SSRX+/SSRX-) data lines
->>> +  - "usb2" phy, USB 2.0 (D+/D-) data lines
->>
->> Why are these optional? phys is required and references phy-names
->> explicitly, so I think that effectively makes these phy-names required
->> as well.
->>
-Reason being is SS mode is optional, but not usb 2.0 or earlier and hence added in
-optional, but considering phys and phy-names goes together, will move this section to
-required.
->>> +
->>> +Example:
->>> +--------
->>> +	pmc: pmc@7000e400 {
->>> +		compatible = "nvidia,tegra210-pmc";
->>> +		reg = <0x0 0x7000e400 0x0 0x400>;
->>> +		clocks = <&tegra_car TEGRA210_CLK_PCLK>, <&clk32k_in>;
->>> +		clock-names = "pclk", "clk32k_in";
->>> +
->>> +		powergates {
->>> +			pd_xusbss: xusba {
->>> +				clocks = <&tegra_car TEGRA210_CLK_XUSB_SS>;
->>> +				resets = <&tegra_car TEGRA210_CLK_XUSB_SS>;
->>> +				#power-domain-cells = <0>;
->>> +			};
->>> +
->>> +			pd_xusbdev: xusbb {
->>> +				clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>;
->>> +				resets = <&tegra_car 95>;
->>> +				#power-domain-cells = <0>;
->>> +			};
->>> +		};
->>> +	};
->>> +
->>> +	xudc@700d0000 {
->>> +		compatible = "nvidia,tegra210-xudc";
->>> +		reg = <0x0 0x700d0000 0x0 0x8000>,
->>> +			<0x0 0x700d8000 0x0 0x1000>,
->>> +			<0x0 0x700d9000 0x0 0x1000>;
->>> +
->>> +		interrupts = <0 44 0x4>;
->>
->> This should use symbolic names defined in the following includes:
->>
->> 	dt-bindings/interrupt-controller/irq.h
->> 	dt-bindings/interrupt-controller/arm-gic.h
->>
->> Thierry
->>
-will update with corresponding macros.
-
--Nagarjuna
->>> +
->>> +		clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>,
->>> +			<&tegra_car TEGRA210_CLK_XUSB_SS>,
->>> +			<&tegra_car TEGRA210_CLK_XUSB_SSP_SRC>,
->>> +			<&tegra_car TEGRA210_CLK_XUSB_HS_SRC>,
->>> +			<&tegra_car TEGRA210_CLK_XUSB_FS_SRC>;
->>> +		clock-names = "xusb_device", "xusb_ss", "xusb_ss_src",
->>> +			      "xusb_hs_src", "xusb_fs_src";
->>> +
->>> +		power-domains = <&pd_xusbdev>, <&pd_xusbss>;
->>> +		power-domain-names = "xusb_device", "xusb_ss";
->>> +
->>> +		nvidia,xusb-padctl = <&padctl>;
->>> +
->>> +		phys = <&{/padctl@7009f000/pads/usb2/lanes/usb2-0}>;
->>> +		phy-names = "usb2;
->>> +
->>> +		avddio-usb-supply = <&vdd_pex_1v05>;
->>> +		hvdd-usb-supply = <&vdd_3v3_sys>;
->>> +		avdd-pll-utmip-supply = <&vdd_1v8>;
->>> +
->>> +		extcon = <&extcon_usb>;
->>> +	};
->>> +
->>> +	extcon_usb: extcon_vbus {
->>> +		compatible = "linux,extcon-usb-gpio";
->>> +		vbus-gpio = <&gpio TEGRA_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
->>> +	};
->>> +
->>> -- 
->>> 2.7.4
->>>
-> 
-> 
+RnJvbTogSnVuIExpIDxqdW4ubGlAbnhwLmNvbT4NCg0KUmVnaXN0ZXIgYWNjZXNzIGluIGNvcmUg
+dmFsaWRhdGlvbiBtYXkgaGFuZyBiZWZvcmUgdGhlIGJ1bGsNCmNsa3MgYXJlIGVuYWJsZWQuDQoN
+CkZpeGVzOiBiODczZTJkMGVhMWUgKCJ1c2I6IGR3YzM6IERvIGNvcmUgdmFsaWRhdGlvbiBlYXJs
+eSBvbiBwcm9iZSIpDQpTaWduZWQtb2ZmLWJ5OiBKdW4gTGkgPGp1bi5saUBueHAuY29tPg0KLS0t
+DQoNCkNoYW5nZSBmb3IgdjI6DQotIFVwZGF0ZSByZXQgdG8gYmUgLUVOT0RFViBpbiBjYXNlIGR3
+YzNfY29yZV9pc192YWxpZCgpIGZhaWwuDQoNCiBkcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyB8IDEz
+ICsrKysrKystLS0tLS0NCiAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCA2IGRlbGV0
+aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMy9jb3JlLmMgYi9kcml2ZXJz
+L3VzYi9kd2MzL2NvcmUuYw0KaW5kZXggNGFmZjFkOC4uOTNiOTZlNiAxMDA2NDQNCi0tLSBhL2Ry
+aXZlcnMvdXNiL2R3YzMvY29yZS5jDQorKysgYi9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYw0KQEAg
+LTE0MjMsMTEgKzE0MjMsNiBAQCBzdGF0aWMgaW50IGR3YzNfcHJvYmUoc3RydWN0IHBsYXRmb3Jt
+X2RldmljZSAqcGRldikNCiAJZHdjLT5yZWdzCT0gcmVnczsNCiAJZHdjLT5yZWdzX3NpemUJPSBy
+ZXNvdXJjZV9zaXplKCZkd2NfcmVzKTsNCiANCi0JaWYgKCFkd2MzX2NvcmVfaXNfdmFsaWQoZHdj
+KSkgew0KLQkJZGV2X2Vycihkd2MtPmRldiwgInRoaXMgaXMgbm90IGEgRGVzaWduV2FyZSBVU0Iz
+IERSRCBDb3JlXG4iKTsNCi0JCXJldHVybiAtRU5PREVWOw0KLQl9DQotDQogCWR3YzNfZ2V0X3By
+b3BlcnRpZXMoZHdjKTsNCiANCiAJZHdjLT5yZXNldCA9IGRldm1fcmVzZXRfY29udHJvbF9nZXRf
+b3B0aW9uYWxfc2hhcmVkKGRldiwgTlVMTCk7DQpAQCAtMTQ2MCw2ICsxNDU1LDEyIEBAIHN0YXRp
+YyBpbnQgZHdjM19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KIAlpZiAocmV0
+KQ0KIAkJZ290byB1bnByZXBhcmVfY2xrczsNCiANCisJaWYgKCFkd2MzX2NvcmVfaXNfdmFsaWQo
+ZHdjKSkgew0KKwkJZGV2X2Vycihkd2MtPmRldiwgInRoaXMgaXMgbm90IGEgRGVzaWduV2FyZSBV
+U0IzIERSRCBDb3JlXG4iKTsNCisJCXJldCA9IC1FTk9ERVY7DQorCQlnb3RvIGRpc2FibGVfY2xr
+czsNCisJfQ0KKw0KIAlwbGF0Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCBkd2MpOw0KIAlkd2MzX2Nh
+Y2hlX2h3cGFyYW1zKGR3Yyk7DQogDQpAQCAtMTUyNCw3ICsxNTI1LDcgQEAgc3RhdGljIGludCBk
+d2MzX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQogZXJyMToNCiAJcG1fcnVu
+dGltZV9wdXRfc3luYygmcGRldi0+ZGV2KTsNCiAJcG1fcnVudGltZV9kaXNhYmxlKCZwZGV2LT5k
+ZXYpOw0KLQ0KK2Rpc2FibGVfY2xrczoNCiAJY2xrX2J1bGtfZGlzYWJsZShkd2MtPm51bV9jbGtz
+LCBkd2MtPmNsa3MpOw0KIHVucHJlcGFyZV9jbGtzOg0KIAljbGtfYnVsa191bnByZXBhcmUoZHdj
+LT5udW1fY2xrcywgZHdjLT5jbGtzKTsNCi0tIA0KMi43LjQNCg0K
