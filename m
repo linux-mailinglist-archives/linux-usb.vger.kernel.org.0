@@ -2,165 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B367C175BE
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 12:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07688175D5
+	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 12:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726996AbfEHKOZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 06:14:25 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:41597 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726937AbfEHKOZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 06:14:25 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190508101424euoutp014190aaf33620dce60695473a3d06632d~crZ28BMfA2010320103euoutp01x
-        for <linux-usb@vger.kernel.org>; Wed,  8 May 2019 10:14:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190508101424euoutp014190aaf33620dce60695473a3d06632d~crZ28BMfA2010320103euoutp01x
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1557310464;
-        bh=utUVNhCfh+UPT/3azJ/XF/ssU5K7qOnuZqjcAxNV8sU=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=YjD6Gje38K5M+FMXtLp07WO0yiHZnxr7yX1HPXSxxTGRxVMfxbWbczVQ3MkbUi7zM
-         sqcx4xewfRONF++pHXsWKoPsPkFCVv9Fu2Kf6ZSYKXa3hfy6PwVL46QsEiojt3Rh2h
-         cJYJr7dc83QOCl9Gc/M2MI+CJvOnP14/jnSCydms=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190508101423eucas1p154c8776774ad781ca66341394812c82d~crZ2HWuv82646526465eucas1p1E;
-        Wed,  8 May 2019 10:14:23 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id DB.30.04377.EFBA2DC5; Wed,  8
-        May 2019 11:14:23 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190508101422eucas1p25503ff4d035742c0511fa03cae7b13f5~crZ1WxdkY3049830498eucas1p2k;
-        Wed,  8 May 2019 10:14:22 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190508101422eusmtrp10a5da45f8b0cc9b389fbaf353b13ce1d~crZ1DuAx43037530375eusmtrp1N;
-        Wed,  8 May 2019 10:14:22 +0000 (GMT)
-X-AuditID: cbfec7f4-5632c9c000001119-86-5cd2abfea210
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id B8.4D.04146.DFBA2DC5; Wed,  8
-        May 2019 11:14:22 +0100 (BST)
-Received: from [106.120.50.25] (unknown [106.120.50.25]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190508101421eusmtip271188177f3895bb5b18e3599d94da593~crZ0mVoxg0974009740eusmtip2B;
-        Wed,  8 May 2019 10:14:21 +0000 (GMT)
-Subject: Re: [PATCH] usb: core: verify devicetree nodes for disabled
- interfaces
-To:     =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>
-Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <106fc58c-1a4f-6605-41d7-b6031c5751a3@samsung.com>
-Date:   Wed, 8 May 2019 12:14:20 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
+        id S1726878AbfEHKSc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 06:18:32 -0400
+Received: from mga02.intel.com ([134.134.136.20]:3477 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726755AbfEHKSc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 May 2019 06:18:32 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 May 2019 03:18:31 -0700
+X-ExtLoop1: 1
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 May 2019 03:18:28 -0700
+Subject: Re: [PATCH v4 1/1] usb: xhci: Add Clear_TT_Buffer
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jim Lin <jilin@nvidia.com>, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com, hminas@synopsys.com,
+        kai.heng.feng@canonical.com, drinkcat@chromium.org,
+        prime.zeng@hisilicon.com, malat@debian.org, nsaenzjulienne@suse.de,
+        jflat@chromium.org, linus.walleij@linaro.org, clabbe@baylibre.com,
+        colin.king@canonical.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <Pine.LNX.4.44L0.1905071022140.1632-100000@iolanthe.rowland.org>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <6164e645-dce7-27a8-70b0-5e37a540f288@linux.intel.com>
+Date:   Wed, 8 May 2019 13:21:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-In-Reply-To: <yw1xy33iv1lq.fsf@mansr.com>
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <Pine.LNX.4.44L0.1905071022140.1632-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrEKsWRmVeSWpSXmKPExsWy7djP87r/V1+KMbgbb7FxxnpWi+bF69ks
-        zp/fwG5xedccNosZ5/cxWSxa1sps8fLID0aLHw+nMzlweNy6U++xaVUnm8f+uWvYPd6cPsXu
-        0bdlFaPH501yAWxRXDYpqTmZZalF+nYJXBkH3sxgLpglWtF07SxrA+MxwS5GDg4JAROJTZeE
-        uhi5OIQEVjBKvD97jA3C+cIoceTZb3YI5zOjxKO3nUAOJ1jH9d6zzBCJ5YwS/a/+QrW8ZZQ4
-        d3IWE0iVsECgxIl/h1hBbBEBU4kdsy6CFTELzGGSeLt9KtgoNgFDia63XWwgNq+AncSFr1MY
-        QWwWARWJHZfPM4EcKCoQI7HoM1SJoMTJmU9YQGxOAU2JF3sfg8WZBeQlmrfOZoawxSVuPZnP
-        BHHpPnaJoy3CELaLxKRVB6A+EJZ4dXwLlC0jcXpyDwvIbRICzYwSD8+tZYdwehglLjfNYISo
-        spY4fPwiK8hBzECb1+/Shwg7SjzZeY8dEpB8EjfeCkLcwCcxadt0Zogwr0RHmxBEtZrErOPr
-        4NYevHCJeQKj0iwkn81C8s0sJN/MQti7gJFlFaN4amlxbnpqsVFearlecWJucWleul5yfu4m
-        RmBKOv3v+JcdjLv+JB1iFOBgVOLhfVFwMUaINbGsuDL3EKMEB7OSCO/1iZdihHhTEiurUovy
-        44tKc1KLDzFKc7AoifNWMzyIFhJITyxJzU5NLUgtgskycXBKNTBWLE1VUljO5Zc9/7jr80ql
-        0zY5EbbpCT8X7rtzuPHkg8scHyUWZobIMJa0evQFqOQuP3L/T2WpuHTN3u2Oohu4fHarBn8p
-        8DZ+VJF+LORy7renvW16yccE37XxiyhHq5kvSnpvVt21ba7ClKc8WoZJM7TP312e1V/xufrv
-        b6cFos9cJl0X+qbEUpyRaKjFXFScCABb7tdMRQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOIsWRmVeSWpSXmKPExsVy+t/xe7r/Vl+KMVj0hNFi44z1rBbNi9ez
-        WZw/v4Hd4vKuOWwWM87vY7JYtKyV2eLlkR+MFj8eTmdy4PC4dafeY9OqTjaP/XPXsHu8OX2K
-        3aNvyypGj8+b5ALYovRsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJz
-        MstSi/TtEvQyDryZwVwwS7Si6dpZ1gbGY4JdjJwcEgImEtd7zzJ3MXJxCAksZZTYtnQVK0RC
-        RuLktAYoW1jiz7UuNhBbSOA1o8Tsm6YgtrBAoMSJf4fAakQETCV2zLrIBjKIWWAOk8SP5pfs
-        EFPXMkp0fZzHAlLFJmAo0fUWYhKvgJ3Eha9TGEFsFgEViR2XzzOB2KICMRInpm5hh6gRlDg5
-        8wlYL6eApsSLvY/BepkFzCTmbX7IDGHLSzRvnQ1li0vcejKfaQKj0Cwk7bOQtMxC0jILScsC
-        RpZVjCKppcW56bnFhnrFibnFpXnpesn5uZsYgZG47djPzTsYL20MPsQowMGoxMM7YdalGCHW
-        xLLiytxDjBIczEoivNcnAoV4UxIrq1KL8uOLSnNSiw8xmgI9N5FZSjQ5H5gk8kriDU0NzS0s
-        Dc2NzY3NLJTEeTsEDsYICaQnlqRmp6YWpBbB9DFxcEo1MLLyVGx+rWgiXMrYuswwtUZ3UuS6
-        R0q3Ajr2JUks3nZiRqtp6HmXf9oPbJX+PlJbe2P68sB0cdebb1am8K2Zs6Rcc/8pv+fiFTp7
-        NPxFvrMsFVd6ZzknfIVKoMkLo5P5V5vc/3G2LXjZE/5kKmvi2fJwr32Hn+axh4crP+BPjeyP
-        FjjUFL12vRJLcUaioRZzUXEiABUqXUXaAgAA
-X-CMS-MailID: 20190508101422eucas1p25503ff4d035742c0511fa03cae7b13f5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190507125630eucas1p1c5fd171a8dc2a6b8eb9dd317fe245f0c
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190507125630eucas1p1c5fd171a8dc2a6b8eb9dd317fe245f0c
-References: <CGME20190507125630eucas1p1c5fd171a8dc2a6b8eb9dd317fe245f0c@eucas1p1.samsung.com>
-        <20190507125615.9381-1-m.szyprowski@samsung.com>
-        <yw1xy33iv1lq.fsf@mansr.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
-
-On 2019-05-07 15:24, Måns Rullgård wrote:
-> Marek Szyprowski <m.szyprowski@samsung.com> writes:
->> Commit 01fdf179f4b0 ("usb: core: skip interfaces disabled in devicetree")
->> add support for disabling given USB device interface by adding nodes to
->> the USB host controller device. The mentioned commit however identifies
->> the given USB interface node only by the 'reg' property in the host
->> controller children nodes and then checks for their the 'status'. The USB
->> device interface nodes however also has to have a 'compatible' property as
->> described in Documentation/devicetree/bindings/usb/usb-device.txt. This is
->> important, because USB host controller might have child-nodes for other
->> purposes. For example, Exynos EHCI and OHCI drivers already define
->> child-nodes for each physical root hub port and assigns respective PHY
->> controller and parameters for them. This conflicts with the proposed
->> approach and verifying for the presence of the compatible property fixes
->> this issue without changing the devicetree bindings and the way the PHY
->> controllers are handled by Exynos EHCI/OHCI drivers.
+On 7.5.2019 17.29, Alan Stern wrote:
+> On Tue, 7 May 2019, Mathias Nyman wrote:
+> 
+>> On 6.5.2019 17.57, Alan Stern wrote:
+>>> On Mon, 6 May 2019, Jim Lin wrote:
+>>>
+>>>> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+>>>> processing for full-/low-speed endpoints connected via a TT, the host
+>>>> software must use the Clear_TT_Buffer request to the TT to ensure
+>>>> that the buffer is not in the busy state".
+>>>>
+>>>> In our case, a full-speed speaker (ConferenceCam) is behind a high-
+>>>> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+>>>> request we may continue to get STALL with the folllowing requests,
+>>>> like Set_Interface.
+>>>>
+>>>> Here we add Clear_TT_Buffer for the following Set_Interface requests
+>>>> to get ACK successfully.
+>>>>
+>>>> Originally usb_hub_clear_tt_buffer uses urb->dev->devnum as device
+>>>> address while sending Clear_TT_Buffer command, but this doesn't work
+>>>> for XHCI.
+>>>
+>>> Why doesn't it work for xHCI?  Clear-TT-Buffer is part of the USB 2.0
+>>> spec; it should work exactly the same for xHCI as for a USB-2.0 host
+>>> controller.
+>>>
+>>> Alan Stern
+>>>
 >>
->> Reported-by: Markus Reichl <m.reichl@fivetechno.de>
->> Fixes: 01fdf179f4b0 ("usb: core: skip interfaces disabled in devicetree")
->> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
->> ---
->>   drivers/usb/core/message.c | 1 +
->>   1 file changed, 1 insertion(+)
+>> For other host controllers udev->devnum is the same as the address of the
+>> usb device, chosen and set by usb core.
 >>
->> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
->> index 82239f27c4cc..cd455c4add25 100644
->> --- a/drivers/usb/core/message.c
->> +++ b/drivers/usb/core/message.c
->> @@ -2007,6 +2007,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
->>   		struct usb_interface *intf = cp->interface[i];
+>> With xHC the controller hardware assigns the address, and won't be the same as
+>> devnum.
 >>
->>   		if (intf->dev.of_node &&
->> +		    of_device_is_compatible(intf->dev.of_node, NULL) &&
->>   		    !of_device_is_available(intf->dev.of_node)) {
->>   			dev_info(&dev->dev, "skipping disabled interface %d\n",
->>   				 intf->cur_altsetting->desc.bInterfaceNumber);
->> -- 
-> This doesn't look right.  of_device_is_compatible() with a NULL compat
-> argument always returns zero.
+>> The Clear-TT-Buffer request sent to the hub includes the address of the LS/FS
+>> child device in wValue field. usb_hub_clear_tt_buffer() uses udev->devnum to set the
+>> address wValue. This won't work for devices connected to xHC
+> 
+> I see.  Thanks for the explanation; it makes sense now.  The patch
+> description should explain this too.
+> 
+> Wouldn't it be better to add a field containing the device address to
+> struct usb_device?  And also export it, either in sysfs or debugfs?
+> It seems like the kind of thing that might be important for debugging.
+> If we did this then the usb_hub_clear_tt_buffer API wouldn't need to be
+> changed.
+> 
 
-Right, my fault. I missed that. of_find_property(intf->dev.of_node, 
-"compatible", NULL) is the correct check.
+Agree, adding address to struct usb_device sounds better.
 
-
-> There also seems to be a broader incompatibility between the generic USB
-> bindings and the use of child nodes in the Exynos bindings.
-
-True, but frankly I have no idea how to fix this in a better way.
-
-Exynos EHCI/OHCI bindings predates the generic USB device bindings and 
-now we can only mitigate the damage caused by this conflict.
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+-Mathias
 
