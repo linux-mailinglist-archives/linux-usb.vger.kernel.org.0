@@ -2,77 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FC0189EE
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 14:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC9918B24
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 16:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726426AbfEIMmZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 May 2019 08:42:25 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49198 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726054AbfEIMmY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 May 2019 08:42:24 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BA5D8AB92;
-        Thu,  9 May 2019 12:42:23 +0000 (UTC)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     thomas@winischhofer.net, gregKH@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCHv2] USB: sisusbvga: fix oops in error path of sisusb_probe
-Date:   Thu,  9 May 2019 14:41:50 +0200
-Message-Id: <20190509124150.31867-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.16.4
+        id S1726721AbfEIOCt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 May 2019 10:02:49 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54690 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726583AbfEIOCt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 May 2019 10:02:49 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 0F2BF260253
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+To:     John Stultz <john.stultz@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     "Yang, Fei" <fei.yang@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen Yu <chenyu56@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+Message-ID: <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com>
+Date:   Thu, 9 May 2019 16:02:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pointer used to log a failure of usb_register_dev() must
-be set before the error is logged.
+Hi John,
+W dniu 08.05.2019 o 04:18, John Stultz pisze:
+> Since commit 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather
+> buffers"), I've been seeing trouble with adb transfers in Android on
+> HiKey960, HiKey and now Dragonboard 845c.
+> 
+> Sometimes things crash, but often the transfers just stop w/o any
+> obvious error messages.
+> 
+> Initially I thought it was an issue with the HiKey960 dwc3 usb patches
+> being upstreamed, and was using the following hack workaround:
+>    https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey960-5.1&id=dcdadaaec9db7a7b78ea9b838dd1453359a2f388
+> 
+> Then dwc2 added sg support, and I ended up having to revert it to get
+> by on HiKey:
+>    https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey-5.1&id=6e91b4c7bd1e94bdd835263403c53e85a677b848
+> 
+> (See thread here: https://lkml.org/lkml/2019/3/8/765)
 
-v2: fix that minor is not available before registration
+So the thread says there are problems at boot, but here you mention about
+adb transfers, which must obviously be happening after the board has booted.
+Do you experience problems at boot or not?
 
-Signed-off-by: oliver Neukum <oneukum@suse.com>
-Reported-by: syzbot+a0cbdbd6d169020c8959@syzkaller.appspotmail.com
-Fixes: 7b5cd5fefbe02 ("USB: SisUSB2VGA: Convert printk to dev_* macros")
----
- drivers/usb/misc/sisusbvga/sisusb.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+If a crash happens, what is in the log?
 
-diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
-index 9560fde621ee..ea06f1fed6fa 100644
---- a/drivers/usb/misc/sisusbvga/sisusb.c
-+++ b/drivers/usb/misc/sisusbvga/sisusb.c
-@@ -3029,6 +3029,13 @@ static int sisusb_probe(struct usb_interface *intf,
- 
- 	mutex_init(&(sisusb->lock));
- 
-+	sisusb->sisusb_dev = dev;
-+	sisusb->vrambase   = SISUSB_PCI_MEMBASE;
-+	sisusb->mmiobase   = SISUSB_PCI_MMIOBASE;
-+	sisusb->mmiosize   = SISUSB_PCI_MMIOSIZE;
-+	sisusb->ioportbase = SISUSB_PCI_IOPORTBASE;
-+	/* Everything else is zero */
-+
- 	/* Register device */
- 	retval = usb_register_dev(intf, &usb_sisusb_class);
- 	if (retval) {
-@@ -3039,13 +3046,7 @@ static int sisusb_probe(struct usb_interface *intf,
- 		goto error_1;
- 	}
- 
--	sisusb->sisusb_dev = dev;
--	sisusb->minor      = intf->minor;
--	sisusb->vrambase   = SISUSB_PCI_MEMBASE;
--	sisusb->mmiobase   = SISUSB_PCI_MMIOBASE;
--	sisusb->mmiosize   = SISUSB_PCI_MMIOSIZE;
--	sisusb->ioportbase = SISUSB_PCI_IOPORTBASE;
--	/* Everything else is zero */
-+	sisusb->minor = intf->minor;
- 
- 	/* Allocate buffers */
- 	sisusb->ibufsize = SISUSB_IBUF_SIZE;
--- 
-2.16.4
 
+Andrzej
