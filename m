@@ -2,79 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDDA18B6A
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 16:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A7218B84
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 16:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbfEIOO5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 May 2019 10:14:57 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:43752 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726571AbfEIOO5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 May 2019 10:14:57 -0400
-Received: (qmail 5708 invoked by uid 2102); 9 May 2019 10:14:55 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 9 May 2019 10:14:55 -0400
-Date:   Thu, 9 May 2019 10:14:55 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     EJ Hsu <ejh@nvidia.com>
-cc:     "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [V2] usb: gadget: storage: Remove warning message
-In-Reply-To: <BN7PR12MB264462BFFBDDACE928D2DCB9CF330@BN7PR12MB2644.namprd12.prod.outlook.com>
-Message-ID: <Pine.LNX.4.44L0.1905091011520.1480-100000@iolanthe.rowland.org>
+        id S1727101AbfEIOQH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 May 2019 10:16:07 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:40078 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726839AbfEIOQH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 May 2019 10:16:07 -0400
+Received: by mail-it1-f194.google.com with SMTP id g71so3570408ita.5;
+        Thu, 09 May 2019 07:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VB9VW1DXgM5qsk34IWnaFfc5rrlp9hnpSv4gxGZLTzw=;
+        b=LlqjSbHWA1WFzBfPS7JC2JpLHcIH3PlnAWBx5OhX3OrDq0LwVisdc3gmp8fmVz+ik1
+         /l1+xH4+zOAK7kUdtQUSgPYqjvRRWWiirSHTw1GyC6ucAJB1PKCEVjsYPeL/WFp42yZL
+         c6/2M/IpPmXqe1hzXxo/0x06f77J9nLiCXO/nSQt50sdpgPemR3Mmu/9eInVXBqb8yLM
+         4YQQnM4iyNCi/4YzTjsiU2QJJVL8MNOvKxr5SMl8Yz6aU/p4ux4H2Mp2g5Ep96I79GUE
+         KpKeqHVg9FSouihmQN4lSt2vfIEB32OebkIOpdo5uwDSLZAHkTlVALq94HAa1OjNaKdw
+         Bzpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VB9VW1DXgM5qsk34IWnaFfc5rrlp9hnpSv4gxGZLTzw=;
+        b=eQez2O0KJRq0KGUZMs30T6sV5vk74AAugyT4uOZQfu/Tc6W21K9ijqSeTWyHeNaNix
+         vPsjoay/ZZ8jTr4gGvLGDWqGqDm2Hprs5Mg5H357egUyJjDU+spWCaibz+41EoTBUetu
+         RBK8bq/uP9hQdOxUIdk/mTrUnB/vrRMn2Id0Qdn1GVjH+y08LXdQE+V3UJWB2+8dPg55
+         dVtFPa70XWGEDWRXLA8gNhIPNwayBSSxvWHr0Zf6MvCGZEkTdz4zY3ztkbrNmmfFmKeD
+         m9B77S+8Tikmfs5FlPFBLz+lznUYr5woRkhSZBWzFexIms41AifD5AHq5qxokoNqu5iR
+         kPuw==
+X-Gm-Message-State: APjAAAXdrVb/aSqvMjRHvklDzWaV+39UkhtGVJBHfdppH6NPmKI+cj/N
+        RYQXCKBZ3L21ZpjDdhSTMnZtpABEj/WS5jcqGX4qm8Z7ELg=
+X-Google-Smtp-Source: APXvYqx/fExGbExiF3LH9V1VVeMV1Wj79ugYIqqIfBk7vXMkbUDBUyYgY8WiMCd/APzg6HCsy+XVoJOKTUS6PytMV/Q=
+X-Received: by 2002:a24:cd05:: with SMTP id l5mr2978259itg.44.1557411366279;
+ Thu, 09 May 2019 07:16:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <20190504070407.56915-1-weiyongjun1@huawei.com> <5a3a89cf-eee3-136c-1c5a-58024e946a24@mleia.com>
+In-Reply-To: <5a3a89cf-eee3-136c-1c5a-58024e946a24@mleia.com>
+From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
+Date:   Thu, 9 May 2019 10:15:54 -0400
+Message-ID: <CA+rxa6oh+Qxo5aLgW11vrAvuu7t7JAFONC6b0+kxRx9rwCmjhg@mail.gmail.com>
+Subject: Re: [PATCH -next] usb: gadget: udc: lpc32xx: fix return value check
+ in lpc32xx_udc_probe()
+To:     Vladimir Zapolskiy <vz@mleia.com>
+Cc:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-usb@vger.kernel.org,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 9 May 2019, EJ Hsu wrote:
+Thanks
 
-> > You forgot to change fsg_unbind() to use FSG_STATE_DISCONNECT.  And when
-> > that's done, it will no longer need to set common->new_fsg to NULL either.
-> > 
-> 
-> Yes, we should change fsg_unbind() as well.
-> 
-> > This is sort of a band-aid approach.  The real problem is that the original design
-> > of the driver never intended for there to be more than one outstanding
-> > CONFIG_CHANGE event, so naturally there are scenarios where it doesn't work
-> > right when that assumption is violated.  This patch addresses one of those
-> > scenarios, but there may be others remaining.
-> > 
-> > Ultimately the problem boils down to synchronization with the composite core.
-> 
-> Thanks for your reviewing, I agree with your point.
-> 
-> > Some of the callbacks made by the core take time to fully process, so what
-> > should happen if the core makes a second callback before the first one is
-> > completely processed?
-> > 
-> > On the other hand, I can't think of anything better at the moment.
-> > 
-> > Alan Stern
-> 
-> Actually, composite core have tried to deal with this case by using a spinlock. 
-> (please refer to the cdev->lock)
-> The problem here is that the callback of fsg will delegate the request to 
-> fsg_main_thread. That is, the handling of fsg request will run in parallel with 
-> composite core.
-> In my opinion, this issue can be avoided if we handle these request directly 
-> in the callback of fsg instead of handing it over to fsg_main_thread. But this 
-> might take too much time in the interrupt context, which is not good for 
-> system performance.
-> 
-> Please correct me if there is anything wrong. Thanks
+Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
 
-In theory, the mass-storage function could also be fixed to be more
-careful about locking and synchronization.  For example, never set or
-read common->next_fsg unless you're holding the fsg lock, and don't
-raise a CONFIG_CHANGE exception if another one is already pending.
-
-But I think your patch will be good enough for now, once you have fixed 
-up the two issues mentioned earlier.
-
-Alan Stern
-
+On Sat, May 4, 2019 at 8:17 AM Vladimir Zapolskiy <vz@mleia.com> wrote:
+>
+> Hi Wei Yongjun,
+>
+> On 05/04/2019 10:04 AM, Wei Yongjun wrote:
+> > In case of error, the function devm_ioremap_resource() returns ERR_PTR()
+> > and never returns NULL. The NULL test in the return value check should
+> > be replaced with IS_ERR().
+> >
+> > This issue was detected by using the Coccinelle software.
+> >
+> > Fixes: 408b56ca5c8e ("usb: gadget: udc: lpc32xx: simplify probe")
+> > Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> > ---
+> >  drivers/usb/gadget/udc/lpc32xx_udc.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
+> > index d8f1c60793ed..00fb79c6d025 100644
+> > --- a/drivers/usb/gadget/udc/lpc32xx_udc.c
+> > +++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+> > @@ -3070,9 +3070,9 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+> >       }
+> >
+> >       udc->udp_baseaddr = devm_ioremap_resource(dev, res);
+> > -     if (!udc->udp_baseaddr) {
+> > +     if (IS_ERR(udc->udp_baseaddr)) {
+> >               dev_err(udc->dev, "IO map failure\n");
+> > -             return -ENOMEM;
+> > +             return PTR_ERR(udc->udp_baseaddr);
+> >       }
+> >
+> >       /* Get USB device clock */
+>
+> thank you for the change, it is a correct fix.
+>
+> I do suppose that dev_err() in the context can be evenly removed, but
+> likely it should be another change.
+>
+> Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+>
+> --
+> Best wishes,
+> Vladimir
