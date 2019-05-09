@@ -2,161 +2,376 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C0618C31
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 16:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49DF18CAD
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 17:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726798AbfEIOmZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 May 2019 10:42:25 -0400
-Received: from mail-eopbgr1400107.outbound.protection.outlook.com ([40.107.140.107]:28160
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726234AbfEIOmZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 May 2019 10:42:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UqwQfVQx/tyIvHYeftXGqv1wibvDjkOi0Gd7ejHkxX0=;
- b=GdnWAzlBCdFrkpWJORnXgtG14mETb7fmmngKROC/IcGbrxO4y0eB1SPjmDnBswljVKyJ6ZCGrqejUM8Un00neBpah99+s7myzb4BUVHdpNWC/AhKHwdhAmjfZJ/Adfx2IVRQN6YqkGI5fcwuULp/nkHLNEzexZe5snZrR0bW7/k=
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
- TY1PR01MB1628.jpnprd01.prod.outlook.com (52.133.161.13) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.12; Thu, 9 May 2019 14:42:20 +0000
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1878.022; Thu, 9 May 2019
- 14:42:20 +0000
-From:   Chris Brandt <Chris.Brandt@renesas.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simon Horman <horms@verge.net.au>
-Subject: RE: [PATCH 06/10] usb: renesas_usbhs: Add support for RZ/A2
-Thread-Topic: [PATCH 06/10] usb: renesas_usbhs: Add support for RZ/A2
-Thread-Index: AQHVBGYrI2C6wi6GUEeEvfBgdp4V36ZiYgMAgABJS4A=
-Date:   Thu, 9 May 2019 14:42:19 +0000
-Message-ID: <TY1PR01MB1562EAE92B76A5F3892865308A330@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-References: <20190506234631.113226-1-chris.brandt@renesas.com>
- <20190506234631.113226-7-chris.brandt@renesas.com>
- <OSBPR01MB317436B70E57E04964BDDECED8330@OSBPR01MB3174.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSBPR01MB317436B70E57E04964BDDECED8330@OSBPR01MB3174.jpnprd01.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Chris.Brandt@renesas.com; 
-x-originating-ip: [75.60.247.61]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ad42fa74-1d41-4e84-bfcb-08d6d48c8a54
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1628;
-x-ms-traffictypediagnostic: TY1PR01MB1628:
-x-microsoft-antispam-prvs: <TY1PR01MB1628C44217D7CB970CFFF3538A330@TY1PR01MB1628.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1227;
-x-forefront-prvs: 003245E729
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(136003)(376002)(346002)(39860400002)(366004)(199004)(189003)(446003)(6862004)(486006)(229853002)(11346002)(66946007)(6246003)(476003)(73956011)(6636002)(66476007)(8676002)(64756008)(66446008)(25786009)(66556008)(8936002)(81156014)(81166006)(478600001)(186003)(9686003)(55016002)(2906002)(86362001)(26005)(72206003)(6506007)(76116006)(53936002)(68736007)(4326008)(102836004)(14444005)(256004)(305945005)(52536014)(33656002)(316002)(5660300002)(7736002)(74316002)(66066001)(71190400001)(71200400001)(6436002)(99286004)(7696005)(76176011)(3846002)(6116002)(54906003)(14454004);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1628;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: KvnXzQQUOMiUfnTbbGJ6qnnq8TnVGrgDB32+OZtfFL2Ls6e5aR8F9ymhkh1YtGFNt5GBwpSTotLLnEX4U2RSFIHZfNrZbs+woBOjlKHTf93wu6BclcaKX5SXfW+lR1c8JdkUffZPd3m2OkShCojeZilNxSukf60TqW3gAyugLKCAwtbLG0sGya6jz8acKtTZ6O+G7kKO2vGUp2g6AmOiIHWM8DLk2mL/3kd4kk2X5zxTRlzulrWWK5izeiEWwrv1gkxmEzx46SHssqw9k5mUPNl/SNJWtBSgXcdlTWyNLlUJQVxyjgvggXmm3yGFmSarudBAqWhpdrFp0VhLmqP9YZIAEf48miBsd+fZJfl8iVzYZ36g4g5YyG3ybYQeiTo54FIeQaafiizto/PCvku6pBg0VMCJcR5o3E5zWkxDZww=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        id S1726469AbfEIPHt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 May 2019 11:07:49 -0400
+Received: from mga18.intel.com ([134.134.136.126]:33170 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726234AbfEIPHs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 May 2019 11:07:48 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 May 2019 08:07:47 -0700
+X-ExtLoop1: 1
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 May 2019 08:07:45 -0700
+Subject: Re: [PATCH 1/4] usb: xhci: add Immediate Data Transfer support
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+References: <1556285012-28186-1-git-send-email-mathias.nyman@linux.intel.com>
+ <1556285012-28186-2-git-send-email-mathias.nyman@linux.intel.com>
+ <CGME20190509103220eucas1p1330f2827916b55e05b1b791504963630@eucas1p1.samsung.com>
+ <bc747768-7457-0df6-f57e-4aeac9c8bf0c@samsung.com>
+ <3fe85fcc-a202-f746-6cd6-d3f5523348f8@linux.intel.com>
+ <a369ba3931e3df113101ce9e52634e5c2ef0b957.camel@suse.de>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <b4e49d68-a94e-f6fb-6439-78ef0ff898ef@linux.intel.com>
+Date:   Thu, 9 May 2019 18:10:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ad42fa74-1d41-4e84-bfcb-08d6d48c8a54
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2019 14:42:19.9732
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1628
+In-Reply-To: <a369ba3931e3df113101ce9e52634e5c2ef0b957.camel@suse.de>
+Content-Type: multipart/mixed;
+ boundary="------------6A10BD124C5667F71A81D538"
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Shimoda=1B$B$5$s!"=1B(B
+This is a multi-part message in MIME format.
+--------------6A10BD124C5667F71A81D538
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> From: Yoshihiro Shimoda
-> Sent: Thursday, May 09, 2019 3:04 AM
+On 9.5.2019 14.51, Nicolas Saenz Julienne wrote:
+> On Thu, 2019-05-09 at 14:40 +0300, Mathias Nyman wrote:
+>> On 9.5.2019 13.32, Marek Szyprowski wrote:
+>>> Dear All,
+>>>
+>>> On 2019-04-26 15:23, Mathias Nyman wrote:
+>>>> From: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+>>>>
+>>>> Immediate data transfers (IDT) allow the HCD to copy small chunks of
+>>>> data (up to 8bytes) directly into its output transfer TRBs. This avoids
+>>>> the somewhat expensive DMA mappings that are performed by default on
+>>>> most URBs submissions.
+>>>>
+>>>> In the case an URB was suitable for IDT. The data is directly copied
+>>>> into the "Data Buffer Pointer" region of the TRB and the IDT flag is
+>>>> set. Instead of triggering memory accesses the HC will use the data
+>>>> directly.
+>>>>
+>>>> The implementation could cover all kind of output endpoints. Yet
+>>>> Isochronous endpoints are bypassed as I was unable to find one that
+>>>> matched IDT's constraints. As we try to bypass the default DMA mappings
+>>>> on URB buffers we'd need to find a Isochronous device with an
+>>>> urb->transfer_buffer_length <= 8 bytes.
+>>>>
+>>>> The implementation takes into account that the 8 byte buffers provided
+>>>> by the URB will never cross a 64KB boundary.
+>>>>
+>>>> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+>>>> Reviewed-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+>>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>
+>>> I've noticed that this patch causes regression on various Samsung Exynos
+>>> 5420/5422/5800 boards, which have USB3.0 host ports provided by
+>>> DWC3/XHCI hardware module. The regression can be observed with ASIX USB
+>>> 2.0 ethernet dongle, which stops working after applying this patch (eth0
+>>> interface is registered, but no packets are transmitted/received). I can
+>>> provide more debugging information or do some tests, just let me know
+>>> what do you need. Reverting this commit makes ASIX USB ethernet dongle
+>>> operational again.
+>>>
+>>
+>> Thanks for reporting.
+>>
+>> Would it be possible to check if your ASIX ethernet dongle works on some
+>> desktop/laptop setup with this same IDT patch?
+>>
+>> Also Exynos xhci traces could help, they would show the content of the TRBs
+>> using IDT.
+>> Maybe byte order gets messed up?
+>>
+>> Take traces with:
+>>
+>> mount -t debugfs none /sys/kernel/debug
+>> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+>> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+>>
+>> <connect ASIX eth dongle, try to use it>
+>>
+>> send /sys/kernel/debug/tracing/trace content to me
+>>
+>> If we can't get this fixed I'll revert the IDT patch
+> 
+> Hi Matthias, thanks for your help.
+> 
+> I'll also be looking into it, so please send me the logs too.
+> 
 
-> > -/* status */
-> > -#define usbhsc_flags_init(p)   do {(p)->flags =3D 0; } while (0)
-> > -#define usbhsc_flags_set(p, b) ((p)->flags |=3D  (b))
-> > -#define usbhsc_flags_clr(p, b) ((p)->flags &=3D ~(b))
-> > -#define usbhsc_flags_has(p, b) ((p)->flags &   (b))
->=20
-> I would like to separate this patch to some patches like below to review
-> the patch(es) easily:
->=20
-> 1. Just move these definitions to common.h.
+Got the logs off list, thanks
 
-FYI, checkpatch.pl says this:
+The "Buffer" data in Control transfer Data stage look suspicious.
 
-  WARNING: Single statement macros should not use a do {} while (0) loop
-  #122: FILE: drivers/usb/renesas_usbhs/common.h:350:
-  +#define usbhsc_flags_init(p)   do {(p)->flags =3D 0; } while (0)
+grep "flags I:" trace_fail  | grep Data
+kworker/0:2-124   [000] d..1    63.092399: xhci_queue_trb: CTRL: Buffer 0000000018b65000 length 6 TD size 0 intr 0 type 'Data Stage' flags I:i:c:s:i:e:C
+ifconfig-1429  [005] d..1    93.181231: xhci_queue_trb: CTRL: Buffer 0000000018b65000 length 6 TD size 0 intr 0 type 'Data Stage' flags I:i:c:s:i:e:C
+ifconfig-1429  [007] dn.2    93.182050: xhci_queue_trb: CTRL: Buffer 0000000000000000 length 8 TD size 0 intr 0 type 'Data Stage' flags I:i:c:s:i:e:C
+ifconfig-1429  [007] d..2    93.182499: xhci_queue_trb: CTRL: Buffer 0000000080000000 length 8 TD size 0 intr 0 type 'Data Stage' flags I:i:c:s:i:e:C
+ifconfig-1429  [007] d..2    93.182736: xhci_queue_trb: CTRL: Buffer 0000000080000000 length 8 TD size 0 intr 0 type 'Data Stage' flags I:i:c:s:i:e:C
+kworker/0:3-1409  [000] d..3    93.382630: xhci_queue_trb: CTRL: Buffer 0000000080000000 length 8 TD size 0 intr 0 type 'Data Stage' flags I:i:c:s:i:e:C
 
-So, I will change this code to:
+First guess would be that in case URB has URB_NO_TRANSFER_DMA_MAP set then data
+will be mapped and urb->transfer_dma is already set.
+The IDT patch uses urb->trabfer_dma as a temporary buffer, and copies the
+urb->transfer_buffer there.
+if transfer buffer is already dma mapped the urb->transfer_buffer can be garbage,
+(shouldn't, but it can be)
 
-#define usbhsc_flags_init(p)   {(p)->flags =3D 0;}
+Below code avoids IDT if URB_NO_TRANSFER_DMA_MAP is set, and doesn't touch
+urb->transfer_dma (patch attached)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index fed3385..f080054 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3423,11 +3423,14 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+  
+         if (urb->transfer_buffer_length > 0) {
+                 u32 length_field, remainder;
++               u64 addr;
+  
+                 if (xhci_urb_suitable_for_idt(urb)) {
+-                       memcpy(&urb->transfer_dma, urb->transfer_buffer,
++                       memcpy(&addr, urb->transfer_buffer,
+                                urb->transfer_buffer_length);
+                         field |= TRB_IDT;
++               } else {
++                       addr = (u64) urb->transfer_dma;
+                 }
+  
+                 remainder = xhci_td_remainder(xhci, 0,
+@@ -3440,8 +3443,8 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+                 if (setup->bRequestType & USB_DIR_IN)
+                         field |= TRB_DIR_IN;
+                 queue_trb(xhci, ep_ring, true,
+-                               lower_32_bits(urb->transfer_dma),
+-                               upper_32_bits(urb->transfer_dma),
++                               lower_32_bits(addr),
++                               upper_32_bits(addr),
+                                 length_field,
+                                 field | ep_ring->cycle_state);
+         }
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index a450a99..7f8b950 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2160,7 +2160,8 @@ static inline bool xhci_urb_suitable_for_idt(struct urb *urb)
+  {
+         if (!usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
+             usb_endpoint_maxp(&urb->ep->desc) >= TRB_IDT_MAX_SIZE &&
+-           urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE)
++           urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE &&
++           !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
+                 return true;
+  
+         return false;
+
+If that doesn't help, then it's possible DATA trbs in control transfer can't
+use IDT at all. IDT is supported for Normal TRBs, which have a different trb
+type than DATA trbs in control transfers.
+
+Also xhci specs 4.11.7 limit IDT usage:
+
+"If the IDT flag is set in one TRB of a TD, then it shall be the only Transfer
+  TRB of the TD"
+
+A whole control transfer is one TD, and it already contains a SETUP transfer TRB
+which is using the IDT flag.
+
+Following disables IDT for control transfers (testpatch attached as well)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index fed3385..4c1c9ad 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3424,12 +3424,6 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+         if (urb->transfer_buffer_length > 0) {
+                 u32 length_field, remainder;
+  
+-               if (xhci_urb_suitable_for_idt(urb)) {
+-                       memcpy(&urb->transfer_dma, urb->transfer_buffer,
+-                              urb->transfer_buffer_length);
+-                       field |= TRB_IDT;
+-               }
+-
+                 remainder = xhci_td_remainder(xhci, 0,
+                                 urb->transfer_buffer_length,
+                                 urb->transfer_buffer_length,
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index a450a99..2e16ff7 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2158,9 +2158,11 @@ static inline struct xhci_ring *xhci_urb_to_transfer_ring(struct xhci_hcd *xhci,
+   */
+  static inline bool xhci_urb_suitable_for_idt(struct urb *urb)
+  {
+-       if (!usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
++       if (!usb_endpoint_xfer_control(&urb->ep->desc) &&
++           !usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
+             usb_endpoint_maxp(&urb->ep->desc) >= TRB_IDT_MAX_SIZE &&
+-           urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE)
++           urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE &&
++           !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
+                 return true;
+  
+         return false;
+
+-Mathias
+
+--------------6A10BD124C5667F71A81D538
+Content-Type: text/x-patch;
+ name="0001-xhci-Don-t-use-IDT-tranfers-when-not-supported.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0="0001-xhci-Don-t-use-IDT-tranfers-when-not-supported.patch"
+
+From c92d0e83f24d9a8f401ef5c91ebc8263fd9d2a56 Mon Sep 17 00:00:00 2001
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Date: Thu, 9 May 2019 17:47:28 +0300
+Subject: [TESTPATCH2] xhci: Don't use IDT tranfers when not supported
+
+control tranfer data stage can't support IDT as xHCI can't have two
+IDT flags in the same TD.
+The SETUP stage is already using IDT
+see xhci 4.11.7 for details
+
+Also don't use IDT if tranfer buffer is already dma mapped.
+There is no benefit with IDT then.
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci-ring.c | 6 ------
+ drivers/usb/host/xhci.h      | 6 ++++--
+ 2 files changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index fed3385..4c1c9ad 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3424,12 +3424,6 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 	if (urb->transfer_buffer_length > 0) {
+ 		u32 length_field, remainder;
+ 
+-		if (xhci_urb_suitable_for_idt(urb)) {
+-			memcpy(&urb->transfer_dma, urb->transfer_buffer,
+-			       urb->transfer_buffer_length);
+-			field |= TRB_IDT;
+-		}
+-
+ 		remainder = xhci_td_remainder(xhci, 0,
+ 				urb->transfer_buffer_length,
+ 				urb->transfer_buffer_length,
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index a450a99..2e16ff7 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2158,9 +2158,11 @@ static inline struct xhci_ring *xhci_urb_to_transfer_ring(struct xhci_hcd *xhci,
+  */
+ static inline bool xhci_urb_suitable_for_idt(struct urb *urb)
+ {
+-	if (!usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
++	if (!usb_endpoint_xfer_control(&urb->ep->desc) &&
++	    !usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
+ 	    usb_endpoint_maxp(&urb->ep->desc) >= TRB_IDT_MAX_SIZE &&
+-	    urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE)
++	    urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE &&
++	    !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
+ 		return true;
+ 
+ 	return false;
+-- 
+2.7.4
 
 
+--------------6A10BD124C5667F71A81D538
+Content-Type: text/x-patch;
+ name="0001-xhci-don-t-use-IDT-transfer-buffer-is-already-dma-ma.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0="0001-xhci-don-t-use-IDT-transfer-buffer-is-already-dma-ma.pa";
+ filename*1="tch"
 
-> It's the same with RZA1. So, I think we can reuse the code like below.
-> What do you think?
-> +	if (dparam->type =3D=3D USBHS_TYPE_RZA1 ||
-> +	    dparam->type =3D=3D USBHS_TYPE_RZA2) {
-> 		dparam->pipe_configs =3D usbhsc_new_pipe;
-> 		dparam->pipe_size =3D ARRAY_SIZE(usbhsc_new_pipe);
-> 	}
+From 485c5ede4d2e237c7f28f0cbb891151f88718e5b Mon Sep 17 00:00:00 2001
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Date: Thu, 9 May 2019 17:47:28 +0300
+Subject: [TESTPATCH1] xhci: don't use IDT transfer buffer is already dma
+ mapped
 
-OK.
+Limit IDT usage if transfer buffer is already mapped.
+Also don't use urb->transfer_dma as a temporary buffer
 
-#At first, RZA2 had 'dparam->has_usb_dmac =3D 1'. But, DMA had some
- issues, so I removed it.
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci-ring.c | 9 ++++++---
+ drivers/usb/host/xhci.h      | 3 ++-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index fed3385..f080054 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3423,11 +3423,14 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 
+ 	if (urb->transfer_buffer_length > 0) {
+ 		u32 length_field, remainder;
++		u64 addr;
+ 
+ 		if (xhci_urb_suitable_for_idt(urb)) {
+-			memcpy(&urb->transfer_dma, urb->transfer_buffer,
++			memcpy(&addr, urb->transfer_buffer,
+ 			       urb->transfer_buffer_length);
+ 			field |= TRB_IDT;
++		} else {
++			addr = (u64) urb->transfer_dma;
+ 		}
+ 
+ 		remainder = xhci_td_remainder(xhci, 0,
+@@ -3440,8 +3443,8 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 		if (setup->bRequestType & USB_DIR_IN)
+ 			field |= TRB_DIR_IN;
+ 		queue_trb(xhci, ep_ring, true,
+-				lower_32_bits(urb->transfer_dma),
+-				upper_32_bits(urb->transfer_dma),
++				lower_32_bits(addr),
++				upper_32_bits(addr),
+ 				length_field,
+ 				field | ep_ring->cycle_state);
+ 	}
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index a450a99..7f8b950 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2160,7 +2160,8 @@ static inline bool xhci_urb_suitable_for_idt(struct urb *urb)
+ {
+ 	if (!usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
+ 	    usb_endpoint_maxp(&urb->ep->desc) >= TRB_IDT_MAX_SIZE &&
+-	    urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE)
++	    urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE &&
++	    !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
+ 		return true;
+ 
+ 	return false;
+-- 
+2.7.4
 
 
-
-> I prefer to add "{ }" on "if" and "else" like below.
->=20
-> 	if (usbhsc_flags_has(priv, USBHSF_CFIFO_BYTE_ADDR)) {
-> 		for (i =3D 0; i < len; i++)
-> 			iowrite8(buf[i], addr + (i & 0x03));
-> 	} else {
-> 		for (i =3D 0; i < len; i++)
-> 			iowrite8(buf[i], addr + (0x03 - (i & 0x03)));
-> 	}
-
-OK.
-#I always prefer braces. It is easier to read.
-
-
-> > +static int usbhs_rza2_power_ctrl(struct platform_device *pdev,
-> > +				void __iomem *base, int enable)
-> > +{
-> > +	struct usbhs_priv *priv =3D usbhs_pdev_to_priv(pdev);
-> > +	int retval =3D -ENODEV;
-> > +
-> > +	if (priv->phy) {
-> > +		if (enable) {
-> > +			retval =3D phy_init(priv->phy);
-> > +			if (enable) {
-> > +				usbhs_bset(priv, SUSPMODE, SUSPM, SUSPM);
-> > +				/* Wait 100 usec for PLL to become stable */
-> > +				udelay(100);
-> > +			} else {
->=20
-> This else code never runs. So,
-
-Yes, thank you.
-
-This code is ugly, so I'm going to change it.
-
-Chris
-
+--------------6A10BD124C5667F71A81D538--
