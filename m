@@ -2,111 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDC3181BB
-	for <lists+linux-usb@lfdr.de>; Wed,  8 May 2019 23:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD56C18421
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 05:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727537AbfEHVpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 17:45:18 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:44977 "EHLO
+        id S1726448AbfEID0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 May 2019 23:26:13 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:43649 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726591AbfEHVpR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 17:45:17 -0400
-Received: by mail-wr1-f68.google.com with SMTP id c5so3894611wrs.11
-        for <linux-usb@vger.kernel.org>; Wed, 08 May 2019 14:45:16 -0700 (PDT)
+        with ESMTP id S1726281AbfEID0M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 May 2019 23:26:12 -0400
+Received: by mail-wr1-f68.google.com with SMTP id r4so734671wro.10
+        for <linux-usb@vger.kernel.org>; Wed, 08 May 2019 20:26:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7D+ymcQFsrZ9j+jO/ay0tfKGA3nxqSGTzzYNIStXbzQ=;
-        b=kAuKSd/V2ppASosx273j6mDoFHWe4rWhtbFfHE41dqsWfGFqHmoZvFmHnGki//NAG4
-         K0wuhsGesLSOeFD499Xy4lUu5oGzfgV73AK53meOAhmINDFgtEHam9PqPkfXVI8ZG5vJ
-         r3kXIcJ8zc4AiZyUtIPHYVFMNana60A/OhnlX1iW2MfALdyafIM5npX4keYfqudvGRXf
-         iZIknMFX/dbrTfuS/pcDVPchKuJ2g55KEbtSJ2jYTtdlo5hRXG2iJFF4Qy8u1X7zLe2S
-         YbZ4pXCNETFqW9L+nifPLENUoQ8fhc12kkBDjLCqs/WWjb0mG4SRz/0vuBSdGZCgBBCu
-         H0Lg==
+        bh=lRhRc+8pG5xCFTlPPF8IH5Jn8EJcWR+taQ45d02yZww=;
+        b=Ge+Pjvx3g4sMxcB8INSQA8PNEWybLExQ+5MUy+EJX2Ni9nrkR5JxNznOE6+q30QnsC
+         1U5+RQwNnumYj+vpNrx19iK+ntOAKV8hoFvrCvVtw7fbS10Cb045l2xHPhXvRhck6Au/
+         HZNuIJH++2TqxiXkI0y8J1fceqH8otIZSGPA8F6XbgbRbF6EonFPymw+94sf4FQYAyGV
+         IBp+4kcUO2C9T53N3d+UkGcgfa8Sr3eDkv15sXU/9Vw1GgGg/7mbPaOLQtuR/cBEeHwK
+         AfUYO1Qu0JQZ2gQDyDdnkn2Zsl+ofJNcwGxHzxTMUZe5gi+bIrMWCrpfBCkyByZgHy1v
+         wibA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7D+ymcQFsrZ9j+jO/ay0tfKGA3nxqSGTzzYNIStXbzQ=;
-        b=C+O8+t+7dovq9kdYHJkDCFKSpQW0jr/4NtJRgZ+ldmIfwvPGxk/SSyfv4NGicVdqLf
-         y5zW4pmKEcbU/ZC20KsS/EQ82FThU46pL4oEznjIVu7ybFhQMrONpb52rZHsm8/oWvC1
-         Ze5l34h3QeyG9eMiIo0kXq2AfkZWi/Le+aa1vtUDhwaA49o6TD/JKKK3WcxEPVbVkabc
-         pA/y3nD6GqRA0SBBfxqtAUpMpQxWTGFO1BJ4hzL8PVdWOWI6bd3of+lzHyA5rjM4yUWQ
-         KjyD5c8TlVEM3SRiqAgoTr/qmVo0Vto4i5jm8oyJl8fCg0iRoTJNI2/b9CEfw0igsSf5
-         U1Sw==
-X-Gm-Message-State: APjAAAXv3zCQkftjnxruk2gSzq4mjSL7rbnRHp6hz9LS5UedgHAQ4zGw
-        yZQ8Ztf6RuO6DBgw+WYMZtZG5zTNftSyZ3yDWsCNVQ==
-X-Google-Smtp-Source: APXvYqzl1zSINu14DgAj1utER5ei9eR2196mUVGyWSseCtTBtzOoGri96Qc9/kkU1stUP1eLXx+3MEK1BfAf7ZCAhsw=
-X-Received: by 2002:a5d:50c2:: with SMTP id f2mr101308wrt.253.1557351915966;
- Wed, 08 May 2019 14:45:15 -0700 (PDT)
+        bh=lRhRc+8pG5xCFTlPPF8IH5Jn8EJcWR+taQ45d02yZww=;
+        b=j42VoGhW86YKr4x4yR1h2/h7cP6itlmi66sHNiK0m7TV/JGgkrg4hMEvxLSov7WSmU
+         vrm5Mm8NYfB40yXo3AAi0Fmgd9ygt1w9RJ5uRehkuD7J/cLtcpnwMWhg9m+VEqaCuWvI
+         ysBKsBeQFlzpaS7IwOKXycdm3LpBrfSU2jbN7HLLjrZbKpXOKK+b49ShlTypd4zWb/zz
+         nRAHXzwZnh5Ha9dmKXeQnxKKR42HlkqpjR/IjENQ8wNwxQHlxWA1LY5LJ/mmDZDP0lRu
+         ft30jJc1lWaUvbiNVxICFrUJ1qhxVKj7Pidn81g7CJArJnThzQopAQZxW9cmkOlB+Ksk
+         Bhrw==
+X-Gm-Message-State: APjAAAVWTvFfIVLi4MD9Dg7JcEarPxDeBnvp7zr3iKMoknmiE5O9/lk/
+        PQF54evec6x2gbDIz6owpoSotMaN2Vyzg7U+kNz3fw==
+X-Google-Smtp-Source: APXvYqwavGD8Uf37ZBJXMkSF/61pdtw/gAuyxjoSTqrxEnjIpwqD/q2DxlhPKPgM+SPcDf6Hm9tDb/uyRSjZRQsyq60=
+X-Received: by 2002:a5d:50c2:: with SMTP id f2mr916900wrt.253.1557372370271;
+ Wed, 08 May 2019 20:26:10 -0700 (PDT)
 MIME-Version: 1.0
 References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
- <3b57eb64-4c25-4582-7b0d-59143060b5a5@collabora.com>
-In-Reply-To: <3b57eb64-4c25-4582-7b0d-59143060b5a5@collabora.com>
+ <5d58059c-1b10-665f-983b-a1d018a30d1f@gmail.com>
+In-Reply-To: <5d58059c-1b10-665f-983b-a1d018a30d1f@gmail.com>
 From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 8 May 2019 14:45:05 -0700
-Message-ID: <CALAqxLW2AubzLOz7S1QWdNtxhO3kk5kikyXo7ToZ=vCOF0vNbg@mail.gmail.com>
+Date:   Wed, 8 May 2019 20:25:58 -0700
+Message-ID: <CALAqxLVyPxTsM34wmMtJGvVHUUq27gh0BDzbS=YWnLbNvpibiw@mail.gmail.com>
 Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
 Cc:     Felipe Balbi <balbi@kernel.org>, "Yang, Fei" <fei.yang@intel.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Chen Yu <chenyu56@huawei.com>,
         lkml <linux-kernel@vger.kernel.org>,
         Linux USB List <linux-usb@vger.kernel.org>,
         Amit Pundir <amit.pundir@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "kernel@collabora.com" <kernel@collabora.com>
+        Marek Szyprowski <m.szyprowski@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 8, 2019 at 5:44 AM Andrzej Pietrasiewicz
-<andrzej.p@collabora.com> wrote:
+On Wed, May 8, 2019 at 12:01 AM Andrzej Pietrasiewicz
+<andrzejtp2010@gmail.com> wrote:
+>
+> Hi John,
+>
+> += Marek
+>
 > W dniu 08.05.2019 o 04:18, John Stultz pisze:
+> > Since commit 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather
+> > buffers"), I've been seeing trouble with adb transfers in Android on
+> > HiKey960, HiKey and now Dragonboard 845c.
+> >
+> > Sometimes things crash, but often the transfers just stop w/o any
+> > obvious error messages.
+> >
+> > Initially I thought it was an issue with the HiKey960 dwc3 usb patches
+> > being upstreamed, and was using the following hack workaround:
+> >    https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey960-5.1&id=dcdadaaec9db7a7b78ea9b838dd1453359a2f388
+> >
+> > Then dwc2 added sg support, and I ended up having to revert it to get
+> > by on HiKey:
+> >    https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey-5.1&id=6e91b4c7bd1e94bdd835263403c53e85a677b848
+> >
+> > (See thread here: https://lkml.org/lkml/2019/3/8/765)
+> >
+> > And now I've reproduced the same issue (with the same dwc3 workaround)
+> > on the already upstream code for Dragonboard 845c.
+> >
+> > Fei Yang has also reached out and mentioned he was seeing similar
+> > problems with the f_fs sg support.
+> >
 > > Andrzej: Do you have any ideas or suggestions on this? I'm happy to
 > > test or run any debug patches, if it would help narrow the issue down.
 > >
 >
-> Can you please try the below patch?
+> There is a patch:
 >
-> One more thing to consider is "functionfs read size 512 > requested size 24,
-> splitting request into multiple reads." in your original report, but let's
-> try this first:
+> https://www.spinics.net/lists/linux-usb/msg178536.html
+> https://www.spinics.net/lists/linux-usb/msg179653.html
 >
->  From f2b8f27cfa42cafe1f56d8abbe2c76fa0072e368 Mon Sep 17 00:00:00 2001
-> From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> Date: Wed, 8 May 2019 13:52:40 +0200
-> Subject: [PATCH] usb: gadget: Zero ffs_io_data
+> which fixes a subtle bug, but hasn't been applied yet.
 >
-> In some cases the "Allocate & copy" block in ffs_epfile_io() is not
-> executed. Consequently, in such a case ffs_alloc_buffer() is never called
-> and struct ffs_io_data is not initialized properly. This in turn leads to
-> problems when ffs_free_buffer() is called at the end of ffs_epfile_io().
->
-> This patch uses kzalloc() instead of kmalloc() in the aio case and memset()
-> in non-aio case to properly initialize struct ffs_io_data.
->
-> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-Hey Andrzej,
-  Thanks so much for sending this patch out! I tried it, but on both
-HiKey960 and Dragonboard 845c (both dwc3 hardware) I'm still seeing
-the same problem with this change.
+So, the "fix zlp handling" doesn't seem to changes things on hikey w/
+the dwc2 hardware.
 
-On db845c "adb logcat" will usually hang mid-way and just sit there.
-Further adb shell connections don't connect until I unplug and replug
-the usb cable.
-
-On HiKey960 logcat seems to work, but doing something like adb install
-<big application> will stall and never complete.
-
-Again, in both cases I'm not getting much in the way of error
-messages, so there's not much clue as to whats going wrong.
-
-Let me know if you have any further ideas to try.
+I still see the following crash right away:
+   13.571611] functionfs read size 512 > requested size 24, splitting
+request into multiple reads.
+[   13.571773] ------------[ cut here ]------------
+[   13.585205] kernel BUG at mm/slub.c:3944!
+[   13.589215] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[   13.594698] Modules linked in:
+[   13.597754] Process adbd (pid: 408, stack limit = 0x000000001b71cb6b)
+[   13.604197] CPU: 0 PID: 408 Comm: adbd Not tainted 5.1.0-06623-g27dc6c9 #168
+[   13.611243] Hardware name: HiKey Development Board (DT)
+[   13.616465] pstate: 40400005 (nZcv daif +PAN -UAO)
+[   13.621266] pc : kfree+0x210/0x258
+[   13.624672] lr : ffs_epfile_io.isra.12+0xf8/0x6b8
+[   13.629371] sp : ffffff8011b63b50
+[   13.632682] x29: ffffff8011b63b50 x28: ffffffc06b918e00
+[   13.637993] x27: ffffffc0703af138 x26: 00000000000001e8
+[   13.643303] x25: ffffff8011b63c98 x24: ffffffc074c3e800
+[   13.648613] x23: ffffffc074affa00 x22: ffffff80114b9000
+[   13.653923] x21: ffffff80108b19b0 x20: ffffff8011c2d000
+[   13.659233] x19: ffffffbf00470b40 x18: 0000000000000000
+[   13.664542] x17: 0000000000000000 x16: ffffffc06b918e00
+[   13.669851] x15: 0000000000000000 x14: 0000000000000000
+[   13.675160] x13: 0000000000000000 x12: 0000000000000000
+[   13.680469] x11: 0000000000000000 x10: 0000000000000000
+[   13.685779] x9 : 0000000000000000 x8 : 00000073d8dd6150
+[   13.691088] x7 : 00000073d8dd6598 x6 : 0000007280805113
+[   13.696398] x5 : 0000007280805113 x4 : 0000000000000000
+[   13.701707] x3 : ffffffc0703af100 x2 : 0000000000000000
+[   13.707020] x1 : ffffffbf00470b48 x0 : ffffffbf00470b48
+[   13.712334] Call trace:
+[   13.714784]  kfree+0x210/0x258
+[   13.717837]  ffs_epfile_io.isra.12+0xf8/0x6b8
+[   13.722191]  ffs_epfile_read_iter+0xb4/0x188
+[   13.726459]  new_sync_read+0xf4/0x190
+[   13.730118]  __vfs_read+0x2c/0x40
+[   13.733430]  vfs_read+0x8c/0x148
+[   13.736654]  ksys_read+0x64/0xf0
+[   13.739878]  __arm64_sys_read+0x14/0x20
+[   13.743715]  el0_svc_common.constprop.0+0xa8/0x100
+[   13.748504]  el0_svc_handler+0x28/0x78
+[   13.752250]  el0_svc+0x8/0xc
+[   13.755132] Code: f9400260 378000a0 f9400660 37000060 (d4210000)
+[   13.761225] ---[ end trace 0220b13deaa73ab7 ]---
+[   13.783381] Kernel panic - not syncing: Fatal exception
+[   13.788616] SMP: stopping secondary CPUs
+[   13.792814] Kernel Offset: disabled
+[   13.796301] CPU features: 0x002,24002004
+[   13.800219] Memory Limit: none
+[   13.820708] Rebooting in 5 seconds..
 
 thanks
 -john
