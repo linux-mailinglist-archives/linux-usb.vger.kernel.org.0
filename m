@@ -2,124 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 550FE1878B
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 11:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5CF187B0
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 11:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725992AbfEIJQM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 May 2019 05:16:12 -0400
-Received: from zimbra2.kalray.eu ([92.103.151.219]:35756 "EHLO
-        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725963AbfEIJQM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 May 2019 05:16:12 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 6088427E9907;
-        Thu,  9 May 2019 11:16:10 +0200 (CEST)
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id VZOBJmtAWNgE; Thu,  9 May 2019 11:16:05 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 0608B27E9902;
-        Thu,  9 May 2019 11:16:05 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 0608B27E9902
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1557393365;
-        bh=T/oQ8CcZlfmQ0HlLaFjP4S9/qk0tYWvG+MJfvM+WTXQ=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=md1wceuHkMyDq0pE5+tjJygNERMEoBLTYZLzv+Ov23vprLmBZbL5dNtBmbQOFYTIE
-         JQfGWNKp2QcspVRBGiadxH8VYIfOql24tnj6LGpx3Nej+V5IgHsU5o5b6HoOvWekCw
-         MxtBc9Ibp9hxKASAz8wxPzvlRfC0XHxJXkQOknlo=
-X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id bOkSSkui2tw7; Thu,  9 May 2019 11:16:04 +0200 (CEST)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id E1A8227E98F8;
-        Thu,  9 May 2019 11:16:04 +0200 (CEST)
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Minas Harutyunyan <hminas@synopsys.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Jules Maselbas <jmaselbas@kalray.eu>
-Subject: [PATCH v2] usb: dwc2: Use generic PHY width in params setup
-Date:   Thu,  9 May 2019 11:15:28 +0200
-Message-Id: <20190509091528.28397-1-jmaselbas@kalray.eu>
-X-Mailer: git-send-email 2.21.0.196.g041f5ea
-In-Reply-To: <20190507100852.11263-2-jmaselbas@kalray.eu>
-References: <20190507100852.11263-2-jmaselbas@kalray.eu>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        id S1726684AbfEIJZ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 May 2019 05:25:29 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52622 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726174AbfEIJZ3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 May 2019 05:25:29 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 8502EBB9E;
+        Thu,  9 May 2019 09:25:28 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     miquel@df.uba.ar, gregKH@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 1/4] rio500: refuse more than one device at a time
+Date:   Thu,  9 May 2019 11:24:53 +0200
+Message-Id: <20190509092456.10688-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Setting params.phy_utmi_width in dwc2_lowlevel_hw_init() is pointless sin=
-ce
-it's value will be overwritten by dwc2_init_params().
+This driver is using a global variable. It cannot handle more than
+one device at a time. The issue has been existing since the dawn
+of the driver.
 
-This change make sure to take in account the generic PHY width informatio=
-n
-during paraminitialisation, done in dwc2_set_param_phy_utmi_width().
+V2: Fixed locking in probe()
+    Fixed Documentation
 
-By doing so, the phy_utmi_width params can still be overrided by
-devicetree specific params and will also be checked against hardware
-capabilities.
-
-Fixes: 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif with phy_utmi_widt=
-h")
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: syzbot+35f04d136fc975a70da4@syzkaller.appspotmail.com
 ---
-v2: Fix typo in commit message. Add Fixes and Tested-by tags.
----
- drivers/usb/dwc2/params.c   | 9 +++++++++
- drivers/usb/dwc2/platform.c | 9 ---------
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ drivers/usb/misc/rio500.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 6900eea57526..5949262ff669 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -253,6 +253,15 @@ static void dwc2_set_param_phy_utmi_width(struct dwc=
-2_hsotg *hsotg)
- 	val =3D (hsotg->hw_params.utmi_phy_data_width =3D=3D
- 	       GHWCFG4_UTMI_PHY_DATA_WIDTH_8) ? 8 : 16;
-=20
-+	if (hsotg->phy) {
-+		/*
-+		 * If using the generic PHY framework, check if the PHY bus
-+		 * width is 8-bit and set the phyif appropriately.
-+		 */
-+		if (phy_get_bus_width(hsotg->phy) =3D=3D 8)
-+			val =3D 8;
+diff --git a/drivers/usb/misc/rio500.c b/drivers/usb/misc/rio500.c
+index 13e4889bc34f..fa921ae60ffa 100644
+--- a/drivers/usb/misc/rio500.c
++++ b/drivers/usb/misc/rio500.c
+@@ -447,15 +447,23 @@ static int probe_rio(struct usb_interface *intf,
+ {
+ 	struct usb_device *dev = interface_to_usbdev(intf);
+ 	struct rio_usb_data *rio = &rio_instance;
+-	int retval;
++	int retval = 0;
+ 
+-	dev_info(&intf->dev, "USB Rio found at address %d\n", dev->devnum);
++	mutex_lock(&rio500_mutex);
++	if (rio->present) {
++		dev_info(&intf->dev, "Second USB Rio at address %d refused\n", dev->devnum);
++		retval = -EBUSY;
++		goto bail_out;
++	} else {
++		dev_info(&intf->dev, "USB Rio found at address %d\n", dev->devnum);
 +	}
-+
- 	hsotg->params.phy_utmi_width =3D val;
+ 
+ 	retval = usb_register_dev(intf, &usb_rio_class);
+ 	if (retval) {
+ 		dev_err(&dev->dev,
+ 			"Not able to get a minor for this device.\n");
+-		return -ENOMEM;
++		retval = -ENOMEM;
++		goto bail_out;
+ 	}
+ 
+ 	rio->rio_dev = dev;
+@@ -464,7 +472,8 @@ static int probe_rio(struct usb_interface *intf,
+ 		dev_err(&dev->dev,
+ 			"probe_rio: Not enough memory for the output buffer\n");
+ 		usb_deregister_dev(intf, &usb_rio_class);
+-		return -ENOMEM;
++		retval = -ENOMEM;
++		goto bail_out;
+ 	}
+ 	dev_dbg(&intf->dev, "obuf address:%p\n", rio->obuf);
+ 
+@@ -473,7 +482,8 @@ static int probe_rio(struct usb_interface *intf,
+ 			"probe_rio: Not enough memory for the input buffer\n");
+ 		usb_deregister_dev(intf, &usb_rio_class);
+ 		kfree(rio->obuf);
+-		return -ENOMEM;
++		retval = -ENOMEM;
++		goto bail_out;
+ 	}
+ 	dev_dbg(&intf->dev, "ibuf address:%p\n", rio->ibuf);
+ 
+@@ -481,8 +491,10 @@ static int probe_rio(struct usb_interface *intf,
+ 
+ 	usb_set_intfdata (intf, rio);
+ 	rio->present = 1;
++bail_out:
++	mutex_unlock(&rio500_mutex);
+ 
+-	return 0;
++	return retval;
  }
-=20
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index d10a7f8daec3..e98d7812da2d 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -271,15 +271,6 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *=
-hsotg)
-=20
- 	hsotg->plat =3D dev_get_platdata(hsotg->dev);
-=20
--	if (hsotg->phy) {
--		/*
--		 * If using the generic PHY framework, check if the PHY bus
--		 * width is 8-bit and set the phyif appropriately.
--		 */
--		if (phy_get_bus_width(hsotg->phy) =3D=3D 8)
--			hsotg->params.phy_utmi_width =3D 8;
--	}
--
- 	/* Clock */
- 	hsotg->clk =3D devm_clk_get_optional(hsotg->dev, "otg");
- 	if (IS_ERR(hsotg->clk)) {
---=20
-2.21.0.196.g041f5ea
+ 
+ static void disconnect_rio(struct usb_interface *intf)
+-- 
+2.16.4
 
