@@ -2,111 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A7218B84
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 16:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B782C18BD3
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 16:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727101AbfEIOQH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 May 2019 10:16:07 -0400
-Received: from mail-it1-f194.google.com ([209.85.166.194]:40078 "EHLO
-        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726839AbfEIOQH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 May 2019 10:16:07 -0400
-Received: by mail-it1-f194.google.com with SMTP id g71so3570408ita.5;
-        Thu, 09 May 2019 07:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VB9VW1DXgM5qsk34IWnaFfc5rrlp9hnpSv4gxGZLTzw=;
-        b=LlqjSbHWA1WFzBfPS7JC2JpLHcIH3PlnAWBx5OhX3OrDq0LwVisdc3gmp8fmVz+ik1
-         /l1+xH4+zOAK7kUdtQUSgPYqjvRRWWiirSHTw1GyC6ucAJB1PKCEVjsYPeL/WFp42yZL
-         c6/2M/IpPmXqe1hzXxo/0x06f77J9nLiCXO/nSQt50sdpgPemR3Mmu/9eInVXBqb8yLM
-         4YQQnM4iyNCi/4YzTjsiU2QJJVL8MNOvKxr5SMl8Yz6aU/p4ux4H2Mp2g5Ep96I79GUE
-         KpKeqHVg9FSouihmQN4lSt2vfIEB32OebkIOpdo5uwDSLZAHkTlVALq94HAa1OjNaKdw
-         Bzpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VB9VW1DXgM5qsk34IWnaFfc5rrlp9hnpSv4gxGZLTzw=;
-        b=eQez2O0KJRq0KGUZMs30T6sV5vk74AAugyT4uOZQfu/Tc6W21K9ijqSeTWyHeNaNix
-         vPsjoay/ZZ8jTr4gGvLGDWqGqDm2Hprs5Mg5H357egUyJjDU+spWCaibz+41EoTBUetu
-         RBK8bq/uP9hQdOxUIdk/mTrUnB/vrRMn2Id0Qdn1GVjH+y08LXdQE+V3UJWB2+8dPg55
-         dVtFPa70XWGEDWRXLA8gNhIPNwayBSSxvWHr0Zf6MvCGZEkTdz4zY3ztkbrNmmfFmKeD
-         m9B77S+8Tikmfs5FlPFBLz+lznUYr5woRkhSZBWzFexIms41AifD5AHq5qxokoNqu5iR
-         kPuw==
-X-Gm-Message-State: APjAAAXdrVb/aSqvMjRHvklDzWaV+39UkhtGVJBHfdppH6NPmKI+cj/N
-        RYQXCKBZ3L21ZpjDdhSTMnZtpABEj/WS5jcqGX4qm8Z7ELg=
-X-Google-Smtp-Source: APXvYqx/fExGbExiF3LH9V1VVeMV1Wj79ugYIqqIfBk7vXMkbUDBUyYgY8WiMCd/APzg6HCsy+XVoJOKTUS6PytMV/Q=
-X-Received: by 2002:a24:cd05:: with SMTP id l5mr2978259itg.44.1557411366279;
- Thu, 09 May 2019 07:16:06 -0700 (PDT)
+        id S1726825AbfEIOcA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 May 2019 10:32:00 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:43780 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726749AbfEIOcA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 May 2019 10:32:00 -0400
+Received: (qmail 14260 invoked by uid 2102); 9 May 2019 10:31:59 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 May 2019 10:31:59 -0400
+Date:   Thu, 9 May 2019 10:31:59 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     Jim Lin <jilin@nvidia.com>, <mathias.nyman@intel.com>,
+        <kai.heng.feng@canonical.com>, <drinkcat@chromium.org>,
+        <keescook@chromium.org>, <nsaenzjulienne@suse.de>,
+        <jflat@chromium.org>, <malat@debian.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 1/1] usb: xhci: Add Clear_TT_Buffer
+In-Reply-To: <20190509122534.GA31542@kroah.com>
+Message-ID: <Pine.LNX.4.44L0.1905091015440.1480-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <20190504070407.56915-1-weiyongjun1@huawei.com> <5a3a89cf-eee3-136c-1c5a-58024e946a24@mleia.com>
-In-Reply-To: <5a3a89cf-eee3-136c-1c5a-58024e946a24@mleia.com>
-From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
-Date:   Thu, 9 May 2019 10:15:54 -0400
-Message-ID: <CA+rxa6oh+Qxo5aLgW11vrAvuu7t7JAFONC6b0+kxRx9rwCmjhg@mail.gmail.com>
-Subject: Re: [PATCH -next] usb: gadget: udc: lpc32xx: fix return value check
- in lpc32xx_udc_probe()
-To:     Vladimir Zapolskiy <vz@mleia.com>
-Cc:     Wei Yongjun <weiyongjun1@huawei.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-usb@vger.kernel.org,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks
+On Thu, 9 May 2019, Greg KH wrote:
 
-Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
+> On Thu, May 09, 2019 at 08:03:15PM +0800, Jim Lin wrote:
+> > --- a/include/linux/usb.h
+> > +++ b/include/linux/usb.h
+> > @@ -625,6 +625,7 @@ struct usb3_lpm_parameters {
+> >   *		parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
+> >   *
+> >   *	Will be used as wValue for SetIsochDelay requests.
+> > + * @devaddr: address on a USB bus, assigned by controller like XHCI
+> >   *
+> >   * Notes:
+> >   * Usbcore drivers should not set usbdev->state directly.  Instead use
+> > @@ -709,6 +710,7 @@ struct usb_device {
+> >  	unsigned lpm_disable_count;
+> >  
+> >  	u16 hub_delay;
+> > +	int devaddr;
+> 
+> Shouldn't this be u32?
 
-On Sat, May 4, 2019 at 8:17 AM Vladimir Zapolskiy <vz@mleia.com> wrote:
->
-> Hi Wei Yongjun,
->
-> On 05/04/2019 10:04 AM, Wei Yongjun wrote:
-> > In case of error, the function devm_ioremap_resource() returns ERR_PTR()
-> > and never returns NULL. The NULL test in the return value check should
-> > be replaced with IS_ERR().
-> >
-> > This issue was detected by using the Coccinelle software.
-> >
-> > Fixes: 408b56ca5c8e ("usb: gadget: udc: lpc32xx: simplify probe")
-> > Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-> > ---
-> >  drivers/usb/gadget/udc/lpc32xx_udc.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-> > index d8f1c60793ed..00fb79c6d025 100644
-> > --- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-> > +++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-> > @@ -3070,9 +3070,9 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
-> >       }
-> >
-> >       udc->udp_baseaddr = devm_ioremap_resource(dev, res);
-> > -     if (!udc->udp_baseaddr) {
-> > +     if (IS_ERR(udc->udp_baseaddr)) {
-> >               dev_err(udc->dev, "IO map failure\n");
-> > -             return -ENOMEM;
-> > +             return PTR_ERR(udc->udp_baseaddr);
-> >       }
-> >
-> >       /* Get USB device clock */
->
-> thank you for the change, it is a correct fix.
->
-> I do suppose that dev_err() in the context can be evenly removed, but
-> likely it should be another change.
->
-> Acked-by: Vladimir Zapolskiy <vz@mleia.com>
->
-> --
-> Best wishes,
-> Vladimir
+In fact the device address is an unsigned 7-bit value.  The size of the 
+variable we store it in doesn't matter much.
+
+BUT!  If it's going to be stored in a regular int then it's foolish to 
+leave a 16-bit gap between it and the preceding field in the structure.  
+It should be added at some appropriate spot in the structure, not at 
+the end.
+
+Overall I think this should be broken up into two patches: one to
+introduce the new field and one to implement Clear-TT-Buffer for xHCI.
+
+Furthermore, update_devnum() in hub.c should do:
+
+	if (udev->devaddr == 0)
+		udev->devaddr = devnum;
+
+Then the code usb_hub_clear_tt_buffer() can just use devaddr without
+needing to check the HCD type.
+
+Alan Stern
+
