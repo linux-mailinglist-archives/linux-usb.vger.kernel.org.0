@@ -2,139 +2,353 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D797A185D7
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 09:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7691A1863C
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 09:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726554AbfEIHOH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 May 2019 03:14:07 -0400
-Received: from mail-eopbgr1410093.outbound.protection.outlook.com ([40.107.141.93]:12719
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        id S1726476AbfEIHdx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 May 2019 03:33:53 -0400
+Received: from mail-eopbgr690055.outbound.protection.outlook.com ([40.107.69.55]:37889
+        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726192AbfEIHOH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 May 2019 03:14:07 -0400
+        id S1725940AbfEIHdw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 May 2019 03:33:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ d=xilinx.onmicrosoft.com; s=selector1-xilinx-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IYNBdjAbLSqTj02BpQog5HIsBKzR6YV/Ta3OYJvpKIs=;
- b=bITG2qCg/wiyNl0GEvVGXHOLmgNUKoR4GOgwflh6bQ6lUMdSacvW6yzio1nj4fZt0L7TzVXohiwl9SDYKkfaOCC48ZyKBN5Joxdx5CW1XGnmIuPMfPk/yZV/Yf1C4LJKaJrPBEPFn8klZAm+j9xeDH9AtFfcZrACZkoqag3V2w8=
-Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com (20.176.240.146) by
- OSBPR01MB2503.jpnprd01.prod.outlook.com (52.134.252.84) with Microsoft SMTP
+ bh=a8MZZk28Mt75KbHEhXaxA09nUWxCk4RvpYQI/2ot/Xk=;
+ b=gx4qlp2r9uCkvDyv6k0bxGz/yRKGjeIY1K/YjZZu3TsMsy/GQsx+slQrF6LRpTUOxk70rE2e2inOWugKraUJ30d/isu2H2OKzREOYXMGfpQKwz3ojtZvs0+ZAuZ/mMO76shX5tacA0WCdQJCcWRdJElAbRIs1uAINvbqFRSK9ws=
+Received: from BL0PR02MB5587.namprd02.prod.outlook.com (20.177.241.30) by
+ BL0PR02MB4419.namprd02.prod.outlook.com (10.167.179.20) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1878.21; Thu, 9 May 2019 07:14:02 +0000
-Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com
- ([fe80::4d29:3383:d67d:d562]) by OSBPR01MB3174.jpnprd01.prod.outlook.com
- ([fe80::4d29:3383:d67d:d562%3]) with mapi id 15.20.1856.012; Thu, 9 May 2019
- 07:14:02 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Chris Brandt <Chris.Brandt@renesas.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Chris Brandt <Chris.Brandt@renesas.com>,
+ 15.20.1856.14; Thu, 9 May 2019 07:33:46 +0000
+Received: from BL0PR02MB5587.namprd02.prod.outlook.com
+ ([fe80::50eb:f7a2:d218:3aad]) by BL0PR02MB5587.namprd02.prod.outlook.com
+ ([fe80::50eb:f7a2:d218:3aad%7]) with mapi id 15.20.1856.012; Thu, 9 May 2019
+ 07:33:46 +0000
+From:   Anurag Kumar Vulisha <anuragku@xilinx.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simon Horman <horms@verge.net.au>
-Subject: RE: [PATCH 03/10] phy: renesas: rcar-gen3-usb2: Check dr_mode when
- not using OTG
-Thread-Topic: [PATCH 03/10] phy: renesas: rcar-gen3-usb2: Check dr_mode when
- not using OTG
-Thread-Index: AQHVBGYbIrh0wxuC4UGtA5QdaFMDmqZiYyig
-Date:   Thu, 9 May 2019 07:14:02 +0000
-Message-ID: <OSBPR01MB3174708A983E7148D0F2F7CCD8330@OSBPR01MB3174.jpnprd01.prod.outlook.com>
-References: <20190506234631.113226-1-chris.brandt@renesas.com>
- <20190506234631.113226-4-chris.brandt@renesas.com>
-In-Reply-To: <20190506234631.113226-4-chris.brandt@renesas.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
+        Felipe Balbi <balbi@kernel.org>,
+        "Claus H. Stovgaard" <cst@phaseone.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "v.anuragkumar@gmail.com" <v.anuragkumar@gmail.com>
+Subject: RE: [PATCH v2 3/3] usb: dwc3: gadget: Add support for disabling U1
+ and U2 entries
+Thread-Topic: [PATCH v2 3/3] usb: dwc3: gadget: Add support for disabling U1
+ and U2 entries
+Thread-Index: AQHVBXNeXBGr58NUnEy04Lh8niwnw6ZiY1Lg
+Date:   Thu, 9 May 2019 07:33:46 +0000
+Message-ID: <BL0PR02MB5587B28B6CCAC0FD790F8335A7330@BL0PR02MB5587.namprd02.prod.outlook.com>
+References: <1557302091-7455-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+ <1557302091-7455-4-git-send-email-anurag.kumar.vulisha@xilinx.com>
+ <30102591E157244384E984126FC3CB4F639E9823@us01wembx1.internal.synopsys.com>
+In-Reply-To: <30102591E157244384E984126FC3CB4F639E9823@us01wembx1.internal.synopsys.com>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-TNEF-Correlator: 
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
+ smtp.mailfrom=anuragku@xilinx.com; 
+x-originating-ip: [149.199.50.133]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0513c3df-07c2-427e-fbb2-08d6d44dea17
+x-ms-office365-filtering-correlation-id: f8f70e76-6a49-4cba-0371-08d6d450ac02
 x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB2503;
-x-ms-traffictypediagnostic: OSBPR01MB2503:
-x-microsoft-antispam-prvs: <OSBPR01MB2503085F85855C2DEECDD421D8330@OSBPR01MB2503.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:BL0PR02MB4419;
+x-ms-traffictypediagnostic: BL0PR02MB4419:
+x-ms-exchange-purlcount: 1
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <BL0PR02MB44197E47F56841EE51B9AC4FA7330@BL0PR02MB4419.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
 x-forefront-prvs: 003245E729
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(39860400002)(366004)(376002)(136003)(396003)(199004)(189003)(66066001)(66946007)(66446008)(66476007)(73956011)(64756008)(66556008)(74316002)(54906003)(76116006)(71200400001)(71190400001)(53936002)(316002)(7696005)(14444005)(256004)(4326008)(99286004)(76176011)(446003)(11346002)(476003)(486006)(9686003)(55016002)(26005)(186003)(305945005)(86362001)(6116002)(3846002)(68736007)(25786009)(14454004)(229853002)(7736002)(81156014)(8936002)(81166006)(478600001)(8676002)(6436002)(52536014)(6506007)(6246003)(5660300002)(6862004)(102836004)(6636002)(33656002)(2906002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB2503;H:OSBPR01MB3174.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(366004)(136003)(396003)(39860400002)(346002)(199004)(189003)(13464003)(7416002)(4326008)(81156014)(81166006)(33656002)(486006)(8676002)(14444005)(476003)(71200400001)(71190400001)(186003)(966005)(11346002)(229853002)(25786009)(6436002)(446003)(74316002)(68736007)(6506007)(256004)(6306002)(14454004)(55016002)(478600001)(73956011)(6246003)(66946007)(305945005)(7696005)(86362001)(76176011)(76116006)(53936002)(7736002)(102836004)(26005)(316002)(66066001)(52536014)(2906002)(66556008)(64756008)(66446008)(66476007)(8936002)(54906003)(99286004)(6116002)(3846002)(110136005)(5660300002)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR02MB4419;H:BL0PR02MB5587.namprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: xilinx.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: NXuicrtNpVBMdmkhYndlSDvlguj+s9j7LrwQ33hcoks77l3sQBz7EDWqWsTlDZ6Pi8hhzIETJp1qUhdd1PFCeZfnnbOU89ZhFOFTEsEmAyXFY/GJt4bN2zLKkWzP8Mg4CnYR84Ix5m+M1IRQ19iuiB6/zYacOz5FPlTcoomO87a4MicvFHpEj7+yWh3npx11LUFhiruEKeCAebfkk5LVXsZL/yVGFrGXgDpWVjLstY7hPjwPle+8gy5I7vNVETI1M2PJJB+wwK2aie7Utw33x7fJvFpkSyNHDcHd7UVR9xivOtPL3Cwyn71C170gb27cuoCes9lqrZl3fB7b/1CwJAsfaajKZj+EBYq7zNd/Jj0c2eISSDWouxoqgyf8gUpdv02tk3lqO6PP+R9aGGXrD3/a9qo/ML8tTrBjeXHLAZ8=
-Content-Type: text/plain; charset="iso-2022-jp"
+x-microsoft-antispam-message-info: shj21ZzbbwNTfnRp8VBz1NdMTxC3TTWWXU9AfNLOBftG9wx3ViPQ4kVZGyywmL4iPLP9HP0gg8wfvFS7EiphJDM6OuQ7lHlcI83LlVPiALvwH9kPUWGn5ZcAoJzwiWbEnCeXAvJQ9sLiSoZvyettAn+NhfQt0BUDCu0WqN5jgTgjxKtwzWY7M7aAzfbHCYTCQLzlRHIygHVEbHmAPPeQqOlpTgrlPz2ov/bk+w9Bf0h08MUUIyiYqlClz7nk+ingtpESDFgjqtfjbGVzGuJicF0zeNFFXO8C/1+fy2LLftdd+vD3lsFCqJ90dkUHSoI8x8jkgNyuHp2ZsmSEeSMHEpB6DndCPFM3UkNAtqaTdBtvPTZ4Z6s0qXaxgdBUSOL1XakuYI74n5jv+BEOt7pEFYPtOfLT1uX0ahmoSFbckTA=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0513c3df-07c2-427e-fbb2-08d6d44dea17
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2019 07:14:02.3073
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8f70e76-6a49-4cba-0371-08d6d450ac02
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2019 07:33:46.6100
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB2503
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4419
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chris=1B$B$5$s=1B(B
 
-Thank you for the patch!
+Hi Thinh,
 
-> From: Chris Brandt, Sent: Tuesday, May 7, 2019 8:46 AM
->=20
-> When not using OTG, the PHY will need to know if it should function as
-> host or peripheral by checking dr_mode in the PHY node (not the parent
-> controller node).
->=20
-> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
-> ---
->  drivers/phy/renesas/phy-rcar-gen3-usb2.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/phy/renesas/phy-rcar-gen3-usb2.c b/drivers/phy/renes=
-as/phy-rcar-gen3-usb2.c
-> index 218b32e458cb..4eaa228ebd30 100644
-> --- a/drivers/phy/renesas/phy-rcar-gen3-usb2.c
-> +++ b/drivers/phy/renesas/phy-rcar-gen3-usb2.c
-> @@ -408,7 +408,12 @@ static int rcar_gen3_phy_usb2_init(struct phy *p)
->  		if (rcar_gen3_needs_init_otg(channel))
->  			rcar_gen3_init_otg(channel);
->  		rphy->otg_initialized =3D true;
-> -	}
-> +	} else
+>-----Original Message-----
+>From: Thinh Nguyen [mailto:Thinh.Nguyen@synopsys.com]
+>Sent: Thursday, May 09, 2019 1:03 AM
+>To: Anurag Kumar Vulisha <anuragku@xilinx.com>; Greg Kroah-Hartman
+><gregkh@linuxfoundation.org>; Rob Herring <robh+dt@kernel.org>; Mark Rutla=
+nd
+><mark.rutland@arm.com>; Felipe Balbi <balbi@kernel.org>; Thinh Nguyen
+><Thinh.Nguyen@synopsys.com>; Claus H. Stovgaard <cst@phaseone.com>
+>Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org; linux-
+>kernel@vger.kernel.org; v.anuragkumar@gmail.com
+>Subject: Re: [PATCH v2 3/3] usb: dwc3: gadget: Add support for disabling U=
+1 and U2
+>entries
+>
+>Hi Anurag,
+>
+>Anurag Kumar Vulisha wrote:
+>> Gadget applications may have a requirement to disable the U1 and U2
+>> entry based on the usecase. Below are few usecases where the disabling
+>> U1/U2 entries may be possible.
+>>
+>> Usecase 1:
+>> When combining dwc3 with an redriver for a USB Type-C device solution, i=
+t
+>> sometimes have problems with leaving U1/U2 for certain hosts, resulting =
+in
+>> link training errors and reconnects. For this U1/U2 state entries may be
+>> avoided.
+>>
+>> Usecase 2:
+>> When performing performance benchmarking on mass storage gadget the
+>> U1 and U2 entries can be disabled.
+>>
+>> Usecase 3:
+>> When periodic transfers like ISOC transfers are used with bInterval
+>> of 1 which doesn't require the link to enter into U1 or U2 state entry
+>> (since ping is issued from host for every uframe interval). In this
+>> case the U1 and U2 entry can be disabled.
+>>
+>> Disablement of U1/U2 can be done by setting U1DevExitLat and U2DevExitLa=
+t
+>> values to 0 in the BOS descriptor. Host on seeing 0 value for U1DevExitL=
+at
+>> and U2DevExitLat, it doesn't send SET_SEL requests to the gadget. There
+>> may be some hosts which may send SET_SEL requests even after seeing 0 in
+>> the UxDevExitLat of BOS descriptor. To aviod U1/U2 entries for these typ=
+e
+>> of hosts, dwc3 controller can be programmed to reject those U1/U2 reques=
+ts
+>> by not enabling ACCEPTUxENA bits in DCTL register.
+>>
+>> This patch updates the same.
+>>
+>> Signed-off-by: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+>> Signed-off-by: Claus H. Stovgaard <cst@phaseone.com>
+>> ---
+>>  Changes in v2
+>> 	1. As suggested by Thinh Nguyen changed the "snps,dis_u1_entry_quirk"
+>> 	   to "snps,dis-u1-entry-quirk"
+>> 	2. Merged the changes done by Claus H. Stovgaard in ep0.c for rejecting
+>> 	   U1/U2 requests into this patch. Changes done by Claus can be found
+>> 	   here https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__marc.inf=
+o_-
+>3Fl-3Dlinux-2Dkernel-26m-3D155722068820568-26w-
+>3D2&d=3DDwIBAg&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3Du9FYoxKtyhjrGFcyixFYqTjw1ZX0=
+Vs
+>G2d8FCmzkTY-
+>w&m=3DdJMdvubLsepuGRDdkLZNJ00bhu52jPV7TZaFkDGD0Vs&s=3DwT7eyWpRKPAqXmLf
+>dfiArbnZ7vE9Vi8DOfRdULmeIqY&e=3D
+>> 	3. Changed the commit message.
+>> ---
+>>  drivers/usb/dwc3/core.c   |  4 ++++
+>>  drivers/usb/dwc3/core.h   |  4 ++++
+>>  drivers/usb/dwc3/ep0.c    |  9 ++++++++-
+>>  drivers/usb/dwc3/gadget.c | 19 +++++++++++++++++++
+>>  drivers/usb/dwc3/gadget.h |  6 ++++++
+>>  5 files changed, 41 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index a1b126f..180239b 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1285,6 +1285,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>  				"snps,dis_u2_susphy_quirk");
+>>  	dwc->dis_enblslpm_quirk =3D device_property_read_bool(dev,
+>>  				"snps,dis_enblslpm_quirk");
+>> +	dwc->dis_u1_entry_quirk =3D device_property_read_bool(dev,
+>> +				"snps,dis-u1-entry-quirk");
+>> +	dwc->dis_u2_entry_quirk =3D device_property_read_bool(dev,
+>> +				"snps,dis-u2-entry-quirk");
+>>  	dwc->dis_rxdet_inp3_quirk =3D device_property_read_bool(dev,
+>>  				"snps,dis_rxdet_inp3_quirk");
+>>  	dwc->dis_u2_freeclk_exists_quirk =3D device_property_read_bool(dev,
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index 1528d39..fa398e2 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -1015,6 +1015,8 @@ struct dwc3_scratchpad_array {
+>>   * @dis_u2_susphy_quirk: set if we disable usb2 suspend phy
+>>   * @dis_enblslpm_quirk: set if we clear enblslpm in GUSB2PHYCFG,
+>>   *                      disabling the suspend signal to the PHY.
+>> + * @dis_u1_entry_quirk: set if link entering into U1 state needs to be =
+disabled.
+>> + * @dis_u2_entry_quirk: set if link entering into U2 state needs to be =
+disabled.
+>>   * @dis_rxdet_inp3_quirk: set if we disable Rx.Detect in P3
+>>   * @dis_u2_freeclk_exists_quirk : set if we clear u2_freeclk_exists
+>>   *			in GUSB2PHYCFG, specify that USB2 PHY doesn't
+>> @@ -1206,6 +1208,8 @@ struct dwc3 {
+>>  	unsigned		dis_u3_susphy_quirk:1;
+>>  	unsigned		dis_u2_susphy_quirk:1;
+>>  	unsigned		dis_enblslpm_quirk:1;
+>> +	unsigned		dis_u1_entry_quirk:1;
+>> +	unsigned		dis_u2_entry_quirk:1;
+>>  	unsigned		dis_rxdet_inp3_quirk:1;
+>>  	unsigned		dis_u2_freeclk_exists_quirk:1;
+>>  	unsigned		dis_del_phy_power_chg_quirk:1;
+>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>> index 8efde17..8e94efc 100644
+>> --- a/drivers/usb/dwc3/ep0.c
+>> +++ b/drivers/usb/dwc3/ep0.c
+>> @@ -379,6 +379,8 @@ static int dwc3_ep0_handle_u1(struct dwc3 *dwc, enum
+>usb_device_state state,
+>>  	if ((dwc->speed !=3D DWC3_DSTS_SUPERSPEED) &&
+>>  			(dwc->speed !=3D DWC3_DSTS_SUPERSPEED_PLUS))
+>>  		return -EINVAL;
+>> +	if (dwc->dis_u1_entry_quirk)
+>
+>We only need to reject on SET_FEATURE(enable U1/U2) and not
+>SET_FEATURE(disable U1/U2).
+>
+>Let's change the if condition to if (set && dis_u1_entry_quirk).
+>
 
-As Sergei-san said, this should be "} else {"
+Thanks for reviewing the patch.
+I agree. Will correct it in the next series.
 
-> +		/* Not OTG, so dr_mode should be set in PHY node */
-> +		if (usb_get_dr_mode(channel->dev) =3D=3D USB_DR_MODE_PERIPHERAL)
-> +			writel(0x80000000, usb2_base + USB2_COMMCTRL);
-> +		else
+>> +		return -EINVAL;
+>>
+>>  	reg =3D dwc3_readl(dwc->regs, DWC3_DCTL);
+>>  	if (set)
+>> @@ -401,6 +403,8 @@ static int dwc3_ep0_handle_u2(struct dwc3 *dwc, enum
+>usb_device_state state,
+>>  	if ((dwc->speed !=3D DWC3_DSTS_SUPERSPEED) &&
+>>  			(dwc->speed !=3D DWC3_DSTS_SUPERSPEED_PLUS))
+>>  		return -EINVAL;
+>> +	if (dwc->dis_u2_entry_quirk)
+>
+>Same comment as previous.
+>
 
-I would like to add "else if usb_get_dr_mode(channel->dev) =3D=3D USB_DR_MO=
-DE_HOST)"
-for a PHY node without "dr_mode" property. In other words, if the PHY node
-doesn't have dr_mode property like R-Car, this condition can be the same be=
-havior as previous.
+Will fix it in the next series
 
-> +			writel(0x00000000, usb2_base + USB2_COMMCTRL);
->=20
->  	rphy->initialized =3D true;
->=20
-> @@ -638,6 +643,7 @@ static int rcar_gen3_phy_usb2_probe(struct platform_d=
-evice *pdev)
->  	if (of_property_read_bool(dev->of_node, "renesas,uses_usb_x1"))
->  		channel->uses_usb_x1 =3D true;
->=20
-> +
+>> +		return -EINVAL;
+>>
+>>  	reg =3D dwc3_readl(dwc->regs, DWC3_DCTL);
+>>  	if (set)
+>> @@ -626,7 +630,10 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, st=
+ruct
+>usb_ctrlrequest *ctrl)
+>>  			 * nothing is pending from application.
+>>  			 */
+>>  			reg =3D dwc3_readl(dwc->regs, DWC3_DCTL);
+>> -			reg |=3D (DWC3_DCTL_ACCEPTU1ENA |
+>DWC3_DCTL_ACCEPTU2ENA);
+>> +			if (!dwc->dis_u1_entry_quirk)
+>> +				reg |=3D DWC3_DCTL_ACCEPTU1ENA;
+>> +			if (!dwc->dis_u2_entry_quirk)
+>> +				reg |=3D DWC3_DCTL_ACCEPTU2ENA;
+>>  			dwc3_writel(dwc->regs, DWC3_DCTL, reg);
+>>  		}
+>>  		break;
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index e293400..f2d3112 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2073,6 +2073,24 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
+>>  	return 0;
+>>  }
+>>
+>> +static void dwc3_gadget_config_params(struct usb_gadget *g,
+>> +				      struct usb_dcd_config_params *params)
+>> +{
+>> +	struct dwc3		*dwc =3D gadget_to_dwc(g);
+>> +
+>> +	/* U1 Device exit Latency */
+>> +	if (dwc->dis_u1_entry_quirk)
+>> +		params->bU1devExitLat =3D 0;
+>
+>It doesn't make sense to have exit latency of 0. Rejecting
+>SET_FEATURE(enable U1/U2) should already let the host know that the
+>device doesn't support U1/U2.
+>
+I am okay to remove this, but I feel that it is better to report zero value=
+ instead
+of a non-zero value in exit latency of BOS when U1 or U2 entries are not su=
+pported.=20
+Advantage of reporting 0 is that some hosts doesn't even send SET_FEATURE(U=
+1/U2)
+requests on seeing zero value in BOS descriptor. Also there can be cases wh=
+ere U1 is
+disabled and U2 entry is allowed or vice versa, for these kind of cases the=
+ driver can
+set zero exit latency value for U1 and non-zero exit latency value for U2 .=
+ Based on this
+I think it would be better to report 0 when U1/U2 states are not enabled. P=
+lease provide
+your opinion on this.
 
-As Sergei-san said, this is not needed :)
+>> +	else
+>> +		params->bU1devExitLat =3D DWC3_DEFAULT_U1_DEV_EXIT_LAT;
+>> +
+>> +	/* U2 Device exit Latency */
+>> +	if (dwc->dis_u2_entry_quirk)
+>> +		params->bU2DevExitLat =3D 0;
+>> +	else
+>> +		params->bU2DevExitLat =3D DWC3_DEFAULT_U2_DEV_EXIT_LAT;
+>
+>This is a le16 value. Assign it with cpu_to_le16().
+>
+Sure, will correct this in next series
 
-Best regards,
-Yoshihiro Shimoda
+Thanks,
+Anurag Kumar Vulisha
 
+>> +}
+>> +
+>>  static void dwc3_gadget_set_speed(struct usb_gadget *g,
+>>  				  enum usb_device_speed speed)
+>>  {
+>> @@ -2142,6 +2160,7 @@ static const struct usb_gadget_ops dwc3_gadget_ops=
+ =3D {
+>>  	.udc_start		=3D dwc3_gadget_start,
+>>  	.udc_stop		=3D dwc3_gadget_stop,
+>>  	.udc_set_speed		=3D dwc3_gadget_set_speed,
+>> +	.get_config_params	=3D dwc3_gadget_config_params,
+>>  };
+>>
+>>  /* --------------------------------------------------------------------=
+------ */
+>> diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
+>> index 3ed738e..5faf4d1 100644
+>> --- a/drivers/usb/dwc3/gadget.h
+>> +++ b/drivers/usb/dwc3/gadget.h
+>> @@ -48,6 +48,12 @@ struct dwc3;
+>>  /* DEPXFERCFG parameter 0 */
+>>  #define DWC3_DEPXFERCFG_NUM_XFER_RES(n)	((n) & 0xffff)
+>>
+>> +/* U1 Device exit Latency */
+>> +#define DWC3_DEFAULT_U1_DEV_EXIT_LAT	0x0A	/* Less then 10 microsec */
+>> +
+>> +/* U2 Device exit Latency */
+>> +#define DWC3_DEFAULT_U2_DEV_EXIT_LAT	0x1FF	/* Less then 511 microsec
+>*/
+>> +
+>>  /* --------------------------------------------------------------------=
+------ */
+>>
+>>  #define to_dwc3_request(r)	(container_of(r, struct dwc3_request, reques=
+t))
+>
+>BR,
+>Thinh
