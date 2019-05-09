@@ -2,80 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 854FA18923
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 13:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4F218926
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 13:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726415AbfEILhH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 May 2019 07:37:07 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:39934 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726084AbfEILhH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 May 2019 07:37:07 -0400
-Received: by mail-io1-f70.google.com with SMTP id l19so1441313iob.6
-        for <linux-usb@vger.kernel.org>; Thu, 09 May 2019 04:37:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ehHiCH7SYbQmOW8XlMeAAbAZBYEjB3xQM+LCER9pDJw=;
-        b=Z2VFAMmfUXENumVc9+EwaGxPOczj8ZMmZM6HwQcDPfNNtiygBsUP8k3vb8anuNBbyg
-         5PfxuGYKItjljFZyLZgftYA20+b/2uUwjSRybvikPrFHVB7TM3SQJwl2Pm/8FYC9pX/J
-         7nSl/h6U1OKzHSvaqZPVu/5hTwjsWc6mAS/6t92jijMqsxlbEoAVBBK0AANwbbayAPXK
-         71OBCAoZfPpEXdn9B1Td+MY7lBEgKxhx3DCXmxCs9nhG/PNAJkU7pohJ0/PAcgck/pg5
-         ywslkV9lL5IANzRKBnLZ8LigbjO9afj663PISnpqrikYUgOBbjvqztWyaXxpjxg9isCo
-         wT9w==
-X-Gm-Message-State: APjAAAU4VXUAtoXLRWkn51gYaopefMBSQW2QMF0RSM8KboSjfzhSplRY
-        oItIoF6TFFBl8N6KQ4DOaLEERGwAe3TJ7GkMulzbcuQTWbLW
-X-Google-Smtp-Source: APXvYqzwz3nMaZbEVPxd55R7GnE0algi/np8iEFDRXg/gjyJH1v67KwF/+6jDgkqSULnCnavOkbGb9KAP/a+2/lC9qjQBqBbVhz3
+        id S1726744AbfEILhn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 May 2019 07:37:43 -0400
+Received: from mga09.intel.com ([134.134.136.24]:21246 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726701AbfEILhn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 May 2019 07:37:43 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 May 2019 04:37:42 -0700
+X-ExtLoop1: 1
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 May 2019 04:37:41 -0700
+Subject: Re: [PATCH 1/4] usb: xhci: add Immediate Data Transfer support
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+References: <1556285012-28186-1-git-send-email-mathias.nyman@linux.intel.com>
+ <1556285012-28186-2-git-send-email-mathias.nyman@linux.intel.com>
+ <CGME20190509103220eucas1p1330f2827916b55e05b1b791504963630@eucas1p1.samsung.com>
+ <bc747768-7457-0df6-f57e-4aeac9c8bf0c@samsung.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <3fe85fcc-a202-f746-6cd6-d3f5523348f8@linux.intel.com>
+Date:   Thu, 9 May 2019 14:40:16 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-X-Received: by 2002:a02:694f:: with SMTP id e76mr2771706jac.111.1557401826476;
- Thu, 09 May 2019 04:37:06 -0700 (PDT)
-Date:   Thu, 09 May 2019 04:37:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a3ca70058872de7c@google.com>
-Subject: WARNING: ath10k USB support is incomplete, don't expect anything to work!
-From:   syzbot <syzbot+c1b25598aa60dcd47e78@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <bc747768-7457-0df6-f57e-4aeac9c8bf0c@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 9.5.2019 13.32, Marek Szyprowski wrote:
+> Dear All,
+> 
+> On 2019-04-26 15:23, Mathias Nyman wrote:
+>> From: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+>>
+>> Immediate data transfers (IDT) allow the HCD to copy small chunks of
+>> data (up to 8bytes) directly into its output transfer TRBs. This avoids
+>> the somewhat expensive DMA mappings that are performed by default on
+>> most URBs submissions.
+>>
+>> In the case an URB was suitable for IDT. The data is directly copied
+>> into the "Data Buffer Pointer" region of the TRB and the IDT flag is
+>> set. Instead of triggering memory accesses the HC will use the data
+>> directly.
+>>
+>> The implementation could cover all kind of output endpoints. Yet
+>> Isochronous endpoints are bypassed as I was unable to find one that
+>> matched IDT's constraints. As we try to bypass the default DMA mappings
+>> on URB buffers we'd need to find a Isochronous device with an
+>> urb->transfer_buffer_length <= 8 bytes.
+>>
+>> The implementation takes into account that the 8 byte buffers provided
+>> by the URB will never cross a 64KB boundary.
+>>
+>> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+>> Reviewed-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> 
+> I've noticed that this patch causes regression on various Samsung Exynos
+> 5420/5422/5800 boards, which have USB3.0 host ports provided by
+> DWC3/XHCI hardware module. The regression can be observed with ASIX USB
+> 2.0 ethernet dongle, which stops working after applying this patch (eth0
+> interface is registered, but no packets are transmitted/received). I can
+> provide more debugging information or do some tests, just let me know
+> what do you need. Reverting this commit makes ASIX USB ethernet dongle
+> operational again.
+> 
 
-syzbot found the following crash on:
+Thanks for reporting.
 
-HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=178c8394a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-dashboard link: https://syzkaller.appspot.com/bug?extid=c1b25598aa60dcd47e78
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17c22222a00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ddce02a00000
+Would it be possible to check if your ASIX ethernet dongle works on some
+desktop/laptop setup with this same IDT patch?
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+c1b25598aa60dcd47e78@syzkaller.appspotmail.com
+Also Exynos xhci traces could help, they would show the content of the TRBs using IDT.
+Maybe byte order gets messed up?
 
-usb 1-1: new low-speed USB device number 2 using dummy_hcd
-usb 1-1: config 0 has an invalid interface number: 93 but max is 0
-usb 1-1: config 0 has no interface number 0
-usb 1-1: New USB device found, idVendor=13b1, idProduct=0042,  
-bcdDevice=f9.d4
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-usb 1-1: WARNING: ath10k USB support is incomplete, don't expect anything  
-to work!
+Take traces with:
 
+mount -t debugfs none /sys/kernel/debug
+echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+<connect ASIX eth dongle, try to use it>
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+send /sys/kernel/debug/tracing/trace content to me
+
+If we can't get this fixed I'll revert the IDT patch
+
+Thanks
+Mathias
