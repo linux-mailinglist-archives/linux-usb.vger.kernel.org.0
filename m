@@ -2,128 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2A318446
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 05:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB55F18567
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 08:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbfEID6J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 May 2019 23:58:09 -0400
-Received: from mail-eopbgr150042.outbound.protection.outlook.com ([40.107.15.42]:60670
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        id S1726797AbfEIGXn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 May 2019 02:23:43 -0400
+Received: from mail-eopbgr1400094.outbound.protection.outlook.com ([40.107.140.94]:6077
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726082AbfEID6J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 May 2019 23:58:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+        id S1726683AbfEIGXm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 May 2019 02:23:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PpGlwJHmEXiGpkDz+SKaOqwgrxGwYCjqEHXiAaPXRjc=;
- b=l1bwdwT8uEv5hAtnzMnESJ6BA1X4nI/isCy0JOAlsVze1pA7dEwFpwiY/mDpofeHHR/OHoimn5LW6LCnJRaGPB4gYem6+hVqnLyM8EUDoQ2YNqp43Vv+BG7o7DEFEQB7hRMxHB6Xqeiruv9hDpTyoQPcwqx7FyWV4Jg22YEUM6o=
-Received: from VI1PR04MB4158.eurprd04.prod.outlook.com (52.133.15.33) by
- VI1PR04MB4317.eurprd04.prod.outlook.com (52.134.31.160) with Microsoft SMTP
+ bh=WBBThbzzBZhrySEVZWkmkes7KaA/DSkhPMh+Otfsm38=;
+ b=RTM43DUZaplDZ5uCNwI2HeRV5neNUuhbxORq0EgUG9urgpiJmP9kK/URY+ir/F1f5+YYIfsCc2uhpdqO1Hm7vpo1nbMZYmE63X/DOO341GJSczIHWq446wpjRXud4otJmZ28BU4DxoqFjMNEl93Fr+AzAIhBcZi3mPSoBEtlgok=
+Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com (20.176.240.146) by
+ OSBPR01MB3591.jpnprd01.prod.outlook.com (20.178.5.215) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.11; Thu, 9 May 2019 03:58:04 +0000
-Received: from VI1PR04MB4158.eurprd04.prod.outlook.com
- ([fe80::8015:ec84:d721:b566]) by VI1PR04MB4158.eurprd04.prod.outlook.com
- ([fe80::8015:ec84:d721:b566%5]) with mapi id 15.20.1856.012; Thu, 9 May 2019
- 03:58:04 +0000
-From:   Yinbo Zhu <yinbo.zhu@nxp.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Xiaobo Xie <xiaobo.xie@nxp.com>,
+ 15.20.1878.20; Thu, 9 May 2019 06:23:38 +0000
+Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com
+ ([fe80::4d29:3383:d67d:d562]) by OSBPR01MB3174.jpnprd01.prod.outlook.com
+ ([fe80::4d29:3383:d67d:d562%3]) with mapi id 15.20.1856.012; Thu, 9 May 2019
+ 06:23:38 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Chris Brandt <Chris.Brandt@renesas.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ramneek Mehresh <ramneek.mehresh@freescale.com>,
-        Nikhil Badola <nikhil.badola@freescale.com>,
-        Ran Wang <ran.wang_1@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jiafei Pan <jiafei.pan@nxp.com>,
-        Suresh Gupta <suresh.gupta@freescale.com>
-Subject: RE: [EXT] Re: [PATCH v5 4/5] usb: host: Stops USB controller init if
- PLL fails to lock
-Thread-Topic: [EXT] Re: [PATCH v5 4/5] usb: host: Stops USB controller init if
- PLL fails to lock
-Thread-Index: AQHVBWPwtPsu0fLjhE+qRODS4vtH+6ZhcX6AgAC5hiA=
-Date:   Thu, 9 May 2019 03:58:04 +0000
-Message-ID: <VI1PR04MB4158AA40AB4A4E60711FD580E9330@VI1PR04MB4158.eurprd04.prod.outlook.com>
-References: <20190508060608.33882-4-yinbo.zhu@nxp.com>
- <Pine.LNX.4.44L0.1905081248440.1699-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1905081248440.1699-100000@iolanthe.rowland.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
+        Simon Horman <horms@verge.net.au>
+Subject: RE: [PATCH 00/10] usb: Add host and device support for RZ/A2
+Thread-Topic: [PATCH 00/10] usb: Add host and device support for RZ/A2
+Thread-Index: AQHVBGYHqBe7JTZ/4k2vKamrKGugU6ZfYQSwgAIoCQCAAMOq8A==
+Date:   Thu, 9 May 2019 06:23:37 +0000
+Message-ID: <OSBPR01MB3174EB1DCBEB9C7CDB3EC3D6D8330@OSBPR01MB3174.jpnprd01.prod.outlook.com>
+References: <20190506234631.113226-1-chris.brandt@renesas.com>
+ <OSBPR01MB317442B092744C8D312682DCD8310@OSBPR01MB3174.jpnprd01.prod.outlook.com>
+ <TY1PR01MB1562C5FCC551A2857A6D15E78A320@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY1PR01MB1562C5FCC551A2857A6D15E78A320@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yinbo.zhu@nxp.com; 
-x-originating-ip: [119.31.174.73]
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 843b58be-f38d-4ab0-8b5d-08d6d43289f5
+x-ms-office365-filtering-correlation-id: 6d08fc73-23e3-4513-63a5-08d6d446df82
 x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4317;
-x-ms-traffictypediagnostic: VI1PR04MB4317:
-x-microsoft-antispam-prvs: <VI1PR04MB4317F2B9FDE90D536E57550AE9330@VI1PR04MB4317.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB3591;
+x-ms-traffictypediagnostic: OSBPR01MB3591:
+x-microsoft-antispam-prvs: <OSBPR01MB3591A5CA5E818F8328785EC3D8330@OSBPR01MB3591.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
 x-forefront-prvs: 003245E729
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(39860400002)(366004)(396003)(136003)(346002)(189003)(199004)(13464003)(229853002)(305945005)(74316002)(81166006)(76116006)(102836004)(7736002)(52536014)(66066001)(26005)(99286004)(186003)(6116002)(2906002)(3846002)(9686003)(73956011)(6246003)(66446008)(107886003)(4326008)(53936002)(53546011)(6916009)(6506007)(25786009)(86362001)(66946007)(64756008)(66556008)(66476007)(2171002)(71190400001)(68736007)(71200400001)(55016002)(476003)(33656002)(5660300002)(81156014)(486006)(8676002)(44832011)(446003)(11346002)(6436002)(14444005)(256004)(478600001)(54906003)(316002)(8936002)(7696005)(14454004)(76176011);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4317;H:VI1PR04MB4158.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(366004)(376002)(346002)(396003)(39860400002)(189003)(199004)(8676002)(81156014)(81166006)(76116006)(446003)(11346002)(478600001)(316002)(66476007)(68736007)(476003)(8936002)(86362001)(486006)(74316002)(14454004)(6116002)(26005)(3846002)(6636002)(66066001)(229853002)(2906002)(9686003)(53936002)(54906003)(6506007)(7696005)(6862004)(4326008)(76176011)(52536014)(99286004)(71200400001)(71190400001)(66946007)(55016002)(186003)(66556008)(73956011)(66446008)(64756008)(7736002)(305945005)(33656002)(14444005)(6246003)(256004)(25786009)(6436002)(102836004)(5660300002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB3591;H:OSBPR01MB3174.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: nZNIemHESZFyPSIVsUvthyZgXLSq3wNtIax8l6yiR1mIwoaWB9W8pWJfOLAppsp7rQKb31Vaha+ao/qTCcEQ46Itg5gnEdhfAglmNZ/nwM8V0S2nWKidOGTCR1hX3jyb5t+ToZvXYJsOrWoGRzJP9ngIOqJt7Oc08dxQ/OlMEuw1ZMjVDaov/qmvG6w8FhE+OoLndF5jcJmel9MizUc7TNlmkzz068M82Mjzm9lXlfd2vpPU2zcM7Qte4ZYlL5nRESgxx7ISkXbS06PB9qVDZLOGZglITYyUkXUcp1tmL2OYOOcATIWWWqTYNytM+D2/7G9g6QNenAHwSXSr0LOYmRf+NYUNDisLUcbHpCA9ivNknU4wqCAI5v8VSU8W/BcOl7CQo8KCEH4x4VOBqxv52JHeby6E83xXVj1K8Q4r8BA=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+x-microsoft-antispam-message-info: vKS4Qsb790L9cleSqww6DVcVBBh8Hl9EpbCbH0rQLQPExyWVMq41XDUx0oWW0hvs2vyJ9uY5jxqopWle9YacB0QBR62CK4ePTqJEO6jqPERp4+TISEADuU3xr3B4lr0AGINjxFE7X+4XeafcTAPEB4TEc5qlMimR0hAjPdTKwPDSKmAS069wI/JyUd64NVb7UhnrcIzm22Q4Sp29N1yQwuC9ms5J47yj0FQktX4W5oHyZ8SedzKoY1blgW8fZu/kf+oCEGkMzgjptejB7dNSv7fuqlTGGb0pFDZAOQR8nt0wbpUPWYZzYay/T7z+3kMdmE/QkQADP1dFZGp6PnclUwtzv3BqlxTDnUQ5kFoD6IzJVnT2LT17beIAvo/5Yedj8W6bU3SUvwOuW4rA/ClirHcGvQt4LoJiNoU82zFgUr0=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 843b58be-f38d-4ab0-8b5d-08d6d43289f5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2019 03:58:04.5626
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d08fc73-23e3-4513-63a5-08d6d446df82
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2019 06:23:38.0386
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4317
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3591
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQWxhbiBTdGVybiBbbWFp
-bHRvOnN0ZXJuQHJvd2xhbmQuaGFydmFyZC5lZHVdDQo+IFNlbnQ6IDIwMTnE6jXUwjnI1SAwOjUw
-DQo+IFRvOiBZaW5ibyBaaHUgPHlpbmJvLnpodUBueHAuY29tPg0KPiBDYzogWGlhb2JvIFhpZSA8
-eGlhb2JvLnhpZUBueHAuY29tPjsgR3JlZyBLcm9haC1IYXJ0bWFuDQo+IDxncmVna2hAbGludXhm
-b3VuZGF0aW9uLm9yZz47IFJhbW5lZWsgTWVocmVzaA0KPiA8cmFtbmVlay5tZWhyZXNoQGZyZWVz
-Y2FsZS5jb20+OyBOaWtoaWwgQmFkb2xhDQo+IDxuaWtoaWwuYmFkb2xhQGZyZWVzY2FsZS5jb20+
-OyBSYW4gV2FuZyA8cmFuLndhbmdfMUBueHAuY29tPjsNCj4gbGludXgtdXNiQHZnZXIua2VybmVs
-Lm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgSmlhZmVpIFBhbg0KPiA8amlhZmVp
-LnBhbkBueHAuY29tPjsgU3VyZXNoIEd1cHRhIDxzdXJlc2guZ3VwdGFAZnJlZXNjYWxlLmNvbT4N
-Cj4gU3ViamVjdDogW0VYVF0gUmU6IFtQQVRDSCB2NSA0LzVdIHVzYjogaG9zdDogU3RvcHMgVVNC
-IGNvbnRyb2xsZXIgaW5pdCBpZiBQTEwgZmFpbHMgdG8NCj4gbG9jaw0KPiANCj4gQ2F1dGlvbjog
-RVhUIEVtYWlsDQo+IA0KPiBPbiBXZWQsIDggTWF5IDIwMTksIFlpbmJvIFpodSB3cm90ZToNCj4g
-DQo+ID4gRnJvbTogUmFtbmVlayBNZWhyZXNoIDxyYW1uZWVrLm1laHJlc2hAZnJlZXNjYWxlLmNv
-bT4NCj4gPg0KPiA+IFVTQiBlcnJhdHVtLUEwMDY5MTggd29ya2Fyb3VuZCB0cmllcyB0byBzdGFy
-dCBpbnRlcm5hbCBQSFkgaW5zaWRlDQo+ID4gdWJvb3QgKHdoZW4gUExMIGZhaWxzIHRvIGxvY2sp
-LiBIb3dldmVyLCBpZiB0aGUgd29ya2Fyb3VuZCBhbHNvIGZhaWxzLA0KPiA+IHRoZW4gVVNCIGlu
-aXRpYWxpemF0aW9uIGlzIGFsc28gc3RvcHBlZCBpbnNpZGUgTGludXguDQo+ID4gRXJyYXR1bS1B
-MDA2OTE4IHdvcmthcm91bmQgZmFpbHVyZSBjcmVhdGVzICJmc2wsZXJyYXR1bV9hMDA2OTE4Ig0K
-PiA+IG5vZGUgaW4gZGV2aWNlLXRyZWUuIFByZXNlbmNlIG9mIHRoaXMgbm9kZSBpbiBkZXZpY2Ut
-dHJlZSBpcyB1c2VkIHRvDQo+ID4gc3RvcCBVU0IgY29udHJvbGxlciBpbml0aWFsaXphdGlvbiBp
-biBMaW51eA0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUmFtbmVlayBNZWhyZXNoIDxyYW1uZWVr
-Lm1laHJlc2hAZnJlZXNjYWxlLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBTdXJlc2ggR3VwdGEg
-PHN1cmVzaC5ndXB0YUBmcmVlc2NhbGUuY29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFlpbmJvIFpo
-dSA8eWluYm8uemh1QG54cC5jb20+DQo+ID4gLS0tDQo+ID4gQ2hhbmdlIGluIHY1Og0KPiA+ICAg
-ICAgICAgICAgICAgdXNlIGRldl93YXJuKCkgaW5zdGVhZCBvZiBwcl93YXJuKCkNCj4gPg0KPiA+
-ICBkcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMgICAgICB8ICAgIDUgKysrKysNCj4gPiAgZHJp
-dmVycy91c2IvaG9zdC9mc2wtbXBoLWRyLW9mLmMgfCAgICAzICsrLQ0KPiA+ICAyIGZpbGVzIGNo
-YW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMgYi9kcml2ZXJzL3VzYi9ob3N0L2VoY2kt
-ZnNsLmMNCj4gPiBpbmRleCAxNjM0YWM4Li45MDU1MGE2IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZl
-cnMvdXNiL2hvc3QvZWhjaS1mc2wuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1m
-c2wuYw0KPiA+IEBAIC0yMzYsNiArMjM2LDExIEBAIHN0YXRpYyBpbnQgZWhjaV9mc2xfc2V0dXBf
-cGh5KHN0cnVjdCB1c2JfaGNkICpoY2QsDQo+ID4gICAgICAgICAgICAgICBwb3J0c2MgfD0gUE9S
-VF9QVFNfUFRXOw0KPiA+ICAgICAgICAgICAgICAgLyogZmFsbCB0aHJvdWdoICovDQo+ID4gICAg
-ICAgY2FzZSBGU0xfVVNCMl9QSFlfVVRNSToNCj4gPiArICAgICAgICAgICAgIGlmIChwZGF0YS0+
-aGFzX2ZzbF9lcnJhdHVtX2EwMDY5MTgpIHsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgZGV2
-X3dhcm4oZGV2LCAiVVNCIFBIWSBjbG9jayBpbnZhbGlkXG4iKTsNCj4gPiArICAgICAgICAgICAg
-ICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+ID4gKyAgICAgICAgICAgICB9DQo+ID4gKw0KPiAN
-Cj4gWW91IG5lZWQgdG8gYWRkIGEgIkZhbGwgdGhyb3VnaCIgY29tbWVudCBiZXR3ZWVuIHRoZXNl
-IHR3byBjYXNlcy4NCj4gPiAgICAgICBjYXNlIEZTTF9VU0IyX1BIWV9VVE1JX0RVQUw6DQo+ID4g
-ICAgICAgICAgICAgICAvKiBQSFlfQ0xLX1ZBTElEIGJpdCBpcyBkZS1mZWF0dXJlZCBmcm9tIGFs
-bCBjb250cm9sbGVyDQo+ID4gICAgICAgICAgICAgICAgKiB2ZXJzaW9ucyBiZWxvdyAyLjQgYW5k
-IGlzIHRvIGJlIGNoZWNrZWQgb25seSBmb3INCj4gDQo+IEFsYW4gU3Rlcm4NCkhpIEFsYW4gU3Rl
-cm4sDQoNCllvdXIgbWVhbmluZyBpcyB0byByZW1vdmUgIi8qIGZhbGwgdGhyb3VnaCovIiBvciBh
-ZGQgdGhlIGVycmF0dW0gY29tbW9udCByZXBsYWNlICIvKiBmYWxsIHRocm91Z2gqLyINCg0KUmVn
-YXJkcywNCllpbmJvDQo=
+Hi Chris=1B$B$5$s=1B(B
+
+> From: Chris Brandt, Sent: Thursday, May 9, 2019 3:08 AM
+>=20
+> Hi Shimoda=1B$B$5$s=1B(B
+>=20
+> > From: Yoshihiro Shimoda
+> > Sent: Tuesday, May 07, 2019 5:17 AM
+> > > For the most part, the RZ/A2 has the same USB 2.0 host and device
+> > > HW as the R-Car Gen3, so we can reuse a lot of the code.
+> > >
+> > > However, there are a couple extra register bits, and the CFIFO
+> > > register 8-bit access works a little different (weird, no idea why).
+> >
+> > This is just my gut feeling, but if we set the BIGEND bit in the CFIFOS=
+EL
+> > of RZ/A2M (R-Car Gen3 doesn't have such a bit though), could the origin=
+al
+> > code work correctly?
+>=20
+> I just tried to set CFIFOSEL.BIGEND =3D 1
+
+Thank you for trying it!
+
+>  * Set CFIFOSEL.BIGEND =3D 1
+>  * Write 8-bit values to CFIFO (same method as R-Car)
+>  * Set CFIFOSEL.BIGEND =3D 0
+>=20
+> The result is bad.
+
+I got it...
+
+> But, then I tried this:
+>  * Set CFIFOSEL.MBW =3D 0   (CFIFO port access =3D 8-bit)
+>  * Write 8-bit values to CFIFO
+>  * Set CFIFOSEL.MBW =3D 2   (CFIFO port access =3D 32-bit)
+>=20
+> Code:
+> u16 cfifosel =3D usbhs_read(priv, fifo->sel);
+>=20
+> usbhs_write(priv, fifo->sel, cfifosel & 0xF3FF); // MBW =3D 8-bit
+>=20
+> 		for (i =3D 0; i < len; i++)
+> 			iowrite8(buf[i], addr); //same address each time
+>=20
+> usbhs_write(priv, fifo->sel, cfifosel);	// MBW =3D 32-bit
+>=20
+>=20
+> This method works good.
+
+I got it.
+
+>   (I assume this method would work with R-Car also)
+
+Unfortunately, R-Car cannot work with this method...
+But, "iowrite8(buf[i], addr + 3);" or "iowrite32(buf[i], addr);" works on t=
+he R-Car.
+And then, I realized that R-Car CFIFO register allows 32-bit access only...
+# So, I'm asking HW guy whether the 8-bit access can be allowed or not now.=
+..
+
+> But...then we have extra register reads and writes.
+> Register accesses are slower, so performance is lower.
+>=20
+> So, I prefer my original method:
+> 	if (usbhsc_flags_has(priv, USBHSF_CFIFO_BYTE_ADDR))
+> 		for (i =3D 0; i < len; i++)
+> 			iowrite8(buf[i], addr + (i & 0x03));
+> 	else
+> 		for (i =3D 0; i < len; i++)
+> 			iowrite8(buf[i], addr + (0x03 - (i & 0x03)));
+>=20
+>=20
+> Do you agree?
+
+I agree.
+However, I have some comments about the patch. So, I'll reply on the patch =
+later.
+
+Best regards,
+Yoshihiro Shimoda
+
+> Chris
+
