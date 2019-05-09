@@ -2,109 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E2119028
-	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 20:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DED319162
+	for <lists+linux-usb@lfdr.de>; Thu,  9 May 2019 20:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbfEISZ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 May 2019 14:25:27 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:35776 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726620AbfEISZ1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 May 2019 14:25:27 -0400
-Received: by mail-wr1-f67.google.com with SMTP id w12so4399945wrp.2
-        for <linux-usb@vger.kernel.org>; Thu, 09 May 2019 11:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q8AxXyua6skxc3/3kJBuCD7WeH5GL35ISvW5fGGS1Eo=;
-        b=hQYjAcZ5MDNPj6PBJB0Dlxy5j1K6Is+95GIDcnqeKNHP3o5YhX/VdojpxEE+Y8PIn9
-         /fDqo/k1ReiQClt2rA6ccdDUYxCsVG5oAVrjjlu6UDUp0NgJdXlLBtInln8PnklrzfJV
-         DLBNO3BMDsOIOvsVEp5acBBy+sPABhK1y8hIi+9SFc1WnnI4jGuCynFeEUq09y2GbZkT
-         k9gYjETJovJMIg+ZmPP2KKnznNs9QABQ9BODXKGEIN/RKwa/pm6KQaODoACb0hHV9uCC
-         iD+570gPRIgSdGmIfM80s57JZgIk28wGy9tEBilYPQkkjxA1C0bLtfFmSOagtNiUZCUk
-         rieg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q8AxXyua6skxc3/3kJBuCD7WeH5GL35ISvW5fGGS1Eo=;
-        b=CrCWFR8hXmR2W9utYu3RcE+D8uVFZNyMZqfx6KTOY9XQZlWBZue+gk52H/wqMiBk02
-         URFiaooMSK5qTnvV4C3xU1jfwBLYiaJqflu9GScra85KpfX8va7r3xwEOqnhZLSmwobH
-         0LrJouwdmt7L/V2XsCjbjfFIO+IqELuTZitobvvv31fCCjRW1do+0YccxDPojK4bJlAy
-         OAvg+9pLqz5QS7B/NX0Ssevoj5ScpUVByH4W5Z6Wu7y/W5Hp3BEJ1TfCS5AG/4OLm0Mn
-         CVmhIiwlzYNsZAJy8eHHgomb73lrBYexZHzWEYBfK6/ooUh315bjcgfcyBgUhsRoCg7O
-         1D1A==
-X-Gm-Message-State: APjAAAVhmlBc+b95HX1zj127oBJNo6m0tbmkjKiu+AU9gXPL1fLnyIxJ
-        wzFpyH7J6ogKON0c8qqktbxUHlcA4bdbmMC/8Q4BXbKqv6Y=
-X-Google-Smtp-Source: APXvYqwrj4aBN6HdRlizpUxg1PGEChem2gmiZwG/9gSosEfNDYAwOUv4ht7lxL+8e98302C4W9vgXaGVYprhjoWVbcc=
-X-Received: by 2002:a5d:50c2:: with SMTP id f2mr4344469wrt.253.1557426325552;
- Thu, 09 May 2019 11:25:25 -0700 (PDT)
+        id S1729185AbfEISzK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 9 May 2019 14:55:10 -0400
+Received: from unicorn.mansr.com ([81.2.72.234]:43750 "EHLO unicorn.mansr.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728705AbfEISzJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 May 2019 14:55:09 -0400
+Received: by unicorn.mansr.com (Postfix, from userid 51770)
+        id 7734E14180; Thu,  9 May 2019 19:55:06 +0100 (BST)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Peter Chen <peter.chen@nxp.com>
+Subject: Re: [PATCH v3] usb: core: verify devicetree nodes for USB devices
+References: <yw1xpnotufti.fsf@mansr.com>
+        <CGME20190509084827eucas1p294962744fe70745c50b69a5349b5de68@eucas1p2.samsung.com>
+        <20190509084726.5405-1-m.szyprowski@samsung.com>
+Date:   Thu, 09 May 2019 19:55:06 +0100
+In-Reply-To: <20190509084726.5405-1-m.szyprowski@samsung.com> (Marek
+        Szyprowski's message of "Thu, 09 May 2019 10:47:26 +0200")
+Message-ID: <yw1xlfzfv4ol.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
 MIME-Version: 1.0
-References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
- <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com>
-In-Reply-To: <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Thu, 9 May 2019 11:25:14 -0700
-Message-ID: <CALAqxLUfJYUtmQDC_aDMxW7KcPUawGoRq-PNUfmzQuNKh97FmQ@mail.gmail.com>
-Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, "Yang, Fei" <fei.yang@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chen Yu <chenyu56@huawei.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 9, 2019 at 7:02 AM Andrzej Pietrasiewicz
-<andrzej.p@collabora.com> wrote:
+Marek Szyprowski <m.szyprowski@samsung.com> writes:
+
+> Commit 69bec7259853 ("USB: core: let USB device know device node")
+> added support for attaching devicetree node for USB devices. The mentioned
+> commit however identifies the given USB device node only by the 'reg'
+> property in the host controller children nodes. The USB device node
+> however also has to have a 'compatible' property as described in
+> Documentation/devicetree/bindings/usb/usb-device.txt. Lack for the
+> 'compatible' property check might result in assigning a devicetree node,
+> which is not intended to be the proper node for the given USB device.
 >
-> Hi John,
-> W dniu 08.05.2019 o 04:18, John Stultz pisze:
-> > Since commit 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather
-> > buffers"), I've been seeing trouble with adb transfers in Android on
-> > HiKey960, HiKey and now Dragonboard 845c.
-> >
-> > Sometimes things crash, but often the transfers just stop w/o any
-> > obvious error messages.
-> >
-> > Initially I thought it was an issue with the HiKey960 dwc3 usb patches
-> > being upstreamed, and was using the following hack workaround:
-> >    https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey960-5.1&id=dcdadaaec9db7a7b78ea9b838dd1453359a2f388
-> >
-> > Then dwc2 added sg support, and I ended up having to revert it to get
-> > by on HiKey:
-> >    https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey-5.1&id=6e91b4c7bd1e94bdd835263403c53e85a677b848
-> >
-> > (See thread here: https://lkml.org/lkml/2019/3/8/765)
+> This is important especially when USB host controller has child-nodes for
+> other purposes. For example, Exynos EHCI and OHCI drivers already define
+> child-nodes for each physical root hub port and assigns respective PHY
+> controller and parameters for them. Those binding predates support for
+> USB devicetree nodes.
 >
-> So the thread says there are problems at boot, but here you mention about
-> adb transfers, which must obviously be happening after the board has booted.
-> Do you experience problems at boot or not?
+> Checking for the proper compatibility string allows to mitigate the
+> conflict between USB device devicetree nodes and the bindings for USB
+> controllers with child nodes. It also fixes the side-effect of the other
+> commits, like 01fdf179f4b0 ("usb: core: skip interfaces disabled in
+> devicetree"), which incorrectly disables some devices on Exynos based
+> boards.
 >
-> If a crash happens, what is in the log?
+> Reported-by: Markus Reichl <m.reichl@fivetechno.de>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+> v3:
+> - replaced ad hoc checks by proper test for proper value of the
+>   compatible string in drivers/usb/core/of.c
+> v2: https://lkml.org/lkml/2019/5/8/321
+> v1: https://lkml.org/lkml/2019/5/7/715
+> ---
+>  drivers/usb/core/hub.c |  3 +++
+>  drivers/usb/core/of.c  | 31 +++++++++++++++++++++++++++++++
+>  include/linux/usb/of.h |  2 ++
+>  3 files changed, 36 insertions(+)
+>
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 2f94568ba385..6f2438522d09 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/usb.h>
+>  #include <linux/usbdevice_fs.h>
+>  #include <linux/usb/hcd.h>
+> +#include <linux/usb/of.h>
+>  #include <linux/usb/otg.h>
+>  #include <linux/usb/quirks.h>
+>  #include <linux/workqueue.h>
+> @@ -5023,6 +5024,8 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>  		if (status < 0)
+>  			goto loop;
+>
+> +		usb_of_validate_device_node(udev);
+> +
+>  		if (udev->quirks & USB_QUIRK_DELAY_INIT)
+>  			msleep(2000);
+>
+> diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
+> index 651708d8c908..2b6f16753edc 100644
+> --- a/drivers/usb/core/of.c
+> +++ b/drivers/usb/core/of.c
+> @@ -30,6 +30,12 @@ struct device_node *usb_of_get_device_node(struct usb_device *hub, int port1)
+>  	for_each_child_of_node(hub->dev.of_node, node) {
+>  		if (of_property_read_u32(node, "reg", &reg))
+>  			continue;
+> +		/*
+> +		 * idVendor and idProduct are not yet known, so check only
+> +		 * a presence of the compatible property.
+> +		 */
 
-So, yes.  Sorry, I am maybe muddling two issues (though they both seem
-to be tied to f_fs sg).  On dwc2, with the current code, we often (but
-not always) crash as soon as adb starts up in the boot process. Thus
-I'm running with a revert of "usb: dwc2: gadget: Add scatter-gather
-mode" to get by.
+This function could be called from anywhere, so that comment seems a bit
+misplaced.
 
-As for example crashes, there is a crash in the thread linked above
-(https://lkml.org/lkml/2019/3/8/765) and also the one I sent yesterday
-when testing with your zlp patch. Let me know if you're looking for
-something more specific.
+> +		if (!of_find_property(node, "compatible", NULL))
+> +			continue;
 
-One thing I didn't do, but I should is run w/ the zlp + your
-memset/kzalloc patch. See if that helps get dwc2 further along at
-least.  I'll test that shortly here and get back to you.
+What if there is a node with a "compatible" property for some entirely
+different purpose?  Since that won't be caught, why bother with this
+test at all?
 
-thanks
--john
+>  		if (reg == port1)
+>  			return node;
+> @@ -39,6 +45,31 @@ struct device_node *usb_of_get_device_node(struct usb_device *hub, int port1)
+>  }
+>  EXPORT_SYMBOL_GPL(usb_of_get_device_node);
+>
+> +/**
+> + * usb_of_validate_device_node() - validate dt node of the probed USB device
+> + * @udev: USB device
+> + *
+> + * Validate devicetree node for the USB device. Compatible string must match
+> + * device's idVendor and idProduct, otherwise the of_node will be put and set
+> + * to NULL.
+> + */
+> +void usb_of_validate_device_node(struct usb_device *udev)
+> +{
+> +	char compatible[13];
+> +
+> +	if (!udev->dev.of_node)
+> +		return;
+> +
+> +	snprintf(compatible, sizeof(compatible), "usb%x,%x",
+> +		 le16_to_cpu(udev->descriptor.idVendor),
+> +		 le16_to_cpu(udev->descriptor.idProduct));
+> +
+> +	if (of_device_is_compatible(udev->dev.of_node, compatible) == 0) {
+> +		of_node_put(udev->dev.of_node);
+> +		udev->dev.of_node = NULL;
+> +	}
+> +}
+> +
+>  /**
+>   * usb_of_has_combined_node() - determine whether a device has a combined node
+>   * @udev: USB device
+> diff --git a/include/linux/usb/of.h b/include/linux/usb/of.h
+> index dba55ccb9b53..9969efda03ad 100644
+> --- a/include/linux/usb/of.h
+> +++ b/include/linux/usb/of.h
+> @@ -24,6 +24,7 @@ bool usb_of_has_combined_node(struct usb_device *udev);
+>  struct device_node *usb_of_get_interface_node(struct usb_device *udev,
+>  		u8 config, u8 ifnum);
+>  struct device *usb_of_get_companion_dev(struct device *dev);
+> +void usb_of_validate_device_node(struct usb_device *udev);
+>  #else
+>  static inline enum usb_dr_mode
+>  of_usb_get_dr_mode_by_phy(struct device_node *np, int arg0)
+> @@ -57,6 +58,7 @@ static inline struct device *usb_of_get_companion_dev(struct device *dev)
+>  {
+>  	return NULL;
+>  }
+> +static inline void usb_of_validate_device_node(struct usb_device *udev) { }
+>  #endif
+>
+>  #if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_USB_SUPPORT)
+> -- 
+> 2.17.1
+>
+
+-- 
+Måns Rullgård
