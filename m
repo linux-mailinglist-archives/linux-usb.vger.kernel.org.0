@@ -2,30 +2,26 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A26F319F0D
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 16:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA0419F29
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 16:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727885AbfEJOXU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 May 2019 10:23:20 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:47756 "HELO
+        id S1727918AbfEJO36 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 May 2019 10:29:58 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:47788 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727790AbfEJOXU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 May 2019 10:23:20 -0400
-Received: (qmail 2214 invoked by uid 2102); 10 May 2019 10:23:19 -0400
+        with SMTP id S1727790AbfEJO36 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 May 2019 10:29:58 -0400
+Received: (qmail 2243 invoked by uid 2102); 10 May 2019 10:29:57 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 10 May 2019 10:23:19 -0400
-Date:   Fri, 10 May 2019 10:23:19 -0400 (EDT)
+  by localhost with SMTP; 10 May 2019 10:29:57 -0400
+Date:   Fri, 10 May 2019 10:29:57 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Jim Lin <jilin@nvidia.com>
-cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
-        <kai.heng.feng@canonical.com>, <drinkcat@chromium.org>,
-        <keescook@chromium.org>, <nsaenzjulienne@suse.de>,
-        <jflat@chromium.org>, <malat@debian.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v9 2/2] usb: xhci: Add Clear_TT_Buffer
-In-Reply-To: <1557491070-24715-3-git-send-email-jilin@nvidia.com>
-Message-ID: <Pine.LNX.4.44L0.1905101019520.1516-100000@iolanthe.rowland.org>
+To:     EJ Hsu <ejh@nvidia.com>
+cc:     balbi@kernel.org, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH V3] usb: gadget: storage: Remove warning message
+In-Reply-To: <1557486130-50945-1-git-send-email-ejh@nvidia.com>
+Message-ID: <Pine.LNX.4.44L0.1905101023400.1516-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -33,96 +29,118 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 10 May 2019, Jim Lin wrote:
+On Fri, 10 May 2019, EJ Hsu wrote:
 
-> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-> processing for full-/low-speed endpoints connected via a TT, the host
-> software must use the Clear_TT_Buffer request to the TT to ensure
-> that the buffer is not in the busy state".
+> This change is to fix below warning message in following scenario:
+> usb_composite_setup_continue: Unexpected call
 > 
-> In our case, a full-speed speaker (ConferenceCam) is behind a high-
-> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-> request we may continue to get STALL with the folllowing requests,
-> like Set_Interface.
+> When system tried to enter suspend, the fsg_disable() will be called to
+> disable fsg driver and send a signal to fsg_main_thread. However, at
+> this point, the fsg_main_thread has already been frozen and can not
+> respond to this signal. So, this signal will be pended until
+> fsg_main_thread wakes up.
 > 
-> Here we update udev->devaddr in address_device callback function
-> (this USB device address is assigned by XHCI controller) and invoke
-> usb_hub_clear_tt_buffer() to send Clear_TT_Buffer request to the hub
-> of the device for the following Set_Interface requests to the device
-> to get ACK successfully.
+> Once system resumes from suspend, fsg_main_thread will detect a signal
+> pended and do some corresponding action (in handle_exception()). Then,
+> host will send some setup requests (get descriptor, set configuration...)
+> to UDC driver trying to enumerate this device. During the handling of "set
+> configuration" request, it will try to sync up with fsg_main_thread by
+> sending a signal (which is the same as the signal sent by fsg_disable)
+> to it. In a similar manner, once the fsg_main_thread receives this
+> signal, it will call handle_exception() to handle the request.
 > 
-> Signed-off-by: Jim Lin <jilin@nvidia.com>
+> However, if the fsg_main_thread wakes up from suspend a little late and
+> "set configuration" request from Host arrives a little earlier,
+> fsg_main_thread might come across the request from "set configuration"
+> when it handles the signal from fsg_disable(). In this case, it will
+> handle this request as well. So, when fsg_main_thread tries to handle
+> the signal sent from "set configuration" later, there will nothing left
+> to do and warning message "Unexpected call" is printed.
+> 
+> Signed-off-by: EJ Hsu <ejh@nvidia.com>
 > ---
-> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
->     , remove its claiming in xhci.h
-> v3: Add description for clearing_tt (xhci.h)
-> v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
->     to protect for Clear_TT_Buffer to be run serially.
->     Remove xhci_clear_tt_buffer_complete as it's not necessary.
->     Same reason as the above.
->     Extend usb_hub_clear_tt_buffer parameter
-> v5: Not extending usb_hub_clear_tt_buffer parameter
->     Add description.
-> v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
-> v7: Add devaddr field in "struct usb_device"
-> v8: split as two patches
-> v9: no change
+> v2: remove the copyright info
+> v3: change fsg_unbind() to use FSG_STATE_DISCONNECT
+> ---
+>  drivers/usb/gadget/function/f_mass_storage.c | 21 +++++++++++++++------
+>  drivers/usb/gadget/function/storage_common.h |  1 +
+>  2 files changed, 16 insertions(+), 6 deletions(-)
 > 
->  drivers/usb/host/xhci-ring.c | 12 ++++++++++++
->  drivers/usb/host/xhci.c      |  1 +
->  2 files changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 9215a28dad40..739737faf752 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1786,6 +1786,17 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
->  	return NULL;
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 043f97a..982c3e8 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -2293,8 +2293,7 @@ static int fsg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
+>  static void fsg_disable(struct usb_function *f)
+>  {
+>  	struct fsg_dev *fsg = fsg_from_func(f);
+> -	fsg->common->new_fsg = NULL;
+> -	raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
+> +	raise_exception(fsg->common, FSG_STATE_DISCONNECT);
 >  }
 >  
-> +static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td)
-> +{
-> +	/*
-> +	 * As part of low/full-speed endpoint-halt processing
-> +	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
-> +	 */
-> +	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
-> +	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub))
-> +		usb_hub_clear_tt_buffer(td->urb);
-> +}
+>  
+> @@ -2307,6 +2306,7 @@ static void handle_exception(struct fsg_common *common)
+>  	enum fsg_state		old_state;
+>  	struct fsg_lun		*curlun;
+>  	unsigned int		exception_req_tag;
+> +	struct fsg_dev		*fsg;
+>  
+>  	/*
+>  	 * Clear the existing signals.  Anything but SIGUSR1 is converted
+> @@ -2413,9 +2413,19 @@ static void handle_exception(struct fsg_common *common)
+>  		break;
+>  
+>  	case FSG_STATE_CONFIG_CHANGE:
+> -		do_set_interface(common, common->new_fsg);
+> -		if (common->new_fsg)
+> +		fsg = common->new_fsg;
+> +		/*
+> +		 * Add a check here to double confirm if a disconnect event
+> +		 * occurs and common->new_fsg has been cleared.
+> +		 */
+> +		if (fsg) {
+> +			do_set_interface(common, fsg);
+>  			usb_composite_setup_continue(common->cdev);
+> +		}
+> +		break;
 > +
->  static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
->  		unsigned int slot_id, unsigned int ep_index,
->  		unsigned int stream_id, struct xhci_td *td,
-> @@ -1804,6 +1815,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
->  	if (reset_type == EP_HARD_RESET) {
->  		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
->  		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
-> +		xhci_clear_hub_tt_buffer(xhci, td);
+> +	case FSG_STATE_DISCONNECT:
+> +		do_set_interface(common, NULL);
+>  		break;
+>  
+>  	case FSG_STATE_EXIT:
+> @@ -2989,8 +2999,7 @@ static void fsg_unbind(struct usb_configuration *c, struct usb_function *f)
+>  
+>  	DBG(fsg, "unbind\n");
+>  	if (fsg->common->fsg == fsg) {
+> -		fsg->common->new_fsg = NULL;
+> -		raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
+> +		raise_exception(fsg->common, FSG_STATE_DISCONNECT);
+>  		/* FIXME: make interruptible or killable somehow? */
+>  		wait_event(common->fsg_wait, common->fsg != fsg);
 >  	}
->  	xhci_ring_cmd_db(xhci);
->  }
+> diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+> index e5e3a25..12687f7 100644
+> --- a/drivers/usb/gadget/function/storage_common.h
+> +++ b/drivers/usb/gadget/function/storage_common.h
+> @@ -161,6 +161,7 @@ enum fsg_state {
+>  	FSG_STATE_ABORT_BULK_OUT,
+>  	FSG_STATE_PROTOCOL_RESET,
+>  	FSG_STATE_CONFIG_CHANGE,
+> +	FSG_STATE_DISCONNECT,
+>  	FSG_STATE_EXIT,
+>  	FSG_STATE_TERMINATED
+>  };
 
-How come there's no clear_tt_buffer_complete() callback?  Without it,
-xhci-hcd won't know when the TT buffer has been cleared, and so it
-won't know when to restart the endpoint ring for the halted endpoint.  
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Note: Restarting the endpoint ring before the TT buffer has been 
-cleared is not safe.
+Although at this point the comment you have added to the CONFIG_CHANGE
+case and the following test are useless.  Since common->new_fsg doesn't
+get cleared any more, it will never be NULL at this point.
+
+What really matters is that the FSG_STATE_DISCONNECT case doesn't call
+usb_composite_setup_continue().
 
 Alan Stern
-
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 7fa58c99f126..68b393e5a453 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -4096,6 +4096,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
->  	/* Zero the input context control for later use */
->  	ctrl_ctx->add_flags = 0;
->  	ctrl_ctx->drop_flags = 0;
-> +	udev->devaddr = (u8)(le32_to_cpu(slot_ctx->dev_state) & DEV_ADDR_MASK);
->  
->  	xhci_dbg_trace(xhci, trace_xhci_dbg_address,
->  		       "Internal device address = %d",
-> 
 
