@@ -2,117 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB7E19FA4
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 16:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE5B19FC4
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 17:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727547AbfEJO4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 May 2019 10:56:54 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:35360 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727492AbfEJO4x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 May 2019 10:56:53 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id F1D5B1A0040;
-        Fri, 10 May 2019 16:56:51 +0200 (CEST)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E59971A00D0;
-        Fri, 10 May 2019 16:56:51 +0200 (CEST)
-Received: from fsr-ub1864-101.ea.freescale.net (fsr-ub1864-101.ea.freescale.net [10.171.82.13])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 77957205ED;
-        Fri, 10 May 2019 16:56:51 +0200 (CEST)
-From:   laurentiu.tudor@nxp.com
-To:     hch@lst.de, stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, marex@denx.de
-Cc:     leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
-        robin.murphy@arm.com, Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Subject: [RFC PATCH 3/3] usb: host: ohci-tmio: init genalloc for local memory
-Date:   Fri, 10 May 2019 17:56:46 +0300
-Message-Id: <20190510145646.10078-4-laurentiu.tudor@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190510145646.10078-1-laurentiu.tudor@nxp.com>
+        id S1727554AbfEJPDl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 May 2019 11:03:41 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:50080 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727346AbfEJPDl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 May 2019 11:03:41 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5F7EA78;
+        Fri, 10 May 2019 08:03:40 -0700 (PDT)
+Received: from [10.1.196.75] (e110467-lin.cambridge.arm.com [10.1.196.75])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 389A53F73C;
+        Fri, 10 May 2019 08:03:39 -0700 (PDT)
+Subject: Re: [RFC PATCH 0/3] prerequisites for device reserved local mem
+ rework
+To:     laurentiu.tudor@nxp.com, hch@lst.de, stern@rowland.harvard.edu,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        marex@denx.de
+Cc:     leoyang.li@nxp.com, linux-kernel@vger.kernel.org
 References: <20190510145646.10078-1-laurentiu.tudor@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <e6410453-9ca3-4bdc-3c74-654333f2806f@arm.com>
+Date:   Fri, 10 May 2019 16:03:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190510145646.10078-1-laurentiu.tudor@nxp.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Hi Laurentiu,
 
-In preparation for dropping the existing "coherent" dma mem declaration
-APIs, replace the current dma_declare_coherent_memory() based mechanism
-with the creation of a genalloc pool that will be used in the OHCI
-subsystem as replacement for the DMA APIs.
+On 10/05/2019 15:56,  wrote:
+> From: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> 
+> For HCs that have local memory, replace the current DMA API usage
+> with a genalloc generic allocator to manage the mappings for these
+> devices.
+> This is in preparation for dropping the existing "coherent" dma
+> mem declaration APIs. Current implementation was relying on a short
+> circuit in the DMA API that in the end, was acting as an allocator
+> for these type of devices.
+> 
+> Only compiled tested, so any volunteers willing to test are most welcome.
 
-For context, see thread here: https://lkml.org/lkml/2019/4/22/357
+Based on my diggings into this in the past, I would expect that you need 
+to do something about hcd_alloc_coherent() as well.
 
-Signed-off-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
----
- drivers/usb/host/ohci-tmio.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+Robin.
 
-diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
-index f88a0370659f..16ff99b56fd3 100644
---- a/drivers/usb/host/ohci-tmio.c
-+++ b/drivers/usb/host/ohci-tmio.c
-@@ -30,6 +30,7 @@
- #include <linux/mfd/core.h>
- #include <linux/mfd/tmio.h>
- #include <linux/dma-mapping.h>
-+#include <linux/genalloc.h>
- 
- /*-------------------------------------------------------------------------*/
- 
-@@ -224,11 +225,6 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
- 		goto err_ioremap_regs;
- 	}
- 
--	ret = dma_declare_coherent_memory(&dev->dev, sram->start, sram->start,
--				resource_size(sram));
--	if (ret)
--		goto err_dma_declare;
--
- 	if (cell->enable) {
- 		ret = cell->enable(dev);
- 		if (ret)
-@@ -239,6 +235,20 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
- 	ohci = hcd_to_ohci(hcd);
- 	ohci_hcd_init(ohci);
- 
-+	ohci->localmem_pool = devm_gen_pool_create(&dev->dev, PAGE_SHIFT,
-+						   dev_to_node(&dev->dev),
-+						   "ohci-sm501");
-+	if (IS_ERR(ohci->localmem_pool)) {
-+		ret = PTR_ERR(ohci->localmem_pool);
-+		goto err_enable;
-+	}
-+	ret = gen_pool_add_virt(ohci->localmem_pool, sram->start, sram->start,
-+				resource_size(sram), dev_to_node(&dev->dev));
-+	if (ret < 0) {
-+		dev_err(&dev->dev, "failed to add to pool: %d\n", ret);
-+		goto err_enable;
-+	}
-+
- 	ret = usb_add_hcd(hcd, irq, 0);
- 	if (ret)
- 		goto err_add_hcd;
-@@ -254,8 +264,6 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
- 	if (cell->disable)
- 		cell->disable(dev);
- err_enable:
--	dma_release_declared_memory(&dev->dev);
--err_dma_declare:
- 	iounmap(hcd->regs);
- err_ioremap_regs:
- 	iounmap(tmio->ccr);
-@@ -276,7 +284,6 @@ static int ohci_hcd_tmio_drv_remove(struct platform_device *dev)
- 	tmio_stop_hc(dev);
- 	if (cell->disable)
- 		cell->disable(dev);
--	dma_release_declared_memory(&dev->dev);
- 	iounmap(hcd->regs);
- 	iounmap(tmio->ccr);
- 	usb_put_hcd(hcd);
--- 
-2.17.1
-
+> 
+> Thank you!
+> 
+> For context, see thread here: https://lkml.org/lkml/2019/4/22/357
+> 
+> Laurentiu Tudor (3):
+>    ohci-hcd: use genalloc for USB HCs with local memory
+>    usb: host: ohci-sm501: init genalloc for local memory
+>    usb: host: ohci-tmio: init genalloc for local memory
+> 
+>   drivers/usb/host/ohci-hcd.c   | 21 +++++++++---
+>   drivers/usb/host/ohci-sm501.c | 63 +++++++++++++++++++----------------
+>   drivers/usb/host/ohci-tmio.c  | 23 ++++++++-----
+>   drivers/usb/host/ohci.h       |  3 ++
+>   4 files changed, 69 insertions(+), 41 deletions(-)
+> 
