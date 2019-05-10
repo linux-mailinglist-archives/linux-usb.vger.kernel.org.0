@@ -2,103 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5B3198A7
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 08:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB977198AA
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 08:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727131AbfEJG44 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 May 2019 02:56:56 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:40473 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726855AbfEJG44 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 May 2019 02:56:56 -0400
-Received: by mail-vs1-f68.google.com with SMTP id c24so3001617vsp.7;
-        Thu, 09 May 2019 23:56:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BB5siklsF44BfaawevdOHnkTt75qgf4I3rkavQlxspU=;
-        b=dEbf7q/WoT7LQNwW+nXI9Om3HIJFC41ZjFmOVJlgWWTX2PK5EgUMllXllKElVaLXOm
-         LfGSVu2x9dPwetuI2L7mStW1r+tsCVQgyumDhnQn1tkcTaZCdKbvr4t9nN/Le/5557WC
-         wpAMj8rfAcdXCG3ZEMGhMpDPn6ibZLEsky82LCqv079OVB8FUehfiX1R0U8q1Ij6rPud
-         Z+TgwAkZ9EmrZhizYOikVe9Sd6Hk6W5Vm1ZRFrMfQ84v48tYOWIWI7OSmJR+eRIaX0Ew
-         SkYTjZ7EiHAnDr34R0qwv7jLY6SLmhtLlELeshPxjryyR1fohJTGJ4hlcRE5juU0NtA7
-         65iw==
-X-Gm-Message-State: APjAAAUnQ1tPi3d6b7ck+jBvadl1e70Q+xGPvkKKz6pclAw/7fj+E20R
-        I33zPDI9ffNCeKZ/hWGV5QwduLloDa/UzXTwwpsJsfVy
-X-Google-Smtp-Source: APXvYqy7gN4hKP3UMbyTD4P8fo1IG0Orwin/8bdbTXWOAkycjpapzoEu10/qLffh4lxf+5D45t/DIRSuWEpX9CJYxeE=
-X-Received: by 2002:a67:f956:: with SMTP id u22mr4732353vsq.11.1557471415201;
- Thu, 09 May 2019 23:56:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190509201142.10543-1-chris.brandt@renesas.com>
- <20190509201142.10543-4-chris.brandt@renesas.com> <OSBPR01MB3174905587AC3953FD2063EBD80C0@OSBPR01MB3174.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSBPR01MB3174905587AC3953FD2063EBD80C0@OSBPR01MB3174.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 10 May 2019 08:56:43 +0200
-Message-ID: <CAMuHMdVvVG64YRg-vWAGDNjuU+_FE_0cC4L38baWVXov1ewoMg@mail.gmail.com>
-Subject: Re: [PATCH v2 03/15] phy: renesas: rcar-gen3-usb2: detect usb_x1 clock
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Chris Brandt <Chris.Brandt@renesas.com>
-Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
+        id S1727033AbfEJG6Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 May 2019 02:58:16 -0400
+Received: from mail-eopbgr680040.outbound.protection.outlook.com ([40.107.68.40]:44260
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726934AbfEJG6Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 May 2019 02:58:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector1-xilinx-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iKonITmOiVpBIyxc3sb4CaBSIyUv7AWMNxytSNrrruU=;
+ b=JhXbQ8tU02edRJZW4rXWJPt/CLsMpAOMMzI39ln/TdexmgpyDkkGHSVIw58QuSgQPfSX6Dl4piQycoYNDmU0pqeelHuDe2DKSl+Y4u2ZBiVs5ef5gnX1AuMx5v1/e8TZFqa5uO376WLDH+fu1QeM9pzTWFsMOtvGZmTb6OA3hjU=
+Received: from BYAPR02MB5591.namprd02.prod.outlook.com (20.177.230.89) by
+ BYAPR02MB4134.namprd02.prod.outlook.com (20.176.249.27) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1878.22; Fri, 10 May 2019 06:58:09 +0000
+Received: from BYAPR02MB5591.namprd02.prod.outlook.com
+ ([fe80::2c0d:4fbd:2c4:31b6]) by BYAPR02MB5591.namprd02.prod.outlook.com
+ ([fe80::2c0d:4fbd:2c4:31b6%5]) with mapi id 15.20.1878.022; Fri, 10 May 2019
+ 06:58:09 +0000
+From:   Anurag Kumar Vulisha <anuragku@xilinx.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simon Horman <horms@verge.net.au>
-Content-Type: text/plain; charset="UTF-8"
+        Felipe Balbi <balbi@kernel.org>,
+        "Claus H. Stovgaard" <cst@phaseone.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "v.anuragkumar@gmail.com" <v.anuragkumar@gmail.com>
+Subject: RE: [PATCH v2 3/3] usb: dwc3: gadget: Add support for disabling U1
+ and U2 entries
+Thread-Topic: [PATCH v2 3/3] usb: dwc3: gadget: Add support for disabling U1
+ and U2 entries
+Thread-Index: AQHVBXNeXBGr58NUnEy04Lh8niwnw6Zj7/lw
+Date:   Fri, 10 May 2019 06:58:09 +0000
+Message-ID: <BYAPR02MB55913E2D6F6865202DE88514A70C0@BYAPR02MB5591.namprd02.prod.outlook.com>
+References: <1557302091-7455-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+ <1557302091-7455-4-git-send-email-anurag.kumar.vulisha@xilinx.com>
+ <30102591E157244384E984126FC3CB4F639E9823@us01wembx1.internal.synopsys.com>
+ <BL0PR02MB5587B28B6CCAC0FD790F8335A7330@BL0PR02MB5587.namprd02.prod.outlook.com>
+ <30102591E157244384E984126FC3CB4F639E9E8F@us01wembx1.internal.synopsys.com>
+In-Reply-To: <30102591E157244384E984126FC3CB4F639E9E8F@us01wembx1.internal.synopsys.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anuragku@xilinx.com; 
+x-originating-ip: [149.199.50.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0b754931-bda8-4b5c-0eaa-08d6d514dc62
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:BYAPR02MB4134;
+x-ms-traffictypediagnostic: BYAPR02MB4134:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <BYAPR02MB41344693C2EB6C2F9FFD9811A70C0@BYAPR02MB4134.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 0033AAD26D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(39860400002)(366004)(376002)(136003)(13464003)(189003)(199004)(305945005)(6246003)(33656002)(53936002)(14444005)(68736007)(8936002)(99286004)(446003)(81166006)(8676002)(256004)(25786009)(81156014)(71200400001)(71190400001)(7736002)(76176011)(486006)(6506007)(7696005)(2906002)(4326008)(102836004)(3846002)(6116002)(11346002)(476003)(26005)(186003)(110136005)(54906003)(52536014)(74316002)(86362001)(7416002)(66446008)(5660300002)(6436002)(14454004)(9686003)(73956011)(76116006)(316002)(66946007)(55016002)(66066001)(66556008)(66476007)(64756008)(229853002)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR02MB4134;H:BYAPR02MB5591.namprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: xilinx.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 0kJzyF/dldPIo3D8E5b4eN7p7/rOuKmOtX1s571b2fvrcqRD8bGaTqvV2ktnaycWw98ZR4P013Wi+QRWwENelGT4/vCH19lvBNTcivkCMpeLaqhRYUA5Kd2aNwG1vxR+NTwEJu/CCdJf0X2s3FZII+0QSYMQLohAuEcm7kQV301zZGLQFAbUm3cOQC+WORZ8LktMz8kSCJ8WogVmlqIWCsOhXpCscBX+aV2JB93c4oW8ERa9uEauUTPXQTQwHZyIuBi6G/IdsoAzPHxQ76KJvYreTi0mjrZivdm6LkGJZyrrzscgkbm4brc1ofp38sSgYp4qIEGToBidyg+AeB/jRkcNGCf25Sg27xgg2IxU6GbwUfMGQb7mOOvuluFujlF+FiCCH5nC+7TMnPyuPAbCRpLV5CMump9GJza5GIywGYg=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b754931-bda8-4b5c-0eaa-08d6d514dc62
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2019 06:58:09.1200
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4134
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Simoda-san, Chris,
 
-On Fri, May 10, 2019 at 6:17 AM Yoshihiro Shimoda
-<yoshihiro.shimoda.uh@renesas.com> wrote:
-> > From: Chris Brandt, Sent: Friday, May 10, 2019 5:12 AM
-> >
-> > The RZ/A2 has an optional dedicated 48MHz clock input for the PLL.
-> > If a clock node named 'usb_x1' exists and set to non-zero, then we can
-> > assume we want it use it.
-> >
-> > Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
-> > ---
-> > v2:
-> >  * use 'usb_x1' clock node instead of 'renesas,uses_usb_x1' property
-> > ---
-> >  drivers/phy/renesas/phy-rcar-gen3-usb2.c | 14 ++++++++++++++
+Hi Thinh,
 
-> > @@ -630,6 +637,13 @@ static int rcar_gen3_phy_usb2_probe(struct platform_device *pdev)
-> >               }
-> >       }
-> >
-> > +     usb_x1_clk = of_find_node_by_name(NULL, "usb_x1");
-> > +     if (usb_x1_clk) {
-> > +             of_property_read_u32(usb_x1_clk, "clock-frequency", &freq_usb);
-> > +             if (freq_usb)
-> > +                     channel->uses_usb_x1 = true;
-> > +     }
-> > +
+>-----Original Message-----
+>From: Thinh Nguyen [mailto:Thinh.Nguyen@synopsys.com]
+>Sent: Friday, May 10, 2019 5:30 AM
+>To: Anurag Kumar Vulisha <anuragku@xilinx.com>; Thinh Nguyen
+><Thinh.Nguyen@synopsys.com>; Greg Kroah-Hartman
+><gregkh@linuxfoundation.org>; Rob Herring <robh+dt@kernel.org>; Mark Rutla=
+nd
+><mark.rutland@arm.com>; Felipe Balbi <balbi@kernel.org>; Claus H. Stovgaar=
+d
+><cst@phaseone.com>
+>Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org; linux-
+>kernel@vger.kernel.org; v.anuragkumar@gmail.com
+>Subject: Re: [PATCH v2 3/3] usb: dwc3: gadget: Add support for disabling U=
+1 and U2
+>entries
 >
-> We need to call of_node_put(usb_x1_clk); here.
+>Hi Anurag,
 >
-> By the way, we can also use devm_clk_get() for it like the following driver:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/renesas/rcar-usb2-clock-sel.c#n135
+>Anurag Kumar Vulisha wrote:
+>>>> +		return -EINVAL;
+>>>>
+>>>>  	reg =3D dwc3_readl(dwc->regs, DWC3_DCTL);
+>>>>  	if (set)
+>>>> @@ -626,7 +630,10 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc,
+>struct
+>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>> index e293400..f2d3112 100644
+>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>> @@ -2073,6 +2073,24 @@ static int dwc3_gadget_stop(struct usb_gadget *=
+g)
+>>>>  	return 0;
+>>>>  }
+>>>>
+>>>> +static void dwc3_gadget_config_params(struct usb_gadget *g,
+>>>> +				      struct usb_dcd_config_params *params)
+>>>> +{
+>>>> +	struct dwc3		*dwc =3D gadget_to_dwc(g);
+>>>> +
+>>>> +	/* U1 Device exit Latency */
+>>>> +	if (dwc->dis_u1_entry_quirk)
+>>>> +		params->bU1devExitLat =3D 0;
+>>> It doesn't make sense to have exit latency of 0. Rejecting
+>>> SET_FEATURE(enable U1/U2) should already let the host know that the
+>>> device doesn't support U1/U2.
+>>>
+>> I am okay to remove this, but I feel that it is better to report zero va=
+lue instead
+>> of a non-zero value in exit latency of BOS when U1 or U2 entries are not=
+ supported.
+>> Advantage of reporting 0 is that some hosts doesn't even send
+>SET_FEATURE(U1/U2)
+>> requests on seeing zero value in BOS descriptor. Also there can be cases=
+ where U1 is
+>> disabled and U2 entry is allowed or vice versa, for these kind of cases =
+the driver can
+>> set zero exit latency value for U1 and non-zero exit latency value for U=
+2 . Based on
+>this
+>> I think it would be better to report 0 when U1/U2 states are not enabled=
+. Please
+>provide
+>> your opinion on this.
+>
+>Hm... I assume you're testing against linux usb stack and xhci host. If
+>that's the case, it looks like host will still request the device to
+>enter U1/U2 despite the device rejecting SET_FEATURE(enable U1/U2). This
+>needs to be fixed. I think what you have is fine to workaround this issue.
 
-+1
+Thanks . Will send the next series with the other fixes that you have sugge=
+sted
 
-devm_clk_get() and clk_get_rate() is the way to go.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best Regards,
+Anurag Kumar Vulisha
