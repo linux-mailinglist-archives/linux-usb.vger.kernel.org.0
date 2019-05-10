@@ -2,96 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09947198B5
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 09:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FD7198C6
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 09:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727036AbfEJHHU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 May 2019 03:07:20 -0400
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:44038 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726934AbfEJHHU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 May 2019 03:07:20 -0400
-Received: by mail-vk1-f193.google.com with SMTP id q189so1225535vkq.11;
-        Fri, 10 May 2019 00:07:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gXpQUb3x7wghnJ50k9J8PnVFEH6yXB8dlTGF8Lc43Ow=;
-        b=CGKUSpX8qrmIkP3c2rfrw9Gd15cKGvg6LeJaiFFFPoEXe4Mq9rouQI1ZEUHGwpQjLd
-         EgScsBJJdTuCX6wGXXlnIOHUmfeGhui2/PfQMwULgVNgpmWzW1wneSIjPY+JJj6zDmTJ
-         lnjIEHuZUByrgp8sTj6YoMHvX8+0fjRR9cNlbQypHMZX53Ae+ORcR9qn/6ZBIY1tFRD0
-         yBHgDxOwNyhhjr+tv2ZZcPbVII04jeaLRB5V0E5TcY0MMnYZMWt2/ZCMFCC3Nb+YFLgf
-         tiqjbq+g25SaQsBbvfXIPLP+NQCLpsRvFfcJLNKzPF6Iuny9enz7gSNLmSnU0tekhemf
-         wkDg==
-X-Gm-Message-State: APjAAAUjuGodSxGlh3YYaVPyra16Xed/sYvdY/u4yOxL+CzXE0gNY0Sl
-        KLMOO3RSBmGmSq796NMba6FPR9lURo37PGLuaRk=
-X-Google-Smtp-Source: APXvYqz+RhHqEZGF6j89SL27lav0IcmyxBqR2CeYKaqFnER+DWFO+HsRImpqMdmbk2zDkr2dfXSvntOAN3sqlfIRSIM=
-X-Received: by 2002:a1f:c2c1:: with SMTP id s184mr4376709vkf.65.1557472039480;
- Fri, 10 May 2019 00:07:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190509201142.10543-1-chris.brandt@renesas.com> <20190509201142.10543-12-chris.brandt@renesas.com>
-In-Reply-To: <20190509201142.10543-12-chris.brandt@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 10 May 2019 09:07:07 +0200
-Message-ID: <CAMuHMdV7aQd-g1t_t27d8ge69e3VZnG7nQ7Lzre=qrJ1UrUuuA@mail.gmail.com>
-Subject: Re: [PATCH v2 11/15] usb: renesas_usbhs: Add support for RZ/A2
-To:     Chris Brandt <chris.brandt@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        id S1727213AbfEJHIY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 May 2019 03:08:24 -0400
+Received: from mail-eopbgr780074.outbound.protection.outlook.com ([40.107.78.74]:8288
+        "EHLO NAM03-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726934AbfEJHIX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 May 2019 03:08:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector1-xilinx-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=idbeOJpMWWKVVxJsCC009CC1eowIPz22bWYhdNICMhI=;
+ b=nVsOJWSBvwcHHDawAEO913WcQZOEchgihesEnwFAIg0MqmYKG7CfHUeOqCzyxFn7LXa4gssZhBAGVbwEjuzS7eErXwXyFijkY+QRs4F8/vRUQD2cgiqfrZ2Rak02kYn8G06CDI7zSQmg5oIUYkdchp8gtWmknluj59nc7F9UVkI=
+Received: from BYAPR02CA0048.namprd02.prod.outlook.com (2603:10b6:a03:54::25)
+ by DM5PR02MB3832.namprd02.prod.outlook.com (2603:10b6:4:b1::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1878.22; Fri, 10 May
+ 2019 07:07:40 +0000
+Received: from SN1NAM02FT003.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e44::204) by BYAPR02CA0048.outlook.office365.com
+ (2603:10b6:a03:54::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1878.22 via Frontend
+ Transport; Fri, 10 May 2019 07:07:40 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.100)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.100; helo=xsj-pvapsmtpgw02;
+Received: from xsj-pvapsmtpgw02 (149.199.60.100) by
+ SN1NAM02FT003.mail.protection.outlook.com (10.152.73.29) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1856.11
+ via Frontend Transport; Fri, 10 May 2019 07:07:39 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66]:59126 helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw02 with esmtp (Exim 4.63)
+        (envelope-from <anurag.kumar.vulisha@xilinx.com>)
+        id 1hOzd5-0003Nt-FJ; Fri, 10 May 2019 00:07:39 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <anurag.kumar.vulisha@xilinx.com>)
+        id 1hOzd0-0004bk-B9; Fri, 10 May 2019 00:07:34 -0700
+Received: from xsj-pvapsmtp01 (mailhost.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id x4A77TQZ004220;
+        Fri, 10 May 2019 00:07:30 -0700
+Received: from [172.23.64.8] (helo=xhdvnc108.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <anuragku@xilinx.com>)
+        id 1hOzcv-0004aK-Ir; Fri, 10 May 2019 00:07:29 -0700
+Received: by xhdvnc108.xilinx.com (Postfix, from userid 15427)
+        id BB4A760509; Fri, 10 May 2019 12:37:28 +0530 (IST)
+From:   Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simon Horman <horms@verge.net.au>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "Claus H. Stovgaard" <cst@phaseone.com>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <v.anuragkumar@gmail.com>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+Subject: [PATCH v3 0/3] usb: gadget: Add support for disabling U1 and U2 entries
+Date:   Fri, 10 May 2019 12:37:25 +0530
+Message-ID: <1557472048-10536-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+X-Mailer: git-send-email 2.1.1
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.100;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(396003)(39860400002)(136003)(346002)(376002)(2980300002)(189003)(199004)(50466002)(2616005)(7416002)(48376002)(47776003)(305945005)(16586007)(42186006)(63266004)(316002)(106002)(966005)(51416003)(478600001)(26005)(81166006)(8676002)(70206006)(81156014)(70586007)(8936002)(6266002)(107886003)(103686004)(6666004)(50226002)(110136005)(426003)(476003)(356004)(5660300002)(486006)(2906002)(14444005)(336012)(4326008)(36756003)(90966002)(54906003)(126002)(52956003)(6306002)(186003)(36386004)(5001870100001)(6606295002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR02MB3832;H:xsj-pvapsmtpgw02;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-100.xilinx.com,xapps1.xilinx.com;MX:1;A:1;
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e344e7cd-9340-4893-57cb-08d6d51630b6
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4709054)(2017052603328);SRVR:DM5PR02MB3832;
+X-MS-TrafficTypeDiagnostic: DM5PR02MB3832:
+X-MS-Exchange-PUrlCount: 1
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-Microsoft-Antispam-PRVS: <DM5PR02MB3832A8947A32938D489F7CDCA70C0@DM5PR02MB3832.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 0033AAD26D
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: Zd9d9H5dq7+9mxsO4qW3GJ6R0T1AZPlTnYSoB4Ax87oEfxb+SG9UKltUZy3j2ZH7KJ92BwZt51uTgcVcjoAbecFp2/waOUKL6M3sp++0HEsBdRR81KvaDZQa0pwhj91zyokOFudrMueK0C/ChjWiOo/ZTJm0umU5GwnTUbnDfiWqvQUp+QRVoNgF0FMyTPC5URXufXvcGzGZ/13ExhmaXnRzwhgSQYXx2e3ztGxPSJXYbJSbVYz9NTL95rk4tV+T6fFgfYnLGxabbKa/lZ9olJ/K4J7FKjasFCopBchvxqA9wj7El933J5B3hutgLYB/adrXmUVxUCKZgsmCDqvkoDevjjzi1Ecy7rkKkQRlaeRanF9lbbUjjwWAuMDsP/qGr+Myz77FDObHM+LWzvGykehAJW+slo7/6GL/nDpOKWg=
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2019 07:07:39.8799
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e344e7cd-9340-4893-57cb-08d6d51630b6
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.100];Helo=[xsj-pvapsmtpgw02]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB3832
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chris,
+Gadget applications may have a requirement to disable the U1 and U2
+entry based on the usecase. Below are few usecases where the disabling
+U1/U2 entries may be possible.
 
-On Thu, May 9, 2019 at 10:14 PM Chris Brandt <chris.brandt@renesas.com> wrote:
-> The RZ/A2 is similar to the R-Car Gen3 with some small differences.
->
-> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
+Usecase 1:
+When combining dwc3 with an redriver for a USB Type-C device solution, it
+sometimes have problems with leaving U1/U2 for certain hosts, resulting in
+link training errors and reconnects. For this U1/U2 state entries may be
+avoided.
 
-Thanks for your patch!
+Usecase 2:
+When performing performance benchmarking on mass storage gadget the
+U1 and U2 entries can be disabled.
 
-> --- a/drivers/usb/renesas_usbhs/common.c
-> +++ b/drivers/usb/renesas_usbhs/common.c
+Usecase 3:
+When periodic transfers like ISOC transfers are used with bInterval
+of 1 which doesn't require the link to enter into U1 or U2 state entry
+(since ping is issued from host for every uframe interval). In this
+case the U1 and U2 entry can be disabled.
 
-> @@ -614,7 +618,8 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
->                 dparam->pipe_size = ARRAY_SIZE(usbhsc_new_pipe);
->         }
->
-> -       if (dparam->type == USBHS_TYPE_RZA1) {
-> +       if (dparam->type == USBHS_TYPE_RZA1 ||
-> +           dparam->type == USBHS_TYPE_RZA2) {
->                 dparam->pipe_configs = usbhsc_new_pipe;
->                 dparam->pipe_size = ARRAY_SIZE(usbhsc_new_pipe);
+Disablement of U1/U2 can be done by setting U1DevExitLat and U2DevExitLat
+values to 0 in the BOS descriptor. Host on seeing 0 value for U1DevExitLat
+and U2DevExitLat, it doesn't send SET_SEL requests to the gadget. There
+may be some hosts which may send SET_SEL requests even after seeing 0 in
+the UxDevExitLat of BOS descriptor. To aviod U1/U2 entries for these type
+of hosts, dwc3 controller can be programmed to reject those U1/U2 requests
+by not enabling ACCEPTUxENA bits in DCTL register.
 
-The above two lines are also present in the block for R-Car Gen2/3 above.
-Perhaps they can just be moved out, and executed unconditionally?
-That leaves R-Car with just the has_usb_dmac feature flag.
+This patch series updates the same.
 
-BTW, this driver uses a mix of feature checking using USBHS_TYPE_*
-enums, and a parameter block/callback struct
-(renesas_usbhs_platform_callback).  Perhaps the feature flags can just
-be moved to the struct, and the various structs referenced from
-of_device_id.data?
+Changes in v3:
+	1. As suggested by Thinh Nguyen modified the logic for rejecting only
+	   SET_FEATURE(enable U1/U2) from host.
+	2. Used cpu_to_le16() before assigning the value to bU2DevExitLat.
 
-Gr{oetje,eeting}s,
+Changes in v2:
+	1. As suggested by Thinh Nguyen changed the "snps,dis_u1_entry_quirk"
+	   to "snps,dis-u1-entry-quirk"
+	2. Merged the changes done by Claus H. Stovgaard in ep0.c for rejecting
+	   U1/U2 requests into this patch. Changes done by Claus can be found
+	   here https://marc.info/?l=linux-kernel&m=155722068820568&w=2
 
-                        Geert
+Anurag Kumar Vulisha (3):
+  doc: dt: bindings: usb: dwc3: Update entries for disabling U1 and U2
+  usb: gadget: send usb_gadget as an argument in get_config_params
+  usb: dwc3: gadget: Add support for disabling U1 and U2 entries
+
+ Documentation/devicetree/bindings/usb/dwc3.txt |  2 ++
+ drivers/usb/dwc3/core.c                        |  4 ++++
+ drivers/usb/dwc3/core.h                        |  4 ++++
+ drivers/usb/dwc3/ep0.c                         |  9 ++++++++-
+ drivers/usb/dwc3/gadget.c                      | 20 ++++++++++++++++++++
+ drivers/usb/dwc3/gadget.h                      |  6 ++++++
+ drivers/usb/gadget/composite.c                 |  2 +-
+ include/linux/usb/gadget.h                     |  3 ++-
+ 8 files changed, 47 insertions(+), 3 deletions(-)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.1.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
