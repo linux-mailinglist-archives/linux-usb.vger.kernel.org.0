@@ -2,204 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD7219E9C
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 15:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29E819EA2
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 16:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbfEJN60 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 May 2019 09:58:26 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:33458 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727636AbfEJN60 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 May 2019 09:58:26 -0400
-Received: by mail-pf1-f194.google.com with SMTP id z28so3300401pfk.0
-        for <linux-usb@vger.kernel.org>; Fri, 10 May 2019 06:58:25 -0700 (PDT)
+        id S1727691AbfEJOBB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 May 2019 10:01:01 -0400
+Received: from mail-eopbgr1410120.outbound.protection.outlook.com ([40.107.141.120]:61360
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727521AbfEJOBB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 May 2019 10:01:01 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oM8/oNwYrxAzNgRNt3GQ+pcVnxNe9smVxY/SlimUNN4=;
-        b=wVjQHtg+qIugF9NaA5lCbGpiKvgLRbmt2/ByjuvTL6qa6UyyLpPXkR1RLOGKxhiqxU
-         08Yo61YJtb10oBiPQ7XaFwwAyuH50WshPPBSauuhA/NHjRp8oWYn+nLiOQmnK9vrWq8q
-         bOK/mR267drq7y82apMX3xw9s+eKN5WpV2ytXBA2b/4vqb971r5SvcN5NFDIOAIStlwJ
-         VXQ1Z1PX2OZq8P3vHm7EMQtKN+ga18zuCCkFwGV+lbLxEVD3EaXnDPBnvBjY29A27tej
-         iW1uhcpCDsSo2hqhb1IDpTE5ImYbqo60eBZd8jBaEnO1GDAwqiMEkR6WIwB6nLTNONJF
-         3ykg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oM8/oNwYrxAzNgRNt3GQ+pcVnxNe9smVxY/SlimUNN4=;
-        b=Ybcwv0DIjcaKIoyxjzt1cBIYCJgUrjDEMm7OYl039Ke8zC92j5wC8xvDbU3Wee6QnW
-         FNU5a8OpWq++SHSCJ1FfAyYSN/CQg8rzz5FgFiusKKMUMWJZreWZ8GNjV/i9KxhGExsI
-         +FX7zbShDJLBPcRqcniI33D/xeM3pDli4NYIVJM9RrCTxgeDBeCGo0126GWOCPiKwP8P
-         GuSkZMh6Jr/fxBAzJqL/uvPm3dez9hIvc4AI7zKbfO81Vao9WcF5wX4J3dhKGz3A3nH6
-         6O7U4BNuK1HxWQoaUs65ymGwN/5+sjOva8LYSijy7ZsjUBByVOlsB84ghEklSNkUDwOt
-         DBeg==
-X-Gm-Message-State: APjAAAV5JPGGqxNVNSZktHFXm5YD+Qgawo/B4DoIdEgdqxPjqpbmrIHi
-        QKTGlCzf3Y5VRT/9kU4BcmZxRfWBgeg4qO6DvQ5OXaLPZImu7Q==
-X-Google-Smtp-Source: APXvYqyyQzPpNgytYZZiMJQNJdM8NNIs4KpbS0RiaQdQe8DVnAxbIlv7nFA+gaEfubBfr2BlDg1xHP9/vSlTfygXNdg=
-X-Received: by 2002:a63:2a89:: with SMTP id q131mr13372332pgq.359.1557496704207;
- Fri, 10 May 2019 06:58:24 -0700 (PDT)
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YAlPZxg7mCUWWg1Ih1GqjcIvgwcYZC7y/rEBr8c8Hs0=;
+ b=nq5yeInHd2e8KW+CaQy+2KfzhwqQ2gJa4dlbgkujCfLgI0b903Gvx8S2rGd8HZRlD5xVSp++KcUm+riOj3xdCyEtPPkK4h9i6iiyNc3gao5slhBJnjC9rfxMjcUqCKDGpxbsnZikw28fzpmwdB1FELwxHcVGsBJUZXs1vQIhmI4=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1770.jpnprd01.prod.outlook.com (52.133.163.13) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.12; Fri, 10 May 2019 14:00:55 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1878.022; Fri, 10 May 2019
+ 14:00:55 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+CC:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v2 08/15] usb: renesas_usbhs: move flags macros
+Thread-Topic: [PATCH v2 08/15] usb: renesas_usbhs: move flags macros
+Thread-Index: AQHVBqOvDXw3Q+SxjUSuWVNuzWBgUaZkCxUAgABYyDA=
+Date:   Fri, 10 May 2019 14:00:55 +0000
+Message-ID: <TY1PR01MB156247F77F157DDB495A41EB8A0C0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20190509201142.10543-1-chris.brandt@renesas.com>
+ <20190509201142.10543-9-chris.brandt@renesas.com>
+ <c57f8a55-ef94-5b28-9345-88805de52ed1@cogentembedded.com>
+In-Reply-To: <c57f8a55-ef94-5b28-9345-88805de52ed1@cogentembedded.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a1b7f757-f32f-44e6-e3f3-08d6d54fec08
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1770;
+x-ms-traffictypediagnostic: TY1PR01MB1770:
+x-microsoft-antispam-prvs: <TY1PR01MB1770FD80C9D60010864B26458A0C0@TY1PR01MB1770.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1923;
+x-forefront-prvs: 0033AAD26D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(396003)(39860400002)(346002)(136003)(376002)(189003)(199004)(86362001)(74316002)(52536014)(76116006)(2906002)(76176011)(66946007)(8936002)(66556008)(73956011)(66476007)(66446008)(5660300002)(99286004)(64756008)(71200400001)(71190400001)(256004)(305945005)(6636002)(9686003)(7736002)(68736007)(53936002)(6246003)(446003)(11346002)(476003)(33656002)(486006)(229853002)(26005)(8676002)(6116002)(6506007)(186003)(4744005)(81156014)(81166006)(14454004)(102836004)(4326008)(66066001)(3846002)(7696005)(316002)(54906003)(478600001)(110136005)(6436002)(55016002)(72206003)(25786009);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1770;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 06YpGCys0Escrka4roq0qYYpT+7bCNmFJPa5HgeSlfvuArq/Wjph3gkaOMnFLWGfsvH/N8W0SA4Hlg/cf6i5DQLYyGqkwbKFuK4p/Vml7A/++zpDrP7Zqq8z/899Kdxgpb83xrahrUdODaMXcHgI9Le7iswMNJ30oJyDOORCmumO/z59uyXz9H1QpdaOyDwiMKcSFvM2ztSwHCUTzMiAzRY/CQeA4TLbCsI/6WG9t1uETRsYjJ+1yHn3+RisLDhRe/yKuQut4sXFkfQCzxIidenaoXwFiVovtxotM0/GZHphiKnHEkYdu9RFExV3WcnQgoM6hLX9QedR7RPBEe2IG0sxykCKu9mACeFh1LjMyjv1vnwSpynFqMXZ6JvlP22ZBGwQQkH7XuPF+Knx0i7G+sTZ8s9CMFePE9O0CN1iyxk=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <0000000000001cc652058888f117@google.com>
-In-Reply-To: <0000000000001cc652058888f117@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 10 May 2019 15:58:13 +0200
-Message-ID: <CAAeHK+xirVvazQoqgaDy3fDaZ1JuYDyb5sQp1Kh_spGdWrCOTw@mail.gmail.com>
-Subject: Re: general protection fault in yurex_interrupt
-To:     syzbot <syzbot+3f516a14255f95fc5599@syzkaller.appspotmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>, rafael@kernel.org,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1b7f757-f32f-44e6-e3f3-08d6d54fec08
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2019 14:00:55.6200
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1770
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: syzbot <syzbot+3f516a14255f95fc5599@syzkaller.appspotmail.com>
-Date: Fri, May 10, 2019 at 3:57 PM
-To: <andreyknvl@google.com>, <gregkh@linuxfoundation.org>,
-<linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-<rafael@kernel.org>, <syzkaller-bugs@googlegroups.com>
-
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12864eaca00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3f516a14255f95fc5599
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=161327b4a00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+3f516a14255f95fc5599@syzkaller.appspotmail.com
->
-> yurex 1-1:0.150: yurex_interrupt - unknown status received: -71
-> yurex 1-1:0.150: yurex_interrupt - unknown status received: -71
-> yurex 1-1:0.150: yurex_interrupt - unknown status received: -71
-> kasan: CONFIG_KASAN_INLINE enabled
-> kasan: GPF could be caused by NULL-ptr deref or user memory access
-> general protection fault: 0000 [#1] SMP KASAN PTI
-> CPU: 1 PID: 5323 Comm: syz-executor.0 Not tainted 5.1.0-rc3-319004-g43151d6
-> #6
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> RIP: 0010:dev_name include/linux/device.h:1087 [inline]
-> RIP: 0010:__dev_printk+0x3f/0x215 drivers/base/core.c:3208
-> Code: 89 f5 53 e8 8e 53 1c fc 48 85 ed 0f 84 c9 01 00 00 e8 80 53 1c fc 48
-> 8d 7d 50 b8 ff ff 37 00 48 89 fa 48 c1 e0 2a 48 c1 ea 03 <80> 3c 02 00 74
-> 05 e8 41 68 53 fc 4c 8b 7d 50 4d 85 ff 75 28 e8 53
-> RSP: 0018:ffff8880ad107930 EFLAGS: 00010002
-> RAX: dffffc0000000000 RBX: ffffed1015a20f2d RCX: 00000000ffffffed
-> RDX: 0000000000000010 RSI: ffffffff855576f0 RDI: 0000000000000080
-> RBP: 0000000000000030 R08: ffff88809b7b1880 R09: ffffed1015a24fc9
-> R10: ffffed1015a24fc8 R11: ffff8880ad127e47 R12: ffffffff8f031080
-> R13: ffff8880ad107988 R14: 0000000000000000 R15: ffff8880a5a48d00
-> FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ff6c1085000 CR3: 000000001167a000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   <IRQ>
->   _dev_err+0xdc/0x10e drivers/base/core.c:3251
->   yurex_interrupt.cold+0x12e/0x13d drivers/usb/misc/yurex.c:183
->   __usb_hcd_giveback_urb+0x1f4/0x470 drivers/usb/core/hcd.c:1758
->   usb_hcd_giveback_urb+0x346/0x400 drivers/usb/core/hcd.c:1823
->   __skb_queue_head_init include/linux/skbuff.h:1790 [inline]
->   skbpoolfree drivers/block/aoe/aoedev.c:428 [inline]
->   freedev drivers/block/aoe/aoedev.c:290 [inline]
->   dummy_timer+0x1225/0x328d drivers/block/aoe/aoedev.c:359
->   call_timer_fn+0x161/0x5f0 kernel/time/timer.c:1325
->   expire_timers kernel/time/timer.c:1362 [inline]
->   __run_timers kernel/time/timer.c:1681 [inline]
->   __run_timers kernel/time/timer.c:1649 [inline]
->   run_timer_softirq+0x58b/0x1400 kernel/time/timer.c:1694
->   __do_softirq+0x22a/0x8cd kernel/softirq.c:293
->   invoke_softirq kernel/softirq.c:374 [inline]
->   irq_exit+0x187/0x1b0 kernel/softirq.c:414
->   exiting_irq arch/x86/include/asm/apic.h:536 [inline]
->   smp_apic_timer_interrupt+0xfe/0x4a0 arch/x86/kernel/apic/apic.c:1062
->   apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:807
->   </IRQ>
-> RIP: 0010:__read_once_size include/linux/compiler.h:193 [inline]
-> RIP: 0010:csd_lock_wait kernel/smp.c:108 [inline]
-> RIP: 0010:smp_call_function_single+0x284/0x330 kernel/smp.c:302
-> Code: c3 e8 c0 a0 0a 00 48 8b 4c 24 08 48 8b 54 24 10 48 8d 74 24 40 8b 7c
-> 24 1c e8 28 fa ff ff 41 89 c4 eb 07 e8 9e a0 0a 00 f3 90 <8b> 5c 24 58 31
-> ff 83 e3 01 89 de e8 fc a1 0a 00 85 db 75 e5 e8 83
-> RSP: 0018:ffff88809b037500 EFLAGS: 00000293 ORIG_RAX: ffffffffffffff13
-> RAX: ffff88809b7b1880 RBX: 0000000000000001 RCX: ffffffff816729e4
-> RDX: 0000000000000000 RSI: ffffffff816729d2 RDI: 0000000000000005
-> RBP: ffff88809b0375e0 R08: ffff88809b7b1880 R09: ffffed1015a05c49
-> R10: ffffed1015a05c48 R11: ffff8880ad02e247 R12: 0000000000000000
-> R13: 0000000000000200 R14: 1ffff11013606ea4 R15: ffff880000001000
->   smp_call_function_many+0x66c/0x7a0 kernel/smp.c:434
->   flush_tlb_others arch/x86/include/asm/paravirt.h:68 [inline]
->   flush_tlb_mm_range+0x1a4/0x260 arch/x86/mm/tlb.c:760
->   tlb_flush arch/x86/include/asm/tlb.h:23 [inline]
->   tlb_flush_mmu_tlbonly include/asm-generic/tlb.h:173 [inline]
->   tlb_flush_mmu_tlbonly include/asm-generic/tlb.h:168 [inline]
->   tlb_flush_mmu+0x1b6/0x510 mm/mmu_gather.c:82
->   arch_tlb_finish_mmu+0x41/0x380 mm/mmu_gather.c:100
->   tlb_finish_mmu+0x9c/0x100 mm/mmu_gather.c:259
->   free_ldt_pgtables.part.0+0xd3/0x110 arch/x86/kernel/ldt.c:319
->   arch_exit_mmap arch/x86/include/asm/mmu_context.h:258 [inline]
->   exit_mmap+0x21c/0x4d0 mm/mmap.c:3127
->   __mmput kernel/fork.c:1046 [inline]
->   mmput+0x158/0x4a0 kernel/fork.c:1067
->   exit_mm kernel/exit.c:546 [inline]
->   do_exit+0x7f0/0x2e10 kernel/exit.c:863
->   do_group_exit+0x12a/0x350 kernel/exit.c:980
->   get_signal+0x3a3/0x1cb0 kernel/signal.c:2577
->   do_signal+0x86/0x1750 arch/x86/kernel/signal.c:816
->   exit_to_usermode_loop+0x1fc/0x270 arch/x86/entry/common.c:162
->   prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
->   syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
->   do_syscall_64+0x40c/0x4f0 arch/x86/entry/common.c:293
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x458da9
-> Code: Bad RIP value.
-> RSP: 002b:00007f2ca8685cf8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-> RAX: fffffffffffffe00 RBX: 000000000073bf08 RCX: 0000000000458da9
-> RDX: 0000000000000000 RSI: 0000000000000080 RDI: 000000000073bf08
-> RBP: 000000000073bf00 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 000000000073bf0c
-> R13: 00007ffc924b246f R14: 00007f2ca86869c0 R15: 000000000073bf0c
-> Modules linked in:
-> ---[ end trace d1dc12b2d1082091 ]---
-> RIP: 0010:dev_name include/linux/device.h:1087 [inline]
-> RIP: 0010:__dev_printk+0x3f/0x215 drivers/base/core.c:3208
-> Code: 89 f5 53 e8 8e 53 1c fc 48 85 ed 0f 84 c9 01 00 00 e8 80 53 1c fc 48
-> 8d 7d 50 b8 ff ff 37 00 48 89 fa 48 c1 e0 2a 48 c1 ea 03 <80> 3c 02 00 74
-> 05 e8 41 68 53 fc 4c 8b 7d 50 4d 85 ff 75 28 e8 53
-> RSP: 0018:ffff8880ad107930 EFLAGS: 00010002
-> RAX: dffffc0000000000 RBX: ffffed1015a20f2d RCX: 00000000ffffffed
-> RDX: 0000000000000010 RSI: ffffffff855576f0 RDI: 0000000000000080
-> RBP: 0000000000000030 R08: ffff88809b7b1880 R09: ffffed1015a24fc9
-> R10: ffffed1015a24fc8 R11: ffff8880ad127e47 R12: ffffffff8f031080
-> R13: ffff8880ad107988 R14: 0000000000000000 R15: ffff8880a5a48d00
-> FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000458d7f CR3: 000000001167a000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-#syz dup: general protection fault in __dev_printk
-
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+T24gRnJpLCBNYXkgMTAsIDIwMTksIFNlcmdlaSBTaHR5bHlvdiB3cm90ZToNCj4gPiAtI2RlZmlu
+ZSBVU0JIU0ZfUlVOVElNRV9QV0NUUkwJKDEgPDwgMCkNCj4gPiAtDQo+ID4gLS8qIHN0YXR1cyAq
+Lw0KPiA+IC0jZGVmaW5lIHVzYmhzY19mbGFnc19pbml0KHApICAgZG8geyhwKS0+ZmxhZ3MgPSAw
+OyB9IHdoaWxlICgwKQ0KPiA+IC0jZGVmaW5lIHVzYmhzY19mbGFnc19zZXQocCwgYikgKChwKS0+
+ZmxhZ3MgfD0gIChiKSkNCj4gPiAtI2RlZmluZSB1c2Joc2NfZmxhZ3NfY2xyKHAsIGIpICgocCkt
+PmZsYWdzICY9IH4oYikpDQo+ID4gLSNkZWZpbmUgdXNiaHNjX2ZsYWdzX2hhcyhwLCBiKSAoKHAp
+LT5mbGFncyAmICAgKGIpKQ0KPiA+DQo+IA0KPiAgICAgV2h5IGxlYXZlIDMgZW1wdHkgbGluZXM/
+DQoNCk9LLCBJJ2xsIGdldCByaWQgb2YgMiBvZiB0aGVtLg0KDQpDaHJpcw0K
