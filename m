@@ -2,136 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD72619EE7
-	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 16:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0450E19EFF
+	for <lists+linux-usb@lfdr.de>; Fri, 10 May 2019 16:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727878AbfEJOTP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 May 2019 10:19:15 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:47714 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727807AbfEJOTP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 May 2019 10:19:15 -0400
-Received: (qmail 2193 invoked by uid 2102); 10 May 2019 10:19:14 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 10 May 2019 10:19:14 -0400
-Date:   Fri, 10 May 2019 10:19:14 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Jim Lin <jilin@nvidia.com>
-cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
-        <kai.heng.feng@canonical.com>, <drinkcat@chromium.org>,
-        <keescook@chromium.org>, <nsaenzjulienne@suse.de>,
-        <jflat@chromium.org>, <malat@debian.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v9 1/2] usb: hub : Add devaddr in struct usb_device
-In-Reply-To: <1557491070-24715-2-git-send-email-jilin@nvidia.com>
-Message-ID: <Pine.LNX.4.44L0.1905101010100.1516-100000@iolanthe.rowland.org>
+        id S1727998AbfEJOU4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 May 2019 10:20:56 -0400
+Received: from mail-eopbgr1410130.outbound.protection.outlook.com ([40.107.141.130]:45960
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727896AbfEJOUz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 May 2019 10:20:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qcNoVX6FrHMPEVfeEiYBjv6VdFmDSe793jDQDXxkvT0=;
+ b=PbSfdmRRUCbSc/QQ7fqaTgFWzPDAuNCCvcaY76MM4r7C0f2QbkbXeUMM/5hEsBag6qdvy8dILK+LS1NsJcLS7RR2B0/rq4dlVxixTfnf607p6mAWtglbhGOD+psvl36OuvpV5RwHar+W8wgi6HvEactpASeuiCDRGsAOFUzAn5o=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1772.jpnprd01.prod.outlook.com (52.133.164.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1878.21; Fri, 10 May 2019 14:20:51 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1878.022; Fri, 10 May 2019
+ 14:20:50 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v2 11/15] usb: renesas_usbhs: Add support for RZ/A2
+Thread-Topic: [PATCH v2 11/15] usb: renesas_usbhs: Add support for RZ/A2
+Thread-Index: AQHVBqPALgaZA5gQ3UyQXy3OztR526Zj8K2AgAATPwCAAC3qAIAANNKQ
+Date:   Fri, 10 May 2019 14:20:50 +0000
+Message-ID: <TY1PR01MB15628F7CF651279C59FE864D8A0C0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20190509201142.10543-1-chris.brandt@renesas.com>
+ <20190509201142.10543-12-chris.brandt@renesas.com>
+ <CAMuHMdV7aQd-g1t_t27d8ge69e3VZnG7nQ7Lzre=qrJ1UrUuuA@mail.gmail.com>
+ <OSBPR01MB3174FA32BADD2B97A6003ADCD80C0@OSBPR01MB3174.jpnprd01.prod.outlook.com>
+ <OSBPR01MB317441157A3BFA9148FFF558D80C0@OSBPR01MB3174.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSBPR01MB317441157A3BFA9148FFF558D80C0@OSBPR01MB3174.jpnprd01.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9fbb7157-7a6f-44f6-8740-08d6d552b461
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1772;
+x-ms-traffictypediagnostic: TY1PR01MB1772:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <TY1PR01MB1772CED39F29B0530B1225748A0C0@TY1PR01MB1772.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3276;
+x-forefront-prvs: 0033AAD26D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(366004)(39860400002)(376002)(346002)(136003)(51444003)(199004)(189003)(446003)(4744005)(66446008)(966005)(76116006)(73956011)(229853002)(55016002)(486006)(66946007)(66476007)(66556008)(64756008)(11346002)(5660300002)(186003)(305945005)(7736002)(6246003)(76176011)(53936002)(8936002)(476003)(4326008)(6436002)(86362001)(81156014)(81166006)(66066001)(6306002)(8676002)(26005)(9686003)(478600001)(316002)(68736007)(52536014)(7696005)(256004)(6506007)(25786009)(54906003)(110136005)(14454004)(33656002)(102836004)(72206003)(74316002)(2906002)(71200400001)(71190400001)(3846002)(6116002)(99286004);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1772;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: rWT5gXIEVmN7SttfVEzic9dTshQ1Tjk9G1vfiUX5+JnGFDqT/fzrxo17jyIL95SG2KRwizHEQhgi5qb/rDQvxM9r1CrdOxaGRbBsR00TTXPvaTUu53u8kLCuY6ecG/ZU1iBME68MjJ7W/Z+pCDREbfMw/JMWab/XzUg7cOi2OcY+dj5ayOroCXzLSlugyRfBI3GjQppZLcgpjyEX05J/vsZRegSPh4PXSonHfYQvjF1cC0kEKdQI3sQd1plcbl+6olBcpvob11O2xhXyD5/L0eODnSxmqjJQ9sH+6ORsCxDL/BElbntuOxiaclrXUIXXJaX6xr0S++imN2xn7G58z9Y0H+AHEASvaARP/pkMz9IrH+w6nzdzgCSFGsgdmeY6kWlHzV8fTMvdZarSpUwAolKAXgBO3hbaq5lczkzf77c=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fbb7157-7a6f-44f6-8740-08d6d552b461
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2019 14:20:50.8638
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1772
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 10 May 2019, Jim Lin wrote:
-
-> The Clear_TT_Buffer request sent to the hub includes the address of
-> the LS/FS child device in wValue field. usb_hub_clear_tt_buffer()
-> uses udev->devnum to set the address wValue. This won't work for
-> devices connected to xHC.
-> 
-> For other host controllers udev->devnum is the same as the address of
-> the usb device, chosen and set by usb core. With xHC the controller
-> hardware assigns the address, and won't be the same as devnum.
-> 
-> Here we add devaddr in "struct usb_device" for
-> usb_hub_clear_tt_buffer() to use.
-> 
-> Signed-off-by: Jim Lin <jilin@nvidia.com>
-> ---
-> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
->     , remove its claiming in xhci.h
-> v3: Add description for clearing_tt (xhci.h)
-> v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
->     to protect for Clear_TT_Buffer to be run serially.
->     Remove xhci_clear_tt_buffer_complete as it's not necessary.
->     Same reason as the above.
->     Extend usb_hub_clear_tt_buffer parameter
-> v5: Not extending usb_hub_clear_tt_buffer parameter
->     Add description.
-> v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
-> v7: Add devaddr field in "struct usb_device"
-> v8: split as two patches, change type from int to u8 for devaddr.
-> v9: Use pahole to find place to put devaddr in struct usb_device.
->     Remove space between type cast and variable.
->     hub.c changed from v8
->     clear->devinfo |= (u16) (udev->devaddr << 4);
->     to 
->     clear->devinfo |= ((u16)udev->devaddr) << 4;
->     to solve a problem if devaddr is larger than 16.
-> 
-> 
->  drivers/usb/core/hub.c | 4 +++-
->  include/linux/usb.h    | 2 ++
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 15a2934dc29d..0d4b289be103 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -873,7 +873,7 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
->  	/* info that CLEAR_TT_BUFFER needs */
->  	clear->tt = tt->multi ? udev->ttport : 1;
->  	clear->devinfo = usb_pipeendpoint (pipe);
-> -	clear->devinfo |= udev->devnum << 4;
-> +	clear->devinfo |= ((u16)udev->devaddr) << 4;
->  	clear->devinfo |= usb_pipecontrol(pipe)
->  			? (USB_ENDPOINT_XFER_CONTROL << 11)
->  			: (USB_ENDPOINT_XFER_BULK << 11);
-> @@ -2125,6 +2125,8 @@ static void update_devnum(struct usb_device *udev, int devnum)
->  	/* The address for a WUSB device is managed by wusbcore. */
->  	if (!udev->wusb)
->  		udev->devnum = devnum;
-> +	if (!udev->devaddr)
-> +		udev->devaddr = (u8)devnum;
-
-Whether or not to put a space after the ')' in a typecast is a matter 
-of personal choice; CodingStyle doesn't say anything about it.  Quite 
-often the space is present.  IIRC, that is how K&R does it.  But it 
-doesn't really matter.
-
->  }
->  
->  static void hub_free_dev(struct usb_device *udev)
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 4229eb74bd2c..5641965e44a1 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -566,6 +566,7 @@ struct usb3_lpm_parameters {
->   * @tt: Transaction Translator info; used with low/full speed dev, highspeed hub
->   * @ttport: device port on that tt hub
->   * @toggle: one bit for each endpoint, with ([0] = IN, [1] = OUT) endpoints
-> + * @devaddr: device address, XHCI: assigned by HW, others: same as devnum
->   * @parent: our hub, unless we're the root
->   * @bus: bus we're part of
->   * @ep0: endpoint 0 data (default control pipe)
-> @@ -643,6 +644,7 @@ struct usb_device {
->  	int		ttport;
->  
->  	unsigned int toggle[2];
-> +	u8 devaddr;
-
-This is another lousy place to put the new value.  A much better
-position would be immediately after "u8 level".
-
->  	struct usb_device *parent;
->  	struct usb_bus *bus;
-
-You should move into this patch the code added to xhci.c to assign
-udev->devaddr.  Without it, this patch is incomplete: devaddr will not
-contain the correct value for devices on a USB-3 bus.  And it doesn't
-belong in the 2/2 patch -- that patch is all about making xhci-hcd call
-usb_clear_tt_buffer().
-
-Alan Stern
-
+SGkgU2hpbW9kYeOBleOCkw0KDQo+IEZyb206IFlvc2hpaGlybyBTaGltb2RhDQo+IFNlbnQ6IEZy
+aWRheSwgTWF5IDEwLCAyMDE5IDc6MDAgQU0NCg0KPiBJIGhhdmUgc3VibWl0dGVkIHN1Y2ggYSBw
+YXRjaCBhcyBmb2xsb3dpbmc6DQo+IGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcGF0Y2gv
+MTA5Mzg1NzUvDQoNCk9LLg0KSSB3aWxsIHJlYmFzZSBteSBwYXRjaGVzIG9uIHRvcCBvZiB5b3Vy
+IHBhdGNoLg0KSSB3aWxsIHNheSBteSBwYXRjaCBzZXJpZXMgZGVwZW5kcyBvbiB5b3VyIHBhdGNo
+Lg0KDQo+IEFib3V0IFNvQyBwYXJhbWV0ZXJzLCBJIHRoaW5rIGl0IGlzIGJldHRlciB0byBhZGQg
+bWVtYmVycyBpbnRvIHN0cnVjdA0KPiByZW5lc2FzX3VzYmhzX2RyaXZlcl9wYXJhbSBsaWtlDQo+
+IGhhc191c2JfZG1hYyBpbnN0ZWFkIG9mIFVTQkhTRl8qIGRlZmluaXRpb25zLiBJbiBvdGhlciB3
+b3Jkcywgd2UgZG9uJ3QNCj4gbmVlZCB0aGUgcGF0Y2ggMDgvMTUgYW5kDQo+IHBhdGNoIDA5LzE1
+IGFuZCAxMC8xNSBzaG91bGQgYWRkIGVhY2ggbWVtYmVyIGZvciBpdC4gQ2hyaXMtc2FuLCB3aGF0
+IGRvDQo+IHlvdSB0aGluaz8NCg0KSSB0aGluayB0aGF0IGlzIGdvb2QuDQoNCk5ldyBQYXRjaCAw
+OC8xNToNCiAqIEFkZCB0byBzdHJ1Y3QgcmVuZXNhc191c2Joc19kcml2ZXJfcGFyYW06DQogICAg
+ICB1MzIgaGFzX3J1bnRpbWVfcHdjdHJsOjE7DQogKiBSZW1vdmUgVVNCSFNGXyoNCiAqIFJlbW92
+ZSB1c2Joc2NfZmxhZ3NfKg0KDQpOZXcgUGF0Y2ggMDkvMTU6DQoqIEFkZCB0byBzdHJ1Y3QgcmVu
+ZXNhc191c2Joc19kcml2ZXJfcGFyYW06DQogICAgIHUzMiBoYXNfY25lbjoxOw0KDQpOZXcgUGF0
+Y2ggMTAvMTU6DQoqIEFkZCB0byBzdHJ1Y3QgcmVuZXNhc191c2Joc19kcml2ZXJfcGFyYW06DQog
+ICAgIHUzMiBjZmlmb19ieXRlX2FkZHI6MTsNCg0KDQpDaHJpcw0KDQo=
