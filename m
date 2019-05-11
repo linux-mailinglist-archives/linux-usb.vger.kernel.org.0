@@ -2,195 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C541A63E
-	for <lists+linux-usb@lfdr.de>; Sat, 11 May 2019 03:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E9A1A716
+	for <lists+linux-usb@lfdr.de>; Sat, 11 May 2019 09:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728199AbfEKBsJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 May 2019 21:48:09 -0400
-Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:49490 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728079AbfEKBsJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 May 2019 21:48:09 -0400
-Received: from mailhost.synopsys.com (dc8-mailhost2.synopsys.com [10.13.135.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id F3DE0C0124;
-        Sat, 11 May 2019 01:48:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1557539292; bh=R+2S9hsN1O5pmtXZq6Xo+Py+Mo7znMvzY7NQ1w6aRuc=;
-        h=From:To:CC:Subject:Date:References:From;
-        b=XtgM9GTpl55k80QjAD+ci8SIxofSWGqGw4Q2n8jHKiThjsShWvcNufFXyjng5/QtE
-         TN2HKLtUnKK+YdklZzJ3FoBQVxvDglqn0O6enSYPn6U4BRQaeSpGFbsA8YQCdKwmVB
-         Ooj/KewOyep5Q9rTGcgvFOoYJjlgdowldf/DeI56hWZcNfUWcfqLfmheCo3hXggcr2
-         aZXLmA9kkn2MWg+oDiHwo1lEFhRY0Q5qRnVrUS8lit+HebE+7Y8fO9TaPrIEGkpODH
-         6OrjYqK9xfEh6GhKr1ruFaLcYXNQE2wepPEUEV2evzNlNiri5MFMG5onSMz0v8d4jV
-         +K95ofipmBklw==
-Received: from us01wehtc1.internal.synopsys.com (us01wehtc1-vip.internal.synopsys.com [10.12.239.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 1D1E4A0077;
-        Sat, 11 May 2019 01:48:07 +0000 (UTC)
-Received: from us01wembx1.internal.synopsys.com ([169.254.1.223]) by
- us01wehtc1.internal.synopsys.com ([::1]) with mapi id 14.03.0415.000; Fri, 10
- May 2019 18:48:07 -0700
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Anurag Kumar Vulisha <anuragku@xilinx.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1728419AbfEKHj6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 May 2019 03:39:58 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:37468 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728392AbfEKHj5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 May 2019 03:39:57 -0400
+Received: by mail-lf1-f67.google.com with SMTP id h126so5675936lfh.4
+        for <linux-usb@vger.kernel.org>; Sat, 11 May 2019 00:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2QQvaa/SSPqU/FGa7FdkdaExZgaJpUrgkhTOk/BWtiM=;
+        b=WHflFKkhglb72GcEopz4ufUa4gcFc2YBuChFrCOLWMjoEPseufiTopM+2ObjCOI3dJ
+         +shsE8KjFphsphk73bpvif8SepL1UqiZQHdh2CFy3U9LQe2bAJc8YubUjXobMfb0gAWQ
+         hWmDOcmiENM9bTedee+trHBabvExBGL7TLBKDKGTIeIunI7LiPRI9jWpdyUWEtpZaTKL
+         gjd+24bC6kzoY5I0ruDjZnN/dvwXfRMTfqYwshrKj9fyZdcOFQ7NDXRwG+vCeTkPzviS
+         9ESbeN9PKKPB19TCSXzbitNsn4tJ8puhpxG/DFxb+MYWQe1VNKBqzYol7FiCudw20MZR
+         vm3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2QQvaa/SSPqU/FGa7FdkdaExZgaJpUrgkhTOk/BWtiM=;
+        b=TMP/AOBu0Ba/TQOk2sYBJ7boFWkzFEbPIQA2rv6qQP1CIjAPLkxdxcYSRnjEeqQGpS
+         DWzcboC9ymXwI5mtmW/SMJ1xpsYuBl5Ort3o1TRG7UNUgXe+btirQCe+zRnfLS0iBbVv
+         JwQ6erLKBpku/gbVG6kkCWf2PaoWCzb/jUraYj3efwj1q4lmQtzHUmERZygs7IoZvoLN
+         dEbomuZWogAZEOE13PaTgvJzUZO4v5GJCM+MsVpBOk9D2DU7JZnstvJG8Vwe0lSdMTFs
+         Y5jHOpG7QHzmq/RyWiHWGfoi3KZKsJR4Mpos18rULYYslCQdEU4wklO7hUdSHhJIsQ6o
+         U68w==
+X-Gm-Message-State: APjAAAXBd/2U/x2G2pbI1H2BJlXpuSGGyBcVXzYjfCCXR2YjtvZCW/cg
+        zrCrUod7sIOUEQrCcVmIseu1b64XnxI=
+X-Google-Smtp-Source: APXvYqxhynHXBx45Q7/bEav695m59fzNRlA3xStpUwAkKwFbG8IjXtbZ8gRAuWPzfuQJ4ORvVExG5g==
+X-Received: by 2002:a19:cc95:: with SMTP id c143mr8090645lfg.138.1557560395529;
+        Sat, 11 May 2019 00:39:55 -0700 (PDT)
+Received: from [192.168.0.199] ([31.173.81.194])
+        by smtp.gmail.com with ESMTPSA id 10sm2005112ljv.47.2019.05.11.00.39.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 11 May 2019 00:39:53 -0700 (PDT)
+Subject: Re: [PATCH v2 05/15] phy: renesas: rcar-gen3-usb2: Check dr_mode when
+ not using OTG
+To:     Chris Brandt <Chris.Brandt@renesas.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        "Felipe Balbi" <balbi@kernel.org>,
-        "Claus H. Stovgaard" <cst@phaseone.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "v.anuragkumar@gmail.com" <v.anuragkumar@gmail.com>
-Subject: Re: [PATCH v2 3/3] usb: dwc3: gadget: Add support for disabling U1
- and U2 entries
-Thread-Topic: [PATCH v2 3/3] usb: dwc3: gadget: Add support for disabling U1
- and U2 entries
-Thread-Index: AQHVBXNg9QMnfODDx0qS+2/7kcKJQQ==
-Date:   Sat, 11 May 2019 01:48:06 +0000
-Message-ID: <30102591E157244384E984126FC3CB4F639EA444@us01wembx1.internal.synopsys.com>
-References: <1557302091-7455-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
- <1557302091-7455-4-git-send-email-anurag.kumar.vulisha@xilinx.com>
- <30102591E157244384E984126FC3CB4F639E9823@us01wembx1.internal.synopsys.com>
- <BL0PR02MB5587B28B6CCAC0FD790F8335A7330@BL0PR02MB5587.namprd02.prod.outlook.com>
- <30102591E157244384E984126FC3CB4F639E9E8F@us01wembx1.internal.synopsys.com>
- <BYAPR02MB55913E2D6F6865202DE88514A70C0@BYAPR02MB5591.namprd02.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.13.184.19]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+References: <20190509201142.10543-1-chris.brandt@renesas.com>
+ <20190509201142.10543-6-chris.brandt@renesas.com>
+ <e987df36-eca6-f05f-d1bf-7dc43fc9d4b4@cogentembedded.com>
+ <TY1PR01MB15628A94DA371A7636984A708A0C0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <711839c7-930f-938e-4626-8a7524f5b82e@cogentembedded.com>
+Date:   Sat, 11 May 2019 10:39:40 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <TY1PR01MB15628A94DA371A7636984A708A0C0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,=0A=
-=0A=
-Anurag Kumar Vulisha wrote:=0A=
-> Hi Thinh,=0A=
->=0A=
->> -----Original Message-----=0A=
->> From: Thinh Nguyen [mailto:Thinh.Nguyen@synopsys.com]=0A=
->> Sent: Friday, May 10, 2019 5:30 AM=0A=
->> To: Anurag Kumar Vulisha <anuragku@xilinx.com>; Thinh Nguyen=0A=
->> <Thinh.Nguyen@synopsys.com>; Greg Kroah-Hartman=0A=
->> <gregkh@linuxfoundation.org>; Rob Herring <robh+dt@kernel.org>; Mark Rut=
-land=0A=
->> <mark.rutland@arm.com>; Felipe Balbi <balbi@kernel.org>; Claus H. Stovga=
-ard=0A=
->> <cst@phaseone.com>=0A=
->> Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org; linux-=0A=
->> kernel@vger.kernel.org; v.anuragkumar@gmail.com=0A=
->> Subject: Re: [PATCH v2 3/3] usb: dwc3: gadget: Add support for disabling=
- U1 and U2=0A=
->> entries=0A=
->>=0A=
->> Hi Anurag,=0A=
->>=0A=
->> Anurag Kumar Vulisha wrote:=0A=
->>>>> +		return -EINVAL;=0A=
->>>>>=0A=
->>>>>  	reg =3D dwc3_readl(dwc->regs, DWC3_DCTL);=0A=
->>>>>  	if (set)=0A=
->>>>> @@ -626,7 +630,10 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc,=
-=0A=
->> struct=0A=
->>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c=0A=
->>>>> index e293400..f2d3112 100644=0A=
->>>>> --- a/drivers/usb/dwc3/gadget.c=0A=
->>>>> +++ b/drivers/usb/dwc3/gadget.c=0A=
->>>>> @@ -2073,6 +2073,24 @@ static int dwc3_gadget_stop(struct usb_gadget =
-*g)=0A=
->>>>>  	return 0;=0A=
->>>>>  }=0A=
->>>>>=0A=
->>>>> +static void dwc3_gadget_config_params(struct usb_gadget *g,=0A=
->>>>> +				      struct usb_dcd_config_params *params)=0A=
->>>>> +{=0A=
->>>>> +	struct dwc3		*dwc =3D gadget_to_dwc(g);=0A=
->>>>> +=0A=
->>>>> +	/* U1 Device exit Latency */=0A=
->>>>> +	if (dwc->dis_u1_entry_quirk)=0A=
->>>>> +		params->bU1devExitLat =3D 0;=0A=
->>>> It doesn't make sense to have exit latency of 0. Rejecting=0A=
->>>> SET_FEATURE(enable U1/U2) should already let the host know that the=0A=
->>>> device doesn't support U1/U2.=0A=
->>>>=0A=
->>> I am okay to remove this, but I feel that it is better to report zero v=
-alue instead=0A=
->>> of a non-zero value in exit latency of BOS when U1 or U2 entries are no=
-t supported.=0A=
->>> Advantage of reporting 0 is that some hosts doesn't even send=0A=
->> SET_FEATURE(U1/U2)=0A=
->>> requests on seeing zero value in BOS descriptor. Also there can be case=
-s where U1 is=0A=
->>> disabled and U2 entry is allowed or vice versa, for these kind of cases=
- the driver can=0A=
->>> set zero exit latency value for U1 and non-zero exit latency value for =
-U2 . Based on=0A=
->> this=0A=
->>> I think it would be better to report 0 when U1/U2 states are not enable=
-d. Please=0A=
->> provide=0A=
->>> your opinion on this.=0A=
->> Hm... I assume you're testing against linux usb stack and xhci host. If=
-=0A=
->> that's the case, it looks like host will still request the device to=0A=
->> enter U1/U2 despite the device rejecting SET_FEATURE(enable U1/U2). This=
-=0A=
->> needs to be fixed. I think what you have is fine to workaround this issu=
-e.=0A=
-> Thanks . Will send the next series with the other fixes that you have sug=
-gested=0A=
->=0A=
-> Best Regards,=0A=
-> Anurag Kumar Vulisha=0A=
->=0A=
-=0A=
-I want to try something. Can you see if this helps with your performance=0A=
-test without setting the U1/U2 exit latency to 0?=0A=
-(No need to change what you have in your patch. This is just for testing).=
-=0A=
-=0A=
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c=0A=
-index 2f94568ba385..619351c581cf 100644=0A=
---- a/drivers/usb/core/hub.c=0A=
-+++ b/drivers/usb/core/hub.c=0A=
-@@ -4057,8 +4057,18 @@ static void usb_enable_link_state(struct usb_hcd=0A=
-*hcd, struct usb_device *udev,=0A=
-                /* Only a configured device will accept the Set Feature=0A=
-                 * U1/U2_ENABLE=0A=
-                 */=0A=
--               if (udev->actconfig)=0A=
--                       usb_set_device_initiated_lpm(udev, state, true);=0A=
-+               if (udev->actconfig) {=0A=
-+                       if (usb_set_device_initiated_lpm(udev, state,=0A=
-true)) {=0A=
-+                               /*=0A=
-+                                * Don't request U1/U2 entry if the device=
-=0A=
-+                                * cannot enable U1/U2.=0A=
-+                                */=0A=
-+                               usb_set_lpm_timeout(udev, state, 0);=0A=
-+                              =0A=
-hcd->driver->disable_usb3_lpm_timeout(hcd, udev,=0A=
-+                                                                    =0A=
-state);=0A=
-+                               return;=0A=
-+                       }=0A=
-+               }=0A=
- =0A=
-                /* As soon as usb_set_lpm_timeout(timeout) returns 0, the=
-=0A=
-                 * hub-initiated LPM is enabled. Thus, LPM is enabled no=0A=
-=0A=
-=0A=
-Thanks,=0A=
-Thinh=0A=
+On 10.05.2019 16:55, Chris Brandt wrote:
+
+>>> +	} else {
+>>> +		/* Not OTG, so dr_mode should be set in PHY node */
+>>> +		mode = usb_get_dr_mode(channel->dev);
+>>> +		if (mode == USB_DR_MODE_HOST)
+>>> +			writel(0x00000000, usb2_base + USB2_COMMCTRL);
+>>> +		else if (mode == USB_DR_MODE_PERIPHERAL)
+>>> +			writel(0x80000000, usb2_base + USB2_COMMCTRL);
+>>
+>>      Maybe a *switch* instead?
+> 
+> I like that idea because I can get rid of the dr_mode variable.
+
+    Yes. :-)
+
+> However...
+> I just tried it, but if I only have a case for HOST and PERIPHERAL, I
+> get this gcc warning:
+> 
+>    warning: enumeration value ‘USB_DR_MODE_UNKNOWN’ not handled in switch [-Wswitch]
+>    warning: enumeration value ‘USB_DR_MODE_OTG’ not handled in switch [-Wswitch]
+> 
+> 
+> So, my code would have to be:
+> 
+> 	} else {
+> 		/* Not OTG, so dr_mode should be set in PHY node */
+> 		switch (usb_get_dr_mode(channel->dev)) {
+> 		case USB_DR_MODE_HOST:
+> 			writel(0x00000000, usb2_base + USB2_COMMCTRL);
+> 			break;
+> 		case USB_DR_MODE_PERIPHERAL:
+> 			writel(0x80000000, usb2_base + USB2_COMMCTRL);
+> 			break;
+> 		case USB_DR_MODE_UNKNOWN:
+> 		case USB_DR_MODE_OTG:
+
+    Maybe default: instead?
+
+> 			break;
+> 		}
+> 	}
+> 
+> I guess that is still OK.
+
+    Yes. :-)
+
+> Chris
+
+MBR, Sergei
