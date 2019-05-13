@@ -2,97 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F7A1BBF1
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 19:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7F01BBF7
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 19:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731749AbfEMR2u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 May 2019 13:28:50 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39553 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730615AbfEMR2u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 13:28:50 -0400
-Received: by mail-ot1-f65.google.com with SMTP id r7so8057541otn.6;
-        Mon, 13 May 2019 10:28:49 -0700 (PDT)
+        id S1731722AbfEMRbk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 May 2019 13:31:40 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:34411 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728708AbfEMRbk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 13:31:40 -0400
+Received: by mail-oi1-f196.google.com with SMTP id v10so9990533oib.1;
+        Mon, 13 May 2019 10:31:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6feJZa0aw0GZsImOuxnHSsC5EDhjfyRhfdFCIT3tJFo=;
-        b=iw6CCBAjGaEZHhI3xBxvM1pc625Ns8SoayZZUxKfxKHBp5aeJrnih7WCGWgneFVefi
-         W3cGTwV4yw9UHFnGy8+JYJ+f8M70BNRtQZSybFRRBQUZm2x8I/yd1BA5U80vZqIl/qQ4
-         IxnISui5sckr8Vxtx1N+BWdk7MxFrv4xVxmPePVylgk7/g56BvZdzXjKpVuklr2ihqUi
-         3EfnhtQFTFGcUuEOwoGO+ZjtmPP5uoUaTdESwClUFZxj0Q/xSBnwjjBwKoLG/wzEtDme
-         wUjSVqiqFACm/n57Zloc57VwGpOLDjDSOoQIvgl7egd6xN1QxjuE6rw35Bhm9E6MuIWG
-         CSfA==
-X-Gm-Message-State: APjAAAUMkmFv2SJLhFOqzbHD8Z/bX2Wy6L+z0sm87kqm4XYu8G8pSTMg
-        PmGXY3qJ7d2x4TNy/W1KVHqLcLo=
-X-Google-Smtp-Source: APXvYqxW/0x7M65XCFbh2CtdKwvaAnoHUcFJ/jpvEKj+sZqkwTWbn2hNdCW+F0o0Ism5B8ky398RwQ==
-X-Received: by 2002:a9d:6288:: with SMTP id x8mr254754otk.79.1557768529379;
-        Mon, 13 May 2019 10:28:49 -0700 (PDT)
+        bh=Jfvm+UxtW85+1lTj8+jl3f2AYjNWVAR7x9TACkvrnqs=;
+        b=XD7sZyqNO0liK+ip/Wc6hYBlLBBYUEL2zJXIvXF8IvQbxHFb7nA7E3n6SCnBd90h2N
+         7jcsuWqJ2sO4dSfeHN23s8U8+BwJOfBiGlnpvfKcGqqJl+mBoz0DnEU0NczOItX9s+zD
+         NatLZeAHp7eUrCNSs6EbtVOAyEIvyZBxm5dj6vd1dDlTKTJ+pgX69OhDCvXlg4pW6pJH
+         GQ74fsvtljhzl/53vztvKARbntf2NfTFYL27RrPrIw5S6w9wAtDYPjCnK0dLS/G5GR5c
+         s/QLxR7s4qqKdlY3KBNjNehdpbok9l1WtSGmFtNlP9rCf40TrEQx8/mlgdsseIgcS1Iq
+         8GFw==
+X-Gm-Message-State: APjAAAWFrwVHSY3i/As0mhijCxzP25eziRPdIIwH2fMvoAJCewcIKGzt
+        1vN2Hr9fkkQFXol7v5sWNw==
+X-Google-Smtp-Source: APXvYqza4wgb3FqLjsDoT94kPU0YjBN5EA7DYSQSSawD4WxuLHYAvNzbMmRxERMqkWJ+hZXslQS8CA==
+X-Received: by 2002:aca:61d7:: with SMTP id v206mr178118oib.97.1557768699295;
+        Mon, 13 May 2019 10:31:39 -0700 (PDT)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h194sm1094992oib.58.2019.05.13.10.28.48
+        by smtp.gmail.com with ESMTPSA id k65sm5359873oia.16.2019.05.13.10.31.37
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 13 May 2019 10:28:48 -0700 (PDT)
-Date:   Mon, 13 May 2019 12:28:47 -0500
+        Mon, 13 May 2019 10:31:38 -0700 (PDT)
+Date:   Mon, 13 May 2019 12:31:37 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Biju Das <biju.das@bp.renesas.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: Re: [v3 PATCH] dt-binding: usb: add usb-role-switch property
-Message-ID: <20190513172847.GA15347@bogus>
-References: <c3596e996c9ab39c6b9bc14b93309244c4a55014.1557306151.git.chunfeng.yun@mediatek.com>
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "Claus H. Stovgaard" <cst@phaseone.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v.anuragkumar@gmail.com,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+Subject: Re: [PATCH v3 1/3] doc: dt: bindings: usb: dwc3: Update entries for
+ disabling U1 and U2
+Message-ID: <20190513173137.GA20313@bogus>
+References: <1557472048-10536-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+ <1557472048-10536-2-git-send-email-anurag.kumar.vulisha@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c3596e996c9ab39c6b9bc14b93309244c4a55014.1557306151.git.chunfeng.yun@mediatek.com>
+In-Reply-To: <1557472048-10536-2-git-send-email-anurag.kumar.vulisha@xilinx.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 8 May 2019 17:17:44 +0800, Chunfeng Yun wrote:
-> Add a property usb-role-switch to tell the driver that use
-> USB Role Switch framework to handle the role switch,
-> it's useful when the driver has already supported other ways,
-> such as extcon framework etc.
+On Fri, 10 May 2019 12:37:26 +0530, Anurag Kumar Vulisha wrote:
+> This patch updates the documentation with the information related
+> to the quirks that needs to be added for disabling the link entering
+> into the U1 and U2 states
 > 
-> Cc: Biju Das <biju.das@bp.renesas.com>
-> Cc: Yu Chen <chenyu56@huawei.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Signed-off-by: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
 > ---
-> v3:
->     add property type, modify description suggested by Heikki
+>  Changes in v3:
+> 	-None
 > 
-> v2:
->     describe it in terms of h/w functionality suggested by Rob
-> 
-> v1:
->     the property is discussed in:
->     [v2,2/7] dt-bindings: usb: renesas_usb3: add usb-role-switch property
->     https://patchwork.kernel.org/patch/10852497/
-> 
->     Mediatek and Hisilicon also try to use it:
->     [v4,3/6] dt-bindings: usb: mtu3: add properties about USB Role Switch
->     https://patchwork.kernel.org/patch/10918385/
->     [v4,6/6] usb: mtu3: register a USB Role Switch for dual role mode
->     https://patchwork.kernel.org/patch/10918367/
-> 
->     [v6,10/13] usb: dwc3: Registering a role switch in the DRD code
->     https://patchwork.kernel.org/patch/10909981/
+>  Changes in v2
+> 	1. As suggested by Thinh Nguyen changed the "snps,dis_u1_entry_quirk"
+> 	   to "snps,dis-u1-entry-quirk"
 > ---
->  Documentation/devicetree/bindings/usb/generic.txt | 4 ++++
->  1 file changed, 4 insertions(+)
+>  Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
