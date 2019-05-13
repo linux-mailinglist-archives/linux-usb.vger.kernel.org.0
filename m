@@ -2,32 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D171F1B2CA
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 11:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDC51B395
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 12:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727999AbfEMJXa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 May 2019 05:23:30 -0400
-Received: from mail-eopbgr50059.outbound.protection.outlook.com ([40.107.5.59]:45825
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727747AbfEMJX3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 13 May 2019 05:23:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XpMJPWruatyyW0pkRidGZnF2e/0tsEgf0w9OU3On0PA=;
- b=XMEhqD1PxVSyDOJ1f1AFqG4EPlAjaxd1oemF66z1ML6z8KOPLnm2htfwONO2qQ5ja6OhXYRW6Fdrq/Zw6cukK+YJjHy/8/fB1PnCfBxwKSPMZSXjZZP3cQQ5ShjMAvkVD1d3TMb6RaUKCAgF1iBFSRe8T/H+4O2O4PXyOTAd6mI=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB3040.eurprd04.prod.outlook.com (10.170.228.150) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1878.24; Mon, 13 May 2019 09:23:24 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::4923:8ad8:62c1:3e61]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::4923:8ad8:62c1:3e61%5]) with mapi id 15.20.1878.024; Mon, 13 May 2019
- 09:23:24 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        =?utf-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        id S1727937AbfEMKDX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 May 2019 06:03:23 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:36747 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727725AbfEMKDX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 06:03:23 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190513100321euoutp02e2ca574e3d1db08abfb2cdf152ed0c47~eNepdYRov0579905799euoutp02E
+        for <linux-usb@vger.kernel.org>; Mon, 13 May 2019 10:03:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190513100321euoutp02e2ca574e3d1db08abfb2cdf152ed0c47~eNepdYRov0579905799euoutp02E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1557741801;
+        bh=IVyisuCc+JszPY6NcxfHr7roJU9tFZ+A5xwYyJ4aG68=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=QgoxxEUSATFPCiMPyDY/wp+qeqY/UeYzRS8tKXdSlqckvscc/FNMK/UsVPU7lE0uy
+         i3AX7aCgKXRWJlEtpcLnj5n549kjhmZLgi7d8Sm3c8E9SlgtRcReVvIcRQezaOfpZ/
+         PCbB6oVp0BJn1uPHCCgrd6/rA2+m5j2djo8jp1lw=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190513100321eucas1p2ccc4a16258b06ca90cf5e9c805092b50~eNeosycRa3209232092eucas1p2E;
+        Mon, 13 May 2019 10:03:21 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id A1.D2.04377.8E049DC5; Mon, 13
+        May 2019 11:03:20 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190513100320eucas1p1fea0b73bdc12f6a0a9456e967a26331c~eNen0RYM21359213592eucas1p1C;
+        Mon, 13 May 2019 10:03:20 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190513100319eusmtrp2f79d552aabf0abe043af66a88aa2071a~eNenkr2q-1629516295eusmtrp2K;
+        Mon, 13 May 2019 10:03:19 +0000 (GMT)
+X-AuditID: cbfec7f4-5632c9c000001119-9a-5cd940e8612e
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 58.A3.04146.7E049DC5; Mon, 13
+        May 2019 11:03:19 +0100 (BST)
+Received: from [106.120.50.25] (unknown [106.120.50.25]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190513100319eusmtip160e7839a37e04c81293c187ca4c6619b~eNenHPs5I0239002390eusmtip1G;
+        Mon, 13 May 2019 10:03:19 +0000 (GMT)
+Subject: Re: [PATCH v3] usb: core: verify devicetree nodes for USB devices
+To:     Peter Chen <peter.chen@nxp.com>,
+        =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-samsung-soc@vger.kernel.org" 
         <linux-samsung-soc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -35,91 +56,117 @@ CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Markus Reichl <m.reichl@fivetechno.de>,
         Krzysztof Kozlowski <krzk@kernel.org>
-Subject: RE: [PATCH v3] usb: core: verify devicetree nodes for USB devices
-Thread-Topic: [PATCH v3] usb: core: verify devicetree nodes for USB devices
-Thread-Index: AQHVBkP6yfsjDnSxCk69+l82SkgDJqZjJOxsgACHhqCAAHC5gIAEqmrwgAAClwCAAANgMA==
-Date:   Mon, 13 May 2019 09:23:24 +0000
-Message-ID: <VI1PR04MB5327FAC12E4A3D403E8D92128B0F0@VI1PR04MB5327.eurprd04.prod.outlook.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <5d0abe9c-613c-d39b-6746-78e5e5c2bbc5@samsung.com>
+Date:   Mon, 13 May 2019 12:03:18 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+        Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <VI1PR04MB5327FAC12E4A3D403E8D92128B0F0@VI1PR04MB5327.eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUhTYRTHfXa3u6s0e9wMD1ZKg4zCl4yQC5UYWV6Kwogo1KilFzXnC7tO
+        sz5oimYqIfVBnYampqb5ii/T1NDEVVOXGcxMM0O0zIWvYSEz583y2+/8z/8853/goQhpu8iR
+        Co+KZVVRCqWctBE29/4yuH31+RB0cKrYla7PrRXRKSW1JG0w1InpobYCks41dAro4rJUgv7W
+        s4LolYkcAb36aVTkY82MjCYyDZX3SObFo2diZlb/RszU/9AKmPuNlYhZbHDyFwfYHA1hleFx
+        rMrD+5pNWKUhnYyZld2cqZ4XJqFSnIGsKcCHYUw7IbKwFFcgGDVu53kJQXGdXwayWedFBOXV
+        v4WbAxV9bQK+UY7gVX8jyRcmBJnLRRtPyfBpKBswkha2x5chx6wXWkwETiGg5X0XYWmQ2BMy
+        TBkbJgn2hrTl2nWmKCHeC2k9agvuwEFQvPjXYQev8yY3QljjKzBsnBZYmMDO0GIqIHh2gJHJ
+        wo1wgAfEkN/aSvKpfaGqvpfgWQYzukYxz7tgrXVzIAXBxEC1mC+yEAwl5yLedQRe6gZFlkQE
+        3g+1bR68fBxmx9oFFhmwLQyb7PgQtvCgOYfgZQmkp0l5twtodDX/1na9fUdkI7lmy2maLedo
+        tpyj+b+3CAkrkQOr5iJDWe5QFBvvzikiOXVUqHtwdGQDWv9TerNuSYvaVq93I0wh+TYJnh4O
+        kooUcVxCZDcCipDbSwL2rEuSEEXCLVYVfVWlVrJcN9pJCeUOkttWnwOlOFQRy0awbAyr2uwK
+        KGvHJFRo61yR7ev2U1I/r61yihhfS/ba99GxJe9cB+MSYdvsc2Hu/NmalbTU702JCycHA+MT
+        WUWm0jXG/c4pVUlW026voS9WZ0qfBD9euEQi/cXnD/1ksj7/BCbAeKMzoWK0AyXqlvuOxZzI
+        7zX2I+7uPFdubx6feto052bWLhVqrWblQi5M4XmAUHGKP5/wG0FPAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPIsWRmVeSWpSXmKPExsVy+t/xu7rPHW7GGHx6pGOxccZ6VovmxevZ
+        LM6f38BucXnXHDaLGef3MVksWtbKbPHyyA9Gix8PpzNZ/Ll3h9WB0+PWnXqPTas62Tz2z13D
+        7vHm9Cl2j43vdjB59G1ZxejxeZNcAHuUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5
+        rJWRqZK+nU1Kak5mWWqRvl2CXsaq8x1sBW+EK16t/cjSwLhEoIuRk0NCwERixZldTF2MXBxC
+        AksZJSa+uMsEkZCRODmtgRXCFpb4c62LDaLoNaPE7f9T2EASwgJeEsvOXQeyOThEBCIk9lzK
+        A6lhFmhmlrjZ0MYOUiMksJ5FYuMmThCbTcBQouttF1gvr4CdRNvX9WC9LAKqEm1HSkHCogIx
+        EiembmGHKBGUODnzCQuIzSkQK3Hj+nOw25gFzCTmbX7IDGHLS2x/OwfKFpe49WQ+0wRGoVlI
+        2mchaZmFpGUWkpYFjCyrGEVSS4tz03OLDfWKE3OLS/PS9ZLzczcxAiNz27Gfm3cwXtoYfIhR
+        gINRiYdX4PmNGCHWxLLiytxDjBIczEoivFGKQCHelMTKqtSi/Pii0pzU4kOMpkC/TWSWEk3O
+        ByaNvJJ4Q1NDcwtLQ3Njc2MzCyVx3g6BgzFCAumJJanZqakFqUUwfUwcnFINjJFn+H+Vz5l+
+        Qf7VMv9Vma9K6v4X1Uy/dm1fl5Fy+qS7x27VHu6ewrXLV6njzZoU2eY9r03cVvts/Z7e0sQ7
+        0Ztzuig7w+SWJKMGFwWT4qq+3tp84xX/p2hyiy9WiY+R+mm8odbRlm3W9XUB0RZ/NgbU/9k3
+        K5R5f6Nvpt/ehdLRKvwvs95vVGIpzkg01GIuKk4EAD5aYNbiAgAA
+X-CMS-MailID: 20190513100320eucas1p1fea0b73bdc12f6a0a9456e967a26331c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190509084827eucas1p294962744fe70745c50b69a5349b5de68
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190509084827eucas1p294962744fe70745c50b69a5349b5de68
 References: <yw1xpnotufti.fsf@mansr.com>
         <CGME20190509084827eucas1p294962744fe70745c50b69a5349b5de68@eucas1p2.samsung.com>
-        <20190509084726.5405-1-m.szyprowski@samsung.com>        <yw1xlfzfv4ol.fsf@mansr.com>
+        <20190509084726.5405-1-m.szyprowski@samsung.com>
+        <yw1xlfzfv4ol.fsf@mansr.com>
         <VI1PR04MB5327AD56CA772284DFE663D08B0C0@VI1PR04MB5327.eurprd04.prod.outlook.com>
         <7c5579d2-634a-d705-a451-563939957d57@samsung.com>
         <VI1PR04MB5327B425756FA394C51525208B0F0@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <3544eb61-2bd8-338d-8d62-d95a775528ef@samsung.com>
-In-Reply-To: <3544eb61-2bd8-338d-8d62-d95a775528ef@samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 64bf6d03-ba51-4abd-f51d-08d6d784a689
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB3040;
-x-ms-traffictypediagnostic: VI1PR04MB3040:
-x-microsoft-antispam-prvs: <VI1PR04MB304066BB1AC3D55480F4D66F8B0F0@VI1PR04MB3040.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1227;
-x-forefront-prvs: 0036736630
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(366004)(396003)(346002)(136003)(376002)(189003)(199004)(25786009)(66946007)(4326008)(73956011)(53936002)(66446008)(186003)(26005)(66556008)(52536014)(76116006)(64756008)(66476007)(55016002)(9686003)(102836004)(44832011)(14454004)(7696005)(11346002)(446003)(476003)(6436002)(74316002)(6246003)(76176011)(6506007)(53546011)(486006)(229853002)(68736007)(256004)(14444005)(5024004)(86362001)(54906003)(110136005)(66066001)(7736002)(99286004)(305945005)(478600001)(71190400001)(33656002)(71200400001)(3846002)(2906002)(81156014)(6116002)(81166006)(8936002)(5660300002)(316002)(8676002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3040;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: KweGsgwrwQYZrFpXusnabyFB8/6Jl95F1UvCluhVF5jJeEWsXNNjZfoLnJLlpJUpmMAB2wu7s/qH/6iScYx3G9bUaUWYzKiafF5eGL8LWPe2oqKwItcbnLCQJjF8MGyJmpTq0u65oEevUbBlRNhAMD8tM22Vh7ZLKUhwU48aocNrbGK+0GmUCHQk+aQ/fKUTHWhgye+Fvd8pAL0aba1yUqpNj7ISbCOmpv30fErx4he0ZGKOeoUSajT9Qhbzx3IRJwQ4kx/04H7bpYbXIImCI22E4JlOYBaIfhmIO0s6Q84eLGJAdFAKwygaTkX1WVdqwOzzPyCxrORD/u4/3lKkwa0wN4Fei3+UU3kzu8yNiihbQOL4CTaEnZT+JfxS3Tzg5XAHOBGNToIbEIbdRef1iNP6uxyIPZaqsg8Q8HLvkUE=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64bf6d03-ba51-4abd-f51d-08d6d784a689
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2019 09:23:24.8617
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3040
+        <3544eb61-2bd8-338d-8d62-d95a775528ef@samsung.com>
+        <VI1PR04MB5327FAC12E4A3D403E8D92128B0F0@VI1PR04MB5327.eurprd04.prod.outlook.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KPiBPbiAyMDE5LTA1LTEzIDExOjAwLCBQZXRlciBDaGVuIHdyb3RlOg0KPiA+PiBPbiAyMDE5
-LTA1LTEwIDA1OjEwLCBQZXRlciBDaGVuIHdyb3RlOg0KPiA+Pj4+IE1hcmVrIFN6eXByb3dza2kg
-PG0uc3p5cHJvd3NraUBzYW1zdW5nLmNvbT4gd3JpdGVzOg0KPiA+Pj4+PiBDb21taXQgNjliZWM3
-MjU5ODUzICgiVVNCOiBjb3JlOiBsZXQgVVNCIGRldmljZSBrbm93IGRldmljZSBub2RlIikNCj4g
-Pj4+Pj4gYWRkZWQgc3VwcG9ydCBmb3IgYXR0YWNoaW5nIGRldmljZXRyZWUgbm9kZSBmb3IgVVNC
-IGRldmljZXMuIFRoZQ0KPiA+Pj4+PiBtZW50aW9uZWQgY29tbWl0IGhvd2V2ZXIgaWRlbnRpZmll
-cyB0aGUgZ2l2ZW4gVVNCIGRldmljZSBub2RlIG9ubHkNCj4gPj4+Pj4gYnkgdGhlDQo+ID4+ICdy
-ZWcnDQo+ID4+Pj4+IHByb3BlcnR5IGluIHRoZSBob3N0IGNvbnRyb2xsZXIgY2hpbGRyZW4gbm9k
-ZXMuIFRoZSBVU0IgZGV2aWNlDQo+ID4+Pj4+IG5vZGUgaG93ZXZlciBhbHNvIGhhcyB0byBoYXZl
-IGEgJ2NvbXBhdGlibGUnIHByb3BlcnR5IGFzIGRlc2NyaWJlZA0KPiA+Pj4+PiBpbiBEb2N1bWVu
-dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3VzYi1kZXZpY2UudHh0LiBMYWNrIGZvcg0K
-PiA+Pj4+PiB0aGUgJ2NvbXBhdGlibGUnIHByb3BlcnR5IGNoZWNrIG1pZ2h0IHJlc3VsdCBpbiBh
-c3NpZ25pbmcgYQ0KPiA+Pj4+PiBkZXZpY2V0cmVlIG5vZGUsIHdoaWNoIGlzIG5vdCBpbnRlbmRl
-ZCB0byBiZSB0aGUgcHJvcGVyIG5vZGUgZm9yIHRoZSBnaXZlbg0KPiBVU0IgZGV2aWNlLg0KPiA+
-Pj4+Pg0KPiA+Pj4+PiBUaGlzIGlzIGltcG9ydGFudCBlc3BlY2lhbGx5IHdoZW4gVVNCIGhvc3Qg
-Y29udHJvbGxlciBoYXMNCj4gPj4+Pj4gY2hpbGQtbm9kZXMgZm9yIG90aGVyIHB1cnBvc2VzLiBG
-b3IgZXhhbXBsZSwgRXh5bm9zIEVIQ0kgYW5kIE9IQ0kNCj4gPj4+Pj4gZHJpdmVycyBhbHJlYWR5
-IGRlZmluZSBjaGlsZC1ub2RlcyBmb3IgZWFjaCBwaHlzaWNhbCByb290IGh1YiBwb3J0DQo+ID4+
-Pj4+IGFuZCBhc3NpZ25zIHJlc3BlY3RpdmUgUEhZIGNvbnRyb2xsZXIgYW5kIHBhcmFtZXRlcnMg
-Zm9yIHRoZW0uDQo+ID4+Pj4+IFRob3NlIGJpbmRpbmcgcHJlZGF0ZXMgc3VwcG9ydCBmb3IgVVNC
-IGRldmljZXRyZWUgbm9kZXMuDQo+ID4+Pj4+DQo+ID4+Pj4+IENoZWNraW5nIGZvciB0aGUgcHJv
-cGVyIGNvbXBhdGliaWxpdHkgc3RyaW5nIGFsbG93cyB0byBtaXRpZ2F0ZQ0KPiA+Pj4+PiB0aGUg
-Y29uZmxpY3QgYmV0d2VlbiBVU0IgZGV2aWNlIGRldmljZXRyZWUgbm9kZXMgYW5kIHRoZSBiaW5k
-aW5ncw0KPiA+Pj4+PiBmb3IgVVNCIGNvbnRyb2xsZXJzIHdpdGggY2hpbGQgbm9kZXMuIEl0IGFs
-c28gZml4ZXMgdGhlDQo+ID4+Pj4+IHNpZGUtZWZmZWN0IG9mIHRoZSBvdGhlciBjb21taXRzLCBs
-aWtlIDAxZmRmMTc5ZjRiMCAoInVzYjogY29yZToNCj4gPj4+Pj4gc2tpcCBpbnRlcmZhY2VzIGRp
-c2FibGVkIGluIGRldmljZXRyZWUiKSwgd2hpY2ggaW5jb3JyZWN0bHkNCj4gPj4+Pj4gZGlzYWJs
-ZXMgc29tZSBkZXZpY2VzIG9uIEV4eW5vcyBiYXNlZCBib2FyZHMuDQo+ID4+PiBIaSBNYXJlaywN
-Cj4gPj4+DQo+ID4+PiBUaGUgcHVycG9zZSBvZiB5b3VyIHBhdGNoIGlzIGRvIG5vdCBzZXQgb2Zf
-bm9kZSBmb3IgZGV2aWNlIHVuZGVyIFVTQg0KPiA+Pj4gY29udHJvbGxlciwNCj4gPj4gcmlnaHQ/
-DQo+ID4+DQo+ID4+IFJpZ2h0Lg0KPiA+Pg0KPiA+IERvIHlvdSBtaW5kIGRvaW5nIGl0IGF0IGZ1
-bmN0aW9uIGV4eW5vc19laGNpX2dldF9waHkgb2YgZWhjaS1leHlub3MuYz8NCj4gDQo+IEkgZG9u
-J3QgbWluZCBmaXhpbmcgaXQgaW4gZWhjaS1leHlub3MsIGJ1dCBmcmFua2x5IHNvIGZhciBJIGhh
-dmUgbm8gaWRlYSBob3cgdG8gZG8gaXQuDQo+IFRoZSBwcm9ibGVtIGlzIHRoYXQgbmV3bHkgY3Jl
-YXRlZCBVU0IgZGV2aWNlcyBnZXQgb2Ytbm9kZSBwb2ludGVyIHBvaW50aW5nIHRvIGENCj4gbm9k
-ZSB3aGljaCBpZiBub3QgaW50ZW5kZWQgZm9yIHRoZW0uIEhvdyB0aGlzIGNhbiBiZSBmaXhlZCBp
-biBlaGNpLWV4eW5vcz8NCj4gDQogDQpDYW4ndCBiZSB3b3JrYXJvdW5kIGJ5IHNldHRpbmcgb2Zf
-bm9kZSBhcyBOVUxMIGZvciBFSENJIGNvbnRyb2xsZXIgb3IgZm9yIFBIWSBub2RlIGF0DQpleHlu
-b3NfZWhjaV9nZXRfcGh5Pw0KDQpQZXRlcg0KDQo=
+Hi Peter,
+
+On 2019-05-13 11:23, Peter Chen wrote:
+>> On 2019-05-13 11:00, Peter Chen wrote:
+>>>> On 2019-05-10 05:10, Peter Chen wrote:
+>>>>>> Marek Szyprowski <m.szyprowski@samsung.com> writes:
+>>>>>>> Commit 69bec7259853 ("USB: core: let USB device know device node")
+>>>>>>> added support for attaching devicetree node for USB devices. The
+>>>>>>> mentioned commit however identifies the given USB device node only
+>>>>>>> by the
+>>>> 'reg'
+>>>>>>> property in the host controller children nodes. The USB device
+>>>>>>> node however also has to have a 'compatible' property as described
+>>>>>>> in Documentation/devicetree/bindings/usb/usb-device.txt. Lack for
+>>>>>>> the 'compatible' property check might result in assigning a
+>>>>>>> devicetree node, which is not intended to be the proper node for the given
+>> USB device.
+>>>>>>> This is important especially when USB host controller has
+>>>>>>> child-nodes for other purposes. For example, Exynos EHCI and OHCI
+>>>>>>> drivers already define child-nodes for each physical root hub port
+>>>>>>> and assigns respective PHY controller and parameters for them.
+>>>>>>> Those binding predates support for USB devicetree nodes.
+>>>>>>>
+>>>>>>> Checking for the proper compatibility string allows to mitigate
+>>>>>>> the conflict between USB device devicetree nodes and the bindings
+>>>>>>> for USB controllers with child nodes. It also fixes the
+>>>>>>> side-effect of the other commits, like 01fdf179f4b0 ("usb: core:
+>>>>>>> skip interfaces disabled in devicetree"), which incorrectly
+>>>>>>> disables some devices on Exynos based boards.
+>>>>> Hi Marek,
+>>>>>
+>>>>> The purpose of your patch is do not set of_node for device under USB
+>>>>> controller,
+>>>> right?
+>>>>
+>>>> Right.
+>>>>
+>>> Do you mind doing it at function exynos_ehci_get_phy of ehci-exynos.c?
+>> I don't mind fixing it in ehci-exynos, but frankly so far I have no idea how to do it.
+>> The problem is that newly created USB devices get of-node pointer pointing to a
+>> node which if not intended for them. How this can be fixed in ehci-exynos?
+>>
+>   
+> Can't be workaround by setting of_node as NULL for EHCI controller or for PHY node at
+> exynos_ehci_get_phy?
+
+Ah, such workaround? I will check, but this will need to be done with 
+care, because have a side effect for other subsystems like regulators or 
+clocks.
+
+BTW, What's wrong with proper, full verification of USB device nodes?
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
