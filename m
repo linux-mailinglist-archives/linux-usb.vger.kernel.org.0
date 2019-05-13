@@ -2,257 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6261AEFC
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 04:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4D61B051
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 08:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727478AbfEMCpH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 May 2019 22:45:07 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:15711 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727281AbfEMCpH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 May 2019 22:45:07 -0400
-X-IronPort-AV: E=Sophos;i="5.60,464,1549897200"; 
-   d="scan'208";a="15542001"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 13 May 2019 11:45:04 +0900
-Received: from localhost.localdomain (unknown [10.166.17.210])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2B8454156AED;
-        Mon, 13 May 2019 11:45:04 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v2] usb: renesas_usbhs: Use specific struct instead of USBHS_TYPE_* enums
-Date:   Mon, 13 May 2019 11:40:29 +0900
-Message-Id: <1557715229-13102-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726877AbfEMG0D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 May 2019 02:26:03 -0400
+Received: from condef-03.nifty.com ([202.248.20.68]:35316 "EHLO
+        condef-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726486AbfEMG0D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 02:26:03 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-03.nifty.com with ESMTP id x4D6MUP8016585;
+        Mon, 13 May 2019 15:22:30 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id x4D6MKMD031944;
+        Mon, 13 May 2019 15:22:21 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x4D6MKMD031944
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1557728542;
+        bh=swEZk/Cz28om8/f0Dg5Vc4B35GQqTxoFUbP1b15szx0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ukcj8KGPL9n5eGX37YX+59e9VBeS2YQuC2ctkglb/oRV9CSvYxQ46LPf030QpAX1n
+         FiBvQlvVtcYFSAYmziyEYqZTTJflZmchyBGt8wMfisMRFXsZfz5r5/P+3zx5IY6esv
+         eK1Ut+jP6Jmu4AvAZFOuIqXe4pCF0xMrI4C+uhLppzqYDbv5OZpF9b/YdISs+URE1c
+         QU1x/JlipyxnSVOsoFS6ZGlED+EOufNSh662uQPRRfz85fM143fhiXd43ZN9bYof/n
+         +4/86QmaRcOoFujKqBrgT6/4Ro0iBauFyDyyKmuXaaC6c46sVv5ts1rG6tffPFLPQ3
+         Ei0/PevcXe2Dg==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 0/4] kbuild: remove 'addtree' and 'flags' magic
+Date:   Mon, 13 May 2019 15:22:13 +0900
+Message-Id: <20190513062217.20750-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds a specific struct "usbhs_of_data" to add a new SoC
-data easily instead of code basis in the future.
+The 'addtree' and 'flags' are longstanding PITA.
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- Changes from v1 [1]:
- - Use sizeof(variable) instead of sizeof(type).
- - Add Geert-san's reviewed-by (thanks!).
+When we discussed this in kbuild ML,
+(https://patchwork.kernel.org/patch/9632347/)
+we agreed to get rid of this hack.
 
-[1]
-https://patchwork.kernel.org/patch/10938575/
+This required lots of efforts to send many fixups
+to each subsystem.
 
- drivers/usb/renesas_usbhs/common.c | 112 +++++++++++++++++++++----------------
- drivers/usb/renesas_usbhs/common.h |   5 ++
- 2 files changed, 70 insertions(+), 47 deletions(-)
+I did it, all the per-subsystem fixups were merged
+except media subsystem.
 
-diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-index 249fbee..0ca89de 100644
---- a/drivers/usb/renesas_usbhs/common.c
-+++ b/drivers/usb/renesas_usbhs/common.c
-@@ -535,53 +535,92 @@ static int usbhsc_drvcllbck_notify_hotplug(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct usbhs_of_data rcar_gen2_data = {
-+	.platform_callback = &usbhs_rcar2_ops,
-+	.param = {
-+		.type = USBHS_TYPE_RCAR_GEN2,
-+		.has_usb_dmac = 1,
-+		.pipe_configs = usbhsc_new_pipe,
-+		.pipe_size = ARRAY_SIZE(usbhsc_new_pipe),
-+	}
-+};
-+
-+static const struct usbhs_of_data rcar_gen3_data = {
-+	.platform_callback = &usbhs_rcar3_ops,
-+	.param = {
-+		.type = USBHS_TYPE_RCAR_GEN3,
-+		.has_usb_dmac = 1,
-+		.pipe_configs = usbhsc_new_pipe,
-+		.pipe_size = ARRAY_SIZE(usbhsc_new_pipe),
-+	}
-+};
-+
-+static const struct usbhs_of_data rcar_gen3_with_pll_data = {
-+	.platform_callback = &usbhs_rcar3_with_pll_ops,
-+	.param = {
-+		.type = USBHS_TYPE_RCAR_GEN3_WITH_PLL,
-+		.has_usb_dmac = 1,
-+		.pipe_configs = usbhsc_new_pipe,
-+		.pipe_size = ARRAY_SIZE(usbhsc_new_pipe),
-+	}
-+};
-+
-+static const struct usbhs_of_data rza1_data = {
-+	.platform_callback = &usbhs_rza1_ops,
-+	.param = {
-+		.type = USBHS_TYPE_RZA1,
-+		.pipe_configs = usbhsc_new_pipe,
-+		.pipe_size = ARRAY_SIZE(usbhsc_new_pipe),
-+	}
-+};
-+
- /*
-  *		platform functions
-  */
- static const struct of_device_id usbhs_of_match[] = {
- 	{
- 		.compatible = "renesas,usbhs-r8a774c0",
--		.data = (void *)USBHS_TYPE_RCAR_GEN3_WITH_PLL,
-+		.data = &rcar_gen3_with_pll_data,
- 	},
- 	{
- 		.compatible = "renesas,usbhs-r8a7790",
--		.data = (void *)USBHS_TYPE_RCAR_GEN2,
-+		.data = &rcar_gen2_data,
- 	},
- 	{
- 		.compatible = "renesas,usbhs-r8a7791",
--		.data = (void *)USBHS_TYPE_RCAR_GEN2,
-+		.data = &rcar_gen2_data,
- 	},
- 	{
- 		.compatible = "renesas,usbhs-r8a7794",
--		.data = (void *)USBHS_TYPE_RCAR_GEN2,
-+		.data = &rcar_gen2_data,
- 	},
- 	{
- 		.compatible = "renesas,usbhs-r8a7795",
--		.data = (void *)USBHS_TYPE_RCAR_GEN3,
-+		.data = &rcar_gen3_data,
- 	},
- 	{
- 		.compatible = "renesas,usbhs-r8a7796",
--		.data = (void *)USBHS_TYPE_RCAR_GEN3,
-+		.data = &rcar_gen3_data,
- 	},
- 	{
- 		.compatible = "renesas,usbhs-r8a77990",
--		.data = (void *)USBHS_TYPE_RCAR_GEN3_WITH_PLL,
-+		.data = &rcar_gen3_with_pll_data,
- 	},
- 	{
- 		.compatible = "renesas,usbhs-r8a77995",
--		.data = (void *)USBHS_TYPE_RCAR_GEN3_WITH_PLL,
-+		.data = &rcar_gen3_with_pll_data,
- 	},
- 	{
- 		.compatible = "renesas,rcar-gen2-usbhs",
--		.data = (void *)USBHS_TYPE_RCAR_GEN2,
-+		.data = &rcar_gen2_data,
- 	},
- 	{
- 		.compatible = "renesas,rcar-gen3-usbhs",
--		.data = (void *)USBHS_TYPE_RCAR_GEN3,
-+		.data = &rcar_gen3_data,
- 	},
- 	{
- 		.compatible = "renesas,rza1-usbhs",
--		.data = (void *)USBHS_TYPE_RZA1,
-+		.data = &rza1_data,
- 	},
- 	{ },
- };
-@@ -591,6 +630,7 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
- {
- 	struct renesas_usbhs_platform_info *info;
- 	struct renesas_usbhs_driver_param *dparam;
-+	const struct usbhs_of_data *data;
- 	u32 tmp;
- 	int gpio;
- 
-@@ -598,8 +638,15 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
- 	if (!info)
- 		return NULL;
- 
-+	data = of_device_get_match_data(dev);
-+	if (!data)
-+		return NULL;
-+
- 	dparam = &info->driver_param;
--	dparam->type = (uintptr_t)of_device_get_match_data(dev);
-+	memcpy(dparam, &data->param, sizeof(data->param));
-+	memcpy(&info->platform_callback, data->platform_callback,
-+	       sizeof(*data->platform_callback));
-+
- 	if (!of_property_read_u32(dev->of_node, "renesas,buswait", &tmp))
- 		dparam->buswait_bwait = tmp;
- 	gpio = of_get_named_gpio_flags(dev->of_node, "renesas,enable-gpio", 0,
-@@ -607,19 +654,6 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
- 	if (gpio > 0)
- 		dparam->enable_gpio = gpio;
- 
--	if (dparam->type == USBHS_TYPE_RCAR_GEN2 ||
--	    dparam->type == USBHS_TYPE_RCAR_GEN3 ||
--	    dparam->type == USBHS_TYPE_RCAR_GEN3_WITH_PLL) {
--		dparam->has_usb_dmac = 1;
--		dparam->pipe_configs = usbhsc_new_pipe;
--		dparam->pipe_size = ARRAY_SIZE(usbhsc_new_pipe);
--	}
--
--	if (dparam->type == USBHS_TYPE_RZA1) {
--		dparam->pipe_configs = usbhsc_new_pipe;
--		dparam->pipe_size = ARRAY_SIZE(usbhsc_new_pipe);
--	}
--
- 	return info;
- }
- 
-@@ -676,29 +710,13 @@ static int usbhs_probe(struct platform_device *pdev)
- 	       &info->driver_param,
- 	       sizeof(struct renesas_usbhs_driver_param));
- 
--	switch (priv->dparam.type) {
--	case USBHS_TYPE_RCAR_GEN2:
--		priv->pfunc = usbhs_rcar2_ops;
--		break;
--	case USBHS_TYPE_RCAR_GEN3:
--		priv->pfunc = usbhs_rcar3_ops;
--		break;
--	case USBHS_TYPE_RCAR_GEN3_WITH_PLL:
--		priv->pfunc = usbhs_rcar3_with_pll_ops;
--		break;
--	case USBHS_TYPE_RZA1:
--		priv->pfunc = usbhs_rza1_ops;
--		break;
--	default:
--		if (!info->platform_callback.get_id) {
--			dev_err(&pdev->dev, "no platform callbacks");
--			return -EINVAL;
--		}
--		memcpy(&priv->pfunc,
--		       &info->platform_callback,
--		       sizeof(struct renesas_usbhs_platform_callback));
--		break;
-+	if (!info->platform_callback.get_id) {
-+		dev_err(&pdev->dev, "no platform callbacks");
-+		return -EINVAL;
- 	}
-+	memcpy(&priv->pfunc,
-+	       &info->platform_callback,
-+	       sizeof(struct renesas_usbhs_platform_callback));
- 
- 	/* set driver callback functions for platform */
- 	dfunc			= &info->driver_callback;
-diff --git a/drivers/usb/renesas_usbhs/common.h b/drivers/usb/renesas_usbhs/common.h
-index 3777af8..de1a663 100644
---- a/drivers/usb/renesas_usbhs/common.h
-+++ b/drivers/usb/renesas_usbhs/common.h
-@@ -282,6 +282,11 @@ struct usbhs_priv {
- 	struct clk *clks[2];
- };
- 
-+struct usbhs_of_data {
-+	const struct renesas_usbhs_platform_callback	*platform_callback;
-+	const struct renesas_usbhs_driver_param		param;
-+};
-+
- /*
-  * common
-  */
+I will apply all the remaining fixups,
+and delete 'addtree' and 'flags' magic.
+
+I have tested this series for a long time,
+and addressed all the reported issues.
+
+
+
+Masahiro Yamada (4):
+  media: remove unneeded header search paths
+  media: prefix header search paths with $(srctree)/
+  treewide: prefix header search paths with $(srctree)/
+  kbuild: remove 'addtree' and 'flags' magic for header search paths
+
+ arch/mips/pnx833x/Platform                    |  2 +-
+ arch/powerpc/Makefile                         |  2 +-
+ arch/sh/Makefile                              |  4 +--
+ arch/x86/kernel/Makefile                      |  2 +-
+ arch/x86/mm/Makefile                          |  2 +-
+ arch/xtensa/boot/lib/Makefile                 |  2 +-
+ drivers/hid/intel-ish-hid/Makefile            |  2 +-
+ drivers/media/common/b2c2/Makefile            |  4 +--
+ drivers/media/dvb-frontends/cxd2880/Makefile  |  2 --
+ drivers/media/i2c/smiapp/Makefile             |  2 +-
+ drivers/media/mmc/siano/Makefile              |  3 +--
+ drivers/media/pci/b2c2/Makefile               |  2 +-
+ drivers/media/pci/bt8xx/Makefile              |  5 ++--
+ drivers/media/pci/cx18/Makefile               |  4 +--
+ drivers/media/pci/cx23885/Makefile            |  4 +--
+ drivers/media/pci/cx88/Makefile               |  4 +--
+ drivers/media/pci/ddbridge/Makefile           |  4 +--
+ drivers/media/pci/dm1105/Makefile             |  2 +-
+ drivers/media/pci/mantis/Makefile             |  2 +-
+ drivers/media/pci/netup_unidvb/Makefile       |  2 +-
+ drivers/media/pci/ngene/Makefile              |  4 +--
+ drivers/media/pci/pluto2/Makefile             |  2 +-
+ drivers/media/pci/pt1/Makefile                |  4 +--
+ drivers/media/pci/pt3/Makefile                |  4 +--
+ drivers/media/pci/smipcie/Makefile            |  5 ++--
+ drivers/media/pci/ttpci/Makefile              |  4 +--
+ drivers/media/platform/sti/c8sectpfe/Makefile |  5 ++--
+ drivers/media/radio/Makefile                  |  2 --
+ drivers/media/spi/Makefile                    |  4 +--
+ drivers/media/usb/as102/Makefile              |  2 +-
+ drivers/media/usb/au0828/Makefile             |  4 +--
+ drivers/media/usb/b2c2/Makefile               |  2 +-
+ drivers/media/usb/cx231xx/Makefile            |  5 ++--
+ drivers/media/usb/em28xx/Makefile             |  4 +--
+ drivers/media/usb/go7007/Makefile             |  2 +-
+ drivers/media/usb/pvrusb2/Makefile            |  4 +--
+ drivers/media/usb/siano/Makefile              |  2 +-
+ drivers/media/usb/tm6000/Makefile             |  4 +--
+ drivers/media/usb/ttusb-budget/Makefile       |  2 +-
+ drivers/media/usb/usbvision/Makefile          |  2 --
+ drivers/net/ethernet/chelsio/libcxgb/Makefile |  2 +-
+ drivers/target/iscsi/cxgbit/Makefile          |  6 ++---
+ drivers/usb/storage/Makefile                  |  2 +-
+ fs/ocfs2/dlm/Makefile                         |  3 +--
+ fs/ocfs2/dlmfs/Makefile                       |  2 +-
+ fs/xfs/Makefile                               |  4 +--
+ net/bpfilter/Makefile                         |  2 +-
+ scripts/Kbuild.include                        |  8 ------
+ scripts/Makefile.host                         | 12 ++++-----
+ scripts/Makefile.lib                          | 26 ++++++-------------
+ scripts/dtc/Makefile                          |  6 ++---
+ scripts/genksyms/Makefile                     |  4 +--
+ scripts/kconfig/Makefile                      |  4 +--
+ 53 files changed, 85 insertions(+), 119 deletions(-)
+
 -- 
-2.7.4
+2.17.1
 
