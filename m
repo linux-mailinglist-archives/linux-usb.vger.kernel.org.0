@@ -2,110 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B541B3A8
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 12:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9671B3EE
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 12:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728373AbfEMKGl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 13 May 2019 06:06:41 -0400
-Received: from unicorn.mansr.com ([81.2.72.234]:36228 "EHLO unicorn.mansr.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727339AbfEMKGl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 13 May 2019 06:06:41 -0400
-Received: by unicorn.mansr.com (Postfix, from userid 51770)
-        id D154B149B5; Mon, 13 May 2019 11:06:39 +0100 (BST)
-From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-samsung-soc\@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v3] usb: core: verify devicetree nodes for USB devices
-References: <yw1xpnotufti.fsf@mansr.com>
-        <CGME20190509084827eucas1p294962744fe70745c50b69a5349b5de68@eucas1p2.samsung.com>
-        <20190509084726.5405-1-m.szyprowski@samsung.com>
-        <yw1xlfzfv4ol.fsf@mansr.com>
-        <VI1PR04MB5327AD56CA772284DFE663D08B0C0@VI1PR04MB5327.eurprd04.prod.outlook.com>
-        <7c5579d2-634a-d705-a451-563939957d57@samsung.com>
-        <VI1PR04MB5327B425756FA394C51525208B0F0@VI1PR04MB5327.eurprd04.prod.outlook.com>
-        <3544eb61-2bd8-338d-8d62-d95a775528ef@samsung.com>
-        <VI1PR04MB5327FAC12E4A3D403E8D92128B0F0@VI1PR04MB5327.eurprd04.prod.outlook.com>
-        <5d0abe9c-613c-d39b-6746-78e5e5c2bbc5@samsung.com>
-Date:   Mon, 13 May 2019 11:06:39 +0100
-In-Reply-To: <5d0abe9c-613c-d39b-6746-78e5e5c2bbc5@samsung.com> (Marek
-        Szyprowski's message of "Mon, 13 May 2019 12:03:18 +0200")
-Message-ID: <yw1xzhnqu0r4.fsf@mansr.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
+        id S1727487AbfEMKXJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 May 2019 06:23:09 -0400
+Received: from mail-it1-f197.google.com ([209.85.166.197]:56053 "EHLO
+        mail-it1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726330AbfEMKXI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 06:23:08 -0400
+Received: by mail-it1-f197.google.com with SMTP id o126so4389685itc.5
+        for <linux-usb@vger.kernel.org>; Mon, 13 May 2019 03:23:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=MD+QokhW6aQWfWqFuW7b35hDHc6Efu2abU5/OSovxBE=;
+        b=DKmJ3qaiuHeTQ3fhAh9gB7wBos7jT8op70A2mT+J83YGOFa/CKJzCnv+zFYocUGzWa
+         2Sw2mlSUUbptuT/MjYqsus6abZc/fRobPQuCoAXb/y5ZOczDvoIEOoNHJaBE/8bbe9EU
+         ClWjGj4bC8q42O/B5VT+MfiGp7NtiKnVK7x0ECuNkEnsIDY76UJ9W23WdAleDpV0S/gG
+         fKLOqjrSCY6+UwLoKhMOm5E20R3qeZHNK4UtpAcB44Ryk93ty5PPVlOPq7AxlKnKJOcs
+         ggJcuObAf9+M+zyXxAINkK35TQ+Ob5v+oX0yTG38dB9Y8ap6w8RD6NY27pFxhDA0H2g2
+         SutQ==
+X-Gm-Message-State: APjAAAUUKxfc66/r18EWZSidW4Ie7XhEVFb7k7ihFzgRjHSU9SQHKxly
+        FNWrcNQk3/IbFqMMaVDTz0fdxuTuTgWxg6KImVAR38wuaxel
+X-Google-Smtp-Source: APXvYqypmz9GTUMulQ4YmTfkPtqRuVD/rXyFolzhHSBiWGAf2piQHL04tnXddD/X840pGS32563fffMIdXuqZJG44r1bPnVrHJjW
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+X-Received: by 2002:a5d:8d81:: with SMTP id b1mr9537878ioj.83.1557742987986;
+ Mon, 13 May 2019 03:23:07 -0700 (PDT)
+Date:   Mon, 13 May 2019 03:23:07 -0700
+In-Reply-To: <000000000000050c5f0588363ad6@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000073512b0588c24d09@google.com>
+Subject: Re: KASAN: use-after-free Read in p54u_load_firmware_cb
+From:   syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, chunkeey@googlemail.com,
+        davem@davemloft.net, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Marek Szyprowski <m.szyprowski@samsung.com> writes:
+syzbot has found a reproducer for the following crash on:
 
-> Hi Peter,
->
-> On 2019-05-13 11:23, Peter Chen wrote:
->>> On 2019-05-13 11:00, Peter Chen wrote:
->>>>> On 2019-05-10 05:10, Peter Chen wrote:
->>>>>>> Marek Szyprowski <m.szyprowski@samsung.com> writes:
->>>>>>>> Commit 69bec7259853 ("USB: core: let USB device know device node")
->>>>>>>> added support for attaching devicetree node for USB devices. The
->>>>>>>> mentioned commit however identifies the given USB device node only
->>>>>>>> by the
->>>>> 'reg'
->>>>>>>> property in the host controller children nodes. The USB device
->>>>>>>> node however also has to have a 'compatible' property as described
->>>>>>>> in Documentation/devicetree/bindings/usb/usb-device.txt. Lack for
->>>>>>>> the 'compatible' property check might result in assigning a
->>>>>>>> devicetree node, which is not intended to be the proper node for the given
->>> USB device.
->>>>>>>> This is important especially when USB host controller has
->>>>>>>> child-nodes for other purposes. For example, Exynos EHCI and OHCI
->>>>>>>> drivers already define child-nodes for each physical root hub port
->>>>>>>> and assigns respective PHY controller and parameters for them.
->>>>>>>> Those binding predates support for USB devicetree nodes.
->>>>>>>>
->>>>>>>> Checking for the proper compatibility string allows to mitigate
->>>>>>>> the conflict between USB device devicetree nodes and the bindings
->>>>>>>> for USB controllers with child nodes. It also fixes the
->>>>>>>> side-effect of the other commits, like 01fdf179f4b0 ("usb: core:
->>>>>>>> skip interfaces disabled in devicetree"), which incorrectly
->>>>>>>> disables some devices on Exynos based boards.
->>>>>> Hi Marek,
->>>>>>
->>>>>> The purpose of your patch is do not set of_node for device under USB
->>>>>> controller,
->>>>> right?
->>>>>
->>>>> Right.
->>>>>
->>>> Do you mind doing it at function exynos_ehci_get_phy of ehci-exynos.c?
->>> I don't mind fixing it in ehci-exynos, but frankly so far I have no
->>> idea how to do it.  The problem is that newly created USB devices
->>> get of-node pointer pointing to a node which if not intended for
->>> them. How this can be fixed in ehci-exynos?
->>>
->>   
->> Can't be workaround by setting of_node as NULL for EHCI controller or
->> for PHY node at exynos_ehci_get_phy?
->
-> Ah, such workaround? I will check, but this will need to be done with 
-> care, because have a side effect for other subsystems like regulators or 
-> clocks.
->
-> BTW, What's wrong with proper, full verification of USB device nodes?
+HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=16b64110a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
+dashboard link: https://syzkaller.appspot.com/bug?extid=200d4bb11b23d929335f
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1634c900a00000
 
-Your approach so far doesn't address the actual problem of a conflict
-between the generic USB DT bindings and those for the Exynos host
-controller.  If you fix that, the validation issue goes away.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com
 
--- 
-Måns Rullgård
+usb 1-1: config 0 descriptor??
+usb 1-1: reset high-speed USB device number 2 using dummy_hcd
+usb 1-1: device descriptor read/64, error -71
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: Loading firmware file isl3887usb
+usb 1-1: Direct firmware load for isl3887usb failed with error -2
+usb 1-1: Firmware not found.
+==================================================================
+BUG: KASAN: use-after-free in p54u_load_firmware_cb.cold+0x97/0x13a  
+drivers/net/wireless/intersil/p54/p54usb.c:936
+Read of size 8 at addr ffff88809803f588 by task kworker/1:0/17
+
+CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.1.0-rc3-319004-g43151d6 #6
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: events request_firmware_work_func
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xe8/0x16e lib/dump_stack.c:113
+  print_address_description+0x6c/0x236 mm/kasan/report.c:187
+  kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
+  p54u_load_firmware_cb.cold+0x97/0x13a  
+drivers/net/wireless/intersil/p54/p54usb.c:936
+  request_firmware_work_func+0x12d/0x249  
+drivers/base/firmware_loader/main.c:785
+  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
+  kthread+0x313/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+
+Allocated by task 0:
+(stack is not available)
+
+Freed by task 0:
+(stack is not available)
+
+The buggy address belongs to the object at ffff88809803f180
+  which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 8 bytes to the right of
+  1024-byte region [ffff88809803f180, ffff88809803f580)
+The buggy address belongs to the page:
+page:ffffea0002600f00 count:1 mapcount:0 mapping:ffff88812c3f4a00 index:0x0  
+compound_mapcount: 0
+flags: 0xfff00000010200(slab|head)
+raw: 00fff00000010200 dead000000000100 dead000000000200 ffff88812c3f4a00
+raw: 0000000000000000 00000000800e000e 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff88809803f480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  ffff88809803f500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ffff88809803f580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                       ^
+  ffff88809803f600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  ffff88809803f680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
