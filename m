@@ -2,137 +2,257 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEB61AB75
-	for <lists+linux-usb@lfdr.de>; Sun, 12 May 2019 11:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6261AEFC
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 04:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbfELJSH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 May 2019 05:18:07 -0400
-Received: from mail-it1-f198.google.com ([209.85.166.198]:53631 "EHLO
-        mail-it1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726529AbfELJSG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 May 2019 05:18:06 -0400
-Received: by mail-it1-f198.google.com with SMTP id q1so9533533itc.3
-        for <linux-usb@vger.kernel.org>; Sun, 12 May 2019 02:18:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=mqrdbMSQFi7W3aeSrTnSvNJE0HD4QWimkJ088nB5tww=;
-        b=EksMo0VCvQepZJWQ9TjCIEcrQDsLiVMjDopcD8bCh5mgOGG0D39Qcx+h15dkZiY/qu
-         qSTe7DL2/NSIT8tYy0zc/n+0fQmukLMixa5SFxxPdZ6vOxluBk42/RXJRPOFAyOnkKGo
-         /4087oYPs2g4JW6+if4xBwpWTcO09qNzgzQx3rRmW2CHP+btViJFwwzztWaC3JBUonwF
-         wigBV55OAEmk1nUal0v7papoWuZC8P/wozKEKNXKxXO+77IspxLX9VDFPi1K3w2ZcQp7
-         RT3jREhyO6wz1Lx6LsaLvJm4o7GzSjmIUXwgHRN8L71OTfy4OkAn9XnEBfbVlyy5Gawq
-         /k0w==
-X-Gm-Message-State: APjAAAUNXuGoWF3YRbSjg3WjaVZ2Osf3Ft+PXHIpVHfYojIFfUkNDwtm
-        HaGujjM2fC6eyNeqLXrXssMopeh3E9lwXJ8wUku3z3LuSyM0
-X-Google-Smtp-Source: APXvYqyBd1DJynayVg/cjXVcdTxDG/CH2Zjaz4vQSMLJQUY6MEtd1dK4RG0FWoP4QSRW6UbJY1gpYOUE+bs5KAQD2DSY4iARXXtL
-MIME-Version: 1.0
-X-Received: by 2002:a24:7b0a:: with SMTP id q10mr13805666itc.81.1557652685593;
- Sun, 12 May 2019 02:18:05 -0700 (PDT)
-Date:   Sun, 12 May 2019 02:18:05 -0700
-In-Reply-To: <0000000000003c6794058871e40a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000228020588ad47a1@google.com>
-Subject: Re: general protection fault in sisusb_probe
-From:   syzbot <syzbot+a0cbdbd6d169020c8959@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        rafael@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        id S1727478AbfEMCpH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 May 2019 22:45:07 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:15711 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727281AbfEMCpH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 May 2019 22:45:07 -0400
+X-IronPort-AV: E=Sophos;i="5.60,464,1549897200"; 
+   d="scan'208";a="15542001"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 13 May 2019 11:45:04 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2B8454156AED;
+        Mon, 13 May 2019 11:45:04 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH v2] usb: renesas_usbhs: Use specific struct instead of USBHS_TYPE_* enums
+Date:   Mon, 13 May 2019 11:40:29 +0900
+Message-Id: <1557715229-13102-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+This patch adds a specific struct "usbhs_of_data" to add a new SoC
+data easily instead of code basis in the future.
 
-HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1222d274a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-dashboard link: https://syzkaller.appspot.com/bug?extid=a0cbdbd6d169020c8959
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1382e600a00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=174783f0a00000
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ Changes from v1 [1]:
+ - Use sizeof(variable) instead of sizeof(type).
+ - Add Geert-san's reviewed-by (thanks!).
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+a0cbdbd6d169020c8959@syzkaller.appspotmail.com
+[1]
+https://patchwork.kernel.org/patch/10938575/
 
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-kasan: CONFIG_KASAN_INLINE enabled
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] SMP KASAN PTI
-CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.1.0-rc3-319004-g43151d6 #6
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:dev_name include/linux/device.h:1087 [inline]
-RIP: 0010:__dev_printk+0x3f/0x215 drivers/base/core.c:3208
-Code: 89 f5 53 e8 8e 53 1c fc 48 85 ed 0f 84 c9 01 00 00 e8 80 53 1c fc 48  
-8d 7d 50 b8 ff ff 37 00 48 89 fa 48 c1 e0 2a 48 c1 ea 03 <80> 3c 02 00 74  
-05 e8 41 68 53 fc 4c 8b 7d 50 4d 85 ff 75 28 e8 53
-RSP: 0018:ffff8880a84ff1c8 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: ffffed101509fe40 RCX: ffffffff8980f1cb
-RDX: 000000000000001e RSI: ffffffff855576f0 RDI: 00000000000000f0
-RBP: 00000000000000a0 R08: ffff8880a84db100 R09: 0000000000000006
-R10: ffff8880a84dba08 R11: ffff8880a84db100 R12: ffffffff8f031080
-R13: ffff8880a84ff220 R14: ffff888090615500 R15: ffff88808c860000
-FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007faa07b90000 CR3: 00000000a0896000 CR4: 00000000001406e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
-  _dev_err+0xdc/0x10e drivers/base/core.c:3251
-  sisusb_probe+0x1c8/0xbd6 drivers/usb/misc/sisusbvga/sisusb.c:3035
-  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
-  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-Modules linked in:
----[ end trace 3af8db6f82d76f53 ]---
-RIP: 0010:dev_name include/linux/device.h:1087 [inline]
-RIP: 0010:__dev_printk+0x3f/0x215 drivers/base/core.c:3208
-Code: 89 f5 53 e8 8e 53 1c fc 48 85 ed 0f 84 c9 01 00 00 e8 80 53 1c fc 48  
-8d 7d 50 b8 ff ff 37 00 48 89 fa 48 c1 e0 2a 48 c1 ea 03 <80> 3c 02 00 74  
-05 e8 41 68 53 fc 4c 8b 7d 50 4d 85 ff 75 28 e8 53
-RSP: 0018:ffff8880a84ff1c8 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: ffffed101509fe40 RCX: ffffffff8980f1cb
-RDX: 000000000000001e RSI: ffffffff855576f0 RDI: 00000000000000f0
-RBP: 00000000000000a0 R08: ffff8880a84db100 R09: 0000000000000006
-R10: ffff8880a84dba08 R11: ffff8880a84db100 R12: ffffffff8f031080
-R13: ffff8880a84ff220 R14: ffff888090615500 R15: ffff88808c860000
-FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007faa07b90000 CR3: 00000000a0896000 CR4: 00000000001406e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+ drivers/usb/renesas_usbhs/common.c | 112 +++++++++++++++++++++----------------
+ drivers/usb/renesas_usbhs/common.h |   5 ++
+ 2 files changed, 70 insertions(+), 47 deletions(-)
+
+diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
+index 249fbee..0ca89de 100644
+--- a/drivers/usb/renesas_usbhs/common.c
++++ b/drivers/usb/renesas_usbhs/common.c
+@@ -535,53 +535,92 @@ static int usbhsc_drvcllbck_notify_hotplug(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct usbhs_of_data rcar_gen2_data = {
++	.platform_callback = &usbhs_rcar2_ops,
++	.param = {
++		.type = USBHS_TYPE_RCAR_GEN2,
++		.has_usb_dmac = 1,
++		.pipe_configs = usbhsc_new_pipe,
++		.pipe_size = ARRAY_SIZE(usbhsc_new_pipe),
++	}
++};
++
++static const struct usbhs_of_data rcar_gen3_data = {
++	.platform_callback = &usbhs_rcar3_ops,
++	.param = {
++		.type = USBHS_TYPE_RCAR_GEN3,
++		.has_usb_dmac = 1,
++		.pipe_configs = usbhsc_new_pipe,
++		.pipe_size = ARRAY_SIZE(usbhsc_new_pipe),
++	}
++};
++
++static const struct usbhs_of_data rcar_gen3_with_pll_data = {
++	.platform_callback = &usbhs_rcar3_with_pll_ops,
++	.param = {
++		.type = USBHS_TYPE_RCAR_GEN3_WITH_PLL,
++		.has_usb_dmac = 1,
++		.pipe_configs = usbhsc_new_pipe,
++		.pipe_size = ARRAY_SIZE(usbhsc_new_pipe),
++	}
++};
++
++static const struct usbhs_of_data rza1_data = {
++	.platform_callback = &usbhs_rza1_ops,
++	.param = {
++		.type = USBHS_TYPE_RZA1,
++		.pipe_configs = usbhsc_new_pipe,
++		.pipe_size = ARRAY_SIZE(usbhsc_new_pipe),
++	}
++};
++
+ /*
+  *		platform functions
+  */
+ static const struct of_device_id usbhs_of_match[] = {
+ 	{
+ 		.compatible = "renesas,usbhs-r8a774c0",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN3_WITH_PLL,
++		.data = &rcar_gen3_with_pll_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,usbhs-r8a7790",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN2,
++		.data = &rcar_gen2_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,usbhs-r8a7791",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN2,
++		.data = &rcar_gen2_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,usbhs-r8a7794",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN2,
++		.data = &rcar_gen2_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,usbhs-r8a7795",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN3,
++		.data = &rcar_gen3_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,usbhs-r8a7796",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN3,
++		.data = &rcar_gen3_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,usbhs-r8a77990",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN3_WITH_PLL,
++		.data = &rcar_gen3_with_pll_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,usbhs-r8a77995",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN3_WITH_PLL,
++		.data = &rcar_gen3_with_pll_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,rcar-gen2-usbhs",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN2,
++		.data = &rcar_gen2_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,rcar-gen3-usbhs",
+-		.data = (void *)USBHS_TYPE_RCAR_GEN3,
++		.data = &rcar_gen3_data,
+ 	},
+ 	{
+ 		.compatible = "renesas,rza1-usbhs",
+-		.data = (void *)USBHS_TYPE_RZA1,
++		.data = &rza1_data,
+ 	},
+ 	{ },
+ };
+@@ -591,6 +630,7 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
+ {
+ 	struct renesas_usbhs_platform_info *info;
+ 	struct renesas_usbhs_driver_param *dparam;
++	const struct usbhs_of_data *data;
+ 	u32 tmp;
+ 	int gpio;
+ 
+@@ -598,8 +638,15 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
+ 	if (!info)
+ 		return NULL;
+ 
++	data = of_device_get_match_data(dev);
++	if (!data)
++		return NULL;
++
+ 	dparam = &info->driver_param;
+-	dparam->type = (uintptr_t)of_device_get_match_data(dev);
++	memcpy(dparam, &data->param, sizeof(data->param));
++	memcpy(&info->platform_callback, data->platform_callback,
++	       sizeof(*data->platform_callback));
++
+ 	if (!of_property_read_u32(dev->of_node, "renesas,buswait", &tmp))
+ 		dparam->buswait_bwait = tmp;
+ 	gpio = of_get_named_gpio_flags(dev->of_node, "renesas,enable-gpio", 0,
+@@ -607,19 +654,6 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
+ 	if (gpio > 0)
+ 		dparam->enable_gpio = gpio;
+ 
+-	if (dparam->type == USBHS_TYPE_RCAR_GEN2 ||
+-	    dparam->type == USBHS_TYPE_RCAR_GEN3 ||
+-	    dparam->type == USBHS_TYPE_RCAR_GEN3_WITH_PLL) {
+-		dparam->has_usb_dmac = 1;
+-		dparam->pipe_configs = usbhsc_new_pipe;
+-		dparam->pipe_size = ARRAY_SIZE(usbhsc_new_pipe);
+-	}
+-
+-	if (dparam->type == USBHS_TYPE_RZA1) {
+-		dparam->pipe_configs = usbhsc_new_pipe;
+-		dparam->pipe_size = ARRAY_SIZE(usbhsc_new_pipe);
+-	}
+-
+ 	return info;
+ }
+ 
+@@ -676,29 +710,13 @@ static int usbhs_probe(struct platform_device *pdev)
+ 	       &info->driver_param,
+ 	       sizeof(struct renesas_usbhs_driver_param));
+ 
+-	switch (priv->dparam.type) {
+-	case USBHS_TYPE_RCAR_GEN2:
+-		priv->pfunc = usbhs_rcar2_ops;
+-		break;
+-	case USBHS_TYPE_RCAR_GEN3:
+-		priv->pfunc = usbhs_rcar3_ops;
+-		break;
+-	case USBHS_TYPE_RCAR_GEN3_WITH_PLL:
+-		priv->pfunc = usbhs_rcar3_with_pll_ops;
+-		break;
+-	case USBHS_TYPE_RZA1:
+-		priv->pfunc = usbhs_rza1_ops;
+-		break;
+-	default:
+-		if (!info->platform_callback.get_id) {
+-			dev_err(&pdev->dev, "no platform callbacks");
+-			return -EINVAL;
+-		}
+-		memcpy(&priv->pfunc,
+-		       &info->platform_callback,
+-		       sizeof(struct renesas_usbhs_platform_callback));
+-		break;
++	if (!info->platform_callback.get_id) {
++		dev_err(&pdev->dev, "no platform callbacks");
++		return -EINVAL;
+ 	}
++	memcpy(&priv->pfunc,
++	       &info->platform_callback,
++	       sizeof(struct renesas_usbhs_platform_callback));
+ 
+ 	/* set driver callback functions for platform */
+ 	dfunc			= &info->driver_callback;
+diff --git a/drivers/usb/renesas_usbhs/common.h b/drivers/usb/renesas_usbhs/common.h
+index 3777af8..de1a663 100644
+--- a/drivers/usb/renesas_usbhs/common.h
++++ b/drivers/usb/renesas_usbhs/common.h
+@@ -282,6 +282,11 @@ struct usbhs_priv {
+ 	struct clk *clks[2];
+ };
+ 
++struct usbhs_of_data {
++	const struct renesas_usbhs_platform_callback	*platform_callback;
++	const struct renesas_usbhs_driver_param		param;
++};
++
+ /*
+  * common
+  */
+-- 
+2.7.4
 
