@@ -2,72 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2063A1B735
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 15:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC001B7CE
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 16:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728712AbfEMNlZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 May 2019 09:41:25 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50576 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727413AbfEMNlZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 13 May 2019 09:41:25 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 76755AC38;
-        Mon, 13 May 2019 13:41:23 +0000 (UTC)
-Message-ID: <1557754110.2793.7.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in p54u_load_firmware_cb
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>,
-        kvalo@codeaurora.org, davem@davemloft.net, andreyknvl@google.com,
-        syzkaller-bugs@googlegroups.com, chunkeey@googlemail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Michael Wu <flamingice@sourmilk.net>
-Date:   Mon, 13 May 2019 15:28:30 +0200
-In-Reply-To: <00000000000073512b0588c24d09@google.com>
-References: <00000000000073512b0588c24d09@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1728500AbfEMOIq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 May 2019 10:08:46 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:45350 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727202AbfEMOIp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 10:08:45 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 9B26A28395B
+Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, "Yang, Fei" <fei.yang@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen Yu <chenyu56@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+ <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com>
+ <CALAqxLUfJYUtmQDC_aDMxW7KcPUawGoRq-PNUfmzQuNKh97FmQ@mail.gmail.com>
+ <CALAqxLVUFfrPVVjR74V3PhhtcCytfp=cUYjo=BcJ14D1fkVXTw@mail.gmail.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <7ec57c29-d1ab-dc4c-755d-a6009b9132b5@collabora.com>
+Date:   Mon, 13 May 2019 16:08:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <CALAqxLVUFfrPVVjR74V3PhhtcCytfp=cUYjo=BcJ14D1fkVXTw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mo, 2019-05-13 at 03:23 -0700, syzbot wrote:
-> syzbot has found a reproducer for the following crash on:
+Hi John,
+
+W dniu 09.05.2019 o 23:23, John Stultz pisze:
+> On Thu, May 9, 2019 at 11:25 AM John Stultz <john.stultz@linaro.org> wrote:
+>>
+>> On Thu, May 9, 2019 at 7:02 AM Andrzej Pietrasiewicz
+>> <andrzej.p@collabora.com> wrote:
+>>>
+
+<snip>
+
 > 
-> HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16b64110a00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-> dashboard link: https://syzkaller.appspot.com/bug?extid=200d4bb11b23d929335f
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1634c900a00000
+> Ok. Apologies for earlier confusion.
 > 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com
+> So the kzalloc/memset fix you sent for f_fs.c does seem to avoid the
+> crash on bootup I was seeing w/  HiKey/dwc2 (previously I had only
+> tested it on HiKey960/dwc3).
 > 
-> usb 1-1: config 0 descriptor??
-> usb 1-1: reset high-speed USB device number 2 using dummy_hcd
-> usb 1-1: device descriptor read/64, error -71
-> usb 1-1: Using ep0 maxpacket: 8
-> usb 1-1: Loading firmware file isl3887usb
-> usb 1-1: Direct firmware load for isl3887usb failed with error -2
-> usb 1-1: Firmware not found.
-> ==================================================================
-> BUG: KASAN: use-after-free in p54u_load_firmware_cb.cold+0x97/0x13a  
-> drivers/net/wireless/intersil/p54/p54usb.c:936
-> Read of size 8 at addr ffff88809803f588 by task kworker/1:0/17
+> However with that patch, I still see tranfer problems with adb, unless
+> I comment out setting sg_supported in dwc2/gadget.c (in the same
+> fashion I have to with HiKey960/dwc3).
+> 
+> The dwc2 zlp patch doesn't seem to affect things much either way in my
+> testing. But maybe I'm just not tripping on that issue yet.
+> 
+> So yes, the kzalloc/memset patch is a clear improvement, as it avoids
+> the bootup crash on dwc2, and seems like it should go in.
+> 
+> However, there is still the outstanding issue w/  functionfs sg
+> support stalling on larger transfers.
 
-Hi,
+Do you get "functionfs read size 512 > requested size 24, splitting
+request into multiple reads" message when problems happen?
 
-it looks to me as if refcounting is broken.
-You should have a usb_put_dev() in p54u_load_firmware_cb() or in
-p54u_disconnect(), but not both.
+Is there anything in the kernel log?
 
-	Regards
-		Oliver
+I'm unable to reproduce your problems. I thought I was able, but
+it was another problem, which is fixed with:
 
+5acb4b970184d189d901192d075997c933b82260
+dwc2: gadget: Fix completed transfer size calculation in DDMA
+
+(or you can simply take upstream drivers/usb/dwc2).
+
+Do your problems happen on dwc2 or dwc3?
+
+Is there a way to try your adb without building and running the
+whole Android?
+
+Andrzej
