@@ -2,119 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9671B3EE
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 12:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0381B437
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 12:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727487AbfEMKXJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 May 2019 06:23:09 -0400
-Received: from mail-it1-f197.google.com ([209.85.166.197]:56053 "EHLO
-        mail-it1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726330AbfEMKXI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 06:23:08 -0400
-Received: by mail-it1-f197.google.com with SMTP id o126so4389685itc.5
-        for <linux-usb@vger.kernel.org>; Mon, 13 May 2019 03:23:08 -0700 (PDT)
+        id S1729119AbfEMKnr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 May 2019 06:43:47 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45757 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729117AbfEMKnr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 06:43:47 -0400
+Received: by mail-lj1-f193.google.com with SMTP id r76so10437417lja.12;
+        Mon, 13 May 2019 03:43:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=MD+QokhW6aQWfWqFuW7b35hDHc6Efu2abU5/OSovxBE=;
-        b=DKmJ3qaiuHeTQ3fhAh9gB7wBos7jT8op70A2mT+J83YGOFa/CKJzCnv+zFYocUGzWa
-         2Sw2mlSUUbptuT/MjYqsus6abZc/fRobPQuCoAXb/y5ZOczDvoIEOoNHJaBE/8bbe9EU
-         ClWjGj4bC8q42O/B5VT+MfiGp7NtiKnVK7x0ECuNkEnsIDY76UJ9W23WdAleDpV0S/gG
-         fKLOqjrSCY6+UwLoKhMOm5E20R3qeZHNK4UtpAcB44Ryk93ty5PPVlOPq7AxlKnKJOcs
-         ggJcuObAf9+M+zyXxAINkK35TQ+Ob5v+oX0yTG38dB9Y8ap6w8RD6NY27pFxhDA0H2g2
-         SutQ==
-X-Gm-Message-State: APjAAAUUKxfc66/r18EWZSidW4Ie7XhEVFb7k7ihFzgRjHSU9SQHKxly
-        FNWrcNQk3/IbFqMMaVDTz0fdxuTuTgWxg6KImVAR38wuaxel
-X-Google-Smtp-Source: APXvYqypmz9GTUMulQ4YmTfkPtqRuVD/rXyFolzhHSBiWGAf2piQHL04tnXddD/X840pGS32563fffMIdXuqZJG44r1bPnVrHJjW
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=h4/ZkVCc1t3s7E6eepp7k0TrGVSnDFGVQyOK9iwfzs8=;
+        b=mNvQTLDcbNKERdiRT9zaG3Hk9rT18jP/4RI3x7Fr4UE7xttkvbyoZAgUUOMpmGCU4O
+         +CzT7KbssQqj8q8ra+jiizMRCf0eHE5kITVBBHJWqd3hf6cINrdXx7r3RKTgQwfldzw2
+         ErF7B6gYiYB7GEYGSuHvQTp4h/yRBY/7jgkuVE/EldnrK7wMDHVZfGTbIN6tOE7HI8e8
+         VjOr7dtXdjHywYlcW0l04lchkiLkD0Wy1PtgTtu1pKiCTI8AJ2Ya/Vjxnx44fig1aByr
+         PpCFQeVfkrhGu9Pw6cQYiDuFsM+s4EaPsbnM2rm8r/kJn5l/PLsym6u3nNacYZFxQfOH
+         UF3w==
+X-Gm-Message-State: APjAAAWQ7uJkp+W9xhLSY32sxJ/H4qfu4cKej+lCUAO0g4rAxyTqVgxR
+        Lvq4AR001bydqvhwW4E1vGchzdn1
+X-Google-Smtp-Source: APXvYqwUz/Xx0PO8e//1chpDexhPeQK89cUWDoVhyJEM9iWDe8xB/TG+oRs+jx6xcy5fMi40In2JYg==
+X-Received: by 2002:a2e:8654:: with SMTP id i20mr12977051ljj.26.1557744224751;
+        Mon, 13 May 2019 03:43:44 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id 78sm3663179lje.81.2019.05.13.03.43.43
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 13 May 2019 03:43:43 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.91)
+        (envelope-from <johan@kernel.org>)
+        id 1hQ8Ql-0007Tr-6A; Mon, 13 May 2019 12:43:39 +0200
+Date:   Mon, 13 May 2019 12:43:39 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] USB: serial: fix unthrottle races
+Message-ID: <20190513104339.GA9651@localhost>
+References: <20190425160540.10036-1-johan@kernel.org>
+ <20190425160540.10036-2-johan@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8d81:: with SMTP id b1mr9537878ioj.83.1557742987986;
- Mon, 13 May 2019 03:23:07 -0700 (PDT)
-Date:   Mon, 13 May 2019 03:23:07 -0700
-In-Reply-To: <000000000000050c5f0588363ad6@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000073512b0588c24d09@google.com>
-Subject: Re: KASAN: use-after-free Read in p54u_load_firmware_cb
-From:   syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, chunkeey@googlemail.com,
-        davem@davemloft.net, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190425160540.10036-2-johan@kernel.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+On Thu, Apr 25, 2019 at 06:05:36PM +0200, Johan Hovold wrote:
+> Fix two long-standing bugs which could potentially lead to memory
+> corruption or leave the port throttled until it is reopened (on weakly
+> ordered systems), respectively, when read-URB completion races with
+> unthrottle().
+> 
+> First, the URB must not be marked as free before processing is complete
+> to prevent it from being submitted by unthrottle() on another CPU.
+> 
+> 	CPU 1				CPU 2
+> 	================		================
+> 	complete()			unthrottle()
+> 	  process_urb();
+> 	  smp_mb__before_atomic();
+> 	  set_bit(i, free);		  if (test_and_clear_bit(i, free))
+> 	  					  submit_urb();
+> 
+> Second, the URB must be marked as free before checking the throttled
+> flag to prevent unthrottle() on another CPU from failing to observe that
+> the URB needs to be submitted if complete() sees that the throttled flag
+> is set.
+> 
+> 	CPU 1				CPU 2
+> 	================		================
+> 	complete()			unthrottle()
+> 	  set_bit(i, free);		  throttled = 0;
+> 	  smp_mb__after_atomic();	  smp_mb();
+> 	  if (throttled)		  if (test_and_clear_bit(i, free))
+> 	  	  return;			  submit_urb();
+> 
+> Note that test_and_clear_bit() only implies barriers when the test is
+> successful. To handle the case where the URB is still in use an explicit
+> barrier needs to be added to unthrottle() for the second race condition.
+> 
+> Fixes: d83b405383c9 ("USB: serial: add support for multiple read urbs")
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=16b64110a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-dashboard link: https://syzkaller.appspot.com/bug?extid=200d4bb11b23d929335f
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1634c900a00000
+Greg, I noticed you added a stable tag to the corresponding cdc-acm fix
+and think I should have added on one from the start to this one as well.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com
+Would you mind queuing this one up for stable?
 
-usb 1-1: config 0 descriptor??
-usb 1-1: reset high-speed USB device number 2 using dummy_hcd
-usb 1-1: device descriptor read/64, error -71
-usb 1-1: Using ep0 maxpacket: 8
-usb 1-1: Loading firmware file isl3887usb
-usb 1-1: Direct firmware load for isl3887usb failed with error -2
-usb 1-1: Firmware not found.
-==================================================================
-BUG: KASAN: use-after-free in p54u_load_firmware_cb.cold+0x97/0x13a  
-drivers/net/wireless/intersil/p54/p54usb.c:936
-Read of size 8 at addr ffff88809803f588 by task kworker/1:0/17
+Upstream commit 3f5edd58d040bfa4b74fb89bc02f0bc6b9cd06ab.
 
-CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.1.0-rc3-319004-g43151d6 #6
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: events request_firmware_work_func
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xe8/0x16e lib/dump_stack.c:113
-  print_address_description+0x6c/0x236 mm/kasan/report.c:187
-  kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
-  p54u_load_firmware_cb.cold+0x97/0x13a  
-drivers/net/wireless/intersil/p54/p54usb.c:936
-  request_firmware_work_func+0x12d/0x249  
-drivers/base/firmware_loader/main.c:785
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-
-Allocated by task 0:
-(stack is not available)
-
-Freed by task 0:
-(stack is not available)
-
-The buggy address belongs to the object at ffff88809803f180
-  which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 8 bytes to the right of
-  1024-byte region [ffff88809803f180, ffff88809803f580)
-The buggy address belongs to the page:
-page:ffffea0002600f00 count:1 mapcount:0 mapping:ffff88812c3f4a00 index:0x0  
-compound_mapcount: 0
-flags: 0xfff00000010200(slab|head)
-raw: 00fff00000010200 dead000000000100 dead000000000200 ffff88812c3f4a00
-raw: 0000000000000000 00000000800e000e 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff88809803f480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff88809803f500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ffff88809803f580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                       ^
-  ffff88809803f600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff88809803f680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
+Thanks,
+Johan
