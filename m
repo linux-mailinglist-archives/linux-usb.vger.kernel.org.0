@@ -2,65 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBFF1B9FD
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 17:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAD31BA38
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 17:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731321AbfEMP3C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 May 2019 11:29:02 -0400
-Received: from mail-it1-f198.google.com ([209.85.166.198]:33965 "EHLO
-        mail-it1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728777AbfEMP3B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 11:29:01 -0400
-Received: by mail-it1-f198.google.com with SMTP id m140so160449ita.1
-        for <linux-usb@vger.kernel.org>; Mon, 13 May 2019 08:29:01 -0700 (PDT)
+        id S1729086AbfEMPjj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 May 2019 11:39:39 -0400
+Received: from mail-lf1-f41.google.com ([209.85.167.41]:33684 "EHLO
+        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728046AbfEMPjj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 11:39:39 -0400
+Received: by mail-lf1-f41.google.com with SMTP id x132so9450396lfd.0;
+        Mon, 13 May 2019 08:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=Im1JV8DmKWSE2P0cw0hdXGTTWoH4wIN3ko1j8EjIKGQ=;
+        b=NmalT44E0CYo0cQoCmLmb7XQcTF/Tw6YKkRlahp7AFEH/JQq6QevaJwCk8OuHpaJA2
+         iOcqFvECUAi6tYBr1oZXtAr3bbLO1zGFy38G2+zaxm4+ssdAuFoKDohxlrWjdOGJPgKz
+         nWPcm/++RmCEOYJKnRCwCM0XCYjgBvOwkzLKHQDHY00ii1ZuPOpVHAfRYNfV+Qxhjba3
+         vqYOVDyI8lFqScAVMKIUYq7vWjrp6wl4FqpHArFXRNkjo9T4FBINcMWAu5/KHZBEi+qe
+         kavKmvcOawFgfmkvxeAygdnnSVRBzIrljq8bbZ+V88bbbFRNZQKP7lBa6DWyrHAx8yUm
+         kAbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=3VZ4p/YISWcz91SuVCC0Sel7mLneKp5LD5Zz/ePb6Zs=;
-        b=AUlzSc6yoeevdu5QedlLEmeEHOZNcFOGK5YdIPMjL+Z3x1zr6atlNNR04rWn7O501H
-         1z0kBJkHaiSrGAh7JGXSb+5xuuHB2ESnsPagJEfaKolpPgpPsOMtNhrLV2OSnzrvr1lM
-         EXL/M3p37VDE+0vuMgVgQE9TfdkT4HV6OeYeXvs7zg/qKlW3Oty1jwMyDpqJ0l+lLP6K
-         /BSRCvJWY1DSKNYwEQJKUyKzMQgfZS4JmG8HqZP9ZltCPkTRIkvC5Ew+InkRRrcVdK5O
-         KqcuebHdoBJbd1PmX+CS9zF7gUZJDuz3JM4JkgrT5LifMqngnolnrm14xF872DU9JRX8
-         ACYQ==
-X-Gm-Message-State: APjAAAW0SoAxLQKNoMg+hTkLUcm3Mp9gLt1ysocv1bx9ziilJx4oAY8/
-        /dC6ekxpRpQaX/6/+CionMI7A1mbqxcjuhnHE9jvMB5DQ5Uj
-X-Google-Smtp-Source: APXvYqzhnwgnI+7XB9cPfmqZVvcdHah0xlT4kcjVKXz/Qf4DKOW4yChduCTqpqesYU5a7etL6kRCLS1kRtSqh/cNsjA9kKuMglZO
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=Im1JV8DmKWSE2P0cw0hdXGTTWoH4wIN3ko1j8EjIKGQ=;
+        b=UPQ8Ls/GnaPbKYpvNpTwadWc/Qp36M7lHnONIqlu60UFrWz7z5n2SylD4iOTnF/AsY
+         W+fMg1YEC1cXd240egFv0BjzP2+J2h0Mh4t/KdshDLNivITZT9tAfYdNbB37buQ6M3bc
+         aeDyzIl++Js03Of5PW9OT6Tb62KNPaOETmYwxygMK7tfTDeiE1naEctm6zp7dcKoS/qj
+         diwoc/4qsb95tyqQa+YfzzRxogq2O4RJa2XJXYc7M+fmp0zqir8buwnzjaOsz37OKjzX
+         Ms5LKsBUAIejim4exqhpKKvBvhe3eihzuq+ySoofcGIXKLd3X+eIA6/602X23tCAVLqt
+         KR0g==
+X-Gm-Message-State: APjAAAXusOLw2TQqKAEZrMrtAg447A29J+aEw1khUQ4ymHRaLvcKOu2D
+        dTV+XOM75dZsIfPkGfnOY+AiLF+/
+X-Google-Smtp-Source: APXvYqxq7DiPUmvMARUX3uWlv0n6ibeaZkY1u2rWKy81j/pGxh+HWxQGS0eQ917yphwfRZfOeTDElA==
+X-Received: by 2002:a19:5507:: with SMTP id n7mr14726777lfe.140.1557761976859;
+        Mon, 13 May 2019 08:39:36 -0700 (PDT)
+Received: from [192.168.1.10] ([95.174.107.249])
+        by smtp.gmail.com with ESMTPSA id x6sm3261852lfn.74.2019.05.13.08.39.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 13 May 2019 08:39:36 -0700 (PDT)
+From:   Igor Plyatov <plyatov@gmail.com>
+Subject: Initialisation of SOC USB pads
+To:     linux-usb@vger.kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-ID: <607c6b4c-d53a-8115-aa60-2a8461607d40@gmail.com>
+Date:   Mon, 13 May 2019 18:39:34 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-Received: by 2002:a24:5dc8:: with SMTP id w191mr18348892ita.136.1557761341111;
- Mon, 13 May 2019 08:29:01 -0700 (PDT)
-Date:   Mon, 13 May 2019 08:29:01 -0700
-In-Reply-To: <Pine.LNX.4.44L0.1905131046130.1478-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000061c7cd0588c6933c@google.com>
-Subject: Re: KASAN: slab-out-of-bounds Write in usb_get_bos_descriptor
-From:   syzbot <syzbot+71f1e64501a309fcc012@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        suwan.kim027@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Dear developers,
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+can you please explain who must configure AT91SAM9G20 SOC pads to 
+operate as USB Host port? Is it AT91Bootstrap, U-Boot bootloader, Linux 
+kernel or this is not required at all?
 
-Reported-and-tested-by:  
-syzbot+71f1e64501a309fcc012@syzkaller.appspotmail.com
+I ask, because during connection of USB disk, my board complains
 
-Tested on:
+usb 1-1: device descriptor read/64, error -62
+usb 1-1: device descriptor read/64, error -62
+usb 1-1: device descriptor read/64, error -62
+usb 1-1: device descriptor read/64, error -62
+usb 1-1: device not accepting address 4, error -62
+usb 1-1: device not accepting address 5, error -62
+usb usb1-port1: unable to enumerate USB device
 
-commit:         43151d6c usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15912100a00000
 
-Note: testing is done by a robot and is best-effort only.
+Looks like there is no connectivity between USB Host module of SOC and 
+USB device. Or am I wrong?
+
+
+My setup is:
+
+
+* AT91SAM9G20 based custom board;
+* Linux kernel 4.9.36, from LINUX4SAM project.
+* USB disk connected to USB Host port 0 (HDPA, HDMA pins of SOC). 39 Ohm 
+series resistors and 15 Kohm pull-down resistors added at these lines. 
+Connectivity between SOC and USB device confirmed by Ohmmeter.
+* USB_VBUS voltage measured at USB connector = 4.96 VDC.
+
+Best wishes
+--
+Igor Plyatov
+
