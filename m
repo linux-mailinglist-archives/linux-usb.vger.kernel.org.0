@@ -2,115 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2540B1BCF0
-	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 20:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6B51BED4
+	for <lists+linux-usb@lfdr.de>; Mon, 13 May 2019 22:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732345AbfEMSJh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 May 2019 14:09:37 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46314 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732341AbfEMSJh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 14:09:37 -0400
-Received: by mail-wr1-f67.google.com with SMTP id r7so15700921wrr.13
-        for <linux-usb@vger.kernel.org>; Mon, 13 May 2019 11:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WZBxw3BQbaqpNiHsdkbnukeHq4nKrz3shSsyzzNHd4M=;
-        b=cfENz/5UHqta8nz6XhqvxQcERP5bbinjZFJkloo4rlmvh+WnCitH0oRDl7eJD+6QYH
-         nFHh2CcabhbSUAH/MMGL7dY5LlHsO2f8cdB/I8qZHb9B0e0AOn4GJz1lwjLJETBW15Al
-         JTbbibvBOLCXHTGZn384Ulohsr5h2y8zEaXmJMUhOvDx+5MeYTygWYKYCXPSwUndPrhg
-         CiU5LCZ2FHV9SrjYBGsNDTNiA+54Gx5nOR+X4rPWXeFI+HArG66hJz/A31W4yEwdtKQs
-         0uPBqmM7a4/94wUNePKRHTckMn3O8h1fdks8slrLkcqTKHnzC5tPJfgCde+4+5jIOMzZ
-         nRZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WZBxw3BQbaqpNiHsdkbnukeHq4nKrz3shSsyzzNHd4M=;
-        b=GuzRYyZgFtlR9qP7xuR+NpXXXjHYuxSOk7eLKH6PuMERMgDGBEGLnO1FAzQQj6UB2t
-         gS5me+nxxOz8sSGchwkorhTa/yDFPiVJe055oXvDmidncp+BZZsnYuF/G4Iz1/n86WCH
-         8rXsnrhsv6113HahV3/qVC360i9D2T41VVz3xYtRRXKdoY7ehpN9HczpV0eczKVc2oam
-         UIi6cUbZlQuHhpd6F4Hg8XjN3WJEiW3TG1busclBs5W0M+DJW4W4u4Jip88hBy9S5tlm
-         6+va0CQ/P4mBlyfJ4CFTS7RnvT3Q0lyyKjaftc9IsILWXfr24hAzBkokeMEgsv5DeOhb
-         8JZA==
-X-Gm-Message-State: APjAAAWkM6iq2gd+abUQni/TiUEys/IqqilQ+7jnQbK0FpZQ1PwV9s+m
-        8fx1s3onnhoYNNFUzLLCZ9yAO4S+nvPHaz/k/XBExw==
-X-Google-Smtp-Source: APXvYqzGMaGgYsxgysYiEyi7Oon8Zhg1rRup69UofSQu4xNqfLZshmMu0etOviRuzy8jC94vjH0ff8lakkLV+S9lpjY=
-X-Received: by 2002:adf:ef83:: with SMTP id d3mr6001055wro.253.1557770975789;
- Mon, 13 May 2019 11:09:35 -0700 (PDT)
+        id S1726286AbfEMUsz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 May 2019 16:48:55 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:39977 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726179AbfEMUsz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 May 2019 16:48:55 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8BAEC26256;
+        Mon, 13 May 2019 16:48:54 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 13 May 2019 16:48:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=KNgp5jlCdpQelzZZ83zf0wjeuD+
+        zXHXWamPU2Yqam7w=; b=Rq4UUNO0tjyq4Nenc1iYwQ2c2jtno3yem8hiAa/wWcm
+        WayWCqQcSI2E4A7hPegebCFu3ZqcVhSmr1Tg4kINOe9a6L+2BdZgJmHBQ460Toh+
+        N70akY1B3KtrOa3lcsLEpesI6CR/n/DAB9O2gcK4dAmUiP712FLS+A14diRyokcu
+        ufAkXXONB755dt4CGLa87XELYM5g4UdCM6HaoDP3mrM8fEnBr5clp6DOFDDGQo+b
+        xK1pQVdM/RMrt1f1plBS560nFKZD3/cFMsCDbWJ4RA4XcNBiMZVqDyyWucb3/qCn
+        DvnVJF0LSxXyJ4wr+NlpBaTFGTahhY7ZXQ0aRmuHsOQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=KNgp5j
+        lCdpQelzZZ83zf0wjeuD+zXHXWamPU2Yqam7w=; b=ebnL0SxVmSbGlN3XSP/uke
+        rcnBiwQlvlcjQJmeO/PwbWzj46+cRPr3XT6iYLdd+qTUEMTPavN+zJWxQpKTzp/V
+        KGMmCW4iegH78q2ygBSIShbfPqGsW3iyxQWxi6k3WNuCaOggvBg86pQxHzj6jKrf
+        1f9coSAOjaB4TQIkqgcapCURs2N7obDNJSratqOQbhzoWrl4Jv4iZ+9QYVx7URi4
+        hJ1n6n6buOY+K4ixhgjKxYBNBBB2ttg5iG5EXzKhP1h01dv4mW6qL+MmhnhnyeXk
+        WkTwFvT47HJE1qPXEnh0aaOenw62Vz/qQQpiett/tAqnCR5VlvfDJSra3WWXhKiw
+        ==
+X-ME-Sender: <xms:NtjZXPvpOaZ5qNxPeOf7TiuoA7iQppF5maaRu4bQc4mrcfn7MnQFRg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrleeggdduheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
+    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
+    vehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:NtjZXCEpDUJAe7A1QZwyGYmEw1rKhSWjBUaK5SzYmAxvC4fdJKDaVQ>
+    <xmx:NtjZXG0OvOFAPuGkeGjD06BTlCnpVZQbUPsPWo_QUus1EWycsXBvdg>
+    <xmx:NtjZXEq5lar8DRQKcVlDRqw4i7eHhHPq3IrCDSuKQ_vsxS6uUHbXWw>
+    <xmx:NtjZXH8-kWT1QI_tWoWuvd68jOGzsOjz5mlgyPSB5UDBjJydTRg5RA>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id C752D10378;
+        Mon, 13 May 2019 16:48:53 -0400 (EDT)
+Date:   Mon, 13 May 2019 22:48:51 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     andreyknvl@google.com, gustavo@embeddedor.com,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, suwan.kim027@gmail.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] USB: Fix slab-out-of-bounds write in
+ usb_get_bos_descriptor
+Message-ID: <20190513204851.GA20475@kroah.com>
+References: <00000000000061c7cd0588c6933c@google.com>
+ <Pine.LNX.4.44L0.1905131313100.1478-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
- <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com> <CALAqxLUfJYUtmQDC_aDMxW7KcPUawGoRq-PNUfmzQuNKh97FmQ@mail.gmail.com>
- <CALAqxLVUFfrPVVjR74V3PhhtcCytfp=cUYjo=BcJ14D1fkVXTw@mail.gmail.com> <7ec57c29-d1ab-dc4c-755d-a6009b9132b5@collabora.com>
-In-Reply-To: <7ec57c29-d1ab-dc4c-755d-a6009b9132b5@collabora.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Mon, 13 May 2019 11:09:23 -0700
-Message-ID: <CALAqxLUgnTB7aZ4edXCaG8SJsJzfY1_yNEPc6Losssw5Xy9-XA@mail.gmail.com>
-Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, "Yang, Fei" <fei.yang@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chen Yu <chenyu56@huawei.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1905131313100.1478-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 13, 2019 at 7:08 AM Andrzej Pietrasiewicz
-<andrzej.p@collabora.com> wrote:
-> W dniu 09.05.2019 o 23:23, John Stultz pisze:
-> > So yes, the kzalloc/memset patch is a clear improvement, as it avoids
-> > the bootup crash on dwc2, and seems like it should go in.
-> >
-> > However, there is still the outstanding issue w/  functionfs sg
-> > support stalling on larger transfers.
->
-> Do you get "functionfs read size 512 > requested size 24, splitting
-> request into multiple reads" message when problems happen?
+On Mon, May 13, 2019 at 01:14:29PM -0400, Alan Stern wrote:
+> The syzkaller USB fuzzer found a slab-out-of-bounds write bug in the
+> USB core, caused by a failure to check the actual size of a BOS
+> descriptor.  This patch adds a check to make sure the descriptor is at
+> least as large as it is supposed to be, so that the code doesn't
+> inadvertently access memory beyond the end of the allocated region
+> when assigning to dev->bos->desc->bNumDeviceCaps later on.
+> 
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Reported-and-tested-by: syzbot+71f1e64501a309fcc012@syzkaller.appspotmail.com
+> CC: <stable@vger.kernel.org>
+> 
+> ---
+> 
+> 
+> [as1898]
+> 
+> 
+>  drivers/usb/core/config.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> Index: usb-devel/drivers/usb/core/config.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/core/config.c
+> +++ usb-devel/drivers/usb/core/config.c
+> @@ -932,8 +932,8 @@ int usb_get_bos_descriptor(struct usb_de
+>  
+>  	/* Get BOS descriptor */
+>  	ret = usb_get_descriptor(dev, USB_DT_BOS, 0, bos, USB_DT_BOS_SIZE);
+> -	if (ret < USB_DT_BOS_SIZE) {
+> -		dev_err(ddev, "unable to get BOS descriptor\n");
+> +	if (ret < USB_DT_BOS_SIZE || bos->bLength < USB_DT_BOS_SIZE) {
+> +		dev_err(ddev, "unable to get BOS descriptor or descriptor too short\n");
 
-Unfortunately no.
+Nice fix, I thought we had found all of these the last time we fuzzed
+this area :)
 
-> Is there anything in the kernel log?
+I'll queue this up once 5.2-rc1 is out, thanks.
 
-Nope. Just the transfers stall/hang and further attempts at adb
-connections fail until the USB cable is unplugged and replugged.
-
-> I'm unable to reproduce your problems. I thought I was able, but
-> it was another problem, which is fixed with:
->
-> 5acb4b970184d189d901192d075997c933b82260
-> dwc2: gadget: Fix completed transfer size calculation in DDMA
->
-> (or you can simply take upstream drivers/usb/dwc2).
-
-Yea, I'm able to test against mainline. I can give this a whirl, but
-since it affects multiple drivers, I suspect the trouble is in the
-f_fs code, not just dwc2.
-
-> Do your problems happen on dwc2 or dwc3?
-
-The transfer hangs happen on *both* dwc2 and dwc3. And on both we can
-use a similar workaround of disabling sg_supported to get by.
-
-https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey-mainline-WIP&id=21dfaac615f1f287377897804cbfe69450d489e3
-https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey960-mainline-WIP&id=5b70ec4ae1c06ae700fcca7141130c71e205fa1c
-
-
-> Is there a way to try your adb without building and running the
-> whole Android?
-
-Maybe? I have heard of folks doing it in the past, though I don't
-really know a quick path to get there.
-
-Is there anything else I can try for you?
-
-thanks
--john
+greg k-h
