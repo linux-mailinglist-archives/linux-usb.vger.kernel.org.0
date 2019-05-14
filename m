@@ -2,122 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B63BC1CD47
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 18:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC0D1CEB9
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 20:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726134AbfENQzP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 May 2019 12:55:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59750 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726013AbfENQzP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 May 2019 12:55:15 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF79F2084A;
-        Tue, 14 May 2019 16:55:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557852914;
-        bh=8n63wOgL9cad2rIE8kZV4epVBMV8HjjuhWRqstNew/0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ndf/+YurjqS3iWSoa4TtmCCyHbKxML1csn3QVzAQ8NzyZkeVHkcdvZRSLD9N2kIge
-         Gbq9WmCXuYBrzVgVxhC1AKXGAnsDeeJiExqP0/tq+U/sTb01im27Tzt7T3XfKjsr88
-         HvbDIx262CIjlbdTYmsxeYQm6JzgoDKTTyyJx9y0=
-Date:   Tue, 14 May 2019 18:55:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] usb: xhci: Possible resource leaks when xhci_run() fails
-Message-ID: <20190514165511.GA28266@kroah.com>
-References: <fd7610ec-5f14-7952-cd9a-e56adb4e1353@gmail.com>
+        id S1726529AbfENSMY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 May 2019 14:12:24 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:35891 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726201AbfENSMY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 May 2019 14:12:24 -0400
+Received: by mail-oi1-f195.google.com with SMTP id l203so12878795oia.3;
+        Tue, 14 May 2019 11:12:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7MKXOx72GnJK4OThTbg/Yq9n8A27D1pwO48w3mZxGik=;
+        b=TfDtCCNmcVJ7WXWPI4ZxFdlwO0Mhu9x3wjKHn1IdQCdY9mHw24ZvvuEItFjyHyZpu2
+         VVaz36e+vJPBfZPmbsEm41Coi/JjA4va/p9o0kvrggHc2zBWGDWLX/HBSSPbeqVTEGDU
+         mmMoH/38v1RUoxJGrxyn7NPQKxi+XI6brkd5mAVEiudZ6sx/eplCH0Uf5wFpUPHxv1bx
+         0hk6ZGy5qnlOI19/ytIrXV3KXZfKZQxz62xmm+92AAPdqeizcpWBMw39O6+iGuHjYqbf
+         jo5CP/qANtYYfvhexUdugkb9gbz68cThPWwAvxcQuEDgJ9O0HwqtCxFtu9cRngMYQIEY
+         ERgw==
+X-Gm-Message-State: APjAAAUOd5gcSGnSDvtXoXis3wg37CD0iZXveg3378RV4K81JXWuIj8M
+        eFNwkcTNwxB2d8YJL7Tiww==
+X-Google-Smtp-Source: APXvYqy19Xjq9sGP3TMfrsYa+PbNh1BafjhPi5bE6IL4JiP7WIz0dF4SnI69FmgshwGuUtHZQI4Byg==
+X-Received: by 2002:aca:5d86:: with SMTP id r128mr3690918oib.135.1557857542852;
+        Tue, 14 May 2019 11:12:22 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id q25sm6355192otl.60.2019.05.14.11.12.18
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 14 May 2019 11:12:22 -0700 (PDT)
+Date:   Tue, 14 May 2019 13:12:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Biju Das <biju.das@bp.renesas.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 2/6] dt-bindings: usb: add binding for Type-B GPIO
+ connector driver
+Message-ID: <20190514181204.GA13949@bogus>
+References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1557823643-8616-3-git-send-email-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fd7610ec-5f14-7952-cd9a-e56adb4e1353@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <1557823643-8616-3-git-send-email-chunfeng.yun@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 14, 2019 at 10:58:05PM +0800, Jia-Ju Bai wrote:
-> xhci_pci_setup() is assigned to hc_driver.reset;
-> xhci_run() is assigned to hc_driver.start();
-> xhci_stop() is assigned to hc_driver.stop().
+On Tue, May 14, 2019 at 04:47:19PM +0800, Chunfeng Yun wrote:
+> It's used to support dual role switch via GPIO when use Type-B
+> receptacle, typically the USB ID pin is connected to an input
+> GPIO pin
 > 
-> xhci_pci_setup() calls xhci_gen_setup, which calls xhci_init(). And
-> xhci_init() calls xhci_mem_init() to allocate resources.
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v5 changes:
+>  1. treat type-B connector as child device of USB controller's, but not
+>     as a separate virtual device, suggested by Rob
+>  2. put connector's port node under connector node, suggested by Rob
 > 
-> xhci_stop() calls xhci_mem_cleanup(), to release the resources allocated in
-> xhci_mem_init() (also namely xhci_pci_setup()).
+> v4 no changes
 > 
-> xhci_run() can fail, because xhci_try_enable_msi() or xhci_alloc_command()
-> in this function can fail.
+> v3 changes:
+>  1. treat type-B connector as a virtual device, but not child device of
+>     USB controller's
 > 
-> In drivers/usb/core/hcd.c:
->     retval = hcd->driver->reset(hcd);
->     if (retval < 0) {
->         ......
->         goto err_hcd_driver_setup;
->     }
->     ......
->     retval = hcd->driver->start(hcd);
->     if (retval < 0) {
->         ......
->         goto err_hcd_driver_start;
->     }
->     .......
->     hcd->driver->stop(hcd);
->     hcd->state = HC_STATE_HALT;
->     clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
->     del_timer_sync(&hcd->rh_timer);
-> err_hcd_driver_start:
->     if (usb_hcd_is_primary_hcd(hcd) && hcd->irq > 0)
->         free_irq(irqnum, hcd);
-> err_request_irq:
-> err_hcd_driver_setup:
-> err_set_rh_speed:
->     usb_put_invalidate_rhdev(hcd);
-> err_allocate_root_hub:
->     usb_deregister_bus(&hcd->self);
-> err_register_bus:
->     hcd_buffer_destroy(hcd);
-> err_create_buf:
->     usb_phy_roothub_power_off(hcd->phy_roothub);
-> err_usb_phy_roothub_power_on:
->     usb_phy_roothub_exit(hcd->phy_roothub);
+> v2 changes:
+>   1. new patch to make binding clear suggested by Hans
+> ---
+>  .../bindings/usb/typeb-conn-gpio.txt          | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt
 > 
-> Thus, when hcd->driver->reset() succeeds and hcd->driver->start() fails,
-> hcd->driver->stop() is not called.
-> 
-> Namely, when xhci_pci_setup() successfully allocates resources, and
-> xhci_run() fails, xhci_stop() is not called to release the resources.
-> For this reason, resource leaks occur in this case.
-> 
-> I check the code of the ehci driver, uhci driver and ohci driver, and find
-> that they do not have such problem, because:
-> In the ehci driver, ehci_run() (namely hcd->driver->start()) never fails.
-> In the uhci driver, all the resources are allocated in uhci_start (namely
-> hcd->driver->start()), and no resources are allocated in uhci_pci_init()
-> (namely hcd->driver->reset()).
-> In the ohci driver, ohci_setup() (namely hcd->driver->reset()) also
-> allocates resources. But when ohci_start() (namely hcd->driver->start()) is
-> going to fail, ohci_stop() is directly called to release the resources
-> allocated by ohci_setup().
-> 
-> Thus, there are two possible ways of fixing bugs:
-> 1) Call xhci_stop() when xhci_run() is going to fail (like the ohci driver)
-> 2) Move all resource-allocation operations into xhci_run() (like the uhci
-> driver).
-> 
-> I am not sure whether these ways are correct, so I only report bugs.
+> diff --git a/Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt b/Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt
+> new file mode 100644
+> index 000000000000..20dd3499a348
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt
+> @@ -0,0 +1,42 @@
+> +USB Type-B GPIO Connector
+> +
+> +This is used to switch dual role mode from the USB ID pin connected to
+> +an input GPIO pin.
+> +
+> +Required properties:
+> +- compatible : should include "linux,typeb-conn-gpio" and "usb-b-connector".
 
-Can you create a patch to show how you would fix this potential issue?
-Given that making this type of thing fail is pretty rare, it's not a
-real high priority to get to, so it might be a while for anyone here to
-look at it.
+I don't think we need "linux,typeb-conn-gpio". A driver can decide to 
+handle GPIO lines if they present or we assume the parent device handles 
+ID and/or Vbus if they are not present.
 
-thanks,
+> +- id-gpios, vbus-gpios : either one of them must be present, and both
+> +	can be present as well.
 
-greg k-h
+Please clarify that vbus-gpios is an input to sense Vbus presence as an 
+output it should be modelled as a regulator only.
+
+These should be added to usb-connector.txt.
+
+The result of all this is you don't need this file. Just additions to 
+usb-connector.txt.
+
+> +- vbus-supply : can be present if needed when supports dual role mode or
+> +	host mode.
+> +	see connector/usb-connector.txt
+> +
+> +Sub-nodes:
+> +- port : should be present.
+> +	see graph.txt
+> +
+> +Example:
+> +
+> +&mtu3 {
+> +	status = "okay";
+
+Don't show status in examples.
+
+> +
+> +	connector {
+> +		compatible = "linux,typeb-conn-gpio", "usb-b-connector";
+> +		label = "micro-USB";
+> +		type = "micro";
+> +		id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
+> +		vbus-supply = <&usb_p0_vbus>;
+> +
+> +		port {
+> +			bconn_ep: endpoint@0 {
+> +				remote-endpoint = <&usb_role_sw>;
+> +			};
+> +		};
+> +	};
+> +
+> +	port {
+> +		usb_role_sw: endpoint@0 {
+> +			remote-endpoint = <&bconn_ep>;
+> +		};
+> +	};
+
+When the host controller is the parent of the connector, you don't need 
+the graph unless you're describing the alternate modes in Type-C.
+
+> +};
+> -- 
+> 2.21.0
+> 
