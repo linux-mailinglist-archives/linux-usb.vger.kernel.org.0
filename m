@@ -2,260 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3541C538
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 10:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FCF1C6CE
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 12:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726710AbfENIrt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 May 2019 04:47:49 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:28472 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726078AbfENIrt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 May 2019 04:47:49 -0400
-X-UUID: dda4ebf4559542a5be255812bfdd5d2a-20190514
-X-UUID: dda4ebf4559542a5be255812bfdd5d2a-20190514
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1399189182; Tue, 14 May 2019 16:47:43 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 14 May 2019 16:47:42 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 14 May 2019 16:47:41 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v5 6/6] usb: mtu3: register a USB Role Switch for dual role mode
-Date:   Tue, 14 May 2019 16:47:23 +0800
-Message-ID: <1557823643-8616-7-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S1726580AbfENKO5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 May 2019 06:14:57 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:50834 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726659AbfENKOh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 May 2019 06:14:37 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 2338D283123
+Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, "Yang, Fei" <fei.yang@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen Yu <chenyu56@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+ <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com>
+ <CALAqxLUfJYUtmQDC_aDMxW7KcPUawGoRq-PNUfmzQuNKh97FmQ@mail.gmail.com>
+ <CALAqxLVUFfrPVVjR74V3PhhtcCytfp=cUYjo=BcJ14D1fkVXTw@mail.gmail.com>
+ <7ec57c29-d1ab-dc4c-755d-a6009b9132b5@collabora.com>
+ <CALAqxLUgnTB7aZ4edXCaG8SJsJzfY1_yNEPc6Losssw5Xy9-XA@mail.gmail.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <36620156-d119-b1b2-989e-0c13b783296e@collabora.com>
+Date:   Tue, 14 May 2019 12:14:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <CALAqxLUgnTB7aZ4edXCaG8SJsJzfY1_yNEPc6Losssw5Xy9-XA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Because extcon is not allowed for new bindings, and the
-dual role switch is supported by USB Role Switch,
-especially for Type-C drivers, so register a USB Role
-Switch to support the new way
+Hi,
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v5 no change
+W dniu 13.05.2019 o 20:09, John Stultz pisze:
+> On Mon, May 13, 2019 at 7:08 AM Andrzej Pietrasiewicz
+> <andrzej.p@collabora.com> wrote:
 
-v4 changes:
-  1. assign fwnode member of usb_role_switch struct suggested by Heikki
+<snip>
 
-v3 changes:
-  1. select USB_ROLE_SWITCH in Kconfig suggested by Heikki
-  2. rename ssusb_mode_manual_switch() to ssusb_mode_switch()
+>>
+>> Do you get "functionfs read size 512 > requested size 24, splitting
+>> request into multiple reads" message when problems happen?
+> 
+> Unfortunately no.
 
-v2 no change
----
- drivers/usb/mtu3/Kconfig        |  1 +
- drivers/usb/mtu3/mtu3.h         |  5 ++++
- drivers/usb/mtu3/mtu3_debugfs.c |  4 +--
- drivers/usb/mtu3/mtu3_dr.c      | 48 ++++++++++++++++++++++++++++++++-
- drivers/usb/mtu3/mtu3_dr.h      |  6 ++---
- drivers/usb/mtu3/mtu3_plat.c    |  3 ++-
- 6 files changed, 60 insertions(+), 7 deletions(-)
+Actually that's a fortunate outcome :)
 
-diff --git a/drivers/usb/mtu3/Kconfig b/drivers/usb/mtu3/Kconfig
-index bcc23486c4ed..88e3db7b3016 100644
---- a/drivers/usb/mtu3/Kconfig
-+++ b/drivers/usb/mtu3/Kconfig
-@@ -43,6 +43,7 @@ config USB_MTU3_DUAL_ROLE
- 	bool "Dual Role mode"
- 	depends on ((USB=y || USB=USB_MTU3) && (USB_GADGET=y || USB_GADGET=USB_MTU3))
- 	depends on (EXTCON=y || EXTCON=USB_MTU3)
-+	select USB_ROLE_SWITCH
- 	help
- 	  This is the default mode of working of MTU3 controller where
- 	  both host and gadget features are enabled.
-diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
-index 76ecf12fdf62..6087be236a35 100644
---- a/drivers/usb/mtu3/mtu3.h
-+++ b/drivers/usb/mtu3/mtu3.h
-@@ -199,6 +199,9 @@ struct mtu3_gpd_ring {
- * @id_nb : notifier for iddig(idpin) detection
- * @id_work : work of iddig detection notifier
- * @id_event : event of iddig detecion notifier
-+* @role_sw : use USB Role Switch to support dual-role switch, can't use
-+*		extcon at the same time, and extcon is deprecated.
-+* @role_sw_used : true when the USB Role Switch is used.
- * @is_u3_drd: whether port0 supports usb3.0 dual-role device or not
- * @manual_drd_enabled: it's true when supports dual-role device by debugfs
- *		to switch host/device modes depending on user input.
-@@ -212,6 +215,8 @@ struct otg_switch_mtk {
- 	struct notifier_block id_nb;
- 	struct work_struct id_work;
- 	unsigned long id_event;
-+	struct usb_role_switch *role_sw;
-+	bool role_sw_used;
- 	bool is_u3_drd;
- 	bool manual_drd_enabled;
- };
-diff --git a/drivers/usb/mtu3/mtu3_debugfs.c b/drivers/usb/mtu3/mtu3_debugfs.c
-index b7c86ccd50b4..3ed666f94dd9 100644
---- a/drivers/usb/mtu3/mtu3_debugfs.c
-+++ b/drivers/usb/mtu3/mtu3_debugfs.c
-@@ -453,9 +453,9 @@ static ssize_t ssusb_mode_write(struct file *file, const char __user *ubuf,
- 		return -EFAULT;
- 
- 	if (!strncmp(buf, "host", 4) && !ssusb->is_host) {
--		ssusb_mode_manual_switch(ssusb, 1);
-+		ssusb_mode_switch(ssusb, 1);
- 	} else if (!strncmp(buf, "device", 6) && ssusb->is_host) {
--		ssusb_mode_manual_switch(ssusb, 0);
-+		ssusb_mode_switch(ssusb, 0);
- 	} else {
- 		dev_err(ssusb->dev, "wrong or duplicated setting\n");
- 		return -EINVAL;
-diff --git a/drivers/usb/mtu3/mtu3_dr.c b/drivers/usb/mtu3/mtu3_dr.c
-index 5fcb71af875a..08e18448e8b8 100644
---- a/drivers/usb/mtu3/mtu3_dr.c
-+++ b/drivers/usb/mtu3/mtu3_dr.c
-@@ -7,6 +7,8 @@
-  * Author: Chunfeng Yun <chunfeng.yun@mediatek.com>
-  */
- 
-+#include <linux/usb/role.h>
-+
- #include "mtu3.h"
- #include "mtu3_dr.h"
- #include "mtu3_debug.h"
-@@ -280,7 +282,7 @@ static int ssusb_extcon_register(struct otg_switch_mtk *otg_sx)
-  * This is useful in special cases, such as uses TYPE-A receptacle but also
-  * wants to support dual-role mode.
-  */
--void ssusb_mode_manual_switch(struct ssusb_mtk *ssusb, int to_host)
-+void ssusb_mode_switch(struct ssusb_mtk *ssusb, int to_host)
- {
- 	struct otg_switch_mtk *otg_sx = &ssusb->otg_switch;
- 
-@@ -318,6 +320,47 @@ void ssusb_set_force_mode(struct ssusb_mtk *ssusb,
- 	mtu3_writel(ssusb->ippc_base, SSUSB_U2_CTRL(0), value);
- }
- 
-+static int ssusb_role_sw_set(struct device *dev, enum usb_role role)
-+{
-+	struct ssusb_mtk *ssusb = dev_get_drvdata(dev);
-+	bool to_host = false;
-+
-+	if (role == USB_ROLE_HOST)
-+		to_host = true;
-+
-+	if (to_host ^ ssusb->is_host)
-+		ssusb_mode_switch(ssusb, to_host);
-+
-+	return 0;
-+}
-+
-+static enum usb_role ssusb_role_sw_get(struct device *dev)
-+{
-+	struct ssusb_mtk *ssusb = dev_get_drvdata(dev);
-+	enum usb_role role;
-+
-+	role = ssusb->is_host ? USB_ROLE_HOST : USB_ROLE_DEVICE;
-+
-+	return role;
-+}
-+
-+static int ssusb_role_sw_register(struct otg_switch_mtk *otg_sx)
-+{
-+	struct usb_role_switch_desc role_sx_desc = { 0 };
-+	struct ssusb_mtk *ssusb =
-+		container_of(otg_sx, struct ssusb_mtk, otg_switch);
-+
-+	if (!otg_sx->role_sw_used)
-+		return 0;
-+
-+	role_sx_desc.set = ssusb_role_sw_set;
-+	role_sx_desc.get = ssusb_role_sw_get;
-+	role_sx_desc.fwnode = dev_fwnode(ssusb->dev);
-+	otg_sx->role_sw = usb_role_switch_register(ssusb->dev, &role_sx_desc);
-+
-+	return PTR_ERR_OR_ZERO(otg_sx->role_sw);
-+}
-+
- int ssusb_otg_switch_init(struct ssusb_mtk *ssusb)
- {
- 	struct otg_switch_mtk *otg_sx = &ssusb->otg_switch;
-@@ -328,6 +371,8 @@ int ssusb_otg_switch_init(struct ssusb_mtk *ssusb)
- 
- 	if (otg_sx->manual_drd_enabled)
- 		ssusb_dr_debugfs_init(ssusb);
-+	else if (otg_sx->role_sw_used)
-+		ret = ssusb_role_sw_register(otg_sx);
- 	else
- 		ret = ssusb_extcon_register(otg_sx);
- 
-@@ -340,4 +385,5 @@ void ssusb_otg_switch_exit(struct ssusb_mtk *ssusb)
- 
- 	cancel_work_sync(&otg_sx->id_work);
- 	cancel_work_sync(&otg_sx->vbus_work);
-+	usb_role_switch_unregister(otg_sx->role_sw);
- }
-diff --git a/drivers/usb/mtu3/mtu3_dr.h b/drivers/usb/mtu3/mtu3_dr.h
-index ba6fe357ce29..5e58c4dbd54a 100644
---- a/drivers/usb/mtu3/mtu3_dr.h
-+++ b/drivers/usb/mtu3/mtu3_dr.h
-@@ -71,7 +71,7 @@ static inline void ssusb_gadget_exit(struct ssusb_mtk *ssusb)
- #if IS_ENABLED(CONFIG_USB_MTU3_DUAL_ROLE)
- int ssusb_otg_switch_init(struct ssusb_mtk *ssusb);
- void ssusb_otg_switch_exit(struct ssusb_mtk *ssusb);
--void ssusb_mode_manual_switch(struct ssusb_mtk *ssusb, int to_host);
-+void ssusb_mode_switch(struct ssusb_mtk *ssusb, int to_host);
- int ssusb_set_vbus(struct otg_switch_mtk *otg_sx, int is_on);
- void ssusb_set_force_mode(struct ssusb_mtk *ssusb,
- 			  enum mtu3_dr_force_mode mode);
-@@ -86,8 +86,8 @@ static inline int ssusb_otg_switch_init(struct ssusb_mtk *ssusb)
- static inline void ssusb_otg_switch_exit(struct ssusb_mtk *ssusb)
- {}
- 
--static inline void
--ssusb_mode_manual_switch(struct ssusb_mtk *ssusb, int to_host) {}
-+static inline void ssusb_mode_switch(struct ssusb_mtk *ssusb, int to_host)
-+{}
- 
- static inline int ssusb_set_vbus(struct otg_switch_mtk *otg_sx, int is_on)
- {
-diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
-index fd0f6c5dfbc1..9c256ea3cdf5 100644
---- a/drivers/usb/mtu3/mtu3_plat.c
-+++ b/drivers/usb/mtu3/mtu3_plat.c
-@@ -299,8 +299,9 @@ static int get_ssusb_rscs(struct platform_device *pdev, struct ssusb_mtk *ssusb)
- 	otg_sx->is_u3_drd = of_property_read_bool(node, "mediatek,usb3-drd");
- 	otg_sx->manual_drd_enabled =
- 		of_property_read_bool(node, "enable-manual-drd");
-+	otg_sx->role_sw_used = of_property_read_bool(node, "usb-role-switch");
- 
--	if (of_property_read_bool(node, "extcon")) {
-+	if (!otg_sx->role_sw_used && of_property_read_bool(node, "extcon")) {
- 		otg_sx->edev = extcon_get_edev_by_phandle(ssusb->dev, 0);
- 		if (IS_ERR(otg_sx->edev)) {
- 			dev_err(ssusb->dev, "couldn't get extcon device\n");
--- 
-2.21.0
+> 
+>> Is there anything in the kernel log?
+> 
+> Nope. Just the transfers stall/hang and further attempts at adb
+> connections fail until the USB cable is unplugged and replugged.
+> 
 
+<snip>
+
+> 
+>> Is there a way to try your adb without building and running the
+>> whole Android?
+> 
+> Maybe? I have heard of folks doing it in the past, though I don't
+> really know a quick path to get there.
+> 
+> Is there anything else I can try for you?
+
+Have you tried compiling FunctionFS with debugging enabled?
+You do so bu uncommenting:
+
+/* #define DEBUG */
+/* #define VERBOSE_DEBUG */
+
+at the beginning of drivers/usb/gadget/function/f_fs.c
+
+Is there anything suspicious in the kernel log when you run it then?
+
+Remote debugging through this mailing list will incur enormous
+round trip time ;) The most valuable help would be helping in
+reproducing the problem you encounter.
+
+One question that comes to my mind is this: Does the USB transmission
+stall (e.g. endpoint stall) or not? In other words, is adb connection
+broken because USB stops transmitting anything, or because the
+data is transmitted but its integrity is broken during transmission
+and that causes adb/adbd confusion which results in stopping their
+operation? Does anything keep happening on FunctionFS when adb
+connection is broken?
+
+Andrzej
