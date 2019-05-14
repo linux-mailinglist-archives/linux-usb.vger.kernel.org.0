@@ -2,83 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EA91CA9D
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 16:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B214C1CB76
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 17:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726427AbfENOmb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 May 2019 10:42:31 -0400
-Received: from verein.lst.de ([213.95.11.211]:46209 "EHLO newverein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725901AbfENOmb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 May 2019 10:42:31 -0400
-Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 7826268B05; Tue, 14 May 2019 16:42:10 +0200 (CEST)
-Date:   Tue, 14 May 2019 16:42:10 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     laurentiu.tudor@nxp.com
-Cc:     hch@lst.de, stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, marex@denx.de, leoyang.li@nxp.com,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com
-Subject: Re: [RFC PATCH v2 1/3] USB: use genalloc for USB HCs with local
- memory
-Message-ID: <20190514144210.GA14625@lst.de>
-References: <20190514143807.7745-1-laurentiu.tudor@nxp.com> <20190514143807.7745-2-laurentiu.tudor@nxp.com>
+        id S1726260AbfENPLj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 May 2019 11:11:39 -0400
+Received: from pbmsgap01.intersil.com ([192.157.179.201]:51608 "EHLO
+        pbmsgap01.intersil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726036AbfENPLj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 May 2019 11:11:39 -0400
+Received: from pps.filterd (pbmsgap01.intersil.com [127.0.0.1])
+        by pbmsgap01.intersil.com (8.16.0.27/8.16.0.27) with SMTP id x4EEqbkb026036;
+        Tue, 14 May 2019 10:56:23 -0400
+Received: from pbmxdp02.intersil.corp (pbmxdp02.pb.intersil.com [132.158.200.223])
+        by pbmsgap01.intersil.com with ESMTP id 2sdswyjjq5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 14 May 2019 10:56:23 -0400
+Received: from pbmxdp02.intersil.corp (132.158.200.223) by
+ pbmxdp02.intersil.corp (132.158.200.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.1531.3; Tue, 14 May 2019 10:56:22 -0400
+Received: from localhost.localdomain (132.158.202.108) by
+ pbmxdp02.intersil.corp (132.158.200.223) with Microsoft SMTP Server id
+ 15.1.1531.3 via Frontend Transport; Tue, 14 May 2019 10:56:21 -0400
+From:   Chris Brandt <chris.brandt@renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+CC:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        "Chris Brandt" <chris.brandt@renesas.com>
+Subject: [PATCH v3 00/15] usb: Add host and device support for RZ/A2
+Date:   Tue, 14 May 2019 09:55:50 -0500
+Message-ID: <20190514145605.19112-1-chris.brandt@renesas.com>
+X-Mailer: git-send-email 2.16.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190514143807.7745-2-laurentiu.tudor@nxp.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-14_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=junk_notspam policy=junk score=0 suspectscore=2 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905140106
+X-Proofpoint-Spam-Reason: mlx
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> @@ -136,6 +137,10 @@ void *hcd_buffer_alloc(
->  		if (size <= pool_max[i])
->  			return dma_pool_alloc(hcd->pool[i], mem_flags, dma);
->  	}
-> +
-> +	if (hcd->driver->flags & HCD_LOCAL_MEM)
-> +		return gen_pool_dma_alloc(hcd->localmem_pool, size, dma);
 
-I think this check needs to be before the above code to use the dma
-pools, as we should always use the HCD local memory.  Probably all the
-way up just below the size == 0 check, that way we can also remove the
-other HCD_LOCAL_MEM check.
+NOTE:
+This series requires the follow patch from Shimoda-san.
+  [PATCH v2] usb: renesas_usbhs: Use specific struct instead of USBHS_TYPE_* enums
 
-> @@ -165,5 +170,10 @@ void hcd_buffer_free(
->  			return;
->  		}
->  	}
-> -	dma_free_coherent(hcd->self.sysdev, size, addr, dma);
-> +
-> +	if (hcd->driver->flags & HCD_LOCAL_MEM)
-> +		gen_pool_free(hcd->localmem_pool, (unsigned long)addr,
-> +			      size);
-> +	else
-> +		dma_free_coherent(hcd->self.sysdev, size, addr, dma);
 
-Same here.
+For the most part, the RZ/A2 has the same USB 2.0 host and device
+HW as the R-Car Gen3, so we can reuse a lot of the code.
 
-> @@ -505,8 +506,15 @@ static int ohci_init (struct ohci_hcd *ohci)
->  	timer_setup(&ohci->io_watchdog, io_watchdog_func, 0);
->  	ohci->prev_frame_no = IO_WATCHDOG_OFF;
->  
-> -	ohci->hcca = dma_alloc_coherent (hcd->self.controller,
-> -			sizeof(*ohci->hcca), &ohci->hcca_dma, GFP_KERNEL);
-> +	if (hcd->driver->flags & HCD_LOCAL_MEM)
-> +		ohci->hcca = gen_pool_dma_alloc(hcd->localmem_pool,
-> +						sizeof(*ohci->hcca),
-> +						&ohci->hcca_dma);
-> +	else
-> +		ohci->hcca = dma_alloc_coherent(hcd->self.controller,
-> +						sizeof(*ohci->hcca),
-> +						&ohci->hcca_dma,
-> +						GFP_KERNEL);
+However, there are a couple extra register bits, and the CFIFO
+register 8-bit access works a little different.
 
-I wonder if we could just use hcd_buffer_alloc/free here, althought
-that would require them to be exported.  I'll leave that decision to
-the relevant maintainers, though.
+There is a dedicated DMAC for the RZ/A2 USB Device HW, but we
+have not been able to reliably get that working yet, so device
+operation is pio only at the moment.
 
-Except for this the series looks exactly what I had envisioned to
-get rid of the device local dma_declare_coherent use case, thanks!
+On the RZ/A2M eval board, both USB channels can be used as either
+host or device. But, it's not set up for otg (ie, there are jumpers
+and separate connectors). Therefore, below is an example of what it
+would look like to enable USB channel 0 as a device instead of a host.
+
+&usb2_phy0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&usb0_pins>;
+	dr_mode = "peripheral";
+	status = "okay";
+};
+
+&usbhs0 {
+	status = "okay";
+};
+
+
+
+
+Chris Brandt (15):
+  ARM: dts: r7s9210: Add USB clock
+  ARM: dts: rza2mevb: Add 48MHz USB clock
+  phy: renesas: rcar-gen3-usb2: detect usb_x1 clock
+  dt-bindings: rcar-gen3-phy-usb2: Document use of usb_x1
+  phy: renesas: rcar-gen3-usb2: Check dr_mode when not using OTG
+  dt-bindings: rcar-gen3-phy-usb2: Document dr_mode
+  dt-bindings: rcar-gen3-phy-usb2: Add r7s9210 support
+  usb: renesas_usbhs: move flags to param
+  usb: renesas_usbhs: add support for CNEN bit
+  usb: renesas_usbhs: support byte addressable CFIFO
+  usb: renesas_usbhs: Add support for RZ/A2
+  dt-bindings: usb: renesas_usbhs: Add support for r7s9210
+  ARM: dts: r7s9210: Add USB Host support
+  ARM: dts: r7s9210: Add USB Device support
+  ARM: dts: rza2mevb: Add USB host support
+
+ .../devicetree/bindings/phy/rcar-gen3-phy-usb2.txt | 19 +++--
+ .../devicetree/bindings/usb/renesas_usbhs.txt      |  2 +
+ arch/arm/boot/dts/r7s9210-rza2mevb.dts             | 42 ++++++++++
+ arch/arm/boot/dts/r7s9210.dtsi                     | 97 ++++++++++++++++++++++
+ drivers/phy/renesas/phy-rcar-gen3-usb2.c           | 26 ++++++
+ drivers/usb/renesas_usbhs/Makefile                 |  2 +-
+ drivers/usb/renesas_usbhs/common.c                 | 44 ++++++----
+ drivers/usb/renesas_usbhs/common.h                 |  3 +-
+ drivers/usb/renesas_usbhs/fifo.c                   |  9 +-
+ drivers/usb/renesas_usbhs/rza.h                    |  1 +
+ drivers/usb/renesas_usbhs/rza2.c                   | 75 +++++++++++++++++
+ include/linux/usb/renesas_usbhs.h                  |  4 +
+ 12 files changed, 298 insertions(+), 26 deletions(-)
+ create mode 100644 drivers/usb/renesas_usbhs/rza2.c
+
+-- 
+2.16.1
+
