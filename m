@@ -2,59 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D85C1C984
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 15:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AA41CA8A
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 16:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbfENNia (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 May 2019 09:38:30 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:42026 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725854AbfENNi3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 May 2019 09:38:29 -0400
-Received: (qmail 2188 invoked by uid 2102); 14 May 2019 09:38:28 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 14 May 2019 09:38:28 -0400
-Date:   Tue, 14 May 2019 09:38:28 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Rick Mark <rickmark@dropbox.com>
-cc:     linux-usb@vger.kernel.org,
-        enterprise-infrasec-team <enterprise-infrasec-team@dropbox.com>,
-        production-infrasec-team <production-infrasec-team@dropbox.com>
-Subject: Re: Lack of length checking in USB configuration may allow buffer
- overflow
-In-Reply-To: <CAEFJ+1OA+=SBRa_O3UupJT_KHm_XDw-4uJ9J3cRJQOW0T_c6aA@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1905140935230.1483-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1726174AbfENOiM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 May 2019 10:38:12 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:56938 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725854AbfENOiM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 May 2019 10:38:12 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B83F0200030;
+        Tue, 14 May 2019 16:38:10 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id AC05220022E;
+        Tue, 14 May 2019 16:38:10 +0200 (CEST)
+Received: from fsr-ub1864-101.ea.freescale.net (fsr-ub1864-101.ea.freescale.net [10.171.82.13])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id F37B82061C;
+        Tue, 14 May 2019 16:38:09 +0200 (CEST)
+From:   laurentiu.tudor@nxp.com
+To:     hch@lst.de, stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, marex@denx.de
+Cc:     leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
+        robin.murphy@arm.com, Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Subject: [RFC PATCH v2 0/3] prerequisites for device reserved local mem rework
+Date:   Tue, 14 May 2019 17:38:04 +0300
+Message-Id: <20190514143807.7745-1-laurentiu.tudor@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 13 May 2019, Rick Mark wrote:
+From: Laurentiu Tudor <laurentiu.tudor@nxp.com>
 
-> Hey All,
-> 
-> I was seeing a linux VM crash due to malformed USB configuration
-> payloads being malformed.
+For HCs that have local memory, replace the current DMA API usage
+with a genalloc generic allocator to manage the mappings for these
+devices.
+This is in preparation for dropping the existing "coherent" dma
+mem declaration APIs. Current implementation was relying on a short
+circuit in the DMA API that in the end, was acting as an allocator
+for these type of devices.
 
-Can you provide more information about this crash?  I would like to 
-know exactly what errors are occurring.  As far as I can tell, the 
-existing code already tests for all the things your patch adds.
+Only compiled tested, so any volunteers willing to test are most welcome.
 
->  I'm testing this patch now which should
-> provide better security checking (but this is my first patch so be
-> kind if I have things wrong.)
+Thank you!
 
-Have you read the loop in usb_parse_configuration() that starts at 
-the comment:
+For context, see thread here: https://lkml.org/lkml/2019/4/22/357
 
-	/* Go through the descriptors, checking their length and counting the
-	 * number of altsettings for each interface */
+Changes in v2:
+ - use genalloc also in core usb (based on comment from Robin)
+ - moved genpool decl to usb_hcd to be accesible from core usb
 
-(approximately line 585)?  This loop should carry out all the tests
-that your patch is trying to duplicate.
+Laurentiu Tudor (3):
+  USB: use genalloc for USB HCs with local memory
+  usb: host: ohci-sm501: init genalloc for local memory
+  usb: host: ohci-tmio: init genalloc for local memory
 
-Alan Stern
+ drivers/usb/core/buffer.c     | 12 ++++++-
+ drivers/usb/host/ohci-hcd.c   | 23 +++++++++++---
+ drivers/usb/host/ohci-sm501.c | 60 +++++++++++++++++++----------------
+ drivers/usb/host/ohci-tmio.c  | 23 +++++++++-----
+ include/linux/usb/hcd.h       |  3 ++
+ 5 files changed, 80 insertions(+), 41 deletions(-)
+
+-- 
+2.17.1
 
