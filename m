@@ -2,43 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC0D1CEB9
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 20:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DDA1CEE4
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 20:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726529AbfENSMY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 May 2019 14:12:24 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:35891 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726201AbfENSMY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 May 2019 14:12:24 -0400
-Received: by mail-oi1-f195.google.com with SMTP id l203so12878795oia.3;
-        Tue, 14 May 2019 11:12:23 -0700 (PDT)
+        id S1727399AbfENSRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 May 2019 14:17:46 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:42240 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726348AbfENSRp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 May 2019 14:17:45 -0400
+Received: by mail-ot1-f68.google.com with SMTP id f23so16145141otl.9;
+        Tue, 14 May 2019 11:17:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7MKXOx72GnJK4OThTbg/Yq9n8A27D1pwO48w3mZxGik=;
-        b=TfDtCCNmcVJ7WXWPI4ZxFdlwO0Mhu9x3wjKHn1IdQCdY9mHw24ZvvuEItFjyHyZpu2
-         VVaz36e+vJPBfZPmbsEm41Coi/JjA4va/p9o0kvrggHc2zBWGDWLX/HBSSPbeqVTEGDU
-         mmMoH/38v1RUoxJGrxyn7NPQKxi+XI6brkd5mAVEiudZ6sx/eplCH0Uf5wFpUPHxv1bx
-         0hk6ZGy5qnlOI19/ytIrXV3KXZfKZQxz62xmm+92AAPdqeizcpWBMw39O6+iGuHjYqbf
-         jo5CP/qANtYYfvhexUdugkb9gbz68cThPWwAvxcQuEDgJ9O0HwqtCxFtu9cRngMYQIEY
-         ERgw==
-X-Gm-Message-State: APjAAAUOd5gcSGnSDvtXoXis3wg37CD0iZXveg3378RV4K81JXWuIj8M
-        eFNwkcTNwxB2d8YJL7Tiww==
-X-Google-Smtp-Source: APXvYqy19Xjq9sGP3TMfrsYa+PbNh1BafjhPi5bE6IL4JiP7WIz0dF4SnI69FmgshwGuUtHZQI4Byg==
-X-Received: by 2002:aca:5d86:: with SMTP id r128mr3690918oib.135.1557857542852;
-        Tue, 14 May 2019 11:12:22 -0700 (PDT)
+        bh=j6KYSa7mFmT8IdJQKzPSI3WBRVrEj+tTk4TrQEJlJp8=;
+        b=TX/6g4d0YEvldhYYnPULVTG85SzqY8fw5AW6hp0/ta7i2TM/Lj5Pj86MY4piFyrS3n
+         xEDW5LWVpD++4YXMBMy+JNs9hqMMsQPnPN8JGZwpGTm277na1V9ct8T/DSMYCHEB9x7g
+         uc2Fk3z77JJtJ3MQqbIFw0IU8JhMho8JfmfzSDjcR6ixtlO5NhQqNjPydBHTORnpmueO
+         jvb/WPZg2UENB5ZuC0zoTaSxBUvcUVCsYHjITE7+mZCFOdDx4PKMPqBaVP5hGaEOufbe
+         /WbjbN4vByObxxyQ2JMSNtAdpnsluKJh2roFwDn/Ub3Zn0bAPlpFSpyAKDcSNFU1zSXD
+         5uxA==
+X-Gm-Message-State: APjAAAVImjiG+flymYzAlGWty1CFAtKkuTQVzxPpUwWTo1LkEF11Q5Rp
+        7w8TlbfLAkSnoPLmdgsYRA==
+X-Google-Smtp-Source: APXvYqxnIsAes2oxtS3pa7msjo6X0Zei3YQDzQ8HtcaPk4a7Y58c4+nemeuTSKJtzH/2q8RiQazUKw==
+X-Received: by 2002:a9d:7c84:: with SMTP id q4mr15400106otn.98.1557857864775;
+        Tue, 14 May 2019 11:17:44 -0700 (PDT)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q25sm6355192otl.60.2019.05.14.11.12.18
+        by smtp.gmail.com with ESMTPSA id m63sm6408810otc.76.2019.05.14.11.17.43
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 May 2019 11:12:22 -0700 (PDT)
-Date:   Tue, 14 May 2019 13:12:04 -0500
+        Tue, 14 May 2019 11:17:43 -0700 (PDT)
+Date:   Tue, 14 May 2019 13:17:43 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Mark Rutland <mark.rutland@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
         Li Jun <jun.li@nxp.com>,
@@ -51,115 +52,43 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-mediatek@lists.infradead.org,
         Biju Das <biju.das@bp.renesas.com>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 2/6] dt-bindings: usb: add binding for Type-B GPIO
- connector driver
-Message-ID: <20190514181204.GA13949@bogus>
+Subject: Re: [PATCH v5 3/6] dt-bindings: usb: mtu3: add properties about USB
+ Role Switch
+Message-ID: <20190514181743.GA21612@bogus>
 References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
- <1557823643-8616-3-git-send-email-chunfeng.yun@mediatek.com>
+ <1557823643-8616-4-git-send-email-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1557823643-8616-3-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1557823643-8616-4-git-send-email-chunfeng.yun@mediatek.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 14, 2019 at 04:47:19PM +0800, Chunfeng Yun wrote:
-> It's used to support dual role switch via GPIO when use Type-B
-> receptacle, typically the USB ID pin is connected to an input
-> GPIO pin
+On Tue, 14 May 2019 16:47:20 +0800, Chunfeng Yun wrote:
+> Now the USB Role Switch is supported, so add properties about it,
+> and modify some description related.
 > 
 > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
-> v5 changes:
->  1. treat type-B connector as child device of USB controller's, but not
->     as a separate virtual device, suggested by Rob
->  2. put connector's port node under connector node, suggested by Rob
+> v5 changes
+>  1. modify decription about extcon and vbus-supply properties
+>  2. make this patch depend on [1]
 > 
-> v4 no changes
+>  [1]: [v3] dt-binding: usb: add usb-role-switch property
+>       https://patchwork.kernel.org/patch/10934835/
 > 
-> v3 changes:
->  1. treat type-B connector as a virtual device, but not child device of
->     USB controller's
+> v4: no changes
+> v3: no changes
 > 
 > v2 changes:
->   1. new patch to make binding clear suggested by Hans
+>   1. fix typo
+>   2. refer new binding about connector property
 > ---
->  .../bindings/usb/typeb-conn-gpio.txt          | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt
+>  .../devicetree/bindings/usb/mediatek,mtu3.txt          | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt b/Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt
-> new file mode 100644
-> index 000000000000..20dd3499a348
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt
-> @@ -0,0 +1,42 @@
-> +USB Type-B GPIO Connector
-> +
-> +This is used to switch dual role mode from the USB ID pin connected to
-> +an input GPIO pin.
-> +
-> +Required properties:
-> +- compatible : should include "linux,typeb-conn-gpio" and "usb-b-connector".
 
-I don't think we need "linux,typeb-conn-gpio". A driver can decide to 
-handle GPIO lines if they present or we assume the parent device handles 
-ID and/or Vbus if they are not present.
-
-> +- id-gpios, vbus-gpios : either one of them must be present, and both
-> +	can be present as well.
-
-Please clarify that vbus-gpios is an input to sense Vbus presence as an 
-output it should be modelled as a regulator only.
-
-These should be added to usb-connector.txt.
-
-The result of all this is you don't need this file. Just additions to 
-usb-connector.txt.
-
-> +- vbus-supply : can be present if needed when supports dual role mode or
-> +	host mode.
-> +	see connector/usb-connector.txt
-> +
-> +Sub-nodes:
-> +- port : should be present.
-> +	see graph.txt
-> +
-> +Example:
-> +
-> +&mtu3 {
-> +	status = "okay";
-
-Don't show status in examples.
-
-> +
-> +	connector {
-> +		compatible = "linux,typeb-conn-gpio", "usb-b-connector";
-> +		label = "micro-USB";
-> +		type = "micro";
-> +		id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
-> +		vbus-supply = <&usb_p0_vbus>;
-> +
-> +		port {
-> +			bconn_ep: endpoint@0 {
-> +				remote-endpoint = <&usb_role_sw>;
-> +			};
-> +		};
-> +	};
-> +
-> +	port {
-> +		usb_role_sw: endpoint@0 {
-> +			remote-endpoint = <&bconn_ep>;
-> +		};
-> +	};
-
-When the host controller is the parent of the connector, you don't need 
-the graph unless you're describing the alternate modes in Type-C.
-
-> +};
-> -- 
-> 2.21.0
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>
