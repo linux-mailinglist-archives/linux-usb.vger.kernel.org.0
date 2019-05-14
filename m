@@ -2,32 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ED81C3FB
-	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 09:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585CE1C46F
+	for <lists+linux-usb@lfdr.de>; Tue, 14 May 2019 10:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726750AbfENHif (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 May 2019 03:38:35 -0400
-Received: from mail-eopbgr40049.outbound.protection.outlook.com ([40.107.4.49]:57634
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726736AbfENHif (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 May 2019 03:38:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xA/t+DwhmQgDigCyEDt8f8oU3FMvV/PpHa8ySzP5MSw=;
- b=AtxIr8BpUpboXtlR5Rb0lv6dsL+uY+SDt8UMANpD6Li0RDnTlDO/Ejnobh5EacvHE8yDH3Nu+oQNk3x1oObN3LLpiXReS17R5Gllkyzpysp8jitWtdCY27mkAHyGiYXvdELUp9Y3ww2lsD05sW7azA9EBAd0Q14R2k6WtGTavLM=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB5392.eurprd04.prod.outlook.com (20.178.120.210) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1900.16; Tue, 14 May 2019 07:38:31 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::4923:8ad8:62c1:3e61]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::4923:8ad8:62c1:3e61%5]) with mapi id 15.20.1878.024; Tue, 14 May 2019
- 07:38:31 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
+        id S1726274AbfENIMQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 May 2019 04:12:16 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:38761 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725899AbfENIMP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 May 2019 04:12:15 -0400
+X-UUID: 1a31c88f6d4e4e1d8a3587bb10240087-20190514
+X-UUID: 1a31c88f6d4e4e1d8a3587bb10240087-20190514
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 703909718; Tue, 14 May 2019 16:12:05 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33N1.mediatek.inc
+ (172.27.4.75) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 14 May
+ 2019 16:12:03 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 14 May 2019 16:12:03 +0800
+Message-ID: <1557821523.10179.284.camel@mhfsdcap03>
+Subject: Re: [PATCH v2 2/8] usb: phy: phy-mxs-usb: add imx7ulp support
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
@@ -35,85 +37,181 @@ CC:     "linux-arm-kernel@lists.infradead.org"
         Fabio Estevam <fabio.estevam@nxp.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         Aisheng Dong <aisheng.dong@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>, Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH v2 8/8] usb: chipidea: imx: "fsl,usbphy" phandle is not
- mandatory now
-Thread-Topic: [PATCH v2 8/8] usb: chipidea: imx: "fsl,usbphy" phandle is not
- mandatory now
-Thread-Index: AQHVCigGOp2NOmuYaEKjpdSq44w//w==
-Date:   Tue, 14 May 2019 07:38:30 +0000
-Message-ID: <20190514073529.29505-9-peter.chen@nxp.com>
+        dl-linux-imx <linux-imx@nxp.com>
+Date:   Tue, 14 May 2019 16:12:03 +0800
+In-Reply-To: <20190514073529.29505-3-peter.chen@nxp.com>
 References: <20190514073529.29505-1-peter.chen@nxp.com>
-In-Reply-To: <20190514073529.29505-1-peter.chen@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.14.1
-x-clientproxiedby: HK0PR03CA0086.apcprd03.prod.outlook.com
- (2603:1096:203:72::26) To VI1PR04MB5327.eurprd04.prod.outlook.com
- (2603:10a6:803:60::16)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cb695de6-55ab-4f7a-bd8e-08d6d83f290f
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5392;
-x-ms-traffictypediagnostic: VI1PR04MB5392:
-x-microsoft-antispam-prvs: <VI1PR04MB5392D081D1B4BDCAE9F123F78B080@VI1PR04MB5392.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2657;
-x-forefront-prvs: 0037FD6480
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(136003)(376002)(346002)(39860400002)(189003)(199004)(386003)(6506007)(102836004)(7736002)(305945005)(6436002)(66946007)(26005)(316002)(6512007)(73956011)(6486002)(66446008)(64756008)(66556008)(66476007)(76176011)(11346002)(446003)(2906002)(476003)(2616005)(25786009)(4326008)(3846002)(53936002)(186003)(486006)(44832011)(86362001)(6116002)(71190400001)(71200400001)(50226002)(256004)(66066001)(2501003)(4744005)(1076003)(5660300002)(68736007)(8676002)(52116002)(99286004)(14454004)(36756003)(478600001)(8936002)(81156014)(81166006)(110136005)(54906003)(142933001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5392;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: obRvkYZvuyudxmJ9iFH+DVDIeZe7vs2WF7lzSwvWz3gNCSZEu63AX4bFLu/iQmqbRUy6n4FXLZ3ZOsB4wOru7bG3LJKvp4Mrm0au+IblTGuWiJcnY7HV01PRyo8aQfzcWKJUC9lwHYDxwoW6rOUB/KH/6w5jWXuPaB2TDFRSpQgA4m2YR3e28lT0xlj2ZBCEs+SfeOjgSFSz4b3SsS0WDgxUrLW8PktxpOFf4AZJ0nANFCQULf7ZppfwfuCeSjdksqs1SOoFOrEIazYfh2Zd4LLubpuXZC3cXl49UZYEGHoSWJ1Q5zbs6sGO3fID5bUNAn2c23Aoev6bMKVTQanxorL1DUxyRii2GbRVEXh9KXhQrqM0n+df+DwS//nuruyHjJYKceMobRoX+HYFO39Bhd9TjENQz2oeMX1kbMsVRfg=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <72F16C411CA5A34AB2DD1235DDE3DE59@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+         <20190514073529.29505-3-peter.chen@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb695de6-55ab-4f7a-bd8e-08d6d83f290f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2019 07:38:31.2337
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5392
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since the chipidea common code support get the USB PHY phandle from
-"phys", the glue layer is not mandatory to get the "fsl,usbphy" phandle
-any more.
+On Tue, 2019-05-14 at 07:38 +0000, Peter Chen wrote:
+> At imx7ulp, the USB related analog register is located in PHY register
+> region too, so we need to control PLL at PHY driver directly.
+> 
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> ---
+>  drivers/usb/phy/phy-mxs-usb.c | 76 ++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 75 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
+> index 1b1bb0ad40c3..90c96a8e9342 100644
+> --- a/drivers/usb/phy/phy-mxs-usb.c
+> +++ b/drivers/usb/phy/phy-mxs-usb.c
+> @@ -20,6 +20,7 @@
+>  
+>  #define DRIVER_NAME "mxs_phy"
+>  
+> +/* Register Macro */
+>  #define HW_USBPHY_PWD				0x00
+>  #define HW_USBPHY_TX				0x10
+>  #define HW_USBPHY_CTRL				0x30
+> @@ -37,6 +38,11 @@
+>  #define GM_USBPHY_TX_TXCAL45DN(x)            (((x) & 0xf) << 8)
+>  #define GM_USBPHY_TX_D_CAL(x)                (((x) & 0xf) << 0)
+>  
+> +/* imx7ulp */
+> +#define HW_USBPHY_PLL_SIC			0xa0
+> +#define HW_USBPHY_PLL_SIC_SET			0xa4
+> +#define HW_USBPHY_PLL_SIC_CLR			0xa8
+> +
+>  #define BM_USBPHY_CTRL_SFTRST			BIT(31)
+>  #define BM_USBPHY_CTRL_CLKGATE			BIT(30)
+>  #define BM_USBPHY_CTRL_OTG_ID_VALUE		BIT(27)
+> @@ -55,6 +61,12 @@
+>  #define BM_USBPHY_IP_FIX                       (BIT(17) | BIT(18))
+>  
+>  #define BM_USBPHY_DEBUG_CLKGATE			BIT(30)
+> +/* imx7ulp */
+> +#define BM_USBPHY_PLL_LOCK			BIT(31)
+> +#define BM_USBPHY_PLL_REG_ENABLE		BIT(21)
+> +#define BM_USBPHY_PLL_BYPASS			BIT(16)
+> +#define BM_USBPHY_PLL_POWER			BIT(12)
+> +#define BM_USBPHY_PLL_EN_USB_CLKS		BIT(6)
+>  
+>  /* Anatop Registers */
+>  #define ANADIG_ANA_MISC0			0x150
+> @@ -167,6 +179,9 @@ static const struct mxs_phy_data imx6ul_phy_data = {
+>  	.flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS,
+>  };
+>  
+> +static const struct mxs_phy_data imx7ulp_phy_data = {
+> +};
+> +
+>  static const struct of_device_id mxs_phy_dt_ids[] = {
+>  	{ .compatible = "fsl,imx6sx-usbphy", .data = &imx6sx_phy_data, },
+>  	{ .compatible = "fsl,imx6sl-usbphy", .data = &imx6sl_phy_data, },
+> @@ -174,6 +189,7 @@ static const struct of_device_id mxs_phy_dt_ids[] = {
+>  	{ .compatible = "fsl,imx23-usbphy", .data = &imx23_phy_data, },
+>  	{ .compatible = "fsl,vf610-usbphy", .data = &vf610_phy_data, },
+>  	{ .compatible = "fsl,imx6ul-usbphy", .data = &imx6ul_phy_data, },
+> +	{ .compatible = "fsl,imx7ulp-usbphy", .data = &imx7ulp_phy_data, },
+>  	{ /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(of, mxs_phy_dt_ids);
+> @@ -198,6 +214,11 @@ static inline bool is_imx6sl_phy(struct mxs_phy *mxs_phy)
+>  	return mxs_phy->data == &imx6sl_phy_data;
+>  }
+>  
+> +static inline bool is_imx7ulp_phy(struct mxs_phy *mxs_phy)
+> +{
+> +	return mxs_phy->data == &imx7ulp_phy_data;
+> +}
+> +
+>  /*
+>   * PHY needs some 32K cycles to switch from 32K clock to
+>   * bus (such as AHB/AXI, etc) clock.
+> @@ -221,14 +242,59 @@ static void mxs_phy_tx_init(struct mxs_phy *mxs_phy)
+>  	}
+>  }
+>  
+> +static int wait_for_pll_lock(const void __iomem *base)
+> +{
+> +	int loop_count = 100;
+> +
+> +	/* Wait for PLL to lock */
+> +	do {
+> +		if (readl(base + HW_USBPHY_PLL_SIC) & BM_USBPHY_PLL_LOCK)
+> +			break;
+> +		usleep_range(100, 150);
+> +	} while (loop_count-- > 0);
+> +
+there is a common API readl_poll_timeout(), maybe you can try it.
 
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/chipidea/ci_hdrc_imx.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+> +	return readl(base + HW_USBPHY_PLL_SIC) & BM_USBPHY_PLL_LOCK
+> +			? 0 : -ETIMEDOUT;
+> +}
+> +
+> +static int mxs_phy_pll_enable(void __iomem *base, bool enable)
+> +{
+> +	int ret = 0;
+> +
+> +	if (enable) {
+> +		writel(BM_USBPHY_PLL_REG_ENABLE, base + HW_USBPHY_PLL_SIC_SET);
+> +		writel(BM_USBPHY_PLL_BYPASS, base + HW_USBPHY_PLL_SIC_CLR);
+> +		writel(BM_USBPHY_PLL_POWER, base + HW_USBPHY_PLL_SIC_SET);
+> +		ret = wait_for_pll_lock(base);
+> +		if (ret)
+> +			return ret;
+> +		writel(BM_USBPHY_PLL_EN_USB_CLKS, base +
+> +				HW_USBPHY_PLL_SIC_SET);
+> +	} else {
+> +		writel(BM_USBPHY_PLL_EN_USB_CLKS, base +
+> +				HW_USBPHY_PLL_SIC_CLR);
+> +		writel(BM_USBPHY_PLL_POWER, base + HW_USBPHY_PLL_SIC_CLR);
+> +		writel(BM_USBPHY_PLL_BYPASS, base + HW_USBPHY_PLL_SIC_SET);
+> +		writel(BM_USBPHY_PLL_REG_ENABLE, base + HW_USBPHY_PLL_SIC_CLR);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
+>  {
+>  	int ret;
+>  	void __iomem *base = mxs_phy->phy.io_priv;
+>  
+> +	if (is_imx7ulp_phy(mxs_phy)) {
+> +		ret = mxs_phy_pll_enable(base, true);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	ret = stmp_reset_block(base + HW_USBPHY_CTRL);
+>  	if (ret)
+> -		return ret;
+> +		goto disable_pll;
+>  
+>  	/* Power up the PHY */
+>  	writel(0, base + HW_USBPHY_PWD);
+> @@ -253,6 +319,11 @@ static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
+>  	mxs_phy_tx_init(mxs_phy);
+>  
+>  	return 0;
+> +
+> +disable_pll:
+> +	if (is_imx7ulp_phy(mxs_phy))
+> +		mxs_phy_pll_enable(base, false);
+> +	return ret;
+>  }
+>  
+>  /* Return true if the vbus is there */
+> @@ -374,6 +445,9 @@ static void mxs_phy_shutdown(struct usb_phy *phy)
+>  	writel(BM_USBPHY_CTRL_CLKGATE,
+>  	       phy->io_priv + HW_USBPHY_CTRL_SET);
+>  
+> +	if (is_imx7ulp_phy(mxs_phy))
+> +		mxs_phy_pll_enable(phy->io_priv, false);
+> +
+>  	clk_disable_unprepare(mxs_phy->clk);
+>  }
+>  
 
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_h=
-drc_imx.c
-index a76708501236..b5abfe89190c 100644
---- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@ -398,8 +398,9 @@ static int ci_hdrc_imx_probe(struct platform_device *pd=
-ev)
- 		ret =3D PTR_ERR(data->phy);
- 		/* Return -EINVAL if no usbphy is available */
- 		if (ret =3D=3D -ENODEV)
--			ret =3D -EINVAL;
--		goto err_clk;
-+			data->phy =3D NULL;
-+		else
-+			goto err_clk;
- 	}
-=20
- 	pdata.usb_phy =3D data->phy;
---=20
-2.14.1
 
