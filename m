@@ -2,54 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B031EA4B
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 10:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A23D1EA98
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 11:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbfEOIj3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 May 2019 04:39:29 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:42271 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbfEOIj2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 04:39:28 -0400
-Received: by mail-lf1-f66.google.com with SMTP id y13so1315342lfh.9
-        for <linux-usb@vger.kernel.org>; Wed, 15 May 2019 01:39:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gXgJ2NRdCHpt3L7731q8B8+lovu36p2J096s+Bj8HBk=;
-        b=PdfrWUiwX3+tHhJ2QUOshH8iSM/ncGp6WT+i7VEFJ/frJ/D+PNGnwLF5lCknMAWXNu
-         4/3K8xqKbVaa6FH7HkM8eGFXRo0i0MklFQyJFZgJNxC62/XcoWR90QEyTWYbQJj+NGmu
-         wvDWWG5g19etfnpQTkDfGKSQ+rMqyVC4hUbkst1gCwYltMdRVOMEHnYKODwvFwQXkOzl
-         Yajhx5hO+OAnRSGzmHMY0ItPDgk+RwbR+2ZdfgJrhViS7GdZQip+Voy3kudsJdNmZjpK
-         I5wHg3U+GS7yByun8eCCJqGSLsJR2GdRYlRY1KLE9e/hzAZSyDytcmqyL2HWGD2jn3xk
-         SCsA==
+        id S1725977AbfEOJEH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 May 2019 05:04:07 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:44007 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725902AbfEOJEH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 05:04:07 -0400
+Received: by mail-vs1-f65.google.com with SMTP id d128so1181649vsc.10;
+        Wed, 15 May 2019 02:04:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gXgJ2NRdCHpt3L7731q8B8+lovu36p2J096s+Bj8HBk=;
-        b=Bw4OQ58cQa7buHnXOVkSGnUd32LYOmJ5meSjjOuemN+uByqjz591YXES+tBrXZglCZ
-         tlq6FDlV5GL5AshLBM5CSoIWQNjevdbodQ7mkTVH1/IQrnnlhmKIkiuBv/Fy+DQmBvF2
-         dcJFRfqV1Gq4p6AVC6qS3MlpMaOd2eHE0yPMEo8SfH4N5KIs55PwRmEjyUkAS/8WsdjB
-         V9bHh9RFDpoPGnL7isJfZRSbf7Z7sTDOlWWj95ZXNsrjtrTfnfDMsyEO5fWNCDVbBq3v
-         JXiaEgIYDM9w/zHR9LaODvL4B+f8h3B1jynjD3dZPtWF1qxulWD2OKK2rjY7IKIcRbyY
-         usaQ==
-X-Gm-Message-State: APjAAAWJqlTqkDiEbXUoF8jO/nM3qQqUGTgW6GSD9nBC3EJXcf80OLbG
-        NNhLszswJlxQzTR8wxJKcVF+eQ==
-X-Google-Smtp-Source: APXvYqxEGYNtWpwEh+ZoMBb0iSPv7qGxCbS7X1yKS+hc7NcFIxoAoSdbv7vpmQpd8g21NAf5bSNHDg==
-X-Received: by 2002:ac2:4989:: with SMTP id f9mr20486878lfl.12.1557909566620;
-        Wed, 15 May 2019 01:39:26 -0700 (PDT)
-Received: from [192.168.0.199] ([31.173.86.98])
-        by smtp.gmail.com with ESMTPSA id l16sm267921ljg.90.2019.05.15.01.39.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 May 2019 01:39:25 -0700 (PDT)
-Subject: Re: [PATCH v3 04/15] dt-bindings: rcar-gen3-phy-usb2: Document use of
- usb_x1
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chris Brandt <chris.brandt@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gkTbiQzGF1k2N99naRD8r5aIjsz3VLc+98eg7EfqOTI=;
+        b=ucA96ZVdsOdVIsCNX+zdzEELNXcoreMVokEj8OVI1JTMXj4q2Af/NmGDrJmcxa4JRh
+         H/FK07aA6JyaVchhfLb9m6naJ6PpCZP4UIJi+zNXT2BHWiRryBy3z0rxJ7ki2deWHGIW
+         4LlvkKzaqL4v5kHn+TeP5hQCipd6qJ8T1yH7hvNEWwow/65zTiqsgukxyRoSdqHhTXNP
+         DbLPAihpiDiYCvAXMeS9mSM/FNA/Yj8nXfscw11079kfY13cAS6njzJGSVATNcqnasN+
+         jmn7/idcc42rZeUZ82VwP3inDSWft0U3Hosylar472wzq1uF0Z3zTOEpbzztouy+nVtf
+         xbjg==
+X-Gm-Message-State: APjAAAUusjfvWJqpUDR/HIIzRsCayuwJzYtDXHOGk1Gydnyc1+7QXzbO
+        UKyP3+Wi7C0GAzQMIVEDJf2xpivY4cJ3TTy6UdM=
+X-Google-Smtp-Source: APXvYqztnkymczgKnMVRe9ZCvVpmL+kBZMs2zWM/eCWYj13BUyDK4j+nFEPaMRWT1Ux/G56HvMqtlcdU69dOK5Yo7fs=
+X-Received: by 2002:a67:8e03:: with SMTP id q3mr19981536vsd.152.1557911045761;
+ Wed, 15 May 2019 02:04:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190514145605.19112-1-chris.brandt@renesas.com>
+ <20190514145605.19112-5-chris.brandt@renesas.com> <CAMuHMdVVu23_8=8CLwM46QAJsxUbYyN1TYQaAzoE+d2uM3YshQ@mail.gmail.com>
+ <f4ceaadb-62e1-9880-e8e3-4f5bf54ce91e@cogentembedded.com>
+In-Reply-To: <f4ceaadb-62e1-9880-e8e3-4f5bf54ce91e@cogentembedded.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 15 May 2019 11:03:54 +0200
+Message-ID: <CAMuHMdWDr0KwrqukgMC=UiMqW4YLF76sag-Jr_fJFfhkggjeKw@mail.gmail.com>
+Subject: Re: [PATCH v3 04/15] dt-bindings: rcar-gen3-phy-usb2: Document use of usb_x1
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     Chris Brandt <chris.brandt@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Simon Horman <horms@verge.net.au>,
@@ -59,53 +50,48 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-References: <20190514145605.19112-1-chris.brandt@renesas.com>
- <20190514145605.19112-5-chris.brandt@renesas.com>
- <CAMuHMdVVu23_8=8CLwM46QAJsxUbYyN1TYQaAzoE+d2uM3YshQ@mail.gmail.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <f4ceaadb-62e1-9880-e8e3-4f5bf54ce91e@cogentembedded.com>
-Date:   Wed, 15 May 2019 11:39:19 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <CAMuHMdVVu23_8=8CLwM46QAJsxUbYyN1TYQaAzoE+d2uM3YshQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Hi Sergei,
 
-On 15.05.2019 10:35, Geert Uytterhoeven wrote:
+On Wed, May 15, 2019 at 10:39 AM Sergei Shtylyov
+<sergei.shtylyov@cogentembedded.com> wrote:
+> On 15.05.2019 10:35, Geert Uytterhoeven wrote:
+> >> Document the USB_X1 input and add clock-names to identify
+> >> functional and USB_X1 clocks.
+> >>
+> >> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
+> >
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> >
+> >> --- a/Documentation/devicetree/bindings/phy/rcar-gen3-phy-usb2.txt
+> >> +++ b/Documentation/devicetree/bindings/phy/rcar-gen3-phy-usb2.txt
+> >> @@ -28,7 +28,11 @@ Required properties:
+> >>                followed by the generic version.
+> >>
+> >>   - reg: offset and length of the partial USB 2.0 Host register block.
+> >> -- clocks: clock phandle and specifier pair(s).
+> >> +- clocks: clock phandle and specifier pair(s). For SoCs that have a separate
+> >> +          dedicated USB_X1 input for the PLL, that is also listed.
+> >> +- clock-names: Name of the clocks. The functional clock shall be called "fclk"
+> >
+> > Names?
+>
+>     And I think the module clock name was "fck", not "fclk"...
 
->> Document the USB_X1 input and add clock-names to identify
->> functional and USB_X1 clocks.
->>
->> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
-> 
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
->> --- a/Documentation/devicetree/bindings/phy/rcar-gen3-phy-usb2.txt
->> +++ b/Documentation/devicetree/bindings/phy/rcar-gen3-phy-usb2.txt
->> @@ -28,7 +28,11 @@ Required properties:
->>                followed by the generic version.
->>
->>   - reg: offset and length of the partial USB 2.0 Host register block.
->> -- clocks: clock phandle and specifier pair(s).
->> +- clocks: clock phandle and specifier pair(s). For SoCs that have a separate
->> +          dedicated USB_X1 input for the PLL, that is also listed.
->> +- clock-names: Name of the clocks. The functional clock shall be called "fclk"
-> 
-> Names?
+Indeed, sorry for missing that.
 
-    And I think the module clock name was "fck", not "fclk"...
+Gr{oetje,eeting}s,
 
-[...]
-> Gr{oetje,eeting}s,
-> 
->                          Geert
+                        Geert
 
-MBR, Sergei
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
