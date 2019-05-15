@@ -2,112 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCA61EC34
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 12:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D58F1EEAF
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 13:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbfEOKhJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 May 2019 06:37:09 -0400
-Received: from mail-eopbgr70041.outbound.protection.outlook.com ([40.107.7.41]:35229
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725974AbfEOKhI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 May 2019 06:37:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CgEZWhMTW3/nSQoTLLLG9IA6TYU3ODHNRVGE7B1JvHk=;
- b=isrOFz0w5pPxPN0u529j79tbTqXqSN6gSIHiF+vhd7BHrrvdCnCJj5cl31i6YZ6LLFg4q+35Ail3v4cIgr+3HUMfIysgmyZGe05iveo3dxVNhSaOah41pkqtpHnD/ubXuop86xKc0FMYGFYls8DfaU7ZbbvCNjSdUiojYECfinQ=
-Received: from VI1PR04MB5134.eurprd04.prod.outlook.com (20.177.50.159) by
- VI1PR04MB4432.eurprd04.prod.outlook.com (20.177.55.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1900.17; Wed, 15 May 2019 10:37:04 +0000
-Received: from VI1PR04MB5134.eurprd04.prod.outlook.com
- ([fe80::8942:6d16:631:413]) by VI1PR04MB5134.eurprd04.prod.outlook.com
- ([fe80::8942:6d16:631:413%4]) with mapi id 15.20.1878.024; Wed, 15 May 2019
- 10:37:04 +0000
-From:   Laurentiu Tudor <laurentiu.tudor@nxp.com>
-To:     Fredrik Noring <noring@nocrew.org>,
-        Robin Murphy <robin.murphy@arm.com>
-CC:     "hch@lst.de" <hch@lst.de>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "marex@denx.de" <marex@denx.de>,
-        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
- rework
-Thread-Topic: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
- rework
-Thread-Index: AQHVCmKoDp6AVawLEEugEGZuSLgHU6Zqu4uAgAA1oICAAQ5TAA==
-Date:   Wed, 15 May 2019 10:37:03 +0000
-Message-ID: <0e5f3b86-7a80-eec7-691b-34a123194208@nxp.com>
-References: <20190514143807.7745-1-laurentiu.tudor@nxp.com>
- <9d34015d-c219-179b-3141-4b0de3530ac3@arm.com> <20190514182931.GA2559@sx9>
-In-Reply-To: <20190514182931.GA2559@sx9>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=laurentiu.tudor@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0bd2ba5d-f397-483d-1f8e-08d6d921456e
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4432;
-x-ms-traffictypediagnostic: VI1PR04MB4432:
-x-ms-exchange-purlcount: 3
-x-microsoft-antispam-prvs: <VI1PR04MB4432A8177BD4C198B60DD258EC090@VI1PR04MB4432.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0038DE95A2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(376002)(366004)(39860400002)(396003)(136003)(51444003)(189003)(199004)(5660300002)(36756003)(53936002)(4326008)(6246003)(478600001)(71190400001)(14454004)(966005)(86362001)(14444005)(256004)(31696002)(31686004)(71200400001)(305945005)(7736002)(316002)(486006)(8936002)(6116002)(3846002)(99286004)(26005)(66556008)(66946007)(66476007)(66446008)(64756008)(2616005)(6436002)(476003)(446003)(11346002)(68736007)(76116006)(91956017)(73956011)(6512007)(6306002)(44832011)(2906002)(110136005)(54906003)(53546011)(186003)(25786009)(6506007)(102836004)(66066001)(76176011)(81166006)(81156014)(8676002)(6486002)(229853002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4432;H:VI1PR04MB5134.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 1lYAzg1OgQhwXRd83xL8J5clfNFl1ZmNjrnC+7QNITDAKYUKVl/nJGmA/Fk99Dft5uG+K3bnnISxJ29mkl4NGCbMcvbwl1kNTnxS/gPDGg3MMki1BICxWvp/RvJ45Qrpf3/5nnHMZZ0E0Hj1LNbKiArnT8G8FXijgS28x9Sm3H9O1ri5c+jeIc8kg6DqO2pbuIQba6/l7xg/yZHNUGNLYVmUUt9Ph2OfM33pJlqT+455Sc0UvOJ9WNNFPQfyYYb7FNhdwm30qmeuNkR/H6tvPZL3uxOVPkGUQQGc0MBma2Tpp52fJkW1vTCjZ+nvOVTWPAU+98Fdg/B94hPkwUhKFIZal0FWuK1wG9g2dB8S+Pfze296q2cyxva0uEcrwdEkhv6ocXqQgOAijxudVUt8lt7re8EKE6Miu3l9P7Gwaq4=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <810E4835CD66544F8E9EFAAC25DE090A@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1731554AbfEOLYU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 May 2019 07:24:20 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:43197 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731791AbfEOLYT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 07:24:19 -0400
+Received: by mail-wr1-f68.google.com with SMTP id r4so2228229wro.10
+        for <linux-usb@vger.kernel.org>; Wed, 15 May 2019 04:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=iK7Jdq13nvzwfdloB64qXfEzplthagbP/dPnPLWGrQE=;
+        b=X2nfQ9d+ogB+13LzvpWGxU2FtqTrDaFgjbZJzfz+GIN8KSMsrKP/i0HzYodOqb8NM+
+         /U0q1gjkWBvxCr6gnV9iFvvm4Qu9iuYNC+CVBLw3jKBLF/ni3DzhMgsEYIAHHkkRIZHQ
+         6+kggP58nysZT4vzheXB4aPdeMl6xVIc665ECpbwx+TfK4wBDIWNWQZRUQ6VcqyhlNnD
+         v4yNoZyF61wiNs4hReHZE8sd+eAcPI8gn330Yid8BBsudM9oVHcAHwdW+/2bgn7lEvqc
+         eLkiuae7O8StNQAF05Xt8N6LUBzH1oNGYy8451YAYOeYRYUBCjk/CNxeZEhW7YW9t0z+
+         mZ5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=iK7Jdq13nvzwfdloB64qXfEzplthagbP/dPnPLWGrQE=;
+        b=Vehw70tBgyvWgldQpglbIaZixxNjJTcox4cuM3lNGczaMyVX3WaAHNkPIVbwBJDMgj
+         /m47iJ96VzQHX/5xth5fjyhGTTsCGMEKUufw2Dyp1EMN6sCNnSa1Nw36+6n/0B+WrbJX
+         OuXX8ZUGV77d3glx4A4sta43Jcm+0L9xYK0yys/K8kbJI5lsJxWR7WtmN+DzwAPfH6mU
+         CZMiwrM0F9yJl75a64zo/9Ftp2KDy9iDhZXi2HfCxcYslf7CFdtYzfjbNf+l6g7njcvP
+         BijIkMdiGZl/LwXn6xTNG0p/H8iirpEkI4gK4CsHgeeQ06PywEDu3BZdwqQyKdNqLJen
+         v5Tw==
+X-Gm-Message-State: APjAAAWdwoSbgv0cDmXbmeoH4ZdJU5x1vYG/Mj3PhuSwe/5aU3fPVuJA
+        Xkns0XhdENRBclDR+lTjuPUMFl9rqSE=
+X-Google-Smtp-Source: APXvYqz20Ph3VMG2q93+rpwvfwoVjuDwSfuDmS3H+IKGL6HGHqdN89ujL1mQtamj+N+3HJJOxB1WWg==
+X-Received: by 2002:adf:dc8a:: with SMTP id r10mr25577049wrj.15.1557919457324;
+        Wed, 15 May 2019 04:24:17 -0700 (PDT)
+Received: from [192.168.99.70] (mail.unidataz.cz. [193.165.148.130])
+        by smtp.googlemail.com with ESMTPSA id e8sm3959408wrc.34.2019.05.15.04.24.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 May 2019 04:24:16 -0700 (PDT)
+From:   "StarostaCZ@gmail.com" <starostacz@gmail.com>
+X-Google-Original-From: "StarostaCZ@gmail.com" <StarostaCZ@gmail.com>
+Subject: Re: Linux crash when using FTDI FT232R USB to serial converter on AMD
+ boards.
+To:     Oliver Neukum <oneukum@suse.com>, Joerg Roedel <joro@8bytes.org>,
+        Johan Hovold <johan@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org
+References: <04503197-a0a9-8b35-6c65-c10f296aab57@gmail.com>
+ <20190429094847.GI26546@localhost> <20190503153716.GE11605@8bytes.org>
+ <8748125e-f360-ff0e-ea15-699bce9e7747@gmail.com>
+ <4e7f0267-eba8-81c3-4036-25924ea9df98@gmail.com>
+ <1557911856.2950.10.camel@suse.com>
+ <3e7ec2f2-ac47-a031-96ba-fa2b9f21ed2e@gmail.com>
+ <1557913582.2950.15.camel@suse.com>
+Message-ID: <0903714d-8b72-e714-70ea-67d9dcd94b74@gmail.com>
+Date:   Wed, 15 May 2019 13:22:44 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bd2ba5d-f397-483d-1f8e-08d6d921456e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2019 10:37:03.9745
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4432
+In-Reply-To: <1557913582.2950.15.camel@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: cs
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8sDQoNCk9uIDE0LjA1LjIwMTkgMjE6MjksIEZyZWRyaWsgTm9yaW5nIHdyb3RlOg0KPiBU
-aGFua3MgUm9iaW4hDQo+IA0KPj4+IEZvciBIQ3MgdGhhdCBoYXZlIGxvY2FsIG1lbW9yeSwgcmVw
-bGFjZSB0aGUgY3VycmVudCBETUEgQVBJIHVzYWdlDQo+Pj4gd2l0aCBhIGdlbmFsbG9jIGdlbmVy
-aWMgYWxsb2NhdG9yIHRvIG1hbmFnZSB0aGUgbWFwcGluZ3MgZm9yIHRoZXNlDQo+Pj4gZGV2aWNl
-cy4NCj4+PiBUaGlzIGlzIGluIHByZXBhcmF0aW9uIGZvciBkcm9wcGluZyB0aGUgZXhpc3Rpbmcg
-ImNvaGVyZW50IiBkbWENCj4+PiBtZW0gZGVjbGFyYXRpb24gQVBJcy4gQ3VycmVudCBpbXBsZW1l
-bnRhdGlvbiB3YXMgcmVseWluZyBvbiBhIHNob3J0DQo+Pj4gY2lyY3VpdCBpbiB0aGUgRE1BIEFQ
-SSB0aGF0IGluIHRoZSBlbmQsIHdhcyBhY3RpbmcgYXMgYW4gYWxsb2NhdG9yDQo+Pj4gZm9yIHRo
-ZXNlIHR5cGUgb2YgZGV2aWNlcy4NCj4+Pg0KPj4+IE9ubHkgY29tcGlsZWQgdGVzdGVkLCBzbyBh
-bnkgdm9sdW50ZWVycyB3aWxsaW5nIHRvIHRlc3QgYXJlIG1vc3Qgd2VsY29tZS4NCj4+DQo+PiBJ
-IHJlY2FsbCBhbiBvdXQtb2YtdHJlZSBQbGF5U3RhdGlvbiAyIE9IQ0kgZHJpdmVyIGJlaW5nIGFu
-b3RoZXINCj4+IEhDRF9MT0NBTF9NRU0gdXNlciAtIGlmIEZyZWRyaWsgYW5kIEp1ZXJnZW4gYXJl
-IHN0aWxsIGFjdGl2ZSBvbiB0aGF0LA0KPj4gaG9wZWZ1bGx5IHRoZXkgbWlnaHQgYmUgYWJsZSB0
-byBjb21tZW50IG9uIHdoZXRoZXIgdGhpcyBhcHByb2FjaCBjYW4NCj4+IHdvcmsgZm9yIHRoZW0g
-dG9vLiBQYXRjaHdvcmsgbGluayBqdXN0IGluIGNhc2U6DQo+PiBodHRwczovL3BhdGNod29yay5r
-ZXJuZWwub3JnL3Byb2plY3QvbGludXgtdXNiL2xpc3QvP3Nlcmllcz0xMTc0MzMNCj4gDQo+IFRy
-dWUuIEluIGZhY3QgSSdtIHByZXBhcmluZyBhIHBhdGNoIHN1Ym1pc3Npb24gZm9yIHRoaXMgUFMy
-IE9IQ0kgZHJpdmVyLA0KPiBhbG9uZyB3aXRoIGFib3V0IGEgaHVuZHJlZCBvdGhlciBwYXRjaGVz
-ICh1bnJlbGF0ZWQgdG8gdGhlIFVTQiBzdWJzeXN0ZW0pLg0KPiBIb3BlZnVsbHkgaW4gYSBmZXcg
-d2Vla3MuIE15IHBhdGNoZXMgYXJlIGN1cnJlbnRseSBvbiB0b3Agb2YgdjUuMC4gV2hhdA0KPiBi
-cmFuY2gvdmVyc2lvbiBpcyByZWNvbW1lbmRlZCB0byB0cnkgdGhpcyBETUEgdXBkYXRlPw0KDQpJ
-IHRoaW5rIHRoYXQgYW55IHJlY2VudCBrZXJuZWwgd2lsbCBkbywgc28gSSdkIHNheSB5b3VyIGN1
-cnJlbnQgYnJhbmNoIA0Kc2hvdWxkIGJlIGZpbmUuDQoNCj4gSGVyZSBpcyB0aGUgdjUuMC4xMSBQ
-UzIgT0hDSSBkcml2ZXIsIGZvciByZWZlcmVuY2U6DQo+IA0KPiBodHRwczovL2dpdGh1Yi5jb20v
-ZnJubzcvbGludXgvYmxvYi9wczItdjUuMC4xMS9kcml2ZXJzL3VzYi9ob3N0L29oY2ktcHMyLmMN
-ClBsZWFzZSBub3RlIHRoYXQgdGhlIGRyaXZlciB3aWxsIG5lZWQgdG8gYmUgdXBkYXRlZCwgc2Vl
-IGhlcmUgZm9yIGFuIA0KZXhhbXBsZToNCg0KaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9w
-YXRjaC8xMDk0MzEwNS8NCg0KLS0tDQpCZXN0IFJlZ2FyZHMsIExhdXJldG5pdQ==
+Dne 15.5.2019 v 11:46 Oliver Neukum napsal(a):
+> Most helpful. First, try to replicate this with the iommu disabled.
+I am trying this with "iommu disabled" in bios, but system crash too: 
+https://paste.ee/p/wUgHl
+
+> Secondly, make a proper bugreport mentioning the affected kernel 
+> version (5.1)
+How can I do this?
+
+> Thirdly, if possible replicate this with the vanilla kernel from 
+> kernel.org
+I am afraid, that is not possible. My skills is not too good - is there 
+some procedure to how do this?
+I made test with mainline kernel 5.1.2 from 
+https://kernel.ubuntu.com/~kernel-ppa/mainline/
+but computer crash on boot (kernel panic: unable to mount root fs...).
+
+starosta
