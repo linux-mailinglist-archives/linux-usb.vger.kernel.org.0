@@ -2,132 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E131F832
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 18:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AEBB1F850
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 18:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbfEOQJm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 May 2019 12:09:42 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:37831 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbfEOQJm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 12:09:42 -0400
-Received: by mail-lf1-f65.google.com with SMTP id q17so272610lfo.4
-        for <linux-usb@vger.kernel.org>; Wed, 15 May 2019 09:09:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=G6gVpku6HTmdux/4tz1klLiPEuMIod8NPcJXLdWTNAo=;
-        b=srskuAzYzXTAQCRjcRe3wVHJVTqDCpFMlG3/8iw/YOIErW2edPKL7YpmsrOBOyvh2E
-         XpiIHRmwaTRu0wzYQuGg8DqCBfBuid+4+tftxqT+CxY12A5R4iEr0hs06xneW+gEc1k8
-         bUYrAGN9hHoOecWCq31nUn1uzbFQqQ1epQ18ejMWV8pNCi2YPo3HlYKo/DwWT5X0/06C
-         TwG4g873ar5upL6fikUMFUHdshycJ62/FSVIKh2gMG1TMH89EowYNbMZL8RNz04Twxy1
-         Ofx4DlUTe7k2QmSF5EiPYFBIrOOFal9HneKB5mRVWFOX0aBtu9Q0lkZS2fwrHVECJHcn
-         SYYw==
+        id S1726672AbfEOQRG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 May 2019 12:17:06 -0400
+Received: from mail-it1-f200.google.com ([209.85.166.200]:42372 "EHLO
+        mail-it1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726084AbfEOQRG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 12:17:06 -0400
+Received: by mail-it1-f200.google.com with SMTP id t196so496630ita.7
+        for <linux-usb@vger.kernel.org>; Wed, 15 May 2019 09:17:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=G6gVpku6HTmdux/4tz1klLiPEuMIod8NPcJXLdWTNAo=;
-        b=hLc7tkO/ahjEg0LNWEQgkJ73l7QlDvqJjlG7Ya1fd6H4TUgaepu+DrBbj0keGVpN/p
-         V5F0gUmNTnb9yOogTZPgWmmv3SJM0kEgr8uyY4YAnIHvvedGAAdCFaxac9aOiNGa/7Gw
-         gjjrB9MsbIkuNPuqsb8aC+Mqd+VRJxE4U6oGH+Q/ZVD0Q5VJmk3wUnDGX9nZf/XjDMsF
-         bYI80xybq3eCG7TT8apZ+kfng2LN7WFGYAcBr853vCIUbUFBEGcG88TI1/UvMFOiMRZk
-         cerICmCg8nrznZJ6oAoCUtP797oRRE7eu987t4P8em2M27dW8VBvQVGpVGHXw79SvI+j
-         hjwA==
-X-Gm-Message-State: APjAAAV0ORTToPbwr/7CK8qwmfYevL3NIXOlQ1R8BiEh3scMAWTb/fF3
-        ZC7tUnb42vxwFo/+p1AwaMHqGg==
-X-Google-Smtp-Source: APXvYqwhMmsX0NYKF8RCfm0n9MMzjHUjVtSjSPo58Wha0g+uEai7D6FuS82WLoK4GBwMloOLtxwe9A==
-X-Received: by 2002:ac2:43af:: with SMTP id t15mr11807306lfl.45.1557936580687;
-        Wed, 15 May 2019 09:09:40 -0700 (PDT)
-Received: from wasted.cogentembedded.com ([31.173.86.124])
-        by smtp.gmail.com with ESMTPSA id t23sm519589lfk.9.2019.05.15.09.09.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 May 2019 09:09:39 -0700 (PDT)
-Subject: Re: [PATCH v6 1/7] dt-bindings: usb: hd3ss3220 device tree binding
- document
-To:     Biju Das <biju.das@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Simon Horman <horms@verge.net.au>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <1557922152-16449-1-git-send-email-biju.das@bp.renesas.com>
- <1557922152-16449-2-git-send-email-biju.das@bp.renesas.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <c9b3ee90-9292-320c-4e22-8f989d829497@cogentembedded.com>
-Date:   Wed, 15 May 2019 19:09:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=/kDWjBB0jCL1YtbOqkI5qZw4O964lNtmlxXi0fZixK4=;
+        b=grmGZEAPyjwyljTToAZOGg702J79VeN5FMsfmIho/r2pHGlGI5ByubFt0PSGrdZh67
+         5pVqHYT26i5gCQv67PFinPjoe/Cm/asz95DKz8WH4g+JXpePUaUbvDrY6RqFFhW910Cs
+         ssF5ba+d4xmKZhIHgJMo8MoHrLkqFysw+pS/DwOHGx1c2me300jVehlSPHo2dG2gBqAs
+         CfbdfThORkwrw3uDrG52FkskZBdiInZYjjMpsbhCjr4uzP9MCmUci4CCa59aubufEg2x
+         LSe2xwutgzF4oyEQMg+56VCRoLqpTE+mEzoMUlRd3YlWVgNMqBsbwbSufSW4EPDCGEzW
+         VJtw==
+X-Gm-Message-State: APjAAAVcrZqEUiLTX9kq6OStTkx0x2V1BmjCoswKX97/C+zHP+FbZFd4
+        BsYvtgOtPmwtTuZKEy2GtIuf9qaGmYUNpb1j/4KPGN/3SjvI
+X-Google-Smtp-Source: APXvYqykB3D2KbCA7ppkwMbMaz0GBUsa4he0CqdKkR9zOB32utCtFaO9CnEDA1gWJIHqbSHQyKnO4IeewHu+FyaoAvArH2q7TINb
 MIME-Version: 1.0
-In-Reply-To: <1557922152-16449-2-git-send-email-biju.das@bp.renesas.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a24:edcb:: with SMTP id r194mr8724352ith.164.1557937025379;
+ Wed, 15 May 2019 09:17:05 -0700 (PDT)
+Date:   Wed, 15 May 2019 09:17:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000faf6000588ef7a11@google.com>
+Subject: KASAN: slab-out-of-bounds Read in au0828_rc_unregister (2)
+From:   syzbot <syzbot+357d86bcb4cca1a2f572@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, sean@mess.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Hello,
 
-On 05/15/2019 03:09 PM, Biju Das wrote:
+syzbot found the following crash on:
 
-> Add device tree binding document for TI HD3SS3220 Type-C DRP port
-> controller driver.
-> 
-> Signed-off-by: Biju Das <biju.das@bp.renesas.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
-> V5-->V6
->   * No change.
-> V4-->V5
->   * No Change.
-> V3-->V4
->   * No Change.
-> V2-->V3
->   * Added Rob's Reviewed by tag.
-> V1-->V2
->   * Added connector node.
->   * updated the example with connector node.
-> ---
->  .../devicetree/bindings/usb/ti,hd3ss3220.txt       | 37 ++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,hd3ss3220.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.txt b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.txt
-> new file mode 100644
-> index 0000000..7f41400
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.txt
-> @@ -0,0 +1,37 @@
-> +TI HD3SS3220 TypeC DRP Port Controller.
-> +
-> +Required properties:
-> + - compatible: Must be "ti,hd3ss3220".
-> + - reg: I2C slave address, must be 0x47 or 0x67 based on ADDR pin.
-> + - interrupts: <a b> where a is the interrupt number and b represents an
-> +   encoding of the sense and level information for the interrupt.
+HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=162ca944a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=95aff7278e7ff25e
+dashboard link: https://syzkaller.appspot.com/bug?extid=357d86bcb4cca1a2f572
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-   This depends on an interrupt controller used. I'd just said "an interrupt
-specifier", w/o further details.
+Unfortunately, I don't have any reproducer for this crash yet.
 
-> +
-> +Required sub-node:
-> + - connector : The "usb-c-connector" attached to the hd3ss3220 chip. The
-> +   bindings of the connector node are specified in:
-> +
-> +	Documentation/devicetree/bindings/connector/usb-connector.txt
-> +
-[...]
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+357d86bcb4cca1a2f572@syzkaller.appspotmail.com
 
-MBR, Sergei
+au0828: recv_control_msg() Failed receiving control message, error -71.
+au0828: recv_control_msg() Failed receiving control message, error -71.
+au0828: recv_control_msg() Failed receiving control message, error -71.
+au8522_writereg: writereg error (reg == 0x106, val == 0x0001, ret == -5)
+usb 4-1: selecting invalid altsetting 5
+au0828: Failure setting usb interface0 to as5
+au0828: au0828_usb_probe() au0828_analog_register failed to register on V4L2
+==================================================================
+BUG: KASAN: slab-out-of-bounds in au0828_rc_unregister+0x9a/0xb0  
+drivers/media/usb/au0828/au0828-input.c:353
+Read of size 8 at addr ffff8881cb76f308 by task kworker/1:5/5626
+
+CPU: 1 PID: 5626 Comm: kworker/1:5 Not tainted 5.1.0-rc3+ #8
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description+0x67/0x231 mm/kasan/report.c:187
+  kasan_report.cold+0x1a/0x35 mm/kasan/report.c:317
+  au0828_rc_unregister+0x9a/0xb0 drivers/media/usb/au0828/au0828-input.c:353
+  au0828_usb_disconnect+0x6a/0x130 drivers/media/usb/au0828/au0828-core.c:189
+  au0828_usb_probe.cold+0x111/0x16e  
+drivers/media/usb/au0828/au0828-core.c:661
+  usb_probe_interface+0x30d/0x7b0 drivers/usb/core/driver.c:361
+  really_probe+0x296/0x680 drivers/base/dd.c:509
+  driver_probe_device+0xf9/0x200 drivers/base/dd.c:671
+  __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:778
+  bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x21e/0x360 drivers/base/dd.c:844
+  bus_probe_device+0x1ec/0x2a0 drivers/base/bus.c:514
+  device_add+0xaf4/0x1700 drivers/base/core.c:2106
+  usb_set_configuration+0xdf2/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0xa8/0x110 drivers/usb/core/driver.c:266
+  really_probe+0x296/0x680 drivers/base/dd.c:509
+  driver_probe_device+0xf9/0x200 drivers/base/dd.c:671
+  __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:778
+  bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x21e/0x360 drivers/base/dd.c:844
+  bus_probe_device+0x1ec/0x2a0 drivers/base/bus.c:514
+  device_add+0xaf4/0x1700 drivers/base/core.c:2106
+  usb_new_device.cold+0x8b8/0x1030 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1ac9/0x35a0 drivers/usb/core/hub.c:5432
+  process_one_work+0x90a/0x1580 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x30e/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the page:
+page:ffffea00072ddb00 count:1 mapcount:0 mapping:0000000000000000 index:0x0  
+compound_mapcount: 0
+flags: 0x200000000010000(head)
+raw: 0200000000010000 dead000000000100 dead000000000200 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8881cb76f200: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+  ffff8881cb76f280: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+> ffff8881cb76f300: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+                       ^
+  ffff8881cb76f380: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+  ffff8881cb76f400: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
