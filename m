@@ -2,180 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FACF1EB08
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 11:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCAA1EB2B
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 11:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbfEOJgl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 May 2019 05:36:41 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:38221 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725871AbfEOJgk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 05:36:40 -0400
-X-UUID: d2ad90e0f7144a55aa61dc3e5dba771f-20190515
-X-UUID: d2ad90e0f7144a55aa61dc3e5dba771f-20190515
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 110671046; Wed, 15 May 2019 17:36:36 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 15 May
- 2019 17:36:34 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 15 May 2019 17:36:33 +0800
-Message-ID: <1557912993.10179.306.camel@mhfsdcap03>
-Subject: Re: [PATCH v5 2/6] dt-bindings: usb: add binding for Type-B GPIO
- connector driver
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        "Badhri Jagan Sridharan" <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 15 May 2019 17:36:33 +0800
-In-Reply-To: <20190514181204.GA13949@bogus>
-References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1557823643-8616-3-git-send-email-chunfeng.yun@mediatek.com>
-         <20190514181204.GA13949@bogus>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        id S1726325AbfEOJpA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 May 2019 05:45:00 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51512 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbfEOJpA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 05:45:00 -0400
+Received: by mail-wm1-f68.google.com with SMTP id o189so1940724wmb.1
+        for <linux-usb@vger.kernel.org>; Wed, 15 May 2019 02:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=DtE5HfpZ+1qLrXuVQIbAVQkRD8RJlyrTRnxIJR/9Qsw=;
+        b=ugX6i4OrdC+UZoznH6hLcexrGpTujUDcdsOyi4i98cGQ4xpLoA9UjtUCNdXDv7WojE
+         tR+DlFn9yGc5c/KXHu3DIW/9Ixz3V1VtqQSXSCYnh8vBSvhC+I2yZIOr1+Ypyq02KaOY
+         IjnjhdGSp4pvqsn4xMmPEe+VX9ukaUfBbRue0Z0EEqFdfS1jodVZR4Acq1pwoCY9x/Cv
+         G4Zx+tDkWCirGlr6ePP1RSdvkB6d9OLk4C01ozmdXrdvG/Q6IlNMFp4aLfsH+aQmVFe/
+         N5nvBqfqPJKXjZUmjPZsG9Cp7pr4WqCwCQ3t7MRRZ69vWDFEmfPDaoGsH2p+lCrwwh5c
+         Kj3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=DtE5HfpZ+1qLrXuVQIbAVQkRD8RJlyrTRnxIJR/9Qsw=;
+        b=sYAh5SiKumoBiv5tOj6M5MurSOnZd+fCyZp7l97q7Yg2JyjQZqorsgBpBR5t1F21+B
+         BIiBln3RkXGKyZoCOUJ0HFVSJceFVfDZ2leL8brY1fzRFvFBbJjNMdK3VbVv0hoo9nAS
+         MdpbFuIk+DbD5KoEHnRASBFGdIJHK/HOkiRzOU+50bwzAHE4yjK+iRiA1XdVYz0Mqqk5
+         UyT7VJXrYpqh8KqER+6xyQUcCoL7snzkOABfC/i5XkwZPj8bWQJj8ORboSgaI1mgOJYU
+         462nvFWRnRu8911p/Mj99IKZ6ykFnD0rx37RubD0V2QTMUIuQBaTDr1mRezY/ldGgisd
+         n6Xw==
+X-Gm-Message-State: APjAAAWENShR4LEykl7tPybSAOn6jbgEdUeiH6DLPJ8a4zziyKUwbez6
+        2LacrLTyVVg4KZvpS4gnWUduCEaYrcA=
+X-Google-Smtp-Source: APXvYqxkoIvkqJFRe89FKzN6JMv8Vi5ELPAijKSwFqaz4sdD0rG36eUIOP/bcCzykmpc2y/sDmcOFA==
+X-Received: by 2002:a05:600c:23ce:: with SMTP id p14mr8580468wmb.36.1557913497835;
+        Wed, 15 May 2019 02:44:57 -0700 (PDT)
+Received: from [192.168.99.70] (mail.unidataz.cz. [193.165.148.130])
+        by smtp.googlemail.com with ESMTPSA id a4sm1923346wmf.45.2019.05.15.02.44.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 May 2019 02:44:57 -0700 (PDT)
+From:   "StarostaCZ@gmail.com" <starostacz@gmail.com>
+X-Google-Original-From: "StarostaCZ@gmail.com" <StarostaCZ@gmail.com>
+Subject: Re: Linux crash when using FTDI FT232R USB to serial converter on AMD
+ boards.
+To:     Oliver Neukum <oneukum@suse.com>, Joerg Roedel <joro@8bytes.org>,
+        Johan Hovold <johan@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org
+References: <04503197-a0a9-8b35-6c65-c10f296aab57@gmail.com>
+ <20190429094847.GI26546@localhost> <20190503153716.GE11605@8bytes.org>
+ <8748125e-f360-ff0e-ea15-699bce9e7747@gmail.com>
+ <4e7f0267-eba8-81c3-4036-25924ea9df98@gmail.com>
+ <1557911856.2950.10.camel@suse.com>
+Message-ID: <d74dba47-5a58-cf34-3c36-975f9ccee0ea@gmail.com>
+Date:   Wed, 15 May 2019 11:43:25 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-MTK:  N
+In-Reply-To: <1557911856.2950.10.camel@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: cs
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-05-14 at 13:12 -0500, Rob Herring wrote:
-> On Tue, May 14, 2019 at 04:47:19PM +0800, Chunfeng Yun wrote:
-> > It's used to support dual role switch via GPIO when use Type-B
-> > receptacle, typically the USB ID pin is connected to an input
-> > GPIO pin
-> > 
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> > v5 changes:
-> >  1. treat type-B connector as child device of USB controller's, but not
-> >     as a separate virtual device, suggested by Rob
-> >  2. put connector's port node under connector node, suggested by Rob
-> > 
-> > v4 no changes
-> > 
-> > v3 changes:
-> >  1. treat type-B connector as a virtual device, but not child device of
-> >     USB controller's
-> > 
-> > v2 changes:
-> >   1. new patch to make binding clear suggested by Hans
-> > ---
-> >  .../bindings/usb/typeb-conn-gpio.txt          | 42 +++++++++++++++++++
-> >  1 file changed, 42 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt b/Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt
-> > new file mode 100644
-> > index 000000000000..20dd3499a348
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/typeb-conn-gpio.txt
-> > @@ -0,0 +1,42 @@
-> > +USB Type-B GPIO Connector
-> > +
-> > +This is used to switch dual role mode from the USB ID pin connected to
-> > +an input GPIO pin.
-> > +
-> > +Required properties:
-> > +- compatible : should include "linux,typeb-conn-gpio" and "usb-b-connector".
-> 
-> I don't think we need "linux,typeb-conn-gpio". 
-Not all usb-b-connector child node need bind this driver, by adding the
-new compatible can avoid unnecessary binding.
+As I wrote, I made new test on kernel Linux version 5.1.0-050100-generic 
+amd64:
+https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.1/
+Same problem, system crash after a few seconds. Full kern.log: 
+https://paste.ee/p/EmLsw
 
-> A driver can decide to 
-> handle GPIO lines if they present
-Yes, the driver, e.g. USB controller driver can do it, but here I want
-to provide a common driver to handle this special case, like
-extcon-usb-gpio driver does, and try to keep transparency from USB
-controller driver. 
+Unfortunately, I can't judge if the patch is there, but I found, that 
+this patch was added to kernel 5.0.2:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/iommu/amd_iommu.c?id=4e50ce03976fbc8ae995a000c4b10c737467beaa
+Can I somehow verify that the patch is in this ubuntu kernel 5.1.0?
 
->  or we assume the parent device handles 
-> ID and/or Vbus if they are not present.
-Yes, it will
-> 
-> > +- id-gpios, vbus-gpios : either one of them must be present, and both
-> > +	can be present as well.
-> 
-> Please clarify that vbus-gpios is an input to sense Vbus presence as an 
-> output it should be modelled as a regulator only.
-Ok, will add more description.
-> 
-> These should be added to usb-connector.txt.
-Already add them in [1/6].
-> 
-> The result of all this is you don't need this file. Just additions to 
-> usb-connector.txt.
-Here add more constrains for id-gpios and vbus-gpios, at least one
-should be present, although they are both optional, this is not true for
-some cases, so not suitable to add into usb-connector.txt.
-> 
-> > +- vbus-supply : can be present if needed when supports dual role mode or
-> > +	host mode.
-> > +	see connector/usb-connector.txt
-> > +
-> > +Sub-nodes:
-> > +- port : should be present.
-> > +	see graph.txt
-> > +
-> > +Example:
-> > +
-> > +&mtu3 {
-> > +	status = "okay";
-> 
-> Don't show status in examples.
-Ok, will drop it.
-> 
-> > +
-> > +	connector {
-> > +		compatible = "linux,typeb-conn-gpio", "usb-b-connector";
-> > +		label = "micro-USB";
-> > +		type = "micro";
-> > +		id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
-> > +		vbus-supply = <&usb_p0_vbus>;
-> > +
-> > +		port {
-> > +			bconn_ep: endpoint@0 {
-> > +				remote-endpoint = <&usb_role_sw>;
-> > +			};
-> > +		};
-> > +	};
-> > +
-> > +	port {
-> > +		usb_role_sw: endpoint@0 {
-> > +			remote-endpoint = <&bconn_ep>;
-> > +		};
-> > +	};
-> 
-> When the host controller is the parent of the connector, you don't need 
-> the graph unless you're describing the alternate modes in Type-C.
-Ok, got it.
+starosta
 
-Thanks a lot.
-
-> 
-> > +};
-> > -- 
-> > 2.21.0
-> > 
-
+Dne 15.5.2019 v 11:17 Oliver Neukum napsal(a):
+> On Mi, 2019-05-15 at 09:54 +0200,  StarostaCZ@gmail.com  wrote:
+>> Hello,
+>> can I still help with this problem? It's very important for us. Thank you.
+> Your first step would be t verify whether your kernel has the
+> fix coming in the patch Joerg mentioned.
+>
+> 	Regards
+> 		Oliver
+>
 
