@@ -2,118 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA791F561
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 15:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC36B1F5B5
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 15:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbfEONSd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 May 2019 09:18:33 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:56542 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727405AbfEONSc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 May 2019 09:18:32 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7E35A1A00E6;
-        Wed, 15 May 2019 15:18:30 +0200 (CEST)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 717CE1A00DD;
-        Wed, 15 May 2019 15:18:30 +0200 (CEST)
-Received: from fsr-ub1864-101.ea.freescale.net (fsr-ub1864-101.ea.freescale.net [10.171.82.13])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id E58EA205F4;
-        Wed, 15 May 2019 15:18:29 +0200 (CEST)
-From:   laurentiu.tudor@nxp.com
-To:     hch@lst.de, stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, marex@denx.de
-Cc:     leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
-        robin.murphy@arm.com, noring@nocrew.org, JuergenUrban@gmx.de,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Subject: [PATCH v3 3/3] usb: host: ohci-tmio: init genalloc for local memory
-Date:   Wed, 15 May 2019 16:18:06 +0300
-Message-Id: <20190515131806.2404-4-laurentiu.tudor@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190515131806.2404-1-laurentiu.tudor@nxp.com>
-References: <20190515131806.2404-1-laurentiu.tudor@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1727745AbfEONiv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 May 2019 09:38:51 -0400
+Received: from mail-eopbgr1410109.outbound.protection.outlook.com ([40.107.141.109]:32169
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726635AbfEONiv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 15 May 2019 09:38:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=arqU6Lvr5Sf26j9WAvt51gRgxm6iQ07EzJ2VtoyC/wU=;
+ b=gzXE6cCDY4X7cKH/qyJGoO32qdZ62Ulfx/WG1IwwhWxW3YyzQo1iSpdNGLKUOvKpc78OgY0CyOF1nrdgV21xVudmUOtIvf68F8L6RZoFYn8ebfNE1XPt80P7jLuV62D+TtTTR2UUfgaDYk7D++7ApjU3+sISHpN0OGfwCSAWVJA=
+Received: from TYXPR01MB1568.jpnprd01.prod.outlook.com (52.133.166.145) by
+ TYXPR01MB1485.jpnprd01.prod.outlook.com (52.133.165.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.16; Wed, 15 May 2019 13:38:46 +0000
+Received: from TYXPR01MB1568.jpnprd01.prod.outlook.com
+ ([fe80::c989:cb4d:b41e:2045]) by TYXPR01MB1568.jpnprd01.prod.outlook.com
+ ([fe80::c989:cb4d:b41e:2045%7]) with mapi id 15.20.1900.010; Wed, 15 May 2019
+ 13:38:46 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v3 13/15] ARM: dts: r7s9210: Add USB Host support
+Thread-Topic: [PATCH v3 13/15] ARM: dts: r7s9210: Add USB Host support
+Thread-Index: AQHVCmV5GV5gsTt0ME28rd2ixcAosqZr02QAgABcqCA=
+Date:   Wed, 15 May 2019 13:38:46 +0000
+Message-ID: <TYXPR01MB1568E1D79AFDB6FF4F5329568A090@TYXPR01MB1568.jpnprd01.prod.outlook.com>
+References: <20190514145605.19112-1-chris.brandt@renesas.com>
+ <20190514145605.19112-14-chris.brandt@renesas.com>
+ <CAMuHMdUU3EBFXHpvw8y_yYf3L1qNNH6HJw+RHP_ioSFwJcd3Vg@mail.gmail.com>
+In-Reply-To: <CAMuHMdUU3EBFXHpvw8y_yYf3L1qNNH6HJw+RHP_ioSFwJcd3Vg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9bfea68c-3133-4fdf-1405-08d6d93aa7b8
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TYXPR01MB1485;
+x-ms-traffictypediagnostic: TYXPR01MB1485:
+x-microsoft-antispam-prvs: <TYXPR01MB14858D5C930DD82BB6185D968A090@TYXPR01MB1485.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3631;
+x-forefront-prvs: 0038DE95A2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(396003)(346002)(376002)(366004)(136003)(189003)(199004)(8936002)(316002)(8676002)(81166006)(81156014)(68736007)(4326008)(25786009)(86362001)(52536014)(446003)(11346002)(476003)(55016002)(9686003)(478600001)(2906002)(486006)(14454004)(3846002)(66066001)(6116002)(256004)(72206003)(5660300002)(26005)(71200400001)(54906003)(71190400001)(186003)(229853002)(305945005)(7736002)(6506007)(76176011)(7696005)(102836004)(7416002)(6246003)(99286004)(66946007)(76116006)(73956011)(66476007)(66556008)(64756008)(33656002)(66446008)(53936002)(558084003)(74316002)(6436002)(6916009);DIR:OUT;SFP:1102;SCL:1;SRVR:TYXPR01MB1485;H:TYXPR01MB1568.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: dTW7m6QCxsp/HUUwxQTgdeUu3E4PRB3f+qYQw+EdiHfr2o/mpc75AObdJ+yzxYWYyJBK02sxYtdd/BxVYeGYvZIsjpVq1VZUKy1TPVoLR2kaP3KcgTWFlCRwhekyYBH+hFKLQ8f6tb1sstxmpdfQ4JHuegeozKiKJtQP9+lfaYSbdozBexoawGVkADmQjwPmQ3V4lSIHmQKrkTCr+vLgP7T5xqxkQpSZQZiCPPyOjPwLkTr7mOlhHaRFHy3KCt6u2mIGUpIS9qk1IwM6kt/GokfqptLjJpYK3Ym6bpmBeL8Rd+6iZzARcoiDqzhDCvmM7AoI6pHtOXhx2OCAyctDMSmsPRFAIYZ53J2dgA8DFkqlnI/MDOIS83AGpDyJIHLLS9lOhKSt6+OzGHBo/Vc8g8/v6lAOKfK2yPMegeMbtOM=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9bfea68c-3133-4fdf-1405-08d6d93aa7b8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2019 13:38:46.3813
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYXPR01MB1485
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-
-In preparation for dropping the existing "coherent" dma mem declaration
-APIs, replace the current dma_declare_coherent_memory() based mechanism
-with the creation of a genalloc pool that will be used in the OHCI
-subsystem as replacement for the DMA APIs.
-
-For context, see thread here: https://lkml.org/lkml/2019/4/22/357
-
-Signed-off-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
----
- drivers/usb/host/ohci-tmio.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
-index f88a0370659f..34869382618f 100644
---- a/drivers/usb/host/ohci-tmio.c
-+++ b/drivers/usb/host/ohci-tmio.c
-@@ -30,6 +30,7 @@
- #include <linux/mfd/core.h>
- #include <linux/mfd/tmio.h>
- #include <linux/dma-mapping.h>
-+#include <linux/genalloc.h>
- 
- /*-------------------------------------------------------------------------*/
- 
-@@ -224,11 +225,6 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
- 		goto err_ioremap_regs;
- 	}
- 
--	ret = dma_declare_coherent_memory(&dev->dev, sram->start, sram->start,
--				resource_size(sram));
--	if (ret)
--		goto err_dma_declare;
--
- 	if (cell->enable) {
- 		ret = cell->enable(dev);
- 		if (ret)
-@@ -239,6 +235,20 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
- 	ohci = hcd_to_ohci(hcd);
- 	ohci_hcd_init(ohci);
- 
-+	hcd->localmem_pool = devm_gen_pool_create(&dev->dev, PAGE_SHIFT,
-+						  dev_to_node(&dev->dev),
-+						  "ohci-sm501");
-+	if (IS_ERR(hcd->localmem_pool)) {
-+		ret = PTR_ERR(hcd->localmem_pool);
-+		goto err_enable;
-+	}
-+	ret = gen_pool_add_virt(hcd->localmem_pool, sram->start, sram->start,
-+				resource_size(sram), dev_to_node(&dev->dev));
-+	if (ret < 0) {
-+		dev_err(&dev->dev, "failed to add to pool: %d\n", ret);
-+		goto err_enable;
-+	}
-+
- 	ret = usb_add_hcd(hcd, irq, 0);
- 	if (ret)
- 		goto err_add_hcd;
-@@ -254,8 +264,6 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
- 	if (cell->disable)
- 		cell->disable(dev);
- err_enable:
--	dma_release_declared_memory(&dev->dev);
--err_dma_declare:
- 	iounmap(hcd->regs);
- err_ioremap_regs:
- 	iounmap(tmio->ccr);
-@@ -276,7 +284,6 @@ static int ohci_hcd_tmio_drv_remove(struct platform_device *dev)
- 	tmio_stop_hc(dev);
- 	if (cell->disable)
- 		cell->disable(dev);
--	dma_release_declared_memory(&dev->dev);
- 	iounmap(hcd->regs);
- 	iounmap(tmio->ccr);
- 	usb_put_hcd(hcd);
--- 
-2.17.1
-
+SGkgR2VlcnQsDQoNCk9uIFdlZCwgTWF5IDE1LCAyMDE5LCBHZWVydCBVeXR0ZXJob2V2ZW4gd3Jv
+dGU6DQoNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICByZWcgPSA8MHhlODIxODIwMCAweDEw
+PjsNCj4gDQo+IFdoYXQgYWJvdXQgdGhlIG90aGVyIHJlZ2lzdGVycz8NCj4gT24gUi1DYXIgR2Vu
+Mywgc2l6ZSBpcyAweDcwMC4NCj4gU2FtZSBmb3IgdXNiMl9waHkxLg0KDQpBaGhoLCBnb29kIGNh
+dGNoLg0KDQpDaHJpcw0KDQo=
