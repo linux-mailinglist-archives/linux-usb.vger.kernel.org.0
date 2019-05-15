@@ -2,269 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0BA1F3B6
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 14:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF411F48C
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 14:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728414AbfEOMQu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 May 2019 08:16:50 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:22171 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728561AbfEOMQt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 08:16:49 -0400
-X-IronPort-AV: E=Sophos;i="5.60,472,1549897200"; 
-   d="scan'208";a="15816038"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 15 May 2019 21:16:47 +0900
-Received: from be1yocto.ree.adwin.renesas.com (unknown [172.29.43.62])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 9537A4003864;
-        Wed, 15 May 2019 21:16:44 +0900 (JST)
-From:   Biju Das <biju.das@bp.renesas.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Biju Das <biju.das@bp.renesas.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Simon Horman <horms+renesas@verge.net.au>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Kees Cook <keescook@chromium.org>, linux-usb@vger.kernel.org,
-        Simon Horman <horms@verge.net.au>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v6 4/7] usb: gadget: udc: renesas_usb3: Add dual role switch support
-Date:   Wed, 15 May 2019 13:09:09 +0100
-Message-Id: <1557922152-16449-5-git-send-email-biju.das@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1557922152-16449-1-git-send-email-biju.das@bp.renesas.com>
-References: <1557922152-16449-1-git-send-email-biju.das@bp.renesas.com>
+        id S1726956AbfEOMhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 May 2019 08:37:08 -0400
+Received: from mail-it1-f197.google.com ([209.85.166.197]:41414 "EHLO
+        mail-it1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726407AbfEOMhG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 08:37:06 -0400
+Received: by mail-it1-f197.google.com with SMTP id y62so2130701itd.6
+        for <linux-usb@vger.kernel.org>; Wed, 15 May 2019 05:37:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Um6hw8hBGXgCPx6XZYqYlQRzMuNmq+VPUEg+UyeKdOU=;
+        b=IVBxSXZazLZ7VO4R+mlzPRNvaLkjrXtWa7gnOTXcI97VrSaQiur1xgbV8bJPgjH8jU
+         zD0ciEgd/Peat9mLd40nIyN+GowcWnx9fQMcsHy02oVlslK0oVqNhAw4sMAB2H8AteHu
+         Yf1JZggxx9n44HX06CHYfgFkZFxG/1+5i4iKK1+4E0ILaPi9feUhswL3xGfj3cr1R0zR
+         vXD3ppqVEqDKTwNzqRN6hnt7W8jlzm9H7KWkZ7Lmw4vd0z0b3U1Bd8xRUrbxfgq7v6Zc
+         chsuGmSAk7sH8iIbH3sXT3Y0ZDu9GHvJ1VoPpJi9mQGy5xg8/p43J17SHrNp2P50HJ/+
+         cWQA==
+X-Gm-Message-State: APjAAAWrb0dbgHynp4efN2emKCw5tsEcVVMhUQsU+xWSo12xvJuHtfda
+        XwzoV2Xh0sjnndP7wWaAdAsgyf43mtkVhtijcWpOBHOrtSgF
+X-Google-Smtp-Source: APXvYqz02U66bDiemG1ALu+P9t2rwzcqeJwB/+UZKK1UHE1ABE5xEINQrWGur2jbunz6h7tcj5uaFqfYtcN3Jfkc6EMk4TH7q3D/
+MIME-Version: 1.0
+X-Received: by 2002:a24:e10c:: with SMTP id n12mr7435870ith.89.1557923825542;
+ Wed, 15 May 2019 05:37:05 -0700 (PDT)
+Date:   Wed, 15 May 2019 05:37:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003587e80588ec68bf@google.com>
+Subject: WARNING in snd_info_free_entry
+From:   syzbot <syzbot+131dee8780c719bc6afb@syzkaller.appspotmail.com>
+To:     alsa-devel@alsa-project.org, andreyknvl@google.com,
+        joe@perches.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, perex@perex.cz,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.com, vkoul@kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The RZ/G2E cat874 board has a type-c connector connected to hd3ss3220 usb
-type-c drp port controller. This patch adds dual role switch support for
-the type-c connector using the usb role switch class framework.
+Hello,
 
-Signed-off-by: Biju Das <biju.das@bp.renesas.com>
+syzbot found the following crash on:
+
+HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ae9974a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=95aff7278e7ff25e
+dashboard link: https://syzkaller.appspot.com/bug?extid=131dee8780c719bc6afb
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=173f3574a00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+131dee8780c719bc6afb@syzkaller.appspotmail.com
+
+snd_usb_toneport 6-1:0.0: set_interface failed
+snd_usb_toneport 6-1:0.0: Line 6 POD Studio UX2 now disconnected
+------------[ cut here ]------------
+list_del corruption. prev->next should be ffff8881d13fa728, but was  
+ffff8881d82ebd68
+WARNING: CPU: 1 PID: 1477 at lib/list_debug.c:51  
+__list_del_entry_valid+0x101/0x170 lib/list_debug.c:51
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 1477 Comm: kworker/1:2 Not tainted 5.1.0-rc3+ #8
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x292/0x5e1 kernel/panic.c:214
+  __warn.cold+0x20/0x53 kernel/panic.c:571
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:973
+RIP: 0010:__list_del_entry_valid+0x101/0x170 lib/list_debug.c:51
+Code: c4 08 31 c0 41 5c 41 5d c3 4c 89 e2 48 c7 c7 20 f7 d8 85 e8 1c 2a 35  
+ff 0f 0b 31 c0 eb c6 48 c7 c7 80 f7 d8 85 e8 0a 2a 35 ff <0f> 0b 31 c0 eb  
+b4 48 c7 c7 e0 f7 d8 85 e8 f8 29 35 ff 0f 0b 31 c0
+RSP: 0018:ffff8881d7a1f078 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff8881d13fa630 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8127bbcd RDI: ffffed103af43e01
+RBP: ffff8881d13fa640 R08: ffff8881d7a10000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff8881d13fad68
+R13: ffff8881d7f1d858 R14: ffff8881d13fa630 R15: ffff8881d13fa718
+  __list_del_entry include/linux/list.h:117 [inline]
+  list_del include/linux/list.h:125 [inline]
+  snd_info_free_entry+0x132/0x340 sound/core/info.c:795
+  snd_info_card_free+0x3e/0x80 sound/core/info.c:606
+  snd_card_do_free sound/core/init.c:469 [inline]
+  release_card_device+0x63/0xd0 sound/core/init.c:156
+  device_release+0x78/0x210 drivers/base/core.c:1064
+  kobject_cleanup lib/kobject.c:662 [inline]
+  kobject_release lib/kobject.c:691 [inline]
+  kref_put include/linux/kref.h:67 [inline]
+  kobject_put+0x17d/0x270 lib/kobject.c:708
+  put_device+0x1c/0x30 drivers/base/core.c:2205
+  snd_card_free_when_closed+0x35/0x50 sound/core/init.c:493
+  line6_disconnect.cold+0xa3/0xbc sound/usb/line6/driver.c:833
+  line6_probe+0xb1e/0x1140 sound/usb/line6/driver.c:799
+  usb_probe_interface+0x30d/0x7b0 drivers/usb/core/driver.c:361
+  really_probe+0x296/0x680 drivers/base/dd.c:509
+  driver_probe_device+0xf9/0x200 drivers/base/dd.c:671
+  __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:778
+  bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x21e/0x360 drivers/base/dd.c:844
+  bus_probe_device+0x1ec/0x2a0 drivers/base/bus.c:514
+  device_add+0xaf4/0x1700 drivers/base/core.c:2106
+  usb_set_configuration+0xdf2/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0xa8/0x110 drivers/usb/core/driver.c:266
+  really_probe+0x296/0x680 drivers/base/dd.c:509
+  driver_probe_device+0xf9/0x200 drivers/base/dd.c:671
+  __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:778
+  bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x21e/0x360 drivers/base/dd.c:844
+  bus_probe_device+0x1ec/0x2a0 drivers/base/bus.c:514
+  device_add+0xaf4/0x1700 drivers/base/core.c:2106
+  usb_new_device.cold+0x8b8/0x1030 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1ac9/0x35a0 drivers/usb/core/hub.c:5432
+  process_one_work+0x90a/0x1580 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+  kthread+0x30e/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
 ---
- V5-->V6
-   * Added graph api's to find the role supported by the connector.
- V4-->V5
-   * Incorporated Shimoda-san's review comment
-    (https://patchwork.kernel.org/patch/10902537/)
- V3-->V4
-   * No Change
- V2-->V3
-   * Incorporated Shimoda-san's review comment
-     (https://patchwork.kernel.org/patch/10852507/)
-   * Used renesas,usb-role-switch property for differentiating USB
-     role switch associated with Type-C port controller driver.
- V1-->V2
-   * Driver uses usb role clas for handling dual role switch and handling
-     connect/disconnect events instead of extcon.
----
- drivers/usb/gadget/udc/renesas_usb3.c | 121 ++++++++++++++++++++++++++++++++--
- 1 file changed, 114 insertions(+), 7 deletions(-)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
-index 7dc2485..1d41998 100644
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -24,6 +24,7 @@
- #include <linux/usb/ch9.h>
- #include <linux/usb/gadget.h>
- #include <linux/usb/of.h>
-+#include <linux/of_graph.h>
- #include <linux/usb/role.h>
- 
- /* register definitions */
-@@ -351,6 +352,8 @@ struct renesas_usb3 {
- 	int disabled_count;
- 
- 	struct usb_request *ep0_req;
-+
-+	enum usb_role connection_state;
- 	u16 test_mode;
- 	u8 ep0_buf[USB3_EP0_BUF_SIZE];
- 	bool softconnect;
-@@ -359,6 +362,7 @@ struct renesas_usb3 {
- 	bool extcon_usb;		/* check vbus and set EXTCON_USB */
- 	bool forced_b_device;
- 	bool start_to_connect;
-+	bool dual_role_sw;
- };
- 
- #define gadget_to_renesas_usb3(_gadget)	\
-@@ -699,8 +703,10 @@ static void usb3_mode_config(struct renesas_usb3 *usb3, bool host, bool a_dev)
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&usb3->lock, flags);
--	usb3_set_mode_by_role_sw(usb3, host);
--	usb3_vbus_out(usb3, a_dev);
-+	if (!usb3->dual_role_sw || usb3->connection_state != USB_ROLE_NONE) {
-+		usb3_set_mode_by_role_sw(usb3, host);
-+		usb3_vbus_out(usb3, a_dev);
-+	}
- 	/* for A-Peripheral or forced B-device mode */
- 	if ((!host && a_dev) || usb3->start_to_connect)
- 		usb3_connect(usb3);
-@@ -716,7 +722,8 @@ static void usb3_check_id(struct renesas_usb3 *usb3)
- {
- 	usb3->extcon_host = usb3_is_a_device(usb3);
- 
--	if (usb3->extcon_host && !usb3->forced_b_device)
-+	if ((!usb3->dual_role_sw && usb3->extcon_host && !usb3->forced_b_device)
-+	    || usb3->connection_state == USB_ROLE_HOST)
- 		usb3_mode_config(usb3, true, true);
- 	else
- 		usb3_mode_config(usb3, false, false);
-@@ -2343,14 +2350,65 @@ static enum usb_role renesas_usb3_role_switch_get(struct device *dev)
- 	return cur_role;
- }
- 
--static int renesas_usb3_role_switch_set(struct device *dev,
--					enum usb_role role)
-+static void handle_ext_role_switch_states(struct device *dev,
-+					    enum usb_role role)
-+{
-+	struct renesas_usb3 *usb3 = dev_get_drvdata(dev);
-+	struct device *host = usb3->host_dev;
-+	enum usb_role cur_role = renesas_usb3_role_switch_get(dev);
-+
-+	switch (role) {
-+	case USB_ROLE_NONE:
-+		usb3->connection_state = USB_ROLE_NONE;
-+		if (usb3->driver)
-+			usb3_disconnect(usb3);
-+		usb3_vbus_out(usb3, false);
-+		break;
-+	case USB_ROLE_DEVICE:
-+		if (usb3->connection_state == USB_ROLE_NONE) {
-+			usb3->connection_state = USB_ROLE_DEVICE;
-+			usb3_set_mode(usb3, false);
-+			if (usb3->driver)
-+				usb3_connect(usb3);
-+		} else if (cur_role == USB_ROLE_HOST)  {
-+			device_release_driver(host);
-+			usb3_set_mode(usb3, false);
-+			if (usb3->driver)
-+				usb3_connect(usb3);
-+		}
-+		usb3_vbus_out(usb3, false);
-+		break;
-+	case USB_ROLE_HOST:
-+		if (usb3->connection_state == USB_ROLE_NONE) {
-+			if (usb3->driver)
-+				usb3_disconnect(usb3);
-+
-+			usb3->connection_state = USB_ROLE_HOST;
-+			usb3_set_mode(usb3, true);
-+			usb3_vbus_out(usb3, true);
-+			if (device_attach(host) < 0)
-+				dev_err(dev, "device_attach(host) failed\n");
-+		} else if (cur_role == USB_ROLE_DEVICE) {
-+			usb3_disconnect(usb3);
-+			/* Must set the mode before device_attach of the host */
-+			usb3_set_mode(usb3, true);
-+			/* This device_attach() might sleep */
-+			if (device_attach(host) < 0)
-+				dev_err(dev, "device_attach(host) failed\n");
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void handle_role_switch_states(struct device *dev,
-+					    enum usb_role role)
- {
- 	struct renesas_usb3 *usb3 = dev_get_drvdata(dev);
- 	struct device *host = usb3->host_dev;
- 	enum usb_role cur_role = renesas_usb3_role_switch_get(dev);
- 
--	pm_runtime_get_sync(dev);
- 	if (cur_role == USB_ROLE_HOST && role == USB_ROLE_DEVICE) {
- 		device_release_driver(host);
- 		usb3_set_mode(usb3, false);
-@@ -2361,6 +2419,20 @@ static int renesas_usb3_role_switch_set(struct device *dev,
- 		if (device_attach(host) < 0)
- 			dev_err(dev, "device_attach(host) failed\n");
- 	}
-+}
-+
-+static int renesas_usb3_role_switch_set(struct device *dev,
-+					enum usb_role role)
-+{
-+	struct renesas_usb3 *usb3 = dev_get_drvdata(dev);
-+
-+	pm_runtime_get_sync(dev);
-+
-+	if (usb3->dual_role_sw)
-+		handle_ext_role_switch_states(dev, role);
-+	else
-+		handle_role_switch_states(dev, role);
-+
- 	pm_runtime_put(dev);
- 
- 	return 0;
-@@ -2650,12 +2722,41 @@ static const unsigned int renesas_usb3_cable[] = {
- 	EXTCON_NONE,
- };
- 
--static const struct usb_role_switch_desc renesas_usb3_role_switch_desc = {
-+static struct usb_role_switch_desc renesas_usb3_role_switch_desc = {
- 	.set = renesas_usb3_role_switch_set,
- 	.get = renesas_usb3_role_switch_get,
- 	.allow_userspace_control = true,
- };
- 
-+static bool is_usb_dual_role_switch(struct device *dev)
-+{
-+	struct device_node *np = dev->of_node;
-+	struct device_node *parent;
-+	struct device_node *child;
-+	bool ret = false;
-+	const char *role_type = NULL;
-+
-+	child = of_graph_get_endpoint_by_regs(np, -1, -1);
-+	if (!child)
-+		return ret;
-+
-+	parent = of_graph_get_remote_port_parent(child);
-+	of_node_put(child);
-+	child = of_get_child_by_name(parent, "connector");
-+	of_node_put(parent);
-+	if (!child)
-+		return ret;
-+
-+	if (of_device_is_compatible(child, "usb-c-connector")) {
-+		of_property_read_string(child, "data-role", &role_type);
-+		if (role_type && (!strncmp(role_type, "dual", strlen("dual"))))
-+			ret = true;
-+	}
-+
-+	of_node_put(child);
-+	return ret;
-+}
-+
- static int renesas_usb3_probe(struct platform_device *pdev)
- {
- 	struct renesas_usb3 *usb3;
-@@ -2741,6 +2842,12 @@ static int renesas_usb3_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_dev_create;
- 
-+	if (device_property_read_bool(&pdev->dev, "usb-role-switch") &&
-+	    is_usb_dual_role_switch(&pdev->dev)) {
-+		usb3->dual_role_sw = true;
-+		renesas_usb3_role_switch_desc.fwnode = dev_fwnode(&pdev->dev);
-+	}
-+
- 	INIT_WORK(&usb3->role_work, renesas_usb3_role_work);
- 	usb3->role_sw = usb_role_switch_register(&pdev->dev,
- 					&renesas_usb3_role_switch_desc);
--- 
-2.7.4
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
