@@ -2,139 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEBB1F850
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 18:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1281F8A6
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 18:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbfEOQRG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 May 2019 12:17:06 -0400
-Received: from mail-it1-f200.google.com ([209.85.166.200]:42372 "EHLO
-        mail-it1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726084AbfEOQRG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 12:17:06 -0400
-Received: by mail-it1-f200.google.com with SMTP id t196so496630ita.7
-        for <linux-usb@vger.kernel.org>; Wed, 15 May 2019 09:17:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=/kDWjBB0jCL1YtbOqkI5qZw4O964lNtmlxXi0fZixK4=;
-        b=grmGZEAPyjwyljTToAZOGg702J79VeN5FMsfmIho/r2pHGlGI5ByubFt0PSGrdZh67
-         5pVqHYT26i5gCQv67PFinPjoe/Cm/asz95DKz8WH4g+JXpePUaUbvDrY6RqFFhW910Cs
-         ssF5ba+d4xmKZhIHgJMo8MoHrLkqFysw+pS/DwOHGx1c2me300jVehlSPHo2dG2gBqAs
-         CfbdfThORkwrw3uDrG52FkskZBdiInZYjjMpsbhCjr4uzP9MCmUci4CCa59aubufEg2x
-         LSe2xwutgzF4oyEQMg+56VCRoLqpTE+mEzoMUlRd3YlWVgNMqBsbwbSufSW4EPDCGEzW
-         VJtw==
-X-Gm-Message-State: APjAAAVcrZqEUiLTX9kq6OStTkx0x2V1BmjCoswKX97/C+zHP+FbZFd4
-        BsYvtgOtPmwtTuZKEy2GtIuf9qaGmYUNpb1j/4KPGN/3SjvI
-X-Google-Smtp-Source: APXvYqykB3D2KbCA7ppkwMbMaz0GBUsa4he0CqdKkR9zOB32utCtFaO9CnEDA1gWJIHqbSHQyKnO4IeewHu+FyaoAvArH2q7TINb
+        id S1726916AbfEOQ3D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 May 2019 12:29:03 -0400
+Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:59389 "EHLO
+        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbfEOQ3D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 12:29:03 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id E5A0C3F9CD;
+        Wed, 15 May 2019 18:28:59 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Flag: NO
+X-Spam-Score: -2.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 tagged_above=-999 required=6.31
+        tests=[ALL_TRUSTED=-1, BAYES_00=-1.9] autolearn=ham autolearn_force=no
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LKUIXh2AJKhb; Wed, 15 May 2019 18:28:59 +0200 (CEST)
+Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
+        (Authenticated sender: mb547485)
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 181213F50A;
+        Wed, 15 May 2019 18:28:58 +0200 (CEST)
+Date:   Wed, 15 May 2019 18:28:58 +0200
+From:   Fredrik Noring <noring@nocrew.org>
+To:     Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>, "hch@lst.de" <hch@lst.de>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "marex@denx.de" <marex@denx.de>,
+        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>,
+        Leo Li <leoyang.li@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
+ rework
+Message-ID: <20190515162858.GB17162@sx9>
+References: <20190514143807.7745-1-laurentiu.tudor@nxp.com>
+ <9d34015d-c219-179b-3141-4b0de3530ac3@arm.com>
+ <20190514182931.GA2559@sx9>
+ <0e5f3b86-7a80-eec7-691b-34a123194208@nxp.com>
 MIME-Version: 1.0
-X-Received: by 2002:a24:edcb:: with SMTP id r194mr8724352ith.164.1557937025379;
- Wed, 15 May 2019 09:17:05 -0700 (PDT)
-Date:   Wed, 15 May 2019 09:17:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000faf6000588ef7a11@google.com>
-Subject: KASAN: slab-out-of-bounds Read in au0828_rc_unregister (2)
-From:   syzbot <syzbot+357d86bcb4cca1a2f572@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, sean@mess.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0e5f3b86-7a80-eec7-691b-34a123194208@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Lauretniu,
 
-syzbot found the following crash on:
+> I think that any recent kernel will do, so I'd say your current branch 
+> should be fine.
 
-HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=162ca944a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=95aff7278e7ff25e
-dashboard link: https://syzkaller.appspot.com/bug?extid=357d86bcb4cca1a2f572
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+The kernel oopses with "unable to handle kernel paging request at virtual
+address 000aba0b" in hcd_alloc_coherent via usb_hcd_map_urb_for_dma. This
+relates to patch 2/3 that I didn't quite understand, where
 
-Unfortunately, I don't have any reproducer for this crash yet.
+-	retval = dma_declare_coherent_memory(dev, mem->start,
+-					 mem->start - mem->parent->start,
+-					 resource_size(mem));
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+357d86bcb4cca1a2f572@syzkaller.appspotmail.com
+becomes
 
-au0828: recv_control_msg() Failed receiving control message, error -71.
-au0828: recv_control_msg() Failed receiving control message, error -71.
-au0828: recv_control_msg() Failed receiving control message, error -71.
-au8522_writereg: writereg error (reg == 0x106, val == 0x0001, ret == -5)
-usb 4-1: selecting invalid altsetting 5
-au0828: Failure setting usb interface0 to as5
-au0828: au0828_usb_probe() au0828_analog_register failed to register on V4L2
-==================================================================
-BUG: KASAN: slab-out-of-bounds in au0828_rc_unregister+0x9a/0xb0  
-drivers/media/usb/au0828/au0828-input.c:353
-Read of size 8 at addr ffff8881cb76f308 by task kworker/1:5/5626
++	retval = gen_pool_add_virt(hcd->localmem_pool,
++				   (unsigned long)mem->start -
++					mem->parent->start,
++				   mem->start, resource_size(mem),
 
-CPU: 1 PID: 5626 Comm: kworker/1:5 Not tainted 5.1.0-rc3+ #8
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description+0x67/0x231 mm/kasan/report.c:187
-  kasan_report.cold+0x1a/0x35 mm/kasan/report.c:317
-  au0828_rc_unregister+0x9a/0xb0 drivers/media/usb/au0828/au0828-input.c:353
-  au0828_usb_disconnect+0x6a/0x130 drivers/media/usb/au0828/au0828-core.c:189
-  au0828_usb_probe.cold+0x111/0x16e  
-drivers/media/usb/au0828/au0828-core.c:661
-  usb_probe_interface+0x30d/0x7b0 drivers/usb/core/driver.c:361
-  really_probe+0x296/0x680 drivers/base/dd.c:509
-  driver_probe_device+0xf9/0x200 drivers/base/dd.c:671
-  __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:778
-  bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x21e/0x360 drivers/base/dd.c:844
-  bus_probe_device+0x1ec/0x2a0 drivers/base/bus.c:514
-  device_add+0xaf4/0x1700 drivers/base/core.c:2106
-  usb_set_configuration+0xdf2/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0xa8/0x110 drivers/usb/core/driver.c:266
-  really_probe+0x296/0x680 drivers/base/dd.c:509
-  driver_probe_device+0xf9/0x200 drivers/base/dd.c:671
-  __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:778
-  bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x21e/0x360 drivers/base/dd.c:844
-  bus_probe_device+0x1ec/0x2a0 drivers/base/bus.c:514
-  device_add+0xaf4/0x1700 drivers/base/core.c:2106
-  usb_new_device.cold+0x8b8/0x1030 drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x1ac9/0x35a0 drivers/usb/core/hub.c:5432
-  process_one_work+0x90a/0x1580 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x30e/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+so that arguments two and three switch places. Given
 
-The buggy address belongs to the page:
-page:ffffea00072ddb00 count:1 mapcount:0 mapping:0000000000000000 index:0x0  
-compound_mapcount: 0
-flags: 0x200000000010000(head)
-raw: 0200000000010000 dead000000000100 dead000000000200 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
+int dma_declare_coherent_memory(struct device *dev, phys_addr_t phys_addr,
+				dma_addr_t device_addr, size_t size);
 
-Memory state around the buggy address:
-  ffff8881cb76f200: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
-  ffff8881cb76f280: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
-> ffff8881cb76f300: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
-                       ^
-  ffff8881cb76f380: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
-  ffff8881cb76f400: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
-==================================================================
+and
 
+int gen_pool_add_virt(struct gen_pool *pool, unsigned long virt, phys_addr_t phys
+		 size_t size, int nid)
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+it seems that the device address (dma_addr_t device_addr) now becomes a
+virtual address (unsigned long virt). Is that intended?
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+My corresponding patch is below for reference. I applied your 1/3 patch
+to test it.
+
+Fredrik
+
+diff --git a/drivers/usb/host/ohci-ps2.c b/drivers/usb/host/ohci-ps2.c
+--- a/drivers/usb/host/ohci-ps2.c
++++ b/drivers/usb/host/ohci-ps2.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/dma-mapping.h>
++#include <linux/genalloc.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/usb.h>
+@@ -92,12 +93,12 @@ static irqreturn_t ohci_ps2_irq(struct usb_hcd *hcd)
+ 	return ohci_irq(hcd); /* Call normal IRQ handler. */
+ }
+ 
+-static int iopheap_alloc_coherent(struct platform_device *pdev,
+-	size_t size, int flags)
++static int iopheap_alloc_coherent(struct platform_device *pdev, size_t size)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+ 	struct ps2_hcd *ps2priv = hcd_to_priv(hcd);
++	int err;
+ 
+ 	if (ps2priv->iop_dma_addr != 0)
+ 		return 0;
+@@ -112,28 +113,37 @@ static int iopheap_alloc_coherent(struct platform_device *pdev,
+ 		return -ENOMEM;
+ 	}
+ 
+-	if (dma_declare_coherent_memory(dev,
+-			iop_bus_to_phys(ps2priv->iop_dma_addr),
+-			ps2priv->iop_dma_addr, size, flags)) {
+-		dev_err(dev, "dma_declare_coherent_memory failed\n");
+-		iop_free(ps2priv->iop_dma_addr);
+-		ps2priv->iop_dma_addr = 0;
+-		return -ENOMEM;
++	hcd->localmem_pool = devm_gen_pool_create(dev,
++		PAGE_SHIFT, dev_to_node(dev), DRV_NAME);
++	if (IS_ERR(hcd->localmem_pool)) {
++		err = PTR_ERR(hcd->localmem_pool);
++		goto out_err;
++	}
++
++	err = gen_pool_add_virt(hcd->localmem_pool, ps2priv->iop_dma_addr,
++		iop_bus_to_phys(ps2priv->iop_dma_addr), size, dev_to_node(dev));
++	if (err < 0) {
++		dev_err(dev, "gen_pool_add_virt failed with %d\n", err);
++		goto out_err;
+ 	}
+ 
+ 	return 0;
++
++out_err:
++	iop_free(ps2priv->iop_dma_addr);
++	ps2priv->iop_dma_addr = 0;
++
++	return err;
+ }
+ 
+ static void iopheap_free_coherent(struct platform_device *pdev)
+ {
+-	struct device *dev = &pdev->dev;
+ 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+ 	struct ps2_hcd *ps2priv = hcd_to_priv(hcd);
+ 
+ 	if (ps2priv->iop_dma_addr == 0)
+ 		return;
+ 
+-	dma_release_declared_memory(dev);
+ 	iop_free(ps2priv->iop_dma_addr);
+ 	ps2priv->iop_dma_addr = 0;
+ }
+@@ -177,8 +187,7 @@ static int ohci_hcd_ps2_probe(struct platform_device *pdev)
+ 		goto err;
+ 	}
+ 
+-	ret = iopheap_alloc_coherent(pdev,
+-		DMA_BUFFER_SIZE, DMA_MEMORY_EXCLUSIVE);
++	ret = iopheap_alloc_coherent(pdev, DMA_BUFFER_SIZE);
+ 	if (ret != 0)
+ 		goto err_alloc_coherent;
+ 
