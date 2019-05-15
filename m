@@ -2,101 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFB71E97A
-	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 09:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610861E98E
+	for <lists+linux-usb@lfdr.de>; Wed, 15 May 2019 09:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726517AbfEOHyE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 May 2019 03:54:04 -0400
-Received: from mail-eopbgr1410100.outbound.protection.outlook.com ([40.107.141.100]:15254
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725902AbfEOHyD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 May 2019 03:54:03 -0400
+        id S1726290AbfEOH4T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 May 2019 03:56:19 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:56109 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbfEOH4S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 May 2019 03:56:18 -0400
+Received: by mail-wm1-f66.google.com with SMTP id x64so1543832wmb.5
+        for <linux-usb@vger.kernel.org>; Wed, 15 May 2019 00:56:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8c2AIa0kqy7nHovF+CQ4QBfYS+nx+MryCn6+vI3NFQM=;
- b=DSSTDk/MjEO2ks3Angy43ae2NkX7vNc7pBCSwqDo1z7eRJavsXm5YaYq/poHTVesJw5yWoyQFSmLF37s+nhTe7A1miM3atPQ5Bp5m5lCw+xopAZHft0J5aPUJKq3zIxE/MODz8ebOgvK7mYFQC6qRG9abqeS9BRvKmyABqPobgg=
-Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com (20.176.240.146) by
- OSBPR01MB2392.jpnprd01.prod.outlook.com (52.134.255.9) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1878.22; Wed, 15 May 2019 07:53:59 +0000
-Received: from OSBPR01MB3174.jpnprd01.prod.outlook.com
- ([fe80::f873:6332:738d:7213]) by OSBPR01MB3174.jpnprd01.prod.outlook.com
- ([fe80::f873:6332:738d:7213%3]) with mapi id 15.20.1878.024; Wed, 15 May 2019
- 07:53:59 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Chris Brandt <Chris.Brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simon Horman <horms@verge.net.au>
-CC:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Chris Brandt <Chris.Brandt@renesas.com>
-Subject: RE: [PATCH v3 12/15] dt-bindings: usb: renesas_usbhs: Add support for
- r7s9210
-Thread-Topic: [PATCH v3 12/15] dt-bindings: usb: renesas_usbhs: Add support
- for r7s9210
-Thread-Index: AQHVCmV0IRA9QMEYq0GcoyjZiO/XmKZr0bvg
-Date:   Wed, 15 May 2019 07:53:59 +0000
-Message-ID: <OSBPR01MB3174646B4DCCE09D82E20473D8090@OSBPR01MB3174.jpnprd01.prod.outlook.com>
-References: <20190514145605.19112-1-chris.brandt@renesas.com>
- <20190514145605.19112-13-chris.brandt@renesas.com>
-In-Reply-To: <20190514145605.19112-13-chris.brandt@renesas.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b5a35786-df7b-43b6-7283-08d6d90a7d59
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB2392;
-x-ms-traffictypediagnostic: OSBPR01MB2392:
-x-microsoft-antispam-prvs: <OSBPR01MB239217D854B2BAF5A79A6BF8D8090@OSBPR01MB2392.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-forefront-prvs: 0038DE95A2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(136003)(376002)(366004)(39860400002)(199004)(189003)(33656002)(54906003)(26005)(74316002)(6436002)(110136005)(9686003)(55016002)(14454004)(229853002)(53936002)(6116002)(5660300002)(186003)(478600001)(316002)(86362001)(25786009)(4326008)(52536014)(66066001)(68736007)(107886003)(2906002)(6246003)(558084003)(71190400001)(66946007)(64756008)(256004)(8676002)(8936002)(81156014)(7736002)(305945005)(71200400001)(76116006)(81166006)(102836004)(66556008)(3846002)(73956011)(7416002)(476003)(446003)(486006)(66476007)(76176011)(99286004)(7696005)(66446008)(11346002)(6506007)(138113003);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB2392;H:OSBPR01MB3174.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: eHeDP1rD1a6LrRCcV7CNCkjz2BrQM8aqMY/W8SL3VQE1NA4Tu3s3obmpZC3OCjB3NN4EbesvPCx1Y2HOOdDHq/7NJmVi4z+LRdrQ1XxG7zJpge4CpcVbqN5H2n90v7iqcaeJW/jGUVkYZ0QmBA31AT0Oo2yl6n8rWTiLMkvQNZt1PfMfmfpnSmr0DeVEBKwaEaScivzQkfEN/y8VhwjBdCHNRKZbvynyDTSvkqKHjEdzbHaGa/J4RMsIgIel37+9PhFv+cqYHmd2/Ms1R8VBK9zTL+3l+a8f5brRkXTMG8SAf0yYuPS1OPUwjwkthDf7lGaKfzn1HoQSHozFGu8Q5tFb3zf1epoMUHIiwq294ZnyipPC8rdU4k5nHVG1NhDuaAYv0L1JHb0vUSDlmccMMR+kh0sEC+mM4p8pR8zskUg=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=rBex1R9irR8avZOElxAJHU70GLvNreCgKQt4QdExZ90=;
+        b=SluTyKcCl6WXTC6B8cG+tW+gV5I+1HneedKnl9R9nJTDQ57laZrekoNH50LMRQinL9
+         jKO+siRsPSvuCwp3kHA1Sx0eQJCBWdQNOEM8sDGGtRXfgvtEf2aQiLXkrAvbz+IM91z/
+         BUIY167oEXuCYY0FWhWXcuA91jEcWdqwOI6yQ/vmFEI0vki/7NRIYXgs2hgq5SYCNuBB
+         qt+okyGxmOtqrK3BM6nVxdOdiJ6uQ5bjIWVB9OzTVVSdGJOvOgchDigYT0KsO+EF1XMj
+         arWXYW3LLFZrhDbrJZwjUibn4DikorvpDIs5HdWnUpplB7D/eq6B+Z2/ULf4rE/D9ipY
+         zBSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=rBex1R9irR8avZOElxAJHU70GLvNreCgKQt4QdExZ90=;
+        b=qszWQRrWkTW0xsvQde4qoMR0M5G46GnM7927lejbe2Oa+0kK/ffMDxEx0OJSrRJ6Z7
+         1uAg7CE3JGAmYMtQiME4FugUASNIYBKbL7ToJ4/GdUL/WWSgzok2dB3UHgVfBH4E7t/y
+         lDSgh3Ez56d0cRt1zC5mOw0Qeh/pKw7VMVf5mwPcwQF7Dzb0g11v/+zWbX+Txaj9BYYa
+         MLljHouDwlvAg4DyG85uXsx2KSetL+7Go2gCqYcFUHMHGssb/IVHiD9vSBoGgx/yUIin
+         4Hv74NZuHUderTLQpa1q6O2luRGF2Eqye/FwcBe9SdYBzuc0iRAA6HBsybt1VPUYjKvc
+         KOvw==
+X-Gm-Message-State: APjAAAV5WrZead5tzacfUddg6jPryHxg/NATa9ct6kc8WRnzasziL8MJ
+        emH6b3CPHOfhAvP6HSW/J+g=
+X-Google-Smtp-Source: APXvYqymW2MN2a95wioLbYgs+h+ZvgQ2fCj8d+MFdr1X2p+Qp5IRpPGBDrFLcxJpHTU9duQ4YsELTw==
+X-Received: by 2002:a1c:f311:: with SMTP id q17mr22419717wmq.144.1557906976425;
+        Wed, 15 May 2019 00:56:16 -0700 (PDT)
+Received: from [192.168.99.70] (mail.unidataz.cz. [193.165.148.130])
+        by smtp.googlemail.com with ESMTPSA id s124sm1613878wmf.42.2019.05.15.00.56.15
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 May 2019 00:56:15 -0700 (PDT)
+From:   "StarostaCZ@gmail.com" <starostacz@gmail.com>
+X-Google-Original-From: "StarostaCZ@gmail.com" <StarostaCZ@gmail.com>
+Subject: Re: Linux crash when using FTDI FT232R USB to serial converter on AMD
+ boards.
+To:     Joerg Roedel <joro@8bytes.org>, Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+        iommu@lists.linux-foundation.org
+References: <04503197-a0a9-8b35-6c65-c10f296aab57@gmail.com>
+ <20190429094847.GI26546@localhost> <20190503153716.GE11605@8bytes.org>
+ <8748125e-f360-ff0e-ea15-699bce9e7747@gmail.com>
+Message-ID: <4e7f0267-eba8-81c3-4036-25924ea9df98@gmail.com>
+Date:   Wed, 15 May 2019 09:54:43 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5a35786-df7b-43b6-7283-08d6d90a7d59
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2019 07:53:59.3499
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB2392
+In-Reply-To: <8748125e-f360-ff0e-ea15-699bce9e7747@gmail.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: cs
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chris-san,
+Hello,
+can I still help with this problem? It's very important for us. Thank you.
 
-> From: Chris Brandt, Sent: Tuesday, May 14, 2019 11:56 PM
->=20
-> Add support for r7s9210 (RZ/A2M) SoC
->=20
-> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
+starosta
 
-Thank you for the patch!
-
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-
-Best regards,
-Yoshihiro Shimoda
+Dne 6.5.2019 v 9:10 StarostaCZ@gmail.com napsal(a):
+> New test on kernel Linux version 5.1.0-050100-generic. Same problem, 
+> system crash after a few seconds.
+> Full kern.log: https://paste.ee/p/EmLsw
+> I can do access to my pc through SSH if useful.
+>
+> starosta
+>
+> Dne 3.5.2019 v 17:37 Joerg Roedel napsal(a):
+>> On Mon, Apr 29, 2019 at 11:48:47AM +0200, Johan Hovold wrote:
+>>> So this is a debian 4.18 kernel seemingly crashing due to a xhci or
+>>> iommu issue.
+>>>
+>>> Can you reproduce this on a mainline kernel?
+>>>
+>>> If so, please post the corresponding logs to the lists and CC the xhci
+>>> and iommu maintainers (added to CC).
+>> Your kernel is probably missing this upstream fix:
+>>
+>>     4e50ce03976f iommu/amd: fix sg->dma_address for sg->offset bigger 
+>> than PAGE_SIZE
+>>
+>> Regards,
+>>
+>>     Joerg
+>>
+>
 
