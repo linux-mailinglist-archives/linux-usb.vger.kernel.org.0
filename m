@@ -2,164 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6010B202A6
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 11:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51429205C3
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 13:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726997AbfEPJfd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 May 2019 05:35:33 -0400
-Received: from mail-eopbgr130050.outbound.protection.outlook.com ([40.107.13.50]:28227
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726336AbfEPJfd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 May 2019 05:35:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hvo5TcoxtKsrr+jgblm8ThGwIsfGMBVrVHMH7gTZVrE=;
- b=M9LragkoVsk5lwOwD7cbqvwFbN38K1nDM7m/WE8KYuMEQMoA+xAJp8vOgKtmD9KUe41vDWQa6X5s1+VlnbS2gPFT9wuxIvDgyqC7/PV50wlW5gtii2vT1/wKhwRB7vfZmRJXUsJKuz/76CLpg6eEKiJiWXzSVfbnT8r9eRUSocs=
-Received: from DB7PR04MB5132.eurprd04.prod.outlook.com (20.176.235.28) by
- DB7PR04MB4362.eurprd04.prod.outlook.com (52.135.131.157) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1878.22; Thu, 16 May 2019 09:35:27 +0000
-Received: from DB7PR04MB5132.eurprd04.prod.outlook.com
- ([fe80::3cde:1777:e184:52ac]) by DB7PR04MB5132.eurprd04.prod.outlook.com
- ([fe80::3cde:1777:e184:52ac%4]) with mapi id 15.20.1900.010; Thu, 16 May 2019
- 09:35:27 +0000
-From:   Laurentiu Tudor <laurentiu.tudor@nxp.com>
-To:     Fredrik Noring <noring@nocrew.org>
-CC:     Robin Murphy <robin.murphy@arm.com>, "hch@lst.de" <hch@lst.de>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "marex@denx.de" <marex@denx.de>,
-        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
- rework
-Thread-Topic: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
- rework
-Thread-Index: AQHVCmKoDp6AVawLEEugEGZuSLgHU6Zqu4uAgAA1oICAAQ5TAIAAYlQAgAEezIA=
-Date:   Thu, 16 May 2019 09:35:27 +0000
-Message-ID: <0fea5fa7-e2b0-b34d-3bf8-976007df2dc2@nxp.com>
-References: <20190514143807.7745-1-laurentiu.tudor@nxp.com>
- <9d34015d-c219-179b-3141-4b0de3530ac3@arm.com> <20190514182931.GA2559@sx9>
- <0e5f3b86-7a80-eec7-691b-34a123194208@nxp.com> <20190515162858.GB17162@sx9>
-In-Reply-To: <20190515162858.GB17162@sx9>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=laurentiu.tudor@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1cc2bbb3-c465-4b3b-167c-08d6d9e1d4af
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB4362;
-x-ms-traffictypediagnostic: DB7PR04MB4362:
-x-microsoft-antispam-prvs: <DB7PR04MB4362FE24463754E8D7BE11A4EC0A0@DB7PR04MB4362.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 0039C6E5C5
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(366004)(136003)(39860400002)(376002)(346002)(51444003)(199004)(189003)(66946007)(66446008)(64756008)(73956011)(66476007)(66556008)(76116006)(91956017)(316002)(68736007)(5660300002)(76176011)(6512007)(99286004)(54906003)(7736002)(229853002)(6436002)(6486002)(2906002)(66066001)(31686004)(256004)(14444005)(8676002)(81156014)(81166006)(11346002)(6916009)(8936002)(4326008)(486006)(31696002)(53546011)(44832011)(6246003)(2616005)(36756003)(71190400001)(476003)(71200400001)(25786009)(478600001)(102836004)(26005)(305945005)(6506007)(86362001)(53936002)(446003)(3846002)(14454004)(6116002)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4362;H:DB7PR04MB5132.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: xrcOF2dWCbeHIeqt3YVFLJKm2XDttthrObmrZDXcPMu72ccOe4E+Mlk2ojgnzT/RqHUbaTAWtcmNyragjbW7ZQYRgEI+cIpUxxgzvHaDmCuUmekpQKlx+ZsqsuanNy7XVs0aTn/DWQZFHrCR+A11HWErh2f8eN/g2PWAN1n1lQ2nk4tpgD2X88kPqZTfhU/Ch8RNMufsonDgPUvXe25y/yhJ7DSDE+NiCBLZ+TgJwg4OaMXr8H0h57csP7e+pl9NT9nAUdeq0wyvchowIWviHbt/Aojdm5t9rX30MGVuRwxJr3otlbyAECFEEEyg2qieD5ok96Yc649aRZxwtQ0K2Pal2xyShwiOBRj3Pj1yYWBp3hXNa2mrX8cbi13EFex/qtaRzYKsE6YWYdVzo11UD3wCJ30tFLd6lnso1gjaLNg=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BFBE18303F803245807D4C8C7EE71589@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727592AbfEPLkH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 May 2019 07:40:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48154 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727582AbfEPLkG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 May 2019 07:40:06 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 15B6F216FD;
+        Thu, 16 May 2019 11:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558006805;
+        bh=iOKHTgaUD++EaecvRM2Rsa8NGxXdxwr8UENTk53sYxs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ci8Tudead22mf4LGF0mbkqvKkDW4MJGBlF9/CuBuEMUbWQGFNPxzhHm6bAzUyOJu7
+         dEDpsAglxZIfwmJXOoX9068lCcPrhMUL4guQKbFK1FZBsdqcCpI62p3kckqM5TDSvC
+         rLp5LirhZ3bw67oMfna02tvGFcz7/VAFjdVy9h4w=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Lars Melin <larsm17@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.0 24/34] qmi_wwan: new Wistron, ZTE and D-Link devices
+Date:   Thu, 16 May 2019 07:39:21 -0400
+Message-Id: <20190516113932.8348-24-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190516113932.8348-1-sashal@kernel.org>
+References: <20190516113932.8348-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cc2bbb3-c465-4b3b-167c-08d6d9e1d4af
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 May 2019 09:35:27.7376
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4362
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgRnJlZHJpaywNCg0KVGhhbmtzIHZlcnkgbXVjaCBmb3IgdGFraW5nIHRoZSB0aW1lIHRvIGxv
-b2sgaW50byB0aGlzLiBQbGVhc2Ugc2VlIA0KY29tbWVudHMgaW5saW5lLg0KDQpPbiAxNS4wNS4y
-MDE5IDE5OjI4LCBGcmVkcmlrIE5vcmluZyB3cm90ZToNCj4gSGkgTGF1cmV0bml1LA0KPiANCj4+
-IEkgdGhpbmsgdGhhdCBhbnkgcmVjZW50IGtlcm5lbCB3aWxsIGRvLCBzbyBJJ2Qgc2F5IHlvdXIg
-Y3VycmVudCBicmFuY2gNCj4+IHNob3VsZCBiZSBmaW5lLg0KPiANCj4gVGhlIGtlcm5lbCBvb3Bz
-ZXMgd2l0aCAidW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwgcGFnaW5nIHJlcXVlc3QgYXQgdmlydHVh
-bA0KPiBhZGRyZXNzIDAwMGFiYTBiIiBpbiBoY2RfYWxsb2NfY29oZXJlbnQgdmlhIHVzYl9oY2Rf
-bWFwX3VyYl9mb3JfZG1hLiANCg0KQnkgYW55IGNoYW5jZSwgZG9lcyB0aGlzIGFkZHJlc3MgbG9v
-a3MgbGlrZSB0aGUgZG1hX2FkZHIgdGhhdCB0aGUgZGV2aWNlIA0Kc2hvdWxkIHRhcmdldD8NCg0K
-PiBUaGlzIHJlbGF0ZXMgdG8gcGF0Y2ggMi8zIHRoYXQgSSBkaWRuJ3QgcXVpdGUgdW5kZXJzdGFu
-ZCwgd2hlcmUNCj4gDQo+IC0JcmV0dmFsID0gZG1hX2RlY2xhcmVfY29oZXJlbnRfbWVtb3J5KGRl
-diwgbWVtLT5zdGFydCwNCj4gLQkJCQkJIG1lbS0+c3RhcnQgLSBtZW0tPnBhcmVudC0+c3RhcnQs
-DQo+IC0JCQkJCSByZXNvdXJjZV9zaXplKG1lbSkpOw0KPiANCj4gYmVjb21lcw0KPiANCj4gKwly
-ZXR2YWwgPSBnZW5fcG9vbF9hZGRfdmlydChoY2QtPmxvY2FsbWVtX3Bvb2wsDQo+ICsJCQkJICAg
-KHVuc2lnbmVkIGxvbmcpbWVtLT5zdGFydCAtDQo+ICsJCQkJCW1lbS0+cGFyZW50LT5zdGFydCwN
-Cj4gKwkJCQkgICBtZW0tPnN0YXJ0LCByZXNvdXJjZV9zaXplKG1lbSksDQo+IA0KPiBzbyB0aGF0
-IGFyZ3VtZW50cyB0d28gYW5kIHRocmVlIHN3aXRjaCBwbGFjZXMuIEdpdmVuDQo+IA0KPiBpbnQg
-ZG1hX2RlY2xhcmVfY29oZXJlbnRfbWVtb3J5KHN0cnVjdCBkZXZpY2UgKmRldiwgcGh5c19hZGRy
-X3QgcGh5c19hZGRyLA0KPiAJCQkJZG1hX2FkZHJfdCBkZXZpY2VfYWRkciwgc2l6ZV90IHNpemUp
-Ow0KPiANCj4gYW5kDQo+IA0KPiBpbnQgZ2VuX3Bvb2xfYWRkX3ZpcnQoc3RydWN0IGdlbl9wb29s
-ICpwb29sLCB1bnNpZ25lZCBsb25nIHZpcnQsIHBoeXNfYWRkcl90IHBoeXMNCj4gCQkgc2l6ZV90
-IHNpemUsIGludCBuaWQpDQo+IA0KPiBpdCBzZWVtcyB0aGF0IHRoZSBkZXZpY2UgYWRkcmVzcyAo
-ZG1hX2FkZHJfdCBkZXZpY2VfYWRkcikgbm93IGJlY29tZXMgYQ0KPiB2aXJ0dWFsIGFkZHJlc3Mg
-KHVuc2lnbmVkIGxvbmcgdmlydCkuIElzIHRoYXQgaW50ZW5kZWQ/DQoNCkFjdHVhbGx5LCBJIHRo
-aW5rIEknbSBtaXN1c2luZyBnZW5hbGxvYyBhbmQgYWxzbyBpdCBhcHBlYXJzIHRoYXQgaSBuZWVk
-IA0KdG8gYWRkIGEgbWFwcGluZyBvbiB0aGUgcGh5cyBhZGRyZXNzLiBTbyBteSBwbGFuIGlzIHRv
-IGNoYW5nZSB0aGUgDQoidW5zaWduZWQgbG9uZyB2aXJ0IiB0byBiZSB0aGUgdm9pZCAqIHJldHVy
-bmVkIGJ5IHRoZSBtYXBwaW5nIG9wZXJhdGlvbiANCmFuZCB0aGUgcGh5c19hZGRyX3QgYmUgdGhl
-IGRtYV9hZGRyX3QuIEknbGwgcmV0dXJuIHdpdGggYSBwYXRjaC4NCg0KUmVnYXJkaW5nIHRoZSB1
-c2FnZSBvZiB1bnNpZ25lZCBsb25nIGluIGdlbmFsbG9jLCB5ZWFoIHNlZW1zIGEgYml0IA0Kc3Ry
-YW5nZSBidXQgYnkgbG9va2luZyBhdCBvdGhlciB1c2VycyBpbiB0aGUga2VybmVsIGl0IGFwcGVh
-cnMgdGhhdCANCnRoYXQncyB0aGUgZGVzaWduLg0KDQotLS0NCkJlc3QgUmVnYXJkcywgTGF1cmVu
-dGl1DQoNCj4gTXkgY29ycmVzcG9uZGluZyBwYXRjaCBpcyBiZWxvdyBmb3IgcmVmZXJlbmNlLiBJ
-IGFwcGxpZWQgeW91ciAxLzMgcGF0Y2gNCj4gdG8gdGVzdCBpdC4NCj4gDQo+IEZyZWRyaWsNCj4g
-DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L29oY2ktcHMyLmMgYi9kcml2ZXJzL3Vz
-Yi9ob3N0L29oY2ktcHMyLmMNCj4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC9vaGNpLXBzMi5jDQo+
-ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3Qvb2hjaS1wczIuYw0KPiBAQCAtNyw2ICs3LDcgQEANCj4g
-ICAgKi8NCj4gICANCj4gICAjaW5jbHVkZSA8bGludXgvZG1hLW1hcHBpbmcuaD4NCj4gKyNpbmNs
-dWRlIDxsaW51eC9nZW5hbGxvYy5oPg0KPiAgICNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4g
-ICAjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQo+ICAgI2luY2x1ZGUgPGxpbnV4
-L3VzYi5oPg0KPiBAQCAtOTIsMTIgKzkzLDEyIEBAIHN0YXRpYyBpcnFyZXR1cm5fdCBvaGNpX3Bz
-Ml9pcnEoc3RydWN0IHVzYl9oY2QgKmhjZCkNCj4gICAJcmV0dXJuIG9oY2lfaXJxKGhjZCk7IC8q
-IENhbGwgbm9ybWFsIElSUSBoYW5kbGVyLiAqLw0KPiAgIH0NCj4gICANCj4gLXN0YXRpYyBpbnQg
-aW9waGVhcF9hbGxvY19jb2hlcmVudChzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2LA0KPiAt
-CXNpemVfdCBzaXplLCBpbnQgZmxhZ3MpDQo+ICtzdGF0aWMgaW50IGlvcGhlYXBfYWxsb2NfY29o
-ZXJlbnQoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldiwgc2l6ZV90IHNpemUpDQo+ICAgew0K
-PiAgIAlzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmcGRldi0+ZGV2Ow0KPiAgIAlzdHJ1Y3QgdXNiX2hj
-ZCAqaGNkID0gcGxhdGZvcm1fZ2V0X2RydmRhdGEocGRldik7DQo+ICAgCXN0cnVjdCBwczJfaGNk
-ICpwczJwcml2ID0gaGNkX3RvX3ByaXYoaGNkKTsNCj4gKwlpbnQgZXJyOw0KPiAgIA0KPiAgIAlp
-ZiAocHMycHJpdi0+aW9wX2RtYV9hZGRyICE9IDApDQo+ICAgCQlyZXR1cm4gMDsNCj4gQEAgLTEx
-MiwyOCArMTEzLDM3IEBAIHN0YXRpYyBpbnQgaW9waGVhcF9hbGxvY19jb2hlcmVudChzdHJ1Y3Qg
-cGxhdGZvcm1fZGV2aWNlICpwZGV2LA0KPiAgIAkJcmV0dXJuIC1FTk9NRU07DQo+ICAgCX0NCj4g
-ICANCj4gLQlpZiAoZG1hX2RlY2xhcmVfY29oZXJlbnRfbWVtb3J5KGRldiwNCj4gLQkJCWlvcF9i
-dXNfdG9fcGh5cyhwczJwcml2LT5pb3BfZG1hX2FkZHIpLA0KPiAtCQkJcHMycHJpdi0+aW9wX2Rt
-YV9hZGRyLCBzaXplLCBmbGFncykpIHsNCj4gLQkJZGV2X2VycihkZXYsICJkbWFfZGVjbGFyZV9j
-b2hlcmVudF9tZW1vcnkgZmFpbGVkXG4iKTsNCj4gLQkJaW9wX2ZyZWUocHMycHJpdi0+aW9wX2Rt
-YV9hZGRyKTsNCj4gLQkJcHMycHJpdi0+aW9wX2RtYV9hZGRyID0gMDsNCj4gLQkJcmV0dXJuIC1F
-Tk9NRU07DQo+ICsJaGNkLT5sb2NhbG1lbV9wb29sID0gZGV2bV9nZW5fcG9vbF9jcmVhdGUoZGV2
-LA0KPiArCQlQQUdFX1NISUZULCBkZXZfdG9fbm9kZShkZXYpLCBEUlZfTkFNRSk7DQo+ICsJaWYg
-KElTX0VSUihoY2QtPmxvY2FsbWVtX3Bvb2wpKSB7DQo+ICsJCWVyciA9IFBUUl9FUlIoaGNkLT5s
-b2NhbG1lbV9wb29sKTsNCj4gKwkJZ290byBvdXRfZXJyOw0KPiArCX0NCj4gKw0KPiArCWVyciA9
-IGdlbl9wb29sX2FkZF92aXJ0KGhjZC0+bG9jYWxtZW1fcG9vbCwgcHMycHJpdi0+aW9wX2RtYV9h
-ZGRyLA0KPiArCQlpb3BfYnVzX3RvX3BoeXMocHMycHJpdi0+aW9wX2RtYV9hZGRyKSwgc2l6ZSwg
-ZGV2X3RvX25vZGUoZGV2KSk7DQo+ICsJaWYgKGVyciA8IDApIHsNCj4gKwkJZGV2X2VycihkZXYs
-ICJnZW5fcG9vbF9hZGRfdmlydCBmYWlsZWQgd2l0aCAlZFxuIiwgZXJyKTsNCj4gKwkJZ290byBv
-dXRfZXJyOw0KPiAgIAl9DQo+ICAgDQo+ICAgCXJldHVybiAwOw0KPiArDQo+ICtvdXRfZXJyOg0K
-PiArCWlvcF9mcmVlKHBzMnByaXYtPmlvcF9kbWFfYWRkcik7DQo+ICsJcHMycHJpdi0+aW9wX2Rt
-YV9hZGRyID0gMDsNCj4gKw0KPiArCXJldHVybiBlcnI7DQo+ICAgfQ0KPiAgIA0KPiAgIHN0YXRp
-YyB2b2lkIGlvcGhlYXBfZnJlZV9jb2hlcmVudChzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2
-KQ0KPiAgIHsNCj4gLQlzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmcGRldi0+ZGV2Ow0KPiAgIAlzdHJ1
-Y3QgdXNiX2hjZCAqaGNkID0gcGxhdGZvcm1fZ2V0X2RydmRhdGEocGRldik7DQo+ICAgCXN0cnVj
-dCBwczJfaGNkICpwczJwcml2ID0gaGNkX3RvX3ByaXYoaGNkKTsNCj4gICANCj4gICAJaWYgKHBz
-MnByaXYtPmlvcF9kbWFfYWRkciA9PSAwKQ0KPiAgIAkJcmV0dXJuOw0KPiAgIA0KPiAtCWRtYV9y
-ZWxlYXNlX2RlY2xhcmVkX21lbW9yeShkZXYpOw0KPiAgIAlpb3BfZnJlZShwczJwcml2LT5pb3Bf
-ZG1hX2FkZHIpOw0KPiAgIAlwczJwcml2LT5pb3BfZG1hX2FkZHIgPSAwOw0KPiAgIH0NCj4gQEAg
-LTE3Nyw4ICsxODcsNyBAQCBzdGF0aWMgaW50IG9oY2lfaGNkX3BzMl9wcm9iZShzdHJ1Y3QgcGxh
-dGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgIAkJZ290byBlcnI7DQo+ICAgCX0NCj4gICANCj4gLQly
-ZXQgPSBpb3BoZWFwX2FsbG9jX2NvaGVyZW50KHBkZXYsDQo+IC0JCURNQV9CVUZGRVJfU0laRSwg
-RE1BX01FTU9SWV9FWENMVVNJVkUpOw0KPiArCXJldCA9IGlvcGhlYXBfYWxsb2NfY29oZXJlbnQo
-cGRldiwgRE1BX0JVRkZFUl9TSVpFKTsNCj4gICAJaWYgKHJldCAhPSAwKQ0KPiAgIAkJZ290byBl
-cnJfYWxsb2NfY29oZXJlbnQ7DQo+ICAgDQo+IA==
+From: Bjørn Mork <bjorn@mork.no>
+
+[ Upstream commit 88ef66a28391ea7b624bfb7508a5b015c13b28f3 ]
+
+Adding device entries found in vendor modified versions of this
+driver.  Function maps for some of the devices follow:
+
+WNC D16Q1, D16Q5, D18Q1 LTE CAT3 module (1435:0918)
+
+MI_00 Qualcomm HS-USB Diagnostics
+MI_01 Android Debug interface
+MI_02 Qualcomm HS-USB Modem
+MI_03 Qualcomm Wireless HS-USB Ethernet Adapter
+MI_04 Qualcomm Wireless HS-USB Ethernet Adapter
+MI_05 Qualcomm Wireless HS-USB Ethernet Adapter
+MI_06 USB Mass Storage Device
+
+ T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480 MxCh= 0
+ D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+ P:  Vendor=1435 ProdID=0918 Rev= 2.32
+ S:  Manufacturer=Android
+ S:  Product=Android
+ S:  SerialNumber=0123456789ABCDEF
+ C:* #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=500mA
+ I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+ E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+ E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+ E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+ E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+ E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+ E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+ E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+ E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+ E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+ E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+WNC D18 LTE CAT3 module (1435:d182)
+
+MI_00 Qualcomm HS-USB Diagnostics
+MI_01 Androd Debug interface
+MI_02 Qualcomm HS-USB Modem
+MI_03 Qualcomm HS-USB NMEA
+MI_04 Qualcomm Wireless HS-USB Ethernet Adapter
+MI_05 Qualcomm Wireless HS-USB Ethernet Adapter
+MI_06 USB Mass Storage Device
+
+ZM8510/ZM8620/ME3960 (19d2:0396)
+
+MI_00 ZTE Mobile Broadband Diagnostics Port
+MI_01 ZTE Mobile Broadband AT Port
+MI_02 ZTE Mobile Broadband Modem
+MI_03 ZTE Mobile Broadband NDIS Port (qmi_wwan)
+MI_04 ZTE Mobile Broadband ADB Port
+
+ME3620_X (19d2:1432)
+
+MI_00 ZTE Diagnostics Device
+MI_01 ZTE UI AT Interface
+MI_02 ZTE Modem Device
+MI_03 ZTE Mobile Broadband Network Adapter
+MI_04 ZTE Composite ADB Interface
+
+Reported-by: Lars Melin <larsm17@gmail.com>
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/qmi_wwan.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 9195f3476b1d7..679e404a5224f 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1122,9 +1122,16 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x0846, 0x68d3, 8)},	/* Netgear Aircard 779S */
+ 	{QMI_FIXED_INTF(0x12d1, 0x140c, 1)},	/* Huawei E173 */
+ 	{QMI_FIXED_INTF(0x12d1, 0x14ac, 1)},	/* Huawei E1820 */
++	{QMI_FIXED_INTF(0x1435, 0x0918, 3)},	/* Wistron NeWeb D16Q1 */
++	{QMI_FIXED_INTF(0x1435, 0x0918, 4)},	/* Wistron NeWeb D16Q1 */
++	{QMI_FIXED_INTF(0x1435, 0x0918, 5)},	/* Wistron NeWeb D16Q1 */
++	{QMI_FIXED_INTF(0x1435, 0x3185, 4)},	/* Wistron NeWeb M18Q5 */
++	{QMI_FIXED_INTF(0x1435, 0xd111, 4)},	/* M9615A DM11-1 D51QC */
+ 	{QMI_FIXED_INTF(0x1435, 0xd181, 3)},	/* Wistron NeWeb D18Q1 */
+ 	{QMI_FIXED_INTF(0x1435, 0xd181, 4)},	/* Wistron NeWeb D18Q1 */
+ 	{QMI_FIXED_INTF(0x1435, 0xd181, 5)},	/* Wistron NeWeb D18Q1 */
++	{QMI_FIXED_INTF(0x1435, 0xd182, 4)},	/* Wistron NeWeb D18 */
++	{QMI_FIXED_INTF(0x1435, 0xd182, 5)},	/* Wistron NeWeb D18 */
+ 	{QMI_FIXED_INTF(0x1435, 0xd191, 4)},	/* Wistron NeWeb D19Q1 */
+ 	{QMI_QUIRK_SET_DTR(0x1508, 0x1001, 4)},	/* Fibocom NL668 series */
+ 	{QMI_FIXED_INTF(0x16d8, 0x6003, 0)},	/* CMOTech 6003 */
+@@ -1180,6 +1187,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x19d2, 0x0265, 4)},	/* ONDA MT8205 4G LTE */
+ 	{QMI_FIXED_INTF(0x19d2, 0x0284, 4)},	/* ZTE MF880 */
+ 	{QMI_FIXED_INTF(0x19d2, 0x0326, 4)},	/* ZTE MF821D */
++	{QMI_FIXED_INTF(0x19d2, 0x0396, 3)},	/* ZTE ZM8620 */
+ 	{QMI_FIXED_INTF(0x19d2, 0x0412, 4)},	/* Telewell TW-LTE 4G */
+ 	{QMI_FIXED_INTF(0x19d2, 0x1008, 4)},	/* ZTE (Vodafone) K3570-Z */
+ 	{QMI_FIXED_INTF(0x19d2, 0x1010, 4)},	/* ZTE (Vodafone) K3571-Z */
+@@ -1200,7 +1208,9 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x19d2, 0x1425, 2)},
+ 	{QMI_FIXED_INTF(0x19d2, 0x1426, 2)},	/* ZTE MF91 */
+ 	{QMI_FIXED_INTF(0x19d2, 0x1428, 2)},	/* Telewell TW-LTE 4G v2 */
++	{QMI_FIXED_INTF(0x19d2, 0x1432, 3)},	/* ZTE ME3620 */
+ 	{QMI_FIXED_INTF(0x19d2, 0x2002, 4)},	/* ZTE (Vodafone) K3765-Z */
++	{QMI_FIXED_INTF(0x2001, 0x7e16, 3)},	/* D-Link DWM-221 */
+ 	{QMI_FIXED_INTF(0x2001, 0x7e19, 4)},	/* D-Link DWM-221 B1 */
+ 	{QMI_FIXED_INTF(0x2001, 0x7e35, 4)},	/* D-Link DWM-222 */
+ 	{QMI_FIXED_INTF(0x2020, 0x2031, 4)},	/* Olicard 600 */
+-- 
+2.20.1
+
