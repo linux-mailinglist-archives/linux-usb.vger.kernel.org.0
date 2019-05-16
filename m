@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51429205C3
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 13:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3739E205F9
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 13:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727592AbfEPLkH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 May 2019 07:40:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48154 "EHLO mail.kernel.org"
+        id S1728187AbfEPLpf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 May 2019 07:45:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49348 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727582AbfEPLkG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 May 2019 07:40:06 -0400
+        id S1727905AbfEPLkx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 May 2019 07:40:53 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 15B6F216FD;
-        Thu, 16 May 2019 11:40:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B26A20862;
+        Thu, 16 May 2019 11:40:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558006805;
+        s=default; t=1558006851;
         bh=iOKHTgaUD++EaecvRM2Rsa8NGxXdxwr8UENTk53sYxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ci8Tudead22mf4LGF0mbkqvKkDW4MJGBlF9/CuBuEMUbWQGFNPxzhHm6bAzUyOJu7
-         dEDpsAglxZIfwmJXOoX9068lCcPrhMUL4guQKbFK1FZBsdqcCpI62p3kckqM5TDSvC
-         rLp5LirhZ3bw67oMfna02tvGFcz7/VAFjdVy9h4w=
+        b=CdxaUuavdmyHR458asB2L7PHBErXwzFt5YTIB2kyuRUFjXKeBKFFw6u4J2/gWHRMl
+         wqy5aGeXWpGAm98/90lKEEU5VXw/n872y1ypCs+rEjcZbK7oG9JrltDol/dEOjmJfu
+         gllCe0sseY5goyBgLmNwC2gfId1FlzDNhwh9m1Jc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
@@ -30,12 +30,12 @@ Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 24/34] qmi_wwan: new Wistron, ZTE and D-Link devices
-Date:   Thu, 16 May 2019 07:39:21 -0400
-Message-Id: <20190516113932.8348-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 19/25] qmi_wwan: new Wistron, ZTE and D-Link devices
+Date:   Thu, 16 May 2019 07:40:22 -0400
+Message-Id: <20190516114029.8682-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190516113932.8348-1-sashal@kernel.org>
-References: <20190516113932.8348-1-sashal@kernel.org>
+In-Reply-To: <20190516114029.8682-1-sashal@kernel.org>
+References: <20190516114029.8682-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
