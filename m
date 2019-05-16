@@ -2,142 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E80B20A48
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 16:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C085420ABB
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 17:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727515AbfEPO4E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 May 2019 10:56:04 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:40112 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727461AbfEPO4E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 May 2019 10:56:04 -0400
-Received: (qmail 2248 invoked by uid 2102); 16 May 2019 10:56:02 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 16 May 2019 10:56:02 -0400
-Date:   Thu, 16 May 2019 10:56:02 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Jim Lin <jilin@nvidia.com>
-cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
-        <kai.heng.feng@canonical.com>, <drinkcat@chromium.org>,
-        <keescook@chromium.org>, <nsaenzjulienne@suse.de>,
-        <jflat@chromium.org>, <malat@debian.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 1/2] usb: xhci : Add devaddr in struct usb_device
-In-Reply-To: <1558017657-13835-2-git-send-email-jilin@nvidia.com>
-Message-ID: <Pine.LNX.4.44L0.1905161054250.1280-100000@iolanthe.rowland.org>
+        id S1727610AbfEPPJz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 May 2019 11:09:55 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:46716 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726703AbfEPPJz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 May 2019 11:09:55 -0400
+Received: by mail-wr1-f68.google.com with SMTP id r7so3766031wrr.13;
+        Thu, 16 May 2019 08:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GldHbOnZfCgrNxHCEakDvlEgb285OgaglO7DDWQycHU=;
+        b=Op8opcDSLOpQgGoRUbw/CP/yYvjtufKY8C3gwNH9bacemHQ50w624XxNsiMJE+4/Op
+         cbr24jzCXRY5KsAXJsv64Wg/oKZI+3DbaIj4cwmWNAZ4PPWO0mQHAnVXEI3vA7mJeWH8
+         n9ZxEYnd+mleHU0Fy59rMJqMjnOw+ihgWCaHP/qxrKAy9mIrXmMTB76SMD0w2VBfZW9A
+         uQrSqMbsWZjAAnGDHF/8qEokPZifppPJhcXV79xUE5Dow35uBkWnXLw3qu7Mf3oFIgDw
+         LJNyIK3sGgxXuaX58+3NVIrL24UmgecM7Ki1j2X4fW7Y58ixSvsP9gA//PpOAx+yECoH
+         LZSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GldHbOnZfCgrNxHCEakDvlEgb285OgaglO7DDWQycHU=;
+        b=oScNxkxxtqU3rGfjcvko3GIXGF9aCJK8WuUTxqxw1luONhGpk3GBTwPShf5BxvptP3
+         aOuP8u8LNK0T8bUJmGC381QW1vEDQjBPjGX21VT3AeH/OKN0zR2QpL2oeQvZQEax27S4
+         +QrT3CBm7TE8Q+lnMZ0gpHk2c7G8oD7PPqhxzu0spsYQOSoBclL7DFG+6tIItTC9N8BK
+         SG9laLCvMcTjiViuqS6ReML7DfDwuC3vKalVoxbMZd6xYmnU9gatPnwK5itAVD3rglkD
+         OgTB5GBIThf6n9JJQW1/IWjV65R/Ck0X63zKN99GiN4Io9gO6nswdZ/jutLK5eoolCBk
+         BP2g==
+X-Gm-Message-State: APjAAAW/dmxmzRKv0ADXTWcsk1nFuh4qdGpH9d004j/0avDXl5ICg7oM
+        5ePt8VV614+E/cAZIPJzICA=
+X-Google-Smtp-Source: APXvYqwNv4y1/E2lS+3B9LHQr1a7DDHE3rix4cnwzwdgALxZNwUQM/lrC0UHLBo5uvZw9LGUuRN8+A==
+X-Received: by 2002:adf:fc8f:: with SMTP id g15mr32536353wrr.122.1558019393216;
+        Thu, 16 May 2019 08:09:53 -0700 (PDT)
+Received: from xws.fritz.box (pD9EA30D0.dip0.t-ipconnect.de. [217.234.48.208])
+        by smtp.gmail.com with ESMTPSA id t6sm4963423wrn.3.2019.05.16.08.09.51
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 May 2019 08:09:52 -0700 (PDT)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Harry Pan <harry.pan@intel.com>,
+        =?UTF-8?q?Maxence=20Dupr=C3=A8s?= <xpros64@hotmail.fr>,
+        =?UTF-8?q?Michael=20Niew=C3=B6hner?= <linux@mniewoehner.de>,
+        Nico Sneck <snecknico@gmail.com>,
+        Emmanuel Pescosta <emmanuelpescosta099@gmail.com>,
+        Jack Stocker <jackstocker.93@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: Add LPM quirk for Surface Dock GigE adapter
+Date:   Thu, 16 May 2019 17:08:31 +0200
+Message-Id: <20190516150833.119745-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 16 May 2019, Jim Lin wrote:
+Without USB_QUIRK_NO_LPM ethernet will not work and rtl8152 will
+complain with
 
-> The Clear_TT_Buffer request sent to the hub includes the address of
-> the LS/FS child device in wValue field. usb_hub_clear_tt_buffer()
-> uses udev->devnum to set the address wValue. This won't work for
-> devices connected to xHC.
-> 
-> For other host controllers udev->devnum is the same as the address of
-> the usb device, chosen and set by usb core. With xHC the controller
-> hardware assigns the address, and won't be the same as devnum.
-> 
-> Here we add devaddr in "struct usb_device" for
-> usb_hub_clear_tt_buffer() to use.
-> 
-> Signed-off-by: Jim Lin <jilin@nvidia.com>
-> ---
+    r8152 <device...>: Stop submitting intr, status -71
 
-Aside from the "xhci:" part of the Subject line (it's not really 
-appropriate because this is a modification of the USB core more than of 
-the xhci-hcd driver),
+Adding the quirk resolves this. As the dock is externally powered, this
+should not have any drawbacks.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+ drivers/usb/core/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
->     , remove its claiming in xhci.h
-> v3: Add description for clearing_tt (xhci.h)
-> v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
->     to protect for Clear_TT_Buffer to be run serially.
->     Remove xhci_clear_tt_buffer_complete as it's not necessary.
->     Same reason as the above.
->     Extend usb_hub_clear_tt_buffer parameter
-> v5: Not extending usb_hub_clear_tt_buffer parameter
->     Add description.
-> v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
-> v7: Add devaddr field in "struct usb_device"
-> v8: split as two patches, change type from int to u8 for devaddr.
-> v9: Use pahole to find place to put devaddr in struct usb_device.
->     Remove space between type cast and variable.
->     hub.c changed from v8
->     clear->devinfo |= (u16) (udev->devaddr << 4);
->     to 
->     clear->devinfo |= ((u16)udev->devaddr) << 4;
->     to solve a problem if devaddr is larger than 16.
-> v10 Initialize devaddr in xhci_setup_device()
->     Move devaddr to be below "u8 level"
-> 
->  drivers/usb/core/hub.c  | 4 +++-
->  drivers/usb/host/xhci.c | 1 +
->  include/linux/usb.h     | 2 ++
->  3 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 15a2934dc29d..0d4b289be103 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -873,7 +873,7 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
->  	/* info that CLEAR_TT_BUFFER needs */
->  	clear->tt = tt->multi ? udev->ttport : 1;
->  	clear->devinfo = usb_pipeendpoint (pipe);
-> -	clear->devinfo |= udev->devnum << 4;
-> +	clear->devinfo |= ((u16)udev->devaddr) << 4;
->  	clear->devinfo |= usb_pipecontrol(pipe)
->  			? (USB_ENDPOINT_XFER_CONTROL << 11)
->  			: (USB_ENDPOINT_XFER_BULK << 11);
-> @@ -2125,6 +2125,8 @@ static void update_devnum(struct usb_device *udev, int devnum)
->  	/* The address for a WUSB device is managed by wusbcore. */
->  	if (!udev->wusb)
->  		udev->devnum = devnum;
-> +	if (!udev->devaddr)
-> +		udev->devaddr = (u8)devnum;
->  }
->  
->  static void hub_free_dev(struct usb_device *udev)
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 7fa58c99f126..68b393e5a453 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -4096,6 +4096,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
->  	/* Zero the input context control for later use */
->  	ctrl_ctx->add_flags = 0;
->  	ctrl_ctx->drop_flags = 0;
-> +	udev->devaddr = (u8)(le32_to_cpu(slot_ctx->dev_state) & DEV_ADDR_MASK);
->  
->  	xhci_dbg_trace(xhci, trace_xhci_dbg_address,
->  		       "Internal device address = %d",
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 4229eb74bd2c..af68e31118f8 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -580,6 +580,7 @@ struct usb3_lpm_parameters {
->   * @bus_mA: Current available from the bus
->   * @portnum: parent port number (origin 1)
->   * @level: number of USB hub ancestors
-> + * @devaddr: device address, XHCI: assigned by HW, others: same as devnum
->   * @can_submit: URBs may be submitted
->   * @persist_enabled:  USB_PERSIST enabled for this device
->   * @have_langid: whether string_langid is valid
-> @@ -663,6 +664,7 @@ struct usb_device {
->  	unsigned short bus_mA;
->  	u8 portnum;
->  	u8 level;
-> +	u8 devaddr;
->  
->  	unsigned can_submit:1;
->  	unsigned persist_enabled:1;
-> 
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 8bc35d53408b..6082b008969b 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -209,6 +209,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* Microsoft LifeCam-VX700 v2.0 */
+ 	{ USB_DEVICE(0x045e, 0x0770), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
++	/* Microsoft Surface Dock Ethernet (RTL8153 GigE) */
++	{ USB_DEVICE(0x045e, 0x07c6), .driver_info = USB_QUIRK_NO_LPM },
++
+ 	/* Cherry Stream G230 2.0 (G85-231) and 3.0 (G85-232) */
+ 	{ USB_DEVICE(0x046a, 0x0023), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
+-- 
+2.21.0
 
