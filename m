@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B1C1FFA4
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 08:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6961FFA9
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 08:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726542AbfEPGkW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 May 2019 02:40:22 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:17833 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726221AbfEPGkV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 May 2019 02:40:21 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cdd05d00000>; Wed, 15 May 2019 23:40:16 -0700
+        id S1726621AbfEPGkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 May 2019 02:40:24 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:4920 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726221AbfEPGkX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 May 2019 02:40:23 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cdd05dc0002>; Wed, 15 May 2019 23:40:29 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 15 May 2019 23:40:20 -0700
+  Wed, 15 May 2019 23:40:22 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 15 May 2019 23:40:20 -0700
-Received: from HQMAIL110.nvidia.com (172.18.146.15) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 May
- 2019 06:40:19 +0000
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by hqmail110.nvidia.com
- (172.18.146.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 May
- 2019 06:40:19 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 16 May 2019 06:40:19 +0000
+        by hqpgpgate101.nvidia.com on Wed, 15 May 2019 23:40:22 -0700
+Received: from HQMAIL102.nvidia.com (172.18.146.10) by HQMAIL103.nvidia.com
+ (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 May
+ 2019 06:40:21 +0000
+Received: from HQMAIL103.nvidia.com (172.20.187.11) by HQMAIL102.nvidia.com
+ (172.18.146.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 May
+ 2019 06:40:21 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL103.nvidia.com
+ (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 16 May 2019 06:40:21 +0000
 Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.65.118]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cdd05d00002>; Wed, 15 May 2019 23:40:18 -0700
+        id <B5cdd05d30002>; Wed, 15 May 2019 23:40:21 -0700
 From:   Nagarjuna Kristam <nkristam@nvidia.com>
 To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
         <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
@@ -36,9 +36,9 @@ To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
 CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>,
         Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [Patch V3 2/8] phy: tegra: xusb: t210: add usb3 port fake support
-Date:   Thu, 16 May 2019 12:09:26 +0530
-Message-ID: <1557988772-15406-3-git-send-email-nkristam@nvidia.com>
+Subject: [Patch V3 3/8] phy: tegra: xusb: t210: add vbus override support
+Date:   Thu, 16 May 2019 12:09:27 +0530
+Message-ID: <1557988772-15406-4-git-send-email-nkristam@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
 References: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
@@ -46,233 +46,189 @@ X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1557988816; bh=kvMeTn/CkE8wJb7u6+dzzQ3rv1viBLXaQAcJbxK2CiY=;
+        t=1557988829; bh=fwRlDQIHTB+pwmLeKGvEOwLrM7QycTjdbRneiKP3lEY=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:X-NVConfidentiality:MIME-Version:
          Content-Type;
-        b=Q/emK3UtkvGishVHWfKW2qk89zUCX5oB/ZRpSBppGnonrFsZCNO2yjm6m3t5tuAsg
-         Y2KiFYcAdNeQilysXqS39PdGTRhrgWACjsI3SHjOkCwvmu3m89ydJmew/Zrvc9xect
-         NFYIPs2e0OwcnrYY5g4Rk5H6lcP4GWBHUTXv+C6jTRaNTOG022HsUGzkXXUB0p2lQw
-         OzUhCKANlv/zEj4tpf9O1J2h5Xa4zLlk2zl0hSzHnhMBNbHRKTjowGQz7ztPk8KpYP
-         tikD65arFpB+GzwoC7Sp2F+FSvpbsnTTmKsS8IDYh2vkysE03AHXFS15ovze/mHzX1
-         DhW66gHi9JDTQ==
+        b=BojHhKrTakudD09FVv19yShoTt3VZidgrK8ADqDVorHj9Lu7yYkV7FA7muLlOL/wi
+         mm0FulEKWpy4AoMczBboZ7blq0TItA+SaL1olYlko+X1HnWsyAutBTH/qtWu9fs1Dl
+         MG0BdtoeeQm8Va6L3PRRbn5pfRlJbfr9D/E1Zf8b2QknvemOWXl8cq1ktgZcz+RU4t
+         tkVg1+SKJvhdJVSmVwwneJN10pOaNLhF29XfNORkgXDCoG7ZbpdpkzIaatkxFwhnfY
+         MfkwBs0ad5kj+DMkhosxoQP35R2ZG9ldiFRk2tZX9gxH1xjFTxWWhTEuyBMe6x33O7
+         j5BvOgf3bO9Xw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tegra210, usb2 only otg/peripheral ports dont work in device mode.
-They need an assosciated usb3 port to work in device mode. Identify
-an unused usb3 port and assign it as a fake USB3 port to USB2 only
-port whose mode is otg/peripheral.
-
-Based on work by BH Hsieh <bhsieh@nvidia.com>.
+Tegra XUSB device control driver needs to control vbus override
+during its operations, add API for the support.
 
 Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
 ---
- drivers/phy/tegra/xusb-tegra210.c | 56 +++++++++++++++++++++++++++++++
- drivers/phy/tegra/xusb.c          | 69 +++++++++++++++++++++++++++++++++++++++
+ drivers/phy/tegra/xusb-tegra210.c | 59 +++++++++++++++++++++++++++++++++++++++
+ drivers/phy/tegra/xusb.c          | 22 +++++++++++++++
  drivers/phy/tegra/xusb.h          |  2 ++
- 3 files changed, 127 insertions(+)
+ include/linux/phy/tegra/xusb.h    |  6 ++--
+ 4 files changed, 87 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
-index 4beebcc..829aca5 100644
+index 829aca5..363d2aa 100644
 --- a/drivers/phy/tegra/xusb-tegra210.c
 +++ b/drivers/phy/tegra/xusb-tegra210.c
-@@ -58,6 +58,7 @@
- #define XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP_SHIFT(x) ((x) * 5)
- #define XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP_MASK(x) (0x7 << ((x) * 5))
- #define XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP(x, v) (((v) & 0x7) << ((x) * 5))
-+#define XUSB_PADCTL_SS_PORT_MAP_PORT_DISABLED 0x7
+@@ -73,6 +73,10 @@
+ #define XUSB_PADCTL_USB3_PAD_MUX_PCIE_IDDQ_DISABLE(x) (1 << (1 + (x)))
+ #define XUSB_PADCTL_USB3_PAD_MUX_SATA_IDDQ_DISABLE(x) (1 << (8 + (x)))
  
- #define XUSB_PADCTL_ELPG_PROGRAM1 0x024
- #define XUSB_PADCTL_ELPG_PROGRAM1_AUX_MUX_LP0_VCORE_DOWN (1 << 31)
-@@ -952,6 +953,34 @@ static int tegra210_usb2_phy_power_on(struct phy *phy)
++#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL0(x) (0x080 + (x) * 0x40)
++#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIP (1 << 18)
++#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIN (1 << 22)
++
+ #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(x) (0x084 + (x) * 0x40)
+ #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_SHIFT 7
+ #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_MASK 0x3
+@@ -235,6 +239,12 @@
+ #define XUSB_PADCTL_UPHY_USB3_PADX_ECTL6(x) (0xa74 + (x) * 0x40)
+ #define XUSB_PADCTL_UPHY_USB3_PAD_ECTL6_RX_EQ_CTRL_H_VAL 0xfcf01368
  
- 	priv = to_tegra210_xusb_padctl(padctl);
- 
-+	if (port->usb3_port_fake != -1) {
-+		value = padctl_readl(padctl, XUSB_PADCTL_SS_PORT_MAP);
-+		value &= ~XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP_MASK(
-+					port->usb3_port_fake);
-+		value |= XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP(
-+					port->usb3_port_fake, index);
-+		padctl_writel(padctl, value, XUSB_PADCTL_SS_PORT_MAP);
++#define XUSB_PADCTL_USB2_VBUS_ID 0xc60
++#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON (1 << 14)
++#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT 18
++#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_MASK 0xf
++#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_FLOATING 8
 +
-+		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
-+		value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_VCORE_DOWN(
-+					port->usb3_port_fake);
-+		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
-+
-+		usleep_range(100, 200);
-+
-+		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
-+		value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN_EARLY(
-+					port->usb3_port_fake);
-+		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
-+
-+		usleep_range(100, 200);
-+
-+		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
-+		value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN(
-+					port->usb3_port_fake);
-+		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
-+	}
-+
- 	value = padctl_readl(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL0);
- 	value &= ~((XUSB_PADCTL_USB2_BIAS_PAD_CTL0_HS_SQUELCH_LEVEL_MASK <<
- 		    XUSB_PADCTL_USB2_BIAS_PAD_CTL0_HS_SQUELCH_LEVEL_SHIFT) |
-@@ -1086,6 +1115,32 @@ static int tegra210_usb2_phy_power_off(struct phy *phy)
- 
- 	mutex_lock(&padctl->lock);
- 
-+	if (port->usb3_port_fake != -1) {
-+		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
-+		value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN_EARLY(
-+					port->usb3_port_fake);
-+		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
-+
-+		usleep_range(100, 200);
-+
-+		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
-+		value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN(
-+					port->usb3_port_fake);
-+		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
-+
-+		usleep_range(250, 350);
-+
-+		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
-+		value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_VCORE_DOWN(
-+					port->usb3_port_fake);
-+		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
-+
-+		value = padctl_readl(padctl, XUSB_PADCTL_SS_PORT_MAP);
-+		value |= XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP(port->usb3_port_fake,
-+					XUSB_PADCTL_SS_PORT_MAP_PORT_DISABLED);
-+		padctl_writel(padctl, value, XUSB_PADCTL_SS_PORT_MAP);
-+	}
-+
- 	if (WARN_ON(pad->enable == 0))
- 		goto out;
- 
-@@ -2051,6 +2106,7 @@ const struct tegra_xusb_padctl_soc tegra210_xusb_padctl_soc = {
- 		},
- 	},
- 	.ops = &tegra210_xusb_padctl_ops,
-+	.need_fake_usb3_port = true,
+ struct tegra210_xusb_fuse_calibration {
+ 	u32 hs_curr_level[4];
+ 	u32 hs_term_range_adj;
+@@ -2024,6 +2034,53 @@ static const struct tegra_xusb_port_ops tegra210_usb3_port_ops = {
+ 	.map = tegra210_usb3_port_map,
  };
- EXPORT_SYMBOL_GPL(tegra210_xusb_padctl_soc);
  
-diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-index 0417213..6618db7 100644
---- a/drivers/phy/tegra/xusb.c
-+++ b/drivers/phy/tegra/xusb.c
-@@ -808,9 +808,66 @@ static void __tegra_xusb_remove_ports(struct tegra_xusb_padctl *padctl)
- 	}
- }
- 
-+static int tegra_xusb_find_unused_usb3_port(struct tegra_xusb_padctl *padctl)
++static int tegra210_xusb_padctl_vbus_override(struct tegra_xusb_padctl *padctl,
++					      bool status)
 +{
-+	struct device_node *np;
-+	unsigned int i;
++	u32 value;
 +
-+	for (i = 0; i < padctl->soc->ports.usb3.count; i++) {
-+		np = tegra_xusb_find_port_node(padctl, "usb3", i);
-+		if (!np || !of_device_is_available(np))
-+			return i;
-+	}
++	dev_dbg(padctl->dev, "%s vbus override\n", status ? "set" : "clear");
 +
-+	return -ENODEV;
++	value = padctl_readl(padctl, XUSB_PADCTL_USB2_VBUS_ID);
++
++	if (status) {
++		value |= XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON;
++		value &= ~(XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_MASK <<
++			   XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT);
++		value |= XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_FLOATING <<
++			 XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT;
++	} else
++		value &= ~XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON;
++
++	padctl_writel(padctl, value, XUSB_PADCTL_USB2_VBUS_ID);
++
++	return 0;
 +}
 +
-+static bool tegra_xusb_usb3_port_has_companion(struct tegra_xusb_padctl *padctl,
-+							     unsigned int index)
++static int tegra210_utmi_port_reset(struct phy *phy)
 +{
-+	unsigned int i;
-+	struct tegra_xusb_usb3_port *usb3;
++	struct tegra_xusb_padctl *padctl;
++	struct tegra_xusb_lane *lane;
++	struct device *dev;
++	u32 value;
 +
-+	for (i = 0; i < padctl->soc->ports.usb3.count; i++) {
-+		usb3 = tegra_xusb_find_usb3_port(padctl, i);
-+		if (usb3 && usb3->port == index)
-+			return true;
-+	}
++	lane = phy_get_drvdata(phy);
++	padctl = lane->pad->padctl;
++	dev = padctl->dev;
 +
-+	return false;
-+}
++	value = padctl_readl(padctl,
++			     XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL0(0));
 +
-+static int tegra_xusb_update_usb3_fake_port(struct tegra_xusb_usb2_port *usb2)
-+{
-+	int fake;
-+
-+	/* Disable usb3_port_fake usage by default and assign if needed */
-+	usb2->usb3_port_fake = -1;
-+
-+	if ((usb2->mode == USB_DR_MODE_OTG ||
-+	     usb2->mode == USB_DR_MODE_PERIPHERAL) &&
-+		!tegra_xusb_usb3_port_has_companion(usb2->base.padctl,
-+						    usb2->base.index)) {
-+		fake = tegra_xusb_find_unused_usb3_port(usb2->base.padctl);
-+
-+		if (fake < 0) {
-+			dev_err(&usb2->base.dev, "no unused USB3 ports available\n");
-+			return -ENODEV;
-+		}
-+
-+		dev_dbg(&usb2->base.dev, "Found unused usb3 port: %d\n",
-+					 fake);
-+		usb2->usb3_port_fake = fake;
-+		tegra_xusb_find_unused_usb3_port(usb2->base.padctl);
++	if ((value & XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIP) ||
++	    (value & XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIN)) {
++		tegra210_xusb_padctl_vbus_override(padctl, false);
++		tegra210_xusb_padctl_vbus_override(padctl, true);
++		return 1;
 +	}
 +
 +	return 0;
 +}
 +
- static int tegra_xusb_setup_ports(struct tegra_xusb_padctl *padctl)
+ static int
+ tegra210_xusb_read_fuse_calibration(struct tegra210_xusb_fuse_calibration *fuse)
  {
- 	struct tegra_xusb_port *port;
-+	struct tegra_xusb_usb2_port *usb2;
- 	unsigned int i;
- 	int err = 0;
+@@ -2086,6 +2143,8 @@ static const struct tegra_xusb_padctl_ops tegra210_xusb_padctl_ops = {
+ 	.remove = tegra210_xusb_padctl_remove,
+ 	.usb3_set_lfps_detect = tegra210_usb3_set_lfps_detect,
+ 	.hsic_set_idle = tegra210_hsic_set_idle,
++	.vbus_override = tegra210_xusb_padctl_vbus_override,
++	.utmi_port_reset = tegra210_utmi_port_reset,
+ };
  
-@@ -840,6 +897,18 @@ static int tegra_xusb_setup_ports(struct tegra_xusb_padctl *padctl)
- 			goto remove_ports;
- 	}
+ const struct tegra_xusb_padctl_soc tegra210_xusb_padctl_soc = {
+diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+index 6618db7..e333532 100644
+--- a/drivers/phy/tegra/xusb.c
++++ b/drivers/phy/tegra/xusb.c
+@@ -1133,6 +1133,28 @@ int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *padctl,
+ }
+ EXPORT_SYMBOL_GPL(tegra_xusb_padctl_usb3_set_lfps_detect);
  
-+	if (padctl->soc->need_fake_usb3_port) {
-+		for (i = 0; i < padctl->soc->ports.usb2.count; i++) {
-+			usb2 = tegra_xusb_find_usb2_port(padctl, i);
-+			if (!usb2)
-+				continue;
++int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
++							bool val)
++{
++	if (padctl->soc->ops->vbus_override)
++		return padctl->soc->ops->vbus_override(padctl, val);
 +
-+			err = tegra_xusb_update_usb3_fake_port(usb2);
-+			if (err < 0)
-+				goto remove_ports;
-+		}
-+	}
++	return -ENOTSUPP;
++}
++EXPORT_SYMBOL_GPL(tegra_xusb_padctl_set_vbus_override);
 +
- 	list_for_each_entry(port, &padctl->ports, list) {
- 		err = port->ops->enable(port);
- 		if (err < 0)
++int tegra_phy_xusb_utmi_port_reset(struct phy *phy)
++{
++	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
++	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
++
++	if (padctl->soc->ops->utmi_port_reset)
++		return padctl->soc->ops->utmi_port_reset(phy);
++
++	return -ENOTSUPP;
++}
++EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_port_reset);
++
+ MODULE_AUTHOR("Thierry Reding <treding@nvidia.com>");
+ MODULE_DESCRIPTION("Tegra XUSB Pad Controller driver");
+ MODULE_LICENSE("GPL v2");
 diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
-index e0028b9f..26dd6d2 100644
+index 26dd6d2..cb22a70 100644
 --- a/drivers/phy/tegra/xusb.h
 +++ b/drivers/phy/tegra/xusb.h
-@@ -299,6 +299,7 @@ struct tegra_xusb_usb2_port {
- 	struct regulator *supply;
- 	enum usb_dr_mode mode;
- 	bool internal;
-+	int usb3_port_fake;
+@@ -381,6 +381,8 @@ struct tegra_xusb_padctl_ops {
+ 			     unsigned int index, bool idle);
+ 	int (*usb3_set_lfps_detect)(struct tegra_xusb_padctl *padctl,
+ 				    unsigned int index, bool enable);
++	int (*vbus_override)(struct tegra_xusb_padctl *padctl, bool set);
++	int (*utmi_port_reset)(struct phy *phy);
  };
  
- static inline struct tegra_xusb_usb2_port *
-@@ -397,6 +398,7 @@ struct tegra_xusb_padctl_soc {
- 
- 	const char * const *supply_names;
- 	unsigned int num_supplies;
-+	bool need_fake_usb3_port;
- };
- 
- struct tegra_xusb_padctl {
+ struct tegra_xusb_padctl_soc {
+diff --git a/include/linux/phy/tegra/xusb.h b/include/linux/phy/tegra/xusb.h
+index 8e1a57a..9b8351c 100644
+--- a/include/linux/phy/tegra/xusb.h
++++ b/include/linux/phy/tegra/xusb.h
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2016, NVIDIA CORPORATION.  All rights reserved.
++ * Copyright (c) 2016-2019, NVIDIA CORPORATION.  All rights reserved.
+  *
+  * This program is free software; you can redistribute it and/or modify it
+  * under the terms and conditions of the GNU General Public License,
+@@ -26,5 +26,7 @@ int tegra_xusb_padctl_hsic_set_idle(struct tegra_xusb_padctl *padctl,
+ 				    unsigned int port, bool idle);
+ int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *padctl,
+ 					   unsigned int port, bool enable);
+-
++int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
++					bool val);
++int tegra_phy_xusb_utmi_port_reset(struct phy *phy);
+ #endif /* PHY_TEGRA_XUSB_H */
 -- 
 2.7.4
 
