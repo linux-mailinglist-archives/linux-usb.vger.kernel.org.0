@@ -2,81 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E0E1FFB5
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 08:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C481FFFE
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 09:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbfEPGkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 May 2019 02:40:39 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:4938 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726674AbfEPGki (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 May 2019 02:40:38 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cdd05ec0000>; Wed, 15 May 2019 23:40:44 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 15 May 2019 23:40:37 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Wed, 15 May 2019 23:40:37 -0700
-Received: from HQMAIL106.nvidia.com (172.18.146.12) by HQMAIL103.nvidia.com
- (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 May
- 2019 06:40:36 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL106.nvidia.com
- (172.18.146.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 16 May 2019 06:40:37 +0000
-Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.65.118]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cdd05e2000b>; Wed, 15 May 2019 23:40:37 -0700
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [Patch V3 8/8] arm64: defconfig: Enable tegra XUDC driver
-Date:   Thu, 16 May 2019 12:09:32 +0530
-Message-ID: <1557988772-15406-9-git-send-email-nkristam@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
-References: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
-X-NVConfidentiality: public
+        id S1726732AbfEPHKq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 May 2019 03:10:46 -0400
+Received: from mail01.preh.com ([80.149.130.22]:31508 "EHLO mail01.preh.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726319AbfEPHKq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 May 2019 03:10:46 -0400
+From:   Kloetzke Jan <Jan.Kloetzke@preh.de>
+To:     "davem@davemloft.net" <davem@davemloft.net>,
+        "oneukum@suse.com" <oneukum@suse.com>
+CC:     "jan@kloetzke.net" <jan@kloetzke.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2] usbnet: fix kernel crash after disconnect
+Thread-Topic: [PATCH v2] usbnet: fix kernel crash after disconnect
+Thread-Index: AQHU/18dyV1WEybtp0WgCkArhegqtKZcDN8AgAGbOgCAD6SEgA==
+Date:   Thu, 16 May 2019 07:10:30 +0000
+Message-ID: <1557990629.19453.7.camel@preh.de>
+References: <1556563688.20085.31.camel@suse.com>
+         <20190430141440.9469-1-Jan.Kloetzke@preh.de>
+         <20190505.004556.492323065607253635.davem@davemloft.net>
+         <1557130666.12778.3.camel@suse.com>
+In-Reply-To: <1557130666.12778.3.camel@suse.com>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-tm-snts-smtp: CD001CF085DFE775677F9BE5A836228302ED75D7614BA2027CD81CD33F5F1FEF2000:8
+x-exclaimer-md-config: 142fe46c-4d13-4ac1-9970-1f36f118897a
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6E1D6F6A821CE24589B802D64EFA922E@preh.de>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1557988844; bh=SJ9GL3oTbSiq7TpUURiON93iiOObqYKhQkoJJ6rnBVI=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=lJ7GdhG3qX/g0l6DYv3gOYiwIJCQ3AJ9lEUIFOkRwlaS9Yl00Jh0IL05xVWq9lhOE
-         GlMllGCSVtBE76R9m6DVv0v0Otpe4eCR2UvjWR5RkBg1btmAfzBHt0njbYrpeJQHhO
-         2SraorU1SMoDvV3sZ8NE5FYZp+j6gnv9yxu+QhlOYNlhII12sMqZYU3vGYa66PnTCU
-         6YqA3tpuuD+dcNurDZNGgBexUKjE0gOSAjOzohosWU6HeOk1GLmGsNW0zMJDsnGNU7
-         qtEVp6A3F2Zqeccu3ogr69bDzRAY07oFO721rpWhal95Wy7t23RAtiT2x5bQFsz9S5
-         TGUEv0CO1IQjQ==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=preh.de; s=key1; c=relaxed/relaxed;
+ h=from:to:cc:subject:date:message-id:references:content-type:mime-version;
+ bh=HDjNlSGE1pTbaN6s5Om8695edfLLIhm71aZmgJAjO2E=;
+ b=kZYWIs4EZuot34elPr1rGsqg4H3PS2mTzoi1qB2cJ7SNCHKSSxopR4JYxLc2pp3AVYQIIUvF+FGp
+        OwQCryEkx65/3ZvoFuPMRf67/B4ONhl8s8uSNKoJyX2NGsEm9Oyw0jO5g6+uMVt5EU+EKNT3zDCy
+        MAMhTT6YOoReLBNbOyRLQUHfTnAViQYofql2kEChxUYPxVmES3zEysViKeIu0TNTiLpak7n6RwNX
+        kgnaghX1T3rbSGDomkcTkPbNCddQSkST9GylZhdH7vVlHC7E+BTENCkW5DzLxne++zRWJPrq48oj
+        QgRObLnHSmB6/O4NmdyTQTqOdstUp0uRaZlD+Q==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable support for Nvidia XUSB device mode controller driver.
-
-Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index b605b7f..bf1437c 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -575,6 +575,7 @@ CONFIG_USB_ULPI=y
- CONFIG_USB_GADGET=y
- CONFIG_USB_RENESAS_USBHS_UDC=m
- CONFIG_USB_RENESAS_USB3=m
-+CONFIG_USB_TEGRA_XUDC=y
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=32
- CONFIG_MMC_ARMMMCI=y
--- 
-2.7.4
-
+QW0gTW9udGFnLCBkZW4gMDYuMDUuMjAxOSwgMTA6MTcgKzAyMDAgc2NocmllYiBPbGl2ZXIgTmV1
+a3VtOg0KPiBPbiBTbywgMjAxOS0wNS0wNSBhdCAwMDo0NSAtMDcwMCwgRGF2aWQgTWlsbGVyIHdy
+b3RlOg0KPiA+IEZyb206IEtsb2V0emtlIEphbiA8SmFuLktsb2V0emtlQHByZWguZGU+DQo+ID4g
+RGF0ZTogVHVlLCAzMCBBcHIgMjAxOSAxNDoxNTowNyArMDAwMA0KPiA+IA0KPiA+ID4gQEAgLTE0
+MzEsNiArMTQzMiwxMSBAQCBuZXRkZXZfdHhfdCB1c2JuZXRfc3RhcnRfeG1pdCAoc3RydWN0IHNr
+X2J1ZmYgKnNrYiwNCj4gPiA+ICAgICAgICAgICAgICAgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgm
+ZGV2LT50eHEubG9jaywgZmxhZ3MpOw0KPiA+ID4gICAgICAgICAgICAgICBnb3RvIGRyb3A7DQo+
+ID4gPiAgICAgICB9DQo+ID4gPiArICAgICBpZiAoV0FSTl9PTihuZXRpZl9xdWV1ZV9zdG9wcGVk
+KG5ldCkpKSB7DQo+ID4gPiArICAgICAgICAgICAgIHVzYl9hdXRvcG1fcHV0X2ludGVyZmFjZV9h
+c3luYyhkZXYtPmludGYpOw0KPiA+ID4gKyAgICAgICAgICAgICBzcGluX3VubG9ja19pcnFyZXN0
+b3JlKCZkZXYtPnR4cS5sb2NrLCBmbGFncyk7DQo+ID4gPiArICAgICAgICAgICAgIGdvdG8gZHJv
+cDsNCj4gPiA+ICsgICAgIH0NCj4gPiANCj4gPiBJZiB0aGlzIGlzIGtub3duIHRvIGhhcHBlbiBh
+bmQgaXMgZXhwZWN0ZWQsIHRoZW4gd2Ugc2hvdWxkIG5vdCB3YXJuLg0KPiA+IA0KPiANCj4gSGks
+DQo+IA0KPiB5ZXMgdGhpcyBpcyB0aGUgcG9pbnQuIENhbiBuZG9fc3RhcnRfeG1pdCgpIGFuZCBu
+ZG9fc3RvcCgpIHJhY2U/DQo+IElmIG5vdCwgd2h5IGRvZXMgdGhlIHBhdGNoIGZpeCB0aGUgb2Jz
+ZXJ2ZWQgaXNzdWUgYW5kIHdoYXQNCj4gcHJldmVudHMgdGhlIHJhY2U/IFNvbWV0aGluZyBpcyBu
+b3QgY2xlYXIgaGVyZS4NCg0KRGF2ZSwgY291bGQgeW91IHNoZWQgc29tZSBsaWdodCBvbiBPbGl2
+ZXJzIHF1ZXN0aW9uPyBJZiB0aGUgcmFjZSBjYW4NCmhhcHBlbiB0aGVuIHdlIGNhbiBzdGljayB0
+byB2MSBiZWNhdXNlIHRoZSBXQVJOX09OIGlzIGluZGVlZCBwb2ludGxlc3MuDQpPdGhlcndpc2Ug
+aXQncyBub3QgY2xlYXIgd2h5IGl0IG1hZGUgdGhlIHByb2JsZW0gZ28gYXdheSBmb3IgdXMgYW5k
+IHYyDQptYXkgYmUgdGhlIGJldHRlciBvcHRpb24uLi4NCg0KUmVnYXJkcywNCkphbg==
