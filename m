@@ -2,108 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F35220AE9
-	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 17:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719AD20AF5
+	for <lists+linux-usb@lfdr.de>; Thu, 16 May 2019 17:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727037AbfEPPP4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 May 2019 11:15:56 -0400
-Received: from ste-pvt-msa2.bahnhof.se ([213.80.101.71]:25841 "EHLO
-        ste-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726790AbfEPPP4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 May 2019 11:15:56 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 308A33F7BB;
-        Thu, 16 May 2019 17:15:49 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 tagged_above=-999 required=6.31
-        tests=[ALL_TRUSTED=-1, BAYES_00=-1.9] autolearn=ham autolearn_force=no
-Received: from ste-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (ste-ftg-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id rg8RyAX5x_3t; Thu, 16 May 2019 17:15:48 +0200 (CEST)
-Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
-        (Authenticated sender: mb547485)
-        by ste-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 7DC0A3F5A0;
-        Thu, 16 May 2019 17:15:48 +0200 (CEST)
-Date:   Thu, 16 May 2019 17:15:48 +0200
-From:   Fredrik Noring <noring@nocrew.org>
-To:     Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, "hch@lst.de" <hch@lst.de>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "marex@denx.de" <marex@denx.de>,
-        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
- rework
-Message-ID: <20190516151548.GB53952@sx9>
-References: <20190514143807.7745-1-laurentiu.tudor@nxp.com>
- <9d34015d-c219-179b-3141-4b0de3530ac3@arm.com>
- <20190514182931.GA2559@sx9>
- <0e5f3b86-7a80-eec7-691b-34a123194208@nxp.com>
- <20190515162858.GB17162@sx9>
- <ed63c117-610c-ea49-f45e-727be220745f@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ed63c117-610c-ea49-f45e-727be220745f@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727144AbfEPPUB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 May 2019 11:20:01 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:42433 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726687AbfEPPUB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 May 2019 11:20:01 -0400
+Received: by mail-pl1-f195.google.com with SMTP id x15so1785275pln.9;
+        Thu, 16 May 2019 08:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=oi+wlm47PEX7LyKDr/FEMS8F29TvHMLAHthlHyHgCw4=;
+        b=g2znzTu0gAG7G7gDzIQrI4gTupdPnh4NeAzhX2A8m+ERbraut5l2AYG914rVpZXM9C
+         8QDH1tidHNaLE3RuDUJLL67Y97PaDSVNUmbL+oQD9EJ5Pk+DOQ4wEO6fXwAURqVt5uju
+         u7jkL7O5uVvHON/Idhpkm2K/UjmDxUAAxDep0uJKz1dgRsBY4oKfRmRqpz4v71rvb/K6
+         GOSmc67yXMAcPaiWnfkucLJ1w/OOTVyWGYtpdHLaIppb5FRboJ4ZML91mBRf6ixcKQGV
+         PVvyjC1z0+aqOlvUi6shhciVNjv+6H8T20h7YgKIk6UyxwS9X5g8ZyaPtSNhtQKlvkXm
+         dRvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=oi+wlm47PEX7LyKDr/FEMS8F29TvHMLAHthlHyHgCw4=;
+        b=hxLr3mqFG67GZDyiHeZd9E3oPAOKACxPhy9CGnJBL5KqWfp90BFJ4KxXIHVssrn8fy
+         FUsbw61hBdICjD5/6yi001SaKCe2izi5YGTpfjshw42p70WyklF8SZEfC1YH5olNf4WK
+         8CPjPDndXeehC5uRGTyd3wNHSI/Cla7+OCRc7rX8emPVZgAhgUTXV7Ibm4GkQl+JLshZ
+         Zwlik92i5Z7KSfd70RbLWaeL1f4tyR34IH3CgpJGHIIb6nGyE7E9uHj3sZLna/dg8uj6
+         n3hkrYjHBQk4/5i6hKlhaoS+JsBqSHnpe4O6keUEFg8Dk6UCm5Pi7H7LwIS7UcosFctH
+         L15Q==
+X-Gm-Message-State: APjAAAU69PppWxjXsg5udyVtioOyQBMGrOBwj479EOaPu4UH1Hx/CbCj
+        1ZJisESW92GWmEYw0QldEI0=
+X-Google-Smtp-Source: APXvYqzIVNDe0Qc03gv4ha2vYaM6bDHoR6Gdz8UlOug8N+KtKW9+9xrWTJL6njhydMem6p/BpBKGTw==
+X-Received: by 2002:a17:902:6bc2:: with SMTP id m2mr50196239plt.24.1558020000781;
+        Thu, 16 May 2019 08:20:00 -0700 (PDT)
+Received: from hydra-Latitude-E5440.qualcomm.com (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com. [103.229.18.19])
+        by smtp.gmail.com with ESMTPSA id q20sm6494464pgq.66.2019.05.16.08.19.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 May 2019 08:20:00 -0700 (PDT)
+From:   parna.naveenkumar@gmail.com
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Naveen Kumar Parna <parna.naveenkumar@gmail.com>
+Subject: [PATCH] USB: OHCI: remove space before open square bracket '['
+Date:   Thu, 16 May 2019 20:49:23 +0530
+Message-Id: <20190516151923.16466-1-parna.naveenkumar@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurentiu,
+From: Naveen Kumar Parna <parna.naveenkumar@gmail.com>
 
-> I took your code, added the missing mapping and placed it in a patch. 
-> Please see attached (compile tested only).
+This patch removes following checkpatch.pl error in usb/host/ohci-pci.c file.
+ERROR: space prohibited before open square bracket '['
 
-Thanks! Unfortunately, the OHCI fails with errors such as
+Signed-off-by: Naveen Kumar Parna <parna.naveenkumar@gmail.com>
+---
+ drivers/usb/host/ohci-pci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	usb 1-1: device descriptor read/64, error -12
+diff --git a/drivers/usb/host/ohci-pci.c b/drivers/usb/host/ohci-pci.c
+index fbcd34911025..a033f7d855e0 100644
+--- a/drivers/usb/host/ohci-pci.c
++++ b/drivers/usb/host/ohci-pci.c
+@@ -274,7 +274,7 @@ static const struct ohci_driver_overrides pci_overrides __initconst = {
+ 	.reset =		ohci_pci_reset,
+ };
+ 
+-static const struct pci_device_id pci_ids [] = { {
++static const struct pci_device_id pci_ids[] = { {
+ 	/* handle any USB OHCI controller */
+ 	PCI_DEVICE_CLASS(PCI_CLASS_SERIAL_USB_OHCI, ~0),
+ 	.driver_data =	(unsigned long) &ohci_pci_hc_driver,
+-- 
+2.17.1
 
-that I tracked down to the calls
-
-	   hub_port_init
-	-> usb_control_msg
-	-> usb_internal_control_msg
-	-> usb_start_wait_urb
-	-> usb_submit_urb
-	-> usb_hcd_submit_urb
-	-> hcd->driver->urb_enqueue
-	-> ohci_urb_enqueue
-	-> ed_get
-	-> ed_alloc
-	-> dma_pool_zalloc
-	-> dma_pool_alloc
-	-> pool_alloc_page,
-
-which returns NULL. Then I noticed
-
-	/* pool_alloc_page() might sleep, so temporarily drop &pool->lock */
-
-that might be a problem considering that the HCD handles pool memory in
-IRQ handlers, for instance:
-
-	   do_IRQ
-	-> generic_handle_irq
-	-> handle_level_irq
-	-> handle_irq_event
-	-> handle_irq_event_percpu
-	-> __handle_irq_event_percpu
-	-> usb_hcd_irq
-	-> ohci_irq
-	-> ohci_work
-	-> finish_urb
-	-> __usb_hcd_giveback_urb
-	-> usb_hcd_unmap_urb_for_dma
-	-> hcd_buffer_free
-
-Also, DMA_BUFFER_SIZE in ohci-ps2.c is only 256 KiB in total. Is the new
-pool implementation at least as efficient as the previous one?
-
-Fredrik
