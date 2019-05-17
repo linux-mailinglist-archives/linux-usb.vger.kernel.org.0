@@ -2,109 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FD82192B
-	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2019 15:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C9221943
+	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2019 15:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728963AbfEQN11 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 May 2019 09:27:27 -0400
-Received: from mga07.intel.com ([134.134.136.100]:27144 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728333AbfEQN11 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 May 2019 09:27:27 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 May 2019 06:27:26 -0700
-X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 17 May 2019 06:27:21 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 17 May 2019 16:27:21 +0300
-Date:   Fri, 17 May 2019 16:27:21 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Biju Das <biju.das@bp.renesas.com>,
-        Yu Chen <chenyu56@huawei.com>, Min Guo <min.guo@mediatek.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-Subject: Re: [v3 PATCH] dt-binding: usb: add usb-role-switch property
-Message-ID: <20190517132721.GB1887@kuha.fi.intel.com>
-References: <c3596e996c9ab39c6b9bc14b93309244c4a55014.1557306151.git.chunfeng.yun@mediatek.com>
+        id S1729002AbfEQNhg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 May 2019 09:37:36 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:8920 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728464AbfEQNhg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 May 2019 09:37:36 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cdeb9240001>; Fri, 17 May 2019 06:37:40 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 17 May 2019 06:37:34 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 17 May 2019 06:37:34 -0700
+Received: from [10.19.120.147] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 17 May
+ 2019 13:37:31 +0000
+Subject: Re: [PATCH v10 1/2] usb: xhci : Add devaddr in struct usb_device
+To:     Alan Stern <stern@rowland.harvard.edu>
+References: <Pine.LNX.4.44L0.1905161054250.1280-100000@iolanthe.rowland.org>
+CC:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <kai.heng.feng@canonical.com>, <drinkcat@chromium.org>,
+        <keescook@chromium.org>, <nsaenzjulienne@suse.de>,
+        <jflat@chromium.org>, <malat@debian.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   Jim Lin <jilin@nvidia.com>
+Message-ID: <63b291c6-b7bc-7796-412e-03f151d1b1a0@nvidia.com>
+Date:   Fri, 17 May 2019 21:37:22 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3596e996c9ab39c6b9bc14b93309244c4a55014.1557306151.git.chunfeng.yun@mediatek.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <Pine.LNX.4.44L0.1905161054250.1280-100000@iolanthe.rowland.org>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL108.nvidia.com (172.18.146.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1558100261; bh=N0Nend43fiGw+jZLFyUCiqfXhdL3evNRULYfXIR/Y9M=;
+        h=X-PGP-Universal:Subject:To:References:CC:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding;
+        b=e3fMuHrYyRfTrVd/+zJS9bL3Qk4s5pZTD28Cymw2Q7X/TA42ZJzAgvTd8ZYSQ2ODD
+         DtcIVd7X+CFEEMe+ZQDEELtKFfgOyJKPCDqcDuEFDLh5tLFcKAl83Hmbb+oXZs6nQe
+         P0qDQLmE+vsmXTyZuuUgO8II4U1Jj2b8pInTpBt8zFFTdvGNk5hzpJey/xAjX8CGnU
+         PDnkgR8M9jfl6HMiYJU97DH8qpJmYxHwuSmP4x+2cX8kZC/r2mCbZky5AGoaBE3kaq
+         B9GQGQ1LY7w6b5hLts2h5pA8T9XUKdM6Lkj33MbjRxsyqX7m7BBy20nfs2AD3ij20R
+         u6TD6BgiS38OQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 08, 2019 at 05:17:44PM +0800, Chunfeng Yun wrote:
-> Add a property usb-role-switch to tell the driver that use
-> USB Role Switch framework to handle the role switch,
-> it's useful when the driver has already supported other ways,
-> such as extcon framework etc.
-> 
-> Cc: Biju Das <biju.das@bp.renesas.com>
-> Cc: Yu Chen <chenyu56@huawei.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Sorry, something went wrong.
 
-Who is meant to pick this? Can you include this in your series where
-you introduce that USB Type-B GPIO connector driver?
+The result is not as expected in one of the tests.
 
-FWIW:
+Abandon this series of patches.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Will debug and resubmit later.
 
-> ---
-> v3:
->     add property type, modify description suggested by Heikki
-> 
-> v2:
->     describe it in terms of h/w functionality suggested by Rob
-> 
-> v1:
->     the property is discussed in:
->     [v2,2/7] dt-bindings: usb: renesas_usb3: add usb-role-switch property
->     https://patchwork.kernel.org/patch/10852497/
-> 
->     Mediatek and Hisilicon also try to use it:
->     [v4,3/6] dt-bindings: usb: mtu3: add properties about USB Role Switch
->     https://patchwork.kernel.org/patch/10918385/
->     [v4,6/6] usb: mtu3: register a USB Role Switch for dual role mode
->     https://patchwork.kernel.org/patch/10918367/
-> 
->     [v6,10/13] usb: dwc3: Registering a role switch in the DRD code
->     https://patchwork.kernel.org/patch/10909981/
-> ---
->  Documentation/devicetree/bindings/usb/generic.txt | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/generic.txt b/Documentation/devicetree/bindings/usb/generic.txt
-> index 0a74ab8dfdc2..cf5a1ad456e6 100644
-> --- a/Documentation/devicetree/bindings/usb/generic.txt
-> +++ b/Documentation/devicetree/bindings/usb/generic.txt
-> @@ -30,6 +30,10 @@ Optional properties:
->  			optional for OTG device.
->   - adp-disable: tells OTG controllers we want to disable OTG ADP, ADP is
->  			optional for OTG device.
-> + - usb-role-switch: boolean, indicates that the device is capable of assigning
-> +			the USB data role (USB host or USB device) for a given
-> +			USB connector, such as Type-C, Type-B(micro).
-> +			see connector/usb-connector.txt.
->  
->  This is an attribute to a USB controller such as:
->  
-> -- 
-> 2.21.0
 
-thanks,
+Jim
 
--- 
-heikki
+
+On 2019=E5=B9=B405=E6=9C=8816=E6=97=A5 22:56, Alan Stern wrote:
+> On Thu, 16 May 2019, Jim Lin wrote:
+>
+>> The Clear_TT_Buffer request sent to the hub includes the address of
+>> the LS/FS child device in wValue field. usb_hub_clear_tt_buffer()
+>> uses udev->devnum to set the address wValue. This won't work for
+>> devices connected to xHC.
+>>
+>> For other host controllers udev->devnum is the same as the address of
+>> the usb device, chosen and set by usb core. With xHC the controller
+>> hardware assigns the address, and won't be the same as devnum.
+>>
+>> Here we add devaddr in "struct usb_device" for
+>> usb_hub_clear_tt_buffer() to use.
+>>
+>> Signed-off-by: Jim Lin <jilin@nvidia.com>
+>> ---
+> Aside from the "xhci:" part of the Subject line (it's not really
+> appropriate because this is a modification of the USB core more than of
+> the xhci-hcd driver),
+>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+>
+>
+>> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
+>>      , remove its claiming in xhci.h
+>> v3: Add description for clearing_tt (xhci.h)
+>> v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
+>>      to protect for Clear_TT_Buffer to be run serially.
+>>      Remove xhci_clear_tt_buffer_complete as it's not necessary.
+>>      Same reason as the above.
+>>      Extend usb_hub_clear_tt_buffer parameter
+>> v5: Not extending usb_hub_clear_tt_buffer parameter
+>>      Add description.
+>> v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
+>> v7: Add devaddr field in "struct usb_device"
+>> v8: split as two patches, change type from int to u8 for devaddr.
+>> v9: Use pahole to find place to put devaddr in struct usb_device.
+>>      Remove space between type cast and variable.
+>>      hub.c changed from v8
+>>      clear->devinfo |=3D (u16) (udev->devaddr << 4);
+>>      to
+>>      clear->devinfo |=3D ((u16)udev->devaddr) << 4;
+>>      to solve a problem if devaddr is larger than 16.
+>> v10 Initialize devaddr in xhci_setup_device()
+>>      Move devaddr to be below "u8 level"
+>>
+>>   drivers/usb/core/hub.c  | 4 +++-
+>>   drivers/usb/host/xhci.c | 1 +
+>>   include/linux/usb.h     | 2 ++
+>>   3 files changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+>> index 15a2934dc29d..0d4b289be103 100644
+>> --- a/drivers/usb/core/hub.c
+>> +++ b/drivers/usb/core/hub.c
+>> @@ -873,7 +873,7 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
+>>   	/* info that CLEAR_TT_BUFFER needs */
+>>   	clear->tt =3D tt->multi ? udev->ttport : 1;
+>>   	clear->devinfo =3D usb_pipeendpoint (pipe);
+>> -	clear->devinfo |=3D udev->devnum << 4;
+>> +	clear->devinfo |=3D ((u16)udev->devaddr) << 4;
+>>   	clear->devinfo |=3D usb_pipecontrol(pipe)
+>>   			? (USB_ENDPOINT_XFER_CONTROL << 11)
+>>   			: (USB_ENDPOINT_XFER_BULK << 11);
+>> @@ -2125,6 +2125,8 @@ static void update_devnum(struct usb_device *udev,=
+ int devnum)
+>>   	/* The address for a WUSB device is managed by wusbcore. */
+>>   	if (!udev->wusb)
+>>   		udev->devnum =3D devnum;
+>> +	if (!udev->devaddr)
+>> +		udev->devaddr =3D (u8)devnum;
+>>   }
+>>  =20
+>>   static void hub_free_dev(struct usb_device *udev)
+>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>> index 7fa58c99f126..68b393e5a453 100644
+>> --- a/drivers/usb/host/xhci.c
+>> +++ b/drivers/usb/host/xhci.c
+>> @@ -4096,6 +4096,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, =
+struct usb_device *udev,
+>>   	/* Zero the input context control for later use */
+>>   	ctrl_ctx->add_flags =3D 0;
+>>   	ctrl_ctx->drop_flags =3D 0;
+>> +	udev->devaddr =3D (u8)(le32_to_cpu(slot_ctx->dev_state) & DEV_ADDR_MAS=
+K);
+>>  =20
+>>   	xhci_dbg_trace(xhci, trace_xhci_dbg_address,
+>>   		       "Internal device address =3D %d",
+>> diff --git a/include/linux/usb.h b/include/linux/usb.h
+>> index 4229eb74bd2c..af68e31118f8 100644
+>> --- a/include/linux/usb.h
+>> +++ b/include/linux/usb.h
+>> @@ -580,6 +580,7 @@ struct usb3_lpm_parameters {
+>>    * @bus_mA: Current available from the bus
+>>    * @portnum: parent port number (origin 1)
+>>    * @level: number of USB hub ancestors
+>> + * @devaddr: device address, XHCI: assigned by HW, others: same as devn=
+um
+>>    * @can_submit: URBs may be submitted
+>>    * @persist_enabled:  USB_PERSIST enabled for this device
+>>    * @have_langid: whether string_langid is valid
+>> @@ -663,6 +664,7 @@ struct usb_device {
+>>   	unsigned short bus_mA;
+>>   	u8 portnum;
+>>   	u8 level;
+>> +	u8 devaddr;
+>>  =20
+>>   	unsigned can_submit:1;
+>>   	unsigned persist_enabled:1;
+>>
+
