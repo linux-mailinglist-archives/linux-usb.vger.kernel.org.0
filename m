@@ -2,85 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3DF21BA6
-	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2019 18:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ADE21BC5
+	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2019 18:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726575AbfEQQeW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 May 2019 12:34:22 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57476 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbfEQQeW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 May 2019 12:34:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Gfmhm1QndU1vd1KEmZzYh+ZiMXcMk0B49UsIQYdD2dY=; b=oncT9ByRFsu0LIodjLvi9FTXl
-        B/LOhGID0QvmlZPRC5j2ltiGoiPdmoOFyFLY1k/V3UaaLked3INDzOiNZmLdkTHFvtvHmo4iLSSpj
-        y1hqmUexfR8Qhk9mNHA+EMLMcS9HqKL5fhpZIvbNrCYJxOtPXfJt1aFxJkDlD6OLngDMoXVoh+VFQ
-        GTsJ3fHQ0lx76k6yEztxe0DGZ6CVIVq4AA8jVgmVrVXMPDfuJxIt4227EKDZrwDNye969GcP3PC5W
-        0sh5QzdtGZNC1dqNYRhwmJY4EUlsTVkaH7ZoEKyqb2FPxcDcqGZGGBZa7fkS/9sIQomHVg+gIWV8/
-        GxFHUoq5Q==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hRfoK-0002UT-DP; Fri, 17 May 2019 16:34:20 +0000
-Date:   Fri, 17 May 2019 09:34:20 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jaewon Kim <jaewon31.kim@gmail.com>
-Cc:     gregkh@linuxfoundation.org, m.szyprowski@samsung.com,
-        linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jaewon Kim <jaewon31.kim@samsung.com>, ytk.lee@samsung.com
-Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
-Message-ID: <20190517163420.GG31704@bombadil.infradead.org>
-References: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
-User-Agent: Mutt/1.9.2 (2017-12-15)
+        id S1726750AbfEQQjt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 May 2019 12:39:49 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:39612 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725933AbfEQQjt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 May 2019 12:39:49 -0400
+Received: by mail-pl1-f195.google.com with SMTP id g9so3585253plm.6;
+        Fri, 17 May 2019 09:39:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=OMoEZ2iMm1kOq3Qs5rH+hd52FI71eBsF046g/E2MoG4=;
+        b=CJHxt09Ve4GNfCw2nyh5+nY5vHHzVwJk5t9P9GyQmx9F6+HYlFpZq9I5Jb6iy2qiKI
+         drsEghEvsWogyskmWAG5l3QDbgO8XC4HpfR2nra+evhA7iW7Rv4VEPCiiXYX4J5Ghxr2
+         szisYrAC81LKk8zYnaM66YW1DHBqPuLJzAR4oultfZNfg3OmDWrTDrtYsci2gzAfiZvB
+         XAqt9ao+gx1bcoJ5gh+swcM1+1GsGw/+Fy6+KtgDTt8vYB5+THSmUYOgqbf4E/V3GdRm
+         27dOzK7px2LUlZXFsvmEbotr6EKS5Lut04cebbiuobHOicXyjRIKT14/u0DdCKYV8zeF
+         jD+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=OMoEZ2iMm1kOq3Qs5rH+hd52FI71eBsF046g/E2MoG4=;
+        b=GR7ZmnWTaHtkW1yX/4VnU4Qv2y4qnCXVb16xZSnBMHHJw+rjob5ilP785ludpMLhp7
+         RIqEmYAwMcZA4NjSbbCd5FEOtY1LDn0Jwvetj5MsSP3hAMGhqjYdZdHFsihh+5de5Pxu
+         ISHtAwHkxbliUdEUAeMet7jJ8IufjeQJ3E2DJ2+pwrUq/MkO8VVJni1rHHg+6o9/9aLP
+         1aUUivfNZXiYpewYzNsmWnfLlOANz8LrStslKbimI/vSIMGtv3vBhzEtnUxsIJjSmEQQ
+         ZiE0arQ4KQ96fZAGhVrTsKNVkkYce5lTLFQBe/wshUzgwR84WAtPFgM5iX/phCIQydGk
+         Do5A==
+X-Gm-Message-State: APjAAAUa9vFPnF9jYEm+sSFVMpT0HogqXhG3O4zSQl41OuIWTMkT55kE
+        FUswO9/S7YfUaHsQXno6u3M=
+X-Google-Smtp-Source: APXvYqwvj++poiLPmNNOh0bEC0A1ERZ1NH1sXCDX/yOY2q3pSypzQ8IyHPjqHAuPFvWicTjxW7kvSg==
+X-Received: by 2002:a17:902:b601:: with SMTP id b1mr10209235pls.117.1558111188991;
+        Fri, 17 May 2019 09:39:48 -0700 (PDT)
+Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id z7sm10513791pgh.81.2019.05.17.09.39.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 May 2019 09:39:48 -0700 (PDT)
+From:   Ajay Gupta <ajaykuee@gmail.com>
+X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
+To:     heikki.krogerus@linux.intel.com
+Cc:     linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Ajay Gupta <ajayg@nvidia.com>
+Subject: [PATCH 0/4] usb: typec: ucsi: ccg: add runtime pm support
+Date:   Fri, 17 May 2019 09:38:14 -0700
+Message-Id: <20190517163818.5007-1-ajayg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 18, 2019 at 01:02:28AM +0900, Jaewon Kim wrote:
-> Hello I don't have enough knowledge on USB core but I've wondered
-> why GFP_NOIO has been used in xhci_alloc_dev for
-> xhci_alloc_virt_device. I found commit ("a6d940dd759b xhci: Use
-> GFP_NOIO during device reset"). But can we just change GFP_NOIO
-> to __GFP_RECLAIM | __GFP_FS ?
+Hi Heikki
 
-No.  __GFP_FS implies __GFP_IO; you can't set __GFP_FS and clear __GFP_IO.
+These patches add support for runtime power management for UCSI CCGx driver.
+I have tested them with NVIDIA GPU card which has i2c interface to talk to
+CCG controller. I have added runtime pm support for the i2c bus driver as well.
 
-It seems like the problem you have is using the CMA to do DMA allocation.
-Why would you do such a thing?
+First two patches add support for runtime pm in i2c bus driver and UCSI CCGx
+driver.
 
-> Please refer to below case.
-> 
-> I got a report from Lee YongTaek <ytk.lee@samsung.com> that the
-> xhci_alloc_virt_device was too slow over 2 seconds only for one page
-> allocation.
-> 
-> 1) It was because kernel version was v4.14 and DMA allocation was
-> done from CMA(Contiguous Memory Allocator) where CMA region was
-> almost filled with file page and  CMA passes GFP down to page
-> isolation. And the page isolation only allows file page isolation only to
-> requests having __GFP_FS.
-> 
-> 2) Historically CMA was changed at v4.19 to use GFP_KERNEL
-> regardless of GFP passed to  DMA allocation through the
-> commit 6518202970c1 "(mm/cma: remove unsupported gfp_mask
-> parameter from cma_alloc()".
-> 
-> I think pre v4.19 the xhci_alloc_virt_device could be very slow
-> depending on CMA situation but free to USB deadlock issue. But as of
-> v4.19, I think, it will be fast but can face the deadlock issue.
-> Consequently I think to meet the both cases, I think USB can pass
-> __GFP_FS without __GFP_IO.
-> 
-> If __GFP_FS is passed from USB core, of course, the CMA patch also
-> need to be changed to pass GFP.
+Last two patches add workaround for an old version of ccg firmware
+which has known issue of not missing interrupt when a device is connected
+to runtime resume the ccg controller. The workaround is needed because
+if a GPU card doesn't get new firmware but gets new kernel then also it
+should continue to work.
 
+Thanks
+Ajay
+
+Ajay Gupta (4):
+  i2c: nvidia-gpu: add runtime pm support
+  usb: typec: ucsi: ccg: enable runtime pm support
+  i2c: nvidia-gpu: resume ccgx i2c client
+  usb: typec: ucsi: ccg: add runtime pm workaround
+
+ drivers/i2c/busses/i2c-nvidia-gpu.c |  37 ++++++--
+ drivers/usb/typec/ucsi/ucsi.c       |   1 +
+ drivers/usb/typec/ucsi/ucsi_ccg.c   | 138 +++++++++++++++++++++++++++-
+ 3 files changed, 165 insertions(+), 11 deletions(-)
+
+-- 
+2.17.1
 
