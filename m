@@ -2,154 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A85F2196D
-	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2019 15:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D962021991
+	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2019 16:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728383AbfEQN45 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 May 2019 09:56:57 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:41726 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728559AbfEQN45 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 May 2019 09:56:57 -0400
-Received: (qmail 1594 invoked by uid 2102); 17 May 2019 09:56:56 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 17 May 2019 09:56:56 -0400
-Date:   Fri, 17 May 2019 09:56:56 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-cc:     linux-usb@vger.kernel.org, <linux-samsung-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        =?UTF-8?q?M=C3=A5ns=20Rullg=C3=A5rd?= <mans@mansr.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4] usb: exynos: add workaround for the USB device bindings
- conflict
-In-Reply-To: <20190517105702.4522-1-m.szyprowski@samsung.com>
-Message-ID: <Pine.LNX.4.44L0.1905170955040.1430-100000@iolanthe.rowland.org>
+        id S1728816AbfEQOIG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 May 2019 10:08:06 -0400
+Received: from mga18.intel.com ([134.134.136.126]:6678 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728103AbfEQOIF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 May 2019 10:08:05 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 May 2019 07:08:04 -0700
+X-ExtLoop1: 1
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 May 2019 07:08:02 -0700
+Subject: Re: [PATCH v10 2/2] usb: xhci: Add Clear_TT_Buffer
+To:     Jim Lin <jilin@nvidia.com>, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com, stern@rowland.harvard.edu,
+        kai.heng.feng@canonical.com, drinkcat@chromium.org,
+        keescook@chromium.org, nsaenzjulienne@suse.de, jflat@chromium.org,
+        malat@debian.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1558017657-13835-1-git-send-email-jilin@nvidia.com>
+ <1558017657-13835-3-git-send-email-jilin@nvidia.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <ece2b354-8b3b-6c3d-6e64-5d7e6236148e@linux.intel.com>
+Date:   Fri, 17 May 2019 17:10:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <1558017657-13835-3-git-send-email-jilin@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 17 May 2019, Marek Szyprowski wrote:
-
-> Commit 69bec7259853 ("USB: core: let USB device know device node") added
-> support for attaching devicetree node for USB devices. Those nodes are
-> children of their USB host controller. However Exynos EHCI and OHCI
-> driver bindings already define child-nodes for each physical root hub
-> port and assigns respective PHY controller and parameters to them. Those
-> bindings predates support for USB device tree nodes.
+On 16.5.2019 17.40, Jim Lin wrote:
+> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+> processing for full-/low-speed endpoints connected via a TT, the host
+> software must use the Clear_TT_Buffer request to the TT to ensure
+> that the buffer is not in the busy state".
 > 
-> To mitigate the side-effects of the conflict between those bindings,
-> lets reset Exynos host controller of_node pointer before registering it
-> to USB subsystem. This fixes the issue raised by the commit 01fdf179f4b0
-> ("usb: core: skip interfaces disabled in devicetree"), which incorrectly
-> disabled some devices on Exynos based boards.
+> In our case, a full-speed speaker (ConferenceCam) is behind a high-
+> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+> request we may continue to get STALL with the folllowing requests,
+> like Set_Interface.
 > 
-> Reported-by: Markus Reichl <m.reichl@fivetechno.de>
-> Suggested-by: Måns Rullgård <mans@mansr.com>
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Here we invoke usb_hub_clear_tt_buffer() to send Clear_TT_Buffer
+> request to the hub of the device for the following Set_Interface
+> requests to the device to get ACK successfully.
+> 
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
 > ---
-> v4:
-> - moved workaround to Exynos OHCI/EHCI drivers as suggested by Måns
+> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
+>      , remove its claiming in xhci.h
+> v3: Add description for clearing_tt (xhci.h)
+> v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
+>      to protect for Clear_TT_Buffer to be run serially.
+>      Remove xhci_clear_tt_buffer_complete as it's not necessary.
+>      Same reason as the above.
+>      Extend usb_hub_clear_tt_buffer parameter
+> v5: Not extending usb_hub_clear_tt_buffer parameter
+>      Add description.
+> v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
+> v7: Add devaddr field in "struct usb_device"
+> v8: split as two patches
+> v9: no change flag
+> v10: Add EP_CLEARING_TT flag
 > 
-> v3: https://lkml.org/lkml/2019/5/9/119
-> - replaced ad hoc checks by proper test for proper value of the
->   compatible string in drivers/usb/core/of.c
+>   drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++++++++++++-
+>   drivers/usb/host/xhci.c      | 17 +++++++++++++++++
+>   drivers/usb/host/xhci.h      |  5 +++++
+>   3 files changed, 48 insertions(+), 1 deletion(-)
 > 
-> v2: https://lkml.org/lkml/2019/5/8/321
-> 
-> v1: https://lkml.org/lkml/2019/5/7/715
-> ---
->  drivers/usb/host/ehci-exynos.c | 10 ++++++++++
->  drivers/usb/host/ohci-exynos.c | 10 ++++++++++
->  2 files changed, 20 insertions(+)
-> 
-> diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
-> index 8e3bab1e0c1f..b127642332ee 100644
-> --- a/drivers/usb/host/ehci-exynos.c
-> +++ b/drivers/usb/host/ehci-exynos.c
-> @@ -39,6 +39,7 @@ static struct hc_driver __read_mostly exynos_ehci_hc_driver;
->  
->  struct exynos_ehci_hcd {
->  	struct clk *clk;
-> +	struct device_node *of_node;
->  	struct phy *phy[PHY_NUMBER];
->  };
->  
-> @@ -203,6 +204,13 @@ static int exynos_ehci_probe(struct platform_device *pdev)
->  	ehci = hcd_to_ehci(hcd);
->  	ehci->caps = hcd->regs;
->  
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 9215a28dad40..11d498b6c09b 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -399,7 +399,7 @@ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
+>   	 * stream once the endpoint is on the HW schedule.
+>   	 */
+>   	if ((ep_state & EP_STOP_CMD_PENDING) || (ep_state & SET_DEQ_PENDING) ||
+> -	    (ep_state & EP_HALTED))
+> +	    (ep_state & EP_HALTED) || (ep_state & EP_CLEARING_TT))
+>   		return;
+>   	writel(DB_VALUE(ep_index, stream_id), db_addr);
+>   	/* The CPU has better things to do at this point than wait for a
+> @@ -433,6 +433,13 @@ static void ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
+>   	}
+>   }
+>   
+> +void xhci_ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
+> +		unsigned int slot_id,
+> +		unsigned int ep_index)
+> +{
+> +	ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
+> +}
+> +
+>   /* Get the right ring for the given slot_id, ep_index and stream_id.
+>    * If the endpoint supports streams, boundary check the URB's stream ID.
+>    * If the endpoint doesn't support streams, return the singular endpoint ring.
+> @@ -1786,6 +1793,23 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
+>   	return NULL;
+>   }
+>   
+> +static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td,
+> +		struct xhci_virt_ep *ep)
+> +{
 > +	/*
-> +	 * Workaround: reset of_node pointer to avoid conflict between Exynos
-> +	 * EHCI port subnodes and generic USB device bindings
+> +	 * As part of low/full-speed endpoint-halt processing
+> +	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
 > +	 */
-> +	exynos_ehci->of_node = pdev->dev.of_node;
-> +	pdev->dev.of_node = NULL;
+> +	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
+> +	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub) &&
+> +	    !(ep->ep_state & EP_CLEARING_TT)) {
+> +		ep->ep_state |= EP_CLEARING_TT;
+> +		td->urb->ep->hcpriv = td->urb->dev;
+> +		if (usb_hub_clear_tt_buffer(td->urb))
+> +			ep->ep_state &= ~EP_CLEARING_TT;
+> +	}
+> +}
 > +
->  	/* DMA burst Enable */
->  	writel(EHCI_INSNREG00_ENABLE_DMA_BURST, EHCI_INSNREG00(hcd->regs));
->  
-
-You forgot to adjust the fail_add_hcd: error pathway in 
-exynos_ehci_probe().
-
-> @@ -231,6 +239,8 @@ static int exynos_ehci_remove(struct platform_device *pdev)
->  	struct usb_hcd *hcd = platform_get_drvdata(pdev);
->  	struct exynos_ehci_hcd *exynos_ehci = to_exynos_ehci(hcd);
->  
-> +	pdev->dev.of_node = exynos_ehci->of_node;
+>   static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
+>   		unsigned int slot_id, unsigned int ep_index,
+>   		unsigned int stream_id, struct xhci_td *td,
+> @@ -1804,6 +1828,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
+>   	if (reset_type == EP_HARD_RESET) {
+>   		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
+>   		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
+> +		xhci_clear_hub_tt_buffer(xhci, td, ep);
+>   	}
+>   	xhci_ring_cmd_db(xhci);
+>   }
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 68b393e5a453..0dc108e61a89 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -5133,6 +5133,22 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+>   }
+>   EXPORT_SYMBOL_GPL(xhci_gen_setup);
+>   
+> +static void xhci_clear_tt_buffer_complete(struct usb_hcd *hcd,
+> +		struct usb_host_endpoint *ep)
+> +{
+> +	struct xhci_hcd *xhci;
+> +	struct usb_device *udev;
+> +	unsigned int slot_id;
+> +	unsigned int ep_index;
 > +
->  	usb_remove_hcd(hcd);
->  
->  	exynos_ehci_phy_disable(&pdev->dev);
-> diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
-> index c0c4dcca6f3c..29f65963af3b 100644
-> --- a/drivers/usb/host/ohci-exynos.c
-> +++ b/drivers/usb/host/ohci-exynos.c
-> @@ -30,6 +30,7 @@ static struct hc_driver __read_mostly exynos_ohci_hc_driver;
->  
->  struct exynos_ohci_hcd {
->  	struct clk *clk;
-> +	struct device_node *of_node;
->  	struct phy *phy[PHY_NUMBER];
->  };
->  
-> @@ -170,6 +171,13 @@ static int exynos_ohci_probe(struct platform_device *pdev)
->  		goto fail_io;
->  	}
->  
-> +	/*
-> +	 * Workaround: reset of_node pointer to avoid conflict between Exynos
-> +	 * OHCI port subnodes and generic USB device bindings
-> +	 */
-> +	exynos_ohci->of_node = pdev->dev.of_node;
-> +	pdev->dev.of_node = NULL;
-> +
->  	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
->  	if (err) {
->  		dev_err(&pdev->dev, "Failed to add USB HCD\n");
+> +	xhci = hcd_to_xhci(hcd);
+> +	udev = (struct usb_device *)ep->hcpriv;
+> +	slot_id = udev->slot_id;
+> +	ep_index = xhci_get_endpoint_index(&ep->desc);
 
-And same here.
 
-Alan Stern
+spin_lock_irqsave(&xhci->lock, flags);  (protecting ep_state)
 
-> @@ -192,6 +200,8 @@ static int exynos_ohci_remove(struct platform_device *pdev)
->  	struct usb_hcd *hcd = platform_get_drvdata(pdev);
->  	struct exynos_ohci_hcd *exynos_ohci = to_exynos_ohci(hcd);
->  
-> +	pdev->dev.of_node = exynos_ohci->of_node;
-> +
->  	usb_remove_hcd(hcd);
->  
->  	exynos_ohci_phy_disable(&pdev->dev);
-> 
+> +	xhci->devs[slot_id]->eps[ep_index].ep_state &= ~EP_CLEARING_TT;
+> +	xhci_ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
 
+unlock
+
+note:
+lock is already taken in xhci_cleanup_halted_endpoint()
+so no need to take lock for xhci_clear_hub_tt_buffer()
+  
+
+Other than that this looks good to me.
+
+-Mathias
