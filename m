@@ -2,177 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D962021991
-	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2019 16:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FAA21B1C
+	for <lists+linux-usb@lfdr.de>; Fri, 17 May 2019 18:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728816AbfEQOIG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 May 2019 10:08:06 -0400
-Received: from mga18.intel.com ([134.134.136.126]:6678 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728103AbfEQOIF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 May 2019 10:08:05 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 May 2019 07:08:04 -0700
-X-ExtLoop1: 1
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 May 2019 07:08:02 -0700
-Subject: Re: [PATCH v10 2/2] usb: xhci: Add Clear_TT_Buffer
-To:     Jim Lin <jilin@nvidia.com>, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com, stern@rowland.harvard.edu,
-        kai.heng.feng@canonical.com, drinkcat@chromium.org,
-        keescook@chromium.org, nsaenzjulienne@suse.de, jflat@chromium.org,
-        malat@debian.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1558017657-13835-1-git-send-email-jilin@nvidia.com>
- <1558017657-13835-3-git-send-email-jilin@nvidia.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <ece2b354-8b3b-6c3d-6e64-5d7e6236148e@linux.intel.com>
-Date:   Fri, 17 May 2019 17:10:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1729392AbfEQQDE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 May 2019 12:03:04 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:35078 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728482AbfEQQDD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 May 2019 12:03:03 -0400
+Received: by mail-ot1-f66.google.com with SMTP id n14so7217045otk.2;
+        Fri, 17 May 2019 09:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=gRcrtb5zkBV22N7ejZ8gd80yYzuG0eMMK0Likb2l39A=;
+        b=qLjX5pYMmcTMjN5iFgyQsKZE0y6c8l2+gMnFTxjnwzcVJC9+73IQv1ERNRGBwqcVB1
+         jRNQe7asKnOot4X72/nbnRE7ZLXpGGHhCVQHVNfntOjMG1qo7pS5msGMHFXbT8alz6NV
+         8MZ4GlFAmF9tHddkLWQiIfiLZoD3R230cflReazsdSKB8hmkKBI5BpKwxrIt27vfGiRV
+         iaoxpaCP0JJhEj2JXMFaw8wwGrfzzn0XPmAsNMq0oa8ktvb2lMmfwa7TtfouoWL0DbPa
+         0DGFpoS0qsgQPx2kd48oCzrUSwvRpDEoz39no2EGJVCoA96kzHrljKfOemLP4MpMrC+3
+         9VWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=gRcrtb5zkBV22N7ejZ8gd80yYzuG0eMMK0Likb2l39A=;
+        b=QX2t0l632nKJLGVdsiMJfTazSfpVn0YXgbqBGE0Q6xNwKDvMNKzBU4ewPFQM4vVWWO
+         I/zbvvhL4za3Su7GEo9Xv1N8S9M7Rxw/AYCkT8n7RN1boarq+nabJNl7O6PesKTnmalv
+         0Mo9Cmm9komJ7DmjQ1CIyTjy17SNre0EDgvPQhB2StZtH0BsQEqcw1TGllKHe+/cxnIp
+         cbb8z2zBPweFyiJToaQAJlbBSlD5RCRMZnpz442oLkuSBqPICb+xe/Blx4gjHxpY8qxV
+         Je3ZjaoMA/2Y5zS/KoT68GtCtlN5QE+bFkVDYPkfhcc53KUeacZYNjFW33OI/GeoaBxB
+         nkdA==
+X-Gm-Message-State: APjAAAV0NPSvS2v1UHoK+H6HycCkmm78B7eKYDaVYyM3IsvYoD4qbsBD
+        HRU2Vi9VGYgUX9EeuYBPlLL6qBCg0iEXSPHYqzk=
+X-Google-Smtp-Source: APXvYqxmJfR52ctG4tHDsK2W7JZpTz8cICNLg1PMwwOW2FZTYEBQrxwnQVaenqKDcW/K5NYKOXtN9pY4O8t6RCdDLOk=
+X-Received: by 2002:a9d:64c1:: with SMTP id n1mr8954538otl.259.1558108983107;
+ Fri, 17 May 2019 09:03:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1558017657-13835-3-git-send-email-jilin@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Jaewon Kim <jaewon31.kim@gmail.com>
+Date:   Sat, 18 May 2019 01:02:28 +0900
+Message-ID: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
+Subject: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
+To:     gregkh@linuxfoundation.org, m.szyprowski@samsung.com,
+        linux-mm@kvack.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jaewon Kim <jaewon31.kim@samsung.com>, ytk.lee@samsung.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16.5.2019 17.40, Jim Lin wrote:
-> USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-> processing for full-/low-speed endpoints connected via a TT, the host
-> software must use the Clear_TT_Buffer request to the TT to ensure
-> that the buffer is not in the busy state".
-> 
-> In our case, a full-speed speaker (ConferenceCam) is behind a high-
-> speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-> request we may continue to get STALL with the folllowing requests,
-> like Set_Interface.
-> 
-> Here we invoke usb_hub_clear_tt_buffer() to send Clear_TT_Buffer
-> request to the hub of the device for the following Set_Interface
-> requests to the device to get ACK successfully.
-> 
-> Signed-off-by: Jim Lin <jilin@nvidia.com>
-> ---
-> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
->      , remove its claiming in xhci.h
-> v3: Add description for clearing_tt (xhci.h)
-> v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
->      to protect for Clear_TT_Buffer to be run serially.
->      Remove xhci_clear_tt_buffer_complete as it's not necessary.
->      Same reason as the above.
->      Extend usb_hub_clear_tt_buffer parameter
-> v5: Not extending usb_hub_clear_tt_buffer parameter
->      Add description.
-> v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
-> v7: Add devaddr field in "struct usb_device"
-> v8: split as two patches
-> v9: no change flag
-> v10: Add EP_CLEARING_TT flag
-> 
->   drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++++++++++++-
->   drivers/usb/host/xhci.c      | 17 +++++++++++++++++
->   drivers/usb/host/xhci.h      |  5 +++++
->   3 files changed, 48 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 9215a28dad40..11d498b6c09b 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -399,7 +399,7 @@ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
->   	 * stream once the endpoint is on the HW schedule.
->   	 */
->   	if ((ep_state & EP_STOP_CMD_PENDING) || (ep_state & SET_DEQ_PENDING) ||
-> -	    (ep_state & EP_HALTED))
-> +	    (ep_state & EP_HALTED) || (ep_state & EP_CLEARING_TT))
->   		return;
->   	writel(DB_VALUE(ep_index, stream_id), db_addr);
->   	/* The CPU has better things to do at this point than wait for a
-> @@ -433,6 +433,13 @@ static void ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
->   	}
->   }
->   
-> +void xhci_ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
-> +		unsigned int slot_id,
-> +		unsigned int ep_index)
-> +{
-> +	ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
-> +}
-> +
->   /* Get the right ring for the given slot_id, ep_index and stream_id.
->    * If the endpoint supports streams, boundary check the URB's stream ID.
->    * If the endpoint doesn't support streams, return the singular endpoint ring.
-> @@ -1786,6 +1793,23 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
->   	return NULL;
->   }
->   
-> +static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td,
-> +		struct xhci_virt_ep *ep)
-> +{
-> +	/*
-> +	 * As part of low/full-speed endpoint-halt processing
-> +	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
-> +	 */
-> +	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
-> +	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub) &&
-> +	    !(ep->ep_state & EP_CLEARING_TT)) {
-> +		ep->ep_state |= EP_CLEARING_TT;
-> +		td->urb->ep->hcpriv = td->urb->dev;
-> +		if (usb_hub_clear_tt_buffer(td->urb))
-> +			ep->ep_state &= ~EP_CLEARING_TT;
-> +	}
-> +}
-> +
->   static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
->   		unsigned int slot_id, unsigned int ep_index,
->   		unsigned int stream_id, struct xhci_td *td,
-> @@ -1804,6 +1828,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
->   	if (reset_type == EP_HARD_RESET) {
->   		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
->   		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
-> +		xhci_clear_hub_tt_buffer(xhci, td, ep);
->   	}
->   	xhci_ring_cmd_db(xhci);
->   }
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 68b393e5a453..0dc108e61a89 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -5133,6 +5133,22 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
->   }
->   EXPORT_SYMBOL_GPL(xhci_gen_setup);
->   
-> +static void xhci_clear_tt_buffer_complete(struct usb_hcd *hcd,
-> +		struct usb_host_endpoint *ep)
-> +{
-> +	struct xhci_hcd *xhci;
-> +	struct usb_device *udev;
-> +	unsigned int slot_id;
-> +	unsigned int ep_index;
-> +
-> +	xhci = hcd_to_xhci(hcd);
-> +	udev = (struct usb_device *)ep->hcpriv;
-> +	slot_id = udev->slot_id;
-> +	ep_index = xhci_get_endpoint_index(&ep->desc);
+Hello I don't have enough knowledge on USB core but I've wondered
+why GFP_NOIO has been used in xhci_alloc_dev for
+xhci_alloc_virt_device. I found commit ("a6d940dd759b xhci: Use
+GFP_NOIO during device reset"). But can we just change GFP_NOIO
+to __GFP_RECLAIM | __GFP_FS ?
+
+Please refer to below case.
+
+I got a report from Lee YongTaek <ytk.lee@samsung.com> that the
+xhci_alloc_virt_device was too slow over 2 seconds only for one page
+allocation.
+
+1) It was because kernel version was v4.14 and DMA allocation was
+done from CMA(Contiguous Memory Allocator) where CMA region was
+almost filled with file page and  CMA passes GFP down to page
+isolation. And the page isolation only allows file page isolation only to
+requests having __GFP_FS.
+
+2) Historically CMA was changed at v4.19 to use GFP_KERNEL
+regardless of GFP passed to  DMA allocation through the
+commit 6518202970c1 "(mm/cma: remove unsupported gfp_mask
+parameter from cma_alloc()".
+
+I think pre v4.19 the xhci_alloc_virt_device could be very slow
+depending on CMA situation but free to USB deadlock issue. But as of
+v4.19, I think, it will be fast but can face the deadlock issue.
+Consequently I think to meet the both cases, I think USB can pass
+__GFP_FS without __GFP_IO.
+
+If __GFP_FS is passed from USB core, of course, the CMA patch also
+need to be changed to pass GFP.
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 005e65922608..38abcd03a1a2 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3893,7 +3893,7 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct
+usb_device *udev)
+         * xhci_discover_or_reset_device(), which may be called as part of
+         * mass storage driver error handling.
+         */
+-       if (!xhci_alloc_virt_device(xhci, slot_id, udev, GFP_NOIO)) {
++       if (!xhci_alloc_virt_device(xhci, slot_id, udev, __GFP_RECLAIM
+| __GFP_FS)) {
+                xhci_warn(xhci, "Could not allocate xHCI USB device
+data structures\n");
+                goto disable_slot;
+        }
 
 
-spin_lock_irqsave(&xhci->lock, flags);  (protecting ep_state)
-
-> +	xhci->devs[slot_id]->eps[ep_index].ep_state &= ~EP_CLEARING_TT;
-> +	xhci_ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
-
-unlock
-
-note:
-lock is already taken in xhci_cleanup_halted_endpoint()
-so no need to take lock for xhci_clear_hub_tt_buffer()
-  
-
-Other than that this looks good to me.
-
--Mathias
+Thank you
