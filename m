@@ -2,33 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CD1223CD
-	for <lists+linux-usb@lfdr.de>; Sat, 18 May 2019 17:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDC3223D1
+	for <lists+linux-usb@lfdr.de>; Sat, 18 May 2019 17:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729541AbfERPNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 May 2019 11:13:40 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58737 "HELO
+        id S1729713AbfERPUs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 May 2019 11:20:48 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:44351 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729310AbfERPNk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 May 2019 11:13:40 -0400
-Received: (qmail 8434 invoked by uid 500); 18 May 2019 11:13:39 -0400
+        with SMTP id S1728935AbfERPUs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 May 2019 11:20:48 -0400
+Received: (qmail 8577 invoked by uid 500); 18 May 2019 11:20:47 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 18 May 2019 11:13:39 -0400
-Date:   Sat, 18 May 2019 11:13:39 -0400 (EDT)
+  by localhost with SMTP; 18 May 2019 11:20:47 -0400
+Date:   Sat, 18 May 2019 11:20:47 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <chunkeey@gmail.com>,
-        <chunkeey@googlemail.com>, <davem@davemloft.net>,
-        <kvalo@codeaurora.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Oliver Neukum <oneukum@suse.com>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: KASAN: use-after-free Read in p54u_load_firmware_cb
-In-Reply-To: <00000000000009fcff05891bae0a@google.com>
-Message-ID: <Pine.LNX.4.44L0.1905181045400.7855-100000@netrider.rowland.org>
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [CFT][PATCH] signal/usb: Replace kill_pid_info_as_cred with
+ kill_pid_usb_asyncio
+In-Reply-To: <87y334v8x1.fsf@xmission.com>
+Message-ID: <Pine.LNX.4.44L0.1905181116330.7855-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -36,55 +33,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 17 May 2019, syzbot wrote:
+On Fri, 17 May 2019, Eric W. Biederman wrote:
 
-> Hello,
+> Wow I got a little distracted but now I am back to this.
 > 
-> syzbot tried to test the proposed patch but build/boot failed:
+> Using your test program I was able to test the basics of this.
+> 
+> I found one bug in my patch where I was missing a memset.  So I have
+> corrected that, and reorganized the patch a little bit.
+> 
+> I have not figured out how to trigger a usb disconnect so I have not
+> tested that.
 
-Drat.  Mistake in the patch.  Let's try again.
+Heh.  Assuming the device file you tell the test program to use 
+corresponds to an actual USB device, you can trigger a disconnect by 
+literally unplugging the USB cable.  (Add a 10-second delay to the 
+program to give yourself enough time.)
 
-Incidentally, as far as I can tell there's no point in having the
-usb_get_dev() in p54u_probe() and usb_put_dev() in p54u_disconnect().  
-The device structure is guaranteed not to be deallocated while a driver
-is bound to any of its interfaces, so taking an extra reference won't
-make any difference.
+> The big thing I have not been able to test is running a 64bit big-endian
+> kernel with a 32bit user space.  My modified version of your test
+> program should report "Bad" without my patch, and should report "Good"
+> with it.
+> 
+> Is there any chance you can test that configuration?  I could not figure
+> out how to get a 64bit big-endian system running in qemu, and I don't
+> have the necessary hardware so I was not able to test that at all.  As
+> that is the actual bug I am still hoping someone can test it.
 
-On the other hand, I do see some problems in the firmware-load
-callback.  First, it calls device_release_driver() without first
-checking that the interface is still bound to the p54u driver.  
-Second, it shouldn't call device_release_driver() at all -- it should
-call usb_driver_release_interface().  It doesn't want to unbind the USB
-device's driver; it wants to unbind the interface's driver.  And third,
-to do this it needs to acquire udev's device lock, not the lock for
-udev's parent.
+Unfortunately, I don't have any big-endian systems either.
 
 Alan Stern
-
-
-#syz test: https://github.com/google/kasan.git usb-fuzzer
-
- drivers/net/wireless/intersil/p54/p54usb.c |    3 +++
- 1 file changed, 3 insertions(+)
-
-Index: usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
-===================================================================
---- usb-devel.orig/drivers/net/wireless/intersil/p54/p54usb.c
-+++ usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
-@@ -923,6 +923,7 @@ static void p54u_load_firmware_cb(const
- 	struct usb_device *udev = priv->udev;
- 	int err;
- 
-+	pr_info("%s: priv->udev = %px\n", __func__, udev);
- 	complete(&priv->fw_wait_load);
- 	if (firmware) {
- 		priv->fw = firmware;
-@@ -969,6 +970,8 @@ static int p54u_load_firmware(struct iee
- 	if (i < 0)
- 		return i;
- 
-+	dev_info(&udev->dev, "%s: udev @ %px, dev.parent @ %px\n",
-+			__func__, udev, &udev->dev.parent);
- 	dev_info(&priv->udev->dev, "Loading firmware file %s\n",
- 	       p54u_fwlist[i].fw);
 
