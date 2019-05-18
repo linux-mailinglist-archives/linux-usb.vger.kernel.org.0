@@ -2,79 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B2F2236C
-	for <lists+linux-usb@lfdr.de>; Sat, 18 May 2019 13:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEAF22380
+	for <lists+linux-usb@lfdr.de>; Sat, 18 May 2019 14:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729820AbfERLrR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 May 2019 07:47:17 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34741 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729814AbfERLrR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 May 2019 07:47:17 -0400
-Received: by mail-pf1-f194.google.com with SMTP id n19so4981399pfa.1;
-        Sat, 18 May 2019 04:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=kFie4+k11yDDftzG0S10xpWYpY/RkmQCteUTvMNHkI4=;
-        b=NwqmbD4UphqZRGD7W1ah35LGjZf9x50ZHnK/Cxq88FQbJLPvvuPYa4QyF273Ac3gMm
-         5Qt2FDOpvwEzLzVSIZbc6utGV4k+Xq7DaT7FCVu3Qygd5BR5eJtrPNi4CkpXvh0bKMIW
-         oTZzTnDyNkP8HEMMx6cdOefRrQw29EQRKKgZsvm8U/FllySRvSkerE0+mrXQ4zpEsXne
-         2n3krtGE0qaCTlzPf6isc5tcEKbj7aYbUOu+yuhCnf9eD9pgbuT2JsB0hQWPXfbYD683
-         Udmaf1nX8fISGTMu0YWu0fJJpSaARZyTQNVF6Qn5/ew+jgNyiZ1oftkVZjRPoPKSIuSX
-         XqlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kFie4+k11yDDftzG0S10xpWYpY/RkmQCteUTvMNHkI4=;
-        b=PCtw/57GrIxXZXrWTQRzgAoLaL8QxEpeF159YHRBQhp2Ici4+lmDz7i1rE0/OonnlK
-         4YDTzotAERCsR+YwjhXU3UCX/ZA2HIGQlpmXt4sknVd9oo8y2GO171DYT3Dq88e76zDF
-         KU+UJ/q3tu/gjdHs4sjwow5qnerCdbklkEGlYcLtcVLNsrrOHFs8wwi/wfLfZQrfQIc/
-         1fkE+D66kWgDUpHVS/xLMmkZyonZECZnrg8ZF+P6uxmaspEDuOsXwMPK26TCmoCwha7z
-         fsSait+8jN7Bp9UVuMofjVg32qOb9fNhsvax7Y3wU56TTzAUnKWPyFxfLNPeGZgbZUCa
-         8iVA==
-X-Gm-Message-State: APjAAAU/M6FHAfcnmEP7cQ2D2tNbb2onvdYsWwUBT+7mCH3SYgT0UhNu
-        XjDSVrcjfOsk6hIv9ighSGI=
-X-Google-Smtp-Source: APXvYqzWqHPnlARkOMniFQKPfXN1jP4MvGD63NJdIO+pf+/V1Px6FvtbupWpIJ8NmJg3aSkt1yzo8A==
-X-Received: by 2002:aa7:8096:: with SMTP id v22mr66680244pff.94.1558180036828;
-        Sat, 18 May 2019 04:47:16 -0700 (PDT)
-Received: from localhost ([43.224.245.181])
-        by smtp.gmail.com with ESMTPSA id r77sm13869151pgr.93.2019.05.18.04.47.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 18 May 2019 04:47:16 -0700 (PDT)
-From:   Weitao Hou <houweitaoo@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, Julia.Lawall@lip6.fr,
-        houweitaoo@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: fix typos in code comments
-Date:   Sat, 18 May 2019 19:46:23 +0800
-Message-Id: <20190518114623.17578-1-houweitaoo@gmail.com>
-X-Mailer: git-send-email 2.18.0
+        id S1729524AbfERMbK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 May 2019 08:31:10 -0400
+Received: from authsmtp39.register.it ([81.88.55.102]:58931 "EHLO
+        authsmtp.register.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729377AbfERMbK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 May 2019 08:31:10 -0400
+X-Greylist: delayed 60619 seconds by postgrey-1.27 at vger.kernel.org; Sat, 18 May 2019 08:31:07 EDT
+Received: from [192.168.1.1] ([93.41.32.9])
+        by cmsmtp with ESMTPSA
+        id RyUSh0WDRZwcbRyUThI1yj; Sat, 18 May 2019 14:31:05 +0200
+X-Rid:  guido@trentalancia.com@93.41.32.9
+Message-ID: <1558182664.16275.8.camel@trentalancia.com>
+Subject: Re: JMicron JMS578 USB-to-SATA HDD enclosure not working
+From:   Guido Trentalancia <guido@trentalancia.com>
+To:     linux-usb@vger.kernel.org
+Cc:     stern@rowland.harvard.edu
+Date:   Sat, 18 May 2019 14:31:04 +0200
+In-Reply-To: <1558121554.3771.12.camel@trentalancia.com>
+References: <1558121554.3771.12.camel@trentalancia.com>
+X-Priority: 1
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfHoSEqTi9YCi97Rdb3JPuyY26sx4NrCAAfMktu6yXRkHR56PpONDpfjOJj9fWSxvAJf6T6kEpuxKs2kpQZd0fIrr7A9dAA5t/QAPwUlk6/7h1mEr0nUH
+ pQDL/SYf88xGKuZX4h9aKM1Wf3RavFBXY27Prpg55IjYckfl1T2AtYtIFXtleSzDEjXwBOiQPZO22wr2ICqA8FnR99Wx5k5AQpg=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-fix lengh to length
+Hello again.
 
-Signed-off-by: Weitao Hou <houweitaoo@gmail.com>
----
- drivers/usb/gadget/udc/snps_udc_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I have now upgraded the original HDD enclosure firmware (version
+46.01.00.01) with the latest available one from the Hardkernel.com /
+Odroid.com project (version 173.01.00.02).
 
-diff --git a/drivers/usb/gadget/udc/snps_udc_core.c b/drivers/usb/gadget/udc/snps_udc_core.c
-index 3fcded31405a..2e84900d0b40 100644
---- a/drivers/usb/gadget/udc/snps_udc_core.c
-+++ b/drivers/usb/gadget/udc/snps_udc_core.c
-@@ -2734,7 +2734,7 @@ static irqreturn_t udc_control_in_isr(struct udc *dev)
- 					/* write fifo */
- 					udc_txfifo_write(ep, &req->req);
- 
--					/* lengh bytes transferred */
-+					/* length bytes transferred */
- 					len = req->req.length - req->req.actual;
- 					if (len > ep->ep.maxpacket)
- 						len = ep->ep.maxpacket;
--- 
-2.18.0
+The problem persists with similar symptoms, however the Sense Key is
+now different:
 
+sd 2:0:0:0: [sdb] tag#13 FAILED Result: hostbyte=DID_OK
+driverbyte=DRIVER_SENSE
+sd 2:0:0:0: [sdb] tag#13 Sense Key : Data Protect [current] 
+sd 2:0:0:0: [sdb] tag#13 Add. Sense: Logical unit access not authorized
+sd 2:0:0:0: [sdb] tag#13 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+print_req_error: critical target error, dev sdb, sector 0 flags 0
+Buffer I/O error on dev sdb, logical block 0, async page read
+sdb: unable to read partition table
+sd 2:0:0:0: [sdb] Attached SCSI disk
+sd 2:0:0:0: [sdb] tag#4 FAILED Result: hostbyte=DID_OK
+driverbyte=DRIVER_SENSE
+sd 2:0:0:0: [sdb] tag#4 Sense Key : Data Protect [current] 
+sd 2:0:0:0: [sdb] tag#4 Add. Sense: Logical unit access not authorized
+sd 2:0:0:0: [sdb] tag#4 CDB: Read(10) 28 00 74 70 6d 00 00 00 08 00
+print_req_error: critical target error, dev sdb, sector 1953524992
+flags 80700
+
+So, the Sense basically changed from "No additional sense" to "Logical
+unit access not authorized", which at least seems a bit more
+meaningful...
+
+The hard-drive is a brand-new Seagate 1TB HDD which works perfectly
+fine when connected to the SATA port directly.
+
+Is anybody aware of any kind of Data Protection or Access Authorization
+option that needs to be disabled or enabled, respectively ? If yes, how
+?
+
+Thanks very much for your time !
+
+Guido
+
+On Fri, 17/05/2019 at 21.32 +0200, Guido Trentalancia wrote:
+> Hello.
+> 
+> I am trying to use a Digitus DA-71114 USB-to-SATA HDD enclosure.
+> 
+> Such unit is reported to use the JMicron JMS578 chipset by the same
+> manufacturer, although it is listed with a different USB VID/PID:
+> 0080:a001.
+> 
+> Immediately after plugging in the USB cable, it reports I/O errors,
+> even though the hard-drive is fine (mounts and reads/writes fine
+> under
+> Windows without the enclosure):
+> 
+> [ 5432.689781] usb 2-1: new SuperSpeed Gen 1 USB device number 29
+> using
+> xhci_hcd
+> [ 5432.702547] usb 2-1: New USB device found, idVendor=0080,
+> idProduct=a001, bcdDevice= 1.00
+> [ 5432.702553] usb 2-1: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [ 5432.702557] usb 2-1: Product: External USB 3.0
+> [ 5432.702561] usb 2-1: Manufacturer: TOSHIBA
+> [ 5432.702565] usb 2-1: SerialNumber: 201503310008E
+> [ 5432.730948] usbcore: registered new interface driver usb-storage
+> [ 5432.736029] scsi host2: uas
+> [ 5432.736373] usbcore: registered new interface driver uas
+> [ 5432.736939] scsi 2:0:0:0: Direct-Access     TO Exter nal USB
+> 3.0      6101 PQ: 0 ANSI: 6
+> [ 5432.738326] sd 2:0:0:0: Attached scsi generic sg2 type 0
+> [ 5435.336588] sd 2:0:0:0: [sdb] 1953525168 512-byte logical blocks:
+> (1.00 TB/932 GiB)
+> [ 5435.336594] sd 2:0:0:0: [sdb] 4096-byte physical blocks
+> [ 5435.336762] sd 2:0:0:0: [sdb] Write Protect is off
+> [ 5435.336766] sd 2:0:0:0: [sdb] Mode Sense: 53 00 00 08
+> [ 5435.337063] sd 2:0:0:0: [sdb] Write cache: enabled, read cache:
+> enabled, doesn't support DPO or FUA
+> [ 5435.337347] sd 2:0:0:0: [sdb] Optimal transfer size 33553920 bytes
+> not a multiple of physical block size (4096 bytes)
+> [ 5465.794203] sd 2:0:0:0: [sdb] tag#6 uas_eh_abort_handler 0 uas-tag 
+> 1
+> inflight: CMD IN 
+> [ 5465.794211] sd 2:0:0:0: [sdb] tag#6 CDB: Read(10) 28 00 00 00 00
+> 00
+> 00 00 08 00
+> [ 5465.800252] scsi host2: uas_eh_device_reset_handler start
+> [ 5465.915678] usb 2-1: reset SuperSpeed Gen 1 USB device number 29
+> using xhci_hcd
+> [ 5465.931925] scsi host2: uas_eh_device_reset_handler success
+> [ 5496.510222] scsi host2: uas_eh_device_reset_handler start
+> [ 5496.510329] sd 2:0:0:0: [sdb] tag#11 uas_zap_pending 0 uas-tag 1
+> inflight: CMD 
+> [ 5496.510337] sd 2:0:0:0: [sdb] tag#11 CDB: Read(10) 28 00 00 00 00
+> 00
+> 00 00 08 00
+> [ 5496.625614] usb 2-1: reset SuperSpeed Gen 1 USB device number 29
+> using xhci_hcd
+> [ 5496.642411] scsi host2: uas_eh_device_reset_handler success
+> [ 5527.230204] scsi host2: uas_eh_device_reset_handler start
+> [ 5527.230309] sd 2:0:0:0: [sdb] tag#9 uas_zap_pending 0 uas-tag 1
+> inflight: CMD 
+> [ 5527.230316] sd 2:0:0:0: [sdb] tag#9 CDB: Read(10) 28 00 00 00 00
+> 00
+> 00 00 08 00
+> [ 5527.345769] usb 2-1: reset SuperSpeed Gen 1 USB device number 29
+> using xhci_hcd
+> [ 5527.361964] scsi host2: uas_eh_device_reset_handler success
+> [ 5527.780612] sd 2:0:0:0: [sdb] tag#10 FAILED Result:
+> hostbyte=DID_OK
+> driverbyte=DRIVER_SENSE
+> [ 5527.780631] sd 2:0:0:0: [sdb] tag#10 Sense Key : Aborted Command
+> [current] 
+> [ 5527.780636] sd 2:0:0:0: [sdb] tag#10 Add. Sense: No additional
+> sense
+> information
+> [ 5527.780642] sd 2:0:0:0: [sdb] tag#10 CDB: Read(10) 28 00 00 00 00
+> 00
+> 00 00 08 00
+> [ 5527.780647] print_req_error: I/O error, dev sdb, sector 0 flags 0
+> [ 5527.780657] Buffer I/O error on dev sdb, logical block 0, async
+> page
+> read
+> 
+> I have also attached the usbmon dump just before and after plugging
+> in
+> the device.
+> 
+> Adding the US_FL_BROKEN_FUA in unusual_uas.h and unusual_devs.h does
+> not help !
+> 
+> I have also tried adding many other quirks (such as
+> US_FL_NO_REPORT_OPCODES, US_FL_NO_ATA_1X, US_FL_IGNORE_RESIDUE,
+> US_FL_FIX_CAPACITY, US_FL_NO_WP_DETECT, US_FL_MAX_SECTORS_64) without
+> any luck !!
+> 
+> The problem also happens when not using UAS but the standard USB
+> storage driver (fails on READ command, sector 0 and sometimes also
+> sector 1953524992).
+> 
+> When the drive is used in the enclosure it is completely unusable, as
+> it fails even on fdisk...
+> 
+> What should I do ?
+> 
+> Thanks.
+> 
+> Guido
