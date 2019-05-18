@@ -2,137 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0642212A
-	for <lists+linux-usb@lfdr.de>; Sat, 18 May 2019 03:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B2F2236C
+	for <lists+linux-usb@lfdr.de>; Sat, 18 May 2019 13:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727309AbfERBxh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 May 2019 21:53:37 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40272 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726761AbfERBxg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 May 2019 21:53:36 -0400
-Received: by mail-ot1-f65.google.com with SMTP id u11so8389691otq.7;
-        Fri, 17 May 2019 18:53:36 -0700 (PDT)
+        id S1729820AbfERLrR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 May 2019 07:47:17 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34741 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729814AbfERLrR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 May 2019 07:47:17 -0400
+Received: by mail-pf1-f194.google.com with SMTP id n19so4981399pfa.1;
+        Sat, 18 May 2019 04:47:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nQoQJoHpzJQYSi8VTTlyTdi+eKb5pb19O1ImUVZ7ifQ=;
-        b=l4ipXGRAjIUzrlrkNvaTG2k7I+bCkITMEedVuFdJU25ONJvkJw5RSmJ17hfa8hOlTj
-         mNz+//ZqwGZCy+TvYGRK0bDw0eTbWJ5r+kSSmDLPhgun28oX3ZxMC7XPRpjVdYpkMDni
-         omHVPXuYpg8wrhglnXxlow1lzLh96xxBmyWiMeoD+1gwQZWGntUKXA5decjWwKiBG/lx
-         axYgdvPwoEQZka/tB8jXG2WFzWSkSZWogp1PycM1fBN5M8h783W4P4NzgFB5oWuHQYP5
-         lBWYYo1w+qK5lL3mmcj3Y+cilEa1QO9YPKCKkewslqpnFc3OzC0DSNTcs5DiBqIFGYFw
-         0goQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=kFie4+k11yDDftzG0S10xpWYpY/RkmQCteUTvMNHkI4=;
+        b=NwqmbD4UphqZRGD7W1ah35LGjZf9x50ZHnK/Cxq88FQbJLPvvuPYa4QyF273Ac3gMm
+         5Qt2FDOpvwEzLzVSIZbc6utGV4k+Xq7DaT7FCVu3Qygd5BR5eJtrPNi4CkpXvh0bKMIW
+         oTZzTnDyNkP8HEMMx6cdOefRrQw29EQRKKgZsvm8U/FllySRvSkerE0+mrXQ4zpEsXne
+         2n3krtGE0qaCTlzPf6isc5tcEKbj7aYbUOu+yuhCnf9eD9pgbuT2JsB0hQWPXfbYD683
+         Udmaf1nX8fISGTMu0YWu0fJJpSaARZyTQNVF6Qn5/ew+jgNyiZ1oftkVZjRPoPKSIuSX
+         XqlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nQoQJoHpzJQYSi8VTTlyTdi+eKb5pb19O1ImUVZ7ifQ=;
-        b=PID6GIxodNvBJofQ+/f8ZwwvS5fpSt4SAl8XZQdXSpWLXmlwAHm5lvS8L8EyTnXSzg
-         Tq+btrFrAeq4oTFq++mTDEPGWowiNBK/tII8nFEEPSf4KKsbR3mu9X8l0Ked3B2O2+eJ
-         z+iJwyE+e/XK49l4thn/J5P/e1dMQNd1vPREBRn482N6poVx48p2WrGIDlyw8UIXJcub
-         Xzyh2zoWhgLwzeJlYUh/BVGiBi+9jp+cn/34OT4Q5RofxYQQi28eUw04XNao4lcV8Zib
-         jf7AMPhy+a+I9Xs4Y2TE6+HaOdaEej9MpEKZN6EWNGBj5Qgjhdj0QmYFiT35UovnqAuq
-         vYxw==
-X-Gm-Message-State: APjAAAV+4r1/FA6Kskfsuaruw15W4oy6GGG5dIELWia+ItSE4gma8LTO
-        nRWtHcyA4FFe9rf1ifHT4YNMneHMrHUxguArwFM=
-X-Google-Smtp-Source: APXvYqzakSouikJDjGU/ZZDMXGyP5yHiZqGJqzz077iJsfIXTiPOTHYX631z9th9Ri2xS+j3CwbDVfry70noOTIRAQs=
-X-Received: by 2002:a9d:4808:: with SMTP id c8mr3385903otf.316.1558144416123;
- Fri, 17 May 2019 18:53:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
- <20190517163420.GG31704@bombadil.infradead.org>
-In-Reply-To: <20190517163420.GG31704@bombadil.infradead.org>
-From:   Jaewon Kim <jaewon31.kim@gmail.com>
-Date:   Sat, 18 May 2019 10:53:03 +0900
-Message-ID: <CAJrd-UuCMpuSDh6Sx24=aesK38XSB5ys2pHCT4K-O0VSj4ewkA@mail.gmail.com>
-Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     gregkh@linuxfoundation.org, m.szyprowski@samsung.com,
-        linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jaewon Kim <jaewon31.kim@samsung.com>, ytk.lee@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kFie4+k11yDDftzG0S10xpWYpY/RkmQCteUTvMNHkI4=;
+        b=PCtw/57GrIxXZXrWTQRzgAoLaL8QxEpeF159YHRBQhp2Ici4+lmDz7i1rE0/OonnlK
+         4YDTzotAERCsR+YwjhXU3UCX/ZA2HIGQlpmXt4sknVd9oo8y2GO171DYT3Dq88e76zDF
+         KU+UJ/q3tu/gjdHs4sjwow5qnerCdbklkEGlYcLtcVLNsrrOHFs8wwi/wfLfZQrfQIc/
+         1fkE+D66kWgDUpHVS/xLMmkZyonZECZnrg8ZF+P6uxmaspEDuOsXwMPK26TCmoCwha7z
+         fsSait+8jN7Bp9UVuMofjVg32qOb9fNhsvax7Y3wU56TTzAUnKWPyFxfLNPeGZgbZUCa
+         8iVA==
+X-Gm-Message-State: APjAAAU/M6FHAfcnmEP7cQ2D2tNbb2onvdYsWwUBT+7mCH3SYgT0UhNu
+        XjDSVrcjfOsk6hIv9ighSGI=
+X-Google-Smtp-Source: APXvYqzWqHPnlARkOMniFQKPfXN1jP4MvGD63NJdIO+pf+/V1Px6FvtbupWpIJ8NmJg3aSkt1yzo8A==
+X-Received: by 2002:aa7:8096:: with SMTP id v22mr66680244pff.94.1558180036828;
+        Sat, 18 May 2019 04:47:16 -0700 (PDT)
+Received: from localhost ([43.224.245.181])
+        by smtp.gmail.com with ESMTPSA id r77sm13869151pgr.93.2019.05.18.04.47.15
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 18 May 2019 04:47:16 -0700 (PDT)
+From:   Weitao Hou <houweitaoo@gmail.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, Julia.Lawall@lip6.fr,
+        houweitaoo@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: fix typos in code comments
+Date:   Sat, 18 May 2019 19:46:23 +0800
+Message-Id: <20190518114623.17578-1-houweitaoo@gmail.com>
+X-Mailer: git-send-email 2.18.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thank you for your comment.
+fix lengh to length
 
-In ARM64 architecture, default CMA region is commonly activated and it
-could be used
-if no specific memory region is defined. The USB driver in my platform
-also uses the
-default CMA region as DMA allocation. If using the CMA to do DMA
-allocation is improper,
-then do you think that the USB driver for my platform should be
-changed not to use CMA?
+Signed-off-by: Weitao Hou <houweitaoo@gmail.com>
+---
+ drivers/usb/gadget/udc/snps_udc_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-According to my understanding, in CONFIG_DMA_CMA on both v4.14 and v5.0,
-__GFP_DIRECT_RECLAIM will try CMA allocation first instead of normal
-buddy allocation.
-Then it will get default CMA region through dev_get_cma_area API.
-Please refer to
-dev_get_cma_area code below though I am using v4.14 for my platform.
+diff --git a/drivers/usb/gadget/udc/snps_udc_core.c b/drivers/usb/gadget/udc/snps_udc_core.c
+index 3fcded31405a..2e84900d0b40 100644
+--- a/drivers/usb/gadget/udc/snps_udc_core.c
++++ b/drivers/usb/gadget/udc/snps_udc_core.c
+@@ -2734,7 +2734,7 @@ static irqreturn_t udc_control_in_isr(struct udc *dev)
+ 					/* write fifo */
+ 					udc_txfifo_write(ep, &req->req);
+ 
+-					/* lengh bytes transferred */
++					/* length bytes transferred */
+ 					len = req->req.length - req->req.actual;
+ 					if (len > ep->ep.maxpacket)
+ 						len = ep->ep.maxpacket;
+-- 
+2.18.0
 
-git show v5.0:include/linux/dma-contiguous.h
- 61 #ifdef CONFIG_DMA_CMA
- 62
- 63 extern struct cma *dma_contiguous_default_area;
- 64
- 65 static inline struct cma *dev_get_cma_area(struct device *dev)
- 66 {
- 67         if (dev && dev->cma_area)
- 68                 return dev->cma_area;
- 69         return dma_contiguous_default_area;
- 70 }
-
-Thank you
-
-2019=EB=85=84 5=EC=9B=94 18=EC=9D=BC (=ED=86=A0) =EC=98=A4=EC=A0=84 1:34, M=
-atthew Wilcox <willy@infradead.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> On Sat, May 18, 2019 at 01:02:28AM +0900, Jaewon Kim wrote:
-> > Hello I don't have enough knowledge on USB core but I've wondered
-> > why GFP_NOIO has been used in xhci_alloc_dev for
-> > xhci_alloc_virt_device. I found commit ("a6d940dd759b xhci: Use
-> > GFP_NOIO during device reset"). But can we just change GFP_NOIO
-> > to __GFP_RECLAIM | __GFP_FS ?
->
-> No.  __GFP_FS implies __GFP_IO; you can't set __GFP_FS and clear __GFP_IO=
-.
->
-> It seems like the problem you have is using the CMA to do DMA allocation.
-> Why would you do such a thing?
->
-> > Please refer to below case.
-> >
-> > I got a report from Lee YongTaek <ytk.lee@samsung.com> that the
-> > xhci_alloc_virt_device was too slow over 2 seconds only for one page
-> > allocation.
-> >
-> > 1) It was because kernel version was v4.14 and DMA allocation was
-> > done from CMA(Contiguous Memory Allocator) where CMA region was
-> > almost filled with file page and  CMA passes GFP down to page
-> > isolation. And the page isolation only allows file page isolation only =
-to
-> > requests having __GFP_FS.
-> >
-> > 2) Historically CMA was changed at v4.19 to use GFP_KERNEL
-> > regardless of GFP passed to  DMA allocation through the
-> > commit 6518202970c1 "(mm/cma: remove unsupported gfp_mask
-> > parameter from cma_alloc()".
-> >
-> > I think pre v4.19 the xhci_alloc_virt_device could be very slow
-> > depending on CMA situation but free to USB deadlock issue. But as of
-> > v4.19, I think, it will be fast but can face the deadlock issue.
-> > Consequently I think to meet the both cases, I think USB can pass
-> > __GFP_FS without __GFP_IO.
-> >
-> > If __GFP_FS is passed from USB core, of course, the CMA patch also
-> > need to be changed to pass GFP.
->
->
