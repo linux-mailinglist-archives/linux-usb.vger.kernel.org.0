@@ -2,185 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEAF22380
-	for <lists+linux-usb@lfdr.de>; Sat, 18 May 2019 14:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CD1223CD
+	for <lists+linux-usb@lfdr.de>; Sat, 18 May 2019 17:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729524AbfERMbK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 May 2019 08:31:10 -0400
-Received: from authsmtp39.register.it ([81.88.55.102]:58931 "EHLO
-        authsmtp.register.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729377AbfERMbK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 May 2019 08:31:10 -0400
-X-Greylist: delayed 60619 seconds by postgrey-1.27 at vger.kernel.org; Sat, 18 May 2019 08:31:07 EDT
-Received: from [192.168.1.1] ([93.41.32.9])
-        by cmsmtp with ESMTPSA
-        id RyUSh0WDRZwcbRyUThI1yj; Sat, 18 May 2019 14:31:05 +0200
-X-Rid:  guido@trentalancia.com@93.41.32.9
-Message-ID: <1558182664.16275.8.camel@trentalancia.com>
-Subject: Re: JMicron JMS578 USB-to-SATA HDD enclosure not working
-From:   Guido Trentalancia <guido@trentalancia.com>
-To:     linux-usb@vger.kernel.org
-Cc:     stern@rowland.harvard.edu
-Date:   Sat, 18 May 2019 14:31:04 +0200
-In-Reply-To: <1558121554.3771.12.camel@trentalancia.com>
-References: <1558121554.3771.12.camel@trentalancia.com>
-X-Priority: 1
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfHoSEqTi9YCi97Rdb3JPuyY26sx4NrCAAfMktu6yXRkHR56PpONDpfjOJj9fWSxvAJf6T6kEpuxKs2kpQZd0fIrr7A9dAA5t/QAPwUlk6/7h1mEr0nUH
- pQDL/SYf88xGKuZX4h9aKM1Wf3RavFBXY27Prpg55IjYckfl1T2AtYtIFXtleSzDEjXwBOiQPZO22wr2ICqA8FnR99Wx5k5AQpg=
+        id S1729541AbfERPNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 May 2019 11:13:40 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:58737 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729310AbfERPNk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 May 2019 11:13:40 -0400
+Received: (qmail 8434 invoked by uid 500); 18 May 2019 11:13:39 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 18 May 2019 11:13:39 -0400
+Date:   Sat, 18 May 2019 11:13:39 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <chunkeey@gmail.com>,
+        <chunkeey@googlemail.com>, <davem@davemloft.net>,
+        <kvalo@codeaurora.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: use-after-free Read in p54u_load_firmware_cb
+In-Reply-To: <00000000000009fcff05891bae0a@google.com>
+Message-ID: <Pine.LNX.4.44L0.1905181045400.7855-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello again.
+On Fri, 17 May 2019, syzbot wrote:
 
-I have now upgraded the original HDD enclosure firmware (version
-46.01.00.01) with the latest available one from the Hardkernel.com /
-Odroid.com project (version 173.01.00.02).
+> Hello,
+> 
+> syzbot tried to test the proposed patch but build/boot failed:
 
-The problem persists with similar symptoms, however the Sense Key is
-now different:
+Drat.  Mistake in the patch.  Let's try again.
 
-sd 2:0:0:0: [sdb] tag#13 FAILED Result: hostbyte=DID_OK
-driverbyte=DRIVER_SENSE
-sd 2:0:0:0: [sdb] tag#13 Sense Key : Data Protect [current] 
-sd 2:0:0:0: [sdb] tag#13 Add. Sense: Logical unit access not authorized
-sd 2:0:0:0: [sdb] tag#13 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
-print_req_error: critical target error, dev sdb, sector 0 flags 0
-Buffer I/O error on dev sdb, logical block 0, async page read
-sdb: unable to read partition table
-sd 2:0:0:0: [sdb] Attached SCSI disk
-sd 2:0:0:0: [sdb] tag#4 FAILED Result: hostbyte=DID_OK
-driverbyte=DRIVER_SENSE
-sd 2:0:0:0: [sdb] tag#4 Sense Key : Data Protect [current] 
-sd 2:0:0:0: [sdb] tag#4 Add. Sense: Logical unit access not authorized
-sd 2:0:0:0: [sdb] tag#4 CDB: Read(10) 28 00 74 70 6d 00 00 00 08 00
-print_req_error: critical target error, dev sdb, sector 1953524992
-flags 80700
+Incidentally, as far as I can tell there's no point in having the
+usb_get_dev() in p54u_probe() and usb_put_dev() in p54u_disconnect().  
+The device structure is guaranteed not to be deallocated while a driver
+is bound to any of its interfaces, so taking an extra reference won't
+make any difference.
 
-So, the Sense basically changed from "No additional sense" to "Logical
-unit access not authorized", which at least seems a bit more
-meaningful...
+On the other hand, I do see some problems in the firmware-load
+callback.  First, it calls device_release_driver() without first
+checking that the interface is still bound to the p54u driver.  
+Second, it shouldn't call device_release_driver() at all -- it should
+call usb_driver_release_interface().  It doesn't want to unbind the USB
+device's driver; it wants to unbind the interface's driver.  And third,
+to do this it needs to acquire udev's device lock, not the lock for
+udev's parent.
 
-The hard-drive is a brand-new Seagate 1TB HDD which works perfectly
-fine when connected to the SATA port directly.
+Alan Stern
 
-Is anybody aware of any kind of Data Protection or Access Authorization
-option that needs to be disabled or enabled, respectively ? If yes, how
-?
 
-Thanks very much for your time !
+#syz test: https://github.com/google/kasan.git usb-fuzzer
 
-Guido
+ drivers/net/wireless/intersil/p54/p54usb.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-On Fri, 17/05/2019 at 21.32 +0200, Guido Trentalancia wrote:
-> Hello.
-> 
-> I am trying to use a Digitus DA-71114 USB-to-SATA HDD enclosure.
-> 
-> Such unit is reported to use the JMicron JMS578 chipset by the same
-> manufacturer, although it is listed with a different USB VID/PID:
-> 0080:a001.
-> 
-> Immediately after plugging in the USB cable, it reports I/O errors,
-> even though the hard-drive is fine (mounts and reads/writes fine
-> under
-> Windows without the enclosure):
-> 
-> [ 5432.689781] usb 2-1: new SuperSpeed Gen 1 USB device number 29
-> using
-> xhci_hcd
-> [ 5432.702547] usb 2-1: New USB device found, idVendor=0080,
-> idProduct=a001, bcdDevice= 1.00
-> [ 5432.702553] usb 2-1: New USB device strings: Mfr=1, Product=2,
-> SerialNumber=3
-> [ 5432.702557] usb 2-1: Product: External USB 3.0
-> [ 5432.702561] usb 2-1: Manufacturer: TOSHIBA
-> [ 5432.702565] usb 2-1: SerialNumber: 201503310008E
-> [ 5432.730948] usbcore: registered new interface driver usb-storage
-> [ 5432.736029] scsi host2: uas
-> [ 5432.736373] usbcore: registered new interface driver uas
-> [ 5432.736939] scsi 2:0:0:0: Direct-Access     TO Exter nal USB
-> 3.0      6101 PQ: 0 ANSI: 6
-> [ 5432.738326] sd 2:0:0:0: Attached scsi generic sg2 type 0
-> [ 5435.336588] sd 2:0:0:0: [sdb] 1953525168 512-byte logical blocks:
-> (1.00 TB/932 GiB)
-> [ 5435.336594] sd 2:0:0:0: [sdb] 4096-byte physical blocks
-> [ 5435.336762] sd 2:0:0:0: [sdb] Write Protect is off
-> [ 5435.336766] sd 2:0:0:0: [sdb] Mode Sense: 53 00 00 08
-> [ 5435.337063] sd 2:0:0:0: [sdb] Write cache: enabled, read cache:
-> enabled, doesn't support DPO or FUA
-> [ 5435.337347] sd 2:0:0:0: [sdb] Optimal transfer size 33553920 bytes
-> not a multiple of physical block size (4096 bytes)
-> [ 5465.794203] sd 2:0:0:0: [sdb] tag#6 uas_eh_abort_handler 0 uas-tag 
-> 1
-> inflight: CMD IN 
-> [ 5465.794211] sd 2:0:0:0: [sdb] tag#6 CDB: Read(10) 28 00 00 00 00
-> 00
-> 00 00 08 00
-> [ 5465.800252] scsi host2: uas_eh_device_reset_handler start
-> [ 5465.915678] usb 2-1: reset SuperSpeed Gen 1 USB device number 29
-> using xhci_hcd
-> [ 5465.931925] scsi host2: uas_eh_device_reset_handler success
-> [ 5496.510222] scsi host2: uas_eh_device_reset_handler start
-> [ 5496.510329] sd 2:0:0:0: [sdb] tag#11 uas_zap_pending 0 uas-tag 1
-> inflight: CMD 
-> [ 5496.510337] sd 2:0:0:0: [sdb] tag#11 CDB: Read(10) 28 00 00 00 00
-> 00
-> 00 00 08 00
-> [ 5496.625614] usb 2-1: reset SuperSpeed Gen 1 USB device number 29
-> using xhci_hcd
-> [ 5496.642411] scsi host2: uas_eh_device_reset_handler success
-> [ 5527.230204] scsi host2: uas_eh_device_reset_handler start
-> [ 5527.230309] sd 2:0:0:0: [sdb] tag#9 uas_zap_pending 0 uas-tag 1
-> inflight: CMD 
-> [ 5527.230316] sd 2:0:0:0: [sdb] tag#9 CDB: Read(10) 28 00 00 00 00
-> 00
-> 00 00 08 00
-> [ 5527.345769] usb 2-1: reset SuperSpeed Gen 1 USB device number 29
-> using xhci_hcd
-> [ 5527.361964] scsi host2: uas_eh_device_reset_handler success
-> [ 5527.780612] sd 2:0:0:0: [sdb] tag#10 FAILED Result:
-> hostbyte=DID_OK
-> driverbyte=DRIVER_SENSE
-> [ 5527.780631] sd 2:0:0:0: [sdb] tag#10 Sense Key : Aborted Command
-> [current] 
-> [ 5527.780636] sd 2:0:0:0: [sdb] tag#10 Add. Sense: No additional
-> sense
-> information
-> [ 5527.780642] sd 2:0:0:0: [sdb] tag#10 CDB: Read(10) 28 00 00 00 00
-> 00
-> 00 00 08 00
-> [ 5527.780647] print_req_error: I/O error, dev sdb, sector 0 flags 0
-> [ 5527.780657] Buffer I/O error on dev sdb, logical block 0, async
-> page
-> read
-> 
-> I have also attached the usbmon dump just before and after plugging
-> in
-> the device.
-> 
-> Adding the US_FL_BROKEN_FUA in unusual_uas.h and unusual_devs.h does
-> not help !
-> 
-> I have also tried adding many other quirks (such as
-> US_FL_NO_REPORT_OPCODES, US_FL_NO_ATA_1X, US_FL_IGNORE_RESIDUE,
-> US_FL_FIX_CAPACITY, US_FL_NO_WP_DETECT, US_FL_MAX_SECTORS_64) without
-> any luck !!
-> 
-> The problem also happens when not using UAS but the standard USB
-> storage driver (fails on READ command, sector 0 and sometimes also
-> sector 1953524992).
-> 
-> When the drive is used in the enclosure it is completely unusable, as
-> it fails even on fdisk...
-> 
-> What should I do ?
-> 
-> Thanks.
-> 
-> Guido
+Index: usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/intersil/p54/p54usb.c
++++ usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
+@@ -923,6 +923,7 @@ static void p54u_load_firmware_cb(const
+ 	struct usb_device *udev = priv->udev;
+ 	int err;
+ 
++	pr_info("%s: priv->udev = %px\n", __func__, udev);
+ 	complete(&priv->fw_wait_load);
+ 	if (firmware) {
+ 		priv->fw = firmware;
+@@ -969,6 +970,8 @@ static int p54u_load_firmware(struct iee
+ 	if (i < 0)
+ 		return i;
+ 
++	dev_info(&udev->dev, "%s: udev @ %px, dev.parent @ %px\n",
++			__func__, udev, &udev->dev.parent);
+ 	dev_info(&priv->udev->dev, "Loading firmware file %s\n",
+ 	       p54u_fwlist[i].fw);
+
