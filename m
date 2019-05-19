@@ -2,80 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD22822845
-	for <lists+linux-usb@lfdr.de>; Sun, 19 May 2019 20:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92F322786
+	for <lists+linux-usb@lfdr.de>; Sun, 19 May 2019 19:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729496AbfESSPi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 May 2019 14:15:38 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45311 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729251AbfESSPi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 May 2019 14:15:38 -0400
-Received: by mail-pf1-f195.google.com with SMTP id s11so6067563pfm.12;
-        Sun, 19 May 2019 11:15:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=LvoOGjtS9Q4v/OhQz+Xvt2yLQuispJiUfyTAeVDnMZ4=;
-        b=bbRR2bxzUuOllnh0/6nD2eAg5pGTqwoSpcBcQaFo8iNh0RHv2G1k2pQ4c1QaPL9SXa
-         NV0HHNI4IOKBJjVtUSkNJKOmUmqRIzz1ziVWFtDM1Z2kxBM1M8+8MxMZss9oXSfI2vfq
-         zVA8+Y0cSykPo5ytUKv4j/vwduPDRq2U2bQhZ0EyuUtRqO7Kf/ozSApKW9EdGHIyHdFM
-         Fpp5Of40958AdVd7rzupfDZSClSGIIoobTEdTmBSyf+g+PN051tgvztE7JAS26MnNZ1U
-         Hor1qStqQVSlC/bblDycPbwp2WL29cnbm4NI8KN4F90N2ygDm+JQ+nrBtYyoSTgjdXnu
-         1mmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LvoOGjtS9Q4v/OhQz+Xvt2yLQuispJiUfyTAeVDnMZ4=;
-        b=AAars4n4wQXOcidKuaNj1ISdxBVwo1WEsF8CKzyA3NbZM0FvGewtowCN719I6s3I7U
-         pWrekPU0bd7gWhd9YM6jn7oVUrZ1McZiest24LaYmSmBXzKlvfsnOXT+7bJ1klGfD2+e
-         whXqrn+9zUwR81b+X3o15AYa3V6QS38kXNxpPq3652fXt3QFHP+JTRvmw4faFfuV+UIx
-         540Es4dQMCnD4+mNDi3RnBsH2hTyxvs7lNMbPXeazNK3dUFRyt/+JpXYfasjcB+CiHz1
-         1xo3j2cu528L1a2ofhaJMmNctwpYy902W6MYVvepgVUe0Jgpx95OYc3xiMatLJRtG5bB
-         h44Q==
-X-Gm-Message-State: APjAAAXRTH9WRdJs6FWGvg/mbhXzqNdu7JQ7RS5SBfDAvbJgFRUlZQ6W
-        qPCDFOR5bS20kVcwGXiWHoDo3/JDFL0=
-X-Google-Smtp-Source: APXvYqy3lkVNGdk2GsXbhC3BVFIuGkQcOtV/abTkec19BkOZMMKFGsQMT/jBr9HzKg45Z2p2n3q2XQ==
-X-Received: by 2002:a63:2cc9:: with SMTP id s192mr25216471pgs.24.1558238148827;
-        Sat, 18 May 2019 20:55:48 -0700 (PDT)
-Received: from localhost ([43.224.245.181])
-        by smtp.gmail.com with ESMTPSA id a11sm5188982pff.128.2019.05.18.20.55.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 18 May 2019 20:55:48 -0700 (PDT)
-From:   Weitao Hou <houweitaoo@gmail.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Weitao Hou <houweitaoo@gmail.com>
-Subject: [PATCH] usb: fix typos in code comments
-Date:   Sun, 19 May 2019 11:55:42 +0800
-Message-Id: <20190519035542.22094-1-houweitaoo@gmail.com>
-X-Mailer: git-send-email 2.18.0
+        id S1727050AbfESRMS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 May 2019 13:12:18 -0400
+Received: from sauhun.de ([88.99.104.3]:44722 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725766AbfESRMR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 19 May 2019 13:12:17 -0400
+Received: from localhost (p5486CF3F.dip0.t-ipconnect.de [84.134.207.63])
+        by pokefinder.org (Postfix) with ESMTPSA id D68EE2C374E;
+        Sun, 19 May 2019 16:47:04 +0200 (CEST)
+Date:   Sun, 19 May 2019 16:47:04 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Ajay Gupta <ajaykuee@gmail.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
+Subject: Re: [PATCH 1/4] i2c: nvidia-gpu: add runtime pm support
+Message-ID: <20190519144704.GB7291@kunai>
+References: <20190517163818.5007-1-ajayg@nvidia.com>
+ <20190517163818.5007-2-ajayg@nvidia.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yNb1oOkm5a9FJOVX"
+Content-Disposition: inline
+In-Reply-To: <20190517163818.5007-2-ajayg@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-fix lenght to length
 
-Signed-off-by: Weitao Hou <houweitaoo@gmail.com>
----
- Documentation/devicetree/bindings/usb/s3c2410-usb.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--yNb1oOkm5a9FJOVX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/usb/s3c2410-usb.txt b/Documentation/devicetree/bindings/usb/s3c2410-usb.txt
-index e45b38ce2986..26c85afd0b53 100644
---- a/Documentation/devicetree/bindings/usb/s3c2410-usb.txt
-+++ b/Documentation/devicetree/bindings/usb/s3c2410-usb.txt
-@@ -4,7 +4,7 @@ OHCI
- 
- Required properties:
-  - compatible: should be "samsung,s3c2410-ohci" for USB host controller
-- - reg: address and lenght of the controller memory mapped region
-+ - reg: address and length of the controller memory mapped region
-  - interrupts: interrupt number for the USB OHCI controller
-  - clocks: Should reference the bus and host clocks
-  - clock-names: Should contain two strings
--- 
-2.18.0
+> diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c=
+-nvidia-gpu.c
+> index 1c8f708f212b..9d347583f8dc 100644
+> --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
+> +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
+> @@ -175,6 +175,7 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *ad=
+ap,
+>  	 * The controller supports maximum 4 byte read due to known
+>  	 * limitation of sending STOP after every read.
+>  	 */
+> +	pm_runtime_get_sync(i2cd->dev);
+>  	for (i =3D 0; i < num; i++) {
+>  		if (msgs[i].flags & I2C_M_RD) {
+>  			/* program client address before starting read */
+> @@ -189,7 +190,7 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *ad=
+ap,
+>  			status =3D gpu_i2c_start(i2cd);
+>  			if (status < 0) {
+>  				if (i =3D=3D 0)
+> -					return status;
+> +					goto exit;
+>  				goto stop;
 
+Hmm, goto here, goto there... OK, the code didn't have a good flow even
+before this patch.
+
+>  			}
+> =20
+> @@ -206,13 +207,18 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *=
+adap,
+>  	}
+>  	status =3D gpu_i2c_stop(i2cd);
+>  	if (status < 0)
+> -		return status;
+> +		goto exit;
+> =20
+> +	pm_runtime_mark_last_busy(i2cd->dev);
+> +	pm_runtime_put_autosuspend(i2cd->dev);
+>  	return i;
+>  stop:
+>  	status2 =3D gpu_i2c_stop(i2cd);
+>  	if (status2 < 0)
+>  		dev_err(i2cd->dev, "i2c stop failed %d\n", status2);
+> +exit:
+> +	pm_runtime_mark_last_busy(i2cd->dev);
+> +	pm_runtime_put_autosuspend(i2cd->dev);
+>  	return status;
+>  }
+
+I am not nacking this, yet the use of goto here seems too much for my
+taste. If you could try refactoring the whole code (dunno, maybe using a
+flag when to use stop?), I'd appreciate this.
+
+
+--yNb1oOkm5a9FJOVX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzhbGQACgkQFA3kzBSg
+KbZDyg//du45dCyEhsChHTtDukHd68YPJsYgjEHa6ZDQ8dmQDQJiviicLbXZ0x0Y
+g2qHjrgTXw/RsBdCVclivdTW2JzbVSAVQ50yFF4Ra/7BtGcT7KPUTMf5p5x9O94O
+ba5YQ1asZkuZK5DnICWzgAIiWsSQBo0IaBnXZQLD/km8kS3iJ+MQIKHUAjKrFrzm
+HAREdnpyB/rmT46kICJep8ThVMwcz/mxVmAFX6dXNIKQSvASS220E2Zxc6HDKzby
+8elZdG5lGeOHy8Qo1t2thBek7FnL5LQz3c6mlkmiLTkWwVcjOQeYkKa5c2V+rRUJ
+u/W0QDMYZyExj2ISIrQTmrRt3D9jcVxYECI5RrtIqydKtTyxXOsYK/lITa5eYn0Z
+P/mUEFBPxrtHJnZ10rnKHMsMRddrMpFDBd7QjSBgHG6ceSCM7Hb3zfxoq2mMcIod
+9oGG1c8xcE6iWnuptldByzeEXT+yfkaKEVQzyPMPRMlzHCnrvGn6Ub3FU0N5/RXa
+YtmZmnRwhqtQFtkCPZQZ5FkGapZyfswPgYQerDyjQj7CuHDTYLEtp1coV9MdhDCk
+Pri2yTjLRDj/nSFn0MuoYPmNhaa8ZsNQUCpeVtMDe0w+Swk25NYAvZB9jbKkO1UR
+wGrOFuHunOeG5s0TDeYFCAAeonj3pHSfumz34gorfmiLhxmUIyA=
+=y56k
+-----END PGP SIGNATURE-----
+
+--yNb1oOkm5a9FJOVX--
