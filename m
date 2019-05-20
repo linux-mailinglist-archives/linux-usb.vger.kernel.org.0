@@ -2,113 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9212823C2B
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 17:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC3F23C68
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 17:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388789AbfETPbS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 11:31:18 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:38417 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731262AbfETPbS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 11:31:18 -0400
-Received: by mail-wm1-f65.google.com with SMTP id t5so12147902wmh.3;
-        Mon, 20 May 2019 08:31:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=U14r5RuHwz6CW9kWdqe1Yxv8qr6791SEzbYW5ZFfNqk=;
-        b=X42kXwwsyIepoPQ5+7f0C8mITSC9q9M4R3X6qzcOZJ+6VSrtBKWV3ZYEviRARRlQJ7
-         UzHjPebLhixIVOSb6DT/Ks5hOQjyBSeqOnR/Pc0iiBtpLvXdIdODVy0/sp1pEe51rCOS
-         WWHVhmU6BxArfJMfK1Fqh+5ntdjK84WS0UR++HrqeOd7SEBrkJqHt/uJEkd4eZNsXCPf
-         3LrdntUh6Oh5JlGtwXGyhR/epNkW0eM7fnBi/IvEZogP8tsvVqoVjJRZzb/jdBBr5WLn
-         glyCeIOZMlQUY7KZGZLi9Ce67PklCxkwKyJp37W5N1UEo/ZiLxqqA16zwla+l8dj3NfH
-         UWKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=U14r5RuHwz6CW9kWdqe1Yxv8qr6791SEzbYW5ZFfNqk=;
-        b=B0F1i/Mk4YyKX5j4CxOByeHD4dGEozyFE9C657Rc1Y74/jKOKro8ZO5wUaUJGPOEvg
-         slrs0rxkY/8s5b0SP2L205Cx01faeIP+wgJ1zZupGIDXjQwnNtPzetXAGeN7f8ivTm2h
-         +QPhjVmuzsnFIWlmdFGi/XshpUWY9BhavERX0vzQ8ulKDQxNRw3adMsZ9h/QLXLeu7z1
-         rofQarvsRu71aZo/OYH1aHXBW8UcH45R9L0btGBjlMELrXQz4GPKE/K0M93Pnuz+hzZA
-         MKGJ4YXgMKjBxXJPSfa/iOo74BhONlGDlSIFiD2e+KeLDbfRWa2bPBp0xML5VDgNQY4Q
-         NFnQ==
-X-Gm-Message-State: APjAAAXUdq0Sqt68kEm2eBGfIDAr5CncW1O+hsyU+gd6a2VnlBBD0ewE
-        tv+VZK7Nt/8391Z3dM0G8hhyYI7A
-X-Google-Smtp-Source: APXvYqzBLCxDCKBc93FboPBqTKnxofoRQHsgqJbVB8qp+LrOaxz2zsTmBoFWRhfw3rS0EiN1U5ZXVQ==
-X-Received: by 2002:a1c:7511:: with SMTP id o17mr5112701wmc.39.1558366276038;
-        Mon, 20 May 2019 08:31:16 -0700 (PDT)
-Received: from ubuntu.faroeurope.com (mail.faroeurope.com. [213.61.174.138])
-        by smtp.gmail.com with ESMTPSA id x1sm11666555wrp.35.2019.05.20.08.31.14
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 20 May 2019 08:31:15 -0700 (PDT)
-From:   Bernd Eckstein <3erndeckstein@gmail.com>
-X-Google-Original-From: Bernd Eckstein <3ernd.Eckstein@gmail.com>
-To:     davem@davemloft.net
-Cc:     linux@roeck-us.net, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corsac@corsac.net, Oliver.Zweigle@faro.com,
-        3ernd.Eckstein@gmail.com
-Subject: [PATCH] usbnet: ipheth: fix racing condition
-Date:   Mon, 20 May 2019 17:31:09 +0200
-Message-Id: <1558366269-17787-1-git-send-email-3ernd.Eckstein@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S2392290AbfETPmN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 11:42:13 -0400
+Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:51333 "EHLO
+        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388878AbfETPmM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 11:42:12 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 3D67E3F7AC;
+        Mon, 20 May 2019 17:42:04 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Flag: NO
+X-Spam-Score: -2.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 tagged_above=-999 required=6.31
+        tests=[ALL_TRUSTED=-1, BAYES_00=-1.9] autolearn=ham autolearn_force=no
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id m4YrvbgMd1na; Mon, 20 May 2019 17:41:58 +0200 (CEST)
+Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
+        (Authenticated sender: mb547485)
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 251973F7F2;
+        Mon, 20 May 2019 17:41:56 +0200 (CEST)
+Date:   Mon, 20 May 2019 17:41:56 +0200
+From:   Fredrik Noring <noring@nocrew.org>
+To:     Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>, "hch@lst.de" <hch@lst.de>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "marex@denx.de" <marex@denx.de>,
+        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>,
+        Leo Li <leoyang.li@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
+ rework
+Message-ID: <20190520154156.GA3664@sx9>
+References: <20190514143807.7745-1-laurentiu.tudor@nxp.com>
+ <9d34015d-c219-179b-3141-4b0de3530ac3@arm.com>
+ <20190514182931.GA2559@sx9>
+ <0e5f3b86-7a80-eec7-691b-34a123194208@nxp.com>
+ <20190515162858.GB17162@sx9>
+ <ed63c117-610c-ea49-f45e-727be220745f@nxp.com>
+ <20190516151548.GB53952@sx9>
+ <5fa97254-3038-6fe7-a7e7-a267262049c6@nxp.com>
+ <20190517174159.GA32450@sx9>
+ <3c8897e9-218e-3fff-1735-816ffd30e908@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3c8897e9-218e-3fff-1735-816ffd30e908@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix a racing condition in ipheth.c that can lead to slow performance.
+Hi Laurentiu,
 
-Bug: In ipheth_tx(), netif_wake_queue() may be called on the callback
-ipheth_sndbulk_callback(), _before_ netif_stop_queue() is called.
-When this happens, the queue is stopped longer than it needs to be,
-thus reducing network performance.
+> Wow, that's excellent news! Thanks a lot for looking into this.
 
-Fix: Move netif_stop_queue() in front of usb_submit_urb(). Now the order
-is always correct. In case, usb_submit_urb() fails, the queue is woken up
-again as callback will not fire.
+You are welcome!
 
-Testing: This racing condition is usually not noticeable, as it has to
-occur very frequently to slowdown the network. The callback from the USB
-is usually triggered slow enough, so the situation does not appear.
-However, on a Ubuntu Linux on VMWare Workstation, running on Windows 10,
-the we loose the race quite often and the following speedup can be noticed:
+> Are you ok if I add your Signed-Off-by and maybe also Tested-by in the 
+> first patch of the series?
 
-Without this patch: Download:  4.10 Mbit/s, Upload:  4.01 Mbit/s
-With this patch:    Download: 36.23 Mbit/s, Upload: 17.61 Mbit/s
+Yes, but I have two comments:
 
-Signed-off-by: Oliver Zweigle <Oliver.Zweigle@faro.com>
-Signed-off-by: Bernd Eckstein <3ernd.Eckstein@gmail.com>
+1. ohci_mem_init() allocates two DMA pools that are no longer relevant, so
+   it seems appropriate to assign NULL to ohci->td_cache and ohci->ed_cache,
+   and document this exception in struct ohci_hcd. Unless something more
+   elegant can be done, of course.
 
----
- drivers/net/usb/ipheth.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+2. A device address is supplied as phys_addr_t phys to gen_pool_add_virt().
+   This seems to work in this particular DMA application, but there will be
+   problems if someone does phys_to_virt() or suchlike. Can this be improved
+   or clearly explained? gen_pool_virt_to_phys() searches in address ranges,
+   for example, so it appears the implementation uses phys quite carefully.
 
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index c247aed..8c01fbf 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -383,17 +383,18 @@ static int ipheth_tx(struct sk_buff *skb, struct net_device *net)
- 			  dev);
- 	dev->tx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+> As a side note, I plan to add a new HCD function and name it something 
+> like hcd_setup_local_mem() that would take care of setting up the 
+> genalloc for drivers.
+
+Good! Then I suppose the HCD_LOCAL_MEM assignment can be removed from the
+drivers too? Like this one:
+
+	ohci_ps2_hc_driver.flags |= HCD_LOCAL_MEM;
+
+Regarding the previous HCD IRQ question, lib/genalloc.c says that
+
+	It is safe to use the allocator in NMI handlers and other special
+	unblockable contexts that could otherwise deadlock on locks.  This
+	is implemented by using atomic operations and retries on any
+	conflicts.  The disadvantage is that there may be livelocks in
+	extreme cases.  For better scalability, one allocator can be used
+	for each CPU.
+
+so it appears to be good enough for USB purposes.
+
+> Yes, I think it would make sense to put the new API in a distinct patch. 
+> I think we can either include it in the next version of the patch series 
+> or you can submit separately and I'll mention it as dependency for this 
+> patch series, however you prefer.
+
+Please find the patch below and if possible include it in your patch series.
+
+Fredrik
+
+lib/genalloc.c: Add gen_pool_dma_zalloc() for zeroed DMA allocations
+
+gen_pool_dma_zalloc() is a zeroed memory variant of gen_pool_dma_alloc().
+Document return values of both, and indicate NULL as a "%NULL" constant.
+
+Signed-off-by: Fredrik Noring <noring@nocrew.org>
+
+--- a/include/linux/genalloc.h
++++ b/include/linux/genalloc.h
+@@ -121,6 +121,8 @@ extern unsigned long gen_pool_alloc_algo(struct gen_pool *, size_t,
+ 		genpool_algo_t algo, void *data);
+ extern void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size,
+ 		dma_addr_t *dma);
++extern void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size,
++		dma_addr_t *dma);
+ extern void gen_pool_free(struct gen_pool *, unsigned long, size_t);
+ extern void gen_pool_for_each_chunk(struct gen_pool *,
+ 	void (*)(struct gen_pool *, struct gen_pool_chunk *, void *), void *);
+--- a/lib/genalloc.c
++++ b/lib/genalloc.c
+@@ -337,12 +337,14 @@ EXPORT_SYMBOL(gen_pool_alloc_algo);
+  * gen_pool_dma_alloc - allocate special memory from the pool for DMA usage
+  * @pool: pool to allocate from
+  * @size: number of bytes to allocate from the pool
+- * @dma: dma-view physical address return value.  Use NULL if unneeded.
++ * @dma: dma-view physical address return value.  Use %NULL if unneeded.
+  *
+  * Allocate the requested number of bytes from the specified pool.
+  * Uses the pool allocation function (with first-fit algorithm by default).
+  * Can not be used in NMI handler on architectures without
+  * NMI-safe cmpxchg implementation.
++ *
++ * Return: virtual address of the allocated memory, or %NULL on failure
+  */
+ void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
+ {
+@@ -362,6 +364,30 @@ void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
+ }
+ EXPORT_SYMBOL(gen_pool_dma_alloc);
  
-+	netif_stop_queue(net);
- 	retval = usb_submit_urb(dev->tx_urb, GFP_ATOMIC);
- 	if (retval) {
- 		dev_err(&dev->intf->dev, "%s: usb_submit_urb: %d\n",
- 			__func__, retval);
- 		dev->net->stats.tx_errors++;
- 		dev_kfree_skb_any(skb);
-+		netif_wake_queue(net);
- 	} else {
- 		dev->net->stats.tx_packets++;
- 		dev->net->stats.tx_bytes += skb->len;
- 		dev_consume_skb_any(skb);
--		netif_stop_queue(net);
- 	}
- 
- 	return NETDEV_TX_OK;
--- 
-2.7.4
-
++/**
++ * gen_pool_dma_zalloc - allocate special zeroed memory from the pool for DMA usage
++ * @pool: pool to allocate from
++ * @size: number of bytes to allocate from the pool
++ * @dma: dma-view physical address return value.  Use %NULL if unneeded.
++ *
++ * Allocate the requested number of zeroed bytes from the specified pool.
++ * Uses the pool allocation function (with first-fit algorithm by default).
++ * Can not be used in NMI handler on architectures without
++ * NMI-safe cmpxchg implementation.
++ *
++ * Return: virtual address of the allocated zeroed memory, or %NULL on failure
++ */
++void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
++{
++	void *vaddr = gen_pool_dma_alloc(pool, size, dma);
++
++	if (vaddr)
++		memset(vaddr, 0, size);
++
++	return vaddr;
++}
++EXPORT_SYMBOL(gen_pool_dma_zalloc);
++
+ /**
+  * gen_pool_free - free allocated special memory back to the pool
+  * @pool: pool to free to
