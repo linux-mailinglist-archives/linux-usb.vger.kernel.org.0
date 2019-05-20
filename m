@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66090232E4
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 13:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8771232E8
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 13:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731586AbfETLnP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 07:43:15 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:34808 "EHLO
+        id S1730588AbfETLnc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 07:43:32 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:34876 "EHLO
         kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731563AbfETLnP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 07:43:15 -0400
+        with ESMTP id S1729598AbfETLnc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 07:43:32 -0400
 Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 0EB9B25AD7A;
-        Mon, 20 May 2019 21:43:13 +1000 (AEST)
+        by kirsty.vergenet.net (Postfix) with ESMTPA id A365E25AD7A;
+        Mon, 20 May 2019 21:43:29 +1000 (AEST)
 Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id 11C379404D4; Mon, 20 May 2019 13:43:11 +0200 (CEST)
-Date:   Mon, 20 May 2019 13:43:10 +0200
+        id B20D79404D4; Mon, 20 May 2019 13:43:27 +0200 (CEST)
+Date:   Mon, 20 May 2019 13:43:27 +0200
 From:   Simon Horman <horms@verge.net.au>
 To:     Chris Brandt <chris.brandt@renesas.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -29,14 +29,14 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v4 12/13] ARM: dts: r7s9210: Add USB Device support
-Message-ID: <20190520114309.j7gjuu2nkgbxire5@verge.net.au>
+Subject: Re: [PATCH v4 13/13] ARM: dts: rza2mevb: Add USB Host support
+Message-ID: <20190520114326.fsv5bxgm6xbpxgqc@verge.net.au>
 References: <20190515152048.42363-1-chris.brandt@renesas.com>
- <20190515152048.42363-13-chris.brandt@renesas.com>
+ <20190515152048.42363-14-chris.brandt@renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190515152048.42363-13-chris.brandt@renesas.com>
+In-Reply-To: <20190515152048.42363-14-chris.brandt@renesas.com>
 Organisation: Horms Solutions BV
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-usb-owner@vger.kernel.org
@@ -44,8 +44,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 15, 2019 at 10:20:47AM -0500, Chris Brandt wrote:
-> Add USB Device support for RZ/A2.
+On Wed, May 15, 2019 at 10:20:48AM -0500, Chris Brandt wrote:
+> Enable USB Host support for both the Type-C connector on the CPU board
+> and the Type-A plug on the sub board.
+> 
+> Both boards are also capable of USB Device operation as well after the
+> appropriate Device Tree modifications.
 > 
 > Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
 > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
