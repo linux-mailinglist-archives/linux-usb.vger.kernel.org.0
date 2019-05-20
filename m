@@ -2,114 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E1023FD9
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 20:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DD224073
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 20:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727208AbfETSDQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 14:03:16 -0400
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:36287 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726964AbfETSDQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 14:03:16 -0400
-Received: by mail-vk1-f196.google.com with SMTP id l199so4110668vke.3
-        for <linux-usb@vger.kernel.org>; Mon, 20 May 2019 11:03:15 -0700 (PDT)
+        id S1726384AbfETSda (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 14:33:30 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46245 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726199AbfETSd3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 14:33:29 -0400
+Received: by mail-wr1-f66.google.com with SMTP id r7so15677172wrr.13
+        for <linux-usb@vger.kernel.org>; Mon, 20 May 2019 11:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l37zIVlCi4dbNDMGaFWNQ6h6zOWM8mlC8MVadX95qhk=;
-        b=ZDuGf+wIJRM3SUZGnB5R5xtdCvh6zDqkd2hQEQlMJrnwn1aNAweMHsf9xJTipnH5Xm
-         JZf3UZvTYWJlvaaVC3pYVCAC/YPgsGT0hFI1XlBBBwmfxPsN2niZv35FfsxOzbIDe8sL
-         1oYbID6Y9SrEv12zWHhdJyfiOGNfn2VcH3VoA=
+         :cc:content-transfer-encoding;
+        bh=632+c6IqzK2BjCuWL6WJ+2pWVzzX6ijbqjHnP9tGBNo=;
+        b=ekCEzlBbb16dcmDM2i7++5oq1yDSWABTDI0lNiL2HxJr1DMsWpttMTWJPfFwSp/tMp
+         iG/sqo4wTFuEzMiLKTlYGq+gX6jl6el1X/zfh13X78mLJZMm8qt2QLvi1WKMgchdJ4pe
+         UR4FnetITwQvgr4DIc6PZBOC+DRO9325Qsp4YS1V6qqRJhzux8+s1PcjnlRp9YXH+3Ii
+         eZEW9n+paE2oHGZfJWhmdguK+aEwIVC0Crm9ZOfyOFW1C2x18GeZFMOL/IqbqVj1Ij8J
+         sSukDskZ7qElHkQBKSm9AEsxyZSWLTVWFkm3/QLpB7RkfMWsGQCGPWm6H6J4JPtMQ0xk
+         SqQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l37zIVlCi4dbNDMGaFWNQ6h6zOWM8mlC8MVadX95qhk=;
-        b=mezpdHNjDZXe8erMk42vP+weE4mcRikTW7IMt3K7lYMDCbwZaoxth+8Zia/jqkZrss
-         ohX/RBDRExKDFA6r0h+sHv/MbTPYw2RT56IiSepy7ZV1fNqqqBXZgwEpjMHxXqIE7dRt
-         rHl4TY99tPE1aiWTW28C1AM7/Bq236WA94V+HLQkMBJ1bWK6D/DEMFSmIcVqMpwkag+S
-         gSz64RQRrcQ/Zicm/FS8+2++B12g4Sg5OlXTPWsAgQz+qDB013o2Dti9wdrOjgS5asdR
-         Hxj92svO4hpd0LMkxspUL94jtyE3yD7AizGLvmUXireA2iJPPdkJ0WhN4Mm22YTyoCDa
-         V4kg==
-X-Gm-Message-State: APjAAAWgae+voGVa9kYMMM1+D6SsewN06AYWEU/ZVibtJHgkS2EU8oHm
-        D6DJYnCHwNJkXjaflcvkfJgqzNDB9DU=
-X-Google-Smtp-Source: APXvYqzhcsra7ouRHK5+6vFV8v01TGWHNOFvszEpjx9SqZY/RGh+tKqjVUe/Pr0e2R7rSfl3IrQn8A==
-X-Received: by 2002:ac5:c542:: with SMTP id d2mr8468081vkl.57.1558375394449;
-        Mon, 20 May 2019 11:03:14 -0700 (PDT)
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com. [209.85.221.169])
-        by smtp.gmail.com with ESMTPSA id j8sm1014223vsd.0.2019.05.20.11.03.14
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 11:03:14 -0700 (PDT)
-Received: by mail-vk1-f169.google.com with SMTP id d7so4110923vkf.1
-        for <linux-usb@vger.kernel.org>; Mon, 20 May 2019 11:03:14 -0700 (PDT)
-X-Received: by 2002:a1f:a410:: with SMTP id n16mr8477054vke.73.1558375068277;
- Mon, 20 May 2019 10:57:48 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=632+c6IqzK2BjCuWL6WJ+2pWVzzX6ijbqjHnP9tGBNo=;
+        b=qmhad6cnpSZtSD6E1IawagitCF6LOYuNW+7n0RKzC4wuQPh3P2sL9KUcgWUmZGWYPv
+         3jPRU/V0oOeTJa/d3PZFbZs3z7QQ5cOzhZg31LXcl/8orZFNUs7nto7ifku04ga6Mdhg
+         6anlO02CCvCFHc6kQI36IBRFxp1MVYpeBxb7vwc7eOinMj6ecNR3IvHOX4H6xktUW1Ah
+         7Hy9YfpnaPmiRijeoV9WxblWSwSsxROWOWaLq9uSfHN9Q7pAL8EPemLTACYJBOpIjvGm
+         sWhYDMzAF+5njQKDJDAY+bgjfsZBQWHFSbB3MJFsbZLYLfWMG2HJ2BfpsCVY1FNzRqEf
+         Qs7g==
+X-Gm-Message-State: APjAAAVPiR73Fn+cmx7INpjy9Mn7Z1Y0cNk+qsqqTiUArljugohgI9xk
+        GBrpUnhRB9RxP1WqZEjvlBa9nZxiRNqyw1pRZK9SnA==
+X-Google-Smtp-Source: APXvYqwt3G9jviKenTL+rRfOnizevWGrAzRjnqp0RfxuoTG9FygdyFOjs5HHMu222ux92N+pxvaHPqhpF4oC93bBtgI=
+X-Received: by 2002:a5d:618b:: with SMTP id j11mr3562517wru.36.1558377208186;
+ Mon, 20 May 2019 11:33:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190516225941.170355-3-dianders@chromium.org> <201905201037.p3rNy0yX%lkp@intel.com>
-In-Reply-To: <201905201037.p3rNy0yX%lkp@intel.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 20 May 2019 10:57:37 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VOPAufL=u5iRCpO=Rdg--goZJ3jxM1znzyEXMTVBTFJg@mail.gmail.com>
-Message-ID: <CAD=FV=VOPAufL=u5iRCpO=Rdg--goZJ3jxM1znzyEXMTVBTFJg@mail.gmail.com>
-Subject: Re: [REPOST PATCH v2 2/3] USB: dwc2: Don't turn off the usbphy in
- suspend if wakeup is enabled
-To:     kbuild test robot <lkp@intel.com>
-Cc:     kbuild-all@01.org, Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Alexandru M Stan <amstan@chromium.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        William Wu <william.wu@rock-chips.com>,
-        linux-usb@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        Randy Li <ayaka@soulik.info>, Chris <zyw@rock-chips.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ryan Case <ryandcase@chromium.org>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Dinh Nguyen <dinguyen@opensource.altera.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+ <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com> <CALAqxLUfJYUtmQDC_aDMxW7KcPUawGoRq-PNUfmzQuNKh97FmQ@mail.gmail.com>
+ <CALAqxLVUFfrPVVjR74V3PhhtcCytfp=cUYjo=BcJ14D1fkVXTw@mail.gmail.com>
+ <7ec57c29-d1ab-dc4c-755d-a6009b9132b5@collabora.com> <CALAqxLUgnTB7aZ4edXCaG8SJsJzfY1_yNEPc6Losssw5Xy9-XA@mail.gmail.com>
+ <36620156-d119-b1b2-989e-0c13b783296e@collabora.com> <db5665cf-6274-c254-720c-798fec79d131@collabora.com>
+ <02E7334B1630744CBDC55DA8586225837F884D53@ORSMSX103.amr.corp.intel.com>
+In-Reply-To: <02E7334B1630744CBDC55DA8586225837F884D53@ORSMSX103.amr.corp.intel.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 20 May 2019 11:33:16 -0700
+Message-ID: <CALAqxLWVc6DnRHJ9gQ8orY7f53g4j+x3BWnoJdBv3sXDZVNpVg@mail.gmail.com>
+Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+To:     "Yang, Fei" <fei.yang@intel.com>
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen Yu <chenyu56@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, May 20, 2019 at 9:23 AM Yang, Fei <fei.yang@intel.com> wrote:
+>
+> >> One question that comes to my mind is this: Does the USB transmission
+> >> stall (e.g. endpoint stall) or not? In other words, is adb connection
+> >> broken because USB stops transmitting anything, or because the data is
+> >> transmitted but its integrity is broken during transmission and that
+> >> causes adb/adbd confusion which results in stopping their operation?
+> >> Does anything keep happening on FunctionFS when adb connection is
+> >> broken?
+> >
+> >Any discoveries about the problem?
+>
+> In my debugging, I'm seeing a lot of requests queued up through ffs_epfil=
+e_io (returning -EIOCBQUEUED), but
+> only a few of them came back through ffs_epfile_async_io_complete -> ffs_=
+user_copy_worker.
+> I don=E2=80=99t think there is a USB transmission stall though, because i=
+f I manually disable io_data->use_sg, everything
+> goes back to normal. So it looks more likely to be a buffer handling prob=
+lem in the DWC3 driver.
 
-On Sun, May 19, 2019 at 7:08 PM kbuild test robot <lkp@intel.com> wrote:
->
-> Hi Douglas,
->
-> Thank you for the patch! Yet something to improve:
->
-> [auto build test ERROR on balbi-usb/next]
-> [also build test ERROR on v5.2-rc1 next-20190517]
-> [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
->
-> url:    https://github.com/0day-ci/linux/commits/Douglas-Anderson/Documentation-dt-bindings-Add-snps-need-phy-for-wake-for-dwc2-USB/20190520-033119
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git next
-> config: x86_64-randconfig-h0-05191510 (attached as .config)
-> compiler: gcc-7 (Debian 7.3.0-1) 7.3.0
-> reproduce:
->         # save the attached .config to linux build tree
->         make ARCH=x86_64
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->    ld: drivers/usb/dwc2/platform.o: in function `dwc2_can_poweroff_phy':
-> >> drivers/usb/dwc2/platform.c:545: undefined reference to `usb_wakeup_enabled_descendants'
+Yea, I also did reconfirm that reverting 772a7a724f6, or setting
+gadget->sg_supported to false makes the isssue go away.
 
-Thank you.  Fixed in v3:
+And after spending a bunch of time trying to trace through the code
+last week, in particular the sg_supported checks, but I'm not seeing
+anything that is standing out with the f_fs logic.
 
-https://lkml.kernel.org/r/20190520175605.2405-1-dianders@chromium.org
+I'd start to agree it might be a buffer handling problem in dwc3, but
+it feels odd that I'm also seeing this w/ dwc2 hardware as well. Maybe
+the  same bug was copied into both drivers?
 
--Doug
+I'll try to dig a little on that theory today.
+
+thanks
+-john
