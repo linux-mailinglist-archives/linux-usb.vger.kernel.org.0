@@ -2,79 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E31D23183
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 12:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E982319D
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 12:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731269AbfETKmQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 06:42:16 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38696 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730320AbfETKmP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 06:42:15 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id D4D9E27E23C
-Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, "Yang, Fei" <fei.yang@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chen Yu <chenyu56@huawei.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "kernel@collabora.com" <kernel@collabora.com>
-References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
- <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com>
- <CALAqxLUfJYUtmQDC_aDMxW7KcPUawGoRq-PNUfmzQuNKh97FmQ@mail.gmail.com>
- <CALAqxLVUFfrPVVjR74V3PhhtcCytfp=cUYjo=BcJ14D1fkVXTw@mail.gmail.com>
- <7ec57c29-d1ab-dc4c-755d-a6009b9132b5@collabora.com>
- <CALAqxLUgnTB7aZ4edXCaG8SJsJzfY1_yNEPc6Losssw5Xy9-XA@mail.gmail.com>
- <36620156-d119-b1b2-989e-0c13b783296e@collabora.com>
-Message-ID: <db5665cf-6274-c254-720c-798fec79d131@collabora.com>
-Date:   Mon, 20 May 2019 12:42:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        id S1732015AbfETKrj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 06:47:39 -0400
+Received: from mail-wm1-f53.google.com ([209.85.128.53]:51437 "EHLO
+        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731483AbfETKri (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 06:47:38 -0400
+Received: by mail-wm1-f53.google.com with SMTP id c77so11280368wmd.1
+        for <linux-usb@vger.kernel.org>; Mon, 20 May 2019 03:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=35aFXwKXWIL1RZrD7exPIwV+uXvt30SdrGN8tEgn2UM=;
+        b=JjdjAMMTqp9jQcBQ5BK79hWPx2L2sLVpepM5BT2oHfoTELCbS/1cq58zwBPSv2TS4D
+         8XcfgvSrc4BNTlL3KQe+PBRj85yPnTYxuwdh+w4duG5cnx1jZiv1kwM/KAQa7wdggRmq
+         9WyW7D93EidNQYtXG1P75alN486fH2b2RTM6ojMieUH40yjvPsxIHrqHMBm1FqRFnNq2
+         fxO8IPW977KgOFKTK9ov0tNyoKKAyOCf6QBmTP0IvpuQcbMncfcziL6ktCRWUHfoVTSO
+         UEidMwN5vfAtH2QQLDEX9XFlyj2OYUmj4tpyDu6rNoQqCbi97s2T98eCkDKrdLDkO0Ln
+         FjvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=35aFXwKXWIL1RZrD7exPIwV+uXvt30SdrGN8tEgn2UM=;
+        b=rUnmwxgNjOSLdYx8RBFHECVlYVA2jlF1M1M/+VpkVAZSXGSKn14om58/SJu7kF/8Fk
+         f4Nc/mHKPJTzPqOum1u2Gy4jFB3jXqzxjl3mCD0UCpfZCuaxBQl51Di5aK+/TyuNgLJX
+         T2q/s5SJoSUAwRuK/GXfMhvjBqFLWD5UEAbWH2fLnPKwON6p0/nccBgkaX+fDnDVt9m5
+         7XyZHuGA78GbW/P6lUFibrcMq75IGv80SSNh7rM20xHLirNTkXBmIgEBhi5OLvWY5F8l
+         vxNNHsD8+KfvxwMxr9qYWH/WB58xC/l9a50lzUyokQa/xkRNunW+YAfp1UDQC9BSsvcY
+         36Jw==
+X-Gm-Message-State: APjAAAVGRD1ZsH41pPotKQakJWlrQnH9b4TICIMygGlpyrrsCP/f8152
+        IoSIIEavDgQm99MSXLUcthrO3zzX
+X-Google-Smtp-Source: APXvYqyNsLncCDEDEQF/SrPeEU62nmShrKt4VzmEJoVe5tZwWx6BlZKcMa0yTg5t4Wzo5qK3dhNa3A==
+X-Received: by 2002:a1c:7d04:: with SMTP id y4mr39438952wmc.123.1558349256762;
+        Mon, 20 May 2019 03:47:36 -0700 (PDT)
+Received: from [192.168.99.70] (mail.unidataz.cz. [193.165.148.130])
+        by smtp.googlemail.com with ESMTPSA id b12sm20706011wmg.27.2019.05.20.03.47.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 May 2019 03:47:35 -0700 (PDT)
+From:   "StarostaCZ@gmail.com" <starostacz@gmail.com>
+X-Google-Original-From: "StarostaCZ@gmail.com" <StarostaCZ@gmail.com>
+Subject: Re: Kernel crash with FTDI FT232R on AMD boards.
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+References: <11678333-2e1a-8c0f-109f-a1aefa54ef9a@gmail.com>
+ <20190516135612.GA28564@localhost>
+ <0d499fe2-80df-cd6d-17a2-7725df240ee8@linux.intel.com>
+Message-ID: <c5d97281-e9c2-657f-f617-72af8c5da06b@gmail.com>
+Date:   Mon, 20 May 2019 12:45:58 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <36620156-d119-b1b2-989e-0c13b783296e@collabora.com>
+In-Reply-To: <0d499fe2-80df-cd6d-17a2-7725df240ee8@linux.intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Content-Language: cs
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi John,
+Dne 16.5.2019 v 16:34 Mathias Nyman napsal(a):
+> To get xhci traces and logs please do:
+>
+> mount -t debugfs none /sys/kernel/debug
+I get message:
+mount: /sys/kernel/debug: none already mounted or mount point busy.
 
-<snip>
+> echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+> < read EEPROM using the usb serial converter >
+> Send output of dmesg
+> Send content of /sys/kernel/debug/tracing/trace 
 
->> Is there anything else I can try for you?
-> 
-> Have you tried compiling FunctionFS with debugging enabled?
-> You do so bu uncommenting:
-> 
-> /* #define DEBUG */
-> /* #define VERBOSE_DEBUG */
-> 
-> at the beginning of drivers/usb/gadget/function/f_fs.c
-> 
-> Is there anything suspicious in the kernel log when you run it then?
-> 
+I made all as you wrote, but problem is, that the system completely 
+freezes and I must power it off.
+After power up there is not any logs (header only) in 
+/sys/kernel/debug/tracing/trace.
+dmesg created before eeprom reading: https://paste.ee/p/xb16H
 
-
-<snip>
-
-> 
-> One question that comes to my mind is this: Does the USB transmission
-> stall (e.g. endpoint stall) or not? In other words, is adb connection
-> broken because USB stops transmitting anything, or because the
-> data is transmitted but its integrity is broken during transmission
-> and that causes adb/adbd confusion which results in stopping their
-> operation? Does anything keep happening on FunctionFS when adb
-> connection is broken?
-
-Any discoveries about the problem?
-
-Andrzej
+starosta
