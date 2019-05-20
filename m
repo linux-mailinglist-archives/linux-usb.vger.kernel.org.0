@@ -2,91 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E982319D
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 12:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345E4232A3
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 13:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732015AbfETKrj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 06:47:39 -0400
-Received: from mail-wm1-f53.google.com ([209.85.128.53]:51437 "EHLO
-        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731483AbfETKri (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 06:47:38 -0400
-Received: by mail-wm1-f53.google.com with SMTP id c77so11280368wmd.1
-        for <linux-usb@vger.kernel.org>; Mon, 20 May 2019 03:47:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=35aFXwKXWIL1RZrD7exPIwV+uXvt30SdrGN8tEgn2UM=;
-        b=JjdjAMMTqp9jQcBQ5BK79hWPx2L2sLVpepM5BT2oHfoTELCbS/1cq58zwBPSv2TS4D
-         8XcfgvSrc4BNTlL3KQe+PBRj85yPnTYxuwdh+w4duG5cnx1jZiv1kwM/KAQa7wdggRmq
-         9WyW7D93EidNQYtXG1P75alN486fH2b2RTM6ojMieUH40yjvPsxIHrqHMBm1FqRFnNq2
-         fxO8IPW977KgOFKTK9ov0tNyoKKAyOCf6QBmTP0IvpuQcbMncfcziL6ktCRWUHfoVTSO
-         UEidMwN5vfAtH2QQLDEX9XFlyj2OYUmj4tpyDu6rNoQqCbi97s2T98eCkDKrdLDkO0Ln
-         FjvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=35aFXwKXWIL1RZrD7exPIwV+uXvt30SdrGN8tEgn2UM=;
-        b=rUnmwxgNjOSLdYx8RBFHECVlYVA2jlF1M1M/+VpkVAZSXGSKn14om58/SJu7kF/8Fk
-         f4Nc/mHKPJTzPqOum1u2Gy4jFB3jXqzxjl3mCD0UCpfZCuaxBQl51Di5aK+/TyuNgLJX
-         T2q/s5SJoSUAwRuK/GXfMhvjBqFLWD5UEAbWH2fLnPKwON6p0/nccBgkaX+fDnDVt9m5
-         7XyZHuGA78GbW/P6lUFibrcMq75IGv80SSNh7rM20xHLirNTkXBmIgEBhi5OLvWY5F8l
-         vxNNHsD8+KfvxwMxr9qYWH/WB58xC/l9a50lzUyokQa/xkRNunW+YAfp1UDQC9BSsvcY
-         36Jw==
-X-Gm-Message-State: APjAAAVGRD1ZsH41pPotKQakJWlrQnH9b4TICIMygGlpyrrsCP/f8152
-        IoSIIEavDgQm99MSXLUcthrO3zzX
-X-Google-Smtp-Source: APXvYqyNsLncCDEDEQF/SrPeEU62nmShrKt4VzmEJoVe5tZwWx6BlZKcMa0yTg5t4Wzo5qK3dhNa3A==
-X-Received: by 2002:a1c:7d04:: with SMTP id y4mr39438952wmc.123.1558349256762;
-        Mon, 20 May 2019 03:47:36 -0700 (PDT)
-Received: from [192.168.99.70] (mail.unidataz.cz. [193.165.148.130])
-        by smtp.googlemail.com with ESMTPSA id b12sm20706011wmg.27.2019.05.20.03.47.35
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 03:47:35 -0700 (PDT)
-From:   "StarostaCZ@gmail.com" <starostacz@gmail.com>
-X-Google-Original-From: "StarostaCZ@gmail.com" <StarostaCZ@gmail.com>
-Subject: Re: Kernel crash with FTDI FT232R on AMD boards.
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-References: <11678333-2e1a-8c0f-109f-a1aefa54ef9a@gmail.com>
- <20190516135612.GA28564@localhost>
- <0d499fe2-80df-cd6d-17a2-7725df240ee8@linux.intel.com>
-Message-ID: <c5d97281-e9c2-657f-f617-72af8c5da06b@gmail.com>
-Date:   Mon, 20 May 2019 12:45:58 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1732115AbfETLey (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 07:34:54 -0400
+Received: from mail-eopbgr50087.outbound.protection.outlook.com ([40.107.5.87]:55871
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730659AbfETLey (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 May 2019 07:34:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JNl2AGubCe73+hSHZ3dKYBozudCA3qObyu2EOlvhDsg=;
+ b=IYdJ/YclCZaFkTT5h81qH2dTufaWp4zCPU9Kpoq/oUECoQ2WAhAX1s/hPFjjF7u1xEO6Zcgv/1xMwdfP4zOSRui+/UZlc0kN7VN74mKH4mAb/6lOEjrJGlnPO9tRE60L82TbxA7XcfUYUeOp93YESnfNhX1DKCJwpEKtKCfG8pw=
+Received: from VI1PR04MB5134.eurprd04.prod.outlook.com (20.177.50.159) by
+ VI1PR04MB4496.eurprd04.prod.outlook.com (20.177.54.92) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.16; Mon, 20 May 2019 11:34:49 +0000
+Received: from VI1PR04MB5134.eurprd04.prod.outlook.com
+ ([fe80::8d0e:de86:9b49:b40]) by VI1PR04MB5134.eurprd04.prod.outlook.com
+ ([fe80::8d0e:de86:9b49:b40%7]) with mapi id 15.20.1900.020; Mon, 20 May 2019
+ 11:34:49 +0000
+From:   Laurentiu Tudor <laurentiu.tudor@nxp.com>
+To:     Fredrik Noring <noring@nocrew.org>
+CC:     Robin Murphy <robin.murphy@arm.com>, "hch@lst.de" <hch@lst.de>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "marex@denx.de" <marex@denx.de>,
+        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>,
+        Leo Li <leoyang.li@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
+ rework
+Thread-Topic: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
+ rework
+Thread-Index: AQHVCmKoDp6AVawLEEugEGZuSLgHU6Zqu4uAgAA1oICAAQ5TAIAAYlQAgAFEQACAADmjAIABSOCAgAByTYCABFBmgA==
+Date:   Mon, 20 May 2019 11:34:48 +0000
+Message-ID: <3c8897e9-218e-3fff-1735-816ffd30e908@nxp.com>
+References: <20190514143807.7745-1-laurentiu.tudor@nxp.com>
+ <9d34015d-c219-179b-3141-4b0de3530ac3@arm.com> <20190514182931.GA2559@sx9>
+ <0e5f3b86-7a80-eec7-691b-34a123194208@nxp.com> <20190515162858.GB17162@sx9>
+ <ed63c117-610c-ea49-f45e-727be220745f@nxp.com> <20190516151548.GB53952@sx9>
+ <5fa97254-3038-6fe7-a7e7-a267262049c6@nxp.com> <20190517174159.GA32450@sx9>
+In-Reply-To: <20190517174159.GA32450@sx9>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=laurentiu.tudor@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 93168338-5747-41a0-306e-08d6dd172ace
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4496;
+x-ms-traffictypediagnostic: VI1PR04MB4496:
+x-microsoft-antispam-prvs: <VI1PR04MB4496B68E1BC699B7D420EDDBEC060@VI1PR04MB4496.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 004395A01C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(376002)(39860400002)(346002)(136003)(396003)(43544003)(199004)(189003)(8676002)(73956011)(71200400001)(71190400001)(8936002)(81166006)(81156014)(76116006)(14454004)(31686004)(478600001)(66476007)(66556008)(64756008)(66446008)(66946007)(91956017)(7736002)(305945005)(316002)(26005)(6916009)(25786009)(102836004)(76176011)(68736007)(4326008)(186003)(53546011)(6506007)(36756003)(31696002)(229853002)(5024004)(6486002)(256004)(6246003)(66066001)(6436002)(86362001)(53936002)(44832011)(99286004)(6512007)(5660300002)(11346002)(54906003)(476003)(446003)(3846002)(6116002)(2616005)(486006)(2906002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4496;H:VI1PR04MB5134.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 2S+dsljc5iYcZtf+1jD2rFOL2TLRrb2/3jlHT/PSBbnLp/SC2aFv+4sODDKmz93UNZ35+HkE1YH0hNxb1DXy5sn99PtVO5ajcvaM275T6DCq6pKDQcX0GmrJ19RyzNpcPipLrRKAmuN0tBnaHyh22X4nChQ2aVs2nI1nvA6H5OCufWE8Ax2SXKI9WLsrA0tQtZ9IQ3vJHzqTEngA2Rp9dSSlMrRxL2kiRsfsN/k3hWvtoZGMfHg7haU/QOaQ+sG/cO6KOORZ3zrtFxNitAiqJP1qWzG16D+n3ScmZgOJ02cCGNH/knx2SWETJZ5afMAE6CNW6swcP8MzW7ABHH1UenVf54Q6LrobxAz8jYaSgVql0FqhjpRhyrZjJMg9o7m/kQklj4+SiIn7yfrqyjtTOjw+/qutLTZWOQJO61XTS5I=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4743EC49162E8C4D973BB16B3013C0AE@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <0d499fe2-80df-cd6d-17a2-7725df240ee8@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: cs
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93168338-5747-41a0-306e-08d6dd172ace
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2019 11:34:49.0626
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4496
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne 16.5.2019 v 16:34 Mathias Nyman napsal(a):
-> To get xhci traces and logs please do:
->
-> mount -t debugfs none /sys/kernel/debug
-I get message:
-mount: /sys/kernel/debug: none already mounted or mount point busy.
-
-> echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-> < read EEPROM using the usb serial converter >
-> Send output of dmesg
-> Send content of /sys/kernel/debug/tracing/trace 
-
-I made all as you wrote, but problem is, that the system completely 
-freezes and I must power it off.
-After power up there is not any logs (header only) in 
-/sys/kernel/debug/tracing/trace.
-dmesg created before eeprom reading: https://paste.ee/p/xb16H
-
-starosta
+SGVsbG8gRnJlZHJpaywNCg0KT24gMTcuMDUuMjAxOSAyMDo0MSwgRnJlZHJpayBOb3Jpbmcgd3Jv
+dGU6DQo+IEhpIExhdXJlbnRpdSwNCj4gDQo+Pj4gdGhhdCBJIHRyYWNrZWQgZG93biB0byB0aGUg
+Y2FsbHMNCj4+Pg0KPj4+IAkgICBodWJfcG9ydF9pbml0DQo+Pj4gCS0+IHVzYl9jb250cm9sX21z
+Zw0KPj4+IAktPiB1c2JfaW50ZXJuYWxfY29udHJvbF9tc2cNCj4+PiAJLT4gdXNiX3N0YXJ0X3dh
+aXRfdXJiDQo+Pj4gCS0+IHVzYl9zdWJtaXRfdXJiDQo+Pj4gCS0+IHVzYl9oY2Rfc3VibWl0X3Vy
+Yg0KPj4+IAktPiBoY2QtPmRyaXZlci0+dXJiX2VucXVldWUNCj4+PiAJLT4gb2hjaV91cmJfZW5x
+dWV1ZQ0KPj4+IAktPiBlZF9nZXQNCj4+PiAJLT4gZWRfYWxsb2MNCj4gDQo+IEkgZm91bmQgdGhh
+dCB0aGUgZ2VuZXJpYyBPSENJIGRyaXZlciB0YWtlcyBhIHdyb25nIHR1cm4gaGVyZSwgaW4gZWRf
+YWxsb2MsDQo+IGFuZCBldmVudHVhbGx5IGFsc28gaW4gdGRfYWxsb2MuIEZvcnR1bmF0ZWx5LCB5
+b3VyIHBhdGNoIGNhbiBiZSBlYXNpbHkNCj4gZXh0ZW5kZWQgdG8gZml4IHRoZW0gYXMgd2VsbC4g
+UGxlYXNlIHNlZSBhdHRhY2hlZCBwYXRjaCBiZWxvdy4NCj4gDQo+IFdpdGggdGhhdCwgdGhlIE9I
+Q0kgc2VlbXMgdG8gd29yayBhcyBleHBlY3RlZCB3aXRoIEhDRF9MT0NBTF9NRU0uIDopDQoNCldv
+dywgdGhhdCdzIGV4Y2VsbGVudCBuZXdzISBUaGFua3MgYSBsb3QgZm9yIGxvb2tpbmcgaW50byB0
+aGlzLg0KQXJlIHlvdSBvayBpZiBJIGFkZCB5b3VyIFNpZ25lZC1PZmYtYnkgYW5kIG1heWJlIGFs
+c28gVGVzdGVkLWJ5IGluIHRoZSANCmZpcnN0IHBhdGNoIG9mIHRoZSBzZXJpZXM/DQpBcyBhIHNp
+ZGUgbm90ZSwgSSBwbGFuIHRvIGFkZCBhIG5ldyBIQ0QgZnVuY3Rpb24gYW5kIG5hbWUgaXQgc29t
+ZXRoaW5nIA0KbGlrZSBoY2Rfc2V0dXBfbG9jYWxfbWVtKCkgdGhhdCB3b3VsZCB0YWtlIGNhcmUg
+b2Ygc2V0dGluZyB1cCB0aGUgDQpnZW5hbGxvYyBmb3IgZHJpdmVycy4NCg0KPiBXb3VsZCB5b3Ug
+bGlrZSBtZSB0byBzdWJtaXQgZ2VuX3Bvb2xfZG1hX3phbGxvYyBhcyBhIHNlcGFyYXRlIHBhdGNo
+Pw0KDQpZZXMsIEkgdGhpbmsgaXQgd291bGQgbWFrZSBzZW5zZSB0byBwdXQgdGhlIG5ldyBBUEkg
+aW4gYSBkaXN0aW5jdCBwYXRjaC4gDQpJIHRoaW5rIHdlIGNhbiBlaXRoZXIgaW5jbHVkZSBpdCBp
+biB0aGUgbmV4dCB2ZXJzaW9uIG9mIHRoZSBwYXRjaCBzZXJpZXMgDQpvciB5b3UgY2FuIHN1Ym1p
+dCBzZXBhcmF0ZWx5IGFuZCBJJ2xsIG1lbnRpb24gaXQgYXMgZGVwZW5kZW5jeSBmb3IgdGhpcyAN
+CnBhdGNoIHNlcmllcywgaG93ZXZlciB5b3UgcHJlZmVyLg0KDQoNCi0tLQ0KVGhhbmtzICYgQmVz
+dCBSZWdhcmRzLCBMYXVyZW50aXU=
