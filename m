@@ -2,41 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC81124768
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 07:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F68E24027
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 20:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbfEUFNG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 01:13:06 -0400
-Received: from [159.89.172.223] ([159.89.172.223]:35724 "EHLO
-        mail.boombf2am.ga" rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1725798AbfEUFNG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 01:13:06 -0400
-Received: by mail.boombf2am.ga (Postfix, from userid 48)
-        id D1435537C00; Mon, 20 May 2019 13:32:35 +0000 (UTC)
+        id S1727360AbfETSTn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 14:19:43 -0400
+Received: from westpalmbeachmassagegroup.com ([45.35.221.60]:40614 "EHLO
+        wolfgangdigital.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726966AbfETSTn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 14:19:43 -0400
 To:     linux-usb@vger.kernel.org
-Subject: Inquiry 20/May/2019
-X-PHP-Originating-Script: 0:nfhdgeds.php
-From:   Daniel Murray <sinara-group@bk.ru>
-Reply-To: sinara-group@list.ru
+Subject: Print your logo on USB drive
+Message-ID: <e709ece2fd24237d874e8cfc4e3fb6e6@esquire.com>
+Date:   Mon, 20 May 2019 15:50:54 +0200
+From:   "Heather" <heather@usblogo.space>
+Reply-To: flashdrive@aliyun.com
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-Message-Id: <20190520143748.D1435537C00@mail.boombf2am.ga>
-Date:   Mon, 20 May 2019 13:32:35 +0000 (UTC)
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,friend,
+Hi,
 
-This is Daniel Murray and i am from Sinara Group Co.Ltd in Russia.
-We are glad to know about your company from the web and we are interested in your products.
-Could you kindly send us your Latest catalog and price list for our trial order.
+I didn’t know if you had received my email from last week?
 
-Best Regards,
+We manufacture ALL custom LOGO and branded products – over 300,000 to
+choose from.
 
-Daniel Murray
-Purchasing Manager
+The most asked about product that we make, is the custom printed USB flash
+drives!
+We can print your logo on them and load your digital images, videos and
+files!
 
+Here is what we include:
+-Any size memory you need: 64MB up to 128GB
+-We will print your logo on both sides, just ask!
+-Very Low Order Minimums
+-Need them quickly?  Not a problem, we offer Rush Service
+
+Email over a copy of your logo and we will create a design mock up for you
+at no cost!
+
+Our higher memory sizes are a really good option right now!
+
+Pricing is low right now, so let us know what you need and we will get you
+a quick quote.
+
+We always offer great rates for schools and nonprofits as well.
+
+Let us know what you would like quoted?
+
+Regards,
+
+Heather Millons
+Custom USB Account Manager
 
