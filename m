@@ -2,76 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4D623E33
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 19:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D02C23F9F
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 19:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392775AbfETRRK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 13:17:10 -0400
-Received: from sauhun.de ([88.99.104.3]:52244 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390305AbfETRRK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 May 2019 13:17:10 -0400
-Received: from localhost (p54B333DA.dip0.t-ipconnect.de [84.179.51.218])
-        by pokefinder.org (Postfix) with ESMTPSA id 78D832C5DC5;
-        Mon, 20 May 2019 19:17:08 +0200 (CEST)
-Date:   Mon, 20 May 2019 19:17:08 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Ajay Gupta <ajayg@nvidia.com>
-Cc:     Ajay Gupta <ajaykuee@gmail.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 1/4] i2c: nvidia-gpu: add runtime pm support
-Message-ID: <20190520171708.GA4018@kunai>
-References: <20190517163818.5007-1-ajayg@nvidia.com>
- <20190517163818.5007-2-ajayg@nvidia.com>
- <20190519144704.GB7291@kunai>
- <BYAPR12MB272780E97D3D70EF46008E32DC060@BYAPR12MB2727.namprd12.prod.outlook.com>
+        id S1726794AbfETR4N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 13:56:13 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:37076 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726796AbfETR4M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 13:56:12 -0400
+Received: by mail-pg1-f193.google.com with SMTP id n27so4539948pgm.4
+        for <linux-usb@vger.kernel.org>; Mon, 20 May 2019 10:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=52yco9VK5RzDzN0Ze4QU/l0MYwJs+5CquMz8VBL6VQk=;
+        b=V4AXEIv08AJKozp2k60l6WH+FbxePpO4LTwIjjxSxtuTTGQq9J6Z94lUGUst3qQJQ0
+         gzqVaxKuD9EsnXxGRIJAA19oBZ5ie2qAalS6DvszK5vEF1nkOTgi0UW+OK0Eg3doRcqb
+         waYM/YGAhtSg0UmYZ5Z0OQJoZBrMBmKMhqCY0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=52yco9VK5RzDzN0Ze4QU/l0MYwJs+5CquMz8VBL6VQk=;
+        b=mj4Yggf4TA+g2e5oFMK+goYU/OMQAI75nXDD7OdsZLJpzVwwvXfq7z2ROcbvAGcUQ8
+         d23ci6Y1+st0p1dswpProhm4Tvl1pyfgUk46csbj7DVamYTeWr8qvAEjK+JA+v9dbIxi
+         cKvo1B8A9Z4Y+Fzan4AeJ0g4l54hORoyuUuknKZZac7ovUVV//Njx0zcC6j/NbrZaW8W
+         x8nsPzBsDk+pdYUG/h+ZdkYrJjbrVwD9VPE8v0ljt3uf8LbBRfMnCOUPK6SnhGRksKZt
+         7Wt1UsQJcYc7WQN16ID2EFzfczCSn9Z2s5OwLHsCGHZBo8a0nejQuWl0MGxsY/thupsV
+         VEvw==
+X-Gm-Message-State: APjAAAX7HWbrubbCg/RR+3XhjwjcNYc1sHGHZxk8m4LqeHCk2X3zowVM
+        2288OsypQbFEwRyWI7ol52TClg==
+X-Google-Smtp-Source: APXvYqzZDvPhaLQndJXX3Bt+sreJ+zs8jKeG3JkAK89Y9xuYz8Uqg1m2gbKwuR3Bid5ZcOye6FcIpw==
+X-Received: by 2002:a62:b40a:: with SMTP id h10mr74507778pfn.216.1558374971504;
+        Mon, 20 May 2019 10:56:11 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
+        by smtp.gmail.com with ESMTPSA id o2sm16852723pgq.1.2019.05.20.10.56.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 May 2019 10:56:10 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>, heiko@sntech.de
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        amstan@chromium.org, linux-rockchip@lists.infradead.org,
+        William Wu <william.wu@rock-chips.com>,
+        linux-usb@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Randy Li <ayaka@soulik.info>, zyw@rock-chips.com,
+        mka@chromium.org, ryandcase@chromium.org,
+        Amelie Delaunay <amelie.delaunay@st.com>, jwerner@chromium.org,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/3] USB: dwc2: Allow wakeup from suspend; enable for rk3288-veyron
+Date:   Mon, 20 May 2019 10:56:02 -0700
+Message-Id: <20190520175605.2405-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IS0zKkzwUGydFO0o"
-Content-Disposition: inline
-In-Reply-To: <BYAPR12MB272780E97D3D70EF46008E32DC060@BYAPR12MB2727.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This is a re-post of the last 3 patches of a series I posted earlier
+at:
+  https://lkml.kernel.org/r/20190418001356.124334-1-dianders@chromium.org
 
---IS0zKkzwUGydFO0o
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The first two patches were applied but the last three weren't because
+they didn't apply at the time.  They apply fine now so are ready to
+land.
 
+Patch #2 has a slight difference in v3 here to fix build robot
+reported error.
 
-> > I am not nacking this, yet the use of goto here seems too much for my taste. If
-> > you could try refactoring the whole code (dunno, maybe using a flag when to
-> > use stop?), I'd appreciate this.
-> Ok, I will add a local variable to make it more readable.
+Changes in v3:
+- Fixed kbuild test robot error.
 
-I was brainstorming here, I am not sure if it will work or not. But you
-will see. Maybe you get other ideas on the way. However, thanks for
-trying out!
+Changes in v2:
+- Rebased to mainline atop rk3288 remote wake quirk series.
+- rk3288-veyron dts patch new for v2.
 
+Douglas Anderson (3):
+  Documentation: dt-bindings: Add snps,need-phy-for-wake for dwc2 USB
+  USB: dwc2: Don't turn off the usbphy in suspend if wakeup is enabled
+  ARM: dts: rockchip: Allow wakeup from rk3288-veyron's dwc2 USB ports
 
---IS0zKkzwUGydFO0o
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../devicetree/bindings/usb/dwc2.txt          |  3 +++
+ arch/arm/boot/dts/rk3288-veyron.dtsi          |  2 ++
+ drivers/usb/dwc2/core.h                       |  8 +++++++
+ drivers/usb/dwc2/hcd.c                        | 19 +++++++++++++++
+ drivers/usb/dwc2/platform.c                   | 23 ++++++++++++++++---
+ 5 files changed, 52 insertions(+), 3 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.21.0.1020.gf2820cf01a-goog
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzi4RAACgkQFA3kzBSg
-Kba77Q/+LQoDOmt+a22fXm9b1ELau3gGmTQGOXeMLs34JHkKCkRmQiQQH3jCnTqu
-3iLB1delPjjFowEVDQVoTQ6+fWWJtPvItzyGhYNMEL59+kIwlbQ7VAUuhd6WV/Do
-q4ddPvP6AlawOgRPQSPF2MF2+pKC7m65OWbDsR7xK2cfZvyzRVjO9UV2ds9nOCL4
-ZVBw0W1jgKOdhe10E1sOp0Ol4nxrknGjY3Jw/aPPMQZNK7dIhIi8DDf12oEmGhtI
-v3fajfLxDu3GppPJqHNUdb8l/maFIhs7CBfiR4/yZdO1RysIqI5P+I8jXnBrtdbX
-yaijWo8MeNw9vfhBqXbuiAPbKJMRNlTwR2fnKSkqgb5ap9Mufewtjz/3STvoh/Fi
-OL4XF8RMkhnYUbGA/xxcnTir4yal+Xrfn6hXnm+NHyTe9Q5PAbsvswRzsr+jrFIB
-HAaL/NfxDETG6j3Q8OeIg43bQBUeJHasPgdg2FWgLB49JoFyZerwiIAiTwUi6zI1
-dyDuD+tVTCsnh9kP39+vYWzw/d6m79YE43mSwbMHsaOuRENseL1qDs4tH78bs5Zy
-W4uKm5VV5OChA5SGi+HtLaT4zCcu8Ziy3P3tFvNXY1AZ2luZl3aTJYkzckuBIX/a
-jKtBZG8FRwrJXCYRMN0lFZvw84mFcOt0gKIbozbGayadBN7aGXs=
-=0Smp
------END PGP SIGNATURE-----
-
---IS0zKkzwUGydFO0o--
