@@ -2,180 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC3F23C68
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 17:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353A023D27
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 18:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392290AbfETPmN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 11:42:13 -0400
-Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:51333 "EHLO
-        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388878AbfETPmM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 11:42:12 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 3D67E3F7AC;
-        Mon, 20 May 2019 17:42:04 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 tagged_above=-999 required=6.31
-        tests=[ALL_TRUSTED=-1, BAYES_00=-1.9] autolearn=ham autolearn_force=no
-Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id m4YrvbgMd1na; Mon, 20 May 2019 17:41:58 +0200 (CEST)
-Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
-        (Authenticated sender: mb547485)
-        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 251973F7F2;
-        Mon, 20 May 2019 17:41:56 +0200 (CEST)
-Date:   Mon, 20 May 2019 17:41:56 +0200
-From:   Fredrik Noring <noring@nocrew.org>
-To:     Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, "hch@lst.de" <hch@lst.de>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "marex@denx.de" <marex@denx.de>,
-        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
- rework
-Message-ID: <20190520154156.GA3664@sx9>
-References: <20190514143807.7745-1-laurentiu.tudor@nxp.com>
- <9d34015d-c219-179b-3141-4b0de3530ac3@arm.com>
- <20190514182931.GA2559@sx9>
- <0e5f3b86-7a80-eec7-691b-34a123194208@nxp.com>
- <20190515162858.GB17162@sx9>
- <ed63c117-610c-ea49-f45e-727be220745f@nxp.com>
- <20190516151548.GB53952@sx9>
- <5fa97254-3038-6fe7-a7e7-a267262049c6@nxp.com>
- <20190517174159.GA32450@sx9>
- <3c8897e9-218e-3fff-1735-816ffd30e908@nxp.com>
+        id S2389456AbfETQXa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 12:23:30 -0400
+Received: from mga12.intel.com ([192.55.52.136]:29400 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388110AbfETQXa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 May 2019 12:23:30 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 May 2019 09:23:29 -0700
+X-ExtLoop1: 1
+Received: from orsmsx104.amr.corp.intel.com ([10.22.225.131])
+  by fmsmga007.fm.intel.com with ESMTP; 20 May 2019 09:23:29 -0700
+Received: from orsmsx115.amr.corp.intel.com (10.22.240.11) by
+ ORSMSX104.amr.corp.intel.com (10.22.225.131) with Microsoft SMTP Server (TLS)
+ id 14.3.408.0; Mon, 20 May 2019 09:23:29 -0700
+Received: from orsmsx103.amr.corp.intel.com ([169.254.5.182]) by
+ ORSMSX115.amr.corp.intel.com ([169.254.4.95]) with mapi id 14.03.0415.000;
+ Mon, 20 May 2019 09:23:29 -0700
+From:   "Yang, Fei" <fei.yang@intel.com>
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        John Stultz <john.stultz@linaro.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen Yu <chenyu56@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: RE: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+Thread-Topic: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+Thread-Index: AQHVBUSfP50+H4oA+0GPWiTwRhChu6ZjSo+AgABJVwCAADHfAIAFz8aAgABDQICAAQ2pAIAJdbYA///lWmA=
+Date:   Mon, 20 May 2019 16:23:28 +0000
+Message-ID: <02E7334B1630744CBDC55DA8586225837F884D53@ORSMSX103.amr.corp.intel.com>
+References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+ <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com>
+ <CALAqxLUfJYUtmQDC_aDMxW7KcPUawGoRq-PNUfmzQuNKh97FmQ@mail.gmail.com>
+ <CALAqxLVUFfrPVVjR74V3PhhtcCytfp=cUYjo=BcJ14D1fkVXTw@mail.gmail.com>
+ <7ec57c29-d1ab-dc4c-755d-a6009b9132b5@collabora.com>
+ <CALAqxLUgnTB7aZ4edXCaG8SJsJzfY1_yNEPc6Losssw5Xy9-XA@mail.gmail.com>
+ <36620156-d119-b1b2-989e-0c13b783296e@collabora.com>
+ <db5665cf-6274-c254-720c-798fec79d131@collabora.com>
+In-Reply-To: <db5665cf-6274-c254-720c-798fec79d131@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ctpclassification: CTP_NT
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiYzE5YjIxYmQtYmE4Ni00ZTI5LTgwMDEtMTNiZWI0MWRiZmEwIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiQU92bjJmbGlySmI1NW0rWEVVTnNNZWlvZE1WTjVycEVMUENVdzl6SFFyQkZNQW1WTTQySU1rTnBsUHdidXo4cSJ9
+dlp-product: dlpe-windows
+dlp-version: 11.0.600.7
+dlp-reaction: no-action
+x-originating-ip: [10.22.254.138]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3c8897e9-218e-3fff-1735-816ffd30e908@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurentiu,
-
-> Wow, that's excellent news! Thanks a lot for looking into this.
-
-You are welcome!
-
-> Are you ok if I add your Signed-Off-by and maybe also Tested-by in the 
-> first patch of the series?
-
-Yes, but I have two comments:
-
-1. ohci_mem_init() allocates two DMA pools that are no longer relevant, so
-   it seems appropriate to assign NULL to ohci->td_cache and ohci->ed_cache,
-   and document this exception in struct ohci_hcd. Unless something more
-   elegant can be done, of course.
-
-2. A device address is supplied as phys_addr_t phys to gen_pool_add_virt().
-   This seems to work in this particular DMA application, but there will be
-   problems if someone does phys_to_virt() or suchlike. Can this be improved
-   or clearly explained? gen_pool_virt_to_phys() searches in address ranges,
-   for example, so it appears the implementation uses phys quite carefully.
-
-> As a side note, I plan to add a new HCD function and name it something 
-> like hcd_setup_local_mem() that would take care of setting up the 
-> genalloc for drivers.
-
-Good! Then I suppose the HCD_LOCAL_MEM assignment can be removed from the
-drivers too? Like this one:
-
-	ohci_ps2_hc_driver.flags |= HCD_LOCAL_MEM;
-
-Regarding the previous HCD IRQ question, lib/genalloc.c says that
-
-	It is safe to use the allocator in NMI handlers and other special
-	unblockable contexts that could otherwise deadlock on locks.  This
-	is implemented by using atomic operations and retries on any
-	conflicts.  The disadvantage is that there may be livelocks in
-	extreme cases.  For better scalability, one allocator can be used
-	for each CPU.
-
-so it appears to be good enough for USB purposes.
-
-> Yes, I think it would make sense to put the new API in a distinct patch. 
-> I think we can either include it in the next version of the patch series 
-> or you can submit separately and I'll mention it as dependency for this 
-> patch series, however you prefer.
-
-Please find the patch below and if possible include it in your patch series.
-
-Fredrik
-
-lib/genalloc.c: Add gen_pool_dma_zalloc() for zeroed DMA allocations
-
-gen_pool_dma_zalloc() is a zeroed memory variant of gen_pool_dma_alloc().
-Document return values of both, and indicate NULL as a "%NULL" constant.
-
-Signed-off-by: Fredrik Noring <noring@nocrew.org>
-
---- a/include/linux/genalloc.h
-+++ b/include/linux/genalloc.h
-@@ -121,6 +121,8 @@ extern unsigned long gen_pool_alloc_algo(struct gen_pool *, size_t,
- 		genpool_algo_t algo, void *data);
- extern void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size,
- 		dma_addr_t *dma);
-+extern void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma);
- extern void gen_pool_free(struct gen_pool *, unsigned long, size_t);
- extern void gen_pool_for_each_chunk(struct gen_pool *,
- 	void (*)(struct gen_pool *, struct gen_pool_chunk *, void *), void *);
---- a/lib/genalloc.c
-+++ b/lib/genalloc.c
-@@ -337,12 +337,14 @@ EXPORT_SYMBOL(gen_pool_alloc_algo);
-  * gen_pool_dma_alloc - allocate special memory from the pool for DMA usage
-  * @pool: pool to allocate from
-  * @size: number of bytes to allocate from the pool
-- * @dma: dma-view physical address return value.  Use NULL if unneeded.
-+ * @dma: dma-view physical address return value.  Use %NULL if unneeded.
-  *
-  * Allocate the requested number of bytes from the specified pool.
-  * Uses the pool allocation function (with first-fit algorithm by default).
-  * Can not be used in NMI handler on architectures without
-  * NMI-safe cmpxchg implementation.
-+ *
-+ * Return: virtual address of the allocated memory, or %NULL on failure
-  */
- void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
- {
-@@ -362,6 +364,30 @@ void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
- }
- EXPORT_SYMBOL(gen_pool_dma_alloc);
- 
-+/**
-+ * gen_pool_dma_zalloc - allocate special zeroed memory from the pool for DMA usage
-+ * @pool: pool to allocate from
-+ * @size: number of bytes to allocate from the pool
-+ * @dma: dma-view physical address return value.  Use %NULL if unneeded.
-+ *
-+ * Allocate the requested number of zeroed bytes from the specified pool.
-+ * Uses the pool allocation function (with first-fit algorithm by default).
-+ * Can not be used in NMI handler on architectures without
-+ * NMI-safe cmpxchg implementation.
-+ *
-+ * Return: virtual address of the allocated zeroed memory, or %NULL on failure
-+ */
-+void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
-+{
-+	void *vaddr = gen_pool_dma_alloc(pool, size, dma);
-+
-+	if (vaddr)
-+		memset(vaddr, 0, size);
-+
-+	return vaddr;
-+}
-+EXPORT_SYMBOL(gen_pool_dma_zalloc);
-+
- /**
-  * gen_pool_free - free allocated special memory back to the pool
-  * @pool: pool to free to
+Pj4gT25lIHF1ZXN0aW9uIHRoYXQgY29tZXMgdG8gbXkgbWluZCBpcyB0aGlzOiBEb2VzIHRoZSBV
+U0IgdHJhbnNtaXNzaW9uIA0KPj4gc3RhbGwgKGUuZy4gZW5kcG9pbnQgc3RhbGwpIG9yIG5vdD8g
+SW4gb3RoZXIgd29yZHMsIGlzIGFkYiBjb25uZWN0aW9uIA0KPj4gYnJva2VuIGJlY2F1c2UgVVNC
+IHN0b3BzIHRyYW5zbWl0dGluZyBhbnl0aGluZywgb3IgYmVjYXVzZSB0aGUgZGF0YSBpcyANCj4+
+IHRyYW5zbWl0dGVkIGJ1dCBpdHMgaW50ZWdyaXR5IGlzIGJyb2tlbiBkdXJpbmcgdHJhbnNtaXNz
+aW9uIGFuZCB0aGF0IA0KPj4gY2F1c2VzIGFkYi9hZGJkIGNvbmZ1c2lvbiB3aGljaCByZXN1bHRz
+IGluIHN0b3BwaW5nIHRoZWlyIG9wZXJhdGlvbj8gDQo+PiBEb2VzIGFueXRoaW5nIGtlZXAgaGFw
+cGVuaW5nIG9uIEZ1bmN0aW9uRlMgd2hlbiBhZGIgY29ubmVjdGlvbiBpcyANCj4+IGJyb2tlbj8N
+Cj4NCj5BbnkgZGlzY292ZXJpZXMgYWJvdXQgdGhlIHByb2JsZW0/DQoNCkluIG15IGRlYnVnZ2lu
+ZywgSSdtIHNlZWluZyBhIGxvdCBvZiByZXF1ZXN0cyBxdWV1ZWQgdXAgdGhyb3VnaCBmZnNfZXBm
+aWxlX2lvIChyZXR1cm5pbmcgLUVJT0NCUVVFVUVEKSwgYnV0DQpvbmx5IGEgZmV3IG9mIHRoZW0g
+Y2FtZSBiYWNrIHRocm91Z2ggZmZzX2VwZmlsZV9hc3luY19pb19jb21wbGV0ZSAtPiBmZnNfdXNl
+cl9jb3B5X3dvcmtlci4NCkkgZG9u4oCZdCB0aGluayB0aGVyZSBpcyBhIFVTQiB0cmFuc21pc3Np
+b24gc3RhbGwgdGhvdWdoLCBiZWNhdXNlIGlmIEkgbWFudWFsbHkgZGlzYWJsZSBpb19kYXRhLT51
+c2Vfc2csIGV2ZXJ5dGhpbmcNCmdvZXMgYmFjayB0byBub3JtYWwuIFNvIGl0IGxvb2tzIG1vcmUg
+bGlrZWx5IHRvIGJlIGEgYnVmZmVyIGhhbmRsaW5nIHByb2JsZW0gaW4gdGhlIERXQzMgZHJpdmVy
+Lg0KDQotRmVpDQoNCj4NCj5BbmRyemVqDQo=
