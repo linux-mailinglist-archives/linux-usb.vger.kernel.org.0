@@ -2,77 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EE022CA7
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 09:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18E022D22
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 09:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730272AbfETHIT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 03:08:19 -0400
-Received: from mail-wr1-f50.google.com ([209.85.221.50]:40276 "EHLO
-        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727130AbfETHIS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 03:08:18 -0400
-Received: by mail-wr1-f50.google.com with SMTP id h4so13236128wre.7
-        for <linux-usb@vger.kernel.org>; Mon, 20 May 2019 00:08:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=+HccZpWfMZ+TIVZwAV0QZEFO3ZJvfjmBLEkuqXom4e0=;
-        b=CmQ6X5ikpF8p1ailIRGSOjEmISaeEhexRX9InC4oNMPOEJlek1JB1jbOUMf6t7op24
-         8NjuNhLrmz4rcsCwQUdwzDKB9zVggdxYYwSBHRGQmS7q3Z8MdkBgAPEaN/WMUp0o+0hx
-         bKBWZFoItaaO1CRmTnskJ1mDcUOjifULAzum0U9FPTynG09X+OHPBSrhVpdzHAeocdca
-         3LL0M6QTwHWWoJOhQA2xed61NAKOWiFO5wgVZv16HHTGRKaH4utVibviL+7Zv+EK6Or+
-         jCxWlIJtnN0XKP0AW1bKCK+xMqbRHnaYPYSX9AZ9liUzOE8h2/TwGiTJwxTaqBfN0+9B
-         YAeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=+HccZpWfMZ+TIVZwAV0QZEFO3ZJvfjmBLEkuqXom4e0=;
-        b=DY+ACGae+3TiVuka0DYMY3VtNzuEiSxom5gNZpl/sTg+SEW5dL9yyOnS2Xx3Ch3o2X
-         tNEaRU0yWcFAmYGpA4wU7hVCddkzeRcvZ8c9Ql5v13jypLH9uF9pK8n7QHNlyllHSuvd
-         TDD6IMgGO/5zu+0+eRehSAKVdbo44+V9QFjtxnrxO1BcDAQ7efrgxAaeal7RxV1+L2pq
-         t1v6yCkHh9fmPtNjjnokD8qif13mJN9JKnLseh5A17AjrRayFqPOaauwHQsbsKtxnjwm
-         +KLKI26xatuvxphUaKRJqAUZBIwZKawxKQTgPkDN64Q4BEokjxKPJBpQ91AC5bUJnAwN
-         Zkig==
-X-Gm-Message-State: APjAAAWwOEZLIt/NWLFGiYJTcXfghDKFby8yeM8R23kSz6kJByUPjn32
-        MSuyQ7wr1OJu2qyuq4EWNOvzhu9X
-X-Google-Smtp-Source: APXvYqw+XwRbptWJ/XFb5tK/qtg1XwpUv45PlYGX+o87UuG8/jnEbR8FijR9HxKULIheRRPMmm7Yug==
-X-Received: by 2002:a05:6000:1203:: with SMTP id e3mr18420577wrx.300.1558336097250;
-        Mon, 20 May 2019 00:08:17 -0700 (PDT)
-Received: from [192.168.99.70] (mail.unidataz.cz. [193.165.148.130])
-        by smtp.googlemail.com with ESMTPSA id d3sm20957803wmf.46.2019.05.20.00.08.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 00:08:16 -0700 (PDT)
-From:   "StarostaCZ@gmail.com" <starostacz@gmail.com>
-X-Google-Original-From: "StarostaCZ@gmail.com" <StarostaCZ@gmail.com>
-Subject: Re: Kernel crash with FTDI FT232R on AMD boards.
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-References: <11678333-2e1a-8c0f-109f-a1aefa54ef9a@gmail.com>
- <20190516135612.GA28564@localhost>
-Message-ID: <0cec0d5b-a9ef-bfeb-a316-27d8279b18cb@gmail.com>
-Date:   Mon, 20 May 2019 09:06:38 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727380AbfETHcu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 03:32:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54516 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726741AbfETHcu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 May 2019 03:32:50 -0400
+Received: from dragon (98.142.130.235.16clouds.com [98.142.130.235])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 66FE520859;
+        Mon, 20 May 2019 07:32:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558337570;
+        bh=6QOCM2O+jWvHVBPgbiBamyy5qsUSAwzS4Pgp+OQcfCQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CdouxzEdd8cyXWd3DiYv4x5o/lA8dl5aA+asetl1A2C2qVuPFrggQf7RYSIQlAlcK
+         t2UjMyKptbE/yoO77zVHymC1Mo5H4cbc+PjVKHMQJgSvKPGj+QGwLlgREFBYtWt9Sm
+         edlBGboFsWfDZXEmZBiftYZishId+M8xEmFnRzWM=
+Date:   Mon, 20 May 2019 15:31:59 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH v2 6/8] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
+Message-ID: <20190520073157.GW15856@dragon>
+References: <20190514073529.29505-1-peter.chen@nxp.com>
+ <20190514073529.29505-7-peter.chen@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20190516135612.GA28564@localhost>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: cs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190514073529.29505-7-peter.chen@nxp.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne 16.5.2019 v 15:56 Johan Hovold napsal(a):
-> On Thu, May 16, 2019 at 03:35:42PM +0200, StarostaCZ@gmail.com wrote:
-> You should mention that you're using libusb and the vendor's ftdi
-> library. Specifically, the kernels ftdi_sio driver is not involved.
-Sorry, you are right, I use libftd2xx drivers version 1.4.8: 
-https://www.ftdichip.com/Drivers/D2XX.htm
-This driver is compiled with libusb. ftdi_sio is removed before testing 
-by command "rmmod ftdi_sio".
+On Tue, May 14, 2019 at 07:38:21AM +0000, Peter Chen wrote:
+> Add imx7ulp USBOTG1 support.
+> 
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> ---
+>  arch/arm/boot/dts/imx7ulp.dtsi | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx7ulp.dtsi b/arch/arm/boot/dts/imx7ulp.dtsi
+> index fca6e50f37c8..60c9ea116d0a 100644
+> --- a/arch/arm/boot/dts/imx7ulp.dtsi
+> +++ b/arch/arm/boot/dts/imx7ulp.dtsi
+> @@ -30,6 +30,7 @@
+>  		serial1 = &lpuart5;
+>  		serial2 = &lpuart6;
+>  		serial3 = &lpuart7;
+> +		usbphy0 = &usbphy1;
+>  	};
+>  
+>  	cpus {
+> @@ -133,6 +134,36 @@
+>  			clock-names = "ipg", "per";
+>  		};
+>  
+> +		usbotg1: usb@40330000 {
+> +			compatible = "fsl,imx7ulp-usb", "fsl,imx6ul-usb",
+> +				"fsl,imx27-usb";
+> +			reg = <0x40330000 0x200>;
+> +			interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&pcc2 IMX7ULP_CLK_USB0>;
+> +			phys = <&usbphy1>;
+> +			fsl,usbmisc = <&usbmisc1 0>;
+> +			ahb-burst-config = <0x0>;
+> +			tx-burst-size-dword = <0x8>;
+> +			rx-burst-size-dword = <0x8>;
+> +			status = "disabled";
+> +		};
+> +
+> +		usbmisc1: usbmisc@40330200 {
+> +			#index-cells = <1>;
 
-starosta
+Nit: we usually start with 'compatible', so can we move it behind?
+
+Shawn
+
+> +			compatible = "fsl,imx7ulp-usbmisc", "fsl,imx7d-usbmisc",
+> +				"fsl,imx6q-usbmisc";
+> +			reg = <0x40330200 0x200>;
+> +		};
+> +
+> +		usbphy1: usbphy@0x40350000 {
+> +			compatible = "fsl,imx7ulp-usbphy",
+> +				"fsl,imx6ul-usbphy", "fsl,imx23-usbphy";
+> +			reg = <0x40350000 0x1000>;
+> +			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&pcc2 IMX7ULP_CLK_USB_PHY>;
+> +			#phy-cells = <0>;
+> +		};
+> +
+>  		usdhc0: mmc@40370000 {
+>  			compatible = "fsl,imx7ulp-usdhc", "fsl,imx6sx-usdhc";
+>  			reg = <0x40370000 0x10000>;
+> -- 
+> 2.14.1
+> 
