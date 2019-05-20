@@ -2,63 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04269230F3
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 12:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E31D23183
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 12:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731566AbfETKMN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 06:12:13 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:37150 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730468AbfETKMM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 06:12:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=MqrvqRAJlxcONvOERepJ1ia9im/zVqpqGszIN9wgOpo=; b=ZU0ytO4YuOP96ibdGXamVHekr
-        uBSM7cCD4CWqHQfee0lTS97z/EH61ONs+mc6CZYtOT3GX7GdQmDV3ZCOxswvcWlCdcD5tUMAKf3lO
-        8cpp0xOP8zB04CG4MxT6SoS91K/bYf1pOv70rCpVbLb80GTGRylJADjqzF3cgmEgHUCkxQGxvFu3x
-        aOyZDtSq0VnBtTuwVqlvi3AyMOPs0BZtj5FOG+3gvaPGFhfapQUsk0j9OXJifHtQQuG53bi2iid/Q
-        FTK3ijbqOwmRyAmwSPJpu/fnRPXmJu6s/sGdB6ZSVuyzXo7qkti7ONQZV6wv8/86V2mFIRECvY9P/
-        aujbpJYRQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hSfH4-0003eI-EN; Mon, 20 May 2019 10:12:06 +0000
-Date:   Mon, 20 May 2019 03:12:06 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jaewon Kim <jaewon31.kim@gmail.com>, linux-mm@kvack.org,
-        gregkh@linuxfoundation.org, Jaewon Kim <jaewon31.kim@samsung.com>,
-        m.szyprowski@samsung.com, ytk.lee@samsung.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
-Message-ID: <20190520101206.GA9291@infradead.org>
-References: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
- <20190520055657.GA31866@infradead.org>
- <1558343365.12672.2.camel@suse.com>
+        id S1731269AbfETKmQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 06:42:16 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38696 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730320AbfETKmP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 06:42:15 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id D4D9E27E23C
+Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, "Yang, Fei" <fei.yang@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen Yu <chenyu56@huawei.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
+ <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com>
+ <CALAqxLUfJYUtmQDC_aDMxW7KcPUawGoRq-PNUfmzQuNKh97FmQ@mail.gmail.com>
+ <CALAqxLVUFfrPVVjR74V3PhhtcCytfp=cUYjo=BcJ14D1fkVXTw@mail.gmail.com>
+ <7ec57c29-d1ab-dc4c-755d-a6009b9132b5@collabora.com>
+ <CALAqxLUgnTB7aZ4edXCaG8SJsJzfY1_yNEPc6Losssw5Xy9-XA@mail.gmail.com>
+ <36620156-d119-b1b2-989e-0c13b783296e@collabora.com>
+Message-ID: <db5665cf-6274-c254-720c-798fec79d131@collabora.com>
+Date:   Mon, 20 May 2019 12:42:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1558343365.12672.2.camel@suse.com>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <36620156-d119-b1b2-989e-0c13b783296e@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 20, 2019 at 11:09:25AM +0200, Oliver Neukum wrote:
-> we actually do. It is just higher up in the calling path:
+Hi John,
 
-Perfect!
+<snip>
 
-> So, do we need to audit the mem_flags again?
-> What are we supposed to use? GFP_KERNEL?
+>> Is there anything else I can try for you?
+> 
+> Have you tried compiling FunctionFS with debugging enabled?
+> You do so bu uncommenting:
+> 
+> /* #define DEBUG */
+> /* #define VERBOSE_DEBUG */
+> 
+> at the beginning of drivers/usb/gadget/function/f_fs.c
+> 
+> Is there anything suspicious in the kernel log when you run it then?
+> 
 
-GFP_KERNEL if you can block, GFP_ATOMIC if you can't for a good reason,
-that is the allocation is from irq context or under a spinlock.  If you
-think you have a case where you think you don't want to block, but it
-is not because of the above reasons we need to have a chat about the
-details.
+
+<snip>
+
+> 
+> One question that comes to my mind is this: Does the USB transmission
+> stall (e.g. endpoint stall) or not? In other words, is adb connection
+> broken because USB stops transmitting anything, or because the
+> data is transmitted but its integrity is broken during transmission
+> and that causes adb/adbd confusion which results in stopping their
+> operation? Does anything keep happening on FunctionFS when adb
+> connection is broken?
+
+Any discoveries about the problem?
+
+Andrzej
