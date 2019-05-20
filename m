@@ -2,124 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE78722F0F
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 10:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C072322FD9
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 11:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731362AbfETIgJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 04:36:09 -0400
-Received: from mga03.intel.com ([134.134.136.65]:40593 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730537AbfETIgI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 May 2019 04:36:08 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 May 2019 01:36:07 -0700
-X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 20 May 2019 01:36:02 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 May 2019 11:36:01 +0300
-Date:   Mon, 20 May 2019 11:36:01 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Biju Das <biju.das@bp.renesas.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by node
-Message-ID: <20190520083601.GE1887@kuha.fi.intel.com>
-References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
- <1557823643-8616-5-git-send-email-chunfeng.yun@mediatek.com>
- <20190517103736.GA1490@kuha.fi.intel.com>
- <20190517130511.GA1887@kuha.fi.intel.com>
- <1558319951.10179.352.camel@mhfsdcap03>
- <20190520080359.GC1887@kuha.fi.intel.com>
- <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+        id S1731200AbfETJIg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 05:08:36 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:40755 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726242AbfETJIg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 05:08:36 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190520090834euoutp011c1a352fa7aad81ee5d7d2197535a112~gWPznopaP2293022930euoutp01P
+        for <linux-usb@vger.kernel.org>; Mon, 20 May 2019 09:08:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190520090834euoutp011c1a352fa7aad81ee5d7d2197535a112~gWPznopaP2293022930euoutp01P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1558343314;
+        bh=F6KtNC0NMgH4WuuveNuxoi+XAP2gbgG4+yRzDs8W2tk=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=smyRVsSIsC9cQdRm030ERHofF2gML5TKz1Nu8BBKYQhRichG3Slr0UG5LBltoFz9C
+         80ixSpYNjSjTQW3TGnrF0iXunuw3vvT0VQTS4kSCJveIUsrxmyJyXw7cyeFNeRgFq5
+         WK0vVftEYUQytsJIHvEmJDid5xb4VVcThTdF5jZM=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190520090833eucas1p25395a1a4cc560cce211bb9f3aa720095~gWPy0jT2p0817608176eucas1p2q;
+        Mon, 20 May 2019 09:08:33 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id C6.DA.04325.19E62EC5; Mon, 20
+        May 2019 10:08:33 +0100 (BST)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190520090832eucas1p163fb465647a030c5eafe399e4b5377c8~gWPyC8zWV0897408974eucas1p1s;
+        Mon, 20 May 2019 09:08:32 +0000 (GMT)
+X-AuditID: cbfec7f5-b8fff700000010e5-d5-5ce26e91b05f
+Received: from eusync3.samsung.com ( [203.254.199.213]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 63.14.04146.09E62EC5; Mon, 20
+        May 2019 10:08:32 +0100 (BST)
+MIME-version: 1.0
+Content-transfer-encoding: 8BIT
+Content-type: text/plain; charset="UTF-8"
+Received: from AMDC2765.DIGITAL.local ([106.120.51.73]) by
+        eusync3.samsung.com (Oracle Communications Messaging Server 7.0.5.31.0 64bit
+        (built May  5 2014)) with ESMTPA id <0PRS00MNKPE4IJ30@eusync3.samsung.com>;
+        Mon, 20 May 2019 10:08:32 +0100 (BST)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        =?UTF-8?q?M=C3=A5ns=20Rullg=C3=A5rd?= <mans@mansr.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH v5] usb: exynos: add workaround for the USB device bindings
+ conflict
+Date:   Mon, 20 May 2019 11:08:23 +0200
+Message-id: <20190520090823.17189-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFIsWRmVeSWpSXmKPExsWy7djP87oT8x7FGMx4zGaxccZ6VovmxevZ
+        LM6f38BucXnXHDaLGef3MVksWtbKbPHyyA9Gi7VH7rJb/Hg4ncniz707rBYTfl9gc+D2uHWn
+        3mPTqk42j/1z17B7vDl9it1j47sdTB6z7/5g9OjbsorR4/MmuQCOKC6blNSczLLUIn27BK6M
+        7WunMhfcVKxY16HYwLhCpouRk0NCwESic/Mk1i5GLg4hgRWMEi3rPjNBOJ8ZJR5taGODqXoy
+        fSczRGIZo8TPX/fYQRK8AoISPybfY+li5OBgFpCXOHIpGyTMLKApsXX3enaI+v+MEuv2r2QC
+        SbAJGEp0ve0CGyoikCBxZPN7sKHMAh+YJN4dbWQGSQgLhElMubkYzGYRUJXofjGbFWKZrcSR
+        6+ugLpKXWL3hAFizhMB1Nom+xauhEi4SJ+7DFMlIdHYcZIIoamaUeHhuLTuE08MocblpBiNE
+        lbXE4eMXWSEO55OYtG06M8g/EgK8Eh1tQhAlHhI723vBhgoJxEosubSTcQKj1CykEJiFCIFZ
+        SCGwgJF5FaN4amlxbnpqsXFearlecWJucWleul5yfu4mRmCKOP3v+NcdjPv+JB1iFOBgVOLh
+        9Zj+MEaINbGsuDL3EKMEB7OSCK+x+v0YId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rzVDA+ihQTS
+        E0tSs1NTC1KLYLJMHJxSDYwJBs+3ZB9f4fjM1jz+zarW1ra79vdEjZZsudnj2NynUbvjsHhD
+        nWji8f2XpMqsH5S2zHU6+ikud+ppzpPX9r/Re+FkFzv9juCb72+ZWf6KzT1zI0s5clpbuCBL
+        mNCc+7kvfJ792sR6e4bihhkzpF61b5/c/ay6YtnjGdeZxBnPci0VVgmoEhJRYinOSDTUYi4q
+        TgQAVndaHA0DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOLMWRmVeSWpSXmKPExsVy+t/xq7oT8h7FGCxZoWSxccZ6VovmxevZ
+        LM6f38BucXnXHDaLGef3MVksWtbKbPHyyA9Gi7VH7rJb/Hg4ncniz707rBYTfl9gc+D2uHWn
+        3mPTqk42j/1z17B7vDl9it1j47sdTB6z7/5g9OjbsorR4/MmuQCOKC6blNSczLLUIn27BK6M
+        7WunMhfcVKxY16HYwLhCpouRk0NCwETiyfSdzF2MXBxCAksYJZonTmUFSfAKCEr8mHyPpYuR
+        g4NZQF7iyKVskDCzgLrEpHmLoOobmSTmvbzPCJJgEzCU6HrbxQZiiwgkSCx5u5kdpIhZ4BOT
+        RNObVmaQhLBAmMSUm4vBbBYBVYnuF7OhltlKHLm+jg3iInmJ1RsOME9g5J2F5I5ZCHfMQnLH
+        AkbmVYwiqaXFuem5xYZ6xYm5xaV56XrJ+bmbGIHBve3Yz807GC9tDD7EKMDBqMTD+2HKwxgh
+        1sSy4srcQ4wSHMxKIrzG6vdjhHhTEiurUovy44tKc1KLDzFKc7AoifN2CByMERJITyxJzU5N
+        LUgtgskycXBKNTCKOtesDGD1exbwM/37DHGmPm+Putti8iKx9YtK0rhZdl+z0mm03MtSW7v7
+        3hYvg6/ez/9dfK46+yaTyWKvMzfeOySmvDPWjQks81jJGWbdmRzO4fou8ZfIpOMp5envjmxO
+        +j0xSFTsX5tR2KxN/NcFJ3Jc714tHiL5TVzGZ/lE78n6i1wMpyqxFGckGmoxFxUnAgAUSI7p
+        agIAAA==
+X-CMS-MailID: 20190520090832eucas1p163fb465647a030c5eafe399e4b5377c8
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190520090832eucas1p163fb465647a030c5eafe399e4b5377c8
+References: <CGME20190520090832eucas1p163fb465647a030c5eafe399e4b5377c8@eucas1p1.samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 20, 2019 at 08:06:41AM +0000, Biju Das wrote:
-> Hi Heikki,
-> 
-> > -----Original Message-----
-> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Sent: Monday, May 20, 2019 9:04 AM
-> > To: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > Cc: Rob Herring <robh+dt@kernel.org>; Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org>; Mark Rutland <mark.rutland@arm.com>;
-> > Matthias Brugger <matthias.bgg@gmail.com>; Adam Thomson
-> > <Adam.Thomson.Opensource@diasemi.com>; Li Jun <jun.li@nxp.com>;
-> > Badhri Jagan Sridharan <badhri@google.com>; Hans de Goede
-> > <hdegoede@redhat.com>; Andy Shevchenko
-> > <andy.shevchenko@gmail.com>; Min Guo <min.guo@mediatek.com>;
-> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> > usb@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> > mediatek@lists.infradead.org; Biju Das <biju.das@bp.renesas.com>; Linus
-> > Walleij <linus.walleij@linaro.org>
-> > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
-> > node
-> > 
-> > On Mon, May 20, 2019 at 10:39:11AM +0800, Chunfeng Yun wrote:
-> > > Hi,
-> > > On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
-> > > > Hi,
-> > > >
-> > > > On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki Krogerus wrote:
-> > > > > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng Yun wrote:
-> > > > > > Add fwnode_usb_role_switch_get() to make easier to get
-> > > > > > usb_role_switch by fwnode which register it.
-> > > > > > It's useful when there is not device_connection registered
-> > > > > > between two drivers and only knows the fwnode which register
-> > > > > > usb_role_switch.
-> > > > > >
-> > > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > > > Tested-by: Biju Das <biju.das@bp.renesas.com>
-> > > > >
-> > > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > >
-> > > > Hold on. I just noticed Rob's comment on patch 2/6, where he points
-> > > > out that you don't need to use device graph since the controller is
-> > > > the parent of the connector. Doesn't that mean you don't really need
-> > > > this API?
-> > > No, I still need it.
-> > > The change is about the way how to get fwnode; when use device graph,
-> > > get fwnode by of_graph_get_remote_node(); but now will get fwnode by
-> > > of_get_parent();
-> > 
-> > OK, I get that, but I'm still not convinced about if something like this function
-> > is needed at all. I also have concerns regarding how you are using the
-> > function. I'll explain in comment to the patch 5/6 in this series...
-> 
-> FYI, Currently  I am also using this api in my patch series.
-> https://patchwork.kernel.org/patch/10944637/
+Commit 69bec7259853 ("USB: core: let USB device know device node") added
+support for attaching devicetree node for USB devices. Those nodes are
+children of their USB host controller. However Exynos EHCI and OHCI
+driver bindings already define child-nodes for each physical root hub
+port and assigns respective PHY controller and parameters to them. Those
+bindings predates support for USB device tree nodes.
 
-Yes, and I have the same question for you I jusb asked in comment I
-added to the patch 5/6 of this series. Why isn't usb_role_switch_get()
-enough?
+To mitigate the side-effects of the conflict between those bindings,
+lets reset Exynos host controller of_node pointer before registering it
+to USB subsystem. This fixes the issue raised by the commit 01fdf179f4b0
+("usb: core: skip interfaces disabled in devicetree"), which incorrectly
+disabled some devices on Exynos based boards.
 
-thanks,
+Reported-by: Markus Reichl <m.reichl@fivetechno.de>
+Suggested-by: Måns Rullgård <mans@mansr.com>
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+v5:
+- fixed error path handling as pointed by Alan
 
+v4: https://patchwork.kernel.org/patch/10947773/
+- moved workaround to Exynos OHCI/EHCI drivers as suggested by Måns
+
+v3: https://lkml.org/lkml/2019/5/9/119
+- replaced ad hoc checks by proper test for proper value of the
+  compatible string in drivers/usb/core/of.c
+
+v2: https://lkml.org/lkml/2019/5/8/321
+
+v1: https://lkml.org/lkml/2019/5/7/715
+---
+ drivers/usb/host/ehci-exynos.c | 11 +++++++++++
+ drivers/usb/host/ohci-exynos.c | 11 +++++++++++
+ 2 files changed, 22 insertions(+)
+
+diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+index 8e3bab1e0c1f..3a29a1a8519c 100644
+--- a/drivers/usb/host/ehci-exynos.c
++++ b/drivers/usb/host/ehci-exynos.c
+@@ -39,6 +39,7 @@ static struct hc_driver __read_mostly exynos_ehci_hc_driver;
+ 
+ struct exynos_ehci_hcd {
+ 	struct clk *clk;
++	struct device_node *of_node;
+ 	struct phy *phy[PHY_NUMBER];
+ };
+ 
+@@ -203,6 +204,13 @@ static int exynos_ehci_probe(struct platform_device *pdev)
+ 	ehci = hcd_to_ehci(hcd);
+ 	ehci->caps = hcd->regs;
+ 
++	/*
++	 * Workaround: reset of_node pointer to avoid conflict between Exynos
++	 * EHCI port subnodes and generic USB device bindings
++	 */
++	exynos_ehci->of_node = pdev->dev.of_node;
++	pdev->dev.of_node = NULL;
++
+ 	/* DMA burst Enable */
+ 	writel(EHCI_INSNREG00_ENABLE_DMA_BURST, EHCI_INSNREG00(hcd->regs));
+ 
+@@ -219,6 +227,7 @@ static int exynos_ehci_probe(struct platform_device *pdev)
+ 
+ fail_add_hcd:
+ 	exynos_ehci_phy_disable(&pdev->dev);
++	pdev->dev.of_node = exynos_ehci->of_node;
+ fail_io:
+ 	clk_disable_unprepare(exynos_ehci->clk);
+ fail_clk:
+@@ -231,6 +240,8 @@ static int exynos_ehci_remove(struct platform_device *pdev)
+ 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+ 	struct exynos_ehci_hcd *exynos_ehci = to_exynos_ehci(hcd);
+ 
++	pdev->dev.of_node = exynos_ehci->of_node;
++
+ 	usb_remove_hcd(hcd);
+ 
+ 	exynos_ehci_phy_disable(&pdev->dev);
+diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+index c0c4dcca6f3c..905c6317e0c3 100644
+--- a/drivers/usb/host/ohci-exynos.c
++++ b/drivers/usb/host/ohci-exynos.c
+@@ -30,6 +30,7 @@ static struct hc_driver __read_mostly exynos_ohci_hc_driver;
+ 
+ struct exynos_ohci_hcd {
+ 	struct clk *clk;
++	struct device_node *of_node;
+ 	struct phy *phy[PHY_NUMBER];
+ };
+ 
+@@ -170,6 +171,13 @@ static int exynos_ohci_probe(struct platform_device *pdev)
+ 		goto fail_io;
+ 	}
+ 
++	/*
++	 * Workaround: reset of_node pointer to avoid conflict between Exynos
++	 * OHCI port subnodes and generic USB device bindings
++	 */
++	exynos_ohci->of_node = pdev->dev.of_node;
++	pdev->dev.of_node = NULL;
++
+ 	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "Failed to add USB HCD\n");
+@@ -180,6 +188,7 @@ static int exynos_ohci_probe(struct platform_device *pdev)
+ 
+ fail_add_hcd:
+ 	exynos_ohci_phy_disable(&pdev->dev);
++	pdev->dev.of_node = exynos_ohci->of_node;
+ fail_io:
+ 	clk_disable_unprepare(exynos_ohci->clk);
+ fail_clk:
+@@ -192,6 +201,8 @@ static int exynos_ohci_remove(struct platform_device *pdev)
+ 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+ 	struct exynos_ohci_hcd *exynos_ohci = to_exynos_ohci(hcd);
+ 
++	pdev->dev.of_node = exynos_ohci->of_node;
++
+ 	usb_remove_hcd(hcd);
+ 
+ 	exynos_ohci_phy_disable(&pdev->dev);
 -- 
-heikki
+2.17.1
+
