@@ -2,185 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3B4230A1
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 11:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04269230F3
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 12:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732325AbfETJpx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 05:45:53 -0400
-Received: from mail-eopbgr1400102.outbound.protection.outlook.com ([40.107.140.102]:15937
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729835AbfETJpx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 May 2019 05:45:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=urpvzzQMwcJiy4pS6sbeUbf3IXmOHrotPzfsSLOu+jQ=;
- b=VQUBEhXCljvfslhV9g2Q453aZBsEEDY4u85rcnbg85FkxRFbU7ixwB+r7uDcmdLf5BSgp+7OA8U286ofQtID0uOVs6H4R+MMMRQjVSjao/3FV8YDaZjme91fSqrpcCetrRe7zG6V5yb8+St29HJzh2COUr0EX+oSCZKkHVcsTpI=
-Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com (52.134.242.17) by
- OSBPR01MB1832.jpnprd01.prod.outlook.com (52.134.227.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1900.18; Mon, 20 May 2019 09:45:46 +0000
-Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com
- ([fe80::a146:39f0:5df9:11bc]) by OSBPR01MB2103.jpnprd01.prod.outlook.com
- ([fe80::a146:39f0:5df9:11bc%7]) with mapi id 15.20.1900.020; Mon, 20 May 2019
- 09:45:46 +0000
-From:   Biju Das <biju.das@bp.renesas.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: RE: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by node
-Thread-Topic: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
- node
-Thread-Index: AQHVCjGxbEdsIx4ReU+jIZIOb3TooaZvJLIAgAApPICABAgXgIAAWsCAgAAANlCAAAi9gIAADx0A
-Date:   Mon, 20 May 2019 09:45:46 +0000
-Message-ID: <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
- <1557823643-8616-5-git-send-email-chunfeng.yun@mediatek.com>
- <20190517103736.GA1490@kuha.fi.intel.com>
- <20190517130511.GA1887@kuha.fi.intel.com>
- <1558319951.10179.352.camel@mhfsdcap03>
- <20190520080359.GC1887@kuha.fi.intel.com>
- <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <20190520083601.GE1887@kuha.fi.intel.com>
-In-Reply-To: <20190520083601.GE1887@kuha.fi.intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=biju.das@bp.renesas.com; 
-x-originating-ip: [193.141.220.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7de330c8-b2f9-4f0c-566a-08d6dd07eeee
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB1832;
-x-ms-traffictypediagnostic: OSBPR01MB1832:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <OSBPR01MB1832F11D57BD6861C5A6E689B8060@OSBPR01MB1832.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 004395A01C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(346002)(366004)(396003)(136003)(376002)(51914003)(199004)(189003)(53936002)(2906002)(66066001)(7736002)(86362001)(305945005)(256004)(3846002)(186003)(26005)(6916009)(25786009)(6116002)(4326008)(74316002)(7416002)(66946007)(6246003)(66476007)(66556008)(76116006)(66446008)(64756008)(73956011)(81166006)(8676002)(81156014)(229853002)(33656002)(8936002)(316002)(6506007)(6436002)(966005)(71190400001)(76176011)(71200400001)(478600001)(6306002)(9686003)(54906003)(486006)(44832011)(102836004)(55016002)(68736007)(7696005)(99286004)(14454004)(52536014)(5660300002)(446003)(476003)(11346002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB1832;H:OSBPR01MB2103.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:0;MX:1;
-received-spf: None (protection.outlook.com: bp.renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: M2DfjJcjOvAj1G2bcfYc5O71X9OD6RTGyNzrf5DRGPHrh/WjVADLv5os5ugnuNb6lZCm1uRBVnIVTCcopdEnnIUyq8dJceis681i4g4GekgANxHW7Rf/W3seLugTY436DVC0tq4ZUl2psPVoyGSdedb6nfVzKaUC4NOHdqYvL44sWR+JyHmmY053FJM9HcKnsfkEVEmSjf2OwLmjf0u0/I/F3l7i8q0jasgvU1naSzfm+YGJDdxMzCxGCg6ckkZ9h2J+//zcktGu/x2E9Ch7+PdW0BeWtb8G/Pf7kOZte13XRbq5lM3WqCBN8Viw4ZSBLER8eAsRrbWoSwc2Fn6dCeReYGHaqGPXoY5BZglmGPHKgCqw4OUrfJr5xFtclkdHjwGXG7q5Fm2lieRvuKie4nvTjKc4M4p8d4H2geaktyQ=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1731566AbfETKMN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 06:12:13 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:37150 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730468AbfETKMM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 06:12:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=MqrvqRAJlxcONvOERepJ1ia9im/zVqpqGszIN9wgOpo=; b=ZU0ytO4YuOP96ibdGXamVHekr
+        uBSM7cCD4CWqHQfee0lTS97z/EH61ONs+mc6CZYtOT3GX7GdQmDV3ZCOxswvcWlCdcD5tUMAKf3lO
+        8cpp0xOP8zB04CG4MxT6SoS91K/bYf1pOv70rCpVbLb80GTGRylJADjqzF3cgmEgHUCkxQGxvFu3x
+        aOyZDtSq0VnBtTuwVqlvi3AyMOPs0BZtj5FOG+3gvaPGFhfapQUsk0j9OXJifHtQQuG53bi2iid/Q
+        FTK3ijbqOwmRyAmwSPJpu/fnRPXmJu6s/sGdB6ZSVuyzXo7qkti7ONQZV6wv8/86V2mFIRECvY9P/
+        aujbpJYRQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hSfH4-0003eI-EN; Mon, 20 May 2019 10:12:06 +0000
+Date:   Mon, 20 May 2019 03:12:06 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jaewon Kim <jaewon31.kim@gmail.com>, linux-mm@kvack.org,
+        gregkh@linuxfoundation.org, Jaewon Kim <jaewon31.kim@samsung.com>,
+        m.szyprowski@samsung.com, ytk.lee@samsung.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
+Message-ID: <20190520101206.GA9291@infradead.org>
+References: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
+ <20190520055657.GA31866@infradead.org>
+ <1558343365.12672.2.camel@suse.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7de330c8-b2f9-4f0c-566a-08d6dd07eeee
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2019 09:45:46.1271
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB1832
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1558343365.12672.2.camel@suse.com>
+User-Agent: Mutt/1.9.2 (2017-12-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, May 20, 2019 at 11:09:25AM +0200, Oliver Neukum wrote:
+> we actually do. It is just higher up in the calling path:
 
+Perfect!
 
-Hi Heikki,
+> So, do we need to audit the mem_flags again?
+> What are we supposed to use? GFP_KERNEL?
 
-Thanks for the feedback.
-
-> Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
-> node
->=20
-> On Mon, May 20, 2019 at 08:06:41AM +0000, Biju Das wrote:
-> > Hi Heikki,
-> >
-> > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
-> > > usb_role_switch by node
-> > >
-> > > On Mon, May 20, 2019 at 10:39:11AM +0800, Chunfeng Yun wrote:
-> > > > Hi,
-> > > > On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
-> > > > > Hi,
-> > > > >
-> > > > > On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki Krogerus wrote:
-> > > > > > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng Yun wrote:
-> > > > > > > Add fwnode_usb_role_switch_get() to make easier to get
-> > > > > > > usb_role_switch by fwnode which register it.
-> > > > > > > It's useful when there is not device_connection registered
-> > > > > > > between two drivers and only knows the fwnode which register
-> > > > > > > usb_role_switch.
-> > > > > > >
-> > > > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > > > > Tested-by: Biju Das <biju.das@bp.renesas.com>
-> > > > > >
-> > > > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > >
-> > > > > Hold on. I just noticed Rob's comment on patch 2/6, where he
-> > > > > points out that you don't need to use device graph since the
-> > > > > controller is the parent of the connector. Doesn't that mean you
-> > > > > don't really need this API?
-> > > > No, I still need it.
-> > > > The change is about the way how to get fwnode; when use device
-> > > > graph, get fwnode by of_graph_get_remote_node(); but now will get
-> > > > fwnode by of_get_parent();
-> > >
-> > > OK, I get that, but I'm still not convinced about if something like
-> > > this function is needed at all. I also have concerns regarding how
-> > > you are using the function. I'll explain in comment to the patch 5/6 =
-in this
-> series...
-> >
-> > FYI, Currently  I am also using this api in my patch series.
-> > https://patchwork.kernel.org/patch/10944637/
->=20
-> Yes, and I have the same question for you I jusb asked in comment I added
-> to the patch 5/6 of this series. Why isn't usb_role_switch_get() enough?
-
-Currently no issue. It will work with this api as well, since the port node=
- is part of controller node.
-For eg:-
-https://patchwork.kernel.org/patch/10944627/
-
-However if any one adds port node inside the connector node, then this api =
-may won't work as expected.
-Currently I get below error
-
-[    2.299703] OF: graph: no port node found in /soc/i2c@e6500000/hd3ss3220=
-@47
-
-For eg:-
-
-	hd3ss3220@47 {
-		compatible =3D "ti,hd3ss3220";
-		...
-		....
-		usb_con: connector {
-                                     ....
-                                     ....
-			port {
-				hd3ss3220_ep: endpoint@0 {
-					reg =3D <0>;
-					remote-endpoint =3D <&usb3peri_role_switch>;
-				};
-			};
-		};
-	};
-
-Regards,
-Biju
+GFP_KERNEL if you can block, GFP_ATOMIC if you can't for a good reason,
+that is the allocation is from irq context or under a spinlock.  If you
+think you have a case where you think you don't want to block, but it
+is not because of the above reasons we need to have a chat about the
+details.
