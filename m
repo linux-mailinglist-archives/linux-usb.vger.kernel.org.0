@@ -2,55 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D494222B7F
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 07:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EE022CA7
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 09:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730457AbfETF5C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 01:57:02 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:33834 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725829AbfETF5C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 01:57:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=n/yIzKd81+TM+3UvGV1Qf2W8qzlZxmI5yFYDnHihTSo=; b=urnzw8VmiMP9TugzAfLgp6yc7
-        dfmBhTiVp1UyVNGQyqHS1Nnn4tFxpWfNDOjlhG3NMqQ3E4wFTCes/z0TWLH1SfqsWpD5/akz+DBX/
-        oHbWkpIrbZP24i2cUziddSM5kBml+LER0VrkrORsAxP71POf02NXO+DhU5vbIZJFNG9kbJ5aV7TEL
-        YCG9fYcgSfdhXvp1Wj2JL25KemMRrINp4Rmms//Dv1Iw5ebeBX5Tsc/k2CzUtT0G+iCSf9LYn1qfl
-        jXOt5kQpf7Iwn84rir0nFGULr6aU1NNTbqKi+ZA0YY3lh0okwoFeQ6Ngq+VbJVUoWRVYvs0RWtiut
-        g1CGMTSvQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hSbI9-0005Xy-GO; Mon, 20 May 2019 05:56:57 +0000
-Date:   Sun, 19 May 2019 22:56:57 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jaewon Kim <jaewon31.kim@gmail.com>
-Cc:     gregkh@linuxfoundation.org, m.szyprowski@samsung.com,
-        linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jaewon Kim <jaewon31.kim@samsung.com>, ytk.lee@samsung.com
-Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
-Message-ID: <20190520055657.GA31866@infradead.org>
-References: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
+        id S1730272AbfETHIT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 03:08:19 -0400
+Received: from mail-wr1-f50.google.com ([209.85.221.50]:40276 "EHLO
+        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727130AbfETHIS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 03:08:18 -0400
+Received: by mail-wr1-f50.google.com with SMTP id h4so13236128wre.7
+        for <linux-usb@vger.kernel.org>; Mon, 20 May 2019 00:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=+HccZpWfMZ+TIVZwAV0QZEFO3ZJvfjmBLEkuqXom4e0=;
+        b=CmQ6X5ikpF8p1ailIRGSOjEmISaeEhexRX9InC4oNMPOEJlek1JB1jbOUMf6t7op24
+         8NjuNhLrmz4rcsCwQUdwzDKB9zVggdxYYwSBHRGQmS7q3Z8MdkBgAPEaN/WMUp0o+0hx
+         bKBWZFoItaaO1CRmTnskJ1mDcUOjifULAzum0U9FPTynG09X+OHPBSrhVpdzHAeocdca
+         3LL0M6QTwHWWoJOhQA2xed61NAKOWiFO5wgVZv16HHTGRKaH4utVibviL+7Zv+EK6Or+
+         jCxWlIJtnN0XKP0AW1bKCK+xMqbRHnaYPYSX9AZ9liUzOE8h2/TwGiTJwxTaqBfN0+9B
+         YAeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=+HccZpWfMZ+TIVZwAV0QZEFO3ZJvfjmBLEkuqXom4e0=;
+        b=DY+ACGae+3TiVuka0DYMY3VtNzuEiSxom5gNZpl/sTg+SEW5dL9yyOnS2Xx3Ch3o2X
+         tNEaRU0yWcFAmYGpA4wU7hVCddkzeRcvZ8c9Ql5v13jypLH9uF9pK8n7QHNlyllHSuvd
+         TDD6IMgGO/5zu+0+eRehSAKVdbo44+V9QFjtxnrxO1BcDAQ7efrgxAaeal7RxV1+L2pq
+         t1v6yCkHh9fmPtNjjnokD8qif13mJN9JKnLseh5A17AjrRayFqPOaauwHQsbsKtxnjwm
+         +KLKI26xatuvxphUaKRJqAUZBIwZKawxKQTgPkDN64Q4BEokjxKPJBpQ91AC5bUJnAwN
+         Zkig==
+X-Gm-Message-State: APjAAAWwOEZLIt/NWLFGiYJTcXfghDKFby8yeM8R23kSz6kJByUPjn32
+        MSuyQ7wr1OJu2qyuq4EWNOvzhu9X
+X-Google-Smtp-Source: APXvYqw+XwRbptWJ/XFb5tK/qtg1XwpUv45PlYGX+o87UuG8/jnEbR8FijR9HxKULIheRRPMmm7Yug==
+X-Received: by 2002:a05:6000:1203:: with SMTP id e3mr18420577wrx.300.1558336097250;
+        Mon, 20 May 2019 00:08:17 -0700 (PDT)
+Received: from [192.168.99.70] (mail.unidataz.cz. [193.165.148.130])
+        by smtp.googlemail.com with ESMTPSA id d3sm20957803wmf.46.2019.05.20.00.08.15
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 May 2019 00:08:16 -0700 (PDT)
+From:   "StarostaCZ@gmail.com" <starostacz@gmail.com>
+X-Google-Original-From: "StarostaCZ@gmail.com" <StarostaCZ@gmail.com>
+Subject: Re: Kernel crash with FTDI FT232R on AMD boards.
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+References: <11678333-2e1a-8c0f-109f-a1aefa54ef9a@gmail.com>
+ <20190516135612.GA28564@localhost>
+Message-ID: <0cec0d5b-a9ef-bfeb-a316-27d8279b18cb@gmail.com>
+Date:   Mon, 20 May 2019 09:06:38 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20190516135612.GA28564@localhost>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: cs
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Folks, you can't just pass arbitary GFP_ flags to dma allocation
-routines, beause very often they are not just wrappers around
-the page allocator.
+Dne 16.5.2019 v 15:56 Johan Hovold napsal(a):
+> On Thu, May 16, 2019 at 03:35:42PM +0200, StarostaCZ@gmail.com wrote:
+> You should mention that you're using libusb and the vendor's ftdi
+> library. Specifically, the kernels ftdi_sio driver is not involved.
+Sorry, you are right, I use libftd2xx drivers version 1.4.8: 
+https://www.ftdichip.com/Drivers/D2XX.htm
+This driver is compiled with libusb. ftdi_sio is removed before testing 
+by command "rmmod ftdi_sio".
 
-So no, you can't just fine grained control the flags, but the
-existing code is just as buggy.
-
-Please switch to use memalloc_noio_save() instead.
+starosta
