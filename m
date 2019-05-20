@@ -2,158 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBB522A00
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 04:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D494222B7F
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 07:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729598AbfETCjT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 May 2019 22:39:19 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:35115 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727720AbfETCjT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 May 2019 22:39:19 -0400
-X-UUID: e9d19da9f5d54130adf050cc20d5151b-20190520
-X-UUID: e9d19da9f5d54130adf050cc20d5151b-20190520
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 849597756; Mon, 20 May 2019 10:39:15 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 20 May
- 2019 10:39:13 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 20 May 2019 10:39:11 +0800
-Message-ID: <1558319951.10179.352.camel@mhfsdcap03>
-Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
- node
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        "Badhri Jagan Sridharan" <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 20 May 2019 10:39:11 +0800
-In-Reply-To: <20190517130511.GA1887@kuha.fi.intel.com>
-References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1557823643-8616-5-git-send-email-chunfeng.yun@mediatek.com>
-         <20190517103736.GA1490@kuha.fi.intel.com>
-         <20190517130511.GA1887@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        id S1730457AbfETF5C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 01:57:02 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:33834 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfETF5C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 01:57:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=n/yIzKd81+TM+3UvGV1Qf2W8qzlZxmI5yFYDnHihTSo=; b=urnzw8VmiMP9TugzAfLgp6yc7
+        dfmBhTiVp1UyVNGQyqHS1Nnn4tFxpWfNDOjlhG3NMqQ3E4wFTCes/z0TWLH1SfqsWpD5/akz+DBX/
+        oHbWkpIrbZP24i2cUziddSM5kBml+LER0VrkrORsAxP71POf02NXO+DhU5vbIZJFNG9kbJ5aV7TEL
+        YCG9fYcgSfdhXvp1Wj2JL25KemMRrINp4Rmms//Dv1Iw5ebeBX5Tsc/k2CzUtT0G+iCSf9LYn1qfl
+        jXOt5kQpf7Iwn84rir0nFGULr6aU1NNTbqKi+ZA0YY3lh0okwoFeQ6Ngq+VbJVUoWRVYvs0RWtiut
+        g1CGMTSvQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hSbI9-0005Xy-GO; Mon, 20 May 2019 05:56:57 +0000
+Date:   Sun, 19 May 2019 22:56:57 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jaewon Kim <jaewon31.kim@gmail.com>
+Cc:     gregkh@linuxfoundation.org, m.szyprowski@samsung.com,
+        linux-mm@kvack.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jaewon Kim <jaewon31.kim@samsung.com>, ytk.lee@samsung.com
+Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
+Message-ID: <20190520055657.GA31866@infradead.org>
+References: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
 MIME-Version: 1.0
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
+User-Agent: Mutt/1.9.2 (2017-12-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
-> Hi,
-> 
-> On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki Krogerus wrote:
-> > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng Yun wrote:
-> > > Add fwnode_usb_role_switch_get() to make easier to get
-> > > usb_role_switch by fwnode which register it.
-> > > It's useful when there is not device_connection registered
-> > > between two drivers and only knows the fwnode which register
-> > > usb_role_switch.
-> > > 
-> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > Tested-by: Biju Das <biju.das@bp.renesas.com>
-> > 
-> > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> 
-> Hold on. I just noticed Rob's comment on patch 2/6, where he points out
-> that you don't need to use device graph since the controller is the
-> parent of the connector. Doesn't that mean you don't really need this
-> API?
-No, I still need it. 
-The change is about the way how to get fwnode;
-when use device graph, get fwnode by of_graph_get_remote_node();
-but now will get fwnode by of_get_parent();
+Folks, you can't just pass arbitary GFP_ flags to dma allocation
+routines, beause very often they are not just wrappers around
+the page allocator.
 
-> 
-> > > ---
-> > > v5 changes:
-> > >  1. remove linux/of.h suggested by Biju
-> > >  2. add tested by Biju
-> > > 
-> > > Note: still depends on [1]
-> > >  [1]: [v6,08/13] usb: roles: Introduce stubs for the exiting functions in role.h
-> > >       https://patchwork.kernel.org/patch/10909971/
-> > > 
-> > > v4 changes:
-> > >   1. use switch_fwnode_match() to find fwnode suggested by Heikki
-> > >   2. this patch now depends on [1]
-> > > 
-> > >  [1] [v6,08/13] usb: roles: Introduce stubs for the exiting functions in role.h
-> > >     https://patchwork.kernel.org/patch/10909971/
-> > > 
-> > > v3 changes:
-> > >   1. use fwnodes instead of node suggested by Andy
-> > >   2. rebuild the API suggested by Heikki
-> > > 
-> > > v2 no changes
-> > > ---
-> > >  drivers/usb/roles/class.c | 24 ++++++++++++++++++++++++
-> > >  include/linux/usb/role.h  |  8 ++++++++
-> > >  2 files changed, 32 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> > > index f45d8df5cfb8..4a1f09a41ec0 100644
-> > > --- a/drivers/usb/roles/class.c
-> > > +++ b/drivers/usb/roles/class.c
-> > > @@ -135,6 +135,30 @@ struct usb_role_switch *usb_role_switch_get(struct device *dev)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(usb_role_switch_get);
-> > >  
-> > > +/**
-> > > + * fwnode_usb_role_switch_get - Find USB role switch by it's parent fwnode
-> > > + * @fwnode: The fwnode that register USB role switch
-> > > + *
-> > > + * Finds and returns role switch registered by @fwnode. The reference count
-> > > + * for the found switch is incremented.
-> > > + */
-> > > +struct usb_role_switch *
-> > > +fwnode_usb_role_switch_get(struct fwnode_handle *fwnode)
-> > > +{
-> > > +	struct usb_role_switch *sw;
-> > > +	struct device *dev;
-> > > +
-> > > +	dev = class_find_device(role_class, NULL, fwnode, switch_fwnode_match);
-> > > +	if (!dev)
-> > > +		return ERR_PTR(-EPROBE_DEFER);
-> > > +
-> > > +	sw = to_role_switch(dev);
-> > > +	WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
-> > > +
-> > > +	return sw;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(fwnode_usb_role_switch_get);
-> 
-> This function only basically converts the fwnode to usb_role_switch,
-> but I would actually prefer that we walked through the device graph
-> here instead of expecting the caller to do that.
-> 
-> So this function should probable be called fwnode_to_usb_role_switch()
-> and not fwnode_usb_role_switch_get(), but I guess you don't need it
-> at all, right?
-> 
-> 
-> thanks,
-> 
+So no, you can't just fine grained control the flags, but the
+existing code is just as buggy.
 
-
+Please switch to use memalloc_noio_save() instead.
