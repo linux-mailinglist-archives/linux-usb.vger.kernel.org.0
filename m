@@ -2,67 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1103239DE
-	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 16:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8458A23AB4
+	for <lists+linux-usb@lfdr.de>; Mon, 20 May 2019 16:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733133AbfETOXy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 10:23:54 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:60016 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732127AbfETOXj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 10:23:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=OatVHIrCWYguW9Na7RTRuHTBGkcI0B4NqgZ1cLxhQgQ=; b=F6QxfkwnuYixy1VbMF0FyONlO
-        dsWCZHGjFMaTg+CXsiL17P09p9tVTwmdejillTJOVKTk/anWvWL7/2Hjnuh5LWjmsNBcyVvck9ejw
-        qRag5Wnz4m1LXhBpxrUmjVbrTKqVDVxM3SLJ5hRyo/66WXxDBVFYyNwcKp+0msVjFMiON4shXUf5H
-        vbUY6T4yOTY7RrgQqYAH4p/LVBT6jkqdtXedMJk6ExQoBvbX8XFofYNevHhct2O6nnOdHeb742/3u
-        cTM60s4nWRGiMl3Wt1xdFEVJ5qZgbUd+XZapkxqz3GuRKvPS5fpJirF6QQ06yJccuyRVkv3a1PPwd
-        Mke8wj0lw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hSjCN-0003ZB-Ee; Mon, 20 May 2019 14:23:31 +0000
-Date:   Mon, 20 May 2019 07:23:31 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Jaewon Kim <jaewon31.kim@gmail.com>, linux-mm@kvack.org,
-        gregkh@linuxfoundation.org, Jaewon Kim <jaewon31.kim@samsung.com>,
-        m.szyprowski@samsung.com, ytk.lee@samsung.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
-Message-ID: <20190520142331.GA12108@infradead.org>
-References: <20190520101206.GA9291@infradead.org>
- <Pine.LNX.4.44L0.1905201011490.1498-100000@iolanthe.rowland.org>
+        id S2391958AbfETOoW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 10:44:22 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:58814 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2388396AbfETOoW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 10:44:22 -0400
+Received: (qmail 2121 invoked by uid 2102); 20 May 2019 10:44:21 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 20 May 2019 10:44:21 -0400
+Date:   Mon, 20 May 2019 10:44:21 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Christian Lamparter <chunkeey@gmail.com>
+cc:     syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>,
+        <kvalo@codeaurora.org>, <davem@davemloft.net>,
+        <andreyknvl@google.com>, <syzkaller-bugs@googlegroups.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH] network: wireless: p54u: Fix race between disconnect and
+ firmware loading
+In-Reply-To: <5014675.0cgHOJIxtM@debian64>
+Message-ID: <Pine.LNX.4.44L0.1905201042110.1498-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1905201011490.1498-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 20, 2019 at 10:16:57AM -0400, Alan Stern wrote:
-> What if the allocation requires the kernel to swap some old pages out 
-> to the backing store, but the backing store is on the device that the 
-> driver is managing?  The swap can't take place until the current I/O 
-> operation is complete (assuming the driver can handle only one I/O 
-> operation at a time), and the current operation can't complete until 
-> the old pages are swapped out.  Result: deadlock.
-> 
-> Isn't that the whole reason for using GFP_NOIO in the first place?
+The syzbot fuzzer found a bug in the p54 USB wireless driver.  The
+issue involves a race between disconnect and the firmware-loader
+callback routine, and it has several aspects.
 
-It is, or rather was.  As it has been incredibly painful to wire
-up the gfp_t argument through some callstacks, most notably the
-vmalloc allocator which is used by a lot of the DMA allocators on
-non-coherent platforms, we now have the memalloc_noio_save and
-memalloc_nofs_save functions that mark a thread as not beeing to
-go into I/O / FS reclaim.  So even if you use GFP_KERNEL you will
-not dip into reclaim with those flags set on the thread.
+One big problem is that when the firmware can't be loaded, the
+callback routine tries to unbind the driver from the USB _device_ (by
+calling device_release_driver) instead of from the USB _interface_ to
+which it is actually bound (by calling usb_driver_release_interface).
+
+The race involves access to the private data structure.  The driver's
+disconnect handler waits for a completion that is signalled by the
+firmware-loader callback routine.  As soon as the completion is
+signalled, you have to assume that the private data structure may have
+been deallocated by the disconnect handler -- even if the firmware was
+loaded without errors.  However, the callback routine does access the
+private data several times after that point.
+
+Another problem is that, in order to ensure that the USB device
+structure hasn't been freed when the callback routine runs, the driver
+takes a reference to it.  This isn't good enough any more, because now
+that the callback routine calls usb_driver_release_interface, it has
+to ensure that the interface structure hasn't been freed.
+
+Finally, the driver takes an unnecessary reference to the USB device
+structure in the probe function and drops the reference in the
+disconnect handler.  This extra reference doesn't accomplish anything,
+because the USB core already guarantees that a device structure won't
+be deallocated while a driver is still bound to any of its interfaces.
+
+To fix these problems, this patch makes the following changes:
+
+	Call usb_driver_release_interface() rather than
+	device_release_driver().
+
+	Don't signal the completion until after the important
+	information has been copied out of the private data structure,
+	and don't refer to the private data at all thereafter.
+
+	Lock udev (the interface's parent) before unbinding the driver
+	instead of locking udev->parent.
+
+	During the firmware loading process, take a reference to the
+	USB interface instead of the USB device.
+
+	Don't take an unnecessary reference to the device during probe
+	(and then don't drop it during disconnect).
+
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-and-tested-by: syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com
+CC: <stable@vger.kernel.org>
+
+---
+
+
+[as1899]
+
+
+ drivers/net/wireless/intersil/p54/p54usb.c |   43 ++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 25 deletions(-)
+
+Index: usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/intersil/p54/p54usb.c
++++ usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
+@@ -33,6 +33,8 @@ MODULE_ALIAS("prism54usb");
+ MODULE_FIRMWARE("isl3886usb");
+ MODULE_FIRMWARE("isl3887usb");
+ 
++static struct usb_driver p54u_driver;
++
+ /*
+  * Note:
+  *
+@@ -921,9 +923,9 @@ static void p54u_load_firmware_cb(const
+ {
+ 	struct p54u_priv *priv = context;
+ 	struct usb_device *udev = priv->udev;
++	struct usb_interface *intf = priv->intf;
+ 	int err;
+ 
+-	complete(&priv->fw_wait_load);
+ 	if (firmware) {
+ 		priv->fw = firmware;
+ 		err = p54u_start_ops(priv);
+@@ -932,26 +934,22 @@ static void p54u_load_firmware_cb(const
+ 		dev_err(&udev->dev, "Firmware not found.\n");
+ 	}
+ 
+-	if (err) {
+-		struct device *parent = priv->udev->dev.parent;
+-
+-		dev_err(&udev->dev, "failed to initialize device (%d)\n", err);
+-
+-		if (parent)
+-			device_lock(parent);
++	complete(&priv->fw_wait_load);
++	/*
++	 * At this point p54u_disconnect may have already freed
++	 * the "priv" context. Do not use it anymore!
++	 */
++	priv = NULL;
+ 
+-		device_release_driver(&udev->dev);
+-		/*
+-		 * At this point p54u_disconnect has already freed
+-		 * the "priv" context. Do not use it anymore!
+-		 */
+-		priv = NULL;
++	if (err) {
++		dev_err(&intf->dev, "failed to initialize device (%d)\n", err);
+ 
+-		if (parent)
+-			device_unlock(parent);
++		usb_lock_device(udev);
++		usb_driver_release_interface(&p54u_driver, intf);
++		usb_unlock_device(udev);
+ 	}
+ 
+-	usb_put_dev(udev);
++	usb_put_intf(intf);
+ }
+ 
+ static int p54u_load_firmware(struct ieee80211_hw *dev,
+@@ -972,14 +970,14 @@ static int p54u_load_firmware(struct iee
+ 	dev_info(&priv->udev->dev, "Loading firmware file %s\n",
+ 	       p54u_fwlist[i].fw);
+ 
+-	usb_get_dev(udev);
++	usb_get_intf(intf);
+ 	err = request_firmware_nowait(THIS_MODULE, 1, p54u_fwlist[i].fw,
+ 				      device, GFP_KERNEL, priv,
+ 				      p54u_load_firmware_cb);
+ 	if (err) {
+ 		dev_err(&priv->udev->dev, "(p54usb) cannot load firmware %s "
+ 					  "(%d)!\n", p54u_fwlist[i].fw, err);
+-		usb_put_dev(udev);
++		usb_put_intf(intf);
+ 	}
+ 
+ 	return err;
+@@ -1011,8 +1009,6 @@ static int p54u_probe(struct usb_interfa
+ 	skb_queue_head_init(&priv->rx_queue);
+ 	init_usb_anchor(&priv->submitted);
+ 
+-	usb_get_dev(udev);
+-
+ 	/* really lazy and simple way of figuring out if we're a 3887 */
+ 	/* TODO: should just stick the identification in the device table */
+ 	i = intf->altsetting->desc.bNumEndpoints;
+@@ -1053,10 +1049,8 @@ static int p54u_probe(struct usb_interfa
+ 		priv->upload_fw = p54u_upload_firmware_net2280;
+ 	}
+ 	err = p54u_load_firmware(dev, intf);
+-	if (err) {
+-		usb_put_dev(udev);
++	if (err)
+ 		p54_free_common(dev);
+-	}
+ 	return err;
+ }
+ 
+@@ -1072,7 +1066,6 @@ static void p54u_disconnect(struct usb_i
+ 	wait_for_completion(&priv->fw_wait_load);
+ 	p54_unregister_common(dev);
+ 
+-	usb_put_dev(interface_to_usbdev(intf));
+ 	release_firmware(priv->fw);
+ 	p54_free_common(dev);
+ }
+
