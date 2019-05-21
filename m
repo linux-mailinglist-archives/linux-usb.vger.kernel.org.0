@@ -2,174 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 665DD24A54
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 10:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210C324AA1
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 10:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726363AbfEUI1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 04:27:33 -0400
-Received: from mail-eopbgr1410098.outbound.protection.outlook.com ([40.107.141.98]:58544
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        id S1726900AbfEUImf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 04:42:35 -0400
+Received: from mail-eopbgr130044.outbound.protection.outlook.com ([40.107.13.44]:50660
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726201AbfEUI1d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 May 2019 04:27:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+        id S1725790AbfEUImf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 04:42:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oxJufPD7Sj64eiG5Amc2+rjEXND/O7dxYk+LELzdG0g=;
- b=V+8TXPGVAc6sJa9SaPhAxJETiMuGihgYvsUocCo8rSf9HjQ8QHMOBpbv+0XR2km15wzkeMfovTtXw3YPq/Wdjb546YuavhSAtWi1UsGiYBQsQcd0tkIeMC9dsBSl2vCq7LdOzprlpS+7FdgnsZBV1BoR9GqrYVuJbfUP77QvpnU=
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
- OSAPR01MB2481.jpnprd01.prod.outlook.com (52.134.245.77) with Microsoft SMTP
+ bh=LTwn26hGk98qhFNKDhuqmtRcWqbka96B26HnzTZdOIo=;
+ b=gdjrHy4H3hIAefLoi/Ia6QoSNPIdnAjQtvAXKlTSf8qoRnG9pxtbcRUucEIfNARw3BY63xh2RGnW6VePYsc5wFI8eIg81hH5onkLtLAm6FTw7Eqooh4L+VGC+W6EKwahLPZ2IM2Munrr2ouMy0bUSJTLJ//5jGgdEqRffXqtlZo=
+Received: from AM0PR04MB5314.eurprd04.prod.outlook.com (20.177.41.157) by
+ AM0PR04MB5409.eurprd04.prod.outlook.com (20.178.116.92) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1900.17; Tue, 21 May 2019 08:27:24 +0000
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::4597:5353:28fb:cfd8]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::4597:5353:28fb:cfd8%7]) with mapi id 15.20.1900.020; Tue, 21 May 2019
- 08:27:24 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Biju Das <biju.das@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Biju Das <biju.das@bp.renesas.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ 15.20.1900.18; Tue, 21 May 2019 08:42:32 +0000
+Received: from AM0PR04MB5314.eurprd04.prod.outlook.com
+ ([fe80::f0fd:f85a:5df:8dd0]) by AM0PR04MB5314.eurprd04.prod.outlook.com
+ ([fe80::f0fd:f85a:5df:8dd0%5]) with mapi id 15.20.1900.020; Tue, 21 May 2019
+ 08:42:31 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Simon Horman <horms@verge.net.au>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v6 2/7] dt-bindings: usb: renesas_usb3: Document usb role
- switch support
-Thread-Topic: [PATCH v6 2/7] dt-bindings: usb: renesas_usb3: Document usb role
- switch support
-Thread-Index: AQHVCxgOYVTacbZXFUG//sel1YhPLKZ1QuVg
-Date:   Tue, 21 May 2019 08:27:23 +0000
-Message-ID: <OSAPR01MB308934C379A9759841E58043D8070@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-References: <1557922152-16449-1-git-send-email-biju.das@bp.renesas.com>
- <1557922152-16449-3-git-send-email-biju.das@bp.renesas.com>
-In-Reply-To: <1557922152-16449-3-git-send-email-biju.das@bp.renesas.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH v2 6/8] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
+Thread-Topic: [PATCH v2 6/8] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
+Thread-Index: AQHVCigBwvPXZQ0UVkuAwmjsg1TEmaZzp+eAgAGl6NA=
+Date:   Tue, 21 May 2019 08:42:31 +0000
+Message-ID: <AM0PR04MB53140D914E608A9BA2CB30858B070@AM0PR04MB5314.eurprd04.prod.outlook.com>
+References: <20190514073529.29505-1-peter.chen@nxp.com>
+ <20190514073529.29505-7-peter.chen@nxp.com> <20190520073157.GW15856@dragon>
+In-Reply-To: <20190520073157.GW15856@dragon>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [124.210.22.195]
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d069454e-c445-431f-e310-08d6ddc626a2
+x-ms-office365-filtering-correlation-id: edd3fda7-4874-497e-fc87-08d6ddc843c0
 x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB2481;
-x-ms-traffictypediagnostic: OSAPR01MB2481:
-x-microsoft-antispam-prvs: <OSAPR01MB24813A79A0A17D59C4FDD227D8070@OSAPR01MB2481.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB5409;
+x-ms-traffictypediagnostic: AM0PR04MB5409:
+x-microsoft-antispam-prvs: <AM0PR04MB5409520D87D99FE36402900A8B070@AM0PR04MB5409.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3968;
 x-forefront-prvs: 0044C17179
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(39860400002)(396003)(366004)(376002)(136003)(189003)(199004)(486006)(6246003)(6116002)(7416002)(66066001)(53936002)(6436002)(476003)(81166006)(81156014)(9686003)(68736007)(25786009)(4326008)(8676002)(55016002)(8936002)(5660300002)(11346002)(446003)(229853002)(478600001)(52536014)(54906003)(86362001)(14454004)(316002)(110136005)(305945005)(71200400001)(76176011)(66446008)(14444005)(256004)(33656002)(102836004)(6506007)(3846002)(64756008)(76116006)(186003)(7736002)(73956011)(71190400001)(26005)(7696005)(74316002)(66556008)(66476007)(66946007)(55236004)(2906002)(99286004);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB2481;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(979002)(346002)(376002)(136003)(396003)(39860400002)(366004)(189003)(199004)(6506007)(54906003)(316002)(71200400001)(8676002)(33656002)(81166006)(81156014)(71190400001)(14454004)(7696005)(76176011)(73956011)(66946007)(6116002)(3846002)(76116006)(5660300002)(66476007)(66556008)(64756008)(66446008)(68736007)(6916009)(8936002)(186003)(25786009)(26005)(6436002)(2906002)(74316002)(256004)(9686003)(14444005)(11346002)(55016002)(52536014)(66066001)(102836004)(229853002)(476003)(305945005)(486006)(99286004)(446003)(86362001)(4326008)(44832011)(7736002)(478600001)(53936002)(6246003)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5409;H:AM0PR04MB5314.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ANPJlg8Yj+l+9rt8Tww79NZKo7hfVB1fG4MFU11WDcNyRqvHGg73c+wm0uaYa8vYlNTQ5i6kgYlO9B5NzTRjRAmY5JhJSXeiMba6Gjxp/7ZOUx8RaRAZ2YrXXEK2L0w3329T0u7qrs+Bc12jaJUU+R77hA02RTQkmemYkJRzy8OY5FrhgLyk73R8K2Wb5Li1jXheoOq78mGleV9klRcXCZj8pS11Uxd7duA1AXRvbmGdztwjiq9S2FuJO9kcARcOhcYDFbom0jDXdQVsf2X1APjQvzB4mwGx/zm3IVYMIjTYoszgWOoxef94hDq2Kq0NADq9OO+Dauocaq0WoH/9ZvKcjp2R9/88Pnmu3Rqfs2Vu84uZo3G1qaxNHQvG07CCGbCNdEVNzc+EMHl5mrYtm8xVy9sYZ0d9SRooh8KJilw=
+x-microsoft-antispam-message-info: h0MOTsQ3ZcKrMCMGiPE/NqeeppooVODBcwMXx7sxmFOryGJJL05dOaEdedrd4wUdeVGS9ZmlbESBM5e0TvQSLPeDL7VixVSPiifVK9nLiOCcbkV3+OAkUns339hlQtHLqSbBkXY2YRmQP2qI5LPHLsM5WDFxUzHgHysFhsH4ouDJS4F1HbDCR5W9UMP/R5pgY4siWtz/AVVgE5d+9x9XQbY2CBKi2yPAyU6smzTWLnKCeWkW4T688OwDFVvOEubd4L/Yqz61A4I8RoTfTeso9K2t1ua1NGYzu9N4rrIsmUhUJ28C/Qe2mTN6I6Faeze+JDXqD/qVWOis+1dPH0SNvQuL8O1tdw7JpdTwuKTXUGQcvzRMGh7tl8qftikxdk8XMFM5Jv+HF1Lb3vbrq7EG9HHoXqoNKjSAQqJRQRGeGQQ=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d069454e-c445-431f-e310-08d6ddc626a2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2019 08:27:23.9608
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: edd3fda7-4874-497e-fc87-08d6ddc843c0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2019 08:42:31.9062
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB2481
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5409
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Biju-san,
-
-Thank you for the patch!
-
-> From: Biju Das, Sent: Wednesday, May 15, 2019 9:09 PM
+=20
+> >  1 file changed, 31 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/imx7ulp.dtsi
+> > b/arch/arm/boot/dts/imx7ulp.dtsi index fca6e50f37c8..60c9ea116d0a
+> > 100644
+> > --- a/arch/arm/boot/dts/imx7ulp.dtsi
+> > +++ b/arch/arm/boot/dts/imx7ulp.dtsi
+> > @@ -30,6 +30,7 @@
+> >  		serial1 =3D &lpuart5;
+> >  		serial2 =3D &lpuart6;
+> >  		serial3 =3D &lpuart7;
+> > +		usbphy0 =3D &usbphy1;
+> >  	};
+> >
+> >  	cpus {
+> > @@ -133,6 +134,36 @@
+> >  			clock-names =3D "ipg", "per";
+> >  		};
+> >
+> > +		usbotg1: usb@40330000 {
+> > +			compatible =3D "fsl,imx7ulp-usb", "fsl,imx6ul-usb",
+> > +				"fsl,imx27-usb";
+> > +			reg =3D <0x40330000 0x200>;
+> > +			interrupts =3D <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks =3D <&pcc2 IMX7ULP_CLK_USB0>;
+> > +			phys =3D <&usbphy1>;
+> > +			fsl,usbmisc =3D <&usbmisc1 0>;
+> > +			ahb-burst-config =3D <0x0>;
+> > +			tx-burst-size-dword =3D <0x8>;
+> > +			rx-burst-size-dword =3D <0x8>;
+> > +			status =3D "disabled";
+> > +		};
+> > +
+> > +		usbmisc1: usbmisc@40330200 {
+> > +			#index-cells =3D <1>;
 >=20
-> Update the DT bindings documentation to support usb role switch
-> for USB Type-C connector using USB role switch class framework.
+> Nit: we usually start with 'compatible', so can we move it behind?
 >=20
-> Signed-off-by: Biju Das <biju.das@bp.renesas.com>
-> ---
->  V5-->V6
->   * Updated description
->   * Added usb-role-switch-property
->  V4-->V5
->   * No Change
->  V3-->V4
->   * No Change
->  V2-->V3
->   * Added optional renesas,usb-role-switch property.
->  V1-->V2
->   * Added usb-role-switch-property
->   * Updated the example with usb-role-switch property.
-> ---
->  .../devicetree/bindings/usb/renesas_usb3.txt       | 26 ++++++++++++++++=
-++++++
->  1 file changed, 26 insertions(+)
+
+Thanks, will change.
+
+Peter
+
+
+> Shawn
 >=20
-> diff --git a/Documentation/devicetree/bindings/usb/renesas_usb3.txt
-> b/Documentation/devicetree/bindings/usb/renesas_usb3.txt
-> index 35039e7..ea6c63c 100644
-> --- a/Documentation/devicetree/bindings/usb/renesas_usb3.txt
-> +++ b/Documentation/devicetree/bindings/usb/renesas_usb3.txt
-> @@ -22,6 +22,11 @@ Required properties:
->  Optional properties:
->    - phys: phandle + phy specifier pair
->    - phy-names: must be "usb"
-> +  - usb-role-switch: support role switch. see usb/generic.txt
-> +
-> +Sub-nodes:
-> +The port would be added as a subnode if the "usb-role-switch" property i=
-s used.
-> +	see graph.txt
-
-I think we should describe which type of a subnode is needed.
-I made an example below. This is based on the usb-connector.txt.
----
-Sub-nodes:
-- any connector to the data bus of this controller should be modeled using =
-the OF graph
-  bindings specified in bindings/graph.txt.
----
-
->  Example of R-Car H3 ES1.x:
->  	usb3_peri0: usb@ee020000 {
-> @@ -39,3 +44,24 @@ Example of R-Car H3 ES1.x:
->  		interrupts =3D <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
->  		clocks =3D <&cpg CPG_MOD 327>;
->  	};
-> +
-> +Example of RZ/G2E:
-> +	usb3_peri0: usb@ee020000 {
-> +		compatible =3D "renesas,r8a774c0-usb3-peri",
-> +			     "renesas,rcar-gen3-usb3-peri";
-> +		reg =3D <0 0xee020000 0 0x400>;
-> +		interrupts =3D <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
-> +		clocks =3D <&cpg CPG_MOD 328>;
-> +		companion =3D <&xhci0>;
-> +		usb-role-switch;
-> +
-> +		port {
-> +			#address-cells =3D <1>;
-> +			#size-cells =3D <0>;
-> +
-> +			usb3peri_role_switch: endpoint@0 {
-> +				reg =3D <0>;
-
-I'm not sure, but I don't think this endpoint@0 and reg =3D <0> are needed.
-In other words, can we use have following node?
-			usb3peri_role_switch: endpoint {
-				remote-endpoint =3D <&hd3ss3220_ep>;
-			};
-
-Best regards,
-Yoshihiro Shimoda
-
+> > +			compatible =3D "fsl,imx7ulp-usbmisc", "fsl,imx7d-usbmisc",
+> > +				"fsl,imx6q-usbmisc";
+> > +			reg =3D <0x40330200 0x200>;
+> > +		};
+> > +
+> > +		usbphy1: usbphy@0x40350000 {
+> > +			compatible =3D "fsl,imx7ulp-usbphy",
+> > +				"fsl,imx6ul-usbphy", "fsl,imx23-usbphy";
+> > +			reg =3D <0x40350000 0x1000>;
+> > +			interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks =3D <&pcc2 IMX7ULP_CLK_USB_PHY>;
+> > +			#phy-cells =3D <0>;
+> > +		};
+> > +
+> >  		usdhc0: mmc@40370000 {
+> >  			compatible =3D "fsl,imx7ulp-usdhc", "fsl,imx6sx-usdhc";
+> >  			reg =3D <0x40370000 0x10000>;
+> > --
+> > 2.14.1
+> >
