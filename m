@@ -2,72 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCF425016
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 15:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C002824FF7
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 15:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727534AbfEUNYb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 09:24:31 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39896 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727044AbfEUNYb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 May 2019 09:24:31 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 3EA72ADCB;
-        Tue, 21 May 2019 13:24:30 +0000 (UTC)
-Message-ID: <1558444291.12672.23.camel@suse.com>
-Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Jaewon Kim <jaewon31.kim@gmail.com>, linux-mm@kvack.org,
-        gregkh@linuxfoundation.org, Jaewon Kim <jaewon31.kim@samsung.com>,
-        m.szyprowski@samsung.com, ytk.lee@samsung.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Date:   Tue, 21 May 2019 15:11:31 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1905201011490.1498-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1905201011490.1498-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1728244AbfEUNTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 09:19:00 -0400
+Received: from mail01.preh.com ([80.149.130.22]:42938 "EHLO mail01.preh.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726692AbfEUNS7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 09:18:59 -0400
+From:   Kloetzke Jan <Jan.Kloetzke@preh.de>
+To:     Oliver Neukum <oneukum@suse.com>,
+        David Miller <davem@davemloft.net>
+CC:     =?utf-8?B?SmFuIEtsw7Z0emtl?= <jan@kloetzke.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Kloetzke Jan <Jan.Kloetzke@preh.de>
+Subject: [PATCH v3] usbnet: fix kernel crash after disconnect
+Thread-Topic: [PATCH v3] usbnet: fix kernel crash after disconnect
+Thread-Index: AQHVD9e0yfwldPJKrkOozCggfUiRSQ==
+Date:   Tue, 21 May 2019 13:18:40 +0000
+Message-ID: <20190521131826.30475-1-Jan.Kloetzke@preh.de>
+References: <1558438944.12672.13.camel@suse.com>
+In-Reply-To: <1558438944.12672.13.camel@suse.com>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-tm-snts-smtp: 0057CAAE3B5C9ED69887D59E986334810166454D7D941CDCF57AE75E0021741E2000:8
+x-exclaimer-md-config: 142fe46c-4d13-4ac1-9970-1f36f118897a
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7AD7AA868E63D944A5F07209F4FA09B3@preh.de>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=preh.de; s=key1; c=relaxed/relaxed;
+ h=from:to:cc:subject:date:message-id:references:content-type:mime-version;
+ bh=1jmU4MUGKrogGk+Rb1I7p4KEjxRh1MCE6RhCh5YD+AE=;
+ b=oGxj932i+4q9UjJ+ntwTPXCb3OmPnml8cTWwz1aAeK2QbO6XHlUsIninKjo35XbrCH6bYweeILxD
+        cz5W4UCRG8nERMxbzRaD+7CxoLJHfLn7LAlg5bFi0MogzdtTwlhDb7cKqfPJm46/ahlqlLp7p1vO
+        rp1li6d6Q2EFQjG2EeWe5R+Ts0dwRbYUS4D2zznPV0nnj1k7OlTRs+nqgd1NKx49T4KuOT46TApZ
+        oITopd5xIieL9lvgqQ23fr4yZBzLpJDR/LKXgnbuzW0PlOYEjiag4/mv/u+jCyjNOoFv9C8Yk1D/
+        GpsrZR2XkDJh2sZVRORhhweGg7QtiaEMLdDn0g==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mo, 2019-05-20 at 10:16 -0400, Alan Stern wrote:
-> On Mon, 20 May 2019, Christoph Hellwig wrote:
-> 
-> > GFP_KERNEL if you can block, GFP_ATOMIC if you can't for a good reason,
-> > that is the allocation is from irq context or under a spinlock.  If you
-> > think you have a case where you think you don't want to block, but it
-> > is not because of the above reasons we need to have a chat about the
-> > details.
-> 
-> What if the allocation requires the kernel to swap some old pages out 
-> to the backing store, but the backing store is on the device that the 
-> driver is managing?  The swap can't take place until the current I/O 
-> operation is complete (assuming the driver can handle only one I/O 
-> operation at a time), and the current operation can't complete until 
-> the old pages are swapped out.  Result: deadlock.
-> 
-> Isn't that the whole reason for using GFP_NOIO in the first place?
-
-Hi,
-
-lookig at this it seems to me that we are in danger of a deadlock
-
-- during reset - devices cannot do IO while being reset
-	covered by the USB layer in usb_reset_device
-- resume & restore - devices cannot do IO while suspended
-	covered by driver core in rpm_callback
-- disconnect - a disconnected device cannot do IO
-	is this a theoretical case or should I do something to
-	the driver core?
-
-How about changing configurations on USB?
-
-	Regards
-		Oliver
-
+V2hlbiBkaXNjb25uZWN0aW5nIGNkY19uY20gdGhlIGtlcm5lbCBzcG9yYWRpY2FsbHkgY3Jhc2hl
+cyBzaG9ydGx5DQphZnRlciB0aGUgZGlzY29ubmVjdDoNCg0KICBbICAgNTcuODY4ODEyXSBVbmFi
+bGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2UgYXQgdmlydHVhbCBh
+ZGRyZXNzIDAwMDAwMDAwDQogIC4uLg0KICBbICAgNTguMDA2NjUzXSBQQyBpcyBhdCAweDANCiAg
+WyAgIDU4LjAwOTIwMl0gTFIgaXMgYXQgY2FsbF90aW1lcl9mbisweGVjLzB4MWI0DQogIFsgICA1
+OC4wMTM1NjddIHBjIDogWzwwMDAwMDAwMDAwMDAwMDAwPl0gbHIgOiBbPGZmZmZmZjgwMDgwZjUx
+MzA+XSBwc3RhdGU6IDAwMDAwMTQ1DQogIFsgICA1OC4wMjA5NzZdIHNwIDogZmZmZmZmODAwODAw
+M2RhMA0KICBbICAgNTguMDI0Mjk1XSB4Mjk6IGZmZmZmZjgwMDgwMDNkYTAgeDI4OiAwMDAwMDAw
+MDAwMDAwMDAxDQogIFsgICA1OC4wMjk2MThdIHgyNzogMDAwMDAwMDAwMDAwMDAwYSB4MjY6IDAw
+MDAwMDAwMDAwMDAxMDANCiAgWyAgIDU4LjAzNDk0MV0geDI1OiAwMDAwMDAwMDAwMDAwMDAwIHgy
+NDogZmZmZmZmODAwODAwM2U2OA0KICBbICAgNTguMDQwMjYzXSB4MjM6IDAwMDAwMDAwMDAwMDAw
+MDAgeDIyOiAwMDAwMDAwMDAwMDAwMDAwDQogIFsgICA1OC4wNDU1ODddIHgyMTogMDAwMDAwMDAw
+MDAwMDAwMCB4MjA6IGZmZmZmZmM2OGZhYzE4MDgNCiAgWyAgIDU4LjA1MDkxMF0geDE5OiAwMDAw
+MDAwMDAwMDAwMTAwIHgxODogMDAwMDAwMDAwMDAwMDAwMA0KICBbICAgNTguMDU2MjMyXSB4MTc6
+IDAwMDAwMDdmODg1YWZmOGMgeDE2OiAwMDAwMDA3Zjg4M2E5ZjEwDQogIFsgICA1OC4wNjE1NTZd
+IHgxNTogMDAwMDAwMDAwMDAwMDAwMSB4MTQ6IDAwMDAwMDAwMDAwMDAwNmUNCiAgWyAgIDU4LjA2
+Njg3OF0geDEzOiAwMDAwMDAwMDAwMDAwMDAwIHgxMjogMDAwMDAwMDAwMDAwMDBiYQ0KICBbICAg
+NTguMDcyMjAxXSB4MTE6IGZmZmZmZmM2OWZmMWRiMzAgeDEwOiAwMDAwMDAwMDAwMDAwMDIwDQog
+IFsgICA1OC4wNzc1MjRdIHg5IDogODAwMDEwMDAwODAwMTAwMCB4OCA6IDAwMDAwMDAwMDAwMDAw
+MDENCiAgWyAgIDU4LjA4Mjg0N10geDcgOiAwMDAwMDAwMDAwMDAwODAwIHg2IDogZmZmZmZmODAw
+ODAwM2U3MA0KICBbICAgNTguMDg4MTY5XSB4NSA6IGZmZmZmZmM2OWZmMTdhMjggeDQgOiAwMDAw
+MDAwMGZmZmYxMzhiDQogIFsgICA1OC4wOTM0OTJdIHgzIDogMDAwMDAwMDAwMDAwMDAwMCB4MiA6
+IDAwMDAwMDAwMDAwMDAwMDANCiAgWyAgIDU4LjA5ODgxNF0geDEgOiAwMDAwMDAwMDAwMDAwMDAw
+IHgwIDogMDAwMDAwMDAwMDAwMDAwMA0KICAuLi4NCiAgWyAgIDU4LjIwNTgwMF0gWzwgICAgICAg
+ICAgKG51bGwpPl0gICAgICAgICAgIChudWxsKQ0KICBbICAgNTguMjEwNTIxXSBbPGZmZmZmZjgw
+MDgwZjUyOTg+XSBleHBpcmVfdGltZXJzKzB4YTAvMHgxNGMNCiAgWyAgIDU4LjIxNTkzN10gWzxm
+ZmZmZmY4MDA4MGY1NDJjPl0gcnVuX3RpbWVyX3NvZnRpcnErMHhlOC8weDEyOA0KICBbICAgNTgu
+MjIxNzAyXSBbPGZmZmZmZjgwMDgwODExMjA+XSBfX2RvX3NvZnRpcnErMHgyOTgvMHgzNDgNCiAg
+WyAgIDU4LjIyNzExOF0gWzxmZmZmZmY4MDA4MGE2MzA0Pl0gaXJxX2V4aXQrMHg3NC8weGJjDQog
+IFsgICA1OC4yMzIwMDldIFs8ZmZmZmZmODAwODBlMTdkYz5dIF9faGFuZGxlX2RvbWFpbl9pcnEr
+MHg3OC8weGFjDQogIFsgICA1OC4yMzc4NTddIFs8ZmZmZmZmODAwODA4MGNmND5dIGdpY19oYW5k
+bGVfaXJxKzB4ODAvMHhhYw0KICAuLi4NCg0KVGhlIGNyYXNoIGhhcHBlbnMgcm91Z2hseSAxMjUu
+LjEzMG1zIGFmdGVyIHRoZSBkaXNjb25uZWN0LiBUaGlzDQpjb3JyZWxhdGVzIHdpdGggdGhlICdk
+ZWxheScgdGltZXIgdGhhdCBpcyBzdGFydGVkIG9uIGNlcnRhaW4gVVNCIHR4L3J4DQplcnJvcnMg
+aW4gdGhlIFVSQiBjb21wbGV0aW9uIGhhbmRsZXIuDQoNClRoZSBwcm9ibGVtIGlzIGEgcmFjZSBv
+ZiB1c2JuZXRfc3RvcCgpIHdpdGggdXNibmV0X3N0YXJ0X3htaXQoKS4gSW4NCnVzYm5ldF9zdG9w
+KCkgd2UgY2FsbCB1c2JuZXRfdGVybWluYXRlX3VyYnMoKSB0byBjYW5jZWwgYWxsIFVSQnMgaW4N
+CmZsaWdodC4gVGhpcyBvbmx5IG1ha2VzIHNlbnNlIGlmIG5vIG5ldyBVUkJzIGFyZSBzdWJtaXR0
+ZWQNCmNvbmN1cnJlbnRseSwgdGhvdWdoLiBCdXQgdGhlIHVzYm5ldF9zdGFydF94bWl0KCkgY2Fu
+IHJ1biBhdCB0aGUgc2FtZQ0KdGltZSBvbiBhbm90aGVyIENQVSB3aGljaCBhbG1vc3QgdW5jb25k
+aXRpb25hbGx5IHN1Ym1pdHMgYW4gVVJCLiBUaGUNCmVycm9yIGNhbGxiYWNrIG9mIHRoZSBuZXcg
+VVJCIHdpbGwgdGhlbiBzY2hlZHVsZSB0aGUgdGltZXIgYWZ0ZXIgaXQgd2FzDQphbHJlYWR5IHN0
+b3BwZWQuDQoNClRoZSBmaXggYWRkcyBhIGNoZWNrIGlmIHRoZSB0eCBxdWV1ZSBpcyBzdG9wcGVk
+IGFmdGVyIHRoZSB0eCBsaXN0IGxvY2sNCmhhcyBiZWVuIHRha2VuLiBUaGlzIHNob3VsZCByZWxp
+YWJseSBwcmV2ZW50IHRoZSBzdWJtaXNzaW9uIG9mIG5ldyBVUkJzDQp3aGlsZSB1c2JuZXRfdGVy
+bWluYXRlX3VyYnMoKSBkb2VzIGl0cyBqb2IuIFRoZSBzYW1lIHRoaW5nIGlzIGRvbmUgb24NCnRo
+ZSByeCBzaWRlIGV2ZW4gdGhvdWdoIGl0IG1pZ2h0IGJlIHNhZmUgZHVlIHRvIG90aGVyIGZsYWdz
+IHRoYXQgYXJlDQpjaGVja2VkIHRoZXJlLg0KDQpTaWduZWQtb2ZmLWJ5OiBKYW4gS2zDtnR6a2Ug
+PEphbi5LbG9ldHprZUBwcmVoLmRlPg0KLS0tDQoNCnYzOiByZW1vdmVkIFdBUk5fT04oKSBiZWNh
+dXNlIHRoZSByYWNlIGlzIGV4cGVjdGVkIHRvIGhhcHBlbg0KdjI6IGFkZCBXQVJOX09OKCkgYXMg
+b2YgT2xpdmVycyBzdWdnZXN0aW9uDQoNCiBkcml2ZXJzL25ldC91c2IvdXNibmV0LmMgfCA2ICsr
+KysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvbmV0L3VzYi91c2JuZXQuYyBiL2RyaXZlcnMvbmV0L3VzYi91c2JuZXQuYw0KaW5kZXgg
+NTA0MjgyYWYyN2U1Li45MjFjYzA1NzFiZDAgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL25ldC91c2Iv
+dXNibmV0LmMNCisrKyBiL2RyaXZlcnMvbmV0L3VzYi91c2JuZXQuYw0KQEAgLTUwNiw2ICs1MDYs
+NyBAQCBzdGF0aWMgaW50IHJ4X3N1Ym1pdCAoc3RydWN0IHVzYm5ldCAqZGV2LCBzdHJ1Y3QgdXJi
+ICp1cmIsIGdmcF90IGZsYWdzKQ0KIA0KIAlpZiAobmV0aWZfcnVubmluZyAoZGV2LT5uZXQpICYm
+DQogCSAgICBuZXRpZl9kZXZpY2VfcHJlc2VudCAoZGV2LT5uZXQpICYmDQorCSAgICB0ZXN0X2Jp
+dChFVkVOVF9ERVZfT1BFTiwgJmRldi0+ZmxhZ3MpICYmDQogCSAgICAhdGVzdF9iaXQgKEVWRU5U
+X1JYX0hBTFQsICZkZXYtPmZsYWdzKSAmJg0KIAkgICAgIXRlc3RfYml0IChFVkVOVF9ERVZfQVNM
+RUVQLCAmZGV2LT5mbGFncykpIHsNCiAJCXN3aXRjaCAocmV0dmFsID0gdXNiX3N1Ym1pdF91cmIg
+KHVyYiwgR0ZQX0FUT01JQykpIHsNCkBAIC0xNDMxLDYgKzE0MzIsMTEgQEAgbmV0ZGV2X3R4X3Qg
+dXNibmV0X3N0YXJ0X3htaXQgKHN0cnVjdCBza19idWZmICpza2IsDQogCQlzcGluX3VubG9ja19p
+cnFyZXN0b3JlKCZkZXYtPnR4cS5sb2NrLCBmbGFncyk7DQogCQlnb3RvIGRyb3A7DQogCX0NCisJ
+aWYgKG5ldGlmX3F1ZXVlX3N0b3BwZWQobmV0KSkgew0KKwkJdXNiX2F1dG9wbV9wdXRfaW50ZXJm
+YWNlX2FzeW5jKGRldi0+aW50Zik7DQorCQlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZkZXYtPnR4
+cS5sb2NrLCBmbGFncyk7DQorCQlnb3RvIGRyb3A7DQorCX0NCiANCiAjaWZkZWYgQ09ORklHX1BN
+DQogCS8qIGlmIHRoaXMgdHJpZ2dlcnMgdGhlIGRldmljZSBpcyBzdGlsbCBhIHNsZWVwICovDQot
+LSANCjIuMTEuMA0K
