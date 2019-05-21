@@ -2,191 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC12B256F4
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 19:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF5A25757
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 20:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729194AbfEURox (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 13:44:53 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:6087 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727142AbfEURox (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 13:44:53 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ce439110000>; Tue, 21 May 2019 10:44:49 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 21 May 2019 10:44:52 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 21 May 2019 10:44:52 -0700
-Received: from HQMAIL112.nvidia.com (172.18.146.18) by HQMAIL103.nvidia.com
- (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 21 May
- 2019 17:44:51 +0000
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL112.nvidia.com
- (172.18.146.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 21 May
- 2019 17:44:51 +0000
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (104.47.37.51) by
- HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Tue, 21 May 2019 17:44:51 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.177.125.216) by
- BYAPR12MB3605.namprd12.prod.outlook.com (20.178.197.27) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.15; Tue, 21 May 2019 17:44:50 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::54a2:b360:f53:6aa]) by BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::54a2:b360:f53:6aa%6]) with mapi id 15.20.1900.020; Tue, 21 May 2019
- 17:44:50 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Ajay Gupta <ajaykuee@gmail.com>
-CC:     "wsa@the-dreams.de" <wsa@the-dreams.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: RE: [PATCH v2 3/5] usb: typec: ucsi: ccg: enable runtime pm support
-Thread-Topic: [PATCH v2 3/5] usb: typec: ucsi: ccg: enable runtime pm support
-Thread-Index: AQHVDztoP3Hz1Du5B0aMxzwyE+x+4qZ1ljGAgABBjEA=
-Date:   Tue, 21 May 2019 17:44:50 +0000
-Message-ID: <BYAPR12MB2727A21E3AB497C26BA699D2DC070@BYAPR12MB2727.namprd12.prod.outlook.com>
-References: <20190520183750.2932-1-ajayg@nvidia.com>
- <20190520183750.2932-4-ajayg@nvidia.com>
- <20190521133727.GK1887@kuha.fi.intel.com>
-In-Reply-To: <20190521133727.GK1887@kuha.fi.intel.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-05-21T17:44:48.8252789Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic;
- Sensitivity=Unrestricted
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ajayg@nvidia.com; 
-x-originating-ip: [216.228.112.22]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 07dca30b-37d1-41da-77d7-08d6de140606
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR12MB3605;
-x-ms-traffictypediagnostic: BYAPR12MB3605:
-x-microsoft-antispam-prvs: <BYAPR12MB36052E2D486148AC3B6C85F0DC070@BYAPR12MB3605.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0044C17179
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(376002)(346002)(39860400002)(366004)(136003)(189003)(199004)(7696005)(74316002)(76176011)(64756008)(66446008)(66556008)(66946007)(73956011)(66476007)(6506007)(52536014)(5660300002)(33656002)(305945005)(26005)(76116006)(486006)(7736002)(229853002)(11346002)(6436002)(186003)(476003)(110136005)(54906003)(66066001)(14454004)(446003)(9686003)(99286004)(478600001)(68736007)(55016002)(102836004)(81166006)(25786009)(4326008)(2906002)(8676002)(71200400001)(71190400001)(14444005)(8936002)(3846002)(6116002)(6246003)(81156014)(53936002)(256004)(316002)(86362001);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB3605;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: IrlNdmP380SVm02YR0PZy9ta0fEKFSDB9DtnYQvYNAOttcC4Fb/uzkOsQuBph16QYh48DZChFMdttcGLyoP0AclFeOAKoOSlJHzK1IOYEfFTIoQPW+lQOziP2OfwcS2dWzk4r9Vc6dJyTQ4M6UNGjCzL20Gjjex/fldQ+o2mjMnd3Q4aJ5TCfs2BMABlfytaFagX8rK+hrnlOxXrmD2sHBQCbTWfqXj8ic+KGJQtH1aqfAj9790CQJ5ZHdkynPvr26wbtb3dmLvm0AqzK/sTSzwSekzKTLxoRLon45f5DDH7vlWrTE9advXqoCDe4g66oyJinNK5l8UyV9K29gWqXF/CRmFSm2AN9V5quIEpx1z6lnFUpLQFK4GLAyD0CiXK/EmRk2JDg1lp4Vq0c4qv36op1rgmVhR3SdW2YEOyz/Y=
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07dca30b-37d1-41da-77d7-08d6de140606
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2019 17:44:50.0293
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3605
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1558460689; bh=R6zEkG3Sqn8DxLKrSHvYpV0FbcbnqvHQRVm1LXPZLLo=;
-        h=X-PGP-Universal:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
-         Message-ID:References:In-Reply-To:Accept-Language:X-MS-Has-Attach:
-         X-MS-TNEF-Correlator:msip_labels:authentication-results:
-         x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
-         x-ms-traffictypediagnostic:x-microsoft-antispam-prvs:
-         x-ms-oob-tlc-oobclassifiers:x-forefront-prvs:
-         x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=JwIot40l6Wc7VIZ7EsLbyOkTNJpHlgOqNX954pYP9c/r5KBIeMKTcbb0fWJramHQ2
-         H8lvW6D3ETMspZH2MgrA26tP2+FkZ902dNTUXBWTV82NH4lsDWJ36Gxrqa7M7nn4hy
-         TGrKgcJqrO41iz2Pu5DoZC7QVURBO7K+o1PEtp1ckzKs2syXAZ8xf21XD5gPyeS1DK
-         o6kqcrpGmUsZ1kId3q8KE1p2PYYEDtmWjs2Ptu0vvMwv4seYih9KyQ2f9xtxJgkK5Y
-         dlo9VQERwFkfsKKQo4Cmi6/f5Cw1aCN2fbsYEACLTh6/r1R8QL+n5jhyJBTWcmDBbU
-         flqvq4sRYlrmQ==
+        id S1728175AbfEUSQD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 14:16:03 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:42712 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727969AbfEUSQD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 14:16:03 -0400
+Received: by mail-pl1-f196.google.com with SMTP id go2so291879plb.9;
+        Tue, 21 May 2019 11:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Y/MYMhrU1tjyFi5FjnHoCnJ6B3pMDuL+caZmJS6iXvc=;
+        b=hC3NzunQtTacilbhVcY+YFbxqEcQa7u2d4uxOn6mm8U3vBSyR8govzXKG4chhNrcRA
+         wHqe/oPMYGsy7eymiKvAciIePZj1f94FfWgD7qI7eEiNhGMyNwlz/RUdusmaicIsKFjG
+         Og4d1f9RMsLBqyFpUOi1GzmCAdfvJxL782vKeAAEvGAMOaAewamcuUPjJQSZLxZr2q8H
+         M5QbbfP7CQS5mwa3rtANt0wV+w1ALdpzJrWFRgsnWe2wDDyT8yQvjX/vMVJ+GB3k2hlX
+         RYlPw1YHcImnxJh5jKM/YeETpxv9xMJSEk4ety0d/RZwDyc6S5c8W7BdzoVAVn8NlVr3
+         UlKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Y/MYMhrU1tjyFi5FjnHoCnJ6B3pMDuL+caZmJS6iXvc=;
+        b=IOAwhdEnVdJvZ7Iw0noYc8Kyb1Vy1148rXkMOW5w56Q4MTgmeuk4u3fr6hTgAPQ8y9
+         lO8DcRZMPj6UVwdgHbmZPoPz0usDUJoRaTXOp8ysEeIoZnm593wlUxgKRvm5bpeRIKOW
+         lq3FPqvGMqzE8BG3T/4jHipwq9M856NhVXQaigx7P2K4fP1agYw2P/Sc4sbofCj+7M8w
+         BtZwD5yPGCF0LzlNypT0EpaxysATeCJWhh9X/uu3yoS7pAaDg8sQcK8Fvv2aLV4T4e4d
+         rc0URM02iRuX0bv8klG5lwbyOzJuy1yFTwN5v43+P/xj8HQ3/M0AjcqVT6iSgNeJO3Zh
+         be/w==
+X-Gm-Message-State: APjAAAUEht9ymeAPUjzrJDMoDfNBJmOjDceONA2taqU4UW8syE90cg5h
+        lL/DD+zM1A/Tx8HDW4gOwrk=
+X-Google-Smtp-Source: APXvYqxAfd+J7HIHw5JyCAQwtUv73KL+sISPMY7Pc7gfBzn8OOfnEfEILHYYQdJXY1Y2bECtz1qIxg==
+X-Received: by 2002:a17:902:6b:: with SMTP id 98mr84476086pla.271.1558462562160;
+        Tue, 21 May 2019 11:16:02 -0700 (PDT)
+Received: from bnva-HP-Pavilion-g6-Notebook-PC.domain.name ([117.241.200.143])
+        by smtp.gmail.com with ESMTPSA id y17sm24090105pfn.79.2019.05.21.11.15.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 May 2019 11:16:01 -0700 (PDT)
+From:   Vandana BN <bnvandana@gmail.com>
+To:     hverkuil@xs4all.nl, royale@zerezo.com, mchehab@kernel.org,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Vandana BN <bnvandana@gmail.com>
+Subject: [PATCH] media:usb:zr364xx:Fix KASAN:null-ptr-deref Read in zr364xx_vidioc_querycap
+Date:   Tue, 21 May 2019 23:45:35 +0530
+Message-Id: <20190521181535.7974-1-bnvandana@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki
+SyzKaller hit the null pointer deref while reading from uninitialized
+udev->product in zr364xx_vidioc_querycap().
+==================================================================
+BUG: KASAN: null-ptr-deref in read_word_at_a_time+0xe/0x20
+include/linux/compiler.h:274
+Read of size 1 at addr 0000000000000000 by task v4l_id/5287
 
-> > +static int ucsi_ccg_resume(struct device *dev) {
-> > +	struct i2c_client *client =3D to_i2c_client(dev);
-> > +	struct ucsi_ccg *uc =3D i2c_get_clientdata(client);
-> > +	struct ucsi *ucsi =3D uc->ucsi;
-> > +	struct ucsi_control c;
-> > +	int ret;
-> > +
-> > +	/* restore UCSI notification enable mask */
-> > +	UCSI_CMD_SET_NTFY_ENABLE(c, UCSI_ENABLE_NTFY_ALL);
-> > +	ret =3D ucsi_send_command(ucsi, &c, NULL, 0);
-> > +	if (ret < 0) {
-> > +		dev_err(uc->dev, "%s: failed to set notification enable - %d\n",
-> > +			__func__, ret);
-> > +	}
-> > +	return 0;
-> > +}
->=20
-> I would prefer that we did this for all methods in ucsi.c, not just ccgx.=
- Could you
-> add resume callback to struct ucsi_ppm, and then call it here.
-struct ucsi_ppm currently have .sync() and .cmd() callback which is impleme=
-nted by
-ucsi_ccg and ucsi_acpi and invoked by usci.c.=20
+CPU: 1 PID: 5287 Comm: v4l_id Not tainted 5.1.0-rc3-319004-g43151d6 #6
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xe8/0x16e lib/dump_stack.c:113
+  kasan_report.cold+0x5/0x3c mm/kasan/report.c:321
+  read_word_at_a_time+0xe/0x20 include/linux/compiler.h:274
+  strscpy+0x8a/0x280 lib/string.c:207
+  zr364xx_vidioc_querycap+0xb5/0x210 drivers/media/usb/zr364xx/zr364xx.c:706
+  v4l_querycap+0x12b/0x340 drivers/media/v4l2-core/v4l2-ioctl.c:1062
+  __video_do_ioctl+0x5bb/0xb40 drivers/media/v4l2-core/v4l2-ioctl.c:2874
+  video_usercopy+0x44e/0xf00 drivers/media/v4l2-core/v4l2-ioctl.c:3056
+  v4l2_ioctl+0x14e/0x1a0 drivers/media/v4l2-core/v4l2-dev.c:364
+  vfs_ioctl fs/ioctl.c:46 [inline]
+  file_ioctl fs/ioctl.c:509 [inline]
+  do_vfs_ioctl+0xced/0x12f0 fs/ioctl.c:696
+  ksys_ioctl+0xa0/0xc0 fs/ioctl.c:713
+  __do_sys_ioctl fs/ioctl.c:720 [inline]
+  __se_sys_ioctl fs/ioctl.c:718 [inline]
+  __x64_sys_ioctl+0x74/0xb0 fs/ioctl.c:718
+  do_syscall_64+0xcf/0x4f0 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x7f3b56d8b347
+Code: 90 90 90 48 8b 05 f1 fa 2a 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff
+ff c3 90 90 90 90 90 90 90 90 90 90 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff
+ff 73 01 c3 48 8b 0d c1 fa 2a 00 31 d2 48 29 c2 64
+RSP: 002b:00007ffe005d5d68 EFLAGS: 00000202 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3b56d8b347
+RDX: 00007ffe005d5d70 RSI: 0000000080685600 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000400884
+R13: 00007ffe005d5ec0 R14: 0000000000000000 R15: 0000000000000000
+==================================================================
 
-Is it okay to add a callback in this structure and implement inside ucsi.c =
-and invoke
-from ucsi_ccg and ucsi_acpi? OR we can just add a function in ucsi.c and ex=
-port it
-and use it from ucsi_ccg and ucsi_acpi?
+For this device udev->product is not initialized and accessing it causes a NULL pointer deref.
 
->=20
-> > +static int ucsi_ccg_runtime_suspend(struct device *dev) {
-> > +	return 0;
-> > +}
-> > +
-> > +static int ucsi_ccg_runtime_resume(struct device *dev) {
-> > +	return 0;
-> > +}
-> > +
-> > +static int ucsi_ccg_runtime_idle(struct device *dev) {
-> > +	return 0;
-> > +}
+The fix is to check for NULL before strscpy() and copy empty string, if
+product is NULL
 
-> > Oh yes, and do you really need to supply all of those stubs?
-We can drop ucsi_ccg_runtime_idle() but we do need
-ucsi_ccg_runtime_suspend() and ucsi_ccg_runtime_resume() for
-runtime pm functionality.
+Reported-by: syzbot+66010012fd4c531a1a96@syzkaller.appspotmail.com
 
-Thanks
-Ajay
-> nvpublic
-> > +
-> > +static const struct dev_pm_ops ucsi_ccg_pm =3D {
-> > +	.suspend =3D ucsi_ccg_suspend,
-> > +	.resume =3D ucsi_ccg_resume,
-> > +	.runtime_suspend =3D ucsi_ccg_runtime_suspend,
-> > +	.runtime_resume =3D ucsi_ccg_runtime_resume,
-> > +	.runtime_idle =3D ucsi_ccg_runtime_idle, };
-> > +
-> >  static struct i2c_driver ucsi_ccg_driver =3D {
-> >  	.driver =3D {
-> >  		.name =3D "ucsi_ccg",
-> > +		.pm =3D &ucsi_ccg_pm,
-> >  	},
-> >  	.probe =3D ucsi_ccg_probe,
-> >  	.remove =3D ucsi_ccg_remove,
->=20
-> thanks,
->=20
-> --
-> heikki
+Signed-off-by: Vandana BN <bnvandana@gmail.com>
+---
+ drivers/media/usb/zr364xx/zr364xx.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
+index 96fee8d5b865..401a1e55dbe1 100644
+--- a/drivers/media/usb/zr364xx/zr364xx.c
++++ b/drivers/media/usb/zr364xx/zr364xx.c
+@@ -703,7 +703,10 @@ static int zr364xx_vidioc_querycap(struct file *file, void *priv,
+ 	struct zr364xx_camera *cam = video_drvdata(file);
+ 
+ 	strscpy(cap->driver, DRIVER_DESC, sizeof(cap->driver));
+-	strscpy(cap->card, cam->udev->product, sizeof(cap->card));
++	if (cam->udev->product)
++		strscpy(cap->card, cam->udev->product, sizeof(cap->card));
++	else
++		strscpy(cap->card, "", sizeof(cap->card));
+ 	strscpy(cap->bus_info, dev_name(&cam->udev->dev),
+ 		sizeof(cap->bus_info));
+ 	cap->device_caps = V4L2_CAP_VIDEO_CAPTURE |
+-- 
+2.17.1
+
