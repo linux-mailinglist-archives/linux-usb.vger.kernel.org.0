@@ -2,46 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D313243F3
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 01:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B6B244EE
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 02:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727058AbfETXOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 May 2019 19:14:53 -0400
-Received: from emh01.mail.saunalahti.fi ([62.142.5.107]:33226 "EHLO
-        emh01.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726357AbfETXOx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 19:14:53 -0400
-X-Greylist: delayed 559 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 May 2019 19:14:52 EDT
-Received: from darkstar.musicnaut.iki.fi (85-76-4-80-nat.elisa-mobile.fi [85.76.4.80])
-        by emh01.mail.saunalahti.fi (Postfix) with ESMTP id 4FC2C2002C;
-        Tue, 21 May 2019 02:05:32 +0300 (EEST)
-Date:   Tue, 21 May 2019 02:05:32 +0300
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, devel@driverdev.osuosl.org
-Subject: TODO advice for octeon-usb?
-Message-ID: <20190520230532.GA3621@darkstar.musicnaut.iki.fi>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1726586AbfEUAJY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 May 2019 20:09:24 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:59690 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725681AbfEUAJY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 May 2019 20:09:24 -0400
+Received: from localhost (50-78-161-185-static.hfc.comcastbusiness.net [50.78.161.185])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 73B4C13F61587;
+        Mon, 20 May 2019 17:09:23 -0700 (PDT)
+Date:   Mon, 20 May 2019 20:09:22 -0400 (EDT)
+Message-Id: <20190520.200922.2277656639346033061.davem@davemloft.net>
+To:     Jan.Kloetzke@preh.de
+Cc:     oneukum@suse.com, jan@kloetzke.net, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usbnet: fix kernel crash after disconnect
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <1557990629.19453.7.camel@preh.de>
+References: <20190505.004556.492323065607253635.davem@davemloft.net>
+        <1557130666.12778.3.camel@suse.com>
+        <1557990629.19453.7.camel@preh.de>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 20 May 2019 17:09:23 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+From: Kloetzke Jan <Jan.Kloetzke@preh.de>
+Date: Thu, 16 May 2019 07:10:30 +0000
 
-I'm looking for input what should be done next to get
-drivers/staging/octeon-usb out of staging.
+> Am Montag, den 06.05.2019, 10:17 +0200 schrieb Oliver Neukum:
+>> On So, 2019-05-05 at 00:45 -0700, David Miller wrote:
+>> > From: Kloetzke Jan <Jan.Kloetzke@preh.de>
+>> > Date: Tue, 30 Apr 2019 14:15:07 +0000
+>> > 
+>> > > @@ -1431,6 +1432,11 @@ netdev_tx_t usbnet_start_xmit (struct sk_buff *skb,
+>> > >               spin_unlock_irqrestore(&dev->txq.lock, flags);
+>> > >               goto drop;
+>> > >       }
+>> > > +     if (WARN_ON(netif_queue_stopped(net))) {
+>> > > +             usb_autopm_put_interface_async(dev->intf);
+>> > > +             spin_unlock_irqrestore(&dev->txq.lock, flags);
+>> > > +             goto drop;
+>> > > +     }
+>> > 
+>> > If this is known to happen and is expected, then we should not warn.
+>> > 
+>> 
+>> yes this is the point. Can ndo_start_xmit() and ndo_stop() race?
+>> If not, why does the patch fix the observed issue and what
+>> prevents the race? Something is not clear here.
+> 
+> Dave, could you shed some light on Olivers question? If the race can
+> happen then we can stick to v1 because the WARN_ON is indeed pointless.
+> Otherwise it's not clear why it made the problem go away for us and v2
+> may be the better option...
 
-Thousands of checkpatch errors/warnings have been fixed (starting point
-was <https://marc.info/?l=linux-driver-devel&m=137028876225266&w=2>),
-also the size of the driver has shrunken considerably.
+Yes I think they can race.   ->ndo_stop() executes and stops the queue,
+then we get an RCU grace period so that all parallel executions of
+->ndo_start_xmit() complete.
 
-If there are still some other bigger issues with this driver, please
-let me know.
+But I wonder, this can probably cause problems because some drivers have
+"stop queue and re-check" logic, f.e. in drivers/net/tg3.c we have:
 
-Thanks,
+	if (unlikely(tg3_tx_avail(tnapi) <= (MAX_SKB_FRAGS + 1))) {
+		netif_tx_stop_queue(txq);
 
-A.
+		/* netif_tx_stop_queue() must be done before checking
+		 * checking tx index in tg3_tx_avail() below, because in
+		 * tg3_tx(), we update tx index before checking for
+		 * netif_tx_queue_stopped().
+		 */
+		smp_mb();
+		if (tg3_tx_avail(tnapi) > TG3_TX_WAKEUP_THRESH(tnapi))
+			netif_tx_wake_queue(txq);
+	}
+
+which in the racey scenerio would undo ->ndo_stop()'s work which is
+completely unexpected.
+
+Hmmm...
