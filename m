@@ -2,65 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA2224FC2
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 15:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCF425016
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 15:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727976AbfEUNJT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 09:09:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50886 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727812AbfEUNJT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 May 2019 09:09:19 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F6902173C;
-        Tue, 21 May 2019 13:09:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558444159;
-        bh=UMiTSP3vE2C3S2QMDxEcaTerhYT+4tA555NRkGhW3Uk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cIeB0EEo/G7r4GRPeZaKjbu2Yxx10MGHqEVxGhh24XsyQNpg/7sCmXzJcgWeaPGE3
-         8djxcUX0UkNwDATSVlWUVLiE3b1moOa5H4Lqxj/LPRJqdxy/SsTv/Suude/gS0K33Q
-         i0VfhWKqVpVL3HbstcYJNdxFBsUBHG51AnITZnQM=
-Date:   Tue, 21 May 2019 15:09:13 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     kbuild test robot <lkp@intel.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, kbuild-all@01.org,
-        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: Re: [usb:usb-linus 3/10] drivers/media//usb/siano/smsusb.c:447:37:
- warning: 'in_maxp' may be used uninitialized in this function
-Message-ID: <20190521130913.GA7273@kroah.com>
-References: <201905211645.tumqhfAz%lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201905211645.tumqhfAz%lkp@intel.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+        id S1727534AbfEUNYb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 09:24:31 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39896 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727044AbfEUNYb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 09:24:31 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 3EA72ADCB;
+        Tue, 21 May 2019 13:24:30 +0000 (UTC)
+Message-ID: <1558444291.12672.23.camel@suse.com>
+Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Jaewon Kim <jaewon31.kim@gmail.com>, linux-mm@kvack.org,
+        gregkh@linuxfoundation.org, Jaewon Kim <jaewon31.kim@samsung.com>,
+        m.szyprowski@samsung.com, ytk.lee@samsung.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Tue, 21 May 2019 15:11:31 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1905201011490.1498-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1905201011490.1498-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 21, 2019 at 04:48:47PM +0800, kbuild test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-> head:   53c7b63f797c96a30c21dd3b781fafaae096a12b
-> commit: 31e0456de5be379b10fea0fa94a681057114a96e [3/10] media: usb: siano: Fix general protection fault in smsusb
-> config: mips-allmodconfig (attached as .config)
-> compiler: mips-linux-gcc (GCC) 8.1.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         git checkout 31e0456de5be379b10fea0fa94a681057114a96e
->         # save the attached .config to linux build tree
->         GCC_VERSION=8.1.0 make.cross ARCH=mips 
+On Mo, 2019-05-20 at 10:16 -0400, Alan Stern wrote:
+> On Mon, 20 May 2019, Christoph Hellwig wrote:
 > 
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
+> > GFP_KERNEL if you can block, GFP_ATOMIC if you can't for a good reason,
+> > that is the allocation is from irq context or under a spinlock.  If you
+> > think you have a case where you think you don't want to block, but it
+> > is not because of the above reasons we need to have a chat about the
+> > details.
 > 
-> Note: it may well be a FALSE warning. FWIW you are at least aware of it now.
-> http://gcc.gnu.org/wiki/Better_Uninitialized_Warnings
+> What if the allocation requires the kernel to swap some old pages out 
+> to the backing store, but the backing store is on the device that the 
+> driver is managing?  The swap can't take place until the current I/O 
+> operation is complete (assuming the driver can handle only one I/O 
+> operation at a time), and the current operation can't complete until 
+> the old pages are swapped out.  Result: deadlock.
+> 
+> Isn't that the whole reason for using GFP_NOIO in the first place?
 
-False positive, gcc isn't smart enough here.
+Hi,
 
-greg k-h
+lookig at this it seems to me that we are in danger of a deadlock
+
+- during reset - devices cannot do IO while being reset
+	covered by the USB layer in usb_reset_device
+- resume & restore - devices cannot do IO while suspended
+	covered by driver core in rpm_callback
+- disconnect - a disconnected device cannot do IO
+	is this a theoretical case or should I do something to
+	the driver core?
+
+How about changing configurations on USB?
+
+	Regards
+		Oliver
+
