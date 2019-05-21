@@ -2,100 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB498247D0
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 08:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9B4247D6
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 08:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726344AbfEUGLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 02:11:40 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:13599 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbfEUGLk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 02:11:40 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ce396980000>; Mon, 20 May 2019 23:11:36 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 20 May 2019 23:11:39 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Mon, 20 May 2019 23:11:39 -0700
-Received: from [10.19.108.117] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 21 May
- 2019 06:11:36 +0000
-Subject: Re: [Patch V3 6/8] arm64: tegra: Enable xudc on Jetson TX1
-To:     Nagarjuna Kristam <nkristam@nvidia.com>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
- <1557988772-15406-7-git-send-email-nkristam@nvidia.com>
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <f9ee9726-3621-83ba-d07f-4592e5d4ad10@nvidia.com>
-Date:   Tue, 21 May 2019 14:11:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727868AbfEUGMs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 02:12:48 -0400
+Received: from mga07.intel.com ([134.134.136.100]:30188 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725798AbfEUGMr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 02:12:47 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 May 2019 23:12:47 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 May 2019 23:12:45 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, devel@driverdev.osuosl.org
+Subject: Re: TODO advice for octeon-usb?
+In-Reply-To: <20190520230532.GA3621@darkstar.musicnaut.iki.fi>
+References: <20190520230532.GA3621@darkstar.musicnaut.iki.fi>
+Date:   Tue, 21 May 2019 09:12:41 +0300
+Message-ID: <87d0kcibdy.fsf@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <1557988772-15406-7-git-send-email-nkristam@nvidia.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL103.nvidia.com (172.20.187.11) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1558419096; bh=V8jtuTDmL5o+6sv9+K24ZKBOp1hdrT/nLOP/Sa/HG6k=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=iFIH049Id9O/SHficoCWT/iTenfIOlED0ecG8/Il7g7RWN4zcOVpSDQK03PMOiaGL
-         72Qdw5AOObXu44HKH2QPTLBP39pCBdnirftkkGovCqb5Yt2PZtGcZdixZK4XGBDWWq
-         +yrnMN3DoF5uKlo66QXxZz632CYfY235drKob/KpE8HFaQy8IomOE25bh2KAUy93Ce
-         H3tnLupzqsESdMgV2rYMni4JPYdnsPR2LKbeyESeY0jB4p3BQP6uNaeSUnXWmTaqsa
-         tbJtq0zdYvqsRyG1rGFL+D/8Sg1taLqzwEQR3J8+PgdmVo+FYBOGPM0awImRZoDijV
-         Ki6e8lthWaUeg==
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reviewed-by: JC Kuo <jckuo@nvidia.com>
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
 
-JC
+Hi,
 
-On 5/16/19 2:39 PM, Nagarjuna Kristam wrote:
-> Enable XUSB device mode driver for USB0 slot on Jetson TX1.
+Aaro Koskinen <aaro.koskinen@iki.fi> writes:
+> I'm looking for input what should be done next to get
+> drivers/staging/octeon-usb out of staging.
 >
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> ---
->   arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
+> Thousands of checkpatch errors/warnings have been fixed (starting point
+> was <https://marc.info/?l=3Dlinux-driver-devel&m=3D137028876225266&w=3D2>=
+),
+> also the size of the driver has shrunken considerably.
 >
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-> index a7dc319..e0e67cd 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-> @@ -1483,6 +1483,20 @@
->   		vmmc-supply = <&vdd_3v3_sd>;
->   	};
->   
-> +	xudc@700d0000 {
-> +		phys = <&{/padctl@7009f000/pads/usb2/lanes/usb2-0}>;
-> +		phy-names = "usb2";
-> +		avddio-usb-supply = <&vdd_3v3_sys>;
-> +		hvdd-usb-supply = <&vdd_1v8>;
-> +		extcon = <&extcon_usb>;
-> +		status = "okay";
-> +	};
-> +
-> +	extcon_usb: extcon_vbus {
-> +		compatible = "linux,extcon-usb-gpio";
-> +		vbus-gpio = <&gpio TEGRA_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
-> +	};
-> +
->   	regulators {
->   		compatible = "simple-bus";
->   		#address-cells = <1>;
+> If there are still some other bigger issues with this driver, please
+> let me know.
+
+Looks pretty clean to me. I would simply break that single file into
+smaller files if possible (see xhci/ehci for example).
+
+my 2 cents
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlzjltkACgkQzL64meEa
+mQaO2g//X/k/5DN6vm615lAlxzfGXbUxrst5JgEXj0XR46jM5pQ/HFRDncQK5QoF
+tbK6roUUq1u9cxJI+OWrMysqIxdTc87v5lz1+Rr6viBbzRoowx6P4NXUE2tWS1IQ
+CyWyrThfKuI1yj9hDqWnF8iY9PVvY+o3wbe8vajuSnzxbNF5E+63XEWdeqB0year
+Fap/TAKBpiUcPZwtVq2mKre/vV837yhHYeb3oxIgJ8Z2t9lf3yqw1hyydyT5R4kW
++rCDAfXfpA7M/WExVUeelU1zX7BCZy2QcOGerccF6zauiD83vCdDlbsy9eQOMWjk
+jEKcHdYW7SMEEAH0hF0Na82lyH+ecpkr62Zx4Zz5X2+Mj+Rd/olNW1pIBSwd5GzH
+sGEjlBWApgtltd+06mfylh7cuEpJxe2uNsEJTLVhEw3LI7B/i5MPGdKoDfaehRuH
+w5piM/Ffm0ZW3ka9wdOfR+EvXocMZi73YUlU/30jthn+c+bkuZO3mjQsRTrs5gYF
+zGYdyXxphloKcd5w4521PeOw2Yr0TIFD9yOnIedQtRah9z91owFDNVtgYGn3GY2M
+2yU0rByEkBFlCXwSQYpyyyN9WWlwZtaNO7mmmdd7qpfdmO76rA+ahRmvVM/1Uhil
+BiZvCAVOBp0hSWh8sy8Qt1+goJUMrS/X4EgL83ZEywc+xh5MxvA=
+=30aF
+-----END PGP SIGNATURE-----
+--=-=-=--
