@@ -2,100 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D342508F
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 15:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A8E25110
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 15:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728201AbfEUNhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 09:37:31 -0400
-Received: from mga04.intel.com ([192.55.52.120]:16047 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727969AbfEUNhb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 May 2019 09:37:31 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 May 2019 06:37:31 -0700
-X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 21 May 2019 06:37:28 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 May 2019 16:37:27 +0300
-Date:   Tue, 21 May 2019 16:37:27 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ajay Gupta <ajaykuee@gmail.com>
-Cc:     wsa@the-dreams.de, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-Subject: Re: [PATCH v2 3/5] usb: typec: ucsi: ccg: enable runtime pm support
-Message-ID: <20190521133727.GK1887@kuha.fi.intel.com>
-References: <20190520183750.2932-1-ajayg@nvidia.com>
- <20190520183750.2932-4-ajayg@nvidia.com>
+        id S1728175AbfEUNti (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 09:49:38 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:32968 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727262AbfEUNth (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 09:49:37 -0400
+Received: (qmail 1836 invoked by uid 2102); 21 May 2019 09:49:36 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 21 May 2019 09:49:36 -0400
+Date:   Tue, 21 May 2019 09:49:36 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     kbuild test robot <lkp@intel.com>, <kbuild-all@01.org>,
+        <linux-usb@vger.kernel.org>, Johan Hovold <johan@kernel.org>
+Subject: Re: [usb:usb-linus 3/10] drivers/media//usb/siano/smsusb.c:447:37:
+ warning: 'in_maxp' may be used uninitialized in this function
+In-Reply-To: <20190521130913.GA7273@kroah.com>
+Message-ID: <Pine.LNX.4.44L0.1905210948590.1634-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190520183750.2932-4-ajayg@nvidia.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Tue, 21 May 2019, Greg Kroah-Hartman wrote:
 
-On Mon, May 20, 2019 at 11:37:48AM -0700, Ajay Gupta wrote:
-> +static int ucsi_ccg_resume(struct device *dev)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct ucsi_ccg *uc = i2c_get_clientdata(client);
-> +	struct ucsi *ucsi = uc->ucsi;
-> +	struct ucsi_control c;
-> +	int ret;
-> +
-> +	/* restore UCSI notification enable mask */
-> +	UCSI_CMD_SET_NTFY_ENABLE(c, UCSI_ENABLE_NTFY_ALL);
-> +	ret = ucsi_send_command(ucsi, &c, NULL, 0);
-> +	if (ret < 0) {
-> +		dev_err(uc->dev, "%s: failed to set notification enable - %d\n",
-> +			__func__, ret);
-> +	}
-> +	return 0;
-> +}
+> On Tue, May 21, 2019 at 04:48:47PM +0800, kbuild test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+> > head:   53c7b63f797c96a30c21dd3b781fafaae096a12b
+> > commit: 31e0456de5be379b10fea0fa94a681057114a96e [3/10] media: usb: siano: Fix general protection fault in smsusb
+> > config: mips-allmodconfig (attached as .config)
+> > compiler: mips-linux-gcc (GCC) 8.1.0
+> > reproduce:
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         git checkout 31e0456de5be379b10fea0fa94a681057114a96e
+> >         # save the attached .config to linux build tree
+> >         GCC_VERSION=8.1.0 make.cross ARCH=mips 
+> > 
+> > If you fix the issue, kindly add following tag
+> > Reported-by: kbuild test robot <lkp@intel.com>
+> > 
+> > Note: it may well be a FALSE warning. FWIW you are at least aware of it now.
+> > http://gcc.gnu.org/wiki/Better_Uninitialized_Warnings
+> 
+> False positive, gcc isn't smart enough here.
 
-I would prefer that we did this for all methods in ucsi.c, not just
-ccgx. Could you add resume callback to struct ucsi_ppm, and then call
-it here.
+Should I send a patch initializing the value to 0 anyway?
 
-> +static int ucsi_ccg_runtime_suspend(struct device *dev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int ucsi_ccg_runtime_resume(struct device *dev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int ucsi_ccg_runtime_idle(struct device *dev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static const struct dev_pm_ops ucsi_ccg_pm = {
-> +	.suspend = ucsi_ccg_suspend,
-> +	.resume = ucsi_ccg_resume,
-> +	.runtime_suspend = ucsi_ccg_runtime_suspend,
-> +	.runtime_resume = ucsi_ccg_runtime_resume,
-> +	.runtime_idle = ucsi_ccg_runtime_idle,
-> +};
-> +
->  static struct i2c_driver ucsi_ccg_driver = {
->  	.driver = {
->  		.name = "ucsi_ccg",
-> +		.pm = &ucsi_ccg_pm,
->  	},
->  	.probe = ucsi_ccg_probe,
->  	.remove = ucsi_ccg_remove,
+Alan Stern
 
-thanks,
-
--- 
-heikki
