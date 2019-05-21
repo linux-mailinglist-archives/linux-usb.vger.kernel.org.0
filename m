@@ -2,154 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F30524909
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 09:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3F92490C
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 09:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726870AbfEUHeq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 03:34:46 -0400
-Received: from mail-eopbgr1400098.outbound.protection.outlook.com ([40.107.140.98]:8931
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726011AbfEUHeq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 May 2019 03:34:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3qAaIZc2MbYEN4HpLvFIMoVEC0n21oKtKy6lIzjPSzc=;
- b=p09BeCTvUNDArL9Zzq9PeJDyO4RuFPX2ANk56zVwaIgnKzKht4JueVuuQ0Ek6t3UIaVWIYqDSfEuHEVSSObhggoCgq0ykt16KuXASBHHvsdiltMfDUTTTrT7FSZ3+6XEF9pQ3DUHyhwfANWp4LME6ohdkR9oOxYPJhcqe1nNWno=
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
- OSAPR01MB2322.jpnprd01.prod.outlook.com (52.134.249.144) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1900.18; Tue, 21 May 2019 07:34:42 +0000
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::4597:5353:28fb:cfd8]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::4597:5353:28fb:cfd8%7]) with mapi id 15.20.1900.020; Tue, 21 May 2019
- 07:34:42 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+        id S1726881AbfEUHfQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 03:35:16 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:3346 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726227AbfEUHfP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 03:35:15 -0400
+X-UUID: 4a52d235df804a5ca0fb31ee7171f658-20190521
+X-UUID: 4a52d235df804a5ca0fb31ee7171f658-20190521
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1524086201; Tue, 21 May 2019 15:35:06 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31DR.mediatek.inc
+ (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 21 May
+ 2019 15:35:05 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 21 May 2019 15:35:04 +0800
+Message-ID: <1558424104.10179.365.camel@mhfsdcap03>
+Subject: RE: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
+ node
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
 To:     Biju Das <biju.das@bp.renesas.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
 CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Simon Horman <horms+renesas@verge.net.au>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Kees Cook <keescook@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Simon Horman <horms@verge.net.au>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: RE: [PATCH v6 4/7] usb: gadget: udc: renesas_usb3: Add dual role
- switch support
-Thread-Topic: [PATCH v6 4/7] usb: gadget: udc: renesas_usb3: Add dual role
- switch support
-Thread-Index: AQHVCxgUJtDbUoV/lUufMqZWI03qcqZ1EFsggAAh7oCAAAYkIA==
-Date:   Tue, 21 May 2019 07:34:41 +0000
-Message-ID: <OSAPR01MB30893CC5002CCE99A2135683D8070@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-References: <1557922152-16449-1-git-send-email-biju.das@bp.renesas.com>
- <1557922152-16449-5-git-send-email-biju.das@bp.renesas.com>
- <OSAPR01MB30890B5983EEAD2536D01A05D8070@OSAPR01MB3089.jpnprd01.prod.outlook.com>
- <OSBPR01MB21032BF17963E11F3D2F7B39B8070@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSBPR01MB21032BF17963E11F3D2F7B39B8070@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [124.210.22.195]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e24d2930-9f64-4af8-7975-08d6ddbec9f1
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB2322;
-x-ms-traffictypediagnostic: OSAPR01MB2322:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <OSAPR01MB2322F67300A2A31618658C66D8070@OSAPR01MB2322.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0044C17179
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(136003)(396003)(366004)(376002)(346002)(51914003)(199004)(189003)(6436002)(2906002)(86362001)(256004)(476003)(486006)(25786009)(966005)(33656002)(102836004)(55236004)(55016002)(5660300002)(6246003)(11346002)(71200400001)(4326008)(6506007)(26005)(71190400001)(53546011)(14454004)(6306002)(5024004)(68736007)(7416002)(229853002)(478600001)(305945005)(446003)(6116002)(74316002)(3846002)(8676002)(8936002)(81166006)(81156014)(110136005)(66066001)(54906003)(99286004)(186003)(66946007)(66476007)(76176011)(66556008)(64756008)(66446008)(53936002)(316002)(7736002)(7696005)(9686003)(76116006)(73956011)(52536014);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB2322;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: PE4dxy4/LQ7LdXmbRE9wSIwaZJTwogLYpI7G1iVXpD33k6oJf5jLQlN+EFRPjOi85gfH1QiDzZ5me7lRN/O9kWxZJrLDQxjRvRKE2Wsf4sVDgZBnvxAm+y/0aNvb/3JpcVGnDnejjom5TcQTNDWckHQuWpOZ5LTJ7WlPsrdnE8SG4MearjYz51FPdOMleufTQ47htOrcp+Z3ETT6r7Qrn+ZEzkt6aNjUMaQCmNDMPT6s5wTR2XPXLGX/cSg77T3gI7GWs7sZBhfbpvoGoUq560I2dAvUzskd75G5zSiaZJTIAKPTlc+x6I9I3mnhcHA1CSdUyBwojKqL3zmSzU6PolC//D6W9KxDI3OKSPT5p2uPd9HpHO3ZBZxHqZC8YhTmDW+1JmrSpKgg1GnK4eyL7DYcGgOUp5+ocMl44ceyU0M=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 21 May 2019 15:35:04 +0800
+In-Reply-To: <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1557823643-8616-5-git-send-email-chunfeng.yun@mediatek.com>
+         <20190517103736.GA1490@kuha.fi.intel.com>
+         <20190517130511.GA1887@kuha.fi.intel.com>
+         <1558319951.10179.352.camel@mhfsdcap03>
+         <20190520080359.GC1887@kuha.fi.intel.com>
+         <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+         <20190520083601.GE1887@kuha.fi.intel.com>
+         <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e24d2930-9f64-4af8-7975-08d6ddbec9f1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2019 07:34:41.9297
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB2322
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Biju-san,
-
-> From: Biju Das, Sent: Tuesday, May 21, 2019 4:10 PM
->=20
-> Hi Shimoda-San,
->=20
+Hi,
+On Mon, 2019-05-20 at 09:45 +0000, Biju Das wrote:
+> 
+> Hi Heikki,
+> 
 > Thanks for the feedback.
->=20
-> > > From: Biju Das, Sent: Wednesday, May 15, 2019 9:09 PM
-> > > Subject: [PATCH v6 4/7] usb: gadget: udc: renesas_usb3: Add dual role
-> > > switch support
-> >
-> > Now I'm confusing about the "Add dual role switch support" mean...
-> > Especially, this driver has already supports dual role switch support b=
-y own
-> > sysfs or debugfs.
->=20
-> Sorry for the confusion.
-> What about "Enhance role switch support" ?
+> 
+> > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
+> > node
+> > 
+> > On Mon, May 20, 2019 at 08:06:41AM +0000, Biju Das wrote:
+> > > Hi Heikki,
+> > >
+> > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
+> > > > usb_role_switch by node
+> > > >
+> > > > On Mon, May 20, 2019 at 10:39:11AM +0800, Chunfeng Yun wrote:
+> > > > > Hi,
+> > > > > On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
+> > > > > > Hi,
+> > > > > >
+> > > > > > On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki Krogerus wrote:
+> > > > > > > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng Yun wrote:
+> > > > > > > > Add fwnode_usb_role_switch_get() to make easier to get
+> > > > > > > > usb_role_switch by fwnode which register it.
+> > > > > > > > It's useful when there is not device_connection registered
+> > > > > > > > between two drivers and only knows the fwnode which register
+> > > > > > > > usb_role_switch.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > > > > > Tested-by: Biju Das <biju.das@bp.renesas.com>
+> > > > > > >
+> > > > > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > > >
+> > > > > > Hold on. I just noticed Rob's comment on patch 2/6, where he
+> > > > > > points out that you don't need to use device graph since the
+> > > > > > controller is the parent of the connector. Doesn't that mean you
+> > > > > > don't really need this API?
+> > > > > No, I still need it.
+> > > > > The change is about the way how to get fwnode; when use device
+> > > > > graph, get fwnode by of_graph_get_remote_node(); but now will get
+> > > > > fwnode by of_get_parent();
+> > > >
+> > > > OK, I get that, but I'm still not convinced about if something like
+> > > > this function is needed at all. I also have concerns regarding how
+> > > > you are using the function. I'll explain in comment to the patch 5/6 in this
+> > series...
+> > >
+> > > FYI, Currently  I am also using this api in my patch series.
+> > > https://patchwork.kernel.org/patch/10944637/
+> > 
+> > Yes, and I have the same question for you I jusb asked in comment I added
+> > to the patch 5/6 of this series. Why isn't usb_role_switch_get() enough?
+> 
+> Currently no issue. It will work with this api as well, since the port node is part of controller node.
+> For eg:-
+> https://patchwork.kernel.org/patch/10944627/
+> 
+> However if any one adds port node inside the connector node, then this api may won't work as expected.
+> Currently I get below error
+> 
+> [    2.299703] OF: graph: no port node found in /soc/i2c@e6500000/hd3ss3220@47
+> 
+> For eg:-
+> 
+> 	hd3ss3220@47 {
+> 		compatible = "ti,hd3ss3220";
+> 		...
+> 		....
+> 		usb_con: connector {
+>                                      ....
+>                                      ....
+> 			port {
+> 				hd3ss3220_ep: endpoint@0 {
+> 					reg = <0>;
+> 					remote-endpoint = <&usb3peri_role_switch>;
+> 				};
+> 			};
+> 		};
+> 	};
+> 
+> Regards,
+> Biju
 
-Thank you for the suggestion. It's good to me.
+I tested 3 cases:
 
-> > > The RZ/G2E cat874 board has a type-c connector connected to hd3ss3220
-> > > usb type-c drp port controller. This patch adds dual role switch
-> > > support for the type-c connector using the usb role switch class fram=
-ework.
-> >
-> > IIUC, after this patch is applied, the hs3ss3220 type-c driver can swit=
-ch the
-> > role by using the usb role switch class framework.
->=20
-> Yes, That is correct. HD3SS3220 driver detects host/device  connection ev=
-ents (attach/detach) and
-> It calls "usb_role_switch_set_role"  to assign/switch the role.
+case 1:
 
-I got it.
+connector {
+    compatible = "linux,typeb-conn-gpio", "usb-b-connector";
+    label = "micro-USB";
+    type = "micro";
+    id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
+    vbus-supply = <&usb_p0_vbus>;
 
-<snip>
-> > JFYI, according to the binding document [1], this "usb-role-switch" mea=
-ns:
-> > ---
-> > + - usb-role-switch: boolean, indicates that the device is capable of a=
-ssigning
-> > +			the USB data role (USB host or USB device) for a
-> > given
-> > +			USB connector, such as Type-C, Type-B(micro).
-> > +			see connector/usb-connector.txt.
-> > ---
-> >
-> > So, R-Car Gen3 / Salvator-XS cannot have this property because the boar=
-d
-> > has Type-A connector.
-> >
-> > [1] https://patchwork.kernel.org/patch/10934835/
->=20
-> I have updated the  binding patch to cover this[1]
-> [1]. https://patchwork.kernel.org/patch/10944631/
-> Are you ok with this binding patch?
+    port {
+        bconn_ep: endpoint@0 {
+            remote-endpoint = <&usb_role_sw>;
+        };
+    };
+};
 
-I'm sorry, I overlooked the patch. I'll check it later.
+&mtu3 {
+    usb-role-switch;
 
-Best regards,
-Yoshihiro Shimoda
+    port {
+        usb_role_sw: endpoint@0 {
+            remote-endpoint = <&bconn_ep>;
+        };
+    };
+};
+
+the driver of connector could use usb_role_switch_get(dev) to get
+mtu3's USB Role Switch. (dev is the device of connector)
+
+case 2:
+
+&mtu3 {
+    usb-role-switch;
+
+    connector {
+        compatible = "linux,typeb-conn-gpio", "usb-b-connector";
+        label = "micro-USB";
+        type = "micro";
+        id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
+        vbus-supply = <&usb_p0_vbus>;
+    };
+};
+
+the driver of connector using usb_role_switch_get(dev) failed to get
+mtu3's USB Role Switch.
+error log:
+#OF: graph: no port node found in /usb@11271000/connector
+this is because connector hasn't child node connected to remote
+endpoint which register USB Role Switch
+
+case 3:
+
+rsw_iddig: role_sw_iddig {
+    compatible = "linux,typeb-conn-gpio";
+    status = "okay";
+
+    connector {
+        compatible = "usb-b-connector";
+        label = "micro-USB";
+        type = "micro";
+        id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
+        vbus-supply = <&usb_p0_vbus>;
+
+        port {
+            bconn_ep: endpoint@0 {
+                remote-endpoint = <&usb_role_sw>;
+            };
+        };
+    };
+};
+
+&mtu3 {
+    usb-role-switch;
+
+    port {
+        usb_role_sw: endpoint@0 {
+            remote-endpoint = <&bconn_ep>;
+        };
+    };
+};
+
+
+the driver of connector using usb_role_switch_get(dev) also failed to
+get mtu3's USB Role Switch. Because usb_role_switch_get() only search
+its child nodes (connector node), but not child's child (port node)
+This case is the same as Biju's
+
+Usually type-c is similar with case 3;
+the next version v6 of this series will use case 2 as Rob suggested,
+see [v5, 2/6]
+
+for case 2, will need the new API fwnode_usb_role_switch_get();
+for case 3, use the new API, or need modify usb_role_switch_get();
+
 
