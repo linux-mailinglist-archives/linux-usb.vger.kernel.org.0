@@ -2,29 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BBF25428
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 17:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E513725680
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 19:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728488AbfEUPiJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 11:38:09 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:33576 "HELO
+        id S1728271AbfEURU0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 13:20:26 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:33692 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728137AbfEUPiI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 11:38:08 -0400
-Received: (qmail 5764 invoked by uid 2102); 21 May 2019 11:38:07 -0400
+        with SMTP id S1728053AbfEURU0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 13:20:26 -0400
+Received: (qmail 6374 invoked by uid 2102); 21 May 2019 13:20:25 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 21 May 2019 11:38:07 -0400
-Date:   Tue, 21 May 2019 11:38:07 -0400 (EDT)
+  by localhost with SMTP; 21 May 2019 13:20:25 -0400
+Date:   Tue, 21 May 2019 13:20:25 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     kbuild test robot <lkp@intel.com>, <kbuild-all@01.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH] media: usb: siano: Fix false-positive "uninitialized variable"
- warning
-In-Reply-To: <20190521140805.GA24615@kroah.com>
-Message-ID: <Pine.LNX.4.44L0.1905211136260.1634-100000@iolanthe.rowland.org>
+To:     Laurentiu Tudor <laurentiu.tudor@nxp.com>
+cc:     hch@lst.de, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <marex@denx.de>, <leoyang.li@nxp.com>,
+        <linux-kernel@vger.kernel.org>, <robin.murphy@arm.com>,
+        <noring@nocrew.org>, <JuergenUrban@gmx.de>
+Subject: Re: [PATCH v5 2/5] USB: use genalloc for USB HCs with local memory
+In-Reply-To: <20190521140748.20012-3-laurentiu.tudor@nxp.com>
+Message-ID: <Pine.LNX.4.44L0.1905211309270.1634-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -32,30 +32,107 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-GCC complains about an apparently uninitialized variable recently
-added to smsusb_init_device().  It's a false positive, but to silence
-the warning this patch adds a trivial initialization.
+On Tue, 21 May 2019 laurentiu.tudor@nxp.com wrote:
 
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Reported-by: kbuild test robot <lkp@intel.com>
-CC: <stable@vger.kernel.org>
+> From: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> 
+> For HCs that have local memory, replace the current DMA API usage
+> with a genalloc generic allocator to manage the mappings for these
+> devices. To help users, introduce a new HCD API,
+> usb_hcd_setup_local_mem() that will setup up the genalloc backing
+> up the device local memory. It will be used in subsequent patches.
+> This is in preparation for dropping the existing "coherent" dma
+> mem declaration APIs. Current implementation was relying on a short
+> circuit in the DMA API that in the end, was acting as an allocator
+> for these type of devices.
+> 
+> For context, see thread here: https://lkml.org/lkml/2019/4/22/357
+> 
+> Signed-off-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> Signed-off-by: Fredrik Noring <noring@nocrew.org>
+> ---
 
----
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -29,6 +29,8 @@
+>  #include <linux/workqueue.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/types.h>
+> +#include <linux/genalloc.h>
+> +#include <linux/io.h>
+>  
+>  #include <linux/phy/phy.h>
+>  #include <linux/usb.h>
+> @@ -3039,6 +3041,40 @@ usb_hcd_platform_shutdown(struct platform_device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(usb_hcd_platform_shutdown);
+>  
+> +int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
+> +			    dma_addr_t dma, size_t size)
+> +{
+> +	int err;
+> +	void __iomem *local_mem;
+> +
+> +	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, PAGE_SHIFT,
+> +						  dev_to_node(hcd->self.sysdev),
+> +						  "ohci-hcd");
 
- drivers/media/usb/siano/smsusb.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Surely that string is a mistake.  You could use 
+dev_name(hcd->self.sysdev) or a name passed by the caller.
 
-Index: usb-devel/drivers/media/usb/siano/smsusb.c
-===================================================================
---- usb-devel.orig/drivers/media/usb/siano/smsusb.c
-+++ usb-devel/drivers/media/usb/siano/smsusb.c
-@@ -400,7 +400,7 @@ static int smsusb_init_device(struct usb
- 	struct smsusb_device_t *dev;
- 	void *mdev;
- 	int i, rc;
--	int in_maxp;
-+	int in_maxp = 0;
- 
- 	/* create device object */
- 	dev = kzalloc(sizeof(struct smsusb_device_t), GFP_KERNEL);
+> +	if (IS_ERR(hcd->localmem_pool))
+> +		return PTR_ERR(hcd->localmem_pool);
+> +
+> +	local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
+> +				  size, MEMREMAP_WC);
+> +	if (!local_mem)
+> +		return -ENOMEM;
+> +
+> +	/*
+> +	 * Here we pass a dma_addr_t but the arg type is a phys_addr_t.
+> +	 * It's not backed by system memory and thus there's no kernel mapping
+> +	 * for it.
+> +	 */
+> +	err = gen_pool_add_virt(hcd->localmem_pool, (unsigned long)local_mem,
+> +				dma, size, dev_to_node(hcd->self.sysdev));
+> +	if (err < 0) {
+> +		dev_err(hcd->self.sysdev, "gen_pool_add_virt failed with %d\n",
+> +			err);
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(usb_hcd_setup_local_mem);
+
+If you have a usb_hcd_setup_local_mem() function then you should also 
+have a usb_hcd_remove_local_mem() function.
+
+> --- a/drivers/usb/host/ohci-mem.c
+> +++ b/drivers/usb/host/ohci-mem.c
+> @@ -36,6 +36,12 @@ static void ohci_hcd_init (struct ohci_hcd *ohci)
+>  
+>  static int ohci_mem_init (struct ohci_hcd *ohci)
+>  {
+> +	if (ohci_to_hcd(ohci)->localmem_pool) {
+> +		ohci->td_cache = NULL;
+> +		ohci->ed_cache = NULL;
+> +		return 0;
+> +	}
+
+This really isn't necessary.  The entire ohci_hcd structure is
+initialized to 0 when it is first allocated.
+
+> --- a/include/linux/usb/hcd.h
+> +++ b/include/linux/usb/hcd.h
+> @@ -216,6 +216,9 @@ struct usb_hcd {
+>  #define	HC_IS_RUNNING(state) ((state) & __ACTIVE)
+>  #define	HC_IS_SUSPENDED(state) ((state) & __SUSPEND)
+>  
+> +	/* allocator for HCs having local memory */
+
+"allocator" is the wrong word -- an allocator is something that 
+allocates.  Perhaps "memory area" or something along those lines.
+
+Alan Stern
 
