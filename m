@@ -2,87 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E70B25112
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 15:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30E62514E
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 16:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbfEUNtx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 09:49:53 -0400
-Received: from mga09.intel.com ([134.134.136.24]:16391 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728207AbfEUNtx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 May 2019 09:49:53 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 May 2019 06:49:51 -0700
-X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 21 May 2019 06:49:48 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 May 2019 16:49:48 +0300
-Date:   Tue, 21 May 2019 16:49:48 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ajay Gupta <ajaykuee@gmail.com>
-Cc:     wsa@the-dreams.de, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-Subject: Re: [PATCH v2 3/5] usb: typec: ucsi: ccg: enable runtime pm support
-Message-ID: <20190521134948.GL1887@kuha.fi.intel.com>
-References: <20190520183750.2932-1-ajayg@nvidia.com>
- <20190520183750.2932-4-ajayg@nvidia.com>
- <20190521133727.GK1887@kuha.fi.intel.com>
+        id S1728298AbfEUOAL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 10:00:11 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:32990 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727624AbfEUOAL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 10:00:11 -0400
+Received: (qmail 1871 invoked by uid 2102); 21 May 2019 10:00:10 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 21 May 2019 10:00:10 -0400
+Date:   Tue, 21 May 2019 10:00:10 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Oliver Neukum <oneukum@suse.com>
+cc:     Christoph Hellwig <hch@infradead.org>,
+        Jaewon Kim <jaewon31.kim@gmail.com>, <linux-mm@kvack.org>,
+        <gregkh@linuxfoundation.org>,
+        Jaewon Kim <jaewon31.kim@samsung.com>,
+        <m.szyprowski@samsung.com>, <ytk.lee@samsung.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
+In-Reply-To: <1558444291.12672.23.camel@suse.com>
+Message-ID: <Pine.LNX.4.44L0.1905210950170.1634-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190521133727.GK1887@kuha.fi.intel.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 21, 2019 at 04:37:27PM +0300, Heikki Krogerus wrote:
+On Tue, 21 May 2019, Oliver Neukum wrote:
+
+> On Mo, 2019-05-20 at 10:16 -0400, Alan Stern wrote:
+> > On Mon, 20 May 2019, Christoph Hellwig wrote:
+> > 
+> > > GFP_KERNEL if you can block, GFP_ATOMIC if you can't for a good reason,
+> > > that is the allocation is from irq context or under a spinlock.  If you
+> > > think you have a case where you think you don't want to block, but it
+> > > is not because of the above reasons we need to have a chat about the
+> > > details.
+> > 
+> > What if the allocation requires the kernel to swap some old pages out 
+> > to the backing store, but the backing store is on the device that the 
+> > driver is managing?  The swap can't take place until the current I/O 
+> > operation is complete (assuming the driver can handle only one I/O 
+> > operation at a time), and the current operation can't complete until 
+> > the old pages are swapped out.  Result: deadlock.
+> > 
+> > Isn't that the whole reason for using GFP_NOIO in the first place?
+> 
 > Hi,
 > 
-> On Mon, May 20, 2019 at 11:37:48AM -0700, Ajay Gupta wrote:
-> > +static int ucsi_ccg_resume(struct device *dev)
-> > +{
-> > +	struct i2c_client *client = to_i2c_client(dev);
-> > +	struct ucsi_ccg *uc = i2c_get_clientdata(client);
-> > +	struct ucsi *ucsi = uc->ucsi;
-> > +	struct ucsi_control c;
-> > +	int ret;
-> > +
-> > +	/* restore UCSI notification enable mask */
-> > +	UCSI_CMD_SET_NTFY_ENABLE(c, UCSI_ENABLE_NTFY_ALL);
-> > +	ret = ucsi_send_command(ucsi, &c, NULL, 0);
-> > +	if (ret < 0) {
-> > +		dev_err(uc->dev, "%s: failed to set notification enable - %d\n",
-> > +			__func__, ret);
-> > +	}
-> > +	return 0;
-> > +}
+> lookig at this it seems to me that we are in danger of a deadlock
 > 
-> I would prefer that we did this for all methods in ucsi.c, not just
-> ccgx. Could you add resume callback to struct ucsi_ppm, and then call
-> it here.
+> - during reset - devices cannot do IO while being reset
+> 	covered by the USB layer in usb_reset_device
+> - resume & restore - devices cannot do IO while suspended
+> 	covered by driver core in rpm_callback
+> - disconnect - a disconnected device cannot do IO
+> 	is this a theoretical case or should I do something to
+> 	the driver core?
 > 
-> > +static int ucsi_ccg_runtime_suspend(struct device *dev)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> > +static int ucsi_ccg_runtime_resume(struct device *dev)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> > +static int ucsi_ccg_runtime_idle(struct device *dev)
-> > +{
-> > +	return 0;
-> > +}
+> How about changing configurations on USB?
 
-Oh yes, and do you really need to supply all of those stubs?
+Changing configurations amounts to much the same as disconnecting,
+because both operations destroy all the existing interfaces.
 
-thanks,
+Disconnect can arise in two different ways.
 
--- 
-heikki
+	Physical hot-unplug: All I/O operations will fail.
+
+	Rmmod or unbind: I/O operations will succeed.
+
+The second case is probably okay.  The first we can do nothing about.  
+However, in either case we do need to make sure that memory allocations
+do not require any writebacks.  This suggests that we need to call
+memalloc_noio_save() from within usb_unbind_interface().
+
+Alan Stern
+
