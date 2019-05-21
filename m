@@ -2,64 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB8724B27
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 11:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F57124B47
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 11:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726562AbfEUJHg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 05:07:36 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46038 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726391AbfEUJHg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 May 2019 05:07:36 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 42ADAAD43;
-        Tue, 21 May 2019 09:07:35 +0000 (UTC)
-Message-ID: <1558428877.12672.8.camel@suse.com>
-Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jaewon Kim <jaewon31.kim@gmail.com>, linux-mm@kvack.org,
-        gregkh@linuxfoundation.org, Jaewon Kim <jaewon31.kim@samsung.com>,
-        m.szyprowski@samsung.com, ytk.lee@samsung.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Date:   Tue, 21 May 2019 10:54:37 +0200
-In-Reply-To: <20190520142331.GA12108@infradead.org>
-References: <20190520101206.GA9291@infradead.org>
-         <Pine.LNX.4.44L0.1905201011490.1498-100000@iolanthe.rowland.org>
-         <20190520142331.GA12108@infradead.org>
+        id S1726562AbfEUJOB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 05:14:01 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:33863 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726006AbfEUJOB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 05:14:01 -0400
+Received: by mail-wr1-f68.google.com with SMTP id f8so11286674wrt.1;
+        Tue, 21 May 2019 02:14:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dHnNpGK7Ry3WUk+2InXBSUl6ONPHIproU8hHdaNasKo=;
+        b=Q2m/FlkNWuKDyP2gARiowAg8kMU//6LrSF07lVW1DJNFDNB0p84vnH9Gt6ZZggHoWJ
+         gcF0xLka+JJXToOfZZ4f+WmYWW3bcvBibFQmed1/e308zlRlMrAdT4HlZ/7zou6PPTcg
+         RkUakt4bdVfrgHEeWvi5XcQCp+NJ+z8h105zmyEMaCUALsGfBISzvZABblP39VgV7Rw2
+         pCNL4RJuwtEdUXL4WaT2TWOQ/61WqQDCWZ8Kh3YuBCi2EvzLzuwxwFK0qfg1aurQvXFo
+         kkjtHJBaJfWM0tBGAg3lBjM22v9L+INZUnhl6evGrnafxaBu9SVO/YeTiUEEa568jrXu
+         0h4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dHnNpGK7Ry3WUk+2InXBSUl6ONPHIproU8hHdaNasKo=;
+        b=MYPyt51DfYxwqsP8hcd9IaXysnKhJAPJtMQFj1GkFFf9+IkKiennjmA9tTUcIfjSet
+         rlvu7/9D3LbvY9WQglMzrOdMhi545M1KYRDC/LzDTdNUSBKruIL6Q4fB6X7+3npFej9P
+         mlzTLFS/LdoSDiNV1eYChzE+SnZwJ84WrhrLzpHaE5Fkeo/+Xk/K2NzYi/KDTwYQDDIz
+         Dw2ko39P8sjc7jPQbFBnIbr5iczUKYLeYHoKXwnufvj1/CJGH/vf4hwR6ahO3bKqT59i
+         ShBBXsV0za5ti/ysHQtm9vdFYanOFIu6EmXJoJWUIB/18cGiapqnsyk6DOo6iYTVi3EP
+         NeKw==
+X-Gm-Message-State: APjAAAVjPVczcll/N2q4DjVgInNGtyjwryoi9rGEAOvLJgXlawJxkqIV
+        pJcbee+M8WQ3Ks1A0c46uIdLN6q90gMvUS70wDk=
+X-Google-Smtp-Source: APXvYqx88jP9IyFfMcKGgzJqBvm934G4O2HXpF13+8xKLPawnsoQAMOoMsv6tBLbm+Ob7gC0B0Szwr7OA5UOIAd23OI=
+X-Received: by 2002:adf:fc44:: with SMTP id e4mr16954254wrs.243.1558430040079;
+ Tue, 21 May 2019 02:14:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190520092856.26307-1-yamada.masahiro@socionext.com>
+In-Reply-To: <20190520092856.26307-1-yamada.masahiro@socionext.com>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Tue, 21 May 2019 17:13:48 +0800
+Message-ID: <CAKgpwJXEHjww0aV4x033qugw75NUtkMg3vvgtCDNgWaWbps29A@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: move core validatation after clock enable and
+ reset deassert
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        linux-usb@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mo, 2019-05-20 at 07:23 -0700, Christoph Hellwig wrote:
-> On Mon, May 20, 2019 at 10:16:57AM -0400, Alan Stern wrote:
-> > What if the allocation requires the kernel to swap some old pages out 
-> > to the backing store, but the backing store is on the device that the 
-> > driver is managing?  The swap can't take place until the current I/O 
-> > operation is complete (assuming the driver can handle only one I/O 
-> > operation at a time), and the current operation can't complete until 
-> > the old pages are swapped out.  Result: deadlock.
-> > 
-> > Isn't that the whole reason for using GFP_NOIO in the first place?
-> 
-> It is, or rather was.  As it has been incredibly painful to wire
-> up the gfp_t argument through some callstacks, most notably the
-> vmalloc allocator which is used by a lot of the DMA allocators on
-> non-coherent platforms, we now have the memalloc_noio_save and
-> memalloc_nofs_save functions that mark a thread as not beeing to
-> go into I/O / FS reclaim.  So even if you use GFP_KERNEL you will
-> not dip into reclaim with those flags set on the thread.
+There is already one identical patch for this:
+https://patchwork.kernel.org/patch/10934937/
+either one is okay.
 
-OK, but this leaves a question open. Will the GFP_NOIO actually
-hurt, if it is used after memalloc_noio_save()?
+Li Jun
 
-	Regards
-		Oliver
-
+Masahiro Yamada <yamada.masahiro@socionext.com> =E4=BA=8E2019=E5=B9=B45=E6=
+=9C=8820=E6=97=A5=E5=91=A8=E4=B8=80 =E4=B8=8B=E5=8D=886:45=E5=86=99=E9=81=
+=93=EF=BC=9A
+>
+> Since commit b873e2d0ea1e ("usb: dwc3: Do core validation early on
+> probe"), the DWC3 USB3 does not work for Socionext UniPhier platform.
+>
+> It moved dwc3_core_is_valid() really early, where no clock is enabled,
+> no reset is deasserted. Any attempt to register access causes the
+> system stall on my platform.
+>
+> Move it after clk_bulk_enable(), and still before dwc3_get_dr_mode().
+>
+> Fixes: b873e2d0ea1e ("usb: dwc3: Do core validation early on probe")
+> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> ---
+>
+>  drivers/usb/dwc3/core.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 4aff1d8dbc4f..93b96e6abddb 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1423,11 +1423,6 @@ static int dwc3_probe(struct platform_device *pdev=
+)
+>         dwc->regs       =3D regs;
+>         dwc->regs_size  =3D resource_size(&dwc_res);
+>
+> -       if (!dwc3_core_is_valid(dwc)) {
+> -               dev_err(dwc->dev, "this is not a DesignWare USB3 DRD Core=
+\n");
+> -               return -ENODEV;
+> -       }
+> -
+>         dwc3_get_properties(dwc);
+>
+>         dwc->reset =3D devm_reset_control_get_optional_shared(dev, NULL);
+> @@ -1460,6 +1455,12 @@ static int dwc3_probe(struct platform_device *pdev=
+)
+>         if (ret)
+>                 goto unprepare_clks;
+>
+> +       if (!dwc3_core_is_valid(dwc)) {
+> +               dev_err(dwc->dev, "this is not a DesignWare USB3 DRD Core=
+\n");
+> +               ret =3D -ENODEV;
+> +               goto disable_clks;
+> +       }
+> +
+>         platform_set_drvdata(pdev, dwc);
+>         dwc3_cache_hwparams(dwc);
+>
+> @@ -1524,7 +1525,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  err1:
+>         pm_runtime_put_sync(&pdev->dev);
+>         pm_runtime_disable(&pdev->dev);
+> -
+> +disable_clks:
+>         clk_bulk_disable(dwc->num_clks, dwc->clks);
+>  unprepare_clks:
+>         clk_bulk_unprepare(dwc->num_clks, dwc->clks);
+> --
+> 2.17.1
+>
