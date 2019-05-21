@@ -2,83 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9B4247D6
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 08:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 671CB24810
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 08:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727868AbfEUGMs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 02:12:48 -0400
-Received: from mga07.intel.com ([134.134.136.100]:30188 "EHLO mga07.intel.com"
+        id S1726719AbfEUG3P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 02:29:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725798AbfEUGMr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 May 2019 02:12:47 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 May 2019 23:12:47 -0700
-X-ExtLoop1: 1
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 May 2019 23:12:45 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, devel@driverdev.osuosl.org
-Subject: Re: TODO advice for octeon-usb?
-In-Reply-To: <20190520230532.GA3621@darkstar.musicnaut.iki.fi>
-References: <20190520230532.GA3621@darkstar.musicnaut.iki.fi>
-Date:   Tue, 21 May 2019 09:12:41 +0300
-Message-ID: <87d0kcibdy.fsf@linux.intel.com>
+        id S1726193AbfEUG3O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 02:29:14 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC7B8217D8;
+        Tue, 21 May 2019 06:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558420154;
+        bh=bN37WpgUZd6TY579JnL+mvLtP9wubXMAhz5jf7nWpRo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WqkXl/djcwAkRr+JrG4uDcfEphZStfHScyT0pZzJZpJ5EKWYh1uejyuKH9N/6ANCJ
+         ylSAc0/7CeY4BABS5i52904oi1dgWmm54U+LFtFL4sAgKzeUideHAyqT2Nw+oahAxw
+         O1AeKxFnZeiWyhADcJr708rtrKleL+KEASpfzFis=
+Date:   Tue, 21 May 2019 08:29:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Weitao Hou <houweitaoo@gmail.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: fix typos in code comments
+Message-ID: <20190521062911.GA5791@kroah.com>
+References: <20190519035542.22094-1-houweitaoo@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190519035542.22094-1-houweitaoo@gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Sun, May 19, 2019 at 11:55:42AM +0800, Weitao Hou wrote:
+> fix lenght to length
+> 
+> Signed-off-by: Weitao Hou <houweitaoo@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/usb/s3c2410-usb.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
+You sent 2 different patches that do different things, yet have
+identical subject lines :(
 
-Hi,
+Please fix that up and resend these as a patch series, with unique
+subjects.
 
-Aaro Koskinen <aaro.koskinen@iki.fi> writes:
-> I'm looking for input what should be done next to get
-> drivers/staging/octeon-usb out of staging.
->
-> Thousands of checkpatch errors/warnings have been fixed (starting point
-> was <https://marc.info/?l=3Dlinux-driver-devel&m=3D137028876225266&w=3D2>=
-),
-> also the size of the driver has shrunken considerably.
->
-> If there are still some other bigger issues with this driver, please
-> let me know.
+thanks,
 
-Looks pretty clean to me. I would simply break that single file into
-smaller files if possible (see xhci/ehci for example).
-
-my 2 cents
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlzjltkACgkQzL64meEa
-mQaO2g//X/k/5DN6vm615lAlxzfGXbUxrst5JgEXj0XR46jM5pQ/HFRDncQK5QoF
-tbK6roUUq1u9cxJI+OWrMysqIxdTc87v5lz1+Rr6viBbzRoowx6P4NXUE2tWS1IQ
-CyWyrThfKuI1yj9hDqWnF8iY9PVvY+o3wbe8vajuSnzxbNF5E+63XEWdeqB0year
-Fap/TAKBpiUcPZwtVq2mKre/vV837yhHYeb3oxIgJ8Z2t9lf3yqw1hyydyT5R4kW
-+rCDAfXfpA7M/WExVUeelU1zX7BCZy2QcOGerccF6zauiD83vCdDlbsy9eQOMWjk
-jEKcHdYW7SMEEAH0hF0Na82lyH+ecpkr62Zx4Zz5X2+Mj+Rd/olNW1pIBSwd5GzH
-sGEjlBWApgtltd+06mfylh7cuEpJxe2uNsEJTLVhEw3LI7B/i5MPGdKoDfaehRuH
-w5piM/Ffm0ZW3ka9wdOfR+EvXocMZi73YUlU/30jthn+c+bkuZO3mjQsRTrs5gYF
-zGYdyXxphloKcd5w4521PeOw2Yr0TIFD9yOnIedQtRah9z91owFDNVtgYGn3GY2M
-2yU0rByEkBFlCXwSQYpyyyN9WWlwZtaNO7mmmdd7qpfdmO76rA+ahRmvVM/1Uhil
-BiZvCAVOBp0hSWh8sy8Qt1+goJUMrS/X4EgL83ZEywc+xh5MxvA=
-=30aF
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
