@@ -2,76 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3138D24C97
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 12:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00DA24CAF
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 12:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbfEUKZG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 06:25:06 -0400
-Received: from conssluserg-03.nifty.com ([210.131.2.82]:37659 "EHLO
-        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726344AbfEUKZF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 06:25:05 -0400
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id x4LAOwZ1025211;
-        Tue, 21 May 2019 19:24:58 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com x4LAOwZ1025211
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1558434298;
-        bh=g1eTgJOllZAMscUYC3eHoMSUDCzCFgfluUEbaSmpZII=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DJxLD49sLiFHtIDhxYyfA4/ZDjjF3p6f3/vezpgTil/hC7qTF61AcTrzBgVpQD9/R
-         NCIbvIluoVMfHVT4HEv0NAPdOPqNDtcue41GSJqA0rbvC5ObjxEH5+A2yT5IaTDTSH
-         f+8fDh0d4fDJ6ecR1v4v4CAMSDAOLFxdSsX6kZRV61IrbrOuPwxuPjJEqNNVplmU+l
-         RVSf0kePEixdGTHoz/MToKWMGKu00lBsNwfFfvSlnjIfjEcGtSijsrlQV1mRMxfPAZ
-         XJoc0jFYLG/arAA4AIWoVDzqAXVWmvcCx64kPMGkeGjq21Si7ZaxRjdShnsLabK2an
-         nmZ0GZ+nUEwlg==
-X-Nifty-SrcIP: [209.85.217.48]
-Received: by mail-vs1-f48.google.com with SMTP id m1so10790360vsr.6;
-        Tue, 21 May 2019 03:24:58 -0700 (PDT)
-X-Gm-Message-State: APjAAAVr/HVL4u4eMAU0kdKrWsKf+kfPvJtwSRffsqixSbEQeJcwqHWn
-        7lp5wXfE0ZJF1y/15didGrCXP9ysw1OOaFd3X0c=
-X-Google-Smtp-Source: APXvYqwb9CDXB51Tkt/ijB8qbrhDOCbaM3Dk/o4G75bkdTd/OXX0x1q59GwzRWpTxaSJj7RsjuCtDAo5ZYgv6kZwXTk=
-X-Received: by 2002:a05:6102:3d9:: with SMTP id n25mr13609687vsq.181.1558434297247;
- Tue, 21 May 2019 03:24:57 -0700 (PDT)
+        id S1727733AbfEUK3A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 06:29:00 -0400
+Received: from verein.lst.de ([213.95.11.211]:59141 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726466AbfEUK26 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 06:28:58 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id 7C5EB68AFE; Tue, 21 May 2019 12:28:35 +0200 (CEST)
+Date:   Tue, 21 May 2019 12:28:35 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     laurentiu.tudor@nxp.com, hch@lst.de, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, marex@denx.de, leoyang.li@nxp.com,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        noring@nocrew.org, JuergenUrban@gmx.de
+Subject: Re: [PATCH v4 1/3] USB: use genalloc for USB HCs with local memory
+Message-ID: <20190521102835.GA1973@lst.de>
+References: <20190516114721.27694-1-laurentiu.tudor@nxp.com> <20190516114721.27694-2-laurentiu.tudor@nxp.com> <20190521081657.GA10639@kroah.com>
 MIME-Version: 1.0
-References: <20190520092856.26307-1-yamada.masahiro@socionext.com> <CAKgpwJXEHjww0aV4x033qugw75NUtkMg3vvgtCDNgWaWbps29A@mail.gmail.com>
-In-Reply-To: <CAKgpwJXEHjww0aV4x033qugw75NUtkMg3vvgtCDNgWaWbps29A@mail.gmail.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Tue, 21 May 2019 19:24:21 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARn+wok5YXrnX-Vatv2-d=+awXtnBCPJmAR2nb8Fi=trw@mail.gmail.com>
-Message-ID: <CAK7LNARn+wok5YXrnX-Vatv2-d=+awXtnBCPJmAR2nb8Fi=trw@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: move core validatation after clock enable and
- reset deassert
-To:     Jun Li <lijun.kernel@gmail.com>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190521081657.GA10639@kroah.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 21, 2019 at 6:14 PM Jun Li <lijun.kernel@gmail.com> wrote:
->
-> There is already one identical patch for this:
-> https://patchwork.kernel.org/patch/10934937/
-> either one is okay.
+On Tue, May 21, 2019 at 10:16:57AM +0200, Greg KH wrote:
+> > +	if (hcd->driver->flags & HCD_LOCAL_MEM)
+> > +		return gen_pool_dma_alloc(hcd->localmem_pool, size, dma);
+> 
+> Does this patch now break things?  hcd->localmem_pool at this point in
+> time is NULL, so this call will fail.  There's no chance for any host
+> controller driver to actually set up this pool in this patch, so is
+> bisection broken?
+> 
+> I think you fix this up in later patches, right?
+> 
+> And if so, why do we even need HCD_LOCAL_MEM anymore?  Can't we just
+> test for the presence of hcd->localmem_pool in order to determine which
+> allocation method to use?
 
-I did not notice this.
+True.  And that also sound like a good bisectability strategy:
 
-Please go ahead with yours
-since your are the first submitter.
-
-Thanks.
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+ - first add hcd->localmem_pool and test for it
+ - convert drivers over to it
+ - remove HCD_LOCAL_MEM
