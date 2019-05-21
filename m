@@ -2,90 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F25ED24C30
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 12:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A91124C6C
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 12:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727560AbfEUKEy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 06:04:54 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:46440 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727547AbfEUKEx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 06:04:53 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 4BAA828084D
-Subject: Re: [REGRESSION] usb: gadget: f_fs: Allow scatter-gather buffers
-To:     "Yang, Fei" <fei.yang@intel.com>,
-        John Stultz <john.stultz@linaro.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chen Yu <chenyu56@huawei.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "kernel@collabora.com" <kernel@collabora.com>
-References: <CALAqxLUMRaNxwTUi9QS7-Cy-Ve4+vteBm8-jW4yzZg_QTJVChA@mail.gmail.com>
- <7caebeb2-ea96-2276-3078-1e53f09ce227@collabora.com>
- <CALAqxLUfJYUtmQDC_aDMxW7KcPUawGoRq-PNUfmzQuNKh97FmQ@mail.gmail.com>
- <CALAqxLVUFfrPVVjR74V3PhhtcCytfp=cUYjo=BcJ14D1fkVXTw@mail.gmail.com>
- <7ec57c29-d1ab-dc4c-755d-a6009b9132b5@collabora.com>
- <CALAqxLUgnTB7aZ4edXCaG8SJsJzfY1_yNEPc6Losssw5Xy9-XA@mail.gmail.com>
- <36620156-d119-b1b2-989e-0c13b783296e@collabora.com>
- <db5665cf-6274-c254-720c-798fec79d131@collabora.com>
- <02E7334B1630744CBDC55DA8586225837F884D53@ORSMSX103.amr.corp.intel.com>
- <CALAqxLWVc6DnRHJ9gQ8orY7f53g4j+x3BWnoJdBv3sXDZVNpVg@mail.gmail.com>
- <02E7334B1630744CBDC55DA8586225837F885FFD@ORSMSX103.amr.corp.intel.com>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <1672b93a-dfe6-acb2-715e-c4a13af54413@collabora.com>
-Date:   Tue, 21 May 2019 12:04:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <02E7334B1630744CBDC55DA8586225837F885FFD@ORSMSX103.amr.corp.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1726907AbfEUKMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 06:12:39 -0400
+Received: from mail01.preh.com ([80.149.130.22]:50804 "EHLO mail01.preh.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726448AbfEUKMj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 06:12:39 -0400
+From:   Kloetzke Jan <Jan.Kloetzke@preh.de>
+To:     "davem@davemloft.net" <davem@davemloft.net>,
+        "oneukum@suse.com" <oneukum@suse.com>
+CC:     "jan@kloetzke.net" <jan@kloetzke.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2] usbnet: fix kernel crash after disconnect
+Thread-Topic: [PATCH v2] usbnet: fix kernel crash after disconnect
+Thread-Index: AQHU/18dyV1WEybtp0WgCkArhegqtKZcDN8AgAGbOgCAD6SEgIAIB9wAgAAGnQA=
+Date:   Tue, 21 May 2019 10:12:23 +0000
+Message-ID: <1558433542.19453.33.camel@preh.de>
+References: <1556563688.20085.31.camel@suse.com>
+         <20190430141440.9469-1-Jan.Kloetzke@preh.de>
+         <20190505.004556.492323065607253635.davem@davemloft.net>
+         <1557130666.12778.3.camel@suse.com> <1557990629.19453.7.camel@preh.de>
+         <1558432122.12672.12.camel@suse.com>
+In-Reply-To: <1558432122.12672.12.camel@suse.com>
+Accept-Language: de-DE, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-tm-snts-smtp: E766891CAA47C511B3ACF51FFF83D97C99B6D1BBDEE79F336CAB83929E6DDA6D2000:8
+x-exclaimer-md-config: 142fe46c-4d13-4ac1-9970-1f36f118897a
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C544988B646F2E438DB82C8B97E734CA@preh.de>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=preh.de; s=key1; c=relaxed/relaxed;
+ h=from:to:cc:subject:date:message-id:references:content-type:mime-version;
+ bh=9wyZw08aJ2US/GZIzCzxf42QZpwuiDAuMmCgt4oeGqc=;
+ b=Xf5Bzq63XAX30L5Uwvs6QsIBYZ+znN2z+lCLKYY70YGo6/VqBRjijo9dmaLGVbb2d3jouIJpG185
+        4Eozy8AV5sAohsQTH96Wl5iUAVy0mVqSNoo3tRrTYCgBZ3+hSeyeWNs6mM8Nk7BmTMdqG86UwlBr
+        QEIXBA3LnCg4SvLMYb2xyM5q1XlORT2edfdNtptrmrJKXh6ub9RcLSOC5Uskb4H5SLh1DahisOgv
+        hdwX1JIDqDcxVrRmEM9qUGk+O2pc20Mv6oJQ3BF4oYllOrwdqbLfzoWjnKJjY47QsYXZYhhh0U8Z
+        /5vTGGZ/3AXp6RoLYSX7HDnM5w54ftlzKG+Ebw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-W dniu 20.05.2019 o 23:52, Yang, Fei pisze:
->>>>> One question that comes to my mind is this: Does the USB
-
-<snip>
-
-> 
-> One of the problems appears to be that req->num_mapped_sgs was left uninitialized. I made the following change and got a lot more requests completed.
-> However this change is not sufficient to solve the adb issue, the usb requests would eventually get stuck without getting a matching ffs_epfile_async_io_complete.
-> 
-> @@ -1067,6 +1067,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->                          req->buf = NULL;
->                          req->sg = io_data->sgt.sgl;
->                          req->num_sgs = io_data->sgt.nents;
-> +                       req->num_mapped_sgs = req->num_sgs;
->                  } else {
->                          req->buf = data;
->                  }
-> @@ -1110,6 +1111,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->                          req->buf = NULL;
->                          req->sg = io_data->sgt.sgl;
->                          req->num_sgs = io_data->sgt.nents;
-> +                       req->num_mapped_sgs = req->num_sgs;
->                  } else {
->                          req->buf = data;
->                  }
-> 
-
-Isn't num_mapped_sgs meant to be set by drivers/usb/gadget/udc/core.c?
-
-And the comment in include/linux/usb/gadget.h says "internal".
-
-One thing that becomes evident now is that adb uses async io.
-It seems that interaction of async io and s-g mode should be further
-investigated.
-
-Andrzej
+SGksDQoNCkFtIERpZW5zdGFnLCBkZW4gMjEuMDUuMjAxOSwgMTE6NDggKzAyMDAgc2NocmllYiBP
+bGl2ZXIgTmV1a3VtOg0KPiBPbiBEbywgMjAxOS0wNS0xNiBhdCAwNzoxMCArMDAwMCwgS2xvZXR6
+a2UgSmFuIHdyb3RlOg0KPiA+IEFtIE1vbnRhZywgZGVuIDA2LjA1LjIwMTksIDEwOjE3ICswMjAw
+IHNjaHJpZWIgT2xpdmVyIE5ldWt1bToNCj4gPiA+IE9uIFNvLCAyMDE5LTA1LTA1IGF0IDAwOjQ1
+IC0wNzAwLCBEYXZpZCBNaWxsZXIgd3JvdGU6DQo+ID4gPiA+IEZyb206IEtsb2V0emtlIEphbiA8
+SmFuLktsb2V0emtlQHByZWguZGU+DQo+ID4gPiA+IERhdGU6IFR1ZSwgMzAgQXByIDIwMTkgMTQ6
+MTU6MDcgKzAwMDANCj4gPiA+ID4gDQo+ID4gPiA+ID4gQEAgLTE0MzEsNiArMTQzMiwxMSBAQCBu
+ZXRkZXZfdHhfdCB1c2JuZXRfc3RhcnRfeG1pdCAoc3RydWN0IHNrX2J1ZmYgKnNrYiwNCj4gPiA+
+ID4gPiAgICAgICAgICAgICAgIHNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmRldi0+dHhxLmxvY2ss
+IGZsYWdzKTsNCj4gPiA+ID4gPiAgICAgICAgICAgICAgIGdvdG8gZHJvcDsNCj4gPiA+ID4gPiAg
+ICAgICB9DQo+ID4gPiA+ID4gKyAgICAgaWYgKFdBUk5fT04obmV0aWZfcXVldWVfc3RvcHBlZChu
+ZXQpKSkgew0KPiA+ID4gPiA+ICsgICAgICAgICAgICAgdXNiX2F1dG9wbV9wdXRfaW50ZXJmYWNl
+X2FzeW5jKGRldi0+aW50Zik7DQo+ID4gPiA+ID4gKyAgICAgICAgICAgICBzcGluX3VubG9ja19p
+cnFyZXN0b3JlKCZkZXYtPnR4cS5sb2NrLCBmbGFncyk7DQo+ID4gPiA+ID4gKyAgICAgICAgICAg
+ICBnb3RvIGRyb3A7DQo+ID4gPiA+ID4gKyAgICAgfQ0KPiA+ID4gPiANCj4gPiA+ID4gSWYgdGhp
+cyBpcyBrbm93biB0byBoYXBwZW4gYW5kIGlzIGV4cGVjdGVkLCB0aGVuIHdlIHNob3VsZCBub3Qg
+d2Fybi4NCj4gPiA+ID4gDQo+ID4gPiANCj4gPiA+IEhpLA0KPiA+ID4gDQo+ID4gPiB5ZXMgdGhp
+cyBpcyB0aGUgcG9pbnQuIENhbiBuZG9fc3RhcnRfeG1pdCgpIGFuZCBuZG9fc3RvcCgpIHJhY2U/
+DQo+ID4gPiBJZiBub3QsIHdoeSBkb2VzIHRoZSBwYXRjaCBmaXggdGhlIG9ic2VydmVkIGlzc3Vl
+IGFuZCB3aGF0DQo+ID4gPiBwcmV2ZW50cyB0aGUgcmFjZT8gU29tZXRoaW5nIGlzIG5vdCBjbGVh
+ciBoZXJlLg0KPiA+IA0KPiA+IERhdmUsIGNvdWxkIHlvdSBzaGVkIHNvbWUgbGlnaHQgb24gT2xp
+dmVycyBxdWVzdGlvbj8gSWYgdGhlIHJhY2UgY2FuDQo+ID4gaGFwcGVuIHRoZW4gd2UgY2FuIHN0
+aWNrIHRvIHYxIGJlY2F1c2UgdGhlIFdBUk5fT04gaXMgaW5kZWVkIHBvaW50bGVzcy4NCj4gPiBP
+dGhlcndpc2UgaXQncyBub3QgY2xlYXIgd2h5IGl0IG1hZGUgdGhlIHByb2JsZW0gZ28gYXdheSBm
+b3IgdXMgYW5kIHYyDQo+ID4gbWF5IGJlIHRoZSBiZXR0ZXIgb3B0aW9uLi4uDQo+IA0KPiBIaSwN
+Cj4gDQo+IGFzIERhdmUgY29uZmlybWVkIHRoYXQgdGhlIHJhY2UgZXhpc3RzLCBjb3VsZCB5b3Ug
+cmVzdWJtaXQgd2l0aG91dA0KPiB0aGUgV0FSTiA/DQoNCldoeSBub3QganVzdCB0YWtlIHYxIG9m
+IHRoZSBwYXRjaD8NCg0KICBodHRwczovL2xvcmUua2VybmVsLm9yZy9uZXRkZXYvMjAxOTA0MTcw
+OTE4NDkuNzQ3NS0xLUphbi5LbG9ldHprZUBwcmVoLmRlLw0KDQpUaGUgb3JpZ2luYWwgdmVyc2lv
+biB3YXMgZXhhY3RseSB0aGUgc2FtZSwganVzdCB3aXRob3V0IHRoZSBXQVJOX09OKCkuDQpPciBp
+cyBpdCByZXF1aXJlZCB0byBzZW5kIGEgdjMgaW4gdGhpcyBjYXNlPw0KDQpSZWdhcmRzLA0KSmFu
