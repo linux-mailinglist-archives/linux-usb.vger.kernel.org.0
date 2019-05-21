@@ -2,65 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B42D25965
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 22:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CC825A27
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 23:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbfEUUrF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 21 May 2019 16:47:05 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:45050 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727350AbfEUUrF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 16:47:05 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d8])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id B282E14CEC900;
-        Tue, 21 May 2019 13:47:04 -0700 (PDT)
-Date:   Tue, 21 May 2019 13:47:04 -0700 (PDT)
-Message-Id: <20190521.134704.1456978856134153782.davem@davemloft.net>
-To:     Jan.Kloetzke@preh.de
-Cc:     oneukum@suse.com, jan@kloetzke.net, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] usbnet: fix kernel crash after disconnect
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190521131826.30475-1-Jan.Kloetzke@preh.de>
-References: <1558438944.12672.13.camel@suse.com>
-        <20190521131826.30475-1-Jan.Kloetzke@preh.de>
-X-Mailer: Mew version 6.8 on Emacs 26.1
+        id S1727493AbfEUVrL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 17:47:11 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:43971 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726907AbfEUVrK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 17:47:10 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D9E7021FC1
+        for <linux-usb@vger.kernel.org>; Tue, 21 May 2019 17:47:09 -0400 (EDT)
+Received: from imap6 ([10.202.2.56])
+  by compute6.internal (MEProxy); Tue, 21 May 2019 17:47:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+        mime-version:message-id:date:from:to:subject:content-type; s=
+        fm2; bh=RuM+yNwF9z1/7ky7LnJmngWVbt/GzSjtgprJYMPkAQ8=; b=i6w28/Gi
+        NnrmSHkuQa/oukmrqD3JczIHK9KiOznKkbxjxJxGk08OYgjUfWI8saqeJmhqUoTf
+        rcxXHLvoBQPDoCBhaQRmc+SAFzVFWYFS5+v/JV4Y5NfOu9MVT86QXoHPler7OwCG
+        +X58cPkalgI0suDQ/4qds68BFs8lCmjDZYb8E6uWOEzjdWqnXzrFGjZRSpNNjSoz
+        UNJFkgxW08svNHyUeADrdangjqwAOco43KT0t+rXP/1y6IcS6MLEcSTaVnsVV0xI
+        +QXZ66gFa0sWMOvMe8DNW6gOkRwdayumGodtw8mZzQGsl7+Uw6N/EWIwe0W7Rlg6
+        0EwpGdUpm3Zn0A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-type:date:from:message-id
+        :mime-version:subject:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=RuM+yNwF9z1/7ky7LnJmngWVbt/Gz
+        SjtgprJYMPkAQ8=; b=6Zgb4UOnSGlrHzDvArhpz3futmW+9Bh2N6s7SZkxVtJqu
+        IoHcP4tINfEYK88pzLCnRvDVU7tkW74q9f/5U2pE8wziv0frItXx1HWWfAz4DEJ9
+        4OpDF3GCOjdgPbnXWoI3+9seyu5t559wjLaTJ6Zmbe7gUndkYDpnc62nWn6XKxuS
+        2YVHs107mer9Cvrb7ln+6eYfxNIFkQpy94SA97xSoxeDC7j/FuQ4c2xGaeEIOMxf
+        DsHogCKOjN5l7T7TX+t9vPWfziOTEY/KMOQ97C5OXbRWY0QeQvwddvzQp9Adw5X9
+        WJN66eqIYf7nsKqBvxJuznbmXesXBBDAG2dmKs7mQ==
+X-ME-Sender: <xms:3XHkXKmgbD1YuqxHujJUURsYB2J0K8XOYppnYxjIHcli_RmR73_61w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrudduuddgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfffhffvufgtsehttdertd
+    erreejnecuhfhrohhmpedftegurghmucfirghushhmrghnnhdfuceorghgrghushhmrghn
+    nhesfhgrshhtmhgrihhlrdgtohhmqeenucfrrghrrghmpehmrghilhhfrhhomheprghgrg
+    hushhmrghnnhesfhgrshhtmhgrihhlrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:3XHkXCPycjOMfAVYB8noX3UsB1r3Wcpdy3dSmue5Lh-lpSlk58xE6g>
+    <xmx:3XHkXJyYej5r_wuynLKNdedfDZTLLIHtIH0JfEB_2hDsxlOSLIsLWQ>
+    <xmx:3XHkXKnT8FQd3RFQqCiyZUqcmzkmY3LBLAk87WfVLUCuRwkPFBIcYw>
+    <xmx:3XHkXGI6wkLZf276KGbLf-zubrP0zq9q-yRUSKTu5dktEd_BJimj9w>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 99A9082F4B; Tue, 21 May 2019 17:47:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.1.6-550-g29afa21-fmstable-20190520v1
 Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 21 May 2019 13:47:04 -0700 (PDT)
+Message-Id: <1b819641-609b-4e0e-86a3-afe81eb73efc@www.fastmail.com>
+Date:   Tue, 21 May 2019 16:49:14 -0500
+From:   "Adam Gausmann" <agausmann@fastmail.com>
+To:     linux-usb@vger.kernel.org
+Subject: =?UTF-8?Q?Raven_Ridge_xhci=5Fhcd_not_working:_"Refused_to_change_power_s?=
+ =?UTF-8?Q?tate,_currently_in_D3"_?=
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Kloetzke Jan <Jan.Kloetzke@preh.de>
-Date: Tue, 21 May 2019 13:18:40 +0000
+On my ThinkPad E585, with a Ryzen 5 2500U, my XHCI driver crashes when plugging in a device after switching power states, or during switching itself.
 
-> When disconnecting cdc_ncm the kernel sporadically crashes shortly
-> after the disconnect:
- ...
-> The crash happens roughly 125..130ms after the disconnect. This
-> correlates with the 'delay' timer that is started on certain USB tx/rx
-> errors in the URB completion handler.
-> 
-> The problem is a race of usbnet_stop() with usbnet_start_xmit(). In
-> usbnet_stop() we call usbnet_terminate_urbs() to cancel all URBs in
-> flight. This only makes sense if no new URBs are submitted
-> concurrently, though. But the usbnet_start_xmit() can run at the same
-> time on another CPU which almost unconditionally submits an URB. The
-> error callback of the new URB will then schedule the timer after it was
-> already stopped.
-> 
-> The fix adds a check if the tx queue is stopped after the tx list lock
-> has been taken. This should reliably prevent the submission of new URBs
-> while usbnet_terminate_urbs() does its job. The same thing is done on
-> the rx side even though it might be safe due to other flags that are
-> checked there.
-> 
-> Signed-off-by: Jan Klötzke <Jan.Kloetzke@preh.de>
+Steps to Reproduce: 
 
-Applied.
+- Unplug the AC power, or start the computer with AC unplugged. If the computer has AC power at boot, it will work properly, but plugging it in after running unplugged will not.
+
+The xhci_hcd and xhci_pci modules remain loaded after the error. Reloading them appears to reset it, and the scenarios above still apply as if the computer was just started.
+
+These tests were performed with laptop_mode disabled; enabling it alters the behavior. I will test that more later.
+
+Results:
+
+The USB device fails to register, and `lsusb` remains unchanged. No other errors will appear after the first one occurs.
+One of two error messages will appear in kernel logs:
+
+[   51.276650] xhci_hcd 0000:05:00.4: Refused to change power state, currently in D3
+[   51.276658] xhci_hcd 0000:05:00.3: Refused to change power state, currently in D3
+[   51.277051] xhci_hcd 0000:05:00.3: enabling device (0000 -> 0002)
+[   51.277074] xhci_hcd 0000:05:00.3: WARN: xHC restore state timeout
+[   51.277077] xhci_hcd 0000:05:00.3: PCI post-resume error -110!
+[   51.279316] xhci_hcd 0000:05:00.3: HC died; cleaning up
+[   51.288669] xhci_hcd 0000:05:00.4: enabling device (0000 -> 0002)
+
+[ 5258.438021] xhci_hcd 0000:05:00.3: Refused to change power state, currently in D3
+[ 5258.438328] xhci_hcd 0000:05:00.4: Refused to change power state, currently in D3
+[ 5258.450026] xhci_hcd 0000:05:00.3: enabling device (0000 -> 0002)
+[ 5258.450511] xhci_hcd 0000:05:00.4: enabling device (0000 -> 0002)
+[ 5266.112941] xhci_hcd 0000:05:00.3: Error while assigning device slot ID
+[ 5266.112952] xhci_hcd 0000:05:00.3: Max number of devices this xHCI host supports is 64.
+[ 5266.112963] usb usb1-port2: couldn't allocate usb_device
+[ 5280.960968] xhci_hcd 0000:05:00.3: Error while assigning device slot ID
+[ 5280.960979] xhci_hcd 0000:05:00.3: Max number of devices this xHCI host supports is 64.
+[ 5280.960993] usb usb1-port2: couldn't allocate usb_device
+
+Expected results: 
+
+Device connects, powers on, and registers properly, showing up in `lsusb`.
+
+Build: 
+
+Linux 4.19.44_1 #1 SMP PREEMPT Wed Mar 27 20:41:38 UTC 2019 x86_64 GNU/Linux, with firmware 20181218
+
+Has been an issue since 4.19.28 and possibly earlier.
+
+-- 
+  Adam Gausmann
+  agausmann@fastmail.com
