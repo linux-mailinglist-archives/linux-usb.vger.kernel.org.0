@@ -2,63 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5931F24B8D
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 11:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E6624BE1
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 11:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbfEUJa5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 05:30:57 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:45656 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726242AbfEUJa5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 05:30:57 -0400
-Received: by mail-lf1-f65.google.com with SMTP id n22so12481198lfe.12
-        for <linux-usb@vger.kernel.org>; Tue, 21 May 2019 02:30:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gfnizI+7Mqtqn/mcADi8sQQq1aQCn9xpDJJCvngM8c4=;
-        b=CM1Ahu+b2Y9Rcwbn2nbnAHkFVu5743ajUSvZt2e4YiLE0b2kZPZnxOEBagqFCtyIfZ
-         z+tg0Qcfwuu+UcIjIhEZGPiHbaT6kxxV6UHOxRRNHpRtVN2eLgMtkXiGL7GJxeyquwri
-         cTc96Z0ufF21yLqn8CNDJnDl43+rNYrN+5oL8yREThQegvv6U5XBFG2yspEWk2u/tQux
-         +HzQizQNzayXpqrWrNLWh+8CLN1muuotC1Pd5SBQdKmO4V1u0LuVS6lATmX9LZTx4x1R
-         Dro569S2TDcAby+tbVUdBXNdjyQ3F0vv5wfgvRiS30zwh/GUq5I3XU2xPFv1QxZaFD45
-         8a3Q==
-X-Gm-Message-State: APjAAAXtbfjuHhD0Koi+H+JtkptWHBhNNrSo3dfdhIxYRIs2WutUmLLI
-        OaBFYStWX5Sw2V+ldU6ryG8=
-X-Google-Smtp-Source: APXvYqzdKAWb/JUQyy53PoBK0FQIE5SXqMB1mUB0c/btMZILS7aj1dytINBL/65AWmKerJ2Cdk5BYw==
-X-Received: by 2002:a05:6512:1c1:: with SMTP id f1mr1090408lfp.125.1558431055275;
-        Tue, 21 May 2019 02:30:55 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id n9sm1185066ljj.10.2019.05.21.02.30.54
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 21 May 2019 02:30:54 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.91)
-        (envelope-from <johan@kernel.org>)
-        id 1hT16g-0007Pe-4Y; Tue, 21 May 2019 11:30:50 +0200
-Date:   Tue, 21 May 2019 11:30:50 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] USB: serial: option: add Telit 0x1260 and 0x1261
- compositions
-Message-ID: <20190521093050.GP568@localhost>
-References: <1557934069-8389-1-git-send-email-dnlplm@gmail.com>
+        id S1727179AbfEUJmx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 05:42:53 -0400
+Received: from mail-eopbgr1410102.outbound.protection.outlook.com ([40.107.141.102]:5376
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726242AbfEUJmx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 05:42:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0F+i24whTvt0i1uQMCTNnBmxnKlQ2oUAJOUaurMOMgk=;
+ b=mnlJv2jEQdQbCuulkBpNOExfGL+EUPaCyVf/GLe3KSRqsD+juoj7Ywv+GaeA+lgmDkz9Uf83JE0uRuFvqYccJsgEGT0DYlZ5QR8/Lyc9XGFoLnS2QGfbhDAm7K86RhOIqwnDNL8aqVQxFGx/6WubFknRzXBksM5fFqET4P3SqKA=
+Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com (52.134.242.17) by
+ OSBPR01MB3701.jpnprd01.prod.outlook.com (20.178.96.209) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.17; Tue, 21 May 2019 09:42:48 +0000
+Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com
+ ([fe80::a146:39f0:5df9:11bc]) by OSBPR01MB2103.jpnprd01.prod.outlook.com
+ ([fe80::a146:39f0:5df9:11bc%7]) with mapi id 15.20.1900.020; Tue, 21 May 2019
+ 09:42:48 +0000
+From:   Biju Das <biju.das@bp.renesas.com>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v6 1/7] dt-bindings: usb: hd3ss3220 device tree binding
+ document
+Thread-Topic: [PATCH v6 1/7] dt-bindings: usb: hd3ss3220 device tree binding
+ document
+Thread-Index: AQHVCxgM+eh9qHNmG0u9jtRSG8piA6ZsWwAAgAkAz+A=
+Date:   Tue, 21 May 2019 09:42:47 +0000
+Message-ID: <OSBPR01MB21033FCDE1A5965435AC4841B8070@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+References: <1557922152-16449-1-git-send-email-biju.das@bp.renesas.com>
+ <1557922152-16449-2-git-send-email-biju.das@bp.renesas.com>
+ <c9b3ee90-9292-320c-4e22-8f989d829497@cogentembedded.com>
+In-Reply-To: <c9b3ee90-9292-320c-4e22-8f989d829497@cogentembedded.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=biju.das@bp.renesas.com; 
+x-originating-ip: [193.141.220.21]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 68f60856-5fde-4ccd-b5ce-08d6ddd0af51
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB3701;
+x-ms-traffictypediagnostic: OSBPR01MB3701:
+x-microsoft-antispam-prvs: <OSBPR01MB37018C1D1D2F2B3958B03CEDB8070@OSBPR01MB3701.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 0044C17179
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(39860400002)(376002)(366004)(136003)(346002)(199004)(51914003)(189003)(76116006)(54906003)(14454004)(4326008)(73956011)(110136005)(68736007)(8936002)(11346002)(55016002)(52536014)(66556008)(64756008)(478600001)(9686003)(66446008)(53936002)(5660300002)(25786009)(229853002)(76176011)(66476007)(7696005)(66946007)(66066001)(6116002)(44832011)(7416002)(3846002)(6506007)(7736002)(26005)(33656002)(53546011)(99286004)(74316002)(305945005)(186003)(476003)(86362001)(102836004)(2906002)(8676002)(446003)(6436002)(81166006)(71200400001)(71190400001)(486006)(5024004)(256004)(81156014)(316002)(6246003);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB3701;H:OSBPR01MB2103.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:0;MX:1;
+received-spf: None (protection.outlook.com: bp.renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: ktunc3c2uqyOT4pnQXAth5V525h7ZYIO7NMuQnToXW6M23oiu1BfLXH1V+CIK/Etdxh21syfXbEfZf19X8dYlPg+c+LtIm1mrRTJlwhUenjZ3IOI/fI5JSkdj7RA/Zbq+qqCAcjxhFpMpfSpUGuTSDvSUMhkMpoe5qpvJ0/U0yo6Fn3UzsO48uMIOz6PIBgKwNpkdBb50uVeji03Zv/6u+5omUXV9EMaAKnASrj0t9Fqdp+wwxPu6MffvV2Q0AiYABmqsM8GIh1qWUke06Kkp/qxOB0JSb5sHYBinDmYWDRnzyxhoI0NGWlLfXmn5g30FyVzt8xcTFT2JOT0+7iu5ykBDQY7w74JaOFXtE5WZKf9GOFV86nvaWHRKR5PiX/mZVAF5CNHqqUSOmJxi2N8bYJQFQB38IZX3Z8gP9nEbPg=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1557934069-8389-1-git-send-email-dnlplm@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68f60856-5fde-4ccd-b5ce-08d6ddd0af51
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2019 09:42:48.0389
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3701
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 15, 2019 at 05:27:49PM +0200, Daniele Palmas wrote:
-> Added support for Telit LE910Cx 0x1260 and 0x1261 compositions.
-> 
-> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-
-Applied, thanks.
-
-Johan
+SGkgU2VyZ2VpLA0KDQpUaGFua3MgZm9yIHRoZSBmZWVkYmFjay4NCg0KPiBTdWJqZWN0OiBSZTog
+W1BBVENIIHY2IDEvN10gZHQtYmluZGluZ3M6IHVzYjogaGQzc3MzMjIwIGRldmljZSB0cmVlIGJp
+bmRpbmcNCj4gZG9jdW1lbnQNCj4gDQo+IEhlbGxvIQ0KPiANCj4gT24gMDUvMTUvMjAxOSAwMzow
+OSBQTSwgQmlqdSBEYXMgd3JvdGU6DQo+IA0KPiA+IEFkZCBkZXZpY2UgdHJlZSBiaW5kaW5nIGRv
+Y3VtZW50IGZvciBUSSBIRDNTUzMyMjAgVHlwZS1DIERSUCBwb3J0DQo+ID4gY29udHJvbGxlciBk
+cml2ZXIuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBCaWp1IERhcyA8YmlqdS5kYXNAYnAucmVu
+ZXNhcy5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+
+DQo+ID4gLS0tDQo+ID4gVjUtLT5WNg0KPiA+ICAgKiBObyBjaGFuZ2UuDQo+ID4gVjQtLT5WNQ0K
+PiA+ICAgKiBObyBDaGFuZ2UuDQo+ID4gVjMtLT5WNA0KPiA+ICAgKiBObyBDaGFuZ2UuDQo+ID4g
+VjItLT5WMw0KPiA+ICAgKiBBZGRlZCBSb2IncyBSZXZpZXdlZCBieSB0YWcuDQo+ID4gVjEtLT5W
+Mg0KPiA+ICAgKiBBZGRlZCBjb25uZWN0b3Igbm9kZS4NCj4gPiAgICogdXBkYXRlZCB0aGUgZXhh
+bXBsZSB3aXRoIGNvbm5lY3RvciBub2RlLg0KPiA+IC0tLQ0KPiA+ICAuLi4vZGV2aWNldHJlZS9i
+aW5kaW5ncy91c2IvdGksaGQzc3MzMjIwLnR4dCAgICAgICB8IDM3DQo+ICsrKysrKysrKysrKysr
+KysrKysrKysNCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDM3IGluc2VydGlvbnMoKykNCj4gPiAgY3Jl
+YXRlIG1vZGUgMTAwNjQ0DQo+ID4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Vz
+Yi90aSxoZDNzczMyMjAudHh0DQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9k
+ZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi90aSxoZDNzczMyMjAudHh0DQo+ID4gYi9Eb2N1bWVudGF0
+aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3RpLGhkM3NzMzIyMC50eHQNCj4gPiBuZXcgZmls
+ZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAuLjdmNDE0MDANCj4gPiAtLS0gL2Rldi9u
+dWxsDQo+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi90aSxo
+ZDNzczMyMjAudHh0DQo+ID4gQEAgLTAsMCArMSwzNyBAQA0KPiA+ICtUSSBIRDNTUzMyMjAgVHlw
+ZUMgRFJQIFBvcnQgQ29udHJvbGxlci4NCj4gPiArDQo+ID4gK1JlcXVpcmVkIHByb3BlcnRpZXM6
+DQo+ID4gKyAtIGNvbXBhdGlibGU6IE11c3QgYmUgInRpLGhkM3NzMzIyMCIuDQo+ID4gKyAtIHJl
+ZzogSTJDIHNsYXZlIGFkZHJlc3MsIG11c3QgYmUgMHg0NyBvciAweDY3IGJhc2VkIG9uIEFERFIg
+cGluLg0KPiA+ICsgLSBpbnRlcnJ1cHRzOiA8YSBiPiB3aGVyZSBhIGlzIHRoZSBpbnRlcnJ1cHQg
+bnVtYmVyIGFuZCBiIHJlcHJlc2VudHMgYW4NCj4gPiArICAgZW5jb2Rpbmcgb2YgdGhlIHNlbnNl
+IGFuZCBsZXZlbCBpbmZvcm1hdGlvbiBmb3IgdGhlIGludGVycnVwdC4NCj4gDQo+ICAgIFRoaXMg
+ZGVwZW5kcyBvbiBhbiBpbnRlcnJ1cHQgY29udHJvbGxlciB1c2VkLiBJJ2QganVzdCBzYWlkICJh
+biBpbnRlcnJ1cHQNCj4gc3BlY2lmaWVyIiwgdy9vIGZ1cnRoZXIgZGV0YWlscy4NCg0KRmluZSAs
+IElmIGl0IGlzIG9rIGZvciBldmVyeW9uZS4gDQoNClJlZ2FyZHMsDQpCaWp1DQo+ID4gKw0KPiA+
+ICtSZXF1aXJlZCBzdWItbm9kZToNCj4gPiArIC0gY29ubmVjdG9yIDogVGhlICJ1c2ItYy1jb25u
+ZWN0b3IiIGF0dGFjaGVkIHRvIHRoZSBoZDNzczMyMjAgY2hpcC4gVGhlDQo+ID4gKyAgIGJpbmRp
+bmdzIG9mIHRoZSBjb25uZWN0b3Igbm9kZSBhcmUgc3BlY2lmaWVkIGluOg0KPiA+ICsNCj4gPiAr
+CURvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jb25uZWN0b3IvdXNiLWNvbm5lY3Rv
+ci50eHQNCj4gPiArDQo+IFsuLi5dDQo+IA0KPiBNQlIsIFNlcmdlaQ0K
