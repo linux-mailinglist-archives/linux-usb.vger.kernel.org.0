@@ -2,54 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F00DA24CAF
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 12:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BAE24CC1
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 12:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727733AbfEUK3A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 06:29:00 -0400
-Received: from verein.lst.de ([213.95.11.211]:59141 "EHLO newverein.lst.de"
+        id S1727554AbfEUKci (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 06:32:38 -0400
+Received: from verein.lst.de ([213.95.11.211]:59186 "EHLO newverein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726466AbfEUK26 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 May 2019 06:28:58 -0400
+        id S1726448AbfEUKch (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 06:32:37 -0400
 Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 7C5EB68AFE; Tue, 21 May 2019 12:28:35 +0200 (CEST)
-Date:   Tue, 21 May 2019 12:28:35 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     laurentiu.tudor@nxp.com, hch@lst.de, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, marex@denx.de, leoyang.li@nxp.com,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        noring@nocrew.org, JuergenUrban@gmx.de
-Subject: Re: [PATCH v4 1/3] USB: use genalloc for USB HCs with local memory
-Message-ID: <20190521102835.GA1973@lst.de>
-References: <20190516114721.27694-1-laurentiu.tudor@nxp.com> <20190516114721.27694-2-laurentiu.tudor@nxp.com> <20190521081657.GA10639@kroah.com>
+        id B230C68AFE; Tue, 21 May 2019 12:32:14 +0200 (CEST)
+Date:   Tue, 21 May 2019 12:32:14 +0200
+From:   "hch@lst.de" <hch@lst.de>
+To:     Fredrik Noring <noring@nocrew.org>
+Cc:     Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Robin Murphy <robin.murphy@arm.com>, "hch@lst.de" <hch@lst.de>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "marex@denx.de" <marex@denx.de>,
+        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>,
+        Leo Li <leoyang.li@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 0/3] prerequisites for device reserved local mem
+ rework
+Message-ID: <20190521103214.GB1973@lst.de>
+References: <9d34015d-c219-179b-3141-4b0de3530ac3@arm.com> <20190514182931.GA2559@sx9> <0e5f3b86-7a80-eec7-691b-34a123194208@nxp.com> <20190515162858.GB17162@sx9> <ed63c117-610c-ea49-f45e-727be220745f@nxp.com> <20190516151548.GB53952@sx9> <5fa97254-3038-6fe7-a7e7-a267262049c6@nxp.com> <20190517174159.GA32450@sx9> <3c8897e9-218e-3fff-1735-816ffd30e908@nxp.com> <20190520154156.GA3664@sx9>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190521081657.GA10639@kroah.com>
+In-Reply-To: <20190520154156.GA3664@sx9>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 21, 2019 at 10:16:57AM +0200, Greg KH wrote:
-> > +	if (hcd->driver->flags & HCD_LOCAL_MEM)
-> > +		return gen_pool_dma_alloc(hcd->localmem_pool, size, dma);
-> 
-> Does this patch now break things?  hcd->localmem_pool at this point in
-> time is NULL, so this call will fail.  There's no chance for any host
-> controller driver to actually set up this pool in this patch, so is
-> bisection broken?
-> 
-> I think you fix this up in later patches, right?
-> 
-> And if so, why do we even need HCD_LOCAL_MEM anymore?  Can't we just
-> test for the presence of hcd->localmem_pool in order to determine which
-> allocation method to use?
+On Mon, May 20, 2019 at 05:41:56PM +0200, Fredrik Noring wrote:
+> 2. A device address is supplied as phys_addr_t phys to gen_pool_add_virt().
+>    This seems to work in this particular DMA application, but there will be
+>    problems if someone does phys_to_virt() or suchlike. Can this be improved
+>    or clearly explained? gen_pool_virt_to_phys() searches in address ranges,
+>    for example, so it appears the implementation uses phys quite carefully.
 
-True.  And that also sound like a good bisectability strategy:
-
- - first add hcd->localmem_pool and test for it
- - convert drivers over to it
- - remove HCD_LOCAL_MEM
+Well, it is a physical address, but not one that has a kernel mapping.
+So phys_addr_t seems right here, but an additional comment explaining it
+is not in the kernel mapping never hurts.
