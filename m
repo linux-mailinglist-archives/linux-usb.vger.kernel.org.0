@@ -2,197 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B192493F
-	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 09:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F5E24999
+	for <lists+linux-usb@lfdr.de>; Tue, 21 May 2019 10:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726705AbfEUHpR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 03:45:17 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:19606 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726719AbfEUHpR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 03:45:17 -0400
-X-UUID: abed8824c125450b9678ab85644ecc39-20190521
-X-UUID: abed8824c125450b9678ab85644ecc39-20190521
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1337020285; Tue, 21 May 2019 15:44:55 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 21 May
- 2019 15:44:54 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 21 May 2019 15:44:53 +0800
-Message-ID: <1558424693.10179.374.camel@mhfsdcap03>
-Subject: Re: [PATCH v5 5/6] usb: roles: add USB Type-B GPIO connector driver
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        "Badhri Jagan Sridharan" <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 21 May 2019 15:44:53 +0800
-In-Reply-To: <20190520083151.GD1887@kuha.fi.intel.com>
-References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1557823643-8616-6-git-send-email-chunfeng.yun@mediatek.com>
-         <20190520083151.GD1887@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        id S1726242AbfEUIAC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 04:00:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58126 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726006AbfEUIAC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 May 2019 04:00:02 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58C292173C;
+        Tue, 21 May 2019 08:00:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558425601;
+        bh=TFwSkOxIndAaN2K59b4QOaMflwcLifnWjtAOfy4v02M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tvjY78tVwG1qYMv7nmPzcfXi0aXPxL8h8xXkTIWay8hGktjwxkS1kPEfKPcn71NLq
+         VoldWl9MvRf6EwpqMUymIKoLveEntuFuZ+MeDQuFogzQ+J2T7KvgMJIVgmXseLzmxr
+         7vP8zVBMU9+OIxUkh9nrBZyMTfK6xz0cU7Ej8OM8=
+Date:   Tue, 21 May 2019 09:59:59 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     linux-usb@vger.kernel.org, devel@driverdev.osuosl.org
+Subject: Re: TODO advice for octeon-usb?
+Message-ID: <20190521075959.GA24848@kroah.com>
+References: <20190520230532.GA3621@darkstar.musicnaut.iki.fi>
 MIME-Version: 1.0
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190520230532.GA3621@darkstar.musicnaut.iki.fi>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Tue, May 21, 2019 at 02:05:32AM +0300, Aaro Koskinen wrote:
+> Hi,
+> 
+> I'm looking for input what should be done next to get
+> drivers/staging/octeon-usb out of staging.
+> 
+> Thousands of checkpatch errors/warnings have been fixed (starting point
+> was <https://marc.info/?l=linux-driver-devel&m=137028876225266&w=2>),
+> also the size of the driver has shrunken considerably.
+> 
+> If there are still some other bigger issues with this driver, please
+> let me know.
 
-On Mon, 2019-05-20 at 11:31 +0300, Heikki Krogerus wrote:
-> On Tue, May 14, 2019 at 04:47:22PM +0800, Chunfeng Yun wrote:
-> > +static int usb_conn_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct device_node *node = dev->of_node;
-> > +	struct device_node *remote_node;
-> > +	struct usb_conn_info *info;
-> > +	int ret = 0;
-> > +
-> > +	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-> > +	if (!info)
-> > +		return -ENOMEM;
-> > +
-> > +	info->dev = dev;
-> > +	info->id_gpiod = devm_gpiod_get_optional(dev, "id", GPIOD_IN);
-> > +	if (IS_ERR(info->id_gpiod))
-> > +		return PTR_ERR(info->id_gpiod);
-> > +
-> > +	info->vbus_gpiod = devm_gpiod_get_optional(dev, "vbus", GPIOD_IN);
-> > +	if (IS_ERR(info->vbus_gpiod))
-> > +		return PTR_ERR(info->vbus_gpiod);
-> > +
-> > +	if (!info->id_gpiod && !info->vbus_gpiod) {
-> > +		dev_err(dev, "failed to get gpios\n");
-> > +		return -ENODEV;
-> > +	}
-> > +
-> > +	if (info->id_gpiod)
-> > +		ret = gpiod_set_debounce(info->id_gpiod, USB_GPIO_DEB_US);
-> > +	if (!ret && info->vbus_gpiod)
-> > +		ret = gpiod_set_debounce(info->vbus_gpiod, USB_GPIO_DEB_US);
-> > +	if (ret < 0)
-> > +		info->debounce_jiffies = msecs_to_jiffies(USB_GPIO_DEB_MS);
-> > +
-> > +	INIT_DELAYED_WORK(&info->dw_det, usb_conn_detect_cable);
-> > +
-> > +	info->vbus = devm_regulator_get(dev, "vbus");
-> > +	if (IS_ERR(info->vbus)) {
-> > +		dev_err(dev, "failed to get vbus\n");
-> > +		return PTR_ERR(info->vbus);
-> > +	}
-> > +
-> > +	remote_node = of_graph_get_remote_node(node, -1, 0);
-> 
-> This is really not ideal. In practice this code will only work if
-> there is only one endpoint described for this device, or if the first
-> endpoint is always the one we are looking for. There is no way to
-> guarantee that.
-Yes, it is.
-I'll modify it as case 2, see reply [v5, 4/6] in this series.
+Submit it as a patch that just adds the files to the drivers/usb/host/
+directory so we can review it on linux-usb@vger and if it gets accepted,
+I can then drop it from the staging directory, or just move it over if
+no changes are needed.
 
-> 
-> The code really has to walk through the entire graph, and identify the
-> remote endpoint it's looking for (and for that we have the boolean
-> device property).
-> 
-> > +	if (!remote_node) {
-> > +		dev_err(dev, "failed to get remote node\n");
-> > +		return -ENODEV;
-> > +	}
-> > +
-> > +	info->role_sw =
-> > +		fwnode_usb_role_switch_get(of_fwnode_handle(remote_node));
-> 
-> So fwnode_usb_role_switch_get() needs be the one that walks through
-> the graph, not the drivers. Otherwise every driver will do the same
-> exact steps (boilerplate). Here you need to be able to just pass the
-> node of this device, not the remote endpoint:
-> 
->         info->role_sw = fwnode_usb_role_switch_get(dev_fwnode(&client->dev));
-> 
-> But why do you need that function at all? Why wouldn't
-> usb_role_switch_get() work?
-> 
->         info->role_sw = usb_role_switch_get(&client->dev);
-> 
-see reply [v5, 4/6] in this series
+thanks,
 
-Thanks a lot.
-
-> > +	of_node_put(remote_node);
-> > +	if (IS_ERR(info->role_sw)) {
-> > +		dev_err(dev, "failed to get role switch\n");
-> > +		return PTR_ERR(info->role_sw);
-> > +	}
-> > +
-> > +	if (info->id_gpiod) {
-> > +		info->id_irq = gpiod_to_irq(info->id_gpiod);
-> > +		if (info->id_irq < 0) {
-> > +			dev_err(dev, "failed to get ID IRQ\n");
-> > +			ret = info->id_irq;
-> > +			goto put_role_sw;
-> > +		}
-> > +
-> > +		ret = devm_request_threaded_irq(dev, info->id_irq, NULL,
-> > +						usb_conn_isr, USB_CONN_IRQF,
-> > +						pdev->name, info);
-> > +		if (ret < 0) {
-> > +			dev_err(dev, "failed to request ID IRQ\n");
-> > +			goto put_role_sw;
-> > +		}
-> > +	}
-> > +
-> > +	if (info->vbus_gpiod) {
-> > +		info->vbus_irq = gpiod_to_irq(info->vbus_gpiod);
-> > +		if (info->vbus_irq < 0) {
-> > +			dev_err(dev, "failed to get VBUS IRQ\n");
-> > +			ret = info->vbus_irq;
-> > +			goto put_role_sw;
-> > +		}
-> > +
-> > +		ret = devm_request_threaded_irq(dev, info->vbus_irq, NULL,
-> > +						usb_conn_isr, USB_CONN_IRQF,
-> > +						pdev->name, info);
-> > +		if (ret < 0) {
-> > +			dev_err(dev, "failed to request VBUS IRQ\n");
-> > +			goto put_role_sw;
-> > +		}
-> > +	}
-> > +
-> > +	platform_set_drvdata(pdev, info);
-> > +
-> > +	/* Perform initial detection */
-> > +	usb_conn_queue_dwork(info, 0);
-> > +
-> > +	return 0;
-> > +
-> > +put_role_sw:
-> > +	usb_role_switch_put(info->role_sw);
-> > +	return ret;
-> > +}
-> 
-> thanks,
-> 
-
-
+greg k-h
