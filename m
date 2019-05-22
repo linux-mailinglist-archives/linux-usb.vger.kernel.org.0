@@ -2,130 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 712E326279
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 12:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3991C26287
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 12:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729609AbfEVKwT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 06:52:19 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:56607 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729379AbfEVKwS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 06:52:18 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id D76382498A;
-        Wed, 22 May 2019 06:52:16 -0400 (EDT)
-Received: from imap6 ([10.202.2.56])
-  by compute6.internal (MEProxy); Wed, 22 May 2019 06:52:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=PPq/8jE/qjEIx/IonXyXM0rB0PUsfcD
-        ROA34oMYTMe0=; b=qRvwpq3SgLOT5hJGaFmf62oSiTnIPsOhTAmSYsOdkmfun+7
-        TqL/2c/aPtCEr4DwES9rvsN5Xgaqc5BaROPFjoGoLLdxO3dFibqfOtCz73OSVlIV
-        oV4wsBEhyHNzpFNIygX+3aW0BGIFxuH9djrENiKA1j637jmi2BSF5FfJd5w1WGFj
-        AdFPGnOzqCDT95WrCFbKYM2SouTjzR5zJJcABq+eYU8J06WDUd3CJpROddiVXBNJ
-        XjnrQLY6s44KeEMArc4WX0HwTBI79yHT29wL2jImaxhtf9uZyX9Svorq0b8QWvab
-        OWqcAIyr29r703Ho1eODgZ6KKkxjuwXHtvU6jSA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=PPq/8j
-        E/qjEIx/IonXyXM0rB0PUsfcDROA34oMYTMe0=; b=NCGqiseGw7/YGpSX8NOtj5
-        6x9KtsxH3S5SFtzaIwvExII7nlISS+OXhhsgPU7YpYijF/opA+gK3cQ8I1RapbfP
-        t/alr7FTTUrblgFjPiyDdzfyBa++mWeR1oD5u3cc2CZwVNtr9iK9vRsFUJ1Pd9bp
-        R1Nndymna8Xof0kVskJhCksXBR7hPlvG/5QxczhCdaE5rCCXambi/HxbXKW/nZEU
-        NHCilfcB2pKSDrSHpaQvhCi9R+YBzr+MtJg6uH0bzbR1XQxYYayKMBUSrSzAVod6
-        3ORwkSBZAneSLSyPja+gly+/PDuzvDd0C51hue8yKOQM6SaqL3WrsQDqeGc8eH8Q
-        ==
-X-ME-Sender: <xms:4CnlXBDBDvxaayndbouHCzJNdKrqNEx2uEX9KmZuXgzWqpDJX1GzOA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrudduvddgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreerjeenucfhrhhomhepfdetuggr
-    mhcuifgruhhsmhgrnhhnfdcuoegrghgruhhsmhgrnhhnsehfrghsthhmrghilhdrtghomh
-    eqnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfrrghrrghmpehmrghilhhfrhho
-    mheprghgrghushhmrghnnhesfhgrshhtmhgrihhlrdgtohhmnecuvehluhhsthgvrhfuih
-    iivgeptd
-X-ME-Proxy: <xmx:4CnlXD-iWcINzWnfb0Jcegxybr-sCl4HmkgquQGnsukFNC_LPA3yBw>
-    <xmx:4CnlXH7DO1gJ2v8HpvPEdCi5DE-uwYioMNc20vNO9Lv9_iYuM2gMwQ>
-    <xmx:4CnlXJEc4qGzcmLeGtx0x5hxyKdaACGPovacbMyQmfnK3gTdlFCw3w>
-    <xmx:4CnlXBzjqtFeKffA-Pvf7g7MbpwQnX9S9tndmxqr8HluQeKuj_8XFw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5B5E61400A0; Wed, 22 May 2019 06:52:16 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.1.6-550-g29afa21-fmstable-20190520v1
-Mime-Version: 1.0
-Message-Id: <6017fa4a-5b29-4c54-ada7-274dcefbaac7@www.fastmail.com>
-In-Reply-To: <20190522055135.GB13702@kroah.com>
-References: <1b819641-609b-4e0e-86a3-afe81eb73efc@www.fastmail.com>
- <20190522055135.GB13702@kroah.com>
-Date:   Wed, 22 May 2019 05:54:20 -0500
-From:   "Adam Gausmann" <agausmann@fastmail.com>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: =?UTF-8?Q?Re:_Raven_Ridge_xhci=5Fhcd_not_working:_"Refused_to_change_pow?=
- =?UTF-8?Q?er_state,_currently_in_D3"?=
-Content-Type: text/plain
+        id S1729265AbfEVKyk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 22 May 2019 06:54:40 -0400
+Received: from unicorn.mansr.com ([81.2.72.234]:44464 "EHLO unicorn.mansr.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728925AbfEVKyk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 May 2019 06:54:40 -0400
+Received: by unicorn.mansr.com (Postfix, from userid 51770)
+        id 4946C17102; Wed, 22 May 2019 11:54:38 +0100 (BST)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 0/5] Exynos EHCI/OHCI: resolve conflict with the generic USB device bindings
+References: <CGME20190521120015eucas1p1da2f3f32d6b8af8cb550463686fd4e12@eucas1p1.samsung.com>
+        <20190521115849.9882-1-m.szyprowski@samsung.com>
+        <yw1xk1ekszo9.fsf@mansr.com>
+        <ff3f4b25-cbc0-4195-79b2-c00633f0c79c@samsung.com>
+Date:   Wed, 22 May 2019 11:54:38 +0100
+In-Reply-To: <ff3f4b25-cbc0-4195-79b2-c00633f0c79c@samsung.com> (Marek
+        Szyprowski's message of "Wed, 22 May 2019 08:01:28 +0200")
+Message-ID: <yw1x7eaiu5ch.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 22, 2019, at 00:51, Greg KH wrote:
-> On Tue, May 21, 2019 at 04:49:14PM -0500, Adam Gausmann wrote:
-> > On my ThinkPad E585, with a Ryzen 5 2500U, my XHCI driver crashes when plugging in a device after switching power states, or during switching itself.
-> > 
-> > Steps to Reproduce: 
-> > 
-> > - Unplug the AC power, or start the computer with AC unplugged. If the computer has AC power at boot, it will work properly, but plugging it in after running unplugged will not.
-> > 
-> > The xhci_hcd and xhci_pci modules remain loaded after the error. Reloading them appears to reset it, and the scenarios above still apply as if the computer was just started.
-> > 
-> > These tests were performed with laptop_mode disabled; enabling it alters the behavior. I will test that more later.
-> > 
-> > Results:
-> > 
-> > The USB device fails to register, and `lsusb` remains unchanged. No other errors will appear after the first one occurs.
-> > One of two error messages will appear in kernel logs:
-> > 
-> > [   51.276650] xhci_hcd 0000:05:00.4: Refused to change power state, currently in D3
-> > [   51.276658] xhci_hcd 0000:05:00.3: Refused to change power state, currently in D3
-> > [   51.277051] xhci_hcd 0000:05:00.3: enabling device (0000 -> 0002)
-> > [   51.277074] xhci_hcd 0000:05:00.3: WARN: xHC restore state timeout
-> > [   51.277077] xhci_hcd 0000:05:00.3: PCI post-resume error -110!
-> > [   51.279316] xhci_hcd 0000:05:00.3: HC died; cleaning up
-> > [   51.288669] xhci_hcd 0000:05:00.4: enabling device (0000 -> 0002)
-> > 
-> > [ 5258.438021] xhci_hcd 0000:05:00.3: Refused to change power state, currently in D3
-> > [ 5258.438328] xhci_hcd 0000:05:00.4: Refused to change power state, currently in D3
-> > [ 5258.450026] xhci_hcd 0000:05:00.3: enabling device (0000 -> 0002)
-> > [ 5258.450511] xhci_hcd 0000:05:00.4: enabling device (0000 -> 0002)
-> > [ 5266.112941] xhci_hcd 0000:05:00.3: Error while assigning device slot ID
-> > [ 5266.112952] xhci_hcd 0000:05:00.3: Max number of devices this xHCI host supports is 64.
-> > [ 5266.112963] usb usb1-port2: couldn't allocate usb_device
-> > [ 5280.960968] xhci_hcd 0000:05:00.3: Error while assigning device slot ID
-> > [ 5280.960979] xhci_hcd 0000:05:00.3: Max number of devices this xHCI host supports is 64.
-> > [ 5280.960993] usb usb1-port2: couldn't allocate usb_device
-> > 
-> > Expected results: 
-> > 
-> > Device connects, powers on, and registers properly, showing up in `lsusb`.
-> > 
-> > Build: 
-> > 
-> > Linux 4.19.44_1 #1 SMP PREEMPT Wed Mar 27 20:41:38 UTC 2019 x86_64 GNU/Linux, with firmware 20181218
-> 
-> 4.19 is pretty old for xhci and normal desktop systems.  Can you please
-> try 5.1 and see if that resolves the issue or not?
-> 
-> thanks,
-> 
-> greg k-h
+Marek Szyprowski <m.szyprowski@samsung.com> writes:
+
+> Hi Måns
 >
+> On 2019-05-21 15:30, Måns Rullgård wrote:
+>> Marek Szyprowski <m.szyprowski@samsung.com> writes:
+>>> Dear All,
+>>>
+>>> Commit 69bec7259853 ("USB: core: let USB device know device node") added
+>>> support for attaching devicetree node for USB devices. Those nodes are
+>>> children of their USB host controller. However Exynos EHCI and OHCI
+>>> driver bindings already define child-nodes for each physical root hub
+>>> port and assigns respective PHY controller and parameters to them. This
+>>> leads to the conflict. A workaround for it has been merged as commit
+>>> 01d4071486fe ("usb: exynos: add workaround for the USB device bindings
+>>> conflict"), but it disabled support for USB device binding for Exynos
+>>> EHCI/OHCI controllers.
+>>>
+>>> This patchset tries to resolve this binding conflict by changing Exynos
+>>> EHCI/OHCI bindings: PHYs are moved from the sub-nodes to a standard array
+>>> under the 'phys' property. Such solution has been suggested by Måns
+>>> Rullgård in the following thread: https://lkml.org/lkml/2019/5/13/228
+>>>
+>>> To keep everything working during the transitional time, the changes has
+>>> been split into 2 steps. First step (patches 1-3) need to be merged before
+>>> the second one (patches 4-5). Patches from each step can be merged to
+>>> respective trees without any dependencies - the only requirement is that
+>>> second step has to be merged after merging all patches from the first one.
+>>>
+>>> This patchset has been tested on various Exynos4 boards with different
+>>> USB host controller configurations (Odroids family: X2, U3, XU3).
+>>>
+>>> Best regards
+>>> Marek Szyprowski
+>>> Samsung R&D Institute Poland
+>>>
+>>> Marek Szyprowski (5):
+>>>    dt-bindings: switch Exynos EHCI/OHCI bindings to use array of generic
+>>>      PHYs
+>>>    ARM: dts: exynos: Add array of generic PHYs to EHCI/OHCI devices
+>>>    usb: exynos: add support for getting PHYs from the standard dt array
+>>>    ARM: dts: exynos: Remove obsolete port sub-nodes from EHCI/OHCI
+>>>      devices
+>>>    usb: exynos: Remove support for legacy PHY bindings
+>> You could retain compatibility with old devicetrees (which may be
+>> useful) by using the "phys" property if it exists and falling back
+>> on the old method if it doesn't.  Then you would get this sequence
+>> of changes:
+>>
+>> 1. Update binding definition.
+>> 2. Support new binding in driver, with fallback to old.
+>> 3. Switch dts files to new binding.
+>
+> This is exactly what I did in this patchset. Until Patch #5 is applied, 
+> Exynos EHCI/OHCI drivers supports both ways of getting PHYs and is fully 
+> compatible with existing DTBs. This last patch should be applied at 
+> least one release later that the first 3 patches to keep everything 
+> working during the -rcX time.
 
-Hi Greg, thanks for your feedback.
+I'm suggesting you keep the fallback in the driver.  It does no harm,
+and it's contained in one place.
 
-I've just tested this on 5.1.3_1 with the same results as before. I should also note that I am using the kernel and firmware as packaged by Void Linux, and these appear to be the latest available from them.  Should I try the latest firmware release from git.kernel.org as well?
+On the dts side, you're adding the new phys property without removing
+the old-style nodes at first.  If you put the driver change first, the
+dts could be switched to the new style in one patch without a confusing
+hybrid ever existing.
+
+> Compatibility with so called old DTBs is not so important, because there 
+> are no boards with Exynos4 and Exynos5 SoCs, which would not update DTB 
+> together with the kernel zImage. There have been already some 
+> significant compatibility breaks related to those SoCs during last years.
+
+You can't possibly know what's out there.  Besides, isn't the general
+policy to not break compatibility without a very good reason?
 
 -- 
-  Adam Gausmann
-  agausmann@fastmail.com
+Måns Rullgård
