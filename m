@@ -2,37 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AC526B22
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 21:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4031C26F1B
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 21:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731254AbfEVTYU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 15:24:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45416 "EHLO mail.kernel.org"
+        id S1731669AbfEVTZi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 15:25:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46980 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731235AbfEVTYT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 May 2019 15:24:19 -0400
+        id S1731660AbfEVTZh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 May 2019 15:25:37 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 174F7217D4;
-        Wed, 22 May 2019 19:24:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 925B221841;
+        Wed, 22 May 2019 19:25:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553058;
-        bh=RJ28cqhq/k3wNrvv147TrJssxgRUEQ/VAxMwIEUK2v4=;
+        s=default; t=1558553137;
+        bh=dwcs9Y0vxroOP9WzRELD7LmuEjDjG77KIt901BZw2uw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kQutsjQd4KndI4tgJRohCZxRMzeiR7noFcSaxfWVW9DLmQHPLP8rIKTgI/jr9M9EY
-         bG+dIU2WN0baoH1NJ4hS9P90seaWawVJ3IRpm3L9CKY2OGdZQDS5LcAg9kFtK1Kmk3
-         Atp5wi28AnEXkLB8QttpAQDmVQ0RR/fLHa4oIfIE=
+        b=zsqoQar/VWWl6bh98cjSnZVYnkOQ59XYo6x89OqaOO851JMjIX8mw7PK29j3ar1jo
+         PUYBxr0c3M1FreeBSO5vNrfrsbN6eQ3NJn1xlYnmBlzaUKmCMJd0TYgZ1Z9BdQazrg
+         ToqnBkc78zrjo2bbGEskluxkO/Srl5LbviqirjXg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Fei Yang <fei.yang@intel.com>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 026/317] usb: gadget: f_fs: don't free buffer prematurely
-Date:   Wed, 22 May 2019 15:18:47 -0400
-Message-Id: <20190522192338.23715-26-sashal@kernel.org>
+Cc:     Johan Hovold <johan@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.0 067/317] USB: serial: fix initial-termios handling
+Date:   Wed, 22 May 2019 15:19:28 -0400
+Message-Id: <20190522192338.23715-67-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
 References: <20190522192338.23715-1-sashal@kernel.org>
@@ -45,83 +42,75 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Fei Yang <fei.yang@intel.com>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit 73103c7f958b99561555c3bd1bc1a0809e0b7d61 ]
+[ Upstream commit 579bebe5dd522580019e7b10b07daaf500f9fb1e ]
 
-The following kernel panic happens due to the io_data buffer gets deallocated
-before the async io is completed. Add a check for the case where io_data buffer
-should be deallocated by ffs_user_copy_worker.
+The USB-serial driver init_termios callback is used to override the
+default initial terminal settings provided by USB-serial core.
 
-[   41.663334] BUG: unable to handle kernel NULL pointer dereference at 0000000000000048
-[   41.672099] #PF error: [normal kernel read fault]
-[   41.677356] PGD 20c974067 P4D 20c974067 PUD 20c973067 PMD 0
-[   41.683687] Oops: 0000 [#1] PREEMPT SMP
-[   41.687976] CPU: 1 PID: 7 Comm: kworker/u8:0 Tainted: G     U            5.0.0-quilt-2e5dc0ac-00790-gd8c79f2-dirty #2
-[   41.705309] Workqueue: adb ffs_user_copy_worker
-[   41.705316] RIP: 0010:__vunmap+0x2a/0xc0
-[   41.705318] Code: 0f 1f 44 00 00 48 85 ff 0f 84 87 00 00 00 55 f7 c7 ff 0f 00 00 48 89 e5 41 55 41 89 f5 41 54 53 48 89 fb 75 71 e8 56 d7 ff ff <4c> 8b 60 48 4d 85 e4 74 76 48 89 df e8 25 ff ff ff 45 85 ed 74 46
-[   41.705320] RSP: 0018:ffffbc3a40053df0 EFLAGS: 00010286
-[   41.705322] RAX: 0000000000000000 RBX: ffffbc3a406f1000 RCX: 0000000000000000
-[   41.705323] RDX: 0000000000000001 RSI: 0000000000000001 RDI: 00000000ffffffff
-[   41.705324] RBP: ffffbc3a40053e08 R08: 000000000001fb79 R09: 0000000000000037
-[   41.705325] R10: ffffbc3a40053b68 R11: ffffbc3a40053cad R12: fffffffffffffff2
-[   41.705326] R13: 0000000000000001 R14: 0000000000000000 R15: ffffffffffffffff
-[   41.705328] FS:  0000000000000000(0000) GS:ffff9e2977a80000(0000) knlGS:0000000000000000
-[   41.705329] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   41.705330] CR2: 0000000000000048 CR3: 000000020c994000 CR4: 00000000003406e0
-[   41.705331] Call Trace:
-[   41.705338]  vfree+0x50/0xb0
-[   41.705341]  ffs_user_copy_worker+0xe9/0x1c0
-[   41.705344]  process_one_work+0x19f/0x3e0
-[   41.705348]  worker_thread+0x3f/0x3b0
-[   41.829766]  kthread+0x12b/0x150
-[   41.833371]  ? process_one_work+0x3e0/0x3e0
-[   41.838045]  ? kthread_create_worker_on_cpu+0x70/0x70
-[   41.843695]  ret_from_fork+0x3a/0x50
-[   41.847689] Modules linked in: hci_uart bluetooth ecdh_generic rfkill_gpio dwc3_pci dwc3 snd_usb_audio mei_me tpm_crb snd_usbmidi_lib xhci_pci xhci_hcd mei tpm snd_hwdep cfg80211 snd_soc_skl snd_soc_skl_ipc snd_soc_sst_ipc snd_soc_sst_dsp snd_hda_ext_core snd_hda_core videobuf2_dma_sg crlmodule
-[   41.876880] CR2: 0000000000000048
-[   41.880584] ---[ end trace 2bc4addff0f2e673 ]---
-[   41.891346] RIP: 0010:__vunmap+0x2a/0xc0
-[   41.895734] Code: 0f 1f 44 00 00 48 85 ff 0f 84 87 00 00 00 55 f7 c7 ff 0f 00 00 48 89 e5 41 55 41 89 f5 41 54 53 48 89 fb 75 71 e8 56 d7 ff ff <4c> 8b 60 48 4d 85 e4 74 76 48 89 df e8 25 ff ff ff 45 85 ed 74 46
-[   41.916740] RSP: 0018:ffffbc3a40053df0 EFLAGS: 00010286
-[   41.922583] RAX: 0000000000000000 RBX: ffffbc3a406f1000 RCX: 0000000000000000
-[   41.930563] RDX: 0000000000000001 RSI: 0000000000000001 RDI: 00000000ffffffff
-[   41.938540] RBP: ffffbc3a40053e08 R08: 000000000001fb79 R09: 0000000000000037
-[   41.946520] R10: ffffbc3a40053b68 R11: ffffbc3a40053cad R12: fffffffffffffff2
-[   41.954502] R13: 0000000000000001 R14: 0000000000000000 R15: ffffffffffffffff
-[   41.962482] FS:  0000000000000000(0000) GS:ffff9e2977a80000(0000) knlGS:0000000000000000
-[   41.971536] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   41.977960] CR2: 0000000000000048 CR3: 000000020c994000 CR4: 00000000003406e0
-[   41.985930] Kernel panic - not syncing: Fatal exception
-[   41.991817] Kernel Offset: 0x16000000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-[   42.009525] Rebooting in 10 seconds..
-[   52.014376] ACPI MEMORY or I/O RESET_REG.
+After a bug was fixed in the original implementation introduced by
+commit fe1ae7fdd2ee ("tty: USB serial termios bits"), the init_termios
+callback was no longer called just once on first use as intended but
+rather on every (first) open.
 
-Fixes: 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather buffers")
-Signed-off-by: Fei Yang <fei.yang@intel.com>
-Reviewed-by: Manu Gautam <mgautam@codeaurora.org>
-Tested-by: John Stultz <john.stultz@linaro.org>
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+This specifically meant that the terminal settings saved on (final)
+close were ignored when reopening a port for drivers overriding the
+initial settings.
+
+Also update the outdated function header referring to the creation of
+termios objects.
+
+Fixes: 7e29bb4b779f ("usb-serial: fix termios initialization logic")
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/f_fs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/serial/usb-serial.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 0f8d16de7a37f..768230795bb2a 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1133,7 +1133,8 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
- error_mutex:
- 	mutex_unlock(&epfile->mutex);
- error:
--	ffs_free_buffer(io_data);
-+	if (ret != -EIOCBQUEUED) /* don't free if there is iocb queued */
-+		ffs_free_buffer(io_data);
- 	return ret;
- }
+diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
+index 7e89efbf2c284..676c296103a2f 100644
+--- a/drivers/usb/serial/usb-serial.c
++++ b/drivers/usb/serial/usb-serial.c
+@@ -164,9 +164,9 @@ void usb_serial_put(struct usb_serial *serial)
+  * @driver: the driver (USB in our case)
+  * @tty: the tty being created
+  *
+- * Create the termios objects for this tty.  We use the default
++ * Initialise the termios structure for this tty.  We use the default
+  * USB serial settings but permit them to be overridden by
+- * serial->type->init_termios.
++ * serial->type->init_termios on first open.
+  *
+  * This is the first place a new tty gets used.  Hence this is where we
+  * acquire references to the usb_serial structure and the driver module,
+@@ -178,6 +178,7 @@ static int serial_install(struct tty_driver *driver, struct tty_struct *tty)
+ 	int idx = tty->index;
+ 	struct usb_serial *serial;
+ 	struct usb_serial_port *port;
++	bool init_termios;
+ 	int retval = -ENODEV;
  
+ 	port = usb_serial_port_get_by_minor(idx);
+@@ -192,14 +193,16 @@ static int serial_install(struct tty_driver *driver, struct tty_struct *tty)
+ 	if (retval)
+ 		goto error_get_interface;
+ 
++	init_termios = (driver->termios[idx] == NULL);
++
+ 	retval = tty_standard_install(driver, tty);
+ 	if (retval)
+ 		goto error_init_termios;
+ 
+ 	mutex_unlock(&serial->disc_mutex);
+ 
+-	/* allow the driver to update the settings */
+-	if (serial->type->init_termios)
++	/* allow the driver to update the initial settings */
++	if (init_termios && serial->type->init_termios)
+ 		serial->type->init_termios(tty);
+ 
+ 	tty->driver_data = port;
 -- 
 2.20.1
 
