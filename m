@@ -2,207 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C974826087
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 11:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6631A2622D
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 12:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728802AbfEVJar (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 05:30:47 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:15374 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728536AbfEVJar (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 05:30:47 -0400
-X-UUID: 6572bcb62c544fa1ac84fa752fc1c9c8-20190522
-X-UUID: 6572bcb62c544fa1ac84fa752fc1c9c8-20190522
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 272006990; Wed, 22 May 2019 17:30:39 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 22 May
- 2019 17:30:37 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 22 May 2019 17:30:36 +0800
-Message-ID: <1558517436.10179.388.camel@mhfsdcap03>
-Subject: RE: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
- node
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Biju Das <biju.das@bp.renesas.com>
-CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        id S1728693AbfEVKpr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 06:45:47 -0400
+Received: from mail-eopbgr40068.outbound.protection.outlook.com ([40.107.4.68]:62528
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727464AbfEVKpr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 May 2019 06:45:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gLc/HeO2V1FK+dmbc9RMmsuQNwyYjAXzWs6MkksZ2Uc=;
+ b=L1RS/QPTJQat+vV7lZ4BiFLbYqAvhkDoQJ524RNGv5tzWF036m4J+gH3frKhS4g7QpMqSEoZMqdQo1IJUuPhMfs8ho8iS6FQjWX44pa+PKHJRz6KgDTJm5xyo7807p3bDlKQUkw1qa5uxBw+z1AsesxTzX0Bx204U1Kq9nBn8fs=
+Received: from VI1PR04MB5134.eurprd04.prod.outlook.com (20.177.50.159) by
+ VI1PR04MB4895.eurprd04.prod.outlook.com (20.177.49.156) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.17; Wed, 22 May 2019 10:45:36 +0000
+Received: from VI1PR04MB5134.eurprd04.prod.outlook.com
+ ([fe80::8d0e:de86:9b49:b40]) by VI1PR04MB5134.eurprd04.prod.outlook.com
+ ([fe80::8d0e:de86:9b49:b40%7]) with mapi id 15.20.1900.020; Wed, 22 May 2019
+ 10:45:36 +0000
+From:   Laurentiu Tudor <laurentiu.tudor@nxp.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "hch@lst.de" <hch@lst.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 22 May 2019 17:30:36 +0800
-In-Reply-To: <OSBPR01MB21032206146152983C8F4E8EB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1557823643-8616-5-git-send-email-chunfeng.yun@mediatek.com>
-         <20190517103736.GA1490@kuha.fi.intel.com>
-         <20190517130511.GA1887@kuha.fi.intel.com>
-         <1558319951.10179.352.camel@mhfsdcap03>
-         <20190520080359.GC1887@kuha.fi.intel.com>
-         <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-         <20190520083601.GE1887@kuha.fi.intel.com>
-         <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-         <20190521095839.GI1887@kuha.fi.intel.com>
-         <OSBPR01MB21032206146152983C8F4E8EB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        "marex@denx.de" <marex@denx.de>, Leo Li <leoyang.li@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "noring@nocrew.org" <noring@nocrew.org>,
+        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>
+Subject: Re: [PATCH v5 2/5] USB: use genalloc for USB HCs with local memory
+Thread-Topic: [PATCH v5 2/5] USB: use genalloc for USB HCs with local memory
+Thread-Index: AQHVD96XE7hyjPzMhU2tA8mX94cqtKZ10zeAgAEkBIA=
+Date:   Wed, 22 May 2019 10:45:35 +0000
+Message-ID: <cb0612c3-4429-7ac9-e885-64407f8a406b@nxp.com>
+References: <Pine.LNX.4.44L0.1905211309270.1634-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1905211309270.1634-100000@iolanthe.rowland.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=laurentiu.tudor@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 29a75ad3-713f-4f45-c954-08d6dea29f68
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4895;
+x-ms-traffictypediagnostic: VI1PR04MB4895:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <VI1PR04MB4895A273513FF6BA216FE203EC000@VI1PR04MB4895.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0045236D47
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(189003)(199004)(8936002)(256004)(81156014)(81166006)(54906003)(486006)(8676002)(14444005)(31686004)(11346002)(966005)(446003)(14454004)(68736007)(71200400001)(71190400001)(66946007)(66476007)(73956011)(4326008)(76116006)(66446008)(64756008)(66556008)(229853002)(476003)(25786009)(5660300002)(6116002)(2616005)(86362001)(6486002)(45080400002)(498600001)(6506007)(6436002)(66066001)(53546011)(31696002)(53936002)(76176011)(7736002)(44832011)(26005)(99286004)(36756003)(186003)(6512007)(305945005)(2906002)(102836004)(6306002)(2171002)(6916009)(6246003)(3846002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4895;H:VI1PR04MB5134.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: QvPwOB5FJvC/Im4Eyj3G2UB7J8f4NR1RmlB6CA8kQPBUFroG2N8iv1OmiE2DKayMy2SEgsfPhyP+movg3GYezzIa7HJfdeaThJMwQ1YYzzRWOhmwt8xTUjx4ECzkE4ZPX4q33bRCxwAdW5pzUy4FAAmMBO/59mBu4MVho8HXZGxy29whLxZ2OZlz8RYvqf65+1F8NoTnmYY+CUmMhKjiJtYljRXacMNyZbCpJclVEpVhPI8ix1hNhuzTYIxoVX0S889NJp2AiX4jU5ZvUnsGsYHwDmfMiMaK+aEi5iTgMPli+jgCySEQE0KfDBZrfaLDc8TLs9KJJXls07KDqCKz7ACsrpCeXNIA9q+5rdOWt0iVx3jREZt4bXJ/iNO4+1mfLW5mEKMzhSX50QRq6ET5YqGt4GUY/6+0rJzbz2nZIaw=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <489EE7882392F046AE8D9C8A45104BA8@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MTK:  N
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29a75ad3-713f-4f45-c954-08d6dea29f68
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2019 10:45:35.8637
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4895
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Biju,
-On Wed, 2019-05-22 at 08:05 +0000, Biju Das wrote:
-> Hi Heikki,
-> 
-> Thanks for the feedback.
-> 
-> > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
-> > node
-> > 
-> > On Mon, May 20, 2019 at 09:45:46AM +0000, Biju Das wrote:
-> > >
-> > >
-> > > Hi Heikki,
-> > >
-> > > Thanks for the feedback.
-> > >
-> > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
-> > > > usb_role_switch by node
-> > > >
-> > > > On Mon, May 20, 2019 at 08:06:41AM +0000, Biju Das wrote:
-> > > > > Hi Heikki,
-> > > > >
-> > > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
-> > > > > > usb_role_switch by node
-> > > > > >
-> > > > > > On Mon, May 20, 2019 at 10:39:11AM +0800, Chunfeng Yun wrote:
-> > > > > > > Hi,
-> > > > > > > On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
-> > > > > > > > Hi,
-> > > > > > > >
-> > > > > > > > On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki Krogerus wrote:
-> > > > > > > > > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng Yun
-> > wrote:
-> > > > > > > > > > Add fwnode_usb_role_switch_get() to make easier to get
-> > > > > > > > > > usb_role_switch by fwnode which register it.
-> > > > > > > > > > It's useful when there is not device_connection
-> > > > > > > > > > registered between two drivers and only knows the fwnode
-> > > > > > > > > > which register usb_role_switch.
-> > > > > > > > > >
-> > > > > > > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > > > > > > > Tested-by: Biju Das <biju.das@bp.renesas.com>
-> > > > > > > > >
-> > > > > > > > > Acked-by: Heikki Krogerus
-> > > > > > > > > <heikki.krogerus@linux.intel.com>
-> > > > > > > >
-> > > > > > > > Hold on. I just noticed Rob's comment on patch 2/6, where he
-> > > > > > > > points out that you don't need to use device graph since the
-> > > > > > > > controller is the parent of the connector. Doesn't that mean
-> > > > > > > > you don't really need this API?
-> > > > > > > No, I still need it.
-> > > > > > > The change is about the way how to get fwnode; when use device
-> > > > > > > graph, get fwnode by of_graph_get_remote_node(); but now will
-> > > > > > > get fwnode by of_get_parent();
-> > > > > >
-> > > > > > OK, I get that, but I'm still not convinced about if something
-> > > > > > like this function is needed at all. I also have concerns
-> > > > > > regarding how you are using the function. I'll explain in
-> > > > > > comment to the patch 5/6 in this
-> > > > series...
-> > > > >
-> > > > > FYI, Currently  I am also using this api in my patch series.
-> > > > > https://patchwork.kernel.org/patch/10944637/
-> > > >
-> > > > Yes, and I have the same question for you I jusb asked in comment I
-> > > > added to the patch 5/6 of this series. Why isn't usb_role_switch_get()
-> > enough?
-> > >
-> > > Currently no issue. It will work with this api as well, since the port node is
-> > part of controller node.
-> > > For eg:-
-> > > https://patchwork.kernel.org/patch/10944627/
-> > >
-> > > However if any one adds port node inside the connector node, then this
-> > api may won't work as expected.
-> > > Currently I get below error
-> > >
-> > > [    2.299703] OF: graph: no port node found in
-> > /soc/i2c@e6500000/hd3ss3220@47
-> > 
-> > We need to understand why is that happening?
-> > 
-> 
-> Form the stack trace  the parent node is "parent_node=hd3ss3220@47" , instead of the "connector" node.
-> That is the reason for the above error.
-> 
-> [    2.442429]  of_graph_get_next_endpoint.part.0+0x28/0x168
-> [    2.447889]  of_fwnode_graph_get_next_endpoint+0x5c/0xb0
-> [    2.453267]  fwnode_graph_get_next_endpoint+0x20/0x30
-> [    2.458374]  device_connection_find_match+0x74/0x1a0
-> [    2.463399]  usb_role_switch_get+0x20/0x28
-> [    2.467542]  hd3ss3220_probe+0xc4/0x218
-> 
-> The use case is
-> 
-> &i2c0 {
-> 	hd3ss3220@47 {                                                           
->                  	compatible = "ti,hd3ss3220"; 
->                                    
->                  	usb_con: connector {                                             
->                           		compatible = "usb-c-connector";                                                      
->                          		port {                                                   
->                                 		 hd3ss3220_ep: endpoint {                         
->                                         			remote-endpoint = <&usb3_role_switch>;   
->                                 		};                                               
->                          		};                                                       
->                 	 };                                                               
-> 	 }; 
-> };
->    
-> &usb3_peri0 {                                                                    
->          companion = <&xhci0>;                                                    
->          usb-role-switch;                                                         
->                                                                                   
->          port {                                                                   
->                 usb3_role_switch: endpoint {                                     
->                         remote-endpoint = <&hd3ss3220_ep>;                       
->                  };                                                               
->          };                                                                       
-> };   
-> 
-> Q1) How do we modify the usb_role_switch_get() function to search 
-> Child(connector) and child's endpoint?
-How about firstly finding connector node in fwnode_graph_devcon_match(),
-then search each endpoint?
-
-> 
-> > It looks like we have an issue somewhere in the code, and instead of fixing
-> > that, you are working around it. Let's not do that.
-> 
-> OK.
-> 
-> Regards,
-> Biju
-> 
-
-
+SGVsbG8gQWxhbiwNCg0KT24gMjEuMDUuMjAxOSAyMDoyMCwgQWxhbiBTdGVybiB3cm90ZToNCj4g
+T24gVHVlLCAyMSBNYXkgMjAxOSBsYXVyZW50aXUudHVkb3JAbnhwLmNvbSB3cm90ZToNCj4gDQo+
+PiBGcm9tOiBMYXVyZW50aXUgVHVkb3IgPGxhdXJlbnRpdS50dWRvckBueHAuY29tPg0KPj4NCj4+
+IEZvciBIQ3MgdGhhdCBoYXZlIGxvY2FsIG1lbW9yeSwgcmVwbGFjZSB0aGUgY3VycmVudCBETUEg
+QVBJIHVzYWdlDQo+PiB3aXRoIGEgZ2VuYWxsb2MgZ2VuZXJpYyBhbGxvY2F0b3IgdG8gbWFuYWdl
+IHRoZSBtYXBwaW5ncyBmb3IgdGhlc2UNCj4+IGRldmljZXMuIFRvIGhlbHAgdXNlcnMsIGludHJv
+ZHVjZSBhIG5ldyBIQ0QgQVBJLA0KPj4gdXNiX2hjZF9zZXR1cF9sb2NhbF9tZW0oKSB0aGF0IHdp
+bGwgc2V0dXAgdXAgdGhlIGdlbmFsbG9jIGJhY2tpbmcNCj4+IHVwIHRoZSBkZXZpY2UgbG9jYWwg
+bWVtb3J5LiBJdCB3aWxsIGJlIHVzZWQgaW4gc3Vic2VxdWVudCBwYXRjaGVzLg0KPj4gVGhpcyBp
+cyBpbiBwcmVwYXJhdGlvbiBmb3IgZHJvcHBpbmcgdGhlIGV4aXN0aW5nICJjb2hlcmVudCIgZG1h
+DQo+PiBtZW0gZGVjbGFyYXRpb24gQVBJcy4gQ3VycmVudCBpbXBsZW1lbnRhdGlvbiB3YXMgcmVs
+eWluZyBvbiBhIHNob3J0DQo+PiBjaXJjdWl0IGluIHRoZSBETUEgQVBJIHRoYXQgaW4gdGhlIGVu
+ZCwgd2FzIGFjdGluZyBhcyBhbiBhbGxvY2F0b3INCj4+IGZvciB0aGVzZSB0eXBlIG9mIGRldmlj
+ZXMuDQo+Pg0KPj4gRm9yIGNvbnRleHQsIHNlZSB0aHJlYWQgaGVyZTogaHR0cHM6Ly9ldXIwMS5z
+YWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHBzJTNBJTJGJTJGbGttbC5v
+cmclMkZsa21sJTJGMjAxOSUyRjQlMkYyMiUyRjM1NyZhbXA7ZGF0YT0wMiU3QzAxJTdDbGF1cmVu
+dGl1LnR1ZG9yJTQwbnhwLmNvbSU3Q2RjNGE3NmIwNGI4NzRiNzViZDU0MDhkNmRlMTA5ZDg2JTdD
+Njg2ZWExZDNiYzJiNGM2ZmE5MmNkOTljNWMzMDE2MzUlN0MwJTdDMCU3QzYzNjk0MDU2MDI4MTk1
+NzIwNyZhbXA7c2RhdGE9SlExaUpjJTJGdyUyQndIZFRGdmFPVCUyRllIQnglMkJWUWxwSFdsZjM0
+NnE3c2NsZmNnJTNEJmFtcDtyZXNlcnZlZD0wDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogTGF1cmVu
+dGl1IFR1ZG9yIDxsYXVyZW50aXUudHVkb3JAbnhwLmNvbT4NCj4+IFNpZ25lZC1vZmYtYnk6IEZy
+ZWRyaWsgTm9yaW5nIDxub3JpbmdAbm9jcmV3Lm9yZz4NCj4+IC0tLQ0KPiANCj4+IC0tLSBhL2Ry
+aXZlcnMvdXNiL2NvcmUvaGNkLmMNCj4+ICsrKyBiL2RyaXZlcnMvdXNiL2NvcmUvaGNkLmMNCj4+
+IEBAIC0yOSw2ICsyOSw4IEBADQo+PiAgICNpbmNsdWRlIDxsaW51eC93b3JrcXVldWUuaD4NCj4+
+ICAgI2luY2x1ZGUgPGxpbnV4L3BtX3J1bnRpbWUuaD4NCj4+ICAgI2luY2x1ZGUgPGxpbnV4L3R5
+cGVzLmg+DQo+PiArI2luY2x1ZGUgPGxpbnV4L2dlbmFsbG9jLmg+DQo+PiArI2luY2x1ZGUgPGxp
+bnV4L2lvLmg+DQo+PiAgIA0KPj4gICAjaW5jbHVkZSA8bGludXgvcGh5L3BoeS5oPg0KPj4gICAj
+aW5jbHVkZSA8bGludXgvdXNiLmg+DQo+PiBAQCAtMzAzOSw2ICszMDQxLDQwIEBAIHVzYl9oY2Rf
+cGxhdGZvcm1fc2h1dGRvd24oc3RydWN0IHBsYXRmb3JtX2RldmljZSAqZGV2KQ0KPj4gICB9DQo+
+PiAgIEVYUE9SVF9TWU1CT0xfR1BMKHVzYl9oY2RfcGxhdGZvcm1fc2h1dGRvd24pOw0KPj4gICAN
+Cj4+ICtpbnQgdXNiX2hjZF9zZXR1cF9sb2NhbF9tZW0oc3RydWN0IHVzYl9oY2QgKmhjZCwgcGh5
+c19hZGRyX3QgcGh5c19hZGRyLA0KPj4gKwkJCSAgICBkbWFfYWRkcl90IGRtYSwgc2l6ZV90IHNp
+emUpDQo+PiArew0KPj4gKwlpbnQgZXJyOw0KPj4gKwl2b2lkIF9faW9tZW0gKmxvY2FsX21lbTsN
+Cj4+ICsNCj4+ICsJaGNkLT5sb2NhbG1lbV9wb29sID0gZGV2bV9nZW5fcG9vbF9jcmVhdGUoaGNk
+LT5zZWxmLnN5c2RldiwgUEFHRV9TSElGVCwNCj4+ICsJCQkJCQkgIGRldl90b19ub2RlKGhjZC0+
+c2VsZi5zeXNkZXYpLA0KPj4gKwkJCQkJCSAgIm9oY2ktaGNkIik7DQo+IA0KPiBTdXJlbHkgdGhh
+dCBzdHJpbmcgaXMgYSBtaXN0YWtlLiAgWW91IGNvdWxkIHVzZQ0KPiBkZXZfbmFtZShoY2QtPnNl
+bGYuc3lzZGV2KSBvciBhIG5hbWUgcGFzc2VkIGJ5IHRoZSBjYWxsZXIuDQoNClNvcnJ5LCBtaXNz
+ZWQgdGhhdC4gV2lsbCBnbyB3aXRoIGRldl9uYW1lKCkgaWYgdGhhdCdzIG9rIHdpdGggeW91Lg0K
+DQo+PiArCWlmIChJU19FUlIoaGNkLT5sb2NhbG1lbV9wb29sKSkNCj4+ICsJCXJldHVybiBQVFJf
+RVJSKGhjZC0+bG9jYWxtZW1fcG9vbCk7DQo+PiArDQo+PiArCWxvY2FsX21lbSA9IGRldm1fbWVt
+cmVtYXAoaGNkLT5zZWxmLnN5c2RldiwgcGh5c19hZGRyLA0KPj4gKwkJCQkgIHNpemUsIE1FTVJF
+TUFQX1dDKTsNCj4+ICsJaWYgKCFsb2NhbF9tZW0pDQo+PiArCQlyZXR1cm4gLUVOT01FTTsNCj4+
+ICsNCj4+ICsJLyoNCj4+ICsJICogSGVyZSB3ZSBwYXNzIGEgZG1hX2FkZHJfdCBidXQgdGhlIGFy
+ZyB0eXBlIGlzIGEgcGh5c19hZGRyX3QuDQo+PiArCSAqIEl0J3Mgbm90IGJhY2tlZCBieSBzeXN0
+ZW0gbWVtb3J5IGFuZCB0aHVzIHRoZXJlJ3Mgbm8ga2VybmVsIG1hcHBpbmcNCj4+ICsJICogZm9y
+IGl0Lg0KPj4gKwkgKi8NCj4+ICsJZXJyID0gZ2VuX3Bvb2xfYWRkX3ZpcnQoaGNkLT5sb2NhbG1l
+bV9wb29sLCAodW5zaWduZWQgbG9uZylsb2NhbF9tZW0sDQo+PiArCQkJCWRtYSwgc2l6ZSwgZGV2
+X3RvX25vZGUoaGNkLT5zZWxmLnN5c2RldikpOw0KPj4gKwlpZiAoZXJyIDwgMCkgew0KPj4gKwkJ
+ZGV2X2VycihoY2QtPnNlbGYuc3lzZGV2LCAiZ2VuX3Bvb2xfYWRkX3ZpcnQgZmFpbGVkIHdpdGgg
+JWRcbiIsDQo+PiArCQkJZXJyKTsNCj4+ICsJCXJldHVybiBlcnI7DQo+PiArCX0NCj4+ICsNCj4+
+ICsJcmV0dXJuIDA7DQo+PiArfQ0KPj4gK0VYUE9SVF9TWU1CT0xfR1BMKHVzYl9oY2Rfc2V0dXBf
+bG9jYWxfbWVtKTsNCj4gDQo+IElmIHlvdSBoYXZlIGEgdXNiX2hjZF9zZXR1cF9sb2NhbF9tZW0o
+KSBmdW5jdGlvbiB0aGVuIHlvdSBzaG91bGQgYWxzbw0KPiBoYXZlIGEgdXNiX2hjZF9yZW1vdmVf
+bG9jYWxfbWVtKCkgZnVuY3Rpb24uDQoNCkV2ZW4gaWYgYWxsIHJlc291cmNlcyB0aGF0IGFyZSBh
+bGxvY2F0ZWQgYXJlIGRldmljZSBtYW5hZ2VkPw0KDQo+PiAtLS0gYS9kcml2ZXJzL3VzYi9ob3N0
+L29oY2ktbWVtLmMNCj4+ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3Qvb2hjaS1tZW0uYw0KPj4gQEAg
+LTM2LDYgKzM2LDEyIEBAIHN0YXRpYyB2b2lkIG9oY2lfaGNkX2luaXQgKHN0cnVjdCBvaGNpX2hj
+ZCAqb2hjaSkNCj4+ICAgDQo+PiAgIHN0YXRpYyBpbnQgb2hjaV9tZW1faW5pdCAoc3RydWN0IG9o
+Y2lfaGNkICpvaGNpKQ0KPj4gICB7DQo+PiArCWlmIChvaGNpX3RvX2hjZChvaGNpKS0+bG9jYWxt
+ZW1fcG9vbCkgew0KPj4gKwkJb2hjaS0+dGRfY2FjaGUgPSBOVUxMOw0KPj4gKwkJb2hjaS0+ZWRf
+Y2FjaGUgPSBOVUxMOw0KPj4gKwkJcmV0dXJuIDA7DQo+PiArCX0NCj4gDQo+IFRoaXMgcmVhbGx5
+IGlzbid0IG5lY2Vzc2FyeS4gIFRoZSBlbnRpcmUgb2hjaV9oY2Qgc3RydWN0dXJlIGlzDQo+IGlu
+aXRpYWxpemVkIHRvIDAgd2hlbiBpdCBpcyBmaXJzdCBhbGxvY2F0ZWQuDQoNCldpbGwgZHJvcC4N
+Cg0KPj4gLS0tIGEvaW5jbHVkZS9saW51eC91c2IvaGNkLmgNCj4+ICsrKyBiL2luY2x1ZGUvbGlu
+dXgvdXNiL2hjZC5oDQo+PiBAQCAtMjE2LDYgKzIxNiw5IEBAIHN0cnVjdCB1c2JfaGNkIHsNCj4+
+ICAgI2RlZmluZQlIQ19JU19SVU5OSU5HKHN0YXRlKSAoKHN0YXRlKSAmIF9fQUNUSVZFKQ0KPj4g
+ICAjZGVmaW5lCUhDX0lTX1NVU1BFTkRFRChzdGF0ZSkgKChzdGF0ZSkgJiBfX1NVU1BFTkQpDQo+
+PiAgIA0KPj4gKwkvKiBhbGxvY2F0b3IgZm9yIEhDcyBoYXZpbmcgbG9jYWwgbWVtb3J5ICovDQo+
+IA0KPiAiYWxsb2NhdG9yIiBpcyB0aGUgd3Jvbmcgd29yZCAtLSBhbiBhbGxvY2F0b3IgaXMgc29t
+ZXRoaW5nIHRoYXQNCj4gYWxsb2NhdGVzLiAgUGVyaGFwcyAibWVtb3J5IGFyZWEiIG9yIHNvbWV0
+aGluZyBhbG9uZyB0aG9zZSBsaW5lcy4NCg0KQWxyaWdodCwgSSB3aWxsIHJld29yay4NCg0KLS0t
+DQpUaGFua3MgJiBCZXN0IFJlZ2FyZHMsIExhdXJlbnRpdQ0K
