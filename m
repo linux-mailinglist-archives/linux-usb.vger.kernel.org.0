@@ -2,124 +2,252 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7582125E51
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 08:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA2D25EF8
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 10:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727453AbfEVGwk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 02:52:40 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:52303 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725801AbfEVGwk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 02:52:40 -0400
-Received: from [192.168.2.10] ([46.9.252.75])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id TL73h27qisDWyTL76hJb1d; Wed, 22 May 2019 08:52:37 +0200
-Subject: Re: [PATCH] media:usb:zr364xx:Fix KASAN:null-ptr-deref Read in
- zr364xx_vidioc_querycap
-To:     Vandana BN <bnvandana@gmail.com>, royale@zerezo.com,
-        mchehab@kernel.org, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20190521181535.7974-1-bnvandana@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <c9311eeb-4cb6-e69c-8a26-7faea7e0c088@xs4all.nl>
-Date:   Wed, 22 May 2019 08:52:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190521181535.7974-1-bnvandana@gmail.com>
-Content-Type: text/plain; charset=utf-8
+        id S1728600AbfEVIFQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 04:05:16 -0400
+Received: from mail-eopbgr1400112.outbound.protection.outlook.com ([40.107.140.112]:52101
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726358AbfEVIFQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 May 2019 04:05:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HbYtDrrTnyCm0GizAGLUUbkJk8OIV5B2JUPsHjtJSMQ=;
+ b=giKf4kVOsEKhYXnSAsge3fh4MRepzf69aCsBMtfqqfIDwsbi+NMwEgglDyn9q6sW9+eS33JuKj7oAGD4Sr/+5pjbZtK5QrwMecw0cfbjtv7HUBajcfLVqClrGXXMxEPiHS81SkAZ2GQMZmXZvqFASbSflf6q8nzLMgIwaPoQ9pw=
+Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com (52.134.242.17) by
+ OSBPR01MB5094.jpnprd01.prod.outlook.com (20.179.183.209) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.16; Wed, 22 May 2019 08:05:10 +0000
+Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com
+ ([fe80::a146:39f0:5df9:11bc]) by OSBPR01MB2103.jpnprd01.prod.outlook.com
+ ([fe80::a146:39f0:5df9:11bc%7]) with mapi id 15.20.1900.020; Wed, 22 May 2019
+ 08:05:10 +0000
+From:   Biju Das <biju.das@bp.renesas.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: RE: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by node
+Thread-Topic: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
+ node
+Thread-Index: AQHVCjGxbEdsIx4ReU+jIZIOb3TooaZvJLIAgAApPICABAgXgIAAWsCAgAAANlCAAAi9gIAADx0AgAGaToCAAW2SoA==
+Date:   Wed, 22 May 2019 08:05:09 +0000
+Message-ID: <OSBPR01MB21032206146152983C8F4E8EB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1557823643-8616-5-git-send-email-chunfeng.yun@mediatek.com>
+ <20190517103736.GA1490@kuha.fi.intel.com>
+ <20190517130511.GA1887@kuha.fi.intel.com>
+ <1558319951.10179.352.camel@mhfsdcap03>
+ <20190520080359.GC1887@kuha.fi.intel.com>
+ <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+ <20190520083601.GE1887@kuha.fi.intel.com>
+ <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+ <20190521095839.GI1887@kuha.fi.intel.com>
+In-Reply-To: <20190521095839.GI1887@kuha.fi.intel.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfAgCbWpy3/Mf5iE6uyIh7ObpST1ZI0MlELXVDzMVOAM5s4N2waUax5FlNru1+/Av8LNMcRlwevn2yp8AUTXfT6JWENMdahG1tg7KBmzj8qYDGnX3vzE3
- Mm+eQgNaM2bAQ5zig8OtkP8f6wDRWan4EKKgCl1DWhMF/mAbAWu4rEvNuL9wrLcvRBibv85CnBvwzvHeo8vo3McSwFDEpd/no29TWWtFXiC5L74tSKnigtBC
- KRYYhWTgj/5UHdwlRpp027YgOkt6f6/6C9xsoNVFmAOvQuLk5F+g3E0L4pzAEV2Ead6GT9BFyR9+3eQnHdq68MwtQQLaqCPVfT/6ZerSdV0GGXW06bIaO+hm
- Xzq6N3RyvhGs9vMmBc3LLAMt01hFKuNIJa5ebL16+xQRHy8f+VknmDk3kBBScWvpS+/ZU8DeYBsmu0gOBGzvxOU3tt99LCqimqby/y2BIWh6p8/ddEduf1Fz
- F6ponXMjgeuIgMF8
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=biju.das@bp.renesas.com; 
+x-originating-ip: [193.141.220.21]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d6c9d8a7-5293-4c92-d74e-08d6de8c360f
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB5094;
+x-ms-traffictypediagnostic: OSBPR01MB5094:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <OSBPR01MB5094730728BB5BE1005D841AB8000@OSBPR01MB5094.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0045236D47
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(366004)(346002)(136003)(376002)(39860400002)(189003)(199004)(51914003)(53936002)(8936002)(71190400001)(25786009)(74316002)(71200400001)(66066001)(6246003)(14454004)(966005)(4326008)(7416002)(76116006)(64756008)(66476007)(66946007)(102836004)(316002)(73956011)(66446008)(66556008)(6506007)(54906003)(44832011)(8676002)(86362001)(26005)(446003)(5660300002)(486006)(52536014)(81156014)(81166006)(478600001)(11346002)(2906002)(6116002)(3846002)(186003)(476003)(76176011)(305945005)(7696005)(6916009)(33656002)(99286004)(7736002)(6436002)(55016002)(9686003)(229853002)(256004)(6306002)(68736007);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB5094;H:OSBPR01MB2103.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:0;
+received-spf: None (protection.outlook.com: bp.renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: KnH6yByx83xBIVFYf0B/+WKjBcQBhrJhEctgn74U9t3qjBA1slL+qFIcfl4pp+HynaCBBsBnr4K29z1b587v8A9P4l6ihqnEuqJlUQ+RkdNn9thAs3iVW24rm4P2IaRdj1yQo9seb61PSzEkNEbCceCgJNLD1vAi6YcAuA3ra6LMZte6QSrzqZZdnK8fiVNPxqVGzdR/ApHC5Ok34/gloyAjDeVuhe7Q55le+ihfLtw76iIzhy2KnOnBq9yGLaAEmFmAtrBHizm9G21tgV9mYKC3R0JhrX64g/oTfJIuxTPLKJhtwddeZeGDQk13UU2UJbUqfxo3JpzKDnxFuadOz+/1v6Zoa4nQwuC/L/Dj4qLiGL4rhnh752H+/SKTvPmXCFDN8jQ8ch2qzp8uZ+cF2fl5DMl6FnCqsB63RJkFmJY=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6c9d8a7-5293-4c92-d74e-08d6de8c360f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2019 08:05:10.1230
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB5094
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/21/19 8:15 PM, Vandana BN wrote:
-> SyzKaller hit the null pointer deref while reading from uninitialized
-> udev->product in zr364xx_vidioc_querycap().
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in read_word_at_a_time+0xe/0x20
-> include/linux/compiler.h:274
-> Read of size 1 at addr 0000000000000000 by task v4l_id/5287
-> 
-> CPU: 1 PID: 5287 Comm: v4l_id Not tainted 5.1.0-rc3-319004-g43151d6 #6
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xe8/0x16e lib/dump_stack.c:113
->   kasan_report.cold+0x5/0x3c mm/kasan/report.c:321
->   read_word_at_a_time+0xe/0x20 include/linux/compiler.h:274
->   strscpy+0x8a/0x280 lib/string.c:207
->   zr364xx_vidioc_querycap+0xb5/0x210 drivers/media/usb/zr364xx/zr364xx.c:706
->   v4l_querycap+0x12b/0x340 drivers/media/v4l2-core/v4l2-ioctl.c:1062
->   __video_do_ioctl+0x5bb/0xb40 drivers/media/v4l2-core/v4l2-ioctl.c:2874
->   video_usercopy+0x44e/0xf00 drivers/media/v4l2-core/v4l2-ioctl.c:3056
->   v4l2_ioctl+0x14e/0x1a0 drivers/media/v4l2-core/v4l2-dev.c:364
->   vfs_ioctl fs/ioctl.c:46 [inline]
->   file_ioctl fs/ioctl.c:509 [inline]
->   do_vfs_ioctl+0xced/0x12f0 fs/ioctl.c:696
->   ksys_ioctl+0xa0/0xc0 fs/ioctl.c:713
->   __do_sys_ioctl fs/ioctl.c:720 [inline]
->   __se_sys_ioctl fs/ioctl.c:718 [inline]
->   __x64_sys_ioctl+0x74/0xb0 fs/ioctl.c:718
->   do_syscall_64+0xcf/0x4f0 arch/x86/entry/common.c:290
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x7f3b56d8b347
-> Code: 90 90 90 48 8b 05 f1 fa 2a 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff
-> ff c3 90 90 90 90 90 90 90 90 90 90 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff
-> ff 73 01 c3 48 8b 0d c1 fa 2a 00 31 d2 48 29 c2 64
-> RSP: 002b:00007ffe005d5d68 EFLAGS: 00000202 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3b56d8b347
-> RDX: 00007ffe005d5d70 RSI: 0000000080685600 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000400884
-> R13: 00007ffe005d5ec0 R14: 0000000000000000 R15: 0000000000000000
-> ==================================================================
-> 
-> For this device udev->product is not initialized and accessing it causes a NULL pointer deref.
-> 
-> The fix is to check for NULL before strscpy() and copy empty string, if
-> product is NULL
-> 
-> Reported-by: syzbot+66010012fd4c531a1a96@syzkaller.appspotmail.com
-> 
-> Signed-off-by: Vandana BN <bnvandana@gmail.com>
-> ---
->  drivers/media/usb/zr364xx/zr364xx.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-> index 96fee8d5b865..401a1e55dbe1 100644
-> --- a/drivers/media/usb/zr364xx/zr364xx.c
-> +++ b/drivers/media/usb/zr364xx/zr364xx.c
-> @@ -703,7 +703,10 @@ static int zr364xx_vidioc_querycap(struct file *file, void *priv,
->  	struct zr364xx_camera *cam = video_drvdata(file);
->  
->  	strscpy(cap->driver, DRIVER_DESC, sizeof(cap->driver));
-> -	strscpy(cap->card, cam->udev->product, sizeof(cap->card));
-> +	if (cam->udev->product)
-> +		strscpy(cap->card, cam->udev->product, sizeof(cap->card));
-> +	else
-> +		strscpy(cap->card, "", sizeof(cap->card));
+Hi Heikki,
 
-You can drop the 'else' part since cap->card is already zeroed by the
-V4L2 core framework. Looks good otherwise!
+Thanks for the feedback.
+
+> Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
+> node
+>=20
+> On Mon, May 20, 2019 at 09:45:46AM +0000, Biju Das wrote:
+> >
+> >
+> > Hi Heikki,
+> >
+> > Thanks for the feedback.
+> >
+> > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
+> > > usb_role_switch by node
+> > >
+> > > On Mon, May 20, 2019 at 08:06:41AM +0000, Biju Das wrote:
+> > > > Hi Heikki,
+> > > >
+> > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
+> > > > > usb_role_switch by node
+> > > > >
+> > > > > On Mon, May 20, 2019 at 10:39:11AM +0800, Chunfeng Yun wrote:
+> > > > > > Hi,
+> > > > > > On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
+> > > > > > > Hi,
+> > > > > > >
+> > > > > > > On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki Krogerus wro=
+te:
+> > > > > > > > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng Yun
+> wrote:
+> > > > > > > > > Add fwnode_usb_role_switch_get() to make easier to get
+> > > > > > > > > usb_role_switch by fwnode which register it.
+> > > > > > > > > It's useful when there is not device_connection
+> > > > > > > > > registered between two drivers and only knows the fwnode
+> > > > > > > > > which register usb_role_switch.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > > > > > > Tested-by: Biju Das <biju.das@bp.renesas.com>
+> > > > > > > >
+> > > > > > > > Acked-by: Heikki Krogerus
+> > > > > > > > <heikki.krogerus@linux.intel.com>
+> > > > > > >
+> > > > > > > Hold on. I just noticed Rob's comment on patch 2/6, where he
+> > > > > > > points out that you don't need to use device graph since the
+> > > > > > > controller is the parent of the connector. Doesn't that mean
+> > > > > > > you don't really need this API?
+> > > > > > No, I still need it.
+> > > > > > The change is about the way how to get fwnode; when use device
+> > > > > > graph, get fwnode by of_graph_get_remote_node(); but now will
+> > > > > > get fwnode by of_get_parent();
+> > > > >
+> > > > > OK, I get that, but I'm still not convinced about if something
+> > > > > like this function is needed at all. I also have concerns
+> > > > > regarding how you are using the function. I'll explain in
+> > > > > comment to the patch 5/6 in this
+> > > series...
+> > > >
+> > > > FYI, Currently  I am also using this api in my patch series.
+> > > > https://patchwork.kernel.org/patch/10944637/
+> > >
+> > > Yes, and I have the same question for you I jusb asked in comment I
+> > > added to the patch 5/6 of this series. Why isn't usb_role_switch_get(=
+)
+> enough?
+> >
+> > Currently no issue. It will work with this api as well, since the port =
+node is
+> part of controller node.
+> > For eg:-
+> > https://patchwork.kernel.org/patch/10944627/
+> >
+> > However if any one adds port node inside the connector node, then this
+> api may won't work as expected.
+> > Currently I get below error
+> >
+> > [    2.299703] OF: graph: no port node found in
+> /soc/i2c@e6500000/hd3ss3220@47
+>=20
+> We need to understand why is that happening?
+>=20
+
+Form the stack trace  the parent node is "parent_node=3Dhd3ss3220@47" , ins=
+tead of the "connector" node.
+That is the reason for the above error.
+
+[    2.442429]  of_graph_get_next_endpoint.part.0+0x28/0x168
+[    2.447889]  of_fwnode_graph_get_next_endpoint+0x5c/0xb0
+[    2.453267]  fwnode_graph_get_next_endpoint+0x20/0x30
+[    2.458374]  device_connection_find_match+0x74/0x1a0
+[    2.463399]  usb_role_switch_get+0x20/0x28
+[    2.467542]  hd3ss3220_probe+0xc4/0x218
+
+The use case is
+
+&i2c0 {
+	hd3ss3220@47 {                                                          =20
+                 	compatible =3D "ti,hd3ss3220";=20
+                                  =20
+                 	usb_con: connector {                                     =
+       =20
+                          		compatible =3D "usb-c-connector";              =
+                                       =20
+                         		port {                                          =
+        =20
+                                		 hd3ss3220_ep: endpoint {                =
+        =20
+                                        			remote-endpoint =3D <&usb3_role_=
+switch>;  =20
+                                		};                                       =
+       =20
+                         		};                                              =
+        =20
+                	 };                                                       =
+       =20
+	 };=20
+};
+  =20
+&usb3_peri0 {                                                              =
+     =20
+         companion =3D <&xhci0>;                                           =
+        =20
+         usb-role-switch;                                                  =
+      =20
+                                                                           =
+      =20
+         port {                                                            =
+      =20
+                usb3_role_switch: endpoint {                               =
+     =20
+                        remote-endpoint =3D <&hd3ss3220_ep>;               =
+       =20
+                 };                                                        =
+      =20
+         };                                                                =
+      =20
+};  =20
+
+Q1) How do we modify the usb_role_switch_get() function to search=20
+Child(connector) and child's endpoint?
+
+> It looks like we have an issue somewhere in the code, and instead of fixi=
+ng
+> that, you are working around it. Let's not do that.
+
+OK.
 
 Regards,
-
-	Hans
-
->  	strscpy(cap->bus_info, dev_name(&cam->udev->dev),
->  		sizeof(cap->bus_info));
->  	cap->device_caps = V4L2_CAP_VIDEO_CAPTURE |
-> 
+Biju
 
