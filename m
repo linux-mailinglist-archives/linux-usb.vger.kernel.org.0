@@ -2,108 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E90262FF
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 13:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0616626371
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 14:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729023AbfEVLbs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 07:31:48 -0400
-Received: from mga14.intel.com ([192.55.52.115]:39534 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728335AbfEVLbs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 May 2019 07:31:48 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 May 2019 04:31:47 -0700
-X-ExtLoop1: 1
-Received: from mattu-haswell.fi.intel.com ([10.237.72.164])
-  by orsmga003.jf.intel.com with ESMTP; 22 May 2019 04:31:45 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5/5] xhci: Convert xhci_handshake() to use readl_poll_timeout_atomic()
-Date:   Wed, 22 May 2019 14:34:01 +0300
-Message-Id: <1558524841-25397-6-git-send-email-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1558524841-25397-1-git-send-email-mathias.nyman@linux.intel.com>
-References: <1558524841-25397-1-git-send-email-mathias.nyman@linux.intel.com>
+        id S1729252AbfEVMHu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 08:07:50 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:37195 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728584AbfEVMHu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 08:07:50 -0400
+X-Originating-IP: 92.137.69.152
+Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 31F87E000A;
+        Wed, 22 May 2019 12:07:45 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Felipe Balbi <balbi@kernel.org>, Vladimir Zapolskiy <vz@mleia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        James Grant <jamesg@zaltys.org>
+Subject: [PATCH v2] usb: gadget: udc: lpc32xx: allocate descriptor with GFP_ATOMIC
+Date:   Wed, 22 May 2019 14:07:36 +0200
+Message-Id: <20190522120736.5521-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Gadget drivers may queue request in interrupt context. This would lead to
+a descriptor allocation in that context. In that case we would hit
+BUG_ON(in_interrupt()) in __get_vm_area_node.
 
-Xhci_handshake() implements the algorithm already captured by
-readl_poll_timeout_atomic(). Convert the former to use the latter to
-avoid repetition.
+Also remove the unnecessary cast.
 
-Turned out this patch also fixes a bug on the AMD Stoneyridge platform
-where usleep(1) sometimes takes over 10ms.
-This means a 5 second timeout can easily take over 15 seconds which will
-trigger the watchdog and reboot the system.
-
-[Add info about patch fixing a bug to commit message -Mathias]
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-Tested-by: Raul E Rangel <rrangel@chromium.org>
-Reviewed-by: Raul E Rangel <rrangel@chromium.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Tested-by: James Grant <jamesg@zaltys.org>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/usb/host/xhci.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 048a675..20db378 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -9,6 +9,7 @@
-  */
+Changes in v2:
+ - remove unnecessary cast as pointed by Joe Perches
+ - Collected tested-by
+
+ drivers/usb/gadget/udc/lpc32xx_udc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
+index d8f1c60793ed..2719194ebf42 100644
+--- a/drivers/usb/gadget/udc/lpc32xx_udc.c
++++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+@@ -937,8 +937,7 @@ static struct lpc32xx_usbd_dd_gad *udc_dd_alloc(struct lpc32xx_udc *udc)
+ 	dma_addr_t			dma;
+ 	struct lpc32xx_usbd_dd_gad	*dd;
  
- #include <linux/pci.h>
-+#include <linux/iopoll.h>
- #include <linux/irq.h>
- #include <linux/log2.h>
- #include <linux/module.h>
-@@ -52,7 +53,6 @@ static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
- 	return false;
- }
+-	dd = (struct lpc32xx_usbd_dd_gad *) dma_pool_alloc(
+-			udc->dd_cache, (GFP_KERNEL | GFP_DMA), &dma);
++	dd = dma_pool_alloc(udc->dd_cache, GFP_ATOMIC | GFP_DMA, &dma);
+ 	if (dd)
+ 		dd->this_dma = dma;
  
--/* TODO: copied from ehci-hcd.c - can this be refactored? */
- /*
-  * xhci_handshake - spin reading hc until handshake completes or fails
-  * @ptr: address of hc register to be read
-@@ -69,18 +69,16 @@ static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
- int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, int usec)
- {
- 	u32	result;
-+	int	ret;
- 
--	do {
--		result = readl(ptr);
--		if (result == ~(u32)0)		/* card removed */
--			return -ENODEV;
--		result &= mask;
--		if (result == done)
--			return 0;
--		udelay(1);
--		usec--;
--	} while (usec > 0);
--	return -ETIMEDOUT;
-+	ret = readl_poll_timeout_atomic(ptr, result,
-+					(result & mask) == done ||
-+					result == U32_MAX,
-+					1, usec);
-+	if (result == U32_MAX)		/* card removed */
-+		return -ENODEV;
-+
-+	return ret;
- }
- 
- /*
 -- 
-2.7.4
+2.21.0
 
