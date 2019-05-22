@@ -2,78 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2C1262CC
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 13:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3691D26ED7
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 21:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728835AbfEVLMx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 07:12:53 -0400
-Received: from mga03.intel.com ([134.134.136.65]:32361 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728743AbfEVLMx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 May 2019 07:12:53 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 May 2019 04:12:52 -0700
-X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 22 May 2019 04:12:49 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 22 May 2019 14:12:48 +0300
-Date:   Wed, 22 May 2019 14:12:48 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ajay Gupta <ajayg@nvidia.com>
-Cc:     Ajay Gupta <ajaykuee@gmail.com>,
-        "wsa@the-dreams.de" <wsa@the-dreams.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2 3/5] usb: typec: ucsi: ccg: enable runtime pm support
-Message-ID: <20190522111248.GM1887@kuha.fi.intel.com>
-References: <20190520183750.2932-1-ajayg@nvidia.com>
- <20190520183750.2932-4-ajayg@nvidia.com>
- <20190521133727.GK1887@kuha.fi.intel.com>
- <BYAPR12MB2727A21E3AB497C26BA699D2DC070@BYAPR12MB2727.namprd12.prod.outlook.com>
+        id S1732378AbfEVTwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 15:52:30 -0400
+Received: from 107-174-234-49-host.colocrossing.com ([107.174.234.49]:43092
+        "EHLO venetian.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730387AbfEVTwa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 15:52:30 -0400
+To:     linux-usb@vger.kernel.org
+Subject: Use logo on USB drive
+Message-ID: <fac47cf45107b07dd3cd948844079526@walgreens.com>
+Date:   Wed, 22 May 2019 13:28:05 +0200
+From:   "David" <david@usbcustom.site>
+Reply-To: jensanke@aliyun.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR12MB2727A21E3AB497C26BA699D2DC070@BYAPR12MB2727.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 21, 2019 at 05:44:50PM +0000, Ajay Gupta wrote:
-> Hi Heikki
-> 
-> > > +static int ucsi_ccg_resume(struct device *dev) {
-> > > +	struct i2c_client *client = to_i2c_client(dev);
-> > > +	struct ucsi_ccg *uc = i2c_get_clientdata(client);
-> > > +	struct ucsi *ucsi = uc->ucsi;
-> > > +	struct ucsi_control c;
-> > > +	int ret;
-> > > +
-> > > +	/* restore UCSI notification enable mask */
-> > > +	UCSI_CMD_SET_NTFY_ENABLE(c, UCSI_ENABLE_NTFY_ALL);
-> > > +	ret = ucsi_send_command(ucsi, &c, NULL, 0);
-> > > +	if (ret < 0) {
-> > > +		dev_err(uc->dev, "%s: failed to set notification enable - %d\n",
-> > > +			__func__, ret);
-> > > +	}
-> > > +	return 0;
-> > > +}
-> > 
-> > I would prefer that we did this for all methods in ucsi.c, not just ccgx. Could you
-> > add resume callback to struct ucsi_ppm, and then call it here.
-> struct ucsi_ppm currently have .sync() and .cmd() callback which is implemented by
-> ucsi_ccg and ucsi_acpi and invoked by usci.c. 
-> 
-> Is it okay to add a callback in this structure and implement inside ucsi.c and invoke
-> from ucsi_ccg and ucsi_acpi? OR we can just add a function in ucsi.c and export it
-> and use it from ucsi_ccg and ucsi_acpi?
+Hi,
 
-Right! Export the function. Sorry.
+Not sure if you received my last email?
 
-thanks,
+Are you interested in purchasing your LOGO promotional and marketing
+products for your company?
+We produce USB Drives with your Logo Printed or artwork printed to be used
+for gifts or marketing.
+Here is more info from our website:
 
--- 
-heikki
+We can pre-load your media files, images, presentations and files onto the
+drives for you.
+
+Some reasons to get the USB drives from us:
+We make Custom Shaped USB drives in the shape of your logo, product or
+anything you like.
+Our USB drives are Eco-friendly
+We supply USB drives to Fortune 100 companies.
+We have over 150 styles and colors to choose from.
+People will keep the USB drive you give them and show it to others
+increasing your marketing value
+
+Please click
+to see all of our stock models and get a quote.
+
+If you are nonprofit, have further discounts for schools and charities.
+
+Thanks,
+David
+USB Drive Specialist
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+http://walgreens.com/mail/link.php?M=26955744&N=3585&L=29&F=T
+
