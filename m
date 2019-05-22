@@ -2,127 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB91325FA1
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 10:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C974826087
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 11:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728735AbfEVIge (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 04:36:34 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:34643 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728538AbfEVIge (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 04:36:34 -0400
-Received: from [IPv6:2001:420:44c1:2579:69f9:edb3:2367:c945] ([IPv6:2001:420:44c1:2579:69f9:edb3:2367:c945])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id TMjch3cxZsDWyTMjfhK3my; Wed, 22 May 2019 10:36:31 +0200
-Subject: Re: [PATCH v2] media:usb:zr364xx:Fix KASAN:null-ptr-deref Read in
- zr364xx_vidioc_querycap
-To:     Vandana BN <bnvandana@gmail.com>, royale@zerezo.com,
-        mchehab@kernel.org, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20190521181535.7974-1-bnvandana@gmail.com>
- <20190522083415.9252-1-bnvandana@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <5cb192e9-aa20-cc80-44b3-16d11a6257ff@xs4all.nl>
-Date:   Wed, 22 May 2019 10:36:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
-MIME-Version: 1.0
-In-Reply-To: <20190522083415.9252-1-bnvandana@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S1728802AbfEVJar (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 05:30:47 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:15374 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728536AbfEVJar (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 05:30:47 -0400
+X-UUID: 6572bcb62c544fa1ac84fa752fc1c9c8-20190522
+X-UUID: 6572bcb62c544fa1ac84fa752fc1c9c8-20190522
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 272006990; Wed, 22 May 2019 17:30:39 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 22 May
+ 2019 17:30:37 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 22 May 2019 17:30:36 +0800
+Message-ID: <1558517436.10179.388.camel@mhfsdcap03>
+Subject: RE: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
+ node
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Biju Das <biju.das@bp.renesas.com>
+CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 22 May 2019 17:30:36 +0800
+In-Reply-To: <OSBPR01MB21032206146152983C8F4E8EB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1557823643-8616-5-git-send-email-chunfeng.yun@mediatek.com>
+         <20190517103736.GA1490@kuha.fi.intel.com>
+         <20190517130511.GA1887@kuha.fi.intel.com>
+         <1558319951.10179.352.camel@mhfsdcap03>
+         <20190520080359.GC1887@kuha.fi.intel.com>
+         <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+         <20190520083601.GE1887@kuha.fi.intel.com>
+         <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+         <20190521095839.GI1887@kuha.fi.intel.com>
+         <OSBPR01MB21032206146152983C8F4E8EB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfBv8opnsATBgOet2RDvjx5IAZBuBfDknh/The5JZZbHYsmjvTH93TTcaND9Rt9LiAjQVUdSwwD+s/Almv4aY1JSdCJhp+6vgLy8CUxqYuHbWUzJfH61x
- thFX4H9wCPNrhAsS3tFQHsmHHgXhzo8KngW/fCEHYud+kr0EHyVeb4Fr5T4qQxE6uO4a5yijdJcVzzxR9vQlaTV7Ph1VdnNMXnt883wfHp+o/4VC8GTTD/Wa
- pYpUdHqvBCDbrPHtsr+he1RiFJ4fex+MC0OS73opTg8Ir3ThPKi49eMSfndjekn3ICEEPix4Z19HwFDQhBWzi05A7pEhxUuIf0ZfnKD8r9IUcTCOyHm022zx
- dj0n4oygdc1jvyJeZE3hXPmpKuIXyuN5dxouhoXWUQINFB3C3CQz8IQBNyu7ddD77cQM2LujDQUuvaLFjkghg49uV/K575K/ovjgGYb5YOhI5n/pvqkyfwtu
- +BGj4UFthSUgLJJ43ThZ5t23dEUkjCw6U2l4B2KcZdmgqIuGvN7mVGaUiS1ZAbMBVByjWj+fzLIliOUz7qdSfdgaIsX9O1KKOHm8xltEy+z4oK/W3kPUcFkX
- uMORaAd8nCu6TCs0KwbAtQcw
+MIME-Version: 1.0
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/22/19 10:34 AM, Vandana BN wrote:
-> SyzKaller hit the null pointer deref while reading from uninitialized
-> udev->product in zr364xx_vidioc_querycap().
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in read_word_at_a_time+0xe/0x20
-> include/linux/compiler.h:274
-> Read of size 1 at addr 0000000000000000 by task v4l_id/5287
+Hi Biju,
+On Wed, 2019-05-22 at 08:05 +0000, Biju Das wrote:
+> Hi Heikki,
 > 
-> CPU: 1 PID: 5287 Comm: v4l_id Not tainted 5.1.0-rc3-319004-g43151d6 #6
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xe8/0x16e lib/dump_stack.c:113
->   kasan_report.cold+0x5/0x3c mm/kasan/report.c:321
->   read_word_at_a_time+0xe/0x20 include/linux/compiler.h:274
->   strscpy+0x8a/0x280 lib/string.c:207
->   zr364xx_vidioc_querycap+0xb5/0x210 drivers/media/usb/zr364xx/zr364xx.c:706
->   v4l_querycap+0x12b/0x340 drivers/media/v4l2-core/v4l2-ioctl.c:1062
->   __video_do_ioctl+0x5bb/0xb40 drivers/media/v4l2-core/v4l2-ioctl.c:2874
->   video_usercopy+0x44e/0xf00 drivers/media/v4l2-core/v4l2-ioctl.c:3056
->   v4l2_ioctl+0x14e/0x1a0 drivers/media/v4l2-core/v4l2-dev.c:364
->   vfs_ioctl fs/ioctl.c:46 [inline]
->   file_ioctl fs/ioctl.c:509 [inline]
->   do_vfs_ioctl+0xced/0x12f0 fs/ioctl.c:696
->   ksys_ioctl+0xa0/0xc0 fs/ioctl.c:713
->   __do_sys_ioctl fs/ioctl.c:720 [inline]
->   __se_sys_ioctl fs/ioctl.c:718 [inline]
->   __x64_sys_ioctl+0x74/0xb0 fs/ioctl.c:718
->   do_syscall_64+0xcf/0x4f0 arch/x86/entry/common.c:290
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x7f3b56d8b347
-> Code: 90 90 90 48 8b 05 f1 fa 2a 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff
-> ff c3 90 90 90 90 90 90 90 90 90 90 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff
-> ff 73 01 c3 48 8b 0d c1 fa 2a 00 31 d2 48 29 c2 64
-> RSP: 002b:00007ffe005d5d68 EFLAGS: 00000202 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3b56d8b347
-> RDX: 00007ffe005d5d70 RSI: 0000000080685600 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000400884
-> R13: 00007ffe005d5ec0 R14: 0000000000000000 R15: 0000000000000000
-> ==================================================================
+> Thanks for the feedback.
 > 
-> For this device udev->product is not initialized and accessing it causes a NULL pointer deref.
+> > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
+> > node
+> > 
+> > On Mon, May 20, 2019 at 09:45:46AM +0000, Biju Das wrote:
+> > >
+> > >
+> > > Hi Heikki,
+> > >
+> > > Thanks for the feedback.
+> > >
+> > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
+> > > > usb_role_switch by node
+> > > >
+> > > > On Mon, May 20, 2019 at 08:06:41AM +0000, Biju Das wrote:
+> > > > > Hi Heikki,
+> > > > >
+> > > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
+> > > > > > usb_role_switch by node
+> > > > > >
+> > > > > > On Mon, May 20, 2019 at 10:39:11AM +0800, Chunfeng Yun wrote:
+> > > > > > > Hi,
+> > > > > > > On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
+> > > > > > > > Hi,
+> > > > > > > >
+> > > > > > > > On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki Krogerus wrote:
+> > > > > > > > > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng Yun
+> > wrote:
+> > > > > > > > > > Add fwnode_usb_role_switch_get() to make easier to get
+> > > > > > > > > > usb_role_switch by fwnode which register it.
+> > > > > > > > > > It's useful when there is not device_connection
+> > > > > > > > > > registered between two drivers and only knows the fwnode
+> > > > > > > > > > which register usb_role_switch.
+> > > > > > > > > >
+> > > > > > > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > > > > > > > Tested-by: Biju Das <biju.das@bp.renesas.com>
+> > > > > > > > >
+> > > > > > > > > Acked-by: Heikki Krogerus
+> > > > > > > > > <heikki.krogerus@linux.intel.com>
+> > > > > > > >
+> > > > > > > > Hold on. I just noticed Rob's comment on patch 2/6, where he
+> > > > > > > > points out that you don't need to use device graph since the
+> > > > > > > > controller is the parent of the connector. Doesn't that mean
+> > > > > > > > you don't really need this API?
+> > > > > > > No, I still need it.
+> > > > > > > The change is about the way how to get fwnode; when use device
+> > > > > > > graph, get fwnode by of_graph_get_remote_node(); but now will
+> > > > > > > get fwnode by of_get_parent();
+> > > > > >
+> > > > > > OK, I get that, but I'm still not convinced about if something
+> > > > > > like this function is needed at all. I also have concerns
+> > > > > > regarding how you are using the function. I'll explain in
+> > > > > > comment to the patch 5/6 in this
+> > > > series...
+> > > > >
+> > > > > FYI, Currently  I am also using this api in my patch series.
+> > > > > https://patchwork.kernel.org/patch/10944637/
+> > > >
+> > > > Yes, and I have the same question for you I jusb asked in comment I
+> > > > added to the patch 5/6 of this series. Why isn't usb_role_switch_get()
+> > enough?
+> > >
+> > > Currently no issue. It will work with this api as well, since the port node is
+> > part of controller node.
+> > > For eg:-
+> > > https://patchwork.kernel.org/patch/10944627/
+> > >
+> > > However if any one adds port node inside the connector node, then this
+> > api may won't work as expected.
+> > > Currently I get below error
+> > >
+> > > [    2.299703] OF: graph: no port node found in
+> > /soc/i2c@e6500000/hd3ss3220@47
+> > 
+> > We need to understand why is that happening?
+> > 
 > 
-> The fix is to check for NULL before strscpy() and copy empty string, if
-> product is NULL
+> Form the stack trace  the parent node is "parent_node=hd3ss3220@47" , instead of the "connector" node.
+> That is the reason for the above error.
 > 
-> Reported-by: syzbot+66010012fd4c531a1a96@syzkaller.appspotmail.com
+> [    2.442429]  of_graph_get_next_endpoint.part.0+0x28/0x168
+> [    2.447889]  of_fwnode_graph_get_next_endpoint+0x5c/0xb0
+> [    2.453267]  fwnode_graph_get_next_endpoint+0x20/0x30
+> [    2.458374]  device_connection_find_match+0x74/0x1a0
+> [    2.463399]  usb_role_switch_get+0x20/0x28
+> [    2.467542]  hd3ss3220_probe+0xc4/0x218
 > 
-> Signed-off-by: Vandana BN <bnvandana@gmail.com>
+> The use case is
+> 
+> &i2c0 {
+> 	hd3ss3220@47 {                                                           
+>                  	compatible = "ti,hd3ss3220"; 
+>                                    
+>                  	usb_con: connector {                                             
+>                           		compatible = "usb-c-connector";                                                      
+>                          		port {                                                   
+>                                 		 hd3ss3220_ep: endpoint {                         
+>                                         			remote-endpoint = <&usb3_role_switch>;   
+>                                 		};                                               
+>                          		};                                                       
+>                 	 };                                                               
+> 	 }; 
+> };
+>    
+> &usb3_peri0 {                                                                    
+>          companion = <&xhci0>;                                                    
+>          usb-role-switch;                                                         
+>                                                                                   
+>          port {                                                                   
+>                 usb3_role_switch: endpoint {                                     
+>                         remote-endpoint = <&hd3ss3220_ep>;                       
+>                  };                                                               
+>          };                                                                       
+> };   
+> 
+> Q1) How do we modify the usb_role_switch_get() function to search 
+> Child(connector) and child's endpoint?
+How about firstly finding connector node in fwnode_graph_devcon_match(),
+then search each endpoint?
 
-Looks good!
-
-I'll take this patch for v5.3.
-
-Regards,
-
-	Hans
-
-> ---
-> v2 - removed else part as cap->card is already zeroed.
 > 
->  drivers/media/usb/zr364xx/zr364xx.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> > It looks like we have an issue somewhere in the code, and instead of fixing
+> > that, you are working around it. Let's not do that.
 > 
-> diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-> index 96fee8d5b865..cd2bc9ed0cd9 100644
-> --- a/drivers/media/usb/zr364xx/zr364xx.c
-> +++ b/drivers/media/usb/zr364xx/zr364xx.c
-> @@ -703,7 +703,8 @@ static int zr364xx_vidioc_querycap(struct file *file, void *priv,
->  	struct zr364xx_camera *cam = video_drvdata(file);
->  
->  	strscpy(cap->driver, DRIVER_DESC, sizeof(cap->driver));
-> -	strscpy(cap->card, cam->udev->product, sizeof(cap->card));
-> +	if (cam->udev->product)
-> +		strscpy(cap->card, cam->udev->product, sizeof(cap->card));
->  	strscpy(cap->bus_info, dev_name(&cam->udev->dev),
->  		sizeof(cap->bus_info));
->  	cap->device_caps = V4L2_CAP_VIDEO_CAPTURE |
+> OK.
 > 
+> Regards,
+> Biju
+> 
+
 
