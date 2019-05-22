@@ -2,291 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DCD25C39
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 05:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498FA25C44
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 05:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728130AbfEVDiD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 May 2019 23:38:03 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:33743 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727681AbfEVDiD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 23:38:03 -0400
-X-UUID: 1af16d7cb5dc42c0abeb575eabeb4e99-20190522
-X-UUID: 1af16d7cb5dc42c0abeb575eabeb4e99-20190522
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 2060629758; Wed, 22 May 2019 11:37:45 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 22 May
- 2019 11:37:43 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 22 May 2019 11:37:42 +0800
-Message-ID: <1558496262.10179.379.camel@mhfsdcap03>
-Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
- node
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Biju Das <biju.das@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Adam Thomson" <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 22 May 2019 11:37:42 +0800
-In-Reply-To: <20190521103304.GJ1887@kuha.fi.intel.com>
-References: <1557823643-8616-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1557823643-8616-5-git-send-email-chunfeng.yun@mediatek.com>
-         <20190517103736.GA1490@kuha.fi.intel.com>
-         <20190517130511.GA1887@kuha.fi.intel.com>
-         <1558319951.10179.352.camel@mhfsdcap03>
-         <20190520080359.GC1887@kuha.fi.intel.com>
-         <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-         <20190520083601.GE1887@kuha.fi.intel.com>
-         <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-         <1558424104.10179.365.camel@mhfsdcap03>
-         <20190521103304.GJ1887@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
-X-MTK:  N
+        id S1728394AbfEVDmV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 May 2019 23:42:21 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:36544 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728150AbfEVDmV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 May 2019 23:42:21 -0400
+Received: from mail-pg1-f200.google.com ([209.85.215.200])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hTI8w-00045E-Tx
+        for linux-usb@vger.kernel.org; Wed, 22 May 2019 03:42:19 +0000
+Received: by mail-pg1-f200.google.com with SMTP id r191so763641pgr.23
+        for <linux-usb@vger.kernel.org>; Tue, 21 May 2019 20:42:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=NPTfaApxYhJLazeTc6j/yypjFDd8f8Hs9lpKwzlxSxg=;
+        b=Z46RZqbN+/+c2qBg44FAxfUUoLXTM3OZdTBX1o2x1Npa8d6yZ/ngjZz2QN8gHPLyhR
+         hOy2rB3L+Hna9ds3f7Uq/cpDR9ijvMP3UoWhuMhJtqN1nwRqt5cugErauATUP9l6VuPd
+         NCvXLQyWX6hYo4CguWxweCri9fpJm8lfrVCH6Mxasdf2+n/PkS0/6VOZpSe89OjTlcLX
+         /VaKLlxY7sRXMS9E/zrJig7JorQ4A3rSoBm4tSXJAEobOaLXHQRDD60woT5GFG6MET3N
+         XAyNONHUmYESptOlNOQZtfv66MJMrICOBfJlLOqnFnXuxHQDwHt/GYmFVM4LAhfoANN6
+         YLnQ==
+X-Gm-Message-State: APjAAAWsGvoLLckhZ1Nq8Ix2ZZDYVGmmngjF3F6yU+W8Kg/7zbTFkTgL
+        nqDML56S3W2gKlfgMceRjD+CWCBFwG4PVofpVl7lOB114QaRmKelvgoVcvPdG6Sk3JShJrpHkFn
+        2bvPvwfLU/8DscvNArFKyXH2sc7MMcYSHNRD+Kw==
+X-Received: by 2002:a63:fd4a:: with SMTP id m10mr86016124pgj.302.1558496537571;
+        Tue, 21 May 2019 20:42:17 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqx6Crm8I8i1AnlXR0t9YOt0OdN/qVVPqLZbTo6dRoYrFXqVPXoCm+7hvxVmOVPBRx5TFq/tKw==
+X-Received: by 2002:a63:fd4a:: with SMTP id m10mr86016105pgj.302.1558496537321;
+        Tue, 21 May 2019 20:42:17 -0700 (PDT)
+Received: from [10.101.46.168] (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
+        by smtp.gmail.com with ESMTPSA id s134sm34046394pfc.110.2019.05.21.20.42.15
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 May 2019 20:42:16 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.8\))
+Subject: Re: [PATCH] PCI / PM: Don't runtime suspend when device only supports
+ wakeup from D0
+From:   Kai Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <20190521222300.GG57618@google.com>
+Date:   Wed, 22 May 2019 11:42:14 +0800
+Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Message-Id: <AE3B21D0-5BD9-40A5-B5A1-3E9A8B8E1327@canonical.com>
+References: <20190521163104.15759-1-kai.heng.feng@canonical.com>
+ <20190521222300.GG57618@google.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+X-Mailer: Apple Mail (2.3445.104.8)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-05-21 at 13:33 +0300, Heikki Krogerus wrote:
-> On Tue, May 21, 2019 at 03:35:04PM +0800, Chunfeng Yun wrote:
-> > Hi,
-> > On Mon, 2019-05-20 at 09:45 +0000, Biju Das wrote:
-> > > 
-> > > Hi Heikki,
-> > > 
-> > > Thanks for the feedback.
-> > > 
-> > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
-> > > > node
-> > > > 
-> > > > On Mon, May 20, 2019 at 08:06:41AM +0000, Biju Das wrote:
-> > > > > Hi Heikki,
-> > > > >
-> > > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
-> > > > > > usb_role_switch by node
-> > > > > >
-> > > > > > On Mon, May 20, 2019 at 10:39:11AM +0800, Chunfeng Yun wrote:
-> > > > > > > Hi,
-> > > > > > > On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
-> > > > > > > > Hi,
-> > > > > > > >
-> > > > > > > > On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki Krogerus wrote:
-> > > > > > > > > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng Yun wrote:
-> > > > > > > > > > Add fwnode_usb_role_switch_get() to make easier to get
-> > > > > > > > > > usb_role_switch by fwnode which register it.
-> > > > > > > > > > It's useful when there is not device_connection registered
-> > > > > > > > > > between two drivers and only knows the fwnode which register
-> > > > > > > > > > usb_role_switch.
-> > > > > > > > > >
-> > > > > > > > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > > > > > > > Tested-by: Biju Das <biju.das@bp.renesas.com>
-> > > > > > > > >
-> > > > > > > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > > > > >
-> > > > > > > > Hold on. I just noticed Rob's comment on patch 2/6, where he
-> > > > > > > > points out that you don't need to use device graph since the
-> > > > > > > > controller is the parent of the connector. Doesn't that mean you
-> > > > > > > > don't really need this API?
-> > > > > > > No, I still need it.
-> > > > > > > The change is about the way how to get fwnode; when use device
-> > > > > > > graph, get fwnode by of_graph_get_remote_node(); but now will get
-> > > > > > > fwnode by of_get_parent();
-> > > > > >
-> > > > > > OK, I get that, but I'm still not convinced about if something like
-> > > > > > this function is needed at all. I also have concerns regarding how
-> > > > > > you are using the function. I'll explain in comment to the patch 5/6 in this
-> > > > series...
-> > > > >
-> > > > > FYI, Currently  I am also using this api in my patch series.
-> > > > > https://patchwork.kernel.org/patch/10944637/
-> > > > 
-> > > > Yes, and I have the same question for you I jusb asked in comment I added
-> > > > to the patch 5/6 of this series. Why isn't usb_role_switch_get() enough?
-> > > 
-> > > Currently no issue. It will work with this api as well, since the port node is part of controller node.
-> > > For eg:-
-> > > https://patchwork.kernel.org/patch/10944627/
-> > > 
-> > > However if any one adds port node inside the connector node, then this api may won't work as expected.
-> > > Currently I get below error
-> > > 
-> > > [    2.299703] OF: graph: no port node found in /soc/i2c@e6500000/hd3ss3220@47
-> > > 
-> > > For eg:-
-> > > 
-> > > 	hd3ss3220@47 {
-> > > 		compatible = "ti,hd3ss3220";
-> > > 		...
-> > > 		....
-> > > 		usb_con: connector {
-> > >                                      ....
-> > >                                      ....
-> > > 			port {
-> > > 				hd3ss3220_ep: endpoint@0 {
-> > > 					reg = <0>;
-> > > 					remote-endpoint = <&usb3peri_role_switch>;
-> > > 				};
-> > > 			};
-> > > 		};
-> > > 	};
-> > > 
-> > > Regards,
-> > > Biju
-> > 
-> > I tested 3 cases:
-> > 
-> > case 1:
-> > 
-> > connector {
-> >     compatible = "linux,typeb-conn-gpio", "usb-b-connector";
-> >     label = "micro-USB";
-> >     type = "micro";
-> >     id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
-> >     vbus-supply = <&usb_p0_vbus>;
-> > 
-> >     port {
-> >         bconn_ep: endpoint@0 {
-> >             remote-endpoint = <&usb_role_sw>;
-> >         };
-> >     };
-> > };
-> > 
-> > &mtu3 {
-> >     usb-role-switch;
-> > 
-> >     port {
-> >         usb_role_sw: endpoint@0 {
-> >             remote-endpoint = <&bconn_ep>;
-> >         };
-> >     };
-> > };
-> > 
-> > the driver of connector could use usb_role_switch_get(dev) to get
-> > mtu3's USB Role Switch. (dev is the device of connector)
-> > 
-> > case 2:
-> > 
-> > &mtu3 {
-> >     usb-role-switch;
-> > 
-> >     connector {
-> >         compatible = "linux,typeb-conn-gpio", "usb-b-connector";
-> >         label = "micro-USB";
-> >         type = "micro";
-> >         id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
-> >         vbus-supply = <&usb_p0_vbus>;
-> >     };
-> > };
-> > 
-> > the driver of connector using usb_role_switch_get(dev) failed to get
-> > mtu3's USB Role Switch.
-> > error log:
-> > #OF: graph: no port node found in /usb@11271000/connector
-> > this is because connector hasn't child node connected to remote
-> > endpoint which register USB Role Switch
-> > 
-> > case 3:
-> > 
-> > rsw_iddig: role_sw_iddig {
-> >     compatible = "linux,typeb-conn-gpio";
-> >     status = "okay";
-> > 
-> >     connector {
-> >         compatible = "usb-b-connector";
-> >         label = "micro-USB";
-> >         type = "micro";
-> >         id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
-> >         vbus-supply = <&usb_p0_vbus>;
-> > 
-> >         port {
-> >             bconn_ep: endpoint@0 {
-> >                 remote-endpoint = <&usb_role_sw>;
-> >             };
-> >         };
-> >     };
-> > };
-> > 
-> > &mtu3 {
-> >     usb-role-switch;
-> > 
-> >     port {
-> >         usb_role_sw: endpoint@0 {
-> >             remote-endpoint = <&bconn_ep>;
-> >         };
-> >     };
-> > };
-> > 
-> > 
-> > the driver of connector using usb_role_switch_get(dev) also failed to
-> > get mtu3's USB Role Switch. Because usb_role_switch_get() only search
-> > its child nodes (connector node), but not child's child (port node)
-> > This case is the same as Biju's
-> > 
-> > Usually type-c is similar with case 3;
-> > the next version v6 of this series will use case 2 as Rob suggested,
-> > see [v5, 2/6]
-> > 
-> > for case 2, will need the new API fwnode_usb_role_switch_get();
-> 
-> Thanks for the explanation.
-> 
-> In this case, if I understood this correctly, the USB controller, which
-> is also the role switch, is the parent of the connector. So shouldn't
-> we simply consider that in the current API?
-It's better if can be added into the current API.
-I'll try it.
-> 
-> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> index f45d8df5cfb8..2f898167b99a 100644
-> --- a/drivers/usb/roles/class.c
-> +++ b/drivers/usb/roles/class.c
-> @@ -125,6 +125,13 @@ struct usb_role_switch *usb_role_switch_get(struct device *dev)
->  {
->         struct usb_role_switch *sw;
-> 
-> +       /*
-> +        * Simplest case is that a connector is looking for the controller,
-> +        * which is its parent.
-> +        */
-> +       if (device_property_present(dev->parent, "usb-role-switch"))
-> +               return to_role_switch(dev->parent);
-> +
->         sw = device_connection_find_match(dev, "usb-role-switch", NULL,
->                                           usb_role_switch_match);
-> 
-> 
-> > for case 3, use the new API, or need modify usb_role_switch_get();
-> 
-> I did not completely understand this case, but isn't it the same as
-> case 2 in the end, after you change it as Rob suggested?
-I'm afraid not, their bindings are different, see
-connector/usb-connector.txt
-> 
-> 
-> thanks,
-> 
+at 6:23 AM, Bjorn Helgaas <helgaas@kernel.org> wrote:
+
+> [+cc Mathias, linux-usb]
+>
+> On Wed, May 22, 2019 at 12:31:04AM +0800, Kai-Heng Feng wrote:
+>> There's an xHC device that doesn't wake when a USB device gets plugged
+>> to its USB port. The driver's own runtime suspend callback was called,
+>> PME signaling was enabled, but it stays at PCI D0.
+>
+> s/xHC/xHCI/ ?
+>
+> This looks like it's fixing a bug?  If so, please include a link to
+> the bug report, and make sure the bug report has "lspci -vv" output
+> attached to it.
+
+Ok, I’ll update this in V2.
+
+>
+>> A PCI device can be runtime suspended to D0 when it supports D0 PME and
+>> its _S0W reports D0. Theoratically this should work, but as [1]
+>> specifies, D0 doesn't have wakeup capability.
+>
+> s/Theoratically/Theoretically/
+
+Ok.
+
+>
+> What does "runtime suspended to D0" mean?
+
+It’s runtime suspended by PCI core, but stays at D0.
+
+>  Is that different from the regular "device is fully operational" sort of D0?
+
+Yes it's different to that.
+Because of _S0W reports D0 and the device has D0 PME support, so it’s  
+“suspended” to D0:
+
+00:10.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] FCH USB  
+XHCI Controller [1022:7914] (rev 20) (prog-if 30 [XHCI])
+         Subsystem: Dell FCH USB XHCI Controller [1028:096c]
+         Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+         Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+         Interrupt: pin A routed to IRQ 18
+         Region 0: Memory at f0668000 (64-bit, non-prefetchable) [size=8K]
+         Capabilities: [50] Power Management version 3
+                 Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+                 Status: D0 NoSoftRst+ PME-Enable+ DSel=0 DScale=0 PME-
+         Capabilities: [70] MSI: Enable- Count=1/8 Maskable- 64bit+
+                 Address: 0000000000000000  Data: 0000
+         Capabilities: [90] MSI-X: Enable+ Count=8 Masked-
+                 Vector table: BAR=0 offset=00001000
+                 PBA: BAR=0 offset=00001080
+         Capabilities: [a0] Express (v2) Root Complex Integrated Endpoint, MSI 00
+                 DevCap: MaxPayload 128 bytes, PhantFunc 0
+                         ExtTag- RBE+
+                 DevCtl: Report errors: Correctable- Non-Fatal- Fatal- Unsupported-
+                         RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop+
+                         MaxPayload 128 bytes, MaxReadReq 512 bytes
+                 DevSta: CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr+ TransPend-
+                 DevCap2: Completion Timeout: Not Supported, TimeoutDis+, LTR+, OBFF Not Supported
+                 DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-, LTR-, OBFF Disabled
+         Capabilities: [100 v1] Latency Tolerance Reporting
+                 Max snoop latency: 0ns
+                 Max no snoop latency: 0ns
+         Kernel driver in use: xhci_hcd
+
+
+PME signaling is correctly enabled:
+Status: D0 NoSoftRst+ PME-Enable+ DSel=0 DScale=0 PME-
+
+> If so, what
+> distinguishes "runtime suspended D0" from "normal fully operational
+> D0”?
+
+The xHC’s own runtime suspend routine is called, but PCI core’s runtime  
+suspend routine decides it should stay at D0.
+So it’s technically runtime suspended to D0.
+
+Kai-Heng
+
+>
+>> To avoid this problematic situation, we should avoid runtime suspend if
+>> D0 is the only state that can wake up the device.
+>>
+>> [1]  
+>> https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/device-working-state-d0
+>>
+>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>> ---
+>>  drivers/pci/pci-driver.c | 5 +++++
+>>  drivers/pci/pci.c        | 2 +-
+>>  include/linux/pci.h      | 3 +++
+>>  3 files changed, 9 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+>> index cae630fe6387..15a6310c5d7b 100644
+>> --- a/drivers/pci/pci-driver.c
+>> +++ b/drivers/pci/pci-driver.c
+>> @@ -1251,6 +1251,11 @@ static int pci_pm_runtime_suspend(struct device  
+>> *dev)
+>>  		return 0;
+>>  	}
+>>
+>> +	if (pci_target_state(pci_dev, device_can_wakeup(dev)) == PCI_D0) {
+>> +		dev_dbg(dev, "D0 doesn't have wakeup capability\n");
+>> +		return -EBUSY;
+>> +	}
+>> +
+>>  	pci_dev->state_saved = false;
+>>  	if (pm && pm->runtime_suspend) {
+>>  		error = pm->runtime_suspend(dev);
+>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+>> index 8abc843b1615..ceee6efbbcfe 100644
+>> --- a/drivers/pci/pci.c
+>> +++ b/drivers/pci/pci.c
+>> @@ -2294,7 +2294,7 @@ EXPORT_SYMBOL(pci_wake_from_d3);
+>>   * If the platform can't manage @dev, return the deepest state from which it
+>>   * can generate wake events, based on any available PME info.
+>>   */
+>> -static pci_power_t pci_target_state(struct pci_dev *dev, bool wakeup)
+>> +pci_power_t pci_target_state(struct pci_dev *dev, bool wakeup)
+>>  {
+>>  	pci_power_t target_state = PCI_D3hot;
+>>
+>> diff --git a/include/linux/pci.h b/include/linux/pci.h
+>> index 4a5a84d7bdd4..91e8dc4d04aa 100644
+>> --- a/include/linux/pci.h
+>> +++ b/include/linux/pci.h
+>> @@ -1188,6 +1188,7 @@ bool pci_pme_capable(struct pci_dev *dev,  
+>> pci_power_t state);
+>>  void pci_pme_active(struct pci_dev *dev, bool enable);
+>>  int pci_enable_wake(struct pci_dev *dev, pci_power_t state, bool enable);
+>>  int pci_wake_from_d3(struct pci_dev *dev, bool enable);
+>> +pci_power_t pci_target_state(struct pci_dev *dev, bool wakeup);
+>>  int pci_prepare_to_sleep(struct pci_dev *dev);
+>>  int pci_back_from_sleep(struct pci_dev *dev);
+>>  bool pci_dev_run_wake(struct pci_dev *dev);
+>> @@ -1672,6 +1673,8 @@ static inline int pci_set_power_state(struct  
+>> pci_dev *dev, pci_power_t state)
+>>  { return 0; }
+>>  static inline int pci_wake_from_d3(struct pci_dev *dev, bool enable)
+>>  { return 0; }
+>> +pci_power_t pci_target_state(struct pci_dev *dev, bool wakeup)
+>> +{ return PCI_D0; }
+>>  static inline pci_power_t pci_choose_state(struct pci_dev *dev,
+>>  					   pm_message_t state)
+>>  { return PCI_D0; }
+>> -- 
+>> 2.17.1
 
 
