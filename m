@@ -2,97 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDBF26674
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 17:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403472667B
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 17:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729696AbfEVPBA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 11:01:00 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:36885 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727975AbfEVPBA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 11:01:00 -0400
-Received: by mail-it1-f196.google.com with SMTP id m140so3551010itg.2;
-        Wed, 22 May 2019 08:01:00 -0700 (PDT)
+        id S1729760AbfEVPCr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 11:02:47 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:44369 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729517AbfEVPCp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 11:02:45 -0400
+Received: by mail-io1-f66.google.com with SMTP id f22so2081615iol.11;
+        Wed, 22 May 2019 08:02:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aIzrHS5nLBf6pyiovGTr1aWzg7NgzfwfpU/6nbGyolg=;
-        b=BD7xcKs/duZRRzHLDo7wNqdwMY5oXP4NZBypwS3LAI+SZ5LXCAKS+P8gltfDeN2Qrz
-         b4aAFqqRLy8Fx6zEai6NLkMqEbHB6GZwyk/B78K1P90RWGGGEdSAf8AwfOWAmqD2GUG2
-         NVzhGGXUk8xIoP4ns9cfeY5FYVPGpisQDXX6yD9Ot+rJ98osYrBokKhdIRUIoo5v7/H7
-         o3reQpJtdq9u47s5xyOEiY0DYIyeMtZ27dajDF1bRZEWM0HnU+wmhjr3XTIQngUAasHz
-         9lrOLvNjoopihTQJW2j3MRX2LqH1C1gz/MqRJH8SwC37noIL5bqhqK2+VcQG3KWnmsm2
-         RklA==
+        bh=vDrBocZqF5A9uvIRjwm8TlVuWA42reD9PHLLFCTbFI8=;
+        b=KTZrZjLxDXab0dPMxFWXRl0eNy5ybOtX4eJo2UN5GMYS9KUvUQzE+BJ2oOkdLIs3Zj
+         Jp2RILHcGS16ekSnEUBvKzm2hFcfnHE5Jr7612tdepE6cVhQ0m68o8JTg25/p2aYQOO3
+         p9O7BC1ztcFxnGtwkZEwfAymH20dUnw0+/jFdte++fufR7JCWA21iKVnfocFpy8AbGzb
+         eCPr1cAtcv2kqlo6rOh+ztAYbJcfnkL40ep1dNVnLYbmCic+1UqqhP8s+EvnZBvbAdHl
+         RjLZyllNq3Utg6BZ11E+o5dyeu0yMlVy4v5JwWmfsm/Y+MuDgJV8yr3kBvfqx6dlWS2r
+         wTXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aIzrHS5nLBf6pyiovGTr1aWzg7NgzfwfpU/6nbGyolg=;
-        b=gOOGt+U/0tES7DGG04Yho9WzOnk6pESmhZayVdWlS8B1UbvrCHuDE66+h2Z3XaCs+W
-         oS6Wj8fL3KmIYRDZFRCr7sEXnApKcD/hSwZZQyxWXQWqPuGUnzCdTSXkFseMJaDyHvxB
-         WGqv0ZXdqjqRQT2eVMD0l6n7C/e6QppCbiO1Y1jg3YXC4N9XVM4xB7ZyhculhPWokqDG
-         3wYw/rUPhpGVL4rbwwZIGcgtpxVvbeViVgsKZ7qpIp8DmB3J3/mInaVc3UfMwVaUAyEC
-         oZEOHfwrCzq55ZoOCYUzZz5eYzUlpmWJESUnIJg8LbiSVHkDO8Opm0WS/vsiKgsSUW3F
-         05tw==
-X-Gm-Message-State: APjAAAXWWM4x8W2XAHBBajTioa0R/3QNGLyGcZHIRQC9vMsWvswgzCSN
-        9sSL3JeREEbmjkDmp8CBdQBfG3rU45TDMhrwxkPGd2BG9AE=
-X-Google-Smtp-Source: APXvYqx4KcQotZMs/inGYcNvV6GW292VABI1Mzl46kBHGTl2TiKpifmJH/NUoivR+MQ5OQKRcC5GMJ9EwzfY5wRbIl0=
-X-Received: by 2002:a24:91d2:: with SMTP id i201mr9261893ite.88.1558537259711;
- Wed, 22 May 2019 08:00:59 -0700 (PDT)
+        bh=vDrBocZqF5A9uvIRjwm8TlVuWA42reD9PHLLFCTbFI8=;
+        b=gwzNcI4UghOVZnd+8z/xYlEiNPUzVVc7TITTn+eTO9/vC2fWXMlhMqt5cvDkoQQafh
+         7FqGkNuFS4lUqZrLSqnvw9Bev0eLTGJA/QWullivfuFC4XbRKQ6Npli25RdRIl8gRpAF
+         3NhEILf5bXJXgR0fhNP8486WFvQuJELuS63kT8z7D1JNk3S5AMy6UsAowpH/tp0z1KyC
+         GTWvyfH4kaiSzhrI6SZBtBI3boZ4HN96anK9UZrHiKTPVoq0AolhCvas0j5raEW5TSFw
+         f1ZKJyMEEThJFRIKfPcjgY0pwC/vJ3rt2LUjV/6pnXmr5a9u56jUYTuc+8BqKuoILWKm
+         g3vA==
+X-Gm-Message-State: APjAAAWC30H602ggBUAXIsZ459surKefIwSKpZlzol1x4LaO5mTGa+hI
+        O2Qmc9l57oNxXD8ZzCDcRySdjfzYVaTI4Y6psvzFtkrWsbQ=
+X-Google-Smtp-Source: APXvYqzLGNbsta34sjAK5yPAwpIwFYJUcC4AaRk6875xUEBJ05MhRdbGMYpQSWHnZpUcyA82CQZxP98IIXCSFC3pQV8=
+X-Received: by 2002:a6b:b7ce:: with SMTP id h197mr26284954iof.169.1558537364407;
+ Wed, 22 May 2019 08:02:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190409120908.12079-1-alexandre.belloni@bootlin.com> <efaaff85-ac39-f0e2-e042-7d6fd0c59054@zaltys.org>
-In-Reply-To: <efaaff85-ac39-f0e2-e042-7d6fd0c59054@zaltys.org>
+References: <20190522120736.5521-1-alexandre.belloni@bootlin.com>
+In-Reply-To: <20190522120736.5521-1-alexandre.belloni@bootlin.com>
 From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
-Date:   Wed, 22 May 2019 11:00:48 -0400
-Message-ID: <CA+rxa6qJDEvg6wCuaLo4yhqa6uZ45rKXcbGwE_XnWkjy2j9YAA@mail.gmail.com>
-Subject: Re: [PATCH 0/5] usb: gadget: udc: lpc32xx: add stotg04 phy support
-To:     James Grant <jamesg@zaltys.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
+Date:   Wed, 22 May 2019 11:02:32 -0400
+Message-ID: <CA+rxa6oabqMLAUyXVX-tvrAkpNDXVQ7KqiEqSf73J1HXwY-e5A@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: udc: lpc32xx: allocate descriptor with GFP_ATOMIC
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Vladimir Zapolskiy <vz@mleia.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org,
         "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, James Grant <jamesg@zaltys.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-You can add my "Acked-by" on the 5 patches.
 Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
 
-On Mon, May 13, 2019 at 7:32 AM James Grant <jamesg@zaltys.org> wrote:
+On Wed, May 22, 2019 at 8:07 AM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
 >
-> Tested with a board containing LPC3250 SOC and STOTG04 PHY by using
-> serial gadget.
+> Gadget drivers may queue request in interrupt context. This would lead to
+> a descriptor allocation in that context. In that case we would hit
+> BUG_ON(in_interrupt()) in __get_vm_area_node.
 >
-> Needed patch "[PATCH] usb: gadget: udc: lpc32xx: allocate descriptor
-> with GFP_ATOMIC" also.
+> Also remove the unnecessary cast.
 >
 > Tested-by: James Grant <jamesg@zaltys.org>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
 >
-> Regards,
-> James Grant.
+> Changes in v2:
+>  - remove unnecessary cast as pointed by Joe Perches
+>  - Collected tested-by
 >
-> On 09/04/2019 14:09, Alexandre Belloni Wrote:
-> > Hi,
-> >
-> > This series starts to clean up the lpc32xx udc driver and also repairs
-> > interrupt handling so hotplugging actually works. The design I tested
-> > that on uses an stotg04 instead of the usual isp1301 so support for that
-> > is also added.
-> >
-> > A bit more work is needed to get the RNDIS gadget driver to work.
-> >
-> > Alexandre Belloni (5):
-> >    usb: gadget: udc: lpc32xx: simplify probe
-> >    usb: gadget: udc: lpc32xx: simplify vbus handling
-> >    usb: gadget: udc: lpc32xx: properly setup phy interrupts
-> >    usb: gadget: udc: lpc32xx: add support for stotg04 phy
-> >    usb: gadget: udc: lpc32xx: rework interrupt handling
-> >
-> >   drivers/usb/gadget/udc/lpc32xx_udc.c | 167 +++++++++++----------------
-> >   1 file changed, 66 insertions(+), 101 deletions(-)
+>  drivers/usb/gadget/udc/lpc32xx_udc.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
+> index d8f1c60793ed..2719194ebf42 100644
+> --- a/drivers/usb/gadget/udc/lpc32xx_udc.c
+> +++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+> @@ -937,8 +937,7 @@ static struct lpc32xx_usbd_dd_gad *udc_dd_alloc(struct lpc32xx_udc *udc)
+>         dma_addr_t                      dma;
+>         struct lpc32xx_usbd_dd_gad      *dd;
+>
+> -       dd = (struct lpc32xx_usbd_dd_gad *) dma_pool_alloc(
+> -                       udc->dd_cache, (GFP_KERNEL | GFP_DMA), &dma);
+> +       dd = dma_pool_alloc(udc->dd_cache, GFP_ATOMIC | GFP_DMA, &dma);
+>         if (dd)
+>                 dd->this_dma = dma;
+>
+> --
+> 2.21.0
+>
