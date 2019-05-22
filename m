@@ -2,124 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4457527124
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 22:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46963271EC
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 23:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730136AbfEVUwe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 16:52:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37892 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729528AbfEVUwe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 May 2019 16:52:34 -0400
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0B37220675;
-        Wed, 22 May 2019 20:52:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558558353;
-        bh=bhpBHeEEilTJAKuT5Mz1T+jvRriCi/QY/aaDhmaV7JI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ouHOrgyYGR6Ej2mSKFz/3tkEsldkGSNiCr50YNVhTymWt2/NSkU5IZLSv5wHzIHey
-         yfJCtejVdReX1qKpbB02KMuX1ladLoJjzMV47fSNX14NzIFTNC7O2HJsIfig+Dgxa+
-         EdwV7TDs99XEyF6g7uXFcv7KEVI02A4FvjQ/pdmU=
-Date:   Wed, 22 May 2019 15:52:31 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
+        id S1730223AbfEVVuc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 17:50:32 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:44733 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728615AbfEVVuc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 17:50:32 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hTZ82-0006en-KY; Wed, 22 May 2019 15:50:30 -0600
+Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.xmission.com)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hTZ7s-0002cm-1j; Wed, 22 May 2019 15:50:30 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Kai Heng Feng <kai.heng.feng@canonical.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] PCI / PM: Don't runtime suspend when device only
- supports wakeup from D0
-Message-ID: <20190522205231.GD79339@google.com>
-References: <20190522181157.GC79339@google.com>
- <Pine.LNX.4.44L0.1905221433310.1410-100000@iolanthe.rowland.org>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        <linux-kernel@vger.kernel.org>
+References: <Pine.LNX.4.44L0.1905221459170.1410-100000@iolanthe.rowland.org>
+Date:   Wed, 22 May 2019 16:50:11 -0500
+In-Reply-To: <Pine.LNX.4.44L0.1905221459170.1410-100000@iolanthe.rowland.org>
+        (Alan Stern's message of "Wed, 22 May 2019 15:02:29 -0400 (EDT)")
+Message-ID: <87o93ujh0s.fsf@xmission.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Pine.LNX.4.44L0.1905221433310.1410-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-XM-SPF: eid=1hTZ7s-0002cm-1j;;;mid=<87o93ujh0s.fsf@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/KkZFIzOai1UbCldXVDvTfkpuB43MLQLU=
+X-SA-Exim-Connect-IP: 72.206.97.68
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa03.xmission.com
+X-Spam-Level: ***
+X-Spam-Status: No, score=3.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
+        T_XMDrugObfuBody_12,XMGappySubj_01,XMGappySubj_02,XMSubLong
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4905]
+        *  1.0 XMGappySubj_02 Gappier still
+        *  0.5 XMGappySubj_01 Very gappy subject
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa03 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  1.0 T_XMDrugObfuBody_12 obfuscated drug references
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Alan Stern <stern@rowland.harvard.edu>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 10180 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 2.2 (0.0%), b_tie_ro: 1.64 (0.0%), parse: 0.68
+        (0.0%), extract_message_metadata: 10 (0.1%), get_uri_detail_list: 2.3
+        (0.0%), tests_pri_-1000: 3.2 (0.0%), tests_pri_-950: 1.10 (0.0%),
+        tests_pri_-900: 0.85 (0.0%), tests_pri_-90: 23 (0.2%), check_bayes: 22
+        (0.2%), b_tokenize: 8 (0.1%), b_tok_get_all: 8 (0.1%), b_comp_prob:
+        2.1 (0.0%), b_tok_touch_all: 2.8 (0.0%), b_finish: 0.51 (0.0%),
+        tests_pri_0: 3457 (34.0%), check_dkim_signature: 0.40 (0.0%),
+        check_dkim_adsp: 3073 (30.2%), poll_dns_idle: 9735 (95.6%),
+        tests_pri_10: 2.7 (0.0%), tests_pri_500: 6677 (65.6%), rewrite_mail:
+        0.00 (0.0%)
+Subject: Re: [PATCH] signal/usb: Replace kill_pid_info_as_cred with kill_pid_usb_asyncio
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 22, 2019 at 02:39:56PM -0400, Alan Stern wrote:
-> On Wed, 22 May 2019, Bjorn Helgaas wrote:
-> > On Wed, May 22, 2019 at 11:46:25PM +0800, Kai Heng Feng wrote:
-> > > > On May 22, 2019, at 9:48 PM, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Wed, May 22, 2019 at 11:42:14AM +0800, Kai Heng Feng wrote:
-> > > >> at 6:23 AM, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > >>> On Wed, May 22, 2019 at 12:31:04AM +0800, Kai-Heng Feng wrote:
-> > > >>>> There's an xHC device that doesn't wake when a USB device gets plugged
-> > > >>>> to its USB port. The driver's own runtime suspend callback was called,
-> > > >>>> PME signaling was enabled, but it stays at PCI D0.
-> > 
-> > > > ...
-> > > > And I guess this patch basically means we wouldn't call the driver's
-> > > > suspend callback if we're merely going to stay at D0, so the driver
-> > > > would have no idea anything happened.  That might match
-> > > > Documentation/power/pci.txt better, because it suggests that the
-> > > > suspend callback is related to putting a device in a low-power state,
-> > > > and D0 is not a low-power state.
-> > > 
-> > > Yes, the patch is to let the device stay at D0 and don’t run driver’s own
-> > > runtime suspend routine.
-> > > 
-> > > I guess I’ll just proceed to send a V2 with updated commit message?
-> > 
-> > Now that I understand what "runtime suspended to D0" means, help me
-> > understand what's actually wrong.
-> 
-> Kai's point is that the xhci-hcd driver thinks the device is now in 
-> runtime suspend, because the runtime_suspend method has been executed.  
-> But in fact the device is still in D0, and as a result, PME signalling 
-> may not work correctly.
+Alan Stern <stern@rowland.harvard.edu> writes:
 
-The device claims to be able to signal PME from D0 (this is from the lspci
-in https://bugzilla.kernel.org/show_bug.cgi?id=203673):
+> On Tue, 21 May 2019, Eric W. Biederman wrote:
+>
+>> The usb support for asyncio encoded one of it's values in the wrong
+>> field.  It should have used si_value but instead used si_addr which is
+>> not present in the _rt union member of struct siginfo.
+>> 
+>> The practical result of this is that on a 64bit big endian kernel
+>> when delivering a signal to a 32bit process the si_addr field
+>> is set to NULL, instead of the expected pointer value.
+>> 
+>> This issue can not be fixed in copy_siginfo_to_user32 as the usb
+>> usage of the the _sigfault (aka si_addr) member of the siginfo
+>> union when SI_ASYNCIO is set is incompatible with the POSIX and
+>> glibc usage of the _rt member of the siginfo union.
+>> 
+>> Therefore replace kill_pid_info_as_cred with kill_pid_usb_asyncio a
+>> dedicated function for this one specific case.  There are no other
+>> users of kill_pid_info_as_cred so this specialization should have no
+>> impact on the amount of code in the kernel.  Have kill_pid_usb_asyncio
+>> take instead of a siginfo_t which is difficult and error prone, 3
+>> arguments, a signal number, an errno value, and an address enconded as
+>> a sigval_t.  The encoding of the address as a sigval_t allows the
+>> code that reads the userspace request for a signal to handle this
+>> compat issue along with all of the other compat issues.
+>> 
+>> Add BUILD_BUG_ONs in kernel/signal.c to ensure that we can now place
+>> the pointer value at the in si_pid (instead of si_addr).  That is the
+>> code now verifies that si_pid and si_addr always occur at the same
+>> location.  Further the code veries that for native structures a value
+>> placed in si_pid and spilling into si_uid will appear in userspace in
+>> si_addr (on a byte by byte copy of siginfo or a field by field copy of
+>> siginfo).  The code also verifies that for a 64bit kernel and a 32bit
+>> userspace the 32bit pointer will fit in si_pid.
+>
+> Okay, I have gone through this.  Although I still don't really
+> understand the detailed issues concerning the layout of the data fields
+> (probably hopeless without seeing a diagram), the USB portions of the
+> patch look good and do what the patch description says.
+>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+>
+> Alan Stern
 
-  00:10.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB XHCI Controller (rev 20) (prog-if 30 [XHCI])
-    Capabilities: [50] Power Management version 3
-      Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+Thanks.
 
-From the xHCI spec r1.0, sec 4.15.2.3, it looks like a connect
-detected while in D0 should assert PME# if enabled (and WCE is set).
+Perhaps this will work as a diagram.  I don't know if there is a better
+way to say it in my patch description.  In struct siginfo there are 3
+fields in fixed positions:
 
-> On the other hand, it wasn't clear from the patch description whether
-> this actually causes a problem on real systems.  The description only
-> said that the problem was theoretical.
+   int si_signo;
+   int si_errno;
+   int si_code;
 
-Kai did say nothing happens when hot-adding a USB device, so I think
-there really is a problem.  This should be an obvious problem that
-lots of people would trip over, so I expect there should be reports in
-launchpad, etc.  I'd really like to have those bread crumbs.  Kai, can
-you add a complete dmesg log to the bugzilla?  Hints from the log,
-like the platform name, can help find related reports.
+After that there is a union.  The si_signo and si_code fields are
+examined to see which union member is valid (see siginfo_layout).
+In every other case a si_code of SI_ASYNCIO corresponds to
+the the _rt union member which has the fields:
 
-> > The PCI core apparently *does* enable PME when we "suspend to D0".
-> > But somehow calling the xHCI runtime suspend callback makes the
-> > driver unable to notice when the PME is signaled?
-> 
-> According to Kai, PME signalling doesn't work in D0 -- or at least,
-> it is _documented_ not to work in D0 -- even though it is enabled
-> and the device claims to support it.
+   int si_pid;
+   int si_uid;
+   sigval_t si_sigval;
 
-I didn't understand this part.  From a PCI perspective, PME signaling
-while in D0 is an optional feature and should work if the device
-advertises support for it.  If it doesn't work on this device, we
-should have a quirk to indicate that.
+However when usb started using SI_ASYNCIO the _sigfault union member
+that (except for special exceptions) only has the field:
 
-But I thought Kai said the device *can* signal PME from D0, but for
-some reason we don't handle it correctly if we have called the xHCI
-suspend callback.
+   void __user *si_addr;
 
-That's the part I don't understand.  Is this an xHCI driver issue?
-Should the suspend callback do something different if we're staying in
-D0?  I'm not sure the callback even knows what Dx state we're going
-to.
+Or in short the relevant piece of the union looks like:
 
-Bjorn
+         0   1  2   3    4   5   6  7
+       +---+---+---+---+---+---+---+---+
+       |    si_pid     |   si_uid      |
+       +---+---+---+---+---+---+---+---+
+       |             si_addr           | (64bit)
+       +---+---+---+---+---+---+---+---+
+       |     si_addr   | (32bit)
+       +---+---+---+---+
+
+Which means if siginfo is copied field by field on 32bit everything
+works because si_pid and si_addr are in the same location.
+
+Similarly if siginfo is copied field by field on 64bit everything
+works because there is no padding between si_pid and si_uid. So
+copying both of those fields results in the entire si_addr being
+copied.
+
+It is the compat case that gets tricky.  Half of the bits are
+zero.  If those zero bits show up in bytes 4-7 and the data
+shows up in bytes 0-3 (aka little endian) everything works.
+If those zero bits show in in bytes 0-3 (aka big endian) userspace sees
+a NULL pointer instead of the value it passed.
+
+
+
+Fixing this while maintaining some modicum of sanity is the tricky bit.
+The interface is made to kill_pid_usb_asyncio is made a sigval_t so the
+standard signal compat tricks can be used.  sigval_t is a union of:
+
+        int sival_int;
+        void __user *sival_ptr;
+
+         0   1  2   3    4   5   6  7
+       +---+---+---+---+---+---+---+---+
+       |            sival_ptr          | (64bit)
+       +---+---+---+---+---+---+---+---+ 
+       |    sival_ptr  | (32bit)
+       +---+---+---+---+
+       |    sival_int  |
+       +---+---+---+---+
+
+The signal code solves the compat issues for sigval_t by storing the
+32bit pointers in sival_int.  So they meaningful bits are guaranteed to
+be in the low 32bits, just like the 32bit sival_ptr.
+
+After a bunch of build BUG_ONs to verify my reasonable assumptions
+of but the siginfo layout are actually true, the code that generates
+the siginfo just copies a sigval_t to si_pid.  And assumes the code
+in the usb stack placed the pointer in the proper part of the sigval_t
+when it read the information from userspace.
+
+I don't know if that helps make it easy to understand but I figured I
+would give it a shot.
+
+Eric
