@@ -2,101 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 553B326A7F
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 21:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC57926ADB
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 21:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729734AbfEVTFJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 22 May 2019 15:05:09 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:58920 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729702AbfEVTFI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 15:05:08 -0400
-Received: from mail-pg1-f197.google.com ([209.85.215.197])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1hTWXz-0001vs-D8
-        for linux-usb@vger.kernel.org; Wed, 22 May 2019 19:05:07 +0000
-Received: by mail-pg1-f197.google.com with SMTP id 63so2181225pga.18
-        for <linux-usb@vger.kernel.org>; Wed, 22 May 2019 12:05:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=czfXF4X+WzadjYZP7hUsAFz3lA9BYtuDgy22wPY8BdM=;
-        b=tmON9S8u2qFidwFncWLpaV+P7SYdjIJiQc5gG2q4XLhKg86rBYQRrc2Ax0Br1VOOvj
-         YVjNkO4eE4+oHxhZZf2od0Hun/YNV/CQBPq/MuIq4aCyxLuUBDG/CVu2zWtQO94OK3Xi
-         +KiBFGAHbFHkzpMDShk/A9PjYZC34lPXfjVi2AFbMLs093oF//NMFmRi1KY/2wXA7+9r
-         6p3kV1441zuMxJOm3rGJzm7t5h8e784UqSok6wOZKbOlXIDkErms6x0llcRZsTyaRrp1
-         yfjHX1F1yF2MklzL21ps2mvNastE9d/oJ6Ww2NIJ1DLPFXxcqDqqm7kBAaPY10J8CDXn
-         HJ3g==
-X-Gm-Message-State: APjAAAWotAFxP1K0tF+9ITGfkJGjVD01XudEvP31aVl7Tpc+/bYPPaPj
-        xIW0o5JB41L0sYEWNeHNEeSAwDKFvU4y63CeHdFodS8j4vpYZ9BvQATrfTsOCcVh1lNbsEw+sPH
-        ei++XMOOvYInregmkscbA5Jljg6rXa8R+uhfw4A==
-X-Received: by 2002:a17:902:9a4c:: with SMTP id x12mr21885945plv.298.1558551906122;
-        Wed, 22 May 2019 12:05:06 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwICiuaHiG2EomDuE5aveWHHAOjp0PRky8IYbMLukmRtN+STI+JHnlJPa1KkQOBxiMrcxBL6Q==
-X-Received: by 2002:a17:902:9a4c:: with SMTP id x12mr21885926plv.298.1558551905870;
-        Wed, 22 May 2019 12:05:05 -0700 (PDT)
-Received: from [192.168.1.220] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id i27sm53077607pfk.162.2019.05.22.12.05.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 12:05:05 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH] PCI / PM: Don't runtime suspend when device only supports
- wakeup from D0
-From:   Kai Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <20190522185339.pfo5xeopyz2i5iem@wunner.de>
-Date:   Thu, 23 May 2019 03:05:08 +0800
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <850CC1CD-2043-4C32-8BB1-5F5BAC1DDF55@canonical.com>
-References: <20190522181157.GC79339@google.com>
- <Pine.LNX.4.44L0.1905221433310.1410-100000@iolanthe.rowland.org>
- <20190522185339.pfo5xeopyz2i5iem@wunner.de>
-To:     Lukas Wunner <lukas@wunner.de>
-X-Mailer: Apple Mail (2.3445.104.11)
+        id S1730250AbfEVTWA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 15:22:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42628 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730236AbfEVTV7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 May 2019 15:21:59 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 64556217F9;
+        Wed, 22 May 2019 19:21:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558552918;
+        bh=cUZTCZSKkExAXaZbd+FP2itMgvfaBTYv2eqKKMroUko=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=i0vquc6uvxigQC+EznGF/WVC/9gH/aDGAU3obp3TYXTsahbkTFS+udW3ib3LkrJuS
+         C/Ib1ulrIG78sFcfp9OvxPXGMzlHIrFPszsq9y8jHEgc94rZsSvNzP5hzIOk3GRK9E
+         UDZSnzwS0eHSQ5B1t28avCbAh+1RzPMioE6FnAqE=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Minas Harutyunyan <minas.harutyunyan@synopsys.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 029/375] usb: dwc2: gadget: Increase descriptors count for ISOC's
+Date:   Wed, 22 May 2019 15:15:29 -0400
+Message-Id: <20190522192115.22666-29-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190522192115.22666-1-sashal@kernel.org>
+References: <20190522192115.22666-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Minas Harutyunyan <minas.harutyunyan@synopsys.com>
 
+[ Upstream commit 54f37f56631747075f1f9a2f0edf6ba405e3e66c ]
 
-> On May 23, 2019, at 2:53 AM, Lukas Wunner <lukas@wunner.de> wrote:
-> 
-> On Wed, May 22, 2019 at 02:39:56PM -0400, Alan Stern wrote:
->> According to Kai, PME signalling doesn't work in D0 -- or at least, it
->> is _documented_ not to work in D0 -- even though it is enabled and the
->> device claims to support it.
->> 
->> In any case, I don't really see any point in "runtime suspending" a 
->> device while leaving it in D0.  We might as well just leave it alone.
-> 
-> There may be devices whose drivers are able to reduce power consumption
-> through some device-specific means when runtime suspending, even though
-> the device remains in PCI_D0.  The patch would cause a power regression
-> for those.
-> 
-> In particular, pci_target_state() returns PCI_D0 if the device lacks the
-> PM capability.
+Some function drivers queueing more than 128 ISOC requests at a time.
+To avoid "descriptor chain full" cases, increasing descriptors count
+from MAX_DMA_DESC_NUM_GENERIC to MAX_DMA_DESC_NUM_HS_ISOC for ISOC's
+only.
 
-So an explicit device_can_wakeup() check before calling pci_target_state()
-is needed to avoid the case you described.
+Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/dwc2/gadget.c | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
-I’ll add this in patch v2.
-
-Kai-Heng
-
-> 
-> Thanks,
-> 
-> Lukas
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 6812a8a3a98ba..a749de7604c62 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -714,13 +714,11 @@ static unsigned int dwc2_gadget_get_chain_limit(struct dwc2_hsotg_ep *hs_ep)
+ 	unsigned int maxsize;
+ 
+ 	if (is_isoc)
+-		maxsize = hs_ep->dir_in ? DEV_DMA_ISOC_TX_NBYTES_LIMIT :
+-					   DEV_DMA_ISOC_RX_NBYTES_LIMIT;
++		maxsize = (hs_ep->dir_in ? DEV_DMA_ISOC_TX_NBYTES_LIMIT :
++					   DEV_DMA_ISOC_RX_NBYTES_LIMIT) *
++					   MAX_DMA_DESC_NUM_HS_ISOC;
+ 	else
+-		maxsize = DEV_DMA_NBYTES_LIMIT;
+-
+-	/* Above size of one descriptor was chosen, multiple it */
+-	maxsize *= MAX_DMA_DESC_NUM_GENERIC;
++		maxsize = DEV_DMA_NBYTES_LIMIT * MAX_DMA_DESC_NUM_GENERIC;
+ 
+ 	return maxsize;
+ }
+@@ -932,7 +930,7 @@ static int dwc2_gadget_fill_isoc_desc(struct dwc2_hsotg_ep *hs_ep,
+ 
+ 	/* Update index of last configured entry in the chain */
+ 	hs_ep->next_desc++;
+-	if (hs_ep->next_desc >= MAX_DMA_DESC_NUM_GENERIC)
++	if (hs_ep->next_desc >= MAX_DMA_DESC_NUM_HS_ISOC)
+ 		hs_ep->next_desc = 0;
+ 
+ 	return 0;
+@@ -964,7 +962,7 @@ static void dwc2_gadget_start_isoc_ddma(struct dwc2_hsotg_ep *hs_ep)
+ 	}
+ 
+ 	/* Initialize descriptor chain by Host Busy status */
+-	for (i = 0; i < MAX_DMA_DESC_NUM_GENERIC; i++) {
++	for (i = 0; i < MAX_DMA_DESC_NUM_HS_ISOC; i++) {
+ 		desc = &hs_ep->desc_list[i];
+ 		desc->status = 0;
+ 		desc->status |= (DEV_DMA_BUFF_STS_HBUSY
+@@ -2162,7 +2160,7 @@ static void dwc2_gadget_complete_isoc_request_ddma(struct dwc2_hsotg_ep *hs_ep)
+ 		dwc2_hsotg_complete_request(hsotg, hs_ep, hs_req, 0);
+ 
+ 		hs_ep->compl_desc++;
+-		if (hs_ep->compl_desc > (MAX_DMA_DESC_NUM_GENERIC - 1))
++		if (hs_ep->compl_desc > (MAX_DMA_DESC_NUM_HS_ISOC - 1))
+ 			hs_ep->compl_desc = 0;
+ 		desc_sts = hs_ep->desc_list[hs_ep->compl_desc].status;
+ 	}
+@@ -3899,6 +3897,7 @@ static int dwc2_hsotg_ep_enable(struct usb_ep *ep,
+ 	unsigned int i, val, size;
+ 	int ret = 0;
+ 	unsigned char ep_type;
++	int desc_num;
+ 
+ 	dev_dbg(hsotg->dev,
+ 		"%s: ep %s: a 0x%02x, attr 0x%02x, mps 0x%04x, intr %d\n",
+@@ -3945,11 +3944,15 @@ static int dwc2_hsotg_ep_enable(struct usb_ep *ep,
+ 	dev_dbg(hsotg->dev, "%s: read DxEPCTL=0x%08x from 0x%08x\n",
+ 		__func__, epctrl, epctrl_reg);
+ 
++	if (using_desc_dma(hsotg) && ep_type == USB_ENDPOINT_XFER_ISOC)
++		desc_num = MAX_DMA_DESC_NUM_HS_ISOC;
++	else
++		desc_num = MAX_DMA_DESC_NUM_GENERIC;
++
+ 	/* Allocate DMA descriptor chain for non-ctrl endpoints */
+ 	if (using_desc_dma(hsotg) && !hs_ep->desc_list) {
+ 		hs_ep->desc_list = dmam_alloc_coherent(hsotg->dev,
+-			MAX_DMA_DESC_NUM_GENERIC *
+-			sizeof(struct dwc2_dma_desc),
++			desc_num * sizeof(struct dwc2_dma_desc),
+ 			&hs_ep->desc_list_dma, GFP_ATOMIC);
+ 		if (!hs_ep->desc_list) {
+ 			ret = -ENOMEM;
+@@ -4092,7 +4095,7 @@ static int dwc2_hsotg_ep_enable(struct usb_ep *ep,
+ 
+ error2:
+ 	if (ret && using_desc_dma(hsotg) && hs_ep->desc_list) {
+-		dmam_free_coherent(hsotg->dev, MAX_DMA_DESC_NUM_GENERIC *
++		dmam_free_coherent(hsotg->dev, desc_num *
+ 			sizeof(struct dwc2_dma_desc),
+ 			hs_ep->desc_list, hs_ep->desc_list_dma);
+ 		hs_ep->desc_list = NULL;
+-- 
+2.20.1
 
