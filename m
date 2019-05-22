@@ -2,104 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3691D26ED7
-	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 21:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEF9262F7
+	for <lists+linux-usb@lfdr.de>; Wed, 22 May 2019 13:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732378AbfEVTwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 May 2019 15:52:30 -0400
-Received: from 107-174-234-49-host.colocrossing.com ([107.174.234.49]:43092
-        "EHLO venetian.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730387AbfEVTwa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 May 2019 15:52:30 -0400
-To:     linux-usb@vger.kernel.org
-Subject: Use logo on USB drive
-Message-ID: <fac47cf45107b07dd3cd948844079526@walgreens.com>
-Date:   Wed, 22 May 2019 13:28:05 +0200
-From:   "David" <david@usbcustom.site>
-Reply-To: jensanke@aliyun.com
-MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+        id S1728536AbfEVLbi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 May 2019 07:31:38 -0400
+Received: from mga14.intel.com ([192.55.52.115]:39534 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728335AbfEVLbi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 May 2019 07:31:38 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 May 2019 04:31:37 -0700
+X-ExtLoop1: 1
+Received: from mattu-haswell.fi.intel.com ([10.237.72.164])
+  by orsmga003.jf.intel.com with ESMTP; 22 May 2019 04:31:35 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/5] xhci fixes for usb-linus
+Date:   Wed, 22 May 2019 14:33:56 +0300
+Message-Id: <1558524841-25397-1-git-send-email-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Greg
 
-Not sure if you received my last email?
+A few fixes for usb-linus, including regression fix for xhci IDT support
+which was added to 5.2-rc1
 
-Are you interested in purchasing your LOGO promotional and marketing
-products for your company?
-We produce USB Drives with your Logo Printed or artwork printed to be used
-for gifts or marketing.
-Here is more info from our website:
+-Mathias
 
-We can pre-load your media files, images, presentations and files onto the
-drives for you.
+Andrey Smirnov (1):
+  xhci: Convert xhci_handshake() to use readl_poll_timeout_atomic()
 
-Some reasons to get the USB drives from us:
-We make Custom Shaped USB drives in the shape of your logo, product or
-anything you like.
-Our USB drives are Eco-friendly
-We supply USB drives to Fortune 100 companies.
-We have over 150 styles and colors to choose from.
-People will keep the USB drive you give them and show it to others
-increasing your marketing value
+Carsten Schmid (1):
+  usb: xhci: avoid null pointer deref when bos field is NULL
 
-Please click
-to see all of our stock models and get a quote.
+Henry Lin (1):
+  xhci: update bounce buffer with correct sg num
 
-If you are nonprofit, have further discounts for schools and charities.
+Jia-Ju Bai (1):
+  usb: xhci: Fix a potential null pointer dereference in
+    xhci_debugfs_create_endpoint()
 
-Thanks,
-David
-USB Drive Specialist
+Mathias Nyman (1):
+  xhci: Fix immediate data transfer if buffer is already DMA mapped
 
+ drivers/usb/host/xhci-debugfs.c |  3 +++
+ drivers/usb/host/xhci-ring.c    | 26 +++++++++++++++++++-------
+ drivers/usb/host/xhci.c         | 24 +++++++++++-------------
+ drivers/usb/host/xhci.h         |  3 ++-
+ 4 files changed, 35 insertions(+), 21 deletions(-)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-http://walgreens.com/mail/link.php?M=26955744&N=3585&L=29&F=T
+-- 
+2.7.4
 
