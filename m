@@ -2,64 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 104C0279FB
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 12:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0957727A1E
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 12:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730311AbfEWKDj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 06:03:39 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54935 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726299AbfEWKDj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 06:03:39 -0400
-Received: by mail-wm1-f65.google.com with SMTP id i3so5137728wml.4;
-        Thu, 23 May 2019 03:03:36 -0700 (PDT)
+        id S1730272AbfEWKOE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 May 2019 06:14:04 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:39077 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726429AbfEWKOE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 06:14:04 -0400
+Received: by mail-wm1-f67.google.com with SMTP id z23so1088936wma.4;
+        Thu, 23 May 2019 03:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=xm9uwBB1vzuK1qGJ0WzNpoRC9jOdI8HxonN1ZU8SrNE=;
-        b=tMIsS6Bqb2UGGIVuNBNyLDNoEZHDul2zOiTcM5xZSlChwNqeKNhrAraFBh5BfhnGIA
-         EroW8bo8VurF2jjH6fpdE8KHddKgpqCV8Vzl5RIF2GRT3e3CJfYY5A3NHvdVAOfYEei/
-         7OgeE5IWn/eSZdO0tF0PhoiWIh7qWEzmHykcKlXG/f4NqBNylMUxHtHBfQ+mmJCXpL6C
-         996GZlqWcO8lZxlVNtIrCftcoHkop/VQXs6T/k0/kqEeznFAchaKM7qQXWWfcj+S4f3R
-         UMBIUgLxRvZ9EBgHCW8wA8qmv1SiFuvqBJT+IOuuw4i4O5SUm5NnM1zIU9i7VhJLsh/5
-         TvNg==
+        bh=E441U0fjiwvwAMVC8ZHJsemAhZrgeKRYMUzxyDhCoYI=;
+        b=BZ1mOCOWX/pY3eN6eN4k02yj2CBr7GFhcESbyxbOL4cU1ehhsVXMFwHqQLx5QkSnfQ
+         pOV4HlWZPB5BqrjDBckYluSnHtDv+BHeQicUj/xrETLj7QrSzb+7/LtFcYVN14kgzHxC
+         odgD/80kOEQHB0aJ713lIOZA/F5mAyybFdks6OKEGOPHzHYH2CyfmSj5R3CQ+whZoIj7
+         pmgBs3qrc7r+OdRAbc3U/98sHCgm9rPqnV8DwV/O4tZbLthQOpmNbHIJ0bTQeNoZ6iEQ
+         7tJR4uOTQbjdT69I04yDrDBgLbnXSxO79dQpjTuNYo+9Nrh9yjFwSG8BsqhUH8CFVpY/
+         ExaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xm9uwBB1vzuK1qGJ0WzNpoRC9jOdI8HxonN1ZU8SrNE=;
-        b=knp0ADS3OYsVkR/al2inp50ahmhrNOoBVzkq3nJMK0zD3H3D9sQuG8Rtq/xCpzeqR3
-         dLeM4JSvJDYngOwWW2ainiy2EO00jDcrwO9+r7ntM3Zlfu+Tk3TEOoXmNKMQl/h+3g+Y
-         lvqV10BIW6ZSNOJgSZSHBVlJ1GLocaaSxuFFlmvGjTSF8DS4lR+M6/yGUobGOxLku06Z
-         oLKzE4NBs+cFpSmPfKituJmikRbcn84ygj27xBHJ0TxvGXQwaDiYOgYy5wUp8cKgqMR9
-         hh2W3T26F8js5L34D/COGUzeRFKK2ZfG8cNDbc0a5kVdQo9Ur4zpwXrmTX27EtzlotVs
-         lfmA==
-X-Gm-Message-State: APjAAAWJg9+dWLCYd81oE5HbUD780q1wWFVp+64P1Fcd9mmEzktw5JGs
-        pCstC+x4ARKdmuSJkDHrJhbO+HlwA50=
-X-Google-Smtp-Source: APXvYqzeijpqGVSTynGVCh2Q4RVjsOrwIl3M+dZKKo+teialfKTfjsqbqa5V3H9oUIAso+cwnlTw6w==
-X-Received: by 2002:a1c:98d0:: with SMTP id a199mr10934041wme.140.1558605815908;
-        Thu, 23 May 2019 03:03:35 -0700 (PDT)
+        bh=E441U0fjiwvwAMVC8ZHJsemAhZrgeKRYMUzxyDhCoYI=;
+        b=sN7cD7wWyaVUeHS49YRPg5a2uJrOUPc8DG+P1P6A0kq01SytEZzGShdWVbrOOtaMZf
+         WGv2RIXbD3BSxaBwzzrlrQq8PVSnCnHxjLTSHqU5kyYJ76K79mMJ4siMNOP+uzDFnUSQ
+         yuCv2hE/coGWk298xObeHj/Pnf76QwuDgfqJMjVmbGZ7Oeq8KKUYLQx12bXatrqPBtnU
+         wwmhuzh1nV2DTCPeaZWJg55IWKcVUCG7BlVRDCm+8Lti8v1HVIPN+qNqKUqUcROZlmkL
+         B4wmBt4/JAaBJJS611Jslk49VdUFNiUiOlC0EZUJweQ1tPRlugY9XtsLjRuhQZkAGL/n
+         /2Aw==
+X-Gm-Message-State: APjAAAW1B2k82w4AErVwiKQOp/4IztcaM4MLE7ycx6EECwO9r+4My8At
+        ktm164F6aqjD7OCn6HaIEYA=
+X-Google-Smtp-Source: APXvYqx9VUGgUOPaLT4N2Wn3HZjXttUTlYcuyETKuA7PhmcUXaxAVW9LhRKDiqj+HrPPeUw6M0wXhw==
+X-Received: by 2002:a1c:9904:: with SMTP id b4mr11453266wme.1.1558606441172;
+        Thu, 23 May 2019 03:14:01 -0700 (PDT)
 Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
-        by smtp.gmail.com with ESMTPSA id l18sm2059977wrh.54.2019.05.23.03.03.34
+        by smtp.gmail.com with ESMTPSA id c12sm7075477wmb.1.2019.05.23.03.14.00
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 May 2019 03:03:35 -0700 (PDT)
-Date:   Thu, 23 May 2019 12:03:33 +0200
+        Thu, 23 May 2019 03:14:00 -0700 (PDT)
+Date:   Thu, 23 May 2019 12:13:59 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Nagarjuna Kristam <nkristam@nvidia.com>
 Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
         mark.rutland@arm.com, robh+dt@kernel.org,
         linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [Patch V3 3/8] phy: tegra: xusb: t210: add vbus override support
-Message-ID: <20190523100333.GC30331@ulmo>
+Subject: Re: [Patch V3 4/8] dt-bindings: usb: Add  NVIDIA Tegra XUSB device
+ mode controller binding
+Message-ID: <20190523101359.GD30331@ulmo>
 References: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
- <1557988772-15406-4-git-send-email-nkristam@nvidia.com>
+ <1557988772-15406-5-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IpbVkmxF4tDyP/Kb"
+        protocol="application/pgp-signature"; boundary="osDK9TLjxFScVI/L"
 Content-Disposition: inline
-In-Reply-To: <1557988772-15406-4-git-send-email-nkristam@nvidia.com>
+In-Reply-To: <1557988772-15406-5-git-send-email-nkristam@nvidia.com>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -67,220 +68,193 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---IpbVkmxF4tDyP/Kb
+--osDK9TLjxFScVI/L
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 16, 2019 at 12:09:27PM +0530, Nagarjuna Kristam wrote:
-> Tegra XUSB device control driver needs to control vbus override
-> during its operations, add API for the support.
+On Thu, May 16, 2019 at 12:09:28PM +0530, Nagarjuna Kristam wrote:
+> Add device-tree binding documentation for the XUSB device mode controller
+> present on Tegra210 SoC. This controller supports the USB 3.0
+> specification.
 >=20
 > Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
 > ---
->  drivers/phy/tegra/xusb-tegra210.c | 59 +++++++++++++++++++++++++++++++++=
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  | 101 +++++++++++++++=
 ++++++
->  drivers/phy/tegra/xusb.c          | 22 +++++++++++++++
->  drivers/phy/tegra/xusb.h          |  2 ++
->  include/linux/phy/tegra/xusb.h    |  6 ++--
->  4 files changed, 87 insertions(+), 2 deletions(-)
+>  1 file changed, 101 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xu=
+dc.txt
 >=20
-> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-t=
-egra210.c
-> index 829aca5..363d2aa 100644
-> --- a/drivers/phy/tegra/xusb-tegra210.c
-> +++ b/drivers/phy/tegra/xusb-tegra210.c
-> @@ -73,6 +73,10 @@
->  #define XUSB_PADCTL_USB3_PAD_MUX_PCIE_IDDQ_DISABLE(x) (1 << (1 + (x)))
->  #define XUSB_PADCTL_USB3_PAD_MUX_SATA_IDDQ_DISABLE(x) (1 << (8 + (x)))
-> =20
-> +#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL0(x) (0x080 + (x) * 0x4=
-0)
-> +#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIP (1 << 18)
-> +#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIN (1 << 22)
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt =
+b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+> new file mode 100644
+> index 0000000..d78b436
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+> @@ -0,0 +1,101 @@
+> +Device tree binding for NVIDIA Tegra XUSB device mode controller (XUDC)
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
->  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(x) (0x084 + (x) * 0x4=
-0)
->  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_SHIFT 7
->  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_MASK 0x3
-> @@ -235,6 +239,12 @@
->  #define XUSB_PADCTL_UPHY_USB3_PADX_ECTL6(x) (0xa74 + (x) * 0x40)
->  #define XUSB_PADCTL_UPHY_USB3_PAD_ECTL6_RX_EQ_CTRL_H_VAL 0xfcf01368
-> =20
-> +#define XUSB_PADCTL_USB2_VBUS_ID 0xc60
-> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON (1 << 14)
-> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT 18
-> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_MASK 0xf
-> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_FLOATING 8
+> +The Tegra XUDC controller supports both USB 2.0 HighSpeed/FullSpeed and
+> +USB 3.0 SuperSpeed protocols.
 > +
->  struct tegra210_xusb_fuse_calibration {
->  	u32 hs_curr_level[4];
->  	u32 hs_term_range_adj;
-> @@ -2024,6 +2034,53 @@ static const struct tegra_xusb_port_ops tegra210_u=
-sb3_port_ops =3D {
->  	.map =3D tegra210_usb3_port_map,
->  };
-> =20
-> +static int tegra210_xusb_padctl_vbus_override(struct tegra_xusb_padctl *=
-padctl,
-> +					      bool status)
-> +{
-> +	u32 value;
-> +
-> +	dev_dbg(padctl->dev, "%s vbus override\n", status ? "set" : "clear");
-> +
-> +	value =3D padctl_readl(padctl, XUSB_PADCTL_USB2_VBUS_ID);
-> +
-> +	if (status) {
-> +		value |=3D XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON;
-> +		value &=3D ~(XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_MASK <<
-> +			   XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT);
-> +		value |=3D XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_FLOATING <<
-> +			 XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT;
-> +	} else
-> +		value &=3D ~XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON;
-> +
-> +	padctl_writel(padctl, value, XUSB_PADCTL_USB2_VBUS_ID);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tegra210_utmi_port_reset(struct phy *phy)
-> +{
-> +	struct tegra_xusb_padctl *padctl;
-> +	struct tegra_xusb_lane *lane;
-> +	struct device *dev;
-> +	u32 value;
-> +
-> +	lane =3D phy_get_drvdata(phy);
-> +	padctl =3D lane->pad->padctl;
-> +	dev =3D padctl->dev;
+> +Required properties:
+> +--------------------
+> +- compatible: For Tegra210, must contain "nvidia,tegra210-xudc".
+> +- reg: Must contain the base and length of the XUSB device registers, XU=
+SB device
+> +  PCI Config registers and XUSB device controller registers.
+> +- interrupts: Must contain the XUSB device interrupt.
+> +- clocks: Must contain an entry for all clocks used.
+> +  See ../clock/clock-bindings.txt for details.
+> +- clock-names: Must include the following entries:
+> +   - dev: Clock to enable core XUSB dev clock.
+> +   - ss: Clock to enable XUSB super speed clock.
+> +   - ss_src: Clock to enable XUSB super speed dev clock.
+> +   - hs_src: Clock to enable XUSB high Speed dev clock.
+> +   - fs_src: Clock to enable XUSB full Speed dev clock.
 
-dev seems unused. Is this debugging leftover?
+You use inconsistent spelling for "speed" here.
+
+> +- nvidia,xusb-padctl: phandle to the XUSB pad controller that is used to
+> +  configure the USB pads used by the XUDC controller.
+> +- power-domains: A list of PM domain specifiers that reference each powe=
+r-domain
+> +  used by the XUSB device mode controller. This list must comprise of a =
+specifier
+> +  for the XUSBA and XUSBB power-domains. See ../power/power_domain.txt a=
+nd
+> +  ../arm/tegra/nvidia,tegra20-pmc.txt for details.
+> +- power-domain-names: A list of names that represent each of the specifi=
+ers in
+> +  the 'power-domains' property. Must include 'ss' and 'dev'.
+> +
+> +For Tegra210:
+> +- avddio-usb-supply: PCIe/USB3 analog logic power supply. Must supply 1.=
+05 V.
+> +- hvdd-usb-supply: USB controller power supply. Must supply 3.3 V.
+> +
+> +- phys: Must contain an entry for each entry in phy-names.
+> +  See ../phy/phy-bindings.txt for details.
+> +- phy-names: Should include an entry for each PHY used by the controller.
+> +  Names must be "usb2", and "usb3" if support SuperSpeed device mode.
+> +  - "usb3" phy, SuperSpeed (SSTX+/SSTX-/SSRX+/SSRX-) data lines.
+> +  - "usb2" phy, USB 2.0 (D+/D-) data lines.
+> +
+> +- extcon: Must contains an extcon entry which detects USB VBUS pin.
+> +  See ../extcon/extcon-usb-gpio.txt for details.
+
+Do the phys, phy-names and extcon properties only apply to Tegra210? It
+sounds like those would also apply to other generations, so they should
+go before the "For Tegra210:" line.
+
+> +
+> +Example:
+> +--------
+> +	pmc: pmc@7000e400 {
+> +		compatible =3D "nvidia,tegra210-pmc";
+> +		reg =3D <0x0 0x7000e400 0x0 0x400>;
+> +		clocks =3D <&tegra_car TEGRA210_CLK_PCLK>, <&clk32k_in>;
+> +		clock-names =3D "pclk", "clk32k_in";
+> +
+> +		powergates {
+> +			pd_xusbss: xusba {
+> +				clocks =3D <&tegra_car TEGRA210_CLK_XUSB_SS>;
+> +				resets =3D <&tegra_car TEGRA210_CLK_XUSB_SS>;
+
+We typically use the literal number here to be consistent with the cases
+where the clock ID differs from the reset ID.
+
+> +				#power-domain-cells =3D <0>;
+> +			};
+> +
+> +			pd_xusbdev: xusbb {
+> +				clocks =3D <&tegra_car TEGRA210_CLK_XUSB_DEV>;
+> +				resets =3D <&tegra_car 95>;
+
+It seems like don't follow that rule exactly since this is the same
+thing we have for XUSB already. I think it'd be best to stick with the
+literal number (like here) and remove the odd ones out. I can prepare
+patches to convert over the existing oddballs.
+
+> +				#power-domain-cells =3D <0>;
+> +			};
+> +		};
+> +	};
+> +
+> +	xudc@700d0000 {
+> +		compatible =3D "nvidia,tegra210-xudc";
+> +		reg =3D <0x0 0x700d0000 0x0 0x8000>,
+> +			<0x0 0x700d8000 0x0 0x1000>,
+> +			<0x0 0x700d9000 0x0 0x1000>;
+
+Use tabs, followed by spaces to properly align with the first entry,
+like you do for clock-names below.
+
+> +
+> +		interrupts =3D <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +		clocks =3D <&tegra_car TEGRA210_CLK_XUSB_DEV>,
+> +			<&tegra_car TEGRA210_CLK_XUSB_SS>,
+> +			<&tegra_car TEGRA210_CLK_XUSB_SSP_SRC>,
+> +			<&tegra_car TEGRA210_CLK_XUSB_HS_SRC>,
+> +			<&tegra_car TEGRA210_CLK_XUSB_FS_SRC>;
+
+Ditto.
+
+> +		clock-names =3D "dev", "ss", "ss_src",
+> +			      "hs_src", "fs_src";
+> +
+> +		power-domains =3D <&pd_xusbdev>, <&pd_xusbss>;
+> +		power-domain-names =3D "dev", "ss";
+> +
+> +		nvidia,xusb-padctl =3D <&padctl>;
+> +
+> +		phys =3D <&{/padctl@7009f000/pads/usb2/lanes/usb2-0}>;
+> +		phy-names =3D "usb2;
+
+Does it perhaps make sense to include the pad controller snippet in here
+as well?
 
 Thierry
 
 > +
-> +	value =3D padctl_readl(padctl,
-> +			     XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL0(0));
+> +		avddio-usb-supply =3D <&vdd_pex_1v05>;
+> +		hvdd-usb-supply =3D <&vdd_3v3_sys>;
 > +
-> +	if ((value & XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIP) ||
-> +	    (value & XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIN)) {
-> +		tegra210_xusb_padctl_vbus_override(padctl, false);
-> +		tegra210_xusb_padctl_vbus_override(padctl, true);
-> +		return 1;
-> +	}
+> +		extcon =3D <&extcon_usb>;
+> +	};
 > +
-> +	return 0;
-> +}
+> +	extcon_usb: extcon_vbus {
+> +		compatible =3D "linux,extcon-usb-gpio";
+> +		vbus-gpio =3D <&gpio TEGRA_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
+> +	};
 > +
->  static int
->  tegra210_xusb_read_fuse_calibration(struct tegra210_xusb_fuse_calibratio=
-n *fuse)
->  {
-> @@ -2086,6 +2143,8 @@ static const struct tegra_xusb_padctl_ops tegra210_=
-xusb_padctl_ops =3D {
->  	.remove =3D tegra210_xusb_padctl_remove,
->  	.usb3_set_lfps_detect =3D tegra210_usb3_set_lfps_detect,
->  	.hsic_set_idle =3D tegra210_hsic_set_idle,
-> +	.vbus_override =3D tegra210_xusb_padctl_vbus_override,
-> +	.utmi_port_reset =3D tegra210_utmi_port_reset,
->  };
-> =20
->  const struct tegra_xusb_padctl_soc tegra210_xusb_padctl_soc =3D {
-> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-> index 6618db7..e333532 100644
-> --- a/drivers/phy/tegra/xusb.c
-> +++ b/drivers/phy/tegra/xusb.c
-> @@ -1133,6 +1133,28 @@ int tegra_xusb_padctl_usb3_set_lfps_detect(struct =
-tegra_xusb_padctl *padctl,
->  }
->  EXPORT_SYMBOL_GPL(tegra_xusb_padctl_usb3_set_lfps_detect);
-> =20
-> +int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
-> +							bool val)
-> +{
-> +	if (padctl->soc->ops->vbus_override)
-> +		return padctl->soc->ops->vbus_override(padctl, val);
-> +
-> +	return -ENOTSUPP;
-> +}
-> +EXPORT_SYMBOL_GPL(tegra_xusb_padctl_set_vbus_override);
-> +
-> +int tegra_phy_xusb_utmi_port_reset(struct phy *phy)
-> +{
-> +	struct tegra_xusb_lane *lane =3D phy_get_drvdata(phy);
-> +	struct tegra_xusb_padctl *padctl =3D lane->pad->padctl;
-> +
-> +	if (padctl->soc->ops->utmi_port_reset)
-> +		return padctl->soc->ops->utmi_port_reset(phy);
-> +
-> +	return -ENOTSUPP;
-> +}
-> +EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_port_reset);
-> +
->  MODULE_AUTHOR("Thierry Reding <treding@nvidia.com>");
->  MODULE_DESCRIPTION("Tegra XUSB Pad Controller driver");
->  MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
-> index 26dd6d2..cb22a70 100644
-> --- a/drivers/phy/tegra/xusb.h
-> +++ b/drivers/phy/tegra/xusb.h
-> @@ -381,6 +381,8 @@ struct tegra_xusb_padctl_ops {
->  			     unsigned int index, bool idle);
->  	int (*usb3_set_lfps_detect)(struct tegra_xusb_padctl *padctl,
->  				    unsigned int index, bool enable);
-> +	int (*vbus_override)(struct tegra_xusb_padctl *padctl, bool set);
-> +	int (*utmi_port_reset)(struct phy *phy);
->  };
-> =20
->  struct tegra_xusb_padctl_soc {
-> diff --git a/include/linux/phy/tegra/xusb.h b/include/linux/phy/tegra/xus=
-b.h
-> index 8e1a57a..9b8351c 100644
-> --- a/include/linux/phy/tegra/xusb.h
-> +++ b/include/linux/phy/tegra/xusb.h
-> @@ -1,5 +1,5 @@
->  /*
-> - * Copyright (c) 2016, NVIDIA CORPORATION.  All rights reserved.
-> + * Copyright (c) 2016-2019, NVIDIA CORPORATION.  All rights reserved.
->   *
->   * This program is free software; you can redistribute it and/or modify =
-it
->   * under the terms and conditions of the GNU General Public License,
-> @@ -26,5 +26,7 @@ int tegra_xusb_padctl_hsic_set_idle(struct tegra_xusb_p=
-adctl *padctl,
->  				    unsigned int port, bool idle);
->  int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *pad=
-ctl,
->  					   unsigned int port, bool enable);
-> -
-> +int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
-> +					bool val);
-> +int tegra_phy_xusb_utmi_port_reset(struct phy *phy);
->  #endif /* PHY_TEGRA_XUSB_H */
 > --=20
 > 2.7.4
 >=20
 
---IpbVkmxF4tDyP/Kb
+--osDK9TLjxFScVI/L
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAlzmb/UACgkQ3SOs138+
-s6Ga4w/+Ict8L3jWlR56CvoJ/Jelck4XSUs/fdiuNu+/zImFovDh8U7OHoMpmzND
-okNVA+BrZ2lgmXz9/NBDvTt+7c4qxEqr4Vik6Q89HRqFn2Qf31VlTyPMQbMXVu+3
-nFrIWib2C3ly8usKBGYQR1OprzfKVwS8VPq+LxZ+zJMWQQbARAOlW/g9YzR1duhZ
-TPMj9sM0+odgh4zPzoLCTa0MTrU1hkIyKH87teyeUJtuPCBldrs516iezeqUyUhr
-0Lzo6IISP9kkURSpnXp3uFHEDd1SS0JTTV+HmfwG0JpSGLzryN0yTFk9YBQmcL1n
-hpAJg34rhQlJMyqa2lBk9eg76Ci8eoNGu8ad8NoXiR66ulCpdhfQ+03d7dZjtC4S
-NRK6O7VGf0Ajy9zELnj4KHGYEzAttwU+jJ4rmJJxwjX0leZ9bKerqiFCwnlDZQSj
-s9PDzjLPJBqPJdvd0pkTjS4024juBkkkf3LTA1tYxoZMRdfGi9FbouPoGXoG/Qlw
-ccoWhdfuK3wpGBddw+MnYbg9LDnHmsbo4QQFR1WPS1GL/1tC+PON3LClVCOl/8on
-jyEQ4NJPagnpkJis/ocxeZPIHn6x86Gm9LCFBP8E5xCRnvXWCWtkoTSD2HpAYUql
-aAzSryw/uyyf9sRJT3H4Vcw4UYj9M4fTujpxuu/Xf8f+uaNLqT0=
-=rpvr
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAlzmcmQACgkQ3SOs138+
+s6F50hAAozJMI81xCHHWiyU/9Hfx/jIhtb8LYe8cNvs+jttbR0j95OENNi/reeS3
+Nid9jn227XcHTfrcWPEfrAwgnHlNL5j4v4bbf2AvtyTYKN57PMLCx0k99Zhn1EI6
+ps4l0/X1pkvlky6RiQS+UzW6hdaEucMYTSoIQAv8anfJ/UiDyvBBuW0UVJbBcL8q
+MwFx2qlC+ibxDToRsThggdHuyabB48hHdrLSWiLUsJNUfgUcpMR+Q5cMBqCeWYx9
+/Z29HC6WPm+3CGgON9kNqbWdBDKnu/ZmIRHt8XIIU/3+ksKX5wPIZmxBvgkspBmk
+CBO8DHm5A3ZMKDS0ftskrTM3CZuWBTXgHYQ9ROpNtQlphPOts0DhfmT5t706T2Yz
+jX12UhzsvpNFKTfRrAhdPZ85Eikjhpj1LBOcx5558/TYSpexGtng0djEXTAT/g2i
+XSizdOwcRCYW8ACLnOY9IEOOoD+PUTh+7glkHxoLr/S9lDkNJHfr7OA19SbcC9r1
+UB+7h6k1oMSYRKKxvNwX8lNVjqoqaIBOzlAI3sSYliPCWHAm3YyDjtQG4krU+Gx+
+8Tc7mYO7OtYliajWwEd7KfC8VWPAN8DOYJLLRzdWA2xg2W6s9tvp0k2VwYGJm/S3
+9OgotfIqC39bWpvAdlhcwSnra6oOnuBWRAs38aZ9zsnqJ17NYxE=
+=sFeo
 -----END PGP SIGNATURE-----
 
---IpbVkmxF4tDyP/Kb--
+--osDK9TLjxFScVI/L--
