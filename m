@@ -2,125 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED1B2755E
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 07:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A2727570
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 07:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727638AbfEWFSL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 01:18:11 -0400
-Received: from mail-eopbgr1400124.outbound.protection.outlook.com ([40.107.140.124]:15790
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725848AbfEWFSK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 May 2019 01:18:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zUGPJSZVv61in7g1sqVPQdmLPCzjRU/Zi9ZkgZH88VU=;
- b=dbGbLIDEDeBoVpTy63QYSQij2IzJZmHBbQ8nVXdAGxH4VDAy36Sn7FrTpH9oBL9wT2EH8hoLh4bu5RsmTR2ZynbXVvEmk7sCU/QuFBvvz6JK6aeQamCN9sRJl+YfvFkNoGxoUb5azZGu3IZWZH1V9C2WkqFO/n/jxDaJsaMRuAo=
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
- OSAPR01MB1793.jpnprd01.prod.outlook.com (52.134.233.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1900.19; Thu, 23 May 2019 05:18:05 +0000
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::4597:5353:28fb:cfd8]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::4597:5353:28fb:cfd8%7]) with mapi id 15.20.1922.017; Thu, 23 May 2019
- 05:18:05 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Biju Das <biju.das@bp.renesas.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Simon Horman <horms@verge.net.au>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v6 1/7] dt-bindings: usb: hd3ss3220 device tree binding
- document
-Thread-Topic: [PATCH v6 1/7] dt-bindings: usb: hd3ss3220 device tree binding
- document
-Thread-Index: AQHVCxgMa5SFoB4ScU+YblO0KwTthKZ1PzwggAADYYCAAcIiAIABMR2w
-Date:   Thu, 23 May 2019 05:18:05 +0000
-Message-ID: <OSAPR01MB308947DD6A61047728A1BFEDD8010@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-References: <1557922152-16449-1-git-send-email-biju.das@bp.renesas.com>
-        <1557922152-16449-2-git-send-email-biju.das@bp.renesas.com>
-        <OSAPR01MB30899C8C3E0F316FF37DAE3AD8070@OSAPR01MB3089.jpnprd01.prod.outlook.com>
- <877eaktf8i.wl-kuninori.morimoto.gx@renesas.com>
- <OSBPR01MB2103B7A7CF5F9CDDC40B9A2BB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSBPR01MB2103B7A7CF5F9CDDC40B9A2BB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bf1d80c7-a952-4a37-25e9-08d6df3e0946
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB1793;
-x-ms-traffictypediagnostic: OSAPR01MB1793:
-x-microsoft-antispam-prvs: <OSAPR01MB179357F895997F73BB1E1BE9D8010@OSAPR01MB1793.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 00462943DE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(39860400002)(366004)(376002)(346002)(396003)(199004)(189003)(8936002)(102836004)(81166006)(81156014)(6636002)(33656002)(4326008)(186003)(68736007)(6436002)(26005)(6246003)(5660300002)(53936002)(14454004)(54906003)(7696005)(86362001)(229853002)(478600001)(71190400001)(110136005)(76176011)(55016002)(6506007)(9686003)(316002)(71200400001)(99286004)(52536014)(73956011)(2906002)(486006)(66476007)(7416002)(66066001)(66446008)(64756008)(305945005)(66556008)(3846002)(25786009)(74316002)(6116002)(66946007)(76116006)(256004)(8676002)(446003)(7736002)(11346002)(476003);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB1793;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 5NRHhIpgsNAbGEH6CYYhHCe6r42rAmCWzSI2FL3Sf8h0uRDW7np8b6lAIqOrxoMBgIhz5bkWmS63ed19s1ZrLCqf/57GevuXobb7NZrym9rrTOuf1WiduNJ1pb/3ZjdIwBSIcIc8FYll64T+1bsKyjEMpUJxbdtTUh+6AUO6avppl9QYt8W6IPhKv+8liyVzIqZ2RD4bgOlLhUWYgsRUvUsj/CHgtM9Rjv57CFDX9PiFH2SYlj0NVtIarmMq2EGBNe13scL7BQA1n3KUHmNLNUn598wdeIsOPcM5ss1v0hdrUZM8ragluoVks5mxXIOP2IRBcJ6FyIQ+dIPrVqkb/BetZlcIMAPNUn83vMehxJ+QbtvfuWL7S7E4RlAWHnNlFw6C5axfsFKiYAzMxzIa6g==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1725873AbfEWF0J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 May 2019 01:26:09 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42034 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725806AbfEWF0I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 01:26:08 -0400
+Received: by mail-lj1-f196.google.com with SMTP id 188so4187815ljf.9;
+        Wed, 22 May 2019 22:26:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2zCsyXvXKQNDrlDAaTPYsiKB9L/0GPY7IwNwkSTGIws=;
+        b=Ta9mRdKZaIppt1lVoJqu6fTlJpOePKt8UpD0P1KlB+5Dhq5IRFRgjf30yH3w11W0Rz
+         YEOutIeR2eVbTVwwM8xE3TG1Vw0rLpHI7yHMe9wcgF24eWV6mrZTEbwCl2QDJ78Tq7sS
+         lgH1nF185LcEsLWnvD3WzxR0BfM5VB26/nckreMvZB1LkZvhNTYp67QtaOeA4auI3qSV
+         ariGldx5mrqJSCxVgiZVcVyyLMQPSTwKpJaSV2UceiNy8Ghuy+BjmPZFZNSqV/Pppv/S
+         KyuoB7s00FCTXWyMy8Gp1LXYFNh8dalME8JNdybe9xzB94j0j1BzAAVi6+LEI6YiQCtk
+         NRhQ==
+X-Gm-Message-State: APjAAAVmJ0K2kf1riWIKV/jpH/NMT1GSMt2qQyPq/46QuAcnSdHhea2k
+        LPxNW1FoM0hSmodbVTpviw5PF35pidc=
+X-Google-Smtp-Source: APXvYqyA+ouMbSVPDNeED1P3R2zPHpVIba71XK7OdTwYvUvWtpyQh9fTIn1geqaP7SOnZMdVP0vS5Q==
+X-Received: by 2002:a2e:9259:: with SMTP id v25mr4076631ljg.46.1558589166763;
+        Wed, 22 May 2019 22:26:06 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id p5sm5818207lfc.80.2019.05.22.22.26.05
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 May 2019 22:26:05 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.91)
+        (envelope-from <johan@kernel.org>)
+        id 1hTgEq-00043C-Ic; Thu, 23 May 2019 07:26:01 +0200
+Date:   Thu, 23 May 2019 07:26:00 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.1 077/375] USB: serial: fix initial-termios
+ handling
+Message-ID: <20190523052600.GA15348@localhost>
+References: <20190522192115.22666-1-sashal@kernel.org>
+ <20190522192115.22666-77-sashal@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf1d80c7-a952-4a37-25e9-08d6df3e0946
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 05:18:05.4083
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB1793
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190522192115.22666-77-sashal@kernel.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Biju-san, Morimoto-san,
+Hi Sasha,
 
-> From: Biju Das, Sent: Wednesday, May 22, 2019 8:00 PM
-<snip>
-> > > According to the connector/usb-connector.txt, should the connector
-> > > node have ports, port@1 and an endpoint nodes like below?
-> >
-> > "ports" is needed if it has multiple "port", otherwise, single port is =
-allowed
-> > from OF-graph point of view.
->=20
-> OK. I will use single port on  the next patch series.
+On Wed, May 22, 2019 at 03:16:17PM -0400, Sasha Levin wrote:
+> From: Johan Hovold <johan@kernel.org>
+> 
+> [ Upstream commit 579bebe5dd522580019e7b10b07daaf500f9fb1e ]
+> 
+> The USB-serial driver init_termios callback is used to override the
+> default initial terminal settings provided by USB-serial core.
+> 
+> After a bug was fixed in the original implementation introduced by
+> commit fe1ae7fdd2ee ("tty: USB serial termios bits"), the init_termios
+> callback was no longer called just once on first use as intended but
+> rather on every (first) open.
+> 
+> This specifically meant that the terminal settings saved on (final)
+> close were ignored when reopening a port for drivers overriding the
+> initial settings.
+> 
+> Also update the outdated function header referring to the creation of
+> termios objects.
+> 
+> Fixes: 7e29bb4b779f ("usb-serial: fix termios initialization logic")
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-According to the connector/usb-connector.txt [1], even if this device uses =
-a single port,
-we should describe ports node and port@1 (for SuperSpeed) subnode like usb/=
-typec-tcpci.txt.
+The stable tag was left out on purpose as this is essentially a new
+feature, and definitely a behavioural change which should not be
+backported.
 
-[1]
-Required nodes:
-- any data bus to the connector should be modeled using the OF graph bindin=
-gs
-  specified in bindings/graph.txt, unless the bus is between parent node an=
-d
-  the connector. Since single connector can have multiple data buses every =
-bus
-  has assigned OF graph port number as follows:
-    0: High Speed (HS), present in all connectors,
-    1: Super Speed (SS), present in SS capable connectors,
-    2: Sideband use (SBU), present in USB-C.
+Please drop from your autosel queues.
 
-Best regards,
-Yoshihiro Shimoda
+Also, may I ask you again not to include usb-serial (and drivers/gnss)
+in your autosel processing.
 
+Thanks,
+Johan
