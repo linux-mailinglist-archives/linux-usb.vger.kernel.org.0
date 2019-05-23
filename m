@@ -2,95 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A7927C36
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 13:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A182D27C47
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 13:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730492AbfEWLwU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 07:52:20 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:40523 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729934AbfEWLwU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 07:52:20 -0400
-Received: by mail-pl1-f194.google.com with SMTP id g69so2667845plb.7;
-        Thu, 23 May 2019 04:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=1UvPiQr+yb8D/ufSTOjzWAKWkJl0k4z7eKTQxsP0aKg=;
-        b=LEEkOhB0qF3TpvZljvm1fCJlzzYTga31PM7TfoUjncv6pn6Bn/lu0U/IpKI+tzp0SK
-         LjkAEnaCUFZAuGeaSMANBLjknqKIz9dWDAY0iZkfntymBkGXBikhD6QaQCPYzoPhG72R
-         ++qABYWLrl14FDMNmEQbyCTRHlgREkILmNZXuCeFgrwRWgC1hdorOYD/QDW6TJ2QipD8
-         9Ss7Q8mkeZq8/6DtuU7aiDO2s+pYbaB8mZMSuuaifglsiUaDeUbYkkMZudKz5NZinCnR
-         uEdu/5b1ngRvwqSPBhiQsARIuHjsGZ61VEt8AiQLKEIL8+jWjsEPaFZxagf0Kj69Vg4a
-         Bqkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1UvPiQr+yb8D/ufSTOjzWAKWkJl0k4z7eKTQxsP0aKg=;
-        b=CA/GjaO8hSCiogUHPHK0fKpGxTvmwp0Yh2DUTWfDO8L+ZMq6Ba2ZC0TGNmA4Fx2yJr
-         249Dzk02xNRSl7vO0FVAa6Y+i/scY8jmjw6T6cw2UAFaJZFtxLyo2zL+inGBm+MfzQ4Y
-         zPlQPJFTsVoS/LrEYArP4q7RBfF/jUkv7KxIh7K4Rb8XcBu5HEm6QIkLviIyLRk4wxvT
-         KwxxAbCSbVilFU8akkXYgMsJ1Bx5RERfDftN5YvPT+uXklvGcLq23ToRqtdFu2DBw6WB
-         txj+t6oQoCjcegoNJC2vrUGgDEQjmb47qEovs+4STfc43fetgu/myXhrjKd33jqeJsYf
-         CHvw==
-X-Gm-Message-State: APjAAAUnKLFY9lwA+xmJyUhFQNi0I3tXVUz0BZPmAnfHHNRVLL0Iwd5R
-        BvKP0fMKoixUPStR6IS4oyw=
-X-Google-Smtp-Source: APXvYqwRSZXft5wN8lNXV2ma/2LEu77SnnsV8qwpl83nBEK74b/7jGnt9NxG7Z50ptOON52k26fkdg==
-X-Received: by 2002:a17:902:1029:: with SMTP id b38mr56884097pla.72.1558612339862;
-        Thu, 23 May 2019 04:52:19 -0700 (PDT)
-Received: from localhost ([43.224.245.181])
-        by smtp.gmail.com with ESMTPSA id q7sm412409pjb.0.2019.05.23.04.52.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 May 2019 04:52:19 -0700 (PDT)
-From:   Weitao Hou <houweitaoo@gmail.com>
-To:     gregkh@linuxfoundation.org, oneukum@suse.com,
-        stern@rowland.harvard.edu, chunfeng.yun@mediatek.com,
-        ebiederm@xmission.com, bigeasy@linutronix.de, iamkeyur96@gmail.com,
-        keescook@chromium.org, houweitaoo@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: avoid redundant allocation and free of memory
-Date:   Thu, 23 May 2019 19:52:08 +0800
-Message-Id: <20190523115208.24674-1-houweitaoo@gmail.com>
-X-Mailer: git-send-email 2.18.0
+        id S1730626AbfEWL5N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 23 May 2019 07:57:13 -0400
+Received: from relay1.mentorg.com ([192.94.38.131]:62432 "EHLO
+        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729698AbfEWL5M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 07:57:12 -0400
+Received: from nat-ies.mentorg.com ([192.94.31.2] helo=SVR-IES-MBX-03.mgc.mentorg.com)
+        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
+        id 1hTmLO-0005nq-MO from Carsten_Schmid@mentor.com 
+        for linux-usb@vger.kernel.org; Thu, 23 May 2019 04:57:10 -0700
+Received: from SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) by
+ SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) with Microsoft SMTP Server
+ (TLS) id 15.0.1320.4; Thu, 23 May 2019 12:57:06 +0100
+Received: from SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17]) by
+ SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17%22]) with mapi id
+ 15.00.1320.000; Thu, 23 May 2019 12:57:06 +0100
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Crash/hung task in usb-storage thread
+Thread-Topic: Crash/hung task in usb-storage thread
+Thread-Index: AdURXgfVXaop83lMT6KXMlJmy+L2Dg==
+Date:   Thu, 23 May 2019 11:57:06 +0000
+Message-ID: <dca3ea08836e475894bdebc7eb28acff@SVR-IES-MBX-03.mgc.mentorg.com>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If usb is not attached, it's unnessary to allocate, copy
-and free memory
+Hi USB maintainers,
 
-Signed-off-by: Weitao Hou <houweitaoo@gmail.com>
----
- drivers/usb/core/devio.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+we recently have seen a problem with usb-storage when trying to read from a device.
+This happened on a 4.14.86 kernel.
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index fa783531ee88..aa17dab6c4ea 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -2130,6 +2130,9 @@ static int proc_ioctl(struct usb_dev_state *ps, struct usbdevfs_ioctl *ctl)
- 	if (ps->privileges_dropped)
- 		return -EACCES;
- 
-+	if (!connected(ps))
-+		return -ENODEV;
-+
- 	/* alloc buffer */
- 	size = _IOC_SIZE(ctl->ioctl_code);
- 	if (size > 0) {
-@@ -2146,11 +2149,6 @@ static int proc_ioctl(struct usb_dev_state *ps, struct usbdevfs_ioctl *ctl)
- 		}
- 	}
- 
--	if (!connected(ps)) {
--		kfree(buf);
--		return -ENODEV;
--	}
--
- 	if (ps->dev->state != USB_STATE_CONFIGURED)
- 		retval = -EHOSTUNREACH;
- 	else if (!(intf = usb_ifnum_to_if(ps->dev, ctl->ifno)))
--- 
-2.18.0
+The kernel's dmesg shows: (log has been submitted via DLT)
+1200.862250 kernel: usb 1-3.1: reset high-speed USB device number 10 using xhci_hcd
+1285.466289 kernel: usb 1-3.1: reset high-speed USB device number 10 using xhci_hcd
+1291.911286 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+1292.018079 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+1292.043073 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+1292.069078 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+1292.093066 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
 
+These messages continue until the hung task mechanism steps in:
+1472.135076 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+1472.135628 kernel: INFO: task usb-storage:7930 blocked for more than 120 seconds.
+1472.135633 kernel: Tainted: P U W O 4.14.86-apl #1
+1472.135634 kernel: "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+1472.135637 kernel: usb-storage D 0 7930 2 0x80000080
+1472.135642 kernel: Call Trace:
+1472.135656 kernel: __schedule+0x1c2/0x7b0
+1472.135661 kernel: schedule+0x2e/0x90
+1472.135664 kernel: schedule_timeout+0x230/0x470
+1472.135678 kernel: ? usb_hcd_submit_urb+0x98/0xba0 [usbcore]
+1472.135719 kernel: ? schedule_timeout+0x230/0x470
+1472.135728 kernel: ? usb_hcd_submit_urb+0x98/0xba0 [usbcore]
+1472.135731 kernel: ? __switch_to_asm+0x40/0x70
+1472.135733 kernel: ? __switch_to_asm+0x34/0x70
+1472.135735 kernel: ? __switch_to_asm+0x40/0x70
+1472.135737 kernel: ? __switch_to_asm+0x34/0x70
+1472.135741 kernel: wait_for_common+0xb5/0x170
+1472.135744 kernel: ? wait_for_common+0xb5/0x170
+1472.135748 kernel: ? wake_up_q+0x80/0x80
+1472.135752 kernel: wait_for_completion+0x18/0x20
+1472.135760 kernel: usb_sg_wait+0x114/0x170 [usbcore]
+1472.135946 kernel: usb_stor_bulk_transfer_sglist.part.3+0x62/0xb0 [usb_storage]
+1472.135951 kernel: usb_stor_bulk_srb+0x46/0x80 [usb_storage]
+1472.135955 kernel: usb_stor_Bulk_transport+0x123/0x390 [usb_storage]
+1472.135960 kernel: usb_stor_invoke_transport+0x3c/0x520 [usb_storage]
+1472.135965 kernel: ? wait_for_common+0xb5/0x170
+1472.135968 kernel: ? wait_for_common+0x149/0x170
+1472.135971 kernel: ? wake_up_q+0x80/0x80
+1472.135975 kernel: usb_stor_transparent_scsi_command+0x9/0x10 [usb_storage]
+1472.135979 kernel: usb_stor_control_thread+0x1eb/0x2d0 [usb_storage]
+1472.135984 kernel: kthread+0x122/0x140
+1472.135988 kernel: ? fill_inquiry_response+0x20/0x20 [usb_storage]
+1472.135991 kernel: ? kthread_create_on_node+0x60/0x60
+1472.135994 kernel: ret_from_fork+0x35/0x40
+1472.163072 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+
+There has been a similar bug being fixed in 3.17 kernel series, maybe the bug has been re-introduced?
+https://bugzilla.kernel.org/show_bug.cgi?id=88341
+
+As USB seems to be the causing subsystem, i submit this query here.
+
+Any idea what could cause this?
+
+
+Best regards
+Carsten
