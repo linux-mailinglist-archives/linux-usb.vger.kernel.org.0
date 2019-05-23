@@ -2,69 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBA328438
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 18:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E26828586
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 20:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730899AbfEWQuV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 12:50:21 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:34422 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730867AbfEWQuU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 12:50:20 -0400
-Received: (qmail 24157 invoked by uid 2102); 23 May 2019 12:50:19 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 23 May 2019 12:50:19 -0400
-Date:   Thu, 23 May 2019 12:50:19 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
+        id S1731261AbfEWSFh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 May 2019 14:05:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57090 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731192AbfEWSFh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 May 2019 14:05:37 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE6EF2075B;
+        Thu, 23 May 2019 18:05:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558634736;
+        bh=mz46K3rk8eFBax1myUUpGNxtfGOg5k4wF/6+jpagj04=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y4xC5Mu85Iy5cOddrtY+GP4YZ4PvNUor54g3hhhBUGO6gISIN/Y5rmuXjCM8aOAU6
+         tyOch2bFTH2MxfbiSSD1N65S07ozdW2/Sai37KFtzKuKobjmbqMzotOu23vOT5FhAm
+         vePim/sGu7qzIqsA3+UQvM6q9uh2u+RnrsQffauU=
+Date:   Thu, 23 May 2019 20:05:34 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
 To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 Subject: Re: Crash/hung task in usb-storage thread
-In-Reply-To: <dca3ea08836e475894bdebc7eb28acff@SVR-IES-MBX-03.mgc.mentorg.com>
-Message-ID: <Pine.LNX.4.44L0.1905231245510.1553-100000@iolanthe.rowland.org>
+Message-ID: <20190523180534.GA19685@kroah.com>
+References: <dca3ea08836e475894bdebc7eb28acff@SVR-IES-MBX-03.mgc.mentorg.com>
+ <20190523120410.GA16571@kroah.com>
+ <3bb81d0da7de4745852aef52802f3b9b@SVR-IES-MBX-03.mgc.mentorg.com>
+ <20190523122626.GA26641@kroah.com>
+ <4412d0ddd08e41009d46c018d50ce5c3@SVR-IES-MBX-03.mgc.mentorg.com>
+ <20190523123552.GA31462@kroah.com>
+ <5c127181fd1e46dfa6efe8e6ea85b750@SVR-IES-MBX-03.mgc.mentorg.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5c127181fd1e46dfa6efe8e6ea85b750@SVR-IES-MBX-03.mgc.mentorg.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 23 May 2019, Schmid, Carsten wrote:
+On Thu, May 23, 2019 at 01:16:12PM +0000, Schmid, Carsten wrote:
+> > > >
+> > > > 4.14.102 is still old.
+> > > I agree
+> > >
+> > > > > Porting a 5.1 will take a lot of effort.
+> > > >
+> > > > Then that implies you have an SoC with a few million lines of code added
+> > > > to the kernel, right?  Nothing we can do here about that mess, you need
+> > > > to go ask for support from the vendor that is forcing you to use that
+> > > > kernel, sorry :(
+> > > >
+> > >
+> > > Well its at least an x86-64 based SoC.
+> > 
+> > An x86 SoC should work on 5.1, what is missing there to keep it from
+> > functioning?  Why hasn't it already been updated to 4.19.y?
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> - Long term stabilisation of product.
+> - Concerns a product update - already in production
 
-> Hi USB maintainers,
-> 
-> we recently have seen a problem with usb-storage when trying to read from a device.
-> This happened on a 4.14.86 kernel.
-> 
-> The kernel's dmesg shows: (log has been submitted via DLT)
-> 1200.862250 kernel: usb 1-3.1: reset high-speed USB device number 10 using xhci_hcd
-> 1285.466289 kernel: usb 1-3.1: reset high-speed USB device number 10 using xhci_hcd
-> 1291.911286 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
-> 1292.018079 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
-> 1292.043073 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
-> 1292.069078 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
-> 1292.093066 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+So, you have a huge list of known bugs/vulnerabilities in that device
+now, yet they refuse to update.  Not good :(
 
-Since there haven't been any substantive change to usb-storage since 
-4.14 was released, there's a good chance this is a problem with 
-xhci-hcd.
+Best of luck,
 
-Is this problem repeatable?  Can you collect a usbmon trace showing 
-what happens when the problem occurs?
-
-> There has been a similar bug being fixed in 3.17 kernel series, maybe the bug has been re-introduced?
-> https://bugzilla.kernel.org/show_bug.cgi?id=88341
-
-That is _extremely_ unlikely.
-
-> As USB seems to be the causing subsystem, i submit this query here.
-> 
-> Any idea what could cause this?
-
-The particular error message you got means that the SCSI layer asked 
-usb-storage to send a command to the device before the previous command 
-was completed.  But without more information there's no way to tell why 
-it did this.
-
-Alan Stern
-
+greg k-h
