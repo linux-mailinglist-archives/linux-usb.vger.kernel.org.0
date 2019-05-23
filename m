@@ -2,112 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A667280C3
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 17:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7B12811D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 17:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730860AbfEWPPZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 11:15:25 -0400
-Received: from guitar.tcltek.co.il ([192.115.133.116]:59683 "EHLO
-        mx.tkos.co.il" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730782AbfEWPPZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 May 2019 11:15:25 -0400
-Received: from tarshish (unknown [10.0.8.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.tkos.co.il (Postfix) with ESMTPS id 2D1CB440061;
-        Thu, 23 May 2019 18:15:22 +0300 (IDT)
-Date:   Thu, 23 May 2019 18:15:20 +0300
-From:   Baruch Siach <baruch@tkos.co.il>
-To:     Jun Li <jun.li@nxp.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v2] usb: dwc3: move core validation to be after clks
- enable
-Message-ID: <20190523151520.pa4zkby24cktnvl6@tarshish>
-References: <1557311367-5863-1-git-send-email-jun.li@nxp.com>
+        id S1730867AbfEWP0q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 May 2019 11:26:46 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:37807 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730804AbfEWP0q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 11:26:46 -0400
+Received: by mail-it1-f194.google.com with SMTP id m140so9130911itg.2
+        for <linux-usb@vger.kernel.org>; Thu, 23 May 2019 08:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=uFg0UTRdakpnwdWnNL4OUoN9u3XbAEwElp9Hoskpuy8=;
+        b=iWKAiRmGRAD2AHVijZQwxOrGkQyu4poB02LaySvLKT3snEJ4Qz6SXLfnZYOpsumCpE
+         QoU8rYY50CupRiDkvWniRcIFdLdTMrJDCI64WOJy4nCWZf+YHa2M9OSyaLfpsZOC8Bsi
+         5JRqlcryaBCnbD6gi3xV7jnWodbitSJhj2nA0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uFg0UTRdakpnwdWnNL4OUoN9u3XbAEwElp9Hoskpuy8=;
+        b=cZ5l+zZtRFl0fBI60tozrCwEJut+Nv6ZDxGiGiKflxNmlmAarQ8zl/XmjDo3I8SPqk
+         bCueJb8XVuWjDd4qqyM7jerRXLtkzGnbQMKtNMUgltO5axJzDPyTPQqjyjaLFoPQXO0s
+         sQYq/OCj2fVsypfGk047HXwj78+aGh4TAURHGWvAXxvKyqc/RZNzEm+JVld9l/EB0wHr
+         4Yt6x7vFQFvXcQdUXC1o+A4Rv+sCJlf1mHxH66k6XwDqjjpTzK/iaUtYbOxSKZagLnDb
+         fh/IG5N//3LgGP057yre1SqkCaDFS7kh66CSdg9zahqwW9MDP3eBSKbumUVob+qXDBgK
+         /oXA==
+X-Gm-Message-State: APjAAAVGUsHZPtyBGRb5w62sNvWtCUrbb2OpgxKwRq9iDnjIoH4bqLtY
+        gPmfU9DJHW0LWLhC7NrT6RhEGg==
+X-Google-Smtp-Source: APXvYqyBKIoZ2SVTkePdplyUiBMQhMeFxlQEf3W43tC2JRuz7xh1qAfOhGHZiyKGb+k5jOT1trnAdw==
+X-Received: by 2002:a24:ac58:: with SMTP id m24mr14973546iti.65.1558625205824;
+        Thu, 23 May 2019 08:26:45 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id f23sm6042344ioc.39.2019.05.23.08.26.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 May 2019 08:26:45 -0700 (PDT)
+Subject: Re: [usb:usb-linus] BUILD REGRESSION
+ c1a145a3ed9a40f3b6145feb97789e8eb49c5566
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kbuild test robot <lkp@intel.com>
+Cc:     linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <5ce58da9.6t2VRua3tVrRG+g+%lkp@intel.com>
+ <20190523071339.GE24064@kroah.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f79aa2c6-aabf-694f-3005-f8349690151e@linuxfoundation.org>
+Date:   Thu, 23 May 2019 09:26:44 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1557311367-5863-1-git-send-email-jun.li@nxp.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190523071339.GE24064@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jun Li,
-
-On Wed, May 08, 2019 at 10:52:37AM +0000, Jun Li wrote:
-> From: Jun Li <jun.li@nxp.com>
+On 5/23/19 1:13 AM, Greg Kroah-Hartman wrote:
+> On Thu, May 23, 2019 at 01:58:01AM +0800, kbuild test robot wrote:
+>> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+>> branch HEAD: c1a145a3ed9a40f3b6145feb97789e8eb49c5566  xhci: Use %zu for printing size_t type
+>>
+>> Regressions in current branch:
+>>
+>> drivers/usb/usbip/stub_dev.c:399:9: sparse: sparse: context imbalance in 'stub_probe' - different lock contexts for basic block
+>> drivers/usb/usbip/stub_dev.c:418:13: sparse: sparse: context imbalance in 'stub_disconnect' - different lock contexts for basic block
+>> drivers/usb/usbip/stub_dev.c:464:1-10: second lock on line 476
+>>
+>> Error ids grouped by kconfigs:
+>>
+>> recent_errors
+>> ├── i386-allmodconfig
+>> │   └── drivers-usb-usbip-stub_dev.c:second-lock-on-line
+>> ├── x86_64-allmodconfig
+>> │   ├── drivers-usb-usbip-stub_dev.c:sparse:sparse:context-imbalance-in-stub_disconnect-different-lock-contexts-for-basic-block
+>> │   └── drivers-usb-usbip-stub_dev.c:sparse:sparse:context-imbalance-in-stub_probe-different-lock-contexts-for-basic-block
+>> └── x86_64-allyesconfig
+>>      └── drivers-usb-usbip-stub_dev.c:second-lock-on-line
 > 
-> Register access in core validation may hang before the bulk
-> clks are enabled.
-
-This patch fixes the hang issue for on my i.MX8MQ based system.
-
-Tested-by: Baruch Siach <baruch@tkos.co.il>
-
-However, commit b873e2d0ea1e is meant to move dwc3_core_is_valid() before 
-dwc3_get_dr_mode(). With this patch dwc3_get_dr_mode() is called from 
-dwc3_get_properties() before dwc3_core_is_valid().
-
-I guess we need a larger change in the initialization sequence.
-
-Thanks,
-baruch
-
-> Fixes: b873e2d0ea1e ("usb: dwc3: Do core validation early on probe")
-> Signed-off-by: Jun Li <jun.li@nxp.com>
-> ---
 > 
-> Change for v2:
-> - Update ret to be -ENODEV in case dwc3_core_is_valid() fail.
+> Shuah, I just got this new report from 0-day about your commit
+> 0c9e8b3cad65 ("usbip: usbip_host: fix BUG: sleeping function called from
+> invalid context") that got added to my tree recently.  Can you look into
+> this to see if it is a real error caused by this commit, or just
+> something that has always been there?
 > 
->  drivers/usb/dwc3/core.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 4aff1d8..93b96e6 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1423,11 +1423,6 @@ static int dwc3_probe(struct platform_device *pdev)
->  	dwc->regs	= regs;
->  	dwc->regs_size	= resource_size(&dwc_res);
->  
-> -	if (!dwc3_core_is_valid(dwc)) {
-> -		dev_err(dwc->dev, "this is not a DesignWare USB3 DRD Core\n");
-> -		return -ENODEV;
-> -	}
-> -
->  	dwc3_get_properties(dwc);
->  
->  	dwc->reset = devm_reset_control_get_optional_shared(dev, NULL);
-> @@ -1460,6 +1455,12 @@ static int dwc3_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto unprepare_clks;
->  
-> +	if (!dwc3_core_is_valid(dwc)) {
-> +		dev_err(dwc->dev, "this is not a DesignWare USB3 DRD Core\n");
-> +		ret = -ENODEV;
-> +		goto disable_clks;
-> +	}
-> +
->  	platform_set_drvdata(pdev, dwc);
->  	dwc3_cache_hwparams(dwc);
->  
-> @@ -1524,7 +1525,7 @@ static int dwc3_probe(struct platform_device *pdev)
->  err1:
->  	pm_runtime_put_sync(&pdev->dev);
->  	pm_runtime_disable(&pdev->dev);
-> -
-> +disable_clks:
->  	clk_bulk_disable(dwc->num_clks, dwc->clks);
->  unprepare_clks:
->  	clk_bulk_unprepare(dwc->num_clks, dwc->clks);
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thanks Greg. I think this is a new problem introduced in my patch. I 
+will send the fix.
+
+thanks,
+-- Shuah
