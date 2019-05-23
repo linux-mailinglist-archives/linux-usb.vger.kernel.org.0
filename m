@@ -2,150 +2,390 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2278627A22
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 12:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD5627A27
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 12:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729698AbfEWKPQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 06:15:16 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:37176 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726429AbfEWKPQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 06:15:16 -0400
-Received: by mail-wr1-f65.google.com with SMTP id e15so5630737wrs.4;
-        Thu, 23 May 2019 03:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=U9kWFboW6XcJ3prQWjhWjMmlPfsMdYcgbJwfJuWODks=;
-        b=cEWib4SKNxQ8+TV3EjdE1KNAYnTQMQB/SUAJDQn6O9/eH63hnxlPUQ11Qqk2g9JhmM
-         gRCVR6cMMwx4uL9nqhr8fWnyq2Ukbvnz9Bix0fZzZ36Yi5e2oIawONoHKqMetB1HgJc6
-         E5KtQXhsDdz3zdggjGUqc+e1qYwWF4RLKQ6jjNMePdEDeo3ScWXSnYR040YiXe5SDqRK
-         BJwKECuHHgMLT+skV9RsaGQihM2qhqzmj10Sa3+59UcVQ8iSH4v/zkM1ebrufDn5RZ87
-         LJVawxrKzErhR1hSANxysXRI8pd9H8B155GvSUWNsS3PAQ4B2pCiC2e96c7GpCDgwAdZ
-         YQbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=U9kWFboW6XcJ3prQWjhWjMmlPfsMdYcgbJwfJuWODks=;
-        b=Fgq+5MnwBoB6eTe3B4wMMK8XgJXxvAVoGSbn4YonRTeq0WWU07muTKQGw2pDgPTntS
-         tX8AvajJMQOxb4S66LjntBw9A7v1M8Pu63dMj9LXY1TbmNs1tjcZHiFbnLEYTHzgVgiU
-         eTWQm6VmF9DV5KsrbfiQAibP63VYeXpS+Hp/jILZhc2NUZQthyroKnL6kFz8eWRMtG1w
-         joBUXHCEAahd5T0lx2X9ewfZeMY1sZUqeYd7i0WqY3c45ctaPFKthpHtwMln/gJIsEVZ
-         PDGfhM7ZqjQykccBJMc2oABUxwbGl6VbVEerGcXe9/6S1Gr+Y1tg6bOAmov3vB/8E8/S
-         Atnw==
-X-Gm-Message-State: APjAAAXEhl0ix8cJLii2zH3gJYlxvNBtj/1MZ6LM/0VgO1TaI3gm3ZU6
-        iVqw23Nxb66+OMUoT/biahc=
-X-Google-Smtp-Source: APXvYqxlOYwVgF/nRi/hsyeGUyvidTRUB37kvdgQKNiREpBavjo4O8mNMaL5B76y90O3q26YZbiyYA==
-X-Received: by 2002:adf:e301:: with SMTP id b1mr27591181wrj.304.1558606514329;
-        Thu, 23 May 2019 03:15:14 -0700 (PDT)
-Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
-        by smtp.gmail.com with ESMTPSA id y1sm9071531wma.14.2019.05.23.03.15.13
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 May 2019 03:15:13 -0700 (PDT)
-Date:   Thu, 23 May 2019 12:15:12 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [Patch V3 5/8] arm64: tegra: Add xudc node for Tegra210
-Message-ID: <20190523101512.GE30331@ulmo>
-References: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
- <1557988772-15406-6-git-send-email-nkristam@nvidia.com>
+        id S1728277AbfEWKQT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 May 2019 06:16:19 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:3965 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726846AbfEWKQT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 06:16:19 -0400
+X-UUID: 68eeb74a4e9d4da5a998aed5323fa1a2-20190523
+X-UUID: 68eeb74a4e9d4da5a998aed5323fa1a2-20190523
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 841437274; Thu, 23 May 2019 18:16:13 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 23 May
+ 2019 18:16:11 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 23 May 2019 18:16:10 +0800
+Message-ID: <1558606570.10179.403.camel@mhfsdcap03>
+Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
+ node
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Biju Das <biju.das@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Adam Thomson" <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 23 May 2019 18:16:10 +0800
+In-Reply-To: <20190522142640.GN1887@kuha.fi.intel.com>
+References: <20190517130511.GA1887@kuha.fi.intel.com>
+         <1558319951.10179.352.camel@mhfsdcap03>
+         <20190520080359.GC1887@kuha.fi.intel.com>
+         <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+         <20190520083601.GE1887@kuha.fi.intel.com>
+         <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+         <20190521095839.GI1887@kuha.fi.intel.com>
+         <OSBPR01MB21032206146152983C8F4E8EB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+         <1558517436.10179.388.camel@mhfsdcap03>
+         <OSBPR01MB21038F2B99EF74831A22727BB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+         <20190522142640.GN1887@kuha.fi.intel.com>
+Content-Type: multipart/mixed; boundary="=-1DBptkwq7PrdOe2/R7LH"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="X3gaHHMYHkYqP6yf"
-Content-Disposition: inline
-In-Reply-To: <1557988772-15406-6-git-send-email-nkristam@nvidia.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=-1DBptkwq7PrdOe2/R7LH
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
---X3gaHHMYHkYqP6yf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Heikki,
+On Wed, 2019-05-22 at 17:26 +0300, Heikki Krogerus wrote:
+> On Wed, May 22, 2019 at 10:55:17AM +0000, Biju Das wrote:
+> > Hi Chunfeng Yun,
+> > 
+> > Thanks for the feedback.
+> > 
+> > > Subject: RE: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
+> > > node
+> > > 
+> > > Hi Biju,
+> > > On Wed, 2019-05-22 at 08:05 +0000, Biju Das wrote:
+> > > > Hi Heikki,
+> > > >
+> > > > Thanks for the feedback.
+> > > >
+> > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
+> > > > > usb_role_switch by node
+> > > > >
+> > > > > On Mon, May 20, 2019 at 09:45:46AM +0000, Biju Das wrote:
+> > > > > >
+> > > > > >
+> > > > > > Hi Heikki,
+> > > > > >
+> > > > > > Thanks for the feedback.
+> > > > > >
+> > > > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
+> > > > > > > usb_role_switch by node
+> > > > > > >
+> > > > > > > On Mon, May 20, 2019 at 08:06:41AM +0000, Biju Das wrote:
+> > > > > > > > Hi Heikki,
+> > > > > > > >
+> > > > > > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
+> > > > > > > > > usb_role_switch by node
+> > > > > > > > >
+> > > > > > > > > On Mon, May 20, 2019 at 10:39:11AM +0800, Chunfeng Yun wrote:
+> > > > > > > > > > Hi,
+> > > > > > > > > > On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
+> > > > > > > > > > > Hi,
+> > > > > > > > > > >
+> > > > > > > > > > > On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki Krogerus
+> > > wrote:
+> > > > > > > > > > > > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng Yun
+> > > > > wrote:
+> > > > > > > > > > > > > Add fwnode_usb_role_switch_get() to make easier to
+> > > > > > > > > > > > > get usb_role_switch by fwnode which register it.
+> > > > > > > > > > > > > It's useful when there is not device_connection
+> > > > > > > > > > > > > registered between two drivers and only knows the
+> > > > > > > > > > > > > fwnode which register usb_role_switch.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Signed-off-by: Chunfeng Yun
+> > > > > > > > > > > > > <chunfeng.yun@mediatek.com>
+> > > > > > > > > > > > > Tested-by: Biju Das <biju.das@bp.renesas.com>
+> > > > > > > > > > > >
+> > > > > > > > > > > > Acked-by: Heikki Krogerus
+> > > > > > > > > > > > <heikki.krogerus@linux.intel.com>
+> > > > > > > > > > >
+> > > > > > > > > > > Hold on. I just noticed Rob's comment on patch 2/6,
+> > > > > > > > > > > where he points out that you don't need to use device
+> > > > > > > > > > > graph since the controller is the parent of the
+> > > > > > > > > > > connector. Doesn't that mean you don't really need this API?
+> > > > > > > > > > No, I still need it.
+> > > > > > > > > > The change is about the way how to get fwnode; when use
+> > > > > > > > > > device graph, get fwnode by of_graph_get_remote_node();
+> > > > > > > > > > but now will get fwnode by of_get_parent();
+> > > > > > > > >
+> > > > > > > > > OK, I get that, but I'm still not convinced about if
+> > > > > > > > > something like this function is needed at all. I also have
+> > > > > > > > > concerns regarding how you are using the function. I'll
+> > > > > > > > > explain in comment to the patch 5/6 in this
+> > > > > > > series...
+> > > > > > > >
+> > > > > > > > FYI, Currently  I am also using this api in my patch series.
+> > > > > > > > https://patchwork.kernel.org/patch/10944637/
+> > > > > > >
+> > > > > > > Yes, and I have the same question for you I jusb asked in
+> > > > > > > comment I added to the patch 5/6 of this series. Why isn't
+> > > > > > > usb_role_switch_get()
+> > > > > enough?
+> > > > > >
+> > > > > > Currently no issue. It will work with this api as well, since the
+> > > > > > port node is
+> > > > > part of controller node.
+> > > > > > For eg:-
+> > > > > > https://patchwork.kernel.org/patch/10944627/
+> > > > > >
+> > > > > > However if any one adds port node inside the connector node, then
+> > > > > > this
+> > > > > api may won't work as expected.
+> > > > > > Currently I get below error
+> > > > > >
+> > > > > > [    2.299703] OF: graph: no port node found in
+> > > > > /soc/i2c@e6500000/hd3ss3220@47
+> > > > >
+> > > > > We need to understand why is that happening?
+> > > > >
+> > > >
+> > > > Form the stack trace  the parent node is "parent_node=hd3ss3220@47" ,
+> > > instead of the "connector" node.
+> > > > That is the reason for the above error.
+> > > >
+> > > > [    2.442429]  of_graph_get_next_endpoint.part.0+0x28/0x168
+> > > > [    2.447889]  of_fwnode_graph_get_next_endpoint+0x5c/0xb0
+> > > > [    2.453267]  fwnode_graph_get_next_endpoint+0x20/0x30
+> > > > [    2.458374]  device_connection_find_match+0x74/0x1a0
+> > > > [    2.463399]  usb_role_switch_get+0x20/0x28
+> > > > [    2.467542]  hd3ss3220_probe+0xc4/0x218
+> > > >
+> > > > The use case is
+> > > >
+> > > > &i2c0 {
+> > > > 	hd3ss3220@47 {
+> > > >                  	compatible = "ti,hd3ss3220";
+> > > >
+> > > >                  	usb_con: connector {
+> > > >                           		compatible = "usb-c-connector";
+> > > >                          		port {
+> > > >                                 		 hd3ss3220_ep: endpoint {
+> > > >                                         			remote-endpoint =
+> > > <&usb3_role_switch>;
+> > > >                                 		};
+> > > >                          		};
+> > > >                 	 };
+> > > > 	 };
+> > > > };
+> > > >
+> > > > &usb3_peri0 {
+> > > >          companion = <&xhci0>;
+> > > >          usb-role-switch;
+> > > >
+> > > >          port {
+> > > >                 usb3_role_switch: endpoint {
+> > > >                         remote-endpoint = <&hd3ss3220_ep>;
+> > > >                  };
+> > > >          };
+> > > > };
+> > > >
+> > > > Q1) How do we modify the usb_role_switch_get() function to search
+> > > > Child(connector) and child's endpoint?
+> > > How about firstly finding connector node in fwnode_graph_devcon_match(),
+> > > then search each endpoint?
+> > 
+> >  I have done a quick prototyping with the changes you suggested and it works.
+> > 
+> > -       struct fwnode_handle *ep;
+> > +       struct fwnode_handle *ep,*child,*tmp = fwnode; 
+> >  
+> > -       fwnode_graph_for_each_endpoint(fwnode, ep) {
+> > +       child = fwnode_get_named_child_node(fwnode, "connector");
+> > +       if (child)
+> > +               tmp = child;
+> > +
+> > +       fwnode_graph_for_each_endpoint(tmp, ep) {
+> > 
+> > Form the stack trace  the parent node is "parent_node= connector" .
+> > 
+> > [    2.440922]  of_graph_get_next_endpoint.part.0+0x28/0x168
+> > [    2.446381]  of_fwnode_graph_get_next_endpoint+0x5c/0xb0
+> > [    2.451758]  fwnode_graph_get_next_endpoint+0x20/0x30
+> > [    2.456866]  device_connection_find_match+0x84/0x1c0
+> > [    2.461888]  usb_role_switch_get+0x20/0x28
+> > 
+> > Heikki, 
+> > Are you ok  with the above changes?
+> 
+> Doesn't that mean that if we made fwnode_usb_role_switch_get() the way
+> I proposed, there is no problem? You just find the "connector" child
+> node in your driver, and pass that to fwnode_usb_role_switch_get():
+> 
+>         struct fwnode_handle *connector;
+>         ...
+>         connector = device_get_named_child_node(&client->dev, "connector");
+>         if (IS_ERR(connector))
+>                 <do something>
+> 
+>         hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
+>         ...
+> 
+> The difference is that instead of just converting a device node of an
+> usb role switch to the usb role switch, it works just like
+> usb_role_switch_get(), just taking fwnode instead of device entry as
+> parameter.
+> 
+> I prepared the patches implementing fwnode_usb_role_switch_get() the
+> way I though it needs to work for my own tests. Please find the
+> patches attached.
+I tested these patches, it didn't work for case as following:
 
-On Thu, May 16, 2019 at 12:09:29PM +0530, Nagarjuna Kristam wrote:
-> Tegra210 has one XUSB device mode controller, which can be operated
-> HS and SS modes. Add DT support for XUSB device mode controller.
->=20
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> ---
->  arch/arm64/boot/dts/nvidia/tegra210.dtsi | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/d=
-ts/nvidia/tegra210.dtsi
-> index a550c0a..edef00b 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-> @@ -1184,6 +1184,25 @@
->  		status =3D "disabled";
->  	};
-> =20
-> +	xudc@700d0000 {
-> +		compatible =3D "nvidia,tegra210-xudc";
-> +		reg =3D <0x0 0x700d0000 0x0 0x8000>,
-> +			<0x0 0x700d8000 0x0 0x1000>,
-> +			<0x0 0x700d9000 0x0 0x1000>;
+case 2:
 
-Same comments regarding alignment as for the bindings patch.
+&mtu3 {
+    usb-role-switch;
 
-> +		interrupts =3D <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-> +		clocks =3D <&tegra_car TEGRA210_CLK_XUSB_DEV>,
-> +			<&tegra_car TEGRA210_CLK_XUSB_SS>,
-> +			<&tegra_car TEGRA210_CLK_XUSB_SSP_SRC>,
-> +			<&tegra_car TEGRA210_CLK_XUSB_HS_SRC>,
-> +			<&tegra_car TEGRA210_CLK_XUSB_FS_SRC>;
+    connector {
+        compatible = "linux,typeb-conn-gpio", "usb-b-connector";
+        label = "micro-USB";
+        type = "micro";
+        id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
+        vbus-supply = <&usb_p0_vbus>;
+    };
+};
 
-Same here.
+so I consider this case in the function fwnode_graph_devcon_match()
+(based on your patches)
 
-> +		clock-names =3D "dev", "ss", "ss_src",
-> +			      "hs_src", "fs_src";
+diff --git a/drivers/base/devcon.c b/drivers/base/devcon.c
+index 8311b70..1dae8b7 100644
+--- a/drivers/base/devcon.c
++++ b/drivers/base/devcon.c
+@@ -18,9 +18,11 @@
+ {
+        struct device_connection con = { .id = con_id };
+        struct fwnode_handle *ep;
++       int ep_count = 0;
+        void *ret;
+ 
+        fwnode_graph_for_each_endpoint(fwnode, ep) {
++               ep_count++;
+                con.fwnode = fwnode_graph_get_remote_port_parent(ep);
+                if (!fwnode_device_is_available(con.fwnode))
+                        continue;
+@@ -32,6 +34,19 @@
+                        return ret;
+                }
+        }
++
++       /* if the connector has no remote endpoint, check its parent */
++       if (!ep_count) {
++               con.fwnode = fwnode_get_parent(fwnode);
++               if (!con.fwnode)
++                       return NULL;
++
++               ret = match(&con, -1, data);
++               fwnode_handle_put(con.fwnode);
++               if (ret)
++                       return ret;
++       }
++
+        return NULL;
+ }
 
-No need to split this across multiple lines, it all fits within 72/80
-characters.
+see attached patch.
 
-Thierry
+then both usb_role_switch_get(dev) or fwnode_usb_role_switch_get(fwnode)
+work well;
 
-> +		power-domains =3D <&pd_xusbdev>, <&pd_xusbss>;
-> +		power-domain-names =3D "dev", "ss";
-> +		nvidia,xusb-padctl =3D <&padctl>;
-> +		status =3D "disabled";
-> +	};
-> +
->  	mipi: mipi@700e3000 {
->  		compatible =3D "nvidia,tegra210-mipi";
->  		reg =3D <0x0 0x700e3000 0x0 0x100>;
-> --=20
-> 2.7.4
->=20
+but I don't know which way is better when consider this specific case,
+put into class.c as you suggested before or put into devcon.c like
+above. 
 
---X3gaHHMYHkYqP6yf
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks a lot
 
------BEGIN PGP SIGNATURE-----
+> 
+> thanks,
+> 
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAlzmcrAACgkQ3SOs138+
-s6EI6Q/8C/tEyZ3kqPVWgXpCadqrSgkSRS7wF2qitJizWLq5HNXrft5rq2AgbHEe
-suqQeuxZtfEdVHqZRKA1u5kvgUNGtheWyfFlGhvlFywgjl1DKF6BghRbu+Fpmnb6
-pOf6btzypjCMxPXEitBxtG23be/ozX2Eh6ItOKI8nEMmlSKZzQTlAMO1L4u2fpud
-1rVidRQSuVLaulyu/XPjodMU/Q5a6GSEdN82Rw/ywkmbLgN0MAIK/lXEZtiscbFK
-1LkNFrw/EIrCqkk9vDuAv9ta7xsoNx0HxTsDR/9E8+9GVSnfG7XN1bweNkDIdTlx
-uSKXMkPtJv1/Gho9g21jlj4hl9JIKzaj4bLhhXaR9mgSz68HEP7X+YiUrF0Ju8gw
-NghhEzNIQfawj7UWQhuKPRNQjUOUDgisSltsn0Rpsku6uVr8kScdxxk36k/rzcPD
-nuNN4rUaXmDScfCnCsggd69x+hC7eopllPtMrOgJlLxylZAkwSBJHSyl03m6dMUP
-MSFIAqWOXnJDZWc/nB3NvW5G1IAQdSMgiEeVrcEUcVp677L6qmzYK3LpJRCqUMV0
-x0f3wSmbB+17rf18epZ6lY/BSWm8tnWHB6UDbAFEZeqIr6DcSWmpLOINu2XKIrC9
-J/CBnj+cewWYzOEtIETSmQEefVHGs+GE8etz80NEyNdUk9zaYXg=
-=oAnT
------END PGP SIGNATURE-----
 
---X3gaHHMYHkYqP6yf--
+--=-1DBptkwq7PrdOe2/R7LH
+Content-Disposition: attachment;
+	filename="0001-device-connection-test-only.patch"
+Content-Type: text/x-patch; name="0001-device-connection-test-only.patch";
+	charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+
+From bd291df4d0247fce5c11da746ae0761420054cf7 Mon Sep 17 00:00:00 2001
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Date: Thu, 23 May 2019 18:04:28 +0800
+Subject: [PATCH] device connection: test only
+
+Change-Id: Ie1b4b6304dfd7a89516fa3578aa5a5b1be924212
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ drivers/base/devcon.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/base/devcon.c b/drivers/base/devcon.c
+index 8311b70bbca2..1dae8b77562d 100644
+--- a/drivers/base/devcon.c
++++ b/drivers/base/devcon.c
+@@ -18,9 +18,11 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+ {
+ 	struct device_connection con = { .id = con_id };
+ 	struct fwnode_handle *ep;
++	int ep_count = 0;
+ 	void *ret;
+ 
+ 	fwnode_graph_for_each_endpoint(fwnode, ep) {
++		ep_count++;
+ 		con.fwnode = fwnode_graph_get_remote_port_parent(ep);
+ 		if (!fwnode_device_is_available(con.fwnode))
+ 			continue;
+@@ -32,6 +34,19 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+ 			return ret;
+ 		}
+ 	}
++
++	/* if the connector has no remote endpoint, check its parent */
++	if (!ep_count) {
++		con.fwnode = fwnode_get_parent(fwnode);
++		if (!con.fwnode)
++			return NULL;
++
++		ret = match(&con, -1, data);
++		fwnode_handle_put(con.fwnode);
++		if (ret)
++			return ret;
++	}
++
+ 	return NULL;
+ }
+ 
+-- 
+2.21.0
+
+
+--=-1DBptkwq7PrdOe2/R7LH--
