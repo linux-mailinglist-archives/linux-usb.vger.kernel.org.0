@@ -2,117 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBCF27A8B
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 12:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145AD27B77
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 13:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729762AbfEWKaq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 06:30:46 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:42094 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727466AbfEWKaq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 06:30:46 -0400
-Received: by mail-wr1-f66.google.com with SMTP id l2so5658225wrb.9;
-        Thu, 23 May 2019 03:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=neBs/yiQpGrDacuRSHIGWUE7O7z1Q8eUFAQh1cTDFYY=;
-        b=YKmTQoInzb/M7lUvBPhH4xEqjtzMhYOyEHlkkMz5uvCu1bo1Va53B2EqUxnGmccYWQ
-         ikAyxZb72rvmQqAoOlrqTvE9FypyV1q4cqjrTPYdjPDO3u8D+MgFhkYF12g5yhIrbYD9
-         tf/uKO/UxVjKv1QNuvyFzycNB2fpLJBu2EaUzD79KfIIf9QZGqZTr8a6yDhFIA1V1OZz
-         9gpwrdkPZQmbDRWz6cINrLG2WtqRhrvWyV5HAoEIw4+UwGpG27GIM5jizhVUf1UxAI7l
-         vdpx/iWpIxCqTy6Mlf+Q2IFtRph2ZzsipZFBA8H1bcjxx/YzlZmmEFWf8h9SJdblVl9Q
-         W9wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=neBs/yiQpGrDacuRSHIGWUE7O7z1Q8eUFAQh1cTDFYY=;
-        b=MrmgxEOU5+1iqnOjUJORI+73pt4EGp58U09agkGyt/nu2x3vvgX6O6I/IxLX9j0wLl
-         MjaeET0VRDtGkt+fjNz9T5V308nTzeT2yo1X/X4iGZZhENKFJj+j4EPxA9C7ff3k2pEs
-         MDTwHZM6qg1VBj4iaVEs9fKCqrVLzLGAyuiE5EMyIfD/Eq/Vam4ztBsZDiEAuumaNvwC
-         7ZA2XA6OK/cQ2pgo2rv8h5fQijJBKNG4Wfx4E9agQEFADGB6vsjOkKDnorq3gHLkG5K7
-         WO/9/RoBKvCAA+4q6EfNR3zXkmVIdxyY8mh9ZBemeLsoEmbNcFpO+VCUX1Hkcp5nFy1F
-         WcFA==
-X-Gm-Message-State: APjAAAXCBvKDFTD23qMup6jyQLzqz4Z9qitAqG2jWdzCUbOBuFC6MLIy
-        vKBBKecv9dZ/Okn2WeyI4zU=
-X-Google-Smtp-Source: APXvYqy9AElth6ojst8O+hubrg4OawSoqRUKLM6T3kt76Ds9otowaEgvpMlS09Xoi8gu1xsdILWtJA==
-X-Received: by 2002:adf:f4ce:: with SMTP id h14mr1728379wrp.17.1558607443926;
-        Thu, 23 May 2019 03:30:43 -0700 (PDT)
-Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
-        by smtp.gmail.com with ESMTPSA id v5sm56935714wra.83.2019.05.23.03.30.42
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 May 2019 03:30:43 -0700 (PDT)
-Date:   Thu, 23 May 2019 12:30:42 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [Patch V3 8/8] arm64: defconfig: Enable tegra XUDC driver
-Message-ID: <20190523103042.GH30331@ulmo>
+        id S1729949AbfEWLMU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 May 2019 07:12:20 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:14081 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728518AbfEWLMU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 07:12:20 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ce680130001>; Thu, 23 May 2019 04:12:19 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 23 May 2019 04:12:18 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 23 May 2019 04:12:18 -0700
+Received: from [10.24.193.7] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 23 May
+ 2019 11:12:15 +0000
+Subject: Re: [Patch V3 3/8] phy: tegra: xusb: t210: add vbus override support
+To:     Thierry Reding <thierry.reding@gmail.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>
 References: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
- <1557988772-15406-9-git-send-email-nkristam@nvidia.com>
+ <1557988772-15406-4-git-send-email-nkristam@nvidia.com>
+ <20190523100333.GC30331@ulmo>
+X-Nvconfidentiality: public
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+Message-ID: <aecd9cff-9b1f-9a9d-4345-761788ad438c@nvidia.com>
+Date:   Thu, 23 May 2019 16:43:28 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="cW+P/jduATWpL925"
-Content-Disposition: inline
-In-Reply-To: <1557988772-15406-9-git-send-email-nkristam@nvidia.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190523100333.GC30331@ulmo>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL103.nvidia.com (172.20.187.11) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1558609939; bh=1QcL6Qjh2O2xjy6a+l+mTNrRUATVWByCaoXPv0qKifk=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=L6kTKy/dFSrO0X5FQ4fK3rYAsIeRqQqmSzuzdFm28YaTKNL0O/F5GvLJld3Zatsgz
+         tSJvntpFZb4qAu3CK93nFgGI18NdcmcZRuvUoPuPKBa4+F896qjzbRQPuMk3ps9pbk
+         jgUCnJgFNw4wH76UpbvgIREowUPNsAjO1X3EiFPz3oXtac/sytqnjKBTa3HSjzveQc
+         k5uoSWao+ertb0P5E6WsMLTP27o3yzux1Ucw3IcgSv7knoxKTBby3HQ/nviBGlCpm3
+         YlQ7gSvX/VD/GdbTX+cQ1FW99H9DOmzlyr1td+AoCw9b0jaGSAKZXGg9KNLtDBwdpv
+         j9h8GSirKBw9g==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---cW+P/jduATWpL925
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 16, 2019 at 12:09:32PM +0530, Nagarjuna Kristam wrote:
-> Enable support for Nvidia XUSB device mode controller driver.
->=20
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> ---
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index b605b7f..bf1437c 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -575,6 +575,7 @@ CONFIG_USB_ULPI=3Dy
->  CONFIG_USB_GADGET=3Dy
->  CONFIG_USB_RENESAS_USBHS_UDC=3Dm
->  CONFIG_USB_RENESAS_USB3=3Dm
-> +CONFIG_USB_TEGRA_XUDC=3Dy
+On 23-05-2019 15:33, Thierry Reding wrote:
+> On Thu, May 16, 2019 at 12:09:27PM +0530, Nagarjuna Kristam wrote:
+>> Tegra XUSB device control driver needs to control vbus override
+>> during its operations, add API for the support.
+>>
+>> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+>> ---
+>>  drivers/phy/tegra/xusb-tegra210.c | 59 +++++++++++++++++++++++++++++++++++++++
+>>  drivers/phy/tegra/xusb.c          | 22 +++++++++++++++
+>>  drivers/phy/tegra/xusb.h          |  2 ++
+>>  include/linux/phy/tegra/xusb.h    |  6 ++--
+>>  4 files changed, 87 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
+>> index 829aca5..363d2aa 100644
+>> --- a/drivers/phy/tegra/xusb-tegra210.c
+>> +++ b/drivers/phy/tegra/xusb-tegra210.c
+>> @@ -73,6 +73,10 @@
+>>  #define XUSB_PADCTL_USB3_PAD_MUX_PCIE_IDDQ_DISABLE(x) (1 << (1 + (x)))
+>>  #define XUSB_PADCTL_USB3_PAD_MUX_SATA_IDDQ_DISABLE(x) (1 << (8 + (x)))
+>>  
+>> +#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL0(x) (0x080 + (x) * 0x40)
+>> +#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIP (1 << 18)
+>> +#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIN (1 << 22)
+>> +
+>>  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(x) (0x084 + (x) * 0x40)
+>>  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_SHIFT 7
+>>  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_MASK 0x3
+>> @@ -235,6 +239,12 @@
+>>  #define XUSB_PADCTL_UPHY_USB3_PADX_ECTL6(x) (0xa74 + (x) * 0x40)
+>>  #define XUSB_PADCTL_UPHY_USB3_PAD_ECTL6_RX_EQ_CTRL_H_VAL 0xfcf01368
+>>  
+>> +#define XUSB_PADCTL_USB2_VBUS_ID 0xc60
+>> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON (1 << 14)
+>> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT 18
+>> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_MASK 0xf
+>> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_FLOATING 8
+>> +
+>>  struct tegra210_xusb_fuse_calibration {
+>>  	u32 hs_curr_level[4];
+>>  	u32 hs_term_range_adj;
+>> @@ -2024,6 +2034,53 @@ static const struct tegra_xusb_port_ops tegra210_usb3_port_ops = {
+>>  	.map = tegra210_usb3_port_map,
+>>  };
+>>  
+>> +static int tegra210_xusb_padctl_vbus_override(struct tegra_xusb_padctl *padctl,
+>> +					      bool status)
+>> +{
+>> +	u32 value;
+>> +
+>> +	dev_dbg(padctl->dev, "%s vbus override\n", status ? "set" : "clear");
+>> +
+>> +	value = padctl_readl(padctl, XUSB_PADCTL_USB2_VBUS_ID);
+>> +
+>> +	if (status) {
+>> +		value |= XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON;
+>> +		value &= ~(XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_MASK <<
+>> +			   XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT);
+>> +		value |= XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_FLOATING <<
+>> +			 XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT;
+>> +	} else
+>> +		value &= ~XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON;
+>> +
+>> +	padctl_writel(padctl, value, XUSB_PADCTL_USB2_VBUS_ID);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int tegra210_utmi_port_reset(struct phy *phy)
+>> +{
+>> +	struct tegra_xusb_padctl *padctl;
+>> +	struct tegra_xusb_lane *lane;
+>> +	struct device *dev;
+>> +	u32 value;
+>> +
+>> +	lane = phy_get_drvdata(phy);
+>> +	padctl = lane->pad->padctl;
+>> +	dev = padctl->dev;
+> 
+> dev seems unused. Is this debugging leftover?
+> 
+> Thierry
+> 
+Yes, will clear this in next series
 
-This driver is fairly large, do we really want to make it built-in by
-default? Are there any downsides to making this a loadable module?
-
-Thierry
-
---cW+P/jduATWpL925
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAlzmdlIACgkQ3SOs138+
-s6Hjig//a8Z5vwgiC76NnBHuHQKcalA6kpCMsG8UH90QVcUGJBWlvniGczTopMKL
-EVqkTE+myEuiE6fVErzhkpbQix41hUf7I68pL/bxvX29N+3KcKH9VlY+vv0iWnL0
-rQB9D+KhWe0gBeaufIBqKcuPvzz2OuQ1uRcpubfW9cE9hqgkRJ/wH28uWSmqk1+n
-pDdO5iL+DUq7Wj2UW/R7o+T0xy455AoG3RIgV0sn8E9wPhXDj7sg3z1fudQBnoh8
-CqmEVvS7ruWeQhIShLJIEzvQFsKFHzEs0DAZ1gyma4JdprSr4s5cdmBNoi69jbvs
-0BVFcVTH1V9uaGT5mgHaBHQry7cGBm0VQPGOS4FNQJ3YFdg8CBwdbHHG13MzCYLx
-FpwU9UGUJ+YRwWXQzpd03+YCBl/KdG5fdvr77KqQLHY+SzDrLTBoKb4E5oX1nNw2
-wjiHXuz+8vHMG0QJWaAoQz7GcZzCfpfSNfgEc4uJpZD7K5RtK4JW7Urr2XKs0xyY
-xTs4oRhSyJ+2t74NLiDYe3Oxjd5BWQzJGA6L/Z8LxZi6JXchQbzE8+0I5Dx0IlHV
-Ra75Zs4La2Qx7zOnQwqukccqIL8Hn3bvorl/XLZ+ExRlb/lRVc9+nEz8ekO/wyaG
-xOCuIWJ/un8VDWJRQpp3I6aq6BpQhPlwZJJSc4kXD3mXlWKvOac=
-=YWPc
------END PGP SIGNATURE-----
-
---cW+P/jduATWpL925--
+-Nagarjuna
+>> +
+>> +	value = padctl_readl(padctl,
+>> +			     XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL0(0));
+>> +
+>> +	if ((value & XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIP) ||
+>> +	    (value & XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIN)) {
+>> +		tegra210_xusb_padctl_vbus_override(padctl, false);
+>> +		tegra210_xusb_padctl_vbus_override(padctl, true);
+>> +		return 1;
+>> +	}
+>> -- 
+>> 2.7.4
+>>
