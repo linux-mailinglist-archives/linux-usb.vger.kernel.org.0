@@ -2,189 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD3C280B9
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 17:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A667280C3
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 17:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730875AbfEWPNX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 11:13:23 -0400
-Received: from gateway22.websitewelcome.com ([192.185.47.125]:19309 "EHLO
-        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730709AbfEWPNX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 11:13:23 -0400
-X-Greylist: delayed 1265 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 May 2019 11:13:22 EDT
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id 42EDAA4C9
-        for <linux-usb@vger.kernel.org>; Thu, 23 May 2019 09:52:17 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id Tp4rhk79p2PzOTp4rh84w4; Thu, 23 May 2019 09:52:17 -0500
-X-Authority-Reason: nr=8
-Received: from [189.250.47.159] (port=53746 helo=[192.168.1.76])
-        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.91)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hTp4q-001bo1-Kd; Thu, 23 May 2019 09:52:17 -0500
-Subject: Re: [PATCH] usbip: usbip_host_common: Use struct_size() in realloc()
-To:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190523144019.GA28932@embeddedor>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=gustavo@embeddedor.com; keydata=
- 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
- VtSixD1uOgytAP7RWS474w==
-Message-ID: <c5315c1f-5329-3f7b-0b70-a2337671320c@embeddedor.com>
-Date:   Thu, 23 May 2019 09:52:08 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1730860AbfEWPPZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 May 2019 11:15:25 -0400
+Received: from guitar.tcltek.co.il ([192.115.133.116]:59683 "EHLO
+        mx.tkos.co.il" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730782AbfEWPPZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 May 2019 11:15:25 -0400
+Received: from tarshish (unknown [10.0.8.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx.tkos.co.il (Postfix) with ESMTPS id 2D1CB440061;
+        Thu, 23 May 2019 18:15:22 +0300 (IDT)
+Date:   Thu, 23 May 2019 18:15:20 +0300
+From:   Baruch Siach <baruch@tkos.co.il>
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH v2] usb: dwc3: move core validation to be after clks
+ enable
+Message-ID: <20190523151520.pa4zkby24cktnvl6@tarshish>
+References: <1557311367-5863-1-git-send-email-jun.li@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20190523144019.GA28932@embeddedor>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.47.159
-X-Source-L: No
-X-Exim-ID: 1hTp4q-001bo1-Kd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.76]) [189.250.47.159]:53746
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 7
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1557311367-5863-1-git-send-email-jun.li@nxp.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+Hi Jun Li,
 
-Sorry, please, drop this patch.
+On Wed, May 08, 2019 at 10:52:37AM +0000, Jun Li wrote:
+> From: Jun Li <jun.li@nxp.com>
+> 
+> Register access in core validation may hang before the bulk
+> clks are enabled.
 
-Thanks
---
-Gustavo
+This patch fixes the hang issue for on my i.MX8MQ based system.
 
-On 5/23/19 9:40 AM, Gustavo A. R. Silva wrote:
-> One of the more common cases of allocation size calculations is finding
-> the size of a structure that has a zero-sized array at the end, along
-> with memory for some number of elements for that array. For example:
-> 
-> struct foo {
->     int stuff;
->     struct boo entry[];
-> };
-> 
-> size = sizeof(struct foo) + count * sizeof(struct boo);
-> instance = realloc(instance, size);
-> 
-> Instead of leaving these open-coded and prone to type mistakes, we can
-> now use the new struct_size() helper:
-> 
-> size = struct_size(instance, entry, count);
-> 
-> or
-> 
-> instance = realloc(instance, struct_size(instance, entry, count));
-> 
-> Notice that, in this case, variable size is not necessary,
-> hence it is removed.
-> 
-> This code was detected with the help of Coccinelle.
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Tested-by: Baruch Siach <baruch@tkos.co.il>
+
+However, commit b873e2d0ea1e is meant to move dwc3_core_is_valid() before 
+dwc3_get_dr_mode(). With this patch dwc3_get_dr_mode() is called from 
+dwc3_get_properties() before dwc3_core_is_valid().
+
+I guess we need a larger change in the initialization sequence.
+
+Thanks,
+baruch
+
+> Fixes: b873e2d0ea1e ("usb: dwc3: Do core validation early on probe")
+> Signed-off-by: Jun Li <jun.li@nxp.com>
 > ---
 > 
-> Notice that checkpatch reports the following warning:
+> Change for v2:
+> - Update ret to be -ENODEV in case dwc3_core_is_valid() fail.
 > 
-> WARNING: line over 80 characters
-> #57: FILE: tools/usb/usbip/libsrc/usbip_host_common.c:90:
-> +	edev = realloc(edev, struct_size(edev, uinf, edev->udev.bNumInterfaces));
+>  drivers/usb/dwc3/core.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 > 
-> The line above is 81-character long. So, I think we should be fine
-> with that, instead of split it into two lines like:
-> 
-> edev = realloc(edev,
-> 	       struct_size(edev, uinf, edev->udev.bNumInterfaces));
-> 
-> Thanks
-> --
-> Gustavo
-> 
->  tools/usb/usbip/libsrc/usbip_host_common.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/tools/usb/usbip/libsrc/usbip_host_common.c b/tools/usb/usbip/libsrc/usbip_host_common.c
-> index 2813aa821c82..1645d02a52af 100644
-> --- a/tools/usb/usbip/libsrc/usbip_host_common.c
-> +++ b/tools/usb/usbip/libsrc/usbip_host_common.c
-> @@ -67,7 +67,6 @@ struct usbip_exported_device *usbip_exported_device_new(
->  {
->  	struct usbip_exported_device *edev = NULL;
->  	struct usbip_exported_device *edev_old;
-> -	size_t size;
->  	int i;
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 4aff1d8..93b96e6 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1423,11 +1423,6 @@ static int dwc3_probe(struct platform_device *pdev)
+>  	dwc->regs	= regs;
+>  	dwc->regs_size	= resource_size(&dwc_res);
 >  
->  	edev = calloc(1, sizeof(struct usbip_exported_device));
-> @@ -87,11 +86,8 @@ struct usbip_exported_device *usbip_exported_device_new(
->  		goto err;
->  
->  	/* reallocate buffer to include usb interface data */
-> -	size = sizeof(struct usbip_exported_device) +
-> -		edev->udev.bNumInterfaces * sizeof(struct usbip_usb_interface);
+> -	if (!dwc3_core_is_valid(dwc)) {
+> -		dev_err(dwc->dev, "this is not a DesignWare USB3 DRD Core\n");
+> -		return -ENODEV;
+> -	}
 > -
->  	edev_old = edev;
-> -	edev = realloc(edev, size);
-> +	edev = realloc(edev, struct_size(edev, uinf, edev->udev.bNumInterfaces));
->  	if (!edev) {
->  		edev = edev_old;
->  		dbg("realloc failed");
-> 
+>  	dwc3_get_properties(dwc);
+>  
+>  	dwc->reset = devm_reset_control_get_optional_shared(dev, NULL);
+> @@ -1460,6 +1455,12 @@ static int dwc3_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto unprepare_clks;
+>  
+> +	if (!dwc3_core_is_valid(dwc)) {
+> +		dev_err(dwc->dev, "this is not a DesignWare USB3 DRD Core\n");
+> +		ret = -ENODEV;
+> +		goto disable_clks;
+> +	}
+> +
+>  	platform_set_drvdata(pdev, dwc);
+>  	dwc3_cache_hwparams(dwc);
+>  
+> @@ -1524,7 +1525,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  err1:
+>  	pm_runtime_put_sync(&pdev->dev);
+>  	pm_runtime_disable(&pdev->dev);
+> -
+> +disable_clks:
+>  	clk_bulk_disable(dwc->num_clks, dwc->clks);
+>  unprepare_clks:
+>  	clk_bulk_unprepare(dwc->num_clks, dwc->clks);
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
