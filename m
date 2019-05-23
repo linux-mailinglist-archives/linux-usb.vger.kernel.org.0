@@ -2,60 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BAD27BAB
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 13:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D43727BF4
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 13:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730402AbfEWLXi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 07:23:38 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:12511 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729934AbfEWLXi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 07:23:38 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ce682b30000>; Thu, 23 May 2019 04:23:31 -0700
+        id S1729962AbfEWLkH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 May 2019 07:40:07 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:15183 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729361AbfEWLkH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 07:40:07 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ce686950002>; Thu, 23 May 2019 04:40:05 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 23 May 2019 04:23:35 -0700
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 23 May 2019 04:40:05 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 23 May 2019 04:23:35 -0700
-Received: from [10.24.193.7] (172.20.13.39) by HQMAIL107.nvidia.com
+        by hqpgpgate102.nvidia.com on Thu, 23 May 2019 04:40:05 -0700
+Received: from [10.24.193.7] (10.124.1.5) by HQMAIL107.nvidia.com
  (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 23 May
- 2019 11:23:32 +0000
-Subject: Re: [Patch V3 2/8] phy: tegra: xusb: t210: add usb3 port fake support
+ 2019 11:40:02 +0000
+Subject: Re: [Patch V3 4/8] dt-bindings: usb: Add NVIDIA Tegra XUSB device
+ mode controller binding
 To:     Thierry Reding <thierry.reding@gmail.com>
 CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
         <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
         <robh+dt@kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>
 References: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
- <1557988772-15406-3-git-send-email-nkristam@nvidia.com>
- <20190523100120.GB30331@ulmo>
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
+ <1557988772-15406-5-git-send-email-nkristam@nvidia.com>
+ <20190523101359.GD30331@ulmo>
 X-Nvconfidentiality: public
-Message-ID: <1856de7e-1b28-a5c6-8141-505ae0236575@nvidia.com>
-Date:   Thu, 23 May 2019 16:54:48 +0530
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+Message-ID: <9a617a32-96e5-9622-747e-d6ab6e90c305@nvidia.com>
+Date:   Thu, 23 May 2019 17:11:18 +0530
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190523100120.GB30331@ulmo>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+In-Reply-To: <20190523101359.GD30331@ulmo>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
  HQMAIL107.nvidia.com (172.20.187.13)
 Content-Type: text/plain; charset="windows-1252"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1558610611; bh=IBq/vY7nxTLp8XCWvxamWpfy5Rpfn/FwQciepWRyAjI=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+        t=1558611605; bh=ILDdYUf/PZUzSIHaXUje7hlRQV29KDo46iEtGkgcolY=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
          Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
          X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
          Content-Transfer-Encoding;
-        b=SZugSE2W6K6q8H6NF8BatNsWlTf9RzmHMhoOrMcfkl4iPS9EjXzP1d08LeTV0O0ZY
-         tI/B/knH2SqQ08dsPRF+1SM0w0Wl8+jtc2Eid06xlqVmU1quHAysdughyVPSQdfFTD
-         DxcgzMVja0VARVcFoLCe19NA4DGl9gbjINNyu5b5lRionjNnlHII2BrCUvJ5BDwjbR
-         piocMkYxuLlK8SX88/Ztlmb+D3YEknDumCWK2XySwONZ4ZNGBQYfVT3DagKQwVIInW
-         V9jDYdrbd5YcfFmWZEkT5tN9w9XAHDBkezjRbG5LdcwbSqBZOpaq6UsKHMfH2AKSa8
-         uc/mquIvETIcg==
+        b=Vs7xN7n9O9zAV9uZ2XSGwY6YJhlIVsMRimGAyjfBiApl2/nSmSIWcubs82EL4ZZMx
+         LnI5kSTvkEV8Bo3VPaFEl6yR5/ncavSdbo8ehpK3deso5uS8Si44JPn3mqzQ1MftKP
+         Z75wEYz2CRQTnaYj7Eun5YjLA+xafm76ZOSbo5OxIW6k0LXeAnuba+x+ppFbkyVDg1
+         VK3rDN764bYTY36s3iUf22itgSQg88idlJm9iT0YTFx2pbw5Qd5qulcVwN9u2kZfa+
+         rdGX/a8Gi2AEWqtqxC8qF4HSyIUepQEeEk/n/JPQlTeOwSByE0/I3WbaatG9XNjr3S
+         0vjdAVtL2kKrg==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -63,292 +64,161 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 23-05-2019 15:31, Thierry Reding wrote:
-> On Thu, May 16, 2019 at 12:09:26PM +0530, Nagarjuna Kristam wrote:
->> On Tegra210, usb2 only otg/peripheral ports dont work in device mode.
->> They need an assosciated usb3 port to work in device mode. Identify
->> an unused usb3 port and assign it as a fake USB3 port to USB2 only
->> port whose mode is otg/peripheral.
->>
->> Based on work by BH Hsieh <bhsieh@nvidia.com>.
+On 23-05-2019 15:43, Thierry Reding wrote:
+> On Thu, May 16, 2019 at 12:09:28PM +0530, Nagarjuna Kristam wrote:
+>> Add device-tree binding documentation for the XUSB device mode controller
+>> present on Tegra210 SoC. This controller supports the USB 3.0
+>> specification.
 >>
 >> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
 >> ---
->>  drivers/phy/tegra/xusb-tegra210.c | 56 +++++++++++++++++++++++++++++++
->>  drivers/phy/tegra/xusb.c          | 69 +++++++++++++++++++++++++++++++++++++++
->>  drivers/phy/tegra/xusb.h          |  2 ++
->>  3 files changed, 127 insertions(+)
+>>  .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  | 101 +++++++++++++++++++++
+>>  1 file changed, 101 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
 >>
->> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
->> index 4beebcc..829aca5 100644
->> --- a/drivers/phy/tegra/xusb-tegra210.c
->> +++ b/drivers/phy/tegra/xusb-tegra210.c
->> @@ -58,6 +58,7 @@
->>  #define XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP_SHIFT(x) ((x) * 5)
->>  #define XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP_MASK(x) (0x7 << ((x) * 5))
->>  #define XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP(x, v) (((v) & 0x7) << ((x) * 5))
->> +#define XUSB_PADCTL_SS_PORT_MAP_PORT_DISABLED 0x7
->>  
->>  #define XUSB_PADCTL_ELPG_PROGRAM1 0x024
->>  #define XUSB_PADCTL_ELPG_PROGRAM1_AUX_MUX_LP0_VCORE_DOWN (1 << 31)
->> @@ -952,6 +953,34 @@ static int tegra210_usb2_phy_power_on(struct phy *phy)
->>  
->>  	priv = to_tegra210_xusb_padctl(padctl);
->>  
->> +	if (port->usb3_port_fake != -1) {
->> +		value = padctl_readl(padctl, XUSB_PADCTL_SS_PORT_MAP);
->> +		value &= ~XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP_MASK(
->> +					port->usb3_port_fake);
->> +		value |= XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP(
->> +					port->usb3_port_fake, index);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_SS_PORT_MAP);
+>> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+>> new file mode 100644
+>> index 0000000..d78b436
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+>> @@ -0,0 +1,101 @@
+>> +Device tree binding for NVIDIA Tegra XUSB device mode controller (XUDC)
+>> +=======================================================================
 >> +
->> +		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +		value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_VCORE_DOWN(
->> +					port->usb3_port_fake);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
+>> +The Tegra XUDC controller supports both USB 2.0 HighSpeed/FullSpeed and
+>> +USB 3.0 SuperSpeed protocols.
 >> +
->> +		usleep_range(100, 200);
->> +
->> +		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +		value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN_EARLY(
->> +					port->usb3_port_fake);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +		usleep_range(100, 200);
->> +
->> +		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +		value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN(
->> +					port->usb3_port_fake);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +	}
->> +
->>  	value = padctl_readl(padctl, XUSB_PADCTL_USB2_BIAS_PAD_CTL0);
->>  	value &= ~((XUSB_PADCTL_USB2_BIAS_PAD_CTL0_HS_SQUELCH_LEVEL_MASK <<
->>  		    XUSB_PADCTL_USB2_BIAS_PAD_CTL0_HS_SQUELCH_LEVEL_SHIFT) |
->> @@ -1086,6 +1115,32 @@ static int tegra210_usb2_phy_power_off(struct phy *phy)
->>  
->>  	mutex_lock(&padctl->lock);
->>  
->> +	if (port->usb3_port_fake != -1) {
->> +		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +		value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN_EARLY(
->> +					port->usb3_port_fake);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +		usleep_range(100, 200);
->> +
->> +		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +		value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN(
->> +					port->usb3_port_fake);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +		usleep_range(250, 350);
->> +
->> +		value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +		value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_VCORE_DOWN(
->> +					port->usb3_port_fake);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +		value = padctl_readl(padctl, XUSB_PADCTL_SS_PORT_MAP);
->> +		value |= XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP(port->usb3_port_fake,
->> +					XUSB_PADCTL_SS_PORT_MAP_PORT_DISABLED);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_SS_PORT_MAP);
->> +	}
->> +
->>  	if (WARN_ON(pad->enable == 0))
->>  		goto out;
->>  
->> @@ -2051,6 +2106,7 @@ const struct tegra_xusb_padctl_soc tegra210_xusb_padctl_soc = {
->>  		},
->>  	},
->>  	.ops = &tegra210_xusb_padctl_ops,
->> +	.need_fake_usb3_port = true,
->>  };
->>  EXPORT_SYMBOL_GPL(tegra210_xusb_padctl_soc);
->>  
->> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
->> index 0417213..6618db7 100644
->> --- a/drivers/phy/tegra/xusb.c
->> +++ b/drivers/phy/tegra/xusb.c
->> @@ -808,9 +808,66 @@ static void __tegra_xusb_remove_ports(struct tegra_xusb_padctl *padctl)
->>  	}
->>  }
->>  
->> +static int tegra_xusb_find_unused_usb3_port(struct tegra_xusb_padctl *padctl)
->> +{
->> +	struct device_node *np;
->> +	unsigned int i;
->> +
->> +	for (i = 0; i < padctl->soc->ports.usb3.count; i++) {
->> +		np = tegra_xusb_find_port_node(padctl, "usb3", i);
->> +		if (!np || !of_device_is_available(np))
->> +			return i;
->> +	}
->> +
->> +	return -ENODEV;
->> +}
->> +
->> +static bool tegra_xusb_usb3_port_has_companion(struct tegra_xusb_padctl *padctl,
->> +							     unsigned int index)
->> +{
->> +	unsigned int i;
->> +	struct tegra_xusb_usb3_port *usb3;
->> +
->> +	for (i = 0; i < padctl->soc->ports.usb3.count; i++) {
->> +		usb3 = tegra_xusb_find_usb3_port(padctl, i);
->> +		if (usb3 && usb3->port == index)
->> +			return true;
->> +	}
->> +
->> +	return false;
->> +}
->> +
->> +static int tegra_xusb_update_usb3_fake_port(struct tegra_xusb_usb2_port *usb2)
->> +{
->> +	int fake;
->> +
->> +	/* Disable usb3_port_fake usage by default and assign if needed */
->> +	usb2->usb3_port_fake = -1;
->> +
->> +	if ((usb2->mode == USB_DR_MODE_OTG ||
->> +	     usb2->mode == USB_DR_MODE_PERIPHERAL) &&
->> +		!tegra_xusb_usb3_port_has_companion(usb2->base.padctl,
->> +						    usb2->base.index)) {
+>> +Required properties:
+>> +--------------------
+>> +- compatible: For Tegra210, must contain "nvidia,tegra210-xudc".
+>> +- reg: Must contain the base and length of the XUSB device registers, XUSB device
+>> +  PCI Config registers and XUSB device controller registers.
+>> +- interrupts: Must contain the XUSB device interrupt.
+>> +- clocks: Must contain an entry for all clocks used.
+>> +  See ../clock/clock-bindings.txt for details.
+>> +- clock-names: Must include the following entries:
+>> +   - dev: Clock to enable core XUSB dev clock.
+>> +   - ss: Clock to enable XUSB super speed clock.
+>> +   - ss_src: Clock to enable XUSB super speed dev clock.
+>> +   - hs_src: Clock to enable XUSB high Speed dev clock.
+>> +   - fs_src: Clock to enable XUSB full Speed dev clock.
 > 
-> This port is still a bit confusing to me. It's not entirely obvious
-> what's going on here. What I think this is doing is this: for OTG or
-> peripheral USB 2.0 ports that are not companion ports themselves (i.e.
-> only standalone OTG/peripheral USB 2.0 ports) find an unused USB 3.0
-> port that can be used as fake for the hardware workaround.
+> You use inconsistent spelling for "speed" here.
 > 
-> Correct me if I'm wrong.
-> 
-
-Yes, understanding is correct
-
-> I find the tegra_xusb_usb3_port_has_companion() confusing in that case
-> because you seem to be testing a USB 3.0 port (_usb3_ in the function
-> name) for a USB 2.0 index (passed as second parameter). So what you're
-> basically trying to do is find a USB 3.0 port for which the USB 2.0 port
-> identified by the given index is a companion. It seems to me like that
-> would be a lot easier to understand if you did this:
-> 
-> 	!tegra_xusb_usb2_port_is_companion(usb2)
-> 
-> with:
-> 
-> 	static bool tegra_xusb_port_is_companion(struct tegra_xusb_usb2_port *port)
-> 	{
-> 		struct tegra_xusb_padctl *padctl = port->base.padctl;
-> 		struct tegra_xusb_usb3_port *usb3;
-> 		unsigned int i;
-> 
-> 		for (i = 0; i < padctl->soc->ports.usb3.count; i++) {
-> 			usb3 = tegra_xusb_find_usb3_port(padctl, i);
-> 			if (usb3 && usb3->port == port->base.index)
-> 				return true;
-> 		}
-> 
-> 		return false;
-> 	}
-> 
-
-Will update accordingly
-
+will do
+>> +- nvidia,xusb-padctl: phandle to the XUSB pad controller that is used to
+>> +  configure the USB pads used by the XUDC controller.
+>> +- power-domains: A list of PM domain specifiers that reference each power-domain
+>> +  used by the XUSB device mode controller. This list must comprise of a specifier
+>> +  for the XUSBA and XUSBB power-domains. See ../power/power_domain.txt and
+>> +  ../arm/tegra/nvidia,tegra20-pmc.txt for details.
+>> +- power-domain-names: A list of names that represent each of the specifiers in
+>> +  the 'power-domains' property. Must include 'ss' and 'dev'.
 >> +
->> +		fake = tegra_xusb_find_unused_usb3_port(usb2->base.padctl);
+>> +For Tegra210:
+>> +- avddio-usb-supply: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
+>> +- hvdd-usb-supply: USB controller power supply. Must supply 3.3 V.
 >> +
->> +		if (fake < 0) {
-> 
-> This is one of the few exceptions where the blank line is not useful. It
-> makes sense here to keep the above two lines close together because you
-> assign the value and then check it. So the blank line rule doesn't apply
-> to this general pattern:
-> 
-> 	value = foobar(...);
-> 	if (value < 0) {
-> 		...
-> 	}
-> 
-> That is, if the value that you check is the same that you just assigned,
-> you should avoid the blank line as separator because the two lines are
-> closely related.
-> 
-
-Will update accordingly
-
->> +			dev_err(&usb2->base.dev, "no unused USB3 ports available\n");
->> +			return -ENODEV;
->> +		}
+>> +- phys: Must contain an entry for each entry in phy-names.
+>> +  See ../phy/phy-bindings.txt for details.
+>> +- phy-names: Should include an entry for each PHY used by the controller.
+>> +  Names must be "usb2", and "usb3" if support SuperSpeed device mode.
+>> +  - "usb3" phy, SuperSpeed (SSTX+/SSTX-/SSRX+/SSRX-) data lines.
+>> +  - "usb2" phy, USB 2.0 (D+/D-) data lines.
 >> +
->> +		dev_dbg(&usb2->base.dev, "Found unused usb3 port: %d\n",
->> +					 fake);
+>> +- extcon: Must contains an extcon entry which detects USB VBUS pin.
+>> +  See ../extcon/extcon-usb-gpio.txt for details.
 > 
-> Nit: the above fits on a single line.
+> Do the phys, phy-names and extcon properties only apply to Tegra210? It
+> sounds like those would also apply to other generations, so they should
+> go before the "For Tegra210:" line.
 > 
-
-> Otherwise looks good.
+Will move before Tegra210
+>> +
+>> +Example:
+>> +--------
+>> +	pmc: pmc@7000e400 {
+>> +		compatible = "nvidia,tegra210-pmc";
+>> +		reg = <0x0 0x7000e400 0x0 0x400>;
+>> +		clocks = <&tegra_car TEGRA210_CLK_PCLK>, <&clk32k_in>;
+>> +		clock-names = "pclk", "clk32k_in";
+>> +
+>> +		powergates {
+>> +			pd_xusbss: xusba {
+>> +				clocks = <&tegra_car TEGRA210_CLK_XUSB_SS>;
+>> +				resets = <&tegra_car TEGRA210_CLK_XUSB_SS>;
 > 
-> Thierry
+> We typically use the literal number here to be consistent with the cases
+> where the clock ID differs from the reset ID.
 > 
-
-Will update accordingly
-
+Will keep reset ID to numeric values
+>> +				#power-domain-cells = <0>;
+>> +			};
+>> +
+>> +			pd_xusbdev: xusbb {
+>> +				clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>;
+>> +				resets = <&tegra_car 95>;
+> 
+> It seems like don't follow that rule exactly since this is the same
+> thing we have for XUSB already. I think it'd be best to stick with the
+> literal number (like here) and remove the odd ones out. I can prepare
+> patches to convert over the existing oddballs.
+> 
+>> +				#power-domain-cells = <0>;
+>> +			};
+>> +		};
+>> +	};
+>> +
+>> +	xudc@700d0000 {
+>> +		compatible = "nvidia,tegra210-xudc";
+>> +		reg = <0x0 0x700d0000 0x0 0x8000>,
+>> +			<0x0 0x700d8000 0x0 0x1000>,
+>> +			<0x0 0x700d9000 0x0 0x1000>;
+> 
+> Use tabs, followed by spaces to properly align with the first entry,
+> like you do for clock-names below.
+> 
+Will allign accordingly
+>> +
+>> +		interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +		clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>,
+>> +			<&tegra_car TEGRA210_CLK_XUSB_SS>,
+>> +			<&tegra_car TEGRA210_CLK_XUSB_SSP_SRC>,
+>> +			<&tegra_car TEGRA210_CLK_XUSB_HS_SRC>,
+>> +			<&tegra_car TEGRA210_CLK_XUSB_FS_SRC>;
+> 
+> Ditto.
+> 
+>> +		clock-names = "dev", "ss", "ss_src",
+>> +			      "hs_src", "fs_src";
+>> +
+>> +		power-domains = <&pd_xusbdev>, <&pd_xusbss>;
+>> +		power-domain-names = "dev", "ss";
+>> +
+>> +		nvidia,xusb-padctl = <&padctl>;
+>> +
+>> +		phys = <&{/padctl@7009f000/pads/usb2/lanes/usb2-0}>;
+>> +		phy-names = "usb2;
+> 
+> Does it perhaps make sense to include the pad controller snippet in here
+> as well?
+>> Thierry
+> 
+Will add the reference.
 -Nagarjuna
->> +		usb2->usb3_port_fake = fake;
->> +		tegra_xusb_find_unused_usb3_port(usb2->base.padctl);
->> +	}
 >> +
->> +	return 0;
->> +}
+>> +		avddio-usb-supply = <&vdd_pex_1v05>;
+>> +		hvdd-usb-supply = <&vdd_3v3_sys>;
 >> +
->>  static int tegra_xusb_setup_ports(struct tegra_xusb_padctl *padctl)
->>  {
->>  	struct tegra_xusb_port *port;
->> +	struct tegra_xusb_usb2_port *usb2;
->>  	unsigned int i;
->>  	int err = 0;
->>  
->> @@ -840,6 +897,18 @@ static int tegra_xusb_setup_ports(struct tegra_xusb_padctl *padctl)
->>  			goto remove_ports;
->>  	}
->>  
->> +	if (padctl->soc->need_fake_usb3_port) {
->> +		for (i = 0; i < padctl->soc->ports.usb2.count; i++) {
->> +			usb2 = tegra_xusb_find_usb2_port(padctl, i);
->> +			if (!usb2)
->> +				continue;
+>> +		extcon = <&extcon_usb>;
+>> +	};
 >> +
->> +			err = tegra_xusb_update_usb3_fake_port(usb2);
->> +			if (err < 0)
->> +				goto remove_ports;
->> +		}
->> +	}
+>> +	extcon_usb: extcon_vbus {
+>> +		compatible = "linux,extcon-usb-gpio";
+>> +		vbus-gpio = <&gpio TEGRA_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
+>> +	};
 >> +
->>  	list_for_each_entry(port, &padctl->ports, list) {
->>  		err = port->ops->enable(port);
->>  		if (err < 0)
->> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
->> index e0028b9f..26dd6d2 100644
->> --- a/drivers/phy/tegra/xusb.h
->> +++ b/drivers/phy/tegra/xusb.h
->> @@ -299,6 +299,7 @@ struct tegra_xusb_usb2_port {
->>  	struct regulator *supply;
->>  	enum usb_dr_mode mode;
->>  	bool internal;
->> +	int usb3_port_fake;
->>  };
->>  
->>  static inline struct tegra_xusb_usb2_port *
->> @@ -397,6 +398,7 @@ struct tegra_xusb_padctl_soc {
->>  
->>  	const char * const *supply_names;
->>  	unsigned int num_supplies;
->> +	bool need_fake_usb3_port;
->>  };
->>  
->>  struct tegra_xusb_padctl {
 >> -- 
 >> 2.7.4
 >>
