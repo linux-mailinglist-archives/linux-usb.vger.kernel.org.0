@@ -2,67 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA60283D3
-	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 18:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBA328438
+	for <lists+linux-usb@lfdr.de>; Thu, 23 May 2019 18:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731116AbfEWQfz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 May 2019 12:35:55 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57060 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730752AbfEWQfz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 12:35:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=pTqw8vVT02TTedKtNx5d/snM21V25zXZwTaJRpzHF2s=; b=NfRr1sg+JCx7yTC0Y1pf6Ia/1
-        Jj1Q2JKIqRmnEF8uOXpqDpnr9jnvpqyQBNSvVaYyiHaVfePwCfQ0tbLKI4O2cMdcBLvDzvrte+2cX
-        1Ly+5JK/e9hbhNJbBJND96QDqY8TGO8OwTWGUrJF1N3V3YCU6jDgEx7HfhN+62O+StZI9eZfbaiEK
-        mOxv1UxoWRRwqCOo3fLHC/klxOsWZN6BIyCzN2XJsws5lMcg06NHOBzxQvEFf9idGdYnR3B3EO+AW
-        M523UGnpBClzSFsxc9+IrD/MOXokNRCGk9ezwriiL9ixjGlj/s3dDot/vgK2nXpf5NgXjUxy43LCg
-        HgQHp8E6Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hTqh3-0004Ox-JP; Thu, 23 May 2019 16:35:49 +0000
-Date:   Thu, 23 May 2019 09:35:49 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jaewon Kim <jaewon31.kim@gmail.com>, linux-mm@kvack.org,
-        gregkh@linuxfoundation.org, Jaewon Kim <jaewon31.kim@samsung.com>,
-        m.szyprowski@samsung.com, ytk.lee@samsung.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
-Message-ID: <20190523163549.GA8692@infradead.org>
-References: <CAJrd-UuMRdWHky4gkmiR0QYozfXW0O35Ohv6mJPFx2TLa8hRKg@mail.gmail.com>
- <20190520055657.GA31866@infradead.org>
- <1558614729.3994.5.camel@suse.com>
+        id S1730899AbfEWQuV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 May 2019 12:50:21 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:34422 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730867AbfEWQuU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 May 2019 12:50:20 -0400
+Received: (qmail 24157 invoked by uid 2102); 23 May 2019 12:50:19 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 23 May 2019 12:50:19 -0400
+Date:   Thu, 23 May 2019 12:50:19 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Crash/hung task in usb-storage thread
+In-Reply-To: <dca3ea08836e475894bdebc7eb28acff@SVR-IES-MBX-03.mgc.mentorg.com>
+Message-ID: <Pine.LNX.4.44L0.1905231245510.1553-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1558614729.3994.5.camel@suse.com>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 23, 2019 at 02:32:09PM +0200, Oliver Neukum wrote:
-> > Please switch to use memalloc_noio_save() instead.
-> 
-> Thinking about this again, we have a problem. We introduced
-> memalloc_noio_save() in 3.10 . Hence the code should have been
-> correct in v4.14. Which means that either
-> 6518202970c1 "(mm/cma: remove unsupported gfp_mask
-> parameter from cma_alloc()"
-> is buggy, or the original issue with a delay of 2 seconds
-> still exist.
-> 
-> Do we need to do something?
+On Thu, 23 May 2019, Schmid, Carsten wrote:
 
-cma_alloc calls into alloc_contig_range to do the actual allocation,
-which then calls current_gfp_context() to pick up the adjustments
-from memalloc_noio_save and friends.  So at least in current mainline
-we should be fine.
+> Hi USB maintainers,
+> 
+> we recently have seen a problem with usb-storage when trying to read from a device.
+> This happened on a 4.14.86 kernel.
+> 
+> The kernel's dmesg shows: (log has been submitted via DLT)
+> 1200.862250 kernel: usb 1-3.1: reset high-speed USB device number 10 using xhci_hcd
+> 1285.466289 kernel: usb 1-3.1: reset high-speed USB device number 10 using xhci_hcd
+> 1291.911286 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+> 1292.018079 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+> 1292.043073 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+> 1292.069078 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+> 1292.093066 kernel: usb-storage: Error in queuecommand_lck: us->srb = ffff9d66b02e3528
+
+Since there haven't been any substantive change to usb-storage since 
+4.14 was released, there's a good chance this is a problem with 
+xhci-hcd.
+
+Is this problem repeatable?  Can you collect a usbmon trace showing 
+what happens when the problem occurs?
+
+> There has been a similar bug being fixed in 3.17 kernel series, maybe the bug has been re-introduced?
+> https://bugzilla.kernel.org/show_bug.cgi?id=88341
+
+That is _extremely_ unlikely.
+
+> As USB seems to be the causing subsystem, i submit this query here.
+> 
+> Any idea what could cause this?
+
+The particular error message you got means that the SCSI layer asked 
+usb-storage to send a command to the device before the previous command 
+was completed.  But without more information there's no way to tell why 
+it did this.
+
+Alan Stern
+
