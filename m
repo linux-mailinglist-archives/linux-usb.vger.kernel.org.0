@@ -2,67 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CDB29B73
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 17:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DA12A04D
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 23:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390152AbfEXPrJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 24 May 2019 11:47:09 -0400
-Received: from relay1.mentorg.com ([192.94.38.131]:44872 "EHLO
-        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389079AbfEXPrJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 11:47:09 -0400
-Received: from nat-ies.mentorg.com ([192.94.31.2] helo=svr-ies-mbx-01.mgc.mentorg.com)
-        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
-        id 1hUCPR-0002iw-MM from Carsten_Schmid@mentor.com ; Fri, 24 May 2019 08:47:05 -0700
-Received: from SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) by
- svr-ies-mbx-01.mgc.mentorg.com (139.181.222.1) with Microsoft SMTP Server
- (TLS) id 15.0.1320.4; Fri, 24 May 2019 16:47:02 +0100
-Received: from SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17]) by
- SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17%22]) with mapi id
- 15.00.1320.000; Fri, 24 May 2019 16:47:02 +0100
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+        id S2404264AbfEXVTj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 May 2019 17:19:39 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38616 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404156AbfEXVTi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 17:19:38 -0400
+Received: by mail-wr1-f66.google.com with SMTP id d18so11279101wrs.5;
+        Fri, 24 May 2019 14:19:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yChQCKBoYYD2ErUvmu70aLCopRrNaS4kVehdN9MryeQ=;
+        b=bIwZkMsdQN9g2Ro0RJ63xyAWzairS1dzzOm1h2L9NxZY2KkYF+EFGj09BdsAMwwtDf
+         l5KwJ5DyqQYuHwhHa0frqv72NnVBVe2dLgzigtaXCiYOqwIUD6LS6i5DAxLg5PLbSg4c
+         9G8WEO8D7Y9qnXZJPvTIQ4gNqQsip6pAZkgldWKNo/7zZa4r0/aJ0o/3YdLnxh17D5PQ
+         5VV/jdd9Ior9AV8zJWOFjjjgP8JhSxWXyt6t7UlrLauxJYISHNBFMyjGz9/UpDnZaiH8
+         TKpuN+19/X4yNx0OEAdvWVfFAP4EHcf3r9PUSYK8Ein3MJItuIC9V3gW6n/VD8Lod7do
+         2f0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yChQCKBoYYD2ErUvmu70aLCopRrNaS4kVehdN9MryeQ=;
+        b=bmT4iTpCVzMIrIDuetrWF2Ahs3pIuIcyGBc2IG2+PQTKAHXLNejBXkm41+Q/vDdB78
+         0NjgpEbTq9nQoBkUxSNNAwtzkcfJp5pvdHw3JNiDiaDMGogEXawB7v+up5ZVlAHCqNq1
+         hVaqgK8cNODdhp/TqQ3nEIQ/oajeb+ifkL6tnHrI6FtD6pommPGlUlpcTuFI0ou01vqh
+         sGUrBautXnT0ApvtEPdVog+X/YPT0IRASb2n6PCIoGKddRwUBa/vlDJZi1n4rg8V5iIu
+         Iv2hnQp9ZU257FVkkH/Si/IOJPnkRrcoa1B2F2+asnA+zXDWnpx3nedC4vsplwMcloRx
+         EW9g==
+X-Gm-Message-State: APjAAAXMeHB9cUgBOUzkhvVnNUgZTg1B1wX5O5yYnDaqzDcFOWRufIZG
+        Hv7O4A6WLSG2V815KQcsnVI=
+X-Google-Smtp-Source: APXvYqymnTU9ieQWRBBGLnerP5t7LVtxI7Wi+PRWnM4/SAAy+wX1lwd0AilN1LYRoh2WAMD/VXnU2Q==
+X-Received: by 2002:adf:f6ce:: with SMTP id y14mr10053787wrp.113.1558732776216;
+        Fri, 24 May 2019 14:19:36 -0700 (PDT)
+Received: from debian64.daheim (p4FD09F8E.dip0.t-ipconnect.de. [79.208.159.142])
+        by smtp.gmail.com with ESMTPSA id c14sm4077515wrt.45.2019.05.24.14.19.35
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 24 May 2019 14:19:35 -0700 (PDT)
+Received: from localhost.daheim ([127.0.0.1] helo=debian64.localnet)
+        by debian64.daheim with esmtp (Exim 4.92)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1hUHbB-0004OC-Bk; Fri, 24 May 2019 23:19:34 +0200
+From:   Christian Lamparter <chunkeey@gmail.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: AW: AW: Crash/hung task in usb-storage thread
-Thread-Topic: AW: Crash/hung task in usb-storage thread
-Thread-Index: AdURXgfVXaop83lMT6KXMlJmy+L2DgAITEKAAC1Xc2AAAfMAAAACqlUg
-Date:   Fri, 24 May 2019 15:47:01 +0000
-Message-ID: <29cade7abfc94b1e92cbaa2224d9e913@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <b4d08a84df3d45bfa77d27d411a17578@SVR-IES-MBX-03.mgc.mentorg.com>
- <Pine.LNX.4.44L0.1905241118410.1435-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1905241118410.1435-100000@iolanthe.rowland.org>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+Cc:     syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>,
+        kvalo@codeaurora.org, davem@davemloft.net, andreyknvl@google.com,
+        syzkaller-bugs@googlegroups.com,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] network: wireless: p54u: Fix race between disconnect and firmware loading
+Date:   Fri, 24 May 2019 23:19:29 +0200
+Message-ID: <389698389.GL6GhM8fq4@debian64>
+In-Reply-To: <Pine.LNX.4.44L0.1905201042110.1498-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1905201042110.1498-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> A more detailed look through the email archives and git log finds the
-> following two commits, either of which might be relevant:
+On Monday, May 20, 2019 4:44:21 PM CEST Alan Stern wrote:
+> The syzbot fuzzer found a bug in the p54 USB wireless driver.  The
+> issue involves a race between disconnect and the firmware-loader
+> callback routine, and it has several aspects.
 > 
-> 	511833acfc06 ("SCSI: fix regression in scsi_send_eh_cmnd()")
-> 	f45681f9beca ("USB: Add quirk to support DJI CineSSD")
+> One big problem is that when the firmware can't be loaded, the
+> callback routine tries to unbind the driver from the USB _device_ (by
+> calling device_release_driver) instead of from the USB _interface_ to
+> which it is actually bound (by calling usb_driver_release_interface).
 > 
-> For the second commit, it might be that your storage device requires
-> the US_FL_NO_ATA_1X quirk in unusual_devs.h.
+> The race involves access to the private data structure.  The driver's
+> disconnect handler waits for a completion that is signalled by the
+> firmware-loader callback routine.  As soon as the completion is
+> signalled, you have to assume that the private data structure may have
+> been deallocated by the disconnect handler -- even if the firmware was
+> loaded without errors.  However, the callback routine does access the
+> private data several times after that point.
 > 
-> Alan Stern
+> Another problem is that, in order to ensure that the USB device
+> structure hasn't been freed when the callback routine runs, the driver
+> takes a reference to it.  This isn't good enough any more, because now
+> that the callback routine calls usb_driver_release_interface, it has
+> to ensure that the interface structure hasn't been freed.
+> 
+> Finally, the driver takes an unnecessary reference to the USB device
+> structure in the probe function and drops the reference in the
+> disconnect handler.  This extra reference doesn't accomplish anything,
+> because the USB core already guarantees that a device structure won't
+> be deallocated while a driver is still bound to any of its interfaces.
+> 
+> To fix these problems, this patch makes the following changes:
+> 
+> 	Call usb_driver_release_interface() rather than
+> 	device_release_driver().
+> 
+> 	Don't signal the completion until after the important
+> 	information has been copied out of the private data structure,
+> 	and don't refer to the private data at all thereafter.
+> 
+> 	Lock udev (the interface's parent) before unbinding the driver
+> 	instead of locking udev->parent.
+> 
+> 	During the firmware loading process, take a reference to the
+> 	USB interface instead of the USB device.
+> 
+> 	Don't take an unnecessary reference to the device during probe
+> 	(and then don't drop it during disconnect).
+> 
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Reported-and-tested-by: syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com
+> CC: <stable@vger.kernel.org>
 
-Hi Alan,
-both patches are present in our 4.14.86.
-And, additionally, we disabled lpm for hotpluggable devices.
+Finally I'm at home where I have the device. Did some test with replugging
+and module unloading, all seems fine. Thanks!
 
-Seems we need to find out the device's ID and add a patch similar to the DJI quirk.
+Acked-by: Christian Lamparter <chunkeey@gmail.com> 
 
-Could be a path to follow up.
 
-Thanks,
-Carsten
