@@ -2,84 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B67372920A
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 09:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E1829243
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 10:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389039AbfEXHpz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 May 2019 03:45:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388911AbfEXHpz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 24 May 2019 03:45:55 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F2B0D217F9;
-        Fri, 24 May 2019 07:45:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558683954;
-        bh=ObrvGpPLiHEvyPviS1L6MjtoBDnP+praLC5ukqMFU0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EUN9fDVX77IBJUkCIzY9sNbVP5n/uaDGltIbrw7RwF72ifujn+NUZ3fD5lGSp2vF3
-         ES8/uxnuMieLrmdE953JA4Aznd29rvq5GXNIemu2kQtvCEi6Rilck3U7Ab+62zbQ+W
-         6H23cbY3lGz9eJcBK+CbpAf6HrBR8eMoOGFxBtfs=
-Date:   Fri, 24 May 2019 09:45:52 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH] usb: mtu3: fix up undefined reference to
- usb_debug_root
-Message-ID: <20190524074552.GA1080@kroah.com>
-References: <ee71197a681165aa72cb73c7f6cb402953351805.1558678075.git.chunfeng.yun@mediatek.com>
+        id S2389046AbfEXIAH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 May 2019 04:00:07 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:18881 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389021AbfEXIAH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 04:00:07 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ce7a4860001>; Fri, 24 May 2019 01:00:06 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 24 May 2019 01:00:06 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Fri, 24 May 2019 01:00:06 -0700
+Received: from [10.24.193.7] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 24 May
+ 2019 08:00:03 +0000
+Subject: Re: [Patch V3 8/8] arm64: defconfig: Enable tegra XUDC driver
+To:     Thierry Reding <thierry.reding@gmail.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
+ <1557988772-15406-9-git-send-email-nkristam@nvidia.com>
+ <20190523103042.GH30331@ulmo>
+X-Nvconfidentiality: public
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+Message-ID: <0b7508f4-584e-0193-6415-bbe4d9a4db42@nvidia.com>
+Date:   Fri, 24 May 2019 13:31:19 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ee71197a681165aa72cb73c7f6cb402953351805.1558678075.git.chunfeng.yun@mediatek.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190523103042.GH30331@ulmo>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1558684806; bh=FlLewyOu6/LhepYQjOXtri6Fy7Jtb8D5m5LOrENMcbo=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=WG2gV/8KHMONDicQHrbJ9dAxC+iUFTRoQe6JUvcfYTLzoBHQpX+czg2zzvKc2KXUv
+         iD7rghwWbFQridS8BjaiJe/Qo9Tay0EetYRjoFia1TsF7fXtAgFfFzb8C3lM/R9ksb
+         4hzkB1PXb2HWLo3gnJ6/fEXw4BerEVFNhgUc+PDaIMSUtKeM9ilyXG3rvmFERFiaKD
+         8FWeC8nbR7VC6FuJfDequbFOk7URL10lELwS62yR7NtI+gbiRu2IIYEON6mGr4xDh9
+         NemA8bbGCS3AYoqrPkysuZVbdzaqTwx3EKtIY/gyJ36v5zLVRm30DDkRzX6B/oegVB
+         Ljt80EQKVUDTg==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 24, 2019 at 02:11:33PM +0800, Chunfeng Yun wrote:
-> When CONFIG_USB is not set, and CONFIG_USB_GADGET is set,
-> there is an issue:
+
+
+On 23-05-2019 16:00, Thierry Reding wrote:
+> On Thu, May 16, 2019 at 12:09:32PM +0530, Nagarjuna Kristam wrote:
+>> Enable support for Nvidia XUSB device mode controller driver.
+>>
+>> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+>> ---
+>>  arch/arm64/configs/defconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+>> index b605b7f..bf1437c 100644
+>> --- a/arch/arm64/configs/defconfig
+>> +++ b/arch/arm64/configs/defconfig
+>> @@ -575,6 +575,7 @@ CONFIG_USB_ULPI=y
+>>  CONFIG_USB_GADGET=y
+>>  CONFIG_USB_RENESAS_USBHS_UDC=m
+>>  CONFIG_USB_RENESAS_USB3=m
+>> +CONFIG_USB_TEGRA_XUDC=y
 > 
-> ld:
-> drivers/usb/mtu3/mtu3_debugfs.o: in function 'ssusb_debugfs_create_root':
-> mtu3_debugfs.c:(.text+0xba3): undefined reference to 'usb_debug_root'
+> This driver is fairly large, do we really want to make it built-in by
+> default? Are there any downsides to making this a loadable module?
 > 
-> usb_debug_root is only built when CONFIG_USB is enabled, so here drop it
-> and use NULL instead.
+> Thierry
 > 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
-> ---
->  drivers/usb/mtu3/mtu3_debugfs.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-
-Why resend?
-
-> diff --git a/drivers/usb/mtu3/mtu3_debugfs.c b/drivers/usb/mtu3/mtu3_debugfs.c
-> index 62c57ddc554e..b7c86ccd50b4 100644
-> --- a/drivers/usb/mtu3/mtu3_debugfs.c
-> +++ b/drivers/usb/mtu3/mtu3_debugfs.c
-> @@ -528,8 +528,7 @@ void ssusb_dr_debugfs_init(struct ssusb_mtk *ssusb)
->  
->  void ssusb_debugfs_create_root(struct ssusb_mtk *ssusb)
->  {
-> -	ssusb->dbgfs_root =
-> -		debugfs_create_dir(dev_name(ssusb->dev), usb_debug_root);
-> +	ssusb->dbgfs_root = debugfs_create_dir(dev_name(ssusb->dev), NULL);
-
-This moves the directory to a new location no matter what the
-configuration is. What's wrong with where it is today?  And shoudn't we
-create the usb root directory if only gadget is enabled?
-
-thanks,
-
-greg k-h
+ No downsides to make it as a module, will update change to mark it as module.
