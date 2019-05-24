@@ -2,48 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3669F29A6F
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 16:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2140829AEF
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 17:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404010AbfEXO7i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 May 2019 10:59:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35278 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403981AbfEXO7i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 24 May 2019 10:59:38 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB9672133D;
-        Fri, 24 May 2019 14:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558709977;
-        bh=mqnd9B23sYjbA0Pl+EXS2Qm4++yAjcuA4/DVttaa3dQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xyRHle8T7Hl5lZRWmJXu6evoRlBfomShFt9xm+RIKoV3lXvnvIcpQFTw+1jlBMfBg
-         2quvmA3R4JIE2ulTFctgJKk07YzoWEs1L5IZo3dxCjQr1DM9MN9FH2T/bkI987SMRw
-         93hcR/C9DFxMcCO9lxZO62iEhh501sHMTDnCW57Q=
-Date:   Fri, 24 May 2019 16:59:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
+        id S2389327AbfEXPY0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 May 2019 11:24:26 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:37086 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2389292AbfEXPYZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 11:24:25 -0400
+Received: (qmail 5854 invoked by uid 2102); 24 May 2019 11:24:24 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 24 May 2019 11:24:24 -0400
+Date:   Fri, 24 May 2019 11:24:24 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
 To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Crash/hung task in usb-storage thread
-Message-ID: <20190524145935.GA9757@kroah.com>
-References: <dca3ea08836e475894bdebc7eb28acff@SVR-IES-MBX-03.mgc.mentorg.com>
- <Pine.LNX.4.44L0.1905231245510.1553-100000@iolanthe.rowland.org>
- <b4d08a84df3d45bfa77d27d411a17578@SVR-IES-MBX-03.mgc.mentorg.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: AW: Crash/hung task in usb-storage thread
 In-Reply-To: <b4d08a84df3d45bfa77d27d411a17578@SVR-IES-MBX-03.mgc.mentorg.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Message-ID: <Pine.LNX.4.44L0.1905241118410.1435-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 24, 2019 at 01:33:14PM +0000, Schmid, Carsten wrote:
+On Fri, 24 May 2019, Schmid, Carsten wrote:
+
 > > On Thu, 23 May 2019, Schmid, Carsten wrote:
 > > 
 > > > Hi USB maintainers,
@@ -91,14 +78,27 @@ On Fri, May 24, 2019 at 01:33:14PM +0000, Schmid, Carsten wrote:
 > Remark on 2019-02-26
 > No hint to a real fix.
 > It simply disappeared ...
+> 
+> > > As USB seems to be the causing subsystem, i submit this query here.
+> > >
+> > > Any idea what could cause this?
+> > 
+> > The particular error message you got means that the SCSI layer asked
+> > usb-storage to send a command to the device before the previous command
+> > was completed.  But without more information there's no way to tell why
+> > it did this.
+> > 
+> > Alan Stern
+> That's at least a hint i can forward to the vendor.
 
-We do not track USB bugs in bugzilla.kernel.org, so NEVER treat that as
-the state of anything with regards to USB and Linux, sorry.  Ask here on
-the mailing list instead.
+A more detailed look through the email archives and git log finds the 
+following two commits, either of which might be relevant:
 
-The fact that nothing else is shown on that bug is to be expected, and
-is normal.
+	511833acfc06 ("SCSI: fix regression in scsi_send_eh_cmnd()")
+	f45681f9beca ("USB: Add quirk to support DJI CineSSD")
 
-thanks,
+For the second commit, it might be that your storage device requires 
+the US_FL_NO_ATA_1X quirk in unusual_devs.h.
 
-greg k-h
+Alan Stern
+
