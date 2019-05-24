@@ -2,71 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DD42996D
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 15:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1A429A61
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 16:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403896AbfEXNyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 May 2019 09:54:03 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:36650 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2403861AbfEXNyD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 09:54:03 -0400
-Received: (qmail 1597 invoked by uid 2102); 24 May 2019 09:54:02 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 May 2019 09:54:02 -0400
-Date:   Fri, 24 May 2019 09:54:02 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg KH <greg@kroah.com>
-cc:     andreyknvl@google.com,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>, <wen.yang99@zte.com.cn>
-Subject: Re: [PATCH] media: usb: siano: Fix general protection fault in smsusb
-In-Reply-To: <20190524103540.250a69e7@coco.lan>
-Message-ID: <Pine.LNX.4.44L0.1905240951470.1435-100000@iolanthe.rowland.org>
+        id S2404040AbfEXOwg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 May 2019 10:52:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52908 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2403860AbfEXOwg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 May 2019 10:52:36 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id E02AFAF7F;
+        Fri, 24 May 2019 14:52:34 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     oneukum@suse.com, Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] xhci: clear port_remote_wakeup after resume failure
+Date:   Fri, 24 May 2019 16:52:30 +0200
+Message-Id: <20190524145231.6605-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 24 May 2019, Mauro Carvalho Chehab wrote:
+This was seen on a Dell Precision 5520 using it's WD15 dock. The dock's
+Ethernet device interfaces with the laptop through one of it's USB3
+ports. While idle, the Ethernet device and HCD are suspended by runtime
+PM, being the only device connected on the bus. Then, both are resumed on
+behalf of the Ethernet device, which has remote wake-up capabilities.
 
-> Em Tue, 7 May 2019 12:39:47 -0400 (EDT)
-> Alan Stern <stern@rowland.harvard.edu> escreveu:
-> 
-> > The syzkaller USB fuzzer found a general-protection-fault bug in the
-> > smsusb part of the Siano DVB driver.  The fault occurs during probe
-> > because the driver assumes without checking that the device has both
-> > IN and OUT endpoints and the IN endpoint is ep1.
-> > 
-> > By slightly rearranging the driver's initialization code, we can make
-> > the appropriate checks early on and thus avoid the problem.  If the
-> > expected endpoints aren't present, the new code safely returns -ENODEV
-> > from the probe routine.
-> > 
-> > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > Reported-and-tested-by: syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com
-> > CC: <stable@vger.kernel.org>
+The Ethernet device was observed to randomly disconnect from the USB
+port shortly after submitting it's remote wake-up request. Probably a
+weird timing issue yet to be investigated. This causes runtime PM to
+busyloop causing some tangible CPU load. The reason is the port gets
+stuck in the middle of a remote wake-up operation, waiting for the
+device to switch to U0. This never happens, leaving "port_remote_wakeup"
+enabled, and automatically triggering a failure on any further suspend
+operation.
 
-> Patch looks correct, and I'm applying it. It exposes another potential
-> problem though: what happens if sizeof(desc.wMaxPacketSize) < sizeof(struct sms_msg_hdr)?
-> 
-> I'm enclosing a followup patch that should solve this situation
-> (and clean up a sparse warning).
-> 
-> Thanks,
-> Mauro
+This patch clears "port_remote_wakeup" upon detecting a device with a
+wrong resuming port state (see Table 4-9 in 4.15.2.3). Making sure the
+above mentioned situation doesn't trigger a PM busyloop.
 
-Your points are well taken.
+Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+---
+ drivers/usb/host/xhci-hub.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-However, Greg KH has already taken the original patch and a fix for the 
-sparse warning into his tree.  I guess the two of you should figure out 
-how best to straighten this out.
-
-Alan Stern
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 3abe70ff1b1e..53f5ee50ef8c 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1047,8 +1047,8 @@ static u32 xhci_get_port_status(struct usb_hcd *hcd,
+ 		xhci_get_usb2_port_status(port, &status, raw_port_status,
+ 					  flags);
+ 	/*
+-	 * Clear stale usb2 resume signalling variables in case port changed
+-	 * state during resume signalling. For example on error
++	 * Clear stale resume signalling variables in case port changed
++	 * state during resume signalling. For example on error.
+ 	 */
+ 	if ((bus_state->resume_done[wIndex] ||
+ 	     test_bit(wIndex, &bus_state->resuming_ports)) &&
+@@ -1057,6 +1057,12 @@ static u32 xhci_get_port_status(struct usb_hcd *hcd,
+ 		bus_state->resume_done[wIndex] = 0;
+ 		clear_bit(wIndex, &bus_state->resuming_ports);
+ 		usb_hcd_end_port_resume(&hcd->self, wIndex);
++	} else if (bus_state->port_remote_wakeup & (1 << port->hcd_portnum) &&
++		   ((raw_port_status & PORT_PLS_MASK) != XDEV_RESUME ||
++		   !(raw_port_status & PORT_CONNECT) ||
++		   !(raw_port_status & PORT_PE) ||
++		   raw_port_status & PORT_OC)) {
++		bus_state->port_remote_wakeup &= ~(1 << port->hcd_portnum);
+ 	}
+ 
+ 	if (bus_state->port_c_suspend & (1 << wIndex))
+-- 
+2.21.0
 
