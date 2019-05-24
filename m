@@ -2,103 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2140829AEF
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 17:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CDB29B73
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 17:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389327AbfEXPY0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 May 2019 11:24:26 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:37086 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2389292AbfEXPYZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 11:24:25 -0400
-Received: (qmail 5854 invoked by uid 2102); 24 May 2019 11:24:24 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 May 2019 11:24:24 -0400
-Date:   Fri, 24 May 2019 11:24:24 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: AW: Crash/hung task in usb-storage thread
-In-Reply-To: <b4d08a84df3d45bfa77d27d411a17578@SVR-IES-MBX-03.mgc.mentorg.com>
-Message-ID: <Pine.LNX.4.44L0.1905241118410.1435-100000@iolanthe.rowland.org>
+        id S2390152AbfEXPrJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 24 May 2019 11:47:09 -0400
+Received: from relay1.mentorg.com ([192.94.38.131]:44872 "EHLO
+        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389079AbfEXPrJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 11:47:09 -0400
+Received: from nat-ies.mentorg.com ([192.94.31.2] helo=svr-ies-mbx-01.mgc.mentorg.com)
+        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
+        id 1hUCPR-0002iw-MM from Carsten_Schmid@mentor.com ; Fri, 24 May 2019 08:47:05 -0700
+Received: from SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) by
+ svr-ies-mbx-01.mgc.mentorg.com (139.181.222.1) with Microsoft SMTP Server
+ (TLS) id 15.0.1320.4; Fri, 24 May 2019 16:47:02 +0100
+Received: from SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17]) by
+ SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17%22]) with mapi id
+ 15.00.1320.000; Fri, 24 May 2019 16:47:02 +0100
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: AW: AW: Crash/hung task in usb-storage thread
+Thread-Topic: AW: Crash/hung task in usb-storage thread
+Thread-Index: AdURXgfVXaop83lMT6KXMlJmy+L2DgAITEKAAC1Xc2AAAfMAAAACqlUg
+Date:   Fri, 24 May 2019 15:47:01 +0000
+Message-ID: <29cade7abfc94b1e92cbaa2224d9e913@SVR-IES-MBX-03.mgc.mentorg.com>
+References: <b4d08a84df3d45bfa77d27d411a17578@SVR-IES-MBX-03.mgc.mentorg.com>
+ <Pine.LNX.4.44L0.1905241118410.1435-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1905241118410.1435-100000@iolanthe.rowland.org>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 24 May 2019, Schmid, Carsten wrote:
-
-> > On Thu, 23 May 2019, Schmid, Carsten wrote:
-> > 
-> > > Hi USB maintainers,
-> > >
-> > > we recently have seen a problem with usb-storage when trying to read
-> > from a device.
-> > > This happened on a 4.14.86 kernel.
-> > >
-> > > The kernel's dmesg shows: (log has been submitted via DLT)
-> > > 1200.862250 kernel: usb 1-3.1: reset high-speed USB device number 10
-> > using xhci_hcd
-> > > 1285.466289 kernel: usb 1-3.1: reset high-speed USB device number 10
-> > using xhci_hcd
-> > > 1291.911286 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> > ffff9d66b02e3528
-> > > 1292.018079 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> > ffff9d66b02e3528
-> > > 1292.043073 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> > ffff9d66b02e3528
-> > > 1292.069078 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> > ffff9d66b02e3528
-> > > 1292.093066 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> > ffff9d66b02e3528
-> > 
-> > Since there haven't been any substantive change to usb-storage since
-> > 4.14 was released, there's a good chance this is a problem with
-> > xhci-hcd.
-> > 
-> > Is this problem repeatable?  Can you collect a usbmon trace showing
-> > what happens when the problem occurs?
-> > 
-> Unfortunately this happened in the field on a test drive.
-> I don't have access to the device.
-> So, no, can't be reproduced by now.
+> A more detailed look through the email archives and git log finds the
+> following two commits, either of which might be relevant:
 > 
-> > > There has been a similar bug being fixed in 3.17 kernel series, maybe the
-> > bug has been re-introduced?
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=88341
-> > 
-> > That is _extremely_ unlikely.
-> > 
-> Looked into the history of that bug report.
-> Strange: no fix is menioned.
-> Reported: 2014-17-11
-> Remark on 2019-02-26
-> No hint to a real fix.
-> It simply disappeared ...
+> 	511833acfc06 ("SCSI: fix regression in scsi_send_eh_cmnd()")
+> 	f45681f9beca ("USB: Add quirk to support DJI CineSSD")
 > 
-> > > As USB seems to be the causing subsystem, i submit this query here.
-> > >
-> > > Any idea what could cause this?
-> > 
-> > The particular error message you got means that the SCSI layer asked
-> > usb-storage to send a command to the device before the previous command
-> > was completed.  But without more information there's no way to tell why
-> > it did this.
-> > 
-> > Alan Stern
-> That's at least a hint i can forward to the vendor.
+> For the second commit, it might be that your storage device requires
+> the US_FL_NO_ATA_1X quirk in unusual_devs.h.
+> 
+> Alan Stern
 
-A more detailed look through the email archives and git log finds the 
-following two commits, either of which might be relevant:
+Hi Alan,
+both patches are present in our 4.14.86.
+And, additionally, we disabled lpm for hotpluggable devices.
 
-	511833acfc06 ("SCSI: fix regression in scsi_send_eh_cmnd()")
-	f45681f9beca ("USB: Add quirk to support DJI CineSSD")
+Seems we need to find out the device's ID and add a patch similar to the DJI quirk.
 
-For the second commit, it might be that your storage device requires 
-the US_FL_NO_ATA_1X quirk in unusual_devs.h.
+Could be a path to follow up.
 
-Alan Stern
-
+Thanks,
+Carsten
