@@ -2,275 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA9C2983C
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 14:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DD7298F9
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 15:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391120AbfEXMow (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 May 2019 08:44:52 -0400
-Received: from mga18.intel.com ([134.134.136.126]:34996 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389057AbfEXMow (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 24 May 2019 08:44:52 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 May 2019 05:44:51 -0700
-X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 24 May 2019 05:44:46 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 24 May 2019 15:44:45 +0300
-Date:   Fri, 24 May 2019 15:44:45 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Biju Das <biju.das@bp.renesas.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by node
-Message-ID: <20190524124445.GP1887@kuha.fi.intel.com>
-References: <20190520080359.GC1887@kuha.fi.intel.com>
- <OSBPR01MB2103385D996762FA54F8E437B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <20190520083601.GE1887@kuha.fi.intel.com>
- <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <20190521095839.GI1887@kuha.fi.intel.com>
- <OSBPR01MB21032206146152983C8F4E8EB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <1558517436.10179.388.camel@mhfsdcap03>
- <OSBPR01MB21038F2B99EF74831A22727BB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <20190522142640.GN1887@kuha.fi.intel.com>
- <OSBPR01MB2103B669C24E9E261B4AFA73B8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+        id S2391395AbfEXNdX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 24 May 2019 09:33:23 -0400
+Received: from relay1.mentorg.com ([192.94.38.131]:40241 "EHLO
+        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391529AbfEXNdX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 09:33:23 -0400
+Received: from nat-ies.mentorg.com ([192.94.31.2] helo=svr-ies-mbx-02.mgc.mentorg.com)
+        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
+        id 1hUAJx-00076l-Qp from Carsten_Schmid@mentor.com ; Fri, 24 May 2019 06:33:17 -0700
+Received: from SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) by
+ svr-ies-mbx-02.mgc.mentorg.com (139.181.222.2) with Microsoft SMTP Server
+ (TLS) id 15.0.1320.4; Fri, 24 May 2019 14:33:14 +0100
+Received: from SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17]) by
+ SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17%22]) with mapi id
+ 15.00.1320.000; Fri, 24 May 2019 14:33:14 +0100
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: AW: Crash/hung task in usb-storage thread
+Thread-Topic: Crash/hung task in usb-storage thread
+Thread-Index: AdURXgfVXaop83lMT6KXMlJmy+L2DgAITEKAAC1Xc2A=
+Date:   Fri, 24 May 2019 13:33:14 +0000
+Message-ID: <b4d08a84df3d45bfa77d27d411a17578@SVR-IES-MBX-03.mgc.mentorg.com>
+References: <dca3ea08836e475894bdebc7eb28acff@SVR-IES-MBX-03.mgc.mentorg.com>
+ <Pine.LNX.4.44L0.1905231245510.1553-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1905231245510.1553-100000@iolanthe.rowland.org>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OSBPR01MB2103B669C24E9E261B4AFA73B8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 22, 2019 at 02:57:33PM +0000, Biju Das wrote:
-> Hi Heikki,
+> On Thu, 23 May 2019, Schmid, Carsten wrote:
 > 
-> Thanks for the patch
+> > Hi USB maintainers,
+> >
+> > we recently have seen a problem with usb-storage when trying to read
+> from a device.
+> > This happened on a 4.14.86 kernel.
+> >
+> > The kernel's dmesg shows: (log has been submitted via DLT)
+> > 1200.862250 kernel: usb 1-3.1: reset high-speed USB device number 10
+> using xhci_hcd
+> > 1285.466289 kernel: usb 1-3.1: reset high-speed USB device number 10
+> using xhci_hcd
+> > 1291.911286 kernel: usb-storage: Error in queuecommand_lck: us->srb =
+> ffff9d66b02e3528
+> > 1292.018079 kernel: usb-storage: Error in queuecommand_lck: us->srb =
+> ffff9d66b02e3528
+> > 1292.043073 kernel: usb-storage: Error in queuecommand_lck: us->srb =
+> ffff9d66b02e3528
+> > 1292.069078 kernel: usb-storage: Error in queuecommand_lck: us->srb =
+> ffff9d66b02e3528
+> > 1292.093066 kernel: usb-storage: Error in queuecommand_lck: us->srb =
+> ffff9d66b02e3528
 > 
-> > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by
-> > node
-> > 
-> > On Wed, May 22, 2019 at 10:55:17AM +0000, Biju Das wrote:
-> > > Hi Chunfeng Yun,
-> > >
-> > > Thanks for the feedback.
-> > >
-> > > > Subject: RE: [PATCH v5 4/6] usb: roles: add API to get
-> > > > usb_role_switch by node
-> > > >
-> > > > Hi Biju,
-> > > > On Wed, 2019-05-22 at 08:05 +0000, Biju Das wrote:
-> > > > > Hi Heikki,
-> > > > >
-> > > > > Thanks for the feedback.
-> > > > >
-> > > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
-> > > > > > usb_role_switch by node
-> > > > > >
-> > > > > > On Mon, May 20, 2019 at 09:45:46AM +0000, Biju Das wrote:
-> > > > > > >
-> > > > > > >
-> > > > > > > Hi Heikki,
-> > > > > > >
-> > > > > > > Thanks for the feedback.
-> > > > > > >
-> > > > > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
-> > > > > > > > usb_role_switch by node
-> > > > > > > >
-> > > > > > > > On Mon, May 20, 2019 at 08:06:41AM +0000, Biju Das wrote:
-> > > > > > > > > Hi Heikki,
-> > > > > > > > >
-> > > > > > > > > > Subject: Re: [PATCH v5 4/6] usb: roles: add API to get
-> > > > > > > > > > usb_role_switch by node
-> > > > > > > > > >
-> > > > > > > > > > On Mon, May 20, 2019 at 10:39:11AM +0800, Chunfeng Yun
-> > wrote:
-> > > > > > > > > > > Hi,
-> > > > > > > > > > > On Fri, 2019-05-17 at 16:05 +0300, Heikki Krogerus wrote:
-> > > > > > > > > > > > Hi,
-> > > > > > > > > > > >
-> > > > > > > > > > > > On Fri, May 17, 2019 at 01:37:36PM +0300, Heikki
-> > > > > > > > > > > > Krogerus
-> > > > wrote:
-> > > > > > > > > > > > > On Tue, May 14, 2019 at 04:47:21PM +0800, Chunfeng
-> > > > > > > > > > > > > Yun
-> > > > > > wrote:
-> > > > > > > > > > > > > > Add fwnode_usb_role_switch_get() to make easier
-> > > > > > > > > > > > > > to get usb_role_switch by fwnode which register it.
-> > > > > > > > > > > > > > It's useful when there is not device_connection
-> > > > > > > > > > > > > > registered between two drivers and only knows
-> > > > > > > > > > > > > > the fwnode which register usb_role_switch.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Signed-off-by: Chunfeng Yun
-> > > > > > > > > > > > > > <chunfeng.yun@mediatek.com>
-> > > > > > > > > > > > > > Tested-by: Biju Das <biju.das@bp.renesas.com>
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Acked-by: Heikki Krogerus
-> > > > > > > > > > > > > <heikki.krogerus@linux.intel.com>
-> > > > > > > > > > > >
-> > > > > > > > > > > > Hold on. I just noticed Rob's comment on patch 2/6,
-> > > > > > > > > > > > where he points out that you don't need to use
-> > > > > > > > > > > > device graph since the controller is the parent of
-> > > > > > > > > > > > the connector. Doesn't that mean you don't really need
-> > this API?
-> > > > > > > > > > > No, I still need it.
-> > > > > > > > > > > The change is about the way how to get fwnode; when
-> > > > > > > > > > > use device graph, get fwnode by
-> > > > > > > > > > > of_graph_get_remote_node(); but now will get fwnode by
-> > > > > > > > > > > of_get_parent();
-> > > > > > > > > >
-> > > > > > > > > > OK, I get that, but I'm still not convinced about if
-> > > > > > > > > > something like this function is needed at all. I also
-> > > > > > > > > > have concerns regarding how you are using the function.
-> > > > > > > > > > I'll explain in comment to the patch 5/6 in this
-> > > > > > > > series...
-> > > > > > > > >
-> > > > > > > > > FYI, Currently  I am also using this api in my patch series.
-> > > > > > > > > https://patchwork.kernel.org/patch/10944637/
-> > > > > > > >
-> > > > > > > > Yes, and I have the same question for you I jusb asked in
-> > > > > > > > comment I added to the patch 5/6 of this series. Why isn't
-> > > > > > > > usb_role_switch_get()
-> > > > > > enough?
-> > > > > > >
-> > > > > > > Currently no issue. It will work with this api as well, since
-> > > > > > > the port node is
-> > > > > > part of controller node.
-> > > > > > > For eg:-
-> > > > > > > https://patchwork.kernel.org/patch/10944627/
-> > > > > > >
-> > > > > > > However if any one adds port node inside the connector node,
-> > > > > > > then this
-> > > > > > api may won't work as expected.
-> > > > > > > Currently I get below error
-> > > > > > >
-> > > > > > > [    2.299703] OF: graph: no port node found in
-> > > > > > /soc/i2c@e6500000/hd3ss3220@47
-> > > > > >
-> > > > > > We need to understand why is that happening?
-> > > > > >
-> > > > >
-> > > > > Form the stack trace  the parent node is
-> > > > > "parent_node=hd3ss3220@47" ,
-> > > > instead of the "connector" node.
-> > > > > That is the reason for the above error.
-> > > > >
-> > > > > [    2.442429]  of_graph_get_next_endpoint.part.0+0x28/0x168
-> > > > > [    2.447889]  of_fwnode_graph_get_next_endpoint+0x5c/0xb0
-> > > > > [    2.453267]  fwnode_graph_get_next_endpoint+0x20/0x30
-> > > > > [    2.458374]  device_connection_find_match+0x74/0x1a0
-> > > > > [    2.463399]  usb_role_switch_get+0x20/0x28
-> > > > > [    2.467542]  hd3ss3220_probe+0xc4/0x218
-> > > > >
-> > > > > The use case is
-> > > > >
-> > > > > &i2c0 {
-> > > > > 	hd3ss3220@47 {
-> > > > >                  	compatible = "ti,hd3ss3220";
-> > > > >
-> > > > >                  	usb_con: connector {
-> > > > >                           		compatible = "usb-c-connector";
-> > > > >                          		port {
-> > > > >                                 		 hd3ss3220_ep: endpoint {
-> > > > >                                         			remote-endpoint =
-> > > > <&usb3_role_switch>;
-> > > > >                                 		};
-> > > > >                          		};
-> > > > >                 	 };
-> > > > > 	 };
-> > > > > };
-> > > > >
-> > > > > &usb3_peri0 {
-> > > > >          companion = <&xhci0>;
-> > > > >          usb-role-switch;
-> > > > >
-> > > > >          port {
-> > > > >                 usb3_role_switch: endpoint {
-> > > > >                         remote-endpoint = <&hd3ss3220_ep>;
-> > > > >                  };
-> > > > >          };
-> > > > > };
-> > > > >
-> > > > > Q1) How do we modify the usb_role_switch_get() function to search
-> > > > > Child(connector) and child's endpoint?
-> > > > How about firstly finding connector node in
-> > > > fwnode_graph_devcon_match(), then search each endpoint?
-> > >
-> > >  I have done a quick prototyping with the changes you suggested and it
-> > works.
-> > >
-> > > -       struct fwnode_handle *ep;
-> > > +       struct fwnode_handle *ep,*child,*tmp = fwnode;
-> > >
-> > > -       fwnode_graph_for_each_endpoint(fwnode, ep) {
-> > > +       child = fwnode_get_named_child_node(fwnode, "connector");
-> > > +       if (child)
-> > > +               tmp = child;
-> > > +
-> > > +       fwnode_graph_for_each_endpoint(tmp, ep) {
-> > >
-> > > Form the stack trace  the parent node is "parent_node= connector" .
-> > >
-> > > [    2.440922]  of_graph_get_next_endpoint.part.0+0x28/0x168
-> > > [    2.446381]  of_fwnode_graph_get_next_endpoint+0x5c/0xb0
-> > > [    2.451758]  fwnode_graph_get_next_endpoint+0x20/0x30
-> > > [    2.456866]  device_connection_find_match+0x84/0x1c0
-> > > [    2.461888]  usb_role_switch_get+0x20/0x28
-> > >
-> > > Heikki,
-> > > Are you ok  with the above changes?
-> > 
-> > Doesn't that mean that if we made fwnode_usb_role_switch_get() the way I
-> > proposed, there is no problem? You just find the "connector" child node in
-> > your driver, and pass that to fwnode_usb_role_switch_get():
+> Since there haven't been any substantive change to usb-storage since
+> 4.14 was released, there's a good chance this is a problem with
+> xhci-hcd.
 > 
-> Yes, That is correct.
+> Is this problem repeatable?  Can you collect a usbmon trace showing
+> what happens when the problem occurs?
 > 
-> >         struct fwnode_handle *connector;
-> >         ...
-> >         connector = device_get_named_child_node(&client->dev, "connector");
-> >         if (IS_ERR(connector))
-> >                 <do something>
-> > 
-> >         hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
-> >         ...
-> > 
-> > The difference is that instead of just converting a device node of an usb role
-> > switch to the usb role switch, it works just like usb_role_switch_get(), just
-> > taking fwnode instead of device entry as parameter.
-> > 
-> > I prepared the patches implementing fwnode_usb_role_switch_get() the
-> > way I though it needs to work for my own tests. Please find the patches
-> > attached.
-> 
-> I have tested  this patches and conform it works. 
-> Do you plan to post this patches to ML? 
+Unfortunately this happened in the field on a test drive.
+I don't have access to the device.
+So, no, can't be reproduced by now.
 
-Could make them part of this series?
+> > There has been a similar bug being fixed in 3.17 kernel series, maybe the
+> bug has been re-introduced?
+> > https://bugzilla.kernel.org/show_bug.cgi?id=88341
+> 
+> That is _extremely_ unlikely.
+> 
+Looked into the history of that bug report.
+Strange: no fix is menioned.
+Reported: 2014-17-11
+Remark on 2019-02-26
+No hint to a real fix.
+It simply disappeared ...
 
+> > As USB seems to be the causing subsystem, i submit this query here.
+> >
+> > Any idea what could cause this?
+> 
+> The particular error message you got means that the SCSI layer asked
+> usb-storage to send a command to the device before the previous command
+> was completed.  But without more information there's no way to tell why
+> it did this.
+> 
+> Alan Stern
+That's at least a hint i can forward to the vendor.
 
-thanks,
-
--- 
-heikki
+Thanks Alan, 
+Carsten
