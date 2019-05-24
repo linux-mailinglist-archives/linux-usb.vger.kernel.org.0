@@ -2,108 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DD7298F9
-	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 15:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6922990F
+	for <lists+linux-usb@lfdr.de>; Fri, 24 May 2019 15:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391395AbfEXNdX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 24 May 2019 09:33:23 -0400
-Received: from relay1.mentorg.com ([192.94.38.131]:40241 "EHLO
-        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391529AbfEXNdX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 09:33:23 -0400
-Received: from nat-ies.mentorg.com ([192.94.31.2] helo=svr-ies-mbx-02.mgc.mentorg.com)
-        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
-        id 1hUAJx-00076l-Qp from Carsten_Schmid@mentor.com ; Fri, 24 May 2019 06:33:17 -0700
-Received: from SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) by
- svr-ies-mbx-02.mgc.mentorg.com (139.181.222.2) with Microsoft SMTP Server
- (TLS) id 15.0.1320.4; Fri, 24 May 2019 14:33:14 +0100
-Received: from SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17]) by
- SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17%22]) with mapi id
- 15.00.1320.000; Fri, 24 May 2019 14:33:14 +0100
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+        id S2403820AbfEXNfu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 May 2019 09:35:50 -0400
+Received: from casper.infradead.org ([85.118.1.10]:56308 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403804AbfEXNfu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 May 2019 09:35:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=a84L9ZynbQTHP9MHDmUi2uab2LrEajX0zeKKzUoHR2Q=; b=QbNFbzbaVGx6nDE4Lt/gz/ontH
+        mryLBk30+Ei/1aJ+mmhUQ1nwSoK+Py0cZktjf95fKVLP0ih2qCetBqumwAPZ3v9hvga8J/u12VOsz
+        wFi+JwWMK3ZMvFf/WHD8qCexM6jX0O6LKU8b+ka+TM8Xd9igf8AIzEuu91xScDMK9qQ7WQYz07wlG
+        TdPelpbWfdjxSj1WSXwumK1MacDG7AWnyZvKhmxIl/YWXUj5unKVWShDq38fDFgU5zM9KPc3Cn74W
+        NLqjEzHu1Q2rAsc2qy6QCf6WI11FyYoYaoQNTJviuZrQP0QGneB+DzhTgL3jLGdU2wL5dzxCj1D4J
+        9HSKYaAQ==;
+Received: from 177.97.63.247.dynamic.adsl.gvt.net.br ([177.97.63.247] helo=coco.lan)
+        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hUAML-00007l-4G; Fri, 24 May 2019 13:35:45 +0000
+Date:   Fri, 24 May 2019 10:35:40 -0300
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: AW: Crash/hung task in usb-storage thread
-Thread-Topic: Crash/hung task in usb-storage thread
-Thread-Index: AdURXgfVXaop83lMT6KXMlJmy+L2DgAITEKAAC1Xc2A=
-Date:   Fri, 24 May 2019 13:33:14 +0000
-Message-ID: <b4d08a84df3d45bfa77d27d411a17578@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <dca3ea08836e475894bdebc7eb28acff@SVR-IES-MBX-03.mgc.mentorg.com>
- <Pine.LNX.4.44L0.1905231245510.1553-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1905231245510.1553-100000@iolanthe.rowland.org>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+Cc:     andreyknvl@google.com,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>, <wen.yang99@zte.com.cn>
+Subject: Re: [PATCH] media: usb: siano: Fix general protection fault in
+ smsusb
+Message-ID: <20190524103540.250a69e7@coco.lan>
+In-Reply-To: <Pine.LNX.4.44L0.1905071237310.1632-100000@iolanthe.rowland.org>
+References: <0000000000004a08f805883ead54@google.com>
+        <Pine.LNX.4.44L0.1905071237310.1632-100000@iolanthe.rowland.org>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On Thu, 23 May 2019, Schmid, Carsten wrote:
-> 
-> > Hi USB maintainers,
-> >
-> > we recently have seen a problem with usb-storage when trying to read
-> from a device.
-> > This happened on a 4.14.86 kernel.
-> >
-> > The kernel's dmesg shows: (log has been submitted via DLT)
-> > 1200.862250 kernel: usb 1-3.1: reset high-speed USB device number 10
-> using xhci_hcd
-> > 1285.466289 kernel: usb 1-3.1: reset high-speed USB device number 10
-> using xhci_hcd
-> > 1291.911286 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> ffff9d66b02e3528
-> > 1292.018079 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> ffff9d66b02e3528
-> > 1292.043073 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> ffff9d66b02e3528
-> > 1292.069078 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> ffff9d66b02e3528
-> > 1292.093066 kernel: usb-storage: Error in queuecommand_lck: us->srb =
-> ffff9d66b02e3528
-> 
-> Since there haven't been any substantive change to usb-storage since
-> 4.14 was released, there's a good chance this is a problem with
-> xhci-hcd.
-> 
-> Is this problem repeatable?  Can you collect a usbmon trace showing
-> what happens when the problem occurs?
-> 
-Unfortunately this happened in the field on a test drive.
-I don't have access to the device.
-So, no, can't be reproduced by now.
+Em Tue, 7 May 2019 12:39:47 -0400 (EDT)
+Alan Stern <stern@rowland.harvard.edu> escreveu:
 
-> > There has been a similar bug being fixed in 3.17 kernel series, maybe the
-> bug has been re-introduced?
-> > https://bugzilla.kernel.org/show_bug.cgi?id=88341
+> The syzkaller USB fuzzer found a general-protection-fault bug in the
+> smsusb part of the Siano DVB driver.  The fault occurs during probe
+> because the driver assumes without checking that the device has both
+> IN and OUT endpoints and the IN endpoint is ep1.
 > 
-> That is _extremely_ unlikely.
+> By slightly rearranging the driver's initialization code, we can make
+> the appropriate checks early on and thus avoid the problem.  If the
+> expected endpoints aren't present, the new code safely returns -ENODEV
+> from the probe routine.
 > 
-Looked into the history of that bug report.
-Strange: no fix is menioned.
-Reported: 2014-17-11
-Remark on 2019-02-26
-No hint to a real fix.
-It simply disappeared ...
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Reported-and-tested-by: syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com
+> CC: <stable@vger.kernel.org>
+> 
+> ---
+> 
+> 
+> [as1897]
+> 
+> 
+>  drivers/media/usb/siano/smsusb.c |   33 ++++++++++++++++++++-------------
+>  1 file changed, 20 insertions(+), 13 deletions(-)
+> 
+> Index: usb-devel/drivers/media/usb/siano/smsusb.c
+> ===================================================================
+> --- usb-devel.orig/drivers/media/usb/siano/smsusb.c
+> +++ usb-devel/drivers/media/usb/siano/smsusb.c
+> @@ -400,6 +400,7 @@ static int smsusb_init_device(struct usb
+>  	struct smsusb_device_t *dev;
+>  	void *mdev;
+>  	int i, rc;
+> +	int in_maxp;
+>  
+>  	/* create device object */
+>  	dev = kzalloc(sizeof(struct smsusb_device_t), GFP_KERNEL);
+> @@ -411,6 +412,24 @@ static int smsusb_init_device(struct usb
+>  	dev->udev = interface_to_usbdev(intf);
+>  	dev->state = SMSUSB_DISCONNECTED;
+>  
+> +	for (i = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
+> +		struct usb_endpoint_descriptor *desc =
+> +				&intf->cur_altsetting->endpoint[i].desc;
+> +
+> +		if (desc->bEndpointAddress & USB_DIR_IN) {
+> +			dev->in_ep = desc->bEndpointAddress;
+> +			in_maxp = usb_endpoint_maxp(desc);
+> +		} else {
+> +			dev->out_ep = desc->bEndpointAddress;
+> +		}
+> +	}
+> +
+> +	pr_debug("in_ep = %02x, out_ep = %02x\n", dev->in_ep, dev->out_ep);
+> +	if (!dev->in_ep || !dev->out_ep) {	/* Missing endpoints? */
+> +		smsusb_term_device(intf);
+> +		return -ENODEV;
+> +	}
+> +
+>  	params.device_type = sms_get_board(board_id)->type;
+>  
+>  	switch (params.device_type) {
+> @@ -425,24 +444,12 @@ static int smsusb_init_device(struct usb
+>  		/* fall-thru */
+>  	default:
+>  		dev->buffer_size = USB2_BUFFER_SIZE;
+> -		dev->response_alignment =
+> -		    le16_to_cpu(dev->udev->ep_in[1]->desc.wMaxPacketSize) -
+> -		    sizeof(struct sms_msg_hdr);
+> +		dev->response_alignment = in_maxp - sizeof(struct sms_msg_hdr);
+>  
+>  		params.flags |= SMS_DEVICE_FAMILY2;
+>  		break;
+>  	}
+>  
+> -	for (i = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
+> -		if (intf->cur_altsetting->endpoint[i].desc. bEndpointAddress & USB_DIR_IN)
+> -			dev->in_ep = intf->cur_altsetting->endpoint[i].desc.bEndpointAddress;
+> -		else
+> -			dev->out_ep = intf->cur_altsetting->endpoint[i].desc.bEndpointAddress;
+> -	}
+> -
+> -	pr_debug("in_ep = %02x, out_ep = %02x\n",
+> -		dev->in_ep, dev->out_ep);
+> -
+>  	params.device = &dev->udev->dev;
+>  	params.usb_device = dev->udev;
+>  	params.buffer_size = dev->buffer_size;
+> 
 
-> > As USB seems to be the causing subsystem, i submit this query here.
-> >
-> > Any idea what could cause this?
-> 
-> The particular error message you got means that the SCSI layer asked
-> usb-storage to send a command to the device before the previous command
-> was completed.  But without more information there's no way to tell why
-> it did this.
-> 
-> Alan Stern
-That's at least a hint i can forward to the vendor.
+Patch looks correct, and I'm applying it. It exposes another potential
+problem though: what happens if sizeof(desc.wMaxPacketSize) < sizeof(struct sms_msg_hdr)?
 
-Thanks Alan, 
-Carsten
+I'm enclosing a followup patch that should solve this situation
+(and clean up a sparse warning).
+
+Thanks,
+Mauro
+
+[PATCH] media: smsusb: better handle optional alignment
+
+Most Siano devices require an alignment for the response.
+
+Changeset f3be52b0056a ("media: usb: siano: Fix general protection fault in smsusb")
+changed the logic with gets such aligment, but it now produces a
+sparce warning:
+
+drivers/media/usb/siano/smsusb.c: In function 'smsusb_init_device':
+drivers/media/usb/siano/smsusb.c:447:37: warning: 'in_maxp' may be used uninitialized in this function [-Wmaybe-uninitialized]
+  447 |   dev->response_alignment = in_maxp - sizeof(struct sms_msg_hdr);
+      |                             ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The sparse message itself is bogus, but a broken (or fake) USB
+eeprom could produce a negative value for response_alignment.
+
+So, change the code in order to check if the result is not
+negative.
+
+Fixes: f3be52b0056a ("media: usb: siano: Fix general protection fault in smsusb")
+CC: <stable@vger.kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+
+diff --git a/drivers/media/usb/siano/smsusb.c b/drivers/media/usb/siano/smsusb.c
+index 27ad14a3f831..e39f3f40dfdd 100644
+--- a/drivers/media/usb/siano/smsusb.c
++++ b/drivers/media/usb/siano/smsusb.c
+@@ -400,7 +400,7 @@ static int smsusb_init_device(struct usb_interface *intf, int board_id)
+ 	struct smsusb_device_t *dev;
+ 	void *mdev;
+ 	int i, rc;
+-	int in_maxp;
++	int align = 0;
+ 
+ 	/* create device object */
+ 	dev = kzalloc(sizeof(struct smsusb_device_t), GFP_KERNEL);
+@@ -418,14 +418,14 @@ static int smsusb_init_device(struct usb_interface *intf, int board_id)
+ 
+ 		if (desc->bEndpointAddress & USB_DIR_IN) {
+ 			dev->in_ep = desc->bEndpointAddress;
+-			in_maxp = usb_endpoint_maxp(desc);
++			align = usb_endpoint_maxp(desc) - sizeof(struct sms_msg_hdr);
+ 		} else {
+ 			dev->out_ep = desc->bEndpointAddress;
+ 		}
+ 	}
+ 
+ 	pr_debug("in_ep = %02x, out_ep = %02x\n", dev->in_ep, dev->out_ep);
+-	if (!dev->in_ep || !dev->out_ep) {	/* Missing endpoints? */
++	if (!dev->in_ep || !dev->out_ep || align < 0) {  /* Missing endpoints? */
+ 		smsusb_term_device(intf);
+ 		return -ENODEV;
+ 	}
+@@ -444,7 +444,7 @@ static int smsusb_init_device(struct usb_interface *intf, int board_id)
+ 		/* fall-thru */
+ 	default:
+ 		dev->buffer_size = USB2_BUFFER_SIZE;
+-		dev->response_alignment = in_maxp - sizeof(struct sms_msg_hdr);
++		dev->response_alignment = align;
+ 
+ 		params.flags |= SMS_DEVICE_FAMILY2;
+ 		break;
+
+
+
+
