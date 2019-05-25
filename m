@@ -2,94 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2382A5CC
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2019 19:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD0F2A6D5
+	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2019 21:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbfEYRbw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 May 2019 13:31:52 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:39341 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbfEYRbw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 May 2019 13:31:52 -0400
-Received: by mail-pl1-f196.google.com with SMTP id g9so5407093plm.6;
-        Sat, 25 May 2019 10:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=Y05SJz+nKCd/5pTWtJwGNN6+L5QhriQ7JFBupAf8lG8=;
-        b=etKFg2BXOQjDNjVMdVNyTRT1PQ2DcRzUcuf6UCFfaRO1EfERfkzGMxIAN/45osz2vP
-         siYKaV2oQxD/oLAnJj3sPkW9yy9U+9WisMKnDm1oaP5znT6v41Zul7TWUQDbh4IWxeOc
-         MYsxY5PYS3uH+D7hsW9xTjLcYg0UgpVB+7+EeJ2KANFIXK9qAxVK7qUzNpEjx0wx5u8Y
-         RkvTqz1DIF1S8YqGVFltn3XGC1bxeAEFyT7HnZWHr/zegsA1tpMWhcgMEh9B/TtBDeRU
-         JRNXZPevsxquCFmXRHHm0Orv/3gUUM0PrMbFPc0W8Y8V+k0cnKtoNEC0RkCuYS+nWLBg
-         g5pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=Y05SJz+nKCd/5pTWtJwGNN6+L5QhriQ7JFBupAf8lG8=;
-        b=Mbus+DJggkgOdlQ453u0XpR5mS0qQ+bz8BLHiKsouy0baHno6ql5JxfLAHFX23UPDA
-         EJks9ZNtgkPUCQXZnii/2gWkMZT9ow55uteBx2/hBzYMEnd2aTqGydq+QG3qWrSYwtoq
-         sBJCXobhVA7ABWEBUVW0I4/ulrcgUxT3BUkIUVxpNt8HRhT5BILH11YQncU6MWy1RPe0
-         iePbiRGlXpqppa7n5bdxqunq83AzD4DOR3ngGmWDjof/NNFypRJJy1/cFF6VYsVbxHPq
-         +HlbIsUFgoPAbxCGYUbvdzbiaLfbA6zL0M2eI9YyONXB+uDNzD1L4t1ufmkV988yaBTX
-         MZLg==
-X-Gm-Message-State: APjAAAX3coqxew5TXtkjBZ/6wC6zR0GcJJzo8PGti4y/yJQ8OEas7Cbi
-        d+fQ/PDp3caNanZEMXpx76E=
-X-Google-Smtp-Source: APXvYqyZTH3xSs44IoltA9WjPzjz5jUnM2latfHMBlgbxq0TG+nSaLJvodUUseieU0+qtaYd3lrsWA==
-X-Received: by 2002:a17:902:70c7:: with SMTP id l7mr27271071plt.47.1558805512032;
-        Sat, 25 May 2019 10:31:52 -0700 (PDT)
-Received: from hari-Inspiron-1545 ([183.83.92.73])
-        by smtp.gmail.com with ESMTPSA id u6sm6677881pfa.1.2019.05.25.10.31.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 25 May 2019 10:31:51 -0700 (PDT)
-Date:   Sat, 25 May 2019 23:01:47 +0530
-From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Hariprasad Kelam <hariprasad.kelam@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: ftdi-elan: fix possible condition with no effect (if ==
- else)
-Message-ID: <20190525173147.GA20418@hari-Inspiron-1545>
+        id S1727334AbfEYTyU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 May 2019 15:54:20 -0400
+Received: from sauhun.de ([88.99.104.3]:46472 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725616AbfEYTyU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 25 May 2019 15:54:20 -0400
+Received: from localhost (p5486CB33.dip0.t-ipconnect.de [84.134.203.51])
+        by pokefinder.org (Postfix) with ESMTPSA id 665A02C016F;
+        Sat, 25 May 2019 21:54:17 +0200 (CEST)
+Date:   Sat, 25 May 2019 21:54:17 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Ajay Gupta <ajaykuee@gmail.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
+Subject: Re: [PATCH v3 1/5] i2c: nvidia-gpu: refactor master_xfer
+Message-ID: <20190525195416.GA12538@kunai>
+References: <20190522183142.11061-1-ajayg@nvidia.com>
+ <20190522183142.11061-2-ajayg@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="k+w/mQv8wyuph6w0"
 Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190522183142.11061-2-ajayg@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-fix  below warning reported by coccicheck
 
-./drivers/usb/misc/ftdi-elan.c:2026:11-13: WARNING: possible condition
-with no effect (if == else)
+--k+w/mQv8wyuph6w0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
----
- drivers/usb/misc/ftdi-elan.c | 7 -------
- 1 file changed, 7 deletions(-)
+On Wed, May 22, 2019 at 11:31:38AM -0700, Ajay Gupta wrote:
+> From: Ajay Gupta <ajayg@nvidia.com>
+>=20
+> Added a local variable "send_stop" to simplify "goto" statements.
+>=20
+> The "send_stop" handles below two case
+> 1) When first i2c start fails and so i2c stop is not sent before
+> exiting
+>=20
+> 2) When i2c stop failed after all transfers and we do not need to
+> send another stop before exiting.
+>=20
+> Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
 
-diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
-index 257efac..cdee3af 100644
---- a/drivers/usb/misc/ftdi-elan.c
-+++ b/drivers/usb/misc/ftdi-elan.c
-@@ -2023,13 +2023,6 @@ static int ftdi_elan_synchronize(struct usb_ftdi *ftdi)
- 						goto read;
- 					} else
- 						goto reset;
--				} else if (s1 == 0x31 && s2 == 0x60) {
--					if (read_stop-- > 0) {
--						goto read;
--					} else {
--						dev_err(&ftdi->udev->dev, "retry limit reached\n");
--						continue;
--					}
- 				} else {
- 					if (read_stop-- > 0) {
- 						goto read;
--- 
-2.7.4
+Nice! It was only a brainstorming suggestion to use a dedicated flag.
+But I must say I like the outcome; much better readable code IMO.
 
+Suggested-by: Wolfram Sang <wsa@the-dreams.de>
+Reviewed-by: Wolfram Sang <wsa@the-dreams.de>
+
+
+--k+w/mQv8wyuph6w0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzpnWQACgkQFA3kzBSg
+KbYnoxAAlOYKXyr2nn5llU8SCVD/VC4H0NutVS+IiIVq15EJbgrj9T1MscwhSijx
+ruoLkN5JieuCWcG/QgGPQXE77ALn5bPG2sbYCoQPsoXEMTo3isU/bdTszHbd2bvO
+jJ0IDkrmGgttxwg58GGpgwOZ+LVfiZ4vdmZ63Mg3VZUD2yv3/AA3ZN4s4hmJItIO
+1yC+tsvYPzte8jMliICxO/3Qvh2lSkD1UEWz7BcOvFjJxEmCLHUoLAP1/8o50Szs
+vT9f96m1g58eLeNqnjlgWHZdx4e/Fbsf61gfig55rM6gaScZhjroOJX9zwurXmVf
+JTMWg8XiGNcKaN77vxNJBplbN90E/5A5DFDMkyQLkOZ9q/pKKvbuIxXbTMG0rIDL
+UQUelgiavTo7KZ/o000w+R8DDQKBay2Swc7YT3AC5Ly4hoMluxyJdGW3116FvfV2
+hwByNAkt4lv8V0rd5AbqlOSFkeFgFvZbaqdy2QOwXgzBs0WKVMK+T7KGWtpOcMNr
+CBipVNFqiCXwEbfsGoxB+F9GDWMgVoJCBkxzWBurF/++64wdkqklTNN0S8oUAoFu
+dD6R4lDiFudhWMbMhikxX32Xp4aq3EU+/zAKd8gUzahkacInDItMgT8aKVAI5lyi
+P+mJal781Sny3ugIXvxcKcu9MCFRPZIw10C2BDw0E1Z8Dk9Zzes=
+=3eKO
+-----END PGP SIGNATURE-----
+
+--k+w/mQv8wyuph6w0--
