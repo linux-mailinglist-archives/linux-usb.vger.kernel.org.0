@@ -2,86 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C13572A6DD
-	for <lists+linux-usb@lfdr.de>; Sat, 25 May 2019 21:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA05D2A93B
+	for <lists+linux-usb@lfdr.de>; Sun, 26 May 2019 12:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727392AbfEYT6z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 May 2019 15:58:55 -0400
-Received: from sauhun.de ([88.99.104.3]:46558 "EHLO pokefinder.org"
+        id S1727689AbfEZKLs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 May 2019 06:11:48 -0400
+Received: from mout.gmx.net ([212.227.15.15]:57223 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725791AbfEYT6z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 25 May 2019 15:58:55 -0400
-Received: from localhost (p5486CB33.dip0.t-ipconnect.de [84.134.203.51])
-        by pokefinder.org (Postfix) with ESMTPSA id 2E7D22C016F;
-        Sat, 25 May 2019 21:58:53 +0200 (CEST)
-Date:   Sat, 25 May 2019 21:58:52 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Ajay Gupta <ajaykuee@gmail.com>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-Subject: Re: [PATCH v3 4/5] i2c: nvidia-gpu: resume ccgx i2c client
-Message-ID: <20190525195852.GC12538@kunai>
-References: <20190522183142.11061-1-ajayg@nvidia.com>
- <20190522183142.11061-5-ajayg@nvidia.com>
+        id S1727681AbfEZKLs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 26 May 2019 06:11:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1558865489;
+        bh=RsZzmmSplgdO28RoGwyrViaNFl/kTmVpO3gWicYofcQ=;
+        h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
+        b=eZteg3NakwWwjquYjLdxx92cKYsyjV7TRjaZsZFAs/4aRWwxILuiunOaQaHL4DXs2
+         AtpQ9LO+4Z83T1ePgQmNvpS2LTIgwhFYbKhD6QXXmxr1fsbWsRRUXk9nbVREcIVlMF
+         JDHUTQv60oCznt6GfmBoWidcNSIZQzUZ3jFZWk7g=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.1.166] ([37.4.249.160]) by mail.gmx.com (mrgmx001
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 0MIMUZ-1hTT5C20TP-0047nm; Sun, 26
+ May 2019 12:11:29 +0200
+To:     =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will.deacon@arm.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+From:   Stefan Wahren <wahrenst@gmx.net>
+Subject: usb: dwc2: RODATA_FULL_DEFAULT_ENABLED causes kernel oops
+Message-ID: <0ae6261e-96b3-cf8b-d523-a6b8851c951b@gmx.net>
+Date:   Sun, 26 May 2019 12:11:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xesSdrSSBC0PokLI"
-Content-Disposition: inline
-In-Reply-To: <20190522183142.11061-5-ajayg@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:1dhw3hl/QquHu4b0qlpUUv5UepZ1XfJqfyDw1LRXaSoxGWxpLFt
+ c6IzWcCrmkQNkaOsBZaov9zx2QvyKyO9jpCnfUPabUJZWNC4ZhmAoLyZhZkD327VwXvGZA3
+ YfLDzg1Rxv+2VqoGkNhMXEItWkTjHb+rQWly0+hZegqZO7PYyhOWRmzR0y0QybQEQq56E7X
+ qvfs9yYSC65sCOtu92x3g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yTAV9FBPStY=:+GhH0LwmaG47T8JvhAc0Y3
+ azIx7ioiRhcYzrkSP9I/wY1l/qQ1Nu4BBav857JgQUaWe36fksVAcgBHjqHOWr6sAGr99B+hL
+ rAK3K7XuxHBeVmps9C5aK6d6OX8/RQAAoj3iijdgHL3Jsn+YbR1EKQ/0OPihBAIvgTm+1gBTm
+ Xclj8gUAjqfxnqG0pQqeWKyhOzWwm41EmGubDcg3CJcAKuRdTwkAr4N/ySSiw8rxqmBzPpwMr
+ A79m5x4t6pc0uFbYtvaq3Ocq/AhqqwKgLZWPLW5BUPK4Wox7LDGJJJZuNlQQ7mZiHEVsZDawF
+ tnpnxSFOQPw5OEDYoQfEg1gTlvPtZ5wZdRbAvHRdeFwSFJhgSVxEOep19h7D/4sxfaQ6lJWrU
+ k6XI9HbB6TSXJBKCKsJD4LlS4YxiX0j6BKE4I9dVQNOXXwHZTWN3+/OvLoAnUubRL1ruR1eqA
+ atufEAjsZBrm+PwcwHLEF+GtbJvfp3NWifzuCKop7/Sly3XbvOC1qeWgAZ9Z5fbLnb4vpqHF8
+ 5cVe6sFLt9m8Uecajip33TE4dLBehZLSd1F1OJsS4NXJMWQm7ntZrf17p49hhqliQf8ZAcopC
+ BJn2jnBBYLQ5k43qJqR9rNW3TFV6guU8LU5l1kpTkOL0S9PcgZgywTNsf7OK4JMygCL16jwrP
+ TaJbys5B6XdegzcN/9LeZLI7Gwjl2z5M8j5NF2LESCBxkWvPZv+M2qmCCQZQJojZ5SIn22D1M
+ ozRFhreTthkC7BeEcRcbqQAiwPsNmZb4V/WGOiTOYn6pSK1eY+yv+IOJ7tqNZYhu7zKKxDKWT
+ o7bR6ZElY3QAW4vmjZci13gytUpKfy03+H5SliTN8LVt2TFPwlqShLEQDRWEHOnTLE/SSIzE7
+ vwSc1Hjk2aXBAUL6G8+Q13FrapMMj+KaLy+iZLgdgt0Zywgp/WMXinlEeQf5Cuss3p6OdofPZ
+ z1qdC5tbqww2jvvQGaduOb0n7fV9nVUfhF8fcINkd0gyQob9SN56R
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
---xesSdrSSBC0PokLI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+i want to remind about an issue which was originally reported by Wayne
+Piekarski [1]. I'm able to reproduce this oops with Mainline Linux 5.0.2
+on a Raspberry Pi 3B+ (arm64/defconfig) and according to Jan Kratochvil
+[2] this applies to 5.1.0 and 5.2.0.
 
-On Wed, May 22, 2019 at 11:31:41AM -0700, Ajay Gupta wrote:
-> From: Ajay Gupta <ajayg@nvidia.com>
->=20
-> Cypress USB Type-C CCGx controller firmware version 3.1.10
-> (which is being used in many NVIDIA GPU cards) has known issue of
-> not triggering interrupt when a USB device is hot plugged to runtime
-> resume the controller. If any GPU card gets latest kernel with runtime
-> pm support but does not get latest fixed firmware then also it should
-> continue to work and therefore a workaround is required to check for
-> any connector change event
->=20
-> The workaround is to request runtime resume of i2c client
-> which is UCSI Cypress CCGx driver. CCG driver will call the ISR
-> for any connector change event only if NVIDIA GPU has old
-> CCG firmware with the known issue.
->=20
-> Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
+The crash is reproducible since commit c55191e96ca ("arm64: mm: apply
+r/o permissions of VM areas to its linear alias as well"), but the root
+cause of the crash was introduced much earlier with commit 56406e017a88
+("usb: dwc2: Fix DMA alignment to start at allocated boundary").
 
-Can't say if this is a valid workaround but here is my ack for modifying
-the I2C realm:
+I tested successfully the following workarounds with the RPi 3B+:
 
-Acked-by: Wolfram Sang <wsa@the-dreams.de>
+1) Disable RODATA_FULL_DEFAULT_ENABLED
 
+2) revert commit 56406e017a88 ("usb: dwc2: Fix DMA alignment to start at
+allocated boundary")
 
---xesSdrSSBC0PokLI
-Content-Type: application/pgp-signature; name="signature.asc"
+It would be nice if someone can come up with a proper solution.
 
------BEGIN PGP SIGNATURE-----
+Regards
+Stefan
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzpnnwACgkQFA3kzBSg
-Kbb4xBAAr0Jk4qrB9mRCfyYB50te6dejjLWIrKpP/ZnQax2vXjNy0EvbdPGbcykN
-a3btkeFJz96xUAEEWilTBznj2V6mgPO78h69s6+ZVgMY0ggC/43pY8cGZ5CAQqu6
-M7sL5nox2ga/auhCshL5QZZNd0cHijtzYoMnRA+iJKr5PkqPVNMxIGhLUPBmLPJ1
-56Z3snzgfsOrRkOAjeKj8+/oPH1D+Tbu1kVmOHl5UGiQbzI3LN16bWepZZa4kMJ8
-DGcAYFc2Nqm2XC8UeoekW0pqzT4HYGlwSbXRmZpSvEgE0ToA6p5hyZK2K8ZBzmkP
-vEzX6Ma8JqzZzUJgeckxCr0osfdAUnLQaA/swZyKVrNBcU8my6ABFy64a+F591hZ
-Ya+re6jfVWU68+fLBxBVXnQ4/GCUb6KoXv0b07UZCkTid/Nl/DMtdGX4YEpDu8ho
-ZBNp6C7w7kb8UFxIDhbNvKxHVkCfVD9iMfkDet9lOlsAkVtYacDKcfSaAqDLKOWp
-U8/hX+qfgxCq8uniwifC8/3tYpVi/uiFkqsj/MMdHq8B9VhtKZw+djybk4GF4AeB
-XZ6JFWiqf3MkJ2GhkQ7w0lrBRxGtIi7WrtP5gcQ6aCYQ2eTSi4XTlCX3HY4D+WdH
-ArGJHBZbEVwZgbLZJkRMwKd9wZrKwHbztLGUfQNmzhYbpdbaBIY=
-=LmJF
------END PGP SIGNATURE-----
+[1] - https://marc.info/?l=linux-usb&m=155440243702650&w=2
+[2] - https://bugzilla.kernel.org/show_bug.cgi?id=203149
 
---xesSdrSSBC0PokLI--
