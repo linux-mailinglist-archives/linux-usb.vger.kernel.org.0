@@ -2,50 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDD12A9D2
-	for <lists+linux-usb@lfdr.de>; Sun, 26 May 2019 14:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D442AB83
+	for <lists+linux-usb@lfdr.de>; Sun, 26 May 2019 20:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727758AbfEZM60 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 May 2019 08:58:26 -0400
-Received: from mail-it1-f195.google.com ([209.85.166.195]:50957 "EHLO
-        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726953AbfEZM6Z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 May 2019 08:58:25 -0400
-Received: by mail-it1-f195.google.com with SMTP id a186so13033483itg.0
-        for <linux-usb@vger.kernel.org>; Sun, 26 May 2019 05:58:25 -0700 (PDT)
+        id S1727992AbfEZSCg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 May 2019 14:02:36 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:39548 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727979AbfEZSCg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 May 2019 14:02:36 -0400
+Received: by mail-it1-f194.google.com with SMTP id 9so21064084itf.4
+        for <linux-usb@vger.kernel.org>; Sun, 26 May 2019 11:02:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=inQTV1Z0gJKzbwP6Z2SUXZUk5axOrsDl8jgpMomhBw0=;
-        b=GO350rD9D39nyve7Hxv9YlVGqQNk4NLMXGeXRsTRnVyESPeO03TcRfW4bcxuB8x57m
-         a6TUvYly2npSbut+4p5l1sYKG5rIu8itny7ijgSllmyHXfze9QH1boOXaz+DiyBan/Uo
-         52uApQ2zH43rmlc3QuWC8EZ6q9AW9GqQMNDZKLxVcgg95gCdogf+rglA+p3WwuaG69Ri
-         oD7rLa0ZOf1lU//XxGc2xWWZFEotBiqOUaNiKNCKmqTKnCkEn3OWqkMZni8X8fCLepRQ
-         nPSSILhVbHUFFZ30hnfOohKxyTuk66xey2FuCrGeA+L0JS4xBhCxUwR8SvrkET4cNJNa
-         bgIQ==
+        bh=w9ucTgTenNw/76da0Hs8BAQoNmqkFrLKFM96xtUMtlE=;
+        b=AKgxoqFCZzjngjXOkpRndLvEmicBBu+xGNIRVdjCKtdd/aU1a3hkWH0IoDa+Xvk+vq
+         R91+vFdKaErBA42JES3nYPN74PZwzpEMxpgWsrPw78BeRPmF3uUZ9isHLQb1QapQEzqD
+         AZNRuIhz9EikBAm+LhMX/y42h/Bq6GuKwjMYX7YXQd2wX5hVPKMXr1Hs9+3xC8aopVVt
+         xU5+7wkejsB0W0otZpv5y0UqerW8JEGHWywjz5HzLRFB6J9zZOcYs2+aH0mqKqKNXlKw
+         bIVwFjP5ALk/iD9bzS0QsJF2A1AHS4iWQz/MpP8vUtkDlMKLTB36HskUrQ8tuU5hIC07
+         Q8KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=inQTV1Z0gJKzbwP6Z2SUXZUk5axOrsDl8jgpMomhBw0=;
-        b=YIKUyAnedo9snC7qV0+KHmUygtEpRusJTRT/M0LD4rt57NKpco8b66uhLEDEyCLMnB
-         capFtDK54WjJz6io5UlGO1Br5m3qgZ/8KcoIBkGKTPU80xoRqy7lmNBKF74Lm1eqxsyi
-         aTqG9YVP6bS88zk1ShLVF3WaxU9dIzF/f3Txxh3f6Y9v1jnqdnIltIDqiZXcZ9xd1jzq
-         3cDAXIvBlwCqoXtH2+dFCzd+K5X8FJdmFSHObf03Gecb4paBjxUSnl9FFwfM+qXYwnMe
-         pwGAHq/qjLh21Q/rQWQF81gIsljTKSYWyYogKSwzWNYJU3MUAat3orwWjkVGHFzjikPB
-         3Xnw==
-X-Gm-Message-State: APjAAAXYwOSTA5/GCu0CDBz7BOPn3Vs0BJeL97tuTKC1IIRjyQ7ywbgi
-        bpRggdyufe4ga94Zj6fNUMOMhP7AbFfQ/BHkJgnDSw==
-X-Google-Smtp-Source: APXvYqzeoIYFh+RLz4ra4CSSNh1VULShRpWGDrIz41W1gMP2WaH/WejFL5gpVrJiDfZfSN/uyYdJ0KvN1uIeWkGOyVY=
-X-Received: by 2002:a24:910b:: with SMTP id i11mr27031774ite.76.1558875504923;
- Sun, 26 May 2019 05:58:24 -0700 (PDT)
+        bh=w9ucTgTenNw/76da0Hs8BAQoNmqkFrLKFM96xtUMtlE=;
+        b=XVUnLOdDwqjYRxMvbNiFwPU5Xol/rPXqXX5eVFHDxMvw+zrhy6B0VcMc5lkVWRJvz7
+         UPL4LZYste7VepfFOIfdVguqjldPJ5UGL4Dwn4gHdiUEwjZhGa1DgH14rb3uFBFslR+9
+         /o9eckMSDJmYpCPSdAzouTteRILVtr2CzXixHVUarqlH2hlEa2hPPcDNdHSlk0/HPkfE
+         YJSBavEiOj68zf/dpmKN227Vb1kcitZc53jyVyfcDyJy2vPyb5d0drCHMggDNdTc0D2a
+         06BaXEdxZ6iM1CdTWTmVg0bU2mlsaj65+pCWw84OtHTvfeUMEdplYszEGEzKcLXx9ZgG
+         zQLA==
+X-Gm-Message-State: APjAAAU/XxqgobS2mfh5whwnLb6Ygl+SC67QskA9m/QIu2JGRndOovtd
+        sSeFpRQ3xZzOikwzOh0nNXsPTFpfkostVL95oIKPDA==
+X-Google-Smtp-Source: APXvYqx2qBD9cRwhPDlsjouVK6mr5mk3j0GDY6Ebq306CUb2YYZOGAX929/s4RJJem5bQtqlvpOzjtHIflontUAKo+w=
+X-Received: by 2002:a24:910b:: with SMTP id i11mr27912268ite.76.1558893755513;
+ Sun, 26 May 2019 11:02:35 -0700 (PDT)
 MIME-Version: 1.0
 References: <0ae6261e-96b3-cf8b-d523-a6b8851c951b@gmx.net> <CAKv9HNaJg3OB3DrC_aJe0M97dFP9A0_Jew_wFqReHvzDoFF+sg@mail.gmail.com>
-In-Reply-To: <CAKv9HNaJg3OB3DrC_aJe0M97dFP9A0_Jew_wFqReHvzDoFF+sg@mail.gmail.com>
+ <CAKv+Gu8fHfmMk63jzvtUGpHb=Nf1bzUvXay8_Hi4YTz=96pQNg@mail.gmail.com>
+In-Reply-To: <CAKv+Gu8fHfmMk63jzvtUGpHb=Nf1bzUvXay8_Hi4YTz=96pQNg@mail.gmail.com>
 From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Date:   Sun, 26 May 2019 14:58:12 +0200
-Message-ID: <CAKv+Gu8fHfmMk63jzvtUGpHb=Nf1bzUvXay8_Hi4YTz=96pQNg@mail.gmail.com>
+Date:   Sun, 26 May 2019 20:02:23 +0200
+Message-ID: <CAKv+Gu_OWrLuQGSinANa27Km4XiJg1MU6oUf=vZ77EXQoC8bZw@mail.gmail.com>
 Subject: Re: usb: dwc2: RODATA_FULL_DEFAULT_ENABLED causes kernel oops
 To:     =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>
 Cc:     Stefan Wahren <wahrenst@gmx.net>,
@@ -63,95 +64,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 26 May 2019 at 12:45, Antti Sepp=C3=A4l=C3=A4 <a.seppala@gmail.com>=
- wrote:
+On Sun, 26 May 2019 at 14:58, Ard Biesheuvel <ard.biesheuvel@linaro.org> wr=
+ote:
 >
-> On Sun, 26 May 2019 at 13:11, Stefan Wahren <wahrenst@gmx.net> wrote:
+> On Sun, 26 May 2019 at 12:45, Antti Sepp=C3=A4l=C3=A4 <a.seppala@gmail.co=
+m> wrote:
 > >
-> > Hi,
+> > On Sun, 26 May 2019 at 13:11, Stefan Wahren <wahrenst@gmx.net> wrote:
+> > >
+> > > Hi,
+> > >
+> > > i want to remind about an issue which was originally reported by Wayn=
+e
+> > > Piekarski [1]. I'm able to reproduce this oops with Mainline Linux 5.=
+0.2
+> > > on a Raspberry Pi 3B+ (arm64/defconfig) and according to Jan Kratochv=
+il
+> > > [2] this applies to 5.1.0 and 5.2.0.
+> > >
+> > > The crash is reproducible since commit c55191e96ca ("arm64: mm: apply
+> > > r/o permissions of VM areas to its linear alias as well"), but the ro=
+ot
+> > > cause of the crash was introduced much earlier with commit 56406e017a=
+88
+> > > ("usb: dwc2: Fix DMA alignment to start at allocated boundary").
+> > >
+> > > I tested successfully the following workarounds with the RPi 3B+:
+> > >
+> > > 1) Disable RODATA_FULL_DEFAULT_ENABLED
+> > >
+> > > 2) revert commit 56406e017a88 ("usb: dwc2: Fix DMA alignment to start=
+ at
+> > > allocated boundary")
+> > >
+> > > It would be nice if someone can come up with a proper solution.
+> > >
+> > > Regards
+> > > Stefan
+> > >
+> > > [1] - https://marc.info/?l=3Dlinux-usb&m=3D155440243702650&w=3D2
+> > > [2] - https://bugzilla.kernel.org/show_bug.cgi?id=3D203149
+> > >
 > >
-> > i want to remind about an issue which was originally reported by Wayne
-> > Piekarski [1]. I'm able to reproduce this oops with Mainline Linux 5.0.=
-2
-> > on a Raspberry Pi 3B+ (arm64/defconfig) and according to Jan Kratochvil
-> > [2] this applies to 5.1.0 and 5.2.0.
+> > Hello.
 > >
-> > The crash is reproducible since commit c55191e96ca ("arm64: mm: apply
-> > r/o permissions of VM areas to its linear alias as well"), but the root
-> > cause of the crash was introduced much earlier with commit 56406e017a88
-> > ("usb: dwc2: Fix DMA alignment to start at allocated boundary").
-> >
-> > I tested successfully the following workarounds with the RPi 3B+:
-> >
-> > 1) Disable RODATA_FULL_DEFAULT_ENABLED
-> >
-> > 2) revert commit 56406e017a88 ("usb: dwc2: Fix DMA alignment to start a=
-t
-> > allocated boundary")
-> >
-> > It would be nice if someone can come up with a proper solution.
-> >
-> > Regards
-> > Stefan
-> >
-> > [1] - https://marc.info/?l=3Dlinux-usb&m=3D155440243702650&w=3D2
-> > [2] - https://bugzilla.kernel.org/show_bug.cgi?id=3D203149
+> > This is just a shot in the dark but have you tried to apply DMA cache
+> > alignment issue fix [1] as a third workaround alternative?
+> > If it helps the fix should be merged upstream.
 > >
 >
-> Hello.
->
-> This is just a shot in the dark but have you tried to apply DMA cache
-> alignment issue fix [1] as a third workaround alternative?
-> If it helps the fix should be merged upstream.
->
 
-Is transfer_buffer_length guaranteed to be a multiple of the max
-D-cache line size in the system? If not, you will need to explicitly
-flush the cache in dwc2_alloc_aligned_buffer() after memcpy()ing the
-original buffer address into the newly allocated buffer, or subsequent
-cache invalidation done in the DMA layer may wipe it.
+Apologies, I should have looked at the patch first :-)
 
-Alternatively, you can round up transfer_buffer_length to be a
-multiple of L1_CACHE_BYTES, e.g.,
+It does exactly what I proposed - ensure that DMA related cache
+invalidation does not wipe the stored_xfer_buffer pointer.
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index b50ec3714fd8..84d43435d86e 100644
---- a/drivers/usb/dwc2/hcd.c
-+++ b/drivers/usb/dwc2/hcd.c
-@@ -2480,8 +2480,9 @@ static void dwc2_free_dma_aligned_buffer(struct urb *=
-urb)
-                return;
-
-        /* Restore urb->transfer_buffer from the end of the allocated area =
-*/
--       memcpy(&stored_xfer_buffer, urb->transfer_buffer +
--              urb->transfer_buffer_length, sizeof(urb->transfer_buffer));
-+       memcpy(&stored_xfer_buffer,
-+              urb->transfer_buffer +
-L1_CACHE_ALIGN(urb->transfer_buffer_length),
-+              sizeof(urb->transfer_buffer));
-
-        if (usb_urb_dir_in(urb)) {
-                if (usb_pipeisoc(urb->pipe))
-@@ -2512,7 +2515,7 @@ static int dwc2_alloc_dma_aligned_buffer(struct
-urb *urb, gfp_t mem_flags)
-         * pointer. This allocation is guaranteed to be aligned properly fo=
-r
-         * DMA
-         */
--       kmalloc_size =3D urb->transfer_buffer_length +
-+       kmalloc_size =3D L1_CACHE_ALIGN(urb->transfer_buffer_length) +
-                sizeof(urb->transfer_buffer);
-
-        kmalloc_ptr =3D kmalloc(kmalloc_size, mem_flags);
-@@ -2523,7 +2526,7 @@ static int dwc2_alloc_dma_aligned_buffer(struct
-urb *urb, gfp_t mem_flags)
-         * Position value of original urb->transfer_buffer pointer to the e=
-nd
-         * of allocation for later referencing
-         */
--       memcpy(kmalloc_ptr + urb->transfer_buffer_length,
-+       memcpy(kmalloc_ptr + L1_CACHE_ALIGN(urb->transfer_buffer_length),
-               &urb->transfer_buffer, sizeof(urb->transfer_buffer));
-
-        if (usb_urb_dir_out(urb))
+sorry for the noise
