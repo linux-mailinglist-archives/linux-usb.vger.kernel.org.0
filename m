@@ -2,115 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2AF2B261
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2019 12:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4733D2B2FF
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2019 13:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbfE0KpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 May 2019 06:45:13 -0400
-Received: from mga18.intel.com ([134.134.136.126]:30969 "EHLO mga18.intel.com"
+        id S1726133AbfE0LOS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 May 2019 07:14:18 -0400
+Received: from mga17.intel.com ([192.55.52.151]:12544 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725943AbfE0KpN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 May 2019 06:45:13 -0400
-X-Amp-Result: UNSCANNABLE
+        id S1725858AbfE0LOS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 May 2019 07:14:18 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 May 2019 03:45:12 -0700
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 May 2019 04:14:17 -0700
 X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 27 May 2019 03:45:07 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 27 May 2019 13:45:06 +0300
-Date:   Mon, 27 May 2019 13:45:06 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Biju Das <biju.das@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 4/6] usb: roles: add API to get usb_role_switch by node
-Message-ID: <20190527104506.GA7167@kuha.fi.intel.com>
-References: <20190520083601.GE1887@kuha.fi.intel.com>
- <OSBPR01MB2103C4C8920C40E42BC1B2A9B8060@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <20190521095839.GI1887@kuha.fi.intel.com>
- <OSBPR01MB21032206146152983C8F4E8EB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <1558517436.10179.388.camel@mhfsdcap03>
- <OSBPR01MB21038F2B99EF74831A22727BB8000@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <20190522142640.GN1887@kuha.fi.intel.com>
- <1558606570.10179.403.camel@mhfsdcap03>
- <20190524114036.GO1887@kuha.fi.intel.com>
- <1558926443.10179.438.camel@mhfsdcap03>
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by orsmga007.jf.intel.com with ESMTP; 27 May 2019 04:14:15 -0700
+Subject: Re: [PATCH] xhci: clear port_remote_wakeup after resume failure
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     oneukum@suse.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190524145231.6605-1-nsaenzjulienne@suse.de>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <eb5d9252-1283-be73-96d6-c24a0fdf1eab@linux.intel.com>
+Date:   Mon, 27 May 2019 14:16:58 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1558926443.10179.438.camel@mhfsdcap03>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190524145231.6605-1-nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-> > IMO that case should be handled in USB role switch API initially, not
-> > in the device connection API. If there is another user for it one day,
-> > then we can move it to device connection API, but not before that.
-> Ok
-> > 
-> > How about this on top of the two patches I sent:
-> I just test it, it works well.
-> I'll prepare a patch and put into this series.
+On 24.5.2019 17.52, Nicolas Saenz Julienne wrote:
+> This was seen on a Dell Precision 5520 using it's WD15 dock. The dock's
+> Ethernet device interfaces with the laptop through one of it's USB3
+> ports. While idle, the Ethernet device and HCD are suspended by runtime
+> PM, being the only device connected on the bus. Then, both are resumed on
+> behalf of the Ethernet device, which has remote wake-up capabilities.
 > 
-> > 
-> > diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> > index aab795b54c7f..36ac9d181e09 100644
-> > --- a/drivers/usb/roles/class.c
-> > +++ b/drivers/usb/roles/class.c
-> > @@ -114,6 +114,19 @@ static void *usb_role_switch_match(struct device_connection *con, int ep,
-> >         return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
-> >  }
-> > 
-> > +static struct usb_role_switch *
-> > +usb_role_switch_is_parent(struct fwnode_handle *parent)
-> > +{
-> > +       struct device *dev;
-> > +
-> > +       if (!parent || !fwnode_property_present(parent, "usb-role-switch"))
-> > +               return NULL;
-> > +
-> > +       dev = class_find_device(role_class, NULL, parent, switch_fwnode_match);
-> > +
-> > +       return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
-> > +}
-> > +
-> >  /**
-> >   * usb_role_switch_get - Find USB role switch linked with the caller
-> >   * @dev: The caller device
-> > @@ -125,6 +138,10 @@ struct usb_role_switch *usb_role_switch_get(struct device *dev)
-> >  {
-> >         struct usb_role_switch *sw;
-> > 
-> > +       sw = usb_role_switch_is_parent(fwnode_get_parent(dev_fwnode(dev)));
-> > +       if (sw)
-> > +               return sw;
-> Do we also need to get parent module before return?
+> The Ethernet device was observed to randomly disconnect from the USB
+> port shortly after submitting it's remote wake-up request. Probably a
+> weird timing issue yet to be investigated. This causes runtime PM to
+> busyloop causing some tangible CPU load. The reason is the port gets
+> stuck in the middle of a remote wake-up operation, waiting for the
+> device to switch to U0. This never happens, leaving "port_remote_wakeup"
+> enabled, and automatically triggering a failure on any further suspend
+> operation.
+> 
+> This patch clears "port_remote_wakeup" upon detecting a device with a
+> wrong resuming port state (see Table 4-9 in 4.15.2.3). Making sure the
+> above mentioned situation doesn't trigger a PM busyloop.
+> 
 
-Yes.
+There was a similar case where the USB3 link had transitioned to a
+lower power U1 or U2 state after resume, before driver read the state,
+leaving port_remote_wakeup flag uncleared.
 
-thanks,
+This was fixed in 5.1 kernel by commit:
 
--- 
-heikki
+6cbcf59 xhci: Fix port resume done detection for SS ports with LPM enable
+
+Can you check if you have it?
+It should be in recent stable releases as well.
+
+-Mathias
