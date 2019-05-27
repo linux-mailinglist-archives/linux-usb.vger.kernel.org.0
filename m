@@ -2,153 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEA32B355
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2019 13:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23042B37B
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2019 13:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbfE0LiI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 May 2019 07:38:08 -0400
-Received: from mail-it1-f197.google.com ([209.85.166.197]:53978 "EHLO
-        mail-it1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725858AbfE0LiH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 May 2019 07:38:07 -0400
-Received: by mail-it1-f197.google.com with SMTP id m14so15678509itl.3
-        for <linux-usb@vger.kernel.org>; Mon, 27 May 2019 04:38:06 -0700 (PDT)
+        id S1726106AbfE0LuV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 May 2019 07:50:21 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:40827 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726094AbfE0LuV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 May 2019 07:50:21 -0400
+Received: by mail-lf1-f68.google.com with SMTP id h13so11853593lfc.7
+        for <linux-usb@vger.kernel.org>; Mon, 27 May 2019 04:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=pp1HOfS6OCew4hOY4gEFNb0Q8jF2KOJSncUe3LIsm+E=;
+        b=f47GmnwIjwZrqaU7ErzymLfrdqvyrdyCmixvkkYF3dzWPX66Bb+EjcyzmV5wdPTAPv
+         C6S6wWFK6qYi1olY4pjCb4KR6WE/vFlSleCYArbDO7XtAodmS2iV7+Oye5h86ES/AaWH
+         7EFgUsE3f/L/s6qc0zPlSszcq6iaU+9hOOOnW08tB3pyOWvAGSZPsIDgrPqoPGUReUdX
+         eQNZ3OxdC6i8Uep+ZPWgdpN7f9XNSiMybIoj1SWvYx7Qyfqg7sULEPDRZUQ5Kjsvl0nB
+         DqXh6zrrAWjNc0wbsgcOs1yynW/ArR0BEofc23odR0fYDb+5ai3Dkp2ySEBfSt3RNm9R
+         4TVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=3ofJz0VOtKLU8MeevgDTLa64a60th9mQF2FKBUhaEfo=;
-        b=paDYKo/zKeKQv2gKnLSKuFDmAS9mCZkHDRGICcyyJIoBLPp3eHzP1AqphOFcgH8ZNu
-         Vy6yjpIh2cTubTjmgZFEWQKwBa6QmAi3H1453DceQDhofeZmNRfGJlp7ajb5f0eSUlzi
-         FlWr2MTvszbYe+e7nq7zrSplPv9VXiIpuIw0EzSJqx+D1zN/3+F03A7Lnr/qrgrapM+n
-         FiIFvVUYVRyfJ/q5H9pkvG11s+UyH057FxVa+cwcZhdV+8HcbskwZZiEnWa7FRZGuUN3
-         UnvlS7FgBy8u5lZyphHl53TKLJ2Wg4Lr/5vIPB4mWY/LW8152i/aS6VJyywCYkR/HeBd
-         gZww==
-X-Gm-Message-State: APjAAAWtcKGkr7vbQnxcRFXddWuBaPJ8VoeSbIEco1qny+U+2pbS0dyq
-        cpoHK6ocFRP4ps7hDnNrk/Cj6hD/pHOv/rz1NiDw4a7Yb5HA
-X-Google-Smtp-Source: APXvYqx3RE6uJKijGeIKhmkzojrhR8IqNMfF5lo/O5KVrJ1mEjMuBtHdWc7JwKkln31iNhl+Vphvgo3ijbgtwRp9AlqVFXgYeGkv
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=pp1HOfS6OCew4hOY4gEFNb0Q8jF2KOJSncUe3LIsm+E=;
+        b=DUI8ABntlU2HnAOlnEwtDyFjUMe1OWSusQ+O7C9mr8IFcaEU7grbRkyZ7mz1T3N5Lk
+         O06TQifoDlQvLaDfNrrx9BMXhOva6T2dUPoTZ4LQZUKZcf/cbzVPVzPhqz8HPrmvhCDx
+         +wpJZ+ssqCF7G4SaDJZvvYm53lek8tRguGEEHmsepOarIhuA/Nv/HKvPxF1fhLhFS2+M
+         Hk5m5wdZsnI3GVUy4atXx9014HxAFV8ONV1fGZp5DFCEQVkGNdzrttg5/9k8R7l56zk/
+         iX+r5lL/qGVnuOL87p6FA1pH4SvC5YZVDXR6OAuAhHO079q4PtUyGvPWzHrTmbXjxhGk
+         N4pA==
+X-Gm-Message-State: APjAAAWgfQCjFkIu4utI0EmImVuOSpsZdVHBaig9V2Cn4D8N7uAjJ/ZK
+        aIQyd7DUUq/YE2kmnZB0iTiv4g==
+X-Google-Smtp-Source: APXvYqyeghVw7Hlqyc73MevUBLPu49ZgfVRkkFi1ISP4HjS790w/5OwT2liWW8VlG9UnUuwgJce1kw==
+X-Received: by 2002:ac2:59c8:: with SMTP id x8mr8006293lfn.189.1558957818849;
+        Mon, 27 May 2019 04:50:18 -0700 (PDT)
+Received: from [192.168.0.199] ([31.173.80.152])
+        by smtp.gmail.com with ESMTPSA id y14sm2239532ljh.60.2019.05.27.04.50.15
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 May 2019 04:50:17 -0700 (PDT)
+Subject: Re: [PATCH 1/1] usb: chipidea: udc: workaround for endpoint conflict
+ issue
+To:     Peter Chen <hzpeterchen@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>, linux-usb@vger.kernel.org,
+        linux-imx@nxp.com, stable@vger.kernel.org, Jun Li <jun.li@nxp.com>
+References: <20190527074222.42970-1-peter.chen@nxp.com>
+ <64ff033b-7f7e-ad91-ac06-73ebd8565286@cogentembedded.com>
+ <CAL411-ouY92Yk2TGqdx9KuhT71p=qEcSC426JwmerBmFAXd+=A@mail.gmail.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <1ddc434b-5771-6af1-e63a-581ef11a21b5@cogentembedded.com>
+Date:   Mon, 27 May 2019 14:49:56 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-Received: by 2002:a6b:5812:: with SMTP id m18mr1656876iob.13.1558957086368;
- Mon, 27 May 2019 04:38:06 -0700 (PDT)
-Date:   Mon, 27 May 2019 04:38:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005a6b660589dcfb60@google.com>
-Subject: WARNING in line6_pcm_acquire
-From:   syzbot <syzbot+192a537b5c634febc6cf@syzkaller.appspotmail.com>
-To:     alsa-devel@alsa-project.org, andreyknvl@google.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, perex@perex.cz,
-        syzkaller-bugs@googlegroups.com, tiwai@suse.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <CAL411-ouY92Yk2TGqdx9KuhT71p=qEcSC426JwmerBmFAXd+=A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 27.05.2019 12:44, Peter Chen wrote:
 
-syzbot found the following crash on:
+>>> An endpoint conflict occurs when the USB is working in device mode
+>>> during an isochronous communication. When the endpointA IN direction
+>>> is an isochronous IN endpoint, and the host sends an IN token to
+>>> endpointA on another device, then the OUT transaction may be missed
+>>> regardless the OUT endpoint number. Generally, this occurs when the
+>>> device is connected to the host through a hub and other devices are
+>>> connected to the same hub.
+>>>
+>>> The affected OUT endpoint can be either control, bulk, isochronous, or
+>>> an interrupt endpoint. After the OUT endpoint is primed, if an IN token
+>>> to the same endpoint number on another device is received, then the OUT
+>>> endpoint may be unprimed (cannot be detected by software), which causes
+>>> this endpoint to no longer respond to the host OUT token, and thus, no
+>>> corresponding interrupt occurs.
+>>>
+>>> There is no good workaround for this issue, the only thing the software
+>>> could do is numbering isochronous IN from the highest endpoint since we
+>>> have observed most of device number endpoint from the lowest.
+>>>
+>>> Cc: <stable@vger.kernel.org> #v3.14+
+>>> Cc: Jun Li <jun.li@nxp.com>
+>>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+>>> ---
+>>>    drivers/usb/chipidea/udc.c | 24 ++++++++++++++++++++++++
+>>>    1 file changed, 24 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+>>> index 829e947cabf5..411d387a45c9 100644
+>>> --- a/drivers/usb/chipidea/udc.c
+>>> +++ b/drivers/usb/chipidea/udc.c
+>>> @@ -1622,6 +1622,29 @@ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
+>>>    static int ci_udc_start(struct usb_gadget *gadget,
+>>>                         struct usb_gadget_driver *driver);
+>>>    static int ci_udc_stop(struct usb_gadget *gadget);
+>>> +
+>>> +
+>>> +/* Match ISOC IN from the highest endpoint */
+>>> +static struct
+>>
+>>      Um, please break the line before the function's type is fully described.
 
-HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=169fe1f8a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=95aff7278e7ff25e
-dashboard link: https://syzkaller.appspot.com/bug?extid=192a537b5c634febc6cf
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+    Mm, I meant to type "after". :-)
 
-Unfortunately, I don't have any reproducer for this crash yet.
+>>
+>>> +usb_ep *ci_udc_match_ep(struct usb_gadget *gadget,
+>>> +                           struct usb_endpoint_descriptor *desc,
+>>> +                           struct usb_ss_ep_comp_descriptor *comp_desc)
+>>> +{
+>>> +     struct ci_hdrc *ci = container_of(gadget, struct ci_hdrc, gadget);
+>>> +     struct usb_ep *ep;
+>>> +     u8 type = desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK;
+>>> +
+>>> +     if ((type == USB_ENDPOINT_XFER_ISOC) &&
+>>> +             (desc->bEndpointAddress & USB_DIR_IN)) {
+>>
+>>      Please add 1 more tab here, so that this line doesn't blend with the
+>> following statement.
+>>
+>>> +             list_for_each_entry_reverse(ep, &ci->gadget.ep_list, ep_list) {
+>>> +                     if (ep->caps.dir_in && !ep->claimed)
+>>> +                             return ep;
+>>> +             }
+>>> +     }
+>>> +
+>>> +     return NULL;
+>>> +}
+>>> +
+>>>    /**
+>>>     * Device operations part of the API to the USB controller hardware,
+>>>     * which don't involve endpoints (or i/o)
+> 
+> Will change both comments, thanks.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+192a537b5c634febc6cf@syzkaller.appspotmail.com
+    TIA.
 
-------------[ cut here ]------------
-do not call blocking ops when !TASK_RUNNING; state=1 set at  
-[<000000009424b595>] do_nanosleep+0x107/0x6a0 kernel/time/hrtimer.c:1675
-WARNING: CPU: 0 PID: 4661 at kernel/sched/core.c:6136  
-__might_sleep+0x135/0x190 kernel/sched/core.c:6136
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 4661 Comm: syz-executor.4 Not tainted 5.1.0-rc3+ #8
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  <IRQ>
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x292/0x5e1 kernel/panic.c:214
-  __warn.cold+0x20/0x53 kernel/panic.c:571
-  report_bug+0x262/0x2a0 lib/bug.c:186
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:973
-RIP: 0010:__might_sleep+0x135/0x190 kernel/sched/core.c:6136
-Code: 65 48 8b 1c 25 c0 de 01 00 48 8d 7b 10 48 89 fe 48 c1 ee 03 80 3c 06  
-00 75 2b 48 8b 73 10 48 c7 c7 c0 ec c5 85 e8 c6 4b f6 ff <0f> 0b e9 46 ff  
-ff ff e8 2f d0 45 00 e9 29 ff ff ff e8 25 d0 45 00
-RSP: 0018:ffff8881db207b48 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff8881c7d71800 RCX: 0000000000000000
-RDX: 0000000000000100 RSI: ffffffff8127bbcd RDI: ffffed103b640f5b
-RBP: ffffffff85c622c0 R08: ffff8881c7d71800 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 000000000000038c
-R13: 0000000000000000 R14: 0000000000000000 R15: ffffffff849f6d40
-  __mutex_lock_common kernel/locking/mutex.c:908 [inline]
-  __mutex_lock+0xc8/0x12b0 kernel/locking/mutex.c:1072
-  line6_pcm_acquire+0x30/0x210 sound/usb/line6/pcm.c:311
-  call_timer_fn+0x15c/0x5e0 kernel/time/timer.c:1325
-  expire_timers kernel/time/timer.c:1362 [inline]
-  __run_timers kernel/time/timer.c:1681 [inline]
-  __run_timers kernel/time/timer.c:1649 [inline]
-  run_timer_softirq+0x586/0x1400 kernel/time/timer.c:1694
-  __do_softirq+0x21f/0x8bc kernel/softirq.c:293
-  invoke_softirq kernel/softirq.c:374 [inline]
-  irq_exit+0x17c/0x1a0 kernel/softirq.c:414
-  exiting_irq arch/x86/include/asm/apic.h:536 [inline]
-  smp_apic_timer_interrupt+0xf1/0x490 arch/x86/kernel/apic/apic.c:1062
-  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:807
-  </IRQ>
-RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:81 [inline]
-RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:160  
-[inline]
-RIP: 0010:_raw_spin_unlock_irqrestore+0x40/0x50  
-kernel/locking/spinlock.c:184
-Code: e8 25 19 bc fb 48 89 ef e8 dd f7 bc fb f6 c7 02 75 11 53 9d e8 a1 fd  
-d8 fb 65 ff 0d 0a 59 99 7a 5b 5d c3 e8 d2 fb d8 fb 53 9d <eb> ed 0f 1f 40  
-00 66 2e 0f 1f 84 00 00 00 00 00 55 48 89 fd 65 ff
-RSP: 0018:ffff8881b13ffba8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
-RAX: 0000000000000007 RBX: 0000000000000246 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffff8881c7d72034
-RBP: ffff8881db224a80 R08: ffff8881c7d71800 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffff8881db224b00 R14: ffff8881db224b00 R15: ffff8881db224a80
-  unlock_hrtimer_base kernel/time/hrtimer.c:878 [inline]
-  hrtimer_start_range_ns+0x5b0/0xad0 kernel/time/hrtimer.c:1109
-  hrtimer_start_expires include/linux/hrtimer.h:409 [inline]
-  do_nanosleep+0x19b/0x6a0 kernel/time/hrtimer.c:1676
-  hrtimer_nanosleep+0x258/0x510 kernel/time/hrtimer.c:1733
-  __do_sys_nanosleep kernel/time/hrtimer.c:1767 [inline]
-  __se_sys_nanosleep kernel/time/hrtimer.c:1754 [inline]
-  __x64_sys_nanosleep+0x19d/0x220 kernel/time/hrtimer.c:1754
-  do_syscall_64+0xbd/0x500 arch/x86/entry/common.c:290
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x486570
-Code: 00 00 48 c7 c0 d4 ff ff ff 64 c7 00 16 00 00 00 31 c0 eb be 66 0f 1f  
-44 00 00 83 3d e1 01 5d 00 00 75 14 b8 23 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 b4 e0 f8 ff c3 48 83 ec 08 e8 ea 53 fd ff
-RSP: 002b:00007ffc588bb088 EFLAGS: 00000246 ORIG_RAX: 0000000000000023
-RAX: ffffffffffffffda RBX: 00000000000a95fa RCX: 0000000000486570
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007ffc588bb090
-RBP: 00000000000002d5 R08: 0000000000000001 R09: 00000000027fc940
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000008
-R13: 00007ffc588bb0e0 R14: 00000000000a8e2a R15: 00007ffc588bb0f0
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+> Peter
 
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+MBR, Sergei
