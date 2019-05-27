@@ -2,113 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE472AD14
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2019 04:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BCA2AD1C
+	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2019 05:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726005AbfE0C4b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 May 2019 22:56:31 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:43771 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725923AbfE0C4a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 May 2019 22:56:30 -0400
-X-UUID: fdc718982f0f42ceb23f9eb55922256f-20190527
-X-UUID: fdc718982f0f42ceb23f9eb55922256f-20190527
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1648446813; Mon, 27 May 2019 10:56:24 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33DR.mediatek.inc
- (172.27.6.106) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 27 May
- 2019 10:56:22 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 27 May 2019 10:56:22 +0800
-Message-ID: <1558925782.10179.429.camel@mhfsdcap03>
-Subject: Re: [RESEND PATCH] usb: mtu3: fix up undefined reference to
- usb_debug_root
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Mon, 27 May 2019 10:56:22 +0800
-In-Reply-To: <20190524113322.GA32094@kroah.com>
-References: <ee71197a681165aa72cb73c7f6cb402953351805.1558678075.git.chunfeng.yun@mediatek.com>
-         <20190524074552.GA1080@kroah.com> <1558689951.10179.422.camel@mhfsdcap03>
-         <20190524113322.GA32094@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        id S1726062AbfE0DEf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 May 2019 23:04:35 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:40148 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725973AbfE0DEf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 26 May 2019 23:04:35 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 45A5620002A;
+        Mon, 27 May 2019 05:04:33 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EEAF9200A4C;
+        Mon, 27 May 2019 05:04:27 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 2DBBC402D6;
+        Mon, 27 May 2019 11:04:21 +0800 (SGT)
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org, shawnguo@kernel.org
+Cc:     robh+dt@kernel.org, fabio.estevam@nxp.com, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, aisheng.dong@nxp.com,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, chunfeng.yun@mediatek.com,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH v3 0/8] Add imx7ulp USBOTG1 support
+Date:   Mon, 27 May 2019 11:06:08 +0800
+Message-Id: <20190527030616.44397-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MTK:  N
+Content-Type: text/plain; charset="iso-8859-1"
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2019-05-24 at 13:33 +0200, Greg Kroah-Hartman wrote:
-> On Fri, May 24, 2019 at 05:25:51PM +0800, Chunfeng Yun wrote:
-> > On Fri, 2019-05-24 at 09:45 +0200, Greg Kroah-Hartman wrote:
-> > > On Fri, May 24, 2019 at 02:11:33PM +0800, Chunfeng Yun wrote:
-> > > > When CONFIG_USB is not set, and CONFIG_USB_GADGET is set,
-> > > > there is an issue:
-> > > > 
-> > > > ld:
-> > > > drivers/usb/mtu3/mtu3_debugfs.o: in function 'ssusb_debugfs_create_root':
-> > > > mtu3_debugfs.c:(.text+0xba3): undefined reference to 'usb_debug_root'
-> > > > 
-> > > > usb_debug_root is only built when CONFIG_USB is enabled, so here drop it
-> > > > and use NULL instead.
-> > > > 
-> > > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > Acked-by: Randy Dunlap <rdunlap@infradead.org>
-> > > > ---
-> > > >  drivers/usb/mtu3/mtu3_debugfs.c | 3 +--
-> > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > 
-> > > Why resend?
-> > Sorry, I should send it out as v2 due to acked-by is added.
-> 
-> Then please document that below the --- line, otherwise I have no idea :(
-Ok
-> 
-> > > > diff --git a/drivers/usb/mtu3/mtu3_debugfs.c b/drivers/usb/mtu3/mtu3_debugfs.c
-> > > > index 62c57ddc554e..b7c86ccd50b4 100644
-> > > > --- a/drivers/usb/mtu3/mtu3_debugfs.c
-> > > > +++ b/drivers/usb/mtu3/mtu3_debugfs.c
-> > > > @@ -528,8 +528,7 @@ void ssusb_dr_debugfs_init(struct ssusb_mtk *ssusb)
-> > > >  
-> > > >  void ssusb_debugfs_create_root(struct ssusb_mtk *ssusb)
-> > > >  {
-> > > > -	ssusb->dbgfs_root =
-> > > > -		debugfs_create_dir(dev_name(ssusb->dev), usb_debug_root);
-> > > > +	ssusb->dbgfs_root = debugfs_create_dir(dev_name(ssusb->dev), NULL);
-> > > 
-> > > This moves the directory to a new location no matter what the
-> > > configuration is. What's wrong with where it is today?  
-> > it seems usb_debug_root is only for host, but not for gadget only, it's
-> > defined and created in usb/core/usb.c
-> 
-> True, but you just moved the root if usb core is present too.
-It's an easy way, and other dual-role driver also uses NULL
+Changes for v3:
+- Using readl_poll_timeout to replace private function. [Patch 2/8]
+- Add more commit log for new flag CI_HDRC_PMQOS. [Patch 5/8]
+- Move 'compatible' at the beginning of propeties. [Patch 6/8]
 
-> 
-> > > And shoudn't we
-> > > create the usb root directory if only gadget is enabled?
-> > Yes, need modify udc/core.c, it's better if support it, do you want me
-> > to send a patch for it?
-> 
-> Yes please, let's see what that looks like.
-I'll do it.
+Changes for v2:
+- Use common 'phys' property [Patch 6/8]
+- Add the last patch that "fsl,usbphy" phandle is not mandatory now
+[Patch 8/8]
+- Add Reviewed-by from Rob.
 
-Thanks
-> 
-> thanks,
-> 
-> greg k-h
 
+There is a dual-role USB controller at imx7ulp, we add support for it
+in this patch set, and the dual-role function is tested at imx7ulp-evk
+board.
+
+Thanks.
+
+Peter Chen (8):
+  doc: dt-binding: mxs-usb-phy: add compatible for 7ulp
+  usb: phy: phy-mxs-usb: add imx7ulp support
+  doc: dt-binding: ci-hdrc-usb2: add compatible string for imx7ulp
+  doc: dt-binding: usbmisc-imx: add compatible string for imx7ulp
+  usb: chipidea: imx: add imx7ulp support
+  ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
+  ARM: dts: imx7ulp-evk: enable USBOTG1 support
+  usb: chipidea: imx: "fsl,usbphy" phandle is not mandatory now
+
+ .../devicetree/bindings/phy/mxs-usb-phy.txt        |  1 +
+ .../devicetree/bindings/usb/ci-hdrc-usb2.txt       |  1 +
+ .../devicetree/bindings/usb/usbmisc-imx.txt        |  1 +
+ arch/arm/boot/dts/imx7ulp-evk.dts                  | 35 +++++++++++
+ arch/arm/boot/dts/imx7ulp.dtsi                     | 31 ++++++++++
+ drivers/usb/chipidea/ci_hdrc_imx.c                 | 33 ++++++++++-
+ drivers/usb/chipidea/usbmisc_imx.c                 |  4 ++
+ drivers/usb/phy/phy-mxs-usb.c                      | 67 +++++++++++++++++++++-
+ include/linux/usb/chipidea.h                       |  1 +
+ 9 files changed, 170 insertions(+), 4 deletions(-)
+
+-- 
+2.14.1
 
