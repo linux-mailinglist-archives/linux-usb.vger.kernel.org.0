@@ -2,89 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9A92BA28
-	for <lists+linux-usb@lfdr.de>; Mon, 27 May 2019 20:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1959D2BEEC
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 07:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727055AbfE0SdB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 May 2019 14:33:01 -0400
-Received: from gateway36.websitewelcome.com ([192.185.179.26]:26072 "EHLO
-        gateway36.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726839AbfE0SdB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 May 2019 14:33:01 -0400
-X-Greylist: delayed 1328 seconds by postgrey-1.27 at vger.kernel.org; Mon, 27 May 2019 14:33:00 EDT
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway36.websitewelcome.com (Postfix) with ESMTP id 0EFD6400CA320
-        for <linux-usb@vger.kernel.org>; Mon, 27 May 2019 12:31:13 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id VK5Eh2DsbiQerVK5Ehd2ye; Mon, 27 May 2019 13:10:52 -0500
-X-Authority-Reason: nr=8
-Received: from [189.250.47.159] (port=37322 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.91)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hVK5D-002uvT-9J; Mon, 27 May 2019 13:10:51 -0500
-Date:   Mon, 27 May 2019 13:10:50 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ajay Gupta <ajayg@nvidia.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] usb: typec: ucsi: ccg: fix memory leak in do_flash
-Message-ID: <20190527181050.GA31496@embeddedor>
+        id S1726949AbfE1F64 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 May 2019 01:58:56 -0400
+Received: from verein.lst.de ([213.95.11.211]:44892 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725904AbfE1F64 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 May 2019 01:58:56 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id 4AAA668AA6; Tue, 28 May 2019 07:58:31 +0200 (CEST)
+Date:   Tue, 28 May 2019 07:58:31 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>, laurentiu.tudor@nxp.com,
+        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        marex@denx.de, leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
+        robin.murphy@arm.com, noring@nocrew.org, JuergenUrban@gmx.de
+Subject: Re: [PATCH v6 0/5] prerequisites for device reserved local mem
+ rework
+Message-ID: <20190528055831.GA11279@lst.de>
+References: <20190522142748.10078-1-laurentiu.tudor@nxp.com> <20190523065602.GA11928@lst.de> <20190523070755.GA23832@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.47.159
-X-Source-L: No
-X-Exim-ID: 1hVK5D-002uvT-9J
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [189.250.47.159]:37322
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 4
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+In-Reply-To: <20190523070755.GA23832@kroah.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In case memory resources for *fw* were successfully allocated,
-release them before return.
+On Thu, May 23, 2019 at 09:07:55AM +0200, Greg KH wrote:
+> I have no objection for you just taking this whole series as-is, no need
+> to worry about merge conflicts with the USB tree, I doubt anything will
+> be touching this area of code anytime soon.
+> 
+> So if you want to take it now, feel free to add:
+> 
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Addresses-Coverity-ID: 1445499 ("Resource leak")
-Fixes: 5c9ae5a87573 ("usb: typec: ucsi: ccg: add firmware flashing support")
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/usb/typec/ucsi/ucsi_ccg.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 9d46aa9e4e35..bf63074675fc 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -862,8 +862,10 @@ static int do_flash(struct ucsi_ccg *uc, enum enum_flash_mode mode)
- 
- not_signed_fw:
- 	wr_buf = kzalloc(CCG4_ROW_SIZE + 4, GFP_KERNEL);
--	if (!wr_buf)
--		return -ENOMEM;
-+	if (!wr_buf) {
-+		err = -ENOMEM;
-+		goto release_fw;
-+	}
- 
- 	err = ccg_cmd_enter_flashing(uc);
- 	if (err)
--- 
-2.21.0
-
+Given that I'll pull it in, shouldn't this be a Reviewed-by or Acked-by?
