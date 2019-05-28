@@ -2,73 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 193952C80E
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 15:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238B12C895
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 16:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbfE1NqS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 May 2019 09:46:18 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:17599 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727039AbfE1NqR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 May 2019 09:46:17 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id AFBA132D07E88EBBD51B;
-        Tue, 28 May 2019 21:46:09 +0800 (CST)
-Received: from localhost (10.177.31.96) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Tue, 28 May 2019
- 21:46:01 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <patrice.chotard@st.com>, <stern@rowland.harvard.edu>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] usb: host: ehci-st: Remove set but not used variable 'ehci'
-Date:   Tue, 28 May 2019 21:45:29 +0800
-Message-ID: <20190528134529.17612-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1727545AbfE1ORV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 May 2019 10:17:21 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:38284 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726673AbfE1ORV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 May 2019 10:17:21 -0400
+Received: (qmail 1747 invoked by uid 2102); 28 May 2019 10:17:19 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 28 May 2019 10:17:19 -0400
+Date:   Tue, 28 May 2019 10:17:19 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Kalle Valo <kvalo@codeaurora.org>
+cc:     Christian Lamparter <chunkeey@gmail.com>,
+        syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>,
+        <davem@davemloft.net>, <andreyknvl@google.com>,
+        <syzkaller-bugs@googlegroups.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: Re: [PATCH] network: wireless: p54u: Fix race between disconnect
+ and firmware loading
+In-Reply-To: <8736kyvkw9.fsf@purkki.adurom.net>
+Message-ID: <Pine.LNX.4.44L0.1905281014340.1564-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.177.31.96]
-X-CFilter-Loop: Reflected
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fixes gcc '-Wunused-but-set-variable' warning:
+On Tue, 28 May 2019, Kalle Valo wrote:
 
-drivers/usb/host/ehci-st.c: In function st_ehci_platform_probe:
-drivers/usb/host/ehci-st.c:155:19: warning: variable ehci set but not used [-Wunused-but-set-variable]
+> The correct prefix is "p54:", but I can fix that during commit.
 
-It is never used, so can be removed.
+Oh, okay, thanks.
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/usb/host/ehci-st.c | 2 --
- 1 file changed, 2 deletions(-)
+> > Index: usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
+> > ===================================================================
+> > --- usb-devel.orig/drivers/net/wireless/intersil/p54/p54usb.c
+> > +++ usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
+> > @@ -33,6 +33,8 @@ MODULE_ALIAS("prism54usb");
+> >  MODULE_FIRMWARE("isl3886usb");
+> >  MODULE_FIRMWARE("isl3887usb");
+> >  
+> > +static struct usb_driver p54u_driver;
+> 
+> How is it safe to use static variables from a wireless driver? For
+> example, what if there are two p54 usb devices on the host? How do we
+> avoid a race in that case?
 
-diff --git a/drivers/usb/host/ehci-st.c b/drivers/usb/host/ehci-st.c
-index dc42981047c9..ccb4e611001d 100644
---- a/drivers/usb/host/ehci-st.c
-+++ b/drivers/usb/host/ehci-st.c
-@@ -152,7 +152,6 @@ static int st_ehci_platform_probe(struct platform_device *dev)
- 	struct resource *res_mem;
- 	struct usb_ehci_pdata *pdata = &ehci_platform_defaults;
- 	struct st_ehci_platform_priv *priv;
--	struct ehci_hcd *ehci;
- 	int err, irq, clk = 0;
- 
- 	if (usb_disabled())
-@@ -177,7 +176,6 @@ static int st_ehci_platform_probe(struct platform_device *dev)
- 	platform_set_drvdata(dev, hcd);
- 	dev->dev.platform_data = pdata;
- 	priv = hcd_to_ehci_priv(hcd);
--	ehci = hcd_to_ehci(hcd);
- 
- 	priv->phy = devm_phy_get(&dev->dev, "usb");
- 	if (IS_ERR(priv->phy)) {
--- 
-2.17.1
+There is no race.  This structure is not per-device; it refers only to
+the driver.  In fact, the line above is only a forward declaration --
+the actual definition of p54u_driver was already in the source file.
 
+Alan Stern
 
