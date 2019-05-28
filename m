@@ -2,83 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DF02C0CF
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 10:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D40F2C0F3
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 10:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727615AbfE1IGR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 May 2019 04:06:17 -0400
-Received: from mga14.intel.com ([192.55.52.115]:43455 "EHLO mga14.intel.com"
+        id S1726312AbfE1ILy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 May 2019 04:11:54 -0400
+Received: from mga01.intel.com ([192.55.52.88]:17847 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726305AbfE1IGR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 May 2019 04:06:17 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1726236AbfE1ILy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 May 2019 04:11:54 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 May 2019 01:06:15 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 May 2019 01:11:53 -0700
 X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 28 May 2019 01:06:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 May 2019 11:06:12 +0300
-Date:   Tue, 28 May 2019 11:06:12 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: ccg: fix memory leak in do_flash
-Message-ID: <20190528080612.GC7167@kuha.fi.intel.com>
-References: <20190527181050.GA31496@embeddedor>
- <20190528080452.GB7167@kuha.fi.intel.com>
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga001.fm.intel.com with ESMTP; 28 May 2019 01:11:51 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [v3 PATCH] usb: create usb_debug_root for gadget only
+In-Reply-To: <cffd6d75f69e4d908c8f39b8a60ddae27d6b7c88.1559028752.git.chunfeng.yun@mediatek.com>
+References: <cffd6d75f69e4d908c8f39b8a60ddae27d6b7c88.1559028752.git.chunfeng.yun@mediatek.com>
+Date:   Tue, 28 May 2019 11:11:50 +0300
+Message-ID: <87k1ebj8vt.fsf@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190528080452.GB7167@kuha.fi.intel.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 28, 2019 at 11:04:52AM +0300, Heikki Krogerus wrote:
-> On Mon, May 27, 2019 at 01:10:50PM -0500, Gustavo A. R. Silva wrote:
-> > In case memory resources for *fw* were successfully allocated,
-> > release them before return.
-> > 
-> > Addresses-Coverity-ID: 1445499 ("Resource leak")
-> > Fixes: 5c9ae5a87573 ("usb: typec: ucsi: ccg: add firmware flashing support")
-> > Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-> 
-> Acked-by: Heikki Krogerus <heikki.krogerus@gmail.com>
 
-That email address does not actually exist :-/. Sorry.
+Hi,
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
+> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> index 7fcb9f782931..88b3ee03a12d 100644
+> --- a/drivers/usb/core/usb.c
+> +++ b/drivers/usb/core/usb.c
+> @@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_GPL(usb_debug_root);
+>  
+>  static void usb_debugfs_init(void)
+>  {
+> -	usb_debug_root = debugfs_create_dir("usb", NULL);
+> +	usb_debug_root = debugfs_create_dir(USB_DEBUG_ROOT_NAME, NULL);
+>  	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
+>  			    &usbfs_devices_fops);
+>  }
+
+might be a better idea to move this to usb common. Then have a function
+which can be called by both host and gadget to maybe create the
+directory:
+
+static struct dentry *usb_debug_root;
+
+struct dentry *usb_debugfs_init(void)
+{
+	if (!usb_debug_root)
+        	usb_debug_root = debugfs_create_dir("usb", NULL);
+
+	return usb_debug_root;
+}
 
 
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi_ccg.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > index 9d46aa9e4e35..bf63074675fc 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > @@ -862,8 +862,10 @@ static int do_flash(struct ucsi_ccg *uc, enum enum_flash_mode mode)
-> >  
-> >  not_signed_fw:
-> >  	wr_buf = kzalloc(CCG4_ROW_SIZE + 4, GFP_KERNEL);
-> > -	if (!wr_buf)
-> > -		return -ENOMEM;
-> > +	if (!wr_buf) {
-> > +		err = -ENOMEM;
-> > +		goto release_fw;
-> > +	}
-> >  
-> >  	err = ccg_cmd_enter_flashing(uc);
-> >  	if (err)
-> > -- 
-> > 2.21.0
+Then usb core would be updated to something like:
+
+static void usb_core_debugfs_init(void)
+{
+	struct dentry *root = usb_debugfs_init();
+
+	debugfs_create_file("devices", 0444, root, NULL, &usbfs_devices_fops);
+}
 
 -- 
-heikki
+balbi
