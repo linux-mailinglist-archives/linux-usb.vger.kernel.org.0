@@ -2,136 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A16CE2C06C
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 09:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18772C0AF
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 09:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727994AbfE1HkI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 May 2019 03:40:08 -0400
-Received: from mail-eopbgr770071.outbound.protection.outlook.com ([40.107.77.71]:63759
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727853AbfE1HkF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 May 2019 03:40:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector1-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EVygfSY8hqy/DBUvsHRCgGvieeoiCENlb8QcgTW8Qa0=;
- b=ug3p+80+pta3QSOyYVopWCIPknnTa/9XApeIFW+44+SXRahs8pvbg98CvxDZWD2q7UoHIhgUD6Sn7ZbGyOWHdj4WAzkhg9cumlMLts6dyltoEMjlw9eglOAVG8lj96mIW2ArwyzQcb/gVfwCJxWUUom9Q8RHLT+KaOaucx79tQQ=
-Received: from BN3PR03CA0110.namprd03.prod.outlook.com (2603:10b6:400:4::28)
- by BLUPR03MB552.namprd03.prod.outlook.com (2a01:111:e400:883::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1922.22; Tue, 28 May
- 2019 07:39:58 +0000
-Received: from SN1NAM02FT022.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::202) by BN3PR03CA0110.outlook.office365.com
- (2603:10b6:400:4::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1943.16 via Frontend
- Transport; Tue, 28 May 2019 07:39:58 +0000
-Authentication-Results: spf=pass (sender IP is 137.71.25.55)
- smtp.mailfrom=analog.com; lists.freedesktop.org; dkim=none (message not
- signed) header.d=none;lists.freedesktop.org; dmarc=bestguesspass action=none
- header.from=analog.com;
-Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
- 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
- client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
-Received: from nwd2mta1.analog.com (137.71.25.55) by
- SN1NAM02FT022.mail.protection.outlook.com (10.152.72.148) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1922.16
- via Frontend Transport; Tue, 28 May 2019 07:39:57 +0000
-Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
-        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id x4S7duOZ023275
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
-        Tue, 28 May 2019 00:39:56 -0700
-Received: from saturn.analog.com (10.50.1.244) by NWD2HUBCAS7.ad.analog.com
- (10.64.69.107) with Microsoft SMTP Server id 14.3.408.0; Tue, 28 May 2019
- 03:39:56 -0400
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
+        id S1727581AbfE1HzW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 May 2019 03:55:22 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:14207 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726789AbfE1HzW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 May 2019 03:55:22 -0400
+X-UUID: 2c54a368901941008760f6ac2ddf19e5-20190528
+X-UUID: 2c54a368901941008760f6ac2ddf19e5-20190528
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1469220644; Tue, 28 May 2019 15:55:16 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 28 May 2019 15:55:15 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 28 May 2019 15:55:14 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-usb@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>, <linux-omap@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <devel@driverdev.osuosl.org>,
-        <linux-usb@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <andriy.shevchenko@linux.intel.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH 3/3][V2] lib: re-introduce new match_string() helper/macro
-Date:   Tue, 28 May 2019 10:39:32 +0300
-Message-ID: <20190528073932.25365-3-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190528073932.25365-1-alexandru.ardelean@analog.com>
-References: <20190508112842.11654-1-alexandru.ardelean@analog.com>
- <20190528073932.25365-1-alexandru.ardelean@analog.com>
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [v3 PATCH] usb: create usb_debug_root for gadget only
+Date:   Tue, 28 May 2019 15:54:59 +0800
+Message-ID: <cffd6d75f69e4d908c8f39b8a60ddae27d6b7c88.1559028752.git.chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(1496009)(136003)(39860400002)(346002)(396003)(376002)(2980300002)(199004)(189003)(126002)(2441003)(86362001)(44832011)(5660300002)(2201001)(478600001)(446003)(476003)(2616005)(53416004)(47776003)(316002)(11346002)(2870700001)(2906002)(6666004)(356004)(50226002)(51416003)(7696005)(7416002)(76176011)(48376002)(4326008)(305945005)(70586007)(70206006)(336012)(26005)(77096007)(186003)(1076003)(7636002)(246002)(486006)(426003)(7406005)(110136005)(54906003)(106002)(107886003)(50466002)(36756003)(8936002)(8676002)(921003)(83996005)(1121003)(2101003);DIR:OUT;SFP:1101;SCL:1;SRVR:BLUPR03MB552;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;A:1;MX:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9f7495c6-88de-4750-c0e9-08d6e33faf63
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(4709054)(1401327)(2017052603328);SRVR:BLUPR03MB552;
-X-MS-TrafficTypeDiagnostic: BLUPR03MB552:
-X-Microsoft-Antispam-PRVS: <BLUPR03MB5526A3F85F374B6EF9329F1F91E0@BLUPR03MB552.namprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1443;
-X-Forefront-PRVS: 00514A2FE6
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: MswgKhZP9m+ZsGUEhWl3phwXCL8yuqzj7xcxpK+dGlJBf9m5zMl51gqC3LUtKdWQ8Os49FCltfeNbu6Phw/B8l5WNlH00oAhRzdjikewQHYUEmLqJ6/urfczkkAV7S6v3P1UMtUMTOYDySCPLD3RO66kjwZftNeRvVV3dsDqCax4qYOjNj2PWP5gkM5PjRZmJWiCQ5YjWYviSRnNrXmzdalwSZTQ416f6pMfl95WCkKeJFuhdayQMWJGsRNhTOHuxm5bGOp4NnJa6ZTV5K+ilvVE4Xb082rHyJdnAOFnjmjlMMgU1yiCJ2yKYrrmhTGSsWl7mABejle5Gq03Z59rpn0+AbER3kkbBxVnYXW8nX3mrHd8Gqzr89K0YpmuIcGMyscsEWrsfpd9tI6dbYg4W4+zRy2MwWGNPPr9JWXwDBM=
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2019 07:39:57.3627
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f7495c6-88de-4750-c0e9-08d6e33faf63
-X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLUPR03MB552
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This change re-introduces `match_string()` as a macro that uses
-ARRAY_SIZE() to compute the size of the array.
+When CONFIG_USB is not set, and CONFIG_USB_GADGET is set,
+there is an issue, e.g.:
 
-After this change, work can start on migrating subsystems to use this new
-helper. Since the original helper is pretty used, migrating to this new one
-will take a while, and will be reviewed by each subsystem.
+drivers/usb/mtu3/mtu3_debugfs.o: in function 'ssusb_debugfs_create_root':
+mtu3_debugfs.c:(.text+0xba3): undefined reference to 'usb_debug_root'
 
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+usb_debug_root is currently only built when host is supported
+(CONFIG_USB is set), for convenience, we also want it created when
+gadget only is enabled, this patch try to support it.
+
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- include/linux/string.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+v3:
+  1. still create usb_debug_root for gadget only
+  2. abandon mtu3's change
+  3. drop acked-by Randy
 
-diff --git a/include/linux/string.h b/include/linux/string.h
-index 7149fcdf62df..34491b075449 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -198,6 +198,15 @@ static inline int strtobool(const char *s, bool *res)
- int __match_string(const char * const *array, size_t n, const char *string);
- int __sysfs_match_string(const char * const *array, size_t n, const char *s);
+v2(resend): add acked-by Randy
+
+v1: fix mtu3's build error, replace usb_debug_root by NULL;
+---
+ drivers/usb/core/usb.c        |  2 +-
+ drivers/usb/gadget/udc/core.c | 27 +++++++++++++++++++++++++++
+ include/linux/usb.h           |  1 +
+ 3 files changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index 7fcb9f782931..88b3ee03a12d 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_GPL(usb_debug_root);
  
-+/**
-+ * match_string - matches given string in an array
-+ * @_a: array of strings
-+ * @_s: string to match with
-+ *
-+ * Helper for __match_string(). Calculates the size of @a automatically.
-+ */
-+#define match_string(_a, _s) __match_string(_a, ARRAY_SIZE(_a), _s)
+ static void usb_debugfs_init(void)
+ {
+-	usb_debug_root = debugfs_create_dir("usb", NULL);
++	usb_debug_root = debugfs_create_dir(USB_DEBUG_ROOT_NAME, NULL);
+ 	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
+ 			    &usbfs_devices_fops);
+ }
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 7cf34beb50df..ed45f9429e58 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/list.h>
+ #include <linux/err.h>
+@@ -1587,12 +1588,37 @@ static int usb_udc_uevent(struct device *dev, struct kobj_uevent_env *env)
+ 	return 0;
+ }
+ 
++/* if CONFIG_USB is set, leave USB core to create usb_debug_root */
++#ifndef CONFIG_USB
++struct dentry *usb_debug_root;
++EXPORT_SYMBOL_GPL(usb_debug_root);
 +
- /**
-  * sysfs_match_string - matches given string in an array
-  * @_a: array of strings
++static void usb_debugfs_init(void)
++{
++	usb_debug_root = debugfs_create_dir(USB_DEBUG_ROOT_NAME, NULL);
++}
++
++static void usb_debugfs_cleanup(void)
++{
++	debugfs_remove_recursive(usb_debug_root);
++}
++#else
++static void usb_debugfs_init(void)
++{}
++
++static void usb_debugfs_cleanup(void)
++{}
++#endif
++
+ static int __init usb_udc_init(void)
+ {
++	usb_debugfs_init();
++
+ 	udc_class = class_create(THIS_MODULE, "udc");
+ 	if (IS_ERR(udc_class)) {
+ 		pr_err("failed to create udc class --> %ld\n",
+ 				PTR_ERR(udc_class));
++		usb_debugfs_cleanup();
+ 		return PTR_ERR(udc_class);
+ 	}
+ 
+@@ -1604,6 +1630,7 @@ subsys_initcall(usb_udc_init);
+ static void __exit usb_udc_exit(void)
+ {
+ 	class_destroy(udc_class);
++	usb_debugfs_cleanup();
+ }
+ module_exit(usb_udc_exit);
+ 
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index ae82d9d1112b..9c6e7b3265af 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1994,6 +1994,7 @@ extern void usb_register_notify(struct notifier_block *nb);
+ extern void usb_unregister_notify(struct notifier_block *nb);
+ 
+ /* debugfs stuff */
++#define USB_DEBUG_ROOT_NAME	"usb"
+ extern struct dentry *usb_debug_root;
+ 
+ /* LED triggers */
 -- 
-2.20.1
+2.21.0
 
