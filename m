@@ -2,200 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 570632C00C
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 09:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640542C044
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 09:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727161AbfE1H0F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 May 2019 03:26:05 -0400
-Received: from mail-eopbgr1400102.outbound.protection.outlook.com ([40.107.140.102]:43168
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        id S1727806AbfE1Hj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 May 2019 03:39:56 -0400
+Received: from mail-eopbgr740080.outbound.protection.outlook.com ([40.107.74.80]:43750
+        "EHLO NAM01-BN3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726305AbfE1H0F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 May 2019 03:26:05 -0400
+        id S1727261AbfE1Hjz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 May 2019 03:39:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ d=analog.onmicrosoft.com; s=selector1-analog-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Olzw2CxKe4q2xX7rwUJiuUg6o55GmIZDKySoB0j/1Bc=;
- b=mejPKvSwNJYLnVC0vsmB73EvSX8lL/PGgxNE+NDYn7bQWjLfyzvph7OKeBhmSqqUyv89qg7nuJ0jXWLxaF5wshr4k3RfCtBQTJhUpLeliQhnMyPOwppLTp0IRHfkFpFvUlcZ8HOMIghIBVS3tpedd7JZLzN2/CKM8et0FCKgPlQ=
-Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com (52.134.242.17) by
- OSBPR01MB5013.jpnprd01.prod.outlook.com (20.179.184.206) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.16; Tue, 28 May 2019 07:25:59 +0000
-Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com
- ([fe80::a146:39f0:5df9:11bc]) by OSBPR01MB2103.jpnprd01.prod.outlook.com
- ([fe80::a146:39f0:5df9:11bc%7]) with mapi id 15.20.1922.021; Tue, 28 May 2019
- 07:25:59 +0000
-From:   Biju Das <biju.das@bp.renesas.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Simon Horman <horms@verge.net.au>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v6 2/7] dt-bindings: usb: renesas_usb3: Document usb role
- switch support
-Thread-Topic: [PATCH v6 2/7] dt-bindings: usb: renesas_usb3: Document usb role
- switch support
-Thread-Index: AQHVCxgOXrucqKyKGEO8VEjNAtE3NqZ1R9aAgArtWZA=
-Date:   Tue, 28 May 2019 07:25:58 +0000
-Message-ID: <OSBPR01MB2103674E30AFECD6878367F9B81E0@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-References: <1557922152-16449-1-git-send-email-biju.das@bp.renesas.com>
- <1557922152-16449-3-git-send-email-biju.das@bp.renesas.com>
- <OSAPR01MB308934C379A9759841E58043D8070@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSAPR01MB308934C379A9759841E58043D8070@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=biju.das@bp.renesas.com; 
-x-originating-ip: [193.141.220.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 063132e6-49b8-4da1-fbf4-08d6e33dbb1b
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:OSBPR01MB5013;
-x-ms-traffictypediagnostic: OSBPR01MB5013:
-x-microsoft-antispam-prvs: <OSBPR01MB5013FF10A03EF54DCEDA0321B81E0@OSBPR01MB5013.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 00514A2FE6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(346002)(376002)(39860400002)(396003)(136003)(51914003)(189003)(199004)(256004)(14444005)(3846002)(6116002)(4326008)(66946007)(7736002)(305945005)(5660300002)(55016002)(6246003)(476003)(8936002)(7416002)(86362001)(26005)(76116006)(186003)(66476007)(73956011)(446003)(11346002)(52536014)(8676002)(81156014)(316002)(66556008)(64756008)(66446008)(81166006)(110136005)(478600001)(54906003)(99286004)(33656002)(2906002)(53936002)(74316002)(71190400001)(6506007)(71200400001)(229853002)(6436002)(9686003)(68736007)(66066001)(25786009)(486006)(7696005)(14454004)(76176011)(44832011)(102836004);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB5013;H:OSBPR01MB2103.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:0;
-received-spf: None (protection.outlook.com: bp.renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 2qZAh34Y3N+U4HCZLuyU7/xLeFOAYmhAEZXcZh0wqC4QNGb0IDk0oMX+b1e0ESKUJfWaUuN6ostHdd2MYvqKUvCNo2WOjN1J9KfKcU10Z5G+xp03L7Di8cUIsbZ80k5+Rv763+HfyzIgZULgKUX+w31qNkEAEGVCSAtAgJizp7g8Ps+ssuhASHhu3JFXiCk88toDVTZ3YE5IQYAtDy6oraImAumIfUjxcy92Zyi0IYSrG2xTGuLQTBTuYS9hjbzxfre3otUtAGs5NjaSdnJhon1SQ4cfK7Dv27n0dCCUvawORMkhdv5L6EPpi2u3mUKKE2D6tOMg/6lNBoL6ZoNLi16DkgxmTuVp0PgPDv6UZLZK4UUsLfoaZGdVi+LBkhHMMv6pc+c5N1AEvlUZlEKvssS8OdkFLvhtjlb5eCZLhFE=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ bh=gWdImhCfyTIUCYzNfD1iIQYARnPSsxhTsT74g8CuXY0=;
+ b=Hq4eM0+YUiVIoYHYAGGuEpOyjhWPdcPFHxn0lkng78s7kuN0jDXksfvZQE0kEOvNPTuar+4Cwfyt9c47tyog14C+ba401xryJ9s5hnJiPDekCnghCGKZj4HeQKs4EbPbnH2B4kKA0p9wn6It0lmbB4CJ95H2YYd7PUpoLM2vyVQ=
+Received: from BN6PR03CA0012.namprd03.prod.outlook.com (2603:10b6:404:23::22)
+ by BL2PR03MB545.namprd03.prod.outlook.com (2a01:111:e400:c23::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1922.15; Tue, 28 May
+ 2019 07:39:47 +0000
+Received: from BL2NAM02FT030.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e46::202) by BN6PR03CA0012.outlook.office365.com
+ (2603:10b6:404:23::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1922.16 via Frontend
+ Transport; Tue, 28 May 2019 07:39:47 +0000
+Authentication-Results: spf=pass (sender IP is 137.71.25.55)
+ smtp.mailfrom=analog.com; lists.freedesktop.org; dkim=none (message not
+ signed) header.d=none;lists.freedesktop.org; dmarc=bestguesspass action=none
+ header.from=analog.com;
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
+Received: from nwd2mta1.analog.com (137.71.25.55) by
+ BL2NAM02FT030.mail.protection.outlook.com (10.152.77.172) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1922.16
+ via Frontend Transport; Tue, 28 May 2019 07:39:46 +0000
+Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
+        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id x4S7dkpQ023241
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Tue, 28 May 2019 00:39:46 -0700
+Received: from saturn.analog.com (10.50.1.244) by NWD2HUBCAS7.ad.analog.com
+ (10.64.69.107) with Microsoft SMTP Server id 14.3.408.0; Tue, 28 May 2019
+ 03:39:45 -0400
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>, <linux-omap@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <devel@driverdev.osuosl.org>,
+        <linux-usb@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-fbdev@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <andriy.shevchenko@linux.intel.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH 1/3][V2] lib: fix match_string() helper on -1 array size
+Date:   Tue, 28 May 2019 10:39:30 +0300
+Message-ID: <20190528073932.25365-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190508112842.11654-1-alexandru.ardelean@analog.com>
+References: <20190508112842.11654-1-alexandru.ardelean@analog.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 063132e6-49b8-4da1-fbf4-08d6e33dbb1b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2019 07:25:58.9658
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(1496009)(376002)(396003)(39860400002)(136003)(346002)(2980300002)(54534003)(189003)(199004)(70586007)(70206006)(2441003)(8936002)(47776003)(7416002)(107886003)(316002)(2201001)(8676002)(14444005)(2906002)(2870700001)(86362001)(356004)(51416003)(6666004)(7696005)(26005)(305945005)(7636002)(1076003)(478600001)(36756003)(4326008)(110136005)(2616005)(126002)(44832011)(54906003)(76176011)(48376002)(486006)(476003)(106002)(50466002)(446003)(11346002)(186003)(50226002)(7406005)(426003)(336012)(53416004)(5660300002)(77096007)(246002)(921003)(1121003)(83996005)(2101003);DIR:OUT;SFP:1101;SCL:1;SRVR:BL2PR03MB545;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6c76f02a-34d6-47de-ba0c-08d6e33fa89e
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(4709054)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328);SRVR:BL2PR03MB545;
+X-MS-TrafficTypeDiagnostic: BL2PR03MB545:
+X-Microsoft-Antispam-PRVS: <BL2PR03MB545CA0A06BB0E64A1EFBE91F91E0@BL2PR03MB545.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-Forefront-PRVS: 00514A2FE6
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: WYQoPPTo42AknDYSpY9w/xftF7FT7SRtXtbzi4SohjgnHD5P3hVPp3WTmUFaLfcDpBMThORg4NphooGNDC9igOh5UCY+z/qJehstorHN6dXF0JXfvmEyhD606e1CCgn1vUccxto/xRVdXdjRcRHavbu1mYcyAlmvTmEDKuQrxdfC1Vrm8H9/tkgoumu/npzY4P0Eyoj1Hwx3z5/P2OctimPreVyglKaTNX/j7lM7XosmVhLrWYt/TLXycti79mDqjngT5xwxZMvszzx4GLzrMAGI+oe486mPjGQdr4mkGPORfalJMEV5ae4/UIaivCRaqH3nuCzPeZes99dzedzF7DJd9vUvbhN8XxbI4NVjhC5LKkww2k/x2hqF8pFkOcddaQzB5rfbyVzu+jJvUQ8J9ZT6v/eq/Une//VX7JZ43bw=
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2019 07:39:46.9658
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: biju.das@bp.renesas.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB5013
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c76f02a-34d6-47de-ba0c-08d6e33fa89e
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL2PR03MB545
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-HI Shimoda-San,
+The documentation the `_match_string()` helper mentions that `n`
+should be:
+ * @n: number of strings in the array or -1 for NULL terminated arrays
 
-Thanks for the feedback.
+The behavior of the function is different, in the sense that it exits on
+the first NULL element in the array, regardless of whether `n` is -1 or a
+positive number.
 
-> Subject: RE: [PATCH v6 2/7] dt-bindings: usb: renesas_usb3: Document usb
-> role switch support
->=20
-> Hi Biju-san,
->=20
-> Thank you for the patch!
->=20
-> > From: Biju Das, Sent: Wednesday, May 15, 2019 9:09 PM
-> >
-> > Update the DT bindings documentation to support usb role switch for
-> > USB Type-C connector using USB role switch class framework.
-> >
-> > Signed-off-by: Biju Das <biju.das@bp.renesas.com>
-> > ---
-> >  V5-->V6
-> >   * Updated description
-> >   * Added usb-role-switch-property
-> >  V4-->V5
-> >   * No Change
-> >  V3-->V4
-> >   * No Change
-> >  V2-->V3
-> >   * Added optional renesas,usb-role-switch property.
-> >  V1-->V2
-> >   * Added usb-role-switch-property
-> >   * Updated the example with usb-role-switch property.
-> > ---
-> >  .../devicetree/bindings/usb/renesas_usb3.txt       | 26
-> ++++++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/renesas_usb3.txt
-> > b/Documentation/devicetree/bindings/usb/renesas_usb3.txt
-> > index 35039e7..ea6c63c 100644
-> > --- a/Documentation/devicetree/bindings/usb/renesas_usb3.txt
-> > +++ b/Documentation/devicetree/bindings/usb/renesas_usb3.txt
-> > @@ -22,6 +22,11 @@ Required properties:
-> >  Optional properties:
-> >    - phys: phandle + phy specifier pair
-> >    - phy-names: must be "usb"
-> > +  - usb-role-switch: support role switch. see usb/generic.txt
-> > +
-> > +Sub-nodes:
-> > +The port would be added as a subnode if the "usb-role-switch" property=
- is
-> used.
-> > +	see graph.txt
->=20
-> I think we should describe which type of a subnode is needed.
-> I made an example below. This is based on the usb-connector.txt.
-> ---
-> Sub-nodes:
-> - any connector to the data bus of this controller should be modeled usin=
-g
-> the OF graph
-> bindings specified in bindings/graph.txt
+This patch changes the behavior, to exit the loop when a NULL element is
+found and n == -1. Essentially, this aligns the behavior with the
+doc-string.
 
-OK to me. I will add the following  at the end.  ", if the "usb-role-switch=
-" property is
-used."
-> ---
->=20
-> >  Example of R-Car H3 ES1.x:
-> >  	usb3_peri0: usb@ee020000 {
-> > @@ -39,3 +44,24 @@ Example of R-Car H3 ES1.x:
-> >  		interrupts =3D <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
-> >  		clocks =3D <&cpg CPG_MOD 327>;
-> >  	};
-> > +
-> > +Example of RZ/G2E:
-> > +	usb3_peri0: usb@ee020000 {
-> > +		compatible =3D "renesas,r8a774c0-usb3-peri",
-> > +			     "renesas,rcar-gen3-usb3-peri";
-> > +		reg =3D <0 0xee020000 0 0x400>;
-> > +		interrupts =3D <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
-> > +		clocks =3D <&cpg CPG_MOD 328>;
-> > +		companion =3D <&xhci0>;
-> > +		usb-role-switch;
-> > +
-> > +		port {
-> > +			#address-cells =3D <1>;
-> > +			#size-cells =3D <0>;
-> > +
-> > +			usb3peri_role_switch: endpoint@0 {
-> > +				reg =3D <0>;
->=20
-> I'm not sure, but I don't think this endpoint@0 and reg =3D <0> are neede=
-d.
-> In other words, can we use have following node?
-> 			usb3peri_role_switch: endpoint {
-> 				remote-endpoint =3D <&hd3ss3220_ep>;
-> 			};
+There are currently many users of `match_string()`, and so, in order to go
+through them, the next patches in the series will focus on doing some
+cosmetic changes, which are aimed at grouping the users of
+`match_string()`.
 
-OK . Will update  the example with
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+---
 
-        port {                                                             =
-     =20
-                usb3_role_switch: endpoint {                               =
-     =20
-                        remote-endpoint =3D <&hd3ss3220_ep>;               =
-       =20
-                 };                                                        =
-      =20
-         };
+Changelog v1 -> v2:
+* split the initial series into just 3 patches that fix the
+  `match_string()` helper and start introducing a new version of this
+  helper, which computes array-size of static arrays
 
-Regards,
-Biju
+ lib/string.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/lib/string.c b/lib/string.c
+index 6016eb3ac73d..e2cf5acc83bd 100644
+--- a/lib/string.c
++++ b/lib/string.c
+@@ -681,8 +681,11 @@ int match_string(const char * const *array, size_t n, const char *string)
+ 
+ 	for (index = 0; index < n; index++) {
+ 		item = array[index];
+-		if (!item)
++		if (!item) {
++			if (n != (size_t)-1)
++				continue;
+ 			break;
++		}
+ 		if (!strcmp(item, string))
+ 			return index;
+ 	}
+-- 
+2.20.1
+
