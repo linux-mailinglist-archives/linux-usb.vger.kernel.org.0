@@ -2,146 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5792C637
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 14:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAA92C646
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 14:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727045AbfE1MLl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 May 2019 08:11:41 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:53298 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726620AbfE1MLl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 May 2019 08:11:41 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id C21AE60271; Tue, 28 May 2019 12:11:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1559045499;
-        bh=2lQySrPSOTMzyxN6pFfdb+ev8cgoIVdkWaHsrsG9+pw=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=VZjh4BYAAVpZxfy0yQF0qtQoGet9/5UvUoYvfMpI3Vn5VllXfA8JwdO/lSM7EUw9P
-         VIw0sVaS+HJrHbXxZFR24R1+vvtHk2dDMkFsC2dOs4O726+kdp9t2bP1gaYRMpu9zX
-         7yaolr0o06xDn6rYBGTfdXB+hzhEQGQJqboI+ycM=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from purkki.adurom.net (purkki.adurom.net [80.68.90.206])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 472EB6070D;
-        Tue, 28 May 2019 12:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1559045499;
-        bh=2lQySrPSOTMzyxN6pFfdb+ev8cgoIVdkWaHsrsG9+pw=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=VZjh4BYAAVpZxfy0yQF0qtQoGet9/5UvUoYvfMpI3Vn5VllXfA8JwdO/lSM7EUw9P
-         VIw0sVaS+HJrHbXxZFR24R1+vvtHk2dDMkFsC2dOs4O726+kdp9t2bP1gaYRMpu9zX
-         7yaolr0o06xDn6rYBGTfdXB+hzhEQGQJqboI+ycM=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 472EB6070D
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Christian Lamparter <chunkeey@gmail.com>,
-        syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>,
-        <davem@davemloft.net>, <andreyknvl@google.com>,
-        <syzkaller-bugs@googlegroups.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH] network: wireless: p54u: Fix race between disconnect and firmware loading
-References: <Pine.LNX.4.44L0.1905201042110.1498-100000@iolanthe.rowland.org>
-Date:   Tue, 28 May 2019 15:11:34 +0300
-In-Reply-To: <Pine.LNX.4.44L0.1905201042110.1498-100000@iolanthe.rowland.org>
-        (Alan Stern's message of "Mon, 20 May 2019 10:44:21 -0400 (EDT)")
-Message-ID: <8736kyvkw9.fsf@purkki.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/23.4 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        id S1727057AbfE1MQq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 May 2019 08:16:46 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33339 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726592AbfE1MQq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 May 2019 08:16:46 -0400
+Received: by mail-pg1-f194.google.com with SMTP id h17so10907494pgv.0;
+        Tue, 28 May 2019 05:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=0bzN1Wwi4oBE37qwWfqH/W0xzz6B21Rsi/lku4rA1HU=;
+        b=GC+XuLNhgsspcdTlIzr9n9G1yCrMcPERolCYmerBEd3mW//yh8vCHhUwuijq01NzXK
+         ULXudmEVabpd/U7dZ9bftHqQo3DZoZpeOPwQxjgVjj0Lu8ht2iUpXWg4WI/GbfU5zYEV
+         c5YJ1z+9EBSdjuwEz+fgNhBTR5IagqjWFOiosspvYm3unOaWKqqEjexFj/4iepLAzpPv
+         yVfYDum+z58EDwjaPfpC0Q/frTMABE5f7vltdFqOceMWp41r0NNIM6YI14xBHfbDrbxe
+         mtB8GMNfxh/bXXmYiJm0VFeZEddlzF/Wgna28+TJ0hmVVYv/kmmGqSN6DV3r5fPgDn8/
+         q99g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=0bzN1Wwi4oBE37qwWfqH/W0xzz6B21Rsi/lku4rA1HU=;
+        b=ttHoRe3QIjpHkAbqfvsruDbJrN1OOgTOw1/NG4FglppVaEGI6whbSe7/pmDO/qe7Yq
+         dOvXRRW8y5MWOx+dDnEu829wT5RRtejTzIvKGsOPCa7qINweIuamoNglLJO8b8fbKUIM
+         rgjBIQ71yxh/dXFQeiZqEua0hMdqJHzKUlIITkI92/Q8KcHR4CSlyA+wcKQxXzpRgWEW
+         k8hMQNwYW/d7P4Ww/OKNOs54dLGSzCKhmAWfJvgCSnUKJtEfsas2MB2C+xQ4ptkb368q
+         1mS82MZ0ZY7JzHTT3jYlnwKyrNXL1GC8tYKzy7+KK3y3Vh3PEVqVa6zO15HCCqAZwAcB
+         XcVQ==
+X-Gm-Message-State: APjAAAW2OWYLnIp/bDne/peuPjyKi0iDAQ0kfDWfGORCgsaX1yoFxofB
+        vZJvqHE9ip0NSWxksdUXBYU=
+X-Google-Smtp-Source: APXvYqx2htZ5c7BUme8PJ4mYq+Ub94y0VjLyCWZp/yxZHUt0R+QXXZHwINt/m08IKYwIDUYYtSWoeA==
+X-Received: by 2002:a62:2cc2:: with SMTP id s185mr102870467pfs.106.1559045805596;
+        Tue, 28 May 2019 05:16:45 -0700 (PDT)
+Received: from xy-data.openstacklocal (ecs-159-138-22-150.compute.hwclouds-dns.com. [159.138.22.150])
+        by smtp.gmail.com with ESMTPSA id j22sm7448173pfh.71.2019.05.28.05.16.43
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 28 May 2019 05:16:45 -0700 (PDT)
+From:   Young Xiao <92siuyang@gmail.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Young Xiao <92siuyang@gmail.com>
+Subject: [PATCH] usb: gadget: fusb300_udc: Fix memory leak of fusb300->ep[i]
+Date:   Tue, 28 May 2019 20:17:54 +0800
+Message-Id: <1559045874-23818-1-git-send-email-92siuyang@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Alan Stern <stern@rowland.harvard.edu> writes:
+There is no deallocation of fusb300->ep[i] elements, allocated at
+fusb300_probe.
 
-> The syzbot fuzzer found a bug in the p54 USB wireless driver.  The
-> issue involves a race between disconnect and the firmware-loader
-> callback routine, and it has several aspects.
->
-> One big problem is that when the firmware can't be loaded, the
-> callback routine tries to unbind the driver from the USB _device_ (by
-> calling device_release_driver) instead of from the USB _interface_ to
-> which it is actually bound (by calling usb_driver_release_interface).
->
-> The race involves access to the private data structure.  The driver's
-> disconnect handler waits for a completion that is signalled by the
-> firmware-loader callback routine.  As soon as the completion is
-> signalled, you have to assume that the private data structure may have
-> been deallocated by the disconnect handler -- even if the firmware was
-> loaded without errors.  However, the callback routine does access the
-> private data several times after that point.
->
-> Another problem is that, in order to ensure that the USB device
-> structure hasn't been freed when the callback routine runs, the driver
-> takes a reference to it.  This isn't good enough any more, because now
-> that the callback routine calls usb_driver_release_interface, it has
-> to ensure that the interface structure hasn't been freed.
->
-> Finally, the driver takes an unnecessary reference to the USB device
-> structure in the probe function and drops the reference in the
-> disconnect handler.  This extra reference doesn't accomplish anything,
-> because the USB core already guarantees that a device structure won't
-> be deallocated while a driver is still bound to any of its interfaces.
->
-> To fix these problems, this patch makes the following changes:
->
-> 	Call usb_driver_release_interface() rather than
-> 	device_release_driver().
->
-> 	Don't signal the completion until after the important
-> 	information has been copied out of the private data structure,
-> 	and don't refer to the private data at all thereafter.
->
-> 	Lock udev (the interface's parent) before unbinding the driver
-> 	instead of locking udev->parent.
->
-> 	During the firmware loading process, take a reference to the
-> 	USB interface instead of the USB device.
->
-> 	Don't take an unnecessary reference to the device during probe
-> 	(and then don't drop it during disconnect).
->
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> Reported-and-tested-by: syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com
-> CC: <stable@vger.kernel.org>
->
-> ---
->
->
-> [as1899]
->
->
->  drivers/net/wireless/intersil/p54/p54usb.c |   43 ++++++++++++-----------------
->  1 file changed, 18 insertions(+), 25 deletions(-)
+The patch adds deallocation of fusb300->ep array elements.
 
-The correct prefix is "p54:", but I can fix that during commit.
+Signed-off-by: Young Xiao <92siuyang@gmail.com>
+---
+ drivers/usb/gadget/udc/fusb300_udc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> Index: usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
-> ===================================================================
-> --- usb-devel.orig/drivers/net/wireless/intersil/p54/p54usb.c
-> +++ usb-devel/drivers/net/wireless/intersil/p54/p54usb.c
-> @@ -33,6 +33,8 @@ MODULE_ALIAS("prism54usb");
->  MODULE_FIRMWARE("isl3886usb");
->  MODULE_FIRMWARE("isl3887usb");
->  
-> +static struct usb_driver p54u_driver;
-
-How is it safe to use static variables from a wireless driver? For
-example, what if there are two p54 usb devices on the host? How do we
-avoid a race in that case?
-
+diff --git a/drivers/usb/gadget/udc/fusb300_udc.c b/drivers/usb/gadget/udc/fusb300_udc.c
+index 263804d..00e3f66 100644
+--- a/drivers/usb/gadget/udc/fusb300_udc.c
++++ b/drivers/usb/gadget/udc/fusb300_udc.c
+@@ -1342,12 +1342,15 @@ static const struct usb_gadget_ops fusb300_gadget_ops = {
+ static int fusb300_remove(struct platform_device *pdev)
+ {
+ 	struct fusb300 *fusb300 = platform_get_drvdata(pdev);
++	int i;
+ 
+ 	usb_del_gadget_udc(&fusb300->gadget);
+ 	iounmap(fusb300->reg);
+ 	free_irq(platform_get_irq(pdev, 0), fusb300);
+ 
+ 	fusb300_free_request(&fusb300->ep[0]->ep, fusb300->ep0_req);
++	for (i = 0; i < FUSB300_MAX_NUM_EP; i++)
++		kfree(fusb300->ep[i]);
+ 	kfree(fusb300);
+ 
+ 	return 0;
+@@ -1491,6 +1494,8 @@ static int fusb300_probe(struct platform_device *pdev)
+ 		if (fusb300->ep0_req)
+ 			fusb300_free_request(&fusb300->ep[0]->ep,
+ 				fusb300->ep0_req);
++		for (i = 0; i < FUSB300_MAX_NUM_EP; i++)
++			kfree(fusb300->ep[i]);
+ 		kfree(fusb300);
+ 	}
+ 	if (reg)
 -- 
-Kalle Valo
+2.7.4
+
