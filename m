@@ -2,102 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E442C69B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 14:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652BB2C7F7
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 15:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbfE1Mew (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 May 2019 08:34:52 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36244 "EHLO mx1.suse.de"
+        id S1727089AbfE1Nkn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 May 2019 09:40:43 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:41972 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726999AbfE1Mew (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 May 2019 08:34:52 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0881DAE86;
-        Tue, 28 May 2019 12:34:50 +0000 (UTC)
-Message-ID: <1559046886.13873.2.camel@suse.com>
-Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jaewon Kim <jaewon31.kim@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        gregkh@linuxfoundation.org, Jaewon Kim <jaewon31.kim@samsung.com>,
-        m.szyprowski@samsung.com, ytk.lee@samsung.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Date:   Tue, 28 May 2019 14:34:46 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1905231001100.1553-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1905231001100.1553-100000@iolanthe.rowland.org>
-Content-Type: multipart/mixed; boundary="=-I2kQBv2Gth4pqYzgYdi+"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1727038AbfE1Nkn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 May 2019 09:40:43 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id E02D0BC582C82B9B2D32;
+        Tue, 28 May 2019 21:40:36 +0800 (CST)
+Received: from localhost (10.177.31.96) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Tue, 28 May 2019
+ 21:40:30 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <patrice.chotard@st.com>, <stern@rowland.harvard.edu>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] usb: host: ohci-st: Remove set but not used variable 'ohci'
+Date:   Tue, 28 May 2019 21:38:49 +0800
+Message-ID: <20190528133849.22156-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.177.31.96]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Fixes gcc '-Wunused-but-set-variable' warning:
 
---=-I2kQBv2Gth4pqYzgYdi+
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+drivers/usb/host/ohci-st.c: In function st_ohci_platform_probe:
+drivers/usb/host/ohci-st.c:135:19: warning: variable ohci set but not used [-Wunused-but-set-variable]
 
-Am Donnerstag, den 23.05.2019, 10:01 -0400 schrieb Alan Stern:
-> On Wed, 22 May 2019, Oliver Neukum wrote:
-> 
-> > On Mi, 2019-05-22 at 10:56 -0400, Alan Stern wrote:
-> > > On Wed, 22 May 2019, Oliver Neukum wrote:
-> > > 
-> > > > I agree with the problem, but I fail to see why this issue would be
-> > > > specific to USB. Shouldn't this be done in the device core layer?
-> > > 
-> > > Only for drivers that are on the block-device writeback path.  The 
-> > > device core doesn't know which drivers these are.
-> > 
-> > Neither does USB know. It is very hard to predict or even tell which
-> > devices are block device drivers. I think we must assume that
-> > any device may be affected.
-> 
-> All right.  Would you like to submit a patch?
+It's never used, so can be removed.
 
-Do you like this one?
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/usb/host/ohci-st.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-	Regards
-		Oliver
+diff --git a/drivers/usb/host/ohci-st.c b/drivers/usb/host/ohci-st.c
+index 992807c9850a..638a92bd2cdc 100644
+--- a/drivers/usb/host/ohci-st.c
++++ b/drivers/usb/host/ohci-st.c
+@@ -132,7 +132,6 @@ static int st_ohci_platform_probe(struct platform_device *dev)
+ 	struct resource *res_mem;
+ 	struct usb_ohci_pdata *pdata = &ohci_platform_defaults;
+ 	struct st_ohci_platform_priv *priv;
+-	struct ohci_hcd *ohci;
+ 	int err, irq, clk = 0;
+ 
+ 	if (usb_disabled())
+@@ -158,7 +157,6 @@ static int st_ohci_platform_probe(struct platform_device *dev)
+ 	platform_set_drvdata(dev, hcd);
+ 	dev->dev.platform_data = pdata;
+ 	priv = hcd_to_ohci_priv(hcd);
+-	ohci = hcd_to_ohci(hcd);
+ 
+ 	priv->phy = devm_phy_get(&dev->dev, "usb");
+ 	if (IS_ERR(priv->phy)) {
+-- 
+2.17.1
 
---=-I2kQBv2Gth4pqYzgYdi+
-Content-Disposition: attachment;
-	filename="0001-base-force-NOIO-allocations-during-unplug.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch; name="0001-base-force-NOIO-allocations-during-unplug.patch";
-	charset="UTF-8"
-
-RnJvbSAwZGM5YzdkZmU5OTRmYzljMjhhNjNiYTI4M2U0NDQyYzIzN2Y2OTg5IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUdWUsIDI4IE1heSAyMDE5IDExOjQzOjAyICswMjAwClN1YmplY3Q6IFtQQVRDSF0gYmFzZTog
-Zm9yY2UgTk9JTyBhbGxvY2F0aW9ucyBkdXJpbmcgdW5wbHVnCgpUaGVyZSBpcyBvbmUgb3Zlcmxv
-b2tlZCBzaXR1YXRpb24gdW5kZXIgd2hpY2ggYSBkcml2ZXIKbXVzdCBub3QgZG8gSU8gdG8gYWxs
-b2NhdGUgbWVtb3J5LiBZb3UgY2Fubm90IGRvIHRoYXQKd2hpbGUgZGlzY29ubmVjdGluZyBhIGRl
-dmljZS4gQSBkZXZpY2UgYmVpbmcgZGlzY29ubmVjdGVkCmlzIG5vIGxvbmdlciBmdW5jdGlvbmFs
-IGluIG1vc3QgY2FzZXMsIHlldCBJTyBtYXkgZmFpbApvbmx5IHdoZW4gdGhlIGhhbmRsZXIgcnVu
-cy4KClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+Ci0tLQog
-ZHJpdmVycy9iYXNlL2NvcmUuYyB8IDQgKysrKwogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9u
-cygrKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmFzZS9jb3JlLmMgYi9kcml2ZXJzL2Jhc2UvY29y
-ZS5jCmluZGV4IGZkNzUxMWUwNGU2Mi4uYTdmNWY0NWJkNzYxIDEwMDY0NAotLS0gYS9kcml2ZXJz
-L2Jhc2UvY29yZS5jCisrKyBiL2RyaXZlcnMvYmFzZS9jb3JlLmMKQEAgLTIyMjksNiArMjIyOSw3
-IEBAIHZvaWQgZGV2aWNlX2RlbChzdHJ1Y3QgZGV2aWNlICpkZXYpCiAJc3RydWN0IGRldmljZSAq
-cGFyZW50ID0gZGV2LT5wYXJlbnQ7CiAJc3RydWN0IGtvYmplY3QgKmdsdWVfZGlyID0gTlVMTDsK
-IAlzdHJ1Y3QgY2xhc3NfaW50ZXJmYWNlICpjbGFzc19pbnRmOworCXVuc2lnbmVkIGludCBub2lv
-X2ZsYWc7CiAKIAkvKgogCSAqIEhvbGQgdGhlIGRldmljZSBsb2NrIGFuZCBzZXQgdGhlICJkZWFk
-IiBmbGFnIHRvIGd1YXJhbnRlZSB0aGF0CkBAIC0yMjU2LDYgKzIyNTcsNyBAQCB2b2lkIGRldmlj
-ZV9kZWwoc3RydWN0IGRldmljZSAqZGV2KQogCQlkZXZpY2VfcmVtb3ZlX3N5c19kZXZfZW50cnko
-ZGV2KTsKIAkJZGV2aWNlX3JlbW92ZV9maWxlKGRldiwgJmRldl9hdHRyX2Rldik7CiAJfQorCW5v
-aW9fZmxhZyA9IG1lbWFsbG9jX25vaW9fc2F2ZSgpOwogCWlmIChkZXYtPmNsYXNzKSB7CiAJCWRl
-dmljZV9yZW1vdmVfY2xhc3Nfc3ltbGlua3MoZGV2KTsKIApAQCAtMjI3Nyw2ICsyMjc5LDggQEAg
-dm9pZCBkZXZpY2VfZGVsKHN0cnVjdCBkZXZpY2UgKmRldikKIAlkZXZpY2VfcGxhdGZvcm1fbm90
-aWZ5KGRldiwgS09CSl9SRU1PVkUpOwogCWRldmljZV9yZW1vdmVfcHJvcGVydGllcyhkZXYpOwog
-CWRldmljZV9saW5rc19wdXJnZShkZXYpOworCW1lbWFsbG9jX25vaW9fcmVzdG9yZShub2lvX2Zs
-YWcpOworCiAKIAlpZiAoZGV2LT5idXMpCiAJCWJsb2NraW5nX25vdGlmaWVyX2NhbGxfY2hhaW4o
-JmRldi0+YnVzLT5wLT5idXNfbm90aWZpZXIsCi0tIAoyLjE2LjQKCg==
-
-
---=-I2kQBv2Gth4pqYzgYdi+--
 
