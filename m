@@ -2,98 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAA92C646
-	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 14:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E442C69B
+	for <lists+linux-usb@lfdr.de>; Tue, 28 May 2019 14:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727057AbfE1MQq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 May 2019 08:16:46 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33339 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726592AbfE1MQq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 May 2019 08:16:46 -0400
-Received: by mail-pg1-f194.google.com with SMTP id h17so10907494pgv.0;
-        Tue, 28 May 2019 05:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=0bzN1Wwi4oBE37qwWfqH/W0xzz6B21Rsi/lku4rA1HU=;
-        b=GC+XuLNhgsspcdTlIzr9n9G1yCrMcPERolCYmerBEd3mW//yh8vCHhUwuijq01NzXK
-         ULXudmEVabpd/U7dZ9bftHqQo3DZoZpeOPwQxjgVjj0Lu8ht2iUpXWg4WI/GbfU5zYEV
-         c5YJ1z+9EBSdjuwEz+fgNhBTR5IagqjWFOiosspvYm3unOaWKqqEjexFj/4iepLAzpPv
-         yVfYDum+z58EDwjaPfpC0Q/frTMABE5f7vltdFqOceMWp41r0NNIM6YI14xBHfbDrbxe
-         mtB8GMNfxh/bXXmYiJm0VFeZEddlzF/Wgna28+TJ0hmVVYv/kmmGqSN6DV3r5fPgDn8/
-         q99g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=0bzN1Wwi4oBE37qwWfqH/W0xzz6B21Rsi/lku4rA1HU=;
-        b=ttHoRe3QIjpHkAbqfvsruDbJrN1OOgTOw1/NG4FglppVaEGI6whbSe7/pmDO/qe7Yq
-         dOvXRRW8y5MWOx+dDnEu829wT5RRtejTzIvKGsOPCa7qINweIuamoNglLJO8b8fbKUIM
-         rgjBIQ71yxh/dXFQeiZqEua0hMdqJHzKUlIITkI92/Q8KcHR4CSlyA+wcKQxXzpRgWEW
-         k8hMQNwYW/d7P4Ww/OKNOs54dLGSzCKhmAWfJvgCSnUKJtEfsas2MB2C+xQ4ptkb368q
-         1mS82MZ0ZY7JzHTT3jYlnwKyrNXL1GC8tYKzy7+KK3y3Vh3PEVqVa6zO15HCCqAZwAcB
-         XcVQ==
-X-Gm-Message-State: APjAAAW2OWYLnIp/bDne/peuPjyKi0iDAQ0kfDWfGORCgsaX1yoFxofB
-        vZJvqHE9ip0NSWxksdUXBYU=
-X-Google-Smtp-Source: APXvYqx2htZ5c7BUme8PJ4mYq+Ub94y0VjLyCWZp/yxZHUt0R+QXXZHwINt/m08IKYwIDUYYtSWoeA==
-X-Received: by 2002:a62:2cc2:: with SMTP id s185mr102870467pfs.106.1559045805596;
-        Tue, 28 May 2019 05:16:45 -0700 (PDT)
-Received: from xy-data.openstacklocal (ecs-159-138-22-150.compute.hwclouds-dns.com. [159.138.22.150])
-        by smtp.gmail.com with ESMTPSA id j22sm7448173pfh.71.2019.05.28.05.16.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 28 May 2019 05:16:45 -0700 (PDT)
-From:   Young Xiao <92siuyang@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Young Xiao <92siuyang@gmail.com>
-Subject: [PATCH] usb: gadget: fusb300_udc: Fix memory leak of fusb300->ep[i]
-Date:   Tue, 28 May 2019 20:17:54 +0800
-Message-Id: <1559045874-23818-1-git-send-email-92siuyang@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S1727137AbfE1Mew (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 May 2019 08:34:52 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36244 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726999AbfE1Mew (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 May 2019 08:34:52 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 0881DAE86;
+        Tue, 28 May 2019 12:34:50 +0000 (UTC)
+Message-ID: <1559046886.13873.2.camel@suse.com>
+Subject: Re: [RFC PATCH] usb: host: xhci: allow __GFP_FS in dma allocation
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jaewon Kim <jaewon31.kim@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
+        gregkh@linuxfoundation.org, Jaewon Kim <jaewon31.kim@samsung.com>,
+        m.szyprowski@samsung.com, ytk.lee@samsung.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Tue, 28 May 2019 14:34:46 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1905231001100.1553-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1905231001100.1553-100000@iolanthe.rowland.org>
+Content-Type: multipart/mixed; boundary="=-I2kQBv2Gth4pqYzgYdi+"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is no deallocation of fusb300->ep[i] elements, allocated at
-fusb300_probe.
 
-The patch adds deallocation of fusb300->ep array elements.
+--=-I2kQBv2Gth4pqYzgYdi+
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Young Xiao <92siuyang@gmail.com>
----
- drivers/usb/gadget/udc/fusb300_udc.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Am Donnerstag, den 23.05.2019, 10:01 -0400 schrieb Alan Stern:
+> On Wed, 22 May 2019, Oliver Neukum wrote:
+> 
+> > On Mi, 2019-05-22 at 10:56 -0400, Alan Stern wrote:
+> > > On Wed, 22 May 2019, Oliver Neukum wrote:
+> > > 
+> > > > I agree with the problem, but I fail to see why this issue would be
+> > > > specific to USB. Shouldn't this be done in the device core layer?
+> > > 
+> > > Only for drivers that are on the block-device writeback path.  The 
+> > > device core doesn't know which drivers these are.
+> > 
+> > Neither does USB know. It is very hard to predict or even tell which
+> > devices are block device drivers. I think we must assume that
+> > any device may be affected.
+> 
+> All right.  Would you like to submit a patch?
 
-diff --git a/drivers/usb/gadget/udc/fusb300_udc.c b/drivers/usb/gadget/udc/fusb300_udc.c
-index 263804d..00e3f66 100644
---- a/drivers/usb/gadget/udc/fusb300_udc.c
-+++ b/drivers/usb/gadget/udc/fusb300_udc.c
-@@ -1342,12 +1342,15 @@ static const struct usb_gadget_ops fusb300_gadget_ops = {
- static int fusb300_remove(struct platform_device *pdev)
- {
- 	struct fusb300 *fusb300 = platform_get_drvdata(pdev);
-+	int i;
- 
- 	usb_del_gadget_udc(&fusb300->gadget);
- 	iounmap(fusb300->reg);
- 	free_irq(platform_get_irq(pdev, 0), fusb300);
- 
- 	fusb300_free_request(&fusb300->ep[0]->ep, fusb300->ep0_req);
-+	for (i = 0; i < FUSB300_MAX_NUM_EP; i++)
-+		kfree(fusb300->ep[i]);
- 	kfree(fusb300);
- 
- 	return 0;
-@@ -1491,6 +1494,8 @@ static int fusb300_probe(struct platform_device *pdev)
- 		if (fusb300->ep0_req)
- 			fusb300_free_request(&fusb300->ep[0]->ep,
- 				fusb300->ep0_req);
-+		for (i = 0; i < FUSB300_MAX_NUM_EP; i++)
-+			kfree(fusb300->ep[i]);
- 		kfree(fusb300);
- 	}
- 	if (reg)
--- 
-2.7.4
+Do you like this one?
+
+	Regards
+		Oliver
+
+--=-I2kQBv2Gth4pqYzgYdi+
+Content-Disposition: attachment;
+	filename="0001-base-force-NOIO-allocations-during-unplug.patch"
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch; name="0001-base-force-NOIO-allocations-during-unplug.patch";
+	charset="UTF-8"
+
+RnJvbSAwZGM5YzdkZmU5OTRmYzljMjhhNjNiYTI4M2U0NDQyYzIzN2Y2OTg5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBUdWUsIDI4IE1heSAyMDE5IDExOjQzOjAyICswMjAwClN1YmplY3Q6IFtQQVRDSF0gYmFzZTog
+Zm9yY2UgTk9JTyBhbGxvY2F0aW9ucyBkdXJpbmcgdW5wbHVnCgpUaGVyZSBpcyBvbmUgb3Zlcmxv
+b2tlZCBzaXR1YXRpb24gdW5kZXIgd2hpY2ggYSBkcml2ZXIKbXVzdCBub3QgZG8gSU8gdG8gYWxs
+b2NhdGUgbWVtb3J5LiBZb3UgY2Fubm90IGRvIHRoYXQKd2hpbGUgZGlzY29ubmVjdGluZyBhIGRl
+dmljZS4gQSBkZXZpY2UgYmVpbmcgZGlzY29ubmVjdGVkCmlzIG5vIGxvbmdlciBmdW5jdGlvbmFs
+IGluIG1vc3QgY2FzZXMsIHlldCBJTyBtYXkgZmFpbApvbmx5IHdoZW4gdGhlIGhhbmRsZXIgcnVu
+cy4KClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+Ci0tLQog
+ZHJpdmVycy9iYXNlL2NvcmUuYyB8IDQgKysrKwogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9u
+cygrKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmFzZS9jb3JlLmMgYi9kcml2ZXJzL2Jhc2UvY29y
+ZS5jCmluZGV4IGZkNzUxMWUwNGU2Mi4uYTdmNWY0NWJkNzYxIDEwMDY0NAotLS0gYS9kcml2ZXJz
+L2Jhc2UvY29yZS5jCisrKyBiL2RyaXZlcnMvYmFzZS9jb3JlLmMKQEAgLTIyMjksNiArMjIyOSw3
+IEBAIHZvaWQgZGV2aWNlX2RlbChzdHJ1Y3QgZGV2aWNlICpkZXYpCiAJc3RydWN0IGRldmljZSAq
+cGFyZW50ID0gZGV2LT5wYXJlbnQ7CiAJc3RydWN0IGtvYmplY3QgKmdsdWVfZGlyID0gTlVMTDsK
+IAlzdHJ1Y3QgY2xhc3NfaW50ZXJmYWNlICpjbGFzc19pbnRmOworCXVuc2lnbmVkIGludCBub2lv
+X2ZsYWc7CiAKIAkvKgogCSAqIEhvbGQgdGhlIGRldmljZSBsb2NrIGFuZCBzZXQgdGhlICJkZWFk
+IiBmbGFnIHRvIGd1YXJhbnRlZSB0aGF0CkBAIC0yMjU2LDYgKzIyNTcsNyBAQCB2b2lkIGRldmlj
+ZV9kZWwoc3RydWN0IGRldmljZSAqZGV2KQogCQlkZXZpY2VfcmVtb3ZlX3N5c19kZXZfZW50cnko
+ZGV2KTsKIAkJZGV2aWNlX3JlbW92ZV9maWxlKGRldiwgJmRldl9hdHRyX2Rldik7CiAJfQorCW5v
+aW9fZmxhZyA9IG1lbWFsbG9jX25vaW9fc2F2ZSgpOwogCWlmIChkZXYtPmNsYXNzKSB7CiAJCWRl
+dmljZV9yZW1vdmVfY2xhc3Nfc3ltbGlua3MoZGV2KTsKIApAQCAtMjI3Nyw2ICsyMjc5LDggQEAg
+dm9pZCBkZXZpY2VfZGVsKHN0cnVjdCBkZXZpY2UgKmRldikKIAlkZXZpY2VfcGxhdGZvcm1fbm90
+aWZ5KGRldiwgS09CSl9SRU1PVkUpOwogCWRldmljZV9yZW1vdmVfcHJvcGVydGllcyhkZXYpOwog
+CWRldmljZV9saW5rc19wdXJnZShkZXYpOworCW1lbWFsbG9jX25vaW9fcmVzdG9yZShub2lvX2Zs
+YWcpOworCiAKIAlpZiAoZGV2LT5idXMpCiAJCWJsb2NraW5nX25vdGlmaWVyX2NhbGxfY2hhaW4o
+JmRldi0+YnVzLT5wLT5idXNfbm90aWZpZXIsCi0tIAoyLjE2LjQKCg==
+
+
+--=-I2kQBv2Gth4pqYzgYdi+--
 
