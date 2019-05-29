@@ -2,86 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D493D2DA6C
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 12:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB712DAB1
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 12:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbfE2KYl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 May 2019 06:24:41 -0400
-Received: from mga09.intel.com ([134.134.136.24]:11595 "EHLO mga09.intel.com"
+        id S1726798AbfE2K2y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 May 2019 06:28:54 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:48996 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725911AbfE2KYk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 May 2019 06:24:40 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 May 2019 03:24:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,526,1549958400"; 
-   d="scan'208";a="179534587"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga002.fm.intel.com with ESMTP; 29 May 2019 03:24:38 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Ran Wang <ran.wang_1@nxp.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list\:DESIGNWARE USB3 DRD IP DRIVER" 
-        <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH] usb: dwc3: Enable the USB snooping
-In-Reply-To: <AM5PR0402MB2865AB6C2A50851B7EA4E653F11F0@AM5PR0402MB2865.eurprd04.prod.outlook.com>
-References: <20171115060459.45375-1-ran.wang_1@nxp.com> <87ineb9b5v.fsf@linux.intel.com> <VI1PR04MB1504776EF3D4D8C374F0C069F1290@VI1PR04MB1504.eurprd04.prod.outlook.com> <87shdfet90.fsf@linux.intel.com> <AM5PR0402MB28654EBE2D431CC2F8061CF8F11E0@AM5PR0402MB2865.eurprd04.prod.outlook.com> <87k1eaanjw.fsf@linux.intel.com> <AM5PR0402MB2865AB6C2A50851B7EA4E653F11F0@AM5PR0402MB2865.eurprd04.prod.outlook.com>
-Date:   Wed, 29 May 2019 13:24:37 +0300
-Message-ID: <874l5dr21m.fsf@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1725956AbfE2K2x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 May 2019 06:28:53 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 91BC81A0273;
+        Wed, 29 May 2019 12:28:50 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 84F8D1A0118;
+        Wed, 29 May 2019 12:28:50 +0200 (CEST)
+Received: from fsr-ub1864-101.ea.freescale.net (fsr-ub1864-101.ea.freescale.net [10.171.82.13])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id F20E1205E4;
+        Wed, 29 May 2019 12:28:49 +0200 (CEST)
+From:   laurentiu.tudor@nxp.com
+To:     hch@lst.de, stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, marex@denx.de
+Cc:     leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
+        robin.murphy@arm.com, noring@nocrew.org, JuergenUrban@gmx.de,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Subject: [PATCH v7 0/5] prerequisites for device reserved local mem rework
+Date:   Wed, 29 May 2019 13:28:38 +0300
+Message-Id: <20190529102843.13174-1-laurentiu.tudor@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Laurentiu Tudor <laurentiu.tudor@nxp.com>
 
-Hi,
+For HCs that have local memory, replace the current DMA API usage
+with a genalloc generic allocator to manage the mappings for these
+devices.
+This is in preparation for dropping the existing "coherent" dma
+mem declaration APIs. Current implementation was relying on a short
+circuit in the DMA API that in the end, was acting as an allocator
+for these type of devices.
 
-Ran Wang <ran.wang_1@nxp.com> writes:
->> >> >> c) WHAT does this mean for PCI devices?
->
-> According to DWC3 data book, I think this (PCI) mean to the case of 'master bus type = Native'
-> The data book describes this feature as 'system bus DMA option for the master bus,
-> which may be configured as AHB, AXI, or Native.' On Table 6-5, it says when MBUS_TYPE
-> is Native, the definition of 4 transfer types control bits [3-0] is 'Same as AXI'.
->
-> However, as to the code implementation to be generic to both PCI and AXI,
-> I admit I don't have a perfect solution so far, only 2 proposals with concerns:
->
-> a. Create another module driver like dwc3-exynos.c (arch/arm/boot/dts/wxynos54xx.dtsi)
->     to contain above programming code. However, it will touch the same reg range of DWC3
->     I think this is not good.
+Only compiled tested, so any volunteers willing to test are most welcome.
 
-I'd prefer avoiding another glue :-)
+Thank you!
 
-> b. Add #ifdef CONFIG_ARCH_LAYERSCAPE in drivers/usb/dwc3/core.c to constrain hacking code
->    can only take effect for Layerscape (AXI case). I know it look ugly.
->
-> Do you have any better advice on this (besides changed power on default value from HW perspective)?
+For context, see thread here: https://lkml.org/lkml/2019/4/22/357
 
-Maybe we don't need to care, actually. Since this property will only be
-needed for RTL instantiation that didn't configure these defaults
-properly during coreConsultant.
+Changes in v7:
+ - drop useless __iomem annotation to fix sparse warning
+ - select GENERIC_ALLOCATOR to fix compilation on sh arch
 
->> >> >> Another question is: Why wasn't this setup properly during
->> >> >> coreConsultant instantiation of the RTL? Do you have devices on
->> >> >> the market already that need this or is this some early FPGA model
->> >> >> or test-only
->> >> ASIC?
->
-> Several Layerscape platforms like LS1043ARDB, LS1046ARDB, etc. are already on
-> the market and have this issue. So I have to work out a SW patch to fix them.
+Changes in v6:
+ - drop some unneeded initializations (Alan)
+ - use device name for genpool instead of misleading "ohci-hcd" (Alan)
+ - updated some comments (Alan, Fredrik)
+ - added Tested-By tags
 
-Thank you, now I'm certain that this is not some temporary solution :-)
+Changes in v5:
+ - updated first patch to preserve bisectability (Christoph, Greg)
+ - fixed a few more places where dma api was still being
+   used (e.g. td_alloc, ed_alloc) (Fredrik)
+ - included patch from Fredrik adding gen_pool_dma_zalloc() api
+ - added patch that drops HCD_LOCAL_MEM altogether (Greg)
+ - set td_cache / ed_cache to null for devices with local mem (Fredrik)
+ - introduce usb_hcd_setup_local_mem() that sets up the genalloc
+   pool for drivers and updated drivers to use it
 
-Thanks for going through this again. Please refresh the patch so we can
-try to get it merged.
+Changes in v4:
+ - created mapping for local mem
+ - fix genalloc misuse
+
+Changes in v3:
+ - rearranged calls into genalloc simplifying the code a bit (Christoph)
+ - dropped RFC prefix
+
+Changes in v2:
+ - use genalloc also in core usb (based on comment from Robin)
+ - moved genpool decl to usb_hcd to be accesible from core usb
+
+Fredrik Noring (1):
+  lib/genalloc.c: Add gen_pool_dma_zalloc() for zeroed DMA allocations
+
+Laurentiu Tudor (4):
+  USB: use genalloc for USB HCs with local memory
+  usb: host: ohci-sm501: init genalloc for local memory
+  usb: host: ohci-tmio: init genalloc for local memory
+  USB: drop HCD_LOCAL_MEM flag
+
+ drivers/usb/Kconfig            |  1 +
+ drivers/usb/core/buffer.c      | 17 ++++++++----
+ drivers/usb/core/hcd.c         | 51 ++++++++++++++++++++++++++++------
+ drivers/usb/host/ehci-hcd.c    |  2 +-
+ drivers/usb/host/fotg210-hcd.c |  2 +-
+ drivers/usb/host/ohci-hcd.c    | 25 +++++++++++++----
+ drivers/usb/host/ohci-mem.c    | 35 ++++++++++++++++++++---
+ drivers/usb/host/ohci-sm501.c  | 50 +++++++++++++++------------------
+ drivers/usb/host/ohci-tmio.c   | 15 ++++------
+ drivers/usb/host/ohci.h        |  2 ++
+ drivers/usb/host/uhci-hcd.c    |  2 +-
+ include/linux/genalloc.h       |  1 +
+ include/linux/usb/hcd.h        |  6 +++-
+ lib/genalloc.c                 | 29 ++++++++++++++++++-
+ 14 files changed, 172 insertions(+), 66 deletions(-)
 
 -- 
-balbi
+2.17.1
+
