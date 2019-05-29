@@ -2,128 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3852D732
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 10:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 543512D745
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 10:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbfE2ICE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 May 2019 04:02:04 -0400
-Received: from mail-it1-f194.google.com ([209.85.166.194]:50907 "EHLO
-        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbfE2ICE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 May 2019 04:02:04 -0400
-Received: by mail-it1-f194.google.com with SMTP id a186so2228188itg.0;
-        Wed, 29 May 2019 01:02:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cNs/DjgSkhhFm41DuwpPA/uTnvP0iIX8DGGy2jep3vs=;
-        b=iAr10vNL8vVbcFz5e/0feLbnzig1ZJRkH/UI2N3ULbh+IM1tfloN9izTztmcEXmqZ3
-         enReLIKCSXVRr0lz/V8j2GGj4eXDcdtmHWcUYAQAa15SGM3HyDsXI0FDYiVaxBpp224v
-         CnQMfj1BRWPeLLig7KSGXj8EvB2V3PFCfJsdFK5CQy8mRZXUSskt3Kw5aZ09Pw/OAlry
-         R4UYssHcp3eYRM4IeHSE4di1x8mVm5uyttSAPOcwgCmNExG7CJI8h4fK1QeV71sgZnb0
-         3yWGuHIYwj77ycNMx91lFQql3rB6jNPMbVPMASi57/5MNSPlugzSRd/rJK2K0WH3F62C
-         mImw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cNs/DjgSkhhFm41DuwpPA/uTnvP0iIX8DGGy2jep3vs=;
-        b=aDUkOyg5UXw0fIfEzbXn+IWv2PdmUTMuuP+rXXydzm6nlb4RV2YbFmzI7pTHMqqQc2
-         tXtly21g4T3/KnSrLZS4bFTB3zGCzq4E7Y0l0j+49TzG5/znHtMOB1LrAOcU4Jh5Ml/x
-         TS30uyypnHdeUtmeolLQwXDS8p55Ra4iS1WFdp7EWCWnrKW914RjAU7+ltoZXfMIFsUU
-         w1DVL757aTWlgI3loGo2sa92+GSGaeh1Tw5LzISK8JaqFTIHPeV0tuNGW5nXhDhK60+O
-         0si5iTYQP7RRPR9PnMKRiFpnXlNATWUwj35sMnNZljBVdlAtxqJxGa8iLxxRwfQkpRwB
-         YiEw==
-X-Gm-Message-State: APjAAAVYQ5CsnfTKCKLtM6EACHgq+L2uOrb4jphh6QHDOCjR7P4p3bp/
-        drG3qJ+l95dtooSoMnz+1oJYDoGVfgde5HuFWHg=
-X-Google-Smtp-Source: APXvYqwvFd41OFIbocvUXGP2j7aAAJZCHWUTEAAnUQhiZs6NcfAOpnpbPn3BvlRNusg/hlvVCetJWfwvuEZhJvkEJj0=
-X-Received: by 2002:a24:4dd4:: with SMTP id l203mr6122816itb.118.1559116923334;
- Wed, 29 May 2019 01:02:03 -0700 (PDT)
+        id S1726069AbfE2IGS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 May 2019 04:06:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42330 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725895AbfE2IGS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 May 2019 04:06:18 -0400
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8EA9B216FD;
+        Wed, 29 May 2019 08:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559117177;
+        bh=zvkST1rrqAg/0EOMioHca7dyZZQf08kifXr9Tqwv1TY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vUNz/6qp6rgUk8CZ+2U7gSM5z5XeE+KIKg/XYq1Pc5+kVlDHCfRFV1RLa8xzUeCsK
+         MR6znKBAa6DT2x6mrdgVdyb42sTfTGyJwEbRVyaa9KtmE14E2qtbshiO5c5/qLxbC8
+         9lDQge5BCqUrdC/ctmqhyTVLrD+qtZFjXRFOvODw=
+Received: by mail-lj1-f174.google.com with SMTP id h11so1508443ljb.2;
+        Wed, 29 May 2019 01:06:17 -0700 (PDT)
+X-Gm-Message-State: APjAAAVUCj/lMAuoFFGrnuzmQGx9jTGTgOr7tedFc6wgOHfgkIBLTd39
+        V1JlyM70Pu5vn8+ElVFnSAZlMm8kImgxPjuyWnw=
+X-Google-Smtp-Source: APXvYqyCNE8aywzruJ1YPsXvoW7Bi8221F62kZ3/oAeiwe1WKZBh2+oYFfOng8NxegoBNooj4esz6WKDqWb0C1gMxKU=
+X-Received: by 2002:a2e:9601:: with SMTP id v1mr21039204ljh.60.1559117175876;
+ Wed, 29 May 2019 01:06:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190529065948.5492-1-andrew.smirnov@gmail.com>
-In-Reply-To: <20190529065948.5492-1-andrew.smirnov@gmail.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Wed, 29 May 2019 16:01:51 +0800
-Message-ID: <CAL411-qcHLFL6ATCqHw_jCZDiHvsF32WZM5dJGCC4C0vyiGvwQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: phy: mxs: Disable external charger detect in mxs_phy_hw_init()
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Chris Healy <cphealy@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        lkml <linux-kernel@vger.kernel.org>
+References: <20190528134305.10184-1-yuehaibing@huawei.com>
+In-Reply-To: <20190528134305.10184-1-yuehaibing@huawei.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 29 May 2019 10:06:04 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPfdhZ1WZZQrqMn69mwJ1aAVVOAD4TJqOc7FMws0+-MG9A@mail.gmail.com>
+Message-ID: <CAJKOXPfdhZ1WZZQrqMn69mwJ1aAVVOAD4TJqOc7FMws0+-MG9A@mail.gmail.com>
+Subject: Re: [PATCH -next] usb: ohci-s3c2410: Remove set but not used variable 'hcd'
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     stern@rowland.harvard.edu, kgene@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 29, 2019 at 3:01 PM Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
+On Tue, 28 May 2019 at 15:43, YueHaibing <yuehaibing@huawei.com> wrote:
 >
-> Since this driver already handles changer detction state, copy the
-> workaround code currently residing in arch/arm/mach-imx/anatop.c into
-> this drier to consolidate the places modifying it.
+> Fixes gcc '-Wunused-but-set-variable' warning:
 >
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> Cc: Chris Healy <cphealy@gmail.com>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
+> drivers/usb/host/ohci-s3c2410.c: In function s3c2410_hcd_oc:
+> drivers/usb/host/ohci-s3c2410.c:296:18: warning: variable hcd set but not used [-Wunused-but-set-variable]
+>
+> It is never used, so can be removed.
+>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 > ---
->
-> The intent of this patch is to consolidate all of the code maipulating
-> charge detection state to a signle place and if this patch is agreed
-> upon I plan to follow it up with this change:
->
-> https://github.com/ndreys/linux/commit/7248f2b85b4706760fd33d2ff970e2ea12d3bea7
->
-> Thanks,
-> Andrey Smirnov
->
->  drivers/usb/phy/phy-mxs-usb.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-> index 1b1bb0ad40c3..6fa16ab31e2e 100644
-> --- a/drivers/usb/phy/phy-mxs-usb.c
-> +++ b/drivers/usb/phy/phy-mxs-usb.c
-> @@ -63,6 +63,7 @@
->
->  #define ANADIG_USB1_CHRG_DETECT_SET            0x1b4
->  #define ANADIG_USB1_CHRG_DETECT_CLR            0x1b8
-> +#define ANADIG_USB2_CHRG_DETECT_SET            0x214
->  #define ANADIG_USB1_CHRG_DETECT_EN_B           BIT(20)
->  #define ANADIG_USB1_CHRG_DETECT_CHK_CHRG_B     BIT(19)
->  #define ANADIG_USB1_CHRG_DETECT_CHK_CONTACT    BIT(18)
-> @@ -250,6 +251,19 @@ static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
->         if (mxs_phy->data->flags & MXS_PHY_NEED_IP_FIX)
->                 writel(BM_USBPHY_IP_FIX, base + HW_USBPHY_IP_SET);
->
-> +       if (mxs_phy->regmap_anatop) {
-> +               unsigned int reg = mxs_phy->port_id ?
-> +                       ANADIG_USB1_CHRG_DETECT_SET :
-> +                       ANADIG_USB2_CHRG_DETECT_SET;
-> +               /*
-> +                * The external charger detector needs to be disabled,
-> +                * or the signal at DP will be poor
-> +                */
-> +               regmap_write(mxs_phy->regmap_anatop, reg,
-> +                            ANADIG_USB1_CHRG_DETECT_EN_B |
-> +                            ANADIG_USB1_CHRG_DETECT_CHK_CHRG_B);
-> +       }
-> +
->         mxs_phy_tx_init(mxs_phy);
->
->         return 0;
-> --
-> 2.21.0
->
+>  drivers/usb/host/ohci-s3c2410.c | 2 --
+>  1 file changed, 2 deletions(-)
 
-Reviewed-by: Peter Chen <peter.chen@nxp.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+Best regards,
+Krzysztof
