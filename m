@@ -2,223 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BD72E04E
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 16:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 691402E064
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 17:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726927AbfE2O4B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 May 2019 10:56:01 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:5851 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726240AbfE2O4A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 May 2019 10:56:00 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cee9d7e0000>; Wed, 29 May 2019 07:55:58 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 29 May 2019 07:55:58 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 29 May 2019 07:55:58 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL103.nvidia.com
- (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 May
- 2019 14:55:57 +0000
-Received: from HQMAIL103.nvidia.com (172.20.187.11) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 May
- 2019 14:55:58 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL103.nvidia.com
- (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 29 May 2019 14:55:57 +0000
-Received: from jilin-desktop.nvidia.com (Not Verified[10.19.120.158]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cee9d7c0000>; Wed, 29 May 2019 07:55:57 -0700
-From:   Jim Lin <jilin@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <stern@rowland.harvard.edu>, <kai.heng.feng@canonical.com>,
-        <drinkcat@chromium.org>, <Thinh.Nguyen@synopsys.com>,
-        <nsaenzjulienne@suse.de>, <jflat@chromium.org>, <malat@debian.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jim Lin <jilin@nvidia.com>
-Subject: [PATCH v11 2/2] usb: xhci: Add Clear_TT_Buffer
-Date:   Wed, 29 May 2019 22:55:49 +0800
-Message-ID: <1559141749-5159-3-git-send-email-jilin@nvidia.com>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1559141749-5159-1-git-send-email-jilin@nvidia.com>
-References: <1559141749-5159-1-git-send-email-jilin@nvidia.com>
+        id S1726670AbfE2PAH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 May 2019 11:00:07 -0400
+Received: from mail-eopbgr760042.outbound.protection.outlook.com ([40.107.76.42]:62331
+        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726147AbfE2PAH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 May 2019 11:00:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector1-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ON5/Ha0qg8YzKDotvQGjWDShxo70tZShCJ7W05kbDC4=;
+ b=0SF+kbZqFgllf06drQMR/1svsVbUkafsrbO60fTGWEtfOJ8qEO7obMy/3BOIlHM3+qeq30pib/58op75htNWOwQ+PoZU0SP97scINUX/eHLo0csB+22iaoC2lASVRipe6/ct5ogKPMz1W7hlGk7TQoUbBUO4Z4TgLaMBErWcAlU=
+Received: from DM6PR02CA0012.namprd02.prod.outlook.com (2603:10b6:5:1c::25) by
+ BYAPR02MB4936.namprd02.prod.outlook.com (2603:10b6:a03:47::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1943.17; Wed, 29 May 2019 15:00:03 +0000
+Received: from CY1NAM02FT055.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::204) by DM6PR02CA0012.outlook.office365.com
+ (2603:10b6:5:1c::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1943.16 via Frontend
+ Transport; Wed, 29 May 2019 15:00:03 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.100)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.100; helo=xsj-pvapsmtpgw02;
+Received: from xsj-pvapsmtpgw02 (149.199.60.100) by
+ CY1NAM02FT055.mail.protection.outlook.com (10.152.74.80) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1922.16
+ via Frontend Transport; Wed, 29 May 2019 15:00:02 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66]:33191 helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw02 with esmtp (Exim 4.63)
+        (envelope-from <anurag.kumar.vulisha@xilinx.com>)
+        id 1hW03e-0001wV-AL; Wed, 29 May 2019 08:00:02 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <anurag.kumar.vulisha@xilinx.com>)
+        id 1hW03Z-0006Tc-65; Wed, 29 May 2019 07:59:57 -0700
+Received: from xsj-pvapsmtp01 (smtp3.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id x4TExlSJ022944;
+        Wed, 29 May 2019 07:59:48 -0700
+Received: from [172.23.64.8] (helo=xhdvnc108.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <anuragku@xilinx.com>)
+        id 1hW03P-0006TH-Ft; Wed, 29 May 2019 07:59:47 -0700
+Received: by xhdvnc108.xilinx.com (Postfix, from userid 15427)
+        id A962D604A9; Wed, 29 May 2019 20:29:46 +0530 (IST)
+From:   Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v.anuragkumar@gmail.com,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+Subject: [PATCH] usb: dwc3: gadget: Correct the logic for finding last SG entry
+Date:   Wed, 29 May 2019 20:29:45 +0530
+Message-Id: <1559141985-17104-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+X-Mailer: git-send-email 2.1.1
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.100;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(376002)(136003)(346002)(39860400002)(396003)(2980300002)(189003)(199004)(50226002)(8936002)(186003)(26005)(42186006)(316002)(52956003)(63266004)(107886003)(426003)(8676002)(2616005)(48376002)(50466002)(305945005)(103686004)(336012)(81156014)(81166006)(478600001)(14444005)(36756003)(47776003)(51416003)(70206006)(70586007)(5660300002)(356004)(2906002)(4326008)(110136005)(36386004)(126002)(16586007)(486006)(6266002)(106002)(476003)(5001870100001);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR02MB4936;H:xsj-pvapsmtpgw02;FPR:;SPF:Pass;LANG:en;PTR:xapps1.xilinx.com,unknown-60-100.xilinx.com;MX:1;A:1;
 MIME-Version: 1.0
 Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1559141758; bh=qJsqgG/wairsxZLuJhaLHWT5QFH0t31DOAuVLrlkZ6M=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:Content-Type;
-        b=MIA0M6VbI40NHvRwArxHcu3C/O5kltkpv7FJsz4MDz/LZdjum4Q3dtNWsHvts8hIs
-         Y1/KxZsAFh62NL/v8eIVjNU4MH2BOiFWL+PfAbcJiYPwd+2uLy6Mmx/k3P8PIR0hXv
-         KjwpZzQ+4jt+gc2cQ6UcvsbztmjfTSvLqM6l+viU71DOMUXFtn1MPUCfXQb1ewV5m9
-         ih/WArK4QrxiLCUck8rkMal2m3qqA48mRsdTPcj06aCWh1NQ7XYBk5GUDFPAhwksyy
-         qIO9mRmdEdCiJjnLNdkxPAYCqsgEERZtFXdhD7QPHlyI3BHqO+WxsfXwwOv8j9Cm60
-         Mi7UJHyxK6tFg==
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 61636102-3efd-4fdf-2a32-08d6e4465439
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(4709054)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328);SRVR:BYAPR02MB4936;
+X-MS-TrafficTypeDiagnostic: BYAPR02MB4936:
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-Microsoft-Antispam-PRVS: <BYAPR02MB4936451F5CDB8BDE86C17686A71F0@BYAPR02MB4936.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Forefront-PRVS: 0052308DC6
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: +WF5sPnKo8c/mn8HNcknG+/9BqVGaMRf2DcOSTlg9RVPOwMCcvsPiLnOvue+Vs0wyZLILiS5s79zRzq9qvIcm5EFJecMOD31/xDLZn+3Pq8Y2Ygb5aNtGTFWtd3YhnOY9pQ2U1L9MIqFXr7JSiOu+ACA+JhH0+tZnf4f2yaaOurTTE0VjMmkwSsiwkfrLTYL6MLrGiLsmMMCVFEpSREYvJpH3qRD0j0f+0qH0QmgL6beSKaeNIk0vr2ykUlrzqwv1DgUBxXGj2zpUQH1LP8X0zYo9ri5ChMJmNkwYBVpWat49llzdjRuFW6uEunL4xlW3UeeFNbNJ5yh2yQ545EebYGlbCOpirOA7NFLopFfz/0wz3YIjAT8bvYRDBOHYaRQHWcoLV3l/7UEXZlzjkZ0bTegFQIy/v2/WnV+1sgYLsw=
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2019 15:00:02.7416
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61636102-3efd-4fdf-2a32-08d6e4465439
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.100];Helo=[xsj-pvapsmtpgw02]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4936
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-processing for full-/low-speed endpoints connected via a TT, the host
-software must use the Clear_TT_Buffer request to the TT to ensure
-that the buffer is not in the busy state".
+As a process of preparing TRBs usb_gadget_map_request_by_dev() is
+called from dwc3_prepare_trbs() for mapping the request. This will
+call dma_map_sg() if req->num_sgs are greater than 0. dma_map_sg()
+will map the sg entries in sglist and return the number of mapped SGs.
+As a part of mapping, some sg entries having contigous memory may be
+merged together into a single sg (when IOMMU used). So, the number of
+mapped sg entries may not be equal to the number of orginal sg entries
+in the request (req->num_sgs).
 
-In our case, a full-speed speaker (ConferenceCam) is behind a high-
-speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-request we may continue to get STALL with the folllowing requests,
-like Set_Interface.
+As a part of preparing the TRBs, dwc3_prepare_one_trb_sg() iterates over
+the sg entries present in the sglist and calls sg_is_last() to identify
+whether the sg entry is last and set IOC bit for the last sg entry. The
+sg_is_last() determines last sg if SG_END is set in sg->page_link. When
+IOMMU used, dma_map_sg() merges 2 or more sgs into a single sg and it
+doesn't retain the page_link properties. Because of this reason the
+sg_is_last() may not find SG_END and thus resulting in IOC bit never
+getting set.
 
-Here we invoke usb_hub_clear_tt_buffer() to send Clear_TT_Buffer
-request to the hub of the device for the following Set_Interface
-requests to the device to get ACK successfully.
+For example:
 
-Signed-off-by: Jim Lin <jilin@nvidia.com>
+Consider a request having 8 sg entries with each entry having a length of
+4096 bytes. Assume that sg1 & sg2, sg3 & sg4, sg5 & sg6, sg7 & sg8 are
+having contigous memory regions.
+
+Before calling dma_map_sg():
+            sg1-->sg2-->sg3-->sg4-->sg6-->sg7-->sg8
+dma_length: 4K    4K    4K    4K    4K    4K    4K
+SG_END:     False False False False False False True
+num_sgs = 8
+num_mapped_sgs = 0
+
+The dma_map_sg() merges sg1 & sg2 memory regions into sg1->dma_address.
+Similarly sg3 & sg4 into sg2->dma_address, sg5 & sg6 into the
+sg3->dma_address and sg6 & sg8 into sg4->dma_address. Here the memory
+regions are merged but the page_link properties like SG_END are not
+retained into the merged sgs.
+
+After calling dma_map_sg();
+            sg1-->sg2-->sg3-->sg4-->sg6-->sg7-->sg8
+dma_length: 8K    8K    8K    8K    0K    0K     0K
+SG_END:     False False False False False False True
+num_sgs = 8
+num_mapped_sgs = 4
+
+After calling dma_map_sg(), sg1,sg2,sg3,sg4 are having dma_length of
+8096 bytes each and remaining sg4,sg5,sg6,sg7 are having 0 bytes of
+dma_length.
+
+After dma_map_sg() is performed dma_perpare_trb_sg() iterates on all sg
+entries and sets IOC bit only for the sg8 (since sg_is_last() returns true
+only for sg8). But after calling dma_map_sg() the valid data are present
+only till sg4 and the IOC bit should be set for sg4 TRB only (which is not
+happening in the present code)
+
+The above mentioned issue can be fixed by determining last sg based on the
+req->num_queued_sgs instead of sg_is_last(). If (req->num_queued_sgs + 1)
+is equal to req->num_mapped_sgs, then this sg is the last sg. In the above
+example, the dwc3 driver has already queued 3 sgs (upto sg3), so the
+num_queued_sgs = 3. On preparing the next sg (i.e sg4), check for last sg
+(num_queued_sgs + 1) == num_mapped_sgs becomes true. So, the driver sets
+IOC bit for sg4. This patch does the same.
+
+Signed-off-by: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
 ---
-v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
-    , remove its claiming in xhci.h
-v3: Add description for clearing_tt (xhci.h)
-v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
-    to protect for Clear_TT_Buffer to be run serially.
-    Remove xhci_clear_tt_buffer_complete as it's not necessary.
-    Same reason as the above.
-    Extend usb_hub_clear_tt_buffer parameter
-v5: Not extending usb_hub_clear_tt_buffer parameter
-    Add description.
-v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
-v7: Add devaddr field in "struct usb_device"
-v8: split as two patches
-v9: no change flag
-v10: Add EP_CLEARING_TT flag
-v11: Add spin_lock/unlock in xhci_clear_tt_buffer_complete
+ drivers/usb/dwc3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
- drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++++++++++++-
- drivers/usb/host/xhci.c      | 21 +++++++++++++++++++++
- drivers/usb/host/xhci.h      |  5 +++++
- 3 files changed, 52 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index feffceb31e8a..a52fd96e70e9 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -399,7 +399,7 @@ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
- 	 * stream once the endpoint is on the HW schedule.
- 	 */
- 	if ((ep_state & EP_STOP_CMD_PENDING) || (ep_state & SET_DEQ_PENDING) ||
--	    (ep_state & EP_HALTED))
-+	    (ep_state & EP_HALTED) || (ep_state & EP_CLEARING_TT))
- 		return;
- 	writel(DB_VALUE(ep_index, stream_id), db_addr);
- 	/* The CPU has better things to do at this point than wait for a
-@@ -433,6 +433,13 @@ static void ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
- 	}
- }
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index d676553..0ab59a6 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1062,7 +1062,7 @@ static void dwc3_prepare_one_trb_sg(struct dwc3_ep *dep,
+ 		unsigned int rem = length % maxp;
+ 		unsigned chain = true;
  
-+void xhci_ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
-+		unsigned int slot_id,
-+		unsigned int ep_index)
-+{
-+	ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
-+}
-+
- /* Get the right ring for the given slot_id, ep_index and stream_id.
-  * If the endpoint supports streams, boundary check the URB's stream ID.
-  * If the endpoint doesn't support streams, return the singular endpoint ring.
-@@ -1794,6 +1801,23 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
- 	return NULL;
- }
+-		if (sg_is_last(s))
++		if ((req->num_queued_sgs + 1) == req->request.num_mapped_sgs)
+ 			chain = false;
  
-+static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td,
-+		struct xhci_virt_ep *ep)
-+{
-+	/*
-+	 * As part of low/full-speed endpoint-halt processing
-+	 * we must clear the TT buffer (USB 2.0 specification 11.17.5).
-+	 */
-+	if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
-+	    (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub) &&
-+	    !(ep->ep_state & EP_CLEARING_TT)) {
-+		ep->ep_state |= EP_CLEARING_TT;
-+		td->urb->ep->hcpriv = td->urb->dev;
-+		if (usb_hub_clear_tt_buffer(td->urb))
-+			ep->ep_state &= ~EP_CLEARING_TT;
-+	}
-+}
-+
- static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
- 		unsigned int slot_id, unsigned int ep_index,
- 		unsigned int stream_id, struct xhci_td *td,
-@@ -1812,6 +1836,7 @@ static void xhci_cleanup_halted_endpoint(struct xhci_hcd *xhci,
- 	if (reset_type == EP_HARD_RESET) {
- 		ep->ep_state |= EP_HARD_CLEAR_TOGGLE;
- 		xhci_cleanup_stalled_ring(xhci, ep_index, stream_id, td);
-+		xhci_clear_hub_tt_buffer(xhci, td, ep);
- 	}
- 	xhci_ring_cmd_db(xhci);
- }
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 4f92643e3a4c..ef5702a45067 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -5163,6 +5163,26 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
- }
- EXPORT_SYMBOL_GPL(xhci_gen_setup);
- 
-+static void xhci_clear_tt_buffer_complete(struct usb_hcd *hcd,
-+		struct usb_host_endpoint *ep)
-+{
-+	struct xhci_hcd *xhci;
-+	struct usb_device *udev;
-+	unsigned int slot_id;
-+	unsigned int ep_index;
-+	unsigned long flags;
-+
-+	xhci = hcd_to_xhci(hcd);
-+	udev = (struct usb_device *)ep->hcpriv;
-+	slot_id = udev->slot_id;
-+	ep_index = xhci_get_endpoint_index(&ep->desc);
-+
-+	spin_lock_irqsave(&xhci->lock, flags);
-+	xhci->devs[slot_id]->eps[ep_index].ep_state &= ~EP_CLEARING_TT;
-+	xhci_ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
-+	spin_unlock_irqrestore(&xhci->lock, flags);
-+}
-+
- static const struct hc_driver xhci_hc_driver = {
- 	.description =		"xhci-hcd",
- 	.product_desc =		"xHCI Host Controller",
-@@ -5224,6 +5244,7 @@ static const struct hc_driver xhci_hc_driver = {
- 	.enable_usb3_lpm_timeout =	xhci_enable_usb3_lpm_timeout,
- 	.disable_usb3_lpm_timeout =	xhci_disable_usb3_lpm_timeout,
- 	.find_raw_port_number =	xhci_find_raw_port_number,
-+	.clear_tt_buffer_complete = xhci_clear_tt_buffer_complete,
- };
- 
- void xhci_init_driver(struct hc_driver *drv,
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 7f8b950d1a73..34789f4db555 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -936,6 +936,8 @@ struct xhci_virt_ep {
- #define EP_GETTING_NO_STREAMS	(1 << 5)
- #define EP_HARD_CLEAR_TOGGLE	(1 << 6)
- #define EP_SOFT_CLEAR_TOGGLE	(1 << 7)
-+/* usb_hub_clear_tt_buffer is in progress */
-+#define EP_CLEARING_TT		(1 << 8)
- 	/* ----  Related to URB cancellation ---- */
- 	struct list_head	cancelled_td_list;
- 	/* Watchdog timer for stop endpoint command to cancel URBs */
-@@ -2102,6 +2104,9 @@ void xhci_handle_command_timeout(struct work_struct *work);
- 
- void xhci_ring_ep_doorbell(struct xhci_hcd *xhci, unsigned int slot_id,
- 		unsigned int ep_index, unsigned int stream_id);
-+void xhci_ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
-+		unsigned int slot_id,
-+		unsigned int ep_index);
- void xhci_cleanup_command_queue(struct xhci_hcd *xhci);
- void inc_deq(struct xhci_hcd *xhci, struct xhci_ring *ring);
- unsigned int count_trbs(u64 addr, u64 len);
+ 		if (rem && usb_endpoint_dir_out(dep->endpoint.desc) && !chain) {
 -- 
-2.1.4
+2.1.1
 
