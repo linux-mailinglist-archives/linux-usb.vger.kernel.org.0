@@ -2,139 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 811652DD6C
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 14:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010522DF31
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 16:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbfE2MsK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 May 2019 08:48:10 -0400
-Received: from mail-it1-f198.google.com ([209.85.166.198]:52325 "EHLO
-        mail-it1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727011AbfE2MsG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 May 2019 08:48:06 -0400
-Received: by mail-it1-f198.google.com with SMTP id z128so1743516itb.2
-        for <linux-usb@vger.kernel.org>; Wed, 29 May 2019 05:48:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=LJlloA+Fuq61yxLWLoC8LnijZCRp6jYSZKHjIzT4Rj4=;
-        b=AsVpmkl9kzFMUNfJ9rR5f8RfHPU+68zilH9ErgwTi5GOleowSbFiT3WjBzqlo/0JvD
-         fFA35XarVTcf8Tdmp9d0Ou9oc0rQ9GbBFXYqB0oN4f6Brg5O0KkOcHJ3bAAUoB20l134
-         WedE1xCUdavX8ZTGk/a19i5aS2JCHdJ8Ty97Dt4oUrQLKDBMKZ8984nksDWTobkd+fnY
-         maVG4PeqX6VVtpoxjunQrzEoS32fMu0v6to0hDH8MtbrEGnJX4qs6N9wyVtO1egysGFF
-         jGecawym9Vmx0k8iSX5gyZPyXRU3KLvb7xJKxehzjJpPCNvk1tOU7tlF5UgLnf4L+Ml7
-         nKWw==
-X-Gm-Message-State: APjAAAWgosWK71HU/M+gLmFYzMDGfIM2QdtRvX5TuGFvU6ySZBjf+aq+
-        Me2rJ9YmUYO38SSnUG+weaeGxeBWDzAXr6+UCsmyP3IX3Oyt
-X-Google-Smtp-Source: APXvYqyOoTnHVSkJDjxHibUr474OVj6vvt6MAXKF+4YVBPM5Hi2U/LhNcsb9y9jjVeB1NhB7UdUot499yQCcLdYVyXWIs8/Ej9hW
+        id S1727201AbfE2OGS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 May 2019 10:06:18 -0400
+Received: from mail-eopbgr10044.outbound.protection.outlook.com ([40.107.1.44]:26081
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727056AbfE2OGS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 May 2019 10:06:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=geXcXOklRqydgUESMTOFmhViXuj+TaNfMYLXO1KDqDA=;
+ b=ODjvl20h+UKNssizeIAKowbwJpWmCZqCxe+PpO0ajQPlUdfR5HKr3JXNMK/2QceZaH23CP+llXQ3nlPyjmtVBUjuAkhkkmsSjpNQLlk8gn5czxdYjvECfY9s3DqQPh5gmPX8VsXNkSnOKZLifg/pURfMcNhrx91eJVtgqzK8a+k=
+Received: from VI1PR04MB5134.eurprd04.prod.outlook.com (20.177.50.159) by
+ VI1PR04MB4927.eurprd04.prod.outlook.com (20.177.49.204) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.17; Wed, 29 May 2019 14:06:12 +0000
+Received: from VI1PR04MB5134.eurprd04.prod.outlook.com
+ ([fe80::8d0e:de86:9b49:b40]) by VI1PR04MB5134.eurprd04.prod.outlook.com
+ ([fe80::8d0e:de86:9b49:b40%7]) with mapi id 15.20.1922.021; Wed, 29 May 2019
+ 14:06:12 +0000
+From:   Laurentiu Tudor <laurentiu.tudor@nxp.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "marex@denx.de" <marex@denx.de>, Leo Li <leoyang.li@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "noring@nocrew.org" <noring@nocrew.org>,
+        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>
+Subject: Re: [PATCH v7 0/5] prerequisites for device reserved local mem rework
+Thread-Topic: [PATCH v7 0/5] prerequisites for device reserved local mem
+ rework
+Thread-Index: AQHVFglQMB1lnLjYnE2Z8bn8+67UAKaB+N+AgAAA+wCAAClrAA==
+Date:   Wed, 29 May 2019 14:06:12 +0000
+Message-ID: <5b8164b3-74a3-9ba4-8c28-61a14ec57a39@nxp.com>
+References: <20190529102843.13174-1-laurentiu.tudor@nxp.com>
+ <20190529113427.GC11952@kroah.com> <20190529113758.GA9399@lst.de>
+In-Reply-To: <20190529113758.GA9399@lst.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=laurentiu.tudor@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1b95a83b-5881-4c73-ef93-08d6e43eceda
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR04MB4927;
+x-ms-traffictypediagnostic: VI1PR04MB4927:
+x-microsoft-antispam-prvs: <VI1PR04MB49271964249C41C427B1A782EC1F0@VI1PR04MB4927.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2582;
+x-forefront-prvs: 0052308DC6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(376002)(136003)(39860400002)(366004)(199004)(189003)(36756003)(66446008)(6436002)(6512007)(53936002)(64756008)(66556008)(31686004)(76116006)(73956011)(2906002)(66574012)(5660300002)(316002)(8676002)(81156014)(26005)(86362001)(6246003)(3846002)(4744005)(6116002)(76176011)(53546011)(6506007)(66476007)(44832011)(31696002)(102836004)(478600001)(186003)(25786009)(110136005)(14454004)(54906003)(99286004)(4326008)(256004)(8936002)(71190400001)(229853002)(81166006)(66946007)(68736007)(305945005)(7736002)(71200400001)(486006)(446003)(66066001)(6486002)(476003)(2616005)(11346002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4927;H:VI1PR04MB5134.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: PzPdfdAE9mkBKiL6fPxlR5v7HEbmTgvv+dUb0J7Y8bE73kd0xlTj+o5aKBGVPvvUKMJA+zn49cyqwg6IrV9ikXButWUlDBamUqplZDmgAxGafv2HV87MuBZAq8p4nQJFpCNzZGrz8sSdWahHdKubSOiRLp4l2gnVT7G+3jammCxCav/NP++GbViBaccGOEiMCCqHZuo6VN2qghtqqjR9qZWv04iu1Q37IYq5iC8EmYLXfQyr35bX1UGxhc4jar+Nki2BX5CL1mgo8chjt6/wzyWhLmhSlmr0rgnblQ5JS7PXRb1ReHW550h86gvhwlUaJNYSEq5zKbVLpZYMdUiAAySMuWQdqL4D+cPcG5U1rNDS/kcQlKPgM7Ws2YmhOQWkOH45ow2idXcvLIZT6TwZxw2Jtx3kNvyPWd1z8NRe5Nc=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B85DCE3956045E4FBD46AE8083B95DAA@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c00a:: with SMTP id u10mr6141490iol.24.1559134085160;
- Wed, 29 May 2019 05:48:05 -0700 (PDT)
-Date:   Wed, 29 May 2019 05:48:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004da71e058a06318b@google.com>
-Subject: WARNING in submit_rx_urb/usb_submit_urb
-From:   syzbot <syzbot+c2a1fa67c02faa0de723@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b95a83b-5881-4c73-ef93-08d6e43eceda
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 May 2019 14:06:12.7994
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: laurentiu.tudor@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4927
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following crash on:
-
-HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=143d5972a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c309d28e15db39c5
-dashboard link: https://syzkaller.appspot.com/bug?extid=c2a1fa67c02faa0de723
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+c2a1fa67c02faa0de723@syzkaller.appspotmail.com
-
-usb 2-1: Direct firmware load for prism2_ru.fw failed with error -2
-prism2_usb 2-1:0.191 (unnamed net_device) (uninitialized): prism2_usb:  
-Firmware not available, but not essential
-prism2_usb 2-1:0.191 (unnamed net_device) (uninitialized): prism2_usb: can  
-continue to use card anyway.
-------------[ cut here ]------------
-usb 2-1: BOGUS urb xfer, pipe 3 != type 1
-WARNING: CPU: 0 PID: 5587 at drivers/usb/core/urb.c:477  
-usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 5587 Comm: kworker/0:2 Not tainted 5.2.0-rc1+ #9
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x292/0x6df kernel/panic.c:218
-  __warn.cold+0x20/0x45 kernel/panic.c:575
-  report_bug+0x262/0x2a0 lib/bug.c:186
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
-RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Code: 4d 85 ed 74 2c e8 b8 de e5 fd 4c 89 f7 e8 b0 7e 11 ff 41 89 d8 44 89  
-e1 4c 89 ea 48 89 c6 48 c7 c7 80 a3 17 86 e8 73 9b bb fd <0f> 0b e9 20 f4  
-ff ff e8 8c de e5 fd 4c 89 f2 48 b8 00 00 00 00 00
-RSP: 0018:ffff8881cb876f98 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: 0000000000040000 RSI: ffffffff812824fd RDI: ffffed103970ede5
-RBP: ffff8881d33a5c00 R08: ffff8881cbf5b000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000003
-R13: ffff8881d2fa3918 R14: ffff8881d5feab20 R15: ffff8881d60e8008
-  submit_rx_urb+0x2e1/0x3e0 drivers/staging/wlan-ng/hfa384x_usb.c:353
-  hfa384x_drvr_start+0x1cb/0x420 drivers/staging/wlan-ng/hfa384x_usb.c:2484
-  prism2sta_ifstate+0x2ea/0x4a0 drivers/staging/wlan-ng/prism2sta.c:471
-  prism2sta_probe_usb.cold+0x1c8/0x49e  
-drivers/staging/wlan-ng/prism2usb.c:112
-  usb_probe_interface+0x30b/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x287/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:777
-  bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e6/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x1700 drivers/base/core.c:2111
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0xa2/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x287/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:777
-  bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e6/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x1700 drivers/base/core.c:2111
-  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x1adc/0x35a0 drivers/usb/core/hub.c:5432
-  process_one_work+0x90a/0x1580 kernel/workqueue.c:2268
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
-  kthread+0x30e/0x420 kernel/kthread.c:254
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+SGkgQ2hyaXN0b3BoLA0KDQpPbiAyOS4wNS4yMDE5IDE0OjM3LCBDaHJpc3RvcGggSGVsbHdpZyB3
+cm90ZToNCj4gT24gV2VkLCBNYXkgMjksIDIwMTkgYXQgMDQ6MzQ6MjdBTSAtMDcwMCwgR3JlZyBL
+SCB3cm90ZToNCj4+IFJldmlld2VkLWJ5OiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51
+eGZvdW5kYXRpb24ub3JnPg0KPj4NCj4+IENocmlzdG9waCwgdGhpcyBpcyBnb2luZyB0aHJvdWdo
+IHlvdXIgdHJlZSwgcmlnaHQ/DQo+IA0KPiBZZXMsIEknbGwgcNGWY2sgaXQgdXAuDQo+IA0KDQpU
+aGFua3MsIGhvcGUgdGhpcyB0aW1lIGV2ZXJ5dGhpbmcgaXMgZmluZS4NCldoZW4geW91IGdldCB0
+aGUgdGltZSwgcGxlYXNlIGxldCBtZSBrbm93IHlvdXIgaWRlYXMgb24gdGhlIG5leHQgc3RlcHMu
+DQoNCi0tLQ0KQmVzdCBSZWdhcmRzLCBMYXVyZW50aXU=
