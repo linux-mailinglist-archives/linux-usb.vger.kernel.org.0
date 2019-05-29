@@ -2,90 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 010522DF31
-	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 16:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA622DF43
+	for <lists+linux-usb@lfdr.de>; Wed, 29 May 2019 16:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727201AbfE2OGS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 May 2019 10:06:18 -0400
-Received: from mail-eopbgr10044.outbound.protection.outlook.com ([40.107.1.44]:26081
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727056AbfE2OGS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 May 2019 10:06:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=geXcXOklRqydgUESMTOFmhViXuj+TaNfMYLXO1KDqDA=;
- b=ODjvl20h+UKNssizeIAKowbwJpWmCZqCxe+PpO0ajQPlUdfR5HKr3JXNMK/2QceZaH23CP+llXQ3nlPyjmtVBUjuAkhkkmsSjpNQLlk8gn5czxdYjvECfY9s3DqQPh5gmPX8VsXNkSnOKZLifg/pURfMcNhrx91eJVtgqzK8a+k=
-Received: from VI1PR04MB5134.eurprd04.prod.outlook.com (20.177.50.159) by
- VI1PR04MB4927.eurprd04.prod.outlook.com (20.177.49.204) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.17; Wed, 29 May 2019 14:06:12 +0000
-Received: from VI1PR04MB5134.eurprd04.prod.outlook.com
- ([fe80::8d0e:de86:9b49:b40]) by VI1PR04MB5134.eurprd04.prod.outlook.com
- ([fe80::8d0e:de86:9b49:b40%7]) with mapi id 15.20.1922.021; Wed, 29 May 2019
- 14:06:12 +0000
-From:   Laurentiu Tudor <laurentiu.tudor@nxp.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "marex@denx.de" <marex@denx.de>, Leo Li <leoyang.li@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "noring@nocrew.org" <noring@nocrew.org>,
-        "JuergenUrban@gmx.de" <JuergenUrban@gmx.de>
-Subject: Re: [PATCH v7 0/5] prerequisites for device reserved local mem rework
-Thread-Topic: [PATCH v7 0/5] prerequisites for device reserved local mem
- rework
-Thread-Index: AQHVFglQMB1lnLjYnE2Z8bn8+67UAKaB+N+AgAAA+wCAAClrAA==
-Date:   Wed, 29 May 2019 14:06:12 +0000
-Message-ID: <5b8164b3-74a3-9ba4-8c28-61a14ec57a39@nxp.com>
-References: <20190529102843.13174-1-laurentiu.tudor@nxp.com>
- <20190529113427.GC11952@kroah.com> <20190529113758.GA9399@lst.de>
-In-Reply-To: <20190529113758.GA9399@lst.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=laurentiu.tudor@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1b95a83b-5881-4c73-ef93-08d6e43eceda
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR04MB4927;
-x-ms-traffictypediagnostic: VI1PR04MB4927:
-x-microsoft-antispam-prvs: <VI1PR04MB49271964249C41C427B1A782EC1F0@VI1PR04MB4927.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2582;
-x-forefront-prvs: 0052308DC6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(376002)(136003)(39860400002)(366004)(199004)(189003)(36756003)(66446008)(6436002)(6512007)(53936002)(64756008)(66556008)(31686004)(76116006)(73956011)(2906002)(66574012)(5660300002)(316002)(8676002)(81156014)(26005)(86362001)(6246003)(3846002)(4744005)(6116002)(76176011)(53546011)(6506007)(66476007)(44832011)(31696002)(102836004)(478600001)(186003)(25786009)(110136005)(14454004)(54906003)(99286004)(4326008)(256004)(8936002)(71190400001)(229853002)(81166006)(66946007)(68736007)(305945005)(7736002)(71200400001)(486006)(446003)(66066001)(6486002)(476003)(2616005)(11346002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4927;H:VI1PR04MB5134.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: PzPdfdAE9mkBKiL6fPxlR5v7HEbmTgvv+dUb0J7Y8bE73kd0xlTj+o5aKBGVPvvUKMJA+zn49cyqwg6IrV9ikXButWUlDBamUqplZDmgAxGafv2HV87MuBZAq8p4nQJFpCNzZGrz8sSdWahHdKubSOiRLp4l2gnVT7G+3jammCxCav/NP++GbViBaccGOEiMCCqHZuo6VN2qghtqqjR9qZWv04iu1Q37IYq5iC8EmYLXfQyr35bX1UGxhc4jar+Nki2BX5CL1mgo8chjt6/wzyWhLmhSlmr0rgnblQ5JS7PXRb1ReHW550h86gvhwlUaJNYSEq5zKbVLpZYMdUiAAySMuWQdqL4D+cPcG5U1rNDS/kcQlKPgM7Ws2YmhOQWkOH45ow2idXcvLIZT6TwZxw2Jtx3kNvyPWd1z8NRe5Nc=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B85DCE3956045E4FBD46AE8083B95DAA@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727494AbfE2OIG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 May 2019 10:08:06 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:53566 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727126AbfE2OIG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 May 2019 10:08:06 -0400
+Received: by mail-io1-f71.google.com with SMTP id c16so1874411ioo.20
+        for <linux-usb@vger.kernel.org>; Wed, 29 May 2019 07:08:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ZT9NVl7P92I+s83jnVhBn/W4UWjhmDLkpznnFNz26lA=;
+        b=RazCbpwR2qyuBQTay+moX/g8uvPh7RDAP2L/OukeCSF0OSICt1WN2AiUltTyJXdaSs
+         nDubJx0UTf0iIiPo3Ne4TxmQJa+Zobpb9NHRZnpEOjn+oDU00Q62qI60tOu9BmpE1dkJ
+         9NucKwSUZW8BDRMROX3Qw+8J1/pxRgWKkrVXA5fJ9ARX+atqB3XVVip82mIRIZ3A2Uqd
+         iwTc8IcemHGCdQMqKPT+GAQaEE6WLEnod0hhPIhOFCI6ZtekvVd1FSltTNwZ84rte302
+         4MMcrZ/H7MFptot6mQ4oxzfF4vJPZS5BHdnu3jSleBYiRZantwD/SpXyWDIZmdvVC/KF
+         4Y1w==
+X-Gm-Message-State: APjAAAX6RbHVV7mQSd3mrplq8YVMr5KniGhbAViJsmDe+QcKKMMrEb0x
+        FenW7PbiCsfIm/SItsshDwq+fcp9v+RErG48MeQVSDQUB/l2
+X-Google-Smtp-Source: APXvYqwv2AnyEv9rrsX+e+gven1RJfMZ5luPwbi0AmIXsE4qN4ArL+zaxfdPTfCuh0gdsgaUn2yIuMixSUoovzEDDHOIEdgJ77sY
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b95a83b-5881-4c73-ef93-08d6e43eceda
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 May 2019 14:06:12.7994
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: laurentiu.tudor@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4927
+X-Received: by 2002:a24:81d4:: with SMTP id q203mr7362487itd.55.1559138885210;
+ Wed, 29 May 2019 07:08:05 -0700 (PDT)
+Date:   Wed, 29 May 2019 07:08:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000689ecb058a074f45@google.com>
+Subject: general protection fault in usb_gadget_udc_reset (2)
+From:   syzbot <syzbot+326669f39a76a997dc02@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgQ2hyaXN0b3BoLA0KDQpPbiAyOS4wNS4yMDE5IDE0OjM3LCBDaHJpc3RvcGggSGVsbHdpZyB3
-cm90ZToNCj4gT24gV2VkLCBNYXkgMjksIDIwMTkgYXQgMDQ6MzQ6MjdBTSAtMDcwMCwgR3JlZyBL
-SCB3cm90ZToNCj4+IFJldmlld2VkLWJ5OiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51
-eGZvdW5kYXRpb24ub3JnPg0KPj4NCj4+IENocmlzdG9waCwgdGhpcyBpcyBnb2luZyB0aHJvdWdo
-IHlvdXIgdHJlZSwgcmlnaHQ/DQo+IA0KPiBZZXMsIEknbGwgcNGWY2sgaXQgdXAuDQo+IA0KDQpU
-aGFua3MsIGhvcGUgdGhpcyB0aW1lIGV2ZXJ5dGhpbmcgaXMgZmluZS4NCldoZW4geW91IGdldCB0
-aGUgdGltZSwgcGxlYXNlIGxldCBtZSBrbm93IHlvdXIgaWRlYXMgb24gdGhlIG5leHQgc3RlcHMu
-DQoNCi0tLQ0KQmVzdCBSZWdhcmRzLCBMYXVyZW50aXU=
+Hello,
+
+syzbot found the following crash on:
+
+HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=156d9486a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c309d28e15db39c5
+dashboard link: https://syzkaller.appspot.com/bug?extid=326669f39a76a997dc02
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+326669f39a76a997dc02@syzkaller.appspotmail.com
+
+general protection fault: 0000 [#1] SMP KASAN PTI
+CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.2.0-rc1+ #9
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_gadget_udc_reset+0x23/0xb0 drivers/usb/gadget/udc/core.c:1051
+Code: eb d4 0f 1f 44 00 00 41 54 49 89 fc 53 48 89 f3 e8 a2 b0 9d fd 48 8d  
+7b 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75  
+70 48 8b 43 40 4c 89 e7 e8 ab b1 00 02 49 8d 7c 24
+RSP: 0018:ffff8881d9dcf4d8 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000e5f0000
+RDX: 0000000000000008 RSI: ffffffff839f654e RDI: 0000000000000040
+RBP: ffff8881d1c88bf4 R08: ffff8881d9d96000 R09: ffffed103a391001
+R10: ffffed103a391000 R11: ffff8881d1c88003 R12: ffff8881d1c88bf8
+R13: ffff8881d1c88000 R14: ffff8881d1cc5923 R15: ffff8881d1cc58e4
+FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f345281df88 CR3: 00000001cf13e000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  set_link_state+0x7be/0xcf0 drivers/usb/gadget/udc/dummy_hcd.c:463
+  dummy_hub_control+0xf28/0x16b0 drivers/usb/gadget/udc/dummy_hcd.c:2289
+  rh_call_control drivers/usb/core/hcd.c:685 [inline]
+  rh_urb_enqueue drivers/usb/core/hcd.c:844 [inline]
+  usb_hcd_submit_urb+0x814/0x1ed0 drivers/usb/core/hcd.c:1652
+  usb_submit_urb+0x6e5/0x13b0 drivers/usb/core/urb.c:569
+  usb_start_wait_urb+0x108/0x2b0 drivers/usb/core/message.c:57
+  usb_internal_control_msg drivers/usb/core/message.c:101 [inline]
+  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:152
+  set_port_feature+0x69/0x90 drivers/usb/core/hub.c:428
+  hub_port_reset+0x20a/0x1440 drivers/usb/core/hub.c:2871
+  hub_port_init+0x9b2/0x2c10 drivers/usb/core/hub.c:4688
+  hub_port_connect drivers/usb/core/hub.c:5021 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x18ff/0x35a0 drivers/usb/core/hub.c:5432
+  process_one_work+0x90a/0x1580 kernel/workqueue.c:2268
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+  kthread+0x30e/0x420 kernel/kthread.c:254
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+Modules linked in:
+---[ end trace 3e0b2150af1908f2 ]---
+RIP: 0010:usb_gadget_udc_reset+0x23/0xb0 drivers/usb/gadget/udc/core.c:1051
+Code: eb d4 0f 1f 44 00 00 41 54 49 89 fc 53 48 89 f3 e8 a2 b0 9d fd 48 8d  
+7b 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75  
+70 48 8b 43 40 4c 89 e7 e8 ab b1 00 02 49 8d 7c 24
+RSP: 0018:ffff8881d9dcf4d8 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000e5f0000
+RDX: 0000000000000008 RSI: ffffffff839f654e RDI: 0000000000000040
+RBP: ffff8881d1c88bf4 R08: ffff8881d9d96000 R09: ffffed103a391001
+R10: ffffed103a391000 R11: ffff8881d1c88003 R12: ffff8881d1c88bf8
+R13: ffff8881d1c88000 R14: ffff8881d1cc5923 R15: ffff8881d1cc58e4
+FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f345281df88 CR3: 00000001cf13e000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
