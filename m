@@ -2,109 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 851252F8BA
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 10:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428B42F8FE
+	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 11:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbfE3Isx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 May 2019 04:48:53 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:45112 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726439AbfE3Isx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 May 2019 04:48:53 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 567431A064A;
-        Thu, 30 May 2019 10:48:51 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BDA501A123B;
-        Thu, 30 May 2019 10:48:48 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 26F5C4029F;
-        Thu, 30 May 2019 16:48:45 +0800 (SGT)
-From:   Peter Chen <peter.chen@nxp.com>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-imx@nxp.com, Peter Chen <peter.chen@nxp.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Jun Li <jun.li@nxp.com>
-Subject: [PATCH v2 1/1] usb: chipidea: udc: workaround for endpoint conflict issue
-Date:   Thu, 30 May 2019 16:50:39 +0800
-Message-Id: <20190530085039.34557-1-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726715AbfE3JIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 May 2019 05:08:42 -0400
+Received: from mail-eopbgr10087.outbound.protection.outlook.com ([40.107.1.87]:21457
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726442AbfE3JIl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 May 2019 05:08:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ml4/Tyy2EwqtQaAZNjq82bPnQb2EkJyukUMl263N6pE=;
+ b=DdGzMhx1gIEjZMhlE/kW11tbkml8NoCrdxGlhX7wD36Nu7iyHynYS4dIpWL5cr9S3HkD8gmgtlvN6w2ODJblhyPM90DWxh0O06a2eVGLzvCPj1/rDm+ohe7Lp6qN8gE585lAVkAfnFy21h2ETuVplQKh5XeKx+AwG9PaD6hiyy8=
+Received: from AM5PR0402MB2865.eurprd04.prod.outlook.com (10.175.44.16) by
+ AM5PR0402MB2898.eurprd04.prod.outlook.com (10.175.42.12) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.22; Thu, 30 May 2019 09:08:36 +0000
+Received: from AM5PR0402MB2865.eurprd04.prod.outlook.com
+ ([fe80::a1bf:17d:a52:3824]) by AM5PR0402MB2865.eurprd04.prod.outlook.com
+ ([fe80::a1bf:17d:a52:3824%4]) with mapi id 15.20.1943.016; Thu, 30 May 2019
+ 09:08:36 +0000
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [PATCH] usb: dwc3: Enable the USB snooping
+Thread-Topic: [PATCH] usb: dwc3: Enable the USB snooping
+Thread-Index: AQHTXdpMV/QBUrO8J0eNmcCmR0ATg6MVIlkAgAAD6zCAABVWgINueaJwgAAMz4CAAwpoAA==
+Date:   Thu, 30 May 2019 09:08:36 +0000
+Message-ID: <AM5PR0402MB2865F3735D808E1BC9F67968F1180@AM5PR0402MB2865.eurprd04.prod.outlook.com>
+References: <20171115060459.45375-1-ran.wang_1@nxp.com>
+ <87ineb9b5v.fsf@linux.intel.com>
+ <VI1PR04MB1504776EF3D4D8C374F0C069F1290@VI1PR04MB1504.eurprd04.prod.outlook.com>
+ <87shdfet90.fsf@linux.intel.com>
+ <AM5PR0402MB28654EBE2D431CC2F8061CF8F11E0@AM5PR0402MB2865.eurprd04.prod.outlook.com>
+ <87k1eaanjw.fsf@linux.intel.com>
+In-Reply-To: <87k1eaanjw.fsf@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ran.wang_1@nxp.com; 
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3654c925-77c6-42ca-3e61-08d6e4de6636
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:AM5PR0402MB2898;
+x-ms-traffictypediagnostic: AM5PR0402MB2898:
+x-microsoft-antispam-prvs: <AM5PR0402MB28986F0C518DCE1DC0C7CA60F1180@AM5PR0402MB2898.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 00531FAC2C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(366004)(39860400002)(396003)(376002)(136003)(199004)(189003)(11346002)(446003)(86362001)(76176011)(66946007)(66066001)(6436002)(486006)(102836004)(6246003)(76116006)(3846002)(71200400001)(229853002)(6116002)(6506007)(478600001)(6916009)(53546011)(14454004)(55016002)(71190400001)(81156014)(81166006)(7736002)(25786009)(476003)(5660300002)(256004)(14444005)(74316002)(4326008)(54906003)(68736007)(66476007)(64756008)(305945005)(73956011)(66556008)(186003)(53936002)(66446008)(26005)(7696005)(52536014)(8936002)(9686003)(2906002)(316002)(99286004)(8676002)(33656002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM5PR0402MB2898;H:AM5PR0402MB2865.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: eR7rGfmlB+wLICgzsDZhUzZ+ofQsel5yBmAKjilxU4tC5FZ5e0yH7WbLK0mB0roadQ6sldOERXa7beSiP+DP2vtQmtWCBR/C9y1S6PGDbkuNX5eCW+s/cs/lc8DX89VGiAj9WOmmxNsj6ld90X4MYWEV3Wr1qOxGVctwlT6uHRvyoZyanFxg3wLgQ9u/DX/bc3LgknZ0u0aUCiF6SvtAsRn3XjEdTTmcngj2XdF9+Exp+4rjTq0fQ0/EtKAf5kv1NX7+KGt+2ybUQ2geIykISlCHVaj7kCqq89X+hRWmK5R5zsH118csZ9U/lUtWMb1yLDf1KfnYWQGh4UAOuNgra4a8WlcyxEHIaKC3FDLVjeURWl2Jswx2bgLCcDbrHHGnewM9VBA/PH1P1HJX9EDKJ9BcprJfh4H5wgKd/XacqcE=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3654c925-77c6-42ca-3e61-08d6e4de6636
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2019 09:08:36.7066
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ran.wang_1@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2898
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-An endpoint conflict occurs when the USB is working in device mode
-during an isochronous communication. When the endpointA IN direction
-is an isochronous IN endpoint, and the host sends an IN token to
-endpointA on another device, then the OUT transaction may be missed
-regardless the OUT endpoint number. Generally, this occurs when the
-device is connected to the host through a hub and other devices are
-connected to the same hub.
+Hi Felipe,
 
-The affected OUT endpoint can be either control, bulk, isochronous, or
-an interrupt endpoint. After the OUT endpoint is primed, if an IN token
-to the same endpoint number on another device is received, then the OUT
-endpoint may be unprimed (cannot be detected by software), which causes
-this endpoint to no longer respond to the host OUT token, and thus, no
-corresponding interrupt occurs.
+On Tuesday, May 28, 2019 18:20, Felipe Balbi wrote:
+>=20
+<snip>
+> >> >> >  /* Global Debug Queue/FIFO Space Available Register */
+> >> >> >  #define DWC3_GDBGFIFOSPACE_NUM(n)	((n) & 0x1f)
+> >> >> >  #define DWC3_GDBGFIFOSPACE_TYPE(n)	(((n) << 5) & 0x1e0)
+> >> >> > @@ -859,6 +867,7 @@ struct dwc3_scratchpad_array {
+> >> >> >   * 	3	- Reserved
+> >> >> >   * @imod_interval: set the interrupt moderation interval in 250n=
+s
+> >> >> >   *                 increments or 0 to disable.
+> >> >> > + * @dma_coherent: set if enable dma-coherent.
+> >> >>
+> >> >> you're not enabling dma coherency, you're enabling cache snooping.
+> >> >> And this property should describe that. Also, keep in mind that
+> >> >> different devices may want different cache types for each of those
+> >> >> fields, so your property would have to be a lot more complex. Somet=
+hing
+> like:
+> >> >>
+> >> >> 	snps,cache-type =3D <foobar "cacheable">, <baz "cacheable">, ...
+> >> >>
+> >> >> Then driver would have to parse this properly to setup GSBUSCFG0.
+> >
+> > According to the DesignWare Cores SuperSpeed USB 3.0 Controller
+> > Databook (v2.60a), it has described Type Bit Assignments for all suppor=
+ted
+> master bus type:
+> > AHB, AXI3, AXI4 and Native. I found the bit definition are different am=
+ong
+> them.
+> > So, for the example you gave above, feel a little bit confused.
+> > Did you mean:
+> >     snps,cache-type =3D <DATA_RD  "write allocate">, <DESC_RD
+> > "cacheable">, <DATA_WR  "bufferable">, <DESC_WR  "read allocate">
+>=20
+> yeah, something like that.
 
-There is no good workaround for this issue, the only thing the software
-could do is numbering isochronous IN from the highest endpoint since we
-have observed most of device number endpoint from the lowest.
+I think DATA_RD  should be a macro, right? So, where I can put its define?
+Create a dwc3.h in include/dt-bindings/usb/ ?
 
-Cc: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc: Jun Li <jun.li@nxp.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
-Changes for v2:
-- Improve the code sytle
+Another question about this remain open is: DWC3 data book's Table 6-5
+Cache Type Bit Assignments show that bits definition will differ per
+MBUS_TYPEs as below:
+----------------------------------------------------------------           =
+     =20
+ MBUS_TYPE| bit[3]       |bit[2]       |bit[1]     |bit[0]                 =
+      =20
+ ----------------------------------------------------------------          =
+      =20
+ AHB      |Cacheable     |Bufferable   |Privilegge |Data                   =
+      =20
+ AXI3     |Write Allocate|Read Allocate|Cacheable  |Bufferable             =
+      =20
+ AXI4     |Allocate Other|Allocate     |Modifiable |Bufferable             =
+      =20
+ AXI4     |Other Allocate|Allocate     |Modifiable |Bufferable             =
+      =20
+ Native   |Same as AXI   |Same as AXI  |Same as AXI|Same as AXI            =
+      =20
+ ----------------------------------------------------------------          =
+      =20
+ Note: The AHB, AXI3, AXI4, and PCIe busses use different names for certain=
+      =20
+ signals, which have the same meaning:                                     =
+      =20
+   Bufferable =3D Posted                                                   =
+        =20
+   Cacheable =3D Modifiable =3D Snoop (negation of No Snoop)
+=20
+For Layerscape SoCs, MBUS_TYPE is AXI3. So I am not sure how to use
+snps,cache-type =3D <DATA_RD  "write allocate">, to cover all MBUS_TYPE?
+(you can notice that AHB and AXI3's cacheable are on different bit)
+Or I just need to handle AXI3 case?
 
- drivers/usb/chipidea/udc.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 829e947cabf5..21c1344bfc42 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -1622,6 +1622,28 @@ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
- static int ci_udc_start(struct usb_gadget *gadget,
- 			 struct usb_gadget_driver *driver);
- static int ci_udc_stop(struct usb_gadget *gadget);
-+
-+
-+/* Match ISOC IN from the highest endpoint */
-+static struct usb_ep *ci_udc_match_ep(struct usb_gadget *gadget,
-+			      struct usb_endpoint_descriptor *desc,
-+			      struct usb_ss_ep_comp_descriptor *comp_desc)
-+{
-+	struct ci_hdrc *ci = container_of(gadget, struct ci_hdrc, gadget);
-+	struct usb_ep *ep;
-+	u8 type = desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK;
-+
-+	if ((type == USB_ENDPOINT_XFER_ISOC) &&
-+			(desc->bEndpointAddress & USB_DIR_IN)) {
-+		list_for_each_entry_reverse(ep, &ci->gadget.ep_list, ep_list) {
-+			if (ep->caps.dir_in && !ep->claimed)
-+				return ep;
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
- /**
-  * Device operations part of the API to the USB controller hardware,
-  * which don't involve endpoints (or i/o)
-@@ -1635,6 +1657,7 @@ static const struct usb_gadget_ops usb_gadget_ops = {
- 	.vbus_draw	= ci_udc_vbus_draw,
- 	.udc_start	= ci_udc_start,
- 	.udc_stop	= ci_udc_stop,
-+	.match_ep 	= ci_udc_match_ep,
- };
- 
- static int init_eps(struct ci_hdrc *ci)
--- 
-2.14.1
-
+Regards,
+Ran
