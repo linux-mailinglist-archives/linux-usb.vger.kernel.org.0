@@ -2,109 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 939092F781
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 08:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45BE2F7EA
+	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 09:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727402AbfE3GnT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 May 2019 02:43:19 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:41920 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725961AbfE3GnT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 May 2019 02:43:19 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B333F2005ED;
-        Thu, 30 May 2019 08:43:16 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 261A9200156;
-        Thu, 30 May 2019 08:43:14 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 97541402B5;
-        Thu, 30 May 2019 14:43:10 +0800 (SGT)
-From:   Peter Chen <peter.chen@nxp.com>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-imx@nxp.com, Peter Chen <peter.chen@nxp.com>,
-        stable@vger.kernel.org, Jun Li <jun.li@nxp.com>
-Subject: [PATCH 1/1] usb: chipidea: udc: workaround for endpoint conflict issue
-Date:   Thu, 30 May 2019 14:45:05 +0800
-Message-Id: <20190530064505.6292-1-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726326AbfE3Hbu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 May 2019 03:31:50 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:5027 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726027AbfE3Hbu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 May 2019 03:31:50 -0400
+X-UUID: b68e1545f7d44cc9bb1f86ad0f0b3d3b-20190530
+X-UUID: b68e1545f7d44cc9bb1f86ad0f0b3d3b-20190530
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1253275830; Thu, 30 May 2019 15:31:40 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 30 May
+ 2019 15:31:39 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 30 May 2019 15:31:39 +0800
+Message-ID: <1559201499.8487.40.camel@mhfsdcap03>
+Subject: Re: [v3 PATCH] usb: create usb_debug_root for gadget only
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Thu, 30 May 2019 15:31:39 +0800
+In-Reply-To: <87k1ebj8vt.fsf@linux.intel.com>
+References: <cffd6d75f69e4d908c8f39b8a60ddae27d6b7c88.1559028752.git.chunfeng.yun@mediatek.com>
+         <87k1ebj8vt.fsf@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-An endpoint conflict occurs when the USB is working in device mode
-during an isochronous communication. When the endpointA IN direction
-is an isochronous IN endpoint, and the host sends an IN token to
-endpointA on another device, then the OUT transaction may be missed
-regardless the OUT endpoint number. Generally, this occurs when the
-device is connected to the host through a hub and other devices are
-connected to the same hub.
+Hi Felipe,
+On Tue, 2019-05-28 at 11:11 +0300, Felipe Balbi wrote:
+> Hi,
+> 
+> Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
+> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> > index 7fcb9f782931..88b3ee03a12d 100644
+> > --- a/drivers/usb/core/usb.c
+> > +++ b/drivers/usb/core/usb.c
+> > @@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_GPL(usb_debug_root);
+> >  
+> >  static void usb_debugfs_init(void)
+> >  {
+> > -	usb_debug_root = debugfs_create_dir("usb", NULL);
+> > +	usb_debug_root = debugfs_create_dir(USB_DEBUG_ROOT_NAME, NULL);
+> >  	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
+> >  			    &usbfs_devices_fops);
+> >  }
+> 
+> might be a better idea to move this to usb common. Then have a function
+> which can be called by both host and gadget to maybe create the
+> directory:
+> 
+> static struct dentry *usb_debug_root;
+> 
+> struct dentry *usb_debugfs_init(void)
+> {
+> 	if (!usb_debug_root)
+>         	usb_debug_root = debugfs_create_dir("usb", NULL);
+> 
+> 	return usb_debug_root;
+> }
+> 
+> 
+> Then usb core would be updated to something like:
+> 
+> static void usb_core_debugfs_init(void)
+> {
+> 	struct dentry *root = usb_debugfs_init();
+> 
+> 	debugfs_create_file("devices", 0444, root, NULL, &usbfs_devices_fops);
+> }
+> 
+I find a problem when move usb_debugfs_init() and usb_debugfs_cleanup()
+into usb common, it's easy to create "usb" directory, but difficult to
+cleanup it:
 
-The affected OUT endpoint can be either control, bulk, isochronous, or
-an interrupt endpoint. After the OUT endpoint is primed, if an IN token
-to the same endpoint number on another device is received, then the OUT
-endpoint may be unprimed (cannot be detected by software), which causes
-this endpoint to no longer respond to the host OUT token, and thus, no
-corresponding interrupt occurs.
+common/common.c
 
-There is no good workaround for this issue, the only thing the software
-could do is numbering isochronous IN from the highest endpoint since we
-have observed most of device number endpoint from the lowest.
+struct dentry *usb_debugfs_init(void)
+{
+    if (!usb_debug_root)
+        usb_debug_root = debugfs_create_dir("usb", NULL);
 
-Cc: <stable@vger.kernel.org> #v3.14+
-Cc: Jun Li <jun.li@nxp.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
-Changes for v2:
-- Some coding style improvements
+    return usb_debug_root;
+}
 
- drivers/usb/chipidea/udc.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+void usb_debugfs_cleanup(void)
+{
+    debugfs_remove_recursive(usb_debug_root);
+    usb_debug_root = NULL;
+}
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 829e947cabf5..411d387a45c9 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -1622,6 +1622,29 @@ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
- static int ci_udc_start(struct usb_gadget *gadget,
- 			 struct usb_gadget_driver *driver);
- static int ci_udc_stop(struct usb_gadget *gadget);
-+
-+
-+/* Match ISOC IN from the highest endpoint */
-+static struct
-+usb_ep *ci_udc_match_ep(struct usb_gadget *gadget,
-+			      struct usb_endpoint_descriptor *desc,
-+			      struct usb_ss_ep_comp_descriptor *comp_desc)
-+{
-+	struct ci_hdrc *ci = container_of(gadget, struct ci_hdrc, gadget);
-+	struct usb_ep *ep;
-+	u8 type = desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK;
-+
-+	if ((type == USB_ENDPOINT_XFER_ISOC) &&
-+		(desc->bEndpointAddress & USB_DIR_IN)) {
-+		list_for_each_entry_reverse(ep, &ci->gadget.ep_list, ep_list) {
-+			if (ep->caps.dir_in && !ep->claimed)
-+				return ep;
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
- /**
-  * Device operations part of the API to the USB controller hardware,
-  * which don't involve endpoints (or i/o)
-@@ -1635,6 +1658,7 @@ static const struct usb_gadget_ops usb_gadget_ops = {
- 	.vbus_draw	= ci_udc_vbus_draw,
- 	.udc_start	= ci_udc_start,
- 	.udc_stop	= ci_udc_stop,
-+	.match_ep	= ci_udc_match_ep,
- };
- 
- static int init_eps(struct ci_hdrc *ci)
--- 
-2.14.1
+core/usb.c
+
+static void usb_core_debugfs_init(void)
+{
+    struct dentry *root = usb_debugfs_init();
+
+    debugfs_create_file("devices", 0444, root, NULL,
+&usbfs_devices_fops);
+}
+
+static int __init usb_init(void)
+{
+    ...
+    usb_core_debugfs_init();
+    ...
+}
+
+static void __exit usb_exit(void)
+{
+    ...
+    usb_debugfs_cleanup();
+    // will be error, gadget may use it.
+    ...
+}
+
+gadget/udc/core.c
+
+static int __init usb_udc_init(void)
+{
+    ...
+    usb_debugfs_init();
+    ...
+}
+
+static void __exit usb_udc_exit(void)
+{
+    ...
+    usb_debugfs_cleanup();
+    // can't cleanup in fact, usb core may use it.
+}
+
+How to handle this case? introduce a reference count? do you have any
+suggestion?
+
+Thanks a lot
+
+
+
+
 
