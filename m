@@ -2,111 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F14552E8F0
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 01:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E55D2EA91
+	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 04:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbfE2XTO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 May 2019 19:19:14 -0400
-Received: from mail-it1-f194.google.com ([209.85.166.194]:35011 "EHLO
-        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726189AbfE2XTO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 May 2019 19:19:14 -0400
-Received: by mail-it1-f194.google.com with SMTP id u186so6439279ith.0
-        for <linux-usb@vger.kernel.org>; Wed, 29 May 2019 16:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gvVrNX9+KA12CZFtJXZ2Anjp6TlWxWYL3KFrzyQz0s4=;
-        b=hpACezGm+Av2ZqlIHxFN5c2QAR44g3WHweR58afFeC6kGL08n0I4QDcs5CiVrhbrZ/
-         Q5Mh5XWreWPZRqTNLXVRYwzxFjq6KAOheuYfdnSSVKqB+LHRhmgQGi1c3XGrDFX3MO1H
-         Ds2HX4uL++oSrI0+EG7/bN9U3yog4k4QMkBGY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gvVrNX9+KA12CZFtJXZ2Anjp6TlWxWYL3KFrzyQz0s4=;
-        b=ZlHM9OqcP11EtTe+oD5rD1xAB8mrW7i66jZ8bLHVLdV5FSLRkE9qVP+o0xhCAiOH7L
-         z1kHJ6fivIGorG8uu5rvwCvvm/+CdD6B+R4vx3rrrXH1A2qBz8M7BCeeYu8k9rj3Dtj/
-         5fevVql1tkDGZxTDGRCaGgb4R20t2Nvh8WKI9D5Sz7vSZBdU3Bb7Sqo2X5WMFlQRItaw
-         nXbskBaQsLVeRRPa2LJx9Sv2vV+2sMfZXKmrGIjs2V2xkZ5PoRk5VN/Fe//S/GSWlLvm
-         Q81wdKAJ0/zedDNTD/APfeoW1pYQuq1IggXXTh4qqTDPD81jySx9JewDN2b+s7de+S52
-         QHag==
-X-Gm-Message-State: APjAAAX3DBdMI47B3HLpulb5p0/tp1uSBvc+xad0nCFgfthHIF7rloTw
-        T3JYfXjoo3BMuXYaJKSFqHe9dQ==
-X-Google-Smtp-Source: APXvYqzU1xUFaMBalwA0GtYXKzaxpry5fypYcyCY3susGO0nFSAjqjh4GCov9XeTJ7RNG6ZWqjK4dQ==
-X-Received: by 2002:a24:5252:: with SMTP id d79mr675333itb.14.1559171953454;
-        Wed, 29 May 2019 16:19:13 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id d71sm382566itc.18.2019.05.29.16.19.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 May 2019 16:19:12 -0700 (PDT)
-Subject: Re: [PATCH] usbip: usbip_host: fix stub_dev lock context imbalance
- regression
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20190529194615.18765-1-skhan@linuxfoundation.org>
- <20190529202557.GA27140@kroah.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3243c1dc-d198-9733-d3d0-5963e14b2d85@linuxfoundation.org>
-Date:   Wed, 29 May 2019 17:19:11 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20190529202557.GA27140@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1726653AbfE3CRz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 May 2019 22:17:55 -0400
+Received: from mail-eopbgr150041.outbound.protection.outlook.com ([40.107.15.41]:48894
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726311AbfE3CRz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 May 2019 22:17:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8LvHwmCVnlAgk4vIdUdJTRhYZl6n7CWhwmMNgwvUmDM=;
+ b=VV+59EBm5yHQ6Xa2HvLw4Ly7x40821x+ukhLX4fN2K+bwNbG+6xVcAoxT70uN2OXkaKgWd2ZcKdQ9WcvgFOIiI3mcIg/FuGOdItTGVJYaUOUFsbCUFbFryaOyxhRNp0v6XiS9aGMOrYnFgzfTws68xoZ4lmZwjt6BJwmxzxS4W0=
+Received: from AM5PR0402MB2865.eurprd04.prod.outlook.com (10.175.44.16) by
+ AM5PR0402MB2881.eurprd04.prod.outlook.com (10.175.42.7) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.17; Thu, 30 May 2019 02:17:51 +0000
+Received: from AM5PR0402MB2865.eurprd04.prod.outlook.com
+ ([fe80::a1bf:17d:a52:3824]) by AM5PR0402MB2865.eurprd04.prod.outlook.com
+ ([fe80::a1bf:17d:a52:3824%4]) with mapi id 15.20.1943.016; Thu, 30 May 2019
+ 02:17:50 +0000
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [PATCH] usb: dwc3: Enable the USB snooping
+Thread-Topic: [PATCH] usb: dwc3: Enable the USB snooping
+Thread-Index: AQHTXdpMV/QBUrO8J0eNmcCmR0ATg6MVIlkAgAAD6zCAABVWgINueaJwgAAMz4CAAYVcwIAADlOAgAEFSVA=
+Date:   Thu, 30 May 2019 02:17:50 +0000
+Message-ID: <AM5PR0402MB28650ECE851C840990816C1CF1180@AM5PR0402MB2865.eurprd04.prod.outlook.com>
+References: <20171115060459.45375-1-ran.wang_1@nxp.com>
+ <87ineb9b5v.fsf@linux.intel.com>
+ <VI1PR04MB1504776EF3D4D8C374F0C069F1290@VI1PR04MB1504.eurprd04.prod.outlook.com>
+ <87shdfet90.fsf@linux.intel.com>
+ <AM5PR0402MB28654EBE2D431CC2F8061CF8F11E0@AM5PR0402MB2865.eurprd04.prod.outlook.com>
+ <87k1eaanjw.fsf@linux.intel.com>
+ <AM5PR0402MB2865AB6C2A50851B7EA4E653F11F0@AM5PR0402MB2865.eurprd04.prod.outlook.com>
+ <874l5dr21m.fsf@linux.intel.com>
+In-Reply-To: <874l5dr21m.fsf@linux.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ran.wang_1@nxp.com; 
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f5c6e834-a328-43d9-3c35-08d6e4a50426
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM5PR0402MB2881;
+x-ms-traffictypediagnostic: AM5PR0402MB2881:
+x-microsoft-antispam-prvs: <AM5PR0402MB288134B70D4E5954895E5915F1180@AM5PR0402MB2881.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 00531FAC2C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(346002)(366004)(396003)(376002)(39860400002)(189003)(199004)(7736002)(52536014)(81166006)(316002)(66946007)(9686003)(8936002)(64756008)(66556008)(229853002)(71200400001)(66066001)(4326008)(76116006)(446003)(66476007)(11346002)(71190400001)(305945005)(486006)(476003)(14444005)(68736007)(256004)(81156014)(74316002)(86362001)(6246003)(102836004)(2906002)(26005)(73956011)(5660300002)(8676002)(6506007)(7696005)(53546011)(6436002)(66446008)(53936002)(33656002)(25786009)(6916009)(55016002)(6116002)(3846002)(54906003)(14454004)(186003)(478600001)(99286004)(76176011);DIR:OUT;SFP:1101;SCL:1;SRVR:AM5PR0402MB2881;H:AM5PR0402MB2865.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: oNI7vJm8GJgd/dEva3fPZYPX3F9AVbgo9cU4GZL3ntgeZCKqR6Yg+gHSgHKfj4JGhCp30Hau981pfscQgGrQms0krJxlR7N+gsVWY2QMd3e2T+HpmQ4Mei8ZLS23yk66IbdAEApIj8a3hGcImd0IP/lEySxxZcZYyGaXh4q+bhNkaMoY4k2B1MtStNub8qzK3rdymuRHu6ko5WUmcmQHCQ+4MFheBe43/C0uvRmoAAGXvXIb8qP/3ahvtN5NP3KUbV8RkODiEkNXUL+Co1PD8bw3CjP2H4b/RKqKoedK3vBw8UfiSHarNNcaYPegDNqNxeBYRMUF66zGlgbwXsKxXxqPOe/JzjbEFjwS7kuPZXdcP5iEWHWrqSRoqEoBwdxCIh3Ja0/O8ScLo1+rTMLrvh6Gp1Unaab6OuYoC/mZTPM=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5c6e834-a328-43d9-3c35-08d6e4a50426
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2019 02:17:50.8684
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ran.wang_1@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2881
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/29/19 2:25 PM, Greg KH wrote:
-> On Wed, May 29, 2019 at 01:46:15PM -0600, Shuah Khan wrote:
->> Fix the following sparse context imbalance regression introduced in
->> a patch that fixed sleeping function called from invalid context bug.
->>
->> kbuild test robot reported on:
->>
->> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
->>
->> Regressions in current branch:
->>
->> drivers/usb/usbip/stub_dev.c:399:9: sparse: sparse: context imbalance in 'stub_probe' - different lock contexts for basic block
->> drivers/usb/usbip/stub_dev.c:418:13: sparse: sparse: context imbalance in 'stub_disconnect' - different lock contexts for basic block
->> drivers/usb/usbip/stub_dev.c:464:1-10: second lock on line 476
->>
->> Error ids grouped by kconfigs:
->>
->> recent_errors
->> ├── i386-allmodconfig
->> │   └── drivers-usb-usbip-stub_dev.c:second-lock-on-line
->> ├── x86_64-allmodconfig
->> │   ├── drivers-usb-usbip-stub_dev.c:sparse:sparse:context-imbalance-in-stub_disconnect-different-lock-contexts-for-basic-block
->> │   └── drivers-usb-usbip-stub_dev.c:sparse:sparse:context-imbalance-in-stub_probe-different-lock-contexts-for-basic-block
->> └── x86_64-allyesconfig
->>      └── drivers-usb-usbip-stub_dev.c:second-lock-on-line
->>
->> This is a real problem in an error leg where spin_lock() is called on an
->> already held lock.
->>
->> Fix the imbalance in stub_probe() and stub_disconnect().
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> I'll go add:
-> 
-> Fixes: 0c9e8b3cad65 ("usbip: usbip_host: fix BUG: sleeping function called from invalid context")
-> Cc: stable <stable@vger.kernel.org>
-> 
-> as the patch this fixes was tagged for stable.
-> 
+Hi Felipe,
 
-Sounds good. Thanks.
+On Wednesday, May 29, 2019 18:25, Felipe Balbi wrote:
+>=20
+> Hi,
+>=20
+> Ran Wang <ran.wang_1@nxp.com> writes:
+> >> >> >> c) WHAT does this mean for PCI devices?
+> >
+> > According to DWC3 data book, I think this (PCI) mean to the case of 'ma=
+ster
+> bus type =3D Native'
+> > The data book describes this feature as 'system bus DMA option for the
+> > master bus, which may be configured as AHB, AXI, or Native.' On Table
+> > 6-5, it says when MBUS_TYPE is Native, the definition of 4 transfer typ=
+es
+> control bits [3-0] is 'Same as AXI'.
+> >
+> > However, as to the code implementation to be generic to both PCI and
+> > AXI, I admit I don't have a perfect solution so far, only 2 proposals w=
+ith
+> concerns:
+> >
+> > a. Create another module driver like dwc3-exynos.c
+> (arch/arm/boot/dts/wxynos54xx.dtsi)
+> >     to contain above programming code. However, it will touch the same =
+reg
+> range of DWC3
+> >     I think this is not good.
+>=20
+> I'd prefer avoiding another glue :-)
 
--- Shuah
+Got it.
+=20
+> > b. Add #ifdef CONFIG_ARCH_LAYERSCAPE in drivers/usb/dwc3/core.c to
+> constrain hacking code
+> >    can only take effect for Layerscape (AXI case). I know it look ugly.
+> >
+> > Do you have any better advice on this (besides changed power on default
+> value from HW perspective)?
+>=20
+> Maybe we don't need to care, actually. Since this property will only be n=
+eeded
+> for RTL instantiation that didn't configure these defaults properly durin=
+g
+> coreConsultant.
 
+Ok, I think I could add information in bindings to highlight this setting m=
+ight
+be RTL instantiation (SoC) relevant to prevent misusing.
+
+> >> >> >> Another question is: Why wasn't this setup properly during
+> >> >> >> coreConsultant instantiation of the RTL? Do you have devices on
+> >> >> >> the market already that need this or is this some early FPGA
+> >> >> >> model or test-only
+> >> >> ASIC?
+> >
+> > Several Layerscape platforms like LS1043ARDB, LS1046ARDB, etc. are
+> > already on the market and have this issue. So I have to work out a SW p=
+atch to
+> fix them.
+>=20
+> Thank you, now I'm certain that this is not some temporary solution :-)
+>=20
+> Thanks for going through this again. Please refresh the patch so we can t=
+ry to
+> get it merged.
+
+Sure, as I know all LS1043A and LS1046A relevant platforms have added 'dma-=
+coherent'
+to DTS node of 'soc' in mainline, which means without this fix USB function=
+ will down
+definitely, I will go through all update requirement we've discussed and wo=
+rk out
+next version patch. Thank you.
+
+Regards,
+Ran=20
