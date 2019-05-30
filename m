@@ -2,101 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA772FCF8
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 16:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590872FDAC
+	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 16:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbfE3OLy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 May 2019 10:11:54 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:44341 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbfE3OLx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 May 2019 10:11:53 -0400
-Received: by mail-lf1-f67.google.com with SMTP id r15so5129518lfm.11
-        for <linux-usb@vger.kernel.org>; Thu, 30 May 2019 07:11:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M2S5HoYs79Odxrbeb8difiMYaumXfmehHJ+8imC8jIQ=;
-        b=ZGNoM0MufgNxpy5au/RpL1RWLfTcCp5dw7bOKw6FcYKCvwtkYTvQrc2Xtk0qswYStF
-         hQUJ7qJkfRSCxCVkTmA3NTCFoj2dHsvZfWlwG+0M8NJuQ6gR8TBHxLfrMu8KLDAEf54t
-         HGOLO+TV7oUe3FWYonOuR6FzY2mmdxprOak2jwFefz2gATTIlnrqblzoVAIQ3SCONyLA
-         RAV4Ryut8qSCFo5ngtopHtoJ5NMIRfiqM2zWUfIvaCm3In0HsPJVqnS/VWG8Um2KPPeW
-         gKsmfAYFc+d1paGYQoAZDZGAOrMwoAM20YhM1xFkRMbO1lH42OVPUjb90jRziSqgbtFP
-         jYdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M2S5HoYs79Odxrbeb8difiMYaumXfmehHJ+8imC8jIQ=;
-        b=sRwSGvDWQO6CLACenbUinndaKesU6pMJn8SPrILBMlX8BZOY4BKbwqJPWBsJRX26bM
-         9c3t0hb45FHhEAyZ3Cv9HClPYdqDWX0QZSWH+oq7BYae725CZKH5CseBrK6vop6nanxx
-         uIFY0fwIhcsXpaoAbikRN0XqTL3DbwcGKEhLvYimWs6ntCSW3dKct3OgZIR790PCiGWq
-         jErglH/uTuQZafEeMOFMOhveXUTaWVEeHJ8XMM6Fqg0f6DwxbTKd8eZy1gMRyc1Ui3nu
-         8yKcC3VcYf71T+qju5lFAIsU/LEWPDaISkkIDxH6ywntosVgi6izosUoYK+OAlAOO6O7
-         7HMw==
-X-Gm-Message-State: APjAAAUX5N5etZNp+HXoFNHsGQ21Zf1t9KwUc9Yc8C7kFgtnt/2i1u5J
-        EBwdqHnuuNq+d4AWsGUhD1JFTwfiTs+RLWxbduM=
-X-Google-Smtp-Source: APXvYqyXRtbrrA9YasSa08wpIlkOMBDNDQHMFV/DWJbIQNdDI2qyAzRM157KrBwqUfJjtMRA5looBWA4+nCaj/evul0=
-X-Received: by 2002:ac2:52a8:: with SMTP id r8mr2288753lfm.20.1559225511385;
- Thu, 30 May 2019 07:11:51 -0700 (PDT)
+        id S1726430AbfE3OVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 May 2019 10:21:39 -0400
+Received: from smtprelay-out1.synopsys.com ([198.182.61.142]:46746 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726045AbfE3OVi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 May 2019 10:21:38 -0400
+Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AFE20C015A;
+        Thu, 30 May 2019 14:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1559226080; bh=DY27FoYJr/ZVzjiCMtlyZWv20rpQnHng7lH0kaf5j28=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Ep0dCWxjYCNNF/xvhaRDeOYxQs1R8sfukPkJIxxJa1+n6XbR6er5C3di5awqSiN+7
+         /X8JGRRij1i8YhHU+GDO6VWqHu3MJF87Fl7iXNuMctlG8+qv6Zd+xAhaxsa9KtszSL
+         nrdcnaaw+eOHbDJ1HoKW48i16zHe8lk4sQov8YwREcTvGTxWhEm6tbhb1UoTrzQ/Ja
+         Jwx3t7cSRA9S6dUX8R7Bu+jvP+1CtBlfGVzfIgByH9tcNjs1u8IoC0Re3l2sCaMfAR
+         s3wtkppNzGuvtujOJbzZT4d5JLsCX3NmQChcnuCpOVCVXFtKfXC4HcKVAVDCIf4XFz
+         hsiBKXBPRSE0Q==
+Received: from [10.116.70.206] (hminas-7480.internal.synopsys.com [10.116.70.206])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 37520A0093;
+        Thu, 30 May 2019 14:21:35 +0000 (UTC)
+Subject: Re: [PATCH] Revert "usb: dwc2: host: Setting qtd to NULL after
+ freeing it"
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>
+References: <1559163283-2429-1-git-send-email-linux@roeck-us.net>
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Message-ID: <1dcd53ee-7557-1974-1aea-33555e1fc67e@synopsys.com>
+Date:   Thu, 30 May 2019 18:21:34 +0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <20190530085039.34557-1-peter.chen@nxp.com>
-In-Reply-To: <20190530085039.34557-1-peter.chen@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 30 May 2019 11:11:42 -0300
-Message-ID: <CAOMZO5Ci9KfZBeSp-ukNgOVwjxGYrz4-uftgBZsix_6Ybuw9Eg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] usb: chipidea: udc: workaround for endpoint
- conflict issue
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Jun Li <jun.li@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1559163283-2429-1-git-send-email-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+On 5/30/2019 12:55 AM, Guenter Roeck wrote:
+> This reverts commit b0d659022e5c96ee5c4bd62d22d3da2d66de306b.
+> 
+> The reverted commit does nothing but adding two unnecessary lines
+> of code.  It sets a local variable to NULL in two functions, but
+> that variable is not used anywhere in the rest of those functions.
+> This is just confusing, so let's remove it.
+> 
+> Cc: Vardan Mikayelyan <mvardan@synopsys.com>
+> Cc: John Youn <johnyoun@synopsys.com>
+> Cc: Douglas Anderson <dianders@chromiun.org>
+> Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-On Thu, May 30, 2019 at 5:50 AM Peter Chen <peter.chen@nxp.com> wrote:
->
-> An endpoint conflict occurs when the USB is working in device mode
-> during an isochronous communication. When the endpointA IN direction
-> is an isochronous IN endpoint, and the host sends an IN token to
-> endpointA on another device, then the OUT transaction may be missed
-> regardless the OUT endpoint number. Generally, this occurs when the
-> device is connected to the host through a hub and other devices are
-> connected to the same hub.
->
-> The affected OUT endpoint can be either control, bulk, isochronous, or
-> an interrupt endpoint. After the OUT endpoint is primed, if an IN token
-> to the same endpoint number on another device is received, then the OUT
-> endpoint may be unprimed (cannot be detected by software), which causes
-> this endpoint to no longer respond to the host OUT token, and thus, no
-> corresponding interrupt occurs.
->
-> There is no good workaround for this issue, the only thing the software
-> could do is numbering isochronous IN from the highest endpoint since we
-> have observed most of device number endpoint from the lowest.
->
-> Cc: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-> Cc: Jun Li <jun.li@nxp.com>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
 
-Should this patch have Cc stable so that it gets applied for older kernels?
 
-> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> index 829e947cabf5..21c1344bfc42 100644
-> --- a/drivers/usb/chipidea/udc.c
-> +++ b/drivers/usb/chipidea/udc.c
-> @@ -1622,6 +1622,28 @@ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
->  static int ci_udc_start(struct usb_gadget *gadget,
->                          struct usb_gadget_driver *driver);
->  static int ci_udc_stop(struct usb_gadget *gadget);
-> +
-> +
+> ---
+>   drivers/usb/dwc2/hcd.c | 1 -
+>   drivers/usb/dwc2/hcd.h | 1 -
+>   2 files changed, 2 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+> index b50ec3714fd8..bca64b0d4d15 100644
+> --- a/drivers/usb/dwc2/hcd.c
+> +++ b/drivers/usb/dwc2/hcd.c
+> @@ -4676,7 +4676,6 @@ static int _dwc2_hcd_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
+>   	spin_unlock_irqrestore(&hsotg->lock, flags);
+>   	urb->hcpriv = NULL;
+>   	kfree(qtd);
+> -	qtd = NULL;
+>   fail1:
+>   	if (qh_allocated) {
+>   		struct dwc2_qtd *qtd2, *qtd2_tmp;
+> diff --git a/drivers/usb/dwc2/hcd.h b/drivers/usb/dwc2/hcd.h
+> index c089ffa1f0a8..f6bc48432b04 100644
+> --- a/drivers/usb/dwc2/hcd.h
+> +++ b/drivers/usb/dwc2/hcd.h
+> @@ -574,7 +574,6 @@ static inline void dwc2_hcd_qtd_unlink_and_free(struct dwc2_hsotg *hsotg,
+>   {
+>   	list_del(&qtd->qtd_list_entry);
+>   	kfree(qtd);
+> -	qtd = NULL;
+>   }
+>   
+>   /* Descriptor DMA support functions */
+> 
 
-One blank line is enough.
