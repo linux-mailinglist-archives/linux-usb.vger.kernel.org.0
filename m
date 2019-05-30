@@ -2,85 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 495072FA4A
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 12:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52492FB02
+	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 13:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726320AbfE3KaB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 May 2019 06:30:01 -0400
-Received: from smtprelay-out1.synopsys.com ([198.182.47.102]:33224 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726029AbfE3KaB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 May 2019 06:30:01 -0400
-Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7DE91C00FD;
-        Thu, 30 May 2019 10:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1559212209; bh=gg8NunW7XsIUu7tJ+B+7jsvCIrIgnJylMlUTpkU5OaY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=JfaWrNGvxdfq5OVVVJUOyO/WniWH1ZwTN88+4vua73kUXzL+7qBWFF4VvxP0SXF7R
-         vxQjdu0KVs1Tuuwno7OB+6Ufbk6tjwcyfOw2xBn/O4AlQXpjfEGhUUV/6S9ZWzpPcI
-         Oov+LRE4fSq+mNF7PsYoBoM+aa4YJHfuFBj2ooWsjX57ZWkf/7lwWP9dXcClip586m
-         Xwp6kOvJX7K/v24iT7FH19sv9lHOMXui32/58RRgG/6/pTEmLEBEUhgspLymjgdggT
-         UI3i3awQlpTBf89CwDeFIV54HuaagwcEC/EFy2QyxuFBiFksAibqVvfsmU7jTsb9EW
-         MDh6ofLlrzIig==
-Received: from [10.116.70.206] (hminas-7480.internal.synopsys.com [10.116.70.206])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 62570A0093;
-        Thu, 30 May 2019 10:29:56 +0000 (UTC)
-Subject: Re: [PATCH] usb: dwc2: Fix DMA cache alignment issues
-To:     Doug Anderson <dianders@chromium.org>,
-        Martin Schiller <ms@dev.tdt.de>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>
-References: <20190218063730.26870-1-ms@dev.tdt.de>
- <CAD=FV=Viag00jL-QRLsnyDoXWT5KFyZ3TnMdTPSJ-dbuNNiFVQ@mail.gmail.com>
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Message-ID: <7bf6f5dd-6f0f-4470-51c7-d024fc8ef4df@synopsys.com>
-Date:   Thu, 30 May 2019 14:29:31 +0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <CAD=FV=Viag00jL-QRLsnyDoXWT5KFyZ3TnMdTPSJ-dbuNNiFVQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726515AbfE3Liv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 May 2019 07:38:51 -0400
+Received: from ns317680.ip-94-23-251.eu ([94.23.251.149]:40233 "EHLO gcdb.top"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726065AbfE3Liv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 May 2019 07:38:51 -0400
+X-Greylist: delayed 15386 seconds by postgrey-1.27 at vger.kernel.org; Thu, 30 May 2019 07:38:51 EDT
+To:     linux-usb@vger.kernel.org
+From:   info <info@gcdb.top>
+Subject: FW: AW: Kontakt.
+Date:   Thu, 30 May 2019 13:00:21 +0200
+Message-ID: <20190530_110021_070612.info@gcdb.top>
+X-Mailer: WEBMAIL
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/29/2019 10:31 PM, Doug Anderson wrote:
-> Hi,
-> 
-> On Sun, Feb 17, 2019 at 10:37 PM Martin Schiller <ms@dev.tdt.de> wrote:
->>
->> Insert a padding between data and the stored_xfer_buffer pointer to
->> ensure they are not on the same cache line.
->>
->> Otherwise, the stored_xfer_buffer gets corrupted for IN URBs on
->> non-cache-coherent systems. (In my case: Lantiq xRX200 MIPS)
->>
->> Fixes: 3bc04e28a030 ("usb: dwc2: host: Get aligned DMA in a more supported way")
->> Fixes: 56406e017a88 ("usb: dwc2: Fix DMA alignment to start at allocated boundary")
->> Signed-off-by: Martin Schiller <ms@dev.tdt.de>
->> ---
->>   drivers/usb/dwc2/hcd.c | 10 +++++++---
->>   1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> This patch has been in the back of my mind for a while bug I never got
-> around to it.  Today I was debugging memory corruption problems when
-> using a webcam on dwc2 on rk3288-veyron-jerry.  This patch appears to
-> solve my problems nicely.  Thanks!
-> 
-> Tested-by: Douglas Anderson <dianders@chromium.org>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> Cc: <stable@vger.kernel.org>
-> 
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Sehr geehrte Damen und Herren,
+
+ich wende mich an Sie, da ich der Meinung bin, dass sich die von Ihnen auf der Webseite angebotenen Produkte ausgezeichnet dazu eignen, im Internet gefördert zu werden.
+Deshalb möchte ich Ihnen die Tools anbieten, die es erlauben, den Verkauf von Ihren Produkten und Dienstleistungen beinahe mit sofortiger Wirkung und auch mehrfach zu erhöhen.
+
+Die Firmenangaben beinhalten: Name der Firma, Ansprechpartner, E-mail Adresse, Tel. + Fax-Nr., PLZ, Ort, Straße etc. 
+
+1. Gesamtpaket 2019 DE - 1,4 Mio. Firmenadressen ( 1 457 620 ) - 190 € ( bis zum 30.05.2019 ) 
+2. Gesamtpaket 2019 DE,AT,CH - 1,7 Mio. Firmenadressen ( 1 747 921 ) - 240 € ( bis zum 30.05.2019 )
+3. Schweiz 2019 ( 187 911 ) - 149 € ( bis zum 30.05.2019 )
+4. Österreich 2019 ( 104 000 ) - 149 € ( bis zum 30.05.2019 )
+
+Die Verwendungsmöglichkeiten der Datenbanken sind praktisch unbegrenzt und Sie können durch Verwendung der von uns entwickelten 
+Programme des personalisierten Versendens von Angeboten u.ä. mittels E-mailing bzw. Fax effektive und sichere Werbekampagnen damit durchführen. 
+
+Bitte informieren Sie sich über die weiteren Details einmal unverbindlich auf unseren Webseiten: 
+
+http://www.gmcmarketing.top/?page=catalog
+
+Mit freundlichen Grüßen
+GMTeam
+
