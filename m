@@ -2,104 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F882FB87
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 14:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5B62FC14
+	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 15:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727163AbfE3MZt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 May 2019 08:25:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33670 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727147AbfE3MZt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 May 2019 08:25:49 -0400
-Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C094A258B0;
-        Thu, 30 May 2019 12:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559219148;
-        bh=tqtA7clOJM5AZ65r3KdPHuiSBsDSQNKZ4k0bzsmPEoQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PpfTAeyg6eO7kT9Kxqx1jZnsYoc0Wk3CmIR51zzONeY+qThPIBd9pQRu+Z1EdZDOm
-         Fy+c2gS9pPppS1g2lJmoAZt3GzR2pIMa8NTcSelZVEmEE0ATEhTP2C7Ug+yuCGabez
-         esXgcqZlAOlYpUcWBtX9i7i5q1X2jmbRy8U2Gz5k=
-Date:   Thu, 30 May 2019 05:25:48 -0700
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Jun Li <jun.li@nxp.com>
-Subject: Re: [PATCH v2 1/1] usb: chipidea: udc: workaround for endpoint
- conflict issue
-Message-ID: <20190530122548.GA17070@kroah.com>
-References: <20190530085039.34557-1-peter.chen@nxp.com>
+        id S1726566AbfE3NST (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 May 2019 09:18:19 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:56256 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725919AbfE3NST (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 May 2019 09:18:19 -0400
+Received: by mail-wm1-f68.google.com with SMTP id u78so3958164wmu.5
+        for <linux-usb@vger.kernel.org>; Thu, 30 May 2019 06:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:date:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=/92tb+flCLO5jSh12AsWD+Oh8tbLRXvhMgq53pYGuFc=;
+        b=ogVCkUYr2oRsaatvK68GUHo9KpeUe/GUKTK4qf1iJJPJGOzj0Ub+u8rcxPep658M4E
+         fPq5pn3Gy0aHtWODlHA2NT3JtprPUG6ZtWiOHWMF1e34tdrUwlNm6kwziZbX/YUc5pCD
+         +IhkdOJ6izIu4/ws9vuzIxX22m8t6mq6vqBFKbRFCU0zCgIBqjhZ+Kw62PoY9rHefMuY
+         BGyvvnWZ+0ZA9Yhp1ozQxI0KHFBWgkNaIvkoCvZG84IfT7/ANrW19g31PLfatEOmjJcu
+         yMhWNn3FY5alcP387+0A+Fnhv1855dBgWmWADCXtlhEkgpVmjTp779sOSUeCgvARmyad
+         o9fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:date:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=/92tb+flCLO5jSh12AsWD+Oh8tbLRXvhMgq53pYGuFc=;
+        b=dZmnkHqFCaCND6NiVNmJFHeSIsJBiJk118xbSVzSPCGJ+SMKnh2v+fJvBG3M0aQvib
+         vYadNrAf2amho8fr/mmnWvqxvInMM8a2OXYfzKj4kbNcCaYdtd6a78TcJNQDBXaCOxa5
+         c96w/Hm5MTS/ZA5aCXF3RotcexT5CnX/G1TKi+EzFkAeH5XG63WgOTWm+yWJc2g6LUY2
+         q4B9BdtBp/rVBu79UCkadqrQns2hFpER3RrSLi8M7B37ID6e1+6UAiRV1OSrxRJoYDBU
+         kW3sz+04Non1WJcTmw3E9vB5jOSSdr/aIyveWHQmlLAzMkVD52K0yiilhstizUhNyWEE
+         S7aA==
+X-Gm-Message-State: APjAAAXisyJ5S2vLMn6YCpeDa6WS7e7xRfstoKb1alvxM50cF8EX4XZr
+        udDM7aMMimGsrvrs6j1gbF3ETjMyP5Y=
+X-Google-Smtp-Source: APXvYqzGeiKsvq7naOo7IqIlHWDybGJyg3ggJzlfgkqPNSB8rO93EWYy5QvwKd6NCVIB9bymUuTiCQ==
+X-Received: by 2002:a05:600c:22cc:: with SMTP id 12mr2295955wmg.141.1559222297340;
+        Thu, 30 May 2019 06:18:17 -0700 (PDT)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id i9sm1709716wmf.43.2019.05.30.06.18.15
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 30 May 2019 06:18:16 -0700 (PDT)
+Message-ID: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
+Subject: Slow I/O on USB media
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     linux-usb@vger.kernel.org
+Date:   Thu, 30 May 2019 15:18:14 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190530085039.34557-1-peter.chen@nxp.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 30, 2019 at 04:50:39PM +0800, Peter Chen wrote:
-> An endpoint conflict occurs when the USB is working in device mode
-> during an isochronous communication. When the endpointA IN direction
-> is an isochronous IN endpoint, and the host sends an IN token to
-> endpointA on another device, then the OUT transaction may be missed
-> regardless the OUT endpoint number. Generally, this occurs when the
-> device is connected to the host through a hub and other devices are
-> connected to the same hub.
-> 
-> The affected OUT endpoint can be either control, bulk, isochronous, or
-> an interrupt endpoint. After the OUT endpoint is primed, if an IN token
-> to the same endpoint number on another device is received, then the OUT
-> endpoint may be unprimed (cannot be detected by software), which causes
-> this endpoint to no longer respond to the host OUT token, and thus, no
-> corresponding interrupt occurs.
-> 
-> There is no good workaround for this issue, the only thing the software
-> could do is numbering isochronous IN from the highest endpoint since we
-> have observed most of device number endpoint from the lowest.
-> 
-> Cc: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-> Cc: Jun Li <jun.li@nxp.com>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
-> Changes for v2:
-> - Improve the code sytle
-> 
->  drivers/usb/chipidea/udc.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> index 829e947cabf5..21c1344bfc42 100644
-> --- a/drivers/usb/chipidea/udc.c
-> +++ b/drivers/usb/chipidea/udc.c
-> @@ -1622,6 +1622,28 @@ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
->  static int ci_udc_start(struct usb_gadget *gadget,
->  			 struct usb_gadget_driver *driver);
->  static int ci_udc_stop(struct usb_gadget *gadget);
-> +
-> +
-> +/* Match ISOC IN from the highest endpoint */
-> +static struct usb_ep *ci_udc_match_ep(struct usb_gadget *gadget,
-> +			      struct usb_endpoint_descriptor *desc,
-> +			      struct usb_ss_ep_comp_descriptor *comp_desc)
-> +{
-> +	struct ci_hdrc *ci = container_of(gadget, struct ci_hdrc, gadget);
-> +	struct usb_ep *ep;
-> +	u8 type = desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK;
-> +
-> +	if ((type == USB_ENDPOINT_XFER_ISOC) &&
+Hi,
+  I have a problem as described at [1], sorry for misunderstanding the
+right place to report it.
 
-usb_endpoint_xfer_isoc()?
+The last kernel I can easily install and test was 5.0.17, but please
+tell me if I should install a newer version (or anything else I should
+do). I just tried installing 5.1.5 but suddenly stopped as I have
+problem in compilation (please be patient with me, because I am not an
+expert).
 
-> +			(desc->bEndpointAddress & USB_DIR_IN)) {
+Here follows the bug report content:
 
-usb_endpoint_dir_in()?
+I am experiencing slow I/O performance since kernel 5.0.1. File
+operations are roughly 10 times slower than they used to be using
+kernel up to 4.20. The problem is present when I use an USB pendrive,
+and does not happen when I copy a file from an internal SATA to
+another internal SATA hard disk.
 
-thanks,
+You can see the discussion in the dar (backup software) mailing list
+[2], because I first noticed the problem using dar, but then
+discovered that also usual file operations such as "cp" suffer the
+same problem.
 
-greg k-h
+Steps to Reproduce:
+Copy a file (e.g. roughly 1GB) from an internal SATA HD to an USB
+pendrive using "cp", using kernel 5.0.1+
+
+Actual Results:
+The file is copied in about 12 minutes
+
+Expected Results:
+The file is copied in about 1 minute (as it happens with kernel up to
+4.20.13)
+
+Running Fedora 29 on a Desktop PC.
+Kernels found to be affected: e.g. 5.0.7, 5.0.9, 5.0.10, 5.0.13,
+5.0.14, 5.0.17.
+
+Thanks, and bye,
+Andrea
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=203757
+[2] https://sourceforge.net/p/dar/mailman/dar-support/thread/d490b5733731cbbb526d759c858a4b11a52fd179.camel%40unipv.it/#msg36660380
+
