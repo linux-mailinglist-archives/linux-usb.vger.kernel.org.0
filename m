@@ -2,144 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F972F898
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 10:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408202F8B9
+	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 10:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726326AbfE3IcU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 May 2019 04:32:20 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:42774 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbfE3IcT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 May 2019 04:32:19 -0400
-Received: by mail-lj1-f196.google.com with SMTP id y15so2002268ljd.9
-        for <linux-usb@vger.kernel.org>; Thu, 30 May 2019 01:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/1crWiF562CDI9B6MQnp+qBczed5VahJW87q5+4ix9g=;
-        b=zUtJYe9OZ6ZcCyqiKk+6KGEr5BbPf2gOYNpRNVkgrz7+yY1Ro0wn92bPs6fKalli3j
-         wh5x3wAhnPUnRyTl7E84g5a3TvS1ZCOLtk+lA+gplHQpao+xhJXskSxnwzpFKkP66vTe
-         kY8fsrOc8vkYvfCPnqHLgnh7mgCBECyA9fwuTM/1IyNSUAFkjmP51NHH/6BIVuGwJcMN
-         W6psu1KH6f1b0Ewvyss7QBvgm3ZsnXJ29tbdHVAc22DgQozyhLSa+JhpfGfWGz+RgEbr
-         wXIekZpzAzmF/mHnVtJHYeYBR+QifXJRhQ0cd13n5ScOwlMBfYNPedcKl+OGX48y/xOF
-         OKOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/1crWiF562CDI9B6MQnp+qBczed5VahJW87q5+4ix9g=;
-        b=dAHU3O0pdDIkgq/5dpXWC/mieZZS7wvY9SgEDm8sPGGsA7bI8ao6IzeXtdbx5hS1Nb
-         wNlO9zp7RbGtC8MI8k/TxCSOzEl1yHRvE/zE3wx5yjjrZ+fvlMsDTUiKI3p+ZXKbTtv7
-         eoE3FW//k5JexnYY7j1YO0iuzbsfLx0YyT1oHcKaJFiQYNSw6FTxTCWuWGKzRdtsBpmD
-         6Ju4XgZusZd3ho5dwk1lrTvEy8NeRkiBtBnBnpFI8mkAj+4CO4/Pc7hCZENkHyccyF3S
-         /u9tF2ikUELxC343MK8LXDfG8Y9FNTzD+JFo0csDpXOr95MeCrtB2iZmf6DZ6fRevmIX
-         vO8w==
-X-Gm-Message-State: APjAAAXOl1uCvpc8qfPoYIQlL/CMhiYqMj7zGE5S1MPNr1hrUu5ipi0r
-        oGdVkUApp/PjVbg8XMBj0GMo6g==
-X-Google-Smtp-Source: APXvYqxGfsgTW7yHj/AYhTuGJL0qm4wwyatngeRc3XknlFAq1yhrKek602C3buhC2/ROCp1OOV77xw==
-X-Received: by 2002:a2e:5b18:: with SMTP id p24mr1369678ljb.50.1559204603276;
-        Thu, 30 May 2019 01:23:23 -0700 (PDT)
-Received: from [192.168.0.199] ([31.173.85.229])
-        by smtp.gmail.com with ESMTPSA id s6sm336548lje.89.2019.05.30.01.23.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 May 2019 01:23:22 -0700 (PDT)
-Subject: Re: [PATCH 1/1] usb: chipidea: udc: workaround for endpoint conflict
+        id S1726649AbfE3Isc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 May 2019 04:48:32 -0400
+Received: from mail-eopbgr60078.outbound.protection.outlook.com ([40.107.6.78]:50149
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726439AbfE3Isc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 May 2019 04:48:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c3icaLPgM7LUrmaELHESHqn+6SRwgKn2nQc49y6Tzkg=;
+ b=DyVD4lQa7rhMsAZbcfFdlU5myFzw1WeltQBCpbX5XfDB2rLMNM1fFZXZ16cFYmqhpoM8ITRHF2F+lqwSaMSy+mgpw0HEmnCdzbQeynDWBAiBhhmTdyO5bamYYkdHUQXqfoAja5hLsEP4tmCnnsBqYYZN20y32/JAZ/M1e6iuoGQ=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
+ VI1PR04MB4830.eurprd04.prod.outlook.com (20.177.49.11) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.18; Thu, 30 May 2019 08:48:26 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9891:c973:a697:3c7b]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9891:c973:a697:3c7b%3]) with mapi id 15.20.1943.016; Thu, 30 May 2019
+ 08:48:26 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Jun Li <jun.li@nxp.com>
+Subject: RE: [PATCH 1/1] usb: chipidea: udc: workaround for endpoint conflict
  issue
-To:     Peter Chen <peter.chen@nxp.com>, linux-usb@vger.kernel.org
-Cc:     linux-imx@nxp.com, stable@vger.kernel.org, Jun Li <jun.li@nxp.com>
+Thread-Topic: [PATCH 1/1] usb: chipidea: udc: workaround for endpoint conflict
+ issue
+Thread-Index: AQHVFrL3D6ynn0YQykmGysSqurgIPaaDVF+AgAAG1aA=
+Date:   Thu, 30 May 2019 08:48:26 +0000
+Message-ID: <VI1PR04MB53274A6AA3D9F1DD613102858B180@VI1PR04MB5327.eurprd04.prod.outlook.com>
 References: <20190530064505.6292-1-peter.chen@nxp.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <2036f4d4-1d5d-f0b3-f0cb-5df59cc91be9@cogentembedded.com>
-Date:   Thu, 30 May 2019 11:22:57 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20190530064505.6292-1-peter.chen@nxp.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ <2036f4d4-1d5d-f0b3-f0cb-5df59cc91be9@cogentembedded.com>
+In-Reply-To: <2036f4d4-1d5d-f0b3-f0cb-5df59cc91be9@cogentembedded.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d7c5b5e6-c9fd-42ca-032d-08d6e4db94b0
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4830;
+x-ms-traffictypediagnostic: VI1PR04MB4830:
+x-microsoft-antispam-prvs: <VI1PR04MB483012C6ECABEF0C4C2BFE958B180@VI1PR04MB4830.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 00531FAC2C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(39860400002)(396003)(366004)(136003)(376002)(189003)(199004)(486006)(7696005)(76176011)(4326008)(5660300002)(11346002)(44832011)(53546011)(2906002)(316002)(446003)(110136005)(54906003)(86362001)(26005)(476003)(186003)(102836004)(74316002)(7736002)(305945005)(6506007)(8936002)(81166006)(81156014)(8676002)(99286004)(52536014)(9686003)(2501003)(76116006)(66446008)(64756008)(66556008)(66476007)(55016002)(6436002)(68736007)(14454004)(478600001)(6116002)(25786009)(71200400001)(229853002)(3846002)(6246003)(66946007)(71190400001)(66066001)(256004)(33656002)(53936002)(73956011);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4830;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: IV/q+JfzZBDLtX3ypUyeXNi94QKw3AUL6YXQXsr6fQ4RFugvMx4jrATJC/EaeGkrbHtS+JU6rTyEvTcYBt0pQjG17QxbNp2Kq5azr7f4dh5M/fn9sTzWCaYaysTrHr0gSLUqpE3tJfXSeeAg7sNkZ10IY2R0Pz+Qyet2MuxJYz3CtHwBs9VGcqjaSPkIm5Ud2J3M6nfrCsRvFcn5a7SB/Hxm3Hdo4vhyyKeSr97NUN5pA+6484yzc4di6RvGrFZQRoBxuh0c8H2CThOUZPL6E5SdnMP04vPnHl0bEUg1qMI/aIgER+WdUpC+isdX5m9imXziK8j98DXYtXiAYakztI1I7cZqLYidDOH7yBCqak9Cd+yXEB4K+QgDVJ1khDwqmc26KqZgi4Ek4NNwsb67V4yOnv/9azEB1ZkNqodP/5k=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7c5b5e6-c9fd-42ca-032d-08d6e4db94b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2019 08:48:26.1828
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: peter.chen@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4830
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 30.05.2019 9:45, Peter Chen wrote:
-
-> An endpoint conflict occurs when the USB is working in device mode
-> during an isochronous communication. When the endpointA IN direction
-> is an isochronous IN endpoint, and the host sends an IN token to
-> endpointA on another device, then the OUT transaction may be missed
-> regardless the OUT endpoint number. Generally, this occurs when the
-> device is connected to the host through a hub and other devices are
-> connected to the same hub.
-> 
-> The affected OUT endpoint can be either control, bulk, isochronous, or
-> an interrupt endpoint. After the OUT endpoint is primed, if an IN token
-> to the same endpoint number on another device is received, then the OUT
-> endpoint may be unprimed (cannot be detected by software), which causes
-> this endpoint to no longer respond to the host OUT token, and thus, no
-> corresponding interrupt occurs.
-> 
-> There is no good workaround for this issue, the only thing the software
-> could do is numbering isochronous IN from the highest endpoint since we
-> have observed most of device number endpoint from the lowest.
-> 
-> Cc: <stable@vger.kernel.org> #v3.14+
-> Cc: Jun Li <jun.li@nxp.com>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
-> Changes for v2:
-> - Some coding style improvements
-
-    Nothing really changed in the patch... :-/
-
->   drivers/usb/chipidea/udc.c | 24 ++++++++++++++++++++++++
->   1 file changed, 24 insertions(+)
-> 
-> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> index 829e947cabf5..411d387a45c9 100644
-> --- a/drivers/usb/chipidea/udc.c
-> +++ b/drivers/usb/chipidea/udc.c
-> @@ -1622,6 +1622,29 @@ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
->   static int ci_udc_start(struct usb_gadget *gadget,
->   			 struct usb_gadget_driver *driver);
->   static int ci_udc_stop(struct usb_gadget *gadget);
-> +
-> +
-> +/* Match ISOC IN from the highest endpoint */
-> +static struct
-> +usb_ep *ci_udc_match_ep(struct usb_gadget *gadget,
-
-    Here...
-
-> +			      struct usb_endpoint_descriptor *desc,
-> +			      struct usb_ss_ep_comp_descriptor *comp_desc)
-> +{
-> +	struct ci_hdrc *ci = container_of(gadget, struct ci_hdrc, gadget);
-> +	struct usb_ep *ep;
-> +	u8 type = desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK;
-> +
-> +	if ((type == USB_ENDPOINT_XFER_ISOC) &&
-> +		(desc->bEndpointAddress & USB_DIR_IN)) {
-
-    ... and here.
-
-> +		list_for_each_entry_reverse(ep, &ci->gadget.ep_list, ep_list) {
-> +			if (ep->caps.dir_in && !ep->claimed)
-> +				return ep;
-> +		}
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
->   /**
->    * Device operations part of the API to the USB controller hardware,
->    * which don't involve endpoints (or i/o)
-[...]
-
-MBR, Sergei
+IA0KPiBPbiAzMC4wNS4yMDE5IDk6NDUsIFBldGVyIENoZW4gd3JvdGU6DQo+IA0KPiA+IEFuIGVu
+ZHBvaW50IGNvbmZsaWN0IG9jY3VycyB3aGVuIHRoZSBVU0IgaXMgd29ya2luZyBpbiBkZXZpY2Ug
+bW9kZQ0KPiA+IGR1cmluZyBhbiBpc29jaHJvbm91cyBjb21tdW5pY2F0aW9uLiBXaGVuIHRoZSBl
+bmRwb2ludEEgSU4gZGlyZWN0aW9uDQo+ID4gaXMgYW4gaXNvY2hyb25vdXMgSU4gZW5kcG9pbnQs
+IGFuZCB0aGUgaG9zdCBzZW5kcyBhbiBJTiB0b2tlbiB0bw0KPiA+IGVuZHBvaW50QSBvbiBhbm90
+aGVyIGRldmljZSwgdGhlbiB0aGUgT1VUIHRyYW5zYWN0aW9uIG1heSBiZSBtaXNzZWQNCj4gPiBy
+ZWdhcmRsZXNzIHRoZSBPVVQgZW5kcG9pbnQgbnVtYmVyLiBHZW5lcmFsbHksIHRoaXMgb2NjdXJz
+IHdoZW4gdGhlDQo+ID4gZGV2aWNlIGlzIGNvbm5lY3RlZCB0byB0aGUgaG9zdCB0aHJvdWdoIGEg
+aHViIGFuZCBvdGhlciBkZXZpY2VzIGFyZQ0KPiA+IGNvbm5lY3RlZCB0byB0aGUgc2FtZSBodWIu
+DQo+ID4NCj4gPiBUaGUgYWZmZWN0ZWQgT1VUIGVuZHBvaW50IGNhbiBiZSBlaXRoZXIgY29udHJv
+bCwgYnVsaywgaXNvY2hyb25vdXMsIG9yDQo+ID4gYW4gaW50ZXJydXB0IGVuZHBvaW50LiBBZnRl
+ciB0aGUgT1VUIGVuZHBvaW50IGlzIHByaW1lZCwgaWYgYW4gSU4NCj4gPiB0b2tlbiB0byB0aGUg
+c2FtZSBlbmRwb2ludCBudW1iZXIgb24gYW5vdGhlciBkZXZpY2UgaXMgcmVjZWl2ZWQsIHRoZW4N
+Cj4gPiB0aGUgT1VUIGVuZHBvaW50IG1heSBiZSB1bnByaW1lZCAoY2Fubm90IGJlIGRldGVjdGVk
+IGJ5IHNvZnR3YXJlKSwNCj4gPiB3aGljaCBjYXVzZXMgdGhpcyBlbmRwb2ludCB0byBubyBsb25n
+ZXIgcmVzcG9uZCB0byB0aGUgaG9zdCBPVVQgdG9rZW4sDQo+ID4gYW5kIHRodXMsIG5vIGNvcnJl
+c3BvbmRpbmcgaW50ZXJydXB0IG9jY3Vycy4NCj4gPg0KPiA+IFRoZXJlIGlzIG5vIGdvb2Qgd29y
+a2Fyb3VuZCBmb3IgdGhpcyBpc3N1ZSwgdGhlIG9ubHkgdGhpbmcgdGhlDQo+ID4gc29mdHdhcmUg
+Y291bGQgZG8gaXMgbnVtYmVyaW5nIGlzb2Nocm9ub3VzIElOIGZyb20gdGhlIGhpZ2hlc3QNCj4g
+PiBlbmRwb2ludCBzaW5jZSB3ZSBoYXZlIG9ic2VydmVkIG1vc3Qgb2YgZGV2aWNlIG51bWJlciBl
+bmRwb2ludCBmcm9tIHRoZQ0KPiBsb3dlc3QuDQo+ID4NCj4gPiBDYzogPHN0YWJsZUB2Z2VyLmtl
+cm5lbC5vcmc+ICN2My4xNCsNCj4gPiBDYzogSnVuIExpIDxqdW4ubGlAbnhwLmNvbT4NCj4gPiBT
+aWduZWQtb2ZmLWJ5OiBQZXRlciBDaGVuIDxwZXRlci5jaGVuQG54cC5jb20+DQo+ID4gLS0tDQo+
+ID4gQ2hhbmdlcyBmb3IgdjI6DQo+ID4gLSBTb21lIGNvZGluZyBzdHlsZSBpbXByb3ZlbWVudHMN
+Cj4gDQo+ICAgICBOb3RoaW5nIHJlYWxseSBjaGFuZ2VkIGluIHRoZSBwYXRjaC4uLiA6LS8NCj4g
+DQo+ID4gICBkcml2ZXJzL3VzYi9jaGlwaWRlYS91ZGMuYyB8IDI0ICsrKysrKysrKysrKysrKysr
+KysrKysrKw0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDI0IGluc2VydGlvbnMoKykNCj4gPg0KPiA+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jaGlwaWRlYS91ZGMuYyBiL2RyaXZlcnMvdXNiL2No
+aXBpZGVhL3VkYy5jDQo+ID4gaW5kZXggODI5ZTk0N2NhYmY1Li40MTFkMzg3YTQ1YzkgMTAwNjQ0
+DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvY2hpcGlkZWEvdWRjLmMNCj4gPiArKysgYi9kcml2ZXJz
+L3VzYi9jaGlwaWRlYS91ZGMuYw0KPiA+IEBAIC0xNjIyLDYgKzE2MjIsMjkgQEAgc3RhdGljIGlu
+dCBjaV91ZGNfcHVsbHVwKHN0cnVjdCB1c2JfZ2FkZ2V0ICpfZ2FkZ2V0LA0KPiBpbnQgaXNfb24p
+DQo+ID4gICBzdGF0aWMgaW50IGNpX3VkY19zdGFydChzdHJ1Y3QgdXNiX2dhZGdldCAqZ2FkZ2V0
+LA0KPiA+ICAgCQkJIHN0cnVjdCB1c2JfZ2FkZ2V0X2RyaXZlciAqZHJpdmVyKTsNCj4gPiAgIHN0
+YXRpYyBpbnQgY2lfdWRjX3N0b3Aoc3RydWN0IHVzYl9nYWRnZXQgKmdhZGdldCk7DQo+ID4gKw0K
+PiA+ICsNCj4gPiArLyogTWF0Y2ggSVNPQyBJTiBmcm9tIHRoZSBoaWdoZXN0IGVuZHBvaW50ICov
+IHN0YXRpYyBzdHJ1Y3QgdXNiX2VwDQo+ID4gKypjaV91ZGNfbWF0Y2hfZXAoc3RydWN0IHVzYl9n
+YWRnZXQgKmdhZGdldCwNCj4gDQo+ICAgICBIZXJlLi4uDQo+IA0KPiA+ICsJCQkgICAgICBzdHJ1
+Y3QgdXNiX2VuZHBvaW50X2Rlc2NyaXB0b3IgKmRlc2MsDQo+ID4gKwkJCSAgICAgIHN0cnVjdCB1
+c2Jfc3NfZXBfY29tcF9kZXNjcmlwdG9yICpjb21wX2Rlc2MpIHsNCj4gPiArCXN0cnVjdCBjaV9o
+ZHJjICpjaSA9IGNvbnRhaW5lcl9vZihnYWRnZXQsIHN0cnVjdCBjaV9oZHJjLCBnYWRnZXQpOw0K
+PiA+ICsJc3RydWN0IHVzYl9lcCAqZXA7DQo+ID4gKwl1OCB0eXBlID0gZGVzYy0+Ym1BdHRyaWJ1
+dGVzICYgVVNCX0VORFBPSU5UX1hGRVJUWVBFX01BU0s7DQo+ID4gKw0KPiA+ICsJaWYgKCh0eXBl
+ID09IFVTQl9FTkRQT0lOVF9YRkVSX0lTT0MpICYmDQo+ID4gKwkJKGRlc2MtPmJFbmRwb2ludEFk
+ZHJlc3MgJiBVU0JfRElSX0lOKSkgew0KPiANCj4gICAgIC4uLiBhbmQgaGVyZS4NCj4gDQo+ID4g
+KwkJbGlzdF9mb3JfZWFjaF9lbnRyeV9yZXZlcnNlKGVwLCAmY2ktPmdhZGdldC5lcF9saXN0LCBl
+cF9saXN0KSB7DQo+ID4gKwkJCWlmIChlcC0+Y2Fwcy5kaXJfaW4gJiYgIWVwLT5jbGFpbWVkKQ0K
+PiA+ICsJCQkJcmV0dXJuIGVwOw0KPiA+ICsJCX0NCj4gPiArCX0NCj4gPiArDQo+ID4gKwlyZXR1
+cm4gTlVMTDsNCj4gPiArfQ0KPiA+ICsNCj4gPiAgIC8qKg0KPiA+ICAgICogRGV2aWNlIG9wZXJh
+dGlvbnMgcGFydCBvZiB0aGUgQVBJIHRvIHRoZSBVU0IgY29udHJvbGxlciBoYXJkd2FyZSwNCj4g
+PiAgICAqIHdoaWNoIGRvbid0IGludm9sdmUgZW5kcG9pbnRzIChvciBpL28pDQo+IFsuLi5dDQo+
+IA0KDQpPb3BzLiBJIHVzZWQgdGhlIGZvcm1lciBwYXRjaCBmaWxlLiBzb3JyeSBhYm91dCB0aGF0
+Lg0KDQpQZXRlcg0K
