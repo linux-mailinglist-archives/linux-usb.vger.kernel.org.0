@@ -2,302 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13156315C9
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2019 22:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715D8316CE
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2019 23:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727416AbfEaUEv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 May 2019 16:04:51 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45813 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727282AbfEaUEu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 May 2019 16:04:50 -0400
-Received: by mail-pf1-f194.google.com with SMTP id s11so6811216pfm.12
-        for <linux-usb@vger.kernel.org>; Fri, 31 May 2019 13:04:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=112Zovjtx8ZJr1t4s7LUgNI3HCAGsmSvfOjQRnyMJCU=;
-        b=XxlXQ2LA/Fd9NkSesPvODwD6A3tksGsqrm9lVeOG5pHiO8te7bj9+Wr9ALiY1LHYhc
-         kfp/43WLVOLMo+N8RMOwetkmI60RcS4TH5h1vGced56vFH3ZHuCo9C0hTL920OCrQE8Z
-         gKTi52cWIJxbFcnl6g8BP21BCKYbdUciAUYB0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=112Zovjtx8ZJr1t4s7LUgNI3HCAGsmSvfOjQRnyMJCU=;
-        b=M00I7l9tXTUP6DGIkbTZRZL5secHSDsNy9SSXXcbrooq/4sE4eEQv4s2tBpZ7VqPtx
-         h5gvzxqeKaDGByrbghcb4Qf7wscDargp3clvgnWmS7BiAz5We69uIxF4O0Xw2OB1AHrq
-         IZS3ea1RcWhqYQPO2Z0HA4mYlSv/zXWEO2EBx87PwsvdbxeF2s1WJnjDdHjEPQ4VRtI8
-         9f7OMm5qhnEpEHIwpvWo9wVh0KGqhoT/jXNMrUDZjUweoX3sfCXB1anMr4sSAfdHSJBt
-         +Qju6CqlnT91n4m5zEQcVrm55KTA9keRSb5lWrDtoAfTIm6YjsPiYP2YQgaENG4gQLUY
-         vR7A==
-X-Gm-Message-State: APjAAAUU0SagBHaUFBtTcOvVLN6CKoguG+BrTudRh6HtTaggwvdbwTNv
-        HKaznutsZvWvc+Q10bs4MymRZg==
-X-Google-Smtp-Source: APXvYqxeTGnGGkTjihI9uH7d87T5xK7nlJC61qOLzE4WGy41v83odHoZijRIrqBW0NIFX0gqq5wJVw==
-X-Received: by 2002:a62:3287:: with SMTP id y129mr7161023pfy.101.1559333089720;
-        Fri, 31 May 2019 13:04:49 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id z4sm6856910pfa.142.2019.05.31.13.04.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 31 May 2019 13:04:49 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Minas Harutyunyan <hminas@synopsys.com>
-Cc:     linux-rockchip@lists.infradead.org,
-        Stefan Wahren <stefan.wahren@i2se.com>, tfiga@chromium.org,
-        mka@chromium.org, groeck@chromium.org,
-        Martin Schiller <ms@dev.tdt.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc2: host: Fix wMaxPacketSize handling (fix webcam regression)
-Date:   Fri, 31 May 2019 13:04:12 -0700
-Message-Id: <20190531200412.129429-1-dianders@chromium.org>
-X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726713AbfEaVyC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 May 2019 17:54:02 -0400
+Received: from mout.web.de ([212.227.17.12]:60965 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725913AbfEaVyC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 31 May 2019 17:54:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1559339632;
+        bh=4PnwSzytXpwFC3XqLknN/leQqVZx0q9UvCEseQqQS+4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=jIC5Q2LtJwYGaPixV8SgrlD6n2xlnLUZMrjXre6okDNzFH+EcIRIKtX5dyJHJ1zr2
+         F6jum7nSXJ4DBw+y0Syq1NWQEevxMmbJofzIMQtNHzcKgwGX1CYErJdzhakDVanY3a
+         VLDQ+QsiFssVg6PlZXF47PWm/TObLqPCm6VhFatU=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from platinum.office.videantis.de ([89.15.238.249]) by smtp.web.de
+ (mrweb103 [213.165.67.124]) with ESMTPSA (Nemesis) id
+ 0MIN2h-1haPpo39vr-00489n; Fri, 31 May 2019 23:53:51 +0200
+From:   Soeren Moch <smoch@web.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Soeren Moch <smoch@web.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH] Revert "usb: core: remove local_irq_save() around ->complete() handler"
+Date:   Fri, 31 May 2019 23:53:40 +0200
+Message-Id: <20190531215340.24539-1-smoch@web.de>
+X-Mailer: git-send-email 2.17.1
+X-Provags-ID: V03:K1:4pki4c77cO/q+Q4fp+esI/7+IHZntp6ARk7ufrkg7lwd/BtNRwG
+ ZONH+X9My05hiGQTV64d6W5tSdlWE7RbotPQYA10uJpTdHeFjQTmo+y0465WGOkacVVpfO3
+ SMdhpb4JQd03rlXmKdIMRNJLlxlJ9T+wkpg7CaPLHbHa06VLqBwVpleYOXMnLX7qthLmmW0
+ RKSTX2erEBTfeSGII/HMw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:00Fs/HKfJpE=:uEzYaepEDBH2thRnu2t4VM
+ j3m7F9bB23oQqaxPeOsMPIZXoRwYHT/Xx/9zyE1+38jrJGrEH9Xwy78d6Gd38G/SUXU84tRjJ
+ C7EDAmc1FacNELDuF9ZjM9bF62PKthxcQQ9Pvuw3L/R491xeA9d4lW73/+tMtilFK4EqyHTNd
+ UB9dKEnm9AuSroRSUUXZpeblMr4zyrffr8BhT5GGLiUjsceMdWJvkr32tonOUR2I4/dC8vDJZ
+ lKZ0FeaRGX1uNaCwqVgvClEaze/3L7LnExqjIhIQ7VQrv0/8EOAI48HnmlKN5YV20JxQ/tmQj
+ BG+8EBkK4AK8rRaJ0WTBgmWLvRukhdXiK4ynEAOsGqQ4tt4IJ80rh8OrhsP+hEKEcOZ5qlxUK
+ 4Z+iOCAwlA9OwEzsHLUxZCHMoUjI5KPJGVj2EBY1oDozymJ//dr0vGCxYxalqG3uyeCTE74FB
+ 6SjpJrWDjbslzR85yLp2w+qXoatdqi1hpD9N6QcHygmKBXwVHK8luzO7jFLjOjoseLkT1O8XC
+ B4alIAk+rNgLZjCbjJs/9ZV0E8RVY3SX77ZfuH/OBr57qVxeosqImw0QATlURPT4UhIE2IxEG
+ 1F0twVmQvsDK7MVe4b/gO5r5Dnz0Dv+ano6aZCFa2RVvjjl3lAbQnGpdinPpXSjsy7NXyKK6G
+ F2xO4X6aU5Y+dqArnrnqIBpwtHrdE+CZC4/U6C5e+/hxldZ91bWGAyb4hCV48+LnytHDRJWyV
+ wwsh5yiKKJ0y+KffV7aCGbIFEZuuli5wRr3IXVItqOV8G64E4AeZbzyUHpCdkg5RiokklrsBM
+ /DPbA90EZ9CbdyVmIjXhJJIDDkmxADqdXkPV0h2W7zICp93rDqilW7gA6zQwgRsqbKcsA4c2o
+ hco2JeHF34+EqpgHlRKppY5vAiy/Yooc6PxjdSn8LNH4LbHzYO4PNbJMBuhYCVy84ZWAoQuNS
+ EUK1xnNxqxODuKXF+HPc6DloRvvV0hBg=
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In commit abb621844f6a ("usb: ch9: make usb_endpoint_maxp() return
-only packet size") the API to usb_endpoint_maxp() changed.  It used to
-just return wMaxPacketSize but after that commit it returned
-wMaxPacketSize with the high bits (the multiplier) masked off.  If you
-wanted to get the multiplier it was now up to your code to call the
-new usb_endpoint_maxp_mult() which was introduced in
-commit 541b6fe63023 ("usb: add helper to extract bits 12:11 of
-wMaxPacketSize").
+This reverts commit ed194d1367698a0872a2b75bbe06b3932ce9df3a.
 
-Prior to the API change most host drivers were updated, but no update
-was made to dwc2.  Presumably it was assumed that dwc2 was too
-simplistic to use the multiplier and thus just didn't support a
-certain class of USB devices.  However, it turns out that dwc2 did use
-the multiplier and many devices using it were working quite nicely.
-That means that many USB devices have been broken since the API
-change.  One such device is a Logitech HD Pro Webcam C920.
+In contrast to the original patch description, apparently not all handlers
+were audited properly. E.g. my RT5370 based USB WIFI adapter (driver in
+drivers/net/wireless/ralink/rt2x00) hangs after a while under heavy load.
+This revert fixes this.
 
-Specifically, though dwc2 didn't directly call usb_endpoint_maxp(), it
-did call usb_maxpacket() which in turn called usb_endpoint_maxp().
+Also revert the follow-up patch d6142b91e9cc249b3aa22c90fade67e2e2d52cdb
+("usb: core: remove flags variable in __usb_hcd_giveback_urb()"), since no=
+w
+we need the flags variable again.
 
-Let's update dwc2 to work properly with the new API.
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org # 4.20+
+Signed-off-by: Soeren Moch <smoch@web.de>
+=2D--
+ drivers/usb/core/hcd.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-Fixes: abb621844f6a ("usb: ch9: make usb_endpoint_maxp() return only packet size")
-Cc: stable@vger.kernel.org
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 94d22551fc1b..08d25fcf8b8e 100644
+=2D-- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1739,6 +1739,7 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	struct usb_hcd *hcd =3D bus_to_hcd(urb->dev->bus);
+ 	struct usb_anchor *anchor =3D urb->anchor;
+ 	int status =3D urb->unlinked;
++	unsigned long flags;
 
- drivers/usb/dwc2/hcd.c       | 29 +++++++++++++++++------------
- drivers/usb/dwc2/hcd.h       | 20 +++++++++++---------
- drivers/usb/dwc2/hcd_intr.c  |  5 +++--
- drivers/usb/dwc2/hcd_queue.c | 10 ++++++----
- 4 files changed, 37 insertions(+), 27 deletions(-)
+ 	urb->hcpriv =3D NULL;
+ 	if (unlikely((urb->transfer_flags & URB_SHORT_NOT_OK) &&
+@@ -1755,7 +1756,20 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index b50ec3714fd8..5c51bf5506d1 100644
---- a/drivers/usb/dwc2/hcd.c
-+++ b/drivers/usb/dwc2/hcd.c
-@@ -2608,7 +2608,7 @@ static int dwc2_assign_and_init_hc(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh)
- 	chan->dev_addr = dwc2_hcd_get_dev_addr(&urb->pipe_info);
- 	chan->ep_num = dwc2_hcd_get_ep_num(&urb->pipe_info);
- 	chan->speed = qh->dev_speed;
--	chan->max_packet = dwc2_max_packet(qh->maxp);
-+	chan->max_packet = qh->maxp;
- 
- 	chan->xfer_started = 0;
- 	chan->halt_status = DWC2_HC_XFER_NO_HALT_STATUS;
-@@ -2686,7 +2686,7 @@ static int dwc2_assign_and_init_hc(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh)
- 		 * This value may be modified when the transfer is started
- 		 * to reflect the actual transfer length
- 		 */
--		chan->multi_count = dwc2_hb_mult(qh->maxp);
-+		chan->multi_count = qh->maxp_mult;
- 
- 	if (hsotg->params.dma_desc_enable) {
- 		chan->desc_list_addr = qh->desc_list_dma;
-@@ -3806,19 +3806,21 @@ static struct dwc2_hcd_urb *dwc2_hcd_urb_alloc(struct dwc2_hsotg *hsotg,
- 
- static void dwc2_hcd_urb_set_pipeinfo(struct dwc2_hsotg *hsotg,
- 				      struct dwc2_hcd_urb *urb, u8 dev_addr,
--				      u8 ep_num, u8 ep_type, u8 ep_dir, u16 mps)
-+				      u8 ep_num, u8 ep_type, u8 ep_dir,
-+				      u16 maxp, u16 maxp_mult)
- {
- 	if (dbg_perio() ||
- 	    ep_type == USB_ENDPOINT_XFER_BULK ||
- 	    ep_type == USB_ENDPOINT_XFER_CONTROL)
- 		dev_vdbg(hsotg->dev,
--			 "addr=%d, ep_num=%d, ep_dir=%1x, ep_type=%1x, mps=%d\n",
--			 dev_addr, ep_num, ep_dir, ep_type, mps);
-+			 "addr=%d, ep_num=%d, ep_dir=%1x, ep_type=%1x, maxp=%d (%d mult)\n",
-+			 dev_addr, ep_num, ep_dir, ep_type, maxp, maxp_mult);
- 	urb->pipe_info.dev_addr = dev_addr;
- 	urb->pipe_info.ep_num = ep_num;
- 	urb->pipe_info.pipe_type = ep_type;
- 	urb->pipe_info.pipe_dir = ep_dir;
--	urb->pipe_info.mps = mps;
-+	urb->pipe_info.maxp = maxp;
-+	urb->pipe_info.maxp_mult = maxp_mult;
- }
- 
- /*
-@@ -3909,8 +3911,9 @@ void dwc2_hcd_dump_state(struct dwc2_hsotg *hsotg)
- 					dwc2_hcd_is_pipe_in(&urb->pipe_info) ?
- 					"IN" : "OUT");
- 				dev_dbg(hsotg->dev,
--					"      Max packet size: %d\n",
--					dwc2_hcd_get_mps(&urb->pipe_info));
-+					"      Max packet size: %d (%d mult)\n",
-+					dwc2_hcd_get_maxp(&urb->pipe_info),
-+					dwc2_hcd_get_maxp_mult(&urb->pipe_info));
- 				dev_dbg(hsotg->dev,
- 					"      transfer_buffer: %p\n",
- 					urb->buf);
-@@ -4510,8 +4513,10 @@ static void dwc2_dump_urb_info(struct usb_hcd *hcd, struct urb *urb,
- 	}
- 
- 	dev_vdbg(hsotg->dev, "  Speed: %s\n", speed);
--	dev_vdbg(hsotg->dev, "  Max packet size: %d\n",
--		 usb_maxpacket(urb->dev, urb->pipe, usb_pipeout(urb->pipe)));
-+	dev_vdbg(hsotg->dev, "  Max packet size: %d (%d mult)\n",
-+		 usb_endpoint_maxp(&urb->ep->desc),
-+		 usb_endpoint_maxp_mult(&urb->ep->desc));
+ 	/* pass ownership to the completion handler */
+ 	urb->status =3D status;
 +
- 	dev_vdbg(hsotg->dev, "  Data buffer length: %d\n",
- 		 urb->transfer_buffer_length);
- 	dev_vdbg(hsotg->dev, "  Transfer buffer: %p, Transfer DMA: %08lx\n",
-@@ -4594,8 +4599,8 @@ static int _dwc2_hcd_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
- 	dwc2_hcd_urb_set_pipeinfo(hsotg, dwc2_urb, usb_pipedevice(urb->pipe),
- 				  usb_pipeendpoint(urb->pipe), ep_type,
- 				  usb_pipein(urb->pipe),
--				  usb_maxpacket(urb->dev, urb->pipe,
--						!(usb_pipein(urb->pipe))));
-+				  usb_endpoint_maxp(&ep->desc),
-+				  usb_endpoint_maxp_mult(&ep->desc));
- 
- 	buf = urb->transfer_buffer;
- 
-diff --git a/drivers/usb/dwc2/hcd.h b/drivers/usb/dwc2/hcd.h
-index c089ffa1f0a8..ce6445a06588 100644
---- a/drivers/usb/dwc2/hcd.h
-+++ b/drivers/usb/dwc2/hcd.h
-@@ -171,7 +171,8 @@ struct dwc2_hcd_pipe_info {
- 	u8 ep_num;
- 	u8 pipe_type;
- 	u8 pipe_dir;
--	u16 mps;
-+	u16 maxp;
-+	u16 maxp_mult;
- };
- 
- struct dwc2_hcd_iso_packet_desc {
-@@ -264,6 +265,7 @@ struct dwc2_hs_transfer_time {
-  *                       - USB_ENDPOINT_XFER_ISOC
-  * @ep_is_in:           Endpoint direction
-  * @maxp:               Value from wMaxPacketSize field of Endpoint Descriptor
-+ * @maxp_mult:          Multiplier for maxp
-  * @dev_speed:          Device speed. One of the following values:
-  *                       - USB_SPEED_LOW
-  *                       - USB_SPEED_FULL
-@@ -340,6 +342,7 @@ struct dwc2_qh {
- 	u8 ep_type;
- 	u8 ep_is_in;
- 	u16 maxp;
-+	u16 maxp_mult;
- 	u8 dev_speed;
- 	u8 data_toggle;
- 	u8 ping_state;
-@@ -503,9 +506,14 @@ static inline u8 dwc2_hcd_get_pipe_type(struct dwc2_hcd_pipe_info *pipe)
- 	return pipe->pipe_type;
- }
- 
--static inline u16 dwc2_hcd_get_mps(struct dwc2_hcd_pipe_info *pipe)
-+static inline u16 dwc2_hcd_get_maxp(struct dwc2_hcd_pipe_info *pipe)
-+{
-+	return pipe->maxp;
-+}
-+
-+static inline u16 dwc2_hcd_get_maxp_mult(struct dwc2_hcd_pipe_info *pipe)
- {
--	return pipe->mps;
-+	return pipe->maxp_mult;
- }
- 
- static inline u8 dwc2_hcd_get_dev_addr(struct dwc2_hcd_pipe_info *pipe)
-@@ -620,12 +628,6 @@ static inline bool dbg_urb(struct urb *urb)
- static inline bool dbg_perio(void) { return false; }
- #endif
- 
--/* High bandwidth multiplier as encoded in highspeed endpoint descriptors */
--#define dwc2_hb_mult(wmaxpacketsize) (1 + (((wmaxpacketsize) >> 11) & 0x03))
--
--/* Packet size for any kind of endpoint descriptor */
--#define dwc2_max_packet(wmaxpacketsize) ((wmaxpacketsize) & 0x07ff)
--
- /*
-  * Returns true if frame1 index is greater than frame2 index. The comparison
-  * is done modulo FRLISTEN_64_SIZE. This accounts for the rollover of the
-diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
-index 88b5dcf3aefc..a052d39b4375 100644
---- a/drivers/usb/dwc2/hcd_intr.c
-+++ b/drivers/usb/dwc2/hcd_intr.c
-@@ -1617,8 +1617,9 @@ static void dwc2_hc_ahberr_intr(struct dwc2_hsotg *hsotg,
- 
- 	dev_err(hsotg->dev, "  Speed: %s\n", speed);
- 
--	dev_err(hsotg->dev, "  Max packet size: %d\n",
--		dwc2_hcd_get_mps(&urb->pipe_info));
-+	dev_err(hsotg->dev, "  Max packet size: %d (mult %d)\n",
-+		dwc2_hcd_get_maxp(&urb->pipe_info),
-+		dwc2_hcd_get_maxp_mult(&urb->pipe_info));
- 	dev_err(hsotg->dev, "  Data buffer length: %d\n", urb->length);
- 	dev_err(hsotg->dev, "  Transfer buffer: %p, Transfer DMA: %08lx\n",
- 		urb->buf, (unsigned long)urb->dma);
-diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
-index ea3aa640c15c..68bbac64b753 100644
---- a/drivers/usb/dwc2/hcd_queue.c
-+++ b/drivers/usb/dwc2/hcd_queue.c
-@@ -708,7 +708,7 @@ static void dwc2_hs_pmap_unschedule(struct dwc2_hsotg *hsotg,
- static int dwc2_uframe_schedule_split(struct dwc2_hsotg *hsotg,
- 				      struct dwc2_qh *qh)
- {
--	int bytecount = dwc2_hb_mult(qh->maxp) * dwc2_max_packet(qh->maxp);
-+	int bytecount = qh->maxp_mult * qh->maxp;
- 	int ls_search_slice;
- 	int err = 0;
- 	int host_interval_in_sched;
-@@ -1332,7 +1332,7 @@ static int dwc2_check_max_xfer_size(struct dwc2_hsotg *hsotg,
- 	u32 max_channel_xfer_size;
- 	int status = 0;
- 
--	max_xfer_size = dwc2_max_packet(qh->maxp) * dwc2_hb_mult(qh->maxp);
-+	max_xfer_size = qh->maxp * qh->maxp_mult;
- 	max_channel_xfer_size = hsotg->params.max_transfer_size;
- 
- 	if (max_xfer_size > max_channel_xfer_size) {
-@@ -1517,8 +1517,9 @@ static void dwc2_qh_init(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh,
- 	u32 prtspd = (hprt & HPRT0_SPD_MASK) >> HPRT0_SPD_SHIFT;
- 	bool do_split = (prtspd == HPRT0_SPD_HIGH_SPEED &&
- 			 dev_speed != USB_SPEED_HIGH);
--	int maxp = dwc2_hcd_get_mps(&urb->pipe_info);
--	int bytecount = dwc2_hb_mult(maxp) * dwc2_max_packet(maxp);
-+	int maxp = dwc2_hcd_get_maxp(&urb->pipe_info);
-+	int maxp_mult = dwc2_hcd_get_maxp_mult(&urb->pipe_info);
-+	int bytecount = maxp_mult * maxp;
- 	char *speed, *type;
- 
- 	/* Initialize QH */
-@@ -1531,6 +1532,7 @@ static void dwc2_qh_init(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh,
- 
- 	qh->data_toggle = DWC2_HC_PID_DATA0;
- 	qh->maxp = maxp;
-+	qh->maxp_mult = maxp_mult;
- 	INIT_LIST_HEAD(&qh->qtd_list);
- 	INIT_LIST_HEAD(&qh->qh_list_entry);
- 
--- 
-2.22.0.rc1.311.g5d7573a151-goog
++	/*
++	 * We disable local IRQs here avoid possible deadlock because
++	 * drivers may call spin_lock() to hold lock which might be
++	 * acquired in one hard interrupt handler.
++	 *
++	 * The local_irq_save()/local_irq_restore() around complete()
++	 * will be removed if current USB drivers have been cleaned up
++	 * and no one may trigger the above deadlock situation when
++	 * running complete() in tasklet.
++	 */
++	local_irq_save(flags);
+ 	urb->complete(urb);
++	local_irq_restore(flags);
+
+ 	usb_anchor_resume_wakeups(anchor);
+ 	atomic_dec(&urb->use_count);
+=2D-
+2.17.1
 
