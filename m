@@ -2,72 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 975F5301FE
-	for <lists+linux-usb@lfdr.de>; Thu, 30 May 2019 20:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1833064D
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2019 03:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726240AbfE3SfA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 May 2019 14:35:00 -0400
-Received: from sonic315-13.consmr.mail.bf2.yahoo.com ([74.6.134.123]:33471
-        "EHLO sonic315-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726079AbfE3Se5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 May 2019 14:34:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559241295; bh=FCjWGTqDRXQUUN8ivg02MDhbiDKrvltOcpc7W52q/3U=; h=Date:From:Reply-To:Subject:References:From:Subject; b=mUyi3clUg3Xnomaf+YhTA9gRwVLNbbs3R3A3WW8HW5dpOGLDVhsxU5uxPhXQFHoQ8C3rANLoO0MfBxeJ6c9FKq4Vd4o0pC3hk/c/jbq9v9Pf9A20gqXDfMPQY5ej3pl5kgKnEm+2TqnZb/0SnHJSekMO8qr4N9bDD/tZx+jd8i39lWWOq/PzkrAEDDu6yzNgB7DWAciNICY2NGlAyEt4U9KJ6UcF9wTBlYevjBjzHK6I4fbAtnUs0u4RUN/6TTIxd1IxcR8MKomOE42w5rqVFEXsnqpfwK5J81GcssJ2eKiWL7Ii/TcrjydB/EQrWbHKsNXMfA5zO5QH0xXHjpDx2A==
-X-YMail-OSG: .mvfc9cVM1kGhp.9789tMdQGm_j7aTPmHvrhLWnjTdWn1rvD4KFPJCClrervGDs
- cMuZkgfy8JN4fj6zGaJR4KKHCtUv7XUD2QCaIuA1d3j3gFSJokCZxvqKN4.uu9vFE8RcEBQqNMt_
- OYm1veoC7f2901RGyg7fYeawUMyhQXON_a34joVgayDT_LiJA8.VpRGc4.VDbLRtQJlEmOUx8dX5
- KWjVXpahq9K0_lptw2pTY3LeAnxpy4jcuxDaOivRfjIrmV5udj_KVO2nRLd0GdpU2C3O.jC4im_o
- FH2KeecWN8xynLcU4BluTz8wqgRsnHjCCgOrgtTLk6pPL9nmsIKVBObgIa4nUiDIf.aLLre_X3vU
- Hn.v_kMVMo6r1NYjB5ns0SZERYIpz4arozVa4hdsyynEXoabr2qo8RksWxSgT4tSrWMTQUTqWNZ6
- uSVJ227_oXJ3bZICS0keUw._y_GkE6cxucTLMPpV7YUGbBxDijPTijNdkkWXy1ryXns8b48Qppir
- PVZOEGRdFFU8Chgb5rt02xD1TG0RPWETcLkXaRjJi2gjQeAt3hJm8eD9JHFZa1wVl26_7JQXVIgS
- w_5lZwad30GQpOPUl58RYtIF9I35xFY6nQdjOrRGKBhbjYCPZuE1BmjJ.FhCT0Y4rZeZv_.MNcev
- PTanVw7143OTH_6nLLric_eTvSdxRa8SHblCSkiGWAsVDpa6oiFqizPFOvdWFwVFVF_7NeAbuaWo
- MdmmbZTeb4zCX.CJFlCvPJ7CraHjryxHB3Da22aB9AvFSLqAh4m2FZNzqH8uRlGRE6c8GUGI_Jp.
- xS8I5ERTLjGRtqGmsE430ZErOvMHXIzOHZBjNA9fh1D2Aza9iyqoU_00_q778b99gTQsnwixpt1R
- RV1TGWCaIFW771kyLWoexwCDHGd244swxubdP9cQ.AtpHpPmnyDO6bU72Fr2egr1IxqMwAo0lhpR
- 8qd.Wrkihdm0YlYhR3leoa5i6RIEtqFMXeUwv5zOtSBPl0jmZdb5Ocyf2DA0qFk262PFNO2Zazx5
- L2XjSiPkVAx2nX3kSDr2KkNatQBOHxNCZB2bD8wXz5dP6.gXSbQws7pZoOnAuDi_Ils5BcHVpIHo
- 616FmVnuHIQ0X3NoPr.CuWgrDGiJGoPTzHwb_z72lTOyP0iyxvlhH4c_bGmHdk84fbbGkxkki9ut
- WwvZs9w2VisAjsnYWi6XQq7BVnb_MdshtMQLA4EdIEp7WpRmGjYzAY9HZ
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.bf2.yahoo.com with HTTP; Thu, 30 May 2019 18:34:55 +0000
-Date:   Thu, 30 May 2019 18:34:51 +0000 (UTC)
-From:   Ms Lisa Hugh <lisa.hugh101@gmail.com>
-Reply-To: Ms Lisa Hugh <ms.lisahugh000@gmail.com>
-Message-ID: <305145471.6881930.1559241291101@mail.yahoo.com>
-Subject: URGENT REPLY FOR THIS BUSINESS...
+        id S1726799AbfEaBqj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 May 2019 21:46:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51140 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726576AbfEaBqj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 May 2019 21:46:39 -0400
+Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EFC7126191;
+        Fri, 31 May 2019 01:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559267198;
+        bh=KpPDgF37BI8PGuzKi/AA8C9Gf/dJFMJfPiiskVuyFmU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EQXrIQVgFRXMTKfCDtHfH6Z409V3726d91GnWJ39dPSVwItU2MTlOxUbfgCG+sMYc
+         ldq5L2QiPYaF1vl22AhQSFd2Fz0R4svZAqvKHo1Ad+bceFXXtMpCBBBE0EQDgfpkn8
+         pClP1k7b10PYDw029XOG0kiPPAilEGcz3b8vZ9/0=
+Date:   Thu, 30 May 2019 18:46:37 -0700
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.2-rc3
+Message-ID: <20190531014637.GA30613@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <305145471.6881930.1559241291101.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.13634 YahooMailBasic Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
 
+  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
 
-Dear Friend,
+are available in the Git repository at:
 
-I am  Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank,
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.2-rc3
 
-There is this fund that was keep in my custody years ago,please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment and the amount is  (US$4.5M DOLLARS).
+for you to fetch changes up to 3ea3091f1bd8586125848c62be295910e9802af0:
 
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
+  usbip: usbip_host: fix stub_dev lock context imbalance regression (2019-05-29 13:26:32 -0700)
 
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
+----------------------------------------------------------------
+USB fixes for 5.2-rc3
 
-Below information is what i need from you so will can be reaching each other .
+Here are some tiny USB fixes for a number of reported issues for
+5.2-rc3.
 
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
+Nothing huge here, just a small collection of xhci and other driver bugs
+that syzbot has been finding in some drivers.  There is also a usbip fix
+and a fix for the usbip fix in here :)
 
+All have been in linux-next with no reported issues.
 
-Thanks.
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+----------------------------------------------------------------
+Alan Stern (3):
+      USB: Fix slab-out-of-bounds write in usb_get_bos_descriptor
+      media: usb: siano: Fix general protection fault in smsusb
+      media: usb: siano: Fix false-positive "uninitialized variable" warning
 
-Ms Lisa Hugh
+Andrey Smirnov (1):
+      xhci: Convert xhci_handshake() to use readl_poll_timeout_atomic()
+
+Carsten Schmid (1):
+      usb: xhci: avoid null pointer deref when bos field is NULL
+
+Chunfeng Yun (1):
+      usb: mtu3: fix up undefined reference to usb_debug_root
+
+Fabio Estevam (1):
+      xhci: Use %zu for printing size_t type
+
+Henry Lin (1):
+      xhci: update bounce buffer with correct sg num
+
+Jia-Ju Bai (1):
+      usb: xhci: Fix a potential null pointer dereference in xhci_debugfs_create_endpoint()
+
+Mathias Nyman (1):
+      xhci: Fix immediate data transfer if buffer is already DMA mapped
+
+Mauro Carvalho Chehab (1):
+      media: smsusb: better handle optional alignment
+
+Maximilian Luz (1):
+      USB: Add LPM quirk for Surface Dock GigE adapter
+
+Oliver Neukum (5):
+      USB: sisusbvga: fix oops in error path of sisusb_probe
+      USB: rio500: refuse more than one device at a time
+      USB: rio500: fix memory leak in close after disconnect
+      USB: rio500: simplify locking
+      USB: rio500: update Documentation
+
+Shuah Khan (2):
+      usbip: usbip_host: fix BUG: sleeping function called from invalid context
+      usbip: usbip_host: fix stub_dev lock context imbalance regression
+
+ Documentation/usb/rio.txt           | 66 ++++++------------------------
+ drivers/media/usb/siano/smsusb.c    | 33 +++++++++------
+ drivers/usb/core/config.c           |  4 +-
+ drivers/usb/core/quirks.c           |  3 ++
+ drivers/usb/host/xhci-debugfs.c     |  3 ++
+ drivers/usb/host/xhci-ring.c        | 26 ++++++++----
+ drivers/usb/host/xhci.c             | 24 +++++------
+ drivers/usb/host/xhci.h             |  3 +-
+ drivers/usb/misc/rio500.c           | 80 ++++++++++++++++++++++---------------
+ drivers/usb/misc/sisusbvga/sisusb.c | 15 +++----
+ drivers/usb/mtu3/mtu3_debugfs.c     |  3 +-
+ drivers/usb/usbip/stub_dev.c        | 75 ++++++++++++++++++++++++----------
+ 12 files changed, 182 insertions(+), 153 deletions(-)
