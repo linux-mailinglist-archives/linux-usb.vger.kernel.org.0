@@ -2,173 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB2B30820
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2019 07:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225233098C
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2019 09:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbfEaFo7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 May 2019 01:44:59 -0400
-Received: from mga18.intel.com ([134.134.136.126]:41385 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725988AbfEaFo6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 31 May 2019 01:44:58 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 May 2019 22:44:58 -0700
-X-ExtLoop1: 1
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga003.jf.intel.com with ESMTP; 30 May 2019 22:44:55 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726792AbfEaHlC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 May 2019 03:41:02 -0400
+Received: from mail-eopbgr1410120.outbound.protection.outlook.com ([40.107.141.120]:43006
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726275AbfEaHlC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 31 May 2019 03:41:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2JJfhjlChlsZblk494lEolIoahzYewRVgkt13gf0nWw=;
+ b=UuI8pqtaJug4kV9Uu/Oe/3rLCLNq7eiMY4k8vSVqL0yp2kn34OWbUyLri+F2I67YD2C4f6rdN6cRVi8PV4IZYEmMEzal8QtuafREC+3xfKedXeVm8UctCJCkwGFCbMP7wyNhtsYCeJXNji0p1CpPACp6jokK826sebNkCYGVx9w=
+Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com (52.134.242.17) by
+ OSBPR01MB3159.jpnprd01.prod.outlook.com (52.134.253.78) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.17; Fri, 31 May 2019 07:40:52 +0000
+Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com
+ ([fe80::a146:39f0:5df9:11bc]) by OSBPR01MB2103.jpnprd01.prod.outlook.com
+ ([fe80::a146:39f0:5df9:11bc%7]) with mapi id 15.20.1922.021; Fri, 31 May 2019
+ 07:40:52 +0000
+From:   Biju Das <biju.das@bp.renesas.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Mark Rutland <mark.rutland@arm.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [v3 PATCH] usb: create usb_debug_root for gadget only
-In-Reply-To: <1559201499.8487.40.camel@mhfsdcap03>
-References: <cffd6d75f69e4d908c8f39b8a60ddae27d6b7c88.1559028752.git.chunfeng.yun@mediatek.com> <87k1ebj8vt.fsf@linux.intel.com> <1559201499.8487.40.camel@mhfsdcap03>
-Date:   Fri, 31 May 2019 08:44:55 +0300
-Message-ID: <87sgsv2n54.fsf@linux.intel.com>
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Yu Chen <chenyu56@huawei.com>
+Subject: RE: [PATCH v6 06/10] device connection: Add
+ fwnode_connection_find_match()
+Thread-Topic: [PATCH v6 06/10] device connection: Add
+ fwnode_connection_find_match()
+Thread-Index: AQHVFfJUqUbU7Icg8UiVJq3QJgY4TaaE3Adg
+Date:   Fri, 31 May 2019 07:40:52 +0000
+Message-ID: <OSBPR01MB2103EAE24D36E23BFE8A76A5B8190@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+References: <1559115828-19146-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1559115828-19146-7-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1559115828-19146-7-git-send-email-chunfeng.yun@mediatek.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=biju.das@bp.renesas.com; 
+x-originating-ip: [193.141.220.21]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e226b5ac-0d7b-4e75-1332-08d6e59b4f1e
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB3159;
+x-ms-traffictypediagnostic: OSBPR01MB3159:
+x-microsoft-antispam-prvs: <OSBPR01MB31591D0E63212706D3957FACB8190@OSBPR01MB3159.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 00540983E2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(39860400002)(396003)(376002)(346002)(366004)(189003)(199004)(51914003)(305945005)(53936002)(33656002)(110136005)(99286004)(5660300002)(256004)(14444005)(76176011)(4326008)(25786009)(68736007)(6116002)(2906002)(7736002)(6246003)(86362001)(7696005)(74316002)(71200400001)(11346002)(71190400001)(7416002)(476003)(3846002)(54906003)(52536014)(9686003)(66066001)(55016002)(186003)(76116006)(26005)(14454004)(102836004)(64756008)(66946007)(44832011)(229853002)(81156014)(73956011)(6436002)(478600001)(6506007)(316002)(446003)(66556008)(8936002)(66476007)(66446008)(486006)(81166006)(8676002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB3159;H:OSBPR01MB2103.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:0;
+received-spf: None (protection.outlook.com: bp.renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 9ve87iDhwS2Bv2t20CDXq8Lmym3IMLYLmUYuFGiVVhZDrG3GENrS7SgY7pnqrMT3/ZjRVbEDCvmoBaeUENs63lIDw7TKlli4dQ7R8gQO93Q6o1BwEbKkPZM4h+oLnAMB82hoB/8raodlNKKedS6veSvDqegQgbePg6vWFbZXkXSa9O8BxoX3oXr1s+DRjOdGTqj8Y7VW4xCSR2W022adb0g3eFiekoRIPHBAPCc0C92EpbxZgaO2qCnAO559QZESckJFltNM0dkP7Q9tY30XufQO5DiPAvOmuKCf+sCgSKbgMmx36D2CGLm+dKZ6ci/wfdOZa0PUuN3dIMhDzXmpwikBSw1No7LOGoAWbuMpfryrYXjOJdV1NKNRw0bK2z3zK8+jJuKVgqutNW0ICFaVTvV5+LLsk73NkjCaiMEtB9k=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e226b5ac-0d7b-4e75-1332-08d6e59b4f1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2019 07:40:52.6808
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: biju.das@bp.renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3159
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
 Hi,
 
-Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
+Thanks for the patch
 
-> Hi Felipe,
-> On Tue, 2019-05-28 at 11:11 +0300, Felipe Balbi wrote:
->> Hi,
->> 
->> Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
->> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
->> > index 7fcb9f782931..88b3ee03a12d 100644
->> > --- a/drivers/usb/core/usb.c
->> > +++ b/drivers/usb/core/usb.c
->> > @@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_GPL(usb_debug_root);
->> >  
->> >  static void usb_debugfs_init(void)
->> >  {
->> > -	usb_debug_root = debugfs_create_dir("usb", NULL);
->> > +	usb_debug_root = debugfs_create_dir(USB_DEBUG_ROOT_NAME, NULL);
->> >  	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
->> >  			    &usbfs_devices_fops);
->> >  }
->> 
->> might be a better idea to move this to usb common. Then have a function
->> which can be called by both host and gadget to maybe create the
->> directory:
->> 
->> static struct dentry *usb_debug_root;
->> 
->> struct dentry *usb_debugfs_init(void)
->> {
->> 	if (!usb_debug_root)
->>         	usb_debug_root = debugfs_create_dir("usb", NULL);
->> 
->> 	return usb_debug_root;
->> }
->> 
->> 
->> Then usb core would be updated to something like:
->> 
->> static void usb_core_debugfs_init(void)
->> {
->> 	struct dentry *root = usb_debugfs_init();
->> 
->> 	debugfs_create_file("devices", 0444, root, NULL, &usbfs_devices_fops);
->> }
->> 
-> I find a problem when move usb_debugfs_init() and usb_debugfs_cleanup()
-> into usb common, it's easy to create "usb" directory, but difficult to
-> cleanup it:
->
-> common/common.c
->
-> struct dentry *usb_debugfs_init(void)
-> {
->     if (!usb_debug_root)
->         usb_debug_root = debugfs_create_dir("usb", NULL);
->
->     return usb_debug_root;
+> Subject: [PATCH v6 06/10] device connection: Add
+> fwnode_connection_find_match()
+>=20
+> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>=20
+> The fwnode_connection_find_match() function is exactly the same as
+> device_connection_find_match(), except it takes struct fwnode_handle as
+> parameter instead of struct device.
+> That allows locating device connections before the device entries have be=
+en
+> created.
+>=20
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Tested-by: Biju Das <biju.das@bp.renesas.com>
+> ---
+> v6:
+>   new patch
+> ---
+>  drivers/base/devcon.c  | 33 +++++++++++++++++++++++++--------
+> include/linux/device.h | 10 +++++++---
+>  2 files changed, 32 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/base/devcon.c b/drivers/base/devcon.c index
+> 04db9ae235e4..8311b70bbca2 100644
+> --- a/drivers/base/devcon.c
+> +++ b/drivers/base/devcon.c
+> @@ -12,9 +12,6 @@
+>  static DEFINE_MUTEX(devcon_lock);
+>  static LIST_HEAD(devcon_list);
+>=20
+> -typedef void *(*devcon_match_fn_t)(struct device_connection *con, int
+> ep,
+> -				   void *data);
+> -
+>  static void *
+>  fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char
+> *con_id,
+>  			  void *data, devcon_match_fn_t match) @@ -38,6
+> +35,28 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode,
+> const char *con_id,
+>  	return NULL;
+>  }
+>=20
+> +/**
+> + * fwnode_connection_find_match - Find connection from a device node
+> + * @fwnode: Device node with the connection
+> + * @con_id: Identifier for the connection
+> + * @data: Data for the match function
+> + * @match: Function to check and convert the connection description
+> + *
+> + * Find a connection with unique identifier @con_id between @fwnode and
+> +another
+> + * device node. @match will be used to convert the connection
+> +description to
+> + * data the caller is expecting to be returned.
+> + */
+> +void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
+> +				   const char *con_id, void *data,
+> +				   devcon_match_fn_t match)
+> +{
+> +	if (!fwnode || !match)
+> +		return NULL;
+> +
+> +	return fwnode_graph_devcon_match(fwnode, con_id, data, match);
 > }
->
-> void usb_debugfs_cleanup(void)
-> {
->     debugfs_remove_recursive(usb_debug_root);
->     usb_debug_root = NULL;
-> }
->
-> core/usb.c
->
-> static void usb_core_debugfs_init(void)
-> {
->     struct dentry *root = usb_debugfs_init();
->
->     debugfs_create_file("devices", 0444, root, NULL,
-> &usbfs_devices_fops);
-> }
->
-> static int __init usb_init(void)
-> {
->     ...
->     usb_core_debugfs_init();
->     ...
-> }
->
-> static void __exit usb_exit(void)
-> {
->     ...
->     usb_debugfs_cleanup();
->     // will be error, gadget may use it.
->     ...
-> }
->
-> gadget/udc/core.c
->
-> static int __init usb_udc_init(void)
-> {
->     ...
->     usb_debugfs_init();
->     ...
-> }
->
-> static void __exit usb_udc_exit(void)
-> {
->     ...
->     usb_debugfs_cleanup();
->     // can't cleanup in fact, usb core may use it.
-> }
->
-> How to handle this case? introduce a reference count? do you have any
-> suggestion?
+> +EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
+> +
+>  /**
+>   * device_connection_find_match - Find physical connection to a device
+>   * @dev: Device with the connection
+> @@ -61,11 +80,9 @@ void *device_connection_find_match(struct device
+> *dev, const char *con_id,
+>  	if (!match)
+>  		return NULL;
+>=20
+> -	if (fwnode) {
+> -		ret =3D fwnode_graph_devcon_match(fwnode, con_id, data,
+> match);
+> -		if (ret)
+> -			return ret;
+> -	}
+> +	ret =3D fwnode_connection_find_match(fwnode, con_id, data,
+> match);
+> +	if (ret)
+> +		return ret;
+>=20
+>  	mutex_lock(&devcon_lock);
+>=20
+> diff --git a/include/linux/device.h b/include/linux/device.h index
+> e85264fb6616..9445f068602f 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -772,10 +772,14 @@ struct device_connection {
+>  	struct list_head	list;
+>  };
+>=20
+> +typedef void *(*devcon_match_fn_t)(struct device_connection *con, int
+> ep,
+> +				   void *data);
+> +
+> +void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
+> +				   const char *con_id, void *data,
+> +				   devcon_match_fn_t match);
+>  void *device_connection_find_match(struct device *dev, const char
+> *con_id,
+> -				void *data,
+> -				void *(*match)(struct device_connection
+> *con,
+> -					       int ep, void *data));
+> +				   void *data, devcon_match_fn_t match);
+>=20
+>  struct device *device_connection_find(struct device *dev, const char
+> *con_id);
+>=20
+> --
+> 2.21.0
 
-I guess a simple refcount is the way to go:
-
-struct dentry *usb_debugfs_init(void)
-{
-	if (!usb_debug_root)
-		usb_debug_root = debugfs_create_dir("usb", NULL);
-
-	usb_debug_root_refcnt++;
-	return usb_debug_root;
-}
-
-void usb_debugfs_cleanup(void)
-{
-	if (!(--usb_debug_root_refcnt)) {
-		debugfs_remove_recursive(usb_debug_root);
-		usb_debug_root = NULL;
-	}
-}
-
-Or something along those lines
-
--- 
-balbi
