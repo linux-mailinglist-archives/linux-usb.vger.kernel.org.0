@@ -2,196 +2,302 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EE231586
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2019 21:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13156315C9
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2019 22:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727374AbfEaTm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 May 2019 15:42:57 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:14386 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727147AbfEaTm5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 May 2019 15:42:57 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cf183bd0000>; Fri, 31 May 2019 12:42:53 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 31 May 2019 12:42:54 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 31 May 2019 12:42:54 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 May
- 2019 19:42:53 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 May
- 2019 19:42:53 +0000
-Received: from NAM03-DM3-obe.outbound.protection.outlook.com (104.47.41.52) by
- HQMAIL109.nvidia.com (172.20.187.15) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Fri, 31 May 2019 19:42:53 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.177.125.216) by
- BYAPR12MB3493.namprd12.prod.outlook.com (20.178.196.219) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.16; Fri, 31 May 2019 19:42:51 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::54a2:b360:f53:6aa]) by BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::54a2:b360:f53:6aa%6]) with mapi id 15.20.1922.021; Fri, 31 May 2019
- 19:42:51 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Wolfram Sang <wsa@the-dreams.de>, Ajay Gupta <ajaykuee@gmail.com>
-CC:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: RE: [PATCH v3 2/5] i2c: nvidia-gpu: add runtime pm support
-Thread-Topic: [PATCH v3 2/5] i2c: nvidia-gpu: add runtime pm support
-Thread-Index: AQHVEMzkPx3E/+mRIUKvJ8Fh+C4XEaZ8RkoAgARYKyCABRGrUA==
-Date:   Fri, 31 May 2019 19:42:50 +0000
-Message-ID: <BYAPR12MB2727F7FA5B11E9DC776A1ABCDC190@BYAPR12MB2727.namprd12.prod.outlook.com>
-References: <20190522183142.11061-1-ajayg@nvidia.com>
- <20190522183142.11061-3-ajayg@nvidia.com> <20190525195630.GB12538@kunai>
- <BYAPR12MB2727D18CBA3BACC667F253C6DC1E0@BYAPR12MB2727.namprd12.prod.outlook.com>
-In-Reply-To: <BYAPR12MB2727D18CBA3BACC667F253C6DC1E0@BYAPR12MB2727.namprd12.prod.outlook.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-05-28T14:25:49.8703516Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic;
- Sensitivity=Unrestricted
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ajayg@nvidia.com; 
-x-originating-ip: [216.228.112.22]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 02a25ee7-c528-4384-0a32-08d6e6002ace
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:BYAPR12MB3493;
-x-ms-traffictypediagnostic: BYAPR12MB3493:
-x-microsoft-antispam-prvs: <BYAPR12MB349362E3DD17A23BB930F5C9DC190@BYAPR12MB3493.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 00540983E2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(366004)(396003)(376002)(346002)(136003)(13464003)(189003)(199004)(64756008)(71200400001)(9686003)(6116002)(2906002)(66556008)(66446008)(66476007)(73956011)(71190400001)(66946007)(55016002)(14444005)(66066001)(6436002)(6506007)(52536014)(256004)(7736002)(305945005)(3846002)(99286004)(11346002)(33656002)(186003)(486006)(5660300002)(316002)(446003)(476003)(6246003)(54906003)(478600001)(76116006)(74316002)(102836004)(110136005)(76176011)(86362001)(68736007)(53546011)(229853002)(81166006)(7696005)(25786009)(8676002)(53936002)(8936002)(81156014)(14454004)(4326008)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB3493;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 624IfehF/LggOG6tCXCmDV+wzvqshLKUI4yKsmAhYO+Sej4B/CkkDMocSnBXyTmKpOsHrSg8cX44q9hZD77Rvaqvn3/OO4u6KW20fod2v1HmLuJX16VvW7fnhcMPresW71k1zyGgncWK2uYPC/T/Zrrrs5E2a0/VVHnqhrZiQwD7TRXzVtkblUYkxMXhXgpaepEpSw3VBfm+wfxchHRHZGWqFgaQ4s6ipUPvrR9zyOED2Lp+GHcQae1qEuB0ze9AiQvsxpcYf1+vjV3ETMwhSXSSrYtgCfAAuH05v3mlTlWM6ES6kzGgHyNrFJu8vk7/6NV3GbHkSMfzYxarfX37qlwF+dt4qq17X28S5MV1skSu14QXcIC7ucBrQedhxF3nU1653oLTDRtF6CMLuPafdzFSt7yoTPtjOqFjqJN40Rc=
+        id S1727416AbfEaUEv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 May 2019 16:04:51 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:45813 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727282AbfEaUEu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 May 2019 16:04:50 -0400
+Received: by mail-pf1-f194.google.com with SMTP id s11so6811216pfm.12
+        for <linux-usb@vger.kernel.org>; Fri, 31 May 2019 13:04:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=112Zovjtx8ZJr1t4s7LUgNI3HCAGsmSvfOjQRnyMJCU=;
+        b=XxlXQ2LA/Fd9NkSesPvODwD6A3tksGsqrm9lVeOG5pHiO8te7bj9+Wr9ALiY1LHYhc
+         kfp/43WLVOLMo+N8RMOwetkmI60RcS4TH5h1vGced56vFH3ZHuCo9C0hTL920OCrQE8Z
+         gKTi52cWIJxbFcnl6g8BP21BCKYbdUciAUYB0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=112Zovjtx8ZJr1t4s7LUgNI3HCAGsmSvfOjQRnyMJCU=;
+        b=M00I7l9tXTUP6DGIkbTZRZL5secHSDsNy9SSXXcbrooq/4sE4eEQv4s2tBpZ7VqPtx
+         h5gvzxqeKaDGByrbghcb4Qf7wscDargp3clvgnWmS7BiAz5We69uIxF4O0Xw2OB1AHrq
+         IZS3ea1RcWhqYQPO2Z0HA4mYlSv/zXWEO2EBx87PwsvdbxeF2s1WJnjDdHjEPQ4VRtI8
+         9f7OMm5qhnEpEHIwpvWo9wVh0KGqhoT/jXNMrUDZjUweoX3sfCXB1anMr4sSAfdHSJBt
+         +Qju6CqlnT91n4m5zEQcVrm55KTA9keRSb5lWrDtoAfTIm6YjsPiYP2YQgaENG4gQLUY
+         vR7A==
+X-Gm-Message-State: APjAAAUU0SagBHaUFBtTcOvVLN6CKoguG+BrTudRh6HtTaggwvdbwTNv
+        HKaznutsZvWvc+Q10bs4MymRZg==
+X-Google-Smtp-Source: APXvYqxeTGnGGkTjihI9uH7d87T5xK7nlJC61qOLzE4WGy41v83odHoZijRIrqBW0NIFX0gqq5wJVw==
+X-Received: by 2002:a62:3287:: with SMTP id y129mr7161023pfy.101.1559333089720;
+        Fri, 31 May 2019 13:04:49 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
+        by smtp.gmail.com with ESMTPSA id z4sm6856910pfa.142.2019.05.31.13.04.48
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 31 May 2019 13:04:49 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Minas Harutyunyan <hminas@synopsys.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        Stefan Wahren <stefan.wahren@i2se.com>, tfiga@chromium.org,
+        mka@chromium.org, groeck@chromium.org,
+        Martin Schiller <ms@dev.tdt.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc2: host: Fix wMaxPacketSize handling (fix webcam regression)
+Date:   Fri, 31 May 2019 13:04:12 -0700
+Message-Id: <20190531200412.129429-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02a25ee7-c528-4384-0a32-08d6e6002ace
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2019 19:42:51.0809
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ajayg@nvidia.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3493
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1559331773; bh=GH5X9RQ+ObGIiGX4bGy2aqFfuGIisPVG2em/dlAH7Vw=;
-        h=X-PGP-Universal:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
-         Message-ID:References:In-Reply-To:Accept-Language:X-MS-Has-Attach:
-         X-MS-TNEF-Correlator:msip_labels:authentication-results:
-         x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
-         x-ms-traffictypediagnostic:x-microsoft-antispam-prvs:
-         x-ms-oob-tlc-oobclassifiers:x-forefront-prvs:
-         x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=EXe22w9NS1s94ix3ZbnuFaknuz04AhwtU8DjHTV2O0v3rEgSn6ekjl+FjnnO2ol6N
-         JOxCQFAN19mBkbIxhxkRFjOFbasSCtqqtvUEwKTrDuTYn4e9WxonoHxoqcAQPdsjGr
-         uR3vV0B/FITcvf+WXWuL5EQSr0ndWHRpAOpCgWCc9OY8NripCXid33YtP+T86IDSgB
-         RIIBAEkwoy2ZyMF15X+Wl8le9FRZgAgIuhjptr4Z5q1cN4+RrTWGRdCpouGG/lJuwo
-         ktAPeRnoWu5wRHWBk9kb008RXY/QKktOdNrDAbvNXJWc71tI6OxBfFc/ovnKy2Xkgp
-         nY2GKQKvM1Kpg==
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Wolfram,
+In commit abb621844f6a ("usb: ch9: make usb_endpoint_maxp() return
+only packet size") the API to usb_endpoint_maxp() changed.  It used to
+just return wMaxPacketSize but after that commit it returned
+wMaxPacketSize with the high bits (the multiplier) masked off.  If you
+wanted to get the multiplier it was now up to your code to call the
+new usb_endpoint_maxp_mult() which was introduced in
+commit 541b6fe63023 ("usb: add helper to extract bits 12:11 of
+wMaxPacketSize").
 
-> > -----Original Message-----
-> > From: linux-usb-owner@vger.kernel.org <linux-usb-
-> owner@vger.kernel.org>
-> > On Behalf Of Wolfram Sang
-> > Sent: Saturday, May 25, 2019 12:57 PM
-> > To: Ajay Gupta <ajaykuee@gmail.com>
-> > Cc: heikki.krogerus@linux.intel.com; linux-usb@vger.kernel.org; linux-
-> > i2c@vger.kernel.org; Ajay Gupta <ajayg@nvidia.com>
-> > Subject: Re: [PATCH v3 2/5] i2c: nvidia-gpu: add runtime pm support
-> >
-> >
-> > > @@ -211,6 +212,8 @@ static int gpu_i2c_master_xfer(struct i2c_adapter
-> > *adap,
-> > >  		goto exit;
-> > >  	}
-> > >
-> > > +	pm_runtime_mark_last_busy(i2cd->dev);
-> > > +	pm_runtime_put_autosuspend(i2cd->dev);
-> > >  	return i;
-> > >  exit:
-> > >  	if (send_stop) {
-> > > @@ -218,6 +221,8 @@ static int gpu_i2c_master_xfer(struct i2c_adapter
-> > *adap,
-> > >  		if (status2 < 0)
-> > >  			dev_err(i2cd->dev, "i2c stop failed %d\n", status2);
-> > >  	}
-> > > +	pm_runtime_mark_last_busy(i2cd->dev);
-> > > +	pm_runtime_put_autosuspend(i2cd->dev);
-> >
-> > Maybe another worthwhile refactorization possible here? The exit code
-> path
-> > and 'all good' code path look very similar.
-> > This can be done incrementally, though. I think for now it is okay.
-> Thanks for suggestion. Yes , it is possible to refactor a bit further her=
-e.
->=20
-> > > +static __maybe_unused int gpu_i2c_suspend(struct device *dev) {
-> > > +	return 0;
-> > > +}
-> >
-> > Why do we need this?
-> I2C function of PCI bus remains in D0 (lspci output) without this functio=
-n.
+Prior to the API change most host drivers were updated, but no update
+was made to dwc2.  Presumably it was assumed that dwc2 was too
+simplistic to use the multiplier and thus just didn't support a
+certain class of USB devices.  However, it turns out that dwc2 did use
+the multiplier and many devices using it were working quite nicely.
+That means that many USB devices have been broken since the API
+change.  One such device is a Logitech HD Pro Webcam C920.
 
-Do you still see any issue with gpu_i2c_suspend()?
+Specifically, though dwc2 didn't directly call usb_endpoint_maxp(), it
+did call usb_maxpacket() which in turn called usb_endpoint_maxp().
 
-Thanks
-Ajay
-> nvpublic
->=20
-> Following document also seems to insist on this.
-> " For this to work, the device's driver has to provide a
-> pm->runtime_suspend() callback "
->=20
-> Documentation/power/pci.txt
-> "First, a PCI device is put into a low-power state, or suspended, with th=
-e help
-> of pm_schedule_suspend() or pm_runtime_suspend() which for PCI devices
-> call
-> pci_pm_runtime_suspend() to do the actual job.  For this to work, the
-> device's
-> driver has to provide a pm->runtime_suspend() callback (see below), which
-> is
-> run by pci_pm_runtime_suspend() as the first action. If the driver's call=
-back
-> returns successfully, the device's standard configuration registers are s=
-aved,
-> the device is prepared to generate wakeup signals and, finally, it is put=
- into
-> the target low-power state."
->=20
-> Thanks
-> Ajay
-> > nvpublic
+Let's update dwc2 to work properly with the new API.
+
+Fixes: abb621844f6a ("usb: ch9: make usb_endpoint_maxp() return only packet size")
+Cc: stable@vger.kernel.org
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/usb/dwc2/hcd.c       | 29 +++++++++++++++++------------
+ drivers/usb/dwc2/hcd.h       | 20 +++++++++++---------
+ drivers/usb/dwc2/hcd_intr.c  |  5 +++--
+ drivers/usb/dwc2/hcd_queue.c | 10 ++++++----
+ 4 files changed, 37 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index b50ec3714fd8..5c51bf5506d1 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -2608,7 +2608,7 @@ static int dwc2_assign_and_init_hc(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh)
+ 	chan->dev_addr = dwc2_hcd_get_dev_addr(&urb->pipe_info);
+ 	chan->ep_num = dwc2_hcd_get_ep_num(&urb->pipe_info);
+ 	chan->speed = qh->dev_speed;
+-	chan->max_packet = dwc2_max_packet(qh->maxp);
++	chan->max_packet = qh->maxp;
+ 
+ 	chan->xfer_started = 0;
+ 	chan->halt_status = DWC2_HC_XFER_NO_HALT_STATUS;
+@@ -2686,7 +2686,7 @@ static int dwc2_assign_and_init_hc(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh)
+ 		 * This value may be modified when the transfer is started
+ 		 * to reflect the actual transfer length
+ 		 */
+-		chan->multi_count = dwc2_hb_mult(qh->maxp);
++		chan->multi_count = qh->maxp_mult;
+ 
+ 	if (hsotg->params.dma_desc_enable) {
+ 		chan->desc_list_addr = qh->desc_list_dma;
+@@ -3806,19 +3806,21 @@ static struct dwc2_hcd_urb *dwc2_hcd_urb_alloc(struct dwc2_hsotg *hsotg,
+ 
+ static void dwc2_hcd_urb_set_pipeinfo(struct dwc2_hsotg *hsotg,
+ 				      struct dwc2_hcd_urb *urb, u8 dev_addr,
+-				      u8 ep_num, u8 ep_type, u8 ep_dir, u16 mps)
++				      u8 ep_num, u8 ep_type, u8 ep_dir,
++				      u16 maxp, u16 maxp_mult)
+ {
+ 	if (dbg_perio() ||
+ 	    ep_type == USB_ENDPOINT_XFER_BULK ||
+ 	    ep_type == USB_ENDPOINT_XFER_CONTROL)
+ 		dev_vdbg(hsotg->dev,
+-			 "addr=%d, ep_num=%d, ep_dir=%1x, ep_type=%1x, mps=%d\n",
+-			 dev_addr, ep_num, ep_dir, ep_type, mps);
++			 "addr=%d, ep_num=%d, ep_dir=%1x, ep_type=%1x, maxp=%d (%d mult)\n",
++			 dev_addr, ep_num, ep_dir, ep_type, maxp, maxp_mult);
+ 	urb->pipe_info.dev_addr = dev_addr;
+ 	urb->pipe_info.ep_num = ep_num;
+ 	urb->pipe_info.pipe_type = ep_type;
+ 	urb->pipe_info.pipe_dir = ep_dir;
+-	urb->pipe_info.mps = mps;
++	urb->pipe_info.maxp = maxp;
++	urb->pipe_info.maxp_mult = maxp_mult;
+ }
+ 
+ /*
+@@ -3909,8 +3911,9 @@ void dwc2_hcd_dump_state(struct dwc2_hsotg *hsotg)
+ 					dwc2_hcd_is_pipe_in(&urb->pipe_info) ?
+ 					"IN" : "OUT");
+ 				dev_dbg(hsotg->dev,
+-					"      Max packet size: %d\n",
+-					dwc2_hcd_get_mps(&urb->pipe_info));
++					"      Max packet size: %d (%d mult)\n",
++					dwc2_hcd_get_maxp(&urb->pipe_info),
++					dwc2_hcd_get_maxp_mult(&urb->pipe_info));
+ 				dev_dbg(hsotg->dev,
+ 					"      transfer_buffer: %p\n",
+ 					urb->buf);
+@@ -4510,8 +4513,10 @@ static void dwc2_dump_urb_info(struct usb_hcd *hcd, struct urb *urb,
+ 	}
+ 
+ 	dev_vdbg(hsotg->dev, "  Speed: %s\n", speed);
+-	dev_vdbg(hsotg->dev, "  Max packet size: %d\n",
+-		 usb_maxpacket(urb->dev, urb->pipe, usb_pipeout(urb->pipe)));
++	dev_vdbg(hsotg->dev, "  Max packet size: %d (%d mult)\n",
++		 usb_endpoint_maxp(&urb->ep->desc),
++		 usb_endpoint_maxp_mult(&urb->ep->desc));
++
+ 	dev_vdbg(hsotg->dev, "  Data buffer length: %d\n",
+ 		 urb->transfer_buffer_length);
+ 	dev_vdbg(hsotg->dev, "  Transfer buffer: %p, Transfer DMA: %08lx\n",
+@@ -4594,8 +4599,8 @@ static int _dwc2_hcd_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
+ 	dwc2_hcd_urb_set_pipeinfo(hsotg, dwc2_urb, usb_pipedevice(urb->pipe),
+ 				  usb_pipeendpoint(urb->pipe), ep_type,
+ 				  usb_pipein(urb->pipe),
+-				  usb_maxpacket(urb->dev, urb->pipe,
+-						!(usb_pipein(urb->pipe))));
++				  usb_endpoint_maxp(&ep->desc),
++				  usb_endpoint_maxp_mult(&ep->desc));
+ 
+ 	buf = urb->transfer_buffer;
+ 
+diff --git a/drivers/usb/dwc2/hcd.h b/drivers/usb/dwc2/hcd.h
+index c089ffa1f0a8..ce6445a06588 100644
+--- a/drivers/usb/dwc2/hcd.h
++++ b/drivers/usb/dwc2/hcd.h
+@@ -171,7 +171,8 @@ struct dwc2_hcd_pipe_info {
+ 	u8 ep_num;
+ 	u8 pipe_type;
+ 	u8 pipe_dir;
+-	u16 mps;
++	u16 maxp;
++	u16 maxp_mult;
+ };
+ 
+ struct dwc2_hcd_iso_packet_desc {
+@@ -264,6 +265,7 @@ struct dwc2_hs_transfer_time {
+  *                       - USB_ENDPOINT_XFER_ISOC
+  * @ep_is_in:           Endpoint direction
+  * @maxp:               Value from wMaxPacketSize field of Endpoint Descriptor
++ * @maxp_mult:          Multiplier for maxp
+  * @dev_speed:          Device speed. One of the following values:
+  *                       - USB_SPEED_LOW
+  *                       - USB_SPEED_FULL
+@@ -340,6 +342,7 @@ struct dwc2_qh {
+ 	u8 ep_type;
+ 	u8 ep_is_in;
+ 	u16 maxp;
++	u16 maxp_mult;
+ 	u8 dev_speed;
+ 	u8 data_toggle;
+ 	u8 ping_state;
+@@ -503,9 +506,14 @@ static inline u8 dwc2_hcd_get_pipe_type(struct dwc2_hcd_pipe_info *pipe)
+ 	return pipe->pipe_type;
+ }
+ 
+-static inline u16 dwc2_hcd_get_mps(struct dwc2_hcd_pipe_info *pipe)
++static inline u16 dwc2_hcd_get_maxp(struct dwc2_hcd_pipe_info *pipe)
++{
++	return pipe->maxp;
++}
++
++static inline u16 dwc2_hcd_get_maxp_mult(struct dwc2_hcd_pipe_info *pipe)
+ {
+-	return pipe->mps;
++	return pipe->maxp_mult;
+ }
+ 
+ static inline u8 dwc2_hcd_get_dev_addr(struct dwc2_hcd_pipe_info *pipe)
+@@ -620,12 +628,6 @@ static inline bool dbg_urb(struct urb *urb)
+ static inline bool dbg_perio(void) { return false; }
+ #endif
+ 
+-/* High bandwidth multiplier as encoded in highspeed endpoint descriptors */
+-#define dwc2_hb_mult(wmaxpacketsize) (1 + (((wmaxpacketsize) >> 11) & 0x03))
+-
+-/* Packet size for any kind of endpoint descriptor */
+-#define dwc2_max_packet(wmaxpacketsize) ((wmaxpacketsize) & 0x07ff)
+-
+ /*
+  * Returns true if frame1 index is greater than frame2 index. The comparison
+  * is done modulo FRLISTEN_64_SIZE. This accounts for the rollover of the
+diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
+index 88b5dcf3aefc..a052d39b4375 100644
+--- a/drivers/usb/dwc2/hcd_intr.c
++++ b/drivers/usb/dwc2/hcd_intr.c
+@@ -1617,8 +1617,9 @@ static void dwc2_hc_ahberr_intr(struct dwc2_hsotg *hsotg,
+ 
+ 	dev_err(hsotg->dev, "  Speed: %s\n", speed);
+ 
+-	dev_err(hsotg->dev, "  Max packet size: %d\n",
+-		dwc2_hcd_get_mps(&urb->pipe_info));
++	dev_err(hsotg->dev, "  Max packet size: %d (mult %d)\n",
++		dwc2_hcd_get_maxp(&urb->pipe_info),
++		dwc2_hcd_get_maxp_mult(&urb->pipe_info));
+ 	dev_err(hsotg->dev, "  Data buffer length: %d\n", urb->length);
+ 	dev_err(hsotg->dev, "  Transfer buffer: %p, Transfer DMA: %08lx\n",
+ 		urb->buf, (unsigned long)urb->dma);
+diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
+index ea3aa640c15c..68bbac64b753 100644
+--- a/drivers/usb/dwc2/hcd_queue.c
++++ b/drivers/usb/dwc2/hcd_queue.c
+@@ -708,7 +708,7 @@ static void dwc2_hs_pmap_unschedule(struct dwc2_hsotg *hsotg,
+ static int dwc2_uframe_schedule_split(struct dwc2_hsotg *hsotg,
+ 				      struct dwc2_qh *qh)
+ {
+-	int bytecount = dwc2_hb_mult(qh->maxp) * dwc2_max_packet(qh->maxp);
++	int bytecount = qh->maxp_mult * qh->maxp;
+ 	int ls_search_slice;
+ 	int err = 0;
+ 	int host_interval_in_sched;
+@@ -1332,7 +1332,7 @@ static int dwc2_check_max_xfer_size(struct dwc2_hsotg *hsotg,
+ 	u32 max_channel_xfer_size;
+ 	int status = 0;
+ 
+-	max_xfer_size = dwc2_max_packet(qh->maxp) * dwc2_hb_mult(qh->maxp);
++	max_xfer_size = qh->maxp * qh->maxp_mult;
+ 	max_channel_xfer_size = hsotg->params.max_transfer_size;
+ 
+ 	if (max_xfer_size > max_channel_xfer_size) {
+@@ -1517,8 +1517,9 @@ static void dwc2_qh_init(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh,
+ 	u32 prtspd = (hprt & HPRT0_SPD_MASK) >> HPRT0_SPD_SHIFT;
+ 	bool do_split = (prtspd == HPRT0_SPD_HIGH_SPEED &&
+ 			 dev_speed != USB_SPEED_HIGH);
+-	int maxp = dwc2_hcd_get_mps(&urb->pipe_info);
+-	int bytecount = dwc2_hb_mult(maxp) * dwc2_max_packet(maxp);
++	int maxp = dwc2_hcd_get_maxp(&urb->pipe_info);
++	int maxp_mult = dwc2_hcd_get_maxp_mult(&urb->pipe_info);
++	int bytecount = maxp_mult * maxp;
+ 	char *speed, *type;
+ 
+ 	/* Initialize QH */
+@@ -1531,6 +1532,7 @@ static void dwc2_qh_init(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh,
+ 
+ 	qh->data_toggle = DWC2_HC_PID_DATA0;
+ 	qh->maxp = maxp;
++	qh->maxp_mult = maxp_mult;
+ 	INIT_LIST_HEAD(&qh->qtd_list);
+ 	INIT_LIST_HEAD(&qh->qh_list_entry);
+ 
+-- 
+2.22.0.rc1.311.g5d7573a151-goog
 
