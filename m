@@ -2,123 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1833064D
-	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2019 03:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB2B30820
+	for <lists+linux-usb@lfdr.de>; Fri, 31 May 2019 07:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726799AbfEaBqj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 May 2019 21:46:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51140 "EHLO mail.kernel.org"
+        id S1726617AbfEaFo7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 May 2019 01:44:59 -0400
+Received: from mga18.intel.com ([134.134.136.126]:41385 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726576AbfEaBqj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 May 2019 21:46:39 -0400
-Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EFC7126191;
-        Fri, 31 May 2019 01:46:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559267198;
-        bh=KpPDgF37BI8PGuzKi/AA8C9Gf/dJFMJfPiiskVuyFmU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EQXrIQVgFRXMTKfCDtHfH6Z409V3726d91GnWJ39dPSVwItU2MTlOxUbfgCG+sMYc
-         ldq5L2QiPYaF1vl22AhQSFd2Fz0R4svZAqvKHo1Ad+bceFXXtMpCBBBE0EQDgfpkn8
-         pClP1k7b10PYDw029XOG0kiPPAilEGcz3b8vZ9/0=
-Date:   Thu, 30 May 2019 18:46:37 -0700
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.2-rc3
-Message-ID: <20190531014637.GA30613@kroah.com>
+        id S1725988AbfEaFo6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 31 May 2019 01:44:58 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 May 2019 22:44:58 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga003.jf.intel.com with ESMTP; 30 May 2019 22:44:55 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [v3 PATCH] usb: create usb_debug_root for gadget only
+In-Reply-To: <1559201499.8487.40.camel@mhfsdcap03>
+References: <cffd6d75f69e4d908c8f39b8a60ddae27d6b7c88.1559028752.git.chunfeng.yun@mediatek.com> <87k1ebj8vt.fsf@linux.intel.com> <1559201499.8487.40.camel@mhfsdcap03>
+Date:   Fri, 31 May 2019 08:44:55 +0300
+Message-ID: <87sgsv2n54.fsf@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
 
-  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
+Hi,
 
-are available in the Git repository at:
+Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.2-rc3
+> Hi Felipe,
+> On Tue, 2019-05-28 at 11:11 +0300, Felipe Balbi wrote:
+>> Hi,
+>> 
+>> Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
+>> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+>> > index 7fcb9f782931..88b3ee03a12d 100644
+>> > --- a/drivers/usb/core/usb.c
+>> > +++ b/drivers/usb/core/usb.c
+>> > @@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_GPL(usb_debug_root);
+>> >  
+>> >  static void usb_debugfs_init(void)
+>> >  {
+>> > -	usb_debug_root = debugfs_create_dir("usb", NULL);
+>> > +	usb_debug_root = debugfs_create_dir(USB_DEBUG_ROOT_NAME, NULL);
+>> >  	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
+>> >  			    &usbfs_devices_fops);
+>> >  }
+>> 
+>> might be a better idea to move this to usb common. Then have a function
+>> which can be called by both host and gadget to maybe create the
+>> directory:
+>> 
+>> static struct dentry *usb_debug_root;
+>> 
+>> struct dentry *usb_debugfs_init(void)
+>> {
+>> 	if (!usb_debug_root)
+>>         	usb_debug_root = debugfs_create_dir("usb", NULL);
+>> 
+>> 	return usb_debug_root;
+>> }
+>> 
+>> 
+>> Then usb core would be updated to something like:
+>> 
+>> static void usb_core_debugfs_init(void)
+>> {
+>> 	struct dentry *root = usb_debugfs_init();
+>> 
+>> 	debugfs_create_file("devices", 0444, root, NULL, &usbfs_devices_fops);
+>> }
+>> 
+> I find a problem when move usb_debugfs_init() and usb_debugfs_cleanup()
+> into usb common, it's easy to create "usb" directory, but difficult to
+> cleanup it:
+>
+> common/common.c
+>
+> struct dentry *usb_debugfs_init(void)
+> {
+>     if (!usb_debug_root)
+>         usb_debug_root = debugfs_create_dir("usb", NULL);
+>
+>     return usb_debug_root;
+> }
+>
+> void usb_debugfs_cleanup(void)
+> {
+>     debugfs_remove_recursive(usb_debug_root);
+>     usb_debug_root = NULL;
+> }
+>
+> core/usb.c
+>
+> static void usb_core_debugfs_init(void)
+> {
+>     struct dentry *root = usb_debugfs_init();
+>
+>     debugfs_create_file("devices", 0444, root, NULL,
+> &usbfs_devices_fops);
+> }
+>
+> static int __init usb_init(void)
+> {
+>     ...
+>     usb_core_debugfs_init();
+>     ...
+> }
+>
+> static void __exit usb_exit(void)
+> {
+>     ...
+>     usb_debugfs_cleanup();
+>     // will be error, gadget may use it.
+>     ...
+> }
+>
+> gadget/udc/core.c
+>
+> static int __init usb_udc_init(void)
+> {
+>     ...
+>     usb_debugfs_init();
+>     ...
+> }
+>
+> static void __exit usb_udc_exit(void)
+> {
+>     ...
+>     usb_debugfs_cleanup();
+>     // can't cleanup in fact, usb core may use it.
+> }
+>
+> How to handle this case? introduce a reference count? do you have any
+> suggestion?
 
-for you to fetch changes up to 3ea3091f1bd8586125848c62be295910e9802af0:
+I guess a simple refcount is the way to go:
 
-  usbip: usbip_host: fix stub_dev lock context imbalance regression (2019-05-29 13:26:32 -0700)
+struct dentry *usb_debugfs_init(void)
+{
+	if (!usb_debug_root)
+		usb_debug_root = debugfs_create_dir("usb", NULL);
 
-----------------------------------------------------------------
-USB fixes for 5.2-rc3
+	usb_debug_root_refcnt++;
+	return usb_debug_root;
+}
 
-Here are some tiny USB fixes for a number of reported issues for
-5.2-rc3.
+void usb_debugfs_cleanup(void)
+{
+	if (!(--usb_debug_root_refcnt)) {
+		debugfs_remove_recursive(usb_debug_root);
+		usb_debug_root = NULL;
+	}
+}
 
-Nothing huge here, just a small collection of xhci and other driver bugs
-that syzbot has been finding in some drivers.  There is also a usbip fix
-and a fix for the usbip fix in here :)
+Or something along those lines
 
-All have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Alan Stern (3):
-      USB: Fix slab-out-of-bounds write in usb_get_bos_descriptor
-      media: usb: siano: Fix general protection fault in smsusb
-      media: usb: siano: Fix false-positive "uninitialized variable" warning
-
-Andrey Smirnov (1):
-      xhci: Convert xhci_handshake() to use readl_poll_timeout_atomic()
-
-Carsten Schmid (1):
-      usb: xhci: avoid null pointer deref when bos field is NULL
-
-Chunfeng Yun (1):
-      usb: mtu3: fix up undefined reference to usb_debug_root
-
-Fabio Estevam (1):
-      xhci: Use %zu for printing size_t type
-
-Henry Lin (1):
-      xhci: update bounce buffer with correct sg num
-
-Jia-Ju Bai (1):
-      usb: xhci: Fix a potential null pointer dereference in xhci_debugfs_create_endpoint()
-
-Mathias Nyman (1):
-      xhci: Fix immediate data transfer if buffer is already DMA mapped
-
-Mauro Carvalho Chehab (1):
-      media: smsusb: better handle optional alignment
-
-Maximilian Luz (1):
-      USB: Add LPM quirk for Surface Dock GigE adapter
-
-Oliver Neukum (5):
-      USB: sisusbvga: fix oops in error path of sisusb_probe
-      USB: rio500: refuse more than one device at a time
-      USB: rio500: fix memory leak in close after disconnect
-      USB: rio500: simplify locking
-      USB: rio500: update Documentation
-
-Shuah Khan (2):
-      usbip: usbip_host: fix BUG: sleeping function called from invalid context
-      usbip: usbip_host: fix stub_dev lock context imbalance regression
-
- Documentation/usb/rio.txt           | 66 ++++++------------------------
- drivers/media/usb/siano/smsusb.c    | 33 +++++++++------
- drivers/usb/core/config.c           |  4 +-
- drivers/usb/core/quirks.c           |  3 ++
- drivers/usb/host/xhci-debugfs.c     |  3 ++
- drivers/usb/host/xhci-ring.c        | 26 ++++++++----
- drivers/usb/host/xhci.c             | 24 +++++------
- drivers/usb/host/xhci.h             |  3 +-
- drivers/usb/misc/rio500.c           | 80 ++++++++++++++++++++++---------------
- drivers/usb/misc/sisusbvga/sisusb.c | 15 +++----
- drivers/usb/mtu3/mtu3_debugfs.c     |  3 +-
- drivers/usb/usbip/stub_dev.c        | 75 ++++++++++++++++++++++++----------
- 12 files changed, 182 insertions(+), 153 deletions(-)
+-- 
+balbi
