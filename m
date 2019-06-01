@@ -2,101 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9CB31768
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2019 01:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A1B31892
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Jun 2019 02:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbfEaXDv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 May 2019 19:03:51 -0400
-Received: from mout.web.de ([212.227.15.3]:44625 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726450AbfEaXDv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 31 May 2019 19:03:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1559343822;
-        bh=rW5cSCO/48qpJ0EI9RXtwgzx0kIenC43po9wrzrIpX0=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=fWgZF8CW35w9kGU3SlNHEk8Zr/bGJWlifVkZDRNcTff4w1cPqJq3R/az0mOFpkoaa
-         YJoHwsnXyzw3jTBOdDR9ZrG1H0JGbCcPYjrvB2Orjap+VLAwFxR+vh4TclUbRkm8l4
-         2IQ9pUWoQLpASFFAYcCFWPU/6+V57S0tlndzljCU=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.43.108] ([89.15.238.249]) by smtp.web.de (mrweb001
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0LjJaZ-1h166k40Zr-00dTHz; Sat, 01
- Jun 2019 01:03:42 +0200
-Subject: Re: [PATCH] Revert "usb: core: remove local_irq_save() around
- ->complete() handler"
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20190531215340.24539-1-smoch@web.de>
- <20190531220535.GA16603@kroah.com>
-From:   Soeren Moch <smoch@web.de>
-Message-ID: <6c03445c-3607-9f33-afee-94613f8d6978@web.de>
-Date:   Sat, 1 Jun 2019 01:02:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726701AbfFAAEV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 May 2019 20:04:21 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40813 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726610AbfFAAEV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 May 2019 20:04:21 -0400
+Received: (qmail 18106 invoked by uid 500); 31 May 2019 20:04:20 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 31 May 2019 20:04:20 -0400
+Date:   Fri, 31 May 2019 20:04:20 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Geoff Winkless <geoff@defgeoff.co.uk>
+cc:     Linux-USB <linux-usb@vger.kernel.org>
+Subject: Re: ehci support on old VIA vt82xxx disappeared around kernel 3.8.
+In-Reply-To: <CAEzk6fe0+LHFbZgN4t8_NVS_fysj7wHFGerMB1fhoHmXsCogVw@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1905311957100.14800-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20190531220535.GA16603@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-GB
-X-Provags-ID: V03:K1:Ic3+BDCPO+aCwP4xgWm/m1rofgV+DLFjQnm+DtiI7ck6/unR63b
- T8R+2OxuPIUTGr1rp06Qv5f8+59HAHjknKRMVT1QG+Gqi15uHt3g6mVBO+TQilJClGwRdIg
- qFPIuTqfdK09xkaQEhNpzROrzl/FoAotj1pS63Zf+qOkRxPYJsW7GZPf+JWqJe3/urAavw6
- gEdiY5wPrc9FX8cJ4TlOg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oEz2LEv2h6U=:gWNWOuxyuL4SYyrdke7Hyu
- ctdKJLK/kYoRXK1BhWOnasJyRXGRh8slxtpr+Hnx3Ej1/aDRVSbRQkENAGozScEw3Xm9y/FK+
- JvFE0j/aYYPgwx82yl+dQkfOVTwwY7GjOu5qySu6NeWjhlafFzsFPSiuX6yJwXaQI6r+wRGr+
- mzlOeBJPOsZmtsCBUpaYmuSWDHYQ9bdw8P8r4TKT1rrajhEYz0ksPUtyokYhGTSbpeWvGQnTI
- k+Fq/Kc36T6zkgtRMiXNI5SU5c2A9DBlIbb/7lJ9T2TtokC4AJDH+780GSprJhKgzVLLW82Vj
- Iik4cdBtW3w0D74/Nv1QJ//KQd2XGjh/4O6hIDBPIfT3rVSgTHl6IZYi7aBZTulbnNopprJ4T
- GQYyqLpiOuH5+7tZDSm7CirOGd7q3z3U153KT3IahNdt2QAWaw3CRZV+ZKvu08Oyr627SHY3r
- P4NG7xorbLYPN4Ukd2qGzgqcTJX3wYHbQiQazfm3i2hpp5Q5EGgGMk47jCuqM4ksL0qLDC9Zg
- DllXyNjC7CtDLptWn/BS9imiP0aaukB66jVvx0E4GbeTwWuosPCcSo1TLwiKqwaE2coyJL6jJ
- 9Hb3O1XkbXZ2TCXWtp/dElxcq/hg9tUleUpQUXEWCOiyppB2FMprgvjtmHuCNQf/dfTbydRw9
- RCeUvCts8RxATPA7f1iNLekMEfeyIbLVK8Q8DfMjQT22xFSk67FrovJqqEcSI8gtHKu4lapZc
- 59S5LSOgz1GTJdbRxBJWgOqqWlcfLg7nKKyq5lNeRIIRFrk2mGcr7mThP+TbfQ4GYWQLzJIi7
- d+VddnRyAxFVvVr7QUrQOD6PQs2NnP2odTAnn7rQuasIlwW4QMuK25GcJqyQjTRgVBKCnSoje
- qBPal3LlBpcScsOI4st5WuwAoTcsYcaYw6zkxN443Y1uP32FbGREGX+JYjGBRs5tUdbpkbgG2
- No7i9kGz+qSRY0KDNa9CkLIHZU9ltyQc=
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, 31 May 2019, Geoff Winkless wrote:
 
+> Hi
+> 
+> Apologies if this is the incorrect place to post this, if so please
+> feel free to call me names and then suggest somewhere more appropriate
+> :)
+> 
+> We have an embedded device on an old EPIA Mini-ITX board that runs
+> Linux 2.6. There are features in more recent (>3.10) kernels that
+> would be useful to us, so I tried to build them for it; however while
+> the kernel runs perfectly fine, ehci support simply fails, which is
+> catastrophic for the device's use - we need USB2 speeds.
+> 
+> I worked backwards and found that it runs normally on 3.7.9, but on
+> 3.7.10 it starts throwing up errors:
+> 
+> usb 1-5: new high-speed USB device number 3 using ehci_hcd
+> usb 1-5: device descriptor read/8, error -110
+> usb 1-5: device descriptor read/8, error -110
+> usb 1-5: new high-speed USB device number 4 using ehci_hcd
+> usb 1-5: device not accepting address 4, error -110
+> usb 1-5: new high-speed USB device number 5 using ehci_hcd
+> 
+> By 3.8.0 ehci simply doesn't work, as if someone decided these errors
+> were too hard to deal with and just disabled the device support.
+> 
+> Chipset is VIA vt82xxx; the ID of the offending bus is 1106:3104
+> 
+> I tried every combination of loading ehci before and after etc,
+> setting the old_scheme_first value, disabling acpi/apm, basically
+> anything I could find on the web that seems related to ehci problems,
+> but nothing seems to make the ehci driver even recognise the device.
+> 
+> /proc/bus/pci/devices shows
+> 
+> 0000 11063123 0  e6000008        0   0   0    0 0     0  400000
+> 0 0 0  0 0     0 agpgart-via
+> 0008 1106b091 0         0        0   0   0    0 0     0       0
+> 0 0 0  0 0     0
+> 0080 11063038 c         0        0   0   0 d001 0     0       0
+> 0 0 0 20 0     0 uhci_hcd
+> 0081 11063038 c         0        0   0   0 d401 0     0       0
+> 0 0 0 20 0     0 uhci_hcd
+> 0082 11063038 5         0        0   0   0 d801 0     0       0
+> 0 0 0 20 0     0 uhci_hcd
+> 0083 11063104 9  e6400000        0   0   0    0 0     0     100
+> 0 0 0  0 0     0
+> 0088 11063177 0         0        0   0   0    0 0     0       0
+> 0 0 0  0 0     0
+> 0089 11060571 0       1f0      3f6 170 376 dc01 0     0       8
+> 0 8 0 10 0     0 VIA_IDE
+> 008d 11063059 5      e001        0   0   0    0 0     0     100
+> 0 0 0  0 0     0 snd_via82xx
+> 0090 11063065 c      e801 e6401000   0   0    0 0     0     100
+> 100 0 0  0 0     0 via-rhine
+> 0100 11063122 c  e0000008 e4000000   0   0    0 0 c0002 4000000
+> 1000000 0 0  0 0 20000
+> 
+> (apologies for the long lines, I cut down the spacing as much as I could).
+> 
+> So you can see that the 11063104 line doesn't even have the ehci-hcd
+> driver associated; on earlier kernel versions the line reads
+> 
+> 0083 11063104 9  e6400000 0 0 0 0 0 0 100 0 0 0 0 0 0 ehci_hcd
+> 
+> Output from lsmod, just in case you're thinking I just haven't
+> inserted the ehci driver...
+> 
+> usbnet 10726 0 - Live 0xcfb4f000
+> ohci_hcd 15520 0 - Live 0xcfad9000
+> uhci_hcd 15679 0 - Live 0xcfa94000
+> ehci_hcd 30853 0 - Live 0xcfa49000
+> pl2303 6016 0 - Live 0xcf979000
+> ftdi_sio 25410 0 - Live 0xcf940000
+> option 18882 0 - Live 0xcf8e7000
+> usb_wwan 4082 1 option, Live 0xcf8a2000
+> 
+> I'm happy to dig for myself - I appreciate this is a fairly niche
+> problem; I have getting on for 30 years' development experience in
+> various platforms, including low-level hardware access in assembly
+> when I was young, but all I've ever done with the kernel is modify in
+> a very small way a few device drivers and I don't even know where to
+> start with this so could do with some pointers.
+> 
+> I tried running a diff on drivers/usb between 3.7.9 and 3.7.10, but
+> other than a few changes around usbserial there doesn't seem to be
+> much, which seems odd given that the behaviour clearly changed. The
+> 3.7.10 changelog only lists some usb-audio changes, a change for
+> memory allocation for some urb blocks, and some fixes for usb-serial,
+> so I guess something else changing has modified the way the USB core
+> interacts with the hardware.
 
-On 01.06.19 00:05, Greg Kroah-Hartman wrote:
-> On Fri, May 31, 2019 at 11:53:40PM +0200, Soeren Moch wrote:
->> This reverts commit ed194d1367698a0872a2b75bbe06b3932ce9df3a.
->>
->> In contrast to the original patch description, apparently not all handl=
-ers
->> were audited properly. E.g. my RT5370 based USB WIFI adapter (driver in
->> drivers/net/wireless/ralink/rt2x00) hangs after a while under heavy loa=
-d.
->> This revert fixes this.
-> Why not just fix that driver?  Wouldn't that be easier?
->
-I suspect there are more drivers to fix. I only tested WIFI sticks so
-far, RTL8188 drivers also seem to suffer from this. I'm not sure how to
-fix all this properly, maybe Sebastian as original patch author can help
-here.
-This patch is mostly for -stable, to get an acceptable solution quickly.
-It was really annoying to get such unstable WIFI connection over the
-last three kernel releases to my development board.=C2=A0 Since my interne=
-t
-service provider forcefully updated my router box 3 weeks ago, I
-unfortunately see the same symptoms on my primary internet access.
-That's even worse, I need to reset this router box every few days. I'm
-not sure, however, that this is caused by the same problem, but it feels
-like this.
-So can we please fix this regression quickly and workout a proper fix
-later? In the original patch there is no reason given, why this patch is
-necessary. With this revert I at least see a stable connection.
+It is quite likely that the changes responsible for your problem are 
+not located under drivers/usb.  I would guess they are in the 
+platform-specific code somewhere.  In any case, you should broaden your 
+approach.  Greg's suggestion about using git bisect, say between 3.7.9 
+and 3.7.10, would be an excellent start.
 
-Thanks,
-Soeren
+> Did we intentionally simply drop support for this chipset in 3.8?
+
+Not as far as I'm aware.  But I don't pay much attention to the
+platform-specific chipset details, so I wouldn't really know.  You'd be 
+better off asking the maintainers responsible for your platform.
+
+Alan Stern
 
