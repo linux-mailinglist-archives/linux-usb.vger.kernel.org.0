@@ -2,101 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8173233407
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 17:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF3E334C8
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 18:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729511AbfFCPwG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jun 2019 11:52:06 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:53998 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729486AbfFCPwG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 3 Jun 2019 11:52:06 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F030D15AB;
-        Mon,  3 Jun 2019 08:52:05 -0700 (PDT)
-Received: from en101.cambridge.arm.com (en101.cambridge.arm.com [10.1.196.93])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BD4693F246;
-        Mon,  3 Jun 2019 08:52:04 -0700 (PDT)
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        suzuki.poulose@arm.com,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [RFC PATCH 44/57] drivers: usb : Use class_find_device_by_fwnode() helper
-Date:   Mon,  3 Jun 2019 16:50:10 +0100
-Message-Id: <1559577023-558-45-git-send-email-suzuki.poulose@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1559577023-558-1-git-send-email-suzuki.poulose@arm.com>
-References: <1559577023-558-1-git-send-email-suzuki.poulose@arm.com>
+        id S1728435AbfFCQU6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jun 2019 12:20:58 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57018 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728281AbfFCQU5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jun 2019 12:20:57 -0400
+Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hXphc-0001ur-Rx; Mon, 03 Jun 2019 16:20:53 +0000
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     stern@rowland.harvard.edu
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH] USB: usb-storage: Add new ID to ums-realtek
+Date:   Tue,  4 Jun 2019 00:20:49 +0800
+Message-Id: <20190603162049.1863-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reuse the generic helper to find a device by fwnode handle.
+There is one more Realtek card reader requires ums-realtek to work
+correctly.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Add the device ID to support it.
+
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
- drivers/usb/roles/class.c | 8 +-------
- drivers/usb/typec/class.c | 8 +-------
- 2 files changed, 2 insertions(+), 14 deletions(-)
+ drivers/usb/storage/unusual_realtek.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-index 3dc78cb..be9b70c 100644
---- a/drivers/usb/roles/class.c
-+++ b/drivers/usb/roles/class.c
-@@ -85,11 +85,6 @@ enum usb_role usb_role_switch_get_role(struct usb_role_switch *sw)
- }
- EXPORT_SYMBOL_GPL(usb_role_switch_get_role);
+diff --git a/drivers/usb/storage/unusual_realtek.h b/drivers/usb/storage/unusual_realtek.h
+index 6b2140f966ef..7e14c2d7cf73 100644
+--- a/drivers/usb/storage/unusual_realtek.h
++++ b/drivers/usb/storage/unusual_realtek.h
+@@ -17,6 +17,11 @@ UNUSUAL_DEV(0x0bda, 0x0138, 0x0000, 0x9999,
+ 		"USB Card Reader",
+ 		USB_SC_DEVICE, USB_PR_DEVICE, init_realtek_cr, 0),
  
--static int switch_fwnode_match(struct device *dev, const void *fwnode)
--{
--	return dev_fwnode(dev) == fwnode;
--}
--
- static void *usb_role_switch_match(struct device_connection *con, int ep,
- 				   void *data)
- {
-@@ -99,8 +94,7 @@ static void *usb_role_switch_match(struct device_connection *con, int ep,
- 		if (!fwnode_property_present(con->fwnode, con->id))
- 			return NULL;
- 
--		dev = class_find_device(role_class, NULL, con->fwnode,
--					switch_fwnode_match);
-+		dev = class_find_device_by_fwnode(role_class, NULL, con->fwnode);
- 	} else {
- 		dev = class_find_device_by_name(role_class, NULL, con->endpoint[ep]);
- 	}
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index c11cc5f..12f9759 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -205,11 +205,6 @@ static void typec_altmode_put_partner(struct altmode *altmode)
- 	put_device(&adev->dev);
- }
- 
--static int typec_port_fwnode_match(struct device *dev, const void *fwnode)
--{
--	return dev_fwnode(dev) == fwnode;
--}
--
- static void *typec_port_match(struct device_connection *con, int ep, void *data)
- {
- 	struct device *dev;
-@@ -219,8 +214,7 @@ static void *typec_port_match(struct device_connection *con, int ep, void *data)
- 	 * we need to return ERR_PTR(-PROBE_DEFER) when there is no device.
- 	 */
- 	if (con->fwnode)
--		return class_find_device(typec_class, NULL, con->fwnode,
--					 typec_port_fwnode_match);
-+		return class_find_device_by_fwnode(typec_class, NULL, con->fwnode);
- 
- 	dev = class_find_device_by_name(typec_class, NULL, con->endpoint[ep]);
- 
++UNUSUAL_DEV(0x0bda, 0x0153, 0x0000, 0x9999,
++		"Realtek",
++		"USB Card Reader",
++		USB_SC_DEVICE, USB_PR_DEVICE, init_realtek_cr, 0),
++
+ UNUSUAL_DEV(0x0bda, 0x0158, 0x0000, 0x9999,
+ 		"Realtek",
+ 		"USB Card Reader",
 -- 
-2.7.4
+2.17.1
 
