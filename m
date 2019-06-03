@@ -2,111 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA55F3330C
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 17:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7497033327
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 17:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729289AbfFCPFZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jun 2019 11:05:25 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33868 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729166AbfFCPFZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jun 2019 11:05:25 -0400
-Received: by mail-pf1-f193.google.com with SMTP id c85so1990146pfc.1;
-        Mon, 03 Jun 2019 08:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C7cPfH6CN5ZWoHauFHa+oHBBt2+qLXBp4PMNQADA6LA=;
-        b=rWLAfhXpVLln/lubNqoXn/QRQeUiKOXjzHubpwNo/E3/V+eqzLFiwV0HaK4WNewTZz
-         7uLkXbzkUClJfX2E04SDT1fj7NB7W5uu/lHglZtjxnij4BAUCXU9kl7mba2CUbc458EH
-         074UmFfNkloro/8gz6bp1jOqO+De7pssVG+2Va+E3VJd+3hGuMHU8/9HONvTcCbhapHK
-         AmfyYV6C5vn/0wjXM8WJKhe5GwOYZpzPqNa3Jk09PTP1GAdA0FZL/um3CwbnDqkLOghN
-         8fE+S5mG3J30+eqj+Ba3jojGBLq1lKeni3LATUDRuYOCygPeZfIkzYaF53Kn9ly92BDe
-         2lSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C7cPfH6CN5ZWoHauFHa+oHBBt2+qLXBp4PMNQADA6LA=;
-        b=tI35iPJW74L8SlHxwERzNQkfDBdx01QfsLF8+ahp9FReI1CqUjFnmLQyfA0qmsaEpO
-         BBm1WP7m7TKPHRyn7epUxxofmJmuhRkOVseQ4SOBX7AR16MyDqAL1z4wQjm5b/1c3LWn
-         V2Sn3L4Y39TKiCXYu4Sk/tZj9Pf1K6/EFGD0CuDcDWlI2C/rvH2rg61vezaUwuhpDpBl
-         PTYaAbcd6sldbUSInzx1IjbAWeaZHS8fI8ob55phktTGBHs4/fwG7ulCmnYjBNMicygG
-         VPHNnNi5UI5ADIjvZAfupD2xjawJs+1yarZZw5LaSlfeM3OquBqhDNAdSouCTFsxjWdO
-         7MWg==
-X-Gm-Message-State: APjAAAVfgD0TpDMjWbCprN+RzPbg8XTQjxaSFXBWcjgp3RSTz6Y1cZIA
-        p1xEg3Crir5MgFuSzpWBhz8=
-X-Google-Smtp-Source: APXvYqzMyTUIHX4B4Li5YRabAbu9JUnmTxekoDuTk6vd7QCe1pDYEWpjaIoXjuWONofkIOINn2TUYA==
-X-Received: by 2002:a62:304:: with SMTP id 4mr31779269pfd.186.1559574324979;
-        Mon, 03 Jun 2019 08:05:24 -0700 (PDT)
-Received: from localhost.localdomain ([125.142.23.13])
-        by smtp.googlemail.com with ESMTPSA id l38sm13393466pje.12.2019.06.03.08.05.22
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 03 Jun 2019 08:05:24 -0700 (PDT)
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah@kernel.org, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suwan Kim <suwan.kim027@gmail.com>
-Subject: [PATCH] usbip: Replace unused kvec array with single variable in vhci_send_cmd_unlink()
-Date:   Tue,  4 Jun 2019 00:02:11 +0900
-Message-Id: <20190603150211.24926-1-suwan.kim027@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        id S1729196AbfFCPKU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jun 2019 11:10:20 -0400
+Received: from crumpet.qq2.net ([80.247.17.44]:33515 "EHLO crumpet.qq2.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729145AbfFCPKU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 Jun 2019 11:10:20 -0400
+Received: from mail-wr1-f54.google.com ([209.85.221.54])
+        by crumpet.qq2.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <geoff@defgeoff.co.uk>)
+        id 1hXobK-0002H7-Ey
+        for linux-usb@vger.kernel.org ; Mon, 03 Jun 2019 16:10:18 +0100
+Received: by mail-wr1-f54.google.com with SMTP id m3so12495038wrv.2
+        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2019 08:10:18 -0700 (PDT)
+X-Gm-Message-State: APjAAAVj0U01c+pyrTpe6IeCEKVrxet6qJhe4+GVYtS3N9UpLZbZlA05
+        C1zpZ4/0odsuvrfInX1EgFS2E7TT7wm/vd6Ncg==
+X-Google-Smtp-Source: APXvYqxj9lfQ65zcOdkVZcfnQo0AAMO/w8YeSuLUdgJMMEJHXFDQb94RZYvpR8uYRiI+oTo8NIMY15dDYLwqlI2to4k=
+X-Received: by 2002:adf:f909:: with SMTP id b9mr17313175wrr.119.1559574618205;
+ Mon, 03 Jun 2019 08:10:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAEzk6fe0+LHFbZgN4t8_NVS_fysj7wHFGerMB1fhoHmXsCogVw@mail.gmail.com>
+ <20190531191128.GA25230@kroah.com>
+In-Reply-To: <20190531191128.GA25230@kroah.com>
+From:   Geoff Winkless <geoff@defgeoff.co.uk>
+Date:   Mon, 3 Jun 2019 16:10:07 +0100
+X-Gmail-Original-Message-ID: <CAEzk6feqwwW9=9Wun0MjqLk09m7Qiuh4D=884Z70nSOgXX7VcA@mail.gmail.com>
+Message-ID: <CAEzk6feqwwW9=9Wun0MjqLk09m7Qiuh4D=884Z70nSOgXX7VcA@mail.gmail.com>
+To:     Greg KH <greg@kroah.com>
+Cc:     Linux-USB <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on crumpet.qq2.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.2
+Subject: Re: ehci support on old VIA vt82xxx disappeared around kernel 3.8.
+X-SA-Exim-Version: 4.2.1 (built Mon, 26 Dec 2011 16:24:06 +0000)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-vhci_send_cmd_unlink() declears kvec array of size 3 but it actually
-uses just one element of the array. So, remove kvec array and replace
-it with single kvec variable.
+On Fri, 31 May 2019 at 20:11, Greg KH <greg@kroah.com> wrote:
 
-Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
----
- drivers/usb/usbip/vhci_tx.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+> Can you run 'git bisect' to determine the exact commit that caused this
+> problem?  That would be most helpful.
 
-diff --git a/drivers/usb/usbip/vhci_tx.c b/drivers/usb/usbip/vhci_tx.c
-index 9aed15a358b7..2fa26d0578d7 100644
---- a/drivers/usb/usbip/vhci_tx.c
-+++ b/drivers/usb/usbip/vhci_tx.c
-@@ -144,16 +144,14 @@ static int vhci_send_cmd_unlink(struct vhci_device *vdev)
- 	struct vhci_unlink *unlink = NULL;
- 
- 	struct msghdr msg;
--	struct kvec iov[3];
-+	struct kvec iov;
- 	size_t txsize;
--
- 	size_t total_size = 0;
- 
- 	while ((unlink = dequeue_from_unlink_tx(vdev)) != NULL) {
- 		int ret;
- 		struct usbip_header pdu_header;
- 
--		txsize = 0;
- 		memset(&pdu_header, 0, sizeof(pdu_header));
- 		memset(&msg, 0, sizeof(msg));
- 		memset(&iov, 0, sizeof(iov));
-@@ -169,11 +167,11 @@ static int vhci_send_cmd_unlink(struct vhci_device *vdev)
- 
- 		usbip_header_correct_endian(&pdu_header, 1);
- 
--		iov[0].iov_base = &pdu_header;
--		iov[0].iov_len  = sizeof(pdu_header);
--		txsize += sizeof(pdu_header);
-+		iov.iov_base = &pdu_header;
-+		iov.iov_len  = sizeof(pdu_header);
-+		txsize = sizeof(pdu_header);
- 
--		ret = kernel_sendmsg(vdev->ud.tcp_socket, &msg, iov, 1, txsize);
-+		ret = kernel_sendmsg(vdev->ud.tcp_socket, &msg, &iov, 1, txsize);
- 		if (ret != txsize) {
- 			pr_err("sendmsg failed!, ret=%d for %zd\n", ret,
- 			       txsize);
--- 
-2.20.1
+Oh for goodness sake. Sorry, I was being an idiot. After half a day of
+building bisect scripts and another 3 hours of waiting for
+compile-reboot-test I finally get to
 
+[adfa79d1c06a32650332930ca4c488ca570b3407] USB: EHCI: make ehci-pci a
+separate driver
+
+I guess that should have been fairly obvious, really.
+
+modprobe ehci-pci and the bus entry reappears.
+
+Thanks (and also to Alan) for the help, apologies for wasting your time.
+
+Geoff (going to hide his blushes in a corner somewhere)
