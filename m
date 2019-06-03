@@ -2,101 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0BB32B41
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 10:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95ED32D40
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 11:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbfFCI7O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jun 2019 04:59:14 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:58528 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726450AbfFCI7O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jun 2019 04:59:14 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x538uY80031648;
-        Mon, 3 Jun 2019 10:58:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=vhx7EIV6xeOk88gkHCWKERKEgt0npZQLR8heaw2xtlI=;
- b=iBU5FywKEi3ZkJQl6/SQMMRxLzzSRD/Eh7hyB26luQ4OXcKfxat0CRmyHsgGxNFeHFyR
- pPFuoebFRxQncEC1f4CkjkvA0k3KIbZgEoboD3qYiHorHGB6Ap7x0RcZGHhIa8SxoO3s
- M6dtdXjJdRr8/OushmrOIRehhAg1He4MtnXmdwk/pthOcqYOmrdLnwSnl29GnynCmNpW
- 5BqPAh0ZY3zGXvt+qR7kU4qxAFh+3LhJhUJDZswAVXGaCXlOBuJa8HHKBgKE4bKoCuU3
- wyOjkBEQGr4W6zc4flWsYevXZKvWuTlId5XwuImAoWjaObg3gxWq6hsm6cawDYGjRxRH tw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2sundrsbtr-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Mon, 03 Jun 2019 10:58:54 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0DFDC3F;
-        Mon,  3 Jun 2019 08:58:53 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag6node1.st.com [10.75.127.16])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D063F1645;
-        Mon,  3 Jun 2019 08:58:52 +0000 (GMT)
-Received: from SFHDAG6NODE3.st.com (10.75.127.18) by SFHDAG6NODE1.st.com
- (10.75.127.16) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 3 Jun
- 2019 10:58:52 +0200
-Received: from SFHDAG6NODE3.st.com ([fe80::d04:5337:ab17:b6f6]) by
- SFHDAG6NODE3.st.com ([fe80::d04:5337:ab17:b6f6%20]) with mapi id
- 15.00.1347.000; Mon, 3 Jun 2019 10:58:52 +0200
-From:   Patrice CHOTARD <patrice.chotard@st.com>
-To:     YueHaibing <yuehaibing@huawei.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        id S1727309AbfFCJ4S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jun 2019 05:56:18 -0400
+Received: from mail-eopbgr1400114.outbound.protection.outlook.com ([40.107.140.114]:43072
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726840AbfFCJ4R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 Jun 2019 05:56:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bteNSAyud6uiK7219yU9ZUOlgZtn6fN/VgixOtxB71I=;
+ b=CHbsdTYAuKf8FU1FK6bahVs12SPv2vnwBNTS10HjrjDKYGm7w8TrYCzFP90D6pi76ptVjuwYgeKWek7hmSqHNkFPQj74hSFvzJsDcKo4EiH8m0qN7uWUw1K2Rs+BmEGHaFi6i6kPRLLoyg2APAtkyQotsvUXS4HWiCRAWDUPJvE=
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
+ OSAPR01MB3204.jpnprd01.prod.outlook.com (52.134.249.73) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1943.16; Mon, 3 Jun 2019 09:56:10 +0000
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85%7]) with mapi id 15.20.1943.018; Mon, 3 Jun 2019
+ 09:56:10 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Biju Das <biju.das@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Biju Das <biju.das@bp.renesas.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH -next] usb: host: ehci-st: Remove set but not used
- variable 'ehci'
-Thread-Topic: [PATCH -next] usb: host: ehci-st: Remove set but not used
- variable 'ehci'
-Thread-Index: AQHVFVu5oOZw623mTkKrd0PNUsnGP6aJiNsA
-Date:   Mon, 3 Jun 2019 08:58:52 +0000
-Message-ID: <0c5c8b72-0242-bd9e-24d2-fb48bd5dbfe3@st.com>
-References: <20190528134529.17612-1-yuehaibing@huawei.com>
-In-Reply-To: <20190528134529.17612-1-yuehaibing@huawei.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Simon Horman <horms@verge.net.au>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v7 2/7] dt-bindings: usb: renesas_usb3: Document usb role
+ switch support
+Thread-Topic: [PATCH v7 2/7] dt-bindings: usb: renesas_usb3: Document usb role
+ switch support
+Thread-Index: AQHVF5i2iqYQ2akI+UyVySqU87/Er6aJtcTw
+Date:   Mon, 3 Jun 2019 09:56:10 +0000
+Message-ID: <OSAPR01MB3089666DB60983B26B910F38D8140@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+References: <1559296800-5610-1-git-send-email-biju.das@bp.renesas.com>
+ <1559296800-5610-3-git-send-email-biju.das@bp.renesas.com>
+In-Reply-To: <1559296800-5610-3-git-send-email-biju.das@bp.renesas.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.47]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B8E577DA51A7EA43A8B47DF0E9F0A2D8@st.com>
-Content-Transfer-Encoding: base64
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a7b42a83-7414-4168-5cc4-08d6e809b4e0
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:OSAPR01MB3204;
+x-ms-traffictypediagnostic: OSAPR01MB3204:
+x-microsoft-antispam-prvs: <OSAPR01MB3204ED88699296D2E515E01ED8140@OSAPR01MB3204.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-forefront-prvs: 0057EE387C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(39860400002)(366004)(376002)(136003)(346002)(199004)(189003)(305945005)(71200400001)(7736002)(52536014)(71190400001)(256004)(25786009)(14444005)(33656002)(4326008)(74316002)(86362001)(4744005)(2906002)(66066001)(5660300002)(478600001)(6436002)(76116006)(73956011)(9686003)(11346002)(76176011)(8936002)(66446008)(66556008)(66476007)(7696005)(64756008)(68736007)(229853002)(446003)(476003)(66946007)(6116002)(6246003)(102836004)(6506007)(316002)(3846002)(54906003)(14454004)(81166006)(186003)(81156014)(8676002)(7416002)(53936002)(26005)(55016002)(99286004)(486006)(110136005);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB3204;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: +Z8F50GhtMkqJoV2+bwUiK9QZLsbXrPqWl3yLt/eUSW01NqpPITxV+9KhYCd+9ywxyd5Move1vMIpZq3epck6kUxrZ5HU24ixuqMyuCn0exND9NmKWHZeDA5vc0xbHRYTm+dpuRMEehaTQYedOltmqGFxTf1fAbDDXUT8RAF/esb7LnY6lXHXwLiwxLN3g/hU8Zhca1h+rGRXHMpx975VILojmyqWXulc4UF0YjubiCOgNpKd2Fp+w0a/VgTlF2wj4LKF2GfFKpd8AFd6GxUOx2oxNsKtaVJLndc8r1mDSuLm+5eaUQmOfyF1vNPmMnAC9cAfXZxfcEfJOBGGXVdkqyE2YncFIzrzmbq1w2H1fNMR7fjOLmzVKUfZ51VFi3NyISVZUqDE0KD1CmwrLDQE30JOEXS4DIxmHpVwWmW5KM=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-03_07:,,
- signatures=0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7b42a83-7414-4168-5cc4-08d6e809b4e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2019 09:56:10.5067
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3204
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkNCg0KT24gNS8yOC8xOSAzOjQ1IFBNLCBZdWVIYWliaW5nIHdyb3RlOg0KPiBGaXhlcyBnY2Mg
-Jy1XdW51c2VkLWJ1dC1zZXQtdmFyaWFibGUnIHdhcm5pbmc6DQo+IA0KPiBkcml2ZXJzL3VzYi9o
-b3N0L2VoY2ktc3QuYzogSW4gZnVuY3Rpb24gc3RfZWhjaV9wbGF0Zm9ybV9wcm9iZToNCj4gZHJp
-dmVycy91c2IvaG9zdC9laGNpLXN0LmM6MTU1OjE5OiB3YXJuaW5nOiB2YXJpYWJsZSBlaGNpIHNl
-dCBidXQgbm90IHVzZWQgWy1XdW51c2VkLWJ1dC1zZXQtdmFyaWFibGVdDQo+IA0KPiBJdCBpcyBu
-ZXZlciB1c2VkLCBzbyBjYW4gYmUgcmVtb3ZlZC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFl1ZUhh
-aWJpbmcgPHl1ZWhhaWJpbmdAaHVhd2VpLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL3VzYi9ob3N0
-L2VoY2ktc3QuYyB8IDIgLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGRlbGV0aW9ucygtKQ0KPiAN
-Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1zdC5jIGIvZHJpdmVycy91c2Iv
-aG9zdC9laGNpLXN0LmMNCj4gaW5kZXggZGM0Mjk4MTA0N2M5Li5jY2I0ZTYxMTAwMWQgMTAwNjQ0
-DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1zdC5jDQo+ICsrKyBiL2RyaXZlcnMvdXNi
-L2hvc3QvZWhjaS1zdC5jDQo+IEBAIC0xNTIsNyArMTUyLDYgQEAgc3RhdGljIGludCBzdF9laGNp
-X3BsYXRmb3JtX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKmRldikNCj4gIAlzdHJ1Y3Qg
-cmVzb3VyY2UgKnJlc19tZW07DQo+ICAJc3RydWN0IHVzYl9laGNpX3BkYXRhICpwZGF0YSA9ICZl
-aGNpX3BsYXRmb3JtX2RlZmF1bHRzOw0KPiAgCXN0cnVjdCBzdF9laGNpX3BsYXRmb3JtX3ByaXYg
-KnByaXY7DQo+IC0Jc3RydWN0IGVoY2lfaGNkICplaGNpOw0KPiAgCWludCBlcnIsIGlycSwgY2xr
-ID0gMDsNCj4gIA0KPiAgCWlmICh1c2JfZGlzYWJsZWQoKSkNCj4gQEAgLTE3Nyw3ICsxNzYsNiBA
-QCBzdGF0aWMgaW50IHN0X2VoY2lfcGxhdGZvcm1fcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rldmlj
-ZSAqZGV2KQ0KPiAgCXBsYXRmb3JtX3NldF9kcnZkYXRhKGRldiwgaGNkKTsNCj4gIAlkZXYtPmRl
-di5wbGF0Zm9ybV9kYXRhID0gcGRhdGE7DQo+ICAJcHJpdiA9IGhjZF90b19laGNpX3ByaXYoaGNk
-KTsNCj4gLQllaGNpID0gaGNkX3RvX2VoY2koaGNkKTsNCj4gIA0KPiAgCXByaXYtPnBoeSA9IGRl
-dm1fcGh5X2dldCgmZGV2LT5kZXYsICJ1c2IiKTsNCj4gIAlpZiAoSVNfRVJSKHByaXYtPnBoeSkp
-IHsNCj4gDQoNCg0KQWNrZWQtYnk6IFBhdHJpY2UgQ2hvdGFyZCA8cGF0cmljZS5jaG90YXJkQHN0
-LmNvbT4NCg0KVGhhbmtzDQoNClBhdHJpY2U=
+Hi Biju-san,
+
+> From: Biju Das, Sent: Friday, May 31, 2019 7:00 PM
+>=20
+> Update the DT bindings documentation to support usb role switch
+> for USB Type-C connector using USB role switch class framework.
+>=20
+> Signed-off-by: Biju Das <biju.das@bp.renesas.com>
+
+Thank you for the patch!
+
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+
+Best regards,
+Yoshihiro Shimoda
+
