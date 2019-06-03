@@ -2,137 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D4B33237
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 16:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DA0332E3
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 16:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729118AbfFCOcE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jun 2019 10:32:04 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34794 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729111AbfFCOcD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jun 2019 10:32:03 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c85so1938852pfc.1
-        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2019 07:32:02 -0700 (PDT)
+        id S1729334AbfFCO6u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jun 2019 10:58:50 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:38023 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729123AbfFCO6t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jun 2019 10:58:49 -0400
+Received: by mail-pg1-f194.google.com with SMTP id v11so8434076pgl.5
+        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2019 07:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hzUTYLyJIfqWCjhTtjBG0SwXN5C9pieJX1yZ/fNJlfM=;
-        b=eaLPFr+Eaf59bCyCzpVAHIPnC8xqLgpWXZaR4rZz8ItD+0nBJJeq69I92bv3/zpy2O
-         41hZVzQIDPfP+wD63PGly4n4s0gTBx70DvVQMCVrx/HhSth24Q5Wi4TakwbZhuJS6rip
-         cz3RHY+nauj3rE0y4a8pBcSQOdRwozKlJSWLGK9DK4i3eTakYP7btsk4XWihEYedjE2n
-         3pChjIa2/IfYRg/2RQcCBUhi1yUFmNqcbvSA0QzljaudvdI/ZVQnpRQFz/hiiCleLfkq
-         iI4SLIlK93MtjqC67lx6+neBootb9ne1ziuUOW7s51yCKC4B2MK723+klvt9EfbBrR93
-         fJLA==
+         :cc:content-transfer-encoding;
+        bh=/YmcpXNB3GtxjI0gi8TM4oLDZ/ddRxsoZKMUEoa2+RQ=;
+        b=LDM9pzCuBg06bpYz0KdRX+sSvYt2RPGYKRQ6Ax2xuwHmYIyWmEwRP5PBiFKMyW9xjQ
+         G7YjY4lK6qAStXZcymn564fnX+1LvWTVuqiJbTlZsewhzUj8AQQLB8lGShkIQa0Xw2bI
+         1o80oqiJzvHAz8CIPa6p4dz3r/tABtFEgARHZ1JOsErFjIYEHpWFKi6O9inv27hTr2ap
+         /Iz0giPDYPgCzu7/UbAZf++N+BFdtXVBk1KUMfhNlvLtNtIDt7uaiNyX7ek1BfAkNAlB
+         jZ5GFNfKpHayo2irnLSxdpgkYTlG//KTQYakM8Re/SKo/MfIXvcrvJ9VekClABHQ6xmT
+         8UIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hzUTYLyJIfqWCjhTtjBG0SwXN5C9pieJX1yZ/fNJlfM=;
-        b=AsIlin4zft8XW8nJ8n0QdVojCTXylEllejBkBmTg7KK+EXTqvXKZJOmfTekcbxW8tj
-         yEyF2S4dmAY3Uqm5Gr24rdJqCYOdiPx6UWdM9pZctiK73ZdryWZzyl9Xj2aTXGmHty9c
-         rTm5ydpcBKjXKAZ1Na/QN5NxKiktboMt6okTofBPGlhqFLZJvB8zsQ/IxIFiYoPdpjaj
-         JpjB+suCrCGgwmfg/nL6JPgMjiS6HPAoqlUgRyFTDlN0kvwhxBH61lIVsZgIDMGQ6PXN
-         EY+ETAgfcCLY/YWNUPrzRn7QHGBSZ3QVD3VWKJmL3O7CfsJcrXu1rLT7ZLzG8SXzsvor
-         Jf4g==
-X-Gm-Message-State: APjAAAVmkAONvHiPdWh/k6Jl5RXC2w49UqkqDBWgTEW5zJQwhEtF1D0g
-        8QyCwGuBS78iI7koAlXcOiLuYgs716pTmaRvybew2g==
-X-Google-Smtp-Source: APXvYqz62JARGj8JxGWFy+5viuvU32dXkhQ5iv+X79Ts4VPYi9LH21dOu2hiS+UtzZDuokRswnFwn9epckI55I9JNQY=
-X-Received: by 2002:a65:64d9:: with SMTP id t25mr28553940pgv.130.1559572321848;
- Mon, 03 Jun 2019 07:32:01 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/YmcpXNB3GtxjI0gi8TM4oLDZ/ddRxsoZKMUEoa2+RQ=;
+        b=jlLVhGt778EzYBh5U0Jm/kVnN8VSS9QjdTwu2XRgv9b3f8TUPWMqxJx9IU34niX0DT
+         qRKq3uMZjRLmfMg0rOM+Qw8efSKkYB/2vrK1lJsbO6K5if1a0CldMAIUoXKy/fDjKOox
+         0WVkzADVDL8idjuoddc/YMTeLh9fh7ftniOqexf8LZnWCar8HNpu7vXadhBNz1JZbKn2
+         UcPXvTtV5tJkGdFM2g8F246SfQLA3WUYDh91hYbgH2JJN3FAJT0LqMZfCyub44losWrQ
+         hBxhBlGizjsjfsJD1h+4y2S6kinr/Py696TaPXqx7oEwI8+1OZZKgEjfZRiHwMqg0FIh
+         PM1Q==
+X-Gm-Message-State: APjAAAXcoduD8/m96JzLInf43mmF0m9Ia826Vclxp0FOUQvE8vcGTdrZ
+        TrHdqSpTRCG0q/ORMj6BzPqIx0ut7MO6ao5A3dYphgrypqA=
+X-Google-Smtp-Source: APXvYqwgLeNi+kJ9tf9mkdaPYabezoneWlyEZyhVZRiZGvFErNCFVA5kdfXc6QyeLET1STo+Lq7+Nif2j+i4aIlgq4w=
+X-Received: by 2002:aa7:8052:: with SMTP id y18mr453002pfm.169.1559573929194;
+ Mon, 03 Jun 2019 07:58:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <00000000000044cec9058a6b6003@google.com>
-In-Reply-To: <00000000000044cec9058a6b6003@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 3 Jun 2019 16:31:50 +0200
-Message-ID: <CAAeHK+z6wQA_ZMG0bC7M9792JXDY=-y4qG=_qypVjwuNbFnFpw@mail.gmail.com>
-Subject: Re: INFO: trying to register non-static key in mwifiex_unregister_dev
-To:     syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>
-Cc:     amitkarwar@gmail.com, "David S. Miller" <davem@davemloft.net>,
-        gbhat@marvell.com, huxinming820@gmail.com,
-        Kalle Valo <kvalo@codeaurora.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-wireless@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        nishants@marvell.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <CAB31r6U3Ha+JrbjGC+wKj-+gJfQ7dk+LSoL1n0tQBxVTPb2mRQ@mail.gmail.com>
+ <20190603131258.GA10397@kroah.com>
+In-Reply-To: <20190603131258.GA10397@kroah.com>
+From:   Vladimir Yerilov <openmindead@gmail.com>
+Date:   Tue, 4 Jun 2019 00:58:38 +1000
+Message-ID: <CAB31r6VK12FXoPh6eNfE1v_Tgjv917Nh7699=TZpm4SkCVMm-w@mail.gmail.com>
+Subject: Re: kernel NULL pointer dereference, ucsi bug
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 3, 2019 at 3:31 PM syzbot
-<syzbot+373e6719b49912399d21@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1448d0f2a00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=193d8457178b3229
-> dashboard link: https://syzkaller.appspot.com/bug?extid=373e6719b49912399d21
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e57ca6a00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1106eda2a00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+373e6719b49912399d21@syzkaller.appspotmail.com
->
-> usb 1-1: Using ep0 maxpacket: 8
-> usb 1-1: config 0 has an invalid interface number: 182 but max is 0
-> usb 1-1: config 0 has no interface number 0
-> usb 1-1: New USB device found, idVendor=1286, idProduct=2052,
-> bcdDevice=61.43
-> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 1-1: config 0 descriptor??
-> usb 1-1: Direct firmware load for mrvl/usbusb8997_combo_v4.bin failed with
-> error -2
-> usb 1-1: Failed to get firmware mrvl/usbusb8997_combo_v4.bin
-> usb 1-1: info: _mwifiex_fw_dpc: unregister device
-> INFO: trying to register non-static key.
-> the code is fine but needs lockdep annotation.
-> turning off the locking correctness validator.
-> CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc1+ #10
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: events request_firmware_work_func
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   assign_lock_key kernel/locking/lockdep.c:774 [inline]
->   register_lock_class+0x11ae/0x1240 kernel/locking/lockdep.c:1083
->   __lock_acquire+0x11d/0x5340 kernel/locking/lockdep.c:3673
->   lock_acquire+0x100/0x2b0 kernel/locking/lockdep.c:4302
->   del_timer_sync+0x3a/0x130 kernel/time/timer.c:1277
->   mwifiex_usb_cleanup_tx_aggr
-> drivers/net/wireless/marvell/mwifiex/usb.c:1358 [inline]
->   mwifiex_unregister_dev+0x416/0x690
-> drivers/net/wireless/marvell/mwifiex/usb.c:1370
->   _mwifiex_fw_dpc+0x577/0xda0 drivers/net/wireless/marvell/mwifiex/main.c:651
->   request_firmware_work_func+0x126/0x242
-> drivers/base/firmware_loader/main.c:785
->   process_one_work+0x905/0x1570 kernel/workqueue.c:2268
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2414
->   kthread+0x30b/0x410 kernel/kthread.c:254
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-> ------------[ cut here ]------------
-> ODEBUG: assert_init not available (active state 0) object type: timer_list
-> hint: 0x0
-> WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:325
-> debug_print_object+0x160/0x250 lib/debugobjects.c:325
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+No, I can't.
 
-#syz dup: INFO: trying to register non-static key in del_timer_sync (2)
+Unfortunately, this exceeds the scope of my knowledge. I simply don't
+know enough to understand your request correctly. What I can is to
+compile and try some pre-rc1 5.2 kernel and see how it goes. Also I
+managed to trace the source of this problem more precisely.
+The issue happens only during the boot with any cable connected to USB
+type C charging port. I have 2 of them: one with power delivery / data
+transfer / video output capabilities, another one is capable for data
+transfer only. So the failing one is power delivery port. No matter
+what is connected - I tried charger cable, OTG cable (C to A USB) and
+USB type C hub - all cause the same bug, but only charger's one
+actually had power from the wall.
+
+Plugging a cable *after* logging in, however, doesn't seem to cause
+any of what I've described in the original bugreport.
+
+Thank you for your help,
+Vladimir
+
+
+=D0=BF=D0=BD, 3 =D0=B8=D1=8E=D0=BD. 2019 =D0=B3. =D0=B2 23:13, Greg KH <gre=
+gkh@linuxfoundation.org>:
+>
+> On Sun, Jun 02, 2019 at 09:24:43PM +1000, Vladimir Yerilov wrote:
+> > Good day,
+> >
+> > There's a problem with ucsi starting from 5.2-rc1 (maybe earlier
+> > versions of 5.2 are affected too).
+> > Recently I've tried these versions of rc3 (commits), all have this issu=
+e:
+> > 3ab4436f688c2d2f221793953cd05435ca84261c (05/31)
+> > 3ea3091f1bd8586125848c62be295910e9802af0
+> > cd6c84d8f0cdc911df435bb075ba22ce3c605b07 (rc2)
+>
+> Can you run 'git bisect' to see what the exact offending patch is?
+>
+> thanks,
+>
+> greg k-h
+
+
+
+--=20
+----
+Best regards,
+Vladimir Yerilov
