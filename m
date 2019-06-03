@@ -2,78 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA77330DB
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 15:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B9933113
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 15:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728530AbfFCNTc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jun 2019 09:19:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57920 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726360AbfFCNTc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 3 Jun 2019 09:19:32 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 59C5525162;
-        Mon,  3 Jun 2019 13:19:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559567972;
-        bh=iTXPAmNoS8U3ZfZP8OM65q8vMO1UxvNGuf2LD/JekMg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CcGJJpFmrlsHX6mBdHs3v0fHB1uavQRKBc6nMPgrNFeen9ngnUkvK6oNt03IYRjM8
-         I4SN83kxaM1SHFkzKdey4/tTLsAKzAKPvqLpp6eq9ab82M065aQOLOwFL+tt1pdKMq
-         uG8Oa7CoQVojZ79ad9OjscM4AF2roixRmat1GcO0=
-Date:   Mon, 3 Jun 2019 15:19:29 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Yu Chen <chenyu56@huawei.com>,
-        John Stultz <john.stultz@linaro.org>
-Subject: Re: [PATCH v6 05/10] usb: roles: Introduce stubs for the exiting
- functions in role.h.
-Message-ID: <20190603131929.GC10397@kroah.com>
-References: <1559115828-19146-1-git-send-email-chunfeng.yun@mediatek.com>
- <1559115828-19146-6-git-send-email-chunfeng.yun@mediatek.com>
+        id S1728695AbfFCNbF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jun 2019 09:31:05 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:49253 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727641AbfFCNbF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jun 2019 09:31:05 -0400
+Received: by mail-io1-f70.google.com with SMTP id z15so6634294ioz.16
+        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2019 06:31:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Xd9c0wiNMk6Apek2lhhQ7MeiJewPRVMefJXoiTf1Kzk=;
+        b=nnWwp28gjacW5RApdT9ojKFOOXA/2YZjnpuInGQuMXKKiNiM2RWt1daLjZ/fF5XAa6
+         LTSN6ykNnkgEeZHGDnzwMwyV5dN1yUSkU4dKr9wxP4rloz0oI5GBkGqOzSETAsMeN1OY
+         vzi67kqEj3ExDV+POQM36pDPH3lOG0XSHCTWuq2HZEkOQvcND0yySPGto0p8YhajYMQz
+         vE1hGd4frtusvY86yBX+C+Ht4uTZH3cPoekUsMZE1ed92vHQtyoqmgiRWS39e8LYqvVI
+         HxbTaa88vEQKAGtMNbq8Cum/D2rIeKP8YMD3hWJ/c2gKhjLOwhYo9s0ZuniIH8thhJGe
+         x1QA==
+X-Gm-Message-State: APjAAAWmw7RbFm5G3oOLFF58GNKKIEVVe8/3kk7aOW+J8DKEwFAPA1Qo
+        eXiolgdtDiqM2ck4VcmIyBFcv5E8BtB8GDwgVNBzgi17FTNb
+X-Google-Smtp-Source: APXvYqzgujQbAIS/Q+3FyQrH3nuh9kfgM04XgvloUsUlk8OX4StVb91+53wTYXM1u9UxnN/Ag0AEck9BFvOQ2gzYiBIaW0D8pNES
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1559115828-19146-6-git-send-email-chunfeng.yun@mediatek.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+X-Received: by 2002:a24:6e90:: with SMTP id w138mr17164666itc.150.1559568664806;
+ Mon, 03 Jun 2019 06:31:04 -0700 (PDT)
+Date:   Mon, 03 Jun 2019 06:31:04 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000044cec9058a6b6003@google.com>
+Subject: INFO: trying to register non-static key in mwifiex_unregister_dev
+From:   syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>
+To:     amitkarwar@gmail.com, andreyknvl@google.com, davem@davemloft.net,
+        gbhat@marvell.com, huxinming820@gmail.com, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        nishants@marvell.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 29, 2019 at 03:43:43PM +0800, Chunfeng Yun wrote:
-> From: Yu Chen <chenyu56@huawei.com>
-> 
-> This patch adds stubs for the exiting functions while
-> CONFIG_USB_ROLE_SWITCH does not enabled.
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: John Stultz <john.stultz@linaro.org>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+Hello,
 
-Same here, you need to sign off on it too.
+syzbot found the following crash on:
 
-thanks,
+HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1448d0f2a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=193d8457178b3229
+dashboard link: https://syzkaller.appspot.com/bug?extid=373e6719b49912399d21
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e57ca6a00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1106eda2a00000
 
-greg k-h
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+373e6719b49912399d21@syzkaller.appspotmail.com
+
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: config 0 has an invalid interface number: 182 but max is 0
+usb 1-1: config 0 has no interface number 0
+usb 1-1: New USB device found, idVendor=1286, idProduct=2052,  
+bcdDevice=61.43
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: Direct firmware load for mrvl/usbusb8997_combo_v4.bin failed with  
+error -2
+usb 1-1: Failed to get firmware mrvl/usbusb8997_combo_v4.bin
+usb 1-1: info: _mwifiex_fw_dpc: unregister device
+INFO: trying to register non-static key.
+the code is fine but needs lockdep annotation.
+turning off the locking correctness validator.
+CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc1+ #10
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: events request_firmware_work_func
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  assign_lock_key kernel/locking/lockdep.c:774 [inline]
+  register_lock_class+0x11ae/0x1240 kernel/locking/lockdep.c:1083
+  __lock_acquire+0x11d/0x5340 kernel/locking/lockdep.c:3673
+  lock_acquire+0x100/0x2b0 kernel/locking/lockdep.c:4302
+  del_timer_sync+0x3a/0x130 kernel/time/timer.c:1277
+  mwifiex_usb_cleanup_tx_aggr  
+drivers/net/wireless/marvell/mwifiex/usb.c:1358 [inline]
+  mwifiex_unregister_dev+0x416/0x690  
+drivers/net/wireless/marvell/mwifiex/usb.c:1370
+  _mwifiex_fw_dpc+0x577/0xda0 drivers/net/wireless/marvell/mwifiex/main.c:651
+  request_firmware_work_func+0x126/0x242  
+drivers/base/firmware_loader/main.c:785
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2268
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+  kthread+0x30b/0x410 kernel/kthread.c:254
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+------------[ cut here ]------------
+ODEBUG: assert_init not available (active state 0) object type: timer_list  
+hint: 0x0
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:325  
+debug_print_object+0x160/0x250 lib/debugobjects.c:325
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
