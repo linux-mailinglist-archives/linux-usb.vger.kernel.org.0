@@ -2,204 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF4532324
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Jun 2019 13:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EDD326A0
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Jun 2019 04:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbfFBLY4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Jun 2019 07:24:56 -0400
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:42781 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726168AbfFBLYz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Jun 2019 07:24:55 -0400
-Received: by mail-pf1-f180.google.com with SMTP id r22so8900346pfh.9
-        for <linux-usb@vger.kernel.org>; Sun, 02 Jun 2019 04:24:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=oLCVyrrw3I2LnOVaNFmw/VQW/3G2HPl9W6jf4PU0u4w=;
-        b=bC7akSM8R7jrlFXrBFqxCyXsiTaZ5e9S5zGAtyNKl0vjL+1qO5f82fZY/VtOnSTSct
-         DvbK0XzzumlQAtcidXXIMYono2VRaeNdpZz4QXFamSqjQIFxQabl7nfnGP47A2nk8qGS
-         r4BrfAjAhUOfTkiPWhle9EZff0aKvjuzXzP4eFtmAtXfE0eH9yJL6qbyuGJlzxNjXY56
-         jLj3N9HbRE9TUkozoHETdpNkX1j1uv+bAakLXMZ8PLYURRdSrosF8TZVW+74Od294wZY
-         mR1+TCBxmkrDknJE3tT/eVUNgdni4K3UzI4S2FBmuUFPoT1+JNDasTRNpcnGmZwT8yR0
-         2g8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=oLCVyrrw3I2LnOVaNFmw/VQW/3G2HPl9W6jf4PU0u4w=;
-        b=icnqczGHheMCSeKg3wBeuwoXeZ6vVeKOy87uGZbkN4Z0KbRZUyTVo4NFTAk8xw3Hhy
-         845JoaUnafOcCx0UQUfft/CsPs12rQ0MfppK8Zv2xIWrJewxcP5UA1qXpds4J3PMLI3Y
-         Hcsmf+lOKyrEVDTSEWSAJ6Pd/A/o+vmIFBkC+tVDVA2C+k8D8jEiPAlDqDLWV5Dz6B+h
-         yJ6GP5KQU99J+ROcOpEeXtYqBUTh/HVGAqvxFibCr/r2hcsOy1ONJQWtW32GevNBc9eQ
-         HSzPqRSoitm5nvs+Q9SsrUUSlBCG7YKbIXsY23VMR4ibnSPussvPgozTLVZyhP+rtWJR
-         7hOw==
-X-Gm-Message-State: APjAAAVNsk4LqOxfOBdq7sTRAjiQ4Cry6qPpEtzGOYKuAvnNFt/AElEC
-        r9c389672GWXbn7G4VcVPOO8IwB9CfmZjQbaW1w+wegvEVI=
-X-Google-Smtp-Source: APXvYqymFAkF/cNgzqWynCxmEfJf/pgezmQ4toyP+iWAVv4PJ5SVgu1r3kpg8o0K3kGoNIVEjSJf93ucA3umX6snmZc=
-X-Received: by 2002:a17:90a:730b:: with SMTP id m11mr22041836pjk.89.1559474694515;
- Sun, 02 Jun 2019 04:24:54 -0700 (PDT)
+        id S1726663AbfFCCdW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Jun 2019 22:33:22 -0400
+Received: from mail-eopbgr10086.outbound.protection.outlook.com ([40.107.1.86]:46993
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726305AbfFCCdW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 2 Jun 2019 22:33:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a3c3JmRRSQ8pq+B3flUTKYDUe2uH9pKiCbftKqmA1Io=;
+ b=aSAbJwwgCBsdkVpsZ30Q8dsiGKKkcuiO8qrNKDHfqkVmy+yZslUFVRFYPkRnfVZ8UdhEx9gJ6hOnJ7Y5nLobyITj1RMa/+LY0vIF2fUpGHxp9X8bX7rxHnbIxYoJn88BLsMZ8TZYRf++5KqULx2B1NgS6Ab5IvzghAt80g/wwDM=
+Received: from AM5PR0402MB2865.eurprd04.prod.outlook.com (10.175.44.16) by
+ AM5PR0402MB2740.eurprd04.prod.outlook.com (10.175.42.14) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1943.17; Mon, 3 Jun 2019 02:33:15 +0000
+Received: from AM5PR0402MB2865.eurprd04.prod.outlook.com
+ ([fe80::a1bf:17d:a52:3824]) by AM5PR0402MB2865.eurprd04.prod.outlook.com
+ ([fe80::a1bf:17d:a52:3824%4]) with mapi id 15.20.1943.018; Mon, 3 Jun 2019
+ 02:33:15 +0000
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Leo Li <leoyang.li@nxp.com>
+Subject: RE: [PATCH] usb: dwc3: Enable the USB snooping
+Thread-Topic: [PATCH] usb: dwc3: Enable the USB snooping
+Thread-Index: AQHTXdpMV/QBUrO8J0eNmcCmR0ATg6MVIlkAgAAD6zCAABVWgINueaJwgAAMz4CAAwpoAIAF38Dw
+Date:   Mon, 3 Jun 2019 02:33:15 +0000
+Message-ID: <AM5PR0402MB2865D0F0E2B4F65C86D051F8F1140@AM5PR0402MB2865.eurprd04.prod.outlook.com>
+References: <20171115060459.45375-1-ran.wang_1@nxp.com>
+ <87ineb9b5v.fsf@linux.intel.com>
+ <VI1PR04MB1504776EF3D4D8C374F0C069F1290@VI1PR04MB1504.eurprd04.prod.outlook.com>
+ <87shdfet90.fsf@linux.intel.com>
+ <AM5PR0402MB28654EBE2D431CC2F8061CF8F11E0@AM5PR0402MB2865.eurprd04.prod.outlook.com>
+ <87k1eaanjw.fsf@linux.intel.com>
+ <AM5PR0402MB2865F3735D808E1BC9F67968F1180@AM5PR0402MB2865.eurprd04.prod.outlook.com>
+In-Reply-To: <AM5PR0402MB2865F3735D808E1BC9F67968F1180@AM5PR0402MB2865.eurprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ran.wang_1@nxp.com; 
+x-originating-ip: [92.121.36.198]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f900d15f-51af-4cbf-6bb0-08d6e7cbd514
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM5PR0402MB2740;
+x-ms-traffictypediagnostic: AM5PR0402MB2740:
+x-microsoft-antispam-prvs: <AM5PR0402MB27408496538B8E18AE5B735AF1140@AM5PR0402MB2740.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0057EE387C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(366004)(136003)(376002)(39860400002)(346002)(189003)(199004)(504964003)(5660300002)(26005)(54906003)(66946007)(102836004)(66476007)(76116006)(73956011)(2906002)(6506007)(8676002)(6916009)(478600001)(25786009)(6436002)(33656002)(53546011)(446003)(52536014)(476003)(6116002)(3846002)(64756008)(6246003)(68736007)(99286004)(86362001)(66446008)(66556008)(486006)(11346002)(186003)(8936002)(14444005)(256004)(229853002)(7736002)(305945005)(53936002)(74316002)(14454004)(316002)(66066001)(76176011)(7696005)(55016002)(71190400001)(81156014)(71200400001)(9686003)(81166006)(4326008);DIR:OUT;SFP:1101;SCL:1;SRVR:AM5PR0402MB2740;H:AM5PR0402MB2865.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: jumJUU2z1JIF0GHB/HPJDh7KQ1Fedn7krtlQ8ynwwfDFDfiS9fs+a2JaO7KCPLLOXEqFHKHpT14CG7YwwgFS8ZJNadH5iyrzkRleyVNgUJ/2+AAkVNNh7ozz5Ds9CfImgYrs5RYVl9VRSt8EjZS6WDC0+E7t8H1hd7YoQ5+fyOs3i43cNLOugu+n5UwzD1h/kjix1V3wlljyXuns63wgGfDB2IC3hr9XsPYsjx+szlE3GovAQATHDtOIYqxa65/LFGQdTCY84A7kLca4JQeW1ve8pkQ+6RI+eCYWSO+IhWFMDlcaEsIi0OH7FS4VFO9l6qhHdhqJIvZvulbYHRHaPW57fGXZk9wYaVJPFagT4Lf2o2+lsjpA+lURRnBhiTyusFPtSLfx+sBFtuaEAR05KMpBqaoOIG2euXZsGA+kwuc=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-From:   Vladimir Yerilov <openmindead@gmail.com>
-Date:   Sun, 2 Jun 2019 21:24:43 +1000
-Message-ID: <CAB31r6U3Ha+JrbjGC+wKj-+gJfQ7dk+LSoL1n0tQBxVTPb2mRQ@mail.gmail.com>
-Subject: kernel NULL pointer dereference, ucsi bug
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f900d15f-51af-4cbf-6bb0-08d6e7cbd514
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2019 02:33:15.7665
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ran.wang_1@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2740
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good day,
+Hi Felipe,
 
-There's a problem with ucsi starting from 5.2-rc1 (maybe earlier
-versions of 5.2 are affected too).
-Recently I've tried these versions of rc3 (commits), all have this issue:
-3ab4436f688c2d2f221793953cd05435ca84261c (05/31)
-3ea3091f1bd8586125848c62be295910e9802af0
-cd6c84d8f0cdc911df435bb075ba22ce3c605b07 (rc2)
+On Thursday, May 30, 2019 17:09, Ran Wang wrote:
+>=20
+> <snip>
+> > >> >> >  /* Global Debug Queue/FIFO Space Available Register */
+> > >> >> >  #define DWC3_GDBGFIFOSPACE_NUM(n)	((n) & 0x1f)
+> > >> >> >  #define DWC3_GDBGFIFOSPACE_TYPE(n)	(((n) << 5) & 0x1e0)
+> > >> >> > @@ -859,6 +867,7 @@ struct dwc3_scratchpad_array {
+> > >> >> >   * 	3	- Reserved
+> > >> >> >   * @imod_interval: set the interrupt moderation interval in 25=
+0ns
+> > >> >> >   *                 increments or 0 to disable.
+> > >> >> > + * @dma_coherent: set if enable dma-coherent.
+> > >> >>
+> > >> >> you're not enabling dma coherency, you're enabling cache snooping=
+.
+> > >> >> And this property should describe that. Also, keep in mind that
+> > >> >> different devices may want different cache types for each of
+> > >> >> those fields, so your property would have to be a lot more
+> > >> >> complex. Something
+> > like:
+> > >> >>
+> > >> >> 	snps,cache-type =3D <foobar "cacheable">, <baz "cacheable">, ...
+> > >> >>
+> > >> >> Then driver would have to parse this properly to setup GSBUSCFG0.
+> > >
+> > > According to the DesignWare Cores SuperSpeed USB 3.0 Controller
+> > > Databook (v2.60a), it has described Type Bit Assignments for all
+> > > supported
+> > master bus type:
+> > > AHB, AXI3, AXI4 and Native. I found the bit definition are different
+> > > among
+> > them.
+> > > So, for the example you gave above, feel a little bit confused.
+> > > Did you mean:
+> > >     snps,cache-type =3D <DATA_RD  "write allocate">, <DESC_RD
+> > > "cacheable">, <DATA_WR  "bufferable">, <DESC_WR  "read allocate">
+> >
+> > yeah, something like that.
+>=20
+> I think DATA_RD  should be a macro, right? So, where I can put its define=
+?
+> Create a dwc3.h in include/dt-bindings/usb/ ?
 
-These are lines from journal logs (more in the attachment):
-Jun 01 16:17:27 kernel: BUG: kernel NULL pointer dereference, address:
-0000000000000368
-Jun 01 16:17:27 kernel: #PF: supervisor read access in kernel mode
-Jun 01 16:17:27 kernel: #PF: error_code(0x0000) - not-present page
-Jun 01 16:17:27 kernel: Oops: 0000 [#1] PREEMPT SMP PTI
-Jun 01 16:17:27 kernel: CPU: 7 PID: 252 Comm: kworker/7:2 Tainted: G
-  U     OE     5.2.0-1-MANJARO #1
-Jun 01 16:17:27 kernel: Hardware name: Timi TM1701/TM1701, BIOS
-XMAKB5R0P0906 10/23/2018
-Jun 01 16:17:27 kernel: Workqueue: events_long ucsi_init [typec_ucsi]
-Jun 01 16:17:27 kernel: RIP: 0010:typec_altmode_get_partner+0x5/0x20 [typec]
-Jun 01 16:17:27 kernel: Code: 85 c0 74 08 e9 3c 8a 78 e2 31 c0 c3 b8
-a1 ff ff ff c3 b8 ed ff ff ff c3 66 66 2e 0f 1f 84 00 00 00 00 00 66
-90 0f 1f 44 00 00 <48> 8b 87 68 03 00 00 48 83 c0 08 c3 66 66 2e 0f 1f
-84 00 00 00 00
-Jun 01 16:17:27 kernel: RSP: 0018:ffffa67542123e00 EFLAGS: 00010293
-Jun 01 16:17:27 kernel: RAX: 0000000000000000 RBX: ffff8e9485a56800
-RCX: 0000000000000000
-Jun 01 16:17:27 kernel: RDX: 0000000000000000 RSI: 0000000000000246
-RDI: 0000000000000000
-Jun 01 16:17:27 kernel: RBP: 0000000000000000 R08: ffff8e949ebdbdc0
-R09: 0000000000000000
-Jun 01 16:17:27 kernel: R10: 0000000000000000 R11: 0000000000000000
-R12: 0000000000000000
-Jun 01 16:17:27 kernel: R13: ffff8e9499237540 R14: ffff8e9485a56ac0
-R15: ffff8e9485a56800
-Jun 01 16:17:27 kernel: FS:  0000000000000000(0000)
-GS:ffff8e949ebc0000(0000) knlGS:0000000000000000
-Jun 01 16:17:27 kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-Jun 01 16:17:27 kernel: CR2: 0000000000000368 CR3: 00000001c8a0a003
-CR4: 00000000003606e0
-Jun 01 16:17:27 kernel: Call Trace:
-Jun 01 16:17:27 kernel:  ucsi_altmode_update_active+0x85/0x100 [typec_ucsi]
-Jun 01 16:17:27 kernel:  ucsi_init+0x398/0x590 [typec_ucsi]
-Jun 01 16:17:27 kernel:  process_one_work+0x1eb/0x410
-Jun 01 16:17:27 kernel:  worker_thread+0x2d/0x3d0
-Jun 01 16:17:27 kernel:  ? process_one_work+0x410/0x410
-Jun 01 16:17:27 kernel:  kthread+0x112/0x130
-Jun 01 16:17:27 kernel:  ? kthread_park+0x80/0x80
-Jun 01 16:17:27 kernel:  ret_from_fork+0x35/0x40
-Jun 01 16:17:27 kernel: Modules linked in: bnep arc4 sunrpc iwlmvm
-rtsx_usb_ms btusb memstick btrtl cdc_ether btbcm usbnet btintel
-uvcvideo r8152 bluetooth mii snd_hda_codec_hdmi mac80211
-videobuf2_vmalloc videobuf2_memops snd_soc_skl intel_rapl
-videobuf2_v4l2 snd_soc_hdac_hda videobuf2_common x86_pkg_temp_thermal
-intel_powerclamp videodev snd_hda_ext_core snd_soc_skl_ipc
-snd_soc_sst_ipc coretemp ecdh_generic media ecc snd_hda_codec_realtek
-kvm_intel snd_soc_sst_dsp snd_soc_acpi_intel_match joydev snd_soc_acpi
-snd_hda_codec_generic snd_soc_core fuse iwlwifi mousedev ledtrig_audio
-mei_hdcp kvm snd_compress ac97_bus snd_pcm_dmaengine snd_hda_intel
-iTCO_wdt iTCO_vendor_support cfg80211 snd_hda_codec snd_hda_core
-snd_hwdep hid_multitouch snd_pcm irqbypass snd_timer intel_cstate
-intel_uncore snd idma64 intel_rapl_perf psmouse mei_me ucsi_acpi
-typec_ucsi pcspkr input_leds intel_wmi_thunderbolt intel_lpss_pci mei
-intel_xhci_usb_role_switch soundcore rfkill i2c_i801 wmi_bmof
-intel_pch_thermal intel_lpss roles
-Jun 01 16:17:27 kernel:  typec i2c_hid intel_hid battery sparse_keymap
-ac evdev mac_hid pcc_cpufreq nf_log_ipv6 ip6t_REJECT nf_reject_ipv6
-xt_hl ip6t_rt nf_log_ipv4 nf_log_common ipt_REJECT nf_reject_ipv4
-xt_LOG xt_multiport xt_CT iptable_raw xt_limit xt_addrtype xt_tcpudp
-xt_conntrack ip6table_filter ip6_tables nf_conntrack_netbios_ns
-nf_conntrack_broadcast nf_nat_ftp nf_nat nf_conntrack_ftp nf_conntrack
-nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c iptable_filter vboxnetflt(OE)
-vboxnetadp(OE) vboxpci(OE) vboxdrv(OE) vboxvideo ttm vboxsf(OE)
-vboxguest uinput sg crypto_user acpi_call(OE) ip_tables x_tables ext4
-crc32c_generic crc16 mbcache jbd2 algif_skcipher af_alg hid_apple
-hid_generic usbhid hid rtsx_usb_sdmmc mmc_core rtsx_usb uas
-usb_storage dm_crypt dm_mod nls_iso8859_1 nls_cp437 sd_mod
-crct10dif_pclmul crc32_pclmul ghash_clmulni_intel serio_raw atkbd
-libps2 aesni_intel ahci libahci libata aes_x86_64 xhci_pci crypto_simd
-cryptd glue_helper xhci_hcd scsi_mod i8042 tpm_crb serio tpm_tis wmi
-tpm_tis_core
-Jun 01 16:17:27 kernel:  crc32c_intel vfat fat tpm rng_core i915
-i2c_algo_bit drm_kms_helper syscopyarea sysfillrect sysimgblt
-fb_sys_fops drm intel_agp intel_gtt agpgart
-Jun 01 16:17:27 kernel: CR2: 0000000000000368
-Jun 01 16:17:27 kernel: ---[ end trace 05c2c0e558309d1c ]---
-Jun 01 16:17:27 kernel: RIP: 0010:typec_altmode_get_partner+0x5/0x20 [typec]
-Jun 01 16:17:27 kernel: Code: 85 c0 74 08 e9 3c 8a 78 e2 31 c0 c3 b8
-a1 ff ff ff c3 b8 ed ff ff ff c3 66 66 2e 0f 1f 84 00 00 00 00 00 66
-90 0f 1f 44 00 00 <48> 8b 87 68 03 00 00 48 83 c0 08 c3 66 66 2e 0f 1f
-84 00 00 00 00
-Jun 01 16:17:27 kernel: RSP: 0018:ffffa67542123e00 EFLAGS: 00010293
-Jun 01 16:17:27 kernel: RAX: 0000000000000000 RBX: ffff8e9485a56800
-RCX: 0000000000000000
-Jun 01 16:17:27 kernel: RDX: 0000000000000000 RSI: 0000000000000246
-RDI: 0000000000000000
-Jun 01 16:17:27 kernel: RBP: 0000000000000000 R08: ffff8e949ebdbdc0
-R09: 0000000000000000
-Jun 01 16:17:27 kernel: R10: 0000000000000000 R11: 0000000000000000
-R12: 0000000000000000
-Jun 01 16:17:27 kernel: R13: ffff8e9499237540 R14: ffff8e9485a56ac0
-R15: ffff8e9485a56800
-Jun 01 16:17:27 kernel: FS:  0000000000000000(0000)
-GS:ffff8e949ebc0000(0000) knlGS:0000000000000000
-Jun 01 16:17:27 kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-Jun 01 16:17:27 kernel: CR2: 0000000000000368 CR3: 00000001c8a0a003
-CR4: 00000000003606e0
-inxi -Fxz
-----------------------------------------------------------------------------------------------------------
+Could you please give me some advice here? I'd like to prepare next version=
+ patch after
+getting this settled.
 
-System:    Host: <HOSTNAME> Kernel: 5.1.5-1-MANJARO x86_64 bits: 64
-compiler: gcc v: 8.3.0
-           Desktop: KDE Plasma 5.15.5 Distro: Manjaro Linux
-Machine:   Type: Laptop System: Timi product: TM1701 v: N/A serial: <filter>
-           Mobo: Timi model: TM1701 v: MP serial: <filter> UEFI:
-INSYDE v: XMAKB5R0P0906
-           date: 10/23/2018
-Battery:   ID-1: BAT0 charge: 54.3 Wh condition: 54.3/60.0 Wh (90%)
-model: SUNWODA R15B01W
-           status: Full
-CPU:       Topology: Quad Core model: Intel Core i7-8550U bits: 64
-type: MT MCP arch: Kaby Lake
-           rev: A L2 cache: 8192 KiB
-           flags: avx avx2 lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3
-vmx bogomips: 31880
-           Speed: 3034 MHz min/max: 400/4000 MHz Core speeds (MHz): 1:
-2700 2: 2700 3: 2700
-           4: 2700 5: 2700 6: 2700 7: 2700 8: 2700
-Graphics:  Device-1: Intel UHD Graphics 620 vendor: Xiaomi driver:
-i915 v: kernel bus ID: 00:02.0
-           Device-2: NVIDIA GP108M [GeForce MX150] driver: N/A bus ID: 01:00.0
-           Display: x11 server: X.Org 1.20.4 driver: intel
-           resolution: 1920x1080~60Hz, 1920x1080~60Hz
-           OpenGL: renderer: Mesa DRI Intel UHD Graphics 620 (Kabylake
-GT2) v: 4.5 Mesa 19.0.5
-           direct render: Yes
-Audio:     Device-1: Intel Sunrise Point-LP HD Audio vendor: Xiaomi
-driver: snd_hda_intel
-           v: kernel bus ID: 00:1f.3
-           Sound Server: ALSA v: k5.1.5-1-MANJARO
-Network:   Device-1: Intel Wireless 8265 / 8275 driver: iwlwifi v:
-kernel port: 4040
-           bus ID: 02:00.0
-           IF: wlp2s0 state: up mac: <filter>
-           Device-2: Realtek RTL8153 Gigabit Ethernet Adapter type:
-USB driver: r8152
-           bus ID: 2-1.1:3
+> Another question about this remain open is: DWC3 data book's Table 6-5 Ca=
+che
+> Type Bit Assignments show that bits definition will differ per MBUS_TYPEs=
+ as
+> below:
+> ----------------------------------------------------------------
+>  MBUS_TYPE| bit[3]       |bit[2]       |bit[1]     |bit[0]
+>  ----------------------------------------------------------------
+>  AHB      |Cacheable     |Bufferable   |Privilegge |Data
+>  AXI3     |Write Allocate|Read Allocate|Cacheable  |Bufferable
+>  AXI4     |Allocate Other|Allocate     |Modifiable |Bufferable
+>  AXI4     |Other Allocate|Allocate     |Modifiable |Bufferable
+>  Native   |Same as AXI   |Same as AXI  |Same as AXI|Same as AXI
+>  ----------------------------------------------------------------
+>  Note: The AHB, AXI3, AXI4, and PCIe busses use different names for certa=
+in
+>  signals, which have the same meaning:
+>    Bufferable =3D Posted
+>    Cacheable =3D Modifiable =3D Snoop (negation of No Snoop)
+>=20
+> For Layerscape SoCs, MBUS_TYPE is AXI3. So I am not sure how to use
+> snps,cache-type =3D <DATA_RD  "write allocate">, to cover all MBUS_TYPE?
+> (you can notice that AHB and AXI3's cacheable are on different bit) Or I =
+just need
+> to handle AXI3 case?
 
--- 
-----
-Best regards,
-Vladimir Yerilov
+Also on this open. Thank you in advance.
+
+Regards,
+Ran
