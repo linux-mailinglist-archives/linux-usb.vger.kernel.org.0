@@ -2,93 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6154342E0
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF42342E5
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727106AbfFDJNQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 05:13:16 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:63272 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727017AbfFDJNP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 05:13:15 -0400
-X-UUID: f1b8df9676b74030890b8250c336d34e-20190604
-X-UUID: f1b8df9676b74030890b8250c336d34e-20190604
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1895715751; Tue, 04 Jun 2019 17:13:05 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 4 Jun
- 2019 17:13:03 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 4 Jun 2019 17:13:03 +0800
-Message-ID: <1559639583.8487.76.camel@mhfsdcap03>
-Subject: Re: [PATCH v4] usb: create usb_debug_root for gadget only
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Tue, 4 Jun 2019 17:13:03 +0800
-In-Reply-To: <20190604082407.GA3783@kroah.com>
-References: <1559633647-29040-1-git-send-email-chunfeng.yun@mediatek.com>
-         <20190604073706.GA25045@kroah.com> <87k1e123mc.fsf@linux.intel.com>
-         <20190604082407.GA3783@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        id S1727005AbfFDJOG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 05:14:06 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:35607 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726965AbfFDJOF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 05:14:05 -0400
+Received: by mail-lj1-f194.google.com with SMTP id h11so18975165ljb.2;
+        Tue, 04 Jun 2019 02:14:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c6YWx7c2KFkFnqdn20PxgRAA7aQNfcdM/X+FMuxKK/o=;
+        b=hGUhr8rqRJVjO5t1cZcwTFQNbIxnpLwstRvr3wcXJXrf0QiM/Fom2u/dRgu2JUy+PV
+         SnPWSKeg1PZzxa6kmBg8q8zXFjLpiPrd/3FayVmr/NNthJ8Az+dqkqmee/FcaHXPwQxG
+         oZJDDdWaHbMLN2P+dL3bDY5P9CeBe/5twYDNV/VK6rPB8qhy/JWry+ZU1Ui8lUgMwmV6
+         lXqEg292S8E7fBsjyarQYfIEAzTSEEWt5SPs0AUWvqjjMlcoXUsUt1PAQeWxA9jlICPS
+         UBNxJGLAwt26NCIfYcCfy5+DkFSJL1Cw0mds3oJSQ8C9qpOQtmL/nn46Crjoa644Ki0X
+         V+Nw==
+X-Gm-Message-State: APjAAAVtoi5z6SPYo7Nf800BYgJRrUumm8LDvGmswPAVVKscPASdwDeE
+        s2CObOnh/oVeu4aglNtVRlQI1c9vcHxhPzNAx85z2shM
+X-Google-Smtp-Source: APXvYqwVWGFsI7Jlyz6rDNBveu7Mo860uc+ajf2GmNkr2kryUlWFAKtU/GfrxAKv5PAPCpDrUrrcAM91c/r3BdKaPKk=
+X-Received: by 2002:a2e:6e01:: with SMTP id j1mr15988864ljc.135.1559639643627;
+ Tue, 04 Jun 2019 02:14:03 -0700 (PDT)
 MIME-Version: 1.0
-X-MTK:  N
+References: <1559621375-5436-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+ <1559621375-5436-3-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+In-Reply-To: <1559621375-5436-3-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 4 Jun 2019 11:13:51 +0200
+Message-ID: <CAMuHMdXqYkaAh5ZaNF7GtrCCjd2=GD4PPmrrL5x1pK2H5BkUcg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb: renesas_usbhs: remove controlling PWEN/EXTLP support
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-06-04 at 10:24 +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jun 04, 2019 at 10:47:55AM +0300, Felipe Balbi wrote:
-> > 
-> > Hi,
-> > 
-> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-> > >> +struct dentry *usb_debugfs_init(void)
-> > >> +{
-> > >> +	if (!usb_debug_root)
-> > >> +		usb_debug_root = debugfs_create_dir("usb", NULL);
-> > >> +
-> > >> +	atomic_inc(&usb_debug_root_refcnt);
-> > >> +
-> > >> +	return usb_debug_root;
-> > >> +}
-> > >> +EXPORT_SYMBOL_GPL(usb_debugfs_init);
-> > >> +
-> > >> +void usb_debugfs_cleanup(void)
-> > >> +{
-> > >> +	if (atomic_dec_and_test(&usb_debug_root_refcnt)) {
-> > >> +		debugfs_remove_recursive(usb_debug_root);
-> > >> +		usb_debug_root = NULL;
-> > >> +	}
-> > >> +}
-> > >> +EXPORT_SYMBOL_GPL(usb_debugfs_cleanup);
-> > >
-> > > Only remove the debugfs subdir if the usbcore module is removed.  Create
-> > > the debugfs subdir when the usbcore module is loaded.  No need for any
-> > > reference counting of any sort at all.  No need to overthink this :)
-> > 
-> > There is a slight need to overthink. He wants to use the same directory
-> > for gadget-only builds too :-)
-> 
-> Again, that's fine, this file will be loaded for those builds as well,
-> right?  
-Yes, either usbcore or gadget will select this file.
+Hi Shimoda-san,
 
-> Otherwise, how would this code even be present?  :)
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, Jun 4, 2019 at 6:14 AM Yoshihiro Shimoda
+<yoshihiro.shimoda.uh@renesas.com> wrote:
+> Controlling PWMEN/EXTLP (named as "has_otg") was supported in v3.2,
+> but was never used by any platform. So, this patch remove it.
+
+Actually it was used, by legacy (pre-DT) board support for kzm9g and
+mackerel.
+The last user was removed by commit 30f8925a57d8ad49 ("ARM: shmobile:
+Remove legacy board code for KZM-A9-GT").
+
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
