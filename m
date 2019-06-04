@@ -2,89 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1375433E85
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 07:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2C633EB3
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 08:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbfFDFnE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 01:43:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33676 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726427AbfFDFnD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jun 2019 01:43:03 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DFD432341B;
-        Tue,  4 Jun 2019 05:43:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559626983;
-        bh=8SaWfngaEUhjwMF9qU08kz93yf4Xs2GH+ch1M4C2a+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cw3zgi5Q7N2/pGMAsl6Uh7On0szLZK+Kzli/xPZ9RL/VciXqNjVcSsnbdCizDM3Qq
-         NwCmhoGP5C/jz8s8h8c3eJhdlfDlpOyxKX1herUz598QWfZHq7Po3MhTDD6aUvhrxI
-         OWETEOBmXU9WztPeCYGNiJo4EWrVlUDTNn+5wxto=
-Date:   Tue, 4 Jun 2019 07:43:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Slow I/O on USB media
-Message-ID: <20190604054300.GE1588@kroah.com>
-References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
- <20190530132522.GA21005@kroah.com>
- <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
+        id S1726488AbfFDGDa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 02:03:30 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:39434 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbfFDGDa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 02:03:30 -0400
+Received: by mail-lj1-f193.google.com with SMTP id a10so15234250ljf.6
+        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2019 23:03:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=i2zQuakiG65DKwTnUcLO7LrQSuNy84OsGfJd0B0W8E0=;
+        b=a2gHthCETx7YLWV25cCfZiOio7rfXAhJfVn6xEN6+7AT8sG0l67huI7Kxc5BceHXmR
+         Hdp+1UsZ6H1MAFK/LjTA+Mt9wk7Df/vqXYy47+0ep8uyQnk0/TMx3q9l/0UxHgjuZl2h
+         ptmm5q4X3u30OtXY2QU+WLtk5q0gtkjmrAYlkxRQd8NpzD8LXh3XbM5SN/k35VBIouqH
+         YrXWfcoHq0QVB9IH+EtgFLbiqrzWbxx3iybpfjhlA7MpStBZcSsnmZwVS11iM4JECVUu
+         nlUg6WRh5NG0d02N47DP4fes1UEutfGcv/h4czh/p3FuZG70hF49kzL8J32lqrh1asYD
+         ViDg==
+X-Gm-Message-State: APjAAAUWqxv1kkSbVVCUVhnS2GgI2+xY8rrX8tJIxdM/FhCYYLMZYE9R
+        9Il0KTtqJsbh6UJqY89rXZQ=
+X-Google-Smtp-Source: APXvYqxhE0+G3UqzflobQvS++uxR7skK8yTEtUNpI3Uz2qKFhWD1RVb+ZuEnzQf6wR2xBWdct1H87w==
+X-Received: by 2002:a2e:6c01:: with SMTP id h1mr16599668ljc.103.1559628207942;
+        Mon, 03 Jun 2019 23:03:27 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id p1sm3588683ljj.1.2019.06.03.23.03.27
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jun 2019 23:03:27 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.91)
+        (envelope-from <johan@kernel.org>)
+        id 1hY2Xc-00076B-UB; Tue, 04 Jun 2019 08:03:24 +0200
+Date:   Tue, 4 Jun 2019 08:03:24 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Peter.Chen@nxp.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: chipidea: Use dev_err() instead of pr_err()
+Message-ID: <20190604060324.GF3668@localhost>
+References: <20190604020901.15197-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
+In-Reply-To: <20190604020901.15197-1-festevam@gmail.com>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 01:13:48PM +0200, Andrea Vai wrote:
-> Il giorno gio, 30/05/2019 alle 06.25 -0700, Greg KH ha scritto:
-> > [...]
-> Hi,
+On Mon, Jun 03, 2019 at 11:09:01PM -0300, Fabio Estevam wrote:
+> dev_err() is more appropriate for printing error messages inside
+> drivers, so switch to dev_err().
 > 
-> > Any chance you can use 'git bisect' to find the offending commit?
-> Yes, I am doing it as I managed to build the kernel from source
-
-Great!  What did you find?
-
-> > And did you accidentally turn on "sync" for the filesystem? 
-> Sorry, I don't think so but actually I don't know exactly what it is
-> nor how to check it...
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  drivers/usb/chipidea/core.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> >  How do you
-> > know the old kernel really flushed the buffers out in 1 minute? 
-> 
-> I used to try to unmount the usb media (e.g. "eject" using Nautilus
-> file manager), and got a message stating the filesystem was in use and
-> could not be mounted, so always answered to not eject it until it was
-> unmounted without any warning... does it make sense?
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index 27749ace2d93..1b6495829265 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -523,8 +523,9 @@ int hw_device_reset(struct ci_hdrc *ci)
+>  	hw_write(ci, OP_USBMODE, USBMODE_SLOM, USBMODE_SLOM);
+>  
+>  	if (hw_read(ci, OP_USBMODE, USBMODE_CM) != USBMODE_CM_DC) {
+> -		pr_err("cannot enter in %s device mode", ci_role(ci)->name);
+> -		pr_err("lpm = %i", ci->hw_bank.lpm);
+> +		dev_err(ci->dev, "cannot enter in %s device mode",
+> +			ci_role(ci)->name);
+> +		dev_err(ci->dev, "lpm = %i", ci->hw_bank.lpm);
 
-That does not mean that the data is not flushed to the device yet, that
-just means that some userspace program is still accessing the device.
-You need to run some other type of test to validate how long it taks for
-the data to get to the device.
+Please also add the missing newlines '\n' (and check if there are more
+instances of that mistake in this driver).
 
-> >  But 12
-> > minutes is really long, did anything else change in your userspace
-> > between the kernel changes as well?
-> I am not sure if I understand correctly the "userspace" you mention:
-> if you mean my home directory and contents, settings etc, then yes,
-> maybe... but while I am doing the tests I am quite sure I didn't
-> change anything, and double-checked many times that the 4.20 kernel is
-> always working (I usually boot up with it when I need to do the usual
-> day work).
+>  		return -ENODEV;
+>  	}
 
-I mean, did any other programs on your machine change between the
-upgrade of your kernel?  Maybe some gnome-tracker is going off and
-indexing all of the data on that device after you mount it, and it
-wasn't previously doing that before.  As it is still busy, something has
-some open files on that device.
-
-good luck!
-
-greg k-h
+Johan
