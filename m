@@ -2,98 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DF833B8C
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 00:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B079133C62
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 02:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbfFCWoT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jun 2019 18:44:19 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39673 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbfFCWoT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jun 2019 18:44:19 -0400
-Received: by mail-pl1-f195.google.com with SMTP id g9so7519073plm.6
-        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2019 15:44:18 -0700 (PDT)
+        id S1726269AbfFDAYO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jun 2019 20:24:14 -0400
+Received: from mail-pf1-f182.google.com ([209.85.210.182]:40194 "EHLO
+        mail-pf1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbfFDAYO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jun 2019 20:24:14 -0400
+Received: by mail-pf1-f182.google.com with SMTP id u17so11551955pfn.7
+        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2019 17:24:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=i1NrrxtRQzUfMSgO3hbvNTalzhN+3gxpJj1nFq+byy8=;
-        b=Epu3x+qUCsvLnQYtceW20enzegJsKK3kHgm4J1DEMqAmOFJtjdVYgQNRjDWwcmgBoe
-         Ag6YPBpG+Mhg1KNgS3g8ttaJm3pEvTbqIgszuY7XnM1WwRATYvXirkBOzaLp3XPviLz1
-         4HuQuuk4n9FoxU3dmMrm6UvGTq6rWTxeLltyY=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=F1fjj8SveI53Eh/TKWeZR5XNIAmDY/eqo7786zDDH6E=;
+        b=fDIAyfS1O3fMyLa/9KziLq9/krKzkIPYmDD8dCINlJ7Py8k3kmh2fq/4w/SIDCJYd8
+         Sv33DKJ/L7aPq0OAVWLrlzSpIeWwDR1XXwlG/gfdh3Mi9qT49QWr3C9xirb8Zbdpbp4o
+         yMVzpmShYmceP3HppmCzPc5rW4hPLRIrQRh6SgDzWX/sV8aNTD1lM1lYH8Y/xSmGspA+
+         nHnPmq9D+pM04mbTRR3lmSn0vZMZtgIIDB82bbwffRnmJOnAOGaDda15iVAhgfwuFDr0
+         RAO9oQ9iMJaZ0ccgvWqGTADOhUmoe/7FJZ8PpdK/Mw9t2Z4YVC4HIu7989yjobVyzsT2
+         0kXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=i1NrrxtRQzUfMSgO3hbvNTalzhN+3gxpJj1nFq+byy8=;
-        b=FKjlS70Ai+8Aqw5srEUSRDf+Ww0K3jA7o8VzvKCM1PIp9QcKXZzsU1kVqFbkdyxO66
-         kc6QlqVM9CKypvwjZ2FFzLW3J2QvowfIWU2XxQ8e5P+rXVN2LiEI7+yB+zD2BkhuDC7a
-         20qKELpPzP7colCFo1lFh0d/61c8NcyeCqU8xUmleOcNt9Qm9FGsGpEU4qe+qjkyu48+
-         qs9U8PD+M7J5dQqflWnVf53FL7Hsyh1KRHEzla/Lfr7ScMu6frOHsc3DJRqZ9xDKsuEB
-         z3U6fjBunRs9esPDPo8GjunJZFiPLHI0oHEjfrw4Gi7nGZOOC60cC4gVteOeufpwcF8k
-         nXag==
-X-Gm-Message-State: APjAAAWFU2FenirCvfYHA3r8RyIkoqhlUoU9Qs59D9Rmu/GVZj6/01wu
-        uSTfMzG2SY1wymrakihXF6UYjg==
-X-Google-Smtp-Source: APXvYqzlBKFdd0t7IQz0yNeea1dEgjJHaS/dE8d8qTD0lMaX5q7l9JDvouMoOEUSk+7Pb/8WQjrToQ==
-X-Received: by 2002:a17:902:2862:: with SMTP id e89mr33265524plb.258.1559601858570;
-        Mon, 03 Jun 2019 15:44:18 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
-        by smtp.gmail.com with ESMTPSA id l1sm14398404pgi.91.2019.06.03.15.44.17
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=F1fjj8SveI53Eh/TKWeZR5XNIAmDY/eqo7786zDDH6E=;
+        b=awOPJiURLSAk6pzui37UgJB1ZlhEIRTBwyHQS0NQwuagg9Q8Do3LJQ3hIrfBWkp1qm
+         PR1g7M73qGKDy6YbxApsD7Qs5epXzSmFVPHs3zf2FqrQ8qiuBj3biyhoIriQCysD8S5Y
+         432eLH3jXF27gWnPJtaZKfK1Rql9BAkzIr4O/rAmLN7sDgTxq+lPTxErDDU0chH619q8
+         3gKzJlFWfC3sDbbsL1Z2EcrJ/UP8LNYixj/d4dkLO2E5YVPsyzmJxPPSerCBk8Wl4Uxq
+         yOA27O2XLeDsQ5yGPAPifLFrlsERBM5Zj6JC3YEaOQlIp3XsKYMVI9kfPXutp9UiE4sN
+         0KLg==
+X-Gm-Message-State: APjAAAUomCReNjq8nfg3JJScwvRxss484GzBgeKXq6LnhzRtyFscyv6m
+        KB5T7s5LpHDE4olHGo6mK68=
+X-Google-Smtp-Source: APXvYqzT/qPYc4ApVdGuiXEBEnCO19xiPvOdUchFQ7QNXJW1Ml2IR/+OzhM/HjAeVr2c2lxMzcxNGw==
+X-Received: by 2002:a62:60c2:: with SMTP id u185mr24620877pfb.58.1559607853256;
+        Mon, 03 Jun 2019 17:24:13 -0700 (PDT)
+Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
+        by smtp.gmail.com with ESMTPSA id f16sm16517429pja.18.2019.06.03.17.24.12
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 03 Jun 2019 15:44:17 -0700 (PDT)
-Date:   Mon, 3 Jun 2019 15:44:17 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        linux-rockchip@lists.infradead.org,
-        Stefan Wahren <stefan.wahren@i2se.com>, tfiga@chromium.org,
-        groeck@chromium.org, Martin Schiller <ms@dev.tdt.de>,
-        stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc2: host: Fix wMaxPacketSize handling (fix webcam
- regression)
-Message-ID: <20190603224417.GN40515@google.com>
-References: <20190531200412.129429-1-dianders@chromium.org>
+        Mon, 03 Jun 2019 17:24:12 -0700 (PDT)
+Date:   Mon, 3 Jun 2019 17:24:10 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Extending USB_CONNECTINFO ioctl
+Message-ID: <20190604002410.GA36666@dtor-ws>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190531200412.129429-1-dianders@chromium.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 31, 2019 at 01:04:12PM -0700, Douglas Anderson wrote:
-> In commit abb621844f6a ("usb: ch9: make usb_endpoint_maxp() return
-> only packet size") the API to usb_endpoint_maxp() changed.  It used to
-> just return wMaxPacketSize but after that commit it returned
-> wMaxPacketSize with the high bits (the multiplier) masked off.  If you
-> wanted to get the multiplier it was now up to your code to call the
-> new usb_endpoint_maxp_mult() which was introduced in
-> commit 541b6fe63023 ("usb: add helper to extract bits 12:11 of
-> wMaxPacketSize").
-> 
-> Prior to the API change most host drivers were updated, but no update
-> was made to dwc2.  Presumably it was assumed that dwc2 was too
-> simplistic to use the multiplier and thus just didn't support a
-> certain class of USB devices.  However, it turns out that dwc2 did use
-> the multiplier and many devices using it were working quite nicely.
-> That means that many USB devices have been broken since the API
-> change.  One such device is a Logitech HD Pro Webcam C920.
-> 
-> Specifically, though dwc2 didn't directly call usb_endpoint_maxp(), it
-> did call usb_maxpacket() which in turn called usb_endpoint_maxp().
-> 
-> Let's update dwc2 to work properly with the new API.
-> 
-> Fixes: abb621844f6a ("usb: ch9: make usb_endpoint_maxp() return only packet size")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Hi Alan, Greg,
 
-I'm not really familiar with the dwc2 driver, but this looks
-reasonable to me. FWIW:
+When running software in a jailed environment where sysfs or udev is not
+readily available and one can only have an FD to usbdevfs device passed
+into the jail, there is a desire to allow libusb working. Alan recently
+added USBDEVFS_GET_SPEED, but we are still missing bus number and list
+of port numbers on the way to the root to be able to better identify the
+device in question.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+What do you think about adding a new ioctl:
+
+struct usbdevfs_connectinfo_ex {
+	__u32 size;		/* size of the structure from the kernel POV */
+	__u32 busnum;
+	__u32 devnum;
+	__u32 speed;		/* USB_SPEED_* form ch9.h */
+	u8 num_ports;		/* Number of entries in port_numbers array */
+	u8 port_numbers[31];	/* Current limit in USB3.0 spec is 7 */
+};
+
+/*
+ * Returns struct usbdevfs_connectinfo_ex; length is variable to allow
+ * extending size of the data returned.
+ */
+#define USBDEVFS_CONNINFO_EX(len)  _IOC(_IOC_READ, 'U', 32, len)
+
+Thanks.
+
+-- 
+Dmitry
