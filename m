@@ -2,108 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A34F5352C1
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 00:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA83735368
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 01:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726312AbfFDWcf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 18:32:35 -0400
-Received: from vimdzmsp-nwas04.bluewin.ch ([195.186.228.51]:33634 "EHLO
-        vimdzmsp-nwas04.bluewin.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726269AbfFDWcf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 18:32:35 -0400
-X-Greylist: delayed 360 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jun 2019 18:32:32 EDT
-Received: from mail.osk.ch ([188.62.190.74])
-        by vimdzmsp-nwas04.bluewin.ch Swisscom AG with SMTP
-        id YHswh8B8mSONSYHt1hU7dU; Wed, 05 Jun 2019 00:26:31 +0200
-Received: from server.osk.ch (localhost [127.0.0.1])
-        by mail.osk.ch (8.14.4/8.14.4/Debian-8+deb8u2) with ESMTP id x54MQPYn025458
-        for <linux-usb@vger.kernel.org>; Wed, 5 Jun 2019 00:26:25 +0200
-Received: (from osk@localhost)
-        by server.osk.ch (8.14.4/8.14.4/Submit) id x54MQPgU025457
-        for linux-usb@vger.kernel.org; Wed, 5 Jun 2019 00:26:25 +0200
-X-Authentication-Warning: server.osk.ch: osk set sender to usb@osk.ch using -f
-Date:   Wed, 5 Jun 2019 00:26:25 +0200
-From:   Chris Osicki <usb@osk.ch>
-To:     linux-usb@vger.kernel.org
-Subject: Question: Device not recognized when connected without a hub. Why?
-Message-ID: <20190604222625.GA25390@server>
+        id S1727822AbfFDXY6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 19:24:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36228 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727218AbfFDXYz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Jun 2019 19:24:55 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B009F206C1;
+        Tue,  4 Jun 2019 23:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559690694;
+        bh=2A7cn2Sda4P0wHU74w42/T9BNRZ/O6FKBVZ/aM5WMm4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KmUMnPD8jyPdV+YGx/pqYttZle67jVCBHstowm4BvfqfkykTM6bhOd1mR17wKXrmk
+         xAMUofwjFEFodiUaTIoBY3fIKItnuoW2tyPhJHQI29W30QpNb0yAr4C1fkmR17HShK
+         Wuo85loZiMZuTPOQ1DvlovIx3ggWznlDYT0+FryQ=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Bernd Eckstein <3erndeckstein@gmail.com>,
+        Oliver Zweigle <Oliver.Zweigle@faro.com>,
+        Bernd Eckstein <3ernd.Eckstein@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 21/24] usbnet: ipheth: fix racing condition
+Date:   Tue,  4 Jun 2019 19:24:12 -0400
+Message-Id: <20190604232416.7479-21-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190604232416.7479-1-sashal@kernel.org>
+References: <20190604232416.7479-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-message-flag: Using Microsoft software might be a security risk
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Greylist: inspected by milter-greylist-4.5.11 (mail.osk.ch [127.0.0.1]); Wed, 05 Jun 2019 00:26:26 +0200 (CEST) for IP:'127.0.0.1' DOMAIN:'localhost' HELO:'server.osk.ch' FROM:'usb@osk.ch' RCPT:''
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.11 (mail.osk.ch [127.0.0.1]); Wed, 05 Jun 2019 00:26:26 +0200 (CEST)
-X-CMAE-Envelope: MS4wfNwnR2n5jWx4t+3QHPifpQUQ1x7HUSjFuGK/mGKw/2JRa1jaL1fK5P6f7lAzLFRKfeyVFDRsBUuU/lWwF3iCw6p7T+LA9X5/MuyP+bS1hxdWYrFqvBuc
- 6ddkB6Q+dhFJTsbvC2odSYH1c7tPNxG988/eXocu7S3PeEtnP5MzJgAl
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Bernd Eckstein <3erndeckstein@gmail.com>
 
-Hi
+[ Upstream commit 94d250fae48e6f873d8362308f5c4d02cd1b1fd2 ]
 
-I stumbled over a behaviour when connecting a USB device which I couldn't find any explanation for.
-So, I'm trying here.
-Why connecting a USB device (USB-TTL converter) direct and via an USB hub makes a difference?
-When I connect it directly all I see in /var/log/syslog are errors, when connectedd via a USB-hub
-it works as expected.
-See logs below.
-hp8300 is HP Compaq Elite 8300 SFF (QV996AV), kernel: 4.15.0-50-generic #54-Ubuntu
+Fix a racing condition in ipheth.c that can lead to slow performance.
 
-lshw reports:
-        *-usb:0
-             description: USB controller
-             product: 7 Series/C210 Series Chipset Family USB xHCI Host Controller
-             vendor: Intel Corporation
-        *-usb:1
-             description: USB controller
-             product: 7 Series/C216 Chipset Family USB Enhanced Host Controller #2
-             vendor: Intel Corporation
+Bug: In ipheth_tx(), netif_wake_queue() may be called on the callback
+ipheth_sndbulk_callback(), _before_ netif_stop_queue() is called.
+When this happens, the queue is stopped longer than it needs to be,
+thus reducing network performance.
 
-BTW, it does work as expected on a Lenovo x220 (same OS).
-Let me know if I should provide any more information.
+Fix: Move netif_stop_queue() in front of usb_submit_urb(). Now the order
+is always correct. In case, usb_submit_urb() fails, the queue is woken up
+again as callback will not fire.
 
-Thanks in advance for any hint.
+Testing: This racing condition is usually not noticeable, as it has to
+occur very frequently to slowdown the network. The callback from the USB
+is usually triggered slow enough, so the situation does not appear.
+However, on a Ubuntu Linux on VMWare Workstation, running on Windows 10,
+the we loose the race quite often and the following speedup can be noticed:
 
-Regards,
-Chris
+Without this patch: Download:  4.10 Mbit/s, Upload:  4.01 Mbit/s
+With this patch:    Download: 36.23 Mbit/s, Upload: 17.61 Mbit/s
 
+Signed-off-by: Oliver Zweigle <Oliver.Zweigle@faro.com>
+Signed-off-by: Bernd Eckstein <3ernd.Eckstein@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/ipheth.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Connected directly:
-Jun  4 23:26:44 hp8300 kernel: [218215.233450] usb 1-1.1: new full-speed USB device number 34 using ehci-pci
-Jun  4 23:26:44 hp8300 kernel: [218215.313423] usb 1-1.1: device descriptor read/64, error -32
-Jun  4 23:26:44 hp8300 kernel: [218215.501445] usb 1-1.1: device descriptor read/64, error -32
-Jun  4 23:26:44 hp8300 kernel: [218215.689444] usb 1-1.1: new full-speed USB device number 35 using ehci-pci
-Jun  4 23:26:44 hp8300 kernel: [218215.769443] usb 1-1.1: device descriptor read/64, error -32
-Jun  4 23:26:44 hp8300 kernel: [218215.957429] usb 1-1.1: device descriptor read/64, error -32
-Jun  4 23:26:44 hp8300 kernel: [218216.065626] usb 1-1-port1: attempt power cycle
-Jun  4 23:26:45 hp8300 kernel: [218216.669420] usb 1-1.1: new full-speed USB device number 36 using ehci-pci
-Jun  4 23:26:45 hp8300 kernel: [218217.085412] usb 1-1.1: device not accepting address 36, error -32
-Jun  4 23:26:45 hp8300 kernel: [218217.165414] usb 1-1.1: new full-speed USB device number 37 using ehci-pci
-Jun  4 23:26:46 hp8300 kernel: [218217.581413] usb 1-1.1: device not accepting address 37, error -32
-Jun  4 23:26:46 hp8300 kernel: [218217.581574] usb 1-1-port1: unable to enumerate USB device
-
-
-Connected via a simple USB hub:
-Jun  4 23:28:08 hp8300 kernel: [218300.044754] usb 1-1.1: new full-speed USB device number 38 using ehci-pci
-Jun  4 23:28:08 hp8300 kernel: [218300.161948] usb 1-1.1: New USB device found, idVendor=058f, idProduct=9254
-Jun  4 23:28:08 hp8300 kernel: [218300.161950] usb 1-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-Jun  4 23:28:08 hp8300 kernel: [218300.161951] usb 1-1.1: Product: Generic USB Hub
-Jun  4 23:28:08 hp8300 kernel: [218300.161952] usb 1-1.1: Manufacturer: ALCOR
-Jun  4 23:28:08 hp8300 kernel: [218300.162269] hub 1-1.1:1.0: USB hub found
-Jun  4 23:28:08 hp8300 kernel: [218300.162936] hub 1-1.1:1.0: 4 ports detected
-Jun  4 23:28:08 hp8300 upowerd[2750]: unhandled action 'bind' on /sys/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.0
-Jun  4 23:28:08 hp8300 upowerd[2750]: unhandled action 'bind' on /sys/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1
-Jun  4 23:28:09 hp8300 kernel: [218300.448772] usb 1-1.1.1: new full-speed USB device number 39 using ehci-pci
-Jun  4 23:28:09 hp8300 kernel: [218300.557969] usb 1-1.1.1: New USB device found, idVendor=1a86, idProduct=7523
-Jun  4 23:28:09 hp8300 kernel: [218300.557973] usb 1-1.1.1: New USB device strings: Mfr=0, Product=2, SerialNumber=0
-Jun  4 23:28:09 hp8300 kernel: [218300.557975] usb 1-1.1.1: Product: USB2.0-Serial
-Jun  4 23:28:09 hp8300 mtp-probe: checking bus 1, device 39: "/sys/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1.1"
-Jun  4 23:28:09 hp8300 mtp-probe: bus: 1, device: 39 was not an MTP device
-Jun  4 23:28:09 hp8300 kernel: [218300.590591] usbcore: registered new interface driver ch341
-Jun  4 23:28:09 hp8300 kernel: [218300.590602] usbserial: USB Serial support registered for ch341-uart
-Jun  4 23:28:09 hp8300 kernel: [218300.590614] ch341 1-1.1.1:1.0: ch341-uart converter detected
-Jun  4 23:28:09 hp8300 kernel: [218300.591377] usb 1-1.1.1: ch341-uart converter now attached to ttyUSB0
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index 3d8a70d3ea9b..3d71f1716390 100644
+--- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -437,17 +437,18 @@ static int ipheth_tx(struct sk_buff *skb, struct net_device *net)
+ 			  dev);
+ 	dev->tx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+ 
++	netif_stop_queue(net);
+ 	retval = usb_submit_urb(dev->tx_urb, GFP_ATOMIC);
+ 	if (retval) {
+ 		dev_err(&dev->intf->dev, "%s: usb_submit_urb: %d\n",
+ 			__func__, retval);
+ 		dev->net->stats.tx_errors++;
+ 		dev_kfree_skb_any(skb);
++		netif_wake_queue(net);
+ 	} else {
+ 		dev->net->stats.tx_packets++;
+ 		dev->net->stats.tx_bytes += skb->len;
+ 		dev_consume_skb_any(skb);
+-		netif_stop_queue(net);
+ 	}
+ 
+ 	return NETDEV_TX_OK;
+-- 
+2.20.1
 
