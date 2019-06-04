@@ -2,118 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 714DD34339
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C125034349
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727133AbfFDJdB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 05:33:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33582 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726918AbfFDJdB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jun 2019 05:33:01 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EDA46249CF;
-        Tue,  4 Jun 2019 09:32:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559640780;
-        bh=fv30zCd+ya4eAbJ4qBlKi6F+W7utOftCbI5ndSkbhZo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=opKQBg1EmjmuiDNAy8aOnEBCvJP3Ac5iFVNmMiAYHI80Eiwt8JcsTxSJtKzOpmazr
-         kIh/7ratqm4vMuGT7y34esEVCWWub0gyxE03Q0QLX0ZY0agYtaWXFjboWzPdQY9SeD
-         P75Ocf07Mw2YSeXlHqhoW0TUmwyAqqREHqZNluLE=
-Date:   Tue, 4 Jun 2019 11:32:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] USB: move usb debugfs directory creation to the usb common
- core
-Message-ID: <20190604093258.GB30054@kroah.com>
+        id S1727051AbfFDJf5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 05:35:57 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:52268 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727023AbfFDJf4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 05:35:56 -0400
+Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id D028A25B73F;
+        Tue,  4 Jun 2019 19:35:54 +1000 (AEST)
+Received: by reginn.horms.nl (Postfix, from userid 7100)
+        id D06DF940986; Tue,  4 Jun 2019 11:35:52 +0200 (CEST)
+Date:   Tue, 4 Jun 2019 11:35:52 +0200
+From:   Simon Horman <horms@verge.net.au>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: renesas_usbhs: remove sudmac support
+Message-ID: <20190604093551.szxmo4xsqqkq4ixz@verge.net.au>
+References: <1559621375-5436-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+ <1559621375-5436-2-git-send-email-yoshihiro.shimoda.uh@renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <1559621375-5436-2-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+Organisation: Horms Solutions BV
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB gadget subsystem wants to use the USB debugfs root directory, so
-move it to the common "core" USB code so that it is properly initialized
-and removed as needed.
+Hi Shimoda-san,
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Tue, Jun 04, 2019 at 01:09:34PM +0900, Yoshihiro Shimoda wrote:
+> SUDMAC featurer was supported in v3.10, but was never used by
+> any platform. So, this patch removes it.
+> 
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> ---
+>  drivers/usb/renesas_usbhs/fifo.c  | 5 +----
+>  include/linux/usb/renesas_usbhs.h | 1 -
+>  2 files changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
+> index 452b456..53f8e2f 100644
+> --- a/drivers/usb/renesas_usbhs/fifo.c
+> +++ b/drivers/usb/renesas_usbhs/fifo.c
+> @@ -325,10 +325,7 @@ static int usbhsf_fifo_select(struct usbhs_pipe *pipe,
+>  	}
+>  
+>  	/* "base" will be used below  */
+> -	if (usbhs_get_dparam(priv, has_sudmac) && !usbhsf_is_cfifo(priv, fifo))
 
----
+I believe usbhsf_is_cfifo() will now be unused and should be removed.
 
-This should be the "correct" version of this, Chunfeng, can you test
-this to verify it works for you?
+With that change feel free to add:
+
+Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
 
 
-diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-index 18f5dcf58b0d..3b5e4263ffef 100644
---- a/drivers/usb/common/common.c
-+++ b/drivers/usb/common/common.c
-@@ -15,6 +15,7 @@
- #include <linux/usb/of.h>
- #include <linux/usb/otg.h>
- #include <linux/of_platform.h>
-+#include <linux/debugfs.h>
- 
- static const char *const ep_type_names[] = {
- 	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
-@@ -291,4 +292,21 @@ struct device *usb_of_get_companion_dev(struct device *dev)
- EXPORT_SYMBOL_GPL(usb_of_get_companion_dev);
- #endif
- 
-+struct dentry *usb_debug_root;
-+EXPORT_SYMBOL_GPL(usb_debug_root);
-+
-+static int usb_common_init(void)
-+{
-+	usb_debug_root = debugfs_create_dir("usb", NULL);
-+	return 0;
-+}
-+
-+static void usb_common_exit(void)
-+{
-+	debugfs_remove_recursive(usb_debug_root);
-+}
-+
-+module_init(usb_common_init);
-+module_exit(usb_common_exit);
-+
- MODULE_LICENSE("GPL");
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 7fcb9f782931..f3d6b1ab80cb 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -1185,19 +1185,17 @@ static struct notifier_block usb_bus_nb = {
- 	.notifier_call = usb_bus_notify,
- };
- 
--struct dentry *usb_debug_root;
--EXPORT_SYMBOL_GPL(usb_debug_root);
-+static struct dentry *usb_devices_root;
- 
- static void usb_debugfs_init(void)
- {
--	usb_debug_root = debugfs_create_dir("usb", NULL);
--	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
--			    &usbfs_devices_fops);
-+	usb_devices_root = debugfs_create_file("devices", 0444, usb_debug_root,
-+					       NULL, &usbfs_devices_fops);
- }
- 
- static void usb_debugfs_cleanup(void)
- {
--	debugfs_remove_recursive(usb_debug_root);
-+	debugfs_remove_recursive(usb_devices_root);
- }
- 
- /*
+> -		usbhs_write(priv, fifo->sel, base);
+> -	else
+> -		usbhs_write(priv, fifo->sel, base | MBW_32);
+> +	usbhs_write(priv, fifo->sel, base | MBW_32);
+>  
+>  	/* check ISEL and CURPIPE value */
+>  	while (timeout--) {
+> diff --git a/include/linux/usb/renesas_usbhs.h b/include/linux/usb/renesas_usbhs.h
+> index 3f53043..a2481f4d 100644
+> --- a/include/linux/usb/renesas_usbhs.h
+> +++ b/include/linux/usb/renesas_usbhs.h
+> @@ -187,7 +187,6 @@ struct renesas_usbhs_driver_param {
+>  	 * option:
+>  	 */
+>  	u32 has_otg:1; /* for controlling PWEN/EXTLP */
+> -	u32 has_sudmac:1; /* for SUDMAC */
+>  	u32 has_usb_dmac:1; /* for USB-DMAC */
+>  	u32 runtime_pwctrl:1;
+>  	u32 has_cnen:1;
+> -- 
+> 2.7.4
+> 
