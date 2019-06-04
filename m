@@ -2,171 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC85E33F35
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 08:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CF13400F
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 09:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbfFDGxC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 4 Jun 2019 02:53:02 -0400
-Received: from relay1.mentorg.com ([192.94.38.131]:55985 "EHLO
-        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726578AbfFDGxC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 02:53:02 -0400
-Received: from nat-ies.mentorg.com ([192.94.31.2] helo=svr-ies-mbx-01.mgc.mentorg.com)
-        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
-        id 1hY3JX-0000Y4-Rs from Carsten_Schmid@mentor.com ; Mon, 03 Jun 2019 23:52:56 -0700
-Received: from SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) by
- svr-ies-mbx-01.mgc.mentorg.com (139.181.222.1) with Microsoft SMTP Server
- (TLS) id 15.0.1320.4; Tue, 4 Jun 2019 07:52:52 +0100
-Received: from SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17]) by
- SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17%22]) with mapi id
- 15.00.1320.000; Tue, 4 Jun 2019 07:52:52 +0100
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     Sasha Levin <sashal@kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>, Stable <stable@vger.kernel.org>
-Subject: AW: [PATCH 3/5] usb: xhci: avoid null pointer deref when bos field is
- NULL
-Thread-Topic: [PATCH 3/5] usb: xhci: avoid null pointer deref when bos field
- is NULL
-Thread-Index: AQHVEJHzdFut9W6npEKrmFpS3QjO6qaCDxyAgAgIjHSAAQsJ0A==
-Date:   Tue, 4 Jun 2019 06:52:52 +0000
-Message-ID: <91b3036382d94af682cfd58d1fd3faf1@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <1558524841-25397-4-git-send-email-mathias.nyman@linux.intel.com>,<20190529131455.C7A8C217D4@mail.kernel.org>
- <1559574003412.30745@mentor.com>
-In-Reply-To: <1559574003412.30745@mentor.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1726877AbfFDH00 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 03:26:26 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:42622 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726589AbfFDH0Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 03:26:25 -0400
+Received: by mail-wr1-f65.google.com with SMTP id o12so7498295wrj.9
+        for <linux-usb@vger.kernel.org>; Tue, 04 Jun 2019 00:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=QbZvrjLfIFVqFbZjsWNghzLo74BB0FgDBdA6SVfVZHY=;
+        b=j6l6U0hBlOSFNA69xTaVSJGX+ZllwaJZJmGZ5ygX+ROvaHUZByrpIp0qKdxmyYGLHY
+         uwhg+HvM0ojo0S7N6zU5k/yuTRASgBp0SE2hHIjgAtTwWJ2SPcbQYxuT86ufeKXtVrNf
+         qyxQXMeL7hjIL9pxyuyP7rfF3k/ZrQiEFmFUt4ARGkSrG1/965HG0i6nsHm8T9qU+Ppg
+         A04c2QYpSjtYhss5vUhEJUDan4XCTYJgsJD6+UVT+JUnqD5vrKWW7AOlNKYsdkO+TBFd
+         +mrVEsjcy6fA8w5UjJ0UqxJAvP3hLVCgoIWWJ0hk7x34RiymKkmgRNB7ufSce4p4xDj/
+         6ngw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=QbZvrjLfIFVqFbZjsWNghzLo74BB0FgDBdA6SVfVZHY=;
+        b=ZIavKQyuTozi72c5Ip/X80tzYZoe36pa+ofpEhKacDLTudjA01cjlkz3iYhLfi3ZNR
+         wfKiko9UBVgWC6CLnX/r+YGPZLGmC2qWqaNHN/ro0WvWbcdpsnYZWxYf9n0Fr0lPaGv7
+         A1Xlih3wmS1UtJJIbHW8PiGRWDxgjC2qAmgExjecUP7zY4vAByM7HNcPHj1aXUEw5FLx
+         2Ef6v7s78ehykVjFwhaRADWN5i45eBZ/VGU8SzsSK1O6YQMepNAni99vv3DMuoa7xLwQ
+         2l6HdyLvWxxmxtII15M5ghZW2F2YIP4iZ9V5K/adGr4tJinysHERCe0L8vBSD54If30q
+         lfzg==
+X-Gm-Message-State: APjAAAXT7TlVXu9fHw3oNPQ76jYLHhASnln23fD+DvVcbxDbfQuLvihF
+        3RAEpf5hwHD8iJUb46aJjaAJXHoT0Sk=
+X-Google-Smtp-Source: APXvYqzBmOMQldN1x1xxbZKKR99CP+q3ys6G4K6AMABOdTPx2pdjiVk4Uqv08Y4f1DrUOrRs+94h4g==
+X-Received: by 2002:adf:fc85:: with SMTP id g5mr19243277wrr.324.1559633183482;
+        Tue, 04 Jun 2019 00:26:23 -0700 (PDT)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id o3sm16976980wmo.6.2019.06.04.00.26.22
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 04 Jun 2019 00:26:22 -0700 (PDT)
+Message-ID: <9b04d6c3a322ffe25e0c57e055885eb22e7cdaea.camel@unipv.it>
+Subject: Re: Slow I/O on USB media
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Date:   Tue, 04 Jun 2019 09:26:17 +0200
+In-Reply-To: <20190604054300.GE1588@kroah.com>
+References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
+         <20190530132522.GA21005@kroah.com>
+         <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
+         <20190604054300.GE1588@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Hi Sasha,
+Il giorno mar, 04/06/2019 alle 07.43 +0200, Greg KH ha scritto:
+> On Mon, Jun 03, 2019 at 01:13:48PM +0200, Andrea Vai wrote:
+> > Il giorno gio, 30/05/2019 alle 06.25 -0700, Greg KH ha scritto:
+> > > [...]
+> > Hi,
+> > 
+> > > Any chance you can use 'git bisect' to find the offending
+> commit?
+> > Yes, I am doing it as I managed to build the kernel from source
 > 
-> i have (back)ported the patch to the older kernels mentioned below
-> where the original patch failed.
+> Great!  What did you find?
+
+so far, something in between 
+2ac5e38ea4203852d6e99edd3cf11f044b0a409f (good) and
+b3cc2bfe7244e848f5e8caa77bbdc72c04abd17c (bad)... (about 8 steps left)
+
 > 
-> The patch appended to this mail applies to v4.14.121, v4.9.178, v4.4.180 and
-> v3.18.140.
-> Some changes within the xhci driver prevented git from finding the correct
-> position.
+> > > And did you accidentally turn on "sync" for the filesystem? 
+> > Sorry, I don't think so but actually I don't know exactly what it
+> is
+> > nor how to check it...
+> > 
+> > >  How do you
+> > > know the old kernel really flushed the buffers out in 1 minute? 
+> > 
+> > I used to try to unmount the usb media (e.g. "eject" using
+> Nautilus
+> > file manager), and got a message stating the filesystem was in use
+> and
+> > could not be mounted, so always answered to not eject it until it
+> was
+> > unmounted without any warning... does it make sense?
 > 
-> Hope this helps :-)
+> That does not mean that the data is not flushed to the device yet,
+> that
+> just means that some userspace program is still accessing the
+> device.
+> You need to run some other type of test to validate how long it taks
+> for
+> the data to get to the device.
+
+I understand, I actually omitted here what I found out by using "top",
+"ps" and "iotop" to catch the moment when the data write finish. I
+found a process named "kworker/u8:0+flush-8:16", or similar, which is
+alive while the cp process is in D state (and as long as I can't
+"eject" the device), and disappears when the media can be ejected, so
+I assumed it to be a good indicator for the data write. But I admit I
+am really poorly skilled on this matter, so thanks for pointing it
+out, and for any other explanation (or links to deepen it
+furthermore).
+
 > 
-> Best regards
-> Carsten
+> > >  But 12
+> > > minutes is really long, did anything else change in your
+> userspace
+> > > between the kernel changes as well?
+> > I am not sure if I understand correctly the "userspace" you
+> mention:
+> > if you mean my home directory and contents, settings etc, then
+> yes,
+> > maybe... but while I am doing the tests I am quite sure I didn't
+> > change anything, and double-checked many times that the 4.20
+> kernel is
+> > always working (I usually boot up with it when I need to do the
+> usual
+> > day work).
 > 
-Brrrr. IT stuff changed so i append the patch as text:
----
-From b1ceb3787bcd6f3ae775eebead9a66b80a2b4314 Mon Sep 17 00:00:00 2001
-From: Carsten Schmid <carsten_schmid@mentor.com>
-Date: Fri, 8 Mar 2019 15:15:52 +0100
-Subject: [PATCH] usb: xhci: avoid null pointer deref when bos field is NULL
+> I mean, did any other programs on your machine change between the
+> upgrade of your kernel?  Maybe some gnome-tracker is going off and
+> indexing all of the data on that device after you mount it, and it
+> wasn't previously doing that before.  As it is still busy, something
+> has
+> some open files on that device.
 
-With defective USB sticks we see the following error happen:
-usb 1-3: new high-speed USB device number 6 using xhci_hcd
-usb 1-3: device descriptor read/64, error -71
-usb 1-3: device descriptor read/64, error -71
-usb 1-3: new high-speed USB device number 7 using xhci_hcd
-usb 1-3: device descriptor read/64, error -71
-usb 1-3: unable to get BOS descriptor set
-usb 1-3: New USB device found, idVendor=0781, idProduct=5581
-usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-...
-BUG: unable to handle kernel NULL pointer dereference at 0000000000000008
+Thank you, now I understand what you mean. Yes, this is definitively
+possible (may a "lsof | grep mount_point_of_the_device" or similar
+could give some clue?)
 
-This comes from the following place:
-[ 1660.215380] IP: xhci_set_usb2_hardware_lpm+0xdf/0x3d0 [xhci_hcd]
-[ 1660.222092] PGD 0 P4D 0
-[ 1660.224918] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[ 1660.425520] CPU: 1 PID: 38 Comm: kworker/1:1 Tainted: P     U  W  O    4.14.67-apl #1
-[ 1660.434277] Workqueue: usb_hub_wq hub_event [usbcore]
-[ 1660.439918] task: ffffa295b6ae4c80 task.stack: ffffad4580150000
-[ 1660.446532] RIP: 0010:xhci_set_usb2_hardware_lpm+0xdf/0x3d0 [xhci_hcd]
-[ 1660.453821] RSP: 0018:ffffad4580153c70 EFLAGS: 00010046
-[ 1660.459655] RAX: 0000000000000000 RBX: ffffa295b4d7c000 RCX: 0000000000000002
-[ 1660.467625] RDX: 0000000000000002 RSI: ffffffff984a55b2 RDI: ffffffff984a55b2
-[ 1660.475586] RBP: ffffad4580153cc8 R08: 0000000000d6520a R09: 0000000000000001
-[ 1660.483556] R10: ffffad4580a004a0 R11: 0000000000000286 R12: ffffa295b4d7c000
-[ 1660.491525] R13: 0000000000010648 R14: ffffa295a84e1800 R15: 0000000000000000
-[ 1660.499494] FS:  0000000000000000(0000) GS:ffffa295bfc80000(0000) knlGS:0000000000000000
-[ 1660.508530] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 1660.514947] CR2: 0000000000000008 CR3: 000000025a114000 CR4: 00000000003406a0
-[ 1660.522917] Call Trace:
-[ 1660.525657]  usb_set_usb2_hardware_lpm+0x3d/0x70 [usbcore]
-[ 1660.531792]  usb_disable_device+0x242/0x260 [usbcore]
-[ 1660.537439]  usb_disconnect+0xc1/0x2b0 [usbcore]
-[ 1660.542600]  hub_event+0x596/0x18f0 [usbcore]
-[ 1660.547467]  ? trace_preempt_on+0xdf/0x100
-[ 1660.552040]  ? process_one_work+0x1c1/0x410
-[ 1660.556708]  process_one_work+0x1d2/0x410
-[ 1660.561184]  ? preempt_count_add.part.3+0x21/0x60
-[ 1660.566436]  worker_thread+0x2d/0x3f0
-[ 1660.570522]  kthread+0x122/0x140
-[ 1660.574123]  ? process_one_work+0x410/0x410
-[ 1660.578792]  ? kthread_create_on_node+0x60/0x60
-[ 1660.583849]  ret_from_fork+0x3a/0x50
-[ 1660.587839] Code: 00 49 89 c3 49 8b 84 24 50 16 00 00 8d 4a ff 48 8d 04 c8 48 89 ca 4c 8b 10 45 8b 6a 04 48 8b 00 48 89 45 c0 49 8b 86 80 03 00 00 <48> 8b 40 08 8b 40 03 0f 1f 44 00 00 45 85 ff 0f 84 81 01 00 00
-[ 1660.608980] RIP: xhci_set_usb2_hardware_lpm+0xdf/0x3d0 [xhci_hcd] RSP: ffffad4580153c70
-[ 1660.617921] CR2: 0000000000000008
+Thanks, and bye,
+Andrea
 
-Tracking this down shows that udev->bos is NULL in the following code:
-(xhci.c, in xhci_set_usb2_hardware_lpm)
-	field = le32_to_cpu(udev->bos->ext_cap->bmAttributes);  <<<<<<< here
-
-	xhci_dbg(xhci, "%s port %d USB2 hardware LPM\n",
-			enable ? "enable" : "disable", port_num + 1);
-
-	if (enable) {
-		/* Host supports BESL timeout instead of HIRD */
-		if (udev->usb2_hw_lpm_besl_capable) {
-			/* if device doesn't have a preferred BESL value use a
-			 * default one which works with mixed HIRD and BESL
-			 * systems. See XHCI_DEFAULT_BESL definition in xhci.h
-			 */
-			if ((field & USB_BESL_SUPPORT) &&
-			    (field & USB_BESL_BASELINE_VALID))
-				hird = USB_GET_BESL_BASELINE(field);
-			else
-				hird = udev->l1_params.besl;
-
-The failing case is when disabling LPM. So it is sufficient to avoid
-access to udev->bos by moving the instruction into the "enable" clause.
-
-Signed-off-by: Carsten Schmid <carsten_schmid@mentor.com>
----
- drivers/usb/host/xhci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index c78de07c4d00..6001c3cefab3 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4155,7 +4155,6 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
- 	pm_addr = port_array[port_num] + PORTPMSC;
- 	pm_val = readl(pm_addr);
- 	hlpm_addr = port_array[port_num] + PORTHLPMC;
--	field = le32_to_cpu(udev->bos->ext_cap->bmAttributes);
- 
- 	xhci_dbg(xhci, "%s port %d USB2 hardware LPM\n",
- 			enable ? "enable" : "disable", port_num + 1);
-@@ -4167,6 +4166,7 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
- 			 * default one which works with mixed HIRD and BESL
- 			 * systems. See XHCI_DEFAULT_BESL definition in xhci.h
- 			 */
-+			field = le32_to_cpu(udev->bos->ext_cap->bmAttributes);
- 			if ((field & USB_BESL_SUPPORT) &&
- 			    (field & USB_BESL_BASELINE_VALID))
- 				hird = USB_GET_BESL_BASELINE(field);
--- 
-2.17.1
 
