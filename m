@@ -2,89 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECB13427B
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6154342E0
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbfFDI76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 04:59:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35666 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726809AbfFDI76 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jun 2019 04:59:58 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 46FCF2404B;
-        Tue,  4 Jun 2019 08:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559638797;
-        bh=QeWEOfvvFgd6D5xz67dJiwIAbjDuXSoQfBcQfqCx6vw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GgEO2+cNZkyKCAwZi4LKgJM6Ldf1AnZDfToPs6lQHtApD4dbm+htN3/5F5fu6p1qG
-         0DtrLMsX/FhL4V0md2kS1IyHzxWUeoE39HEFzfTfobE2y0OOK4abvT9DnzZ54Ya/nZ
-         9wC0Ivn1Sq0ttlnzEZdWyGKCRMxvBh146YOL7IVk=
-Date:   Tue, 4 Jun 2019 10:59:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jim Lin <jilin@nvidia.com>
-Cc:     stern@rowland.harvard.edu, mathias.nyman@intel.com,
-        kai.heng.feng@canonical.com, drinkcat@chromium.org,
-        Thinh.Nguyen@synopsys.com, nsaenzjulienne@suse.de,
-        jflat@chromium.org, malat@debian.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 0/2] usb: xhci: Add Clear_TT_Buffer
-Message-ID: <20190604085955.GA2855@kroah.com>
-References: <1559559224-9845-1-git-send-email-jilin@nvidia.com>
- <20190603122303.GA16267@kroah.com>
- <e7ccbc27-2ff4-b1b9-aa1b-c77da5e122ca@nvidia.com>
+        id S1727106AbfFDJNQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 05:13:16 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:63272 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727017AbfFDJNP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 05:13:15 -0400
+X-UUID: f1b8df9676b74030890b8250c336d34e-20190604
+X-UUID: f1b8df9676b74030890b8250c336d34e-20190604
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1895715751; Tue, 04 Jun 2019 17:13:05 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31DR.mediatek.inc
+ (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 4 Jun
+ 2019 17:13:03 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 4 Jun 2019 17:13:03 +0800
+Message-ID: <1559639583.8487.76.camel@mhfsdcap03>
+Subject: Re: [PATCH v4] usb: create usb_debug_root for gadget only
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Tue, 4 Jun 2019 17:13:03 +0800
+In-Reply-To: <20190604082407.GA3783@kroah.com>
+References: <1559633647-29040-1-git-send-email-chunfeng.yun@mediatek.com>
+         <20190604073706.GA25045@kroah.com> <87k1e123mc.fsf@linux.intel.com>
+         <20190604082407.GA3783@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e7ccbc27-2ff4-b1b9-aa1b-c77da5e122ca@nvidia.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 04, 2019 at 04:53:54PM +0800, Jim Lin wrote:
+On Tue, 2019-06-04 at 10:24 +0200, Greg Kroah-Hartman wrote:
+> On Tue, Jun 04, 2019 at 10:47:55AM +0300, Felipe Balbi wrote:
+> > 
+> > Hi,
+> > 
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> > >> +struct dentry *usb_debugfs_init(void)
+> > >> +{
+> > >> +	if (!usb_debug_root)
+> > >> +		usb_debug_root = debugfs_create_dir("usb", NULL);
+> > >> +
+> > >> +	atomic_inc(&usb_debug_root_refcnt);
+> > >> +
+> > >> +	return usb_debug_root;
+> > >> +}
+> > >> +EXPORT_SYMBOL_GPL(usb_debugfs_init);
+> > >> +
+> > >> +void usb_debugfs_cleanup(void)
+> > >> +{
+> > >> +	if (atomic_dec_and_test(&usb_debug_root_refcnt)) {
+> > >> +		debugfs_remove_recursive(usb_debug_root);
+> > >> +		usb_debug_root = NULL;
+> > >> +	}
+> > >> +}
+> > >> +EXPORT_SYMBOL_GPL(usb_debugfs_cleanup);
+> > >
+> > > Only remove the debugfs subdir if the usbcore module is removed.  Create
+> > > the debugfs subdir when the usbcore module is loaded.  No need for any
+> > > reference counting of any sort at all.  No need to overthink this :)
+> > 
+> > There is a slight need to overthink. He wants to use the same directory
+> > for gadget-only builds too :-)
 > 
+> Again, that's fine, this file will be loaded for those builds as well,
+> right?  
+Yes, either usbcore or gadget will select this file.
+
+> Otherwise, how would this code even be present?  :)
 > 
-> On 2019年06月03日 20:23, Greg KH wrote:
-> > On Mon, Jun 03, 2019 at 06:53:42PM +0800, Jim Lin wrote:
-> > > USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-> > > processing for full-/low-speed endpoints connected via a TT, the host
-> > > software must use the Clear_TT_Buffer request to the TT to ensure
-> > > that the buffer is not in the busy state".
-> > > 
-> > > In our case, a full-speed speaker (ConferenceCam) is behind a high-
-> > > speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-> > > request we may continue to get STALL with the folllowing requests,
-> > > like Set_Interface.
-> > > 
-> > > Solution is to invoke usb_hub_clear_tt_buffer() to send
-> > > Clear_TT_Buffer request to the hub of the device for the following
-> > > Set_Interface requests to the device to get ACK successfully.
-> > > 
-> > > The Clear_TT_Buffer request sent to the hub includes the address of
-> > > the LS/FS child device in wValue field. usb_hub_clear_tt_buffer()
-> > > uses udev->devnum to set the address wValue. This won't work for
-> > > devices connected to xHC.
-> > > 
-> > > For other host controllers udev->devnum is the same as the address of
-> > > the usb device, chosen and set by usb core. With xHC the controller
-> > > hardware assigns the address, and won't be the same as devnum.
-> > > 
-> > > Here we have two patches.
-> > > One is to add devaddr in struct usb_device for
-> > > usb_hub_clear_tt_buffer() to use.
-> > > Another is to invoke usb_hub_clear_tt_buffer() for halt processing.
-> > Why did you resend patch series 11?
-> Didn't get response in 2 or 3 days.
-> Will be more patient next time.
+> thanks,
+> 
+> greg k-h
 
-Please do, only resend if you do not get a response after 2 weeks.
 
-thanks,
-
-greg k-h
