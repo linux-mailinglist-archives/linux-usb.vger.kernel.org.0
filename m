@@ -2,63 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C75342F4
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66876342F1
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727151AbfFDJOw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 05:14:52 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60564 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727023AbfFDJOw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jun 2019 05:14:52 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 05D47AC54;
-        Tue,  4 Jun 2019 09:14:50 +0000 (UTC)
-Message-ID: <1559639677.21920.4.camel@suse.com>
-Subject: Re: [PATCH] Fix chipmunk-like voice when using Logitech C270 for
- recording audio.
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Marco Zatta <marco@zatta.me>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Date:   Tue, 04 Jun 2019 11:14:37 +0200
-In-Reply-To: <20190603175540.GA4368@jimmy.localdomain>
-References: <20190601075257.GA24550@jimmy.localdomain>
-         <1559555890.25071.5.camel@suse.com>
-         <20190603175540.GA4368@jimmy.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727118AbfFDJOq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 05:14:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48704 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726948AbfFDJOq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Jun 2019 05:14:46 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4270D21976;
+        Tue,  4 Jun 2019 09:14:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559639685;
+        bh=jRInVvoH/Jp1WAAgsg3CtkKKgWZbOrkmzFm+ATVyo4g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ItT/JG4j7Zw1Qmygon0KfYYZbV5gsZ0jmQm7Wq34OweZyE9lEUG9ikxPolTdHn/6+
+         z3COdTJE5fN+MdHQ3HW4VnNmQ7yWQdfWxapfzxMzMiiHjO+WKC1SIku9tlhVJWgcPh
+         Qft/vN8ZHEvD9vPc2rBKJyRY4xZRXicaqJKcbeQk=
+Date:   Tue, 4 Jun 2019 11:14:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4] usb: create usb_debug_root for gadget only
+Message-ID: <20190604091443.GA458@kroah.com>
+References: <1559633647-29040-1-git-send-email-chunfeng.yun@mediatek.com>
+ <20190604073706.GA25045@kroah.com>
+ <1559638754.8487.71.camel@mhfsdcap03>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1559638754.8487.71.camel@mhfsdcap03>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 03.06.2019, 19:55 +0200 schrieb Marco Zatta:
-> On Mon, Jun 03, 2019 at 11:58:10AM +0200, Oliver Neukum wrote:
-> > Are you sure only the C270 is affected?
+On Tue, Jun 04, 2019 at 04:59:14PM +0800, Chunfeng Yun wrote:
+> On Tue, 2019-06-04 at 09:37 +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Jun 04, 2019 at 03:34:07PM +0800, Chunfeng Yun wrote:
+> > > When CONFIG_USB is not set, and CONFIG_USB_GADGET is set,
+> > > there is an issue, e.g.:
+> > > 
+> > > drivers/usb/mtu3/mtu3_debugfs.o: in function 'ssusb_debugfs_create_root':
+> > > mtu3_debugfs.c:(.text+0xba3): undefined reference to 'usb_debug_root'
+> > > 
+> > > usb_debug_root is currently only built when host is supported
+> > > (CONFIG_USB is set), for convenience, we also want it created when
+> > > gadget only is enabled, this patch try to support it.
+> > > 
+> > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > ---
+> > > v4:
+> > >   move common API into common.c suggested by Felipe
+> > > 
+> > > v3:
+> > >   1. still create usb_debug_root for gadget only
+> > >   2. abandon mtu3's change
+> > >   3. drop acked-by Randy
+> > > 
+> > > v2(resend): add acked-by Randy
+> > > 
+> > > v1: fix mtu3's build error, replace usb_debug_root by NULL;
+> > > ---
+> > >  drivers/usb/common/common.c   | 26 ++++++++++++++++++++++++++
+> > >  drivers/usb/core/usb.c        | 16 ++++------------
+> > >  drivers/usb/gadget/udc/core.c |  3 +++
+> > >  include/linux/usb.h           |  2 ++
+> > >  4 files changed, 35 insertions(+), 12 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+> > > index 18f5dcf58b0d..c52e9c9f58ec 100644
+> > > --- a/drivers/usb/common/common.c
+> > > +++ b/drivers/usb/common/common.c
+> > > @@ -15,6 +15,7 @@
+> > >  #include <linux/usb/of.h>
+> > >  #include <linux/usb/otg.h>
+> > >  #include <linux/of_platform.h>
+> > > +#include <linux/debugfs.h>
+> > >  
+> > >  static const char *const ep_type_names[] = {
+> > >  	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
+> > > @@ -139,6 +140,31 @@ enum usb_dr_mode usb_get_dr_mode(struct device *dev)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(usb_get_dr_mode);
+> > >  
+> > > +struct dentry *usb_debug_root;
+> > > +EXPORT_SYMBOL_GPL(usb_debug_root);
+> > > +
+> > > +static atomic_t usb_debug_root_refcnt = ATOMIC_INIT(0);
 > > 
-> > 	Regards
-> > 		Oliver
-> 
-> Hello Oliver,
-> 
-> No, unfortunately I am not sure but I am missing the hardware to
-> properly test. I am quite sure that it fixes the problem in the C270
-> though :)
+> > Ick, no.
+> > 
+> > > +
+> > > +struct dentry *usb_debugfs_init(void)
+> > > +{
+> > > +	if (!usb_debug_root)
+> > > +		usb_debug_root = debugfs_create_dir("usb", NULL);
+> > > +
+> > > +	atomic_inc(&usb_debug_root_refcnt);
+> > > +
+> > > +	return usb_debug_root;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(usb_debugfs_init);
+> > > +
+> > > +void usb_debugfs_cleanup(void)
+> > > +{
+> > > +	if (atomic_dec_and_test(&usb_debug_root_refcnt)) {
+> > > +		debugfs_remove_recursive(usb_debug_root);
+> > > +		usb_debug_root = NULL;
+> > > +	}
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(usb_debugfs_cleanup);
+> > 
+> > Only remove the debugfs subdir if the usbcore module is removed. 
+> Both usbcore module and gadget module will use this "usb" subdir now.
+> Gadget module may still use it when remove usbcore module.
 
-Well, after all that time neither do I have the test hardware.
-And I doubt that for some reason only the C270 should be affected.
+Did you try to remove the usb-common module with the udc gadget module
+remaining loaded with this change in place?  I think you will find that
+it is impossible given that the udc gadget module now depends on a
+symbol in the usb-common code.
 
-> Thanks for that, since you were the author of the first commit.
+So again, just use the module reference counting logic to drive this
+functionality, don't create an atomic variable that duplicates the
+logic we already have in place today.
 
-I appreciate your patch, but I think teh safe option would be to do
-it for all models.
+thanks,
 
-	Regards
-		Oliver
-
-PS: Are you really in Montenegro or is that just a close address?
-
+greg k-h
