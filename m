@@ -2,102 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A77433CA1
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 02:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEEC33D01
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 04:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbfFDA4z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Jun 2019 20:56:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53366 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726163AbfFDA4y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 3 Jun 2019 20:56:54 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8345325A6B;
-        Tue,  4 Jun 2019 00:56:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559609813;
-        bh=GaJ4qL2HdoRrSICUeux3MYc8KHihlthK57DuSkvBIgk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=PwW8husjoaZuP0+GbeXzn7kOM2z+KNAFT1AHHZZYLMr37UIpmxR3uC22JXqJUhZUI
-         oAR8e29iybCsmwLv9TMxSiqIwCoLcC/G7YSUbdL5M5VyT0GwifdseSa0ESI4kf9MOG
-         6mBIuW1y791HDdRclyyZd5zd3yJjgN+0/x9nLz1E=
-Subject: Re: [PATCH] usbip: Replace unused kvec array with single variable in
- vhci_send_cmd_unlink()
-To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20190603150211.24926-1-suwan.kim027@gmail.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <cff86084-5b7b-c02e-69d5-3e0e801fd11f@kernel.org>
-Date:   Mon, 3 Jun 2019 18:56:52 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20190603150211.24926-1-suwan.kim027@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726205AbfFDCJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Jun 2019 22:09:13 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:38346 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726141AbfFDCJN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Jun 2019 22:09:13 -0400
+Received: by mail-qt1-f195.google.com with SMTP id l3so11984328qtj.5
+        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2019 19:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=A8Vzg318xmH58Z9a+fveMVNEFPv+xhZ4diThI/PeSOU=;
+        b=buvZBmdESQg2EGcwE9JW2BpWcJd2ZGCF9TR3Nl0JaADp8nCwpIUjD2n+4w4g4Tc8NM
+         GtQtIcwVYro54a64ui3Ruhl3c4DlWUi9tby7KYDl0BuFU4428iLus5Ml7WL3f6MB1sfs
+         NGFbOyboJX4OYYeZdOycQjy046leQXEztkikHlpcDRWmwyx4OpZgGMNwWwNDFXo7XFMz
+         9WJRB7cVJvH7p7SXBDDDk2wlnjm/h4GzO9Z1TTaqQuNKrVVJAyBdk66iD4QilUCwAqmZ
+         OfCznTKkspJ9K2+KGozpQqrNngGYN0ftP5aIw6a15MV4+HQvaYpQrLjrmqCBHN8RwcKT
+         jB9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=A8Vzg318xmH58Z9a+fveMVNEFPv+xhZ4diThI/PeSOU=;
+        b=AhOUJ30UqtgYymjSXMKVhFzc3H+JldLOv6/T7QDzoAt6ZF3DYKts9d2MBNMO6AaOvW
+         4SIO8UQ1lPL4YVUP+/QLbfwbrDDyqNP9AO+z9grvigQ5aM7p26RsEteOErm1kSEoHJad
+         FOFr1BcJoSslslXIu5caJjcOkjKcTjScRRkDKPcsjv7Ha2FXsjnT+yaMCgXvCRxOMb2u
+         Glkzo4MytnCZH8wOVTJ8jf5HASDB06D6tUofVBDGy6QFOV+aFdrsGnqNdvA9SgV2LXOS
+         y0PrTWivMXxyT7g6TqIE2yYSM5pdx4GKaINEcNQcYv9E8oItrRl338BEzr0Qzlf7j9rr
+         ygXQ==
+X-Gm-Message-State: APjAAAWODhiU7HZ+o6ScxO55SiuhSdkT8CioBSnSKv6N1KGAdRJ3lxt2
+        sZBUcRwYTLyCMzjhsQcCqaD/rnac
+X-Google-Smtp-Source: APXvYqwLENJw30qpVSOq+34Wri0oVx/5zygUppGbYbkxdZiqZNcqoHp0qE9v+e1a7aYTPgIHHu4lHg==
+X-Received: by 2002:aed:2bc1:: with SMTP id e59mr5936211qtd.7.1559614152130;
+        Mon, 03 Jun 2019 19:09:12 -0700 (PDT)
+Received: from fabio-Latitude-E5450.am.freescale.net ([2804:14c:482:3c8:56cb:1049:60d2:137b])
+        by smtp.gmail.com with ESMTPSA id 45sm12102276qtn.82.2019.06.03.19.09.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jun 2019 19:09:11 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     Peter.Chen@nxp.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH] usb: chipidea: Use dev_err() instead of pr_err()
+Date:   Mon,  3 Jun 2019 23:09:01 -0300
+Message-Id: <20190604020901.15197-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/3/19 9:02 AM, Suwan Kim wrote:
-> vhci_send_cmd_unlink() declears kvec array of size 3 but it actually
-> uses just one element of the array. So, remove kvec array and replace
-> it with single kvec variable.
-> 
-> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> ---
->   drivers/usb/usbip/vhci_tx.c | 12 +++++-------
->   1 file changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/usbip/vhci_tx.c b/drivers/usb/usbip/vhci_tx.c
-> index 9aed15a358b7..2fa26d0578d7 100644
-> --- a/drivers/usb/usbip/vhci_tx.c
-> +++ b/drivers/usb/usbip/vhci_tx.c
-> @@ -144,16 +144,14 @@ static int vhci_send_cmd_unlink(struct vhci_device *vdev)
->   	struct vhci_unlink *unlink = NULL;
->   
->   	struct msghdr msg;
-> -	struct kvec iov[3];
-> +	struct kvec iov;
->   	size_t txsize;
-> -
->   	size_t total_size = 0;
->   
->   	while ((unlink = dequeue_from_unlink_tx(vdev)) != NULL) {
->   		int ret;
->   		struct usbip_header pdu_header;
->   
-> -		txsize = 0;
->   		memset(&pdu_header, 0, sizeof(pdu_header));
->   		memset(&msg, 0, sizeof(msg));
->   		memset(&iov, 0, sizeof(iov));
-> @@ -169,11 +167,11 @@ static int vhci_send_cmd_unlink(struct vhci_device *vdev)
->   
->   		usbip_header_correct_endian(&pdu_header, 1);
->   
-> -		iov[0].iov_base = &pdu_header;
-> -		iov[0].iov_len  = sizeof(pdu_header);
-> -		txsize += sizeof(pdu_header);
-> +		iov.iov_base = &pdu_header;
-> +		iov.iov_len  = sizeof(pdu_header);
-> +		txsize = sizeof(pdu_header);
->   
-> -		ret = kernel_sendmsg(vdev->ud.tcp_socket, &msg, iov, 1, txsize);
-> +		ret = kernel_sendmsg(vdev->ud.tcp_socket, &msg, &iov, 1, txsize);
->   		if (ret != txsize) {
->   			pr_err("sendmsg failed!, ret=%d for %zd\n", ret,
->   			       txsize);
-> 
+dev_err() is more appropriate for printing error messages inside
+drivers, so switch to dev_err().
 
-Looks good to me.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ drivers/usb/chipidea/core.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 27749ace2d93..1b6495829265 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -523,8 +523,9 @@ int hw_device_reset(struct ci_hdrc *ci)
+ 	hw_write(ci, OP_USBMODE, USBMODE_SLOM, USBMODE_SLOM);
+ 
+ 	if (hw_read(ci, OP_USBMODE, USBMODE_CM) != USBMODE_CM_DC) {
+-		pr_err("cannot enter in %s device mode", ci_role(ci)->name);
+-		pr_err("lpm = %i", ci->hw_bank.lpm);
++		dev_err(ci->dev, "cannot enter in %s device mode",
++			ci_role(ci)->name);
++		dev_err(ci->dev, "lpm = %i", ci->hw_bank.lpm);
+ 		return -ENODEV;
+ 	}
+ 
+-- 
+2.17.1
 
-thanks,
--- Shuah
