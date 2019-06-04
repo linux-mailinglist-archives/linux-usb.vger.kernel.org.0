@@ -2,85 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2C633EB3
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 08:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29DD33F15
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 08:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbfFDGDa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 02:03:30 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:39434 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726136AbfFDGDa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 02:03:30 -0400
-Received: by mail-lj1-f193.google.com with SMTP id a10so15234250ljf.6
-        for <linux-usb@vger.kernel.org>; Mon, 03 Jun 2019 23:03:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=i2zQuakiG65DKwTnUcLO7LrQSuNy84OsGfJd0B0W8E0=;
-        b=a2gHthCETx7YLWV25cCfZiOio7rfXAhJfVn6xEN6+7AT8sG0l67huI7Kxc5BceHXmR
-         Hdp+1UsZ6H1MAFK/LjTA+Mt9wk7Df/vqXYy47+0ep8uyQnk0/TMx3q9l/0UxHgjuZl2h
-         ptmm5q4X3u30OtXY2QU+WLtk5q0gtkjmrAYlkxRQd8NpzD8LXh3XbM5SN/k35VBIouqH
-         YrXWfcoHq0QVB9IH+EtgFLbiqrzWbxx3iybpfjhlA7MpStBZcSsnmZwVS11iM4JECVUu
-         nlUg6WRh5NG0d02N47DP4fes1UEutfGcv/h4czh/p3FuZG70hF49kzL8J32lqrh1asYD
-         ViDg==
-X-Gm-Message-State: APjAAAUWqxv1kkSbVVCUVhnS2GgI2+xY8rrX8tJIxdM/FhCYYLMZYE9R
-        9Il0KTtqJsbh6UJqY89rXZQ=
-X-Google-Smtp-Source: APXvYqxhE0+G3UqzflobQvS++uxR7skK8yTEtUNpI3Uz2qKFhWD1RVb+ZuEnzQf6wR2xBWdct1H87w==
-X-Received: by 2002:a2e:6c01:: with SMTP id h1mr16599668ljc.103.1559628207942;
-        Mon, 03 Jun 2019 23:03:27 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id p1sm3588683ljj.1.2019.06.03.23.03.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 03 Jun 2019 23:03:27 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.91)
-        (envelope-from <johan@kernel.org>)
-        id 1hY2Xc-00076B-UB; Tue, 04 Jun 2019 08:03:24 +0200
-Date:   Tue, 4 Jun 2019 08:03:24 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Peter.Chen@nxp.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: chipidea: Use dev_err() instead of pr_err()
-Message-ID: <20190604060324.GF3668@localhost>
-References: <20190604020901.15197-1-festevam@gmail.com>
+        id S1726761AbfFDGm4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 02:42:56 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:32490 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726410AbfFDGm4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 02:42:56 -0400
+X-UUID: b1e17f24206b40989f4201573ba7bd9c-20190604
+X-UUID: b1e17f24206b40989f4201573ba7bd9c-20190604
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 333179411; Tue, 04 Jun 2019 14:42:39 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31DR.mediatek.inc
+ (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 4 Jun
+ 2019 14:42:38 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 4 Jun 2019 14:42:37 +0800
+Message-ID: <1559630557.8487.59.camel@mhfsdcap03>
+Subject: Re: [PATCH v6 07/10] usb: roles: Add fwnode_usb_role_switch_get()
+ function
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        "Badhri Jagan Sridharan" <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Yu Chen <chenyu56@huawei.com>
+Date:   Tue, 4 Jun 2019 14:42:37 +0800
+In-Reply-To: <20190603131901.GB10397@kroah.com>
+References: <1559115828-19146-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1559115828-19146-8-git-send-email-chunfeng.yun@mediatek.com>
+         <20190603131901.GB10397@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190604020901.15197-1-festevam@gmail.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 11:09:01PM -0300, Fabio Estevam wrote:
-> dev_err() is more appropriate for printing error messages inside
-> drivers, so switch to dev_err().
+On Mon, 2019-06-03 at 15:19 +0200, Greg Kroah-Hartman wrote:
+> On Wed, May 29, 2019 at 03:43:45PM +0800, Chunfeng Yun wrote:
+> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > 
+> > The fwnode_usb_role_switch_get() function is exactly the
+> > same as usb_role_switch_get(), except that it takes struct
+> > fwnode_handle as parameter instead of struct device.
+> > 
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> > v6:
+> >   new patch
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  drivers/usb/chipidea/core.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> If you are forwarding on a patch from someone else, like this, you need
+> to put your signed-off-by line on it as well.
 > 
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> index 27749ace2d93..1b6495829265 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -523,8 +523,9 @@ int hw_device_reset(struct ci_hdrc *ci)
->  	hw_write(ci, OP_USBMODE, USBMODE_SLOM, USBMODE_SLOM);
->  
->  	if (hw_read(ci, OP_USBMODE, USBMODE_CM) != USBMODE_CM_DC) {
-> -		pr_err("cannot enter in %s device mode", ci_role(ci)->name);
-> -		pr_err("lpm = %i", ci->hw_bank.lpm);
-> +		dev_err(ci->dev, "cannot enter in %s device mode",
-> +			ci_role(ci)->name);
-> +		dev_err(ci->dev, "lpm = %i", ci->hw_bank.lpm);
+> Please fix that up, and add the tested-by one, when you resend this
+> series.
+Got it, thanks
 
-Please also add the missing newlines '\n' (and check if there are more
-instances of that mistake in this driver).
+> 
+> thanks,
+> 
+> greg k-h
 
->  		return -ENODEV;
->  	}
 
-Johan
