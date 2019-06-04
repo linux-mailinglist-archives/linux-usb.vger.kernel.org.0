@@ -2,141 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66876342F1
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0057834316
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 11:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbfFDJOq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 05:14:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48704 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726948AbfFDJOq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jun 2019 05:14:46 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4270D21976;
-        Tue,  4 Jun 2019 09:14:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559639685;
-        bh=jRInVvoH/Jp1WAAgsg3CtkKKgWZbOrkmzFm+ATVyo4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ItT/JG4j7Zw1Qmygon0KfYYZbV5gsZ0jmQm7Wq34OweZyE9lEUG9ikxPolTdHn/6+
-         z3COdTJE5fN+MdHQ3HW4VnNmQ7yWQdfWxapfzxMzMiiHjO+WKC1SIku9tlhVJWgcPh
-         Qft/vN8ZHEvD9vPc2rBKJyRY4xZRXicaqJKcbeQk=
-Date:   Tue, 4 Jun 2019 11:14:43 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v4] usb: create usb_debug_root for gadget only
-Message-ID: <20190604091443.GA458@kroah.com>
-References: <1559633647-29040-1-git-send-email-chunfeng.yun@mediatek.com>
- <20190604073706.GA25045@kroah.com>
- <1559638754.8487.71.camel@mhfsdcap03>
+        id S1726997AbfFDJXu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 05:23:50 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:42611 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726877AbfFDJXt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 05:23:49 -0400
+Received: by mail-lf1-f65.google.com with SMTP id y13so15875980lfh.9;
+        Tue, 04 Jun 2019 02:23:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WEKyb8uTtW2nlixza2b1BlJpCFBifaSgzv/gxrO/6ig=;
+        b=GNeDiTWVgsAZFAmgADmEBgqkx+XU7jNRC0ceUpGlsFtK73vs5uSafjv9fysnpMH4Tk
+         pnMiSoXUksk69BacuYWTkDtQyBpxw0mBWAxzIf8WvkXUAEIAD+hh9qrSTk1USt4tMSJP
+         neyqokNqTN9Ww3dDfWlHrTQ5j6pRq44aHbD7xhe7yLzqDnLr56rlEIGm1FGv2d4ZQ5xy
+         4EmMx3FPqn4KoyAvse5gDzv0+zp54VcndavfEsgnA65kOW58D5MrOCcQU8+XxPTdE8cT
+         RI1StvryIj5d/xzx0zmancpjUnVfqS9xxR+4jYQqesv9HgfqFP2oFbet6o9KvxOIIHAv
+         asxA==
+X-Gm-Message-State: APjAAAW/4tnJPlmyCGZfg/PgM5k12KYBKZ3jFDS+DQlxiXnPoURZieto
+        MRi3R4+cjXo4b4ReqkGo/NO2S5Ew/BeUJ78/q/e/0cE7
+X-Google-Smtp-Source: APXvYqyIxr36IS1LAnUxZlMf951L1abvvle0io4evXb2lWXMADRTLp/O8+KlJT32mDqkGg8eynLJnJiZyeiAdNC9O4U=
+X-Received: by 2002:ac2:546a:: with SMTP id e10mr16257154lfn.75.1559640227823;
+ Tue, 04 Jun 2019 02:23:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1559638754.8487.71.camel@mhfsdcap03>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+References: <1559621375-5436-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+ <1559621375-5436-2-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+In-Reply-To: <1559621375-5436-2-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 4 Jun 2019 11:23:35 +0200
+Message-ID: <CAMuHMdX7CBOZsJ5YwLeN7ay=P8z+o6kVK0W68gMXXyqo=XOaLA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: renesas_usbhs: remove sudmac support
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 04, 2019 at 04:59:14PM +0800, Chunfeng Yun wrote:
-> On Tue, 2019-06-04 at 09:37 +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Jun 04, 2019 at 03:34:07PM +0800, Chunfeng Yun wrote:
-> > > When CONFIG_USB is not set, and CONFIG_USB_GADGET is set,
-> > > there is an issue, e.g.:
-> > > 
-> > > drivers/usb/mtu3/mtu3_debugfs.o: in function 'ssusb_debugfs_create_root':
-> > > mtu3_debugfs.c:(.text+0xba3): undefined reference to 'usb_debug_root'
-> > > 
-> > > usb_debug_root is currently only built when host is supported
-> > > (CONFIG_USB is set), for convenience, we also want it created when
-> > > gadget only is enabled, this patch try to support it.
-> > > 
-> > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > ---
-> > > v4:
-> > >   move common API into common.c suggested by Felipe
-> > > 
-> > > v3:
-> > >   1. still create usb_debug_root for gadget only
-> > >   2. abandon mtu3's change
-> > >   3. drop acked-by Randy
-> > > 
-> > > v2(resend): add acked-by Randy
-> > > 
-> > > v1: fix mtu3's build error, replace usb_debug_root by NULL;
-> > > ---
-> > >  drivers/usb/common/common.c   | 26 ++++++++++++++++++++++++++
-> > >  drivers/usb/core/usb.c        | 16 ++++------------
-> > >  drivers/usb/gadget/udc/core.c |  3 +++
-> > >  include/linux/usb.h           |  2 ++
-> > >  4 files changed, 35 insertions(+), 12 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-> > > index 18f5dcf58b0d..c52e9c9f58ec 100644
-> > > --- a/drivers/usb/common/common.c
-> > > +++ b/drivers/usb/common/common.c
-> > > @@ -15,6 +15,7 @@
-> > >  #include <linux/usb/of.h>
-> > >  #include <linux/usb/otg.h>
-> > >  #include <linux/of_platform.h>
-> > > +#include <linux/debugfs.h>
-> > >  
-> > >  static const char *const ep_type_names[] = {
-> > >  	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
-> > > @@ -139,6 +140,31 @@ enum usb_dr_mode usb_get_dr_mode(struct device *dev)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(usb_get_dr_mode);
-> > >  
-> > > +struct dentry *usb_debug_root;
-> > > +EXPORT_SYMBOL_GPL(usb_debug_root);
-> > > +
-> > > +static atomic_t usb_debug_root_refcnt = ATOMIC_INIT(0);
-> > 
-> > Ick, no.
-> > 
-> > > +
-> > > +struct dentry *usb_debugfs_init(void)
-> > > +{
-> > > +	if (!usb_debug_root)
-> > > +		usb_debug_root = debugfs_create_dir("usb", NULL);
-> > > +
-> > > +	atomic_inc(&usb_debug_root_refcnt);
-> > > +
-> > > +	return usb_debug_root;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(usb_debugfs_init);
-> > > +
-> > > +void usb_debugfs_cleanup(void)
-> > > +{
-> > > +	if (atomic_dec_and_test(&usb_debug_root_refcnt)) {
-> > > +		debugfs_remove_recursive(usb_debug_root);
-> > > +		usb_debug_root = NULL;
-> > > +	}
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(usb_debugfs_cleanup);
-> > 
-> > Only remove the debugfs subdir if the usbcore module is removed. 
-> Both usbcore module and gadget module will use this "usb" subdir now.
-> Gadget module may still use it when remove usbcore module.
+On Tue, Jun 4, 2019 at 6:14 AM Yoshihiro Shimoda
+<yoshihiro.shimoda.uh@renesas.com> wrote:
+> SUDMAC featurer was supported in v3.10, but was never used by
+> any platform. So, this patch removes it.
+>
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-Did you try to remove the usb-common module with the udc gadget module
-remaining loaded with this change in place?  I think you will find that
-it is impossible given that the udc gadget module now depends on a
-symbol in the usb-common code.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-So again, just use the module reference counting logic to drive this
-functionality, don't create an atomic variable that duplicates the
-logic we already have in place today.
+Gr{oetje,eeting}s,
 
-thanks,
+                        Geert
 
-greg k-h
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
