@@ -2,65 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4C834690
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 14:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3F4346F0
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 14:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727403AbfFDMZS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 08:25:18 -0400
-Received: from mga14.intel.com ([192.55.52.115]:18595 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726994AbfFDMZS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jun 2019 08:25:18 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jun 2019 05:25:17 -0700
-X-ExtLoop1: 1
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jun 2019 05:25:15 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] USB: move usb debugfs directory creation to the usb common core
-In-Reply-To: <20190604093258.GB30054@kroah.com>
-References: <20190604093258.GB30054@kroah.com>
-Date:   Tue, 04 Jun 2019 15:25:14 +0300
-Message-ID: <87tvd5illh.fsf@linux.intel.com>
+        id S1727793AbfFDMf6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 4 Jun 2019 08:35:58 -0400
+Received: from mail02.inet.sy ([212.11.196.40]:47411 "HELO mail02.inet.sy"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
+        id S1727398AbfFDMf6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Jun 2019 08:35:58 -0400
+X-Greylist: delayed 406 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jun 2019 08:35:56 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail02.inet.sy (Postfix) with ESMTP id A20491634A9;
+        Tue,  4 Jun 2019 15:29:04 +0300 (EEST)
+X-Virus-Scanned: Debian amavisd-new at mail03.inet.sy
+X-Spam-Flag: NO
+X-Spam-Score: 6.357
+X-Spam-Level: ******
+X-Spam-Status: No, score=6.357 tagged_above=-999 required=7
+        tests=[BAYES_50=0.8, FREEMAIL_FROM=0.001, FREEMAIL_REPLYTO=1,
+        LOTS_OF_MONEY=0.001, SPF_FAIL=0.001, SPF_HELO_NONE=0.001,
+        SPOOFED_FREEM_REPTO=2.499, TO_EQ_FM_DOM_SPF_FAIL=0.053,
+        TO_EQ_FM_SPF_FAIL=0.001, US_DOLLARS_3=2] autolearn=unavailable
+Received: from mail02.inet.sy ([127.0.0.1])
+        by localhost (mail02.inet.sy [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3zRyEAQtFVXG; Tue,  4 Jun 2019 15:29:04 +0300 (EEST)
+Received: from mail01.inet.sy (mail.inet.sy [212.11.196.115])
+        by mail02.inet.sy (Postfix) with ESMTP id 8A7241634A6;
+        Tue,  4 Jun 2019 15:29:04 +0300 (EEST)
+Received: from Mail-Exchange.firefite.local (unknown [212.11.218.206])
+        by mail01.inet.sy (Postfix) with ESMTP id 18B9A8EC046;
+        Tue,  4 Jun 2019 15:30:12 +0300 (EEST)
+Received: from Mail-Exchange.firefite.local (192.168.0.19) by
+ Mail-Exchange.firefite.local (192.168.0.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.1466.3; Tue, 4 Jun 2019 15:29:09 +0300
+Received: from Admin.localhost (105.186.0.15) by Mail-Exchange.firefite.local
+ (192.168.0.19) with Microsoft SMTP Server (version=TLS1_0,
+ cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.1.1466.3 via Frontend Transport;
+ Tue, 4 Jun 2019 15:29:03 +0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Award Notice
+To:     Recipients <hnkglobalpromo@brew-meister.com>
+From:   "Mrs. Vera Donald" <hnkglobalpromo@brew-meister.com>
+Date:   Tue, 4 Jun 2019 20:28:55 +0800
+Reply-To: <hp-fudiciaryagent@brew-meister.com>
+X-Antivirus: Avast (VPS 190604-1, 06/03/2019), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <0b87f420-81de-42ff-872c-c89fcea20e9e@Mail-Exchange.firefite.local>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+We are gleeful to inform you that your e-mail address eventually entered our 2019 online promotion that won you C$3,780,000.00 Canadian Dollars. Kindly respond for claim processing.
 
-Hi,
+Mrs. Vera Donald
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index 7fcb9f782931..f3d6b1ab80cb 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -1185,19 +1185,17 @@ static struct notifier_block usb_bus_nb = {
->  	.notifier_call = usb_bus_notify,
->  };
->  
-> -struct dentry *usb_debug_root;
-> -EXPORT_SYMBOL_GPL(usb_debug_root);
-> +static struct dentry *usb_devices_root;
->  
->  static void usb_debugfs_init(void)
->  {
-> -	usb_debug_root = debugfs_create_dir("usb", NULL);
-> -	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
-> -			    &usbfs_devices_fops);
-> +	usb_devices_root = debugfs_create_file("devices", 0444, usb_debug_root,
+---
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
 
-don't we have a race now? Can usbcore ever probe before usb common?
-
--- 
-balbi
