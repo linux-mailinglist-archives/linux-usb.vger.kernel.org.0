@@ -2,192 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3575934034
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 09:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B3134064
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 09:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbfFDHea (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 03:34:30 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:38643 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726589AbfFDHe3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 03:34:29 -0400
-X-UUID: 279c78d53c2e4bb39aa67cc19e446483-20190604
-X-UUID: 279c78d53c2e4bb39aa67cc19e446483-20190604
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 555060999; Tue, 04 Jun 2019 15:34:16 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 4 Jun 2019 15:34:15 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 4 Jun 2019 15:34:13 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v4] usb: create usb_debug_root for gadget only
-Date:   Tue, 4 Jun 2019 15:34:07 +0800
-Message-ID: <1559633647-29040-1-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1726942AbfFDHhK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 03:37:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57172 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726711AbfFDHhJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Jun 2019 03:37:09 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5F2DA249F4;
+        Tue,  4 Jun 2019 07:37:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559633828;
+        bh=yYjY9dPy0rYXxHJBZ1dR1jEtdGG5VdpSBr1YZrJynDk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DtKXT2B1mmCgfmSocSk422rsl4VwCBPwwgyDUn74Z9p1rd8VASnFg7wZ797DfmPo6
+         L76rjNkBWerw3wHawBdh2+nIVCt7FIxBYUL7nasWGYXLG+DS/jsLtTzzAxDcigSCqv
+         K1eZzEuWRcwO5TV5GhrOFWs/kPQkxzZSoG+m9z/I=
+Date:   Tue, 4 Jun 2019 09:37:06 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4] usb: create usb_debug_root for gadget only
+Message-ID: <20190604073706.GA25045@kroah.com>
+References: <1559633647-29040-1-git-send-email-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1559633647-29040-1-git-send-email-chunfeng.yun@mediatek.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When CONFIG_USB is not set, and CONFIG_USB_GADGET is set,
-there is an issue, e.g.:
+On Tue, Jun 04, 2019 at 03:34:07PM +0800, Chunfeng Yun wrote:
+> When CONFIG_USB is not set, and CONFIG_USB_GADGET is set,
+> there is an issue, e.g.:
+> 
+> drivers/usb/mtu3/mtu3_debugfs.o: in function 'ssusb_debugfs_create_root':
+> mtu3_debugfs.c:(.text+0xba3): undefined reference to 'usb_debug_root'
+> 
+> usb_debug_root is currently only built when host is supported
+> (CONFIG_USB is set), for convenience, we also want it created when
+> gadget only is enabled, this patch try to support it.
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v4:
+>   move common API into common.c suggested by Felipe
+> 
+> v3:
+>   1. still create usb_debug_root for gadget only
+>   2. abandon mtu3's change
+>   3. drop acked-by Randy
+> 
+> v2(resend): add acked-by Randy
+> 
+> v1: fix mtu3's build error, replace usb_debug_root by NULL;
+> ---
+>  drivers/usb/common/common.c   | 26 ++++++++++++++++++++++++++
+>  drivers/usb/core/usb.c        | 16 ++++------------
+>  drivers/usb/gadget/udc/core.c |  3 +++
+>  include/linux/usb.h           |  2 ++
+>  4 files changed, 35 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+> index 18f5dcf58b0d..c52e9c9f58ec 100644
+> --- a/drivers/usb/common/common.c
+> +++ b/drivers/usb/common/common.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/usb/of.h>
+>  #include <linux/usb/otg.h>
+>  #include <linux/of_platform.h>
+> +#include <linux/debugfs.h>
+>  
+>  static const char *const ep_type_names[] = {
+>  	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
+> @@ -139,6 +140,31 @@ enum usb_dr_mode usb_get_dr_mode(struct device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(usb_get_dr_mode);
+>  
+> +struct dentry *usb_debug_root;
+> +EXPORT_SYMBOL_GPL(usb_debug_root);
+> +
+> +static atomic_t usb_debug_root_refcnt = ATOMIC_INIT(0);
 
-drivers/usb/mtu3/mtu3_debugfs.o: in function 'ssusb_debugfs_create_root':
-mtu3_debugfs.c:(.text+0xba3): undefined reference to 'usb_debug_root'
+Ick, no.
 
-usb_debug_root is currently only built when host is supported
-(CONFIG_USB is set), for convenience, we also want it created when
-gadget only is enabled, this patch try to support it.
+> +
+> +struct dentry *usb_debugfs_init(void)
+> +{
+> +	if (!usb_debug_root)
+> +		usb_debug_root = debugfs_create_dir("usb", NULL);
+> +
+> +	atomic_inc(&usb_debug_root_refcnt);
+> +
+> +	return usb_debug_root;
+> +}
+> +EXPORT_SYMBOL_GPL(usb_debugfs_init);
+> +
+> +void usb_debugfs_cleanup(void)
+> +{
+> +	if (atomic_dec_and_test(&usb_debug_root_refcnt)) {
+> +		debugfs_remove_recursive(usb_debug_root);
+> +		usb_debug_root = NULL;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(usb_debugfs_cleanup);
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v4:
-  move common API into common.c suggested by Felipe
+Only remove the debugfs subdir if the usbcore module is removed.  Create
+the debugfs subdir when the usbcore module is loaded.  No need for any
+reference counting of any sort at all.  No need to overthink this :)
 
-v3:
-  1. still create usb_debug_root for gadget only
-  2. abandon mtu3's change
-  3. drop acked-by Randy
+thanks,
 
-v2(resend): add acked-by Randy
-
-v1: fix mtu3's build error, replace usb_debug_root by NULL;
----
- drivers/usb/common/common.c   | 26 ++++++++++++++++++++++++++
- drivers/usb/core/usb.c        | 16 ++++------------
- drivers/usb/gadget/udc/core.c |  3 +++
- include/linux/usb.h           |  2 ++
- 4 files changed, 35 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-index 18f5dcf58b0d..c52e9c9f58ec 100644
---- a/drivers/usb/common/common.c
-+++ b/drivers/usb/common/common.c
-@@ -15,6 +15,7 @@
- #include <linux/usb/of.h>
- #include <linux/usb/otg.h>
- #include <linux/of_platform.h>
-+#include <linux/debugfs.h>
- 
- static const char *const ep_type_names[] = {
- 	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
-@@ -139,6 +140,31 @@ enum usb_dr_mode usb_get_dr_mode(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(usb_get_dr_mode);
- 
-+struct dentry *usb_debug_root;
-+EXPORT_SYMBOL_GPL(usb_debug_root);
-+
-+static atomic_t usb_debug_root_refcnt = ATOMIC_INIT(0);
-+
-+struct dentry *usb_debugfs_init(void)
-+{
-+	if (!usb_debug_root)
-+		usb_debug_root = debugfs_create_dir("usb", NULL);
-+
-+	atomic_inc(&usb_debug_root_refcnt);
-+
-+	return usb_debug_root;
-+}
-+EXPORT_SYMBOL_GPL(usb_debugfs_init);
-+
-+void usb_debugfs_cleanup(void)
-+{
-+	if (atomic_dec_and_test(&usb_debug_root_refcnt)) {
-+		debugfs_remove_recursive(usb_debug_root);
-+		usb_debug_root = NULL;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(usb_debugfs_cleanup);
-+
- #ifdef CONFIG_OF
- /**
-  * of_usb_get_dr_mode_by_phy - Get dual role mode for the controller device
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 7fcb9f782931..9d8db7faf75f 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -1185,19 +1185,11 @@ static struct notifier_block usb_bus_nb = {
- 	.notifier_call = usb_bus_notify,
- };
- 
--struct dentry *usb_debug_root;
--EXPORT_SYMBOL_GPL(usb_debug_root);
--
--static void usb_debugfs_init(void)
-+static void usb_core_debugfs_init(void)
- {
--	usb_debug_root = debugfs_create_dir("usb", NULL);
--	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
--			    &usbfs_devices_fops);
--}
-+	struct dentry *root = usb_debugfs_init();
- 
--static void usb_debugfs_cleanup(void)
--{
--	debugfs_remove_recursive(usb_debug_root);
-+	debugfs_create_file("devices", 0444, root, NULL, &usbfs_devices_fops);
- }
- 
- /*
-@@ -1212,7 +1204,7 @@ static int __init usb_init(void)
- 	}
- 	usb_init_pool_max();
- 
--	usb_debugfs_init();
-+	usb_core_debugfs_init();
- 
- 	usb_acpi_register();
- 	retval = bus_register(&usb_bus_type);
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 7cf34beb50df..8ef000b9baa4 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1597,12 +1597,15 @@ static int __init usb_udc_init(void)
- 	}
- 
- 	udc_class->dev_uevent = usb_udc_uevent;
-+	usb_debugfs_init();
-+
- 	return 0;
- }
- subsys_initcall(usb_udc_init);
- 
- static void __exit usb_udc_exit(void)
- {
-+	usb_debugfs_cleanup();
- 	class_destroy(udc_class);
- }
- module_exit(usb_udc_exit);
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index ae82d9d1112b..175e4a0b1847 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1995,6 +1995,8 @@ extern void usb_unregister_notify(struct notifier_block *nb);
- 
- /* debugfs stuff */
- extern struct dentry *usb_debug_root;
-+extern struct dentry *usb_debugfs_init(void);
-+extern void usb_debugfs_cleanup(void);
- 
- /* LED triggers */
- enum usb_led_event {
--- 
-2.21.0
-
+greg k-h
