@@ -2,98 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC5234967
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 15:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF918349DB
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Jun 2019 16:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbfFDNux (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 09:50:53 -0400
-Received: from mga02.intel.com ([134.134.136.20]:39344 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727129AbfFDNux (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jun 2019 09:50:53 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jun 2019 06:50:52 -0700
-X-ExtLoop1: 1
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by orsmga007.jf.intel.com with ESMTP; 04 Jun 2019 06:50:50 -0700
-Subject: Re: [PATCH] xhci: clear port_remote_wakeup after resume failure
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     oneukum@suse.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190524145231.6605-1-nsaenzjulienne@suse.de>
- <eb5d9252-1283-be73-96d6-c24a0fdf1eab@linux.intel.com>
- <e2dd83c5dbba1bb9bd300285285ab07135dc6166.camel@suse.de>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <9286ec05-d2a2-bd23-3397-b6a3623cad8f@linux.intel.com>
-Date:   Tue, 4 Jun 2019 16:53:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1727413AbfFDOPH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 4 Jun 2019 10:15:07 -0400
+Received: from mail02.inet.sy ([212.11.196.40]:51623 "HELO mail02.inet.sy"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
+        id S1727287AbfFDOPH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Jun 2019 10:15:07 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail02.inet.sy (Postfix) with ESMTP id 758B4164E23;
+        Tue,  4 Jun 2019 17:15:01 +0300 (EEST)
+X-Virus-Scanned: Debian amavisd-new at mail03.inet.sy
+X-Spam-Flag: NO
+X-Spam-Score: 6.358
+X-Spam-Level: ******
+X-Spam-Status: No, score=6.358 tagged_above=-999 required=7
+        tests=[BAYES_50=0.8, FREEMAIL_FROM=0.001, FREEMAIL_REPLYTO=1,
+        LOTS_OF_MONEY=0.001, MONEY_FRAUD_5=0.001, SPF_FAIL=0.001,
+        SPF_HELO_NONE=0.001, SPOOFED_FREEM_REPTO=2.499,
+        TO_EQ_FM_DOM_SPF_FAIL=0.053, TO_EQ_FM_SPF_FAIL=0.001, US_DOLLARS_3=2]
+        autolearn=unavailable
+Received: from mail02.inet.sy ([127.0.0.1])
+        by localhost (mail02.inet.sy [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id W7embeCU+WyU; Tue,  4 Jun 2019 17:15:01 +0300 (EEST)
+Received: from mail01.inet.sy (mail.inet.sy [212.11.196.115])
+        by mail02.inet.sy (Postfix) with ESMTP id 5DE06164E22;
+        Tue,  4 Jun 2019 17:15:01 +0300 (EEST)
+Received: from Mail-Exchange.firefite.local (unknown [212.11.218.206])
+        by mail01.inet.sy (Postfix) with ESMTP id 15F068EC025;
+        Tue,  4 Jun 2019 17:16:09 +0300 (EEST)
+Received: from Mail-Exchange.firefite.local (192.168.0.19) by
+ Mail-Exchange.firefite.local (192.168.0.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.1466.3; Tue, 4 Jun 2019 17:15:05 +0300
+Received: from Admin.localhost (105.186.0.15) by Mail-Exchange.firefite.local
+ (192.168.0.19) with Microsoft SMTP Server (version=TLS1_0,
+ cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.1.1466.3 via Frontend Transport;
+ Tue, 4 Jun 2019 17:14:59 +0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <e2dd83c5dbba1bb9bd300285285ab07135dc6166.camel@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Award Notice
+To:     Recipients <hnkglobalpromo@brew-meister.com>
+From:   "Mrs. Vera Donald" <hnkglobalpromo@brew-meister.com>
+Date:   Tue, 4 Jun 2019 22:14:51 +0800
+Reply-To: <hp-fudiciaryagent@brew-meister.com>
+X-Antivirus: Avast (VPS 190604-2, 06/04/2019), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <e5ddbac1-5ceb-4511-8998-8df14c3063fc@Mail-Exchange.firefite.local>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 27.5.2019 14.28, Nicolas Saenz Julienne wrote:
-> Hi Matthias,
-> thanks for the review.
-> 
-> On Mon, 2019-05-27 at 14:16 +0300, Mathias Nyman wrote:
->> On 24.5.2019 17.52, Nicolas Saenz Julienne wrote:
->>> This was seen on a Dell Precision 5520 using it's WD15 dock. The dock's
->>> Ethernet device interfaces with the laptop through one of it's USB3
->>> ports. While idle, the Ethernet device and HCD are suspended by runtime
->>> PM, being the only device connected on the bus. Then, both are resumed on
->>> behalf of the Ethernet device, which has remote wake-up capabilities.
->>>
->>> The Ethernet device was observed to randomly disconnect from the USB
->>> port shortly after submitting it's remote wake-up request. Probably a
->>> weird timing issue yet to be investigated. This causes runtime PM to
->>> busyloop causing some tangible CPU load. The reason is the port gets
->>> stuck in the middle of a remote wake-up operation, waiting for the
->>> device to switch to U0. This never happens, leaving "port_remote_wakeup"
->>> enabled, and automatically triggering a failure on any further suspend
->>> operation.
->>>
->>> This patch clears "port_remote_wakeup" upon detecting a device with a
->>> wrong resuming port state (see Table 4-9 in 4.15.2.3). Making sure the
->>> above mentioned situation doesn't trigger a PM busyloop.
->>>
->>
->> There was a similar case where the USB3 link had transitioned to a
->> lower power U1 or U2 state after resume, before driver read the state,
->> leaving port_remote_wakeup flag uncleared.
->>
->> This was fixed in 5.1 kernel by commit:
->>
->> 6cbcf59 xhci: Fix port resume done detection for SS ports with LPM enable
->>
->> Can you check if you have it?
->> It should be in recent stable releases as well.
-> 
-> I was aware of that patch, unfortunately it doesn't address the same issue. In
-> my case I never get a second port status event (so no PLC == 1 or any state
-> change seen in PLS). The device simply disconnects from the bus.
-> 
+We are gleeful to inform you that your e-mail address eventually entered our 2019 online promotion that won you C$3,780,000.00 Canadian Dollars. Claim No:HGP/748/89-3PL. Keep your claim number confidential until claim.
 
-I see, ok, then we need to clear the flag in the hub thread.
+Contact our office immediately with details below to commence release of your winning prize by providing your winning details above.
 
-But to me it looks like this patch could cause a small race risk in the successful
-device initiated resume cases.
+Mr. Vorst Paxton
+Email: hp-fudiciaryagent@brew-meister.com
+Alternative e-Mail: heinekenglobalpromo@gmail.com
+Office: +1-438-700-9141
 
-If the hub thread, i.e. the get_port_status() function, notices the U0 state before
-the interrupt handler, i.e. handle_port_status() function, then port_remote_wakeup
-flag is cleared in the hub thread and the wakeup notification is never called from
-handle_port_status().
+Congratulations!!!
 
-Would it be enough to just check for (port_remote_wakeup flag && !PORT_CONNECT) in the hub thread?
-USB3 PORT_CONNECT bit is lost in most error cases.
+Yours Sincerely,
 
--Mathias
+Mrs. Vera Donald
+Head of Award Department
+Heineken Global Promotion
+
+---
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
