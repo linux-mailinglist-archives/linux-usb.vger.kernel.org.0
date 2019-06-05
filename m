@@ -2,92 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A77FF35F02
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0589A35F13
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728246AbfFEOSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 10:18:48 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:42865 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727904AbfFEOSr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 10:18:47 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q10so4705878pff.9;
-        Wed, 05 Jun 2019 07:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=/kbLXj/2o2HvwHqCd08UzWTDA8h4P12DlInHOlJGg0k=;
-        b=bvnbWzJ/IuzTHAp+GV7XYne5Np3trktMt24KYENkCeIZBrssGfAVRyqeHmraxxsC1Q
-         f/gvwDzfGPHsn7OdUUjjuJex480svivtSn+QlMBOYFaNwl3pCgGVX9IC6G+ufO4xDfIt
-         K98LrfRuzeTWTxuYTyYa5clUtIDlo5OiQu7DnLPvGilLyX0C40ORPFH4MMmTbH7ipiHP
-         6rx2VbkLIxpMbE4vsq8GVNqV32pemqR7Lz4sB1lkxa0C+JlusxEcvfQymge3IFuOXo7s
-         mnZ2QVMbPqfbYS9ECvODdvt75DfkrRAelS7dvfKaZPWyw2qHKHlFRivsU2ggvDd5nQCZ
-         vqPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=/kbLXj/2o2HvwHqCd08UzWTDA8h4P12DlInHOlJGg0k=;
-        b=kwGk7MwJ5NuWPhaOozVWj4gwwHzNiTscUahKOCVtqfjlH4/EvK38X+hxa3jsKjxgrr
-         armegECMtrr8nSfpy1LP99fb2Ks7zQ1m2XzhBSH0VpxSveQ3cxGy4+3hlmfWwP5o9WqJ
-         3QZadSl/V1MkffdRdGcAs3vbA6sTM1dDzWFXLJ2MX0szub2Ls5vraDfd4m2nHTQwUIr6
-         AiJn1HwzW6++5H/BN0QK1PBxqIc634SxVg6UK9wtzgdy/5TnCPT4NL4Apn73rSz77va3
-         EQO+sFyVjqJPvK4UILOO5Y1mTZ1IoOfGDY7lc33dWx8KxjRs46RcoUAUFiZ+lF6HHFLo
-         8MXA==
-X-Gm-Message-State: APjAAAWAvXMj9ItXHyBw73qhFIZm+ttaS8Wld57NMoMiuwCWpex+0x15
-        xqG7hMmmb9+5k6AqREqzUYg=
-X-Google-Smtp-Source: APXvYqwXDEYq9kiH2wKwVz0PVnlUNFr+xhEr4Q1C1Je3EEQP3udttWvv1qMXVAHIvoGJuvo52Cv1LQ==
-X-Received: by 2002:a17:90a:8982:: with SMTP id v2mr44140003pjn.136.1559744327204;
-        Wed, 05 Jun 2019 07:18:47 -0700 (PDT)
-Received: from hari-Inspiron-1545 ([183.83.89.153])
-        by smtp.gmail.com with ESMTPSA id j2sm26134353pfb.157.2019.06.05.07.18.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 07:18:46 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 19:48:42 +0530
-From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Mukesh Ojha <mojha@codeaurora.org>, Kangjie Lu <kjlu@umn.edu>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: host: u132-hcd: remove unneeded variable frame
-Message-ID: <20190605141842.GA7212@hari-Inspiron-1545>
+        id S1728233AbfFEOVh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 10:21:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38550 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728211AbfFEOVg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 10:21:36 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BD7DE206C3;
+        Wed,  5 Jun 2019 14:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559744496;
+        bh=WVBtNhofdnvJkq53voJWvebrCLkrn2IcpEjJMYTbD3c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mULR2d1z0acGiN9m1WRM0rCuDE1IcZROX0NOevHm6j79IABCmJlcMbBvORFnBaV2V
+         FMIdQKwxv0Y3nH4jlrgYJ9ndN4pRQZLRLedBcxMoQK3KCJiqJBMYcZ7hHPPu4MPv1N
+         cN1O0j75fabr1XaDk5iokhEjtuh6eGRVAPOPqJ4E=
+Date:   Wed, 5 Jun 2019 16:21:33 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Peter.Chen@nxp.com, johan@kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: chipidea: Use dev_err() instead of pr_err()
+Message-ID: <20190605142133.GB8803@kroah.com>
+References: <20190605130723.9184-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190605130723.9184-1-festevam@gmail.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch fixes below issue reported by coccicheck
+On Wed, Jun 05, 2019 at 10:07:23AM -0300, Fabio Estevam wrote:
+> dev_err() is more appropriate for printing error messages inside
+> drivers, so switch to dev_err().
+> 
+> While at it also add the missing newlines and remove 'device'
+> string as the ci_role(ci)->name string will tell if it is host
+> or gadget.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> Changes since v1:
+> - Add missing newlines (Johan)
+> - Remove 'device' string
+> 
+>  drivers/usb/chipidea/core.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index 27749ace2d93..92132b35b7fd 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -523,8 +523,9 @@ int hw_device_reset(struct ci_hdrc *ci)
+>  	hw_write(ci, OP_USBMODE, USBMODE_SLOM, USBMODE_SLOM);
+>  
+>  	if (hw_read(ci, OP_USBMODE, USBMODE_CM) != USBMODE_CM_DC) {
+> -		pr_err("cannot enter in %s device mode", ci_role(ci)->name);
+> -		pr_err("lpm = %i", ci->hw_bank.lpm);
+> +		dev_err(ci->dev, "cannot enter in %s mode\n",
 
-drivers/usb/host/u132-hcd.c:2557:6-11: Unneeded variable: "frame".
-Return "0" on line 2560
+You changed the string text, why?
 
-Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
----
- drivers/usb/host/u132-hcd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/host/u132-hcd.c b/drivers/usb/host/u132-hcd.c
-index 4a5c9b5..400c40b 100644
---- a/drivers/usb/host/u132-hcd.c
-+++ b/drivers/usb/host/u132-hcd.c
-@@ -2554,10 +2554,9 @@ static int u132_get_frame(struct usb_hcd *hcd)
- 		dev_err(&u132->platform_dev->dev, "device is being removed\n");
- 		return -ESHUTDOWN;
- 	} else {
--		int frame = 0;
- 		dev_err(&u132->platform_dev->dev, "TODO: u132_get_frame\n");
- 		mdelay(100);
--		return frame;
-+		return 0;
- 	}
- }
- 
--- 
-2.7.4
-
+greg k-h
