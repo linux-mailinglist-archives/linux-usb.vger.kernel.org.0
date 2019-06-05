@@ -2,244 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4375B35AD0
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 13:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E323D35B6B
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 13:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727231AbfFELCN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 07:02:13 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:27292 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726502AbfFELCN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 07:02:13 -0400
-X-UUID: 62358f7f558746279a4e7c9afa609bd4-20190605
-X-UUID: 62358f7f558746279a4e7c9afa609bd4-20190605
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1997192840; Wed, 05 Jun 2019 19:01:57 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 5 Jun
- 2019 19:01:55 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 5 Jun 2019 19:01:55 +0800
-Message-ID: <1559732515.8487.106.camel@mhfsdcap03>
-Subject: Re: [PATCH v2] USB: move usb debugfs directory creation to the usb
- common core
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Wed, 5 Jun 2019 19:01:55 +0800
-In-Reply-To: <20190605092816.GA23758@kroah.com>
-References: <20190605092816.GA23758@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
-X-MTK:  N
+        id S1727219AbfFELnJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 07:43:09 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37771 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727307AbfFELnJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 07:43:09 -0400
+Received: by mail-wr1-f66.google.com with SMTP id v14so1465505wrr.4
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 04:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=nQjqkj1EN8NC8Ay0yEHmwn6X2HJX2TtkXyONunIjoOQ=;
+        b=RH78oA+NxoAk2QUd4m2HOQ8dyN2sCxrVo+FvNDasZKbmuqv5dUteK2nYHr3AU8dZY2
+         lL6O731jO9kBau+KvwCnnF2pv2zQNFqiUY9zOrc3A4LrxHgl9/zAkEPJlQwGcvHZMo/w
+         T5Q+bajSnI9mx+6X4Pf9VCvK19Rxr/TWdt13E2G4DlLn2iW89yA4kT0OaSSfHFXfqVw2
+         wsqz5uFfMcqQjg4rZ9X+5QJeBFThsy8V7siule0Y3MR04je8W6A0+CQYQsv0XPB0SH1t
+         zd6JjCDEnS9YTtARJbgAB90xZpf4QrVjQTx3SGk0eBWm1D1i41b7bUq302Rnt1ZCH8ac
+         ByZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=nQjqkj1EN8NC8Ay0yEHmwn6X2HJX2TtkXyONunIjoOQ=;
+        b=Xp+rCuwapjHj3PP9jojKAhnVB5EAagM1WYs0NG1Hk3AYBqLOvZHk4083Y3VUuAA7Qh
+         yY61Wjnd7q71CTnpjQHvb1R8nt3w6Zc3fexYKJLerk2jxJ+hpBrFmDpj8BIsHTzaTrxw
+         Bp9BJO/qj28gw+6NegNnP6n1uTfFZIbw5SaMStXrOh3/RACmD0RUjat0gxXkE4mqBFZq
+         jAv9huNeUYrrg3cYr+d0E+g3HmMyjwrIdj3Wf66LrtnJl5bCJZFo57I4KH409ou2m34d
+         O0sKItXkQ+zlTnF0LaBNeOZGuiV0M52Rpvj5TQEGVV2NHO6hwScBLJVh0DSMcwURLmNh
+         6EfA==
+X-Gm-Message-State: APjAAAUUJUV1bPDQGYGniqzouqgv/ETWc23bdEYMfxmLU/N0+wnYgcMG
+        hVUhkAc6mePniNqsd0ZsoeGNKA==
+X-Google-Smtp-Source: APXvYqzW/Zk1QYpnjxkfpZRt3FJnFpmA3XMOWzcM86U3SMvvL1uOdSy1dK3RIaWGRhxFidbFe5xSCw==
+X-Received: by 2002:a5d:5702:: with SMTP id a2mr9341914wrv.89.1559734987545;
+        Wed, 05 Jun 2019 04:43:07 -0700 (PDT)
+Received: from localhost.localdomain ([2.27.167.43])
+        by smtp.gmail.com with ESMTPSA id 34sm27718740wre.32.2019.06.05.04.43.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 04:43:06 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     alokc@codeaurora.org, andy.gross@linaro.org,
+        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
+        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 1/8] i2c: i2c-qcom-geni: Provide support for ACPI
+Date:   Wed,  5 Jun 2019 12:42:55 +0100
+Message-Id: <20190605114302.22509-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
-On Wed, 2019-06-05 at 11:28 +0200, Greg Kroah-Hartman wrote:
-> The USB gadget subsystem wants to use the USB debugfs root directory, so
-> move it to the common "core" USB code so that it is properly initialized
-> and removed as needed.
-> 
-> In order to properly do this, we need to load the common code before the
-> usb core code, when everything is linked into the kernel, so reorder the
-> link order of the code.
-> 
-> Also as the usb common code has the possibility of the led trigger logic
-> to be merged into it, handle the build option properly by only having
-> one module init/exit function and have the common code initialize the
-> led trigger if needed.
-> 
-> Reported-by: From: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> 
-> Chunfeng, can you test this version to verify it works for you when
-> building the code into the kernel?
-> 
-> v2: handle led common code link error reported by kbuild
->     handle subsys_initcall issue pointed out by Chunfeng
-> 
->  drivers/usb/Makefile        |  3 +--
->  drivers/usb/common/common.c | 21 +++++++++++++++++++++
->  drivers/usb/common/common.h | 14 ++++++++++++++
->  drivers/usb/common/led.c    |  9 +++------
->  drivers/usb/core/usb.c      | 10 ++++------
->  5 files changed, 43 insertions(+), 14 deletions(-)
->  create mode 100644 drivers/usb/common/common.h
-> 
-> diff --git a/drivers/usb/Makefile b/drivers/usb/Makefile
-> index 7d1b8c82b208..ecc2de1ffaae 100644
-> --- a/drivers/usb/Makefile
-> +++ b/drivers/usb/Makefile
-> @@ -5,6 +5,7 @@
->  
->  # Object files in subdirectories
->  
-> +obj-$(CONFIG_USB_COMMON)	+= common/
->  obj-$(CONFIG_USB)		+= core/
->  obj-$(CONFIG_USB_SUPPORT)	+= phy/
->  
-> @@ -60,8 +61,6 @@ obj-$(CONFIG_USB_CHIPIDEA)	+= chipidea/
->  obj-$(CONFIG_USB_RENESAS_USBHS)	+= renesas_usbhs/
->  obj-$(CONFIG_USB_GADGET)	+= gadget/
->  
-> -obj-$(CONFIG_USB_COMMON)	+= common/
-> -
->  obj-$(CONFIG_USBIP_CORE)	+= usbip/
->  
->  obj-$(CONFIG_TYPEC)		+= typec/
-> diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-> index 18f5dcf58b0d..84a4423aaddf 100644
-> --- a/drivers/usb/common/common.c
-> +++ b/drivers/usb/common/common.c
-> @@ -15,6 +15,8 @@
->  #include <linux/usb/of.h>
->  #include <linux/usb/otg.h>
->  #include <linux/of_platform.h>
-> +#include <linux/debugfs.h>
-> +#include "common.h"
->  
->  static const char *const ep_type_names[] = {
->  	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
-> @@ -291,4 +293,23 @@ struct device *usb_of_get_companion_dev(struct device *dev)
->  EXPORT_SYMBOL_GPL(usb_of_get_companion_dev);
->  #endif
->  
-> +struct dentry *usb_debug_root;
-> +EXPORT_SYMBOL_GPL(usb_debug_root);
-> +
-> +static int usb_common_init(void)
-> +{
-> +	usb_debug_root = debugfs_create_dir("usb", NULL);
-> +	ledtrig_usb_init();
-> +	return 0;
-> +}
-> +
-> +static void usb_common_exit(void)
-> +{
-> +	ledtrig_usb_exit();
-> +	debugfs_remove_recursive(usb_debug_root);
-> +}
-> +
-When enable CONFIG_LED_TRIGGER, there is a warning
+Add a match table to allow automatic probing of ACPI device
+QCOM0220.  Ignore clock attainment errors.  Set default clock
+frequency value.
 
- MODPOST vmlinux.o
-WARNING: vmlinux.o(.text+0x68e300): Section mismatch in reference from
-the function usb_common_init() to the
-function .init.text:ledtrig_usb_init()
-The function usb_common_init() references
-the function __init ledtrig_usb_init().
-This is often because usb_common_init lacks a __init
-annotation or the annotation of ledtrig_usb_init is wrong.
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/i2c/busses/i2c-qcom-geni.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-WARNING: vmlinux.o(.text+0x68e318): Section mismatch in reference from
-the function usb_common_exit() to the
-function .exit.text:ledtrig_usb_exit()
-The function usb_common_exit() references a function in an exit section.
-Often the function ledtrig_usb_exit() has valid usage outside the exit
-section
-and the fix is to remove the __exit annotation of ledtrig_usb_exit.
-
-seems need add __init and __exit for usb_common_init/exit
-
-> +subsys_initcall(usb_common_init);
-> +module_exit(usb_common_exit);
-> +
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/usb/common/common.h b/drivers/usb/common/common.h
-> new file mode 100644
-> index 000000000000..424a91316a4b
-> --- /dev/null
-> +++ b/drivers/usb/common/common.h
-> @@ -0,0 +1,14 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef __LINUX_USB_COMMON_H
-> +#define __LINUX_USB_COMMON_H
-> +
-> +#if defined(CONFIG_USB_LED_TRIG)
-> +void ledtrig_usb_init(void);
-> +void ledtrig_usb_exit(void);
-> +#else
-> +static inline void ledtrig_usb_init(void) { }
-> +static inline void ledtrig_usb_exit(void) { }
-> +#endif
-> +
-> +#endif	/* __LINUX_USB_COMMON_H */
-> diff --git a/drivers/usb/common/led.c b/drivers/usb/common/led.c
-> index 7bd81166b77d..0865dd44a80a 100644
-> --- a/drivers/usb/common/led.c
-> +++ b/drivers/usb/common/led.c
-> @@ -10,6 +10,7 @@
->  #include <linux/init.h>
->  #include <linux/leds.h>
->  #include <linux/usb.h>
-> +#include "common.h"
->  
->  #define BLINK_DELAY 30
->  
-> @@ -36,18 +37,14 @@ void usb_led_activity(enum usb_led_event ev)
->  EXPORT_SYMBOL_GPL(usb_led_activity);
->  
-> 
-> -static int __init ledtrig_usb_init(void)
-> +void __init ledtrig_usb_init(void)
->  {
->  	led_trigger_register_simple("usb-gadget", &ledtrig_usb_gadget);
->  	led_trigger_register_simple("usb-host", &ledtrig_usb_host);
-> -	return 0;
->  }
->  
-> -static void __exit ledtrig_usb_exit(void)
-> +void __exit ledtrig_usb_exit(void)
->  {
->  	led_trigger_unregister_simple(ledtrig_usb_gadget);
->  	led_trigger_unregister_simple(ledtrig_usb_host);
->  }
-> -
-> -module_init(ledtrig_usb_init);
-> -module_exit(ledtrig_usb_exit);
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index 7fcb9f782931..5a0df527a8ca 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -1185,19 +1185,17 @@ static struct notifier_block usb_bus_nb = {
->  	.notifier_call = usb_bus_notify,
->  };
->  
-> -struct dentry *usb_debug_root;
-> -EXPORT_SYMBOL_GPL(usb_debug_root);
-> +static struct dentry *usb_devices_root;
->  
->  static void usb_debugfs_init(void)
->  {
-> -	usb_debug_root = debugfs_create_dir("usb", NULL);
-> -	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
-> -			    &usbfs_devices_fops);
-> +	usb_devices_root = debugfs_create_file("devices", 0444, usb_debug_root,
-> +					       NULL, &usbfs_devices_fops);
->  }
->  
->  static void usb_debugfs_cleanup(void)
->  {
-> -	debugfs_remove_recursive(usb_debug_root);
-> +	debugfs_remove(usb_devices_root);
->  }
->  
->  /*
-
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index db075bc0d952..0fa93b448e8d 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
+ 
++#include <linux/acpi.h>
+ #include <linux/clk.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/err.h>
+@@ -483,6 +484,12 @@ static const struct i2c_algorithm geni_i2c_algo = {
+ 	.functionality	= geni_i2c_func,
+ };
+ 
++static const struct acpi_device_id geni_i2c_acpi_match[] = {
++	{ "QCOM0220"},
++	{ },
++};
++MODULE_DEVICE_TABLE(acpi, geni_i2c_acpi_match);
++
+ static int geni_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct geni_i2c_dev *gi2c;
+@@ -502,7 +509,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
+ 		return PTR_ERR(gi2c->se.base);
+ 
+ 	gi2c->se.clk = devm_clk_get(&pdev->dev, "se");
+-	if (IS_ERR(gi2c->se.clk)) {
++	if (IS_ERR(gi2c->se.clk) && !ACPI_HANDLE(&pdev->dev)) {
+ 		ret = PTR_ERR(gi2c->se.clk);
+ 		dev_err(&pdev->dev, "Err getting SE Core clk %d\n", ret);
+ 		return ret;
+@@ -510,12 +517,19 @@ static int geni_i2c_probe(struct platform_device *pdev)
+ 
+ 	ret = device_property_read_u32(&pdev->dev, "clock-frequency",
+ 							&gi2c->clk_freq_out);
+-	if (ret) {
++	if (ret && !ACPI_HANDLE(&pdev->dev)) {
+ 		dev_info(&pdev->dev,
+ 			"Bus frequency not specified, default to 100kHz.\n");
+ 		gi2c->clk_freq_out = KHZ(100);
+ 	}
+ 
++	if (ACPI_HANDLE(&pdev->dev)) {
++		ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(&pdev->dev));
++
++		/* Using default, same as the !ACPI case above */
++		gi2c->clk_freq_out = KHZ(100);
++	}
++
+ 	gi2c->irq = platform_get_irq(pdev, 0);
+ 	if (gi2c->irq < 0) {
+ 		dev_err(&pdev->dev, "IRQ error for i2c-geni\n");
+@@ -660,6 +674,7 @@ static struct platform_driver geni_i2c_driver = {
+ 		.name = "geni_i2c",
+ 		.pm = &geni_i2c_pm_ops,
+ 		.of_match_table = geni_i2c_dt_match,
++		.acpi_match_table = ACPI_PTR(geni_i2c_acpi_match),
+ 	},
+ };
+ 
+-- 
+2.17.1
 
