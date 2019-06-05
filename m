@@ -2,99 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D77535C53
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 14:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D6A35C58
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 14:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727592AbfFEMJO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 08:09:14 -0400
-Received: from mail-eopbgr1410127.outbound.protection.outlook.com ([40.107.141.127]:27472
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726305AbfFEMJO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 08:09:14 -0400
+        id S1727536AbfFEMLX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 08:11:23 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33943 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726305AbfFEMLW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 08:11:22 -0400
+Received: by mail-pf1-f196.google.com with SMTP id c85so5936163pfc.1;
+        Wed, 05 Jun 2019 05:11:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z04kfF10zxZdWzkt2V/e/SFELaUpasJPu/wRWdJJIpg=;
- b=E3Ss5OAs9rT4c4bYVlkvTATj53uE8Hsh+DTmmAE9G3kmAb0k6YN60hmScyEJ2A+uHnAH3IiOzh9gTIVqzVRIv8NxrcDjmYPO8Fug1sstQMcs8i1MIVyRrysh41PEQvCounhEDTdomULAxh8QAFQ4LFX3jVSkjlhztxzH7UBDMrk=
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
- OSAPR01MB1683.jpnprd01.prod.outlook.com (52.134.232.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1965.12; Wed, 5 Jun 2019 12:09:10 +0000
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::19ad:b6ce:a287:dc85]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::19ad:b6ce:a287:dc85%7]) with mapi id 15.20.1943.018; Wed, 5 Jun 2019
- 12:09:10 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: RE: rcar_gen3_phy_usb2: unbalanced disables for USB20_VBUS0
-Thread-Topic: rcar_gen3_phy_usb2: unbalanced disables for USB20_VBUS0
-Thread-Index: AQHVGwA/6yZMGZVP4EW1AZzw0OBf96aMbWQggAA2D4CAAFUo0A==
-Date:   Wed, 5 Jun 2019 12:09:10 +0000
-Message-ID: <OSAPR01MB30895B18E4874231396BFEBED8160@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-References: <CAMuHMdUObtKUVDohLT501TarPRC6eDnxBqqB5Tj_Tb+-4fwbkw@mail.gmail.com>
- <OSAPR01MB30890E4B76F9605F3726C676D8160@OSAPR01MB3089.jpnprd01.prod.outlook.com>
- <CAMuHMdXWsNfj1UYXDyh4ZJ0E2Z0jobug4jJ4uTpUa1X4d+Hocw@mail.gmail.com>
-In-Reply-To: <CAMuHMdXWsNfj1UYXDyh4ZJ0E2Z0jobug4jJ4uTpUa1X4d+Hocw@mail.gmail.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0404256c-d93a-4aaf-c1e7-08d6e9ae9e21
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB1683;
-x-ms-traffictypediagnostic: OSAPR01MB1683:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <OSAPR01MB16831065A7320FFA716DBA71D8160@OSAPR01MB1683.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 00594E8DBA
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(376002)(396003)(39860400002)(136003)(189003)(199004)(102836004)(86362001)(53936002)(26005)(74316002)(53546011)(5660300002)(6506007)(66946007)(71200400001)(71190400001)(6916009)(9686003)(52536014)(476003)(66556008)(73956011)(66476007)(64756008)(66446008)(6436002)(305945005)(7736002)(99286004)(486006)(478600001)(76116006)(7696005)(446003)(256004)(14444005)(6306002)(76176011)(966005)(11346002)(55016002)(186003)(68736007)(14454004)(4326008)(3846002)(54906003)(66066001)(6116002)(6246003)(81166006)(81156014)(8676002)(8936002)(229853002)(25786009)(33656002)(2906002)(316002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB1683;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 7dOCbNDgYqLQacF9KeqSQuLqcFAioDrMplazg9qo0RfFOD4ocHlgyGIkJb6lMC3h2ohcdX1aXiE43jxGLE+w99TZKlxF7JTHIDd97totQvYjJ449+5xl9kTpZL0DxHT2Ttp9UTfpawq5cHZxmAVb3vENZeMKI+/iaDG1MZC57UupkjbA/VxviiY5kQzJWX4LwUQRSjU8JniBRqJF7p0REhzZXrAl8i4GA4oEhN+3ubxBDPsD4xK4/xZ9N3YXjXboTG1a6/Z6vxe9P1+TW3qRbJicVX9Z5HHF710innOQl3ceh0Y2lMVG4j45jVy6UdkE1UmTnVP3//p2CG5kMOuep+WTgpQ+TcWBgBhkoDqvvgRUj5fRbzQYWWNPGvjfyDZ9SYbpEbfNKB/jeQR2sVcZP4ljvEGZ0SQVS/iOL0WDEUI=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=0VttWoGeA31c+2HzIYdX6LBJx8qWi/Su25TJGeVD+lc=;
+        b=ZAgoWy5UXnUyYxUnO8a97KJkK8S5ZwfQbzliMcuFGF5wJCS5QTunurNFF1CsElLMln
+         WjKHBI/RI65POLDgTqTuEJJulsSPIAaFaQvdJD/yQhvfxEOjFyiVQN22Ojmw9PJvB5kk
+         jzcHhGdI/ve6Tie/C8gawHf9vJFTCLsmKv7VnCeZn5HWgWslTpyMDALN3PKad+FE9SAT
+         P1p2CzGDz7zNP6l+8qvGbRypkYGn9YNlj3Nng8FRDSqYeLM8OPEg+9u/CFFQTWWnv7pZ
+         7rx/Gy2C1fbo1neEyn2f4+SgiGcu2D0w94tRKn5v8uq8BwbciVwY3RetEeqC6YkTDe8z
+         +bjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=0VttWoGeA31c+2HzIYdX6LBJx8qWi/Su25TJGeVD+lc=;
+        b=AvFvnNrAzlOMo5ujeblPj3XpKj3kfbXz6kG/lnF63bHRwCl6efScjgDvfPdTB+K9Bn
+         vz811DbMNPyQ7gnLnJWzo9EDwacSlqVV1ywiYsDcjBNJvsMTh0JmzfZqXXBlvM3nqdwU
+         zn8710t0mS15ytOYot9zn6qySYqbnDvtIY8RNDQOhXAQ1j7IYQ2IzQ9QqokverpGGYyD
+         IR/arL7eyS0mb34uf59FltcLcTdSnckoXPfMOAFUwSI0DAWYhmBUMypz35D/dLwRxOMB
+         9SYw5scuPgaM3ZzQr+3BFmOQmy4oyGtGD9p5gq2zMoLmK0kSlB6nkoyYgUEZPHP6tUKr
+         pn1w==
+X-Gm-Message-State: APjAAAVoQg8LKd/wKlVWUdbXR2NywqjI0AyVCVwiVgMB3U+8a4kR5n+2
+        5pvVMMe6H7n6bWeEuP9QSYQ=
+X-Google-Smtp-Source: APXvYqz2jOOChrGTnN1pOtlc9Ifhcp1FAReD38lXlHEm7M9HVHDPC1f/UQ4A+msSCasdtIJWKtoOjQ==
+X-Received: by 2002:a62:d0:: with SMTP id 199mr15757825pfa.253.1559736682058;
+        Wed, 05 Jun 2019 05:11:22 -0700 (PDT)
+Received: from hari-Inspiron-1545 ([183.83.89.153])
+        by smtp.gmail.com with ESMTPSA id t14sm2424182pgg.33.2019.06.05.05.11.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 05:11:21 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 17:41:17 +0530
+From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Anton Vasilyev <vasilyev@ispras.ru>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fotg210-udc: Remove unneeded variable
+Message-ID: <20190605121117.GA4729@hari-Inspiron-1545>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0404256c-d93a-4aaf-c1e7-08d6e9ae9e21
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2019 12:09:10.4768
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB1683
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgR2VlcnQtc2FuLA0KDQo+IEZyb206IEdlZXJ0IFV5dHRlcmhvZXZlbiwgU2VudDogV2VkbmVz
-ZGF5LCBKdW5lIDUsIDIwMTkgNDowMyBQTQ0KPiANCj4gSGkgU2hpbW9kYS1zYW4sDQo+IA0KPiBP
-biBXZWQsIEp1biA1LCAyMDE5IGF0IDY6MDYgQU0gWW9zaGloaXJvIFNoaW1vZGENCj4gPHlvc2hp
-aGlyby5zaGltb2RhLnVoQHJlbmVzYXMuY29tPiB3cm90ZToNCj4gPiA+IEZyb206IEdlZXJ0IFV5
-dHRlcmhvZXZlbiwgU2VudDogV2VkbmVzZGF5LCBKdW5lIDUsIDIwMTkgMzowNiBBTQ0KPiA+ID4g
-VXNpbmcgYSB0cmVlIGJhc2VkIG9uIHJlbmVzYXMtZHJpdmVycy0yMDE5LTA2LTA0LXY1LjItcmMz
-LCBJIHN0YXJ0ZWQgc2VlaW5nDQo+ID4gPiB0aGUgZm9sbG93aW5nIHdhcm5pbmcgZHVyaW5nIGEg
-c2Vjb25kIHN5c3RlbSBzdXNwZW5kIChzMmlkbGUpOg0KPiA+IDxzbmlwPg0KPiA+ID4gU28gZmFy
-IEkndmUgc2VlbiB0aGlzIG9uIFNhbHZhdG9yLVggd2l0aCBSLUNhciBIMyBFUzEuMCBvciBNMy1X
-LCBhbmQNCj4gPiA+IG9uIFNhbHZhdG9yLVhTIHdpdGggUi1DYXIgTTMtTiwgYnV0IG5vdCAoeWV0
-Pykgb24gSDMgRVMyLjAuDQo+ID4NCj4gPiBJIGNvdWxkIHJlcHJvZHVjZSB0aGlzIGlzc3VlIG9u
-IFItQ2FyIEgzIEVTMy4wIHdpdGggU3VzcGVuZC10by1SQU0uDQo+ID4gIyBJJ20gc2lsbHkgYnV0
-IEkgY291bGQgbm90IHVzZSBzMmlkbGUgdGhhdCBkaWRuJ3Qgd2FrZSB1cCBieSByYXZiLg0KPiA+
-ICMgaHR0cHM6Ly9lbGludXgub3JnL1ItQ2FyL0JvYXJkcy9TYWx2YXRvci1YI1N1c3BlbmQtdG8t
-SWRsZQ0KPiANCj4gV2l0aCBDT05GSUdfUE1fREVCVUc9eSBhbmQgQ09ORklHX1BNX1RFU1RfU1VT
-UEVORD15LCB5b3UgY2FuIHVzZQ0KPiANCj4gICAgICBlY2hvIHBsYXRmb3JtID4gL3N5cy9wb3dl
-ci9wbV90ZXN0DQo+IA0KPiB0byBjb25maWd1cmUgdGhlIHN5c3RlbSB0byB3YWtlIHVwIGZyb20g
-czJpZGxlIGFmdGVyIDUgc2Vjb25kcy4NCj4gVGhpcyBhbGxvd3MgdG8gbG9vcCBzMmlkbGUgd2l0
-aG91dCB1c2VyIGludGVydmVudGlvbi4NCg0KVGhhbmsgeW91IGZvciBleHBsYW5hdGlvbiEgSSBj
-b3VsZCB1c2UgaXQgb24gbXkgZW52aXJvbm1lbnQuDQoNCkJlc3QgcmVnYXJkcywNCllvc2hpaGly
-byBTaGltb2RhDQoNCg==
+This patch fixes below warning reported by coccicheck
+
+drivers/usb/gadget/udc/fotg210-udc.c:484:5-8: Unneeded variable: "ret".
+Return "0" on line 507
+
+Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+---
+ drivers/usb/gadget/udc/fotg210-udc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/fotg210-udc.c b/drivers/usb/gadget/udc/fotg210-udc.c
+index cec4929..21f3e6c 100644
+--- a/drivers/usb/gadget/udc/fotg210-udc.c
++++ b/drivers/usb/gadget/udc/fotg210-udc.c
+@@ -481,7 +481,6 @@ static int fotg210_set_halt_and_wedge(struct usb_ep *_ep, int value, int wedge)
+ 	struct fotg210_ep *ep;
+ 	struct fotg210_udc *fotg210;
+ 	unsigned long flags;
+-	int ret = 0;
+ 
+ 	ep = container_of(_ep, struct fotg210_ep, ep);
+ 
+@@ -504,7 +503,7 @@ static int fotg210_set_halt_and_wedge(struct usb_ep *_ep, int value, int wedge)
+ 	}
+ 
+ 	spin_unlock_irqrestore(&ep->fotg210->lock, flags);
+-	return ret;
++	return 0;
+ }
+ 
+ static int fotg210_ep_set_halt(struct usb_ep *_ep, int value)
+-- 
+2.7.4
+
