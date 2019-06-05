@@ -2,102 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01727360E4
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 18:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FCB360F2
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 18:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728671AbfFEQL4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 12:11:56 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:56846 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728560AbfFEQLz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 12:11:55 -0400
-Received: (qmail 5092 invoked by uid 2102); 5 Jun 2019 12:11:54 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 5 Jun 2019 12:11:54 -0400
-Date:   Wed, 5 Jun 2019 12:11:54 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrea Vai <andrea.vai@unipv.it>
-cc:     Greg KH <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
-Subject: Re: Slow I/O on USB media
-In-Reply-To: <4f2e5b456eb0f53b8c921465c1b1c4813b918f65.camel@unipv.it>
-Message-ID: <Pine.LNX.4.44L0.1906051206350.1788-100000@iolanthe.rowland.org>
+        id S1728585AbfFEQOn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 12:14:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45954 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728263AbfFEQOn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 12:14:43 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C17902075C;
+        Wed,  5 Jun 2019 16:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559751282;
+        bh=QYqVWfMWIB0tPswuWSBtKDQovqoyFIkrZ9uvkouGR8c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PY+yqkfPvixJgkCNeiT5YlkgobDTwArN2zzuz3iQQBii8p/3xfMZmtV8a0NpUVRZB
+         Bb4N3urjGJcRQXDZ9akEg378+onIYObDVBtUNZ85z1gHG2omihcRFca/B5/4W5bbrX
+         GHdFlgKCAk+SM7YnkIVMMuGdpDXRQorAXWUE4kfM=
+Date:   Wed, 5 Jun 2019 18:14:39 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
+        Dan Murphy <dmurphy@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wpan@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Peter Rosin <peda@axentia.se>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH 10/13] drivers: Introduce variants of class_find_device()
+Message-ID: <20190605161439.GB17272@kroah.com>
+References: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com>
+ <1559747630-28065-11-git-send-email-suzuki.poulose@arm.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1559747630-28065-11-git-send-email-suzuki.poulose@arm.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 5 Jun 2019, Andrea Vai wrote:
+On Wed, Jun 05, 2019 at 04:13:47PM +0100, Suzuki K Poulose wrote:
+> +/**
+> + * class_find_device_by_devt : device iterator for locating a particular device
+> + * matching the device type.
+> + * @class: class type
+> + * @start: device to start search from
+> + * @devt: device type of the device to match.
+> + */
+> +static inline struct device *class_find_device_by_devt(struct class *class,
+> +						       struct device *start,
+> +						       dev_t devt)
+> +{
+> +	return class_find_device(class, start, &devt, device_match_devt);
+> +}
 
-> Hi,
-> Il giorno mer, 05/06/2019 alle 10.26 -0400, Alan Stern ha scritto:
-> > On Wed, 5 Jun 2019, Andrea Vai wrote:
-> > 
-> > > Hi,
-> > > Il giorno mar, 04/06/2019 alle 07.43 +0200, Greg KH ha scritto:
-> > > > On Mon, Jun 03, 2019 at 01:13:48PM +0200, Andrea Vai wrote:
-> > > > > Il giorno gio, 30/05/2019 alle 06.25 -0700, Greg KH ha
-> > scritto:
-> > > > > > [...]
-> > > > > Hi,
-> > > > > 
-> > > > > > Any chance you can use 'git bisect' to find the offending
-> > > > commit?
-> > > > > Yes, I am doing it as I managed to build the kernel from
-> > source
-> > > > 
-> > > > Great!  What did you find?
-> > > 
-> > > # first bad commit: [534903d60376b4989b76ec445630aa10f2bc3043]
-> > > drm/atomic: Use explicit old crtc state in
-> > > drm_atomic_add_affected_planes()
-> > > 
-> > > By the way, as I am not expert, is there a way to double-check
-> > that I
-> > > bisected correctly? (such as, e.g., test with the version before
-> > this
-> > > one, and then with this commit applied?)
-> > 
-> > That is exactly the way to do it: Build a kernel from that commit
-> > and 
-> > see that it fails, then revert the commit and see that the
-> > resulting 
-> > kernel succeeds.
-> > 
-> > (Note: The notion of "version before" doesn't have a firm meaning
-> > in 
-> > the kernel, because some commits have multiple parents.  The best
-> > way 
-> > to see if a single commit caused a change is to do what I said
-> > above: 
-> > revert the commit and see what happens.)
-> ok, thank you for pointing it out. So, my question is: how to revert a
-> commit? (sorry, I prefer to ask you because I am afraid I could do
-> something wrong, and don't trust too much myself and what I pick up
-> searching on the web. In the special case, I found "git revert", but
-> for example how could I revert back a "reversion"? :-/ (I know I miss
-> the basis, I never worked with git, so sorry for the stupid
-> question)).
-
-In this case it's very simple, since the 534903d60376 commit does have 
-a single parent.  You can just do "git checkout 534903d60376^".
-
-More generally, you could do "git show 534903d60376 | git apply -R -".  
-That would tell git to write out the commit in the form of a patch and 
-then apply the patch in reverse.
-
-Alan Stern
-
-> > Incidentally, it seems very unlikely that a commit for the drm 
-> > subsystem would have any effect on the behavior of a USB storage 
-> > device.
-> 
-> well, I had the same doubt and that's the reason I was trying to do
-> the check: I'm afraid I have done something wrong or made a mess with
-> the bisect process.
-> 
-> Thank you,
-> Andrea
+Still has the start parameter, despite the changelog saying it would not
+:(
 
