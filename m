@@ -2,83 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FCB360F2
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 18:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD88536127
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 18:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728585AbfFEQOn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 12:14:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45954 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728263AbfFEQOn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 12:14:43 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C17902075C;
-        Wed,  5 Jun 2019 16:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559751282;
-        bh=QYqVWfMWIB0tPswuWSBtKDQovqoyFIkrZ9uvkouGR8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PY+yqkfPvixJgkCNeiT5YlkgobDTwArN2zzuz3iQQBii8p/3xfMZmtV8a0NpUVRZB
-         Bb4N3urjGJcRQXDZ9akEg378+onIYObDVBtUNZ85z1gHG2omihcRFca/B5/4W5bbrX
-         GHdFlgKCAk+SM7YnkIVMMuGdpDXRQorAXWUE4kfM=
-Date:   Wed, 5 Jun 2019 18:14:39 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Dan Murphy <dmurphy@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Jiri Slaby <jslaby@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wpan@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Peter Rosin <peda@axentia.se>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH 10/13] drivers: Introduce variants of class_find_device()
-Message-ID: <20190605161439.GB17272@kroah.com>
-References: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com>
- <1559747630-28065-11-git-send-email-suzuki.poulose@arm.com>
+        id S1728654AbfFEQYD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 12:24:03 -0400
+Received: from mail-wm1-f51.google.com ([209.85.128.51]:55446 "EHLO
+        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728630AbfFEQYD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 12:24:03 -0400
+Received: by mail-wm1-f51.google.com with SMTP id 16so2872699wmg.5
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 09:24:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=ZaMs/snBbpvg7XRuQ2l4FQcAh7uurMNccxIYMJb1RYw=;
+        b=G3WS3CLdMtdpEgRt8LdT9g9aXIW4znuxHldNimOYGQoMs0zCQebFvUJm1FdhI0N3Om
+         AoNd4eZwtcpS2XCqnEQknbE4rkxfDdI4MuVaUMNPlQ8kzNbUdi/+Rt7czHGrR4dHZL5C
+         V9hTlt1ctb4fuJ/kESxXv9tuLJ5b7lk3q56x+5tRxGdnZXx0JBODVYbJPsXOMXDDq/Kh
+         +Y9kiDBjJ7Wm+9uKshgRKWb4S7NRWQbYymMBqhiwYZl3aGgaEOaYTL92q+fBqe6HdXhY
+         PRtdDrFKICiec99v4mYvHGwuk0uT0erPGJ1wlGu/OWD0Xw1KTCcXSQW73wS2+UVB2Ckx
+         Jodg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=ZaMs/snBbpvg7XRuQ2l4FQcAh7uurMNccxIYMJb1RYw=;
+        b=K/lI88/1TXtaODodYvNA3B/bpTfPrrge6MQqj2Bl/wtIIxO1phYRYgOYJ83DhdBSv9
+         9bvnooaQUVHTCFIxd8t4ff8wiscW9djMk0OtHGNv3NVSOOyxHV9H/76N8LV9WQgk7/Ol
+         02ofXynqAgOtEv4v0Cpoj6ANboaYn8jpl7mfJWpm33gL8sE71beDCskgtU+UKmjEEaxL
+         w68LYNYllqhG/TvNoaQU/nwH4ZIXrZXk/duZHOKjFeWffZ8jZpVDzlWQqQNbOzRLmwFx
+         PGDRUybnjCXoM/Q3oXMrhq2h23wO/hZvLL7gGVDdV643ZLwqLcNpyb9jhJeJDXX+MQxM
+         tylA==
+X-Gm-Message-State: APjAAAUXIK1Y+JfwZJXusokv6/pzeDxpysF1LEoSOkLgAzrw1WzWXKLM
+        kC3g4h57FNPNKVXJFp/QYm2xkw==
+X-Google-Smtp-Source: APXvYqw5PN+qikdN+XUYdofCIGNq2CptGAZIRMMEQoiGQINzKauE6sGieVdnVdoWSZc/9hYrlc7BaQ==
+X-Received: by 2002:a1c:7217:: with SMTP id n23mr11203656wmc.47.1559751840910;
+        Wed, 05 Jun 2019 09:24:00 -0700 (PDT)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id f8sm13656078wrx.11.2019.06.05.09.23.58
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 05 Jun 2019 09:23:58 -0700 (PDT)
+Message-ID: <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it>
+Subject: Re: Slow I/O on USB media
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
+Date:   Wed, 05 Jun 2019 18:23:58 +0200
+In-Reply-To: <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
+References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
+         <20190530132522.GA21005@kroah.com>
+         <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
+         <20190604054300.GE1588@kroah.com>
+         <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
+         <20190605145525.GA28819@kroah.com>
+         <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1559747630-28065-11-git-send-email-suzuki.poulose@arm.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 04:13:47PM +0100, Suzuki K Poulose wrote:
-> +/**
-> + * class_find_device_by_devt : device iterator for locating a particular device
-> + * matching the device type.
-> + * @class: class type
-> + * @start: device to start search from
-> + * @devt: device type of the device to match.
-> + */
-> +static inline struct device *class_find_device_by_devt(struct class *class,
-> +						       struct device *start,
-> +						       dev_t devt)
-> +{
-> +	return class_find_device(class, start, &devt, device_match_devt);
-> +}
+Hi,
+Il giorno mer, 05/06/2019 alle 16.55 +0200, Greg KH ha scritto:
+> On Wed, Jun 05, 2019 at 09:36:04AM +0200, Andrea Vai wrote:
+> > Hi,
+> > Il giorno mar, 04/06/2019 alle 07.43 +0200, Greg KH ha scritto:
+> > > On Mon, Jun 03, 2019 at 01:13:48PM +0200, Andrea Vai wrote:
+> > > > Il giorno gio, 30/05/2019 alle 06.25 -0700, Greg KH ha
+> scritto:
+> > > > > [...]
+> > > > Hi,
+> > > > 
+> > > > > Any chance you can use 'git bisect' to find the offending
+> > > commit?
+> > > > Yes, I am doing it as I managed to build the kernel from
+> source
+> > > 
+> > > Great!  What did you find?
+> > 
+> > # first bad commit: [534903d60376b4989b76ec445630aa10f2bc3043]
+> > drm/atomic: Use explicit old crtc state in
+> > drm_atomic_add_affected_planes()
+> > 
+> > By the way, as I am not expert, is there a way to double-check
+> that I
+> > bisected correctly? (such as, e.g., test with the version before
+> this
+> > one, and then with this commit applied?)
+> 
+> How exactly are you "testing" this?
+> 
+> I would recommend a script that does something like:
+>       mount the disk somewhere
+>       copy a big file to it
+>       unmount the disk
+> 
+> testing how long the whole process takes, especially the 'unmount'
+> is
+> important.  Are you doing that?
 
-Still has the start parameter, despite the changelog saying it would not
-:(
+Well, not exactly, and thank you for pointing me out. I am doing the
+job in two ways, from the DE (when I am located at the PC), or in an
+ssh session when I am away. In ssh I manually mount the media, then
+run
+
+touch begin
+date
+<cp command>
+date
+touch end
+
+so I get the time kept looking at the output of "date", or at the date
+of the begin/end files. I understand that if I don't unmount the media
+I cannot be sure all data has been written, but if the cp command is
+still not finished after 20, 30 minutes then I can tag the commit as
+"bad". Since I obtained one "good" behavior only (1-2 minutes) among
+10+ tests, I took for sure it was a"good" commit, and I may have made
+a mistake there (because I am not sure I actually unmounted the
+media).
+
+If I use the DE (where the media is mounted automatically) I used to
+"eject" the media after the copy finished, and took note of the time
+used until the media was correctly "ejected" (and, so, unmounted).
+
+Anyway, I know that I can do all of this in a better way, and will let
+you know.
+
+> 
+> Also, you should probably just boot into text mode for this, most
+> graphical DEs like to auto-mount disks these days.
+
+Thank you for clarifying. As said above, actually I think I have took
+care of it, but I can do another bisect by turning off the automount
+feature of USB media in my DE, and mount/unmount only by command line.
+
+First of all, I will try to revert the commit, and see what happens.
+If the test fails, I will run another bisect.
+
+Thank you for your patience,
+Best regards
+Andrea
 
