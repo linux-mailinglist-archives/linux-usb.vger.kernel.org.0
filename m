@@ -2,155 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F853576C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 09:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01B635773
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 09:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbfFEHHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 03:07:34 -0400
-Received: from mail-eopbgr20080.outbound.protection.outlook.com ([40.107.2.80]:62209
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726536AbfFEHHe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 03:07:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zLAAt3BL+sGQp4G4btulciJGZrB7AfgtnguDDX6EvfU=;
- b=jF70+Es9DCcFZRI6sgfNHduCGIWgAHMXSlHiZ1EYssKN/kVYBJTqxNqQL9WwcR5mCiRLzkIBLaRki9XEqu+1mlEF7KyvMnOa0CRyJefRIezyxKfTd54U2LBxQherU7lGB4VY8NgBGbI2d2chdxzIlNPC7kBJQwoQGWKUw8q9aHI=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB4846.eurprd04.prod.outlook.com (20.177.49.15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.22; Wed, 5 Jun 2019 07:07:30 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9891:c973:a697:3c7b]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9891:c973:a697:3c7b%3]) with mapi id 15.20.1965.011; Wed, 5 Jun 2019
- 07:07:30 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Shawn Guo <shawnguo@kernel.org>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "chunfeng.yun@mediatek.com" <chunfeng.yun@mediatek.com>
-Subject: RE: [PATCH v3 6/8] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
-Thread-Topic: [PATCH v3 6/8] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
-Thread-Index: AQHVFDjwJwcxVExAwkGmD5zag5gWjKaMpnEAgAALr+A=
-Date:   Wed, 5 Jun 2019 07:07:30 +0000
-Message-ID: <VI1PR04MB53274359CFCA91AE6A3681678B160@VI1PR04MB5327.eurprd04.prod.outlook.com>
-References: <20190527030616.44397-1-peter.chen@nxp.com>
- <20190527030616.44397-7-peter.chen@nxp.com> <20190605062517.GF29853@dragon>
-In-Reply-To: <20190605062517.GF29853@dragon>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9bd2feaa-8643-4a11-da47-08d6e984799a
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4846;
-x-ms-traffictypediagnostic: VI1PR04MB4846:
-x-microsoft-antispam-prvs: <VI1PR04MB484652FCA720ACD74FA66AA78B160@VI1PR04MB4846.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3826;
-x-forefront-prvs: 00594E8DBA
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(366004)(136003)(39860400002)(376002)(199004)(189003)(53936002)(14444005)(256004)(55016002)(6436002)(9686003)(7736002)(66066001)(74316002)(99286004)(229853002)(71190400001)(71200400001)(44832011)(25786009)(5660300002)(6116002)(486006)(6246003)(476003)(6916009)(3846002)(11346002)(446003)(4326008)(86362001)(52536014)(33656002)(73956011)(6506007)(66476007)(66946007)(66556008)(66446008)(64756008)(76116006)(76176011)(7696005)(54906003)(316002)(102836004)(2906002)(8936002)(305945005)(68736007)(8676002)(81156014)(81166006)(478600001)(26005)(186003)(14454004);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4846;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: J6ZfiYXQEemDHuK223RWhdo6tBRF4MsNwEVinmU3LKjVDR+hY+qJoWPJ73M6zqvxWBEHSWNI+R3tRhw6MVAZDfxJJAtL8PS0bNgqHFAAxD2Ps76Wrs8tcultTp8Nap1SaoSdoYWYSCNWq9+GK5baEsAP20RQJvKkaKZwIH7n9kEputOwpUQz4JNBbXeDOKhSQTAQpl28yAnYcIc/+1Srx+xhgG22ia9F+sOogjUvdLTmgG43zH8/E51QwymS/rmYaP4HLmDYnm5M6HvhE5g9I1oI59FGkill3mbLPo60fmXDAEL2+w6YsdL1WuTTpPdntvPw/TxPBENbFQSl/fN0qI413dDq9aFQ+qHgJllmuemcvewHhGfTUGZ1V8v5jWbF/ZUYsnzYs8B3YGrDjsLo1EyCn62xbIl54feN41w36ls=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726555AbfFEHJc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 03:09:32 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:36498 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726467AbfFEHJc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 03:09:32 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n4so15237970wrs.3
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 00:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=k36dAzNmgaqwmQvMa36IwjM04BTSr/wOoDP6exbi8UY=;
+        b=x1WvdiqHLGUEpygoU7klJUijn/C602Fe/bjAvlUTzjx+mANGu6SbHM0cNO6C1aYO70
+         cgE5M3tcJMZUb4aa2iNdpqyoRySDK3DOzLY5GYYBvnlXRAbERMKwJvO6PChqSsf1grbr
+         lM1cAbcqFEloQ76z4a+rOMaDqeqlFIZ1AcQA3BufSn6WYNLsTeUUh8XbSM7MMI7XnGbm
+         IVRpU1osdykJhxWGwjYopNceGQeWq6Q1TJ+qnbrzaa5Wi+9jNVJQEWI2/ZhWPwjdPNQJ
+         UxEOQm5H4edvFoHK1Wk8x3DbaytJZIvDr+N0+Ck0k1WO/AkT3w1uc00d0s0YfgenW7AP
+         Nw/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=k36dAzNmgaqwmQvMa36IwjM04BTSr/wOoDP6exbi8UY=;
+        b=D9jtafpeznsf6hzZEdkhzRPBHUfuu1B4haWpg1Q2pMZ65EdVYPseUH1KXo7uYCk/7Z
+         G3bIQ69bijGfjMO2I2PeFy/tETE073trJOuZlGAmvTMtHbpgkvHJIL3sQXC3Lx1OmdwR
+         jecKrF6kCJU0IFeGaDG7gY7vOWz3klijsHLidJ5xNAyhN708StjpBZD7GZJI7NFEh7x6
+         dW52QbtV96zFwEDIJr/Io69EwcuADDHyUtasr4X3seJJIHZuBAH9rtjnklvZ2Wip0nhc
+         8LjPEjpjy3uZEzfUqdIPirL25dIGt8h2zP7nJoHbADOGyjCdSZNidg+1SWzJHgDg9Dbp
+         QStA==
+X-Gm-Message-State: APjAAAUdvJXRJtSCwAdcGOLo+dm/kNp/yhTDBCjL9+3zHDklhpo75thM
+        +STLT2eCD+VGyocg3RMWiDLw4g==
+X-Google-Smtp-Source: APXvYqxh5AFxtIbzQZRmSAlo9FC/qrjqBKRgVLtmMT2NgG+CeZHe6g4bUCTSorRYhPeYfhTb5pZX+w==
+X-Received: by 2002:a5d:690d:: with SMTP id t13mr6579006wru.93.1559718570730;
+        Wed, 05 Jun 2019 00:09:30 -0700 (PDT)
+Received: from dell ([2.27.167.43])
+        by smtp.gmail.com with ESMTPSA id c129sm2405930wma.27.2019.06.05.00.09.29
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 05 Jun 2019 00:09:30 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 08:09:28 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
+        andy.gross@linaro.org, david.brown@linaro.org,
+        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 6/8] usb: dwc3: qcom: Add support for booting with ACPI
+Message-ID: <20190605070928.GJ4797@dell>
+References: <20190604104455.8877-1-lee.jones@linaro.org>
+ <20190604104455.8877-6-lee.jones@linaro.org>
+ <20190605063507.GM22737@tuxbook-pro>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9bd2feaa-8643-4a11-da47-08d6e984799a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2019 07:07:30.3660
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: peter.chen@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4846
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190605063507.GM22737@tuxbook-pro>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> > ---
-> >  arch/arm/boot/dts/imx7ulp.dtsi | 31 +++++++++++++++++++++++++++++++
-> >  1 file changed, 31 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/imx7ulp.dtsi
-> > b/arch/arm/boot/dts/imx7ulp.dtsi index fca6e50f37c8..37b058119505
-> > 100644
-> > --- a/arch/arm/boot/dts/imx7ulp.dtsi
-> > +++ b/arch/arm/boot/dts/imx7ulp.dtsi
-> > @@ -30,6 +30,7 @@
-> >  		serial1 =3D &lpuart5;
-> >  		serial2 =3D &lpuart6;
-> >  		serial3 =3D &lpuart7;
-> > +		usbphy0 =3D &usbphy1;
-> >  	};
-> >
-> >  	cpus {
-> > @@ -133,6 +134,36 @@
-> >  			clock-names =3D "ipg", "per";
-> >  		};
-> >
-> > +		usbotg1: usb@40330000 {
-> > +			compatible =3D "fsl,imx7ulp-usb", "fsl,imx6ul-usb",
-> > +				"fsl,imx27-usb";
->=20
-> If "fsl,imx6ul-usb" is the one that imx7ulp device is compatible with and=
- will match in
-> driver, "fsl,imx27-usb" can just be dropped.  Same comment on usbmisc and
-> usbphy below.
->=20
+On Tue, 04 Jun 2019, Bjorn Andersson wrote:
 
-Ok, will change, thanks.
+> On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
+> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> [..]
+> > @@ -373,7 +416,7 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
+> >  
+> >  	qcom->num_clocks = count;
+> >  
+> > -	if (!count)
+> > +	if (!count || ACPI_HANDLE(dev))
+> >  		return 0;
+> 
+> Afaict you call this with count = of_count_phandle_with_args(), which
+> should be 0. But why not skip calling this at all?
 
-Peter
+Actually count can be <0, which is why I must have needed it at the
+beginning.  There is another patch in this set which checks for
+errors, thus the ACPI_HANDLE() call should now be superfluous.  I
+will test and remove it.
 
-> Shawn
->=20
-> > +			reg =3D <0x40330000 0x200>;
-> > +			interrupts =3D <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks =3D <&pcc2 IMX7ULP_CLK_USB0>;
-> > +			phys =3D <&usbphy1>;
-> > +			fsl,usbmisc =3D <&usbmisc1 0>;
-> > +			ahb-burst-config =3D <0x0>;
-> > +			tx-burst-size-dword =3D <0x8>;
-> > +			rx-burst-size-dword =3D <0x8>;
-> > +			status =3D "disabled";
-> > +		};
+> >  	qcom->clks = devm_kcalloc(dev, qcom->num_clocks,
+> > @@ -409,12 +452,28 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
+> >  	return 0;
+> >  }
+> >  
+> > +static const struct dwc3_acpi_pdata sdm845_acpi_pdata = {
+> > +	.qscratch_base_offset = SDM845_QSCRATCH_BASE_OFFSET,
+> > +	.qscratch_base_size = SDM845_QSCRATCH_SIZE,
+> > +	.dwc3_core_base_size = SDM845_DWC3_CORE_SIZE,
+> > +	.hs_phy_irq_index = 1,
+> > +	.dp_hs_phy_irq_index = 4,
+> > +	.dm_hs_phy_irq_index = 3,
+> > +	.ss_phy_irq_index = 2
+> > +};
 > > +
-> > +		usbmisc1: usbmisc@40330200 {
-> > +			compatible =3D "fsl,imx7ulp-usbmisc", "fsl,imx7d-usbmisc",
-> > +				"fsl,imx6q-usbmisc";
-> > +			#index-cells =3D <1>;
-> > +			reg =3D <0x40330200 0x200>;
-> > +		};
+> > +static const struct acpi_device_id dwc3_qcom_acpi_match[] = {
+> > +	{ "QCOM2430", (unsigned long)&sdm845_acpi_pdata },
+> > +	{ },
+> > +};
+> > +MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
+> 
+> Analog to of_device_get_match_data() there seems to be a
+> acpi_device_get_match_data(), if you use this you should be able to
+> have you acpi_device_id array next to the of_device_id.
+
+Do you mean "Analogous"?
+
+I will try to group them, thanks.
+
 > > +
-> > +		usbphy1: usbphy@0x40350000 {
-> > +			compatible =3D "fsl,imx7ulp-usbphy",
-> > +				"fsl,imx6ul-usbphy", "fsl,imx23-usbphy";
-> > +			reg =3D <0x40350000 0x1000>;
-> > +			interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks =3D <&pcc2 IMX7ULP_CLK_USB_PHY>;
-> > +			#phy-cells =3D <0>;
-> > +		};
-> > +
-> >  		usdhc0: mmc@40370000 {
-> >  			compatible =3D "fsl,imx7ulp-usdhc", "fsl,imx6sx-usdhc";
-> >  			reg =3D <0x40370000 0x10000>;
-> > --
-> > 2.14.1
-> >
+> >  static int dwc3_qcom_probe(struct platform_device *pdev)
+> 
+> It seems that all that's left unconditional on ACPI_HANDLE() in this
+> function are the optional pieces and the tail. Wouldn't it be cleaner to
+> split it out in different functions?
+
+There are ~50 lines of shared code in dwc3_qcom_probe(), most of it is
+interspersed between the configuration table (DT, ACPI) pieces, which
+is why it's formatted in the current way.
+
+I can split a few things out into separate functions if you think
+it'll help.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
