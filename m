@@ -2,159 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEF9359F8
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 11:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A38B935A1D
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 12:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbfFEJz3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 05:55:29 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:34996 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726993AbfFEJz3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 05:55:29 -0400
-Received: by mail-wm1-f66.google.com with SMTP id c6so1614472wml.0
-        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 02:55:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=T2lb6BFKyo6qFGuGkYXia4Pk+2dP0QxKBCkXd6OlypE=;
-        b=CPgOTuOq7c9MOvfUWJ5q/1+tOxgwn+XFG+0Um2QDTbUUUZanzLWDdj11nBOM2fIwB7
-         kEstullEcq59rr+WijeSFS9WnI3Qt9gjYsTf935hVMLJqfnOazzwxLxIHcji5TjkcosG
-         Y9XeYmQEDs6JbYlcEA7MiiEoYVV0BhB9r3suWTxQwm2++AJs9fMMbvBXj41wWMXxBHMd
-         Jf9fOl3L6hWXn6ofOl5x36eliDoR4Kpmq+BhUX/CuX//P1ZfkmcraAPARmc95tEHq9iI
-         iCz+Nm6D2SuuWiuOfBEm9CAkUqn9XEWtOrlUjSO+W80Dvqivdf9+b0ODE40uSn7iXy5B
-         3ZfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=T2lb6BFKyo6qFGuGkYXia4Pk+2dP0QxKBCkXd6OlypE=;
-        b=fV46/Hz0wvCBjqruF6LGdHSZciCFFTPD+5VILF1zKb9EP5+yZz81BHiTS4hjA+kqPf
-         g37MCAnxdnctLSaAPR2mw55PURLP/e9zSQO7Z82E5kr+PiYBci9Y3UJGm1IF3xO1rU2k
-         QIMG7TIyR+24vstBU9OKMnt4mLpYBnqPta4LlRYfux9Bh5uQRAsxNflAtdcfOLlTkmG3
-         I90EVy18etlDvtYk7bBySZeIPPfZaMUV+MPnBs6pZkjWZVCpBUkm7N3aRI0bdoon9yzQ
-         zMnnwSSuF7UqLTKC3AZ1g0xX1YywhP9LJE0i4bP9FjBm9RwvPoSoCiR3JPfSePscBRHu
-         jR6Q==
-X-Gm-Message-State: APjAAAW/Xgv5hLZ0WzHubMJRDaOF9AdwkeOjvT9VpPQMWf88ptSskXcE
-        Jaq5DKIR39A38AvbF8/4HEqCSg==
-X-Google-Smtp-Source: APXvYqwb15JLdo1InhCZA1cwpY0KvOYdXxpte37lxvn/nhB25qLp3J8HUS7DEBlgQIXew3zQcT8Cbw==
-X-Received: by 2002:a1c:dc07:: with SMTP id t7mr15208355wmg.164.1559728526806;
-        Wed, 05 Jun 2019 02:55:26 -0700 (PDT)
-Received: from dell ([2.27.167.43])
-        by smtp.gmail.com with ESMTPSA id z14sm7127245wre.96.2019.06.05.02.55.25
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 05 Jun 2019 02:55:26 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 10:55:24 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
-        andy.gross@linaro.org, david.brown@linaro.org,
-        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 6/8] usb: dwc3: qcom: Add support for booting with ACPI
-Message-ID: <20190605095524.GS4797@dell>
-References: <20190604104455.8877-1-lee.jones@linaro.org>
- <20190604104455.8877-6-lee.jones@linaro.org>
- <20190605063507.GM22737@tuxbook-pro>
- <20190605070928.GJ4797@dell>
+        id S1727239AbfFEKDk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 06:03:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60684 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727161AbfFEKDk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 06:03:40 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B70C4206B8;
+        Wed,  5 Jun 2019 10:03:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559729019;
+        bh=DZ0Ukqzk/PtCUYtEt5E60AbhRwkMO2p2nJdi/gL5qyk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PwtRstst/Wwsr3Uyq+uM3EesHwq3Yz4mQE5nc0kzZ4kVbLeOOvNfukcxh5c48vAte
+         4+ItiIhv5M2VQACAb/95rwCg+Vuqj0fcyfvlVxP1nazYisiT7eGv2wx51aDkcD27a2
+         ymDCoaYdP7bueKLRUOYni0tLUGekqTmZjTChEN9g=
+Date:   Wed, 5 Jun 2019 12:03:37 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     David Howells <dhowells@redhat.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Mathias Payer <mathias.payer@nebelwelt.net>,
+        Kento Kobayashi <Kento.A.Kobayashi@sony.com>,
+        Hui Peng <benquike@gmail.com>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Jan-Marek Glogowski <glogow@fbihome.de>,
+        Bin Liu <b-liu@ti.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Jon Flatley <jflat@chromium.org>,
+        Mathieu Malaterre <malat@debian.org>,
+        Spyridon Papageorgiou <spapageorgiou@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        Joshua Frkuska <joshua_frkuska@mentor.com>,
+        "George G . Davis" <george_davis@mentor.com>,
+        yuichi.kusakabe@denso-ten.com, yohhei.fukui@denso-ten.com,
+        natsumi.kamei@denso-ten.com, yasano@jp.adit-jv.com
+Subject: Re: [PATCH] usb: hub: report failure to enumerate uevent to userspace
+Message-ID: <20190605100337.GA9350@kroah.com>
+References: <20190605090556.17792-1-erosca@de.adit-jv.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190605070928.GJ4797@dell>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190605090556.17792-1-erosca@de.adit-jv.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 05 Jun 2019, Lee Jones wrote:
+On Wed, Jun 05, 2019 at 11:05:56AM +0200, Eugeniu Rosca wrote:
+> From: Spyridon Papageorgiou <spapageorgiou@de.adit-jv.com>
+> 
+> When a USB device fails to enumerate, only a kernel message is printed.
+> With this patch, a uevent is also generated to notify userspace.
+> Services can monitor for the event through udev and handle failures
+> accordingly.
+> 
+> The "port_enumerate_fail_notify()" function name follows the syntax of
+> "port_over_current_notify()" used in v4.20-rc1
+> commit 201af55da8a398 ("usb: core: added uevent for over-current").
+> 
+> Signed-off-by: Spyridon Papageorgiou <spapageorgiou@de.adit-jv.com>
+> Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
 
-> On Tue, 04 Jun 2019, Bjorn Andersson wrote:
-> 
-> > On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
-> > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > [..]
-> > > @@ -373,7 +416,7 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
-> > >  
-> > >  	qcom->num_clocks = count;
-> > >  
-> > > -	if (!count)
-> > > +	if (!count || ACPI_HANDLE(dev))
-> > >  		return 0;
-> > 
-> > Afaict you call this with count = of_count_phandle_with_args(), which
-> > should be 0. But why not skip calling this at all?
-> 
-> Actually count can be <0, which is why I must have needed it at the
-> beginning.  There is another patch in this set which checks for
-> errors, thus the ACPI_HANDLE() call should now be superfluous.  I
-> will test and remove it.
+All we need is one special notifier!  ...
 
-Just looked into this - it is still required.
+{grumble}
 
-of_count_phandle_with_args() returns an error not to be heeded in the
-ACPI case.  So the logic goes:
+This can end up causing loads of new kobject change events to be added,
+overloading what uevents were supposed to be in the first place
+(add/remove of sysfs objects).
 
-[This patch]
- * It's fine to boot DT with no clocks to initialise (return 0)
- * There are no clocks to enable when booting ACPI (return 0)
+I just talked with David Howells, and this type of thing really should
+be tied into the new "notifier" interface/api.  That way you can
+register for any specific type of event and just get notified of them
+when they happen.  No need to mess with uevents.
 
-[Another patch]
- * It's not fine to boot DT and for 'count < 0' (return count)
+See his posts on linux-api starting with:
+	Subject: [RFC][PATCH 0/8] Mount, FS, Block and Keyrings notifications [ver #2]
+for the proposal.
 
-> > >  	qcom->clks = devm_kcalloc(dev, qcom->num_clocks,
-> > > @@ -409,12 +452,28 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +static const struct dwc3_acpi_pdata sdm845_acpi_pdata = {
-> > > +	.qscratch_base_offset = SDM845_QSCRATCH_BASE_OFFSET,
-> > > +	.qscratch_base_size = SDM845_QSCRATCH_SIZE,
-> > > +	.dwc3_core_base_size = SDM845_DWC3_CORE_SIZE,
-> > > +	.hs_phy_irq_index = 1,
-> > > +	.dp_hs_phy_irq_index = 4,
-> > > +	.dm_hs_phy_irq_index = 3,
-> > > +	.ss_phy_irq_index = 2
-> > > +};
-> > > +
-> > > +static const struct acpi_device_id dwc3_qcom_acpi_match[] = {
-> > > +	{ "QCOM2430", (unsigned long)&sdm845_acpi_pdata },
-> > > +	{ },
-> > > +};
-> > > +MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
-> > 
-> > Analog to of_device_get_match_data() there seems to be a
-> > acpi_device_get_match_data(), if you use this you should be able to
-> > have you acpi_device_id array next to the of_device_id.
-> 
-> Do you mean "Analogous"?
-> 
-> I will try to group them, thanks.
-> 
-> > > +
-> > >  static int dwc3_qcom_probe(struct platform_device *pdev)
-> > 
-> > It seems that all that's left unconditional on ACPI_HANDLE() in this
-> > function are the optional pieces and the tail. Wouldn't it be cleaner to
-> > split it out in different functions?
-> 
-> There are ~50 lines of shared code in dwc3_qcom_probe(), most of it is
-> interspersed between the configuration table (DT, ACPI) pieces, which
-> is why it's formatted in the current way.
-> 
-> I can split a few things out into separate functions if you think
-> it'll help.
-> 
+If we added USB (or really any hardware events) to that interface, would
+it solve the issue you are trying to solve here?
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+thanks,
+
+greg k-h
