@@ -2,116 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7948235825
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 09:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2B53584D
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 10:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbfFEH5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 03:57:05 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:35317 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726467AbfFEH5C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 03:57:02 -0400
-Received: by mail-lf1-f65.google.com with SMTP id a25so18391858lfg.2;
-        Wed, 05 Jun 2019 00:57:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BIGkKcYfLrKZMcNofxFte/MwlnM+iUUU8rGg0Es0KCI=;
-        b=jRpSbB4kywIBITbYWEf6/kRotgyPwypZ2xiTiMXOl0E1rybviEi2ONR4DIJ00lXGXR
-         vVEMTcbSgDoasqjGTmiV+73RyS5JhIw9ARxsVeFOV5gxOTGpzSCvaFC9llO0HrbV2G85
-         xeEVV0vodGNT1ter+ADBS8kqHyHPHJzh1tdGU1OsSUvngS/3vNlHNFdAlmivn4cDzRAO
-         JhGlzf6bvGgm02RPkVP7GcaXSQ3PRqocVtumxDV/6arnynLI7jXjoxrtJewwW5IjbNo5
-         gumC2sFZ7TpXE5xr6u5astLFgKblMLTLBRAixPPthRfP35JYDUz3qjFYVdLp+obMcfCb
-         xvMg==
-X-Gm-Message-State: APjAAAUm9WVT9+7h4UsT9IecKmTSFSbtIuxArhNiu2foPLMIAubZ/r2S
-        0vwQekxBQJhpVLhGInycVgk=
-X-Google-Smtp-Source: APXvYqyJTHFtU2ZPnYiQSPpENJAgbw8I3+7lh4a0s29uA2IVhDFXd/5pYXop0LCfMkGc18+7XLWDyw==
-X-Received: by 2002:a19:6a01:: with SMTP id u1mr17636778lfu.141.1559721419930;
-        Wed, 05 Jun 2019 00:56:59 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id t22sm4189527lje.58.2019.06.05.00.56.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 00:56:59 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.91)
-        (envelope-from <johan@kernel.org>)
-        id 1hYQn2-00063e-Gt; Wed, 05 Jun 2019 09:56:57 +0200
-Date:   Wed, 5 Jun 2019 09:56:56 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, balbi@kernel.org,
-        wsa+renesas@sang-engineering.com, gregkh@linuxfoundation.org,
-        linus.walleij@linaro.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david.brown@linaro.org,
-        alokc@codeaurora.org, kramasub@codeaurora.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, andy.gross@linaro.org,
-        jlhugo@gmail.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/8] i2c: i2c-qcom-geni: Signify successful driver probe
-Message-ID: <20190605075656.GC29637@localhost>
-References: <20190604104455.8877-1-lee.jones@linaro.org>
- <20190604104455.8877-2-lee.jones@linaro.org>
- <20190605062020.GL22737@tuxbook-pro>
- <20190605071625.GK4797@dell>
+        id S1726568AbfFEIDs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 04:03:48 -0400
+Received: from mga11.intel.com ([192.55.52.93]:56934 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726263AbfFEIDs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 04:03:48 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jun 2019 01:03:47 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga006.fm.intel.com with ESMTP; 05 Jun 2019 01:03:46 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v.anuragkumar@gmail.com,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Correct the logic for finding last SG entry
+In-Reply-To: <1559141985-17104-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+References: <1559141985-17104-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+Date:   Wed, 05 Jun 2019 11:03:42 +0300
+Message-ID: <87y32gcvc1.fsf@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190605071625.GK4797@dell>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 08:16:25AM +0100, Lee Jones wrote:
-> On Tue, 04 Jun 2019, Bjorn Andersson wrote:
-> 
-> > On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
-> > 
-> > > The Qualcomm Geni I2C driver currently probes silently which can be
-> > > confusing when debugging potential issues.  Add a low level (INFO)
-> > > print when each I2C controller is successfully initially set-up.
-> > > 
-> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > ---
-> > >  drivers/i2c/busses/i2c-qcom-geni.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> > > index 0fa93b448e8d..e27466d77767 100644
-> > > --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> > > +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> > > @@ -598,6 +598,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
-> > >  		return ret;
-> > >  	}
-> > >  
-> > > +	dev_info(&pdev->dev, "Geni-I2C adaptor successfully added\n");
-> > > +
-> > 
-> > I would prefer that we do not add such prints, as it would be to accept
-> > the downstream behaviour of spamming the log to the point where no one
-> > will ever look through it.
-> 
-> We should be able to find a middle ground.  Spamming the log with all
-> sorts of device specific information/debug is obviously not
-> constructive, but a single liner to advertise that an important
-> device/controller has been successfully initialised is more helpful
-> than it is hinderous.
-> 
-> This print was added due to the silent initialisation costing me
-> several hours of debugging ACPI device/driver code (albeit learning a
-> lot about ACPI as I go) just to find out that it was already doing the
-> right thing - just very quietly.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-No, we don't add noise like this to the logs just because it may be
-useful while debugging. Even one-liners add up.
 
-There are plenty of options for debugging already ranging from adding a
-temporary dev_info() to the probe function in question to using dynamic
-debugging to have driver core log every successful probe.
+Hi,
 
-And in this case you say the driver was in fact already bound; that can
-easily be verified through sysfs too in case things aren't behaving the
-way you expect.
+Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com> writes:
+> As a process of preparing TRBs usb_gadget_map_request_by_dev() is
+> called from dwc3_prepare_trbs() for mapping the request. This will
+> call dma_map_sg() if req->num_sgs are greater than 0. dma_map_sg()
+> will map the sg entries in sglist and return the number of mapped SGs.
+> As a part of mapping, some sg entries having contigous memory may be
+> merged together into a single sg (when IOMMU used). So, the number of
+> mapped sg entries may not be equal to the number of orginal sg entries
+> in the request (req->num_sgs).
+>
+> As a part of preparing the TRBs, dwc3_prepare_one_trb_sg() iterates over
+> the sg entries present in the sglist and calls sg_is_last() to identify
+> whether the sg entry is last and set IOC bit for the last sg entry. The
+> sg_is_last() determines last sg if SG_END is set in sg->page_link. When
+> IOMMU used, dma_map_sg() merges 2 or more sgs into a single sg and it
+> doesn't retain the page_link properties. Because of this reason the
+> sg_is_last() may not find SG_END and thus resulting in IOC bit never
+> getting set.
+>
+> For example:
+>
+> Consider a request having 8 sg entries with each entry having a length of
+> 4096 bytes. Assume that sg1 & sg2, sg3 & sg4, sg5 & sg6, sg7 & sg8 are
+> having contigous memory regions.
+>
+> Before calling dma_map_sg():
+>             sg1-->sg2-->sg3-->sg4-->sg6-->sg7-->sg8
+> dma_length: 4K    4K    4K    4K    4K    4K    4K
+> SG_END:     False False False False False False True
+> num_sgs =3D 8
+> num_mapped_sgs =3D 0
+>
+> The dma_map_sg() merges sg1 & sg2 memory regions into sg1->dma_address.
+> Similarly sg3 & sg4 into sg2->dma_address, sg5 & sg6 into the
+> sg3->dma_address and sg6 & sg8 into sg4->dma_address. Here the memory
+> regions are merged but the page_link properties like SG_END are not
+> retained into the merged sgs.
 
-Johan
+isn't this a bug in the scatterlist mapping code? Why doesn't it keep
+SG_END?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlz3d14ACgkQzL64meEa
+mQbIKA/+Ii2ChJ8pGwu2ghUPIQnqcxUB7blHV78JMz1exJzlZJ1nJa+LicAky5rJ
+k2h0k2Ieaxqj/BExNkC6Q/NtDLSOKPIf7BHjZrjE60JnXexPFUuZiaupVVzVK356
+5Y+VDvWVYW8q3DH4g4x7v3Z+ceY6cZiNYLnpKShdnsSyBJTrveTgMR375eYmgMZP
+vSc9eqDtN4goT2uqx3uBF6ZvT1r5Cwx1snmqSQiWGg+iDkVJbBC52IxS7mS5S85G
+cLQuIrMrJTwk/QS0xlrQjk5uJCZekruiRD5GsktWx+iUb0J2WAbaD3QYU/Hba/xQ
+qOdGkj/VPDfo4a0y2nVQIJd5ck6KEV1iOaAN0jx78PR0459nhQeZY19yGdkvTU9L
+wW2q7idyaiEDiZUMpaDyq6M+lfBCQUcYjJ5bCUluQEXwJy7srsuQlIh4s+XCCAVM
+puN3zV6f8FD+xJLCqQ0alw2JjbjZn53mW0W8eMTD2CSTFSl9GcCAdfblgmhciDBZ
+Yqrk8a7s0wDd7fA+/hGYUbJt5efLWHiPYY5Rqeh3GbOVEOP1LTN9/Ipsi6hM+Dxd
+FIkH2BjBD99TpIUQlrE+U6iaIUiy8b9pBPiORyjPcHGfdNK/7ITxQ7WWRZJznZRS
+MuQ0WAC2u60k8xwzouNwbXL/jcoUP6974/MDeOF5iK4di2YLogg=
+=uzJL
+-----END PGP SIGNATURE-----
+--=-=-=--
