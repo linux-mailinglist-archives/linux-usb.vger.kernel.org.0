@@ -2,123 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 746EB36404
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 21:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5503645E
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 21:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbfFETJi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 15:09:38 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:49434 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726965AbfFETJg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 15:09:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
-        :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3bkukSS82+wj1sa4UwaAnaEsPot66Pp1IhVKWWk3PRs=; b=mGRP1yv+6nhs3018nR7FDir6MR
-        yW2KpUdkVXd8h8RkJdDj1tuGagsIAIvpd1VsALfxZ1DkT4wTVouzt7qhx+73meALgT70AlcO5xLHj
-        mTIETncl9oUJn/qpMemeFTJGAcf9Mk/DdNXarbduY3tsrC0BpsrAU63i+ieaDTF+frDi5rUDG95zO
-        q4mlexgv5VIHBxFBUrE5p3dVpmNhgD6qhgXTrM1ZvvIMuwKpIxJce+GwGO3FW3tBca0H74QS1jVrx
-        GVv4fTGrwEQe7jPzVrmoe1J027ZfC4xFWFkAjvSMCJmU9Ie+smQqtLl9B8rKE+HvIybF29GTgGbqf
-        aKajtGeQ==;
-Received: from 089144193064.atnat0002.highway.a1.net ([89.144.193.64] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hYbHs-0006Cv-4J; Wed, 05 Jun 2019 19:09:28 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Sebastian Ott <sebott@linux.ibm.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Max Gurtovoy <maxg@mellanox.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
-        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Subject: [PATCH 13/13] uas: set virt_boundary_mask in the scsi host
-Date:   Wed,  5 Jun 2019 21:08:36 +0200
-Message-Id: <20190605190836.32354-14-hch@lst.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190605190836.32354-1-hch@lst.de>
-References: <20190605190836.32354-1-hch@lst.de>
+        id S1726670AbfFETO6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 15:14:58 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:45359 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726652AbfFETO5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 15:14:57 -0400
+Received: by mail-pl1-f194.google.com with SMTP id x7so9056945plr.12
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 12:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=3Rc60lsJ3z1zOjfi7ksD28e6ywcaQlCBCKfGl8ThP5g=;
+        b=wl9zOlVGzsak3W0n9srNqt6xTicaVMXyvuV62ylpgplp0YgPU7AxCF2aoOl4RB2iC5
+         6cPYPEmWEcxRkhSQT57mRJKRMLXCedtcqKwMwsOGUFlinvg03O+6j6DGB/fUMSIL09V+
+         wbvrFegoqrdRMWReviAaArKT1XKDv7Q3UdZInx0oUItNDGwcSfHj0y3P/XbhDxVRBZ0D
+         1yCB6OValT1P7bMoLKXsiTopYfc7JTB1ixy+cTPwWdKa2YzQE2Wk+wXa6s4NUj8y8Dfc
+         D9FBIWE1C6kkbzPxlvNmqGmNa6Z9G3Xpa+E2YU9W+JqS/kkBUZJxb5rYvg85KIW0DsTX
+         h0Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3Rc60lsJ3z1zOjfi7ksD28e6ywcaQlCBCKfGl8ThP5g=;
+        b=CrClniYw5Kh9BJ8P6zXh/asW4BnxaPSmF+0wjIOu3yRVFWNmSnjYEqw3tbuLSUnw86
+         +Lbiz0xwH2hn33ddTXClH50r1TTWBGg1HmE6C5DF9z+YZ50HqjWoF4Uuu9Wqx+whRPur
+         9gLELz9kehcgQhJNzS1SoxARE2k/nuf/2Yq791dNjcnbLHUGANeLltlRTu4x3jx7fkmE
+         6oyZ71Rn9a/V2MbZAohELpdJRX/f+b/LU9DoqOScvLiGx5zv6n2566+FYRutiBNDgI8e
+         VcdEYj9LLSG+gDlKyraAZXxAE7WnDS7UqO8mAANymFKQqsA+uCIWxKTTra7GGY48c58d
+         13kQ==
+X-Gm-Message-State: APjAAAWIJr7FyQx96YiFmVqg7eX7JXi6yEuCgJEWWL/MRuWaKwT9fZVy
+        ZoV0FZwWY5KuvlbRhq4YVRvsZg==
+X-Google-Smtp-Source: APXvYqz+h4aRHxX//DbbKSqnGBRk+YbQMFSEIS2PAURYu4NSWDUnLwqSRo+mFseHlHHDfgCMaf9Iyw==
+X-Received: by 2002:a17:902:2ba7:: with SMTP id l36mr45371487plb.334.1559762096439;
+        Wed, 05 Jun 2019 12:14:56 -0700 (PDT)
+Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id t15sm21182517pjb.6.2019.06.05.12.14.55
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 05 Jun 2019 12:14:55 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 12:14:53 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
+        andy.gross@linaro.org, david.brown@linaro.org,
+        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 7/8] usb: dwc3: qcom: Start USB in 'host mode' on the
+ SDM845
+Message-ID: <20190605191453.GJ4814@minitux>
+References: <20190604104455.8877-1-lee.jones@linaro.org>
+ <20190604104455.8877-7-lee.jones@linaro.org>
+ <20190605070029.GN22737@tuxbook-pro>
+ <20190605083454.GO4797@dell>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190605083454.GO4797@dell>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This ensures all proper DMA layer handling is taken care of by the
-SCSI midlayer.
+On Wed 05 Jun 01:34 PDT 2019, Lee Jones wrote:
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/usb/storage/uas.c | 36 ++++++++++++++++--------------------
- 1 file changed, 16 insertions(+), 20 deletions(-)
+> On Wed, 05 Jun 2019, Bjorn Andersson wrote:
+> 
+> > On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
+> > 
+> > > When booting with Device Tree, the current default boot configuration
+> > > table option, the request to boot via 'host mode' comes from the
+> > > "dr_mode" property.
+> > 
+> > This has been the default on the MTP, but this is changing as this is
+> > causing issues when connected downstream from a hub (the typical
+> > development case for the primary USB port of a phone like device) and
+> > more importantly we don't have support for the PMIC blocks that control
+> > VBUS.
+> 
+> My point is not about which mode is currently chosen.  It's more about
+> the capability of choosing which mode is appropriate for a given
+> system via DT.
+> 
+> > Once these issues are resolved the dr_mode would be "otg".
+> 
+> OTG doesn't work on this H/W, so we need to specify "host" mode.
+> 
 
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 047c5922618f..d20919e7bbf4 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -789,29 +789,9 @@ static int uas_slave_alloc(struct scsi_device *sdev)
- {
- 	struct uas_dev_info *devinfo =
- 		(struct uas_dev_info *)sdev->host->hostdata;
--	int maxp;
- 
- 	sdev->hostdata = devinfo;
- 
--	/*
--	 * We have two requirements here. We must satisfy the requirements
--	 * of the physical HC and the demands of the protocol, as we
--	 * definitely want no additional memory allocation in this path
--	 * ruling out using bounce buffers.
--	 *
--	 * For a transmission on USB to continue we must never send
--	 * a package that is smaller than maxpacket. Hence the length of each
--         * scatterlist element except the last must be divisible by the
--         * Bulk maxpacket value.
--	 * If the HC does not ensure that through SG,
--	 * the upper layer must do that. We must assume nothing
--	 * about the capabilities off the HC, so we use the most
--	 * pessimistic requirement.
--	 */
--
--	maxp = usb_maxpacket(devinfo->udev, devinfo->data_in_pipe, 0);
--	blk_queue_virt_boundary(sdev->request_queue, maxp - 1);
--
- 	/*
- 	 * The protocol has no requirements on alignment in the strict sense.
- 	 * Controllers may or may not have alignment restrictions.
-@@ -1004,6 +984,22 @@ static int uas_probe(struct usb_interface *intf, const struct usb_device_id *id)
- 	 */
- 	shost->can_queue = devinfo->qdepth - 2;
- 
-+	/*
-+	 * We have two requirements here. We must satisfy the requirements of
-+	 * the physical HC and the demands of the protocol, as we definitely
-+	 * want no additional memory allocation in this path ruling out using
-+	 * bounce buffers.
-+	 *
-+	 * For a transmission on USB to continue we must never send a package
-+	 * that is smaller than maxpacket.  Hence the length of each scatterlist
-+	 * element except the last must be divisible by the Bulk maxpacket
-+	 * value.  If the HC does not ensure that through SG, the upper layer
-+	 * must do that.  We must assume nothing about the capabilities off the
-+	 * HC, so we use the most pessimistic requirement.
-+	 */
-+	shost->virt_boundary_mask =
-+		usb_maxpacket(udev, devinfo->data_in_pipe, 0) - 1;
-+
- 	usb_set_intfdata(intf, shost);
- 	result = scsi_add_host(shost, &intf->dev);
- 	if (result)
--- 
-2.20.1
+My objection is that when you say "this H/W" you mean a particular
+product, but you're making this decision for all SDM845 based products
+using ACPI.
 
+I don't know if there is a Windows phone based on SDM845, but if there
+is then I don't think forcing it to host would be correct.
+
+> > > A property of the same name can be used inside
+> > > ACPI tables too.  However it is missing from the SDM845's ACPI tables
+> > > so we have to supply this information using Platform Device Properites
+> > > instead.
+> > > 
+> > 
+> > Afaict this would install a fall-back property, so in the case that we
+> > have specified dr_mode in DT (or ACPI) that would take precedence. So
+> 
+> That's correct.
+> 
+> > the commit message should reflect that this redefines the default choice
+> > to be "host", rather than "otg".
+> 
+> No problem.
+> 
+> > Which is in conflict with what's described for dr_mode in
+> > Documentation/devicetree/bindings/usb/generic.txt
+> 
+> This implementation only affects ACPI based platforms.  When booting
+> with DT, the description in that DT related document is still
+> accurate.
+> 
+
+You're right, I got lost between the patches and the sprinkled if
+(ACPI_HANDLE()) in the probe. This is only added for ACPI.
+
+> > And this driver is used on a range of different Qualcomm platforms, so I
+> > don't think this is SDM845 specific.
+> 
+> ACPI based platforms?
+> 
+> All the ones I've seen use the XHCI USB driver directly ("PNP0D10").
+>  
+
+MSM8998 (835) has the same controller, so this should affect those
+laptops as well.
+
+Regards,
+Bjorn
+
+> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > ---
+> > >  drivers/usb/dwc3/dwc3-qcom.c | 12 ++++++++++++
+> > >  1 file changed, 12 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > > index 349bf549ee44..f21fdd6cdd1a 100644
+> > > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > > @@ -468,6 +468,11 @@ static const struct acpi_device_id dwc3_qcom_acpi_match[] = {
+> > >  };
+> > >  MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
+> > >  
+> > > +static const struct property_entry dwc3_qcom_acpi_properties[] = {
+> > > +	PROPERTY_ENTRY_STRING("dr_mode", "host"),
+> > > +	{}
+> > > +};
+> > > +
+> > >  static int dwc3_qcom_probe(struct platform_device *pdev)
+> > >  {
+> > >  	struct device_node	*np = pdev->dev.of_node, *dwc3_np;
+> > > @@ -603,6 +608,13 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+> > >  			goto platform_unalloc;
+> > >  		}
+> > >  
+> > > +		ret = platform_device_add_properties(qcom->dwc3,
+> > > +						     dwc3_qcom_acpi_properties);
+> > > +		if (ret < 0) {
+> > > +			dev_err(&pdev->dev, "failed to add properties\n");
+> > > +			goto platform_unalloc;
+> > > +		}
+> > > +
+> > >  		ret = platform_device_add(qcom->dwc3);
+> > >  		if (ret) {
+> > >  			dev_err(&pdev->dev, "failed to add device\n");
+> 
+> -- 
+> Lee Jones [?????????]
+> Linaro Services Technical Lead
+> Linaro.org ??? Open source software for ARM SoCs
+> Follow Linaro: Facebook | Twitter | Blog
