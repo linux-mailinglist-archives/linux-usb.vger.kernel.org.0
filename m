@@ -2,83 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC5A35FAE
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E2B36005
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 17:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728502AbfFEOz3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 10:55:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55014 "EHLO mail.kernel.org"
+        id S1728460AbfFEPOi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 11:14:38 -0400
+Received: from foss.arm.com ([217.140.101.70]:33426 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728303AbfFEOz3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 10:55:29 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3FF5A206B8;
-        Wed,  5 Jun 2019 14:55:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559746528;
-        bh=LRZ30IPa6Nv2lRdKaHOKDLX7XyAGFKonVvxxNwqLT8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LZjO9Ux7yVL3s4+u/DYaZJ071X99d49oJqAwPpf1DIP7AEvq3kIhoclG36/XlpMR/
-         N0JPdQobFdyr3K8aMQ74zoGuG3XXzIlRA2lKp2BQ9YIEFoelZuokv4i1Ul20HwVba5
-         o7egZ5ZQUqoXV0byy4oo7jIBhRDZolbkqPP3nojE=
-Date:   Wed, 5 Jun 2019 16:55:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Slow I/O on USB media
-Message-ID: <20190605145525.GA28819@kroah.com>
-References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
- <20190530132522.GA21005@kroah.com>
- <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
- <20190604054300.GE1588@kroah.com>
- <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+        id S1728458AbfFEPOh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 11:14:37 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F2AB374;
+        Wed,  5 Jun 2019 08:14:36 -0700 (PDT)
+Received: from en101.cambridge.arm.com (en101.cambridge.arm.com [10.1.196.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8DD463F246;
+        Wed,  5 Jun 2019 08:14:34 -0700 (PDT)
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        suzuki.poulose@arm.com, "David S. Miller" <davem@davemloft.net>,
+        Doug Ledford <dledford@redhat.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-usb@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joe Perches <joe@perches.com>
+Subject: [PATCH 05/13] drivers: Add generic helper to match by fwnode
+Date:   Wed,  5 Jun 2019 16:13:42 +0100
+Message-Id: <1559747630-28065-6-git-send-email-suzuki.poulose@arm.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com>
+References: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 09:36:04AM +0200, Andrea Vai wrote:
-> Hi,
-> Il giorno mar, 04/06/2019 alle 07.43 +0200, Greg KH ha scritto:
-> > On Mon, Jun 03, 2019 at 01:13:48PM +0200, Andrea Vai wrote:
-> > > Il giorno gio, 30/05/2019 alle 06.25 -0700, Greg KH ha scritto:
-> > > > [...]
-> > > Hi,
-> > > 
-> > > > Any chance you can use 'git bisect' to find the offending
-> > commit?
-> > > Yes, I am doing it as I managed to build the kernel from source
-> > 
-> > Great!  What did you find?
-> 
-> # first bad commit: [534903d60376b4989b76ec445630aa10f2bc3043]
-> drm/atomic: Use explicit old crtc state in
-> drm_atomic_add_affected_planes()
-> 
-> By the way, as I am not expert, is there a way to double-check that I
-> bisected correctly? (such as, e.g., test with the version before this
-> one, and then with this commit applied?)
+Add a helper to match the firmware node handle of a device. This
+will be used later for generic look up by fwnode helpers.
 
-How exactly are you "testing" this?
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Doug Ledford <dledford@redhat.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-usb@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Joe Perches <joe@perches.com>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+---
+ drivers/base/core.c    | 6 ++++++
+ include/linux/device.h | 1 +
+ 2 files changed, 7 insertions(+)
 
-I would recommend a script that does something like:
-	mount the disk somewhere
-	copy a big file to it
-	unmount the disk
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 9211908..efcdb96 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3334,3 +3334,9 @@ int device_match_of_node(struct device *dev, const void *np)
+ 	return dev->of_node == np;
+ }
+ EXPORT_SYMBOL_GPL(device_match_of_node);
++
++int device_match_fwnode(struct device *dev, const void *fwnode)
++{
++	return dev_fwnode(dev) == fwnode;
++}
++EXPORT_SYMBOL_GPL(device_match_fwnode);
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 7093085..08aa087 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -164,6 +164,7 @@ struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter);
+ void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
+ 
+ int device_match_of_node(struct device *dev, const void *np);
++int device_match_fwnode(struct device *dev, const void *fwnode);
+ 
+ int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+ 		     int (*fn)(struct device *dev, void *data));
+-- 
+2.7.4
 
-testing how long the whole process takes, especially the 'unmount' is
-important.  Are you doing that?
-
-Also, you should probably just boot into text mode for this, most
-graphical DEs like to auto-mount disks these days.
-
-thanks,
-
-greg k-h
