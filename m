@@ -2,148 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 822D435900
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 10:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B34B3590E
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 10:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726743AbfFEIwT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 04:52:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57048 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726690AbfFEIwT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 04:52:19 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 01A322075C;
-        Wed,  5 Jun 2019 08:52:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559724738;
-        bh=33U2EKfjRS7h+XMGkmD3adAxfr6fGPYO5U7ZjaS/GaY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jg8LNDdI0PoUYPg/zVrHza4ANwwsNV4xpyvG90wnOrXz6LjtnDwRiaa5W+ti7SflB
-         7ATBvjKJU2WdvbuNwRTWRQPx0hbf1OrcQiHrmNoWTdDl+jVvYwWMzvNGvfBN/4HMx2
-         44ObQkLWTyjt8JccrcHrk/wdy3CfHRaHp+UMDTTo=
-Date:   Wed, 5 Jun 2019 10:52:16 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] USB: move usb debugfs directory creation to the usb
- common core
-Message-ID: <20190605085216.GB26984@kroah.com>
-References: <20190604093258.GB30054@kroah.com>
- <20190604115919.GA24346@kroah.com>
- <1559721031.8487.99.camel@mhfsdcap03>
+        id S1726793AbfFEIzd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 04:55:33 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:43399 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726502AbfFEIzd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 04:55:33 -0400
+Received: by mail-lj1-f195.google.com with SMTP id 16so8808780ljv.10;
+        Wed, 05 Jun 2019 01:55:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0U6eDBY+p278g6sAhkapnBhYYyaYO1FDxf1FQX6wdaE=;
+        b=HBPJFEtPbn9HEHEU5p2Q9djbv2eF7H6eg8lY62yOeDAIuVGioCcz4E/ayNdXH4gHun
+         q99yW1sKTkcjlp1y68fFqWw+iPWMXvTe5qvI80/jcq7QrnmTCS9d4GU8panbDoSOYjR0
+         iyBD0hp2ggz1gSQil6uzxmXYLL6aczPKNRpglYcoLUc44tsb1jEm7y5AvnWwhpns63bW
+         ldON1HGFb8q8iTFRXpq9wTjQwrTZJc4RITUqXroLRghk7c/hucE91tPnFf6DAGsHTVZ4
+         D/NKi5296hhTm77pONZE2id+bXoP4ZFOZST4hTZV8X5ujLMqh1vRGaykT03GUZV6wPEP
+         w+YA==
+X-Gm-Message-State: APjAAAUj45fgmEkfRkSbbdQEQMHrGYYAwHUKPw9qsOuAdgCwJeykQUgX
+        PEB2/FdGNtlir/GmoNvIJnc=
+X-Google-Smtp-Source: APXvYqzvONsFYRciDKTx+Wt06noIZ5QHPF4uWQkaEhVru+K0f055PuFxcQ4dCitfAPD5HYEsSY0jVg==
+X-Received: by 2002:a2e:2c17:: with SMTP id s23mr3271471ljs.214.1559724930581;
+        Wed, 05 Jun 2019 01:55:30 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id x29sm4070530lfg.58.2019.06.05.01.55.29
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 01:55:29 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.91)
+        (envelope-from <johan@kernel.org>)
+        id 1hYRhf-0006Sd-3c; Wed, 05 Jun 2019 10:55:27 +0200
+Date:   Wed, 5 Jun 2019 10:55:27 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>, balbi@kernel.org,
+        wsa+renesas@sang-engineering.com, gregkh@linuxfoundation.org,
+        linus.walleij@linaro.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david.brown@linaro.org,
+        alokc@codeaurora.org, kramasub@codeaurora.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, andy.gross@linaro.org,
+        jlhugo@gmail.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/8] i2c: i2c-qcom-geni: Signify successful driver probe
+Message-ID: <20190605085527.GE29637@localhost>
+References: <20190604104455.8877-1-lee.jones@linaro.org>
+ <20190604104455.8877-2-lee.jones@linaro.org>
+ <20190605062020.GL22737@tuxbook-pro>
+ <20190605071625.GK4797@dell>
+ <20190605075656.GC29637@localhost>
+ <20190605082047.GM4797@dell>
+ <20190605083353.GD29637@localhost>
+ <20190605084921.GQ4797@dell>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1559721031.8487.99.camel@mhfsdcap03>
+In-Reply-To: <20190605084921.GQ4797@dell>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 03:50:31PM +0800, Chunfeng Yun wrote:
-> On Tue, 2019-06-04 at 13:59 +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Jun 04, 2019 at 11:32:58AM +0200, Greg Kroah-Hartman wrote:
-> > > The USB gadget subsystem wants to use the USB debugfs root directory, so
-> > > move it to the common "core" USB code so that it is properly initialized
-> > > and removed as needed.
+On Wed, Jun 05, 2019 at 09:49:21AM +0100, Lee Jones wrote:
+> On Wed, 05 Jun 2019, Johan Hovold wrote:
+> 
+> > On Wed, Jun 05, 2019 at 09:20:47AM +0100, Lee Jones wrote:
+> > > On Wed, 05 Jun 2019, Johan Hovold wrote:
+ 
+> > > > There are plenty of options for debugging already ranging from adding a
+> > > > temporary dev_info() to the probe function in question to using dynamic
+> > > > debugging to have driver core log every successful probe.
 > > > 
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > 
-> > > ---
-> > > 
-> > > This should be the "correct" version of this, Chunfeng, can you test
-> > > this to verify it works for you?
-> > > 
-> > > 
-> > > diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-> > > index 18f5dcf58b0d..3b5e4263ffef 100644
-> > > --- a/drivers/usb/common/common.c
-> > > +++ b/drivers/usb/common/common.c
-> > > @@ -15,6 +15,7 @@
-> > >  #include <linux/usb/of.h>
-> > >  #include <linux/usb/otg.h>
-> > >  #include <linux/of_platform.h>
-> > > +#include <linux/debugfs.h>
-> > >  
-> > >  static const char *const ep_type_names[] = {
-> > >  	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
-> > > @@ -291,4 +292,21 @@ struct device *usb_of_get_companion_dev(struct device *dev)
-> > >  EXPORT_SYMBOL_GPL(usb_of_get_companion_dev);
-> > >  #endif
-> > >  
-> > > +struct dentry *usb_debug_root;
-> > > +EXPORT_SYMBOL_GPL(usb_debug_root);
-> > > +
-> > > +static int usb_common_init(void)
-> > > +{
-> > > +	usb_debug_root = debugfs_create_dir("usb", NULL);
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void usb_common_exit(void)
-> > > +{
-> > > +	debugfs_remove_recursive(usb_debug_root);
-> > > +}
-> > > +
-> > > +module_init(usb_common_init);
-> I tested this patch.
+> > > This is what I ended up doing.  It was time consuming to parse though
+> > > a log of that size when you have no paging or keyboard.
+> > 
+> > With the right command-line option to enable dynamic debugging you get
+> > one line per successful probe, just like you wanted. Or are you now
+> > saying that one-line per device is too much after all? ;)
 > 
-> Here use module_init() indeed have a race as Felipe said before.
-> usbcore uses subsys_initcall(), and have a higher priority than
-> module_init(), so when usbcore tries to create "devices" file,
-> usb_debug_root is not created.
+> Which command line option are you pertaining to?
 
-Ah, let me fix that, it should have the same init level and I'll ensure
-it comes first in the linking.
+To enable dynamic debugging in driver core you could use something like
 
-> after I replace it by postcore_initcall() (debugfs uses
-> core_initcall()), test two cases:
-> 
-> 1. buildin usbcore/udc-core
-> 
->     "usb" directory is created, and usb/devices file is also created by
-> usbcore
-> 
-> 2. build both usbcore and gadget as ko
-> 
->     usbcore.ko, udc-core.ko and usb-common.ko are created. 
-> 
->    2.1 
->        insmod usb-common.ko   // "usb" directory is created
->        insmod usb-core.ko   // usb/devices file is created
-> 
->    2.2
->        rmmod usb-common.ko  // failed, usb_common is in use by usb-core
-> 
->    2.3 
->        rmmod usb-core.ko   // usb/devices file is destroyed
->        rmmod usb-common.ko  // usb directory is destroyed
-> 
->    2.4 
->        insmod usb-common.ko   // "usb" directory is created
->        insmod udc-core.ko
-> 
->    2.5
->        rmmod usb-common.ko  // failed, usb_common is in use by udc-core
-> 
->    2.6 
->        rmmod udc-core.ko
->        rmmod usb-common.ko  // usb directory is destroyed
-> 
-> they are all in line with expectations
+	CONFIG_CMDLINE="dyndbg=\"func really_probe =p\""
 
-Wonderful!
+That gives you two printouts per successful probe, for example:
 
-Let me fix up the init level, and the build issue tha kbuild found, and
-post a v2 patch.
+	bus: 'usb-serial': really_probe: probing driver edgeport_ti_1 with device ttyUSB0
+	bus: 'usb-serial': really_probe: bound device ttyUSB0 to driver edgeport_ti_1
 
-thanks,
+Or you can of course just change the corresponding pr_debug to pr_info
+while debugging.
 
-greg k-h
+Johan
