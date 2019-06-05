@@ -2,25 +2,26 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0FE35D61
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 14:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E538135D66
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 15:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727842AbfFEM6N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 08:58:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47396 "EHLO mx1.suse.de"
+        id S1727814AbfFENAC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 09:00:02 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47644 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727769AbfFEM6N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 08:58:13 -0400
+        id S1727601AbfFENAC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 09:00:02 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id F4061AEBD;
-        Wed,  5 Jun 2019 12:58:11 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id B21EAAEBD;
+        Wed,  5 Jun 2019 13:00:01 +0000 (UTC)
 From:   Oliver Neukum <oneukum@suse.com>
-To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
+To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu
 Cc:     Oliver Neukum <oneukum@suse.com>
 Subject: [PATCH] usb: hso: correct debug message
-Date:   Wed,  5 Jun 2019 14:57:52 +0200
-Message-Id: <20190605125752.26610-1-oneukum@suse.com>
+Date:   Wed,  5 Jun 2019 14:59:42 +0200
+Message-Id: <20190605125942.26696-1-oneukum@suse.com>
 X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
