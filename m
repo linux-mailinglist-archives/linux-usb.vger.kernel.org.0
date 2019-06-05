@@ -2,144 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A052835749
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 08:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6415F35758
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 09:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbfFEG7v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 02:59:51 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:34319 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726501AbfFEG7q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 02:59:46 -0400
-Received: by mail-pg1-f196.google.com with SMTP id h2so8625604pgg.1
-        for <linux-usb@vger.kernel.org>; Tue, 04 Jun 2019 23:59:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kyvvb8Dpo+7r/hNh0Hasg4c/obIxKq733Zz2TyhyGfk=;
-        b=hnjKuAO+7okYKXT89T/HbjNHxzesqyxbmXGKeWw/M0zwLzOfJJzpKp+dzmqoVSGqOt
-         iDtduWPOOhMqRZ6X5vd3CEdo10NfJCUvGI9JQm/MdY9gjmE2kuH4LRETYHUrglfYxm8J
-         VCjECmRAgTUl366uCinwIDOF69n2S5FaY6OJFhB2njA68JADokDFOWPoi928hFXfMxfB
-         VH3bfVZX1XT/JVjKlUVWZJi68djN/YvQ0aFGC14/GD6WwBmQAobvm00Mwv4a1zw8aV6G
-         TWWSXbzVPVAtUSPJfPtY03wapzuBJphxNZZ/50HL2mG/P3OXVXN4cflOO4fT/wy4Hbek
-         8vTQ==
+        id S1726663AbfFEHDW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 03:03:22 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:41036 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726086AbfFEHDW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 03:03:22 -0400
+Received: by mail-lj1-f194.google.com with SMTP id s21so11480494lji.8;
+        Wed, 05 Jun 2019 00:03:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kyvvb8Dpo+7r/hNh0Hasg4c/obIxKq733Zz2TyhyGfk=;
-        b=AEfVKLHDmnyB2Hz/3J3r6tY33W2wQQXRRs+UqCgz+bVD6BYHEZLGG69XG7N9aBtroH
-         LSFTf0kP+NVfw3+D8FIVdgIKTAFrbVSK+9J75Shsft75DClE2nBML5oy8MdUAkXd/L43
-         U1PffyA1vA5acmYH0iTASB8IIWI/e4fFVH0l9N+57mYl3R0WUjvYYhWxkhLvN+LBVV0L
-         HyTL0ChOSCrWxesaQbuIfD4+MUmluFbAPdjtroVvxwLr6Kuz94PLrLa5QzTm+k9cinM+
-         QzpIrfzFj80caHY/BLNdLTXtPnxrWuh6PRxVB1fPESasVPJaRPjAaDY56xZz2sqbJTdb
-         u8Mw==
-X-Gm-Message-State: APjAAAUfxCBCsidfr4M45gKBVZY6LnmCgBGglDmCkWx5hx/j3jk2cjhe
-        yEWG5Fhyq8CwY7aV+o5LiQFOGw==
-X-Google-Smtp-Source: APXvYqxpBjz9vh9WdULbhd//bFEmA+VYRSMMw3Z/uoePAdJidj7tnNGvl62YsQy5ZWMZmZn6F/RnRw==
-X-Received: by 2002:a62:648d:: with SMTP id y135mr35422233pfb.98.1559717985295;
-        Tue, 04 Jun 2019 23:59:45 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id e184sm28589093pfa.169.2019.06.04.23.59.43
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 04 Jun 2019 23:59:44 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 00:00:29 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
-        andy.gross@linaro.org, david.brown@linaro.org,
-        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 7/8] usb: dwc3: qcom: Start USB in 'host mode' on the
- SDM845
-Message-ID: <20190605070029.GN22737@tuxbook-pro>
-References: <20190604104455.8877-1-lee.jones@linaro.org>
- <20190604104455.8877-7-lee.jones@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=osYzYbwPlOcKrG/PC8H8GWv1Nj5R7QK9wL1yUwsonBc=;
+        b=YT9K87TS1L+r1EFiLLaUcKL8P/rkxIMlZ93iEwCfuAYiJnvNDcEs2wA2ZNyUqgCIVd
+         nEayUOWpuRmJzTs1Z8ua2vVuPkX5iPqZ+o/d9pCD5a4sZ+3sWiZQOTtaEjSQHFLLvPGb
+         Pcuv2hy2c/4qckaFv6e1SjjkRG0gUfwwTF/2+QbB1BWziPFmZ6H0OYsw7DB+/ZE0VUnI
+         d2nyjwOw1Bm5s5RCcZiS2QjRmyDS9eqtg+TnQ9BNqARq/p5dlJSQ6n28jZdurULaNTsK
+         ZqAio89WnFnkskA1tjPJCcG4jZcyeui7DwWZF2uc/XA+vQV6r9cP8vfvzHqd8rhQsvnB
+         rvtA==
+X-Gm-Message-State: APjAAAXM+1p2medbe9z2hpTbwWXCIR3N+4L3s9m558Agz+nYqPbufqZK
+        YNdLlhAp9O92ecGR47b051a011brEq7mjYvLW6KbAzwDfrI=
+X-Google-Smtp-Source: APXvYqzwh3fVGm1fjYzMw1AVnfNmxjP5Iwroc9j1hk1lhsXlBthTB4FsB5COji/H7zBPGwhpbTYrkhgAtBN8C7k+/Jw=
+X-Received: by 2002:a2e:6e01:: with SMTP id j1mr19452629ljc.135.1559718199961;
+ Wed, 05 Jun 2019 00:03:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190604104455.8877-7-lee.jones@linaro.org>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+References: <CAMuHMdUObtKUVDohLT501TarPRC6eDnxBqqB5Tj_Tb+-4fwbkw@mail.gmail.com>
+ <OSAPR01MB30890E4B76F9605F3726C676D8160@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSAPR01MB30890E4B76F9605F3726C676D8160@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 5 Jun 2019 09:03:07 +0200
+Message-ID: <CAMuHMdXWsNfj1UYXDyh4ZJ0E2Z0jobug4jJ4uTpUa1X4d+Hocw@mail.gmail.com>
+Subject: Re: rcar_gen3_phy_usb2: unbalanced disables for USB20_VBUS0
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
+Hi Shimoda-san,
 
-> When booting with Device Tree, the current default boot configuration
-> table option, the request to boot via 'host mode' comes from the
-> "dr_mode" property.
+On Wed, Jun 5, 2019 at 6:06 AM Yoshihiro Shimoda
+<yoshihiro.shimoda.uh@renesas.com> wrote:
+> > From: Geert Uytterhoeven, Sent: Wednesday, June 5, 2019 3:06 AM
+> > Using a tree based on renesas-drivers-2019-06-04-v5.2-rc3, I started seeing
+> > the following warning during a second system suspend (s2idle):
+> <snip>
+> > So far I've seen this on Salvator-X with R-Car H3 ES1.0 or M3-W, and
+> > on Salvator-XS with R-Car M3-N, but not (yet?) on H3 ES2.0.
+>
+> I could reproduce this issue on R-Car H3 ES3.0 with Suspend-to-RAM.
+> # I'm silly but I could not use s2idle that didn't wake up by ravb.
+> # https://elinux.org/R-Car/Boards/Salvator-X#Suspend-to-Idle
 
-This has been the default on the MTP, but this is changing as this is
-causing issues when connected downstream from a hub (the typical
-development case for the primary USB port of a phone like device) and
-more importantly we don't have support for the PMIC blocks that control
-VBUS.
+With CONFIG_PM_DEBUG=y and CONFIG_PM_TEST_SUSPEND=y, you can use
 
-Once these issues are resolved the dr_mode would be "otg".
+     echo platform > /sys/power/pm_test
 
-> A property of the same name can be used inside
-> ACPI tables too.  However it is missing from the SDM845's ACPI tables
-> so we have to supply this information using Platform Device Properites
-> instead.
-> 
+to configure the system to wake up from s2idle after 5 seconds.
+This allows to loop s2idle without user intervention.
 
-Afaict this would install a fall-back property, so in the case that we
-have specified dr_mode in DT (or ACPI) that would take precedence. So
-the commit message should reflect that this redefines the default choice
-to be "host", rather than "otg".
+> Thank you for trying it. I have investigated this issue and then I found the root cause.
+>
+> After the following patch was applied, multiple phy devices are generated.
+> https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/drivers/phy/renesas/phy-rcar-gen3-usb2.c?h=renesas-drivers-2019-06-04-v5.2-rc3&id=549b6b55b00558183cef4af2c2bb61d4f2ffe508
+>
+> But, on the power_on function, it should set the "powered" flag for any other phys anyway.
+> Otherwise, such a strange imbalance behavior happened.
+> The powered flag is needed to avoid multiple "PLL_RST" register setting.
+> # I think regulator_{en,dis}able() don't need such a condition though.
+>
+> I'll submit a bugfix patch with your Reported-by tag later.
 
-Which is in conflict with what's described for dr_mode in
-Documentation/devicetree/bindings/usb/generic.txt
+Thank you very much!
 
+Gr{oetje,eeting}s,
 
-And this driver is used on a range of different Qualcomm platforms, so I
-don't think this is SDM845 specific.
+                        Geert
 
-Regards,
-Bjorn
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 349bf549ee44..f21fdd6cdd1a 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -468,6 +468,11 @@ static const struct acpi_device_id dwc3_qcom_acpi_match[] = {
->  };
->  MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
->  
-> +static const struct property_entry dwc3_qcom_acpi_properties[] = {
-> +	PROPERTY_ENTRY_STRING("dr_mode", "host"),
-> +	{}
-> +};
-> +
->  static int dwc3_qcom_probe(struct platform_device *pdev)
->  {
->  	struct device_node	*np = pdev->dev.of_node, *dwc3_np;
-> @@ -603,6 +608,13 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  			goto platform_unalloc;
->  		}
->  
-> +		ret = platform_device_add_properties(qcom->dwc3,
-> +						     dwc3_qcom_acpi_properties);
-> +		if (ret < 0) {
-> +			dev_err(&pdev->dev, "failed to add properties\n");
-> +			goto platform_unalloc;
-> +		}
-> +
->  		ret = platform_device_add(qcom->dwc3);
->  		if (ret) {
->  			dev_err(&pdev->dev, "failed to add device\n");
-> -- 
-> 2.17.1
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
