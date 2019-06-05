@@ -2,103 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D8635ED8
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E31A35EF9
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728344AbfFEONE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 10:13:04 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41228 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728271AbfFEOM7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 10:12:59 -0400
-Received: by mail-pl1-f194.google.com with SMTP id s24so9592965plr.8;
-        Wed, 05 Jun 2019 07:12:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=rQ5cAV9JVUsLAwdrrM1O5TPRMwz73JZqLRqBbZ7vdx0=;
-        b=mkl4LWlmnvt2DDHqNVDTjN982AZdka7KylbeLHsPRlFPb8Ko91eXw2vN/MbTCFK4K6
-         V/0KfvD/l/DRVJ6PVKgElDaBROM2zzQn7hWGT4EWBUnzj4h4pOm0WlJKhCWr+tUG2k9Y
-         uN2J3NmkoFeUUwV2pekjnutk6BNiwrzUN8P0xjuH7U2xVUgKiaGS7hZWSuUHZx+TSNq5
-         /zZp/3vkShW4LmMUeqFyHeJJ5kp2HSrT0onJq+zEirrztCwDfzeUZimYS1yJkZFWwbAb
-         ZXKvZatNxonsOZJVjfJw/QOJzJLLx89QFfpCds8hKAI0mFiF7i16GKxc1mUoE24UFqVf
-         YKEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=rQ5cAV9JVUsLAwdrrM1O5TPRMwz73JZqLRqBbZ7vdx0=;
-        b=OLhSvwFIiQlzsgJEwoc2RUk1TVrIZkXd7QpVY1HAtW58u9QBjfeIzCIL9Je+visdM3
-         GpROekHXoiTTbDk0xmZ5IgwQo0JCIPec3tIODJkdnBdslKmKVGr599PPzMG/yboSHcHJ
-         wpZ0mHfSTlNy/lhYQJVywmai+4wgGSfxz/PJXpPqUmQjobcYcMNOYoyyUuTfRIRPOem0
-         DeoyAGtSA1pvY1Yykk/2PF2EN86MPNKUEauTBb5jlQbDZQNjKursrUub7Hea1btCltuJ
-         sV3XuA+TzUXEh4ongCc3UYZbQEkcy6zHOVYkVTz0goJAVm4iH58mH1qD8Anjw/VFhkQ+
-         6kbA==
-X-Gm-Message-State: APjAAAXdBFbi8XohmR+vBLZDUhWVq43R0L4j2/TdwIfIJHr75F2P9cAi
-        Q+zLjY3lRaFOKnYRTGWK8K0=
-X-Google-Smtp-Source: APXvYqwt9vBba0fghkxA1R42UwPabG57Vw1OB94e8KD9RMo/nfBcesglEHOs/XxsrQ0RyMkSZGGI0Q==
-X-Received: by 2002:a17:902:b402:: with SMTP id x2mr44511012plr.128.1559743979222;
-        Wed, 05 Jun 2019 07:12:59 -0700 (PDT)
-Received: from hari-Inspiron-1545 ([183.83.89.153])
-        by smtp.gmail.com with ESMTPSA id c6sm41458010pfm.163.2019.06.05.07.12.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 07:12:58 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 19:42:53 +0530
-From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: at91_udc: Remove unneeded variable
-Message-ID: <20190605141253.GA7052@hari-Inspiron-1545>
+        id S1728193AbfFEOSP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 10:18:15 -0400
+Received: from sauhun.de ([88.99.104.3]:54796 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727904AbfFEOSP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 10:18:15 -0400
+Received: from localhost (p5486CB35.dip0.t-ipconnect.de [84.134.203.53])
+        by pokefinder.org (Postfix) with ESMTPSA id 87E5D2C016F;
+        Wed,  5 Jun 2019 16:18:12 +0200 (CEST)
+Date:   Wed, 5 Jun 2019 16:18:12 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>, balbi@kernel.org,
+        wsa+renesas@sang-engineering.com, gregkh@linuxfoundation.org,
+        linus.walleij@linaro.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david.brown@linaro.org,
+        alokc@codeaurora.org, kramasub@codeaurora.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, andy.gross@linaro.org,
+        jlhugo@gmail.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/8] i2c: i2c-qcom-geni: Signify successful driver probe
+Message-ID: <20190605141812.GA962@kunai>
+References: <20190604104455.8877-1-lee.jones@linaro.org>
+ <20190604104455.8877-2-lee.jones@linaro.org>
+ <20190605062020.GL22737@tuxbook-pro>
+ <20190605071625.GK4797@dell>
+ <20190605075656.GC29637@localhost>
+ <20190605082047.GM4797@dell>
+ <20190605083353.GD29637@localhost>
+ <20190605084921.GQ4797@dell>
+ <20190605085527.GE29637@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0F1p//8PRICkK4MW"
 Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190605085527.GE29637@localhost>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-at91_wakeup is always returning -EINVAL.
 
-But usb_gadget_wakeup expects 0 on success and negative number on
-failure. As per current implementation this function wont fail.
+--0F1p//8PRICkK4MW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patch removes unneeded variable and returns 0.
 
-Issue identified by coccicheck
+> To enable dynamic debugging in driver core you could use something like
+>=20
+> 	CONFIG_CMDLINE=3D"dyndbg=3D\"func really_probe =3Dp\""
+>=20
+> That gives you two printouts per successful probe, for example:
+>=20
+> 	bus: 'usb-serial': really_probe: probing driver edgeport_ti_1 with devic=
+e ttyUSB0
+> 	bus: 'usb-serial': really_probe: bound device ttyUSB0 to driver edgeport=
+_ti_1
 
-drivers/usb/gadget/udc/at91_udc.c:802:6-12:
-Unneeded variable: "status". Return "- EINVAL" on line 821
+I agree that this scales much better than adding strings to every
+driver. Also, the driver core will report failed probes other than
+-ENODEV, or?
 
-Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
----
- drivers/usb/gadget/udc/at91_udc.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Regarding this patch, however, I don't care much. I'll let the driver
+maintainers decide.
 
-diff --git a/drivers/usb/gadget/udc/at91_udc.c b/drivers/usb/gadget/udc/at91_udc.c
-index 03959dc..194ffb1 100644
---- a/drivers/usb/gadget/udc/at91_udc.c
-+++ b/drivers/usb/gadget/udc/at91_udc.c
-@@ -799,7 +799,6 @@ static int at91_wakeup(struct usb_gadget *gadget)
- {
- 	struct at91_udc	*udc = to_udc(gadget);
- 	u32		glbstate;
--	int		status = -EINVAL;
- 	unsigned long	flags;
- 
- 	DBG("%s\n", __func__ );
-@@ -818,7 +817,7 @@ static int at91_wakeup(struct usb_gadget *gadget)
- 
- done:
- 	spin_unlock_irqrestore(&udc->lock, flags);
--	return status;
-+	return 0;
- }
- 
- /* reinit == restore initial software state */
--- 
-2.7.4
 
+--0F1p//8PRICkK4MW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz3zx8ACgkQFA3kzBSg
+KbbwxQ//RQO8EXcBxgeJWiAo1YAvXE5bXco6J0Kag8kCqqOMHBIScESwy3pPkg+5
+DS/gtk2oJhvxOzUsFV1pLy+Eo3XbwN91CqbOd4QN8EEDTovnAWjvkzfyvy71DBgY
+w+O3WXPA4vsZ1i3907HUdaUAgfcWOLJYe6TaJG/4gkS43ByT1eK54rsOg9Gz1YZZ
+L06igURCQudkaB/OGzVuNk4nkyd1v5HoSiMcuYHKp9ifOf9ID992LpJ47FIEb2h+
+QFFSc/M5XGGETtUuQxdPW9DjqthrSUKV6hKoIKBMOG3uH13JUVbCCB8DIyTvb8h6
+UWcDfjQp/s7f279yVjhnE4+oEnKD4qzrsHX5+rzdeZ3rbEbLvjtbX7DHkeT6/ql7
+FcHnLelb3wGM0wSBybsovpH7zyzMR1g3CPTuClmjtuxNTQKcdRdZ6+7ZimA0KdQE
+/zQEW/QIwIutYmpU11iei8VT5BIg3ihI+xJOrFvdJMpmsrf9Y0WAR6j6kypBHPAH
+V750wMmIEQVgd+tordV7qB+HYdcCQspA2Beqglhz7Lu0f4ynexueEzP4oLQZRohR
+j/1C+7+dTDz43EIXL6OJpaXpyJPzeTnrSuyuVOquAJcXSPa9ALu36A7QFFsjU3t+
+oyeAoN/LwsnU5AxUy28uOyBgDldBrwrihTH/i0GU4pdAn54BY+Y=
+=a6fa
+-----END PGP SIGNATURE-----
+
+--0F1p//8PRICkK4MW--
