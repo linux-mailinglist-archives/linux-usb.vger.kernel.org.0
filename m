@@ -2,72 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F9135F19
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7192335F2C
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728346AbfFEOWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 10:22:19 -0400
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:41497 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728190AbfFEOWT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 10:22:19 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 02DFE21F3C;
-        Wed,  5 Jun 2019 10:22:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 05 Jun 2019 10:22:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=82Wqdd
-        gTanaA8sQnpaKhsdwYdtwsBt7md4IKTrjAOog=; b=j15yEjU1Zkt+QMnnwxxjMO
-        tyqUWT5/eFFuKTI9LjHiDqnEuRBOmTJm6iVCIGUhwyOmtmTWScKmpgNYglFM/LZZ
-        do+0UiiQ9DD1iq90Xsv/OTAF4Y+0FEuoGXzeEnnCj/Auyfd+jD4u7dPbspbaurYM
-        PAuVvX3sYHEVYUcg2Ejw+Xj0z+ROo6if2sDUGTMWpsFYHi03zGa5PnatKVKWZBXY
-        FdKwf/V0Ju1Ou4XQcKxh5PtGOQpG+UoJoysMcLNpXQFtps14wO/FwPswA54uCbdF
-        SYEvHJuTqdTN8WLowjx5SHySTd0YJSN5Ad5QOPALXH1sEWZbByHjeIxLECjdktHA
-        ==
-X-ME-Sender: <xms:GdD3XNfIp653e2BNYKmo3Hin7zRnslsFRsUqHHXu1j1SughL2agMlA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrudegvddgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvghfmjfeslhhinhhugihfohhunhgurghtihhonhdrohhrgheqnecukf
-    hppeekfedrkeeirdekledruddtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghg
-    sehkrhhorghhrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:GdD3XDV_FN_TxQzZCA0XofU7HMvPPbMY8K_vsitQWR8f3cMXVTVmkg>
-    <xmx:GdD3XGDVeGrF499Yy9guzHyTkeP4uAyQNi9wiNyLLEpwq3k5i9EUmg>
-    <xmx:GdD3XG6YESyhbV-mAREtCqbUoz07nXBlRU5O0Iii7mKOwnRJOGtA6A>
-    <xmx:GdD3XOQNXdTLmQfP2byR-ElKlI0HXMUUPofOcKQJcFwdqUfl-TROWg>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 058EF80062;
-        Wed,  5 Jun 2019 10:22:16 -0400 (EDT)
-Date:   Wed, 5 Jun 2019 16:22:14 +0200
-From:   Greg KH <gregKH@linuxfoundation.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
-Subject: Re: [PATCH] usb: hso: correct debug message
-Message-ID: <20190605142214.GC8803@kroah.com>
-References: <20190605125942.26696-1-oneukum@suse.com>
+        id S1728296AbfFEO0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 10:26:45 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:56538 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728290AbfFEO0p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 10:26:45 -0400
+Received: (qmail 2056 invoked by uid 2102); 5 Jun 2019 10:26:44 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 5 Jun 2019 10:26:44 -0400
+Date:   Wed, 5 Jun 2019 10:26:44 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrea Vai <andrea.vai@unipv.it>
+cc:     Greg KH <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
+Subject: Re: Slow I/O on USB media
+In-Reply-To: <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
+Message-ID: <Pine.LNX.4.44L0.1906051022380.1788-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190605125942.26696-1-oneukum@suse.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 02:59:42PM +0200, Oliver Neukum wrote:
-> If you do not find the OUT endpoint, you should say so,
-> rather than copy the error message for the IN endpoint.
-> Presumably a copy and paste error.
-> 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->  drivers/net/usb/hso.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 5 Jun 2019, Andrea Vai wrote:
 
-drivers/net/ patches go to netdev@vger...
+> Hi,
+> Il giorno mar, 04/06/2019 alle 07.43 +0200, Greg KH ha scritto:
+> > On Mon, Jun 03, 2019 at 01:13:48PM +0200, Andrea Vai wrote:
+> > > Il giorno gio, 30/05/2019 alle 06.25 -0700, Greg KH ha scritto:
+> > > > [...]
+> > > Hi,
+> > > 
+> > > > Any chance you can use 'git bisect' to find the offending
+> > commit?
+> > > Yes, I am doing it as I managed to build the kernel from source
+> > 
+> > Great!  What did you find?
+> 
+> # first bad commit: [534903d60376b4989b76ec445630aa10f2bc3043]
+> drm/atomic: Use explicit old crtc state in
+> drm_atomic_add_affected_planes()
+> 
+> By the way, as I am not expert, is there a way to double-check that I
+> bisected correctly? (such as, e.g., test with the version before this
+> one, and then with this commit applied?)
+
+That is exactly the way to do it: Build a kernel from that commit and 
+see that it fails, then revert the commit and see that the resulting 
+kernel succeeds.
+
+(Note: The notion of "version before" doesn't have a firm meaning in 
+the kernel, because some commits have multiple parents.  The best way 
+to see if a single commit caused a change is to do what I said above: 
+revert the commit and see what happens.)
+
+Incidentally, it seems very unlikely that a commit for the drm 
+subsystem would have any effect on the behavior of a USB storage 
+device.
+
+Alan Stern
 
