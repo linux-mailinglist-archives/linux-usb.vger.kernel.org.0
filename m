@@ -2,96 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0A536254
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 19:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86103362B6
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 19:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbfFERTN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 13:19:13 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:43941 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725950AbfFERTN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 13:19:13 -0400
-Received: by mail-pl1-f193.google.com with SMTP id cl9so4821455plb.10;
-        Wed, 05 Jun 2019 10:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=B/JvG0ZRDNEBNEcUAraBTtC7NdvBq6Iubs4NTtSOxek=;
-        b=rDfdgNbauu7tZFEVYV7kQxLNvFyCSUWQ7UC3QM6R5p6bIgKreqMVDBgwWMaOEBxIDL
-         96Uh5qcTkghNicBFnqtttNQKz/o2k3mU6z84h0Oz8cblIIdVoG0MosNevlA4Jx/dccUn
-         DLanrfnDs7gqgu9LLefN9tkfsB1JV/0QpmvJ8TjifvOTwig5xwzpcpbNLheZ8phjhZA+
-         4DIZfCocPAF0IKLy9yaO475MMkN09W9CnUFoZmI3JTuEyEnZXbOJQq81JxngkEQwOD3C
-         qnz3lPZpMfku2xZ6OyZOUmgjFXFXQRN2laDJffcS0VDypmBhrIMZ1KkVL6Ah4gRSX6sc
-         /QRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=B/JvG0ZRDNEBNEcUAraBTtC7NdvBq6Iubs4NTtSOxek=;
-        b=L/0xB1s45OjNOkc2yBszik/gD0jq7sIId7E49gIVe7GKY+bz4UzrG6kcp3bcBkaCIG
-         klzyyhO7LVD5cRbyTLDEqzJWo2tamzELVPsH2aq5DBMELzywXYjsTBVPA402nYCjAVHz
-         J3JtibS03WUgzHebNhIJ3z6IXZHZCGudkqXJWbaAZR9jxiBDtwXntYzCXKz6+Bc5PfM+
-         DsURo3cXyJJ9VOZOM8OzKNoEUxvhnbI5bfhycw+iq86gKsG1fjnZW9qosXX0R3fQGW5Q
-         Jz9X99UwrPLHYT9aCZjcbvQHmwNpwTEEnfAmdEC0BNHhIws7AVf7wJWxejD9olRFA5oL
-         rVAw==
-X-Gm-Message-State: APjAAAV93I77x+/QWU7fVhdoCbpTpT+R9jznwFGaX5kIBrY6GilTs26j
-        5QGFhMCroyQeR31ZzUW6w+A=
-X-Google-Smtp-Source: APXvYqzg6UsjNE80K0klM5VcBmYR/EAMwGMU1qa/8PwHFBWS3R8yC4dfX12VduefFKMCfQ0mxDsjkg==
-X-Received: by 2002:a17:902:2aa9:: with SMTP id j38mr8317370plb.206.1559755152756;
-        Wed, 05 Jun 2019 10:19:12 -0700 (PDT)
-Received: from hari-Inspiron-1545 ([183.83.89.153])
-        by smtp.gmail.com with ESMTPSA id n13sm17135548pgh.6.2019.06.05.10.19.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 10:19:11 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 22:49:08 +0530
-From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
-To:     Thomas Winischhofer <thomas@winischhofer.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726515AbfFERcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 13:32:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725950AbfFERcW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 13:32:22 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C4F8020866;
+        Wed,  5 Jun 2019 17:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559755942;
+        bh=3OiQHIkBj5obYDAp408SvCaE7dajk3tP3v7IaTQD8NM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K05P9hZ/zbQOih6+VIAtmv54MVb00m0mVCk6ICAh53KoDtFLyQRde0VVPjP3Am+Zx
+         frkol9unQ7LlQMuO5WDQ2N+mpkEyld1lltMfotgu8QSP6unXm4Hbz13Ap8w66a9CyS
+         supbIfeQkaymcOPYPAg2dycl1TrvYXtR8QEBjd7c=
+Date:   Wed, 5 Jun 2019 19:32:19 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
+Cc:     Thomas Winischhofer <thomas@winischhofer.net>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: sisusbvga: Remove unneeded variable
-Message-ID: <20190605171908.GA10444@hari-Inspiron-1545>
+Subject: Re: [PATCH] USB: sisusbvga: Remove unneeded variable
+Message-ID: <20190605173219.GC27700@kroah.com>
+References: <20190605171908.GA10444@hari-Inspiron-1545>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190605171908.GA10444@hari-Inspiron-1545>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-fix below warning reported by coccicheck
+On Wed, Jun 05, 2019 at 10:49:08PM +0530, Hariprasad Kelam wrote:
+> fix below warning reported by coccicheck
+> 
+> drivers/usb/misc/sisusbvga/sisusb.c:1753:5-8: Unneeded variable: "ret".
+> Return "0" on line 1877
+> 
+> Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+> ---
+>  drivers/usb/misc/sisusbvga/sisusb.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
+> index ea06f1f..dfe2ed1 100644
+> --- a/drivers/usb/misc/sisusbvga/sisusb.c
+> +++ b/drivers/usb/misc/sisusbvga/sisusb.c
+> @@ -1750,7 +1750,7 @@ static int sisusb_setup_screen(struct sisusb_usb_data *sisusb,
+>  static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
+>  		int touchengines)
+>  {
+> -	int ret = 0, i, j, modex, bpp, du;
+> +	int i, j, modex, bpp, du;
+>  	u8 sr31, cr63, tmp8;
+>  	static const char attrdata[] = {
+>  		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+> @@ -1874,7 +1874,7 @@ static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
+>  
+>  	SETIREG(SISCR, 0x34, 0x44);	/* we just set std mode #44 */
+>  
+> -	return ret;
+> +	return 0;
 
-drivers/usb/misc/sisusbvga/sisusb.c:1753:5-8: Unneeded variable: "ret".
-Return "0" on line 1877
+If this function can not fail, why is it returning anything at all?
+Please fix that up at the same time.
 
-Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
----
- drivers/usb/misc/sisusbvga/sisusb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
-index ea06f1f..dfe2ed1 100644
---- a/drivers/usb/misc/sisusbvga/sisusb.c
-+++ b/drivers/usb/misc/sisusbvga/sisusb.c
-@@ -1750,7 +1750,7 @@ static int sisusb_setup_screen(struct sisusb_usb_data *sisusb,
- static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
- 		int touchengines)
- {
--	int ret = 0, i, j, modex, bpp, du;
-+	int i, j, modex, bpp, du;
- 	u8 sr31, cr63, tmp8;
- 	static const char attrdata[] = {
- 		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-@@ -1874,7 +1874,7 @@ static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
- 
- 	SETIREG(SISCR, 0x34, 0x44);	/* we just set std mode #44 */
- 
--	return ret;
-+	return 0;
- }
- 
- static int sisusb_init_gfxcore(struct sisusb_usb_data *sisusb)
--- 
-2.7.4
-
+greg k-h
