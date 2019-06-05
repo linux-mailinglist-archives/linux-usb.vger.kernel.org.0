@@ -2,79 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86103362B6
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 19:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EC4362D3
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 19:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbfFERcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 13:32:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54448 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725950AbfFERcW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 13:32:22 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C4F8020866;
-        Wed,  5 Jun 2019 17:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559755942;
-        bh=3OiQHIkBj5obYDAp408SvCaE7dajk3tP3v7IaTQD8NM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K05P9hZ/zbQOih6+VIAtmv54MVb00m0mVCk6ICAh53KoDtFLyQRde0VVPjP3Am+Zx
-         frkol9unQ7LlQMuO5WDQ2N+mpkEyld1lltMfotgu8QSP6unXm4Hbz13Ap8w66a9CyS
-         supbIfeQkaymcOPYPAg2dycl1TrvYXtR8QEBjd7c=
-Date:   Wed, 5 Jun 2019 19:32:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
-Cc:     Thomas Winischhofer <thomas@winischhofer.net>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: sisusbvga: Remove unneeded variable
-Message-ID: <20190605173219.GC27700@kroah.com>
-References: <20190605171908.GA10444@hari-Inspiron-1545>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190605171908.GA10444@hari-Inspiron-1545>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+        id S1726515AbfFERht (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 13:37:49 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:40421 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726280AbfFERht (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 13:37:49 -0400
+Received: by mail-qt1-f194.google.com with SMTP id a15so4456293qtn.7
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 10:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=3cTAGjEEyvSEOKis+JGJ9E3Hpl0tuFQ0pG5JvNLtgH4=;
+        b=OSdVDV2JAIDLq3bo4Fw+iHKe0AN62VKi3LQenR9+D7C6zzAD34bhSVh1WtluVzYK4A
+         3Q742xlzlHApJ3k0R4+SCnAWshNR2RL0YJeA9PSh6VclRCKaiGwotsC4aZl9RVbGwyWz
+         uDAsRdAGXI122phxyvklGcoY/Doa6iE1V154SqLw9shsaHEkVHUBjPznDD8964xLreGm
+         lRXCXFF2txfsbeYRzH9Epk6N32Fk5NbYO+uHSVThNDDaMdcFWOP/cY4K2R/J/TKh/inh
+         o+V2FYZnRGfp/yzhLunEF4yKRtHKTW843ncM08tNdP1Slj7Q/XSFnifsYuMvZPMZNP6l
+         /7nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3cTAGjEEyvSEOKis+JGJ9E3Hpl0tuFQ0pG5JvNLtgH4=;
+        b=a4ipYWpMOReHwci5l/BKgL8ptIDI7d5LgbAe2sYdUHCRyVNvcH3F5beD+1dQ69ea4K
+         KX0dIK3fAJU+XXahr9CNbiQnU7fT0MRJZekr1uffyoI3u05wr0QyiahabcuD5Lyc9/ZL
+         Q67J3ArxZe4e1RW8Gs1KX9izQlXtebXQQ9OwnlFIu3+xqf3pawChZCgMGlyMmLoG6Azx
+         wh+v4GirpzYgcBHweB7b8WNqs07aYUHDmgtnQCZUscwc7Gg0dx46YGQaclxj+TLvgbIC
+         9CkPobKdJdOzGOk/cKyt80FqQ3BC3n8uFLe6YxrW8GDXj+lLHm3aFg5UeoM6rbanf8dw
+         PzZQ==
+X-Gm-Message-State: APjAAAVItGf4dKurq/LpW+C7xlmtge8+sCfyYzQkZP/L90rMt8ZsU7gP
+        c2IYVSDR13GqKHyXOF2pVXA=
+X-Google-Smtp-Source: APXvYqzoQsjtAWz7MEenC+22P59dqMeQLLucvnV8zDLOSEZRgzIrfCR+qJXtAhsQELiiOoKI0H/Vbw==
+X-Received: by 2002:ac8:1a1c:: with SMTP id v28mr34242409qtj.270.1559756268152;
+        Wed, 05 Jun 2019 10:37:48 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14c:482:3c8:56cb:1049:60d2:137b])
+        by smtp.gmail.com with ESMTPSA id m66sm12378225qkb.12.2019.06.05.10.37.45
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 10:37:47 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     Peter.Chen@nxp.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH 1/2] usb: chipidea: imx: Use devm_platform_ioremap_resource()
+Date:   Wed,  5 Jun 2019 14:37:37 -0300
+Message-Id: <20190605173738.5380-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 10:49:08PM +0530, Hariprasad Kelam wrote:
-> fix below warning reported by coccicheck
-> 
-> drivers/usb/misc/sisusbvga/sisusb.c:1753:5-8: Unneeded variable: "ret".
-> Return "0" on line 1877
-> 
-> Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
-> ---
->  drivers/usb/misc/sisusbvga/sisusb.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
-> index ea06f1f..dfe2ed1 100644
-> --- a/drivers/usb/misc/sisusbvga/sisusb.c
-> +++ b/drivers/usb/misc/sisusbvga/sisusb.c
-> @@ -1750,7 +1750,7 @@ static int sisusb_setup_screen(struct sisusb_usb_data *sisusb,
->  static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
->  		int touchengines)
->  {
-> -	int ret = 0, i, j, modex, bpp, du;
-> +	int i, j, modex, bpp, du;
->  	u8 sr31, cr63, tmp8;
->  	static const char attrdata[] = {
->  		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-> @@ -1874,7 +1874,7 @@ static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
->  
->  	SETIREG(SISCR, 0x34, 0x44);	/* we just set std mode #44 */
->  
-> -	return ret;
-> +	return 0;
+Use devm_platform_ioremap_resource() to simplify the code a bit.
 
-If this function can not fail, why is it returning anything at all?
-Please fix that up at the same time.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ drivers/usb/chipidea/usbmisc_imx.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+index d8b67e150b12..b0b3ba65c8d7 100644
+--- a/drivers/usb/chipidea/usbmisc_imx.c
++++ b/drivers/usb/chipidea/usbmisc_imx.c
+@@ -769,7 +769,6 @@ MODULE_DEVICE_TABLE(of, usbmisc_imx_dt_ids);
+ 
+ static int usbmisc_imx_probe(struct platform_device *pdev)
+ {
+-	struct resource	*res;
+ 	struct imx_usbmisc *data;
+ 	const struct of_device_id *of_id;
+ 
+@@ -783,8 +782,7 @@ static int usbmisc_imx_probe(struct platform_device *pdev)
+ 
+ 	spin_lock_init(&data->lock);
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	data->base = devm_ioremap_resource(&pdev->dev, res);
++	data->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(data->base))
+ 		return PTR_ERR(data->base);
+ 
+-- 
+2.17.1
 
-greg k-h
