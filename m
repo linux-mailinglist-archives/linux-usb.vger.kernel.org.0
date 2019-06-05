@@ -2,116 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69457366F2
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 23:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB9236827
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 01:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbfFEVqZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 17:46:25 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:34717 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726502AbfFEVqZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 17:46:25 -0400
-Received: by mail-pg1-f193.google.com with SMTP id h2so85719pgg.1;
-        Wed, 05 Jun 2019 14:46:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wVHClWl83LJ+u63GhFAh1l0RQa+NY4Hk0/D4slzQzV0=;
-        b=t9AJGRyI9SEqXVZAmAUs3ZqRfMyaQekOOYs/ZD8huILdYj5wezynTdJTEzpTaQUA/I
-         IbX+nUZ8ZaR/gQjgV5WnQno2tB8vpSEvZl23fY6+Z1hEAqgk339Wlry8xPCHVIauNMHu
-         cf/EDc3o3byv2vPvlFwqZtdgw3s3H/IP6IxQvgX/J2GeTw4lxPhrQx335Kto4tpXqLcJ
-         3rI0w4PqFGXWAymbzWX64UaOdqZ/D+MokoA7stnLz1sBybjFZpSQm7bIrhkxhLdrxpaB
-         psLHnY3mcGuu5Tu2zUUcgdYV3swchhXSiUZyFSGQ0B4BT9pBU1audVh2HGoS7ME1rhMP
-         moqQ==
+        id S1726608AbfFEXfR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 19:35:17 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:47051 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726502AbfFEXfR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 19:35:17 -0400
+Received: by mail-oi1-f193.google.com with SMTP id 203so271769oid.13;
+        Wed, 05 Jun 2019 16:35:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wVHClWl83LJ+u63GhFAh1l0RQa+NY4Hk0/D4slzQzV0=;
-        b=k0b4TMedpb8DvC9yYyfhstvXL3x0SBgsZrOUWZFcighLF5/LN9L6/8DOCGM2CaH7FG
-         V0fLsPzHKDEPFwyS4mbWXJRtQ5/jgff8Um6XjXBhZlVUziStR1tlaJBm3Rby6sCFd/07
-         OKXaZdwoQIVlg38YhL9Uyq/oeueQxhl2mZjtrTQyarBd79FT0OdmYtV/GiYpbVpZAnh0
-         gl2i/DVN6X9fA/w9Ap76nvfGdFMj1NWp9XxUU4HGt1RTYDidfz0cWYUI55j8XTOVm/CD
-         p0HO2AdqY+sksewnX3shh+hOPoYkeVGop3q8rI1Av+oTLPXuy0cjoNaZL2TzXejyPJo9
-         RtYw==
-X-Gm-Message-State: APjAAAURa+1Y+G2bLRg2PJ6zzTOgW7yMX982zv70bjjJX0EhU/wdXXYx
-        ouBsda/S+Efp61aBFBEoIS4=
-X-Google-Smtp-Source: APXvYqz+eJgUTibPNjLvxTAaqTSeA0VFGgm+wTGI1UNNuJwrIeGZusYtqZ067RvWqrF8dFnX/afUZg==
-X-Received: by 2002:a17:90a:dd42:: with SMTP id u2mr47466072pjv.118.1559771184444;
-        Wed, 05 Jun 2019 14:46:24 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z15sm6282401pge.40.2019.06.05.14.46.22
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sP5Jo/+KivdI/bxh9Ffstcmb0kFLHw7pjLkPnap8FYc=;
+        b=NTdJRAn38Knw/o6Kpz/DTy4VHA00ps4Mlf+O/OUDpJv2kE7FLxTf21fLcN6f5AhjKs
+         BDNIbngrm+6cwPr8Nj8qT/BFM5rJcHdyWjMiK4Subnv++rms9EXd79hOxs96Qs2cYODF
+         DafQnhciKV5UIQ+q2cznW0yYkXPG+EyEQpaUzBqAnpQbXfZJ0MMiM/3hBRzv1lIeU2jC
+         HsPCa0qF+n060RsHi/nhmZGrdhgZB5AyWEJYS8n/ri+YuRCMphJxNkT6AHJwzl3+34Zi
+         T406AUeC4IolYF+2PeTXMT8PLIjAJN3BmnU7a8AAw+GlUV3HPwGJx2bKSiHvOSs6lwVb
+         H5hQ==
+X-Gm-Message-State: APjAAAVNBtkbAV/O4Kjg4bvytKvVSQCorrMTFnERYs1EOVz8ssw2GehO
+        vXAsOoM0yXXsQWFrttZtyFXCGSCh
+X-Google-Smtp-Source: APXvYqxKdRuZiaGzWrM69Xb9VlwdZWMVuRphCu6AjNPc/fgK/sF4SQPpB4XYM1onfx/CRY0xjH7dIQ==
+X-Received: by 2002:aca:dd08:: with SMTP id u8mr5800529oig.27.1559777716296;
+        Wed, 05 Jun 2019 16:35:16 -0700 (PDT)
+Received: from ?IPv6:2600:1700:65a0:78e0:514:7862:1503:8e4d? ([2600:1700:65a0:78e0:514:7862:1503:8e4d])
+        by smtp.gmail.com with ESMTPSA id m32sm56535otc.55.2019.06.05.16.35.13
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 14:46:23 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 14:46:22 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     laurentiu.tudor@nxp.com
-Cc:     hch@lst.de, stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, marex@denx.de, leoyang.li@nxp.com,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        noring@nocrew.org, JuergenUrban@gmx.de
-Subject: Re: [PATCH v7 3/5] usb: host: ohci-sm501: init genalloc for local
- memory
-Message-ID: <20190605214622.GA22254@roeck-us.net>
-References: <20190529102843.13174-1-laurentiu.tudor@nxp.com>
- <20190529102843.13174-4-laurentiu.tudor@nxp.com>
+        Wed, 05 Jun 2019 16:35:15 -0700 (PDT)
+Subject: Re: [PATCH 08/13] IB/iser: set virt_boundary_mask in the scsi host
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Sebastian Ott <sebott@linux.ibm.com>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
+        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+References: <20190605190836.32354-1-hch@lst.de>
+ <20190605190836.32354-9-hch@lst.de> <20190605202235.GC3273@ziepe.ca>
+From:   Sagi Grimberg <sagi@grimberg.me>
+Message-ID: <b3e46295-4257-86ad-6994-f83b736c8f40@grimberg.me>
+Date:   Wed, 5 Jun 2019 16:35:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190529102843.13174-4-laurentiu.tudor@nxp.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190605202235.GC3273@ziepe.ca>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 29, 2019 at 01:28:41PM +0300, laurentiu.tudor@nxp.com wrote:
-> From: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+
+>> This ensures all proper DMA layer handling is taken care of by the
+>> SCSI midlayer.
 > 
-> In preparation for dropping the existing "coherent" dma mem declaration
-> APIs, replace the current dma_declare_coherent_memory() based mechanism
-> with the creation of a genalloc pool that will be used in the OHCI
-> subsystem as replacement for the DMA APIs.
+> Maybe not entirely related to this series, but it looks like the SCSI
+> layer is changing the device global dma_set_max_seg_size() - at least
+> in RDMA the dma device is being shared between many users, so we
+> really don't want SCSI to make this value smaller.
 > 
-> For context, see thread here: https://lkml.org/lkml/2019/4/22/357
-> 
-> Signed-off-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> Can we do something about this?
 
-This patch results in usb access failures when trying to boot from the
-sm501-usb controller on sh4 with qemu.
+srp seems to do the right thing:
+target_host->max_segment_size = ib_dma_max_seg_size(ibdev);
 
-usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 08 7c 00 00 f0 00
-print_req_error: I/O error, dev sda, sector 2172 flags 80700
-usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 01 da 00 00 f0 00
-print_req_error: I/O error, dev sda, sector 474 flags 84700
-usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 02 da 00 00 f0 00
-print_req_error: I/O error, dev sda, sector 730 flags 84700
-usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 0b 50 00 00 f0 00
-print_req_error: I/O error, dev sda, sector 2896 flags 84700
+But iser does not, which means that scsi limits it to:
+BLK_MAX_SEGMENT_SIZE (64k)
 
-Qemu command line is:
+I can send a fix to iser.
 
-The qemu command line is:
+> Wondering about other values too, and the interaction with the new
+> combining stuff in umem.c
 
-qemu-system-sh4 -M r2d \
-        -kernel ./arch/sh/boot/zImage \
-	-snapshot \
-	-usb -device usb-storage,drive=d0 \
-	-drive file=rootfs.ext2,if=none,id=d0,format=raw \
-	-append 'panic=-1 slub_debug=FZPUA root=/dev/sda rootwait console=ttySC1,115200 earlycon=scif,mmio16,0xffe80000 noiotrap' \
-	-serial null -serial stdio \
-	-net nic,model=rtl8139 -net user -nographic -monitor null
-
-Reverting this patch as well as "USB: drop HCD_LOCAL_MEM flag" fixes the
-problem. Reverting "USB: drop HCD_LOCAL_MEM flag" alone does not help.
-
-Guenter
+The only other values AFAICT is the dma_boundary that rdma llds don't
+set...
