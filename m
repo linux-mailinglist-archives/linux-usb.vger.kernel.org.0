@@ -2,77 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B146356E8
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 08:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B7C356BF
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 08:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfFEGVW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 02:21:22 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:62280 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726263AbfFEGVW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 02:21:22 -0400
-X-IronPort-AV: E=Sophos;i="5.60,550,1549897200"; 
-   d="scan'208";a="17654997"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 05 Jun 2019 15:21:20 +0900
-Received: from localhost.localdomain (unknown [10.166.17.210])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 4D5E140062C7;
-        Wed,  5 Jun 2019 15:21:20 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v2 2/2] usb: renesas_usbhs: remove controlling PWEN/EXTLP support
-Date:   Wed,  5 Jun 2019 15:16:22 +0900
-Message-Id: <1559715382-28390-3-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1559715382-28390-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-References: <1559715382-28390-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+        id S1726608AbfFEGQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 02:16:44 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40480 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726613AbfFEGQh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 02:16:37 -0400
+Received: by mail-pg1-f196.google.com with SMTP id d30so11799158pgm.7
+        for <linux-usb@vger.kernel.org>; Tue, 04 Jun 2019 23:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=yPLGcJboWqTS41OXT0YPS9mFDLi+KIswrNZ4xj5RMzE=;
+        b=a2p19VFRYfiN+slwv4mz43rBb2yISQyrLkTJcMwSA/WWx9l79OZvNlzb0McxQjlz1q
+         V0H85qKfEr5ZtprV5QK9qBTKSV8I1gF9ndrBiqTp2IS+Bz1UAF4xjzJ5ovK8Dbv9obd/
+         E4MAUdbc473B8+RS4fi0cnV5jtQ/pttN9wdLEjbGLZPKISnutmqS1RoLvLUmatV7Sxj4
+         1YpTj26Z25oIhkuyqe73xgLobBxUTtBRWPzTU80HA6shTFVU+iFMdg7A/LeV1fBVQ54j
+         iipbbvvwaXrxFxqY26USW52xFqh7PwiURi/plOK8dz92vePi2swKlawieFKqGfDli8E8
+         zFfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=yPLGcJboWqTS41OXT0YPS9mFDLi+KIswrNZ4xj5RMzE=;
+        b=kmaokM6GsA6HMTWtbVbff7gUh2AVPZjvWEh5ClvjaosuRrjMIzvhs7kc/IFwYHUIJZ
+         SL/gjRdrpwkNXOx6XuyA4f51Itj37Vb4Z3gaj/h1JIKrc1/XZa2uz9ZnWwn08SOk55UR
+         0YOobXfKr2Ct77HZGJoGtOhrZUHpJXc5ExtyOSMoW5jidOg0zac9erddPsOqRNiyh/9c
+         PaX6QJDeDjyeqNjsW2CFRHBfqsXeyZqaXVgYcY7W+y+nli8TCOxea9uqpjy9oF9+C+KH
+         dq3+mqLkA5MLV6iaOW96oOZVant8glf5LqsxTXaUdD0eSUUO0YQ6VTyW8rYnHYwvcUX6
+         xSzw==
+X-Gm-Message-State: APjAAAW99vUHwsQUrO0ttAPoUP0gkYuacfb5mDYGXBGn6zcjJ+ue6nge
+        YIAwn3OpenNU9quGa8ORsTrx9w==
+X-Google-Smtp-Source: APXvYqwEJhIs8QubYN0avnbvfixWjIzhGaRnp7YPaFTgZ2Z2O0BG2WDaO37plKfU2MMrMOlw9tyzHw==
+X-Received: by 2002:a62:ea0a:: with SMTP id t10mr43421341pfh.236.1559715396814;
+        Tue, 04 Jun 2019 23:16:36 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id z18sm8987858pgh.88.2019.06.04.23.16.35
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 04 Jun 2019 23:16:36 -0700 (PDT)
+Date:   Tue, 4 Jun 2019 23:17:21 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
+        andy.gross@linaro.org, david.brown@linaro.org,
+        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 4/8] pinctrl: qcom: sdm845: Provide ACPI support
+Message-ID: <20190605061721.GK22737@tuxbook-pro>
+References: <20190604104455.8877-1-lee.jones@linaro.org>
+ <20190604104455.8877-4-lee.jones@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190604104455.8877-4-lee.jones@linaro.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Controlling PWMEN/EXTLP (named as "has_otg") was supported in v3.2,
-but the last user (kzm9g) was removed by the commit 30f8925a57d8ad49
-("ARM: shmobile: Remove legacy board code for KZM-A9-GT"). So, this
-patch remove it.
+On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
----
- drivers/usb/renesas_usbhs/common.c | 4 ----
- include/linux/usb/renesas_usbhs.h  | 1 -
- 2 files changed, 5 deletions(-)
+> This patch provides basic support for booting with ACPI instead
+> of the currently supported Device Tree.  When doing so there are a
+> couple of differences which we need to taken into consideration.
+> 
+> Firstly, the SDM850 ACPI tables omit information pertaining to the
+> 4 reserved GPIOs on the platform.  If Linux attempts to touch/
+> initialise any of these lines, the firmware will restart the
+> platform.
+> 
+> Secondly, when booting with ACPI, it is expected that the firmware
+> will set-up things like; Regulators, Clocks, Pin Functions, etc in
+> their ideal configuration.  Thus, the possible Pin Functions
+> available to this platform are not advertised when providing the
+> higher GPIOD/Pinctrl APIs with pin information.
+> 
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/pinctrl/qcom/Kconfig          |  2 +-
+>  drivers/pinctrl/qcom/pinctrl-sdm845.c | 35 ++++++++++++++++++++++++++-
+>  2 files changed, 35 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
+> index 2e66ab72c10b..aafbe932424f 100644
+> --- a/drivers/pinctrl/qcom/Kconfig
+> +++ b/drivers/pinctrl/qcom/Kconfig
+> @@ -168,7 +168,7 @@ config PINCTRL_SDM660
+>  
+>  config PINCTRL_SDM845
+>         tristate "Qualcomm Technologies Inc SDM845 pin controller driver"
+> -       depends on GPIOLIB && OF
+> +       depends on GPIOLIB && (OF || ACPI)
+>         select PINCTRL_MSM
+>         help
+>           This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+> diff --git a/drivers/pinctrl/qcom/pinctrl-sdm845.c b/drivers/pinctrl/qcom/pinctrl-sdm845.c
+> index c97f20fca5fd..7188bee3cf3e 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-sdm845.c
+> +++ b/drivers/pinctrl/qcom/pinctrl-sdm845.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
+>   */
+>  
+> +#include <linux/acpi.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> @@ -1277,6 +1278,10 @@ static const struct msm_pingroup sdm845_groups[] = {
+>  	UFS_RESET(ufs_reset, 0x99f000),
+>  };
+>  
+> +static const int sdm845_acpi_reserved_gpios[] = {
+> +	0, 1, 2, 3, 81, 82, 83, 84, -1
+> +};
+> +
+>  static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
+>  	.pins = sdm845_pins,
+>  	.npins = ARRAY_SIZE(sdm845_pins),
+> @@ -1284,14 +1289,41 @@ static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
+>  	.nfunctions = ARRAY_SIZE(sdm845_functions),
+>  	.groups = sdm845_groups,
+>  	.ngroups = ARRAY_SIZE(sdm845_groups),
+> +	.reserved_gpios = sdm845_acpi_reserved_gpios,
 
-diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-index c7c9c5d..a501ea6 100644
---- a/drivers/usb/renesas_usbhs/common.c
-+++ b/drivers/usb/renesas_usbhs/common.c
-@@ -95,10 +95,6 @@ void usbhs_sys_host_ctrl(struct usbhs_priv *priv, int enable)
- {
- 	u16 mask = DCFM | DRPD | DPRPU | HSE | USBE;
- 	u16 val  = DCFM | DRPD | HSE | USBE;
--	int has_otg = usbhs_get_dparam(priv, has_otg);
--
--	if (has_otg)
--		usbhs_bset(priv, DVSTCTR, (EXTLP | PWEN), (EXTLP | PWEN));
- 
- 	/*
- 	 * if enable
-diff --git a/include/linux/usb/renesas_usbhs.h b/include/linux/usb/renesas_usbhs.h
-index a2481f4d..b2cba7c 100644
---- a/include/linux/usb/renesas_usbhs.h
-+++ b/include/linux/usb/renesas_usbhs.h
-@@ -186,7 +186,6 @@ struct renesas_usbhs_driver_param {
- 	/*
- 	 * option:
- 	 */
--	u32 has_otg:1; /* for controlling PWEN/EXTLP */
- 	u32 has_usb_dmac:1; /* for USB-DMAC */
- 	u32 runtime_pwctrl:1;
- 	u32 has_cnen:1;
--- 
-2.7.4
+The reason why put these in DT is because the list is board/firmware
+dependent. E.g. the firmware on db845c does not support the peripherals
+that sits on these 8 pins and as such these are not reserved.
 
+But given that the two structs looks identical now, did you perhaps not
+intend to add.reserved_gpios for the non-ACPI case?
+
+Regards,
+Bjorn
+
+> +	.ngpios = 150,
+> +};
+> +
+> +static const struct msm_pinctrl_soc_data sdm845_acpi_pinctrl = {
+> +	.pins = sdm845_pins,
+> +	.npins = ARRAY_SIZE(sdm845_pins),
+> +	.groups = sdm845_groups,
+> +	.ngroups = ARRAY_SIZE(sdm845_groups),
+> +	.reserved_gpios = sdm845_acpi_reserved_gpios,
+>  	.ngpios = 150,
+>  };
+>  
+>  static int sdm845_pinctrl_probe(struct platform_device *pdev)
+>  {
+> -	return msm_pinctrl_probe(pdev, &sdm845_pinctrl);
+> +	int ret;
+> +
+> +	if (pdev->dev.of_node) {
+> +		ret = msm_pinctrl_probe(pdev, &sdm845_pinctrl);
+> +	} else if (ACPI_HANDLE(&pdev->dev)) {
+> +		ret = msm_pinctrl_probe(pdev, &sdm845_acpi_pinctrl);
+> +	} else {
+> +		dev_err(&pdev->dev, "DT and ACPI disabled\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+>  }
+>  
+> +static const struct acpi_device_id sdm845_pinctrl_acpi_match[] = {
+> +	{ "QCOM0217"},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(acpi, sdm845_pinctrl_acpi_match);
+> +
+>  static const struct of_device_id sdm845_pinctrl_of_match[] = {
+>  	{ .compatible = "qcom,sdm845-pinctrl", },
+>  	{ },
+> @@ -1302,6 +1334,7 @@ static struct platform_driver sdm845_pinctrl_driver = {
+>  		.name = "sdm845-pinctrl",
+>  		.pm = &msm_pinctrl_dev_pm_ops,
+>  		.of_match_table = sdm845_pinctrl_of_match,
+> +		.acpi_match_table = ACPI_PTR(sdm845_pinctrl_acpi_match),
+>  	},
+>  	.probe = sdm845_pinctrl_probe,
+>  	.remove = msm_pinctrl_remove,
+> -- 
+> 2.17.1
+> 
