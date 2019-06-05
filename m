@@ -2,134 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E0C35526
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 04:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21C3355BE
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 06:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbfFECQH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Jun 2019 22:16:07 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:16151 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726293AbfFECQH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 22:16:07 -0400
-X-UUID: 9db87658935a4c8f8961da87f290c9d2-20190605
-X-UUID: 9db87658935a4c8f8961da87f290c9d2-20190605
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1510923047; Wed, 05 Jun 2019 10:16:01 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33DR.mediatek.inc
- (172.27.6.106) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 5 Jun
- 2019 10:16:00 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 5 Jun 2019 10:15:59 +0800
-Message-ID: <1559700959.8487.78.camel@mhfsdcap03>
-Subject: Re: [PATCH] USB: move usb debugfs directory creation to the usb
- common core
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Wed, 5 Jun 2019 10:15:59 +0800
-In-Reply-To: <20190604115919.GA24346@kroah.com>
-References: <20190604093258.GB30054@kroah.com>
-         <20190604115919.GA24346@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        id S1726613AbfFEEGs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 00:06:48 -0400
+Received: from mail-eopbgr1400131.outbound.protection.outlook.com ([40.107.140.131]:31440
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725294AbfFEEGs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 00:06:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QzRw9pf2OfyvOVRgkWwWnQL0J2UKXOuShxVzeg3UszQ=;
+ b=nLxOUTMtQld7edhPgWa+mZtuaquvj13wN8+2k4shuLweNK3nxjJHkzlm48M8BGcP2K5mc1OtLc5KcAoEuDyug4wtgVIivbFgyH/W2VTXb0nZrVrWk4iWqq8MM41XGU27BFgUJ5WuXmY7mIqDsX7rbD+ZSmA9bDPf8DMdH458ZI4=
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
+ OSAPR01MB4724.jpnprd01.prod.outlook.com (20.179.177.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1943.22; Wed, 5 Jun 2019 04:06:44 +0000
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85%7]) with mapi id 15.20.1943.018; Wed, 5 Jun 2019
+ 04:06:44 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: RE: rcar_gen3_phy_usb2: unbalanced disables for USB20_VBUS0
+Thread-Topic: rcar_gen3_phy_usb2: unbalanced disables for USB20_VBUS0
+Thread-Index: AQHVGwA/6yZMGZVP4EW1AZzw0OBf96aMbWQg
+Date:   Wed, 5 Jun 2019 04:06:44 +0000
+Message-ID: <OSAPR01MB30890E4B76F9605F3726C676D8160@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+References: <CAMuHMdUObtKUVDohLT501TarPRC6eDnxBqqB5Tj_Tb+-4fwbkw@mail.gmail.com>
+In-Reply-To: <CAMuHMdUObtKUVDohLT501TarPRC6eDnxBqqB5Tj_Tb+-4fwbkw@mail.gmail.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 928ca3fe-6801-4301-b5af-08d6e96b3903
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB4724;
+x-ms-traffictypediagnostic: OSAPR01MB4724:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <OSAPR01MB47246B1632FCF714AB6CCA4FD8160@OSAPR01MB4724.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 00594E8DBA
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(39860400002)(346002)(396003)(366004)(376002)(199004)(189003)(33656002)(74316002)(316002)(8676002)(305945005)(229853002)(6116002)(446003)(486006)(73956011)(66556008)(53936002)(76116006)(76176011)(66476007)(186003)(11346002)(66446008)(64756008)(6436002)(81166006)(66946007)(66066001)(476003)(14454004)(3846002)(966005)(26005)(71190400001)(52536014)(7736002)(2906002)(5660300002)(54906003)(102836004)(6506007)(7696005)(99286004)(25786009)(256004)(81156014)(6306002)(8936002)(71200400001)(9686003)(6916009)(4326008)(478600001)(55016002)(14444005)(6246003)(86362001)(68736007);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB4724;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: WOlcF+FWqtpp+3oZhU8Fmr/lN7NHT0ANSpn2CHjdCmc/+mta+thslkCBvaZ7EOyAv/02lmHiwMWYzShuDBjpcE5I/qe8J4zv2N9JxnLv8KZVs/QEcltpzFRTaUhuUilAQGDP16sorOM+yD49jm8wp2kNCNDoBCjFlm2eDcV9QOVrOVccbWp9fMF66GPdKtM37JrAaJddnhUMt4uEP7FEid/w1Wxbw9kxTCf0ATHHz9ow37UytVbJhOzMmq7CWykz55MKtP16TizrOqrQeNkZNBo9OYB2d/qfk6DbMl8eW0tqy/QUuav0MXyzujnu8p9EObVpT/AIV/PhRemoQi5wDH3UZDRJfZfMEUnuIU4e4YrjyEi5NAYhXdA7C/XggQSaph16elgAIv3ZLgLsrLLPsYaabLNM1N654qiEbdkgLW4=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MTK:  N
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 928ca3fe-6801-4301-b5af-08d6e96b3903
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2019 04:06:44.3562
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB4724
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-06-04 at 13:59 +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jun 04, 2019 at 11:32:58AM +0200, Greg Kroah-Hartman wrote:
-> > The USB gadget subsystem wants to use the USB debugfs root directory, so
-> > move it to the common "core" USB code so that it is properly initialized
-> > and removed as needed.
-> > 
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > 
-> > ---
-> > 
-> > This should be the "correct" version of this, Chunfeng, can you test
-> > this to verify it works for you?
-I'll test it ASAP, thanks a lot
-
-> > 
-> > 
-> > diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-> > index 18f5dcf58b0d..3b5e4263ffef 100644
-> > --- a/drivers/usb/common/common.c
-> > +++ b/drivers/usb/common/common.c
-> > @@ -15,6 +15,7 @@
-> >  #include <linux/usb/of.h>
-> >  #include <linux/usb/otg.h>
-> >  #include <linux/of_platform.h>
-> > +#include <linux/debugfs.h>
-> >  
-> >  static const char *const ep_type_names[] = {
-> >  	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
-> > @@ -291,4 +292,21 @@ struct device *usb_of_get_companion_dev(struct device *dev)
-> >  EXPORT_SYMBOL_GPL(usb_of_get_companion_dev);
-> >  #endif
-> >  
-> > +struct dentry *usb_debug_root;
-> > +EXPORT_SYMBOL_GPL(usb_debug_root);
-> > +
-> > +static int usb_common_init(void)
-> > +{
-> > +	usb_debug_root = debugfs_create_dir("usb", NULL);
-> > +	return 0;
-> > +}
-> > +
-> > +static void usb_common_exit(void)
-> > +{
-> > +	debugfs_remove_recursive(usb_debug_root);
-> > +}
-> > +
-> > +module_init(usb_common_init);
-> > +module_exit(usb_common_exit);
-> > +
-> >  MODULE_LICENSE("GPL");
-> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> > index 7fcb9f782931..f3d6b1ab80cb 100644
-> > --- a/drivers/usb/core/usb.c
-> > +++ b/drivers/usb/core/usb.c
-> > @@ -1185,19 +1185,17 @@ static struct notifier_block usb_bus_nb = {
-> >  	.notifier_call = usb_bus_notify,
-> >  };
-> >  
-> > -struct dentry *usb_debug_root;
-> > -EXPORT_SYMBOL_GPL(usb_debug_root);
-> > +static struct dentry *usb_devices_root;
-> >  
-> >  static void usb_debugfs_init(void)
-> >  {
-> > -	usb_debug_root = debugfs_create_dir("usb", NULL);
-> > -	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
-> > -			    &usbfs_devices_fops);
-> > +	usb_devices_root = debugfs_create_file("devices", 0444, usb_debug_root,
-> > +					       NULL, &usbfs_devices_fops);
-> >  }
-> >  
-> >  static void usb_debugfs_cleanup(void)
-> >  {
-> > -	debugfs_remove_recursive(usb_debug_root);
-> > +	debugfs_remove_recursive(usb_devices_root);
-> 
-> That should just be debugfs_remove();
-> 
-> I'll fix it up after someone tests this :)
-> 
-> thanks,
-> 
-> greg k-h
-
-
+SGkgR2VlcnQtc2FuLA0KDQpUaGFuayB5b3UgdmVyeSBtdWNoIGZvciB5b3VyIHJlcG9ydCENCg0K
+PiBGcm9tOiBHZWVydCBVeXR0ZXJob2V2ZW4sIFNlbnQ6IFdlZG5lc2RheSwgSnVuZSA1LCAyMDE5
+IDM6MDYgQU0NCj4gDQo+IEhpIFNoaW1vZGEtc2FuLA0KPiANCj4gVXNpbmcgYSB0cmVlIGJhc2Vk
+IG9uIHJlbmVzYXMtZHJpdmVycy0yMDE5LTA2LTA0LXY1LjItcmMzLCBJIHN0YXJ0ZWQgc2VlaW5n
+DQo+IHRoZSBmb2xsb3dpbmcgd2FybmluZyBkdXJpbmcgYSBzZWNvbmQgc3lzdGVtIHN1c3BlbmQg
+KHMyaWRsZSk6DQo8c25pcD4NCj4gU28gZmFyIEkndmUgc2VlbiB0aGlzIG9uIFNhbHZhdG9yLVgg
+d2l0aCBSLUNhciBIMyBFUzEuMCBvciBNMy1XLCBhbmQNCj4gb24gU2FsdmF0b3ItWFMgd2l0aCBS
+LUNhciBNMy1OLCBidXQgbm90ICh5ZXQ/KSBvbiBIMyBFUzIuMC4NCg0KSSBjb3VsZCByZXByb2R1
+Y2UgdGhpcyBpc3N1ZSBvbiBSLUNhciBIMyBFUzMuMCB3aXRoIFN1c3BlbmQtdG8tUkFNLg0KIyBJ
+J20gc2lsbHkgYnV0IEkgY291bGQgbm90IHVzZSBzMmlkbGUgdGhhdCBkaWRuJ3Qgd2FrZSB1cCBi
+eSByYXZiLg0KIyBodHRwczovL2VsaW51eC5vcmcvUi1DYXIvQm9hcmRzL1NhbHZhdG9yLVgjU3Vz
+cGVuZC10by1JZGxlDQoNCj4gVW5mb3J0dW5hdGVseSB0aGUgaXNzdWUgc2VlbXMgdG8gYmUgZmFp
+cmx5IHRpbWluZy1zZW5zaXRpdmUsIHNvIEkgZmFpbGVkDQo+IHRvIGJpc2VjdCBpdC4NCj4gDQo+
+IEkgaGF2ZSBhZGRlZCBzb21lIGRlYnVnLiAgV2hpbGUgdGhpcyBkaWRuJ3QgaGVscCBtZSBmaW5k
+aW5nIHRoZSBjYXVzZQ0KPiBvZiB0aGUgYWJvdmUgd2FybmluZywgaXQgZGlkIGRpc2NvdmVyIGFu
+b3RoZXIgaW1iYWxhbmNlOg0KDQpUaGFuayB5b3UgZm9yIHRyeWluZyBpdC4gSSBoYXZlIGludmVz
+dGlnYXRlZCB0aGlzIGlzc3VlIGFuZCB0aGVuIEkgZm91bmQgdGhlIHJvb3QgY2F1c2UuDQoNCkFm
+dGVyIHRoZSBmb2xsb3dpbmcgcGF0Y2ggd2FzIGFwcGxpZWQsIG11bHRpcGxlIHBoeSBkZXZpY2Vz
+IGFyZSBnZW5lcmF0ZWQuDQpodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2Vy
+bmVsL2dpdC9nZWVydC9yZW5lc2FzLWRyaXZlcnMuZ2l0L2NvbW1pdC9kcml2ZXJzL3BoeS9yZW5l
+c2FzL3BoeS1yY2FyLWdlbjMtdXNiMi5jP2g9cmVuZXNhcy1kcml2ZXJzLTIwMTktMDYtMDQtdjUu
+Mi1yYzMmaWQ9NTQ5YjZiNTViMDA1NTgxODNjZWY0YWYyYzJiYjYxZDRmMmZmZTUwOA0KDQpCdXQs
+IG9uIHRoZSBwb3dlcl9vbiBmdW5jdGlvbiwgaXQgc2hvdWxkIHNldCB0aGUgInBvd2VyZWQiIGZs
+YWcgZm9yIGFueSBvdGhlciBwaHlzIGFueXdheS4NCk90aGVyd2lzZSwgc3VjaCBhIHN0cmFuZ2Ug
+aW1iYWxhbmNlIGJlaGF2aW9yIGhhcHBlbmVkLg0KVGhlIHBvd2VyZWQgZmxhZyBpcyBuZWVkZWQg
+dG8gYXZvaWQgbXVsdGlwbGUgIlBMTF9SU1QiIHJlZ2lzdGVyIHNldHRpbmcuDQojIEkgdGhpbmsg
+cmVndWxhdG9yX3tlbixkaXN9YWJsZSgpIGRvbid0IG5lZWQgc3VjaCBhIGNvbmRpdGlvbiB0aG91
+Z2guDQoNCkknbGwgc3VibWl0IGEgYnVnZml4IHBhdGNoIHdpdGggeW91ciBSZXBvcnRlZC1ieSB0
+YWcgbGF0ZXIuDQoNCkJlc3QgcmVnYXJkcywNCllvc2hpaGlybyBTaGltb2RhDQoNCg==
