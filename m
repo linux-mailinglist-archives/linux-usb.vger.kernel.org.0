@@ -2,108 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C85835F18
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F9135F19
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728281AbfFEOWD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 10:22:03 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:56490 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728211AbfFEOWD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 10:22:03 -0400
-Received: (qmail 2013 invoked by uid 2102); 5 Jun 2019 10:22:02 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 5 Jun 2019 10:22:02 -0400
-Date:   Wed, 5 Jun 2019 10:22:02 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Yinbo Zhu <yinbo.zhu@nxp.com>
-cc:     xiaobo.xie@nxp.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ramneek Mehresh <ramneek.mehresh@freescale.com>,
-        Nikhil Badola <nikhil.badola@freescale.com>,
-        Ran Wang <ran.wang_1@nxp.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <jiafei.pan@nxp.com>
-Subject: Re: [PATCH v6 4/5] usb: host: Stops USB controller init if PLL fails
- to lock
-In-Reply-To: <20190605054952.34687-4-yinbo.zhu@nxp.com>
-Message-ID: <Pine.LNX.4.44L0.1906051020540.1788-100000@iolanthe.rowland.org>
+        id S1728346AbfFEOWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 10:22:19 -0400
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:41497 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728190AbfFEOWT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 10:22:19 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 02DFE21F3C;
+        Wed,  5 Jun 2019 10:22:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 05 Jun 2019 10:22:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=82Wqdd
+        gTanaA8sQnpaKhsdwYdtwsBt7md4IKTrjAOog=; b=j15yEjU1Zkt+QMnnwxxjMO
+        tyqUWT5/eFFuKTI9LjHiDqnEuRBOmTJm6iVCIGUhwyOmtmTWScKmpgNYglFM/LZZ
+        do+0UiiQ9DD1iq90Xsv/OTAF4Y+0FEuoGXzeEnnCj/Auyfd+jD4u7dPbspbaurYM
+        PAuVvX3sYHEVYUcg2Ejw+Xj0z+ROo6if2sDUGTMWpsFYHi03zGa5PnatKVKWZBXY
+        FdKwf/V0Ju1Ou4XQcKxh5PtGOQpG+UoJoysMcLNpXQFtps14wO/FwPswA54uCbdF
+        SYEvHJuTqdTN8WLowjx5SHySTd0YJSN5Ad5QOPALXH1sEWZbByHjeIxLECjdktHA
+        ==
+X-ME-Sender: <xms:GdD3XNfIp653e2BNYKmo3Hin7zRnslsFRsUqHHXu1j1SughL2agMlA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrudegvddgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvghfmjfeslhhinhhugihfohhunhgurghtihhonhdrohhrgheqnecukf
+    hppeekfedrkeeirdekledruddtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghg
+    sehkrhhorghhrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:GdD3XDV_FN_TxQzZCA0XofU7HMvPPbMY8K_vsitQWR8f3cMXVTVmkg>
+    <xmx:GdD3XGDVeGrF499Yy9guzHyTkeP4uAyQNi9wiNyLLEpwq3k5i9EUmg>
+    <xmx:GdD3XG6YESyhbV-mAREtCqbUoz07nXBlRU5O0Iii7mKOwnRJOGtA6A>
+    <xmx:GdD3XOQNXdTLmQfP2byR-ElKlI0HXMUUPofOcKQJcFwdqUfl-TROWg>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 058EF80062;
+        Wed,  5 Jun 2019 10:22:16 -0400 (EDT)
+Date:   Wed, 5 Jun 2019 16:22:14 +0200
+From:   Greg KH <gregKH@linuxfoundation.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
+Subject: Re: [PATCH] usb: hso: correct debug message
+Message-ID: <20190605142214.GC8803@kroah.com>
+References: <20190605125942.26696-1-oneukum@suse.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190605125942.26696-1-oneukum@suse.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 5 Jun 2019, Yinbo Zhu wrote:
-
-> From: Ramneek Mehresh <ramneek.mehresh@freescale.com>
+On Wed, Jun 05, 2019 at 02:59:42PM +0200, Oliver Neukum wrote:
+> If you do not find the OUT endpoint, you should say so,
+> rather than copy the error message for the IN endpoint.
+> Presumably a copy and paste error.
 > 
-> USB erratum-A006918 workaround tries to start internal PHY inside
-> uboot (when PLL fails to lock). However, if the workaround also
-> fails, then USB initialization is also stopped inside Linux.
-> Erratum-A006918 workaround failure creates "fsl,erratum_a006918"
-> node in device-tree. Presence of this node in device-tree is
-> used to stop USB controller initialization in Linux
-> 
-> Signed-off-by: Ramneek Mehresh <ramneek.mehresh@freescale.com>
-> Signed-off-by: Suresh Gupta <suresh.gupta@freescale.com>
-> Signed-off-by: Yinbo Zhu <yinbo.zhu@nxp.com>
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
 > ---
-> Change in v6:
-> 		add a "Fall through" comment 	
-> 
->  drivers/usb/host/ehci-fsl.c      | 10 +++++++++-
->  drivers/usb/host/fsl-mph-dr-of.c |  3 ++-
->  2 files changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
-> index 8f3bf3efb038..86ae37086a74 100644
-> --- a/drivers/usb/host/ehci-fsl.c
-> +++ b/drivers/usb/host/ehci-fsl.c
-> @@ -234,8 +234,16 @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
->  		break;
->  	case FSL_USB2_PHY_UTMI_WIDE:
->  		portsc |= PORT_PTS_PTW;
-> -		/* fall through */
->  	case FSL_USB2_PHY_UTMI:
-> +		/* Presence of this node "has_fsl_erratum_a006918"
-> +		 * in device-tree is used to stop USB controller
-> +		 * initialization in Linux
-> +		 */
-> +		if (pdata->has_fsl_erratum_a006918) {
-> +			dev_warn(dev, "USB PHY clock invalid\n");
-> +			return -EINVAL;
-> +		}
-> +
->  	case FSL_USB2_PHY_UTMI_DUAL:
+>  drivers/net/usb/hso.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This is bad.  You got rid of a "fall through" comment that was needed, 
-and you failed to add another one where it was needed.
-
-Alan Stern
-
->  		/* PHY_CLK_VALID bit is de-featured from all controller
->  		 * versions below 2.4 and is to be checked only for
-> diff --git a/drivers/usb/host/fsl-mph-dr-of.c b/drivers/usb/host/fsl-mph-dr-of.c
-> index 4f8b8a08c914..762b97600ab0 100644
-> --- a/drivers/usb/host/fsl-mph-dr-of.c
-> +++ b/drivers/usb/host/fsl-mph-dr-of.c
-> @@ -224,13 +224,14 @@ static int fsl_usb2_mph_dr_of_probe(struct platform_device *ofdev)
->  		of_property_read_bool(np, "fsl,usb-erratum-a005275");
->  	pdata->has_fsl_erratum_a005697 =
->  		of_property_read_bool(np, "fsl,usb_erratum-a005697");
-> +	pdata->has_fsl_erratum_a006918 =
-> +		of_property_read_bool(np, "fsl,usb_erratum-a006918");
->  
->  	if (of_get_property(np, "fsl,usb_erratum_14", NULL))
->  		pdata->has_fsl_erratum_14 = 1;
->  	else
->  		pdata->has_fsl_erratum_14 = 0;
->  
-> -
->  	/*
->  	 * Determine whether phy_clk_valid needs to be checked
->  	 * by reading property in device tree
-> 
+drivers/net/ patches go to netdev@vger...
 
