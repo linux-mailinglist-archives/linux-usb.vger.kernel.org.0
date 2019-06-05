@@ -2,20 +2,20 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9101535E86
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1D235E57
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 15:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728205AbfFEOAm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 10:00:42 -0400
-Received: from 313717.com ([176.126.78.19]:39918 "EHLO treehousetv.com"
+        id S1728003AbfFENun (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 09:50:43 -0400
+Received: from 313717.com ([176.126.78.19]:45411 "EHLO treehousetv.com"
         rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727883AbfFEOAm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 10:00:42 -0400
-X-Greylist: delayed 3630 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 Jun 2019 10:00:39 EDT
+        id S1727992AbfFENum (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 09:50:42 -0400
+X-Greylist: delayed 3031 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 Jun 2019 09:50:41 EDT
 To:     linux-usb@vger.kernel.org
-Subject: USB drives with logos
-Message-ID: <933975e5e4efafd9be8eb2b9582635e9@vecteezy.com>
-Date:   Wed, 05 Jun 2019 14:21:36 +0200
+Subject: custom printed logo
+Message-ID: <a6e0cbd6ceb0d181f0cef3ef186f065f@vecteezy.com>
+Date:   Wed, 05 Jun 2019 14:29:40 +0200
 From:   "Stacy" <schssereutz@aol.jp>
 Reply-To: halsyid@sina.com
 MIME-Version: 1.0
