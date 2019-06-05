@@ -2,93 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2D3358E9
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 10:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C4A358F6
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 10:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbfFEIqI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 04:46:08 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38871 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726636AbfFEIqH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 04:46:07 -0400
-Received: by mail-pg1-f194.google.com with SMTP id v11so12016478pgl.5;
-        Wed, 05 Jun 2019 01:46:07 -0700 (PDT)
+        id S1726821AbfFEItZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 04:49:25 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:36646 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726793AbfFEItZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 04:49:25 -0400
+Received: by mail-wr1-f67.google.com with SMTP id n4so15537520wrs.3
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 01:49:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mk5FRq2HIkggKOYlb1t32JxfiDeZB3gniCUsPO6/xZI=;
-        b=LjE/XPGqoSghQHXJWid6eAalCbvND2JpM7cZodepxdcu5sydDV4ALW4V1indIn2ve+
-         ro/+9AV07szWsujI2k5OWOHpYoqn0Lko99MN4KhJfebhVda8dQB/jTSRvKY3rx/W7a7d
-         jjJe+wLhb6zZNFg86ROAAr8Gb5Pr/pbUuEFY/nX+kkcB6gjGdRf15AQ56BiK0lOwD+mr
-         96rMNUII2i3Vyhn5vvtspJXpfAR0wsn/a06F8E2irwekWWqqLjGSaI9HgCBVyESnIAZR
-         xl5q0G6JW7XP8E5oeUqslpOF2xSz9hHeupjQK+x4VNpBkH0OfPyOzQG03MJ/B/1Ty3LP
-         x0mg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=47X4zT30GaadHJDaOJJAh/DnRfU8HKGu6t7RX9pL/1E=;
+        b=nRR+/O1w2hpos8U3WuMiH/3+BN6lTgWYnsbBoN6gkVLrZ1RHMizsu+4ZO9EuzH4TaB
+         JaodAlZK3Kx2Q2WmB+EnEIN4wEJCqbyWdIq3GrjNrF/eMlNvvhbGv1T3/iQg83ufteRt
+         Ty7tf9D0F1yh4O5vWOF1XlO7xgunN2POXJD12fUH+Orf9E4jk0Jg5oSY9sKLt7hLAeMU
+         8vwQ3faYAIOoLM5uZ1OAR9oHHJzWu0gZIUKOZNV4CWV3ujufMGwZx8Gei7yNZu6lnFos
+         xpv7J1856IHDdO5sl9kIutepdd1VmglvBLZeIjZyX1J4L0DgbnVEE6f9z8GHgItLDDJu
+         Krrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mk5FRq2HIkggKOYlb1t32JxfiDeZB3gniCUsPO6/xZI=;
-        b=ojuHtQHw4pNLcFV7joSo7rG16hfqBXaK0hVknpy6es4m5o0vHC0qcQLPPDcp9dyKCG
-         AHChY/EnsgcRRI4aMGnUOajyCD1wjrxDiLgUOYfsxx88HY/kg8iofDZM7wqepm6e4GoJ
-         fsxhbEiwo5Vl9TNGZdEP/ylzD8+tM60sEp373tDl6eiY9qcC4BxsEsTKQjdzJwVd9P0n
-         WMBpcCyfOlVr3vYWctBZk/MloFXGxsZnjD93dDCICbbFllhpmJqBdWh+ylwq42xVa4VC
-         0ql8Gt4vpZ1bk72gW5hkpY5Af8efi1BYvRNfxbUhbo2hJ6R9r455WwzNFXgbfmyaQMfi
-         sP3Q==
-X-Gm-Message-State: APjAAAXCyKAOV8bfyleAn/mowiX8AyNTuQXn+813vxvgmytC2/817RT6
-        LwCVvY/uReyCaZ7z7e84Cjr296/SCorQvD5l0sQ=
-X-Google-Smtp-Source: APXvYqz9Lj0yCfy+J+2j77hhw6XN27rcOlilHibyQ96byM7FluGi0by+4HbGwYHmbgTq02AfDgdKEa0nzroKSuiuPcs=
-X-Received: by 2002:a17:90b:d8b:: with SMTP id bg11mr10737373pjb.30.1559724367061;
- Wed, 05 Jun 2019 01:46:07 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=47X4zT30GaadHJDaOJJAh/DnRfU8HKGu6t7RX9pL/1E=;
+        b=c5vOF/TB316HIx+FFYgqXFQcFDZocBfJQ7KhNrwtDDDKHlWX9pl1ANV3+uhLqo5+uy
+         RJxr0oswnoC9hde9Y5qtdbIyVVJFHZP5+BivkQsveayJj81PPgnDAwy8fjU1SdgElQl/
+         6li/jnp0sfdoUJerOzR5OUPfVIcDYTnsJThYRpLErnXq7Nuu9ObV/Mal6pPAamhSWr5n
+         CF56R0LdWb+me9pxxVXUfSVsFSU4emGWK7cYGc+o1KhZtPLhbEaWfMXwFApCBk3gaI8S
+         rXxnJ7otNqdMLGkKeJn7ezEiku6m1EAblVOLdMa9nkHAJH3l8xf2lRoj3UegDqMegs/n
+         Oeiw==
+X-Gm-Message-State: APjAAAV8HvwMRXCz9l+y45157UCNn9gej24YjunCourW5QavTGPqujUM
+        zu+2NHbKPLMYvKaQTLfeVZ2Org==
+X-Google-Smtp-Source: APXvYqxKnUroo208CFyjzxg0auBl2QoUOj9T6CN3+LaoIlDzgTwijaRuwxToGpm9u7DR/bSrMEMWdA==
+X-Received: by 2002:adf:ab11:: with SMTP id q17mr10398482wrc.182.1559724563960;
+        Wed, 05 Jun 2019 01:49:23 -0700 (PDT)
+Received: from dell ([2.27.167.43])
+        by smtp.gmail.com with ESMTPSA id y2sm32449365wra.58.2019.06.05.01.49.23
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 05 Jun 2019 01:49:23 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 09:49:21 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, balbi@kernel.org,
+        wsa+renesas@sang-engineering.com, gregkh@linuxfoundation.org,
+        linus.walleij@linaro.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david.brown@linaro.org,
+        alokc@codeaurora.org, kramasub@codeaurora.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, andy.gross@linaro.org,
+        jlhugo@gmail.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/8] i2c: i2c-qcom-geni: Signify successful driver probe
+Message-ID: <20190605084921.GQ4797@dell>
+References: <20190604104455.8877-1-lee.jones@linaro.org>
+ <20190604104455.8877-2-lee.jones@linaro.org>
+ <20190605062020.GL22737@tuxbook-pro>
+ <20190605071625.GK4797@dell>
+ <20190605075656.GC29637@localhost>
+ <20190605082047.GM4797@dell>
+ <20190605083353.GD29637@localhost>
 MIME-Version: 1.0
-References: <1559115828-19146-1-git-send-email-chunfeng.yun@mediatek.com> <1559115828-19146-10-git-send-email-chunfeng.yun@mediatek.com>
-In-Reply-To: <1559115828-19146-10-git-send-email-chunfeng.yun@mediatek.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 5 Jun 2019 11:45:55 +0300
-Message-ID: <CAHp75VcbZwd0e6r38C2x7HLEHLr4oR7TjwdDXnDxRPRs3anwgA@mail.gmail.com>
-Subject: Re: [PATCH v6 09/10] usb: roles: add USB Type-B GPIO connector driver
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Min Guo <min.guo@mediatek.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Yu Chen <chenyu56@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190605083353.GD29637@localhost>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 29, 2019 at 10:44 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> Due to the requirement of usb-connector.txt binding, the old way
-> using extcon to support USB Dual-Role switch is now deprecated
-> when use Type-B connector.
-> This patch introduces a driver of Type-B connector which typically
-> uses an input GPIO to detect USB ID pin, and try to replace the
-> function provided by extcon-usb-gpio driver
+On Wed, 05 Jun 2019, Johan Hovold wrote:
 
-> +static SIMPLE_DEV_PM_OPS(usb_conn_pm_ops,
-> +                        usb_conn_suspend, usb_conn_resume);
-> +
-> +#define DEV_PMS_OPS (IS_ENABLED(CONFIG_PM_SLEEP) ? &usb_conn_pm_ops : NULL)
+> On Wed, Jun 05, 2019 at 09:20:47AM +0100, Lee Jones wrote:
+> > On Wed, 05 Jun 2019, Johan Hovold wrote:
+> 
+> > > No, we don't add noise like this to the logs just because it may be
+> > > useful while debugging. Even one-liners add up.
+> > 
+> > One line per device is should not cause an issue.
+> > 
+> > Problems occur when developers try to print all kinds of device
+> > specifics to the boot log.  A simple, single line for such an
+> > important device/controller has more benefits than drawbacks.
+> 
+> What about the thousands of probe functions which do not currently spam
+> the logs? If you want to see all successful probes reliably, you tell
+> driver core to print it.
+> 
+> > > There are plenty of options for debugging already ranging from adding a
+> > > temporary dev_info() to the probe function in question to using dynamic
+> > > debugging to have driver core log every successful probe.
+> > 
+> > This is what I ended up doing.  It was time consuming to parse though
+> > a log of that size when you have no paging or keyboard.
+> 
+> With the right command-line option to enable dynamic debugging you get
+> one line per successful probe, just like you wanted. Or are you now
+> saying that one-line per device is too much after all? ;)
 
-Why this macro is needed?
+Which command line option are you pertaining to?
+
+> > > And in this case you say the driver was in fact already bound; that can
+> > > easily be verified through sysfs too in case things aren't behaving the
+> > > way you expect.
+> > 
+> > Not in a non-booting system with no keyboard you can't. ;)
+> 
+> Fair enough, but the above would still work.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
