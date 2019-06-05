@@ -2,174 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EED363BC
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 21:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7835836442
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 21:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726573AbfFETGT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 15:06:19 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:45432 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726421AbfFETGS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 15:06:18 -0400
-Received: by mail-pg1-f195.google.com with SMTP id w34so12892719pga.12
-        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 12:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=M6BGDN2AyVfgjLFK/UIuQsI5QieCC/mU2xEW0eQBY6c=;
-        b=NGNQhr7s+dSXGA0agT49GCRMN5IBD59uXz3hQDX1aXq4lMe5N67yu52ciH/CgRwHUP
-         oaU5ZJ03dVccEINZLKm3W1zobHhPMqR//HHdjiAQd1g8hmh0CtDIW5Y1pTk1IbY2IaO1
-         B/VPli8Q2TMnY+VKcvSXoK9/vA/peszAGu4EYmGzokB+0Rl+59FpTDynelw9pT15L2jK
-         5YCE0Ph6aJcwVoI4t3kz8ujggXCUBpUiYs69ebmhnQtTVw6y9DWv7/bp2SoKFq5ORurU
-         jdB4W+mLQDd8lH8tQIlNHznVWVhnupC3IELyc2LldxJmHthhy8vWRQMMGjYpHQ8rWlau
-         Y+4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=M6BGDN2AyVfgjLFK/UIuQsI5QieCC/mU2xEW0eQBY6c=;
-        b=YXoP/w+3TtZb6ZzMa4zaEKwUIW1Q1/zbkxcfP2GLe6gLBfr/+GwKywxfairpT1Ofka
-         rSV5Qi7PoB/23pPJY0iR683iDf4tqPc+4Xct7sD454gjM102e6YN6J/Z89HJdqWo77EQ
-         qkGmUxe9+B7GoO3O3xA1tH95r1IKTdFQ2YrJqMdQ0LNP1ADWJ0HnOwlQv7KwauFje/Iu
-         H3xCKIOaVsAlqK985IuKYtdWmN6QHHkQxSNZelAngkkqRle/+e9xwLeuV2KCyTYtHcuA
-         ktAHE1STowO+yvxo8vJObfS5Yq46tbPkYubMa4jyfVl/FUiBv6Nyef8o7isD7lV8LFOA
-         tc8g==
-X-Gm-Message-State: APjAAAUnX5gsNteRP+IOzib/tY8R2IPrL/dM7IDVgMVtBH+0POL3P0fg
-        K3PQOE+AiTC+Ztykx2aUsVdmTA==
-X-Google-Smtp-Source: APXvYqzlT/XPvgcF1v+ffkfX/JPoo7GvSAjnePPEFFPhNx56Xy63K3pCAsqBkSIncUTmupa3p3kRtw==
-X-Received: by 2002:a17:90a:9308:: with SMTP id p8mr44957549pjo.12.1559761577409;
-        Wed, 05 Jun 2019 12:06:17 -0700 (PDT)
-Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id q4sm19489811pgb.39.2019.06.05.12.06.16
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 05 Jun 2019 12:06:16 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 12:06:14 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
-        andy.gross@linaro.org, david.brown@linaro.org,
-        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 4/8] pinctrl: qcom: sdm845: Provide ACPI support
-Message-ID: <20190605190614.GI4814@minitux>
-References: <20190604104455.8877-1-lee.jones@linaro.org>
- <20190604104455.8877-4-lee.jones@linaro.org>
- <20190605061721.GK22737@tuxbook-pro>
- <20190605073133.GL4797@dell>
+        id S1726715AbfFETIz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 15:08:55 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44422 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726421AbfFETIy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 15:08:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=aXk533Y40BLOyImNad0BaK/HkvfBpi+VFKiLovkq2FY=; b=MqJkkcnxuMst8SfYFH0p/H0sS
+        Lyndhu8pTjyjfQyCjGGLFai29f329X1ePrgtN/YiqkHPIN0jszBGe0NaFysyaLUT8iQXMi77kr3Ek
+        VK9dgOqwdzPw6Acy6G9wKOUedXKcUzEoKGZWxrXhzwj0M/MSx7rRNoFuVUIWqQsLzx2BOQ9Z5aGKa
+        E1OsE0J46lx96G9b7y4w7pjA57wrq6KmUpVXPoT6CN1Zwy/HvcQQB4OQD57GDHUtGETcm1tOVobgA
+        82otTB9t6FSATrXnlqA+euiivNTTfNlrFuP4C+PcevHuUSUXXHc8/huT8lQNz6KUokynQWTV5UM5L
+        ++qe37rJw==;
+Received: from 089144193064.atnat0002.highway.a1.net ([89.144.193.64] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hYbH4-0005Cx-Qz; Wed, 05 Jun 2019 19:08:39 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Sebastian Ott <sebott@linux.ibm.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
+        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+Subject: properly communicate queue limits to the DMA layer
+Date:   Wed,  5 Jun 2019 21:08:23 +0200
+Message-Id: <20190605190836.32354-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190605073133.GL4797@dell>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed 05 Jun 00:31 PDT 2019, Lee Jones wrote:
+Hi Jens,
 
-> On Tue, 04 Jun 2019, Bjorn Andersson wrote:
-> 
-> > On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
-> > 
-> > > This patch provides basic support for booting with ACPI instead
-> > > of the currently supported Device Tree.  When doing so there are a
-> > > couple of differences which we need to taken into consideration.
-> > > 
-> > > Firstly, the SDM850 ACPI tables omit information pertaining to the
-> > > 4 reserved GPIOs on the platform.  If Linux attempts to touch/
-> > > initialise any of these lines, the firmware will restart the
-> > > platform.
-> > > 
-> > > Secondly, when booting with ACPI, it is expected that the firmware
-> > > will set-up things like; Regulators, Clocks, Pin Functions, etc in
-> > > their ideal configuration.  Thus, the possible Pin Functions
-> > > available to this platform are not advertised when providing the
-> > > higher GPIOD/Pinctrl APIs with pin information.
-> > > 
-> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > ---
-> > >  drivers/pinctrl/qcom/Kconfig          |  2 +-
-> > >  drivers/pinctrl/qcom/pinctrl-sdm845.c | 35 ++++++++++++++++++++++++++-
-> > >  2 files changed, 35 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
-> > > index 2e66ab72c10b..aafbe932424f 100644
-> > > --- a/drivers/pinctrl/qcom/Kconfig
-> > > +++ b/drivers/pinctrl/qcom/Kconfig
-> > > @@ -168,7 +168,7 @@ config PINCTRL_SDM660
-> > >  
-> > >  config PINCTRL_SDM845
-> > >         tristate "Qualcomm Technologies Inc SDM845 pin controller driver"
-> > > -       depends on GPIOLIB && OF
-> > > +       depends on GPIOLIB && (OF || ACPI)
-> > >         select PINCTRL_MSM
-> > >         help
-> > >           This is the pinctrl, pinmux, pinconf and gpiolib driver for the
-> > > diff --git a/drivers/pinctrl/qcom/pinctrl-sdm845.c b/drivers/pinctrl/qcom/pinctrl-sdm845.c
-> > > index c97f20fca5fd..7188bee3cf3e 100644
-> > > --- a/drivers/pinctrl/qcom/pinctrl-sdm845.c
-> > > +++ b/drivers/pinctrl/qcom/pinctrl-sdm845.c
-> > > @@ -3,6 +3,7 @@
-> > >   * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
-> > >   */
-> > >  
-> > > +#include <linux/acpi.h>
-> > >  #include <linux/module.h>
-> > >  #include <linux/of.h>
-> > >  #include <linux/platform_device.h>
-> > > @@ -1277,6 +1278,10 @@ static const struct msm_pingroup sdm845_groups[] = {
-> > >  	UFS_RESET(ufs_reset, 0x99f000),
-> > >  };
-> > >  
-> > > +static const int sdm845_acpi_reserved_gpios[] = {
-> > > +	0, 1, 2, 3, 81, 82, 83, 84, -1
-> > > +};
-> > > +
-> > >  static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
-> > >  	.pins = sdm845_pins,
-> > >  	.npins = ARRAY_SIZE(sdm845_pins),
-> > > @@ -1284,14 +1289,41 @@ static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
-> > >  	.nfunctions = ARRAY_SIZE(sdm845_functions),
-> > >  	.groups = sdm845_groups,
-> > >  	.ngroups = ARRAY_SIZE(sdm845_groups),
-> > > +	.reserved_gpios = sdm845_acpi_reserved_gpios,
-> > 
-> > The reason why put these in DT is because the list is board/firmware
-> > dependent. E.g. the firmware on db845c does not support the peripherals
-> > that sits on these 8 pins and as such these are not reserved.
-> 
-> If we need to be more particular about which platform(s) this affects,
-> we could add matching based on their differences (some ACPI HID or F/W
-> version/descriptor, etc) as and when we enable them for booting with
-> ACPI.
-> 
+we've always had a bit of a problem communicating the block layer
+queue limits to the DMA layer, which needs to respect them when
+an IOMMU that could merge segments is used.  Unfortunately most
+drivers don't get this right.  Oddly enough we've been mostly
+getting away with it, although lately dma-debug has been catching
+a few of those issues.
 
-You're making an assumption that all SDM845 (the platform) devices using
-ACPI will have this list of GPIOs reserved for secure firmware to use,
-this is questionable but I don't have any better suggestion.
+The segment merging fix for devices with PRP-like structures seems
+to have escalated this a bit.  The first patch fixes the actual
+report from Sebastian, while the rest fix every drivers that appears
+to have the problem based on a code audit looking for drivers using
+blk_queue_max_segment_size, blk_queue_segment_boundary or
+blk_queue_virt_boundary and calling dma_map_sg eventually.  Note
+that for SCSI drivers I've taken the blk_queue_virt_boundary setting
+to the SCSI core, similar to how we did it for the other two settings
+a while ago.  This also deals with the fact that the DMA layer
+settings are on a per-device granularity, so the per-device settings
+in a few SCSI drivers can't actually work in an IOMMU environment.
 
-But you do this by adding a new struct msm_pinctrl_soc_data
-sdm845_acpi_pinctrl, specifically for the ACPI case. And then, on the
-line I object to here, you add this list as the list of reserved GPIOs
-for the DT case as well.
-
-> > But given that the two structs looks identical now, did you perhaps not
-> > intend to add.reserved_gpios for the non-ACPI case?
-> 
-> Given your example above, I think it's best that we let the
-> configuration tables advertise these in the first instance.  I only
-> add them here because it is not possible to obtain them from
-> elsewhere.
-> 
-
-Then add it for ACPI only - which I still presume you intended to do by
-adding sdm845_acpi_pinctrl (which is now identical to sdm845_pinctrl).
-
-Regards,
-Bjorn
+It would be nice to eventually pass these limits as arguments to
+dma_map_sg, but that is a far too big series for the 5.2 merge
+window.
