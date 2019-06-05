@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E53513621C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 19:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0A536254
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 19:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728786AbfFERLy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 13:11:54 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34876 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728577AbfFERLx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 13:11:53 -0400
-Received: by mail-pl1-f194.google.com with SMTP id p1so9917913plo.2;
-        Wed, 05 Jun 2019 10:11:53 -0700 (PDT)
+        id S1726280AbfFERTN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 13:19:13 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:43941 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725950AbfFERTN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 13:19:13 -0400
+Received: by mail-pl1-f193.google.com with SMTP id cl9so4821455plb.10;
+        Wed, 05 Jun 2019 10:19:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=v+XL33nKKgLzcxRQhQhEGC6TDQvccYp6B7En+erV9hc=;
-        b=he3iEBP4RwmWS2hsetYGcIfsHu6mjuFkNE/44bYCJIdQvaLJ5hco7f4N15KuvI7SzQ
-         25V3oruilcb3EeYf/ho6mZJ9iD6cz8kqD0+GetH8bQbbWBN5P24cxJeCd7t7/jU36hUY
-         MDXKNPnZRKk7pFFlXKbDleNfv1Mw18jufPZqLDyD6LE9H15h1K9PpOsY+lSbK6n2xpal
-         MhWAlKKok5LqzYIausi5764vbJYDiQynYgbAttuI+ntxphashbZoxe0QLMIOevq4o9ku
-         QG4lcSVhdK16awf7duEkmsxk6iS/fC5xR4UwEkamihST27EwoH9MnjbxiBylEI4d5Yjt
-         em1w==
+        bh=B/JvG0ZRDNEBNEcUAraBTtC7NdvBq6Iubs4NTtSOxek=;
+        b=rDfdgNbauu7tZFEVYV7kQxLNvFyCSUWQ7UC3QM6R5p6bIgKreqMVDBgwWMaOEBxIDL
+         96Uh5qcTkghNicBFnqtttNQKz/o2k3mU6z84h0Oz8cblIIdVoG0MosNevlA4Jx/dccUn
+         DLanrfnDs7gqgu9LLefN9tkfsB1JV/0QpmvJ8TjifvOTwig5xwzpcpbNLheZ8phjhZA+
+         4DIZfCocPAF0IKLy9yaO475MMkN09W9CnUFoZmI3JTuEyEnZXbOJQq81JxngkEQwOD3C
+         qnz3lPZpMfku2xZ6OyZOUmgjFXFXQRN2laDJffcS0VDypmBhrIMZ1KkVL6Ah4gRSX6sc
+         /QRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=v+XL33nKKgLzcxRQhQhEGC6TDQvccYp6B7En+erV9hc=;
-        b=kCUjv+mLUJh2DrhnOqp3gsZ6mBOXDtuzoKIHDV5jztvCWLaI9FDQP9cMtUUpyUOKTL
-         LVuopVhfzg/zC4XQu9Pc6Y/hrC4TQt9lK4sAhuauyV6dgMXB6rrgTBONgGk9UMbis4Tb
-         LRXq63EqDzDlU7HyyQW3r9G3GjyaWgFh9iS+EYr5GMutz3MG/7JYDNg/WRAgJttmZTw+
-         8pN8XvDNjkrrrSGG8vjLVyEPyVYc+9Ioe6rZlCxa2ER90MrRk5NWZGq50qrPoIF+MozT
-         2NrQo6rR3gPoPPkko/qTVPY4vVskfbdvARyc9sA05N7bY6tWrDL8EsRuchxxM9gX7M+9
-         w4WQ==
-X-Gm-Message-State: APjAAAVsAfFa5Uu20Xd2CONvAhL8TD6sSV7dNGxBKH6gjp4tBH5xCtnr
-        fLv6+dm5KvBZbOBx6Ksxcv8=
-X-Google-Smtp-Source: APXvYqwwDdrTNaphEd6GlINLgVtsrsKLUvrt8xyInFHL1cnGX/XoAdjjv8uPV+gD1gxuOOddS/d0Fw==
-X-Received: by 2002:a17:902:d916:: with SMTP id c22mr19896662plz.195.1559754713050;
-        Wed, 05 Jun 2019 10:11:53 -0700 (PDT)
+        bh=B/JvG0ZRDNEBNEcUAraBTtC7NdvBq6Iubs4NTtSOxek=;
+        b=L/0xB1s45OjNOkc2yBszik/gD0jq7sIId7E49gIVe7GKY+bz4UzrG6kcp3bcBkaCIG
+         klzyyhO7LVD5cRbyTLDEqzJWo2tamzELVPsH2aq5DBMELzywXYjsTBVPA402nYCjAVHz
+         J3JtibS03WUgzHebNhIJ3z6IXZHZCGudkqXJWbaAZR9jxiBDtwXntYzCXKz6+Bc5PfM+
+         DsURo3cXyJJ9VOZOM8OzKNoEUxvhnbI5bfhycw+iq86gKsG1fjnZW9qosXX0R3fQGW5Q
+         Jz9X99UwrPLHYT9aCZjcbvQHmwNpwTEEnfAmdEC0BNHhIws7AVf7wJWxejD9olRFA5oL
+         rVAw==
+X-Gm-Message-State: APjAAAV93I77x+/QWU7fVhdoCbpTpT+R9jznwFGaX5kIBrY6GilTs26j
+        5QGFhMCroyQeR31ZzUW6w+A=
+X-Google-Smtp-Source: APXvYqzg6UsjNE80K0klM5VcBmYR/EAMwGMU1qa/8PwHFBWS3R8yC4dfX12VduefFKMCfQ0mxDsjkg==
+X-Received: by 2002:a17:902:2aa9:: with SMTP id j38mr8317370plb.206.1559755152756;
+        Wed, 05 Jun 2019 10:19:12 -0700 (PDT)
 Received: from hari-Inspiron-1545 ([183.83.89.153])
-        by smtp.gmail.com with ESMTPSA id j20sm22027968pfi.138.2019.06.05.10.11.50
+        by smtp.gmail.com with ESMTPSA id n13sm17135548pgh.6.2019.06.05.10.19.10
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 10:11:51 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 22:41:47 +0530
+        Wed, 05 Jun 2019 10:19:11 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 22:49:08 +0530
 From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
-To:     Bin Liu <b-liu@ti.com>,
+To:     Thomas Winischhofer <thomas@winischhofer.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: musb: Remove unneeded variable
-Message-ID: <20190605171147.GA9558@hari-Inspiron-1545>
+Subject: [PATCH] USB: sisusbvga: Remove unneeded variable
+Message-ID: <20190605171908.GA10444@hari-Inspiron-1545>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -62,35 +62,36 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 fix below warning reported by coccicheck
 
-drivers/usb/musb/musb_gadget.c:1088:6-12: Unneeded variable: "status".
-Return "0" on line 1121
+drivers/usb/misc/sisusbvga/sisusb.c:1753:5-8: Unneeded variable: "ret".
+Return "0" on line 1877
 
 Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
 ---
- drivers/usb/musb/musb_gadget.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/usb/misc/sisusbvga/sisusb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
-index ffe462a..2cb31fc 100644
---- a/drivers/usb/musb/musb_gadget.c
-+++ b/drivers/usb/musb/musb_gadget.c
-@@ -1085,7 +1085,6 @@ static int musb_gadget_disable(struct usb_ep *ep)
- 	u8		epnum;
- 	struct musb_ep	*musb_ep;
- 	void __iomem	*epio;
--	int		status = 0;
+diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
+index ea06f1f..dfe2ed1 100644
+--- a/drivers/usb/misc/sisusbvga/sisusb.c
++++ b/drivers/usb/misc/sisusbvga/sisusb.c
+@@ -1750,7 +1750,7 @@ static int sisusb_setup_screen(struct sisusb_usb_data *sisusb,
+ static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
+ 		int touchengines)
+ {
+-	int ret = 0, i, j, modex, bpp, du;
++	int i, j, modex, bpp, du;
+ 	u8 sr31, cr63, tmp8;
+ 	static const char attrdata[] = {
+ 		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+@@ -1874,7 +1874,7 @@ static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
  
- 	musb_ep = to_musb_ep(ep);
- 	musb = musb_ep->musb;
-@@ -1118,7 +1117,7 @@ static int musb_gadget_disable(struct usb_ep *ep)
+ 	SETIREG(SISCR, 0x34, 0x44);	/* we just set std mode #44 */
  
- 	musb_dbg(musb, "%s", musb_ep->end_point.name);
- 
--	return status;
+-	return ret;
 +	return 0;
  }
  
- /*
+ static int sisusb_init_gfxcore(struct sisusb_usb_data *sisusb)
 -- 
 2.7.4
 
