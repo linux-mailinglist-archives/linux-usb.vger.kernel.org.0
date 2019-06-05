@@ -2,68 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7192335F2C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EE235F8A
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 16:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728296AbfFEO0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 10:26:45 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:56538 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728290AbfFEO0p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 10:26:45 -0400
-Received: (qmail 2056 invoked by uid 2102); 5 Jun 2019 10:26:44 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 5 Jun 2019 10:26:44 -0400
-Date:   Wed, 5 Jun 2019 10:26:44 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrea Vai <andrea.vai@unipv.it>
-cc:     Greg KH <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
-Subject: Re: Slow I/O on USB media
-In-Reply-To: <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
-Message-ID: <Pine.LNX.4.44L0.1906051022380.1788-100000@iolanthe.rowland.org>
+        id S1728398AbfFEOsM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 10:48:12 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45527 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726442AbfFEOsM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 10:48:12 -0400
+Received: by mail-lj1-f193.google.com with SMTP id m23so1597116lje.12
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 07:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KRKqCcJkJjhU1mnyKVRgvukXjIdmsxJhBRIKCeb21V8=;
+        b=lMfvhE2MN5MzIzQzIS2EpGkekKhNf/1b1FjFg1hngq3lsKTREYBct0sdWuGYv13ZHM
+         BEnkeIZpY4bOuFbi9P+5aLxAba9k3X3Wtru/3oO0nm22yubOu0OazdJfiEKIX9Xh4rjC
+         NkP9WwD799fS5R/8gSUYuBcujBnBokE7y8PeM5/2FKSwZ5i84cn23aWnmcQn0t0PsZ7p
+         8z/sNFncRelepYWPqIQ+ODYmiu9rBxbJAQUsV5tigS7i6nlHQLpnPGy5pgEnsH3u8czf
+         tgWJdpiQHjy6E3flLVZ051vJWleOyAE+p4cZIFwhX16Xmvdt1QgInQ+NN1kJiAar5S+Z
+         BcYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KRKqCcJkJjhU1mnyKVRgvukXjIdmsxJhBRIKCeb21V8=;
+        b=QDcg6eBxqv+R5WMWrc9eggvFH+zzke8wXZAJL7NBEdWIRgapsR6bMeN0NSf5P+nqYj
+         0k11WBCbT2KdRToXTj2Zn6jAos50HfWYeqxbrddpMnmAp01nmfIoBlm6Ut1C8JIp+MRV
+         DeZQjIXLWJehAXjgbIGjf3+AFrUEPZW924NZJNmSFbEAtPMjCUPTTtM3HcfEjpoPJ5Gz
+         opmf1VxHby3zwevwmjrNQppB7juPny2V6mXW/xuMXqfJm7JeO8Bv5WKTAEUERFTpFRw8
+         gS2BuF4pLT4xPvuUxjCJSbsO+F8MXQCeejl+Ou0UK8WKd50sK0Mz/87NMXB8Z5pPzHa+
+         e1BQ==
+X-Gm-Message-State: APjAAAWRJCYM6aILR2cKD1KOuPQa7YeBBAnFn59PIEJIivXZfP1ej6DC
+        Tz/KV2hl0R5nvth77J9sbuBMg60mjgf7H/HVD5M=
+X-Google-Smtp-Source: APXvYqzM04/j6r4MYqvWbpgYvZujJNxPDx9kmGbL6MbH7Iybs5ZzhOFR8PWJLQQQH4+fxc+eD+51dO0DCitcYXFkhzQ=
+X-Received: by 2002:a2e:7f15:: with SMTP id a21mr3512524ljd.51.1559746089717;
+ Wed, 05 Jun 2019 07:48:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <20190605130723.9184-1-festevam@gmail.com> <20190605142133.GB8803@kroah.com>
+In-Reply-To: <20190605142133.GB8803@kroah.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 5 Jun 2019 11:47:59 -0300
+Message-ID: <CAOMZO5BmbgcPYqJK47+mtjkMLPR9XjwdCQ4V+qjOnjg1g+nZrw@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: chipidea: Use dev_err() instead of pr_err()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Peter Chen <Peter.Chen@nxp.com>, Johan Hovold <johan@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 5 Jun 2019, Andrea Vai wrote:
+Hi Greg,
 
-> Hi,
-> Il giorno mar, 04/06/2019 alle 07.43 +0200, Greg KH ha scritto:
-> > On Mon, Jun 03, 2019 at 01:13:48PM +0200, Andrea Vai wrote:
-> > > Il giorno gio, 30/05/2019 alle 06.25 -0700, Greg KH ha scritto:
-> > > > [...]
-> > > Hi,
-> > > 
-> > > > Any chance you can use 'git bisect' to find the offending
-> > commit?
-> > > Yes, I am doing it as I managed to build the kernel from source
-> > 
-> > Great!  What did you find?
-> 
-> # first bad commit: [534903d60376b4989b76ec445630aa10f2bc3043]
-> drm/atomic: Use explicit old crtc state in
-> drm_atomic_add_affected_planes()
-> 
-> By the way, as I am not expert, is there a way to double-check that I
-> bisected correctly? (such as, e.g., test with the version before this
-> one, and then with this commit applied?)
+On Wed, Jun 5, 2019 at 11:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 
-That is exactly the way to do it: Build a kernel from that commit and 
-see that it fails, then revert the commit and see that the resulting 
-kernel succeeds.
+> > diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> > index 27749ace2d93..92132b35b7fd 100644
+> > --- a/drivers/usb/chipidea/core.c
+> > +++ b/drivers/usb/chipidea/core.c
+> > @@ -523,8 +523,9 @@ int hw_device_reset(struct ci_hdrc *ci)
+> >       hw_write(ci, OP_USBMODE, USBMODE_SLOM, USBMODE_SLOM);
+> >
+> >       if (hw_read(ci, OP_USBMODE, USBMODE_CM) != USBMODE_CM_DC) {
+> > -             pr_err("cannot enter in %s device mode", ci_role(ci)->name);
+> > -             pr_err("lpm = %i", ci->hw_bank.lpm);
+> > +             dev_err(ci->dev, "cannot enter in %s mode\n",
+>
+> You changed the string text, why?
 
-(Note: The notion of "version before" doesn't have a firm meaning in 
-the kernel, because some commits have multiple parents.  The best way 
-to see if a single commit caused a change is to do what I said above: 
-revert the commit and see what happens.)
+I mentioned this string change in the commit log.
 
-Incidentally, it seems very unlikely that a commit for the drm 
-subsystem would have any effect on the behavior of a USB storage 
-device.
+Originally we could have the following error message:
 
-Alan Stern
+cannot enter in host device mode
 
+This "host device" message looks strange, so that's why I removed the
+"device" string.
+
+If you prefer, I can split it in three patches (add newline, remove
+'device' string, change to dev_err).
+
+Thanks
