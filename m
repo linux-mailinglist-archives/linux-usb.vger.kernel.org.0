@@ -2,149 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD88536127
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 18:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEAB361EE
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 18:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728654AbfFEQYD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 12:24:03 -0400
-Received: from mail-wm1-f51.google.com ([209.85.128.51]:55446 "EHLO
-        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728630AbfFEQYD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 12:24:03 -0400
-Received: by mail-wm1-f51.google.com with SMTP id 16so2872699wmg.5
-        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 09:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=ZaMs/snBbpvg7XRuQ2l4FQcAh7uurMNccxIYMJb1RYw=;
-        b=G3WS3CLdMtdpEgRt8LdT9g9aXIW4znuxHldNimOYGQoMs0zCQebFvUJm1FdhI0N3Om
-         AoNd4eZwtcpS2XCqnEQknbE4rkxfDdI4MuVaUMNPlQ8kzNbUdi/+Rt7czHGrR4dHZL5C
-         V9hTlt1ctb4fuJ/kESxXv9tuLJ5b7lk3q56x+5tRxGdnZXx0JBODVYbJPsXOMXDDq/Kh
-         +Y9kiDBjJ7Wm+9uKshgRKWb4S7NRWQbYymMBqhiwYZl3aGgaEOaYTL92q+fBqe6HdXhY
-         PRtdDrFKICiec99v4mYvHGwuk0uT0erPGJ1wlGu/OWD0Xw1KTCcXSQW73wS2+UVB2Ckx
-         Jodg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=ZaMs/snBbpvg7XRuQ2l4FQcAh7uurMNccxIYMJb1RYw=;
-        b=K/lI88/1TXtaODodYvNA3B/bpTfPrrge6MQqj2Bl/wtIIxO1phYRYgOYJ83DhdBSv9
-         9bvnooaQUVHTCFIxd8t4ff8wiscW9djMk0OtHGNv3NVSOOyxHV9H/76N8LV9WQgk7/Ol
-         02ofXynqAgOtEv4v0Cpoj6ANboaYn8jpl7mfJWpm33gL8sE71beDCskgtU+UKmjEEaxL
-         w68LYNYllqhG/TvNoaQU/nwH4ZIXrZXk/duZHOKjFeWffZ8jZpVDzlWQqQNbOzRLmwFx
-         PGDRUybnjCXoM/Q3oXMrhq2h23wO/hZvLL7gGVDdV643ZLwqLcNpyb9jhJeJDXX+MQxM
-         tylA==
-X-Gm-Message-State: APjAAAUXIK1Y+JfwZJXusokv6/pzeDxpysF1LEoSOkLgAzrw1WzWXKLM
-        kC3g4h57FNPNKVXJFp/QYm2xkw==
-X-Google-Smtp-Source: APXvYqw5PN+qikdN+XUYdofCIGNq2CptGAZIRMMEQoiGQINzKauE6sGieVdnVdoWSZc/9hYrlc7BaQ==
-X-Received: by 2002:a1c:7217:: with SMTP id n23mr11203656wmc.47.1559751840910;
-        Wed, 05 Jun 2019 09:24:00 -0700 (PDT)
-Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
-        by smtp.gmail.com with ESMTPSA id f8sm13656078wrx.11.2019.06.05.09.23.58
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 05 Jun 2019 09:23:58 -0700 (PDT)
-Message-ID: <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it>
-Subject: Re: Slow I/O on USB media
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
-Date:   Wed, 05 Jun 2019 18:23:58 +0200
-In-Reply-To: <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
-References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
-         <20190530132522.GA21005@kroah.com>
-         <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
-         <20190604054300.GE1588@kroah.com>
-         <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
-         <20190605145525.GA28819@kroah.com>
-         <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        id S1728860AbfFEQzp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 12:55:45 -0400
+Received: from smtp1.de.adit-jv.com ([93.241.18.167]:53358 "EHLO
+        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728753AbfFEQzp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 12:55:45 -0400
+Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
+        by smtp1.de.adit-jv.com (Postfix) with ESMTP id EFE583C00DD;
+        Wed,  5 Jun 2019 18:55:42 +0200 (CEST)
+Received: from smtp1.de.adit-jv.com ([127.0.0.1])
+        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 4PIzeykYxjEW; Wed,  5 Jun 2019 18:55:34 +0200 (CEST)
+Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 4C9EC3C00D1;
+        Wed,  5 Jun 2019 18:55:34 +0200 (CEST)
+Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
+ (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.439.0; Wed, 5 Jun 2019
+ 18:55:34 +0200
+Date:   Wed, 5 Jun 2019 18:55:30 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     David Howells <dhowells@redhat.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Mathias Payer <mathias.payer@nebelwelt.net>,
+        Kento Kobayashi <Kento.A.Kobayashi@sony.com>,
+        Hui Peng <benquike@gmail.com>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Jan-Marek Glogowski <glogow@fbihome.de>,
+        Bin Liu <b-liu@ti.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Jon Flatley <jflat@chromium.org>,
+        Mathieu Malaterre <malat@debian.org>,
+        Spyridon Papageorgiou <spapageorgiou@de.adit-jv.com>,
+        Joshua Frkuska <joshua_frkuska@mentor.com>,
+        "George G . Davis" <george_davis@mentor.com>,
+        <yuichi.kusakabe@denso-ten.com>, <yohhei.fukui@denso-ten.com>,
+        <natsumi.kamei@denso-ten.com>, <yasano@jp.adit-jv.com>,
+        <sliu@de.adit-jv.com>, Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>
+Subject: Re: [PATCH] usb: hub: report failure to enumerate uevent to userspace
+Message-ID: <20190605165530.GA15790@vmlxhi-102.adit-jv.com>
+References: <20190605090556.17792-1-erosca@de.adit-jv.com>
+ <20190605100337.GA9350@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190605100337.GA9350@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.93.184]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-Il giorno mer, 05/06/2019 alle 16.55 +0200, Greg KH ha scritto:
-> On Wed, Jun 05, 2019 at 09:36:04AM +0200, Andrea Vai wrote:
-> > Hi,
-> > Il giorno mar, 04/06/2019 alle 07.43 +0200, Greg KH ha scritto:
-> > > On Mon, Jun 03, 2019 at 01:13:48PM +0200, Andrea Vai wrote:
-> > > > Il giorno gio, 30/05/2019 alle 06.25 -0700, Greg KH ha
-> scritto:
-> > > > > [...]
-> > > > Hi,
-> > > > 
-> > > > > Any chance you can use 'git bisect' to find the offending
-> > > commit?
-> > > > Yes, I am doing it as I managed to build the kernel from
-> source
-> > > 
-> > > Great!  What did you find?
+Hi Greg,
+
+We really appreciate your feedback.
+
+On Wed, Jun 05, 2019 at 12:03:37PM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Jun 05, 2019 at 11:05:56AM +0200, Eugeniu Rosca wrote:
+> > From: Spyridon Papageorgiou <spapageorgiou@de.adit-jv.com>
 > > 
-> > # first bad commit: [534903d60376b4989b76ec445630aa10f2bc3043]
-> > drm/atomic: Use explicit old crtc state in
-> > drm_atomic_add_affected_planes()
+> > When a USB device fails to enumerate, only a kernel message is printed.
+> > With this patch, a uevent is also generated to notify userspace.
+> > Services can monitor for the event through udev and handle failures
+> > accordingly.
 > > 
-> > By the way, as I am not expert, is there a way to double-check
-> that I
-> > bisected correctly? (such as, e.g., test with the version before
-> this
-> > one, and then with this commit applied?)
+> > The "port_enumerate_fail_notify()" function name follows the syntax of
+> > "port_over_current_notify()" used in v4.20-rc1
+> > commit 201af55da8a398 ("usb: core: added uevent for over-current").
+> > 
+> > Signed-off-by: Spyridon Papageorgiou <spapageorgiou@de.adit-jv.com>
+> > Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
 > 
-> How exactly are you "testing" this?
+> All we need is one special notifier!  ...
 > 
-> I would recommend a script that does something like:
->       mount the disk somewhere
->       copy a big file to it
->       unmount the disk
+> {grumble}
 > 
-> testing how long the whole process takes, especially the 'unmount'
-> is
-> important.  Are you doing that?
+> This can end up causing loads of new kobject change events to be added,
+> overloading what uevents were supposed to be in the first place
+> (add/remove of sysfs objects).
 
-Well, not exactly, and thank you for pointing me out. I am doing the
-job in two ways, from the DE (when I am located at the PC), or in an
-ssh session when I am away. In ssh I manually mount the media, then
-run
-
-touch begin
-date
-<cp command>
-date
-touch end
-
-so I get the time kept looking at the output of "date", or at the date
-of the begin/end files. I understand that if I don't unmount the media
-I cannot be sure all data has been written, but if the cp command is
-still not finished after 20, 30 minutes then I can tag the commit as
-"bad". Since I obtained one "good" behavior only (1-2 minutes) among
-10+ tests, I took for sure it was a"good" commit, and I may have made
-a mistake there (because I am not sure I actually unmounted the
-media).
-
-If I use the DE (where the media is mounted automatically) I used to
-"eject" the media after the copy finished, and took note of the time
-used until the media was correctly "ejected" (and, so, unmounted).
-
-Anyway, I know that I can do all of this in a better way, and will let
-you know.
+I guess that's the case for every other kobject_uevent*(*, KOBJ_CHANGE)
+call in the USB subsystem (in case of either HW or code misbehavior).
+JFTR, there are around 120 such calls in the entire v5.2-rc3 kernel.
 
 > 
-> Also, you should probably just boot into text mode for this, most
-> graphical DEs like to auto-mount disks these days.
+> I just talked with David Howells, and this type of thing really should
+> be tied into the new "notifier" interface/api.  That way you can
+> register for any specific type of event and just get notified of them
+> when they happen.  No need to mess with uevents.
+> 
+> See his posts on linux-api starting with:
+> 	Subject: [RFC][PATCH 0/8] Mount, FS, Block and Keyrings notifications [ver #2]
+> for the proposal.
+> 
+> If we added USB (or really any hardware events) to that interface, would
+> it solve the issue you are trying to solve here?
 
-Thank you for clarifying. As said above, actually I think I have took
-care of it, but I can do another bisect by turning off the automount
-feature of USB media in my DE, and mount/unmount only by command line.
+I checked this patch series in linux-fs.git [3], as well as shared my
+thoughts with our security and RFS experts, and we came up with the
+following questions/remarks:
 
-First of all, I will try to revert the commit, and see what happens.
-If the test fails, I will run another bisect.
+ - Looking at commit [4], it seems that the new "notifier" interface/api
+   forces userspace applications to link against -lkeyutils [5].
+   Assuming the latter is designed for ("Kernel key management") [6],
+   it may look like the keyutils library is being abused to handle
+   the "USB (or really any hardware events)". Do you really plan to
+   extend the scope of the library to handle these new tasks?
 
-Thank you for your patience,
-Best regards
-Andrea
+ - Currently, to be able to get kobject uevent notifications, our
+   applications must include "libudev.h" and must link against -ludev.
+   By using the feature implemented in [3], we would significantly
+   increase the complexity of those applications, particularly because
+   they would need to arbitrate between two different categories of
+   events received via two different APIs.
 
+ - It is also my assumption that the existing KOBJ_CHANGE events cannot
+   be easily converted to the new API, since this would hurt a dozen of
+   userland applications relying on them.
+
+Overall, I am quite clueless how to proceed with this patch, except to
+keep it in our internal tree, most likely forever. Any
+comments/recommendations would be appreciated.
+
+> 
+> thanks,
+> 
+> greg k-h
+
+[1] linux (v5.2-rc3) git grep KOBJ_CHANGE -- drivers/usb/
+drivers/usb/core/hub.c:	kobject_uevent_env(&hub_dev->kobj, KOBJ_CHANGE, envp);
+drivers/usb/gadget/udc/core.c:	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+drivers/usb/gadget/udc/core.c:	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+drivers/usb/phy/phy.c:	kobject_uevent_env(&usb_phy->dev->kobj, KOBJ_CHANGE, envp);
+drivers/usb/typec/class.c:	kobject_uevent(&adev->dev.kobj, KOBJ_CHANGE);
+drivers/usb/typec/class.c:	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
+drivers/usb/typec/class.c:	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
+drivers/usb/typec/class.c:	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
+drivers/usb/typec/class.c:	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
+
+[2] git grep -w KOBJ_CHANGE -- ":\!Documentation" ":\!include" | wc -l
+122
+
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=notifications
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?h=16a8aad951990
+[5] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git
+[6] https://lwn.net/Articles/210502/ ("Kernel key management")
+
+-- 
+Best Regards,
+Eugeniu.
