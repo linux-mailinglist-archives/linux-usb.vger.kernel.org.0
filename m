@@ -2,361 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1396D359C5
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 11:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02175359D0
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 11:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbfFEJlW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 05:41:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46710 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726690AbfFEJlV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 05:41:21 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B8EE82075C;
-        Wed,  5 Jun 2019 09:41:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559727680;
-        bh=tXrGqUaQKHyhNXKd74KtHi4wl0aXhkbM/QVI8uzhELU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PB6XzbOdijPuvNM9u9QIGq4Vw419iARqkFdtX8upEGF9iyxgPMjJQgslMbUZOsUMT
-         W957kwwWJGJstQDe6muNKJnJYehASsurvGRJ+Tyw8VbzDWeWDe31NQ3ztc9SnfNprm
-         9WR5VzbJ55vCxBwaWO/GH8XQDJT0nTft1pkj8sdk=
-Date:   Wed, 5 Jun 2019 11:41:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-Cc:     linux-usb@vger.kernel.org, patches@opensource.cirrus.com,
-        stern@rowland.harvard.edu, oneukum@suse.com
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-Message-ID: <20190605094117.GA24282@kroah.com>
-References: <1557482469-6834-1-git-send-email-mkulkarni@opensource.cirrus.com>
+        id S1727065AbfFEJsJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 05:48:09 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:12855 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727045AbfFEJsJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 05:48:09 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cf78fd50000>; Wed, 05 Jun 2019 02:48:05 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 05 Jun 2019 02:48:06 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 05 Jun 2019 02:48:06 -0700
+Received: from [10.19.120.158] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 5 Jun
+ 2019 09:48:04 +0000
+Subject: Re: [PATCH v11 1/2] usb: Add devaddr in struct usb_device
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <stern@rowland.harvard.edu>, <kai.heng.feng@canonical.com>,
+        <drinkcat@chromium.org>, <Thinh.Nguyen@synopsys.com>,
+        <nsaenzjulienne@suse.de>, <jflat@chromium.org>, <malat@debian.org>
+References: <1559559224-9845-1-git-send-email-jilin@nvidia.com>
+ <1559559224-9845-2-git-send-email-jilin@nvidia.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   Jim Lin <jilin@nvidia.com>
+Message-ID: <e56146a9-9a88-b257-c3ea-1dcf307df830@nvidia.com>
+Date:   Wed, 5 Jun 2019 17:48:02 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1557482469-6834-1-git-send-email-mkulkarni@opensource.cirrus.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <1559559224-9845-2-git-send-email-jilin@nvidia.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL103.nvidia.com (172.20.187.11) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1559728085; bh=grjBNnzx9l51zL5S3keIIjDGVi0z/QiNjnVmI0UGVtc=;
+        h=X-PGP-Universal:Subject:To:References:CC:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding;
+        b=T0CwpM0U1bZ8cYs38JVl/NcOvHXHtjp1u9DpcUpioOoJCgRM13yw2a/ca79gLHgpm
+         J+MyJ6f413Xswb0SN5ypua4/y927A7Dizy+nVpZEmFnTvTZnf6UulTJANNz61D8s/7
+         7UX3P5iPWNelw2vMVKKj2CAxkygOi7EZJ5yR8HAUKP2ZBtXs8GjlcelndF2JXrdbKl
+         lzf+yV5f83SX+QtmkodPMGiiY4H/okuow71RuXx9KVFyqDSKrmr3wO8vY1V8UfhIzA
+         YulD6hqh/CdSZkrEXN8bRx/LnE9OidNpX1MczWePk92TsuifmIsXz+OpkAtwK+9xmo
+         1sJNXo43zCssg==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 10, 2019 at 11:01:09AM +0100, Mayuresh Kulkarni wrote:
-> - The current driver increments the PM ref-count in its .open
-> API and decrements it in its .close API.
-> - Due to this, it is not possible for the usb_device to go into
-> suspend (L2) even if all of its interfaces report idle to usb-core.
-> - In order to allow the suspend, 2 new ioctls are added:
-> 1. USBDEVFS_SUSPEND: calls auto-suspend and indicates to usb/pm core
-> to attempt suspend, if appropriate. This is a non-blocking call.
-> 2. USBDEVFS_WAIT_RESUME: waits for resume. This is a blocking call.
-> The resume could happen due to:
-> host-wake (i.e.: any driver bound to interface(s) of device wants to
-> send/receive control/data)
-> OR
-> remote-wake (i.e.: when remote-wake enabled device generates a
-> remote-wake to host).
-> In both these conditions, this call will return.
-> - It is expected that:
-> 1. When user-space thinks the device is idle from its point-of-view,
-> it calls USBDEVFS_SUSPEND.
-> 2. After USBDEVFS_WAIT_RESUME call returns,
-> the callers queries the device/interface of its interest to see
-> what caused resume and take appropriate action on it.
 
-I'm going to make a bunch of random comments on this patch, some
-cosmetic...
-
-First off, the above is horrible to try to read, please format things in
-a sane way such that we can understand it well.
-
-> The link to relevant discussion about this patch on linux-usb is -
-> https://www.spinics.net/lists/linux-usb/msg173285.html
-
-You should not need to reference any external web site for a changelog
-entry, just put the needed information in the changelog itself.
-
-> Signed-off-by: Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
+On 2019=E5=B9=B406=E6=9C=8803=E6=97=A5 18:53, Jim Lin wrote:
+> The Clear_TT_Buffer request sent to the hub includes the address of
+> the LS/FS child device in wValue field. usb_hub_clear_tt_buffer()
+> uses udev->devnum to set the address wValue. This won't work for
+> devices connected to xHC.
+>
+> For other host controllers udev->devnum is the same as the address of
+> the usb device, chosen and set by usb core. With xHC the controller
+> hardware assigns the address, and won't be the same as devnum.
+>
+> Here we add devaddr in "struct usb_device" for
+> usb_hub_clear_tt_buffer() to use.
+>
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
 > ---
->  drivers/usb/core/devio.c          | 114 ++++++++++++++++++++++++++++++++++++--
->  include/uapi/linux/usbdevice_fs.h |   2 +
->  2 files changed, 112 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> index fa783531..67dc326 100644
-> --- a/drivers/usb/core/devio.c
-> +++ b/drivers/usb/core/devio.c
-> @@ -68,6 +68,9 @@ struct usb_dev_state {
->  	u32 disabled_bulk_eps;
->  	bool privileges_dropped;
->  	unsigned long interface_allowed_mask;
-> +	bool runtime_active;
-> +	bool is_suspended;
-> +	wait_queue_head_t wait_resume;
+> v2: xhci_clear_tt_buffer_complete: add static, shorter indentation
+>      , remove its claiming in xhci.h
+> v3: Add description for clearing_tt (xhci.h)
+> v4: Remove clearing_tt flag because hub_tt_work has hub->tt.lock
+>      to protect for Clear_TT_Buffer to be run serially.
+>      Remove xhci_clear_tt_buffer_complete as it's not necessary.
+>      Same reason as the above.
+>      Extend usb_hub_clear_tt_buffer parameter
+> v5: Not extending usb_hub_clear_tt_buffer parameter
+>      Add description.
+> v6: Remove unused parameter slot_id from xhci_clear_hub_tt_buffer
+> v7: Add devaddr field in "struct usb_device"
+> v8: split as two patches, change type from int to u8 for devaddr.
+> v9: Use pahole to find place to put devaddr in struct usb_device.
+>      Remove space between type cast and variable.
+>      hub.c changed from v8
+>      clear->devinfo |=3D (u16) (udev->devaddr << 4);
+>      to
+>      clear->devinfo |=3D ((u16)udev->devaddr) << 4;
+>      to solve a problem if devaddr is larger than 16.
+> v10 Initialize devaddr in xhci_setup_device()
+>      Move devaddr to be below "u8 level"
+> v11 Add xhci.c "slot_ctx =3D ..."
+>
+>   drivers/usb/core/hub.c  | 4 +++-
+>   drivers/usb/host/xhci.c | 2 ++
+>   include/linux/usb.h     | 2 ++
+>   3 files changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 572e8c26a129..82cc3766cb23 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -873,7 +873,7 @@ int usb_hub_clear_tt_buffer(struct urb *urb)
+>   	/* info that CLEAR_TT_BUFFER needs */
+>   	clear->tt =3D tt->multi ? udev->ttport : 1;
+>   	clear->devinfo =3D usb_pipeendpoint (pipe);
+> -	clear->devinfo |=3D udev->devnum << 4;
+> +	clear->devinfo |=3D ((u16)udev->devaddr) << 4;
+>   	clear->devinfo |=3D usb_pipecontrol(pipe)
+>   			? (USB_ENDPOINT_XFER_CONTROL << 11)
+>   			: (USB_ENDPOINT_XFER_BULK << 11);
+> @@ -2125,6 +2125,8 @@ static void update_devnum(struct usb_device *udev, =
+int devnum)
+>   	/* The address for a WUSB device is managed by wusbcore. */
+>   	if (!udev->wusb)
+>   		udev->devnum =3D devnum;
+> +	if (!udev->devaddr)
+> +		udev->devaddr =3D (u8)devnum;
+>   }
+>  =20
+>   static void hub_free_dev(struct usb_device *udev)
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 20db378a6012..4f92643e3a4c 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -4125,6 +4125,8 @@ static int xhci_setup_device(struct usb_hcd *hcd, s=
+truct usb_device *udev,
+>   	/* Zero the input context control for later use */
+>   	ctrl_ctx->add_flags =3D 0;
+>   	ctrl_ctx->drop_flags =3D 0;
+> +	slot_ctx =3D xhci_get_slot_ctx(xhci, virt_dev->out_ctx);
+> +	udev->devaddr =3D (u8)(le32_to_cpu(slot_ctx->dev_state) & DEV_ADDR_MASK=
+);
+>  =20
+>   	xhci_dbg_trace(xhci, trace_xhci_dbg_address,
+>   		       "Internal device address =3D %d",
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index ae82d9d1112b..83d35d993e8c 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -578,6 +578,7 @@ struct usb3_lpm_parameters {
+>    * @bus_mA: Current available from the bus
+>    * @portnum: parent port number (origin 1)
+>    * @level: number of USB hub ancestors
+> + * @devaddr: device address, XHCI: assigned by HW, others: same as devnu=
+m
+>    * @can_submit: URBs may be submitted
+>    * @persist_enabled:  USB_PERSIST enabled for this device
+>    * @have_langid: whether string_langid is valid
+> @@ -661,6 +662,7 @@ struct usb_device {
+>   	unsigned short bus_mA;
+>   	u8 portnum;
+>   	u8 level;
+> +	u8 devaddr;
+>  =20
+>   	unsigned can_submit:1;
+>   	unsigned persist_enabled:1;
 
-That's some crazy alignment issues, please don't waste bytes for no good
-reason.
+- May I get patch v11 1/2 acked or reviewed by Alan?
 
-And can you document these fields somewhere?
+Did I not do this already?  Oh well, in any case:
 
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
->  };
->  
->  struct usb_memory {
-> @@ -444,6 +447,23 @@ static struct async *async_getpending(struct usb_dev_state *ps,
->  	return NULL;
->  }
->  
-> +static int async_getpending_count(struct usb_dev_state *ps)
-> +{
-> +	struct async *as;
-> +	int count;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&ps->lock, flags);
-> +	if (list_empty(&ps->async_pending))
-> +		count = 0;
-> +	else
-> +		list_for_each_entry(as, &ps->async_pending, asynclist)
-> +			count++;
+Alan Stern
 
-Doesn't list_for_each_entry() work just fine on an empty list?  Just set
-count to 0 up above, right?
+--nvpublic
 
-> +	spin_unlock_irqrestore(&ps->lock, flags);
-
-So, right after you call this function, and drop the lock, the entries
-can change, making your "count" invalid and stale.  So you can not trust
-the value at all, right?
-
-> +
-> +	return count;
-> +}
-> +
->  static void snoop_urb(struct usb_device *udev,
->  		void __user *userurb, int pipe, unsigned length,
->  		int timeout_or_status, enum snoop_when when,
-> @@ -699,16 +719,26 @@ static void driver_disconnect(struct usb_interface *intf)
->  	destroy_async_on_interface(ps, ifnum);
->  }
->  
-> -/* The following routines are merely placeholders.  There is no way
-> - * to inform a user task about suspend or resumes.
-> - */
->  static int driver_suspend(struct usb_interface *intf, pm_message_t msg)
->  {
-> +	struct usb_dev_state *ps = usb_get_intfdata(intf);
-> +
-> +	ps->is_suspended = true;
-
-No locking needed?
-
-> +	snoop(&ps->dev->dev, "driver-suspend\n");
-
-Why?  Does anyone use the snoop api anymore?
-
-> +
->  	return 0;
->  }
->  
->  static int driver_resume(struct usb_interface *intf)
->  {
-> +	struct usb_dev_state *ps = usb_get_intfdata(intf);
-> +
-> +	ps->runtime_active = true;
-> +	wake_up(&ps->wait_resume);
-> +
-> +	snoop(&ps->dev->dev, "driver-resume: runtime-active = %d\n",
-> +		ps->runtime_active);
-
-What does runtime_active give userspace here?  Again, who is using
-snoop?  And isn't runtime_active a bool?  It's always going to be "true"
-here.  Is this just debugging code left in?
-
-> +
->  	return 0;
->  }
->  
-> @@ -718,6 +748,7 @@ struct usb_driver usbfs_driver = {
->  	.disconnect =	driver_disconnect,
->  	.suspend =	driver_suspend,
->  	.resume =	driver_resume,
-> +	.supports_autosuspend = 1,
->  };
->  
->  static int claimintf(struct usb_dev_state *ps, unsigned int ifnum)
-> @@ -963,6 +994,27 @@ static struct usb_device *usbdev_lookup_by_devt(dev_t devt)
->  	return to_usb_device(dev);
->  }
->  
-> +/* must be called with usb-dev lock held */
-> +static int usbdev_do_resume(struct usb_dev_state *ps)
-> +{
-> +	int ret = 0;
-> +
-> +	if (!ps->runtime_active) {
-> +		snoop(&ps->dev->dev, "suspended..resume now\n");
-
-Again snoop?
-
-> +		ps->is_suspended = false;
-> +		if (usb_autoresume_device(ps->dev)) {
-> +			ret = -EIO;
-> +			goto _out;
-> +		}
-> +		snoop(&ps->dev->dev, "resume done..active now\n");
-> +		ps->runtime_active = true;
-> +		wake_up(&ps->wait_resume);
-
-No locking at all?
-
-> +	}
-> +
-> +_out:
-
-Why is this even needed, just return -EIO above and all is good.
-
-But again, is any locking needed here?
-
-
-> +	return ret;
-> +}
-> +
->  /*
->   * file operations
->   */
-> @@ -1008,6 +1060,9 @@ static int usbdev_open(struct inode *inode, struct file *file)
->  	INIT_LIST_HEAD(&ps->async_completed);
->  	INIT_LIST_HEAD(&ps->memory_list);
->  	init_waitqueue_head(&ps->wait);
-> +	init_waitqueue_head(&ps->wait_resume);
-> +	ps->runtime_active = true;
-> +	ps->is_suspended = false;
->  	ps->disc_pid = get_pid(task_pid(current));
->  	ps->cred = get_current_cred();
->  	smp_wmb();
-> @@ -1034,6 +1089,10 @@ static int usbdev_release(struct inode *inode, struct file *file)
->  	struct async *as;
->  
->  	usb_lock_device(dev);
-> +
-> +	/* what can we can do if resume fails? */
-
-You tell me!
-
-> +	usbdev_do_resume(ps);
-> +
->  	usb_hub_release_all_ports(dev, ps);
->  
->  	list_del_init(&ps->list);
-> @@ -2355,6 +2414,18 @@ static int proc_drop_privileges(struct usb_dev_state *ps, void __user *arg)
->  	return 0;
->  }
->  
-> +static int proc_wait_resume(struct usb_dev_state *ps)
-> +{
-> +	int ret;
-> +
-> +	snoop(&ps->dev->dev, "wait-for-resume\n");
-> +	ret = wait_event_interruptible(ps->wait_resume,
-> +		(ps->runtime_active == true));
-> +	snoop(&ps->dev->dev, "wait-for-resume...done\n");
-
-This is just debugging code, right?  Please remove.
-
-> +
-> +	return ret;
-> +}
-> +
->  /*
->   * NOTE:  All requests here that have interface numbers as parameters
->   * are assuming that somehow the configuration has been prevented from
-> @@ -2373,6 +2444,25 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  
->  	usb_lock_device(dev);
->  
-> +	if (cmd != USBDEVFS_WAIT_RESUME) {
-> +		ret = usbdev_do_resume(ps);
-
-do resume for all ioctl commands?  are you sure?
-
-> +		if (ret)
-> +			goto done;
-> +	} else {
-> +		usb_unlock_device(dev);
-> +		ret = proc_wait_resume(ps);
-> +
-> +		/* Call auto-resume to balance auto-suspend of suspend-ioctl */
-> +		usb_lock_device(dev);
-> +		if (ps->is_suspended) {
-> +			ret = usb_autoresume_device(ps->dev);
-> +			ps->is_suspended = false;
-> +		}
-> +		usb_unlock_device(dev);
-> +
-> +		goto _done;
-
-What is the difference between _done and done?  Please have descriptive
-labels if you are going to have any at all.
-
-Why isn't this part of the switch statement below?
-
-> +	}
-> +
->  	/* Reap operations are allowed even after disconnection */
->  	switch (cmd) {
->  	case USBDEVFS_REAPURB:
-> @@ -2549,10 +2639,26 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  	case USBDEVFS_GET_SPEED:
->  		ret = ps->dev->speed;
->  		break;
-> +	case USBDEVFS_SUSPEND:
-> +		ret = 0;
-> +
-> +		/* we cannot suspend when URB is pending */
-> +		if (async_getpending_count(ps)) {
-> +			snoop(&ps->dev->dev, "ioctl-suspend but URB pending\n");
-
-You do not know this, your value is stale :(
-
-And again, you are using snoop() calls for debugging, not for actual USB
-traffic, which is what it was designed for.  These all need to be
-removed/rewritten.
-
-> +			ret = -EINVAL;
-> +		} else {
-> +			if (ps->runtime_active) {
-> +				snoop(&ps->dev->dev, "ioctl-suspend\n");
-> +				ps->runtime_active = false;
-> +				usb_autosuspend_device(ps->dev);
-> +			}
-> +		}
-> +		break;
->  	}
->  
-> - done:
-> +done:
->  	usb_unlock_device(dev);
-> +_done:
-
-See, horrid names :(
-
->  	if (ret >= 0)
->  		inode->i_atime = current_time(inode);
->  	return ret;
-> diff --git a/include/uapi/linux/usbdevice_fs.h b/include/uapi/linux/usbdevice_fs.h
-> index 964e872..ae46beb 100644
-> --- a/include/uapi/linux/usbdevice_fs.h
-> +++ b/include/uapi/linux/usbdevice_fs.h
-> @@ -197,5 +197,7 @@ struct usbdevfs_streams {
->  #define USBDEVFS_FREE_STREAMS      _IOR('U', 29, struct usbdevfs_streams)
->  #define USBDEVFS_DROP_PRIVILEGES   _IOW('U', 30, __u32)
->  #define USBDEVFS_GET_SPEED         _IO('U', 31)
-> +#define USBDEVFS_SUSPEND           _IO('U', 32)
-> +#define USBDEVFS_WAIT_RESUME       _IO('U', 33)
-
-No documentation for what these do?
-
-thanks,
-
-greg k-h
