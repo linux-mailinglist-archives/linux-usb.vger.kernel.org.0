@@ -2,94 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6415F35758
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 09:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9C335751
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 09:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbfFEHDW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 03:03:22 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:41036 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726086AbfFEHDW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 03:03:22 -0400
-Received: by mail-lj1-f194.google.com with SMTP id s21so11480494lji.8;
-        Wed, 05 Jun 2019 00:03:20 -0700 (PDT)
+        id S1726541AbfFEHCq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 03:02:46 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:35194 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726427AbfFEHCq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 03:02:46 -0400
+Received: by mail-pf1-f196.google.com with SMTP id d126so14309559pfd.2
+        for <linux-usb@vger.kernel.org>; Wed, 05 Jun 2019 00:02:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=uz4rW4hom4PNyImhqoO7mrnt+7yVJFQ+a19gRd/J1UQ=;
+        b=k2mgUNFS8mlgZJLWSI2R4t0x6v3cRS5Cibzq9KsQeI9KAoK6H7pBodfPO0qs0J/hBF
+         UnokjKUh6mu48Jv152LXpaxAIemY3F4zfzFSo9NysiwGnJDt8ax3RxYRET3ra0TkQP/i
+         GPnwx+W3Hhu5yRpNgUdOJGq+0KClDNJKtGTSYKeDaXwRrQBMN/34vs9cIw762gGL2S2X
+         aCq0lADu9jfpEF0rmoDeGo70ZA4BURwaE5YhZ1GEYO/HYwHMaLZ9hL3hbjNuPqnF1VEN
+         qBKuQPkKiY/bWef19eOPrZkK5kuzU+JYYp1dQcFzU8F63bw09h+yuZibsYe9AOcoI0tB
+         VAcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=osYzYbwPlOcKrG/PC8H8GWv1Nj5R7QK9wL1yUwsonBc=;
-        b=YT9K87TS1L+r1EFiLLaUcKL8P/rkxIMlZ93iEwCfuAYiJnvNDcEs2wA2ZNyUqgCIVd
-         nEayUOWpuRmJzTs1Z8ua2vVuPkX5iPqZ+o/d9pCD5a4sZ+3sWiZQOTtaEjSQHFLLvPGb
-         Pcuv2hy2c/4qckaFv6e1SjjkRG0gUfwwTF/2+QbB1BWziPFmZ6H0OYsw7DB+/ZE0VUnI
-         d2nyjwOw1Bm5s5RCcZiS2QjRmyDS9eqtg+TnQ9BNqARq/p5dlJSQ6n28jZdurULaNTsK
-         ZqAio89WnFnkskA1tjPJCcG4jZcyeui7DwWZF2uc/XA+vQV6r9cP8vfvzHqd8rhQsvnB
-         rvtA==
-X-Gm-Message-State: APjAAAXM+1p2medbe9z2hpTbwWXCIR3N+4L3s9m558Agz+nYqPbufqZK
-        YNdLlhAp9O92ecGR47b051a011brEq7mjYvLW6KbAzwDfrI=
-X-Google-Smtp-Source: APXvYqzwh3fVGm1fjYzMw1AVnfNmxjP5Iwroc9j1hk1lhsXlBthTB4FsB5COji/H7zBPGwhpbTYrkhgAtBN8C7k+/Jw=
-X-Received: by 2002:a2e:6e01:: with SMTP id j1mr19452629ljc.135.1559718199961;
- Wed, 05 Jun 2019 00:03:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=uz4rW4hom4PNyImhqoO7mrnt+7yVJFQ+a19gRd/J1UQ=;
+        b=o4gg2YIHK8NcmnP6mwLyuwGy7+X2J+p9SShSP7roHXiSUU9zCdDUKjH+8Xi79bvwf3
+         /DmGt4NjDUjb+mvRxWtldGR9W/VxeT7MgFJrQhErKE0mPDPYdfx5cXhvhdmoenGuXn8l
+         gbEr7YOAnGSKT5toTSbZ3L95yOiRy+V1Spqf2F/o+GiBKoq/u+uDU4uCvmAAR2bYdjMD
+         FI8Z8O9/UIn+W2WRiblf0fl9oHqJ7rhxf9FdXFbyTLo3sYxPwFjOgsriR/szRd9jkqQp
+         +GLrKivepUOBDVnlJO1QId3Oa0vgvEd7t4fA/e5BSV2k+3Q5tOC6tojJL9uycSb6mGgZ
+         do9A==
+X-Gm-Message-State: APjAAAVxAI0pQfKPFwt5nmLwhCioeo3QQFrUbylUcSAY6e/b5/W71yf7
+        Uz55absXd/LYhTPSHy5skyG0Kg==
+X-Google-Smtp-Source: APXvYqxbp1TM7o6DxILTBx5tTuqENvUDU+OcxxTSnQwTp/YO/ccBSoR/xNWDWoB8WKd14PCiX3fHZQ==
+X-Received: by 2002:a63:fa16:: with SMTP id y22mr2444462pgh.15.1559718165590;
+        Wed, 05 Jun 2019 00:02:45 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id w62sm7765452pfw.132.2019.06.05.00.02.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 05 Jun 2019 00:02:45 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 00:03:30 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
+        andy.gross@linaro.org, david.brown@linaro.org,
+        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 8/8] usb: dwc3: qcom: Improve error handling
+Message-ID: <20190605070330.GO22737@tuxbook-pro>
+References: <20190604104455.8877-1-lee.jones@linaro.org>
+ <20190604104455.8877-8-lee.jones@linaro.org>
 MIME-Version: 1.0
-References: <CAMuHMdUObtKUVDohLT501TarPRC6eDnxBqqB5Tj_Tb+-4fwbkw@mail.gmail.com>
- <OSAPR01MB30890E4B76F9605F3726C676D8160@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSAPR01MB30890E4B76F9605F3726C676D8160@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 5 Jun 2019 09:03:07 +0200
-Message-ID: <CAMuHMdXWsNfj1UYXDyh4ZJ0E2Z0jobug4jJ4uTpUa1X4d+Hocw@mail.gmail.com>
-Subject: Re: rcar_gen3_phy_usb2: unbalanced disables for USB20_VBUS0
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190604104455.8877-8-lee.jones@linaro.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Shimoda-san,
+On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
 
-On Wed, Jun 5, 2019 at 6:06 AM Yoshihiro Shimoda
-<yoshihiro.shimoda.uh@renesas.com> wrote:
-> > From: Geert Uytterhoeven, Sent: Wednesday, June 5, 2019 3:06 AM
-> > Using a tree based on renesas-drivers-2019-06-04-v5.2-rc3, I started seeing
-> > the following warning during a second system suspend (s2idle):
-> <snip>
-> > So far I've seen this on Salvator-X with R-Car H3 ES1.0 or M3-W, and
-> > on Salvator-XS with R-Car M3-N, but not (yet?) on H3 ES2.0.
->
-> I could reproduce this issue on R-Car H3 ES3.0 with Suspend-to-RAM.
-> # I'm silly but I could not use s2idle that didn't wake up by ravb.
-> # https://elinux.org/R-Car/Boards/Salvator-X#Suspend-to-Idle
+> dwc3_qcom_clk_init() is called with of_count_phandle_with_args() as an
+> argument.  If of_count_phandle_with_args() returns an error, the number
+> of clocks will be a negative value and will lead to undefined behaviour.
+> 
+> Ensure we check for an error before attempting to blindly use the value.
+> 
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 
-With CONFIG_PM_DEBUG=y and CONFIG_PM_TEST_SUSPEND=y, you can use
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-     echo platform > /sys/power/pm_test
-
-to configure the system to wake up from s2idle after 5 seconds.
-This allows to loop s2idle without user intervention.
-
-> Thank you for trying it. I have investigated this issue and then I found the root cause.
->
-> After the following patch was applied, multiple phy devices are generated.
-> https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/drivers/phy/renesas/phy-rcar-gen3-usb2.c?h=renesas-drivers-2019-06-04-v5.2-rc3&id=549b6b55b00558183cef4af2c2bb61d4f2ffe508
->
-> But, on the power_on function, it should set the "powered" flag for any other phys anyway.
-> Otherwise, such a strange imbalance behavior happened.
-> The powered flag is needed to avoid multiple "PLL_RST" register setting.
-> # I think regulator_{en,dis}able() don't need such a condition though.
->
-> I'll submit a bugfix patch with your Reported-by tag later.
-
-Thank you very much!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index f21fdd6cdd1a..633482926497 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -419,6 +419,9 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
+>  	if (!count || ACPI_HANDLE(dev))
+>  		return 0;
+>  
+> +	if (count < 0)
+> +		return count;
+> +
+>  	qcom->clks = devm_kcalloc(dev, qcom->num_clocks,
+>  				  sizeof(struct clk *), GFP_KERNEL);
+>  	if (!qcom->clks)
+> -- 
+> 2.17.1
+> 
