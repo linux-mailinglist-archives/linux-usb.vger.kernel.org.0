@@ -2,161 +2,221 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C49A435D08
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 14:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6421335D28
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 14:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727692AbfFEMkP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 08:40:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44494 "EHLO mail.kernel.org"
+        id S1727896AbfFEMon (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 08:44:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46768 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727273AbfFEMkP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 08:40:15 -0400
+        id S1727870AbfFEMon (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Jun 2019 08:44:43 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1AE4C206BB;
-        Wed,  5 Jun 2019 12:40:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4723E206BB;
+        Wed,  5 Jun 2019 12:44:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559738413;
-        bh=qdAUBbULazBNhStl1AcZ7Kv55Zf3/V9JNzSigkm1w7M=;
+        s=default; t=1559738682;
+        bh=QE6OqV+pr1o/aexoFAKgGSdIKhD1YYlp3Prttmy2EPs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d+brviXoxz8rR+sa6s+nEnzxEORtvoSYychevSjfk+wLUWBEPtzNRxqQVfhQpZBCH
-         nsrd7ag0lwuGki2SLtp21v2dlF9Z/igkVJeTqH1rw1VIBnseo0+90PB5RZLzcWFvBD
-         CP24WIcSjTIE83sXdlJ1xmviw6Mu1b5JboF/7eb0=
-Date:   Wed, 5 Jun 2019 14:40:11 +0200
+        b=LMLWSTpDCoGa7HCezr8IzmhUO1OC9hzQqfVeIXS9xkg4HLP5gsfEa9ZfFCefNP8rR
+         0N6uqLc3Fj8Q8Xvk3sfHXIIWIHNgLThyRLApTVH1uw0v7SYcK1aKvo+xPJYOsKGgeJ
+         ArZpPDQRNDylFyhvQPQZoAirFN73ac6yj6lfgyn8=
+Date:   Wed, 5 Jun 2019 14:44:40 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2] USB: move usb debugfs directory creation to the usb
+Subject: [PATCH v3] USB: move usb debugfs directory creation to the usb
  common core
-Message-ID: <20190605124011.GB17558@kroah.com>
+Message-ID: <20190605124440.GD17558@kroah.com>
 References: <20190605092816.GA23758@kroah.com>
- <1559732515.8487.106.camel@mhfsdcap03>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1559732515.8487.106.camel@mhfsdcap03>
+In-Reply-To: <20190605092816.GA23758@kroah.com>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 07:01:55PM +0800, Chunfeng Yun wrote:
-> Hi Greg,
-> On Wed, 2019-06-05 at 11:28 +0200, Greg Kroah-Hartman wrote:
-> > The USB gadget subsystem wants to use the USB debugfs root directory, so
-> > move it to the common "core" USB code so that it is properly initialized
-> > and removed as needed.
-> > 
-> > In order to properly do this, we need to load the common code before the
-> > usb core code, when everything is linked into the kernel, so reorder the
-> > link order of the code.
-> > 
-> > Also as the usb common code has the possibility of the led trigger logic
-> > to be merged into it, handle the build option properly by only having
-> > one module init/exit function and have the common code initialize the
-> > led trigger if needed.
-> > 
-> > Reported-by: From: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> > 
-> > Chunfeng, can you test this version to verify it works for you when
-> > building the code into the kernel?
-> > 
-> > v2: handle led common code link error reported by kbuild
-> >     handle subsys_initcall issue pointed out by Chunfeng
-> > 
-> >  drivers/usb/Makefile        |  3 +--
-> >  drivers/usb/common/common.c | 21 +++++++++++++++++++++
-> >  drivers/usb/common/common.h | 14 ++++++++++++++
-> >  drivers/usb/common/led.c    |  9 +++------
-> >  drivers/usb/core/usb.c      | 10 ++++------
-> >  5 files changed, 43 insertions(+), 14 deletions(-)
-> >  create mode 100644 drivers/usb/common/common.h
-> > 
-> > diff --git a/drivers/usb/Makefile b/drivers/usb/Makefile
-> > index 7d1b8c82b208..ecc2de1ffaae 100644
-> > --- a/drivers/usb/Makefile
-> > +++ b/drivers/usb/Makefile
-> > @@ -5,6 +5,7 @@
-> >  
-> >  # Object files in subdirectories
-> >  
-> > +obj-$(CONFIG_USB_COMMON)	+= common/
-> >  obj-$(CONFIG_USB)		+= core/
-> >  obj-$(CONFIG_USB_SUPPORT)	+= phy/
-> >  
-> > @@ -60,8 +61,6 @@ obj-$(CONFIG_USB_CHIPIDEA)	+= chipidea/
-> >  obj-$(CONFIG_USB_RENESAS_USBHS)	+= renesas_usbhs/
-> >  obj-$(CONFIG_USB_GADGET)	+= gadget/
-> >  
-> > -obj-$(CONFIG_USB_COMMON)	+= common/
-> > -
-> >  obj-$(CONFIG_USBIP_CORE)	+= usbip/
-> >  
-> >  obj-$(CONFIG_TYPEC)		+= typec/
-> > diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-> > index 18f5dcf58b0d..84a4423aaddf 100644
-> > --- a/drivers/usb/common/common.c
-> > +++ b/drivers/usb/common/common.c
-> > @@ -15,6 +15,8 @@
-> >  #include <linux/usb/of.h>
-> >  #include <linux/usb/otg.h>
-> >  #include <linux/of_platform.h>
-> > +#include <linux/debugfs.h>
-> > +#include "common.h"
-> >  
-> >  static const char *const ep_type_names[] = {
-> >  	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
-> > @@ -291,4 +293,23 @@ struct device *usb_of_get_companion_dev(struct device *dev)
-> >  EXPORT_SYMBOL_GPL(usb_of_get_companion_dev);
-> >  #endif
-> >  
-> > +struct dentry *usb_debug_root;
-> > +EXPORT_SYMBOL_GPL(usb_debug_root);
-> > +
-> > +static int usb_common_init(void)
-> > +{
-> > +	usb_debug_root = debugfs_create_dir("usb", NULL);
-> > +	ledtrig_usb_init();
-> > +	return 0;
-> > +}
-> > +
-> > +static void usb_common_exit(void)
-> > +{
-> > +	ledtrig_usb_exit();
-> > +	debugfs_remove_recursive(usb_debug_root);
-> > +}
-> > +
-> When enable CONFIG_LED_TRIGGER, there is a warning
-> 
->  MODPOST vmlinux.o
-> WARNING: vmlinux.o(.text+0x68e300): Section mismatch in reference from
-> the function usb_common_init() to the
-> function .init.text:ledtrig_usb_init()
-> The function usb_common_init() references
-> the function __init ledtrig_usb_init().
-> This is often because usb_common_init lacks a __init
-> annotation or the annotation of ledtrig_usb_init is wrong.
-> 
-> WARNING: vmlinux.o(.text+0x68e318): Section mismatch in reference from
-> the function usb_common_exit() to the
-> function .exit.text:ledtrig_usb_exit()
-> The function usb_common_exit() references a function in an exit section.
-> Often the function ledtrig_usb_exit() has valid usage outside the exit
-> section
-> and the fix is to remove the __exit annotation of ledtrig_usb_exit.
-> 
-> seems need add __init and __exit for usb_common_init/exit
+The USB gadget subsystem wants to use the USB debugfs root directory, so
+move it to the common "core" USB code so that it is properly initialized
+and removed as needed.
 
-Yes, you are right, I'll go add those markings to those functions, good
-catch.
+In order to properly do this, we need to load the common code before the
+usb core code, when everything is linked into the kernel, so reorder the
+link order of the code.
 
-greg k-h
+Also as the usb common code has the possibility of the led trigger logic
+to be merged into it, handle the build option properly by only having
+one module init/exit function and have the common code initialize the
+led trigger if needed.
+
+Reported-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+Chunfeng, can you try testing this again?
+
+v3: Fix __init and __exit error when building into the tree as reported
+    by Chunfeng
+    Fix Reported-by: line as reported
+v2: handle led common code link error reported by kbuild
+    handle subsys_initcall issue pointed out by Chunfeng
+
+ drivers/usb/Makefile        |  3 +--
+ drivers/usb/common/common.c | 21 +++++++++++++++++++++
+ drivers/usb/common/common.h | 14 ++++++++++++++
+ drivers/usb/common/led.c    |  9 +++------
+ drivers/usb/core/usb.c      | 10 ++++------
+ 5 files changed, 43 insertions(+), 14 deletions(-)
+ create mode 100644 drivers/usb/common/common.h
+
+diff --git a/drivers/usb/Makefile b/drivers/usb/Makefile
+index 7d1b8c82b208..ecc2de1ffaae 100644
+--- a/drivers/usb/Makefile
++++ b/drivers/usb/Makefile
+@@ -5,6 +5,7 @@
+ 
+ # Object files in subdirectories
+ 
++obj-$(CONFIG_USB_COMMON)	+= common/
+ obj-$(CONFIG_USB)		+= core/
+ obj-$(CONFIG_USB_SUPPORT)	+= phy/
+ 
+@@ -60,8 +61,6 @@ obj-$(CONFIG_USB_CHIPIDEA)	+= chipidea/
+ obj-$(CONFIG_USB_RENESAS_USBHS)	+= renesas_usbhs/
+ obj-$(CONFIG_USB_GADGET)	+= gadget/
+ 
+-obj-$(CONFIG_USB_COMMON)	+= common/
+-
+ obj-$(CONFIG_USBIP_CORE)	+= usbip/
+ 
+ obj-$(CONFIG_TYPEC)		+= typec/
+diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+index 18f5dcf58b0d..1433260d99b4 100644
+--- a/drivers/usb/common/common.c
++++ b/drivers/usb/common/common.c
+@@ -15,6 +15,8 @@
+ #include <linux/usb/of.h>
+ #include <linux/usb/otg.h>
+ #include <linux/of_platform.h>
++#include <linux/debugfs.h>
++#include "common.h"
+ 
+ static const char *const ep_type_names[] = {
+ 	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
+@@ -291,4 +293,23 @@ struct device *usb_of_get_companion_dev(struct device *dev)
+ EXPORT_SYMBOL_GPL(usb_of_get_companion_dev);
+ #endif
+ 
++struct dentry *usb_debug_root;
++EXPORT_SYMBOL_GPL(usb_debug_root);
++
++static int __init usb_common_init(void)
++{
++	usb_debug_root = debugfs_create_dir("usb", NULL);
++	ledtrig_usb_init();
++	return 0;
++}
++
++static void __exit usb_common_exit(void)
++{
++	ledtrig_usb_exit();
++	debugfs_remove_recursive(usb_debug_root);
++}
++
++subsys_initcall(usb_common_init);
++module_exit(usb_common_exit);
++
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/common/common.h b/drivers/usb/common/common.h
+new file mode 100644
+index 000000000000..424a91316a4b
+--- /dev/null
++++ b/drivers/usb/common/common.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __LINUX_USB_COMMON_H
++#define __LINUX_USB_COMMON_H
++
++#if defined(CONFIG_USB_LED_TRIG)
++void ledtrig_usb_init(void);
++void ledtrig_usb_exit(void);
++#else
++static inline void ledtrig_usb_init(void) { }
++static inline void ledtrig_usb_exit(void) { }
++#endif
++
++#endif	/* __LINUX_USB_COMMON_H */
+diff --git a/drivers/usb/common/led.c b/drivers/usb/common/led.c
+index 7bd81166b77d..0865dd44a80a 100644
+--- a/drivers/usb/common/led.c
++++ b/drivers/usb/common/led.c
+@@ -10,6 +10,7 @@
+ #include <linux/init.h>
+ #include <linux/leds.h>
+ #include <linux/usb.h>
++#include "common.h"
+ 
+ #define BLINK_DELAY 30
+ 
+@@ -36,18 +37,14 @@ void usb_led_activity(enum usb_led_event ev)
+ EXPORT_SYMBOL_GPL(usb_led_activity);
+ 
+ 
+-static int __init ledtrig_usb_init(void)
++void __init ledtrig_usb_init(void)
+ {
+ 	led_trigger_register_simple("usb-gadget", &ledtrig_usb_gadget);
+ 	led_trigger_register_simple("usb-host", &ledtrig_usb_host);
+-	return 0;
+ }
+ 
+-static void __exit ledtrig_usb_exit(void)
++void __exit ledtrig_usb_exit(void)
+ {
+ 	led_trigger_unregister_simple(ledtrig_usb_gadget);
+ 	led_trigger_unregister_simple(ledtrig_usb_host);
+ }
+-
+-module_init(ledtrig_usb_init);
+-module_exit(ledtrig_usb_exit);
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index 7fcb9f782931..5a0df527a8ca 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -1185,19 +1185,17 @@ static struct notifier_block usb_bus_nb = {
+ 	.notifier_call = usb_bus_notify,
+ };
+ 
+-struct dentry *usb_debug_root;
+-EXPORT_SYMBOL_GPL(usb_debug_root);
++static struct dentry *usb_devices_root;
+ 
+ static void usb_debugfs_init(void)
+ {
+-	usb_debug_root = debugfs_create_dir("usb", NULL);
+-	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
+-			    &usbfs_devices_fops);
++	usb_devices_root = debugfs_create_file("devices", 0444, usb_debug_root,
++					       NULL, &usbfs_devices_fops);
+ }
+ 
+ static void usb_debugfs_cleanup(void)
+ {
+-	debugfs_remove_recursive(usb_debug_root);
++	debugfs_remove(usb_devices_root);
+ }
+ 
+ /*
+-- 
+2.21.0
+
