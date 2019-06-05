@@ -2,74 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F32361F9
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 18:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53513621C
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 19:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728741AbfFEQ7B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 12:59:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37836 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728570AbfFEQ7B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 12:59:01 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 513C82075B;
-        Wed,  5 Jun 2019 16:59:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559753940;
-        bh=abNYLIeAra2a5OtLn3uGtszbHHq45rjOhZwqFwLARrM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Via+BNtdcdGV4661jr/rexdWSNRn9Z5QCyfxjT37ucMVWdpOJVEhZsEih82v259KY
-         Kw+zx3uI63N2gVA8vuQEt8icFtKmo5SUd2DAwOPydrJ6lnBn0LgBc3bt/ErhTb4EIz
-         SDsz6goeBocKjP8jeKIANfFAnLOkipt2x+w1Tgeg=
-Date:   Wed, 5 Jun 2019 18:58:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vladimir Yerilov <openmindead@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: kernel NULL pointer dereference, ucsi bug
-Message-ID: <20190605165857.GA23286@kroah.com>
-References: <CAB31r6U3Ha+JrbjGC+wKj-+gJfQ7dk+LSoL1n0tQBxVTPb2mRQ@mail.gmail.com>
- <20190603131258.GA10397@kroah.com>
- <CAB31r6VK12FXoPh6eNfE1v_Tgjv917Nh7699=TZpm4SkCVMm-w@mail.gmail.com>
- <20190604054045.GD1588@kroah.com>
- <CAB31r6WAkDPKyvY31Up=OAGXvhQgS23uW5YYQs601zUaaNaELg@mail.gmail.com>
+        id S1728786AbfFERLy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Jun 2019 13:11:54 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:34876 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728577AbfFERLx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Jun 2019 13:11:53 -0400
+Received: by mail-pl1-f194.google.com with SMTP id p1so9917913plo.2;
+        Wed, 05 Jun 2019 10:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=v+XL33nKKgLzcxRQhQhEGC6TDQvccYp6B7En+erV9hc=;
+        b=he3iEBP4RwmWS2hsetYGcIfsHu6mjuFkNE/44bYCJIdQvaLJ5hco7f4N15KuvI7SzQ
+         25V3oruilcb3EeYf/ho6mZJ9iD6cz8kqD0+GetH8bQbbWBN5P24cxJeCd7t7/jU36hUY
+         MDXKNPnZRKk7pFFlXKbDleNfv1Mw18jufPZqLDyD6LE9H15h1K9PpOsY+lSbK6n2xpal
+         MhWAlKKok5LqzYIausi5764vbJYDiQynYgbAttuI+ntxphashbZoxe0QLMIOevq4o9ku
+         QG4lcSVhdK16awf7duEkmsxk6iS/fC5xR4UwEkamihST27EwoH9MnjbxiBylEI4d5Yjt
+         em1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=v+XL33nKKgLzcxRQhQhEGC6TDQvccYp6B7En+erV9hc=;
+        b=kCUjv+mLUJh2DrhnOqp3gsZ6mBOXDtuzoKIHDV5jztvCWLaI9FDQP9cMtUUpyUOKTL
+         LVuopVhfzg/zC4XQu9Pc6Y/hrC4TQt9lK4sAhuauyV6dgMXB6rrgTBONgGk9UMbis4Tb
+         LRXq63EqDzDlU7HyyQW3r9G3GjyaWgFh9iS+EYr5GMutz3MG/7JYDNg/WRAgJttmZTw+
+         8pN8XvDNjkrrrSGG8vjLVyEPyVYc+9Ioe6rZlCxa2ER90MrRk5NWZGq50qrPoIF+MozT
+         2NrQo6rR3gPoPPkko/qTVPY4vVskfbdvARyc9sA05N7bY6tWrDL8EsRuchxxM9gX7M+9
+         w4WQ==
+X-Gm-Message-State: APjAAAVsAfFa5Uu20Xd2CONvAhL8TD6sSV7dNGxBKH6gjp4tBH5xCtnr
+        fLv6+dm5KvBZbOBx6Ksxcv8=
+X-Google-Smtp-Source: APXvYqwwDdrTNaphEd6GlINLgVtsrsKLUvrt8xyInFHL1cnGX/XoAdjjv8uPV+gD1gxuOOddS/d0Fw==
+X-Received: by 2002:a17:902:d916:: with SMTP id c22mr19896662plz.195.1559754713050;
+        Wed, 05 Jun 2019 10:11:53 -0700 (PDT)
+Received: from hari-Inspiron-1545 ([183.83.89.153])
+        by smtp.gmail.com with ESMTPSA id j20sm22027968pfi.138.2019.06.05.10.11.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 10:11:51 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 22:41:47 +0530
+From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: musb: Remove unneeded variable
+Message-ID: <20190605171147.GA9558@hari-Inspiron-1545>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB31r6WAkDPKyvY31Up=OAGXvhQgS23uW5YYQs601zUaaNaELg@mail.gmail.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 04:36:23PM +1000, Vladimir Yerilov wrote:
-> Good day Mr. Kroah-Hartman,
-> 
-> I've found the culprit commit. It took a while though but now I'm sure:
-> 
-> commit - brief decription - time - works (y) or not (n)
-> 670784fb4ebe54434e263837390e358405031d9e - rc1 2019-05-20
-> e260ad01f0aa9e96b5386d5cd7184afd949dc457 - rc0 2019-05-14 19:52:51 -0700 n
-> 8ea5b2abd07e2280a332bd9c1a7f4dd15b9b6c13 - rc0 2019-05-09 19:35:41 -0700 n
-> 54516da1ea859dd4f56ebba2e483d2df9d7c8a32 - rc0 2019-05-05 21:58:36 -0700 y
-> 71ae5fc87c34ecbdca293c2a5c563d6be2576558 - rc0 2019-05-06 20:29:45 -0700 y
-> 80f232121b69cc69a31ccb2b38c1665d770b0710 - rc0 2019-05-07 22:03:58 -0700 y
-> a2d635decbfa9c1e4ae15cb05b68b2559f7f827c - rc0 2019-05-08 21:35:19 -0700 n
-> 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a - rc0 2019-05-08 10:03:52 -0700 n
-> 86dc59e39031fb0d366d5b1f92db015b24bef70b - rc0 2019-05-08 09:46:44 -0700 y
-> 
-> So 86dc59e39031fb0d366d5b1f92db015b24bef70b is the last working for
-> me, and 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a is the breaking one:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v5.2-rc3&id=132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
+fix below warning reported by coccicheck
 
-132d68d37d33 ("Merge tag 'usb-5.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb")
-is a merge point, which is odd, you should be able to drop down into
-that and find the exact wrong commit.
+drivers/usb/musb/musb_gadget.c:1088:6-12: Unneeded variable: "status".
+Return "0" on line 1121
 
-what does 'git bisect log' show?
+Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+---
+ drivers/usb/musb/musb_gadget.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
+index ffe462a..2cb31fc 100644
+--- a/drivers/usb/musb/musb_gadget.c
++++ b/drivers/usb/musb/musb_gadget.c
+@@ -1085,7 +1085,6 @@ static int musb_gadget_disable(struct usb_ep *ep)
+ 	u8		epnum;
+ 	struct musb_ep	*musb_ep;
+ 	void __iomem	*epio;
+-	int		status = 0;
+ 
+ 	musb_ep = to_musb_ep(ep);
+ 	musb = musb_ep->musb;
+@@ -1118,7 +1117,7 @@ static int musb_gadget_disable(struct usb_ep *ep)
+ 
+ 	musb_dbg(musb, "%s", musb_ep->end_point.name);
+ 
+-	return status;
++	return 0;
+ }
+ 
+ /*
+-- 
+2.7.4
 
-greg k-h
