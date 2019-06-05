@@ -2,96 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 847173551B
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 04:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E0C35526
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Jun 2019 04:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbfFECCv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 4 Jun 2019 22:02:51 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:6958 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726293AbfFECCu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Jun 2019 22:02:50 -0400
-Received: from DGGEML403-HUB.china.huawei.com (unknown [172.30.72.54])
-        by Forcepoint Email with ESMTP id C549CAC5FA6598B3CA3A;
-        Wed,  5 Jun 2019 10:02:48 +0800 (CST)
-Received: from DGGEML421-HUB.china.huawei.com (10.1.199.38) by
- DGGEML403-HUB.china.huawei.com (10.3.17.33) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Wed, 5 Jun 2019 10:02:48 +0800
-Received: from DGGEML529-MBX.china.huawei.com ([169.254.6.38]) by
- dggeml421-hub.china.huawei.com ([10.1.199.38]) with mapi id 14.03.0439.000;
- Wed, 5 Jun 2019 10:02:40 +0800
-From:   Duyanlin <duyanlin@huawei.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+        id S1726535AbfFECQH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Jun 2019 22:16:07 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:16151 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726293AbfFECQH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Jun 2019 22:16:07 -0400
+X-UUID: 9db87658935a4c8f8961da87f290c9d2-20190605
+X-UUID: 9db87658935a4c8f8961da87f290c9d2-20190605
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1510923047; Wed, 05 Jun 2019 10:16:01 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33DR.mediatek.inc
+ (172.27.6.106) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 5 Jun
+ 2019 10:16:00 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 5 Jun 2019 10:15:59 +0800
+Message-ID: <1559700959.8487.78.camel@mhfsdcap03>
+Subject: Re: [PATCH] USB: move usb debugfs directory creation to the usb
+ common core
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zengweilin <zengweilin@huawei.com>
-Subject: [PATCH] drivers/usb/host/imx21-hcd.c: fix divide-by-zero in func
- nonisoc_etd_done
-Thread-Topic: [PATCH] drivers/usb/host/imx21-hcd.c: fix divide-by-zero in
- func nonisoc_etd_done
-Thread-Index: AQHVGgfcZ17K0unPU0i5TlbYCbNWX6aMUaEg
-Date:   Wed, 5 Jun 2019 02:02:40 +0000
-Message-ID: <52727B2E0D7DFC4A945AFC14D2E3E5A92211C6FE@dggeml529-mbx.china.huawei.com>
-References: <1559564879-88739-1-git-send-email-duyanlin@huawei.com>
-In-Reply-To: <1559564879-88739-1-git-send-email-duyanlin@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.40.37.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        <linux-mediatek@lists.infradead.org>
+Date:   Wed, 5 Jun 2019 10:15:59 +0800
+In-Reply-To: <20190604115919.GA24346@kroah.com>
+References: <20190604093258.GB30054@kroah.com>
+         <20190604115919.GA24346@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, 2019-06-04 at 13:59 +0200, Greg Kroah-Hartman wrote:
+> On Tue, Jun 04, 2019 at 11:32:58AM +0200, Greg Kroah-Hartman wrote:
+> > The USB gadget subsystem wants to use the USB debugfs root directory, so
+> > move it to the common "core" USB code so that it is properly initialized
+> > and removed as needed.
+> > 
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > 
+> > ---
+> > 
+> > This should be the "correct" version of this, Chunfeng, can you test
+> > this to verify it works for you?
+I'll test it ASAP, thanks a lot
 
-If the function usb_maxpacket(urb->dev, urb->pipe, usb_pipeout(urb->pipe)) returns 0, that will cause a illegal divide-by-zero operation, unexpected results may occur.
-It is best to ensure that the denominator is non-zero before dividing by zero.
+> > 
+> > 
+> > diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+> > index 18f5dcf58b0d..3b5e4263ffef 100644
+> > --- a/drivers/usb/common/common.c
+> > +++ b/drivers/usb/common/common.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/usb/of.h>
+> >  #include <linux/usb/otg.h>
+> >  #include <linux/of_platform.h>
+> > +#include <linux/debugfs.h>
+> >  
+> >  static const char *const ep_type_names[] = {
+> >  	[USB_ENDPOINT_XFER_CONTROL] = "ctrl",
+> > @@ -291,4 +292,21 @@ struct device *usb_of_get_companion_dev(struct device *dev)
+> >  EXPORT_SYMBOL_GPL(usb_of_get_companion_dev);
+> >  #endif
+> >  
+> > +struct dentry *usb_debug_root;
+> > +EXPORT_SYMBOL_GPL(usb_debug_root);
+> > +
+> > +static int usb_common_init(void)
+> > +{
+> > +	usb_debug_root = debugfs_create_dir("usb", NULL);
+> > +	return 0;
+> > +}
+> > +
+> > +static void usb_common_exit(void)
+> > +{
+> > +	debugfs_remove_recursive(usb_debug_root);
+> > +}
+> > +
+> > +module_init(usb_common_init);
+> > +module_exit(usb_common_exit);
+> > +
+> >  MODULE_LICENSE("GPL");
+> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> > index 7fcb9f782931..f3d6b1ab80cb 100644
+> > --- a/drivers/usb/core/usb.c
+> > +++ b/drivers/usb/core/usb.c
+> > @@ -1185,19 +1185,17 @@ static struct notifier_block usb_bus_nb = {
+> >  	.notifier_call = usb_bus_notify,
+> >  };
+> >  
+> > -struct dentry *usb_debug_root;
+> > -EXPORT_SYMBOL_GPL(usb_debug_root);
+> > +static struct dentry *usb_devices_root;
+> >  
+> >  static void usb_debugfs_init(void)
+> >  {
+> > -	usb_debug_root = debugfs_create_dir("usb", NULL);
+> > -	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
+> > -			    &usbfs_devices_fops);
+> > +	usb_devices_root = debugfs_create_file("devices", 0444, usb_debug_root,
+> > +					       NULL, &usbfs_devices_fops);
+> >  }
+> >  
+> >  static void usb_debugfs_cleanup(void)
+> >  {
+> > -	debugfs_remove_recursive(usb_debug_root);
+> > +	debugfs_remove_recursive(usb_devices_root);
+> 
+> That should just be debugfs_remove();
+> 
+> I'll fix it up after someone tests this :)
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Yanlin Du <duyanlin@huawei.com>
----
- drivers/usb/host/imx21-hcd.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/imx21-hcd.c b/drivers/usb/host/imx21-hcd.c index 6e3dad1..6a47f78 100644
---- a/drivers/usb/host/imx21-hcd.c
-+++ b/drivers/usb/host/imx21-hcd.c
-@@ -1038,6 +1038,7 @@ static void nonisoc_etd_done(struct usb_hcd *hcd, int etd_num)
- 	int cc;
- 	u32 bytes_xfrd;
- 	int etd_done;
-+	unsigned int maxp;
- 
- 	disactivate_etd(imx21, etd_num);
- 
-@@ -1104,13 +1105,13 @@ static void nonisoc_etd_done(struct usb_hcd *hcd, int etd_num)
- 		break;
- 
- 	case PIPE_BULK:
-+		maxp = usb_maxpacket(urb->dev, urb->pipe,
-+				usb_pipeout(urb->pipe));
- 		urb->actual_length += bytes_xfrd;
- 		if ((urb_priv->state == US_BULK)
- 		    && (urb->transfer_flags & URB_ZERO_PACKET)
- 		    && urb->transfer_buffer_length > 0
--		    && ((urb->transfer_buffer_length %
--			 usb_maxpacket(urb->dev, urb->pipe,
--				       usb_pipeout(urb->pipe))) == 0)) {
-+		    && maxp && (urb->transfer_buffer_length % maxp == 0)) {
- 			/* need a 0-packet */
- 			urb_priv->state = US_BULK0;
- 		} else {
---
-1.8.5.6
 
