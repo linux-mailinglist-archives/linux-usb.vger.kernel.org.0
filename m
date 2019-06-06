@@ -2,334 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE35F37075
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 11:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390E537166
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 12:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbfFFJnf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 05:43:35 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:46620 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727539AbfFFJne (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Jun 2019 05:43:34 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 9104EC04959F;
-        Thu,  6 Jun 2019 09:43:28 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3E28D68D2E;
-        Thu,  6 Jun 2019 09:43:23 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
- Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
- Kingdom.
- Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 09/10] usb: Add USB subsystem notifications [ver #3]
-From:   David Howells <dhowells@redhat.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, dhowells@redhat.com, raven@themaw.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 06 Jun 2019 10:43:22 +0100
-Message-ID: <155981420247.17513.18371208824032389940.stgit@warthog.procyon.org.uk>
-In-Reply-To: <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk>
-References: <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/unknown-version
+        id S1728278AbfFFKNz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 06:13:55 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:46022 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726972AbfFFKNy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 06:13:54 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190606101353euoutp01ea625c26f5f51dff62bcd02f384573dd~llGr-VRmc1005710057euoutp01c
+        for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2019 10:13:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190606101353euoutp01ea625c26f5f51dff62bcd02f384573dd~llGr-VRmc1005710057euoutp01c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1559816033;
+        bh=q7Vt4t2TLCX1FEiKWGgYOXEtOeQK3KwHaZhoW+yIvNk=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=LcbjRui/DS0P7zVdqwDkfZwPiO1SRm86iAo9HjThscCcJdCOEqVGtj2avda/KOqh2
+         FksOYW4fvmnng139YvuvOzNc4tzIfwsn3rDGOsea72cwF0wtG0dAaDkPwwx3kcgm3X
+         5V2JE40x1pUN8nK2JuurFc0TSxGKd4Iuv0tH+/CE=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190606101352eucas1p13083459c65d92f52c257547aa2e277b4~llGrKgUyR0268802688eucas1p1s;
+        Thu,  6 Jun 2019 10:13:52 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 9D.43.04298.067E8FC5; Thu,  6
+        Jun 2019 11:13:52 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190606101351eucas1p20bc19d1206182a418d827545d576ca18~llGqbIgtd0333103331eucas1p2o;
+        Thu,  6 Jun 2019 10:13:51 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190606101351eusmtrp1d4dcbdb15e72a8643fe9adde5b6aeea6~llGqLmxZx3127131271eusmtrp19;
+        Thu,  6 Jun 2019 10:13:51 +0000 (GMT)
+X-AuditID: cbfec7f2-f13ff700000010ca-b1-5cf8e760652a
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 3E.19.04146.F57E8FC5; Thu,  6
+        Jun 2019 11:13:51 +0100 (BST)
+Received: from [106.120.50.25] (unknown [106.120.50.25]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190606101350eusmtip233f64318a03d8c9c7a21ec121eb50a90~llGpdsi7N0368503685eusmtip2B;
+        Thu,  6 Jun 2019 10:13:50 +0000 (GMT)
+Subject: Re: [PATCH v2] usb: dwc2: Use generic PHY width in params setup
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <0c370ba7-bb45-7580-1a60-021f15c1c37d@samsung.com>
+Date:   Thu, 6 Jun 2019 12:13:49 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <1d774b88-b176-448d-3e8b-8c1f04cb1406@synopsys.com>
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBKsWRmVeSWpSXmKPExsWy7djP87oJz3/EGEz6yWQx/2aSRfPi9WwW
+        s2acZrVYtKyV2eLlkR+MFu+m3GZ2YPO4dafe4/T6m4we804Geuyfu4bdY8v+z4wenzfJBbBF
+        cdmkpOZklqUW6dslcGWc+6hc8E6sYsOJmYwNjPOEuxg5OSQETCQunJnC3MXIxSEksIJR4tWN
+        1UwgCSGBL4wSh6eWQiQ+M0p87dzLBNPx6+VUqI7ljBLLup4yQThvGSXuLelmBakSFvCQ2PX6
+        PSOILSKgL3Fg6l9GkCJmkLFfdn9kAUmwCRhKdL3tYgOxeQXsJO4cvwHWzCKgIjHp321mEFtU
+        IEbi6/6rzBA1ghInZz4B6+UUcJC4PbcfrJ5ZQF6ieetsZghbXOLWk/lgF0kIbGKXeD79GNTd
+        LhLHn/UxQtjCEq+Ob2GHsGUkTk/uYYFoaGaUeHhuLTuE08MocblpBlSHtcTh4xeB1nEArdCU
+        WL9LHyLsKPFm+hlmkLCEAJ/EjbeCEEfwSUzaNh0qzCvR0SYEUa0mMev4Ori1By9cYp7AqDQL
+        yWuzkLwzC8k7sxD2LmBkWcUonlpanJueWmyYl1quV5yYW1yal66XnJ+7iRGYfk7/O/5pB+PX
+        S0mHGAU4GJV4eCU2fo8RYk0sK67MPcQowcGsJMJbduFHjBBvSmJlVWpRfnxRaU5q8SFGaQ4W
+        JXHeaoYH0UIC6YklqdmpqQWpRTBZJg5OqQbG/TvmXfrjnfD4RE/Bjz+7HdQ0T94O2GB053vM
+        Yzb1/4UbLE7Hzv47YZHAVsGs+fx37dfZfwudxTYtWmzHNjXWb6IC/0Myyz0WS+flTPpwbJ3b
+        mm/a3xh3FTss8o/0uKbR84+lmbX+4Evv+6I+j+SSnGfpz3rSez3Y67206ew93+NeXDv48vAb
+        BSWW4oxEQy3mouJEAAEWCpE7AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNIsWRmVeSWpSXmKPExsVy+t/xe7rxz3/EGNy+ymMx/2aSRfPi9WwW
+        s2acZrVYtKyV2eLlkR+MFu+m3GZ2YPO4dafe4/T6m4we804Geuyfu4bdY8v+z4wenzfJBbBF
+        6dkU5ZeWpCpk5BeX2CpFG1oY6RlaWugZmVjqGRqbx1oZmSrp29mkpOZklqUW6dsl6GWc+6hc
+        8E6sYsOJmYwNjPOEuxg5OSQETCR+vZzK3MXIxSEksJRR4tXpeewQCRmJk9MaWCFsYYk/17rY
+        IIpeM0rM7FnLBpIQFvCQ2PX6PSOILSKgL3Fg6l9GkCJmgS+MEqdnPmCB6PjIKPFy2SsmkCo2
+        AUOJrrddYN28AnYSd47fAFvBIqAiMenfbWYQW1QgRqKvcQULRI2gxMmZT8BsTgEHidtz+8Hq
+        mQXMJOZtfsgMYctLNG+dDWWLS9x6Mp9pAqPQLCTts5C0zELSMgtJywJGllWMIqmlxbnpucWG
+        esWJucWleel6yfm5mxiBEbft2M/NOxgvbQw+xCjAwajEwyux8XuMEGtiWXFl7iFGCQ5mJRHe
+        sgs/YoR4UxIrq1KL8uOLSnNSiw8xmgI9N5FZSjQ5H5gM8kriDU0NzS0sDc2NzY3NLJTEeTsE
+        DsYICaQnlqRmp6YWpBbB9DFxcEo1MLqv+OuQpP+9dWvo4YU1LNuZ+9UZboj8fWXH/5e3pX0q
+        97plG2dL28s9OygWOfmhYuv8uKuyKScECjKdO6b91LGa4cixzyDnosvz6Dj3G5b9m7wec+22
+        fPH66pvSs+xStTyFMnGPtq+Ze1N/4U9mlrfTNjXu+/Zb/CtDnMbR7MUt3VIxj5/V7VZiKc5I
+        NNRiLipOBAA09wBEzgIAAA==
+X-CMS-MailID: 20190606101351eucas1p20bc19d1206182a418d827545d576ca18
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Thu, 06 Jun 2019 09:43:33 +0000 (UTC)
+X-RootMTR: 20190531124510epcas2p1f261a838b299f3f99b521760872de32b
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190531124510epcas2p1f261a838b299f3f99b521760872de32b
+References: <20190507100852.11263-2-jmaselbas@kalray.eu>
+        <20190509091528.28397-1-jmaselbas@kalray.eu>
+        <CGME20190531124510epcas2p1f261a838b299f3f99b521760872de32b@epcas2p1.samsung.com>
+        <1d774b88-b176-448d-3e8b-8c1f04cb1406@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a USB subsystem notification mechanism whereby notifications about
-hardware events such as device connection, disconnection, reset and I/O
-errors, can be reported to a monitoring process asynchronously.
+Hi All,
 
-Firstly, an event queue needs to be created:
+On 2019-05-31 14:44, Minas Harutyunyan wrote:
+> On 5/9/2019 1:16 PM, Jules Maselbas wrote:
+>> Setting params.phy_utmi_width in dwc2_lowlevel_hw_init() is pointless 
+>> since
+>> it's value will be overwritten by dwc2_init_params().
+>>
+>> This change make sure to take in account the generic PHY width 
+>> information
+>> during paraminitialisation, done in dwc2_set_param_phy_utmi_width().
+>>
+>> By doing so, the phy_utmi_width params can still be overrided by
+>> devicetree specific params and will also be checked against hardware
+>> capabilities.
+>>
+>> Fixes: 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif with 
+>> phy_utmi_width")
+>> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+>
+> Acked-by: Minas Harutyunyan <hminas@synopsys.com>
 
-	fd = open("/dev/event_queue", O_RDWR);
-	ioctl(fd, IOC_WATCH_QUEUE_SET_SIZE, page_size << n);
+Gentle reminder, Felipe, could you take this to the fixes for v5.2?
 
-then a notification can be set up to report USB notifications via that
-queue:
-
-	struct watch_notification_filter filter = {
-		.nr_filters = 1,
-		.filters = {
-			[0] = {
-				.type = WATCH_TYPE_USB_NOTIFY,
-				.subtype_filter[0] = UINT_MAX;
-			},
-		},
-	};
-	ioctl(fd, IOC_WATCH_QUEUE_SET_FILTER, &filter);
-	device_notify(fd, 12);
-
-After that, records will be placed into the queue when events occur on a
-USB device or bus.  Records are of the following format:
-
-	struct usb_notification {
-		struct watch_notification watch;
-		__u32	error;
-		__u32	reserved;
-		__u8	name_len;
-		__u8	name[0];
-	} *n;
-
-Where:
-
-	n->watch.type will be WATCH_TYPE_USB_NOTIFY
-
-	n->watch.subtype will be the type of notification, such as
-	NOTIFY_USB_DEVICE_ADD.
-
-	n->watch.info & WATCH_INFO_LENGTH will indicate the length of the
-	record.
-
-	n->watch.info & WATCH_INFO_ID will be the second argument to
-	device_notify(), shifted.
-
-	n->error and n->reserved are intended to convey information such as
-	error codes, but are currently not used
-
-	n->name_len and n->name convey the USB device name as an
-	unterminated string.  This may be truncated - it is currently
-	limited to a maximum 63 chars.
-
-Note that it is permissible for event records to be of variable length -
-or, at least, the length may be dependent on the subtype.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc: linux-usb@vger.kernel.org
----
-
- Documentation/watch_queue.rst    |    9 ++++++
- drivers/usb/core/Kconfig         |   10 +++++++
- drivers/usb/core/devio.c         |   55 ++++++++++++++++++++++++++++++++++++++
- drivers/usb/core/hub.c           |    3 ++
- include/linux/usb.h              |   19 +++++++++++++
- include/uapi/linux/watch_queue.h |   30 ++++++++++++++++++++-
- 6 files changed, 125 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/watch_queue.rst b/Documentation/watch_queue.rst
-index c2954e191989..7ce5d4147fa9 100644
---- a/Documentation/watch_queue.rst
-+++ b/Documentation/watch_queue.rst
-@@ -15,6 +15,8 @@ receive notifications from the kernel.  This can be used in conjunction with::
- 
-     * Block layer event notifications
- 
-+    * USB subsystem event notifications
-+
- 
- The notifications buffers can be enabled by:
- 
-@@ -344,6 +346,13 @@ Any particular buffer can be fed from multiple sources.  Sources include:
-     or temporary link loss.  Watchpoints of this type are set on the global
-     device watch list.
- 
-+  * WATCH_TYPE_USB_NOTIFY
-+
-+    Notifications of this type indicate USB subsystem events, such as
-+    attachment, removal, reset and I/O errors.  Separate events are generated
-+    for buses and devices.  Watchpoints of this type are set on the global
-+    device watch list.
-+
- 
- Event Filtering
- ===============
-diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
-index bdb6bd0b63a6..4be88368ab6b 100644
---- a/drivers/usb/core/Kconfig
-+++ b/drivers/usb/core/Kconfig
-@@ -103,3 +103,13 @@ config USB_AUTOSUSPEND_DELAY
- 	  The default value Linux has always had is 2 seconds.  Change
- 	  this value if you want a different delay and cannot modify
- 	  the command line or module parameter.
-+
-+config USB_NOTIFICATIONS
-+	bool "Provide USB hardware event notifications"
-+	depends on USB
-+	select DEVICE_NOTIFICATIONS
-+	help
-+	  This option provides support for getting hardware event notifications
-+	  on USB devices and interfaces.  This makes use of the
-+	  /dev/watch_queue misc device to handle the notification buffer.
-+	  device_notify(2) is used to set/remove watches.
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index fa783531ee88..af7f339c35c5 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -41,6 +41,7 @@
- #include <linux/dma-mapping.h>
- #include <asm/byteorder.h>
- #include <linux/moduleparam.h>
-+#include <linux/watch_queue.h>
- 
- #include "usb.h"
- 
-@@ -2633,13 +2634,67 @@ static void usbdev_remove(struct usb_device *udev)
- 	}
- }
- 
-+#ifdef CONFIG_USB_NOTIFICATIONS
-+static noinline void post_usb_notification(const char *devname,
-+					   enum usb_notification_type subtype,
-+					   u32 error)
-+{
-+	unsigned int name_len, n_len;
-+	u64 id = 0; /* Might want to put a dev# here. */
-+
-+	struct {
-+		struct usb_notification n;
-+		char more_name[USB_NOTIFICATION_MAX_NAME_LEN -
-+			       (sizeof(struct usb_notification) -
-+				offsetof(struct usb_notification, name))];
-+	} n;
-+
-+	name_len = strlen(devname);
-+	name_len = min_t(size_t, name_len, USB_NOTIFICATION_MAX_NAME_LEN);
-+	n_len = round_up(offsetof(struct usb_notification, name) + name_len,
-+			 sizeof(__u64));
-+
-+	memset(&n, 0, sizeof(n));
-+	memcpy(n.n.name, devname, n_len);
-+
-+	n.n.watch.type		= WATCH_TYPE_USB_NOTIFY;
-+	n.n.watch.subtype	= subtype;
-+	n.n.watch.info		= n_len;
-+	n.n.error		= error;
-+	n.n.name_len		= name_len;
-+
-+	post_device_notification(&n.n.watch, id);
-+}
-+
-+void post_usb_device_notification(const struct usb_device *udev,
-+				  enum usb_notification_type subtype, u32 error)
-+{
-+	post_usb_notification(dev_name(&udev->dev), subtype, error);
-+}
-+
-+void post_usb_bus_notification(const struct usb_bus *ubus,
-+			       enum usb_notification_type subtype, u32 error)
-+{
-+	post_usb_notification(ubus->bus_name, subtype, error);
-+}
-+#endif
-+
- static int usbdev_notify(struct notifier_block *self,
- 			       unsigned long action, void *dev)
- {
- 	switch (action) {
- 	case USB_DEVICE_ADD:
-+		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_ADD, 0);
- 		break;
- 	case USB_DEVICE_REMOVE:
-+		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_REMOVE, 0);
-+		usbdev_remove(dev);
-+		break;
-+	case USB_BUS_ADD:
-+		post_usb_bus_notification(dev, NOTIFY_USB_BUS_ADD, 0);
-+		break;
-+	case USB_BUS_REMOVE:
-+		post_usb_bus_notification(dev, NOTIFY_USB_BUS_REMOVE, 0);
- 		usbdev_remove(dev);
- 		break;
- 	}
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 2f94568ba385..722013d8142c 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4596,6 +4596,9 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 				(udev->config) ? "reset" : "new", speed,
- 				devnum, driver_name);
- 
-+	if (udev->config)
-+		post_usb_device_notification(udev, NOTIFY_USB_DEVICE_RESET, 0);
-+
- 	/* Set up TT records, if needed  */
- 	if (hdev->tt) {
- 		udev->tt = hdev->tt;
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index ae82d9d1112b..12687b55811d 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -2008,6 +2008,25 @@ extern void usb_led_activity(enum usb_led_event ev);
- static inline void usb_led_activity(enum usb_led_event ev) {}
- #endif
- 
-+/*
-+ * Notification functions.
-+ */
-+#ifdef CONFIG_USB_NOTIFICATIONS
-+extern void post_usb_device_notification(const struct usb_device *udev,
-+					 enum usb_notification_type subtype,
-+					 u32 error);
-+extern void post_usb_bus_notification(const struct usb_bus *ubus,
-+				      enum usb_notification_type subtype,
-+				      u32 error);
-+#else
-+static inline void post_usb_device_notification(const struct usb_device *udev,
-+						enum usb_notification_type subtype,
-+						u32 error) {}
-+static inline void post_usb_bus_notification(const struct usb_bus *ubus,
-+					     enum usb_notification_type subtype,
-+					     u32 error) {}
-+#endif
-+
- #endif  /* __KERNEL__ */
- 
- #endif
-diff --git a/include/uapi/linux/watch_queue.h b/include/uapi/linux/watch_queue.h
-index 22e3326b83a6..d596ac5a61e4 100644
---- a/include/uapi/linux/watch_queue.h
-+++ b/include/uapi/linux/watch_queue.h
-@@ -14,7 +14,8 @@ enum watch_notification_type {
- 	WATCH_TYPE_SB_NOTIFY	= 2,	/* Superblock notification */
- 	WATCH_TYPE_KEY_NOTIFY	= 3,	/* Key/keyring change notification */
- 	WATCH_TYPE_BLOCK_NOTIFY	= 4,	/* Block layer notifications */
--#define WATCH_TYPE___NR 5
-+	WATCH_TYPE_USB_NOTIFY	= 5,	/* USB subsystem notifications */
-+#define WATCH_TYPE___NR 6
- };
- 
- enum watch_meta_notification_subtype {
-@@ -182,4 +183,31 @@ struct block_notification {
- 	__u64	sector;			/* Affected sector */
- };
- 
-+/*
-+ * Type of USB layer notification.
-+ */
-+enum usb_notification_type {
-+	NOTIFY_USB_DEVICE_ADD		= 0, /* USB device added */
-+	NOTIFY_USB_DEVICE_REMOVE	= 1, /* USB device removed */
-+	NOTIFY_USB_BUS_ADD		= 2, /* USB bus added */
-+	NOTIFY_USB_BUS_REMOVE		= 3, /* USB bus removed */
-+	NOTIFY_USB_DEVICE_RESET		= 4, /* USB device reset */
-+	NOTIFY_USB_DEVICE_ERROR		= 5, /* USB device error */
-+};
-+
-+/*
-+ * USB subsystem notification record.
-+ * - watch.type = WATCH_TYPE_USB_NOTIFY
-+ * - watch.subtype = enum usb_notification_type
-+ */
-+struct usb_notification {
-+	struct watch_notification watch; /* WATCH_TYPE_USB_NOTIFY */
-+	__u32	error;
-+	__u32	reserved;
-+	__u8	name_len;		/* Length of device name */
-+	__u8	name[0];		/* Device name (padded to __u64, truncated at 63 chars) */
-+};
-+
-+#define USB_NOTIFICATION_MAX_NAME_LEN 63
-+
- #endif /* _UAPI_LINUX_WATCH_QUEUE_H */
+>> ---
+>> v2: Fix typo in commit message. Add Fixes and Tested-by tags.
+>> ---
+>>   drivers/usb/dwc2/params.c   | 9 +++++++++
+>>   drivers/usb/dwc2/platform.c | 9 ---------
+>>   2 files changed, 9 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+>> index 6900eea57526..5949262ff669 100644
+>> --- a/drivers/usb/dwc2/params.c
+>> +++ b/drivers/usb/dwc2/params.c
+>> @@ -253,6 +253,15 @@ static void dwc2_set_param_phy_utmi_width(struct 
+>> dwc2_hsotg *hsotg)
+>>       val = (hsotg->hw_params.utmi_phy_data_width ==
+>>              GHWCFG4_UTMI_PHY_DATA_WIDTH_8) ? 8 : 16;
+>>   +    if (hsotg->phy) {
+>> +        /*
+>> +         * If using the generic PHY framework, check if the PHY bus
+>> +         * width is 8-bit and set the phyif appropriately.
+>> +         */
+>> +        if (phy_get_bus_width(hsotg->phy) == 8)
+>> +            val = 8;
+>> +    }
+>> +
+>>       hsotg->params.phy_utmi_width = val;
+>>   }
+>>   diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+>> index d10a7f8daec3..e98d7812da2d 100644
+>> --- a/drivers/usb/dwc2/platform.c
+>> +++ b/drivers/usb/dwc2/platform.c
+>> @@ -271,15 +271,6 @@ static int dwc2_lowlevel_hw_init(struct 
+>> dwc2_hsotg *hsotg)
+>>         hsotg->plat = dev_get_platdata(hsotg->dev);
+>>   -    if (hsotg->phy) {
+>> -        /*
+>> -         * If using the generic PHY framework, check if the PHY bus
+>> -         * width is 8-bit and set the phyif appropriately.
+>> -         */
+>> -        if (phy_get_bus_width(hsotg->phy) == 8)
+>> -            hsotg->params.phy_utmi_width = 8;
+>> -    }
+>> -
+>>       /* Clock */
+>>       hsotg->clk = devm_clk_get_optional(hsotg->dev, "otg");
+>>       if (IS_ERR(hsotg->clk)) {
+>>
+>
+>
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
