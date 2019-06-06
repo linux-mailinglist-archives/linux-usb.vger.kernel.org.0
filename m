@@ -2,188 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2711D36A2E
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 04:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F1A36B61
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 07:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726726AbfFFCwp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Jun 2019 22:52:45 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:37692 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726474AbfFFCwm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 Jun 2019 22:52:42 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A83011A0FA4;
-        Thu,  6 Jun 2019 04:52:39 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5911B1A00F6;
-        Thu,  6 Jun 2019 04:52:35 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id EE2D1402D5;
-        Thu,  6 Jun 2019 10:52:29 +0800 (SGT)
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>, Yang Li <pku.leo@gmail.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ran Wang <ran.wang_1@nxp.com>
-Subject: [RESEND][PATCH v3 2/2] usb: dwc3: Add workaround for host mode VBUS glitch when boot
-Date:   Thu,  6 Jun 2019 10:54:18 +0800
-Message-Id: <20190606025418.26313-2-ran.wang_1@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190606025418.26313-1-ran.wang_1@nxp.com>
-References: <20190606025418.26313-1-ran.wang_1@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726336AbfFFFNb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 01:13:31 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:60428 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725782AbfFFFNb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 01:13:31 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5658UAq011318;
+        Wed, 5 Jun 2019 22:11:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=ylmvFaynTnm2xShYZm5lLLOJk58zqFatT2ShI1S/0e4=;
+ b=cmMfYsneq1kIIwlWnYy+TwpIQ3mVx0ShILi1PsQI3rqRBDK1foGfKz6pHJnuNlEXvsoS
+ yEBm3pzYg+rQ0YXII3hsqwErSzN2SJvNHVxP5jPApNP1ybreMZz+Tk5p0pDQSxnxddUR
+ bbc1CofCt2eLpYfRBjNl5klLm06WjoevOu6x9jknI7RJvcfKNgZebWHqW1cH6VwGllgY
+ aQou7/Qr6zrz2TjAs7oH82bZEA5O/163I28xkqBm9gqrAsUFbl87jsuF9B4oa2l0EeUp
+ 7wsAGIcNC5SEZrPUobpu8HHO3ek8iFCVW7yOMtat7Zdy7sSk5sIFRiTt36P3rzCgAnJP Jg== 
+Authentication-Results: cadence.com;
+        spf=pass smtp.mailfrom=pawell@cadence.com
+Received: from nam04-co1-obe.outbound.protection.outlook.com (mail-co1nam04lp2057.outbound.protection.outlook.com [104.47.45.57])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 2sun4r3h7h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jun 2019 22:11:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ylmvFaynTnm2xShYZm5lLLOJk58zqFatT2ShI1S/0e4=;
+ b=XJnS1rPztbtbTnjJB6ihyOriFbKHUBLSQA28V3sZ3Op5o/N46UVkxtseI8fRzJe4I32CqYRQDTpriPpxJRbCl4vRy6FXBHvEMgKlC2yXRpw76z8t3Ppd+QsR/Hxo34KuQftlbuC4zsJ2tov8f5/XDG+7LKqH5FKTIMHWDsCbCsQ=
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
+ BYAPR07MB5720.namprd07.prod.outlook.com (20.178.0.78) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1943.22; Thu, 6 Jun 2019 05:11:33 +0000
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::594a:4a73:3ead:457d]) by BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::594a:4a73:3ead:457d%3]) with mapi id 15.20.1943.023; Thu, 6 Jun 2019
+ 05:11:33 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Lars Melin <larsm17@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jbergsagel@ti.com" <jbergsagel@ti.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
+        Suresh Punnoose <sureshp@cadence.com>,
+        "peter.chen@nxp.com" <peter.chen@nxp.com>,
+        Jayshri Dajiram Pawar <jpawar@cadence.com>,
+        Rahul Kumar <kurahul@cadence.com>
+Subject: RE: [PATCH v7 0/6] Introduced new Cadence USBSS DRD Driver.
+Thread-Topic: [PATCH v7 0/6] Introduced new Cadence USBSS DRD Driver.
+Thread-Index: AQHVG4YPLuNsPGFK2Eaa0JSlSMiZDaaN0ryAgABCM9A=
+Date:   Thu, 6 Jun 2019 05:11:33 +0000
+Message-ID: <BYAPR07MB4709E7267C34F09747B13568DD170@BYAPR07MB4709.namprd07.prod.outlook.com>
+References: <1559729030-16390-1-git-send-email-pawell@cadence.com>
+ <30b6ac49-2edc-fde0-a106-34ff94999e5a@gmail.com>
+In-Reply-To: <30b6ac49-2edc-fde0-a106-34ff94999e5a@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctOGIzYjY0ODYtODgxOS0xMWU5LTg3NDEtMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDhiM2I2NDg4LTg4MTktMTFlOS04NzQxLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iNTkxIiB0PSIxMzIwNDI3MTQ5MTMzMTQxNDkiIGg9IlpEMUIreEpVMVQvTVBaREZaOFkvZXJFTHJ3ST0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
+x-dg-rorf: 
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fd51c603-16a2-42d1-f710-08d6ea3d7188
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR07MB5720;
+x-ms-traffictypediagnostic: BYAPR07MB5720:
+x-microsoft-antispam-prvs: <BYAPR07MB5720A475F174818ABE00FCE1DD170@BYAPR07MB5720.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 00603B7EEF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(39860400002)(376002)(346002)(136003)(366004)(36092001)(189003)(199004)(14454004)(7696005)(76176011)(6506007)(76116006)(74316002)(73956011)(99286004)(7416002)(186003)(6436002)(478600001)(110136005)(55016002)(33656002)(305945005)(54906003)(102836004)(52536014)(26005)(9686003)(7736002)(229853002)(81156014)(8676002)(2501003)(4744005)(66476007)(486006)(6246003)(256004)(107886003)(66946007)(446003)(5660300002)(11346002)(81166006)(316002)(86362001)(3846002)(68736007)(25786009)(476003)(8936002)(66066001)(71200400001)(71190400001)(64756008)(53936002)(2906002)(4326008)(6116002)(66446008)(66556008);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB5720;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: cadence.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: j279DhvQn9vuzUlxyg05cEm70xlCpgeX64bhenSE8XhB84JOeogqbBM0hW/li8HkipuBbwQCnCbQtAEPqrC3YSVtno1Fcox8/hTeRfQFzVB2oMYfcC4w4ztDyi07nQwr0MG1gjQiCX1jsZ12YixdU1EWwh99Pfp3DcOBfeHAxK4IkkKDHrIsUvW8cSnNTHk3s/pCyqMo0N6lsEIXdvZGnrjQwfRzv0Jsi7vs7jgoByW3jaihE4NGueWYL0HGLZnySDSpM+/IDwBt1sva5p3vhgmijK1GD1Mt5iqkLs00Imns+r5Jc4y50/gHYNNsLZBjaKHFwZPSv9IvhDjwgCfede7hi+i0TwwKKbBUoT6uo0FnJPk2EODC2zz6LnzY+mPcIyszzUmjL/qc13ztlvrsQwqySj0CCota9lOgACY8Z8U=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd51c603-16a2-42d1-f710-08d6ea3d7188
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2019 05:11:33.7010
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pawell@global.cadence.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5720
+X-Proofpoint-SPF-Result: pass
+X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
+ include:mktomail.com include:spf-0014ca01.pphosted.com
+ include:spf.protection.outlook.com include:auth.msgapp.com
+ include:spf.mandrillapp.com ~all
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-06_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
+ spamscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=594 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906060038
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When DWC3 is set to host mode by programming register DWC3_GCTL, VBUS
-(or its control signal) will be turned on immediately on related Root Hub
-ports. Then, the VBUS is turned off for a little while(15us) when do xhci
-reset (conducted by xhci driver) and back to normal finally, we can
-observe a negative glitch of related signal happen.
-
-This VBUS glitch might cause some USB devices enumeration fail if kernel
-boot with them connected. Such as LS1012AFWRY/LS1043ARDB/LX2160AQDS
-/LS1088ARDB with Kingston 16GB USB2.0/Kingston USB3.0/JetFlash Transcend
-4GB USB2.0 drives. The fail cases include enumerated as full-speed device
-or report wrong device descriptor, etc.
-
-One SW workaround which can fix this is by programing all xhci PORTSC[PP]
-to 0 to turn off VBUS immediately after setting host mode in DWC3 driver
-(per signal measurement result, it will be too late to do it in
-xhci-plat.c or xhci.c). Then, after xhci reset complete in xhci driver,
-PORTSC[PP]s' value will back to 1 automatically and VBUS on at that time,
-no glitch happen and normal enumeration process has no impact.
-
-Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
----
-Changes in v3:
-  - Add macro PORT_REGS_SIZE to replace 0x10
-  - Change initial value of i to 0 for the for loop
-  - Cosmetic changes
-
-Changes in v2:
-  - Rename related property to 'snps,host-vbus-glitches'
-  - Rename related dwc member to 'host_vbus_glitches'
-  - Add member 'host_vbus_glitches' description in 'dwc3'
-
- drivers/usb/dwc3/core.c |   48 +++++++++++++++++++++++++++++++++++++++++++++++
- drivers/usb/dwc3/core.h |   12 +++++++++++
- 2 files changed, 60 insertions(+), 0 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index a1b126f..dd80e3d 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -100,6 +100,42 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
- 	return 0;
- }
- 
-+/*
-+ * dwc3_power_of_all_roothub_ports - Power off all Root hub ports
-+ * @dwc3: Pointer to our controller context structure
-+ */
-+static void dwc3_power_off_all_roothub_ports(struct dwc3 *dwc)
-+{
-+	int i, port_num;
-+	u32 reg, op_regs_base, offset;
-+	void __iomem		*xhci_regs;
-+
-+	/* xhci regs is not mapped yet, do it temperary here */
-+	if (dwc->xhci_resources[0].start) {
-+		xhci_regs = ioremap(dwc->xhci_resources[0].start,
-+				DWC3_XHCI_REGS_END);
-+		if (IS_ERR(xhci_regs)) {
-+			dev_err(dwc->dev, "Failed to ioremap xhci_regs\n");
-+			return;
-+		}
-+
-+		op_regs_base = HC_LENGTH(readl(xhci_regs));
-+		reg = readl(xhci_regs + XHCI_HCSPARAMS1);
-+		port_num = HCS_MAX_PORTS(reg);
-+
-+		for (i = 0; i < port_num; i++) {
-+			offset = op_regs_base + XHCI_PORTSC_BASE +
-+				PORT_REGS_SIZE * i;
-+			reg = readl(xhci_regs + offset);
-+			reg &= ~PORT_POWER;
-+			writel(reg, xhci_regs + offset);
-+		}
-+
-+		iounmap(xhci_regs);
-+	} else
-+		dev_err(dwc->dev, "xhci base reg invalid\n");
-+}
-+
- void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
- {
- 	u32 reg;
-@@ -109,6 +145,15 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
- 	reg |= DWC3_GCTL_PRTCAPDIR(mode);
- 	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
- 
-+	/*
-+	 * We have to power off all Root hub ports immediately after DWC3 set
-+	 * to host mode to avoid VBUS glitch happen when xhci get reset later.
-+	 */
-+	if (dwc->host_vbus_glitches) {
-+		if (mode == DWC3_GCTL_PRTCAP_HOST)
-+			dwc3_power_off_all_roothub_ports(dwc);
-+	}
-+
- 	dwc->current_dr_role = mode;
- }
- 
-@@ -1306,6 +1351,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 	dwc->dis_metastability_quirk = device_property_read_bool(dev,
- 				"snps,dis_metastability_quirk");
- 
-+	dwc->host_vbus_glitches = device_property_read_bool(dev,
-+				"snps,host-vbus-glitches");
-+
- 	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
- 	dwc->tx_de_emphasis = tx_de_emphasis;
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index df87641..c2dee0b 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -606,6 +606,15 @@
- #define DWC3_OSTS_VBUSVLD		BIT(1)
- #define DWC3_OSTS_CONIDSTS		BIT(0)
- 
-+/* Partial XHCI Register and Bit fields for quirk */
-+#define XHCI_HCSPARAMS1		0x4
-+#define XHCI_PORTSC_BASE	0x400
-+#define PORT_REGS_SIZE		0x10
-+#define PORT_POWER			(1 << 9)
-+#define HCS_MAX_PORTS(p)	(((p) >> 24) & 0x7f)
-+#define XHCI_HC_LENGTH(p)	(((p)>>00)&0x00ff)
-+#define HC_LENGTH(p)		XHCI_HC_LENGTH(p)
-+
- /* Structures */
- 
- struct dwc3_trb;
-@@ -1024,6 +1033,8 @@ struct dwc3_scratchpad_array {
-  * 	2	- No de-emphasis
-  * 	3	- Reserved
-  * @dis_metastability_quirk: set to disable metastability quirk.
-+ * @host-vbus-glitches: set to avoid vbus glitch during
-+ *                      xhci reset.
-  * @imod_interval: set the interrupt moderation interval in 250ns
-  *                 increments or 0 to disable.
-  */
-@@ -1209,6 +1220,7 @@ struct dwc3 {
- 	unsigned		tx_de_emphasis:2;
- 
- 	unsigned		dis_metastability_quirk:1;
-+	unsigned		host_vbus_glitches:1;
- 
- 	u16			imod_interval;
- };
--- 
-1.7.1
-
+Pk9uIDYvNS8yMDE5IDE3OjAzLCBQYXdlbCBMYXN6Y3phayB3cm90ZToNCj4+IFRoaXMgcGF0Y2gg
+aW50cm9kdWNlcyBuZXcgQ2FkZW5jZSBVU0JTUyBEUkQgZHJpdmVyIHRvIExpbnV4IGtlcm5lbC4N
+Cj4+DQo+PiBUaGUgQ2FkZW5jZSBVU0JTUyBEUkQgRHJpdmVyIGlzIGEgaGlnaGx5IGNvbmZpZ3Vy
+YWJsZSBJUCBDb3JlIHdoaWNoDQo+PiBjYW4gYmUgaW5zdGFudGlhdGVkIGFzIER1YWwtUm9sZSBE
+ZXZpY2UgKERSRCksIFBlcmlwaGVyYWwgT25seSBhbmQNCj4+IEhvc3QgT25seSAoWEhDSSljb25m
+aWd1cmF0aW9ucy4NCj4+DQo+VGhlIGRyaXZlciBpcyBub3QgYW4gSVAgQ29yZSwgdGhlIGhhcmR3
+YXJlIGRldmljZSBpcy4NCj4NCkkgcmVtZW1iZXIgdGhhdCBJIGhhZCBzdWNoIGNvbW1lbnQgaW4g
+dGhlIHBhc3RlLiBJIGRvbid0IGtub3cgd2h5IHRoZXJlIGlzICJJUCBDb3JlIi4NCg0KSSB3aWxs
+IGNoYW5nZSBpdC4NCnRoYW5rcyAsDQpQYXdlbA0KPg0KPi9MYXJzDQo+DQoNCg==
