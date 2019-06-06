@@ -2,99 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E16636E60
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 10:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC6E36EEC
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 10:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726972AbfFFIUI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 04:20:08 -0400
-Received: from mail-eopbgr140071.outbound.protection.outlook.com ([40.107.14.71]:8935
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726223AbfFFIUI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Jun 2019 04:20:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OkHBqrFdV8Qrtl9bItUJfQizYLpUCSv1Ca/kuonfWlg=;
- b=jEjSChMcyetVMfTQ4PyKmG/eOAqkOAfxUD5c4ep6xk8YQIm+MdfQJmA0YLwdREZO9JNP+m+Or4pLYBfhsGonoOVABXPtJYuLTv/tw8RzRNxtYSM2lZTyqlS+WTabKORpEoo/9q2nJl09o/aFRegVpFyrvaVyBuQVuUZuzl+TY/I=
-Received: from AM5PR0402MB2865.eurprd04.prod.outlook.com (10.175.44.16) by
- AM5PR0402MB2772.eurprd04.prod.outlook.com (10.175.41.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.22; Thu, 6 Jun 2019 08:20:03 +0000
-Received: from AM5PR0402MB2865.eurprd04.prod.outlook.com
- ([fe80::a1bf:17d:a52:3824]) by AM5PR0402MB2865.eurprd04.prod.outlook.com
- ([fe80::a1bf:17d:a52:3824%4]) with mapi id 15.20.1965.011; Thu, 6 Jun 2019
- 08:20:03 +0000
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>, Yang Li <pku.leo@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RESEND][PATCH v3 1/2] usb: dwc3: Add avoiding vbus glitch happen
- during xhci reset
-Thread-Topic: [RESEND][PATCH v3 1/2] usb: dwc3: Add avoiding vbus glitch
- happen during xhci reset
-Thread-Index: AQHVHBLourGMUHjS80KOCHUiDl6by6aOSEAAgAAASeA=
-Date:   Thu, 6 Jun 2019 08:20:03 +0000
-Message-ID: <AM5PR0402MB2865979E26017BC5937DBBA5F1170@AM5PR0402MB2865.eurprd04.prod.outlook.com>
-References: <20190606025418.26313-1-ran.wang_1@nxp.com>
- <78eb1558-b8d4-0632-ad0c-4144c711d2da@cogentembedded.com>
-In-Reply-To: <78eb1558-b8d4-0632-ad0c-4144c711d2da@cogentembedded.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ran.wang_1@nxp.com; 
-x-originating-ip: [92.121.36.197]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 72c8ddcc-0975-4add-2a0c-08d6ea57c67e
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM5PR0402MB2772;
-x-ms-traffictypediagnostic: AM5PR0402MB2772:
-x-microsoft-antispam-prvs: <AM5PR0402MB27729871382C8442A4A1FB19F1170@AM5PR0402MB2772.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 00603B7EEF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(346002)(39860400002)(376002)(366004)(396003)(189003)(199004)(6506007)(4744005)(55016002)(446003)(14454004)(305945005)(7736002)(110136005)(66946007)(6116002)(53936002)(86362001)(5660300002)(11346002)(52536014)(66476007)(4326008)(33656002)(2906002)(476003)(486006)(68736007)(3846002)(25786009)(316002)(81166006)(6246003)(478600001)(74316002)(8936002)(81156014)(8676002)(186003)(64756008)(66446008)(71200400001)(76116006)(71190400001)(54906003)(73956011)(26005)(66556008)(256004)(9686003)(76176011)(102836004)(53546011)(7696005)(229853002)(6436002)(99286004)(66066001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM5PR0402MB2772;H:AM5PR0402MB2865.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: LEM/qZliSZCPG0w3tR7/sQH646/2PskYVCV6YuejVzhz3dNbyjAuKRA4EoAUFPjGr2Ch7DcjkRix/855koD8U6kWAwusztLAbbOE44rPMY1df/ZKwRFm0ZYlvvORc0LGkyyQfrlvCZRGD6m7Ng+Bzefa1yw9hhh1R2BYlQi7Z0zTS+RCPT6L6OHY169QNe9KW2+rbMpxMhEtDs3uAgX7fABdxYe1smmMffyLqvHLwOdnjQq8CaZ0ZwHO/KGaz+JyB+C3+Vtw9aPSDRQDre3M3OsTZoBJ1+3yjHq2Rm/CIjtRfH59WE3yegffSFchufuffGca1uS/nFigozjrjYoZqhf5A2EfvAwAVh3r9BLO+vO5Cl/kZa6VTmj1Qt85id0i9WY1JhzVlGOLp4gimBcUwqZAETKQGmIutDCgMnhKxGo=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727182AbfFFIlj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 04:41:39 -0400
+Received: from mail-wr1-f51.google.com ([209.85.221.51]:34854 "EHLO
+        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726926AbfFFIli (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 04:41:38 -0400
+Received: by mail-wr1-f51.google.com with SMTP id m3so1483316wrv.2
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 01:41:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=VqhXzdqvcYOThqW56WF3BqojYE8dWJhuh1y93bHdlqY=;
+        b=mcC+30mLls3yAQVyOdCs9XnTVIax/UYPDJQOmPsa3Ew5kyYf6dJEFKHgCzVLr+R1Sr
+         h3lFPE2WMASzJmwHC/TmdQYw7QIDHJz1NV2bVmxnFANnWzYk26KtPSSkysW54EOkcRU9
+         zKapbh1RQlbCAYzMtgcZoDiPOebaK+yt/h33hQO1gdX/y9wEEp4pZ2kYSn1cOeB6cPEo
+         /k3TitxnHizHkm1xKkt6vqBwHbyA1obiNKM5ADRO0Vw4IaLfkYtlUGOvnu5GXp7buDqN
+         tx675+JrrVKEK+azlGNoh1NPkagrfl0zq2DlyTh70P0Fki4FlgPv8Z+SUyJNjvSWRf+U
+         hU2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=VqhXzdqvcYOThqW56WF3BqojYE8dWJhuh1y93bHdlqY=;
+        b=TUGOIJpk+mYS2o6KsI+2tGAPrYFAha/ga7zg4RZoRFTky81HD06udskmgl/9lfkChc
+         q+AeyEzdH1PadSm3ojeFx1ISMmWnNWRwFQRwNPrr0DRQ+i+5bUIqbC/ruxg2tVLpZu+4
+         PrrR4rJlYacQbbk2XSaDiOB4LRmPSSWkQrcm2Czg0IeVYkA9ZHRIKw4lTlGhh8Run2Ga
+         +isHZ0kqUmNfXM24Yu8mFl+xw0ri2DtEWGjlSC8dIbTwU0lmEjDMZvh1HIw1ZQOx/O5s
+         J+sJmET91/xXvSyTWZH8tSAzZOWTQMEjnuiRve47X5udGKTdky9I+c8dm0kqvLjavNIE
+         QVGw==
+X-Gm-Message-State: APjAAAU+xPZZoftJe3QJTuENsN11cDVNqw3iiTZNuSvkaWZSwHl81Ojb
+        xujk5aaCNzhtYrtk0sSiMV3+nfZYLio=
+X-Google-Smtp-Source: APXvYqwsyDFswViQswe9yZfWgI7oAkoxEtH4Rwy1lV+KAZmurfbWMpTYupu2Pccu5QCgBXvYz7RNrA==
+X-Received: by 2002:a5d:4f81:: with SMTP id d1mr5559311wru.156.1559810496811;
+        Thu, 06 Jun 2019 01:41:36 -0700 (PDT)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id o126sm1105453wmo.31.2019.06.06.01.41.36
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 06 Jun 2019 01:41:36 -0700 (PDT)
+Message-ID: <2387746fa7c61a4fe9a994cbece186731eac7fa9.camel@unipv.it>
+Subject: Re: Slow I/O on USB media
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
+Date:   Thu, 06 Jun 2019 10:41:35 +0200
+In-Reply-To: <20190605173902.GE27700@kroah.com>
+References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
+         <20190530132522.GA21005@kroah.com>
+         <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
+         <20190604054300.GE1588@kroah.com>
+         <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
+         <20190605145525.GA28819@kroah.com>
+         <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
+         <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it>
+         <20190605173902.GE27700@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72c8ddcc-0975-4add-2a0c-08d6ea57c67e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2019 08:20:03.1934
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ran.wang_1@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2772
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgU2VyZ2VpLA0KDQpPbiBUaHVyc2RheSwgSnVuZSAwNiwgMjAxOSAxNjoxNyBTZXJnZWkgU2h0
-eWx5b3Ygd3JvdGU6DQo+IA0KPiBIZWxsbyENCj4gDQo+IE9uIDA2LjA2LjIwMTkgNTo1NCwgUmFu
-IFdhbmcgd3JvdGU6DQo+IA0KPiA+IFdoZW4gRFdDMyBpcyBzZXQgdG8gaG9zdCBtb2RlIGJ5IHBy
-b2dyYW1taW5nIHJlZ2lzdGVyIERXQzNfR0NUTCwgVkJVUw0KPiA+IChvciBpdHMgY29udHJvbCBz
-aWduYWwpIHdpbGwgdHVybiBvbiBpbW1lZGlhdGVseSBvbiByZWxhdGVkIFJvb3QgSHViDQo+ID4g
-cG9ydHMuIFRoZW4gdGhlIFZCVVMgd2lsbCBiZSBkZS1hc3NlcnRlZCBmb3IgYSBsaXR0bGUgd2hp
-bGUgZHVyaW5nDQo+ID4geGhjaSByZXNldCAoY29uZHVjdGVkIGJ5IHhoY2kgZHJpdmVyKSBmb3Ig
-YSBsaXR0bGUgd2hpbGUgYW5kIGJhY2sgdG8gbm9ybWFsLg0KPiA+DQo+ID4gVGhpcyBWQlVTIGds
-aXRjaCBtaWdodCBjYXVzZSBzb21lIFVTQiBkZXZpY2VzIGVtdXJhdGlvbiBmYWlsIGlmIGtlcm5l
-bA0KPiANCj4gICAgIEVudW1lcmF0aW9uLiA6LSkNCg0KVGhhbmtzLCB3aWxsIGNvcnJlY3QgaXQg
-aW4gbmV4dCB2ZXJzaW9uDQogDQpSZWdhcmRzLA0KUmFuDQoNCj4gPiBib290IHdpdGggdGhlbSBj
-b25uZWN0ZWQuIE9uZSBTVyB3b3JrYXJvdW5kIHdoaWNoIGNhbiBmaXggdGhpcyBpcyB0bw0KPiA+
-IHByb2dyYW0gYWxsIFBPUlRTQ1tQUF0gdG8gMCB0byB0dXJuIG9mZiBWQlVTIGltbWVkaWF0ZWx5
-IGFmdGVyIHNldHRpbmcNCj4gPiBob3N0IG1vZGUgaW4gRFdDMyBkcml2ZXIocGVyIHNpZ25hbCBt
-ZWFzdXJlbWVudCByZXN1bHQsIGl0IHdpbGwgYmUgdG9vDQo+ID4gbGF0ZSB0byBkbyBpdCBpbiB4
-aGNpLXBsYXQuYyBvciB4aGNpLmMpLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUmFuIFdhbmcg
-PHJhbi53YW5nXzFAbnhwLmNvbT4NCj4gPiBSZXZpZXdlZC1ieTogUm9iIEhlcnJpbmcgPHJvYmhA
-a2VybmVsLm9yZz4NCj4gWy4uLl0NCj4gDQo+IE1CUiwgU2VyZ2VpDQo=
+Il giorno mer, 05/06/2019 alle 19.39 +0200, Greg KH ha scritto:
+> On Wed, Jun 05, 2019 at 06:23:58PM +0200, Andrea Vai wrote:
+> [...]
+> In ssh I manually mount the media,
+> then
+> > run
+> > 
+> > touch begin
+> > date
+> > <cp command>
+> > date
+> > touch end
+> 
+> That tests nothing other than the size of the memory in your system
+> :(
+> 
+> You have to flush the data out to the device fully in order to
+> properly
+> measure device throughput.  Calling 'touch' does not do that.
+> 
+> > If I use the DE (where the media is mounted automatically) I used
+> to
+> > "eject" the media after the copy finished, and took note of the
+> time
+> > used until the media was correctly "ejected" (and, so, unmounted).
+> 
+> eject/unmount is good.
+> 
+> > Anyway, I know that I can do all of this in a better way, and will
+> let
+> > you know.
+> 
+> Yes, please do so, your steps above do not show much.
+
+so, just to be sure now, here is my test script:
+
+touch inizio
+date
+mount UUID="6a9d3c05-6758-49c0-a46e-6ce221478eb3" /mnt/pendrive
+cp /NoBackup/buttare/ubuntu-14.04.5-desktop-i386.iso /mnt/pendrive
+umount /mnt/pendrive
+date
+touch fine
+
+can you please confirm (if) it's fine?
+
+> 
+> And you need to get your auto-mount out of the way, as who knows
+> what
+> options your device is being mounted with (i.e. sync or no
+> sync).  You
+> have to control that yourself in order to be sure.
+
+yes, I disabled the auto-mount. Furthermore, is there any option I
+need to specify to the mount command (i.e., as you say, sync or no
+sync)?
+
+thanks,
+bye
+Andrea
+
