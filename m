@@ -2,32 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABFE37F59
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 23:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5FB38004
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 23:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728154AbfFFVRS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 17:17:18 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:44388 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727915AbfFFVRS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Jun 2019 17:17:18 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id CC70644BC4;
-        Thu,  6 Jun 2019 21:17:15 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 572707838F;
-        Thu,  6 Jun 2019 21:17:07 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CALCETrVuNRPgEzv-XY4M9m6sEsCiRHxPenN_MpcMYc1h26vVwQ@mail.gmail.com>
-References: <CALCETrVuNRPgEzv-XY4M9m6sEsCiRHxPenN_MpcMYc1h26vVwQ@mail.gmail.com> <b91710d8-cd2d-6b93-8619-130b9d15983d@tycho.nsa.gov> <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk> <3813.1559827003@warthog.procyon.org.uk> <8382af23-548c-f162-0e82-11e308049735@tycho.nsa.gov> <0eb007c5-b4a0-9384-d915-37b0e5a158bf@schaufler-ca.com> <c82052e5-ca11-67b5-965e-8f828081f31c@tycho.nsa.gov> <07e92045-2d80-8573-4d36-643deeaff9ec@schaufler-ca.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     dhowells@redhat.com, Casey Schaufler <casey@schaufler-ca.com>,
+        id S1728787AbfFFVyb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 17:54:31 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:35405 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728777AbfFFVya (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 17:54:30 -0400
+Received: by mail-pf1-f194.google.com with SMTP id d126so2324070pfd.2
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 14:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=nRTOxuA/Gwk436wjdRLZFFI2IWjHeK4nxXXVH9+gvJE=;
+        b=EGncbImdzKfDyyHC/wGTZ/hfrEnzQxuTOp2J1Y0gY1VpXSC9Md3ikeKaFw/Z3B22v7
+         0DNodTI71qmiSKyhcOcGu+kQr8Xu0pMtEttTsx96lJ6bMriq7jNWzBs9Y+FEnRfLOpYZ
+         qz8wRnKzKQ/VpDiQMqXU5ddM+QmOqL0WbO7UAMFLeVZf/ZN5YPfFzeJx1xGjcCAya2fh
+         dZWvMCYQhQ+zwgrcrrAc3oohAIXvEeBEVJRMsTPMM3Mg8+24b3tPfpaFLAnoONbYwo3M
+         bJ862/yfW4n5Z66MhmTBXgNY7GFN7zknPozfRMiFJXfEWmnKk6ZewdvLUz9dDYBeAWlR
+         IGSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=nRTOxuA/Gwk436wjdRLZFFI2IWjHeK4nxXXVH9+gvJE=;
+        b=BHGqjdd3sgdXlZ2Y2T7b20c1MesPwZnOqnna/k/Ab3pODB1tMyYhN++uXMMTl4ldOa
+         sjd0uqj8EiliEWwQSRzu86BgRO9uIiJaMJ9DW9W0+JejjbSDlYrT9JsAwnPUtn2sQrWh
+         8z1svyI9F1vzBj8AbXdXrocv52mzq5Lc3U5HcdQYze1MuVuPrIMpkfK9QPgBtNKMBsRb
+         mqDKnWE0UqTOt8z9D1pF7pKyOaWBEv4/aCmcTPdGAb3SbNpdYrzsPFSfwivBm+Ffi0ZH
+         xil+fT9m7P6zoahWs5K5z/dV42d14QdAhL+VGq0KJDkwXzjia6u0abS2UR0kkFxy44lx
+         D5yg==
+X-Gm-Message-State: APjAAAVQcqJeB+kQjlpETi7PES9Kb5fOaVaE9BAgbU/wNcbeoBd3SBiz
+        TzpgU7zTygD/QAk6aA2eIlBNsg==
+X-Google-Smtp-Source: APXvYqxFQa7/xE+mo3PRdCgIrbB81YZuPBHMMdpvWLdYui3Pw7zIn8HCIDPOffgGuFZp2pZ6jeQSxw==
+X-Received: by 2002:a62:1483:: with SMTP id 125mr55452892pfu.137.1559858070049;
+        Thu, 06 Jun 2019 14:54:30 -0700 (PDT)
+Received: from ?IPv6:2601:646:c200:1ef2:f1c4:94fc:993:1923? ([2601:646:c200:1ef2:f1c4:94fc:993:1923])
+        by smtp.gmail.com with ESMTPSA id h62sm126764pgc.77.2019.06.06.14.54.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jun 2019 14:54:28 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC][PATCH 00/10] Mount, FS, Block and Keyrings notifications [ver #3]
+From:   Andy Lutomirski <luto@amacapital.net>
+X-Mailer: iPhone Mail (16F203)
+In-Reply-To: <23611.1559855827@warthog.procyon.org.uk>
+Date:   Thu, 6 Jun 2019 14:54:27 -0700
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
         Stephen Smalley <sds@tycho.nsa.gov>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,90 +64,56 @@ Cc:     dhowells@redhat.com, Casey Schaufler <casey@schaufler-ca.com>,
         LSM List <linux-security-module@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Paul Moore <paul@paul-moore.com>
-Subject: Re: [RFC][PATCH 00/10] Mount, FS, Block and Keyrings notifications [ver #3]
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <23610.1559855827.1@warthog.procyon.org.uk>
-Date:   Thu, 06 Jun 2019 22:17:07 +0100
-Message-ID: <23611.1559855827@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.30]); Thu, 06 Jun 2019 21:17:17 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <AD7898AE-B92C-4DE6-B895-7116FEDB3091@amacapital.net>
+References: <CALCETrVuNRPgEzv-XY4M9m6sEsCiRHxPenN_MpcMYc1h26vVwQ@mail.gmail.com> <b91710d8-cd2d-6b93-8619-130b9d15983d@tycho.nsa.gov> <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk> <3813.1559827003@warthog.procyon.org.uk> <8382af23-548c-f162-0e82-11e308049735@tycho.nsa.gov> <0eb007c5-b4a0-9384-d915-37b0e5a158bf@schaufler-ca.com> <c82052e5-ca11-67b5-965e-8f828081f31c@tycho.nsa.gov> <07e92045-2d80-8573-4d36-643deeaff9ec@schaufler-ca.com> <23611.1559855827@warthog.procyon.org.uk>
+To:     David Howells <dhowells@redhat.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Andy Lutomirski <luto@kernel.org> wrote:
 
-> > > You are allowing arbitrary information flow between T and W above.  Who
-> > > cares about notifications?
-> >
-> > I do. If Watched object is /dev/null no data flow is possible.
-> > There are many objects on a modern Linux system for which this
-> > is true. Even if it's "just a file" the existence of one path
-> > for data to flow does not justify ignoring the rules for other
-> > data paths.
-> 
-> Aha!
-> 
-> Even ignoring security, writes to things like /dev/null should
-> probably not trigger notifications to people who are watching
-> /dev/null.  (There are probably lots of things like this: /dev/zero,
-> /dev/urandom, etc.)
 
-Even writes to /dev/null might generate access notifications; leastways,
-vfs_read() will call fsnotify_access() afterwards on success.
+> On Jun 6, 2019, at 2:17 PM, David Howells <dhowells@redhat.com> wrote:
+>=20
+> Andy Lutomirski <luto@kernel.org> wrote:
+>=20
+>>>> You are allowing arbitrary information flow between T and W above.  Who=
 
-Whether or not you can set marks on open device files is another matter.
+>>>> cares about notifications?
+>>>=20
+>>> I do. If Watched object is /dev/null no data flow is possible.
+>>> There are many objects on a modern Linux system for which this
+>>> is true. Even if it's "just a file" the existence of one path
+>>> for data to flow does not justify ignoring the rules for other
+>>> data paths.
+>>=20
+>> Aha!
+>>=20
+>> Even ignoring security, writes to things like /dev/null should
+>> probably not trigger notifications to people who are watching
+>> /dev/null.  (There are probably lots of things like this: /dev/zero,
+>> /dev/urandom, etc.)
+>=20
+> Even writes to /dev/null might generate access notifications; leastways,
+> vfs_read() will call fsnotify_access() afterwards on success.
 
-> David, are there any notification types that have this issue in your
-> patchset?  If so, is there a straightforward way to fix it?
+Hmm. I can see this being an issue, but I guess not with your patch set.
 
-I'm not sure what issue you're referring to specifically.  Do you mean whether
-writes to device files generate notifications?
+>=20
+> Whether or not you can set marks on open device files is another matter.
+>=20
+>> David, are there any notification types that have this issue in your
+>> patchset?  If so, is there a straightforward way to fix it?
+>=20
+> I'm not sure what issue you're referring to specifically.  Do you mean whe=
+ther
+> writes to device files generate notifications?
 
-> Generically, it seems like maybe writes to device nodes shouldn't trigger
-> notifications since, despite the fact that different openers of a device
-> node share an inode, there isn't necessarily any connection between them.
+I mean: are there cases where some action generates a notification but does n=
+ot otherwise have an effect visible to the users who can receive the notific=
+ation. It looks like the answer is probably =E2=80=9Cno=E2=80=9D, which is g=
+ood.
 
-With the notification types I have currently implemented, I don't even notice
-any accesses to a device file unless:
-
- (1) Someone mounts over the top of one.
-
- (2) The access triggers an I/O error or device reset or causes the device to
-     be attached or detached.
-
- (3) Wangling the device causes some other superblock event.
-
- (4) The driver calls request_key() and that creates a new key.
-
-> Casey, if this is fixed in general, do you have another case where the
-> right to write and the right to read do not imply the right to
-> communicate?
-> 
-> > An analogy is that two processes with different UIDs can open a file,
-> > but still can't signal each other.
-> 
-> What do you mean "signal"?  If two processes with different UIDs can
-> open the same file for read and write, then they can communicate with
-> each other in many ways.  For example, one can write to the file and
-> the other can read it.  One can take locks and the other can read the
-> lock state.  They can both map it and use any number of memory access
-> side channels to communicate.  But, of course, they can't send each
-> other signals with kill().
-> 
-> If, however, one of these processes is using some fancy mechanism
-> (inotify, dnotify, kqueue, fanotify, whatever) to watch the file, and
-> the other one writes it, then it seems inconsistent to lie to the
-> watching process and say that the file wasn't written because some
-> security policy has decided to allow the write, allow the read, but
-> suppress this particular notification.  Hence my request for a real
-> example: when would it make sense to do this?
-
-Note that fanotify requires CAP_SYS_ADMIN, but inotify and dnotify do not.
-
-dnotify is applied to an open file, so it might be usable on a chardev such as
-/dev/null, say.
-
-David
+Casey, is this good enough for you, or is there still an issue?=
