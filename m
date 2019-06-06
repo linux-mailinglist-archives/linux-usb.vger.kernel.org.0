@@ -2,165 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF5B36F5F
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 11:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1BB37002
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 11:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727569AbfFFJDM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 05:03:12 -0400
-Received: from mail-wm1-f52.google.com ([209.85.128.52]:36798 "EHLO
-        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727509AbfFFJDM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 05:03:12 -0400
-Received: by mail-wm1-f52.google.com with SMTP id u8so1560670wmm.1
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 02:03:10 -0700 (PDT)
+        id S1727702AbfFFJgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 05:36:42 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:44122 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727469AbfFFJgm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 05:36:42 -0400
+Received: by mail-pf1-f196.google.com with SMTP id t16so1139669pfe.11
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 02:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=ikqhDzHJzrnnMA0hQ9bg9M7iUfopxG0xDwuMQvfnxZY=;
-        b=uvfOHxuyq0ME+d5d6jcjTrr0vtWPeD01SCRLxU3nx8ZkNMmtvmZn5Lf81dOTWoiIKx
-         /icpidp52Cw+RIL9Jz3k3Uikrk9dHFKpOpy03xdsbvzUKuJmfNAj9qczdUwhyLtColJD
-         yNiYdnwEf/LUdsioBWd9+NRYa+V+lgb7+NQ4/d33rfj7KaM6Lcwh1fHjUgghT7FciZ7a
-         bhjiRz1xShbCwzcpVETs7M4cdd5QgTV9UnGCIEVK5G+bAuhWPm7sGF/piwbsHa+qhhV8
-         Y9qn13PFafACzppfYwyqTKfgDfPiLTBboLglvUQDGTkhG0/X7qXeISNbtsSKOP2biTSw
-         Jy9A==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=h5do6viF1QYHmi9zodRPi2gOLo4d0RMmlNDMFVT6d0s=;
+        b=OsdYFDR7n8GZdRL5hTrf1LRRH/9tb9lFqWF/NyqegA74ZymzpSfa/yOWd+/RJI3FC2
+         EP9xp8H+aXNXZJbqvgJUhr6fKSIP0QH/VfSgN3IKkS6kgp3y2AGNt1DGV2i3rnKTW3rF
+         W7YZTr2O+PdzdTzfbAh9rtTk+wWBxbIPZ1mZ2GOSjG40NIjEqu5fMHkmr5G74GIBhuHl
+         Ls3TOrfObyb2b8nm8jYAk36//yPjN6Sp189zArN+BumidjIpwzLPAt0EkGWw2KEqD2RB
+         qQNhenEviJeXFB0qj1Os9cAXXz2MeWsG5b56oA2M0OY//hJy5qAKUhUgRdRKe/hCchym
+         HeVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=ikqhDzHJzrnnMA0hQ9bg9M7iUfopxG0xDwuMQvfnxZY=;
-        b=tcRpT+KCYU6yTLtBA0je5K8t5q2n3XNI4nOVK6cn+0SrRqCMmoevqS1CFS8B1YfAp0
-         xtJWhkpriZE6o/HI8Dlp4N0PodJ5yVxcolYM1KQJIQPpP04afM9yYWqTq42voB6w+5Qv
-         xpyJIjHtbM779NCddFTEa/n52odV7+l2QUkr+oUfCqQUvn3I5Ot8oJtDNwKtPKa+myrS
-         0g+aYeKuBD43Zwv36ySl9IGuj2dyvuXD4whaGlg4Y04ua6OZhltUl6Tmweyrauoh56/1
-         Q1ONPLWmiarVk/HVjSoyPnTsM9B3P6l5rr4JWjGjgMFNN0pUmlokD6SX/PsWKbG6djhj
-         YjSA==
-X-Gm-Message-State: APjAAAXvgGVZuLiwmXkJJ7m1wJNqj3HjmdnDytoNvC7ImWfiscSWdpH/
-        bl48pt6aFQufXKFp2tLaDkHE3S2Ez8I=
-X-Google-Smtp-Source: APXvYqy9zEAw53Ywk0LBeahOLAn91ajXZ7dhhekbjecnOQbRZLAe+U9gMxqM2hJ2bXsYlJd+Y+vaEQ==
-X-Received: by 2002:a1c:ca06:: with SMTP id a6mr26059243wmg.48.1559811790186;
-        Thu, 06 Jun 2019 02:03:10 -0700 (PDT)
-Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
-        by smtp.gmail.com with ESMTPSA id d10sm1290013wrp.74.2019.06.06.02.03.09
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 06 Jun 2019 02:03:09 -0700 (PDT)
-Message-ID: <3fa782ff44f2518e2b7ef7f6f424ed9ecbeafe7f.camel@unipv.it>
-Subject: Re: Slow I/O on USB media
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
-Date:   Thu, 06 Jun 2019 11:03:05 +0200
-In-Reply-To: <20190605173902.GE27700@kroah.com>
-References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
-         <20190530132522.GA21005@kroah.com>
-         <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
-         <20190604054300.GE1588@kroah.com>
-         <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
-         <20190605145525.GA28819@kroah.com>
-         <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
-         <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it>
-         <20190605173902.GE27700@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=h5do6viF1QYHmi9zodRPi2gOLo4d0RMmlNDMFVT6d0s=;
+        b=sqpv9H3aIh+h/243Zk3vrHSvcOJr7jZWYx0xVm7iKCgf4SiOmRyW9hefikcv0tg9Pc
+         +0al4NBNRlZZ+l022m1LxXKxPEz7l0n+Xn0njVb3P52gFHKb4vxdNwmgCiHGi/i97xqe
+         0AVRsgeLHUymLtEVDVzRb3EzyzTQY2TWipFp15X6Vd6VosMtkpXXQjWOlPATy/3YP+Vx
+         rMGuNsnrtkt6Mye22cS7Cf6JrBtdm4JoUfHtDLjKPALBLAssAr2avP0sOv83z/d13GbW
+         kejCLD3S9LtHQZnru1gf6g+AT5K0ERcVsj6saM4eKqFWy9ybEFd2BcGRnkPK4HUInZ7b
+         BlOw==
+X-Gm-Message-State: APjAAAUfrIbVlSjzxfziVi6AOP5I8MMVv9rtS1s0DxSBrWKFC1MjekAn
+        UsuweOoBiyPFmsvdTgzo0lnwR2jjpegAphnvBFU=
+X-Google-Smtp-Source: APXvYqzROQ9GT8kawWI3jKEoqOnh3Hx09LCAQTweL1WHj3945Ho2Ssly40NtqjWs7ugNVPcOKRihv2eQ1CPACDPA0cU=
+X-Received: by 2002:a63:f402:: with SMTP id g2mr2409825pgi.197.1559813801667;
+ Thu, 06 Jun 2019 02:36:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <CAB31r6U3Ha+JrbjGC+wKj-+gJfQ7dk+LSoL1n0tQBxVTPb2mRQ@mail.gmail.com>
+ <20190603131258.GA10397@kroah.com> <CAB31r6VK12FXoPh6eNfE1v_Tgjv917Nh7699=TZpm4SkCVMm-w@mail.gmail.com>
+ <20190604054045.GD1588@kroah.com> <CAB31r6WAkDPKyvY31Up=OAGXvhQgS23uW5YYQs601zUaaNaELg@mail.gmail.com>
+ <20190605165857.GA23286@kroah.com>
+In-Reply-To: <20190605165857.GA23286@kroah.com>
+From:   Vladimir Yerilov <openmindead@gmail.com>
+Date:   Thu, 6 Jun 2019 19:36:30 +1000
+Message-ID: <CAB31r6W2qhLCa5ecddx8Kqe0=1QEdE5eeg_be71QuyX+ZWMtEQ@mail.gmail.com>
+Subject: Re: kernel NULL pointer dereference, ucsi bug
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il giorno mer, 05/06/2019 alle 19.39 +0200, Greg KH ha scritto:
-> On Wed, Jun 05, 2019 at 06:23:58PM +0200, Andrea Vai wrote:
-> > Hi,
-> > Il giorno mer, 05/06/2019 alle 16.55 +0200, Greg KH ha scritto:
-> > > On Wed, Jun 05, 2019 at 09:36:04AM +0200, Andrea Vai wrote:
-> > > > Hi,
-> > > > Il giorno mar, 04/06/2019 alle 07.43 +0200, Greg KH ha
-> scritto:
-> > > > > On Mon, Jun 03, 2019 at 01:13:48PM +0200, Andrea Vai wrote:
-> > > > > > Il giorno gio, 30/05/2019 alle 06.25 -0700, Greg KH ha
-> > > scritto:
-> > > > > > > [...]
-> > > > > > Hi,
-> > > > > > 
-> > > > > > > Any chance you can use 'git bisect' to find the
-> offending
-> > > > > commit?
-> > > > > > Yes, I am doing it as I managed to build the kernel from
-> > > source
-> > > > > 
-> > > > > Great!  What did you find?
-> > > > 
-> > > > # first bad commit: [534903d60376b4989b76ec445630aa10f2bc3043]
-> > > > drm/atomic: Use explicit old crtc state in
-> > > > drm_atomic_add_affected_planes()
-> > > > 
-> > > > By the way, as I am not expert, is there a way to double-check
-> > > that I
-> > > > bisected correctly? (such as, e.g., test with the version
-> before
-> > > this
-> > > > one, and then with this commit applied?)
-> > > 
-> > > How exactly are you "testing" this?
-> > > 
-> > > I would recommend a script that does something like:
-> > >       mount the disk somewhere
-> > >       copy a big file to it
-> > >       unmount the disk
-> > > 
-> > > testing how long the whole process takes, especially the
-> 'unmount'
-> > > is
-> > > important.  Are you doing that?
-> > 
-> > Well, not exactly, and thank you for pointing me out. I am doing
-> the
-> > job in two ways, from the DE (when I am located at the PC), or in
-> an
-> > ssh session when I am away. In ssh I manually mount the media,
-> then
-> > run
-> > 
-> > touch begin
-> > date
-> > <cp command>
-> > date
-> > touch end
-> 
-> That tests nothing other than the size of the memory in your system
-> :(
-> 
-> You have to flush the data out to the device fully in order to
-> properly
-> measure device throughput.  Calling 'touch' does not do that.
-> 
-> > If I use the DE (where the media is mounted automatically) I used
-> to
-> > "eject" the media after the copy finished, and took note of the
-> time
-> > used until the media was correctly "ejected" (and, so, unmounted).
-> 
-> eject/unmount is good.
-> 
-> > Anyway, I know that I can do all of this in a better way, and will
-> let
-> > you know.
-> 
-> Yes, please do so, your steps above do not show much.
-> 
-> 
+Thanks a lot! Now I understand how to work with bisect in general.
+However, its log is unlikely to be of help because I use my distro
+tools to make a kernel package. So I dropped down into the merge
+commit and for now I am here:
 
-excuse me, another question: since I get the good behavior with kernel
-4.20.13 (installed from my distro packages), is it correct to run at
-first
+index : kernel/git/davem/net-next.git
+commit - time&date - works or not
+80f232121b69cc69a31ccb2b38c1665d770b0710 - 2019-05-07 22:03:58 -0700 - y
+5d438e200215f61ca6a7aa69f3c4e035ac54d8ee - 2019-04-25 11:03:52 +0200 - y
+6f6a407a591ebe3e4c6bd2329b29862b3980a3ca - 2019-05-03 18:00:15 +0200 -
+bug introduced? Not sure:
+Jun 06 18:57:33 kernel: BUG: unable to handle kernel NULL pointer
+dereference at 0000000000000370
+But no log-in issues which were preventing me from logging in as whole
+merge 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a did, so there must be
+something else after this commit too. For now I marked it as "bad".
+e823d948b7e53dc982c867ac4ce7877fc0418897 - 2019-04-30 17:55:08 +0200 -
+this is being built at the moment.
 
+Bisect log, just in case:
 git bisect start
-git bisect good v4.20.13
+# bad: [132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a] Merge tag
+'usb-5.2-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+git bisect bad 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
+# good: [86dc59e39031fb0d366d5b1f92db015b24bef70b] net: dsa: sja1105:
+Make 'sja1105et_regs' and 'sja1105pqrs_regs' static
+git bisect good 86dc59e39031fb0d366d5b1f92db015b24bef70b
+# good: [80f232121b69cc69a31ccb2b38c1665d770b0710] Merge
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next
+git bisect good 80f232121b69cc69a31ccb2b38c1665d770b0710
+# good: [5d438e200215f61ca6a7aa69f3c4e035ac54d8ee] usb: typec: ucsi:
+ccg: add get_fw_info function
+git bisect good 5d438e200215f61ca6a7aa69f3c4e035ac54d8ee
+# bad: [6f6a407a591ebe3e4c6bd2329b29862b3980a3ca] Merge tag
+'usb-serial-5.2-rc1' of
+https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into
+usb-next
+git bisect bad 6f6a407a591ebe3e4c6bd2329b29862b3980a3ca
 
-, then build the latest kernel, test it, set it as bad (as far as I
-can expect) and go on with following tests?
+Have a good day,
+Vladimir
 
-Many thanks,
-Andrea
 
+=D1=87=D1=82, 6 =D0=B8=D1=8E=D0=BD. 2019 =D0=B3. =D0=B2 02:59, Greg KH <gre=
+gkh@linuxfoundation.org>:
+>
+> On Wed, Jun 05, 2019 at 04:36:23PM +1000, Vladimir Yerilov wrote:
+> > Good day Mr. Kroah-Hartman,
+> >
+> > I've found the culprit commit. It took a while though but now I'm sure:
+> >
+> > commit - brief decription - time - works (y) or not (n)
+> > 670784fb4ebe54434e263837390e358405031d9e - rc1 2019-05-20
+> > e260ad01f0aa9e96b5386d5cd7184afd949dc457 - rc0 2019-05-14 19:52:51 -070=
+0 n
+> > 8ea5b2abd07e2280a332bd9c1a7f4dd15b9b6c13 - rc0 2019-05-09 19:35:41 -070=
+0 n
+> > 54516da1ea859dd4f56ebba2e483d2df9d7c8a32 - rc0 2019-05-05 21:58:36 -070=
+0 y
+> > 71ae5fc87c34ecbdca293c2a5c563d6be2576558 - rc0 2019-05-06 20:29:45 -070=
+0 y
+> > 80f232121b69cc69a31ccb2b38c1665d770b0710 - rc0 2019-05-07 22:03:58 -070=
+0 y
+> > a2d635decbfa9c1e4ae15cb05b68b2559f7f827c - rc0 2019-05-08 21:35:19 -070=
+0 n
+> > 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a - rc0 2019-05-08 10:03:52 -070=
+0 n
+> > 86dc59e39031fb0d366d5b1f92db015b24bef70b - rc0 2019-05-08 09:46:44 -070=
+0 y
+> >
+> > So 86dc59e39031fb0d366d5b1f92db015b24bef70b is the last working for
+> > me, and 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a is the breaking one:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?h=3Dv5.2-rc3&id=3D132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
+>
+> 132d68d37d33 ("Merge tag 'usb-5.2-rc1' of git://git.kernel.org/pub/scm/li=
+nux/kernel/git/gregkh/usb")
+> is a merge point, which is odd, you should be able to drop down into
+> that and find the exact wrong commit.
+>
+> what does 'git bisect log' show?
+>
+> thanks,
+>
+> greg k-h
+
+
+
+--=20
+----
+Best regards,
+Vladimir Yerilov
