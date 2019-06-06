@@ -2,88 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52273376B6
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 16:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E36376CD
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 16:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728859AbfFFOas (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 10:30:48 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:51888 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727133AbfFFOas (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 10:30:48 -0400
-Received: (qmail 3569 invoked by uid 2102); 6 Jun 2019 10:30:47 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 6 Jun 2019 10:30:47 -0400
-Date:   Thu, 6 Jun 2019 10:30:47 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrea Vai <andrea.vai@unipv.it>
-cc:     Greg KH <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
-Subject: Re: Slow I/O on USB media
-In-Reply-To: <b159e1518b670d4b0126c7671c30c8c3cb8fffbc.camel@unipv.it>
-Message-ID: <Pine.LNX.4.44L0.1906061025540.1641-100000@iolanthe.rowland.org>
+        id S1728796AbfFFOdJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 10:33:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42824 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727133AbfFFOdJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 Jun 2019 10:33:09 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F2E4620673;
+        Thu,  6 Jun 2019 14:33:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559831588;
+        bh=/2jJJ5oG2cISFINJKQe1EgAmoS+dF35UJQdmAaBdaNA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vIL9tsxaJCJ6vmzNR4W5rYK5l1deky/3ctGG8Pold6Jk8WI2e71x0lSPFlLVWy+5X
+         6OjNoesUKJ2twjzicbxxgesIRYfRAal2qoLQEa9SfsYJ294nTr71ci0Jj4ufRCNZ/q
+         zVNjY+QFddmc9uFjoz911UcJn2YsMRxZVjUM77VY=
+Date:   Thu, 6 Jun 2019 16:33:06 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     David Howells <dhowells@redhat.com>, viro@zeniv.linux.org.uk,
+        linux-usb@vger.kernel.org, raven@themaw.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/10] usb: Add USB subsystem notifications [ver #3]
+Message-ID: <20190606143306.GA11294@kroah.com>
+References: <155981420247.17513.18371208824032389940.stgit@warthog.procyon.org.uk>
+ <Pine.LNX.4.44L0.1906061020000.1641-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1906061020000.1641-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 6 Jun 2019, Andrea Vai wrote:
-
-> Here I am with another question.
-> What I have done so far:
+On Thu, Jun 06, 2019 at 10:24:18AM -0400, Alan Stern wrote:
+> On Thu, 6 Jun 2019, David Howells wrote:
 > 
-> - booted with the last kernel I know to be working (4.20.13-
-> 200.fc29.x86_64, installed from Fedora repos), checked that test runs
-> fine (2min to copy)
-> - marked "git bisect good v4.20.13"
-> - built the latest stable version:
->   - git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
->   - cp -v /boot/config-$(uname -r) .config
->   - make -j4 && make modules_install && make install && grub2-mkconfig -o /boot/grub2/grub.cfg
->   - grubby --set-default /boot/vmlinuz-5.2.0-rc3 (the last regular file listed in "ls -lrt /boot/v*")
-> - rebooted with kernel 5.2.0-rc3, ran the test, took 49min to copy
-> (!), thus marked "git bisect bad"
-> - built again, and it turns out to be 4.20.0 (why is it earlier than
-> 4.20.13?), rebooted with 4.20.0, ran the test and it took more than 15
-> minutes so I killed the cp process, and marked it BAD, and obtained:
+> > Add a USB subsystem notification mechanism whereby notifications about
+> > hardware events such as device connection, disconnection, reset and I/O
+> > errors, can be reported to a monitoring process asynchronously.
 > 
-> The merge base 8fe28cb58bcb235034b64cbbb7550a8a43fd88be is bad.
-> This means the bug has been fixed between
-> 8fe28cb58bcb235034b64cbbb7550a8a43fd88be and
-> [0f7c162c1df596e0bba04c26fc9cc497983bf32b].
-> 
-> The output of "git bisect log" is:
-> 
-> git bisect start
-> # good: [0f7c162c1df596e0bba04c26fc9cc497983bf32b] Linux 4.20.13
-> git bisect good 0f7c162c1df596e0bba04c26fc9cc497983bf32b
-> # bad: [f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a] Linux 5.2-rc3
-> git bisect bad f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a
-> # bad: [8fe28cb58bcb235034b64cbbb7550a8a43fd88be] Linux 4.20
-> git bisect bad 8fe28cb58bcb235034b64cbbb7550a8a43fd88be
-> 
-> I can understand that the bug was present before 4.20.13 (is that
-> reasonable?), but how can I tell bisect to start at 4.20.13, which I
-> know for sure to be working, and not from 4.20.0, which I actually
-> don't care about?
+> USB I/O errors covers an awfully large and vague field.  Do we really
+> want to include them?  I'm doubtful.
 
-So what you got was a meaningless result.  Bisection works by assuming 
-assuming that it's looking for a commit that introduced a problem.  If 
-the earliest commit you test already has the problem (and 4.20.0 is 
-earlier than 4.20.13) then bisection won't do anything.
+See the other patch on the linux-usb list that wanted to start adding
+KOBJ_CHANGE notifications about USB "i/o errors".
 
-In your case it looks like something added between 4.20.0 and 4.20.13 
-caused the problem to go away!  You can still use bisection to find the 
-commit which did that, but the idea is a little unintuitive.
+So for "severe" issues, yes, we should do this, but perhaps not for all
+of the "normal" things we see when a device is yanked out of the system
+and the like.
 
-Start out by telling git that 4.20.0 is "good" and 4.20.13 is "bad".  
-Then test the intermediate commits as you have been doing, and say that 
-the commit is "good" if the copy takes a long time and "bad" if the 
-copy takes a short time.  That should help to find the first commit 
-which caused the problem to go away.  (Assuming that the problem is 
-caused by the kernel and not by something else...)
+thanks,
 
-Alan Stern
-
+greg k-h
