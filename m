@@ -2,56 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F37037A5C
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 18:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6240937AAE
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 19:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729862AbfFFQ7E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 12:59:04 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40436 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725267AbfFFQ7E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 12:59:04 -0400
-Received: by mail-pg1-f193.google.com with SMTP id d30so1691419pgm.7
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 09:59:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pALyoPrTNuzrcmYyr6GKDh6TCpPY+q0BQz/s712cq0k=;
-        b=CUdLtdNZJbN6HJcSsHxutHBBkB1t1LywdkKxLXFT8K+VD3Mgz8Cn0oyCcvTL30spjS
-         r5K1lYeoUFRW7BIQDyMduwwxyntVul8LrlorCxsiEj/v62MDX5vi69Osn8/Q8qyblECU
-         gLMjeHd1ogjBMbdUBI6+QiY796s+cBPLWLABs3QZL+TAuE2jMFNdeY/llzKOmtSOjlEe
-         hrBnlfj4Vw//YJWxyhKtZ7tHb08e4AgbY6EEBkYHdqILUr6L7M2ecsU0VwvNIW55NX9r
-         9EIrV4cv3mBNaxKluMJBo17PI0ngjVEl/ybBBZSKAvx0/gF0+6tKswS5mjr5eDlp8umt
-         /xBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pALyoPrTNuzrcmYyr6GKDh6TCpPY+q0BQz/s712cq0k=;
-        b=QiNhcoNsefQO6mJJ1f70X7+v609P/1tryYWz4Taz3avcvqiWuAmLVNwSh2x5/5zRVO
-         PE81tSKTleSus1mAoZhJevYLbLIeLloEn87EbbAsOQpW2HIEpJHcNq4X8qTVBtcs7Ge8
-         2F5U0zEVBdhcfNzvoHFcCUK6nZjyi5uuLAB11n6DmWkKVcUjtVKTCSx8PKDGFskf0BKW
-         mJgJWPERPvOTviwbPPb1bC3RnInNSlqMfpzEYxCSqYciAppNgEc0HvipIvMZ1teYwzHm
-         0mSUfAGht4gTzPcWaFZr/4UutMwdWSGvvNxPv2Q/bIW6f1gPZMzNyk7g9mEtagyJcu1T
-         qMOw==
-X-Gm-Message-State: APjAAAXiVQicvsIxO2RedXK2xUs4oNVYOz/ZwqzrLwSHbQDqBtf+VOjT
-        VLyaXL0NSxsWpKpCXtAjuzJdaNgEjndoCxn/ANs=
-X-Google-Smtp-Source: APXvYqydddRbx/ISJLWpy8MUluFitNqn/QwTr3fCvmbS+RocQWqBnb8AqMJoPBOMdiW0auFd+5K1drwWzutQU/SFr9k=
-X-Received: by 2002:a63:c5:: with SMTP id 188mr4261840pga.108.1559840343033;
- Thu, 06 Jun 2019 09:59:03 -0700 (PDT)
+        id S1729984AbfFFRML (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 13:12:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47872 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729974AbfFFRML (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 Jun 2019 13:12:11 -0400
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 31D6B21019
+        for <linux-usb@vger.kernel.org>; Thu,  6 Jun 2019 17:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559841129;
+        bh=eGMr7DoLIYR8UAjWgzFrqPiUh2ExP+Mttqzga+MgnkE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=0hle2nhbR2j30aFu/wj5a0oPnKJKZaOV8Iaj4zpzbUwG5TNgRZ1Y9cEdYTe26tZBj
+         NU4NTwPAOst0j9szSsplymqFiuVyIz26Rl29hS116ruQRNEobofla7Fn5qSJ/oY4Jx
+         8n+xJ+5eQNp4TG+D3Fmjjbh8SPCHloL2hK8Or5cU=
+Received: by mail-wm1-f46.google.com with SMTP id s3so710700wms.2
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 10:12:09 -0700 (PDT)
+X-Gm-Message-State: APjAAAWQM3wlUfyiri8YjxCdKaHmqkhyRUhpNzWY6DtX1RKhcB8+TxuJ
+        khwsRQEHiwuqE0siOIUVFzhln73jWPJJ+cAm8xeLqg==
+X-Google-Smtp-Source: APXvYqxF2/aZhWBhL7/nZs8kAI6o4jWXCnyQL0WIhGhKQNoGeALkczoYjn7lAoJ1sviKMS+lCfqerwAfZZ7eqb0UxSQ=
+X-Received: by 2002:a7b:c450:: with SMTP id l16mr802034wmi.0.1559841127574;
+ Thu, 06 Jun 2019 10:12:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAB31r6U3Ha+JrbjGC+wKj-+gJfQ7dk+LSoL1n0tQBxVTPb2mRQ@mail.gmail.com>
- <20190603131258.GA10397@kroah.com> <CAB31r6VK12FXoPh6eNfE1v_Tgjv917Nh7699=TZpm4SkCVMm-w@mail.gmail.com>
- <20190604054045.GD1588@kroah.com> <CAB31r6WAkDPKyvY31Up=OAGXvhQgS23uW5YYQs601zUaaNaELg@mail.gmail.com>
- <20190605165857.GA23286@kroah.com>
-In-Reply-To: <20190605165857.GA23286@kroah.com>
-From:   Vladimir Yerilov <openmindead@gmail.com>
-Date:   Fri, 7 Jun 2019 02:58:51 +1000
-Message-ID: <CAB31r6X7g_ZqfDUYBh=eFZftA7dc2GppMeWtPxMJCg-X7BGxUA@mail.gmail.com>
-Subject: Re: kernel NULL pointer dereference, ucsi bug
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
+References: <b91710d8-cd2d-6b93-8619-130b9d15983d@tycho.nsa.gov>
+ <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk>
+ <3813.1559827003@warthog.procyon.org.uk> <8382af23-548c-f162-0e82-11e308049735@tycho.nsa.gov>
+ <0eb007c5-b4a0-9384-d915-37b0e5a158bf@schaufler-ca.com>
+In-Reply-To: <0eb007c5-b4a0-9384-d915-37b0e5a158bf@schaufler-ca.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Thu, 6 Jun 2019 10:11:56 -0700
+X-Gmail-Original-Message-ID: <CALCETrWn_C8oReKXGMXiJDOGoYWMs+jg2DWa5ZipKAceyXkx5w@mail.gmail.com>
+Message-ID: <CALCETrWn_C8oReKXGMXiJDOGoYWMs+jg2DWa5ZipKAceyXkx5w@mail.gmail.com>
+Subject: Re: [RFC][PATCH 00/10] Mount, FS, Block and Keyrings notifications
+ [ver #3]
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
+        David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>, raven@themaw.net,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
@@ -59,136 +61,159 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Finally I can name the first bad commit:
-
-git bisect good
-ad74b8649beaf1a22cf8641324e3321fa0269d16 is the first bad commit
-commit ad74b8649beaf1a22cf8641324e3321fa0269d16
-Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date:   Tue Apr 23 17:21:48 2019 +0300
-
-   usb: typec: ucsi: Preliminary support for alternate modes
-
-   With UCSI the alternate modes, just like everything else
-   related to USB Type-C connectors, are handled in firmware.
-   The operating system can see the status and is allowed to
-   request certain things, for example entering and exiting the
-   modes, but the support for alternate modes is very limited
-   in UCSI. The feature is also optional, which means that even
-   when the platform supports alternate modes, the operating
-   system may not be even made aware of them.
-
-   UCSI does not support direct VDM reading or writing.
-   Instead, alternate modes can be entered and exited using a
-   single custom command which takes also an optional SVID
-   specific configuration value as parameter. That means every
-   supported alternate mode has to be handled separately in
-   UCSI driver.
-
-   This commit does not include support for any specific
-   alternate mode. The discovered alternate modes are now
-   registered, but binding a driver to an alternate mode will
-   not be possible until support for that alternate mode is
-   added to the UCSI driver.
-
-   Tested-by: Ajay Gupta <ajayg@nvidia.com>
-   Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-   Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-:040000 040000 f19a610d131d6d3e6397934562dd6112e78b2415
-76df0e463eeacf57157adba0291fc9577c7d5145 M      dr
-ivers
-
-git bisect log
-git bisect start
-# bad: [132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a] Merge tag
-'usb-5.2-rc1' of git://git.kernel.org/pub/scm/
-linux/kernel/git/gregkh/usb
-git bisect bad 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
-# good: [86dc59e39031fb0d366d5b1f92db015b24bef70b] net: dsa: sja1105:
-Make 'sja1105et_regs' and 'sja1105pq
-rs_regs' static
-git bisect good 86dc59e39031fb0d366d5b1f92db015b24bef70b
-# good: [80f232121b69cc69a31ccb2b38c1665d770b0710] Merge
-git://git.kernel.org/pub/scm/linux/kernel/git/dav
-em/net-next
-git bisect good 80f232121b69cc69a31ccb2b38c1665d770b0710
-# good: [5d438e200215f61ca6a7aa69f3c4e035ac54d8ee] usb: typec: ucsi:
-ccg: add get_fw_info function
-git bisect good 5d438e200215f61ca6a7aa69f3c4e035ac54d8ee
-# bad: [6f6a407a591ebe3e4c6bd2329b29862b3980a3ca] Merge tag
-'usb-serial-5.2-rc1' of https://git.kernel.org
-/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
-git bisect bad 6f6a407a591ebe3e4c6bd2329b29862b3980a3ca
-# bad: [e823d948b7e53dc982c867ac4ce7877fc0418897] usb: musb: dsps: Use
-dev_get_drvdata()
-git bisect bad e823d948b7e53dc982c867ac4ce7877fc0418897
-# bad: [6fee3787ea7aebf25fecdce325ee9b2150c5727b] dt-bindings:
-usb-xhci: Add r8a774c0 support
-git bisect bad 6fee3787ea7aebf25fecdce325ee9b2150c5727b
-# bad: [cf28369c634fafb5f4e81750cba6988cdb4b4490] usb: typec: Add
-driver for NVIDIA Alt Modes
-git bisect bad cf28369c634fafb5f4e81750cba6988cdb4b4490
-# bad: [ad74b8649beaf1a22cf8641324e3321fa0269d16] usb: typec: ucsi:
-Preliminary support for alternate mode
-s
-git bisect bad ad74b8649beaf1a22cf8641324e3321fa0269d16
-# good: [5c9ae5a87573d38cfc4c740aafda2fa6ce06e401] usb: typec: ucsi:
-ccg: add firmware flashing support
-git bisect good 5c9ae5a87573d38cfc4c740aafda2fa6ce06e401
-# first bad commit: [ad74b8649beaf1a22cf8641324e3321fa0269d16] usb:
-typec: ucsi: Preliminary support for a
-lternate modes
-
-Best regards,
-Vladimir
-
-=D1=87=D1=82, 6 =D0=B8=D1=8E=D0=BD. 2019 =D0=B3. =D0=B2 02:59, Greg KH <gre=
-gkh@linuxfoundation.org>:
+On Thu, Jun 6, 2019 at 9:43 AM Casey Schaufler <casey@schaufler-ca.com> wro=
+te:
 >
-> On Wed, Jun 05, 2019 at 04:36:23PM +1000, Vladimir Yerilov wrote:
-> > Good day Mr. Kroah-Hartman,
+> On 6/6/2019 7:05 AM, Stephen Smalley wrote:
+> > On 6/6/19 9:16 AM, David Howells wrote:
+> >> Stephen Smalley <sds@tycho.nsa.gov> wrote:
+> >>
+> >> This might be easier to discuss if you can reply to:
+> >>
+> >>     https://lore.kernel.org/lkml/5393.1559768763@warthog.procyon.org.u=
+k/
+> >>
+> >> which is on the ver #2 posting of this patchset.
 > >
-> > I've found the culprit commit. It took a while though but now I'm sure:
+> > Sorry for being late to the party.  Not sure whether you're asking me t=
+o respond only there or both there and here to your comments below.  I'll s=
+tart here but can revisit if it's a problem.
+> >>
+> >>>> LSM support is included, but controversial:
+> >>>>
+> >>>>    (1) The creds of the process that did the fput() that reduced the=
+ refcount
+> >>>>        to zero are cached in the file struct.
+> >>>>
+> >>>>    (2) __fput() overrides the current creds with the creds from (1) =
+whilst
+> >>>>        doing the cleanup, thereby making sure that the creds seen by=
+ the
+> >>>>        destruction notification generated by mntput() appears to com=
+e from
+> >>>>        the last fputter.
+> >>>>
+> >>>>    (3) security_post_notification() is called for each queue that we=
+ might
+> >>>>        want to post a notification into, thereby allowing the LSM to=
+ prevent
+> >>>>        covert communications.
+> >>>>
+> >>>>    (?) Do I need to add security_set_watch(), say, to rule on whethe=
+r a watch
+> >>>>        may be set in the first place?  I might need to add a variant=
+ per
+> >>>>        watch-type.
+> >>>>
+> >>>>    (?) Do I really need to keep track of the process creds in which =
+an
+> >>>>        implicit object destruction happened?  For example, imagine y=
+ou create
+> >>>>        an fd with fsopen()/fsmount().  It is marked to dissolve the =
+mount it
+> >>>>        refers to on close unless move_mount() clears that flag.  Now=
+, imagine
+> >>>>        someone looking at that fd through procfs at the same time as=
+ you exit
+> >>>>        due to an error.  The LSM sees the destruction notification c=
+ome from
+> >>>>        the looker if they happen to do their fput() after yours.
+> >>>
+> >>>
+> >>> I'm not in favor of this approach.
+> >>
+> >> Which bit?  The last point?  Keeping track of the process creds after =
+an
+> >> implicit object destruction.
 > >
-> > commit - brief decription - time - works (y) or not (n)
-> > 670784fb4ebe54434e263837390e358405031d9e - rc1 2019-05-20
-> > e260ad01f0aa9e96b5386d5cd7184afd949dc457 - rc0 2019-05-14 19:52:51 -070=
-0 n
-> > 8ea5b2abd07e2280a332bd9c1a7f4dd15b9b6c13 - rc0 2019-05-09 19:35:41 -070=
-0 n
-> > 54516da1ea859dd4f56ebba2e483d2df9d7c8a32 - rc0 2019-05-05 21:58:36 -070=
-0 y
-> > 71ae5fc87c34ecbdca293c2a5c563d6be2576558 - rc0 2019-05-06 20:29:45 -070=
-0 y
-> > 80f232121b69cc69a31ccb2b38c1665d770b0710 - rc0 2019-05-07 22:03:58 -070=
-0 y
-> > a2d635decbfa9c1e4ae15cb05b68b2559f7f827c - rc0 2019-05-08 21:35:19 -070=
-0 n
-> > 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a - rc0 2019-05-08 10:03:52 -070=
-0 n
-> > 86dc59e39031fb0d366d5b1f92db015b24bef70b - rc0 2019-05-08 09:46:44 -070=
-0 y
+> > (1), (2), (3), and the last point.
 > >
-> > So 86dc59e39031fb0d366d5b1f92db015b24bef70b is the last working for
-> > me, and 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a is the breaking one:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?h=3Dv5.2-rc3&id=3D132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
+> >>> Can we check permission to the object being watched when a watch is s=
+et
+> >>> (read-like access),
+> >>
+> >> Yes, and I need to do that.  I think it's likely to require an extra h=
+ook for
+> >> each entry point added because the objects are different:
+> >>
+> >>     int security_watch_key(struct watch *watch, struct key *key);
+> >>     int security_watch_sb(struct watch *watch, struct path *path);
+> >>     int security_watch_mount(struct watch *watch, struct path *path);
+> >>     int security_watch_devices(struct watch *watch);
+> >>
+> >>> make sure every access that can trigger a notification requires a
+> >>> (write-like) permission to the accessed object,
+> >>
+> >> "write-like permssion" for whom?  The triggerer or the watcher?
+> >
+> > The former, i.e. the process that performed the operation that triggere=
+d the notification.  Think of it as a write from the process to the accesse=
+d object, which triggers a notification (another write) on some related obj=
+ect (the watched object), which is then read by the watcher.
 >
-> 132d68d37d33 ("Merge tag 'usb-5.2-rc1' of git://git.kernel.org/pub/scm/li=
-nux/kernel/git/gregkh/usb")
-> is a merge point, which is odd, you should be able to drop down into
-> that and find the exact wrong commit.
+> We agree that the process that performed the operation that triggered
+> the notification is the initial subject. Smack will treat the process
+> with the watch set (in particular, its ring buffer) as the object
+> being written to. SELinux, with its finer grained controls, will
+> involve other things as noted above. There are other place where we
+> see this, notably IP packet delivery.
 >
-> what does 'git bisect log' show?
+> The implication is that the information about the triggering
+> process needs to be available throughout.
 >
-> thanks,
+> >
+> >> There are various 'classes' of events:
+> >>
+> >>   (1) System events (eg. hardware I/O errors, automount points expirin=
+g).
+> >>
+> >>   (2) Direct events (eg. automounts, manual mounts, EDQUOT, key linkag=
+e).
+> >>
+> >>   (3) Indirect events (eg. exit/close doing the last fput and causing =
+an
+> >>       unmount).
+> >>
+> >> Class (1) are uncaused by a process, so I use init_cred for them.  One=
+ could
+> >> argue that the automount point expiry should perhaps take place under =
+the
+> >> creds of whoever triggered it in the first place, but we need to be ca=
+reful
+> >> about long-term cred pinning.
+> >
+> > This seems equivalent to just checking whether the watcher is allowed t=
+o get that kind of event, no other cred truly needed.
+> >
+> >> Class (2) the causing process must've had permission to cause them - o=
+therwise
+> >> we wouldn't have got the event.
+> >
+> > So we've already done a check on the causing process, and we're going t=
+o check whether the watcher can set the watch. We just need to establish th=
+e connection between the accessed object and the watched object in some man=
+ner.
 >
-> greg k-h
+> I don't agree. That is, I don't believe it is sufficient.
+> There is no guarantee that being able to set a watch on an
+> object implies that every process that can trigger the event
+> can send it to you.
+>
+>         Watcher has Smack label W
+>         Triggerer has Smack label T
+>         Watched object has Smack label O
+>
+>         Relevant Smack rules are
+>
+>         W O rw
+>         T O rw
+>
+> The watcher will be able to set the watch,
+> the triggerer will be able to trigger the event,
+> but there is nothing that would allow the watcher
+> to receive the event. This is not a case of watcher
+> reading the watched object, as the event is delivered
+> without any action by watcher.
 
-
-
---=20
-----
-Best regards,
-Vladimir Yerilov
+I think this is an example of a bogus policy that should not be
+supported by the kernel.
