@@ -2,106 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B65D376D5
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 16:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D680376EB
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 16:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728884AbfFFOed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 10:34:33 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:41966 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728842AbfFFOec (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 10:34:32 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q17so1620800pfq.8
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 07:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=uliRl25tF2O1ExnxNI5OeemcUVuWp/hZHc1pbbwUvtw=;
-        b=MBprUpp1e5VKUe+T74LmM6i0Ek4WwUD8SNxviqye9qRCXjeQD1AN2cQwMjMeLOJAFU
-         gJe75uGQWbYYHmyw2x5BvtU5ncrcFbkHTESEAOA1dzwscKIbkZKdQNpmnqFhKnBmc3zQ
-         EGOBnm10P7Akkmw3M7Phxq/g7hqCRhz0eQ+B4qicHZCKeanltJAA1IX5vvqIsNB6EU1V
-         ffagFv4poPie3Oi6fc6m4FO/7bfLmtOyca95WSoReHg1f/VgYW1TP1sk+8d73DWcuplv
-         eVzc1ya3v/2UecxqoJ+Sq8Lb0zxNK7qHeBb63mjflhEmiQno3Q0gxTPT2+o1bJzLxiLZ
-         ZnSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=uliRl25tF2O1ExnxNI5OeemcUVuWp/hZHc1pbbwUvtw=;
-        b=DuU0WrT9xxouZt9+ar8VnZj9RallNGE3AWx7gkFINqok8xUn/jrg2W9cPQJRa89aBu
-         nTkKOAT8Dvpqg6iIp/mVDGLgigiiOnjBNwosYde3Wj75OtrG2u+XHwfrIOP+eI2sDd6w
-         sPZ7ZhRfQ/tbK6DZDa0MUM6GA0bR2BJp4sUwFAQ06kAHB1aAI8tO9rukeuOwy7bh2wJJ
-         9XIt64fjTmZun6IeNgFpa2Le+NcPKc8w9edhPVhvOJO7dXjebykXQm8sBJieYFgwPg5f
-         UeemmsVHfpSa7fc5bMdVnMVOZpFgj8gzNSfHIdbpu1+j/WdbGrYMsN69peAgLtSB00jE
-         Y3VA==
-X-Gm-Message-State: APjAAAXk7g/lTDCKAeaUYJqAZfmpSMFtdCwgmKfMTjqutWjrSte7cpx9
-        l+q0CUC4NjFx0mVZF9+lJ3ZjFg==
-X-Google-Smtp-Source: APXvYqzIL8wsldD4bies6ebY7rZKopPTvKboOK8nOCrGaFcXy8cI3glqwYs+CwKGEY8yNiE0aUv+Rw==
-X-Received: by 2002:a63:dd05:: with SMTP id t5mr3525537pgg.229.1559831671810;
-        Thu, 06 Jun 2019 07:34:31 -0700 (PDT)
-Received: from brauner.io ([172.56.30.175])
-        by smtp.gmail.com with ESMTPSA id l7sm2552259pfl.9.2019.06.06.07.34.25
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 06 Jun 2019 07:34:31 -0700 (PDT)
-Date:   Thu, 6 Jun 2019 16:34:21 +0200
-From:   Christian Brauner <christian@brauner.io>
-To:     David Howells <dhowells@redhat.com>
-Cc:     viro@zeniv.linux.org.uk,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-usb@vger.kernel.org, raven@themaw.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH 00/10] Mount, FS, Block and Keyrings notifications
- [ver #3]
-Message-ID: <20190606143420.hxjximmhigpa2nti@brauner.io>
-References: <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk>
+        id S1729132AbfFFOgW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 10:36:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45440 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729127AbfFFOgT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 Jun 2019 10:36:19 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AAFF020684;
+        Thu,  6 Jun 2019 14:36:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559831779;
+        bh=0+6yAN4x3LW/K99s/MXK1mbzTQ4ibuVWbt5QohmGAnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p+JWUakozH4qlGjRMvUqJKmWScqn+pXjEPKspuP/Wv1MoauGALSeO1W1pU5RWrYBt
+         dy/KbL0jdi9wPFIY/BWoO4hEmSMe9PG3o9SWs7WV1ckIQAHMMNAUlGfsHVbgLtvHAi
+         53sF+XxCvOafmq/W8ZCIWfhWPeK1lulqj10pQKvw=
+Date:   Thu, 6 Jun 2019 16:36:16 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Bollinger, Seth" <Seth.Bollinger@digi.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Seth Bollinger <seth.boll@gmail.com>
+Subject: Re: USB reset problem
+Message-ID: <20190606143616.GB11294@kroah.com>
+References: <A2655C7A-C29C-4462-A668-8F7B9C81A648@digi.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <A2655C7A-C29C-4462-A668-8F7B9C81A648@digi.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 06, 2019 at 10:41:59AM +0100, David Howells wrote:
+On Thu, Jun 06, 2019 at 01:55:37PM +0000, Bollinger, Seth wrote:
+> Hello All,
 > 
-> Hi Al,
+> Recently we saw a problem where the device reset will fail due to a configuration descriptor check in hub.c:5600.
 > 
-> Here's a set of patches to add a general variable-length notification queue
-> concept and to add sources of events for:
+>         if (memcmp(buf, udev->rawdescriptors[index], old_length)
+>                 != 0) {
+>             dev_dbg(&udev->dev, "config index %d changed (#%d)\n",
+>                 index,
+>                 ((struct usb_config_descriptor *) buf)->
+>                     bConfigurationValue);
+>             changed = 1;
+>             break;
+>         }
 > 
->  (1) Mount topology events, such as mounting, unmounting, mount expiry,
->      mount reconfiguration.
+> The descriptors returned from the device have a different iInterface.  I checked the usb spec and couldn’t find anything that says iInterface can’t change.  I don’t have the source for the device, but I think it’s probably generating the interface string each reset and returning a different index for it (“ADB interface”).
 > 
->  (2) Superblock events, such as R/W<->R/O changes, quota overrun and I/O
->      errors (not complete yet).
-> 
->  (3) Key/keyring events, such as creating, linking and removal of keys.
-> 
->  (4) General device events (single common queue) including:
-> 
->      - Block layer events, such as device errors
-> 
->      - USB subsystem events, such as device/bus attach/remove, device
->        reset, device errors.
-> 
-> One of the reasons for this is so that we can remove the issue of processes
-> having to repeatedly and regularly scan /proc/mounts, which has proven to
-> be a system performance problem.  To further aid this, the fsinfo() syscall
-> on which this patch series depends, provides a way to access superblock and
-> mount information in binary form without the need to parse /proc/mounts.
-> 
-> 
-> LSM support is included, but controversial:
+> Has anyone else seen this?  Does the spec guarantee that iInterface should never change between device resets?
 
-Apart from the LSM/security controversy here the general direction of
-this patchset is pretty well received it seems.
-Imho, having a notification mechanism like this is a very good thing for
-userspace. So would be great if there'd be a consensus on the LSM bits.
+If the descriptor changes between resets, that means that something
+changed and we need to start over with it.  What is the problem that
+this is causing?
 
-Christian
+thanks,
+
+greg k-h
