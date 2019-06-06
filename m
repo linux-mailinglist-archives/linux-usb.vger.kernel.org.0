@@ -2,124 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 833E537718
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 16:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5AD37728
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 16:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728825AbfFFOsA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 10:48:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52286 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728011AbfFFOsA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Jun 2019 10:48:00 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C6BF20684;
-        Thu,  6 Jun 2019 14:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559832479;
-        bh=2hbhdnSbQG7h+HcSn+06xQlfH6sV/oBVimuoNSdu2EU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jdXU1f1xPTZxLRr5TzQZQCYECGYwAHbL7EXDO0titA4Gig7Mjel8h+ZWiE6Y7fwYH
-         PRS6lTTIc+tYvt6Ma3OLN/oBltaBxT1Fh0r1odfXqeMlwc7ZUz4UO2q0kb6kKCh+hO
-         LXV/P7Ch8gxbZ1fNRGxYEsMrQs4FcfySp6gEjCHY=
-Date:   Thu, 6 Jun 2019 16:47:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
-Subject: Re: Slow I/O on USB media
-Message-ID: <20190606144757.GA12356@kroah.com>
-References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
- <20190530132522.GA21005@kroah.com>
- <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
- <20190604054300.GE1588@kroah.com>
- <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
- <20190605145525.GA28819@kroah.com>
- <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
- <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it>
- <20190605173902.GE27700@kroah.com>
- <b159e1518b670d4b0126c7671c30c8c3cb8fffbc.camel@unipv.it>
+        id S1728954AbfFFOvb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 6 Jun 2019 10:51:31 -0400
+Received: from mail1.bemta24.messagelabs.com ([67.219.250.209]:57243 "EHLO
+        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728011AbfFFOva (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 10:51:30 -0400
+Received: from [67.219.251.53] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-2.bemta.az-c.us-west-2.aws.symcld.net id 92/4D-22293-17829FC5; Thu, 06 Jun 2019 14:51:29 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrEKsWRWlGSWpSXmKPExsXi5LtOQLdA42e
+  MwYs91hbNi9ezWSxa1spsMfXvTUYHZo+ds+6ye+yfu4bd4/MmuQDmKNbMvKT8igTWjOcHdzEX
+  3GCuuHJxPWsD42+mLkYuDiGBPYwSd75uZuxi5ORgEzCUOLflLTuILSKgIfHy6C0WEJtZwE/i0
+  5FuVhBbWEBOYtmc/UA1HEA18hIvHkVBlFtJ9B9sAytnEVCR+PPzD1g5r4C1RMOhRjBbSCBe4s
+  eRTWwgNqeAvsT2TxPAbEYBMYnvp9YwQawSl7j1ZD6YLSEgILFkz3lmCFtU4uXjf6wQtoJE84K
+  F7BD1OhILdn9ig7DNJT5dPssKYWtLLFv4mhniBkGJkzOfsExgFJmFZMUsJO2zkLTPQtI+C0n7
+  AkbWVYzmSUWZ6RkluYmZObqGBga6hoZGuobGlkC2XmKVbrJeabFueWpxia6RXmJ5sV5xZW5yT
+  opeXmrJJkZgxKUUdHPtYHx35LXeIUZJDiYlUd57S37ECPEl5adUZiQWZ8QXleakFh9ilOHgUJ
+  LgzVb7GSMkWJSanlqRlpkDjH6YtAQHj5IIb5c6UJq3uCAxtzgzHSJ1itGYY8LLuYuYORZsXbK
+  IWYglLz8vVUqcdzLIJAGQ0ozSPLhBsKR0iVFWSpiXkYGBQYinILUoN7MEVf4VozgHo5IwbyLI
+  Qp7MvBK4fa+ATmECOoX/wjeQU0oSEVJSDUzp5ZvSi38evDGxRuTEufPrJq8TLdQIeJySwTTxQ
+  K79bZX8721TFHTCHO+wuCqsOnZsJz9LUUR+b7StZD7Lhb/ON5UtxJf/fuv5cOLx5Xt4hWvn7n
+  xhKjwrt0ozVnT+4v9WYSfVFq6fc+ua9oSnMw8fvr956bryd5d9f3wV6hGxD2qXl9LedT5JrnL
+  eqdw03pSStz+2O3NXfCnUDZDcFqpsYnv9XvDK9u0yf2cmP1dmWCD4tnTXdKdCtkXhth1ZaabV
+  WVOeRvOWRK1cNNk5I+g8a3NFyaqY1lhFAY7EQ9qHp5ZwLxKsNHhvHrgrpKx9fe4GDfUKvYZFu
+  m5hH1Y77YvWSF7q0qfoa9v8V6rohhJLcUaioRZzUXEiACnhpETFAwAA
+X-Env-Sender: Seth.Bollinger@digi.com
+X-Msg-Ref: server-2.tower-365.messagelabs.com!1559832685!12192439!4
+X-Originating-IP: [66.77.174.16]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.31.5; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 3292 invoked from network); 6 Jun 2019 14:51:28 -0000
+Received: from owa.digi.com (HELO MCL-VMS-XCH01.digi.com) (66.77.174.16)
+  by server-2.tower-365.messagelabs.com with SMTP; 6 Jun 2019 14:51:28 -0000
+Received: from MTK-SMS-XCH01.digi.com ([fe80::cca7:5299:c88e:1c40]) by
+ MCL-VMS-XCH01.digi.com ([fe80::5587:821d:f8e4:6578%13]) with mapi id
+ 14.03.0439.000; Thu, 6 Jun 2019 09:51:27 -0500
+From:   "Bollinger, Seth" <Seth.Bollinger@digi.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     USB list <linux-usb@vger.kernel.org>,
+        Seth Bollinger <seth.boll@gmail.com>
+Subject: Re: USB reset problem
+Thread-Topic: USB reset problem
+Thread-Index: AQHVHG+E/DdiSC3Fxkmu3GrMhR5lsKaPBVcAgAAEMwA=
+Date:   Thu, 6 Jun 2019 14:51:26 +0000
+Message-ID: <76055429-9E4E-4B4B-B9B0-9514F633392F@digi.com>
+References: <A2655C7A-C29C-4462-A668-8F7B9C81A648@digi.com>
+ <20190606143616.GB11294@kroah.com>
+In-Reply-To: <20190606143616.GB11294@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.27.1.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A4C214BDC5B2A24F86F59A9A345FC21B@digi.com>
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b159e1518b670d4b0126c7671c30c8c3cb8fffbc.camel@unipv.it>
-User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 06, 2019 at 04:00:52PM +0200, Andrea Vai wrote:
-> Il giorno mer, 05/06/2019 alle 19.39 +0200, Greg KH ha scritto:
-> > On Wed, Jun 05, 2019 at 06:23:58PM +0200, Andrea Vai wrote:
-> > [...]
-> > 
-> > > Anyway, I know that I can do all of this in a better way, and will
-> > let
-> > > you know.
-> > 
-> > Yes, please do so, your steps above do not show much.
-> 
-> Here I am with another question.
-> What I have done so far:
-> 
-> - booted with the last kernel I know to be working (4.20.13-
-> 200.fc29.x86_64, installed from Fedora repos), checked that test runs
 
-We have no idea what is in a random distro kernel, sorry.
+> On Jun 6, 2019, at 9:36 AM, Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> If the descriptor changes between resets, that means that something
+> changed and we need to start over with it.  What is the problem that
+> this is causing
 
-So I would start with a kernel.org kernel.  That keeps things at an even
-level, and you are using a "known good" configuration as well.
+We have code doing a USBDEVFS_RESET that fails when the ioctl returns EPERM.
 
-> fine (2min to copy)
-> - marked "git bisect good v4.20.13"
-> - built the latest stable version:
->   - git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
->   - cp -v /boot/config-$(uname -r) .config
->   - make -j4 && make modules_install && make install && grub2-mkconfig -o /boot/grub2/grub.cfg
->   - grubby --set-default /boot/vmlinuz-5.2.0-rc3 (the last regular file listed in "ls -lrt /boot/v*")
-> - rebooted with kernel 5.2.0-rc3, ran the test, took 49min to copy
-> (!), thus marked "git bisect bad"
-> - built again, and it turns out to be 4.20.0 (why is it earlier than
-> 4.20.13?), rebooted with 4.20.0, ran the test and it took more than 15
-> minutes so I killed the cp process, and marked it BAD, and obtained:
-> 
-> The merge base 8fe28cb58bcb235034b64cbbb7550a8a43fd88be is bad.
-> This means the bug has been fixed between
-> 8fe28cb58bcb235034b64cbbb7550a8a43fd88be and
-> [0f7c162c1df596e0bba04c26fc9cc497983bf32b].
-> 
-> The output of "git bisect log" is:
-> 
-> git bisect start
-> # good: [0f7c162c1df596e0bba04c26fc9cc497983bf32b] Linux 4.20.13
-> git bisect good 0f7c162c1df596e0bba04c26fc9cc497983bf32b
-> # bad: [f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a] Linux 5.2-rc3
-> git bisect bad f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a
-> # bad: [8fe28cb58bcb235034b64cbbb7550a8a43fd88be] Linux 4.20
-> git bisect bad 8fe28cb58bcb235034b64cbbb7550a8a43fd88be
-> 
-> I can understand that the bug was present before 4.20.13 (is that
-> reasonable?), but how can I tell bisect to start at 4.20.13, which I
-> know for sure to be working, and not from 4.20.0, which I actually
-> don't care about?
-> 
-> I am afraid I am missing something obvious, sorry
+I think the solution might be to simply not do the reset for this device, but wanted to check if anyone else had encountered this issue.
 
-As Alan said, 4.20 is older than 4.20.13.
+Thanks!
 
-But, is the kernel.org version of 4.20.13 really "good" here?
+Seth
 
-I would start with Linus's tree and stay away from the stable trees
-for now.  As you end up with odd "leafs" that can confuse 'git bisect'
-and everyone else.
 
-So start with 4.20.0.  Test that.  If it is "good", then great!
-
-If not, then maybe you are not really using the same kernel
-configuration that Fedora is, _or_ Fedora has some odd kernel patch
-added that makes things an order of magnitude faster :)
-
-thanks,
-
-greg k-h
