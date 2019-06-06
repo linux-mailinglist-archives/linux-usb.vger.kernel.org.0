@@ -2,153 +2,283 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1BB37002
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 11:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBCD37040
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 11:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbfFFJgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 05:36:42 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44122 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727469AbfFFJgm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 05:36:42 -0400
-Received: by mail-pf1-f196.google.com with SMTP id t16so1139669pfe.11
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 02:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=h5do6viF1QYHmi9zodRPi2gOLo4d0RMmlNDMFVT6d0s=;
-        b=OsdYFDR7n8GZdRL5hTrf1LRRH/9tb9lFqWF/NyqegA74ZymzpSfa/yOWd+/RJI3FC2
-         EP9xp8H+aXNXZJbqvgJUhr6fKSIP0QH/VfSgN3IKkS6kgp3y2AGNt1DGV2i3rnKTW3rF
-         W7YZTr2O+PdzdTzfbAh9rtTk+wWBxbIPZ1mZ2GOSjG40NIjEqu5fMHkmr5G74GIBhuHl
-         Ls3TOrfObyb2b8nm8jYAk36//yPjN6Sp189zArN+BumidjIpwzLPAt0EkGWw2KEqD2RB
-         qQNhenEviJeXFB0qj1Os9cAXXz2MeWsG5b56oA2M0OY//hJy5qAKUhUgRdRKe/hCchym
-         HeVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=h5do6viF1QYHmi9zodRPi2gOLo4d0RMmlNDMFVT6d0s=;
-        b=sqpv9H3aIh+h/243Zk3vrHSvcOJr7jZWYx0xVm7iKCgf4SiOmRyW9hefikcv0tg9Pc
-         +0al4NBNRlZZ+l022m1LxXKxPEz7l0n+Xn0njVb3P52gFHKb4vxdNwmgCiHGi/i97xqe
-         0AVRsgeLHUymLtEVDVzRb3EzyzTQY2TWipFp15X6Vd6VosMtkpXXQjWOlPATy/3YP+Vx
-         rMGuNsnrtkt6Mye22cS7Cf6JrBtdm4JoUfHtDLjKPALBLAssAr2avP0sOv83z/d13GbW
-         kejCLD3S9LtHQZnru1gf6g+AT5K0ERcVsj6saM4eKqFWy9ybEFd2BcGRnkPK4HUInZ7b
-         BlOw==
-X-Gm-Message-State: APjAAAUfrIbVlSjzxfziVi6AOP5I8MMVv9rtS1s0DxSBrWKFC1MjekAn
-        UsuweOoBiyPFmsvdTgzo0lnwR2jjpegAphnvBFU=
-X-Google-Smtp-Source: APXvYqzROQ9GT8kawWI3jKEoqOnh3Hx09LCAQTweL1WHj3945Ho2Ssly40NtqjWs7ugNVPcOKRihv2eQ1CPACDPA0cU=
-X-Received: by 2002:a63:f402:: with SMTP id g2mr2409825pgi.197.1559813801667;
- Thu, 06 Jun 2019 02:36:41 -0700 (PDT)
+        id S1728071AbfFFJmX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 05:42:23 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:60470 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727857AbfFFJmW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 Jun 2019 05:42:22 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id E6E7E307C941;
+        Thu,  6 Jun 2019 09:42:04 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C5262A2E9;
+        Thu,  6 Jun 2019 09:42:00 +0000 (UTC)
+Subject: [RFC][PATCH 00/10] Mount, FS,
+ Block and Keyrings notifications [ver #3]
+From:   David Howells <dhowells@redhat.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-usb@vger.kernel.org, dhowells@redhat.com, raven@themaw.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 06 Jun 2019 10:41:59 +0100
+Message-ID: <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/unknown-version
 MIME-Version: 1.0
-References: <CAB31r6U3Ha+JrbjGC+wKj-+gJfQ7dk+LSoL1n0tQBxVTPb2mRQ@mail.gmail.com>
- <20190603131258.GA10397@kroah.com> <CAB31r6VK12FXoPh6eNfE1v_Tgjv917Nh7699=TZpm4SkCVMm-w@mail.gmail.com>
- <20190604054045.GD1588@kroah.com> <CAB31r6WAkDPKyvY31Up=OAGXvhQgS23uW5YYQs601zUaaNaELg@mail.gmail.com>
- <20190605165857.GA23286@kroah.com>
-In-Reply-To: <20190605165857.GA23286@kroah.com>
-From:   Vladimir Yerilov <openmindead@gmail.com>
-Date:   Thu, 6 Jun 2019 19:36:30 +1000
-Message-ID: <CAB31r6W2qhLCa5ecddx8Kqe0=1QEdE5eeg_be71QuyX+ZWMtEQ@mail.gmail.com>
-Subject: Re: kernel NULL pointer dereference, ucsi bug
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Thu, 06 Jun 2019 09:42:22 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks a lot! Now I understand how to work with bisect in general.
-However, its log is unlikely to be of help because I use my distro
-tools to make a kernel package. So I dropped down into the merge
-commit and for now I am here:
 
-index : kernel/git/davem/net-next.git
-commit - time&date - works or not
-80f232121b69cc69a31ccb2b38c1665d770b0710 - 2019-05-07 22:03:58 -0700 - y
-5d438e200215f61ca6a7aa69f3c4e035ac54d8ee - 2019-04-25 11:03:52 +0200 - y
-6f6a407a591ebe3e4c6bd2329b29862b3980a3ca - 2019-05-03 18:00:15 +0200 -
-bug introduced? Not sure:
-Jun 06 18:57:33 kernel: BUG: unable to handle kernel NULL pointer
-dereference at 0000000000000370
-But no log-in issues which were preventing me from logging in as whole
-merge 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a did, so there must be
-something else after this commit too. For now I marked it as "bad".
-e823d948b7e53dc982c867ac4ce7877fc0418897 - 2019-04-30 17:55:08 +0200 -
-this is being built at the moment.
+Hi Al,
 
-Bisect log, just in case:
-git bisect start
-# bad: [132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a] Merge tag
-'usb-5.2-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
-git bisect bad 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
-# good: [86dc59e39031fb0d366d5b1f92db015b24bef70b] net: dsa: sja1105:
-Make 'sja1105et_regs' and 'sja1105pqrs_regs' static
-git bisect good 86dc59e39031fb0d366d5b1f92db015b24bef70b
-# good: [80f232121b69cc69a31ccb2b38c1665d770b0710] Merge
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next
-git bisect good 80f232121b69cc69a31ccb2b38c1665d770b0710
-# good: [5d438e200215f61ca6a7aa69f3c4e035ac54d8ee] usb: typec: ucsi:
-ccg: add get_fw_info function
-git bisect good 5d438e200215f61ca6a7aa69f3c4e035ac54d8ee
-# bad: [6f6a407a591ebe3e4c6bd2329b29862b3980a3ca] Merge tag
-'usb-serial-5.2-rc1' of
-https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into
-usb-next
-git bisect bad 6f6a407a591ebe3e4c6bd2329b29862b3980a3ca
+Here's a set of patches to add a general variable-length notification queue
+concept and to add sources of events for:
 
-Have a good day,
-Vladimir
+ (1) Mount topology events, such as mounting, unmounting, mount expiry,
+     mount reconfiguration.
+
+ (2) Superblock events, such as R/W<->R/O changes, quota overrun and I/O
+     errors (not complete yet).
+
+ (3) Key/keyring events, such as creating, linking and removal of keys.
+
+ (4) General device events (single common queue) including:
+
+     - Block layer events, such as device errors
+
+     - USB subsystem events, such as device/bus attach/remove, device
+       reset, device errors.
+
+One of the reasons for this is so that we can remove the issue of processes
+having to repeatedly and regularly scan /proc/mounts, which has proven to
+be a system performance problem.  To further aid this, the fsinfo() syscall
+on which this patch series depends, provides a way to access superblock and
+mount information in binary form without the need to parse /proc/mounts.
 
 
-=D1=87=D1=82, 6 =D0=B8=D1=8E=D0=BD. 2019 =D0=B3. =D0=B2 02:59, Greg KH <gre=
-gkh@linuxfoundation.org>:
->
-> On Wed, Jun 05, 2019 at 04:36:23PM +1000, Vladimir Yerilov wrote:
-> > Good day Mr. Kroah-Hartman,
-> >
-> > I've found the culprit commit. It took a while though but now I'm sure:
-> >
-> > commit - brief decription - time - works (y) or not (n)
-> > 670784fb4ebe54434e263837390e358405031d9e - rc1 2019-05-20
-> > e260ad01f0aa9e96b5386d5cd7184afd949dc457 - rc0 2019-05-14 19:52:51 -070=
-0 n
-> > 8ea5b2abd07e2280a332bd9c1a7f4dd15b9b6c13 - rc0 2019-05-09 19:35:41 -070=
-0 n
-> > 54516da1ea859dd4f56ebba2e483d2df9d7c8a32 - rc0 2019-05-05 21:58:36 -070=
-0 y
-> > 71ae5fc87c34ecbdca293c2a5c563d6be2576558 - rc0 2019-05-06 20:29:45 -070=
-0 y
-> > 80f232121b69cc69a31ccb2b38c1665d770b0710 - rc0 2019-05-07 22:03:58 -070=
-0 y
-> > a2d635decbfa9c1e4ae15cb05b68b2559f7f827c - rc0 2019-05-08 21:35:19 -070=
-0 n
-> > 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a - rc0 2019-05-08 10:03:52 -070=
-0 n
-> > 86dc59e39031fb0d366d5b1f92db015b24bef70b - rc0 2019-05-08 09:46:44 -070=
-0 y
-> >
-> > So 86dc59e39031fb0d366d5b1f92db015b24bef70b is the last working for
-> > me, and 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a is the breaking one:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?h=3Dv5.2-rc3&id=3D132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
->
-> 132d68d37d33 ("Merge tag 'usb-5.2-rc1' of git://git.kernel.org/pub/scm/li=
-nux/kernel/git/gregkh/usb")
-> is a merge point, which is odd, you should be able to drop down into
-> that and find the exact wrong commit.
->
-> what does 'git bisect log' show?
->
-> thanks,
->
-> greg k-h
+LSM support is included, but controversial:
+
+ (1) The creds of the process that did the fput() that reduced the refcount
+     to zero are cached in the file struct.
+
+ (2) __fput() overrides the current creds with the creds from (1) whilst
+     doing the cleanup, thereby making sure that the creds seen by the
+     destruction notification generated by mntput() appears to come from
+     the last fputter.
+
+ (3) security_post_notification() is called for each queue that we might
+     want to post a notification into, thereby allowing the LSM to prevent
+     covert communications.
+
+ (?) Do I need to add security_set_watch(), say, to rule on whether a watch
+     may be set in the first place?  I might need to add a variant per
+     watch-type.
+
+ (?) Do I really need to keep track of the process creds in which an
+     implicit object destruction happened?  For example, imagine you create
+     an fd with fsopen()/fsmount().  It is marked to dissolve the mount it
+     refers to on close unless move_mount() clears that flag.  Now, imagine
+     someone looking at that fd through procfs at the same time as you exit
+     due to an error.  The LSM sees the destruction notification come from
+     the looker if they happen to do their fput() after yours.
 
 
+Design decisions:
 
---=20
-----
-Best regards,
-Vladimir Yerilov
+ (1) A misc chardev is used to create and open a ring buffer:
+
+	fd = open("/dev/watch_queue", O_RDWR);
+
+     which is then configured and mmap'd into userspace:
+
+	ioctl(fd, IOC_WATCH_QUEUE_SET_SIZE, BUF_SIZE);
+	ioctl(fd, IOC_WATCH_QUEUE_SET_FILTER, &filter);
+	buf = mmap(NULL, BUF_SIZE * page_size, PROT_READ | PROT_WRITE,
+		   MAP_SHARED, fd, 0);
+
+     The fd cannot be read or written (though there is a facility to use
+     write to inject records for debugging) and userspace just pulls data
+     directly out of the buffer.
+
+ (2) The ring index pointers are stored inside the ring and are thus
+     accessible to userspace.  Userspace should only update the tail
+     pointer and never the head pointer or risk breaking the buffer.  The
+     kernel checks that the pointers appear valid before trying to use
+     them.  A 'skip' record is maintained around the pointers.
+
+ (3) poll() can be used to wait for data to appear in the buffer.
+
+ (4) Records in the buffer are binary, typed and have a length so that they
+     can be of varying size.
+
+     This means that multiple heterogeneous sources can share a common
+     buffer.  Tags may be specified when a watchpoint is created to help
+     distinguish the sources.
+
+ (5) The queue is reusable as there are 16 million types available, of
+     which I've used 4, so there is scope for others to be used.
+
+ (6) Records are filterable as types have up to 256 subtypes that can be
+     individually filtered.  Other filtration is also available.
+
+ (7) Each time the buffer is opened, a new buffer is created - this means
+     that there's no interference between watchers.
+
+ (8) When recording a notification, the kernel will not sleep, but will
+     rather mark a queue as overrun if there's insufficient space, thereby
+     avoiding userspace causing the kernel to hang.
+
+ (9) The 'watchpoint' should be specific where possible, meaning that you
+     specify the object that you want to watch.
+
+(10) The buffer is created and then watchpoints are attached to it, using
+     one of:
+
+	keyctl_watch_key(KEY_SPEC_SESSION_KEYRING, fd, 0x01);
+	mount_notify(AT_FDCWD, "/", 0, fd, 0x02);
+	sb_notify(AT_FDCWD, "/mnt", 0, fd, 0x03);
+
+     where in all three cases, fd indicates the queue and the number after
+     is a tag between 0 and 255.
+
+(11) The watch must be removed if either the watch buffer is destroyed or
+     the watched object is destroyed.
+
+
+Things I want to avoid:
+
+ (1) Introducing features that make the core VFS dependent on the network
+     stack or networking namespaces (ie. usage of netlink).
+
+ (2) Dumping all this stuff into dmesg and having a daemon that sits there
+     parsing the output and distributing it as this then puts the
+     responsibility for security into userspace and makes handling
+     namespaces tricky.  Further, dmesg might not exist or might be
+     inaccessible inside a container.
+
+ (3) Letting users see events they shouldn't be able to see.
+
+
+Further things that could be considered:
+
+ (1) Adding a keyctl call to allow a watch on a keyring to be extended to
+     "children" of that keyring, such that the watch is removed from the
+     child if it is unlinked from the keyring.
+
+ (2) Adding global superblock event queue.
+
+ (3) Propagating watches to child superblock over automounts.
+
+
+The patches can be found here also:
+
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=notifications
+
+Changes:
+
+ v3: I've added a USB notification source and reformulated the block
+     notification source so that there's now a common watch list, for which
+     the system call is now device_notify().
+
+     I've assigned a pair of unused ioctl numbers in the 'W' series to the
+     ioctls added by this series.
+
+     I've also added a description of the kernel API to the documentation.
+
+ v2: I've fixed various issues raised by Jann Horn and GregKH and moved to
+     krefs for refcounting.  I've added some security features to try and
+     give Casey Schaufler the LSM control he wants.
+
+David
+---
+David Howells (10):
+      security: Override creds in __fput() with last fputter's creds
+      General notification queue with user mmap()'able ring buffer
+      keys: Add a notification facility
+      vfs: Add a mount-notification facility
+      vfs: Add superblock notifications
+      fsinfo: Export superblock notification counter
+      Add a general, global device notification watch list
+      block: Add block layer notifications
+      usb: Add USB subsystem notifications
+      Add sample notification program
+
+
+ Documentation/ioctl/ioctl-number.txt   |    1 
+ Documentation/security/keys/core.rst   |   58 ++
+ Documentation/watch_queue.rst          |  492 ++++++++++++++++++
+ arch/x86/entry/syscalls/syscall_32.tbl |    3 
+ arch/x86/entry/syscalls/syscall_64.tbl |    3 
+ block/Kconfig                          |    9 
+ block/blk-core.c                       |   29 +
+ drivers/base/Kconfig                   |    9 
+ drivers/base/Makefile                  |    1 
+ drivers/base/notify.c                  |   82 +++
+ drivers/misc/Kconfig                   |   13 
+ drivers/misc/Makefile                  |    1 
+ drivers/misc/watch_queue.c             |  889 ++++++++++++++++++++++++++++++++
+ drivers/usb/core/Kconfig               |   10 
+ drivers/usb/core/devio.c               |   55 ++
+ drivers/usb/core/hub.c                 |    3 
+ fs/Kconfig                             |   21 +
+ fs/Makefile                            |    1 
+ fs/file_table.c                        |   12 
+ fs/fsinfo.c                            |   12 
+ fs/mount.h                             |   33 +
+ fs/mount_notify.c                      |  180 ++++++
+ fs/namespace.c                         |    9 
+ fs/super.c                             |  116 ++++
+ include/linux/blkdev.h                 |   15 +
+ include/linux/dcache.h                 |    1 
+ include/linux/device.h                 |    7 
+ include/linux/fs.h                     |   79 +++
+ include/linux/key.h                    |    4 
+ include/linux/lsm_hooks.h              |   15 +
+ include/linux/security.h               |   14 +
+ include/linux/syscalls.h               |    5 
+ include/linux/usb.h                    |   19 +
+ include/linux/watch_queue.h            |   87 +++
+ include/uapi/linux/fsinfo.h            |   10 
+ include/uapi/linux/keyctl.h            |    1 
+ include/uapi/linux/watch_queue.h       |  213 ++++++++
+ kernel/sys_ni.c                        |    7 
+ mm/interval_tree.c                     |    2 
+ mm/memory.c                            |    1 
+ samples/Kconfig                        |    6 
+ samples/Makefile                       |    1 
+ samples/vfs/test-fsinfo.c              |   13 
+ samples/watch_queue/Makefile           |    9 
+ samples/watch_queue/watch_test.c       |  310 +++++++++++
+ security/keys/Kconfig                  |   10 
+ security/keys/compat.c                 |    2 
+ security/keys/gc.c                     |    5 
+ security/keys/internal.h               |   30 +
+ security/keys/key.c                    |   37 +
+ security/keys/keyctl.c                 |   88 +++
+ security/keys/keyring.c                |   17 -
+ security/keys/request_key.c            |    4 
+ security/security.c                    |    9 
+ 54 files changed, 3025 insertions(+), 38 deletions(-)
+ create mode 100644 Documentation/watch_queue.rst
+ create mode 100644 drivers/base/notify.c
+ create mode 100644 drivers/misc/watch_queue.c
+ create mode 100644 fs/mount_notify.c
+ create mode 100644 include/linux/watch_queue.h
+ create mode 100644 include/uapi/linux/watch_queue.h
+ create mode 100644 samples/watch_queue/Makefile
+ create mode 100644 samples/watch_queue/watch_test.c
+
