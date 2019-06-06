@@ -2,92 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA69372B6
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 13:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E1F373D0
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 14:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728279AbfFFLXb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 07:23:31 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43357 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726961AbfFFLXb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 07:23:31 -0400
-Received: by mail-pf1-f195.google.com with SMTP id i189so1304280pfg.10
-        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 04:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1KX7rxOBTJggZ5Jpw+qh5GOtx+SmZ2NeqPrKujmHVXQ=;
-        b=gG2yjrz9nmCeQyrmhMmRh9xpLACVxI0SQnFgixzlkVCHwGHCVt+jCkpoRnvYc+D0Bd
-         fYtE+LEVpv9F+PopmdWzS5GsTBmMIxYA3I0qUCmXrEp7hiD2zItouldYgHzwI74+8GwI
-         wNgpYz120bfi7s8aXy05syqZ84zGpByWBI1gYlnhVZkYgW241nx7JI/L5TZpwHu507Ms
-         clNLOdHUFICBqdy62YJQyZ1ISIqoPmy1ffimErgixoUfV43nIByo3+g2WgXgPiWdyBkc
-         ttFoa1Uy4ejcTj2G6AvswEvJ2kSAQq/zF7ns9rk76JRIKjtI9sCYUfBswAmXp+mkDMLN
-         1jgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1KX7rxOBTJggZ5Jpw+qh5GOtx+SmZ2NeqPrKujmHVXQ=;
-        b=pHOTJJwqGaPDpbpE0eAzFkFIxeNt4nOc6VjtSqR+m1uJCZCq2zKMJfO27EHQKwwAZ4
-         qEnbbGB6A+z0JDy4rsjRZNALfnNGgyCLbfXXxXtisZeDie1jdMBP9puZ63Z/42cD64kV
-         a92aA4SBFWGdPqBv8R+7PVbxEZYCfBDC6W6bgDXKlafI8YN5D5yVwus8sFWMu2K1pDeG
-         3d3SWh9zRM5ahimMgwDaKfCSYBxOH9VFWe49bcPtTIgq8ZBk0bOV6GUv4hlJsoqJtdYF
-         d4L+cwTCoL+aC8TzCoKQAk04VbL0AT1GL/IooZrJ+ey/Ui3WDBOX7NEiAKkP7VOFvphf
-         9XHA==
-X-Gm-Message-State: APjAAAVn1+jjUADKOrHDVz8vqeyGBQkAX4up5806yyP+q1Yh6qajT8g1
-        qjF6VlyBx9E7j9INrKUHKH08CAMhKMbhMoYEXGinpg==
-X-Google-Smtp-Source: APXvYqydFREgMEMU+AQn3IiEa3czoGuVJrp1IkkDDa66+PMnGnH78dQEzKVhHerbCfURBGvH+0a/triro4n5Xwf8nyQ=
-X-Received: by 2002:a65:64d9:: with SMTP id t25mr2933936pgv.130.1559820210239;
- Thu, 06 Jun 2019 04:23:30 -0700 (PDT)
+        id S1727104AbfFFMJk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 08:09:40 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:52876 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726581AbfFFMJk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 08:09:40 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x56C91JO022739;
+        Thu, 6 Jun 2019 07:09:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1559822941;
+        bh=qcyIk2SJUn0ZdZwR3JN8S2jqhxldDWKzw9rcIaBM9CY=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=r1DfGkAVMqtciddhXYiHl8QMDCTU/qQpAicziLVILpa8KpKMbqfJui+zeGvjT4GhI
+         SRIUt7L4kK40Egrm6VBGerre2yXhaPVNVfse9pVcPFFgH48VDmZQS81BByHg2rQ+AW
+         Ur+7hqcX1lzzJRn97RNTxSDJFv61OFNPHcT3PnlA=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x56C910S073346
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 6 Jun 2019 07:09:01 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 6 Jun
+ 2019 07:09:00 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 6 Jun 2019 07:09:00 -0500
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x56C8u4P076209;
+        Thu, 6 Jun 2019 07:08:56 -0500
+Subject: Re: [PATCH v7 1/6] dt-bindings: add binding for USBSS-DRD controller.
+To:     Pawel Laszczak <pawell@cadence.com>, <devicetree@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <felipe.balbi@linux.intel.com>,
+        <linux-usb@vger.kernel.org>, <hdegoede@redhat.com>,
+        <heikki.krogerus@linux.intel.com>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jbergsagel@ti.com>,
+        <nsekhar@ti.com>, <nm@ti.com>, <sureshp@cadence.com>,
+        <peter.chen@nxp.com>, <jpawar@cadence.com>, <kurahul@cadence.com>
+References: <1559729030-16390-1-git-send-email-pawell@cadence.com>
+ <1559729030-16390-2-git-send-email-pawell@cadence.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <f032b3f3-409d-b0fc-8d5f-01c898b4c7a7@ti.com>
+Date:   Thu, 6 Jun 2019 15:08:55 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <000000000000fa11f3058a69d67b@google.com> <1559811234.21928.9.camel@suse.com>
-In-Reply-To: <1559811234.21928.9.camel@suse.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 6 Jun 2019 13:23:18 +0200
-Message-ID: <CAAeHK+xGsOfKHdW8h5NQs-DQKXUUQW92ERnj5m7P=tvui-ZPuQ@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in device_del
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+93f2f45b19519b289613@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        rafael@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1559729030-16390-2-git-send-email-pawell@cadence.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 6, 2019 at 10:54 AM Oliver Neukum <oneukum@suse.com> wrote:
->
-> Am Montag, den 03.06.2019, 04:41 -0700 schrieb syzbot:
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1684d87ca00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=193d8457178b3229
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=93f2f45b19519b289613
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> >
-> > Unfortunately, I don't have any reproducer for this crash yet.
->
-> Will this do?
+Pawel,
 
-Hi Oliver,
+On 05/06/2019 13:03, Pawel Laszczak wrote:
+> This patch aim at documenting USB related dt-bindings for the
+> Cadence USBSS-DRD controller.
+> 
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> ---
+>  .../devicetree/bindings/usb/cdns-usb3.txt     | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/cdns-usb3.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/cdns-usb3.txt b/Documentation/devicetree/bindings/usb/cdns-usb3.txt
+> new file mode 100644
+> index 000000000000..1d2b449e3cb4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/cdns-usb3.txt
+> @@ -0,0 +1,30 @@
+> +Binding for the Cadence USBSS-DRD controller
+> +
+> +Required properties:
+> +  - reg: Physical base address and size of the controller's register areas.
+> +	 Controller has 3 different regions:
+> +	 region 1 - HOST registers area
+> +	 region 2 - DEVICE registers area
+> +	 region 3 - OTG/DRD registers area
+> +  - reg-names - register memory area names:
+> +	"xhci" - for HOST registers space
+> +	"dev" - for DEVICE registers space
+> +	"otg" - for OTG/DRD registers space
+> +  - compatible: Should contain: "cdns,usb3-1.0.0" or "cdns,usb3-1.0.1"
+> +  - interrupts: Interrupts used by cdns3 controller.
 
-Unfortunately there's no reproducer for this bug. I've looked at the
-fix, but I'm not sure I understand what it does. Perhaps expanding the
-patch description would help, as it doesn't make the patch any more
-clear for me. But I'm not familiar with this code, so if you think
-this change makes sense and supposedly fixes this bug, then please
-post it.
+Since we are requesting 3 separate named interrupts in code we need to
+mention them here.
 
-Thanks!
+> +
+> +Optional properties:
+> + - maximum-speed : valid arguments are "super-speed", "high-speed" and
+> +                   "full-speed"; refer to usb/generic.txt
+> + - dr_mode: Should be one of "host", "peripheral" or "otg".
+> + - phys: reference to the USB PHY
+> +
+> +Example:
+> +	usb@f3000000 {
+> +		compatible = "cdns,usb3-1.0.1";
+> +		interrupts = <USB_IRQ  7 IRQ_TYPE_LEVEL_HIGH>;
 
->
->         Regards
->                 Oliver
+This example won't work as code requests for 3 separate interrupts.
+
+> +		reg = <0xf3000000 0x10000	/* memory area for HOST registers */
+> +			0xf3010000 0x10000	/* memory area for DEVICE registers */
+> +			0xf3020000 0x10000>;	/* memory area for OTG/DRD registers */
+> +		reg-names = "xhci", "dev", "otg";
+> +	};
+> 
+
+-- 
+cheers,
+-roger
+
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
