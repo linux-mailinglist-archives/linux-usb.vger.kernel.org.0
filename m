@@ -2,82 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8950A375C4
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 15:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BDE375EF
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 16:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727438AbfFFNzl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 09:55:41 -0400
-Received: from mail1.bemta24.messagelabs.com ([67.219.250.3]:60611 "EHLO
-        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726693AbfFFNzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 09:55:41 -0400
-Received: from [67.219.250.101] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-3.bemta.az-a.us-west-2.aws.symcld.net id 81/29-29278-A5B19FC5; Thu, 06 Jun 2019 13:55:38 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNKsWRWlGSWpSXmKPExsXi5LtOQDdK+me
-  MwYoGA4tFy1qZLab+vcnowOSxc9Zddo/Pm+QCmKJYM/OS8isSWDMWnpvPXvCTs2Lb1QbWBsYX
-  nF2MXBxCAnsYJZ6cX8zSxcjJwSZgKHFuy1t2EFtEQEPiwIG3TCA2M5D9Zv0DRhBbWEBKonXNb
-  aAaDqAaeYkXj6IgyvUkmpf/ACtnEVCRuHixG8zmFbCWuPvjBth4RgExie+n1kCNFJe49WQ+mC
-  0hICCxZM95ZghbVOLl43+sELaCRPOChWCrmAU0Jdbv0odoNZc4+XMjK4StKDGl+yE7xCpBiZM
-  zn7BMYBSahWTDLITuWUi6ZyHpnoWkewEj6ypGi6SizPSMktzEzBxdQwMDXUNDI11DYxBtoZdY
-  pZuoV1qsW55aXKJrpJdYXqxXXJmbnJOil5dasokRGCspBU1lOxjfHHmtd4hRkoNJSZT33pIfM
-  UJ8SfkplRmJxRnxRaU5qcWHGGU4OJQkeGdJ/owREixKTU+tSMvMAcYtTFqCg0dJhLcFJM1bXJ
-  CYW5yZDpE6xWjPMeHl3EXMHAu2LgGSm+cuBZJHQKQQS15+XqqUOO9JkDYBkLaM0jy4obA0c4l
-  RVkqYl5GBgUGIpyC1KDezBFX+FaM4B6OSMK8eyBSezLwSuN2vgM5iAjqL/8I3kLNKEhFSUg1M
-  6RtV4zfWVSs1fL1wakJb7pVvzzZ+5flrZCLx52WpZrvO7F8zMgJTmExWXlBjEHi6tUs7MOhDp
-  VtctkeCx/nszSzCt423/d+z+nzs0cMRbzZWnvNZ4tjosZPtUcac8yVde58pOT6WrlrsumxNhp
-  fJ32sB904cTDnIsPq+33e5i58MvVOWSmqEBU7MS7XZWnXuW+Ippae/Lv6NvO664onEXY13Cj8
-  j92+9pSZ7Z0aayGzTlwefvcuers7Q1f4pcfG9sqOvrtvbX2iz/rn2t+UO66+iQZ0mNuxx39nT
-  uOf+P1+7dNvGpNCAVWfZ3l1Mmf1FP/KGcGaw0luLO00F898EOa9gaw6ZmnBLT80j5tKv80osx
-  RmJhlrMRcWJAMtmpfGuAwAA
-X-Env-Sender: Seth.Bollinger@digi.com
-X-Msg-Ref: server-19.tower-325.messagelabs.com!1559829337!162880!2
-X-Originating-IP: [66.77.174.16]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.43.9; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 15687 invoked from network); 6 Jun 2019 13:55:38 -0000
-Received: from owa.digi.com (HELO MCL-VMS-XCH01.digi.com) (66.77.174.16)
-  by server-19.tower-325.messagelabs.com with SMTP; 6 Jun 2019 13:55:38 -0000
-Received: from MTK-SMS-XCH01.digi.com ([fe80::cca7:5299:c88e:1c40]) by
- MCL-VMS-XCH01.digi.com ([fe80::5587:821d:f8e4:6578%13]) with mapi id
- 14.03.0439.000; Thu, 6 Jun 2019 08:55:37 -0500
-From:   "Bollinger, Seth" <Seth.Bollinger@digi.com>
-To:     USB list <linux-usb@vger.kernel.org>
-CC:     Seth Bollinger <seth.boll@gmail.com>
-Subject: USB reset problem
-Thread-Topic: USB reset problem
-Thread-Index: AQHVHG+ETWfSPd+0wUORZEMqfAwZ6w==
-Date:   Thu, 6 Jun 2019 13:55:37 +0000
-Message-ID: <A2655C7A-C29C-4462-A668-8F7B9C81A648@digi.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.27.1.153]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9C8D9A357D51A8478AF6992F718F9CEC@digi.com>
-Content-Transfer-Encoding: base64
+        id S1728631AbfFFOAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 10:00:55 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:40618 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726924AbfFFOAz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 10:00:55 -0400
+Received: by mail-wm1-f68.google.com with SMTP id v19so46315wmj.5
+        for <linux-usb@vger.kernel.org>; Thu, 06 Jun 2019 07:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=wI0ZnEW6mKaY5avBBKMaDLj8ZU+OOyWjoJYCXR8MbmI=;
+        b=rdaKPWQ7EQYxOraH00Fk6ZIL+ruchtORmw4dQuwlPXyozVBEYeGLjMDX/LRBTzJ2R0
+         TVu07Fm9M+RxYUNYl4EsbbH5wQzqEzG2yODGgM26gcWjOfgMw4BoEHr3mzPt+2jRWWAC
+         1JVXDp7a/ItQZ3u5M1/P5cPgk81tigk2uDgEfmDQFV8ByUM264tFlTOX2g0rPMPhhaMU
+         sziTjsQVHkTY2C+d/35LXwBfFt/t8ppKsg12sfh6Gz/npYvEH929SxB3tWTI/hwAoMKk
+         uBhwhsey2qx/MBuKwHY+9cxCG0moLAwy7H8OR6Qz25v18dUf38ZCqmUsPorvuN/hGynQ
+         T/mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=wI0ZnEW6mKaY5avBBKMaDLj8ZU+OOyWjoJYCXR8MbmI=;
+        b=WvEKGUABt1AM5w8+rjVTjVzVPZ20RPRS7b831zUyvKA/yQyjllTZTfIfwS1PQm1el3
+         LiKcAjuEoGzNuvhoTOnjUA66VCfEHGa/jfmJUNxkdKKSLrGlMTZaEYc8muTmHOkB4G5m
+         hy2q56QXTlVr1lGlWnxwZ/746WHWSQmOYyS1LWekAxlJckVFQtuqEC3Q/Oc5fJg5kcN2
+         6qlJP2wv5wld+yibbBsqDNnfSkWXWnndy8zyN6jOJejXXA9Ulcxo49eoExWMOMG3IvLm
+         +VXTI3XHXG7axE0I1AXc7axQRgpl+kYf5N0TYMJvo8K4BDYKnar+s4ZfhuITMy/NNiHc
+         d6iw==
+X-Gm-Message-State: APjAAAVW5Rep6AB4yfeo0ErkYNleVUU6yKD6HVEbQ5BiI0KwmL6kjDGS
+        nDDO1gB0DnVWicUuRaK5Ob6eqUbYew8=
+X-Google-Smtp-Source: APXvYqzAl/r7Qf9ly0D50ZwEJ/8aea13bV/2LaelbmqCAHHq07dadXwfNAufOauQ5AIHfb/SCGoiBA==
+X-Received: by 2002:a7b:c5cd:: with SMTP id n13mr110205wmk.67.1559829653418;
+        Thu, 06 Jun 2019 07:00:53 -0700 (PDT)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id v10sm2167354wml.27.2019.06.06.07.00.52
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 06 Jun 2019 07:00:52 -0700 (PDT)
+Message-ID: <b159e1518b670d4b0126c7671c30c8c3cb8fffbc.camel@unipv.it>
+Subject: Re: Slow I/O on USB media
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
+Date:   Thu, 06 Jun 2019 16:00:52 +0200
+In-Reply-To: <20190605173902.GE27700@kroah.com>
+References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
+         <20190530132522.GA21005@kroah.com>
+         <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
+         <20190604054300.GE1588@kroah.com>
+         <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
+         <20190605145525.GA28819@kroah.com>
+         <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
+         <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it>
+         <20190605173902.GE27700@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8gQWxsLA0KDQpSZWNlbnRseSB3ZSBzYXcgYSBwcm9ibGVtIHdoZXJlIHRoZSBkZXZpY2Ug
-cmVzZXQgd2lsbCBmYWlsIGR1ZSB0byBhIGNvbmZpZ3VyYXRpb24gZGVzY3JpcHRvciBjaGVjayBp
-biBodWIuYzo1NjAwLg0KDQogICAgICAgIGlmIChtZW1jbXAoYnVmLCB1ZGV2LT5yYXdkZXNjcmlw
-dG9yc1tpbmRleF0sIG9sZF9sZW5ndGgpDQogICAgICAgICAgICAgICAgIT0gMCkgew0KICAgICAg
-ICAgICAgZGV2X2RiZygmdWRldi0+ZGV2LCAiY29uZmlnIGluZGV4ICVkIGNoYW5nZWQgKCMlZClc
-biIsDQogICAgICAgICAgICAgICAgaW5kZXgsDQogICAgICAgICAgICAgICAgKChzdHJ1Y3QgdXNi
-X2NvbmZpZ19kZXNjcmlwdG9yICopIGJ1ZiktPg0KICAgICAgICAgICAgICAgICAgICBiQ29uZmln
-dXJhdGlvblZhbHVlKTsNCiAgICAgICAgICAgIGNoYW5nZWQgPSAxOw0KICAgICAgICAgICAgYnJl
-YWs7DQogICAgICAgIH0NCg0KVGhlIGRlc2NyaXB0b3JzIHJldHVybmVkIGZyb20gdGhlIGRldmlj
-ZSBoYXZlIGEgZGlmZmVyZW50IGlJbnRlcmZhY2UuICBJIGNoZWNrZWQgdGhlIHVzYiBzcGVjIGFu
-ZCBjb3VsZG7igJl0IGZpbmQgYW55dGhpbmcgdGhhdCBzYXlzIGlJbnRlcmZhY2UgY2Fu4oCZdCBj
-aGFuZ2UuICBJIGRvbuKAmXQgaGF2ZSB0aGUgc291cmNlIGZvciB0aGUgZGV2aWNlLCBidXQgSSB0
-aGluayBpdOKAmXMgcHJvYmFibHkgZ2VuZXJhdGluZyB0aGUgaW50ZXJmYWNlIHN0cmluZyBlYWNo
-IHJlc2V0IGFuZCByZXR1cm5pbmcgYSBkaWZmZXJlbnQgaW5kZXggZm9yIGl0ICjigJxBREIgaW50
-ZXJmYWNl4oCdKS4NCg0KSGFzIGFueW9uZSBlbHNlIHNlZW4gdGhpcz8gIERvZXMgdGhlIHNwZWMg
-Z3VhcmFudGVlIHRoYXQgaUludGVyZmFjZSBzaG91bGQgbmV2ZXIgY2hhbmdlIGJldHdlZW4gZGV2
-aWNlIHJlc2V0cz8NCg0KVGhhbmtzLA0KDQpTZXRo
+Il giorno mer, 05/06/2019 alle 19.39 +0200, Greg KH ha scritto:
+> On Wed, Jun 05, 2019 at 06:23:58PM +0200, Andrea Vai wrote:
+> [...]
+> 
+> > Anyway, I know that I can do all of this in a better way, and will
+> let
+> > you know.
+> 
+> Yes, please do so, your steps above do not show much.
+
+Here I am with another question.
+What I have done so far:
+
+- booted with the last kernel I know to be working (4.20.13-
+200.fc29.x86_64, installed from Fedora repos), checked that test runs
+fine (2min to copy)
+- marked "git bisect good v4.20.13"
+- built the latest stable version:
+  - git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+  - cp -v /boot/config-$(uname -r) .config
+  - make -j4 && make modules_install && make install && grub2-mkconfig -o /boot/grub2/grub.cfg
+  - grubby --set-default /boot/vmlinuz-5.2.0-rc3 (the last regular file listed in "ls -lrt /boot/v*")
+- rebooted with kernel 5.2.0-rc3, ran the test, took 49min to copy
+(!), thus marked "git bisect bad"
+- built again, and it turns out to be 4.20.0 (why is it earlier than
+4.20.13?), rebooted with 4.20.0, ran the test and it took more than 15
+minutes so I killed the cp process, and marked it BAD, and obtained:
+
+The merge base 8fe28cb58bcb235034b64cbbb7550a8a43fd88be is bad.
+This means the bug has been fixed between
+8fe28cb58bcb235034b64cbbb7550a8a43fd88be and
+[0f7c162c1df596e0bba04c26fc9cc497983bf32b].
+
+The output of "git bisect log" is:
+
+git bisect start
+# good: [0f7c162c1df596e0bba04c26fc9cc497983bf32b] Linux 4.20.13
+git bisect good 0f7c162c1df596e0bba04c26fc9cc497983bf32b
+# bad: [f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a] Linux 5.2-rc3
+git bisect bad f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a
+# bad: [8fe28cb58bcb235034b64cbbb7550a8a43fd88be] Linux 4.20
+git bisect bad 8fe28cb58bcb235034b64cbbb7550a8a43fd88be
+
+I can understand that the bug was present before 4.20.13 (is that
+reasonable?), but how can I tell bisect to start at 4.20.13, which I
+know for sure to be working, and not from 4.20.0, which I actually
+don't care about?
+
+I am afraid I am missing something obvious, sorry
+
+Thank you very much,
+Andrea
+
