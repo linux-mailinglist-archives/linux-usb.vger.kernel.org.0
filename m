@@ -2,160 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC372374FE
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 15:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8950A375C4
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 15:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727603AbfFFNRA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 6 Jun 2019 09:17:00 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:49902 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726877AbfFFNQ7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Jun 2019 09:16:59 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 2AC1F85546;
-        Thu,  6 Jun 2019 13:16:54 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E50DF108427E;
-        Thu,  6 Jun 2019 13:16:43 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <b91710d8-cd2d-6b93-8619-130b9d15983d@tycho.nsa.gov>
-References: <b91710d8-cd2d-6b93-8619-130b9d15983d@tycho.nsa.gov> <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk>
-To:     Stephen Smalley <sds@tycho.nsa.gov>
-Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-usb@vger.kernel.org, raven@themaw.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Moore <paul@paul-moore.com>
-Subject: Re: [RFC][PATCH 00/10] Mount, FS, Block and Keyrings notifications [ver #3]
+        id S1727438AbfFFNzl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 09:55:41 -0400
+Received: from mail1.bemta24.messagelabs.com ([67.219.250.3]:60611 "EHLO
+        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726693AbfFFNzl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 09:55:41 -0400
+Received: from [67.219.250.101] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-3.bemta.az-a.us-west-2.aws.symcld.net id 81/29-29278-A5B19FC5; Thu, 06 Jun 2019 13:55:38 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNKsWRWlGSWpSXmKPExsXi5LtOQDdK+me
+  MwYoGA4tFy1qZLab+vcnowOSxc9Zddo/Pm+QCmKJYM/OS8isSWDMWnpvPXvCTs2Lb1QbWBsYX
+  nF2MXBxCAnsYJZ6cX8zSxcjJwSZgKHFuy1t2EFtEQEPiwIG3TCA2M5D9Zv0DRhBbWEBKonXNb
+  aAaDqAaeYkXj6IgyvUkmpf/ACtnEVCRuHixG8zmFbCWuPvjBth4RgExie+n1kCNFJe49WQ+mC
+  0hICCxZM95ZghbVOLl43+sELaCRPOChWCrmAU0Jdbv0odoNZc4+XMjK4StKDGl+yE7xCpBiZM
+  zn7BMYBSahWTDLITuWUi6ZyHpnoWkewEj6ypGi6SizPSMktzEzBxdQwMDXUNDI11DYxBtoZdY
+  pZuoV1qsW55aXKJrpJdYXqxXXJmbnJOil5dasokRGCspBU1lOxjfHHmtd4hRkoNJSZT33pIfM
+  UJ8SfkplRmJxRnxRaU5qcWHGGU4OJQkeGdJ/owREixKTU+tSMvMAcYtTFqCg0dJhLcFJM1bXJ
+  CYW5yZDpE6xWjPMeHl3EXMHAu2LgGSm+cuBZJHQKQQS15+XqqUOO9JkDYBkLaM0jy4obA0c4l
+  RVkqYl5GBgUGIpyC1KDezBFX+FaM4B6OSMK8eyBSezLwSuN2vgM5iAjqL/8I3kLNKEhFSUg1M
+  6RtV4zfWVSs1fL1wakJb7pVvzzZ+5flrZCLx52WpZrvO7F8zMgJTmExWXlBjEHi6tUs7MOhDp
+  VtctkeCx/nszSzCt423/d+z+nzs0cMRbzZWnvNZ4tjosZPtUcac8yVde58pOT6WrlrsumxNhp
+  fJ32sB904cTDnIsPq+33e5i58MvVOWSmqEBU7MS7XZWnXuW+Ippae/Lv6NvO664onEXY13Cj8
+  j92+9pSZ7Z0aayGzTlwefvcuers7Q1f4pcfG9sqOvrtvbX2iz/rn2t+UO66+iQZ0mNuxx39nT
+  uOf+P1+7dNvGpNCAVWfZ3l1Mmf1FP/KGcGaw0luLO00F898EOa9gaw6ZmnBLT80j5tKv80osx
+  RmJhlrMRcWJAMtmpfGuAwAA
+X-Env-Sender: Seth.Bollinger@digi.com
+X-Msg-Ref: server-19.tower-325.messagelabs.com!1559829337!162880!2
+X-Originating-IP: [66.77.174.16]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.43.9; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 15687 invoked from network); 6 Jun 2019 13:55:38 -0000
+Received: from owa.digi.com (HELO MCL-VMS-XCH01.digi.com) (66.77.174.16)
+  by server-19.tower-325.messagelabs.com with SMTP; 6 Jun 2019 13:55:38 -0000
+Received: from MTK-SMS-XCH01.digi.com ([fe80::cca7:5299:c88e:1c40]) by
+ MCL-VMS-XCH01.digi.com ([fe80::5587:821d:f8e4:6578%13]) with mapi id
+ 14.03.0439.000; Thu, 6 Jun 2019 08:55:37 -0500
+From:   "Bollinger, Seth" <Seth.Bollinger@digi.com>
+To:     USB list <linux-usb@vger.kernel.org>
+CC:     Seth Bollinger <seth.boll@gmail.com>
+Subject: USB reset problem
+Thread-Topic: USB reset problem
+Thread-Index: AQHVHG+ETWfSPd+0wUORZEMqfAwZ6w==
+Date:   Thu, 6 Jun 2019 13:55:37 +0000
+Message-ID: <A2655C7A-C29C-4462-A668-8F7B9C81A648@digi.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.27.1.153]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9C8D9A357D51A8478AF6992F718F9CEC@digi.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3812.1559827003.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: 8BIT
-Date:   Thu, 06 Jun 2019 14:16:43 +0100
-Message-ID: <3813.1559827003@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Thu, 06 Jun 2019 13:16:59 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Stephen Smalley <sds@tycho.nsa.gov> wrote:
-
-This might be easier to discuss if you can reply to:
-
-	https://lore.kernel.org/lkml/5393.1559768763@warthog.procyon.org.uk/
-
-which is on the ver #2 posting of this patchset.
-
-> > LSM support is included, but controversial:
-> >
-> >   (1) The creds of the process that did the fput() that reduced the refcount
-> >       to zero are cached in the file struct.
-> >
-> >   (2) __fput() overrides the current creds with the creds from (1) whilst
-> >       doing the cleanup, thereby making sure that the creds seen by the
-> >       destruction notification generated by mntput() appears to come from
-> >       the last fputter.
-> >
-> >   (3) security_post_notification() is called for each queue that we might
-> >       want to post a notification into, thereby allowing the LSM to prevent
-> >       covert communications.
-> >
-> >   (?) Do I need to add security_set_watch(), say, to rule on whether a watch
-> >       may be set in the first place?  I might need to add a variant per
-> >       watch-type.
-> >
-> >   (?) Do I really need to keep track of the process creds in which an
-> >       implicit object destruction happened?  For example, imagine you create
-> >       an fd with fsopen()/fsmount().  It is marked to dissolve the mount it
-> >       refers to on close unless move_mount() clears that flag.  Now, imagine
-> >       someone looking at that fd through procfs at the same time as you exit
-> >       due to an error.  The LSM sees the destruction notification come from
-> >       the looker if they happen to do their fput() after yours.
-> 
-> 
-> I'm not in favor of this approach.
-
-Which bit?  The last point?  Keeping track of the process creds after an
-implicit object destruction.
-
-> Can we check permission to the object being watched when a watch is set
-> (read-like access),
-
-Yes, and I need to do that.  I think it's likely to require an extra hook for
-each entry point added because the objects are different:
-
-	int security_watch_key(struct watch *watch, struct key *key);
-	int security_watch_sb(struct watch *watch, struct path *path);
-	int security_watch_mount(struct watch *watch, struct path *path);
-	int security_watch_devices(struct watch *watch);
-
-> make sure every access that can trigger a notification requires a
-> (write-like) permission to the accessed object,
-
-"write-like permssion" for whom?  The triggerer or the watcher?
-
-There are various 'classes' of events:
-
- (1) System events (eg. hardware I/O errors, automount points expiring).
-
- (2) Direct events (eg. automounts, manual mounts, EDQUOT, key linkage).
-
- (3) Indirect events (eg. exit/close doing the last fput and causing an
-     unmount).
-
-Class (1) are uncaused by a process, so I use init_cred for them.  One could
-argue that the automount point expiry should perhaps take place under the
-creds of whoever triggered it in the first place, but we need to be careful
-about long-term cred pinning.
-
-Class (2) the causing process must've had permission to cause them - otherwise
-we wouldn't have got the event.
-
-Class (3) is interesting since it's currently entirely cleanup events and the
-process may have the right to do them (close, dup2, exit, but also execve)
-whether the LSM thinks it should be able to cause the object to be destroyed
-or not.
-
-It gets more complicated than that, though: multiple processes with different
-security attributes can all have fds pointing to a common file object - and
-the last one to close carries the can as far as the LSM is concerned.
-
-And yet more complicated when you throw in unix sockets with partially passed
-fds still in their queues.  That's what patch 01 is designed to try and cope
-with.
-
-> and make sure there is some sane way to control the relationship between the
-> accessed object and the watched object (write-like)?
-
-This is the trick.  Keys and superblocks have object labels of their own and
-don't - for now - propagate their watches.  With these, the watch is on the
-object you initially assign it to and it goes no further than that.
-
-mount_notify() is the interesting case since we want to be able to detect
-mount topology change events from within the vfs subtree rooted at the watched
-directory without having to manually put a watch on every directory in that
-subtree - or even just every mount object.
-
-Or, maybe, that's what I'll have to do: make it mount_notify() can only apply
-to the subtree within its superblock, and the caller must call mount_notify()
-for every mount object it wants to monitor.  That would at least ensure that
-the caller can, at that point, reach all those mount points.
-
-> For cases where we have no object per se or at least no security
-> structure/label associated with it, we may have to fall back to a
-> coarse-grained "Can the watcher get this kind of notification in general?".
-
-Agreed - and we should probably have that anyway.
-
-David
+SGVsbG8gQWxsLA0KDQpSZWNlbnRseSB3ZSBzYXcgYSBwcm9ibGVtIHdoZXJlIHRoZSBkZXZpY2Ug
+cmVzZXQgd2lsbCBmYWlsIGR1ZSB0byBhIGNvbmZpZ3VyYXRpb24gZGVzY3JpcHRvciBjaGVjayBp
+biBodWIuYzo1NjAwLg0KDQogICAgICAgIGlmIChtZW1jbXAoYnVmLCB1ZGV2LT5yYXdkZXNjcmlw
+dG9yc1tpbmRleF0sIG9sZF9sZW5ndGgpDQogICAgICAgICAgICAgICAgIT0gMCkgew0KICAgICAg
+ICAgICAgZGV2X2RiZygmdWRldi0+ZGV2LCAiY29uZmlnIGluZGV4ICVkIGNoYW5nZWQgKCMlZClc
+biIsDQogICAgICAgICAgICAgICAgaW5kZXgsDQogICAgICAgICAgICAgICAgKChzdHJ1Y3QgdXNi
+X2NvbmZpZ19kZXNjcmlwdG9yICopIGJ1ZiktPg0KICAgICAgICAgICAgICAgICAgICBiQ29uZmln
+dXJhdGlvblZhbHVlKTsNCiAgICAgICAgICAgIGNoYW5nZWQgPSAxOw0KICAgICAgICAgICAgYnJl
+YWs7DQogICAgICAgIH0NCg0KVGhlIGRlc2NyaXB0b3JzIHJldHVybmVkIGZyb20gdGhlIGRldmlj
+ZSBoYXZlIGEgZGlmZmVyZW50IGlJbnRlcmZhY2UuICBJIGNoZWNrZWQgdGhlIHVzYiBzcGVjIGFu
+ZCBjb3VsZG7igJl0IGZpbmQgYW55dGhpbmcgdGhhdCBzYXlzIGlJbnRlcmZhY2UgY2Fu4oCZdCBj
+aGFuZ2UuICBJIGRvbuKAmXQgaGF2ZSB0aGUgc291cmNlIGZvciB0aGUgZGV2aWNlLCBidXQgSSB0
+aGluayBpdOKAmXMgcHJvYmFibHkgZ2VuZXJhdGluZyB0aGUgaW50ZXJmYWNlIHN0cmluZyBlYWNo
+IHJlc2V0IGFuZCByZXR1cm5pbmcgYSBkaWZmZXJlbnQgaW5kZXggZm9yIGl0ICjigJxBREIgaW50
+ZXJmYWNl4oCdKS4NCg0KSGFzIGFueW9uZSBlbHNlIHNlZW4gdGhpcz8gIERvZXMgdGhlIHNwZWMg
+Z3VhcmFudGVlIHRoYXQgaUludGVyZmFjZSBzaG91bGQgbmV2ZXIgY2hhbmdlIGJldHdlZW4gZGV2
+aWNlIHJlc2V0cz8NCg0KVGhhbmtzLA0KDQpTZXRo
