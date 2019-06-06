@@ -2,125 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F1A36B61
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 07:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7690436C03
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Jun 2019 08:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726336AbfFFFNb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Jun 2019 01:13:31 -0400
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:60428 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725782AbfFFFNb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 01:13:31 -0400
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5658UAq011318;
-        Wed, 5 Jun 2019 22:11:37 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=ylmvFaynTnm2xShYZm5lLLOJk58zqFatT2ShI1S/0e4=;
- b=cmMfYsneq1kIIwlWnYy+TwpIQ3mVx0ShILi1PsQI3rqRBDK1foGfKz6pHJnuNlEXvsoS
- yEBm3pzYg+rQ0YXII3hsqwErSzN2SJvNHVxP5jPApNP1ybreMZz+Tk5p0pDQSxnxddUR
- bbc1CofCt2eLpYfRBjNl5klLm06WjoevOu6x9jknI7RJvcfKNgZebWHqW1cH6VwGllgY
- aQou7/Qr6zrz2TjAs7oH82bZEA5O/163I28xkqBm9gqrAsUFbl87jsuF9B4oa2l0EeUp
- 7wsAGIcNC5SEZrPUobpu8HHO3ek8iFCVW7yOMtat7Zdy7sSk5sIFRiTt36P3rzCgAnJP Jg== 
-Authentication-Results: cadence.com;
-        spf=pass smtp.mailfrom=pawell@cadence.com
-Received: from nam04-co1-obe.outbound.protection.outlook.com (mail-co1nam04lp2057.outbound.protection.outlook.com [104.47.45.57])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 2sun4r3h7h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jun 2019 22:11:37 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ylmvFaynTnm2xShYZm5lLLOJk58zqFatT2ShI1S/0e4=;
- b=XJnS1rPztbtbTnjJB6ihyOriFbKHUBLSQA28V3sZ3Op5o/N46UVkxtseI8fRzJe4I32CqYRQDTpriPpxJRbCl4vRy6FXBHvEMgKlC2yXRpw76z8t3Ppd+QsR/Hxo34KuQftlbuC4zsJ2tov8f5/XDG+7LKqH5FKTIMHWDsCbCsQ=
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
- BYAPR07MB5720.namprd07.prod.outlook.com (20.178.0.78) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.22; Thu, 6 Jun 2019 05:11:33 +0000
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::594a:4a73:3ead:457d]) by BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::594a:4a73:3ead:457d%3]) with mapi id 15.20.1943.023; Thu, 6 Jun 2019
- 05:11:33 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Lars Melin <larsm17@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>
-Subject: RE: [PATCH v7 0/6] Introduced new Cadence USBSS DRD Driver.
-Thread-Topic: [PATCH v7 0/6] Introduced new Cadence USBSS DRD Driver.
-Thread-Index: AQHVG4YPLuNsPGFK2Eaa0JSlSMiZDaaN0ryAgABCM9A=
-Date:   Thu, 6 Jun 2019 05:11:33 +0000
-Message-ID: <BYAPR07MB4709E7267C34F09747B13568DD170@BYAPR07MB4709.namprd07.prod.outlook.com>
-References: <1559729030-16390-1-git-send-email-pawell@cadence.com>
- <30b6ac49-2edc-fde0-a106-34ff94999e5a@gmail.com>
-In-Reply-To: <30b6ac49-2edc-fde0-a106-34ff94999e5a@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctOGIzYjY0ODYtODgxOS0xMWU5LTg3NDEtMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDhiM2I2NDg4LTg4MTktMTFlOS04NzQxLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iNTkxIiB0PSIxMzIwNDI3MTQ5MTMzMTQxNDkiIGg9IlpEMUIreEpVMVQvTVBaREZaOFkvZXJFTHJ3ST0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
-x-dg-rorf: 
-x-originating-ip: [185.217.253.59]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fd51c603-16a2-42d1-f710-08d6ea3d7188
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR07MB5720;
-x-ms-traffictypediagnostic: BYAPR07MB5720:
-x-microsoft-antispam-prvs: <BYAPR07MB5720A475F174818ABE00FCE1DD170@BYAPR07MB5720.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 00603B7EEF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(39860400002)(376002)(346002)(136003)(366004)(36092001)(189003)(199004)(14454004)(7696005)(76176011)(6506007)(76116006)(74316002)(73956011)(99286004)(7416002)(186003)(6436002)(478600001)(110136005)(55016002)(33656002)(305945005)(54906003)(102836004)(52536014)(26005)(9686003)(7736002)(229853002)(81156014)(8676002)(2501003)(4744005)(66476007)(486006)(6246003)(256004)(107886003)(66946007)(446003)(5660300002)(11346002)(81166006)(316002)(86362001)(3846002)(68736007)(25786009)(476003)(8936002)(66066001)(71200400001)(71190400001)(64756008)(53936002)(2906002)(4326008)(6116002)(66446008)(66556008);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB5720;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: cadence.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: j279DhvQn9vuzUlxyg05cEm70xlCpgeX64bhenSE8XhB84JOeogqbBM0hW/li8HkipuBbwQCnCbQtAEPqrC3YSVtno1Fcox8/hTeRfQFzVB2oMYfcC4w4ztDyi07nQwr0MG1gjQiCX1jsZ12YixdU1EWwh99Pfp3DcOBfeHAxK4IkkKDHrIsUvW8cSnNTHk3s/pCyqMo0N6lsEIXdvZGnrjQwfRzv0Jsi7vs7jgoByW3jaihE4NGueWYL0HGLZnySDSpM+/IDwBt1sva5p3vhgmijK1GD1Mt5iqkLs00Imns+r5Jc4y50/gHYNNsLZBjaKHFwZPSv9IvhDjwgCfede7hi+i0TwwKKbBUoT6uo0FnJPk2EODC2zz6LnzY+mPcIyszzUmjL/qc13ztlvrsQwqySj0CCota9lOgACY8Z8U=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726599AbfFFGCL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 02:02:11 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37370 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725267AbfFFGCK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 Jun 2019 02:02:10 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 4EB62AF80;
+        Thu,  6 Jun 2019 06:02:08 +0000 (UTC)
+Subject: Re: [PATCH 10/13] megaraid_sas: set virt_boundary_mask in the scsi
+ host
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc:     Sebastian Ott <sebott@linux.ibm.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
+        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+References: <20190605190836.32354-1-hch@lst.de>
+ <20190605190836.32354-11-hch@lst.de>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <345c3931-0940-7d59-ebc6-fa1ea56c60ac@suse.de>
+Date:   Thu, 6 Jun 2019 08:02:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd51c603-16a2-42d1-f710-08d6ea3d7188
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2019 05:11:33.7010
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pawell@global.cadence.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5720
-X-Proofpoint-SPF-Result: pass
-X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
- include:mktomail.com include:spf-0014ca01.pphosted.com
- include:spf.protection.outlook.com include:auth.msgapp.com
- include:spf.mandrillapp.com ~all
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-06_04:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
- priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
- spamscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=594 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906060038
+In-Reply-To: <20190605190836.32354-11-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pk9uIDYvNS8yMDE5IDE3OjAzLCBQYXdlbCBMYXN6Y3phayB3cm90ZToNCj4+IFRoaXMgcGF0Y2gg
-aW50cm9kdWNlcyBuZXcgQ2FkZW5jZSBVU0JTUyBEUkQgZHJpdmVyIHRvIExpbnV4IGtlcm5lbC4N
-Cj4+DQo+PiBUaGUgQ2FkZW5jZSBVU0JTUyBEUkQgRHJpdmVyIGlzIGEgaGlnaGx5IGNvbmZpZ3Vy
-YWJsZSBJUCBDb3JlIHdoaWNoDQo+PiBjYW4gYmUgaW5zdGFudGlhdGVkIGFzIER1YWwtUm9sZSBE
-ZXZpY2UgKERSRCksIFBlcmlwaGVyYWwgT25seSBhbmQNCj4+IEhvc3QgT25seSAoWEhDSSljb25m
-aWd1cmF0aW9ucy4NCj4+DQo+VGhlIGRyaXZlciBpcyBub3QgYW4gSVAgQ29yZSwgdGhlIGhhcmR3
-YXJlIGRldmljZSBpcy4NCj4NCkkgcmVtZW1iZXIgdGhhdCBJIGhhZCBzdWNoIGNvbW1lbnQgaW4g
-dGhlIHBhc3RlLiBJIGRvbid0IGtub3cgd2h5IHRoZXJlIGlzICJJUCBDb3JlIi4NCg0KSSB3aWxs
-IGNoYW5nZSBpdC4NCnRoYW5rcyAsDQpQYXdlbA0KPg0KPi9MYXJzDQo+DQoNCg==
+On 6/5/19 9:08 PM, Christoph Hellwig wrote:
+> This ensures all proper DMA layer handling is taken care of by the
+> SCSI midlayer.  Note that the effect is global, as the IOMMU merging
+> is based off a paramters in struct device.  We could still turn if off
+> if no PCIe devices are present, but I don't know how to find that out.
+> 
+> Also remove the bogus nomerges flag, merges do take the virt_boundary
+> into account.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/scsi/megaraid/megaraid_sas_base.c   | 46 +++++----------------
+>  drivers/scsi/megaraid/megaraid_sas_fusion.c |  7 ++++
+>  2 files changed, 18 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+> index 3dd1df472dc6..20b3b3f8bc16 100644
+> --- a/drivers/scsi/megaraid/megaraid_sas_base.c
+> +++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+> @@ -1870,39 +1870,6 @@ void megasas_set_dynamic_target_properties(struct scsi_device *sdev,
+>  	}
+>  }
+>  
+> -/*
+> - * megasas_set_nvme_device_properties -
+> - * set nomerges=2
+> - * set virtual page boundary = 4K (current mr_nvme_pg_size is 4K).
+> - * set maximum io transfer = MDTS of NVME device provided by MR firmware.
+> - *
+> - * MR firmware provides value in KB. Caller of this function converts
+> - * kb into bytes.
+> - *
+> - * e.a MDTS=5 means 2^5 * nvme page size. (In case of 4K page size,
+> - * MR firmware provides value 128 as (32 * 4K) = 128K.
+> - *
+> - * @sdev:				scsi device
+> - * @max_io_size:				maximum io transfer size
+> - *
+> - */
+> -static inline void
+> -megasas_set_nvme_device_properties(struct scsi_device *sdev, u32 max_io_size)
+> -{
+> -	struct megasas_instance *instance;
+> -	u32 mr_nvme_pg_size;
+> -
+> -	instance = (struct megasas_instance *)sdev->host->hostdata;
+> -	mr_nvme_pg_size = max_t(u32, instance->nvme_page_size,
+> -				MR_DEFAULT_NVME_PAGE_SIZE);
+> -
+> -	blk_queue_max_hw_sectors(sdev->request_queue, (max_io_size / 512));
+> -
+> -	blk_queue_flag_set(QUEUE_FLAG_NOMERGES, sdev->request_queue);
+> -	blk_queue_virt_boundary(sdev->request_queue, mr_nvme_pg_size - 1);
+> -}
+> -
+> -
+>  /*
+>   * megasas_set_static_target_properties -
+>   * Device property set by driver are static and it is not required to be
+> @@ -1961,8 +1928,10 @@ static void megasas_set_static_target_properties(struct scsi_device *sdev,
+>  		max_io_size_kb = le32_to_cpu(instance->tgt_prop->max_io_size_kb);
+>  	}
+>  
+> -	if (instance->nvme_page_size && max_io_size_kb)
+> -		megasas_set_nvme_device_properties(sdev, (max_io_size_kb << 10));
+> +	if (instance->nvme_page_size && max_io_size_kb) {
+> +		blk_queue_max_hw_sectors(sdev->request_queue,
+> +				(max_io_size_kb << 10) / 512);
+> +	}
+>  
+>  	scsi_change_queue_depth(sdev, device_qd);
+>  
+What happened to the NOMERGES queue flag?
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
