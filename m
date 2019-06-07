@@ -2,99 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DDA39344
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 19:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51923393FF
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 20:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731499AbfFGRbw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 13:31:52 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:50960 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729355AbfFGRbw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 13:31:52 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x57HIpx6178003;
-        Fri, 7 Jun 2019 17:30:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=g9qgPYWy2UeZZX7Q5xvayFUZ5+Jlv5AgZT4Wz1d17eI=;
- b=GquEmfpf1HBT7vX2CzX+dMvzNB0wpOB4iQtcXeOAyF2DoiXBKIsxxFSTqxuQEeD3dFsE
- NW/2qE6nTYp8yIdaZlmQWE+LLZF9hQdENVg3wyoapAls1vxX2q+9hAztXIlTcBohI7iE
- puGOc+EVwd+Wj8du+nhWNsaHMeyQXzpQZb9TZBrehPH95mB9xQPTriWtztvyVvBfZJSY
- ZvDGQ2w0kte1RG2ckQVBBt6EnYhIHB7zOIRVQHpveA/dR7UH9rQ/u//0E/s5itVU17r+
- 9iPvrwQcznyJ2mXDhgxzinr5bV6Wic02t6r2sOO0mi4aLy1ulC69fy/YracyVTUd+Ixp yw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2suj0qyhpc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Jun 2019 17:30:37 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x57HU97U102069;
-        Fri, 7 Jun 2019 17:30:36 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2swngk4vhc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Jun 2019 17:30:36 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x57HUY6s025234;
-        Fri, 7 Jun 2019 17:30:34 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 07 Jun 2019 10:30:34 -0700
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Sebastian Ott <sebott@linux.ibm.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Max Gurtovoy <maxg@mellanox.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
-        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Subject: Re: properly communicate queue limits to the DMA layer
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190605190836.32354-1-hch@lst.de>
-        <591cfa1e-fecb-7d00-c855-3b9eb8eb8a2a@kernel.dk>
-        <20190605192405.GA18243@lst.de>
-        <f07d0abf-b3eb-f530-37b9-e66454740b3f@kernel.dk>
-Date:   Fri, 07 Jun 2019 13:30:30 -0400
-In-Reply-To: <f07d0abf-b3eb-f530-37b9-e66454740b3f@kernel.dk> (Jens Axboe's
-        message of "Thu, 6 Jun 2019 23:52:35 -0600")
-Message-ID: <yq1o939i9qh.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1730517AbfFGSJs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 14:09:48 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39401 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730389AbfFGSJr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 14:09:47 -0400
+Received: by mail-pf1-f196.google.com with SMTP id j2so1624318pfe.6
+        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 11:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=/3m639ul9fLGHczHyKn0H1zZg+5SVSXXo1Nl+CYKby4=;
+        b=PzFmnwe5R9+tXehwIXZM6y8FoShB+B2G5A0MZe7+0cyb/EOpN+t4FPLENdAFQiY4vp
+         snMFvVlNDWgHWDB2eUSQIPp1jPpux+sTG071CiSoW9pKxLK4lCyinxlVC7k40V6c7NyM
+         z5pTl9+LJCEFZIC3Qz7jsfCfXo3GXCw4hr6fH/Of0zai00v9lD1BaHATpmLQ9qqU0zRI
+         HEJWGafkIT/mIu9OHFbD7peMSgFffJJnzRTXUZh94uyM4rRLf4WGCbHpAYNJSgv6Pp+D
+         fd+lIHwpViriTTXjPu1DqDEtndYAxhmI9tO3EsjbdeUbHvIlHX+VrJDGetgrOd1J7w40
+         Dz0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/3m639ul9fLGHczHyKn0H1zZg+5SVSXXo1Nl+CYKby4=;
+        b=UuDKjqlHPhNhGxxHcT16XrvLv1o7T0Xh4mlRGCCFmPBhMCK9uY8n23/LmQOHJn1cdL
+         FV1+q0v0FGb4LR94JMNqXBGEHpTe9WYzj9C+yuBhchr+Vq3K8GV6eIynRSAJiPO9BEzR
+         pIIzxlA2OqWR2hamxNZeqLHjAeEXdeZSLo0Bju+8+XISXMxKHIQqsXLJiM7l7s2wV4eL
+         3PTJavVFBZSdeD18gyDnMXPuM/9ez3uHBXvzzNIwSq+fj5TPtR9BJ/kYZkdriKkzpEUd
+         FYGPhFN1nQUpVXUhOptrGQ8xim+pFBuVuJ9wbEY9QehsRyQ0V+Iyyul7TTZobntY7uzV
+         fU5g==
+X-Gm-Message-State: APjAAAWu+FFbbCAqDcc157JR9m+hgYiy36AJ1uuLaH9LRoALgFdmWNVA
+        SGTSb2qC47KtEeOAVur9tIwPyw==
+X-Google-Smtp-Source: APXvYqzt5gwdXKwtn7ZORpYSN5ZFetcAiXsBwVaXb6cj35kEgitwNjg1kWrl11fOzV9tGYSsCfKnXw==
+X-Received: by 2002:a62:3287:: with SMTP id y129mr4134583pfy.251.1559930986308;
+        Fri, 07 Jun 2019 11:09:46 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id l44sm6897224pje.29.2019.06.07.11.09.43
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 07 Jun 2019 11:09:45 -0700 (PDT)
+Date:   Fri, 7 Jun 2019 11:10:30 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, alokc@codeaurora.org,
+        Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        wsa+renesas@sang-engineering.com,
+        Linus Walleij <linus.walleij@linaro.org>, balbi@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jeffrey Hugo <jlhugo@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 3/8] pinctrl: msm: Add ability for drivers to supply a
+ reserved GPIO list
+Message-ID: <20190607181030.GX22737@tuxbook-pro>
+References: <20190607082901.6491-1-lee.jones@linaro.org>
+ <20190607082901.6491-3-lee.jones@linaro.org>
+ <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9281 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=528
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906070116
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9281 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=574 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906070116
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri 07 Jun 04:10 PDT 2019, Ard Biesheuvel wrote:
 
-Jens,
+> On Fri, 7 Jun 2019 at 10:29, Lee Jones <lee.jones@linaro.org> wrote:
+> >
+> > When booting MSM based platforms with Device Tree or some ACPI
+> > implementations, it is possible to provide a list of reserved pins
+> > via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
+> > However some ACPI tables are not populated with this information,
+> > thus it has to come from a knowledgable device driver instead.
+> >
+> > Here we provide the MSM common driver with additional support to
+> > parse this informtion and correctly populate the widely used
+> > 'valid_mask'.
+> >
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> 
+> I'm not sure if this is the correct approach. Presumably, on ACPI
+> systems, all the pinctl stuff is already set up by the firmware, and
+> so we shouldn't touch *any* pins unless they have been requested
+> explicitly. Is there any way we can support this in the current
+> framework?
+> 
 
->> The SCSI bits will need a bit more review, and possibly tweaking
->> fo megaraid and mpt3sas.  But they are really independent of the
->> other patches, so maybe skip them for now and leave them for Martin
->> to deal with.
->
-> I dropped the SCSI bits.
+The only reason why we do this (at least the initial reason) is because
+gpiolib will read the current state of all GPIOs during initialization.
 
-I'll monitor and merge them.
+But due to the sensitive nature of the application using these pins
+Linux is prohibited from touching the associated GPIO/pinmux/pinconf
+registers - resulting in a security violation if we allow gpiolib to
+touch them.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+
+When it comes to pinmux/pinconf those are only poked explicitly and
+those seems to be described in PEP nodes, such as:
+
+	Package (0x02)
+	{
+	    "TLMMGPIO",
+	    Package (0x06)
+	    {
+		0x2C,
+		One,
+		Zero,
+		One,
+		Zero,
+		Zero
+	    }
+	},
+
+So the pinctrl-sdm845/msm drivers gives us GPIOs, but for pinconf and
+pinmux there's a need for something very different from what we're used
+to.
+
+Regards,
+Bjorn
+
+> > ---
+> >  drivers/pinctrl/qcom/pinctrl-msm.c | 18 ++++++++++++++++++
+> >  drivers/pinctrl/qcom/pinctrl-msm.h |  1 +
+> >  2 files changed, 19 insertions(+)
+> >
+> > diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
+> > index ee8119879c4c..3ac740b36508 100644
+> > --- a/drivers/pinctrl/qcom/pinctrl-msm.c
+> > +++ b/drivers/pinctrl/qcom/pinctrl-msm.c
+> > @@ -607,8 +607,23 @@ static int msm_gpio_init_valid_mask(struct gpio_chip *chip)
+> >         int ret;
+> >         unsigned int len, i;
+> >         unsigned int max_gpios = pctrl->soc->ngpios;
+> > +       const int *reserved = pctrl->soc->reserved_gpios;
+> >         u16 *tmp;
+> >
+> > +       /* Driver provided reserved list overrides DT and ACPI */
+> > +       if (reserved) {
+> > +               bitmap_fill(chip->valid_mask, max_gpios);
+> > +               for (i = 0; reserved[i] >= 0; i++) {
+> > +                       if (i >= max_gpios || reserved[i] >= max_gpios) {
+> > +                               dev_err(pctrl->dev, "invalid list of reserved GPIOs\n");
+> > +                               return -EINVAL;
+> > +                       }
+> > +                       clear_bit(reserved[i], chip->valid_mask);
+> > +               }
+> > +
+> > +               return 0;
+> > +       }
+> > +
+> >         /* The number of GPIOs in the ACPI tables */
+> >         len = ret = device_property_read_u16_array(pctrl->dev, "gpios", NULL,
+> >                                                    0);
+> > @@ -964,6 +979,9 @@ static void msm_gpio_irq_handler(struct irq_desc *desc)
+> >
+> >  static bool msm_gpio_needs_valid_mask(struct msm_pinctrl *pctrl)
+> >  {
+> > +       if (pctrl->soc->reserved_gpios)
+> > +               return true;
+> > +
+> >         return device_property_read_u16_array(pctrl->dev, "gpios", NULL, 0) > 0;
+> >  }
+> >
+> > diff --git a/drivers/pinctrl/qcom/pinctrl-msm.h b/drivers/pinctrl/qcom/pinctrl-msm.h
+> > index c12048e54a6f..23b93ae92269 100644
+> > --- a/drivers/pinctrl/qcom/pinctrl-msm.h
+> > +++ b/drivers/pinctrl/qcom/pinctrl-msm.h
+> > @@ -121,6 +121,7 @@ struct msm_pinctrl_soc_data {
+> >         bool pull_no_keeper;
+> >         const char *const *tiles;
+> >         unsigned int ntiles;
+> > +       const int *reserved_gpios;
+> >  };
+> >
+> >  extern const struct dev_pm_ops msm_pinctrl_dev_pm_ops;
+> > --
+> > 2.17.1
+> >
+> >
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
