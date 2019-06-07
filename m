@@ -2,134 +2,259 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D098B3875D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 11:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB60387C5
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 12:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727935AbfFGJuG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 05:50:06 -0400
-Received: from mga14.intel.com ([192.55.52.115]:28392 "EHLO mga14.intel.com"
+        id S1727633AbfFGKQJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 06:16:09 -0400
+Received: from mga01.intel.com ([192.55.52.88]:35508 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727790AbfFGJuG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Jun 2019 05:50:06 -0400
+        id S1727373AbfFGKQI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jun 2019 06:16:08 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jun 2019 02:50:06 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jun 2019 03:16:08 -0700
 X-ExtLoop1: 1
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga003.jf.intel.com with ESMTP; 07 Jun 2019 02:50:04 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     John Youn <John.Youn@synopsys.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: [RFC] Sorting out dwc3 ISOC endpoints once and for all
-Date:   Fri, 07 Jun 2019 12:50:00 +0300
-Message-ID: <87a7etd8s7.fsf@linux.intel.com>
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 07 Jun 2019 03:16:03 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 07 Jun 2019 13:16:02 +0300
+Date:   Fri, 7 Jun 2019 13:16:02 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+        felipe.balbi@linux.intel.com, linux-usb@vger.kernel.org,
+        hdegoede@redhat.com, robh+dt@kernel.org, rogerq@ti.com,
+        linux-kernel@vger.kernel.org, jbergsagel@ti.com, nsekhar@ti.com,
+        nm@ti.com, sureshp@cadence.com, peter.chen@nxp.com,
+        jpawar@cadence.com, kurahul@cadence.com
+Subject: Re: [PATCH v7 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
+Message-ID: <20190607101602.GD10298@kuha.fi.intel.com>
+References: <1559729030-16390-1-git-send-email-pawell@cadence.com>
+ <1559729030-16390-6-git-send-email-pawell@cadence.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1559729030-16390-6-git-send-email-pawell@cadence.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jun 05, 2019 at 11:03:49AM +0100, Pawel Laszczak wrote:
+> diff --git a/drivers/usb/cdns3/debugfs.c b/drivers/usb/cdns3/debugfs.c
+> new file mode 100644
+> index 000000000000..dfcbeb5e14f8
+> --- /dev/null
+> +++ b/drivers/usb/cdns3/debugfs.c
+> @@ -0,0 +1,173 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Cadence USBSS DRD Controller DebugFS filer.
+> + *
+> + * Copyright (C) 2018-2019 Cadence.
+> + *
+> + * Author: Pawel Laszczak <pawell@cadence.com>
+> + */
+> +
+> +#include <linux/types.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/seq_file.h>
+> +#include <linux/uaccess.h>
+> +
+> +#include "core.h"
+> +#include "gadget.h"
+> +#include "drd.h"
 
+static const char *const cdns3_mode[] = {
+        [USB_DR_MODE_UNKNOWN]           = "unknown",
+        [USB_DR_MODE_OTG]               = "otg",
+        [USB_DR_MODE_HOST]              = "host",
+        [USB_DR_MODE_PERIPHERAL]        = "device",
+};
 
-Hi John,
+> +static int cdns3_mode_show(struct seq_file *s, void *unused)
+> +{
+> +	struct cdns3 *cdns = s->private;
+> +
+> +	switch (cdns->current_dr_mode) {
+> +	case USB_DR_MODE_HOST:
+> +		seq_puts(s, "host\n");
+> +		break;
+> +	case USB_DR_MODE_PERIPHERAL:
+> +		seq_puts(s, "device\n");
+> +		break;
+> +	case USB_DR_MODE_OTG:
+> +		seq_puts(s, "otg\n");
+> +		break;
+> +	default:
+> +		seq_puts(s, "UNKNOWN mode\n");
+> +	}
 
-Now that we have dwc3_gadget_start_isoc_quirk() which figures out the
-correct combination for the top-most 2 bits in the frame number, why
-don't we just use that to start isochronous transfers and never, again,
-have Bus Expiry problems?
+All you should need here is:
 
-I mean something along the lines of below diff (completely untested):
+        seq_puts(s, cdns3_mode[cdns->current_dr_mode]);
 
-modified   drivers/usb/dwc3/gadget.c
-@@ -1369,9 +1369,8 @@ static int dwc3_gadget_start_isoc_quirk(struct dwc3_e=
-p *dep)
- 	else if (test0 && test1)
- 		dep->combo_num =3D 0;
-=20
-=2D	dep->frame_number &=3D 0x3fff;
- 	dep->frame_number |=3D dep->combo_num << 14;
-=2D	dep->frame_number +=3D max_t(u32, 4, dep->interval);
-+	dep->frame_number =3D DWC3_ALIGN_FRAME(dep, 1);
-=20
- 	/* Reinitialize test variables */
- 	dep->start_cmd_status =3D 0;
-@@ -1383,33 +1382,16 @@ static int dwc3_gadget_start_isoc_quirk(struct dwc3=
-_ep *dep)
- static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
- {
- 	struct dwc3 *dwc =3D dep->dwc;
-=2D	int ret;
-=2D	int i;
-=20
- 	if (list_empty(&dep->pending_list)) {
- 		dep->flags |=3D DWC3_EP_PENDING_REQUEST;
- 		return -EAGAIN;
- 	}
-=20
-=2D	if (!dwc->dis_start_transfer_quirk && dwc3_is_usb31(dwc) &&
-=2D	    (dwc->revision <=3D DWC3_USB31_REVISION_160A ||
-=2D	     (dwc->revision =3D=3D DWC3_USB31_REVISION_170A &&
-=2D	      dwc->version_type >=3D DWC31_VERSIONTYPE_EA01 &&
-=2D	      dwc->version_type <=3D DWC31_VERSIONTYPE_EA06))) {
-=2D
-=2D		if (dwc->gadget.speed <=3D USB_SPEED_HIGH && dep->direction)
-=2D			return dwc3_gadget_start_isoc_quirk(dep);
-=2D	}
-=2D
-=2D	for (i =3D 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
-=2D		dep->frame_number =3D DWC3_ALIGN_FRAME(dep, i + 1);
-+	dep->frame_number =3D __dwc3_gadget_get_frame(dwc);
-+	dep->frame_number =3D DWC3_ALIGN_FRAME(dep, 1);
-=20
-=2D		ret =3D __dwc3_gadget_kick_transfer(dep);
-=2D		if (ret !=3D -EAGAIN)
-=2D			break;
-=2D	}
-=2D
-=2D	return ret;
-+	return dwc3_gadget_start_isoc_quirk(dep);
- }
-=20
- static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request=
- *req)
+> +	return 0;
+> +}
+> +
+> +static int cdns3_mode_open(struct inode *inode, struct file *file)
+> +{
+> +	return single_open(file, cdns3_mode_show, inode->i_private);
+> +}
+> +
+> +static ssize_t cdns3_mode_write(struct file *file,
+> +				const char __user *ubuf,
+> +				size_t count, loff_t *ppos)
+> +{
+> +	struct seq_file	 *s = file->private_data;
+> +	struct cdns3 *cdns = s->private;
+> +	u32 mode = USB_DR_MODE_UNKNOWN;
+> +	char buf[32];
+> +	int ret = 0;
 
+        int ret;
 
-Would there be any obvious draw-back to going down this route? The thing
-is that, as it is, it seems like we will *always* have some corner case
-where we can't guarantee that we can even start a transfer since there's
-no upper-bound between XferNotReady and gadget driver finally queueing a
-request. Also, I can't simply read DSTS for the frame number because of
-top-most 2 bits.
+> +	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+> +		return -EFAULT;
 
-best
+                return -EINVAL;
 
-=2D-=20
-balbi
+> +
+> +	if (cdns->debug_disable) {
+> +		dev_err(cdns->dev,
+> +			"Mode can't be changed when disable is set\n");
+> +		return -EFAULT;
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+                return -EPERM;
 
------BEGIN PGP SIGNATURE-----
+> +	}
+> +
+> +	if (!strncmp(buf, "host", 4)) {
+> +		if (cdns->dr_mode == USB_DR_MODE_HOST ||
+> +		    cdns->dr_mode == USB_DR_MODE_OTG) {
+> +			mode = USB_DR_MODE_HOST;
+> +		}
+> +	}
+> +
+> +	if (!strncmp(buf, "device", 6))
+> +		if (cdns->dr_mode == USB_DR_MODE_PERIPHERAL ||
+> +		    cdns->dr_mode == USB_DR_MODE_OTG)
+> +			mode = USB_DR_MODE_PERIPHERAL;
+> +
+> +	if (!strncmp(buf, "otg", 3) && cdns->dr_mode == USB_DR_MODE_OTG)
+> +		mode = USB_DR_MODE_OTG;
+> +
+> +	if (mode == USB_DR_MODE_UNKNOWN) {
+> +		dev_err(cdns->dev, "Failed: incorrect mode setting\n");
+> +		return -EFAULT;
+> +	}
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlz6M0gACgkQzL64meEa
-mQZn2w/+Mj5fo4O6dJFQeaZrstjdM4PyjtLPBtBFr4oEkSJAwD61u91RCEr//0nS
-TRkH12dLmucAyCxhXHv5+MgKKSCMRJMYfvU4kXY2ttPqD6bzm1hAIrsupCcbn8zG
-R4AjCW5/QUIHZ19dtHGIGsNNWlUDBP0FVEE+uX+A6+6gzRWoZKmcK3MFSwXPbXlK
-bkYnH01vhnkbis39BBQVxtB9jkVkWvty9DubIqVjfHG5+8CMz0kB02cMOW7Nqm5k
-GJkDU+kw4DdtuvjpIzagvX2skFMySy8QQ5Ub1cUutW7Y6HrCavtILodzn3eXkAu/
-rKct9pmYW+tvBMQ7syydA6YNYVUFgrJYUQQtwrhf8k7TCDHFFjELVZHNMQFJQdbJ
-5rF6EMhb/5Ogjom4tZ29Eqm215kRc4GZVLWpyipLbCRxh6sSp4rhcWhF14b/spOQ
-hGvwyOmjC/Yw66wgLgJ4ZpH2BSoofBWdboaHFfMY+9/bmLthi9yMB6nY/UU444Xd
-JJ3lQDmcPmCno24D+IQodh4M+/9KXJoXkzibSJTysnrL0gHVWVZPhX+CcI5jeMdb
-JTXNJBkVAofFBcX8cTHnti1LPlIIPtejpYAOiZmegRNWS0Y/N+FF+7fHo4BE7HCR
-uxl8Ly171PLbiMwU6TE6Q1WbFmRUjvTR+owefAw3h10T8hq8rb8=
-=+5aq
------END PGP SIGNATURE-----
---=-=-=--
+To cover all those, you just need to:
+
+        ret = match_string(cdns3_mode, ARRAY_SIZE(cdns3_mode), buf));
+        if (ret < 0 || ret == USB_DR_MODE_UNKNOWN)
+                return -EINVAL;
+
+> +	if (cdns->current_dr_mode != mode) {
+> +		cdns->desired_dr_mode = mode;
+
+        if (cdns->current_dr_mode != ret)
+		cdns->desired_dr_mode = ret;
+
+> +		cdns3_role_stop(cdns);
+> +		ret = cdns3_drd_update_mode(cdns);
+> +		if (ret)
+> +			return ret;
+> +
+> +		queue_work(system_freezable_wq, &cdns->role_switch_wq);
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations cdns3_mode_fops = {
+> +	.open			= cdns3_mode_open,
+> +	.write			= cdns3_mode_write,
+> +	.read			= seq_read,
+> +	.llseek			= seq_lseek,
+> +	.release		= single_release,
+> +};
+> +
+> +static int cdns3_disable_show(struct seq_file *s, void *unused)
+> +{
+> +	struct cdns3 *cdns = s->private;
+> +
+> +	if (!cdns->debug_disable)
+> +		seq_puts(s, "0\n");
+> +	else
+> +		seq_puts(s, "1\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t cdns3_disable_write(struct file *file,
+> +				   const char __user *ubuf,
+> +				   size_t count, loff_t *ppos)
+> +{
+> +	struct seq_file	 *s = file->private_data;
+> +	struct cdns3 *cdns = s->private;
+> +	bool disable;
+> +	char buf[16];
+> +
+> +	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+> +		return -EFAULT;
+> +
+> +	if (kstrtobool(buf, &disable)) {
+> +		dev_err(cdns->dev, "wrong setting\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (disable != cdns->debug_disable) {
+> +		cdns->debug_disable = disable;
+> +		queue_work(system_freezable_wq, &cdns->role_switch_wq);
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static int cdns3_disable_open(struct inode *inode, struct file *file)
+> +{
+> +	return single_open(file, cdns3_disable_show, inode->i_private);
+> +}
+> +
+> +static const struct file_operations cdns3_disable_fops = {
+> +	.open			= cdns3_disable_open,
+> +	.write			= cdns3_disable_write,
+> +	.read			= seq_read,
+> +	.llseek			= seq_lseek,
+> +	.release		= single_release,
+> +};
+> +
+> +void cdns3_debugfs_init(struct cdns3 *cdns)
+> +{
+> +	struct dentry *root;
+> +
+> +	root = debugfs_create_dir(dev_name(cdns->dev), NULL);
+> +	cdns->root = root;
+> +	if (IS_ENABLED(CONFIG_USB_CDNS3_GADGET) &&
+> +	    IS_ENABLED(CONFIG_USB_CDNS3_HOST))
+> +		debugfs_create_file("mode", 0644, root, cdns,
+> +				    &cdns3_mode_fops);
+> +
+> +	debugfs_create_file("disable", 0644, root, cdns,
+> +			    &cdns3_disable_fops);
+> +}
+> +
+> +void cdns3_debugfs_exit(struct cdns3 *cdns)
+> +{
+> +	debugfs_remove_recursive(cdns->root);
+> +}
+
+thanks,
+
+-- 
+heikki
