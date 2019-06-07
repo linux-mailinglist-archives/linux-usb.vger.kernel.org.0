@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EB638476
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 08:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA0138477
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 08:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbfFGGhu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 02:37:50 -0400
+        id S1727190AbfFGGhv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 02:37:51 -0400
 Received: from mga09.intel.com ([134.134.136.24]:57977 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726645AbfFGGhu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Jun 2019 02:37:50 -0400
+        id S1727341AbfFGGhv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jun 2019 02:37:51 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 23:37:48 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 23:37:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,562,1557212400"; 
-   d="scan'208";a="182572400"
+   d="scan'208";a="182572405"
 Received: from intel.iind.intel.com ([10.66.245.146])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Jun 2019 23:37:46 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 06 Jun 2019 23:37:48 -0700
 From:   Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     mathias.nyman@intel.com, rajaram.regupathy@intel.com,
         abhilash.k.v@intel.com, prabhat.chand.pandey@intel.com,
         m.balaji@intel.com
-Subject: [PATCH 1/5] usb: xhci: dbc: make DbC modular, introducing dbc_function structure
-Date:   Fri,  7 Jun 2019 12:03:02 +0530
-Message-Id: <20190607063306.5612-2-prabhat.chand.pandey@intel.com>
+Subject: [PATCH 2/5] usb: xhci: dbc: DbC TTY driver to use new interface
+Date:   Fri,  7 Jun 2019 12:03:03 +0530
+Message-Id: <20190607063306.5612-3-prabhat.chand.pandey@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
 References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
@@ -38,454 +38,239 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch introduces the dbc_function structure as a first step in
-making DbC modular and capable in exposing different user interfaces using
-different "functions", which may implement the callbacks exposed here
-according to the driver's need.
+Change DbC TTY driver to use the new modular interface exposed by the DbC
+core. This will allow other function drivers with a different interface
+also to use DbC.
 
-Only one "function" can be registered at a time.
-The generic way to enable a DbC function would be, using sys-fs:
-
-Locate the directory for PCI enumerated XHCI host controller in the
-sysfs path.
-e.g.: cd /sys/bus/pci/devices/0000:00:14.0
-$ echo "enable" > dbc
-
-This is done AFTER the function is selected at build time. Only 1 function
-can be selected at a time.
-
+[no need to add running number to tty driver name, remove it. -Mathias]
 Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
 Signed-off-by: Abhilash K V <abhilash.k.v@intel.com>
 Signed-off-by: Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
 Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-dbgcap.c | 159 ++++++++++++++++++++++-----------
- drivers/usb/host/xhci-dbgcap.h |  32 ++++++-
- 2 files changed, 138 insertions(+), 53 deletions(-)
+ drivers/usb/host/Kconfig       | 15 ++++++-
+ drivers/usb/host/Makefile      |  4 +-
+ drivers/usb/host/xhci-dbgcap.h |  4 --
+ drivers/usb/host/xhci-dbgtty.c | 81 ++++++++++++++++++++++++++++++----
+ 4 files changed, 90 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
-index 52e32644a4b2..96adc53b0fdb 100644
---- a/drivers/usb/host/xhci-dbgcap.c
-+++ b/drivers/usb/host/xhci-dbgcap.c
-@@ -9,11 +9,14 @@
- #include <linux/dma-mapping.h>
- #include <linux/slab.h>
- #include <linux/nls.h>
-+#include <linux/module.h>
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index d809671c5fea..c29ed8a61dcb 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -30,13 +30,26 @@ config USB_XHCI_HCD
+ if USB_XHCI_HCD
+ config USB_XHCI_DBGCAP
+ 	bool "xHCI support for debug capability"
+-	depends on TTY
+ 	---help---
+ 	  Say 'Y' to enable the support for the xHCI debug capability. Make
+ 	  sure that your xHCI host supports the extended debug capability and
+ 	  you want a TTY serial device based on the xHCI debug capability
+ 	  before enabling this option. If unsure, say 'N'.
  
- #include "xhci.h"
- #include "xhci-trace.h"
- #include "xhci-dbgcap.h"
- 
-+static struct dbc_function *dbc_registered_func;
++choice
++	prompt "Select function for debug capability"
++	depends on USB_XHCI_DBGCAP
 +
- static inline void *
- dbc_dma_alloc_coherent(struct xhci_hcd *xhci, size_t size,
- 		       dma_addr_t *dma_handle, gfp_t flags)
-@@ -35,41 +38,42 @@ dbc_dma_free_coherent(struct xhci_hcd *xhci, size_t size,
- 				  size, cpu_addr, dma_handle);
- }
- 
--static u32 xhci_dbc_populate_strings(struct dbc_str_descs *strings)
-+static u32 xhci_dbc_populate_strings(struct dbc_str_descs *strings,
-+					struct dbc_function *func)
- {
- 	struct usb_string_descriptor	*s_desc;
- 	u32				string_length;
- 
- 	/* Serial string: */
- 	s_desc = (struct usb_string_descriptor *)strings->serial;
--	utf8s_to_utf16s(DBC_STRING_SERIAL, strlen(DBC_STRING_SERIAL),
-+	utf8s_to_utf16s(func->string.serial, strlen(func->string.serial),
- 			UTF16_LITTLE_ENDIAN, (wchar_t *)s_desc->wData,
- 			DBC_MAX_STRING_LENGTH);
- 
--	s_desc->bLength		= (strlen(DBC_STRING_SERIAL) + 1) * 2;
-+	s_desc->bLength		= (strlen(func->string.serial) + 1) * 2;
- 	s_desc->bDescriptorType	= USB_DT_STRING;
- 	string_length		= s_desc->bLength;
- 	string_length		<<= 8;
- 
- 	/* Product string: */
- 	s_desc = (struct usb_string_descriptor *)strings->product;
--	utf8s_to_utf16s(DBC_STRING_PRODUCT, strlen(DBC_STRING_PRODUCT),
-+	utf8s_to_utf16s(func->string.product, strlen(func->string.product),
- 			UTF16_LITTLE_ENDIAN, (wchar_t *)s_desc->wData,
- 			DBC_MAX_STRING_LENGTH);
- 
--	s_desc->bLength		= (strlen(DBC_STRING_PRODUCT) + 1) * 2;
-+	s_desc->bLength		= (strlen(func->string.product) + 1) * 2;
- 	s_desc->bDescriptorType	= USB_DT_STRING;
- 	string_length		+= s_desc->bLength;
- 	string_length		<<= 8;
- 
- 	/* Manufacture string: */
- 	s_desc = (struct usb_string_descriptor *)strings->manufacturer;
--	utf8s_to_utf16s(DBC_STRING_MANUFACTURER,
--			strlen(DBC_STRING_MANUFACTURER),
-+	utf8s_to_utf16s(func->string.manufacturer,
-+			strlen(func->string.manufacturer),
- 			UTF16_LITTLE_ENDIAN, (wchar_t *)s_desc->wData,
- 			DBC_MAX_STRING_LENGTH);
- 
--	s_desc->bLength		= (strlen(DBC_STRING_MANUFACTURER) + 1) * 2;
-+	s_desc->bLength		= (strlen(func->string.manufacturer) + 1) * 2;
- 	s_desc->bDescriptorType	= USB_DT_STRING;
- 	string_length		+= s_desc->bLength;
- 	string_length		<<= 8;
-@@ -84,7 +88,9 @@ static u32 xhci_dbc_populate_strings(struct dbc_str_descs *strings)
- 	return string_length;
- }
- 
--static void xhci_dbc_init_contexts(struct xhci_hcd *xhci, u32 string_length)
-+static void xhci_dbc_init_contexts(struct xhci_hcd *xhci,
-+					struct dbc_function *func,
-+					u32 string_length)
- {
- 	struct xhci_dbc		*dbc;
- 	struct dbc_info_context	*info;
-@@ -124,10 +130,10 @@ static void xhci_dbc_init_contexts(struct xhci_hcd *xhci, u32 string_length)
- 	/* Set DbC context and info registers: */
- 	xhci_write_64(xhci, dbc->ctx->dma, &dbc->regs->dccp);
- 
--	dev_info = cpu_to_le32((DBC_VENDOR_ID << 16) | DBC_PROTOCOL);
-+	dev_info = cpu_to_le32((func->vid << 16) | func->protocol);
- 	writel(dev_info, &dbc->regs->devinfo1);
- 
--	dev_info = cpu_to_le32((DBC_DEVICE_REV << 16) | DBC_PRODUCT_ID);
-+	dev_info = cpu_to_le32((func->device_rev << 16) | func->pid);
- 	writel(dev_info, &dbc->regs->devinfo2);
- }
- 
-@@ -181,11 +187,13 @@ static void xhci_dbc_flush_endpoint_requests(struct dbc_ep *dep)
- 		xhci_dbc_flush_single_request(req);
- }
- 
--static void xhci_dbc_flush_requests(struct xhci_dbc *dbc)
++config USB_XHCI_DBGCAP_TTY
++	tristate "xHCI DbC tty driver support"
++	depends on USB_XHCI_HCD && USB_XHCI_DBGCAP && TTY
++	help
++	  Say 'Y' to enable the support for the tty driver interface to xHCI
++	  debug capability. This will expose a /dev/ttyDBC* device node on device
++	  which may be used by the usb-debug driver on the debug host.
++	  If unsure, say 'N'.
++endchoice
 +
-+void xhci_dbc_flush_requests(struct xhci_dbc *dbc)
- {
- 	xhci_dbc_flush_endpoint_requests(&dbc->eps[BULK_OUT]);
- 	xhci_dbc_flush_endpoint_requests(&dbc->eps[BULK_IN]);
- }
-+EXPORT_SYMBOL_GPL(xhci_dbc_flush_requests);
+ config USB_XHCI_PCI
+        tristate
+        depends on USB_PCI
+diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+index 84514f71ae44..b21b0ea9e966 100644
+--- a/drivers/usb/host/Makefile
++++ b/drivers/usb/host/Makefile
+@@ -16,9 +16,11 @@ xhci-hcd-y += xhci-ring.o xhci-hub.o xhci-dbg.o
+ xhci-hcd-y += xhci-trace.o
  
- struct dbc_request *
- dbc_alloc_request(struct dbc_ep *dep, gfp_t gfp_flags)
-@@ -205,6 +213,7 @@ dbc_alloc_request(struct dbc_ep *dep, gfp_t gfp_flags)
+ ifneq ($(CONFIG_USB_XHCI_DBGCAP), )
+-	xhci-hcd-y += xhci-dbgcap.o xhci-dbgtty.o
++	xhci-hcd-y += xhci-dbgcap.o
+ endif
  
- 	return req;
- }
-+EXPORT_SYMBOL_GPL(dbc_alloc_request);
- 
- void
- dbc_free_request(struct dbc_ep *dep, struct dbc_request *req)
-@@ -213,6 +222,7 @@ dbc_free_request(struct dbc_ep *dep, struct dbc_request *req)
- 
- 	kfree(req);
- }
-+EXPORT_SYMBOL_GPL(dbc_free_request);
- 
- static void
- xhci_dbc_queue_trb(struct xhci_ring *ring, u32 field1,
-@@ -344,6 +354,7 @@ int dbc_ep_queue(struct dbc_ep *dep, struct dbc_request *req,
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(dbc_ep_queue);
- 
- static inline void xhci_dbc_do_eps_init(struct xhci_hcd *xhci, bool direction)
- {
-@@ -371,7 +382,9 @@ static void xhci_dbc_eps_exit(struct xhci_hcd *xhci)
- 	memset(dbc->eps, 0, sizeof(struct dbc_ep) * ARRAY_SIZE(dbc->eps));
- }
- 
--static int xhci_dbc_mem_init(struct xhci_hcd *xhci, gfp_t flags)
-+static int xhci_dbc_mem_init(struct xhci_hcd *xhci,
-+				struct dbc_function *func,
-+				gfp_t flags)
- {
- 	int			ret;
- 	dma_addr_t		deq;
-@@ -418,8 +431,8 @@ static int xhci_dbc_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	xhci_write_64(xhci, deq, &dbc->regs->erdp);
- 
- 	/* Setup strings and contexts: */
--	string_length = xhci_dbc_populate_strings(dbc->string);
--	xhci_dbc_init_contexts(xhci, string_length);
-+	string_length = xhci_dbc_populate_strings(dbc->string, func);
-+	xhci_dbc_init_contexts(xhci, func, string_length);
- 
- 	xhci_dbc_eps_init(xhci);
- 	dbc->state = DS_INITIALIZED;
-@@ -478,20 +491,9 @@ static int xhci_do_dbc_start(struct xhci_hcd *xhci)
- 	u32			ctrl;
- 	struct xhci_dbc		*dbc = xhci->dbc;
- 
--	if (dbc->state != DS_DISABLED)
-+	if (dbc->state != DS_INITIALIZED)
- 		return -EINVAL;
- 
--	writel(0, &dbc->regs->control);
--	ret = xhci_handshake(&dbc->regs->control,
--			     DBC_CTRL_DBC_ENABLE,
--			     0, 1000);
--	if (ret)
--		return ret;
--
--	ret = xhci_dbc_mem_init(xhci, GFP_ATOMIC);
--	if (ret)
--		return ret;
--
- 	ctrl = readl(&dbc->regs->control);
- 	writel(ctrl | DBC_CTRL_DBC_ENABLE | DBC_CTRL_PORT_ENABLE,
- 	       &dbc->regs->control);
-@@ -552,9 +554,13 @@ static void xhci_dbc_stop(struct xhci_hcd *xhci)
- 
- 	cancel_delayed_work_sync(&dbc->event_work);
- 
--	if (port->registered)
--		xhci_dbc_tty_unregister_device(xhci);
--
-+	if (port->registered &&
-+	    dbc_registered_func &&
-+	    dbc_registered_func->post_disconnect) {
-+		ret = dbc_registered_func->post_disconnect(dbc);
-+		if (ret)
-+			xhci_err(xhci, "dbc post_disconnect error %d\n", ret);
-+	}
- 	spin_lock_irqsave(&dbc->lock, flags);
- 	ret = xhci_do_dbc_stop(xhci);
- 	spin_unlock_irqrestore(&dbc->lock, flags);
-@@ -798,16 +804,12 @@ static void xhci_dbc_handle_events(struct work_struct *work)
- 
- 	switch (evtr) {
- 	case EVT_GSER:
--		ret = xhci_dbc_tty_register_device(xhci);
--		if (ret) {
--			xhci_err(xhci, "failed to alloc tty device\n");
--			break;
--		}
--
--		xhci_info(xhci, "DbC now attached to /dev/ttyDBC0\n");
-+		if (dbc_registered_func->post_config)
-+			dbc_registered_func->post_config(dbc);
- 		break;
- 	case EVT_DISC:
--		xhci_dbc_tty_unregister_device(xhci);
-+		if (dbc_registered_func->post_disconnect)
-+			ret = dbc_registered_func->post_disconnect(dbc);
- 		break;
- 	case EVT_DONE:
- 		break;
-@@ -912,46 +914,76 @@ static ssize_t dbc_store(struct device *dev,
- 			 struct device_attribute *attr,
- 			 const char *buf, size_t count)
- {
-+	struct xhci_dbc		*dbc;
- 	struct xhci_hcd		*xhci;
-+	int			ret = 0;
- 
- 	xhci = hcd_to_xhci(dev_get_drvdata(dev));
-+	dbc = xhci->dbc;
- 
--	if (!strncmp(buf, "enable", 6))
-+	if (!strncmp(buf, "enable", 6) && dbc->state == DS_DISABLED) {
-+		if (!dbc_registered_func)
-+			return -EINVAL;
-+		if (!try_module_get(dbc_registered_func->owner))
-+			return -ENODEV;
-+		ret = xhci_dbc_mem_init(dbc->xhci, dbc_registered_func,
-+						GFP_ATOMIC);
-+		if (ret)
-+			goto err;
-+		if (dbc_registered_func->run)
-+			ret = dbc_registered_func->run(dbc);
-+		if (ret) {
-+			xhci_dbc_mem_cleanup(xhci);
-+			dbc->state = DS_DISABLED;
-+			goto err;
-+		}
- 		xhci_dbc_start(xhci);
--	else if (!strncmp(buf, "disable", 7))
-+	} else if (!strncmp(buf, "disable", 7) && dbc->state != DS_DISABLED) {
-+		if (!dbc_registered_func)
-+			return -EINVAL;
- 		xhci_dbc_stop(xhci);
--	else
-+		if (dbc_registered_func->stop)
-+			dbc_registered_func->stop(dbc);
-+		module_put(dbc_registered_func->owner);
-+	} else
- 		return -EINVAL;
- 
- 	return count;
-+err:
-+	module_put(dbc_registered_func->owner);
-+	return ret;
- }
- 
- static DEVICE_ATTR_RW(dbc);
- 
-+static struct attribute *dbc_dev_attributes[] = {
-+	&dev_attr_dbc.attr,
-+	NULL
-+};
++obj-$(CONFIG_USB_XHCI_DBGCAP_TTY) += xhci-dbgtty.o
 +
-+static const struct attribute_group dbc_dev_attrib_grp = {
-+	.attrs = dbc_dev_attributes,
-+};
-+
-+
- int xhci_dbc_init(struct xhci_hcd *xhci)
- {
- 	int			ret;
- 	struct device		*dev = xhci_to_hcd(xhci)->self.controller;
- 
- 	ret = xhci_do_dbc_init(xhci);
--	if (ret)
--		goto init_err3;
--
--	ret = xhci_dbc_tty_register_driver(xhci);
- 	if (ret)
- 		goto init_err2;
- 
--	ret = device_create_file(dev, &dev_attr_dbc);
-+	ret = sysfs_create_group(&dev->kobj, &dbc_dev_attrib_grp);
- 	if (ret)
- 		goto init_err1;
- 
- 	return 0;
- 
- init_err1:
--	xhci_dbc_tty_unregister_driver();
--init_err2:
- 	xhci_do_dbc_exit(xhci);
--init_err3:
-+init_err2:
- 	return ret;
- }
- 
-@@ -963,11 +995,38 @@ void xhci_dbc_exit(struct xhci_hcd *xhci)
- 		return;
- 
- 	device_remove_file(dev, &dev_attr_dbc);
--	xhci_dbc_tty_unregister_driver();
- 	xhci_dbc_stop(xhci);
- 	xhci_do_dbc_exit(xhci);
- }
- 
-+static inline int is_invalid(int val)
-+{
-+	return (val <  0 || val > 0xffff);
-+}
-+
-+int xhci_dbc_register_function(struct dbc_function *func)
-+{
-+	if (dbc_registered_func)
-+		return -EBUSY;
-+
-+	if (is_invalid(func->protocol) ||
-+		is_invalid(func->vid) ||
-+		is_invalid(func->pid) ||
-+		is_invalid(func->device_rev))
-+		return -EINVAL;
-+	if (!func->run || !func->stop)
-+		return -EINVAL;
-+	dbc_registered_func = func;
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(xhci_dbc_register_function);
-+
-+void xhci_dbc_unregister_function(void)
-+{
-+	dbc_registered_func = NULL;
-+}
-+EXPORT_SYMBOL_GPL(xhci_dbc_unregister_function);
-+
- #ifdef CONFIG_PM
- int xhci_dbc_suspend(struct xhci_hcd *xhci)
- {
+ ifneq ($(CONFIG_USB_XHCI_MTK), )
+ 	xhci-hcd-y += xhci-mtk-sch.o
+ endif
 diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
-index ce0c6072bd48..b4d5622a9030 100644
+index b4d5622a9030..302e6ca72370 100644
 --- a/drivers/usb/host/xhci-dbgcap.h
 +++ b/drivers/usb/host/xhci-dbgcap.h
-@@ -11,6 +11,7 @@
- 
- #include <linux/tty.h>
- #include <linux/kfifo.h>
-+#include <linux/kernel.h>
- 
- struct dbc_regs {
- 	__le32	capability;
-@@ -48,9 +49,9 @@ struct dbc_info_context {
- 
- #define DBC_MAX_PACKET			1024
- #define DBC_MAX_STRING_LENGTH		64
--#define DBC_STRING_MANUFACTURER		"Linux Foundation"
--#define DBC_STRING_PRODUCT		"Linux USB Debug Target"
--#define DBC_STRING_SERIAL		"0001"
-+#define DBC_STR_MANUFACTURER		"Linux Foundation"
-+#define DBC_STR_PRODUCT		"Linux USB Debug Target"
-+#define DBC_STR_SERIAL			"0001"
- #define	DBC_CONTEXT_SIZE		64
- 
- /*
-@@ -75,6 +76,7 @@ struct dbc_str_descs {
- #define DBC_PRODUCT_ID			0x0010	/* device 0010 */
- #define DBC_DEVICE_REV			0x0010	/* 0.10 */
- 
-+
- enum dbc_state {
- 	DS_DISABLED = 0,
- 	DS_INITIALIZED,
-@@ -108,6 +110,25 @@ struct dbc_ep {
- 	unsigned			direction:1;
- };
- 
-+struct dbc_function {
-+	char				func_name[32];
-+	/* string descriptors */
-+	struct dbc_str_descs            string;
-+	/* other device or interface descriptors */
-+	u16				protocol;
-+	u16				vid;
-+	u16				pid;
-+	u16				device_rev;
-+
-+	/* callbacks */
-+	int (*run)(struct xhci_dbc *dbc);
-+	int (*post_config)(struct xhci_dbc *dbc);
-+	int (*post_disconnect)(struct xhci_dbc *dbc);
-+	int (*stop)(struct xhci_dbc *dbc);
-+
-+	/* module owner */
-+	struct module			*owner;
-+};
- #define DBC_QUEUE_SIZE			16
- #define DBC_WRITE_BUF_SIZE		8192
- 
-@@ -151,6 +172,8 @@ struct xhci_dbc {
- 	struct dbc_ep			eps[2];
- 
- 	struct dbc_port			port;
-+	/* priv pointer for a function */
-+	void                            *func_priv;
- };
- 
- #define dbc_bulkout_ctx(d)		\
-@@ -200,8 +223,11 @@ void xhci_dbc_tty_unregister_driver(void);
- int xhci_dbc_tty_register_device(struct xhci_hcd *xhci);
- void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci);
+@@ -218,10 +218,6 @@ static inline struct dbc_ep *get_out_ep(struct xhci_hcd *xhci)
+ #ifdef CONFIG_USB_XHCI_DBGCAP
+ int xhci_dbc_init(struct xhci_hcd *xhci);
+ void xhci_dbc_exit(struct xhci_hcd *xhci);
+-int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci);
+-void xhci_dbc_tty_unregister_driver(void);
+-int xhci_dbc_tty_register_device(struct xhci_hcd *xhci);
+-void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci);
  struct dbc_request *dbc_alloc_request(struct dbc_ep *dep, gfp_t gfp_flags);
-+void xhci_dbc_flush_reqests(struct xhci_dbc *dbc);
+ void xhci_dbc_flush_reqests(struct xhci_dbc *dbc);
  void dbc_free_request(struct dbc_ep *dep, struct dbc_request *req);
- int dbc_ep_queue(struct dbc_ep *dep, struct dbc_request *req, gfp_t gfp_flags);
-+int xhci_dbc_register_function(struct dbc_function *func);
-+void xhci_dbc_unregister_function(void);
- #ifdef CONFIG_PM
- int xhci_dbc_suspend(struct xhci_hcd *xhci);
- int xhci_dbc_resume(struct xhci_hcd *xhci);
+diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
+index aff79ff5aba4..f75a95006c51 100644
+--- a/drivers/usb/host/xhci-dbgtty.c
++++ b/drivers/usb/host/xhci-dbgtty.c
+@@ -7,13 +7,15 @@
+  * Author: Lu Baolu <baolu.lu@linux.intel.com>
+  */
+ 
++#include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/tty.h>
+ #include <linux/tty_flip.h>
+-
+ #include "xhci.h"
+ #include "xhci-dbgcap.h"
+ 
++#define DBC_STR_FUNC_TTY    "TTY"
++
+ static unsigned int
+ dbc_send_packet(struct dbc_port *port, char *packet, unsigned int size)
+ {
+@@ -279,12 +281,11 @@ static const struct tty_operations dbc_tty_ops = {
+ 	.unthrottle		= dbc_tty_unthrottle,
+ };
+ 
+-static struct tty_driver *dbc_tty_driver;
+-
+-int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
++static int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
+ {
+ 	int			status;
+ 	struct xhci_dbc		*dbc = xhci->dbc;
++	struct tty_driver	*dbc_tty_driver;
+ 
+ 	dbc_tty_driver = tty_alloc_driver(1, TTY_DRIVER_REAL_RAW |
+ 					  TTY_DRIVER_DYNAMIC_DEV);
+@@ -296,7 +297,6 @@ int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
+ 
+ 	dbc_tty_driver->driver_name = "dbc_serial";
+ 	dbc_tty_driver->name = "ttyDBC";
+-
+ 	dbc_tty_driver->type = TTY_DRIVER_TYPE_SERIAL;
+ 	dbc_tty_driver->subtype = SERIAL_TYPE_NORMAL;
+ 	dbc_tty_driver->init_termios = tty_std_termios;
+@@ -315,16 +315,19 @@ int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
+ 		put_tty_driver(dbc_tty_driver);
+ 		dbc_tty_driver = NULL;
+ 	}
++	dbc->func_priv = dbc_tty_driver;
+ 
+ 	return status;
+ }
+ 
+-void xhci_dbc_tty_unregister_driver(void)
++static void xhci_dbc_tty_unregister_driver(struct xhci_dbc *dbc)
+ {
++	struct tty_driver	*dbc_tty_driver =
++					(struct tty_driver *) dbc->func_priv;
+ 	if (dbc_tty_driver) {
+ 		tty_unregister_driver(dbc_tty_driver);
+ 		put_tty_driver(dbc_tty_driver);
+-		dbc_tty_driver = NULL;
++		dbc->func_priv = NULL;
+ 	}
+ }
+ 
+@@ -440,12 +443,14 @@ xhci_dbc_tty_exit_port(struct dbc_port *port)
+ 	tty_port_destroy(&port->port);
+ }
+ 
+-int xhci_dbc_tty_register_device(struct xhci_hcd *xhci)
++static int xhci_dbc_tty_register_device(struct xhci_hcd *xhci)
+ {
+ 	int			ret;
+ 	struct device		*tty_dev;
+ 	struct xhci_dbc		*dbc = xhci->dbc;
+ 	struct dbc_port		*port = &dbc->port;
++	struct tty_driver	*dbc_tty_driver =
++					(struct tty_driver *) dbc->func_priv;
+ 
+ 	xhci_dbc_tty_init_port(xhci, port);
+ 	tty_dev = tty_port_register_device(&port->port,
+@@ -493,6 +498,8 @@ void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci)
+ {
+ 	struct xhci_dbc		*dbc = xhci->dbc;
+ 	struct dbc_port		*port = &dbc->port;
++	struct tty_driver	*dbc_tty_driver =
++					(struct tty_driver *) dbc->func_priv;
+ 
+ 	tty_unregister_device(dbc_tty_driver, 0);
+ 	xhci_dbc_tty_exit_port(port);
+@@ -503,3 +510,61 @@ void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci)
+ 	xhci_dbc_free_requests(get_out_ep(xhci), &port->read_queue);
+ 	xhci_dbc_free_requests(get_in_ep(xhci), &port->write_pool);
+ }
++
++static int dbc_tty_post_config(struct xhci_dbc *dbc)
++{
++	return xhci_dbc_tty_register_device(dbc->xhci);
++}
++
++static int dbc_tty_post_disconnect(struct xhci_dbc *dbc)
++{
++	xhci_dbc_tty_unregister_device(dbc->xhci);
++	return 0;
++}
++
++static int dbc_tty_run(struct xhci_dbc *dbc)
++{
++	return  xhci_dbc_tty_register_driver(dbc->xhci);
++}
++
++static int dbc_tty_stop(struct xhci_dbc *dbc)
++{
++	xhci_dbc_tty_unregister_driver(dbc);
++	return 0;
++}
++
++static struct dbc_function tty_func = {
++	.owner = THIS_MODULE,
++	.string = {
++		.manufacturer = DBC_STR_MANUFACTURER,
++		.product = DBC_STR_PRODUCT,
++		.serial = DBC_STR_SERIAL,
++	},
++	.protocol = DBC_PROTOCOL,
++	.vid =     DBC_VENDOR_ID,
++	.pid =     DBC_PRODUCT_ID,
++	.device_rev = DBC_DEVICE_REV,
++	.func_name = DBC_STR_FUNC_TTY,
++
++	.post_config = dbc_tty_post_config,
++	.post_disconnect = dbc_tty_post_disconnect,
++	.run = dbc_tty_run,
++	.stop = dbc_tty_stop,
++};
++
++static int __init xhci_dbc_tty_init(void)
++{
++	return xhci_dbc_register_function(&tty_func);
++}
++
++static void __exit xhci_dbc_tty_fini(void)
++{
++	xhci_dbc_unregister_function();
++}
++
++late_initcall(xhci_dbc_tty_init);
++module_exit(xhci_dbc_tty_fini);
++
++MODULE_DESCRIPTION("xHCI DbC tty driver");
++MODULE_AUTHOR("Baoulu Lu");
++MODULE_LICENSE("GPL");
 -- 
 2.21.0
 
