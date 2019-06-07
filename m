@@ -2,68 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D92623813D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 00:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2624D38276
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 03:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726933AbfFFWuy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 6 Jun 2019 18:50:54 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:25307 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726352AbfFFWuy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Jun 2019 18:50:54 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 27461C1EB216;
-        Thu,  6 Jun 2019 22:50:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 17E1153B33;
-        Thu,  6 Jun 2019 22:50:48 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <D2BD8FEB-5DF5-449B-AF81-83BA65E0E643@amacapital.net>
-References: <D2BD8FEB-5DF5-449B-AF81-83BA65E0E643@amacapital.net> <AD7898AE-B92C-4DE6-B895-7116FEDB3091@amacapital.net> <CALCETrVuNRPgEzv-XY4M9m6sEsCiRHxPenN_MpcMYc1h26vVwQ@mail.gmail.com> <b91710d8-cd2d-6b93-8619-130b9d15983d@tycho.nsa.gov> <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk> <3813.1559827003@warthog.procyon.org.uk> <8382af23-548c-f162-0e82-11e308049735@tycho.nsa.gov> <0eb007c5-b4a0-9384-d915-37b0e5a158bf@schaufler-ca.com> <c82052e5-ca11-67b5-965e-8f828081f31c@tycho.nsa.gov> <07e92045-2d80-8573-4d36-643deeaff9ec@schaufler-ca.com> <23611.1559855827@warthog.procyon.org.uk> <30567.1559860681@warthog.procyon.org.uk>
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     dhowells@redhat.com, Andy Lutomirski <luto@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        id S1727434AbfFGB5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Jun 2019 21:57:05 -0400
+Received: from mail-pg1-f174.google.com ([209.85.215.174]:43792 "EHLO
+        mail-pg1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726791AbfFGB5E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Jun 2019 21:57:04 -0400
+Received: by mail-pg1-f174.google.com with SMTP id f25so266283pgv.10;
+        Thu, 06 Jun 2019 18:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=YFXox/VaEEDxs9pquSJLpjpCJcX389Fmf7dWJx9j5h8=;
+        b=fd2atQP1qdoyel71qRIYtGZmyNwY3U7xfG5j5j9PFq4fbQXsrW2UMnKBeFmoEhiguC
+         n9HlXRU+w0RAb+jWY4vGVguByv1Cc+fMjVTCT2u+yjFqOkDGn7MrLzJuhrWUg+uPGg4O
+         qk001HgwBTacceHi4x4kObsLZv8yj6FKmFozgzLShHEZ4LdSdTwGFyPHWgHb18mkoCwp
+         Vqm5287oGU0mulRrnaiz3OCyZe14Zdald/jqF67bC8QIM+EvPtQ4qDsaGd5H2Duwhant
+         kf9l92zvOmaU7UbQ9a2zCXYVIY4mreFUALU59myk3XAc63iX81hb7ftawXTZePIv6/fi
+         p+zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=YFXox/VaEEDxs9pquSJLpjpCJcX389Fmf7dWJx9j5h8=;
+        b=BaZfWOU8rFMVF+N66hPsF9nwHXZ5x2DyYXALQoCrcpmkpS8ByXFIGCJRk68nhOQvdC
+         FcwJ5QJx+J4oceG0tyN+hcvV5NOVcP+x7vnimIBunxAlMUE+y6YGdA6Z+Ox7G6qJuGwG
+         ZRqMZUAIcEBN3ZAv/+vYXQ/5pCb0OqtjWKC1bArFdTa0YH+75uGQXV7OJs27ETfyoy7q
+         vEASvv+JK/Nt7fhojBnbBuWkYgArIFuYOqdddgur+mM2CfIhhisgxIL8EIZQDiKKb9go
+         uPxduwr5WhpI9CFjJLk6Ht9qV8FszDIOE1u5f9TCiHzW1YBlKQIb/aDLUczlDyaIlPRu
+         YklQ==
+X-Gm-Message-State: APjAAAWjP1lJFlIl2HX7UXhinDJK/SE0NXPdaUuZeeOYnmsIFFnUNmFb
+        qfJPv8vxSRk+14GA5KNV4CQ=
+X-Google-Smtp-Source: APXvYqwAEMKapNCPLmFfVinmGpCE+xThuCljjQZSDJL2/DOYhYvG/45KTOx+TxQuwzxQL5Vqd0PGLQ==
+X-Received: by 2002:a62:a511:: with SMTP id v17mr54610684pfm.129.1559872624178;
+        Thu, 06 Jun 2019 18:57:04 -0700 (PDT)
+Received: from hari-Inspiron-1545 ([183.83.89.153])
+        by smtp.gmail.com with ESMTPSA id r77sm385030pgr.93.2019.06.06.18.57.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jun 2019 18:57:03 -0700 (PDT)
+Date:   Fri, 7 Jun 2019 07:26:58 +0530
+From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
+To:     Thomas Winischhofer <thomas@winischhofer.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>, raven@themaw.net,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Subject: Re: [RFC][PATCH 00/10] Mount, FS, Block and Keyrings notifications [ver #3]
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [Patch v2] USB: sisusbvga: Remove unneeded variable
+Message-ID: <20190607015658.GA4113@hari-Inspiron-1545>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Date:   Thu, 06 Jun 2019 23:50:48 +0100
-Message-ID: <31428.1559861448@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Thu, 06 Jun 2019 22:50:53 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Andy Lutomirski <luto@amacapital.net> wrote:
+fix below warning reported by coccicheck
 
-> They can call fsinfo() anyway, or just read /proc/self/mounts. As far as I’m
-> concerned, if you have CAP_SYS_ADMIN over a mount namespace and LSM policy
-> lets you mount things, the of course you can get information to basically
-> anyone who can use that mount namespace.
+drivers/usb/misc/sisusbvga/sisusb.c:1753:5-8: Unneeded variable: "ret".
+Return "0" on line 1877
 
-And automounts?  You don't need CAP_SYS_ADMIN to trigger one of those, but
-they still generate events.  On the other hand, you need CSA to mount
-something that has automounts in the first place, and if you're particularly
-concerned about security, you probably don't want the processes you might be
-suspicious of having access to things that contain automounts (typically
-network filesystems).
+Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+-----
+changes in v2: Change return type of sisusb_set_default_mode from int to void
+               as it never fails.
+---
+ drivers/usb/misc/sisusbvga/sisusb.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-David
+diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
+index ea06f1f..2ab9600 100644
+--- a/drivers/usb/misc/sisusbvga/sisusb.c
++++ b/drivers/usb/misc/sisusbvga/sisusb.c
+@@ -1747,10 +1747,10 @@ static int sisusb_setup_screen(struct sisusb_usb_data *sisusb,
+ 	return ret;
+ }
+ 
+-static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
++static void sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
+ 		int touchengines)
+ {
+-	int ret = 0, i, j, modex, bpp, du;
++	int i, j, modex, bpp, du;
+ 	u8 sr31, cr63, tmp8;
+ 	static const char attrdata[] = {
+ 		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+@@ -1873,8 +1873,6 @@ static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
+ 	}
+ 
+ 	SETIREG(SISCR, 0x34, 0x44);	/* we just set std mode #44 */
+-
+-	return ret;
+ }
+ 
+ static int sisusb_init_gfxcore(struct sisusb_usb_data *sisusb)
+@@ -2019,7 +2017,7 @@ static int sisusb_init_gfxcore(struct sisusb_usb_data *sisusb)
+ 
+ 		ret |= SETIREG(SISCR, 0x83, 0x00);
+ 
+-		ret |= sisusb_set_default_mode(sisusb, 0);
++		sisusb_set_default_mode(sisusb, 0);
+ 
+ 		ret |= SETIREGAND(SISSR, 0x21, 0xdf);
+ 		ret |= SETIREGOR(SISSR, 0x01, 0x20);
+@@ -2246,7 +2244,7 @@ static int sisusb_init_gfxdevice(struct sisusb_usb_data *sisusb, int initscreen)
+ 		if (sisusb_init_gfxcore(sisusb) == 0) {
+ 			sisusb->gfxinit = 1;
+ 			sisusb_get_ramconfig(sisusb);
+-			ret |= sisusb_set_default_mode(sisusb, 1);
++			sisusb_set_default_mode(sisusb, 1);
+ 			ret |= sisusb_setup_screen(sisusb, 1, initscreen);
+ 		}
+ 	}
+-- 
+2.7.4
+
