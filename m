@@ -2,93 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFD0384C0
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 09:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E066D38475
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 08:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbfFGHNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 03:13:33 -0400
-Received: from smtp1.iitb.ac.in ([103.21.127.13]:45144 "EHLO smtp1.iitb.ac.in"
+        id S1727106AbfFGGht (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 02:37:49 -0400
+Received: from mga09.intel.com ([134.134.136.24]:57977 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726778AbfFGHNd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Jun 2019 03:13:33 -0400
-X-Greylist: delayed 2234 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jun 2019 03:13:31 EDT
-Received: from ldns1.iitb.ac.in (ldns1.iitb.ac.in [10.200.12.1])
-        by smtp1.iitb.ac.in (Postfix) with SMTP id 07D87105B687
-        for <linux-usb@vger.kernel.org>; Fri,  7 Jun 2019 12:01:34 +0530 (IST)
-Received: (qmail 27999 invoked by uid 510); 7 Jun 2019 12:01:33 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns1 (envelope-from <rws@aero.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/25472} 
- Clear:RC:1(10.200.1.25):SA:0(1.5/7.0):. Processed in 2.069313 secs; 07 Jun 2019 12:01:33 +0530
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on ldns1.iitb.ac.in
-X-Spam-Level: *
-X-Spam-Status: No, score=1.5 required=7.0 tests=BAYES_50,IITB_ORIG,
-        MISSING_HEADERS,PROPER_IITB_MSGID,T_RP_MATCHES_RCVD autolearn=disabled
-        version=3.4.1
-X-Spam-Pyzor: Reported 0 times.
-X-Envelope-From: rws@aero.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns1.iitb.ac.in) (10.200.1.25)
-  by ldns1.iitb.ac.in with SMTP; 7 Jun 2019 12:01:31 +0530
-Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
-        by ldns1.iitb.ac.in (Postfix) with ESMTP id 80518360036;
-        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id E4B948902E55E;
-        Fri,  7 Jun 2019 12:01:16 +0530 (IST)
-Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
-        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id uy24o_MU5OGU; Fri,  7 Jun 2019 12:01:16 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 5C3AC8902E548;
-        Fri,  7 Jun 2019 12:01:14 +0530 (IST)
-X-Virus-Scanned: amavisd-new at aero.iitb.ac.in
-Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
-        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 2kbUWSjAc2AF; Fri,  7 Jun 2019 12:01:14 +0530 (IST)
-Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 0EEE684310111;
-        Fri,  7 Jun 2019 12:01:10 +0530 (IST)
-Date:   Fri, 7 Jun 2019 12:01:09 +0530 (IST)
-From:   Martins Henry <rws@aero.iitb.ac.in>
-Message-ID: <412557711.60336.1559889069980.JavaMail.zimbra@aero.iitb.ac.in>
-Subject: Thanks and I wait for your answer
+        id S1726048AbfFGGht (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jun 2019 02:37:49 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 23:37:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,562,1557212400"; 
+   d="scan'208";a="182572394"
+Received: from intel.iind.intel.com ([10.66.245.146])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Jun 2019 23:37:44 -0700
+From:   Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     mathias.nyman@intel.com, rajaram.regupathy@intel.com,
+        abhilash.k.v@intel.com, prabhat.chand.pandey@intel.com,
+        m.balaji@intel.com
+Subject: [PATCH 0/5] usb: xhci: dbc: make modular and add RAW interface
+Date:   Fri,  7 Jun 2019 12:03:01 +0530
+Message-Id: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.101.1.5]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF11 (Win)/8.8.12_GA_3794)
-Thread-Index: SsslhYkcLNFU69da/wYft5cO9/ZYnA==
-Thread-Topic: Thanks and I wait for your answer
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+This patch-set adds the following features to dbc driver:
 
-I am Martin Henry, An American Citizen; I am the personal secretary to
-Mr. Donald Railton, the controller of a Lottery Company. Please I am
-having big problem now, I have a 6yrs old daughter who has leukemia, a
-disease of the blood, and she needs a bone marrow transplant or she
-will die.
+- show the active dbc function and dbc descriptors, allowing
+  user space to dynamically modify the descriptors.
 
-Please I am only asking for your help and you will benefit from it
-also. As an insider with Lottery Firm, working as the personal
-secretary to the controller, I want you to send me your name to play,
-I have some numbers that are going to win, stored in his secret data
-system in the office. The Lottery is an online entry with credit card
-anywhere with a name and address. All I want you to do is to send your
-name to play it and I will send confirmation to you.
+- modularize dbc core to enable it to expose different function
+  interfaces, till now only TTY interface was exposed.
 
-I will play with my card on your name and the Prize will be shared
-equally between us. Immediately the results are released they will
-contact you for payment as the oversea winner. The lotto can be played
-with 9.00 dollars, or 50 dollars but the prize will be Millions.
-Remember that I am playing on your name with my card; I just want to
-front you for this, because I need this money to save the life of my
-little daughter.
+- use the new framework to expose RAW interface that can be
+  used by any user-space application to directly read from and 
+  write into dbc bulk end-points.
 
-Thanks and I wait for your answer
-Martin Henry.
+
+Abhilash K V (1):
+  usb: xhci: dbc: Add a dbc raw driver to provide a raw interface on DbC
+
+K V, Abhilash (1):
+  usb: xhci: dbc: Provide sysfs option to configure dbc descriptors
+
+Prabhat Chand Pandey (3):
+  usb: xhci: dbc: make DbC modular, introducing dbc_function structure
+  usb: xhci: dbc: DbC TTY driver to use new interface
+  usb: xhci: dbc: Document describe about dbc raw interface
+
+ .../testing/sysfs-bus-pci-drivers-xhci_hcd    | 112 ++++
+ Documentation/usb/dbc_raw.rst                 | 136 +++++
+ Documentation/usb/index.rst                   |  16 +
+ drivers/usb/host/Kconfig                      |  24 +-
+ drivers/usb/host/Makefile                     |   5 +-
+ drivers/usb/host/xhci-dbgcap.c                | 498 ++++++++++++++++--
+ drivers/usb/host/xhci-dbgcap.h                |  36 +-
+ drivers/usb/host/xhci-dbgraw.c                | 365 +++++++++++++
+ drivers/usb/host/xhci-dbgtty.c                |  81 ++-
+ 9 files changed, 1206 insertions(+), 67 deletions(-)
+ create mode 100644 Documentation/usb/dbc_raw.rst
+ create mode 100644 Documentation/usb/index.rst
+ create mode 100644 drivers/usb/host/xhci-dbgraw.c
+
+-- 
+2.21.0
+
