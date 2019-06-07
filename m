@@ -2,196 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51923393FF
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 20:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5BA39557
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 21:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730517AbfFGSJs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 14:09:48 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:39401 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730389AbfFGSJr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 14:09:47 -0400
-Received: by mail-pf1-f196.google.com with SMTP id j2so1624318pfe.6
-        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 11:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/3m639ul9fLGHczHyKn0H1zZg+5SVSXXo1Nl+CYKby4=;
-        b=PzFmnwe5R9+tXehwIXZM6y8FoShB+B2G5A0MZe7+0cyb/EOpN+t4FPLENdAFQiY4vp
-         snMFvVlNDWgHWDB2eUSQIPp1jPpux+sTG071CiSoW9pKxLK4lCyinxlVC7k40V6c7NyM
-         z5pTl9+LJCEFZIC3Qz7jsfCfXo3GXCw4hr6fH/Of0zai00v9lD1BaHATpmLQ9qqU0zRI
-         HEJWGafkIT/mIu9OHFbD7peMSgFffJJnzRTXUZh94uyM4rRLf4WGCbHpAYNJSgv6Pp+D
-         fd+lIHwpViriTTXjPu1DqDEtndYAxhmI9tO3EsjbdeUbHvIlHX+VrJDGetgrOd1J7w40
-         Dz0w==
+        id S1729587AbfFGTNH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 15:13:07 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:40069 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728752AbfFGTNG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 15:13:06 -0400
+Received: by mail-io1-f69.google.com with SMTP id v11so2362234iop.7
+        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 12:13:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/3m639ul9fLGHczHyKn0H1zZg+5SVSXXo1Nl+CYKby4=;
-        b=UuDKjqlHPhNhGxxHcT16XrvLv1o7T0Xh4mlRGCCFmPBhMCK9uY8n23/LmQOHJn1cdL
-         FV1+q0v0FGb4LR94JMNqXBGEHpTe9WYzj9C+yuBhchr+Vq3K8GV6eIynRSAJiPO9BEzR
-         pIIzxlA2OqWR2hamxNZeqLHjAeEXdeZSLo0Bju+8+XISXMxKHIQqsXLJiM7l7s2wV4eL
-         3PTJavVFBZSdeD18gyDnMXPuM/9ez3uHBXvzzNIwSq+fj5TPtR9BJ/kYZkdriKkzpEUd
-         FYGPhFN1nQUpVXUhOptrGQ8xim+pFBuVuJ9wbEY9QehsRyQ0V+Iyyul7TTZobntY7uzV
-         fU5g==
-X-Gm-Message-State: APjAAAWu+FFbbCAqDcc157JR9m+hgYiy36AJ1uuLaH9LRoALgFdmWNVA
-        SGTSb2qC47KtEeOAVur9tIwPyw==
-X-Google-Smtp-Source: APXvYqzt5gwdXKwtn7ZORpYSN5ZFetcAiXsBwVaXb6cj35kEgitwNjg1kWrl11fOzV9tGYSsCfKnXw==
-X-Received: by 2002:a62:3287:: with SMTP id y129mr4134583pfy.251.1559930986308;
-        Fri, 07 Jun 2019 11:09:46 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id l44sm6897224pje.29.2019.06.07.11.09.43
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 07 Jun 2019 11:09:45 -0700 (PDT)
-Date:   Fri, 7 Jun 2019 11:10:30 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, alokc@codeaurora.org,
-        Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        wsa+renesas@sang-engineering.com,
-        Linus Walleij <linus.walleij@linaro.org>, balbi@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jeffrey Hugo <jlhugo@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 3/8] pinctrl: msm: Add ability for drivers to supply a
- reserved GPIO list
-Message-ID: <20190607181030.GX22737@tuxbook-pro>
-References: <20190607082901.6491-1-lee.jones@linaro.org>
- <20190607082901.6491-3-lee.jones@linaro.org>
- <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=cyqCrDVt2dXVqI86R5kiLgCbIofZNHXYbbR1FIOGENY=;
+        b=iXxzw5UcUHKCTdeDHpKCXBh8fq1vE8MTL3b5QoQIoATLWPFUXCzm4X2/k6WBng2xsS
+         JGgNyz7oqWZippo33AUHAUDJA+xeN/Tk+Yb6oa5rB7bJqqHQb7mrrPmk7BD/QwjkvevZ
+         y6mSpPFT7Q9F91n3JNKU8mrpG1mByYLBedSo3kuLxJnJxVlXdCn6MPpkE/7Pcw5LoBNH
+         sTKcqphkiJgVXd1LzU73gxZCR/xw+MXeunoUrPBDMxz0JBcsuwuHr3fH9CZK9EIHcr1f
+         o+eODVX8MH1hVRUqh19vYplPurP41eH6nNpN3QmUwLrAKZ/Bk1AQjXflDpiHPfZmGbIm
+         hk3w==
+X-Gm-Message-State: APjAAAVEJe1uMip14Af++XFw15px6WDN0QACfX5z2MF+WheLpau0zm3Z
+        tBFBa3r5UhJZ4tCy8UI+4MaZY6pGZ8ny2Ly+ls8ZZcNUfgNM
+X-Google-Smtp-Source: APXvYqx/BdEP9lMOAedJ3yRv8lpTdqGerTLV44sx8ug8pFLGAgLn7Qp6CZoPRXvcthgfYfh0AMdPOBh/Q8emJuHLVG9uCw6Qhx3o
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+X-Received: by 2002:a5d:860e:: with SMTP id f14mr1413298iol.242.1559934786049;
+ Fri, 07 Jun 2019 12:13:06 -0700 (PDT)
+Date:   Fri, 07 Jun 2019 12:13:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cba2b6058ac09eeb@google.com>
+Subject: KMSAN: uninit-value in ax88178_bind
+From:   syzbot <syzbot+abd25d675d47f23f188c@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        lynxis@fe80.eu, marcel.ziswiler@toradex.com,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        yang.wei9@zte.com.cn, zhang.run@zte.com.cn
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 07 Jun 04:10 PDT 2019, Ard Biesheuvel wrote:
+Hello,
 
-> On Fri, 7 Jun 2019 at 10:29, Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > When booting MSM based platforms with Device Tree or some ACPI
-> > implementations, it is possible to provide a list of reserved pins
-> > via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
-> > However some ACPI tables are not populated with this information,
-> > thus it has to come from a knowledgable device driver instead.
-> >
-> > Here we provide the MSM common driver with additional support to
-> > parse this informtion and correctly populate the widely used
-> > 'valid_mask'.
-> >
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> 
-> I'm not sure if this is the correct approach. Presumably, on ACPI
-> systems, all the pinctl stuff is already set up by the firmware, and
-> so we shouldn't touch *any* pins unless they have been requested
-> explicitly. Is there any way we can support this in the current
-> framework?
-> 
+syzbot found the following crash on:
 
-The only reason why we do this (at least the initial reason) is because
-gpiolib will read the current state of all GPIOs during initialization.
+HEAD commit:    f75e4cfe kmsan: use kmsan_handle_urb() in urb.c
+git tree:       kmsan
+console output: https://syzkaller.appspot.com/x/log.txt?x=10b2622ea00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=602468164ccdc30a
+dashboard link: https://syzkaller.appspot.com/bug?extid=abd25d675d47f23f188c
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+06d00afa61eef8f7f501ebdb4e8612ea43ec2d78)
 
-But due to the sensitive nature of the application using these pins
-Linux is prohibited from touching the associated GPIO/pinmux/pinconf
-registers - resulting in a security violation if we allow gpiolib to
-touch them.
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+abd25d675d47f23f188c@syzkaller.appspotmail.com
+
+usb 2-1: Using ep0 maxpacket: 8
+usb 2-1: config 0 has an invalid interface number: 81 but max is 0
+usb 2-1: config 0 has no interface number 0
+usb 2-1: New USB device found, idVendor=04bb, idProduct=0930, bcdDevice=  
+f.22
+usb 2-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 2-1: config 0 descriptor??
+==================================================================
+BUG: KMSAN: uninit-value in is_valid_ether_addr  
+include/linux/etherdevice.h:200 [inline]
+BUG: KMSAN: uninit-value in asix_set_netdev_dev_addr  
+drivers/net/usb/asix_devices.c:73 [inline]
+BUG: KMSAN: uninit-value in ax88178_bind+0x635/0xad0  
+drivers/net/usb/asix_devices.c:1087
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.1.0+ #1
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x130/0x2a0 mm/kmsan/kmsan.c:622
+  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:310
+  is_valid_ether_addr include/linux/etherdevice.h:200 [inline]
+  asix_set_netdev_dev_addr drivers/net/usb/asix_devices.c:73 [inline]
+  ax88178_bind+0x635/0xad0 drivers/net/usb/asix_devices.c:1087
+  usbnet_probe+0x10f5/0x3940 drivers/net/usb/usbnet.c:1728
+  usb_probe_interface+0xd66/0x1320 drivers/usb/core/driver.c:361
+  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x454/0x730 drivers/base/dd.c:844
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+  device_add+0x288d/0x30e0 drivers/base/core.c:2106
+  usb_set_configuration+0x30dc/0x3750 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x14c/0x200 drivers/usb/core/driver.c:266
+  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x454/0x730 drivers/base/dd.c:844
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+  device_add+0x288d/0x30e0 drivers/base/core.c:2106
+  usb_new_device+0x23e5/0x2ff0 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x48d1/0x7290 drivers/usb/core/hub.c:5432
+  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
+  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
+  kthread+0x4b5/0x4f0 kernel/kthread.c:254
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+
+Local variable description: ----buf@ax88178_bind
+Variable was created at:
+  ax88178_bind+0x60/0xad0 drivers/net/usb/asix_devices.c:1076
+  usbnet_probe+0x10f5/0x3940 drivers/net/usb/usbnet.c:1728
+==================================================================
 
 
-When it comes to pinmux/pinconf those are only poked explicitly and
-those seems to be described in PEP nodes, such as:
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-	Package (0x02)
-	{
-	    "TLMMGPIO",
-	    Package (0x06)
-	    {
-		0x2C,
-		One,
-		Zero,
-		One,
-		Zero,
-		Zero
-	    }
-	},
-
-So the pinctrl-sdm845/msm drivers gives us GPIOs, but for pinconf and
-pinmux there's a need for something very different from what we're used
-to.
-
-Regards,
-Bjorn
-
-> > ---
-> >  drivers/pinctrl/qcom/pinctrl-msm.c | 18 ++++++++++++++++++
-> >  drivers/pinctrl/qcom/pinctrl-msm.h |  1 +
-> >  2 files changed, 19 insertions(+)
-> >
-> > diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
-> > index ee8119879c4c..3ac740b36508 100644
-> > --- a/drivers/pinctrl/qcom/pinctrl-msm.c
-> > +++ b/drivers/pinctrl/qcom/pinctrl-msm.c
-> > @@ -607,8 +607,23 @@ static int msm_gpio_init_valid_mask(struct gpio_chip *chip)
-> >         int ret;
-> >         unsigned int len, i;
-> >         unsigned int max_gpios = pctrl->soc->ngpios;
-> > +       const int *reserved = pctrl->soc->reserved_gpios;
-> >         u16 *tmp;
-> >
-> > +       /* Driver provided reserved list overrides DT and ACPI */
-> > +       if (reserved) {
-> > +               bitmap_fill(chip->valid_mask, max_gpios);
-> > +               for (i = 0; reserved[i] >= 0; i++) {
-> > +                       if (i >= max_gpios || reserved[i] >= max_gpios) {
-> > +                               dev_err(pctrl->dev, "invalid list of reserved GPIOs\n");
-> > +                               return -EINVAL;
-> > +                       }
-> > +                       clear_bit(reserved[i], chip->valid_mask);
-> > +               }
-> > +
-> > +               return 0;
-> > +       }
-> > +
-> >         /* The number of GPIOs in the ACPI tables */
-> >         len = ret = device_property_read_u16_array(pctrl->dev, "gpios", NULL,
-> >                                                    0);
-> > @@ -964,6 +979,9 @@ static void msm_gpio_irq_handler(struct irq_desc *desc)
-> >
-> >  static bool msm_gpio_needs_valid_mask(struct msm_pinctrl *pctrl)
-> >  {
-> > +       if (pctrl->soc->reserved_gpios)
-> > +               return true;
-> > +
-> >         return device_property_read_u16_array(pctrl->dev, "gpios", NULL, 0) > 0;
-> >  }
-> >
-> > diff --git a/drivers/pinctrl/qcom/pinctrl-msm.h b/drivers/pinctrl/qcom/pinctrl-msm.h
-> > index c12048e54a6f..23b93ae92269 100644
-> > --- a/drivers/pinctrl/qcom/pinctrl-msm.h
-> > +++ b/drivers/pinctrl/qcom/pinctrl-msm.h
-> > @@ -121,6 +121,7 @@ struct msm_pinctrl_soc_data {
-> >         bool pull_no_keeper;
-> >         const char *const *tiles;
-> >         unsigned int ntiles;
-> > +       const int *reserved_gpios;
-> >  };
-> >
-> >  extern const struct dev_pm_ops msm_pinctrl_dev_pm_ops;
-> > --
-> > 2.17.1
-> >
-> >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
