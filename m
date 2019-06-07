@@ -2,261 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA5C38C2D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 16:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304C338C3D
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 16:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728257AbfFGOGQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 10:06:16 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:59449 "EHLO
+        id S1729349AbfFGOKe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 10:10:34 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:55977 "EHLO
         wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728199AbfFGOGQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 10:06:16 -0400
+        by vger.kernel.org with ESMTP id S1727840AbfFGOKe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 10:10:34 -0400
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 42EEE5E7;
-        Fri,  7 Jun 2019 10:06:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 07 Jun 2019 10:06:12 -0400
+        by mailout.west.internal (Postfix) with ESMTP id 9DCE6620;
+        Fri,  7 Jun 2019 10:10:32 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 07 Jun 2019 10:10:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=pHGZ+LZ6yw2sG5llZMKmeaFD/ej
-        dcKWBXyE7a3IM/Zo=; b=VdGAJHMFhuVfzLi+mybCwXKE88GPbVOc0sT1qGc/pEB
-        uwiQiQatizlsMgWVS7MC92dmxobIPJNIfekbi3jpLtIXgMOlINM+taQGmWnKcrOj
-        r9J8jTpPIqfsj6YikEitaH7GObt8ZkDF66ksIUJ9VHHkZ3/TfJMCn2mS342Nd2Oh
-        2WtAYQ+HU8/Y/MENGPbzEejgRgkZfq2vLuJ/eLKNohJeq7FluKq7gvIX48kNGHWB
-        +ey0RH5oVl+DtIH2Q78/20uDh/ePRTgbJKOeKCHrhzi+ecle4hunLq0xq0uXoRl4
-        urn2JjKO0j651/+nD04etHgyWbqjx6BlqpFX7AzCCUA==
+        :content-type:in-reply-to; s=fm1; bh=xAnYgbuAMFj0Fp9K735YG2C/Ud6
+        R10q8pKEXU59D698=; b=Uvg6AaPNvHyOxmPTJq6GlJbf+GCqTOSaltfsWt1Sfjy
+        iYXJwjsFtNknTVsB1Ef4w9Jch22XxnWBdhx2YyBtCmM09jC9pAOln4ezoPeT8Z09
+        quxw3h/Nf5yMikfisCuEEIyTh5+IVDV1wdQMdXhTID9VeFvUzS5s/wABG6Rb40Os
+        L4HkdoKCNKlWKcpQLy12EjjmPI/fcGjyH1mbXArhjIbC9IxG7P+JdPXr9UtUYPub
+        0ItOoCxIyh0ypeJy8lesubd68dvErpURd0L8rZVoKCJXOnVxNpDIZg3dFNjJcvhM
+        m0GPjXuNfGTzL3k58uYkmL04KH/9nKOjAls8IqQCyVg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=pHGZ+L
-        Z6yw2sG5llZMKmeaFD/ejdcKWBXyE7a3IM/Zo=; b=aYuS0qtV9ny2ZAV1z9PMvo
-        onG7I8Sz9ZhzJHYuQiiQDcAjLE8yM3NhPrAoqN8n/Vmz8MXSQfNci8pR2BnY95qy
-        u7AV3T3N22CcYdPMeH0E0tlT9UEBErWYVhyOSB6NZ17yswHKLOzFAmOVbaa9AhU9
-        ZHvP5XuOqh3Yx1ZE6po926P0vTmvzXIF2hEIn5G+djUaKDTC+ufshLz7PlU2rpn7
-        /AmYDH6TbNaHsOaXBhOoQOdYByC0p8dYOuRUl5lyTw0HXPbgsV6D+WoDJBZVMgRA
-        co9GNq3RxUtxP6bEY8nzxshTDZZJEzsaWd79CX1GcsZ3cTXs6HkLrwpF3tFVqprg
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=xAnYgb
+        uAMFj0Fp9K735YG2C/Ud6R10q8pKEXU59D698=; b=tgIftbtRgQ2Va8PajRUwgJ
+        C5eUN9jcCJxmiWZnJHDrQK7NNEQJ3TfGa+7+cAkRMp/Ag61uDybXWiaSYHB0J1Dt
+        czUc1YlhoIk+VQMvgy/QxZ8KY5QrHFlFv5SoNPTcTKpUA/f+eGKQW+jcumApCdSB
+        KO6V+p10E7LNbA3oT0cOqxjcUTHcN783JF3C8sQh5yl6ReEYvEwv8Xef8uUJe68k
+        yAQt/rrfkigF0ziHB8nAo67uaeodf5XS+sCJiUIJBG+ee6wiAxKLAAfHdd4qr4te
+        dCZorsF5yu4pFEw8lMeNaWjC/znw/i5y55ZXXy8OH0xJnsQPMA7otzdc8KBYwrPQ
         ==
-X-ME-Sender: <xms:U2_6XPjqgiy4VvgQBKl3q8M1ENVjJEJ8un-4gSVUBuwrOS-xODzZjg>
+X-ME-Sender: <xms:V3D6XAptNMBm8b5b-bb-Bt_0kYmS0XMOlsXPg_ieLoMzYPyNr6yG0A>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrudegiedgjedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
     ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
     dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
-    vehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:U2_6XMJcCkpTLcY5cPkOdTTdIk9lIjdAal3TcTHsTxvcREhx6XCkDQ>
-    <xmx:U2_6XHDUagJTOWLMV9s5lAdontrs4eZHYoV9FrZ9He-r4IhDGLxIhg>
-    <xmx:U2_6XEjUx1wZRjI8HM4CDSbLhCe9m2-hShy2gZOMkALlxO3dQ5bs5A>
-    <xmx:U2_6XCKXd3k6wWnju163M7A_ff4U3ntmG_DhQV4P-SQWYmGPVC40xQ>
+    vehluhhsthgvrhfuihiivgepud
+X-ME-Proxy: <xmx:V3D6XOTEW5VYKPMneZMOTKFTNu6aN5Xl3jCLwqeXkGYV15lIQA2trA>
+    <xmx:V3D6XC2okNMBmwTKhsR9l6ABPS9hdnEox-64HxbirRWHZiaRshLcHg>
+    <xmx:V3D6XCDHuK7tVUwKHOXC2OhxWpoTQTQFmyc2pyvWQgShIwUI8KCfjg>
+    <xmx:WHD6XHJfpKQAQZ-ayP8eDvF537eUeXWgL1h7N20fl41qSbUxL18o3g>
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id B775980064;
-        Fri,  7 Jun 2019 10:06:10 -0400 (EDT)
-Date:   Fri, 7 Jun 2019 16:06:08 +0200
+        by mail.messagingengine.com (Postfix) with ESMTPA id 2613F380083;
+        Fri,  7 Jun 2019 10:10:31 -0400 (EDT)
+Date:   Fri, 7 Jun 2019 16:10:29 +0200
 From:   Greg KH <greg@kroah.com>
 To:     Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
 Cc:     linux-usb@vger.kernel.org, mathias.nyman@intel.com,
         rajaram.regupathy@intel.com, abhilash.k.v@intel.com,
         m.balaji@intel.com
-Subject: Re: [PATCH 2/5] usb: xhci: dbc: DbC TTY driver to use new interface
-Message-ID: <20190607140608.GE14665@kroah.com>
+Subject: Re: [PATCH 3/5] usb: xhci: dbc: Provide sysfs option to configure
+ dbc descriptors
+Message-ID: <20190607141029.GF14665@kroah.com>
 References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
- <20190607063306.5612-3-prabhat.chand.pandey@intel.com>
+ <20190607063306.5612-4-prabhat.chand.pandey@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190607063306.5612-3-prabhat.chand.pandey@intel.com>
+In-Reply-To: <20190607063306.5612-4-prabhat.chand.pandey@intel.com>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 07, 2019 at 12:03:03PM +0530, Prabhat Chand Pandey wrote:
-> Change DbC TTY driver to use the new modular interface exposed by the DbC
-> core. This will allow other function drivers with a different interface
-> also to use DbC.
-
-What are those other function drivers?  What is wrong with tty?
-
-I'm missing a _lot_ of background information here...
-
-> [no need to add running number to tty driver name, remove it. -Mathias]
+On Fri, Jun 07, 2019 at 12:03:04PM +0530, Prabhat Chand Pandey wrote:
+> From: "K V, Abhilash" <abhilash.k.v@intel.com>
+> 
+> Show the active dbc function and dbc descriptors, allowing
+> user space to dynamically modify the descriptors
+> 
+> The DBC specific sysfs attributes are separated into two groups,
+> in the first group there are dbc & dbc_function sysfs attributes and in
+> second group all other DBC descriptor specific sysfs attributes.
+> 
+> First group of attributes will be populated at the time of dbc_init and
+> second group of attributes will only be populated when "dbc" attribute
+> value is set to "enable".
+> 
+> Whenever "dbc" attribute value will be "disable" then second group
+> of attributes will be removed.
+> 
 > Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-> Signed-off-by: Abhilash K V <abhilash.k.v@intel.com>
+> Signed-off-by: Gururaj K <gururaj.k@intel.com>
+> Signed-off-by: K V, Abhilash <abhilash.k.v@intel.com>
 > Signed-off-by: Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
 > Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > ---
->  drivers/usb/host/Kconfig       | 15 ++++++-
->  drivers/usb/host/Makefile      |  4 +-
->  drivers/usb/host/xhci-dbgcap.h |  4 --
->  drivers/usb/host/xhci-dbgtty.c | 81 ++++++++++++++++++++++++++++++----
->  4 files changed, 90 insertions(+), 14 deletions(-)
+>  .../testing/sysfs-bus-pci-drivers-xhci_hcd    | 112 ++++++
+>  drivers/usb/host/xhci-dbgcap.c                | 339 ++++++++++++++++++
+>  2 files changed, 451 insertions(+)
 > 
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index d809671c5fea..c29ed8a61dcb 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -30,13 +30,26 @@ config USB_XHCI_HCD
->  if USB_XHCI_HCD
->  config USB_XHCI_DBGCAP
->  	bool "xHCI support for debug capability"
-> -	depends on TTY
->  	---help---
->  	  Say 'Y' to enable the support for the xHCI debug capability. Make
->  	  sure that your xHCI host supports the extended debug capability and
->  	  you want a TTY serial device based on the xHCI debug capability
->  	  before enabling this option. If unsure, say 'N'.
->  
-> +choice
-> +	prompt "Select function for debug capability"
-> +	depends on USB_XHCI_DBGCAP
+> diff --git a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
+> index 0088aba4caa8..b46b6afc6c4a 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
+> +++ b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
+> @@ -23,3 +23,115 @@ Description:
+>  		Reading this attribute gives the state of the DbC. It
+>  		can be one of the following states: disabled, enabled,
+>  		initialized, connected, configured and stalled.
 > +
-> +config USB_XHCI_DBGCAP_TTY
-> +	tristate "xHCI DbC tty driver support"
-> +	depends on USB_XHCI_HCD && USB_XHCI_DBGCAP && TTY
-> +	help
-> +	  Say 'Y' to enable the support for the tty driver interface to xHCI
-> +	  debug capability. This will expose a /dev/ttyDBC* device node on device
-> +	  which may be used by the usb-debug driver on the debug host.
-> +	  If unsure, say 'N'.
+> +What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_function
 
-Module name?
+You are putting xhci-specific files in a pci device directory.  why not
+put it in your host controller device instead?  That's the best place
+for this, and what about xhci drivers that are NOT pci?
 
-> +endchoice
+Don't abuse the pci device for things that are not pci.
 
-So you have to choose at build time the "function"?  Why?  I thougth
-this was to be dynamic?
-
+> +static struct attribute *dbc_descriptor_attributes[] = {
+> +	&dev_attr_dbc_manufacturer.attr,
+> +	&dev_attr_dbc_product.attr,
+> +	&dev_attr_dbc_serial.attr,
+> +	&dev_attr_dbc_protocol.attr,
+> +	&dev_attr_dbc_vid.attr,
+> +	&dev_attr_dbc_pid.attr,
+> +	&dev_attr_dbc_device_rev.attr,
+> +	NULL
+> +};
 > +
->  config USB_XHCI_PCI
->         tristate
->         depends on USB_PCI
-> diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-> index 84514f71ae44..b21b0ea9e966 100644
-> --- a/drivers/usb/host/Makefile
-> +++ b/drivers/usb/host/Makefile
-> @@ -16,9 +16,11 @@ xhci-hcd-y += xhci-ring.o xhci-hub.o xhci-dbg.o
->  xhci-hcd-y += xhci-trace.o
->  
->  ifneq ($(CONFIG_USB_XHCI_DBGCAP), )
-> -	xhci-hcd-y += xhci-dbgcap.o xhci-dbgtty.o
-> +	xhci-hcd-y += xhci-dbgcap.o
->  endif
->  
-> +obj-$(CONFIG_USB_XHCI_DBGCAP_TTY) += xhci-dbgtty.o
-> +
->  ifneq ($(CONFIG_USB_XHCI_MTK), )
->  	xhci-hcd-y += xhci-mtk-sch.o
->  endif
-> diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
-> index b4d5622a9030..302e6ca72370 100644
-> --- a/drivers/usb/host/xhci-dbgcap.h
-> +++ b/drivers/usb/host/xhci-dbgcap.h
-> @@ -218,10 +218,6 @@ static inline struct dbc_ep *get_out_ep(struct xhci_hcd *xhci)
->  #ifdef CONFIG_USB_XHCI_DBGCAP
->  int xhci_dbc_init(struct xhci_hcd *xhci);
->  void xhci_dbc_exit(struct xhci_hcd *xhci);
-> -int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci);
-> -void xhci_dbc_tty_unregister_driver(void);
-> -int xhci_dbc_tty_register_device(struct xhci_hcd *xhci);
-> -void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci);
->  struct dbc_request *dbc_alloc_request(struct dbc_ep *dep, gfp_t gfp_flags);
->  void xhci_dbc_flush_reqests(struct xhci_dbc *dbc);
->  void dbc_free_request(struct dbc_ep *dep, struct dbc_request *req);
-> diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-> index aff79ff5aba4..f75a95006c51 100644
-> --- a/drivers/usb/host/xhci-dbgtty.c
-> +++ b/drivers/usb/host/xhci-dbgtty.c
-> @@ -7,13 +7,15 @@
->   * Author: Lu Baolu <baolu.lu@linux.intel.com>
->   */
->  
-> +#include <linux/module.h>
->  #include <linux/slab.h>
->  #include <linux/tty.h>
->  #include <linux/tty_flip.h>
-> -
->  #include "xhci.h"
->  #include "xhci-dbgcap.h"
->  
-> +#define DBC_STR_FUNC_TTY    "TTY"
+> +static const struct attribute_group dbc_descriptor_attrib_grp = {
+> +	.attrs = dbc_descriptor_attributes,
+> +};
 
-What is this for?  You only use it once, what does it mean?
+ATTRIBUTE_GROUPS()?
 
 > +
->  static unsigned int
->  dbc_send_packet(struct dbc_port *port, char *packet, unsigned int size)
->  {
-> @@ -279,12 +281,11 @@ static const struct tty_operations dbc_tty_ops = {
->  	.unthrottle		= dbc_tty_unthrottle,
->  };
->  
-> -static struct tty_driver *dbc_tty_driver;
-> -
-> -int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
-> +static int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
->  {
->  	int			status;
->  	struct xhci_dbc		*dbc = xhci->dbc;
-> +	struct tty_driver	*dbc_tty_driver;
->  
->  	dbc_tty_driver = tty_alloc_driver(1, TTY_DRIVER_REAL_RAW |
->  					  TTY_DRIVER_DYNAMIC_DEV);
-> @@ -296,7 +297,6 @@ int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
->  
->  	dbc_tty_driver->driver_name = "dbc_serial";
->  	dbc_tty_driver->name = "ttyDBC";
-> -
->  	dbc_tty_driver->type = TTY_DRIVER_TYPE_SERIAL;
->  	dbc_tty_driver->subtype = SERIAL_TYPE_NORMAL;
->  	dbc_tty_driver->init_termios = tty_std_termios;
+>  static ssize_t dbc_store(struct device *dev,
+>  			 struct device_attribute *attr,
+>  			 const char *buf, size_t count)
+> @@ -938,6 +1270,10 @@ static ssize_t dbc_store(struct device *dev,
+>  			goto err;
+>  		}
+>  		xhci_dbc_start(xhci);
+> +		ret = sysfs_create_group(&dev->kobj,
+> +					 &dbc_descriptor_attrib_grp);
 
-Unneeded change.
+If you EVER have to make a sysfs call within a driver, that is a HUGE
+red flag that you are doing something wrong.
 
-> @@ -315,16 +315,19 @@ int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
->  		put_tty_driver(dbc_tty_driver);
->  		dbc_tty_driver = NULL;
->  	}
-> +	dbc->func_priv = dbc_tty_driver;
->  
->  	return status;
->  }
->  
-> -void xhci_dbc_tty_unregister_driver(void)
-> +static void xhci_dbc_tty_unregister_driver(struct xhci_dbc *dbc)
->  {
-> +	struct tty_driver	*dbc_tty_driver =
-> +					(struct tty_driver *) dbc->func_priv;
+You are doing something wrong here, you just raced with userspace and
+created a bunch of new files that userspace will not see.
 
-Horrid formatting.  Checkpatch would have warned you about this mess, so
-it's obvious you didn't run it :(
+Please do this correctly by setting the default device group for the
+driver.
 
->  	if (dbc_tty_driver) {
->  		tty_unregister_driver(dbc_tty_driver);
->  		put_tty_driver(dbc_tty_driver);
-> -		dbc_tty_driver = NULL;
-> +		dbc->func_priv = NULL;
->  	}
->  }
->  
-> @@ -440,12 +443,14 @@ xhci_dbc_tty_exit_port(struct dbc_port *port)
->  	tty_port_destroy(&port->port);
->  }
->  
-> -int xhci_dbc_tty_register_device(struct xhci_hcd *xhci)
-> +static int xhci_dbc_tty_register_device(struct xhci_hcd *xhci)
->  {
->  	int			ret;
->  	struct device		*tty_dev;
->  	struct xhci_dbc		*dbc = xhci->dbc;
->  	struct dbc_port		*port = &dbc->port;
-> +	struct tty_driver	*dbc_tty_driver =
-> +					(struct tty_driver *) dbc->func_priv;
+> +		if (ret)
+> +			goto err;
+>  	} else if (!strncmp(buf, "disable", 7) && dbc->state != DS_DISABLED) {
+>  		if (!dbc_registered_func)
+>  			return -EINVAL;
+> @@ -945,6 +1281,7 @@ static ssize_t dbc_store(struct device *dev,
+>  		if (dbc_registered_func->stop)
+>  			dbc_registered_func->stop(dbc);
+>  		module_put(dbc_registered_func->owner);
+> +		sysfs_remove_group(&dev->kobj, &dbc_descriptor_attrib_grp);
 
-Again, ick.  Why are you casting?
+Same here.
 
-And again, checkpatch.pl please.
+And does this really remove the files for when the PCI device is removed
+from the system?  Or the driver from the device?  It doesn't seem like
+it, but I might be missing a codepath here...
 
-I give up here, sorry, this series is a mess :(
+thanks,
 
 greg k-h
