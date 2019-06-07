@@ -2,147 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC12387FF
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 12:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7958A38886
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 13:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728209AbfFGKdH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 06:33:07 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:56709 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727102AbfFGKdG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 06:33:06 -0400
-Received: by mail-io1-f69.google.com with SMTP id u25so1288042iol.23
-        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 03:33:06 -0700 (PDT)
+        id S1728339AbfFGLIh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 07:08:37 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:43399 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728305AbfFGLIh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 07:08:37 -0400
+Received: by mail-io1-f65.google.com with SMTP id k20so1066900ios.10
+        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 04:08:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GXA3Jr+Mhw7TJ/Zj0rrWncqBfBkrIy8iCvF3ptMXOGE=;
+        b=kKmWVm7KNq1gSBghKEw8JHjybhOI4fZHTnGfp2JTChD6SU08oV8twygIt6if0dSujm
+         YFYcFhgdSb4cTtmxOX8hlja4HscZv35gluhEq+WILhmLtf2CXLYanIgjfETslUG3AIee
+         77sfg8QmheYJ1Y9FMyJqEHmU78MGah8K9YstGDvrZfeib4m1GrGI77FH36AgGhfNvtmE
+         5XRu8K1G/HTl0HNGtTgagJfajtF11z8NCLRF/bWYbXO0Oyb+PhDvuHUiw0aPyucijghq
+         K7QZDmenykjrYN02pdjgCGLSvTWxLAYh1G8X164OxAHcifc+HYiAB0/+HlO43PpdrFIq
+         Rx3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ri4kh7VquzQYNilePfGGXnzZVizwUC0xdIzwwyPw8Jg=;
-        b=jDhDCLPo0KT1tcdcCR8eV6NB3dt4BjQMX0j2o7TRCU1g3dHRi+QJobvVVgzEKGhGir
-         0ksmX+qoJrOC0wZUsRzYCdROZblLmLgtXtg7I5xbKygM8gsOGycubF3XXWBgK9L4H+Nt
-         ef71/7gcXCY5dWtbVkho7wRPcWJ87GtMZGDZcyL1DFjHdXKT7rrvxfT1OTyx4NTDDLJ6
-         /0fzoTGzmaqCLPkIArspIwLgGPcrnzNyvkCSQGuyrzWtS9wY5OtwT37EQfa4Nyr7GNQ1
-         R1gKZUVkc0LxHgkbhG+woMJaizgOuBtFjPMWK/GAdt8R+tvStHMwpbnVsve/K+b2WCHX
-         TX1w==
-X-Gm-Message-State: APjAAAVuaeoFFLUCEJ9JGtuBOLX98fDg9Mjr8xzCFprtywHCGL4HVaMc
-        8GO0Z+5E9g58mKKpJKzXkBn89Zt+CKm+Dvm0353fakH96vEg
-X-Google-Smtp-Source: APXvYqz7hpzC/Wwk28PWg8lXyteCwaKt3jO1uHe0MugGYuLjvuUNM6Y2WZYY5/UVNtioKknfPPXueJwCtwNp0qFraRWi/sDpHdOW
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GXA3Jr+Mhw7TJ/Zj0rrWncqBfBkrIy8iCvF3ptMXOGE=;
+        b=o1aNbVPoleb5re7k6Jz8fImuUQsCfYZYDdxn16ZHhHyq0QYnVX7tuHjya7jxyBXphQ
+         +A1xqVylbVzQUAWkHsMDhGYeFf91RRWai9COuXlxTmT5pdHTKkpA5lI8T8JIin89bXaf
+         +F0rCP0nvABWkaQyEqInoLeAmKubNWNBkNiAJvIwKv49+NcThDa5IO7SWHLs6W1GOMt7
+         nPTEQXqHVFyKq0JZ3qNAHjBTKgeBjPgo6H8aivzB1gYQuwEkJlOZNktwxPsZgX9wHFb6
+         7pOD/kc5K2D/jDeV7265vIkUx5acDlXGzYJyG38y4fa2gvJrsILaPUl4IGte/wuZ7GXu
+         APOQ==
+X-Gm-Message-State: APjAAAW8d0kiRXBqKK7YBO4jDPivdX0o66ySlasAMacs/v3vTfEdgw1E
+        PcR86XDBRRJzg7iDvIhxdt6zbZB31Bjrun560dY+pQ==
+X-Google-Smtp-Source: APXvYqx+hd94b4UUsZSCPJJ96EY6XV+oXjukJZTTRGg/pxcsi1nOH4E1wPdCHkE5/rIixOEkqC0BmTndCcDQVsRhVM8=
+X-Received: by 2002:a05:6602:98:: with SMTP id h24mr300107iob.49.1559905716603;
+ Fri, 07 Jun 2019 04:08:36 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:b488:: with SMTP id d130mr27708772iof.58.1559903585612;
- Fri, 07 Jun 2019 03:33:05 -0700 (PDT)
-Date:   Fri, 07 Jun 2019 03:33:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001abc1c058ab95b3e@google.com>
-Subject: WARNING in aiptek_open/usb_submit_urb
-From:   syzbot <syzbot+75cccf2b7da87fb6f84b@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+References: <20190607082901.6491-1-lee.jones@linaro.org>
+In-Reply-To: <20190607082901.6491-1-lee.jones@linaro.org>
+From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Date:   Fri, 7 Jun 2019 13:08:25 +0200
+Message-ID: <CAKv+Gu_SP7qBggCrVkF41BimV3PnCQXb5OUKyCsE0bBxa68RZA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] i2c: i2c-qcom-geni: Provide support for ACPI
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     alokc@codeaurora.org, Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        wsa+renesas@sang-engineering.com,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>, balbi@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jeffrey Hugo <jlhugo@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, 7 Jun 2019 at 10:29, Lee Jones <lee.jones@linaro.org> wrote:
+>
+> Add a match table to allow automatic probing of ACPI device
+> QCOM0220.  Ignore clock attainment errors.  Set default clock
+> frequency value.
+>
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/i2c/busses/i2c-qcom-geni.c | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index db075bc0d952..0fa93b448e8d 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  // Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
+>
+> +#include <linux/acpi.h>
+>  #include <linux/clk.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/err.h>
+> @@ -483,6 +484,12 @@ static const struct i2c_algorithm geni_i2c_algo = {
+>         .functionality  = geni_i2c_func,
+>  };
+>
+> +static const struct acpi_device_id geni_i2c_acpi_match[] = {
+> +       { "QCOM0220"},
+> +       { },
+> +};
+> +MODULE_DEVICE_TABLE(acpi, geni_i2c_acpi_match);
+> +
 
-syzbot found the following crash on:
+We usually put #ifdef CONFIG_ACPI/#endif around these, otherwise you
+end up with acpi:XXXX modaliases even though ACPI is not compiled in.
 
-HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=140186c1a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=193d8457178b3229
-dashboard link: https://syzkaller.appspot.com/bug?extid=75cccf2b7da87fb6f84b
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e01351a00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16573351a00000
+>  static int geni_i2c_probe(struct platform_device *pdev)
+>  {
+>         struct geni_i2c_dev *gi2c;
+> @@ -502,7 +509,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>                 return PTR_ERR(gi2c->se.base);
+>
+>         gi2c->se.clk = devm_clk_get(&pdev->dev, "se");
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+75cccf2b7da87fb6f84b@syzkaller.appspotmail.com
+Can we avoid this call altogether in ACPI mode? Also, please use
+'has_acpi_companion()' to test whether we are probing via ACPI.
 
-usb 1-1: config 0 has no interface number 0
-usb 1-1: config 0 interface 237 altsetting 0 bulk endpoint 0x83 has invalid  
-maxpacket 255
-usb 1-1: New USB device found, idVendor=08ca, idProduct=0022,  
-bcdDevice=6d.4a
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-aiptek 1-1:0.237: Aiptek using 400 ms programming speed
-input: Aiptek as  
-/devices/platform/dummy_hcd.0/usb1/1-1/1-1:0.237/input/input5
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 0 PID: 108 at drivers/usb/core/urb.c:477  
-usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 108 Comm: kworker/0:2 Not tainted 5.2.0-rc1+ #10
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x292/0x6c9 kernel/panic.c:218
-  __warn.cold+0x20/0x4b kernel/panic.c:575
-  report_bug+0x262/0x2a0 lib/bug.c:186
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
-RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Code: 4d 85 ed 74 2c e8 b8 06 e9 fd 4c 89 f7 e8 c0 44 13 ff 41 89 d8 44 89  
-e1 4c 89 ea 48 89 c6 48 c7 c7 20 1c 1a 86 e8 03 db be fd <0f> 0b e9 20 f4  
-ff ff e8 8c 06 e9 fd 4c 89 f2 48 b8 00 00 00 00 00
-RSP: 0018:ffff8881d41bf020 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8127e98d RDI: ffffed103a837df6
-RBP: ffff8881d246dc80 R08: ffff8881d7b4e000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff8881d170ee10 R14: ffff8881d05b4d20 R15: ffff8881d42c4300
-  aiptek_open+0xd5/0x130 drivers/input/tablet/aiptek.c:843
-  input_open_device+0x170/0x280 drivers/input/input.c:611
-  kbd_connect+0xfe/0x160 drivers/tty/vt/keyboard.c:1547
-  input_attach_handler+0x194/0x200 drivers/input/input.c:1004
-  input_register_device.cold+0xf5/0x246 drivers/input/input.c:2159
-  aiptek_probe.cold+0x286/0x30d drivers/input/tablet/aiptek.c:1886
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
-  process_one_work+0x905/0x1570 kernel/workqueue.c:2268
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
-  kthread+0x30b/0x410 kernel/kthread.c:254
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+> -       if (IS_ERR(gi2c->se.clk)) {
+> +       if (IS_ERR(gi2c->se.clk) && !ACPI_HANDLE(&pdev->dev)) {
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+>                 ret = PTR_ERR(gi2c->se.clk);
+>                 dev_err(&pdev->dev, "Err getting SE Core clk %d\n", ret);
+>                 return ret;
+> @@ -510,12 +517,19 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>
+>         ret = device_property_read_u32(&pdev->dev, "clock-frequency",
+>                                                         &gi2c->clk_freq_out);
+> -       if (ret) {
+> +       if (ret && !ACPI_HANDLE(&pdev->dev)) {
+>                 dev_info(&pdev->dev,
+>                         "Bus frequency not specified, default to 100kHz.\n");
+>                 gi2c->clk_freq_out = KHZ(100);
+>         }
+>
+> +       if (ACPI_HANDLE(&pdev->dev)) {
+> +               ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(&pdev->dev));
+> +
+> +               /* Using default, same as the !ACPI case above */
+> +               gi2c->clk_freq_out = KHZ(100);
+> +       }
+> +
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+You are overriding the speed to 100 kHz even if the ACPI device has a
+"clock-frequency" property.
+
+>         gi2c->irq = platform_get_irq(pdev, 0);
+>         if (gi2c->irq < 0) {
+>                 dev_err(&pdev->dev, "IRQ error for i2c-geni\n");
+> @@ -660,6 +674,7 @@ static struct platform_driver geni_i2c_driver = {
+>                 .name = "geni_i2c",
+>                 .pm = &geni_i2c_pm_ops,
+>                 .of_match_table = geni_i2c_dt_match,
+> +               .acpi_match_table = ACPI_PTR(geni_i2c_acpi_match),
+>         },
+>  };
+>
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
