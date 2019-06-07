@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA0138477
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 08:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E2338478
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 08:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727190AbfFGGhv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 02:37:51 -0400
+        id S1727263AbfFGGhy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 02:37:54 -0400
 Received: from mga09.intel.com ([134.134.136.24]:57977 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727341AbfFGGhv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Jun 2019 02:37:51 -0400
+        id S1727103AbfFGGhy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jun 2019 02:37:54 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 23:37:50 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 23:37:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,562,1557212400"; 
-   d="scan'208";a="182572405"
+   d="scan'208";a="182572415"
 Received: from intel.iind.intel.com ([10.66.245.146])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Jun 2019 23:37:48 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 06 Jun 2019 23:37:51 -0700
 From:   Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     mathias.nyman@intel.com, rajaram.regupathy@intel.com,
         abhilash.k.v@intel.com, prabhat.chand.pandey@intel.com,
         m.balaji@intel.com
-Subject: [PATCH 2/5] usb: xhci: dbc: DbC TTY driver to use new interface
-Date:   Fri,  7 Jun 2019 12:03:03 +0530
-Message-Id: <20190607063306.5612-3-prabhat.chand.pandey@intel.com>
+Subject: [PATCH 3/5] usb: xhci: dbc: Provide sysfs option to configure dbc descriptors
+Date:   Fri,  7 Jun 2019 12:03:04 +0530
+Message-Id: <20190607063306.5612-4-prabhat.chand.pandey@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
 References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
@@ -38,239 +38,533 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Change DbC TTY driver to use the new modular interface exposed by the DbC
-core. This will allow other function drivers with a different interface
-also to use DbC.
+From: "K V, Abhilash" <abhilash.k.v@intel.com>
 
-[no need to add running number to tty driver name, remove it. -Mathias]
+Show the active dbc function and dbc descriptors, allowing
+user space to dynamically modify the descriptors
+
+The DBC specific sysfs attributes are separated into two groups,
+in the first group there are dbc & dbc_function sysfs attributes and in
+second group all other DBC descriptor specific sysfs attributes.
+
+First group of attributes will be populated at the time of dbc_init and
+second group of attributes will only be populated when "dbc" attribute
+value is set to "enable".
+
+Whenever "dbc" attribute value will be "disable" then second group
+of attributes will be removed.
+
 Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-Signed-off-by: Abhilash K V <abhilash.k.v@intel.com>
+Signed-off-by: Gururaj K <gururaj.k@intel.com>
+Signed-off-by: K V, Abhilash <abhilash.k.v@intel.com>
 Signed-off-by: Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
 Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/Kconfig       | 15 ++++++-
- drivers/usb/host/Makefile      |  4 +-
- drivers/usb/host/xhci-dbgcap.h |  4 --
- drivers/usb/host/xhci-dbgtty.c | 81 ++++++++++++++++++++++++++++++----
- 4 files changed, 90 insertions(+), 14 deletions(-)
+ .../testing/sysfs-bus-pci-drivers-xhci_hcd    | 112 ++++++
+ drivers/usb/host/xhci-dbgcap.c                | 339 ++++++++++++++++++
+ 2 files changed, 451 insertions(+)
 
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index d809671c5fea..c29ed8a61dcb 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -30,13 +30,26 @@ config USB_XHCI_HCD
- if USB_XHCI_HCD
- config USB_XHCI_DBGCAP
- 	bool "xHCI support for debug capability"
--	depends on TTY
- 	---help---
- 	  Say 'Y' to enable the support for the xHCI debug capability. Make
- 	  sure that your xHCI host supports the extended debug capability and
- 	  you want a TTY serial device based on the xHCI debug capability
- 	  before enabling this option. If unsure, say 'N'.
- 
-+choice
-+	prompt "Select function for debug capability"
-+	depends on USB_XHCI_DBGCAP
+diff --git a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
+index 0088aba4caa8..b46b6afc6c4a 100644
+--- a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
++++ b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
+@@ -23,3 +23,115 @@ Description:
+ 		Reading this attribute gives the state of the DbC. It
+ 		can be one of the following states: disabled, enabled,
+ 		initialized, connected, configured and stalled.
 +
-+config USB_XHCI_DBGCAP_TTY
-+	tristate "xHCI DbC tty driver support"
-+	depends on USB_XHCI_HCD && USB_XHCI_DBGCAP && TTY
-+	help
-+	  Say 'Y' to enable the support for the tty driver interface to xHCI
-+	  debug capability. This will expose a /dev/ttyDBC* device node on device
-+	  which may be used by the usb-debug driver on the debug host.
-+	  If unsure, say 'N'.
-+endchoice
++What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_function
++Date:		June 2018
++Contact:	Rajaram Regupathy <rajaram.regupathy@intel.com>
++Description:
++		xHCI USB host controllers provide Debug Capability (Dbc)
++		as an extended feature. When configured Dbc presents a
++		debug device which is fully compliant with the USB
++		framework.
 +
- config USB_XHCI_PCI
-        tristate
-        depends on USB_PCI
-diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-index 84514f71ae44..b21b0ea9e966 100644
---- a/drivers/usb/host/Makefile
-+++ b/drivers/usb/host/Makefile
-@@ -16,9 +16,11 @@ xhci-hcd-y += xhci-ring.o xhci-hub.o xhci-dbg.o
- xhci-hcd-y += xhci-trace.o
- 
- ifneq ($(CONFIG_USB_XHCI_DBGCAP), )
--	xhci-hcd-y += xhci-dbgcap.o xhci-dbgtty.o
-+	xhci-hcd-y += xhci-dbgcap.o
- endif
- 
-+obj-$(CONFIG_USB_XHCI_DBGCAP_TTY) += xhci-dbgtty.o
++		This framework can be utilized to provide various interfaces.
++		By Default, it is configured to provide a serial Interface.
 +
- ifneq ($(CONFIG_USB_XHCI_MTK), )
- 	xhci-hcd-y += xhci-mtk-sch.o
- endif
-diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
-index b4d5622a9030..302e6ca72370 100644
---- a/drivers/usb/host/xhci-dbgcap.h
-+++ b/drivers/usb/host/xhci-dbgcap.h
-@@ -218,10 +218,6 @@ static inline struct dbc_ep *get_out_ep(struct xhci_hcd *xhci)
- #ifdef CONFIG_USB_XHCI_DBGCAP
- int xhci_dbc_init(struct xhci_hcd *xhci);
- void xhci_dbc_exit(struct xhci_hcd *xhci);
--int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci);
--void xhci_dbc_tty_unregister_driver(void);
--int xhci_dbc_tty_register_device(struct xhci_hcd *xhci);
--void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci);
- struct dbc_request *dbc_alloc_request(struct dbc_ep *dep, gfp_t gfp_flags);
- void xhci_dbc_flush_reqests(struct xhci_dbc *dbc);
- void dbc_free_request(struct dbc_ep *dep, struct dbc_request *req);
-diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-index aff79ff5aba4..f75a95006c51 100644
---- a/drivers/usb/host/xhci-dbgtty.c
-+++ b/drivers/usb/host/xhci-dbgtty.c
-@@ -7,13 +7,15 @@
-  * Author: Lu Baolu <baolu.lu@linux.intel.com>
-  */
- 
-+#include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/tty.h>
- #include <linux/tty_flip.h>
--
- #include "xhci.h"
- #include "xhci-dbgcap.h"
- 
-+#define DBC_STR_FUNC_TTY    "TTY"
++		This attribute lets us configure the interface provided
++		by Dbc functionality. By Default, this attribute value
++		is "TTY" corresponding to the the serial interface. Other
++		values can be supported in future to provide a varied
++		interface to use DbC.
 +
- static unsigned int
- dbc_send_packet(struct dbc_port *port, char *packet, unsigned int size)
- {
-@@ -279,12 +281,11 @@ static const struct tty_operations dbc_tty_ops = {
- 	.unthrottle		= dbc_tty_unthrottle,
- };
- 
--static struct tty_driver *dbc_tty_driver;
--
--int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
-+static int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
- {
- 	int			status;
- 	struct xhci_dbc		*dbc = xhci->dbc;
-+	struct tty_driver	*dbc_tty_driver;
- 
- 	dbc_tty_driver = tty_alloc_driver(1, TTY_DRIVER_REAL_RAW |
- 					  TTY_DRIVER_DYNAMIC_DEV);
-@@ -296,7 +297,6 @@ int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
- 
- 	dbc_tty_driver->driver_name = "dbc_serial";
- 	dbc_tty_driver->name = "ttyDBC";
--
- 	dbc_tty_driver->type = TTY_DRIVER_TYPE_SERIAL;
- 	dbc_tty_driver->subtype = SERIAL_TYPE_NORMAL;
- 	dbc_tty_driver->init_termios = tty_std_termios;
-@@ -315,16 +315,19 @@ int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
- 		put_tty_driver(dbc_tty_driver);
- 		dbc_tty_driver = NULL;
- 	}
-+	dbc->func_priv = dbc_tty_driver;
- 
- 	return status;
++		Reading this attribute gives the interface which is
++		currently configured with DbC. If it is "TTY" then serial
++		interface is configured.
++
++What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_manufacturer
++Date:		June 2018
++Contact:	Rajaram Regupathy <rajaram.regupathy@intel.com>
++Description:
++		xHCI USB host controllers provide Debug Capability (Dbc)
++		as an extended feature. When configured Dbc presents a
++		debug device which is fully compliant with the USB
++		framework.
++		This attribute lets us change the manufacturer name as
++		presented by the debug device in the USB Manufacturer String
++		descriptor. The default value is "Linux Foundation".
++
++What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_product
++Date:		June 2018
++Contact:	Rajaram Regupathy <rajaram.regupathy@intel.com>
++Description:
++		xHCI USB host controllers provide Debug Capability (Dbc)
++		as an extended feature. When configured Dbc presents a
++		debug device which is fully compliant with the USB
++		framework.
++		This attribute lets us change the product name as
++		presented by the debug device in the USB Product String
++		descriptor. The default value is "Linux USB Debug Target".
++
++What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_serial
++Date:		June 2018
++Contact:	Rajaram Regupathy <rajaram.regupathy@intel.com>
++Description:
++		xHCI USB host controllers provide Debug Capability (Dbc)
++		as an extended feature. When configured Dbc presents a
++		debug device which is fully compliant with the USB
++		framework.
++		This attribute lets us change the serial number as
++		presented by the debug device in the USB Serial Number String
++		descriptor. The default value is "0001".
++
++What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_protocol
++Date:		June 2018
++Contact:	Rajaram Regupathy <rajaram.regupathy@intel.com>
++Description:
++		xHCI USB host controllers provide Debug Capability (Dbc)
++		as an extended feature. When configured Dbc presents a
++		debug device which is fully compliant with the USB
++		framework.
++		This attribute lets us change the bInterfaceProtocol field as
++		presented by the debug device in the USB Interface descriptor.
++
++		The default value is  1  (GNU Remote Debug command).
++		Other permissible value is 0 which is for vendor defined debug
++		target.
++
++What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_vid
++Date:		June 2018
++Contact:	Rajaram Regupathy <rajaram.regupathy@intel.com>
++Description:
++		xHCI USB host controllers provide Debug Capability (Dbc)
++		as an extended feature. When configured Dbc presents a
++		debug device which is fully compliant with the USB
++		framework.
++		This attribute lets us change the idVendor field as
++		presented by the debug device in the USB Device descriptor.
++		The default value is 0x1d6b (Linux Foundation).
++		It can be any 16-bit integer.
++
++
++What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_pid
++Date:		June 2018
++Contact:	Rajaram Regupathy <rajaram.regupathy@intel.com>
++Description:
++		xHCI USB host controllers provide Debug Capability (Dbc)
++		as an extended feature. When configured Dbc presents a
++		debug device which is fully compliant with the USB
++		framework.
++		This attribute lets us change the idProduct field as
++		presented by the debug device in the USB Device descriptor.
++		The default value is 0x0010. It can be any 16-bit integer.
++
++What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_device_rev
++Date:		June 2018
++Contact:	Rajaram Regupathy <rajaram.regupathy@intel.com>
++Description:
++		xHCI USB host controllers provide Debug Capability (Dbc)
++		as an extended feature. When configured Dbc presents a
++		debug device which is fully compliant with the USB
++		framework.
++		This attribute lets us change the bcdDevice field as
++		presented by the debug device in the USB Device descriptor.
++		The default value is 0x0010 (device rev 0.10).
++		It can be any 16-bit integer.
+diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
+index 96adc53b0fdb..d6bd1eacc208 100644
+--- a/drivers/usb/host/xhci-dbgcap.c
++++ b/drivers/usb/host/xhci-dbgcap.c
+@@ -873,6 +873,315 @@ static int xhci_do_dbc_init(struct xhci_hcd *xhci)
+ 	return 0;
  }
  
--void xhci_dbc_tty_unregister_driver(void)
-+static void xhci_dbc_tty_unregister_driver(struct xhci_dbc *dbc)
- {
-+	struct tty_driver	*dbc_tty_driver =
-+					(struct tty_driver *) dbc->func_priv;
- 	if (dbc_tty_driver) {
- 		tty_unregister_driver(dbc_tty_driver);
- 		put_tty_driver(dbc_tty_driver);
--		dbc_tty_driver = NULL;
-+		dbc->func_priv = NULL;
- 	}
++static ssize_t dbc_function_show(struct device *dev,
++			struct device_attribute *attr,
++			char *buf)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	int    count = 0;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (!dbc)
++		return -ENODEV;
++	if (!dbc_registered_func)
++		count += sprintf(buf, "%s\n", "none");
++	else
++		count += sprintf(buf, "%s\n", dbc_registered_func->func_name);
++
++	return count;
++}
++
++static ssize_t dbc_manufacturer_show(struct device *dev,
++			struct device_attribute *attr,
++			char *buf)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	struct usb_string_descriptor    *s_desc;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (!dbc || !dbc->string)
++		return -ENODEV;
++	s_desc = (struct usb_string_descriptor *) dbc->string->manufacturer;
++	return utf16s_to_utf8s((wchar_t *) s_desc->wData, s_desc->bLength / 2,
++			UTF16_LITTLE_ENDIAN, buf, DBC_MAX_STRING_LENGTH);
++}
++
++static ssize_t dbc_manufacturer_store(struct device *dev,
++			 struct device_attribute *attr,
++			 const char *buf, size_t size)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	struct usb_string_descriptor    *s_desc;
++	int ret;
++	struct dbc_info_context	*info;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (dbc->state != DS_DISABLED)
++		return -EBUSY;
++	s_desc = (struct usb_string_descriptor *) dbc->string->manufacturer;
++	ret =  utf8s_to_utf16s(buf, strlen(buf),
++				UTF16_LITTLE_ENDIAN, (wchar_t *)s_desc->wData,
++				DBC_MAX_STRING_LENGTH);
++	if (ret < 0)
++		return ret;
++	s_desc->bLength         = (strlen(buf) + 1) * 2;
++	info			= (struct dbc_info_context *)dbc->ctx->bytes;
++	info->length		= (info->length & ~(0xffu << 8))
++					|  (s_desc->bLength) << 8;
++	return size;
++}
++
++static ssize_t dbc_product_show(struct device *dev,
++			struct device_attribute *attr,
++			char *buf)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	struct usb_string_descriptor    *s_desc;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (!dbc || !dbc->string)
++		return -ENODEV;
++	s_desc = (struct usb_string_descriptor *) dbc->string->product;
++	return utf16s_to_utf8s((wchar_t *) s_desc->wData, s_desc->bLength / 2,
++			UTF16_LITTLE_ENDIAN, buf, DBC_MAX_STRING_LENGTH);
++}
++
++static ssize_t dbc_product_store(struct device *dev,
++			 struct device_attribute *attr,
++			 const char *buf, size_t size)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	struct usb_string_descriptor    *s_desc;
++	int ret;
++	struct dbc_info_context	*info;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (dbc->state != DS_DISABLED)
++		return -EBUSY;
++	s_desc = (struct usb_string_descriptor *) dbc->string->serial;
++	ret = utf8s_to_utf16s(buf, strlen(buf),
++				UTF16_LITTLE_ENDIAN, (wchar_t *)s_desc->wData,
++				DBC_MAX_STRING_LENGTH);
++	if (ret < 0)
++		return ret;
++	s_desc->bLength         = (strlen(buf) + 1) * 2;
++	info			= (struct dbc_info_context *)dbc->ctx->bytes;
++	info->length		= (info->length & ~(0xffu << 16))
++					 |  (s_desc->bLength) << 16;
++	return size;
++}
++
++static ssize_t dbc_serial_show(struct device *dev,
++			struct device_attribute *attr,
++			char *buf)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	struct usb_string_descriptor    *s_desc;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (!dbc || !dbc->string)
++		return -ENODEV;
++	s_desc = (struct usb_string_descriptor *) dbc->string->serial;
++	return utf16s_to_utf8s((wchar_t *) s_desc->wData, s_desc->bLength / 2,
++			UTF16_LITTLE_ENDIAN, buf, DBC_MAX_STRING_LENGTH);
++}
++
++static ssize_t dbc_serial_store(struct device *dev,
++			 struct device_attribute *attr,
++			 const char *buf, size_t size)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	struct usb_string_descriptor    *s_desc;
++	int ret;
++	struct dbc_info_context	*info;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (dbc->state != DS_DISABLED)
++		return -EBUSY;
++	s_desc = (struct usb_string_descriptor *) dbc->string->serial;
++	ret = utf8s_to_utf16s(buf, strlen(buf),
++				UTF16_LITTLE_ENDIAN, (wchar_t *)s_desc->wData,
++				DBC_MAX_STRING_LENGTH);
++	if (ret < 0)
++		return ret;
++	s_desc->bLength         = (strlen(buf) + 1) * 2;
++	info			= (struct dbc_info_context *)dbc->ctx->bytes;
++	info->length		= (info->length & ~(0xffu << 24))
++					 |  (s_desc->bLength) << 24;
++	return size;
++}
++
++static ssize_t dbc_protocol_show(struct device *dev,
++			struct device_attribute *attr,
++			char *buf)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	void __iomem *ptr;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	ptr = &dbc->regs->devinfo1;
++	return sprintf(buf, "%02x\n", le32_to_cpu(readl(ptr)) & 0xff);
++}
++
++static ssize_t dbc_protocol_store(struct device *dev,
++			 struct device_attribute *attr,
++			 const char *buf, size_t size)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	int value;
++	int ret;
++	void __iomem *ptr;
++	u32 dev_info;
++
++	ret = kstrtoint(buf, 0, &value);
++	if (ret || value < 0 || value > 0xff)
++		return -EINVAL;
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (dbc->state != DS_DISABLED)
++		return -EBUSY;
++	ptr = &dbc->regs->devinfo1;
++	dev_info = le32_to_cpu(readl(ptr));
++	dev_info = cpu_to_le32((dev_info & ~(0xffu)) | value);
++	writel(dev_info, ptr);
++	return size;
++}
++
++static ssize_t dbc_vid_show(struct device *dev,
++			struct device_attribute *attr,
++			char *buf)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	void __iomem *ptr;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	ptr = &dbc->regs->devinfo1;
++	return sprintf(buf, "%04x\n", ((u32)le32_to_cpu(readl(ptr))) >> 16);
++}
++
++static ssize_t dbc_vid_store(struct device *dev,
++			 struct device_attribute *attr,
++			 const char *buf, size_t size)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	int value;
++	int ret;
++	void __iomem *ptr;
++	u32 dev_info;
++
++	ret = kstrtoint(buf, 0, &value);
++	if (ret || value < 0 || value > 0xffff)
++		return -EINVAL;
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (dbc->state != DS_DISABLED)
++		return -EBUSY;
++	ptr = &dbc->regs->devinfo1;
++	dev_info = le32_to_cpu(readl(ptr));
++	dev_info = cpu_to_le32((dev_info & ~(0xffffu << 16)) | (value << 16));
++	writel(dev_info, ptr);
++	return size;
++}
++
++
++static ssize_t dbc_pid_show(struct device *dev,
++			struct device_attribute *attr,
++			char *buf)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	void __iomem *ptr;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	ptr = &dbc->regs->devinfo2;
++	return sprintf(buf, "%04x\n", le32_to_cpu(readl(ptr)) & 0xffff);
++}
++
++static ssize_t dbc_pid_store(struct device *dev,
++			 struct device_attribute *attr,
++			 const char *buf, size_t size)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	int value;
++	int ret;
++	void __iomem *ptr;
++	u32 dev_info;
++
++	ret = kstrtoint(buf, 0, &value);
++	if (ret || value < 0 || value > 0xffff)
++		return -EINVAL;
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (dbc->state != DS_DISABLED)
++		return -EBUSY;
++	ptr = &dbc->regs->devinfo2;
++	dev_info = le32_to_cpu(readl(ptr));
++	dev_info = cpu_to_le32((dev_info & ~(0xffffu)) | value);
++	writel(dev_info, ptr);
++	return size;
++}
++
++static ssize_t dbc_device_rev_show(struct device *dev,
++			struct device_attribute *attr,
++			char *buf)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	void __iomem *ptr;
++
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	ptr = &dbc->regs->devinfo2;
++	return sprintf(buf, "%04x\n",  ((u32)le32_to_cpu(readl(ptr))) >> 16);
++}
++
++static ssize_t dbc_device_rev_store(struct device *dev,
++			 struct device_attribute *attr,
++			 const char *buf, size_t size)
++{
++	struct xhci_dbc         *dbc;
++	struct xhci_hcd         *xhci;
++	int value;
++	int ret;
++	void __iomem *ptr;
++	u32 dev_info;
++
++	ret = kstrtoint(buf, 0, &value);
++	if (ret || value < 0 || value > 0xffff)
++		return -EINVAL;
++	xhci = hcd_to_xhci(dev_get_drvdata(dev));
++	dbc = xhci->dbc;
++	if (dbc->state != DS_DISABLED)
++		return -EBUSY;
++	ptr = &dbc->regs->devinfo2;
++	dev_info = le32_to_cpu(readl(ptr));
++	dev_info = cpu_to_le32((dev_info & ~(0xffffu << 16)) | (value << 16));
++	writel(dev_info, ptr);
++	return size;
++}
++
+ static ssize_t dbc_show(struct device *dev,
+ 			struct device_attribute *attr,
+ 			char *buf)
+@@ -910,6 +1219,29 @@ static ssize_t dbc_show(struct device *dev,
+ 	return sprintf(buf, "%s\n", p);
  }
  
-@@ -440,12 +443,14 @@ xhci_dbc_tty_exit_port(struct dbc_port *port)
- 	tty_port_destroy(&port->port);
- }
- 
--int xhci_dbc_tty_register_device(struct xhci_hcd *xhci)
-+static int xhci_dbc_tty_register_device(struct xhci_hcd *xhci)
- {
- 	int			ret;
- 	struct device		*tty_dev;
- 	struct xhci_dbc		*dbc = xhci->dbc;
- 	struct dbc_port		*port = &dbc->port;
-+	struct tty_driver	*dbc_tty_driver =
-+					(struct tty_driver *) dbc->func_priv;
- 
- 	xhci_dbc_tty_init_port(xhci, port);
- 	tty_dev = tty_port_register_device(&port->port,
-@@ -493,6 +498,8 @@ void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci)
- {
- 	struct xhci_dbc		*dbc = xhci->dbc;
- 	struct dbc_port		*port = &dbc->port;
-+	struct tty_driver	*dbc_tty_driver =
-+					(struct tty_driver *) dbc->func_priv;
- 
- 	tty_unregister_device(dbc_tty_driver, 0);
- 	xhci_dbc_tty_exit_port(port);
-@@ -503,3 +510,61 @@ void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci)
- 	xhci_dbc_free_requests(get_out_ep(xhci), &port->read_queue);
- 	xhci_dbc_free_requests(get_in_ep(xhci), &port->write_pool);
- }
++static DEVICE_ATTR_RW(dbc_manufacturer);
++static DEVICE_ATTR_RW(dbc_product);
++static DEVICE_ATTR_RW(dbc_serial);
++static DEVICE_ATTR_RW(dbc_protocol);
++static DEVICE_ATTR_RW(dbc_vid);
++static DEVICE_ATTR_RW(dbc_pid);
++static DEVICE_ATTR_RW(dbc_device_rev);
 +
-+static int dbc_tty_post_config(struct xhci_dbc *dbc)
-+{
-+	return xhci_dbc_tty_register_device(dbc->xhci);
-+}
-+
-+static int dbc_tty_post_disconnect(struct xhci_dbc *dbc)
-+{
-+	xhci_dbc_tty_unregister_device(dbc->xhci);
-+	return 0;
-+}
-+
-+static int dbc_tty_run(struct xhci_dbc *dbc)
-+{
-+	return  xhci_dbc_tty_register_driver(dbc->xhci);
-+}
-+
-+static int dbc_tty_stop(struct xhci_dbc *dbc)
-+{
-+	xhci_dbc_tty_unregister_driver(dbc);
-+	return 0;
-+}
-+
-+static struct dbc_function tty_func = {
-+	.owner = THIS_MODULE,
-+	.string = {
-+		.manufacturer = DBC_STR_MANUFACTURER,
-+		.product = DBC_STR_PRODUCT,
-+		.serial = DBC_STR_SERIAL,
-+	},
-+	.protocol = DBC_PROTOCOL,
-+	.vid =     DBC_VENDOR_ID,
-+	.pid =     DBC_PRODUCT_ID,
-+	.device_rev = DBC_DEVICE_REV,
-+	.func_name = DBC_STR_FUNC_TTY,
-+
-+	.post_config = dbc_tty_post_config,
-+	.post_disconnect = dbc_tty_post_disconnect,
-+	.run = dbc_tty_run,
-+	.stop = dbc_tty_stop,
++static struct attribute *dbc_descriptor_attributes[] = {
++	&dev_attr_dbc_manufacturer.attr,
++	&dev_attr_dbc_product.attr,
++	&dev_attr_dbc_serial.attr,
++	&dev_attr_dbc_protocol.attr,
++	&dev_attr_dbc_vid.attr,
++	&dev_attr_dbc_pid.attr,
++	&dev_attr_dbc_device_rev.attr,
++	NULL
 +};
 +
-+static int __init xhci_dbc_tty_init(void)
-+{
-+	return xhci_dbc_register_function(&tty_func);
-+}
++static const struct attribute_group dbc_descriptor_attrib_grp = {
++	.attrs = dbc_descriptor_attributes,
++};
 +
-+static void __exit xhci_dbc_tty_fini(void)
-+{
-+	xhci_dbc_unregister_function();
-+}
-+
-+late_initcall(xhci_dbc_tty_init);
-+module_exit(xhci_dbc_tty_fini);
-+
-+MODULE_DESCRIPTION("xHCI DbC tty driver");
-+MODULE_AUTHOR("Baoulu Lu");
-+MODULE_LICENSE("GPL");
+ static ssize_t dbc_store(struct device *dev,
+ 			 struct device_attribute *attr,
+ 			 const char *buf, size_t count)
+@@ -938,6 +1270,10 @@ static ssize_t dbc_store(struct device *dev,
+ 			goto err;
+ 		}
+ 		xhci_dbc_start(xhci);
++		ret = sysfs_create_group(&dev->kobj,
++					 &dbc_descriptor_attrib_grp);
++		if (ret)
++			goto err;
+ 	} else if (!strncmp(buf, "disable", 7) && dbc->state != DS_DISABLED) {
+ 		if (!dbc_registered_func)
+ 			return -EINVAL;
+@@ -945,6 +1281,7 @@ static ssize_t dbc_store(struct device *dev,
+ 		if (dbc_registered_func->stop)
+ 			dbc_registered_func->stop(dbc);
+ 		module_put(dbc_registered_func->owner);
++		sysfs_remove_group(&dev->kobj, &dbc_descriptor_attrib_grp);
+ 	} else
+ 		return -EINVAL;
+ 
+@@ -955,9 +1292,11 @@ static ssize_t dbc_store(struct device *dev,
+ }
+ 
+ static DEVICE_ATTR_RW(dbc);
++static DEVICE_ATTR_RO(dbc_function);
+ 
+ static struct attribute *dbc_dev_attributes[] = {
+ 	&dev_attr_dbc.attr,
++	&dev_attr_dbc_function.attr,
+ 	NULL
+ };
+ 
 -- 
 2.21.0
 
