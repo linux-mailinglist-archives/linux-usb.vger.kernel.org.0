@@ -2,334 +2,436 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E8438CC7
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 16:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070FC38CD9
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 16:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729651AbfFGOTX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 10:19:23 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:45032 "EHLO mx1.redhat.com"
+        id S1728906AbfFGOVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 10:21:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43460 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728851AbfFGOTW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Jun 2019 10:19:22 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1728311AbfFGOVg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jun 2019 10:21:36 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id C47323081252;
-        Fri,  7 Jun 2019 14:19:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BF59769600;
-        Fri,  7 Jun 2019 14:19:14 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
- Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
- Kingdom.
- Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 12/13] usb: Add USB subsystem notifications [ver #4]
-From:   David Howells <dhowells@redhat.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, dhowells@redhat.com, raven@themaw.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 07 Jun 2019 15:19:14 +0100
-Message-ID: <155991715405.15579.10293116686588296857.stgit@warthog.procyon.org.uk>
-In-Reply-To: <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk>
-References: <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/unknown-version
+        by mail.kernel.org (Postfix) with ESMTPSA id A9B63206E0;
+        Fri,  7 Jun 2019 14:21:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559917295;
+        bh=PPhaLs6o/v/rlYSISFdVhkY1NPprXyJk/i/vzqDO8mk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yzzjh/XKET9dQsOJKaZfuGlFQq7wojUjr8YIXf23CMtPpoXigUQPdTNojw4foi9iz
+         lxjRp75xjUVLrq6wb8d1IQNb6+lmhAz4A3JCk6v4cSUC2LOnWhJVbmJpLHqMBjlZbQ
+         Bv21IISuXMBTafxwWVOrkG0n2UYo3MzFfQlUohdY=
+Date:   Fri, 7 Jun 2019 16:21:32 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
+Cc:     linux-usb@vger.kernel.org, mathias.nyman@intel.com,
+        rajaram.regupathy@intel.com, abhilash.k.v@intel.com,
+        m.balaji@intel.com
+Subject: Re: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a
+ raw interface on DbC
+Message-ID: <20190607142132.GG14665@kroah.com>
+References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
+ <20190607063306.5612-5-prabhat.chand.pandey@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.49]); Fri, 07 Jun 2019 14:19:21 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190607063306.5612-5-prabhat.chand.pandey@intel.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a USB subsystem notification mechanism whereby notifications about
-hardware events such as device connection, disconnection, reset and I/O
-errors, can be reported to a monitoring process asynchronously.
+On Fri, Jun 07, 2019 at 12:03:05PM +0530, Prabhat Chand Pandey wrote:
+> From: Abhilash K V <abhilash.k.v@intel.com>
+> 
+> This patch provides a raw device interface on xhci Debug capability.
 
-Firstly, an event queue needs to be created:
+What is a "raw device"?
 
-	fd = open("/dev/event_queue", O_RDWR);
-	ioctl(fd, IOC_WATCH_QUEUE_SET_SIZE, page_size << n);
+> This abstracts dbc functionality to user space inorder to facilitate
+> various frameworks to utilize xhci debug capability.
 
-then a notification can be set up to report USB notifications via that
-queue:
+I do not understand this sentance at all.  Please provide a lot more
+information.
 
-	struct watch_notification_filter filter = {
-		.nr_filters = 1,
-		.filters = {
-			[0] = {
-				.type = WATCH_TYPE_USB_NOTIFY,
-				.subtype_filter[0] = UINT_MAX;
-			},
-		},
-	};
-	ioctl(fd, IOC_WATCH_QUEUE_SET_FILTER, &filter);
-	notify_devices(fd, 12);
+> It helps to render the target as an usb debug class device on host and
+> establish an usb connection by providing two bulk endpoints.
 
-After that, records will be placed into the queue when events occur on a
-USB device or bus.  Records are of the following format:
+provide bulk endpoints where?  To send data where?  This is very
+confusing and does not make any sense to me...
 
-	struct usb_notification {
-		struct watch_notification watch;
-		__u32	error;
-		__u32	reserved;
-		__u8	name_len;
-		__u8	name[0];
-	} *n;
 
-Where:
+> 
+> [don't dynamically allocate tiny space for name only -Mathias]
+> Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
+> Signed-off-by: Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
+> Signed-off-by: Abhilash K V <abhilash.k.v@intel.com>
+> Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> ---
+>  drivers/usb/host/Kconfig       |   9 +
+>  drivers/usb/host/Makefile      |   1 +
+>  drivers/usb/host/xhci-dbgraw.c | 365 +++++++++++++++++++++++++++++++++
+>  3 files changed, 375 insertions(+)
+>  create mode 100644 drivers/usb/host/xhci-dbgraw.c
+> 
+> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+> index c29ed8a61dcb..0f801977cd1e 100644
+> --- a/drivers/usb/host/Kconfig
+> +++ b/drivers/usb/host/Kconfig
+> @@ -48,6 +48,15 @@ config USB_XHCI_DBGCAP_TTY
+>  	  debug capability. This will expose a /dev/ttyDBC* device node on device
+>  	  which may be used by the usb-debug driver on the debug host.
+>  	  If unsure, say 'N'.
+> +
+> +config USB_XHCI_DBGCAP_RAW
+> +       tristate "xHCI DbC raw driver support"
+> +       depends on USB_XHCI_HCD && USB_XHCI_DBGCAP
+> +       help
+> +         Say 'Y' to enable the support for the raw driver interface to xHCI
+> +         debug capability. This will expose a device node corresponding to
+> +         1 bulk IN and 1 bulk OUT endpoints to be presented to debug host.
+> +         If unsure, say 'N'.
 
-	n->watch.type will be WATCH_TYPE_USB_NOTIFY
+module name?
 
-	n->watch.subtype will be the type of notification, such as
-	NOTIFY_USB_DEVICE_ADD.
+>  endchoice
+>  
+>  config USB_XHCI_PCI
+> diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+> index b21b0ea9e966..a4aee6a5daf0 100644
+> --- a/drivers/usb/host/Makefile
+> +++ b/drivers/usb/host/Makefile
+> @@ -20,6 +20,7 @@ ifneq ($(CONFIG_USB_XHCI_DBGCAP), )
+>  endif
+>  
+>  obj-$(CONFIG_USB_XHCI_DBGCAP_TTY) += xhci-dbgtty.o
+> +obj-$(CONFIG_USB_XHCI_DBGCAP_RAW) += xhci-dbgraw.o
+>  
+>  ifneq ($(CONFIG_USB_XHCI_MTK), )
+>  	xhci-hcd-y += xhci-mtk-sch.o
+> diff --git a/drivers/usb/host/xhci-dbgraw.c b/drivers/usb/host/xhci-dbgraw.c
+> new file mode 100644
+> index 000000000000..f7ca4b089dbd
+> --- /dev/null
+> +++ b/drivers/usb/host/xhci-dbgraw.c
+> @@ -0,0 +1,365 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/**
+> + * Raw DbC for xHCI debug capability
+> + *
+> + * Copyright (C) 2019 Intel Corporation
+> + *
+> + * Author: Rajaram Regupathy <rajaram.regupathy@intel.com>
+> + * Author: Abhilash K V <abhilash.k.v@intel.com>
+> + * Author: Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
+> + */
+> +
+> +#include <linux/idr.h>
+> +#include <linux/module.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/sizes.h>
+> +#include <linux/slab.h>
+> +
+> +#include "xhci.h"
+> +#include "xhci-dbgcap.h"
+> +
+> +#define DBC_XHCI_MINORS     8
+> +#define DBC_STR_FUNC_RAW    "RAW"
+> +#define DBC_RAW_BULK_BUFFER_SIZE  (SZ_64K)
+> +
+> +static DEFINE_IDR(dbc_minors);
 
-	n->watch.info & WATCH_INFO_LENGTH will indicate the length of the
-	record.
+These are not minor numbers, they are semi-random device ids.  Don't
+confuse them with a minor number.
 
-	n->watch.info & WATCH_INFO_ID will be the second argument to
-	device_notify(), shifted.
+> +
+> +struct dbc_dev {
+> +	struct mutex dev_excl;
+> +	struct mutex read_excl;
+> +	struct mutex write_excl;
 
-	n->error and n->reserved are intended to convey information such as
-	error codes, but are currently not used
+What do these protect?
 
-	n->name_len and n->name convey the USB device name as an
-	unterminated string.  This may be truncated - it is currently
-	limited to a maximum 63 chars.
+> +	wait_queue_head_t read_wq;
+> +	wait_queue_head_t write_wq;
+> +
+> +	int error;
 
-Note that it is permissible for event records to be of variable length -
-or, at least, the length may be dependent on the subtype.
+error of what?
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc: linux-usb@vger.kernel.org
----
+> +	bool in_use;
+> +	char name[16];
 
- Documentation/watch_queue.rst    |    9 ++++++
- drivers/usb/core/Kconfig         |   10 +++++++
- drivers/usb/core/devio.c         |   55 ++++++++++++++++++++++++++++++++++++++
- drivers/usb/core/hub.c           |    3 ++
- include/linux/usb.h              |   19 +++++++++++++
- include/uapi/linux/watch_queue.h |   30 ++++++++++++++++++++-
- 6 files changed, 125 insertions(+), 1 deletion(-)
+why do you need this?  What's wrong with the misc device name?
 
-diff --git a/Documentation/watch_queue.rst b/Documentation/watch_queue.rst
-index c2954e191989..7ce5d4147fa9 100644
---- a/Documentation/watch_queue.rst
-+++ b/Documentation/watch_queue.rst
-@@ -15,6 +15,8 @@ receive notifications from the kernel.  This can be used in conjunction with::
- 
-     * Block layer event notifications
- 
-+    * USB subsystem event notifications
-+
- 
- The notifications buffers can be enabled by:
- 
-@@ -344,6 +346,13 @@ Any particular buffer can be fed from multiple sources.  Sources include:
-     or temporary link loss.  Watchpoints of this type are set on the global
-     device watch list.
- 
-+  * WATCH_TYPE_USB_NOTIFY
-+
-+    Notifications of this type indicate USB subsystem events, such as
-+    attachment, removal, reset and I/O errors.  Separate events are generated
-+    for buses and devices.  Watchpoints of this type are set on the global
-+    device watch list.
-+
- 
- Event Filtering
- ===============
-diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
-index bdb6bd0b63a6..4be88368ab6b 100644
---- a/drivers/usb/core/Kconfig
-+++ b/drivers/usb/core/Kconfig
-@@ -103,3 +103,13 @@ config USB_AUTOSUSPEND_DELAY
- 	  The default value Linux has always had is 2 seconds.  Change
- 	  this value if you want a different delay and cannot modify
- 	  the command line or module parameter.
-+
-+config USB_NOTIFICATIONS
-+	bool "Provide USB hardware event notifications"
-+	depends on USB
-+	select DEVICE_NOTIFICATIONS
-+	help
-+	  This option provides support for getting hardware event notifications
-+	  on USB devices and interfaces.  This makes use of the
-+	  /dev/watch_queue misc device to handle the notification buffer.
-+	  device_notify(2) is used to set/remove watches.
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index fa783531ee88..af7f339c35c5 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -41,6 +41,7 @@
- #include <linux/dma-mapping.h>
- #include <asm/byteorder.h>
- #include <linux/moduleparam.h>
-+#include <linux/watch_queue.h>
- 
- #include "usb.h"
- 
-@@ -2633,13 +2634,67 @@ static void usbdev_remove(struct usb_device *udev)
- 	}
- }
- 
-+#ifdef CONFIG_USB_NOTIFICATIONS
-+static noinline void post_usb_notification(const char *devname,
-+					   enum usb_notification_type subtype,
-+					   u32 error)
-+{
-+	unsigned int name_len, n_len;
-+	u64 id = 0; /* Might want to put a dev# here. */
-+
-+	struct {
-+		struct usb_notification n;
-+		char more_name[USB_NOTIFICATION_MAX_NAME_LEN -
-+			       (sizeof(struct usb_notification) -
-+				offsetof(struct usb_notification, name))];
-+	} n;
-+
-+	name_len = strlen(devname);
-+	name_len = min_t(size_t, name_len, USB_NOTIFICATION_MAX_NAME_LEN);
-+	n_len = round_up(offsetof(struct usb_notification, name) + name_len,
-+			 sizeof(__u64));
-+
-+	memset(&n, 0, sizeof(n));
-+	memcpy(n.n.name, devname, n_len);
-+
-+	n.n.watch.type		= WATCH_TYPE_USB_NOTIFY;
-+	n.n.watch.subtype	= subtype;
-+	n.n.watch.info		= n_len;
-+	n.n.error		= error;
-+	n.n.name_len		= name_len;
-+
-+	post_device_notification(&n.n.watch, id);
-+}
-+
-+void post_usb_device_notification(const struct usb_device *udev,
-+				  enum usb_notification_type subtype, u32 error)
-+{
-+	post_usb_notification(dev_name(&udev->dev), subtype, error);
-+}
-+
-+void post_usb_bus_notification(const struct usb_bus *ubus,
-+			       enum usb_notification_type subtype, u32 error)
-+{
-+	post_usb_notification(ubus->bus_name, subtype, error);
-+}
-+#endif
-+
- static int usbdev_notify(struct notifier_block *self,
- 			       unsigned long action, void *dev)
- {
- 	switch (action) {
- 	case USB_DEVICE_ADD:
-+		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_ADD, 0);
- 		break;
- 	case USB_DEVICE_REMOVE:
-+		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_REMOVE, 0);
-+		usbdev_remove(dev);
-+		break;
-+	case USB_BUS_ADD:
-+		post_usb_bus_notification(dev, NOTIFY_USB_BUS_ADD, 0);
-+		break;
-+	case USB_BUS_REMOVE:
-+		post_usb_bus_notification(dev, NOTIFY_USB_BUS_REMOVE, 0);
- 		usbdev_remove(dev);
- 		break;
- 	}
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 2f94568ba385..722013d8142c 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4596,6 +4596,9 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 				(udev->config) ? "reset" : "new", speed,
- 				devnum, driver_name);
- 
-+	if (udev->config)
-+		post_usb_device_notification(udev, NOTIFY_USB_DEVICE_RESET, 0);
-+
- 	/* Set up TT records, if needed  */
- 	if (hdev->tt) {
- 		udev->tt = hdev->tt;
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index ae82d9d1112b..12687b55811d 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -2008,6 +2008,25 @@ extern void usb_led_activity(enum usb_led_event ev);
- static inline void usb_led_activity(enum usb_led_event ev) {}
- #endif
- 
-+/*
-+ * Notification functions.
-+ */
-+#ifdef CONFIG_USB_NOTIFICATIONS
-+extern void post_usb_device_notification(const struct usb_device *udev,
-+					 enum usb_notification_type subtype,
-+					 u32 error);
-+extern void post_usb_bus_notification(const struct usb_bus *ubus,
-+				      enum usb_notification_type subtype,
-+				      u32 error);
-+#else
-+static inline void post_usb_device_notification(const struct usb_device *udev,
-+						enum usb_notification_type subtype,
-+						u32 error) {}
-+static inline void post_usb_bus_notification(const struct usb_bus *ubus,
-+					     enum usb_notification_type subtype,
-+					     u32 error) {}
-+#endif
-+
- #endif  /* __KERNEL__ */
- 
- #endif
-diff --git a/include/uapi/linux/watch_queue.h b/include/uapi/linux/watch_queue.h
-index 22e3326b83a6..d596ac5a61e4 100644
---- a/include/uapi/linux/watch_queue.h
-+++ b/include/uapi/linux/watch_queue.h
-@@ -14,7 +14,8 @@ enum watch_notification_type {
- 	WATCH_TYPE_SB_NOTIFY	= 2,	/* Superblock notification */
- 	WATCH_TYPE_KEY_NOTIFY	= 3,	/* Key/keyring change notification */
- 	WATCH_TYPE_BLOCK_NOTIFY	= 4,	/* Block layer notifications */
--#define WATCH_TYPE___NR 5
-+	WATCH_TYPE_USB_NOTIFY	= 5,	/* USB subsystem notifications */
-+#define WATCH_TYPE___NR 6
- };
- 
- enum watch_meta_notification_subtype {
-@@ -182,4 +183,31 @@ struct block_notification {
- 	__u64	sector;			/* Affected sector */
- };
- 
-+/*
-+ * Type of USB layer notification.
-+ */
-+enum usb_notification_type {
-+	NOTIFY_USB_DEVICE_ADD		= 0, /* USB device added */
-+	NOTIFY_USB_DEVICE_REMOVE	= 1, /* USB device removed */
-+	NOTIFY_USB_BUS_ADD		= 2, /* USB bus added */
-+	NOTIFY_USB_BUS_REMOVE		= 3, /* USB bus removed */
-+	NOTIFY_USB_DEVICE_RESET		= 4, /* USB device reset */
-+	NOTIFY_USB_DEVICE_ERROR		= 5, /* USB device error */
-+};
-+
-+/*
-+ * USB subsystem notification record.
-+ * - watch.type = WATCH_TYPE_USB_NOTIFY
-+ * - watch.subtype = enum usb_notification_type
-+ */
-+struct usb_notification {
-+	struct watch_notification watch; /* WATCH_TYPE_USB_NOTIFY */
-+	__u32	error;
-+	__u32	reserved;
-+	__u8	name_len;		/* Length of device name */
-+	__u8	name[0];		/* Device name (padded to __u64, truncated at 63 chars) */
-+};
-+
-+#define USB_NOTIFICATION_MAX_NAME_LEN 63
-+
- #endif /* _UAPI_LINUX_WATCH_QUEUE_H */
+> +	struct xhci_dbc *dbc;
+> +	struct miscdevice misc_dev;
+> +};
+> +
+> +static void xhci_dbc_free_req(struct dbc_ep *dep, struct dbc_request *req)
+> +{
+> +	kfree(req->buf);
+> +	dbc_free_request(dep, req);
+> +}
+> +
+> +struct dbc_request *xhci_dbc_alloc_requests(struct dbc_ep *dep,
+> +		void (*fn)(struct xhci_hcd *, struct dbc_request *))
+> +{
+> +	struct dbc_request *req;
+> +
+> +	req = dbc_alloc_request(dep, GFP_KERNEL);
+> +	if (!req)
+> +		return req;
+> +
+> +	req->length = DBC_RAW_BULK_BUFFER_SIZE;
+> +	req->buf = kmalloc(req->length, GFP_KERNEL);
+> +	if (!req->buf)
+> +		xhci_dbc_free_req(dep, req);
+> +
+> +	req->complete = fn;
+> +
+> +	return req;
+> +}
+> +
+> +static void dbc_complete_in(struct xhci_hcd *xhci,
+> +				struct dbc_request *req)
+> +{
+> +	struct xhci_dbc *dbc = (struct xhci_dbc *) xhci->dbc;
+> +	struct dbc_dev *dev = (struct dbc_dev *) dbc->func_priv;
+> +
+> +	if (req->status)
+> +		dev->error = req->status;
+> +
+> +	wake_up(&dev->write_wq);
+> +}
+> +
+> +static void dbc_complete_out(struct xhci_hcd *xhci,
+> +				struct dbc_request *req)
+> +{
+> +	struct xhci_dbc *dbc = (struct xhci_dbc *) xhci->dbc;
+> +	struct dbc_dev *dev = (struct dbc_dev *) dbc->func_priv;
+> +
+> +	if (req->status)
+> +		dev->error = req->status;
+> +
+> +	wake_up(&dev->read_wq);
+> +}
+> +
+> +static ssize_t dbc_read(struct file *fp, char __user *buf,
+> +				size_t count, loff_t *pos)
+> +{
+> +	int status = 0;
+> +	struct dbc_dev *dev = (struct dbc_dev *) fp->private_data;
+> +	struct xhci_dbc   *dbc = dev->dbc;
+> +	struct dbc_request *req;
+> +	struct dbc_port   *port = &dbc->port;
+> +	int r = count, xfer;
+> +	int ret;
+> +
+> +	if (dbc->state != DS_CONFIGURED)
+> +		return -EAGAIN;
+> +
+> +	port->in = get_in_ep(dbc->xhci);
+> +
+> +	mutex_lock(&dev->read_excl);
+> +
+> +	req = xhci_dbc_alloc_requests(port->in, dbc_complete_out);
+> +	if (!req) {
+> +		r = -ENOMEM;
+> +		goto alloc_fail;
+> +	}
+> +
+> +	req->actual = 0;
+> +
+> +	xfer = min_t(size_t, count, DBC_RAW_BULK_BUFFER_SIZE);
+> +	req->length = xfer;
+> +
+> +	status = dbc_ep_queue(port->in, req, GFP_ATOMIC);
+> +	if (status) {
+> +		dev->error = status;
+> +		r = status;
+> +		goto request_fail;
+> +	}
+> +
+> +	ret = wait_event_interruptible(dev->read_wq,
+> +			(req->status != -EINPROGRESS));
+> +
+> +	if (ret < 0) {
+> +		r = ret;
+> +		goto request_fail;
+> +	}
+> +
+> +	if (dev->error) {
+> +		r = dev->error;
+> +		goto request_fail;
+> +	}
+> +
+> +	xfer = (req->actual < count) ? req->actual : count;
+> +	if (!req->actual) {
+> +		r = 0;
+> +	} else {
+> +		r = copy_to_user(buf, req->buf, xfer);
+> +		if (!r)
+> +			r = xfer;
+> +	}
+> +
+> +request_fail:
+> +	xhci_dbc_free_req(port->in, req);
+> +alloc_fail:
+> +	mutex_unlock(&dev->read_excl);
+> +
+> +	return r;
+> +}
+> +
+> +static ssize_t dbc_write(struct file *fp, const char __user *buf,
+> +				size_t count, loff_t *pos)
+> +{
+> +	int status = 0;
+> +	struct dbc_dev *dev = (struct dbc_dev *) fp->private_data;
+> +	struct xhci_dbc *dbc = dev->dbc;
+> +	struct dbc_request *req = 0;
+> +	struct dbc_port   *port = &dbc->port;
+> +	int r = count, xfer;
+> +	int ret;
+> +
+> +	if (dbc->state != DS_CONFIGURED)
+> +		return -EAGAIN;
 
+Why?  What does this mean to userspace?  How do they configure it?
+
+> +
+> +	port->out = get_out_ep(dbc->xhci);
+> +
+> +	mutex_lock(&dev->write_excl);
+> +
+> +	/* get an idle tx request to use */
+> +	req = xhci_dbc_alloc_requests(port->out, dbc_complete_in);
+> +	if (!req) {
+> +		r = -ENOMEM;
+> +		goto alloc_fail;
+> +	}
+> +
+> +	req->actual = 0;
+> +	xfer = min_t(size_t, count, DBC_RAW_BULK_BUFFER_SIZE);
+> +
+> +	ret = copy_from_user(req->buf, buf, xfer);
+> +	if (ret) {
+> +		r = ret;
+> +		goto request_fail;
+> +	}
+
+Ok, I'm going to blame Mathias for not actually reading this code before
+acking it.  This is just not right, come on.
+
+> +	r = xfer;
+> +	req->length = xfer;
+> +	status = dbc_ep_queue(port->out, req, GFP_ATOMIC);
+> +	if (status) {
+> +		dev->error = status;
+> +		r = status;
+> +		goto request_fail;
+> +	}
+> +
+> +	ret = wait_event_interruptible(dev->write_wq,
+> +			(req->status != -EINPROGRESS));
+> +	if (ret < 0)
+> +		r = ret;
+> +
+> +request_fail:
+> +	xhci_dbc_free_req(port->out, req);
+> +alloc_fail:
+> +	mutex_unlock(&dev->write_excl);
+> +
+> +	return r;
+> +}
+> +
+> +static int dbc_open(struct inode *ip, struct file *fp)
+> +{
+> +	struct dbc_dev *dbc_dev;
+> +	struct xhci_dbc *dbc;
+> +	int r = 0;
+> +
+> +	dbc_dev = container_of(fp->private_data, struct dbc_dev, misc_dev);
+> +
+> +	mutex_lock(&dbc_dev->dev_excl);
+> +	if (dbc_dev->in_use) {
+> +		r = -EBUSY;
+> +		goto err;
+> +	}
+
+No, just no.  Don't try to enforce "only one user" in the kernel, it
+always fails, is a horrible mess, and can be trivially worked around.
+If a user wants to open the device multiple times and do crazy things
+with it, they deserve the mess it creates.
+
+For example, we don't forbid tty devices from being opened multiple
+times, if someone is foolish enough to do that, they get to keep the
+pieces.
+
+Also, this code is wrong, and doesn't really prevent it from happening
+:)
+
+> +
+> +	dbc = dbc_dev->dbc;
+> +	if (!dbc) {
+> +		r =  -ENODEV;
+> +		goto err;
+> +	}
+> +
+> +	dbc_dev->in_use = true;
+> +	fp->private_data = dbc_dev;
+> +
+> +	/* clear the error latch */
+> +	dbc_dev->error = 0;
+> +err:
+> +	mutex_unlock(&dbc_dev->dev_excl);
+> +
+> +	return r;
+> +}
+> +
+> +static int dbc_release(struct inode *ip, struct file *fp)
+> +{
+> +	struct dbc_dev *dbc_dev = (struct dbc_dev *) fp->private_data;
+> +
+> +
+
+extra whitespace???
+
+And again with the pointless casting :(
+
+> +	mutex_lock(&dbc_dev->dev_excl);
+> +	dbc_dev->in_use = false;
+> +	fp->private_data = NULL;
+
+Why?  the file descriptor is about to be freed, no need to care about
+this anymore.
+
+> +	mutex_unlock(&dbc_dev->dev_excl);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct file_operations dbc_fops = {
+> +	.owner = THIS_MODULE,
+> +	.read = dbc_read,
+> +	.write = dbc_write,
+> +	.open = dbc_open,
+> +	.release = dbc_release,
+> +};
+
+So you have a new char device, with a undocumented and unknown format of
+data flowing across it to the device.  How in the world are we supposed
+to use this thing?  Where is it documented?  What does it do?  How can
+you use it?
+
+I don't mean to be so harsh here, but come on people, this stuff needs a
+lot more background documentation, information, and explaination as to
+exactly why in the world we need any of this, and what it even does!
+
+Also, you need to fix the code, it doesn't work as pointed out in a few
+places :)
+
+greg k-h
