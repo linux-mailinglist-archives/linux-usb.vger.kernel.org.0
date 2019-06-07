@@ -2,111 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63ECB389F7
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 14:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAEE38A26
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 14:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728631AbfFGMOw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 08:14:52 -0400
-Received: from mail-pf1-f182.google.com ([209.85.210.182]:42380 "EHLO
-        mail-pf1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728064AbfFGMOv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 08:14:51 -0400
-Received: by mail-pf1-f182.google.com with SMTP id q10so1086380pff.9
-        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 05:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mIRZ0yASylMhzQubMKFMRQwVCTv44FnWps2nTeX9GRo=;
-        b=ndNFAQyvTaQJI9S82LGFVxjDjz5z8j+s0HGUOlzDMZBz1TE6Mjhbh1wAsOp0h7I6Rp
-         +AjicOGEAfpdqTLt4eXClvu5Ntt8sqzZ20Q8MNT0B9ZK7BssTtyteosOllv6/mb9Ign7
-         mJw6snct/AQIByAFdsuH4oNpn3wZRfiMUcp47FHEu+ret2GKxZkf/jzD2iIAlux1Ga1K
-         1Q4FNwy6Sg4o/PBPrb89hNNP+r+FP+l/EGOr+3esJ6KKY2agcJNZnJDCweiQ+T8gjRiD
-         RtTcr1wn1r1WB7FfztwiLhBQt3SQYKgHY+LPKlZZM0td+3RQx7Puwv2WD8vbya3kWTB0
-         7u4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mIRZ0yASylMhzQubMKFMRQwVCTv44FnWps2nTeX9GRo=;
-        b=AL73wh6mg/9YzeU4xW9jAptu3l/oLzmPQ1JrKnYvVeabX7UP6iA9ZQ4dKGS26M4fKw
-         Lxpx3Xa+HfmtETk6dQLfnAGoVwf4Fa8XqSDzGEyhgkE7QXDUJaD3qodLCm2rT+jRvyrB
-         SjK0/zp/N8p/By6jDfcjCv/zH8/B2KBnLsV2LKNSYW4y5ZxEGJAP+ekwxeqHca8WNsMX
-         tKxbHew/z6GxbvfUxsL2rxNPJFmuEPkvl7xLAB+mmjP6wBwst3CaUR1zJSDGfLdRXsws
-         2mxLQ657eFnbkVqe4itsqqjjtU/zp3jj+jsEW6T7jzJ8JPHA09x/Ejn+CAX56FLXHolF
-         M2IA==
-X-Gm-Message-State: APjAAAUESxymbqotXqw/86wSJidZ4MUuVSAguRQ8j6F1n50ue/lOJoEE
-        IZMh1MFvgUSnwD43JD/bnZTgstPw4xx4z0K+VSjyeeqWtZbpcQ==
-X-Google-Smtp-Source: APXvYqxicjuaikNek3BVniZ33E56kcJPtsWYrnEM4Ljyd3OfH5TkyGPcgQfgs2zGcLGCX/uvzuIoXovJayBkDmJxjiQ=
-X-Received: by 2002:a17:90a:8586:: with SMTP id m6mr5073865pjn.129.1559909690797;
- Fri, 07 Jun 2019 05:14:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAAeHK+xRHB28N_VUbcCit=81+wKK=A9X3aA4rTa9aShy7b2Bnw@mail.gmail.com>
- <877e9xd2nx.fsf@linux.intel.com>
-In-Reply-To: <877e9xd2nx.fsf@linux.intel.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 7 Jun 2019 14:14:39 +0200
-Message-ID: <CAAeHK+xG7-U7kWp1uTT2oA1-Krr2iw8SGnzrciw+0kuLr1qsYA@mail.gmail.com>
-Subject: Re: Pass transfer_buffer to gadget drivers
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+        id S1728809AbfFGMZe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 08:25:34 -0400
+Received: from mga11.intel.com ([192.55.52.93]:11336 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727693AbfFGMZd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jun 2019 08:25:33 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jun 2019 05:25:33 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Jun 2019 05:25:31 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     Alan Stern <stern@rowland.harvard.edu>,
         USB list <linux-usb@vger.kernel.org>,
         Alexander Potapenko <glider@google.com>,
         Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: Pass transfer_buffer to gadget drivers
+In-Reply-To: <CAAeHK+xG7-U7kWp1uTT2oA1-Krr2iw8SGnzrciw+0kuLr1qsYA@mail.gmail.com>
+References: <CAAeHK+xRHB28N_VUbcCit=81+wKK=A9X3aA4rTa9aShy7b2Bnw@mail.gmail.com> <877e9xd2nx.fsf@linux.intel.com> <CAAeHK+xG7-U7kWp1uTT2oA1-Krr2iw8SGnzrciw+0kuLr1qsYA@mail.gmail.com>
+Date:   Fri, 07 Jun 2019 15:25:28 +0300
+Message-ID: <874l51d1l3.fsf@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 7, 2019 at 2:02 PM Felipe Balbi
-<felipe.balbi@linux.intel.com> wrote:
->
->
-> Hi,
->
-> Andrey Konovalov <andreyknvl@google.com> writes:
-> > I've noticed that when the host performs a control request,
-> > urb->transfer_buffer/transfer_buffer_length are not passed to the
-> > gadget drivers via the setup() call, the only thing that is passed is
-> > the usb_ctrlrequest struct. Is there a way to get the transfer_buffer
-> > from within a gadget driver? If not, what approach would the best to
-> > implement this?
->
-> I think you need to further explain what you mean here.
->
-> What do you mean by gadget driver in this case?
->
-> If you mean the drivers under drivers/usb/gadget/{function,legacy}
-> directories then there's no way that they can have access to anything
-> from the host.
->
-> Remember that gadget and host are two completely distinct units. The
-> only thing they share is a USB cable. When it comes to Control
-> Transfers, if a data stage is necessary, that must be encoded in the
-> wLength field of the control structure.
->
-> Also, host side does *not* pass its usb_ctrlrequest struct to the
-> gadget, it passes a series of 8 bytes which are oblivious to where in
-> memory they were from the host point of view.
->
-> If if you have the same machine acting as both host and device, each
-> side has no knowledge of that fact.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Hi Felipe,
 
-What I meant is that any module (gadget driver) that implements
-usb_gadget_driver struct callbacks and registers it, will only get
-usb_ctrlrequest through the setup() callback, but not the
-transfer_buffer/length. And therefore it can't access the data that is
-attached to a control request.
+Hi,
 
-I've faced this with a custom implementation of a gadget driver module
-while using the dummy_hcd module, but I AFAIU it's not relevant to
-those two, but rather to the whole gadget subsystem.
-
-Thanks!
-
+Andrey Konovalov <andreyknvl@google.com> writes:
+>> Andrey Konovalov <andreyknvl@google.com> writes:
+>> > I've noticed that when the host performs a control request,
+>> > urb->transfer_buffer/transfer_buffer_length are not passed to the
+>> > gadget drivers via the setup() call, the only thing that is passed is
+>> > the usb_ctrlrequest struct. Is there a way to get the transfer_buffer
+>> > from within a gadget driver? If not, what approach would the best to
+>> > implement this?
+>>
+>> I think you need to further explain what you mean here.
+>>
+>> What do you mean by gadget driver in this case?
+>>
+>> If you mean the drivers under drivers/usb/gadget/{function,legacy}
+>> directories then there's no way that they can have access to anything
+>> from the host.
+>>
+>> Remember that gadget and host are two completely distinct units. The
+>> only thing they share is a USB cable. When it comes to Control
+>> Transfers, if a data stage is necessary, that must be encoded in the
+>> wLength field of the control structure.
+>>
+>> Also, host side does *not* pass its usb_ctrlrequest struct to the
+>> gadget, it passes a series of 8 bytes which are oblivious to where in
+>> memory they were from the host point of view.
+>>
+>> If if you have the same machine acting as both host and device, each
+>> side has no knowledge of that fact.
 >
-> --
-> balbi
+> Hi Felipe,
+>
+> What I meant is that any module (gadget driver) that implements
+> usb_gadget_driver struct callbacks and registers it, will only get
+> usb_ctrlrequest through the setup() callback, but not the
+> transfer_buffer/length.
+
+A control request is *always* 8 bytes. That's mandated by the USB
+specification.
+
+> And therefore it can't access the data that is
+> attached to a control request.
+
+There is no data attached to a control request. A Control Transfer is
+composed of 2 or 3 stages:
+
+=2D SETUP stage
+	an 8 byte transfer descriptor type thing
+
+=2D (optional) Data stage
+	if wLength of control request contains a value > 0, then this
+	stage fires up to transfer the amount of data communicated in
+	wLength (during previous stage).
+
+=2D Status Stage
+	A zero length transfer to communicate successful end of transfer
+	(in case it completes fine) or an error (in case of STALL
+	condition).
+
+> I've faced this with a custom implementation of a gadget driver module
+> while using the dummy_hcd module, but I AFAIU it's not relevant to
+> those two, but rather to the whole gadget subsystem.
+
+What is this custom gadget doing? Which kernel version are you using?
+What error are you facing? Could it be that you misunderstood how USB
+works?
+
+Best regards
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlz6V7gACgkQzL64meEa
+mQaaOg//duRD2hUgQoVOn2spKqB5JZdo9R31mjrZFhak8vQ4j1xIhjy3cyvsLmgG
+5QgA+jOTLeDEnRRufuxZWw0tDG0JeF5gUv4vfDlFflqslJ6riWD21nLT71oPARyL
+XOl11YExdZatAMFoj3ShFO0iXUgjepAu6MM/DVcgG5wveA3dy5yIk8gLm0+gCF8p
+UGCT2dOg5kHOhDGlz0s5iIPOeAcOChHrNneEtqQHrE8O0j8ysUb6octzP178lIdJ
+pzEJFWiFGEzHOwFW+hPxUAAERo57yenAzOqdJzw83czwRRA4ZxumdvEqAr/LkUWI
+pZeTmtSukbB3u9+rS4ZFHmnmT544US+PQbC0UmOdGstp5o5/xJixfzuWmFj7TLTl
+vPtziQmUI8z1/LVeNJWkKVHf/+oyLpp4xv27V3H9rerkiQRAWzjt9zDVxpvObxbj
+mHZROy+iTVz3+qVkd4WomK1sRof/v9/HUjoP+XqYwWtvl7OF/tPpUaTjfayXXMe5
+6OSAAleThZtutXYFjSm7NHsvWQ7jnhLoWjrD8RUvZ4hOC2F2epFyRqXrpE0PnWP5
+Ot9M3Y+IWzYLNfonGr+u+1WlVvYJX+/U9Cy2w0g6Eveh4gFsp/qi219RHAhcUqWW
+gjWZrDuoBHWzWGWLPRLGLftVQPWR5wzWODi2oN6M0xCEKgvOuD8=
+=TTLE
+-----END PGP SIGNATURE-----
+--=-=-=--
