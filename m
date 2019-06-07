@@ -2,204 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4109F387EE
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 12:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC12387FF
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 12:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727951AbfFGKae (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 06:30:34 -0400
-Received: from mga06.intel.com ([134.134.136.31]:46377 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726939AbfFGKae (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Jun 2019 06:30:34 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jun 2019 03:30:32 -0700
-X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 07 Jun 2019 03:30:27 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 07 Jun 2019 13:30:26 +0300
-Date:   Fri, 7 Jun 2019 13:30:26 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Yu Chen <chenyu56@huawei.com>
-Subject: Re: [PATCH v6 06/10] device connection: Add
- fwnode_connection_find_match()
-Message-ID: <20190607103026.GE10298@kuha.fi.intel.com>
-References: <1559115828-19146-1-git-send-email-chunfeng.yun@mediatek.com>
- <1559115828-19146-7-git-send-email-chunfeng.yun@mediatek.com>
+        id S1728209AbfFGKdH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 06:33:07 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:56709 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727102AbfFGKdG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 06:33:06 -0400
+Received: by mail-io1-f69.google.com with SMTP id u25so1288042iol.23
+        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 03:33:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ri4kh7VquzQYNilePfGGXnzZVizwUC0xdIzwwyPw8Jg=;
+        b=jDhDCLPo0KT1tcdcCR8eV6NB3dt4BjQMX0j2o7TRCU1g3dHRi+QJobvVVgzEKGhGir
+         0ksmX+qoJrOC0wZUsRzYCdROZblLmLgtXtg7I5xbKygM8gsOGycubF3XXWBgK9L4H+Nt
+         ef71/7gcXCY5dWtbVkho7wRPcWJ87GtMZGDZcyL1DFjHdXKT7rrvxfT1OTyx4NTDDLJ6
+         /0fzoTGzmaqCLPkIArspIwLgGPcrnzNyvkCSQGuyrzWtS9wY5OtwT37EQfa4Nyr7GNQ1
+         R1gKZUVkc0LxHgkbhG+woMJaizgOuBtFjPMWK/GAdt8R+tvStHMwpbnVsve/K+b2WCHX
+         TX1w==
+X-Gm-Message-State: APjAAAVuaeoFFLUCEJ9JGtuBOLX98fDg9Mjr8xzCFprtywHCGL4HVaMc
+        8GO0Z+5E9g58mKKpJKzXkBn89Zt+CKm+Dvm0353fakH96vEg
+X-Google-Smtp-Source: APXvYqz7hpzC/Wwk28PWg8lXyteCwaKt3jO1uHe0MugGYuLjvuUNM6Y2WZYY5/UVNtioKknfPPXueJwCtwNp0qFraRWi/sDpHdOW
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="bg08WKrSYDhXBjb5"
-Content-Disposition: inline
-In-Reply-To: <1559115828-19146-7-git-send-email-chunfeng.yun@mediatek.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+X-Received: by 2002:a6b:b488:: with SMTP id d130mr27708772iof.58.1559903585612;
+ Fri, 07 Jun 2019 03:33:05 -0700 (PDT)
+Date:   Fri, 07 Jun 2019 03:33:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001abc1c058ab95b3e@google.com>
+Subject: WARNING in aiptek_open/usb_submit_urb
+From:   syzbot <syzbot+75cccf2b7da87fb6f84b@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
---bg08WKrSYDhXBjb5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+syzbot found the following crash on:
 
-Hi,
+HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=140186c1a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=193d8457178b3229
+dashboard link: https://syzkaller.appspot.com/bug?extid=75cccf2b7da87fb6f84b
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e01351a00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16573351a00000
 
-On Wed, May 29, 2019 at 03:43:44PM +0800, Chunfeng Yun wrote:
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> 
-> The fwnode_connection_find_match() function is exactly the
-> same as device_connection_find_match(), except it takes
-> struct fwnode_handle as parameter instead of struct device.
-> That allows locating device connections before the device
-> entries have been created.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+75cccf2b7da87fb6f84b@syzkaller.appspotmail.com
 
-This one is also missing your SoB.
+usb 1-1: config 0 has no interface number 0
+usb 1-1: config 0 interface 237 altsetting 0 bulk endpoint 0x83 has invalid  
+maxpacket 255
+usb 1-1: New USB device found, idVendor=08ca, idProduct=0022,  
+bcdDevice=6d.4a
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+aiptek 1-1:0.237: Aiptek using 400 ms programming speed
+input: Aiptek as  
+/devices/platform/dummy_hcd.0/usb1/1-1/1-1:0.237/input/input5
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 0 PID: 108 at drivers/usb/core/urb.c:477  
+usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 108 Comm: kworker/0:2 Not tainted 5.2.0-rc1+ #10
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x292/0x6c9 kernel/panic.c:218
+  __warn.cold+0x20/0x4b kernel/panic.c:575
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
+RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Code: 4d 85 ed 74 2c e8 b8 06 e9 fd 4c 89 f7 e8 c0 44 13 ff 41 89 d8 44 89  
+e1 4c 89 ea 48 89 c6 48 c7 c7 20 1c 1a 86 e8 03 db be fd <0f> 0b e9 20 f4  
+ff ff e8 8c 06 e9 fd 4c 89 f2 48 b8 00 00 00 00 00
+RSP: 0018:ffff8881d41bf020 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8127e98d RDI: ffffed103a837df6
+RBP: ffff8881d246dc80 R08: ffff8881d7b4e000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: ffff8881d170ee10 R14: ffff8881d05b4d20 R15: ffff8881d42c4300
+  aiptek_open+0xd5/0x130 drivers/input/tablet/aiptek.c:843
+  input_open_device+0x170/0x280 drivers/input/input.c:611
+  kbd_connect+0xfe/0x160 drivers/tty/vt/keyboard.c:1547
+  input_attach_handler+0x194/0x200 drivers/input/input.c:1004
+  input_register_device.cold+0xf5/0x246 drivers/input/input.c:2159
+  aiptek_probe.cold+0x286/0x30d drivers/input/tablet/aiptek.c:1886
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2268
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+  kthread+0x30b/0x410 kernel/kthread.c:254
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-There are now some other changes to the devcon API in Rafael's tree
-[1] that will conflict with this one. I'm attaching a modified version
-of the patch that is rebased on top of today's linux-next. If you use
-it, you should make a note (probable in the cover letter) that the
-series now depends on Rafael's tree.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=linux-next
-
-
-thanks,
-
--- 
-heikki
-
---bg08WKrSYDhXBjb5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="0001-device-connection-Add-fwnode_connection_find_match.patch"
-
-From ea4ebbfd00e6ddc7bb7ad32e2f921bfc67f2ff8f Mon Sep 17 00:00:00 2001
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date: Wed, 22 May 2019 17:06:54 +0300
-Subject: [PATCH] device connection: Add fwnode_connection_find_match()
-
-The fwnode_connection_find_match() function is exactly the
-same as device_connection_find_match(), except it takes
-struct fwnode_handle as parameter instead of struct device.
-That allows locating device connections before the device
-entries have been created.
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/base/devcon.c  | 43 ++++++++++++++++++++++++++++++------------
- include/linux/device.h | 10 +++++++---
- 2 files changed, 38 insertions(+), 15 deletions(-)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/base/devcon.c b/drivers/base/devcon.c
-index f7035fc12b92..5bf9537bd738 100644
---- a/drivers/base/devcon.c
-+++ b/drivers/base/devcon.c
-@@ -12,9 +12,6 @@
- static DEFINE_MUTEX(devcon_lock);
- static LIST_HEAD(devcon_list);
- 
--typedef void *(*devcon_match_fn_t)(struct device_connection *con, int ep,
--				   void *data);
--
- static void *
- fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
- 			  void *data, devcon_match_fn_t match)
-@@ -60,6 +57,34 @@ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
- 	return NULL;
- }
- 
-+/**
-+ * fwnode_connection_find_match - Find connection from a device node
-+ * @fwnode: Device node with the connection
-+ * @con_id: Identifier for the connection
-+ * @data: Data for the match function
-+ * @match: Function to check and convert the connection description
-+ *
-+ * Find a connection with unique identifier @con_id between @fwnode and another
-+ * device node. @match will be used to convert the connection description to
-+ * data the caller is expecting to be returned.
-+ */
-+void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
-+				   const char *con_id, void *data,
-+				   devcon_match_fn_t match)
-+{
-+	void *ret;
-+
-+	if (!fwnode || !match)
-+		return NULL;
-+
-+	ret = fwnode_graph_devcon_match(fwnode, con_id, data, match);
-+	if (ret)
-+		return ret;
-+
-+	return fwnode_devcon_match(fwnode, con_id, data, match);
-+}
-+EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
-+
- /**
-  * device_connection_find_match - Find physical connection to a device
-  * @dev: Device with the connection
-@@ -83,15 +108,9 @@ void *device_connection_find_match(struct device *dev, const char *con_id,
- 	if (!match)
- 		return NULL;
- 
--	if (fwnode) {
--		ret = fwnode_graph_devcon_match(fwnode, con_id, data, match);
--		if (ret)
--			return ret;
--
--		ret = fwnode_devcon_match(fwnode, con_id, data, match);
--		if (ret)
--			return ret;
--	}
-+	ret = fwnode_connection_find_match(fwnode, con_id, data, match);
-+	if (ret)
-+		return ret;
- 
- 	mutex_lock(&devcon_lock);
- 
-diff --git a/include/linux/device.h b/include/linux/device.h
-index e0649f6adf2e..fd06d75da206 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -773,10 +773,14 @@ struct device_connection {
- 	struct list_head	list;
- };
- 
-+typedef void *(*devcon_match_fn_t)(struct device_connection *con, int ep,
-+				   void *data);
-+
-+void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
-+				   const char *con_id, void *data,
-+				   devcon_match_fn_t match);
- void *device_connection_find_match(struct device *dev, const char *con_id,
--				void *data,
--				void *(*match)(struct device_connection *con,
--					       int ep, void *data));
-+				   void *data, devcon_match_fn_t match);
- 
- struct device *device_connection_find(struct device *dev, const char *con_id);
- 
--- 
-2.20.1
-
-
---bg08WKrSYDhXBjb5--
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
