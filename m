@@ -2,240 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFB43870C
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 11:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D098B3875D
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 11:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727356AbfFGJ1O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 05:27:14 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:60942 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726584AbfFGJ1N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 05:27:13 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x579Q2tp108826;
-        Fri, 7 Jun 2019 04:26:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1559899562;
-        bh=x+/jv4waw72NZPJ7GdwLNaaEhDeI1awerl2cDh5XcZY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ktNXUQwG/yZcCDBhASfElEin9+2Y1xTmL6BrRyKyHCR1eLaxfVXtY3E5Svcf0V1XS
-         uFiO8v6Ryunl5VgIk+F89bnlnAbNRwIzmoKMPzoPv5g1REU97rTg5iL1xoSaRhWIub
-         aNTBb2Zn/mWr243Q2ANpOdU7eyTpThdKF3bOLTzM=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x579Q2n5026948
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 7 Jun 2019 04:26:02 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 7 Jun
- 2019 04:26:01 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 7 Jun 2019 04:26:01 -0500
-Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x579Pvme094604;
-        Fri, 7 Jun 2019 04:25:58 -0500
-Subject: Re: [PATCH v7 1/6] dt-bindings: add binding for USBSS-DRD controller.
-To:     Pawel Laszczak <pawell@cadence.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>
-References: <1559729030-16390-1-git-send-email-pawell@cadence.com>
- <1559729030-16390-2-git-send-email-pawell@cadence.com>
- <f032b3f3-409d-b0fc-8d5f-01c898b4c7a7@ti.com>
- <BYAPR07MB470903AF06C1F8A34BBB3C64DD100@BYAPR07MB4709.namprd07.prod.outlook.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <64be9d26-2a68-1b90-89c8-29b227e0cd9c@ti.com>
-Date:   Fri, 7 Jun 2019 12:25:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727935AbfFGJuG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 05:50:06 -0400
+Received: from mga14.intel.com ([192.55.52.115]:28392 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727790AbfFGJuG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jun 2019 05:50:06 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jun 2019 02:50:06 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga003.jf.intel.com with ESMTP; 07 Jun 2019 02:50:04 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     John Youn <John.Youn@synopsys.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: [RFC] Sorting out dwc3 ISOC endpoints once and for all
+Date:   Fri, 07 Jun 2019 12:50:00 +0300
+Message-ID: <87a7etd8s7.fsf@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <BYAPR07MB470903AF06C1F8A34BBB3C64DD100@BYAPR07MB4709.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07/06/2019 07:46, Pawel Laszczak wrote:
-> 
->>
->> Pawel,
->>
->> On 05/06/2019 13:03, Pawel Laszczak wrote:
->>> This patch aim at documenting USB related dt-bindings for the
->>> Cadence USBSS-DRD controller.
->>>
->>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->>> Reviewed-by: Rob Herring <robh@kernel.org>
->>>
->>> ---
->>>  .../devicetree/bindings/usb/cdns-usb3.txt     | 30 +++++++++++++++++++
->>>  1 file changed, 30 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/usb/cdns-usb3.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/cdns-usb3.txt b/Documentation/devicetree/bindings/usb/cdns-usb3.txt
->>> new file mode 100644
->>> index 000000000000..1d2b449e3cb4
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/cdns-usb3.txt
->>> @@ -0,0 +1,30 @@
->>> +Binding for the Cadence USBSS-DRD controller
->>> +
->>> +Required properties:
->>> +  - reg: Physical base address and size of the controller's register areas.
->>> +	 Controller has 3 different regions:
->>> +	 region 1 - HOST registers area
->>> +	 region 2 - DEVICE registers area
->>> +	 region 3 - OTG/DRD registers area
->>> +  - reg-names - register memory area names:
->>> +	"xhci" - for HOST registers space
->>> +	"dev" - for DEVICE registers space
->>> +	"otg" - for OTG/DRD registers space
->>> +  - compatible: Should contain: "cdns,usb3-1.0.0" or "cdns,usb3-1.0.1"
->>> +  - interrupts: Interrupts used by cdns3 controller.
->>
->> Since we are requesting 3 separate named interrupts in code we need to
->> mention them here.
-> 
-> Hi Roger, 
-> 
-> Yes, I know, but this code is Reviewed-by: Rob Herring, so I thought to add 
-> this as separate patch after putting this driver into kernel.
-> 
-
-Binding document should be updated as code changes.
-
-> I assume that after making some change in this file I should remove statement
-> Reviewed-by: Rob Herring <robh@kernel.org> from this patch to start reviving 
-> from the beginning.  
-
-Yes.
-
-> 
-> What do you think about such dt-binding:
-> 
-> Required properties:
->   - reg: Physical base address and size of the controller's register areas.
->          Controller has 3 different regions:
->          region 1 - HOST registers area
->          region 2 - DEVICE registers area
->          region 3 - OTG/DRD registers area
-
-Is it so that region 1 is always HOST?
-offset 0 seems to be OTG though.
-
-If it is implementation specific then you could get rid of numbering.
-
->   - reg-names - register memory area names:
->         "xhci" - for HOST registers space
->         "dev" - for DEVICE registers space
->         "otg" - for OTG/DRD registers space
->   - compatible: Should contain:
->         "cdns,usb3-1.0.0" - for 0x00024502 controller version
->         "cdns,usb3-1.0.1" - for 0x00024509 controller version
->         "cdns,usb3-1.0.2" - for 0x0002450C controller version
->         "cdns,usb3-1.0.3" - for 0x0002450d controller version
-> 
-> - interrupts: Interrupts used by cdns3 controller:
->         "host" - interrupt used by XHCI driver.
->         "peripheral" - interrupt used by device driver
->         "otg" - interrupt used by DRD/OTG  part of driver
-> 
-> Optional properties:
->  - maximum-speed : valid arguments are "super-speed", "high-speed" and
->                    "full-speed"; refer to usb/generic.txt
->  - dr_mode: Should be one of "host", "peripheral" or "otg".
->  - phys: reference to the USB PHY
-
-need to add 'phy-names' since you request the PHY with name.
-
->  - on-chip-buff-size : size of memory intended as internal memory for endpoints
->         buffers expressed in KB
-> 
-> Example:
->         usb@f3000000 {
->                 compatible = "cdns,usb3-1.0.1";
->                 interrupts = <USB_HOST_IRQ  7 IRQ_TYPE_LEVEL_HIGH>
-
-coma missing.
->                                 <USB_DEVICE_IRQ  7 IRQ_TYPE_LEVEL_HIGH>
-here too.
->                                 <USB_OTG_IRQ  8 IRQ_TYPE_LEVEL_HIGH>;
-
-What is 7 and 8 ?
-
->                 interrupt-names = "host", "peripheral", "otg";
->                 reg = <0xf3000000 0x10000       /* memory area for HOST registers */
-
-should end with >,
-
->                         0xf3010000 0x10000      /* memory area for DEVICE registers */
-here too
-
->                         0xf3020000 0x10000>;    /* memory area for OTG/DRD registers */
->                 reg-names = "xhci", "dev", "otg";
->         };
-
-Isn't otg at offset 0, xhci at offset 0x10000 and dev at offset 0x20000?
-
-> 
-> Is this correct now ?
-> 
-> Maybe I should add something additionally for phy ?
-
-e.g.
-
-                        phys = <&usb3_phy>;
-                        phy-names = "cdns3,usbphy";
-
-> 
-> Regards,
-> Pawel
-> 
->   
->>
->>> +
->>> +Optional properties:
->>> + - maximum-speed : valid arguments are "super-speed", "high-speed" and
->>> +                   "full-speed"; refer to usb/generic.txt
->>> + - dr_mode: Should be one of "host", "peripheral" or "otg".
->>> + - phys: reference to the USB PHY
->>> +
->>> +Example:
->>> +	usb@f3000000 {
->>> +		compatible = "cdns,usb3-1.0.1";
->>> +		interrupts = <USB_IRQ  7 IRQ_TYPE_LEVEL_HIGH>;
->>
->> This example won't work as code requests for 3 separate interrupts.
->>
->>> +		reg = <0xf3000000 0x10000	/* memory area for HOST registers */
->>> +			0xf3010000 0x10000	/* memory area for DEVICE registers */
->>> +			0xf3020000 0x10000>;	/* memory area for OTG/DRD registers */
->>> +		reg-names = "xhci", "dev", "otg";
->>> +	};
->>>
->>
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
--- 
-cheers,
--roger
+Hi John,
 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Now that we have dwc3_gadget_start_isoc_quirk() which figures out the
+correct combination for the top-most 2 bits in the frame number, why
+don't we just use that to start isochronous transfers and never, again,
+have Bus Expiry problems?
+
+I mean something along the lines of below diff (completely untested):
+
+modified   drivers/usb/dwc3/gadget.c
+@@ -1369,9 +1369,8 @@ static int dwc3_gadget_start_isoc_quirk(struct dwc3_e=
+p *dep)
+ 	else if (test0 && test1)
+ 		dep->combo_num =3D 0;
+=20
+=2D	dep->frame_number &=3D 0x3fff;
+ 	dep->frame_number |=3D dep->combo_num << 14;
+=2D	dep->frame_number +=3D max_t(u32, 4, dep->interval);
++	dep->frame_number =3D DWC3_ALIGN_FRAME(dep, 1);
+=20
+ 	/* Reinitialize test variables */
+ 	dep->start_cmd_status =3D 0;
+@@ -1383,33 +1382,16 @@ static int dwc3_gadget_start_isoc_quirk(struct dwc3=
+_ep *dep)
+ static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
+ {
+ 	struct dwc3 *dwc =3D dep->dwc;
+=2D	int ret;
+=2D	int i;
+=20
+ 	if (list_empty(&dep->pending_list)) {
+ 		dep->flags |=3D DWC3_EP_PENDING_REQUEST;
+ 		return -EAGAIN;
+ 	}
+=20
+=2D	if (!dwc->dis_start_transfer_quirk && dwc3_is_usb31(dwc) &&
+=2D	    (dwc->revision <=3D DWC3_USB31_REVISION_160A ||
+=2D	     (dwc->revision =3D=3D DWC3_USB31_REVISION_170A &&
+=2D	      dwc->version_type >=3D DWC31_VERSIONTYPE_EA01 &&
+=2D	      dwc->version_type <=3D DWC31_VERSIONTYPE_EA06))) {
+=2D
+=2D		if (dwc->gadget.speed <=3D USB_SPEED_HIGH && dep->direction)
+=2D			return dwc3_gadget_start_isoc_quirk(dep);
+=2D	}
+=2D
+=2D	for (i =3D 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
+=2D		dep->frame_number =3D DWC3_ALIGN_FRAME(dep, i + 1);
++	dep->frame_number =3D __dwc3_gadget_get_frame(dwc);
++	dep->frame_number =3D DWC3_ALIGN_FRAME(dep, 1);
+=20
+=2D		ret =3D __dwc3_gadget_kick_transfer(dep);
+=2D		if (ret !=3D -EAGAIN)
+=2D			break;
+=2D	}
+=2D
+=2D	return ret;
++	return dwc3_gadget_start_isoc_quirk(dep);
+ }
+=20
+ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request=
+ *req)
+
+
+Would there be any obvious draw-back to going down this route? The thing
+is that, as it is, it seems like we will *always* have some corner case
+where we can't guarantee that we can even start a transfer since there's
+no upper-bound between XferNotReady and gadget driver finally queueing a
+request. Also, I can't simply read DSTS for the frame number because of
+top-most 2 bits.
+
+best
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlz6M0gACgkQzL64meEa
+mQZn2w/+Mj5fo4O6dJFQeaZrstjdM4PyjtLPBtBFr4oEkSJAwD61u91RCEr//0nS
+TRkH12dLmucAyCxhXHv5+MgKKSCMRJMYfvU4kXY2ttPqD6bzm1hAIrsupCcbn8zG
+R4AjCW5/QUIHZ19dtHGIGsNNWlUDBP0FVEE+uX+A6+6gzRWoZKmcK3MFSwXPbXlK
+bkYnH01vhnkbis39BBQVxtB9jkVkWvty9DubIqVjfHG5+8CMz0kB02cMOW7Nqm5k
+GJkDU+kw4DdtuvjpIzagvX2skFMySy8QQ5Ub1cUutW7Y6HrCavtILodzn3eXkAu/
+rKct9pmYW+tvBMQ7syydA6YNYVUFgrJYUQQtwrhf8k7TCDHFFjELVZHNMQFJQdbJ
+5rF6EMhb/5Ogjom4tZ29Eqm215kRc4GZVLWpyipLbCRxh6sSp4rhcWhF14b/spOQ
+hGvwyOmjC/Yw66wgLgJ4ZpH2BSoofBWdboaHFfMY+9/bmLthi9yMB6nY/UU444Xd
+JJ3lQDmcPmCno24D+IQodh4M+/9KXJoXkzibSJTysnrL0gHVWVZPhX+CcI5jeMdb
+JTXNJBkVAofFBcX8cTHnti1LPlIIPtejpYAOiZmegRNWS0Y/N+FF+7fHo4BE7HCR
+uxl8Ly171PLbiMwU6TE6Q1WbFmRUjvTR+owefAw3h10T8hq8rb8=
+=+5aq
+-----END PGP SIGNATURE-----
+--=-=-=--
