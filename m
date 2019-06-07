@@ -2,64 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0574D38949
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 13:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542FC38998
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 14:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727980AbfFGLpK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 07:45:10 -0400
-Received: from mail-pf1-f174.google.com ([209.85.210.174]:46320 "EHLO
-        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727228AbfFGLpK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 07:45:10 -0400
-Received: by mail-pf1-f174.google.com with SMTP id 81so1036301pfy.13
-        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 04:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=nks5MxKbu2Z/dmRxn12Edp+dNmmqr2Dhuedz0d2MekA=;
-        b=oFbv5AzKs1MIQDRi41fB47JZjBIasKIitvKzDCbqiXe0WuU+sur78E1Z0jpp3ah+T/
-         tLd1EX0rn3AVrMXsAocEXyjdaU8TcB1nB6+OAyZWqLvCPNJYhOfi2b5ul24XnQtMTXse
-         y0ECpfl21V9KjXXg/EbSgdA5zTin385ci/YpmG7dC//OXmo1A60cmpACd0A5XAx2G7N4
-         QhSe2Xm4KEvjIlAdq8Ow83x/jJpNs094zbuZXzvnBOk9koNLWvWQW8zWQIHV4aMALKRz
-         gaRuLiMlBO4z0V4ZLsn9TdJYZsK7MiYbJa5zzRaxWEHdjVgk9bDZXlOwxxKrnBBRrCj/
-         1a6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=nks5MxKbu2Z/dmRxn12Edp+dNmmqr2Dhuedz0d2MekA=;
-        b=L7Bn+fW/1QdzOSrdBzBchAlkPYZAobN/piOHJNysWxLCgzuojGRyKDuCONdS3LEaen
-         WG20T/0/PYDUIgvZb5wX6gY1oNUt2E1SU0KPIIiPZkTe9U+fSCut0PB7dTxIM4F8z1j0
-         O9Nr1R0+8aeZ1IQXPUUk8FmVuylOpn+gQ6xnG4O73CD3LYMLpQNHPOzWPGyETqMFWmw0
-         xpDFh5K34ETv3G1xXZ5WrvGNEqr7+mfv0gQ+fLcLGqZBQ7scw4hw6yCBowYT8FAqE0c6
-         tbWgcVQxJOkLrWMT45vDXj/1+9sIGUawJ6jBhg5aN7vI41doGBuVSdRZU3ospEDvNX3A
-         WC6Q==
-X-Gm-Message-State: APjAAAVaEJGJnw2HCTmS36HHHl2lT9nQVGxwu+Qzx3DpGQL+jBdMINGJ
-        vB8kPt5DFev2r7xik/qjjLLy4ya+Ged9JLaI4q97SA==
-X-Google-Smtp-Source: APXvYqwFNSnT44Ux9Pn7KBINEvqzFeQ7wPU92qN9toNOdFCwfQ1IhIIfvadQE3rq7JoXKR6RDbV+r1KplLRMtEeCdec=
-X-Received: by 2002:a62:1c91:: with SMTP id c139mr50300483pfc.25.1559907909102;
- Fri, 07 Jun 2019 04:45:09 -0700 (PDT)
-MIME-Version: 1.0
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 7 Jun 2019 13:44:58 +0200
-Message-ID: <CAAeHK+xRHB28N_VUbcCit=81+wKK=A9X3aA4rTa9aShy7b2Bnw@mail.gmail.com>
-Subject: Pass transfer_buffer to gadget drivers
-To:     Alan Stern <stern@rowland.harvard.edu>
+        id S1727843AbfFGMCR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 08:02:17 -0400
+Received: from mga04.intel.com ([192.55.52.120]:46698 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727388AbfFGMCR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jun 2019 08:02:17 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jun 2019 05:02:16 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga002.jf.intel.com with ESMTP; 07 Jun 2019 05:02:14 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>
 Cc:     USB list <linux-usb@vger.kernel.org>,
         Alexander Potapenko <glider@google.com>,
         Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: Pass transfer_buffer to gadget drivers
+In-Reply-To: <CAAeHK+xRHB28N_VUbcCit=81+wKK=A9X3aA4rTa9aShy7b2Bnw@mail.gmail.com>
+References: <CAAeHK+xRHB28N_VUbcCit=81+wKK=A9X3aA4rTa9aShy7b2Bnw@mail.gmail.com>
+Date:   Fri, 07 Jun 2019 15:02:10 +0300
+Message-ID: <877e9xd2nx.fsf@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-I've noticed that when the host performs a control request,
-urb->transfer_buffer/transfer_buffer_length are not passed to the
-gadget drivers via the setup() call, the only thing that is passed is
-the usb_ctrlrequest struct. Is there a way to get the transfer_buffer
-from within a gadget driver? If not, what approach would the best to
-implement this?
 
-Thanks!
+Hi,
+
+Andrey Konovalov <andreyknvl@google.com> writes:
+> I've noticed that when the host performs a control request,
+> urb->transfer_buffer/transfer_buffer_length are not passed to the
+> gadget drivers via the setup() call, the only thing that is passed is
+> the usb_ctrlrequest struct. Is there a way to get the transfer_buffer
+> from within a gadget driver? If not, what approach would the best to
+> implement this?
+
+I think you need to further explain what you mean here.
+
+What do you mean by gadget driver in this case?
+
+If you mean the drivers under drivers/usb/gadget/{function,legacy}
+directories then there's no way that they can have access to anything
+from the host.
+
+Remember that gadget and host are two completely distinct units. The
+only thing they share is a USB cable. When it comes to Control
+Transfers, if a data stage is necessary, that must be encoded in the
+wLength field of the control structure.
+
+Also, host side does *not* pass its usb_ctrlrequest struct to the
+gadget, it passes a series of 8 bytes which are oblivious to where in
+memory they were from the host point of view.
+
+If if you have the same machine acting as both host and device, each
+side has no knowledge of that fact.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlz6UkIACgkQzL64meEa
+mQbiHhAAxZ4dru2uQnqYtP3r+fmUJdH4lsEmrE4ea76I3OuMxxCKoLdzYqefuKbg
+si3FWLNvCFWV5iLz9/md6TUswXecI3Xi6kdceX83EPRD5/wxvCSNMeB2mX0bDI4T
+29uAJLbQJpoVC3OZzxsygryHbOgwvjlbvMgidGtw43XbF8hOoAELocQy5cif9fwE
+Wh0cP4DPwpvcf+648As7J6CiqwNJUD8MeKXB/O20xhG9zVIGrlRdy1WtwmR9v2Qv
+CNpWGKcHkodwVT3PCRCJ8488qbMvINbj2MnVnx/cJSi6pIE8vhvLubi0t+9Lf8dm
+eGIIaKziJeyK/XErZH9wb5djo8kjVg6RkmgI7cCqY7RFKlILbgaFcBrwPI5iedrB
+5jJvMLfrHnfYpp4MfOb3+mrnvJr1jIuU46wXt6sl3Ap51Wf1egQGlai9y3GEfN99
+TsZ9zEfQWtmfUYabecgPd7NNUX9FfK+6veny9n2cZwSaPpq7IkHfdK4GN9aQako+
+TAlLrlfU340n5lUn066YbY2zm0WTOWXyu7rq66EERN2Xk8BzmZD4PM2ADEasi1nW
+uphRL7t9HG26kTYNT/Tx7l9v99/yJ9qN9kZJYgLeJ8nT0PEuAFvQUTznxB0NbMCv
+WlGs+bmsxmW94F7t1j8qXvGh8bGfLSkFwhN19RZfE/26KF2cQP4=
+=tzej
+-----END PGP SIGNATURE-----
+--=-=-=--
