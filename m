@@ -2,174 +2,292 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 304C338C3D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 16:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EA438C77
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Jun 2019 16:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729349AbfFGOKe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Jun 2019 10:10:34 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:55977 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727840AbfFGOKe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Jun 2019 10:10:34 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 9DCE6620;
-        Fri,  7 Jun 2019 10:10:32 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 07 Jun 2019 10:10:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=xAnYgbuAMFj0Fp9K735YG2C/Ud6
-        R10q8pKEXU59D698=; b=Uvg6AaPNvHyOxmPTJq6GlJbf+GCqTOSaltfsWt1Sfjy
-        iYXJwjsFtNknTVsB1Ef4w9Jch22XxnWBdhx2YyBtCmM09jC9pAOln4ezoPeT8Z09
-        quxw3h/Nf5yMikfisCuEEIyTh5+IVDV1wdQMdXhTID9VeFvUzS5s/wABG6Rb40Os
-        L4HkdoKCNKlWKcpQLy12EjjmPI/fcGjyH1mbXArhjIbC9IxG7P+JdPXr9UtUYPub
-        0ItOoCxIyh0ypeJy8lesubd68dvErpURd0L8rZVoKCJXOnVxNpDIZg3dFNjJcvhM
-        m0GPjXuNfGTzL3k58uYkmL04KH/9nKOjAls8IqQCyVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=xAnYgb
-        uAMFj0Fp9K735YG2C/Ud6R10q8pKEXU59D698=; b=tgIftbtRgQ2Va8PajRUwgJ
-        C5eUN9jcCJxmiWZnJHDrQK7NNEQJ3TfGa+7+cAkRMp/Ag61uDybXWiaSYHB0J1Dt
-        czUc1YlhoIk+VQMvgy/QxZ8KY5QrHFlFv5SoNPTcTKpUA/f+eGKQW+jcumApCdSB
-        KO6V+p10E7LNbA3oT0cOqxjcUTHcN783JF3C8sQh5yl6ReEYvEwv8Xef8uUJe68k
-        yAQt/rrfkigF0ziHB8nAo67uaeodf5XS+sCJiUIJBG+ee6wiAxKLAAfHdd4qr4te
-        dCZorsF5yu4pFEw8lMeNaWjC/znw/i5y55ZXXy8OH0xJnsQPMA7otzdc8KBYwrPQ
-        ==
-X-ME-Sender: <xms:V3D6XAptNMBm8b5b-bb-Bt_0kYmS0XMOlsXPg_ieLoMzYPyNr6yG0A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrudegiedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
-    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
-    vehluhhsthgvrhfuihiivgepud
-X-ME-Proxy: <xmx:V3D6XOTEW5VYKPMneZMOTKFTNu6aN5Xl3jCLwqeXkGYV15lIQA2trA>
-    <xmx:V3D6XC2okNMBmwTKhsR9l6ABPS9hdnEox-64HxbirRWHZiaRshLcHg>
-    <xmx:V3D6XCDHuK7tVUwKHOXC2OhxWpoTQTQFmyc2pyvWQgShIwUI8KCfjg>
-    <xmx:WHD6XHJfpKQAQZ-ayP8eDvF537eUeXWgL1h7N20fl41qSbUxL18o3g>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 2613F380083;
-        Fri,  7 Jun 2019 10:10:31 -0400 (EDT)
-Date:   Fri, 7 Jun 2019 16:10:29 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
-Cc:     linux-usb@vger.kernel.org, mathias.nyman@intel.com,
-        rajaram.regupathy@intel.com, abhilash.k.v@intel.com,
-        m.balaji@intel.com
-Subject: Re: [PATCH 3/5] usb: xhci: dbc: Provide sysfs option to configure
- dbc descriptors
-Message-ID: <20190607141029.GF14665@kroah.com>
-References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
- <20190607063306.5612-4-prabhat.chand.pandey@intel.com>
+        id S1729190AbfFGORg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Jun 2019 10:17:36 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:58852 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728257AbfFGORf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Jun 2019 10:17:35 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id E9C7E22389B;
+        Fri,  7 Jun 2019 14:17:24 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DC12578566;
+        Fri,  7 Jun 2019 14:17:15 +0000 (UTC)
+Subject: [RFC][PATCH 00/13] Mount, FS,
+ Block and Keyrings notifications [ver #4]
+From:   David Howells <dhowells@redhat.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-usb@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dhowells@redhat.com, raven@themaw.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 07 Jun 2019 15:17:10 +0100
+Message-ID: <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/unknown-version
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190607063306.5612-4-prabhat.chand.pandey@intel.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Fri, 07 Jun 2019 14:17:35 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 07, 2019 at 12:03:04PM +0530, Prabhat Chand Pandey wrote:
-> From: "K V, Abhilash" <abhilash.k.v@intel.com>
-> 
-> Show the active dbc function and dbc descriptors, allowing
-> user space to dynamically modify the descriptors
-> 
-> The DBC specific sysfs attributes are separated into two groups,
-> in the first group there are dbc & dbc_function sysfs attributes and in
-> second group all other DBC descriptor specific sysfs attributes.
-> 
-> First group of attributes will be populated at the time of dbc_init and
-> second group of attributes will only be populated when "dbc" attribute
-> value is set to "enable".
-> 
-> Whenever "dbc" attribute value will be "disable" then second group
-> of attributes will be removed.
-> 
-> Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-> Signed-off-by: Gururaj K <gururaj.k@intel.com>
-> Signed-off-by: K V, Abhilash <abhilash.k.v@intel.com>
-> Signed-off-by: Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
-> Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
->  .../testing/sysfs-bus-pci-drivers-xhci_hcd    | 112 ++++++
->  drivers/usb/host/xhci-dbgcap.c                | 339 ++++++++++++++++++
->  2 files changed, 451 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
-> index 0088aba4caa8..b46b6afc6c4a 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
-> +++ b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
-> @@ -23,3 +23,115 @@ Description:
->  		Reading this attribute gives the state of the DbC. It
->  		can be one of the following states: disabled, enabled,
->  		initialized, connected, configured and stalled.
-> +
-> +What:		/sys/bus/pci/drivers/xhci_hcd/.../dbc_function
 
-You are putting xhci-specific files in a pci device directory.  why not
-put it in your host controller device instead?  That's the best place
-for this, and what about xhci drivers that are NOT pci?
+Hi Al,
 
-Don't abuse the pci device for things that are not pci.
+Here's a set of patches to add a general variable-length notification queue
+concept and to add sources of events for:
 
-> +static struct attribute *dbc_descriptor_attributes[] = {
-> +	&dev_attr_dbc_manufacturer.attr,
-> +	&dev_attr_dbc_product.attr,
-> +	&dev_attr_dbc_serial.attr,
-> +	&dev_attr_dbc_protocol.attr,
-> +	&dev_attr_dbc_vid.attr,
-> +	&dev_attr_dbc_pid.attr,
-> +	&dev_attr_dbc_device_rev.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group dbc_descriptor_attrib_grp = {
-> +	.attrs = dbc_descriptor_attributes,
-> +};
+ (1) Mount topology events, such as mounting, unmounting, mount expiry,
+     mount reconfiguration.
 
-ATTRIBUTE_GROUPS()?
+ (2) Superblock events, such as R/W<->R/O changes, quota overrun and I/O
+     errors (not complete yet).
 
-> +
->  static ssize_t dbc_store(struct device *dev,
->  			 struct device_attribute *attr,
->  			 const char *buf, size_t count)
-> @@ -938,6 +1270,10 @@ static ssize_t dbc_store(struct device *dev,
->  			goto err;
->  		}
->  		xhci_dbc_start(xhci);
-> +		ret = sysfs_create_group(&dev->kobj,
-> +					 &dbc_descriptor_attrib_grp);
+ (3) Key/keyring events, such as creating, linking and removal of keys.
 
-If you EVER have to make a sysfs call within a driver, that is a HUGE
-red flag that you are doing something wrong.
+ (4) General device events (single common queue) including:
 
-You are doing something wrong here, you just raced with userspace and
-created a bunch of new files that userspace will not see.
+     - Block layer events, such as device errors
 
-Please do this correctly by setting the default device group for the
-driver.
+     - USB subsystem events, such as device/bus attach/remove, device
+       reset, device errors.
 
-> +		if (ret)
-> +			goto err;
->  	} else if (!strncmp(buf, "disable", 7) && dbc->state != DS_DISABLED) {
->  		if (!dbc_registered_func)
->  			return -EINVAL;
-> @@ -945,6 +1281,7 @@ static ssize_t dbc_store(struct device *dev,
->  		if (dbc_registered_func->stop)
->  			dbc_registered_func->stop(dbc);
->  		module_put(dbc_registered_func->owner);
-> +		sysfs_remove_group(&dev->kobj, &dbc_descriptor_attrib_grp);
+One of the reasons for this is so that we can remove the issue of processes
+having to repeatedly and regularly scan /proc/mounts, which has proven to
+be a system performance problem.  To further aid this, the fsinfo() syscall
+on which this patch series depends, provides a way to access superblock and
+mount information in binary form without the need to parse /proc/mounts.
 
-Same here.
 
-And does this really remove the files for when the PCI device is removed
-from the system?  Or the driver from the device?  It doesn't seem like
-it, but I might be missing a codepath here...
+LSM support is included, but controversial:
 
-thanks,
+ (1) The creds of the process that did the fput() that reduced the refcount
+     to zero are cached in the file struct.
 
-greg k-h
+ (2) __fput() overrides the current creds with the creds from (1) whilst
+     doing the cleanup, thereby making sure that the creds seen by the
+     destruction notification generated by mntput() appears to come from
+     the last fputter.
+
+ (3) security_post_notification() is called for each queue that we might
+     want to post a notification into, thereby allowing the LSM to prevent
+     covert communications.
+
+ (?) Do I need to add security_set_watch(), say, to rule on whether a watch
+     may be set in the first place?  I might need to add a variant per
+     watch-type.
+
+ (?) Do I really need to keep track of the process creds in which an
+     implicit object destruction happened?  For example, imagine you create
+     an fd with fsopen()/fsmount().  It is marked to dissolve the mount it
+     refers to on close unless move_mount() clears that flag.  Now, imagine
+     someone looking at that fd through procfs at the same time as you exit
+     due to an error.  The LSM sees the destruction notification come from
+     the looker if they happen to do their fput() after yours.
+
+
+Design decisions:
+
+ (1) A misc chardev is used to create and open a ring buffer:
+
+	fd = open("/dev/watch_queue", O_RDWR);
+
+     which is then configured and mmap'd into userspace:
+
+	ioctl(fd, IOC_WATCH_QUEUE_SET_SIZE, BUF_SIZE);
+	ioctl(fd, IOC_WATCH_QUEUE_SET_FILTER, &filter);
+	buf = mmap(NULL, BUF_SIZE * page_size, PROT_READ | PROT_WRITE,
+		   MAP_SHARED, fd, 0);
+
+     The fd cannot be read or written (though there is a facility to use
+     write to inject records for debugging) and userspace just pulls data
+     directly out of the buffer.
+
+ (2) The ring index pointers are stored inside the ring and are thus
+     accessible to userspace.  Userspace should only update the tail
+     pointer and never the head pointer or risk breaking the buffer.  The
+     kernel checks that the pointers appear valid before trying to use
+     them.  A 'skip' record is maintained around the pointers.
+
+ (3) poll() can be used to wait for data to appear in the buffer.
+
+ (4) Records in the buffer are binary, typed and have a length so that they
+     can be of varying size.
+
+     This means that multiple heterogeneous sources can share a common
+     buffer.  Tags may be specified when a watchpoint is created to help
+     distinguish the sources.
+
+ (5) The queue is reusable as there are 16 million types available, of
+     which I've used 4, so there is scope for others to be used.
+
+ (6) Records are filterable as types have up to 256 subtypes that can be
+     individually filtered.  Other filtration is also available.
+
+ (7) Each time the buffer is opened, a new buffer is created - this means
+     that there's no interference between watchers.
+
+ (8) When recording a notification, the kernel will not sleep, but will
+     rather mark a queue as overrun if there's insufficient space, thereby
+     avoiding userspace causing the kernel to hang.
+
+ (9) The 'watchpoint' should be specific where possible, meaning that you
+     specify the object that you want to watch.
+
+(10) The buffer is created and then watchpoints are attached to it, using
+     one of:
+
+	keyctl_watch_key(KEY_SPEC_SESSION_KEYRING, fd, 0x01);
+	mount_notify(AT_FDCWD, "/", 0, fd, 0x02);
+	sb_notify(AT_FDCWD, "/mnt", 0, fd, 0x03);
+
+     where in all three cases, fd indicates the queue and the number after
+     is a tag between 0 and 255.
+
+(11) The watch must be removed if either the watch buffer is destroyed or
+     the watched object is destroyed.
+
+
+Things I want to avoid:
+
+ (1) Introducing features that make the core VFS dependent on the network
+     stack or networking namespaces (ie. usage of netlink).
+
+ (2) Dumping all this stuff into dmesg and having a daemon that sits there
+     parsing the output and distributing it as this then puts the
+     responsibility for security into userspace and makes handling
+     namespaces tricky.  Further, dmesg might not exist or might be
+     inaccessible inside a container.
+
+ (3) Letting users see events they shouldn't be able to see.
+
+
+Further things that could be considered:
+
+ (1) Adding a keyctl call to allow a watch on a keyring to be extended to
+     "children" of that keyring, such that the watch is removed from the
+     child if it is unlinked from the keyring.
+
+ (2) Adding global superblock event queue.
+
+ (3) Propagating watches to child superblock over automounts.
+
+
+The patches can be found here also:
+
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=notifications
+
+Changes:
+
+ v4: Split the basic UAPI bits out into their own patch and then split the
+     LSM hooks out into an intermediate patch.  Add LSM hooks for setting
+     watches.
+
+     Rename the *_notify() system calls to watch_*() for consistency.
+
+ v3: I've added a USB notification source and reformulated the block
+     notification source so that there's now a common watch list, for which
+     the system call is now device_notify().
+
+     I've assigned a pair of unused ioctl numbers in the 'W' series to the
+     ioctls added by this series.
+
+     I've also added a description of the kernel API to the documentation.
+
+ v2: I've fixed various issues raised by Jann Horn and GregKH and moved to
+     krefs for refcounting.  I've added some security features to try and
+     give Casey Schaufler the LSM control he wants.
+
+David
+---
+David Howells (13):
+      security: Override creds in __fput() with last fputter's creds
+      uapi: General notification ring definitions
+      security: Add hooks to rule on setting a watch
+      security: Add a hook for the point of notification insertion
+      General notification queue with user mmap()'able ring buffer
+      keys: Add a notification facility
+      vfs: Add a mount-notification facility
+      vfs: Add superblock notifications
+      fsinfo: Export superblock notification counter
+      Add a general, global device notification watch list
+      block: Add block layer notifications
+      usb: Add USB subsystem notifications
+      Add sample notification program
+
+
+ Documentation/ioctl/ioctl-number.txt   |    1 
+ Documentation/security/keys/core.rst   |   58 ++
+ Documentation/watch_queue.rst          |  492 ++++++++++++++++++
+ arch/x86/entry/syscalls/syscall_32.tbl |    3 
+ arch/x86/entry/syscalls/syscall_64.tbl |    3 
+ block/Kconfig                          |    9 
+ block/blk-core.c                       |   29 +
+ drivers/base/Kconfig                   |    9 
+ drivers/base/Makefile                  |    1 
+ drivers/base/watch.c                   |   89 +++
+ drivers/misc/Kconfig                   |   13 
+ drivers/misc/Makefile                  |    1 
+ drivers/misc/watch_queue.c             |  889 ++++++++++++++++++++++++++++++++
+ drivers/usb/core/Kconfig               |   10 
+ drivers/usb/core/devio.c               |   55 ++
+ drivers/usb/core/hub.c                 |    3 
+ fs/Kconfig                             |   21 +
+ fs/Makefile                            |    1 
+ fs/file_table.c                        |   12 
+ fs/fsinfo.c                            |   12 
+ fs/mount.h                             |   33 +
+ fs/mount_notify.c                      |  187 +++++++
+ fs/namespace.c                         |    9 
+ fs/super.c                             |  122 ++++
+ include/linux/blkdev.h                 |   15 +
+ include/linux/dcache.h                 |    1 
+ include/linux/device.h                 |    7 
+ include/linux/fs.h                     |   79 +++
+ include/linux/key.h                    |    4 
+ include/linux/lsm_hooks.h              |   48 ++
+ include/linux/security.h               |   35 +
+ include/linux/syscalls.h               |    5 
+ include/linux/usb.h                    |   19 +
+ include/linux/watch_queue.h            |   87 +++
+ include/uapi/linux/fsinfo.h            |   10 
+ include/uapi/linux/keyctl.h            |    1 
+ include/uapi/linux/watch_queue.h       |  213 ++++++++
+ kernel/sys_ni.c                        |    7 
+ samples/Kconfig                        |    6 
+ samples/Makefile                       |    1 
+ samples/vfs/test-fsinfo.c              |   13 
+ samples/watch_queue/Makefile           |    9 
+ samples/watch_queue/watch_test.c       |  308 +++++++++++
+ security/keys/Kconfig                  |   10 
+ security/keys/compat.c                 |    2 
+ security/keys/gc.c                     |    5 
+ security/keys/internal.h               |   30 +
+ security/keys/key.c                    |   37 +
+ security/keys/keyctl.c                 |   95 +++
+ security/keys/keyring.c                |   17 -
+ security/keys/request_key.c            |    4 
+ security/security.c                    |   29 +
+ 52 files changed, 3121 insertions(+), 38 deletions(-)
+ create mode 100644 Documentation/watch_queue.rst
+ create mode 100644 drivers/base/watch.c
+ create mode 100644 drivers/misc/watch_queue.c
+ create mode 100644 fs/mount_notify.c
+ create mode 100644 include/linux/watch_queue.h
+ create mode 100644 include/uapi/linux/watch_queue.h
+ create mode 100644 samples/watch_queue/Makefile
+ create mode 100644 samples/watch_queue/watch_test.c
+
