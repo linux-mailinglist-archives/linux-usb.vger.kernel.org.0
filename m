@@ -2,109 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7F039AD0
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 06:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBC939B42
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 07:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726239AbfFHEKt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Jun 2019 00:10:49 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42300 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725379AbfFHEKs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jun 2019 00:10:48 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q10so2233142pff.9
-        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 21:10:48 -0700 (PDT)
+        id S1726083AbfFHFNq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Jun 2019 01:13:46 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36836 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725804AbfFHFNq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jun 2019 01:13:46 -0400
+Received: by mail-pf1-f193.google.com with SMTP id u22so2304264pfm.3
+        for <linux-usb@vger.kernel.org>; Fri, 07 Jun 2019 22:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=crP/L6ZX28vkkYT7tQbRmMKy/ZkhEnI0JhfxmVeFjC0=;
-        b=TxsNOhcUk2dUhjgJIcbkyLXBtKqvJpHTaNc+xRSs9moW2ndwxj0wvHpb7UdzZ8GIHB
-         kLyvVG7zidxP9IwSJaymt3F8UL/RjVnz25slMDWhjSipyy7NK5DrrZByM4hqIzNMUSwe
-         ps+y0MD8eWL3A3X5z+GVpgopfFtTJLERmnFQgsMBKRMuDXgI16xf4cX5zcQqBZ0JbZdv
-         UFvzSVX0RPSdSceNL453+7PL2y9nE2pm1Vr6heypDuiZ0SQFVNO8xElhZJO5HQFMq4N8
-         EQ3h/DKqO7j8gM2LNhNJd3H3U9/qGXBzsfz16WMsfUUgYOqNRTcZIB6THFxBwhxXZGjN
-         8Dsw==
+        d=gmail.com; s=20161025;
+        h=sender:from:to:subject:date:message-id:in-reply-to:references;
+        bh=R9VTYP9/7G32Whru1TU/7RuR3qM+5MQe8FDzCDdKFAw=;
+        b=RSOoZ5Iac9s1Q4lGwVAVCpSMT2Zc6qQkNQbP9qGOOzj7HFdolFSE+aWL+TWmw9bADw
+         M8QSWv3+et/pTO3gjuo8JKtB8W2a9KA3/fIupun/Mf3mJQU1zkAig1LcTC7EVeKriCLK
+         XAXeOMtrf9XV2vz3Ab3AUI0QnEFcMV3NdGvqYyIE2TvO5MxYVRI+8L2LNyTLGT1Gchcq
+         FzGZ8KthzV/bqjkbLRjLGgvXyEWPfIek+9WRJEcy1pgf5SXn0SN1uSGHq+8pX1mcmdGt
+         qD5LSoU+7a0qhZ6o+dnRUO+4WQRRBH5ycnMWpFREUdjMTA5usS4U4ZOYEQw3zcIrANVU
+         QbhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=crP/L6ZX28vkkYT7tQbRmMKy/ZkhEnI0JhfxmVeFjC0=;
-        b=Ug634ko04trNdiifNcNvNNoVNtjUTGDu8SzXOR1na88vXBZg5kLVS2b+a8g/fI2zlK
-         PeWYU1dCjtLFu6wz0vCprADvozFqb2DOq8xxez3BzhMjbVfEvPElcbCviPH5ipOxl4U3
-         qub1VT9o1MJGOafEgCdkYmB5h8OdZObirDh/PHh6U20ItADCioszDPs4NxtCseEKrPFQ
-         gqgH7BXoBWtmYaf9A4BXgi/KTz85ToLd1Dtr2SLjZLM3y0XFLaJL5idpOVgf4CVFl/va
-         njIT73Hc9LDKErQEvlEn6KR/SDrqBwHWb1V+TeGIWue+fZgAXH2i/LCbPYiyz4bWinax
-         qspA==
-X-Gm-Message-State: APjAAAVol+iKP+GisnEtlkm5aKXiuXn6Q9hCtYF91DcAAkekxg1/Trxc
-        6TraGhjqK3MoEN5HL1bcdL8Eym1WQbc=
-X-Google-Smtp-Source: APXvYqyqDR2r/6Uj2YzgTATzPBXHYoPMxcYRP/mHWDNK1dDw68dJRtVmbbW/lRrBdRydM7vET5JDPA==
-X-Received: by 2002:a63:ee0a:: with SMTP id e10mr5868676pgi.28.1559967047717;
-        Fri, 07 Jun 2019 21:10:47 -0700 (PDT)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id b35sm3516670pjc.15.2019.06.07.21.10.46
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 07 Jun 2019 21:10:46 -0700 (PDT)
-Date:   Fri, 7 Jun 2019 21:10:44 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, alokc@codeaurora.org,
-        Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/8] pinctrl: msm: Add ability for drivers to supply a
- reserved GPIO list
-Message-ID: <20190608041044.GK24059@builder>
-References: <20190605114302.22509-1-lee.jones@linaro.org>
- <20190605114302.22509-3-lee.jones@linaro.org>
- <CACRpkdaEe3uKAsSuhbToevXH1cMsuMUvwaopLPuD+JkDTnuEnQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdaEe3uKAsSuhbToevXH1cMsuMUvwaopLPuD+JkDTnuEnQ@mail.gmail.com>
-User-Agent: Mutt/1.10.0 (2018-05-17)
+        h=x-gm-message-state:sender:from:to:subject:date:message-id
+         :in-reply-to:references;
+        bh=R9VTYP9/7G32Whru1TU/7RuR3qM+5MQe8FDzCDdKFAw=;
+        b=eFhJC16bhAfduTrPyhdcy5vo2wUEr2I1VNdkL1sMmrJbnVf9ybhrKmC5XuWzyqNwyh
+         tnM+i50dr7o9JoqubIwhuiIOPO7fSVm30O1rzRJWiW5ljZlh3DVEnFgrr/Ke+qcSbOLk
+         tURwXnlht3GMsSckkmxfX1bI2RTt7K21x/8BCSHkEj5d4ep/MA83Xiblxnj+0fzrpz8V
+         aBqAKOThSkM5yC9S1qJDAUbJ2BQAaKTvTi6kJo2X3+3nKc8h0gWZJtWRd1qqPJ+4KZ7L
+         eougU0XJdLg2T1MP4wvW/ALJ31XvwHOoHxXTzm7Gg7xYEOgyF8InVzN/vpu6HyhOn7gZ
+         HH0Q==
+X-Gm-Message-State: APjAAAX34WTaK4RAgis3zrCYAqz3tZOEHjSKvYEcbMNwKOMLkgAIqJdw
+        sx1ajdcHIuqxMq2BM+UIrkSe+WkudMY=
+X-Google-Smtp-Source: APXvYqw7HTC3a8U/x/PfSzSgw75YJIm/yKQL/4lkZfCy+GyxBc7FKzqb1TFf/MR26lKvcvP2Flhh0A==
+X-Received: by 2002:a63:3c9:: with SMTP id 192mr530384pgd.90.1559970824731;
+        Fri, 07 Jun 2019 22:13:44 -0700 (PDT)
+Received: from jontio-desktop.hub ([2407:7000:9c2a:7b00:58e6:a4f8:a6f6:4bfe])
+        by smtp.googlemail.com with ESMTPSA id 133sm216676pfa.92.2019.06.07.22.13.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 07 Jun 2019 22:13:44 -0700 (PDT)
+From:   jontio <jontio@i4free.co.nz>
+To:     johan@kernel.org, linux-usb@vger.kernel.org, jontio@i4free.co.nz
+Subject: [PATCH] USB: serial: ch341: fix wrong baud rate setting calculation
+Date:   Sat,  8 Jun 2019 17:13:09 +1200
+Message-Id: <20190608051309.4689-1-jontio@i4free.co.nz>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <jontio@i4free.co.nz>
+References: <jontio@i4free.co.nz>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 07 Jun 16:02 PDT 2019, Linus Walleij wrote:
+For some wanted baud rates ch341_set_baudrate_lcr() calculates the "a"
+value such that it produces a significantly different baud rate than the
+desired one. This means some hardware can't communicate with the CH34x
+chip. Particularly obvious wrong baud rates are 256000 and 921600 which
+deviate by 2.3% and 7.4% respectively. This proposed patch will bring the
+errors for these baud rates to below 0.5%. This patch will significantly
+improve the error of some other unusual baud rates too (such as 1333333
+from 10% error to 0% error). Currently ch341_set_baudrate_lcr() will
+accept any baud rate and can produce a practically arbitrary large error
+(for example a 40% error for 5000000) this patch does not address this
+issue.
 
-> On Wed, Jun 5, 2019 at 1:43 PM Lee Jones <lee.jones@linaro.org> wrote:
-> 
-> > When booting MSM based platforms with Device Tree or some ACPI
-> > implementations, it is possible to provide a list of reserved pins
-> > via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
-> > However some ACPI tables are not populated with this information,
-> > thus it has to come from a knowledgable device driver instead.
-> >
-> > Here we provide the MSM common driver with additional support to
-> > parse this informtion and correctly populate the widely used
-> > 'valid_mask'.
-> >
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> 
-> Exactly how we should use of the API, so if Björn can supply an
-> ACK to patches 3 and 4 I'm happy to apply them.
-> 
-> Björn?
-> 
+Signed-off-by: jontio <jontio@i4free.co.nz>
+---
+ drivers/usb/serial/ch341.c | 45 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-I'm waiting for a version that does not specify the reserved_gpios for
-struct msm_pinctrl_soc_data sdm845_pinctrl {}, as this would override
-the ability of getting these from DT.
+diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+index 3bb1fff02bed..7cd1d6f70b56 100644
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -54,6 +54,9 @@
+ #define CH341_BAUDBASE_FACTOR 1532620800
+ #define CH341_BAUDBASE_DIVMAX 3
+ 
++/* Chip frequency is 12Mhz. not quite the same as (CH341_BAUDBASE_FACTOR>>7) */
++#define CH341_OSC_FREQUENCY 12000000
++
+ /* Break support - the information used to implement this was gleaned from
+  * the Net/FreeBSD uchcom.c driver by Takanori Watanabe.  Domo arigato.
+  */
+@@ -168,6 +171,48 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+ 	factor = 0x10000 - factor;
+ 	a = (factor & 0xff00) | divisor;
+ 
++	/*
++	 * Calculate baud error using the 0,1,2,3 LSB and
++	 * also the error without the divisor (LSB==7).
++	 * Decide whether the divisor should be used.
++	 */
++	uint32_t msB = (a>>8) & 0xFF;
++	uint32_t lsB = a & 0xFF;
++	int32_t baud_wanted = priv->baud_rate;
++	uint32_t denom = ((1<<(10-3*lsB))*(256-msB));
++	/*
++	 * baud_wanted==(CH341_OSC_FREQUENCY/256) implies MSB==0 for no divisor
++	 * the 100 is for rounding.
++	 */
++	if (denom && ((baud_wanted+100) >= (((uint32_t)CH341_OSC_FREQUENCY)>>8))) {
++
++		/* Calculate error for divisor */
++		int32_t baud_expected = ((uint32_t)CH341_OSC_FREQUENCY) / denom;
++		uint32_t baud_error_difference = abs(baud_expected-baud_wanted);
++
++		/* Calculate a for no divisor */
++		uint32_t a_no_divisor = ((0x10000-(((uint32_t)CH341_OSC_FREQUENCY)<<8) /
++			baud_wanted+128) & 0xFF00) | 0x07;
++
++		/* a_no_divisor is only valid for MSB<248 */
++		if ((a_no_divisor>>8) < 248) {
++
++			/* Calculate error for no divisor */
++			int32_t baud_expected_no_divisor = ((uint32_t)CH341_OSC_FREQUENCY) /
++				(256-(a_no_divisor>>8));
++			uint32_t baud_error_difference_no_divisor =
++				abs(baud_expected_no_divisor-baud_wanted);
++
++			/*
++			 * If error using no divisor is less than using
++			 * a divisor then use it instead for the "a" word.
++			 */
++			if (baud_error_difference_no_divisor < baud_error_difference)
++				a = a_no_divisor;
++		}
++
++	}
++
+ 	/*
+ 	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
+ 	 * has been received unless bit 7 is set.
+-- 
+2.17.1
 
-I haven't seen such revision yet, will review it once I find it.
-
-Regards,
-Bjorn
