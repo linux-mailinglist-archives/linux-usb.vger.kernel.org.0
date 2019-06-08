@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D770B39F26
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 13:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B74B39DB8
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 13:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727484AbfFHLkT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Jun 2019 07:40:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57454 "EHLO mail.kernel.org"
+        id S1728652AbfFHLnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Jun 2019 07:43:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60412 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727459AbfFHLkR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 8 Jun 2019 07:40:17 -0400
+        id S1728640AbfFHLnK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 8 Jun 2019 07:43:10 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5BE74208C0;
-        Sat,  8 Jun 2019 11:40:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C96AD214AF;
+        Sat,  8 Jun 2019 11:43:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559994017;
+        s=default; t=1559994189;
         bh=lwKR71ZRj7Zr9zES63ArSSUXvbi1ImHyvWXs/ZGcBfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qdrrRT7e7Y7YIedv5Jop/Xfe7Z0ONTj2VeoybEazUr1qFJSkggcv1NbCJnkDFGQ9p
-         YfXtzkI5wZnPYm+UpqztDE06qEu8yX5oJgi7u57LYn9lah3foBZxRPpzSsAmJwHyzS
-         sPYiX5PohBh59MxIsig2vZur7r7rVWPVwcrX/2YI=
+        b=XWb29LW2GOFLlDpTN/RBIbysS1d/eJQJ1CzDx9Yxh9p4Bs1lSLJV6gLVnFUQ/7RPd
+         eSUQYNfnuGV4lSJ0C4Jv1Le5gYb4eW1ITan6ONBXJHEXLjoHud54uqafVaNJ66mmwz
+         h8rxdRRboX/qt4Lz3JZeIb4A6w0VtE27yui3N4hI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 18/70] usb: xhci: Fix a potential null pointer dereference in xhci_debugfs_create_endpoint()
-Date:   Sat,  8 Jun 2019 07:38:57 -0400
-Message-Id: <20190608113950.8033-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 10/49] usb: xhci: Fix a potential null pointer dereference in xhci_debugfs_create_endpoint()
+Date:   Sat,  8 Jun 2019 07:41:51 -0400
+Message-Id: <20190608114232.8731-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190608113950.8033-1-sashal@kernel.org>
-References: <20190608113950.8033-1-sashal@kernel.org>
+In-Reply-To: <20190608114232.8731-1-sashal@kernel.org>
+References: <20190608114232.8731-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
