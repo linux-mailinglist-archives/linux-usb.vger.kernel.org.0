@@ -2,312 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E425E44ED6
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 23:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D44A39B8D
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 09:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbfFMV7s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 17:59:48 -0400
-Received: from mailfilter2.ihug.co.nz ([203.109.136.2]:16759 "EHLO
-        mailfilter2.ihug.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726316AbfFMV7r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 17:59:47 -0400
-X-Greylist: delayed 578 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Jun 2019 17:59:46 EDT
-X-Cloudmark-SP-Filtered: true
-X-Cloudmark-SP-Result: =?us-ascii?q?v=3D2=2E1_cv=3DZfq9TphA_c=3D1_sm=3D2_tr?=
- =?us-ascii?q?=3D0_a=3D+wZQ9V8TwFDb+bPO7zJ1jg=3D=3D=3A17?=
- =?us-ascii?q?_a=3DjpOVt7BSZ2e4Z31A5e1TngXxSK0=3D=3A19_a=3Dkj9zAlcOel0A=3A10?=
- =?us-ascii?q?_a=3Ddq6fvYVFJ5YA=3A10?=
- =?us-ascii?q?_a=3DycGLOZvRAAAA=3A8_a=3DGcBjqfl=5FAAAA=3A8_a=3DVwQbUJbxAAAA?=
- =?us-ascii?q?=3A8_a=3D1=5FuRqOBQAAAA=3A8?=
- =?us-ascii?q?_a=3DaAkNVphkAAAA=3A8_a=3DnbzhBc3WAAAA=3A8_a=3DzK78OCVoGShWb4I?=
- =?us-ascii?q?tPY4A=3A9?=
- =?us-ascii?q?_a=3DwSwJ0vXf4Y-WlBlP=3A21_a=3DnkOcSyfWNPwLmwkS=3A21_a=3DCjuIK?=
- =?us-ascii?q?1q=5F8ugA=3A10?=
- =?us-ascii?q?_a=3D=5FFdmRy1lNMmlPwh0EFDV=3A22_a=3DCWQMFa1q=5FpvqjtddOh7T=3A?=
- =?us-ascii?q?22?=
- =?us-ascii?q?_a=3DAjGcO6oz07-iQ99wixmX=3A22_a=3DBqJUVCxI9yffi80WDKHC=3A22?=
- =?us-ascii?q?_a=3DuzxBtuH7W9VDlUk5-f10=3A22_a=3DEkLwxwq1R-hcMYNqXCWi=3A22?=
-X-IronPort-AV: E=Sophos;i="5.63,370,1557144000"; 
-   d="scan'208";a="505008041"
-Received: from unassigned.core.vf.net.nz (HELO smtp.vodafone.co.nz) ([203.118.158.227])
-  by cust.filter2.content.vf.net.nz with ESMTP; 14 Jun 2019 09:49:19 +1200
-Received: from PC201407091922 (28.215.252.27.dyn.cust.vf.net.nz [27.252.215.28])
-        by smtp.vodafone.co.nz (Postfix) with ESMTP id F08B74FB00A;
-        Sat,  8 Jun 2019 05:50:16 +0000 (UTC)
-From:   "Jonathan Olds" <jontio@i4free.co.nz>
-To:     "'Johan Hovold'" <johan@kernel.org>
-Cc:     <frank@kingswood-consulting.co.uk>, <werner@cornelius-consult.de>,
-        <boris@hajduk.org>, <linux-usb@vger.kernel.org>
-References: <000901d50e93$7cb31470$76193d50$@co.nz> <20190603072337.GB3668@localhost>
-In-Reply-To: <20190603072337.GB3668@localhost>
-Subject: RE: linux/drivers/usb/serial/ch341.c calculates some baud rates wrong
-Date:   Sat, 8 Jun 2019 17:49:51 +1200
-Message-ID: <000001d51dbe$1245e560$36d1b020$@co.nz>
+        id S1726618AbfFHHnZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Jun 2019 03:43:25 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41024 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726042AbfFHHnZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jun 2019 03:43:25 -0400
+Received: by mail-wr1-f65.google.com with SMTP id c2so4232576wrm.8
+        for <linux-usb@vger.kernel.org>; Sat, 08 Jun 2019 00:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QKqc0lzP47gMzHzMD6emb7W7zB5bOawpgd0Vsnvec/4=;
+        b=iudRtLU6O/K5MoUTfgrPaw4epasI3YCxKnb1oGvltkC1G6tEPW4a6JJAcQyZH664vc
+         LoqCuyuAlyaui2PQVSC0lWa/bhazRmS+qHaEBilFsL6qiIVufEEQULf31aDb/VRMI9to
+         gw/uxxy9pm/eea+nH8qEpigAWF6CnsjYhZjXoXjy7Pvh4Y7SNI8Zlqfg2HocO6QteCP0
+         3EO3Z7gltOFwCULDNUxT7IrdE7hfOMSBaF6f1O1DB53oYUGiVv7wexW4q67hYGOtWURE
+         NnW0Pcm3YJNMP2UE5Zwmxe4syk6o1UiEBlwo+fwt9vEfY+QAmWYc9ZpUtExmT66JNm5f
+         6qBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QKqc0lzP47gMzHzMD6emb7W7zB5bOawpgd0Vsnvec/4=;
+        b=D+8ziFlvo5gffEg2l9QpjYeidK0f4a1R1hsGz33N9aJSRW2i5hD6Sz0pQ8S+mmTEPh
+         V6Giholwb4puAZit6yZaXJ7WEqetDjCfLO0wpLhYQy9WwBUCeDCrUZCfMp5Dbazs9zj+
+         MuAXeIrgFT4mJ3ERT5C/TgwyaVuFr3Vm6cQheFIsQ3FVkhKDQp0LqrVAD8Cy6zBJ3ZWF
+         6GIVl7+84xtjMhMLjdvKMCcx+odRL8N575wcN6cDg+ECXr2eMfGjB1pSZtPfbUCQfolX
+         e9FgdFVtqHFWnmGzqtIwlzpi/oIhUlo7WRfgNk5+dETMQ3Hkkf/gPZVV16wCJNpLBXgi
+         t7YA==
+X-Gm-Message-State: APjAAAWG+UeN2XwD7W8yvHn5yibr4rb084KoLTPikjZKgBih8JgL4CU4
+        4cq2+c8KjVQ1QwPOkTYlmLtfTahp0BwAJdkHWcGX8nDpGDI=
+X-Google-Smtp-Source: APXvYqwVHkTTl2RtzFd3SNTiyl6Mtkz55AiLKBMcIwBqmlgsxBJAZvMghvJhtM2H68AISr2J0Qj9Px0vWtCZJt80u7E=
+X-Received: by 2002:adf:dd82:: with SMTP id x2mr12976555wrl.27.1559979803087;
+ Sat, 08 Jun 2019 00:43:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdUZ3UfHN2bTxA3STX64Y2wikQAqMwDqkJjw
-Content-Language: en-nz
+References: <2a9e1be71a2c6c940dac904752fdd34129745444.camel@unipv.it>
+ <20190530132522.GA21005@kroah.com> <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
+ <20190604054300.GE1588@kroah.com> <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
+ <20190605145525.GA28819@kroah.com> <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
+ <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it> <20190605173902.GE27700@kroah.com>
+ <b159e1518b670d4b0126c7671c30c8c3cb8fffbc.camel@unipv.it> <20190606144757.GA12356@kroah.com>
+In-Reply-To: <20190606144757.GA12356@kroah.com>
+From:   Andrea Vai <andrea.vai@unipv.it>
+Date:   Sat, 8 Jun 2019 09:43:11 +0200
+Message-ID: <CAOsYWL03ALs6xJxcbDeppwtY9Q3v-vW6ptjK18CzL0RtJfboBw@mail.gmail.com>
+Subject: Re: Slow I/O on USB media
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
+Il giorno gio 6 giu 2019 alle ore 16:48 Greg KH
+<gregkh@linuxfoundation.org> ha scritto:
+>
+> On Thu, Jun 06, 2019 at 04:00:52PM +0200, Andrea Vai wrote:
+> > Il giorno mer, 05/06/2019 alle 19.39 +0200, Greg KH ha scritto:
+> > > On Wed, Jun 05, 2019 at 06:23:58PM +0200, Andrea Vai wrote:
+> > > [...]
+> > >
+> > > > Anyway, I know that I can do all of this in a better way, and will
+> > > let
+> > > > you know.
+> > >
+> > > Yes, please do so, your steps above do not show much.
+> >
+> > Here I am with another question.
+> > What I have done so far:
+> >
+> > - booted with the last kernel I know to be working (4.20.13-
+> > 200.fc29.x86_64, installed from Fedora repos), checked that test runs
+>
+> We have no idea what is in a random distro kernel, sorry.
+>
+> So I would start with a kernel.org kernel.  That keeps things at an even
+> level, and you are using a "known good" configuration as well.
+>
+> > fine (2min to copy)
+> > - marked "git bisect good v4.20.13"
+> > - built the latest stable version:
+> >   - git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+> >   - cp -v /boot/config-$(uname -r) .config
+> >   - make -j4 && make modules_install && make install && grub2-mkconfig -o /boot/grub2/grub.cfg
+> >   - grubby --set-default /boot/vmlinuz-5.2.0-rc3 (the last regular file listed in "ls -lrt /boot/v*")
+> > - rebooted with kernel 5.2.0-rc3, ran the test, took 49min to copy
+> > (!), thus marked "git bisect bad"
+> > - built again, and it turns out to be 4.20.0 (why is it earlier than
+> > 4.20.13?), rebooted with 4.20.0, ran the test and it took more than 15
+> > minutes so I killed the cp process, and marked it BAD, and obtained:
+> >
+> > The merge base 8fe28cb58bcb235034b64cbbb7550a8a43fd88be is bad.
+> > This means the bug has been fixed between
+> > 8fe28cb58bcb235034b64cbbb7550a8a43fd88be and
+> > [0f7c162c1df596e0bba04c26fc9cc497983bf32b].
+> >
+> > The output of "git bisect log" is:
+> >
+> > git bisect start
+> > # good: [0f7c162c1df596e0bba04c26fc9cc497983bf32b] Linux 4.20.13
+> > git bisect good 0f7c162c1df596e0bba04c26fc9cc497983bf32b
+> > # bad: [f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a] Linux 5.2-rc3
+> > git bisect bad f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a
+> > # bad: [8fe28cb58bcb235034b64cbbb7550a8a43fd88be] Linux 4.20
+> > git bisect bad 8fe28cb58bcb235034b64cbbb7550a8a43fd88be
+> >
+> > I can understand that the bug was present before 4.20.13 (is that
+> > reasonable?), but how can I tell bisect to start at 4.20.13, which I
+> > know for sure to be working, and not from 4.20.0, which I actually
+> > don't care about?
+> >
+> > I am afraid I am missing something obvious, sorry
+>
+> As Alan said, 4.20 is older than 4.20.13.
+>
+> But, is the kernel.org version of 4.20.13 really "good" here?
+>
+> I would start with Linus's tree and stay away from the stable trees
+> for now.  As you end up with odd "leafs" that can confuse 'git bisect'
+> and everyone else.
+>
+> So start with 4.20.0.  Test that.  If it is "good", then great!
 
-Thanks for the info. I followed
-https://nickdesaulniers.github.io/blog/2017/05/16/submitting-your-first-patc
-h-to-the-linux-kernel-and-responding-to-feedback/ and made a proposal patch
-("[PATCH] USB: serial: ch341: fix wrong baud rate setting calculation"). The
-Get_maintainers.pl file didn't work for me I got...
+Hi,
+  there is also something else I don't understand.
+Every time I build a kernel, then after booting it "uname -a" shows
+something like
 
-../../../scripts/get_maintainer.pl
-0001-USB-serial-ch341-fix-wrong-baud-rate-setting-calcula.patch 
-../../../scripts/get_maintainer.pl: The current directory does not appear to
-be a linux kernel source tree.
+Linux [...] 4.19.0-rc5+ #12 SMP Sat Jun 8 00:26:42 CEST 2019 x86_64
+x86_64 x86_64 GNU/Linux
 
-I've measured the actual baud rates for a lot of given baud rates and I
-think I have deduced the formulas for calculating the "a" value. "a" is a
-uint16 and split up in two, a LSB and a MSB. The current driver only uses
-LSB from the set {0,1,2,3}. There is another valid LSB of 7 that the current
-driver doesn't use. The formula for LSB from the set {0,1,2,3} is...
+where the number after "#" increments by 1 from the previous build.
 
-Actual baud rate == 2^(3*LSB-10)*12000000/(256-MSB), if LSB is in {0,1,2,3}
-and 0<MSB<255
+Now I have the same number (#12) after a new build, is it normal?
+Furthermore, "ls -lrt /boot/v*" shows the last lines to be
 
-When LSB == 7 then things are a bit different. LSB==7 seems to switch off
-the clock divider that the LSB usually does but only if MSB<248; when
-MSB>=248 the clock divider is turned back on and LSB is effectively 3 again.
-So we can also use the following formula...
+-rw-r--r--. 1 root root 8648656  8 giu 00.35 /boot/vmlinuz-4.19.0-rc5+.old
+-rw-r--r--. 1 root root 8648656  8 giu 09.08 /boot/vmlinuz-4.19.0-rc5+
 
-Actual baud rate == 12000000/(256-MSB), if LSB == 7 and 0<MSB<248
+and "diff /boot/vmlinuz-4.19.0-rc5+.old /boot/vmlinuz-4.19.0-rc5+"
+shows they are identical. Why? I expected that each bisect would lead
+to a different kernel.
+Assuming that the opposite can happen, does it mean that when I say
+i.e. "git bisect bad", then build a new kernel and see that is
+identical to the previous one I can run "git bisect bad" without
+booting into the new one and even making the test?
 
-So the trick is to use these formulas to find a MSB and a LSB that produce
-and actual baud rate that are as close as possible to the desired baud rate.
-With errors greater than say 2 to 3% hardware will start to fail to
-communicate.
+Another thing I don't understand is that I told 4.20.0 to be good, so
+I would expect that I don't need to test any older version, but as far
+as I know 4.19.0-rc5+ is older than 4.20.0, so why is it involved in
+the bisection?
 
-Looking at some common baud rates only the higher rates are affected by not
-using a LSB of 7. Of the typical rates only 256000 and 921600 are really
-affected. However other unusual frequencies are affected too such as 1333333
-and I think you could calculate a lot more unusual affected frequencies.
-That being the case I think calculating the MSB when LSB == 7 for a given
-wanted baud rate could be a better solution than special cases for each
-affected baud rate. Something like this seems to work and what I used for
-testing...
+I had to "git bisect skip" one time (the kernel did not boot), but as
+far as I know I don't think this could be related to my doubts.
 
-    // chip frequency is 12Mhz. not quite the same as
-(CH341_BAUDBASE_FACTOR>>7)
-    #define CH341_OSC_FREQUENCY 12000000
-    //
-    //this block of code is for deciding when LSB==7 of "a" is beter than
-LSB=={0,1,2,3} of "a".
-    //frequencies such as 921600, 256000, 1333333 etc have a large baud rate
-error when using LSB=={0,1,2,3}
-    //such as the above code uses. 921600 when using LSB=={0,1,2,3} I
-measured 7.4% error but when
-    //using LSB==7 I measured 0.4% error.
-    //
-    //The chip I tested this on was a CH340G and came back with "Chip
-version: 0x31".
-    //I assume this will work for CH341 and other chip versions but I don't
-think I
-    //have any of those chips lying around.
-    //
-    //calc baud error using the 0,1,2,3 LSB and also the error without the
-divisor (LSB==7)
-    uint32_t msB=(a>>8)&0xFF;
-    uint32_t lsB=a&0xFF;
-    int32_t baud_wanted=(priv->baud_rate);
-    uint32_t denom=((1<<(10-3*lsB))*(256-msB));
- 
-if(denom&&((baud_wanted+100)>=(((uint32_t)CH341_OSC_FREQUENCY)/256)))//as
-baud_wanted==(CH341_OSC_FREQUENCY/256) implies MSB==0 for no divisor, the
-100 is for rounding.
-    {
-        //calc error for divisor
-        int32_t baud_expected=((uint32_t)CH341_OSC_FREQUENCY)/denom;
-        uint32_t baud_error_difference=abs(baud_expected-baud_wanted);
-    
-        //calc a for no divisor
-        uint32_t
-a_no_divisor=(((256<<8)-(((uint32_t)CH341_OSC_FREQUENCY)<<8)/baud_wanted+128
-)&0xFF00)|0x07;
-        
-        //a_no_divisor is only valid for MSB<248.
-        if((a_no_divisor>>8)<248)
-        {
+Current output of "git bisect log" is
 
-            //calc error for no divisor
-            int32_t
-baud_expected_no_divisor=((uint32_t)CH341_OSC_FREQUENCY)/(256-(a_no_divisor>
->8));
-            uint32_t
-baud_error_difference_no_divisor=abs(baud_expected_no_divisor-baud_wanted);
+git bisect start
+# good: [8fe28cb58bcb235034b64cbbb7550a8a43fd88be] Linux 4.20
+git bisect good 8fe28cb58bcb235034b64cbbb7550a8a43fd88be
+# bad: [01047631df813f6247185547c3778c80af088a20] Merge tag
+'xfs-5.2-fixes-2' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux
+git bisect bad 01047631df813f6247185547c3778c80af088a20
+# bad: [bcd49c3dd172c38e14faf151adca63c8db4c9557] Merge branch
+'x86-cleanups-for-linus' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+git bisect bad bcd49c3dd172c38e14faf151adca63c8db4c9557
+# bad: [fcf010449ebe1db0cb68b2c6410972a782f2bd14] Merge tag
+'kgdb-4.21-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/danielt/linux
+git bisect bad fcf010449ebe1db0cb68b2c6410972a782f2bd14
+# bad: [e0c38a4d1f196a4b17d2eba36afff8f656a4f1de] Merge
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next
+git bisect bad e0c38a4d1f196a4b17d2eba36afff8f656a4f1de
+# bad: [c2f1f3e0e17d94ab0c66d83e669492cb9e9a3698] Merge
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/sparc-next
+git bisect bad c2f1f3e0e17d94ab0c66d83e669492cb9e9a3698
+# bad: [b3cc2bfe7244e848f5e8caa77bbdc72c04abd17c] Merge tag
+'i3c/for-4.21' of
+git://git.kernel.org/pub/scm/linux/kernel/git/i3c/linux
+git bisect bad b3cc2bfe7244e848f5e8caa77bbdc72c04abd17c
+# bad: [2ac5e38ea4203852d6e99edd3cf11f044b0a409f] Merge drm/drm-next
+into drm-intel-next-queued
+git bisect bad 2ac5e38ea4203852d6e99edd3cf11f044b0a409f
+# skip: [63ac3328f0d1d37f286e397b14d9596ed09d7ca5] drm/i915: fix
+broadwell EU computation
+git bisect skip 63ac3328f0d1d37f286e397b14d9596ed09d7ca5
+# bad: [ca05359f1e64cf8303ee532e50efe4ab7563d4a9] dma-buf: allow
+reserving more than one shared fence slot
+git bisect bad ca05359f1e64cf8303ee532e50efe4ab7563d4a9
+# bad: [21ebe615c16994f340fe2b6735aad31fd1d0014c] drm: Remove
+transitional helpers
+git bisect bad 21ebe615c16994f340fe2b6735aad31fd1d0014c
+# bad: [a0d4d42cb5854400baa47bf63d9aae65fa9f484e] drm/bochs: Replace
+drm_gem_object_unreference_unlocked with put function
+git bisect bad a0d4d42cb5854400baa47bf63d9aae65fa9f484e
 
-            //if error using no divisor is less than using a divisor then
-use it instead for the "a" word.
-            if(baud_error_difference_no_divisor<baud_error_difference)
-            {
-                a=a_no_divisor;
-            }
-            
-            printk("ch341_set_baudrate_lcr: using LSB==%u.
-org_expected_baud=%u org_error=%u org_a=0x%4X no_divisor_expected_baud=%u
-no_divisor_error=%u
-no_divisor_a=0x%4X\n",a&0xFF,baud_expected,baud_error_difference,(msB<<8|lsB
-),baud_expected_no_divisor,baud_error_difference_no_divisor,a_no_divisor);
-
-        }
-    }
-  
-
-I've tested that with my hardware and it seems to work fine with every
-setting I could throw at it. I am aware that I've only tried it on my
-hardware with a CH340G chip. So trying with different chips and computers
-would be a good idea (I've tested it on the CH340G chip with two computers).
-
-My measurements/workings as a libre/open office calc file can be downloaded
-from https://jontio.github.io/linux_kernel_work/ch43x_tests.ods .
-
-I measured the following with the current driver...
-
-Baud wanted	Baud measured	Error as % of wanted
-50	50	0.0%
-75	75.2	0.3%
-110	109.5	0.5%
-135	134.6	0.3%
-150	150.4	0.3%
-300	300.8	0.3%
-600	601.3	0.2%
-1200	1201.9	0.2%
-1800	1801.8	0.1%
-2400	2403.8	0.2%
-4800	4807.7	0.2%
-7200	7215	0.2%
-9600	9615.4	0.2%
-14400	14430	0.2%
-19200	19231	0.2%
-38400	38462	0.2%
-56000	56054	0.1%
-57600	57837	0.4%
-115200	115207	0.0%
-128000	127551	0.4%
-230400	230415	0.0%
-256000	250000	2.3%
-460800	460617	0.0%
-921600	853242	7.4%
-1000000	999001	0.1%
-1333333	1204819	9.6%
-1843200	1496334	18.8%
-2000000	1984127	0.8%
-5000000	2985075	40.3%
-
-The patch will fix 256000, 1333333 and 921600 but not 1843200 and 5000000.
-
-The driver even with my patch doesn't give an error to the user when the
-error is beyond a certain threshold. With the formulas I deduced it would be
-possible to estimate the percentage error and if it was beyond a certain
-threshold send something to dmesg. For example the ch34x can't produce
-1843200 baud with an acceptable accuracy but the driver will happily
-calculate the best possible "a". The user could read dmesg and adjust their
-hardware to better match the ch34x baud rate.
-
-Cheers,
-Jonti
-
------Original Message-----
-From: Johan Hovold [mailto:johan@kernel.org] 
-Sent: Monday, 3 June 2019 7:24 p.m.
-To: Jonathan Olds
-Cc: johan@kernel.org; frank@kingswood-consulting.co.uk;
-werner@cornelius-consult.de; boris@hajduk.org
-Subject: Re: linux/drivers/usb/serial/ch341.c calculates some baud rates
-wrong
-
-Hi Jonathan,
-
-and sorry about the late reply.
-
-On Mon, May 20, 2019 at 10:37:48AM +1200, Jonathan Olds wrote:
-> Hi,
-> 
-> Sorry for sending this email to so many but I've never contributed to 
-> the Linux kernel before and I'm not sure how this is done or who to talk
-to.
-
-You can use scripts/get_maintainer.pl to figure out which maintainers and
-lists to CC.
-
-For USB serial that would be me and we always keep the linux-usb list on CC.
-
-It never hurts to CC the original authors as well, just like you did here.
-
-Note that you need to send mails to list as plain text, not html.
-
-> With a CH340 chip the ch341 driver is loaded. My chip id is 0x31 
-> according to the driver debug info.
-> 
-> In "static int ch341_set_baudrate_lcr(struct usb_device *dev, struct 
-> ch341_private *priv, u8 lcr)"
-> 
-> 
-> Currently we have...
-
-...
-
->                a = (factor & 0xff00) | divisor;
-
-> This "a" thing is called index when used in this function...
-> 
-> "ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x1312, a);"
-> 
-> This "a" is wrong for some baud rates. (I've only tried 921600 so far)
-> 
-> For example at 921600 baud "a" is calculated as "0xF303". This creates 
-> a baud rate of about 857000 baud. This can be seen in the following
-figures...
-
-> I saw this is another driver...
-
-...
-
-> So this person used cases for various baud rates that have incorrect 
-> rates using the method that the current Linux kernel driver implements.
-> 
-> I then use the 0xF307 that this calculates for 921600 baud and put an 
-> if statement into the current Linux driver like so...
-
-...
-
-> This produced the correct baud rate as can be seen in the following 
-> figure...
-
-> I found this bug out of necessity. I made a board ( 
-> http://jontio.zapto.org/jpic ) and programmed initially in Windows 
-> without any baud rate issues. Then moving to Linux the board wasn't 
-> able to connect as the baud rate where incorrect. So it is a real bug 
-> and one that needs addressing. Fortunately the solution looks like 
-> using the code with the cases in it. I have no idea where the 
-> programming documentation is for this chip so this index number for 
-> setting the baud rate is just a magic number to me at the moment.
-> 
-> What is the process to get this fix incorporated into new updates to 
-> Linux kernel? If you want I can create a list of what standard baud 
-> rates are incorrect and by how much with an oscilloscope; I think it 
-> will only be for the very high baud rates and may only affect 921600 and
-above.
-
-Such a list would be very useful to have.
-
-And I agree that if you can't infer the algorithm used from your
-experimental data we may need to start special casing.
-
-Please do gather the data, and send it to the list and propose a patch for
-fixing the broken rates.
-
-Thanks,
-Johan
-
+Many thanks,
+Andrea
