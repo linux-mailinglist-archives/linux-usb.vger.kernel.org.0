@@ -2,115 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 774293A040
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 16:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B498D3A04F
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 16:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727148AbfFHOWN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Jun 2019 10:22:13 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:41675 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727015AbfFHOWM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jun 2019 10:22:12 -0400
-Received: by mail-lf1-f66.google.com with SMTP id 136so3673298lfa.8
-        for <linux-usb@vger.kernel.org>; Sat, 08 Jun 2019 07:22:11 -0700 (PDT)
+        id S1727137AbfFHOtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Jun 2019 10:49:52 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:41255 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727074AbfFHOtw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jun 2019 10:49:52 -0400
+Received: by mail-wr1-f66.google.com with SMTP id c2so4904042wrm.8;
+        Sat, 08 Jun 2019 07:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aIUAKPG6L/Uk7RNnahoThkSWUC4nrgmZui5o+1IQtNk=;
-        b=a8zCjMPgP8flEe8AX4DYltakrbTeXlf4HJdUBQFer/b0IPJPCfVav33LROaOIvkRBh
-         d/ezKZe+qMrAcg+2zaULmB+dIX8setyM8Dw/amQKtBtuGvpqfUZdtCABo4QaT5ZFUGGd
-         fksqElAG9w2gwbE6Q6S46627rrHHqLiRDCA8eScKkVkurpN9O6Dge+avOCJxW9CwIBjE
-         vWmpOGwdimteMBWpy3R6+1wtE1HyS9jIIsl6y+9pjv6itruHNG55mTSg6Qzlisw2u1sl
-         d/rKG06wFYR5828vG892iuyGTPq8CV75uQK3Cx8ndRZlvQhTZTCv/wvDzZyIGlw+oOwZ
-         bmxg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eWOdxQrFr4RFjEMoqWRjZksTgoTUFpfXgF0kmiG4tnM=;
+        b=QcE4ndQ8B18fmQ/brgW3sdTEjoYggt6GmVVYw+M4eUQT5SNjOOkc9cqyiwMx/aFryD
+         wX17evhox8dJ48qCvOrutZ6OXXbg5VNgZ156xUIkcQYS9fbpCP3VdVmSbuhQ0uHdvfq6
+         Ela9tp//984on3j3qUfoCPtPijRvd1lvETdh/6NOSl+ntHILYaCC0KW5Eug4MJ70FHWc
+         8GgIVIFAFu2eXm8bzFcga2WJuOtsW1IMVU/Ou6ZjOnB1XWtlccY0DxnjW7xKySTctVFW
+         awbUBZsCJ4Ga6DqMr+Izqehf9VCPWJnOqyO5nIGAQM6A76IXenaYMKpLECUHT3AOE1A3
+         JDSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aIUAKPG6L/Uk7RNnahoThkSWUC4nrgmZui5o+1IQtNk=;
-        b=Ed4dZpQKYm9BBvAe1Np1nz2YF4wHhnPwN7d354bGbRsq3HikmnW83o41WP1rwEAiQx
-         K686oS5ltjpVIargBDygvv+hDHwPn/ckzKsejb3ajiq93HzsGV8UQuMoaq/0OSfb8XJQ
-         Z5WdbhZglj7N4sKaIn+cUjfriDRWRiN79r/sT4qt9VyvWMkG6/ttRGjYQ4Gz4SoBm2NV
-         KUOW1kMATGrhE6inQLKIPINr+8ikOXeud34rim6zL6uz8E2aRz54Q1H/hN9Lwa57tk5Y
-         VXH9a+DTKXIrLeDNSCKW6I5fbFMCe4QS4Dlja4M/+JibGK7y/rfGsI0wTgwOArBfv7Ju
-         +h5Q==
-X-Gm-Message-State: APjAAAVkWc5snc7lUqqFJXZ7O0C7bYkmM6Elx/PJd3pjD7UMkJLa5Hed
-        LXcZRlT8hAqxsZ/63FeAoLFc4PiLI8lCC4aGTmzUFw==
-X-Google-Smtp-Source: APXvYqx2MoGtkoQjUm5Wa5IOCM/k/orM6EKwAwZG7AXIo8rcqREn8WTPkR2Fc2Pbt++tRSEdz7xZS6GOynFOOaZSLRQ=
-X-Received: by 2002:ac2:598d:: with SMTP id w13mr28511822lfn.165.1560003730786;
- Sat, 08 Jun 2019 07:22:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=eWOdxQrFr4RFjEMoqWRjZksTgoTUFpfXgF0kmiG4tnM=;
+        b=d0i6SB16wSMghCHNVrqP3QEg1CMlf7Rd3HQoMgsuYiFf+oMWPeDGvfivbORWJ+Kvm/
+         TvVJYrQFI3x6PIFhsDAaDCrt0NB0Un9Kkk/7zSkjRras1xwD+MV+HscMeGfo7mrebXXM
+         Kg0glC9rvU7J6+TJZ2BIMg1jjfu6mcuj0deIgTa0dhWC3iAVqqDiHEERbiLLmLWV5h3j
+         iRqkqTiXNO987GxVStOENVQ91QrogwfnUgxyRX2S3hMXRwzJid+k5HA4ywKZo0EILY/o
+         1RAs/5e0+hzuL9vPHQ6AdyozdX1ePV8uFjOUWtwj6VqEeTCEUk65V3KqdaE8iPwfZWpA
+         IkKw==
+X-Gm-Message-State: APjAAAUsTFrXke+6GuBnmyBSlbZgGKkDn4vXLjEJ+STjxCUAkCyTTned
+        bjN4WFHW/D/hGjGvXPhZ5lU4wO9s
+X-Google-Smtp-Source: APXvYqw1h4EYjbXpyqb4DFtM0Mb3nKNri2gXI9/A7BX0grqWAUM3+TB0cwu8a1B2RXqoIp0bsU//hA==
+X-Received: by 2002:adf:efc8:: with SMTP id i8mr9774465wrp.220.1560005388831;
+        Sat, 08 Jun 2019 07:49:48 -0700 (PDT)
+Received: from debian64.daheim (p5B0D753E.dip0.t-ipconnect.de. [91.13.117.62])
+        by smtp.gmail.com with ESMTPSA id j132sm9691200wmj.21.2019.06.08.07.49.47
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sat, 08 Jun 2019 07:49:48 -0700 (PDT)
+Received: from chuck by debian64.daheim with local (Exim 4.92)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1hZcfD-0000Cv-F2; Sat, 08 Jun 2019 16:49:47 +0200
+From:   Christian Lamparter <chunkeey@gmail.com>
+To:     linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Kalle Valo <kvalo@codeaurora.org>
+Subject: [PATCH v2] carl9170: fix misuse of device driver API
+Date:   Sat,  8 Jun 2019 16:49:47 +0200
+Message-Id: <20190608144947.744-3-chunkeey@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190608144947.744-1-chunkeey@gmail.com>
+References: <20190608144947.744-1-chunkeey@gmail.com>
 MIME-Version: 1.0
-References: <20190607082901.6491-1-lee.jones@linaro.org> <20190607082901.6491-3-lee.jones@linaro.org>
- <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
-In-Reply-To: <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 8 Jun 2019 16:22:03 +0200
-Message-ID: <CACRpkdZmBe6ucmekLUNkypDKx=eAXqtwdYNpZzwByzuWb-sjDA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] pinctrl: msm: Add ability for drivers to supply a
- reserved GPIO list
-To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, alokc@codeaurora.org,
-        Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jeffrey Hugo <jlhugo@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 7, 2019 at 1:10 PM Ard Biesheuvel <ard.biesheuvel@linaro.org> wrote:
-> On Fri, 7 Jun 2019 at 10:29, Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > When booting MSM based platforms with Device Tree or some ACPI
-> > implementations, it is possible to provide a list of reserved pins
-> > via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
-> > However some ACPI tables are not populated with this information,
-> > thus it has to come from a knowledgable device driver instead.
-> >
-> > Here we provide the MSM common driver with additional support to
-> > parse this informtion and correctly populate the widely used
-> > 'valid_mask'.
-> >
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
->
-> I'm not sure if this is the correct approach. Presumably, on ACPI
-> systems, all the pinctl stuff is already set up by the firmware, and
-> so we shouldn't touch *any* pins unless they have been requested
-> explicitly. Is there any way we can support this in the current
-> framework?
+This patch follows Alan Stern's recent patch:
+"p54: Fix race between disconnect and firmware loading"
 
-I don't suppose anything but the GPIO portions of the pinctrl
-driver is ever used under ACPI. I guess in an ideal ACPI world
-noone (like userspace) would ever use a GPIO because ACPI
-would have all GPIOs assigned a particular purpose, so accessing
-any of them would lead to a crash.
+that overhauled carl9170 buggy firmware loading and driver
+unbinding procedures.
 
-But in practice it seems a lot of GPIOs are available and used
-for example by userspace hacks, so just blacklisting the ones
-that cannot be accessed by the GPIO subsystem seems like
-a viable compromise.
+Since the carl9170 code was adapted from p54 it uses the
+same functions and is likely to have the same problem, but
+it's just that the syzbot hasn't reproduce them (yet).
 
-Then we have the ACPI paradigm of pin control being controlled
-by ACPI: this is also great in theory, but it seems like the ACPI
-firmware has in cases forgot or omitted to implement some of
-it and people need to access it anyways. The people writing the
-default firmware cannot think out or test all usecases, so some
-will be left open-ended to non-firmware authoring users. This is why
-drivers/pinctrl/intel/* exists despite being for exclusively
-ACPI platforms. Being able to control pins also from the kernel
-has become a viable compromise.
+a summary from the changes (copied from the p54 patch):
+ * Call usb_driver_release_interface() rather than
+   device_release_driver().
 
-Yours,
-Linus Walleij
+ * Lock udev (the interface's parent) before unbinding the
+   driver instead of locking udev->parent.
+
+ * During the firmware loading process, take a reference
+   to the USB interface instead of the USB device.
+
+ * Don't take an unnecessary reference to the device during
+   probe (and then don't drop it during disconnect).
+
+and
+
+ * Make sure to prevent use-after-free bugs by explicitly
+   setting the driver context to NULL after signaling the
+   completion.
+
+Cc: <stable@vger.kernel.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+---
+v2: Alan Stern's comments
+  - fixed possible use-after-free
+---
+ drivers/net/wireless/ath/carl9170/usb.c | 39 +++++++++++--------------
+ 1 file changed, 17 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/carl9170/usb.c b/drivers/net/wireless/ath/carl9170/usb.c
+index e7c3f3b8457d..99f1897a775d 100644
+--- a/drivers/net/wireless/ath/carl9170/usb.c
++++ b/drivers/net/wireless/ath/carl9170/usb.c
+@@ -128,6 +128,8 @@ static const struct usb_device_id carl9170_usb_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(usb, carl9170_usb_ids);
+ 
++static struct usb_driver carl9170_driver;
++
+ static void carl9170_usb_submit_data_urb(struct ar9170 *ar)
+ {
+ 	struct urb *urb;
+@@ -966,32 +968,28 @@ static int carl9170_usb_init_device(struct ar9170 *ar)
+ 
+ static void carl9170_usb_firmware_failed(struct ar9170 *ar)
+ {
+-	struct device *parent = ar->udev->dev.parent;
+-	struct usb_device *udev;
+-
+-	/*
+-	 * Store a copy of the usb_device pointer locally.
+-	 * This is because device_release_driver initiates
+-	 * carl9170_usb_disconnect, which in turn frees our
+-	 * driver context (ar).
++	/* Store a copies of the usb_interface and usb_device pointer locally.
++	 * This is because release_driver initiates carl9170_usb_disconnect,
++	 * which in turn frees our driver context (ar).
+ 	 */
+-	udev = ar->udev;
++	struct usb_interface *intf = ar->intf;
++	struct usb_device *udev = ar->udev;
+ 
+ 	complete(&ar->fw_load_wait);
++	/* at this point 'ar' could be already freed. Don't use it anymore */
++	ar = NULL;
+ 
+ 	/* unbind anything failed */
+-	if (parent)
+-		device_lock(parent);
+-
+-	device_release_driver(&udev->dev);
+-	if (parent)
+-		device_unlock(parent);
++	usb_lock_device(udev);
++	usb_driver_release_interface(&carl9170_driver, intf);
++	usb_unlock_device(udev);
+ 
+-	usb_put_dev(udev);
++	usb_put_intf(intf);
+ }
+ 
+ static void carl9170_usb_firmware_finish(struct ar9170 *ar)
+ {
++	struct usb_interface *intf = ar->intf;
+ 	int err;
+ 
+ 	err = carl9170_parse_firmware(ar);
+@@ -1009,7 +1007,7 @@ static void carl9170_usb_firmware_finish(struct ar9170 *ar)
+ 		goto err_unrx;
+ 
+ 	complete(&ar->fw_load_wait);
+-	usb_put_dev(ar->udev);
++	usb_put_intf(intf);
+ 	return;
+ 
+ err_unrx:
+@@ -1052,7 +1050,6 @@ static int carl9170_usb_probe(struct usb_interface *intf,
+ 		return PTR_ERR(ar);
+ 
+ 	udev = interface_to_usbdev(intf);
+-	usb_get_dev(udev);
+ 	ar->udev = udev;
+ 	ar->intf = intf;
+ 	ar->features = id->driver_info;
+@@ -1094,15 +1091,14 @@ static int carl9170_usb_probe(struct usb_interface *intf,
+ 	atomic_set(&ar->rx_anch_urbs, 0);
+ 	atomic_set(&ar->rx_pool_urbs, 0);
+ 
+-	usb_get_dev(ar->udev);
++	usb_get_intf(intf);
+ 
+ 	carl9170_set_state(ar, CARL9170_STOPPED);
+ 
+ 	err = request_firmware_nowait(THIS_MODULE, 1, CARL9170FW_NAME,
+ 		&ar->udev->dev, GFP_KERNEL, ar, carl9170_usb_firmware_step2);
+ 	if (err) {
+-		usb_put_dev(udev);
+-		usb_put_dev(udev);
++		usb_put_intf(intf);
+ 		carl9170_free(ar);
+ 	}
+ 	return err;
+@@ -1131,7 +1127,6 @@ static void carl9170_usb_disconnect(struct usb_interface *intf)
+ 
+ 	carl9170_release_firmware(ar);
+ 	carl9170_free(ar);
+-	usb_put_dev(udev);
+ }
+ 
+ #ifdef CONFIG_PM
+-- 
+2.20.1
+
