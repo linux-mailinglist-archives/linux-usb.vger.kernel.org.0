@@ -2,106 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DFA39FC3
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 14:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E35839FEE
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 15:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727204AbfFHM7V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Jun 2019 08:59:21 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:44190 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726976AbfFHM7V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jun 2019 08:59:21 -0400
-Received: by mail-pf1-f195.google.com with SMTP id t16so2692869pfe.11;
-        Sat, 08 Jun 2019 05:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=U6kNzw9jg6wjnbbAdjWukgPoHdW/wsFLgOtzXedRmQY=;
-        b=GpSA+M/dnDLmUIfKHKILYGlW+ssHIXlWIknKgB3dionkiIycmDI90wnlNQo6gTe54f
-         B5aM/REyPQ05QVbvR8PSpEMOa85NIwd7h5t//8DwC7BhDNpspLJBSk0DNGMsGEdc+vnn
-         cLXSdSQFliisilIf3KMKKo4VmlFeyt9JO18JmVAMY0hzOO0g28gCqLvMHGohRMJtK8yd
-         CP1GlR3zSZ0+85KfzNSe+8ur9RuP//cMEiU3vm7ZyuzOfAGL7QVq+f7tHrsq85uh7Psh
-         HmQVOqpjDINB4RhIkCE21li55iVE4TDiaXGk/CTEitIWxcr+CO4w9AH9Kz6g2VBT0eY1
-         7VMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=U6kNzw9jg6wjnbbAdjWukgPoHdW/wsFLgOtzXedRmQY=;
-        b=Pn3Hbaqz36Su0Qr8bBx60NwZPZbCvu6+2RYbI6f+Jma+1AZ7hZ2FQ1Rm4mfJMSOZop
-         uJFs/kVdjNWVBZuLeuTa+1uK8gCmdQBObSCV8tOPcxKgsIx5S7etDAUqvek0aZpch61k
-         LJuOVNBQJvTP4nOSUZkWTFIXeFoDcdjG9CdeBmmW1NsY3/QVqMwKKRY3iLHYvUGwwK3V
-         66VGDYvy78acjkr24K6LDa+tdpyR96u5bZFdXNfvpr2dUIw1XghgJPPNHgR5T5mVHT/c
-         qUi+1NyOe0Yshnuqr1Ol8VG1MQsdsaIPuzL57ZxOMsMQrZf0WzsFVNkjBE/lP+pguOeZ
-         YxVQ==
-X-Gm-Message-State: APjAAAW/zWadXfx27o4Mlbl33b4KESf1qyQepuFsYZXXbbg6o7NQX5TI
-        MZckO6ATt5tlYUHoYFiBm0a20iHr
-X-Google-Smtp-Source: APXvYqxr/wei3HEkeiEAaJNqCFNiiLSJWQcad/VgHMXw/qaK0q94sYMsz8v0iNdbfA4n0SYluSTAAA==
-X-Received: by 2002:a65:4907:: with SMTP id p7mr7301950pgs.288.1559998760078;
-        Sat, 08 Jun 2019 05:59:20 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v23sm5099951pff.185.2019.06.08.05.59.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 08 Jun 2019 05:59:19 -0700 (PDT)
-Subject: Re: [PATCH 34/34] usb: typec: tcpm: fusb302: simplify getting the
- adapter of a client
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726978AbfFHNdi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Jun 2019 09:33:38 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58748 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726861AbfFHNdi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 8 Jun 2019 09:33:38 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id E5B91AF8C;
+        Sat,  8 Jun 2019 13:33:35 +0000 (UTC)
+Message-ID: <be9d7f2d3ede283cb6931c6edbb13c3fffa53b83.camel@suse.de>
+Subject: Re: [PATCH] xhci: clear port_remote_wakeup after resume failure
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     oneukum@suse.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
- <20190608105619.593-35-wsa+renesas@sang-engineering.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <bb8439e5-f56a-c848-180f-1feddbb198fe@roeck-us.net>
-Date:   Sat, 8 Jun 2019 05:59:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+Date:   Sat, 08 Jun 2019 15:33:34 +0200
+In-Reply-To: <9286ec05-d2a2-bd23-3397-b6a3623cad8f@linux.intel.com>
+References: <20190524145231.6605-1-nsaenzjulienne@suse.de>
+         <eb5d9252-1283-be73-96d6-c24a0fdf1eab@linux.intel.com>
+         <e2dd83c5dbba1bb9bd300285285ab07135dc6166.camel@suse.de>
+         <9286ec05-d2a2-bd23-3397-b6a3623cad8f@linux.intel.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-cRqm/SKreSIW7OXm1moF"
+User-Agent: Evolution 3.32.2 
 MIME-Version: 1.0
-In-Reply-To: <20190608105619.593-35-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/8/19 3:56 AM, Wolfram Sang wrote:
-> We have a dedicated pointer for that, so use it. Much easier to read and
-> less computation involved.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+--=-cRqm/SKreSIW7OXm1moF
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> ---
-> 
-> Please apply to your subsystem tree.
-> 
->   drivers/usb/typec/tcpm/fusb302.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index 7302f7501ec9..c524088246ee 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -1697,13 +1697,12 @@ static int fusb302_probe(struct i2c_client *client,
->   			 const struct i2c_device_id *id)
->   {
->   	struct fusb302_chip *chip;
-> -	struct i2c_adapter *adapter;
-> +	struct i2c_adapter *adapter = client->adapter;
->   	struct device *dev = &client->dev;
->   	const char *name;
->   	int ret = 0;
->   	u32 v;
->   
-> -	adapter = to_i2c_adapter(client->dev.parent);
->   	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_I2C_BLOCK)) {
->   		dev_err(&client->dev,
->   			"I2C/SMBus block functionality not supported!\n");
-> 
+On Tue, 2019-06-04 at 16:53 +0300, Mathias Nyman wrote:
+> On 27.5.2019 14.28, Nicolas Saenz Julienne wrote:
+> > Hi Matthias,
+> > thanks for the review.
+> >=20
+> > On Mon, 2019-05-27 at 14:16 +0300, Mathias Nyman wrote:
+> > > On 24.5.2019 17.52, Nicolas Saenz Julienne wrote:
+> > > > This was seen on a Dell Precision 5520 using it's WD15 dock. The do=
+ck's
+> > > > Ethernet device interfaces with the laptop through one of it's USB3
+> > > > ports. While idle, the Ethernet device and HCD are suspended by run=
+time
+> > > > PM, being the only device connected on the bus. Then, both are resu=
+med
+> > > > on
+> > > > behalf of the Ethernet device, which has remote wake-up capabilitie=
+s.
+> > > >=20
+> > > > The Ethernet device was observed to randomly disconnect from the US=
+B
+> > > > port shortly after submitting it's remote wake-up request. Probably=
+ a
+> > > > weird timing issue yet to be investigated. This causes runtime PM t=
+o
+> > > > busyloop causing some tangible CPU load. The reason is the port get=
+s
+> > > > stuck in the middle of a remote wake-up operation, waiting for the
+> > > > device to switch to U0. This never happens, leaving "port_remote_wa=
+keup"
+> > > > enabled, and automatically triggering a failure on any further susp=
+end
+> > > > operation.
+> > > >=20
+> > > > This patch clears "port_remote_wakeup" upon detecting a device with=
+ a
+> > > > wrong resuming port state (see Table 4-9 in 4.15.2.3). Making sure =
+the
+> > > > above mentioned situation doesn't trigger a PM busyloop.
+> > > >=20
+> > >=20
+> > > There was a similar case where the USB3 link had transitioned to a
+> > > lower power U1 or U2 state after resume, before driver read the state=
+,
+> > > leaving port_remote_wakeup flag uncleared.
+> > >=20
+> > > This was fixed in 5.1 kernel by commit:
+> > >=20
+> > > 6cbcf59 xhci: Fix port resume done detection for SS ports with LPM en=
+able
+> > >=20
+> > > Can you check if you have it?
+> > > It should be in recent stable releases as well.
+> >=20
+> > I was aware of that patch, unfortunately it doesn't address the same is=
+sue.
+> > In
+> > my case I never get a second port status event (so no PLC =3D=3D 1 or a=
+ny state
+> > change seen in PLS). The device simply disconnects from the bus.
+> >=20
+>=20
+> I see, ok, then we need to clear the flag in the hub thread.
+>=20
+> But to me it looks like this patch could cause a small race risk in the
+> successful
+> device initiated resume cases.
+>=20
+> If the hub thread, i.e. the get_port_status() function, notices the U0 st=
+ate
+> before
+> the interrupt handler, i.e. handle_port_status() function, then
+> port_remote_wakeup
+> flag is cleared in the hub thread and the wakeup notification is never ca=
+lled
+> from
+> handle_port_status().
+>=20
+> Would it be enough to just check for (port_remote_wakeup flag &&
+> !PORT_CONNECT) in the hub thread?
+> USB3 PORT_CONNECT bit is lost in most error cases.
+
+I get your concerns, there is a race indeed. On top of that, checking
+PORT_CONNECT works fine for me.
+
+So if I undertood your suggestion right, would this be fine?=20
+
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 3abe70ff1b1e..253957dc62de 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1057,6 +1057,9 @@ static u32 xhci_get_port_status(struct usb_hcd *hcd,
+                bus_state->resume_done[wIndex] =3D 0;
+                clear_bit(wIndex, &bus_state->resuming_ports);
+                usb_hcd_end_port_resume(&hcd->self, wIndex);
++       } else if (bus_state->port_remote_wakeup & (1 << port->hcd_portnum)=
+ &&
++                  !(raw_port_status & PORT_CONNECT)) {
++               bus_state->port_remote_wakeup &=3D ~(1 << port->hcd_portnum=
+);
+        }
+=20
+        if (bus_state->port_c_suspend & (1 << wIndex))
+
+Regards,
+Nicolas
+
+
+--=-cRqm/SKreSIW7OXm1moF
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAlz7uS4ACgkQlfZmHno8
+x/4lVAf/TyAT8eaZIbbe6LfM3lKlrEaNIF+nzVTML9dn3//0w0NMFBBKbJ51EO6b
+Y2PI4j33UKaaWtf+fXUh3hVFuRTWXjjH5gJ+QDBav4UgZxUQ4mKsooYqO+ciNKZb
+1qevu+Z4XHCYou3UUukmbKiXhfsuvtr98vwwwQBBdpHJXVEQBSoiNgBmoHZDWvNL
+26ov+w/+ZECF0Ofa8n5vUIGy66Pqg3ldWNF6R2YNwkea/iZRG/8sk1ZGXtVni7B7
+gU3ARNIbn1HeHvuZvePUJhaSroUNzI3IqiD2DY9I2VK1PQG3mbiDBz9yRyM+enSX
+beoGBT9DMOu2aS3u2Zwj2Hdl2Gt+7A==
+=TuC8
+-----END PGP SIGNATURE-----
+
+--=-cRqm/SKreSIW7OXm1moF--
 
