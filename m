@@ -2,119 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 929E239FF9
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 15:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774293A040
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 16:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727151AbfFHNkL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Jun 2019 09:40:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56536 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726227AbfFHNkL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 8 Jun 2019 09:40:11 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E242D214C6;
-        Sat,  8 Jun 2019 13:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560001210;
-        bh=J92X63eJnF4/ZVdxVIzn3vP2M1eHZgcHuOyotC/SU70=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m73bra1Z+41F0rgW/uhg+IO5K040f0AtsUsJDeViRz2rbmwBQHi02yq9+vforBjdz
-         McI+37imngbfGlmpzulh2QG7T5hy9uGJCLBinLya2e6DcmT+M0SRJCe5BLMJuNgylf
-         O3SlY3L1djbLQDYAsNPNro2UzNxTEWRYVUHcHg6E=
-Date:   Sat, 8 Jun 2019 15:40:08 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     devicetree@vger.kernel.org, felipe.balbi@linux.intel.com,
-        linux-usb@vger.kernel.org, hdegoede@redhat.com,
-        heikki.krogerus@linux.intel.com, robh+dt@kernel.org, rogerq@ti.com,
-        linux-kernel@vger.kernel.org, jbergsagel@ti.com, nsekhar@ti.com,
-        nm@ti.com, sureshp@cadence.com, peter.chen@nxp.com,
-        jpawar@cadence.com, kurahul@cadence.com
-Subject: Re: [PATCH v7 2/6] usb:common Separated decoding functions from dwc3
- driver.
-Message-ID: <20190608134008.GB11489@kroah.com>
-References: <1559729030-16390-1-git-send-email-pawell@cadence.com>
- <1559729030-16390-3-git-send-email-pawell@cadence.com>
+        id S1727148AbfFHOWN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Jun 2019 10:22:13 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:41675 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727015AbfFHOWM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jun 2019 10:22:12 -0400
+Received: by mail-lf1-f66.google.com with SMTP id 136so3673298lfa.8
+        for <linux-usb@vger.kernel.org>; Sat, 08 Jun 2019 07:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aIUAKPG6L/Uk7RNnahoThkSWUC4nrgmZui5o+1IQtNk=;
+        b=a8zCjMPgP8flEe8AX4DYltakrbTeXlf4HJdUBQFer/b0IPJPCfVav33LROaOIvkRBh
+         d/ezKZe+qMrAcg+2zaULmB+dIX8setyM8Dw/amQKtBtuGvpqfUZdtCABo4QaT5ZFUGGd
+         fksqElAG9w2gwbE6Q6S46627rrHHqLiRDCA8eScKkVkurpN9O6Dge+avOCJxW9CwIBjE
+         vWmpOGwdimteMBWpy3R6+1wtE1HyS9jIIsl6y+9pjv6itruHNG55mTSg6Qzlisw2u1sl
+         d/rKG06wFYR5828vG892iuyGTPq8CV75uQK3Cx8ndRZlvQhTZTCv/wvDzZyIGlw+oOwZ
+         bmxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aIUAKPG6L/Uk7RNnahoThkSWUC4nrgmZui5o+1IQtNk=;
+        b=Ed4dZpQKYm9BBvAe1Np1nz2YF4wHhnPwN7d354bGbRsq3HikmnW83o41WP1rwEAiQx
+         K686oS5ltjpVIargBDygvv+hDHwPn/ckzKsejb3ajiq93HzsGV8UQuMoaq/0OSfb8XJQ
+         Z5WdbhZglj7N4sKaIn+cUjfriDRWRiN79r/sT4qt9VyvWMkG6/ttRGjYQ4Gz4SoBm2NV
+         KUOW1kMATGrhE6inQLKIPINr+8ikOXeud34rim6zL6uz8E2aRz54Q1H/hN9Lwa57tk5Y
+         VXH9a+DTKXIrLeDNSCKW6I5fbFMCe4QS4Dlja4M/+JibGK7y/rfGsI0wTgwOArBfv7Ju
+         +h5Q==
+X-Gm-Message-State: APjAAAVkWc5snc7lUqqFJXZ7O0C7bYkmM6Elx/PJd3pjD7UMkJLa5Hed
+        LXcZRlT8hAqxsZ/63FeAoLFc4PiLI8lCC4aGTmzUFw==
+X-Google-Smtp-Source: APXvYqx2MoGtkoQjUm5Wa5IOCM/k/orM6EKwAwZG7AXIo8rcqREn8WTPkR2Fc2Pbt++tRSEdz7xZS6GOynFOOaZSLRQ=
+X-Received: by 2002:ac2:598d:: with SMTP id w13mr28511822lfn.165.1560003730786;
+ Sat, 08 Jun 2019 07:22:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1559729030-16390-3-git-send-email-pawell@cadence.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+References: <20190607082901.6491-1-lee.jones@linaro.org> <20190607082901.6491-3-lee.jones@linaro.org>
+ <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
+In-Reply-To: <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 8 Jun 2019 16:22:03 +0200
+Message-ID: <CACRpkdZmBe6ucmekLUNkypDKx=eAXqtwdYNpZzwByzuWb-sjDA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] pinctrl: msm: Add ability for drivers to supply a
+ reserved GPIO list
+To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, alokc@codeaurora.org,
+        Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jeffrey Hugo <jlhugo@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 11:03:46AM +0100, Pawel Laszczak wrote:
-> Patch moves some decoding functions from driver/usb/dwc3/debug.h driver
-> to driver/usb/common/debug.c file. These moved functions include:
->     dwc3_decode_get_status
->     dwc3_decode_set_clear_feature
->     dwc3_decode_set_address
->     dwc3_decode_get_set_descriptor
->     dwc3_decode_get_configuration
->     dwc3_decode_set_configuration
->     dwc3_decode_get_intf
->     dwc3_decode_set_intf
->     dwc3_decode_synch_frame
->     dwc3_decode_set_sel
->     dwc3_decode_set_isoch_delay
->     dwc3_decode_ctrl
-> 
-> These functions are used also in inroduced cdns3 driver.
-> 
-> All functions prefixes were changed from dwc3 to usb.
-> Also, function's parameters has been extended according to the name
-> of fields in standard SETUP packet.
-> Additionally, patch adds usb_decode_ctrl function to
-> include/linux/usb/ch9.h file.i
-> 
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->  drivers/usb/common/Makefile |   2 +-
->  drivers/usb/common/debug.c  | 273 ++++++++++++++++++++++++++++++++++++
->  drivers/usb/dwc3/debug.h    | 252 ---------------------------------
->  drivers/usb/dwc3/trace.h    |   2 +-
->  include/linux/usb/ch9.h     |  25 ++++
->  5 files changed, 300 insertions(+), 254 deletions(-)
->  create mode 100644 drivers/usb/common/debug.c
-> 
-> diff --git a/drivers/usb/common/Makefile b/drivers/usb/common/Makefile
-> index 0a7c45e85481..02eb01666289 100644
-> --- a/drivers/usb/common/Makefile
-> +++ b/drivers/usb/common/Makefile
-> @@ -4,7 +4,7 @@
->  #
->  
->  obj-$(CONFIG_USB_COMMON)	  += usb-common.o
-> -usb-common-y			  += common.o
-> +usb-common-y			  += common.o debug.o
->  usb-common-$(CONFIG_USB_LED_TRIG) += led.o
->  
->  obj-$(CONFIG_USB_OTG_FSM) += usb-otg-fsm.o
-> diff --git a/drivers/usb/common/debug.c b/drivers/usb/common/debug.c
-> new file mode 100644
-> index 000000000000..f7218d794aa6
-> --- /dev/null
-> +++ b/drivers/usb/common/debug.c
-> @@ -0,0 +1,273 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/**
-> + * Common USB debugging functions
-> + *
-> + * Copyright (C) 2010-2011 Texas Instruments Incorporated - http://www.ti.com
-> + *
-> + * Authors: Felipe Balbi <balbi@ti.com>,
-> + *	    Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> + */
-> +
-> +#ifndef __LINUX_USB_COMMON_DEBUG
-> +#define __LINUX_USB_COMMON_DEBUG
+On Fri, Jun 7, 2019 at 1:10 PM Ard Biesheuvel <ard.biesheuvel@linaro.org> wrote:
+> On Fri, 7 Jun 2019 at 10:29, Lee Jones <lee.jones@linaro.org> wrote:
+> >
+> > When booting MSM based platforms with Device Tree or some ACPI
+> > implementations, it is possible to provide a list of reserved pins
+> > via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
+> > However some ACPI tables are not populated with this information,
+> > thus it has to come from a knowledgable device driver instead.
+> >
+> > Here we provide the MSM common driver with additional support to
+> > parse this informtion and correctly populate the widely used
+> > 'valid_mask'.
+> >
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+>
+> I'm not sure if this is the correct approach. Presumably, on ACPI
+> systems, all the pinctl stuff is already set up by the firmware, and
+> so we shouldn't touch *any* pins unless they have been requested
+> explicitly. Is there any way we can support this in the current
+> framework?
 
-Why are you doing thsi in a .c file?
+I don't suppose anything but the GPIO portions of the pinctrl
+driver is ever used under ACPI. I guess in an ideal ACPI world
+noone (like userspace) would ever use a GPIO because ACPI
+would have all GPIOs assigned a particular purpose, so accessing
+any of them would lead to a crash.
 
-thanks,
+But in practice it seems a lot of GPIOs are available and used
+for example by userspace hacks, so just blacklisting the ones
+that cannot be accessed by the GPIO subsystem seems like
+a viable compromise.
 
-greg k-h
+Then we have the ACPI paradigm of pin control being controlled
+by ACPI: this is also great in theory, but it seems like the ACPI
+firmware has in cases forgot or omitted to implement some of
+it and people need to access it anyways. The people writing the
+default firmware cannot think out or test all usecases, so some
+will be left open-ended to non-firmware authoring users. This is why
+drivers/pinctrl/intel/* exists despite being for exclusively
+ACPI platforms. Being able to control pins also from the kernel
+has become a viable compromise.
+
+Yours,
+Linus Walleij
