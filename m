@@ -2,208 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B498D3A04F
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Jun 2019 16:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63803A374
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2019 05:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbfFHOtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Jun 2019 10:49:52 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:41255 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727074AbfFHOtw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jun 2019 10:49:52 -0400
-Received: by mail-wr1-f66.google.com with SMTP id c2so4904042wrm.8;
-        Sat, 08 Jun 2019 07:49:49 -0700 (PDT)
+        id S1727614AbfFIDH6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Jun 2019 23:07:58 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:43268 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727522AbfFIDH5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Jun 2019 23:07:57 -0400
+Received: by mail-pl1-f194.google.com with SMTP id cl9so2279676plb.10;
+        Sat, 08 Jun 2019 20:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eWOdxQrFr4RFjEMoqWRjZksTgoTUFpfXgF0kmiG4tnM=;
-        b=QcE4ndQ8B18fmQ/brgW3sdTEjoYggt6GmVVYw+M4eUQT5SNjOOkc9cqyiwMx/aFryD
-         wX17evhox8dJ48qCvOrutZ6OXXbg5VNgZ156xUIkcQYS9fbpCP3VdVmSbuhQ0uHdvfq6
-         Ela9tp//984on3j3qUfoCPtPijRvd1lvETdh/6NOSl+ntHILYaCC0KW5Eug4MJ70FHWc
-         8GgIVIFAFu2eXm8bzFcga2WJuOtsW1IMVU/Ou6ZjOnB1XWtlccY0DxnjW7xKySTctVFW
-         awbUBZsCJ4Ga6DqMr+Izqehf9VCPWJnOqyO5nIGAQM6A76IXenaYMKpLECUHT3AOE1A3
-         JDSQ==
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=9itGLtdOmBJM/1ryZSxTG0b15PTePJMrWSbb4zQK9g0=;
+        b=QD+i09DKNxSMKJPjE1LYcW5lxW3wv1QXKW9pysyjlVemnMuZQBJIgRTybCYhwtlUhO
+         XftQHGF+Ket4n68pLOGo7DeL0fVazfzV62O+GSa5GhemdsXQeW/xRY+SYNAuiaOQB9TF
+         W1a9GGNcZDpcsiDpoVhMprv3cO9fPh1ovwrs3WK0lP8IqwP3JVmCESOzXDPrRWG+PE2A
+         HmX6YvSqDW7H2FjE31URUDX1OCszGx68ycFi8WIqqW9T2JcKa+YRVkQ+aNZisEuFIC2Z
+         SPh1NbO57o2ueDBuqKVjgE5zs9VInZ0t/CY6U9ArKEP0t+x/p2qY15k2r/3u6L9c2enQ
+         IDnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eWOdxQrFr4RFjEMoqWRjZksTgoTUFpfXgF0kmiG4tnM=;
-        b=d0i6SB16wSMghCHNVrqP3QEg1CMlf7Rd3HQoMgsuYiFf+oMWPeDGvfivbORWJ+Kvm/
-         TvVJYrQFI3x6PIFhsDAaDCrt0NB0Un9Kkk/7zSkjRras1xwD+MV+HscMeGfo7mrebXXM
-         Kg0glC9rvU7J6+TJZ2BIMg1jjfu6mcuj0deIgTa0dhWC3iAVqqDiHEERbiLLmLWV5h3j
-         iRqkqTiXNO987GxVStOENVQ91QrogwfnUgxyRX2S3hMXRwzJid+k5HA4ywKZo0EILY/o
-         1RAs/5e0+hzuL9vPHQ6AdyozdX1ePV8uFjOUWtwj6VqEeTCEUk65V3KqdaE8iPwfZWpA
-         IkKw==
-X-Gm-Message-State: APjAAAUsTFrXke+6GuBnmyBSlbZgGKkDn4vXLjEJ+STjxCUAkCyTTned
-        bjN4WFHW/D/hGjGvXPhZ5lU4wO9s
-X-Google-Smtp-Source: APXvYqw1h4EYjbXpyqb4DFtM0Mb3nKNri2gXI9/A7BX0grqWAUM3+TB0cwu8a1B2RXqoIp0bsU//hA==
-X-Received: by 2002:adf:efc8:: with SMTP id i8mr9774465wrp.220.1560005388831;
-        Sat, 08 Jun 2019 07:49:48 -0700 (PDT)
-Received: from debian64.daheim (p5B0D753E.dip0.t-ipconnect.de. [91.13.117.62])
-        by smtp.gmail.com with ESMTPSA id j132sm9691200wmj.21.2019.06.08.07.49.47
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sat, 08 Jun 2019 07:49:48 -0700 (PDT)
-Received: from chuck by debian64.daheim with local (Exim 4.92)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1hZcfD-0000Cv-F2; Sat, 08 Jun 2019 16:49:47 +0200
-From:   Christian Lamparter <chunkeey@gmail.com>
-To:     linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Kalle Valo <kvalo@codeaurora.org>
-Subject: [PATCH v2] carl9170: fix misuse of device driver API
-Date:   Sat,  8 Jun 2019 16:49:47 +0200
-Message-Id: <20190608144947.744-3-chunkeey@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190608144947.744-1-chunkeey@gmail.com>
-References: <20190608144947.744-1-chunkeey@gmail.com>
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=9itGLtdOmBJM/1ryZSxTG0b15PTePJMrWSbb4zQK9g0=;
+        b=ZWNxNKnJvKlckHxuz6d4Egcjpm+I9Yvz/RLhdIVgyrTisWOqOwnOu5y6OrnK8bdC8I
+         3kaJrEB7pJ0vmiczMkfbIEswC3c/6iGgxQZf8QH3c8TBv/iC08IrGsFR1iYgvNXp4Hcn
+         dHd0Tz5fIfC+Iq14NMP64pN1xI0bj2ACvt0OSGXhgUp+6abeu693qITR1pCcSc/UydvZ
+         2yzfDSsJboUc6WvVn1jM4+YHiKgkRnFcNfXqnuq2o+2moMNkbviSvsusYmIyYCGtrHM9
+         8UkfWFGCsem2g6leG2poofMBpcXlJJsCnhc8RcQu5U+K56hKnwJh+en3+oyByTGkyQrg
+         aDyA==
+X-Gm-Message-State: APjAAAXC3/2ffzeHLbMnvy1Px2TvT4U8ixDfWovuw1K5tgkio1DQ6+Up
+        pKYimkHo2kSy5APw1l3ZXx/T9/+q
+X-Google-Smtp-Source: APXvYqyIWMT75YQVshaRDgY/L673h2d967CpqFM0Cc1x7TmTf/fagw1CLfC9lh1r8DisZDajDPRjPQ==
+X-Received: by 2002:a17:902:d701:: with SMTP id w1mr57917621ply.12.1560049677010;
+        Sat, 08 Jun 2019 20:07:57 -0700 (PDT)
+Received: from hari-Inspiron-1545 ([183.83.89.153])
+        by smtp.gmail.com with ESMTPSA id x127sm6358865pfb.107.2019.06.08.20.07.55
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 08 Jun 2019 20:07:56 -0700 (PDT)
+Date:   Sun, 9 Jun 2019 08:37:52 +0530
+From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
+To:     Thomas Winischhofer <thomas@winischhofer.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [Patch v3] USB: sisusbvga: Remove unneeded variable
+Message-ID: <20190609030751.GA5482@hari-Inspiron-1545>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch follows Alan Stern's recent patch:
-"p54: Fix race between disconnect and firmware loading"
+Remove unneeded variable ret in function sisusb_set_default_mode.
 
-that overhauled carl9170 buggy firmware loading and driver
-unbinding procedures.
+Change return type of sisusb_set_default_mode from int to void
+as it never fails.
 
-Since the carl9170 code was adapted from p54 it uses the
-same functions and is likely to have the same problem, but
-it's just that the syzbot hasn't reproduce them (yet).
+Issue identified by coccicheck
 
-a summary from the changes (copied from the p54 patch):
- * Call usb_driver_release_interface() rather than
-   device_release_driver().
+Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+-----
+changes in v2: Change return type of sisusb_set_default_mode from int to
+void as it never fails
 
- * Lock udev (the interface's parent) before unbinding the
-   driver instead of locking udev->parent.
-
- * During the firmware loading process, take a reference
-   to the USB interface instead of the USB device.
-
- * Don't take an unnecessary reference to the device during
-   probe (and then don't drop it during disconnect).
-
-and
-
- * Make sure to prevent use-after-free bugs by explicitly
-   setting the driver context to NULL after signaling the
-   completion.
-
-Cc: <stable@vger.kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+changes in v3: Update changelog
+----
 ---
-v2: Alan Stern's comments
-  - fixed possible use-after-free
----
- drivers/net/wireless/ath/carl9170/usb.c | 39 +++++++++++--------------
- 1 file changed, 17 insertions(+), 22 deletions(-)
+ drivers/usb/misc/sisusbvga/sisusb.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/carl9170/usb.c b/drivers/net/wireless/ath/carl9170/usb.c
-index e7c3f3b8457d..99f1897a775d 100644
---- a/drivers/net/wireless/ath/carl9170/usb.c
-+++ b/drivers/net/wireless/ath/carl9170/usb.c
-@@ -128,6 +128,8 @@ static const struct usb_device_id carl9170_usb_ids[] = {
- };
- MODULE_DEVICE_TABLE(usb, carl9170_usb_ids);
- 
-+static struct usb_driver carl9170_driver;
-+
- static void carl9170_usb_submit_data_urb(struct ar9170 *ar)
- {
- 	struct urb *urb;
-@@ -966,32 +968,28 @@ static int carl9170_usb_init_device(struct ar9170 *ar)
- 
- static void carl9170_usb_firmware_failed(struct ar9170 *ar)
- {
--	struct device *parent = ar->udev->dev.parent;
--	struct usb_device *udev;
--
--	/*
--	 * Store a copy of the usb_device pointer locally.
--	 * This is because device_release_driver initiates
--	 * carl9170_usb_disconnect, which in turn frees our
--	 * driver context (ar).
-+	/* Store a copies of the usb_interface and usb_device pointer locally.
-+	 * This is because release_driver initiates carl9170_usb_disconnect,
-+	 * which in turn frees our driver context (ar).
- 	 */
--	udev = ar->udev;
-+	struct usb_interface *intf = ar->intf;
-+	struct usb_device *udev = ar->udev;
- 
- 	complete(&ar->fw_load_wait);
-+	/* at this point 'ar' could be already freed. Don't use it anymore */
-+	ar = NULL;
- 
- 	/* unbind anything failed */
--	if (parent)
--		device_lock(parent);
--
--	device_release_driver(&udev->dev);
--	if (parent)
--		device_unlock(parent);
-+	usb_lock_device(udev);
-+	usb_driver_release_interface(&carl9170_driver, intf);
-+	usb_unlock_device(udev);
- 
--	usb_put_dev(udev);
-+	usb_put_intf(intf);
+diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
+index ea06f1f..2ab9600 100644
+--- a/drivers/usb/misc/sisusbvga/sisusb.c
++++ b/drivers/usb/misc/sisusbvga/sisusb.c
+@@ -1747,10 +1747,10 @@ static int sisusb_setup_screen(struct sisusb_usb_data *sisusb,
+ 	return ret;
  }
  
- static void carl9170_usb_firmware_finish(struct ar9170 *ar)
+-static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
++static void sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
+ 		int touchengines)
  {
-+	struct usb_interface *intf = ar->intf;
- 	int err;
- 
- 	err = carl9170_parse_firmware(ar);
-@@ -1009,7 +1007,7 @@ static void carl9170_usb_firmware_finish(struct ar9170 *ar)
- 		goto err_unrx;
- 
- 	complete(&ar->fw_load_wait);
--	usb_put_dev(ar->udev);
-+	usb_put_intf(intf);
- 	return;
- 
- err_unrx:
-@@ -1052,7 +1050,6 @@ static int carl9170_usb_probe(struct usb_interface *intf,
- 		return PTR_ERR(ar);
- 
- 	udev = interface_to_usbdev(intf);
--	usb_get_dev(udev);
- 	ar->udev = udev;
- 	ar->intf = intf;
- 	ar->features = id->driver_info;
-@@ -1094,15 +1091,14 @@ static int carl9170_usb_probe(struct usb_interface *intf,
- 	atomic_set(&ar->rx_anch_urbs, 0);
- 	atomic_set(&ar->rx_pool_urbs, 0);
- 
--	usb_get_dev(ar->udev);
-+	usb_get_intf(intf);
- 
- 	carl9170_set_state(ar, CARL9170_STOPPED);
- 
- 	err = request_firmware_nowait(THIS_MODULE, 1, CARL9170FW_NAME,
- 		&ar->udev->dev, GFP_KERNEL, ar, carl9170_usb_firmware_step2);
- 	if (err) {
--		usb_put_dev(udev);
--		usb_put_dev(udev);
-+		usb_put_intf(intf);
- 		carl9170_free(ar);
+-	int ret = 0, i, j, modex, bpp, du;
++	int i, j, modex, bpp, du;
+ 	u8 sr31, cr63, tmp8;
+ 	static const char attrdata[] = {
+ 		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+@@ -1873,8 +1873,6 @@ static int sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
  	}
- 	return err;
-@@ -1131,7 +1127,6 @@ static void carl9170_usb_disconnect(struct usb_interface *intf)
  
- 	carl9170_release_firmware(ar);
- 	carl9170_free(ar);
--	usb_put_dev(udev);
+ 	SETIREG(SISCR, 0x34, 0x44);	/* we just set std mode #44 */
+-
+-	return ret;
  }
  
- #ifdef CONFIG_PM
+ static int sisusb_init_gfxcore(struct sisusb_usb_data *sisusb)
+@@ -2019,7 +2017,7 @@ static int sisusb_init_gfxcore(struct sisusb_usb_data *sisusb)
+ 
+ 		ret |= SETIREG(SISCR, 0x83, 0x00);
+ 
+-		ret |= sisusb_set_default_mode(sisusb, 0);
++		sisusb_set_default_mode(sisusb, 0);
+ 
+ 		ret |= SETIREGAND(SISSR, 0x21, 0xdf);
+ 		ret |= SETIREGOR(SISSR, 0x01, 0x20);
+@@ -2246,7 +2244,7 @@ static int sisusb_init_gfxdevice(struct sisusb_usb_data *sisusb, int initscreen)
+ 		if (sisusb_init_gfxcore(sisusb) == 0) {
+ 			sisusb->gfxinit = 1;
+ 			sisusb_get_ramconfig(sisusb);
+-			ret |= sisusb_set_default_mode(sisusb, 1);
++			sisusb_set_default_mode(sisusb, 1);
+ 			ret |= sisusb_setup_screen(sisusb, 1, initscreen);
+ 		}
+ 	}
 -- 
-2.20.1
+2.7.4
 
