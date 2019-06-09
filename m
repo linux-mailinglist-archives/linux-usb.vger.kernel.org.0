@@ -2,49 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DF53A44C
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2019 10:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307BA3A521
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Jun 2019 13:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727984AbfFIIOt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Jun 2019 04:14:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727552AbfFIIOt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 9 Jun 2019 04:14:49 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CCF12089E;
-        Sun,  9 Jun 2019 08:14:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560068088;
-        bh=lsJx6+EEX6Khwgnje4fhX94Hi11pes50Auc1ZGLgyo0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=17JPB/MZvA9eGMucwNNTtBE47qGH+zh1h+TRiKNAecjcQPzJ5mlfW4uD62xA+zsDw
-         hrhXgYdMQHw0v6oakcrO5jItNPsN6SjY+CwlRmTYDB4L1kXRMaUpONZmQrKHDD3s2m
-         5S3vY91Y028m9L4yyyTI1afqAeSuM1pCucNNO0dU=
-Date:   Sun, 9 Jun 2019 10:14:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Saurav-Girepunje <saurav.girepunje@gmail.com>
-Cc:     b-liu@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, saurav.girepunje@hotmail.com
-Subject: Re: [PATCH] Updated the function description for musb_stage0_irq
+        id S1728270AbfFILYI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Jun 2019 07:24:08 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39276 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728080AbfFILYH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Jun 2019 07:24:07 -0400
+Received: by mail-pf1-f196.google.com with SMTP id j2so3654621pfe.6;
+        Sun, 09 Jun 2019 04:24:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=GbNH/+SOJ/7ZiuH2uzFEjE1InUMnES6ChjAMNiqvkB8=;
+        b=DUKhpdgJkLMIycp09Kyw7rQzFSM81WUbnpuVfAl/j+nUSjafYkWON4YuJsbwQV/5hJ
+         tZcPrS2R2VVVZGvtYeF5uGDa2YeGeVzi+XgDN/gRGUC+Dq4kU4lPnuLjuw5yN1HeQOoV
+         wNUMc6UyFM97Tnf7AB6Y4Ysdd7L/m/4uVKXyGM5YYwjYX1bPezL0CsIYNKv2JLcIt33L
+         WNc6CGJLApFm2T4Q0tKM2Wzn0LC4u7gwNtDhfvDAgDbV/pcPjQuQ03Ez3zn65mRs4rh6
+         r5hz+MTcFBx7dol/woagESqqpw7jHSmu4QeiS6gRilWKn8Ri+CP7GnhfgVfpJMyPteUe
+         QwXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=GbNH/+SOJ/7ZiuH2uzFEjE1InUMnES6ChjAMNiqvkB8=;
+        b=ftmXN8IbdqCPWHtrbiNifVUtlaLJy1NEFizK42/i3RxhITAeWj3YhwgUbOJebiGdtb
+         2a8YUtWubg2wQkxT5apaDZz5JTdW9YVa2CCYZd3xtGzjkZBmjRRwPKIUWY7xAf9RaqTK
+         Oea7MWCOKcbTCZ82BTJsOPbGU5Xkimy+6njRN1LdoY0CWPf8FSE7AKuyKrloJW088ajJ
+         /9aU0bwjQWKMTrh0ezoKwEMJauHQDQLAnDyMMGYVqrUPtpbrghBWh1EzZPc8huvFDuye
+         pLSNinWcethgOlB2Ckg2PONDuPbWbMbItayLhxBdhHS84wHobLGK0FTyd1xkz/B2SgFB
+         TJjQ==
+X-Gm-Message-State: APjAAAWyYOBOy3njyzBXRfBQGpzNQJIQdNFSX2jNCX0cW1Ks4CrxHH6u
+        UYOyNPO6MdwFORurcRK09Go=
+X-Google-Smtp-Source: APXvYqw+KgvfkLmIjJPP2eN1U77y5D1DRxM7+MdKmXZ9SN3RiF3kUTXc8q4Os7bNp4eUA1qt8553GQ==
+X-Received: by 2002:a62:750c:: with SMTP id q12mr48335174pfc.59.1560079447047;
+        Sun, 09 Jun 2019 04:24:07 -0700 (PDT)
+Received: from saurav ([123.201.165.107])
+        by smtp.gmail.com with ESMTPSA id y185sm11472716pfy.110.2019.06.09.04.24.04
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 09 Jun 2019 04:24:06 -0700 (PDT)
+Date:   Sun, 9 Jun 2019 16:54:00 +0530
+From:   Saurav-Girepunje <saurav.girepunje@gmail.com>
+To:     b-liu@ti.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     saurav.girepunje@hotmail.com
+Subject: [PATCH] Updated the function description for musb_stage0_irq
  Signed-off-by: Saurav-Girepunje <saurav.girepunje@gmail.com>
-Message-ID: <20190609081446.GA12061@kroah.com>
-References: <20190609080753.GA7735@saurav>
+Message-ID: <20190609112356.GA19055@saurav>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="MGYHOYXEY6WxJCY8"
 Content-Disposition: inline
-In-Reply-To: <20190609080753.GA7735@saurav>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 09, 2019 at 01:38:02PM +0530, Saurav-Girepunje wrote:
-> ---
->  drivers/usb/musb/musb_core.c | 1 -
->  1 file changed, 1 deletion(-)
 
-I think something went wrong with your commit :(
+--MGYHOYXEY6WxJCY8
+Content-Type: text/plain; charset=us-ascii
+Content-Description: Updated the function description for musb_stage0_irq
+Content-Disposition: inline
+
+---
+ drivers/usb/musb/musb_core.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 9f5a4819a744..2451e0ee2d01 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -909,7 +909,6 @@ static void musb_handle_intr_reset(struct musb *musb)
+  * @param musb instance pointer
+  * @param int_usb register contents
+  * @param devctl
+- * @param power
+  */
+ 
+ static irqreturn_t musb_stage0_irq(struct musb *musb, u8 int_usb,
+-- 
+2.20.1
+
+Regards,
+Saurav Girepunje
+
+--MGYHOYXEY6WxJCY8
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment; filename="0001-Updated-the-function-description-for-musb_stage0_irq.patch"
+
+From d861c19b28f6263f7c14c16e05398ddca06c56fb Mon Sep 17 00:00:00 2001
+From: Saurav-Girepunje <saurav.girepunje@gmail.com>
+Date: Sun, 9 Jun 2019 13:05:56 +0530
+Subject: [PATCH] Updated the function description for musb_stage0_irq
+ Signed-off-by: Saurav-Girepunje <saurav.girepunje@gmail.com>
+
+---
+ drivers/usb/musb/musb_core.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 9f5a4819a744..2451e0ee2d01 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -909,7 +909,6 @@ static void musb_handle_intr_reset(struct musb *musb)
+  * @param musb instance pointer
+  * @param int_usb register contents
+  * @param devctl
+- * @param power
+  */
+ 
+ static irqreturn_t musb_stage0_irq(struct musb *musb, u8 int_usb,
+-- 
+2.20.1
+
+
+--MGYHOYXEY6WxJCY8--
