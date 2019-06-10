@@ -2,57 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C08D33B516
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 14:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7683B665
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 15:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389471AbfFJMcu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 08:32:50 -0400
-Received: from verein.lst.de ([213.95.11.211]:43628 "EHLO newverein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389048AbfFJMcu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Jun 2019 08:32:50 -0400
-Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 4360268B02; Mon, 10 Jun 2019 14:32:22 +0200 (CEST)
-Date:   Mon, 10 Jun 2019 14:32:22 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: How to resolve an issue in swiotlb environment?
-Message-ID: <20190610123222.GA20985@lst.de>
-References: <OSAPR01MB3089B381AF2F687526E63EEAD8140@OSAPR01MB3089.jpnprd01.prod.outlook.com> <OSAPR01MB3089D50DBDAA6C7D427E72EED8100@OSAPR01MB3089.jpnprd01.prod.outlook.com> <OSAPR01MB3089BCA7CF78D6E4D9C83E1BD8130@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+        id S2390335AbfFJNsc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 09:48:32 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42074 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390270AbfFJNsc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 09:48:32 -0400
+Received: by mail-lj1-f196.google.com with SMTP id t28so7983329lje.9
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 06:48:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding:user-agent;
+        bh=+xHGHLyyVpmqmvF4JOo4/p/f/z3f6+vIzrUpyfNzbn0=;
+        b=ShoS4qgJVgNkUbVqjq+PKIZsvfJXWH0Lpg+NnD9/heCOu6hlcEcAN99ayWIit1SDSg
+         2B7iRjVgK5Tx1J6brueNcm0AoE5TgxoqVRD07RHnqCncXcK/+hPJ0mMRDr8oX9Th1mTo
+         99PhdlXoav2C2uWADOYSQ19LajgNLacz6TJjTJc/XWwWbPv/kTpVrj2vVqMyVsLLa30i
+         DifBFQe7HZ1jYu3hl7yS+DRg1A3P7Rew67jrK5877y8sLr+rU+Cvk4hNt7MsT2Oh5l0l
+         KJ7bOxYzCjhKCE7eN8N11yHS6qcmYkb1kcgBn4gGiDGU72UcBBu0ZngLNbWSgDUDmWVT
+         XqCw==
+X-Gm-Message-State: APjAAAVqnSYZkjk+CjwthPrNaN6wZq2dgHIEF38crvuYDMfe85lM3l+3
+        wcGUO4M8gxWclYdenUYNTxe2FVU/YeE=
+X-Google-Smtp-Source: APXvYqyhKBKuF6zlJvLU/uop8NDgezZIdmn4HM/06BPXtJKUtDqAq2+VKEYa7izSi4r1gHae1/rjJw==
+X-Received: by 2002:a2e:9654:: with SMTP id z20mr9909275ljh.52.1560174509621;
+        Mon, 10 Jun 2019 06:48:29 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id a4sm1995072lfj.31.2019.06.10.06.48.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 10 Jun 2019 06:48:29 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92)
+        (envelope-from <johan@kernel.org>)
+        id 1haKez-00081f-CN; Mon, 10 Jun 2019 15:48:29 +0200
+Date:   Mon, 10 Jun 2019 15:48:29 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 5.2-rc5
+Message-ID: <20190610134829.GA30830@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <OSAPR01MB3089BCA7CF78D6E4D9C83E1BD8130@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Yoshihiro,
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
 
-sorry for not taking care of this earlier, today is a public holiday
-here and thus I'm not working much over the long weekend.
+  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
 
-On Mon, Jun 10, 2019 at 11:13:07AM +0000, Yoshihiro Shimoda wrote:
-> I have another way to avoid the issue. But it doesn't seem that a good way though...
-> According to the commit that adding blk_queue_virt_boundary() [3],
-> this is needed for vhci_hcd as a workaround so that if we avoid to call it
-> on xhci-hcd driver, the issue disappeared. What do you think?
-> JFYI, I pasted a tentative patch in the end of email [4].
+are available in the Git repository at:
 
-Oh, I hadn't even look at why USB uses blk_queue_virt_boundary, and it
-seems like the usage is wrong, as it doesn't follow the same rules as
-all the others.  I think your patch goes in the right direction,
-but instead of comparing a hcd name it needs to be keyed of a flag
-set by the driver (I suspect there is one indicating native SG support,
-but I can't quickly find it), and we need an alternative solution
-for drivers that don't see like vhci.  I suspect just limiting the
-entire transfer size to something that works for a single packet
-for them would be fine.
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.2-rc5
+
+for you to fetch changes up to f3dfd4072c3ee6e287f501a18b5718b185d6a940:
+
+  USB: serial: option: add Telit 0x1260 and 0x1261 compositions (2019-05-21 11:27:24 +0200)
+
+----------------------------------------------------------------
+USB-serial fixes for 5.2-rc5
+
+Here are some new device ids for option and pl2303.
+
+All have been in linux-next with no reported issues.
+
+Signed-off-by: Johan Hovold <johan@kernel.org>
+
+----------------------------------------------------------------
+Chris Packham (1):
+      USB: serial: pl2303: add Allied Telesis VT-Kit3
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit 0x1260 and 0x1261 compositions
+
+Jörgen Storvist (1):
+      USB: serial: option: add support for Simcom SIM7500/SIM7600 RNDIS mode
+
+ drivers/usb/serial/option.c | 6 ++++++
+ drivers/usb/serial/pl2303.c | 1 +
+ drivers/usb/serial/pl2303.h | 3 +++
+ 3 files changed, 10 insertions(+)
