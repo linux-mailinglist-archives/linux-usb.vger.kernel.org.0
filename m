@@ -2,142 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C57F3B774
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 16:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958EB3B787
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 16:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403920AbfFJOcv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 10:32:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34122 "EHLO mail.kernel.org"
+        id S2389989AbfFJOhm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 10:37:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403915AbfFJOcv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Jun 2019 10:32:51 -0400
+        id S2388932AbfFJOhl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Jun 2019 10:37:41 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58B1D20862;
-        Mon, 10 Jun 2019 14:32:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA74D20679;
+        Mon, 10 Jun 2019 14:37:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560177169;
-        bh=aHxNWHdJf6peMpy8lSH5D7no8bfhXLLdokyzawcegKE=;
+        s=default; t=1560177460;
+        bh=NLPcsVhwonhg+PWG+96z6M5/9CdmvuvA+cQPz9sZoyM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wr+Lp1iAtH2gkM6AEDzJRTPm9mI/i0deFzP+Kikqbm8F0YeXNAqQx0SUCSZm9WtxS
-         PSiVqdhDi03eH9E8lpLuJa5ER8xB0T0/rHYe+c8srAJTFBBr9dK0jBfoZnkWNATAGQ
-         1AvjcG91MRE7U2ox1OwlmHAEXbJlM0vOP32HcsnM=
-Date:   Mon, 10 Jun 2019 16:32:47 +0200
+        b=RLr1iN8puhEb8JKtzS2W2RG0vaVW0KqMrrrpPq8uRv8b8LH2Wtbvti1R9MjPSCqg/
+         j5YDdqNveXkTOvYsE8IfqdleZdoozB/cD9I/gH5g86BM2F7BghG2IuzTjiNMV79S6K
+         xxZL+HA8H7+YNdDbncBg1X1PEXxMk0o40WhNTejE=
+Date:   Mon, 10 Jun 2019 16:37:37 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Vladimir Yerilov <openmindead@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: kernel NULL pointer dereference, ucsi bug
-Message-ID: <20190610143247.GB23343@kroah.com>
-References: <CAB31r6U3Ha+JrbjGC+wKj-+gJfQ7dk+LSoL1n0tQBxVTPb2mRQ@mail.gmail.com>
- <20190603131258.GA10397@kroah.com>
- <CAB31r6VK12FXoPh6eNfE1v_Tgjv917Nh7699=TZpm4SkCVMm-w@mail.gmail.com>
- <20190604054045.GD1588@kroah.com>
- <CAB31r6WAkDPKyvY31Up=OAGXvhQgS23uW5YYQs601zUaaNaELg@mail.gmail.com>
- <20190605165857.GA23286@kroah.com>
- <CAB31r6X7g_ZqfDUYBh=eFZftA7dc2GppMeWtPxMJCg-X7BGxUA@mail.gmail.com>
+To:     Andrea Vai <andrea.vai@unipv.it>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: Slow I/O on USB media
+Message-ID: <20190610143737.GA30602@kroah.com>
+References: <86676f40a8c1aa44bf5799eac6019183d6d33336.camel@unipv.it>
+ <20190604054300.GE1588@kroah.com>
+ <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
+ <20190605145525.GA28819@kroah.com>
+ <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
+ <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it>
+ <20190605173902.GE27700@kroah.com>
+ <b159e1518b670d4b0126c7671c30c8c3cb8fffbc.camel@unipv.it>
+ <20190606144757.GA12356@kroah.com>
+ <CAOsYWL03ALs6xJxcbDeppwtY9Q3v-vW6ptjK18CzL0RtJfboBw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB31r6X7g_ZqfDUYBh=eFZftA7dc2GppMeWtPxMJCg-X7BGxUA@mail.gmail.com>
+In-Reply-To: <CAOsYWL03ALs6xJxcbDeppwtY9Q3v-vW6ptjK18CzL0RtJfboBw@mail.gmail.com>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 07, 2019 at 02:58:51AM +1000, Vladimir Yerilov wrote:
-> Finally I can name the first bad commit:
+On Sat, Jun 08, 2019 at 09:43:11AM +0200, Andrea Vai wrote:
+> Il giorno gio 6 giu 2019 alle ore 16:48 Greg KH
+> <gregkh@linuxfoundation.org> ha scritto:
+> >
+> > On Thu, Jun 06, 2019 at 04:00:52PM +0200, Andrea Vai wrote:
+> > > Il giorno mer, 05/06/2019 alle 19.39 +0200, Greg KH ha scritto:
+> > > > On Wed, Jun 05, 2019 at 06:23:58PM +0200, Andrea Vai wrote:
+> > > > [...]
+> > > >
+> > > > > Anyway, I know that I can do all of this in a better way, and will
+> > > > let
+> > > > > you know.
+> > > >
+> > > > Yes, please do so, your steps above do not show much.
+> > >
+> > > Here I am with another question.
+> > > What I have done so far:
+> > >
+> > > - booted with the last kernel I know to be working (4.20.13-
+> > > 200.fc29.x86_64, installed from Fedora repos), checked that test runs
+> >
+> > We have no idea what is in a random distro kernel, sorry.
+> >
+> > So I would start with a kernel.org kernel.  That keeps things at an even
+> > level, and you are using a "known good" configuration as well.
+> >
+> > > fine (2min to copy)
+> > > - marked "git bisect good v4.20.13"
+> > > - built the latest stable version:
+> > >   - git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+> > >   - cp -v /boot/config-$(uname -r) .config
+> > >   - make -j4 && make modules_install && make install && grub2-mkconfig -o /boot/grub2/grub.cfg
+> > >   - grubby --set-default /boot/vmlinuz-5.2.0-rc3 (the last regular file listed in "ls -lrt /boot/v*")
+> > > - rebooted with kernel 5.2.0-rc3, ran the test, took 49min to copy
+> > > (!), thus marked "git bisect bad"
+> > > - built again, and it turns out to be 4.20.0 (why is it earlier than
+> > > 4.20.13?), rebooted with 4.20.0, ran the test and it took more than 15
+> > > minutes so I killed the cp process, and marked it BAD, and obtained:
+> > >
+> > > The merge base 8fe28cb58bcb235034b64cbbb7550a8a43fd88be is bad.
+> > > This means the bug has been fixed between
+> > > 8fe28cb58bcb235034b64cbbb7550a8a43fd88be and
+> > > [0f7c162c1df596e0bba04c26fc9cc497983bf32b].
+> > >
+> > > The output of "git bisect log" is:
+> > >
+> > > git bisect start
+> > > # good: [0f7c162c1df596e0bba04c26fc9cc497983bf32b] Linux 4.20.13
+> > > git bisect good 0f7c162c1df596e0bba04c26fc9cc497983bf32b
+> > > # bad: [f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a] Linux 5.2-rc3
+> > > git bisect bad f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a
+> > > # bad: [8fe28cb58bcb235034b64cbbb7550a8a43fd88be] Linux 4.20
+> > > git bisect bad 8fe28cb58bcb235034b64cbbb7550a8a43fd88be
+> > >
+> > > I can understand that the bug was present before 4.20.13 (is that
+> > > reasonable?), but how can I tell bisect to start at 4.20.13, which I
+> > > know for sure to be working, and not from 4.20.0, which I actually
+> > > don't care about?
+> > >
+> > > I am afraid I am missing something obvious, sorry
+> >
+> > As Alan said, 4.20 is older than 4.20.13.
+> >
+> > But, is the kernel.org version of 4.20.13 really "good" here?
+> >
+> > I would start with Linus's tree and stay away from the stable trees
+> > for now.  As you end up with odd "leafs" that can confuse 'git bisect'
+> > and everyone else.
+> >
+> > So start with 4.20.0.  Test that.  If it is "good", then great!
 > 
-> git bisect good
-> ad74b8649beaf1a22cf8641324e3321fa0269d16 is the first bad commit
-> commit ad74b8649beaf1a22cf8641324e3321fa0269d16
-> Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Date:   Tue Apr 23 17:21:48 2019 +0300
+> Hi,
+>   there is also something else I don't understand.
+> Every time I build a kernel, then after booting it "uname -a" shows
+> something like
 > 
->    usb: typec: ucsi: Preliminary support for alternate modes
+> Linux [...] 4.19.0-rc5+ #12 SMP Sat Jun 8 00:26:42 CEST 2019 x86_64
+> x86_64 x86_64 GNU/Linux
 > 
->    With UCSI the alternate modes, just like everything else
->    related to USB Type-C connectors, are handled in firmware.
->    The operating system can see the status and is allowed to
->    request certain things, for example entering and exiting the
->    modes, but the support for alternate modes is very limited
->    in UCSI. The feature is also optional, which means that even
->    when the platform supports alternate modes, the operating
->    system may not be even made aware of them.
+> where the number after "#" increments by 1 from the previous build.
 > 
->    UCSI does not support direct VDM reading or writing.
->    Instead, alternate modes can be entered and exited using a
->    single custom command which takes also an optional SVID
->    specific configuration value as parameter. That means every
->    supported alternate mode has to be handled separately in
->    UCSI driver.
-> 
->    This commit does not include support for any specific
->    alternate mode. The discovered alternate modes are now
->    registered, but binding a driver to an alternate mode will
->    not be possible until support for that alternate mode is
->    added to the UCSI driver.
-> 
->    Tested-by: Ajay Gupta <ajayg@nvidia.com>
->    Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> :040000 040000 f19a610d131d6d3e6397934562dd6112e78b2415
-> 76df0e463eeacf57157adba0291fc9577c7d5145 M      dr
-> ivers
-> 
-> git bisect log
-> git bisect start
-> # bad: [132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a] Merge tag
-> 'usb-5.2-rc1' of git://git.kernel.org/pub/scm/
-> linux/kernel/git/gregkh/usb
-> git bisect bad 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
-> # good: [86dc59e39031fb0d366d5b1f92db015b24bef70b] net: dsa: sja1105:
-> Make 'sja1105et_regs' and 'sja1105pq
-> rs_regs' static
-> git bisect good 86dc59e39031fb0d366d5b1f92db015b24bef70b
-> # good: [80f232121b69cc69a31ccb2b38c1665d770b0710] Merge
-> git://git.kernel.org/pub/scm/linux/kernel/git/dav
-> em/net-next
-> git bisect good 80f232121b69cc69a31ccb2b38c1665d770b0710
-> # good: [5d438e200215f61ca6a7aa69f3c4e035ac54d8ee] usb: typec: ucsi:
-> ccg: add get_fw_info function
-> git bisect good 5d438e200215f61ca6a7aa69f3c4e035ac54d8ee
-> # bad: [6f6a407a591ebe3e4c6bd2329b29862b3980a3ca] Merge tag
-> 'usb-serial-5.2-rc1' of https://git.kernel.org
-> /pub/scm/linux/kernel/git/johan/usb-serial into usb-next
-> git bisect bad 6f6a407a591ebe3e4c6bd2329b29862b3980a3ca
-> # bad: [e823d948b7e53dc982c867ac4ce7877fc0418897] usb: musb: dsps: Use
-> dev_get_drvdata()
-> git bisect bad e823d948b7e53dc982c867ac4ce7877fc0418897
-> # bad: [6fee3787ea7aebf25fecdce325ee9b2150c5727b] dt-bindings:
-> usb-xhci: Add r8a774c0 support
-> git bisect bad 6fee3787ea7aebf25fecdce325ee9b2150c5727b
-> # bad: [cf28369c634fafb5f4e81750cba6988cdb4b4490] usb: typec: Add
-> driver for NVIDIA Alt Modes
-> git bisect bad cf28369c634fafb5f4e81750cba6988cdb4b4490
-> # bad: [ad74b8649beaf1a22cf8641324e3321fa0269d16] usb: typec: ucsi:
-> Preliminary support for alternate mode
-> s
-> git bisect bad ad74b8649beaf1a22cf8641324e3321fa0269d16
-> # good: [5c9ae5a87573d38cfc4c740aafda2fa6ce06e401] usb: typec: ucsi:
-> ccg: add firmware flashing support
-> git bisect good 5c9ae5a87573d38cfc4c740aafda2fa6ce06e401
-> # first bad commit: [ad74b8649beaf1a22cf8641324e3321fa0269d16] usb:
-> typec: ucsi: Preliminary support for a
-> lternate modes
-> 
-> Best regards,
-> Vladimir
+> Now I have the same number (#12) after a new build, is it normal?
 
+Maybe, sometimes an incremental build does not bump the .version number,
+I don't remember exactly what causes that to increase.  It's somewhere
+in the build scripts :)
 
-Heikki, any thoughts?
+> Furthermore, "ls -lrt /boot/v*" shows the last lines to be
+> 
+> -rw-r--r--. 1 root root 8648656  8 giu 00.35 /boot/vmlinuz-4.19.0-rc5+.old
+> -rw-r--r--. 1 root root 8648656  8 giu 09.08 /boot/vmlinuz-4.19.0-rc5+
+> 
+> and "diff /boot/vmlinuz-4.19.0-rc5+.old /boot/vmlinuz-4.19.0-rc5+"
+> shows they are identical. Why? I expected that each bisect would lead
+> to a different kernel.
 
-Vladimir, can you post the oops message again?  I don't see it here in
-the email thread anymore.
+It should.
 
-thanks,
+Are you sure they are really different?  'diff' works on text files, how
+about running something like md5sum on the files to ensure they really
+are, or are not, the same thing?
+
+And sometimes, a bisection may cause things to change in files that you
+do not actually require for building.  So the same output may happen.
+
+> Assuming that the opposite can happen, does it mean that when I say
+> i.e. "git bisect bad", then build a new kernel and see that is
+> identical to the previous one I can run "git bisect bad" without
+> booting into the new one and even making the test?
+> 
+> Another thing I don't understand is that I told 4.20.0 to be good, so
+> I would expect that I don't need to test any older version, but as far
+> as I know 4.19.0-rc5+ is older than 4.20.0, so why is it involved in
+> the bisection?
+
+Because it went down a subsystem branch that might have been based on a
+much older tree.
+
+Think about this workflow:
+	- developer branches from 4.10.0
+	- developer adds some patches to the branch
+	- developer gets Linus to merge their branch into his 4.20-rc1
+	  kernel release.
+
+As a "point in time", between 4.19-final and 4.20-2, the development
+worflow did step back to a 4.10.0 release, for those patches.
+
+Now that's an extreme example, but lots of developers work off of the
+last release (or close to it) and get their trees merged as part of the
+merge window.  That is what will cause your kernel version to look like
+it went back in time.
+
+Hope this helps,
 
 greg k-h
