@@ -2,85 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 663263B007
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 09:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1606B3B011
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 09:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388218AbfFJH4P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 03:56:15 -0400
-Received: from mga11.intel.com ([192.55.52.93]:17276 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388206AbfFJH4P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Jun 2019 03:56:15 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jun 2019 00:56:15 -0700
-X-ExtLoop1: 1
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga002.jf.intel.com with ESMTP; 10 Jun 2019 00:56:13 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
-        "leoyang.li\@nxp.com" <leoyang.li@nxp.com>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: fsl_udc status?
-In-Reply-To: <95d5902538997e340ccf7784406832904d512b51.camel@infinera.com>
-References: <95d5902538997e340ccf7784406832904d512b51.camel@infinera.com>
-Date:   Mon, 10 Jun 2019 10:56:09 +0300
-Message-ID: <87v9xdc1ra.fsf@linux.intel.com>
+        id S2388216AbfFJH5n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 03:57:43 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:43363 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388261AbfFJH5e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 03:57:34 -0400
+Received: by mail-wr1-f67.google.com with SMTP id r18so8100423wrm.10
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 00:57:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=xTVf10rNwhHdq0na/JiMNEiN+1J2gR7CZjLBDvBlZ9M=;
+        b=C/7BgS21M51i7i2CmNw0m1n793WHuwfoYQkS3WRWJWKQsQBxjw9CIy2+Faq9ymMTeV
+         U2GBuJzPbjKCHDCazNCv3EufybIeE1wUBtLZaPDWMGaINHWIIzfHC+0p9nVF7beZGSBd
+         //LURySsxd2kT8FOBdUsOWxnFZ+5dl+hoVq7XeFhuZowUdZd4O1UvhPIRq4tH0zazkBr
+         3TnjUYgkVr92aniAKuyUF8QQKGfjozeMSXNOnfXAnZNynC+7HVoNCxcff8tCQ4ZbboQl
+         zVeN/hmZoEiKQoXh76n41vtHuJpPK1irmunendNLi9m6ZVhJKXOgCoZBuaGpKeVJspaT
+         PIVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=xTVf10rNwhHdq0na/JiMNEiN+1J2gR7CZjLBDvBlZ9M=;
+        b=cHtPfgqOjPrffFC92q3SALsehtVTdfENrRWVMw5vQdNCRXkfhuJ1E0kf+Vf9FVENuJ
+         DEdAJz6V/9uwhPjg4udjYcy/b/OZACWpjC4QrFpdyHDItwzMuL6wmrL7qnk66MCWGjJU
+         Hc7O/9H3KHGMRj8Zw33yt/jafbGyxDRhgfvE9GfAdvq5E+fJLSIbFT+aRcK1Hx8ZgBXP
+         AY7d6rvwzj6OTk/C/KPz4wYTn1RNfv74bX5baIxSKcVX/0LJ9It0Kx3++cypkeFBq24f
+         VzT69OPyaCKnLocsBvB2Myc2PmTCcPgEDrMyZlHQDawHiYfvBW2rmozCWFZWrT4WJRDa
+         aUVQ==
+X-Gm-Message-State: APjAAAU0PdK6h8bw6EBOnJpc8rQS68Z9nVS6DnVWc34uH7FFsLnx9UNC
+        zqCYOuxUVq0CGymLhz3ogTIopA==
+X-Google-Smtp-Source: APXvYqwPND89CTG631SsvW5xJabNs8hX8frrZKJyV7VaYPuMk/7oG5ltYmF1iH5bZQdZa0Uy/r0eCA==
+X-Received: by 2002:a5d:6583:: with SMTP id q3mr47343484wru.184.1560153452753;
+        Mon, 10 Jun 2019 00:57:32 -0700 (PDT)
+Received: from dell ([2.31.167.229])
+        by smtp.gmail.com with ESMTPSA id f13sm5796159wrt.27.2019.06.10.00.57.31
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 10 Jun 2019 00:57:32 -0700 (PDT)
+Date:   Mon, 10 Jun 2019 08:57:30 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>, alokc@codeaurora.org,
+        Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/8] pinctrl: msm: Add ability for drivers to supply a
+ reserved GPIO list
+Message-ID: <20190610075730.GH4797@dell>
+References: <20190605114302.22509-1-lee.jones@linaro.org>
+ <20190605114302.22509-3-lee.jones@linaro.org>
+ <CACRpkdaEe3uKAsSuhbToevXH1cMsuMUvwaopLPuD+JkDTnuEnQ@mail.gmail.com>
+ <20190608041044.GK24059@builder>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190608041044.GK24059@builder>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Fri, 07 Jun 2019, Bjorn Andersson wrote:
 
+> On Fri 07 Jun 16:02 PDT 2019, Linus Walleij wrote:
+> 
+> > On Wed, Jun 5, 2019 at 1:43 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > 
+> > > When booting MSM based platforms with Device Tree or some ACPI
+> > > implementations, it is possible to provide a list of reserved pins
+> > > via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
+> > > However some ACPI tables are not populated with this information,
+> > > thus it has to come from a knowledgable device driver instead.
+> > >
+> > > Here we provide the MSM common driver with additional support to
+> > > parse this informtion and correctly populate the widely used
+> > > 'valid_mask'.
+> > >
+> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > 
+> > Exactly how we should use of the API, so if Björn can supply an
+> > ACK to patches 3 and 4 I'm happy to apply them.
+> > 
+> > Björn?
+> > 
+> 
+> I'm waiting for a version that does not specify the reserved_gpios for
+> struct msm_pinctrl_soc_data sdm845_pinctrl {}, as this would override
+> the ability of getting these from DT.
+> 
+> I haven't seen such revision yet, will review it once I find it.
 
-Hi,
+Just testing it now.  It should be on the list by the time you start.
 
-Joakim Tjernlund <Joakim.Tjernlund@infinera.com> writes:
-> We are trying to get fsl_udc up and running on a T1042 with without succe=
-ss.
-> Seems like this driver is lagging behind the corresponding host driver(mp=
-h).
-> The mph driver has a number of USB errata workarounds while udc has none.
-> At least erratas A007792 seems applicable for udc too.
->
-> Is the fsl_udc driver functional on 4.14.x(which we use)? What is missing=
- ?
-
-If you're on v4.14, then you need to ask for support from whoever gave
-you that kernel. In this forum we treat mainline only, which currently
-is at v5.2-rc4. Unless you can try that version of the kernel, we can't
-really help you here.
-
-Good luck
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlz+DRkACgkQzL64meEa
-mQZBORAAr3+SUIDwUTAgbQhQjSvX/vl7o/zAnSt4aAtWqMT1lWe3V/zSTe2DO2gE
-assP2yUl3qp8Hc8YZ0t2HI662PQ7HBF47FoA2k1hJiNTI9hsjHWctZEWDBcWQExM
-GX24S33GZS93DiCKWBSFebz5ia4Oj+dIKVfYt8W0q9CBMK2b5qMfbqxM698kSQW4
-mSvd8U3Hky1XjSAQWvodLjiPwQReAkMAz6Vv5NLquM0M4Q9Da/2gJz+QyM/yLusF
-6yTExNfndIQqtC1FnF213ZeLIjHIc6b/wwh/JtE/Bn3HzAFTeFaubMRpYEs2hWYx
-FkyMg07+VeTG7E6bJfjdP2dTrxgUSdHhF+VEtqJKEtg1kCx5338WB8tuQzoAG3zt
-da66e9HVWAXqzCCcaNQ2xsCa4gl2CFxD3DQc6IpLwSj+Kf+R/HbIAb34wxcKPyO4
-hfT6kcCI4IgBCMQidm6YfEuv13yip8YA7jjLXLBDUD3VVoag66W++LIt8X8/D5WO
-02YS2UAC5DmjnE8hGIJmMMZJ23P1IKlgxA4TqwdmAKH5NMKi8e9OC2JKc8Fj4jNA
-YSHM5Eg6v1djX0l7QCMD9T5TZIQqPVRRHBDmt+QpEfBec7f2B6wnB1mUMLAyKzAO
-8bFf+g68QYahIcZ2HDpWaAB3Oj7YEcBlcZqyCypxB/0C8Mlr12k=
-=ZqKi
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
