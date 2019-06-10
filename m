@@ -2,433 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F873B33F
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 12:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942813B3D4
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 13:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389483AbfFJKc4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 06:32:56 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:12918 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389466AbfFJKc4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 06:32:56 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cfe31d40000>; Mon, 10 Jun 2019 03:32:52 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 10 Jun 2019 03:32:52 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 10 Jun 2019 03:32:52 -0700
-Received: from [10.24.193.7] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 10 Jun
- 2019 10:32:46 +0000
-Subject: Re: [PATCH v6 09/10] usb: roles: add USB Type-B GPIO connector driver
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Yu Chen <chenyu56@huawei.com>
-References: <1559115828-19146-1-git-send-email-chunfeng.yun@mediatek.com>
- <1559115828-19146-10-git-send-email-chunfeng.yun@mediatek.com>
-X-Nvconfidentiality: public
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <9640aa29-bc96-ded1-e757-e885bda354a8@nvidia.com>
-Date:   Mon, 10 Jun 2019 16:03:55 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S2389668AbfFJLNN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 07:13:13 -0400
+Received: from mail-eopbgr1400093.outbound.protection.outlook.com ([40.107.140.93]:52562
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2389001AbfFJLNM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Jun 2019 07:13:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mv1cB6TYVqqrUWnJnAL27fz2RL0totzSyKRsj0PLFMo=;
+ b=lP8qKNjeMfnhKUvehlqDPW1551+49VM/xdJmAEqTSGN4fU7KcmkgeSboeUexpcK/zgO6LC48C4OyYKH6pwZSu5g18vCK4nNaSWNAlEFSsELAh3mO7ZajwPzEldGDY2OnzH2D1+gOWtGS7fBn5Zw+7QPG+CNdbY0b+ujEVYbbWhI=
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
+ OSAPR01MB3924.jpnprd01.prod.outlook.com (20.178.103.206) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.14; Mon, 10 Jun 2019 11:13:08 +0000
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85%7]) with mapi id 15.20.1965.017; Mon, 10 Jun 2019
+ 11:13:08 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: How to resolve an issue in swiotlb environment?
+Thread-Topic: How to resolve an issue in swiotlb environment?
+Thread-Index: AdUZ1Qlk800+Qz0uSuO63mIBeXkktQDUe+5AAJUL5SA=
+Date:   Mon, 10 Jun 2019 11:13:07 +0000
+Message-ID: <OSAPR01MB3089BCA7CF78D6E4D9C83E1BD8130@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+References: <OSAPR01MB3089B381AF2F687526E63EEAD8140@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+ <OSAPR01MB3089D50DBDAA6C7D427E72EED8100@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSAPR01MB3089D50DBDAA6C7D427E72EED8100@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4065dcc2-72a5-405b-85a5-08d6ed949e46
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB3924;
+x-ms-traffictypediagnostic: OSAPR01MB3924:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <OSAPR01MB3924B1967F84D0D57C9C01C5D8130@OSAPR01MB3924.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2399;
+x-forefront-prvs: 0064B3273C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(366004)(39860400002)(376002)(346002)(136003)(189003)(199004)(6306002)(9686003)(186003)(3846002)(6436002)(14444005)(55016002)(305945005)(7736002)(256004)(6116002)(74316002)(2906002)(26005)(229853002)(11346002)(446003)(66066001)(99286004)(7696005)(110136005)(81156014)(102836004)(81166006)(478600001)(54906003)(8936002)(316002)(8676002)(76176011)(6506007)(6246003)(476003)(966005)(486006)(5660300002)(76116006)(33656002)(66446008)(64756008)(2171002)(73956011)(66556008)(66476007)(66946007)(53936002)(14454004)(86362001)(68736007)(52536014)(4326008)(25786009)(71200400001)(71190400001)(6606295002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB3924;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: NgAafUU9h7+iTES7NU8K82hVUXph3Ln8Byr3rdskx+lFCEIf7WQogi6Ega2SRgYGZEP5q8wpoWROVyQNQ6gZ7gB//wXWIfZZEBmvWKi0rOa3KMSohJYV0tW4sGsD90Go4aAjLNxY5X1ocz1ENccxJdB2c8UkFFz+8l1w82dhDshV0U9oCS1gtmYWKLsfKoi2jKySRhUjThwZB1XZA/a6LOAep0GKKfniaNwjSGJdgZjoKcZfKIoD/e+vinGyAyzljxYWJ9g6ZxkMG2qwz+fEg885bDyKqel/iLbOOZs8cmw51HAz33yokmi58S35q5PoAhxUP3kI89+TbkSW7/bv041+ngM9rRtkqCxsROKHNFldSY6pUc1ES4mvfZbbArvQOL8zyrbniXlPlywDcFFbtUsz3OVt1mIzYMRIg2I9xdc=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <1559115828-19146-10-git-send-email-chunfeng.yun@mediatek.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560162772; bh=bWmRlNrhWjmX5Y+q8rrrUpjUpcU1optSS1Aod6ADxgE=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=O3lA2DKfT+zKHjU8VTzQuaUlMlRxmYPsz9GYZjlQsV9i3fNu2IPg2jdY9KYj02EfT
-         96ERVopGCyLH+v3hUmB3wF1jG7711fbs6y8FKNJPUQGYf3H28Tq1gGyGYHRi11f7O+
-         Rdv/TvcO1N9cSfYgM3BWyRsN1P/WbgQYN3+SEdpF4HvsOpG58VEg7JI6eMEZH5bUOg
-         zscLrLD3V1LI/RZ2kBYlxR5PJ+O51fJECkzecZmuVIo/zG5NK5jUWsgWzx6uVgCtqI
-         9zhFqD1ve0uR6UMq3tjwVCte97yR5rHFBOSlKQAXtyG7DOVsmqa6qRu3oKFgthsjYY
-         tWvsd8Gg3J83g==
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4065dcc2-72a5-405b-85a5-08d6ed949e46
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2019 11:13:08.3860
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3924
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Tested-by: Nagarjuna Kristam <nkristam@nvidia.com>
+Hi Christoph, Alan,
+(add linux-usb ML on CC.)
 
-On 29-05-2019 13:13, Chunfeng Yun wrote:
-> Due to the requirement of usb-connector.txt binding, the old way
-> using extcon to support USB Dual-Role switch is now deprecated
-> when use Type-B connector.
-> This patch introduces a driver of Type-B connector which typically
-> uses an input GPIO to detect USB ID pin, and try to replace the
-> function provided by extcon-usb-gpio driver
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> From: Yoshihiro Shimoda, Sent: Friday, June 7, 2019 9:00 PM
+>=20
+> Hi Christoph,
+>=20
+> I think we should continue to discuss on this email thread instead of the=
+ fixed DMA-API.txt patch [1]
+>=20
+> [1]
+> https://marc.info/?t=3D155989412200001&r=3D1&w=3D2
+>=20
+> > From: Yoshihiro Shimoda, Sent: Monday, June 3, 2019 3:42 PM
+> >
+> > Hi linux-block and iommu mailing lists,
+> >
+> > I have an issue that a USB SSD with xHCI on R-Car H3 causes "swiotlb is=
+ full" like below.
+> >
+> >     [   36.745286] xhci-hcd ee000000.usb: swiotlb buffer is full (sz: 5=
+24288 bytes), total 32768 (slots), used 1338
+> (slots)
+> >
+> > I have investigated this issue by using git bisect, and then I found th=
+e following commit:
+> >
+> > ---
+> > commit 09324d32d2a0843e66652a087da6f77924358e62
+> > Author: Christoph Hellwig <hch@lst.de>
+> > Date:   Tue May 21 09:01:41 2019 +0200
+> >
+> >     block: force an unlimited segment size on queues with a virt bounda=
+ry
+> > ---
+>=20
+> Thank you for your comment on other email thread [2] like below:
 > ---
-> v6 changes:
->   1. get usb-role-swtich by usb_role_switch_get()
-> 
-> v5 changes:
->   1. put usb_role_switch when error happens suggested by Biju
->   2. don't treat bype-B connector as a virtual device suggested by Rob
-> 
-> v4 changes:
->   1. remove linux/gpio.h suggested by Linus
->   2. put node when error happens
-> 
-> v3 changes:
->   1. treat bype-B connector as a virtual device;
->   2. change file name again
-> 
-> v2 changes:
->   1. file name is changed
->   2. use new compatible
+> Turns out it isn't as simple as I thought, as there doesn't seem to
+> be an easy way to get to the struct device used for DMA mapping
+> from USB drivers.  I'll need to think a bit more how to handle that
+> best.
 > ---
->  drivers/usb/roles/Kconfig           |  11 ++
->  drivers/usb/roles/Makefile          |   1 +
->  drivers/usb/roles/typeb-conn-gpio.c | 286 ++++++++++++++++++++++++++++
->  3 files changed, 298 insertions(+)
->  create mode 100644 drivers/usb/roles/typeb-conn-gpio.c
-> 
-> diff --git a/drivers/usb/roles/Kconfig b/drivers/usb/roles/Kconfig
-> index f8b31aa67526..d1156e18a81a 100644
-> --- a/drivers/usb/roles/Kconfig
-> +++ b/drivers/usb/roles/Kconfig
-> @@ -26,4 +26,15 @@ config USB_ROLES_INTEL_XHCI
->  	  To compile the driver as a module, choose M here: the module will
->  	  be called intel-xhci-usb-role-switch.
->  
-> +config TYPEB_CONN_GPIO
-> +	tristate "USB Type-B GPIO Connector"
-> +	depends on GPIOLIB
-> +	help
-> +	  The driver supports USB role switch between host and device via GPIO
-> +	  based USB cable detection, used typically if an input GPIO is used
-> +	  to detect USB ID pin.
-> +
-> +	  To compile the driver as a module, choose M here: the module will
-> +	  be called typeb-conn-gpio.ko
-> +
->  endif # USB_ROLE_SWITCH
-> diff --git a/drivers/usb/roles/Makefile b/drivers/usb/roles/Makefile
-> index 757a7d2797eb..5d5620d9d113 100644
-> --- a/drivers/usb/roles/Makefile
-> +++ b/drivers/usb/roles/Makefile
-> @@ -3,3 +3,4 @@
->  obj-$(CONFIG_USB_ROLE_SWITCH)		+= roles.o
->  roles-y					:= class.o
->  obj-$(CONFIG_USB_ROLES_INTEL_XHCI)	+= intel-xhci-usb-role-switch.o
-> +obj-$(CONFIG_TYPEB_CONN_GPIO)		+= typeb-conn-gpio.o
-> diff --git a/drivers/usb/roles/typeb-conn-gpio.c b/drivers/usb/roles/typeb-conn-gpio.c
-> new file mode 100644
-> index 000000000000..c66f852365ef
-> --- /dev/null
-> +++ b/drivers/usb/roles/typeb-conn-gpio.c
-> @@ -0,0 +1,286 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * USB Type-B GPIO Connector Driver
-> + *
-> + * Copyright (C) 2019 MediaTek Inc.
-> + *
-> + * Author: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> + *
-> + * Some code borrowed from drivers/extcon/extcon-usb-gpio.c
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irq.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/pinctrl/consumer.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/usb/role.h>
-> +
-> +#define USB_GPIO_DEB_MS		20	/* ms */
-> +#define USB_GPIO_DEB_US		((USB_GPIO_DEB_MS) * 1000)	/* us */
-> +
-> +#define USB_CONN_IRQF	\
-> +	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
-> +
-> +struct usb_conn_info {
-> +	struct device *dev;
-> +	struct usb_role_switch *role_sw;
-> +	enum usb_role last_role;
-> +	struct regulator *vbus;
-> +	struct delayed_work dw_det;
-> +	unsigned long debounce_jiffies;
-> +
-> +	struct gpio_desc *id_gpiod;
-> +	struct gpio_desc *vbus_gpiod;
-> +	int id_irq;
-> +	int vbus_irq;
-> +};
-> +
-> +/**
-> + * "DEVICE" = VBUS and "HOST" = !ID, so we have:
-> + * Both "DEVICE" and "HOST" can't be set as active at the same time
-> + * so if "HOST" is active (i.e. ID is 0)  we keep "DEVICE" inactive
-> + * even if VBUS is on.
-> + *
-> + *  Role          |   ID  |  VBUS
-> + * ------------------------------------
-> + *  [1] DEVICE    |   H   |   H
-> + *  [2] NONE      |   H   |   L
-> + *  [3] HOST      |   L   |   H
-> + *  [4] HOST      |   L   |   L
-> + *
-> + * In case we have only one of these signals:
-> + * - VBUS only - we want to distinguish between [1] and [2], so ID is always 1
-> + * - ID only - we want to distinguish between [1] and [4], so VBUS = ID
-> + */
-> +static void usb_conn_detect_cable(struct work_struct *work)
-> +{
-> +	struct usb_conn_info *info;
-> +	enum usb_role role;
-> +	int id, vbus, ret;
-> +
-> +	info = container_of(to_delayed_work(work),
-> +			    struct usb_conn_info, dw_det);
-> +
-> +	/* check ID and VBUS */
-> +	id = info->id_gpiod ?
-> +		gpiod_get_value_cansleep(info->id_gpiod) : 1;
-> +	vbus = info->vbus_gpiod ?
-> +		gpiod_get_value_cansleep(info->vbus_gpiod) : id;
-> +
-> +	if (!id)
-> +		role = USB_ROLE_HOST;
-> +	else if (vbus)
-> +		role = USB_ROLE_DEVICE;
-> +	else
-> +		role = USB_ROLE_NONE;
-> +
-> +	dev_dbg(info->dev, "role %d/%d, gpios: id %d, vbus %d\n",
-> +		info->last_role, role, id, vbus);
-> +
-> +	if (info->last_role == role) {
-> +		dev_warn(info->dev, "repeated role: %d\n", role);
-> +		return;
-> +	}
-> +
-> +	if (info->last_role == USB_ROLE_HOST)
-> +		regulator_disable(info->vbus);
-> +
-> +	ret = usb_role_switch_set_role(info->role_sw, role);
-> +	if (ret)
-> +		dev_err(info->dev, "failed to set role: %d\n", ret);
-> +
-> +	if (role == USB_ROLE_HOST) {
-> +		ret = regulator_enable(info->vbus);
-> +		if (ret)
-> +			dev_err(info->dev, "enable vbus regulator failed\n");
-> +	}
-> +
-> +	info->last_role = role;
-> +
-> +	dev_dbg(info->dev, "vbus regulator is %s\n",
-> +		regulator_is_enabled(info->vbus) ? "enabled" : "disabled");
-> +}
-> +
-> +static void usb_conn_queue_dwork(struct usb_conn_info *info,
-> +				 unsigned long delay)
-> +{
-> +	queue_delayed_work(system_power_efficient_wq, &info->dw_det, delay);
-> +}
-> +
-> +static irqreturn_t usb_conn_isr(int irq, void *dev_id)
-> +{
-> +	struct usb_conn_info *info = dev_id;
-> +
-> +	usb_conn_queue_dwork(info, info->debounce_jiffies);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int usb_conn_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct usb_conn_info *info;
-> +	int ret = 0;
-> +
-> +	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-> +	if (!info)
-> +		return -ENOMEM;
-> +
-> +	info->dev = dev;
-> +	info->id_gpiod = devm_gpiod_get_optional(dev, "id", GPIOD_IN);
-> +	if (IS_ERR(info->id_gpiod))
-> +		return PTR_ERR(info->id_gpiod);
-> +
-> +	info->vbus_gpiod = devm_gpiod_get_optional(dev, "vbus", GPIOD_IN);
-> +	if (IS_ERR(info->vbus_gpiod))
-> +		return PTR_ERR(info->vbus_gpiod);
-> +
-> +	if (!info->id_gpiod && !info->vbus_gpiod) {
-> +		dev_err(dev, "failed to get gpios\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	if (info->id_gpiod)
-> +		ret = gpiod_set_debounce(info->id_gpiod, USB_GPIO_DEB_US);
-> +	if (!ret && info->vbus_gpiod)
-> +		ret = gpiod_set_debounce(info->vbus_gpiod, USB_GPIO_DEB_US);
-> +	if (ret < 0)
-> +		info->debounce_jiffies = msecs_to_jiffies(USB_GPIO_DEB_MS);
-> +
-> +	INIT_DELAYED_WORK(&info->dw_det, usb_conn_detect_cable);
-> +
-> +	info->vbus = devm_regulator_get(dev, "vbus");
-> +	if (IS_ERR(info->vbus)) {
-> +		dev_err(dev, "failed to get vbus\n");
-> +		return PTR_ERR(info->vbus);
-> +	}
-> +
-> +	info->role_sw = usb_role_switch_get(dev);
-> +	if (IS_ERR(info->role_sw)) {
-> +		if (PTR_ERR(info->role_sw) != -EPROBE_DEFER)
-> +			dev_err(dev, "failed to get role switch\n");
-> +
-> +		return PTR_ERR(info->role_sw);
-> +	}
-> +
-> +	if (info->id_gpiod) {
-> +		info->id_irq = gpiod_to_irq(info->id_gpiod);
-> +		if (info->id_irq < 0) {
-> +			dev_err(dev, "failed to get ID IRQ\n");
-> +			ret = info->id_irq;
-> +			goto put_role_sw;
-> +		}
-> +
-> +		ret = devm_request_threaded_irq(dev, info->id_irq, NULL,
-> +						usb_conn_isr, USB_CONN_IRQF,
-> +						pdev->name, info);
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to request ID IRQ\n");
-> +			goto put_role_sw;
-> +		}
-> +	}
-> +
-> +	if (info->vbus_gpiod) {
-> +		info->vbus_irq = gpiod_to_irq(info->vbus_gpiod);
-> +		if (info->vbus_irq < 0) {
-> +			dev_err(dev, "failed to get VBUS IRQ\n");
-> +			ret = info->vbus_irq;
-> +			goto put_role_sw;
-> +		}
-> +
-> +		ret = devm_request_threaded_irq(dev, info->vbus_irq, NULL,
-> +						usb_conn_isr, USB_CONN_IRQF,
-> +						pdev->name, info);
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to request VBUS IRQ\n");
-> +			goto put_role_sw;
-> +		}
-> +	}
-> +
-> +	platform_set_drvdata(pdev, info);
-> +
-> +	/* Perform initial detection */
-> +	usb_conn_queue_dwork(info, 0);
-> +
-> +	return 0;
-> +
-> +put_role_sw:
-> +	usb_role_switch_put(info->role_sw);
-> +	return ret;
-> +}
-> +
-> +static int usb_conn_remove(struct platform_device *pdev)
-> +{
-> +	struct usb_conn_info *info = platform_get_drvdata(pdev);
-> +
-> +	cancel_delayed_work_sync(&info->dw_det);
-> +
-> +	if (info->last_role == USB_ROLE_HOST)
-> +		regulator_disable(info->vbus);
-> +
-> +	usb_role_switch_put(info->role_sw);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused usb_conn_suspend(struct device *dev)
-> +{
-> +	struct usb_conn_info *info = dev_get_drvdata(dev);
-> +
-> +	if (info->id_gpiod)
-> +		disable_irq(info->id_irq);
-> +	if (info->vbus_gpiod)
-> +		disable_irq(info->vbus_irq);
-> +
-> +	pinctrl_pm_select_sleep_state(dev);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused usb_conn_resume(struct device *dev)
-> +{
-> +	struct usb_conn_info *info = dev_get_drvdata(dev);
-> +
-> +	pinctrl_pm_select_default_state(dev);
-> +
-> +	if (info->id_gpiod)
-> +		enable_irq(info->id_irq);
-> +	if (info->vbus_gpiod)
-> +		enable_irq(info->vbus_irq);
-> +
-> +	usb_conn_queue_dwork(info, 0);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(usb_conn_pm_ops,
-> +			 usb_conn_suspend, usb_conn_resume);
-> +
-> +#define DEV_PMS_OPS (IS_ENABLED(CONFIG_PM_SLEEP) ? &usb_conn_pm_ops : NULL)
-> +
-> +static const struct of_device_id usb_conn_dt_match[] = {
-> +	{ .compatible = "linux,typeb-conn-gpio", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, usb_conn_dt_match);
-> +
-> +static struct platform_driver usb_conn_driver = {
-> +	.probe		= usb_conn_probe,
-> +	.remove		= usb_conn_remove,
-> +	.driver		= {
-> +		.name	= "typeb-conn-gpio",
-> +		.pm	= DEV_PMS_OPS,
-> +		.of_match_table = usb_conn_dt_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(usb_conn_driver);
-> +
-> +MODULE_AUTHOR("Chunfeng Yun <chunfeng.yun@mediatek.com>");
-> +MODULE_DESCRIPTION("USB Type-B GPIO connector driver");
-> +MODULE_LICENSE("GPL v2");
-> 
+>=20
+> [2]
+> https://marc.info/?l=3Dlinux-doc&m=3D155989651620473&w=3D2
+
+I have another way to avoid the issue. But it doesn't seem that a good way =
+though...
+According to the commit that adding blk_queue_virt_boundary() [3],
+this is needed for vhci_hcd as a workaround so that if we avoid to call it
+on xhci-hcd driver, the issue disappeared. What do you think?
+JFYI, I pasted a tentative patch in the end of email [4].
+
+---
+[3]
+commit 747668dbc061b3e62bc1982767a3a1f9815fcf0e
+Author: Alan Stern <stern@rowland.harvard.edu>
+Date:   Mon Apr 15 13:19:25 2019 -0400
+
+    usb-storage: Set virt_boundary_mask to avoid SG overflows
+---
+[4]
+diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.=
+c
+index 59190d8..277c6f7e 100644
+--- a/drivers/usb/storage/scsiglue.c
++++ b/drivers/usb/storage/scsiglue.c
+@@ -30,6 +30,8 @@
+=20
+ #include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/usb.h>
++#include <linux/usb/hcd.h>
+=20
+ #include <scsi/scsi.h>
+ #include <scsi/scsi_cmnd.h>
+@@ -65,6 +67,7 @@ static const char* host_info(struct Scsi_Host *host)
+ static int slave_alloc (struct scsi_device *sdev)
+ {
+ 	struct us_data *us =3D host_to_us(sdev->host);
++	struct usb_hcd *hcd =3D bus_to_hcd(us->pusb_dev->bus);
+ 	int maxp;
+=20
+ 	/*
+@@ -80,8 +83,10 @@ static int slave_alloc (struct scsi_device *sdev)
+ 	 * Bulk maxpacket value.  Fortunately this value is always a
+ 	 * power of 2.  Inform the block layer about this requirement.
+ 	 */
+-	maxp =3D usb_maxpacket(us->pusb_dev, us->recv_bulk_pipe, 0);
+-	blk_queue_virt_boundary(sdev->request_queue, maxp - 1);
++	if (!strcmp(hcd->driver->description, "vhci_hcd")) {
++		maxp =3D usb_maxpacket(us->pusb_dev, us->recv_bulk_pipe, 0);
++		blk_queue_virt_boundary(sdev->request_queue, maxp - 1);
++	}
+=20
+ 	/*
+ 	 * Some host controllers may have alignment requirements.
+---
+Best regards,
+Yoshihiro Shimoda
+
