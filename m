@@ -2,178 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC0E3B9C2
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 18:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128743BAB0
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 19:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726429AbfFJQmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 12:42:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726215AbfFJQmw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Jun 2019 12:42:52 -0400
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B303F20820
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 16:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560184971;
-        bh=tXbHag/USdm+4mUHgtj4zWsRGotIHMmzJx1x6Cx6xwE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eg/VT6ZIqewlHruvFiwIrW6sxxeaAfyq+pd7qIvGmU+WUps1udbDUIqJ+9K2h0dif
-         DJX0ZlsJGLw0TCdbwpEogokcRurDpRAmW/hKGpGS+xsS2DRkbiXmRbpHra7NbxmarJ
-         fZhXRLK1uac7cGQhmHU7vQcPaYoXd8gWGwGM4mdk=
-Received: by mail-wm1-f52.google.com with SMTP id u8so43860wmm.1
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 09:42:50 -0700 (PDT)
-X-Gm-Message-State: APjAAAWMdnHpwvrb6hShsAyNMWaNIYXlfJGIFa7a0R7zamqY+WyszZfv
-        +irMbdmB+0utVEPqmmpnolMuHz3XZa4eP2Xjaq9+Ow==
-X-Google-Smtp-Source: APXvYqyv8NSCEyJg2Hv8AHPLVJY9L6V2V/QOLFaZD86SuSFB89IZcrzuIySjt90M5yKSGdxvGrqfW/B+zWfAS5WxmAU=
-X-Received: by 2002:a1c:a942:: with SMTP id s63mr14224080wme.76.1560184969283;
- Mon, 10 Jun 2019 09:42:49 -0700 (PDT)
+        id S2388571AbfFJRND (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 13:13:03 -0400
+Received: from mail-eopbgr50054.outbound.protection.outlook.com ([40.107.5.54]:5262
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387496AbfFJRNC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Jun 2019 13:13:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/NaBGDUmAcv19IfF1PCBap9ebj5FYYcci2emYxcYrBM=;
+ b=aj7ybnHMdjDW6j9T0cgtl61oUndkckENFZLO5I5o4OjvOEvjUelx+OTxCn96OzieHnmRemaj5OGGlzPtn1ChAJoE8tX+8gZI1LnbG/6vhWnAOkZur+U+F7/yRYOnZy5JZdLBxXpXm3IgC8ywcIR/ZVMJYVKyjg0gDEpTGmU1VJU=
+Received: from VE1PR04MB6687.eurprd04.prod.outlook.com (20.179.235.152) by
+ VE1PR04MB6719.eurprd04.prod.outlook.com (20.179.235.208) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.12; Mon, 10 Jun 2019 17:12:59 +0000
+Received: from VE1PR04MB6687.eurprd04.prod.outlook.com
+ ([fe80::9e6:e136:4c09:fe67]) by VE1PR04MB6687.eurprd04.prod.outlook.com
+ ([fe80::9e6:e136:4c09:fe67%5]) with mapi id 15.20.1965.017; Mon, 10 Jun 2019
+ 17:12:59 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     "jocke@infinera.com" <joakim.tjernlund@infinera.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Ran Wang <ran.wang_1@nxp.com>
+Subject: RE: fsl_udc status?
+Thread-Topic: fsl_udc status?
+Thread-Index: AQHVH2FeViVekb5FTkyBYafYtN/FkaaVHuBQ
+Date:   Mon, 10 Jun 2019 17:12:59 +0000
+Message-ID: <VE1PR04MB6687C0AD101BF0747EB0077D8F130@VE1PR04MB6687.eurprd04.prod.outlook.com>
+References: <95d5902538997e340ccf7784406832904d512b51.camel@infinera.com>
+In-Reply-To: <95d5902538997e340ccf7784406832904d512b51.camel@infinera.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leoyang.li@nxp.com; 
+x-originating-ip: [64.157.242.222]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5ae9d6b4-1de5-45bc-8dd7-08d6edc6e37c
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VE1PR04MB6719;
+x-ms-traffictypediagnostic: VE1PR04MB6719:
+x-ms-exchange-purlcount: 1
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-microsoft-antispam-prvs: <VE1PR04MB6719F2E58BE4D36AFDBF772B8F130@VE1PR04MB6719.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-forefront-prvs: 0064B3273C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(39860400002)(396003)(376002)(346002)(189003)(13464003)(199004)(6116002)(4744005)(52536014)(33656002)(66066001)(7736002)(5660300002)(25786009)(11346002)(74316002)(3846002)(53546011)(316002)(7116003)(99286004)(476003)(6436002)(6506007)(186003)(86362001)(14454004)(7696005)(229853002)(446003)(76176011)(2501003)(26005)(68736007)(102836004)(66556008)(2906002)(66446008)(66476007)(71200400001)(110136005)(53936002)(486006)(9686003)(55016002)(478600001)(966005)(6636002)(71190400001)(6306002)(73956011)(81166006)(305945005)(64756008)(81156014)(8936002)(6246003)(256004)(8676002)(66946007)(76116006)(491001);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6719;H:VE1PR04MB6687.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: accKI8JLc/ygxIFzlJ4xaw37W6ErZcyUI8mZg12RnGhWkB6jaVsDo09o3IfZFtWE2w3hpa6MzU5jqIQ6Hfpn5FibNZUkH/3jxw4ehCLbcLHZ7H+Wmp3sQ+30G9d0D5P1s1p5NpwrbSvUc6UsByeKidcY0GyzO+Y2xkwddc3rumSlquhW53UAHoWVau9sNSc/YRVAfiZwnBFhKSKFluyvecspXw6nW8jkEKg+0wztS0Ap1Qy+JdydDi8WufmigOSQCF4uNrJ6HbskT03tK37fcR7KzsAh9RpGd1MXPeZtRCKFBxFDspEg7vtwHRvA1EJLJ9P2vt+8obN419FxuDjrmscCDVu1qLAAViLIC8WioZ4aGqny35sPFXfPMViCxzwnELbzQWuwzQXEhy01A/kRL6dMqPUKQwjVAiYrjjVfj5E=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk>
- <be966d9c-e38d-7a30-8d80-fad5f25ab230@tycho.nsa.gov> <0cf7a49d-85f6-fba9-62ec-a378e0b76adf@schaufler-ca.com>
-In-Reply-To: <0cf7a49d-85f6-fba9-62ec-a378e0b76adf@schaufler-ca.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Mon, 10 Jun 2019 09:42:37 -0700
-X-Gmail-Original-Message-ID: <CALCETrX5O18q2=dUeC=hEtK2=t5KQpGBy9XveHxFw36OqkbNOg@mail.gmail.com>
-Message-ID: <CALCETrX5O18q2=dUeC=hEtK2=t5KQpGBy9XveHxFw36OqkbNOg@mail.gmail.com>
-Subject: Re: [RFC][PATCH 00/13] Mount, FS, Block and Keyrings notifications
- [ver #4]
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
-        David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        USB list <linux-usb@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        raven@themaw.net, Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ae9d6b4-1de5-45bc-8dd7-08d6edc6e37c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2019 17:12:59.3983
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: leoyang.li@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6719
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 10, 2019 at 9:34 AM Casey Schaufler <casey@schaufler-ca.com> wr=
-ote:
->
-> On 6/10/2019 8:21 AM, Stephen Smalley wrote:
-> > On 6/7/19 10:17 AM, David Howells wrote:
-> >>
-> >> Hi Al,
-> >>
-> >> Here's a set of patches to add a general variable-length notification =
-queue
-> >> concept and to add sources of events for:
-> >>
-> >>   (1) Mount topology events, such as mounting, unmounting, mount expir=
-y,
-> >>       mount reconfiguration.
-> >>
-> >>   (2) Superblock events, such as R/W<->R/O changes, quota overrun and =
-I/O
-> >>       errors (not complete yet).
-> >>
-> >>   (3) Key/keyring events, such as creating, linking and removal of key=
-s.
-> >>
-> >>   (4) General device events (single common queue) including:
-> >>
-> >>       - Block layer events, such as device errors
-> >>
-> >>       - USB subsystem events, such as device/bus attach/remove, device
-> >>         reset, device errors.
-> >>
-> >> One of the reasons for this is so that we can remove the issue of proc=
-esses
-> >> having to repeatedly and regularly scan /proc/mounts, which has proven=
- to
-> >> be a system performance problem.  To further aid this, the fsinfo() sy=
-scall
-> >> on which this patch series depends, provides a way to access superbloc=
-k and
-> >> mount information in binary form without the need to parse /proc/mount=
-s.
-> >>
-> >>
-> >> LSM support is included, but controversial:
-> >>
-> >>   (1) The creds of the process that did the fput() that reduced the re=
-fcount
-> >>       to zero are cached in the file struct.
-> >>
-> >>   (2) __fput() overrides the current creds with the creds from (1) whi=
-lst
-> >>       doing the cleanup, thereby making sure that the creds seen by th=
-e
-> >>       destruction notification generated by mntput() appears to come f=
-rom
-> >>       the last fputter.
-> >>
-> >>   (3) security_post_notification() is called for each queue that we mi=
-ght
-> >>       want to post a notification into, thereby allowing the LSM to pr=
-event
-> >>       covert communications.
-> >>
-> >>   (?) Do I need to add security_set_watch(), say, to rule on whether a=
- watch
-> >>       may be set in the first place?  I might need to add a variant pe=
-r
-> >>       watch-type.
-> >>
-> >>   (?) Do I really need to keep track of the process creds in which an
-> >>       implicit object destruction happened?  For example, imagine you =
-create
-> >>       an fd with fsopen()/fsmount().  It is marked to dissolve the mou=
-nt it
-> >>       refers to on close unless move_mount() clears that flag.  Now, i=
-magine
-> >>       someone looking at that fd through procfs at the same time as yo=
-u exit
-> >>       due to an error.  The LSM sees the destruction notification come=
- from
-> >>       the looker if they happen to do their fput() after yours.
-> >
-> > I remain unconvinced that (1), (2), (3), and the final (?) above are a =
-good idea.
-> >
-> > For SELinux, I would expect that one would implement a collection of pe=
-r watch-type WATCH permission checks on the target object (or to some well-=
-defined object label like the kernel SID if there is no object) that allow =
-receipt of all notifications of that watch-type for objects related to the =
-target object, where "related to" is defined per watch-type.
-> >
-> > I wouldn't expect SELinux to implement security_post_notification() at =
-all.  I can't see how one can construct a meaningful, stable policy for it.=
-  I'd argue that the triggering process is not posting the notification; th=
-e kernel is posting the notification and the watcher has been authorized to=
- receive it.
->
-> I cannot agree. There is an explicit action by a subject that results
-> in information being delivered to an object. Just like a signal or a
-> UDP packet delivery. Smack handles this kind of thing just fine. The
-> internal mechanism that results in the access is irrelevant from
-> this viewpoint. I can understand how a mechanism like SELinux that
-> works on finer granularity might view it differently.
-
-I think you really need to give an example of a coherent policy that
-needs this.  As it stands, your analogy seems confusing.  If someone
-changes the system clock, we don't restrict who is allowed to be
-notified (via, for example, TFD_TIMER_CANCEL_ON_SET) that the clock
-was changed based on who changed the clock.  Similarly, if someone
-tries to receive a packet on a socket, we check whether they have the
-right to receive on that socket (from the endpoint in question) and,
-if the sender is local, whether the sender can send to that socket.
-We do not check whether the sender can send to the receiver.
-
-The signal example is inapplicable.  Sending a signal to a process is
-an explicit action done to that process, and it can easily adversely
-affect the target.  Of course it requires permission.
-
---Andy
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSm9ha2ltIFRqZXJubHVu
+ZCA8Sm9ha2ltLlRqZXJubHVuZEBpbmZpbmVyYS5jb20+DQo+IFNlbnQ6IE1vbmRheSwgSnVuZSAx
+MCwgMjAxOSAyOjUyIEFNDQo+IFRvOiBMZW8gTGkgPGxlb3lhbmcubGlAbnhwLmNvbT47IGxpbnV4
+LXVzYkB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogZnNsX3VkYyBzdGF0dXM/DQo+IA0KPiBX
+ZSBhcmUgdHJ5aW5nIHRvIGdldCBmc2xfdWRjIHVwIGFuZCBydW5uaW5nIG9uIGEgVDEwNDIgd2l0
+aCB3aXRob3V0IHN1Y2Nlc3MuDQo+IFNlZW1zIGxpa2UgdGhpcyBkcml2ZXIgaXMgbGFnZ2luZyBi
+ZWhpbmQgdGhlIGNvcnJlc3BvbmRpbmcgaG9zdCBkcml2ZXIobXBoKS4NCj4gVGhlIG1waCBkcml2
+ZXIgaGFzIGEgbnVtYmVyIG9mIFVTQiBlcnJhdGEgd29ya2Fyb3VuZHMgd2hpbGUgdWRjIGhhcyBu
+b25lLg0KPiBBdCBsZWFzdCBlcnJhdGFzIEEwMDc3OTIgc2VlbXMgYXBwbGljYWJsZSBmb3IgdWRj
+IHRvby4NCj4gDQo+IElzIHRoZSBmc2xfdWRjIGRyaXZlciBmdW5jdGlvbmFsIG9uIDQuMTQueCh3
+aGljaCB3ZSB1c2UpPyBXaGF0IGlzIG1pc3NpbmcgPw0KDQpXZSBhcmUgY3VycmVudGx5IHByb3Zp
+ZGluZyA0LjE0IHN1cHBvcnQgd2l0aCBvdXIgUW9ySVEgU0RLLiAgWW91IGNhbiB0cnkgdGhlIGtl
+cm5lbCB0cmVlIGF0IGh0dHBzOi8vc291cmNlLmNvZGVhdXJvcmEub3JnL2V4dGVybmFsL3Fvcmlx
+L3FvcmlxLWNvbXBvbmVudHMvbGludXgvbG9nLz9oPWxpbnV4LTQuMTQuICBJIHRoaW5rIGl0IGlz
+IHRlc3RlZCBvbiBUMTA0Mi4NCg0KSSBzZWUgdGhhdCB0aGVyZSBhcmUgYSBmZXcgdWRjIHJlbGF0
+ZWQgcGF0Y2hlcyB0aGF0IG9ubHkgZXhpc3Qgb24gb3VyIFNESyBjb2RlIGJhc2UuICBBZGRpbmcg
+UmFuIFdhbmcgd2hvIGlzIG1haW50YWluaW5nIHRoZXNlIFVTQiBwYXRjaGVzIGludGVybmFsbHku
+ICBXZSBzaG91bGQgZGVmaW5pdGVseSB0cnkgdG8gdXBzdHJlYW0gdGhlbSBpbnN0ZWFkIG9mIG1h
+aW50YWluaW5nIHRoZW0gaW50ZXJuYWxseSBmb3JldmVyLg0KDQpSZWdhcmRzLA0KTGVvDQoNCg==
