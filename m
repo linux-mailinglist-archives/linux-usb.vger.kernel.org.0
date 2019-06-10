@@ -2,81 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9209C3B304
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 12:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB34B3B30A
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 12:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389334AbfFJKTy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 06:19:54 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:19792 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389291AbfFJKTy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 06:19:54 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cfe2ec80000>; Mon, 10 Jun 2019 03:19:52 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 10 Jun 2019 03:19:53 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 10 Jun 2019 03:19:53 -0700
-Received: from HQMAIL104.nvidia.com (172.18.146.11) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 10 Jun
- 2019 10:19:53 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 10 Jun 2019 10:19:53 +0000
-Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.65.118]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cfe2ec50005>; Mon, 10 Jun 2019 03:19:52 -0700
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [Patch V4 8/8] arm64: defconfig: Enable tegra XUDC driver
-Date:   Mon, 10 Jun 2019 15:49:09 +0530
-Message-ID: <1560161949-26031-9-git-send-email-nkristam@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1560161949-26031-1-git-send-email-nkristam@nvidia.com>
-References: <1560161949-26031-1-git-send-email-nkristam@nvidia.com>
-X-NVConfidentiality: public
+        id S2389291AbfFJKUp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 06:20:45 -0400
+Received: from mail-it1-f195.google.com ([209.85.166.195]:54080 "EHLO
+        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389335AbfFJKUo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 06:20:44 -0400
+Received: by mail-it1-f195.google.com with SMTP id m187so12380917ite.3
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 03:20:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TD9nldu+Dkg66DtJL22FIFPPAtJrtLwLTy4JIGvUcQ0=;
+        b=xGOZzIJLwgDnCGn+KlPHKMf5rhw1h6HPB+95GrnYpcFyME3d6inxxLyUdmnkUq34J+
+         zIomGN+MLBR/oBWOe0ulrBE7Z4E32pfkipA+UvLZ1HSdKDy8GC6l8Mp9wJ803ogYGbAJ
+         XkKTMgVLsEwE6FpWaaDwbvNxWnbiruke6qUOyB0ejNsZuBRBi3b43yVy4fvDCb91ewO2
+         Zjef6VagFWfnsI0m34DKo41NNnLdVP9/Dyh1VbdA8PowiwZdyPE/WzmPhq03ic8Wi1/B
+         bsA1uFFW4PNjaH9sgcjjZ0hpbNNQwDPdUAJ2P909ro09PZSJ1gys4wpgtKshS4+ctbrH
+         zTDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TD9nldu+Dkg66DtJL22FIFPPAtJrtLwLTy4JIGvUcQ0=;
+        b=BX+s6Us35GL9STT2S59N2zhl2HMfgXntFIPCy5YlXG3jOQIz6E4Jzidjt/+5cPdDPl
+         52FmsBkogepuk/aN/hOfS4Qg6vAqg6X9j/7wX0fSvDoYdBfwIfysTe8x4UncVg/rFi0z
+         b3ME/0Z/F0e/t6Dw9VsBKLTIiaAOAuUWFmudFBRr+NeOgw7aMrp26H4cOv/h3PAXho4f
+         TQyofkbbiZ+rNhWnpgDDbdz/Khk716WYbM0Ch4fpL00RiEmTFfg3RciHO+Yu04gxVckW
+         kbw1BcHyjq4gtt4ZxMyE2Lv+ZNXaJW0ec4Jwxgn3ARJ9v0xaPihyLSCCOr1CzWhoJW54
+         vkbA==
+X-Gm-Message-State: APjAAAUZkgrKf4jXqiSXLvN/Fru1z+PNUZ+aX7E/MClLKBDo9K2Gr7Y6
+        +vxCrLs8GEl64iyExju0J6RFCZ5LCNJkey/xj0g/ZA==
+X-Google-Smtp-Source: APXvYqz8+9gsk4GZjuP3WNO3dIJxKVqLA91XwEqoIRkCKyS++7skP/Y8F+BITEkNQ+1mKDd2q8VehsdTmYGSs98dr0s=
+X-Received: by 2002:a05:660c:44a:: with SMTP id d10mr12222840itl.153.1560162043688;
+ Mon, 10 Jun 2019 03:20:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560161992; bh=FeCrLOohF5hF22QycDZ6u+H5QlmZDk8jFM9rdOnSybk=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=Hkhuq+uiFoX9spXhGlmV412aXodMoI08N2oHQRqHDsBwTwhzIG73ZpeOGcyp9wV0d
-         hMmWhXqK72vjYqpq+zj2igZH2N0NVc0baq/tg46ihIKvWCfstjIYbUm+Q9S9pDICU4
-         L2fk5OE7xGBKVENiEz2hwe/jKbFPCL0MxMiD5/3nkgQshArDYH3VsFmyMI/hPZTb4A
-         mJEpfjcc3CzOG3QhqJFkGRZjf/vSqbO3X6p0wyaDG7CS3/ZGnj07CYWhdCJvb3gZ60
-         xdrPLxyH4RTDhs6qZX6220gm+QXgcqiflAAhPY/hwDW/m1YXzjUclooFIgmY6iU6tf
-         9lPc2AssJ12Fw==
+References: <20190610084213.1052-1-lee.jones@linaro.org> <20190610084213.1052-4-lee.jones@linaro.org>
+ <CAKv+Gu_s7i8JC4cv-dJMvm1_0cGzzhzf+Dxu0rxcF7iugF=vHg@mail.gmail.com>
+ <20190610085542.GL4797@dell> <CAKv+Gu8rhxciy1cOG3B3pda9+p4R_COGrrqa7S_Rj9y2HeBxYw@mail.gmail.com>
+ <20190610092245.GN4797@dell>
+In-Reply-To: <20190610092245.GN4797@dell>
+From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Date:   Mon, 10 Jun 2019 12:20:30 +0200
+Message-ID: <CAKv+Gu94ES4_SjkmAMaAgwCtsx_YmOn0=yaeM9GFjPCCxrANoQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/8] pinctrl: qcom: sdm845: Provide ACPI support
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     alokc@codeaurora.org, Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        wsa+renesas@sang-engineering.com,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>, balbi@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Hugo <jlhugo@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable support for Nvidia XUSB device mode controller driver.
+On Mon, 10 Jun 2019 at 11:22, Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Mon, 10 Jun 2019, Ard Biesheuvel wrote:
+>
+> > On Mon, 10 Jun 2019 at 10:55, Lee Jones <lee.jones@linaro.org> wrote:
+> > >
+> > > On Mon, 10 Jun 2019, Ard Biesheuvel wrote:
+> > >
+> > > > On Mon, 10 Jun 2019 at 10:42, Lee Jones <lee.jones@linaro.org> wrote:
+> > > > >
+> > > > > This patch provides basic support for booting with ACPI instead
+> > > > > of the currently supported Device Tree.  When doing so there are a
+> > > > > couple of differences which we need to taken into consideration.
+> > > > >
+> > > > > Firstly, the SDM850 ACPI tables omit information pertaining to the
+> > > > > 4 reserved GPIOs on the platform.  If Linux attempts to touch/
+> > > > > initialise any of these lines, the firmware will restart the
+> > > > > platform.
+> > > > >
+> > > > > Secondly, when booting with ACPI, it is expected that the firmware
+> > > > > will set-up things like; Regulators, Clocks, Pin Functions, etc in
+> > > > > their ideal configuration.  Thus, the possible Pin Functions
+> > > > > available to this platform are not advertised when providing the
+> > > > > higher GPIOD/Pinctrl APIs with pin information.
+> > > > >
+> > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > >
+> > > > For the ACPI probing boilerplate:
+> > > > Acked-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+> > > >
+> > > > *However*, I really don't like hardcoding reserved GPIOs like this.
+> > > > What guarantee do we have that each and every ACPI system
+> > > > incorporating the QCOM0217 device has the exact same list of reserved
+> > > > GPIOs?
+> > >
+> > > This is SDM845 specific, so the chances are reduced.
+> >
+> > You don't know that.
+>
+> All the evidence I have to hand tells me that this is the case.  Even
+> on very closely related variants Qualcomm uses different H/W blocks
+> for GPIO.
+>
+> > > However, if another SDM845 variant does crop up, also lacking the
+> > > "gpios" property, we will have to find another differentiating factor
+> > > between them and conduct some matching.  What else can you do with
+> > > platforms supporting non-complete/non-forthcoming ACPI tables?
+> > >
+> >
+> > Either we don't touch any pins at all if they are not referenced
+> > explicitly anywhere
+>
+> I guess this would require an API change, which is out of scope of
+> this patch-set.  Happy to change this implementation later if the
+> subsystem allows for it though.
+>
+> > or we parse the PEP tables, which seem to cover
+> > some of this information (if Bjorn's analysis is correct)
+>
+> Maybe someone can conduct some further work on this when we start to
+> enable or write a driver for the PEP (Windows-compatible System Power
+> Management Controller).  The tables for the PEP look pretty complex,
+> so this task would be extremely difficult if not impossible without
+> Qualcomm's help.  I wouldn't even know how to extrapolate this
+> information from the tables.
+>
+> > (if Bjorn's analysis is correct)
+>
+> Bjorn is about to provide his Reviewed-by for this implementation.
+>
 
-Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index f0bad30..87a8d0d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -577,6 +577,7 @@ CONFIG_USB_ULPI=y
- CONFIG_USB_GADGET=y
- CONFIG_USB_RENESAS_USBHS_UDC=m
- CONFIG_USB_RENESAS_USB3=m
-+CONFIG_USB_TEGRA_XUDC=m
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=32
- CONFIG_MMC_ARMMMCI=y
--- 
-2.7.4
-
+If Bjorn can live with it, then so can I.
