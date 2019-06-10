@@ -2,102 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD563B70E
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 16:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F306C3B729
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 16:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390726AbfFJOQL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 10:16:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48790 "EHLO mail.kernel.org"
+        id S2390781AbfFJOVF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 10:21:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53586 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390682AbfFJOQL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Jun 2019 10:16:11 -0400
+        id S2390708AbfFJOVE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Jun 2019 10:21:04 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F022207E0;
-        Mon, 10 Jun 2019 14:16:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C8887207E0;
+        Mon, 10 Jun 2019 14:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560176170;
-        bh=RdNeTv79b9E8qs/xrXqA6ychSrjogWwPKm1yobW5SxM=;
+        s=default; t=1560176464;
+        bh=eoMjWnQ0ixXdPIe46Sfe4mWspAVGRjF9LS9dORV46kA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o+Xdh/Vt0v9tnUhPGx5LSLkGdDkepYTa/cxvnwUj6WPvCDMzOFgWk5a+vCQHm6oNG
-         3xX35xAgFUDiU5IHhTdNppnoaOkFqbzfBE3j/Gybxe7h1lqoDEKqyQSW0LXeWUHtZd
-         AFqSY1c/vLwdCyDSClJ7qKrsr7P4rVyXjjjFlSIg=
-Date:   Mon, 10 Jun 2019 16:16:07 +0200
+        b=ZpgwwAYvXbB54AruQ+Gjnqb5x1QrlSdmfqlcScT0K01y3q1dI3LcsrFo04tNadgge
+         V6q37DybB/mULHnRaYvX/ezInMaA/lPCgk5xBU2AY5iw/DVO4AQiOAyi5b2P3Anksi
+         P0Eklu1YvVffKCmDJS7bDzppgK0uicalWn6Sm2xA=
+Date:   Mon, 10 Jun 2019 16:21:01 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>,
-        linux-usb@vger.kernel.org, mathias.nyman@intel.com,
-        rajaram.regupathy@intel.com, abhilash.k.v@intel.com,
-        m.balaji@intel.com
-Subject: Re: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a
- raw interface on DbC
-Message-ID: <20190610141607.GA5937@kroah.com>
-References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
- <20190607063306.5612-5-prabhat.chand.pandey@intel.com>
- <20190607142132.GG14665@kroah.com>
- <af51b855-4ee4-9bc2-6484-b8c4d897f503@linux.intel.com>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+Cc:     "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: fsl_udc status?
+Message-ID: <20190610142101.GB5937@kroah.com>
+References: <95d5902538997e340ccf7784406832904d512b51.camel@infinera.com>
+ <87v9xdc1ra.fsf@linux.intel.com>
+ <9171a0e63bebaa0efaec64838f9a1c6982fc33e8.camel@infinera.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <af51b855-4ee4-9bc2-6484-b8c4d897f503@linux.intel.com>
+In-Reply-To: <9171a0e63bebaa0efaec64838f9a1c6982fc33e8.camel@infinera.com>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 10, 2019 at 04:53:51PM +0300, Mathias Nyman wrote:
-> On 7.6.2019 17.21, Greg KH wrote:
-> > On Fri, Jun 07, 2019 at 12:03:05PM +0530, Prabhat Chand Pandey wrote:
-> > > From: Abhilash K V <abhilash.k.v@intel.com>
-> > > 
-> > > This patch provides a raw device interface on xhci Debug capability.
+On Mon, Jun 10, 2019 at 08:33:17AM +0000, Joakim Tjernlund wrote:
+> On Mon, 2019-06-10 at 10:56 +0300, Felipe Balbi wrote:
+> > Hi,
 > > 
-> > What is a "raw device"?
+> > Joakim Tjernlund <Joakim.Tjernlund@infinera.com> writes:
+> > > We are trying to get fsl_udc up and running on a T1042 with without success.
+> > > Seems like this driver is lagging behind the corresponding host driver(mph).
+> > > The mph driver has a number of USB errata workarounds while udc has none.
+> > > At least erratas A007792 seems applicable for udc too.
+> > >
+> > > Is the fsl_udc driver functional on 4.14.x(which we use)? What is missing ?
 > > 
-> > > This abstracts dbc functionality to user space inorder to facilitate
-> > > various frameworks to utilize xhci debug capability.
-> > 
-> > I do not understand this sentance at all.  Please provide a lot more
-> > information.
-> > 
-> > > It helps to render the target as an usb debug class device on host and
-> > > establish an usb connection by providing two bulk endpoints.
-> > 
-> > provide bulk endpoints where?  To send data where?  This is very
-> > confusing and does not make any sense to me...
-> > 
-> > 
-> > > 
-> > > [don't dynamically allocate tiny space for name only -Mathias]
-> > > Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-> > > Signed-off-by: Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
-> > > Signed-off-by: Abhilash K V <abhilash.k.v@intel.com>
-> > > Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > > ---
-> ...
-> > 
-> > So you have a new char device, with a undocumented and unknown format of
-> > data flowing across it to the device.  How in the world are we supposed
-> > to use this thing?  Where is it documented?  What does it do?  How can
-> > you use it?
-> > 
-> > I don't mean to be so harsh here, but come on people, this stuff needs a
-> > lot more background documentation, information, and explaination as to
-> > exactly why in the world we need any of this, and what it even does!
-> > 
-> > Also, you need to fix the code, it doesn't work as pointed out in a few
-> > places :)
-> > 
+> > If you're on v4.14, then you need to ask for support from whoever gave
+> > you that kernel. In this forum we treat mainline only, which currently
+> > is at v5.2-rc4. Unless you can try that version of the kernel, we can't
+> > really help you here.
 > 
-> Thanks for going through this.
-> It's now clear this is far from ready.
-> I need to re-evaluate my position on this, not just the code and the documentation,
-> but the usefulness of it all.
+> None gave me that kernel, it is the stable 4.14.x tree that Greg maintains, I would
+> assume that this forum has some support for stable kernels too?
 
-What is this even supposed to be used for?  What is the application for
-it?  I couldn't determine that at all, what am I missing?
+ONLY use a older LTS kernel if you already have a device up and working
+properly and you need "long term" support for it.  Do NOT use it for
+bringing up a new device and expecting everything to work properly on it
+at all.  That should only be done on the latest stable release, and
+sometimes, if you are using an older system, on the latest LTS release.
+
+4.14.y is neither the latest LTS release, nor the latest stable release.
+Please try either 4.19.y or 5.1 to see if Linux even works on this
+device.  If so, then worry about running an older kernel (but you really
+do not want to do that anyway.)
+
+> Looking at upstream, there has not been any significant change in this
+> area for a long time.
+
+There are lots and lots of changes that have happened all over the
+kernel tree since 4.14.0 was released.  Don't assume things are not
+connected at all, they are not.
+
+So please, try 5.1, and if that doesn't work, we will be glad to help
+you out.
+
+If you insist on using 4.14 for a device you do not even know if it
+works or not, you really are on your own.
 
 thanks,
 
