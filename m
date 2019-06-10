@@ -2,88 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7683B665
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 15:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95163B671
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 15:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390335AbfFJNsc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 09:48:32 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:42074 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390270AbfFJNsc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 09:48:32 -0400
-Received: by mail-lj1-f196.google.com with SMTP id t28so7983329lje.9
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 06:48:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=+xHGHLyyVpmqmvF4JOo4/p/f/z3f6+vIzrUpyfNzbn0=;
-        b=ShoS4qgJVgNkUbVqjq+PKIZsvfJXWH0Lpg+NnD9/heCOu6hlcEcAN99ayWIit1SDSg
-         2B7iRjVgK5Tx1J6brueNcm0AoE5TgxoqVRD07RHnqCncXcK/+hPJ0mMRDr8oX9Th1mTo
-         99PhdlXoav2C2uWADOYSQ19LajgNLacz6TJjTJc/XWwWbPv/kTpVrj2vVqMyVsLLa30i
-         DifBFQe7HZ1jYu3hl7yS+DRg1A3P7Rew67jrK5877y8sLr+rU+Cvk4hNt7MsT2Oh5l0l
-         KJ7bOxYzCjhKCE7eN8N11yHS6qcmYkb1kcgBn4gGiDGU72UcBBu0ZngLNbWSgDUDmWVT
-         XqCw==
-X-Gm-Message-State: APjAAAVqnSYZkjk+CjwthPrNaN6wZq2dgHIEF38crvuYDMfe85lM3l+3
-        wcGUO4M8gxWclYdenUYNTxe2FVU/YeE=
-X-Google-Smtp-Source: APXvYqyhKBKuF6zlJvLU/uop8NDgezZIdmn4HM/06BPXtJKUtDqAq2+VKEYa7izSi4r1gHae1/rjJw==
-X-Received: by 2002:a2e:9654:: with SMTP id z20mr9909275ljh.52.1560174509621;
-        Mon, 10 Jun 2019 06:48:29 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id a4sm1995072lfj.31.2019.06.10.06.48.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 10 Jun 2019 06:48:29 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1haKez-00081f-CN; Mon, 10 Jun 2019 15:48:29 +0200
-Date:   Mon, 10 Jun 2019 15:48:29 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 5.2-rc5
-Message-ID: <20190610134829.GA30830@localhost>
+        id S2390387AbfFJNvF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 09:51:05 -0400
+Received: from mga05.intel.com ([192.55.52.43]:43786 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390306AbfFJNvF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Jun 2019 09:51:05 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jun 2019 06:51:05 -0700
+X-ExtLoop1: 1
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by orsmga007.jf.intel.com with ESMTP; 10 Jun 2019 06:51:03 -0700
+Subject: Re: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a raw
+ interface on DbC
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
+Cc:     linux-usb@vger.kernel.org, mathias.nyman@intel.com,
+        rajaram.regupathy@intel.com, abhilash.k.v@intel.com,
+        m.balaji@intel.com
+References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
+ <20190607063306.5612-5-prabhat.chand.pandey@intel.com>
+ <20190607142132.GG14665@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <af51b855-4ee4-9bc2-6484-b8c4d897f503@linux.intel.com>
+Date:   Mon, 10 Jun 2019 16:53:51 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <20190607142132.GG14665@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
+On 7.6.2019 17.21, Greg KH wrote:
+> On Fri, Jun 07, 2019 at 12:03:05PM +0530, Prabhat Chand Pandey wrote:
+>> From: Abhilash K V <abhilash.k.v@intel.com>
+>>
+>> This patch provides a raw device interface on xhci Debug capability.
+> 
+> What is a "raw device"?
+> 
+>> This abstracts dbc functionality to user space inorder to facilitate
+>> various frameworks to utilize xhci debug capability.
+> 
+> I do not understand this sentance at all.  Please provide a lot more
+> information.
+> 
+>> It helps to render the target as an usb debug class device on host and
+>> establish an usb connection by providing two bulk endpoints.
+> 
+> provide bulk endpoints where?  To send data where?  This is very
+> confusing and does not make any sense to me...
+> 
+> 
+>>
+>> [don't dynamically allocate tiny space for name only -Mathias]
+>> Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
+>> Signed-off-by: Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
+>> Signed-off-by: Abhilash K V <abhilash.k.v@intel.com>
+>> Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> ---
+...
+> 
+> So you have a new char device, with a undocumented and unknown format of
+> data flowing across it to the device.  How in the world are we supposed
+> to use this thing?  Where is it documented?  What does it do?  How can
+> you use it?
+> 
+> I don't mean to be so harsh here, but come on people, this stuff needs a
+> lot more background documentation, information, and explaination as to
+> exactly why in the world we need any of this, and what it even does!
+> 
+> Also, you need to fix the code, it doesn't work as pointed out in a few
+> places :)
+> 
 
-  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
+Thanks for going through this.
+It's now clear this is far from ready.
+I need to re-evaluate my position on this, not just the code and the documentation,
+but the usefulness of it all.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.2-rc5
-
-for you to fetch changes up to f3dfd4072c3ee6e287f501a18b5718b185d6a940:
-
-  USB: serial: option: add Telit 0x1260 and 0x1261 compositions (2019-05-21 11:27:24 +0200)
-
-----------------------------------------------------------------
-USB-serial fixes for 5.2-rc5
-
-Here are some new device ids for option and pl2303.
-
-All have been in linux-next with no reported issues.
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
-
-----------------------------------------------------------------
-Chris Packham (1):
-      USB: serial: pl2303: add Allied Telesis VT-Kit3
-
-Daniele Palmas (1):
-      USB: serial: option: add Telit 0x1260 and 0x1261 compositions
-
-Jörgen Storvist (1):
-      USB: serial: option: add support for Simcom SIM7500/SIM7600 RNDIS mode
-
- drivers/usb/serial/option.c | 6 ++++++
- drivers/usb/serial/pl2303.c | 1 +
- drivers/usb/serial/pl2303.h | 3 +++
- 3 files changed, 10 insertions(+)
+-Mathias
