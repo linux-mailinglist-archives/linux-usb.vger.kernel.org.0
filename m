@@ -2,112 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEFB3B795
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 16:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C8A3B7D7
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 16:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390888AbfFJOkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 10:40:12 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:35248 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2389520AbfFJOkL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 10:40:11 -0400
-Received: (qmail 3552 invoked by uid 2102); 10 Jun 2019 10:40:10 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 10 Jun 2019 10:40:10 -0400
-Date:   Mon, 10 Jun 2019 10:40:10 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrea Vai <andrea.vai@unipv.it>
-cc:     Greg KH <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
+        id S2390127AbfFJOzi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 10:55:38 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:36562 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390087AbfFJOzi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 10:55:38 -0400
+Received: by mail-wm1-f68.google.com with SMTP id u8so8488804wmm.1
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 07:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=grpyJzpY2dq78MaqCsFjp6aOPdiyZO5ANWkqeCMDb2E=;
+        b=w/eKKSWhOoEaBZJpd25LXFkhehQsayD+ZCo+gIFsoHK9sclz0/Fx8NGoYdPBLeY/6Z
+         uPlMw02d0iKOdBn9OwdoQyO/knNzSw2owvJBehFAn3ikRt6fn4ua/0oK55bwzgry0rkr
+         Hz1lPt9t4ZmVojTnwlAMX8RVQJ4jaV67ijOn8MzVL8PLhQD04uNPP7fNuSKz/4iq9qQ6
+         uSmJS1a2j8PA2hHtqeHRDBKJgeDwIADph4qyUxpeun2HMFHa1l+V4bh2SY6Erlslm1K+
+         b8w/Bw6NucDN/qYOLet0mG4qwUSx1gkrcGmJA4iOtTMVR2YxLWvhRPu9HLmEhanoarHz
+         JXKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=grpyJzpY2dq78MaqCsFjp6aOPdiyZO5ANWkqeCMDb2E=;
+        b=fsApiui0FRfK+88gCjOwFBNmf9t5M2QAibba7n5Xn2jljHRkQfZxYw4YLzOg+8l6Mo
+         siK9AeVKBO1Pi13AF2/2VAI9iryZ/MFy1+lRXO/yO9Fo8YBqVhVLPypx3U8Obf9w4M+V
+         tZRkb/XSAmeIYEiKhJFcUVsKhslOLh+uumdQsBQjyjPyS0AGQ0WlUI6uABG6mZDLoylg
+         klK7gAA0tQ+MsY200HTpiJGAFCZIjWsEx2d6LRBgPIJeu6O2vCvnwAvtqhfjACvhAlM2
+         zJYZNwYWGIjtWDPo6pllegj0PFc23NZb51vZ6qbPzCRXSUECDY72l676ImZARaC1MN0p
+         XSqg==
+X-Gm-Message-State: APjAAAXeLe55sos+hjipifoUAIH8CbLba8PlnYlESULcuONiWI3PWdIf
+        r4yH8Lz75am852v3qJk2Uugt+tG5x7I=
+X-Google-Smtp-Source: APXvYqxKoHJ9dC9gfhq/TLzwNkedUoxO2v/gl0WGaMPMs9Iqc7sPF30w1urh0B68nix82FGJSF9ONw==
+X-Received: by 2002:a7b:c144:: with SMTP id z4mr14566041wmi.50.1560178536381;
+        Mon, 10 Jun 2019 07:55:36 -0700 (PDT)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id a67sm5347931wmh.40.2019.06.10.07.55.35
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 10 Jun 2019 07:55:35 -0700 (PDT)
+Message-ID: <fd2b71b53a5ca4b6ab635dc6d04676d157c2c46c.camel@unipv.it>
 Subject: Re: Slow I/O on USB media
-In-Reply-To: <CAOsYWL2z=Rddvu62DP+QdQOf=4FwygmLrOPS0rJ8Uc+OzLKQvA@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1906101030280.1560-100000@iolanthe.rowland.org>
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Date:   Mon, 10 Jun 2019 16:55:34 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1906101030280.1560-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1906101030280.1560-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 8 Jun 2019, Andrea Vai wrote:
-
-> Il giorno sab 8 giu 2019 alle ore 09:43 Andrea Vai
-> <andrea.vai@unipv.it> ha scritto:
-> >
-> >[...]
-> >
-> > Hi,
-> >   there is also something else I don't understand.
-> > Every time I build a kernel, then after booting it "uname -a" shows
-> > something like
-> >
-> > Linux [...] 4.19.0-rc5+ #12 SMP Sat Jun 8 00:26:42 CEST 2019 x86_64
-> > x86_64 x86_64 GNU/Linux
-> >
-> > where the number after "#" increments by 1 from the previous build.
-> >
-> > Now I have the same number (#12) after a new build, is it normal?
-
-That number is set up by the kernel's build system, and it is 
-automatically incremented each time you build a kernel (look for a file 
-named ".version" in the top-level kernel source directory).  It should 
-be different each time.
-
-> > Furthermore, "ls -lrt /boot/v*" shows the last lines to be
-> >
-> > -rw-r--r--. 1 root root 8648656  8 giu 00.35 /boot/vmlinuz-4.19.0-rc5+.old
-> > -rw-r--r--. 1 root root 8648656  8 giu 09.08 /boot/vmlinuz-4.19.0-rc5+
-> >
-> > and "diff /boot/vmlinuz-4.19.0-rc5+.old /boot/vmlinuz-4.19.0-rc5+"
-> > shows they are identical. Why? I expected that each bisect would lead
-> > to a different kernel.
-
-Maybe you aren't building or installing the kernels correctly.
-
-> > Assuming that the opposite can happen, does it mean that when I say
-> > i.e. "git bisect bad", then build a new kernel and see that is
-> > identical to the previous one I can run "git bisect bad" without
-> > booting into the new one and even making the test?
-
-Yes, except that the new kernel should never be identical to the old 
-one.
-
-> > Another thing I don't understand is that I told 4.20.0 to be good, so
-> > I would expect that I don't need to test any older version, but as far
-> > as I know 4.19.0-rc5+ is older than 4.20.0, so why is it involved in
-> > the bisection?
-
-I don't know.
-
-> > I had to "git bisect skip" one time (the kernel did not boot), but as
-> > far as I know I don't think this could be related to my doubts.
-> > [...]
+Il giorno lun, 10/06/2019 alle 10.40 -0400, Alan Stern ha scritto:
 > 
-> Update:
->   I have concluded the bisection, found that
-> "9cb5f4873b993497d462b9406f9a1d8a148e461b is the first bad commit",
-> reverted it, and the test still fails (btw, the final kernel file,
-> /boot/vmlinuz-4.19.0-rc5+, does not differ from the previous one).
+> 
+> [...]
 
-It sounds like you did not do the bisection or testing correctly.
+Thank you Alan and Greg for your patience and answer. I will carefully
+consider all the advice you gave me, but one in particular stands out
+to me first:
 
-> So, all my doubts above are still there (and growing). What I am doing wrong?
+>         Not setting up the .config file properly for each build.
 
-Without knowing exactly what you are doing, it's impossible to say what 
-you're doing wrong.  Some possibilities include:
+How should I set up the .config file properly for each build? What I
+did so far was
 
-	Not setting up the .config file properly for each build.
+cp -v /boot/config-$(uname -r) .config
 
-	Not installing the new kernel in the right place.
+(when I was using a "working kernel", maybe the Fedora one) before the
+first build, then never touched the .config dir again during the
+bisection.
 
-	Booting some kernel other than the new one when you test.
+(Also, I use to press ENTER to accept all default choices when
+compiling, is that correct?)
 
-Sometimes doing "make clean" before each build will help.
+Many thanks,
+Andrea Vai
 
-Also, it's possible that what you're testing for isn't caused by the 
-kernel in the first place (i.e., running the test several times under 
-the _same_ kernel might give different results).  In that case, 
-bisection would be pointless.
 
-Alan Stern
 
