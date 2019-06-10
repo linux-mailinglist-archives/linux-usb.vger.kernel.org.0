@@ -2,154 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4C03B1E2
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 11:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FD33B25C
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 11:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388268AbfFJJWt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 05:22:49 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:37701 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388431AbfFJJWt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 05:22:49 -0400
-Received: by mail-wr1-f67.google.com with SMTP id v14so8381065wrr.4
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 02:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=G1lpUotvma47Z1RO2D5VX/I7uflkBXZ22xkg1HQ/USI=;
-        b=hJCkx2KR+NIkDwRFeraGfF4DHt2DUmwtr60qd9nLSH36qGSOynSiXeBtl5ybF8L0dn
-         pnA/bDiJGCLtMFrKG64+F4PxE/BCjEnmUfgybp5rvC84ASqfVLs+C7uKecLuJCDAOxWo
-         nL4ORmsbFf6ofo5z0z78tNg1LeWUIxyO901/KwIoH+c/xzpLZJLgrkprAWxAZqJ+OEP1
-         nFZLqfILmv5pT7tNKbySmIy22ONGFTE8fGEDz8KzFkJJaGzD9V9yDSEzeGC+4BWr4Z9e
-         FdxvQDp8O5Loq/iEqqXceHHaLCdkegi8ZozuBckAqV6LiQPJDHVQJTe4H0zcalEQXVFh
-         INAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=G1lpUotvma47Z1RO2D5VX/I7uflkBXZ22xkg1HQ/USI=;
-        b=rWebE8GxfY4L/Auukstfr5ld+AjgJJ3c6THKKyg/b/TwpWoKc8dBLCiKnfofDq9vg3
-         4JMDyyTztGkm2ulZ4x9o5N0lD/JuyheDLeIT61er5owkafije1DCyFtWG+kJd/J+8F0j
-         8A+TVk8qlE801uF3D8VeMvLd8UPcDFU7EKy5rYhwKt4Rzipo9VQ7+2BSI9dh3PWuaz40
-         jMAxabGtgiwVqlXyXQr+3xZVqmU29KrwXG1GsAls1jOULaQTg04xlRg5qiJSftCuye4g
-         0/d5v5GPoHVDptOu2kfcV7stcm/opNMNl8XsCoW8nq2PMF81KkbRBrwr4TwIjnVzd4Cr
-         stVg==
-X-Gm-Message-State: APjAAAUM9HHIDgLSnzvm7jPJRbzJ9ydkF20Fqd5Z8SqVUUxCu0av8MQ5
-        H8toDlzSFYVeR+epT9d8+BuAuQ==
-X-Google-Smtp-Source: APXvYqwF7A2E5R4fmM/F0NbqYzotL3Yb9yzsKrwKjxbsYMU0XzfAxqQRhUHKAoBn6OW6wfm5SWZNSQ==
-X-Received: by 2002:adf:b64b:: with SMTP id i11mr44160150wre.205.1560158567552;
-        Mon, 10 Jun 2019 02:22:47 -0700 (PDT)
-Received: from dell ([2.31.167.229])
-        by smtp.gmail.com with ESMTPSA id l18sm7825015wrv.38.2019.06.10.02.22.46
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 10 Jun 2019 02:22:46 -0700 (PDT)
-Date:   Mon, 10 Jun 2019 10:22:45 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc:     alokc@codeaurora.org, Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        wsa+renesas@sang-engineering.com,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>, balbi@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Hugo <jlhugo@gmail.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/8] pinctrl: qcom: sdm845: Provide ACPI support
-Message-ID: <20190610092245.GN4797@dell>
-References: <20190610084213.1052-1-lee.jones@linaro.org>
- <20190610084213.1052-4-lee.jones@linaro.org>
- <CAKv+Gu_s7i8JC4cv-dJMvm1_0cGzzhzf+Dxu0rxcF7iugF=vHg@mail.gmail.com>
- <20190610085542.GL4797@dell>
- <CAKv+Gu8rhxciy1cOG3B3pda9+p4R_COGrrqa7S_Rj9y2HeBxYw@mail.gmail.com>
+        id S2388960AbfFJJnr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 05:43:47 -0400
+Received: from mga09.intel.com ([134.134.136.24]:4284 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387977AbfFJJnq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Jun 2019 05:43:46 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jun 2019 02:43:46 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga002.jf.intel.com with ESMTP; 10 Jun 2019 02:43:44 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
+        "leoyang.li\@nxp.com" <leoyang.li@nxp.com>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: fsl_udc status?
+In-Reply-To: <9171a0e63bebaa0efaec64838f9a1c6982fc33e8.camel@infinera.com>
+References: <95d5902538997e340ccf7784406832904d512b51.camel@infinera.com> <87v9xdc1ra.fsf@linux.intel.com> <9171a0e63bebaa0efaec64838f9a1c6982fc33e8.camel@infinera.com>
+Date:   Mon, 10 Jun 2019 12:43:40 +0300
+Message-ID: <87pnnlbws3.fsf@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKv+Gu8rhxciy1cOG3B3pda9+p4R_COGrrqa7S_Rj9y2HeBxYw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 10 Jun 2019, Ard Biesheuvel wrote:
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-> On Mon, 10 Jun 2019 at 10:55, Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > On Mon, 10 Jun 2019, Ard Biesheuvel wrote:
-> >
-> > > On Mon, 10 Jun 2019 at 10:42, Lee Jones <lee.jones@linaro.org> wrote:
-> > > >
-> > > > This patch provides basic support for booting with ACPI instead
-> > > > of the currently supported Device Tree.  When doing so there are a
-> > > > couple of differences which we need to taken into consideration.
-> > > >
-> > > > Firstly, the SDM850 ACPI tables omit information pertaining to the
-> > > > 4 reserved GPIOs on the platform.  If Linux attempts to touch/
-> > > > initialise any of these lines, the firmware will restart the
-> > > > platform.
-> > > >
-> > > > Secondly, when booting with ACPI, it is expected that the firmware
-> > > > will set-up things like; Regulators, Clocks, Pin Functions, etc in
-> > > > their ideal configuration.  Thus, the possible Pin Functions
-> > > > available to this platform are not advertised when providing the
-> > > > higher GPIOD/Pinctrl APIs with pin information.
-> > > >
-> > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > >
-> > > For the ACPI probing boilerplate:
-> > > Acked-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-> > >
-> > > *However*, I really don't like hardcoding reserved GPIOs like this.
-> > > What guarantee do we have that each and every ACPI system
-> > > incorporating the QCOM0217 device has the exact same list of reserved
-> > > GPIOs?
-> >
-> > This is SDM845 specific, so the chances are reduced.
-> 
-> You don't know that.
 
-All the evidence I have to hand tells me that this is the case.  Even
-on very closely related variants Qualcomm uses different H/W blocks
-for GPIO.
+Hi,
 
-> > However, if another SDM845 variant does crop up, also lacking the
-> > "gpios" property, we will have to find another differentiating factor
-> > between them and conduct some matching.  What else can you do with
-> > platforms supporting non-complete/non-forthcoming ACPI tables?
-> >
-> 
-> Either we don't touch any pins at all if they are not referenced
-> explicitly anywhere
+Joakim Tjernlund <Joakim.Tjernlund@infinera.com> writes:
 
-I guess this would require an API change, which is out of scope of
-this patch-set.  Happy to change this implementation later if the
-subsystem allows for it though.
+> On Mon, 2019-06-10 at 10:56 +0300, Felipe Balbi wrote:
+>> Hi,
+>>=20
+>> Joakim Tjernlund <Joakim.Tjernlund@infinera.com> writes:
+>> > We are trying to get fsl_udc up and running on a T1042 with without su=
+ccess.
+>> > Seems like this driver is lagging behind the corresponding host driver=
+(mph).
+>> > The mph driver has a number of USB errata workarounds while udc has no=
+ne.
+>> > At least erratas A007792 seems applicable for udc too.
+>> >
+>> > Is the fsl_udc driver functional on 4.14.x(which we use)? What is miss=
+ing ?
+>>=20
+>> If you're on v4.14, then you need to ask for support from whoever gave
+>> you that kernel. In this forum we treat mainline only, which currently
+>> is at v5.2-rc4. Unless you can try that version of the kernel, we can't
+>> really help you here.
+>
+> None gave me that kernel, it is the stable 4.14.x tree that Greg maintain=
+s, I would
+> assume that this forum has some support for stable kernels too?
+>
+> Looking at upstream, there has not been any significant change in this
+> area for a long time.
 
-> or we parse the PEP tables, which seem to cover
-> some of this information (if Bjorn's analysis is correct)
+In that case, I'll let Li Yang reply.
 
-Maybe someone can conduct some further work on this when we start to
-enable or write a driver for the PEP (Windows-compatible System Power
-Management Controller).  The tables for the PEP look pretty complex,
-so this task would be extremely difficult if not impossible without
-Qualcomm's help.  I wouldn't even know how to extrapolate this
-information from the tables.
+=2D-=20
+balbi
 
-> (if Bjorn's analysis is correct)
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Bjorn is about to provide his Reviewed-by for this implementation.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlz+JkwACgkQzL64meEa
+mQZLdw/+MQBaOTrG1GoWH8FhrE11HhbZjM/bySWX/UlkIRjs6rLI0ynFNQx/Pc1Y
+R4cxVKs1URdlAcsT53jC6F52do2oBcKKBfQcYfs1TmzLMAc7TPhCBCv7bkUirgNL
+leXq54UQARDd4hBmvMqlyyTGixlj34LaUnq2KOH3pmx4AC/0O6e5JcRxMVbbLs0N
+kBnfpWleIJXlVS08xLupTc8mwjCHeMTLMQlYPE6UZr3ms1c+gfFxDaDP4uU4iWtM
+C8DrStNTZzMD5LLU63zW06jRinNPNrDzKdrVTmkk2TETKYy2gfJ0vuPHOhei1f3d
+vYj0E/l393H23Zqznc02YKCqP68/UU0TjpTfUxlhsUlSLiGPCzmYkn4aBA/zq8q0
+aOO+sN2A/A3D4M3tXtdKrBzwVuRLGcaYeWPMxaf+u17/IVbQIzzSDLj1fzyILdsB
+Q4Hl4riwtv5Ir2dlM34URcOqE3N7N39v1PsbKUCwygaHF/+fG7vjndhImWfT1AIR
+n5MrK30MYHhnTx48NnyjCMFF5F4C+jMFnvUD5Q7Ws5RDxph8td/cnkuTVJ8vUK/5
+QnOJniLMKUm56hxv6P6nO/El+lcUIg6yqx2qdVltpm+f33nKd/DM0Kh9l7S1PF34
+MZ03+HuidytXTQ6VhjvtGuQcNpgQ+9A9z969rso6IBajX+uFkoA=
+=c4/f
+-----END PGP SIGNATURE-----
+--=-=-=--
