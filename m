@@ -2,266 +2,373 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2A73B7E0
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 16:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2C03B82F
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 17:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391021AbfFJO50 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 10:57:26 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:37531 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390087AbfFJO5Z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 10:57:25 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 19so4630705pfa.4
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 07:57:25 -0700 (PDT)
+        id S2391148AbfFJPV0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 11:21:26 -0400
+Received: from ucol19pa12.eemsg.mail.mil ([214.24.24.85]:4772 "EHLO
+        UCOL19PA12.eemsg.mail.mil" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389997AbfFJPVZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 11:21:25 -0400
+X-EEMSG-check-017: 27200632|UCOL19PA12_EEMSG_MP10.csd.disa.mil
+X-IronPort-AV: E=Sophos;i="5.63,575,1557187200"; 
+   d="scan'208";a="27200632"
+Received: from emsm-gh1-uea11.ncsc.mil ([214.29.60.3])
+  by UCOL19PA12.eemsg.mail.mil with ESMTP/TLS/DHE-RSA-AES256-SHA256; 10 Jun 2019 15:21:18 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=yPZBJqautpo7MdFgnHPddXOAdYv4bcGCjakrmWFV0uw=;
-        b=nzOLYdQJkbURjNiMK5Yuqb0qPn35zZdtxM9DK49Hd7AjMWWlmQaJah4qN44SBZ7W7Q
-         ThfU/gghM4FtJ7IcOf/impkD0NeGu9S96UXzN2zK1yf+EY7Yq8yT+0zhz/m3VkgNpbiu
-         x8f8aoGPGS3pbdsfn89Po1qi+EbmvHbU6K4vrfzOPBXIF7vvQiaVwKSc1X9LM9IAnKLG
-         jD6ouooZliS0qIh4yw8MTcFw7+SEb1Yor6XsIRL3L3t5DD+ztAdBuSor+a3Ln+N7TcPl
-         jtzKQeMO6S9xZ53sNBYkQL+5rrFeq5ohi4G6nMDlJ6bhh6scg3hCWupBsxjdnMWArs2+
-         yz2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=yPZBJqautpo7MdFgnHPddXOAdYv4bcGCjakrmWFV0uw=;
-        b=o/C1GsYd45myMOUDTOiStbl8F+Y21ESAo6utmEJj+SPl10PvQUnyqWOa5AE2f8gNzV
-         Bup7CPzEx7vvOKYshvOzk/GGUwDiKtfyEIV0mu+l9bjSQ0An6GjzXpxZOt+d44mDM3Ce
-         ELCG3/Z/M42dI0FyYyZVcw+DuZ2H7RjKtClv5zLmTFoP315QmTXSPU3G3LjEKKPfDRcK
-         cwPx+BRU42Pmm7WcTmp+hqoYI/QUKVGHGy6zf63FFbmmf9u3uYLp0AxIfaL3t6UjNOJK
-         CX/i6gTPeiFjvgMiQ6D8XUdYSkuDcgQ0DsjFKZ5RDkSXQr2ijUuYh4rUsPYd3u8ZSzh1
-         lVPw==
-X-Gm-Message-State: APjAAAWRwueVy9n0ZO0KioSF7F312fd5N7TWYpL90/uD41lPAf5+Ku6U
-        9xzvM4cHz90jAVubAwSQquqGeErsicZ47lt8EGU=
-X-Google-Smtp-Source: APXvYqyJL1fEEu6UPUsREp40j1Az1tcCfaC6unDYBQ85wx96mroGmWSUZvNBus6sVg0hUAyobFDk1MlNzj2l+hRkvo8=
-X-Received: by 2002:aa7:8052:: with SMTP id y18mr43132308pfm.169.1560178644891;
- Mon, 10 Jun 2019 07:57:24 -0700 (PDT)
+  d=tycho.nsa.gov; i=@tycho.nsa.gov; q=dns/txt;
+  s=tycho.nsa.gov; t=1560180078; x=1591716078;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=6GVGeWFfPRtAzKu/YQShunam7JA1BmghsOayMT9r9Wk=;
+  b=c2Y8Jz1/blwlxgYRzH1lHXuspx5+FD0VZLyajd1SbEe5sR2Gz0vazwok
+   Zhdxt9o5WuxkI0czSqH7yjIgfXgedIJGdcHzSkZGpz+iJCbCihxAJWNNx
+   lkBw5WBVqVYfL02zSTk7Gm5YCy3YYUAHm8FN2fq+hFXLveK5QpdQ5Uzqy
+   nR7Krjusn7Se1ff9ODlKuTQOHY4/JPyiW6+M0rNcZlgnhyXXQU0QO8ctH
+   +ZJSxwSUcglmBPsgn68B+Utnln3Gd2/+E78r9ABAstgf2tliTSaHSluVD
+   2iYjwusBCv5rzd5co/L4cqHTU/8jZtJu08WiGxARCbJDQ/xG3XVwqWq7p
+   w==;
+X-IronPort-AV: E=Sophos;i="5.63,575,1557187200"; 
+   d="scan'208";a="28760646"
+IronPort-PHdr: =?us-ascii?q?9a23=3APFcDnhIWbgZrwUJU59mcpTZWNBhigK39O0sv0r?=
+ =?us-ascii?q?FitYgXLPn8rarrMEGX3/hxlliBBdydt6sdzbOL6euwBCQp2tWoiDg6aptCVh?=
+ =?us-ascii?q?sI2409vjcLJ4q7M3D9N+PgdCcgHc5PBxdP9nC/NlVJSo6lPwWB6nK94iQPFR?=
+ =?us-ascii?q?rhKAF7Ovr6GpLIj8Swyuu+54Dfbx9HiTagfL9+Ngi6oAXPusUZgoZvKrs6xw?=
+ =?us-ascii?q?fUrHdPZ+lY335jK0iJnxb76Mew/Zpj/DpVtvk86cNOUrj0crohQ7BAAzsoL2?=
+ =?us-ascii?q?465MvwtRneVgSP/WcTUn8XkhVTHQfI6gzxU4rrvSv7sup93zSaPdHzQLspVz?=
+ =?us-ascii?q?mu87tnRRn1gyocKTU37H/YhdBxjKJDoRKuuRp/w5LPYIqIMPZyZ77Rcc8GSW?=
+ =?us-ascii?q?ZEWMteWTZBAoehZIURCeQPM/tTo43kq1YAqRayAA+hD/7txDBVnH/7xbA03f?=
+ =?us-ascii?q?ovEQ/G3wIuEdwBv3vWo9rpO6kfSvy1wavSwDnfc/9b1zXw5Y7VeR4hu/GMWr?=
+ =?us-ascii?q?dwfNLMx0kzCQzFllWQppLjPziIy+oNtnKU7+5kVe2xi28stgZ8oiOyycc3kY?=
+ =?us-ascii?q?TJmoIUxUzE9SV+2oo1I8a4R1Rhbd6rF5tQqTiXOo1rSc0sRGFovTw1yrwAuZ?=
+ =?us-ascii?q?OjfygF1o4nxxjBZPyDaYSI5QjjVOmXLDxlh3xlYKqyiwu9/EWv0OHxVtS43E?=
+ =?us-ascii?q?xUoidKjNXArG0B2hrO4cadUPR95F2u2TOX2gDW7eFLPF47mLLAK54k3r4wjp?=
+ =?us-ascii?q?0TsVnfHiPumEX5kquWdkI89+i08evneLTmpoKHN4NulgH/Mrghmsy4AegiNA?=
+ =?us-ascii?q?gBQ3Ob9vim2L3m/E35RK1GjvwwkqbHrJDXPdkXq6G2DgNP0osv9gyzAymp3d?=
+ =?us-ascii?q?gGh3ULMUpJeBedgIjoP1HOLur4DfC6g1m0izdk2uvGM6b9ApTNMnfDkLDhca?=
+ =?us-ascii?q?x7605H0gU/199f55VKCr0ZOvL8RlfxtMDEDh8+KwG73ubnCNJz14wAXWKPBr?=
+ =?us-ascii?q?SZPbjIsVCW++0vI/ODZJMPtDnhLPgl4ubkjWUlll8FYampwZwXZWimHvRnOU?=
+ =?us-ascii?q?WZZmHhg9YfHmcMvwo+UvbmiFmDUT5VenazULgw5jYhCIKpF4vDW4OtiqSb3C?=
+ =?us-ascii?q?inBp1WenxGCleUHHfsdoWEXeoMaS2LLs98iTwLTqOsS5Eu1R6wrg/20blnIf?=
+ =?us-ascii?q?TO+i0eq53j0MJ55+rJlRE97TZ0FdiS03mRT2FomWMFXzs23KF5oUxgxVaPyL?=
+ =?us-ascii?q?N4jOJEGtxO/fNJUxs6NJ7Fw+x/DND9Rx/BftOXR1u9XNWmDi8+Tsgrz98NfU?=
+ =?us-ascii?q?l9AdOigQ7H3yawBL8VjbOLDoQu8q3Ax3jxO9p9y3He2aY9lVYmWdVANG29i6?=
+ =?us-ascii?q?5k6wfTB5TGk1iXl6aua6scxjfB+3uZwmaUoE5YVwtwW73fXX8DfkvWscj55k?=
+ =?us-ascii?q?TaQr+hE7QoLARByc2CKqZRbt3pjFNGROrsOdTQZGKxhmGwCguSybOQbYrqfG?=
+ =?us-ascii?q?Md0D/aCEgenAAZ5WyGOhQmBie9v2LeCyRjFUj1bEPy7+Z+rmi2TlM0zw6Uak?=
+ =?us-ascii?q?1uzbS09gQThfOCV/MZxqgEtzs5qzVoAFa92MrbC96BpwpnYaVdbsox4Flc1W?=
+ =?us-ascii?q?3EqQN9IIKvL6R5i14AfAR4oVnu2w90Copei8gqqm0lzA5oJaKfylNBeCuS3Y?=
+ =?us-ascii?q?rsNb3PNmny4BevZrbS2lHf1taW56gO5O0ipFX7vQGkDVQi83p53NlPyXec5Y?=
+ =?us-ascii?q?vFDBAUUZ3vVkY77R96p6vVYiMl/YPbyWVsMbWosj/Fw98pAOolyhC9f9ZQKa?=
+ =?us-ascii?q?+LDwvyE8oGCMitM+EqhVepYQwePOxI9647Idmmd/2Y166vJupgmyimjWtf6o?=
+ =?us-ascii?q?Bnzk2M7zZ8SvLP35sdwPGXwAuGVy39jFenvcD3gptJZS8dHmWh0yjoHo1Rab?=
+ =?us-ascii?q?NofYYNF2iuJ9e7xtJkh57iQ3RY7kKsB0sa2M+1fhqfd1j93QxW1UQKrn2rgC?=
+ =?us-ascii?q?i4wCJukzEvsKWf2DfDw/rtdBUZIG5HXmpigkn2IYiykd8aWFKkbw8zlBuq/U?=
+ =?us-ascii?q?z63bRUpLxjL2nPRkdFZzD2IHt/Uqu0rbeCe9RA6I4ssSlOVeS8ZleaSqTjrB?=
+ =?us-ascii?q?cAzyzjGG5el3gHcGSGs4v4k1Raj32QKHJo5C7VecZvyBPb//TGSPJR1yZATy?=
+ =?us-ascii?q?59332fGFmmOPG78NOVidHHs+ajRySmTJIVbCq445mHsX6A+WByARC518u2k9?=
+ =?us-ascii?q?njHBlyhTT3zPF2RC7Iq1D6eYCt2KOkZ7E0NnJ0DUPxvpIpUrp1lZE90dRJgi?=
+ =?us-ascii?q?kX?=
+X-IPAS-Result: =?us-ascii?q?A2CQBQBEdf5c/wHyM5BmHAEBAQQBAQcEAQGBZYFnKmpSM?=
+ =?us-ascii?q?iiEFZI+NUwBAQEBAQEGgTV+iFOPI4FnCQEBAQEBAQEBAS0HAQIBAYRAAoJ0I?=
+ =?us-ascii?q?zgTAQMBAQEEAQEBAQMBAWwcDII6KQGCZgEBAQECASMEET8CEAsOCgICJgICV?=
+ =?us-ascii?q?wYBDAgBAYJTDD8BgXYFDw+nSn4zgk+CeIMfgUaBDCiLXRd4gQeBESeBVmAHL?=
+ =?us-ascii?q?j6CYQQYgSwDAYMhglgEizZMiAaHLo0HagmCEYIbhCmMeAYbgiWLAIF5h32ND?=
+ =?us-ascii?q?wSBKYVqkTUhgVgrCAIYCCEPO4JtCIISF4hhhVsjAzGBBQEBjEqCUQEB?=
+Received: from tarius.tycho.ncsc.mil ([144.51.242.1])
+  by emsm-gh1-uea11.NCSC.MIL with ESMTP; 10 Jun 2019 15:21:04 +0000
+Received: from moss-pluto.infosec.tycho.ncsc.mil (moss-pluto [192.168.25.131])
+        by tarius.tycho.ncsc.mil (8.14.4/8.14.4) with ESMTP id x5AFL1op018603;
+        Mon, 10 Jun 2019 11:21:02 -0400
+Subject: Re: [RFC][PATCH 00/13] Mount, FS, Block and Keyrings notifications
+ [ver #4]
+To:     David Howells <dhowells@redhat.com>, viro@zeniv.linux.org.uk
+Cc:     linux-usb@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        raven@themaw.net, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-block@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>
+References: <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk>
+From:   Stephen Smalley <sds@tycho.nsa.gov>
+Message-ID: <be966d9c-e38d-7a30-8d80-fad5f25ab230@tycho.nsa.gov>
+Date:   Mon, 10 Jun 2019 11:21:01 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <CAB31r6U3Ha+JrbjGC+wKj-+gJfQ7dk+LSoL1n0tQBxVTPb2mRQ@mail.gmail.com>
- <20190603131258.GA10397@kroah.com> <CAB31r6VK12FXoPh6eNfE1v_Tgjv917Nh7699=TZpm4SkCVMm-w@mail.gmail.com>
- <20190604054045.GD1588@kroah.com> <CAB31r6WAkDPKyvY31Up=OAGXvhQgS23uW5YYQs601zUaaNaELg@mail.gmail.com>
- <20190605165857.GA23286@kroah.com> <CAB31r6X7g_ZqfDUYBh=eFZftA7dc2GppMeWtPxMJCg-X7BGxUA@mail.gmail.com>
- <20190610143247.GB23343@kroah.com>
-In-Reply-To: <20190610143247.GB23343@kroah.com>
-From:   Vladimir Yerilov <openmindead@gmail.com>
-Date:   Tue, 11 Jun 2019 00:57:13 +1000
-Message-ID: <CAB31r6V0zMYos+=Y=ALZYE8uDoGL2qjwn6AWaVMthdExA2pBPQ@mail.gmail.com>
-Subject: Re: kernel NULL pointer dereference, ucsi bug
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I guess you meant the previous one, Greg (oops msg was just my excuse,
-nothing more), so here it is:
+On 6/7/19 10:17 AM, David Howells wrote:
+> 
+> Hi Al,
+> 
+> Here's a set of patches to add a general variable-length notification queue
+> concept and to add sources of events for:
+> 
+>   (1) Mount topology events, such as mounting, unmounting, mount expiry,
+>       mount reconfiguration.
+> 
+>   (2) Superblock events, such as R/W<->R/O changes, quota overrun and I/O
+>       errors (not complete yet).
+> 
+>   (3) Key/keyring events, such as creating, linking and removal of keys.
+> 
+>   (4) General device events (single common queue) including:
+> 
+>       - Block layer events, such as device errors
+> 
+>       - USB subsystem events, such as device/bus attach/remove, device
+>         reset, device errors.
+> 
+> One of the reasons for this is so that we can remove the issue of processes
+> having to repeatedly and regularly scan /proc/mounts, which has proven to
+> be a system performance problem.  To further aid this, the fsinfo() syscall
+> on which this patch series depends, provides a way to access superblock and
+> mount information in binary form without the need to parse /proc/mounts.
+> 
+> 
+> LSM support is included, but controversial:
+> 
+>   (1) The creds of the process that did the fput() that reduced the refcount
+>       to zero are cached in the file struct.
+> 
+>   (2) __fput() overrides the current creds with the creds from (1) whilst
+>       doing the cleanup, thereby making sure that the creds seen by the
+>       destruction notification generated by mntput() appears to come from
+>       the last fputter.
+> 
+>   (3) security_post_notification() is called for each queue that we might
+>       want to post a notification into, thereby allowing the LSM to prevent
+>       covert communications.
+> 
+>   (?) Do I need to add security_set_watch(), say, to rule on whether a watch
+>       may be set in the first place?  I might need to add a variant per
+>       watch-type.
+> 
+>   (?) Do I really need to keep track of the process creds in which an
+>       implicit object destruction happened?  For example, imagine you create
+>       an fd with fsopen()/fsmount().  It is marked to dissolve the mount it
+>       refers to on close unless move_mount() clears that flag.  Now, imagine
+>       someone looking at that fd through procfs at the same time as you exit
+>       due to an error.  The LSM sees the destruction notification come from
+>       the looker if they happen to do their fput() after yours.
 
->>
-Finally I can name the first bad commit:
+I remain unconvinced that (1), (2), (3), and the final (?) above are a 
+good idea.
 
-git bisect good
-ad74b8649beaf1a22cf8641324e3321fa0269d16 is the first bad commit
-commit ad74b8649beaf1a22cf8641324e3321fa0269d16
-Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date:   Tue Apr 23 17:21:48 2019 +0300
+For SELinux, I would expect that one would implement a collection of per 
+watch-type WATCH permission checks on the target object (or to some 
+well-defined object label like the kernel SID if there is no object) 
+that allow receipt of all notifications of that watch-type for objects 
+related to the target object, where "related to" is defined per watch-type.
 
-   usb: typec: ucsi: Preliminary support for alternate modes
+I wouldn't expect SELinux to implement security_post_notification() at 
+all.  I can't see how one can construct a meaningful, stable policy for 
+it.  I'd argue that the triggering process is not posting the 
+notification; the kernel is posting the notification and the watcher has 
+been authorized to receive it.
 
-   With UCSI the alternate modes, just like everything else
-   related to USB Type-C connectors, are handled in firmware.
-   The operating system can see the status and is allowed to
-   request certain things, for example entering and exiting the
-   modes, but the support for alternate modes is very limited
-   in UCSI. The feature is also optional, which means that even
-   when the platform supports alternate modes, the operating
-   system may not be even made aware of them.
+> 
+> 
+> Design decisions:
+> 
+>   (1) A misc chardev is used to create and open a ring buffer:
+> 
+> 	fd = open("/dev/watch_queue", O_RDWR);
+> 
+>       which is then configured and mmap'd into userspace:
+> 
+> 	ioctl(fd, IOC_WATCH_QUEUE_SET_SIZE, BUF_SIZE);
+> 	ioctl(fd, IOC_WATCH_QUEUE_SET_FILTER, &filter);
+> 	buf = mmap(NULL, BUF_SIZE * page_size, PROT_READ | PROT_WRITE,
+> 		   MAP_SHARED, fd, 0);
+> 
+>       The fd cannot be read or written (though there is a facility to use
+>       write to inject records for debugging) and userspace just pulls data
+>       directly out of the buffer.
+> 
+>   (2) The ring index pointers are stored inside the ring and are thus
+>       accessible to userspace.  Userspace should only update the tail
+>       pointer and never the head pointer or risk breaking the buffer.  The
+>       kernel checks that the pointers appear valid before trying to use
+>       them.  A 'skip' record is maintained around the pointers.
+> 
+>   (3) poll() can be used to wait for data to appear in the buffer.
+> 
+>   (4) Records in the buffer are binary, typed and have a length so that they
+>       can be of varying size.
+> 
+>       This means that multiple heterogeneous sources can share a common
+>       buffer.  Tags may be specified when a watchpoint is created to help
+>       distinguish the sources.
+> 
+>   (5) The queue is reusable as there are 16 million types available, of
+>       which I've used 4, so there is scope for others to be used.
+> 
+>   (6) Records are filterable as types have up to 256 subtypes that can be
+>       individually filtered.  Other filtration is also available.
+> 
+>   (7) Each time the buffer is opened, a new buffer is created - this means
+>       that there's no interference between watchers.
+> 
+>   (8) When recording a notification, the kernel will not sleep, but will
+>       rather mark a queue as overrun if there's insufficient space, thereby
+>       avoiding userspace causing the kernel to hang.
+> 
+>   (9) The 'watchpoint' should be specific where possible, meaning that you
+>       specify the object that you want to watch.
+> 
+> (10) The buffer is created and then watchpoints are attached to it, using
+>       one of:
+> 
+> 	keyctl_watch_key(KEY_SPEC_SESSION_KEYRING, fd, 0x01);
+> 	mount_notify(AT_FDCWD, "/", 0, fd, 0x02);
+> 	sb_notify(AT_FDCWD, "/mnt", 0, fd, 0x03);
+> 
+>       where in all three cases, fd indicates the queue and the number after
+>       is a tag between 0 and 255.
+> 
+> (11) The watch must be removed if either the watch buffer is destroyed or
+>       the watched object is destroyed.
+> 
+> 
+> Things I want to avoid:
+> 
+>   (1) Introducing features that make the core VFS dependent on the network
+>       stack or networking namespaces (ie. usage of netlink).
+> 
+>   (2) Dumping all this stuff into dmesg and having a daemon that sits there
+>       parsing the output and distributing it as this then puts the
+>       responsibility for security into userspace and makes handling
+>       namespaces tricky.  Further, dmesg might not exist or might be
+>       inaccessible inside a container.
+> 
+>   (3) Letting users see events they shouldn't be able to see.
+> 
+> 
+> Further things that could be considered:
+> 
+>   (1) Adding a keyctl call to allow a watch on a keyring to be extended to
+>       "children" of that keyring, such that the watch is removed from the
+>       child if it is unlinked from the keyring.
+> 
+>   (2) Adding global superblock event queue.
+> 
+>   (3) Propagating watches to child superblock over automounts.
+> 
+> 
+> The patches can be found here also:
+> 
+> 	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=notifications
+> 
+> Changes:
+> 
+>   v4: Split the basic UAPI bits out into their own patch and then split the
+>       LSM hooks out into an intermediate patch.  Add LSM hooks for setting
+>       watches.
+> 
+>       Rename the *_notify() system calls to watch_*() for consistency.
+> 
+>   v3: I've added a USB notification source and reformulated the block
+>       notification source so that there's now a common watch list, for which
+>       the system call is now device_notify().
+> 
+>       I've assigned a pair of unused ioctl numbers in the 'W' series to the
+>       ioctls added by this series.
+> 
+>       I've also added a description of the kernel API to the documentation.
+> 
+>   v2: I've fixed various issues raised by Jann Horn and GregKH and moved to
+>       krefs for refcounting.  I've added some security features to try and
+>       give Casey Schaufler the LSM control he wants.
+> 
+> David
+> ---
+> David Howells (13):
+>        security: Override creds in __fput() with last fputter's creds
+>        uapi: General notification ring definitions
+>        security: Add hooks to rule on setting a watch
+>        security: Add a hook for the point of notification insertion
+>        General notification queue with user mmap()'able ring buffer
+>        keys: Add a notification facility
+>        vfs: Add a mount-notification facility
+>        vfs: Add superblock notifications
+>        fsinfo: Export superblock notification counter
+>        Add a general, global device notification watch list
+>        block: Add block layer notifications
+>        usb: Add USB subsystem notifications
+>        Add sample notification program
+> 
+> 
+>   Documentation/ioctl/ioctl-number.txt   |    1
+>   Documentation/security/keys/core.rst   |   58 ++
+>   Documentation/watch_queue.rst          |  492 ++++++++++++++++++
+>   arch/x86/entry/syscalls/syscall_32.tbl |    3
+>   arch/x86/entry/syscalls/syscall_64.tbl |    3
+>   block/Kconfig                          |    9
+>   block/blk-core.c                       |   29 +
+>   drivers/base/Kconfig                   |    9
+>   drivers/base/Makefile                  |    1
+>   drivers/base/watch.c                   |   89 +++
+>   drivers/misc/Kconfig                   |   13
+>   drivers/misc/Makefile                  |    1
+>   drivers/misc/watch_queue.c             |  889 ++++++++++++++++++++++++++++++++
+>   drivers/usb/core/Kconfig               |   10
+>   drivers/usb/core/devio.c               |   55 ++
+>   drivers/usb/core/hub.c                 |    3
+>   fs/Kconfig                             |   21 +
+>   fs/Makefile                            |    1
+>   fs/file_table.c                        |   12
+>   fs/fsinfo.c                            |   12
+>   fs/mount.h                             |   33 +
+>   fs/mount_notify.c                      |  187 +++++++
+>   fs/namespace.c                         |    9
+>   fs/super.c                             |  122 ++++
+>   include/linux/blkdev.h                 |   15 +
+>   include/linux/dcache.h                 |    1
+>   include/linux/device.h                 |    7
+>   include/linux/fs.h                     |   79 +++
+>   include/linux/key.h                    |    4
+>   include/linux/lsm_hooks.h              |   48 ++
+>   include/linux/security.h               |   35 +
+>   include/linux/syscalls.h               |    5
+>   include/linux/usb.h                    |   19 +
+>   include/linux/watch_queue.h            |   87 +++
+>   include/uapi/linux/fsinfo.h            |   10
+>   include/uapi/linux/keyctl.h            |    1
+>   include/uapi/linux/watch_queue.h       |  213 ++++++++
+>   kernel/sys_ni.c                        |    7
+>   samples/Kconfig                        |    6
+>   samples/Makefile                       |    1
+>   samples/vfs/test-fsinfo.c              |   13
+>   samples/watch_queue/Makefile           |    9
+>   samples/watch_queue/watch_test.c       |  308 +++++++++++
+>   security/keys/Kconfig                  |   10
+>   security/keys/compat.c                 |    2
+>   security/keys/gc.c                     |    5
+>   security/keys/internal.h               |   30 +
+>   security/keys/key.c                    |   37 +
+>   security/keys/keyctl.c                 |   95 +++
+>   security/keys/keyring.c                |   17 -
+>   security/keys/request_key.c            |    4
+>   security/security.c                    |   29 +
+>   52 files changed, 3121 insertions(+), 38 deletions(-)
+>   create mode 100644 Documentation/watch_queue.rst
+>   create mode 100644 drivers/base/watch.c
+>   create mode 100644 drivers/misc/watch_queue.c
+>   create mode 100644 fs/mount_notify.c
+>   create mode 100644 include/linux/watch_queue.h
+>   create mode 100644 include/uapi/linux/watch_queue.h
+>   create mode 100644 samples/watch_queue/Makefile
+>   create mode 100644 samples/watch_queue/watch_test.c
+> 
 
-   UCSI does not support direct VDM reading or writing.
-   Instead, alternate modes can be entered and exited using a
-   single custom command which takes also an optional SVID
-   specific configuration value as parameter. That means every
-   supported alternate mode has to be handled separately in
-   UCSI driver.
-
-   This commit does not include support for any specific
-   alternate mode. The discovered alternate modes are now
-   registered, but binding a driver to an alternate mode will
-   not be possible until support for that alternate mode is
-   added to the UCSI driver.
-
-   Tested-by: Ajay Gupta <ajayg@nvidia.com>
-   Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-   Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-:040000 040000 f19a610d131d6d3e6397934562dd6112e78b2415
-76df0e463eeacf57157adba0291fc9577c7d5145 M      dr
-ivers
-
-git bisect log
-git bisect start
-# bad: [132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a] Merge tag
-'usb-5.2-rc1' of git://git.kernel.org/pub/scm/
-linux/kernel/git/gregkh/usb
-git bisect bad 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
-# good: [86dc59e39031fb0d366d5b1f92db015b24bef70b] net: dsa: sja1105:
-Make 'sja1105et_regs' and 'sja1105pq
-rs_regs' static
-git bisect good 86dc59e39031fb0d366d5b1f92db015b24bef70b
-# good: [80f232121b69cc69a31ccb2b38c1665d770b0710] Merge
-git://git.kernel.org/pub/scm/linux/kernel/git/dav
-em/net-next
-git bisect good 80f232121b69cc69a31ccb2b38c1665d770b0710
-# good: [5d438e200215f61ca6a7aa69f3c4e035ac54d8ee] usb: typec: ucsi:
-ccg: add get_fw_info function
-git bisect good 5d438e200215f61ca6a7aa69f3c4e035ac54d8ee
-# bad: [6f6a407a591ebe3e4c6bd2329b29862b3980a3ca] Merge tag
-'usb-serial-5.2-rc1' of https://git.kernel.org
-/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
-git bisect bad 6f6a407a591ebe3e4c6bd2329b29862b3980a3ca
-# bad: [e823d948b7e53dc982c867ac4ce7877fc0418897] usb: musb: dsps: Use
-dev_get_drvdata()
-git bisect bad e823d948b7e53dc982c867ac4ce7877fc0418897
-# bad: [6fee3787ea7aebf25fecdce325ee9b2150c5727b] dt-bindings:
-usb-xhci: Add r8a774c0 support
-git bisect bad 6fee3787ea7aebf25fecdce325ee9b2150c5727b
-# bad: [cf28369c634fafb5f4e81750cba6988cdb4b4490] usb: typec: Add
-driver for NVIDIA Alt Modes
-git bisect bad cf28369c634fafb5f4e81750cba6988cdb4b4490
-# bad: [ad74b8649beaf1a22cf8641324e3321fa0269d16] usb: typec: ucsi:
-Preliminary support for alternate mode
-s
-git bisect bad ad74b8649beaf1a22cf8641324e3321fa0269d16
-# good: [5c9ae5a87573d38cfc4c740aafda2fa6ce06e401] usb: typec: ucsi:
-ccg: add firmware flashing support
-git bisect good 5c9ae5a87573d38cfc4c740aafda2fa6ce06e401
-# first bad commit: [ad74b8649beaf1a22cf8641324e3321fa0269d16] usb:
-typec: ucsi: Preliminary support for a
-lternate modes
-
-Best regards,
-Vladimir
-<<
-
-The above bisect log was my initial try to find a commit which
-introduced an issue. I came to
-ad74b8649beaf1a22cf8641324e3321fa0269d16 eventually.
-The latter bisect tries ended up at
-12456e509be25d24fe479394852428517922d02a, which is merge, as I
-understand, so the actual culprit is
-ad74b8649beaf1a22cf8641324e3321fa0269d16 anyways.
-PS: rc4 is still a no-go for me (just to re-iterate how severe the
-problem is): not only error logs I see but I cannot log in as well,
-system hangs up completely (haven't tried REISUB though).
-
-=D0=B2=D1=82, 11 =D0=B8=D1=8E=D0=BD. 2019 =D0=B3. =D0=B2 00:32, Greg KH <gr=
-egkh@linuxfoundation.org>:
->
-> On Fri, Jun 07, 2019 at 02:58:51AM +1000, Vladimir Yerilov wrote:
-> > Finally I can name the first bad commit:
-> >
-> > git bisect good
-> > ad74b8649beaf1a22cf8641324e3321fa0269d16 is the first bad commit
-> > commit ad74b8649beaf1a22cf8641324e3321fa0269d16
-> > Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Date:   Tue Apr 23 17:21:48 2019 +0300
-> >
-> >    usb: typec: ucsi: Preliminary support for alternate modes
-> >
-> >    With UCSI the alternate modes, just like everything else
-> >    related to USB Type-C connectors, are handled in firmware.
-> >    The operating system can see the status and is allowed to
-> >    request certain things, for example entering and exiting the
-> >    modes, but the support for alternate modes is very limited
-> >    in UCSI. The feature is also optional, which means that even
-> >    when the platform supports alternate modes, the operating
-> >    system may not be even made aware of them.
-> >
-> >    UCSI does not support direct VDM reading or writing.
-> >    Instead, alternate modes can be entered and exited using a
-> >    single custom command which takes also an optional SVID
-> >    specific configuration value as parameter. That means every
-> >    supported alternate mode has to be handled separately in
-> >    UCSI driver.
-> >
-> >    This commit does not include support for any specific
-> >    alternate mode. The discovered alternate modes are now
-> >    registered, but binding a driver to an alternate mode will
-> >    not be possible until support for that alternate mode is
-> >    added to the UCSI driver.
-> >
-> >    Tested-by: Ajay Gupta <ajayg@nvidia.com>
-> >    Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >
-> > :040000 040000 f19a610d131d6d3e6397934562dd6112e78b2415
-> > 76df0e463eeacf57157adba0291fc9577c7d5145 M      dr
-> > ivers
-> >
-> > git bisect log
-> > git bisect start
-> > # bad: [132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a] Merge tag
-> > 'usb-5.2-rc1' of git://git.kernel.org/pub/scm/
-> > linux/kernel/git/gregkh/usb
-> > git bisect bad 132d68d37d33f1d0b9c1f507c8b4d64c27ecec8a
-> > # good: [86dc59e39031fb0d366d5b1f92db015b24bef70b] net: dsa: sja1105:
-> > Make 'sja1105et_regs' and 'sja1105pq
-> > rs_regs' static
-> > git bisect good 86dc59e39031fb0d366d5b1f92db015b24bef70b
-> > # good: [80f232121b69cc69a31ccb2b38c1665d770b0710] Merge
-> > git://git.kernel.org/pub/scm/linux/kernel/git/dav
-> > em/net-next
-> > git bisect good 80f232121b69cc69a31ccb2b38c1665d770b0710
-> > # good: [5d438e200215f61ca6a7aa69f3c4e035ac54d8ee] usb: typec: ucsi:
-> > ccg: add get_fw_info function
-> > git bisect good 5d438e200215f61ca6a7aa69f3c4e035ac54d8ee
-> > # bad: [6f6a407a591ebe3e4c6bd2329b29862b3980a3ca] Merge tag
-> > 'usb-serial-5.2-rc1' of https://git.kernel.org
-> > /pub/scm/linux/kernel/git/johan/usb-serial into usb-next
-> > git bisect bad 6f6a407a591ebe3e4c6bd2329b29862b3980a3ca
-> > # bad: [e823d948b7e53dc982c867ac4ce7877fc0418897] usb: musb: dsps: Use
-> > dev_get_drvdata()
-> > git bisect bad e823d948b7e53dc982c867ac4ce7877fc0418897
-> > # bad: [6fee3787ea7aebf25fecdce325ee9b2150c5727b] dt-bindings:
-> > usb-xhci: Add r8a774c0 support
-> > git bisect bad 6fee3787ea7aebf25fecdce325ee9b2150c5727b
-> > # bad: [cf28369c634fafb5f4e81750cba6988cdb4b4490] usb: typec: Add
-> > driver for NVIDIA Alt Modes
-> > git bisect bad cf28369c634fafb5f4e81750cba6988cdb4b4490
-> > # bad: [ad74b8649beaf1a22cf8641324e3321fa0269d16] usb: typec: ucsi:
-> > Preliminary support for alternate mode
-> > s
-> > git bisect bad ad74b8649beaf1a22cf8641324e3321fa0269d16
-> > # good: [5c9ae5a87573d38cfc4c740aafda2fa6ce06e401] usb: typec: ucsi:
-> > ccg: add firmware flashing support
-> > git bisect good 5c9ae5a87573d38cfc4c740aafda2fa6ce06e401
-> > # first bad commit: [ad74b8649beaf1a22cf8641324e3321fa0269d16] usb:
-> > typec: ucsi: Preliminary support for a
-> > lternate modes
-> >
-> > Best regards,
-> > Vladimir
->
->
-> Heikki, any thoughts?
->
-> Vladimir, can you post the oops message again?  I don't see it here in
-> the email thread anymore.
->
-> thanks,
->
-> greg k-h
-
-
-
---=20
-----
-Best regards,
-Vladimir Yerilov
