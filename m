@@ -2,93 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D95163B671
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 15:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6143B6FE
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Jun 2019 16:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390387AbfFJNvF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 09:51:05 -0400
-Received: from mga05.intel.com ([192.55.52.43]:43786 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390306AbfFJNvF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Jun 2019 09:51:05 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jun 2019 06:51:05 -0700
-X-ExtLoop1: 1
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by orsmga007.jf.intel.com with ESMTP; 10 Jun 2019 06:51:03 -0700
-Subject: Re: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a raw
- interface on DbC
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
-Cc:     linux-usb@vger.kernel.org, mathias.nyman@intel.com,
-        rajaram.regupathy@intel.com, abhilash.k.v@intel.com,
-        m.balaji@intel.com
-References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
- <20190607063306.5612-5-prabhat.chand.pandey@intel.com>
- <20190607142132.GG14665@kroah.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <af51b855-4ee4-9bc2-6484-b8c4d897f503@linux.intel.com>
-Date:   Mon, 10 Jun 2019 16:53:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S2390753AbfFJOMg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 10:12:36 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:35072 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2390691AbfFJOMf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 10:12:35 -0400
+Received: (qmail 1728 invoked by uid 2102); 10 Jun 2019 10:12:34 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 10 Jun 2019 10:12:34 -0400
+Date:   Mon, 10 Jun 2019 10:12:34 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Christian Lamparter <chunkeey@gmail.com>
+cc:     linux-wireless@vger.kernel.org, <linux-usb@vger.kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>
+Subject: Re: [PATCH v2] carl9170: fix misuse of device driver API
+In-Reply-To: <20190608144947.744-3-chunkeey@gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1906101012150.1560-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20190607142132.GG14665@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7.6.2019 17.21, Greg KH wrote:
-> On Fri, Jun 07, 2019 at 12:03:05PM +0530, Prabhat Chand Pandey wrote:
->> From: Abhilash K V <abhilash.k.v@intel.com>
->>
->> This patch provides a raw device interface on xhci Debug capability.
+On Sat, 8 Jun 2019, Christian Lamparter wrote:
+
+> This patch follows Alan Stern's recent patch:
+> "p54: Fix race between disconnect and firmware loading"
 > 
-> What is a "raw device"?
+> that overhauled carl9170 buggy firmware loading and driver
+> unbinding procedures.
 > 
->> This abstracts dbc functionality to user space inorder to facilitate
->> various frameworks to utilize xhci debug capability.
+> Since the carl9170 code was adapted from p54 it uses the
+> same functions and is likely to have the same problem, but
+> it's just that the syzbot hasn't reproduce them (yet).
 > 
-> I do not understand this sentance at all.  Please provide a lot more
-> information.
+> a summary from the changes (copied from the p54 patch):
+>  * Call usb_driver_release_interface() rather than
+>    device_release_driver().
 > 
->> It helps to render the target as an usb debug class device on host and
->> establish an usb connection by providing two bulk endpoints.
+>  * Lock udev (the interface's parent) before unbinding the
+>    driver instead of locking udev->parent.
 > 
-> provide bulk endpoints where?  To send data where?  This is very
-> confusing and does not make any sense to me...
+>  * During the firmware loading process, take a reference
+>    to the USB interface instead of the USB device.
 > 
+>  * Don't take an unnecessary reference to the device during
+>    probe (and then don't drop it during disconnect).
 > 
->>
->> [don't dynamically allocate tiny space for name only -Mathias]
->> Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
->> Signed-off-by: Prabhat Chand Pandey <prabhat.chand.pandey@intel.com>
->> Signed-off-by: Abhilash K V <abhilash.k.v@intel.com>
->> Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> ---
-...
+> and
 > 
-> So you have a new char device, with a undocumented and unknown format of
-> data flowing across it to the device.  How in the world are we supposed
-> to use this thing?  Where is it documented?  What does it do?  How can
-> you use it?
+>  * Make sure to prevent use-after-free bugs by explicitly
+>    setting the driver context to NULL after signaling the
+>    completion.
 > 
-> I don't mean to be so harsh here, but come on people, this stuff needs a
-> lot more background documentation, information, and explaination as to
-> exactly why in the world we need any of this, and what it even does!
+> Cc: <stable@vger.kernel.org>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+> ---
+> v2: Alan Stern's comments
+>   - fixed possible use-after-free
+> ---
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+
+>  drivers/net/wireless/ath/carl9170/usb.c | 39 +++++++++++--------------
+>  1 file changed, 17 insertions(+), 22 deletions(-)
 > 
-> Also, you need to fix the code, it doesn't work as pointed out in a few
-> places :)
+> diff --git a/drivers/net/wireless/ath/carl9170/usb.c b/drivers/net/wireless/ath/carl9170/usb.c
+> index e7c3f3b8457d..99f1897a775d 100644
+> --- a/drivers/net/wireless/ath/carl9170/usb.c
+> +++ b/drivers/net/wireless/ath/carl9170/usb.c
+> @@ -128,6 +128,8 @@ static const struct usb_device_id carl9170_usb_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(usb, carl9170_usb_ids);
+>  
+> +static struct usb_driver carl9170_driver;
+> +
+>  static void carl9170_usb_submit_data_urb(struct ar9170 *ar)
+>  {
+>  	struct urb *urb;
+> @@ -966,32 +968,28 @@ static int carl9170_usb_init_device(struct ar9170 *ar)
+>  
+>  static void carl9170_usb_firmware_failed(struct ar9170 *ar)
+>  {
+> -	struct device *parent = ar->udev->dev.parent;
+> -	struct usb_device *udev;
+> -
+> -	/*
+> -	 * Store a copy of the usb_device pointer locally.
+> -	 * This is because device_release_driver initiates
+> -	 * carl9170_usb_disconnect, which in turn frees our
+> -	 * driver context (ar).
+> +	/* Store a copies of the usb_interface and usb_device pointer locally.
+> +	 * This is because release_driver initiates carl9170_usb_disconnect,
+> +	 * which in turn frees our driver context (ar).
+>  	 */
+> -	udev = ar->udev;
+> +	struct usb_interface *intf = ar->intf;
+> +	struct usb_device *udev = ar->udev;
+>  
+>  	complete(&ar->fw_load_wait);
+> +	/* at this point 'ar' could be already freed. Don't use it anymore */
+> +	ar = NULL;
+>  
+>  	/* unbind anything failed */
+> -	if (parent)
+> -		device_lock(parent);
+> -
+> -	device_release_driver(&udev->dev);
+> -	if (parent)
+> -		device_unlock(parent);
+> +	usb_lock_device(udev);
+> +	usb_driver_release_interface(&carl9170_driver, intf);
+> +	usb_unlock_device(udev);
+>  
+> -	usb_put_dev(udev);
+> +	usb_put_intf(intf);
+>  }
+>  
+>  static void carl9170_usb_firmware_finish(struct ar9170 *ar)
+>  {
+> +	struct usb_interface *intf = ar->intf;
+>  	int err;
+>  
+>  	err = carl9170_parse_firmware(ar);
+> @@ -1009,7 +1007,7 @@ static void carl9170_usb_firmware_finish(struct ar9170 *ar)
+>  		goto err_unrx;
+>  
+>  	complete(&ar->fw_load_wait);
+> -	usb_put_dev(ar->udev);
+> +	usb_put_intf(intf);
+>  	return;
+>  
+>  err_unrx:
+> @@ -1052,7 +1050,6 @@ static int carl9170_usb_probe(struct usb_interface *intf,
+>  		return PTR_ERR(ar);
+>  
+>  	udev = interface_to_usbdev(intf);
+> -	usb_get_dev(udev);
+>  	ar->udev = udev;
+>  	ar->intf = intf;
+>  	ar->features = id->driver_info;
+> @@ -1094,15 +1091,14 @@ static int carl9170_usb_probe(struct usb_interface *intf,
+>  	atomic_set(&ar->rx_anch_urbs, 0);
+>  	atomic_set(&ar->rx_pool_urbs, 0);
+>  
+> -	usb_get_dev(ar->udev);
+> +	usb_get_intf(intf);
+>  
+>  	carl9170_set_state(ar, CARL9170_STOPPED);
+>  
+>  	err = request_firmware_nowait(THIS_MODULE, 1, CARL9170FW_NAME,
+>  		&ar->udev->dev, GFP_KERNEL, ar, carl9170_usb_firmware_step2);
+>  	if (err) {
+> -		usb_put_dev(udev);
+> -		usb_put_dev(udev);
+> +		usb_put_intf(intf);
+>  		carl9170_free(ar);
+>  	}
+>  	return err;
+> @@ -1131,7 +1127,6 @@ static void carl9170_usb_disconnect(struct usb_interface *intf)
+>  
+>  	carl9170_release_firmware(ar);
+>  	carl9170_free(ar);
+> -	usb_put_dev(udev);
+>  }
+>  
+>  #ifdef CONFIG_PM
 > 
 
-Thanks for going through this.
-It's now clear this is far from ready.
-I need to re-evaluate my position on this, not just the code and the documentation,
-but the usefulness of it all.
-
--Mathias
