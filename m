@@ -2,125 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBF73BF85
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 00:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E73F73BF8D
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 00:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390139AbfFJWbx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 18:31:53 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33369 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388328AbfFJWbw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 18:31:52 -0400
-Received: by mail-pl1-f196.google.com with SMTP id g21so4227066plq.0
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 15:31:52 -0700 (PDT)
+        id S2390209AbfFJWhC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 18:37:02 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:44255 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390073AbfFJWhC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 18:37:02 -0400
+Received: by mail-pf1-f193.google.com with SMTP id t16so6098143pfe.11;
+        Mon, 10 Jun 2019 15:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=f4Ty7tCC1x1ecWBNDg2uTgmlEQrSVcBuucVk8ao86zY=;
-        b=u5QJCQ/0FQfpNVpn4zNjhdGMPj+QHNMeOGYKaFmsJ6EYBWgyDvzLB33AZAUKGWRY2r
-         NDf7vVVlp4RIUEWdZRKImYdXUqaoPPc+QUltJEnwGyBeI9STTkuRKo5O7Lm5dlRVQPeP
-         6Am6Em40tgp5TaNlif6g5/4NNrcTIeMJGt5Dx+1zEZFpbrOrtCBrDlcb/F08xHphEjvJ
-         Tr9bX+uuMKfgl4yTrncMIGIfysalQP7XOm6vKZuV+W74ZMQjOQ4l3YBO89AjgvW/OUNT
-         QWfnDiPs6SP4P/tqOrPPFTcG7I+lGgluMVT0f/oo6OZYljHQIYEWDESPH25chwNaivz6
-         DuRg==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=q8b2TKU6JOAJlj9dzQ91v3D4QaEKDBsjJpwMvzaCt2U=;
+        b=R+8DWMq4UluXl/AGTjShDwuS1OZP5R2Hp/hgySjl4KWPHXCG20d7K+w0TfhIqLVmx2
+         JJSg0tm7me4YzjGyU3OyABU3sF6+RFsNN2V2p2CR37ZlhHN7Z2kzpGsLUr/cc/FuQAS6
+         DZx+U3sMe4qiPTycpKOz8Olm/m3Kf+nlCNrLU3Vma9blPPxdcj6WI0ZZLoLSKscdHZGI
+         EdbNHqk3/l+IR0AdJ/YCTpu43yobSSG3VRqfvtXUrtXj+9EmXNh5sZNiqqTbO8xod0cc
+         9Fb8BwWvg5mUxrtk7rjOKgPWj7FT/yoYI8V5u6SvGemhQmJ2cIZnNEtkrpGBaa/zCo5P
+         Q7Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=f4Ty7tCC1x1ecWBNDg2uTgmlEQrSVcBuucVk8ao86zY=;
-        b=IrqnmJSa5PEP5RuHO4NgKD+NX5nyNdQ10JNLXq0fnkoPmxEhhAwLZW+kslA5tudke2
-         BUQGNilitd2gUGXVxpyiH/JXRY1NPL7kcr+G3bGxPfh/BI/RrNUEn6N5nGaWJUwhJG1P
-         LnT6omQZ04vIrv9x2wDhty+qz1vigPmxYfDBHGupg0Qs0XKsJJ06t25Ft55D71HTBCLH
-         MAHafnTQcVGDUXDlVBECUQxyxN2Oo4ctZvRvY3A2udJ3xkadhAesIxI5lFucAXpwwZZs
-         kXCuzQZg6pFE7rFROgBJIKsZeni7UoytkWcLsjTUxYByZJJeqWQyGfUbBuNEphgB8oat
-         yH6g==
-X-Gm-Message-State: APjAAAX1v7MMMsV3ktY033PgT+pRa7UtcMyu5fCmO3k5/HAXy28kXIg7
-        ECscK81KpaZbSYRnA/WLN3E=
-X-Google-Smtp-Source: APXvYqzkWWgsl53lwR7GZrnI3Ews7y0G/ROY27ZW9Y9QonBXZKwc7nUpC96PoFUjlUrbKg9/9WwpLw==
-X-Received: by 2002:a17:902:121:: with SMTP id 30mr69575856plb.314.1560205911563;
-        Mon, 10 Jun 2019 15:31:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=q8b2TKU6JOAJlj9dzQ91v3D4QaEKDBsjJpwMvzaCt2U=;
+        b=gxi2Jb2Y/QvORr9ZHK5hYT7BrGZb7XA1C6J1MDI/5X28FxH3LciLbfoNaI2tydaGs+
+         fJEYrM/mV/7XIBm3zjWAV8HHk6ttlySu5MtQslUHdgr+9B4VLnLSjVrFxM6hZ+cPsqdc
+         Wtu9cZSQ7xk9rnh7Y4e89yCM1SnSFjDQLMLakyHc4TfA02hYcoq8aMz370FdbtnqH0A1
+         xv4O51dBpI+mnR4YScx2+lc1hj3FKOOCkXED7c4Jxp6DySefFoeeM0bD7PpVpxuaYkBN
+         S/Cwk/Umgv51yHS8KLTSpQU2XbQZbrIa6wbS/d+0kNkIKFybarVpshIdClul2kOdakR7
+         ziGA==
+X-Gm-Message-State: APjAAAUGayG2nqxaZ91uzf9Pl0UWy6L0uzqbW1qb72YWQWZ5k941eXCv
+        rdRHglSrq2hW3v/kg3+AVgk=
+X-Google-Smtp-Source: APXvYqwd8sGYxy89XzGWUIQvVTvKCqg+kl6oGItr0yMFIo7CpSE1iaXNvQGc/dpHKLVKDrZXk8JXJA==
+X-Received: by 2002:aa7:8ecb:: with SMTP id b11mr37159852pfr.220.1560206220888;
+        Mon, 10 Jun 2019 15:37:00 -0700 (PDT)
 Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id a25sm12403343pfo.112.2019.06.10.15.31.50
+        by smtp.gmail.com with ESMTPSA id g17sm14465463pfb.56.2019.06.10.15.36.59
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 10 Jun 2019 15:31:50 -0700 (PDT)
-Date:   Mon, 10 Jun 2019 15:31:48 -0700
+        Mon, 10 Jun 2019 15:37:00 -0700 (PDT)
+Date:   Mon, 10 Jun 2019 15:36:58 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        libusb-devel@lists.sourceforge.net
-Subject: Re: Extending USB_CONNECTINFO ioctl
-Message-ID: <20190610223148.GA10147@dtor-ws>
-References: <20190604002410.GA36666@dtor-ws>
- <Pine.LNX.4.44L0.1906040952480.1731-100000@iolanthe.rowland.org>
- <20190604161451.GB226219@dtor-ws>
- <20190604164853.GA14605@kroah.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     bleung@chromium.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, libusb-devel@lists.sourceforge.net
+Subject: [PATCH] USB: add usbfs ioctl to retrieve the connection parameters
+Message-ID: <20190610223658.GA162167@dtor-ws>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190604164853.GA14605@kroah.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 04, 2019 at 06:48:53PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jun 04, 2019 at 09:14:51AM -0700, Dmitry Torokhov wrote:
-> > Hi Alan,
-> > 
-> > On Tue, Jun 04, 2019 at 10:17:25AM -0400, Alan Stern wrote:
-> > > On Mon, 3 Jun 2019, Dmitry Torokhov wrote:
-> > > 
-> > > > Hi Alan, Greg,
-> > > > 
-> > > > When running software in a jailed environment where sysfs or udev is not
-> > > > readily available and one can only have an FD to usbdevfs device passed
-> > > > into the jail, there is a desire to allow libusb working. Alan recently
-> > > > added USBDEVFS_GET_SPEED, but we are still missing bus number and list
-> > > > of port numbers on the way to the root to be able to better identify the
-> > > > device in question.
-> > > > 
-> > > > What do you think about adding a new ioctl:
-> > > > 
-> > > > struct usbdevfs_connectinfo_ex {
-> > > > 	__u32 size;		/* size of the structure from the kernel POV */
-> > > 
-> > > This should be an input/output parameter.  That is, the original value
-> > > says how big the userspace structure is, and the value stored by the
-> > > kernel says how much space was actually filled in.  Or alternatively, 
-> > > have two size fields (one for input and one for output).
-> > 
-> > The "incoming" size is encoded in the ioctl number (the 'len' argument
-> > in USBDEVFS_CONNINFO_EX()), there is no reason to add it separately (or
-> > make read/write).
-> > 
-> > > 
-> > > > 	__u32 busnum;
-> > > > 	__u32 devnum;
-> > > > 	__u32 speed;		/* USB_SPEED_* form ch9.h */
-> > > > 	u8 num_ports;		/* Number of entries in port_numbers array */
-> > > > 	u8 port_numbers[31];	/* Current limit in USB3.0 spec is 7 */
-> > > > };
-> > > 
-> > > Yeah, 31 is overkill.  Even the USB-2.0 spec limits the topology to 7
-> > > tiers (including the root hub), meaning that only 6 port numbers are
-> > > needed.
-> > 
-> > If you insist I can bring it down to 7, but this structure is short
-> > lived, on stack, and there should not be many of them in the kernel, so
-> > if we can avoid extending a particular field in the future I think it is
-> > worth it.
-> 
-> I don't know what USB 4 has in it (and if I did, I couldn't mention it),
-> but someone who can see those specs might want to take a look at them to
-> just say "yeah, 31 looks like a good number" or "nope, make it a bit
-> bigger please!"
+Recently usfbs gained availability to retrieve device speed, but there
+is sill no way to determine the bus number or list of ports the device
+is connected to when using usbfs. While this information can be obtained
+from sysfs, not all environments allow sysfs access. In a jailed
+environment a program might be simply given an opened file descriptor to
+usbfs device, and it is really important that all data can be gathered
+from said file descriptor.
 
-OK, I believe 7 tiers should be enough, so I'll cut it down to 7 from
-31.
+This patch introduces a new ioctl, USBDEVFS_CONNINFO_EX, which return
+extended connection information for the device, including the bus
+number, address, port list and speed. The API allows kernel to extend
+amount of data returned by the ioctl and userspace has an option of
+adjusting the amount of data it is willing to consume. A new capability,
+USBDEVFS_CAP_CONNINFO_EX, is introduced to help userspace in determining
+whether the kernel supports this new ioctl.
 
-Thanks.
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/usb/core/devio.c          | 42 ++++++++++++++++++++++++++++++-
+ include/uapi/linux/usbdevice_fs.h | 26 +++++++++++++++++++
+ 2 files changed, 67 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index fa783531ee88..fb6a074e4f1d 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -1308,6 +1308,39 @@ static int proc_connectinfo(struct usb_dev_state *ps, void __user *arg)
+ 	return 0;
+ }
+ 
++static int proc_conninfo_ex(struct usb_dev_state *ps,
++			    void __user *arg, size_t size)
++{
++	struct usbdevfs_conninfo_ex ci;
++	struct usb_device *udev = ps->dev;
++
++	if (size < sizeof(ci.size))
++		return -EINVAL;
++
++	memset(&ci, 0, sizeof(ci));
++	ci.size = sizeof(ci);
++	ci.busnum = udev->bus->busnum;
++	ci.devnum = udev->devnum;
++	ci.speed = udev->speed;
++
++	while (udev && udev->portnum != 0) {
++		if (++ci.num_ports <= ARRAY_SIZE(ci.ports))
++			ci.ports[ARRAY_SIZE(ci.ports) - ci.num_ports] =
++					udev->portnum;
++		udev = udev->parent;
++	}
++
++	if (ci.num_ports < ARRAY_SIZE(ci.ports))
++		memmove(&ci.ports[0],
++			&ci.ports[ARRAY_SIZE(ci.ports) - ci.num_ports],
++			ci.num_ports);
++
++	if (copy_to_user(arg, &ci, min(sizeof(ci), size)))
++		return -EFAULT;
++
++	return 0;
++}
++
+ static int proc_resetdevice(struct usb_dev_state *ps)
+ {
+ 	struct usb_host_config *actconfig = ps->dev->actconfig;
+@@ -2252,7 +2285,7 @@ static int proc_get_capabilities(struct usb_dev_state *ps, void __user *arg)
+ 
+ 	caps = USBDEVFS_CAP_ZERO_PACKET | USBDEVFS_CAP_NO_PACKET_SIZE_LIM |
+ 			USBDEVFS_CAP_REAP_AFTER_DISCONNECT | USBDEVFS_CAP_MMAP |
+-			USBDEVFS_CAP_DROP_PRIVILEGES;
++			USBDEVFS_CAP_DROP_PRIVILEGES | USBDEVFS_CAP_CONNINFO_EX;
+ 	if (!ps->dev->bus->no_stop_on_short)
+ 		caps |= USBDEVFS_CAP_BULK_CONTINUATION;
+ 	if (ps->dev->bus->sg_tablesize)
+@@ -2551,6 +2584,13 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+ 		break;
+ 	}
+ 
++	/* Handle variable-length commands */
++	switch (cmd & ~IOCSIZE_MASK) {
++	case USBDEVFS_CONNINFO_EX(0):
++		ret = proc_conninfo_ex(ps, p, _IOC_SIZE(cmd));
++		break;
++	}
++
+  done:
+ 	usb_unlock_device(dev);
+ 	if (ret >= 0)
+diff --git a/include/uapi/linux/usbdevice_fs.h b/include/uapi/linux/usbdevice_fs.h
+index 964e87217be4..393a2de914e8 100644
+--- a/include/uapi/linux/usbdevice_fs.h
++++ b/include/uapi/linux/usbdevice_fs.h
+@@ -76,6 +76,26 @@ struct usbdevfs_connectinfo {
+ 	unsigned char slow;
+ };
+ 
++struct usbdevfs_conninfo_ex {
++	__u32 size;		/* Size of the structure from the kernel's */
++				/* point of view. Can be used by userspace */
++				/* to determine how much data can be       */
++				/* used/trusted.                           */
++	__u32 busnum;           /* USB bus number, as enumerated by the    */
++				/* kernel, the device is connected to.     */
++	__u32 devnum;           /* Device address on the bus.              */
++	__u32 speed;		/* USB_SPEED_* constants from ch9.h        */
++	u8 num_ports;		/* Number of ports the device is connected */
++				/* to on the way to the root hub. It may   */
++				/* be bigger than size of 'ports' array so */
++				/* userspace can detect overflows.         */
++	u8 ports[7];		/* List of ports on the way from the root  */
++				/* hub to the device. Current limit in     */
++				/* USB specification is 7 tiers (root hub, */
++				/* 5 intermediate hubs, device), which     */
++				/* gives at most 6 port entries.           */
++};
++
+ #define USBDEVFS_URB_SHORT_NOT_OK	0x01
+ #define USBDEVFS_URB_ISO_ASAP		0x02
+ #define USBDEVFS_URB_BULK_CONTINUATION	0x04
+@@ -137,6 +157,7 @@ struct usbdevfs_hub_portinfo {
+ #define USBDEVFS_CAP_REAP_AFTER_DISCONNECT	0x10
+ #define USBDEVFS_CAP_MMAP			0x20
+ #define USBDEVFS_CAP_DROP_PRIVILEGES		0x40
++#define USBDEVFS_CAP_CONNINFO_EX		0x80
+ 
+ /* USBDEVFS_DISCONNECT_CLAIM flags & struct */
+ 
+@@ -197,5 +218,10 @@ struct usbdevfs_streams {
+ #define USBDEVFS_FREE_STREAMS      _IOR('U', 29, struct usbdevfs_streams)
+ #define USBDEVFS_DROP_PRIVILEGES   _IOW('U', 30, __u32)
+ #define USBDEVFS_GET_SPEED         _IO('U', 31)
++/*
++ * Returns struct usbdevfs_conninfo_ex; length is variable to allow
++ * extending size of the data returned.
++ */
++#define USBDEVFS_CONNINFO_EX(len)  _IOC(_IOC_READ, 'U', 32, len)
+ 
+ #endif /* _UAPI_LINUX_USBDEVICE_FS_H */
+-- 
+2.22.0.rc2.383.gf4fbbf30c2-goog
+
 
 -- 
 Dmitry
