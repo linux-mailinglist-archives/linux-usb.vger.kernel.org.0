@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 430FD3C392
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 07:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362003C3B7
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 08:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403854AbfFKFsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 01:48:02 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:62225 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2390485AbfFKFsB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 01:48:01 -0400
-X-UUID: 8dd45107285d4157a64b8222a8fbe719-20190611
-X-UUID: 8dd45107285d4157a64b8222a8fbe719-20190611
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        id S2391194AbfFKF7l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 01:59:41 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:63325 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2390485AbfFKF7l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 01:59:41 -0400
+X-UUID: 62c779248366490688a9b32f61fffd8e-20190611
+X-UUID: 62c779248366490688a9b32f61fffd8e-20190611
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
         (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1836222041; Tue, 11 Jun 2019 13:47:49 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 11 Jun
- 2019 13:47:48 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+        with ESMTP id 1177027926; Tue, 11 Jun 2019 13:59:33 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 11 Jun
+ 2019 13:59:32 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
  (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 11 Jun 2019 13:47:46 +0800
-Message-ID: <1560232066.8487.119.camel@mhfsdcap03>
+ Transport; Tue, 11 Jun 2019 13:59:31 +0800
+Message-ID: <1560232771.8487.120.camel@mhfsdcap03>
 Subject: Re: [PATCH v6 09/10] usb: roles: add USB Type-B GPIO connector
  driver
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
 CC:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -37,23 +37,19 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         Li Jun <jun.li@nxp.com>,
         "Badhri Jagan Sridharan" <badhri@google.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        Min Guo <min.guo@mediatek.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         Biju Das <biju.das@bp.renesas.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        "Yu Chen" <chenyu56@huawei.com>
-Date:   Tue, 11 Jun 2019 13:47:46 +0800
-In-Reply-To: <CAHp75VeWu+8H2=PRNud_MAoD9zozb2Ugh9b=9TCtYmGLVyCTpQ@mail.gmail.com>
+        Yu Chen <chenyu56@huawei.com>
+Date:   Tue, 11 Jun 2019 13:59:31 +0800
+In-Reply-To: <9640aa29-bc96-ded1-e757-e885bda354a8@nvidia.com>
 References: <1559115828-19146-1-git-send-email-chunfeng.yun@mediatek.com>
          <1559115828-19146-10-git-send-email-chunfeng.yun@mediatek.com>
-         <CAHp75VcbZwd0e6r38C2x7HLEHLr4oR7TjwdDXnDxRPRs3anwgA@mail.gmail.com>
-         <1559789630.8487.111.camel@mhfsdcap03>
-         <CAHp75VeWu+8H2=PRNud_MAoD9zozb2Ugh9b=9TCtYmGLVyCTpQ@mail.gmail.com>
+         <9640aa29-bc96-ded1-e757-e885bda354a8@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.2.3-0ubuntu6 
 Content-Transfer-Encoding: 7bit
@@ -64,31 +60,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2019-06-06 at 09:31 +0300, Andy Shevchenko wrote:
-> On Thu, Jun 6, 2019 at 5:53 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> >
-> > On Wed, 2019-06-05 at 11:45 +0300, Andy Shevchenko wrote:
-> > > On Wed, May 29, 2019 at 10:44 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> > > >
-> > > > Due to the requirement of usb-connector.txt binding, the old way
-> > > > using extcon to support USB Dual-Role switch is now deprecated
-> > > > when use Type-B connector.
-> > > > This patch introduces a driver of Type-B connector which typically
-> > > > uses an input GPIO to detect USB ID pin, and try to replace the
-> > > > function provided by extcon-usb-gpio driver
-> > >
-> > > > +static SIMPLE_DEV_PM_OPS(usb_conn_pm_ops,
-> > > > +                        usb_conn_suspend, usb_conn_resume);
-> > > > +
-> > > > +#define DEV_PMS_OPS (IS_ENABLED(CONFIG_PM_SLEEP) ? &usb_conn_pm_ops : NULL)
-> > >
-> > > Why this macro is needed?
-> > Want to set .pm as NULL when CONFIG_PM_SLEEP is not enabled.
+On Mon, 2019-06-10 at 16:03 +0530, Nagarjuna Kristam wrote:
+> Tested-by: Nagarjuna Kristam <nkristam@nvidia.com>
 > 
-> Doesn't SIMPLE_DEV_PM_OPS do this for you?
-Yes, you are right, it provides an empty dev_pm_ops struct, I'll remove
-DEV_PMS_OPS, thanks a lot
+Thanks
 
-> 
+> On 29-05-2019 13:13, Chunfeng Yun wrote:
+> > Due to the requirement of usb-connector.txt binding, the old way
+> > using extcon to support USB Dual-Role switch is now deprecated
+> > when use Type-B connector.
+> > This patch introduces a driver of Type-B connector which typically
+> > uses an input GPIO to detect USB ID pin, and try to replace the
+> > function provided by extcon-usb-gpio driver
+> > 
+> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > ---
+> > v6 changes:
+> >   1. get usb-role-swtich by usb_role_switch_get()
+> > 
+> > v5 changes:
+> >   1. put usb_role_switch when error happens suggested by Biju
+> >   2. don't treat bype-B connector as a virtual device suggested by Rob
+> > 
+> > v4 changes:
+> >   1. remove linux/gpio.h suggested by Linus
+> >   2. put node when error happens
+> > 
+> > v3 changes:
+> >   1. treat bype-B connector as a virtual device;
+> >   2. change file name again
+> > 
+> > v2 changes:
+> >   1. file name is changed
+> >   2. use new compatible
+> > ---
+> >  drivers/usb/roles/Kconfig           |  11 ++
+> >  drivers/usb/roles/Makefile          |   1 +
+> >  drivers/usb/roles/typeb-conn-gpio.c | 286 ++++++++++++++++++++++++++++
+> >  3 files changed, 298 insertions(+)
+> >  create mode 100644 drivers/usb/roles/typeb-conn-gpio.c
+> > 
+> > diff --git a/drivers/usb/roles/Kconfig b/drivers/usb/roles/Kconfig
+> > index f8b31aa67526..d1156e18a81a 100644
+> > --- a/drivers/usb/roles/Kconfig
+> > +++ b/drivers/usb/roles/Kconfig
+> > 
 
 
