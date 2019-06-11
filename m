@@ -2,158 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7ABB3C476
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 08:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125B73C479
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 08:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391260AbfFKGsU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 02:48:20 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38424 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391233AbfFKGsU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 02:48:20 -0400
-Received: by mail-wr1-f67.google.com with SMTP id d18so11594961wrs.5
-        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 23:48:18 -0700 (PDT)
+        id S2404078AbfFKGtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 02:49:17 -0400
+Received: from mail-eopbgr1400091.outbound.protection.outlook.com ([40.107.140.91]:20544
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2391233AbfFKGtR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Jun 2019 02:49:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=uCSMMpjVp+n8RVynvtFQmd5yno8u/xvHbuDxjIjlf3Q=;
-        b=yCwu1b6oseIGNCa4ENrVZ2NJqG8vdmCdk4372HQsZxThmi+0gwT6777tOlLZIyJwVX
-         oLpGuMQsgO6WNKM4F3+3w9nudoOq5/d32qxypEX0uVJCAQNKgwuypnqnh+CrjYkx/pWU
-         4KCZUM50M1XOzM0yGqyvT4utDtdRvpT0u6nsvwDfnO6ALpFP1+Cxu0w+g5J+dPGSHbnq
-         D0ubYm2XJF9xfiwylohvY/uV28qQ4KZW03bor1wOdh0dXsSOgM2lcKHy3epj743Ms3Wq
-         69E5Mc/t2wF+4muHWkbDHJpAETfGksyW0k7NS/eudVSPrfSkShQdcV7//q2aMX8jbmGd
-         p8FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=uCSMMpjVp+n8RVynvtFQmd5yno8u/xvHbuDxjIjlf3Q=;
-        b=jo6fK2Ts7+fmpS1w89E+I1Au8KbfAOTdhKRHo0ZoRdYH4volYs33LerP6BaUsbO2DR
-         +m+qjuuqpiq5bZ1jd0hqvjEdxGCEZcj4OGSeAqN8GI1j8jTr19AlAS+GmCq1S7e4qtWC
-         FCaHeU8F2hjsDKqZ65MklbCONlFavDO8DLBH2NR/C5ghMiYkfN2EHGtGWxuiQx3n+HgD
-         lMqIVsS0zTlD+Ui8F0R6wtAP3lRKvF+xPrHgUV2wADgYtI4woppeAKOCDEqL2r6Tg70c
-         nJ0pXo1ov80Fnzh0E0PtNY/3IXMjDK/mFX72xCDjvEbKlwD2zpX4R4eBsaWh7qGxudmV
-         lAjA==
-X-Gm-Message-State: APjAAAXbJl7s4P8FgQnalc0YzcSgcpb0Llmm2oHfzA6NrZ66Eky4cB2H
-        iIbTkUlFacXpCDSDgL99ZoHVc2ZjWZM=
-X-Google-Smtp-Source: APXvYqz8STQGkz2dY+8TrA1J8S71d9VHxL2dXbV7YlNvShDrjEPjJrQKmAF7wP1XT3zGRPFX+71bZg==
-X-Received: by 2002:adf:f508:: with SMTP id q8mr20503396wro.299.1560235698182;
-        Mon, 10 Jun 2019 23:48:18 -0700 (PDT)
-Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
-        by smtp.gmail.com with ESMTPSA id 74sm1554648wma.7.2019.06.10.23.48.17
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 10 Jun 2019 23:48:17 -0700 (PDT)
-Message-ID: <a0039fb3590832e4fbb0b036281411a846296fcc.camel@unipv.it>
-Subject: Re: Slow I/O on USB media
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Date:   Tue, 11 Jun 2019 08:48:16 +0200
-In-Reply-To: <20190610143821.GB30602@kroah.com>
-References: <20190604054300.GE1588@kroah.com>
-         <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
-         <20190605145525.GA28819@kroah.com>
-         <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
-         <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it>
-         <20190605173902.GE27700@kroah.com>
-         <b159e1518b670d4b0126c7671c30c8c3cb8fffbc.camel@unipv.it>
-         <20190606144757.GA12356@kroah.com>
-         <CAOsYWL03ALs6xJxcbDeppwtY9Q3v-vW6ptjK18CzL0RtJfboBw@mail.gmail.com>
-         <CAOsYWL2z=Rddvu62DP+QdQOf=4FwygmLrOPS0rJ8Uc+OzLKQvA@mail.gmail.com>
-         <20190610143821.GB30602@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3ZTXEMME8NnhGCouO7tCVCDEdyMs+irQ+11VbPTgvVo=;
+ b=m5e5K5VFR0JNVHhH71YFwbP6Ur44rvXIj/MOd3rPg9DMyP+AprsKlc55x7Ue6ZmUmCW3kqdW8OP4P7FD7GE1fMzom4lg3rwGa/CS4Sr4ViagCJr5BLqb8iLUWdRgWLjxthUexiqoah8IfE/zhgSBHEy53ksYWu5opvQMQ1CuKjg=
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
+ OSAPR01MB3666.jpnprd01.prod.outlook.com (20.178.128.11) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.12; Tue, 11 Jun 2019 06:49:12 +0000
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85%7]) with mapi id 15.20.1965.017; Tue, 11 Jun 2019
+ 06:49:12 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Christoph Hellwig <hch@lst.de>
+CC:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: How to resolve an issue in swiotlb environment?
+Thread-Topic: How to resolve an issue in swiotlb environment?
+Thread-Index: AdUZ1Qlk800+Qz0uSuO63mIBeXkktQDUe+5AAJUL5SAAA1kYAAANEESAABf845A=
+Date:   Tue, 11 Jun 2019 06:49:12 +0000
+Message-ID: <OSAPR01MB30899F6EE0ABD554B4A21E7FD8ED0@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+References: <20190610123222.GA20985@lst.de>
+ <Pine.LNX.4.44L0.1906101423200.1560-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1906101423200.1560-100000@iolanthe.rowland.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 653fa7d6-1148-484d-afa6-08d6ee38e9e9
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB3666;
+x-ms-traffictypediagnostic: OSAPR01MB3666:
+x-microsoft-antispam-prvs: <OSAPR01MB3666C9700F08B92CD08E1272D8ED0@OSAPR01MB3666.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 006546F32A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(346002)(376002)(396003)(39860400002)(136003)(189003)(199004)(486006)(73956011)(66066001)(66946007)(33656002)(3846002)(110136005)(6246003)(25786009)(53936002)(4326008)(66446008)(76116006)(68736007)(86362001)(6116002)(305945005)(64756008)(316002)(54906003)(66556008)(2171002)(66476007)(14444005)(256004)(7696005)(8936002)(5660300002)(14454004)(7736002)(229853002)(11346002)(76176011)(6436002)(99286004)(2906002)(55016002)(52536014)(9686003)(81166006)(71200400001)(102836004)(476003)(71190400001)(478600001)(8676002)(26005)(6506007)(446003)(186003)(81156014)(74316002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB3666;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: cLMle0Pje1Fic3R//UYSRBgca4Dc2cCwPkLi7lZHaR+iX1jz3oJXvSifQm/XlydGsup7aBWjLB8a65ylkYiR4KxQ97KaI/wfzPZBJ8PejbKLnjZomMEiCPOuS48vkU6rof4EHVL2eZ9H899G8o8JladlMlBjEqtpb0a5rx7ezcnvJ6q39KexTmDuHZYOIgm8b2x2pVCBrIW6fOeAZ4MZU/FsDXWRGSM/elOn5r73g48PycCQZ/jIsvATZ8vGJZDIMTImiGiW4BVZ39GLsd3QoKOWVS4whuuLcPD2+WGbQoJXP1zu++/GR9/XYfXN4dWGdaC4XVT+rw/5h48HX/vXg9kLx2ZBsdnai4RUAx/w/XjrnA/CiJ8GCDgwPV+l6z8402sr+BqKF50Q/Tx7COVjIXeFO2OHSrFq8qAg77A9yhA=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 653fa7d6-1148-484d-afa6-08d6ee38e9e9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2019 06:49:12.8499
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3666
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il giorno lun, 10/06/2019 alle 16.38 +0200, Greg KH ha scritto:
-> On Sat, Jun 08, 2019 at 11:29:16AM +0200, Andrea Vai wrote:
-> > Il giorno sab 8 giu 2019 alle ore 09:43 Andrea Vai
-> > <andrea.vai@unipv.it> ha scritto:
-> > >
-> > >[...]
-> > >
-> > > Hi,
-> > >   there is also something else I don't understand.
-> > > Every time I build a kernel, then after booting it "uname -a"
-> shows
-> > > something like
-> > >
-> > > Linux [...] 4.19.0-rc5+ #12 SMP Sat Jun 8 00:26:42 CEST 2019
-> x86_64
-> > > x86_64 x86_64 GNU/Linux
-> > >
-> > > where the number after "#" increments by 1 from the previous
-> build.
-> > >
-> > > Now I have the same number (#12) after a new build, is it
-> normal?
-> > > Furthermore, "ls -lrt /boot/v*" shows the last lines to be
-> > >
-> > > -rw-r--r--. 1 root root 8648656  8 giu 00.35 /boot/vmlinuz-
-> 4.19.0-rc5+.old
-> > > -rw-r--r--. 1 root root 8648656  8 giu 09.08 /boot/vmlinuz-
-> 4.19.0-rc5+
-> > >
-> > > and "diff /boot/vmlinuz-4.19.0-rc5+.old /boot/vmlinuz-4.19.0-
-> rc5+"
-> > > shows they are identical. Why? I expected that each bisect would
-> lead
-> > > to a different kernel.
-> > > Assuming that the opposite can happen, does it mean that when I
-> say
-> > > i.e. "git bisect bad", then build a new kernel and see that is
-> > > identical to the previous one I can run "git bisect bad" without
-> > > booting into the new one and even making the test?
-> > >
-> > > Another thing I don't understand is that I told 4.20.0 to be
-> good, so
-> > > I would expect that I don't need to test any older version, but
-> as far
-> > > as I know 4.19.0-rc5+ is older than 4.20.0, so why is it
-> involved in
-> > > the bisection?
-> > >
-> > > I had to "git bisect skip" one time (the kernel did not boot),
-> but as
-> > > far as I know I don't think this could be related to my doubts.
-> > > [...]
-> > 
-> > Update:
-> >   I have concluded the bisection, found that
-> > "9cb5f4873b993497d462b9406f9a1d8a148e461b is the first bad
-> commit",
-> > reverted it, and the test still fails (btw, the final kernel file,
-> > /boot/vmlinuz-4.19.0-rc5+, does not differ from the previous one).
-> > 
-> > So, all my doubts above are still there (and growing). What I am
-> doing wrong?
-> 
-> Are you _SURE_ that a 4.20.0 release actually worked properly for
-> you?
-> Did you build one and do your tests?  Or are you just relying on
-> your
-> Fedora build still?
+Hi Christoph, Alan,
 
-Yes, I am really sure of that, and the definitive proof is that since
-I stopped bisecting I made the 4.20.0 the default boot kernel, and all
-my backups are done "quickly" (12min to create a 12GB archive).
-Furthermore, "uname -a" shows
+> From: Alan Stern, Sent: Tuesday, June 11, 2019 3:46 AM
+>=20
+> On Mon, 10 Jun 2019, Christoph Hellwig wrote:
+>=20
+> > Hi Yoshihiro,
+> >
+> > sorry for not taking care of this earlier, today is a public holiday
+> > here and thus I'm not working much over the long weekend.
 
-Linux 4.20.0 #1 SMP Thu Jun 6 22:32:29 CEST 2019 x86_64 x86_64 x86_64
-GNU/Linux
+To Christoph:
 
-To have one more evidence, I started the test while writing down this
-sentence, and it has just finished in one minute and a half (1 GB file
-copy).
+No worries.
 
-I will go on following your other suggestions; by the time, thank you
-for pointing this out,
+> > On Mon, Jun 10, 2019 at 11:13:07AM +0000, Yoshihiro Shimoda wrote:
+> > > I have another way to avoid the issue. But it doesn't seem that a goo=
+d way though...
+> > > According to the commit that adding blk_queue_virt_boundary() [3],
+> > > this is needed for vhci_hcd as a workaround so that if we avoid to ca=
+ll it
+> > > on xhci-hcd driver, the issue disappeared. What do you think?
+> > > JFYI, I pasted a tentative patch in the end of email [4].
+> >
+> > Oh, I hadn't even look at why USB uses blk_queue_virt_boundary, and it
+> > seems like the usage is wrong, as it doesn't follow the same rules as
+> > all the others.  I think your patch goes in the right direction,
+> > but instead of comparing a hcd name it needs to be keyed of a flag
+> > set by the driver (I suspect there is one indicating native SG support,
+> > but I can't quickly find it), and we need an alternative solution
+> > for drivers that don't see like vhci.  I suspect just limiting the
+> > entire transfer size to something that works for a single packet
+> > for them would be fine.
+>=20
+> Christoph:
+>=20
+> In most of the different kinds of USB host controllers, the hardware is
+> not capable of assembling a packet out of multiple buffers at arbitrary
+> addresses.  As a matter of fact, xHCI is the only kind that _can_ do
+> this.
+>=20
+> In some cases, the hardware can assemble packets provided each buffer
+> other than the last ends at a page boundary and each buffer other than
+> the first starts at a page boundary (Intel would say the buffers are
+> "virtually contiguous"), but this is a rather complex rule and we don't
+> want to rely on it.  Plus, in other cases the hardware _can't_ do this.
+>=20
+> Instead, we want the SG buffers to be set up so that each one (except
+> the last) is an exact multiple of the maximum packet size.  That way,
+> each packet can be assembled from the contents of a single buffer and
+> there's no problem.
 
-Andrea
+There is out of this topic though, if we prepare such an exact multiple
+of the maximum packet size (1024, 512 or 64), is it possible to cause
+trouble on IOMMU environment? IIUC, dma_map_sg() maps SG buffers as
+a single segment and then the segment buffer is not contiguous.
+
+> The maximum packet size depends on the type of USB connection.
+> Typical values are 1024, 512, or 64.  It's always a power of two and
+> it's smaller than 4096.  Therefore we simplify the problem even further
+> by requiring that each SG buffer in a scatterlist (except the last one)
+> be a multiple of the page size.  (It doesn't need to be aligned on a
+> page boundary, as far as I remember.)
+>=20
+> That's why the blk_queue_virt_boundary usage was added to the USB code.
+> Perhaps it's not the right way of doing this; I'm not an expert on the
+> inner workings of the block layer.  If you can suggest a better way to
+> express our requirement, that would be great.
+
+Since I'm also not familiar with the block layer, I could not find a better
+way...
+
+Best regards,
+Yoshihiro Shimoda
+
+> Alan Stern
+>=20
+> PS: There _is_ a flag saying whether an HCD supports SG.  But what it
+> means is that the driver can handle an SG list that meets the
+> requirement above; it doesn't mean that the driver can reassemble the
+> data from an SG list into a series of bounce buffers in order to meet
+> the requirement.  We very much want not to do that, especially since
+> the block layer should already be capable of doing it for us.
 
