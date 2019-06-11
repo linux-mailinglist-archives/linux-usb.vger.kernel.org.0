@@ -2,138 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 647943D64A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 21:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB13C3D708
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 21:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403829AbfFKTDs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 15:03:48 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:33398 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405041AbfFKTDr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 15:03:47 -0400
-Received: by mail-pl1-f194.google.com with SMTP id g21so5530879plq.0;
-        Tue, 11 Jun 2019 12:03:46 -0700 (PDT)
+        id S2405563AbfFKTkx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 15:40:53 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:32976 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391090AbfFKTkx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 15:40:53 -0400
+Received: by mail-pf1-f194.google.com with SMTP id x15so8099080pfq.0
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2019 12:40:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=+QbRljIgJwWBCzWz9e7i8YONsVM1yUd4G7aQc2LYOeY=;
-        b=KA9NWr5iz/A4jsEJ5AhARMgh4T+UpkqjqJScqAcDG8v7nBlWcBgURc6KT+/PgUSCnZ
-         M2a6GpogN88X5FwqHoYdH/ayMg2/+yQxwR+MRIPai5lz8UNvM1Y/BZGKN/tLk9H9e8OX
-         YUhgcFrLj1rraz7ESB6QInR7wgqKpLFp/kThW4h70qzOIV3tQk4PTXQuPmR71/ZB1IrV
-         06ZymkBmp2BF49v1bzsA7TsmnF/1rriUiO8GUAzIeCO2guljtlJ0VpLyiX33aSxPGaZX
-         AvD9Ee3LWAVYHx7bwyHIsBazojz5xrlBLd8htP6r5OuvQBh97wSr3WoHAvUsZ0zzkCbT
-         mw0w==
+        bh=2Tl9Z0NsfgrApufoe2WUbK2OeIisauNIixsAGf/fSmk=;
+        b=vsAEGERkAaoThhFQXBii705fmbt72E/99Uu7FZajp8SUf8GTc9LlYBfAC9HjBDp5sL
+         4EKL6GI9Rp7rOn2WJp0TItbwY1VpF5bcED6xmFO6HO1yjnxBmgJQRVff+Szsd7nDo52k
+         o1KbxC6jfKkSBlesArxZfIgVWHOPkeVNKjzoOo2dLBfe0tMVlsJMNhicCRnqqzah4M1p
+         nQ+X+wveo4NUY1wN8RdZqJ6VXO8ZpGZsQhfe115nX9JanaBCN6VcbYPC8c0LrFdvg90V
+         DNFLgkX/ED/WENER8nOIEnsilSeYqIY4TNFJg1PXRtIJq4SgPMjABUQl+T2ZO2lY8t8G
+         +ndA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+QbRljIgJwWBCzWz9e7i8YONsVM1yUd4G7aQc2LYOeY=;
-        b=qYB39Mx7x+pQrB5sihDrsdfpUpBgkgAWSldyUbLW40FxJtq6ghAnQ5vjM9ld6q4J5M
-         7P2px2BTTdN2nXIxjxTfu0hWWZEeoSmT6dxaUYOOA+wM51AtRlQaJQ8PpGpJM8IbZh+h
-         d7Ky9NcZxov+9IARgW++VBitCpEnL8azwrzAjuWCjkKuoIiINfjeLB7GonjvzTuROn8m
-         GXVrXnfLJ5hybuUK1MBSRspP1+bPn0umgY6xR6KG8Z7oRLI3wGOG1dvTyPXZmauJ47Z2
-         QFo2gj2d1R25qGJLq6tG178ZbWtvgFAzUeoJp9y49Z1tnz2OL2pDQHNxCrxW4mxp02xN
-         S1bw==
-X-Gm-Message-State: APjAAAU8gHbnPYcrjOpXkosqUur941nBLXNRWudKISoAIbYIyVtwW5P5
-        YlreT3CJE4JdWtrEk3pPbo4=
-X-Google-Smtp-Source: APXvYqxh+O8fngACzCZvf/EiUwldMGLtMTvUx+/ODjcXz0khddZweOpl0aIOTJZal4YiWoFsmIKA3A==
-X-Received: by 2002:a17:902:d701:: with SMTP id w1mr71539969ply.12.1560279826423;
-        Tue, 11 Jun 2019 12:03:46 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j14sm16520690pfe.10.2019.06.11.12.03.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 12:03:44 -0700 (PDT)
-Date:   Tue, 11 Jun 2019 12:03:43 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Fredrik Noring <noring@nocrew.org>
-Cc:     laurentiu.tudor@nxp.com, hch@lst.de, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        marex@denx.de, leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
-        robin.murphy@arm.com, JuergenUrban@gmx.de
-Subject: Re: [PATCH v7 3/5] usb: host: ohci-sm501: init genalloc for local
- memory
-Message-ID: <20190611190343.GA18459@roeck-us.net>
-References: <20190529102843.13174-1-laurentiu.tudor@nxp.com>
- <20190529102843.13174-4-laurentiu.tudor@nxp.com>
- <20190605214622.GA22254@roeck-us.net>
- <20190611133223.GA30054@roeck-us.net>
- <20190611172654.GA2602@sx9>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2Tl9Z0NsfgrApufoe2WUbK2OeIisauNIixsAGf/fSmk=;
+        b=jlVXgY6ysQvvIkDXsrn9fQZ0XTehlfdVCp1amqYrwBjiYQHegcwRrp+37yJWUfo08N
+         56G7/UmflFKl4bqmxMo726475QLQplc+++dZKCUgFsykYwWOCbA3x8a8rtI5H6pE3+jL
+         l7wMhqYOVaeNOI5XeQAiE3Baa5eYhgjVSvJxvVSIYz0r7MgoC3rgQIKqjZEkU+f07Rrn
+         xQKiQIrvaYLi8zWaupDAHoHkFVBhZ7AnoB/pVHu8UFN30VfDRTdmsuKhvxbxQEvxREaz
+         ZilCH8wB7NR9uxSQqsGyTT2EbP3X/auNBz9dWJzg8G+1bjagEHt1TJgEYXZcDqtXFQbh
+         UDJQ==
+X-Gm-Message-State: APjAAAVfsR7wtOSZaxZyI0NwCalhNGWmbUAOFwSAG7/hcBPri7lkiI7h
+        KxFn+Lh9B+w3o0ChTOQTH0xSxg==
+X-Google-Smtp-Source: APXvYqzXVcc6fXXOJJq5bogayd4145zzm/qfoD7KDrsL3o2QfDRsySAjhmLpJFJJtPni27dVTOe/2Q==
+X-Received: by 2002:a62:2a0a:: with SMTP id q10mr77972329pfq.79.1560282051640;
+        Tue, 11 Jun 2019 12:40:51 -0700 (PDT)
+Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id c133sm18710319pfb.111.2019.06.11.12.40.50
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 11 Jun 2019 12:40:51 -0700 (PDT)
+Date:   Tue, 11 Jun 2019 12:40:48 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
+        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
+        linus.walleij@linaro.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, ard.biesheuvel@linaro.org,
+        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/8] i2c: i2c-qcom-geni: Signify successful driver
+ probe
+Message-ID: <20190611194048.GR4814@minitux>
+References: <20190610084213.1052-1-lee.jones@linaro.org>
+ <20190610084213.1052-2-lee.jones@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190611172654.GA2602@sx9>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190610084213.1052-2-lee.jones@linaro.org>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 07:26:54PM +0200, Fredrik Noring wrote:
-> Hi Guenter,
-> 
-> > > This patch results in usb access failures when trying to boot from the
-> > > sm501-usb controller on sh4 with qemu.
-> > > 
-> > > usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> > > sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> > > sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 08 7c 00 00 f0 00
-> > > print_req_error: I/O error, dev sda, sector 2172 flags 80700
-> > > usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> > > sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> > > sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 01 da 00 00 f0 00
-> > > print_req_error: I/O error, dev sda, sector 474 flags 84700
-> > > usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> > > sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> > > sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 02 da 00 00 f0 00
-> > > print_req_error: I/O error, dev sda, sector 730 flags 84700
-> > > usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> > > sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> > > sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 0b 50 00 00 f0 00
-> > > print_req_error: I/O error, dev sda, sector 2896 flags 84700
-> > > 
-> > > Qemu command line is:
-> > > 
-> > > The qemu command line is:
-> > > 
-> > > qemu-system-sh4 -M r2d \
-> > >         -kernel ./arch/sh/boot/zImage \
-> > > 	-snapshot \
-> > > 	-usb -device usb-storage,drive=d0 \
-> > > 	-drive file=rootfs.ext2,if=none,id=d0,format=raw \
-> > > 	-append 'panic=-1 slub_debug=FZPUA root=/dev/sda rootwait console=ttySC1,115200 earlycon=scif,mmio16,0xffe80000 noiotrap' \
-> > > 	-serial null -serial stdio \
-> > > 	-net nic,model=rtl8139 -net user -nographic -monitor null
-> > > 
-> > > Reverting this patch as well as "USB: drop HCD_LOCAL_MEM flag" fixes the
-> > > problem. Reverting "USB: drop HCD_LOCAL_MEM flag" alone does not help.
-> > > 
-> > 
-> > This problem is still seen in next-20190611.
-> > Has anyone actually tested this code ?
-> 
-> I tested patches 1, 2 and 5 with v5.0.19. Perhaps yet another part of the
-> OHCI subsystem allocates memory from the wrong pool? With some luck it is
-> relatively easy to trace backwards from the error messages to the point
-> where the memory is being allocated. One way to establish this is to
-> sprinkle printk around if-statements. There may be 10-20 levels of calls
-> including one or two indirect calls via pointers. Would you be able to do
-> that?
+On Mon 10 Jun 01:42 PDT 2019, Lee Jones wrote:
+
+> The Qualcomm Geni I2C driver currently probes silently which can be
+> confusing when debugging potential issues.  Add a low level (INFO)
+> print when each I2C controller is successfully initially set-up.
 > 
 
-I don't think I'll have time to do that anytime soon. Not that I know what
-exactly to look for in the first place.
+Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Can you do that debugging yourself ? All you would need is a cross-compiler
-(eg from kernel.org), qemu, and a working configuration (the root file
-system doesn't really matter since the code doesn't get to the point of
-loading it, but you can use [1]). For the configuration file, you can use
-rts7751r2dplus_defconfig with CONFIG_CMDLINE and CONFIG_CMDLINE_OVERWRITE
-removed.
-
-Thanks,
-Guenter
-
----
-[1] https://github.com/groeck/linux-build-test/blob/master/rootfs/sh/rootfs.ext2.gz
-
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> Acked-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+> ---
+>  drivers/i2c/busses/i2c-qcom-geni.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 9e3b8a98688d..a89bfce5388e 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -596,6 +596,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> +	dev_dbg(&pdev->dev, "Geni-I2C adaptor successfully added\n");
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.17.1
+> 
