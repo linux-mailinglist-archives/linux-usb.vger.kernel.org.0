@@ -2,84 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6F53C69C
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 10:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB523C733
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 11:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403930AbfFKIx7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 04:53:59 -0400
-Received: from mga03.intel.com ([134.134.136.65]:36451 "EHLO mga03.intel.com"
+        id S2404392AbfFKJ32 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 11 Jun 2019 05:29:28 -0400
+Received: from mga05.intel.com ([192.55.52.43]:47340 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403836AbfFKIx6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Jun 2019 04:53:58 -0400
-X-Amp-Result: UNSCANNABLE
+        id S1727642AbfFKJ31 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Jun 2019 05:29:27 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jun 2019 01:53:58 -0700
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jun 2019 02:29:27 -0700
 X-ExtLoop1: 1
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 11 Jun 2019 01:53:53 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 11 Jun 2019 11:53:52 +0300
-Date:   Tue, 11 Jun 2019 11:53:52 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+Received: from fmsmsx107.amr.corp.intel.com ([10.18.124.205])
+  by fmsmga005.fm.intel.com with ESMTP; 11 Jun 2019 02:29:27 -0700
+Received: from fmsmsx155.amr.corp.intel.com (10.18.116.71) by
+ fmsmsx107.amr.corp.intel.com (10.18.124.205) with Microsoft SMTP Server (TLS)
+ id 14.3.408.0; Tue, 11 Jun 2019 02:29:27 -0700
+Received: from bgsmsx109.gar.corp.intel.com (10.223.4.211) by
+ FMSMSX155.amr.corp.intel.com (10.18.116.71) with Microsoft SMTP Server (TLS)
+ id 14.3.408.0; Tue, 11 Jun 2019 02:29:26 -0700
+Received: from bgsmsx102.gar.corp.intel.com ([169.254.2.19]) by
+ BGSMSX109.gar.corp.intel.com ([169.254.10.171]) with mapi id 14.03.0415.000;
+ Tue, 11 Jun 2019 14:59:24 +0530
+From:   "Regupathy, Rajaram" <rajaram.regupathy@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     "Pandey, Prabhat Chand" <prabhat.chand.pandey@intel.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>
-Subject: Re: [PATCH v7 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
-Message-ID: <20190611085352.GA27627@kuha.fi.intel.com>
-References: <1559729030-16390-1-git-send-email-pawell@cadence.com>
- <1559729030-16390-6-git-send-email-pawell@cadence.com>
- <20190607101602.GD10298@kuha.fi.intel.com>
- <BYAPR07MB4709F32FF0C6DAE8905703C7DD130@BYAPR07MB4709.namprd07.prod.outlook.com>
+        "Nyman, Mathias" <mathias.nyman@intel.com>,
+        "K V, Abhilash" <abhilash.k.v@intel.com>,
+        "Balaji, M" <m.balaji@intel.com>
+Subject: RE: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a
+ raw interface on DbC
+Thread-Topic: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a
+ raw interface on DbC
+Thread-Index: AQHVHPuR36OpqDxWE0mdxttyJz+Qf6aP4nEAgASvQoCAAAY5gIAAZ6fg
+Importance: high
+X-Priority: 1
+Date:   Tue, 11 Jun 2019 09:29:23 +0000
+Message-ID: <4834501FD402484A85750D15DF17AB5C1D15AEE6@BGSMSX102.gar.corp.intel.com>
+References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
+ <20190607063306.5612-5-prabhat.chand.pandey@intel.com>
+ <20190607142132.GG14665@kroah.com>
+ <af51b855-4ee4-9bc2-6484-b8c4d897f503@linux.intel.com>
+ <20190610141607.GA5937@kroah.com>
+In-Reply-To: <20190610141607.GA5937@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.0.600.7
+dlp-reaction: no-action
+x-ctpclassification: CTP_NT
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMjk1NWQ4NzktM2RkMS00ZWE2LTg4MzctZjhkYjM4YzY5YzE2IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiaTRTQUNweEpDa1JxTnZTQVwvczZZa1JWVFNRaCtRUGlnNGtXc0dMOGVBenpTYkxDSnl0RDUxQ0VrUUY1alpyb0YifQ==
+x-originating-ip: [10.223.10.10]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR07MB4709F32FF0C6DAE8905703C7DD130@BYAPR07MB4709.namprd07.prod.outlook.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pawel,
 
-On Mon, Jun 10, 2019 at 06:33:29AM +0000, Pawel Laszczak wrote:
-> >> +static ssize_t cdns3_mode_write(struct file *file,
-> >> +				const char __user *ubuf,
-> >> +				size_t count, loff_t *ppos)
-> >> +{
-> >> +	struct seq_file	 *s = file->private_data;
-> >> +	struct cdns3 *cdns = s->private;
-> >> +	u32 mode = USB_DR_MODE_UNKNOWN;
-> >> +	char buf[32];
-> >> +	int ret = 0;
-> >
-> >        int ret;
-> >
-> >> +	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
-> >> +		return -EFAULT;
-> >
-> >                return -EINVAL;
+
+> -----Original Message-----
+> From: Greg KH [mailto:gregkh@linuxfoundation.org]
+> Sent: Monday, June 10, 2019 7:46 PM
+> To: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Cc: Pandey, Prabhat Chand <prabhat.chand.pandey@intel.com>; linux-
+> usb@vger.kernel.org; Nyman, Mathias <mathias.nyman@intel.com>;
+> Regupathy, Rajaram <rajaram.regupathy@intel.com>; K V, Abhilash
+> <abhilash.k.v@intel.com>; Balaji, M <m.balaji@intel.com>
+> Subject: Re: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a raw
+> interface on DbC
+> Importance: High
 > 
-> Why? I've checked in some place in kernel and after copy_from_user are used EFAULT.
-> I think that EINVAL is better but I wanted be  consistent with the rest of kernel. 
+> On Mon, Jun 10, 2019 at 04:53:51PM +0300, Mathias Nyman wrote:
+> > On 7.6.2019 17.21, Greg KH wrote:
+> > > On Fri, Jun 07, 2019 at 12:03:05PM +0530, Prabhat Chand Pandey wrote:
+> > > > From: Abhilash K V <abhilash.k.v@intel.com>
+> > > >
+> > > > This patch provides a raw device interface on xhci Debug capability.
+> > >
+> > > What is a "raw device"?
+> > >
+> > > > This abstracts dbc functionality to user space inorder to
+> > > > facilitate various frameworks to utilize xhci debug capability.
+> > >
+> > > I do not understand this sentance at all.  Please provide a lot more
+> > > information.
+> > >
+> > > > It helps to render the target as an usb debug class device on host
+> > > > and establish an usb connection by providing two bulk endpoints.
+> > >
+> > > provide bulk endpoints where?  To send data where?  This is very
+> > > confusing and does not make any sense to me...
+> > >
+> > >
+> > > >
+> > > > [don't dynamically allocate tiny space for name only -Mathias]
+> > > > Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
+> > > > Signed-off-by: Prabhat Chand Pandey
+> > > > <prabhat.chand.pandey@intel.com>
+> > > > Signed-off-by: Abhilash K V <abhilash.k.v@intel.com>
+> > > > Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> > > > ---
+> > ...
+> > >
+> > > So you have a new char device, with a undocumented and unknown
+> > > format of data flowing across it to the device.  How in the world
+> > > are we supposed to use this thing?  Where is it documented?  What
+> > > does it do?  How can you use it?
+
+We had captured all information in patch 5/5 patch in the documentation part.  
+We could always improve the documentation. Please let us know
+
+> > >
+> > > I don't mean to be so harsh here, but come on people, this stuff
+> > > needs a lot more background documentation, information, and
+> > > explaination as to exactly why in the world we need any of this, and what it
+> even does!
+> > >
+> > > Also, you need to fix the code, it doesn't work as pointed out in a
+> > > few places :)
+> > >
+> >
+> > Thanks for going through this.
+> > It's now clear this is far from ready.
+> > I need to re-evaluate my position on this, not just the code and the
+> > documentation, but the usefulness of it all.
 > 
-> Is there any explanation for this ?
+> What is this even supposed to be used for?  What is the application for it?  I
+> couldn't determine that at all, what am I missing?
 
-No. You are correct. EFAULT seems to be used with copy_from_user().
+A typical use case is ADB for x86 Android systems  or similar user space class(debug) drivers that can leverage xHCI.DbC capability for debug purpose.
 
-thanks,
+The larger goal here is to have DbC as a unified debug infrastructure for different debug methods like KGDB or early printk and leverage the benefits of a dedicated debug infra (DbC) brings in. 
 
--- 
-heikki
+> 
+> thanks,
+> 
+> greg k-h
