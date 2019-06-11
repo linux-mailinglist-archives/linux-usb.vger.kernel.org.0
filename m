@@ -2,205 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 846D73D3F8
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 19:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AE23D3FB
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 19:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405985AbfFKRYX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 13:24:23 -0400
-Received: from mga06.intel.com ([134.134.136.31]:13809 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405718AbfFKRYX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Jun 2019 13:24:23 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jun 2019 10:24:22 -0700
-X-ExtLoop1: 1
-Received: from pipin.fi.intel.com ([10.237.72.175])
-  by orsmga005.jf.intel.com with ESMTP; 11 Jun 2019 10:24:20 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] usb: xhci: dbc: get rid of global pointer
-Date:   Tue, 11 Jun 2019 20:24:16 +0300
-Message-Id: <20190611172416.12473-1-felipe.balbi@linux.intel.com>
-X-Mailer: git-send-email 2.22.0
+        id S2406000AbfFKRZH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 13:25:07 -0400
+Received: from mail-it1-f199.google.com ([209.85.166.199]:56211 "EHLO
+        mail-it1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405987AbfFKRZG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 13:25:06 -0400
+Received: by mail-it1-f199.google.com with SMTP id b5so2939072itj.5
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2019 10:25:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=I1aBIdZwz6RxeJUUWVYQOdlkCBuyA19TmFs+D1pr88A=;
+        b=Kwua1LNsvQmqhkPwPwAk6F217q7f/Jb+eKDYRjA1Pi6FEFkv90EYYRTA5lXhs46sbz
+         1o5j3HcPI1wMtNAtLYsi99iRb6mlQrzvAoVmeYBNCl6kM+3RqleBBlDO+BFoZA8KnKIt
+         1vGCm2H1cMtoMhXVFe0/++h8wYFkgv5ot98QaAicn9meCdFJTk/ZG7FQmj/Z4KCWVkx4
+         o27j4cZACCIZ2ewe2DJnuFF7EE7QS0OB4FOPjvx81OGhokMFBM50P1Cjl8RBzIlVsi4i
+         7IKKjdDbWUknFunD4d8e7aOKKeEtSA6ZnRU/M0S1zOmnG5T99B6w0RwPqDHIZKtqRF2X
+         99+A==
+X-Gm-Message-State: APjAAAUbEgQ0rVM6um9j7uDzTYZw38yyv+WjiIPYKVjJroVBLy9epx1u
+        o/3YBHqcKwVnOqml+m/QannBmAeLlcrKsq+kYssN/Utq/FGu
+X-Google-Smtp-Source: APXvYqxQH8tdbqCQlll2DNLltI7CdXtwxnxV6c/iUdc0mRjdvUvhAH+W+THvwSmXFMFZR+ZuC6nN83qPMisubOwGQoB2527z+THW
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a24:1c9:: with SMTP id 192mr18289568itk.79.1560273905794;
+ Tue, 11 Jun 2019 10:25:05 -0700 (PDT)
+Date:   Tue, 11 Jun 2019 10:25:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e84a3a058b0f9307@google.com>
+Subject: KASAN: use-after-free Read in usb_kill_anchored_urbs
+From:   syzbot <syzbot+eb6ab607626fd1dac0f1@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If we happen to have two XHCI controllers with DbC capability, then
-there's no hope this will ever work as the global pointer will be
-overwritten by the controller that probes last.
+Hello,
 
-Avoid this problem by keeping the tty_driver struct pointer inside
-struct xhci_dbc.
+syzbot found the following crash on:
 
-Fixes: dfba2174dc42 usb: xhci: Add DbC support in xHCI driver
-Cc: <stable@vger.kernel.org> # v4.16+
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=15df4ecaa00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=193d8457178b3229
+dashboard link: https://syzkaller.appspot.com/bug?extid=eb6ab607626fd1dac0f1
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11847e7aa00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ef5f2ea00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+eb6ab607626fd1dac0f1@syzkaller.appspotmail.com
+
+mcba_usb 1-1:0.116 can0: Failed to send cmd (169)
+mcba_usb 1-1:0.116 can0: failed tx_urb -2
+mcba_usb 1-1:0.116 can0: Failed to send cmd (169)
+mcba_usb 1-1:0.116: Microchip CAN BUS Analyzer connected
+usb 1-1: USB disconnect, device number 2
+mcba_usb 1-1:0.116 can0: device disconnected
+==================================================================
+BUG: KASAN: use-after-free in __lock_acquire+0x3a5d/0x5340  
+kernel/locking/lockdep.c:3664
+Read of size 8 at addr ffff8881d44c63c8 by task kworker/0:1/12
+
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.2.0-rc1+ #10
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description+0x67/0x231 mm/kasan/report.c:188
+  __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
+  kasan_report+0xe/0x20 mm/kasan/common.c:614
+  __lock_acquire+0x3a5d/0x5340 kernel/locking/lockdep.c:3664
+  lock_acquire+0x100/0x2b0 kernel/locking/lockdep.c:4302
+  __raw_spin_lock_irq include/linux/spinlock_api_smp.h:128 [inline]
+  _raw_spin_lock_irq+0x2d/0x40 kernel/locking/spinlock.c:167
+  spin_lock_irq include/linux/spinlock.h:363 [inline]
+  usb_kill_anchored_urbs+0x1e/0x110 drivers/usb/core/urb.c:787
+  mcba_urb_unlink drivers/net/can/usb/mcba_usb.c:722 [inline]
+  mcba_usb_disconnect+0xd6/0xe4 drivers/net/can/usb/mcba_usb.c:892
+  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+  __device_release_driver drivers/base/dd.c:1081 [inline]
+  device_release_driver_internal+0x404/0x4c0 drivers/base/dd.c:1112
+  bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+  device_del+0x460/0xb80 drivers/base/core.c:2274
+  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+  usb_disconnect+0x284/0x830 drivers/usb/core/hub.c:2197
+  hub_port_connect drivers/usb/core/hub.c:4940 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1409/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2268
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+  kthread+0x30b/0x410 kernel/kthread.c:254
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 12:
+  save_stack+0x1b/0x80 mm/kasan/common.c:71
+  set_track mm/kasan/common.c:79 [inline]
+  __kasan_kmalloc mm/kasan/common.c:489 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:462
+  kmalloc_node include/linux/slab.h:590 [inline]
+  kvmalloc_node+0x61/0xf0 mm/util.c:430
+  kvmalloc include/linux/mm.h:637 [inline]
+  kvzalloc include/linux/mm.h:645 [inline]
+  alloc_netdev_mqs+0x97/0xce0 net/core/dev.c:9154
+  alloc_candev_mqs+0x58/0x320 drivers/net/can/dev.c:738
+  mcba_usb_probe+0xaf/0xbca drivers/net/can/usb/mcba_usb.c:810
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2268
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+  kthread+0x30b/0x410 kernel/kthread.c:254
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 12:
+  save_stack+0x1b/0x80 mm/kasan/common.c:71
+  set_track mm/kasan/common.c:79 [inline]
+  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:451
+  slab_free_hook mm/slub.c:1421 [inline]
+  slab_free_freelist_hook mm/slub.c:1448 [inline]
+  slab_free mm/slub.c:2994 [inline]
+  kfree+0xd7/0x280 mm/slub.c:3949
+  kvfree+0x59/0x60 mm/util.c:459
+  device_release+0x71/0x200 drivers/base/core.c:1064
+  kobject_cleanup lib/kobject.c:691 [inline]
+  kobject_release lib/kobject.c:720 [inline]
+  kref_put include/linux/kref.h:67 [inline]
+  kobject_put+0x171/0x280 lib/kobject.c:737
+  put_device+0x1b/0x30 drivers/base/core.c:2210
+  free_netdev+0x317/0x420 net/core/dev.c:9265
+  mcba_usb_disconnect+0xca/0xe4 drivers/net/can/usb/mcba_usb.c:890
+  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+  __device_release_driver drivers/base/dd.c:1081 [inline]
+  device_release_driver_internal+0x404/0x4c0 drivers/base/dd.c:1112
+  bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+  device_del+0x460/0xb80 drivers/base/core.c:2274
+  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+  usb_disconnect+0x284/0x830 drivers/usb/core/hub.c:2197
+  hub_port_connect drivers/usb/core/hub.c:4940 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1409/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2268
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+  kthread+0x30b/0x410 kernel/kthread.c:254
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the object at ffff8881d44c5500
+  which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 3784 bytes inside of
+  4096-byte region [ffff8881d44c5500, ffff8881d44c6500)
+The buggy address belongs to the page:
+page:ffffea0007513000 refcount:1 mapcount:0 mapping:ffff8881dac02600  
+index:0x0 compound_mapcount: 0
+flags: 0x200000000010200(slab|head)
+raw: 0200000000010200 dead000000000100 dead000000000200 ffff8881dac02600
+raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8881d44c6280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881d44c6300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff8881d44c6380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                               ^
+  ffff8881d44c6400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881d44c6480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
 ---
- drivers/usb/host/xhci-dbgcap.c |  4 +--
- drivers/usb/host/xhci-dbgcap.h |  3 +-
- drivers/usb/host/xhci-dbgtty.c | 54 +++++++++++++++++-----------------
- 3 files changed, 31 insertions(+), 30 deletions(-)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
-index 52e32644a4b2..5f56b650c0ea 100644
---- a/drivers/usb/host/xhci-dbgcap.c
-+++ b/drivers/usb/host/xhci-dbgcap.c
-@@ -948,7 +948,7 @@ int xhci_dbc_init(struct xhci_hcd *xhci)
- 	return 0;
- 
- init_err1:
--	xhci_dbc_tty_unregister_driver();
-+	xhci_dbc_tty_unregister_driver(xhci);
- init_err2:
- 	xhci_do_dbc_exit(xhci);
- init_err3:
-@@ -963,7 +963,7 @@ void xhci_dbc_exit(struct xhci_hcd *xhci)
- 		return;
- 
- 	device_remove_file(dev, &dev_attr_dbc);
--	xhci_dbc_tty_unregister_driver();
-+	xhci_dbc_tty_unregister_driver(xhci);
- 	xhci_dbc_stop(xhci);
- 	xhci_do_dbc_exit(xhci);
- }
-diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
-index ce0c6072bd48..30dedf36c566 100644
---- a/drivers/usb/host/xhci-dbgcap.h
-+++ b/drivers/usb/host/xhci-dbgcap.h
-@@ -151,6 +151,7 @@ struct xhci_dbc {
- 	struct dbc_ep			eps[2];
- 
- 	struct dbc_port			port;
-+	struct tty_driver		*tty_driver;
- };
- 
- #define dbc_bulkout_ctx(d)		\
-@@ -196,7 +197,7 @@ static inline struct dbc_ep *get_out_ep(struct xhci_hcd *xhci)
- int xhci_dbc_init(struct xhci_hcd *xhci);
- void xhci_dbc_exit(struct xhci_hcd *xhci);
- int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci);
--void xhci_dbc_tty_unregister_driver(void);
-+void xhci_dbc_tty_unregister_driver(struct xhci_hcd *xhci);
- int xhci_dbc_tty_register_device(struct xhci_hcd *xhci);
- void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci);
- struct dbc_request *dbc_alloc_request(struct dbc_ep *dep, gfp_t gfp_flags);
-diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-index aff79ff5aba4..300fc770a0d5 100644
---- a/drivers/usb/host/xhci-dbgtty.c
-+++ b/drivers/usb/host/xhci-dbgtty.c
-@@ -279,52 +279,52 @@ static const struct tty_operations dbc_tty_ops = {
- 	.unthrottle		= dbc_tty_unthrottle,
- };
- 
--static struct tty_driver *dbc_tty_driver;
--
- int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
- {
- 	int			status;
- 	struct xhci_dbc		*dbc = xhci->dbc;
- 
--	dbc_tty_driver = tty_alloc_driver(1, TTY_DRIVER_REAL_RAW |
-+	dbc->tty_driver = tty_alloc_driver(1, TTY_DRIVER_REAL_RAW |
- 					  TTY_DRIVER_DYNAMIC_DEV);
--	if (IS_ERR(dbc_tty_driver)) {
--		status = PTR_ERR(dbc_tty_driver);
--		dbc_tty_driver = NULL;
-+	if (IS_ERR(dbc->tty_driver)) {
-+		status = PTR_ERR(dbc->tty_driver);
-+		dbc->tty_driver = NULL;
- 		return status;
- 	}
- 
--	dbc_tty_driver->driver_name = "dbc_serial";
--	dbc_tty_driver->name = "ttyDBC";
-+	dbc->tty_driver->driver_name = "dbc_serial";
-+	dbc->tty_driver->name = "ttyDBC";
- 
--	dbc_tty_driver->type = TTY_DRIVER_TYPE_SERIAL;
--	dbc_tty_driver->subtype = SERIAL_TYPE_NORMAL;
--	dbc_tty_driver->init_termios = tty_std_termios;
--	dbc_tty_driver->init_termios.c_cflag =
-+	dbc->tty_driver->type = TTY_DRIVER_TYPE_SERIAL;
-+	dbc->tty_driver->subtype = SERIAL_TYPE_NORMAL;
-+	dbc->tty_driver->init_termios = tty_std_termios;
-+	dbc->tty_driver->init_termios.c_cflag =
- 			B9600 | CS8 | CREAD | HUPCL | CLOCAL;
--	dbc_tty_driver->init_termios.c_ispeed = 9600;
--	dbc_tty_driver->init_termios.c_ospeed = 9600;
--	dbc_tty_driver->driver_state = &dbc->port;
-+	dbc->tty_driver->init_termios.c_ispeed = 9600;
-+	dbc->tty_driver->init_termios.c_ospeed = 9600;
-+	dbc->tty_driver->driver_state = &dbc->port;
- 
--	tty_set_operations(dbc_tty_driver, &dbc_tty_ops);
-+	tty_set_operations(dbc->tty_driver, &dbc_tty_ops);
- 
--	status = tty_register_driver(dbc_tty_driver);
-+	status = tty_register_driver(dbc->tty_driver);
- 	if (status) {
- 		xhci_err(xhci,
- 			 "can't register dbc tty driver, err %d\n", status);
--		put_tty_driver(dbc_tty_driver);
--		dbc_tty_driver = NULL;
-+		put_tty_driver(dbc->tty_driver);
-+		dbc->tty_driver = NULL;
- 	}
- 
- 	return status;
- }
- 
--void xhci_dbc_tty_unregister_driver(void)
-+void xhci_dbc_tty_unregister_driver(struct xhci_hcd *xhci)
- {
--	if (dbc_tty_driver) {
--		tty_unregister_driver(dbc_tty_driver);
--		put_tty_driver(dbc_tty_driver);
--		dbc_tty_driver = NULL;
-+	struct xhci_dbc		*dbc = xhci->dbc;
-+
-+	if (dbc->tty_driver) {
-+		tty_unregister_driver(dbc->tty_driver);
-+		put_tty_driver(dbc->tty_driver);
-+		dbc->tty_driver = NULL;
- 	}
- }
- 
-@@ -449,7 +449,7 @@ int xhci_dbc_tty_register_device(struct xhci_hcd *xhci)
- 
- 	xhci_dbc_tty_init_port(xhci, port);
- 	tty_dev = tty_port_register_device(&port->port,
--					   dbc_tty_driver, 0, NULL);
-+					   dbc->tty_driver, 0, NULL);
- 	if (IS_ERR(tty_dev)) {
- 		ret = PTR_ERR(tty_dev);
- 		goto register_fail;
-@@ -479,7 +479,7 @@ int xhci_dbc_tty_register_device(struct xhci_hcd *xhci)
- 	kfifo_free(&port->write_fifo);
- 
- buf_alloc_fail:
--	tty_unregister_device(dbc_tty_driver, 0);
-+	tty_unregister_device(dbc->tty_driver, 0);
- 
- register_fail:
- 	xhci_dbc_tty_exit_port(port);
-@@ -494,7 +494,7 @@ void xhci_dbc_tty_unregister_device(struct xhci_hcd *xhci)
- 	struct xhci_dbc		*dbc = xhci->dbc;
- 	struct dbc_port		*port = &dbc->port;
- 
--	tty_unregister_device(dbc_tty_driver, 0);
-+	tty_unregister_device(dbc->tty_driver, 0);
- 	xhci_dbc_tty_exit_port(port);
- 	port->registered = false;
- 
--- 
-2.22.0
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
