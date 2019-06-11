@@ -2,207 +2,242 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E73F73BF8D
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 00:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3DD3C07E
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 02:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390209AbfFJWhC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Jun 2019 18:37:02 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44255 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390073AbfFJWhC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 18:37:02 -0400
-Received: by mail-pf1-f193.google.com with SMTP id t16so6098143pfe.11;
-        Mon, 10 Jun 2019 15:37:01 -0700 (PDT)
+        id S2389362AbfFKA11 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Jun 2019 20:27:27 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:41472 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390260AbfFKA10 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Jun 2019 20:27:26 -0400
+Received: by mail-pg1-f194.google.com with SMTP id 83so5888688pgg.8
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 17:27:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=q8b2TKU6JOAJlj9dzQ91v3D4QaEKDBsjJpwMvzaCt2U=;
-        b=R+8DWMq4UluXl/AGTjShDwuS1OZP5R2Hp/hgySjl4KWPHXCG20d7K+w0TfhIqLVmx2
-         JJSg0tm7me4YzjGyU3OyABU3sF6+RFsNN2V2p2CR37ZlhHN7Z2kzpGsLUr/cc/FuQAS6
-         DZx+U3sMe4qiPTycpKOz8Olm/m3Kf+nlCNrLU3Vma9blPPxdcj6WI0ZZLoLSKscdHZGI
-         EdbNHqk3/l+IR0AdJ/YCTpu43yobSSG3VRqfvtXUrtXj+9EmXNh5sZNiqqTbO8xod0cc
-         9Fb8BwWvg5mUxrtk7rjOKgPWj7FT/yoYI8V5u6SvGemhQmJ2cIZnNEtkrpGBaa/zCo5P
-         Q7Ww==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=VM2dk3phoXMJWUmg4OkGbUsCUxKTv/qfJ7B/YkcH/jc=;
+        b=zYcM1bjwlBj/VZ68drx0nOd348CC8iakrVB6vDS+gJ7EnC22G0Gh88OpERBZMgOxFb
+         Ivn3P5x0NGHsY6n9ZwVcZ9+DkalHqli6FeDqy0tXEYqIPBV0K/GCO8vLZugKuT2lTtwD
+         hogTBTI88gW2RP7sY2VkC6QBGYVmfPW/Xblyq0TKoqpjTmAdJc19Kg+wXSgsVIgJiK68
+         TF1BEHQDiqVnYzgMC4rWD0NN1JH5T+orsD/EZPhiTRWl185RGHxhqVaMXN3a2sw23/ck
+         Loz04gUYjWWAQPhsjWh7cOJnDF71aXELbLgIeg20wyqufu5gFwncvNVs3a1n1mcZbyDn
+         xHhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=q8b2TKU6JOAJlj9dzQ91v3D4QaEKDBsjJpwMvzaCt2U=;
-        b=gxi2Jb2Y/QvORr9ZHK5hYT7BrGZb7XA1C6J1MDI/5X28FxH3LciLbfoNaI2tydaGs+
-         fJEYrM/mV/7XIBm3zjWAV8HHk6ttlySu5MtQslUHdgr+9B4VLnLSjVrFxM6hZ+cPsqdc
-         Wtu9cZSQ7xk9rnh7Y4e89yCM1SnSFjDQLMLakyHc4TfA02hYcoq8aMz370FdbtnqH0A1
-         xv4O51dBpI+mnR4YScx2+lc1hj3FKOOCkXED7c4Jxp6DySefFoeeM0bD7PpVpxuaYkBN
-         S/Cwk/Umgv51yHS8KLTSpQU2XbQZbrIa6wbS/d+0kNkIKFybarVpshIdClul2kOdakR7
-         ziGA==
-X-Gm-Message-State: APjAAAUGayG2nqxaZ91uzf9Pl0UWy6L0uzqbW1qb72YWQWZ5k941eXCv
-        rdRHglSrq2hW3v/kg3+AVgk=
-X-Google-Smtp-Source: APXvYqwd8sGYxy89XzGWUIQvVTvKCqg+kl6oGItr0yMFIo7CpSE1iaXNvQGc/dpHKLVKDrZXk8JXJA==
-X-Received: by 2002:aa7:8ecb:: with SMTP id b11mr37159852pfr.220.1560206220888;
-        Mon, 10 Jun 2019 15:37:00 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id g17sm14465463pfb.56.2019.06.10.15.36.59
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 10 Jun 2019 15:37:00 -0700 (PDT)
-Date:   Mon, 10 Jun 2019 15:36:58 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     bleung@chromium.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, libusb-devel@lists.sourceforge.net
-Subject: [PATCH] USB: add usbfs ioctl to retrieve the connection parameters
-Message-ID: <20190610223658.GA162167@dtor-ws>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=VM2dk3phoXMJWUmg4OkGbUsCUxKTv/qfJ7B/YkcH/jc=;
+        b=KuKlkMGgBRKNegwCmQE831EKXQiNEmO1utoOfu/65+bXbzjBxpEIea0tWGmDlxb9S4
+         774kuxw1UXmw+Wn+a5zWkOquwWIT0Lupm+FAUZTSz6cNoYV5D4ZQYL410Rl9nzcCupMI
+         AFif5sbAMk4/q8NQfv20icZhvuwYNIrT3GEaagrqL/jSxUs0esYjMx7Eeq2Cb0Fk4hxA
+         2JF7soNh813+gyKVL3l7GxEc3fnCEOHn9dqz9veNp3jzOashPzlRMlYtkTqVqo4YaT+u
+         +jjjUK5TEBwzEe3pbXTdUFWR03M0QptK4dH3P4x3hMewYAUvbkoDI7bnICqY05Hlv/0R
+         THfg==
+X-Gm-Message-State: APjAAAVfWGJ3knbb6Eo7PuFtwCfUd8eq3JWWleX5gFe+QiKjj0xxt0UZ
+        R1Qz0B8+9rqlMdH9rM0V+jNgwA==
+X-Google-Smtp-Source: APXvYqzwt2kqHvu9OTRvm5vLnspi9CzNyFEQTcK84714NO8Z1PTwNct/Ne+Bo6TCz7ewEYKeUwxoHQ==
+X-Received: by 2002:a62:1ec3:: with SMTP id e186mr78012544pfe.197.1560212845477;
+        Mon, 10 Jun 2019 17:27:25 -0700 (PDT)
+Received: from ?IPv6:2600:1010:b02c:114f:fc47:b6b2:14a5:bb80? ([2600:1010:b02c:114f:fc47:b6b2:14a5:bb80])
+        by smtp.gmail.com with ESMTPSA id u5sm11410506pgp.19.2019.06.10.17.27.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 10 Jun 2019 17:27:23 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC][PATCH 00/13] Mount, FS, Block and Keyrings notifications [ver #4]
+Date:   Mon, 10 Jun 2019 17:13:51 -0700
+Message-Id: <97BA9EB5-4E62-4E3A-BD97-CEC34F16FCFF@amacapital.net>
+References: <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk> <be966d9c-e38d-7a30-8d80-fad5f25ab230@tycho.nsa.gov> <0cf7a49d-85f6-fba9-62ec-a378e0b76adf@schaufler-ca.com> <CALCETrX5O18q2=dUeC=hEtK2=t5KQpGBy9XveHxFw36OqkbNOg@mail.gmail.com> <dac74580-5b48-86e4-8222-cac29a9f541d@schaufler-ca.com> <E0925E1F-E5F2-4457-8704-47B6E64FE3F3@amacapital.net> <4b7d02b2-2434-8a7c-66cc-7dbebc37efbc@schaufler-ca.com> <CALCETrU+PKVbrKQJoXj9x_5y+vTZENMczHqyM_Xb85ca5YDZuA@mail.gmail.com> <25d88489-9850-f092-205e-0a4fc292f41b@schaufler-ca.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        USB list <linux-usb@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        raven@themaw.net, Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>
+In-Reply-To: <25d88489-9850-f092-205e-0a4fc292f41b@schaufler-ca.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+X-Mailer: iPhone Mail (16F203)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Recently usfbs gained availability to retrieve device speed, but there
-is sill no way to determine the bus number or list of ports the device
-is connected to when using usbfs. While this information can be obtained
-from sysfs, not all environments allow sysfs access. In a jailed
-environment a program might be simply given an opened file descriptor to
-usbfs device, and it is really important that all data can be gathered
-from said file descriptor.
-
-This patch introduces a new ioctl, USBDEVFS_CONNINFO_EX, which return
-extended connection information for the device, including the bus
-number, address, port list and speed. The API allows kernel to extend
-amount of data returned by the ioctl and userspace has an option of
-adjusting the amount of data it is willing to consume. A new capability,
-USBDEVFS_CAP_CONNINFO_EX, is introduced to help userspace in determining
-whether the kernel supports this new ioctl.
-
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- drivers/usb/core/devio.c          | 42 ++++++++++++++++++++++++++++++-
- include/uapi/linux/usbdevice_fs.h | 26 +++++++++++++++++++
- 2 files changed, 67 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index fa783531ee88..fb6a074e4f1d 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -1308,6 +1308,39 @@ static int proc_connectinfo(struct usb_dev_state *ps, void __user *arg)
- 	return 0;
- }
- 
-+static int proc_conninfo_ex(struct usb_dev_state *ps,
-+			    void __user *arg, size_t size)
-+{
-+	struct usbdevfs_conninfo_ex ci;
-+	struct usb_device *udev = ps->dev;
-+
-+	if (size < sizeof(ci.size))
-+		return -EINVAL;
-+
-+	memset(&ci, 0, sizeof(ci));
-+	ci.size = sizeof(ci);
-+	ci.busnum = udev->bus->busnum;
-+	ci.devnum = udev->devnum;
-+	ci.speed = udev->speed;
-+
-+	while (udev && udev->portnum != 0) {
-+		if (++ci.num_ports <= ARRAY_SIZE(ci.ports))
-+			ci.ports[ARRAY_SIZE(ci.ports) - ci.num_ports] =
-+					udev->portnum;
-+		udev = udev->parent;
-+	}
-+
-+	if (ci.num_ports < ARRAY_SIZE(ci.ports))
-+		memmove(&ci.ports[0],
-+			&ci.ports[ARRAY_SIZE(ci.ports) - ci.num_ports],
-+			ci.num_ports);
-+
-+	if (copy_to_user(arg, &ci, min(sizeof(ci), size)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
- static int proc_resetdevice(struct usb_dev_state *ps)
- {
- 	struct usb_host_config *actconfig = ps->dev->actconfig;
-@@ -2252,7 +2285,7 @@ static int proc_get_capabilities(struct usb_dev_state *ps, void __user *arg)
- 
- 	caps = USBDEVFS_CAP_ZERO_PACKET | USBDEVFS_CAP_NO_PACKET_SIZE_LIM |
- 			USBDEVFS_CAP_REAP_AFTER_DISCONNECT | USBDEVFS_CAP_MMAP |
--			USBDEVFS_CAP_DROP_PRIVILEGES;
-+			USBDEVFS_CAP_DROP_PRIVILEGES | USBDEVFS_CAP_CONNINFO_EX;
- 	if (!ps->dev->bus->no_stop_on_short)
- 		caps |= USBDEVFS_CAP_BULK_CONTINUATION;
- 	if (ps->dev->bus->sg_tablesize)
-@@ -2551,6 +2584,13 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		break;
- 	}
- 
-+	/* Handle variable-length commands */
-+	switch (cmd & ~IOCSIZE_MASK) {
-+	case USBDEVFS_CONNINFO_EX(0):
-+		ret = proc_conninfo_ex(ps, p, _IOC_SIZE(cmd));
-+		break;
-+	}
-+
-  done:
- 	usb_unlock_device(dev);
- 	if (ret >= 0)
-diff --git a/include/uapi/linux/usbdevice_fs.h b/include/uapi/linux/usbdevice_fs.h
-index 964e87217be4..393a2de914e8 100644
---- a/include/uapi/linux/usbdevice_fs.h
-+++ b/include/uapi/linux/usbdevice_fs.h
-@@ -76,6 +76,26 @@ struct usbdevfs_connectinfo {
- 	unsigned char slow;
- };
- 
-+struct usbdevfs_conninfo_ex {
-+	__u32 size;		/* Size of the structure from the kernel's */
-+				/* point of view. Can be used by userspace */
-+				/* to determine how much data can be       */
-+				/* used/trusted.                           */
-+	__u32 busnum;           /* USB bus number, as enumerated by the    */
-+				/* kernel, the device is connected to.     */
-+	__u32 devnum;           /* Device address on the bus.              */
-+	__u32 speed;		/* USB_SPEED_* constants from ch9.h        */
-+	u8 num_ports;		/* Number of ports the device is connected */
-+				/* to on the way to the root hub. It may   */
-+				/* be bigger than size of 'ports' array so */
-+				/* userspace can detect overflows.         */
-+	u8 ports[7];		/* List of ports on the way from the root  */
-+				/* hub to the device. Current limit in     */
-+				/* USB specification is 7 tiers (root hub, */
-+				/* 5 intermediate hubs, device), which     */
-+				/* gives at most 6 port entries.           */
-+};
-+
- #define USBDEVFS_URB_SHORT_NOT_OK	0x01
- #define USBDEVFS_URB_ISO_ASAP		0x02
- #define USBDEVFS_URB_BULK_CONTINUATION	0x04
-@@ -137,6 +157,7 @@ struct usbdevfs_hub_portinfo {
- #define USBDEVFS_CAP_REAP_AFTER_DISCONNECT	0x10
- #define USBDEVFS_CAP_MMAP			0x20
- #define USBDEVFS_CAP_DROP_PRIVILEGES		0x40
-+#define USBDEVFS_CAP_CONNINFO_EX		0x80
- 
- /* USBDEVFS_DISCONNECT_CLAIM flags & struct */
- 
-@@ -197,5 +218,10 @@ struct usbdevfs_streams {
- #define USBDEVFS_FREE_STREAMS      _IOR('U', 29, struct usbdevfs_streams)
- #define USBDEVFS_DROP_PRIVILEGES   _IOW('U', 30, __u32)
- #define USBDEVFS_GET_SPEED         _IO('U', 31)
-+/*
-+ * Returns struct usbdevfs_conninfo_ex; length is variable to allow
-+ * extending size of the data returned.
-+ */
-+#define USBDEVFS_CONNINFO_EX(len)  _IOC(_IOC_READ, 'U', 32, len)
- 
- #endif /* _UAPI_LINUX_USBDEVICE_FS_H */
--- 
-2.22.0.rc2.383.gf4fbbf30c2-goog
 
 
--- 
-Dmitry
+> On Jun 10, 2019, at 2:25 PM, Casey Schaufler <casey@schaufler-ca.com> wrot=
+e:
+>=20
+>> On 6/10/2019 12:53 PM, Andy Lutomirski wrote:
+>> On Mon, Jun 10, 2019 at 12:34 PM Casey Schaufler <casey@schaufler-ca.com>=
+ wrote:
+>>>>>> I think you really need to give an example of a coherent policy that
+>>>>>> needs this.
+>>>>> I keep telling you, and you keep ignoring what I say.
+>>>>>=20
+>>>>>> As it stands, your analogy seems confusing.
+>>>>> It's pretty simple. I have given both the abstract
+>>>>> and examples.
+>>>> You gave the /dev/null example, which is inapplicable to this patchset.=
+
+>>> That addressed an explicit objection, and pointed out
+>>> an exception to a generality you had asserted, which was
+>>> not true. It's also a red herring regarding the current
+>>> discussion.
+>> This argument is pointless.
+>>=20
+>> Please humor me and just give me an example.  If you think you have
+>> already done so, feel free to repeat yourself.  If you have no
+>> example, then please just say so.
+>=20
+> To repeat the /dev/null example:
+>=20
+> Process A and process B both open /dev/null.
+> A and B can write and read to their hearts content
+> to/from /dev/null without ever once communicating.
+> The mutual accessibility of /dev/null in no way implies that
+> A and B can communicate. If A can set a watch on /dev/null,
+> and B triggers an event, there still has to be an access
+> check on the delivery of the event because delivering an event
+> to A is not an action on /dev/null, but on A.
+>=20
+
+At discussed, this is an irrelevant straw man. This patch series does not pr=
+oduce events when this happens. I=E2=80=99m looking for a relevant example, p=
+lease.
+>=20
+>=20
+>>  An unprivileged
+>> user can create a new userns and a new mount ns, but then they're
+>> modifying a whole different mount tree.
+>=20
+> Within those namespaces you can still have multiple users,
+> constrained be system access control policy.
+
+And the one doing the mounting will be constrained by MAC and DAC policy, as=
+ always.  The namespace creator is, from the perspective of those processes,=
+ admin.
+
+>=20
+>>=20
+>>>>>> Similarly, if someone
+>>>>>> tries to receive a packet on a socket, we check whether they have the=
+
+>>>>>> right to receive on that socket (from the endpoint in question) and,
+>>>>>> if the sender is local, whether the sender can send to that socket.
+>>>>>> We do not check whether the sender can send to the receiver.
+>>>>> Bzzzt! Smack sure does.
+>>>> This seems dubious. I=E2=80=99m still trying to get you to explain to a=
+ non-Smack person why this makes sense.
+>>> Process A sends a packet to process B.
+>>> If A has access to TopSecret data and B is not
+>>> allowed to see TopSecret data, the delivery should
+>>> be prevented. Is that nonsensical?
+>> It makes sense.  As I see it, the way that a sensible policy should do
+>> this is by making sure that there are no sockets, pipes, etc that
+>> Process A can write and that Process B can read.
+>=20
+> You can't explain UDP controls without doing the access check
+> on packet delivery. The sendmsg() succeeds when the packet leaves
+> the sender. There doesn't even have to be a socket bound to the
+> port. The only opportunity you have for control is on packet
+> delivery, which is the only point at which you can have the
+> information required.
+
+Huh?  You sendmsg() from an address to an address.  My point is that, for mo=
+st purposes, that=E2=80=99s all the information that=E2=80=99s needed.
+
+>=20
+>> If you really want to prevent a malicious process with TopSecret data
+>> from sending it to a different process, then you can't use Linux on
+>> x86 or ARM.  Maybe that will be fixed some day, but you're going to
+>> need to use an extremely tight sandbox to make this work.
+>=20
+> I won't be commenting on that.
+
+Then why is preventing this is an absolute requirement? It=E2=80=99s unattai=
+nable.
+
+>=20
+>>=20
+>>>>>> The signal example is inapplicable.
+>>>>> =46rom a modeling viewpoint the actions are identical.
+>>>> This seems incorrect to me
+>>> What would be correct then? Some convoluted combination
+>>> of system entities that aren't owned or controlled by
+>>> any mechanism?
+>>>=20
+>> POSIX signal restrictions aren't there to prevent two processes from
+>> communicating.  They're there to prevent the sender from manipulating
+>> or crashing the receiver without appropriate privilege.
+>=20
+> POSIX signal restrictions have a long history. In the P10031e/2c
+> debates both communication and manipulation where seriously
+> considered. I would say both are true.
+>=20
+>>>> and, I think, to most everyone else reading this.
+>>> That's quite the assertion. You may even be correct.
+>>>=20
+>>>> Can you explain?
+>>>>=20
+>>>> In SELinux-ese, when you write to a file, the subject is the writer and=
+ the object is the file.  When you send a signal to a process, the object is=
+ the target process.
+>>> YES!!!!!!!!!!!!
+>>>=20
+>>> And when a process triggers a notification it is the subject
+>>> and the watching process is the object!
+>>>=20
+>>> Subject =3D=3D active entity
+>>> Object  =3D=3D passive entity
+>>>=20
+>>> Triggering an event is, like calling kill(), an action!
+>>>=20
+>> And here is where I disagree with your interpretation.  Triggering an
+>> event is a side effect of writing to the file.  There are *two*
+>> security relevant actions, not one, and they are:
+>>=20
+>> First, the write:
+>>=20
+>> Subject =3D=3D the writer
+>> Action =3D=3D write
+>> Object =3D=3D the file
+>>=20
+>> Then the event, which could be modeled in a couple of ways:
+>>=20
+>> Subject =3D=3D the file
+>=20
+> Files   are   not   subjects. They are passive entities.
+>=20
+>> Action =3D=3D notify
+>> Object =3D=3D the recipient
+
+Great. Then use the variant below.
+
+>>=20
+>> or
+>>=20
+>> Subject =3D=3D the recipient
+>> Action =3D=3D watch
+>> Object =3D=3D the file
+>>=20
+>> By conflating these two actions into one, you've made the modeling
+>> very hard, and you start running into all these nasty questions like
+>> "who actually closed this open file"
+>=20
+> No, I've made the code more difficult.
+> You can not call
+> the file a subject. That is just wrong. It's not a valid
+> model.
+
+You=E2=80=99ve ignored the =E2=80=9CAction =3D=3D watch=E2=80=9D variant. Do=
+ you care to comment?
