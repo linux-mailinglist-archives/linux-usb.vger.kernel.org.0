@@ -2,108 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 362003C3B7
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 08:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14B43C3EC
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 08:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391194AbfFKF7l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 01:59:41 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:63325 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2390485AbfFKF7l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 01:59:41 -0400
-X-UUID: 62c779248366490688a9b32f61fffd8e-20190611
-X-UUID: 62c779248366490688a9b32f61fffd8e-20190611
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1177027926; Tue, 11 Jun 2019 13:59:33 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 11 Jun
- 2019 13:59:32 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 11 Jun 2019 13:59:31 +0800
-Message-ID: <1560232771.8487.120.camel@mhfsdcap03>
-Subject: Re: [PATCH v6 09/10] usb: roles: add USB Type-B GPIO connector
- driver
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        "Badhri Jagan Sridharan" <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Yu Chen <chenyu56@huawei.com>
-Date:   Tue, 11 Jun 2019 13:59:31 +0800
-In-Reply-To: <9640aa29-bc96-ded1-e757-e885bda354a8@nvidia.com>
-References: <1559115828-19146-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1559115828-19146-10-git-send-email-chunfeng.yun@mediatek.com>
-         <9640aa29-bc96-ded1-e757-e885bda354a8@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        id S2403865AbfFKG22 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 02:28:28 -0400
+Received: from mga18.intel.com ([134.134.136.126]:57905 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725766AbfFKG21 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Jun 2019 02:28:27 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jun 2019 23:28:26 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Jun 2019 23:28:23 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Howells <dhowells@redhat.com>, viro@zeniv.linux.org.uk,
+        linux-usb@vger.kernel.org, raven@themaw.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/10] usb: Add USB subsystem notifications [ver #3]
+In-Reply-To: <Pine.LNX.4.44L0.1906071000260.1612-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1906071000260.1612-100000@iolanthe.rowland.org>
+Date:   Tue, 11 Jun 2019 09:28:15 +0300
+Message-ID: <875zpcfxfk.fsf@linux.intel.com>
 MIME-Version: 1.0
-X-MTK:  N
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2019-06-10 at 16:03 +0530, Nagarjuna Kristam wrote:
-> Tested-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> 
-Thanks
-
-> On 29-05-2019 13:13, Chunfeng Yun wrote:
-> > Due to the requirement of usb-connector.txt binding, the old way
-> > using extcon to support USB Dual-Role switch is now deprecated
-> > when use Type-B connector.
-> > This patch introduces a driver of Type-B connector which typically
-> > uses an input GPIO to detect USB ID pin, and try to replace the
-> > function provided by extcon-usb-gpio driver
-> > 
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> > v6 changes:
-> >   1. get usb-role-swtich by usb_role_switch_get()
-> > 
-> > v5 changes:
-> >   1. put usb_role_switch when error happens suggested by Biju
-> >   2. don't treat bype-B connector as a virtual device suggested by Rob
-> > 
-> > v4 changes:
-> >   1. remove linux/gpio.h suggested by Linus
-> >   2. put node when error happens
-> > 
-> > v3 changes:
-> >   1. treat bype-B connector as a virtual device;
-> >   2. change file name again
-> > 
-> > v2 changes:
-> >   1. file name is changed
-> >   2. use new compatible
-> > ---
-> >  drivers/usb/roles/Kconfig           |  11 ++
-> >  drivers/usb/roles/Makefile          |   1 +
-> >  drivers/usb/roles/typeb-conn-gpio.c | 286 ++++++++++++++++++++++++++++
-> >  3 files changed, 298 insertions(+)
-> >  create mode 100644 drivers/usb/roles/typeb-conn-gpio.c
-> > 
-> > diff --git a/drivers/usb/roles/Kconfig b/drivers/usb/roles/Kconfig
-> > index f8b31aa67526..d1156e18a81a 100644
-> > --- a/drivers/usb/roles/Kconfig
-> > +++ b/drivers/usb/roles/Kconfig
-> > 
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
+Hi,
+
+Alan Stern <stern@rowland.harvard.edu> writes:
+>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+>> > On Thu, Jun 06, 2019 at 10:55:24AM -0400, Alan Stern wrote:
+>> >> On Thu, 6 Jun 2019, Greg Kroah-Hartman wrote:
+>> >>=20
+>> >> > On Thu, Jun 06, 2019 at 10:24:18AM -0400, Alan Stern wrote:
+>> >> > > On Thu, 6 Jun 2019, David Howells wrote:
+>> >> > >=20
+>> >> > > > Add a USB subsystem notification mechanism whereby notification=
+s about
+>> >> > > > hardware events such as device connection, disconnection, reset=
+ and I/O
+>> >> > > > errors, can be reported to a monitoring process asynchronously.
+>> >> > >=20
+>> >> > > USB I/O errors covers an awfully large and vague field.  Do we re=
+ally
+>> >> > > want to include them?  I'm doubtful.
+>> >> >=20
+>> >> > See the other patch on the linux-usb list that wanted to start addi=
+ng
+>> >> > KOBJ_CHANGE notifications about USB "i/o errors".
+>> >>=20
+>> >> That patch wanted to add notifications only for enumeration failures
+>> >> (assuming you're talking about the patch from Eugeniu Rosca), not I/O
+>> >> errors in general.
+>> >
+>> > Yes, sorry, I was thinking that as a "I/O failed in enumeration" :)
+>> >
+>> >> > So for "severe" issues, yes, we should do this, but perhaps not for=
+ all
+>> >> > of the "normal" things we see when a device is yanked out of the sy=
+stem
+>> >> > and the like.
+>> >>=20
+>> >> Then what counts as a "severe" issue?  Anything besides enumeration=20
+>> >> failure?
+>> >
+>> > Not that I can think of at the moment, other than the other recently
+>> > added KOBJ_CHANGE issue.  I'm sure we have other "hard failure" issues
+>> > in the USB stack that people will want exposed over time.
+>>=20
+>> From an XHCI standpoint, Transaction Errors might be one thing. They
+>> happen rarely and are a strong indication that the bus itself is
+>> bad. Either bad cable, misbehaving PHYs, improper power management, etc.
+>
+> Don't you also get transaction errors if the user unplugs a device in=20
+> the middle of a transfer?  That's not the sort of thing we want to sent=20
+> notifications about.
+
+Mathias, do we get Transaction Error if user removes cable during a
+transfer? I thought we would just get Port Status Change with CC bit
+cleared, no?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAlz/Sf8ACgkQzL64meEa
+mQYadA//auaAM9h9MprFzdErulkqH3HmHRaWdSU/kq9mtbaRLTuogqjRpvHqUc8p
+MTfNarWOJXGd5K8l8wjKT1LINfnFJSgcUOWE+bx3FFBbtistVC7KQ+ig9lb/+xj5
+TdkQa+9uZRkdFYkJrmPUTLjrnj74wNAnydPdqu5hPPcAHS+MCHF3KNTCN69h+s6g
+1F2nxcr9/6ZAPlIPtIHy3NW1wqDSvAKIM9nVWwTtT97B0pPAohAcu9/HrteyqyZ5
+53cqMqEn+8l430ehCn1IPNhQW9vIYFsxnaUdcRWpgUgEhkhmS8CBNPianolrMvf6
+VkWX0cfFSQeA/T/hrjqEfDAN+jaHlNGfBWScnqKupATHEOQtxobyxo/W9Pzsofqo
+k05eNr39pwAKaE0Fh+KOtrhnMKe9n3/ePAkYrYHdV30fuqF0WmtWhNw6btIYA30T
+2WHtHhJBP+yRu8VU0Y+EICyBF2L2gNO5sp3m2HsrpcQChescr1br7UYVGgXpxt8T
+/74wp8DlZB4NKSgrCrmwE3j1CfbgJCgf1KKsEXWUgF+zdVZTuoZVVOqo5G3iOxZg
+9Ry8nqLEA0Gz+HY/37wVmSG7hWS/Me7cpQg289uuEll9UXzpVal6oDaZrBFv3jeA
+pf6kOp99IqzbPVG/E16BGCdOgb5gwBNb+agM/Rj5jAn3f0BftoE=
+=gmf3
+-----END PGP SIGNATURE-----
+--=-=-=--
