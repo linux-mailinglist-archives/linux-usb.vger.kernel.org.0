@@ -2,138 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6107B3CF5B
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 16:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236373CF6B
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 16:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391280AbfFKOpG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 10:45:06 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:53000 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391127AbfFKOpG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 10:45:06 -0400
-Received: by mail-io1-f72.google.com with SMTP id p12so10104065iog.19
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2019 07:45:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=tUob3QbIRa6wmkeEyy9XTsPmW1BG3WSB6d8B47p1jt4=;
-        b=BhxoxnAkCiG6O6jW1xAN8BQ3lXJ3DyXySIm7dXobOTtBlpsL9SURFcYy7E+59maJN/
-         64fOtNH9UTQZILQhQMrbLYkIexOpdqK7s5AIZDK0glBXz4YVrxUzf4RNLOn9ePUuT9PU
-         1jsKyMwPwF0zFqWo4Zkza9wqyq/M+j1KgYPeABliANUMiJscpoTmpyinxLsRwb7ogtb6
-         h05LNWLDB6TYYZ/PN9OU71/ZT1qGzNPjnQwP+H2CvPXPsfzlJPizh1AnyoWNarBmMuSE
-         rfBWV/3y89KIx6qYBJGBNsT2oZ2y40rjsc8ttfuk/0ovddc8oyDQFsjBlHTwQTtRgE7G
-         Webw==
-X-Gm-Message-State: APjAAAWQLFPg8HaxDLmr+5SidBq2CMXQ/M1OIRxKM0iQpyRCIqMSYp7X
-        aZKAXvXfCSoEN8WrPL0iUbdPFf0OswDRhDNjvKuwcN/ew/Tv
-X-Google-Smtp-Source: APXvYqxUcaF8F+lxr/TKjqHdPHFrKqils+BWR4nhGGnebCV9hedlRnvZhYOzFq7Ue1OI/ANoVAi7xOOXefcmoubboxrhAswxLEnK
+        id S2391456AbfFKOvP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 10:51:15 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:35764 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2390036AbfFKOvP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 10:51:15 -0400
+Received: (qmail 2357 invoked by uid 2102); 11 Jun 2019 10:51:14 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 11 Jun 2019 10:51:14 -0400
+Date:   Tue, 11 Jun 2019 10:51:14 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Christoph Hellwig <hch@lst.de>
+cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: How to resolve an issue in swiotlb environment?
+In-Reply-To: <20190611064158.GA20601@lst.de>
+Message-ID: <Pine.LNX.4.44L0.1906110956510.1535-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b817:: with SMTP id o23mr34272047jam.134.1560264305324;
- Tue, 11 Jun 2019 07:45:05 -0700 (PDT)
-Date:   Tue, 11 Jun 2019 07:45:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000acb99a058b0d5741@google.com>
-Subject: WARNING in snd_usb_motu_microbookii_communicate/usb_submit_urb
-From:   syzbot <syzbot+d952e5e28f5fb7718d23@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, 11 Jun 2019, Christoph Hellwig wrote:
 
-syzbot found the following crash on:
+> Hi Alan,
+> 
+> thanks for the explanation.  It seems like what usb wants is to:
+> 
+>  - set sg_tablesize to 1 for devices that can't handle scatterlist at all
 
-HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=111aabfea00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=193d8457178b3229
-dashboard link: https://syzkaller.appspot.com/bug?extid=d952e5e28f5fb7718d23
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e71f51a00000
+Hmmm.  usb-storage (and possible other drivers too) currently handles
+such controllers by setting up an SG transfer as a series of separate
+URBs, one for each scatterlist entry.  But this is not the same thing,
+for two reasons:
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+d952e5e28f5fb7718d23@syzkaller.appspotmail.com
+	It has less I/O overhead than setting sg_tablesize to 1 because 
+	it sets up the whole transfer as a single SCSI command, which 
+	requires much less time and traffic on the USB bus than sending 
+	multiple commands.
 
-usb 2-1: Waiting for MOTU Microbook II to boot up...
-------------[ cut here ]------------
-usb 2-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 0 PID: 2059 at drivers/usb/core/urb.c:477  
-usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 2059 Comm: kworker/0:2 Not tainted 5.2.0-rc1+ #10
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x292/0x6c9 kernel/panic.c:218
-  __warn.cold+0x20/0x4b kernel/panic.c:575
-  report_bug+0x262/0x2a0 lib/bug.c:186
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
-RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Code: 4d 85 ed 74 2c e8 b8 06 e9 fd 4c 89 f7 e8 c0 44 13 ff 41 89 d8 44 89  
-e1 4c 89 ea 48 89 c6 48 c7 c7 20 1c 1a 86 e8 03 db be fd <0f> 0b e9 20 f4  
-ff ff e8 8c 06 e9 fd 4c 89 f2 48 b8 00 00 00 00 00
-RSP: 0018:ffff8881cdba6dc0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8127e98d RDI: ffffed1039b74daa
-RBP: ffff8881d7b3bb80 R08: ffff8881ccffc800 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff8881d9159510 R14: ffff8881d0f61a20 R15: ffff8881d0a28000
-  usb_start_wait_urb+0x108/0x2b0 drivers/usb/core/message.c:57
-  usb_bulk_msg+0x228/0x550 drivers/usb/core/message.c:253
-  snd_usb_motu_microbookii_communicate.constprop.0+0xe3/0x240  
-sound/usb/quirks.c:1011
-  snd_usb_motu_microbookii_boot_quirk sound/usb/quirks.c:1051 [inline]
-  snd_usb_apply_boot_quirk.cold+0x140/0x36b sound/usb/quirks.c:1280
-  usb_audio_probe+0x2ec/0x2010 sound/usb/card.c:590
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
-  process_one_work+0x905/0x1570 kernel/workqueue.c:2268
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
-  kthread+0x30b/0x410 kernel/kthread.c:254
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+	It has that requirement about each scatterlist element except
+	the last being a multiple of the maximum packet size in length.
+	(This is because the USB protocol says that a transfer ends
+	whenever a less-than-maximum-size packet is encountered.)
 
+We would like to avoid the extra I/O overhead for host controllers that
+can't handle SG.  In fact, switching to sg_tablesize = 1 would probably
+be considered a regression.
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+>  - set the virt boundary as-is for devices supporting "basic" scatterlist,
+>    although that still assumes they can rejiggle them because for example
+>    you could still get a smaller than expected first segment ala (assuming
+>    a 1024 byte packet size and thus 1023 virt_boundary_mask):
+> 
+>         | 0 .. 511 | 512 .. 1023 | 1024 .. 1535 |
+> 
+>    as the virt_bondary does not guarantee that the first segment is
+>    the same size as all the mid segments.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+But that is exactly the problem we need to solve.
+
+The issue which prompted the commit this thread is about arose in a
+situation where the block layer set up a scatterlist containing buffer
+sizes something like:
+
+	4096 4096 1536 1024
+
+and the maximum packet size was 1024.  The situation was a little 
+unusual, because it involved vhci-hcd (a virtual HCD).  This doesn't 
+matter much in normal practice because:
+
+	Block devices normally have a block size of 512 bytes or more.
+	Smaller values are very uncommon.  So scatterlist element sizes
+	are always divisible by 512.
+
+	xHCI is the only USB host controller type with a maximum packet 
+	size larger than 512, and xHCI hardware can do full 
+	scatter-gather so it doesn't care what the buffer sizes are.
+
+So another approach would be to fix vhci-hcd and then trust that the
+problem won't arise again, for the reasons above.  We would be okay so
+long as nobody tried to use a USB-SCSI device with a block size of 256
+bytes or less.
+
+>  - do not set any limit on xhci
+> 
+> But that just goes back to the original problem, and that is that with
+> swiotlb we are limited in the total dma mapping size, and recent block
+> layer changes in the way we handle the virt_boundary mean we now build
+> much larger requests by default.  For SCSI ULDs to take that into
+> account I need to call dma_max_mapping_size() and use that as the
+> upper bound for the request size.  My plan is to do that in scsi_lib.c,
+> but for that we need to expose the actual struct device that the dma
+> mapping is perfomed on to the scsi layer.  If that device is different
+> from the sysfs hierchary struct device, which it is for usb the ULDD
+> needs to scsi_add_host_with_dma and pass the dma device as well.  How
+> do I get at the dma device (aka the HCDs pci_dev or similar) from
+> usb-storage/uas?
+
+From usb_stor_probe2(): us->pusb_dev->bus->sysdev.
+From uas_probe(): udev->bus->sysdev.
+
+The ->sysdev field points to the device used for DMA mapping.  It is
+often the same as ->controller, but sometimes it is
+->controller->parent because of the peculiarities of some platforms.
+
+Alan Stern
+
