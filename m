@@ -2,147 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0673D4183A
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 00:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 776CC4187C
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 00:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405635AbfFKWdx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 18:33:53 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:36812 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405516AbfFKWdx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 18:33:53 -0400
-Received: by mail-pl1-f193.google.com with SMTP id d21so5723045plr.3
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2019 15:33:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rheF1XeHr+TBtp29Z8BqnMhDdcbdifoVvsMUnTVTQ0w=;
-        b=QKzewkqqr14aegyj9+KanpTXPALGWcAhgyKlFkPm+hIUpaiT5vfVCHwLDQjJnicRB4
-         jWOVMCSmyMs7lj97v8kBr5AIAjLEtAYARRhQvSIdJl6dY8M8BIMwu6hXtzBO/6hQAAVZ
-         R/3aJvCS5f1cpoXdCsmvWLdPJctFcP3gL7lhMRFa2f04l87qEV3sG+LctemNIIutyiz0
-         coO2IFn//1n30Y5C3x2psChDUceRjUq3sahJi0y3yAlHV+XXZsp9XT/sRIA/UjAFFgGJ
-         VuUO6M6OzU+lbVMu8QhXHbQzabAHnK3JcUwmnUhN5ilGVa3HtEDaHSJuGg4zy3T9ddsl
-         /2iQ==
+        id S2436973AbfFKW5T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 18:57:19 -0400
+Received: from mail-it1-f195.google.com ([209.85.166.195]:39203 "EHLO
+        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436793AbfFKW5T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 18:57:19 -0400
+Received: by mail-it1-f195.google.com with SMTP id j204so7546100ite.4;
+        Tue, 11 Jun 2019 15:57:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rheF1XeHr+TBtp29Z8BqnMhDdcbdifoVvsMUnTVTQ0w=;
-        b=dwfbeYmuiyxuIwGf/RISWwF+5ZzEze3hyr2NscXI4EXk93vCTSctEMIMqzXn96THk/
-         sMX+Y1rWOJKHkNRyE1/o75z8Pkv9iB/1CN+21TWx9ZjrRqMQwy1ks12d5TP16iuPB6Qd
-         8Yrf6w/Qq/OEWTnROidy8gsUIRMaMXYwbPV2zBuEwJ7EVwSVE3Xk9rPK9XRAj2TIBRZD
-         FHYuaZCRUZlm1VBOM7gtxNm+T/YVN+PQ3s8nI043flGW0KIY1vBKJaaFUG3wpG8rfiuf
-         zBh3Bi0q2f7Rol8II46hv3LHvqcAoSwbvRan89BSE1TZH6nBqm37fPkWkrsO4YKCpoj9
-         ntEg==
-X-Gm-Message-State: APjAAAXU3JtsZPNwT71RrYgjsqKs825YhYsmLXEU+GLVthpSgvZNB5yh
-        8xznu8VeNF+DqGJBMu5xp6X+VQ==
-X-Google-Smtp-Source: APXvYqzOrGp2e1lCEgBy09sDw+6XFk1Cp1xh3ZSUOlQ7lXvCww/YU+McON7j6rpV8WQzMMdtV7Kusw==
-X-Received: by 2002:a17:902:42a5:: with SMTP id h34mr40878255pld.16.1560292432547;
-        Tue, 11 Jun 2019 15:33:52 -0700 (PDT)
-Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id w4sm18222973pfw.97.2019.06.11.15.33.51
+        bh=grKmCXxGy1i4B/yLN1jR++efXaP6K2Z8kYYVl2A1dxI=;
+        b=P95OKKqu8OrZkExBDNopuBFQNSCcrDMYhXbDy6aatYkCMThNwHtfoSFfPmVMztUicz
+         NlQ/5dO4P18LjjYLoxRFNDXrRQ4Rw4PZDwLI7IinQkF7rTKfPhaxXLyAfIARVbtldowc
+         nYOoKjwAl04dAvIqTKzQ3byqO7346MQCc36wyNs4336TlF4r5lBvc0Lv+cxOj0rEp0U5
+         pSK8aBduM+J2dEEuWOTfTUlKjbr2GqZrxDjI4K1kAwUVrrrjXjiv2NhV+a31og9zjyt4
+         Hwj3Mgq/k+Br08P1ekw0TyKScnrp/tvPginu2c5s4G+A/ZA8WrPMVSn32TZcZfvHwZjP
+         6LQw==
+X-Gm-Message-State: APjAAAXaC6+1xrcR5puwEV/d26KNPGVAeReF2bm1tR9J/J5vodY0QYK4
+        zGLecGXB36f7suWlCGzk2Q==
+X-Google-Smtp-Source: APXvYqwT8uYEMg+kMVmtj5ABSGKwbpnRHmB8C+/X7mKXTCV3Kub3hF8yvzhLe7Pmhr2rwqzF2IOTuw==
+X-Received: by 2002:a24:a303:: with SMTP id p3mr19505197ite.128.1560293838305;
+        Tue, 11 Jun 2019 15:57:18 -0700 (PDT)
+Received: from localhost (ip-174-149-252-64.englco.spcsdns.net. [174.149.252.64])
+        by smtp.gmail.com with ESMTPSA id u187sm5500574iod.37.2019.06.11.15.57.16
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 11 Jun 2019 15:33:51 -0700 (PDT)
-Date:   Tue, 11 Jun 2019 15:33:49 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
-        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
-        linus.walleij@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, ard.biesheuvel@linaro.org,
-        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 7/8] usb: dwc3: qcom: Start USB in 'host mode' on the
- SDM845
-Message-ID: <20190611223349.GS4814@minitux>
-References: <20190610084213.1052-1-lee.jones@linaro.org>
- <20190610084213.1052-7-lee.jones@linaro.org>
+        Tue, 11 Jun 2019 15:57:17 -0700 (PDT)
+Date:   Tue, 11 Jun 2019 16:57:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Biju Das <biju.das@bp.renesas.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Simon Horman <horms@verge.net.au>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v7 2/7] dt-bindings: usb: renesas_usb3: Document usb role
+ switch support
+Message-ID: <20190611225710.GA28189@bogus>
+References: <1559296800-5610-1-git-send-email-biju.das@bp.renesas.com>
+ <1559296800-5610-3-git-send-email-biju.das@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190610084213.1052-7-lee.jones@linaro.org>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <1559296800-5610-3-git-send-email-biju.das@bp.renesas.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 10 Jun 01:42 PDT 2019, Lee Jones wrote:
-
-> When booting with Device Tree, the current default boot configuration
-> table option, the request to boot via 'host mode' comes from the
-> 'dr_mode' property.
-
-As I said in my previous review, the default mode for SDM845 is OTG. For
-the MTP specifically we specify the default mode to be peripheral (was
-host).
-
-
-The remaining thing that worries me with this patch is that I do expect
-that at least one of the USB-C ports is OTG. But I am not able to
-conclude anything regarding this and host-only is a good default for
-this type of device, so I suggest that we merge this.
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> A property of the same name can be used inside
-> ACPI tables too.  However it is missing from the SDM845's ACPI tables
-> so we have to supply this information using Platform Device Properties
-> instead.
+On Fri, 31 May 2019 10:59:55 +0100, Biju Das wrote:
+> Update the DT bindings documentation to support usb role switch
+> for USB Type-C connector using USB role switch class framework.
 > 
-> This does not change the behaviour of any currently supported devices.
-> The property is only set on ACPI enabled platforms, thus for H/W
-> booting DT, unless a 'dr_mode' property is present, the default is
-> still OTG (On-The-Go) as per [0].  Any new ACPI devices added will
-> also be able to over-ride this implementation by providing a 'dr_mode'
-> property in their ACPI tables.  In cases where 'dr_mode' is omitted
-> from the tables AND 'host mode' should not be the default (very
-> unlikely), then we will have to add some way of choosing between them
-> at run time - most likely by ACPI HID.
-> 
-> [0] Documentation/devicetree/bindings/usb/generic.txt
-> 
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Biju Das <biju.das@bp.renesas.com>
 > ---
->  drivers/usb/dwc3/dwc3-qcom.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  V6-->V7
+>   * Incorporated shimoda-san's review comments.
+>     (https://patchwork.kernel.org/patch/10944631/)
+>  V5-->V6
+>   * Updated description
+>   * Added usb-role-switch-property
+>  V4-->V5
+>   * No Change
+>  V3-->V4
+>   * No Change
+>  V2-->V3
+>   * Added optional renesas,usb-role-switch property.
+>  V1-->V2
+>   * Added usb-role-switch-property
+>   * Updated the example with usb-role-switch property.
+> ---
+>  .../devicetree/bindings/usb/renesas_usb3.txt       | 23 ++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 1e1f12b7991d..55ba04254e38 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -444,6 +444,11 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
->  	return 0;
->  }
->  
-> +static const struct property_entry dwc3_qcom_acpi_properties[] = {
-> +	PROPERTY_ENTRY_STRING("dr_mode", "host"),
-> +	{}
-> +};
-> +
->  static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
->  {
->  	struct dwc3_qcom 	*qcom = platform_get_drvdata(pdev);
-> @@ -488,6 +493,13 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
->  		goto out;
->  	}
->  
-> +	ret = platform_device_add_properties(qcom->dwc3,
-> +					     dwc3_qcom_acpi_properties);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "failed to add properties\n");
-> +		goto out;
-> +	}
-> +
->  	ret = platform_device_add(qcom->dwc3);
->  	if (ret)
->  		dev_err(&pdev->dev, "failed to add device\n");
-> -- 
-> 2.17.1
-> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
