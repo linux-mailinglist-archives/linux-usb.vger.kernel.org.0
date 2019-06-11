@@ -2,183 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBA43C47D
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 08:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7ABB3C476
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 08:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404083AbfFKGtx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 02:49:53 -0400
-Received: from mail-eopbgr80075.outbound.protection.outlook.com ([40.107.8.75]:21123
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390485AbfFKGtx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Jun 2019 02:49:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pVF6nsxEQ9hmF8CQcRfI3/eq+nddHvTEqmR6ieDJaAM=;
- b=SY4md4uB04MR19AIXRJRiQpq+SIWO0uUdU9cxm5V38SbEZgBkhr1r5nncDzhAZq52xFY52oe7UlqjSJHVNgHG1w9Z2dXAhR0b/D29kFAirctafNFUu4U/NUfSQUN7BIPHCisdUNvgkOdIViLzljzawHbTvETinsosp50m4Kw4JA=
-Received: from VI1PR04MB4158.eurprd04.prod.outlook.com (52.133.15.33) by
- VI1PR04MB3982.eurprd04.prod.outlook.com (10.171.182.15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1965.12; Tue, 11 Jun 2019 06:48:07 +0000
-Received: from VI1PR04MB4158.eurprd04.prod.outlook.com
- ([fe80::adce:72e8:d327:a10]) by VI1PR04MB4158.eurprd04.prod.outlook.com
- ([fe80::adce:72e8:d327:a10%7]) with mapi id 15.20.1965.011; Tue, 11 Jun 2019
- 06:48:07 +0000
-From:   Yinbo Zhu <yinbo.zhu@nxp.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Xiaobo Xie <xiaobo.xie@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ramneek Mehresh <ramneek.mehresh@freescale.com>,
-        Nikhil Badola <nikhil.badola@freescale.com>,
-        Ran Wang <ran.wang_1@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jiafei Pan <jiafei.pan@nxp.com>
-Subject: RE: [EXT] Re: [PATCH v6 4/5] usb: host: Stops USB controller init if
- PLL fails to lock
-Thread-Topic: [EXT] Re: [PATCH v6 4/5] usb: host: Stops USB controller init if
- PLL fails to lock
-Thread-Index: AQHVG2JFHPrNwRzzI0qVTHZVwmHoiqaNHVEAgAELuXCAB+Fn0A==
-Date:   Tue, 11 Jun 2019 06:48:07 +0000
-Message-ID: <VI1PR04MB4158848A7F9C3E68948EBAACE9ED0@VI1PR04MB4158.eurprd04.prod.outlook.com>
-References: <20190605054952.34687-4-yinbo.zhu@nxp.com>
- <Pine.LNX.4.44L0.1906051020540.1788-100000@iolanthe.rowland.org>
- <VI1PR04MB4158822B3E935275A488FDA7E9170@VI1PR04MB4158.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB4158822B3E935275A488FDA7E9170@VI1PR04MB4158.eurprd04.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yinbo.zhu@nxp.com; 
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 601cabe7-0658-4e97-feaa-08d6ee38c2ea
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB3982;
-x-ms-traffictypediagnostic: VI1PR04MB3982:
-x-microsoft-antispam-prvs: <VI1PR04MB398224A5116FD362A008C36EE9ED0@VI1PR04MB3982.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-forefront-prvs: 006546F32A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(136003)(366004)(396003)(346002)(39860400002)(189003)(199004)(13464003)(256004)(52536014)(99286004)(71190400001)(14444005)(73956011)(54906003)(5660300002)(71200400001)(66066001)(14454004)(2906002)(74316002)(6116002)(3846002)(33656002)(11346002)(86362001)(6506007)(229853002)(53936002)(446003)(102836004)(2171002)(486006)(26005)(68736007)(476003)(186003)(44832011)(55016002)(9686003)(6246003)(76116006)(66946007)(66476007)(64756008)(66446008)(53546011)(8936002)(25786009)(6916009)(6436002)(4326008)(76176011)(305945005)(8676002)(7696005)(478600001)(81166006)(66556008)(316002)(7736002)(81156014);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3982;H:VI1PR04MB4158.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ybzZndxF4Bmd/X8JnJ7MxsnWc0hSd4ooO7ngGMBpGAv3EqoW0IEKafEtRS+N0OsUAZOsaG0sDtf2SpWnuq7Q8gAgN2wM9+ccQXWKH3COVF3mOUqNWQjouhoxh3B0Cwvtb3gYiwLQBb3YqgbotVqz882zyF6q9g5QZQukqnkpYAjhHnfg6zJFMt+1gNDiY4VimmWVLybL8BNqYaidb6pDN2Mk4ZI0d837J+MNl3cFkhAzF4jIrRQicQ7D/xbB62GCvhn8Y25h0telUdMap0OB27KjL3+xA+pKXHDLWL1OJs1I4iI/ys2z3zDE+xtOCBV0U/WBxX8cl18YDiWNVldGrf7XTg7weUHtyLlPj+fROBLtqhLVzZU7sbzudFAdcXWn1tMENrj6fLtpSEqlUKpm8utAD/pIlMBFqdDkTgXcbPA=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S2391260AbfFKGsU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 02:48:20 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:38424 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391233AbfFKGsU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 02:48:20 -0400
+Received: by mail-wr1-f67.google.com with SMTP id d18so11594961wrs.5
+        for <linux-usb@vger.kernel.org>; Mon, 10 Jun 2019 23:48:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=uCSMMpjVp+n8RVynvtFQmd5yno8u/xvHbuDxjIjlf3Q=;
+        b=yCwu1b6oseIGNCa4ENrVZ2NJqG8vdmCdk4372HQsZxThmi+0gwT6777tOlLZIyJwVX
+         oLpGuMQsgO6WNKM4F3+3w9nudoOq5/d32qxypEX0uVJCAQNKgwuypnqnh+CrjYkx/pWU
+         4KCZUM50M1XOzM0yGqyvT4utDtdRvpT0u6nsvwDfnO6ALpFP1+Cxu0w+g5J+dPGSHbnq
+         D0ubYm2XJF9xfiwylohvY/uV28qQ4KZW03bor1wOdh0dXsSOgM2lcKHy3epj743Ms3Wq
+         69E5Mc/t2wF+4muHWkbDHJpAETfGksyW0k7NS/eudVSPrfSkShQdcV7//q2aMX8jbmGd
+         p8FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=uCSMMpjVp+n8RVynvtFQmd5yno8u/xvHbuDxjIjlf3Q=;
+        b=jo6fK2Ts7+fmpS1w89E+I1Au8KbfAOTdhKRHo0ZoRdYH4volYs33LerP6BaUsbO2DR
+         +m+qjuuqpiq5bZ1jd0hqvjEdxGCEZcj4OGSeAqN8GI1j8jTr19AlAS+GmCq1S7e4qtWC
+         FCaHeU8F2hjsDKqZ65MklbCONlFavDO8DLBH2NR/C5ghMiYkfN2EHGtGWxuiQx3n+HgD
+         lMqIVsS0zTlD+Ui8F0R6wtAP3lRKvF+xPrHgUV2wADgYtI4woppeAKOCDEqL2r6Tg70c
+         nJ0pXo1ov80Fnzh0E0PtNY/3IXMjDK/mFX72xCDjvEbKlwD2zpX4R4eBsaWh7qGxudmV
+         lAjA==
+X-Gm-Message-State: APjAAAXbJl7s4P8FgQnalc0YzcSgcpb0Llmm2oHfzA6NrZ66Eky4cB2H
+        iIbTkUlFacXpCDSDgL99ZoHVc2ZjWZM=
+X-Google-Smtp-Source: APXvYqz8STQGkz2dY+8TrA1J8S71d9VHxL2dXbV7YlNvShDrjEPjJrQKmAF7wP1XT3zGRPFX+71bZg==
+X-Received: by 2002:adf:f508:: with SMTP id q8mr20503396wro.299.1560235698182;
+        Mon, 10 Jun 2019 23:48:18 -0700 (PDT)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id 74sm1554648wma.7.2019.06.10.23.48.17
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 10 Jun 2019 23:48:17 -0700 (PDT)
+Message-ID: <a0039fb3590832e4fbb0b036281411a846296fcc.camel@unipv.it>
+Subject: Re: Slow I/O on USB media
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Date:   Tue, 11 Jun 2019 08:48:16 +0200
+In-Reply-To: <20190610143821.GB30602@kroah.com>
+References: <20190604054300.GE1588@kroah.com>
+         <9b013238be4e3c63e33181a954d1ecc3287d22e4.camel@unipv.it>
+         <20190605145525.GA28819@kroah.com>
+         <0c2adde7154b0a6c8b2ad7fc5258916731b78775.camel@unipv.it>
+         <463fb315f901783543c3bd5284523912c3c31080.camel@unipv.it>
+         <20190605173902.GE27700@kroah.com>
+         <b159e1518b670d4b0126c7671c30c8c3cb8fffbc.camel@unipv.it>
+         <20190606144757.GA12356@kroah.com>
+         <CAOsYWL03ALs6xJxcbDeppwtY9Q3v-vW6ptjK18CzL0RtJfboBw@mail.gmail.com>
+         <CAOsYWL2z=Rddvu62DP+QdQOf=4FwygmLrOPS0rJ8Uc+OzLKQvA@mail.gmail.com>
+         <20190610143821.GB30602@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 601cabe7-0658-4e97-feaa-08d6ee38c2ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2019 06:48:07.3504
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yinbo.zhu@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3982
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogWWluYm8gWmh1DQo+IFNl
-bnQ6IDIwMTnE6jbUwjbI1SAxNDozNQ0KPiBUbzogQWxhbiBTdGVybiA8c3Rlcm5Acm93bGFuZC5o
-YXJ2YXJkLmVkdT4NCj4gQ2M6IFhpYW9ibyBYaWUgPHhpYW9iby54aWVAbnhwLmNvbT47IEdyZWcg
-S3JvYWgtSGFydG1hbg0KPiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+OyBSYW1uZWVrIE1l
-aHJlc2gNCj4gPHJhbW5lZWsubWVocmVzaEBmcmVlc2NhbGUuY29tPjsgTmlraGlsIEJhZG9sYQ0K
-PiA8bmlraGlsLmJhZG9sYUBmcmVlc2NhbGUuY29tPjsgUmFuIFdhbmcgPHJhbi53YW5nXzFAbnhw
-LmNvbT47DQo+IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
-cm5lbC5vcmc7IEppYWZlaSBQYW4NCj4gPGppYWZlaS5wYW5AbnhwLmNvbT4NCj4gU3ViamVjdDog
-UkU6IFtFWFRdIFJlOiBbUEFUQ0ggdjYgNC81XSB1c2I6IGhvc3Q6IFN0b3BzIFVTQiBjb250cm9s
-bGVyIGluaXQgaWYgUExMDQo+IGZhaWxzIHRvIGxvY2sNCj4gDQo+IA0KPiANCj4gPiAtLS0tLU9y
-aWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+IEZyb206IEFsYW4gU3Rlcm4gW21haWx0bzpzdGVybkBy
-b3dsYW5kLmhhcnZhcmQuZWR1XQ0KPiA+IFNlbnQ6IDIwMTnE6jbUwjXI1SAyMjoyMg0KPiA+IFRv
-OiBZaW5ibyBaaHUgPHlpbmJvLnpodUBueHAuY29tPg0KPiA+IENjOiBYaWFvYm8gWGllIDx4aWFv
-Ym8ueGllQG54cC5jb20+OyBHcmVnIEtyb2FoLUhhcnRtYW4NCj4gPiA8Z3JlZ2toQGxpbnV4Zm91
-bmRhdGlvbi5vcmc+OyBSYW1uZWVrIE1laHJlc2gNCj4gPiA8cmFtbmVlay5tZWhyZXNoQGZyZWVz
-Y2FsZS5jb20+OyBOaWtoaWwgQmFkb2xhDQo+ID4gPG5pa2hpbC5iYWRvbGFAZnJlZXNjYWxlLmNv
-bT47IFJhbiBXYW5nIDxyYW4ud2FuZ18xQG54cC5jb20+Ow0KPiA+IGxpbnV4LXVzYkB2Z2VyLmtl
-cm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IEppYWZlaSBQYW4NCj4gPiA8
-amlhZmVpLnBhbkBueHAuY29tPg0KPiA+IFN1YmplY3Q6IFtFWFRdIFJlOiBbUEFUQ0ggdjYgNC81
-XSB1c2I6IGhvc3Q6IFN0b3BzIFVTQiBjb250cm9sbGVyIGluaXQNCj4gPiBpZiBQTEwgZmFpbHMg
-dG8gbG9jaw0KPiA+DQo+ID4gQ2F1dGlvbjogRVhUIEVtYWlsDQo+ID4NCj4gPiBPbiBXZWQsIDUg
-SnVuIDIwMTksIFlpbmJvIFpodSB3cm90ZToNCj4gPg0KPiA+ID4gRnJvbTogUmFtbmVlayBNZWhy
-ZXNoIDxyYW1uZWVrLm1laHJlc2hAZnJlZXNjYWxlLmNvbT4NCj4gPiA+DQo+ID4gPiBVU0IgZXJy
-YXR1bS1BMDA2OTE4IHdvcmthcm91bmQgdHJpZXMgdG8gc3RhcnQgaW50ZXJuYWwgUEhZIGluc2lk
-ZQ0KPiA+ID4gdWJvb3QgKHdoZW4gUExMIGZhaWxzIHRvIGxvY2spLiBIb3dldmVyLCBpZiB0aGUg
-d29ya2Fyb3VuZCBhbHNvDQo+ID4gPiBmYWlscywgdGhlbiBVU0IgaW5pdGlhbGl6YXRpb24gaXMg
-YWxzbyBzdG9wcGVkIGluc2lkZSBMaW51eC4NCj4gPiA+IEVycmF0dW0tQTAwNjkxOCB3b3JrYXJv
-dW5kIGZhaWx1cmUgY3JlYXRlcyAiZnNsLGVycmF0dW1fYTAwNjkxOCINCj4gPiA+IG5vZGUgaW4g
-ZGV2aWNlLXRyZWUuIFByZXNlbmNlIG9mIHRoaXMgbm9kZSBpbiBkZXZpY2UtdHJlZSBpcyB1c2Vk
-IHRvDQo+ID4gPiBzdG9wIFVTQiBjb250cm9sbGVyIGluaXRpYWxpemF0aW9uIGluIExpbnV4DQo+
-ID4gPg0KPiA+ID4gU2lnbmVkLW9mZi1ieTogUmFtbmVlayBNZWhyZXNoIDxyYW1uZWVrLm1laHJl
-c2hAZnJlZXNjYWxlLmNvbT4NCj4gPiA+IFNpZ25lZC1vZmYtYnk6IFN1cmVzaCBHdXB0YSA8c3Vy
-ZXNoLmd1cHRhQGZyZWVzY2FsZS5jb20+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBZaW5ibyBaaHUg
-PHlpbmJvLnpodUBueHAuY29tPg0KPiA+ID4gLS0tDQo+ID4gPiBDaGFuZ2UgaW4gdjY6DQo+ID4g
-PiAgICAgICAgICAgICAgIGFkZCBhICJGYWxsIHRocm91Z2giIGNvbW1lbnQNCj4gPiA+DQo+ID4g
-PiAgZHJpdmVycy91c2IvaG9zdC9laGNpLWZzbC5jICAgICAgfCAxMCArKysrKysrKystDQo+ID4g
-PiAgZHJpdmVycy91c2IvaG9zdC9mc2wtbXBoLWRyLW9mLmMgfCAgMyArKy0NCj4gPiA+ICAyIGZp
-bGVzIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+ID4gPg0KPiA+
-ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1mc2wuYw0KPiA+ID4gYi9kcml2
-ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMgaW5kZXggOGYzYmYzZWZiMDM4Li44NmFlMzcwODZhNzQN
-Cj4gPiA+IDEwMDY0NA0KPiA+ID4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC9laGNpLWZzbC5jDQo+
-ID4gPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMNCj4gPiA+IEBAIC0yMzQsOCAr
-MjM0LDE2IEBAIHN0YXRpYyBpbnQgZWhjaV9mc2xfc2V0dXBfcGh5KHN0cnVjdCB1c2JfaGNkICpo
-Y2QsDQo+ID4gPiAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+ID4gICAgICAgY2FzZSBGU0xfVVNC
-Ml9QSFlfVVRNSV9XSURFOg0KPiA+ID4gICAgICAgICAgICAgICBwb3J0c2MgfD0gUE9SVF9QVFNf
-UFRXOw0KPiA+ID4gLSAgICAgICAgICAgICAvKiBmYWxsIHRocm91Z2ggKi8NCj4gPiA+ICAgICAg
-IGNhc2UgRlNMX1VTQjJfUEhZX1VUTUk6DQo+ID4gPiArICAgICAgICAgICAgIC8qIFByZXNlbmNl
-IG9mIHRoaXMgbm9kZSAiaGFzX2ZzbF9lcnJhdHVtX2EwMDY5MTgiDQo+ID4gPiArICAgICAgICAg
-ICAgICAqIGluIGRldmljZS10cmVlIGlzIHVzZWQgdG8gc3RvcCBVU0IgY29udHJvbGxlcg0KPiA+
-ID4gKyAgICAgICAgICAgICAgKiBpbml0aWFsaXphdGlvbiBpbiBMaW51eA0KPiA+ID4gKyAgICAg
-ICAgICAgICAgKi8NCj4gPiA+ICsgICAgICAgICAgICAgaWYgKHBkYXRhLT5oYXNfZnNsX2VycmF0
-dW1fYTAwNjkxOCkgew0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgIGRldl93YXJuKGRldiwg
-IlVTQiBQSFkgY2xvY2sgaW52YWxpZFxuIik7DQo+ID4gPiArICAgICAgICAgICAgICAgICAgICAg
-cmV0dXJuIC1FSU5WQUw7DQo+ID4gPiArICAgICAgICAgICAgIH0NCj4gPiA+ICsNCj4gPiA+ICAg
-ICAgIGNhc2UgRlNMX1VTQjJfUEhZX1VUTUlfRFVBTDoNCj4gPg0KPiA+DQo+ID4gWW91IG5lZWQg
-dG8gYWRkIGEgIkZhbGwgdGhyb3VnaCIgY29tbWVudCBiZXR3ZWVuIHRoZXNlIHR3byBjYXNlcy4N
-Cj4gPiA+ICAgICAgIGNhc2UgRlNMX1VTQjJfUEhZX1VUTUlfRFVBTDoNCj4gPiA+ICAgICAgICAg
-ICAgICAgLyogUEhZX0NMS19WQUxJRCBiaXQgaXMgZGUtZmVhdHVyZWQgZnJvbSBhbGwgY29udHJv
-bGxlcg0KPiA+ID4gICAgICAgICAgICAgICAgKiB2ZXJzaW9ucyBiZWxvdyAyLjQgYW5kIGlzIHRv
-IGJlIGNoZWNrZWQgb25seSBmb3INCj4gPg0KPiA+IEFsYW4gU3Rlcm4NCj4gPiBIaSBBbGFuIFN0
-ZXJuLA0KPiA+DQo+ID4gWW91ciBtZWFuaW5nIGlzIHRvIHJlbW92ZSAiLyogZmFsbCB0aHJvdWdo
-Ki8iIG9yIGFkZCB0aGUgZXJyYXR1bSBjb21tb250DQo+IHJlcGxhY2UgIi8qIGZhbGwgdGhyb3Vn
-aCovIg0KPiA+DQo+ID4gUmVnYXJkcywNCj4gPiBZaW5ibw0KPiA+IFRoaXMgaXMgYmFkLiAgWW91
-IGdvdCByaWQgb2YgYSAiZmFsbCB0aHJvdWdoIiBjb21tZW50IHRoYXQgd2FzIG5lZWRlZCwNCj4g
-PiBhbmQgeW91IGZhaWxlZCB0byBhZGQgYW5vdGhlciBvbmUgd2hlcmUgaXQgd2FzIG5lZWRlZC4N
-Cj4gPg0KPiA+IEFsYW4gU3Rlcm4NCj4gSSBkb24ndCBnZXQgeW91ciBtZWFuaW5nLg0KPiBZaW5i
-bw0KSGkgQWxhbiwNCg0KWW91ciBtZWFuaW5nIGlzIGxpa2UgZm9sbG93aW5nIGNvZGUgY2hhbmdl
-LCBpc24ndCBpdD8gaWYgbm8sIGNvdWxkIHlvdSBnaXZlIGEgZXhhbXBsZQ0KICAgICAgICAgICAg
-ICAgIHBvcnRzYyB8PSBQT1JUX1BUU19QVFc7DQogICAgICAgICAgICAgICAgLyogZmFsbCB0aHJv
-dWdoICovDQogICAgICAgIGNhc2UgRlNMX1VTQjJfUEhZX1VUTUk6DQorICAgICAgICAgICAgICAg
-LyogUHJlc2VuY2Ugb2YgdGhpcyBub2RlICJoYXNfZnNsX2VycmF0dW1fYTAwNjkxOCINCisgICAg
-ICAgICAgICAgICAgKiBpbiBkZXZpY2UtdHJlZSBpcyB1c2VkIHRvIHN0b3AgVVNCIGNvbnRyb2xs
-ZXINCisgICAgICAgICAgICAgICAgKiBpbml0aWFsaXphdGlvbiBpbiBMaW51eA0KKyAgICAgICAg
-ICAgICAgICAqLw0KKyAgICAgICAgICAgICAgIGlmIChwZGF0YS0+aGFzX2ZzbF9lcnJhdHVtX2Ew
-MDY5MTgpIHsNCisgICAgICAgICAgICAgICAgICAgICAgIGRldl93YXJuKGRldiwgIlVTQiBQSFkg
-Y2xvY2sgaW52YWxpZFxuIik7DQorICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gLUVJTlZB
-TDsNCisgICAgICAgICAgICAgICB9DQorDQogICAgICAgIGNhc2UgRlNMX1VTQjJfUEhZX1VUTUlf
-RFVBTDoNCiAgICAgICAgICAgICAgICAvKiBQSFlfQ0xLX1ZBTElEIGJpdCBpcyBkZS1mZWF0dXJl
-ZCBmcm9tIGFsbCBjb250cm9sbGVyDQpSZWdhcmRzLA0KWWluYm8uDQoNCj4gPg0KPiA+ID4gICAg
-ICAgICAgICAgICAvKiBQSFlfQ0xLX1ZBTElEIGJpdCBpcyBkZS1mZWF0dXJlZCBmcm9tIGFsbCBj
-b250cm9sbGVyDQo+ID4gPiAgICAgICAgICAgICAgICAqIHZlcnNpb25zIGJlbG93IDIuNCBhbmQg
-aXMgdG8gYmUgY2hlY2tlZCBvbmx5IGZvcg0KPiA+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNi
-L2hvc3QvZnNsLW1waC1kci1vZi5jDQo+ID4gPiBiL2RyaXZlcnMvdXNiL2hvc3QvZnNsLW1waC1k
-ci1vZi5jDQo+ID4gPiBpbmRleCA0ZjhiOGEwOGM5MTQuLjc2MmI5NzYwMGFiMCAxMDA2NDQNCj4g
-PiA+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QvZnNsLW1waC1kci1vZi5jDQo+ID4gPiArKysgYi9k
-cml2ZXJzL3VzYi9ob3N0L2ZzbC1tcGgtZHItb2YuYw0KPiA+ID4gQEAgLTIyNCwxMyArMjI0LDE0
-IEBAIHN0YXRpYyBpbnQgZnNsX3VzYjJfbXBoX2RyX29mX3Byb2JlKHN0cnVjdA0KPiA+IHBsYXRm
-b3JtX2RldmljZSAqb2ZkZXYpDQo+ID4gPiAgICAgICAgICAgICAgIG9mX3Byb3BlcnR5X3JlYWRf
-Ym9vbChucCwgImZzbCx1c2ItZXJyYXR1bS1hMDA1Mjc1Iik7DQo+ID4gPiAgICAgICBwZGF0YS0+
-aGFzX2ZzbF9lcnJhdHVtX2EwMDU2OTcgPQ0KPiA+ID4gICAgICAgICAgICAgICBvZl9wcm9wZXJ0
-eV9yZWFkX2Jvb2wobnAsICJmc2wsdXNiX2VycmF0dW0tYTAwNTY5NyIpOw0KPiA+ID4gKyAgICAg
-cGRhdGEtPmhhc19mc2xfZXJyYXR1bV9hMDA2OTE4ID0NCj4gPiA+ICsgICAgICAgICAgICAgb2Zf
-cHJvcGVydHlfcmVhZF9ib29sKG5wLCAiZnNsLHVzYl9lcnJhdHVtLWEwMDY5MTgiKTsNCj4gPiA+
-DQo+ID4gPiAgICAgICBpZiAob2ZfZ2V0X3Byb3BlcnR5KG5wLCAiZnNsLHVzYl9lcnJhdHVtXzE0
-IiwgTlVMTCkpDQo+ID4gPiAgICAgICAgICAgICAgIHBkYXRhLT5oYXNfZnNsX2VycmF0dW1fMTQg
-PSAxOw0KPiA+ID4gICAgICAgZWxzZQ0KPiA+ID4gICAgICAgICAgICAgICBwZGF0YS0+aGFzX2Zz
-bF9lcnJhdHVtXzE0ID0gMDsNCj4gPiA+DQo+ID4gPiAtDQo+ID4gPiAgICAgICAvKg0KPiA+ID4g
-ICAgICAgICogRGV0ZXJtaW5lIHdoZXRoZXIgcGh5X2Nsa192YWxpZCBuZWVkcyB0byBiZSBjaGVj
-a2VkDQo+ID4gPiAgICAgICAgKiBieSByZWFkaW5nIHByb3BlcnR5IGluIGRldmljZSB0cmVlDQo+
-ID4gPg0KDQo=
+Il giorno lun, 10/06/2019 alle 16.38 +0200, Greg KH ha scritto:
+> On Sat, Jun 08, 2019 at 11:29:16AM +0200, Andrea Vai wrote:
+> > Il giorno sab 8 giu 2019 alle ore 09:43 Andrea Vai
+> > <andrea.vai@unipv.it> ha scritto:
+> > >
+> > >[...]
+> > >
+> > > Hi,
+> > >   there is also something else I don't understand.
+> > > Every time I build a kernel, then after booting it "uname -a"
+> shows
+> > > something like
+> > >
+> > > Linux [...] 4.19.0-rc5+ #12 SMP Sat Jun 8 00:26:42 CEST 2019
+> x86_64
+> > > x86_64 x86_64 GNU/Linux
+> > >
+> > > where the number after "#" increments by 1 from the previous
+> build.
+> > >
+> > > Now I have the same number (#12) after a new build, is it
+> normal?
+> > > Furthermore, "ls -lrt /boot/v*" shows the last lines to be
+> > >
+> > > -rw-r--r--. 1 root root 8648656  8 giu 00.35 /boot/vmlinuz-
+> 4.19.0-rc5+.old
+> > > -rw-r--r--. 1 root root 8648656  8 giu 09.08 /boot/vmlinuz-
+> 4.19.0-rc5+
+> > >
+> > > and "diff /boot/vmlinuz-4.19.0-rc5+.old /boot/vmlinuz-4.19.0-
+> rc5+"
+> > > shows they are identical. Why? I expected that each bisect would
+> lead
+> > > to a different kernel.
+> > > Assuming that the opposite can happen, does it mean that when I
+> say
+> > > i.e. "git bisect bad", then build a new kernel and see that is
+> > > identical to the previous one I can run "git bisect bad" without
+> > > booting into the new one and even making the test?
+> > >
+> > > Another thing I don't understand is that I told 4.20.0 to be
+> good, so
+> > > I would expect that I don't need to test any older version, but
+> as far
+> > > as I know 4.19.0-rc5+ is older than 4.20.0, so why is it
+> involved in
+> > > the bisection?
+> > >
+> > > I had to "git bisect skip" one time (the kernel did not boot),
+> but as
+> > > far as I know I don't think this could be related to my doubts.
+> > > [...]
+> > 
+> > Update:
+> >   I have concluded the bisection, found that
+> > "9cb5f4873b993497d462b9406f9a1d8a148e461b is the first bad
+> commit",
+> > reverted it, and the test still fails (btw, the final kernel file,
+> > /boot/vmlinuz-4.19.0-rc5+, does not differ from the previous one).
+> > 
+> > So, all my doubts above are still there (and growing). What I am
+> doing wrong?
+> 
+> Are you _SURE_ that a 4.20.0 release actually worked properly for
+> you?
+> Did you build one and do your tests?  Or are you just relying on
+> your
+> Fedora build still?
+
+Yes, I am really sure of that, and the definitive proof is that since
+I stopped bisecting I made the 4.20.0 the default boot kernel, and all
+my backups are done "quickly" (12min to create a 12GB archive).
+Furthermore, "uname -a" shows
+
+Linux 4.20.0 #1 SMP Thu Jun 6 22:32:29 CEST 2019 x86_64 x86_64 x86_64
+GNU/Linux
+
+To have one more evidence, I started the test while writing down this
+sentence, and it has just finished in one minute and a half (1 GB file
+copy).
+
+I will go on following your other suggestions; by the time, thank you
+for pointing this out,
+
+Andrea
+
