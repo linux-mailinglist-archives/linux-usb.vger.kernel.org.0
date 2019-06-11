@@ -2,138 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE65C3CDCC
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 15:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F013CE91
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 16:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388194AbfFKN6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 09:58:46 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:40787 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387671AbfFKN6q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 09:58:46 -0400
-Received: by mail-wm1-f65.google.com with SMTP id v19so3045722wmj.5
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2019 06:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vKGIIEZ1EWhF8d9VHamuiFuthqcJ8PCoZC+PlSBmz6w=;
-        b=EzeY2hPjuYcKKephwbA2K1k8wINtGW9iU2baby+Xliqe1XCNSRPc1BDCV0c7P2Cfyq
-         fiswGap6+7EHJyYD4nFTEmjDAndmmuLpxkj0z6N8Si5dC3jZyenH1cLi8DdmoDNfj4ba
-         ARQ8YUjx20+dGQtgThBUX9sUMXH4R3nlFlzRiYIEV3Zey05eBOYBfJFFwmCPkmO9Gn1a
-         uOoUwOPFvWqAhOOAmKWhhM2wZ98IENtfIHlORA/cK+Qf8dR8LC/pGpZmW1ELLdhHk+Pq
-         ydAqAkXyQU1W/SahLXNTTwrpSDtKRdWPjj0lKnHPvnDVgef+NAYipXlO8rplYVr932Yj
-         fiwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vKGIIEZ1EWhF8d9VHamuiFuthqcJ8PCoZC+PlSBmz6w=;
-        b=rknJwfJGDzRES4wjB+rWXw5sHrB5Qf6Ge2rnVImQo2C4q3u19q15I52pEwhSKMb00f
-         5Z0ySWjJR/v98vCBGaqGiVRrhcjzcVBHCcJUKx4/ViSgEE+9+0lx3u43H7LgQ/BAskhu
-         E5bnwRwT0MdVboPS6K6oGnTXsRm75BfSNXsSBZWtdmV6tNfqRcOnf7zjDfO/JvT+1L3e
-         HGqTtC8i/C+Mr20afmEKbusijjwVd/pGHta+hJdT/n4AsENUGOPuUIr+DSR0kG+wEJKb
-         qhfB0hdZcMiNaqWlVKwAOK48AHp1EfSZu+lZfE+AWKH/IllsUEHM0v6GuhA6l5rJOE/8
-         orLA==
-X-Gm-Message-State: APjAAAXqn6bPVwKUX+666mRJ0SywxKxC1eGffOTiRnGJTlgf3IihlRHM
-        F9N9av6wKDoly15Gy/QV9jUQ5Q==
-X-Google-Smtp-Source: APXvYqzt0u8aL8eNXkVgF2OmeqrddaS2cdZwbIEkydNhWGlivtGsTJEGph122kdnU4rK2V5IkAeWDw==
-X-Received: by 2002:a05:600c:389:: with SMTP id w9mr17129874wmd.139.1560261523914;
-        Tue, 11 Jun 2019 06:58:43 -0700 (PDT)
-Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id c16sm12317446wrr.53.2019.06.11.06.58.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 11 Jun 2019 06:58:43 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     balbi@kernel.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: meson-g12a: Add support for IRQ based OTG switching
-Date:   Tue, 11 Jun 2019 15:58:42 +0200
-Message-Id: <20190611135842.8396-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.21.0
+        id S2388722AbfFKOVU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 10:21:20 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:22932 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387767AbfFKOVT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Jun 2019 10:21:19 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 1E922308218D;
+        Tue, 11 Jun 2019 14:21:14 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-126.rdu2.redhat.com [10.10.120.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D9956611AA;
+        Tue, 11 Jun 2019 14:21:10 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk>
+References: <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
+        linux-usb@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: What do LSMs *actually* need for checks on notifications?
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <31008.1560262869.1@warthog.procyon.org.uk>
+Date:   Tue, 11 Jun 2019 15:21:09 +0100
+Message-ID: <31009.1560262869@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Tue, 11 Jun 2019 14:21:19 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for the OTG ID change interrupt to switch between Host
-and Device mode.
+To see if we can try and make progress on this, can we try and come at this
+from another angle: what do LSMs *actually* need to do this?  And I grant that
+each LSM might require different things.
 
-Tested on the Hardkernel Odroid-N2 board.
+-~-
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- drivers/usb/dwc3/dwc3-meson-g12a.c | 32 ++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
+[A] There are a bunch of things available, some of which may be coincident,
+depending on the context:
 
-diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-index 2aec31a2eacb..e5c5ad0d529e 100644
---- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-+++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-@@ -348,6 +348,22 @@ static enum usb_role dwc3_meson_g12a_role_get(struct device *dev)
- 		USB_ROLE_HOST : USB_ROLE_DEVICE;
- }
- 
-+static irqreturn_t dwc3_meson_g12a_irq_thread(int irq, void *data)
-+{
-+	struct dwc3_meson_g12a *priv = data;
-+	enum phy_mode otg_id;
-+
-+	otg_id = dwc3_meson_g12a_get_id(priv);
-+	if (otg_id != priv->otg_phy_mode) {
-+		if (dwc3_meson_g12a_otg_mode_set(priv, otg_id))
-+			dev_warn(priv->dev, "Failed to switch OTG mode\n");
-+	}
-+
-+	regmap_update_bits(priv->regmap, USB_R5, USB_R5_ID_DIG_IRQ, 0);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static struct device *dwc3_meson_g12_find_child(struct device *dev,
- 						const char *compatible)
- {
-@@ -374,7 +390,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 	void __iomem *base;
- 	struct resource *res;
- 	enum phy_mode otg_id;
--	int ret, i;
-+	int ret, i, irq;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -436,6 +452,19 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 	/* Get dr_mode */
- 	priv->otg_mode = usb_get_dr_mode(dev);
- 
-+	if (priv->otg_mode == USB_DR_MODE_OTG) {
-+		/* Ack irq before registering */
-+		regmap_update_bits(priv->regmap, USB_R5,
-+				   USB_R5_ID_DIG_IRQ, 0);
-+
-+		irq = platform_get_irq(pdev, 0);
-+		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+						dwc3_meson_g12a_irq_thread,
-+						IRQF_ONESHOT, pdev->name, priv);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	dwc3_meson_g12a_usb_init(priv);
- 
- 	/* Init PHYs */
-@@ -460,7 +489,6 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 
- 	/* Setup OTG mode corresponding to the ID pin */
- 	if (priv->otg_mode == USB_DR_MODE_OTG) {
--		/* TOFIX Handle ID mode toggling via IRQ */
- 		otg_id = dwc3_meson_g12a_get_id(priv);
- 		if (otg_id != priv->otg_phy_mode) {
- 			if (dwc3_meson_g12a_otg_mode_set(priv, otg_id))
--- 
-2.21.0
+ (1) The creds of the process that created a watch_queue (ie. opened
+     /dev/watch_queue).
 
+ (2) The creds of the process that set a watch (ie. called watch_sb,
+     KEYCTL_NOTIFY, ...);
+
+ (3) The creds of the process that tripped the event (which might be the
+     system).
+
+ (4) The security attributes of the object on which the watch was set (uid,
+     gid, mode, labels).
+
+ (5) The security attributes of the object on which the event was tripped.
+
+ (6) The security attributes of all the objects between the object in (5) and
+     the object in (4), assuming we work from (5) towards (4) if the two
+     aren't coincident (WATCH_INFO_RECURSIVE).
+
+At the moment, when post_one_notification() wants to write a notification into
+a queue, it calls security_post_notification() to ask if it should be allowed
+to do so.  This is passed (1) and (3) above plus the notification record.
+
+
+[B] There are a number of places I can usefully potentially add hooks:
+
+ (a) The point at which a watch queue is created (ie. /dev/watch_queue is
+     opened).
+
+ (b) The point at which a watch is set (ie. watch_sb).
+
+ (c) The point at which a notification is generated (ie. an automount point is
+     tripped).
+
+ (d) The point at which a notification is delivered (ie. we write the message
+     into the queue).
+
+ (e) All the points at which we walk over an object in a chain from (c) to
+     find the watch on which we can effect (d) (eg. we walk rootwards from a
+     mountpoint to find watches on a branch in the mount topology).
+
+
+[C] Problems that need to be resolved:
+
+ (x) Do I need to put a security pointer in struct watch for the active LSM to
+     fill in?  If so, I presume this would need passing to
+     security_post_notification().
+
+ (y) What checks should be done on object destruction after final put and what
+     contexts need to be supplied?
+
+     This one is made all the harder because the creds that are in force when
+     close(), exit(), exec(), dup2(), etc. close a file descriptor might need
+     to be propagated to deferred-fput, which must in turn propagate them to
+     af_unix-cleanup, and thence back to deferred-fput and thence to implicit
+     unmount (dissolve_on_fput()[*]).
+
+     [*] Though it should be noted that if this happens, the subtree cannot be
+     	 attached to the root of a namespace.
+
+     Further, if several processes are sharing a file object, it's not
+     predictable as to which process the final notification will come from.
+
+ (z) Do intermediate objects, say in a mount topology notification, actually
+     need to be checked against the watcher's creds?  For a mount topology
+     notification, would this require calling inode_permission() for each
+     intervening directory?
+
+     Doing that might be impractical as it would probably have to be done
+     outside of of the RCU read lock and the filesystem ->permission() hooks
+     might want to sleep (to touch disk or talk to a server).
+
+David
