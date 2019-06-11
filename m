@@ -2,103 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D98F3D401
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 19:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C843D52B
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 20:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406049AbfFKR1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 13:27:07 -0400
-Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:43676 "EHLO
-        pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405718AbfFKR1G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 13:27:06 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 3F9B13FA1F;
-        Tue, 11 Jun 2019 19:26:58 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 tagged_above=-999 required=6.31
-        tests=[ALL_TRUSTED=-1, BAYES_00=-1.9] autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id gYRQZqnvAFS5; Tue, 11 Jun 2019 19:26:57 +0200 (CEST)
-Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
-        (Authenticated sender: mb547485)
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 579773F8E0;
-        Tue, 11 Jun 2019 19:26:56 +0200 (CEST)
-Date:   Tue, 11 Jun 2019 19:26:54 +0200
-From:   Fredrik Noring <noring@nocrew.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     laurentiu.tudor@nxp.com, hch@lst.de, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        marex@denx.de, leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
-        robin.murphy@arm.com, JuergenUrban@gmx.de
-Subject: Re: [PATCH v7 3/5] usb: host: ohci-sm501: init genalloc for local
- memory
-Message-ID: <20190611172654.GA2602@sx9>
-References: <20190529102843.13174-1-laurentiu.tudor@nxp.com>
- <20190529102843.13174-4-laurentiu.tudor@nxp.com>
- <20190605214622.GA22254@roeck-us.net>
- <20190611133223.GA30054@roeck-us.net>
+        id S2406828AbfFKSIn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 14:08:43 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35556 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406685AbfFKSIn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 14:08:43 -0400
+Received: by mail-ot1-f67.google.com with SMTP id j19so12824335otq.2;
+        Tue, 11 Jun 2019 11:08:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O89jlWqoEX7q/G6CiVxiDDmlI/FOM0sB6BHEXW+0fFM=;
+        b=cHdSLiwdTyZbPGVz/qYnZJJCYplwKEbE0QdVdYmjqez+GGasa8TA9GEaZeZf+/Q/yc
+         8TIaqOiIijHlpQPN+b0BBZvmxtMd47x/uYK7Vk5XPD8mYxbl+yUPaIuF7vI0M7QzRtm0
+         HNeafuVGHu/sa/BCqZcATKXmtS7Eag+BS6pOHP7N3/7dY0uWHKLKUSLT34TY6AzMuvGD
+         Nr42TPWl2pxEfX5qbCwSGwJadJSQJ9gNcRUKKGUG7vKQZCsm/m8sJ9YWSh2bYRWL5CwC
+         TqB5iiaGNo0Yp7KTmdwXVV/+fDhjaVwXeP064+XZo1StqFJ682mO7SEdwmnKHz22qWhC
+         eMcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O89jlWqoEX7q/G6CiVxiDDmlI/FOM0sB6BHEXW+0fFM=;
+        b=VaYzh+rozdbOrVD40m3Udl774Bu1PnUio0GMtKQJveIg/k7Fka3tIiD8hRng1TeFPV
+         G0fJcU4XvCbdqaItEhjSzfyNO5CMzL9OH7wreiX1baW6jMHNxN13OZiQ8pyJaD54AQ03
+         3CoK5KsXTPfXP6iYOyskBylqma3iV4qABmS6MaOcVCKN7lfQV9I+wwE77f1p+4Wuqb1T
+         pZgmnWbuwL627zCNGilzqKanShPo2jEKGF/YMU5gDpnOTx74PTvVLR7fM5xRx9euZrUs
+         h5UtxUPUfawn2YWyhri/3AzAYYyG+Z5RIwRax1RLYAoVPmSTdt770oB7Ha6Xmrra4wov
+         cDWw==
+X-Gm-Message-State: APjAAAUvq3/opwI7sGMhDp1iUQui+g/X70Ma5DTjVz0tN1PT1jRKMJaq
+        sRJaMxZdagKzWYxTE0N9RFHvorBT9CKV6Xa5ork=
+X-Google-Smtp-Source: APXvYqx6SoLuddvsSFbGwWXlHsKKnRFjZOzVnVqvxNNOkTK4cQ1P337c36bckWzk3tAMnUuN46R+aOyOVrxZcNZhBbc=
+X-Received: by 2002:a9d:32a6:: with SMTP id u35mr36300662otb.81.1560276522291;
+ Tue, 11 Jun 2019 11:08:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190611133223.GA30054@roeck-us.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190611135842.8396-1-narmstrong@baylibre.com>
+In-Reply-To: <20190611135842.8396-1-narmstrong@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 11 Jun 2019 20:08:31 +0200
+Message-ID: <CAFBinCAkwjf9oDV6AGPi2PzzQ2KNTXXDHW6FTfN3kXpDT6cFpg@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: meson-g12a: Add support for IRQ based OTG switching
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     balbi@kernel.org, linux-amlogic@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Guenter,
+Hi Neil,
 
-> > This patch results in usb access failures when trying to boot from the
-> > sm501-usb controller on sh4 with qemu.
-> > 
-> > usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> > sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> > sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 08 7c 00 00 f0 00
-> > print_req_error: I/O error, dev sda, sector 2172 flags 80700
-> > usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> > sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> > sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 01 da 00 00 f0 00
-> > print_req_error: I/O error, dev sda, sector 474 flags 84700
-> > usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> > sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> > sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 02 da 00 00 f0 00
-> > print_req_error: I/O error, dev sda, sector 730 flags 84700
-> > usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> > sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> > sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 0b 50 00 00 f0 00
-> > print_req_error: I/O error, dev sda, sector 2896 flags 84700
-> > 
-> > Qemu command line is:
-> > 
-> > The qemu command line is:
-> > 
-> > qemu-system-sh4 -M r2d \
-> >         -kernel ./arch/sh/boot/zImage \
-> > 	-snapshot \
-> > 	-usb -device usb-storage,drive=d0 \
-> > 	-drive file=rootfs.ext2,if=none,id=d0,format=raw \
-> > 	-append 'panic=-1 slub_debug=FZPUA root=/dev/sda rootwait console=ttySC1,115200 earlycon=scif,mmio16,0xffe80000 noiotrap' \
-> > 	-serial null -serial stdio \
-> > 	-net nic,model=rtl8139 -net user -nographic -monitor null
-> > 
-> > Reverting this patch as well as "USB: drop HCD_LOCAL_MEM flag" fixes the
-> > problem. Reverting "USB: drop HCD_LOCAL_MEM flag" alone does not help.
-> > 
-> 
-> This problem is still seen in next-20190611.
-> Has anyone actually tested this code ?
+On Tue, Jun 11, 2019 at 3:58 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
+>
+> Add support for the OTG ID change interrupt to switch between Host
+> and Device mode.
+>
+> Tested on the Hardkernel Odroid-N2 board.
+>
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+with the three questions/comments below answered/addressed:
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-I tested patches 1, 2 and 5 with v5.0.19. Perhaps yet another part of the
-OHCI subsystem allocates memory from the wrong pool? With some luck it is
-relatively easy to trace backwards from the error messages to the point
-where the memory is being allocated. One way to establish this is to
-sprinkle printk around if-statements. There may be 10-20 levels of calls
-including one or two indirect calls via pointers. Would you be able to do
-that?
+> ---
+>  drivers/usb/dwc3/dwc3-meson-g12a.c | 32 ++++++++++++++++++++++++++++--
+>  1 file changed, 30 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> index 2aec31a2eacb..e5c5ad0d529e 100644
+> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
+> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+the comment block at the start of the driver file also contains a
+"TOFIX" which points to the missing IRQ handling
+can you please also drop that TOFIX comment in lines 15/16?
 
-Fredrik
+> @@ -348,6 +348,22 @@ static enum usb_role dwc3_meson_g12a_role_get(struct device *dev)
+>                 USB_ROLE_HOST : USB_ROLE_DEVICE;
+>  }
+>
+> +static irqreturn_t dwc3_meson_g12a_irq_thread(int irq, void *data)
+> +{
+> +       struct dwc3_meson_g12a *priv = data;
+> +       enum phy_mode otg_id;
+> +
+> +       otg_id = dwc3_meson_g12a_get_id(priv);
+> +       if (otg_id != priv->otg_phy_mode) {
+> +               if (dwc3_meson_g12a_otg_mode_set(priv, otg_id))
+> +                       dev_warn(priv->dev, "Failed to switch OTG mode\n");
+> +       }
+> +
+> +       regmap_update_bits(priv->regmap, USB_R5, USB_R5_ID_DIG_IRQ, 0);
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+>  static struct device *dwc3_meson_g12_find_child(struct device *dev,
+>                                                 const char *compatible)
+>  {
+> @@ -374,7 +390,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>         void __iomem *base;
+>         struct resource *res;
+>         enum phy_mode otg_id;
+> -       int ret, i;
+> +       int ret, i, irq;
+>
+>         priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>         if (!priv)
+> @@ -436,6 +452,19 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>         /* Get dr_mode */
+>         priv->otg_mode = usb_get_dr_mode(dev);
+>
+> +       if (priv->otg_mode == USB_DR_MODE_OTG) {
+> +               /* Ack irq before registering */
+> +               regmap_update_bits(priv->regmap, USB_R5,
+> +                                  USB_R5_ID_DIG_IRQ, 0);
+I assume that either the IRQ line is:
+- always enabled
+- enabled when (USB_R5_ID_DIG_EN_0 | USB_R5_ID_DIG_EN_1 |
+USB_R5_ID_DIG_TH_MASK) are set (which we already do in
+dwc3_meson_g12a_usb_init)
+
+> +               irq = platform_get_irq(pdev, 0);
+do we need to check the IRQ before trying to request it?
+drivers/gpu/drm/meson/meson_dw_hdmi.c and drivers/usb/dwc3/host.c for
+example error out if irq number is lower than 0
+
+(it's great to see that this only required a small patch to make it work :))
+
+
+Martin
