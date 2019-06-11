@@ -2,138 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C843D52B
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 20:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54763D59A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Jun 2019 20:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406828AbfFKSIn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Jun 2019 14:08:43 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35556 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406685AbfFKSIn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 14:08:43 -0400
-Received: by mail-ot1-f67.google.com with SMTP id j19so12824335otq.2;
-        Tue, 11 Jun 2019 11:08:42 -0700 (PDT)
+        id S2388207AbfFKSju (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Jun 2019 14:39:50 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40704 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389685AbfFKSju (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Jun 2019 14:39:50 -0400
+Received: by mail-pf1-f195.google.com with SMTP id p184so4685433pfp.7
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2019 11:39:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O89jlWqoEX7q/G6CiVxiDDmlI/FOM0sB6BHEXW+0fFM=;
-        b=cHdSLiwdTyZbPGVz/qYnZJJCYplwKEbE0QdVdYmjqez+GGasa8TA9GEaZeZf+/Q/yc
-         8TIaqOiIijHlpQPN+b0BBZvmxtMd47x/uYK7Vk5XPD8mYxbl+yUPaIuF7vI0M7QzRtm0
-         HNeafuVGHu/sa/BCqZcATKXmtS7Eag+BS6pOHP7N3/7dY0uWHKLKUSLT34TY6AzMuvGD
-         Nr42TPWl2pxEfX5qbCwSGwJadJSQJ9gNcRUKKGUG7vKQZCsm/m8sJ9YWSh2bYRWL5CwC
-         TqB5iiaGNo0Yp7KTmdwXVV/+fDhjaVwXeP064+XZo1StqFJ682mO7SEdwmnKHz22qWhC
-         eMcA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zW6AynUQeh/d1MGikSw6rg9037amHgOpXgjZc/bYyo0=;
+        b=gtHTXVgSsCW+WzGSqP5jD5k72gd1VwNjkRGZ6kyTYVbl9OaWD2braqloLb++ZYFoaW
+         dbCaH+n3AgU4PKdA57lePWtbt4HHHDl1ElnATdqGqXSF9yVrYo76JPhNKS088vzV7GDN
+         1CJ9ag9coDwUukCnp8mQHRFG78or4KyQfmzxd4kqOkRAl4hT/CRoKK6A3i6xzLoNwdvE
+         62v61Cz/xHioGQvUIEttFjfCFwI47zsJvlj8yjxAo4u0cGbHPDcxEQxUy941mb/k5jTG
+         8Joplh3e5y46cHQeocodgZMMxMEeFdefwVPuwtV3pGGphvTDuMsWt0xAmXTH9035qn7M
+         KyYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O89jlWqoEX7q/G6CiVxiDDmlI/FOM0sB6BHEXW+0fFM=;
-        b=VaYzh+rozdbOrVD40m3Udl774Bu1PnUio0GMtKQJveIg/k7Fka3tIiD8hRng1TeFPV
-         G0fJcU4XvCbdqaItEhjSzfyNO5CMzL9OH7wreiX1baW6jMHNxN13OZiQ8pyJaD54AQ03
-         3CoK5KsXTPfXP6iYOyskBylqma3iV4qABmS6MaOcVCKN7lfQV9I+wwE77f1p+4Wuqb1T
-         pZgmnWbuwL627zCNGilzqKanShPo2jEKGF/YMU5gDpnOTx74PTvVLR7fM5xRx9euZrUs
-         h5UtxUPUfawn2YWyhri/3AzAYYyG+Z5RIwRax1RLYAoVPmSTdt770oB7Ha6Xmrra4wov
-         cDWw==
-X-Gm-Message-State: APjAAAUvq3/opwI7sGMhDp1iUQui+g/X70Ma5DTjVz0tN1PT1jRKMJaq
-        sRJaMxZdagKzWYxTE0N9RFHvorBT9CKV6Xa5ork=
-X-Google-Smtp-Source: APXvYqx6SoLuddvsSFbGwWXlHsKKnRFjZOzVnVqvxNNOkTK4cQ1P337c36bckWzk3tAMnUuN46R+aOyOVrxZcNZhBbc=
-X-Received: by 2002:a9d:32a6:: with SMTP id u35mr36300662otb.81.1560276522291;
- Tue, 11 Jun 2019 11:08:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zW6AynUQeh/d1MGikSw6rg9037amHgOpXgjZc/bYyo0=;
+        b=gZELFI1nH/1ZDBDXOCGlKGjv58fcjoVvaHFi+KJRBCyYBD3Cx2wLvCTylFTfcVrct5
+         p5a6WSU5v5FZpvlNmTb6h0iayAwtQLKFl+EN2YV1YUj+y631o9obG96acDEg7Ng3mAA/
+         Z7OPISCg4fZmRnM+wHdmv1MEgZU4LKnZ1+vgzO2stI30OBQnuFLNAKy83R7dy/ecpALs
+         rmyeGIuD1UvkpLmYzAzMraH3qI+vK/P7QaWAwCVWm2qolhncyCHc5tydzjraXVAhWPeC
+         TdIfZxsd/RQ56rGdCaePyab0Y8PBKYQ7dNAbS6osBPJxoD+TfvCfJKrf0eYoIB6BukAV
+         FkOA==
+X-Gm-Message-State: APjAAAUbDcZ/guPy05ydpbFUy3QEcBs5yQTAKyGr6o+NX7UHRsYUKQiR
+        ehxbmSwdNKu8KPtTyX/6UoFQVQ==
+X-Google-Smtp-Source: APXvYqy9pS4xgDWNZze0LOrbLEksodwMGCOdwtad24aELFBqknW6/q8wGUEyNWy9Ls67LZYFBEhhgw==
+X-Received: by 2002:a62:e511:: with SMTP id n17mr73761345pff.181.1560278388728;
+        Tue, 11 Jun 2019 11:39:48 -0700 (PDT)
+Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id y22sm23485517pfo.39.2019.06.11.11.39.47
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 11 Jun 2019 11:39:48 -0700 (PDT)
+Date:   Tue, 11 Jun 2019 11:39:45 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Ard Biesheuvel <ard.biesheuvel@linaro.org>, alokc@codeaurora.org,
+        Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        wsa+renesas@sang-engineering.com,
+        Linus Walleij <linus.walleij@linaro.org>, balbi@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Hugo <jlhugo@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 4/8] pinctrl: qcom: sdm845: Provide ACPI support
+Message-ID: <20190611183945.GP4814@minitux>
+References: <20190610084213.1052-1-lee.jones@linaro.org>
+ <20190610084213.1052-4-lee.jones@linaro.org>
+ <CAKv+Gu_s7i8JC4cv-dJMvm1_0cGzzhzf+Dxu0rxcF7iugF=vHg@mail.gmail.com>
+ <20190610085542.GL4797@dell>
+ <CAKv+Gu8rhxciy1cOG3B3pda9+p4R_COGrrqa7S_Rj9y2HeBxYw@mail.gmail.com>
+ <20190610092245.GN4797@dell>
 MIME-Version: 1.0
-References: <20190611135842.8396-1-narmstrong@baylibre.com>
-In-Reply-To: <20190611135842.8396-1-narmstrong@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 11 Jun 2019 20:08:31 +0200
-Message-ID: <CAFBinCAkwjf9oDV6AGPi2PzzQ2KNTXXDHW6FTfN3kXpDT6cFpg@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: meson-g12a: Add support for IRQ based OTG switching
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     balbi@kernel.org, linux-amlogic@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190610092245.GN4797@dell>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Neil,
+On Mon 10 Jun 02:22 PDT 2019, Lee Jones wrote:
 
-On Tue, Jun 11, 2019 at 3:58 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> Add support for the OTG ID change interrupt to switch between Host
-> and Device mode.
->
-> Tested on the Hardkernel Odroid-N2 board.
->
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-with the three questions/comments below answered/addressed:
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> On Mon, 10 Jun 2019, Ard Biesheuvel wrote:
+> 
+> > On Mon, 10 Jun 2019 at 10:55, Lee Jones <lee.jones@linaro.org> wrote:
+> > >
+> > > On Mon, 10 Jun 2019, Ard Biesheuvel wrote:
+> > >
+> > > > On Mon, 10 Jun 2019 at 10:42, Lee Jones <lee.jones@linaro.org> wrote:
+> > > > >
+> > > > > This patch provides basic support for booting with ACPI instead
+> > > > > of the currently supported Device Tree.  When doing so there are a
+> > > > > couple of differences which we need to taken into consideration.
+> > > > >
+> > > > > Firstly, the SDM850 ACPI tables omit information pertaining to the
+> > > > > 4 reserved GPIOs on the platform.  If Linux attempts to touch/
+> > > > > initialise any of these lines, the firmware will restart the
+> > > > > platform.
+> > > > >
+> > > > > Secondly, when booting with ACPI, it is expected that the firmware
+> > > > > will set-up things like; Regulators, Clocks, Pin Functions, etc in
+> > > > > their ideal configuration.  Thus, the possible Pin Functions
+> > > > > available to this platform are not advertised when providing the
+> > > > > higher GPIOD/Pinctrl APIs with pin information.
+> > > > >
+> > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > >
+> > > > For the ACPI probing boilerplate:
+> > > > Acked-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+> > > >
+> > > > *However*, I really don't like hardcoding reserved GPIOs like this.
+> > > > What guarantee do we have that each and every ACPI system
+> > > > incorporating the QCOM0217 device has the exact same list of reserved
+> > > > GPIOs?
+> > >
+> > > This is SDM845 specific, so the chances are reduced.
+> > 
+> > You don't know that.
+> 
+> All the evidence I have to hand tells me that this is the case.  Even
+> on very closely related variants Qualcomm uses different H/W blocks
+> for GPIO.
+> 
 
-> ---
->  drivers/usb/dwc3/dwc3-meson-g12a.c | 32 ++++++++++++++++++++++++++++--
->  1 file changed, 30 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> index 2aec31a2eacb..e5c5ad0d529e 100644
-> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-the comment block at the start of the driver file also contains a
-"TOFIX" which points to the missing IRQ handling
-can you please also drop that TOFIX comment in lines 15/16?
+I presume with this you mean that e.g. the 835 laptops doesn't sport a
+QCOM0217?
 
-> @@ -348,6 +348,22 @@ static enum usb_role dwc3_meson_g12a_role_get(struct device *dev)
->                 USB_ROLE_HOST : USB_ROLE_DEVICE;
->  }
->
-> +static irqreturn_t dwc3_meson_g12a_irq_thread(int irq, void *data)
-> +{
-> +       struct dwc3_meson_g12a *priv = data;
-> +       enum phy_mode otg_id;
-> +
-> +       otg_id = dwc3_meson_g12a_get_id(priv);
-> +       if (otg_id != priv->otg_phy_mode) {
-> +               if (dwc3_meson_g12a_otg_mode_set(priv, otg_id))
-> +                       dev_warn(priv->dev, "Failed to switch OTG mode\n");
-> +       }
-> +
-> +       regmap_update_bits(priv->regmap, USB_R5, USB_R5_ID_DIG_IRQ, 0);
-> +
-> +       return IRQ_HANDLED;
-> +}
-> +
->  static struct device *dwc3_meson_g12_find_child(struct device *dev,
->                                                 const char *compatible)
->  {
-> @@ -374,7 +390,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->         void __iomem *base;
->         struct resource *res;
->         enum phy_mode otg_id;
-> -       int ret, i;
-> +       int ret, i, irq;
->
->         priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->         if (!priv)
-> @@ -436,6 +452,19 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->         /* Get dr_mode */
->         priv->otg_mode = usb_get_dr_mode(dev);
->
-> +       if (priv->otg_mode == USB_DR_MODE_OTG) {
-> +               /* Ack irq before registering */
-> +               regmap_update_bits(priv->regmap, USB_R5,
-> +                                  USB_R5_ID_DIG_IRQ, 0);
-I assume that either the IRQ line is:
-- always enabled
-- enabled when (USB_R5_ID_DIG_EN_0 | USB_R5_ID_DIG_EN_1 |
-USB_R5_ID_DIG_TH_MASK) are set (which we already do in
-dwc3_meson_g12a_usb_init)
+> > > However, if another SDM845 variant does crop up, also lacking the
+> > > "gpios" property, we will have to find another differentiating factor
+> > > between them and conduct some matching.  What else can you do with
+> > > platforms supporting non-complete/non-forthcoming ACPI tables?
+> > >
+> > 
+> > Either we don't touch any pins at all if they are not referenced
+> > explicitly anywhere
+> 
+> I guess this would require an API change, which is out of scope of
+> this patch-set.  Happy to change this implementation later if the
+> subsystem allows for it though.
+> 
 
-> +               irq = platform_get_irq(pdev, 0);
-do we need to check the IRQ before trying to request it?
-drivers/gpu/drm/meson/meson_dw_hdmi.c and drivers/usb/dwc3/host.c for
-example error out if irq number is lower than 0
+Last time we discussed this the _only_ offender was the loop issuing a
+get_direction() on all descs towards the end of
+gpiochip_add_data_with_key()
 
-(it's great to see that this only required a small patch to make it work :))
+> > or we parse the PEP tables, which seem to cover
+> > some of this information (if Bjorn's analysis is correct)
+> 
+> Maybe someone can conduct some further work on this when we start to
+> enable or write a driver for the PEP (Windows-compatible System Power
+> Management Controller).  The tables for the PEP look pretty complex,
+> so this task would be extremely difficult if not impossible without
+> Qualcomm's help.  I wouldn't even know how to extrapolate this
+> information from the tables.
+> 
 
+Yeah that looks quite different, so I'm not sure how to tie that into
+the current driver. But I'm fine with adding this for now, if PEP brings
+a different approach we can always rip this out later.
 
-Martin
+Regards,
+Bjorn
+
+> > (if Bjorn's analysis is correct)
+> 
+> Bjorn is about to provide his Reviewed-by for this implementation.
+> 
+> -- 
+> Lee Jones [?????????]
+> Linaro Services Technical Lead
+> Linaro.org ??? Open source software for ARM SoCs
+> Follow Linaro: Facebook | Twitter | Blog
