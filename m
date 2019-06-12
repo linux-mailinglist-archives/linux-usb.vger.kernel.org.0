@@ -2,71 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F963429A9
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 16:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D47F429C6
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 16:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729266AbfFLOoK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 10:44:10 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:55694 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2439872AbfFLOnM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 10:43:12 -0400
-Received: (qmail 3203 invoked by uid 2102); 12 Jun 2019 10:43:11 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 12 Jun 2019 10:43:11 -0400
-Date:   Wed, 12 Jun 2019 10:43:11 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Christoph Hellwig <hch@lst.de>
-cc:     Oliver Neukum <oneukum@suse.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: How to resolve an issue in swiotlb environment?
-In-Reply-To: <20190612120653.GA25285@lst.de>
-Message-ID: <Pine.LNX.4.44L0.1906121038210.1557-100000@iolanthe.rowland.org>
+        id S1732555AbfFLOrq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 10:47:46 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:35869 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728707AbfFLOrp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 10:47:45 -0400
+Received: by mail-lj1-f195.google.com with SMTP id i21so15364263ljj.3
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2019 07:47:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=uIQDRabCfmjZ92D5uexPHtee+FQNiKE+mEbCN3RV92c=;
+        b=iwz+0A5IhHUmh62gf7sVxDhjZEtMnzMCUJiDTwrH9XxcK8NxeF8n07V8EgYOJOp3QY
+         Ca0bd1vK6DGEStbvIhsRQJJ9n7sXa2a9iyFEduJIbhyMDtAl9AD06weNpaMZXmT71Arr
+         3kouIXtwZe2AFrupRDg1BBqET2xs1P/pw2c+EtRN8Ry8Y0o7zIQJ2vxHdFtlUi1u4YFY
+         0iyAAyzSTfJyZTKvW4aUUlHmKIoQx/W5oZ0RYxaDN9UYa9CrXJ+uunyipIwxAj/IaLKm
+         FxQLHSs4rNIpUybLfhixnvHrN5N7wB3WPQBTbl2cPDWem0pabnorkATxtapgg01rql/d
+         ekMA==
+X-Gm-Message-State: APjAAAXb8abY8vlpkpdy0lFFp4QlGcZeRqtp0Bu49bFlgbjn76AhF9Xk
+        DkSnRqfDddbCGAzjH3DjUdAYakUAQMw=
+X-Google-Smtp-Source: APXvYqzP3FvvysMeLqwwKWcV06nKC6e/ojmI7Tf9HXyYpzQmNip2HuBRPwwVyemVIVn3WG431PnXUw==
+X-Received: by 2002:a2e:6e01:: with SMTP id j1mr43254259ljc.135.1560350863793;
+        Wed, 12 Jun 2019 07:47:43 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id j11sm14667lfm.29.2019.06.12.07.47.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 12 Jun 2019 07:47:42 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92)
+        (envelope-from <johan@kernel.org>)
+        id 1hb4XS-0004ly-Va; Wed, 12 Jun 2019 16:47:47 +0200
+Date:   Wed, 12 Jun 2019 16:47:46 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Charles Yeh <charlesyeh522@gmail.com>
+Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-usb@vger.kernel.org, charles-yeh@prolific.com.tw
+Subject: Re: [PATCH] USB:serial:pl2303:Add new PID to support PL2303HXN
+ (TYPE_HXN)
+Message-ID: <20190612144746.GA18153@localhost>
+References: <20190612131842.4200-1-charlesyeh522@gmail.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190612131842.4200-1-charlesyeh522@gmail.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 12 Jun 2019, Christoph Hellwig wrote:
+On Wed, Jun 12, 2019 at 09:18:41PM +0800, Charles Yeh wrote:
+> Prolific has developed a new USB to UART chip: PL2303HXN
+> PL2303HXN : PL2303GC/PL2303GS/PL2303GT/PL2303GL/PL2303GE/PL2303GB
+> The Vendor request used by the PL2303HXN (TYPE_HXN) is different from
+> the existing PL2303 series (TYPE_HX & TYPE_01).
+> Therefore, different Vendor requests are used to issue related commands.
 
-> On Wed, Jun 12, 2019 at 01:46:06PM +0200, Oliver Neukum wrote:
-> > > Thay is someething the virt_boundary prevents.  But could still give
-> > > you something like:
-> > > 
-> > > 	1536 4096 4096 1024
-> > > 
-> > > or
-> > > 	1536 16384 8192 4096 16384 512
-> > 
-> > That would kill the driver, if maxpacket were 1024.
-> > 
-> > USB has really two kinds of requirements
-> > 
-> > 1. What comes from the protocol
-> > 2. What comes from the HCD
-> > 
-> > The protocol wants just multiples of maxpacket. XHCI can satisfy
-> > that in arbitrary scatter/gather. Other HCs cannot.
-> 
-> We have no real way to enforce that for the other HCs unfortunately.
-> I can't really think of any better way to handle their limitations
-> except for setting max_segments to 1 or bounce buffering.
+> Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
+> ---
 
-Would it be okay to rely on the assumption that USB block devices never 
-have block size < 512?  (We could even add code to the driver to 
-enforce this, although refusing to handle such devices at all might be 
-worse than getting an occasional error.)
+As I've asked you several times already, make sure to
 
-As I mentioned before, the only HCD that sometimes ends up with
-maxpacket = 1024 but is unable to do full SG is vhci-hcd, and that one
-shouldn't be too hard to fix.
+ - add a patch version to your subject (e.g. [PATCH v5], or which
+   version number you're currently at)
 
-Alan Stern
+ - include a changelog here, below the --- line, so we know what changed
+   since previous versions
 
+ - fix up your subject line (add a space after each colon)
+
+Please fix up and resend.
+
+Thanks,
+Johan
