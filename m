@@ -2,98 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E2342FB0
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 21:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD20448ED
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 19:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727879AbfFLTM2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 15:12:28 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:37380 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727120AbfFLTM2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 15:12:28 -0400
-Received: by mail-oi1-f194.google.com with SMTP id t76so12532099oih.4;
-        Wed, 12 Jun 2019 12:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sfLPcL25crERXrHmndKdN43HIkrSYCz0GOmOHCLrbTE=;
-        b=ulhd5qz+prqvRTlbEb33O83a8dJZJItyzAOFrAUu3qDrKHWht7BK1Pz0cTuQ3rlOot
-         2oxjZoPmXhooSS9W7VtVDWGm1BFzamAwNbSSfjM/pXF04rZ4meJ8D10Dq6X9o86cXgho
-         mc4iWqGCqZX/6AWPmo5M4+dnUBaHr685eYyUmxN/pQzfPI1qXJqqlG9EiE6ynSEJOmbb
-         WKm73I+W83G1gtEckWP4i0LOeq/CZ8kegVEBEvQeCH0dtHAVCVYGcM4cYLzfZIyGI75b
-         2yPqbQPEtDTGqt2i9ZMpliCmi4PWVK0DWXL+iuP9yfoUszCtj9oyO/1tqJctfeyjc1Il
-         vkkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sfLPcL25crERXrHmndKdN43HIkrSYCz0GOmOHCLrbTE=;
-        b=o/nd9SShCNgWootFhu7x80Eo99CpCWnyPdM47ezIoSjOvcMTWGO1lc8aI0yEvxFiqZ
-         qwkPp8t8A6oSpETOuNvuGtD+iZC2o3xzhK7rYnDF5ZLkywA0p0EPzGw41eIkrjG/k7qf
-         QYdAuZUibetQvoRenAXQKYN2RrejSS0fHEJvn3t2R3i8bjg6c2uRCTWdR7gquE4V5JGB
-         DK2uafAJds4z7ZBE0JolKDG4SqMHYeOK4pIyzZVud4eemqwPXZ8UpHcFdn9jZ2lxy5If
-         u7PLMTj4cTKDRF8jIKrAoN2rikfC7hpWg+beaG6ksSC75oRUELtZzNdwu5kcUd3TjiMb
-         czGA==
-X-Gm-Message-State: APjAAAUmDV2MvQTV2O+dmc3XbAR92QSEYQLQotSFmlCiMqMMpiT30Si6
-        h/KiRhOdM69W9PG1Zah6cwgcWsD/BizCTOxvJLA=
-X-Google-Smtp-Source: APXvYqy1dUlZ1GjSxaAhR2GBYxG+eBb73qatzfmqC3RzvvJ0mVsraiypMKNRkXEumiF39w8vn4DIrw2Km7vMogL4Qho=
-X-Received: by 2002:aca:4ad2:: with SMTP id x201mr501939oia.129.1560366747250;
- Wed, 12 Jun 2019 12:12:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190611135842.8396-1-narmstrong@baylibre.com>
- <CAFBinCAkwjf9oDV6AGPi2PzzQ2KNTXXDHW6FTfN3kXpDT6cFpg@mail.gmail.com> <8950adde-0942-5f04-0ce6-922a9886c440@baylibre.com>
-In-Reply-To: <8950adde-0942-5f04-0ce6-922a9886c440@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 12 Jun 2019 21:12:16 +0200
-Message-ID: <CAFBinCBaBBv1buJ=U022GyHN+UJdfA+DC0t7wkSEt5aqvjdG-g@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: meson-g12a: Add support for IRQ based OTG switching
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     balbi@kernel.org, linux-amlogic@lists.infradead.org,
+        id S2393474AbfFMRMF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 13:12:05 -0400
+Received: from mga18.intel.com ([134.134.136.126]:38392 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729074AbfFLWNc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Jun 2019 18:13:32 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jun 2019 15:13:31 -0700
+X-ExtLoop1: 1
+Received: from fei-dev-host.jf.intel.com ([10.7.198.158])
+  by orsmga007.jf.intel.com with ESMTP; 12 Jun 2019 15:13:31 -0700
+From:   fei.yang@intel.com
+To:     felipe.balbi@linux.intel.com, john.stultz@linaro.org,
+        mgautam@codeaurora.org, andrzej.p@samsung.com,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        gregkh@linuxfoundation.org
+Subject: [PATCH] usb: gadget: f_fs: data_len used before properly set
+Date:   Wed, 12 Jun 2019 15:13:26 -0700
+Message-Id: <1560377606-40855-1-git-send-email-fei.yang@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Neil,
+From: Fei Yang <fei.yang@intel.com>
 
-On Wed, Jun 12, 2019 at 5:13 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
-[...]
-> >> @@ -436,6 +452,19 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
-> >>         /* Get dr_mode */
-> >>         priv->otg_mode = usb_get_dr_mode(dev);
-> >>
-> >> +       if (priv->otg_mode == USB_DR_MODE_OTG) {
-> >> +               /* Ack irq before registering */
-> >> +               regmap_update_bits(priv->regmap, USB_R5,
-> >> +                                  USB_R5_ID_DIG_IRQ, 0);
-> > I assume that either the IRQ line is:
-> > - always enabled
-> > - enabled when (USB_R5_ID_DIG_EN_0 | USB_R5_ID_DIG_EN_1 |
-> > USB_R5_ID_DIG_TH_MASK) are set (which we already do in
-> > dwc3_meson_g12a_usb_init)
->
-> Can't say... I suspect the (USB_R5_ID_DIG_EN_0 | USB_R5_ID_DIG_EN_1 |
-> > USB_R5_ID_DIG_TH_MASK) enables the detection.
-> The regmap_update_bits(USB_R5_ID_DIG_IRQ) is only here to make sure the "current"
-> irq event is masked, whatever the previous init.
->
-> Or I misunderstood question ?
-that perfectly answers my question - thank you!
+The following line of code in function ffs_epfile_io is trying to set
+flag io_data->use_sg in case buffer required is larger than one page.
 
-> >
-> >> +               irq = platform_get_irq(pdev, 0);
-> > do we need to check the IRQ before trying to request it?
-> > drivers/gpu/drm/meson/meson_dw_hdmi.c and drivers/usb/dwc3/host.c for
-> > example error out if irq number is lower than 0
->
-> No, devm_request_threaded_irq() will fail if -1 is given, I've using this scheme
-> for a while now !
-OK, it wasn't obvious to me when I looked at devm_request_threaded_irq.
-thank you for clarifying this
+    io_data->use_sg = gadget->sg_supported && data_len > PAGE_SIZE;
 
+However at this point of time the variable data_len has not been set
+to the proper buffer size yet. The consequence is that io_data->use_sg
+is always set regardless what buffer size really is, because the condition
+(data_len > PAGE_SIZE) is effectively an unsigned comparison between
+-EINVAL and PAGE_SIZE which would always result in TRUE.
 
-Martin
+Fixes: 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather buffers")
+Signed-off-by: Fei Yang <fei.yang@intel.com>
+Cc: stable <stable@vger.kernel.org>
+---
+ drivers/usb/gadget/function/f_fs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 47be961..c7ed900 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -997,7 +997,6 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+ 		 * earlier
+ 		 */
+ 		gadget = epfile->ffs->gadget;
+-		io_data->use_sg = gadget->sg_supported && data_len > PAGE_SIZE;
+ 
+ 		spin_lock_irq(&epfile->ffs->eps_lock);
+ 		/* In the meantime, endpoint got disabled or changed. */
+@@ -1012,6 +1011,8 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+ 		 */
+ 		if (io_data->read)
+ 			data_len = usb_ep_align_maybe(gadget, ep->ep, data_len);
++
++		io_data->use_sg = gadget->sg_supported && data_len > PAGE_SIZE;
+ 		spin_unlock_irq(&epfile->ffs->eps_lock);
+ 
+ 		data = ffs_alloc_buffer(io_data, data_len);
+-- 
+2.7.4
+
