@@ -2,130 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B73C41C34
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 08:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882C041D12
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 08:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731048AbfFLG2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 02:28:30 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:44590 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726010AbfFLG2a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 02:28:30 -0400
-X-UUID: ee68a5836ab848e7bba4d9c3af397e7a-20190612
-X-UUID: ee68a5836ab848e7bba4d9c3af397e7a-20190612
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 653344176; Wed, 12 Jun 2019 14:28:16 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 12 Jun 2019 14:28:14 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 12 Jun 2019 14:28:15 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        id S2407727AbfFLG6i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 02:58:38 -0400
+Received: from mga01.intel.com ([192.55.52.88]:45279 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390376AbfFLG6i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Jun 2019 02:58:38 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jun 2019 23:58:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,363,1557212400"; 
+   d="scan'208";a="184148897"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Jun 2019 23:58:34 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <wsd_upstream@mediatek.com>
-Subject: [PATCH] mtu3: fix setup packet response for HNP and SRP request
-Date:   Wed, 12 Jun 2019 14:28:07 +0800
-Message-ID: <1560320892-30551-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        David Howells <dhowells@redhat.com>, viro@zeniv.linux.org.uk,
+        linux-usb@vger.kernel.org, raven@themaw.net,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/10] usb: Add USB subsystem notifications [ver #3]
+In-Reply-To: <Pine.LNX.4.44L0.1906110950440.1535-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1906110950440.1535-100000@iolanthe.rowland.org>
+Date:   Wed, 12 Jun 2019 09:58:33 +0300
+Message-ID: <87h88v1e92.fsf@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: CE1AD9F9C4AB7DD47709BB3955B3B7E2FF4BB35A299C25F5C5745B5492155FC12000:8
-X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-1. Add OTG_HNP_REQD and OTG_SRP_REQD definitions in ch9.h.
-2. When OTG_HNP_REQD and OTG_SRP_REQD has been received,
-usb hardware must not enter TEST mode but need to response setup packet.
-3. Add otg_srp_reqd and otg_hnp_reqd in struct ssusb_mtk for futher
-implementation.
 
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
----
- drivers/usb/mtu3/mtu3.h            |  4 ++++
- drivers/usb/mtu3/mtu3_gadget_ep0.c | 13 +++++++++++++
- include/uapi/linux/usb/ch9.h       |  5 +++++
- 3 files changed, 22 insertions(+)
+Hi,
 
-diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
-index 76ecf12fdf62..bb8a31bc6e4d 100644
---- a/drivers/usb/mtu3/mtu3.h
-+++ b/drivers/usb/mtu3/mtu3.h
-@@ -226,6 +226,8 @@ struct otg_switch_mtk {
-  * @dma_clk: dma_bus_ck clock for AXI bus etc
-  * @dr_mode: works in which mode:
-  *		host only, device only or dual-role mode
-+ * @otg_srp_reqd: used for SRP request handling.
-+ * @otg_hnp_reqd: used for HNP request handling.
-  * @u2_ports: number of usb2.0 host ports
-  * @u3_ports: number of usb3.0 host ports
-  * @u3p_dis_msk: mask of disabling usb3 ports, for example, bit0==1 to
-@@ -252,6 +254,8 @@ struct ssusb_mtk {
- 	/* otg */
- 	struct otg_switch_mtk otg_switch;
- 	enum usb_dr_mode dr_mode;
-+	bool otg_srp_reqd;
-+	bool otg_hnp_reqd;
- 	bool is_host;
- 	int u2_ports;
- 	int u3_ports;
-diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-index 4da216c99726..1247c43a63e6 100644
---- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
-+++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-@@ -285,11 +285,24 @@ static int handle_test_mode(struct mtu3 *mtu, struct usb_ctrlrequest *setup)
- 		dev_dbg(mtu->dev, "TEST_PACKET\n");
- 		mtu->test_mode_nr = TEST_PACKET_MODE;
- 		break;
-+	case OTG_SRP_REQD:
-+		dev_dbg(mtu->dev, "OTG_SRP_REQD\n");
-+		mtu->ssusb->otg_srp_reqd = 1;
-+		break;
-+	case OTG_HNP_REQD:
-+		dev_dbg(mtu->dev, "OTG_HNP_REQD\n");
-+		mtu->ssusb->otg_hnp_reqd = 1;
-+		break;
- 	default:
- 		handled = -EINVAL;
- 		goto out;
- 	}
- 
-+	if (mtu->ssusb->otg_srp_reqd || mtu->ssusb->otg_hnp_reqd) {
-+		mtu->ep0_state = MU3D_EP0_STATE_SETUP;
-+		goto out;
-+	}
-+
- 	mtu->test_mode = true;
- 
- 	/* no TX completion interrupt, and need restart platform after test */
-diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
-index d5a5caec8fbc..545918c83fd1 100644
---- a/include/uapi/linux/usb/ch9.h
-+++ b/include/uapi/linux/usb/ch9.h
-@@ -143,6 +143,11 @@
- #define	TEST_SE0_NAK	3
- #define	TEST_PACKET	4
- #define	TEST_FORCE_EN	5
-+/*
-+ * OTG HNP and SRP REQD
-+ */
-+#define	OTG_SRP_REQD	6
-+#define	OTG_HNP_REQD	7
- 
- /* Status Type */
- #define USB_STATUS_TYPE_STANDARD	0
+Alan Stern <stern@rowland.harvard.edu> writes:
+
+> On Tue, 11 Jun 2019, Felipe Balbi wrote:
+>
+>> >> >> > So for "severe" issues, yes, we should do this, but perhaps not for all
+>> >> >> > of the "normal" things we see when a device is yanked out of the system
+>> >> >> > and the like.
+>> >> >> 
+>> >> >> Then what counts as a "severe" issue?  Anything besides enumeration 
+>> >> >> failure?
+>> >> >
+>> >> > Not that I can think of at the moment, other than the other recently
+>> >> > added KOBJ_CHANGE issue.  I'm sure we have other "hard failure" issues
+>> >> > in the USB stack that people will want exposed over time.
+>> >> 
+>> >> From an XHCI standpoint, Transaction Errors might be one thing. They
+>> >> happen rarely and are a strong indication that the bus itself is
+>> >> bad. Either bad cable, misbehaving PHYs, improper power management, etc.
+>> >
+>> > Don't you also get transaction errors if the user unplugs a device in 
+>> > the middle of a transfer?  That's not the sort of thing we want to sent 
+>> > notifications about.
+>> 
+>> Mathias, do we get Transaction Error if user removes cable during a
+>> transfer? I thought we would just get Port Status Change with CC bit
+>> cleared, no?
+>
+> Even if xHCI doesn't give Transaction Errors when a cable is unplugged 
+> during a transfer, other host controllers do.  Sometimes quite a lot -- 
+> they continue to occur until the kernel polls the parent hub's 
+> interrupt ep and learns that the port is disconnected, which can take 
+> up to 250 ms.
+
+my comment was specific about XHCI. It even started with "From an XHCI
+standpoint" :-)
+
 -- 
-2.18.0
-
+balbi
