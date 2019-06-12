@@ -2,303 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E186B41F9B
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 10:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF57641FBE
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 10:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406287AbfFLItX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 12 Jun 2019 04:49:23 -0400
-Received: from mga05.intel.com ([192.55.52.43]:64126 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726636AbfFLItW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Jun 2019 04:49:22 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jun 2019 01:49:22 -0700
-X-ExtLoop1: 1
-Received: from fmsmsx103.amr.corp.intel.com ([10.18.124.201])
-  by orsmga005.jf.intel.com with ESMTP; 12 Jun 2019 01:49:20 -0700
-Received: from fmsmsx163.amr.corp.intel.com (10.18.125.72) by
- FMSMSX103.amr.corp.intel.com (10.18.124.201) with Microsoft SMTP Server (TLS)
- id 14.3.408.0; Wed, 12 Jun 2019 01:49:20 -0700
-Received: from BGSMSX107.gar.corp.intel.com (10.223.4.191) by
- fmsmsx163.amr.corp.intel.com (10.18.125.72) with Microsoft SMTP Server (TLS)
- id 14.3.408.0; Wed, 12 Jun 2019 01:49:19 -0700
-Received: from bgsmsx102.gar.corp.intel.com ([169.254.2.19]) by
- BGSMSX107.gar.corp.intel.com ([169.254.9.94]) with mapi id 14.03.0415.000;
- Wed, 12 Jun 2019 14:19:11 +0530
-From:   "Regupathy, Rajaram" <rajaram.regupathy@intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Cox, Alan" <alan.cox@intel.com>
-CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "Pandey, Prabhat Chand" <prabhat.chand.pandey@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Nyman, Mathias" <mathias.nyman@intel.com>,
-        "K V, Abhilash" <abhilash.k.v@intel.com>,
-        "Balaji, M" <m.balaji@intel.com>
-Subject: RE: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a
- raw interface on DbC
-Thread-Topic: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a
- raw interface on DbC
-Thread-Index: AQHVHPuR36OpqDxWE0mdxttyJz+Qf6aP4nEAgASvQoCAAAY5gIAAZ6fggADhFoCAAHI+AP//utyAgAFqFnA=
-Importance: high
-X-Priority: 1
-Date:   Wed, 12 Jun 2019 08:49:11 +0000
-Message-ID: <4834501FD402484A85750D15DF17AB5C1D15DF95@BGSMSX102.gar.corp.intel.com>
-References: <20190607063306.5612-1-prabhat.chand.pandey@intel.com>
- <20190607063306.5612-5-prabhat.chand.pandey@intel.com>
- <20190607142132.GG14665@kroah.com>
- <af51b855-4ee4-9bc2-6484-b8c4d897f503@linux.intel.com>
- <20190610141607.GA5937@kroah.com>
- <4834501FD402484A85750D15DF17AB5C1D15AEE6@BGSMSX102.gar.corp.intel.com>
- <20190611095243.GA23226@kroah.com>
- <4834501FD402484A85750D15DF17AB5C1D15B030@BGSMSX102.gar.corp.intel.com>
- <20190611123409.GA26261@kroah.com>
-In-Reply-To: <20190611123409.GA26261@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
+        id S2408006AbfFLIw3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 04:52:29 -0400
+Received: from mail-eopbgr1400095.outbound.protection.outlook.com ([40.107.140.95]:39712
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2407156AbfFLIw3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Jun 2019 04:52:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RVU3TwliIUydOjf7eBK/rzzSlo+vO4nnsIRH7FR5glg=;
+ b=M7Kk7vsJgnrQfog7CheWKVMZJXy9HDzwItO6QtULvXg5tX8hUQrvwFvDhDbbdxbf1q7Ck5Q9je6Ggpw58eG76tBGggQE+YJA5id9uYLjbtWxnwp63nEYWuXPes1V0zwFz35Js0bkGPr3XV98n8InnjskramkmVe3vDH0iCK3VfE=
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
+ OSAPR01MB4020.jpnprd01.prod.outlook.com (20.178.102.83) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.14; Wed, 12 Jun 2019 08:52:21 +0000
+Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
+ ([fe80::19ad:b6ce:a287:dc85%7]) with mapi id 15.20.1965.017; Wed, 12 Jun 2019
+ 08:52:21 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: How to resolve an issue in swiotlb environment?
+Thread-Topic: How to resolve an issue in swiotlb environment?
+Thread-Index: AdUZ1Qlk800+Qz0uSuO63mIBeXkktQDUe+5AAJUL5SAAA1kYAAANEESAABj9hAAAERZjAAAi6naAAAJz/+A=
+Date:   Wed, 12 Jun 2019 08:52:21 +0000
+Message-ID: <OSAPR01MB3089D154C6DF0237003CE80CD8EC0@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+References: <20190611064158.GA20601@lst.de>
+ <Pine.LNX.4.44L0.1906110956510.1535-100000@iolanthe.rowland.org>
+ <20190612073059.GA20086@lst.de>
+In-Reply-To: <20190612073059.GA20086@lst.de>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.0.600.7
-dlp-reaction: no-action
-x-ctpclassification: CTP_NT
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiOGJkMDQ4M2EtYWY5My00OGM4LWE0NmItZmY5ZDc2YTZjODNkIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiSXBubnZ6MXdURUl6ZEVvYVlwNWYxczRFNW9sSVUzcHJXV0NpUWRIWHdcL3pBNHZ5Z013OHhkVjhDQmpmWmh6SkkifQ==
-x-originating-ip: [10.223.10.10]
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 67300a03-2f72-4bb6-ad94-08d6ef134889
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB4020;
+x-ms-traffictypediagnostic: OSAPR01MB4020:
+x-microsoft-antispam-prvs: <OSAPR01MB4020F8EB0D2011C0BDBBE918D8EC0@OSAPR01MB4020.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0066D63CE6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(396003)(136003)(346002)(39850400004)(376002)(199004)(189003)(86362001)(2906002)(33656002)(81156014)(54906003)(110136005)(14454004)(316002)(486006)(8936002)(7736002)(52536014)(25786009)(6436002)(66946007)(74316002)(5660300002)(11346002)(446003)(68736007)(476003)(81166006)(3846002)(6116002)(66446008)(102836004)(66556008)(64756008)(305945005)(186003)(76116006)(53936002)(71200400001)(66476007)(9686003)(66066001)(7696005)(76176011)(478600001)(55016002)(6506007)(71190400001)(73956011)(99286004)(14444005)(4326008)(8676002)(6246003)(229853002)(256004)(2171002)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB4020;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: nlsIq6Rvrrb0DfdoeWgYMN9FU9PWqxR/6GV2UdcnxwPv+UQl7s70W1qDb05kU76uuOTG8WJ83DyHCIuuTKyRNIgxtDcl4VOOCV0K+aOXOsar2MXspYV3CE3DWs8Lm8EJq1xfiZrYLZX68VJ5FaiHjtsL15UirI821e/L+Krw1tQgxU3kBEK6NXJjnVJq9pxZ6Q91pYkFnUXtqGsqqmWIGjlpH/RSHxzzjdhzvmhpDnu20jjftf6JS/x0s8tnOPyd2tkPeaSCXdrXCSPOH4aDDGRZBKrDYsy7qDGeie6m0P3kYh1sR1kcuzxIkY4m6frKMdWcQrRNWNAt7O5i1p3SfFgXpjUk4153+snWmSus3kBs6Lb+28zPC+fq9E6sJaUOO4cM0KGWxgcoryUZ3/SajMpMyzEUjiAhG4ev9HOs8R0=
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67300a03-2f72-4bb6-ad94-08d6ef134889
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2019 08:52:21.7764
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB4020
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Christoph,
 
+> From: Christoph Hellwig, Sent: Wednesday, June 12, 2019 4:31 PM
+>=20
+> First things first:
+>=20
+> Yoshihiro, can you try this git branch?  The new bits are just the three
+> patches at the end, but they sit on top of a few patches already sent
+> out to the list, so a branch is probably either:
+>=20
+>    git://git.infradead.org/users/hch/misc.git scsi-virt-boundary-fixes
 
-> -----Original Message-----
-> From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> Sent: Tuesday, June 11, 2019 6:04 PM
-> To: Regupathy, Rajaram <rajaram.regupathy@intel.com>
-> Cc: Mathias Nyman <mathias.nyman@linux.intel.com>; Pandey, Prabhat Chand
-> <prabhat.chand.pandey@intel.com>; linux-usb@vger.kernel.org; Nyman,
-> Mathias <mathias.nyman@intel.com>; K V, Abhilash <abhilash.k.v@intel.com>;
-> Balaji, M <m.balaji@intel.com>
-> Subject: Re: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to provide a raw
-> interface on DbC
-> Importance: High
-> 
-> On Tue, Jun 11, 2019 at 12:17:40PM +0000, Regupathy, Rajaram wrote:
-> >
-> >
-> > > -----Original Message-----
-> > > From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> > > Sent: Tuesday, June 11, 2019 3:23 PM
-> > > To: Regupathy, Rajaram <rajaram.regupathy@intel.com>
-> > > Cc: Mathias Nyman <mathias.nyman@linux.intel.com>; Pandey, Prabhat
-> > > Chand <prabhat.chand.pandey@intel.com>; linux-usb@vger.kernel.org;
-> > > Nyman, Mathias <mathias.nyman@intel.com>; K V, Abhilash
-> > > <abhilash.k.v@intel.com>; Balaji, M <m.balaji@intel.com>
-> > > Subject: Re: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to
-> > > provide a raw interface on DbC
-> > > Importance: High
-> > >
-> > > On Tue, Jun 11, 2019 at 09:29:23AM +0000, Regupathy, Rajaram wrote:
-> > > >
-> > > >
-> > > > > -----Original Message-----
-> > > > > From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> > > > > Sent: Monday, June 10, 2019 7:46 PM
-> > > > > To: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > > > > Cc: Pandey, Prabhat Chand <prabhat.chand.pandey@intel.com>;
-> > > > > linux- usb@vger.kernel.org; Nyman, Mathias
-> > > > > <mathias.nyman@intel.com>; Regupathy, Rajaram
-> > > > > <rajaram.regupathy@intel.com>; K V, Abhilash
-> > > > > <abhilash.k.v@intel.com>; Balaji, M <m.balaji@intel.com>
-> > > > > Subject: Re: [PATCH 4/5] usb: xhci: dbc: Add a dbc raw driver to
-> > > > > provide a raw interface on DbC
-> > > > > Importance: High
-> > > > >
-> > > > > On Mon, Jun 10, 2019 at 04:53:51PM +0300, Mathias Nyman wrote:
-> > > > > > On 7.6.2019 17.21, Greg KH wrote:
-> > > > > > > On Fri, Jun 07, 2019 at 12:03:05PM +0530, Prabhat Chand Pandey
-> wrote:
-> > > > > > > > From: Abhilash K V <abhilash.k.v@intel.com>
-> > > > > > > >
-> > > > > > > > This patch provides a raw device interface on xhci Debug capability.
-> > > > > > >
-> > > > > > > What is a "raw device"?
-> > > > > > >
-> > > > > > > > This abstracts dbc functionality to user space inorder to
-> > > > > > > > facilitate various frameworks to utilize xhci debug capability.
-> > > > > > >
-> > > > > > > I do not understand this sentance at all.  Please provide a
-> > > > > > > lot more information.
-> > > > > > >
-> > > > > > > > It helps to render the target as an usb debug class device
-> > > > > > > > on host and establish an usb connection by providing two bulk
-> endpoints.
-> > > > > > >
-> > > > > > > provide bulk endpoints where?  To send data where?  This is
-> > > > > > > very confusing and does not make any sense to me...
-> > > > > > >
-> > > > > > >
-> > > > > > > >
-> > > > > > > > [don't dynamically allocate tiny space for name only
-> > > > > > > > -Mathias]
-> > > > > > > > Signed-off-by: Rajaram Regupathy
-> > > > > > > > <rajaram.regupathy@intel.com>
-> > > > > > > > Signed-off-by: Prabhat Chand Pandey
-> > > > > > > > <prabhat.chand.pandey@intel.com>
-> > > > > > > > Signed-off-by: Abhilash K V <abhilash.k.v@intel.com>
-> > > > > > > > Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > > > > > > > ---
-> > > > > > ...
-> > > > > > >
-> > > > > > > So you have a new char device, with a undocumented and
-> > > > > > > unknown format of data flowing across it to the device.  How
-> > > > > > > in the world are we supposed to use this thing?  Where is it
-> > > > > > > documented?  What does it do?  How can you use it?
-> > > >
-> > > > We had captured all information in patch 5/5 patch in the
-> > > > documentation
-> > > part.
-> > > > We could always improve the documentation. Please let us know
-> > >
-> > > The documentation needs work, see my comments on that.
-> > >
-> > > Also, I don't think you answered these basic questions there, like
-> > > "what is the data format", and "how is this supposed to be used".
-> >
-> > Sure. dbc_raw("dbcfs" could have been better) is a an interface similar to
-> gadget(ffs) or host (usbfs) drivers of USB. These "*fs" provides user land to
-> develop class drivers.  Thus the transport is agnostic on the data format, where
-> we could implement an MTP class (ffs,usbfs) or ADB(dbcfs/dbc_raw).
-> 
-> Please wrap your lines at 72 columns...
-> 
-> Anyway, this is not a filesystem interface, you have created a char device.
-> Much like the tty char device node you have today, right?  Just seems to use
-> different ioctls, and requires a custom userspace program.
-> 
-> > But I agree we need to provide additional documentation similar to
-> > Documentation/usb/proc_usb_info.txt or
-> > Documentation/usb/functionfs.txt
-> 
-> You need some sort of documentation :)
-> 
-> > > > > > > I don't mean to be so harsh here, but come on people, this
-> > > > > > > stuff needs a lot more background documentation,
-> > > > > > > information, and explaination as to exactly why in the world
-> > > > > > > we need any of this, and what it
-> > > > > even does!
-> > > > > > >
-> > > > > > > Also, you need to fix the code, it doesn't work as pointed
-> > > > > > > out in a few places :)
-> > > > > > >
-> > > > > >
-> > > > > > Thanks for going through this.
-> > > > > > It's now clear this is far from ready.
-> > > > > > I need to re-evaluate my position on this, not just the code
-> > > > > > and the documentation, but the usefulness of it all.
-> > > > >
-> > > > > What is this even supposed to be used for?  What is the
-> > > > > application for it?  I couldn't determine that at all, what am I missing?
-> > > >
-> > > > A typical use case is ADB for x86 Android systems  or similar user
-> > > > space class(debug) drivers that can leverage xHCI.DbC capability
-> > > > for debug purpose.
-> > >
-> > > Why does adb need a "high speed" interface?
-> >
-> > Debug tools require high/super speed when large logs or test files have to be
-> pushed or pulled from the device under test. ADB is one such tool.
-> 
-> And what is lacking with the tty interface you have today?  How can this be
-> "faster" when it is talking to the same exact hardware?  Where is the overhead
-> in the tty api that is now gone here?
-> 
-> > > And do you need special hardware to access this?  Do you need
-> > > patches on the adb side for this?
-> >
-> > No special hardware is required. We need a USB Type-AtoA debug cable and is
-> a commonly used method in other OS tools as well .  Yes adb requires changes
-> only in enumeration path to match the descriptors.
-> 
-> Do you have a link to such cables?  I don't seem to have one anywhere...
-> 
-> > > > The larger goal here is to have DbC as a unified debug
-> > > > infrastructure for
-> > > different debug methods like KGDB or early printk and leverage the
-> > > benefits of a dedicated debug infra (DbC) brings in.
-> > >
-> > > Have you modified kgdb for this?  Do you have patches for that?
-> > No kgdb changes. For kgdb to work we added necessary wrapper functions
-> required on the dbc_tty interface which already part of kernel. We have
-> functionally verified and shall push the patch subsequently. Am I missing
-> something ?
-> 
-> You are missing the justification of a custom api that requires all userspace
-> tools to be modified instead of using the existing tty api that everything "just
-> works" with today.
+Thank you for the patches!
+Unfortunately, the three patches could not resolve this issue.
+However, it's a hint to me, and then I found the root cause:
+ - slave_configure() in drivers/usb/storage/scsiglue.c calls
+   blk_queue_max_hw_sectors() with 2048 sectors (1 MiB) when USB_SPEED_SUPE=
+R or more.
+ -- So that, even if your patches (also I fixed it a little [1]) could not =
+resolve
+    the issue because the max_sectors is overwritten by above code.
 
-I was referring to the poll methods required for KGDB/GDB to work which is missing in dbc_tty driver in the kernel.
+So, I think we should fix the slave_configure() by using dma_max_mapping_si=
+ze().
+What do you think? If so, I can make such a patch.
 
-> 
-> > > Who can use this interface in the "real world", is it only
-> > > developers that have access to the special hardware dongle?  Or can
-> > > anyone use this on their laptops for getting console access in a way
-> > > that is somehow "better" than the existing interface?
-> >
-> > No special hardware is required. As indicated earlier developers need a USB A-
-> A debug cable and anyone can use it to get console access.
-> 
-> Where can I get one of those?
-Here is one example:  https://www.amazon.com/SIIG-SuperSpeed-Cable-Meters-CB-US0212-S1/dp/B0032ANCBO
+[1]
+In the "scsi: take the DMA max mapping size into account" patch,
++       shost->max_sectors =3D min_t(unsigned int, shost->max_sectors,
++                       dma_max_mapping_size(dev) << SECTOR_SHIFT);
 
-> 
-> > Yes it is better that existing usb-serial converters with each having proprietary
-> drivers . This is a plug and play solution providing super speed interface.
-> 
-> I don't understand, what is "proprietary" about the existing tty api?
-> It's a generic tty device node, right?  What am I missing?
+it should be:
++                       dma_max_mapping_size(dev) >> SECTOR_SHIFT);
 
-I am referring to usb-serial controller drivers as in "drivers/usb/serial/Kconfig" which has vendors configs leading to much of kernel maintenance.  DbC driver would provide necessary functionality without any of those.
+But, if we fix the slave_configure(), we don't need this patch, IIUC.
 
-> 
-> > > And just how much "faster" is all of this than the current tty
-> > > interface?  What is lacking in the tty interface today that you need
-> > > this new, special one?  Can you just not fix any bottleneck in the
-> > > tty driver if you are not properly saturating the bus?
-> >
-> > IMHO, tty is a legacy interface designed for the purpose it serves
-> > for. Modern High speed IO will not fit into tty framework and
-> > refactoring it will not bring any real value.  We have captured the
-> > initial performance numbers in the documentation patch 5/5.  Please
-> > correct me if I am missing something
-> 
-> Why will "modern high speed IO" not fit into the tty framework?  Where is the
-> bottleneck?  We have tty devices that seem to run at "line speed"
-> on a firewire connection today, and that should be faster than whatever this
-> host controller can pump out, right?
+Best regards,
+Yoshihiro Shimoda
 
-Though I am not aware of the design thoughts behind firewire-tty driver which is in staging, I see
-the to do list and git logs indicate buffer over flow issues indicating the tty framework cannot handle high speed IO. 
-
-Thus our rationale of why tty may not serve the purpose as indicated below gets ratified 
-- Performance & stability ( multiple layers, >1GB file copy CRC errors)
-- Error Recovery  ( lack of framework to propagate transport error handling to the "real" class drivers)
-
-> 
-> My main objection here is a lack of justification to require userspace to write to
-> a new, unknown and undocumented interface, because of an unknown speed
-> issue in the existing codebase.
-
-As for us clarity on unknown/undocumented, ADB is adequately documented and known tool. Please note this is just one example and the interface can be leveraged by other debug tools for better performance..  Having a thinner kernel implementation has well known advantage including stability and maintenance and is not new to USB drivers
-
-> Would you take patches submitted in such a way if you were in my place?
-I would be happy to address all your concerns and open to adopt any better approach that solves the problem .
-
-> 
-> thanks,
-> 
-> greg k-h
