@@ -2,80 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F1C42001
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 10:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227944213A
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 11:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437433AbfFLIz0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 12 Jun 2019 04:55:26 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:60220 "EHLO mx1.redhat.com"
+        id S2437427AbfFLJmu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 05:42:50 -0400
+Received: from mga17.intel.com ([192.55.52.151]:62733 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437421AbfFLIzZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Jun 2019 04:55:25 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id A2ADC30832C8;
-        Wed, 12 Jun 2019 08:55:13 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-109.rdu2.redhat.com [10.10.120.109])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 714AE46;
-        Wed, 12 Jun 2019 08:55:03 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <cf3f4865-b6d7-7303-0212-960439e0c119@tycho.nsa.gov>
-References: <cf3f4865-b6d7-7303-0212-960439e0c119@tycho.nsa.gov> <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk> <be966d9c-e38d-7a30-8d80-fad5f25ab230@tycho.nsa.gov> <0cf7a49d-85f6-fba9-62ec-a378e0b76adf@schaufler-ca.com> <CALCETrX5O18q2=dUeC=hEtK2=t5KQpGBy9XveHxFw36OqkbNOg@mail.gmail.com> <dac74580-5b48-86e4-8222-cac29a9f541d@schaufler-ca.com> <E0925E1F-E5F2-4457-8704-47B6E64FE3F3@amacapital.net> <4b7d02b2-2434-8a7c-66cc-7dbebc37efbc@schaufler-ca.com> <CALCETrU+PKVbrKQJoXj9x_5y+vTZENMczHqyM_Xb85ca5YDZuA@mail.gmail.com> <25d88489-9850-f092-205e-0a4fc292f41b@schaufler-ca.com> <97BA9EB5-4E62-4E3A-BD97-CEC34F16FCFF@amacapital.net>
-To:     Stephen Smalley <sds@tycho.nsa.gov>
-Cc:     dhowells@redhat.com, Andy Lutomirski <luto@amacapital.net>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        USB list <linux-usb@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
+        id S2436777AbfFLJmu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Jun 2019 05:42:50 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jun 2019 02:42:44 -0700
+X-ExtLoop1: 1
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 12 Jun 2019 02:42:22 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 12 Jun 2019 12:42:21 +0300
+Date:   Wed, 12 Jun 2019 12:42:21 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Biju Das <biju.das@bp.renesas.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        raven@themaw.net, Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Subject: Re: [RFC][PATCH 00/13] Mount, FS, Block and Keyrings notifications [ver #4]
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v7 3/7] usb: typec: driver for TI HD3SS3220 USB Type-C
+ DRP port controller
+Message-ID: <20190612094221.GA19831@kuha.fi.intel.com>
+References: <1559296800-5610-1-git-send-email-biju.das@bp.renesas.com>
+ <1559296800-5610-4-git-send-email-biju.das@bp.renesas.com>
+ <20190612082502.GB18301@kuha.fi.intel.com>
+ <OSBPR01MB21037C117F1E7125615AB643B8EC0@OSBPR01MB2103.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <12979.1560329702.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: 8BIT
-Date:   Wed, 12 Jun 2019 09:55:02 +0100
-Message-ID: <12980.1560329702@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Wed, 12 Jun 2019 08:55:25 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <OSBPR01MB21037C117F1E7125615AB643B8EC0@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Stephen Smalley <sds@tycho.nsa.gov> wrote:
+On Wed, Jun 12, 2019 at 08:42:47AM +0000, Biju Das wrote:
+> Hi Heikki,
+> 
+> > Subject: Re: [PATCH v7 3/7] usb: typec: driver for TI HD3SS3220 USB Type-C
+> > DRP port controller
+> > 
+> > On Fri, May 31, 2019 at 10:59:56AM +0100, Biju Das wrote:
+> > > Driver for TI HD3SS3220 USB Type-C DRP port controller.
+> > >
+> > > The driver currently registers the port and supports data role swapping.
+> > >
+> > > Signed-off-by: Biju Das <biju.das@bp.renesas.com>
+> > 
+> > Acked-by; Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> 
+> Thanks.  I believe there is a typo  it should be ":"  instead of ";" .
 
-> 2) If notifications can be triggered by read-like operations (as in fanotify,
-> for example), then a "read" can be turned into a "write" flow through a
-> notification.
+True :)
 
-I don't think any of the things can be classed as "read-like" operations.  At
-the moment, there are the following groups:
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
- (1) Addition of objects (eg. key_link, mount).
-
- (2) Modifications to things (eg. keyctl_write, remount).
-
- (3) Removal of objects (eg. key_unlink, unmount, fput+FMODE_NEED_UNMOUNT).
-
- (4) I/O or hardware errors (eg. USB device add/remove, EDQUOT, ENOSPC).
-
-I have not currently defined any access events.
-
-I've been looking at the possibility of having epoll generate events this way,
-but that's not as straightforward as I'd hoped and fanotify could potentially
-use it also, but in both those cases, the process is already getting the
-events currently by watching for them using synchronous waiting syscalls.
-Instead this would generate an event to say it had happened.
-
-David
+-- 
+heikki
