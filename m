@@ -2,83 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 882C041D12
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 08:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D92D41D74
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 09:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407727AbfFLG6i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 02:58:38 -0400
-Received: from mga01.intel.com ([192.55.52.88]:45279 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390376AbfFLG6i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Jun 2019 02:58:38 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jun 2019 23:58:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,363,1557212400"; 
-   d="scan'208";a="184148897"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Jun 2019 23:58:34 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Howells <dhowells@redhat.com>, viro@zeniv.linux.org.uk,
-        linux-usb@vger.kernel.org, raven@themaw.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/10] usb: Add USB subsystem notifications [ver #3]
-In-Reply-To: <Pine.LNX.4.44L0.1906110950440.1535-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1906110950440.1535-100000@iolanthe.rowland.org>
-Date:   Wed, 12 Jun 2019 09:58:33 +0300
-Message-ID: <87h88v1e92.fsf@linux.intel.com>
+        id S2405215AbfFLHSh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 03:18:37 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:34754 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731214AbfFLHSh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 03:18:37 -0400
+Received: by mail-lf1-f68.google.com with SMTP id y198so11246819lfa.1
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2019 00:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eLHfkrcZKTo38F+HaUI6ckV79OZ0o6Qwqt61e1BrVrE=;
+        b=T3WDjTm70bMNjTMTCWqVSg7AlbbkPQ8m68HplITNSif9lb4dM1J4+qSqh7Bvp7O3Ww
+         Yysk1R0j0bTNnoYt8zCSs1qZ2Mvg/HDYnUQjzbxPpjFkVJ64dq01UEDZ8S/Rt6thbZw1
+         5NajMHZbFg4j/a5wyeEch9lfQlmmQ4wly/T8T+D8yAuCtTqPsuadEWmNpYEWD+qI3Ujf
+         Qsiq2AHo0pbd9cDZZocdVrxiX+rjbf5XzFWkKficu/3zleLrwS4ImuQ7oGn//+LMWp8f
+         mTOFKEPWKMLqcqWoNsoh8P7l1Xaz0bzm+e7F2zYbglE2PY28+hh/H8bTV2RSeAHKygwB
+         hNog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eLHfkrcZKTo38F+HaUI6ckV79OZ0o6Qwqt61e1BrVrE=;
+        b=lgVkWazxEnGp3F//zxNFavOYamolNQIW9ocF5bI2dJ5UN0cGDCTIfBWV5XInsdUzoP
+         QRQeei4nwwMa2ndKEiTKODJexfLB6zsyEfyTPT5VJIFk3rqxJnCoWH46JgtxpmuJY9m2
+         wqsA13Su4DFtrxA96LY+17FspOE8MnSUje4Udsg1QMUpDi7tKPxT1dgZR2FoMjIRk6jl
+         MVJIhR/XE/YsnrlKihsuPOlrhBKX4UykTQB1PB3E0AHqHcis1wc/Kr074rAKkeCVoXaz
+         SZL8BALQ2xcMUA/S8xE2uN1MyQfxB3PCXA+YcByaM3H6fROBZdMsIAfHTdxv20wEYy8u
+         Q1/w==
+X-Gm-Message-State: APjAAAVtdPBv5j47Dt74WKG+zBqXKrhu18+DqpZaLG6zwwSUlytzGibl
+        i7HCFQa4c0O4QL7cXBK5/LlK8Nj+dv9ICSRusVIvnQ==
+X-Google-Smtp-Source: APXvYqzDh4d8Jgxhz1KUU0UefThe5Mfao7GnQlNr1l1ciJMnwpzLb6ZT/NclpErH3pe+BXltkLCsA/57T4H+XLB/VdE=
+X-Received: by 2002:a19:7616:: with SMTP id c22mr36520290lff.115.1560323915112;
+ Wed, 12 Jun 2019 00:18:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20190610084213.1052-1-lee.jones@linaro.org> <20190610084213.1052-4-lee.jones@linaro.org>
+ <CAKv+Gu_s7i8JC4cv-dJMvm1_0cGzzhzf+Dxu0rxcF7iugF=vHg@mail.gmail.com>
+ <20190610085542.GL4797@dell> <CAKv+Gu8rhxciy1cOG3B3pda9+p4R_COGrrqa7S_Rj9y2HeBxYw@mail.gmail.com>
+ <20190610092245.GN4797@dell> <20190611183945.GP4814@minitux>
+In-Reply-To: <20190611183945.GP4814@minitux>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 12 Jun 2019 09:18:23 +0200
+Message-ID: <CACRpkdZLO0tOuaribTWK5eMYD6_drdGJk9x7tG7YDxJKVJqOVg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/8] pinctrl: qcom: sdm845: Provide ACPI support
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        alokc@codeaurora.org, Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Hugo <jlhugo@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Jun 11, 2019 at 8:39 PM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
 
-Hi,
+> Last time we discussed this the _only_ offender was the loop issuing a
+> get_direction() on all descs towards the end of
+> gpiochip_add_data_with_key()
 
-Alan Stern <stern@rowland.harvard.edu> writes:
+I think that is still the only offender.
 
-> On Tue, 11 Jun 2019, Felipe Balbi wrote:
->
->> >> >> > So for "severe" issues, yes, we should do this, but perhaps not for all
->> >> >> > of the "normal" things we see when a device is yanked out of the system
->> >> >> > and the like.
->> >> >> 
->> >> >> Then what counts as a "severe" issue?  Anything besides enumeration 
->> >> >> failure?
->> >> >
->> >> > Not that I can think of at the moment, other than the other recently
->> >> > added KOBJ_CHANGE issue.  I'm sure we have other "hard failure" issues
->> >> > in the USB stack that people will want exposed over time.
->> >> 
->> >> From an XHCI standpoint, Transaction Errors might be one thing. They
->> >> happen rarely and are a strong indication that the bus itself is
->> >> bad. Either bad cable, misbehaving PHYs, improper power management, etc.
->> >
->> > Don't you also get transaction errors if the user unplugs a device in 
->> > the middle of a transfer?  That's not the sort of thing we want to sent 
->> > notifications about.
->> 
->> Mathias, do we get Transaction Error if user removes cable during a
->> transfer? I thought we would just get Port Status Change with CC bit
->> cleared, no?
->
-> Even if xHCI doesn't give Transaction Errors when a cable is unplugged 
-> during a transfer, other host controllers do.  Sometimes quite a lot -- 
-> they continue to occur until the kernel polls the parent hub's 
-> interrupt ep and learns that the port is disconnected, which can take 
-> up to 250 ms.
+We were a bit back and forth: adding that code, removing it
+and then adding it back again.
 
-my comment was specific about XHCI. It even started with "From an XHCI
-standpoint" :-)
+In a way it is good that we detect it so users do not crash their
+kernels by asking for these GPIOs at runtime from userspace
+instead.
 
--- 
-balbi
+It makes a lot of sense for us to ask for the initial direction for
+all pins, as they get registered as GPIOs, which by definition
+makes them available as such and we should be able to inspect
+them.
+
+"GPIOs" reserved by ACPI arguably are not GPIOs anymore
+since ACPI have dedicated them to a special purpose
+(no more "general purpose").
+
+Yours,
+Linus Walleij
