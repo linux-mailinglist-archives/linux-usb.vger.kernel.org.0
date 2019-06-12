@@ -2,30 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DC542982
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 16:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F963429A9
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 16:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392082AbfFLOiN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 10:38:13 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:55670 "HELO
+        id S1729266AbfFLOoK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 10:44:10 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:55694 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2392068AbfFLOiM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 10:38:12 -0400
-Received: (qmail 3180 invoked by uid 2102); 12 Jun 2019 10:38:11 -0400
+        with SMTP id S2439872AbfFLOnM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 10:43:12 -0400
+Received: (qmail 3203 invoked by uid 2102); 12 Jun 2019 10:43:11 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 12 Jun 2019 10:38:11 -0400
-Date:   Wed, 12 Jun 2019 10:38:11 -0400 (EDT)
+  by localhost with SMTP; 12 Jun 2019 10:43:11 -0400
+Date:   Wed, 12 Jun 2019 10:43:11 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Soeren Moch <smoch@web.de>
-cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH] Revert "usb: core: remove local_irq_save() around
- ->complete() handler"
-In-Reply-To: <fb64b378-57a1-19f4-0fd2-1689fc3d8540@web.de>
-Message-ID: <Pine.LNX.4.44L0.1906121033550.1557-100000@iolanthe.rowland.org>
+To:     Christoph Hellwig <hch@lst.de>
+cc:     Oliver Neukum <oneukum@suse.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: How to resolve an issue in swiotlb environment?
+In-Reply-To: <20190612120653.GA25285@lst.de>
+Message-ID: <Pine.LNX.4.44L0.1906121038210.1557-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -33,68 +34,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 12 Jun 2019, Soeren Moch wrote:
+On Wed, 12 Jun 2019, Christoph Hellwig wrote:
 
-> On 01.06.19 13:02, Sebastian Andrzej Siewior wrote:
-> > On 2019-06-01 12:50:08 [+0200], To Soeren Moch wrote:
-> >> I will look into this.
-> >
-> > nothing obvious. If there is really blocken lock, could you please
-> > enable lockdep
-> > |CONFIG_LOCK_DEBUGGING_SUPPORT=y
-> > |CONFIG_PROVE_LOCKING=y
-> > |# CONFIG_LOCK_STAT is not set
-> > |CONFIG_DEBUG_RT_MUTEXES=y
-> > |CONFIG_DEBUG_SPINLOCK=y
-> > |CONFIG_DEBUG_MUTEXES=y
-> > |CONFIG_DEBUG_WW_MUTEX_SLOWPATH=y
-> > |CONFIG_DEBUG_RWSEMS=y
-> > |CONFIG_DEBUG_LOCK_ALLOC=y
-> > |CONFIG_LOCKDEP=y
-> > |# CONFIG_DEBUG_LOCKDEP is not set
-> > |CONFIG_DEBUG_ATOMIC_SLEEP=y
-> >
-> > and send me the splat that lockdep will report?
-> >
+> On Wed, Jun 12, 2019 at 01:46:06PM +0200, Oliver Neukum wrote:
+> > > Thay is someething the virt_boundary prevents.  But could still give
+> > > you something like:
+> > > 
+> > > 	1536 4096 4096 1024
+> > > 
+> > > or
+> > > 	1536 16384 8192 4096 16384 512
+> > 
+> > That would kill the driver, if maxpacket were 1024.
+> > 
+> > USB has really two kinds of requirements
+> > 
+> > 1. What comes from the protocol
+> > 2. What comes from the HCD
+> > 
+> > The protocol wants just multiples of maxpacket. XHCI can satisfy
+> > that in arbitrary scatter/gather. Other HCs cannot.
 > 
-> Nothing interesting:
-> 
-> [    0.000000] Booting Linux on physical CPU 0x0
-> [    0.000000] Linux version 5.1.0 (root@matrix) (gcc version 7.4.0
-> (Debian 7.4.0-6)) #6 SMP PREEMPT Wed Jun 12 11:28:41 CEST 2019
-> [    0.000000] CPU: ARMv7 Processor [412fc09a] revision 10 (ARMv7),
-> cr=10c5387d
-> [    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing
-> instruction cache
-> [    0.000000] OF: fdt: Machine model: TBS2910 Matrix ARM mini PC
-> ...
-> [    0.000000] rcu: Preemptible hierarchical RCU implementation.
-> [    0.000000] rcu:     RCU lockdep checking is enabled.
-> ...
-> [    0.003546] Lock dependency validator: Copyright (c) 2006 Red Hat,
-> Inc., Ingo Molnar
-> [    0.003657] ... MAX_LOCKDEP_SUBCLASSES:  8
-> [    0.003713] ... MAX_LOCK_DEPTH:          48
-> [    0.003767] ... MAX_LOCKDEP_KEYS:        8191
-> [    0.003821] ... CLASSHASH_SIZE:          4096
-> [    0.003876] ... MAX_LOCKDEP_ENTRIES:     32768
-> [    0.003931] ... MAX_LOCKDEP_CHAINS:      65536
-> [    0.003986] ... CHAINHASH_SIZE:          32768
-> [    0.004042]  memory used by lock dependency info: 5243 kB
-> 
-> Nothing else.
-> 
-> When stopping hostapd after it hangs:
-> [  903.504475] ieee80211 phy0: rt2x00queue_flush_queue: Warning - Queue
-> 14 failed to flush
+> We have no real way to enforce that for the other HCs unfortunately.
+> I can't really think of any better way to handle their limitations
+> except for setting max_segments to 1 or bounce buffering.
 
-Instead of reverting the original commit, can you prevent the problem 
-by adding local_irq_save() and local_irq_restore() to the URB 
-completion routines in that wireless driver?
+Would it be okay to rely on the assumption that USB block devices never 
+have block size < 512?  (We could even add code to the driver to 
+enforce this, although refusing to handle such devices at all might be 
+worse than getting an occasional error.)
 
-Probably people who aren't already pretty familiar with the driver code
-won't easily be able to locate the race.  Still, a little overkill may
-be an acceptable solution.
+As I mentioned before, the only HCD that sometimes ends up with
+maxpacket = 1024 but is unable to do full SG is vhci-hcd, and that one
+shouldn't be too hard to fix.
 
 Alan Stern
 
