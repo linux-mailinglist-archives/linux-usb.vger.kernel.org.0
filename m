@@ -2,61 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A022342403
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 13:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6134243D
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 13:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406761AbfFLLbb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 07:31:31 -0400
-Received: from verein.lst.de ([213.95.11.211]:59152 "EHLO newverein.lst.de"
+        id S1728060AbfFLLnQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 07:43:16 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:38074 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727352AbfFLLbb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Jun 2019 07:31:31 -0400
-Received: by newverein.lst.de (Postfix, from userid 2407)
-        id D62C068B02; Wed, 12 Jun 2019 13:31:02 +0200 (CEST)
-Date:   Wed, 12 Jun 2019 13:31:02 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: How to resolve an issue in swiotlb environment?
-Message-ID: <20190612113102.GA24742@lst.de>
-References: <20190611064158.GA20601@lst.de> <Pine.LNX.4.44L0.1906110956510.1535-100000@iolanthe.rowland.org> <20190612073059.GA20086@lst.de> <OSAPR01MB3089D154C6DF0237003CE80CD8EC0@OSAPR01MB3089.jpnprd01.prod.outlook.com>
+        id S1728601AbfFLLnQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Jun 2019 07:43:16 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id C388D7573D;
+        Wed, 12 Jun 2019 11:43:10 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-109.rdu2.redhat.com [10.10.120.109])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E2927614C4;
+        Wed, 12 Jun 2019 11:43:06 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <05ddc1e6-78ba-b60e-73b1-ffe86de2f2f8@tycho.nsa.gov>
+References: <05ddc1e6-78ba-b60e-73b1-ffe86de2f2f8@tycho.nsa.gov> <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk> <31009.1560262869@warthog.procyon.org.uk>
+To:     Stephen Smalley <sds@tycho.nsa.gov>
+Cc:     dhowells@redhat.com, Casey Schaufler <casey@schaufler-ca.com>,
+        Andy Lutomirski <luto@kernel.org>, viro@zeniv.linux.org.uk,
+        linux-usb@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: What do LSMs *actually* need for checks on notifications?
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OSAPR01MB3089D154C6DF0237003CE80CD8EC0@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <25044.1560339786.1@warthog.procyon.org.uk>
+Date:   Wed, 12 Jun 2019 12:43:06 +0100
+Message-ID: <25045.1560339786@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Wed, 12 Jun 2019 11:43:15 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 08:52:21AM +0000, Yoshihiro Shimoda wrote:
-> Hi Christoph,
-> 
-> > From: Christoph Hellwig, Sent: Wednesday, June 12, 2019 4:31 PM
-> > 
-> > First things first:
-> > 
-> > Yoshihiro, can you try this git branch?  The new bits are just the three
-> > patches at the end, but they sit on top of a few patches already sent
-> > out to the list, so a branch is probably either:
-> > 
-> >    git://git.infradead.org/users/hch/misc.git scsi-virt-boundary-fixes
-> 
-> Thank you for the patches!
-> Unfortunately, the three patches could not resolve this issue.
-> However, it's a hint to me, and then I found the root cause:
->  - slave_configure() in drivers/usb/storage/scsiglue.c calls
->    blk_queue_max_hw_sectors() with 2048 sectors (1 MiB) when USB_SPEED_SUPER or more.
->  -- So that, even if your patches (also I fixed it a little [1]) could not resolve
->     the issue because the max_sectors is overwritten by above code.
-> 
-> So, I think we should fix the slave_configure() by using dma_max_mapping_size().
-> What do you think? If so, I can make such a patch.
+Stephen Smalley <sds@tycho.nsa.gov> wrote:
 
-Yes, please do.
+> >   (6) The security attributes of all the objects between the object in (5)
+> >       and the object in (4), assuming we work from (5) towards (4) if the
+> >       two aren't coincident (WATCH_INFO_RECURSIVE).
+> 
+> Does this apply to anything other than mount notifications?
+
+Not at the moment.  I'm considering making it such that you can make a watch
+on a keyring get automatically propagated to keys that get added to the
+keyring (and removed upon unlink) - the idea being that there is no 'single
+parent path' concept for a keyring as there is for a directory.
+
+I'm also pondering the idea of making it possible to have superblock watches
+automatically propagated to superblocks created by automount points on the
+watched superblock.
+
+> And for mount notifications, isn't the notification actually for a change to
+> the mount namespace, not a change to any file?
+
+Yes.
+
+> Hence, the real "object" for events that trigger mount notifications is the
+> mount namespace, right?
+
+Um... arguably.  Would that mean that that would need a label from somewhere?
+
+> The watched path is just a way of identifying a subtree of the mount
+> namespace for notifications - it isn't the real object being watched.
+
+I like that argument.
+
+Thanks,
+David
