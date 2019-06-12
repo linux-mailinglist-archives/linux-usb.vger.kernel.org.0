@@ -2,172 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7048F41BDA
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 07:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B73C41C34
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 08:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730843AbfFLF5l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 01:57:41 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55753 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730696AbfFLF5l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 01:57:41 -0400
-Received: by mail-wm1-f65.google.com with SMTP id a15so5147067wmj.5
-        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2019 22:57:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=4of8ZiK34nF/APP+EeYx9XNCcGPU1AME2L4lrHVraeI=;
-        b=SD79wLU+G6g5/2870hSYrojXo8hkeJYjHJvuJMFUl4pMujwbM+t0i5yVvfgSuJzikK
-         bbMaoLkZRFq9lrBAnxGgMo7Wrr3d03cr+rLois8ec1U2UplLC+1ye25jxyNICqFESQ5B
-         Z66rCwLwDivfh9dprT0lI7za4JpauGVpOJWxSxSx+OJWj3EzbmXNdqlx95XsQbICUZJX
-         3L0/4zj64CDQ4DesKqgZ9NfDR0/VRLD0FvtnAiITdNaN0fu3aqCoN0iUa/CtBHkT0bTO
-         +u/BKQPj4AeOLK8Za3+5h9ls2FpC9zM1dwf42W5Sz8wh5DPuzSUqyYJHW62NKDW4ttYo
-         jmdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=4of8ZiK34nF/APP+EeYx9XNCcGPU1AME2L4lrHVraeI=;
-        b=WX60Hh6GXwQqOgsWxpwhsS4BKr9YJxhzvorxYyNFoX4TaadGQ8bgzZT8b81zjUIYAd
-         QTNbdJH0RcdGtG/2L7U/ZHRdwXhHGg/B+xU9OCRg2xNPKdyhb/nr0qmJTaGobyUVcu4O
-         Ln/+hmx1HzCIPLlptfFE5/8KfMrjnq8IeEw319zDfjv0dP+TWmEcE8jqzfjwcSyAs48G
-         yY7KQNvoWd1AUDJDannzdUdZyTKh8Vh2fNWD05DffiC6RwFFpkWlKDLM8Q/Oz7aW3FOk
-         88fCVs8cRcNOdLa3ljeNCm8K99W45Wu3ZQT34POHMLRifhSjQ+GqlGoIlfjAGnPsDG3n
-         jhTw==
-X-Gm-Message-State: APjAAAU06pgbN1ymY3NTy3EXdrPYw/LpAbPa/tK8jqIzVB79IDa1OZ7i
-        Wnjp2UZptw28tXcFrP3L4HPtPA==
-X-Google-Smtp-Source: APXvYqzJvBNZQtwmkeMKOpNbBz81+iFkqBs/75CCe2ORqE04JpIzCx+Il2rit2gE1lFSlYBsiUOwtA==
-X-Received: by 2002:a1c:618a:: with SMTP id v132mr20248396wmb.17.1560319058242;
-        Tue, 11 Jun 2019 22:57:38 -0700 (PDT)
-Received: from dell ([2.27.35.243])
-        by smtp.gmail.com with ESMTPSA id r3sm20726946wrr.61.2019.06.11.22.57.36
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 11 Jun 2019 22:57:37 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 06:57:36 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
-        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
-        linus.walleij@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, ard.biesheuvel@linaro.org,
-        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 7/8] usb: dwc3: qcom: Start USB in 'host mode' on the
- SDM845
-Message-ID: <20190612055736.GO4797@dell>
-References: <20190610084213.1052-1-lee.jones@linaro.org>
- <20190610084213.1052-7-lee.jones@linaro.org>
- <20190611223349.GS4814@minitux>
+        id S1731048AbfFLG2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 02:28:30 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:44590 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726010AbfFLG2a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 02:28:30 -0400
+X-UUID: ee68a5836ab848e7bba4d9c3af397e7a-20190612
+X-UUID: ee68a5836ab848e7bba4d9c3af397e7a-20190612
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 653344176; Wed, 12 Jun 2019 14:28:16 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 12 Jun 2019 14:28:14 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 12 Jun 2019 14:28:15 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <wsd_upstream@mediatek.com>
+Subject: [PATCH] mtu3: fix setup packet response for HNP and SRP request
+Date:   Wed, 12 Jun 2019 14:28:07 +0800
+Message-ID: <1560320892-30551-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190611223349.GS4814@minitux>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-TM-SNTS-SMTP: CE1AD9F9C4AB7DD47709BB3955B3B7E2FF4BB35A299C25F5C5745B5492155FC12000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 11 Jun 2019, Bjorn Andersson wrote:
+1. Add OTG_HNP_REQD and OTG_SRP_REQD definitions in ch9.h.
+2. When OTG_HNP_REQD and OTG_SRP_REQD has been received,
+usb hardware must not enter TEST mode but need to response setup packet.
+3. Add otg_srp_reqd and otg_hnp_reqd in struct ssusb_mtk for futher
+implementation.
 
-> On Mon 10 Jun 01:42 PDT 2019, Lee Jones wrote:
-> 
-> > When booting with Device Tree, the current default boot configuration
-> > table option, the request to boot via 'host mode' comes from the
-> > 'dr_mode' property.
-> 
-> As I said in my previous review, the default mode for SDM845 is OTG. For
-> the MTP specifically we specify the default mode to be peripheral (was
-> host).
-> 
-> 
-> The remaining thing that worries me with this patch is that I do expect
-> that at least one of the USB-C ports is OTG. But I am not able to
-> conclude anything regarding this and host-only is a good default for
-> this type of device, so I suggest that we merge this.
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+---
+ drivers/usb/mtu3/mtu3.h            |  4 ++++
+ drivers/usb/mtu3/mtu3_gadget_ep0.c | 13 +++++++++++++
+ include/uapi/linux/usb/ch9.h       |  5 +++++
+ 3 files changed, 22 insertions(+)
 
-Right.  So one thing to consider is that Qualcomm Mobile Dept. do not
-use ACPI for Linux, so this patch-set only affects the Laptop
-form factor devices, where 'host' is the expected mode.
-
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Thanks for taking the time to review this Bjorn.
-
-Hopefully we can get Felipe's attention soon.
-
-Felipe,
-
-One thing to think about when taking Bjorn's Reviewed-by into
-consideration; although we both work for Linaro, we actually operate
-in different teams.  Bjorn is on the Qualcomm Landing Team, and as an
-ex-Qualcomm employee he is in an excellent position to review these
-patches, thus his Review should carry more weight than the usual
-co-worker review IMHO.
-
-TIA.
-
-> > A property of the same name can be used inside
-> > ACPI tables too.  However it is missing from the SDM845's ACPI tables
-> > so we have to supply this information using Platform Device Properties
-> > instead.
-> > 
-> > This does not change the behaviour of any currently supported devices.
-> > The property is only set on ACPI enabled platforms, thus for H/W
-> > booting DT, unless a 'dr_mode' property is present, the default is
-> > still OTG (On-The-Go) as per [0].  Any new ACPI devices added will
-> > also be able to over-ride this implementation by providing a 'dr_mode'
-> > property in their ACPI tables.  In cases where 'dr_mode' is omitted
-> > from the tables AND 'host mode' should not be the default (very
-> > unlikely), then we will have to add some way of choosing between them
-> > at run time - most likely by ACPI HID.
-> > 
-> > [0] Documentation/devicetree/bindings/usb/generic.txt
-> > 
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  drivers/usb/dwc3/dwc3-qcom.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > index 1e1f12b7991d..55ba04254e38 100644
-> > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > @@ -444,6 +444,11 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
-> >  	return 0;
-> >  }
-> >  
-> > +static const struct property_entry dwc3_qcom_acpi_properties[] = {
-> > +	PROPERTY_ENTRY_STRING("dr_mode", "host"),
-> > +	{}
-> > +};
-> > +
-> >  static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
-> >  {
-> >  	struct dwc3_qcom 	*qcom = platform_get_drvdata(pdev);
-> > @@ -488,6 +493,13 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
-> >  		goto out;
-> >  	}
-> >  
-> > +	ret = platform_device_add_properties(qcom->dwc3,
-> > +					     dwc3_qcom_acpi_properties);
-> > +	if (ret < 0) {
-> > +		dev_err(&pdev->dev, "failed to add properties\n");
-> > +		goto out;
-> > +	}
-> > +
-> >  	ret = platform_device_add(qcom->dwc3);
-> >  	if (ret)
-> >  		dev_err(&pdev->dev, "failed to add device\n");
-
+diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
+index 76ecf12fdf62..bb8a31bc6e4d 100644
+--- a/drivers/usb/mtu3/mtu3.h
++++ b/drivers/usb/mtu3/mtu3.h
+@@ -226,6 +226,8 @@ struct otg_switch_mtk {
+  * @dma_clk: dma_bus_ck clock for AXI bus etc
+  * @dr_mode: works in which mode:
+  *		host only, device only or dual-role mode
++ * @otg_srp_reqd: used for SRP request handling.
++ * @otg_hnp_reqd: used for HNP request handling.
+  * @u2_ports: number of usb2.0 host ports
+  * @u3_ports: number of usb3.0 host ports
+  * @u3p_dis_msk: mask of disabling usb3 ports, for example, bit0==1 to
+@@ -252,6 +254,8 @@ struct ssusb_mtk {
+ 	/* otg */
+ 	struct otg_switch_mtk otg_switch;
+ 	enum usb_dr_mode dr_mode;
++	bool otg_srp_reqd;
++	bool otg_hnp_reqd;
+ 	bool is_host;
+ 	int u2_ports;
+ 	int u3_ports;
+diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+index 4da216c99726..1247c43a63e6 100644
+--- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
++++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+@@ -285,11 +285,24 @@ static int handle_test_mode(struct mtu3 *mtu, struct usb_ctrlrequest *setup)
+ 		dev_dbg(mtu->dev, "TEST_PACKET\n");
+ 		mtu->test_mode_nr = TEST_PACKET_MODE;
+ 		break;
++	case OTG_SRP_REQD:
++		dev_dbg(mtu->dev, "OTG_SRP_REQD\n");
++		mtu->ssusb->otg_srp_reqd = 1;
++		break;
++	case OTG_HNP_REQD:
++		dev_dbg(mtu->dev, "OTG_HNP_REQD\n");
++		mtu->ssusb->otg_hnp_reqd = 1;
++		break;
+ 	default:
+ 		handled = -EINVAL;
+ 		goto out;
+ 	}
+ 
++	if (mtu->ssusb->otg_srp_reqd || mtu->ssusb->otg_hnp_reqd) {
++		mtu->ep0_state = MU3D_EP0_STATE_SETUP;
++		goto out;
++	}
++
+ 	mtu->test_mode = true;
+ 
+ 	/* no TX completion interrupt, and need restart platform after test */
+diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+index d5a5caec8fbc..545918c83fd1 100644
+--- a/include/uapi/linux/usb/ch9.h
++++ b/include/uapi/linux/usb/ch9.h
+@@ -143,6 +143,11 @@
+ #define	TEST_SE0_NAK	3
+ #define	TEST_PACKET	4
+ #define	TEST_FORCE_EN	5
++/*
++ * OTG HNP and SRP REQD
++ */
++#define	OTG_SRP_REQD	6
++#define	OTG_HNP_REQD	7
+ 
+ /* Status Type */
+ #define USB_STATUS_TYPE_STANDARD	0
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.18.0
+
