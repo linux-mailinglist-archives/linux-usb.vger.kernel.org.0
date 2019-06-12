@@ -2,94 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B666D41DA8
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 09:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC3341DCC
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 09:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731398AbfFLH0C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 03:26:02 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37928 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405505AbfFLH0B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 03:26:01 -0400
-Received: by mail-lj1-f196.google.com with SMTP id o13so14163513lji.5
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2019 00:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=msM4dgHT7OChSN8YMEnC/hlz7O4CQA3Qt/8x5kRoeWA=;
-        b=b/xNVmBGr774Ie44vkdUYzW5g96u3La3k0A9SkL3ZCvZkJF98mYXDQ6oP9LRZh7Wp/
-         2vvQhSHA3r4OQBrQ7F92Mofp94Op3kqIQEKS8O+hSDMP2fnYaKO61aP1PbwJcYdaNkud
-         Uyg/uruiDUcv2DAYwC7O9pg8remPu1Uh3BpmwKar4uCP4Sp2HYDx1JVC3VEx1wjMqJNo
-         bRXEiIeSR30mKPOoa8C77KYigxq3DHc3oCTvWo7Qzb1rVN30/VnNJ2zgp/VN1Is2rgqC
-         Y+sDCDqKg9uQcSI7N022tg6lqvie69RffAY9o34iLiLGyXRl91cmjVEhOhil7iISNP/k
-         aFrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=msM4dgHT7OChSN8YMEnC/hlz7O4CQA3Qt/8x5kRoeWA=;
-        b=MXi59t0BfmV9W+UFplgaQTBh1sH8YvMgRyGjO4t+1/ieI71M/896L6r7xo2KCdBJ2v
-         5G+hIck+xml6tHe4pHF/Y0WfDP+OEfQ9P/yA9liGZSa/Ju5aRAOAB2lIE48m2kYeCkbg
-         vsCPF5VzNk3UGl3kXromqsOyrA5F+RITgQejKOh+h1U9N4WGWLUGqp9AlmfhHrvZ1BhN
-         OYVgxv9wBBNz8em0XPAFD5qeIYpmY7hvNLluP5a8Q6lGyiuuXSFaASTO0j9UsbXjTotl
-         NZLngbVri+vkaPbaCc2sFu10AEgXKk2a502pwa6BkawYBj5zvWY146ccloRh+AAjS609
-         TvEw==
-X-Gm-Message-State: APjAAAWMeI8ooZAZPT6E4L3eHbW09vlUqr3BFeNshVZSIEuL7c5sGe71
-        qBjb45kWlY9aq1lXCa5REuwDb9o2oXFI8nB1+EExIw==
-X-Google-Smtp-Source: APXvYqx5YwbEg0avWvoTtMnv22p8ShuveFC0J0UpmFk2uYfKnJ2tkg9tfFI9Py8uT6FyJuuL+H4KmQND6QpZjMGZBTE=
-X-Received: by 2002:a2e:7508:: with SMTP id q8mr26602026ljc.165.1560324358738;
- Wed, 12 Jun 2019 00:25:58 -0700 (PDT)
+        id S1727027AbfFLHb2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 03:31:28 -0400
+Received: from verein.lst.de ([213.95.11.211]:57550 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725959AbfFLHb2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Jun 2019 03:31:28 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id BC64968AFE; Wed, 12 Jun 2019 09:30:59 +0200 (CEST)
+Date:   Wed, 12 Jun 2019 09:30:59 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: How to resolve an issue in swiotlb environment?
+Message-ID: <20190612073059.GA20086@lst.de>
+References: <20190611064158.GA20601@lst.de> <Pine.LNX.4.44L0.1906110956510.1535-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <20190610084213.1052-1-lee.jones@linaro.org> <20190610084213.1052-3-lee.jones@linaro.org>
-In-Reply-To: <20190610084213.1052-3-lee.jones@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 12 Jun 2019 09:25:47 +0200
-Message-ID: <CACRpkdaXHC6dfOMMOj-a8o1zCzqqZoeQLEEAZ=XpPWKN_nf=9w@mail.gmail.com>
-Subject: Re: [PATCH v3 3/8] pinctrl: msm: Add ability for drivers to supply a
- reserved GPIO list
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     alokc@codeaurora.org, Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jeffrey Hugo <jlhugo@gmail.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1906110956510.1535-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 10, 2019 at 10:42 AM Lee Jones <lee.jones@linaro.org> wrote:
+First things first:
 
-> When booting MSM based platforms with Device Tree or some ACPI
-> implementations, it is possible to provide a list of reserved pins
-> via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
-> However some ACPI tables are not populated with this information,
-> thus it has to come from a knowledgable device driver instead.
->
-> Here we provide the MSM common driver with additional support to
-> parse this informtion and correctly populate the widely used
-> 'valid_mask'.
->
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Yoshihiro, can you try this git branch?  The new bits are just the three
+patches at the end, but they sit on top of a few patches already sent
+out to the list, so a branch is probably either:
 
-I have queued patches 3 and 4 in the pin control tree on an
-immutable branch with Bjorn's ACKs:
-git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
-ib-qcom-acpi
+   git://git.infradead.org/users/hch/misc.git scsi-virt-boundary-fixes
 
-I have also merge this to pinctrl's devel branch for next.
+Gitweb:
 
-Yours,
-Linus Walleij
+   http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/scsi-virt-boundary-fixes
+
+And now on to the rest:
+
+> We would like to avoid the extra I/O overhead for host controllers that
+> can't handle SG.  In fact, switching to sg_tablesize = 1 would probably
+> be considered a regression.
+
+Ok, makes sense.
+
+> >  - set the virt boundary as-is for devices supporting "basic" scatterlist,
+> >    although that still assumes they can rejiggle them because for example
+> >    you could still get a smaller than expected first segment ala (assuming
+> >    a 1024 byte packet size and thus 1023 virt_boundary_mask):
+> > 
+> >         | 0 .. 511 | 512 .. 1023 | 1024 .. 1535 |
+> > 
+> >    as the virt_bondary does not guarantee that the first segment is
+> >    the same size as all the mid segments.
+> 
+> But that is exactly the problem we need to solve.
+
+So based on the above I'm a little confused about the actual requirement
+again.  Can you still split the SCSI command into multiple URBs?  And
+is the boundary for that split still the scatterlist entry as in the
+description above?  If so I don't really see how the virt_boundary
+helps you at all. as it only guarnatees that in a bio, each subsequent
+segment start as the advertised virt_boundary.  It says nothing about
+the size of each segment.
+
+> The issue which prompted the commit this thread is about arose in a
+> situation where the block layer set up a scatterlist containing buffer
+> sizes something like:
+> 
+> 	4096 4096 1536 1024
+> 
+> and the maximum packet size was 1024.  The situation was a little 
+> unusual, because it involved vhci-hcd (a virtual HCD).  This doesn't 
+> matter much in normal practice because:
+
+Thay is someething the virt_boundary prevents.  But could still give
+you something like:
+
+	1536 4096 4096 1024
+
+or
+	1536 16384 8192 4096 16384 512
+
+> The ->sysdev field points to the device used for DMA mapping.  It is
+> often the same as ->controller, but sometimes it is
+> ->controller->parent because of the peculiarities of some platforms.
+
+Thanks, taken into account in the above patches!
