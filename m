@@ -2,118 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4EB41BC5
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 07:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7048F41BDA
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 07:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730786AbfFLF4C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 01:56:02 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:34952 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730695AbfFLF4B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 01:56:01 -0400
-X-UUID: 64847a9f3a504d1c88cde0d4f142c093-20190612
-X-UUID: 64847a9f3a504d1c88cde0d4f142c093-20190612
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1279344623; Wed, 12 Jun 2019 13:55:51 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- MTKMBS31DR.mediatek.inc (172.27.6.102) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 12 Jun 2019 13:55:49 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 12 Jun 2019 13:55:48 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Jumin Li <jumin.li@mediatek.com>
-Subject: [PATCH 5/5] usb: xhci-mtk: add an optional xhci_ck clock
-Date:   Wed, 12 Jun 2019 13:55:21 +0800
-Message-ID: <41bb0198ef2a4059685a8736b54c88487864a517.1560246390.git.chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <5e06482a0be15476c7b5825f155accf98275afa8.1560246390.git.chunfeng.yun@mediatek.com>
-References: <5e06482a0be15476c7b5825f155accf98275afa8.1560246390.git.chunfeng.yun@mediatek.com>
+        id S1730843AbfFLF5l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 01:57:41 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:55753 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730696AbfFLF5l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 01:57:41 -0400
+Received: by mail-wm1-f65.google.com with SMTP id a15so5147067wmj.5
+        for <linux-usb@vger.kernel.org>; Tue, 11 Jun 2019 22:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=4of8ZiK34nF/APP+EeYx9XNCcGPU1AME2L4lrHVraeI=;
+        b=SD79wLU+G6g5/2870hSYrojXo8hkeJYjHJvuJMFUl4pMujwbM+t0i5yVvfgSuJzikK
+         bbMaoLkZRFq9lrBAnxGgMo7Wrr3d03cr+rLois8ec1U2UplLC+1ye25jxyNICqFESQ5B
+         Z66rCwLwDivfh9dprT0lI7za4JpauGVpOJWxSxSx+OJWj3EzbmXNdqlx95XsQbICUZJX
+         3L0/4zj64CDQ4DesKqgZ9NfDR0/VRLD0FvtnAiITdNaN0fu3aqCoN0iUa/CtBHkT0bTO
+         +u/BKQPj4AeOLK8Za3+5h9ls2FpC9zM1dwf42W5Sz8wh5DPuzSUqyYJHW62NKDW4ttYo
+         jmdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=4of8ZiK34nF/APP+EeYx9XNCcGPU1AME2L4lrHVraeI=;
+        b=WX60Hh6GXwQqOgsWxpwhsS4BKr9YJxhzvorxYyNFoX4TaadGQ8bgzZT8b81zjUIYAd
+         QTNbdJH0RcdGtG/2L7U/ZHRdwXhHGg/B+xU9OCRg2xNPKdyhb/nr0qmJTaGobyUVcu4O
+         Ln/+hmx1HzCIPLlptfFE5/8KfMrjnq8IeEw319zDfjv0dP+TWmEcE8jqzfjwcSyAs48G
+         yY7KQNvoWd1AUDJDannzdUdZyTKh8Vh2fNWD05DffiC6RwFFpkWlKDLM8Q/Oz7aW3FOk
+         88fCVs8cRcNOdLa3ljeNCm8K99W45Wu3ZQT34POHMLRifhSjQ+GqlGoIlfjAGnPsDG3n
+         jhTw==
+X-Gm-Message-State: APjAAAU06pgbN1ymY3NTy3EXdrPYw/LpAbPa/tK8jqIzVB79IDa1OZ7i
+        Wnjp2UZptw28tXcFrP3L4HPtPA==
+X-Google-Smtp-Source: APXvYqzJvBNZQtwmkeMKOpNbBz81+iFkqBs/75CCe2ORqE04JpIzCx+Il2rit2gE1lFSlYBsiUOwtA==
+X-Received: by 2002:a1c:618a:: with SMTP id v132mr20248396wmb.17.1560319058242;
+        Tue, 11 Jun 2019 22:57:38 -0700 (PDT)
+Received: from dell ([2.27.35.243])
+        by smtp.gmail.com with ESMTPSA id r3sm20726946wrr.61.2019.06.11.22.57.36
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 11 Jun 2019 22:57:37 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 06:57:36 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
+        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
+        linus.walleij@linaro.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, ard.biesheuvel@linaro.org,
+        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 7/8] usb: dwc3: qcom: Start USB in 'host mode' on the
+ SDM845
+Message-ID: <20190612055736.GO4797@dell>
+References: <20190610084213.1052-1-lee.jones@linaro.org>
+ <20190610084213.1052-7-lee.jones@linaro.org>
+ <20190611223349.GS4814@minitux>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190611223349.GS4814@minitux>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some SoCs may have an optional clock xhci_ck (125M or 200M), it
-usually uses the same PLL as sys_ck, so support it.
+On Tue, 11 Jun 2019, Bjorn Andersson wrote:
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/host/xhci-mtk.c | 13 +++++++++++++
- drivers/usb/host/xhci-mtk.h |  1 +
- 2 files changed, 14 insertions(+)
+> On Mon 10 Jun 01:42 PDT 2019, Lee Jones wrote:
+> 
+> > When booting with Device Tree, the current default boot configuration
+> > table option, the request to boot via 'host mode' comes from the
+> > 'dr_mode' property.
+> 
+> As I said in my previous review, the default mode for SDM845 is OTG. For
+> the MTP specifically we specify the default mode to be peripheral (was
+> host).
+> 
+> 
+> The remaining thing that worries me with this patch is that I do expect
+> that at least one of the USB-C ports is OTG. But I am not able to
+> conclude anything regarding this and host-only is a good default for
+> this type of device, so I suggest that we merge this.
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index 026fe18972d3..b18a6baef204 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -216,6 +216,10 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk *mtk)
- 		return PTR_ERR(mtk->sys_clk);
- 	}
- 
-+	mtk->xhci_clk = devm_clk_get_optional(dev, "xhci_ck");
-+	if (IS_ERR(mtk->xhci_clk))
-+		return PTR_ERR(mtk->xhci_clk);
-+
- 	mtk->ref_clk = devm_clk_get_optional(dev, "ref_ck");
- 	if (IS_ERR(mtk->ref_clk))
- 		return PTR_ERR(mtk->ref_clk);
-@@ -244,6 +248,12 @@ static int xhci_mtk_clks_enable(struct xhci_hcd_mtk *mtk)
- 		goto sys_clk_err;
- 	}
- 
-+	ret = clk_prepare_enable(mtk->xhci_clk);
-+	if (ret) {
-+		dev_err(mtk->dev, "failed to enable xhci_clk\n");
-+		goto xhci_clk_err;
-+	}
-+
- 	ret = clk_prepare_enable(mtk->mcu_clk);
- 	if (ret) {
- 		dev_err(mtk->dev, "failed to enable mcu_clk\n");
-@@ -261,6 +271,8 @@ static int xhci_mtk_clks_enable(struct xhci_hcd_mtk *mtk)
- dma_clk_err:
- 	clk_disable_unprepare(mtk->mcu_clk);
- mcu_clk_err:
-+	clk_disable_unprepare(mtk->xhci_clk);
-+xhci_clk_err:
- 	clk_disable_unprepare(mtk->sys_clk);
- sys_clk_err:
- 	clk_disable_unprepare(mtk->ref_clk);
-@@ -272,6 +284,7 @@ static void xhci_mtk_clks_disable(struct xhci_hcd_mtk *mtk)
- {
- 	clk_disable_unprepare(mtk->dma_clk);
- 	clk_disable_unprepare(mtk->mcu_clk);
-+	clk_disable_unprepare(mtk->xhci_clk);
- 	clk_disable_unprepare(mtk->sys_clk);
- 	clk_disable_unprepare(mtk->ref_clk);
- }
-diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-index 8be8c5f7ff62..5ac458b7d2e0 100644
---- a/drivers/usb/host/xhci-mtk.h
-+++ b/drivers/usb/host/xhci-mtk.h
-@@ -139,6 +139,7 @@ struct xhci_hcd_mtk {
- 	struct regulator *vusb33;
- 	struct regulator *vbus;
- 	struct clk *sys_clk;	/* sys and mac clock */
-+	struct clk *xhci_clk;
- 	struct clk *ref_clk;
- 	struct clk *mcu_clk;
- 	struct clk *dma_clk;
+Right.  So one thing to consider is that Qualcomm Mobile Dept. do not
+use ACPI for Linux, so this patch-set only affects the Laptop
+form factor devices, where 'host' is the expected mode.
+
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Thanks for taking the time to review this Bjorn.
+
+Hopefully we can get Felipe's attention soon.
+
+Felipe,
+
+One thing to think about when taking Bjorn's Reviewed-by into
+consideration; although we both work for Linaro, we actually operate
+in different teams.  Bjorn is on the Qualcomm Landing Team, and as an
+ex-Qualcomm employee he is in an excellent position to review these
+patches, thus his Review should carry more weight than the usual
+co-worker review IMHO.
+
+TIA.
+
+> > A property of the same name can be used inside
+> > ACPI tables too.  However it is missing from the SDM845's ACPI tables
+> > so we have to supply this information using Platform Device Properties
+> > instead.
+> > 
+> > This does not change the behaviour of any currently supported devices.
+> > The property is only set on ACPI enabled platforms, thus for H/W
+> > booting DT, unless a 'dr_mode' property is present, the default is
+> > still OTG (On-The-Go) as per [0].  Any new ACPI devices added will
+> > also be able to over-ride this implementation by providing a 'dr_mode'
+> > property in their ACPI tables.  In cases where 'dr_mode' is omitted
+> > from the tables AND 'host mode' should not be the default (very
+> > unlikely), then we will have to add some way of choosing between them
+> > at run time - most likely by ACPI HID.
+> > 
+> > [0] Documentation/devicetree/bindings/usb/generic.txt
+> > 
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > ---
+> >  drivers/usb/dwc3/dwc3-qcom.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> > 
+> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > index 1e1f12b7991d..55ba04254e38 100644
+> > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > @@ -444,6 +444,11 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
+> >  	return 0;
+> >  }
+> >  
+> > +static const struct property_entry dwc3_qcom_acpi_properties[] = {
+> > +	PROPERTY_ENTRY_STRING("dr_mode", "host"),
+> > +	{}
+> > +};
+> > +
+> >  static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
+> >  {
+> >  	struct dwc3_qcom 	*qcom = platform_get_drvdata(pdev);
+> > @@ -488,6 +493,13 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
+> >  		goto out;
+> >  	}
+> >  
+> > +	ret = platform_device_add_properties(qcom->dwc3,
+> > +					     dwc3_qcom_acpi_properties);
+> > +	if (ret < 0) {
+> > +		dev_err(&pdev->dev, "failed to add properties\n");
+> > +		goto out;
+> > +	}
+> > +
+> >  	ret = platform_device_add(qcom->dwc3);
+> >  	if (ret)
+> >  		dev_err(&pdev->dev, "failed to add device\n");
+
 -- 
-2.21.0
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
