@@ -2,127 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF3C422AB
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 12:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2703422C1
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Jun 2019 12:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408915AbfFLKis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jun 2019 06:38:48 -0400
-Received: from mout.web.de ([212.227.17.12]:35415 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407474AbfFLKis (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Jun 2019 06:38:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1560335920;
-        bh=w7Zapu97qEenwfGP8VjODN6jV86L8V7ffF+//76IatM=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=pkZ3HlONe4+40eHueQucv6Xeqc1A/rYbNkDUO3XhfCvN/rCGD8DODqaj7aT2ayAzG
-         SKgDsJ/kn16PZRo9/AWahOg2zy5pLqDUyJj9rVQNFzGF4vzA8U3A44+GJaZMGawj0r
-         7hih7dCuoPuVICCCQnKvH6N+wEDl4DSUjGGGcMhQ=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.43.108] ([89.15.237.104]) by smtp.web.de (mrweb101
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MZlZK-1hwOLh1sdC-00LXk3; Wed, 12
- Jun 2019 12:38:39 +0200
-Subject: Re: [PATCH] Revert "usb: core: remove local_irq_save() around
- ->complete() handler"
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20190531215340.24539-1-smoch@web.de>
- <20190531220535.GA16603@kroah.com>
- <6c03445c-3607-9f33-afee-94613f8d6978@web.de>
- <20190601105008.zfqrtu6krw4mhisb@linutronix.de>
- <20190601110247.v4lzwvqhuwrjrotb@linutronix.de>
-From:   Soeren Moch <smoch@web.de>
-Message-ID: <fb64b378-57a1-19f4-0fd2-1689fc3d8540@web.de>
-Date:   Wed, 12 Jun 2019 12:38:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S2438046AbfFLKkU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jun 2019 06:40:20 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:55236 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438030AbfFLKkQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jun 2019 06:40:16 -0400
+Received: by mail-wm1-f68.google.com with SMTP id g135so6032129wme.4
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jun 2019 03:40:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=QOUu665VzbrQkdt6yuFrpjcTfZcOezuzhB04ruczt2c=;
+        b=cigPc5yqKtc5ty1KWdwigqWdNQXSGwDhC0Fr7SXbLKN7MEyfVKpajuulmqbSG9T7QR
+         IcPH51LzN028aYASAjgoEvs/yg4Pg8H7A3SohtTv9x6uhcRAyl9DQBsIVFyyILSkyj9d
+         xvuJKhveB91CQX7REZo886hk+/xTsR01v7H+aDTJMS5cjqVGwEnDcLhDG102dooNRbGC
+         ULMdawJIHoCs7ZGUg8ib5cVyPBzduAUauJ3SwSKqDPWx3zfLegCI5ahAM1K/OWF9mcoY
+         FCwJE2bPnH9bZekPqQ4TYGMFqT1RcIFXKug7miIo23wz9IegSMwwKsCcB+tH6ImR17w9
+         eVNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=QOUu665VzbrQkdt6yuFrpjcTfZcOezuzhB04ruczt2c=;
+        b=oOHAmUbHDHNzvlSn+aoHmETuFFkh0hSnJvrCPR04n1vaKA0yB1WRQJWJ2x3bziDT+u
+         9p6f+skRCILg4zu0THTQUU5bL26mqrvGRliXBqRCutrM8MG2Oo6gi9sxHi7o3PW2G+LF
+         gjecA+DmS/k79Dy4oYg9CYMJdDKd3eMJyVxz/r03EUQb7kZmctjKF3kGxJXc7NSYMSvU
+         bQGFqUwIcMyuP/0vxE3FijRC1FH3tIBQZquVkoInEewcyOzeD96Db3w69BekRH3MFWbX
+         OyceNtl+BsT3ex5yVNPPnFeU2KhxMZZ+aEbhG4ngHD/Cb6c7eD3Vu3x+Bme7X+DvOzeD
+         wsHA==
+X-Gm-Message-State: APjAAAU/RaMxE6Eu+eTOIZBpfaPytPZHG0PfFl/u8T8asRTd5X8yJdrr
+        i+9fnyW2IF7uX6oJzpTj2qd1pA==
+X-Google-Smtp-Source: APXvYqy1InhFscPbjy00LsR+VSBPtrs/pTzNt7sH1NgkU981TFf39ZicVqy8q3leI91RcX0sQgcUIA==
+X-Received: by 2002:a1c:a7ca:: with SMTP id q193mr23272055wme.150.1560336014376;
+        Wed, 12 Jun 2019 03:40:14 -0700 (PDT)
+Received: from dell ([185.80.132.160])
+        by smtp.gmail.com with ESMTPSA id g5sm20846547wrp.29.2019.06.12.03.40.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 12 Jun 2019 03:40:13 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 11:40:11 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
+        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
+        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org,
+        ard.biesheuvel@linaro.org, jlhugo@gmail.com,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/8] i2c: i2c-qcom-geni: Provide support for ACPI
+Message-ID: <20190612104011.GA4660@dell>
+References: <20190610084213.1052-1-lee.jones@linaro.org>
+ <20190612103453.ccet2pneairnlpcc@ninjato>
 MIME-Version: 1.0
-In-Reply-To: <20190601110247.v4lzwvqhuwrjrotb@linutronix.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ITNzeUPAh3LVNjomSsgP/7ESekNXFtNIcYrM8VUzfhsiM22HdCO
- CWmklggNCUM0Uf4ZW2ZKTToWeTInSyP6JbGKafvWIP6EWHdDZ71Pic8v2sQXSlSz0jBYdKl
- SGZjq3HugqgJi0zhQl0zw3gbMgJkoqf1rUw4h/RS4cNzv4oVRvhzG6IYNcFsJbSKrM9sDd2
- GexEeIchvU8IqpVb1PH6Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mKTjyQwiRoo=:jxymFFKr2qEOQchX/kGA8F
- 3Vb44yIm2uxAibNMScG0Q39c+yZMRO6Ly82yoN7ZYkQUTw1ddGd0AOeD1R93IgHeBuA3LPpy2
- S3iibh9PXMiC6laGMQJwPtB+A8OSQ/+H0w/IoxCB7NP8tocZP/qSvTcismqjjnagJi1npxKuM
- 1iNNDnt66/53JrWALQqNghnE8FJKBojKSkjHkGzlcL3nAhjwCdshD5J1fnd0uYqsxZIcUPIh4
- cW8KC0rxuNegknB+zqQ6pSqfGO/jV8HKJhYJ2vgvMVVmhIBb2emrR0IZVUT02TwxDebHRlDC/
- GTVLvx2Fi2PVW6EZ5CQUAhHbdNGLU6uzkl41o9TiiukD7TtubMMD8sraRwHT3t3bb6GhDeOjw
- OplazHsqxLjy0BLOD+mHKUTVhGvjtWrE4YKBzLnYowpcI/gkuNGgx5tbUQRnPmyKDLKy0Cxjg
- IbZr5ePmwgpPQWMc0mbUf5zp2pmDOYlqrjD+D2CJUKBAnfKotceym9fPSx5lXW8RRU3uXczmN
- LK9bSO2wcomdNUp+YB/wGDVc/c6hrHMAymlMNYQ5FZCVgQtJ7y5YgWN8hj/dufE/b3qsDM01f
- /s1Bsh3WM3EWSyytA1I9Qqap9KUnV+lpV1nAdGfYsDmkx1QOjZ6lrvV1SBW/wfGQvpCHPnxMT
- mUmx6LBPAAK2SS/6jNghnknFFXKCIwmDTvQUVOf5K5wP/piVV4sjyqWRV6O3stnyOPxcsuuyx
- VvaasqNBwSmDoO3o9SMlaYIMrtZso+46ZshdYIByDkmxlioKlNylR3ClB5F0mYQeCYrFe02uk
- /ji5C80f7yyJKg5Ul0cAYhNCv9PjD+K1rxsmPewnnISdhDP8DZ60omTmzmeOaeib16XBiym4o
- t2g62ePBcjlcdTYku3h6tYD0oslZl7BdCDEN1sdEmMbrinwVU1BYZ9ahU9PiMufHEmiZEGg54
- VFcLhy9Yh5+ruw1LmrwvUJsa/Gpq+JbVYvzfhZJyiv/SARdiciy9NAssRSZdLhEe2WT6KEX1e
- 5A==
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190612103453.ccet2pneairnlpcc@ninjato>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, 12 Jun 2019, Wolfram Sang wrote:
 
+> On Mon, Jun 10, 2019 at 09:42:06AM +0100, Lee Jones wrote:
+> > Add a match table to allow automatic probing of ACPI device
+> > QCOM0220.  Ignore clock attainment errors.  Set default clock
+> > frequency value.
+> > 
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> 
+> Sadly, there is no cover-letter describing if there is a dependency or
+> not. I assume there is, otherwise I would get the I2C patches only? But
+> what is the suggested way upstream then?
 
-On 01.06.19 13:02, Sebastian Andrzej Siewior wrote:
-> On 2019-06-01 12:50:08 [+0200], To Soeren Moch wrote:
->> I will look into this.
->
-> nothing obvious. If there is really blocken lock, could you please
-> enable lockdep
-> |CONFIG_LOCK_DEBUGGING_SUPPORT=3Dy
-> |CONFIG_PROVE_LOCKING=3Dy
-> |# CONFIG_LOCK_STAT is not set
-> |CONFIG_DEBUG_RT_MUTEXES=3Dy
-> |CONFIG_DEBUG_SPINLOCK=3Dy
-> |CONFIG_DEBUG_MUTEXES=3Dy
-> |CONFIG_DEBUG_WW_MUTEX_SLOWPATH=3Dy
-> |CONFIG_DEBUG_RWSEMS=3Dy
-> |CONFIG_DEBUG_LOCK_ALLOC=3Dy
-> |CONFIG_LOCKDEP=3Dy
-> |# CONFIG_DEBUG_LOCKDEP is not set
-> |CONFIG_DEBUG_ATOMIC_SLEEP=3Dy
->
-> and send me the splat that lockdep will report?
->
+There are no cross-subsystem build dependencies on any of these
+patches.  The only reason they are bundled together in the same
+patch-set is for cross-subsystem visibility and understanding.
 
-Nothing interesting:
+There is wide interest in these devices.
 
-[    0.000000] Booting Linux on physical CPU 0x0
-[    0.000000] Linux version 5.1.0 (root@matrix) (gcc version 7.4.0
-(Debian 7.4.0-6)) #6 SMP PREEMPT Wed Jun 12 11:28:41 CEST 2019
-[    0.000000] CPU: ARMv7 Processor [412fc09a] revision 10 (ARMv7),
-cr=3D10c5387d
-[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing
-instruction cache
-[    0.000000] OF: fdt: Machine model: TBS2910 Matrix ARM mini PC
-...
-[    0.000000] rcu: Preemptible hierarchical RCU implementation.
-[    0.000000] rcu:     RCU lockdep checking is enabled.
-...
-[    0.003546] Lock dependency validator: Copyright (c) 2006 Red Hat,
-Inc., Ingo Molnar
-[    0.003657] ... MAX_LOCKDEP_SUBCLASSES:  8
-[    0.003713] ... MAX_LOCK_DEPTH:          48
-[    0.003767] ... MAX_LOCKDEP_KEYS:        8191
-[    0.003821] ... CLASSHASH_SIZE:          4096
-[    0.003876] ... MAX_LOCKDEP_ENTRIES:     32768
-[    0.003931] ... MAX_LOCKDEP_CHAINS:      65536
-[    0.003986] ... CHAINHASH_SIZE:          32768
-[    0.004042]  memory used by lock dependency info: 5243 kB
+> Also, the current maintainer entry for this driver looks like:
+> 
+> drivers/i2c/busses/i2c-qcom-geni.c:
+>         Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
+>         David Brown <david.brown@linaro.org> (maintainer:ARM/QUALCOMM SUPPORT)
+>         Alok Chauhan <alokc@codeaurora.org> (supporter:QUALCOMM GENERIC INTERFACE I2C DRIVER)
+> 
+> I didn't hear from those people yet, would be great to have their acks.
 
-Nothing else.
+I will see if I can rouse them from their slumber.
 
-When stopping hostapd after it hangs:
-[  903.504475] ieee80211 phy0: rt2x00queue_flush_queue: Warning - Queue
-14 failed to flush
-
-Soeren
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
