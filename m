@@ -2,142 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D4244B82
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 21:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9809744CC2
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 21:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729485AbfFMTB4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 15:01:56 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:37066 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727307AbfFMTBy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 15:01:54 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 22so11221265wmg.2
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2019 12:01:53 -0700 (PDT)
+        id S1729559AbfFMT6z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 15:58:55 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:37016 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729588AbfFMT6u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 15:58:50 -0400
+Received: by mail-io1-f66.google.com with SMTP id e5so687657iok.4
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2019 12:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6KguLrFwl0xPCes0CytFyV6BjIEPLyEaRz6Aj70yR7w=;
-        b=j5e9Vl4xfjq394daE3nOYQWA0Yekr+zPxdRyPz1NMbmUt/44pK1HGdBPJz+1wrf9DT
-         5GHpISbHFPFcJCzoK1FSc0RziFvPWERUsFKxv8wpsFV0YvjMaS/9ZC/ie6YqL6h3uBmg
-         tLkotCkYLzdUThhlfYJgI1rwyyWdzjfbhO/I0k64FwtwHFdxKGTJViStVDB8elBiU90H
-         iEoSkMzicwD5LQ7yHlON3YDs0f31wcGJp5UCD+Sg23lBMPm4WT3YnyT6V9/SeqKnifnG
-         SZ/bZmbv9TrwYiEIOT/R4+VjAE7u7/52hPOp/ppo6h3PPa8Tr1G9rCM7H9R5ikzloyvU
-         SGZw==
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=0g3LShZij9OvLky32ww/mm8nsliTsm7gD3njRd6NCQk=;
+        b=VvRUdVRnyB4TuhZ+9+/oPM6pb8vxTclPrmvRFZ9PzavJCtkYfSYgjGNiCUQTux1nUl
+         9VjOQatdu+aPOowyvOuIY8hKioFj1wntgGyBXavSkEATXrC/5DcyjhYCe5Ag1uW/q8zp
+         fQGdKjxC19RzzJyIAL/Mw4avblUSP65mKGcmY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6KguLrFwl0xPCes0CytFyV6BjIEPLyEaRz6Aj70yR7w=;
-        b=f4g99CTpBokI+skknl08vaRG8ai8SCzWChOS9xhYkPuhmaZKxPyRSQNNaoAVLFak90
-         g3rRtBEUYuuF1hc2JrtfOmI8JT0fx4Im5fnnDnWfS8vMGYdH/JWqYTjMudor6SCHTwuC
-         nYwUfvWqK0DD3N2jJd0NTTa7FoympJkelclBKo1IipRUQ/18xcw8gLt3z7CzggI1kNnv
-         upikHxEHBi8Nu/J3vhaTxJOc1U23eaDCwEGmai5+ITlvyBhF//uq2vpKhXhf/9vE8dcV
-         O2xYQTMkt2aFRyDW8PRKc0b16BGbpp5TY69TeJNrk0wssSGytO0IuxuntYroln4iErEo
-         O8lw==
-X-Gm-Message-State: APjAAAWYz7x3p+3QWhorRcpwbu8K07kW/skbtm3lwh92ERQeMzidrlmk
-        3M/gviM3FMoP95Hni7q/gzv1By+mBQaeWdkNlJoJ/Q==
-X-Google-Smtp-Source: APXvYqxuT1gm3u8/hCDM3wezjyGA7tgkxOInncWJuSpR6tMq+J0eK/KQWnX8tpXhhukbO20sOdbPNpxPlxd5f/YG518=
-X-Received: by 2002:a1c:9a53:: with SMTP id c80mr4584144wme.173.1560452512591;
- Thu, 13 Jun 2019 12:01:52 -0700 (PDT)
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=0g3LShZij9OvLky32ww/mm8nsliTsm7gD3njRd6NCQk=;
+        b=PxPqlTrLJlQ5lONN1cq4VYHg6i3hWawOJ5dx6plUb/Dno9C6k8Ud7ycVczKFVIDtn7
+         Egtp4iRMSUmdqD05DhKzW3GI100N1lv1OFQ/o4Ut/WjvVZi/iXg0LAEP/Y0MJ5ieoAXu
+         +4kTVX+PPSEw+7cXKFpaWeeMZPALgPwio+TPe5XZLY7sp6sNHoWkulbl93xhH7gIgEH0
+         +vp3z/p677ilLA+hAGCVP8aYyHNJA+YMmzNzMq3RIUCkq7tv/BDGMLr0b6GmVA5h+OOZ
+         0PN4TtELn+o/4CP/QKNUkMrCCIYVtmTakDUhZBDFNrxt/7bkMXihatw6QN7MFMDto8P2
+         flOA==
+X-Gm-Message-State: APjAAAWWHIEcN0Ts22PJxVjmVzDs8q6lVFyvRfTFSeEJhxf2M38+3Ts6
+        ++1FUMnRVy1nXJoNffJQ+147O+U0xmB+32LyersFYw==
+X-Google-Smtp-Source: APXvYqxdGc8NyPROiaW5qZ3CjU9Mi5BWb0Y5+Ghq0hcByTKiBd2ar5O9a3Vi002QTGCiPnE/Sx2A/4naPXD8YwkquS4=
+X-Received: by 2002:a6b:f910:: with SMTP id j16mr7292522iog.256.1560455929090;
+ Thu, 13 Jun 2019 12:58:49 -0700 (PDT)
+From:   Kashyap Desai <kashyap.desai@broadcom.com>
+References: <20190605190836.32354-1-hch@lst.de> <20190605190836.32354-11-hch@lst.de>
+ <cd713506efb9579d1f69a719d831c28d@mail.gmail.com> <20190608081400.GA19573@lst.de>
+In-Reply-To: <20190608081400.GA19573@lst.de>
 MIME-Version: 1.0
-References: <1560377606-40855-1-git-send-email-fei.yang@intel.com>
-In-Reply-To: <1560377606-40855-1-git-send-email-fei.yang@intel.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Thu, 13 Jun 2019 12:01:39 -0700
-Message-ID: <CALAqxLXeXt1Me_gzUFX8uBAuw_26QEOAX84324kzq7Hih1XDQw@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: f_fs: data_len used before properly set
-To:     "Yang, Fei" <fei.yang@intel.com>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        mgautam@codeaurora.org,
-        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQNLjZIO2zMn7N+9xPobnDbFSu4o5gI2RJdJAgF+bYgBfxw4kaN/cE8Q
+Date:   Fri, 14 Jun 2019 01:28:47 +0530
+Message-ID: <98f6557ae91a7cdfe8069fcf7d788c88@mail.gmail.com>
+Subject: RE: [PATCH 10/13] megaraid_sas: set virt_boundary_mask in the scsi host
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Sebastian Ott <sebott@linux.ibm.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>,
+        PDL-MPT-FUSIONLINUX <mpt-fusionlinux.pdl@broadcom.com>,
+        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 3:13 PM <fei.yang@intel.com> wrote:
 >
-> From: Fei Yang <fei.yang@intel.com>
+> On Thu, Jun 06, 2019 at 09:07:27PM +0530, Kashyap Desai wrote:
+> > Hi Christoph, Changes for <megaraid_sas> and <mpt3sas> looks good. We
+> > want to confirm few sanity before ACK. BTW, what benefit we will see
+> > moving virt_boundry setting to SCSI mid layer ? Is it just modular
+> > approach OR any functional fix ?
 >
-> The following line of code in function ffs_epfile_io is trying to set
-> flag io_data->use_sg in case buffer required is larger than one page.
->
->     io_data->use_sg = gadget->sg_supported && data_len > PAGE_SIZE;
->
-> However at this point of time the variable data_len has not been set
-> to the proper buffer size yet. The consequence is that io_data->use_sg
-> is always set regardless what buffer size really is, because the condition
-> (data_len > PAGE_SIZE) is effectively an unsigned comparison between
-> -EINVAL and PAGE_SIZE which would always result in TRUE.
->
-> Fixes: 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather buffers")
-> Signed-off-by: Fei Yang <fei.yang@intel.com>
-> Cc: stable <stable@vger.kernel.org>
+> The big difference is that virt_boundary now also changes the
+> max_segment_size, and this ensures that this limit is also communicated
+to
+> the DMA mapping layer.
+Is there any changes in API  blk_queue_virt_boundary? I could not find
+relevant code which account for this. Can you help ?
+Which git repo shall I use for testing ? That way I can confirm, I didn't
+miss relevant changes.
 
-Hey Fei! Thanks so much for sending this out! I was excited that this
-might resolve the ffs stalls I've been seeing on dwc3/dwc2 hardware,
-but when I gave it a shot, it doesn't seem to help. In fact, rather
-then a stall, I end up seeing the following panic:
+From your above explanation, it means (after this patch) max segment size
+of the MR controller will be set to 4K.
+Earlier it is possible to receive single SGE of 64K datalength (Since max
+seg size was 64K), but now the same buffer will reach the driver having 16
+SGEs (Each SGE will contain 4K length).
+Right ?
 
-[  383.415362] Unable to handle kernel read from unreadable memory at
-virtual address 0000000000000018
-[  383.431935] Mem abort info:
-[  383.431937]   ESR = 0x96000005
-[  383.431940]   Exception class = DABT (current EL), IL = 32 bits
-[  383.431941]   SET = 0, FnV = 0
-[  383.431942]   EA = 0, S1PTW = 0
-[  383.431943] Data abort info:
-[  383.431945]   ISV = 0, ISS = 0x00000005
-[  383.431946]   CM = 0, WnR = 0
-[  383.431951] user pgtable: 4k pages, 39-bit VAs, pgdp=00000000aae1f000
-[  383.431953] [0000000000000018] pgd=000000009f064003,
-pud=000000009f064003, pmd=0000000000000000
-[  383.482560] Internal error: Oops: 96000005 [#1] PREEMPT SMP
-[  383.488128] Modules linked in:
-[  383.491181] CPU: 0 PID: 399 Comm: irq/69-dwc3 Tainted: G S
-      5.2.0-rc4-00092-gf5f12f5d3fdd #296
-[  383.501002] Hardware name: HiKey960 (DT)
-[  383.504918] pstate: 20400085 (nzCv daIf +PAN -UAO)
-[  383.509714] pc : dma_direct_unmap_sg+0x38/0x80
-[  383.514151] lr : dma_direct_unmap_sg+0x5c/0x80
-[  383.518586] sp : ffffff8011fcbc40
-[  383.521893] x29: ffffff8011fcbc40 x28: ffffffc0bad9c180
-[  383.527199] x27: ffffffc0bae05300 x26: 0000000000000002
-[  383.532504] x25: ffffffc0b9a9fd00 x24: 0000000000000000
-[  383.537809] x23: 0000000000000001 x22: ffffffc0bad9fc10
-[  383.543114] x21: 0000000000000002 x20: 0000000000000001
-[  383.548420] x19: 0000000000000000 x18: 0000000000000000
-[  383.553726] x17: 0000000000000000 x16: 0000000000000000
-[  383.559032] x15: 0000000000000000 x14: ffffff8010eb6ad0
-[  383.564338] x13: 0000000000000000 x12: 0000000000000000
-[  383.569643] x11: 0000000000000000 x10: 00000000000009d0
-[  383.574949] x9 : ffffff8011fcbd20 x8 : ffffffc0b63c3a30
-[  383.580254] x7 : ffffffc0bc515c00 x6 : 0000000000000007
-[  383.585560] x5 : 0000000000000001 x4 : 0000000000000004
-[  383.590865] x3 : 0000000000000001 x2 : 0000000000000001
-[  383.596169] x1 : 000000000006bf42 x0 : 0000000000000000
-[  383.601477] Call trace:
-[  383.603916]  dma_direct_unmap_sg+0x38/0x80
-[  383.608013]  usb_gadget_unmap_request_by_dev+0xb0/0xc8
-[  383.613148]  dwc3_gadget_del_and_unmap_request.isra.13+0x78/0x150
-[  383.619235]  dwc3_gadget_giveback+0x30/0x68
-[  383.623412]  dwc3_thread_interrupt+0x694/0x14e0
-[  383.627938]  irq_thread_fn+0x28/0x78
-[  383.631506]  irq_thread+0x124/0x1c0
-[  383.634991]  kthread+0x128/0x130
-[  383.638214]  ret_from_fork+0x10/0x1c
-[  383.641786] Code: 2a0303f7 aa0403f8 52800014 d503201f (b9401a62)
-[  383.647874] ---[ end trace f48053c2040c5658 ]---
-
-From the looks of it though, I suspect your fix is a good one, and
-maybe its just helping expose some related underlying issues in the
-dwc3 driver?
-
-thanks
--john
+Kashyap
