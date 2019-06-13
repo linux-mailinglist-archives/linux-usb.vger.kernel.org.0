@@ -2,94 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4633A44CED
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 22:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789D344DDE
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 22:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729241AbfFMUEQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 16:04:16 -0400
-Received: from mail-io1-f41.google.com ([209.85.166.41]:33893 "EHLO
-        mail-io1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728997AbfFMUEQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 16:04:16 -0400
-Received: by mail-io1-f41.google.com with SMTP id k8so769790iot.1
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2019 13:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:references:in-reply-to:mime-version:thread-index:date
-         :message-id:subject:to:cc;
-        bh=DI3nny5EkaaAj92ROhz8+oF1JyVO+F50iFiYFfny5cg=;
-        b=Vf0Co9J1FWQf/mNg9X22WqwFrqk1bWNDchM2WOC0coX4mVxqvFdL4M7qSSiticNd+/
-         +3h8YyGJXb6Dp9fwIq4WsLEKSNJVZR/j3S/HsXXpkjb7r3yKx1VfkTt2fSEW7Upj2InB
-         vpUy4mSkuPaOLlVxWUk8m4jGlNkrR8m+OQY9c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:references:in-reply-to:mime-version
-         :thread-index:date:message-id:subject:to:cc;
-        bh=DI3nny5EkaaAj92ROhz8+oF1JyVO+F50iFiYFfny5cg=;
-        b=HTqLoZetM9sylxXE66lczzZWoOPsk7fsjtzMM1qNqsK9CN15zaBXpg9LdDbJPmqiuG
-         GeYSKTcLw+WAEIyVIzaIOM4AEf4miGiFiRd5eqsKPJCGP6QpIEV2/XQXX/IJF3jyJI/b
-         3f+a+QxLhHXPuIf1aVaKDBbc99HoJE9BfAi7V7m5l0xeEdZXVvEcxoUjPOPi5w3q3C3w
-         Sebyu9muKk2ozzIZlu48EPs20pe6LNCWkE8L4F8PKCcz+/Mr4yRd6nDymh9tQeEgBN9U
-         vWsS/opiovu+rerl/X2L5MCPalcNxBGW1L3ZSl4pl2mLPqrpQ6TfDPyhCW5w0duk/He2
-         Devg==
-X-Gm-Message-State: APjAAAVkMSANlGQaHRE+g/QR50uRBcnVHSpgOnhZs95sjWeiBDqjBpSk
-        AYcBZdBuEWhstVbdaR+wPJuyufmzlSq+WUH41I1msQ==
-X-Google-Smtp-Source: APXvYqzt6T4yoFnlQQM4Io9z3VVKv9jXWB1wt4QkxYaqK+pkTNNNf6XRH7RjKzaoumZniM5JtnYN2SZhYMEkCQ+APaM=
-X-Received: by 2002:a5d:9b1a:: with SMTP id y26mr37376851ion.238.1560456255599;
- Thu, 13 Jun 2019 13:04:15 -0700 (PDT)
-From:   Kashyap Desai <kashyap.desai@broadcom.com>
-References: <20190605190836.32354-1-hch@lst.de> <20190605190836.32354-11-hch@lst.de>
- <cd713506efb9579d1f69a719d831c28d@mail.gmail.com> <20190613084458.GB13221@lst.de>
-In-Reply-To: <20190613084458.GB13221@lst.de>
+        id S1726177AbfFMUyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 16:54:03 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:60766 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725747AbfFMUyD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 16:54:03 -0400
+Received: (qmail 6064 invoked by uid 2102); 13 Jun 2019 16:54:02 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 13 Jun 2019 16:54:02 -0400
+Date:   Thu, 13 Jun 2019 16:54:02 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
+cc:     Greg KH <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <patches@opensource.cirrus.com>, <oneukum@suse.com>
+Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
+In-Reply-To: <1560434431.11184.13.camel@opensource.cirrus.com>
+Message-ID: <Pine.LNX.4.44L0.1906131648180.1307-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQNLjZIO2zMn7N+9xPobnDbFSu4o5gI2RJdJAgF+bYgCEzcr9aN60eSw
-Date:   Fri, 14 Jun 2019 01:34:00 +0530
-Message-ID: <d411baa1bdd34f1a1289480d13fe1cef@mail.gmail.com>
-Subject: RE: [PATCH 10/13] megaraid_sas: set virt_boundary_mask in the scsi host
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>, Sebastian Ott <sebott@linux.ibm.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Max Gurtovoy <maxg@mellanox.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>,
-        PDL-MPT-FUSIONLINUX <mpt-fusionlinux.pdl@broadcom.com>,
-        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
-> So before I respin this series, can you help with a way to figure out
-for
-> mpt3sas and megaraid if a given controller supports NVMe devices at all,
-so
-> that we don't have to set the virt boundary if not?
+On Thu, 13 Jun 2019, Mayuresh Kulkarni wrote:
 
+> Hi Alan,
+> 
+> Thanks for your review and apologies for late response from me. I was on PTO last week and then in a training this week.
+> 
+> > Aside from the issues Greg raised, it isn't right because it relies on 
+> > the suspend and resume callbacks for individual interfaces, not for the 
+> > whole device.  There are a few other things that should be changed as 
+> > well.
+> 
+> In our use-case, we open the USB device with our VID/PID and then using that fd
+> we bind to our interface. So this approach probably worked for our use-case.
 
-In MegaRaid we have below enum -        VENTURA_SERIES and AERO_SERIES
-supports NVME
+Yes.  But it seems more reliable to use suspend/resume information for 
+the whole device, instead of assuming that the userspace program will 
+have claimed an interface.
 
-enum MR_ADAPTER_TYPE {
-        MFI_SERIES = 1,
-        THUNDERBOLT_SERIES = 2,
-        INVADER_SERIES = 3,
-        VENTURA_SERIES = 4,
-        AERO_SERIES = 5,
-};
+> > Below is my attempt at doing the same thing (not tested, and it doesn't
+> > answer all of Greg's objections).  It is very similar to your patch.  
+> > Does it work for your application?
+> > 
+> 
+> I am checking your code-changes and will get back to you on this by next week.
+> 
+> > (Note: I imagine you might run into trouble because devices generally 
+> > do not get put into runtime suspend immediately.  So if you call the 
+> > USBDEVFS_SUSPEND ioctl and then the USBDEVFS_WAIT_FOR_RESUME ioctl, the 
+> > wait will return immediately because the device hasn't yet been 
+> > suspended.)
+> > 
+> 
+> For this point, I am suggesting below -
+> How about we return "udev->dev.power.usage_count" from suspend ioctl?
+> count = 0 -> suspend success so good to call wait-for-resume ioctl
+> count != 0 -> don't call resume since suspend did not happen.
+> 
+> Will that work?
 
-In mpt3sas driver we have below method - If IOC FACT reports NVME Device
-support in Protocol Flags, we can consider it as HBA with NVME drive
-support.
+No, it will not.  The usage_count value can change at any time, so it 
+will be out-of-date by the time the ioctl returns.  Furthermore, even 
+if usage_count is > 0 when the suspend ioctl returns, it may become 0 
+later on, and the device will be suspended some time after that.
 
-ioc->facts.ProtocolFlags & MPI2_IOCFACTS_PROTOCOL_NVME_DEVICES
+In fact, if you use the default settings for USB autosuspend, the 
+device won't be suspended until 2 seconds after the usage_count becomes 
+0.  So even if the suspend ioctl decrements usage_count to 0, the 
+device still won't be suspended right away.  If you call the 
+wait-for-resume ioctl immediately, the call will fail.
 
-Kashyap
+Alan Stern
+
