@@ -2,139 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F5344E16
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 23:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D9244E84
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 23:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730175AbfFMVGE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 17:06:04 -0400
-Received: from mga04.intel.com ([192.55.52.120]:59043 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725747AbfFMVGE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Jun 2019 17:06:04 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 14:06:03 -0700
-X-ExtLoop1: 1
-Received: from orsmsx105.amr.corp.intel.com ([10.22.225.132])
-  by orsmga003.jf.intel.com with ESMTP; 13 Jun 2019 14:06:02 -0700
-Received: from orsmsx122.amr.corp.intel.com (10.22.225.227) by
- ORSMSX105.amr.corp.intel.com (10.22.225.132) with Microsoft SMTP Server (TLS)
- id 14.3.408.0; Thu, 13 Jun 2019 14:06:02 -0700
-Received: from orsmsx102.amr.corp.intel.com ([169.254.3.187]) by
- ORSMSX122.amr.corp.intel.com ([169.254.11.228]) with mapi id 14.03.0415.000;
- Thu, 13 Jun 2019 14:06:02 -0700
-From:   "Yang, Fei" <fei.yang@intel.com>
-To:     John Stultz <john.stultz@linaro.org>
-CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        "mgautam@codeaurora.org" <mgautam@codeaurora.org>,
-        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Subject: RE: [PATCH] usb: gadget: f_fs: data_len used before properly set
-Thread-Topic: [PATCH] usb: gadget: f_fs: data_len used before properly set
-Thread-Index: AQHVIhpu+QIEYVtaVU6Xn558US2yDaaaBJ0A
-Date:   Thu, 13 Jun 2019 21:06:01 +0000
-Message-ID: <02E7334B1630744CBDC55DA8586225837F8A676C@ORSMSX102.amr.corp.intel.com>
-References: <1560377606-40855-1-git-send-email-fei.yang@intel.com>
- <CALAqxLXeXt1Me_gzUFX8uBAuw_26QEOAX84324kzq7Hih1XDQw@mail.gmail.com>
-In-Reply-To: <CALAqxLXeXt1Me_gzUFX8uBAuw_26QEOAX84324kzq7Hih1XDQw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ctpclassification: CTP_NT
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiNzFjMTJhZTgtMjM4ZC00YjdhLThlZjEtZWQyMGVmYzQ2ZWI0IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiSHdIbUxXQkd6ZHFnc3pScTFCdHBMaDNGZE1GcCs5T1wvZkhQeFwvUGJ1NXFUY0VSWVZUQ1kyaGZcLzMwY1VybEpXVCJ9
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.22.254.139]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727168AbfFMVcN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 17:32:13 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:40549 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727150AbfFMVcM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 17:32:12 -0400
+Received: by mail-qt1-f195.google.com with SMTP id a15so145916qtn.7;
+        Thu, 13 Jun 2019 14:32:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bV+jbWLbQyP5MQv/RIkQ4h7mTt3iu1hS0A/gRh+q9oc=;
+        b=kJnsl/xHkCeIRlcPBHqRtJWSFxXRiryJOKDwxmG6EWcAcj7ejfkqG+EYVr9ST4Hd14
+         ncB9hi0BgawHfVsYzt2Ut+eade/AIHiEBC5DmdXqxR2mhr9PR192KBz9JjV2K0kTL2sh
+         aPW2NjXZO/tmqqmfSPM1Se0CSuj9C6B+srzMx/2Pfio7ko1AZJtE1ODLfFz/j7T248rg
+         myERSjAuacvlCBtb5QZ/O3LCt7C1oKk5Qh8rW93rci14OKfHHOPkOjq4pHBXDdSVwsHK
+         B9hilzRARCvlZDM1xh0sm0Ci0IOZMgeJWT9gVox2BkDr6g+aVcTzU25aTE7jcUCuKDEr
+         TabA==
+X-Gm-Message-State: APjAAAWH0mnA0vgXo+/ImjCKmbCX5QHroeO+tjy719pfvlufmf2FA1vO
+        eSeY6lyR6WyJFG1IitOWTkn7HVY=
+X-Google-Smtp-Source: APXvYqxItT0FcgweR+DA+RahPmYsCBs8tX4ll8M1VN4Cz/+iJXrwrzmp2/jti9IbKhtmp/r2OS5A3w==
+X-Received: by 2002:a0c:9564:: with SMTP id m33mr5337341qvm.89.1560461530974;
+        Thu, 13 Jun 2019 14:32:10 -0700 (PDT)
+Received: from localhost ([64.188.179.243])
+        by smtp.gmail.com with ESMTPSA id h185sm589865qkd.11.2019.06.13.14.32.10
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 13 Jun 2019 14:32:10 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 15:32:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        mark.rutland@arm.com, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [Patch V3 4/8] dt-bindings: usb: Add  NVIDIA Tegra XUSB device
+ mode controller binding
+Message-ID: <20190613213209.GA27327@bogus>
+References: <1557988772-15406-1-git-send-email-nkristam@nvidia.com>
+ <1557988772-15406-5-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1557988772-15406-5-git-send-email-nkristam@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pj4gVGhlIGZvbGxvd2luZyBsaW5lIG9mIGNvZGUgaW4gZnVuY3Rpb24gZmZzX2VwZmlsZV9pbyBp
-cyB0cnlpbmcgdG8gc2V0IA0KPj4gZmxhZyBpb19kYXRhLT51c2Vfc2cgaW4gY2FzZSBidWZmZXIg
-cmVxdWlyZWQgaXMgbGFyZ2VyIHRoYW4gb25lIHBhZ2UuDQo+Pg0KPj4gICAgIGlvX2RhdGEtPnVz
-ZV9zZyA9IGdhZGdldC0+c2dfc3VwcG9ydGVkICYmIGRhdGFfbGVuID4gUEFHRV9TSVpFOw0KPj4N
-Cj4+IEhvd2V2ZXIgYXQgdGhpcyBwb2ludCBvZiB0aW1lIHRoZSB2YXJpYWJsZSBkYXRhX2xlbiBo
-YXMgbm90IGJlZW4gc2V0IA0KPj4gdG8gdGhlIHByb3BlciBidWZmZXIgc2l6ZSB5ZXQuIFRoZSBj
-b25zZXF1ZW5jZSBpcyB0aGF0IGlvX2RhdGEtPnVzZV9zZyANCj4+IGlzIGFsd2F5cyBzZXQgcmVn
-YXJkbGVzcyB3aGF0IGJ1ZmZlciBzaXplIHJlYWxseSBpcywgYmVjYXVzZSB0aGUgDQo+PiBjb25k
-aXRpb24gKGRhdGFfbGVuID4gUEFHRV9TSVpFKSBpcyBlZmZlY3RpdmVseSBhbiB1bnNpZ25lZCBj
-b21wYXJpc29uIA0KPj4gYmV0d2VlbiAtRUlOVkFMIGFuZCBQQUdFX1NJWkUgd2hpY2ggd291bGQg
-YWx3YXlzIHJlc3VsdCBpbiBUUlVFLg0KPj4NCj4+IEZpeGVzOiA3NzJhN2E3MjRmNjkgKCJ1c2I6
-IGdhZGdldDogZl9mczogQWxsb3cgc2NhdHRlci1nYXRoZXIgDQo+PiBidWZmZXJzIikNCj4+IFNp
-Z25lZC1vZmYtYnk6IEZlaSBZYW5nIDxmZWkueWFuZ0BpbnRlbC5jb20+DQo+PiBDYzogc3RhYmxl
-IDxzdGFibGVAdmdlci5rZXJuZWwub3JnPg0KPg0KPiBIZXkgRmVpISBUaGFua3Mgc28gbXVjaCBm
-b3Igc2VuZGluZyB0aGlzIG91dCEgSSB3YXMgZXhjaXRlZCB0aGF0IHRoaXMgbWlnaHQgcmVzb2x2
-ZQ0KPiB0aGUgZmZzIHN0YWxscyBJJ3ZlIGJlZW4gc2VlaW5nIG9uIGR3YzMvZHdjMiBoYXJkd2Fy
-ZSwgYnV0IHdoZW4gSSBnYXZlIGl0IGEgc2hvdCwgaXQNCj4gZG9lc24ndCBzZWVtIHRvIGhlbHAu
-IEluIGZhY3QsIHJhdGhlciB0aGVuIGEgc3RhbGwsIEkgZW5kIHVwIHNlZWluZyB0aGUgZm9sbG93
-aW5nIHBhbmljOg0KPiANCj4gWyAgMzgzLjQxNTM2Ml0gVW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwg
-cmVhZCBmcm9tIHVucmVhZGFibGUgbWVtb3J5IGF0IHZpcnR1YWwgYWRkcmVzcyAwMDAwMDAwMDAw
-MDAwMDE4DQo+IFsgIDM4My40MzE5MzVdIE1lbSBhYm9ydCBpbmZvOg0KPiBbICAzODMuNDMxOTM3
-XSAgIEVTUiA9IDB4OTYwMDAwMDUNCj4gWyAgMzgzLjQzMTk0MF0gICBFeGNlcHRpb24gY2xhc3Mg
-PSBEQUJUIChjdXJyZW50IEVMKSwgSUwgPSAzMiBiaXRzDQo+IFsgIDM4My40MzE5NDFdICAgU0VU
-ID0gMCwgRm5WID0gMA0KPiBbICAzODMuNDMxOTQyXSAgIEVBID0gMCwgUzFQVFcgPSAwDQo+IFsg
-IDM4My40MzE5NDNdIERhdGEgYWJvcnQgaW5mbzoNCj4gWyAgMzgzLjQzMTk0NV0gICBJU1YgPSAw
-LCBJU1MgPSAweDAwMDAwMDA1DQo+IFsgIDM4My40MzE5NDZdICAgQ00gPSAwLCBXblIgPSAwDQo+
-IFsgIDM4My40MzE5NTFdIHVzZXIgcGd0YWJsZTogNGsgcGFnZXMsIDM5LWJpdCBWQXMsIHBnZHA9
-MDAwMDAwMDBhYWUxZjAwMA0KPiBbICAzODMuNDMxOTUzXSBbMDAwMDAwMDAwMDAwMDAxOF0gcGdk
-PTAwMDAwMDAwOWYwNjQwMDMsIHB1ZD0wMDAwMDAwMDlmMDY0MDAzLCBwbWQ9MDAwMDAwMDAwMDAw
-MDAwMA0KPiBbICAzODMuNDgyNTYwXSBJbnRlcm5hbCBlcnJvcjogT29wczogOTYwMDAwMDUgWyMx
-XSBQUkVFTVBUIFNNUA0KPiBbICAzODMuNDg4MTI4XSBNb2R1bGVzIGxpbmtlZCBpbjoNCj4gWyAg
-MzgzLjQ5MTE4MV0gQ1BVOiAwIFBJRDogMzk5IENvbW06IGlycS82OS1kd2MzIFRhaW50ZWQ6IEcg
-Uw0KPiAgICAgICA1LjIuMC1yYzQtMDAwOTItZ2Y1ZjEyZjVkM2ZkZCAjMjk2IFsgIDM4My41MDEw
-MDJdIEhhcmR3YXJlIG5hbWU6IEhpS2V5OTYwIChEVCkNCj4gWyAgMzgzLjUwNDkxOF0gcHN0YXRl
-OiAyMDQwMDA4NSAobnpDdiBkYUlmICtQQU4gLVVBTykNCj4gWyAgMzgzLjUwOTcxNF0gcGMgOiBk
-bWFfZGlyZWN0X3VubWFwX3NnKzB4MzgvMHg4MA0KPiBbICAzODMuNTE0MTUxXSBsciA6IGRtYV9k
-aXJlY3RfdW5tYXBfc2crMHg1Yy8weDgwDQo+IFsgIDM4My41MTg1ODZdIHNwIDogZmZmZmZmODAx
-MWZjYmM0MA0KPiBbICAzODMuNTIxODkzXSB4Mjk6IGZmZmZmZjgwMTFmY2JjNDAgeDI4OiBmZmZm
-ZmZjMGJhZDljMTgwDQo+IFsgIDM4My41MjcxOTldIHgyNzogZmZmZmZmYzBiYWUwNTMwMCB4MjY6
-IDAwMDAwMDAwMDAwMDAwMDINCj4gWyAgMzgzLjUzMjUwNF0geDI1OiBmZmZmZmZjMGI5YTlmZDAw
-IHgyNDogMDAwMDAwMDAwMDAwMDAwMA0KPiBbICAzODMuNTM3ODA5XSB4MjM6IDAwMDAwMDAwMDAw
-MDAwMDEgeDIyOiBmZmZmZmZjMGJhZDlmYzEwDQo+IFsgIDM4My41NDMxMTRdIHgyMTogMDAwMDAw
-MDAwMDAwMDAwMiB4MjA6IDAwMDAwMDAwMDAwMDAwMDENCj4gWyAgMzgzLjU0ODQyMF0geDE5OiAw
-MDAwMDAwMDAwMDAwMDAwIHgxODogMDAwMDAwMDAwMDAwMDAwMA0KPiBbICAzODMuNTUzNzI2XSB4
-MTc6IDAwMDAwMDAwMDAwMDAwMDAgeDE2OiAwMDAwMDAwMDAwMDAwMDAwDQo+IFsgIDM4My41NTkw
-MzJdIHgxNTogMDAwMDAwMDAwMDAwMDAwMCB4MTQ6IGZmZmZmZjgwMTBlYjZhZDANCj4gWyAgMzgz
-LjU2NDMzOF0geDEzOiAwMDAwMDAwMDAwMDAwMDAwIHgxMjogMDAwMDAwMDAwMDAwMDAwMA0KPiBb
-ICAzODMuNTY5NjQzXSB4MTE6IDAwMDAwMDAwMDAwMDAwMDAgeDEwOiAwMDAwMDAwMDAwMDAwOWQw
-DQo+IFsgIDM4My41NzQ5NDldIHg5IDogZmZmZmZmODAxMWZjYmQyMCB4OCA6IGZmZmZmZmMwYjYz
-YzNhMzANCj4gWyAgMzgzLjU4MDI1NF0geDcgOiBmZmZmZmZjMGJjNTE1YzAwIHg2IDogMDAwMDAw
-MDAwMDAwMDAwNw0KPiBbICAzODMuNTg1NTYwXSB4NSA6IDAwMDAwMDAwMDAwMDAwMDEgeDQgOiAw
-MDAwMDAwMDAwMDAwMDA0DQo+IFsgIDM4My41OTA4NjVdIHgzIDogMDAwMDAwMDAwMDAwMDAwMSB4
-MiA6IDAwMDAwMDAwMDAwMDAwMDENCj4gWyAgMzgzLjU5NjE2OV0geDEgOiAwMDAwMDAwMDAwMDZi
-ZjQyIHgwIDogMDAwMDAwMDAwMDAwMDAwMA0KPiBbICAzODMuNjAxNDc3XSBDYWxsIHRyYWNlOg0K
-PiBbICAzODMuNjAzOTE2XSAgZG1hX2RpcmVjdF91bm1hcF9zZysweDM4LzB4ODANCj4gWyAgMzgz
-LjYwODAxM10gIHVzYl9nYWRnZXRfdW5tYXBfcmVxdWVzdF9ieV9kZXYrMHhiMC8weGM4DQo+IFsg
-IDM4My42MTMxNDhdICBkd2MzX2dhZGdldF9kZWxfYW5kX3VubWFwX3JlcXVlc3QuaXNyYS4xMysw
-eDc4LzB4MTUwDQo+IFsgIDM4My42MTkyMzVdICBkd2MzX2dhZGdldF9naXZlYmFjaysweDMwLzB4
-NjgNCj4gWyAgMzgzLjYyMzQxMl0gIGR3YzNfdGhyZWFkX2ludGVycnVwdCsweDY5NC8weDE0ZTAN
-Cj4gWyAgMzgzLjYyNzkzOF0gIGlycV90aHJlYWRfZm4rMHgyOC8weDc4DQo+IFsgIDM4My42MzE1
-MDZdICBpcnFfdGhyZWFkKzB4MTI0LzB4MWMwDQo+IFsgIDM4My42MzQ5OTFdICBrdGhyZWFkKzB4
-MTI4LzB4MTMwDQo+IFsgIDM4My42MzgyMTRdICByZXRfZnJvbV9mb3JrKzB4MTAvMHgxYw0KPiBb
-ICAzODMuNjQxNzg2XSBDb2RlOiAyYTAzMDNmNyBhYTA0MDNmOCA1MjgwMDAxNCBkNTAzMjAxZiAo
-Yjk0MDFhNjIpDQo+IFsgIDM4My42NDc4NzRdIC0tLVsgZW5kIHRyYWNlIGY0ODA1M2MyMDQwYzU2
-NTggXS0tLQ0KPiANCj4gRnJvbSB0aGUgbG9va3Mgb2YgaXQgdGhvdWdoLCBJIHN1c3BlY3QgeW91
-ciBmaXggaXMgYSBnb29kIG9uZSwgYW5kIG1heWJlIGl0cyBqdXN0IGhlbHBpbmcNCj4gZXhwb3Nl
-IHNvbWUgcmVsYXRlZCB1bmRlcmx5aW5nIGlzc3VlcyBpbiB0aGUgZHdjMyBkcml2ZXI/DQoNCkl0
-IGRvZXNuJ3QgZml4IHRoZSBmZnMgc3RhbGwgaXNzdWUgZm9yIG1lIGVpdGhlciwgYnV0IEkgaGF2
-ZSBub3Qgc2VlbiB0aGlzIHBhbmljIHRob3VnaC4NCg0KSXQncyBpbnRlcmVzdGluZyB0byBzZWUg
-dGhpcyBwYW5pYyBiZWNhdXNlIGRtYSB1bm1hcHBpbmcgaXMgd2hhdCBJJ20gbG9va2luZyBhdCBy
-aWdodCBub3cuDQpXaGVuIEkgc2VlIHRoZSBmZnMgc3RhbGxzLCB0aGUgcHJvYmxlbSBzZWVtcyB0
-byBiZSB0aGF0IGEgcmVhZCByZXF1ZXN0IG9mIDUxMiBieXRlcyByZXR1cm5pbmcNCnJpZ2h0IGF3
-YXkgd2l0aCBhIGJ1ZmZlciBmaWxsZWQgd2l0aCBhbGwgemVyb3MuIEFuZCB0aGF0IGlzIGhhcHBl
-bmluZyBhZnRlciBhIGJ1bmNoIG9mIHJlcXVlc3RzDQpvZiAxNjM4NCBieXRlcy4gSSdtIHN1c3Bl
-Y3RpbmcgdGhlIGRtYSBhcyB3ZWxsLCBiZWNhdXNlIHRoZSBjb21wbGV0aW9uIGludGVycnVwdCBm
-b3IgdGhpcw0KcmVxdWVzdCBvZiA1MTIgYnl0ZXMgc2VlbXMgdG8gYmUgZmlyZWQgbWlzdGFrZW5s
-eS4NCg0KSSBkb24ndCBhbHdheXMgaGF2ZSB0aW1lIHRvIHdvcmsgb24gdGhpcyBpc3N1ZSB0aG91
-Z2gsIG1pZ2h0IG5vdCB1cGRhdGUgZm9yIGEgd2hpbGUuIFBsZWFzZQ0Ka2VlcCBtZSBwb3N0ZWQg
-aWYgeW91IGZpbmQgYW55dGhpbmcuDQoNClRoYW5rcywNCi1GZWkNCg==
+On Thu, May 16, 2019 at 12:09:28PM +0530, Nagarjuna Kristam wrote:
+> Add device-tree binding documentation for the XUSB device mode controller
+> present on Tegra210 SoC. This controller supports the USB 3.0
+> specification.
+> 
+> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+> ---
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  | 101 +++++++++++++++++++++
+>  1 file changed, 101 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+> new file mode 100644
+> index 0000000..d78b436
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+> @@ -0,0 +1,101 @@
+> +Device tree binding for NVIDIA Tegra XUSB device mode controller (XUDC)
+> +=======================================================================
+> +
+> +The Tegra XUDC controller supports both USB 2.0 HighSpeed/FullSpeed and
+> +USB 3.0 SuperSpeed protocols.
+> +
+> +Required properties:
+> +--------------------
+> +- compatible: For Tegra210, must contain "nvidia,tegra210-xudc".
+> +- reg: Must contain the base and length of the XUSB device registers, XUSB device
+> +  PCI Config registers and XUSB device controller registers.
+> +- interrupts: Must contain the XUSB device interrupt.
+> +- clocks: Must contain an entry for all clocks used.
+> +  See ../clock/clock-bindings.txt for details.
+> +- clock-names: Must include the following entries:
+> +   - dev: Clock to enable core XUSB dev clock.
+> +   - ss: Clock to enable XUSB super speed clock.
+> +   - ss_src: Clock to enable XUSB super speed dev clock.
+> +   - hs_src: Clock to enable XUSB high Speed dev clock.
+> +   - fs_src: Clock to enable XUSB full Speed dev clock.
+> +- nvidia,xusb-padctl: phandle to the XUSB pad controller that is used to
+> +  configure the USB pads used by the XUDC controller.
+> +- power-domains: A list of PM domain specifiers that reference each power-domain
+> +  used by the XUSB device mode controller. This list must comprise of a specifier
+> +  for the XUSBA and XUSBB power-domains. See ../power/power_domain.txt and
+> +  ../arm/tegra/nvidia,tegra20-pmc.txt for details.
+> +- power-domain-names: A list of names that represent each of the specifiers in
+> +  the 'power-domains' property. Must include 'ss' and 'dev'.
+> +
+> +For Tegra210:
+> +- avddio-usb-supply: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
+
+Wouldn't an analog supply belong in the phy node?
+
+> +- hvdd-usb-supply: USB controller power supply. Must supply 3.3 V.
+> +
+> +- phys: Must contain an entry for each entry in phy-names.
+> +  See ../phy/phy-bindings.txt for details.
+> +- phy-names: Should include an entry for each PHY used by the controller.
+> +  Names must be "usb2", and "usb3" if support SuperSpeed device mode.
+> +  - "usb3" phy, SuperSpeed (SSTX+/SSTX-/SSRX+/SSRX-) data lines.
+> +  - "usb2" phy, USB 2.0 (D+/D-) data lines.
+> +
+> +- extcon: Must contains an extcon entry which detects USB VBUS pin.
+> +  See ../extcon/extcon-usb-gpio.txt for details.
+
+Use the usb-connector binding for new bindings.
+
+> +
+> +Example:
+> +--------
+> +	pmc: pmc@7000e400 {
+> +		compatible = "nvidia,tegra210-pmc";
+> +		reg = <0x0 0x7000e400 0x0 0x400>;
+> +		clocks = <&tegra_car TEGRA210_CLK_PCLK>, <&clk32k_in>;
+> +		clock-names = "pclk", "clk32k_in";
+> +
+> +		powergates {
+> +			pd_xusbss: xusba {
+> +				clocks = <&tegra_car TEGRA210_CLK_XUSB_SS>;
+> +				resets = <&tegra_car TEGRA210_CLK_XUSB_SS>;
+> +				#power-domain-cells = <0>;
+> +			};
+> +
+> +			pd_xusbdev: xusbb {
+> +				clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>;
+> +				resets = <&tegra_car 95>;
+> +				#power-domain-cells = <0>;
+> +			};
+> +		};
+> +	};
+> +
+> +	xudc@700d0000 {
+> +		compatible = "nvidia,tegra210-xudc";
+> +		reg = <0x0 0x700d0000 0x0 0x8000>,
+> +			<0x0 0x700d8000 0x0 0x1000>,
+> +			<0x0 0x700d9000 0x0 0x1000>;
+> +
+> +		interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +		clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>,
+> +			<&tegra_car TEGRA210_CLK_XUSB_SS>,
+> +			<&tegra_car TEGRA210_CLK_XUSB_SSP_SRC>,
+> +			<&tegra_car TEGRA210_CLK_XUSB_HS_SRC>,
+> +			<&tegra_car TEGRA210_CLK_XUSB_FS_SRC>;
+> +		clock-names = "dev", "ss", "ss_src",
+> +			      "hs_src", "fs_src";
+> +
+> +		power-domains = <&pd_xusbdev>, <&pd_xusbss>;
+> +		power-domain-names = "dev", "ss";
+> +
+> +		nvidia,xusb-padctl = <&padctl>;
+> +
+> +		phys = <&{/padctl@7009f000/pads/usb2/lanes/usb2-0}>;
+> +		phy-names = "usb2;
+> +
+> +		avddio-usb-supply = <&vdd_pex_1v05>;
+> +		hvdd-usb-supply = <&vdd_3v3_sys>;
+> +
+> +		extcon = <&extcon_usb>;
+> +	};
+> +
+> +	extcon_usb: extcon_vbus {
+> +		compatible = "linux,extcon-usb-gpio";
+> +		vbus-gpio = <&gpio TEGRA_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
+> +	};
+> +
+> -- 
+> 2.7.4
+> 
