@@ -2,105 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A8E43C29
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 17:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4FC44770
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 18:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732964AbfFMPeY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 11:34:24 -0400
-Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:43990 "EHLO
-        pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727200AbfFMPeX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 11:34:23 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 279A73F7C1;
-        Thu, 13 Jun 2019 17:34:16 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 tagged_above=-999 required=6.31
-        tests=[ALL_TRUSTED=-1, BAYES_00=-1.9] autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xRpvJaXI_Z3q; Thu, 13 Jun 2019 17:34:15 +0200 (CEST)
-Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
-        (Authenticated sender: mb547485)
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 07A5E3F70B;
-        Thu, 13 Jun 2019 17:34:14 +0200 (CEST)
-Date:   Thu, 13 Jun 2019 17:34:14 +0200
-From:   Fredrik Noring <noring@nocrew.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     laurentiu.tudor@nxp.com, hch@lst.de, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        marex@denx.de, leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
-        robin.murphy@arm.com, JuergenUrban@gmx.de
-Subject: Re: [PATCH v7 3/5] usb: host: ohci-sm501: init genalloc for local
- memory
-Message-ID: <20190613153414.GA909@sx9>
-References: <20190529102843.13174-1-laurentiu.tudor@nxp.com>
- <20190529102843.13174-4-laurentiu.tudor@nxp.com>
- <20190605214622.GA22254@roeck-us.net>
- <20190611133223.GA30054@roeck-us.net>
- <20190611172654.GA2602@sx9>
- <20190611190343.GA18459@roeck-us.net>
- <20190613134033.GA2489@sx9>
- <bdfd2178-9e3c-dc15-6aa1-ec1f1fbcb191@roeck-us.net>
+        id S1729992AbfFMQ7k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 12:59:40 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:41150 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729820AbfFMQ7k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 12:59:40 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5DGrg6a146672;
+        Thu, 13 Jun 2019 16:59:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=VB7BbCcx5CDFsG6/AylvYiYZjuNghhK4GPV3gIX6IgY=;
+ b=JM/zm087RQdix9tjZYqwsKtsL1r4oeg4m549rL34vFP7V7snV+V6jkMW32K6cszyFqwA
+ 4LAwbnYI7oNx6Cder0IYcyRig+6l/D5XoXA1WNj3W3i4BZ6SS9JNcU2+U4sz9Ilx21RF
+ m9yWqSzUQgzoMdBE7yH3XIoto5guc4o8ijARvGbDVEAkV33NZnSKZyPhcunGnyQZOg6D
+ gntIMHlm0W9RMbH9YcXv5nmx02cXJu4f8UcMUE/CPLCoFNupiHRYByCja362NG3+UA64
+ L3pcrl3it7g9J2N2cGoPCK+Lkrsj/lr1/Q03zQibiuskhzmeOuF3NAuinosmwPYef5Ov hA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2t05nr2uea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jun 2019 16:59:26 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5DGuroV168293;
+        Thu, 13 Jun 2019 16:57:26 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2t1jpjnsf2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jun 2019 16:57:26 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5DGvOZm008225;
+        Thu, 13 Jun 2019 16:57:24 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 13 Jun 2019 09:57:23 -0700
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>,
+        "iommu\@lists.linux-foundation.org" 
+        <iommu@lists.linux-foundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "linux-block\@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: How to resolve an issue in swiotlb environment?
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190612120653.GA25285@lst.de>
+        <Pine.LNX.4.44L0.1906121038210.1557-100000@iolanthe.rowland.org>
+        <20190613073900.GC12093@lst.de>
+Date:   Thu, 13 Jun 2019 12:57:21 -0400
+In-Reply-To: <20190613073900.GC12093@lst.de> (Christoph Hellwig's message of
+        "Thu, 13 Jun 2019 09:39:00 +0200")
+Message-ID: <yq14l4ttocu.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <bdfd2178-9e3c-dc15-6aa1-ec1f1fbcb191@roeck-us.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9287 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=655
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906130122
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9287 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=707 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906130123
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Guenter,
 
-> Thanks for the confirmation. Do you see the problem only with the
-> ohci-sm501 driver or also with others ?
+Christoph,
 
-All are likely affected, but it depends, because I believe the problem is
-that the USB subsystem runs out of memory. Please try the attached patch!
+> sd.c only supports a few specific sector size, and none of them is
+> < 512 bytes:
 
-The pool assumed 4096 byte page alignment for every allocation, which is
-excessive given that many requests are for 16 and 32 bytes. In the patch
-below, I have turned down the order to 5, which is good enough for the ED
-and TD structures of the OHCI, but not enough for the HCCA that needs 256
-byte alignment. With some luck, the WARN_ON_ONCE will not trigger in your
-test, though. If it does, you may try to increase the order from 5 to 8.
+Yep, while sd.c in theory supported 256-byte logical blocks a while
+back, that code was removed since the block layer always operates on
+units of 512 bytes.
 
-I have observed strange things happen when the USB subsystem runs out of
-memory. The mass storage drivers often seem to busy-wait on -ENOMEM,
-consuming a lot of processor resources. It would be much more efficient
-to sleep waiting for memory to become available.
-
-In your case I suspect that allocation failures are not correctly
-attributed. Certain kinds of temporary freezes may also occur, as the
-various devices are reset due to host memory allocation errors.
-
-Fredrik
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -3011,7 +3011,7 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
- 	int err;
- 	void __iomem *local_mem;
- 
--	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, PAGE_SHIFT,
-+	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, 5,
- 						  dev_to_node(hcd->self.sysdev),
- 						  dev_name(hcd->self.sysdev));
- 	if (IS_ERR(hcd->localmem_pool))
-diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
---- a/drivers/usb/host/ohci-hcd.c
-+++ b/drivers/usb/host/ohci-hcd.c
-@@ -517,6 +517,7 @@ static int ohci_init (struct ohci_hcd *ohci)
- 						GFP_KERNEL);
- 	if (!ohci->hcca)
- 		return -ENOMEM;
-+	WARN_ON_ONCE(ohci->hcca_dma & 0xff);
- 
- 	if ((ret = ohci_mem_init (ohci)) < 0)
- 		ohci_stop (hcd);
+-- 
+Martin K. Petersen	Oracle Linux Engineering
