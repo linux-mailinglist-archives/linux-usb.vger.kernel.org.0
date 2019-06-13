@@ -2,87 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D05544FBB
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 01:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFED44FD2
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 01:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727060AbfFMXBH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 19:01:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42192 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726296AbfFMXBH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Jun 2019 19:01:07 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C71622147A;
-        Thu, 13 Jun 2019 23:01:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560466866;
-        bh=ijAoTvben3xHdJwjFjc2JVq20l3k6CT0SJjNIni16EE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=l7CW3kEbIEfMPyQKq84ka0PeuSuwdqPEd/rBwzyb+r1FqLLqyErPP9Iw42L52TmB5
-         2Uy1rIkSbsHxHYYCWBq3FZuNZTXRsZ2QRyHKWJRpBXggeBKNkX5qMpxYhhmmT5vXeb
-         r3sXe5wfp6Fftm3kLieDRdFmX+o6d0kmUyHdR3fc=
-Subject: Re: How to resolve an issue in swiotlb environment?
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Christoph Hellwig <hch@lst.de>,
-        Valentina Manea <valentina.manea.m@gmail.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        shuah <shuah@kernel.org>
-References: <Pine.LNX.4.44L0.1906131306580.1307-100000@iolanthe.rowland.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <41caad16-3fa1-413b-0d49-594d48b88de4@kernel.org>
-Date:   Thu, 13 Jun 2019 17:01:05 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726777AbfFMXGK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 19:06:10 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:45588 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726525AbfFMXGK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 19:06:10 -0400
+Received: by mail-qt1-f194.google.com with SMTP id j19so350776qtr.12;
+        Thu, 13 Jun 2019 16:06:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0WB7++WgXsHSMQU/iyYHt1wyyCBYlEx8/DL9NzTbRRs=;
+        b=nLEwdSHpRjxIF83kSW5Qk2UDSHZ65U7Z35qzojL3TZGoFWOQe27FRk1rSo9PV8/XgA
+         mzQ0ZLPMnYWPexnev53P7yCexa+I2GzphFDwRijOJ1W5GVepU0j9JX50R913ecUjTBBh
+         tDsBumb2SeuFpXRBC8nXroJ/WRRbnoVvPAN+YrNPo/M8Ho8XHMtPc31zhGLMCMnKoGWH
+         i69vWDjphTJ0EhJtktFfnu8Wx0KqZRHsOpnGb5kEF44aKEu7HUO5wfUOg+e6hY+/luEJ
+         SViDjQerZ6pmjcDbwKcOZVg+/9qbkmopKWFDimaaf1jFk+5XakpFGWhYvjcuYaaKIen4
+         TImA==
+X-Gm-Message-State: APjAAAWLbAy4VJP1qMCbmaW0sc9Bd5bZ9o8oxcM+kMZRHRyzGoJP2dVW
+        FnolJhiBoncRs5nfWNIqkg==
+X-Google-Smtp-Source: APXvYqx+14G87vSF1DTU9nLxwM7+unwwEu2UUz11EbKZ7aTXFmfrxUUj04BpoYDxl/NFoTvXCrZb5A==
+X-Received: by 2002:ac8:3301:: with SMTP id t1mr72629681qta.209.1560467169096;
+        Thu, 13 Jun 2019 16:06:09 -0700 (PDT)
+Received: from localhost ([64.188.179.243])
+        by smtp.gmail.com with ESMTPSA id y16sm404646qkf.93.2019.06.13.16.06.08
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 13 Jun 2019 16:06:08 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 17:06:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>, heiko@sntech.de,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        amstan@chromium.org, linux-rockchip@lists.infradead.org,
+        William Wu <william.wu@rock-chips.com>,
+        linux-usb@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Randy Li <ayaka@soulik.info>, zyw@rock-chips.com,
+        mka@chromium.org, ryandcase@chromium.org,
+        Amelie Delaunay <amelie.delaunay@st.com>, jwerner@chromium.org,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v3 1/3] Documentation: dt-bindings: Add
+ snps,need-phy-for-wake for dwc2 USB
+Message-ID: <20190613230607.GA10347@bogus>
+References: <20190520175605.2405-1-dianders@chromium.org>
+ <20190520175605.2405-2-dianders@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.1906131306580.1307-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190520175605.2405-2-dianders@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/13/19 11:16 AM, Alan Stern wrote:
-> On Thu, 13 Jun 2019, Christoph Hellwig wrote:
+On Mon, 20 May 2019 10:56:03 -0700, Douglas Anderson wrote:
+> Some SoCs with a dwc2 USB controller may need to keep the PHY on to
+> support remote wakeup.  Allow specifying this as a device tree
+> property.
 > 
->> On Wed, Jun 12, 2019 at 10:43:11AM -0400, Alan Stern wrote:
->>> Would it be okay to rely on the assumption that USB block devices never
->>> have block size < 512?  (We could even add code to the driver to
->>> enforce this, although refusing to handle such devices at all might be
->>> worse than getting an occasional error.)
->>
->> sd.c only supports a few specific sector size, and none of them is
->> < 512 bytes:
->>
->> 	if (sector_size != 512 &&
->> 	    sector_size != 1024 &&
->> 	    sector_size != 2048 &&
->> 	    sector_size != 4096) {
->> 	    	...
->> 		sdkp->capacity = 0;
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> For relevant prior discussion on this patch, see:
 > 
-> Great!  So all we have to do is fix vhci-hcd.  Then we can remove all
-> the virt_boundary_mask stuff from usb-storage and uas entirely.
+> https://lkml.kernel.org/r/1435017144-2971-3-git-send-email-dianders@chromium.org
 > 
-> (I'm assuming wireless USB isn't a genuine issue.  As far as I know, it
-> is pretty much abandoned at this point.)
+> I didn't make any changes from the prior version since I never found
+> out what Rob thought of my previous arguments.  If folks want a
+> change, perhaps they could choose from these options:
 > 
-> Valentina and Shua: Adding SG support to vhci-hcd shouldn't be too
-> hard.  It ought to be possible even without changing the network
-> protocol.
+> 1. Assume that all dwc2 hosts would like to keep their PHY on for
+>    suspend if there's a USB wakeup enabled, thus we totally drop this
+>    binding.  This doesn't seem super great to me since I'd bet that
+>    many devices that use dwc2 weren't designed for USB wakeup (they
+>    may not keep enough clocks or rails on) so we might be wasting
+>    power for nothing.
+> 2. Rename this property to "snps,wakeup-from-suspend-with-phy" to make
+>    it more obvious that this property is intended both to document
+>    that wakeup from suspend is possible and that we need the PHY for
+>    said wakeup.
+> 3. Rename this property to "snps,can-wakeup-from-suspend" and assume
+>    it's implicit that if we can wakeup from suspend that we need to
+>    keep the PHY on.  If/when someone shows that a device exists using
+>    dwc2 where we can wakeup from suspend without the PHY they can add
+>    a new property.
+> 
+> NOTE FOR REPOST:
+> - In v2 Rob said [1] he'd prefer something based on the SoC
+>   compatibility string, but that doesn't work because not all boards
+>   will have the regulator setup / board design / suspend logic
+>   necessary to make this work.
+> 
+> [1] https://lkml.kernel.org/r/20190430012328.GA25660@bogus
+> 
+> 
+> Changes in v3: None
+> Changes in v2: None
+> 
+>  Documentation/devicetree/bindings/usb/dwc2.txt | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 
-I will start taking a look at this. Is there a target release in plan
-to drop virt_boundary_mask stuff?
-
-thanks,
--- Shuah
-
+Reviewed-by: Rob Herring <robh@kernel.org>
