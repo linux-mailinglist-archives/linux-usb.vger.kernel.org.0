@@ -2,115 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2417A43ED0
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 17:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532A443E3D
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 17:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732444AbfFMPxQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 11:53:16 -0400
-Received: from mail-eopbgr1410123.outbound.protection.outlook.com ([40.107.141.123]:7647
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731620AbfFMJDr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Jun 2019 05:03:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uAY2bLVCaJwEhGCGpQ1wTEnD/jvTHS3JmrGyHZ07RS4=;
- b=eR2oxwBNY8usOcEPz5R5g6WtAfUJNk/3hLNabEqSc8f+tkHqhKTmVBdflGNlRqdFfOF2sq/vWdH11U8+WinGpLrZns92ovZZZXVZQuiIbggae7wP5LAr575cPjUJznxOSPXj3wBgdvjChSNCpyqgbAYPBQZIEpvT4M0I0LVUmmw=
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
- OSAPR01MB3636.jpnprd01.prod.outlook.com (20.178.102.79) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.12; Thu, 13 Jun 2019 09:03:43 +0000
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::19ad:b6ce:a287:dc85]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::19ad:b6ce:a287:dc85%7]) with mapi id 15.20.1965.017; Thu, 13 Jun 2019
- 09:03:43 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Christoph Hellwig <hch@lst.de>
-CC:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "usb-storage@lists.one-eyed-alien.net" 
-        <usb-storage@lists.one-eyed-alien.net>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH] usb-storage: Add a limitation for
- blk_queue_max_hw_sectors()
-Thread-Topic: [PATCH] usb-storage: Add a limitation for
- blk_queue_max_hw_sectors()
-Thread-Index: AQHVIaFtvT1x5o9i20+mWJmRsUTFuKaZMWgAgAAI15CAAAzWgIAAAfaA
-Date:   Thu, 13 Jun 2019 09:03:43 +0000
-Message-ID: <OSAPR01MB308976F808F8588C4B49BF54D8EF0@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-References: <1560400504-26884-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <20190613073346.GB12093@lst.de>
- <OSAPR01MB30899FBDA010F0465599437AD8EF0@OSAPR01MB3089.jpnprd01.prod.outlook.com>
- <20190613085121.GA13442@lst.de>
-In-Reply-To: <20190613085121.GA13442@lst.de>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 653f06d1-9ac6-4292-2b79-08d6efde0940
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB3636;
-x-ms-traffictypediagnostic: OSAPR01MB3636:
-x-microsoft-antispam-prvs: <OSAPR01MB3636942CFB0E899A850B5539D8EF0@OSAPR01MB3636.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-forefront-prvs: 0067A8BA2A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(396003)(136003)(366004)(39860400002)(189003)(199004)(186003)(5660300002)(6506007)(52536014)(256004)(4744005)(66476007)(66556008)(64756008)(99286004)(55016002)(66446008)(102836004)(71190400001)(71200400001)(11346002)(66946007)(53936002)(25786009)(26005)(9686003)(6916009)(66066001)(73956011)(76176011)(76116006)(7696005)(446003)(6436002)(6116002)(54906003)(486006)(6246003)(478600001)(229853002)(476003)(14454004)(74316002)(4326008)(3846002)(305945005)(33656002)(68736007)(81166006)(86362001)(81156014)(8676002)(8936002)(7736002)(2906002)(316002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB3636;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: yp2SH5Z8oeVDeXdIwLVK5Rx4sDwzZ3e7jm6wuXqftnxTYoQVxFNIgSPGtiObmKeJBjnsfHU5Cy9dQItQL1tYlksygOUohwEOh0VmMPp/q1DcYc2OswKzD1O3XRoitdz7jPaZTBBRqDf2/cb7Vr/72qWKtnmyhyylmNqSMlzf7c8veEtdHGsk8q71XtcOEmmmXhTLQqEXJBdVBlv1Dw+V6uUylnmBtbdfM6W2UEaH4YOAIynpudaYOkN3TqkrAPHg1YsNCHOJK325zUFa0a4T9EMWnknL8gkp3gdM7CtncMTDp1x9tb5h8WfUtpzzAroT3ZVwdc+ZzgiTsEkFsDOEnAr7UMCuTLRmhpNtz6CpB6hqq2A3lfkwhWoHQbyu+8+J0SH6f9taGONCbXkJGhbhpivpP/5dL7B56Tkm/YxKIe0=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2389314AbfFMPs2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 11:48:28 -0400
+Received: from sauhun.de ([88.99.104.3]:38560 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731731AbfFMJT3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Jun 2019 05:19:29 -0400
+Received: from localhost (p5486CF99.dip0.t-ipconnect.de [84.134.207.153])
+        by pokefinder.org (Postfix) with ESMTPSA id 7A4352C3559;
+        Thu, 13 Jun 2019 11:19:26 +0200 (CEST)
+Date:   Thu, 13 Jun 2019 11:19:26 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
+        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
+        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org,
+        ard.biesheuvel@linaro.org, jlhugo@gmail.com,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/8] i2c: i2c-qcom-geni: Provide support for ACPI
+Message-ID: <20190613091926.GB952@kunai>
+References: <20190610084213.1052-1-lee.jones@linaro.org>
+ <20190612103453.ccet2pneairnlpcc@ninjato>
+ <20190612104011.GA4660@dell>
+ <20190612104459.gvji3qxym5s4odfq@ninjato>
+ <20190613085204.GF4660@dell>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 653f06d1-9ac6-4292-2b79-08d6efde0940
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2019 09:03:43.5343
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3636
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Fba/0zbH8Xs+Fj9o"
+Content-Disposition: inline
+In-Reply-To: <20190613085204.GF4660@dell>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Christoph,
 
-> From: Christoph Hellwig, Sent: Thursday, June 13, 2019 5:51 PM
+--Fba/0zbH8Xs+Fj9o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+> I contacted both of them.
 >=20
-> On Thu, Jun 13, 2019 at 08:46:00AM +0000, Yoshihiro Shimoda wrote:
-> > I believe this patch I sent has already covered it. What do you think?
-> >
-> > For examples (all value units are "sectors"):
-> > 	default	mapping size	max_sectors
-> > case 1	240	MAX		2048		--> we use 2048
-> > case 2	240	512		2048		--> we use 512
-> > case 3	240	128		2048		--> we use 128
-> > case 4	240	128		64		--> we use 64
+>  Andy doesn't touch anything that isn't QUP based (8994 and older).
 >=20
-> Yes, I guess your version is fine after all:
->=20
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>  David doesn't deal with MSM platforms if Andy is available.=20
 
-Thank you for your review!
+That's good to know, thanks!
 
-> although I think it might be simpler to just read the value back
-> from the queue in the end.
+> So I guess the decision is yours.  Seeing at this patch is pretty
+> trivial and has our ACPI expert's Ack, the decision shouldn't be a
+> difficult one.
 
-Ah, now I understand why you suggest it.
-I agree with you. This patch changed 23 lines. But, it will change a few li=
-nes only.
-So, I'll make such a patch.
+No worries, the patch will be applied. I just wanted to check if the
+listed maintainers are still there. Otherwise I need to orphan this
+driver.
 
-Best regards,
-Yoshihiro Shimoda
 
+--Fba/0zbH8Xs+Fj9o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0CFRkACgkQFA3kzBSg
+KbaquBAArPmt8Fz3DGFNlnfxI6ee/fBc4huwdqsLrUXhirCq2NxTHi0g8mc1Y4O5
+js7pOOLQSqZ6cTamIqHGv7wNonZ16xhvJPexVAz8CPT9BOysmHI/Z1eBEorBqOh8
+MXkJGWXCSJ8li3yAdDLcQWKyj42zzEV7YJ/7kzEVpodSec/ufP1l34mxPNY+gVkj
+b2YAX41oX7KMQ+ix+O9dK1U/wja5costVyUNXxjLuzZBTooVShj7dnrcLuROw1ss
+I3V09OpXN7E8tF4Tq52gJ3xH1wJslMsi2GGGBFC4kKC3txfO04cuOZsLmf36Jomd
+hBFUBBQotylM32w5lshWXcPQOUWBsKlDtfK5qyAhKIeBEvs08pbqK1Lw8hFT8T7t
+6kD5Ty0cRPx5yBU0DE46FWuR60RYUqfq+bLYy4Y1O5lyCY2IdM46SMuFo6pp96lq
+GQReaFopNp4SCpNPNJCDFtoHegeEoT5JKrcjLHRV9Zg2+p4mNL2O7Epkvi+4JvzV
+p1gVvtL0/x5wVD8QWtXq8a7/IQ5oYUaULExw+WzhWD+VV4c/4JyyMNtGpCmnXCAr
+EXj+7drBHheZN7nmmrer+sEuAySjTlhhHtFvb2K735P06Etqu5YWAtm88j7FcZUU
+SaCzuSKqPQgU401V3+k5aexWOMCEN1DehlbyL+n7nQazEovGM24=
+=dLE0
+-----END PGP SIGNATURE-----
+
+--Fba/0zbH8Xs+Fj9o--
