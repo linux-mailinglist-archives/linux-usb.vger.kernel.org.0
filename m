@@ -2,84 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 789D344DDE
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 22:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F5344E16
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 23:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbfFMUyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 16:54:03 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:60766 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725747AbfFMUyD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 16:54:03 -0400
-Received: (qmail 6064 invoked by uid 2102); 13 Jun 2019 16:54:02 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 13 Jun 2019 16:54:02 -0400
-Date:   Thu, 13 Jun 2019 16:54:02 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-cc:     Greg KH <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <patches@opensource.cirrus.com>, <oneukum@suse.com>
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-In-Reply-To: <1560434431.11184.13.camel@opensource.cirrus.com>
-Message-ID: <Pine.LNX.4.44L0.1906131648180.1307-100000@iolanthe.rowland.org>
+        id S1730175AbfFMVGE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 17:06:04 -0400
+Received: from mga04.intel.com ([192.55.52.120]:59043 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725747AbfFMVGE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Jun 2019 17:06:04 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 14:06:03 -0700
+X-ExtLoop1: 1
+Received: from orsmsx105.amr.corp.intel.com ([10.22.225.132])
+  by orsmga003.jf.intel.com with ESMTP; 13 Jun 2019 14:06:02 -0700
+Received: from orsmsx122.amr.corp.intel.com (10.22.225.227) by
+ ORSMSX105.amr.corp.intel.com (10.22.225.132) with Microsoft SMTP Server (TLS)
+ id 14.3.408.0; Thu, 13 Jun 2019 14:06:02 -0700
+Received: from orsmsx102.amr.corp.intel.com ([169.254.3.187]) by
+ ORSMSX122.amr.corp.intel.com ([169.254.11.228]) with mapi id 14.03.0415.000;
+ Thu, 13 Jun 2019 14:06:02 -0700
+From:   "Yang, Fei" <fei.yang@intel.com>
+To:     John Stultz <john.stultz@linaro.org>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "mgautam@codeaurora.org" <mgautam@codeaurora.org>,
+        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Subject: RE: [PATCH] usb: gadget: f_fs: data_len used before properly set
+Thread-Topic: [PATCH] usb: gadget: f_fs: data_len used before properly set
+Thread-Index: AQHVIhpu+QIEYVtaVU6Xn558US2yDaaaBJ0A
+Date:   Thu, 13 Jun 2019 21:06:01 +0000
+Message-ID: <02E7334B1630744CBDC55DA8586225837F8A676C@ORSMSX102.amr.corp.intel.com>
+References: <1560377606-40855-1-git-send-email-fei.yang@intel.com>
+ <CALAqxLXeXt1Me_gzUFX8uBAuw_26QEOAX84324kzq7Hih1XDQw@mail.gmail.com>
+In-Reply-To: <CALAqxLXeXt1Me_gzUFX8uBAuw_26QEOAX84324kzq7Hih1XDQw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ctpclassification: CTP_NT
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiNzFjMTJhZTgtMjM4ZC00YjdhLThlZjEtZWQyMGVmYzQ2ZWI0IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiSHdIbUxXQkd6ZHFnc3pScTFCdHBMaDNGZE1GcCs5T1wvZkhQeFwvUGJ1NXFUY0VSWVZUQ1kyaGZcLzMwY1VybEpXVCJ9
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.22.254.139]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 13 Jun 2019, Mayuresh Kulkarni wrote:
-
-> Hi Alan,
-> 
-> Thanks for your review and apologies for late response from me. I was on PTO last week and then in a training this week.
-> 
-> > Aside from the issues Greg raised, it isn't right because it relies on 
-> > the suspend and resume callbacks for individual interfaces, not for the 
-> > whole device.  There are a few other things that should be changed as 
-> > well.
-> 
-> In our use-case, we open the USB device with our VID/PID and then using that fd
-> we bind to our interface. So this approach probably worked for our use-case.
-
-Yes.  But it seems more reliable to use suspend/resume information for 
-the whole device, instead of assuming that the userspace program will 
-have claimed an interface.
-
-> > Below is my attempt at doing the same thing (not tested, and it doesn't
-> > answer all of Greg's objections).  It is very similar to your patch.  
-> > Does it work for your application?
-> > 
-> 
-> I am checking your code-changes and will get back to you on this by next week.
-> 
-> > (Note: I imagine you might run into trouble because devices generally 
-> > do not get put into runtime suspend immediately.  So if you call the 
-> > USBDEVFS_SUSPEND ioctl and then the USBDEVFS_WAIT_FOR_RESUME ioctl, the 
-> > wait will return immediately because the device hasn't yet been 
-> > suspended.)
-> > 
-> 
-> For this point, I am suggesting below -
-> How about we return "udev->dev.power.usage_count" from suspend ioctl?
-> count = 0 -> suspend success so good to call wait-for-resume ioctl
-> count != 0 -> don't call resume since suspend did not happen.
-> 
-> Will that work?
-
-No, it will not.  The usage_count value can change at any time, so it 
-will be out-of-date by the time the ioctl returns.  Furthermore, even 
-if usage_count is > 0 when the suspend ioctl returns, it may become 0 
-later on, and the device will be suspended some time after that.
-
-In fact, if you use the default settings for USB autosuspend, the 
-device won't be suspended until 2 seconds after the usage_count becomes 
-0.  So even if the suspend ioctl decrements usage_count to 0, the 
-device still won't be suspended right away.  If you call the 
-wait-for-resume ioctl immediately, the call will fail.
-
-Alan Stern
-
+Pj4gVGhlIGZvbGxvd2luZyBsaW5lIG9mIGNvZGUgaW4gZnVuY3Rpb24gZmZzX2VwZmlsZV9pbyBp
+cyB0cnlpbmcgdG8gc2V0IA0KPj4gZmxhZyBpb19kYXRhLT51c2Vfc2cgaW4gY2FzZSBidWZmZXIg
+cmVxdWlyZWQgaXMgbGFyZ2VyIHRoYW4gb25lIHBhZ2UuDQo+Pg0KPj4gICAgIGlvX2RhdGEtPnVz
+ZV9zZyA9IGdhZGdldC0+c2dfc3VwcG9ydGVkICYmIGRhdGFfbGVuID4gUEFHRV9TSVpFOw0KPj4N
+Cj4+IEhvd2V2ZXIgYXQgdGhpcyBwb2ludCBvZiB0aW1lIHRoZSB2YXJpYWJsZSBkYXRhX2xlbiBo
+YXMgbm90IGJlZW4gc2V0IA0KPj4gdG8gdGhlIHByb3BlciBidWZmZXIgc2l6ZSB5ZXQuIFRoZSBj
+b25zZXF1ZW5jZSBpcyB0aGF0IGlvX2RhdGEtPnVzZV9zZyANCj4+IGlzIGFsd2F5cyBzZXQgcmVn
+YXJkbGVzcyB3aGF0IGJ1ZmZlciBzaXplIHJlYWxseSBpcywgYmVjYXVzZSB0aGUgDQo+PiBjb25k
+aXRpb24gKGRhdGFfbGVuID4gUEFHRV9TSVpFKSBpcyBlZmZlY3RpdmVseSBhbiB1bnNpZ25lZCBj
+b21wYXJpc29uIA0KPj4gYmV0d2VlbiAtRUlOVkFMIGFuZCBQQUdFX1NJWkUgd2hpY2ggd291bGQg
+YWx3YXlzIHJlc3VsdCBpbiBUUlVFLg0KPj4NCj4+IEZpeGVzOiA3NzJhN2E3MjRmNjkgKCJ1c2I6
+IGdhZGdldDogZl9mczogQWxsb3cgc2NhdHRlci1nYXRoZXIgDQo+PiBidWZmZXJzIikNCj4+IFNp
+Z25lZC1vZmYtYnk6IEZlaSBZYW5nIDxmZWkueWFuZ0BpbnRlbC5jb20+DQo+PiBDYzogc3RhYmxl
+IDxzdGFibGVAdmdlci5rZXJuZWwub3JnPg0KPg0KPiBIZXkgRmVpISBUaGFua3Mgc28gbXVjaCBm
+b3Igc2VuZGluZyB0aGlzIG91dCEgSSB3YXMgZXhjaXRlZCB0aGF0IHRoaXMgbWlnaHQgcmVzb2x2
+ZQ0KPiB0aGUgZmZzIHN0YWxscyBJJ3ZlIGJlZW4gc2VlaW5nIG9uIGR3YzMvZHdjMiBoYXJkd2Fy
+ZSwgYnV0IHdoZW4gSSBnYXZlIGl0IGEgc2hvdCwgaXQNCj4gZG9lc24ndCBzZWVtIHRvIGhlbHAu
+IEluIGZhY3QsIHJhdGhlciB0aGVuIGEgc3RhbGwsIEkgZW5kIHVwIHNlZWluZyB0aGUgZm9sbG93
+aW5nIHBhbmljOg0KPiANCj4gWyAgMzgzLjQxNTM2Ml0gVW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwg
+cmVhZCBmcm9tIHVucmVhZGFibGUgbWVtb3J5IGF0IHZpcnR1YWwgYWRkcmVzcyAwMDAwMDAwMDAw
+MDAwMDE4DQo+IFsgIDM4My40MzE5MzVdIE1lbSBhYm9ydCBpbmZvOg0KPiBbICAzODMuNDMxOTM3
+XSAgIEVTUiA9IDB4OTYwMDAwMDUNCj4gWyAgMzgzLjQzMTk0MF0gICBFeGNlcHRpb24gY2xhc3Mg
+PSBEQUJUIChjdXJyZW50IEVMKSwgSUwgPSAzMiBiaXRzDQo+IFsgIDM4My40MzE5NDFdICAgU0VU
+ID0gMCwgRm5WID0gMA0KPiBbICAzODMuNDMxOTQyXSAgIEVBID0gMCwgUzFQVFcgPSAwDQo+IFsg
+IDM4My40MzE5NDNdIERhdGEgYWJvcnQgaW5mbzoNCj4gWyAgMzgzLjQzMTk0NV0gICBJU1YgPSAw
+LCBJU1MgPSAweDAwMDAwMDA1DQo+IFsgIDM4My40MzE5NDZdICAgQ00gPSAwLCBXblIgPSAwDQo+
+IFsgIDM4My40MzE5NTFdIHVzZXIgcGd0YWJsZTogNGsgcGFnZXMsIDM5LWJpdCBWQXMsIHBnZHA9
+MDAwMDAwMDBhYWUxZjAwMA0KPiBbICAzODMuNDMxOTUzXSBbMDAwMDAwMDAwMDAwMDAxOF0gcGdk
+PTAwMDAwMDAwOWYwNjQwMDMsIHB1ZD0wMDAwMDAwMDlmMDY0MDAzLCBwbWQ9MDAwMDAwMDAwMDAw
+MDAwMA0KPiBbICAzODMuNDgyNTYwXSBJbnRlcm5hbCBlcnJvcjogT29wczogOTYwMDAwMDUgWyMx
+XSBQUkVFTVBUIFNNUA0KPiBbICAzODMuNDg4MTI4XSBNb2R1bGVzIGxpbmtlZCBpbjoNCj4gWyAg
+MzgzLjQ5MTE4MV0gQ1BVOiAwIFBJRDogMzk5IENvbW06IGlycS82OS1kd2MzIFRhaW50ZWQ6IEcg
+Uw0KPiAgICAgICA1LjIuMC1yYzQtMDAwOTItZ2Y1ZjEyZjVkM2ZkZCAjMjk2IFsgIDM4My41MDEw
+MDJdIEhhcmR3YXJlIG5hbWU6IEhpS2V5OTYwIChEVCkNCj4gWyAgMzgzLjUwNDkxOF0gcHN0YXRl
+OiAyMDQwMDA4NSAobnpDdiBkYUlmICtQQU4gLVVBTykNCj4gWyAgMzgzLjUwOTcxNF0gcGMgOiBk
+bWFfZGlyZWN0X3VubWFwX3NnKzB4MzgvMHg4MA0KPiBbICAzODMuNTE0MTUxXSBsciA6IGRtYV9k
+aXJlY3RfdW5tYXBfc2crMHg1Yy8weDgwDQo+IFsgIDM4My41MTg1ODZdIHNwIDogZmZmZmZmODAx
+MWZjYmM0MA0KPiBbICAzODMuNTIxODkzXSB4Mjk6IGZmZmZmZjgwMTFmY2JjNDAgeDI4OiBmZmZm
+ZmZjMGJhZDljMTgwDQo+IFsgIDM4My41MjcxOTldIHgyNzogZmZmZmZmYzBiYWUwNTMwMCB4MjY6
+IDAwMDAwMDAwMDAwMDAwMDINCj4gWyAgMzgzLjUzMjUwNF0geDI1OiBmZmZmZmZjMGI5YTlmZDAw
+IHgyNDogMDAwMDAwMDAwMDAwMDAwMA0KPiBbICAzODMuNTM3ODA5XSB4MjM6IDAwMDAwMDAwMDAw
+MDAwMDEgeDIyOiBmZmZmZmZjMGJhZDlmYzEwDQo+IFsgIDM4My41NDMxMTRdIHgyMTogMDAwMDAw
+MDAwMDAwMDAwMiB4MjA6IDAwMDAwMDAwMDAwMDAwMDENCj4gWyAgMzgzLjU0ODQyMF0geDE5OiAw
+MDAwMDAwMDAwMDAwMDAwIHgxODogMDAwMDAwMDAwMDAwMDAwMA0KPiBbICAzODMuNTUzNzI2XSB4
+MTc6IDAwMDAwMDAwMDAwMDAwMDAgeDE2OiAwMDAwMDAwMDAwMDAwMDAwDQo+IFsgIDM4My41NTkw
+MzJdIHgxNTogMDAwMDAwMDAwMDAwMDAwMCB4MTQ6IGZmZmZmZjgwMTBlYjZhZDANCj4gWyAgMzgz
+LjU2NDMzOF0geDEzOiAwMDAwMDAwMDAwMDAwMDAwIHgxMjogMDAwMDAwMDAwMDAwMDAwMA0KPiBb
+ICAzODMuNTY5NjQzXSB4MTE6IDAwMDAwMDAwMDAwMDAwMDAgeDEwOiAwMDAwMDAwMDAwMDAwOWQw
+DQo+IFsgIDM4My41NzQ5NDldIHg5IDogZmZmZmZmODAxMWZjYmQyMCB4OCA6IGZmZmZmZmMwYjYz
+YzNhMzANCj4gWyAgMzgzLjU4MDI1NF0geDcgOiBmZmZmZmZjMGJjNTE1YzAwIHg2IDogMDAwMDAw
+MDAwMDAwMDAwNw0KPiBbICAzODMuNTg1NTYwXSB4NSA6IDAwMDAwMDAwMDAwMDAwMDEgeDQgOiAw
+MDAwMDAwMDAwMDAwMDA0DQo+IFsgIDM4My41OTA4NjVdIHgzIDogMDAwMDAwMDAwMDAwMDAwMSB4
+MiA6IDAwMDAwMDAwMDAwMDAwMDENCj4gWyAgMzgzLjU5NjE2OV0geDEgOiAwMDAwMDAwMDAwMDZi
+ZjQyIHgwIDogMDAwMDAwMDAwMDAwMDAwMA0KPiBbICAzODMuNjAxNDc3XSBDYWxsIHRyYWNlOg0K
+PiBbICAzODMuNjAzOTE2XSAgZG1hX2RpcmVjdF91bm1hcF9zZysweDM4LzB4ODANCj4gWyAgMzgz
+LjYwODAxM10gIHVzYl9nYWRnZXRfdW5tYXBfcmVxdWVzdF9ieV9kZXYrMHhiMC8weGM4DQo+IFsg
+IDM4My42MTMxNDhdICBkd2MzX2dhZGdldF9kZWxfYW5kX3VubWFwX3JlcXVlc3QuaXNyYS4xMysw
+eDc4LzB4MTUwDQo+IFsgIDM4My42MTkyMzVdICBkd2MzX2dhZGdldF9naXZlYmFjaysweDMwLzB4
+NjgNCj4gWyAgMzgzLjYyMzQxMl0gIGR3YzNfdGhyZWFkX2ludGVycnVwdCsweDY5NC8weDE0ZTAN
+Cj4gWyAgMzgzLjYyNzkzOF0gIGlycV90aHJlYWRfZm4rMHgyOC8weDc4DQo+IFsgIDM4My42MzE1
+MDZdICBpcnFfdGhyZWFkKzB4MTI0LzB4MWMwDQo+IFsgIDM4My42MzQ5OTFdICBrdGhyZWFkKzB4
+MTI4LzB4MTMwDQo+IFsgIDM4My42MzgyMTRdICByZXRfZnJvbV9mb3JrKzB4MTAvMHgxYw0KPiBb
+ICAzODMuNjQxNzg2XSBDb2RlOiAyYTAzMDNmNyBhYTA0MDNmOCA1MjgwMDAxNCBkNTAzMjAxZiAo
+Yjk0MDFhNjIpDQo+IFsgIDM4My42NDc4NzRdIC0tLVsgZW5kIHRyYWNlIGY0ODA1M2MyMDQwYzU2
+NTggXS0tLQ0KPiANCj4gRnJvbSB0aGUgbG9va3Mgb2YgaXQgdGhvdWdoLCBJIHN1c3BlY3QgeW91
+ciBmaXggaXMgYSBnb29kIG9uZSwgYW5kIG1heWJlIGl0cyBqdXN0IGhlbHBpbmcNCj4gZXhwb3Nl
+IHNvbWUgcmVsYXRlZCB1bmRlcmx5aW5nIGlzc3VlcyBpbiB0aGUgZHdjMyBkcml2ZXI/DQoNCkl0
+IGRvZXNuJ3QgZml4IHRoZSBmZnMgc3RhbGwgaXNzdWUgZm9yIG1lIGVpdGhlciwgYnV0IEkgaGF2
+ZSBub3Qgc2VlbiB0aGlzIHBhbmljIHRob3VnaC4NCg0KSXQncyBpbnRlcmVzdGluZyB0byBzZWUg
+dGhpcyBwYW5pYyBiZWNhdXNlIGRtYSB1bm1hcHBpbmcgaXMgd2hhdCBJJ20gbG9va2luZyBhdCBy
+aWdodCBub3cuDQpXaGVuIEkgc2VlIHRoZSBmZnMgc3RhbGxzLCB0aGUgcHJvYmxlbSBzZWVtcyB0
+byBiZSB0aGF0IGEgcmVhZCByZXF1ZXN0IG9mIDUxMiBieXRlcyByZXR1cm5pbmcNCnJpZ2h0IGF3
+YXkgd2l0aCBhIGJ1ZmZlciBmaWxsZWQgd2l0aCBhbGwgemVyb3MuIEFuZCB0aGF0IGlzIGhhcHBl
+bmluZyBhZnRlciBhIGJ1bmNoIG9mIHJlcXVlc3RzDQpvZiAxNjM4NCBieXRlcy4gSSdtIHN1c3Bl
+Y3RpbmcgdGhlIGRtYSBhcyB3ZWxsLCBiZWNhdXNlIHRoZSBjb21wbGV0aW9uIGludGVycnVwdCBm
+b3IgdGhpcw0KcmVxdWVzdCBvZiA1MTIgYnl0ZXMgc2VlbXMgdG8gYmUgZmlyZWQgbWlzdGFrZW5s
+eS4NCg0KSSBkb24ndCBhbHdheXMgaGF2ZSB0aW1lIHRvIHdvcmsgb24gdGhpcyBpc3N1ZSB0aG91
+Z2gsIG1pZ2h0IG5vdCB1cGRhdGUgZm9yIGEgd2hpbGUuIFBsZWFzZQ0Ka2VlcCBtZSBwb3N0ZWQg
+aWYgeW91IGZpbmQgYW55dGhpbmcuDQoNClRoYW5rcywNCi1GZWkNCg==
