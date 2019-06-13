@@ -2,133 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AF544A42
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 20:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44AC844A85
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 20:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727017AbfFMSFq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 14:05:46 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38361 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726265AbfFMSFp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 14:05:45 -0400
-Received: by mail-pg1-f193.google.com with SMTP id v11so11387411pgl.5;
-        Thu, 13 Jun 2019 11:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6EdW1zQmAAxK0Wa2ppkGhsrx4V+WLwXRsMm+jl3+ewo=;
-        b=CY4EEIKXVyaEX9Q2YU2gGkUHWd0Pp+IvLWSb6NtU47cM2RbPyozw/YKui7GvEIcwXu
-         HKkMgmbcBo1EaMxgNpnwOvJZ6rOOjaKXtTQDMI18ftK6UlsiXnX69m3EuC4g+DFjMEP8
-         /Y5jh4IvbkOXkTlRmwSGNP92wjUu191GVcrBMWSmso443/L3e96pZUErlVAOEZLit1tu
-         71LtfO2NSARBP+p6M9M6EryIuIBu3VhwHn7lqcexvjPCcNB7rzothPlLhXbadTR04wqT
-         z7t9JiGqQKfncKIS0AxAEC+07IoUXybdLqMag/zqJROoNbpYwOTXOWl6Hy8i2X1DyHWS
-         VWcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6EdW1zQmAAxK0Wa2ppkGhsrx4V+WLwXRsMm+jl3+ewo=;
-        b=B329nxDxhP8B7FCzNqdtX7Jedvy47klGNjcJI+FLEqUs2xT9T5+M3qD8mebSUR0OJP
-         xaT/CD4tqj7SMl3ChawQp0RGOh+LSBpkqZpedlrbgSl5xwQn2zVhs4w7YFWALDRZDkrb
-         nSHaIgOEVtES1i9GLWS5yR8vbIgV6/TfhQEwi8Af4Gf3Sz5uN7fjg0f9DxGGsQU90G6v
-         02iGAC9PxHFGg9s6i9BQUZ9VaKTrYf5zFC6sh7smxrnoiQKz+K/BJiiRjbAi5K/At5eS
-         mT1uP63aKFNVUEqULfLGgLT4CKwqXbsBWIIXs0sUDXXpvCwcOuRSawkJwmBulhS7PIam
-         ssQw==
-X-Gm-Message-State: APjAAAX3bPM22rkAsv20az3oxmpOUW75etHs8vh5jQzWnJPD6cHFHEBG
-        zE0fE33+qSgFpB2rdU8aZ3w=
-X-Google-Smtp-Source: APXvYqw1YQzFVkNF9Msoqos5HCsJR3CRbWRv0JJz9cZgpC8b19GXB02dTSyHEal1BUYRQWmrQUAang==
-X-Received: by 2002:a17:90a:2648:: with SMTP id l66mr6718507pje.65.1560449144861;
-        Thu, 13 Jun 2019 11:05:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 16sm343780pfo.65.2019.06.13.11.05.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Jun 2019 11:05:43 -0700 (PDT)
-Subject: Re: [PATCH v7 3/5] usb: host: ohci-sm501: init genalloc for local
- memory
-To:     Fredrik Noring <noring@nocrew.org>
-Cc:     laurentiu.tudor@nxp.com, hch@lst.de, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        marex@denx.de, leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
-        robin.murphy@arm.com, JuergenUrban@gmx.de
-References: <20190529102843.13174-1-laurentiu.tudor@nxp.com>
- <20190529102843.13174-4-laurentiu.tudor@nxp.com>
- <20190605214622.GA22254@roeck-us.net> <20190611133223.GA30054@roeck-us.net>
- <20190611172654.GA2602@sx9> <20190611190343.GA18459@roeck-us.net>
- <20190613134033.GA2489@sx9>
- <bdfd2178-9e3c-dc15-6aa1-ec1f1fbcb191@roeck-us.net>
- <20190613153414.GA909@sx9>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <3f2164cd-7655-b7cc-ec57-d8751886728c@roeck-us.net>
-Date:   Thu, 13 Jun 2019 11:05:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727144AbfFMSSV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 14:18:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53356 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725889AbfFMSSV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Jun 2019 14:18:21 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B49802084D;
+        Thu, 13 Jun 2019 18:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560449900;
+        bh=UUPjymC9kDajGrf6Y1o5QmQxqZkcGGFGOf881Oi2P7c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mj/InHz/M4M+7YDI9phQ0DIG8VdygD8QUPunej5bSSU4rFGcDmE4jHNJeEViQxGYN
+         xuMJIxmLqPsRFQ8EncILpIvVc/QqtRDjs6f+zfVszunY2mOIk0pY6/xm6RSUVM96XT
+         4xYxcFPA1uvSN7C2Tyb1+yI/OVRvRoZl952RVFHc=
+Date:   Thu, 13 Jun 2019 20:18:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: How to resolve an issue in swiotlb environment?
+Message-ID: <20190613181817.GA14548@kroah.com>
+References: <20190613073900.GC12093@lst.de>
+ <Pine.LNX.4.44L0.1906131306580.1307-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20190613153414.GA909@sx9>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1906131306580.1307-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/13/19 8:34 AM, Fredrik Noring wrote:
-> Hi Guenter,
+On Thu, Jun 13, 2019 at 01:16:32PM -0400, Alan Stern wrote:
+> On Thu, 13 Jun 2019, Christoph Hellwig wrote:
 > 
->> Thanks for the confirmation. Do you see the problem only with the
->> ohci-sm501 driver or also with others ?
+> > On Wed, Jun 12, 2019 at 10:43:11AM -0400, Alan Stern wrote:
+> > > Would it be okay to rely on the assumption that USB block devices never 
+> > > have block size < 512?  (We could even add code to the driver to 
+> > > enforce this, although refusing to handle such devices at all might be 
+> > > worse than getting an occasional error.)
+> > 
+> > sd.c only supports a few specific sector size, and none of them is
+> > < 512 bytes:
+> > 
+> > 	if (sector_size != 512 &&
+> > 	    sector_size != 1024 &&
+> > 	    sector_size != 2048 &&
+> > 	    sector_size != 4096) {
+> > 	    	...
+> > 		sdkp->capacity = 0;
 > 
-> All are likely affected, but it depends, because I believe the problem is
-> that the USB subsystem runs out of memory. Please try the attached patch!
+> Great!  So all we have to do is fix vhci-hcd.  Then we can remove all 
+> the virt_boundary_mask stuff from usb-storage and uas entirely.
 > 
-> The pool assumed 4096 byte page alignment for every allocation, which is
-> excessive given that many requests are for 16 and 32 bytes. In the patch
-> below, I have turned down the order to 5, which is good enough for the ED
-> and TD structures of the OHCI, but not enough for the HCCA that needs 256
-> byte alignment. With some luck, the WARN_ON_ONCE will not trigger in your
-> test, though. If it does, you may try to increase the order from 5 to 8.
-> 
+> (I'm assuming wireless USB isn't a genuine issue.  As far as I know, it 
+> is pretty much abandoned at this point.)
 
-You are right, the patch below fixes the problem. I did not get the warning
-with order==5. Nevertheless, I also tested with order==8; that works as well.
+It is, I need to just move it to staging and delete the thing.  I don't
+know of any hardware anymore.
 
-Thanks a lot for tracking this down!
-Guenter
+thanks,
 
-> I have observed strange things happen when the USB subsystem runs out of
-> memory. The mass storage drivers often seem to busy-wait on -ENOMEM,
-> consuming a lot of processor resources. It would be much more efficient
-> to sleep waiting for memory to become available.
-> 
-> In your case I suspect that allocation failures are not correctly
-> attributed. Certain kinds of temporary freezes may also occur, as the
-> various devices are reset due to host memory allocation errors.
->  > Fredrik
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -3011,7 +3011,7 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
->   	int err;
->   	void __iomem *local_mem;
->   
-> -	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, PAGE_SHIFT,
-> +	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, 5,
->   						  dev_to_node(hcd->self.sysdev),
->   						  dev_name(hcd->self.sysdev));
->   	if (IS_ERR(hcd->localmem_pool))
-> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-> --- a/drivers/usb/host/ohci-hcd.c
-> +++ b/drivers/usb/host/ohci-hcd.c
-> @@ -517,6 +517,7 @@ static int ohci_init (struct ohci_hcd *ohci)
->   						GFP_KERNEL);
->   	if (!ohci->hcca)
->   		return -ENOMEM;
-> +	WARN_ON_ONCE(ohci->hcca_dma & 0xff);
->   
->   	if ((ret = ohci_mem_init (ohci)) < 0)
->   		ohci_stop (hcd);
-> 
-
+greg k-h
