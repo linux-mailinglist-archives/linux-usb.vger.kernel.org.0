@@ -2,95 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8076643E02
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 17:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A90543DFF
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 17:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731778AbfFMPqz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 11:46:55 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:43639 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731772AbfFMJe0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 05:34:26 -0400
-Received: by mail-lf1-f66.google.com with SMTP id j29so14511915lfk.10;
-        Thu, 13 Jun 2019 02:34:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=D4VkNejS3l89DpjptrqgXwGcwS4Wano2U0wz4lwUEa0=;
-        b=VaQNczpK/3BmxeL4sv5hN1gRqsuOe4NI9bIsuhefGirRwQ2Ep+xA5p2rvPlmUUSHTw
-         L+zsLfwVahm75pjugCW/QTbAGRpG8Lph5iydCA61rPHz1MosqOauTJnQPwpX33GyhLo1
-         DDVkaUOAsiiHv4uOVnw2cVbzGsru5vICGLbGYhUMGbZiqm2It8Hn7r7V0MuuJr1DiTOD
-         qm1rZB9Prw9Luxid/u5KHBvpPi2bYdTC5BG7XIa2SG11ijMYz29+oS9u40Ytdtqr4hup
-         XCXEGHScUttgcoLhm0jdTyOvq+vqlCUDr8cuj9LNcof3A97bkmtITZGdp7WiKBgxW9OJ
-         uh7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=D4VkNejS3l89DpjptrqgXwGcwS4Wano2U0wz4lwUEa0=;
-        b=MqisVzaiR4RZUeQguk0h+zHQy4RHJtFufT5nZvANGlIzXCCQjH9cxqZojS/lOEgfZa
-         dSOd9dV4ZC7NO7OgfewSOYbh2VpnsDhKfqkkRVmPO7Mx59jG6zYR5M9n2q1637oG33Hf
-         LBY7CB4HnR/rsmLDTJk5bre1ToOUkUcJFmZsqvyB7mMCb7NqpGyqw7HMlt8nEZJx/niv
-         tQPigY8gvZS+QbH9IJw/d/wJsqZ9i5aUYxQluW0Xf9YAKAhiStRo8niYXOmyxF1YZEae
-         3ps2ClDyPlsGdF/GEeF8D41GHSWrEE1dArjK4yCUWhHdKjqToKUHQ4N+jG/ZjCZh+0nw
-         hywg==
-X-Gm-Message-State: APjAAAVy/ijPsy6T4VhdY9S6pd/+OeDss1Wv+dZf18RkO4CdoyJaACXN
-        j4R9RblEk4RP+Hex10SDw2SdyzXsHfw=
-X-Google-Smtp-Source: APXvYqyfZ4+dBY9GGiHtRnUXuqpxEoChE5mHTzoE5aKczii6KVRstIKjFeEE1l2WGWN4DtxQPyYKng==
-X-Received: by 2002:a05:6512:4c5:: with SMTP id w5mr5128674lfq.171.1560418464220;
-        Thu, 13 Jun 2019 02:34:24 -0700 (PDT)
-Received: from ub1 (h-160-100.A251.priv.bahnhof.se. [37.123.160.100])
-        by smtp.gmail.com with ESMTPSA id s20sm485172lfb.95.2019.06.13.02.34.23
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 13 Jun 2019 02:34:23 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 11:34:33 +0200
-From:   Jonas Stenvall <jonas.stenvall.umea@gmail.com>
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, erosca@de.adit-jv.com,
-        vladimir_zapolskiy@mentor.com, joshua_frkuska@mentor.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: u_audio: Fixed variable declaration coding
- style issue
-Message-ID: <20190613093433.GA3878@ub1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1731781AbfFMPqs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 11:46:48 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:25554 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731782AbfFMJhR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 05:37:17 -0400
+X-IronPort-AV: E=Sophos;i="5.62,369,1554735600"; 
+   d="scan'208";a="18585683"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 13 Jun 2019 18:37:14 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2E2B3417857B;
+        Thu, 13 Jun 2019 18:37:14 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     hch@lst.de, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH v2] usb-storage: Add a limitation for blk_queue_max_hw_sectors()
+Date:   Thu, 13 Jun 2019 18:36:51 +0900
+Message-Id: <1560418611-10239-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fixed a coding style issue, replacing unsigned with unsigned int.
+This patch fixes an issue that the following error happens on
+swiotlb environment:
 
-Signed-off-by: Jonas Stenvall <jonas.stenvall.umea@gmail.com>
+	xhci-hcd ee000000.usb: swiotlb buffer is full (sz: 524288 bytes), total 32768 (slots), used 1338 (slots)
+
+On the kernel v5.1, block settings of a usb-storage with SuperSpeed
+were the following so that the block layer will allocate buffers
+up to 64 KiB, and then the issue didn't happen.
+
+	max_segment_size = 65536
+	max_hw_sectors_kb = 1024
+
+After the commit 09324d32d2a0 ("block: force an unlimited segment
+size on queues with a virt boundary") is applied, the block settings
+are the following. So, the block layer will allocate buffers up to
+1024 KiB, and then the issue happens:
+
+	max_segment_size = 4294967295
+	max_hw_sectors_kb = 1024
+
+To fix the issue, the usb-storage driver checks the maximum size of
+a mapping for the device and then adjusts the max_hw_sectors_kb
+if required. After this patch is applied, the block settings will
+be the following, and then the issue doesn't happen.
+
+	max_segment_size = 4294967295
+	max_hw_sectors_kb = 256
+
+Fixes: 09324d32d2a0 ("block: force an unlimited segment size on queues with a virt boundary")
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 ---
- drivers/usb/gadget/function/u_audio.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Changes from v1:
+ - Call blk_queue_max_hw_sectors() for the maximum size of mapping
+   unconditionally to simplify the code by using read the value back
+   from the queue in the end.
+ - Add a comment on the code.
+ - On v1, I got Reviewed-by from Christoph. But, I changed the code a little,
+   I removed the Reviewed-by.
 
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index fb5ed97572e5..56906d15fb55 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -40,7 +40,7 @@ struct uac_rtd_params {
+ drivers/usb/storage/scsiglue.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
+index 59190d8..556bb4f 100644
+--- a/drivers/usb/storage/scsiglue.c
++++ b/drivers/usb/storage/scsiglue.c
+@@ -28,6 +28,8 @@
+  * status of a command.
+  */
  
- 	void *rbuf;
++#include <linux/blkdev.h>
++#include <linux/dma-mapping.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
  
--	unsigned max_psize;	/* MaxPacketSize of endpoint */
-+	unsigned int max_psize;	/* MaxPacketSize of endpoint */
- 	struct uac_req *ureq;
- 
- 	spinlock_t lock;
-@@ -78,7 +78,7 @@ static const struct snd_pcm_hardware uac_pcm_hardware = {
- 
- static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
+@@ -99,6 +101,7 @@ static int slave_alloc (struct scsi_device *sdev)
+ static int slave_configure(struct scsi_device *sdev)
  {
--	unsigned pending;
-+	unsigned int pending;
- 	unsigned long flags, flags2;
- 	unsigned int hw_ptr;
- 	int status = req->status;
+ 	struct us_data *us = host_to_us(sdev->host);
++	struct device *dev = us->pusb_dev->bus->sysdev;
+ 
+ 	/*
+ 	 * Many devices have trouble transferring more than 32KB at a time,
+@@ -129,6 +132,14 @@ static int slave_configure(struct scsi_device *sdev)
+ 	}
+ 
+ 	/*
++	 * The max_hw_sectors should be up to maximum size of a mapping for
++	 * the device. Otherwise, a DMA API might fail on swiotlb environment.
++	 */
++	blk_queue_max_hw_sectors(sdev->request_queue,
++		min_t(size_t, queue_max_hw_sectors(sdev->request_queue),
++		      dma_max_mapping_size(dev) >> SECTOR_SHIFT));
++
++	/*
+ 	 * Some USB host controllers can't do DMA; they have to use PIO.
+ 	 * They indicate this by setting their dma_mask to NULL.  For
+ 	 * such controllers we need to make sure the block layer sets
 -- 
-2.17.1
+2.7.4
 
