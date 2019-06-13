@@ -2,83 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C51243B81
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 17:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 550BB43B1A
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 17:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729362AbfFMP3w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 11:29:52 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:22282 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728643AbfFMLTM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 07:19:12 -0400
-X-IronPort-AV: E=Sophos;i="5.62,369,1554735600"; 
-   d="scan'208";a="18384428"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 13 Jun 2019 20:19:10 +0900
-Received: from localhost.localdomain (unknown [10.166.17.210])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 86BC2427E065;
-        Thu, 13 Jun 2019 20:19:10 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH] usb: renesas_usbhs: Use struct assignment instead of memcpy()
-Date:   Thu, 13 Jun 2019 20:18:48 +0900
-Message-Id: <1560424728-13929-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1727757AbfFMP0V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 11:26:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40740 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729247AbfFMLsl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Jun 2019 07:48:41 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2A58F21743;
+        Thu, 13 Jun 2019 11:48:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560426520;
+        bh=9qYuqWS/zB6QY0LmX9g1a0O0WQFIqul/r/81HJRNE7Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=avLatfaKqJJ+oNzBZHnPREm/5qpVln84VICPLPM2jMtQOD4IJ7ZEJnd28XA7S4/Vd
+         xZU8/XYPYBzacMLk7AC6sRrlo5hCHgc7MEL6BqhRtTpoPWdk6Pr/ba8Z1HzsIjTtnd
+         ylqwOLspOrBD6PP40k8i47Q1LF8jlqMLq1cheLBY=
+Date:   Thu, 13 Jun 2019 13:48:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Oliver Neukum <oliver@neukum.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH V2 07/15] usb: image: microtek: use sg helper to operate
+ sgl
+Message-ID: <20190613114838.GA13444@kroah.com>
+References: <20190613071335.5679-1-ming.lei@redhat.com>
+ <20190613071335.5679-8-ming.lei@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190613071335.5679-8-ming.lei@redhat.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To avoid the error-proneness of calls to sizeof() in the memcpy,
-this patch uses struct assignment instead of memcpy.
+On Thu, Jun 13, 2019 at 03:13:27PM +0800, Ming Lei wrote:
+> The current way isn't safe for chained sgl, so use sg helper to
+> operate sgl.
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
- This patch is based on Greg's linux-usb.git / usb-next branch.
- Note that mod_host.c also has memcpy but we cannot use struct assignment
- for it because the type of urb->setup_patcket is just "unsigned char *".
+Same changelog comment problem as I mentioned on the other patch, please
+fix up and resend.
 
- drivers/usb/renesas_usbhs/common.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-index a501ea6..ebbe322 100644
---- a/drivers/usb/renesas_usbhs/common.c
-+++ b/drivers/usb/renesas_usbhs/common.c
-@@ -651,9 +651,8 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
- 		return NULL;
- 
- 	dparam = &info->driver_param;
--	memcpy(dparam, &data->param, sizeof(data->param));
--	memcpy(&info->platform_callback, data->platform_callback,
--	       sizeof(*data->platform_callback));
-+	*dparam = data->param;
-+	info->platform_callback = *data->platform_callback;
- 
- 	if (!of_property_read_u32(dev->of_node, "renesas,buswait", &tmp))
- 		dparam->buswait_bwait = tmp;
-@@ -714,17 +713,13 @@ static int usbhs_probe(struct platform_device *pdev)
- 	 * care platform info
- 	 */
- 
--	memcpy(&priv->dparam,
--	       &info->driver_param,
--	       sizeof(struct renesas_usbhs_driver_param));
-+	priv->dparam = info->driver_param;
- 
- 	if (!info->platform_callback.get_id) {
- 		dev_err(&pdev->dev, "no platform callbacks");
- 		return -EINVAL;
- 	}
--	memcpy(&priv->pfunc,
--	       &info->platform_callback,
--	       sizeof(struct renesas_usbhs_platform_callback));
-+	priv->pfunc = info->platform_callback;
- 
- 	/* set driver callback functions for platform */
- 	dfunc			= &info->driver_callback;
--- 
-2.7.4
-
+greg k-h
