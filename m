@@ -2,89 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 532A443E3D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 17:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8076643E02
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 17:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389314AbfFMPs2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 11:48:28 -0400
-Received: from sauhun.de ([88.99.104.3]:38560 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731731AbfFMJT3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Jun 2019 05:19:29 -0400
-Received: from localhost (p5486CF99.dip0.t-ipconnect.de [84.134.207.153])
-        by pokefinder.org (Postfix) with ESMTPSA id 7A4352C3559;
-        Thu, 13 Jun 2019 11:19:26 +0200 (CEST)
-Date:   Thu, 13 Jun 2019 11:19:26 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
-        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
-        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        ard.biesheuvel@linaro.org, jlhugo@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/8] i2c: i2c-qcom-geni: Provide support for ACPI
-Message-ID: <20190613091926.GB952@kunai>
-References: <20190610084213.1052-1-lee.jones@linaro.org>
- <20190612103453.ccet2pneairnlpcc@ninjato>
- <20190612104011.GA4660@dell>
- <20190612104459.gvji3qxym5s4odfq@ninjato>
- <20190613085204.GF4660@dell>
+        id S1731778AbfFMPqz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 11:46:55 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:43639 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731772AbfFMJe0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 05:34:26 -0400
+Received: by mail-lf1-f66.google.com with SMTP id j29so14511915lfk.10;
+        Thu, 13 Jun 2019 02:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=D4VkNejS3l89DpjptrqgXwGcwS4Wano2U0wz4lwUEa0=;
+        b=VaQNczpK/3BmxeL4sv5hN1gRqsuOe4NI9bIsuhefGirRwQ2Ep+xA5p2rvPlmUUSHTw
+         L+zsLfwVahm75pjugCW/QTbAGRpG8Lph5iydCA61rPHz1MosqOauTJnQPwpX33GyhLo1
+         DDVkaUOAsiiHv4uOVnw2cVbzGsru5vICGLbGYhUMGbZiqm2It8Hn7r7V0MuuJr1DiTOD
+         qm1rZB9Prw9Luxid/u5KHBvpPi2bYdTC5BG7XIa2SG11ijMYz29+oS9u40Ytdtqr4hup
+         XCXEGHScUttgcoLhm0jdTyOvq+vqlCUDr8cuj9LNcof3A97bkmtITZGdp7WiKBgxW9OJ
+         uh7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=D4VkNejS3l89DpjptrqgXwGcwS4Wano2U0wz4lwUEa0=;
+        b=MqisVzaiR4RZUeQguk0h+zHQy4RHJtFufT5nZvANGlIzXCCQjH9cxqZojS/lOEgfZa
+         dSOd9dV4ZC7NO7OgfewSOYbh2VpnsDhKfqkkRVmPO7Mx59jG6zYR5M9n2q1637oG33Hf
+         LBY7CB4HnR/rsmLDTJk5bre1ToOUkUcJFmZsqvyB7mMCb7NqpGyqw7HMlt8nEZJx/niv
+         tQPigY8gvZS+QbH9IJw/d/wJsqZ9i5aUYxQluW0Xf9YAKAhiStRo8niYXOmyxF1YZEae
+         3ps2ClDyPlsGdF/GEeF8D41GHSWrEE1dArjK4yCUWhHdKjqToKUHQ4N+jG/ZjCZh+0nw
+         hywg==
+X-Gm-Message-State: APjAAAVy/ijPsy6T4VhdY9S6pd/+OeDss1Wv+dZf18RkO4CdoyJaACXN
+        j4R9RblEk4RP+Hex10SDw2SdyzXsHfw=
+X-Google-Smtp-Source: APXvYqyfZ4+dBY9GGiHtRnUXuqpxEoChE5mHTzoE5aKczii6KVRstIKjFeEE1l2WGWN4DtxQPyYKng==
+X-Received: by 2002:a05:6512:4c5:: with SMTP id w5mr5128674lfq.171.1560418464220;
+        Thu, 13 Jun 2019 02:34:24 -0700 (PDT)
+Received: from ub1 (h-160-100.A251.priv.bahnhof.se. [37.123.160.100])
+        by smtp.gmail.com with ESMTPSA id s20sm485172lfb.95.2019.06.13.02.34.23
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 13 Jun 2019 02:34:23 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 11:34:33 +0200
+From:   Jonas Stenvall <jonas.stenvall.umea@gmail.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, erosca@de.adit-jv.com,
+        vladimir_zapolskiy@mentor.com, joshua_frkuska@mentor.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: u_audio: Fixed variable declaration coding
+ style issue
+Message-ID: <20190613093433.GA3878@ub1>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Fba/0zbH8Xs+Fj9o"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190613085204.GF4660@dell>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Fixed a coding style issue, replacing unsigned with unsigned int.
 
---Fba/0zbH8Xs+Fj9o
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Jonas Stenvall <jonas.stenvall.umea@gmail.com>
+---
+ drivers/usb/gadget/function/u_audio.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index fb5ed97572e5..56906d15fb55 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -40,7 +40,7 @@ struct uac_rtd_params {
+ 
+ 	void *rbuf;
+ 
+-	unsigned max_psize;	/* MaxPacketSize of endpoint */
++	unsigned int max_psize;	/* MaxPacketSize of endpoint */
+ 	struct uac_req *ureq;
+ 
+ 	spinlock_t lock;
+@@ -78,7 +78,7 @@ static const struct snd_pcm_hardware uac_pcm_hardware = {
+ 
+ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
+ {
+-	unsigned pending;
++	unsigned int pending;
+ 	unsigned long flags, flags2;
+ 	unsigned int hw_ptr;
+ 	int status = req->status;
+-- 
+2.17.1
 
-> I contacted both of them.
->=20
->  Andy doesn't touch anything that isn't QUP based (8994 and older).
->=20
->  David doesn't deal with MSM platforms if Andy is available.=20
-
-That's good to know, thanks!
-
-> So I guess the decision is yours.  Seeing at this patch is pretty
-> trivial and has our ACPI expert's Ack, the decision shouldn't be a
-> difficult one.
-
-No worries, the patch will be applied. I just wanted to check if the
-listed maintainers are still there. Otherwise I need to orphan this
-driver.
-
-
---Fba/0zbH8Xs+Fj9o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0CFRkACgkQFA3kzBSg
-KbaquBAArPmt8Fz3DGFNlnfxI6ee/fBc4huwdqsLrUXhirCq2NxTHi0g8mc1Y4O5
-js7pOOLQSqZ6cTamIqHGv7wNonZ16xhvJPexVAz8CPT9BOysmHI/Z1eBEorBqOh8
-MXkJGWXCSJ8li3yAdDLcQWKyj42zzEV7YJ/7kzEVpodSec/ufP1l34mxPNY+gVkj
-b2YAX41oX7KMQ+ix+O9dK1U/wja5costVyUNXxjLuzZBTooVShj7dnrcLuROw1ss
-I3V09OpXN7E8tF4Tq52gJ3xH1wJslMsi2GGGBFC4kKC3txfO04cuOZsLmf36Jomd
-hBFUBBQotylM32w5lshWXcPQOUWBsKlDtfK5qyAhKIeBEvs08pbqK1Lw8hFT8T7t
-6kD5Ty0cRPx5yBU0DE46FWuR60RYUqfq+bLYy4Y1O5lyCY2IdM46SMuFo6pp96lq
-GQReaFopNp4SCpNPNJCDFtoHegeEoT5JKrcjLHRV9Zg2+p4mNL2O7Epkvi+4JvzV
-p1gVvtL0/x5wVD8QWtXq8a7/IQ5oYUaULExw+WzhWD+VV4c/4JyyMNtGpCmnXCAr
-EXj+7drBHheZN7nmmrer+sEuAySjTlhhHtFvb2K735P06Etqu5YWAtm88j7FcZUU
-SaCzuSKqPQgU401V3+k5aexWOMCEN1DehlbyL+n7nQazEovGM24=
-=dLE0
------END PGP SIGNATURE-----
-
---Fba/0zbH8Xs+Fj9o--
