@@ -2,167 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B187D44B0B
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 20:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E7144B77
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jun 2019 20:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728711AbfFMSqo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jun 2019 14:46:44 -0400
-Received: from uhil19pa14.eemsg.mail.mil ([214.24.21.87]:15913 "EHLO
-        UHIL19PA14.eemsg.mail.mil" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726893AbfFMSql (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 14:46:41 -0400
-X-EEMSG-check-017: 61114394|UHIL19PA14_EEMSG_MP12.csd.disa.mil
-Received: from emsm-gh1-uea10.ncsc.mil ([214.29.60.2])
-  by UHIL19PA14.eemsg.mail.mil with ESMTP/TLS/DHE-RSA-AES256-SHA256; 13 Jun 2019 18:46:33 +0000
+        id S1729383AbfFMS6o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jun 2019 14:58:44 -0400
+Received: from mail-yb1-f201.google.com ([209.85.219.201]:53195 "EHLO
+        mail-yb1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727307AbfFMS6n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jun 2019 14:58:43 -0400
+Received: by mail-yb1-f201.google.com with SMTP id w6so158486ybp.19
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jun 2019 11:58:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tycho.nsa.gov; i=@tycho.nsa.gov; q=dns/txt;
-  s=tycho.nsa.gov; t=1560451593; x=1591987593;
-  h=from:subject:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=W8eTWLv9tHywO5BpKJxyj7MNrrIdkJL3Y6n3rMjH5ts=;
-  b=T+8qluC/UFgE2QSLbuHUAFuQJ7xgGfSjehXDYT8+nEOeDbeRUTivduiP
-   6cHCJJmse1lPZm3pyxCfF5j/siBah2kgTX/MSwwIIyMAsPflqmiPer/wf
-   2Sl9QLP47nS2nUP07MC4nNqXgdJIsl2IvwDfXo2YZZJPAxG6dBim3wTbZ
-   SL6HpGZ3K4dMnVaKxWzORy/a6HzK+TRSDRnbTcHLKs1t892G5HYfCidJZ
-   NB9SxFSlE6FYpApta9s/Mam5NTVtAr++S+fzoRcxMjaWQ9NED4XAAHe6n
-   3ZglMWg+tQpbIMpCbhaeVhjGEJaZRELmqnMqzyko5/J+6Vh4b5PPWnBPO
-   w==;
-X-IronPort-AV: E=Sophos;i="5.63,369,1557187200"; 
-   d="scan'208";a="24726270"
-IronPort-PHdr: =?us-ascii?q?9a23=3A8c5gXRd6GHq0oOq8ssDlLq5plGMj4u6mDksu8p?=
- =?us-ascii?q?Mizoh2WeGdxc25ZhON2/xhgRfzUJnB7Loc0qyK6vmmADFRqs/b7jgrS99lb1?=
- =?us-ascii?q?c9k8IYnggtUoauKHbQC7rUVRE8B9lIT1R//nu2YgB/Ecf6YEDO8DXptWZBUh?=
- =?us-ascii?q?rwOhBoKevrB4Xck9q41/yo+53Ufg5EmCexbal9IRmrsAndrNQajItmJ6o+1x?=
- =?us-ascii?q?fFvHpFcPlKyG11Il6egwzy7dqq8p559CRQtfMh98peXqj/Yq81U79WAik4Pm?=
- =?us-ascii?q?4s/MHkugXNQgWJ5nsHT2UZiQFIDBTf7BH7RZj+rC33vfdg1SaAPM32Sbc0WS?=
- =?us-ascii?q?m+76puVRTlhjsLOyI//WrKkcF7kr5Vrwy9qBx+247UYZ+aNPxifqPGYNgWQX?=
- =?us-ascii?q?NNUttNWyBdB4+xaYUAD/AFPe1FsYfzoVUApga6CQW1BO7izjpEi3nr1qM4zu?=
- =?us-ascii?q?shCxnL0gw9EdwQvnTar9v7O6kdXu+30KbGwi7Ob+9U1Drn9ITEbh4srPOKUL?=
- =?us-ascii?q?ltccTR004vFwbdg1uNtYzqISuV1uQTvGid8uFuSOevhHQjqwF1vDeuxtonh4?=
- =?us-ascii?q?7Sho0I0VDJ7jl5wYYpKt24T053e9ikEIBKuC2AOIt2Rd0iTnhutS0nybMGoY?=
- =?us-ascii?q?a2cDUFxZko3RLSa+GLf5KW7h/sSuqdOyp0iXR4c7ylnRmy61KvyujkW8mx11?=
- =?us-ascii?q?ZFszRKn8HXtnAIyxzT8s+HSuZh/ku52TaAyQTT6uZcLEAoj6XbMZ8hwqMrlp?=
- =?us-ascii?q?YJrUTCHjP5mEXxjKOMcEUr5vOo5Pj9brXjp5+cM5d4igD4MqswhsyyGfk0Pw?=
- =?us-ascii?q?cBUmSB+emwyafv8VP2TblUlPE6j7HVsJXAKsQaoq65DRVV0oEm6xunFDepzc?=
- =?us-ascii?q?8YkGIbLFNFZB2Hj4/pN0vIIPDjF/izmVuskDB1x/zeJL3uHo3NLmTfkLfmZb?=
- =?us-ascii?q?ty9k5cyA09zN9B45JUDqoBLenpWkDvqdPYDgU2MxCuz+n7D9V905sUWXiTDa?=
- =?us-ascii?q?+BLKPSrViI6/ozLOaWf48apjb8JuM+5/HyjX82g0Idfaet3ZQJcnC0B+hpLF?=
- =?us-ascii?q?+DbXXwhdcBFH8AvhAiQ+zylF2CTTlTam62X6Ih+jE7D5mrDYTdSYC3hryOwi?=
- =?us-ascii?q?O7EodRZmBcBVCGCW3oeJmcW/cQdCKSJddskiIFVbi7TI8szhCvuxH8y7pmMO?=
- =?us-ascii?q?rY4CkYtZPl1Nho6OzfjxYy9SZ7D8iHzmGNTHl+nnkUSD8uwKB/vUt9x0+H0a?=
- =?us-ascii?q?h5hfxYCNNS6+pUUgchLpHR1PJ6C9/sVQLbZNuJS0ipQs+gAT4vStI92dgOY1?=
- =?us-ascii?q?xyG9+6lBDMwzKqA6MJl7yMHJE09qPc337sJ8dy0nrGz7cugEU7QstVNG2mmq?=
- =?us-ascii?q?5++xHWB47OjkqZiqKqeroH0S7T+2eM03COsFtbUAFuS6XFW24QZk/ModT+/E?=
- =?us-ascii?q?PCQKekCa47PQtZ1c6CNqxKZ8XtjVVHQvfjJdvfb3u/m2erGBmH2K2MY5Tue2?=
- =?us-ascii?q?gGwiXdB1YLkxoJ8XaFKwc+HCGhrHzaDDB0ElLveUzs+/FkqHynVk800x2Kb0?=
- =?us-ascii?q?p52rqx+x4Vg+GcSvwK0rIHpighsTN0E0i539/NFdqAqBRufL9GbdM+/lhHz2?=
- =?us-ascii?q?TZuBJ5PpC6KKBinFEeeRxtv0zyzxV3FplAkc8yoXMy1gVyNKaY3UhZdzyCwJ?=
- =?us-ascii?q?DwPqTbKmz1/BCoca7ZxEvS38qR+qcKu7wErADPtR+oGgIC9Gpq191Omy+Q5p?=
- =?us-ascii?q?LVAQ4WSrrrX0o3/gQ8rLbfNHoT/YTRgEZwPLG0vzmK4NcgAO8o2170ZNtEGL?=
- =?us-ascii?q?+VHw/1VcsBDo6hL/J8yAvhVQ4NIO0HrP18BMihbfbTnff2bes=3D?=
-X-IPAS-Result: =?us-ascii?q?A2DLDgDKmAJd/wHyM5BmHgEGBwaBZYFnKoE7ATIohBaTQ?=
- =?us-ascii?q?gECAQEBBoE1iVGPJIFnCQEBAQEBAQEBATQBAgEBhEACgkkjOBMBAwEBAQQBA?=
- =?us-ascii?q?QEBAwEBbCiCOikBgmYBAQEBAgEjFToFAhALDgoCAiYCAlcGDQYCAQGCXz+Bd?=
- =?us-ascii?q?wUPqzWBMYhrgUaBDCiLXRd4gQeBOIJrPoN+LoMiglgElB6VLgmCEoIbkSsGG?=
- =?us-ascii?q?4ImiwqJfKV7IYFYKwgCGAghD4MnghsXjjwjAzCBBgEBjWqCQwEB?=
-Received: from tarius.tycho.ncsc.mil ([144.51.242.1])
-  by EMSM-GH1-UEA10.NCSC.MIL with ESMTP; 13 Jun 2019 18:46:32 +0000
-Received: from moss-pluto.infosec.tycho.ncsc.mil (moss-pluto [192.168.25.131])
-        by tarius.tycho.ncsc.mil (8.14.4/8.14.4) with ESMTP id x5DIkUSV011773;
-        Thu, 13 Jun 2019 14:46:31 -0400
-From:   Stephen Smalley <sds@tycho.nsa.gov>
-Subject: Re: What do LSMs *actually* need for checks on notifications?
-To:     David Howells <dhowells@redhat.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Andy Lutomirski <luto@kernel.org>, viro@zeniv.linux.org.uk,
-        linux-usb@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>
-References: <05ddc1e6-78ba-b60e-73b1-ffe86de2f2f8@tycho.nsa.gov>
- <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk>
- <31009.1560262869@warthog.procyon.org.uk>
- <25045.1560339786@warthog.procyon.org.uk>
-Message-ID: <deef1cbd-993e-78e4-396f-0f80b4da4668@tycho.nsa.gov>
-Date:   Thu, 13 Jun 2019 14:46:30 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <25045.1560339786@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=ntyU81TkyEJi0U0KfIlv21oVqbkT3seZuV3ZHEbCLg0=;
+        b=ofFUL+LiZ9kIXWQ4J7Dcze8i6L5hceX6pezSH7NhdnkCZJ85S5vnKlqsL0BcEzQPiW
+         qlP4ktK+B1nc3Pi4fONorwTU/VA4iBZJDHqakw7eHXQuYApUDcyLmLRCllFsd5QFXqQB
+         r+t2VQDJjE6EhXkRCkLMRd73dCxseToUguQ7awSocYdQetAYlPbp7ZhiDGgtkSdZEBqP
+         P1j3qsQzDs2LUgJB4scduWO/S2EYLSdCRlV/VuBds7UhQ8Ki+flUvyyCwdyzLnRBOFmL
+         AfBOTxj/o7lQeAVq9xE8+1o/HmgYetiDmrgLTh8eVHxDNJ2MgLZKaIBoc2C0CKQoGvGN
+         g/Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=ntyU81TkyEJi0U0KfIlv21oVqbkT3seZuV3ZHEbCLg0=;
+        b=AGfqu2lMXMUSM87HzUCy4rtFeXURbbbNybuSbNGid9S718WyIcyc6D3ZyCSYv7aaMy
+         aKaopsAzNZ1aMxfX9+z66f7zkbnhIzPASDQrWlzqf89pKxizBMaqTZ3F8ThN2z78fu76
+         xmvVIbjIYdFIatdEIuxssirC572SAxL9JR2WhHfNNuD+JfJuhF+aboiroTbqP8A5OEt4
+         U6jqnXbHNcec8dcn4yL6KROi8e0po/MAShBBO7ho/JV9Q/Y4J4tz4GvIZoseoDf84Ueo
+         d+EL8PwM+cQqZmwgABryBjJ9AQwAN3Jbhv+WI4T6046zhc+w2UqqNKukLWvs/m5NJ2R/
+         EMpg==
+X-Gm-Message-State: APjAAAWGT58iiFlbIALbwsey02iGbUhcWomvSKKG1mcUi8CFBLJP1mPD
+        gZ/eDGyYvtiqbK2PBBEJ16Qss+xiPg==
+X-Google-Smtp-Source: APXvYqxjBX8LnwyXeiyTURsJrIQW3A2EGmGNcDL2ydL2gF/CBr+jJ3LhGWPYKiqfVbKMGzkKhV8fhOf1Ow==
+X-Received: by 2002:a0d:db08:: with SMTP id d8mr29509096ywe.242.1560452322698;
+ Thu, 13 Jun 2019 11:58:42 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 11:58:38 -0700
+In-Reply-To: <20190613184450.GA896@kroah.com>
+Message-Id: <20190613185838.251806-1-nhuck@google.com>
+Mime-Version: 1.0
+References: <20190613184450.GA896@kroah.com>
+X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
+Subject: [PATCH] usb: host: xhci-tegra: Fix Wunused-const-variable
+From:   Nathan Huckleberry <nhuck@google.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Nathan Huckleberry <nhuck@google.com>,
+        clang-built-linux@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/12/19 7:43 AM, David Howells wrote:
-> Stephen Smalley <sds@tycho.nsa.gov> wrote:
-> 
->>>    (6) The security attributes of all the objects between the object in (5)
->>>        and the object in (4), assuming we work from (5) towards (4) if the
->>>        two aren't coincident (WATCH_INFO_RECURSIVE).
->>
->> Does this apply to anything other than mount notifications?
-> 
-> Not at the moment.  I'm considering making it such that you can make a watch
-> on a keyring get automatically propagated to keys that get added to the
-> keyring (and removed upon unlink) - the idea being that there is no 'single
-> parent path' concept for a keyring as there is for a directory.
-> 
-> I'm also pondering the idea of making it possible to have superblock watches
-> automatically propagated to superblocks created by automount points on the
-> watched superblock.
+Clang produces the following warning
 
-So at the point where you can set a watch on one object O1 with label X, 
-and receive notifications triggered upon operations on another object O2 
-with label Y, we have to consider whether the relationship between X and 
-Y is controlled in any way (possibly transitively through a series of 
-checks performed earlier) and whether we can reasonably infer that the 
-authorization to watch X implies the ability to be notified of 
-operations on Y.  Not a problem for the mount notifications AFAICS 
-because there is only truly one object - the mount namespace itself, and 
-it is always our own.
+drivers/usb/host/xhci-tegra.c:357:27: warning: unused variable
+'mbox_cmd_name' [-Wunused-const-variable]
+static const char * const mbox_cmd_name[] = {
 
-> 
->> And for mount notifications, isn't the notification actually for a change to
->> the mount namespace, not a change to any file?
-> 
-> Yes.
-> 
->> Hence, the real "object" for events that trigger mount notifications is the
->> mount namespace, right?
-> 
-> Um... arguably.  Would that mean that that would need a label from somewhere?
+Looks like it was intended for logging or debugging, but was
+never implemented. Removing mbox_cmd_name.
 
-That takes us into the whole question of whether namespaces should be 
-labeled (presumably from their creator), and the association between 
-processes and their namespaces should be controlled.  I think when we 
-originally looked at them, it wasn't much of a concern since the only 
-means of creating a new namespace and associating with it was via 
-clone() and then later also via unshare().  /proc/pid/ns and setns() 
-changed that picture, but still requires ptrace read mode access, which 
-at least provides some control over entering namespaces created by 
-others. I suspect that ultimately we want namespaces to be labeled and 
-controlled but that isn't your problem to solve here.
+Cc: clang-built-linux@googlegroups.com
+Link: https://github.com/ClangBuiltLinux/linux/issues/533
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+---
+ drivers/usb/host/xhci-tegra.c | 23 -----------------------
+ 1 file changed, 23 deletions(-)
 
-For your purposes, a process is setting a watch on its own namespace, 
-and it already inherently can observe changes to that namespace without 
-needing watches/notifications, and it can modify that namespace iff 
-privileged wrt to the namespace.  One might argue that no check is 
-required at all for setting the watch, and at most, it would be a check 
-between the process and its own label to match the checking when 
-accessing /proc/self/mounts. That presumes that no additional 
-information is conveyed via the notification that isn't already 
-available from /proc/self/mounts, particularly any information specific 
-to the process that triggered the notification.  Does that make sense?
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 294158113d62..dafc65911fc0 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -354,29 +354,6 @@ enum tegra_xusb_mbox_cmd {
+ 	MBOX_CMD_NAK
+ };
+ 
+-static const char * const mbox_cmd_name[] = {
+-	[  1] = "MSG_ENABLE",
+-	[  2] = "INC_FALCON_CLOCK",
+-	[  3] = "DEC_FALCON_CLOCK",
+-	[  4] = "INC_SSPI_CLOCK",
+-	[  5] = "DEC_SSPI_CLOCK",
+-	[  6] = "SET_BW",
+-	[  7] = "SET_SS_PWR_GATING",
+-	[  8] = "SET_SS_PWR_UNGATING",
+-	[  9] = "SAVE_DFE_CTLE_CTX",
+-	[ 10] = "AIRPLANE_MODE_ENABLED",
+-	[ 11] = "AIRPLANE_MODE_DISABLED",
+-	[ 12] = "START_HSIC_IDLE",
+-	[ 13] = "STOP_HSIC_IDLE",
+-	[ 14] = "DBC_WAKE_STACK",
+-	[ 15] = "HSIC_PRETEND_CONNECT",
+-	[ 16] = "RESET_SSPI",
+-	[ 17] = "DISABLE_SS_LFPS_DETECTION",
+-	[ 18] = "ENABLE_SS_LFPS_DETECTION",
+-	[128] = "ACK",
+-	[129] = "NAK",
+-};
+-
+ struct tegra_xusb_mbox_msg {
+ 	u32 cmd;
+ 	u32 data;
+-- 
+2.22.0.rc2.383.gf4fbbf30c2-goog
 
-> 
->> The watched path is just a way of identifying a subtree of the mount
->> namespace for notifications - it isn't the real object being watched.
-> 
-> I like that argument.
-> 
-> Thanks,
-> David
-> 
