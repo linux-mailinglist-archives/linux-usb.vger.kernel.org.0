@@ -2,151 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 519734580D
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 10:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AF945845
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 11:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbfFNI63 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jun 2019 04:58:29 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:38458 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726255AbfFNI62 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jun 2019 04:58:28 -0400
-Received: by mail-wr1-f65.google.com with SMTP id d18so1652610wrs.5
-        for <linux-usb@vger.kernel.org>; Fri, 14 Jun 2019 01:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nQzfi5pCNjbWy0L+GM97E8S0hKWGfnv4Ct4OLdEoTWQ=;
-        b=ygwDU90/bi1g10z7gM0VCKByS/vE0RY0Mqms4KLT+5oQ8yni0T9alBS4/LbqjjUU8O
-         CMduCLq82OBf0/FCW23pRrjy6MPK3NlzWhoH2X2Kx0CLV8aegxIuYVPevaekx8eHrss1
-         2SsMq88cy1p8HtUW4cQ2/e6dTbgSu/GBTp5TI5V2dUrTXe+7OJOUBrkdFyYnltCRimqR
-         grgDVsfyIznazMBGeb/RtN+LCMdoksG65JataHHx8nXm9CigDVyvIA5ne0TRENQz3BVl
-         fgX4hegRPe7emSbCUv+wQJZP8+VsTYA+Eaf1zHePeoAuTmsOtbHKRWfi2ktbxcpBxAcs
-         9chg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nQzfi5pCNjbWy0L+GM97E8S0hKWGfnv4Ct4OLdEoTWQ=;
-        b=b/AEg832nBLiubo+eNq5b0WYjrU/oc7zb+MsxlxwtbKP19FpqWMmxPtOKOB4ZOwDVn
-         ZQI7blJNCehdRaW8DJGnHk5eW6YfvHRjkoaXmfzMS060RPGpuc3C7jd7FWBjxj6dagN4
-         SKHKxY2GeQ8JgbKgYOCUeJFe37tO0YqYwOALL3KEur2PRh8uugkOvqG2lt46fkHAkRNW
-         6ua5ZSATWkbzMotkwigCWbeAcaDLokpY1Rz1b1v0j8/vCjWOdZ9SPoywZlvMz7w+625b
-         rkEBgK5cCJp+asF2weYvgVuR5GTPmizPodKJ12krRIm6aBeVz+yzmPShFjb9EsskRHdx
-         qHbA==
-X-Gm-Message-State: APjAAAVenjjjl62SfDChoDOIIHdEot637bjWRxX9o+i/HSNcCdebFahy
-        SGTgB487lYgwqSJvoxXOLMELZvNJmUOKgA==
-X-Google-Smtp-Source: APXvYqw485uYVt+kqDbpQ0wxUDiPbGSM8KdkwxJABu2kHY2ceJEAOlsM1vw93IQ0cwpPB9fhmy66qw==
-X-Received: by 2002:adf:a749:: with SMTP id e9mr64394856wrd.64.1560502706508;
-        Fri, 14 Jun 2019 01:58:26 -0700 (PDT)
-Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id c2sm2178672wrf.75.2019.06.14.01.58.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 14 Jun 2019 01:58:25 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     balbi@kernel.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2] usb: dwc3: meson-g12a: Add support for IRQ based OTG switching
-Date:   Fri, 14 Jun 2019 10:58:24 +0200
-Message-Id: <20190614085824.23307-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.21.0
+        id S1727032AbfFNJJd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jun 2019 05:09:33 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:1261 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726083AbfFNJJc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jun 2019 05:09:32 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d03644b0000>; Fri, 14 Jun 2019 02:09:31 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 14 Jun 2019 02:09:30 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 14 Jun 2019 02:09:30 -0700
+Received: from localhost (10.124.1.5) by HQMAIL107.nvidia.com (172.20.187.13)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 14 Jun 2019 09:09:29
+ +0000
+Date:   Fri, 14 Jun 2019 11:09:27 +0200
+From:   Thierry Reding <treding@nvidia.com>
+To:     Nathan Huckleberry <nhuck@google.com>
+CC:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <clang-built-linux@googlegroups.com>
+Subject: Re: Cleanup of -Wunused-const-variable in
+ drivers/usb/host/xhci-tegra.c
+Message-ID: <20190614090926.GB14954@ulmo>
+References: <CAJkfWY4nKwyPDh=MuCURst2SZceceeR2v3qrT9UY=VbvLnEmFg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJkfWY4nKwyPDh=MuCURst2SZceceeR2v3qrT9UY=VbvLnEmFg@mail.gmail.com>
+X-NVConfidentiality: public
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="p4qYPpj5QlsIQJ0K"
+Content-Disposition: inline
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560503371; bh=NPpw3g7qJwORXH5hMJclNUm2tbMB0d7doKYfsHOg8pE=;
+        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
+         MIME-Version:In-Reply-To:X-NVConfidentiality:User-Agent:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:
+         Content-Disposition;
+        b=qvDhRojV/C+y2ywvNC6e4ah8nVRW1G8qKbom1K4ep04P/sp6bWcwwpwhY7knEGWJP
+         wDe555zTeqjuzfxYkQhVHy0oZJgDcS2mWHF4veDa1Xy7vWEFN/o0DwOL8wd8Q8LfSA
+         /5hqz3spsa0Bfmz5iUeo2HzCn/0sSNVxDM9p4ojZlkhsiKU3m7Kkl2F6Xmhvp3BQZx
+         UbD0OCUk8Ka6NZm87Xig198n8ljAb+bXrXpvnEJAzh2x/369RNfXVxrofQdh/6Mk+b
+         0bcUCE9Ke42pAphU1IuneJ7zqVjZA1kOYU0ovPKj1tH2/ICqr1s/XDJ7URDVVFFWPR
+         AfuhMjPGnRIOQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for the OTG ID change interrupt to switch between Host
-and Device mode.
+--p4qYPpj5QlsIQJ0K
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested on the Hardkernel Odroid-N2 board.
+On Thu, Jun 13, 2019 at 11:38:38AM -0700, Nathan Huckleberry wrote:
+> Hey all,
+>=20
+> I'm looking into cleaning up ignored warnings in the kernel so we can
+> remove compiler flags to ignore warnings.
+>=20
+> There's an unused variable ('mbox_cmd_name') in xhci-tegra.c. Looks
+> like it was intended for logging or debugging, but never used. Just
+> wanted to reach out to ask the best steps for cleaning this up.
+>=20
+> If the variable is no longer needed I'd like to send a patch to remove it.
+>=20
+> https://github.com/ClangBuiltLinux/linux/issues/533
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/usb/dwc3/dwc3-meson-g12a.c | 36 +++++++++++++++++++++++++-----
- 1 file changed, 31 insertions(+), 5 deletions(-)
+Feel free to send that patch. If we ever need this debug information
+again we can easily add it back by reverting.
 
-diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-index 2aec31a2eacb..bca7e92a10e9 100644
---- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-+++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-@@ -11,9 +11,7 @@
-  * - Control registers for each USB2 Ports
-  * - Control registers for the USB PHY layer
-  * - SuperSpeed PHY can be enabled only if port is used
-- *
-- * TOFIX:
-- * - Add dynamic OTG switching with ID change interrupt
-+ * - Dynamic OTG switching with ID change interrupt
-  */
- 
- #include <linux/module.h>
-@@ -348,6 +346,22 @@ static enum usb_role dwc3_meson_g12a_role_get(struct device *dev)
- 		USB_ROLE_HOST : USB_ROLE_DEVICE;
- }
- 
-+static irqreturn_t dwc3_meson_g12a_irq_thread(int irq, void *data)
-+{
-+	struct dwc3_meson_g12a *priv = data;
-+	enum phy_mode otg_id;
-+
-+	otg_id = dwc3_meson_g12a_get_id(priv);
-+	if (otg_id != priv->otg_phy_mode) {
-+		if (dwc3_meson_g12a_otg_mode_set(priv, otg_id))
-+			dev_warn(priv->dev, "Failed to switch OTG mode\n");
-+	}
-+
-+	regmap_update_bits(priv->regmap, USB_R5, USB_R5_ID_DIG_IRQ, 0);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static struct device *dwc3_meson_g12_find_child(struct device *dev,
- 						const char *compatible)
- {
-@@ -374,7 +388,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 	void __iomem *base;
- 	struct resource *res;
- 	enum phy_mode otg_id;
--	int ret, i;
-+	int ret, i, irq;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -436,6 +450,19 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 	/* Get dr_mode */
- 	priv->otg_mode = usb_get_dr_mode(dev);
- 
-+	if (priv->otg_mode == USB_DR_MODE_OTG) {
-+		/* Ack irq before registering */
-+		regmap_update_bits(priv->regmap, USB_R5,
-+				   USB_R5_ID_DIG_IRQ, 0);
-+
-+		irq = platform_get_irq(pdev, 0);
-+		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+						dwc3_meson_g12a_irq_thread,
-+						IRQF_ONESHOT, pdev->name, priv);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	dwc3_meson_g12a_usb_init(priv);
- 
- 	/* Init PHYs */
-@@ -460,7 +487,6 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 
- 	/* Setup OTG mode corresponding to the ID pin */
- 	if (priv->otg_mode == USB_DR_MODE_OTG) {
--		/* TOFIX Handle ID mode toggling via IRQ */
- 		otg_id = dwc3_meson_g12a_get_id(priv);
- 		if (otg_id != priv->otg_phy_mode) {
- 			if (dwc3_meson_g12a_otg_mode_set(priv, otg_id))
--- 
-2.21.0
+Thierry
 
+--p4qYPpj5QlsIQJ0K
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl0DZEYACgkQ3SOs138+
+s6F0tw//W5cSvT/bzIDSSWLG2gWjBGan521TaQV9D62U4c5bYKIDMGBGyXKIQkPC
+yL81T65cFTzuAD/+4isvxTihI42lYK5CbI1JyjKdE2SGjrMOQQkrm7+O02FGye4w
+TDje5ir0HRUx2KtjfuDbjvRKlUY3Q/gp8255k4KPSY3ZozepzO1FrjaaXMew6bn1
+xcWtVh8LVqcsGbP0Ifp0bMrHx7mKHajEnhtPtevnH1/11ELJE86l/iOOekjL151m
+feA9Vs5v4NB84NRFE3HVx9c5N8DBdmuLfDHgrECIbP/xvbgGrqKQi+6a0cZOMZcB
+LJ9oTATYH/FpbmFOg7MCrfjkU4eKP6xVUjL+Y3qD7iha7IWuWxGuK+QtrWhq3Bxq
+qiE4r5eFdRVAu44dl0GoNIuNzlHqiuOvZ52DyTzHuBqEkyLYQYm4NqHsFgjHMwnd
+cz2oALUYAcrhFv8qfSVeqDIg23PK7ulrAt2hBUaDDDD8hYOc2WIdVw3xg7wCa9qb
+ZW07rRakhLV1xsoIhcbKhKzSpVNymchyI5HvrRQyY5nVdx99N4dyHO6rDrMHWAQE
+VUautrjtchnOkHpIPQi+rkcZjCqtGK1GNfpljSP42WSZCYeOZJMoFbkdfU5AVRVu
+wSxU5NEnY4uo4Xm31cvUXd+DU14SuF+kicc02+fU9GuKnVfc/Is=
+=BAJT
+-----END PGP SIGNATURE-----
+
+--p4qYPpj5QlsIQJ0K--
