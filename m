@@ -2,130 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EFD46696
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 19:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F4846792
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 20:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727628AbfFNRzW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jun 2019 13:55:22 -0400
-Received: from foss.arm.com ([217.140.110.172]:39624 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727611AbfFNRzW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Jun 2019 13:55:22 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3124DCFC;
-        Fri, 14 Jun 2019 10:55:21 -0700 (PDT)
-Received: from en101.cambridge.arm.com (en101.cambridge.arm.com [10.1.196.93])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1358C3F718;
-        Fri, 14 Jun 2019 10:55:19 -0700 (PDT)
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        suzuki.poulose@arm.com, linux-usb@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Subject: [PATCH v2 19/28] drivers: Introduce bus_find_device_by_devt() helper
-Date:   Fri, 14 Jun 2019 18:54:14 +0100
-Message-Id: <1560534863-15115-20-git-send-email-suzuki.poulose@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1560534863-15115-1-git-send-email-suzuki.poulose@arm.com>
-References: <1560534863-15115-1-git-send-email-suzuki.poulose@arm.com>
+        id S1725886AbfFNScW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jun 2019 14:32:22 -0400
+Received: from mail-pf1-f177.google.com ([209.85.210.177]:33187 "EHLO
+        mail-pf1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725809AbfFNScV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jun 2019 14:32:21 -0400
+Received: by mail-pf1-f177.google.com with SMTP id x15so1956732pfq.0
+        for <linux-usb@vger.kernel.org>; Fri, 14 Jun 2019 11:32:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=HGCoVIRjEmqG61oMegqr7r3yd4XZdAs4EdJ3aivpW/k=;
+        b=T71CzyYaR5pPS04+6iy/aty4COZvz5D3FigaZfxnx/a4+niAebs8C9JoDjNhxvzYQo
+         y/sxd5aWLUFqogYhj1lqnjlIQnDk9Ac5Z3Cohbg6Vls1i7kqNWng/T3ZKpWbrgUTy7AN
+         1oOSVSfzfF1vXMGwB2FRmNmKFTu1gnmWUcEe7LOMcF8ewKmcjfA9TSF9r5wB3QWu49PP
+         ZB0C/CWSP+L+wjahV7ilcefr/cAuENLu2Tj01i2f1GAslHWrii/dK5D6Pk+aW65ZhZml
+         cQAoPaqXjpp7oA2Oqz/qxBEIPKqkWbbMHgL6aRICnd4Ycojk5k3y3ofsvNLUfNpnya1Y
+         Sw6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=HGCoVIRjEmqG61oMegqr7r3yd4XZdAs4EdJ3aivpW/k=;
+        b=HmhSH3AXHjvIdAeAmtCTUyXilvF1vGd5HZWFlpHXJTMf/h7j90Hql++VglaV59lLps
+         gTumcuZiQDwswjbYn3csj+9WzW9SHybZeLORS0gLd7JP22mjM5Mgy2663jq4UyWPzhVN
+         LTXcoFlmrfyEdL/XF0Pygq5yJ3ue+/mNTaIx41M5Z9D+YWbR6imil3ERpC0+R1jLWuBk
+         bCVPPDRd6it0me9RAqF+I9qsCJfaOCWRahlt/fBH0DjeO4mGpUu+ZmQtyjy3Is3aJpY2
+         1lUULlaPz3E4Gc2vFg9pazhW7m7UXw1ET4v2kgZ788iF4I2v31rfo6Gu2nkGACPNrMAz
+         hcmA==
+X-Gm-Message-State: APjAAAUv/un3zjfNk2Eurzvqd7lFOuISXQNqrgZLhSBc2FWnhFqYSvIF
+        40z0MSJo6ZIIETxQ2zRLG3i+
+X-Google-Smtp-Source: APXvYqwItCJJYwfaLZG36WF148Qa910FBc1J9QhPVpAA/wYK8gaAM9gDUPT6Ii1KFJGtGPQ/9p73jg==
+X-Received: by 2002:a17:90a:1904:: with SMTP id 4mr12893672pjg.116.1560537140466;
+        Fri, 14 Jun 2019 11:32:20 -0700 (PDT)
+Received: from Mani-XPS-13-9360 ([2409:4072:997:5d95:bdd9:1134:3bdd:7ab4])
+        by smtp.gmail.com with ESMTPSA id j2sm3370153pgq.13.2019.06.14.11.32.16
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 14 Jun 2019 11:32:19 -0700 (PDT)
+Date:   Sat, 15 Jun 2019 00:02:13 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-actions@lists.infradead.org,
+        afaerber@suse.de
+Subject: DWC3 USB hub issue
+Message-ID: <20190614183213.GB29654@Mani-XPS-13-9360>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a wrapper to bus_find_device() to search for a device
-by the device type, reusing the generic match function.
-Also convert the existing users to make use of the new helper.
+Hello,
 
-Cc: linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
----
- drivers/hwtracing/intel_th/core.c | 10 +---------
- drivers/usb/core/devio.c          |  8 +-------
- include/linux/device.h            | 12 ++++++++++++
- 3 files changed, 14 insertions(+), 16 deletions(-)
+I'm trying to upstream Designware USB3 host driver present in the Actions
+Semi S900 SoC. It can successfully detect the USB hub but when any of the
+USB device got plugged in, it fails with following error:
 
-diff --git a/drivers/hwtracing/intel_th/core.c b/drivers/hwtracing/intel_th/core.c
-index 5592289..d5c1821 100644
---- a/drivers/hwtracing/intel_th/core.c
-+++ b/drivers/hwtracing/intel_th/core.c
-@@ -789,12 +789,6 @@ static int intel_th_populate(struct intel_th *th)
- 	return 0;
- }
- 
--static int match_devt(struct device *dev, const void *data)
--{
--	dev_t devt = (dev_t)(unsigned long)(void *)data;
--	return dev->devt == devt;
--}
--
- static int intel_th_output_open(struct inode *inode, struct file *file)
- {
- 	const struct file_operations *fops;
-@@ -802,9 +796,7 @@ static int intel_th_output_open(struct inode *inode, struct file *file)
- 	struct device *dev;
- 	int err;
- 
--	dev = bus_find_device(&intel_th_bus, NULL,
--			      (void *)(unsigned long)inode->i_rdev,
--			      match_devt);
-+	dev = bus_find_device_by_devt(&intel_th_bus, inode->i_rdev);
- 	if (!dev || !dev->driver)
- 		return -ENODEV;
- 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 7bd7de7..4e83623 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -947,17 +947,11 @@ static int parse_usbdevfs_streams(struct usb_dev_state *ps,
- 	return ret;
- }
- 
--static int match_devt(struct device *dev, const void *data)
--{
--	return dev->devt == (dev_t)(unsigned long)(void *)data;
--}
--
- static struct usb_device *usbdev_lookup_by_devt(dev_t devt)
- {
- 	struct device *dev;
- 
--	dev = bus_find_device(&usb_bus_type, NULL,
--			      (void *) (unsigned long) devt, match_devt);
-+	dev = bus_find_device_by_devt(&usb_bus_type, devt);
- 	if (!dev)
- 		return NULL;
- 	return to_usb_device(dev);
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 576d84f..3c244ac 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -213,6 +213,18 @@ bus_find_device_by_fwnode(struct bus_type *bus, const struct fwnode_handle *fwno
- 	return bus_find_device(bus, NULL, fwnode, device_match_fwnode);
- }
- 
-+/**
-+ * bus_find_device_by_devt : device iterator for locating a particular device
-+ * matching the device type.
-+ * @bus: bus type
-+ * @devt: device type of the device to match.
-+ */
-+static inline struct device *bus_find_device_by_devt(struct bus_type *bus,
-+						     dev_t devt)
-+{
-+	return bus_find_device(bus, NULL, &devt, device_match_devt);
-+}
-+
- struct device *subsys_find_device_by_id(struct bus_type *bus, unsigned int id,
- 					struct device *hint);
- int bus_for_each_drv(struct bus_type *bus, struct device_driver *start,
--- 
-2.7.4
+[    4.365566] usb usb1-port1: connect-debounce failed
 
+Full log can be found here: https://pastebin.ubuntu.com/p/PNff5fZkn6/
+
+Below is the output of, lsusb -v:
+
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            9 Hub
+  bDeviceSubClass         0 Unused
+  bDeviceProtocol         3 
+  bMaxPacketSize0         9
+  idVendor           0x1d6b Linux Foundation
+  idProduct          0x0003 3.0 root hub
+  bcdDevice            5.02
+  iManufacturer           3 Linux 5.2.0-rc3-00032-gbd970cfc7a82-dirty xhci-hcd
+  iProduct                2 xHCI Host Controller
+  iSerial                 1 xhci-hcd.0.auto
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength           31
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9 Hub
+      bInterfaceSubClass      0 Unused
+      bInterfaceProtocol      0 Full speed (or root) hub
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0004  1x 4 bytes
+        bInterval              12
+        bMaxBurst               0
+Hub Descriptor:
+  bLength              12
+  bDescriptorType      42
+  nNbrPorts             1
+  wHubCharacteristic 0x000a
+    No power switching (usb 1.0)
+    Per-port overcurrent protection
+  bPwrOn2PwrGood       10 * 2 milli seconds
+  bHubContrCurrent      0 milli Ampere
+  bHubDecLat          0.0 micro seconds
+  wHubDelay             0 nano seconds
+  DeviceRemovable    0x00
+ Hub Port Status:
+   Port 1: 0000.02a0 5Gbps power Rx.Detect
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength           15
+  bNumDeviceCaps          1
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x02
+      Latency Tolerance Messages (LTM) Supported
+    wSpeedsSupported   0x0008
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   3
+      Lowest fully-functional device speed is SuperSpeed (5Gbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+Device Status:     0x0001
+  Self Powered
+
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+Devicetree snippet:
+
+                usbdrd3_0: usb@e0400000 {
+                        compatible = "actions,s900-dwc3";
+                        clocks = <&cmu CLK_USB3_480MPLL0>,
+                                 <&cmu CLK_USB3_480MPHY0>,
+                                 <&cmu CLK_USB3_5GPHY>,
+                                 <&cmu CLK_USB3_CCE>,
+                                 <&cmu CLK_USB3_MAC>;
+                        clock-names = "usb3_480mpll0", "usb3_480mphy0",
+                                      "usb3_5gphy", "usb3_cce",
+                                      "usb3_mac";
+                        resets  = <&cmu RESET_USB3>;
+                        reset-names = "usb3";
+                        power-domains = <&sps S900_PD_USB3>;
+                        #address-cells = <2>;
+                        #size-cells = <2>;
+                        ranges;
+
+                        usbdrd_dwc3_0: dwc3 {
+                                compatible = "snps,dwc3";
+                                reg = <0x0 0xe0400000 0x0 0x100000>;
+                                interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
+                                usb-phy = <&usb2_phy>, <&usb3_phy>;
+                                dr_mode = "host";
+                                power-domains = <&sps S900_PD_USB3>;
+                                snps,hsphy_interface = "utmi";
+                        };
+                };
+
+After going through the mailing list looking for similar issue, found that
+some host controllers works with following quirk:
+
+snps,dis_u3_susphy_quirk;
+
+I tried that also but it didn't work. Can anyone shed some light on this?
+
+PS: USB3 is working fine with vendor kernel 3.10.
+
+Thanks,
+Mani
