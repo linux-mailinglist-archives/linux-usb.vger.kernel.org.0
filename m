@@ -2,117 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA29B4550F
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 08:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E0345525
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 08:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726052AbfFNGxI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jun 2019 02:53:08 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:49834 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725834AbfFNGxH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jun 2019 02:53:07 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190614065305euoutp02c73808c461fe90a8b29e6ef35ea5b750~n-hptJzfh1797717977euoutp02F;
-        Fri, 14 Jun 2019 06:53:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190614065305euoutp02c73808c461fe90a8b29e6ef35ea5b750~n-hptJzfh1797717977euoutp02F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1560495185;
-        bh=T/897ffO/UeNImnMGoYZqvW9BMN4qL2AJzoKTbQUbMk=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=FIzE/crp6pNNvCFAFH5syzqWDWs8tSMRNEh5XVPAPklq+C0Ku+no8HjFwpH6vJL7V
-         AbjzyM8sRdetPtCdJtAnN82blaL6uPDFLZLSr+dOsfVmVtEhkEbSQ83/eE6r1wDco3
-         efiYRjiSYQU/fKhtKMoQYkd55S1YmCLQpXdPzH5I=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190614065304eucas1p17bdedd73d25a018f3a33a205866274dd~n-hpQTzhD1340313403eucas1p1y;
-        Fri, 14 Jun 2019 06:53:04 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 83.77.04377.054430D5; Fri, 14
-        Jun 2019 07:53:04 +0100 (BST)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190614065304eucas1p1ad98abc5c0f5e5e94fa43bed7e7d0e4f~n-hoklhSx0061500615eucas1p1y;
-        Fri, 14 Jun 2019 06:53:04 +0000 (GMT)
-X-AuditID: cbfec7f4-12dff70000001119-50-5d034450069d
-Received: from eusync1.samsung.com ( [203.254.199.211]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 4E.C6.04146.054430D5; Fri, 14
-        Jun 2019 07:53:04 +0100 (BST)
-Received: from AMDC2765.DIGITAL.local ([106.120.51.73]) by
-        eusync1.samsung.com (Oracle Communications Messaging Server 7.0.5.31.0 64bit
-        (built May  5 2014)) with ESMTPA id <0PT200GBBTSBAO70@eusync1.samsung.com>;
-        Fri, 14 Jun 2019 07:53:04 +0100 (BST)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2] usb: dwc2: Force 8bit UTMI width for Samsung Exynos SoCs
-Date:   Fri, 14 Jun 2019 08:52:53 +0200
-Message-id: <20190614065253.9622-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDIsWRmVeSWpSXmKPExsWy7djPc7oBLsyxBod7lCw2zljPajH/ZpJF
-        46+97BazZpxmtTh/fgO7xeVdc9gsZpzfx2SxaFkrs8XaI3fZHTg9Tq+/yeixaVUnm8e8k4Ee
-        fVtWMXps2f+Z0ePzJrkAtigum5TUnMyy1CJ9uwSujCenD7MUvGOvaP3+i7WB8SpbFyMnh4SA
-        icS+HT1ANheHkMAKRonNP29COZ8ZJS43dzJ2MXKAVf3/7w0RX8YoceXhRSYI5z+jxPP5x5lA
-        RrEJGEp0ve0CGysikCBxZPN7ZhCbWaCPSeJ+uyaILSzgI3F0014mkKEsAqoSi8+XgYR5BWwk
-        Pr1dwgRxkbzE6g0HmEHmSwg0skmcWf8Q6ggXiSUNfhA1MhKdHQeZIGqaGSUenlvLDuH0AF3d
-        NIMRospa4vDxi6wQR/BJTNo2nRliEK9ER5sQRImHxIHOl+wgtpBArMRSoPsnMIovYGRYxSie
-        Wlqcm55abJSXWq5XnJhbXJqXrpecn7uJERhnp/8d/7KDcdefpEOMAhyMSjy8B6yYYoVYE8uK
-        K3MPMUpwMCuJ8M6zZo4V4k1JrKxKLcqPLyrNSS0+xCjNwaIkzlvN8CBaSCA9sSQ1OzW1ILUI
-        JsvEwSnVwBiwKPAAz0GGBb6/pBI/FTJtZpvF4G7Coivm4124qOFJQfbFsxe2bli/9eXifVX3
-        Sww7TD++CbzxvzFFSfx9jsiOV/HfOTdx3lbaEHrqCtf5i9Vae6tuFFpLz9q4X6zeFqjIz/vK
-        84pNMmpGpWzpc49e/iWzwXRn5VwBmQkbkmy8XL6WHe0+r8RSnJFoqMVcVJwIALDKyFyvAgAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFJMWRmVeSWpSXmKPExsVy+t/xy7oBLsyxBhcOsFpsnLGe1WL+zSSL
-        xl972S1mzTjNanH+/AZ2i8u75rBZzDi/j8li0bJWZou1R+6yO3B6nF5/k9Fj06pONo95JwM9
-        +rasYvTYsv8zo8fnTXIBbFFcNimpOZllqUX6dglcGU9OH2YpeMde0fr9F2sD41W2LkYODgkB
-        E4n//727GLk4hASWMEqsWdfA3sXICeQ0Mkk82OYEYrMJGEp0ve1iA7FFBBIklrzdzA7SwCww
-        gUliz5nHYAlhAR+Jo5v2MoEMZRFQlVh8vgwkzCtgI/Hp7RImEFtCQF5i9YYDzBMYuRYwMqxi
-        FEktLc5Nzy021CtOzC0uzUvXS87P3cQIDJFtx35u3sF4aWPwIUYBDkYlHt4DVkyxQqyJZcWV
-        uYcYJTiYlUR451kzxwrxpiRWVqUW5ccXleakFh9ilOZgURLn7RA4GCMkkJ5YkpqdmlqQWgST
-        ZeLglGpgtH0Qf8/h0Fe+xw15vpuc84Xsg8qzylcx/GqaotM6/0Kaiv//MM6Sdfkz9nMvP8Ky
-        eLWcRVnSDfm435/6D1TfiXumdfSHxxHtU2IyUclbKxbvSc2QFeI+7S32zecy/46Si3O6zys3
-        fBSLnvBwjY+CYI3m4pJn+lzxes55KRo/vx+YvKSY/66wEktxRqKhFnNRcSIAsj0Jpw0CAAA=
-X-CMS-MailID: 20190614065304eucas1p1ad98abc5c0f5e5e94fa43bed7e7d0e4f
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190614065304eucas1p1ad98abc5c0f5e5e94fa43bed7e7d0e4f
-References: <CGME20190614065304eucas1p1ad98abc5c0f5e5e94fa43bed7e7d0e4f@eucas1p1.samsung.com>
+        id S1725996AbfFNG56 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jun 2019 02:57:58 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:34620 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725837AbfFNG56 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 Jun 2019 02:57:58 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id F32B259463;
+        Fri, 14 Jun 2019 06:57:57 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-17.pek2.redhat.com [10.72.8.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7AC7A39C3;
+        Fri, 14 Jun 2019 06:57:43 +0000 (UTC)
+Date:   Fri, 14 Jun 2019 14:57:38 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Finn Thain <fthain@telegraphics.com.au>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Oliver Neukum <oliver@neukum.org>
+Subject: Re: [PATCH V3 07/15] usb: image: microtek: use sg helper to operate
+ scatterlist
+Message-ID: <20190614065737.GB24393@ming.t460p>
+References: <20190614025316.7360-1-ming.lei@redhat.com>
+ <20190614025316.7360-8-ming.lei@redhat.com>
+ <alpine.LNX.2.21.1906141536000.33@nippy.intranet>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LNX.2.21.1906141536000.33@nippy.intranet>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Fri, 14 Jun 2019 06:57:58 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Samsung Exynos SoCs require to force UTMI width to 8bit, otherwise the
-host side of the shared USB2 PHY doesn't work.
+On Fri, Jun 14, 2019 at 03:39:10PM +1000, Finn Thain wrote:
+> On Fri, 14 Jun 2019, Ming Lei wrote:
+> 
+> > Use the scatterlist iterators and remove direct indexing of the
+> > scatterlist array.
+> > 
+> > This way allows us to pre-allocate one small scatterlist, which can be
+> > chained with one runtime allocated scatterlist if the pre-allocated one
+> > isn't enough for the whole request.
+> > 
+> > Cc: Oliver Neukum <oliver@neukum.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: linux-usb@vger.kernel.org
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> > ---
+> >  drivers/usb/image/microtek.c | 20 ++++++++------------
+> >  drivers/usb/image/microtek.h |  2 +-
+> >  2 files changed, 9 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
+> > index 607be1f4fe27..0a57c2cc8e5a 100644
+> > --- a/drivers/usb/image/microtek.c
+> > +++ b/drivers/usb/image/microtek.c
+> > @@ -488,7 +488,6 @@ static void mts_command_done( struct urb *transfer )
+> >  
+> >  static void mts_do_sg (struct urb* transfer)
+> >  {
+> > -	struct scatterlist * sg;
+> >  	int status = transfer->status;
+> >  	MTS_INT_INIT();
+> >  
+> > @@ -500,13 +499,12 @@ static void mts_do_sg (struct urb* transfer)
+> >  		mts_transfer_cleanup(transfer);
+> >          }
+> >  
+> > -	sg = scsi_sglist(context->srb);
+> > -	context->fragment++;
+> > +	context->curr_sg = sg_next(context->curr_sg);
+> >  	mts_int_submit_urb(transfer,
+> >  			   context->data_pipe,
+> > -			   sg_virt(&sg[context->fragment]),
+> > -			   sg[context->fragment].length,
+> > -			   context->fragment + 1 == scsi_sg_count(context->srb) ?
+> > +			   sg_virt(context->curr_sg),
+> > +			   context->curr_sg->length,
+> > +			   sg_is_last(context->curr_sg) ?
+> >  			   mts_data_done : mts_do_sg);
+> >  }
+> >  
+> > @@ -526,22 +524,20 @@ static void
+> >  mts_build_transfer_context(struct scsi_cmnd *srb, struct mts_desc* desc)
+> >  {
+> >  	int pipe;
+> > -	struct scatterlist * sg;
+> > -	
+> > +
+> >  	MTS_DEBUG_GOT_HERE();
+> >  
+> >  	desc->context.instance = desc;
+> >  	desc->context.srb = srb;
+> > -	desc->context.fragment = 0;
+> >  
+> >  	if (!scsi_bufflen(srb)) {
+> >  		desc->context.data = NULL;
+> >  		desc->context.data_length = 0;
+> >  		return;
+> >  	} else {
+> > -		sg = scsi_sglist(srb);
+> > -		desc->context.data = sg_virt(&sg[0]);
+> > -		desc->context.data_length = sg[0].length;
+> > +		desc->context.curr_sg = scsi_sglist(srb);
+> > +		desc->context.data = sg_virt(desc->context.curr_sg);
+> > +		desc->context.data_length = desc->context.curr_sg->length;
+> >  	}
+> >  
+> 
+> Would it not be better to initialize desc->context.curr_sg in both 
+> branches of this conditional?
 
-Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
-Fixes: 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif with phy_utmi_width")
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-Tested-by: Krzysztof Kozlowski <krzk@kernel.org>
----
-v2:
-- added collected tags
----
- drivers/usb/dwc2/params.c | 1 +
- 1 file changed, 1 insertion(+)
+I think either way is fine given desc->context.curr_sg is used only
+if 'context->data' isn't NULL, see mts_command_done().
 
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 6900eea57526..9ece4affb9d4 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -76,6 +76,7 @@ static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)
- 	struct dwc2_core_params *p = &hsotg->params;
- 
- 	p->power_down = 0;
-+	p->phy_utmi_width = 8;
- }
- 
- static void dwc2_set_rk_params(struct dwc2_hsotg *hsotg)
--- 
-2.17.1
+So I'd keep the patch as it is.
 
+Thanks,
+Ming
