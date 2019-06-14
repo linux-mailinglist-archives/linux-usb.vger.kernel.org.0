@@ -2,90 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3574641F
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 18:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCAB465AA
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jun 2019 19:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725996AbfFNQam (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jun 2019 12:30:42 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:39636 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725801AbfFNQam (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jun 2019 12:30:42 -0400
-Received: by mail-qt1-f193.google.com with SMTP id i34so3145702qta.6;
-        Fri, 14 Jun 2019 09:30:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=jMjniYLe1gr6/AMUsfiLEF+RmBgBhFISx6JTCsfFayw=;
-        b=dylpHzVutdtvz80h4E1MALMrkF9zOCisPlXnDYM9KgCx7i+2LHdHkYBzgFgEJ8dGXF
-         UAprhzVtH+tEIJKKWjuQUBEPBLWbjubMFjuWEnVEGzSfZcy5ywQol5zb/0PT/FA3/8nO
-         BARpeRjPtzZYf6+9scil6YIUZDHH+ESX2MZSu6HCIWUMbn+fIPglWbXbRdMf+S2oDptM
-         h18CtxctbbD74q7yImTnOpvHWJrDAWaJdgpcjHZy2ubt1TdU98VB7tnWCfrXj4/L/fF5
-         cJztCXgvrqa8CfeMCzTTmKWlzSEaKllFz22lJmLIWRYnOX+wNPXqlHuf1LpByJSujK68
-         n1Pw==
-X-Gm-Message-State: APjAAAVyEsBKlw6ZuY9CTXrRtZsfo62mJSEbkVWMuPMSnOvd2TiripqO
-        +j8rftSpTyBB9tz2Rfzjqhn5yt4jzg==
-X-Google-Smtp-Source: APXvYqyq8hzzFgEGvYC87jNq+3O710Dm+93YPe7JOG/z4/1WC3Xyz09BCnowTVLy+F+fmhIrcXUSQg==
-X-Received: by 2002:ac8:2ae8:: with SMTP id c37mr27905229qta.267.1560529840914;
-        Fri, 14 Jun 2019 09:30:40 -0700 (PDT)
-Received: from localhost ([64.188.179.243])
-        by smtp.gmail.com with ESMTPSA id s23sm2624864qtj.56.2019.06.14.09.30.39
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 14 Jun 2019 09:30:40 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 10:30:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH 1/5] dt-bindings: switch Exynos EHCI/OHCI bindings to use
- array of generic PHYs
-Message-ID: <20190614163039.GA24384@bogus>
-References: <20190521115849.9882-1-m.szyprowski@samsung.com>
- <CGME20190521120107eucas1p1a56efaa0e7f2117063e70683276edc10@eucas1p1.samsung.com>
- <20190521115849.9882-2-m.szyprowski@samsung.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190521115849.9882-2-m.szyprowski@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726541AbfFNRXV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jun 2019 13:23:21 -0400
+Received: from lnfm1.sai.msu.ru ([93.180.26.255]:50801 "EHLO lnfm1.sai.msu.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726444AbfFNRXU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 Jun 2019 13:23:20 -0400
+X-Greylist: delayed 2129 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Jun 2019 13:23:05 EDT
+Received: from dragon.sai.msu.ru (dragon.sai.msu.ru [93.180.26.172])
+        by lnfm1.sai.msu.ru (8.14.1/8.12.8) with ESMTP id x5EGl5kL020143;
+        Fri, 14 Jun 2019 19:47:10 +0300
+Received: from oak.local (unknown [92.243.181.209])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by dragon.sai.msu.ru (Postfix) with ESMTPSA id 9152ABCE4;
+        Fri, 14 Jun 2019 19:46:58 +0300 (MSK)
+From:   "Matwey V. Kornilov" <matwey@sai.msu.ru>
+To:     b-liu@ti.com, gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     matwey.kornilov@gmail.com,
+        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] musb: Improve performance for hub-attached webcams
+Date:   Fri, 14 Jun 2019 19:45:48 +0300
+Message-Id: <20190614164554.27679-1-matwey@sai.msu.ru>
+X-Mailer: git-send-email 2.16.4
+In-Reply-To: <20190403185310.8437-1-matwey@sai.msu.ru>
+References: <20190403185310.8437-1-matwey@sai.msu.ru>
+In-Reply-To: <20190403185310.8437-1-matwey@sai.msu.ru>
+References: <20190403185310.8437-1-matwey@sai.msu.ru>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 21, 2019 at 01:58:45PM +0200, Marek Szyprowski wrote:
-> Commit 69bec7259853 ("USB: core: let USB device know device node") added
-> support for attaching devicetree node for USB devices. Those nodes are
-> children of their USB host controller. However Exynos EHCI and OHCI
-> driver bindings already define child-nodes for each physical root hub
-> port and assigns respective PHY controller and parameters to them. This
-> leads to the conflict. A workaround for it has been merged as commit
-> 01d4071486fe ("usb: exynos: add workaround for the USB device bindings
-> conflict"), but it disabled support for USB device binding for Exynos
-> EHCI/OHCI controllers.
-> 
-> To resolve it properly, lets move PHYs from the sub-nodes to a standard
-> array under the 'phys' property.
-> 
-> Suggested-by: Måns Rullgård <mans@mansr.com>
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->  .../devicetree/bindings/usb/exynos-usb.txt    | 41 +++++++------------
->  1 file changed, 14 insertions(+), 27 deletions(-)
+The series is concerned to issues with isochronous transfer while
+streaming the USB webcam data. I discovered the issue first time
+when attached PWC USB webcam to AM335x-based BeagleBone Black SBC.
+It appeared that the root issue was in numerous missed IN requests
+during isochronous transfer where each missing leaded to the frame
+drop. Since every IN request is triggered in MUSB driver
+individually, it is important to queue the send IN request as
+earlier as possible when the previous IN completed. At the same
+time the URB giveback handler of the device driver has also to be
+called there, that leads to arbitrarily delay depending on the
+device driver performance. The details with the references are
+described in [1].
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The issue has two parts:
 
-The old way would also conflict with the usb-connector binding as that 
-uses the graph binding.
+  1) peripheral driver URB callback performance
+  2) MUSB host driver performance
 
-Rob
+It appeared that the first part is related to the wrong memory
+allocation strategy in the most USB webcam drivers. Non-cached
+memory is used in assumption that coherent DMA memory leads to
+the better performance than non-coherent memory in conjunction with
+the proper synchronization. Yet the assumption might be valid for
+x86 platforms some time ago, the issue was fixed for PWC driver in:
+
+    1161db6776bd ("media: usb: pwc: Don't use coherent DMA buffers for ISO transfer")
+
+that leads to 3.5x performance gain. The more generic fix for this
+common issue are coming for the rest drivers [2].
+
+The patch allowed successfully running full-speed USB PWC webcams
+attached directly to BeagleBone Black USB port.
+
+However, the second part of the issue is still present for
+peripheral device attached through the high-speed USB hub due to
+its 125us frame time. The patch series is intended to reorganize
+musb_advance_schedule() to allow host to send IN request quicker.
+
+The patch series is organized as the following. First three patches
+improve readability of the existing code in
+musb_advance_schedule(). Patches 4 and 5 introduce updated
+signature for musb_start_urb(). The last patch introduce new
+code-path in musb_advance_schedule() which allows for faster
+response.
+
+References:
+
+[1] https://www.spinics.net/lists/linux-usb/msg165735.html
+[2] https://www.spinics.net/lists/linux-media/msg144279.html
+
+Changes since v1:
+ - Patch 6 was redone to keep URB giveback order and stop transmission at
+   erroneous URB.
+
+Matwey V. Kornilov (6):
+  usb: musb: Use USB_DIR_IN when calling musb_advance_schedule()
+  usb: musb: Introduce musb_qh_empty() helper function
+  usb: musb: Introduce musb_qh_free() helper function
+  usb: musb: Rename musb_start_urb() to musb_start_next_urb()
+  usb: musb: Introduce musb_start_urb()
+  usb: musb: Decrease URB starting latency in musb_advance_schedule()
+
+ drivers/usb/musb/musb_host.c | 132 ++++++++++++++++++++++++++++---------------
+ drivers/usb/musb/musb_host.h |   1 +
+ 2 files changed, 86 insertions(+), 47 deletions(-)
+
+-- 
+2.16.4
+
