@@ -2,133 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5F247102
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Jun 2019 17:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C204717D
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Jun 2019 19:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726591AbfFOPst (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 Jun 2019 11:48:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33034 "EHLO mail.kernel.org"
+        id S1726998AbfFORzI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 Jun 2019 13:55:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726405AbfFOPst (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 15 Jun 2019 11:48:49 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BB12B20673;
-        Sat, 15 Jun 2019 15:48:47 +0000 (UTC)
+        id S1725270AbfFORzH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 15 Jun 2019 13:55:07 -0400
+Subject: Re: [GIT PULL] USB fixes for 5.2-rc5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560613728;
-        bh=Ge0khhEctwDDjsAI9a281lx6Be7hNKcUJhcPMGAOz8I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NfW/aNUcnLsxHEl4s7R2zYbGx7CDtl/GkQplUAoY+vQUgH1dexOgXY6RttRpLh1s/
-         55p8PAysM+MA6JXX+12kSPGZ8ZjGtp2mJyPeX8joKuc/Uz4oHa/IcLNJDn9YYeLYk+
-         x1USUq8htT21amMWl7udsdE+OuG3/q+HS0W16dKw=
-Date:   Sat, 15 Jun 2019 17:48:45 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        s=default; t=1560621306;
+        bh=CA6qax+LZQSfbA3Nv9S7rXdp4xUGXGlahHUXFbBpPVw=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=o8pMDLsHGbIQJ5LbZTS48lcw4WlKG+EDvp/E4l1218Mehwn2U5sGBJeE8swHE8/m9
+         wjkXPM4pmvKO3kCULSH+x05ZxcgGXWk74l6295ajzWoAmtoaAeNCCvqyMS4rVA7c2l
+         lL4iWwjkCCy7D5zSufhjXeCdUxZ0ItENHgAuCQIU=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20190615154845.GA6603@kroah.com>
+References: <20190615154845.GA6603@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20190615154845.GA6603@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.2-rc5
+X-PR-Tracked-Commit-Id: 5f54a85db5df67df8161739a4b2f9c2b7ab219fe
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ff39074b1d4e727c299ccfd1588f9cca17a59c86
+Message-Id: <156062130668.5191.12217177123386573904.pr-tracker-bot@kernel.org>
+Date:   Sat, 15 Jun 2019 17:55:06 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.2-rc5
-Message-ID: <20190615154845.GA6603@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a:
+The pull request you sent on Sat, 15 Jun 2019 17:48:45 +0200:
 
-  Linux 5.2-rc3 (2019-06-02 13:55:33 -0700)
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.2-rc5
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ff39074b1d4e727c299ccfd1588f9cca17a59c86
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.2-rc5
+Thank you!
 
-for you to fetch changes up to 5f54a85db5df67df8161739a4b2f9c2b7ab219fe:
-
-  usb: typec: Make sure an alt mode exist before getting its partner (2019-06-12 17:13:02 +0200)
-
-----------------------------------------------------------------
-USB fixes for 5.2-rc5
-
-Here are some small USB driver fixes for 5.2-rc5
-
-Nothing major, just some small gadget fixes, usb-serial new device ids,
-a few new quirks, and some small fixes for some regressions that have
-been found after the big 5.2-rc1 merge.
-
-All of these have been in linux-next for a while with no reported
-issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Alexandre Belloni (1):
-      usb: gadget: udc: lpc32xx: allocate descriptor with GFP_ATOMIC
-
-Andrey Smirnov (1):
-      usb: phy: mxs: Disable external charger detect in mxs_phy_hw_init()
-
-Andrzej Pietrasiewicz (1):
-      usb: gadget: dwc2: fix zlp handling
-
-Chris Packham (1):
-      USB: serial: pl2303: add Allied Telesis VT-Kit3
-
-Daniele Palmas (1):
-      USB: serial: option: add Telit 0x1260 and 0x1261 compositions
-
-Douglas Anderson (1):
-      usb: dwc2: host: Fix wMaxPacketSize handling (fix webcam regression)
-
-Greg Kroah-Hartman (2):
-      Merge tag 'fixes-for-v5.2-rc4' of git://git.kernel.org/.../balbi/usb into usb-linus
-      Merge tag 'usb-serial-5.2-rc5' of https://git.kernel.org/.../johan/usb-serial into usb-linus
-
-Gustavo A. R. Silva (1):
-      usb: typec: ucsi: ccg: fix memory leak in do_flash
-
-Heikki Krogerus (1):
-      usb: typec: Make sure an alt mode exist before getting its partner
-
-Jörgen Storvist (1):
-      USB: serial: option: add support for Simcom SIM7500/SIM7600 RNDIS mode
-
-Kai-Heng Feng (1):
-      USB: usb-storage: Add new ID to ums-realtek
-
-Marco Zatta (1):
-      USB: Fix chipmunk-like voice when using Logitech C270 for recording audio.
-
-Martin Schiller (1):
-      usb: dwc2: Fix DMA cache alignment issues
-
-Minas Harutyunyan (1):
-      usb: dwc2: Set actual frame number for completed ISOC transfer for none DDMA
-
-Wei Yongjun (1):
-      usb: gadget: udc: lpc32xx: fix return value check in lpc32xx_udc_probe()
-
-Young Xiao (1):
-      usb: gadget: fusb300_udc: Fix memory leak of fusb300->ep[i]
-
- drivers/usb/core/quirks.c             |  3 +++
- drivers/usb/dwc2/gadget.c             | 24 ++++++++++++++-------
- drivers/usb/dwc2/hcd.c                | 39 +++++++++++++++++++++--------------
- drivers/usb/dwc2/hcd.h                | 20 ++++++++++--------
- drivers/usb/dwc2/hcd_intr.c           |  5 +++--
- drivers/usb/dwc2/hcd_queue.c          | 10 +++++----
- drivers/usb/gadget/udc/fusb300_udc.c  |  5 +++++
- drivers/usb/gadget/udc/lpc32xx_udc.c  |  7 +++----
- drivers/usb/phy/phy-mxs-usb.c         | 14 +++++++++++++
- drivers/usb/serial/option.c           |  6 ++++++
- drivers/usb/serial/pl2303.c           |  1 +
- drivers/usb/serial/pl2303.h           |  3 +++
- drivers/usb/storage/unusual_realtek.h |  5 +++++
- drivers/usb/typec/bus.c               |  2 +-
- drivers/usb/typec/ucsi/ucsi_ccg.c     |  6 ++++--
- 15 files changed, 105 insertions(+), 45 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
