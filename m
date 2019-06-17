@@ -2,109 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE866477C5
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 03:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0A34784C
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 05:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727529AbfFQBrX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Jun 2019 21:47:23 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:35748 "EHLO inva021.nxp.com"
+        id S1727492AbfFQDEH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Jun 2019 23:04:07 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:45350 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727481AbfFQBrW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 16 Jun 2019 21:47:22 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id F3651200B3A;
-        Mon, 17 Jun 2019 03:47:20 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9BDA5200B38;
-        Mon, 17 Jun 2019 03:47:17 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 87604402D6;
-        Mon, 17 Jun 2019 09:47:13 +0800 (SGT)
-From:   Peter Chen <peter.chen@nxp.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Jun Li <jun.li@nxp.com>
-Subject: [PATCH 1/1] usb: chipidea: udc: workaround for endpoint conflict issue
-Date:   Mon, 17 Jun 2019 09:49:07 +0800
-Message-Id: <20190617014907.9184-2-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190617014907.9184-1-peter.chen@nxp.com>
-References: <20190617014907.9184-1-peter.chen@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1727464AbfFQDEH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 16 Jun 2019 23:04:07 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 97BA4308621C;
+        Mon, 17 Jun 2019 03:04:06 +0000 (UTC)
+Received: from localhost (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 64D211001B2E;
+        Mon, 17 Jun 2019 03:03:53 +0000 (UTC)
+From:   Ming Lei <ming.lei@redhat.com>
+To:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH V4 00/16] use sg helper to operate scatterlist
+Date:   Mon, 17 Jun 2019 11:03:33 +0800
+Message-Id: <20190617030349.26415-1-ming.lei@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Mon, 17 Jun 2019 03:04:07 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-An endpoint conflict occurs when the USB is working in device mode
-during an isochronous communication. When the endpointA IN direction
-is an isochronous IN endpoint, and the host sends an IN token to
-endpointA on another device, then the OUT transaction may be missed
-regardless the OUT endpoint number. Generally, this occurs when the
-device is connected to the host through a hub and other devices are
-connected to the same hub.
+Hi,
 
-The affected OUT endpoint can be either control, bulk, isochronous, or
-an interrupt endpoint. After the OUT endpoint is primed, if an IN token
-to the same endpoint number on another device is received, then the OUT
-endpoint may be unprimed (cannot be detected by software), which causes
-this endpoint to no longer respond to the host OUT token, and thus, no
-corresponding interrupt occurs.
+Scsi MQ makes a large static allocation for the first scatter gather
+list chunk for the driver to use.  This is a performance headache we'd
+like to fix by reducing the size of the allocation to a 2 element
+array.  Doing this will break the current guarantee that any driver
+using SG_ALL doesn't need to use the scatterlist iterators and can get
+away with directly dereferencing the array.  Thus we need to update all
+drivers to use the scatterlist iterators and remove direct indexing of
+the scatterlist array before reducing the initial scatterlist
+allocation size in SCSI.
 
-There is no good workaround for this issue, the only thing the software
-could do is numbering isochronous IN from the highest endpoint since we
-have observed most of device number endpoint from the lowest.
+So convert drivers to use scatterlist helper.
 
-Cc: <stable@vger.kernel.org> #v3.14+
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Cc: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc: Jun Li <jun.li@nxp.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/chipidea/udc.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+There are two types of direct access on scatterlist in SCSI drivers:
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 829e947cabf5..6a5ee8e6da10 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -1622,6 +1622,25 @@ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
- static int ci_udc_start(struct usb_gadget *gadget,
- 			 struct usb_gadget_driver *driver);
- static int ci_udc_stop(struct usb_gadget *gadget);
-+
-+/* Match ISOC IN from the highest endpoint */
-+static struct usb_ep *ci_udc_match_ep(struct usb_gadget *gadget,
-+			      struct usb_endpoint_descriptor *desc,
-+			      struct usb_ss_ep_comp_descriptor *comp_desc)
-+{
-+	struct ci_hdrc *ci = container_of(gadget, struct ci_hdrc, gadget);
-+	struct usb_ep *ep;
-+
-+	if (usb_endpoint_xfer_isoc(desc) && usb_endpoint_dir_in(desc)) {
-+		list_for_each_entry_reverse(ep, &ci->gadget.ep_list, ep_list) {
-+			if (ep->caps.dir_in && !ep->claimed)
-+				return ep;
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
- /**
-  * Device operations part of the API to the USB controller hardware,
-  * which don't involve endpoints (or i/o)
-@@ -1635,6 +1654,7 @@ static const struct usb_gadget_ops usb_gadget_ops = {
- 	.vbus_draw	= ci_udc_vbus_draw,
- 	.udc_start	= ci_udc_start,
- 	.udc_stop	= ci_udc_stop,
-+	.match_ep 	= ci_udc_match_ep,
- };
- 
- static int init_eps(struct ci_hdrc *ci)
+1) operate on the scatterlist via scsi_sglist(scmd) directly, then one
+local variable of 'struct scatterlist *' is involved.
+
+2) scsi_sglist(scmd) is stored to cmd->SCp.buffer and the scatterlist is
+used via cmd->SCp.buffer.
+
+The following coccinelle semantic patch is developed for finding the
+above two types of direct scatterlist uses:
+
+	@@ struct scatterlist *p; @@
+	(
+	- ++p
+	+ p = sg_next(p)
+	|
+	- p++
+	+ p = sg_next(p)
+	|
+	- p = p + 1
+	+ p = sg_next(p)
+	|
+	- p += 1
+	+ p = sg_next(p)
+	|
+	- --p
+	+ p = sg_non_exist_prev(p)
+	|
+	- p--
+	+ p = sg_non_exist_prev(p)
+	|
+	- p = p - 1
+	+ p = sg_non_exist_prev(p)
+	|
+	- p -= 1
+	+ p = sg_non_exist_prev(p)
+	)
+	
+	@@
+	struct scatterlist *p;
+	expression data != 0;
+	@@
+	- p[data]
+	+ '!!!!!!use sg iterator helper!!!!!!'
+	
+	@@
+	struct scatterlist[] p;
+	expression data != 0;
+	@@
+	- p[data]
+	+ '!!!!!!use sg iterator helper!!!!!!'
+	
+	
+	@@ struct scsi_cmnd *scmd; @@
+	(
+	-	scmd->SCp.buffer++
+	+	scmd->SCp.buffer = sg_next(scmd->SCp.buffer)
+	|
+	-	++scmd->SCp.buffer
+	+	scmd->SCp.buffer = sg_next(scmd->SCp.buffer)
+	|
+	-	scmd->SCp.buffer += 1
+	+	scmd->SCp.buffer = sg_next(scmd->SCp.buffer)
+	|
+	-	scmd->SCp.buffer = scmd->SCp.buffer + 1
+	+	scmd->SCp.buffer = sg_next(scmd->SCp.buffer)
+	|
+	-	scmd->SCp.buffer--
+	+	scmd->SCp.buffer = sg_no_exit_prev(scmd->SCp.buffer)
+	|
+	-	--scmd->SCp.buffer
+	+	scmd->SCp.buffer = sg_no_exit_prev(scmd->SCp.buffer)
+	|
+	-	scmd->SCp.buffer -= 1
+	+	scmd->SCp.buffer = sg_no_exit_prev(scmd->SCp.buffer)
+	|
+	-	scmd->SCp.buffer = scmd->SCp.buffer - 1
+	+	scmd->SCp.buffer = sg_no_exit_prev(scmd->SCp.buffer)
+	)
+	
+	@@
+	struct scsi_cmnd *scmd;
+	expression data != 0;
+	@@
+	- scmd->SCp.buffer[data]
+	+ '!!!!!!use sg iterator helper!!!!!!'
+
+
+The 1st 10 patches are for handling type #1, and the other 6 patches
+for handling type #2, and all the 16 are found by the above coccinelle
+semantic patch.
+
+V4:
+	- fix building failure on pmcraid's conversion 
+	- improve the coccinelle semantic patch to cover both two types of
+	scatterlist direct use
+	- driver 'staging: rtsx' is covered
+
+V3:
+	- update commit log and cover letter, most of words are from
+	James Bottomley	
+
+V2:
+	- use coccinelle semantic patch for finding direct sgl uses from
+	scsi command(9 drivers found)
+	- run 'git grep -E "SCp.buffer"' to find direct sgl uses
+	from SCp.buffer(6 drivers are found)
+
+
+Finn Thain (1):
+  NCR5380: Support chained sg lists
+
+Ming Lei (15):
+  scsi: vmw_pscsi: use sg helper to operate scatterlist
+  scsi: advansys: use sg helper to operate scatterlist
+  scsi: lpfc: use sg helper to operate scatterlist
+  scsi: mvumi: use sg helper to operate scatterlist
+  scsi: ipr: use sg helper to operate scatterlist
+  scsi: pmcraid: use sg helper to operate scatterlist
+  usb: image: microtek: use sg helper to operate scatterlist
+  staging: unisys: visorhba: use sg helper to operate scatterlist
+  staging: rtsx: use sg helper to operate scatterlist
+  s390: zfcp_fc: use sg helper to operate scatterlist
+  scsi: aha152x: use sg helper to operate scatterlist
+  scsi: imm: use sg helper to operate scatterlist
+  scsi: pcmcia: nsp_cs: use sg helper to operate scatterlist
+  scsi: ppa: use sg helper to operate scatterlist
+  scsi: wd33c93: use sg helper to operate scatterlist
+
+ drivers/s390/scsi/zfcp_fc.c                   |  4 +-
+ drivers/scsi/NCR5380.c                        | 41 ++++++++----------
+ drivers/scsi/advansys.c                       |  2 +-
+ drivers/scsi/aha152x.c                        | 42 +++++++++----------
+ drivers/scsi/imm.c                            |  2 +-
+ drivers/scsi/ipr.c                            | 28 +++++++------
+ drivers/scsi/lpfc/lpfc_nvmet.c                |  3 +-
+ drivers/scsi/mvumi.c                          |  9 ++--
+ drivers/scsi/pcmcia/nsp_cs.c                  |  4 +-
+ drivers/scsi/pmcraid.c                        | 14 +++----
+ drivers/scsi/ppa.c                            |  2 +-
+ drivers/scsi/vmw_pvscsi.c                     |  2 +-
+ drivers/scsi/wd33c93.c                        |  2 +-
+ drivers/staging/rts5208/rtsx_transport.c      |  4 +-
+ .../staging/unisys/visorhba/visorhba_main.c   |  9 ++--
+ drivers/usb/image/microtek.c                  | 20 ++++-----
+ drivers/usb/image/microtek.h                  |  2 +-
+ 17 files changed, 90 insertions(+), 100 deletions(-)
+
 -- 
-2.14.1
+2.20.1
 
