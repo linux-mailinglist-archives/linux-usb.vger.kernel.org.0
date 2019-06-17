@@ -2,117 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B42495E5
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 01:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733FA495FC
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 01:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729037AbfFQXby (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jun 2019 19:31:54 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42358 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728997AbfFQXby (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jun 2019 19:31:54 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q10so6481991pff.9
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2019 16:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DGYOEoZzB7ON/ATlnUBcULai9xMr1qfqBufmX8ObGVk=;
-        b=MsOJAsmqrNkd+thN/EWzBdMwNxj11a8cL2a44gNkr5+pGlHsbvwFICvinXt9UuNXfc
-         9w5UjUPapfCk+RI6jLlGn9IsIg41Ov/hPbChGOKC2kl7VrM6R3DnpU5/m3tWF+9fj/1w
-         Coh9CN6EQBKQiPTFWy/qTfW2mwy09MQwbHYmnsMixzM/3VKWYe5NI3Zx334w4sNQ6ga/
-         2Vhphf7roI1R01zasbHn5+RLqEhfKbPEMsPHxPiNumjE7xlWyZhxb6zCa5w4wUyF9pbS
-         T49IKBb7QUu0yNv6oSDo5f4XCDQCE1HDXSDEsXmyfFjGcM5aPyxI7/wfGxWZ6U+YK34J
-         6nUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=DGYOEoZzB7ON/ATlnUBcULai9xMr1qfqBufmX8ObGVk=;
-        b=EKpeOWjM2/8T/DmUXUSzuReoT508nvOAImkP2TvIR7falaBTUEbh+hTkzjppnuvRNZ
-         OIOcQ0UvfvFzDLFi5od3kwT7xqN+8dNeQe6YLxEzKKn0sT/KIgUxE3XO3htTYKtmCLFd
-         jEtkau8gNNb5+DCS8oCPiJp99NCQWvCWl8e3OL+w3UiXKCkUwSH+QAZvSERPLugg7JeU
-         /tKEAQFdCYr5mgYtndQ7oqgFco8HNZZZQRZvwFRHcgAOH7T9NruHYWlWld+MCp3uFwSI
-         nO3D/3NbovKZjcNdkS2LmkC/tHL54ZYkEx+WrqtTvV1NG2rvQRtwff3p5GEYBNzEI94t
-         /fQQ==
-X-Gm-Message-State: APjAAAVpwamvhnV2pKPsoD1KD58fS6NcgulOnKA8edj27r8PLWiyRlpl
-        ujEm0/8+lGEJs14x5Umgl/cfN8vZVI8=
-X-Google-Smtp-Source: APXvYqxhoDCo/2WrjA1oZwFDetrz3gTPAAcfoCkSlyrzm+oAC1Ce2sXawNGtom1y+s+nhHsRbJxuPg==
-X-Received: by 2002:a17:90a:d14a:: with SMTP id t10mr1778883pjw.85.1560814313171;
-        Mon, 17 Jun 2019 16:31:53 -0700 (PDT)
-Received: from mn.cs.uvic.ca (S01061cabc0a516f3.gv.shawcable.net. [24.69.190.94])
-        by smtp.gmail.com with ESMTPSA id q10sm9526373pgg.35.2019.06.17.16.31.52
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 17 Jun 2019 16:31:52 -0700 (PDT)
-Received: by mn.cs.uvic.ca (Postfix, from userid 1000)
-        id B68FA4609F0; Mon, 17 Jun 2019 16:31:51 -0700 (PDT)
-From:   dmg@turingmachine.org
-To:     linux-usb@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, Daniel M German <dmg@turingmachine.org>
-Subject: [PATCH] usb: Replace a < b ? a : b construct with min_t(type, a, b) in drivers/usb
-Date:   Mon, 17 Jun 2019 16:30:50 -0700
-Message-Id: <20190617233050.21409-1-dmg@turingmachine.org>
-X-Mailer: git-send-email 2.20.1
+        id S1728705AbfFQXfm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jun 2019 19:35:42 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:33928 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727443AbfFQXfm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jun 2019 19:35:42 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 51DF02955E;
+        Mon, 17 Jun 2019 19:35:37 -0400 (EDT)
+Date:   Tue, 18 Jun 2019 09:35:48 +1000 (AEST)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     "Juergen E . Fischer" <fischer@norbit.de>,
+        Ming Lei <ming.lei@redhat.com>
+cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>
+Subject: Re: [PATCH V4 11/16] scsi: aha152x: use sg helper to operate
+ scatterlist
+In-Reply-To: <alpine.LNX.2.21.1906171334330.168@nippy.intranet>
+Message-ID: <alpine.LNX.2.21.1906180901160.284@nippy.intranet>
+References: <20190617030349.26415-1-ming.lei@redhat.com> <20190617030349.26415-12-ming.lei@redhat.com> <alpine.LNX.2.21.1906171334330.168@nippy.intranet>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Daniel M German <dmg@turingmachine.org>
+On Mon, 17 Jun 2019, Finn Thain wrote:
 
-Use min_t to find the minimum of two values instead of using the ?: operator.
+> On Mon, 17 Jun 2019, Ming Lei wrote:
+> 
+> > Use the scatterlist iterators and remove direct indexing of the
+> > scatterlist array.
+> > 
+> > This way allows us to pre-allocate one small scatterlist, which can be
+> > chained with one runtime allocated scatterlist if the pre-allocated one
+> > isn't enough for the whole request.
+> > 
+> > Finn added the change to replace SCp.buffers_residual with sg_is_last()
+> > for fixing updating it, and the similar change has been applied on
+> > NCR5380.c
+> > 
+> > Cc: Finn Thain <fthain@telegraphics.com.au>
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> 
+> Reviewed-by: Finn Thain <fthain@telegraphics.com.au>
+> 
 
-This change does not alter functionality. It is merely cosmetic intended to
-improve the readability of the code.
+I have to retract that. I think this patch is still wrong.
 
-Signed-off-by: Daniel M German <dmg@turingmachine.org>
----
- drivers/usb/gadget/function/u_ether.c | 2 +-
- drivers/usb/misc/adutux.c             | 2 +-
- drivers/usb/storage/realtek_cr.c      | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+GETSTCNT() appears to be the number of bytes sent since datao_init() and 
+not the number of bytes sent since the start of the command. (Note the 
+CLRSTCNT in datao_init() which appears to clear the transfer counter.) I 
+don't see how the existing datao_end() could work otherwise. (Juergen?)
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 737bd77a575d..f6ba46684ddb 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -1006,7 +1006,7 @@ int gether_get_ifname(struct net_device *net, char *name, int len)
- 	rtnl_lock();
- 	ret = snprintf(name, len, "%s\n", netdev_name(net));
- 	rtnl_unlock();
--	return ret < len ? ret : len;
-+	return min_t(int, ret, len);
- }
- EXPORT_SYMBOL_GPL(gether_get_ifname);
+So here's another attempt. Ming, I'd be happy to take the blame/credit (in 
+the form of a From tag etc.) in case you don't want to spend more time on 
+this.
+
+diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
+index 97872838b983..f07f3fa9b58d 100644
+--- a/drivers/scsi/aha152x.c
++++ b/drivers/scsi/aha152x.c
+@@ -948,7 +948,6 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
+ 	   SCp.ptr              : buffer pointer
+ 	   SCp.this_residual    : buffer length
+ 	   SCp.buffer           : next buffer
+-	   SCp.buffers_residual : left buffers in list
+ 	   SCp.phase            : current state of the command */
  
-diff --git a/drivers/usb/misc/adutux.c b/drivers/usb/misc/adutux.c
-index 9465fb95d70a..4a9fa3152f2a 100644
---- a/drivers/usb/misc/adutux.c
-+++ b/drivers/usb/misc/adutux.c
-@@ -379,7 +379,7 @@ static ssize_t adu_read(struct file *file, __user char *buffer, size_t count,
+ 	if ((phase & resetting) || !scsi_sglist(SCpnt)) {
+@@ -956,13 +955,11 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
+ 		SCpnt->SCp.this_residual = 0;
+ 		scsi_set_resid(SCpnt, 0);
+ 		SCpnt->SCp.buffer           = NULL;
+-		SCpnt->SCp.buffers_residual = 0;
+ 	} else {
+ 		scsi_set_resid(SCpnt, scsi_bufflen(SCpnt));
+ 		SCpnt->SCp.buffer           = scsi_sglist(SCpnt);
+ 		SCpnt->SCp.ptr              = SG_ADDRESS(SCpnt->SCp.buffer);
+ 		SCpnt->SCp.this_residual    = SCpnt->SCp.buffer->length;
+-		SCpnt->SCp.buffers_residual = scsi_sg_count(SCpnt) - 1;
+ 	}
  
- 		if (data_in_secondary) {
- 			/* drain secondary buffer */
--			int amount = bytes_to_read < data_in_secondary ? bytes_to_read : data_in_secondary;
-+			int amount = min_t(size_t, bytes_to_read, data_in_secondary);
- 			i = copy_to_user(buffer, dev->read_buffer_secondary+dev->secondary_head, amount);
- 			if (i) {
- 				retval = -EFAULT;
-diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
-index cc794e25a0b6..15ce54bde600 100644
---- a/drivers/usb/storage/realtek_cr.c
-+++ b/drivers/usb/storage/realtek_cr.c
-@@ -260,7 +260,7 @@ static int rts51x_bulk_transport(struct us_data *us, u8 lun,
- 	 * was really transferred and what the device tells us
- 	 */
- 	if (residue)
--		residue = residue < buf_len ? residue : buf_len;
-+		residue = min_t(unsigned int, residue, buf_len);
+ 	DO_LOCK(flags);
+@@ -2030,10 +2027,9 @@ static void datai_run(struct Scsi_Host *shpnt)
+ 				}
  
- 	if (act_len)
- 		*act_len = buf_len - residue;
+ 				if (CURRENT_SC->SCp.this_residual == 0 &&
+-				    CURRENT_SC->SCp.buffers_residual > 0) {
++				    !sg_is_last(CURRENT_SC->SCp.buffer)) {
+ 					/* advance to next buffer */
+-					CURRENT_SC->SCp.buffers_residual--;
+-					CURRENT_SC->SCp.buffer++;
++					CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
+ 					CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
+ 					CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
+ 				}
+@@ -2136,10 +2132,10 @@ static void datao_run(struct Scsi_Host *shpnt)
+ 			CMD_INC_RESID(CURRENT_SC, -2 * data_count);
+ 		}
+ 
+-		if(CURRENT_SC->SCp.this_residual==0 && CURRENT_SC->SCp.buffers_residual>0) {
++		if (CURRENT_SC->SCp.this_residual == 0 &&
++		    !sg_is_last(CURRENT_SC->SCp.buffer)) {
+ 			/* advance to next buffer */
+-			CURRENT_SC->SCp.buffers_residual--;
+-			CURRENT_SC->SCp.buffer++;
++			CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
+ 			CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
+ 			CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
+ 		}
+@@ -2158,22 +2154,26 @@ static void datao_run(struct Scsi_Host *shpnt)
+ static void datao_end(struct Scsi_Host *shpnt)
+ {
+ 	if(TESTLO(DMASTAT, DFIFOEMP)) {
+-		int data_count = (DATA_LEN - scsi_get_resid(CURRENT_SC)) -
+-			GETSTCNT();
++		u32 datao_cnt = GETSTCNT();
++		int datao_out = DATA_LEN - scsi_get_resid(CURRENT_SC);
++		int done;
++		struct scatterlist *sg = scsi_sglist(CURRENT_SC);
+ 
+-		CMD_INC_RESID(CURRENT_SC, data_count);
++		CMD_INC_RESID(CURRENT_SC, datao_out - datao_cnt);
+ 
+-		data_count -= CURRENT_SC->SCp.ptr -
+-			SG_ADDRESS(CURRENT_SC->SCp.buffer);
+-		while(data_count>0) {
+-			CURRENT_SC->SCp.buffer--;
+-			CURRENT_SC->SCp.buffers_residual++;
+-			data_count -= CURRENT_SC->SCp.buffer->length;
++		done = scsi_bufflen(CURRENT_SC) - scsi_get_resid(CURRENT_SC);
++		/* Locate the first SG entry not yet sent */
++		while (done > 0 && !sg_is_last(sg)) {
++			if (done < sg->length)
++				break;
++			done -= sg->length;
++			sg = sg_next(sg);
+ 		}
+-		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) -
+-			data_count;
+-		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length +
+-			data_count;
++
++		CURRENT_SC->SCp.buffer = sg;
++		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) + done;
++		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length -
++			done;
+ 	}
+ 
+ 	SETPORT(SXFRCTL0, CH1|CLRCH1|CLRSTCNT);
+@@ -2501,7 +2501,7 @@ static void get_command(struct seq_file *m, struct scsi_cmnd * ptr)
+ 
+ 	seq_printf(m, "); resid=%d; residual=%d; buffers=%d; phase |",
+ 		scsi_get_resid(ptr), ptr->SCp.this_residual,
+-		ptr->SCp.buffers_residual);
++		sg_nents(ptr->SCp.buffer) - 1);
+ 
+ 	if (ptr->SCp.phase & not_issued)
+ 		seq_puts(m, "not issued|");
+
 -- 
-2.20.1
-
