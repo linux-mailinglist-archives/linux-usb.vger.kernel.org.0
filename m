@@ -2,170 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB2C478B0
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 05:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2A247900
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 06:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727673AbfFQDfs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Jun 2019 23:35:48 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:47442 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727669AbfFQDfs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Jun 2019 23:35:48 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 2F7832931B;
-        Sun, 16 Jun 2019 23:35:42 -0400 (EDT)
-Date:   Mon, 17 Jun 2019 13:35:53 +1000 (AEST)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Ming Lei <ming.lei@redhat.com>
-cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>
-Subject: Re: [PATCH V4 11/16] scsi: aha152x: use sg helper to operate
- scatterlist
-In-Reply-To: <20190617030349.26415-12-ming.lei@redhat.com>
-Message-ID: <alpine.LNX.2.21.1906171334330.168@nippy.intranet>
-References: <20190617030349.26415-1-ming.lei@redhat.com> <20190617030349.26415-12-ming.lei@redhat.com>
+        id S1725897AbfFQERr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jun 2019 00:17:47 -0400
+Received: from mail-eopbgr1410128.outbound.protection.outlook.com ([40.107.141.128]:59644
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725778AbfFQERq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Jun 2019 00:17:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MmkixwRvjDS7rGX301COiJH0uUpjqnSTmo128qV9Lvg=;
+ b=riHkILYrchef9PUczfUprqjdWmPDkyEdfM6sMCPhWUpEr+EIoXJAmKv4s/gsl7b3avwXiR/uNMzNbh72I2LkbOS0+JkJiP+BslQqp0npUmWqTSWeDmVnGeRxQjtyHAoPMAtuGzmaM9+oO4eRSKZOkmH12RU4oe5/eP+/GcNhOMI=
+Received: from OSBPR01MB3590.jpnprd01.prod.outlook.com (20.178.97.80) by
+ OSBPR01MB4487.jpnprd01.prod.outlook.com (20.179.184.149) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1987.12; Mon, 17 Jun 2019 04:17:43 +0000
+Received: from OSBPR01MB3590.jpnprd01.prod.outlook.com
+ ([fe80::b1c2:125c:440d:e240]) by OSBPR01MB3590.jpnprd01.prod.outlook.com
+ ([fe80::b1c2:125c:440d:e240%4]) with mapi id 15.20.1987.014; Mon, 17 Jun 2019
+ 04:17:43 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "usb-storage@lists.one-eyed-alien.net" 
+        <usb-storage@lists.one-eyed-alien.net>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
+Subject: RE: [PATCH v2] usb-storage: Add a limitation for
+ blk_queue_max_hw_sectors()
+Thread-Topic: [PATCH v2] usb-storage: Add a limitation for
+ blk_queue_max_hw_sectors()
+Thread-Index: AQHVIcuW138W6xs/SU+mBATKJYat56aZ0SQAgAABRQCAAAL1gIAFZkqg
+Date:   Mon, 17 Jun 2019 04:17:43 +0000
+Message-ID: <OSBPR01MB359051D6F83101432E0F2549D8EB0@OSBPR01MB3590.jpnprd01.prod.outlook.com>
+References: <20190613171112.GA22155@lst.de>
+ <Pine.LNX.4.44L0.1906131317210.1307-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1906131317210.1307-100000@iolanthe.rowland.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d2cf138f-69ff-4fc6-2f40-08d6f2dabeed
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB4487;
+x-ms-traffictypediagnostic: OSBPR01MB4487:
+x-microsoft-antispam-prvs: <OSBPR01MB4487C41E39307542DA438F99D8EB0@OSBPR01MB4487.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0071BFA85B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(136003)(39860400002)(346002)(396003)(376002)(199004)(189003)(305945005)(26005)(2906002)(54906003)(86362001)(5660300002)(186003)(102836004)(6436002)(7696005)(74316002)(316002)(14454004)(14444005)(6916009)(76176011)(7736002)(33656002)(68736007)(478600001)(53936002)(71200400001)(4326008)(71190400001)(66066001)(256004)(229853002)(99286004)(55016002)(9686003)(476003)(52536014)(6506007)(11346002)(76116006)(25786009)(6116002)(486006)(8676002)(3846002)(2171002)(446003)(6246003)(66476007)(73956011)(64756008)(66556008)(81166006)(81156014)(66446008)(8936002)(66946007);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB4487;H:OSBPR01MB3590.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: NxPmAC6mKVImNsoqBh7b4Li1dj6WA4Ordh2n+1oqYEYxsD7dL5pSj3uyxnjXmMN+rx7VPxv6j+LQBOOHaXseaujM9h4KxzLLtgCuK2yVVnDAryYq3MXrOad+X2eKQG60MO288KkOB1dd0sCxujcfiaHcnlx4ui1URHdDNIHSW6T/QlQga9FhaIgquChSA+0Aa6qVsrz/3y0qZr13Rot62gHH3+a8eXWwtCaHM3A8gUV+HzlhLCFcf3Yp+V9FAuoGne+lutqHCKzRYUyzT7UL0wVdw9AnnF+05sFFQq9XRGhEheFx96ofqQRFlhjSlALiA+yuNdy+voDOsf6JyFEL6vcHQIcF1zhAoiNFwGGeS5aXGa8mQw7cktOSStkxTPh6DNZkn6qrsZrbwbY+0XUR1b+TlmH/yb+CGDaogaeJH4A=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2cf138f-69ff-4fc6-2f40-08d6f2dabeed
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2019 04:17:43.7342
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB4487
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 17 Jun 2019, Ming Lei wrote:
+Hi Alan,
 
-> Use the scatterlist iterators and remove direct indexing of the
-> scatterlist array.
-> 
-> This way allows us to pre-allocate one small scatterlist, which can be
-> chained with one runtime allocated scatterlist if the pre-allocated one
-> isn't enough for the whole request.
-> 
-> Finn added the change to replace SCp.buffers_residual with sg_is_last()
-> for fixing updating it, and the similar change has been applied on
-> NCR5380.c
-> 
-> Cc: Finn Thain <fthain@telegraphics.com.au>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> From: Alan Stern, Sent: Friday, June 14, 2019 2:22 AM
+>=20
+> On Thu, 13 Jun 2019, Christoph Hellwig wrote:
+>=20
+> > On Thu, Jun 13, 2019 at 01:06:40PM -0400, Alan Stern wrote:
+> > > Hmmm.  Would it be easier instead to copy the DMA mapping parameters
+> > > from us->pusb_dev->bus->sysdev into the SCSI host's parent before
+> > > calling scsi_add_host()?  That way the correct values would be
+> > > available from the beginning, so the existing DMA setup would
+> > > automatically use the correct sizes.
+> >
+> > It would in theory.  But at usb-storage has a special max_sectors quirk
+> > for tape devices, and as the device type is a per-LU property we'd
+> > still have to override it in ->slave_configure.
+>=20
+> Not just for tape devices.  But that's okay; those max_sectors
+> overrides have been present for a long time and we can keep them.
+> Getting rid of the virt_boundary_mask stuff would still be a big
+> improvement.
 
-Reviewed-by: Finn Thain <fthain@telegraphics.com.au>
+Thank you for the comments. So, should I wait for getting rid of the
+virt_boundary_mask stuff? If I revise the commit log of this patch,
+is it acceptable for v5.2-stable as a workaround? In other words,
+I worry about this issue exists on v5.2-stable.
 
--- 
+Best regards,
+Yoshihiro Shimoda
 
-> ---
->  drivers/scsi/aha152x.c | 42 ++++++++++++++++++++----------------------
->  1 file changed, 20 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
-> index 97872838b983..6d0518f616cb 100644
-> --- a/drivers/scsi/aha152x.c
-> +++ b/drivers/scsi/aha152x.c
-> @@ -948,7 +948,6 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
->  	   SCp.ptr              : buffer pointer
->  	   SCp.this_residual    : buffer length
->  	   SCp.buffer           : next buffer
-> -	   SCp.buffers_residual : left buffers in list
->  	   SCp.phase            : current state of the command */
->  
->  	if ((phase & resetting) || !scsi_sglist(SCpnt)) {
-> @@ -956,13 +955,11 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
->  		SCpnt->SCp.this_residual = 0;
->  		scsi_set_resid(SCpnt, 0);
->  		SCpnt->SCp.buffer           = NULL;
-> -		SCpnt->SCp.buffers_residual = 0;
->  	} else {
->  		scsi_set_resid(SCpnt, scsi_bufflen(SCpnt));
->  		SCpnt->SCp.buffer           = scsi_sglist(SCpnt);
->  		SCpnt->SCp.ptr              = SG_ADDRESS(SCpnt->SCp.buffer);
->  		SCpnt->SCp.this_residual    = SCpnt->SCp.buffer->length;
-> -		SCpnt->SCp.buffers_residual = scsi_sg_count(SCpnt) - 1;
->  	}
->  
->  	DO_LOCK(flags);
-> @@ -2030,10 +2027,9 @@ static void datai_run(struct Scsi_Host *shpnt)
->  				}
->  
->  				if (CURRENT_SC->SCp.this_residual == 0 &&
-> -				    CURRENT_SC->SCp.buffers_residual > 0) {
-> +				    !sg_is_last(CURRENT_SC->SCp.buffer)) {
->  					/* advance to next buffer */
-> -					CURRENT_SC->SCp.buffers_residual--;
-> -					CURRENT_SC->SCp.buffer++;
-> +					CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
->  					CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
->  					CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
->  				}
-> @@ -2136,10 +2132,10 @@ static void datao_run(struct Scsi_Host *shpnt)
->  			CMD_INC_RESID(CURRENT_SC, -2 * data_count);
->  		}
->  
-> -		if(CURRENT_SC->SCp.this_residual==0 && CURRENT_SC->SCp.buffers_residual>0) {
-> +		if(CURRENT_SC->SCp.this_residual==0 &&
-> +		   !sg_is_last(CURRENT_SC->SCp.buffer)) {
->  			/* advance to next buffer */
-> -			CURRENT_SC->SCp.buffers_residual--;
-> -			CURRENT_SC->SCp.buffer++;
-> +			CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
->  			CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
->  			CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
->  		}
-> @@ -2158,22 +2154,24 @@ static void datao_run(struct Scsi_Host *shpnt)
->  static void datao_end(struct Scsi_Host *shpnt)
->  {
->  	if(TESTLO(DMASTAT, DFIFOEMP)) {
-> -		int data_count = (DATA_LEN - scsi_get_resid(CURRENT_SC)) -
-> -			GETSTCNT();
-> +		int done = GETSTCNT();
-> +		int data_count = (DATA_LEN - scsi_get_resid(CURRENT_SC)) - done;
-> +		struct scatterlist *sg = scsi_sglist(CURRENT_SC);
->  
->  		CMD_INC_RESID(CURRENT_SC, data_count);
->  
-> -		data_count -= CURRENT_SC->SCp.ptr -
-> -			SG_ADDRESS(CURRENT_SC->SCp.buffer);
-> -		while(data_count>0) {
-> -			CURRENT_SC->SCp.buffer--;
-> -			CURRENT_SC->SCp.buffers_residual++;
-> -			data_count -= CURRENT_SC->SCp.buffer->length;
-> +		/* Locate the first SG entry not yet sent */
-> +		while (done > 0 && !sg_is_last(sg)) {
-> +			if (done < sg->length)
-> +				break;
-> +			done -= sg->length;
-> +			sg = sg_next(sg);
->  		}
-> -		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) -
-> -			data_count;
-> -		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length +
-> -			data_count;
-> +
-> +		CURRENT_SC->SCp.buffer = sg;
-> +		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) + done;
-> +		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length -
-> +			done;
->  	}
->  
->  	SETPORT(SXFRCTL0, CH1|CLRCH1|CLRSTCNT);
-> @@ -2501,7 +2499,7 @@ static void get_command(struct seq_file *m, struct scsi_cmnd * ptr)
->  
->  	seq_printf(m, "); resid=%d; residual=%d; buffers=%d; phase |",
->  		scsi_get_resid(ptr), ptr->SCp.this_residual,
-> -		ptr->SCp.buffers_residual);
-> +		sg_nents(ptr->SCp.buffer) - 1);
->  
->  	if (ptr->SCp.phase & not_issued)
->  		seq_puts(m, "not issued|");
-> 
+> Alan Stern
+
