@@ -2,130 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA39B48854
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 18:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB654887C
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 18:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbfFQQGB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jun 2019 12:06:01 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:47082 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726509AbfFQQGB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jun 2019 12:06:01 -0400
-Received: by mail-lf1-f68.google.com with SMTP id z15so6891334lfh.13
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jun 2019 09:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ftr3IF6tEhAQtJEYORdg+72gK/8WB7Tuv1StM+dZuAk=;
-        b=GorSRaYuzb+DQmhSgz3nUmepUzz51+Lyv6smpuuHnpoQIPtwZSpBVP4zk3LrUrQXlO
-         Isd8K4u6O11izNx3bNmHdCC8GtUcTTiSGew6dvzyvns3ODFQ993EppLXwbnyOGhS81lN
-         x0Brxfw7ipJf1iktkzM0o+LpQRAxEcHbDnn/Zlgk4vpkLCWNLWYZlOiXgM2onbNmBgQ8
-         DvoksYUQL0DBgWqQQnS6v4s555bHT1eDk79ZK10zrefEzd7BUxBdPMl7K8iCb5y98vFe
-         9IISN4PaKDRAckmOUQhTBAd+hYv9DydnF7Jlm9TYY9czpM/B8OqxcRj6tvjbcg5PV/Mc
-         B9yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=Ftr3IF6tEhAQtJEYORdg+72gK/8WB7Tuv1StM+dZuAk=;
-        b=DnGPaQlkeEtRP/9aAR1YKjpgZszAKUSAlG761Mv83zApXUi3QEixdt/BgzRw6RgfHX
-         JgCtWDgsrOsWcOVzidRULgjnc9xlNYfeUTGZSDu80pzbtTngO4uf2f+FAwXnoInBIJY1
-         VDLBLmL44Cq7emJ9amlz4TiPQxoeetDxlLiG5QrZ99ocdwI6pi7EHNjjOyGYaYIYzPh7
-         u3FGG0FB0NPcUraJjo7wV8UUMcmLE1nyYHrT6kBkDlLX9MLk6BIHztyv5nB8GCcsUl1g
-         0TarzFY6f7lpJmaO8ES4B6oUYhHNXdG9vdzwHMk+djuN8JgkJU1vQciyXKjfTxdod0hj
-         gEbw==
-X-Gm-Message-State: APjAAAVJz9YovoHisUhZVYOuyUkFU2wCp8bwLUtSVeQrr81qrdwxR1Or
-        +gi8lOJjZsU7zv1od1pd8rFcBA==
-X-Google-Smtp-Source: APXvYqxy91RpuobIYehP+3aOoQHmmQtMCXRPP5GVPK8YNQWAOFzrL+2r+mJVUmXGGCJGyYDS5xdg4w==
-X-Received: by 2002:a19:7905:: with SMTP id u5mr55463097lfc.117.1560787559152;
-        Mon, 17 Jun 2019 09:05:59 -0700 (PDT)
-Received: from wasted.cogentembedded.com ([31.173.84.129])
-        by smtp.gmail.com with ESMTPSA id m17sm2174140lji.16.2019.06.17.09.05.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Jun 2019 09:05:58 -0700 (PDT)
-Subject: Re: [PATCH v4 6/8] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
-To:     Peter Chen <peter.chen@nxp.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "chunfeng.yun@mediatek.com" <chunfeng.yun@mediatek.com>
-References: <20190614093544.11730-1-peter.chen@nxp.com>
- <20190614093544.11730-7-peter.chen@nxp.com>
- <0dbf01f9-7c5c-ce0b-4feb-378c9147f15a@cogentembedded.com>
- <VI1PR04MB5327B9EF844F9C7505D337298BEB0@VI1PR04MB5327.eurprd04.prod.outlook.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <7d50357c-64b4-f504-e1b8-0e4542b59d12@cogentembedded.com>
-Date:   Mon, 17 Jun 2019 19:05:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        id S1726731AbfFQQO3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jun 2019 12:14:29 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:55780 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726715AbfFQQO3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jun 2019 12:14:29 -0400
+Received: (qmail 3842 invoked by uid 2102); 17 Jun 2019 12:14:27 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 17 Jun 2019 12:14:27 -0400
+Date:   Mon, 17 Jun 2019 12:14:27 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrea Vai <andrea.vai@unipv.it>
+cc:     Greg KH <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
+Subject: Re: Slow I/O on USB media
+In-Reply-To: <01c48aab5eedb26db5ccd389293a975ca3ac197b.camel@unipv.it>
+Message-ID: <Pine.LNX.4.44L0.1906171202580.1738-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB5327B9EF844F9C7505D337298BEB0@VI1PR04MB5327.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+On Mon, 17 Jun 2019, Andrea Vai wrote:
 
-On 06/17/2019 04:13 AM, Peter Chen wrote:
-
-[...]
->>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
->>> ---
->>>   arch/arm/boot/dts/imx7ulp.dtsi | 28 ++++++++++++++++++++++++++++
->>>   1 file changed, 28 insertions(+)
->>>
->>> diff --git a/arch/arm/boot/dts/imx7ulp.dtsi
->>> b/arch/arm/boot/dts/imx7ulp.dtsi index fca6e50f37c8..5115e47715c3
->>> 100644
->>> --- a/arch/arm/boot/dts/imx7ulp.dtsi
->>> +++ b/arch/arm/boot/dts/imx7ulp.dtsi
->>> @@ -30,6 +30,7 @@
->>>   		serial1 = &lpuart5;
->>>   		serial2 = &lpuart6;
->>>   		serial3 = &lpuart7;
->>> +		usbphy0 = &usbphy1;
->>
->>     Is that really needed?
-
-> Yes, since the driver code uses aligned id, and the controller number is from 0 at the code.
-> I commented it here: [1]
-
-   Fair enough...
-
->> [...]
->>> @@ -133,6 +134,33 @@
->> [...]
->>> +		usbphy1: usbphy@0x40350000 {
->>
->>     Name it "usb-phy@40350000" please.
->>
+> Il giorno lun, 10/06/2019 alle 10.40 -0400, Alan Stern ha scritto:
+> > On Sat, 8 Jun 2019, Andrea Vai wrote:
+> > 
+> > [...]
 > 
-> Would you please list binding doc for your suggestion?
-
-   The DT spec v0.2, section 2.2.2:
-
-https://github.com/devicetree-org/devicetree-specification/releases/download/v0.2/devicetree-specification-v0.2.pdf
-
+> Hi,
+>   I have concluded the (third) bisect, and still haven't come to an
+> end, but I have collected as much information as I can:
 > 
-> Thanks,
-> Peter
+> - I started again from:
+> cd /NoBackup/kernel
+> rm -rf linux
+> git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> cd linux
+> cp /boot/config-4.20.13-200.fc29.x86_64 .config
+> git bisect start
+> git bisect good v4.20
 > 
-> [1] https://patchwork.kernel.org/patch/10920599/
+> - To build each kernel, I have created a build script that simply
+> does:
+> make clean && make -j4 && make modules_install && make install &&
+> grub2-mkconfig -o /boot/grub2/grub.cfg && ls -lrt /boot/v*
+> 
+> - Then, used grubby --set-default to set the last kernel built (took
+> from the output of the last command of the build script)
+> 
+> - Rebooted and check with "uname -a" that the correct kernel is
+> actually the last built, comparing the # in the output of "uname -a"
+> with the content of the .version file;
+> 
+> - Do the test, using a script I created:
+> 
+> logfile=...
+> echo -n "Inizio: " | tee -a $logfile
+> date | tee -a $logfile
+> uname -a | tee -a $logfile
+> touch inizio
+> mount UUID="05141239-4ea5-494d-aa91-acd67db89ce5" /mnt/pendrive
+> cp /NoBackup/buttare/ubuntu-14.04.5-desktop-i386.iso /mnt/pendrive
+> umount /mnt/pendrive
+> echo -n "...fine: " | tee -a $logfile
+> date | tee -a $logfile
+> touch fine
+> 
+> Then, from the script output and the log file, I ran "git bisect bad"
+> each time the time taken was more than the time resulting with the
+> "good" kernel(s) (then started again with the build, and so on).
+> 
+> That happened ALL times, so I never encountered a kernel that made me
+> say "git bisect good".
 
-MBR, Sergei
+Really?  That strongly suggests that the 4.20 kernel also should have
+been marked bad.  Did you really test it exactly the same way as all
+the others?  That is, did you go through the entire procedure starting
+with "git checkout v4.20", then running the build script, then the
+reboot and "uname -a", and then the test script?
+
+Or did you just run a few tests with the Fedora 4.20.13 kernel and
+assume that the results would be the same as those?
+
+> Usually, the time took more than 20 minutes
+> (remember, the good kernel takes 1min15sec to copy), except a couple
+> of cases where it took 11 and 15 minutes. I assumed that a "good"
+> kernel would be one that behaves the same as the "original good" one
+> (1:15 min), but may I be wrong in this assumption? Note that the
+> 1:15min time is measured when the system usually makes (lot of) other
+> work, because it's the kernel I use regularly (i.e., also when I don't
+> do the tests).
+> 
+> Also, to answer to Alan:
+> 
+>    Also, it's possible that what you're testing for isn't caused by
+>    the 
+>    kernel in the first place (i.e., running the test several times
+>    under 
+>    the _same_ kernel might give different results).  In that case, 
+>    bisection would be pointless.
+> 
+> I have tried to exclude it by doing many tries (10) for some kernels.
+> I should have done it for all the kernels I built, but for now I did
+> it for the last one (see below) and "good" one (4.20) only, because I
+> would like to be sure the good one really runs fine, and in this case
+> the results are very homogeneous: average time is 1:12 (m:s), and the
+> standard deviation is 3 seconds.
+> 
+> For the other kernels I did one only try each, and they give very
+> different results among each other, spacing from 55min to 6min (other
+> examples are 38, 11, 22, 28, 23, 25, 15, 22, 30, 13 min), but even
+> with the best case the result was some 5 times slower than the "good"
+> one, so I marked it as "bad".
+> 
+> The ".config" file was never touched by me manually (I noticed that
+> sometimes I had to reply to some questions to configure the kernel,
+> and in those cases the .config content changed. Those cases were
+> frequent at the beginning of the bisect, and never happened after the
+> 7th, 8th step roughly).
+> 
+> The last bisect command showed:
+> 
+> a1cccdcf330e2a59b72b1588a7ef87cbaaa8a4e9 is the first bad commit
+> commit a1cccdcf330e2a59b72b1588a7ef87cbaaa8a4e9
+> Author: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> Date:   Thu Sep 20 12:27:04 2018 +0200
+> 
+>     drm/i915: Clean up casts to crtc_state in
+> intel_atomic_commit_tail()
+>     
+>     Use old/new_intel_crtc_state, and get rid of all the conversion
+> casts
+>     where they don't add anything.
+>     
+>     Signed-off-by: Maarten Lankhorst <
+> maarten.lankhorst@linux.intel.com>
+>     Reviewed-by: Matt Roper <matthew.d.roper@intel.com>
+>     Link: 
+> https://patchwork.freedesktop.org/patch/msgid/20180920102711.4184-2-maarten.lankhorst@linux.intel.com
+> 
+> 
+> And reverting it may have helped "a little", but didn't make the
+> problem disappear: 10 tries gave 4:47 +/- 2:01 minutes (but note that
+> I didn't do the 10 trials for the preceding kernel, and the only trial
+> on it gave 6:25 min).
+
+If _all_ the kernels you built and tested were bad then you probably 
+did not start the bisection from the right commit.
+
+> By the way, I noticed an error ("Unexpected system error") reported
+> sometimes by the Fedora ABRT tool, that states "this is not a software
+> bug, the kernel log indicates it is a hardware error", or something
+> similar (sorry, at the moment I don't know exactly where to find it).
+
+Did you look in the kernel log?
+
+> I have described as accurately 	as possible the steps I took because I
+> hope that you can find some mistakes in them. Sorry if it turns out to
+> be boring.
+> 
+> What do you suggest me?
+
+Compare the mainstream 4.20 kernel with the Fedora 4.20.13 kernel.  
+Also, maybe compare the mainstream 4.20.13 with Fedora's 4.20.13.
+
+Alan Stern
+
