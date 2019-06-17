@@ -2,159 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 017E448135
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 13:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210F94827C
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 14:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725973AbfFQLqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jun 2019 07:46:51 -0400
-Received: from outbound2.flatbooster.com ([84.200.223.10]:35722 "EHLO
-        outbound2.flatbooster.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbfFQLqv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jun 2019 07:46:51 -0400
-Received: from localhost (outbound2.flatbooster.com [127.0.0.1])
-        by outbound2.flatbooster.com (Postfix) with ESMTP id F10DA228079;
-        Mon, 17 Jun 2019 13:46:47 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at outbound2.flatbooster.com
-Received: from outbound2.flatbooster.com ([127.0.0.1])
-        by localhost (outbound2.flatbooster.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IbUzvdsGv0uC; Mon, 17 Jun 2019 13:46:46 +0200 (CEST)
-Received: from rex11.flatbooster.com (rex11.flatbooster.com [84.200.223.40])
-        by outbound2.flatbooster.com (Postfix) with ESMTPS id C8301228024;
-        Mon, 17 Jun 2019 13:46:46 +0200 (CEST)
-Received: from [10.0.1.16] (unknown [5.10.63.154])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: web110614p1)
-        by rex11.flatbooster.com (Postfix) with ESMTPSA id 98CA414E0A06;
-        Mon, 17 Jun 2019 13:46:46 +0200 (CEST)
-From:   Bernd Steinhauser <linux-ml@bernd-steinhauser.de>
-Subject: Force Feedback support not recognized on Granite Devices Simucube
-Reply-To: linux-ml@bernd-steinhauser.de
-To:     linux-input@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org
-Message-ID: <b4e9f460-ee34-fe8b-4502-e14701f9f03b@bernd-steinhauser.de>
-Date:   Mon, 17 Jun 2019 13:46:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726669AbfFQMcS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jun 2019 08:32:18 -0400
+Received: from mga12.intel.com ([192.55.52.136]:57562 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726005AbfFQMcS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Jun 2019 08:32:18 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jun 2019 05:32:17 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga005.jf.intel.com with ESMTP; 17 Jun 2019 05:32:13 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>, alokc@codeaurora.org,
+        agross@kernel.org, david.brown@linaro.org,
+        wsa+renesas@sang-engineering.com, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, ard.biesheuvel@linaro.org,
+        jlhugo@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] usb: dwc3: qcom: Add support for booting with ACPI
+In-Reply-To: <20190617102146.GG16364@dell>
+References: <20190612142654.9639-1-lee.jones@linaro.org> <20190612142654.9639-5-lee.jones@linaro.org> <20190617102146.GG16364@dell>
+Date:   Mon, 17 Jun 2019 15:32:07 +0300
+Message-ID: <87y320gzp4.fsf@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------6511CA17743B51AFCC229752"
-Content-Language: en-US
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------6511CA17743B51AFCC229752
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-Resending this message to linux input as suggested.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-I own a Granite Devices Simucube force feedback wheel which I'd like to get 
-working under Linux.
-The current status is that if I use a tool to check/test the FFB, it tells me 
-that the device does not support FFB.
-I'm also using the device under Windows 7 and there it works without any special 
-driver, so it should work with USB HID FFB.
-In principle, it supports the following effects (see link below):
-- constant force
-- friction
-- damping
-- spring
-- sine wave
-- square wave
-- sawtooth
-- triangle
+Lee Jones <lee.jones@linaro.org> writes:
+>> In Linux, the DWC3 core exists as its own independent platform device.
+>> Thus when describing relationships in Device Tree, the current default
+>> boot configuration table option, the DWC3 core often resides as a child
+>> of the platform specific node.  Both of which are given their own
+>> address space descriptions and the drivers can be mostly agnostic to
+>> each other.
+>>=20
+>> However, other Operating Systems have taken a more monolithic approach,
+>> which is evident in the configuration ACPI tables for the Qualcomm
+>> Snapdragon SDM850, where all DWC3 (core and platform) components are
+>> described under a single IO memory region.
+>>=20
+>> To ensure successful booting using the supplied ACPI tables, we need to
+>> devise a way to chop up the address regions provided and subsequently
+>> register the DWC3 core with the resultant information, which is
+>> precisely what this patch aims to achieve.
+>>=20
+>> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> ---
+>>  drivers/usb/dwc3/Kconfig     |   2 +-
+>>  drivers/usb/dwc3/dwc3-qcom.c | 206 ++++++++++++++++++++++++++++++-----
+>>  2 files changed, 179 insertions(+), 29 deletions(-)
+>
+> I'm starting to get a little twitchy about these patches now.  Due to
+> the release cadence of the larger Linux distros, it's pretty important
+> that these changes land in v5.3.  Without them, it is impossible to
+> install Linux on some pretty high profile emerging platforms.
+>
+> It's already -rc5 and I'm concerned that we're going to miss the
+> merge-window.  Would you be kind enough to review these patches
+> please?  The Pinctrl and I2C parts of the set have already been
+> merged.
 
-The device advertises as MCS, Granite Devices SimuCUBE with id 16d0:0d5a, I'll 
-attach lsusb output.
-Upon connection, the device is recognized and the output is:
+I don't seem to have this series in my inbox. This is the only email I
+have in this series.
 
-[ 3271.812807] usb 1-2.4.2: new full-speed USB device number 10 using xhci_hcd
-[ 3271.921182] usb 1-2.4.2: New USB device found, idVendor=16d0, idProduct=0d5a, 
-bcdDevice= 2.00
-[ 3271.921184] usb 1-2.4.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[ 3271.921185] usb 1-2.4.2: Product: SimuCUBE
-[ 3271.921186] usb 1-2.4.2: Manufacturer: Granite Devices
-[ 3271.921187] usb 1-2.4.2: SerialNumber: 0123456789
-[ 3281.943990] input: Granite Devices SimuCUBE as 
-/devices/pci0000:00/0000:00:09.0/0000:04:00.0/usb1/1-2/1-2.4/1-2.4.2/1-2.4.2:1.0/0003:16D0:0D5A.0016/input/input48
-[ 3281.944223] hid-generic 0003:16D0:0D5A.0016: unknown set_effect report layout
-[ 3281.944228] hid-generic 0003:16D0:0D5A.0016: input,hiddev2,hidraw15: USB HID 
-v1.11 Joystick [Granite Devices SimuCUBE] on usb-0000:04:00.0-2.4.2/input0
+=2D-=20
+balbi
 
-I spent some time looking at the code and also other ffb code in usbhid, but 
-since I'm not really familiar with C I have a hard time figuring out why it 
-doesn't work out of the box and how to fix this, but I'd be happy to help 
-implementing/debugging it.
-For a start, it would be really nice to find out what is reported, what the 
-report should look like and why it doesn't match.
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Kind Regards,
-Bernd
+-----BEGIN PGP SIGNATURE-----
 
-Links that might or might not be useful for general information:
-https://granitedevices.com/wiki/SimuCUBE_technical_specifications
-https://granitedevices.com/wiki/SimuCUBE_Firmware_User_Guide#DirectInput_Effect_Settings_and_Descriptions
-
-
-
-
-
---------------6511CA17743B51AFCC229752
-Content-Type: text/plain; charset=UTF-8;
- name="lsusb-v.txt"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="lsusb-v.txt"
-
-QnVzIDAwMSBEZXZpY2UgMDEwOiBJRCAxNmQwOjBkNWEgTUNTIApEZXZpY2UgRGVzY3JpcHRv
-cjoKICBiTGVuZ3RoICAgICAgICAgICAgICAgIDE4CiAgYkRlc2NyaXB0b3JUeXBlICAgICAg
-ICAgMQogIGJjZFVTQiAgICAgICAgICAgICAgIDIuMDAKICBiRGV2aWNlQ2xhc3MgICAgICAg
-ICAgICAwIAogIGJEZXZpY2VTdWJDbGFzcyAgICAgICAgIDAgCiAgYkRldmljZVByb3RvY29s
-ICAgICAgICAgMCAKICBiTWF4UGFja2V0U2l6ZTAgICAgICAgIDY0CiAgaWRWZW5kb3IgICAg
-ICAgICAgIDB4MTZkMCBNQ1MKICBpZFByb2R1Y3QgICAgICAgICAgMHgwZDVhIAogIGJjZERl
-dmljZSAgICAgICAgICAgIDIuMDAKICBpTWFudWZhY3R1cmVyICAgICAgICAgICAxIEdyYW5p
-dGUgRGV2aWNlcwogIGlQcm9kdWN0ICAgICAgICAgICAgICAgIDIgU2ltdUNVQkUKICBpU2Vy
-aWFsICAgICAgICAgICAgICAgICAzIDAxMjM0NTY3ODkKICBiTnVtQ29uZmlndXJhdGlvbnMg
-ICAgICAxCiAgQ29uZmlndXJhdGlvbiBEZXNjcmlwdG9yOgogICAgYkxlbmd0aCAgICAgICAg
-ICAgICAgICAgOQogICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgMgogICAgd1RvdGFsTGVu
-Z3RoICAgICAgIDB4MDAyOQogICAgYk51bUludGVyZmFjZXMgICAgICAgICAgMQogICAgYkNv
-bmZpZ3VyYXRpb25WYWx1ZSAgICAgMQogICAgaUNvbmZpZ3VyYXRpb24gICAgICAgICAgMCAK
-ICAgIGJtQXR0cmlidXRlcyAgICAgICAgIDB4YzAKICAgICAgU2VsZiBQb3dlcmVkCiAgICBN
-YXhQb3dlciAgICAgICAgICAgICAgMTAwbUEKICAgIEludGVyZmFjZSBEZXNjcmlwdG9yOgog
-ICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5CiAgICAgIGJEZXNjcmlwdG9yVHlwZSAg
-ICAgICAgIDQKICAgICAgYkludGVyZmFjZU51bWJlciAgICAgICAgMAogICAgICBiQWx0ZXJu
-YXRlU2V0dGluZyAgICAgICAwCiAgICAgIGJOdW1FbmRwb2ludHMgICAgICAgICAgIDIKICAg
-ICAgYkludGVyZmFjZUNsYXNzICAgICAgICAgMyBIdW1hbiBJbnRlcmZhY2UgRGV2aWNlCiAg
-ICAgIGJJbnRlcmZhY2VTdWJDbGFzcyAgICAgIDAgCiAgICAgIGJJbnRlcmZhY2VQcm90b2Nv
-bCAgICAgIDAgCiAgICAgIGlJbnRlcmZhY2UgICAgICAgICAgICAgIDAgCiAgICAgICAgSElE
-IERldmljZSBEZXNjcmlwdG9yOgogICAgICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAg
-OQogICAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAzMwogICAgICAgICAgYmNkSElE
-ICAgICAgICAgICAgICAgMS4xMQogICAgICAgICAgYkNvdW50cnlDb2RlICAgICAgICAgICAg
-MCBOb3Qgc3VwcG9ydGVkCiAgICAgICAgICBiTnVtRGVzY3JpcHRvcnMgICAgICAgICAxCiAg
-ICAgICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgIDM0IFJlcG9ydAogICAgICAgICAgd0Rl
-c2NyaXB0b3JMZW5ndGggICAgMTQ2NQogICAgICAgICBSZXBvcnQgRGVzY3JpcHRvcnM6IAog
-ICAgICAgICAgICoqIFVOQVZBSUxBQkxFICoqCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6
-CiAgICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgNwogICAgICAgIGJEZXNjcmlwdG9y
-VHlwZSAgICAgICAgIDUKICAgICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDgxICBFUCAx
-IElOCiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAgICAgMwogICAgICAgICAgVHJhbnNm
-ZXIgVHlwZSAgICAgICAgICAgIEludGVycnVwdAogICAgICAgICAgU3luY2ggVHlwZSAgICAg
-ICAgICAgICAgIE5vbmUKICAgICAgICAgIFVzYWdlIFR5cGUgICAgICAgICAgICAgICBEYXRh
-CiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDA0MCAgMXggNjQgYnl0ZXMKICAgICAg
-ICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAxCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6
-CiAgICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgNwogICAgICAgIGJEZXNjcmlwdG9y
-VHlwZSAgICAgICAgIDUKICAgICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDAxICBFUCAx
-IE9VVAogICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDMKICAgICAgICAgIFRyYW5z
-ZmVyIFR5cGUgICAgICAgICAgICBJbnRlcnJ1cHQKICAgICAgICAgIFN5bmNoIFR5cGUgICAg
-ICAgICAgICAgICBOb25lCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0
-YQogICAgICAgIHdNYXhQYWNrZXRTaXplICAgICAweDAwNDAgIDF4IDY0IGJ5dGVzCiAgICAg
-ICAgYkludGVydmFsICAgICAgICAgICAgICAgMQpjYW4ndCBnZXQgZGV2aWNlIHF1YWxpZmll
-cjogUmVzb3VyY2UgdGVtcG9yYXJpbHkgdW5hdmFpbGFibGUKY2FuJ3QgZ2V0IGRlYnVnIGRl
-c2NyaXB0b3I6IFJlc291cmNlIHRlbXBvcmFyaWx5IHVuYXZhaWxhYmxlCkRldmljZSBTdGF0
-dXM6ICAgICAweDAwMDEKICBTZWxmIFBvd2VyZWQK
---------------6511CA17743B51AFCC229752--
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0HiEkACgkQzL64meEa
+mQZgTg/+MvWLo+0fVFNR04KSqTX6nZcqLk/4KwBc7uy1RsD4WMFa3zcKE/jB8scd
+KN48Szwr6TxXj6/nboP7PeKF+u2ftbYw8L1Ggtd1Okq/Fn8mUcM+vY1xGotjgrao
+ZXbOLcI393gCADUuEgHbOZDXPeLtgF2K/RQ06CPJ+wPunpx3pDwJVaMumW5Inocu
+Yz/eMkd5XP2QXDfL8F+27ZfnZQ6oNbEa+RV0cakbyvjHWDbkeiCW2DN5YFM3gJpC
+T9RXeqzKIUkfWd3mLcBq54Z3wCh51nw2UfThE1bQK2XlPKPXnU9P/Oi7ZIJYn5X4
+hF9PoBRoYWoaS5v9TJxL+78F+salna/FVsr6jKtbmVQjr4t3H+2i3SKXUmcMtaP9
+/jXg8jRCni44640ri7F4xN52TdkE/K7eAShOTp2izyRydKkZRxCOgW0xPh1Yi6Yx
+DGFxy4TQPUc6uAchzWfB/DIQywLYMDChFGMc525vTiw3ATnWf5dK7c/G0FufNs+g
+YcXsD9HyhYs9puAp4DBUZmXZGiuPHT8Se78aTfYqAvY7oFH5puh2Mg8UDLeeiatr
+A67I1jpWh9RvTGFPpBABobbaItB4lMcitFy2MqxByxNmJt9l5bbExTRmdXLFzbZK
+db8+BiVaO0xw70s0j9BuGwO/YolXOiX2i4lP4Qzhc7WjniL3FPw=
+=l8qE
+-----END PGP SIGNATURE-----
+--=-=-=--
