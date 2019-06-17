@@ -2,103 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B4D47783
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 03:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE71447789
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 03:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727382AbfFQBN6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Jun 2019 21:13:58 -0400
-Received: from mail-eopbgr140085.outbound.protection.outlook.com ([40.107.14.85]:10999
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727235AbfFQBN5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 16 Jun 2019 21:13:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tKu/5AO3LYlUOafsJvWox9oW2htgTMMYAxeUYPHktgY=;
- b=l7MxlT8wQCPgXiFdoFIimqzOfW/zxIBy4m73oD7o/OhqoE4Nnl8/qqXfTtLfuTcTKxF9flnnh67oU2n65hhhAvdF10hR+BH/aPbHZm6cOsNnD+rVZ/JtkWJJxmoeyilmF1n1wUmxknH/fTFBTWuxKN+a7FX+vet5n1MTBbE1xhU=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB4736.eurprd04.prod.outlook.com (20.177.48.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.13; Mon, 17 Jun 2019 01:13:53 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c1bf:7842:6630:b87a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c1bf:7842:6630:b87a%7]) with mapi id 15.20.1987.014; Mon, 17 Jun 2019
- 01:13:53 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "chunfeng.yun@mediatek.com" <chunfeng.yun@mediatek.com>
-Subject: RE: [PATCH v4 6/8] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
-Thread-Topic: [PATCH v4 6/8] ARM: dts: imx7ulp: add imx7ulp USBOTG1 support
-Thread-Index: AQHVIpRSNr6mYKZVAEKkjfl1njA6J6acbVKAgAKdzIA=
-Date:   Mon, 17 Jun 2019 01:13:52 +0000
-Message-ID: <VI1PR04MB5327B9EF844F9C7505D337298BEB0@VI1PR04MB5327.eurprd04.prod.outlook.com>
-References: <20190614093544.11730-1-peter.chen@nxp.com>
- <20190614093544.11730-7-peter.chen@nxp.com>
- <0dbf01f9-7c5c-ce0b-4feb-378c9147f15a@cogentembedded.com>
-In-Reply-To: <0dbf01f9-7c5c-ce0b-4feb-378c9147f15a@cogentembedded.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2ccf280b-8dc0-4c49-0bfc-08d6f2c11011
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4736;
-x-ms-traffictypediagnostic: VI1PR04MB4736:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <VI1PR04MB4736E098631B8C1C481902C88BEB0@VI1PR04MB4736.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 0071BFA85B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(136003)(366004)(346002)(376002)(396003)(189003)(199004)(9686003)(966005)(86362001)(186003)(256004)(26005)(14454004)(305945005)(33656002)(99286004)(2201001)(8676002)(229853002)(7736002)(74316002)(66066001)(4744005)(52536014)(478600001)(71200400001)(71190400001)(81156014)(81166006)(5660300002)(2501003)(8936002)(76176011)(6506007)(476003)(66446008)(64756008)(66556008)(66476007)(4326008)(7696005)(2906002)(68736007)(44832011)(486006)(446003)(11346002)(3846002)(6116002)(73956011)(6306002)(110136005)(54906003)(6246003)(76116006)(66946007)(6436002)(316002)(55016002)(25786009)(53936002)(102836004);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4736;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: x+LAx2e/ycMS1MKCzNVnmLvs2Fa2XocWmf36F4pbK1Y9747xTRdei3QWfNQfbKjmAjo2961iCDJ6Gv2BipJzLtgB3+C9tlY5khrlkAVwp9eMVSFuM9qfNCJ57HBuNPkNCNqoYopSZ949OYJKBJeSfPbzhU5+1UOEnLSq7Ipw3+SXgJcufMYdMjrP25v7S82+h2mgv6FDJ1V71mm6vnwPryPc9Sp+Y72C29r+3/F1OM9xieS6r7IEGUxh00/Wpx5advpvxfWH5hOjQnIFkvJm9LBTA5e5w6oS6xavjp/75rUfo0FozVdRRpHRi12Dw/8StAv2SWwtQWLmJHD4lQgWWXsGjhISxDTPOpxvqnPWu/83XzQXLVxiOLhK4RaiZ1kfnfehtLAIzhGGMh4hN12NZYVmwW39oKMJu58yMrTjG2c=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727507AbfFQBPI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Jun 2019 21:15:08 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:32910 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727235AbfFQBPI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 16 Jun 2019 21:15:08 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 7DCFE1796;
+        Mon, 17 Jun 2019 01:15:06 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A00A60C18;
+        Mon, 17 Jun 2019 01:14:36 +0000 (UTC)
+Date:   Mon, 17 Jun 2019 09:14:27 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Finn Thain <fthain@telegraphics.com.au>
+Cc:     "Juergen E . Fischer" <fischer@norbit.de>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>
+Subject: Re: [PATCH V3 10/15] scsi: aha152x: use sg helper to operate
+ scatterlist
+Message-ID: <20190617011426.GB20122@ming.t460p>
+References: <20190614025316.7360-1-ming.lei@redhat.com>
+ <20190614025316.7360-11-ming.lei@redhat.com>
+ <alpine.LNX.2.21.1906141404270.33@nippy.intranet>
+ <20190614081732.GC24393@ming.t460p>
+ <alpine.LNX.2.21.1906141931070.65@nippy.intranet>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ccf280b-8dc0-4c49-0bfc-08d6f2c11011
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2019 01:13:53.0477
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: peter.chen@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4736
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LNX.2.21.1906141931070.65@nippy.intranet>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Mon, 17 Jun 2019 01:15:07 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUGV0ZXIgQ2hlbiA8cGV0ZXIuY2hlbkBueHAuY29t
-Pg0KPiA+IC0tLQ0KPiA+ICAgYXJjaC9hcm0vYm9vdC9kdHMvaW14N3VscC5kdHNpIHwgMjggKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDI4IGluc2Vy
-dGlvbnMoKykNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9pbXg3dWxw
-LmR0c2kNCj4gPiBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDd1bHAuZHRzaSBpbmRleCBmY2E2ZTUw
-ZjM3YzguLjUxMTVlNDc3MTVjMw0KPiA+IDEwMDY0NA0KPiA+IC0tLSBhL2FyY2gvYXJtL2Jvb3Qv
-ZHRzL2lteDd1bHAuZHRzaQ0KPiA+ICsrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDd1bHAuZHRz
-aQ0KPiA+IEBAIC0zMCw2ICszMCw3IEBADQo+ID4gICAJCXNlcmlhbDEgPSAmbHB1YXJ0NTsNCj4g
-PiAgIAkJc2VyaWFsMiA9ICZscHVhcnQ2Ow0KPiA+ICAgCQlzZXJpYWwzID0gJmxwdWFydDc7DQo+
-ID4gKwkJdXNicGh5MCA9ICZ1c2JwaHkxOw0KPiANCj4gICAgIElzIHRoYXQgcmVhbGx5IG5lZWRl
-ZD8NCj4gDQoNClllcywgc2luY2UgdGhlIGRyaXZlciBjb2RlIHVzZXMgYWxpZ25lZCBpZCwgYW5k
-IHRoZSBjb250cm9sbGVyIG51bWJlciBpcyBmcm9tIDAgYXQgdGhlIGNvZGUuDQpJIGNvbW1lbnRl
-ZCBpdCBoZXJlOiBbMV0NCg0KPiBbLi4uXQ0KPiA+IEBAIC0xMzMsNiArMTM0LDMzIEBADQo+IFsu
-Li5dDQo+ID4gKwkJdXNicGh5MTogdXNicGh5QDB4NDAzNTAwMDAgew0KPiANCj4gICAgIE5hbWUg
-aXQgInVzYi1waHlANDAzNTAwMDAiIHBsZWFzZS4NCj4gDQoNCldvdWxkIHlvdSBwbGVhc2UgbGlz
-dCBiaW5kaW5nIGRvYyBmb3IgeW91ciBzdWdnZXN0aW9uPw0KDQpUaGFua3MsDQpQZXRlcg0KDQpb
-MV0gaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wYXRjaC8xMDkyMDU5OS8NCg==
+On Fri, Jun 14, 2019 at 08:36:38PM +1000, Finn Thain wrote:
+> On Fri, 14 Jun 2019, Ming Lei wrote:
+> 
+> > 
+> > Follows the fixed version, could you review again?
+> > 
+> > From f03484d4bac083c39d70665cfbadb641093b63de Mon Sep 17 00:00:00 2001
+> > From: Ming Lei <ming.lei@redhat.com>
+> > Date: Wed, 12 Jun 2019 20:37:35 +0800
+> > Subject: [PATCH] scsi: aha152x: use sg helper to operate scatterlist
+> > 
+> > Use the scatterlist iterators and remove direct indexing of the
+> > scatterlist array.
+> > 
+> > This way allows us to pre-allocate one small scatterlist, which can be
+> > chained with one runtime allocated scatterlist if the pre-allocated one
+> > isn't enough for the whole request.
+> > 
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> > ---
+> >  drivers/scsi/aha152x.c | 34 ++++++++++++++++++++--------------
+> >  1 file changed, 20 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
+> > index 97872838b983..7faecdefda56 100644
+> > --- a/drivers/scsi/aha152x.c
+> > +++ b/drivers/scsi/aha152x.c
+> > @@ -2033,7 +2033,7 @@ static void datai_run(struct Scsi_Host *shpnt)
+> >  				    CURRENT_SC->SCp.buffers_residual > 0) {
+> >  					/* advance to next buffer */
+> >  					CURRENT_SC->SCp.buffers_residual--;
+> > -					CURRENT_SC->SCp.buffer++;
+> > +					CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
+> >  					CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
+> >  					CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
+> >  				}
+> > @@ -2139,7 +2139,7 @@ static void datao_run(struct Scsi_Host *shpnt)
+> >  		if(CURRENT_SC->SCp.this_residual==0 && CURRENT_SC->SCp.buffers_residual>0) {
+> >  			/* advance to next buffer */
+> >  			CURRENT_SC->SCp.buffers_residual--;
+> > -			CURRENT_SC->SCp.buffer++;
+> > +			CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
+> >  			CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
+> >  			CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
+> >  		}
+> > @@ -2158,22 +2158,28 @@ static void datao_run(struct Scsi_Host *shpnt)
+> >  static void datao_end(struct Scsi_Host *shpnt)
+> >  {
+> >  	if(TESTLO(DMASTAT, DFIFOEMP)) {
+> > -		int data_count = (DATA_LEN - scsi_get_resid(CURRENT_SC)) -
+> > -			GETSTCNT();
+> > +		int done = GETSTCNT();
+> > +		int data_count = (DATA_LEN - scsi_get_resid(CURRENT_SC)) - done;
+> 
+> I think that's better than my suggestion.
+> 
+> > +		struct scatterlist *sg = scsi_sglist(CURRENT_SC);
+> > +		int i;
+> >  
+> >  		CMD_INC_RESID(CURRENT_SC, data_count);
+> >  
+> > -		data_count -= CURRENT_SC->SCp.ptr -
+> > -			SG_ADDRESS(CURRENT_SC->SCp.buffer);
+> > -		while(data_count>0) {
+> > -			CURRENT_SC->SCp.buffer--;
+> > -			CURRENT_SC->SCp.buffers_residual++;
+> > -			data_count -= CURRENT_SC->SCp.buffer->length;
+> > +		/*
+> > +		 * rewind where we have done, and we have to start from
+> > +		 * the beginning
+> > +		 */
+> 
+> How about, "Locate the first SG entry not yet sent".
+
+OK.
+
+> 
+> We could use sg_nents_for_len() but it returns a count of sg entries not a 
+> scatterlist pointer so it's not very helpful here.
+> 
+> > +		for (i = 0; done > 0 && !sg_is_last(sg); i++, sg = sg_next(sg)) {
+> > +			if (done < sg->length)
+> > +				break;
+> > +			done -= sg->length;
+> >  		}
+> > -		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) -
+> > -			data_count;
+> > -		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length +
+> > -			data_count;
+> > +
+> > +		CURRENT_SC->SCp.buffers_residual = i;
+> 
+> Contradicting my previous email, that's still not right. I think it would 
+> have to be,
+> 
+> 		CURRENT_SC->SCp.buffers_residual = scsi_sg_count(CURRENT_SC) - i;
+
+Right, my fault.
+
+> 
+> But we could remove all references to SCp.buffers_residual, like I did in 
+> patch 15/15 for NCR5380.c.
+> 
+> > +		CURRENT_SC->SCp.buffer = sg;
+> > +		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) + done;
+> > +		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length -
+> > +			done;
+> >  	}
+> >  
+> >  	SETPORT(SXFRCTL0, CH1|CLRCH1|CLRSTCNT);
+> > 
+> 
+> What do you think of the revised patch below?
+
+Looks fine, I will include it in V4.
+
+Thanks,
+Ming
