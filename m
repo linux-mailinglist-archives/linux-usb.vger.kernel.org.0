@@ -2,44 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B294E47D56
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 10:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D3047D6E
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jun 2019 10:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727680AbfFQIkG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jun 2019 04:40:06 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:35278 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727669AbfFQIkF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jun 2019 04:40:05 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 49E0E25AED3;
-        Mon, 17 Jun 2019 18:40:04 +1000 (AEST)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id 4B70794024A; Mon, 17 Jun 2019 10:40:02 +0200 (CEST)
-Date:   Mon, 17 Jun 2019 10:40:02 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] usb: renesas_usbhs: Use struct assignment instead of
- memcpy()
-Message-ID: <20190617084001.67c5524q4xp3xh4i@verge.net.au>
-References: <1560424728-13929-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+        id S1727703AbfFQIpG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jun 2019 04:45:06 -0400
+Received: from verein.lst.de ([213.95.11.211]:34464 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725971AbfFQIpG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Jun 2019 04:45:06 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id 6715C68AFE; Mon, 17 Jun 2019 10:44:33 +0200 (CEST)
+Date:   Mon, 17 Jun 2019 10:44:33 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Kashyap Desai <kashyap.desai@broadcom.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Sebastian Ott <sebott@linux.ibm.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>,
+        PDL-MPT-FUSIONLINUX <mpt-fusionlinux.pdl@broadcom.com>,
+        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/13] megaraid_sas: set virt_boundary_mask in the scsi
+ host
+Message-ID: <20190617084433.GA7969@lst.de>
+References: <20190605190836.32354-1-hch@lst.de> <20190605190836.32354-11-hch@lst.de> <cd713506efb9579d1f69a719d831c28d@mail.gmail.com> <20190608081400.GA19573@lst.de> <98f6557ae91a7cdfe8069fcf7d788c88@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1560424728-13929-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <98f6557ae91a7cdfe8069fcf7d788c88@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 08:18:48PM +0900, Yoshihiro Shimoda wrote:
-> To avoid the error-proneness of calls to sizeof() in the memcpy,
-> this patch uses struct assignment instead of memcpy.
-> 
-> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+On Fri, Jun 14, 2019 at 01:28:47AM +0530, Kashyap Desai wrote:
+> Is there any changes in API  blk_queue_virt_boundary? I could not find
+> relevant code which account for this. Can you help ?
+> Which git repo shall I use for testing ? That way I can confirm, I didn't
+> miss relevant changes.
 
-Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
+Latest mainline plus the series (which is about to get resent).
+blk_queue_virt_boundary now forced an unlimited max_hw_sectors as that
+is how PRP-like schemes work, to work around a block driver merging
+bug.  But we also need to communicate that limit to the DMA layer so
+that we don't set a smaller iommu segment size limitation.
+
+> >From your above explanation, it means (after this patch) max segment size
+> of the MR controller will be set to 4K.
+> Earlier it is possible to receive single SGE of 64K datalength (Since max
+> seg size was 64K), but now the same buffer will reach the driver having 16
+> SGEs (Each SGE will contain 4K length).
+
+No, there is no more limit for the size of the segment at all,
+as for PRPs each PRP is sort of a segment from the hardware perspective.
+We just require the segments to not have gaps, as PRPs don't allow for
+that.
+
+That being said I think these patches are wrong for the case of megaraid
+or mpt having both NVMe and SAS/ATA devices behind a single controller.
+Is that a valid configuration?
