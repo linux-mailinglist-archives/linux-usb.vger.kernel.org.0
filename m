@@ -2,55 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8590A4A3E2
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 16:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A62C4A3DA
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 16:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728881AbfFRO0Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 10:26:24 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34364 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725919AbfFRO0Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jun 2019 10:26:24 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 516BFAC2D;
-        Tue, 18 Jun 2019 14:26:23 +0000 (UTC)
-Message-ID: <1560867168.3184.8.camel@suse.com>
-Subject: possible deadlock in 3b6054da68f9b0d5ed6a7ed0f42a79e61904352c ("usb
- hub: send clear_tt_buffer_complete events when canceling TT clear work")
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Octavian Purdila <octavian.purdila@intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Date:   Tue, 18 Jun 2019 16:12:48 +0200
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1729161AbfFROZB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 10:25:01 -0400
+Received: from mga07.intel.com ([134.134.136.100]:24098 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728982AbfFROZA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jun 2019 10:25:00 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 07:25:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,389,1557212400"; 
+   d="scan'208";a="243006657"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.164])
+  by orsmga001.jf.intel.com with ESMTP; 18 Jun 2019 07:24:58 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/2] xhci fixes for usb-linus
+Date:   Tue, 18 Jun 2019 17:27:46 +0300
+Message-Id: <1560868068-2583-1-git-send-email-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Greg
 
-looking at this code,  which fixed a deadlock,it looks to me
-like it has introduced another deadlock.
+A couple of fixes for usb-linus, one to detect usb 3.2 xhci hosts,
+another to resolve a rare host hang at resume issue.
 
-[assume a storage device on a hub being suspended]
+-Mathias
 
-hub_suspend() -> hub_quiesce() -> flush_work(&hub->tt.clear_work) ->
+Mathias Nyman (2):
+  usb: xhci: Don't try to recover an endpoint if port is in error state.
+  xhci: detect USB 3.2 capable host controllers correctly
 
-/* note that tt.clear_work is not on its own queue, it uses
-simple schedule_work(). Hence the work lands on system_wq,
-shared with arbitrary works */
+ drivers/usb/host/xhci-ring.c | 15 ++++++++++++++-
+ drivers/usb/host/xhci.c      | 25 ++++++++++++++++++++-----
+ drivers/usb/host/xhci.h      |  9 +++++++++
+ 3 files changed, 43 insertions(+), 6 deletions(-)
 
-kmalloc(... , GFP_KERNEL) -> usb_storage or uas ->
-usb_autopm_get_interface() -> DEADLOCK
-
-I think you need to use a dedicated workqueue for the hub driver.
-
-	Regards
-		Oliver
-
+-- 
+2.7.4
 
