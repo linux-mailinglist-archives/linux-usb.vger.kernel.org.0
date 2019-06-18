@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C56E49A58
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 09:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C41349A63
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 09:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728779AbfFRHUJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 03:20:09 -0400
-Received: from mga14.intel.com ([192.55.52.115]:57805 "EHLO mga14.intel.com"
+        id S1727099AbfFRHV4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 03:21:56 -0400
+Received: from mga01.intel.com ([192.55.52.88]:64340 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726091AbfFRHUJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jun 2019 03:20:09 -0400
+        id S1726158AbfFRHVz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jun 2019 03:21:55 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 00:20:09 -0700
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 00:21:55 -0700
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,388,1557212400"; 
+   d="asc'?scan'208";a="186014466"
 Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Jun 2019 00:20:07 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Youn <John.Youn@synopsys.com>,
-        John Youn <John.Youn@synopsys.com>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [RFC] Sorting out dwc3 ISOC endpoints once and for all
-In-Reply-To: <30102591E157244384E984126FC3CB4F63A11B8A@us01wembx1.internal.synopsys.com>
-References: <87a7etd8s7.fsf@linux.intel.com> <2B3535C5ECE8B5419E3ECBE30077290902E78AF3D7@us01wembx1.internal.synopsys.com> <30102591E157244384E984126FC3CB4F63A11B8A@us01wembx1.internal.synopsys.com>
-Date:   Tue, 18 Jun 2019 10:20:03 +0300
-Message-ID: <87fto7gy1o.fsf@linux.intel.com>
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2019 00:21:53 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Lianwei Wang <lianwei.wang@gmail.com>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH] usb: gadget: avoid using gadget after freed
+In-Reply-To: <CAJFUiJh4zQDvnS7BhUam14LtUrb5ad=hiukQgiYbOiUZs4zVcg@mail.gmail.com>
+References: <20190614070243.31565-1-lianwei.wang@gmail.com> <87tvcogzbv.fsf@linux.intel.com> <CAJFUiJh4zQDvnS7BhUam14LtUrb5ad=hiukQgiYbOiUZs4zVcg@mail.gmail.com>
+Date:   Tue, 18 Jun 2019 10:21:49 +0300
+Message-ID: <87d0jbgxyq.fsf@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -44,68 +44,81 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>>
->>>  static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct
->>> dwc3_request *req)
->>>
->>>
->>> Would there be any obvious draw-back to going down this route? The thing
->>> is that, as it is, it seems like we will *always* have some corner case
->>> where we can't guarantee that we can even start a transfer since there's
->>> no upper-bound between XferNotReady and gadget driver finally queueing a
->>> request. Also, I can't simply read DSTS for the frame number because of
->>> top-most 2 bits.
->>>
->> For non-affected version of the IP, the xfernotready -> starttransfer
->> time will have to be off by more than a couple seconds for the driver
->> to produce an incorrect 16-bit frame number. If you're seeing errors
->> here, maybe we just need to code review the relevant sections to make
->> sure the 14/16-bit and rollover conditions are all handled correctly.
->
-> I think what Felipe may see is some delay in the system that causes the
-> SW to not handle XferNotReady event in time. We already have the "retry"
-> method handle that to a certain extend.
->
->> But I can't think of any obvious drawbacks of the quirk, other than
->> doing some unnecessary work, which shouldn't produce any bad
->> side-effects. But we haven't really tested that.
+Lianwei Wang <lianwei.wang@gmail.com> writes:
+> On Mon, Jun 17, 2019 at 5:40 AM Felipe Balbi <balbi@kernel.org> wrote:
 >>
+>> Lianwei Wang <lianwei.wang@gmail.com> writes:
+>>
+>> > The udc and gadget device will be deleted when udc device is
+>> > disconnected and the related function will be unbind with it.
+>> >
+>> > But if the configfs is not deleted, then the function object
+>> > will be kept and the bound status is kept true.
+>> >
+>> > Then after udc device is connected again and a new udc and
+>> > gadget objects will be created and passed to bind interface.
+>> > But because the bound is still true, the new gadget is not
+>> > updated to netdev and a previous freed gadget will be used
+>> > in netdev after bind.
+>> >
+>> > To fix this using after freed issue, always set the gadget
+>> > object to netdev in bind interface.
+>> >
+>> > Signed-off-by: Lianwei Wang <lianwei.wang@gmail.com>
+>>
+>> I can't actually understand what's the problem here. The gadget is not
+>> deleted when we disconnect the cable.
+>>
+>> --
+>> balbi
 >
-> The workaround for the isoc_quirk requires 2 tries sending
-> START_TRANSFER command. This means that you have to account the delay of
-> that command completion plus potentially 1 more END_TRANSFER completion.
-> That's why the quirk gives a buffer of at least 4 uframes of the
-> scheduled isoc frame. So, it cannot schedule immediately on the next
-> uframe, that's one of the drawbacks.
+> The issue was observed with a dual-role capable USB controller (e.g. Intel
+> XHCI controller), which has the ability to switch role between host and d=
+evice
+> mode. The gadget is deleted when we switch role to device mode from host
+> mode. See below log:
+> # echo p > /sys/devices/pci0000:00/0000:00:15.1/intel-cht-otg.0/mux_state=
+ #(4.4)
+
+oh, so you're using a modified tree :-) Then we can't really help.
+
+> [   41.170891] intel-cht-otg intel-cht-otg.0: p: set PERIPHERAL mode
+> [   41.171895] dwc3 dwc3.0.auto: DWC3 OTG Notify USB_EVENT_VBUS
+> [   41.187420] dwc3 dwc3.0.auto: dwc3_resume_common
+> [   41.191192] usb 1-1: USB disconnect, device number 3
+> [   41.191284] usb 1-1.1: USB disconnect, device number 4
+> [   41.218958] usb 1-1.5: USB disconnect, device number 5
+> [   41.238117] android_work: sent uevent USB_STATE=3DCONFIGURED
+> [   41.240572] android_work: sent uevent USB_STATE=3DDISCONNECTED
+
+What is this android_work. That doesn't exist upstream.
+
+> [   41.263285] platform dabr_udc.0: unregister gadget driver 'configfs-ga=
+dget'
+> [   41.263413] configfs-gadget gadget: unbind function 'Function FS
+> Gadget'/ffff8801db049e38
+> [   41.263969] configfs-gadget gadget: unbind function
+> 'cdc_network'/ffff8801d8897400
+> [   41.325943] dabridge 1-1.5:1.0: Port 3 VBUS OFF
+> [   41.720957] dabr_udc deleted
+> [   41.721097] dabridge 1-5 deleted
 >
+> The UDC and gadget will be deleted after switch role to device mode.
+> And they will be
+> created as new object when switching back to host mode. At this time
+> the bind in function
+> driver (e.g. f_ncm) will not set the new gadget.
 >
-> Hi Felipe,
+> For kernel 4.19+, the role switch command will be:
+>   echo "device" > /sys/class/usb_role/intel_xhci_usb_sw-role-switch/role
 >
-> Since you're asking this, it means you're still seeing issue with your
-> setup despite retrying to send START_TRANSFER command 5 times. What's
-> the worse delay responding to XferNotReady you're seeing in your setup?
+> The latest Intel role switch kernel driver can be found here:
+>   https://elixir.bootlin.com/linux/v5.2-rc5/source/drivers/usb/roles/inte=
+l-xhci-usb-role-switch.c
 
-There's no upper-bound on how long the gadget will take to enqueue a
-request. We see problems with UVC gadget all the time. It can take a lot
-of time to decide to enqueue data.
-
-Usually I hear this from folks using UVC gadget with a real sensor on
-the background.
-
-I've seen gadget enqueueing as far as 20 intervals in the future. But
-remember, there's no upper-bound. And that's the problem. If we could
-just read the frame number from DSTS and use that, we wouldn't have any
-issues. But since DSTS only contains 14 our of the 16 bits the
-controller needs, then we can't really use that.
-
-To me, it seems like this part of the controller wasn't well
-thought-out. These extra two bits, perhaps, should be internal to the
-controller and SW should have no knowledge that they exist.
-
-In any case, this is the biggest sort of issues in DWC3 right now :-)
-
-Anything else seems to behave nicely without any problems.
+Right, please test against v5.2-rc5 and show me the problem on that
+kernel. I can't apply patches for problems that may not even exist in
+upstream, sorry.
 
 =2D-=20
 balbi
@@ -115,18 +128,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0IkKMACgkQzL64meEa
-mQb5lxAAuaSQWwTg0WyHUd0pKVcI1qXFNxGhrH05cKzSzud7HM1drNTqoLK40HEm
-lMUBJFKEBfzyBDoMAUR4YjrB9dfWitL29t/BAzIFosPt+LWjRAmbuwxRZO+VXmxO
-E4A5bqfQEnLWE8T28lr64gQbuFRo0ilatKF6IaXXKLHqYts0Nx1itnfq55nkQ9md
-7JnXB/FyEh0Le1EBiYinq9uPfy/6PXXNNBkvB1A2GTlwnEjjO7RejIXUsv7ErFFk
-WfUhvbtKDfup+kjyN4DP2C4C/TNMGVSnyc2m89fCCde72m+Bvi5LipuMVzaQ1nnr
-PApVLTDDw2ZeNHyen2xgPbQ2GweqStx8Ip1GMI89hw14oTDT7RqHw0Vy2qZHsbTn
-KLlY9roXDmCPNpiTE4ATM2ndz8v/oPOZl1EyE2tvMkBp9HZOSUgvVrMb1bbJ8aln
-u7HrX6FmgOwBUBNVqViFyS4rMrrLirzhVqKlbeyfzcQb9TjqNcRbWki05D8aTcrg
-2MSvGjiJbjwKvHbNHp01U9srinYFALRJAL5wkx3EirlPDkmhhxLCUGKuqhYmKLyj
-r4Wcp2W71ZTqadegXOzgRAhsme2bG4UeUksgSBfNB2A9O3EbN9YCgVLSV4IpjHim
-F0BJw9WMFjtdpkE9l8CrftKEcv3v4lqNiQhVDm9E4DiaNaJ1MI4=
-=VNep
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0IkQ0ACgkQzL64meEa
+mQZ/AQ/+N/vD5ieIzqMPsYMUSNCBpVCa99U4xl6VkJ/KvUZZK+9DL5hEWGgSQQ41
+kxJhSyD+8ABN0ybajVEGzhOBfeDVAu2UFvndNhNRzpv42Lz8rPplX0IXvqlh8fWr
+tiexwVlF+3rCtXQda2F5lNoJTjwls/WaRPT9FyPT/XW/9cGd7jk9Pg+j4gGG/GV7
+tfW88pwgr/IyQ8xgTpW7iPktFxZv5ecnIsNkZbvJjysBvt4oDs2NqGT0HNAbvyNK
+M11zfQwowdYzBOfo4QSABqqMtvo+PPYZK/iWcc87rW61kR9FZF+1WcoY5JRj7Kn3
+Rveq1whnEo+9dXP6CZ2pEgHvtJpdCeU4MnlfZIhNT5EMxFmB59aIszD34PPpiYpI
+US/uWyp9SvJ/WrwIgJx+ROQZFcu+HZYK0NYqjTR0uN92PQ1rdxqr/5GSCpEr01cd
+2roKxIkKd550YSb4fWUKj0kTTUJy/bD5IvGlPYFFUmcpD61zg5z0ji30iY06VA3+
+2qXTJcZV5739B2kycVrpP7CPUiJCBeDzfGcCM3eoQJBFuYE378vlMsGrfQ5SHxq6
+E6dXy+WCWGt1n+HmdLm8yHpCo9SyWJpwr+R3kkaelBtq+AkgXt1uEfeOM80HVt3W
+bG3vSvpK04eCfbsQ3GsuXa65NfSZzHaV53xi6R5OsBon/sGMTVU=
+=Yw5v
 -----END PGP SIGNATURE-----
 --=-=-=--
