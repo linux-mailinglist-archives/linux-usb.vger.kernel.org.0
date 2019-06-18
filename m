@@ -2,173 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60859497DA
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 05:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C14249A3B
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 09:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbfFRDyH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jun 2019 23:54:07 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:35764 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbfFRDyH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jun 2019 23:54:07 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id BF1812956A;
-        Mon, 17 Jun 2019 23:54:01 -0400 (EDT)
-Date:   Tue, 18 Jun 2019 13:54:12 +1000 (AEST)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Ming Lei <ming.lei@redhat.com>
-cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>
-Subject: Re: [PATCH V5 11/16] scsi: aha152x: use sg helper to operate
- scatterlist
-In-Reply-To: <20190618013757.22401-12-ming.lei@redhat.com>
-Message-ID: <alpine.LNX.2.21.1906181352030.8@nippy.intranet>
-References: <20190618013757.22401-1-ming.lei@redhat.com> <20190618013757.22401-12-ming.lei@redhat.com>
+        id S1726233AbfFRHRY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 03:17:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40942 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725955AbfFRHRY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jun 2019 03:17:24 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4B50720873;
+        Tue, 18 Jun 2019 05:59:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560837557;
+        bh=3Mwkc0cWOSStWWOJIiMxyqSyyjL9711lqq0yY8nG0XI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GpiVw4xA/7I8NFtBB+gLGvaRiWU2uSRicLLFUMbSH4aygcKwTIoZK+1cgjTyuzlrP
+         X9tzBGaqUyxVM/9FEIq11Hvvnv2/YGFYJyQgO4RiXjpM/XzcdxQ4JrobjcI52mO2Qt
+         vlo3hznJ9kzczqTBAipptV2MXdGH1ydtWmnzWZIE=
+Date:   Tue, 18 Jun 2019 07:59:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] usb: renesas_usbhs: Use struct assignment instead of
+ memcpy()
+Message-ID: <20190618055915.GA5904@kroah.com>
+References: <1560424728-13929-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1560424728-13929-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 18 Jun 2019, Ming Lei wrote:
-
-> From: Finn Thain <fthain@telegraphics.com.au>
+On Thu, Jun 13, 2019 at 08:18:48PM +0900, Yoshihiro Shimoda wrote:
+> To avoid the error-proneness of calls to sizeof() in the memcpy,
+> this patch uses struct assignment instead of memcpy.
 > 
-> Use the scatterlist iterators and remove direct indexing of the
-> scatterlist array.
-> 
-> This way allows us to pre-allocate one small scatterlist, which can be
-> chained with one runtime allocated scatterlist if the pre-allocated one
-> isn't enough for the whole request.
-> 
-> Finn added the change to replace SCp.buffers_residual with sg_is_last()
-> for fixing updating it, and the similar change has been applied on
-> NCR5380.c
-> 
-> Cc: Finn Thain <fthain@telegraphics.com.au>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-
-Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
-
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 > ---
->  drivers/scsi/aha152x.c | 46 +++++++++++++++++++++---------------------
->  1 file changed, 23 insertions(+), 23 deletions(-)
+>  This patch is based on Greg's linux-usb.git / usb-next branch.
+>  Note that mod_host.c also has memcpy but we cannot use struct assignment
+>  for it because the type of urb->setup_patcket is just "unsigned char *".
 > 
-> diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
-> index 97872838b983..f07f3fa9b58d 100644
-> --- a/drivers/scsi/aha152x.c
-> +++ b/drivers/scsi/aha152x.c
-> @@ -948,7 +948,6 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
->  	   SCp.ptr              : buffer pointer
->  	   SCp.this_residual    : buffer length
->  	   SCp.buffer           : next buffer
-> -	   SCp.buffers_residual : left buffers in list
->  	   SCp.phase            : current state of the command */
->  
->  	if ((phase & resetting) || !scsi_sglist(SCpnt)) {
-> @@ -956,13 +955,11 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
->  		SCpnt->SCp.this_residual = 0;
->  		scsi_set_resid(SCpnt, 0);
->  		SCpnt->SCp.buffer           = NULL;
-> -		SCpnt->SCp.buffers_residual = 0;
->  	} else {
->  		scsi_set_resid(SCpnt, scsi_bufflen(SCpnt));
->  		SCpnt->SCp.buffer           = scsi_sglist(SCpnt);
->  		SCpnt->SCp.ptr              = SG_ADDRESS(SCpnt->SCp.buffer);
->  		SCpnt->SCp.this_residual    = SCpnt->SCp.buffer->length;
-> -		SCpnt->SCp.buffers_residual = scsi_sg_count(SCpnt) - 1;
->  	}
->  
->  	DO_LOCK(flags);
-> @@ -2030,10 +2027,9 @@ static void datai_run(struct Scsi_Host *shpnt)
->  				}
->  
->  				if (CURRENT_SC->SCp.this_residual == 0 &&
-> -				    CURRENT_SC->SCp.buffers_residual > 0) {
-> +				    !sg_is_last(CURRENT_SC->SCp.buffer)) {
->  					/* advance to next buffer */
-> -					CURRENT_SC->SCp.buffers_residual--;
-> -					CURRENT_SC->SCp.buffer++;
-> +					CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
->  					CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
->  					CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
->  				}
-> @@ -2136,10 +2132,10 @@ static void datao_run(struct Scsi_Host *shpnt)
->  			CMD_INC_RESID(CURRENT_SC, -2 * data_count);
->  		}
->  
-> -		if(CURRENT_SC->SCp.this_residual==0 && CURRENT_SC->SCp.buffers_residual>0) {
-> +		if (CURRENT_SC->SCp.this_residual == 0 &&
-> +		    !sg_is_last(CURRENT_SC->SCp.buffer)) {
->  			/* advance to next buffer */
-> -			CURRENT_SC->SCp.buffers_residual--;
-> -			CURRENT_SC->SCp.buffer++;
-> +			CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
->  			CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
->  			CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
->  		}
-> @@ -2158,22 +2154,26 @@ static void datao_run(struct Scsi_Host *shpnt)
->  static void datao_end(struct Scsi_Host *shpnt)
->  {
->  	if(TESTLO(DMASTAT, DFIFOEMP)) {
-> -		int data_count = (DATA_LEN - scsi_get_resid(CURRENT_SC)) -
-> -			GETSTCNT();
-> +		u32 datao_cnt = GETSTCNT();
-> +		int datao_out = DATA_LEN - scsi_get_resid(CURRENT_SC);
-> +		int done;
-> +		struct scatterlist *sg = scsi_sglist(CURRENT_SC);
->  
-> -		CMD_INC_RESID(CURRENT_SC, data_count);
-> +		CMD_INC_RESID(CURRENT_SC, datao_out - datao_cnt);
->  
-> -		data_count -= CURRENT_SC->SCp.ptr -
-> -			SG_ADDRESS(CURRENT_SC->SCp.buffer);
-> -		while(data_count>0) {
-> -			CURRENT_SC->SCp.buffer--;
-> -			CURRENT_SC->SCp.buffers_residual++;
-> -			data_count -= CURRENT_SC->SCp.buffer->length;
-> +		done = scsi_bufflen(CURRENT_SC) - scsi_get_resid(CURRENT_SC);
-> +		/* Locate the first SG entry not yet sent */
-> +		while (done > 0 && !sg_is_last(sg)) {
-> +			if (done < sg->length)
-> +				break;
-> +			done -= sg->length;
-> +			sg = sg_next(sg);
->  		}
-> -		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) -
-> -			data_count;
-> -		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length +
-> -			data_count;
-> +
-> +		CURRENT_SC->SCp.buffer = sg;
-> +		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) + done;
-> +		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length -
-> +			done;
->  	}
->  
->  	SETPORT(SXFRCTL0, CH1|CLRCH1|CLRSTCNT);
-> @@ -2501,7 +2501,7 @@ static void get_command(struct seq_file *m, struct scsi_cmnd * ptr)
->  
->  	seq_printf(m, "); resid=%d; residual=%d; buffers=%d; phase |",
->  		scsi_get_resid(ptr), ptr->SCp.this_residual,
-> -		ptr->SCp.buffers_residual);
-> +		sg_nents(ptr->SCp.buffer) - 1);
->  
->  	if (ptr->SCp.phase & not_issued)
->  		seq_puts(m, "not issued|");
+>  drivers/usb/renesas_usbhs/common.c | 13 ++++---------
+>  1 file changed, 4 insertions(+), 9 deletions(-)
 > 
+> diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
+> index a501ea6..ebbe322 100644
+> --- a/drivers/usb/renesas_usbhs/common.c
+> +++ b/drivers/usb/renesas_usbhs/common.c
+> @@ -651,9 +651,8 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
+>  		return NULL;
+>  
+>  	dparam = &info->driver_param;
+> -	memcpy(dparam, &data->param, sizeof(data->param));
+> -	memcpy(&info->platform_callback, data->platform_callback,
+> -	       sizeof(*data->platform_callback));
+> +	*dparam = data->param;
+> +	info->platform_callback = *data->platform_callback;
+
+How are the original calls here "error-prone"?  Yes, the compiler will
+end up calling memcpy somehow with this change, but it feels "wrong" to
+hide a memory copy like this.
+
+So are you _sure_ you want this change?
+
+thanks,
+
+greg k-h
