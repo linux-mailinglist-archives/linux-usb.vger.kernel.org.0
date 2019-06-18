@@ -2,98 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5064A3DF
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 16:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088974A3EB
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 16:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729370AbfFROZE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 10:25:04 -0400
-Received: from mga07.intel.com ([134.134.136.100]:24098 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728982AbfFROZD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jun 2019 10:25:03 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 07:25:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,389,1557212400"; 
-   d="scan'208";a="243006671"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.164])
-  by orsmga001.jf.intel.com with ESMTP; 18 Jun 2019 07:25:01 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "# v4 . 18+" <stable@vger.kernel.org>
-Subject: [PATCH 2/2] xhci: detect USB 3.2 capable host controllers correctly
-Date:   Tue, 18 Jun 2019 17:27:48 +0300
-Message-Id: <1560868068-2583-3-git-send-email-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1560868068-2583-1-git-send-email-mathias.nyman@linux.intel.com>
-References: <1560868068-2583-1-git-send-email-mathias.nyman@linux.intel.com>
+        id S1729319AbfFRO2t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 10:28:49 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:46744 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725919AbfFRO2t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jun 2019 10:28:49 -0400
+Received: by mail-pg1-f195.google.com with SMTP id v9so7772154pgr.13;
+        Tue, 18 Jun 2019 07:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E1/I1Ufg34C1B6zIIvwm9i0iJRfJjNFEn+RuFULwkks=;
+        b=X/uim5G3SmB9Xn2yHbi9R3F9S7lYpaRSc3ObBExc0ZSS7XysMJ6XJP/zBscub2V7k4
+         NN3zK4x8BkffqHiiYqCfVpo4BZ28/fmHjG9iE5M4czIysaZaYINWD51MA46HmTC5nOv5
+         HA0J0+S+vp+onfN4Lmk02VrBmgW2/tLbejUoUGFUfGM6A3OGCOOax2HYIM6FNl4K0Cfm
+         S0n/PCUYXsOu8u2kcA5nWKVstg1LtBss7WkBBdXLpiu2QGrMxQKW7r9ajuO0wDZ5NBtX
+         EM0nVm/iwtgpxHL5hjjcEJCY5vuKjQAMrJccyI8K0l2HcsTGgGra4K4P/lHLQj03nkQH
+         u7nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E1/I1Ufg34C1B6zIIvwm9i0iJRfJjNFEn+RuFULwkks=;
+        b=mJeYEM1mSTnMOng5Eue3OPp3o6HEQ81lPznfyGJEvi9aRvfQsFH1YV1hx3cl81k/dK
+         T8JKx4KtEdSiMLF93NLE9DdEfw8LmH7VbSG+WowYS0K0Bg5ImT/uJlLjRKREmwMSxuka
+         Sq5DXBEh83ftxnzv/xazKCiuSIOVPuQjx8dp5rL4y5UBN6N3Vta3BPAV7RO02Q2YFEGi
+         9PyLwxUMs0FST/QuGpFwkkqqQ/akgyWDeUsItHjVH3+j6gDJPaaHVkmn7aAMZSIYwlOf
+         7WxIUiqAztRvGZBPKQpBPg77eIJtqdIyLwmErOXwHyBaVjsOc/sVSqCONK3xHUtkKWSE
+         HSng==
+X-Gm-Message-State: APjAAAXBLHCXcKO144k08ztliCuJLA+aqkjHcSDmdOm0qiM27zEVZq14
+        GFXuz8NyeG2GBX0DIg2EJqQKjs8s
+X-Google-Smtp-Source: APXvYqxZIh1souW32CVhRK4cZknFCWaDje8FAbLxO+CiAtzHtj7ky872ihEDRNnp9vkukaxZ6O0gxA==
+X-Received: by 2002:a63:fe51:: with SMTP id x17mr3106520pgj.61.1560868128219;
+        Tue, 18 Jun 2019 07:28:48 -0700 (PDT)
+Received: from localhost.localdomain ([125.142.23.13])
+        by smtp.googlemail.com with ESMTPSA id d6sm13902340pgf.55.2019.06.18.07.28.46
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 18 Jun 2019 07:28:47 -0700 (PDT)
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suwan Kim <suwan.kim027@gmail.com>
+Subject: [PATCH] usbip: Implement map_urb_for_dma function for vhci to skip dma mapping
+Date:   Tue, 18 Jun 2019 23:28:17 +0900
+Message-Id: <20190618142817.16844-1-suwan.kim027@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB 3.2 capability in a host can be detected from the
-xHCI Supported Protocol Capability major and minor revision fields.
+vhci doesn’t do dma for remote device. Actually, the real dma
+operation is done by network card driver. So, vhci doesn’t use and
+need dma address of transfer buffer of urb.
 
-If major is 0x3 and minor 0x20 then the host is USB 3.2 capable.
+But hcd provides dma mapping function by defualt in usb_hcd_submit_urb()
+and it causes unnecessary dma mapping which will be done again at
+NIC driver and it wastes CPU cycles. So, implement map_urb_for_dma
+function for vhci in order to skip the dma mapping procedure.
 
-For USB 3.2 capable hosts set the root hub lane count to 2.
-
-The Major Revision and Minor Revision fields contain a BCD version number.
-The value of the Major Revision field is JJh and the value of the Minor
-Revision field is MNh for version JJ.M.N, where JJ = major revision number,
-M - minor version number, N = sub-minor version number,
-e.g. version 3.1 is represented with a value of 0310h.
-
-Also fix the extra whitespace printed out when announcing regular
-SuperSpeed hosts.
-
-Cc: <stable@vger.kernel.org> # v4.18+
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
 ---
- drivers/usb/host/xhci.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ drivers/usb/usbip/vhci_hcd.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 78a2a93..3f79f35 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -5065,16 +5065,26 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
- 	} else {
- 		/*
- 		 * Some 3.1 hosts return sbrn 0x30, use xhci supported protocol
--		 * minor revision instead of sbrn
-+		 * minor revision instead of sbrn. Minor revision is a two digit
-+		 * BCD containing minor and sub-minor numbers, only show minor.
- 		 */
--		minor_rev = xhci->usb3_rhub.min_rev;
--		if (minor_rev) {
-+		minor_rev = xhci->usb3_rhub.min_rev / 0x10;
-+
-+		switch (minor_rev) {
-+		case 2:
-+			hcd->speed = HCD_USB32;
-+			hcd->self.root_hub->speed = USB_SPEED_SUPER_PLUS;
-+			hcd->self.root_hub->rx_lanes = 2;
-+			hcd->self.root_hub->tx_lanes = 2;
-+			break;
-+		case 1:
- 			hcd->speed = HCD_USB31;
- 			hcd->self.root_hub->speed = USB_SPEED_SUPER_PLUS;
-+			break;
- 		}
--		xhci_info(xhci, "Host supports USB 3.%x %s SuperSpeed\n",
-+		xhci_info(xhci, "Host supports USB 3.%x %sSuperSpeed\n",
- 			  minor_rev,
--			  minor_rev ? "Enhanced" : "");
-+			  minor_rev ? "Enhanced " : "");
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 667d9c0ec905..9df4d9e36788 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -1287,6 +1287,13 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
+ 	return 0;
+ }
  
- 		xhci->usb3_rhub.hcd = hcd;
- 		/* xHCI private pointer was set in xhci_pci_probe for the second
++static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
++			    gfp_t mem_flags)
++{
++	dev_dbg(hcd->self.controller, "vhci does not map urb for dma\n");
++	return 0;
++}
++
+ static const struct hc_driver vhci_hc_driver = {
+ 	.description	= driver_name,
+ 	.product_desc	= driver_desc,
+@@ -1302,6 +1309,7 @@ static const struct hc_driver vhci_hc_driver = {
+ 	.urb_dequeue	= vhci_urb_dequeue,
+ 
+ 	.get_frame_number = vhci_get_frame_number,
++	.map_urb_for_dma = vhci_map_urb_for_dma,
+ 
+ 	.hub_status_data = vhci_hub_status,
+ 	.hub_control    = vhci_hub_control,
 -- 
-2.7.4
+2.20.1
 
