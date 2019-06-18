@@ -2,96 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD34E49A83
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 09:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B02949A99
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 09:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbfFRH0a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 03:26:30 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45282 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbfFRH0a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jun 2019 03:26:30 -0400
-Received: by mail-lj1-f196.google.com with SMTP id m23so11970508lje.12;
-        Tue, 18 Jun 2019 00:26:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vYL9eXDi5fZpGlVTlm0z+uYln5oEnd9pKK7FianvZDY=;
-        b=n77tDDYW3waBJcbaLClbwhgJNVmsfk5FAsDzfvkRtsVYUz5XivzhKWqj9CuUlpxepX
-         AhhsDeKwIhTmj1M2+vIu0VBI9tpyT84ZpettpVg5b5qVvczwe1SumgYE8gA+uym9mTYx
-         WiCeV2BrHtbwM96rwp0d7AdBxVZNYn9G1PpZHfxJdKa2yk/X0flYHERTJ1HelGEhtHIb
-         nHMVUvwNNEHoeooCuNFJtkU8RcwK0zWF1xOQt15oQy3ddnomAbN6T8GX0jaiWjyIyDe7
-         YcHTaAww5VHFU6h4lDE42zi28SS5wmCodFXRCbVxXIbTyvWmA+TB9r3oZPBOGHQONGpe
-         4MRA==
-X-Gm-Message-State: APjAAAV/K880qo/1Myl6mJSYlpkfFw/nKUW9qBJid4a6PyjgFp+xXrhv
-        7+/FRFF0nkWr0aN/UM9c/dnQ3SSst/voW3VCx14=
-X-Google-Smtp-Source: APXvYqwVwG4Ku4T77iSiLcEDng/rGcmEPe1CG74tXlrwmHFU8f75YYR01E+2/xDuxubK98hEiyqOVhiH+OOF9c18HUY=
-X-Received: by 2002:a2e:9685:: with SMTP id q5mr13577892lji.227.1560842788335;
- Tue, 18 Jun 2019 00:26:28 -0700 (PDT)
+        id S1729045AbfFRHaF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 03:30:05 -0400
+Received: from mga06.intel.com ([134.134.136.31]:29366 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725870AbfFRHaF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jun 2019 03:30:05 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 00:30:04 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga007.fm.intel.com with ESMTP; 18 Jun 2019 00:30:02 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: remove redundant 'default n' from Kconfig-s
+In-Reply-To: <79726177-d524-4f83-eeb2-18ae9b2e50cf@samsung.com>
+References: <CGME20190520141434eucas1p266520a2ef8db42b3deee004e1cba3a1f@eucas1p2.samsung.com> <79726177-d524-4f83-eeb2-18ae9b2e50cf@samsung.com>
+Date:   Tue, 18 Jun 2019 10:29:58 +0300
+Message-ID: <874l4ngxl5.fsf@linux.intel.com>
 MIME-Version: 1.0
-References: <1560424728-13929-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <20190618055915.GA5904@kroah.com>
-In-Reply-To: <20190618055915.GA5904@kroah.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Jun 2019 09:26:15 +0200
-Message-ID: <CAMuHMdUjVaRxLKjx3twLqGaL41NeLaxdsKatkRXij+VY+FOGWg@mail.gmail.com>
-Subject: Re: [PATCH] usb: renesas_usbhs: Use struct assignment instead of memcpy()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 18, 2019 at 9:17 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> On Thu, Jun 13, 2019 at 08:18:48PM +0900, Yoshihiro Shimoda wrote:
-> > To avoid the error-proneness of calls to sizeof() in the memcpy,
-> > this patch uses struct assignment instead of memcpy.
-> >
-> > Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > ---
-> >  This patch is based on Greg's linux-usb.git / usb-next branch.
-> >  Note that mod_host.c also has memcpy but we cannot use struct assignment
-> >  for it because the type of urb->setup_patcket is just "unsigned char *".
-> >
-> >  drivers/usb/renesas_usbhs/common.c | 13 ++++---------
-> >  1 file changed, 4 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-> > index a501ea6..ebbe322 100644
-> > --- a/drivers/usb/renesas_usbhs/common.c
-> > +++ b/drivers/usb/renesas_usbhs/common.c
-> > @@ -651,9 +651,8 @@ static struct renesas_usbhs_platform_info *usbhs_parse_dt(struct device *dev)
-> >               return NULL;
-> >
-> >       dparam = &info->driver_param;
-> > -     memcpy(dparam, &data->param, sizeof(data->param));
-> > -     memcpy(&info->platform_callback, data->platform_callback,
-> > -            sizeof(*data->platform_callback));
-> > +     *dparam = data->param;
-> > +     info->platform_callback = *data->platform_callback;
+Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com> writes:
+
+> 'default n' is the default value for any bool or tristate Kconfig
+> setting so there is no need to write it explicitly.
 >
-> How are the original calls here "error-prone"?  Yes, the compiler will
-> end up calling memcpy somehow with this change, but it feels "wrong" to
-> hide a memory copy like this.
+> Also since commit f467c5640c29 ("kconfig: only write '# CONFIG_FOO
+> is not set' for visible symbols") the Kconfig behavior is the same
+> regardless of 'default n' being present or not:
+>
+>     ...
+>     One side effect of (and the main motivation for) this change is making
+>     the following two definitions behave exactly the same:
+>=20=20=20=20=20
+>         config FOO
+>                 bool
+>=20=20=20=20=20
+>         config FOO
+>                 bool
+>                 default n
+>=20=20=20=20=20
+>     With this change, neither of these will generate a
+>     '# CONFIG_FOO is not set' line (assuming FOO isn't selected/implied).
+>     That might make it clearer to people that a bare 'default n' is
+>     redundant.
+>     ...
+>
+> Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 
-There are no checks that:
-  - the source and destination pointers point to the same type,
-  - the passed size matches the actual object size.
+Fine by me. Greg if you want to take this directly (since it touches
+things all over the place):
 
-Gr{oetje,eeting}s,
+Acked-by: Felipe Balbi <felipe.balbi@linux.intel.com>
 
-                        Geert
+If you prefer that I put this in my pull request to you, just let me know.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+=2D-=20
+balbi
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0IkvYACgkQzL64meEa
+mQa9mg//fdocqbcV3m9oWbkA2fqyPAEbOt+BZPMT5I6NG+7692hoKu4777C6/vDG
+/vlng8aPFT1OoqXZxDoJK62yD3f/LOI1ELHfJTObMQmRlhUoyRnZMoRJ7CNtgA3W
+DawFYmeHQRBZB6HXsdBCrEF+aNNQ/7cF6e9dnq9dbQwuhToePn3IYCmIO1cWr5eM
+i+VjKDjQvB1+CDzCDeXx/eK2cVkTNn8FdzOmP7jjRpybHP3Lgz9T386zUJLiOz8V
+rBKzE0/NAeOVQvEk0pROZm/Walm+YDIaTYJlQkGagYgYWvfDBxVKp4qmiqpmC3j0
+Wtv8DV+kqcp6w7oe3aMte5ssSyiR6xuUXQ39NECC+C+Zoip6sh7byKcNlEljg88M
+YlOJ1rZr99eic1hKxuOqZon0Erj+/bGiEXikmaKI8W4EdY8/NLvKVl0XF2eRDVd6
+RBwf3glSPd2iRWHEQYwJDvmwVEi8b6alpXojXsZbunftmUz4b+cizUVKM8fw/6ce
+QRB3LZsHR/V8504UWx+l8Uq1jbrNjTwpJp1oLaW3ZweCMMHjFR2Dy351CD5vOy0U
+djvW+wjq3BTXqNnQNWVOpyrass4ynPOlBHHN5WnEDrXmVY8q3+tChPeNSDpNVCBg
+bbIqYUq4zzYy1QdzqqAKNGvyhWxE4iS8X9OfAcC5h8ae0xnYvtI=
+=L/+a
+-----END PGP SIGNATURE-----
+--=-=-=--
