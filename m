@@ -2,75 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E40C4A2B1
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 15:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2353C4A2C7
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 15:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729356AbfFRNsD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 09:48:03 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:39866 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729121AbfFRNsC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jun 2019 09:48:02 -0400
-Received: (qmail 2328 invoked by uid 2102); 18 Jun 2019 09:48:01 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 18 Jun 2019 09:48:01 -0400
-Date:   Tue, 18 Jun 2019 09:48:01 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-cc:     Kernel development list <linux-kernel@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB MASS STORAGE DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:USB MASS STORAGE DRIVER" 
-        <usb-storage@lists.one-eyed-alien.net>
-Subject: Re: [PATCH 2/2] usb: storage: scsiglue: Do not skip VPD if try_vpd_pages
- is set
-In-Reply-To: <20190618013146.21961-3-marcos.souza.org@gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1906180946160.1659-100000@iolanthe.rowland.org>
+        id S1728699AbfFRNuS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 09:50:18 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:39158 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726543AbfFRNuS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jun 2019 09:50:18 -0400
+Received: by mail-lf1-f67.google.com with SMTP id p24so9350302lfo.6;
+        Tue, 18 Jun 2019 06:50:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3XxRZmEFc6S94zkz1v2gmbXuUx8rY0PRYaYALomUXmE=;
+        b=CbsWMAmX80BPeomQsrcCjAQxFDG3N6t2Pjx656XgDWM9bhWR+0lqoxv0ty5JQz0+rp
+         FDUtpC4zr7XVoVYgWKWsfYxVt8+VUoH257N4+58RynRoXaCnv6ml8daV5hmeizn4n3yv
+         pJ5xAJv/r+YNJidNDxdPYpZZ8J4XWOORaU5KZskwUPCjXZgTgn05UIbzTuPCmM85xjX/
+         l0MK3dXWWDCNaI6+c0WyYIIa5xtbXOyhC3QiDNXmGXJoFhkg7angcrYRX+8oQxXgCJqn
+         HI9i7UZFR7ViodTOclPvy81DF2U65bsXQKM1nj6KtK2g/ZkmfHVs6nNGuTHkfc0YEsmp
+         3YZg==
+X-Gm-Message-State: APjAAAXQam/ZK3ZW1dNXbToqYT1pYBK/DfPDU3La6cJxxhEUhWmxI8uZ
+        mzOGeHP/BFScLjzneii1xNYF3I3Y5PJCvhRCZFE=
+X-Google-Smtp-Source: APXvYqyjUQmkWVXqFsrtrEbXyCpTYiSZYc5iy8vOvp8IBFiO7utxs7XS9RNJXLpWcLb2yxVf43O1smhFhYX6qjPp6ng=
+X-Received: by 2002:a19:6e41:: with SMTP id q1mr51356084lfk.20.1560865815542;
+ Tue, 18 Jun 2019 06:50:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <20190617090603.8449-1-horms+renesas@verge.net.au> <20190617090603.8449-2-horms+renesas@verge.net.au>
+In-Reply-To: <20190617090603.8449-2-horms+renesas@verge.net.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Jun 2019 15:50:02 +0200
+Message-ID: <CAMuHMdWMaSh89Pqd-BYanjvpuZCzDSwonY2OswS8STZaC+c42Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: renesas_usbhs: Rename bindings
+ documentation file
+To:     Simon Horman <horms+renesas@verge.net.au>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 17 Jun 2019, Marcos Paulo de Souza wrote:
+On Mon, Jun 17, 2019 at 11:07 AM Simon Horman
+<horms+renesas@verge.net.au> wrote:
+> For consistency with the naming of (most) other documentation files for DT
+> bindings for Renesas IP blocks rename the Renesas USBHS documentation file
+> from renesas-usbhs.txt to renesas,usbhs.txt.
+>
+> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
 
-> If BLIST_TRY_VPD_PAGES is set for a device, even for an USB, it should
-> be honored, so only set skip_vpd_pages is try_vpd_pages is not set.
-> 
-> Signed-off-by: Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-> ---
->  drivers/usb/storage/scsiglue.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-> index 59190d88fa9f..0a9520780771 100644
-> --- a/drivers/usb/storage/scsiglue.c
-> +++ b/drivers/usb/storage/scsiglue.c
-> @@ -195,8 +195,11 @@ static int slave_configure(struct scsi_device *sdev)
->  		 */
->  		sdev->skip_ms_page_8 = 1;
->  
-> -		/* Some devices don't handle VPD pages correctly */
-> -		sdev->skip_vpd_pages = 1;
-> +		/*
-> +		 * Some devices don't handle VPD pages correctly, so skip vpd
-> +		 * pages if not forced by SCSI layer.
-> +		 */
-> +		sdev->skip_vpd_pages = sdev->try_vpd_pages == 0;
->  
->  		/* Do not attempt to use REPORT SUPPORTED OPERATION CODES */
->  		sdev->no_report_opcodes = 1;
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Gr{oetje,eeting}s,
 
-Although I think it would be clearer to write:
+                        Geert
 
-		sdev->skip_vpd_pages = !sdev->try_vpd_pages;
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-But that's just personal preference.  This is okay as it is.
-
-Alan Stern
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
