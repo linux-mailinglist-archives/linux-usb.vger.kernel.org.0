@@ -2,77 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A564A2CB
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 15:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0264A2D7
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 15:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728881AbfFRNui (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 09:50:38 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:45273 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726330AbfFRNui (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jun 2019 09:50:38 -0400
-Received: by mail-lj1-f195.google.com with SMTP id m23so13182987lje.12;
-        Tue, 18 Jun 2019 06:50:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H6baJYY0bHxjGwD2jhFAtoEZX118yPW/WL/m/3qULgw=;
-        b=kL+Ns4TEt4ngKD2XzzL1eiu0eOV086VXpGQIhgOz/CtbrGtv9IMwf0ObIp9eYLsF9b
-         XfAIl27XzThmgK33LyVSWHzebPxCefkzr6VMUoPsk7FLwZab00VoVKywSasy6/PVCnbv
-         U5s17/t/P1VIy9F1FM3mbjlPkWXhHKEDLIqHJs1uxe8oW5Tt/i4x5LMV3k64ZmnAScZU
-         uu769zClTSct+y4qqzlC1llRWz+xhL4UwNKPyhPZMSgG00rLkY02jyH6nijgXWUuzwnV
-         8VtOZOwbsuRoZr0HS+BQ2WPffurFxBnnRG+aDJotjKliMOKBYnrKwVuyoYYB56JiT8ZY
-         E++w==
-X-Gm-Message-State: APjAAAUhaLXsgtSyEyZrLQuQvnr4jYVwifJDUKjlxo+qqraxXLMhQEeA
-        w8nGuRBktZIraenQQ6sFJQF1P4XQBjpMFUfE2EY=
-X-Google-Smtp-Source: APXvYqx3rVUailLpodItFz/fzH9gekjzzCcOovc1MtDS56MO/Oyu3LgGVmvlrQAGIqc6SJsq42XCt4hUojLZNN5DrHA=
-X-Received: by 2002:a2e:9a58:: with SMTP id k24mr17705290ljj.165.1560865835709;
- Tue, 18 Jun 2019 06:50:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190617090603.8449-1-horms+renesas@verge.net.au> <20190617090603.8449-3-horms+renesas@verge.net.au>
-In-Reply-To: <20190617090603.8449-3-horms+renesas@verge.net.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Jun 2019 15:50:23 +0200
-Message-ID: <CAMuHMdWTvqZ4Vda=Eui69DDLtaRUFUVgkoZDhZcu5A7SuD7YHQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: usb: renesas_gen3: Rename bindings
- documentation file
-To:     Simon Horman <horms+renesas@verge.net.au>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
+        id S1726446AbfFRNxw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 09:53:52 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:39892 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725970AbfFRNxw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jun 2019 09:53:52 -0400
+Received: (qmail 2414 invoked by uid 2102); 18 Jun 2019 09:53:50 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 18 Jun 2019 09:53:50 -0400
+Date:   Tue, 18 Jun 2019 09:53:50 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
         USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Content-Type: text/plain; charset="UTF-8"
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: Pass transfer_buffer to gadget drivers
+In-Reply-To: <CAAeHK+y6W=w1_bJYa_T4SLYfZnRCKrtiz5o6Nvnmedq8Um2-LA@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1906180948100.1659-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 11:07 AM Simon Horman
-<horms+renesas@verge.net.au> wrote:
-> For consistency with the naming of (most) other documentation files for DT
-> bindings for Renesas IP blocks rename the Renesas USB3.0 peripheral
-> documentation file from renesas-gen3.txt to renesas,gen3.txt.
->
-> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+On Tue, 18 Jun 2019, Andrey Konovalov wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> On Tue, Jun 18, 2019 at 3:31 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> >
+> > On Fri, Jun 7, 2019 at 5:05 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> > >
+> > > On Fri, Jun 7, 2019 at 5:02 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > >
+> > > > On Fri, 7 Jun 2019, Andrey Konovalov wrote:
+> > > >
+> > > > > > > The problem is that I want to receive that data (from the data stage)
+> > > > > > > from within my gadget driver module. But it's not passed to the
+> > > > > > > setup() callback. And the question is: how do I do that then?
+> > > > > >
+> > > > > > I just caught up on this thread...
+> > > > > >
+> > > > > > The answer is simple: The gadget driver's setup() callback routine
+> > > > > > submits a request for endpoint 0.  The Data Stage data is sent or
+> > > > > > received (depending on the direction encoded in the Setup information)
+> > > > > > by this request.
+> > > > >
+> > > > > Ah, OK, got it, thanks!
+> > > > >
+> > > > > Although while looking at the dummy_hcd implementation, I saw that it
+> > > > > accesses usb->transfer_buffer in case USB_REQ_GET_STATUS in
+> > > > > handle_control_request(), which is called right before the setup()
+> > > > > callback is called. So the data already available there without any
+> > > > > additional requests. Is this an implementation detail that is specific
+> > > > > to dummy_hcd?
+> > > >
+> > > > Yes, it is.  dummy-hcd is unusual in that it combines both a USB host
+> > > > controller and a USB device controller in a single driver.
+> > > >
+> > > > Normal UDC drivers do handle USB_REQ_GET_STATUS on their own without
+> > > > requiring the use of an explicit usb_request, because they handle the
+> > > > entire transfer internally and don't involve the gadget driver.
+> > > > However, they don't have access to any transfer_buffer; all they can do
+> > > > is exchange packets with the host.
+> > >
+> > > OK, I see. Thanks a lot!
+> >
+> > Another question: do I understand correctly, that we only proceed with
+> > submitting an URB to get the data for the control OUT request
+> > (ctrl->bRequestType doesn't have the USB_DIR_IN bit set) if
+> > ctrl->wLength != 0?
 
-Gr{oetje,eeting}s,
+That's right.  If a control-OUT transfer has wLength == 0, it means 
+there is no data stage.  (And control-IN transfers are not allowed to 
+have wLength == 0.)
 
-                        Geert
+> Also, does the gadget subsystem guarantee, that we get the complete()
+> callback for the DATA stage of the OUT control request before we get a
+> setup() callback for the next control request if there's any?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+As I recall, this isn't mentioned in the documentation.  But the UDC
+drivers I know of do behave that way, and it's reasonable to assume
+they all do.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+After all, a data-stage transfer can't complete _after_ the next Setup
+packet arrives.  Reception of a new Setup packet invalidates all
+ongoing control transfers.
+
+Alan Stern
+
