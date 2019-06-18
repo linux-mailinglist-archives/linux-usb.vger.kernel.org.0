@@ -2,157 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3684A994
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 20:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC2C4A99A
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 20:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729951AbfFRSN3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 14:13:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48528 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727616AbfFRSN3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jun 2019 14:13:29 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730181AbfFRSPG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 14:15:06 -0400
+Received: from smtprelay-out1.synopsys.com ([198.182.47.102]:51590 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729993AbfFRSPG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jun 2019 14:15:06 -0400
+Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E70DA206B7;
-        Tue, 18 Jun 2019 18:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560881608;
-        bh=EPSt8WDDZhgEgBISU36mG1L9HTFFk7NID4KgfUFh5HI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hFfUvMURX5LaVW7l8nKkR4NwH6xTmq7nKIYT9E6RvjteeXwfWEsdYl2OqOjGlfM05
-         yTxt8rS1Ygq4ya4UmWQRlOT8Ohs7Gi02uQc4KB6vKjXv68LNEsUNTgmLsrxF92LL2C
-         VMoIMl6SbLCmXv4NldaExvU0P4bHnaezTyyfRMZ0=
-Date:   Tue, 18 Jun 2019 20:13:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     dmg <dmg@turingmachine.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: Replace a < b ? a : b construct with min_t(type, a,
- b) in adutux driver
-Message-ID: <20190618181326.GA19012@kroah.com>
-References: <20190618153529.11418-1-dmg@turingmachine.org>
- <20190618160658.GA27611@kroah.com>
- <87imt2kdub.fsf@mn.cs.uvic.ca>
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B34B8C0168;
+        Tue, 18 Jun 2019 18:15:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1560881705; bh=7wVtfsmfxUfIw+LPrmGJPTnDRIskv2eGTf5KZ+mwiv8=;
+        h=From:To:CC:Subject:Date:References:From;
+        b=IXH/3yhFt6orVfdVm7NAUdl2d5ipd9LSAoLxrnWYpqmPGH21f7NwJytrgj3FpfOPK
+         5WU8dpRUCJPgP5TJCm8iRbCzHPsWaFwYCeLvs3qiabknlMDVcTvX6cL16H1/PIobzn
+         FF63MKTUJqsN96ro2SEKhA4Ktvsidlb5ng6xh+FC8YJbrHQBD1VxSD8pnsc05Wsb4g
+         A7zqzo9Whm8V3Xsq13I/oL+zS83SgFTREco8rOzdzR97xPmHZSdlxNlsDsXJDuLysH
+         z6DIUwFIwkMFWLZWmLA9gONDuRGArNgXWCySbXbrk9sumlOQllkdjD7IlUw8PeGHX7
+         6Ff9qT6Y6WA1g==
+Received: from US01WXQAHTC1.internal.synopsys.com (us01wxqahtc1.internal.synopsys.com [10.12.238.230])
+        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 71BF8A009A;
+        Tue, 18 Jun 2019 18:15:05 +0000 (UTC)
+Received: from us01wembx1.internal.synopsys.com ([169.254.1.22]) by
+ US01WXQAHTC1.internal.synopsys.com ([::1]) with mapi id 14.03.0415.000; Tue,
+ 18 Jun 2019 11:15:04 -0700
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Youn <John.Youn@synopsys.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [RFC] Sorting out dwc3 ISOC endpoints once and for all
+Thread-Topic: [RFC] Sorting out dwc3 ISOC endpoints once and for all
+Thread-Index: AQHVHRZlsWV0TH3kp0u96EW7I6xXQg==
+Date:   Tue, 18 Jun 2019 18:15:03 +0000
+Message-ID: <30102591E157244384E984126FC3CB4F63A1230F@us01wembx1.internal.synopsys.com>
+References: <87a7etd8s7.fsf@linux.intel.com>
+ <2B3535C5ECE8B5419E3ECBE30077290902E78AF3D7@us01wembx1.internal.synopsys.com>
+ <30102591E157244384E984126FC3CB4F63A11B8A@us01wembx1.internal.synopsys.com>
+ <87fto7gy1o.fsf@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.13.184.19]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87imt2kdub.fsf@mn.cs.uvic.ca>
-User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 10:22:52AM -0700, dmg wrote:
-> 
-> Greg KH <gregkh@linuxfoundation.org> writes:
-> 
-> >> diff --git a/drivers/usb/misc/adutux.c b/drivers/usb/misc/adutux.c
-> >> index 9465fb95d70a..4a9fa3152f2a 100644
-> >> --- a/drivers/usb/misc/adutux.c
-> >> +++ b/drivers/usb/misc/adutux.c
-> >> @@ -379,7 +379,7 @@ static ssize_t adu_read(struct file *file, __user char *buffer, size_t count,
-> >>
-> >>  		if (data_in_secondary) {
-> >>  			/* drain secondary buffer */
-> >> -			int amount = bytes_to_read < data_in_secondary ? bytes_to_read : data_in_secondary;
-> >> +			int amount = min_t(size_t, bytes_to_read, data_in_secondary);
-> >
-> > Shouldn't amount and data_in_secondary be of size_t type?  Then you can
-> > just use min() here, right?
-> 
-> 
-> I looked at the code.
-> 
-> there is an implicit assertion that
-> 
->    dev->secondary_tail >=  dev->secondary_head
-> 
-> 
-> (which are pointers to the secondary buffer)
-
-No, those are integers for the buffer, secondary_tail seems just to be
-the "length" of the buffer, and secondary_head is the current "start" of
-the buffer that has not been sent yet.
-
-So these can not ever "wrap", thank goodness.
-
-But really, ick ick ick, this code is odd.  Seems like they are trying
-to go with a "flip buffer" scheme when there are many simpler ways to do
-all of this...
-
-Oh well, we deal with what we have...
-
-> 	while (bytes_to_read) {
-> 		int data_in_secondary = dev->secondary_tail - dev->secondary_head;
-> 		dev_dbg(&dev->udev->dev,
-> 			"%s : while, data_in_secondary=%d, status=%d\n",
-> 			__func__, data_in_secondary,
-> 			dev->interrupt_in_urb->status);
-> 
-> 		if (data_in_secondary) {
-> 			/* drain secondary buffer */
-> 			int amount = bytes_to_read < data_in_secondary ? bytes_to_read : data_in_secondary;
-> 			i = copy_to_user(buffer, dev->read_buffer_secondary+dev->secondary_head, amount);
-> 			if (i) {
-> 				retval = -EFAULT;
-> 				goto exit;
-> 			}
-> 			dev->secondary_head += (amount - i);
-> 			bytes_read += (amount - i);
-> 			bytes_to_read -= (amount - i);
-> 		} else {
-> 			/* we check the primary buffer */
-> 
-> As computed, data_in_secondary is the number of bytes left in the secondary
-> buffer and hence, it should always be larger or equal 0.
-
-Yes.
-
-> The if statement seems to imply this fact. There is no handling of the case
-> where data_in_secondary is negative--if that was the case, copy_to_user will be
-> called with a negative number, which I assume will return an error.
-
-Looking at the code, it never can be.
-
-And no, copy_to_user() with a negative number is just a really BIG
-number, and bad things happen, we never want to do that as it's usually
-a security issue then.
-
-> This is interesting. It means that if the pointers are incorrect (head points
-> after tail), the current code will probably be able to recover from the bug with
-> an error (i assume copy_to_user will return != 0 if called with a negative
-> number).
-> 
-> If we change data_in_secondary to size_t, and the head points after the tail,
-> the data_in_secondary will be invalid (but positive) and copy_to_user will try
-> to read those number of bytes. I don't know what would happen in that case.
-
-Looking at the code, I do not see how this can happen, do you?
-
-> Amount is number of bytes to read from this buffer, so it does not make sense for it to be
-> negative. So it being size_t sounds ok.
-> 
-> Barring that potential bug in the values of the pointers of the head and the
-> tail,  it appears it is safe to change the type of both data_in_secondary and
-> amount to size_t, and use min instead. It will also require to change the printf-style
-> modifier  (%d => %lu)
-> 
-> Also,  note the use of "amount -i" the end of the if statement. At this point i
-> is equal to zero. the "- i" can be dropped from all these computations.
-
-That is someone who did not know what copy_to_user() returned and
-assumed it was the number of bytes copied :(
-
-> please let me know if this is something that sounds ok, and I'll prepare it and
-> submit a new patch.
-
-It sounds ok.  And if you want to fix anything else up here in this
-mess, it's always appreciated.  Odds are no one uses this driver
-anymore, but that's no reason to keep it being such a mess :)
-
-Oh, and great report, that was nicely done.
-
-thanks,
-
-greg k-h
+Felipe Balbi wrote:=0A=
+> Hi,=0A=
+>=0A=
+> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:=0A=
+>>>>  static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct=0A=
+>>>> dwc3_request *req)=0A=
+>>>>=0A=
+>>>>=0A=
+>>>> Would there be any obvious draw-back to going down this route? The thi=
+ng=0A=
+>>>> is that, as it is, it seems like we will *always* have some corner cas=
+e=0A=
+>>>> where we can't guarantee that we can even start a transfer since there=
+'s=0A=
+>>>> no upper-bound between XferNotReady and gadget driver finally queueing=
+ a=0A=
+>>>> request. Also, I can't simply read DSTS for the frame number because o=
+f=0A=
+>>>> top-most 2 bits.=0A=
+>>>>=0A=
+>>> For non-affected version of the IP, the xfernotready -> starttransfer=
+=0A=
+>>> time will have to be off by more than a couple seconds for the driver=
+=0A=
+>>> to produce an incorrect 16-bit frame number. If you're seeing errors=0A=
+>>> here, maybe we just need to code review the relevant sections to make=
+=0A=
+>>> sure the 14/16-bit and rollover conditions are all handled correctly.=
+=0A=
+>> I think what Felipe may see is some delay in the system that causes the=
+=0A=
+>> SW to not handle XferNotReady event in time. We already have the "retry"=
+=0A=
+>> method handle that to a certain extend.=0A=
+>>=0A=
+>>> But I can't think of any obvious drawbacks of the quirk, other than=0A=
+>>> doing some unnecessary work, which shouldn't produce any bad=0A=
+>>> side-effects. But we haven't really tested that.=0A=
+>>>=0A=
+>> The workaround for the isoc_quirk requires 2 tries sending=0A=
+>> START_TRANSFER command. This means that you have to account the delay of=
+=0A=
+>> that command completion plus potentially 1 more END_TRANSFER completion.=
+=0A=
+>> That's why the quirk gives a buffer of at least 4 uframes of the=0A=
+>> scheduled isoc frame. So, it cannot schedule immediately on the next=0A=
+>> uframe, that's one of the drawbacks.=0A=
+>>=0A=
+>>=0A=
+>> Hi Felipe,=0A=
+>>=0A=
+>> Since you're asking this, it means you're still seeing issue with your=
+=0A=
+>> setup despite retrying to send START_TRANSFER command 5 times. What's=0A=
+>> the worse delay responding to XferNotReady you're seeing in your setup?=
+=0A=
+> There's no upper-bound on how long the gadget will take to enqueue a=0A=
+> request. We see problems with UVC gadget all the time. It can take a lot=
+=0A=
+> of time to decide to enqueue data.=0A=
+=0A=
+That's why there's a mechanism in the controller to return bus-expiry=0A=
+status to let the SW know if it had scheduled isoc too late. SW can do 2=0A=
+things: 1) re-schedule at a later timer or 2) send END_TRANSFER command=0A=
+to wait for the next XferNotReady to try again.=0A=
+=0A=
+> Usually I hear this from folks using UVC gadget with a real sensor on=0A=
+> the background.=0A=
+>=0A=
+> I've seen gadget enqueueing as far as 20 intervals in the future. But=0A=
+> remember, there's no upper-bound. And that's the problem. If we could=0A=
+> just read the frame number from DSTS and use that, we wouldn't have any=
+=0A=
+> issues. But since DSTS only contains 14 our of the 16 bits the=0A=
+> controller needs, then we can't really use that.=0A=
+=0A=
+You can create another quirk for devices that have this behavior to use=0A=
+frame number in DSTS instead.  As John had pointed out and mentioned, =0A=
+this will only work if the service interval and the delay in the=0A=
+scheduling of isoc is within 2 seconds.=0A=
+=0A=
+You will need to calculate this value along with BIT(15) and BIT(14) of=0A=
+XferNotReady for rollovers.=0A=
+=0A=
+>=0A=
+> To me, it seems like this part of the controller wasn't well=0A=
+> thought-out. These extra two bits, perhaps, should be internal to the=0A=
+> controller and SW should have no knowledge that they exist.=0A=
+=0A=
+These values are internal. SW should not have knowledge of it. This=0A=
+implementation will not follow the programming guide and should be used=0A=
+as a quirk for devices that are too slow to handle the XferNotReady=0A=
+event but want to schedule isoc immediately after handling the event.=0A=
+=0A=
+> In any case, this is the biggest sort of issues in DWC3 right now :-)=0A=
+>=0A=
+> Anything else seems to behave nicely without any problems.=0A=
+>=0A=
+=0A=
+BR,=0A=
+Thinh=0A=
