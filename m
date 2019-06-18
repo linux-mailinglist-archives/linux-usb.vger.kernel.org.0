@@ -2,30 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A256F49EA2
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 12:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEC349EB6
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 12:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729406AbfFRKwH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 06:52:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42392 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726037AbfFRKwG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jun 2019 06:52:06 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9A6B52080C;
-        Tue, 18 Jun 2019 10:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560855126;
-        bh=J0Lun6i6fIgucD20SF/FNzWUD+MvjLFZOAudnlwwWfw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0LE4FpVjNlT7uuhzEwQTmd8tmzf2u6Jd2FxCM/vhwFgnb/8xv2PAfYjn6ltYHR4Kh
-         18txgdSNOEnTThNIs/uO4/c16CRaUXJkf77OAZKO90DsidaEH7UbvQqSMvdBipU+vc
-         Y2RVrd62MD1qB6cpWxBGMc3uUb0VO51qgKibybWo=
-Date:   Tue, 18 Jun 2019 12:52:03 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+        id S1729603AbfFRK5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 06:57:05 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:35568 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729507AbfFRK5E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jun 2019 06:57:04 -0400
+Received: by mail-qt1-f193.google.com with SMTP id d23so14682214qto.2;
+        Tue, 18 Jun 2019 03:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=iNtD4nqgdcjPq+QbDW9ufam1Yl9j9a7cFfLokrIpxow=;
+        b=Hg2UJ6zYatddEJUePiDtn1leIbAiQveIqQogq/ccMmVFikaKELdmz0Nj7Us3EywoE3
+         cxRfBgJkvpxi+ol73OHAMeMF6jnw4ppS5HPJpzhv7Tvq4RKXVSSL2gG9Mxtyu1hiWupk
+         mlqWXC+vNKf3v8JlAcfGSV5HLefd5W9hJq6+diAmmDba3ktN5hMWyD3paNr2jVUbgW2l
+         GrMnxTW4g7mr4QcAR39XhYqD0sgotTWC9ZECcQiFT9t01kEdzVy8zIw1Kc2XiAOfQYNV
+         zSzaDgTKKVb0gCjG4ulsKx8fekLbBZbsNrRRwr9MazmF2Ds2wodDjbbbjViAgHx/qlCs
+         LGbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iNtD4nqgdcjPq+QbDW9ufam1Yl9j9a7cFfLokrIpxow=;
+        b=U0KGFqtRy469MRo4NWUZNtM9x+6xdCPcCfArmGoIS7pr5tzEbTGpBIVyvO6xzviz6m
+         b0Rt5zZ12sb1uvSBiVEY5Vcmy3aRCdkgP3D7EmMYHUrIW9D0ALFGvoikV7fpmCcJJryv
+         HansbobJP2mFASiE9f0dqiZgToMyILXsytDJSkC1B61/+lod88afKlH+BpgA8Vwxn+J7
+         QPAEX0KejUgQtLBnYyUYWUWFHK3WT1tIDlgnbQp2K897zqOyloZ8lrgLUEzHTi4IcvPV
+         bagqQwoDa71/OEpnjKWOqVHGDWXKtozLVTDNlRtmN4zVZgxFG03nSJWB93QWNWoAEHIU
+         tpUA==
+X-Gm-Message-State: APjAAAVLIYT3iwaRRJRYVfWXXEUJ9nIP20NZB3Q6tdtnclkD7fl9ZF/7
+        T2ZP1+m0dB9z/syuXh9QYcXShAToyIM=
+X-Google-Smtp-Source: APXvYqz133Gc8bVKrmUTYrRI8fbiciUcJ6gGBNxtrfY0FrDsAY5v8xnU1h1yCQ+jJVHjCdNqa0ZyjA==
+X-Received: by 2002:aed:39e7:: with SMTP id m94mr19891860qte.0.1560855423728;
+        Tue, 18 Jun 2019 03:57:03 -0700 (PDT)
+Received: from geeko ([186.212.50.252])
+        by smtp.gmail.com with ESMTPSA id g35sm2874993qtg.92.2019.06.18.03.56.43
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 18 Jun 2019 03:57:03 -0700 (PDT)
+Date:   Tue, 18 Jun 2019 07:56:33 -0300
+From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Alan Stern <stern@rowland.harvard.edu>,
         "open list:USB MASS STORAGE DRIVER" <linux-usb@vger.kernel.org>,
@@ -33,42 +54,54 @@ Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         <usb-storage@lists.one-eyed-alien.net>
 Subject: Re: [PATCH 2/2] usb: storage: scsiglue: Do not skip VPD if
  try_vpd_pages is set
-Message-ID: <20190618105203.GA18349@kroah.com>
+Message-ID: <20190618105631.GB9372@geeko>
 References: <20190618013146.21961-1-marcos.souza.org@gmail.com>
  <20190618013146.21961-3-marcos.souza.org@gmail.com>
  <20190618064947.GB22457@kroah.com>
  <20190618103001.GA9372@geeko>
+ <20190618105203.GA18349@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190618103001.GA9372@geeko>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20190618105203.GA18349@kroah.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 07:30:04AM -0300, Marcos Paulo de Souza wrote:
-> On Tue, Jun 18, 2019 at 08:49:47AM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Jun 17, 2019 at 10:31:46PM -0300, Marcos Paulo de Souza wrote:
-> > > If BLIST_TRY_VPD_PAGES is set for a device, even for an USB, it should
-> > > be honored, so only set skip_vpd_pages is try_vpd_pages is not set.
+On Tue, Jun 18, 2019 at 12:52:03PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Jun 18, 2019 at 07:30:04AM -0300, Marcos Paulo de Souza wrote:
+> > On Tue, Jun 18, 2019 at 08:49:47AM +0200, Greg Kroah-Hartman wrote:
+> > > On Mon, Jun 17, 2019 at 10:31:46PM -0300, Marcos Paulo de Souza wrote:
+> > > > If BLIST_TRY_VPD_PAGES is set for a device, even for an USB, it should
+> > > > be honored, so only set skip_vpd_pages is try_vpd_pages is not set.
+> > > > 
+> > > > Signed-off-by: Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+> > > > ---
+> > > >  drivers/usb/storage/scsiglue.c | 7 +++++--
+> > > >  1 file changed, 5 insertions(+), 2 deletions(-)
 > > > 
-> > > Signed-off-by: Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-> > > ---
-> > >  drivers/usb/storage/scsiglue.c | 7 +++++--
-> > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > > Where is patch 1/2 of this series?
 > > 
-> > Where is patch 1/2 of this series?
+> > You can find it here:
+> > https://lore.kernel.org/lkml/20190618013146.21961-2-marcos.souza.org@gmail.com/
 > 
-> You can find it here:
-> https://lore.kernel.org/lkml/20190618013146.21961-2-marcos.souza.org@gmail.com/
+> So is this 2/2 patch independant of 1/2 and can go throught the USB
+> tree, or do they both need to be together?
 
-So is this 2/2 patch independant of 1/2 and can go throught the USB
-tree, or do they both need to be together?
+I think it is, since we are not dealing with something specific to a device in
+this patch.
 
-As it is, I have no idea what to do with this patch :(
+> 
+> As it is, I have no idea what to do with this patch :(
+Sorry, I relied in get_maintainer.pl only, so you weren't CCed in both patches.
+But feel free to grab this patch in your tree.
+> 
+> thanks,
+> 
+> greg k-h
 
-thanks,
-
-greg k-h
+-- 
+Thanks,
+Marcos
