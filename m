@@ -2,120 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECCE4A521
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 17:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 527124A54E
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 17:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729327AbfFRPT4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 11:19:56 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:46914 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729287AbfFRPT4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jun 2019 11:19:56 -0400
-Received: by mail-pl1-f195.google.com with SMTP id e5so5834421pls.13;
-        Tue, 18 Jun 2019 08:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=fq5VhcilP64BeWXL9owdbnBuYJRBLePLtFWb4+IFtS0=;
-        b=VmQfx+N+TXMUHraRKiYJCWtn8k2rkDMD2eDyuw/xku77OWNV4nVWeHoF22oeO9Vnyd
-         VsENFxm83rAA7oLlf5/7TjC73E1UDERkvdegTFR2ETWgGKh3FQmq1eK5yJZANaxMdGfw
-         W3LXlC7aHVKWI9W47gjrQ4qRWxL0cS3gmTJnZNrJAWQxnnvSFWSq+y74e6ofN0LJGrkb
-         Sn+5tr+Tzl6aHgvLkKoufbAy5blzDkNzX/GbTGqMrqJzi/rVwaErwhVBRKBcLJ3mJml1
-         FJZ8B7YvD2o939I92W9t/t6h6HFNr637qpGPs75mBYwvVlEt11Qhy2byZvnN69CnOykP
-         NsJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fq5VhcilP64BeWXL9owdbnBuYJRBLePLtFWb4+IFtS0=;
-        b=LPGhzDzFy5XlZ06ATcwMd89PT9jwwzv9404hUfEtiqjJ2eCcZuBb48R4vn1J5AELSK
-         vVtMqokP7a6UZ+36uUx2Cm9eR+tTn6MFkNQcexQQDmFkP4OHmyurpdxK4Hht6+M04TyN
-         YC/FsGS2v/Gh2WsxZe+UGkQb+J6CjG1HWgyrAfDgiQPgUDcOWKzyvIvO8zI4aWh25qxd
-         ZP59FkwfX9fpEXUdhheZt8LwrBzUX9g8IprBpHecyTUAySQGygAhVyBEzEjjyOhfF0KS
-         8Gi7C++7ppA0Nuu81p91ycZ7gIU8xvtlr0S8DQSVxIaD6Pnkf0/sVW/7w0TdljVnEklc
-         rsow==
-X-Gm-Message-State: APjAAAUMuloipnOG7XZeAND45Fq6z+3NxyxgpTmRw1pNCxrrBKeYkfr7
-        zaYTH5qNWRLSAQf4TYogqTc=
-X-Google-Smtp-Source: APXvYqy7CigQ7qoDxgojxHeK25n9qpTdov7bJ10aWRlbXWEwHg13ccHte6Wg5AP9o6kiA6fB7y+m4Q==
-X-Received: by 2002:a17:902:aa03:: with SMTP id be3mr36658303plb.240.1560871195259;
-        Tue, 18 Jun 2019 08:19:55 -0700 (PDT)
-Received: from geeko ([186.212.50.252])
-        by smtp.gmail.com with ESMTPSA id j8sm14613224pfi.148.2019.06.18.08.19.52
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 08:19:54 -0700 (PDT)
-Date:   Tue, 18 Jun 2019 12:17:39 -0300
-From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Kernel development list <linux-kernel@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB MASS STORAGE DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:USB MASS STORAGE DRIVER" 
-        <usb-storage@lists.one-eyed-alien.net>
-Subject: Re: [PATCH 2/2] usb: storage: scsiglue: Do not skip VPD if
- try_vpd_pages is set
-Message-ID: <20190618151737.GA16959@geeko>
-References: <20190618013146.21961-3-marcos.souza.org@gmail.com>
- <Pine.LNX.4.44L0.1906180946160.1659-100000@iolanthe.rowland.org>
+        id S1729308AbfFRP1A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 11:27:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54046 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728982AbfFRP1A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jun 2019 11:27:00 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 07E382085A;
+        Tue, 18 Jun 2019 15:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560871619;
+        bh=SSnKVKJU0sLRhqBq4rWiHjbloE8WCZeYuIUyrvX0IuQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TNVsbSr+J7ksOeKydpSZY4pJ/tQgfEVAMjcQqbe+o69oJ9nON2nWWW7bx9IZ/6Wq/
+         css/mUSXC9LeUD5HulAfva/vL33uD/sra5x51RBOssCxUvqlMIH8kcLERQgYZfUOlT
+         VGGtuAHNerpgfRTQXYcFscY0V3Z00lS29cIF2Fc0=
+Date:   Tue, 18 Jun 2019 17:26:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     dmg <dmg@turingmachine.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: Replace a < b ? a : b construct with min_t(type, a,
+ b) in drivers/usb
+Message-ID: <20190618152657.GA1912@kroah.com>
+References: <20190617233050.21409-1-dmg@turingmachine.org>
+ <20190618064905.GA22457@kroah.com>
+ <87pnnbj5v7.fsf@mn.cs.uvic.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1906180946160.1659-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87pnnbj5v7.fsf@mn.cs.uvic.ca>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 09:48:01AM -0400, Alan Stern wrote:
-> On Mon, 17 Jun 2019, Marcos Paulo de Souza wrote:
+On Tue, Jun 18, 2019 at 08:00:28AM -0700, dmg wrote:
 > 
-> > If BLIST_TRY_VPD_PAGES is set for a device, even for an USB, it should
-> > be honored, so only set skip_vpd_pages is try_vpd_pages is not set.
-> > 
-> > Signed-off-by: Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-> > ---
-> >  drivers/usb/storage/scsiglue.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-> > index 59190d88fa9f..0a9520780771 100644
-> > --- a/drivers/usb/storage/scsiglue.c
-> > +++ b/drivers/usb/storage/scsiglue.c
-> > @@ -195,8 +195,11 @@ static int slave_configure(struct scsi_device *sdev)
-> >  		 */
-> >  		sdev->skip_ms_page_8 = 1;
-> >  
-> > -		/* Some devices don't handle VPD pages correctly */
-> > -		sdev->skip_vpd_pages = 1;
-> > +		/*
-> > +		 * Some devices don't handle VPD pages correctly, so skip vpd
-> > +		 * pages if not forced by SCSI layer.
-> > +		 */
-> > +		sdev->skip_vpd_pages = sdev->try_vpd_pages == 0;
-> >  
-> >  		/* Do not attempt to use REPORT SUPPORTED OPERATION CODES */
-> >  		sdev->no_report_opcodes = 1;
+> Greg KH <gregkh@linuxfoundation.org> writes:
 > 
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > On Mon, Jun 17, 2019 at 04:30:50PM -0700, dmg@turingmachine.org wrote:
+> >> From: Daniel M German <dmg@turingmachine.org>
+> >>
+> >> Use min_t to find the minimum of two values instead of using the ?: operator.
+> >
+> > Why is min_t() needed for all of these and not just min()?
 > 
-> Although I think it would be clearer to write:
+> The use of min triggers a compilation warning (see below), which min_t is supposed to
+> address (from min_t comment: 'min()/max() macros that also do strict type-checking.. See the
+> "unnecessary" pointer comparison.", from include/linux/kernel')
 > 
-> 		sdev->skip_vpd_pages = !sdev->try_vpd_pages;
+>    In file included from drivers/usb/misc/adutux.c:19:
+>    drivers/usb/misc/adutux.c: In function ‘adu_read’:
+>    ./include/linux/kernel.h:818:29: warning: comparison of distinct pointer types lacks a cast
+>       (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+>                                 ^~
+>    ./include/linux/kernel.h:832:4: note: in expansion of macro ‘__typecheck’
+>       (__typecheck(x, y) && __no_side_effects(x, y))
+>        ^~~~~~~~~~~
+>    ./include/linux/kernel.h:842:24: note: in expansion of macro ‘__safe_cmp’
+>      __builtin_choose_expr(__safe_cmp(x, y), \
+>                            ^~~~~~~~~~
+>    ./include/linux/kernel.h:851:19: note: in expansion of macro ‘__careful_cmp’
+>     #define min(x, y) __careful_cmp(x, y, <)
+>                       ^~~~~~~~~~~~~
+>    drivers/usb/misc/adutux.c:382:34: note: in expansion of macro ‘min’
+>                         int amount = min(bytes_to_read, data_in_secondary);
+>                                      ^~~
 
-I agree. Greg, would you like me to send a v2 of this patch with this change, or
-can you apply the change suggested by Alan?
+Yes, but is it needed for all of these?
 
-Thanks,
-Marcos
+And what about just changing the types of those variables to be the
+same?  Does the cast have to be there?
 
-> 
-> But that's just personal preference.  This is okay as it is.
-> 
-> Alan Stern
-> 
+thanks,
 
--- 
-Thanks,
-Marcos
+greg k-h
