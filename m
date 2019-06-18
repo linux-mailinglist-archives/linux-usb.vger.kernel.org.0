@@ -2,34 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBE149A6F
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 09:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BAE49A80
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 09:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726308AbfFRHX2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 03:23:28 -0400
-Received: from mga07.intel.com ([134.134.136.100]:5733 "EHLO mga07.intel.com"
+        id S1725913AbfFRH0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 03:26:08 -0400
+Received: from mga07.intel.com ([134.134.136.100]:5897 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725870AbfFRHX2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jun 2019 03:23:28 -0400
+        id S1725870AbfFRH0I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jun 2019 03:26:08 -0400
 X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 00:23:27 -0700
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 00:26:08 -0700
 X-ExtLoop1: 1
 Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga007.jf.intel.com with ESMTP; 18 Jun 2019 00:23:24 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     alokc@codeaurora.org, agross@kernel.org, david.brown@linaro.org,
-        bjorn.andersson@linaro.org, gregkh@linuxfoundation.org,
-        ard.biesheuvel@linaro.org, jlhugo@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND v4 0/4] I2C: DWC3 USB: Add support for ACPI based AArch64 Laptops
-In-Reply-To: <20190617132349.GI16364@dell>
-References: <20190617125105.6186-1-lee.jones@linaro.org> <87lfy0gym0.fsf@linux.intel.com> <20190617132349.GI16364@dell>
-Date:   Tue, 18 Jun 2019 10:23:20 +0300
-Message-ID: <87a7efgxw7.fsf@linux.intel.com>
+  by fmsmga007.fm.intel.com with ESMTP; 18 Jun 2019 00:26:05 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: dwc2: Use generic PHY width in params setup
+In-Reply-To: <0c370ba7-bb45-7580-1a60-021f15c1c37d@samsung.com>
+References: <20190507100852.11263-2-jmaselbas@kalray.eu> <20190509091528.28397-1-jmaselbas@kalray.eu> <CGME20190531124510epcas2p1f261a838b299f3f99b521760872de32b@epcas2p1.samsung.com> <1d774b88-b176-448d-3e8b-8c1f04cb1406@synopsys.com> <0c370ba7-bb45-7580-1a60-021f15c1c37d@samsung.com>
+Date:   Tue, 18 Jun 2019 10:26:01 +0300
+Message-ID: <877e9jgxrq.fsf@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -45,45 +45,34 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Lee Jones <lee.jones@linaro.org> writes:
-> On Mon, 17 Jun 2019, Felipe Balbi wrote:
+Marek Szyprowski <m.szyprowski@samsung.com> writes:
+> Hi All,
 >
->> Lee Jones <lee.jones@linaro.org> writes:
->>=20
->> > This patch-set ensures the kernel is bootable on the newly released
->> > AArch64 based Laptops using ACPI configuration tables.  The Pinctrl
->> > changes have been accepted, leaving only I2C (keyboard, touchpad,
->> > touchscreen, fingerprint, etc, HID device) and USB (root filesystem,
->> > camera, networking, etc) enablement.
->> >
->> > RESEND: Stripped I2C patches as they have also been merged into
->> >         their respective subsystem.
->> >
->> > v4:
->> >  * Collecting Acks
->> >  * Adding Andy Gross' new email
->> >  * Removing applied Pinctrl patches
->> >
->> > Lee Jones (4):
->> >   soc: qcom: geni: Add support for ACPI
->> >   usb: dwc3: qcom: Add support for booting with ACPI
->> >   usb: dwc3: qcom: Start USB in 'host mode' on the SDM845
->> >   usb: dwc3: qcom: Improve error handling
->>=20
->> pushed to testing/next
+> On 2019-05-31 14:44, Minas Harutyunyan wrote:
+>> On 5/9/2019 1:16 PM, Jules Maselbas wrote:
+>>> Setting params.phy_utmi_width in dwc2_lowlevel_hw_init() is pointless=20
+>>> since
+>>> it's value will be overwritten by dwc2_init_params().
+>>>
+>>> This change make sure to take in account the generic PHY width=20
+>>> information
+>>> during paraminitialisation, done in dwc2_set_param_phy_utmi_width().
+>>>
+>>> By doing so, the phy_utmi_width params can still be overrided by
+>>> devicetree specific params and will also be checked against hardware
+>>> capabilities.
+>>>
+>>> Fixes: 707d80f0a3c5 ("usb: dwc2: gadget: Replace phyif with=20
+>>> phy_utmi_width")
+>>> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>>> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+>>
+>> Acked-by: Minas Harutyunyan <hminas@synopsys.com>
 >
-> Sounds promising, thanks Felipe.
->
-> OOI, what is your process?
->
-> How does do the patches typically sit in there?
+> Gentle reminder, Felipe, could you take this to the fixes for v5.2?
 
-I'll probably merge to my 'next' branch today. I leave them in
-testing/next for a couple days, usually, so 0-day can run its thing and
-I get a chance of at least boot testing on our machines in the lab here.
-
-Since this doesn't touch anything "generic", I don't _have_ to boot
-test, so I'll probably merge to 'next' today.
+darn it, I applied for 'next'. I'll remove from that branch and place it
+in fixes. Pull request, hopefully, tomorrow.
 
 =2D-=20
 balbi
@@ -93,18 +82,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0IkWgACgkQzL64meEa
-mQZfuBAAuQZcnBloj3LoF6OISK9Br5hFTGB0GgLw0eVC0w8VavE1eR4HWJYAD9HU
-OtpJSw049QWg5tdam9Se6Vuz6vxi3Hsd0ALTLxaSscinMd1YoMmpnmnX83uSbINn
-V9OhiWwV7WmbGKSGAyvO9v+2tYsopxDyoFQr7uleNEF53w8hP4FEHY0BXmd7ZGqR
-X5zr6hA03V/7huGC6zqQgtWzrqif3quk/dns882qvNsb5KbsF6nHvbpmYj/50ytn
-jRJUG9XdqBgSKx9n4qdQNwtD1eJmpRm+Oa/M9MFwWMw/RZOciS0sfhcl7gHMJaGD
-x328NQj80cTs+jq0OiqqYdnKy8R+x7UuKdnNgZW7QvENVJwmEUOwFjU1Btyz4TYH
-FORe9XJiVXRUy9ytCykWNgj3jhlYeocnr9ZWGks5wTJkMKER+fUvMJfMSrW0PHDQ
-dn1Rs/orlx3rdJ1TnpfBTgqMBWqtxSPaYTqd0gHMPkUSoLm1ion1et7QlGUnteYb
-bsave1+35O6UT5b1hf6vUGWICU7zUdfMoQUD0pq+A6QlnvkpK7IBZhfvR0Z+5kNl
-1F+ut0O8O+PCE93AKYyhIGKDhy/dZYIR26/0ukGhGwtk8fbS4FfaYEYQYsr0fJuV
-myZ3TiG0YZXqgOKo8qauXRj0kZUw85lkzyeBCvpj3EgGzbtze28=
-=UaAI
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0IkgkACgkQzL64meEa
+mQaEtg//QHm4ABfRpJhlDPAML92Bajj+u02j2orJsp2hzlEGET6nU7lgveiiTSRv
+Z4276cKHr+9/dCASCQg/SbDRKk3WRsnw810BazUylyw7JhQfMpfoLZy2Div/ydI3
+pyrvoppbk4LW75Qgz/9ACj3oWjChI0j2/8Y+cbQkV556B/NlZyBjIxKNLqDj1FfQ
+5APqX7jSSsYS7XtaMhewjRewrICOO9+JEkj7PVkPngFHApi39KQPvIUu7IBG0DH8
+/9krXa7JBUjiSdQZk+cbo5h8CGhk7iUV6iPl5DDt2WQe1V9LQt14mIVePLbwLOtR
+PougVrG1Q6z0xrK+ZcBpf/M+Gq5Kg4KN0viVBTsgTeZjCHW0EPcS1T2xPbYOtvo2
+Yw6s7M86TPDyIZrhSsCBfOI9Yk1djzuj2btviGVSFtsBwIJsr8U6AwSDGGMdF9Ak
+Jhwk0viAxAgWE/YdPa9WNGAIjmSCBgxXOmCKnrPX6+UDQTthqpRni+nZOK9jcZ72
+pjv8YY08NC8nO3ihkGJODTSDr7D3OtsO7Bgm1d/8cU2EItlQ22kIjVMmmdzu2i7b
+YF7in25lc2W5GLIpBDIxAZ1ME+3uFNAVu2U820dgj0Ajb3p/v4GBUzboCUG6BFYw
+Zkzo1Epj/NxT6hUcq/obFEeO1D77Uo59hXl/A38e4hY7RKuuXkE=
+=g3cO
 -----END PGP SIGNATURE-----
 --=-=-=--
