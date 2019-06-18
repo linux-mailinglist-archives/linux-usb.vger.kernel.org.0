@@ -2,143 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A02F649A28
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 09:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C56E49A58
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 09:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728625AbfFRHPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 03:15:43 -0400
-Received: from mail-eopbgr1410095.outbound.protection.outlook.com ([40.107.141.95]:10425
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725955AbfFRHPn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jun 2019 03:15:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tkmkgJWchracTE2Jf0x3WYuTbCZJRLJ3IZ4Vi0LalK8=;
- b=I5ye6eKEe1M2LxzKJ7YPqR+qWqPDmzYrEd+fpT5c3pHH+DNKIEOe0mVWFln6PckF4LL8QPjgvC9ebTLzbynDrIYysV0aasJgkns1mv689TITiwsk/Fxc5ETlnt3V92MpkVCX7mKdEsNgMaqtpR1Fj3fQPtLYccB9hbgJaVcaU3w=
-Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com (52.134.242.17) by
- OSBPR01MB3029.jpnprd01.prod.outlook.com (52.134.254.79) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.12; Tue, 18 Jun 2019 07:15:39 +0000
-Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com
- ([fe80::451a:14a0:aa81:1b54]) by OSBPR01MB2103.jpnprd01.prod.outlook.com
- ([fe80::451a:14a0:aa81:1b54%7]) with mapi id 15.20.1987.014; Tue, 18 Jun 2019
- 07:15:39 +0000
-From:   Biju Das <biju.das@bp.renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Simon Horman <horms@verge.net.au>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v7 3/7] usb: typec: driver for TI HD3SS3220 USB Type-C DRP
- port controller
-Thread-Topic: [PATCH v7 3/7] usb: typec: driver for TI HD3SS3220 USB Type-C
- DRP port controller
-Thread-Index: AQHVF5i4H7iFvw/OZk6CzzYV6n6nWKahFESAgAAAXMCAAAP7gIAAAMpg
-Date:   Tue, 18 Jun 2019 07:15:39 +0000
-Message-ID: <OSBPR01MB210397241ADE60BB88C09E22B8EA0@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-References: <1559296800-5610-1-git-send-email-biju.das@bp.renesas.com>
- <1559296800-5610-4-git-send-email-biju.das@bp.renesas.com>
- <20190618064743.GA22269@kroah.com>
- <OSBPR01MB2103613A152597DF83BC18D0B8EA0@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <20190618070315.GA9160@kroah.com>
-In-Reply-To: <20190618070315.GA9160@kroah.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=biju.das@bp.renesas.com; 
-x-originating-ip: [193.141.220.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3593c44f-b300-453f-9055-08d6f3bcc473
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSBPR01MB3029;
-x-ms-traffictypediagnostic: OSBPR01MB3029:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <OSBPR01MB302915834633ADBEE14F5616B8EA0@OSBPR01MB3029.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:923;
-x-forefront-prvs: 007271867D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(366004)(39860400002)(136003)(376002)(346002)(199004)(189003)(76176011)(11346002)(305945005)(316002)(256004)(7736002)(14444005)(4326008)(7696005)(6306002)(74316002)(71200400001)(71190400001)(14454004)(8936002)(6436002)(33656002)(55016002)(186003)(6246003)(66946007)(6916009)(5660300002)(9686003)(73956011)(6506007)(81166006)(8676002)(81156014)(66066001)(53936002)(446003)(68736007)(102836004)(25786009)(86362001)(229853002)(99286004)(7416002)(52536014)(66446008)(26005)(476003)(54906003)(966005)(64756008)(66556008)(66476007)(486006)(2906002)(6116002)(44832011)(3846002)(76116006)(478600001);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB3029;H:OSBPR01MB2103.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:0;MX:1;
-received-spf: None (protection.outlook.com: bp.renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: sAYTTSfOjc3aq3eXr5uTQWD46OwrPlKM9EiKj/9Bg8TJOKk50nHEZOtKnr7AZLbzmOwIGWLZY8ONy6n6tRs/dKaj6KvKGUd0bA8OUxhhfcW9xuXGtOv2rCZ2W/5NFnWKkCNjceICShADouXp3eRTtqjX2pgiPsINt5afguTxRzwfM9/a3xODh8NKMw501+0htL2EuinpWcLA1CT9b3iM5PpgvF6aOSGaTX4GmnoNf3pttU/FxL1KniNJvfE/sijnF/RLoGTYalrzmQdb8/7GbPJaUbxfqW643N0V7vGmEYLL6Ltaw19E4BW/hsPTOBJ0v84ghlVElAvqSqR5kN34cUlxALq8AQVCPPlQOzj7chHvChNRP42taoTo+0/j1HLedRxK5qs22rpHjANcHCMJlbZ9J6KQZkajoQLgcd3ihvw=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1728779AbfFRHUJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 03:20:09 -0400
+Received: from mga14.intel.com ([192.55.52.115]:57805 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726091AbfFRHUJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jun 2019 03:20:09 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 00:20:09 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Jun 2019 00:20:07 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Youn <John.Youn@synopsys.com>,
+        John Youn <John.Youn@synopsys.com>
+Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [RFC] Sorting out dwc3 ISOC endpoints once and for all
+In-Reply-To: <30102591E157244384E984126FC3CB4F63A11B8A@us01wembx1.internal.synopsys.com>
+References: <87a7etd8s7.fsf@linux.intel.com> <2B3535C5ECE8B5419E3ECBE30077290902E78AF3D7@us01wembx1.internal.synopsys.com> <30102591E157244384E984126FC3CB4F63A11B8A@us01wembx1.internal.synopsys.com>
+Date:   Tue, 18 Jun 2019 10:20:03 +0300
+Message-ID: <87fto7gy1o.fsf@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3593c44f-b300-453f-9055-08d6f3bcc473
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2019 07:15:39.3153
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: biju.das@bp.renesas.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3029
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-> Subject: Re: [PATCH v7 3/7] usb: typec: driver for TI HD3SS3220 USB Type-=
-C
-> DRP port controller
->=20
-> > > Subject: Re: [PATCH v7 3/7] usb: typec: driver for TI HD3SS3220 USB
-> > > Type-C DRP port controller
-> > >
-> > > On Fri, May 31, 2019 at 10:59:56AM +0100, Biju Das wrote:
-> > > > Driver for TI HD3SS3220 USB Type-C DRP port controller.
-> > > >
-> > > > The driver currently registers the port and supports data role swap=
-ping.
-> > > >
-> > > > Signed-off-by: Biju Das <biju.das@bp.renesas.com>
-> > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > ---
-> > >
-> > > I tried to apply this, but get the following build error:
-> > >
-> > > drivers/usb/typec/hd3ss3220.c: In function hd3ss3220_probe:
-> > > drivers/usb/typec/hd3ss3220.c:179:23: error: implicit declaration of
-> > > function fwnode_usb_role_switch_get; did you mean
-> > > usb_role_switch_get? [- Werror=3Dimplicit-function-declaration]
-> > >   hd3ss3220->role_sw =3D fwnode_usb_role_switch_get(connector);
-> > >                        ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >                        usb_role_switch_get
-> > > drivers/usb/typec/hd3ss3220.c:179:21: warning: assignment to struct
-> > > usb_role_switch * from int makes pointer from integer without a cast
-> > > [-Wint- conversion]
-> > >   hd3ss3220->role_sw =3D fwnode_usb_role_switch_get(connector);
-> > >                      ^
-> > >
-> > > You might want to fix that so the series can be applied :(
-> >
-> > This patch depend upon the  below commit[1] which introduced the new
-> API "fwnode_usb_role_switch_get()"
-> >
-> > [1] https://patchwork.kernel.org/patch/10986227/ ("usb: roles: Add
-> > fwnode_usb_role_switch_get() function")
->=20
-> Ok, then I guess I will have to wait to merge this until that is accepted=
-.
->=20
-> Please resend when that happens.
 
-OK.  I will resend this patch after  patch [1]  get accepted.
+Hi,
 
-Regards,
-Biju
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+>>>
+>>>  static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct
+>>> dwc3_request *req)
+>>>
+>>>
+>>> Would there be any obvious draw-back to going down this route? The thing
+>>> is that, as it is, it seems like we will *always* have some corner case
+>>> where we can't guarantee that we can even start a transfer since there's
+>>> no upper-bound between XferNotReady and gadget driver finally queueing a
+>>> request. Also, I can't simply read DSTS for the frame number because of
+>>> top-most 2 bits.
+>>>
+>> For non-affected version of the IP, the xfernotready -> starttransfer
+>> time will have to be off by more than a couple seconds for the driver
+>> to produce an incorrect 16-bit frame number. If you're seeing errors
+>> here, maybe we just need to code review the relevant sections to make
+>> sure the 14/16-bit and rollover conditions are all handled correctly.
+>
+> I think what Felipe may see is some delay in the system that causes the
+> SW to not handle XferNotReady event in time. We already have the "retry"
+> method handle that to a certain extend.
+>
+>> But I can't think of any obvious drawbacks of the quirk, other than
+>> doing some unnecessary work, which shouldn't produce any bad
+>> side-effects. But we haven't really tested that.
+>>
+>
+> The workaround for the isoc_quirk requires 2 tries sending
+> START_TRANSFER command. This means that you have to account the delay of
+> that command completion plus potentially 1 more END_TRANSFER completion.
+> That's why the quirk gives a buffer of at least 4 uframes of the
+> scheduled isoc frame. So, it cannot schedule immediately on the next
+> uframe, that's one of the drawbacks.
+>
+>
+> Hi Felipe,
+>
+> Since you're asking this, it means you're still seeing issue with your
+> setup despite retrying to send START_TRANSFER command 5 times. What's
+> the worse delay responding to XferNotReady you're seeing in your setup?
+
+There's no upper-bound on how long the gadget will take to enqueue a
+request. We see problems with UVC gadget all the time. It can take a lot
+of time to decide to enqueue data.
+
+Usually I hear this from folks using UVC gadget with a real sensor on
+the background.
+
+I've seen gadget enqueueing as far as 20 intervals in the future. But
+remember, there's no upper-bound. And that's the problem. If we could
+just read the frame number from DSTS and use that, we wouldn't have any
+issues. But since DSTS only contains 14 our of the 16 bits the
+controller needs, then we can't really use that.
+
+To me, it seems like this part of the controller wasn't well
+thought-out. These extra two bits, perhaps, should be internal to the
+controller and SW should have no knowledge that they exist.
+
+In any case, this is the biggest sort of issues in DWC3 right now :-)
+
+Anything else seems to behave nicely without any problems.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0IkKMACgkQzL64meEa
+mQb5lxAAuaSQWwTg0WyHUd0pKVcI1qXFNxGhrH05cKzSzud7HM1drNTqoLK40HEm
+lMUBJFKEBfzyBDoMAUR4YjrB9dfWitL29t/BAzIFosPt+LWjRAmbuwxRZO+VXmxO
+E4A5bqfQEnLWE8T28lr64gQbuFRo0ilatKF6IaXXKLHqYts0Nx1itnfq55nkQ9md
+7JnXB/FyEh0Le1EBiYinq9uPfy/6PXXNNBkvB1A2GTlwnEjjO7RejIXUsv7ErFFk
+WfUhvbtKDfup+kjyN4DP2C4C/TNMGVSnyc2m89fCCde72m+Bvi5LipuMVzaQ1nnr
+PApVLTDDw2ZeNHyen2xgPbQ2GweqStx8Ip1GMI89hw14oTDT7RqHw0Vy2qZHsbTn
+KLlY9roXDmCPNpiTE4ATM2ndz8v/oPOZl1EyE2tvMkBp9HZOSUgvVrMb1bbJ8aln
+u7HrX6FmgOwBUBNVqViFyS4rMrrLirzhVqKlbeyfzcQb9TjqNcRbWki05D8aTcrg
+2MSvGjiJbjwKvHbNHp01U9srinYFALRJAL5wkx3EirlPDkmhhxLCUGKuqhYmKLyj
+r4Wcp2W71ZTqadegXOzgRAhsme2bG4UeUksgSBfNB2A9O3EbN9YCgVLSV4IpjHim
+F0BJw9WMFjtdpkE9l8CrftKEcv3v4lqNiQhVDm9E4DiaNaJ1MI4=
+=VNep
+-----END PGP SIGNATURE-----
+--=-=-=--
