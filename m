@@ -2,83 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D41CF49618
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 01:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE3849637
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 02:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbfFQXw3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jun 2019 19:52:29 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46512 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726427AbfFQXw3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jun 2019 19:52:29 -0400
-Received: by mail-pg1-f196.google.com with SMTP id v9so6600957pgr.13;
-        Mon, 17 Jun 2019 16:52:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rT1Ry9CXDU/Gof/gNESKymfMi9a8wIc43QBygQM/oWk=;
-        b=mJ8Jlyf5c5CQr32tFtn4QQKxZrgQtMFLlzgKU1/UcwURQq2ZCFE1OGJtEtb3WAV3Tk
-         ZNlvZ8SOnjROFsW0jpfyIrzcr4T3FYEds3Rt9DsWO03Nrg9hfEMQgoArhGc6beUsxsxf
-         Jc/qlKMvXm9QK1r+IHwTE2rumUeI71Gx9WvW+IdZturb9TrmX9S3mwPFUb1tfkSm0sso
-         geYJpvOXgTXgmXcG+gGg3FNEvYgJaKV4gAt144FB1C+7lAhOh7so1ZM8nrgI4dZTrgT9
-         Np3epluPIoVTGX9eJmW7p5kUsGVLO7OTleZj4rBlhLikyV3whn3gZv2zG7nK0L/6QnQw
-         pu8Q==
-X-Gm-Message-State: APjAAAVUBRH8HZSxjZCPsHsddXOdjqTpXuEfWgJbA5pCQPmLBZNNDgKu
-        ffAvLtnIIgormnADur5a5ps=
-X-Google-Smtp-Source: APXvYqznUwe7i1jFQEHoTI8nFDF4yUuM+GrXTOznm/OWpDdnoDTWVknSAtGeEiPT6OHomWHWWX0woA==
-X-Received: by 2002:a17:90a:2ec2:: with SMTP id h2mr1867192pjs.119.1560815548541;
-        Mon, 17 Jun 2019 16:52:28 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id l20sm11750101pff.102.2019.06.17.16.52.26
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Jun 2019 16:52:27 -0700 (PDT)
-Subject: Re: [PATCH V4 00/16] use sg helper to operate scatterlist
-To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        id S1728572AbfFRAP6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jun 2019 20:15:58 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:51602 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726568AbfFRAP6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Jun 2019 20:15:58 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id C4ECDC057F3E;
+        Tue, 18 Jun 2019 00:15:57 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-17.pek2.redhat.com [10.72.8.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2DA7D91F33;
+        Tue, 18 Jun 2019 00:15:41 +0000 (UTC)
+Date:   Tue, 18 Jun 2019 08:15:37 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Finn Thain <fthain@telegraphics.com.au>
+Cc:     "Juergen E . Fischer" <fischer@norbit.de>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.com>,
         Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
         Cathy Avery <cavery@redhat.com>,
         "Ewan D . Milne" <emilne@redhat.com>,
         Brian King <brking@us.ibm.com>,
         James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
         Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Benjamin Block <bblock@linux.ibm.com>
+Subject: Re: [PATCH V4 11/16] scsi: aha152x: use sg helper to operate
+ scatterlist
+Message-ID: <20190618001536.GA5774@ming.t460p>
 References: <20190617030349.26415-1-ming.lei@redhat.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <25be959c-82fc-996e-76ed-c1fe7b4dce5d@acm.org>
-Date:   Mon, 17 Jun 2019 16:52:25 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+ <20190617030349.26415-12-ming.lei@redhat.com>
+ <alpine.LNX.2.21.1906171334330.168@nippy.intranet>
+ <alpine.LNX.2.21.1906180901160.284@nippy.intranet>
 MIME-Version: 1.0
-In-Reply-To: <20190617030349.26415-1-ming.lei@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LNX.2.21.1906180901160.284@nippy.intranet>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Tue, 18 Jun 2019 00:15:58 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/16/19 8:03 PM, Ming Lei wrote:
-> Scsi MQ makes a large static allocation for the first scatter gather
-> list chunk for the driver to use.  This is a performance headache we'd
-> like to fix by reducing the size of the allocation to a 2 element
-> array.  Doing this will break the current guarantee that any driver
-> using SG_ALL doesn't need to use the scatterlist iterators and can get
-> away with directly dereferencing the array.  Thus we need to update all
-> drivers to use the scatterlist iterators and remove direct indexing of
-> the scatterlist array before reducing the initial scatterlist
-> allocation size in SCSI.
+On Tue, Jun 18, 2019 at 09:35:48AM +1000, Finn Thain wrote:
+> On Mon, 17 Jun 2019, Finn Thain wrote:
+> 
+> > On Mon, 17 Jun 2019, Ming Lei wrote:
+> > 
+> > > Use the scatterlist iterators and remove direct indexing of the
+> > > scatterlist array.
+> > > 
+> > > This way allows us to pre-allocate one small scatterlist, which can be
+> > > chained with one runtime allocated scatterlist if the pre-allocated one
+> > > isn't enough for the whole request.
+> > > 
+> > > Finn added the change to replace SCp.buffers_residual with sg_is_last()
+> > > for fixing updating it, and the similar change has been applied on
+> > > NCR5380.c
+> > > 
+> > > Cc: Finn Thain <fthain@telegraphics.com.au>
+> > > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> > 
+> > Reviewed-by: Finn Thain <fthain@telegraphics.com.au>
+> > 
+> 
+> I have to retract that. I think this patch is still wrong.
+> 
+> GETSTCNT() appears to be the number of bytes sent since datao_init() and 
+> not the number of bytes sent since the start of the command. (Note the 
+> CLRSTCNT in datao_init() which appears to clear the transfer counter.) I 
+> don't see how the existing datao_end() could work otherwise. (Juergen?)
+> 
+> So here's another attempt. Ming, I'd be happy to take the blame/credit (in 
+> the form of a From tag etc.) in case you don't want to spend more time on 
+> this.
 
-For all patches in this series except 9/16 and 11/16, please add the 
-following:
+Sure, will do that in V5.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Thanks,
+Ming
