@@ -2,76 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD8D4A557
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 17:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0F44A5AA
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jun 2019 17:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729412AbfFRP2h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jun 2019 11:28:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55228 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729247AbfFRP2h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Jun 2019 11:28:37 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 031B92085A;
-        Tue, 18 Jun 2019 15:28:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560871716;
-        bh=cBZbIGQ+cjyD2YCVRDOXcoe7z6QzrPpzbzN0znS/Ylg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=1637osodxbXA+dd8NcCz7z4PZoJd2L4ooz5xgXaHLyVoXzk6mzzxCFsnF70fvSYaj
-         rxwiYsehj0Nwqj96sUhbw7/ewZ6peonITYgoV53cZ0Lc/Fz3dnxXt5nuaECF1D648A
-         wRwkpNFXQQ0FTiqYqUEkbxk32ximtj+bSI7AepPk=
-Subject: Re: How to resolve an issue in swiotlb environment?
+        id S1729386AbfFRPnT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jun 2019 11:43:19 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50764 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729272AbfFRPnT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Jun 2019 11:43:19 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 6F581AC84;
+        Tue, 18 Jun 2019 15:43:18 +0000 (UTC)
+Message-ID: <1560871774.3184.16.camel@suse.com>
+Subject: Re: [RFC] deadlock with flush_work() in UAS
+From:   Oliver Neukum <oneukum@suse.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        shuah <shuah@kernel.org>
-References: <Pine.LNX.4.44L0.1906141043530.24571-100000@netrider.rowland.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <20684ef6-7da7-90ed-4cd6-3bc46202de6d@kernel.org>
-Date:   Tue, 18 Jun 2019 09:28:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.1906141043530.24571-100000@netrider.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Cc:     linux-usb@vger.kernel.org
+Date:   Tue, 18 Jun 2019 17:29:34 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1906181120550.1659-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1906181120550.1659-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/14/19 8:44 AM, Alan Stern wrote:
-> On Thu, 13 Jun 2019, shuah wrote:
+Am Dienstag, den 18.06.2019, 11:29 -0400 schrieb Alan Stern:
+> On Tue, 18 Jun 2019, Oliver Neukum wrote:
 > 
->>> Great!  So all we have to do is fix vhci-hcd.  Then we can remove all
->>> the virt_boundary_mask stuff from usb-storage and uas entirely.
->>>
->>> (I'm assuming wireless USB isn't a genuine issue.  As far as I know, it
->>> is pretty much abandoned at this point.)
->>>
->>> Valentina and Shua: Adding SG support to vhci-hcd shouldn't be too
->>> hard.  It ought to be possible even without changing the network
->>> protocol.
->>>
->>
->> I will start taking a look at this. Is there a target release in plan
->> to drop virt_boundary_mask stuff?
+> > Hi,
+> > 
+> > looking at those deadlocks it looks to me like UAS can
+> > deadlock on itself. What do you think?
+> > 
+> >       Regards
+> >               Oliver
+> > 
+> > From 2d497f662e6c03fe9e0a75e05b64d52514e890b3 Mon Sep 17 00:00:00 2001
+> > From: Oliver Neukum <oneukum@suse.com>
+> > Date: Tue, 18 Jun 2019 15:03:56 +0200
+> > Subject: [PATCH] UAS: fix deadlock in error handling and PM flushing work
+> > 
+> > A SCSI error handler and block runtime PM must not allocate
+> > memory with GFP_KERNEL. Furthermore they must not wait for
+> > tasks allocating memory with GFP_KERNEL.
+> > That means that they cannot share a workqueue with arbitrary tasks.
+> > 
+> > Fix this for UAS using a private workqueue.
 > 
-> Not yet.  But since it doesn't do what we want anyway, this should be
-> fixed quickly.
-> 
+> I'm not so sure that one long-running task in a workqueue will block 
+> other tasks.  Workqueues have variable numbers of threads, added and 
+> removed on demand.  (On the other hand, when new threads need to be 
+> added the workqueue manager probably uses GFP_KERNEL.)
 
-Sounds good. I am working on it.
+Do we have a guarantee it will reschedule already scheduled works?
+The deadlock would be something like
 
-thanks,
--- Shuah
+uas_pre_reset() -> uas_wait_for_pending_cmnds() ->
+flush_work(&devinfo->work) -> kmalloc() -> DEADLOCK
+
+You can also make this chain with uas_suspend()
+
+> Even if you disagree, perhaps we should have a global workqueue with a
+> permanently set noio flag.  It could be shared among multiple drivers
+> such as uas and the hub driver for purposes like this.  (In fact, the 
+> hub driver already has its own dedicated workqueue.)
+
+That is a good idea. But does UAS need WQ_MEM_RECLAIM?
+
+	Regards
+		Oliver
+
