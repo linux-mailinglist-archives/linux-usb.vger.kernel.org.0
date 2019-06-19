@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9024B255
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 08:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CDF4B259
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 08:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbfFSGrC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 02:47:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39336 "EHLO mail.kernel.org"
+        id S1730999AbfFSGrp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 02:47:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39714 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725946AbfFSGrC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Jun 2019 02:47:02 -0400
+        id S1725854AbfFSGrp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Jun 2019 02:47:45 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF4142084A;
-        Wed, 19 Jun 2019 06:47:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B56C2084A;
+        Wed, 19 Jun 2019 06:47:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560926821;
-        bh=C2aoVq7aazq9W6b3IluQuhMripBNlXNJ+3pxYmrN82s=;
+        s=default; t=1560926864;
+        bh=Lw51ETJCagdJjPcdiX//pROPxBVlyXwdRk48OK7aJUU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vvk4uSIU2o53fql60X0tPbMdzFWWRg8kQhflNQtWTTbxj3fVgUEv0raJKDjfeBCN9
-         QZ2QyfqGeE7esOn6jVQysSqdxsjWq6+2g6bgrVOUyX1Z4aJfiu13zg+gEj7Nn1l4C0
-         zbW+fuG+d9Fx4e5dfinQxV22oMWx0FnBhxfYbzk4=
-Date:   Wed, 19 Jun 2019 08:46:58 +0200
+        b=JMAOriz8CR4Mj7WHSmVXF2DYVl4C9P/ejNJdwEw8Ldzj5aFwd2HPFy8C/kRz9EMoq
+         IO7vcajxnK178OYeC6WETJTm8AiRudQpQPM3PQhGZ/2qh+wv2Hf0D/4dhXoGqi/SAh
+         dtJkPyPo1XRAH63fKw6KIhb+Ku426t5FTPu5okA4=
+Date:   Wed, 19 Jun 2019 08:47:41 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
@@ -37,7 +37,7 @@ Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         linux-usb@vger.kernel.org
 Subject: Re: [PATCH v1 14/22] docs: usb: rename files to .rst and add them to
  drivers-api
-Message-ID: <20190619064658.GA1082@kroah.com>
+Message-ID: <20190619064741.GB1082@kroah.com>
 References: <cover.1560891322.git.mchehab+samsung@kernel.org>
  <c05aecb424e4f835e3f7872ecb5818e1d2f3267c.1560891322.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
@@ -61,4 +61,8 @@ On Tue, Jun 18, 2019 at 06:05:38PM -0300, Mauro Carvalho Chehab wrote:
 > 
 > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Ah,  I guess I can take this through my tree, will do that later today.
+
+thanks,
+
+greg k-h
