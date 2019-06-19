@@ -2,88 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4C94C12B
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 21:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643464C1A5
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 21:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbfFSTDL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 15:03:11 -0400
-Received: from mail-pl1-f181.google.com ([209.85.214.181]:36825 "EHLO
-        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbfFSTDL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 15:03:11 -0400
-Received: by mail-pl1-f181.google.com with SMTP id k8so206575plt.3
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2019 12:03:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gnarbox-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=uA9hl/cy7clDpvQGIhxKbocc9pYPGpMUjGemP4WZ1m0=;
-        b=ezw2I8Md9GUbgk75bkbvfntukrm3+ddtgjLUR/OaeSxYPMTxxBhdv2ojxwoHqKsvt4
-         POADdaV0cHCbDOV55B3pbeyn67wmbY8EvD9faYp4n3C/zrx5ZdcZePZXfZ4sJ0IVcWEW
-         kiCrXxQ7AA7rcp3OeJRaIalvP9tDKKHs9QLQNjM9XdEWiQNgiKzuY1ActLvZNqlhmlcg
-         dQ4kK8ezJJ1c7wY/a+XdBxfnKeUI7MXSZS90z6rsMh0YVFRdKj9yYqnJjWO3D0fSJZ0U
-         Z2O1skSvBu7pqXGbNUAZZCmgClPGd/fnkLU812iLTmMFtjaC4OU+2kdafCAfDCfJf3hE
-         b04Q==
+        id S1726518AbfFSTnv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 15:43:51 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:45858 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726230AbfFSTnu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 15:43:50 -0400
+Received: by mail-pg1-f194.google.com with SMTP id s21so208391pga.12;
+        Wed, 19 Jun 2019 12:43:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=uA9hl/cy7clDpvQGIhxKbocc9pYPGpMUjGemP4WZ1m0=;
-        b=L+R9swRzWGDBKOmfXuqmYeKP1y6An2oEjSHtSgSf++ytzn71y8wTFixJ5z1I/C/tsp
-         Ut612dAlJJHZrAWsJ8tmNZbypTIU58mi6+5ssHNjS2OGa7Ib8xB0WRn1PA+RmkrhEfqM
-         SQjPt5bMZaovRzswR088T4Y49qSg/bJsaF69CvfvEW2kTi2OIc/D0lGC50vBERPM1eCo
-         Ua6RoZsq0ubfjOhUQauVlEk3wfBcaQdkA/gceubBmoiatBJmyXXsOs9Vo4onWB+47+Ge
-         Oa+X7VbBPImYpeD48QyasPZJo8g/tTKS4tv7LS6holjZcLV99BaXiL621AR2RurmnWr+
-         qTgA==
-X-Gm-Message-State: APjAAAVSDwCExtVh8HpuhG90DwcYf8eqbbUA/AAMOhbgqRKugQkbNJWW
-        jPQaVac9ALzLg/GBgVNlUvSZhjrjEwbYXQ==
-X-Google-Smtp-Source: APXvYqzLqZaa2fw/lBMZKap5WVVgoV/cEQcITxL5/ZYSVxaAhxuu+nxx31gj7JiLrgOS/kJh6596xA==
-X-Received: by 2002:a17:902:b608:: with SMTP id b8mr23392596pls.303.1560970990067;
-        Wed, 19 Jun 2019 12:03:10 -0700 (PDT)
-Received: from coops ([12.244.160.210])
-        by smtp.gmail.com with ESMTPSA id h12sm6765642pje.12.2019.06.19.12.03.09
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 19 Jun 2019 12:03:09 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 12:03:07 -0700
-From:   Rob Weber <rob@gnarbox.com>
-To:     mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org
-Subject: xHCI Driver Compliance Test Support
-Message-ID: <20190619190307.GA18466@coops>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vkDuWR4Ufpj0xciDQcbKjPFVsG7k2MUKXN7wSLo/irQ=;
+        b=naWKF5qxbT+Oz6omRJ46geiqeLoZoZHtQbEOxN+grTO1SdVlBwo50NfGxQmc/FFlud
+         bRuio6JuptysRHXJLBLP9e0onk5K2zobBF/ZgXR55k2OnsVIk1CLgLAKvOYpsbqLfbgn
+         8lz1jH0IIET/SR2arPzhvk5ZR/XkClOGMqhG34sWHKfh+Z/FaC/Ic8Zzrio9htfk0Vov
+         jX5TgVwNESXuaFck3KieYKrHoP0ifxE6FS8PdsWvCgLX49YosANv8zPNgJFXc9iaXXdG
+         L5GmXDGIoIsw2rCQfkztD+VLRN6YveY5PAH4N0s/sqdMvEUs64o/3c+8H/UGixsSUcIS
+         0Hnw==
+X-Gm-Message-State: APjAAAXkTUCyLc6jGutDKRt/hS+K8P+APD3lvohkc2MAoj282LMxRlAZ
+        fEfCSsFtyIy5eXCyC/qZXCgv4hHT7B8=
+X-Google-Smtp-Source: APXvYqzu0qVkLU1Bjj2t90oYtlQ8S7ihvZbF2diaNzgHmiBEJPWw0dSSJHUCdg1/QQ9BlByLhmOSHQ==
+X-Received: by 2002:a63:5a02:: with SMTP id o2mr8900735pgb.93.1560973429816;
+        Wed, 19 Jun 2019 12:43:49 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id r4sm2325798pjd.28.2019.06.19.12.43.48
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Wed, 19 Jun 2019 12:43:48 -0700 (PDT)
+Subject: Re: [PATCH V5 00/16] use sg helper to operate scatterlist
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Ming Lei <ming.lei@redhat.com>
+Cc:     linux-scsi@vger.kernel.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>
+References: <20190618013757.22401-1-ming.lei@redhat.com>
+ <yq11rzqzacx.fsf@oracle.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <3df71d64-78fb-c6fc-f456-a0b626abff3b@acm.org>
+Date:   Wed, 19 Jun 2019 12:43:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <yq11rzqzacx.fsf@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+On 6/18/19 5:29 PM, Martin K. Petersen wrote:
+> I applied this series with a bunch of edits and clarifying comments. It
+> was quite the nightmare to rebase 5.3/scsi-queue to satisfy the ordering
+> requirements, locate the scattered fixes, tweak tags, etc. Hope I got
+> everything right.
 
-I am working on running our custom USB dual-role product through some
-compliance testing. It seems that the SoC and host controller are
-not responding to the LFPS signaling and timeout that is supposed to
-automatically begin the compliance test sequence.
+Hi Martin,
 
-I'm currently running a 4.9.115 kernel, and I'm afraid I might be
-missing some critical patches for compliance test support. I noticed
-these two patches came up in a google search:
+Do you perhaps plan to push out these patches at a later time? It seems 
+like that branch has not been updated recently:
 
-https://patchwork.kernel.org/patch/10415345/
-https://www.spinics.net/lists/linux-usb/msg160002.html
+$ git show --format=fuller mkp-scsi/5.3/scsi-queue | head -n7
+commit f3e88ad00f58e9a05986be3028b2ed8654c601c9
+Author:     Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+AuthorDate: Fri May 31 08:14:43 2019 -0400
+Commit:     Martin K. Petersen <martin.petersen@oracle.com>
+CommitDate: Fri Jun 7 10:17:06 2019 -0400
 
-Besides these patches, is there anything else that comes to mind that I
-might need to do to start compliance testing? I'm about to build a more
-recent kernel to see if that improves my situation as well.
+     scsi: mpt3sas: Update driver version to 29.100.00.00
 
-Just for reference, our product uses an intel atom z8550 SoC that uses
-an xHCI host controller and a dwc3 device controller. Our platform also
-uses a USB 3.0 redriver. The datasheet for this redriver (tusb542)
-indicates that it's internal LFPS controller supports full USB 3.0
-compliance requirements.
+Thanks,
 
-Thanks in advance for your guidance!
-
-Cheers,
-Rob Weber
+Bart.
