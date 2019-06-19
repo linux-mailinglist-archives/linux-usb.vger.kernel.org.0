@@ -2,102 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8544B7C0
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 14:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E5D4B8CB
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 14:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbfFSMOV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 08:14:21 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:32825 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726999AbfFSMOV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 08:14:21 -0400
-Received: by mail-lf1-f67.google.com with SMTP id y17so11963044lfe.0;
-        Wed, 19 Jun 2019 05:14:19 -0700 (PDT)
+        id S1731872AbfFSMjL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 08:39:11 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:46981 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727314AbfFSMjL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 08:39:11 -0400
+Received: by mail-lf1-f68.google.com with SMTP id z15so11963238lfh.13;
+        Wed, 19 Jun 2019 05:39:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=viZCpU3ySO88xcftuhoxzMqd1UsQYhWRDk4AqSx7aJQ=;
-        b=Tl4qvhtXlPL1NYFRW627bwSgKns3rhzsO5X2Oki52GwHwfgmbtWtNQEkgISmFEYime
-         J1ai+/ZWtUd1gSRaNSenJS76CE7xe2AsbQzB86IZ9w8y+5J4yzG0gr7e5ba8ynWM7C5/
-         +nFsujzKVOPYK/mX8BBBWRkWredn8QuvoanQf+hxJSsKAB1cR8GNP+Hyr/3VmrBruLnn
-         8/gT4/Udu6ElGdBFFi666520rP8J80R6SI8V1Whi0z1GVjHwYfehxL/KGK/bS+gorEKY
-         J/XgEACoZ3pCzM4znNa0YsYeYWyPXoWxsua/LU7PgQwYp7GTyDEo6r1pGkfNOzO+7fAf
-         CUsw==
-X-Gm-Message-State: APjAAAWV5wqUqS6SZCpPkniG5zo/iZ7ceudReRouI633uHX9LctaP3YU
-        7KjGgbcoOEieb6RQ1i2+RYfKbRl1
-X-Google-Smtp-Source: APXvYqz6WWr/U2IF0nUtMuppVMrbghBUZxv/Ikjj4TrGtdMHpcmTNPYlGuTRxYIc3CozD/pJzls01Q==
-X-Received: by 2002:ac2:528e:: with SMTP id q14mr32695444lfm.17.1560946458790;
-        Wed, 19 Jun 2019 05:14:18 -0700 (PDT)
+        bh=k1hQu5XF69cIYxxFB0cBywmRgl9yaZZCT4nTwvJSezk=;
+        b=ZkK+ICs+K3cGqcGKhT0r8c3lt2CQNDHzvWvy6vyp9E0QOZR7NXRT8q3bo9/EzOHJRN
+         v4qIjmEtrlctiHdMQDwjrVSu1lohreVTRzunpzYiIu6+nZ2xnyFi8N0nO3LLB9c40vSM
+         wpp0vvgRmBX9xsnxLr3gA5qCX7PAHtY3l5oLWEHmdcFgG4uCuaTYS3ah5DJih1TLOPLt
+         AustNqgDGuBicQluyi2Qxoyo+NCNgs0cbhPe64UV/WWMk4FbJBTt78HQlRIta38xq+uJ
+         KPl5TRDn81RYu0k8O6tsmdhouxrqUhTGnnH9myRPYNZugb6q9yR0dC22zGYS6FCaQrao
+         VDcw==
+X-Gm-Message-State: APjAAAV8ZTAhPfbs1/kGjbDFUHLVHHq+aLoBbhPpVAv5WphS+rOnrtfN
+        Zo9+HXQNEyRQhMrE7NSoNNY=
+X-Google-Smtp-Source: APXvYqy8ehN7nubUh2RfrodRbelb0zkjhgIBNB4apnSPdFi9hffzisYfFg8LfwrrGQrJ+IuOQhW90g==
+X-Received: by 2002:a19:ed07:: with SMTP id y7mr65146320lfy.56.1560947949245;
+        Wed, 19 Jun 2019 05:39:09 -0700 (PDT)
 Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id q4sm3407092lje.99.2019.06.19.05.14.17
+        by smtp.gmail.com with ESMTPSA id b62sm3036301ljb.71.2019.06.19.05.39.08
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Jun 2019 05:14:17 -0700 (PDT)
+        Wed, 19 Jun 2019 05:39:08 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92)
         (envelope-from <johan@kernel.org>)
-        id 1hdZTj-0001OW-6r; Wed, 19 Jun 2019 14:14:15 +0200
-Date:   Wed, 19 Jun 2019 14:14:15 +0200
+        id 1hdZrl-0001Yw-No; Wed, 19 Jun 2019 14:39:05 +0200
+Date:   Wed, 19 Jun 2019 14:39:05 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: dbc: get rid of global pointer
-Message-ID: <20190619121415.GE25248@localhost>
-References: <20190611172416.12473-1-felipe.balbi@linux.intel.com>
- <20190614145236.GB3849@localhost>
- <877e9kiuew.fsf@linux.intel.com>
- <20190618143120.GI31871@localhost>
- <877e9if5iz.fsf@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Johan Hovold <johan@kernel.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 14/22] docs: usb: rename files to .rst and add them to
+ drivers-api
+Message-ID: <20190619123905.GF25248@localhost>
+References: <cover.1560891322.git.mchehab+samsung@kernel.org>
+ <c05aecb424e4f835e3f7872ecb5818e1d2f3267c.1560891322.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0OAP2g/MAC+5xKAE"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <877e9if5iz.fsf@linux.intel.com>
+In-Reply-To: <c05aecb424e4f835e3f7872ecb5818e1d2f3267c.1560891322.git.mchehab+samsung@kernel.org>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Jun 18, 2019 at 06:05:38PM -0300, Mauro Carvalho Chehab wrote:
+> While there are a mix of things here, most of the stuff
+> were written from Kernel developer's PoV. So, add them to
+> the driver-api book.
+> 
+> A follow up for this patch would be to move documents from
+> there that are specific to sysadmins, adding them to the
+> admin-guide.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
---0OAP2g/MAC+5xKAE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 19, 2019 at 09:33:40AM +0300, Felipe Balbi wrote:
-> Johan Hovold <johan@kernel.org> writes:
-
-> > Are you sure you actually did register two xhci debug ttys?
->=20
-> hmm, let me check:
-
-=2E..
-
-> Hmm, so it only really registers after writing to sysfs file. Man, this
-> is an odd driver :-)
-
-I hear you. :)
-
-> @Mathias, can you drop the previous fix? I'll try to come up with a
-> better version of this.
->=20
-> @Johan, thanks for the review.
-
-You're welcome.
-
-Johan
-
---0OAP2g/MAC+5xKAE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCXQonEwAKCRALxc3C7H1l
-CLNDAQDnkOId8dM/yhhOzEsy5JQBrdPd7iFBM1eD6McRNfeyMgEA772CFu66cAam
-8gwvYuIB1uyXfKNsUYLToq9AApe74A8=
-=mlev
------END PGP SIGNATURE-----
-
---0OAP2g/MAC+5xKAE--
+Acked-by: Johan Hovold <johan@kernel.org>
