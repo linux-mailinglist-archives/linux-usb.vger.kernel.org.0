@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC834B21A
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 08:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D644B222
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 08:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725899AbfFSG2h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 02:28:37 -0400
-Received: from mga17.intel.com ([192.55.52.151]:37176 "EHLO mga17.intel.com"
+        id S1725901AbfFSGdr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 02:33:47 -0400
+Received: from mga17.intel.com ([192.55.52.151]:37414 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725892AbfFSG2h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Jun 2019 02:28:37 -0400
+        id S1725854AbfFSGdr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Jun 2019 02:33:47 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 23:28:35 -0700
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 23:33:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,392,1557212400"; 
-   d="asc'?scan'208";a="358093566"
+   d="asc'?scan'208";a="243221487"
 Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Jun 2019 23:28:34 -0700
+  by orsmga001.jf.intel.com with ESMTP; 18 Jun 2019 23:33:44 -0700
 From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Youn <John.Youn@synopsys.com>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [RFC] Sorting out dwc3 ISOC endpoints once and for all
-In-Reply-To: <30102591E157244384E984126FC3CB4F63A1230F@us01wembx1.internal.synopsys.com>
-References: <87a7etd8s7.fsf@linux.intel.com> <2B3535C5ECE8B5419E3ECBE30077290902E78AF3D7@us01wembx1.internal.synopsys.com> <30102591E157244384E984126FC3CB4F63A11B8A@us01wembx1.internal.synopsys.com> <87fto7gy1o.fsf@linux.intel.com> <30102591E157244384E984126FC3CB4F63A1230F@us01wembx1.internal.synopsys.com>
-Date:   Wed, 19 Jun 2019 09:28:30 +0300
-Message-ID: <87a7eef5rl.fsf@linux.intel.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: dbc: get rid of global pointer
+In-Reply-To: <20190618143120.GI31871@localhost>
+References: <20190611172416.12473-1-felipe.balbi@linux.intel.com> <20190614145236.GB3849@localhost> <877e9kiuew.fsf@linux.intel.com> <20190618143120.GI31871@localhost>
+Date:   Wed, 19 Jun 2019 09:33:40 +0300
+Message-ID: <877e9if5iz.fsf@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -46,108 +46,161 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>>>> Would there be any obvious draw-back to going down this route? The th=
-ing
->>>>> is that, as it is, it seems like we will *always* have some corner ca=
-se
->>>>> where we can't guarantee that we can even start a transfer since ther=
-e's
->>>>> no upper-bound between XferNotReady and gadget driver finally queuein=
-g a
->>>>> request. Also, I can't simply read DSTS for the frame number because =
-of
->>>>> top-most 2 bits.
->>>>>
->>>> For non-affected version of the IP, the xfernotready -> starttransfer
->>>> time will have to be off by more than a couple seconds for the driver
->>>> to produce an incorrect 16-bit frame number. If you're seeing errors
->>>> here, maybe we just need to code review the relevant sections to make
->>>> sure the 14/16-bit and rollover conditions are all handled correctly.
->>> I think what Felipe may see is some delay in the system that causes the
->>> SW to not handle XferNotReady event in time. We already have the "retry"
->>> method handle that to a certain extend.
->>>
->>>> But I can't think of any obvious drawbacks of the quirk, other than
->>>> doing some unnecessary work, which shouldn't produce any bad
->>>> side-effects. But we haven't really tested that.
->>>>
->>> The workaround for the isoc_quirk requires 2 tries sending
->>> START_TRANSFER command. This means that you have to account the delay of
->>> that command completion plus potentially 1 more END_TRANSFER completion.
->>> That's why the quirk gives a buffer of at least 4 uframes of the
->>> scheduled isoc frame. So, it cannot schedule immediately on the next
->>> uframe, that's one of the drawbacks.
->>>
->>>
->>> Hi Felipe,
->>>
->>> Since you're asking this, it means you're still seeing issue with your
->>> setup despite retrying to send START_TRANSFER command 5 times. What's
->>> the worse delay responding to XferNotReady you're seeing in your setup?
->> There's no upper-bound on how long the gadget will take to enqueue a
->> request. We see problems with UVC gadget all the time. It can take a lot
->> of time to decide to enqueue data.
+Johan Hovold <johan@kernel.org> writes:
+>> Johan Hovold <johan@kernel.org> writes:
+>> > On Tue, Jun 11, 2019 at 08:24:16PM +0300, Felipe Balbi wrote:
+>> >> If we happen to have two XHCI controllers with DbC capability, then
+>> >> there's no hope this will ever work as the global pointer will be
+>> >> overwritten by the controller that probes last.
+>> >>=20
+>> >> Avoid this problem by keeping the tty_driver struct pointer inside
+>> >> struct xhci_dbc.
+>> >
+>> > How did you test this patch?
+>>=20
+>> by running it on a machine that actually has two DbCs
+>>=20
+>> >> @@ -279,52 +279,52 @@ static const struct tty_operations dbc_tty_ops =
+=3D {
+>> >>  	.unthrottle		=3D dbc_tty_unthrottle,
+>> >>  };
+>> >>=20=20
+>> >> -static struct tty_driver *dbc_tty_driver;
+>> >> -
+>> >>  int xhci_dbc_tty_register_driver(struct xhci_hcd *xhci)
+>> >>  {
+>> >>  	int			status;
+>> >>  	struct xhci_dbc		*dbc =3D xhci->dbc;
+>> >>=20=20
+>> >> -	dbc_tty_driver =3D tty_alloc_driver(1, TTY_DRIVER_REAL_RAW |
+>> >> +	dbc->tty_driver =3D tty_alloc_driver(1, TTY_DRIVER_REAL_RAW |
+>> >>  					  TTY_DRIVER_DYNAMIC_DEV);
+>> >> -	if (IS_ERR(dbc_tty_driver)) {
+>> >> -		status =3D PTR_ERR(dbc_tty_driver);
+>> >> -		dbc_tty_driver =3D NULL;
+>> >> +	if (IS_ERR(dbc->tty_driver)) {
+>> >> +		status =3D PTR_ERR(dbc->tty_driver);
+>> >> +		dbc->tty_driver =3D NULL;
+>> >>  		return status;
+>> >>  	}
+>> >>=20=20
+>> >> -	dbc_tty_driver->driver_name =3D "dbc_serial";
+>> >> -	dbc_tty_driver->name =3D "ttyDBC";
+>> >> +	dbc->tty_driver->driver_name =3D "dbc_serial";
+>> >> +	dbc->tty_driver->name =3D "ttyDBC";
+>> >
+>> > You're now registering multiple drivers for the same thing (and wasting
+>> > a major number for each) and specifically using the same name, which
+>> > should lead to name clashes when registering the second port.
+>>=20
+>> No warnings were printed while running this, actually. Odd
 >
-> That's why there's a mechanism in the controller to return bus-expiry
-> status to let the SW know if it had scheduled isoc too late. SW can do 2
-> things: 1) re-schedule at a later timer or 2) send END_TRANSFER command
-> to wait for the next XferNotReady to try again.
-
-All of this is still rather flakey. Can I send consecutive END_TRANSFER
-commands and get new XferNotReady at any moment? Consider this
-situation:
-
-. transfer started
-. transfer completes with status Missed ISOC
-. driver issues END_TRANSFER (as required by docs)
-. XferNotReady fires
-. driver updates current frame number
-. several mS of nothing
-. finally gadget enqueues a transfer
-. Start Transfer command
-. completes with Bus Expiry
-
-Can I issue *another* END_TRANSFER at this point? I don't even have a
-valid transfer resource since transfer wasn't started.
-
-The best "workaround" I can think of would be to delay END_TRASFER until
-ep_queue time.
-
->> Usually I hear this from folks using UVC gadget with a real sensor on
->> the background.
->>
->> I've seen gadget enqueueing as far as 20 intervals in the future. But
->> remember, there's no upper-bound. And that's the problem. If we could
->> just read the frame number from DSTS and use that, we wouldn't have any
->> issues. But since DSTS only contains 14 our of the 16 bits the
->> controller needs, then we can't really use that.
+> Odd indeed. I get the expected warning from sysfs when trying to
+> register a second tty using an already registered name:
 >
-> You can create another quirk for devices that have this behavior to use
-> frame number in DSTS instead.  As John had pointed out and mentioned,=20
-> this will only work if the service interval and the delay in the
-> scheduling of isoc is within 2 seconds.
-
-well, that's better than nothing, but there's no upper-bound for the
-gadget driver, really.
-
-> You will need to calculate this value along with BIT(15) and BIT(14) of
-> XferNotReady for rollovers.
+> [  643.360555] sysfs: cannot create duplicate filename '/class/tty/ttyS0'
+> [  643.360637] CPU: 1 PID: 2383 Comm: modprobe Not tainted 5.2.0-rc1 #2
+> [  643.360702] Hardware name:  /D34010WYK, BIOS WYLPT10H.86A.0051.2019.03=
+22.1320 03/22/2019
+> [  643.360784] Call Trace:
+> [  643.360823]  dump_stack+0x46/0x60
+> [  643.360865]  sysfs_warn_dup.cold.3+0x17/0x2f
+> [  643.360914]  sysfs_do_create_link_sd.isra.2+0xa6/0xc0
+> [  643.360961]  device_add+0x30d/0x660
+> [  643.360987]  tty_register_device_attr+0xdd/0x1d0
+> [  643.361018]  ? sysfs_create_file_ns+0x5d/0x90
+> [  643.361049]  usb_serial_device_probe+0x72/0xf0 [usbserial]
+> ...
 >
->>
->> To me, it seems like this part of the controller wasn't well
->> thought-out. These extra two bits, perhaps, should be internal to the
->> controller and SW should have no knowledge that they exist.
->
-> These values are internal. SW should not have knowledge of it. This
-> implementation will not follow the programming guide and should be used
-> as a quirk for devices that are too slow to handle the XferNotReady
-> event but want to schedule isoc immediately after handling the event.
+> Are you sure you actually did register two xhci debug ttys?
 
-They are *not* internal if SW needs to know that to start a transfer
-properly it needs these extra two bits :-) What I meant to say was that
-we should never have a 16-bit frame number. Only 14 bits. But in any
-case, we can't change the HW now :-)
+hmm, let me check:
+
+int xhci_dbc_tty_register_device(struct xhci_hcd *xhci)
+{
+	int			ret;
+	struct device		*tty_dev;
+	struct xhci_dbc		*dbc =3D xhci->dbc;
+	struct dbc_port		*port =3D &dbc->port;
+
+	xhci_dbc_tty_init_port(xhci, port);
+	tty_dev =3D tty_port_register_device(&port->port,
+					   dbc_tty_driver, 0, NULL);
+
+	[...]
+}
+
+static void xhci_dbc_handle_events(struct work_struct *work)
+{
+	int			ret;
+	enum evtreturn		evtr;
+	struct xhci_dbc		*dbc;
+	unsigned long		flags;
+	struct xhci_hcd		*xhci;
+
+	dbc =3D container_of(to_delayed_work(work), struct xhci_dbc, event_work);
+	xhci =3D dbc->xhci;
+
+	spin_lock_irqsave(&dbc->lock, flags);
+	evtr =3D xhci_dbc_do_handle_events(dbc);
+	spin_unlock_irqrestore(&dbc->lock, flags);
+
+	switch (evtr) {
+	case EVT_GSER:
+		ret =3D xhci_dbc_tty_register_device(xhci);
+
+	[...]
+}
+
+static int xhci_dbc_start(struct xhci_hcd *xhci)
+{
+	int			ret;
+	unsigned long		flags;
+	struct xhci_dbc		*dbc =3D xhci->dbc;
+
+	WARN_ON(!dbc);
+
+	pm_runtime_get_sync(xhci_to_hcd(xhci)->self.controller);
+
+	spin_lock_irqsave(&dbc->lock, flags);
+	ret =3D xhci_do_dbc_start(xhci);
+	spin_unlock_irqrestore(&dbc->lock, flags);
+
+	if (ret) {
+		pm_runtime_put(xhci_to_hcd(xhci)->self.controller);
+		return ret;
+	}
+
+	return mod_delayed_work(system_wq, &dbc->event_work, 1);
+}
+
+static ssize_t dbc_store(struct device *dev,
+			 struct device_attribute *attr,
+			 const char *buf, size_t count)
+{
+	struct xhci_hcd		*xhci;
+
+	xhci =3D hcd_to_xhci(dev_get_drvdata(dev));
+
+	if (!strncmp(buf, "enable", 6))
+		xhci_dbc_start(xhci);
+	else if (!strncmp(buf, "disable", 7))
+		xhci_dbc_stop(xhci);
+	else
+		return -EINVAL;
+
+	return count;
+}
+
+Hmm, so it only really registers after writing to sysfs file. Man, this
+is an odd driver :-)
+
+@Mathias, can you drop the previous fix? I'll try to come up with a
+better version of this.
+
+@Johan, thanks for the review.
+
+cheers
 
 =2D-=20
 balbi
@@ -157,18 +210,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0J1g4ACgkQzL64meEa
-mQZ8sQ/+LL5tvOgyttXHPnDteksJTkj7M9MWrl9ImyZai6heIO8Esk2UedRnuJak
-t3Q6jZn4evqeH8lwOXFcm+me7XHny0yFRtNS8bLcYgUa867iZ5ylm3ek84kKvgUx
-4rkwN8vfwWeXfKJgUX4XL29K5Ex3Tq/4opONaWYXeWTgo3owkkCWQEA3JyWI+NXI
-EBqUdQMMYb6V6ETHPOV03tjsgfihrSPPxd4MvSXlW0mF/GZtb+H5keb1YEK/iEtT
-7H+9KBI+tFSB1BfBy02j6gEiUAkHuXcmJT2vhJoj69X9vB9dms/sY4LdjS9xUP8C
-OYOJUS1oQMserLXURhrl3rWg9gBaqppYJJ614EiAWndzbSJlQQWxC0A0lCaXCwot
-U8rTzipqKHj7MnlW1mCzbX8fsFNT6uTbJBr3H5BZpX9j9BvmRb6LY5q5HMnLskx4
-PJDJbEunWvclQkeu/XlKxhyfEvKGe5eAtoV+iDef9mT2WKUietpljcSLbuoCkK9R
-YJ79AT0K4K3GeaFXZtkCiCBhBpTgs7X0h/a2piY33clAmPLDN2JBnZ0e+asUw0qn
-xFR/+aUVB7Rgcl4Zyd9MdONn8l7MqL8heZNFb0Hw23f4mXIv4HoOAa5XbbUZuKiB
-44yViGIs+BHXQkGMkgg89xaInMnzoAIYmow06mES4chPQRlOAGY=
-=5Svd
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0J10QACgkQzL64meEa
+mQbpMxAAqxt6iZem55dprW88PUOdiJBNIj1IsKe07R4ElMD88YD9PshR5UHqBhy4
+89LMOFEk05Z4OBMWYtGuAGE5e8RAqlM3uZub3iWgQkDj/ya4hQvxE3VqUZaf/uAF
+5/HJKEio1zW01CqCjgwRBQ16m93+QcVSqH3LBlWMJ+RNLvvj1Fg7iyNMSHCMp7m+
+04bEljqDTmiNsg5n9Zshc0ZD9Hxcj1yE4sZe0L9NpYNxBVOtmraT3hN7B37M/7eu
+BfmfeImW2G+wOe//ujLbs3IAcPnVs3OQ7X6qUbpWAczTCXMnl0LdYUuBIRuP0yuD
+sMptailGg3e+3pWD6FIJ/Ykq7jH3Uu7iUP71ljd8Di+LmUTdGBJKSwiAG9hXXJjd
+pBvZjPYdXi2eimdVXCygGweRWRThmGksHJXZwCu55+Y3kDZgNNGmetVkOxPrAVhv
+P1KJjYKwkVKkoYbHVbvGbMDVSda0lqq4Wb9Dt/pPSt/sTSc2WWsDhi/7fO/lcax7
+Rq5MX1WSTEQmjXcOIR58bpCZqQQRfVJLCEkIfXzIw2ZwGkISyBeBuxQImToVCvVK
+aA86SzM5azDpocsowhZyc6FzpAxDG3HVTtqcIcupcfEc7uWe8ITYpC3iwc6Mww1W
+I1mlg8uAjhE9FmqWimW6B5XqS7PGHBkdrVn1gaLPPZkC7fincF4=
+=7dTY
 -----END PGP SIGNATURE-----
 --=-=-=--
