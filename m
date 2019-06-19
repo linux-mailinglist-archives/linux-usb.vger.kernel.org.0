@@ -2,105 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DB34BBF0
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 16:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E584BC2E
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 16:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729501AbfFSOpF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 10:45:05 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:42718 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726332AbfFSOpE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 10:45:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=2QmJmFe3IBdUY4osXNYAJypH6UhyPcID9zSOw7B/q78=; b=NMNGndtAeTjI+iNhm2ZJjponQ
-        Nej1ObgElN7yV99l4Esqat501fUM6L8OaWi2iTKn+aAemKHt74bbj+5XKLDfJ/Lq8dXqmBWlUYGl9
-        xkBCvvCSUU6L3e9NWORe2FlgolB4tzm7w8rPScLZWJggTGqRGXBKijdeIBc5Ma17Y9b9GRiM09tAh
-        AxtgA0lS4Yz/FXiyvlBq4cYCQB0OpQQlHCW7lLBCNxYZC8uVcujYCPCd2eNPe4K3uOlkrytr+d7pE
-        PXqKd9b1ov6zWYofCA/nojLa6NavPD3wpHW94MTl9SXv1arBHTqiZsXInf/JCaRIjkO/zGQ/VlseM
-        gFhCN7HWA==;
-Received: from 177.133.86.196.dynamic.adsl.gvt.net.br ([177.133.86.196] helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hdbpe-0000LT-Tr; Wed, 19 Jun 2019 14:45:03 +0000
-Date:   Wed, 19 Jun 2019 11:44:58 -0300
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-media@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mike Isely <isely@pobox.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzbot <syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com>,
-        syzbot <syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com>
-Subject: Re: [PATCH] media: pvrusb2: use a different format for warnings
-Message-ID: <20190619114458.52474694@coco.lan>
-In-Reply-To: <CAAeHK+w9xGtaQ5oSCq-=1YNk_11T2Tz9LKehkL7ZsAz-XwKajw@mail.gmail.com>
-References: <b3761c6479a49b60316325ebc22da904e36d4538.1556813333.git.andreyknvl@google.com>
-        <20190502163907.GA14995@kroah.com>
-        <CAAeHK+w9xGtaQ5oSCq-=1YNk_11T2Tz9LKehkL7ZsAz-XwKajw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1726238AbfFSO73 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 10:59:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54262 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725899AbfFSO73 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Jun 2019 10:59:29 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0C1782183F;
+        Wed, 19 Jun 2019 14:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560956368;
+        bh=fcfAj5P6unSRhKIOsI+pivToyX2jS9tb5MRk1HOXv1U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KaNeMreMTPiqZblG7wJXKnlszSuO0YRSoiSYgc1fq9Ux28OcagMIVZpJ27Cvbvr/v
+         81EnbqYGgOJarEk5N9OJ5S9YbcKoOEAp0qUr0Wuvaqo9fGqfTJTjcZC/4kJ+V7x1Av
+         undnPvUoIc4OCN/HA8Jn0bGnIL3p92mvih4Vii14=
+Date:   Wed, 19 Jun 2019 16:59:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     kvaradarajan <Kiruthika.Varadarajan@harman.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH]  USB/Gadget: Fix race between gether_disconnect and
+ rx_submit
+Message-ID: <20190619145926.GA18985@kroah.com>
+References: <1560926470-15092-1-git-send-email-Kiruthika.Varadarajan@harman.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1560926470-15092-1-git-send-email-Kiruthika.Varadarajan@harman.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Em Wed, 19 Jun 2019 16:30:01 +0200
-Andrey Konovalov <andreyknvl@google.com> escreveu:
-
-> On Thu, May 2, 2019 at 6:39 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, May 02, 2019 at 06:09:26PM +0200, Andrey Konovalov wrote:  
-> > > When the pvrusb2 driver detects that there's something wrong with the
-> > > device, it prints a warning message. Right now those message are
-> > > printed in two different formats:
-> > >
-> > > 1. ***WARNING*** message here
-> > > 2. WARNING: message here
-> > >
-> > > There's an issue with the second format. Syzkaller recognizes it as a
-> > > message produced by a WARN_ON(), which is used to indicate a bug in the
-> > > kernel. However pvrusb2 prints those warnings to indicate an issue with
-> > > the device, not the bug in the kernel.
-> > >
-> > > This patch changes the pvrusb2 driver to consistently use the first
-> > > warning message format. This will unblock syzkaller testing of this
-> > > driver.
-> > >
-> > > Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
-> > > Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
-> > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>  
-> >
-> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>  
+On Wed, Jun 19, 2019 at 06:41:10AM +0000, kvaradarajan wrote:
+>   On spin lock release in rx_submit, gether_disconnect get
+>   a chance to run, it makes port_usb NULL, rx_submit access
+>   NULL port USB, hence null pointer crash.
 > 
-> I don't think I see this patch picked up anywhere. Should this fix go
-> through the USB or some media tree?
+>   Fixed by releasing the lock in rx_submit after port_usb
+>   is used.
 
-Media drivers go via the media tree. You should notice that we are
-currently receiving around 100 patches per week there. It may take
-some time for people to review, but the patches are queued at
-patchwork, so sooner or later someone will review and apply, if nobody
-did it already:
+Meta-comments about the patch information...
 
-	https://patchwork.linuxtv.org/project/linux-media/list/
+Why is this indented?  Please keep comments all the way to the left and
+wrap the columns at 72.
 
-That's said, I'm not seeing this patch there:
+> Signed-off-by: KVaradarajan <Kiruthika.Varadarajan@harman.com>
 
-	https://patchwork.linuxtv.org/project/linux-media/list/?series=&submitter=&state=*&q=pvrusb2&archive=&delegate=
+I need a "legal name" here, I don't think you sign documents that way.
+It also needs to match the From: line of your email.
 
-It sounds that, for whatever reason, the patch never arrived
-patchwork. Please re-submit it and check if media patchwork got it.
+> ---
+>  drivers/usb/gadget/function/u_ether.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+> index 737bd77..76cf1e4 100644
+> --- a/drivers/usb/gadget/function/u_ether.c
+> +++ b/drivers/usb/gadget/function/u_ether.c
+> @@ -186,11 +186,11 @@ static void defer_kevent(struct eth_dev *dev, int flag)
+>  		out = dev->port_usb->out_ep;
+>  	else
+>  		out = NULL;
+> -	spin_unlock_irqrestore(&dev->lock, flags);
+>  
+> -	if (!out)
+> +	if (!out) {
+> +		spin_unlock_irqrestore(&dev->lock, flags);
+>  		return -ENOTCONN;
+> -
+> +	}
+>  
+>  	/* Padding up to RX_EXTRA handles minor disagreements with host.
+>  	 * Normally we use the USB "terminate on short read" convention;
+> @@ -215,6 +215,7 @@ static void defer_kevent(struct eth_dev *dev, int flag)
+>  	if (dev->port_usb->is_fixed)
+>  		size = max_t(size_t, size, dev->port_usb->fixed_out_len);
+>  
+> +	spin_unlock_irqrestore(&dev->lock, flags);
 
-If not, perhaps you just found a bug with patchwork 2.1 :-)
-(we upgraded from version 1.0 to 2.1 at the beginning of this
-month)
-Thanks,
-Mauro
+Patch looks sane to me.  I'll let Felipe do the real review after you
+resend based on the information above.
+
+thanks,
+
+greg k-h
