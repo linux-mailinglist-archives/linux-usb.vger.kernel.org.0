@@ -2,53 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A209B4B2FE
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 09:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640A64B3CD
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 10:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731064AbfFSHYl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 03:24:41 -0400
-Received: from mga03.intel.com ([134.134.136.65]:52552 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725854AbfFSHYl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Jun 2019 03:24:41 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jun 2019 00:24:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,392,1557212400"; 
-   d="scan'208";a="150528022"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by orsmga007.jf.intel.com with ESMTP; 19 Jun 2019 00:24:39 -0700
-Subject: Re: [PATCH] usb: xhci: dbc: get rid of global pointer
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org
-References: <20190611172416.12473-1-felipe.balbi@linux.intel.com>
- <20190614145236.GB3849@localhost> <877e9kiuew.fsf@linux.intel.com>
- <20190618143120.GI31871@localhost> <877e9if5iz.fsf@linux.intel.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <cbd4a9d6-fab9-2af0-54ce-b574a3491abf@linux.intel.com>
-Date:   Wed, 19 Jun 2019 10:27:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1731297AbfFSIQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 04:16:49 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44385 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731213AbfFSIQt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 04:16:49 -0400
+Received: by mail-pg1-f196.google.com with SMTP id n2so9202248pgp.11;
+        Wed, 19 Jun 2019 01:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=v129+ZmLYPT0Qs610F/+KFD490TqCFT77Vj5+nBNN28=;
+        b=M3qgtyV4AQr65r2pR1XmxMysyqRVsRmXoqrZFpp9C6zTvsQyKmyphn+6AiqPxTOdAH
+         GCRRu24W/izWtCCzJFP6u6UQieHtTtp0qqTrZexVYMkd7yTbbrh8vgbSrR4Kn4Vdg9+A
+         QWg4sDNEf3lZe8+jA3hazKFgNMOAfdapUL9f3l+tdDT6CC4rd8MbUMPM+ZLX2NeF9rLt
+         etQbZ+g8R4qczgqml/JlfBZM4KSiK0a4+k2efumXahIGq6HnPrLUjXEGfg91nT0xgt6l
+         URrAu1aqdjXKyeUckE/effvcdPFBchJe7vjkuPnRqTprmS0TxjeCBmt3mAclkLSoXOfi
+         jxQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=v129+ZmLYPT0Qs610F/+KFD490TqCFT77Vj5+nBNN28=;
+        b=AmD9B1b7xlMziihkS0WSYzdbAutrJpSGWFHW7Qb9mDPb1V3L407cGQcdzBCkxAeDYJ
+         G3r06BIkTigMc9WBkjVQigm83a0wZ3TKGGC1Gua+KT0tQfnQ/oBrOymhCGWLTUPkyryF
+         RYlymmgdks/FZV/yXNZQOYeTwy6Wfkf8k60oEb+afdadTgy70KfAfHweKyS5e18fkD0x
+         wGOvK7v1R/T4e5l8kgMNZ8mSMuzP9bPO7U9fZg9icWSybuAw7gmW8orHp8rv3pRnzWyY
+         BSmqOiEGUec2YuMEKTa7OdTr9GgGcVJiU8D94X2tR5U/lgS12j85l60vC9NrUFJ/F5jd
+         AJyw==
+X-Gm-Message-State: APjAAAUUdmTB3AbrbciIIa1dOR+JripUyBaNAq3zXafpi2CL60fyJ6pv
+        SBGGCz0axizjKYZKWVv2ccg=
+X-Google-Smtp-Source: APXvYqy46mmCmfahU0kewqo7z+Wo2ByFUBKVQhnj602dEah1sJEMMpRJq+iwu/9ERzcbE0ZNLHP96A==
+X-Received: by 2002:a63:80c8:: with SMTP id j191mr6962738pgd.442.1560932208474;
+        Wed, 19 Jun 2019 01:16:48 -0700 (PDT)
+Received: from localhost.localdomain ([163.152.162.99])
+        by smtp.gmail.com with ESMTPSA id u1sm15769414pgr.94.2019.06.19.01.16.46
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 19 Jun 2019 01:16:48 -0700 (PDT)
+Date:   Wed, 19 Jun 2019 17:16:42 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usbip: Implement map_urb_for_dma function for vhci to
+ skip dma mapping
+Message-ID: <20190619081641.GA2387@localhost.localdomain>
+References: <20190618142817.16844-1-suwan.kim027@gmail.com>
+ <Pine.LNX.4.44L0.1906181129450.1659-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <877e9if5iz.fsf@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Pine.LNX.4.44L0.1906181129450.1659-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19.6.2019 9.33, Felipe Balbi wrote:
+On Tue, Jun 18, 2019 at 11:30:34AM -0400, Alan Stern wrote:
+> On Tue, 18 Jun 2019, Suwan Kim wrote:
 > 
+> > vhci doesn’t do dma for remote device. Actually, the real dma
+> > operation is done by network card driver. So, vhci doesn’t use and
+> > need dma address of transfer buffer of urb.
+> > 
+> > But hcd provides dma mapping function by defualt in usb_hcd_submit_urb()
+> > and it causes unnecessary dma mapping which will be done again at
+> > NIC driver and it wastes CPU cycles. So, implement map_urb_for_dma
+> > function for vhci in order to skip the dma mapping procedure.
+> > 
+> > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+> > ---
+> >  drivers/usb/usbip/vhci_hcd.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> > index 667d9c0ec905..9df4d9e36788 100644
+> > --- a/drivers/usb/usbip/vhci_hcd.c
+> > +++ b/drivers/usb/usbip/vhci_hcd.c
+> > @@ -1287,6 +1287,13 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
+> >  	return 0;
+> >  }
+> >  
+> > +static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+> > +			    gfp_t mem_flags)
+> > +{
+> > +	dev_dbg(hcd->self.controller, "vhci does not map urb for dma\n");
+> > +	return 0;
+> > +}
+> > +
+> >  static const struct hc_driver vhci_hc_driver = {
+> >  	.description	= driver_name,
+> >  	.product_desc	= driver_desc,
+> > @@ -1302,6 +1309,7 @@ static const struct hc_driver vhci_hc_driver = {
+> >  	.urb_dequeue	= vhci_urb_dequeue,
+> >  
+> >  	.get_frame_number = vhci_get_frame_number,
+> > +	.map_urb_for_dma = vhci_map_urb_for_dma,
+> >  
+> >  	.hub_status_data = vhci_hub_status,
+> >  	.hub_control    = vhci_hub_control,
 > 
-> @Mathias, can you drop the previous fix? I'll try to come up with a
-> better version of this.
+> If the goal is to avoid wasting CPU cycles, you probably should have a 
+> vhci_unmap_urb_for_dma routine as well.
 
-Dropped
+I missed that. Thank you for pointing it out.
+I will send v2 including unmap function.
 
--Mathias
+Regards
 
+Suwan Kim
