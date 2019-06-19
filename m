@@ -2,122 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 640A64B3CD
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 10:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E492D4B4D2
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 11:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731297AbfFSIQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 04:16:49 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44385 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731213AbfFSIQt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 04:16:49 -0400
-Received: by mail-pg1-f196.google.com with SMTP id n2so9202248pgp.11;
-        Wed, 19 Jun 2019 01:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=v129+ZmLYPT0Qs610F/+KFD490TqCFT77Vj5+nBNN28=;
-        b=M3qgtyV4AQr65r2pR1XmxMysyqRVsRmXoqrZFpp9C6zTvsQyKmyphn+6AiqPxTOdAH
-         GCRRu24W/izWtCCzJFP6u6UQieHtTtp0qqTrZexVYMkd7yTbbrh8vgbSrR4Kn4Vdg9+A
-         QWg4sDNEf3lZe8+jA3hazKFgNMOAfdapUL9f3l+tdDT6CC4rd8MbUMPM+ZLX2NeF9rLt
-         etQbZ+g8R4qczgqml/JlfBZM4KSiK0a4+k2efumXahIGq6HnPrLUjXEGfg91nT0xgt6l
-         URrAu1aqdjXKyeUckE/effvcdPFBchJe7vjkuPnRqTprmS0TxjeCBmt3mAclkLSoXOfi
-         jxQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=v129+ZmLYPT0Qs610F/+KFD490TqCFT77Vj5+nBNN28=;
-        b=AmD9B1b7xlMziihkS0WSYzdbAutrJpSGWFHW7Qb9mDPb1V3L407cGQcdzBCkxAeDYJ
-         G3r06BIkTigMc9WBkjVQigm83a0wZ3TKGGC1Gua+KT0tQfnQ/oBrOymhCGWLTUPkyryF
-         RYlymmgdks/FZV/yXNZQOYeTwy6Wfkf8k60oEb+afdadTgy70KfAfHweKyS5e18fkD0x
-         wGOvK7v1R/T4e5l8kgMNZ8mSMuzP9bPO7U9fZg9icWSybuAw7gmW8orHp8rv3pRnzWyY
-         BSmqOiEGUec2YuMEKTa7OdTr9GgGcVJiU8D94X2tR5U/lgS12j85l60vC9NrUFJ/F5jd
-         AJyw==
-X-Gm-Message-State: APjAAAUUdmTB3AbrbciIIa1dOR+JripUyBaNAq3zXafpi2CL60fyJ6pv
-        SBGGCz0axizjKYZKWVv2ccg=
-X-Google-Smtp-Source: APXvYqy46mmCmfahU0kewqo7z+Wo2ByFUBKVQhnj602dEah1sJEMMpRJq+iwu/9ERzcbE0ZNLHP96A==
-X-Received: by 2002:a63:80c8:: with SMTP id j191mr6962738pgd.442.1560932208474;
-        Wed, 19 Jun 2019 01:16:48 -0700 (PDT)
-Received: from localhost.localdomain ([163.152.162.99])
-        by smtp.gmail.com with ESMTPSA id u1sm15769414pgr.94.2019.06.19.01.16.46
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 19 Jun 2019 01:16:48 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 17:16:42 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     shuah@kernel.org, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usbip: Implement map_urb_for_dma function for vhci to
- skip dma mapping
-Message-ID: <20190619081641.GA2387@localhost.localdomain>
-References: <20190618142817.16844-1-suwan.kim027@gmail.com>
- <Pine.LNX.4.44L0.1906181129450.1659-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Pine.LNX.4.44L0.1906181129450.1659-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1731166AbfFSJTo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 05:19:44 -0400
+Received: from mx2.suse.de ([195.135.220.15]:34356 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731293AbfFSJTo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Jun 2019 05:19:44 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 91AB1ADCF;
+        Wed, 19 Jun 2019 09:19:43 +0000 (UTC)
+Message-ID: <1560935981.4587.10.camel@suse.com>
+Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        patches@opensource.cirrus.com, linux-usb@vger.kernel.org
+Date:   Wed, 19 Jun 2019 11:19:41 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1906181133570.1659-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1906181133570.1659-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 11:30:34AM -0400, Alan Stern wrote:
-> On Tue, 18 Jun 2019, Suwan Kim wrote:
+Am Dienstag, den 18.06.2019, 11:50 -0400 schrieb Alan Stern:
+> On Tue, 18 Jun 2019, Mayuresh Kulkarni wrote:
 > 
-> > vhci doesn’t do dma for remote device. Actually, the real dma
-> > operation is done by network card driver. So, vhci doesn’t use and
-> > need dma address of transfer buffer of urb.
+> > > You're right that the program needs to know when the device is about
+> > > to 
+> > > be suspended.  But waiting for an ioctl to return isn't a good way 
+> > > to do it; this needs to be a callback of some sort.  That is, the 
+> > > kernel also needs to know when the program is ready for the suspend.
+> > > 
+> > > I don't know what is the best approach.
 > > 
-> > But hcd provides dma mapping function by defualt in usb_hcd_submit_urb()
-> > and it causes unnecessary dma mapping which will be done again at
-> > NIC driver and it wastes CPU cycles. So, implement map_urb_for_dma
-> > function for vhci in order to skip the dma mapping procedure.
-> > 
-> > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> > ---
-> >  drivers/usb/usbip/vhci_hcd.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> > index 667d9c0ec905..9df4d9e36788 100644
-> > --- a/drivers/usb/usbip/vhci_hcd.c
-> > +++ b/drivers/usb/usbip/vhci_hcd.c
-> > @@ -1287,6 +1287,13 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
-> >  	return 0;
-> >  }
-> >  
-> > +static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
-> > +			    gfp_t mem_flags)
-> > +{
-> > +	dev_dbg(hcd->self.controller, "vhci does not map urb for dma\n");
-> > +	return 0;
-> > +}
-> > +
-> >  static const struct hc_driver vhci_hc_driver = {
-> >  	.description	= driver_name,
-> >  	.product_desc	= driver_desc,
-> > @@ -1302,6 +1309,7 @@ static const struct hc_driver vhci_hc_driver = {
-> >  	.urb_dequeue	= vhci_urb_dequeue,
-> >  
-> >  	.get_frame_number = vhci_get_frame_number,
-> > +	.map_urb_for_dma = vhci_map_urb_for_dma,
-> >  
-> >  	.hub_status_data = vhci_hub_status,
-> >  	.hub_control    = vhci_hub_control,
+> > This is becoming tricky now.
 > 
-> If the goal is to avoid wasting CPU cycles, you probably should have a 
-> vhci_unmap_urb_for_dma routine as well.
+> Yes.  There probably are mechanisms already in use in other parts of 
+> the kernel that would be suitable here, but I don't know what they are.  
+> We could try asking some other people for advice.
 
-I missed that. Thank you for pointing it out.
-I will send v2 including unmap function.
+Waiting for an ioctl() is horrible. If you really want to do this
+poll() would be the obvious API. It is made for waiting for changes
+of states.
 
-Regards
+[..]
+> The suspend callback is _not_ responsible for actually suspending the
+> device; that is handled by the USB subsystem core.
+> 
+> These ideas are indeed applicable to programs using usbfs.  The kernel
 
-Suwan Kim
+Not fully. Usbfs has the same issue as FUSE here. Drivers are per
+interface but power management is per device. Hence every driver
+is in the block IO path for these issues. You cannot do block IO
+in user space. The best you can do is notify of state changes,
+but you cannot wait for them.
+
+> needs to have a way to inform the program that the device is about
+> enter (or has just left) a low-power state, so that the program can
+> stop (or start) trying to communicate with the device.  And the kernel 
+> needs to know when the program is ready for the state change.
+
+That has difficulties based in fundamental issues. We can let user
+space block power transitions. We can notify it. But we cannot
+block on it.
+
+It would be easiest to export the usb_autopm_* API to user space.
+
+	Regards
+		Oliver
+
