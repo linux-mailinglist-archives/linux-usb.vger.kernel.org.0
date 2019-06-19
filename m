@@ -2,66 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CE54BC97
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 17:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325944BCB8
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 17:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729903AbfFSPMJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 11:12:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59656 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726009AbfFSPMJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Jun 2019 11:12:09 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B407DAF61;
-        Wed, 19 Jun 2019 15:12:07 +0000 (UTC)
-Message-ID: <1560957124.4587.20.camel@suse.com>
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org
-Date:   Wed, 19 Jun 2019 17:12:04 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1906191024150.1596-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1906191024150.1596-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
+        id S1727222AbfFSPYN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 11:24:13 -0400
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:35849 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726958AbfFSPYN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 11:24:13 -0400
+Received: by mail-qk1-f201.google.com with SMTP id b7so16043303qkk.3
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2019 08:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=8JkBGLTmIvJ3qsE79AaFBP8DQoZLm77gpsr17OF6DbA=;
+        b=LfcUThih9a14fTjhWiK2T4bwmz+w0Twk6p4g4B+vyf/QxY73hWvRImoKSI6TQas9t5
+         lrCONVWXx/t8Gu8Ag9QO6bkt+GUHStvWCvV53z2hhA4QEVf+muQtZezlYMkxpV3gGMup
+         9AdYd5qPjYKO4+4iFYt4ZHf3i8CxutQU5EOQ7SemKJxaJ0tvSADEbKcaNQIcvp3eQxXa
+         2TlhU6OANOoAaCRuG8CWzNJn05El/MjdYvKGnkJaANrCfa3vPedp1RnZDKB9PnBVO/pc
+         XXmlWDF9ggjQ1n7fzipBcTpDPP3h4MtwlNB7mbrmLjEyFULNmKXLBKhidGc6KrGSCzCv
+         IG6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=8JkBGLTmIvJ3qsE79AaFBP8DQoZLm77gpsr17OF6DbA=;
+        b=f1MhebhGBb8Em04HFv5NqXzueklWpcwgtVWfcq06Cb3mBUCYMRylCJhT5c8zi/SC75
+         l1A3cLsHYP6WhWwFI7QVLVqWwI6qFh743hvkBWwBgQoidKe/Tpvf/w7xcfhdM2dBBd9M
+         3ApbwO++Pt06GfOnXKhPPppwkqLz2VmIBCg5GA3mvOMU+sW6q1CuxATDN8huiXVRJwzy
+         LgH899wUocrVaReeVhKcpKJSA+NhzruRkPA+GG56+qeTrkLSGWlEBdX1Il3YV9L8jw5v
+         f4pcm+/GPPbhP1ZoThpIZeAOCj4754Q1lbRmS9sKdAUnfbeM7QZmtJs81Rv881sekInL
+         8U4A==
+X-Gm-Message-State: APjAAAW06B5Q4m7dy6IKaSfHgQN9MEGZjE5MBLpyDg/a0v28gfm2NZhn
+        4HVx+/gBmFCMlpMeZyoUabQ8CSoFe6Sbshh5
+X-Google-Smtp-Source: APXvYqy0SZQS1AL6A/Ot5Mo5MT4g/NFmCrgVXvyqFGi3mhXJRMnt8rsSeUUIYH6SgI+DXkRVh75mFMrQRMwm7Akw
+X-Received: by 2002:ac8:2834:: with SMTP id 49mr88206358qtq.326.1560957851972;
+ Wed, 19 Jun 2019 08:24:11 -0700 (PDT)
+Date:   Wed, 19 Jun 2019 17:24:07 +0200
+Message-Id: <6d36cd9fd0a0102a438cafa903dcf3d6fc44937f.1560957802.git.andreyknvl@google.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+Subject: [PATCH RESUBMIT] media: pvrusb2: use a different format for warnings
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Mike Isely <isely@pobox.com>, linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>,
+        syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com,
+        syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 19.06.2019, 10:40 -0400 schrieb Alan Stern:
-> On Wed, 19 Jun 2019, Oliver Neukum wrote:
+When the pvrusb2 driver detects that there's something wrong with the
+device, it prints a warning message. Right now those message are
+printed in two different formats:
 
-> > It would be easiest to export the usb_autopm_* API to user space.
-> 
-> But ->suspend and ->resume callbacks are part of that API, and as you 
-> say, it is not feasible to have these callbacks run in userspace.
+1. ***WARNING*** message here
+2. WARNING: message here
 
-We can notify user space about resume(). There will be a delay, but
-there will always be a delay, even in kernel space.
+There's an issue with the second format. Syzkaller recognizes it as a
+message produced by a WARN_ON(), which is used to indicate a bug in the
+kernel. However pvrusb2 prints those warnings to indicate an issue with
+the device, not the bug in the kernel.
 
-> The only solution I can think of is for the userspace program to first
-> set the device's autosuspend delay to 0.  Then whenever the
-> WAIT_FOR_RESUME ioctl returns -- even if it returns immediately -- the
-> program should assume the suspend is over or is not going to happen.  
-> Then the program can run normally for a short while (10 seconds,
-> perhaps) before making another attempt to suspend.
+This patch changes the pvrusb2 driver to consistently use the first
+warning message format. This will unblock syzkaller testing of this
+driver.
 
-That is ugly. Quite ugly actually.
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
+Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c      | 4 ++--
+ drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c | 6 +++---
+ drivers/media/usb/pvrusb2/pvrusb2-std.c      | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Why actually do we care about suspend()? Would the user space
-task do anything else but cease IO? We can do that in usbfs,
-assuming we do not care about the order of killing.
-User space will learn from an appropriate error code the device
-went to power save. And if it does not do IO, why care?
-I have never seen a driver that actually saves device state in
-suspend().
-
-	Regards
-		Oliver
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+index 816c85786c2a..191439109788 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+@@ -1680,7 +1680,7 @@ static int pvr2_decoder_enable(struct pvr2_hdw *hdw,int enablefl)
+ 	}
+ 	if (!hdw->flag_decoder_missed) {
+ 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+-			   "WARNING: No decoder present");
++			   "***WARNING*** No decoder present");
+ 		hdw->flag_decoder_missed = !0;
+ 		trace_stbit("flag_decoder_missed",
+ 			    hdw->flag_decoder_missed);
+@@ -2366,7 +2366,7 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
+ 	if (hdw_desc->flag_is_experimental) {
+ 		pvr2_trace(PVR2_TRACE_INFO, "**********");
+ 		pvr2_trace(PVR2_TRACE_INFO,
+-			   "WARNING: Support for this device (%s) is experimental.",
++			   "***WARNING*** Support for this device (%s) is experimental.",
+ 							      hdw_desc->description);
+ 		pvr2_trace(PVR2_TRACE_INFO,
+ 			   "Important functionality might not be entirely working.");
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+index 8f023085c2d9..43e54bdbd4aa 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+@@ -343,11 +343,11 @@ static int i2c_hack_cx25840(struct pvr2_hdw *hdw,
+ 
+ 	if ((ret != 0) || (*rdata == 0x04) || (*rdata == 0x0a)) {
+ 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+-			   "WARNING: Detected a wedged cx25840 chip; the device will not work.");
++			   "***WARNING*** Detected a wedged cx25840 chip; the device will not work.");
+ 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+-			   "WARNING: Try power cycling the pvrusb2 device.");
++			   "***WARNING*** Try power cycling the pvrusb2 device.");
+ 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+-			   "WARNING: Disabling further access to the device to prevent other foul-ups.");
++			   "***WARNING*** Disabling further access to the device to prevent other foul-ups.");
+ 		// This blocks all further communication with the part.
+ 		hdw->i2c_func[0x44] = NULL;
+ 		pvr2_hdw_render_useless(hdw);
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-std.c b/drivers/media/usb/pvrusb2/pvrusb2-std.c
+index 6b651f8b54df..37dc299a1ca2 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-std.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-std.c
+@@ -353,7 +353,7 @@ struct v4l2_standard *pvr2_std_create_enum(unsigned int *countptr,
+ 		bcnt = pvr2_std_id_to_str(buf,sizeof(buf),fmsk);
+ 		pvr2_trace(
+ 			PVR2_TRACE_ERROR_LEGS,
+-			"WARNING: Failed to classify the following standard(s): %.*s",
++			"***WARNING*** Failed to classify the following standard(s): %.*s",
+ 			bcnt,buf);
+ 	}
+ 
+-- 
+2.22.0.410.gd8fdbe21b5-goog
 
