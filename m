@@ -2,142 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 325944BCB8
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 17:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464334BCBC
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 17:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727222AbfFSPYN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 11:24:13 -0400
-Received: from mail-qk1-f201.google.com ([209.85.222.201]:35849 "EHLO
-        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbfFSPYN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 11:24:13 -0400
-Received: by mail-qk1-f201.google.com with SMTP id b7so16043303qkk.3
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2019 08:24:12 -0700 (PDT)
+        id S1729670AbfFSPY5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 11:24:57 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:44224 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727818AbfFSPYv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 11:24:51 -0400
+Received: by mail-pl1-f193.google.com with SMTP id t7so7377352plr.11
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2019 08:24:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=8JkBGLTmIvJ3qsE79AaFBP8DQoZLm77gpsr17OF6DbA=;
-        b=LfcUThih9a14fTjhWiK2T4bwmz+w0Twk6p4g4B+vyf/QxY73hWvRImoKSI6TQas9t5
-         lrCONVWXx/t8Gu8Ag9QO6bkt+GUHStvWCvV53z2hhA4QEVf+muQtZezlYMkxpV3gGMup
-         9AdYd5qPjYKO4+4iFYt4ZHf3i8CxutQU5EOQ7SemKJxaJ0tvSADEbKcaNQIcvp3eQxXa
-         2TlhU6OANOoAaCRuG8CWzNJn05El/MjdYvKGnkJaANrCfa3vPedp1RnZDKB9PnBVO/pc
-         XXmlWDF9ggjQ1n7fzipBcTpDPP3h4MtwlNB7mbrmLjEyFULNmKXLBKhidGc6KrGSCzCv
-         IG6A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=odHa8sQ/yoaX5QNk1w5aCWhCcWp4r/WrYr5KNweyAwg=;
+        b=oseLVwfIYfkp7YRYL1YYK06mWuJObguNhqL0xaC83Gr3+3RNwOzBWJCA5qdtYBxt9o
+         uzTxc7AkoUGpNHSxVRRbNwU68ufxuCyX800EEZzrQEhDutq8FfYYWkmPYLuJ16//fWrd
+         wQtqfjC4mcC4pexLJKQvQNonTNtddUlQBZMxTBopnGN8sjKYdEivd++yJTims6EefuE8
+         cdwYmrnoVE9QnikKLNLE7VT4b607cWdngCOFJX+wWrnwx9ieHgCYnECQ9plRtfqLEF7b
+         c7wQhOa50GM20ccP9W9B5CBaT+Gq1uHSepvFEJMU+/XDdWJRI8UZOmrt3LL94BdsNdaX
+         VncA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=8JkBGLTmIvJ3qsE79AaFBP8DQoZLm77gpsr17OF6DbA=;
-        b=f1MhebhGBb8Em04HFv5NqXzueklWpcwgtVWfcq06Cb3mBUCYMRylCJhT5c8zi/SC75
-         l1A3cLsHYP6WhWwFI7QVLVqWwI6qFh743hvkBWwBgQoidKe/Tpvf/w7xcfhdM2dBBd9M
-         3ApbwO++Pt06GfOnXKhPPppwkqLz2VmIBCg5GA3mvOMU+sW6q1CuxATDN8huiXVRJwzy
-         LgH899wUocrVaReeVhKcpKJSA+NhzruRkPA+GG56+qeTrkLSGWlEBdX1Il3YV9L8jw5v
-         f4pcm+/GPPbhP1ZoThpIZeAOCj4754Q1lbRmS9sKdAUnfbeM7QZmtJs81Rv881sekInL
-         8U4A==
-X-Gm-Message-State: APjAAAW06B5Q4m7dy6IKaSfHgQN9MEGZjE5MBLpyDg/a0v28gfm2NZhn
-        4HVx+/gBmFCMlpMeZyoUabQ8CSoFe6Sbshh5
-X-Google-Smtp-Source: APXvYqy0SZQS1AL6A/Ot5Mo5MT4g/NFmCrgVXvyqFGi3mhXJRMnt8rsSeUUIYH6SgI+DXkRVh75mFMrQRMwm7Akw
-X-Received: by 2002:ac8:2834:: with SMTP id 49mr88206358qtq.326.1560957851972;
- Wed, 19 Jun 2019 08:24:11 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 17:24:07 +0200
-Message-Id: <6d36cd9fd0a0102a438cafa903dcf3d6fc44937f.1560957802.git.andreyknvl@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH RESUBMIT] media: pvrusb2: use a different format for warnings
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=odHa8sQ/yoaX5QNk1w5aCWhCcWp4r/WrYr5KNweyAwg=;
+        b=hKVEfYXj3kpOy/O10Wyb+5bx5P0v1jJa7vbHo5gIrlYbm0SYc42wnJlxPQcP83TlbZ
+         5cQE/1dda/h2xla8TOmNCQP9kz3d+/QZxigrPi/FMnpVFHhNST5XxNArxDNQ2kmGrzwW
+         v70/AwGSOpikoxMXKmBngi78geh75HS2zwGc1p7g2TmF4g/gSGT1pO3c0K6eWe42RXvc
+         KhOGqysQj9EVo3o5BUTmQoiXKAGr7gsdAJpOpKLDR6ev0tOf2vPbHwWIixXZnmZFI8Wk
+         l3VHjiEbAa7uONEY7rwSGaRzJhIeKkyu64cCj6764Vj7bvcHRZ0GLjmRYBpJNbSmoPd1
+         uFfg==
+X-Gm-Message-State: APjAAAU4EqMNd+CTbkTMYpdcuwApmfENxXMmGgEgOEO78DjoYmTl4I3q
+        LUaPaWx6IY3XM/M2HVV+ZN0sCKoeqNmkMuSy9I4RPw==
+X-Google-Smtp-Source: APXvYqx6p4EUG2WDQGbkLweEA9sgYlt7d+JS+6S5T4a3dp4Kcp71sE2625Q2NhVdzG6nl561DiDISbPyed+z5/EcWuc=
+X-Received: by 2002:a17:902:8609:: with SMTP id f9mr111244987plo.252.1560957890006;
+ Wed, 19 Jun 2019 08:24:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <b3761c6479a49b60316325ebc22da904e36d4538.1556813333.git.andreyknvl@google.com>
+ <20190502163907.GA14995@kroah.com> <CAAeHK+w9xGtaQ5oSCq-=1YNk_11T2Tz9LKehkL7ZsAz-XwKajw@mail.gmail.com>
+ <20190619114458.52474694@coco.lan>
+In-Reply-To: <20190619114458.52474694@coco.lan>
 From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
+Date:   Wed, 19 Jun 2019 17:24:38 +0200
+Message-ID: <CAAeHK+z_f5ugKEpKmfi3qqYE3_OZcTzmZYJaPn2c=hUK64VyJw@mail.gmail.com>
+Subject: Re: [PATCH] media: pvrusb2: use a different format for warnings
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Mike Isely <isely@pobox.com>, linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com,
-        syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
+        USB list <linux-usb@vger.kernel.org>,
+        linux-media@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mike Isely <isely@pobox.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzbot <syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com>,
+        syzbot <syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the pvrusb2 driver detects that there's something wrong with the
-device, it prints a warning message. Right now those message are
-printed in two different formats:
+On Wed, Jun 19, 2019 at 4:45 PM Mauro Carvalho Chehab
+<mchehab@kernel.org> wrote:
+>
+> Em Wed, 19 Jun 2019 16:30:01 +0200
+> Andrey Konovalov <andreyknvl@google.com> escreveu:
+>
+> > On Thu, May 2, 2019 at 6:39 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Thu, May 02, 2019 at 06:09:26PM +0200, Andrey Konovalov wrote:
+> > > > When the pvrusb2 driver detects that there's something wrong with the
+> > > > device, it prints a warning message. Right now those message are
+> > > > printed in two different formats:
+> > > >
+> > > > 1. ***WARNING*** message here
+> > > > 2. WARNING: message here
+> > > >
+> > > > There's an issue with the second format. Syzkaller recognizes it as a
+> > > > message produced by a WARN_ON(), which is used to indicate a bug in the
+> > > > kernel. However pvrusb2 prints those warnings to indicate an issue with
+> > > > the device, not the bug in the kernel.
+> > > >
+> > > > This patch changes the pvrusb2 driver to consistently use the first
+> > > > warning message format. This will unblock syzkaller testing of this
+> > > > driver.
+> > > >
+> > > > Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
+> > > > Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
+> > > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > >
+> > > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >
+> > I don't think I see this patch picked up anywhere. Should this fix go
+> > through the USB or some media tree?
+>
+> Media drivers go via the media tree. You should notice that we are
+> currently receiving around 100 patches per week there. It may take
+> some time for people to review, but the patches are queued at
+> patchwork, so sooner or later someone will review and apply, if nobody
+> did it already:
+>
+>         https://patchwork.linuxtv.org/project/linux-media/list/
+>
+> That's said, I'm not seeing this patch there:
+>
+>         https://patchwork.linuxtv.org/project/linux-media/list/?series=&submitter=&state=*&q=pvrusb2&archive=&delegate=
+>
+> It sounds that, for whatever reason, the patch never arrived
+> patchwork. Please re-submit it and check if media patchwork got it.
 
-1. ***WARNING*** message here
-2. WARNING: message here
+OK, done!
 
-There's an issue with the second format. Syzkaller recognizes it as a
-message produced by a WARN_ON(), which is used to indicate a bug in the
-kernel. However pvrusb2 prints those warnings to indicate an issue with
-the device, not the bug in the kernel.
-
-This patch changes the pvrusb2 driver to consistently use the first
-warning message format. This will unblock syzkaller testing of this
-driver.
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reported-by: syzbot+af8f8d2ac0d39b0ed3a0@syzkaller.appspotmail.com
-Reported-by: syzbot+170a86bf206dd2c6217e@syzkaller.appspotmail.com
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c      | 4 ++--
- drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c | 6 +++---
- drivers/media/usb/pvrusb2/pvrusb2-std.c      | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index 816c85786c2a..191439109788 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -1680,7 +1680,7 @@ static int pvr2_decoder_enable(struct pvr2_hdw *hdw,int enablefl)
- 	}
- 	if (!hdw->flag_decoder_missed) {
- 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
--			   "WARNING: No decoder present");
-+			   "***WARNING*** No decoder present");
- 		hdw->flag_decoder_missed = !0;
- 		trace_stbit("flag_decoder_missed",
- 			    hdw->flag_decoder_missed);
-@@ -2366,7 +2366,7 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
- 	if (hdw_desc->flag_is_experimental) {
- 		pvr2_trace(PVR2_TRACE_INFO, "**********");
- 		pvr2_trace(PVR2_TRACE_INFO,
--			   "WARNING: Support for this device (%s) is experimental.",
-+			   "***WARNING*** Support for this device (%s) is experimental.",
- 							      hdw_desc->description);
- 		pvr2_trace(PVR2_TRACE_INFO,
- 			   "Important functionality might not be entirely working.");
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
-index 8f023085c2d9..43e54bdbd4aa 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
-@@ -343,11 +343,11 @@ static int i2c_hack_cx25840(struct pvr2_hdw *hdw,
- 
- 	if ((ret != 0) || (*rdata == 0x04) || (*rdata == 0x0a)) {
- 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
--			   "WARNING: Detected a wedged cx25840 chip; the device will not work.");
-+			   "***WARNING*** Detected a wedged cx25840 chip; the device will not work.");
- 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
--			   "WARNING: Try power cycling the pvrusb2 device.");
-+			   "***WARNING*** Try power cycling the pvrusb2 device.");
- 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
--			   "WARNING: Disabling further access to the device to prevent other foul-ups.");
-+			   "***WARNING*** Disabling further access to the device to prevent other foul-ups.");
- 		// This blocks all further communication with the part.
- 		hdw->i2c_func[0x44] = NULL;
- 		pvr2_hdw_render_useless(hdw);
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-std.c b/drivers/media/usb/pvrusb2/pvrusb2-std.c
-index 6b651f8b54df..37dc299a1ca2 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-std.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-std.c
-@@ -353,7 +353,7 @@ struct v4l2_standard *pvr2_std_create_enum(unsigned int *countptr,
- 		bcnt = pvr2_std_id_to_str(buf,sizeof(buf),fmsk);
- 		pvr2_trace(
- 			PVR2_TRACE_ERROR_LEGS,
--			"WARNING: Failed to classify the following standard(s): %.*s",
-+			"***WARNING*** Failed to classify the following standard(s): %.*s",
- 			bcnt,buf);
- 	}
- 
--- 
-2.22.0.410.gd8fdbe21b5-goog
-
+>
+> If not, perhaps you just found a bug with patchwork 2.1 :-)
+> (we upgraded from version 1.0 to 2.1 at the beginning of this
+> month)
+> Thanks,
+> Mauro
