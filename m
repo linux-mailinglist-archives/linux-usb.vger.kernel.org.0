@@ -2,105 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FD34B69B
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 13:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F42B4B7AF
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jun 2019 14:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726751AbfFSLDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jun 2019 07:03:17 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45814 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727067AbfFSLDR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 07:03:17 -0400
-Received: by mail-lj1-f196.google.com with SMTP id m23so2768611lje.12
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2019 04:03:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=Luu+5rYK+UBQnap9xN87KqCbR3KAr2ZJr7v5Aor7Sgw=;
-        b=suXYxAMjz59lvhJQHLgFctHetXVze4fq6LJGfaHu6u7dSe6wuf8VLeA1vMnT0cU6rf
-         Z9pxXFNyqsVWBeGLKWj8hm4bYSCwh3SRygkdWUtJZ4pXHbDi1x83/66f4loPVQRUtUdo
-         X5RpmJ+T37cPHdZZ2syt9SQ8iMdI5qv4Ygyn8kmrVNopPOome4/wjVWlCoMw+e5ujuxp
-         F70SQkw9/wHNU4Y7qJNWVd30IopBNYHLRey89xb8qieITXXlaBBns4l+ac3+c8G0wVEd
-         reHNjtFKFKOlNoKOngYOc8Q0wNNwtQVfWG27aJHuhnhn7xLH/rHIbg/p+TDnt1GiPpnD
-         +NCA==
+        id S1731654AbfFSMLF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jun 2019 08:11:05 -0400
+Received: from mail-lf1-f53.google.com ([209.85.167.53]:42164 "EHLO
+        mail-lf1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726246AbfFSMLE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jun 2019 08:11:04 -0400
+Received: by mail-lf1-f53.google.com with SMTP id y13so11918585lfh.9
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jun 2019 05:11:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=Luu+5rYK+UBQnap9xN87KqCbR3KAr2ZJr7v5Aor7Sgw=;
-        b=O63u/8Nbv/Eod9m3KNRNGWAg5HKYqZmhWJNHCWq8cIYQjWrbEFaDLrNCsmt0tdM1Cb
-         5oy2nafo7ewUoSnsUTB0J/HD32ATBIW8ljx9sDnV6sCQazesGqEaPHbwJxJL6rT4ah79
-         n+N1H8vHoerUe21/xhhlZadsgJas2c0u71Ffx+rbwHi3Apr+O3GI1l1zy3EXEs5OgqUy
-         3V3g/SCwieWgrd+J+/G918NMROpYz2kLhvWG2bU8goPW+Tlzg5jna60PD1fxlUCuHdIx
-         515sAdYfWu34r2/uwNW27dfmtSZWByUIw/UatcAxfnzY870Yso4Z97FFpsLIym9qTnHx
-         kpAQ==
-X-Gm-Message-State: APjAAAWkWH9bWrksVSxfBLkBr/O4lr53n+Lov8MslgX5r+y1MYcdxg/D
-        MoZ1X8W7oImvLYgOzpy4ZMo5Mg==
-X-Google-Smtp-Source: APXvYqxZ9IA0ppIbwUalwcRBMLFQVzuYiFSFtfCmTlzFHAB17QSbWvFXviSuBgZd2h5m1cAPIFzY6A==
-X-Received: by 2002:a2e:9b84:: with SMTP id z4mr36740332lji.75.1560942195085;
-        Wed, 19 Jun 2019 04:03:15 -0700 (PDT)
-Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
-        by smtp.gmail.com with ESMTPSA id x19sm3062896ljb.6.2019.06.19.04.03.14
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 19 Jun 2019 04:03:14 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 13:03:14 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Simon Horman <horms+renesas@verge.net.au>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-usb@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/2] dt-bindings: usb: renease_{usbhs,gen3} Rename
- bindings documentation files
-Message-ID: <20190619110314.GC18708@bigcity.dyn.berto.se>
-References: <20190617090603.8449-1-horms+renesas@verge.net.au>
+        bh=uR7f48wHFUWEXhWOGahRrwd36u9zKsF+WNVmK3CIQxA=;
+        b=AuvHfTgWb4fra/V99W8a7PJsm7etI/3x6vY1nsQt+bKShAUG6r+ieyUgIEQK48Ewgu
+         NOtIsZ4t9GoHClqINWWvyijR4wbwUoB9y2v9Ll898KTTOHSM2n94CPDN6VqWmq2crfkH
+         L149NHLT43fIG7p0XYrs10gt8399P92efoO0n44iEYcSMvGKT5kxL1Q3A5SqXz0A5bFo
+         T9GlCqoLrLqfySGGUE8Tj+FwDRl5+TEWop47DFjyjgfdhNfTvmfI5/6LEfYy6rstyRpv
+         V8dt4/1DkGM9IczaebxKfxB4sfUw58wNQRDecJDSLU0waMRJWsqoT99mk/CJepM254mT
+         nFhQ==
+X-Gm-Message-State: APjAAAWyGyRB+811nmTrGBhKaj2xKI0y/+vLggIiiJBrQFmrRbFKqsa9
+        tADG67icHQdWB1wPfqUt67A=
+X-Google-Smtp-Source: APXvYqyHQ78NrQQmXmNwOM6ULtwSHV7FusTPVs0t063hkWjg+7QlhfgmUAfDiFFoFdGKOG7WFFg56Q==
+X-Received: by 2002:ac2:5609:: with SMTP id v9mr5377421lfd.27.1560946262415;
+        Wed, 19 Jun 2019 05:11:02 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id 72sm3062262ljj.104.2019.06.19.05.11.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 19 Jun 2019 05:11:01 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92)
+        (envelope-from <johan@kernel.org>)
+        id 1hdZQY-0001NO-SM; Wed, 19 Jun 2019 14:10:58 +0200
+Date:   Wed, 19 Jun 2019 14:10:58 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     =?iso-8859-1?Q?J=F6rgen?= Storvist <jorgen.storvist@gmail.com>
+Cc:     linux-usb@vger.kernel.org, johan@kernel.org
+Subject: Re: [PATCH] USB: serial: option: add support for GosunCn ME3630
+ RNDIS mode
+Message-ID: <20190619121058.GD25248@localhost>
+References: <20190619002812.00006025@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190617090603.8449-1-horms+renesas@verge.net.au>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <20190619002812.00006025@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Simon,
-
-Thanks for your work.
-
-On 2019-06-17 11:06:01 +0200, Simon Horman wrote:
-> Hi,
+On Wed, Jun 19, 2019 at 12:30:19AM +0200, Jörgen Storvist wrote:
+> Added USB IDs for GosunCn ME3630 cellular module in RNDIS mode.
 > 
-> For consistency with the naming of (most) other documentation files for DT
-> bindings for Renesas IP blocks rename the Renesas USBHS and USB 3.0
-> peripheral documentation files.
-
-With Shimoda-sans comment on 2/2 fixed for the whole series,
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
+> T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=03 Dev#= 18 Spd=480 MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=19d2 ProdID=0601 Rev=03.18
+> S:  Manufacturer=Android
+> S:  Product=Android
+> S:  SerialNumber=b950269c
+> C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+> I:  If#=0x1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+> I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
 > 
-> Simon Horman (2):
->   dt-bindings: usb: renesas_usbhs: Rename bindings documentation file
->   dt-bindings: usb: renesas_gen3: Rename bindings documentation file
-> 
->  .../devicetree/bindings/usb/{renesas_usb3.txt => renesas,usb3.txt}        | 0
->  .../devicetree/bindings/usb/{renesas_usbhs.txt => renesas,usbhs.txt}      | 0
->  2 files changed, 0 insertions(+), 0 deletions(-)
->  rename Documentation/devicetree/bindings/usb/{renesas_usb3.txt => renesas,usb3.txt} (100%)
->  rename Documentation/devicetree/bindings/usb/{renesas_usbhs.txt => renesas,usbhs.txt} (100%)
-> 
-> -- 
-> 2.11.0
+> Signed-off-by: Jörgen Storvist <jorgen.storvist@gmail.com>
 
--- 
-Regards,
-Niklas Söderlund
+Applied, thanks.
+
+Johan
