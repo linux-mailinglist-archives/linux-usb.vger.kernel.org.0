@@ -2,82 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 273324CD69
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 14:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FE34CD72
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 14:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731651AbfFTMIZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jun 2019 08:08:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38528 "EHLO mail.kernel.org"
+        id S1731678AbfFTMK2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jun 2019 08:10:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39586 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730596AbfFTMIZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Jun 2019 08:08:25 -0400
+        id S1730596AbfFTMK2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 Jun 2019 08:10:28 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E93232080C;
-        Thu, 20 Jun 2019 12:08:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0906E2080C;
+        Thu, 20 Jun 2019 12:10:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561032504;
-        bh=Hu4fjtFx9KYIeiMqIRLLcDpAkiZGrzLLCm4nvrd1BlQ=;
+        s=default; t=1561032627;
+        bh=gypvzOuIyGej/WLKSteaEHH1Cc+uthJD0zqXxf7LLJk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rjWHoVLcgcLJJhpkJqHXWS2v8WcGC+lV6YhSOop3h+Nk7YF56eMv0f5noITVKDEA+
-         14PRPi37MfxDDUB0wuAiwZ9BIG3tfTVcTFjwhO3JqOjSHOX8Pnz+49ZiQQTGWGYy39
-         OYuXXRvq0dEsC5uqoyZKUOglPkYgSZOdYjBnq5Xg=
-Date:   Thu, 20 Jun 2019 14:08:21 +0200
+        b=wKQFXj/Kk1YUVHNUjmFWLP/OYg2Z4cD55J+GL9FwDW4/YVfOMZ+Bm5ajPWetKYjUg
+         UJ/J9WsCFYnWCc3j+g9/EEOocWMisPtXsvaQ6k8HlsrRbJy8sLYuAFVlad7O2gxuHA
+         dOHkFYG1pY93D5BhBFAESLH8hCeT6OGJpSFWDyEc=
+Date:   Thu, 20 Jun 2019 14:10:25 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: remove redundant 'default n' from Kconfig-s
-Message-ID: <20190620120821.GA19295@kroah.com>
-References: <CGME20190520141434eucas1p266520a2ef8db42b3deee004e1cba3a1f@eucas1p2.samsung.com>
- <79726177-d524-4f83-eeb2-18ae9b2e50cf@samsung.com>
- <874l4ngxl5.fsf@linux.intel.com>
+To:     Yinbo Zhu <yinbo.zhu@nxp.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, xiaobo.xie@nxp.com,
+        jiafei.pan@nxp.com,
+        Ramneek Mehresh <ramneek.mehresh@freescale.com>,
+        Nikhil Badola <nikhil.badola@freescale.com>,
+        Ran Wang <ran.wang_1@nxp.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 4/5] usb: host: Stops USB controller init if PLL fails
+ to lock
+Message-ID: <20190620121025.GB19295@kroah.com>
+References: <20190614085433.22344-1-yinbo.zhu@nxp.com>
+ <20190614085433.22344-4-yinbo.zhu@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <874l4ngxl5.fsf@linux.intel.com>
+In-Reply-To: <20190614085433.22344-4-yinbo.zhu@nxp.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 10:29:58AM +0300, Felipe Balbi wrote:
-> Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com> writes:
+On Fri, Jun 14, 2019 at 04:54:32PM +0800, Yinbo Zhu wrote:
+> From: Ramneek Mehresh <ramneek.mehresh@freescale.com>
 > 
-> > 'default n' is the default value for any bool or tristate Kconfig
-> > setting so there is no need to write it explicitly.
-> >
-> > Also since commit f467c5640c29 ("kconfig: only write '# CONFIG_FOO
-> > is not set' for visible symbols") the Kconfig behavior is the same
-> > regardless of 'default n' being present or not:
-> >
-> >     ...
-> >     One side effect of (and the main motivation for) this change is making
-> >     the following two definitions behave exactly the same:
-> >     
-> >         config FOO
-> >                 bool
-> >     
-> >         config FOO
-> >                 bool
-> >                 default n
-> >     
-> >     With this change, neither of these will generate a
-> >     '# CONFIG_FOO is not set' line (assuming FOO isn't selected/implied).
-> >     That might make it clearer to people that a bare 'default n' is
-> >     redundant.
-> >     ...
-> >
-> > Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> USB erratum-A006918 workaround tries to start internal PHY inside
+> uboot (when PLL fails to lock). However, if the workaround also
+> fails, then USB initialization is also stopped inside Linux.
+> Erratum-A006918 workaround failure creates "fsl,erratum_a006918"
+> node in device-tree. Presence of this node in device-tree is
+> used to stop USB controller initialization in Linux
 > 
-> Fine by me. Greg if you want to take this directly (since it touches
-> things all over the place):
+> Signed-off-by: Ramneek Mehresh <ramneek.mehresh@freescale.com>
+> Signed-off-by: Suresh Gupta <suresh.gupta@freescale.com>
+> Signed-off-by: Yinbo Zhu <yinbo.zhu@nxp.com>
+> ---
+> Change in v7:
+> 		keep v5 version "fall through"
 > 
-> Acked-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+>  drivers/usb/host/ehci-fsl.c      | 9 +++++++++
+>  drivers/usb/host/fsl-mph-dr-of.c | 3 ++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 > 
-> If you prefer that I put this in my pull request to you, just let me know.
+> diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+> index 8f3bf3efb038..ef3dfd33a62e 100644
+> --- a/drivers/usb/host/ehci-fsl.c
+> +++ b/drivers/usb/host/ehci-fsl.c
+> @@ -236,6 +236,15 @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
+>  		portsc |= PORT_PTS_PTW;
+>  		/* fall through */
+>  	case FSL_USB2_PHY_UTMI:
+> +		/* Presence of this node "has_fsl_erratum_a006918"
+> +		 * in device-tree is used to stop USB controller
+> +		 * initialization in Linux
+> +		 */
+> +		if (pdata->has_fsl_erratum_a006918) {
+> +			dev_warn(dev, "USB PHY clock invalid\n");
+> +			return -EINVAL;
+> +		}
+> +
 
-I think I already took this :)
+You need a /* fall through */ comment here, right?
+
+thanks,
+
+greg k-h
