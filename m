@@ -2,34 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D5A4D550
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 19:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794304D570
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 19:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732115AbfFTRee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jun 2019 13:34:34 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:35182 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726530AbfFTRe2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jun 2019 13:34:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1561052066; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2PvY1i8PHpawEPAEre7rKVHvj4003Eq08vSuPmhlQE8=;
-        b=MVZxD8zLgTvEFE/SngL1ktTiRa4VmJDUUAq189XSupv1g7kpty1X11R30k1kJuUwCk3c6J
-        GesZAoufKKR8KtB8SBfQXq8uQLiHp6qXKkjFCURr6oZlsEorJQD6NRwLqB4zJhlxt+GlUr
-        Pe2xADZuXE0oidJ7+N6Qk31VjF1Ayek=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Bin Liu <b-liu@ti.com>
-Cc:     od@zcrc.me, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: [PATCH 3/3] usb: musb: jz4740: Add support for DMA
-Date:   Thu, 20 Jun 2019 19:34:14 +0200
-Message-Id: <20190620173414.3201-3-paul@crapouillou.net>
-In-Reply-To: <20190620173414.3201-1-paul@crapouillou.net>
-References: <20190620173414.3201-1-paul@crapouillou.net>
+        id S1726659AbfFTRug (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jun 2019 13:50:36 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:40825 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726523AbfFTRug (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jun 2019 13:50:36 -0400
+Received: by mail-wr1-f67.google.com with SMTP id p11so3917170wre.7;
+        Thu, 20 Jun 2019 10:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4eo8XIVIYev23OnO80+wbqMoVimiFq3yayx0KvqUr5w=;
+        b=j5zicp6+maY+GOPyFK/PvDoc1wrPyoWiFtqphAKZgLb1cXQq2Gc+OXg9ff3UfCvDlS
+         L6snkim8YEzbPNCQtVSwkJ/iYPbJNseNGK+y8f5pfln/rg2nw1Kdo6H80p04s8xhK6gP
+         kIiH1bTMqiRYbEl3QTvpazK5Mc2TuH6g/TiYvCTRChoIy9FWXYuxSeBPiJpinbhEJf8k
+         /vGI9Zhgoxgbv4wc8KG6mw1X2E3rgt2f3/sG9vrOdQpYxqxYfslajPjMzbU2VF4zllUJ
+         CPgBFj28ReelvV8Xma0yXuuM9GD42qHmSclXf1KnPWII+EI8Z2v9e6ZCdKJOTQ3390m7
+         Uusg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4eo8XIVIYev23OnO80+wbqMoVimiFq3yayx0KvqUr5w=;
+        b=ro51OE7RO1JuOSUjtxQTh9wcKhWhEbyF0sRKk3NSaWvtPkTyr2dwaO5SMrWnXNFNfj
+         GFEGnnzUO8NitExUhnpR7b/K9pt/0Lsdjukj1cngcrtdNiqJXG/ir52WV8x6YUT2/j5r
+         aq6LjFP9glthQNPxakwFctNxvuhGpl94oA9BcHME6Q1w4JZybSKufuuZdNenmZUNl5ZC
+         xVdirsynmTKPJiFAFK1BnnBaV52GjgnY6NARFt6IA9nxhw9knpxFeFS9n3aV601UFzeZ
+         6alVKNu8e55M/1A7x+e3r31f+o4iJIwXINYWpKh7zTh+JzXbyvAvvGfhQEcv9AJJVBYK
+         TGRw==
+X-Gm-Message-State: APjAAAXYgLADqxpy+5teadIE00BJgDb/22K0snN1R70BQswOoS6QdX4G
+        QlA5euwVWIEiKD9RztPdaiM=
+X-Google-Smtp-Source: APXvYqy3FJVNfRc3t3aR+Tq1J8OvbfdS3/X94VpeWR5oYw0CxV/mmojM9wqtuoxFsq5qi4xaY049Nw==
+X-Received: by 2002:a5d:4cca:: with SMTP id c10mr37480642wrt.233.1561053033510;
+        Thu, 20 Jun 2019 10:50:33 -0700 (PDT)
+Received: from blackbox.darklights.net (p200300F133C20E00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:33c2:e00:428d:5cff:feb9:9db8])
+        by smtp.googlemail.com with ESMTPSA id l1sm568745wrf.46.2019.06.20.10.50.31
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 20 Jun 2019 10:50:32 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     hminas@synopsys.com, linux-usb@vger.kernel.org,
+        felipe.balbi@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-stable <stable@vger.kernel.org>
+Subject: [PATCH] usb: dwc2: use a longer AHB idle timeout in dwc2_core_reset()
+Date:   Thu, 20 Jun 2019 19:50:22 +0200
+Message-Id: <20190620175022.29348-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -37,93 +61,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for using the DMA channels built into the Inventra IP.
+Use a 10000us AHB idle timeout in dwc2_core_reset() and make it
+consistent with the other "wait for AHB master IDLE state" ocurrences.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Tested-by: Artur Rojek <contact@artur-rojek.eu>
+This fixes a problem for me where dwc2 would not want to initialize when
+updating to 4.19 on a MIPS Lantiq VRX200 SoC. dwc2 worked fine with
+4.14.
+Testing on my board shows that it takes 180us until AHB master IDLE
+state is signalled. The very old vendor driver for this SoC (ifxhcd)
+used a 1 second timeout.
+Use the same timeout that is used everywhere when polling for
+GRSTCTL_AHBIDLE instead of using a timeout that "works for one board"
+(180us in my case) to have consistent behavior across the dwc2 driver.
+
+Cc: linux-stable <stable@vger.kernel.org> # 4.19+
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
- drivers/usb/musb/Kconfig  |  2 +-
- drivers/usb/musb/jz4740.c | 21 +++++++++++++++------
- 2 files changed, 16 insertions(+), 7 deletions(-)
+ drivers/usb/dwc2/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/musb/Kconfig b/drivers/usb/musb/Kconfig
-index 52f8e2b57ad5..210e4844c92a 100644
---- a/drivers/usb/musb/Kconfig
-+++ b/drivers/usb/musb/Kconfig
-@@ -142,7 +142,7 @@ config USB_UX500_DMA
- 
- config USB_INVENTRA_DMA
- 	bool 'Inventra'
--	depends on USB_MUSB_OMAP2PLUS
-+	depends on USB_MUSB_OMAP2PLUS || USB_MUSB_JZ4740
- 	help
- 	  Enable DMA transfers using Mentor's engine.
- 
-diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-index 5261f8dfedec..bbecfdee6ea1 100644
---- a/drivers/usb/musb/jz4740.c
-+++ b/drivers/usb/musb/jz4740.c
-@@ -25,11 +25,14 @@ struct jz4740_glue {
- static irqreturn_t jz4740_musb_interrupt(int irq, void *__hci)
- {
- 	unsigned long   flags;
--	irqreturn_t     retval = IRQ_NONE;
-+	irqreturn_t     retval = IRQ_NONE, retval_dma = IRQ_NONE;
- 	struct musb     *musb = __hci;
- 
- 	spin_lock_irqsave(&musb->lock, flags);
- 
-+	if (IS_ENABLED(CONFIG_USB_INVENTRA_DMA) && musb->dma_controller)
-+		retval_dma = musbhs_dma_controller_irq(musb->dma_controller);
-+
- 	musb->int_usb = musb_readb(musb->mregs, MUSB_INTRUSB);
- 	musb->int_tx = musb_readw(musb->mregs, MUSB_INTRTX);
- 	musb->int_rx = musb_readw(musb->mregs, MUSB_INTRRX);
-@@ -47,7 +50,10 @@ static irqreturn_t jz4740_musb_interrupt(int irq, void *__hci)
- 
- 	spin_unlock_irqrestore(&musb->lock, flags);
- 
--	return retval;
-+	if (retval == IRQ_HANDLED || retval_dma == IRQ_HANDLED)
-+		return IRQ_HANDLED;
-+
-+	return IRQ_NONE;
- }
- 
- static struct musb_fifo_cfg jz4740_musb_fifo_cfg[] = {
-@@ -91,18 +97,19 @@ static int jz4740_musb_init(struct musb *musb)
- 	musb->dyn_fifo = true;
- 
- 	musb->isr = jz4740_musb_interrupt;
-+	musb->dma_share_usb_irq = true;
- 
- 	return 0;
- }
- 
--/*
-- * DMA has not been confirmed to work with CONFIG_USB_INVENTRA_DMA,
-- * so let's not set up the dma function pointers yet.
-- */
- static const struct musb_platform_ops jz4740_musb_ops = {
- 	.quirks		= MUSB_DMA_INVENTRA | MUSB_INDEXED_EP,
- 	.fifo_mode	= 2,
- 	.init		= jz4740_musb_init,
-+#ifdef CONFIG_USB_INVENTRA_DMA
-+	.dma_init	= musbhs_dma_controller_create,
-+	.dma_exit	= musbhs_dma_controller_destroy,
-+#endif
- };
- 
- static int jz4740_probe(struct platform_device *pdev)
-@@ -137,6 +144,8 @@ static int jz4740_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
+index 8b499d643461..8e41d70fd298 100644
+--- a/drivers/usb/dwc2/core.c
++++ b/drivers/usb/dwc2/core.c
+@@ -531,7 +531,7 @@ int dwc2_core_reset(struct dwc2_hsotg *hsotg, bool skip_wait)
  	}
  
- 	musb->dev.parent		= &pdev->dev;
-+	musb->dev.dma_mask		= &musb->dev.coherent_dma_mask;
-+	musb->dev.coherent_dma_mask	= DMA_BIT_MASK(32);
- 
- 	glue->dev			= &pdev->dev;
- 	glue->musb			= musb;
+ 	/* Wait for AHB master IDLE state */
+-	if (dwc2_hsotg_wait_bit_set(hsotg, GRSTCTL, GRSTCTL_AHBIDLE, 50)) {
++	if (dwc2_hsotg_wait_bit_set(hsotg, GRSTCTL, GRSTCTL_AHBIDLE, 10000)) {
+ 		dev_warn(hsotg->dev, "%s: HANG! AHB Idle timeout GRSTCTL GRSTCTL_AHBIDLE\n",
+ 			 __func__);
+ 		return -EBUSY;
 -- 
-2.21.0.593.g511ec345e18
+2.22.0
 
