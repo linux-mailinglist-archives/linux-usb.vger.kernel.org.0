@@ -2,67 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E90E24C885
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 09:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8959E4C8B4
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 09:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730965AbfFTHgT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jun 2019 03:36:19 -0400
-Received: from mga09.intel.com ([134.134.136.24]:56211 "EHLO mga09.intel.com"
+        id S1726081AbfFTHyp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jun 2019 03:54:45 -0400
+Received: from mga05.intel.com ([192.55.52.43]:26433 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730891AbfFTHgS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Jun 2019 03:36:18 -0400
+        id S1725912AbfFTHyo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 Jun 2019 03:54:44 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jun 2019 00:36:18 -0700
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jun 2019 00:54:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,396,1557212400"; 
-   d="scan'208";a="154041728"
-Received: from pipin.fi.intel.com ([10.237.72.175])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2019 00:36:16 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Linux USB <linux-usb@vger.kernel.org>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>
-Subject: [PATCH] usb: dwc3: pci: Add Support for Intel Elkhart Lake Devices
-Date:   Thu, 20 Jun 2019 10:36:15 +0300
-Message-Id: <20190620073615.4332-1-felipe.balbi@linux.intel.com>
-X-Mailer: git-send-email 2.22.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+   d="scan'208";a="186729197"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.164])
+  by fmsmga002.fm.intel.com with ESMTP; 20 Jun 2019 00:54:42 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>, <stern@rowland.harvard.edu>,
+        "Lee, Chiasheng" <chiasheng.lee@intel.com>,
+        "# v4 . 13+" <stable@vger.kernel.org>, Lee@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH] usb: Handle USB3 remote wakeup for LPM enabled devices correctly
+Date:   Thu, 20 Jun 2019 10:56:04 +0300
+Message-Id: <1561017364-24229-1-git-send-email-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch simply adds a new PCI Device ID
+From: "Lee, Chiasheng" <chiasheng.lee@intel.com>
 
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+With Link Power Management (LPM) enabled USB3 links transition to low
+power U1/U2 link states from U0 state automatically.
+
+Current hub code detects USB3 remote wakeups by checking if the software
+state still shows suspended, but the link has transitioned from suspended
+U3 to enabled U0 state.
+
+As it takes some time before the hub thread reads the port link state
+after a USB3 wake notification, the link may have transitioned from U0
+to U1/U2, and wake is not detected by hub code.
+
+Fix this by handling U1/U2 states in the same way as U0 in USB3 wakeup
+handling
+
+This patch should be added to stable kernels since 4.13 where LPM was
+kept enabled during suspend/resume
+
+Cc: <stable@vger.kernel.org> # v4.13+
+Signed-off-by: Lee, Chiasheng <chiasheng.lee@intel.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/core/hub.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 8cced3609e24..f9b550081550 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -34,6 +34,7 @@
- #define PCI_DEVICE_ID_INTEL_CNPLP		0x9dee
- #define PCI_DEVICE_ID_INTEL_CNPH		0xa36e
- #define PCI_DEVICE_ID_INTEL_ICLLP		0x34ee
-+#define PCI_DEVICE_ID_INTEL_EHLLP		0x4b7e
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 2f94568..2c8e60c 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3617,6 +3617,7 @@ static int hub_handle_remote_wakeup(struct usb_hub *hub, unsigned int port,
+ 	struct usb_device *hdev;
+ 	struct usb_device *udev;
+ 	int connect_change = 0;
++	u16 link_state;
+ 	int ret;
  
- #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
- #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
-@@ -339,6 +340,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ICLLP),
- 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
+ 	hdev = hub->hdev;
+@@ -3626,9 +3627,11 @@ static int hub_handle_remote_wakeup(struct usb_hub *hub, unsigned int port,
+ 			return 0;
+ 		usb_clear_port_feature(hdev, port, USB_PORT_FEAT_C_SUSPEND);
+ 	} else {
++		link_state = portstatus & USB_PORT_STAT_LINK_STATE;
+ 		if (!udev || udev->state != USB_STATE_SUSPENDED ||
+-				 (portstatus & USB_PORT_STAT_LINK_STATE) !=
+-				 USB_SS_PORT_LS_U0)
++				(link_state != USB_SS_PORT_LS_U0 &&
++				 link_state != USB_SS_PORT_LS_U1 &&
++				 link_state != USB_SS_PORT_LS_U2))
+ 			return 0;
+ 	}
  
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHLLP),
-+	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
-+
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
- 	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
- 	{  }	/* Terminating Entry */
 -- 
-2.22.0
+2.7.4
 
