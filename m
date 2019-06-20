@@ -2,75 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 442984CA62
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 11:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE6C4CAE8
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 11:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725925AbfFTJND (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jun 2019 05:13:03 -0400
-Received: from mga12.intel.com ([192.55.52.136]:40630 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725889AbfFTJND (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Jun 2019 05:13:03 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jun 2019 02:13:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,396,1557212400"; 
-   d="scan'208";a="154060824"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2019 02:13:01 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB: fixes for v5.2-rc5
-Date:   Thu, 20 Jun 2019 12:13:01 +0300
-Message-ID: <87h88kbowy.fsf@linux.intel.com>
+        id S1726392AbfFTJdG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jun 2019 05:33:06 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:47089 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725889AbfFTJdG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jun 2019 05:33:06 -0400
+Received: by mail-io1-f72.google.com with SMTP id s83so4152892iod.13
+        for <linux-usb@vger.kernel.org>; Thu, 20 Jun 2019 02:33:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=WtWpzIFG+KojeL/qLHo4CGjxOFRh5iPbQVL0zRdDcv8=;
+        b=TZ4Bh+17cA9cJMedA12wUEwxDo4MvNucKIi1spu4Ar86L+AaNGekHxbPF0tRWJwqOF
+         9QF6KbljX6szH05pXqvIsmtNVx46xFPO0aVMeVWx9+JvcJSTldzJUW7d7H6eQC1AWa37
+         akXkz65Sb6qe4Cuyoqc5qiAkKldRZqjk3OvNjWWB1RkLfSboOALZvDY0yOSnEGG7eMDV
+         PB0JWsPq53v3wq4A1XUVCyOnRCNNFR/qY57Y4Q2eIMJ64Lg01ZWV1PUY2hQHwohQQPm3
+         VVMUOrxlkD+HUBVdrf3sennQxaF9UB/CD9N2cu1dJauTE2EKANvv1zR0LnecTlBoIqNR
+         8Ueg==
+X-Gm-Message-State: APjAAAU1JyKgLn5ShEUE9uJithqPnZZQ2QbgKVrgrH3LrRDQTH14pPaU
+        yURVVgB08E1YcKb37x61MHO2C58h82yGuv6FqE8b0m9e8S8c
+X-Google-Smtp-Source: APXvYqxHzHMo/9j6u9oKQD3Qp+e6EO/ppYpsYS4rrYXtLgLwyo3wIGPM50AmvXp7B1oxIRClwugmz9KQHSDzxiaJ0eT6jWmcatkp
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Received: by 2002:a6b:ed09:: with SMTP id n9mr11381595iog.153.1561023185627;
+ Thu, 20 Jun 2019 02:33:05 -0700 (PDT)
+Date:   Thu, 20 Jun 2019 02:33:05 -0700
+In-Reply-To: <0000000000005463aa0589dcfb85@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000773344058bbe0858@google.com>
+Subject: Re: INFO: trying to register non-static key in usbtouch_reset_resume
+From:   syzbot <syzbot+933daad9be4e67ba91a9@syzkaller.appspotmail.com>
+To:     allison@lohutok.net, andreyknvl@google.com,
+        dmitry.torokhov@gmail.com, gregkh@linuxfoundation.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mpe@ellerman.id.au, rfontana@redhat.com,
+        rydberg@bitmath.org, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+syzbot has found a reproducer for the following crash on:
 
-Hi Greg,
+HEAD commit:    9939f56e usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=100c063aa00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df134eda130bb43a
+dashboard link: https://syzkaller.appspot.com/bug?extid=933daad9be4e67ba91a9
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=144fa5e6a00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d12de6a00000
 
-Just one pending fix this time.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+933daad9be4e67ba91a9@syzkaller.appspotmail.com
 
-Let me know if you need anything to be changed
+usb 1-1: reset low-speed USB device number 2 using dummy_hcd
+INFO: trying to register non-static key.
+the code is fine but needs lockdep annotation.
+turning off the locking correctness validator.
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.2.0-rc5+ #11
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  assign_lock_key kernel/locking/lockdep.c:775 [inline]
+  register_lock_class+0x11ae/0x1240 kernel/locking/lockdep.c:1084
+  __lock_acquire+0x11d/0x5340 kernel/locking/lockdep.c:3674
+  lock_acquire+0x100/0x2b0 kernel/locking/lockdep.c:4303
+  __mutex_lock_common kernel/locking/mutex.c:926 [inline]
+  __mutex_lock+0xf9/0x12b0 kernel/locking/mutex.c:1073
+  usbtouch_reset_resume+0xb1/0x170  
+drivers/input/touchscreen/usbtouchscreen.c:1611
+  usb_resume_interface drivers/usb/core/driver.c:1242 [inline]
+  usb_resume_interface.isra.0+0x184/0x390 drivers/usb/core/driver.c:1210
+  usb_resume_both+0x23d/0x780 drivers/usb/core/driver.c:1412
+  __rpm_callback+0x27e/0x3c0 drivers/base/power/runtime.c:355
+  rpm_callback+0x18f/0x230 drivers/base/power/runtime.c:485
+  rpm_resume+0x10c5/0x1840 drivers/base/power/runtime.c:849
+  __pm_runtime_resume+0x103/0x180 drivers/base/power/runtime.c:1076
+  pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
+  usb_autoresume_device+0x1e/0x60 drivers/usb/core/driver.c:1599
+  usb_remote_wakeup+0x7b/0xb0 drivers/usb/core/hub.c:3601
+  hub_port_connect_change drivers/usb/core/hub.c:5190 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x23d7/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x30b/0x410 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+dummy_hcd dummy_hcd.0: port status 0x00010100 has changes
+dummy_hcd dummy_hcd.0: port status 0x00010101 has changes
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
+usb 1-1: reset low-speed USB device number 2 using dummy_hcd
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
+usb usb1: dummy_bus_suspend
+usb usb1: dummy_bus_resume
+dummy_hcd dummy_hcd.0: port status 0x00010100 has changes
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
+usb 1-1: reset low-speed USB device number 2 using dummy_hcd
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
+usb usb1: dummy_bus_suspend
+usb usb1: dummy_bus_resume
+dummy_hcd dummy_hcd.0: port status 0x00010100 has changes
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
+usb 1-1: reset low-speed USB device number 2 using dummy_hcd
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
+usb usb1: dummy_bus_suspend
+usb usb1: dummy_bus_resume
+dummy_hcd dummy_hcd.0: port status 0x00010100 has changes
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
+usb 1-1: reset low-speed USB device number 2 using dummy_hcd
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
+usb usb1: dummy_bus_suspend
+usb usb1: dummy_bus_resume
+dummy_hcd dummy_hcd.0: port status 0x00010100 has changes
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
+usb 1-1: reset low-speed USB device number 2 using dummy_hcd
+dummy_hcd dummy_hcd.0: port status 0x00100303 has changes
 
-cheers
-
-
-The following changes since commit 9e0babf2c06c73cda2c0cd37a1653d823adb40ec:
-
-  Linux 5.2-rc5 (2019-06-16 08:49:45 -1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/fixes-for-v5.2-rc5
-
-for you to fetch changes up to 42de8afc40c97002fceb500e2331f6a722be3c14:
-
-  usb: dwc2: Use generic PHY width in params setup (2019-06-18 10:27:14 +0300)
-
-----------------------------------------------------------------
-usb: fixes for v5.2-rc5
-
-A single fix to take into account the PHY width during initialization of
-dwc2 driver. This change allows deviceTree to pass PHY width if
-necessary.
-
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-
-----------------------------------------------------------------
-Jules Maselbas (1):
-      usb: dwc2: Use generic PHY width in params setup
-
- drivers/usb/dwc2/params.c   | 9 +++++++++
- drivers/usb/dwc2/platform.c | 9 ---------
- 2 files changed, 9 insertions(+), 9 deletions(-)
-
--- 
-balbi
