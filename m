@@ -2,91 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8959E4C8B4
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 09:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73294C91D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jun 2019 10:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726081AbfFTHyp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jun 2019 03:54:45 -0400
-Received: from mga05.intel.com ([192.55.52.43]:26433 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725912AbfFTHyo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Jun 2019 03:54:44 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jun 2019 00:54:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,396,1557212400"; 
-   d="scan'208";a="186729197"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.164])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Jun 2019 00:54:42 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>, <stern@rowland.harvard.edu>,
-        "Lee, Chiasheng" <chiasheng.lee@intel.com>,
-        "# v4 . 13+" <stable@vger.kernel.org>, Lee@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH] usb: Handle USB3 remote wakeup for LPM enabled devices correctly
-Date:   Thu, 20 Jun 2019 10:56:04 +0300
-Message-Id: <1561017364-24229-1-git-send-email-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
+        id S1731328AbfFTIMq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jun 2019 04:12:46 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:25389 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725925AbfFTIMp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jun 2019 04:12:45 -0400
+X-UUID: b566a0946ec84570b984f1c3fe670ffa-20190620
+X-UUID: b566a0946ec84570b984f1c3fe670ffa-20190620
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1645524193; Thu, 20 Jun 2019 16:12:39 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 20 Jun 2019 16:12:36 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 20 Jun 2019 16:12:35 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] usb: dwc3: remove unused @lock member of dwc3_ep struct
+Date:   Thu, 20 Jun 2019 16:12:31 +0800
+Message-ID: <342af01a252a9ef9457a6a6ec653a40698058fbc.1561018149.git.chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Lee, Chiasheng" <chiasheng.lee@intel.com>
+The member @lock of dwc2_ep struct is only initialized,
+and not used elsewhere, so remove it.
 
-With Link Power Management (LPM) enabled USB3 links transition to low
-power U1/U2 link states from U0 state automatically.
-
-Current hub code detects USB3 remote wakeups by checking if the software
-state still shows suspended, but the link has transitioned from suspended
-U3 to enabled U0 state.
-
-As it takes some time before the hub thread reads the port link state
-after a USB3 wake notification, the link may have transitioned from U0
-to U1/U2, and wake is not detected by hub code.
-
-Fix this by handling U1/U2 states in the same way as U0 in USB3 wakeup
-handling
-
-This patch should be added to stable kernels since 4.13 where LPM was
-kept enabled during suspend/resume
-
-Cc: <stable@vger.kernel.org> # v4.13+
-Signed-off-by: Lee, Chiasheng <chiasheng.lee@intel.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- drivers/usb/core/hub.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/usb/dwc3/core.h   | 2 --
+ drivers/usb/dwc3/gadget.c | 2 --
+ 2 files changed, 4 deletions(-)
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 2f94568..2c8e60c 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3617,6 +3617,7 @@ static int hub_handle_remote_wakeup(struct usb_hub *hub, unsigned int port,
- 	struct usb_device *hdev;
- 	struct usb_device *udev;
- 	int connect_change = 0;
-+	u16 link_state;
- 	int ret;
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index f19cbeb01087..72d28cb14bdf 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -649,7 +649,6 @@ struct dwc3_event_buffer {
+  * @cancelled_list: list of cancelled requests for this endpoint
+  * @pending_list: list of pending requests for this endpoint
+  * @started_list: list of started requests on this endpoint
+- * @lock: spinlock for endpoint request queue traversal
+  * @regs: pointer to first endpoint register
+  * @trb_pool: array of transaction buffers
+  * @trb_pool_dma: dma address of @trb_pool
+@@ -677,7 +676,6 @@ struct dwc3_ep {
+ 	struct list_head	pending_list;
+ 	struct list_head	started_list;
  
- 	hdev = hub->hdev;
-@@ -3626,9 +3627,11 @@ static int hub_handle_remote_wakeup(struct usb_hub *hub, unsigned int port,
- 			return 0;
- 		usb_clear_port_feature(hdev, port, USB_PORT_FEAT_C_SUSPEND);
- 	} else {
-+		link_state = portstatus & USB_PORT_STAT_LINK_STATE;
- 		if (!udev || udev->state != USB_STATE_SUSPENDED ||
--				 (portstatus & USB_PORT_STAT_LINK_STATE) !=
--				 USB_SS_PORT_LS_U0)
-+				(link_state != USB_SS_PORT_LS_U0 &&
-+				 link_state != USB_SS_PORT_LS_U1 &&
-+				 link_state != USB_SS_PORT_LS_U2))
- 			return 0;
+-	spinlock_t		lock;
+ 	void __iomem		*regs;
+ 
+ 	struct dwc3_trb		*trb_pool;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index d67655384eb2..7f75da30caba 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2251,8 +2251,6 @@ static int dwc3_gadget_init_endpoint(struct dwc3 *dwc, u8 epnum)
+ 		dep->endpoint.comp_desc = NULL;
  	}
  
+-	spin_lock_init(&dep->lock);
+-
+ 	if (num == 0)
+ 		ret = dwc3_gadget_init_control_endpoint(dep);
+ 	else if (direction)
 -- 
-2.7.4
+2.21.0
 
