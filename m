@@ -2,80 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDC34E6A6
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 13:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5834E96C
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 15:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbfFULCh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jun 2019 07:02:37 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:52038 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726218AbfFULCh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jun 2019 07:02:37 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 13A8A80580; Fri, 21 Jun 2019 13:02:25 +0200 (CEST)
-Date:   Fri, 21 Jun 2019 13:02:12 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wpan@vger.kernel.org,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: Re: [PATCH v2 12/28] drivers: Introduce class_find_device_by_name()
- helper
-Message-ID: <20190621110212.GE24145@amd>
-References: <1560534863-15115-1-git-send-email-suzuki.poulose@arm.com>
- <1560534863-15115-13-git-send-email-suzuki.poulose@arm.com>
+        id S1726299AbfFUNiY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jun 2019 09:38:24 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:35143 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725975AbfFUNiY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jun 2019 09:38:24 -0400
+Received: by mail-vs1-f66.google.com with SMTP id u124so3846747vsu.2;
+        Fri, 21 Jun 2019 06:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y3RLgKLOFIxvZMzXOwU7F5Yurn0c+NOUw+jUTBkhCgo=;
+        b=mF442hqXyWC8aR9fMe4LMrIymhJ7j/2eWnIxti4QdqJLT13eFvyCmkjK/JQY0DiqUe
+         Rq+PluQKYySpM44e6mT8Fm8qEge3slgpf2R8P8egW9Hyx/L0JR2nPtmBa7matk//sNQW
+         diWPsvfkFSQHfIHvRtYfVlPMNPrI7TOvuYKlGLalZP/wLcqU5gIoyZkN6gaJJeAwupkC
+         8ancpd/cKIYDueEMn3+rvFNdtVbyXc3MqtnyGv0wiwK6rvwrOlACLt9uxgIetlB2wdsF
+         kYVkSBrSp7gkRX0eAVJhu5jnxXWNG+cdqzM9jEDNm/UCzUyCTUvT7BlY0XV2fvJJTLY3
+         J2ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y3RLgKLOFIxvZMzXOwU7F5Yurn0c+NOUw+jUTBkhCgo=;
+        b=sHgOQznNqWDy5VzJfpZkiIc34P26Z7vlgx6G5B3CfVdFupaBJ6KKoT3knEAhpwycMy
+         RCQnXpwjSyAqp/xfye0zEfpi1jv5IH7HXSI2SGguf5sE1zPz79DskOpjRmmAhsYZNn33
+         ODFY0h4DjngHgX/1GqQfETYJjcqrxwK9wsc/ay56Y89gAXltN8AiIZpUccx+bui9pgD5
+         8NI5DLWEo7Z+CLN1UYS4FksgNJnFZznlTjiS0Txs+1bI8CXgqOATN8I+d7vJjQru0HCy
+         HYEnaY4ZSdXepuC/AzrbFMf3hwuE9Kf/++rXLxEpuhjSL35/UXdNUiiGO3kWnNMZdwTr
+         nv8w==
+X-Gm-Message-State: APjAAAWnFMVgKhwboa+EqhexjtaR7XjYc5G/ap+NqRmIIRfSRg0i21SF
+        mCco8960SpkwMniulC9MiEMRlWIkLVGvLbVfsWU=
+X-Google-Smtp-Source: APXvYqwXhGSaeU4cIvOV+lL4GHqdL9eNUIi3gdmDB80kH/6pe8U/CrLJNfH7mhCD+EiR1b9dDIWgOj4eTxHfMp3XkCI=
+X-Received: by 2002:a67:f8d4:: with SMTP id c20mr11787135vsp.239.1561124302979;
+ Fri, 21 Jun 2019 06:38:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="maH1Gajj2nflutpK"
-Content-Disposition: inline
-In-Reply-To: <1560534863-15115-13-git-send-email-suzuki.poulose@arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <1561064991-16874-1-git-send-email-alcooperx@gmail.com>
+ <1561064991-16874-4-git-send-email-alcooperx@gmail.com> <1561095579.32589.3.camel@mhfsdcap03>
+In-Reply-To: <1561095579.32589.3.camel@mhfsdcap03>
+From:   Alan Cooper <alcooperx@gmail.com>
+Date:   Fri, 21 Jun 2019 09:39:08 -0400
+Message-ID: <CAOGqxeWUHbo51k-BpBJ0NT=s1hhJW5TOQ_js2QyqHV=mGbYUEw@mail.gmail.com>
+Subject: Re: [PATCH 3/6] usb: bdc: driver may fail to get USB PHY
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+It's been very useful to have the DEFER debug message so I'd like to
+leave in the check for DEFER. I should not be skipping the clock
+disable, so I'll "goto clk_cleanup" for both cases.
 
---maH1Gajj2nflutpK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks
+Al
 
-On Fri 2019-06-14 18:54:07, Suzuki K Poulose wrote:
-> Add a new wrapper for class_find_device() to search for devices
-> by name and convert the existing users to use the new helper.
->=20
-> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-
-Acked-by: Pavel Machek <pavel@ucw.cz>
-
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---maH1Gajj2nflutpK
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl0MuTQACgkQMOfwapXb+vJ8WgCgnOZkd5moXKRPvuQkd1eU8H06
-grYAn0ag+mNIvHHKvgTnU0Y6VSeNUVZt
-=oxwG
------END PGP SIGNATURE-----
-
---maH1Gajj2nflutpK--
+On Fri, Jun 21, 2019 at 1:39 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+> On Thu, 2019-06-20 at 17:09 -0400, Al Cooper wrote:
+> > Initialization order is important for the USB PHY and the PHY clients.
+> > The init order is based on the build order of the drivers in the
+> > makefiles and the PHY drivers are built early to help with
+> > dependencies, but the new SCMI based clock subsystem has the side
+> > effect of making some additional drivers DEFER until the clock
+> > is ready. This is causing the USB PHY driver to defer which is causing
+> > some PHY clients to fail when they try to get the PHY. The fix is to have
+> > the client driver return DEFER when it's "get phy" routine returns DEFER.
+> >
+> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> > ---
+> >  drivers/usb/gadget/udc/bdc/bdc_core.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
+> > index 11a43de6c1c6..c794890d785b 100644
+> > --- a/drivers/usb/gadget/udc/bdc/bdc_core.c
+> > +++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+> > @@ -543,9 +543,13 @@ static int bdc_probe(struct platform_device *pdev)
+> >                       dev, dev->of_node, phy_num);
+> >               if (IS_ERR(bdc->phys[phy_num])) {
+> >                       ret = PTR_ERR(bdc->phys[phy_num]);
+> > +                     if (ret == -EPROBE_DEFER) {
+> > +                             dev_dbg(bdc->dev, "DEFER, waiting for PHY\n");
+> why not disable clock here? when re-probe, will enable clock again.
+> to me, no need check -EPROBE_DEFFER.
+> > +                             return ret;
+> > +                     }
+>
+> >                       dev_err(bdc->dev,
+> >                               "BDC phy specified but not found:%d\n", ret);
+> > -                     return ret;
+> > +                     goto clk_cleanup;
+> >               }
+> >       }
+> >
+>
+>
