@@ -2,85 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4794E1B7
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 10:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 514E84E1E6
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 10:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726218AbfFUIK3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jun 2019 04:10:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40832 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726045AbfFUIK3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 Jun 2019 04:10:29 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14900208CA;
-        Fri, 21 Jun 2019 08:10:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561104628;
-        bh=DcNtDbXBQYfpKbxtOfWOz5DR9ppohi+L4kdDgJPJvhc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=F4VkM4+9VdK6bb4B/gxyNI5iAVUO0HtGGCkZuSqx7DpCqO1Zq0zcNs9m8CUMs8o8A
-         BvJVWLLdBVHQARe9z+VML0Ur9RatvwdG2k0wp1DYrCCV9M5JJc2Ubq8Eee68nLRfLJ
-         maU6M8dgVVlR/1N1u9lWJTIqQDdhU/DUSl+P17es=
-Date:   Fri, 21 Jun 2019 10:10:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.2-rc6
-Message-ID: <20190621081026.GA27919@kroah.com>
+        id S1726328AbfFUI2h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jun 2019 04:28:37 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:38852 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726241AbfFUI2h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jun 2019 04:28:37 -0400
+Received: by mail-lj1-f196.google.com with SMTP id r9so5228214ljg.5
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jun 2019 01:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Y/byJ90aNdg3Pqz+FT01BYtKKMWzDXjNty5j77MnPKg=;
+        b=dEwA46sKfRRhifrHIC27/RULTXBoKZ4uCeUXCJTtP0a9w+Nzc2qMNvCT8I2KZDdETX
+         O8OWAWY/PITqJTflD8CLvfNKglM3MGJX6rw637njcWHvh52xJV0XaMAHI66NMbd5eMU8
+         n3m5+8rF468uYmQrfXVQOBHXcSHjpokhO1xiGD0c/EIf1BscV2Ba53pKTDpxFSAY/ODO
+         QJK4tHlKietA5IkWOkTRj/qdzEVV0bhWxgVgz5uQOGE0ESEMdLP5QkGNpEPMxONzQk48
+         cDuvzbeWZgFEzH+h0Pa87g3CpqCBRY5XwUosBT1zOg15/+6PjUm1VwHiW2exg8aEWMP8
+         JyCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Y/byJ90aNdg3Pqz+FT01BYtKKMWzDXjNty5j77MnPKg=;
+        b=FOxra4njP3DRdI697Rxkt5mrtCeBn1ikztIncO6zggmqBcH/CMdQgh0iO5jr8NRwtf
+         T3ypUzXtZX9gUmbRfQU2CwghCfmPdpyosaiqri8hHG5AC0kjL4medXXpLfJLLACwwfVd
+         1JaV3vmrc7qpdnNlMqTt9cdV1oDUD+3AjmrNregqEH1n4bJHRA8tR3uYU0ab8+9ai88j
+         7BzrWb2Tv3Dr6x9JLFgdkLC4d0T2jHmOUN7mxzFlKDp/ct7ZPw0G1t0tncqlUAYcqa86
+         D6meUPls/9IIWQBDkQqKISdjJFiQo8zAzCm009GkKzrIyyj++9OZkKm34LWDjIe0FgFQ
+         f/yg==
+X-Gm-Message-State: APjAAAV+4Xl6RlfUEGvyIFfSe94jmLVR7jlcj5qidmIZtWLci4W4CvoG
+        r8lQV/vcwUOFIyCyRFLJbnseHQ==
+X-Google-Smtp-Source: APXvYqwNSL1uHelWPTEWNV2IUQNYffRO96scF8rXsXvJoqpeVar8A9njpmcrYixAWbYA0AoFEG2tvg==
+X-Received: by 2002:a2e:5bdd:: with SMTP id m90mr62098450lje.46.1561105714963;
+        Fri, 21 Jun 2019 01:28:34 -0700 (PDT)
+Received: from [192.168.0.199] ([31.173.80.27])
+        by smtp.gmail.com with ESMTPSA id r17sm291512ljb.77.2019.06.21.01.28.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 21 Jun 2019 01:28:34 -0700 (PDT)
+Subject: Re: [PATCH 6/6] usb: bdc: Update compatible match strings
+To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>
+References: <1561064991-16874-1-git-send-email-alcooperx@gmail.com>
+ <1561064991-16874-7-git-send-email-alcooperx@gmail.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <facac509-1e64-e35b-ee25-5ba265a514c4@cogentembedded.com>
+Date:   Fri, 21 Jun 2019 11:28:33 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <1561064991-16874-7-git-send-email-alcooperx@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 9e0babf2c06c73cda2c0cd37a1653d823adb40ec:
+Hello!
 
-  Linux 5.2-rc5 (2019-06-16 08:49:45 -1000)
+On 21.06.2019 0:09, Al Cooper wrote:
 
-are available in the Git repository at:
+> Remove "brcm,bdc-v0.16" because it was never used on any system.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.2-rc6
+    You're not really removing it, are you?
 
-for you to fetch changes up to d28bdaff5e260852621d45edd3af017cc5d16925:
+> Add "brcm,bdc-udc-v3.1" which exists for any STB system with BDC.
+> 
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> ---
+>   drivers/usb/gadget/udc/bdc/bdc_core.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
+> index 15e28790142d..e2b2628925e6 100644
+> --- a/drivers/usb/gadget/udc/bdc/bdc_core.c
+> +++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+> @@ -644,6 +644,7 @@ static SIMPLE_DEV_PM_OPS(bdc_pm_ops, bdc_suspend,
+>   		bdc_resume);
+>   
+>   static const struct of_device_id bdc_of_match[] = {
+> +	{ .compatible = "brcm,bdc-udc-v3.1" },
+>   	{ .compatible = "brcm,bdc-v0.16" },
+>   	{ .compatible = "brcm,bdc" },
+>   	{ /* sentinel */ }
 
-  Merge tag 'fixes-for-v5.2-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb into usb-linus (2019-06-20 11:56:35 +0200)
-
-----------------------------------------------------------------
-USB fixes for 5.2-rc6
-
-Here are 4 small USB fixes for 5.2-rc6.
-
-They include 2 xhci bugfixes, a chipidea fix, and a small dwc2 fix.
-Nothing major, just nice things to get resolved for reported issues.
-
-All have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Greg Kroah-Hartman (1):
-      Merge tag 'fixes-for-v5.2-rc5' of git://git.kernel.org/.../balbi/usb into usb-linus
-
-Jules Maselbas (1):
-      usb: dwc2: Use generic PHY width in params setup
-
-Mathias Nyman (2):
-      usb: xhci: Don't try to recover an endpoint if port is in error state.
-      xhci: detect USB 3.2 capable host controllers correctly
-
-Peter Chen (1):
-      usb: chipidea: udc: workaround for endpoint conflict issue
-
- drivers/usb/chipidea/udc.c   | 20 ++++++++++++++++++++
- drivers/usb/dwc2/params.c    |  9 +++++++++
- drivers/usb/dwc2/platform.c  |  9 ---------
- drivers/usb/host/xhci-ring.c | 15 ++++++++++++++-
- drivers/usb/host/xhci.c      | 25 ++++++++++++++++++++-----
- drivers/usb/host/xhci.h      |  9 +++++++++
- 6 files changed, 72 insertions(+), 15 deletions(-)
+MBR, Sergei
