@@ -2,68 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3E14E10F
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 09:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4794E1B7
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 10:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726027AbfFUHQ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jun 2019 03:16:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44716 "EHLO mail.kernel.org"
+        id S1726218AbfFUIK3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jun 2019 04:10:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726008AbfFUHQ7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 Jun 2019 03:16:59 -0400
+        id S1726045AbfFUIK3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 Jun 2019 04:10:29 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 290DF206E0;
-        Fri, 21 Jun 2019 07:16:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 14900208CA;
+        Fri, 21 Jun 2019 08:10:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561101418;
-        bh=XSh7O6uMARCWeP2ZP3fy2u27p6zOxwD7t2ypCeLhmO4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2M37qOv5j8DkAHwJ68fWb0m/ErFRiuek3MB9nmD0WMHb/fVxii/49tkChL3852Bmm
-         l9aOf8Dq1ZXF+IpZ3qudmN0FFZK9xf1Rc8xZjYET9bzl/pu7/mbbm6TgKkq6ho6NV9
-         Uw4qC1OzCtsgTIriMD+vhLNzVDvlnk1X0DgSV/Ik=
-Date:   Fri, 21 Jun 2019 09:16:55 +0200
+        s=default; t=1561104628;
+        bh=DcNtDbXBQYfpKbxtOfWOz5DR9ppohi+L4kdDgJPJvhc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=F4VkM4+9VdK6bb4B/gxyNI5iAVUO0HtGGCkZuSqx7DpCqO1Zq0zcNs9m8CUMs8o8A
+         BvJVWLLdBVHQARe9z+VML0Ur9RatvwdG2k0wp1DYrCCV9M5JJc2Ubq8Eee68nLRfLJ
+         maU6M8dgVVlR/1N1u9lWJTIqQDdhU/DUSl+P17es=
+Date:   Fri, 21 Jun 2019 10:10:26 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     dmg@turingmachine.org
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: clean up some of the computations in adu_read
-Message-ID: <20190621071655.GA20682@kroah.com>
-References: <20190621065921.5199-1-dmg@turingmachine.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.2-rc6
+Message-ID: <20190621081026.GA27919@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190621065921.5199-1-dmg@turingmachine.org>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 11:59:21PM -0700, dmg@turingmachine.org wrote:
-> From: Daniel M German <dmg@turingmachine.org>
-> 
-> Replace ?: with min to calculate the number of bytes in the secondary buffer,
-> including changing the data type of data_in_secondary to size_t to be
-> type-consistent. data_in_secondary can never be negative.
-> 
-> Remove some spurious calculations (copy_to_user returns zero on success),
-> making one variable redundant (i)
-> 
-> This change does not alter the functionality of the code.
-> 
-> Signed-off-by: Daniel M German <dmg@turingmachine.org>
-> ---
->  drivers/usb/misc/adutux.c | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
+The following changes since commit 9e0babf2c06c73cda2c0cd37a1653d823adb40ec:
 
-When sending a new version of a patch, you need to version it.  The
-documentation says how to do this, but basically you need a "v2" in the
-subject line ([PATCH v2]) and then below the --- line, you need to say
-what has changed from the previous version.
+  Linux 5.2-rc5 (2019-06-16 08:49:45 -1000)
 
-Can you resend a v3 of this patch that has all of that in it?
+are available in the Git repository at:
 
-thanks,
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.2-rc6
 
-greg k-h
+for you to fetch changes up to d28bdaff5e260852621d45edd3af017cc5d16925:
+
+  Merge tag 'fixes-for-v5.2-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb into usb-linus (2019-06-20 11:56:35 +0200)
+
+----------------------------------------------------------------
+USB fixes for 5.2-rc6
+
+Here are 4 small USB fixes for 5.2-rc6.
+
+They include 2 xhci bugfixes, a chipidea fix, and a small dwc2 fix.
+Nothing major, just nice things to get resolved for reported issues.
+
+All have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Greg Kroah-Hartman (1):
+      Merge tag 'fixes-for-v5.2-rc5' of git://git.kernel.org/.../balbi/usb into usb-linus
+
+Jules Maselbas (1):
+      usb: dwc2: Use generic PHY width in params setup
+
+Mathias Nyman (2):
+      usb: xhci: Don't try to recover an endpoint if port is in error state.
+      xhci: detect USB 3.2 capable host controllers correctly
+
+Peter Chen (1):
+      usb: chipidea: udc: workaround for endpoint conflict issue
+
+ drivers/usb/chipidea/udc.c   | 20 ++++++++++++++++++++
+ drivers/usb/dwc2/params.c    |  9 +++++++++
+ drivers/usb/dwc2/platform.c  |  9 ---------
+ drivers/usb/host/xhci-ring.c | 15 ++++++++++++++-
+ drivers/usb/host/xhci.c      | 25 ++++++++++++++++++++-----
+ drivers/usb/host/xhci.h      |  9 +++++++++
+ 6 files changed, 72 insertions(+), 15 deletions(-)
