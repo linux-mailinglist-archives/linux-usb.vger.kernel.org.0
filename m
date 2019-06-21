@@ -2,338 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4B44EF69
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 21:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC90D4EF91
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 21:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbfFUT2W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jun 2019 15:28:22 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:34396 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725947AbfFUT2W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jun 2019 15:28:22 -0400
-Received: (qmail 11070 invoked by uid 2102); 21 Jun 2019 15:28:21 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 21 Jun 2019 15:28:21 -0400
-Date:   Fri, 21 Jun 2019 15:28:21 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        <patches@opensource.cirrus.com>, <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-In-Reply-To: <1561133817.11118.16.camel@opensource.cirrus.com>
-Message-ID: <Pine.LNX.4.44L0.1906211319260.1471-100000@iolanthe.rowland.org>
+        id S1726043AbfFUTlj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jun 2019 15:41:39 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36034 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725985AbfFUTli (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jun 2019 15:41:38 -0400
+Received: by mail-wr1-f68.google.com with SMTP id n4so6442152wrs.3;
+        Fri, 21 Jun 2019 12:41:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3systKa+Hf4qC2jaG3AjlrFBz0jY6HiFgy5kIInPZyA=;
+        b=NLFcAIzJgQC5f+4dP79+WzoN2aitRR76c7mWvmCCPV4uCawGWkfNCv+sp8q02aMeZ0
+         QLs8F9F5ZxQHU2zMr1pDMg0mJZ9NIdhh0dS+ovi7D6fypSw0WxWOEBv0r2KegNP2cPUT
+         MPEvxb6Ty11Q1G3CueeX4lHLUV3LnS2L//E+LvJgzdLSPkGhNb+VfMITeDOK7fQD5iwq
+         YsrLpfxE3QHD1RAR2Wa82xAU4mvglXsvD/2J1OI0VKiNKP26WO4LfLOLqhZjPrADrH4v
+         QWQ/OZtVZNWrAdDHUqF1UPSTnakH3EedOOt5ZYtWEaYOWTw6vrRdLKUNAa9IeR0woh3c
+         7RBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3systKa+Hf4qC2jaG3AjlrFBz0jY6HiFgy5kIInPZyA=;
+        b=nz4NDUYM3IOo9ycEEiRVIyNZmTMQ9gevibf4INGDIlWORn9gCSRCAEkhfjCu4fKEZq
+         Y3T5jdJ9hPQmgCDJ3dl3J1sFZaiQ+1Q3OJxqUIHABQnRgRHAJ7+MZ/QNiXKVqTIoU+ta
+         A6J3UpUZzo/zJiE3EQ4judNyD7o9Beo8b/Ra6NXykUj2wUtDUaGZwAhXyCQil4AwVF7e
+         ABzzdjizALBsLpIagWYVyY0HsfOj1ozfjejtg6mZM7XUtFcnGX9pvmqIAaaYYZJscFUm
+         iaNQ0yiBiRXNHCesrRAjdUrYquUOC+xyHfAiIafuOxZ3MfDmyHNwFVyS9hUknf60AvKN
+         eZ6Q==
+X-Gm-Message-State: APjAAAVEY/UyHAJjqyhwGD9d7jXi6gQrjcRAlRgpZLKjmIEHzAmqzlug
+        NqLI3Wd4K9YvxZubjDyDqwY=
+X-Google-Smtp-Source: APXvYqxaj/OzULPesBpIwooy+0eOaACaAA/gzFy/CQ5q+tz/e3X0fiWlukbCm3LdvH2dHk7gBO+6ww==
+X-Received: by 2002:adf:f34b:: with SMTP id e11mr11601910wrp.230.1561146096000;
+        Fri, 21 Jun 2019 12:41:36 -0700 (PDT)
+Received: from debian64.daheim (pD9E297F7.dip0.t-ipconnect.de. [217.226.151.247])
+        by smtp.gmail.com with ESMTPSA id t6sm3622441wmb.29.2019.06.21.12.41.34
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 21 Jun 2019 12:41:34 -0700 (PDT)
+Received: from localhost.daheim ([127.0.0.1] helo=debian64.localnet)
+        by debian64.daheim with esmtp (Exim 4.92)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1hePPi-0006bH-8c; Fri, 21 Jun 2019 21:41:34 +0200
+From:   Christian Lamparter <chunkeey@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5]  usb: xhci: Add support for Renesas USB controllers
+Date:   Fri, 21 Jun 2019 21:41:33 +0200
+Message-ID: <11747914.jfR0NPdACA@debian64>
+In-Reply-To: <20190621085913.8722-1-vkoul@kernel.org>
+References: <20190621085913.8722-1-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 21 Jun 2019, Mayuresh Kulkarni wrote:
-
-> Hi Alan,
+On Friday, June 21, 2019 10:59:08 AM CEST Vinod Koul wrote:
+> This series add support for Renesas USB controllers uPD720201 and uPD720202.
+> These require firmware to be loaded and in case devices have ROM those can
+> also be programmed if empty. If ROM is programmed, it runs from ROM as well.
 > 
-> With the suggested modification (of having suspend/resume of usbfs at
-> device level instead of interface level), looks like I am seeing a
-> deadlock described as below -
+> This includes two patches from Christian which supported these controllers
+> w/o ROM and later my patches for ROM support and multiple firmware versions.
 > 
-> Pre-condition: USB device is connected but suspended before running test
-> program.
+> Changes in v2:
+>   used macros for timeout count and delay
+>   removed renesas_fw_alive_check
+>   cleaned renesas_fw_callback
+>   removed recurion for renesas_fw_download
+>   added MODULE_FIRMWARE
+>   added comment for multiple fw order
 > 
-> 1. The test program calls open(/dev/bus/usb/...).
-> 2. This ends up calling usbdev_open().
-> 3. usbdev_open() takes the lock and calls usb_autoresume_device().
-> 4. usb_autoresume_device() calls pm_runtime_get_sync(). Due to _sync
-> version, this call will return after calling the resume call-back of
-> driver (please correct me if wrong).
-> 5. This ends up calling generic_resume() which
-> calls usbfs_notify_resume().
-> 6. Now usbfs_notify_resume() also wants the same lock that usbdev_open()
-> in (3) has already taken.
-
-What lock are you talking about?  usbfs_notify_resume() doesn't take 
-any locks.
-
-> My observation so far is - when the USB device is connected for first
-> time, Android's USB manager server is able to open the device and reads
-> its descriptors using usbfs. But the test is not able to. The change is
-> auto-suspend in between device connect and run of test program.
+> Christian Lamparter (2):
+>   usb: xhci: add firmware loader for uPD720201 and uPD720202 w/o ROM
+>   usb: xhci: handle uPD720201 and uPD720202 w/o ROM
 > 
-> I am still analysing the situation here to see if pre-condition above
-> really makes difference or not. So please take this update with pinch of
-> salt. However, still I wanted send this update and get a quick review to
-> ensure I am not wandering in weeds.
+> Vinod Koul (3):
+>   usb: xhci: Use register defined and field names
+>   usb: xhci: Add ROM loader for uPD720201
+>   usb: xhci: allow multiple firmware versions
+> 
+>  drivers/usb/host/xhci-pci.c | 942 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 942 insertions(+)
+> 
 
-This doesn't sound like a real problem.
+bootlog from a Netgear WNDR4700 with a 32GiB USB3 Stick attached to the 
+Renesas uPD720202K8-711-BAA-A chip.
 
-However, I have been thinking about how to do all this in light of
-Oliver's comments, and it seems like we should make some changes.
+[   13.523094] xhci_hcd 0000:45:00.0: firmware size is not a multiple of 8.
+[   13.868071] xhci_hcd 0000:45:00.0: xHCI Host Controller
+[   13.873325] xhci_hcd 0000:45:00.0: new USB bus registered, assigned bus number 2
+[   13.886296] xhci_hcd 0000:45:00.0: hcc params 0x014051cf hci version 0x100 quirks 0x0000000101000090
+[   13.902719] usbcore: registered new interface driver usb-storage
+[   13.909277] kmodloader: done loading kernel modules from /etc/modules-boot.d/*
+[   13.917336] hub 2-0:1.0: USB hub found
+[   13.921432] init: - preinit -
+[   13.930356] hub 2-0:1.0: 2 ports detected
+[   13.942869] xhci_hcd 0000:45:00.0: xHCI Host Controller
+[   13.948122] xhci_hcd 0000:45:00.0: new USB bus registered, assigned bus number 3
+[   13.955514] xhci_hcd 0000:45:00.0: Host supports USB 3.0  SuperSpeed
+[   13.981227] usb usb3: We don't know the algorithms for LPM for this host, disabling LPM.
+[   13.997141] hub 3-0:1.0: USB hub found
+[   14.004375] hub 3-0:1.0: 2 ports detected
+[   14.375644] usb-storage 1-1:1.0: USB Mass Storage device detected
+[   14.382247] scsi host1: usb-storage 1-1:1.0
+[   14.438959] usb 3-2: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+[   14.467746] usb-storage 3-2:1.0: USB Mass Storage device detected
+[   14.474241] scsi host2: usb-storage 3-2:1.0
+[   15.394562] scsi 1:0:0:0: Direct-Access     Generic  STORAGE DEVICE   9454 PQ: 0 ANSI: 0
+[   15.405183] sd 1:0:0:0: [sda] Attached SCSI removable disk
+[   15.522448] scsi 2:0:0:0: Direct-Access     SanDisk  Ultra            1.00 PQ: 0 ANSI: 6
+[   15.531952] sd 2:0:0:0: [sdb] 60063744 512-byte logical blocks: (30.8 GB/28.6 GiB)
+[   15.541007] sd 2:0:0:0: [sdb] Write Protect is off
+[   15.546808] sd 2:0:0:0: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[   15.574567]  sdb: sdb1
+[   15.580581] sd 2:0:0:0: [sdb] Attached SCSI removable disk
 
-First, let's change the ioctls' names.  Instead of RESUME and SUSPEND,
-I'll call them FORBID_SUSPEND and ALLOW_SUSPEND.  The way they work
-should be clear: ALLOW_SUSPEND will permit the device to be suspended
-but might not cause a suspend to happen immediately.  FORBID_SUSPEND
-will cause an immediate resume if the device is currently suspended and
-will prevent the device from being suspended in the future.  The new 
-names more accurately reflect what the ioctls actually do.
+This is working.
 
-Second, the WAIT_FOR_RESUME ioctl will wait only until a resume has
-occurred more recently than the most recent ALLOW_SUSPEND ioctl.  So
-for example, if the program calls ALLOW_SUSPEND, and the device
-suspends, and then the device resumes, and then the device suspends
-again, and then the program calls WAIT_FOR_RESUME, the ioctl will
-return immediately even though the device is currently suspended.  
-Thus you don't have to worry about missing a remote resume.  This also
-means that when WAIT_FOR_RESUME returns, the program should call
-FORBID_SUSPEND to ensure that the device is active and doesn't go back 
-into suspend.
+Tested-by: Christian Lamparter <chunkeey@gmail.com>
 
-In practice, your program would use the ioctls as follows:
-
-	When the device file is opened, the kernel will automatically
-	do the equivalent of FORBID_SUSPEND (to remain compatible 
-	with the current behavior).
-
-	When the program is ready for the device to suspend, it will
-	call the ALLOW_SUSPEND ioctl.  But it won't cancel the 
-	outstanding URBs; instead it will continue to interact 
-	normally with the device, because the device might not be 
-	suspended for some time.
-
-	When the device does go into suspend, URBs will start failing
-	with an appropriate error code (EHOSTUNREACH, ESHUTDOWN, 
-	EPROTO, or something similar).  In this way the program will
-	realize the device is suspended.  At that point the program
-	should call the WAIT_FOR_RESUME ioctl and stop trying to 
-	communicate with the device.
-
-	When WAIT_FOR_RESUME returns, the program should call the
-	FORBID_SUSPEND ioctl and resume normal communication with the 
-	device.
-
-How does that sound?
-
-The proposed patch is below.
-
-Alan Stern
-
-
-Index: usb-devel/drivers/usb/core/devio.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/devio.c
-+++ usb-devel/drivers/usb/core/devio.c
-@@ -60,14 +60,17 @@ struct usb_dev_state {
- 	struct list_head async_completed;
- 	struct list_head memory_list;
- 	wait_queue_head_t wait;     /* wake up if a request completed */
-+	wait_queue_head_t wait_for_resume;   /* wake up upon runtime resume */
- 	unsigned int discsignr;
- 	struct pid *disc_pid;
- 	const struct cred *cred;
- 	void __user *disccontext;
- 	unsigned long ifclaimed;
- 	u32 disabled_bulk_eps;
--	bool privileges_dropped;
- 	unsigned long interface_allowed_mask;
-+	int not_yet_resumed;
-+	bool suspend_allowed;
-+	bool privileges_dropped;
- };
- 
- struct usb_memory {
-@@ -699,9 +702,7 @@ static void driver_disconnect(struct usb
- 	destroy_async_on_interface(ps, ifnum);
- }
- 
--/* The following routines are merely placeholders.  There is no way
-- * to inform a user task about suspend or resumes.
-- */
-+/* We don't care about suspend/resume of claimed interfaces */
- static int driver_suspend(struct usb_interface *intf, pm_message_t msg)
- {
- 	return 0;
-@@ -712,12 +713,29 @@ static int driver_resume(struct usb_inte
- 	return 0;
- }
- 
-+/* The following routines apply to the entire device, not interfaces */
-+void usbfs_notify_suspend(struct usb_device *udev)
-+{
-+	/* We don't need to handle this */
-+}
-+
-+void usbfs_notify_resume(struct usb_device *udev)
-+{
-+	struct usb_dev_state *ps;
-+
-+	list_for_each_entry(ps, &udev->filelist, list) {
-+		WRITE_ONCE(ps->not_yet_resumed, 0);
-+		wake_up_all(&ps->wait_for_resume);
-+	}
-+}
-+
- struct usb_driver usbfs_driver = {
- 	.name =		"usbfs",
- 	.probe =	driver_probe,
- 	.disconnect =	driver_disconnect,
- 	.suspend =	driver_suspend,
- 	.resume =	driver_resume,
-+	.supports_autosuspend = 1,
- };
- 
- static int claimintf(struct usb_dev_state *ps, unsigned int ifnum)
-@@ -1008,6 +1026,7 @@ static int usbdev_open(struct inode *ino
- 	INIT_LIST_HEAD(&ps->async_completed);
- 	INIT_LIST_HEAD(&ps->memory_list);
- 	init_waitqueue_head(&ps->wait);
-+	init_waitqueue_head(&ps->wait_for_resume);
- 	ps->disc_pid = get_pid(task_pid(current));
- 	ps->cred = get_current_cred();
- 	smp_wmb();
-@@ -1032,8 +1051,11 @@ static int usbdev_release(struct inode *
- 	struct usb_device *dev = ps->dev;
- 	unsigned int ifnum;
- 	struct async *as;
-+	int rc = 0;
- 
- 	usb_lock_device(dev);
-+	if (ps->suspend_allowed)
-+		rc = usb_autoresume_device(dev);
- 	usb_hub_release_all_ports(dev, ps);
- 
- 	list_del_init(&ps->list);
-@@ -1044,7 +1066,8 @@ static int usbdev_release(struct inode *
- 			releaseintf(ps, ifnum);
- 	}
- 	destroy_all_async(ps);
--	usb_autosuspend_device(dev);
-+	if (rc == 0)
-+		usb_autosuspend_device(dev);
- 	usb_unlock_device(dev);
- 	usb_put_dev(dev);
- 	put_pid(ps->disc_pid);
-@@ -2355,6 +2378,45 @@ static int proc_drop_privileges(struct u
- 	return 0;
- }
- 
-+static int proc_forbid_suspend(struct usb_dev_state *ps)
-+{
-+	int ret = 0;
-+
-+	if (ps->suspend_allowed) {
-+		ret = usb_autoresume_device(ps->dev);
-+		if (ret == 0)
-+			ps->suspend_allowed = false;
-+		else if (ret != -ENODEV)
-+			ret = -EIO;
-+	}
-+	return ret;
-+}
-+
-+static int proc_allow_suspend(struct usb_dev_state *ps)
-+{
-+	if (!connected(ps))
-+		return -ENODEV;
-+
-+	WRITE_ONCE(ps->not_yet_resumed, 1);
-+	if (!ps->suspend_allowed) {
-+		usb_autosuspend_device(ps->dev);
-+		ps->suspend_allowed = true;
-+	}
-+	return 0;
-+}
-+
-+static int proc_wait_for_resume(struct usb_dev_state *ps)
-+{
-+	int ret;
-+
-+	usb_unlock_device(ps->dev);
-+	ret = wait_event_interruptible(ps->wait_for_resume,
-+			READ_ONCE(ps->not_yet_resumed) == 0);
-+	usb_lock_device(ps->dev);
-+
-+	return ret;
-+}
-+
- /*
-  * NOTE:  All requests here that have interface numbers as parameters
-  * are assuming that somehow the configuration has been prevented from
-@@ -2549,6 +2611,15 @@ static long usbdev_do_ioctl(struct file
- 	case USBDEVFS_GET_SPEED:
- 		ret = ps->dev->speed;
- 		break;
-+	case USBDEVFS_FORBID_SUSPEND:
-+		ret = proc_forbid_suspend(ps);
-+		break;
-+	case USBDEVFS_ALLOW_SUSPEND:
-+		ret = proc_allow_suspend(ps);
-+		break;
-+	case USBDEVFS_WAIT_FOR_RESUME:
-+		ret = proc_wait_for_resume(ps);
-+		break;
- 	}
- 
-  done:
-@@ -2620,6 +2691,8 @@ static void usbdev_remove(struct usb_dev
- 		ps = list_entry(udev->filelist.next, struct usb_dev_state, list);
- 		destroy_all_async(ps);
- 		wake_up_all(&ps->wait);
-+		WRITE_ONCE(ps->not_yet_resumed, 0);
-+		wake_up_all(&ps->wait_for_resume);
- 		list_del_init(&ps->list);
- 		if (ps->discsignr) {
- 			clear_siginfo(&sinfo);
-Index: usb-devel/drivers/usb/core/generic.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/generic.c
-+++ usb-devel/drivers/usb/core/generic.c
-@@ -257,6 +257,8 @@ static int generic_suspend(struct usb_de
- 	else
- 		rc = usb_port_suspend(udev, msg);
- 
-+	if (rc == 0)
-+		usbfs_notify_suspend(udev);
- 	return rc;
- }
- 
-@@ -273,6 +275,9 @@ static int generic_resume(struct usb_dev
- 		rc = hcd_bus_resume(udev, msg);
- 	else
- 		rc = usb_port_resume(udev, msg);
-+
-+	if (rc == 0)
-+		usbfs_notify_resume(udev);
- 	return rc;
- }
- 
-Index: usb-devel/drivers/usb/core/usb.h
-===================================================================
---- usb-devel.orig/drivers/usb/core/usb.h
-+++ usb-devel/drivers/usb/core/usb.h
-@@ -95,6 +95,9 @@ extern int usb_runtime_idle(struct devic
- extern int usb_enable_usb2_hardware_lpm(struct usb_device *udev);
- extern int usb_disable_usb2_hardware_lpm(struct usb_device *udev);
- 
-+extern void usbfs_notify_suspend(struct usb_device *udev);
-+extern void usbfs_notify_resume(struct usb_device *udev);
-+
- #else
- 
- static inline int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
-Index: usb-devel/include/uapi/linux/usbdevice_fs.h
-===================================================================
---- usb-devel.orig/include/uapi/linux/usbdevice_fs.h
-+++ usb-devel/include/uapi/linux/usbdevice_fs.h
-@@ -197,5 +197,8 @@ struct usbdevfs_streams {
- #define USBDEVFS_FREE_STREAMS      _IOR('U', 29, struct usbdevfs_streams)
- #define USBDEVFS_DROP_PRIVILEGES   _IOW('U', 30, __u32)
- #define USBDEVFS_GET_SPEED         _IO('U', 31)
-+#define USBDEVFS_FORBID_SUSPEND    _IO('U', 32)
-+#define USBDEVFS_ALLOW_SUSPEND     _IO('U', 33)
-+#define USBDEVFS_WAIT_FOR_RESUME   _IO('U', 34)
- 
- #endif /* _UAPI_LINUX_USBDEVICE_FS_H */
 
