@@ -2,88 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B42394E01E
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 07:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2624F4E07B
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jun 2019 08:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726132AbfFUFjz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jun 2019 01:39:55 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:47594 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725989AbfFUFjy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jun 2019 01:39:54 -0400
-X-UUID: 37acaca11a7f47e8b645bf0aa6b4fec9-20190621
-X-UUID: 37acaca11a7f47e8b645bf0aa6b4fec9-20190621
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 2142318987; Fri, 21 Jun 2019 13:39:44 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
- (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 21 Jun
- 2019 13:39:41 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 21 Jun 2019 13:39:39 +0800
-Message-ID: <1561095579.32589.3.camel@mhfsdcap03>
-Subject: Re: [PATCH 3/6] usb: bdc: driver may fail to get USB PHY
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Al Cooper <alcooperx@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 21 Jun 2019 13:39:39 +0800
-In-Reply-To: <1561064991-16874-4-git-send-email-alcooperx@gmail.com>
-References: <1561064991-16874-1-git-send-email-alcooperx@gmail.com>
-         <1561064991-16874-4-git-send-email-alcooperx@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726198AbfFUGRE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jun 2019 02:17:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57300 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726008AbfFUGRE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 Jun 2019 02:17:04 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29FE4208C3;
+        Fri, 21 Jun 2019 06:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561097823;
+        bh=LtLsHcIO+Y4Hyt28BA0WwAx1H0XSf13sggiAgxBdccw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QJk4FYEmfmVKKm8kTizUde/fxyLUOgiQipCTYfts/LhsBphciUJOo7Xti8jk2PT9g
+         MgCIesIkKmPQa0zKtuchCNLxjycN0PckYR5o7gL9f7dMMQdNWN6spf9kor6zq+AuIt
+         /2CmjL2/978ZxIYAb8QlSyyjiP+C0UN/zPzGe4OY=
+Date:   Fri, 21 Jun 2019 08:16:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     dmg <dmg@turingmachine.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [usb:usb-testing 46/46] drivers/usb//misc/adutux.c:375:4:
+ warning: format '%lu' expects argument of type 'long unsigned int', but
+ argument 5 has type 'size_t {aka unsigned int}'
+Message-ID: <20190621061613.GA29018@kroah.com>
+References: <201906202227.KeVsA81p%lkp@intel.com>
+ <87wohgs3lh.fsf@mn.cs.uvic.ca>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: 43013DC376CE0C2D6BA9A2FFAED04B892277477DCD77C754F66B812CB2D1E7A02000:8
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wohgs3lh.fsf@mn.cs.uvic.ca>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2019-06-20 at 17:09 -0400, Al Cooper wrote:
-> Initialization order is important for the USB PHY and the PHY clients.
-> The init order is based on the build order of the drivers in the
-> makefiles and the PHY drivers are built early to help with
-> dependencies, but the new SCMI based clock subsystem has the side
-> effect of making some additional drivers DEFER until the clock
-> is ready. This is causing the USB PHY driver to defer which is causing
-> some PHY clients to fail when they try to get the PHY. The fix is to have
-> the client driver return DEFER when it's "get phy" routine returns DEFER.
+On Thu, Jun 20, 2019 at 08:01:30AM -0700, dmg wrote:
 > 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> ---
->  drivers/usb/gadget/udc/bdc/bdc_core.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> kbuild test robot <lkp@intel.com> writes:
 > 
-> diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
-> index 11a43de6c1c6..c794890d785b 100644
-> --- a/drivers/usb/gadget/udc/bdc/bdc_core.c
-> +++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
-> @@ -543,9 +543,13 @@ static int bdc_probe(struct platform_device *pdev)
->  			dev, dev->of_node, phy_num);
->  		if (IS_ERR(bdc->phys[phy_num])) {
->  			ret = PTR_ERR(bdc->phys[phy_num]);
-> +			if (ret == -EPROBE_DEFER) {
-> +				dev_dbg(bdc->dev, "DEFER, waiting for PHY\n");
-why not disable clock here? when re-probe, will enable clock again.
-to me, no need check -EPROBE_DEFFER.
-> +				return ret;
-> +			}
+> [...]
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> >    In file included from include/linux/printk.h:332:0,
+> >                     from include/linux/kernel.h:15,
+> >                     from drivers/usb//misc/adutux.c:19:
+> >    drivers/usb//misc/adutux.c: In function 'adu_read':
+> >>> drivers/usb//misc/adutux.c:375:4: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'size_t {aka unsigned int}' [-Wformat=]
+> >        "%s : while, data_in_secondary=%lu, status=%d\n",
+> 
+> I am not sure what is the best way to address this warning.
+> 
+> size_t seems to be architecture dependent. On my computer (intel64)
+> size_t is long unsigned int, but in this test it is int unsigned.
+> 
+> Are there any suggestions on what is the best way to deal with this?
+> 
+> casting size_t to long unsigned int will work, but it sounds kind of
+> ugly.
 
->  			dev_err(bdc->dev,
->  				"BDC phy specified but not found:%d\n", ret);
-> -			return ret;
-> +			goto clk_cleanup;
->  		}
->  	}
->  
+As others have pointed out, there's a printk modifier for this.
 
+I'll go drop your patch from my testing branch now, please fix up your
+patch and resend.
 
+thanks,
+
+greg k-h
