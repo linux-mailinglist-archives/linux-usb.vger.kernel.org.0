@@ -2,223 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 825D44F547
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2019 12:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44D14F6F8
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2019 18:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726272AbfFVKlX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Jun 2019 06:41:23 -0400
-Received: from mga17.intel.com ([192.55.52.151]:32731 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726112AbfFVKlX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 22 Jun 2019 06:41:23 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jun 2019 03:41:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,404,1557212400"; 
-   d="scan'208";a="165902019"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Jun 2019 03:41:19 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1hedSQ-000CZ2-Rv; Sat, 22 Jun 2019 18:41:18 +0800
-Date:   Sat, 22 Jun 2019 18:40:35 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Suwan Kim <suwan.kim027@gmail.com>
-Cc:     kbuild-all@01.org, shuah@kernel.org, stern@rowland.harvard.edu,
-        valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suwan Kim <suwan.kim027@gmail.com>
-Subject: Re: [PATCH 2/2] usbip: Implement SG support to vhci
-Message-ID: <201906221828.RndHkR8Y%lkp@intel.com>
-References: <20190621174553.28862-3-suwan.kim027@gmail.com>
+        id S1726482AbfFVQ3K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Jun 2019 12:29:10 -0400
+Received: from sonic316-11.consmr.mail.bf2.yahoo.com ([74.6.130.121]:43826
+        "EHLO sonic316-11.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726487AbfFVQ3J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Jun 2019 12:29:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220948; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=Sqmma7rQCC9csXbuiUU3W2/3JNoNH7S8264Vtax3p6vjP/GOy3xpD3wbU2PRR9kt9Hpkf+FIWW9PMCnOCaw1O79buHof/+e4XCSgtAjG8InDhCml6NU6QqPjKJ3zDc6ntgnpVqWtJnbhtjoUqIbv1W6GU8NTi8qVdCcmhrTc1IZ6aiOxpvBar7FQmN3jAwZcqruMWVYBgbk1LAoNqGvQ8jjOiTjNhCDJjpcLi94EE60gk+qIfYgu1AQDdd9wVo7X6i3XlVR9KCYw0l7ikZmlDSVkcSrrmJBlognD3+QlW4wko0RiyOGAXy+sEMAa8UXhFfxEEhf+A0WfqKBKwkVQbg==
+X-YMail-OSG: 3TA6aNEVM1mHk4tfSNROwYxIcekGBuzt5YSl8uAf.0_HHQ2LGDBhX2FGT2.Do_z
+ _0DV280q.YGRxDLoRDSJM82e2d5hsgoPZVcKxWsle6Z3oHX8Omo6hY9bu5QjJLY68zQNKFXygJQb
+ l1z62dHRy69xOFvl6tq.81EbMsOh1_cirrcCk2fMX_Jmwx0sebG__1rhE6wzzo_NDP9VbvIqZ9bR
+ 2icQk1E4jS_eT.9i5S8Sf0xsdShl9dMibpAXRU93yOYuHTQIa_P77tZTcStgCsIVxKiDvC3a0NxY
+ 8gZtRhwFdS641nFzLb368UTov.mB4xMHIDhTJv9NazaTg1j8sw18ET29s.TqlBmXHg8vLU94qBpd
+ 5PlUttniCcoNFEJpnLF3UUydECDiL8Z11cc18YJXwsIeDfFkYqHGX5XdA4jNj054mfKUIhoNEakn
+ WUKps59xvPMOhDCVBujS9v_vJClG4fXrBtjl.W_LQqwsSCutxIcdvaqHEtURhc6MkAEPdp4bTGI.
+ srA9smb.rYGHYAQmfGBYSrMpzCORaFwD3sLBOdwCdBjEVVdu.sBEOGddWsx2T8AZRYYy5nvR9Foz
+ bPsz41tE4__SqGjxrktEJ2_s2wIQAUza2deZFDGXc6T62eXwgZpA4Pp2nGTmGbFQ6h4nAMd51HJh
+ T3GzQn8s4GOn.0BKRwZDpwf7w10rv6JPk5nAgLZOaX7LfFs2yeq7fnFrg4OCOiG9MCMxrUNq6gf7
+ VomHdE0MTMCDmL3Ebk4K0YUhXaCTht27MRDaoJusaRVRGavzgn0vj3Z4n7xxu27l7AAqrNZTRmUI
+ n_b8fWLMzkIFoI7ZcmL_O5d2bYctv7x0WqIS4U6onMjRr4HtPSPFTejqwRtmzChG01EgeDt1Xu9J
+ 3fp8ciCxthupmhAtFqCrukMze7VttucN.DpeM8bKmVw1EDgn.s_L.L9fVdDwg2umGkLNazDxoP0_
+ dzbgtjASRdO1.JaxkowN5gRT6rna4oVoAmbHsjQ4rLTjBWSWz8ZqQDlV43apY.buigbJvn4Qmvf1
+ GxhsPAlHlnnGfjZ9pr3BSAVXKd_Qs83vYaBOYxWdXDlwxBl9.1.bnCTqFBLXCTND1BZASE2pli5W
+ fu842ttK3BMCdw5COU_fvmE4HTFnTUQ5tN2a6KHryWZiInkZpWdo8I9xFucw8IlPI3qY2rDSegZk
+ LLEiGCawsrUj04Yg3uv6LVIzJaVvTytAzboyOeQVTgoj.0EfkvEtgpXm3
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:29:08 +0000
+Date:   Sat, 22 Jun 2019 16:29:03 +0000 (UTC)
+From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
+Reply-To: miss.fmayusuf11@gmail.com
+Message-ID: <1743094696.311303.1561220943310@mail.yahoo.com>
+Subject: From:Miss: Fatima Yusuf.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190621174553.28862-3-suwan.kim027@gmail.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Suwan,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on v5.2-rc5 next-20190621]
-[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
-
-url:    https://github.com/0day-ci/linux/commits/Suwan-Kim/usbip-Skip-DMA-mapping-and-unmapping-for-urb-at-vhci/20190622-130016
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.1-rc1-7-g2b96cd8-dirty
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
-
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
+From:Miss: Fatima Yusuf.
 
-   drivers/usb/usbip/usbip_common.c:419:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] command @@    got restrunsigned int [usertype] command @@
-   drivers/usb/usbip/usbip_common.c:419:33: sparse:    expected unsigned int [usertype] command
-   drivers/usb/usbip/usbip_common.c:419:33: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:420:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] seqnum @@    got restrunsigned int [usertype] seqnum @@
-   drivers/usb/usbip/usbip_common.c:420:33: sparse:    expected unsigned int [usertype] seqnum
-   drivers/usb/usbip/usbip_common.c:420:33: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:421:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] devid @@    got restrunsigned int [usertype] devid @@
-   drivers/usb/usbip/usbip_common.c:421:33: sparse:    expected unsigned int [usertype] devid
-   drivers/usb/usbip/usbip_common.c:421:33: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:422:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] direction @@    got restrunsigned int [usertype] direction @@
-   drivers/usb/usbip/usbip_common.c:422:33: sparse:    expected unsigned int [usertype] direction
-   drivers/usb/usbip/usbip_common.c:422:33: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:423:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] ep @@    got restrunsigned int [usertype] ep @@
-   drivers/usb/usbip/usbip_common.c:423:33: sparse:    expected unsigned int [usertype] ep
-   drivers/usb/usbip/usbip_common.c:423:33: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:437:37: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] transfer_flags @@    got restrunsigned int [usertype] transfer_flags @@
-   drivers/usb/usbip/usbip_common.c:437:37: sparse:    expected unsigned int [usertype] transfer_flags
-   drivers/usb/usbip/usbip_common.c:437:37: sparse:    got restricted __be32 [usertype]
->> drivers/usb/usbip/usbip_common.c:438:30: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] num_sgs @@    got restrunsigned int [usertype] num_sgs @@
->> drivers/usb/usbip/usbip_common.c:438:30: sparse:    expected unsigned int [usertype] num_sgs
-   drivers/usb/usbip/usbip_common.c:438:30: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:477:29: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] seqnum @@    got restrunsigned int [usertype] seqnum @@
-   drivers/usb/usbip/usbip_common.c:477:29: sparse:    expected unsigned int [usertype] seqnum
-   drivers/usb/usbip/usbip_common.c:477:29: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:529:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] offset @@    got restrunsigned int [usertype] offset @@
-   drivers/usb/usbip/usbip_common.c:529:33: sparse:    expected unsigned int [usertype] offset
-   drivers/usb/usbip/usbip_common.c:529:33: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:530:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] length @@    got restrunsigned int [usertype] length @@
-   drivers/usb/usbip/usbip_common.c:530:33: sparse:    expected unsigned int [usertype] length
-   drivers/usb/usbip/usbip_common.c:530:33: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:531:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] status @@    got restrunsigned int [usertype] status @@
-   drivers/usb/usbip/usbip_common.c:531:33: sparse:    expected unsigned int [usertype] status
-   drivers/usb/usbip/usbip_common.c:531:33: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:532:36: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] actual_length @@    got restrunsigned int [usertype] actual_length @@
-   drivers/usb/usbip/usbip_common.c:532:36: sparse:    expected unsigned int [usertype] actual_length
-   drivers/usb/usbip/usbip_common.c:532:36: sparse:    got restricted __be32 [usertype]
-   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
-   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
+For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
 
-vim +438 drivers/usb/usbip/usbip_common.c
+I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
 
-   415	
-   416	static void correct_endian_basic(struct usbip_header_basic *base, int send)
-   417	{
-   418		if (send) {
-   419			base->command	= cpu_to_be32(base->command);
-   420			base->seqnum	= cpu_to_be32(base->seqnum);
-   421			base->devid	= cpu_to_be32(base->devid);
-   422			base->direction	= cpu_to_be32(base->direction);
-   423			base->ep	= cpu_to_be32(base->ep);
-   424		} else {
-   425			base->command	= be32_to_cpu(base->command);
-   426			base->seqnum	= be32_to_cpu(base->seqnum);
-   427			base->devid	= be32_to_cpu(base->devid);
-   428			base->direction	= be32_to_cpu(base->direction);
- > 429			base->ep	= be32_to_cpu(base->ep);
-   430		}
-   431	}
-   432	
-   433	static void correct_endian_cmd_submit(struct usbip_header_cmd_submit *pdu,
-   434					      int send)
-   435	{
-   436		if (send) {
-   437			pdu->transfer_flags = cpu_to_be32(pdu->transfer_flags);
- > 438			pdu->num_sgs = cpu_to_be32(pdu->num_sgs);
-   439	
-   440			cpu_to_be32s(&pdu->transfer_buffer_length);
-   441			cpu_to_be32s(&pdu->start_frame);
-   442			cpu_to_be32s(&pdu->number_of_packets);
-   443			cpu_to_be32s(&pdu->interval);
-   444		} else {
-   445			pdu->transfer_flags = be32_to_cpu(pdu->transfer_flags);
-   446			pdu->num_sgs = be32_to_cpu(pdu->num_sgs);
-   447	
-   448			be32_to_cpus(&pdu->transfer_buffer_length);
-   449			be32_to_cpus(&pdu->start_frame);
-   450			be32_to_cpus(&pdu->number_of_packets);
-   451			be32_to_cpus(&pdu->interval);
-   452		}
-   453	}
-   454	
+Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
 
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
+
+I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
+
+My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
+
+I am waiting to hear from you.
+Yours Sincerely,
+Miss.Fatima Yusuf.
