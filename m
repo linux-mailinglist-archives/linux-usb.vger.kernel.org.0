@@ -2,53 +2,223 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B614F2E6
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2019 02:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825D44F547
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jun 2019 12:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbfFVAsh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jun 2019 20:48:37 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56667 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726058AbfFVAsh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jun 2019 20:48:37 -0400
-Received: (qmail 32664 invoked by uid 500); 21 Jun 2019 20:48:36 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 21 Jun 2019 20:48:36 -0400
-Date:   Fri, 21 Jun 2019 20:48:36 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Harutyun Khachatryan <kh_harut@mail.ru>
-cc:     USB list <linux-usb@vger.kernel.org>
-Subject: Re: USB bug
-In-Reply-To: <0de30c70-76b0-863c-98c5-2a465d1ef399@mail.ru>
-Message-ID: <Pine.LNX.4.44L0.1906212042580.32253-100000@netrider.rowland.org>
+        id S1726272AbfFVKlX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Jun 2019 06:41:23 -0400
+Received: from mga17.intel.com ([192.55.52.151]:32731 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726112AbfFVKlX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 22 Jun 2019 06:41:23 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jun 2019 03:41:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,404,1557212400"; 
+   d="scan'208";a="165902019"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Jun 2019 03:41:19 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1hedSQ-000CZ2-Rv; Sat, 22 Jun 2019 18:41:18 +0800
+Date:   Sat, 22 Jun 2019 18:40:35 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Suwan Kim <suwan.kim027@gmail.com>
+Cc:     kbuild-all@01.org, shuah@kernel.org, stern@rowland.harvard.edu,
+        valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suwan Kim <suwan.kim027@gmail.com>
+Subject: Re: [PATCH 2/2] usbip: Implement SG support to vhci
+Message-ID: <201906221828.RndHkR8Y%lkp@intel.com>
+References: <20190621174553.28862-3-suwan.kim027@gmail.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190621174553.28862-3-suwan.kim027@gmail.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 22 Jun 2019, Harutyun Khachatryan wrote:
+Hi Suwan,
 
-> Dear Alan Stern,
-> 
-> I thought that I should wait Mathias's response. I am terribly sorry for 
-> that. I am sending dmesg log and trace content as you asked. I tried the 
-> procedure on kernel 5.1.12-050112-generic since it's most recent now and 
-> the bug still exists in it. If you need for 5.0 write me back. Thank you 
-> in advance.
+Thank you for the patch! Perhaps something to improve:
 
-The linux-usb mailing list does not accept email messages in HTML 
-format.  Please resend your message using plain text only.
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on v5.2-rc5 next-20190621]
+[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
 
-Also, I'm not the xHCI maintainer -- Mathias is.  You should send your 
-messages to him along with (or instead of) me.
+url:    https://github.com/0day-ci/linux/commits/Suwan-Kim/usbip-Skip-DMA-mapping-and-unmapping-for-urb-at-vhci/20190622-130016
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-rc1-7-g2b96cd8-dirty
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
-Finally, posting the logs isn't very useful if you don't say what you 
-were doing at the time.  When you resend your message, include a 
-detailed description of exactly what you did while the logs were being 
-collected.
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-Alan Stern
 
+sparse warnings: (new ones prefixed by >>)
+
+   drivers/usb/usbip/usbip_common.c:419:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] command @@    got restrunsigned int [usertype] command @@
+   drivers/usb/usbip/usbip_common.c:419:33: sparse:    expected unsigned int [usertype] command
+   drivers/usb/usbip/usbip_common.c:419:33: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:420:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] seqnum @@    got restrunsigned int [usertype] seqnum @@
+   drivers/usb/usbip/usbip_common.c:420:33: sparse:    expected unsigned int [usertype] seqnum
+   drivers/usb/usbip/usbip_common.c:420:33: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:421:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] devid @@    got restrunsigned int [usertype] devid @@
+   drivers/usb/usbip/usbip_common.c:421:33: sparse:    expected unsigned int [usertype] devid
+   drivers/usb/usbip/usbip_common.c:421:33: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:422:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] direction @@    got restrunsigned int [usertype] direction @@
+   drivers/usb/usbip/usbip_common.c:422:33: sparse:    expected unsigned int [usertype] direction
+   drivers/usb/usbip/usbip_common.c:422:33: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:423:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] ep @@    got restrunsigned int [usertype] ep @@
+   drivers/usb/usbip/usbip_common.c:423:33: sparse:    expected unsigned int [usertype] ep
+   drivers/usb/usbip/usbip_common.c:423:33: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:425:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:426:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:427:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:428:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:429:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:437:37: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] transfer_flags @@    got restrunsigned int [usertype] transfer_flags @@
+   drivers/usb/usbip/usbip_common.c:437:37: sparse:    expected unsigned int [usertype] transfer_flags
+   drivers/usb/usbip/usbip_common.c:437:37: sparse:    got restricted __be32 [usertype]
+>> drivers/usb/usbip/usbip_common.c:438:30: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] num_sgs @@    got restrunsigned int [usertype] num_sgs @@
+>> drivers/usb/usbip/usbip_common.c:438:30: sparse:    expected unsigned int [usertype] num_sgs
+   drivers/usb/usbip/usbip_common.c:438:30: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:445:39: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:446:32: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:477:29: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] seqnum @@    got restrunsigned int [usertype] seqnum @@
+   drivers/usb/usbip/usbip_common.c:477:29: sparse:    expected unsigned int [usertype] seqnum
+   drivers/usb/usbip/usbip_common.c:477:29: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:479:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:529:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] offset @@    got restrunsigned int [usertype] offset @@
+   drivers/usb/usbip/usbip_common.c:529:33: sparse:    expected unsigned int [usertype] offset
+   drivers/usb/usbip/usbip_common.c:529:33: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:530:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] length @@    got restrunsigned int [usertype] length @@
+   drivers/usb/usbip/usbip_common.c:530:33: sparse:    expected unsigned int [usertype] length
+   drivers/usb/usbip/usbip_common.c:530:33: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:531:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] status @@    got restrunsigned int [usertype] status @@
+   drivers/usb/usbip/usbip_common.c:531:33: sparse:    expected unsigned int [usertype] status
+   drivers/usb/usbip/usbip_common.c:531:33: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:532:36: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] actual_length @@    got restrunsigned int [usertype] actual_length @@
+   drivers/usb/usbip/usbip_common.c:532:36: sparse:    expected unsigned int [usertype] actual_length
+   drivers/usb/usbip/usbip_common.c:532:36: sparse:    got restricted __be32 [usertype]
+   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:534:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:535:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:536:35: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
+   drivers/usb/usbip/usbip_common.c:537:38: sparse: sparse: cast to restricted __be32
+
+vim +438 drivers/usb/usbip/usbip_common.c
+
+   415	
+   416	static void correct_endian_basic(struct usbip_header_basic *base, int send)
+   417	{
+   418		if (send) {
+   419			base->command	= cpu_to_be32(base->command);
+   420			base->seqnum	= cpu_to_be32(base->seqnum);
+   421			base->devid	= cpu_to_be32(base->devid);
+   422			base->direction	= cpu_to_be32(base->direction);
+   423			base->ep	= cpu_to_be32(base->ep);
+   424		} else {
+   425			base->command	= be32_to_cpu(base->command);
+   426			base->seqnum	= be32_to_cpu(base->seqnum);
+   427			base->devid	= be32_to_cpu(base->devid);
+   428			base->direction	= be32_to_cpu(base->direction);
+ > 429			base->ep	= be32_to_cpu(base->ep);
+   430		}
+   431	}
+   432	
+   433	static void correct_endian_cmd_submit(struct usbip_header_cmd_submit *pdu,
+   434					      int send)
+   435	{
+   436		if (send) {
+   437			pdu->transfer_flags = cpu_to_be32(pdu->transfer_flags);
+ > 438			pdu->num_sgs = cpu_to_be32(pdu->num_sgs);
+   439	
+   440			cpu_to_be32s(&pdu->transfer_buffer_length);
+   441			cpu_to_be32s(&pdu->start_frame);
+   442			cpu_to_be32s(&pdu->number_of_packets);
+   443			cpu_to_be32s(&pdu->interval);
+   444		} else {
+   445			pdu->transfer_flags = be32_to_cpu(pdu->transfer_flags);
+   446			pdu->num_sgs = be32_to_cpu(pdu->num_sgs);
+   447	
+   448			be32_to_cpus(&pdu->transfer_buffer_length);
+   449			be32_to_cpus(&pdu->start_frame);
+   450			be32_to_cpus(&pdu->number_of_packets);
+   451			be32_to_cpus(&pdu->interval);
+   452		}
+   453	}
+   454	
+
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
