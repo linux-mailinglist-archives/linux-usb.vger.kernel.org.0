@@ -2,93 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC9F50115
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 07:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A079501B7
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 07:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbfFXFlw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 01:41:52 -0400
-Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:41698 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726223AbfFXFlw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 01:41:52 -0400
-Received: from mailhost.synopsys.com (unknown [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D9084C01C4;
-        Mon, 24 Jun 2019 05:41:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1561354911; bh=E1ERrISIW+x8N6/XjWkPCVdmvp0aiB6uJtVc4k+4tXo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=AJakDklB8qWucLSsOgZ7kcmOZ6Sd0wVHNpfzhJg27zkf+9MeY50eFDFnlhPkeRUCM
-         NsAHHH62qGvuMQA3TCQHdQ6F2WNUdq6O7en9wPPCFVRbuMp2Bv7lKP4VoddNKynS9o
-         qDS05iIumGYXIsOvKTqq4kZK+pZcqyNkYoF1x2hxyILh9iNAfEvXRcL6javwhFxR3K
-         LirNPYlsPwJc9TeWw/NgXFb7ZiEIZniIZftaqb97JQZ59uvXfi7/Wpqgz2igr3MNrx
-         6nAL523LjnSJrMhc4jCg1Tqb1B9GbbkURgkDznKe0UNnz+ciIXjYGp3seVWsGzHye1
-         4X8dgja8PUrxw==
-Received: from [10.116.70.206] (unknown [10.116.70.206])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id EB20DA0231;
-        Mon, 24 Jun 2019 05:41:47 +0000 (UTC)
-Subject: Re: [PATCH] usb: dwc2: use a longer AHB idle timeout in
- dwc2_core_reset()
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>
-References: <20190620175022.29348-1-martin.blumenstingl@googlemail.com>
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Message-ID: <a7647aea-b3e6-b785-8476-1851f50beff1@synopsys.com>
-Date:   Mon, 24 Jun 2019 09:41:46 +0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726399AbfFXF6U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 01:58:20 -0400
+Received: from mga11.intel.com ([192.55.52.93]:34567 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725782AbfFXF6U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Jun 2019 01:58:20 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jun 2019 22:58:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,411,1557212400"; 
+   d="scan'208";a="161523545"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Jun 2019 22:58:17 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Ran Wang <ran.wang_1@nxp.com>, Rob Herring <robh+dt@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list\:DESIGNWARE USB3 DRD IP DRIVER" 
+        <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Leo Li <leoyang.li@nxp.com>
+Subject: RE: [PATCH] usb: dwc3: Enable the USB snooping
+In-Reply-To: <VE1PR04MB66557834D3588FC8B558950AF1E00@VE1PR04MB6655.eurprd04.prod.outlook.com>
+References: <20171115060459.45375-1-ran.wang_1@nxp.com> <87ineb9b5v.fsf@linux.intel.com> <VI1PR04MB1504776EF3D4D8C374F0C069F1290@VI1PR04MB1504.eurprd04.prod.outlook.com> <87shdfet90.fsf@linux.intel.com> <AM5PR0402MB28654EBE2D431CC2F8061CF8F11E0@AM5PR0402MB2865.eurprd04.prod.outlook.com> <87k1eaanjw.fsf@linux.intel.com> <AM5PR0402MB2865F3735D808E1BC9F67968F1180@AM5PR0402MB2865.eurprd04.prod.outlook.com> <AM5PR0402MB2865D0F0E2B4F65C86D051F8F1140@AM5PR0402MB2865.eurprd04.prod.outlook.com> <87o92wgyqj.fsf@linux.intel.com> <VE1PR04MB66557834D3588FC8B558950AF1E00@VE1PR04MB6655.eurprd04.prod.outlook.com>
+Date:   Mon, 24 Jun 2019 08:58:16 +0300
+Message-ID: <87v9wvsex3.fsf@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20190620175022.29348-1-martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/20/2019 9:51 PM, Martin Blumenstingl wrote:
-> Use a 10000us AHB idle timeout in dwc2_core_reset() and make it
-> consistent with the other "wait for AHB master IDLE state" ocurrences.
-> 
-> This fixes a problem for me where dwc2 would not want to initialize when
-> updating to 4.19 on a MIPS Lantiq VRX200 SoC. dwc2 worked fine with
-> 4.14.
-> Testing on my board shows that it takes 180us until AHB master IDLE
-> state is signalled. The very old vendor driver for this SoC (ifxhcd)
-> used a 1 second timeout.
-> Use the same timeout that is used everywhere when polling for
-> GRSTCTL_AHBIDLE instead of using a timeout that "works for one board"
-> (180us in my case) to have consistent behavior across the dwc2 driver.
-> 
-> Cc: linux-stable <stable@vger.kernel.org> # 4.19+
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
 
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Hi,
 
->   drivers/usb/dwc2/core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-> index 8b499d643461..8e41d70fd298 100644
-> --- a/drivers/usb/dwc2/core.c
-> +++ b/drivers/usb/dwc2/core.c
-> @@ -531,7 +531,7 @@ int dwc2_core_reset(struct dwc2_hsotg *hsotg, bool skip_wait)
->   	}
->   
->   	/* Wait for AHB master IDLE state */
-> -	if (dwc2_hsotg_wait_bit_set(hsotg, GRSTCTL, GRSTCTL_AHBIDLE, 50)) {
-> +	if (dwc2_hsotg_wait_bit_set(hsotg, GRSTCTL, GRSTCTL_AHBIDLE, 10000)) {
->   		dev_warn(hsotg->dev, "%s: HANG! AHB Idle timeout GRSTCTL GRSTCTL_AHBIDLE\n",
->   			 __func__);
->   		return -EBUSY;
-> 
+Ran Wang <ran.wang_1@nxp.com> writes:
+>> >> > >> >> >  /* Global Debug Queue/FIFO Space Available Register */
+>> >> > >> >> >  #define DWC3_GDBGFIFOSPACE_NUM(n)	((n) & 0x1f)
+>> >> > >> >> >  #define DWC3_GDBGFIFOSPACE_TYPE(n)	(((n) << 5) & 0x1e0)
+>> >> > >> >> > @@ -859,6 +867,7 @@ struct dwc3_scratchpad_array {
+>> >> > >> >> >   * 	3	- Reserved
+>> >> > >> >> >   * @imod_interval: set the interrupt moderation interval in 250ns
+>> >> > >> >> >   *                 increments or 0 to disable.
+>> >> > >> >> > + * @dma_coherent: set if enable dma-coherent.
+>> >> > >> >>
+>> >> > >> >> you're not enabling dma coherency, you're enabling cache snooping.
+>> >> > >> >> And this property should describe that. Also, keep in mind
+>> >> > >> >> that different devices may want different cache types for
+>> >> > >> >> each of those fields, so your property would have to be a lot
+>> >> > >> >> more complex. Something
+>> >> > like:
+>> >> > >> >>
+>> >> > >> >> 	snps,cache-type = <foobar "cacheable">, <baz "cacheable">, ...
+>> >> > >> >>
+>> >> > >> >> Then driver would have to parse this properly to setup GSBUSCFG0.
+>> >> > >
+>> >> > > According to the DesignWare Cores SuperSpeed USB 3.0 Controller
+>> >> > > Databook (v2.60a), it has described Type Bit Assignments for all
+>> >> > > supported
+>> >> > master bus type:
+>> >> > > AHB, AXI3, AXI4 and Native. I found the bit definition are
+>> >> > > different among
+>> >> > them.
+>> >> > > So, for the example you gave above, feel a little bit confused.
+>> >> > > Did you mean:
+>> >> > >     snps,cache-type = <DATA_RD  "write allocate">, <DESC_RD
+>> >> > > "cacheable">, <DATA_WR  "bufferable">, <DESC_WR  "read allocate">
+>> >> >
+>> >> > yeah, something like that.
+>> >>
+>> >> I think DATA_RD  should be a macro, right? So, where I can put its define?
+>> >> Create a dwc3.h in include/dt-bindings/usb/ ?
+>> >
+>> > Could you please give me some advice here? I'd like to prepare next
+>> > version patch after getting this settled.
+>> >
+>> >> Another question about this remain open is: DWC3 data book's Table
+>> >> 6-5 Cache Type Bit Assignments show that bits definition will differ
+>> >> per MBUS_TYPEs as
+>> >> below:
+>> >> ----------------------------------------------------------------
+>> >>  MBUS_TYPE| bit[3]       |bit[2]       |bit[1]     |bit[0]
+>> >>  ----------------------------------------------------------------
+>> >>  AHB      |Cacheable     |Bufferable   |Privilegge |Data
+>> >>  AXI3     |Write Allocate|Read Allocate|Cacheable  |Bufferable
+>> >>  AXI4     |Allocate Other|Allocate     |Modifiable |Bufferable
+>> >>  AXI4     |Other Allocate|Allocate     |Modifiable |Bufferable
+>> >>  Native   |Same as AXI   |Same as AXI  |Same as AXI|Same as AXI
+>> >>  ----------------------------------------------------------------
+>> >>  Note: The AHB, AXI3, AXI4, and PCIe busses use different names for
+>> >> certain  signals, which have the same meaning:
+>> >>    Bufferable = Posted
+>> >>    Cacheable = Modifiable = Snoop (negation of No Snoop)
+>> >>
+>> >> For Layerscape SoCs, MBUS_TYPE is AXI3. So I am not sure how to use
+>> >> snps,cache-type = <DATA_RD  "write allocate">, to cover all MBUS_TYPE?
+>> >> (you can notice that AHB and AXI3's cacheable are on different bit)
+>> >> Or I just need to handle AXI3 case?
+>> >
+>> > Also on this open. Thank you in advance.
+>> 
+>> You could pass two strings and let the driver process them. Something
+>> like:
+>> 
+>> 	snps,cache_type = <"data_wr" "write allocate">, <"desc_rd"
+>> "cacheable">...
+>> 
+>> And so on. The only thing missing is for the mbus_type to be known by the driver.
+>> Is that something we can figure out on any of the HWPARAMS registers or does
+>> it have to be told explicitly?
+>
+> I have checked Layerscape Reference manual, HWPARAMS0~8 doesn't contain mbus_type
+> Info, and I didn't know where have declared it explicitly.
+>
+>> Another option would be to pass a string followed by one hex digit for the bits:
+>> 
+>> 	snps,cache_type = <"data_wr" 0x8>, <"desc_rd" 0x2>...;
+>> 
+>> Then we don't need to describe mbus_type since the bits are what matters.
+>
+> Yes, it's also what we prefer to use, it will be more flexible, I can add above Table
+> 6-5 Cache Type Bit Assignments in binding to help user decide which value they
+> would use.
+>
+> I would submit another version of patch for further review, thank you very much.
 
+cool, thanks
+
+-- 
+balbi
