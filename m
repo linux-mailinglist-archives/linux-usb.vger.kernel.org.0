@@ -2,195 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1447451010
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 17:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E623B51061
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 17:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730549AbfFXPNh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 11:13:37 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50876 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729235AbfFXPNg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 11:13:36 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5OF0Eaw130558
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2019 11:13:35 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tb0dr2df9-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2019 11:13:34 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-usb@vger.kernel.org> from <maier@linux.ibm.com>;
-        Mon, 24 Jun 2019 16:13:32 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 24 Jun 2019 16:13:26 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5OFDPht43974882
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jun 2019 15:13:25 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A448AE053;
-        Mon, 24 Jun 2019 15:13:25 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7827FAE045;
-        Mon, 24 Jun 2019 15:13:24 +0000 (GMT)
-Received: from oc4120165700.ibm.com (unknown [9.152.98.199])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Jun 2019 15:13:24 +0000 (GMT)
-Subject: Re: [PATCH V5 10/16] s390: zfcp_fc: use sg helper to operate
- scatterlist
-To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-s390@vger.kernel.org
-References: <20190618013757.22401-1-ming.lei@redhat.com>
- <20190618013757.22401-11-ming.lei@redhat.com>
-From:   Steffen Maier <maier@linux.ibm.com>
-Date:   Mon, 24 Jun 2019 17:13:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1730994AbfFXP3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 11:29:40 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:33472 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730986AbfFXP3k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 11:29:40 -0400
+Received: by mail-pg1-f196.google.com with SMTP id m4so6698846pgk.0
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2019 08:29:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5sMA8Bhdq57YWns4UhDuBeWcNG1MKu8bMzUeQztIwmo=;
+        b=geq2YQDjLudJEDsQW5df0w57jpwjsnFBugQD+Uxq7vemrKR40xxaxDNeQF0sXx3Rup
+         +DA2Un2DphDRoo8ungSfRXbIAeOYVSP8atN1GmkrIUp93o/qfei8daFta8ZANX/Rvha4
+         cj2FUFRjj3kQxyF5HmshlEZsPmv7/9ueZ7OJ5s3KeCt0ghUcyz89NUbZG6iKL8mWwoEo
+         FKc59cQrxu83tAxDA9Z32lh8AlnSNyPPgm63n25sGVi2SzkFa/PJnHT06AfrLkjgqj4g
+         nG4ha0ezpIaDHia4ysySQd3D5K+Qm+edX7DKO2J+ZRt5LuFDdjJHZ4yw+lStdI4s8Qga
+         d8gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5sMA8Bhdq57YWns4UhDuBeWcNG1MKu8bMzUeQztIwmo=;
+        b=D42FCpwggG+3mB/1x2BwNSgQso10ufjgpl+66cniuEVqw+MqEYSeBZ1ULgvEVeQ3vz
+         1JjP+v9rP8mUNb23pyCXrxKmblG8/+iY5jLLc4K280dbxnlZnQ9lVr08+ffTUfB0arcx
+         qXx1e+D1AZ7hVWlUanheDiP/j5pvYpUwXHCq5NS/iXnmQQIZd0wkETk+45UHiPklNqgw
+         aC4Q+E+M9JEqqStgNww/4mmkNNnzFSLQRmv6z/p3+J6VFuNGeKvJDjMprP5y8mWjbCmX
+         KAKb0+BVc6DQVm+InfELtwnitsZMPlMq34++FoxWkHFWIpdOpDqfUMPaGxOV8PTaUNFe
+         7goQ==
+X-Gm-Message-State: APjAAAWwqkrbnrb/vQJnx8conicb9ybF9yMrlwMmaFwdQOPns2fXPj0Z
+        9b7b2EU82mDwweJfimJbJyVb/yqEqGR16VS+ydhwLJInJMM=
+X-Google-Smtp-Source: APXvYqyGugxGb0p/WNDcK74We/hdAUW6mjTNAvW4+3FAphRoJfY+GG6lJrx5vEz+N8+hkaus4qFaa4hXvgmejqcWdxo=
+X-Received: by 2002:a65:4c0c:: with SMTP id u12mr33434112pgq.130.1561390178725;
+ Mon, 24 Jun 2019 08:29:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190618013757.22401-11-ming.lei@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19062415-0028-0000-0000-0000037D2117
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062415-0029-0000-0000-0000243D3EE9
-Message-Id: <95bfa1fb-d0eb-fc61-ecc0-001ae52a326f@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_10:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906240122
+References: <0000000000008f19f7058c10a633@google.com> <871rzj6sww.fsf@miraculix.mork.no>
+In-Reply-To: <871rzj6sww.fsf@miraculix.mork.no>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 24 Jun 2019 17:29:27 +0200
+Message-ID: <CAAeHK+xjP6Uuwa7ccgomj1ea+2sZahriQvRzdmU-f6FZdxJ5Zw@mail.gmail.com>
+Subject: Re: KASAN: global-out-of-bounds Read in qmi_wwan_probe
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+Cc:     Kristian Evensen <kristian.evensen@gmail.com>,
+        syzbot <syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Ming,
+On Mon, Jun 24, 2019 at 2:59 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
+>
+> syzbot <syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com> writes:
+>
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    9939f56e usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D1615a669a00=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Ddf134eda130=
+bb43a
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Db68605d7fadd2=
+1510de1
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D10630af6a=
+00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1127da69a00=
+000
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the comm=
+it:
+> > Reported-by: syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com
+> >
+> > usb 1-1: new high-speed USB device number 2 using dummy_hcd
+> > usb 1-1: Using ep0 maxpacket: 8
+> > usb 1-1: New USB device found, idVendor=3D12d1, idProduct=3D14f1,
+> > bcdDevice=3Dd4.d9
+> > usb 1-1: New USB device strings: Mfr=3D0, Product=3D0, SerialNumber=3D0
+> > usb 1-1: config 0 descriptor??
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > BUG: KASAN: global-out-of-bounds in qmi_wwan_probe+0x342/0x360
+> > drivers/net/usb/qmi_wwan.c:1417
+> > Read of size 8 at addr ffffffff8618c140 by task kworker/1:1/22
+> >
+> > CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.2.0-rc5+ #11
+> > Hardware name: Google Google Compute Engine/Google Compute Engine,
+> > BIOS Google 01/01/2011
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >  __dump_stack lib/dump_stack.c:77 [inline]
+> >  dump_stack+0xca/0x13e lib/dump_stack.c:113
+> >  print_address_description+0x67/0x231 mm/kasan/report.c:188
+> >  __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
+> >  kasan_report+0xe/0x20 mm/kasan/common.c:614
+> >  qmi_wwan_probe+0x342/0x360 drivers/net/usb/qmi_wwan.c:1417
+> >  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+> >  really_probe+0x281/0x660 drivers/base/dd.c:509
+> >  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+> >  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+> >  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+> >
+>
+> Hello Kristian!
+>
+> I need some help understanding this...  IIUC syzbot is claiming an
+> out-of-bounds access at line 1417 in v5.2-rc5.  Or whatever - I'm having
+> a hard time deciphering what kernel version the bot is actually
+> testing. The claimed HEAD is not a kernel commit.  At least not in my
+> kernel...
 
-On 6/18/19 3:37 AM, Ming Lei wrote:
-> Use the scatterlist iterators and remove direct indexing of the
-> scatterlist array.
-> 
-> This way allows us to pre-allocate one small scatterlist, which can be
-> chained with one runtime allocated scatterlist if the pre-allocated one
-> isn't enough for the whole request.
-> 
-> Cc: Steffen Maier <maier@linux.ibm.com>
-> Cc: Benjamin Block <bblock@linux.ibm.com>
-> Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
-> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-> Acked-by: Benjamin Block <bblock@linux.ibm.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->   drivers/s390/scsi/zfcp_fc.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
-> index 33eddb02ee30..b018b61bd168 100644
-> --- a/drivers/s390/scsi/zfcp_fc.c
-> +++ b/drivers/s390/scsi/zfcp_fc.c
-> @@ -620,7 +620,7 @@ static void zfcp_fc_sg_free_table(struct scatterlist *sg, int count)
->   {
->   	int i;
->   
-> -	for (i = 0; i < count; i++, sg++)
-> +	for (i = 0; i < count; i++, sg = sg_next(sg))
->   		if (sg)
->   			free_page((unsigned long) sg_virt(sg));
->   		else
-> @@ -641,7 +641,7 @@ static int zfcp_fc_sg_setup_table(struct scatterlist *sg, int count)
->   	int i;
->   
->   	sg_init_table(sg, count);
-> -	for (i = 0; i < count; i++, sg++) {
-> +	for (i = 0; i < count; i++, sg = sg_next(sg)) {
->   		addr = (void *) get_zeroed_page(GFP_KERNEL);
->   		if (!addr) {
->   			zfcp_fc_sg_free_table(sg, i);
-> 
+The bot currently tests this tree:
+https://github.com/google/kasan/tree/usb-fuzzer, which is essentially
+5.2-rc5.
 
-I'm still catching up with emails that came during my vacation, so I'm not 
-fully up-to-date on the current state of this and how to bring in potential 
-fixups on top.
+>
+>
+> But if this is correct, then it points to the info->data access you
+> recently added:
+>
+> 822e44b45eb99 (Kristian Evensen        2019-03-02 13:32:26 +0100 1409)  /=
+* Several Quectel modems supports dynamic interface configuration, so
+> 7c5cca3588545 (Kristian Evensen        2018-09-08 13:50:48 +0200 1410)   =
+* we need to match on class/subclass/protocol. These values are
+> 7c5cca3588545 (Kristian Evensen        2018-09-08 13:50:48 +0200 1411)   =
+* identical for the diagnostic- and QMI-interface, but bNumEndpoints is
+> 7c5cca3588545 (Kristian Evensen        2018-09-08 13:50:48 +0200 1412)   =
+* different. Ignore the current interface if the number of endpoints
+> e4bf63482c309 (Kristian Evensen        2019-04-07 15:39:09 +0200 1413)   =
+* equals the number for the diag interface (two).
+> 7c5cca3588545 (Kristian Evensen        2018-09-08 13:50:48 +0200 1414)   =
+*/
+> e4bf63482c309 (Kristian Evensen        2019-04-07 15:39:09 +0200 1415)  i=
+nfo =3D (void *)&id->driver_info;
+> e4bf63482c309 (Kristian Evensen        2019-04-07 15:39:09 +0200 1416)
+> e4bf63482c309 (Kristian Evensen        2019-04-07 15:39:09 +0200 1417)  i=
+f (info->data & QMI_WWAN_QUIRK_QUECTEL_DYNCFG) {
+> e4bf63482c309 (Kristian Evensen        2019-04-07 15:39:09 +0200 1418)   =
+       if (desc->bNumEndpoints =3D=3D 2)
+> e4bf63482c309 (Kristian Evensen        2019-04-07 15:39:09 +0200 1419)   =
+               return -ENODEV;
+> e4bf63482c309 (Kristian Evensen        2019-04-07 15:39:09 +0200 1420)  }
+>
+>
+> I must be blind. I cannot see how this could end up failing.
+> id->driver_info is always set to one of qmi_wwan_info,
+> qmi_wwan_info_quirk_dtr or qmi_wwan_info_quirk_quectel_dyncfg at this
+> point.  How does that end up out-of-bounds?
 
-I think, we also have two more (not so obvious) places in the corresponding 
-response/completion code path, where we might need to introduce the proper 
-iterator helper:
+I've run the reproducer locally and checked the addresses. The
+structures that you mentioned are at:
 
-zfcp_fsf.c:
+gef> p &qmi_wwan_info
+$1 =3D (const struct driver_info *) 0xffffffff85d32e80 <qmi_wwan_info>
+gef> p &qmi_wwan_info_quirk_dtr
+$2 =3D (const struct driver_info *) 0xffffffff85d32dc0 <qmi_wwan_info_quirk=
+_dtr>
+gef> p &qmi_wwan_info_quirk_quectel_dyncfg
+$3 =3D (const struct driver_info *) 0xffffffff85d32d00
+<qmi_wwan_info_quirk_quectel_dyncfg>
 
-static int zfcp_fc_eval_gpn_ft(struct zfcp_fc_req *fc_req,
-			       struct zfcp_adapter *adapter, int max_entries)
-{
-	struct scatterlist *sg = &fc_req->sg_rsp;
-...
-	/* first entry is the header */
-	for (x = 1; x < max_entries && !last; x++) {
-...
-		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
-...
-		else
-			acc = sg_virt(++sg);
-                                       ^^^^
+And the bad access for me happens on address 0xffffffff85d32ce0, so it
+seems that driver_info somehow ended up lying below
+qmi_wwan_info_quirk_quectel_dyncfg.
 
-zfcp_dbf.c:
+gef> x/6gx 0xffffffff85d32ce0
+0xffffffff85d32ce0: 0x0000000000000000 0x0000000000000000
+0xffffffff85d32cf0: 0x0000000000000000 0x0000000000000000
+0xffffffff85d32d00 <qmi_wwan_info_quirk_quectel_dyncfg>:
+0xffffffff85d32cc0 0x0000000000000600
 
-static u16 zfcp_dbf_san_res_cap_len_if_gpn_ft(char *tag,
-					      struct zfcp_fsf_req *fsf,
-					      u16 len)
-{
-	struct scatterlist *resp_entry = ct_els->resp;
-...
-	/* the basic CT_IU preamble is the same size as one entry in the GPN_FT
-	 * response, allowing us to skip special handling for it - just skip it
-	 */
-	for (x = 1; x < max_entries && !last; x++) {
-		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
-...
-		else
-			acc = sg_virt(++resp_entry);
-                                       ^^^^^^^^^^^^
-
-
-What do you think?
-
--- 
-Mit freundlichen Gruessen / Kind regards
-Steffen Maier
-
-Linux on IBM Z Development
-
-https://www.ibm.com/privacy/us/en/
-IBM Deutschland Research & Development GmbH
-Vorsitzender des Aufsichtsrats: Matthias Hartmann
-Geschaeftsfuehrung: Dirk Wittkopp
-Sitz der Gesellschaft: Boeblingen
-Registergericht: Amtsgericht Stuttgart, HRB 243294
-
+>
+>
+>
+> Bj=C3=B8rn
