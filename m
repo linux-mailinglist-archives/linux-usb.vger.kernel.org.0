@@ -2,129 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A4E50071
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 06:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC9F50115
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 07:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727754AbfFXEG2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 00:06:28 -0400
-Received: from mail-eopbgr10071.outbound.protection.outlook.com ([40.107.1.71]:57633
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725769AbfFXEG2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jun 2019 00:06:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rYQDGM7N5MY/oKufxIwBegkwRmRqGA0xRi8IXs4ww9c=;
- b=g0GUr2XizR/ci3I72Im6RzBpKSlHCxSuiQQrEh8X9ZffgSd/xAtc3CM/NBqxijldYlPAlz2ky/sgbkjGSeybQqZgbGUdDz94AVdZ7QXoT7f5YubSOjQF1UFuDA6wB1lLg7U2dynEexJJyVPn3KvAnd6jNO4P2nHwxaVmJNhYsFw=
-Received: from VI1PR04MB4158.eurprd04.prod.outlook.com (52.133.15.33) by
- VI1PR04MB4190.eurprd04.prod.outlook.com (52.134.30.155) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Mon, 24 Jun 2019 04:05:43 +0000
-Received: from VI1PR04MB4158.eurprd04.prod.outlook.com
- ([fe80::bcac:811a:b5bf:1431]) by VI1PR04MB4158.eurprd04.prod.outlook.com
- ([fe80::bcac:811a:b5bf:1431%5]) with mapi id 15.20.2008.014; Mon, 24 Jun 2019
- 04:05:43 +0000
-From:   Yinbo Zhu <yinbo.zhu@nxp.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Xiaobo Xie <xiaobo.xie@nxp.com>,
-        Jiafei Pan <jiafei.pan@nxp.com>,
-        Ramneek Mehresh <ramneek.mehresh@freescale.com>,
-        Nikhil Badola <nikhil.badola@freescale.com>,
-        Ran Wang <ran.wang_1@nxp.com>,
+        id S1726869AbfFXFlw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 01:41:52 -0400
+Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:41698 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726223AbfFXFlw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 01:41:52 -0400
+Received: from mailhost.synopsys.com (unknown [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D9084C01C4;
+        Mon, 24 Jun 2019 05:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1561354911; bh=E1ERrISIW+x8N6/XjWkPCVdmvp0aiB6uJtVc4k+4tXo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=AJakDklB8qWucLSsOgZ7kcmOZ6Sd0wVHNpfzhJg27zkf+9MeY50eFDFnlhPkeRUCM
+         NsAHHH62qGvuMQA3TCQHdQ6F2WNUdq6O7en9wPPCFVRbuMp2Bv7lKP4VoddNKynS9o
+         qDS05iIumGYXIsOvKTqq4kZK+pZcqyNkYoF1x2hxyILh9iNAfEvXRcL6javwhFxR3K
+         LirNPYlsPwJc9TeWw/NgXFb7ZiEIZniIZftaqb97JQZ59uvXfi7/Wpqgz2igr3MNrx
+         6nAL523LjnSJrMhc4jCg1Tqb1B9GbbkURgkDznKe0UNnz+ciIXjYGp3seVWsGzHye1
+         4X8dgja8PUrxw==
+Received: from [10.116.70.206] (unknown [10.116.70.206])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id EB20DA0231;
+        Mon, 24 Jun 2019 05:41:47 +0000 (UTC)
+Subject: Re: [PATCH] usb: dwc2: use a longer AHB idle timeout in
+ dwc2_core_reset()
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH v7 4/5] usb: host: Stops USB controller init if
- PLL fails to lock
-Thread-Topic: [EXT] Re: [PATCH v7 4/5] usb: host: Stops USB controller init if
- PLL fails to lock
-Thread-Index: AQHVIo6QieXrOkuFP0CWMyQ1TInvsKakfSuAgAWYcyA=
-Date:   Mon, 24 Jun 2019 04:05:42 +0000
-Message-ID: <VI1PR04MB41581F96118B9FD33636C63DE9E00@VI1PR04MB4158.eurprd04.prod.outlook.com>
-References: <20190614085433.22344-1-yinbo.zhu@nxp.com>
- <20190614085433.22344-4-yinbo.zhu@nxp.com> <20190620121025.GB19295@kroah.com>
-In-Reply-To: <20190620121025.GB19295@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yinbo.zhu@nxp.com; 
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e381b365-c08d-4c42-1c7a-08d6f8593a1b
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4190;
-x-ms-traffictypediagnostic: VI1PR04MB4190:
-x-microsoft-antispam-prvs: <VI1PR04MB4190F111E42C85EDE119E08CE9E00@VI1PR04MB4190.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3276;
-x-forefront-prvs: 007814487B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(39860400002)(346002)(376002)(136003)(13464003)(199004)(189003)(33656002)(8676002)(186003)(4326008)(26005)(71190400001)(71200400001)(5660300002)(25786009)(86362001)(6916009)(478600001)(73956011)(52536014)(66446008)(66556008)(14454004)(66946007)(76116006)(64756008)(66476007)(68736007)(81156014)(6506007)(9686003)(476003)(81166006)(486006)(44832011)(7696005)(256004)(14444005)(6116002)(229853002)(102836004)(305945005)(74316002)(11346002)(446003)(316002)(2906002)(53936002)(99286004)(8936002)(6246003)(55016002)(76176011)(66066001)(54906003)(6436002)(53546011)(7736002)(3846002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4190;H:VI1PR04MB4158.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 5oDzf8pFouuUayCsg4+8Tu9ErtA1K2DNi6UAbX6Jk5uadFHkKP8tQbwUdVGXqpoDo8VAlcgbUfR5ZwFhjdKOcQ2AsUWR4HaRz9lru/5wUUTB2xsPeqjy13C0wicn8MVtelLssdihVRFVngz5Hl8acUEY/rCo72E4s50k5yxr02J4r7c8Z8v9AXpmIGOPbDyEOE5DfnFPLAnOOLa/pREllZzLcj3Jv+RGS9J3KoY1OerkBIShS9lFO/o8/w6FmuYdMto+2aGZAkRXomOUAmIXMUENvVu7aUt68pjYHP0AnXIHJAqUiFa4ODc+9LDU5a1H8uw+9WMpPSmcppm4oB5wIfX28Ef6O//tsrhtL7y+WeB/IaEC7VNcByl0kAm+nVNRy1V8ioV91xZHZdIGLG9+DBpEi5Ktok+gZdXDDlb1Xls=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>
+References: <20190620175022.29348-1-martin.blumenstingl@googlemail.com>
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Message-ID: <a7647aea-b3e6-b785-8476-1851f50beff1@synopsys.com>
+Date:   Mon, 24 Jun 2019 09:41:46 +0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e381b365-c08d-4c42-1c7a-08d6f8593a1b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2019 04:05:42.8987
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yinbo.zhu@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4190
+In-Reply-To: <20190620175022.29348-1-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3JlZyBLcm9haC1IYXJ0
-bWFuIFttYWlsdG86Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmddDQo+IFNlbnQ6IDIwMTnE6jbU
-wjIwyNUgMjA6MTANCj4gVG86IFlpbmJvIFpodSA8eWluYm8uemh1QG54cC5jb20+DQo+IENjOiBB
-bGFuIFN0ZXJuIDxzdGVybkByb3dsYW5kLmhhcnZhcmQuZWR1PjsgWGlhb2JvIFhpZSA8eGlhb2Jv
-LnhpZUBueHAuY29tPjsNCj4gSmlhZmVpIFBhbiA8amlhZmVpLnBhbkBueHAuY29tPjsgUmFtbmVl
-ayBNZWhyZXNoDQo+IDxyYW1uZWVrLm1laHJlc2hAZnJlZXNjYWxlLmNvbT47IE5pa2hpbCBCYWRv
-bGENCj4gPG5pa2hpbC5iYWRvbGFAZnJlZXNjYWxlLmNvbT47IFJhbiBXYW5nIDxyYW4ud2FuZ18x
-QG54cC5jb20+Ow0KPiBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdl
-ci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFtFWFRdIFJlOiBbUEFUQ0ggdjcgNC81XSB1c2I6IGhv
-c3Q6IFN0b3BzIFVTQiBjb250cm9sbGVyIGluaXQgaWYgUExMIGZhaWxzIHRvDQo+IGxvY2sNCj4g
-DQo+IENhdXRpb246IEVYVCBFbWFpbA0KPiANCj4gT24gRnJpLCBKdW4gMTQsIDIwMTkgYXQgMDQ6
-NTQ6MzJQTSArMDgwMCwgWWluYm8gWmh1IHdyb3RlOg0KPiA+IEZyb206IFJhbW5lZWsgTWVocmVz
-aCA8cmFtbmVlay5tZWhyZXNoQGZyZWVzY2FsZS5jb20+DQo+ID4NCj4gPiBVU0IgZXJyYXR1bS1B
-MDA2OTE4IHdvcmthcm91bmQgdHJpZXMgdG8gc3RhcnQgaW50ZXJuYWwgUEhZIGluc2lkZQ0KPiA+
-IHVib290ICh3aGVuIFBMTCBmYWlscyB0byBsb2NrKS4gSG93ZXZlciwgaWYgdGhlIHdvcmthcm91
-bmQgYWxzbyBmYWlscywNCj4gPiB0aGVuIFVTQiBpbml0aWFsaXphdGlvbiBpcyBhbHNvIHN0b3Bw
-ZWQgaW5zaWRlIExpbnV4Lg0KPiA+IEVycmF0dW0tQTAwNjkxOCB3b3JrYXJvdW5kIGZhaWx1cmUg
-Y3JlYXRlcyAiZnNsLGVycmF0dW1fYTAwNjkxOCINCj4gPiBub2RlIGluIGRldmljZS10cmVlLiBQ
-cmVzZW5jZSBvZiB0aGlzIG5vZGUgaW4gZGV2aWNlLXRyZWUgaXMgdXNlZCB0bw0KPiA+IHN0b3Ag
-VVNCIGNvbnRyb2xsZXIgaW5pdGlhbGl6YXRpb24gaW4gTGludXgNCj4gPg0KPiA+IFNpZ25lZC1v
-ZmYtYnk6IFJhbW5lZWsgTWVocmVzaCA8cmFtbmVlay5tZWhyZXNoQGZyZWVzY2FsZS5jb20+DQo+
-ID4gU2lnbmVkLW9mZi1ieTogU3VyZXNoIEd1cHRhIDxzdXJlc2guZ3VwdGFAZnJlZXNjYWxlLmNv
-bT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBZaW5ibyBaaHUgPHlpbmJvLnpodUBueHAuY29tPg0KPiA+
-IC0tLQ0KPiA+IENoYW5nZSBpbiB2NzoNCj4gPiAgICAgICAgICAgICAgIGtlZXAgdjUgdmVyc2lv
-biAiZmFsbCB0aHJvdWdoIg0KPiA+DQo+ID4gIGRyaXZlcnMvdXNiL2hvc3QvZWhjaS1mc2wuYyAg
-ICAgIHwgOSArKysrKysrKysNCj4gPiAgZHJpdmVycy91c2IvaG9zdC9mc2wtbXBoLWRyLW9mLmMg
-fCAzICsrLQ0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDEgZGVsZXRp
-b24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMg
-Yi9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMNCj4gPiBpbmRleCA4ZjNiZjNlZmIwMzguLmVm
-M2RmZDMzYTYyZSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMN
-Cj4gPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMNCj4gPiBAQCAtMjM2LDYgKzIz
-NiwxNSBAQCBzdGF0aWMgaW50IGVoY2lfZnNsX3NldHVwX3BoeShzdHJ1Y3QgdXNiX2hjZCAqaGNk
-LA0KPiA+ICAgICAgICAgICAgICAgcG9ydHNjIHw9IFBPUlRfUFRTX1BUVzsNCj4gPiAgICAgICAg
-ICAgICAgIC8qIGZhbGwgdGhyb3VnaCAqLw0KPiA+ICAgICAgIGNhc2UgRlNMX1VTQjJfUEhZX1VU
-TUk6DQo+ID4gKyAgICAgICAgICAgICAvKiBQcmVzZW5jZSBvZiB0aGlzIG5vZGUgImhhc19mc2xf
-ZXJyYXR1bV9hMDA2OTE4Ig0KPiA+ICsgICAgICAgICAgICAgICogaW4gZGV2aWNlLXRyZWUgaXMg
-dXNlZCB0byBzdG9wIFVTQiBjb250cm9sbGVyDQo+ID4gKyAgICAgICAgICAgICAgKiBpbml0aWFs
-aXphdGlvbiBpbiBMaW51eA0KPiA+ICsgICAgICAgICAgICAgICovDQo+ID4gKyAgICAgICAgICAg
-ICBpZiAocGRhdGEtPmhhc19mc2xfZXJyYXR1bV9hMDA2OTE4KSB7DQo+ID4gKyAgICAgICAgICAg
-ICAgICAgICAgIGRldl93YXJuKGRldiwgIlVTQiBQSFkgY2xvY2sgaW52YWxpZFxuIik7DQo+ID4g
-KyAgICAgICAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiA+ICsgICAgICAgICAgICAg
-fQ0KPiA+ICsNCj4gDQo+IFlvdSBuZWVkIGEgLyogZmFsbCB0aHJvdWdoICovIGNvbW1lbnQgaGVy
-ZSwgcmlnaHQ/DQo+IA0KSEkgZ3JlZyBrLWguDQoNClRoYW5rcyB5b3VyIGZlZWRiYWNrIQ0KDQpZ
-ZXMgLGl0IGlzIG5lZWRlZCwgYmVjYXVzZSB0aGlzIGNhc2UgZG9lc24ndCBoYXZlIGJyZWFrLCBp
-biBhZGRpdGlvbiBJIHdpbGwgYWRkIGEgIi8qIGZhbGwgdGhyb3VnaCovIiBpbg0KY2FzZSBGU0xf
-VVNCMl9QSFlfVVRNSSwgcGxlYXNlIHlvdSBub3RlLg0KVGhhbmtzDQoNCkJlc3QgUmVnYXJkcywN
-CllpbmJvIFpodS4NCg0KPiB0aGFua3MsDQo+IA0KPiBncmVnIGstaA0K
+On 6/20/2019 9:51 PM, Martin Blumenstingl wrote:
+> Use a 10000us AHB idle timeout in dwc2_core_reset() and make it
+> consistent with the other "wait for AHB master IDLE state" ocurrences.
+> 
+> This fixes a problem for me where dwc2 would not want to initialize when
+> updating to 4.19 on a MIPS Lantiq VRX200 SoC. dwc2 worked fine with
+> 4.14.
+> Testing on my board shows that it takes 180us until AHB master IDLE
+> state is signalled. The very old vendor driver for this SoC (ifxhcd)
+> used a 1 second timeout.
+> Use the same timeout that is used everywhere when polling for
+> GRSTCTL_AHBIDLE instead of using a timeout that "works for one board"
+> (180us in my case) to have consistent behavior across the dwc2 driver.
+> 
+> Cc: linux-stable <stable@vger.kernel.org> # 4.19+
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+
+>   drivers/usb/dwc2/core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
+> index 8b499d643461..8e41d70fd298 100644
+> --- a/drivers/usb/dwc2/core.c
+> +++ b/drivers/usb/dwc2/core.c
+> @@ -531,7 +531,7 @@ int dwc2_core_reset(struct dwc2_hsotg *hsotg, bool skip_wait)
+>   	}
+>   
+>   	/* Wait for AHB master IDLE state */
+> -	if (dwc2_hsotg_wait_bit_set(hsotg, GRSTCTL, GRSTCTL_AHBIDLE, 50)) {
+> +	if (dwc2_hsotg_wait_bit_set(hsotg, GRSTCTL, GRSTCTL_AHBIDLE, 10000)) {
+>   		dev_warn(hsotg->dev, "%s: HANG! AHB Idle timeout GRSTCTL GRSTCTL_AHBIDLE\n",
+>   			 __func__);
+>   		return -EBUSY;
+> 
+
