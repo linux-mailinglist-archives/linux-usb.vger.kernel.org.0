@@ -2,159 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6469B501FE
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 08:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B1E501ED
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 08:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727385AbfFXGPL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 02:15:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53518 "EHLO mail.kernel.org"
+        id S1726587AbfFXGMd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 02:12:33 -0400
+Received: from mga04.intel.com ([192.55.52.120]:54256 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727318AbfFXGPK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jun 2019 02:15:10 -0400
-Received: from localhost.localdomain (unknown [106.201.35.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 906EE2146F;
-        Mon, 24 Jun 2019 06:15:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561356909;
-        bh=HVwwUjSOfRYewg5i8Jp9AiL7VWVq9IgT9SSCehh/aRk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f6O3it0X8EQ7gvwxn2z8al1u5mfVzAoMX+wSAfJaLBFeiSjthQt+qIv7EIiu8viOH
-         Sp66QjyDFcBoQiwyhWi5McLWqp+4BUaT8+BnR4060Aw46ScTdV8QR+gDp/KBGopVL4
-         8Q03X/CWOarmhDo8sXvfxNM7olCOu4vwRLJa2DL8=
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Lamparter <chunkeey@gmail.com>
-Subject: [PATCH v3 4/4] usb: xhci: allow multiple firmware versions
-Date:   Mon, 24 Jun 2019 11:41:26 +0530
-Message-Id: <20190624061126.11938-5-vkoul@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190624061126.11938-1-vkoul@kernel.org>
-References: <20190624061126.11938-1-vkoul@kernel.org>
+        id S1726472AbfFXGMd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Jun 2019 02:12:33 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jun 2019 23:12:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,411,1557212400"; 
+   d="scan'208";a="151853564"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by orsmga007.jf.intel.com with ESMTP; 23 Jun 2019 23:12:31 -0700
+Subject: Re: xHCI Driver Compliance Test Support
+To:     Rob Weber <rob@gnarbox.com>, mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org
+References: <20190619190307.GA18466@coops>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <fc2609bc-2441-0293-1eca-3781af410414@linux.intel.com>
+Date:   Mon, 24 Jun 2019 09:15:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190619190307.GA18466@coops>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Allow multiple firmware file versions in table and load them in
-increasing order as we find them in the file system.
+Hi
 
-Tested-by: Christian Lamparter <chunkeey@gmail.com>
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc: Christian Lamparter <chunkeey@googlemail.com>
----
- drivers/usb/host/xhci-pci.c | 47 +++++++++++++++++++++++++++++++++++--
- 1 file changed, 45 insertions(+), 2 deletions(-)
+On 19.6.2019 22.03, Rob Weber wrote:
+> Hi Mathias,
+> 
+> I am working on running our custom USB dual-role product through some
+> compliance testing. It seems that the SoC and host controller are
+> not responding to the LFPS signaling and timeout that is supposed to
+> automatically begin the compliance test sequence.
+> 
+> I'm currently running a 4.9.115 kernel, and I'm afraid I might be
+> missing some critical patches for compliance test support. I noticed
+> these two patches came up in a google search:
+> 
+> https://patchwork.kernel.org/patch/10415345/
+> https://www.spinics.net/lists/linux-usb/msg160002.html
+> 
+> Besides these patches, is there anything else that comes to mind that I
+> might need to do to start compliance testing? I'm about to build a more
+> recent kernel to see if that improves my situation as well.
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 2b80c0ce48a8..bac73f28ee0b 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -336,13 +336,20 @@ static const struct renesas_fw_entry {
- 	 *  - uPD720201 ES 2.0 sample whose revision ID is 2.
- 	 *  - uPD720201 ES 2.1 sample & CS sample & Mass product, ID is 3.
- 	 *  - uPD720202 ES 2.0 sample & CS sample & Mass product, ID is 2.
-+	 *
-+	 *  Entry expected_version should be kept in increasing order for a
-+	 *  chip, so that driver will pick first version and if that fails
-+	 *  then next one will be picked
- 	 */
- 	{ "K2013080.mem", 0x0014, 0x02, 0x2013 },
-+	{ "K2026090.mem", 0x0014, 0x03, 0x2026 },
- 	{ "K2013080.mem", 0x0014, 0x03, 0x2013 },
-+	{ "K2026090.mem", 0x0015, 0x02, 0x2026 },
- 	{ "K2013080.mem", 0x0015, 0x02, 0x2013 },
- };
- 
- MODULE_FIRMWARE("K2013080.mem");
-+MODULE_FIRMWARE("K2026090.mem");
- 
- static const struct renesas_fw_entry *renesas_needs_fw_dl(struct pci_dev *dev)
- {
-@@ -363,6 +370,24 @@ static const struct renesas_fw_entry *renesas_needs_fw_dl(struct pci_dev *dev)
- 	return NULL;
- }
- 
-+static const struct
-+renesas_fw_entry *renesas_get_next_entry(struct pci_dev *dev,
-+					 const struct renesas_fw_entry *entry)
-+{
-+	const struct renesas_fw_entry *next_entry;
-+	size_t i;
-+
-+	for (i = 0; i < ARRAY_SIZE(renesas_fw_table); i++) {
-+		next_entry = &renesas_fw_table[i];
-+		if (next_entry->device == dev->device &&
-+		    next_entry->revision == dev->revision &&
-+		    next_entry->expected_version < entry->expected_version)
-+			return next_entry;
-+	}
-+
-+	return NULL;
-+}
-+
- static int renesas_fw_download_image(struct pci_dev *dev,
- 				     const u32 *fw,
- 				     size_t step)
-@@ -705,6 +730,7 @@ struct renesas_fw_ctx {
- 	struct pci_dev *pdev;
- 	const struct pci_device_id *id;
- 	bool resume;
-+	const struct renesas_fw_entry *entry;
- };
- 
- static int xhci_pci_probe(struct pci_dev *pdev,
-@@ -964,13 +990,29 @@ static void renesas_fw_callback(const struct firmware *fw,
- 	struct renesas_fw_ctx *ctx = context;
- 	struct pci_dev *pdev = ctx->pdev;
- 	struct device *parent = pdev->dev.parent;
-+	const struct renesas_fw_entry *next_entry;
- 	bool rom;
- 	int err;
- 
- 	if (!fw) {
- 		dev_err(&pdev->dev, "firmware failed to load\n");
--
--		goto cleanup;
-+		/*
-+		 * we didn't find firmware, check if we have another
-+		 * entry for this device
-+		 */
-+		next_entry = renesas_get_next_entry(ctx->pdev, ctx->entry);
-+		if (next_entry) {
-+			ctx->entry = next_entry;
-+			dev_dbg(&pdev->dev, "Found next entry, requesting: %s\n",
-+				next_entry->firmware_name);
-+			request_firmware_nowait(THIS_MODULE, 1,
-+						next_entry->firmware_name,
-+						&pdev->dev, GFP_KERNEL,
-+						ctx, renesas_fw_callback);
-+			return;
-+		} else {
-+			goto cleanup;
-+		}
- 	}
- 
- 	err = renesas_fw_verify(pdev, fw->data, fw->size);
-@@ -1068,6 +1110,7 @@ static int renesas_fw_download_to_hw(struct pci_dev *pdev,
- 	ctx->pdev = pdev;
- 	ctx->resume = do_resume;
- 	ctx->id = id;
-+	ctx->entry = entry;
- 
- 	pci_dev_get(pdev);
- 	err = request_firmware_nowait(THIS_MODULE, 1, entry->firmware_name,
--- 
-2.20.1
+If xHC hw has a "Compliance Transition Capability" (CTC) bit set in the
+HCCPARAMS2 register then ports won't go to compliance unless software
+specifically allows it.
 
+see xhci spec section 4.19.1.2.4.1 for more details.
+
+Compliance can be allowed either with a SetPortFeature(PORT_LINK_STATE) request,
+or via debugfs.
+
+To allow compliance using debugfs, first check port is in disabled state:
+
+# cat /sys/kernel/debug/usb/xhci/0000:00:15.0/ports/port01/portsc
+Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change: Wake:
+
+enable compliance by writing "compliance" to the port:
+# echo compliance > /sys/kernel/debug/usb/xhci/0000:00:15.0/ports/port01/portsc
+
+This needs to be done for that specific port, and after every port warm reset.
+
+After 1st LFPS timeout the port should go to compliance, can be read from portsc
+
+Also make sure you don't have XHCI_COMP_MODE_QUIRK or XHCI_MISSING_CAS quirks set,
+these try to recover ports that accidentally enter compliance mode in normal use.
+
+> 
+> Just for reference, our product uses an intel atom z8550 SoC that uses
+> an xHCI host controller and a dwc3 device controller. Our platform also
+> uses a USB 3.0 redriver. The datasheet for this redriver (tusb542)
+> indicates that it's internal LFPS controller supports full USB 3.0
+> compliance requirements.
+> 
+
+z8550 is Cherry Trail? I unfortunately don't have those around anymore.
+
+-Mathias
