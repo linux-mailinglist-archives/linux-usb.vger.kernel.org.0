@@ -2,224 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 797E45000C
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 05:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A4E50071
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 06:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727145AbfFXDJS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Jun 2019 23:09:18 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:42240 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726565AbfFXDJS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jun 2019 23:09:18 -0400
-Received: by mail-io1-f65.google.com with SMTP id u19so312048ior.9;
-        Sun, 23 Jun 2019 20:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ka07R5MBT3qdEd4LNE8j7RfXe7ufFgvDbzjplApYGDA=;
-        b=Bp1zH7h0J+eGgC3P+i4bMVJyd2LukoGYodB+H5UZMi5tdMreUQdPTHgdo2TFZrvw1k
-         eaIGIgKJWJOMqn1jpJOfjMVu098KpasLedWXQKczMCbH/ubVYedYlbyRad/WYAP52ux7
-         KnH6/0tS1v9GjlZH5Bkcl2YgSlzINeUs1wwbFKlf5YgK0YLsTaueAb5Ocqm2ZL6ixLCO
-         IlkHx0HXzw5etMNDr0fWOh/IuJPwuaGdxrNET9NG10nZstH94SDC09PwiSodONizJAef
-         cnCgVALxraWfqpnOFHcmXM+HsAN7I8NzI0hwK6ra62hJeKuBkCIU5yXAIBH4tSmXexlL
-         oTnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ka07R5MBT3qdEd4LNE8j7RfXe7ufFgvDbzjplApYGDA=;
-        b=hfpkNbniQTKn94OYRgbDchIgUI/bDBpAskszQ4tnOMt6sg1B284QQPf9WuPFeN22Gq
-         G2iChtbJofMyg18tWvhjPoA3SwNxGMcPhhEshKY9bN5wEdv+yiU1+ZFanSv51YTKT1xh
-         rvZRiPlRydh/T1w00z9BNWvJ3+0k1Q/knSRt1QDmB7YXC0NNWlGaFoGDM5BYXQa3z/ME
-         H71ySA74JxKx/ABHeQcI17hk5U1QCAmVOIAxP6kGsMyBnHswWsD4mSke4IotLZiwb84B
-         0BEAXRf0GbVnN2TTMkqmse1g+MNZRi/Jy4ZPo3Gnf4cRj5CCwwHzKCCYhzLBPhpyfcyt
-         Qatw==
-X-Gm-Message-State: APjAAAUY38zg1SHa1AkU2CpogQvaX/5dOQgGvRTSIEzamtp9IrYao38m
-        a9uoIiKauy/HbkNMWvP4IoedzGhnGPzeDzAMQpk=
-X-Google-Smtp-Source: APXvYqxD8VGTjTK70nPC+63PvSZM6zUi+XqoRijUjB177Z58G/jcQot2k6naC5+rm52XUaWVX7MD6cP0JiCc0XP1U6c=
-X-Received: by 2002:a02:6516:: with SMTP id u22mr23229404jab.49.1561345757250;
- Sun, 23 Jun 2019 20:09:17 -0700 (PDT)
+        id S1727754AbfFXEG2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 00:06:28 -0400
+Received: from mail-eopbgr10071.outbound.protection.outlook.com ([40.107.1.71]:57633
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725769AbfFXEG2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Jun 2019 00:06:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rYQDGM7N5MY/oKufxIwBegkwRmRqGA0xRi8IXs4ww9c=;
+ b=g0GUr2XizR/ci3I72Im6RzBpKSlHCxSuiQQrEh8X9ZffgSd/xAtc3CM/NBqxijldYlPAlz2ky/sgbkjGSeybQqZgbGUdDz94AVdZ7QXoT7f5YubSOjQF1UFuDA6wB1lLg7U2dynEexJJyVPn3KvAnd6jNO4P2nHwxaVmJNhYsFw=
+Received: from VI1PR04MB4158.eurprd04.prod.outlook.com (52.133.15.33) by
+ VI1PR04MB4190.eurprd04.prod.outlook.com (52.134.30.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.16; Mon, 24 Jun 2019 04:05:43 +0000
+Received: from VI1PR04MB4158.eurprd04.prod.outlook.com
+ ([fe80::bcac:811a:b5bf:1431]) by VI1PR04MB4158.eurprd04.prod.outlook.com
+ ([fe80::bcac:811a:b5bf:1431%5]) with mapi id 15.20.2008.014; Mon, 24 Jun 2019
+ 04:05:43 +0000
+From:   Yinbo Zhu <yinbo.zhu@nxp.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Alan Stern <stern@rowland.harvard.edu>,
+        Xiaobo Xie <xiaobo.xie@nxp.com>,
+        Jiafei Pan <jiafei.pan@nxp.com>,
+        Ramneek Mehresh <ramneek.mehresh@freescale.com>,
+        Nikhil Badola <nikhil.badola@freescale.com>,
+        Ran Wang <ran.wang_1@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [EXT] Re: [PATCH v7 4/5] usb: host: Stops USB controller init if
+ PLL fails to lock
+Thread-Topic: [EXT] Re: [PATCH v7 4/5] usb: host: Stops USB controller init if
+ PLL fails to lock
+Thread-Index: AQHVIo6QieXrOkuFP0CWMyQ1TInvsKakfSuAgAWYcyA=
+Date:   Mon, 24 Jun 2019 04:05:42 +0000
+Message-ID: <VI1PR04MB41581F96118B9FD33636C63DE9E00@VI1PR04MB4158.eurprd04.prod.outlook.com>
+References: <20190614085433.22344-1-yinbo.zhu@nxp.com>
+ <20190614085433.22344-4-yinbo.zhu@nxp.com> <20190620121025.GB19295@kroah.com>
+In-Reply-To: <20190620121025.GB19295@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yinbo.zhu@nxp.com; 
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e381b365-c08d-4c42-1c7a-08d6f8593a1b
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4190;
+x-ms-traffictypediagnostic: VI1PR04MB4190:
+x-microsoft-antispam-prvs: <VI1PR04MB4190F111E42C85EDE119E08CE9E00@VI1PR04MB4190.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3276;
+x-forefront-prvs: 007814487B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(39860400002)(346002)(376002)(136003)(13464003)(199004)(189003)(33656002)(8676002)(186003)(4326008)(26005)(71190400001)(71200400001)(5660300002)(25786009)(86362001)(6916009)(478600001)(73956011)(52536014)(66446008)(66556008)(14454004)(66946007)(76116006)(64756008)(66476007)(68736007)(81156014)(6506007)(9686003)(476003)(81166006)(486006)(44832011)(7696005)(256004)(14444005)(6116002)(229853002)(102836004)(305945005)(74316002)(11346002)(446003)(316002)(2906002)(53936002)(99286004)(8936002)(6246003)(55016002)(76176011)(66066001)(54906003)(6436002)(53546011)(7736002)(3846002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4190;H:VI1PR04MB4158.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 5oDzf8pFouuUayCsg4+8Tu9ErtA1K2DNi6UAbX6Jk5uadFHkKP8tQbwUdVGXqpoDo8VAlcgbUfR5ZwFhjdKOcQ2AsUWR4HaRz9lru/5wUUTB2xsPeqjy13C0wicn8MVtelLssdihVRFVngz5Hl8acUEY/rCo72E4s50k5yxr02J4r7c8Z8v9AXpmIGOPbDyEOE5DfnFPLAnOOLa/pREllZzLcj3Jv+RGS9J3KoY1OerkBIShS9lFO/o8/w6FmuYdMto+2aGZAkRXomOUAmIXMUENvVu7aUt68pjYHP0AnXIHJAqUiFa4ODc+9LDU5a1H8uw+9WMpPSmcppm4oB5wIfX28Ef6O//tsrhtL7y+WeB/IaEC7VNcByl0kAm+nVNRy1V8ioV91xZHZdIGLG9+DBpEi5Ktok+gZdXDDlb1Xls=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20190624020258.21690-1-peter.chen@nxp.com> <20190624020258.21690-3-peter.chen@nxp.com>
-In-Reply-To: <20190624020258.21690-3-peter.chen@nxp.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Mon, 24 Jun 2019 11:09:05 +0800
-Message-ID: <CAL411-r_=44bAi6zupcM7cG7-ivcEH_Mu3YYffoE8Ve0d+xqRg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/8] usb: phy: phy-mxs-usb: add imx7ulp support
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     balbi@kernel.org, shawnguo@kernel.org, robh+dt@kernel.org,
-        fabio.estevam@nxp.com, kernel@pengutronix.de,
-        devicetree@vger.kernel.org, aisheng.dong@nxp.com,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        USB list <linux-usb@vger.kernel.org>,
-        chunfeng.yun@mediatek.com, sergei.shtylyov@cogentembedded.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e381b365-c08d-4c42-1c7a-08d6f8593a1b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2019 04:05:42.8987
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yinbo.zhu@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4190
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> At imx7ulp, the USB related analog register is located in PHY register
-> region too, so we need to control PLL at PHY driver directly.
->
-
-Hi Felipe,
-
-Would you please have a review for Patch 1 and Patch 2 in this series?
-Thanks.
-
-Peter
-
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
->  drivers/usb/phy/phy-mxs-usb.c | 67 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 66 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-> index 6fa16ab31e2e..70b8c8248caf 100644
-> --- a/drivers/usb/phy/phy-mxs-usb.c
-> +++ b/drivers/usb/phy/phy-mxs-usb.c
-> @@ -17,9 +17,11 @@
->  #include <linux/of_device.h>
->  #include <linux/regmap.h>
->  #include <linux/mfd/syscon.h>
-> +#include <linux/iopoll.h>
->
->  #define DRIVER_NAME "mxs_phy"
->
-> +/* Register Macro */
->  #define HW_USBPHY_PWD                          0x00
->  #define HW_USBPHY_TX                           0x10
->  #define HW_USBPHY_CTRL                         0x30
-> @@ -37,6 +39,11 @@
->  #define GM_USBPHY_TX_TXCAL45DN(x)            (((x) & 0xf) << 8)
->  #define GM_USBPHY_TX_D_CAL(x)                (((x) & 0xf) << 0)
->
-> +/* imx7ulp */
-> +#define HW_USBPHY_PLL_SIC                      0xa0
-> +#define HW_USBPHY_PLL_SIC_SET                  0xa4
-> +#define HW_USBPHY_PLL_SIC_CLR                  0xa8
-> +
->  #define BM_USBPHY_CTRL_SFTRST                  BIT(31)
->  #define BM_USBPHY_CTRL_CLKGATE                 BIT(30)
->  #define BM_USBPHY_CTRL_OTG_ID_VALUE            BIT(27)
-> @@ -55,6 +62,12 @@
->  #define BM_USBPHY_IP_FIX                       (BIT(17) | BIT(18))
->
->  #define BM_USBPHY_DEBUG_CLKGATE                        BIT(30)
-> +/* imx7ulp */
-> +#define BM_USBPHY_PLL_LOCK                     BIT(31)
-> +#define BM_USBPHY_PLL_REG_ENABLE               BIT(21)
-> +#define BM_USBPHY_PLL_BYPASS                   BIT(16)
-> +#define BM_USBPHY_PLL_POWER                    BIT(12)
-> +#define BM_USBPHY_PLL_EN_USB_CLKS              BIT(6)
->
->  /* Anatop Registers */
->  #define ANADIG_ANA_MISC0                       0x150
-> @@ -168,6 +181,9 @@ static const struct mxs_phy_data imx6ul_phy_data = {
->         .flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS,
->  };
->
-> +static const struct mxs_phy_data imx7ulp_phy_data = {
-> +};
-> +
->  static const struct of_device_id mxs_phy_dt_ids[] = {
->         { .compatible = "fsl,imx6sx-usbphy", .data = &imx6sx_phy_data, },
->         { .compatible = "fsl,imx6sl-usbphy", .data = &imx6sl_phy_data, },
-> @@ -175,6 +191,7 @@ static const struct of_device_id mxs_phy_dt_ids[] = {
->         { .compatible = "fsl,imx23-usbphy", .data = &imx23_phy_data, },
->         { .compatible = "fsl,vf610-usbphy", .data = &vf610_phy_data, },
->         { .compatible = "fsl,imx6ul-usbphy", .data = &imx6ul_phy_data, },
-> +       { .compatible = "fsl,imx7ulp-usbphy", .data = &imx7ulp_phy_data, },
->         { /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, mxs_phy_dt_ids);
-> @@ -199,6 +216,11 @@ static inline bool is_imx6sl_phy(struct mxs_phy *mxs_phy)
->         return mxs_phy->data == &imx6sl_phy_data;
->  }
->
-> +static inline bool is_imx7ulp_phy(struct mxs_phy *mxs_phy)
-> +{
-> +       return mxs_phy->data == &imx7ulp_phy_data;
-> +}
-> +
->  /*
->   * PHY needs some 32K cycles to switch from 32K clock to
->   * bus (such as AHB/AXI, etc) clock.
-> @@ -222,14 +244,49 @@ static void mxs_phy_tx_init(struct mxs_phy *mxs_phy)
->         }
->  }
->
-> +static int mxs_phy_pll_enable(void __iomem *base, bool enable)
-> +{
-> +       int ret = 0;
-> +
-> +       if (enable) {
-> +               u32 value;
-> +
-> +               writel(BM_USBPHY_PLL_REG_ENABLE, base + HW_USBPHY_PLL_SIC_SET);
-> +               writel(BM_USBPHY_PLL_BYPASS, base + HW_USBPHY_PLL_SIC_CLR);
-> +               writel(BM_USBPHY_PLL_POWER, base + HW_USBPHY_PLL_SIC_SET);
-> +               ret = readl_poll_timeout(base + HW_USBPHY_PLL_SIC,
-> +                       value, (value & BM_USBPHY_PLL_LOCK) != 0,
-> +                       100, 10000);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               writel(BM_USBPHY_PLL_EN_USB_CLKS, base +
-> +                               HW_USBPHY_PLL_SIC_SET);
-> +       } else {
-> +               writel(BM_USBPHY_PLL_EN_USB_CLKS, base +
-> +                               HW_USBPHY_PLL_SIC_CLR);
-> +               writel(BM_USBPHY_PLL_POWER, base + HW_USBPHY_PLL_SIC_CLR);
-> +               writel(BM_USBPHY_PLL_BYPASS, base + HW_USBPHY_PLL_SIC_SET);
-> +               writel(BM_USBPHY_PLL_REG_ENABLE, base + HW_USBPHY_PLL_SIC_CLR);
-> +       }
-> +
-> +       return ret;
-> +}
-> +
->  static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
->  {
->         int ret;
->         void __iomem *base = mxs_phy->phy.io_priv;
->
-> +       if (is_imx7ulp_phy(mxs_phy)) {
-> +               ret = mxs_phy_pll_enable(base, true);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
->         ret = stmp_reset_block(base + HW_USBPHY_CTRL);
->         if (ret)
-> -               return ret;
-> +               goto disable_pll;
->
->         /* Power up the PHY */
->         writel(0, base + HW_USBPHY_PWD);
-> @@ -267,6 +324,11 @@ static int mxs_phy_hw_init(struct mxs_phy *mxs_phy)
->         mxs_phy_tx_init(mxs_phy);
->
->         return 0;
-> +
-> +disable_pll:
-> +       if (is_imx7ulp_phy(mxs_phy))
-> +               mxs_phy_pll_enable(base, false);
-> +       return ret;
->  }
->
->  /* Return true if the vbus is there */
-> @@ -388,6 +450,9 @@ static void mxs_phy_shutdown(struct usb_phy *phy)
->         writel(BM_USBPHY_CTRL_CLKGATE,
->                phy->io_priv + HW_USBPHY_CTRL_SET);
->
-> +       if (is_imx7ulp_phy(mxs_phy))
-> +               mxs_phy_pll_enable(phy->io_priv, false);
-> +
->         clk_disable_unprepare(mxs_phy->clk);
->  }
->
-> --
-> 2.14.1
->
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3JlZyBLcm9haC1IYXJ0
+bWFuIFttYWlsdG86Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmddDQo+IFNlbnQ6IDIwMTnE6jbU
+wjIwyNUgMjA6MTANCj4gVG86IFlpbmJvIFpodSA8eWluYm8uemh1QG54cC5jb20+DQo+IENjOiBB
+bGFuIFN0ZXJuIDxzdGVybkByb3dsYW5kLmhhcnZhcmQuZWR1PjsgWGlhb2JvIFhpZSA8eGlhb2Jv
+LnhpZUBueHAuY29tPjsNCj4gSmlhZmVpIFBhbiA8amlhZmVpLnBhbkBueHAuY29tPjsgUmFtbmVl
+ayBNZWhyZXNoDQo+IDxyYW1uZWVrLm1laHJlc2hAZnJlZXNjYWxlLmNvbT47IE5pa2hpbCBCYWRv
+bGENCj4gPG5pa2hpbC5iYWRvbGFAZnJlZXNjYWxlLmNvbT47IFJhbiBXYW5nIDxyYW4ud2FuZ18x
+QG54cC5jb20+Ow0KPiBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdl
+ci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFtFWFRdIFJlOiBbUEFUQ0ggdjcgNC81XSB1c2I6IGhv
+c3Q6IFN0b3BzIFVTQiBjb250cm9sbGVyIGluaXQgaWYgUExMIGZhaWxzIHRvDQo+IGxvY2sNCj4g
+DQo+IENhdXRpb246IEVYVCBFbWFpbA0KPiANCj4gT24gRnJpLCBKdW4gMTQsIDIwMTkgYXQgMDQ6
+NTQ6MzJQTSArMDgwMCwgWWluYm8gWmh1IHdyb3RlOg0KPiA+IEZyb206IFJhbW5lZWsgTWVocmVz
+aCA8cmFtbmVlay5tZWhyZXNoQGZyZWVzY2FsZS5jb20+DQo+ID4NCj4gPiBVU0IgZXJyYXR1bS1B
+MDA2OTE4IHdvcmthcm91bmQgdHJpZXMgdG8gc3RhcnQgaW50ZXJuYWwgUEhZIGluc2lkZQ0KPiA+
+IHVib290ICh3aGVuIFBMTCBmYWlscyB0byBsb2NrKS4gSG93ZXZlciwgaWYgdGhlIHdvcmthcm91
+bmQgYWxzbyBmYWlscywNCj4gPiB0aGVuIFVTQiBpbml0aWFsaXphdGlvbiBpcyBhbHNvIHN0b3Bw
+ZWQgaW5zaWRlIExpbnV4Lg0KPiA+IEVycmF0dW0tQTAwNjkxOCB3b3JrYXJvdW5kIGZhaWx1cmUg
+Y3JlYXRlcyAiZnNsLGVycmF0dW1fYTAwNjkxOCINCj4gPiBub2RlIGluIGRldmljZS10cmVlLiBQ
+cmVzZW5jZSBvZiB0aGlzIG5vZGUgaW4gZGV2aWNlLXRyZWUgaXMgdXNlZCB0bw0KPiA+IHN0b3Ag
+VVNCIGNvbnRyb2xsZXIgaW5pdGlhbGl6YXRpb24gaW4gTGludXgNCj4gPg0KPiA+IFNpZ25lZC1v
+ZmYtYnk6IFJhbW5lZWsgTWVocmVzaCA8cmFtbmVlay5tZWhyZXNoQGZyZWVzY2FsZS5jb20+DQo+
+ID4gU2lnbmVkLW9mZi1ieTogU3VyZXNoIEd1cHRhIDxzdXJlc2guZ3VwdGFAZnJlZXNjYWxlLmNv
+bT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBZaW5ibyBaaHUgPHlpbmJvLnpodUBueHAuY29tPg0KPiA+
+IC0tLQ0KPiA+IENoYW5nZSBpbiB2NzoNCj4gPiAgICAgICAgICAgICAgIGtlZXAgdjUgdmVyc2lv
+biAiZmFsbCB0aHJvdWdoIg0KPiA+DQo+ID4gIGRyaXZlcnMvdXNiL2hvc3QvZWhjaS1mc2wuYyAg
+ICAgIHwgOSArKysrKysrKysNCj4gPiAgZHJpdmVycy91c2IvaG9zdC9mc2wtbXBoLWRyLW9mLmMg
+fCAzICsrLQ0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDEgZGVsZXRp
+b24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMg
+Yi9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMNCj4gPiBpbmRleCA4ZjNiZjNlZmIwMzguLmVm
+M2RmZDMzYTYyZSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMN
+Cj4gPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L2VoY2ktZnNsLmMNCj4gPiBAQCAtMjM2LDYgKzIz
+NiwxNSBAQCBzdGF0aWMgaW50IGVoY2lfZnNsX3NldHVwX3BoeShzdHJ1Y3QgdXNiX2hjZCAqaGNk
+LA0KPiA+ICAgICAgICAgICAgICAgcG9ydHNjIHw9IFBPUlRfUFRTX1BUVzsNCj4gPiAgICAgICAg
+ICAgICAgIC8qIGZhbGwgdGhyb3VnaCAqLw0KPiA+ICAgICAgIGNhc2UgRlNMX1VTQjJfUEhZX1VU
+TUk6DQo+ID4gKyAgICAgICAgICAgICAvKiBQcmVzZW5jZSBvZiB0aGlzIG5vZGUgImhhc19mc2xf
+ZXJyYXR1bV9hMDA2OTE4Ig0KPiA+ICsgICAgICAgICAgICAgICogaW4gZGV2aWNlLXRyZWUgaXMg
+dXNlZCB0byBzdG9wIFVTQiBjb250cm9sbGVyDQo+ID4gKyAgICAgICAgICAgICAgKiBpbml0aWFs
+aXphdGlvbiBpbiBMaW51eA0KPiA+ICsgICAgICAgICAgICAgICovDQo+ID4gKyAgICAgICAgICAg
+ICBpZiAocGRhdGEtPmhhc19mc2xfZXJyYXR1bV9hMDA2OTE4KSB7DQo+ID4gKyAgICAgICAgICAg
+ICAgICAgICAgIGRldl93YXJuKGRldiwgIlVTQiBQSFkgY2xvY2sgaW52YWxpZFxuIik7DQo+ID4g
+KyAgICAgICAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiA+ICsgICAgICAgICAgICAg
+fQ0KPiA+ICsNCj4gDQo+IFlvdSBuZWVkIGEgLyogZmFsbCB0aHJvdWdoICovIGNvbW1lbnQgaGVy
+ZSwgcmlnaHQ/DQo+IA0KSEkgZ3JlZyBrLWguDQoNClRoYW5rcyB5b3VyIGZlZWRiYWNrIQ0KDQpZ
+ZXMgLGl0IGlzIG5lZWRlZCwgYmVjYXVzZSB0aGlzIGNhc2UgZG9lc24ndCBoYXZlIGJyZWFrLCBp
+biBhZGRpdGlvbiBJIHdpbGwgYWRkIGEgIi8qIGZhbGwgdGhyb3VnaCovIiBpbg0KY2FzZSBGU0xf
+VVNCMl9QSFlfVVRNSSwgcGxlYXNlIHlvdSBub3RlLg0KVGhhbmtzDQoNCkJlc3QgUmVnYXJkcywN
+CllpbmJvIFpodS4NCg0KPiB0aGFua3MsDQo+IA0KPiBncmVnIGstaA0K
