@@ -2,140 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A079501B7
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 07:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D634E501F4
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 08:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726399AbfFXF6U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 01:58:20 -0400
-Received: from mga11.intel.com ([192.55.52.93]:34567 "EHLO mga11.intel.com"
+        id S1727010AbfFXGOz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 02:14:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725782AbfFXF6U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jun 2019 01:58:20 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jun 2019 22:58:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,411,1557212400"; 
-   d="scan'208";a="161523545"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Jun 2019 22:58:17 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Ran Wang <ran.wang_1@nxp.com>, Rob Herring <robh+dt@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list\:DESIGNWARE USB3 DRD IP DRIVER" 
-        <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Leo Li <leoyang.li@nxp.com>
-Subject: RE: [PATCH] usb: dwc3: Enable the USB snooping
-In-Reply-To: <VE1PR04MB66557834D3588FC8B558950AF1E00@VE1PR04MB6655.eurprd04.prod.outlook.com>
-References: <20171115060459.45375-1-ran.wang_1@nxp.com> <87ineb9b5v.fsf@linux.intel.com> <VI1PR04MB1504776EF3D4D8C374F0C069F1290@VI1PR04MB1504.eurprd04.prod.outlook.com> <87shdfet90.fsf@linux.intel.com> <AM5PR0402MB28654EBE2D431CC2F8061CF8F11E0@AM5PR0402MB2865.eurprd04.prod.outlook.com> <87k1eaanjw.fsf@linux.intel.com> <AM5PR0402MB2865F3735D808E1BC9F67968F1180@AM5PR0402MB2865.eurprd04.prod.outlook.com> <AM5PR0402MB2865D0F0E2B4F65C86D051F8F1140@AM5PR0402MB2865.eurprd04.prod.outlook.com> <87o92wgyqj.fsf@linux.intel.com> <VE1PR04MB66557834D3588FC8B558950AF1E00@VE1PR04MB6655.eurprd04.prod.outlook.com>
-Date:   Mon, 24 Jun 2019 08:58:16 +0300
-Message-ID: <87v9wvsex3.fsf@linux.intel.com>
+        id S1726472AbfFXGOz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Jun 2019 02:14:55 -0400
+Received: from localhost.localdomain (unknown [106.201.35.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D24AA20663;
+        Mon, 24 Jun 2019 06:14:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561356894;
+        bh=SSajmWbvqgmbGWzL+sIpdibtzxavz5ikcOIKoAusBVk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jpRKgVVamUXzYaspAeIXVF00OdClZWvILuPM8VvRjYlCzILMR2ALhQcvc8DPc0UQE
+         ufJQ09H6t23sZW6i2JyP+iIK3mXRAY5m12R9AKiVrJXVityfeiXQDSvxkLj3weCbkt
+         B83ejNldoEhjUxxOKMX43M8GBqwEEsuKx1VHwY5g=
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] usb: xhci: Add support for Renesas USB controllers
+Date:   Mon, 24 Jun 2019 11:41:22 +0530
+Message-Id: <20190624061126.11938-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This series add support for Renesas USB controllers uPD720201 and uPD720202.
+These require firmware to be loaded and in case devices have ROM those can
+also be programmed if empty. If ROM is programmed, it runs from ROM as well.
 
-Hi,
+This includes two patches from Christian which supported these controllers
+w/o ROM and later my patches for ROM support and multiple firmware versions.
 
-Ran Wang <ran.wang_1@nxp.com> writes:
->> >> > >> >> >  /* Global Debug Queue/FIFO Space Available Register */
->> >> > >> >> >  #define DWC3_GDBGFIFOSPACE_NUM(n)	((n) & 0x1f)
->> >> > >> >> >  #define DWC3_GDBGFIFOSPACE_TYPE(n)	(((n) << 5) & 0x1e0)
->> >> > >> >> > @@ -859,6 +867,7 @@ struct dwc3_scratchpad_array {
->> >> > >> >> >   * 	3	- Reserved
->> >> > >> >> >   * @imod_interval: set the interrupt moderation interval in 250ns
->> >> > >> >> >   *                 increments or 0 to disable.
->> >> > >> >> > + * @dma_coherent: set if enable dma-coherent.
->> >> > >> >>
->> >> > >> >> you're not enabling dma coherency, you're enabling cache snooping.
->> >> > >> >> And this property should describe that. Also, keep in mind
->> >> > >> >> that different devices may want different cache types for
->> >> > >> >> each of those fields, so your property would have to be a lot
->> >> > >> >> more complex. Something
->> >> > like:
->> >> > >> >>
->> >> > >> >> 	snps,cache-type = <foobar "cacheable">, <baz "cacheable">, ...
->> >> > >> >>
->> >> > >> >> Then driver would have to parse this properly to setup GSBUSCFG0.
->> >> > >
->> >> > > According to the DesignWare Cores SuperSpeed USB 3.0 Controller
->> >> > > Databook (v2.60a), it has described Type Bit Assignments for all
->> >> > > supported
->> >> > master bus type:
->> >> > > AHB, AXI3, AXI4 and Native. I found the bit definition are
->> >> > > different among
->> >> > them.
->> >> > > So, for the example you gave above, feel a little bit confused.
->> >> > > Did you mean:
->> >> > >     snps,cache-type = <DATA_RD  "write allocate">, <DESC_RD
->> >> > > "cacheable">, <DATA_WR  "bufferable">, <DESC_WR  "read allocate">
->> >> >
->> >> > yeah, something like that.
->> >>
->> >> I think DATA_RD  should be a macro, right? So, where I can put its define?
->> >> Create a dwc3.h in include/dt-bindings/usb/ ?
->> >
->> > Could you please give me some advice here? I'd like to prepare next
->> > version patch after getting this settled.
->> >
->> >> Another question about this remain open is: DWC3 data book's Table
->> >> 6-5 Cache Type Bit Assignments show that bits definition will differ
->> >> per MBUS_TYPEs as
->> >> below:
->> >> ----------------------------------------------------------------
->> >>  MBUS_TYPE| bit[3]       |bit[2]       |bit[1]     |bit[0]
->> >>  ----------------------------------------------------------------
->> >>  AHB      |Cacheable     |Bufferable   |Privilegge |Data
->> >>  AXI3     |Write Allocate|Read Allocate|Cacheable  |Bufferable
->> >>  AXI4     |Allocate Other|Allocate     |Modifiable |Bufferable
->> >>  AXI4     |Other Allocate|Allocate     |Modifiable |Bufferable
->> >>  Native   |Same as AXI   |Same as AXI  |Same as AXI|Same as AXI
->> >>  ----------------------------------------------------------------
->> >>  Note: The AHB, AXI3, AXI4, and PCIe busses use different names for
->> >> certain  signals, which have the same meaning:
->> >>    Bufferable = Posted
->> >>    Cacheable = Modifiable = Snoop (negation of No Snoop)
->> >>
->> >> For Layerscape SoCs, MBUS_TYPE is AXI3. So I am not sure how to use
->> >> snps,cache-type = <DATA_RD  "write allocate">, to cover all MBUS_TYPE?
->> >> (you can notice that AHB and AXI3's cacheable are on different bit)
->> >> Or I just need to handle AXI3 case?
->> >
->> > Also on this open. Thank you in advance.
->> 
->> You could pass two strings and let the driver process them. Something
->> like:
->> 
->> 	snps,cache_type = <"data_wr" "write allocate">, <"desc_rd"
->> "cacheable">...
->> 
->> And so on. The only thing missing is for the mbus_type to be known by the driver.
->> Is that something we can figure out on any of the HWPARAMS registers or does
->> it have to be told explicitly?
->
-> I have checked Layerscape Reference manual, HWPARAMS0~8 doesn't contain mbus_type
-> Info, and I didn't know where have declared it explicitly.
->
->> Another option would be to pass a string followed by one hex digit for the bits:
->> 
->> 	snps,cache_type = <"data_wr" 0x8>, <"desc_rd" 0x2>...;
->> 
->> Then we don't need to describe mbus_type since the bits are what matters.
->
-> Yes, it's also what we prefer to use, it will be more flexible, I can add above Table
-> 6-5 Cache Type Bit Assignments in binding to help user decide which value they
-> would use.
->
-> I would submit another version of patch for further review, thank you very much.
+Changes in v3:
+  Dropped patch 2 as discussed with Christian
+  Removed aligned 8 bytes check
+  Change order for firware search from highest version to lowest
+  Added entry for new firmware for device 0x14 as well
+  Add tested by Christian
 
-cool, thanks
+Changes in v2:
+  used macros for timeout count and delay
+  removed renesas_fw_alive_check
+  cleaned renesas_fw_callback
+  removed recurion for renesas_fw_download
+  added MODULE_FIRMWARE
+  added comment for multiple fw order
+
+Christian Lamparter (1):
+  usb: xhci: add firmware loader for uPD720201 and uPD720202 w/o ROM
+
+Vinod Koul (3):
+  usb: xhci: Use register defined and field names
+  usb: xhci: Add ROM loader for uPD720201
+  usb: xhci: allow multiple firmware versions
+
+ drivers/usb/host/xhci-pci.c | 875 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 875 insertions(+)
 
 -- 
-balbi
+2.20.1
+
