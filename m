@@ -2,48 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A795189F
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 18:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 214D8518E6
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 18:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730618AbfFXQ1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 12:27:07 -0400
-Received: from canardo.mork.no ([148.122.252.1]:56291 "EHLO canardo.mork.no"
+        id S1728085AbfFXQpY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 12:45:24 -0400
+Received: from canardo.mork.no ([148.122.252.1]:52427 "EHLO canardo.mork.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726393AbfFXQ1H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jun 2019 12:27:07 -0400
+        id S1727128AbfFXQpY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Jun 2019 12:45:24 -0400
 Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
         (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x5OGQpI1008347
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x5OGjEfI019192
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 24 Jun 2019 18:26:52 +0200
+        Mon, 24 Jun 2019 18:45:15 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1561393612; bh=fLGEnw2Njzn9xoqzS5V4EDKFzf98/cQHM5dM1LpBLzA=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=dKDvQAwpJjFXmlAogZehs5GN9Y0cWRugc8cEv6J7slbl2Gp91bIw92D6f8xqQPH1C
-         2D1A6sM+SFV7PUESbRMLRQ8XCn1KbzQrGpeCn7dKGZ1MWCkmcPx5tg1DETysp/3GEE
-         pWXw8Nq+31CbbTfMV6RbuTVO7HvammQT1NNOkUL0=
+        t=1561394715; bh=IDXZJ///XxwnyiOJpz8yicO6tLhZ1eLIrJXMy8Pzy9o=;
+        h=From:To:Cc:Subject:Date:Message-Id:From;
+        b=QFWbzXDxWkjF2XMtNgEdoVUqLgV/UXaa0PRsXeItEYc/ICr8TDmi1b8jFXa8Auyg9
+         ypb6K3Vw8Ayu5autyWr6/m6kj0fyzU4sFG/pMB35ZL/Q97jGckW+PqFWrn236W7DA9
+         H/KoD2DPEGwf/Fjul8pzyadVoNnkw7HDcx3JHvos=
 Received: from bjorn by miraculix.mork.no with local (Exim 4.89)
-        (envelope-from <bjorn@mork.no>)
-        id 1hfRnv-0008IY-E4; Mon, 24 Jun 2019 18:26:51 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Kristian Evensen <kristian.evensen@gmail.com>,
-        syzbot <syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: KASAN: global-out-of-bounds Read in qmi_wwan_probe
-Organization: m
-References: <0000000000008f19f7058c10a633@google.com>
-        <871rzj6sww.fsf@miraculix.mork.no>
-Date:   Mon, 24 Jun 2019 18:26:51 +0200
-In-Reply-To: <871rzj6sww.fsf@miraculix.mork.no> (Hillf Danton's message of
-        "Mon, 24 Jun 2019 23:38:36 +0800")
-Message-ID: <87tvcf54qc.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        (envelope-from <bjorn@miraculix.mork.no>)
+        id 1hfS5i-0000E4-E7; Mon, 24 Jun 2019 18:45:14 +0200
+From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+To:     netdev@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Kristian Evensen <kristian.evensen@gmail.com>
+Subject: [PATCH net,stable] qmi_wwan: Fix out-of-bounds read
+Date:   Mon, 24 Jun 2019 18:45:11 +0200
+Message-Id: <20190624164511.831-1-bjorn@mork.no>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.100.3 at canardo
 X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
@@ -51,19 +44,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hillf Danton <hdanton@sina.com> writes:
+The syzbot reported
 
-> and wonder if the following works.
->
-> -	info =3D (void *)&id->driver_info;
-> +	info =3D (void *)id->driver_info;
+ Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description+0x67/0x231 mm/kasan/report.c:188
+  __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
+  kasan_report+0xe/0x20 mm/kasan/common.c:614
+  qmi_wwan_probe+0x342/0x360 drivers/net/usb/qmi_wwan.c:1417
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
 
+Caused by too many confusing indirections and casts.
+id->driver_info is a pointer stored in a long.  We want the
+pointer here, not the address of it.
 
-Doh! Right you are.  Thanks to both you and Andrey for quick and good
-help.
+Thanks-to: Hillf Danton <hdanton@sina.com>
+Reported-by: syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com
+Cc: Kristian Evensen <kristian.evensen@gmail.com>
+Fixes: e4bf63482c30 ("qmi_wwan: Add quirk for Quectel dynamic config")
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+---
+The bug was introduced in v5.2-rc1 but has been backported to stable kernels.
+So this fix also needs to go into stable.
 
-We obviously have some bad code patterns here, since this apparently
-worked for Kristian by pure luck.
+ drivers/net/usb/qmi_wwan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index d080f8048e52..8b4ad10cf940 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1482,7 +1482,7 @@ static int qmi_wwan_probe(struct usb_interface *intf,
+ 	 * different. Ignore the current interface if the number of endpoints
+ 	 * equals the number for the diag interface (two).
+ 	 */
+-	info = (void *)&id->driver_info;
++	info = (void *)id->driver_info;
+ 
+ 	if (info->data & QMI_WWAN_QUIRK_QUECTEL_DYNCFG) {
+ 		if (desc->bNumEndpoints == 2)
+-- 
+2.11.0
 
-Bj=C3=B8rn
