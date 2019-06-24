@@ -2,80 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD0F51966
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 19:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADC051974
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 19:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732351AbfFXRRC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 13:17:02 -0400
-Received: from mail-io1-f44.google.com ([209.85.166.44]:39980 "EHLO
-        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726628AbfFXRRC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 13:17:02 -0400
-Received: by mail-io1-f44.google.com with SMTP id n5so3816908ioc.7;
-        Mon, 24 Jun 2019 10:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HKVZVeTIp0VzP4z4Uro5y3TTUO1hlLUucOTNEWyo+tU=;
-        b=kqK76VCJ2Tc+wIyI2JOQ/ZV6Fh/BExUX9pt0s72wbQbVVyV1s3YFexA2Gu8SlQXp/I
-         EtwsZB2BoZlFJ983KZ+zCm7b6Hx46/GF4b2NSjWh7Cibsg0DXEe892VrJteOTB1cH4oX
-         qtNqLS6uspEqD/Kv7ScBHkdRbALxcS/Lx/QzuVUazygm6YFZt1yG7WFkhytp0HSKX72H
-         x0m2BId2noXj/eTO969WTKThIe7izvrU6zXhLBJ0b6nid0VrT2YnaAJLuR5+rju5cVwW
-         mRvhGzNcNLwu+FZcbkOT1TVBV0gHEjmj9EuSB+Dy2PBTIzgnpRd31SbVOnGG3LWWElb2
-         D5Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HKVZVeTIp0VzP4z4Uro5y3TTUO1hlLUucOTNEWyo+tU=;
-        b=sgl0e1leW2n3EZ7cZRckUajBpqBZtKtfiSewpfrsVKrZwt3Q9RqpL4/brTGPwTqZCk
-         LMo3boGzDRIY2/kYnkK3SWCj4nWK83Kda4VEEKBD8/mQpSSS+Br7uJgNSUtzcZ8GWhpr
-         gZ8SmyGCMYzlAhu8BLknD8I3jaQK9/1LDrYai9/kPb7EKNFVzp4tqg+ltiisRM222IGM
-         ie7qhZV4T4xG+9IhjULrnsHDu72TjlVk6kcLFmm9gSuFbSyLHimquirODQsBZB0aRH8K
-         E+PW3xAmkXrwHnHE+FB8hmfrZgI84arOHuEwV4Vp/N/RA9Yx0LTZpKD0Gz8ksM2NAGH+
-         hrKw==
-X-Gm-Message-State: APjAAAWwq5EVPbVz4LCiAcYQI9auYU3ies39Ocy23jJeBvG4fO5IeKWb
-        r89Ek00fUj3cKyEKikz2VEZ/N2+7SHwt5bViAyw=
-X-Google-Smtp-Source: APXvYqys+HijZUTbiXSyiQ6GHQWE2ih7NaysqfQN4H4DvhAB8KcMe+qfcJYvq6imH+Gw3Fh/B+mOTRB6JLhN8F9jSlk=
-X-Received: by 2002:a5e:8f42:: with SMTP id x2mr15878117iop.35.1561396621141;
- Mon, 24 Jun 2019 10:17:01 -0700 (PDT)
+        id S1732357AbfFXRYQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 13:24:16 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:57466 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1732226AbfFXRYQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 13:24:16 -0400
+Received: (qmail 6027 invoked by uid 2102); 24 Jun 2019 13:24:15 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 24 Jun 2019 13:24:15 -0400
+Date:   Mon, 24 Jun 2019 13:24:15 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Suwan Kim <suwan.kim027@gmail.com>
+cc:     shuah@kernel.org, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] usbip: Implement SG support to vhci
+In-Reply-To: <20190624145852.GC7547@localhost.localdomain>
+Message-ID: <Pine.LNX.4.44L0.1906241322140.1609-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <0000000000008f19f7058c10a633@google.com> <871rzj6sww.fsf@miraculix.mork.no>
- <87tvcf54qc.fsf@miraculix.mork.no>
-In-Reply-To: <87tvcf54qc.fsf@miraculix.mork.no>
-From:   Kristian Evensen <kristian.evensen@gmail.com>
-Date:   Mon, 24 Jun 2019 19:16:50 +0200
-Message-ID: <CAKfDRXjnUZx2rAVV1-9em9YyNvJbFG+vciZHihsKiu66Uz2Dgw@mail.gmail.com>
-Subject: Re: KASAN: global-out-of-bounds Read in qmi_wwan_probe
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, David Miller <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, 24 Jun 2019, Suwan Kim wrote:
 
-On Mon, Jun 24, 2019 at 6:26 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
-> Doh! Right you are.  Thanks to both you and Andrey for quick and good
-> help.
->
-> We obviously have some bad code patterns here, since this apparently
-> worked for Kristian by pure luck.
+> > > +	hcd->self.sg_tablesize = ~0;
+> > > +	hcd->self.no_sg_constraint = 1;
+> > 
+> > You probably shouldn't do this, for two reasons.  First, sg_tablesize
+> > of the server's HCD may be smaller than ~0.  If the client's value is
+> > larger than the server's, a transfer could be accepted on the client
+> > but then fail on the server because the SG list was too big.
 
-Thanks a lot to everyone for spotting and fixing my mistake, and sorry
-for not replying earlier. The patch from Bj=C3=B8rn is probably a candidate
-for stable as well. I don't remember exactly when the quirk was
-accepted in the kernel, but I recently submitted and got the quirk
-accepted into 4.14.
+On the other hand, I don't know of any examples where an HCD has 
+sg_tablesize set to anything other than 0 or ~0.  vhci-hcd might end up 
+being the only one.
 
-BR,
-Kristian
+> > Also, you may want to restrict the size of SG transfers even further,
+> > so that you don't have to allocate a tremendous amount of memory all at
+> > once on the server.  An SG transfer can be quite large.  I don't know 
+> > what a reasonable limit would be -- 16 perhaps?
+> 
+> Is there any reason why you think that 16 is ok? Or Can I set this
+> value as the smallest value of all HC? I think that sg_tablesize
+> cannot be a variable value because vhci interacts with different
+> machines and all machines has different sg_tablesize value.
+
+I didn't have any good reason for picking 16.  Using the smallest value 
+of all the HCDs seems like a good idea.
+
+Alan Stern
+
