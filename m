@@ -2,155 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F60850F5C
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 16:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1447451010
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 17:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727664AbfFXO67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 10:58:59 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45752 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726708AbfFXO67 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 10:58:59 -0400
-Received: by mail-pf1-f195.google.com with SMTP id r1so7648824pfq.12;
-        Mon, 24 Jun 2019 07:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TRMTWS0cPEEAhit+uZ2HEz5EhK22AdHx0UBIHnvpe0s=;
-        b=t+sZ1zdWZTip2CFxNZMQXxFxHl02l9mBF1G1GdEBxsOzyEqCjy19IrnvhFVQqG5Jsu
-         HKc5h3UtXpXM2+pZamRlW/35dJTpBaSHcbXGlL2CrAzexBZ7+eDZaqFlGjun6Qwk6TaN
-         03piFOleKJKbKbJTPESIEpNtZTJNmjg8GRlGw5mhHzjBM4xJtmDbgLUWoVEj8EOVrw9E
-         5L11cVwmC7RDx7CmojvaxHp9XRW3TjN7sOuiNyaEWlpU9hSNguiCAY3sQFy3Wyuwp7kO
-         gOxJr909vvQHYgrmoWzOd4YMY7KtNcx5a/sNVAWaO2bNOXik954iAjCchuxfoa/xwSGL
-         9A5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TRMTWS0cPEEAhit+uZ2HEz5EhK22AdHx0UBIHnvpe0s=;
-        b=mUfd010dcYbndt6xQj80Jaavr4xaItyInxgOgG3/Z2wgd6m0G7h00LVxZO/s/5v84H
-         I+hGOKmMLhBc2+nsQSKjIoY2FB+JKZVcK23FJU39YSWmYLfLt+PCjnP4tWfommqTt6mg
-         /gqiz8bXOXtiIlQxfzFBzSf4hcKAgQcl2FdN/D9B2Fz+jEjCG5JGv6NAdJ7b9+2oM71C
-         tyUd75LPBXIXCl2Jj2DUxX+kssrWzdGpZ0RaECJ0q1J8GCsBoxW+RCoveFXmXtMcd5UB
-         qF0rD2dakTM9x/5AKRbp4ufbgTfgXLve47KRh2nVZeemgZv2ZRCp5T295v21XN8KdriG
-         laaw==
-X-Gm-Message-State: APjAAAXiUFd01xftJCKqcRua1upxbooGmK0rhcZGTL8kAa8eeUsMkVLJ
-        1XU1h6quBsqQKN0MzknBMyU=
-X-Google-Smtp-Source: APXvYqwThNykeYeT1DwTNSsyUEF6bR+BMk2qXnrOqE1ZANRkHewSr0lh2qOuTQ5WTIEHg4JxMr9IIw==
-X-Received: by 2002:a65:510c:: with SMTP id f12mr32304339pgq.92.1561388338217;
-        Mon, 24 Jun 2019 07:58:58 -0700 (PDT)
-Received: from localhost.localdomain ([125.142.23.13])
-        by smtp.gmail.com with ESMTPSA id w16sm15623074pfj.85.2019.06.24.07.58.56
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 24 Jun 2019 07:58:57 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 23:58:53 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     shuah@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usbip: Implement SG support to vhci
-Message-ID: <20190624145852.GC7547@localhost.localdomain>
-References: <20190621174553.28862-3-suwan.kim027@gmail.com>
- <Pine.LNX.4.44L0.1906211548560.1471-100000@iolanthe.rowland.org>
+        id S1730549AbfFXPNh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 11:13:37 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50876 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729235AbfFXPNg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 11:13:36 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5OF0Eaw130558
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2019 11:13:35 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tb0dr2df9-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2019 11:13:34 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-usb@vger.kernel.org> from <maier@linux.ibm.com>;
+        Mon, 24 Jun 2019 16:13:32 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 24 Jun 2019 16:13:26 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5OFDPht43974882
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jun 2019 15:13:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A448AE053;
+        Mon, 24 Jun 2019 15:13:25 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7827FAE045;
+        Mon, 24 Jun 2019 15:13:24 +0000 (GMT)
+Received: from oc4120165700.ibm.com (unknown [9.152.98.199])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Jun 2019 15:13:24 +0000 (GMT)
+Subject: Re: [PATCH V5 10/16] s390: zfcp_fc: use sg helper to operate
+ scatterlist
+To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-s390@vger.kernel.org
+References: <20190618013757.22401-1-ming.lei@redhat.com>
+ <20190618013757.22401-11-ming.lei@redhat.com>
+From:   Steffen Maier <maier@linux.ibm.com>
+Date:   Mon, 24 Jun 2019 17:13:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1906211548560.1471-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190618013757.22401-11-ming.lei@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19062415-0028-0000-0000-0000037D2117
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19062415-0029-0000-0000-0000243D3EE9
+Message-Id: <95bfa1fb-d0eb-fc61-ecc0-001ae52a326f@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_10:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906240122
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 04:05:24PM -0400, Alan Stern wrote:
-> On Sat, 22 Jun 2019, Suwan Kim wrote:
+Hi Ming,
+
+On 6/18/19 3:37 AM, Ming Lei wrote:
+> Use the scatterlist iterators and remove direct indexing of the
+> scatterlist array.
 > 
-> > There are bugs on vhci with usb 3.0 storage device. Originally, vhci
-> > doesn't supported SG. So, USB storage driver on vhci divides SG list
-> > into multiple URBs and it causes buffer overflow on the xhci of the
-> > server. So we need to add SG support to vhci
+> This way allows us to pre-allocate one small scatterlist, which can be
+> chained with one runtime allocated scatterlist if the pre-allocated one
+> isn't enough for the whole request.
 > 
-> It doesn't cause buffer overflow.  The problem was that a transfer got
-> terminated too early because the transfer length for one of the URBs
-> was not divisible by the maxpacket size.
-
-Oh.. I misunderstood the problem. I will rewrite the problem
-situation.
-
-> > In this patch, vhci basically support SG and it sends each SG list
-> > entry to the stub driver. Then, the stub driver sees total length of
-> > the buffer and allocates SG table and pages according to the total
-> > buffer length calling sgl_alloc(). After the stub driver receives
-> > completed URB, it again sends each SG list entry to the vhci.
-> > 
-> > If HCD of server doesn't support SG, the stub driver allocates
-> > big buffer using kmalloc() instead of using sgl_alloc() which
-> > allocates SG list and pages.
+> Cc: Steffen Maier <maier@linux.ibm.com>
+> Cc: Benjamin Block <bblock@linux.ibm.com>
+> Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Acked-by: Benjamin Block <bblock@linux.ibm.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>   drivers/s390/scsi/zfcp_fc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> You might be better off not using kmalloc.  It's easier for the kernel 
-> to allocate a bunch of small buffers than a single big one.  Then you 
-> can create a separate URB for each buffer.
-
-Ok. I will implement it as usb_sg_init() does and send v2 patch
-including the logic of submitting separate URBs.
-
-> > Alan fixed vhci bug with the USB 3.0 storage device by modifying
-> > USB storage driver.
-> > ("usb-storage: Set virt_boundary_mask to avoid SG overflows")
-> > But the fundamental solution of it is to add SG support to vhci.
-> > 
-> > This patch works well with the USB 3.0 storage devices without Alan's
-> > patch, and we can revert Alan's patch if it causes some troubles.
+> diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
+> index 33eddb02ee30..b018b61bd168 100644
+> --- a/drivers/s390/scsi/zfcp_fc.c
+> +++ b/drivers/s390/scsi/zfcp_fc.c
+> @@ -620,7 +620,7 @@ static void zfcp_fc_sg_free_table(struct scatterlist *sg, int count)
+>   {
+>   	int i;
+>   
+> -	for (i = 0; i < count; i++, sg++)
+> +	for (i = 0; i < count; i++, sg = sg_next(sg))
+>   		if (sg)
+>   			free_page((unsigned long) sg_virt(sg));
+>   		else
+> @@ -641,7 +641,7 @@ static int zfcp_fc_sg_setup_table(struct scatterlist *sg, int count)
+>   	int i;
+>   
+>   	sg_init_table(sg, count);
+> -	for (i = 0; i < count; i++, sg++) {
+> +	for (i = 0; i < count; i++, sg = sg_next(sg)) {
+>   		addr = (void *) get_zeroed_page(GFP_KERNEL);
+>   		if (!addr) {
+>   			zfcp_fc_sg_free_table(sg, i);
 > 
-> These last two paragraphs don't need to be in the patch description.
 
-I will remove these paragraphs in v2 patch.
+I'm still catching up with emails that came during my vacation, so I'm not 
+fully up-to-date on the current state of this and how to bring in potential 
+fixups on top.
 
-> > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> > ---
-> 
-> I'm not sufficiently familiar with the usbip drivers to review most of 
-> this.  However...
-> 
-> > diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> > index be87c8a63e24..cc93c1a87a3e 100644
-> > --- a/drivers/usb/usbip/vhci_hcd.c
-> > +++ b/drivers/usb/usbip/vhci_hcd.c
-> > @@ -696,7 +696,8 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
-> >  	}
-> >  	vdev = &vhci_hcd->vdev[portnum-1];
-> >  
-> > -	if (!urb->transfer_buffer && urb->transfer_buffer_length) {
-> > +	if (!urb->transfer_buffer && !urb->num_sgs &&
-> > +	     urb->transfer_buffer_length) {
-> >  		dev_dbg(dev, "Null URB transfer buffer\n");
-> >  		return -EINVAL;
-> >  	}
-> > @@ -1142,6 +1143,11 @@ static int vhci_setup(struct usb_hcd *hcd)
-> >  		hcd->speed = HCD_USB3;
-> >  		hcd->self.root_hub->speed = USB_SPEED_SUPER;
-> >  	}
-> > +
-> > +	/* support sg */
-> > +	hcd->self.sg_tablesize = ~0;
-> > +	hcd->self.no_sg_constraint = 1;
-> 
-> You probably shouldn't do this, for two reasons.  First, sg_tablesize
-> of the server's HCD may be smaller than ~0.  If the client's value is
-> larger than the server's, a transfer could be accepted on the client
-> but then fail on the server because the SG list was too big.
-> 
-> Also, you may want to restrict the size of SG transfers even further,
-> so that you don't have to allocate a tremendous amount of memory all at
-> once on the server.  An SG transfer can be quite large.  I don't know 
-> what a reasonable limit would be -- 16 perhaps?
+I think, we also have two more (not so obvious) places in the corresponding 
+response/completion code path, where we might need to introduce the proper 
+iterator helper:
 
-Is there any reason why you think that 16 is ok? Or Can I set this
-value as the smallest value of all HC? I think that sg_tablesize
-cannot be a variable value because vhci interacts with different
-machines and all machines has different sg_tablesize value.
+zfcp_fsf.c:
 
-Regards
+static int zfcp_fc_eval_gpn_ft(struct zfcp_fc_req *fc_req,
+			       struct zfcp_adapter *adapter, int max_entries)
+{
+	struct scatterlist *sg = &fc_req->sg_rsp;
+...
+	/* first entry is the header */
+	for (x = 1; x < max_entries && !last; x++) {
+...
+		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
+...
+		else
+			acc = sg_virt(++sg);
+                                       ^^^^
 
-Suwan Kim
+zfcp_dbf.c:
+
+static u16 zfcp_dbf_san_res_cap_len_if_gpn_ft(char *tag,
+					      struct zfcp_fsf_req *fsf,
+					      u16 len)
+{
+	struct scatterlist *resp_entry = ct_els->resp;
+...
+	/* the basic CT_IU preamble is the same size as one entry in the GPN_FT
+	 * response, allowing us to skip special handling for it - just skip it
+	 */
+	for (x = 1; x < max_entries && !last; x++) {
+		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
+...
+		else
+			acc = sg_virt(++resp_entry);
+                                       ^^^^^^^^^^^^
+
+
+What do you think?
+
+-- 
+Mit freundlichen Gruessen / Kind regards
+Steffen Maier
+
+Linux on IBM Z Development
+
+https://www.ibm.com/privacy/us/en/
+IBM Deutschland Research & Development GmbH
+Vorsitzender des Aufsichtsrats: Matthias Hartmann
+Geschaeftsfuehrung: Dirk Wittkopp
+Sitz der Gesellschaft: Boeblingen
+Registergericht: Amtsgericht Stuttgart, HRB 243294
+
