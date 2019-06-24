@@ -2,180 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6679050A28
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 13:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD60550A5C
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 14:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729850AbfFXLvm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 07:51:42 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:36244 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729420AbfFXLvl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 07:51:41 -0400
-Received: by mail-pf1-f195.google.com with SMTP id r7so7379417pfl.3
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2019 04:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MktjD5JI8plrPxYgdY28dSdky16sGE3yFJlzutMBX0Y=;
-        b=E42AtJYYKS3gX+CavKLFlDYVVNCoSjuykLZUIN+uEWysOmPvEjowAsUCoL+p4bxDLD
-         CHrahBaSZ/AaA1XqTklaYxmNdWwMTuqFhUEj3ACVySVr6cSwog2yQK7SJYe9SJf+1fsu
-         Jxg5XidlAQWXCtiklfCS+OOJ1RsXwjtQbu8IAX5dtex3bFVNMHklYhUWj3x0K3TIwpv7
-         HKzvKlb0UyYUk6dO+GP0wKxTbQ6mWivHViXlIhnXA1+Bye+t0Pe7wiPpiviOP4TFKtF+
-         5ep5I5d21sivYG84h7gout7eJagMVCFuQ5RU2JOUJgT/iicMTHgAKyAYWUnWJcbS4xSb
-         SGOg==
+        id S1729482AbfFXMHG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 08:07:06 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:42153 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727789AbfFXMHG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 08:07:06 -0400
+Received: by mail-io1-f71.google.com with SMTP id f22so21725902ioj.9
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2019 05:07:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MktjD5JI8plrPxYgdY28dSdky16sGE3yFJlzutMBX0Y=;
-        b=HCN/U7CZvjty8/17WlFrichGCeGHG4WCSCpaxcS3ISKqoDGSsI7IYeY9UwsKU4yT5n
-         Q3jPxCJfPcGVfgu8qeHEuhE33/Gm0JQSI3ROq1oRdX9TpSY1dFj7MzqcAmZ38uuEQrEw
-         Pzq6sjobrG1Rt+sWpkYt8bNohBryx79sBpglNNJOV70zA6C7zTK8+ox1fA5PGu3+ya9m
-         EQsA+zPD92cOyis2F1ilaT10RiI+tfn4hFb1fNqX2S3qlQtjFBb3QA+bmdberKeRGTuX
-         rPOFUyKWt/6yXsuxh+keoTHyhvBU/AxVIr5wAniRPil2Dz/2GJTmwr79NDmKPsvtyLIl
-         eW2A==
-X-Gm-Message-State: APjAAAWhqdyKnAlB/BFWT1M02ZgTW1v+dZyFcnHtMG+nMIOVGu8bfNn6
-        AwIgHd75i8AcEBnvnNtc4e3hN97Hjw6gGq5B89wBXQ==
-X-Google-Smtp-Source: APXvYqz5xbtBgSv9XKplkSawe6nghKkaroCsUJSXThEB/hnFaWvNPzkCZMYZkuMEAbHjzcChr/ODQWoaTLNZKz32Dw4=
-X-Received: by 2002:a17:90a:a116:: with SMTP id s22mr24124967pjp.47.1561377100565;
- Mon, 24 Jun 2019 04:51:40 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=UGhJIyNooByBIQwghNYXd2AUJKMl6V+JYhFL1m8VV5g=;
+        b=ac+L9UolGUX2fBZLTgPgg2pWj2pnjcAT/IIK7kdrAxsovVF7zgXo6LUG+b0299c4YE
+         gU/PE1yCV4ZT5mDbY4vARdy/8AObose0i4eXKxtMPPsT2DKcNZrN398UIEKLdKk+tcAO
+         rEW0YFb4fRWgJ4s6PJAOmby79fc9BljrkZJmjztnsyR/prOp842JMD61V3wl75rlKrRL
+         r4VEXxGDB3fhHMhZclBkafwKmgAl+gw0j90uE4daZZvcAZzAtwDqfZBsnLLa8xQWWoOA
+         YV+CAmmPW8ckDv7+ZV+36BDJnJ/TrMOtsL04hJI/TuVD46A96CfX3LWjhAQqf3BdIIIQ
+         JVpw==
+X-Gm-Message-State: APjAAAWn+NmnuDATjhV/yn6SgYq7zAwGiXwAzL6aaNHNzYL3AGbTT2cT
+        yWQiqEQnLk4CBDT+dFar+46l1aYsfKe99ZFyRpSW9iUfz8Z8
+X-Google-Smtp-Source: APXvYqxR/tYsvKiMqAC13+NvLqrNK+/RBaFWoLBWzH6xb58aCGAjHzGagS7p4kIYGN9dkrABIdKIHu9D/9WuZjUzVuwPN7Fxlm1g
 MIME-Version: 1.0
-References: <Pine.LNX.4.44L0.1906201544001.1346-100000@iolanthe.rowland.org> <3232861.cjm3rXpEJU@debian64>
-In-Reply-To: <3232861.cjm3rXpEJU@debian64>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 24 Jun 2019 13:51:29 +0200
-Message-ID: <CAAeHK+zhcgmBQT=rdHaCMu7XWPz4o1gwzCJQEXiTEW9_iUUauA@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in p54u_load_firmware_cb
-To:     Christian Lamparter <chunkeey@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+6d237e74cdc13f036473@syzkaller.appspotmail.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-wireless@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a05:6638:63a:: with SMTP id h26mr1330802jar.92.1561378025312;
+ Mon, 24 Jun 2019 05:07:05 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 05:07:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008f19f7058c10a633@google.com>
+Subject: KASAN: global-out-of-bounds Read in qmi_wwan_probe
+From:   syzbot <syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, bjorn@mork.no, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 9:56 PM Christian Lamparter <chunkeey@gmail.com> wrote:
->
-> On Thursday, June 20, 2019 9:46:32 PM CEST Alan Stern wrote:
-> > On Wed, 19 Jun 2019, syzbot wrote:
-> >
-> > > syzbot has found a reproducer for the following crash on:
-> > >
-> > > HEAD commit:    9939f56e usb-fuzzer: main usb gadget fuzzer driver
-> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=135e29faa00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=df134eda130bb43a
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=6d237e74cdc13f036473
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=175d946ea00000
-> > >
-> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > Reported-by: syzbot+6d237e74cdc13f036473@syzkaller.appspotmail.com
-> > >
-> > > usb 3-1: Direct firmware load for isl3887usb failed with error -2
-> > > usb 3-1: Firmware not found.
-> > > ==================================================================
-> > > BUG: KASAN: slab-out-of-bounds in p54u_load_firmware_cb.cold+0x97/0x13d
-> > > drivers/net/wireless/intersil/p54/p54usb.c:936
-> > > Read of size 8 at addr ffff8881c9cf7588 by task kworker/1:5/2759
-> > >
-> > > CPU: 1 PID: 2759 Comm: kworker/1:5 Not tainted 5.2.0-rc5+ #11
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > > Google 01/01/2011
-> > > Workqueue: events request_firmware_work_func
-> > > Call Trace:
-> > >   __dump_stack lib/dump_stack.c:77 [inline]
-> > >   dump_stack+0xca/0x13e lib/dump_stack.c:113
-> > >   print_address_description+0x67/0x231 mm/kasan/report.c:188
-> > >   __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
-> > >   kasan_report+0xe/0x20 mm/kasan/common.c:614
-> > >   p54u_load_firmware_cb.cold+0x97/0x13d
-> > > drivers/net/wireless/intersil/p54/p54usb.c:936
-> > >   request_firmware_work_func+0x126/0x242
-> > > drivers/base/firmware_loader/main.c:785
-> > >   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
-> > >   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-> > >   kthread+0x30b/0x410 kernel/kthread.c:255
-> > >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-> > >
-> > > Allocated by task 1612:
-> > >   save_stack+0x1b/0x80 mm/kasan/common.c:71
-> > >   set_track mm/kasan/common.c:79 [inline]
-> > >   __kasan_kmalloc mm/kasan/common.c:489 [inline]
-> > >   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:462
-> > >   kmalloc include/linux/slab.h:547 [inline]
-> > >   syslog_print kernel/printk/printk.c:1346 [inline]
-> > >   do_syslog kernel/printk/printk.c:1519 [inline]
-> > >   do_syslog+0x4f4/0x12e0 kernel/printk/printk.c:1493
-> > >   kmsg_read+0x8a/0xb0 fs/proc/kmsg.c:40
-> > >   proc_reg_read+0x1c1/0x280 fs/proc/inode.c:221
-> > >   __vfs_read+0x76/0x100 fs/read_write.c:425
-> > >   vfs_read+0x18e/0x3d0 fs/read_write.c:461
-> > >   ksys_read+0x127/0x250 fs/read_write.c:587
-> > >   do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
-> > >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > >
-> > > Freed by task 1612:
-> > >   save_stack+0x1b/0x80 mm/kasan/common.c:71
-> > >   set_track mm/kasan/common.c:79 [inline]
-> > >   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:451
-> > >   slab_free_hook mm/slub.c:1421 [inline]
-> > >   slab_free_freelist_hook mm/slub.c:1448 [inline]
-> > >   slab_free mm/slub.c:2994 [inline]
-> > >   kfree+0xd7/0x280 mm/slub.c:3949
-> > >   syslog_print kernel/printk/printk.c:1405 [inline]
-> > >   do_syslog kernel/printk/printk.c:1519 [inline]
-> > >   do_syslog+0xff3/0x12e0 kernel/printk/printk.c:1493
-> > >   kmsg_read+0x8a/0xb0 fs/proc/kmsg.c:40
-> > >   proc_reg_read+0x1c1/0x280 fs/proc/inode.c:221
-> > >   __vfs_read+0x76/0x100 fs/read_write.c:425
-> > >   vfs_read+0x18e/0x3d0 fs/read_write.c:461
-> > >   ksys_read+0x127/0x250 fs/read_write.c:587
-> > >   do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
-> > >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > >
-> > > The buggy address belongs to the object at ffff8881c9cf7180
-> > >   which belongs to the cache kmalloc-1k of size 1024
-> > > The buggy address is located 8 bytes to the right of
-> > >   1024-byte region [ffff8881c9cf7180, ffff8881c9cf7580)
-> > > The buggy address belongs to the page:
-> > > page:ffffea0007273d00 refcount:1 mapcount:0 mapping:ffff8881dac02a00
-> > > index:0x0 compound_mapcount: 0
-> > > flags: 0x200000000010200(slab|head)
-> > > raw: 0200000000010200 dead000000000100 dead000000000200 ffff8881dac02a00
-> > > raw: 0000000000000000 00000000000e000e 00000001ffffffff 0000000000000000
-> > > page dumped because: kasan: bad access detected
-> > >
-> > > Memory state around the buggy address:
-> > >   ffff8881c9cf7480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > >   ffff8881c9cf7500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > > > ffff8881c9cf7580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > >                        ^
-> > >   ffff8881c9cf7600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > >   ffff8881c9cf7680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > > ==================================================================
-> >
-> > Isn't this the same as syzkaller bug 200d4bb11b23d929335f ?  Doesn't
-> > the same patch fix it?
-> >
-> I think Kalle hasn't applied it yet? It's still sitting on the patchwork queue:
-> <https://patchwork.kernel.org/patch/10951527/>
+Hello,
 
-Yes, until this patch is in the tree that is being tested (which is
-based on the usb-linus branch; I update it every few weeks), syzbot
-considers this bug as open.
+syzbot found the following crash on:
 
->
-> Regards,
-> Christian
->
->
+HEAD commit:    9939f56e usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1615a669a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df134eda130bb43a
+dashboard link: https://syzkaller.appspot.com/bug?extid=b68605d7fadd21510de1
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10630af6a00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1127da69a00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com
+
+usb 1-1: new high-speed USB device number 2 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=12d1, idProduct=14f1,  
+bcdDevice=d4.d9
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+==================================================================
+BUG: KASAN: global-out-of-bounds in qmi_wwan_probe+0x342/0x360  
+drivers/net/usb/qmi_wwan.c:1417
+Read of size 8 at addr ffffffff8618c140 by task kworker/1:1/22
+
+CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.2.0-rc5+ #11
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description+0x67/0x231 mm/kasan/report.c:188
+  __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
+  kasan_report+0xe/0x20 mm/kasan/common.c:614
+  qmi_wwan_probe+0x342/0x360 drivers/net/usb/qmi_wwan.c:1417
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
