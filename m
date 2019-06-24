@@ -2,275 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB8B50B47
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 14:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9660150BEB
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 15:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728138AbfFXM7V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 08:59:21 -0400
-Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:11206 "EHLO
-        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728070AbfFXM7V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 08:59:21 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 840FE3F669;
-        Mon, 24 Jun 2019 14:59:18 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.9
+        id S1731072AbfFXNYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 09:24:34 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:39994 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728635AbfFXNYd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 09:24:33 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id A2B2D60D35; Mon, 24 Jun 2019 13:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561382672;
+        bh=nFcGEbZcTkvmOSyEkEviWoSgX4LYhTdkIGi80b7j/pE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=H06CjTkxt7ZLBbVY5ZjRqN54RzrMndZHgmNV5H3VeSNr3xXlzHf6g5jfRIdp/58a/
+         hgvsi2DuTJQ0eLZrprg32HrZUs/9LR9sllERlpOa+5dcKIrsDeTl4Oanm77mHVsFuc
+         v9CFN12qLPWm+7NcUdEAFx9gAr/N8EjcIWHJC3SM=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 tagged_above=-999 required=6.31
-        tests=[ALL_TRUSTED=-1, BAYES_00=-1.9] autolearn=ham autolearn_force=no
-Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1ArtfnyGGGGw; Mon, 24 Jun 2019 14:59:18 +0200 (CEST)
-Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
-        (Authenticated sender: mb547485)
-        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 32B2C3F4E9;
-        Mon, 24 Jun 2019 14:59:17 +0200 (CEST)
-Date:   Mon, 24 Jun 2019 14:59:16 +0200
-From:   Fredrik Noring <noring@nocrew.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>, laurentiu.tudor@nxp.com,
-        stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, marex@denx.de, leoyang.li@nxp.com,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        JuergenUrban@gmx.de
-Subject: Re: [PATCH v7 3/5] usb: host: ohci-sm501: init genalloc for local
- memory
-Message-ID: <20190624125916.GA2516@sx9>
-References: <20190605214622.GA22254@roeck-us.net>
- <20190611133223.GA30054@roeck-us.net>
- <20190611172654.GA2602@sx9>
- <20190611190343.GA18459@roeck-us.net>
- <20190613134033.GA2489@sx9>
- <bdfd2178-9e3c-dc15-6aa1-ec1f1fbcb191@roeck-us.net>
- <20190613153414.GA909@sx9>
- <3f2164cd-7655-b7cc-ec57-d8751886728c@roeck-us.net>
- <20190614142816.GA2574@sx9>
- <20190624063515.GA3296@lst.de>
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 14E3F607DE;
+        Mon, 24 Jun 2019 13:24:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561382669;
+        bh=nFcGEbZcTkvmOSyEkEviWoSgX4LYhTdkIGi80b7j/pE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=gqG7YnqdeXqEoCkwnT9mzxN9E9OmD+C52BZr7/1ToNn09m04ST35+RShL2Ie6YeY0
+         BzjYnXOC58v2XBtPgneIeD7wApDSX07rTUNMHm0djr2OXkRjH+bL6q+RM7skjmMm19
+         jMlZEKi9FABS8nidUEy3eenOdVDHdbF8MVV/Bh0M=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 14E3F607DE
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Christian Lamparter <chunkeey@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        syzbot <syzbot+6d237e74cdc13f036473@syzkaller.appspotmail.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-wireless@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in p54u_load_firmware_cb
+References: <Pine.LNX.4.44L0.1906201544001.1346-100000@iolanthe.rowland.org>
+        <3232861.cjm3rXpEJU@debian64>
+        <CAAeHK+zhcgmBQT=rdHaCMu7XWPz4o1gwzCJQEXiTEW9_iUUauA@mail.gmail.com>
+Date:   Mon, 24 Jun 2019 16:24:23 +0300
+In-Reply-To: <CAAeHK+zhcgmBQT=rdHaCMu7XWPz4o1gwzCJQEXiTEW9_iUUauA@mail.gmail.com>
+        (Andrey Konovalov's message of "Mon, 24 Jun 2019 13:51:29 +0200")
+Message-ID: <87d0j3t8u0.fsf@kamboji.qca.qualcomm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190624063515.GA3296@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Christoph,
+Andrey Konovalov <andreyknvl@google.com> writes:
 
-> Can you send me the patch formally so that I can queue it up for the
-> dma-mapping tree?
+> On Thu, Jun 20, 2019 at 9:56 PM Christian Lamparter <chunkeey@gmail.com> wrote:
+>>
+>> On Thursday, June 20, 2019 9:46:32 PM CEST Alan Stern wrote:
+>> > On Wed, 19 Jun 2019, syzbot wrote:
+>> >
+>> > > syzbot has found a reproducer for the following crash on:
+>> > >
+>> > > HEAD commit:    9939f56e usb-fuzzer: main usb gadget fuzzer driver
+>> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+>> > > console output: https://syzkaller.appspot.com/x/log.txt?x=135e29faa00000
+>> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=df134eda130bb43a
+>> > > dashboard link: https://syzkaller.appspot.com/bug?extid=6d237e74cdc13f036473
+>> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=175d946ea00000
+>> > >
+>> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+>> > > Reported-by: syzbot+6d237e74cdc13f036473@syzkaller.appspotmail.com
+>> > >
+>> > > usb 3-1: Direct firmware load for isl3887usb failed with error -2
+>> > > usb 3-1: Firmware not found.
+>> > > ==================================================================
+>> > > BUG: KASAN: slab-out-of-bounds in p54u_load_firmware_cb.cold+0x97/0x13d
+>> > > drivers/net/wireless/intersil/p54/p54usb.c:936
+>> > > Read of size 8 at addr ffff8881c9cf7588 by task kworker/1:5/2759
+>> > >
+>> > > CPU: 1 PID: 2759 Comm: kworker/1:5 Not tainted 5.2.0-rc5+ #11
+>> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+>> > > Google 01/01/2011
+>> > > Workqueue: events request_firmware_work_func
+>> > > Call Trace:
+>> > >   __dump_stack lib/dump_stack.c:77 [inline]
+>> > >   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>> > >   print_address_description+0x67/0x231 mm/kasan/report.c:188
+>> > >   __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
+>> > >   kasan_report+0xe/0x20 mm/kasan/common.c:614
+>> > >   p54u_load_firmware_cb.cold+0x97/0x13d
+>> > > drivers/net/wireless/intersil/p54/p54usb.c:936
+>> > >   request_firmware_work_func+0x126/0x242
+>> > > drivers/base/firmware_loader/main.c:785
+>> > >   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+>> > >   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+>> > >   kthread+0x30b/0x410 kernel/kthread.c:255
+>> > >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>> > >
+>> > > Allocated by task 1612:
+>> > >   save_stack+0x1b/0x80 mm/kasan/common.c:71
+>> > >   set_track mm/kasan/common.c:79 [inline]
+>> > >   __kasan_kmalloc mm/kasan/common.c:489 [inline]
+>> > >   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:462
+>> > >   kmalloc include/linux/slab.h:547 [inline]
+>> > >   syslog_print kernel/printk/printk.c:1346 [inline]
+>> > >   do_syslog kernel/printk/printk.c:1519 [inline]
+>> > >   do_syslog+0x4f4/0x12e0 kernel/printk/printk.c:1493
+>> > >   kmsg_read+0x8a/0xb0 fs/proc/kmsg.c:40
+>> > >   proc_reg_read+0x1c1/0x280 fs/proc/inode.c:221
+>> > >   __vfs_read+0x76/0x100 fs/read_write.c:425
+>> > >   vfs_read+0x18e/0x3d0 fs/read_write.c:461
+>> > >   ksys_read+0x127/0x250 fs/read_write.c:587
+>> > >   do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
+>> > >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+>> > >
+>> > > Freed by task 1612:
+>> > >   save_stack+0x1b/0x80 mm/kasan/common.c:71
+>> > >   set_track mm/kasan/common.c:79 [inline]
+>> > >   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:451
+>> > >   slab_free_hook mm/slub.c:1421 [inline]
+>> > >   slab_free_freelist_hook mm/slub.c:1448 [inline]
+>> > >   slab_free mm/slub.c:2994 [inline]
+>> > >   kfree+0xd7/0x280 mm/slub.c:3949
+>> > >   syslog_print kernel/printk/printk.c:1405 [inline]
+>> > >   do_syslog kernel/printk/printk.c:1519 [inline]
+>> > >   do_syslog+0xff3/0x12e0 kernel/printk/printk.c:1493
+>> > >   kmsg_read+0x8a/0xb0 fs/proc/kmsg.c:40
+>> > >   proc_reg_read+0x1c1/0x280 fs/proc/inode.c:221
+>> > >   __vfs_read+0x76/0x100 fs/read_write.c:425
+>> > >   vfs_read+0x18e/0x3d0 fs/read_write.c:461
+>> > >   ksys_read+0x127/0x250 fs/read_write.c:587
+>> > >   do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
+>> > >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+>> > >
+>> > > The buggy address belongs to the object at ffff8881c9cf7180
+>> > >   which belongs to the cache kmalloc-1k of size 1024
+>> > > The buggy address is located 8 bytes to the right of
+>> > >   1024-byte region [ffff8881c9cf7180, ffff8881c9cf7580)
+>> > > The buggy address belongs to the page:
+>> > > page:ffffea0007273d00 refcount:1 mapcount:0 mapping:ffff8881dac02a00
+>> > > index:0x0 compound_mapcount: 0
+>> > > flags: 0x200000000010200(slab|head)
+>> > > raw: 0200000000010200 dead000000000100 dead000000000200 ffff8881dac02a00
+>> > > raw: 0000000000000000 00000000000e000e 00000001ffffffff 0000000000000000
+>> > > page dumped because: kasan: bad access detected
+>> > >
+>> > > Memory state around the buggy address:
+>> > >   ffff8881c9cf7480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>> > >   ffff8881c9cf7500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>> > > > ffff8881c9cf7580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>> > >                        ^
+>> > >   ffff8881c9cf7600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>> > >   ffff8881c9cf7680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>> > > ==================================================================
+>> >
+>> > Isn't this the same as syzkaller bug 200d4bb11b23d929335f ?  Doesn't
+>> > the same patch fix it?
+>> >
+>> I think Kalle hasn't applied it yet? It's still sitting on the patchwork queue:
+>> <https://patchwork.kernel.org/patch/10951527/>
+>
+> Yes, until this patch is in the tree that is being tested (which is
+> based on the usb-linus branch; I update it every few weeks), syzbot
+> considers this bug as open.
 
-That patch would be detrimental to local memory devices, as previously
-discussed, so I would like to suggest a much better approach, as shown below,
-where allocations are aligned as required but not necessarily much more than
-that.
+I'm hoping to apply this today or tomorrow.
 
-Fredrik
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -3014,7 +3014,7 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
- 	int err;
- 	void __iomem *local_mem;
- 
--	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, PAGE_SHIFT,
-+	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, 4,
- 						  dev_to_node(hcd->self.sysdev),
- 						  dev_name(hcd->self.sysdev));
- 	if (IS_ERR(hcd->localmem_pool))
-diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
---- a/drivers/usb/host/ohci-hcd.c
-+++ b/drivers/usb/host/ohci-hcd.c
-@@ -507,9 +507,9 @@ static int ohci_init (struct ohci_hcd *ohci)
- 	ohci->prev_frame_no = IO_WATCHDOG_OFF;
- 
- 	if (hcd->localmem_pool)
--		ohci->hcca = gen_pool_dma_alloc(hcd->localmem_pool,
-+		ohci->hcca = gen_pool_dma_alloc_align(hcd->localmem_pool,
- 						sizeof(*ohci->hcca),
--						&ohci->hcca_dma);
-+						&ohci->hcca_dma, 256);
- 	else
- 		ohci->hcca = dma_alloc_coherent(hcd->self.controller,
- 						sizeof(*ohci->hcca),
-diff --git a/drivers/usb/host/ohci-mem.c b/drivers/usb/host/ohci-mem.c
---- a/drivers/usb/host/ohci-mem.c
-+++ b/drivers/usb/host/ohci-mem.c
-@@ -94,7 +94,8 @@ td_alloc (struct ohci_hcd *hc, gfp_t mem_flags)
- 	struct usb_hcd	*hcd = ohci_to_hcd(hc);
- 
- 	if (hcd->localmem_pool)
--		td = gen_pool_dma_zalloc(hcd->localmem_pool, sizeof(*td), &dma);
-+		td = gen_pool_dma_zalloc_align(hcd->localmem_pool,
-+				sizeof(*td), &dma, 32);
- 	else
- 		td = dma_pool_zalloc(hc->td_cache, mem_flags, &dma);
- 	if (td) {
-@@ -137,7 +138,8 @@ ed_alloc (struct ohci_hcd *hc, gfp_t mem_flags)
- 	struct usb_hcd	*hcd = ohci_to_hcd(hc);
- 
- 	if (hcd->localmem_pool)
--		ed = gen_pool_dma_zalloc(hcd->localmem_pool, sizeof(*ed), &dma);
-+		ed = gen_pool_dma_zalloc_align(hcd->localmem_pool,
-+				sizeof(*ed), &dma, 16);
- 	else
- 		ed = dma_pool_zalloc(hc->ed_cache, mem_flags, &dma);
- 	if (ed) {
-diff --git a/include/linux/genalloc.h b/include/linux/genalloc.h
---- a/include/linux/genalloc.h
-+++ b/include/linux/genalloc.h
-@@ -121,7 +121,15 @@ extern unsigned long gen_pool_alloc_algo(struct gen_pool *, size_t,
- 		genpool_algo_t algo, void *data);
- extern void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size,
- 		dma_addr_t *dma);
--void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma);
-+extern void *gen_pool_dma_alloc_algo(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, genpool_algo_t algo, void *data);
-+extern void *gen_pool_dma_alloc_align(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, int align);
-+extern void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma);
-+extern void *gen_pool_dma_zalloc_algo(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, genpool_algo_t algo, void *data);
-+extern void *gen_pool_dma_zalloc_align(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, int align);
- extern void gen_pool_free(struct gen_pool *, unsigned long, size_t);
- extern void gen_pool_for_each_chunk(struct gen_pool *,
- 	void (*)(struct gen_pool *, struct gen_pool_chunk *, void *), void *);
-diff --git a/lib/genalloc.c b/lib/genalloc.c
---- a/lib/genalloc.c
-+++ b/lib/genalloc.c
-@@ -347,13 +347,33 @@ EXPORT_SYMBOL(gen_pool_alloc_algo);
-  * Return: virtual address of the allocated memory, or %NULL on failure
-  */
- void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
-+{
-+	return gen_pool_dma_alloc_algo(pool, size, dma, pool->algo, pool->data);
-+}
-+EXPORT_SYMBOL(gen_pool_dma_alloc);
-+
-+/**
-+ * gen_pool_dma_alloc_algo - allocate special memory from the pool for DMA
-+ * usage with the given pool algorithm
-+ * @pool: pool to allocate from
-+ * @size: number of bytes to allocate from the pool
-+ * @dma: dma-view physical address return value.  Use NULL if unneeded.
-+ * @algo: algorithm passed from caller
-+ * @data: data passed to algorithm
-+ *
-+ * Allocate the requested number of bytes from the specified pool. Uses the
-+ * given pool allocation function. Can not be used in NMI handler on
-+ * architectures without NMI-safe cmpxchg implementation.
-+ */
-+void *gen_pool_dma_alloc_algo(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, genpool_algo_t algo, void *data)
- {
- 	unsigned long vaddr;
- 
- 	if (!pool)
- 		return NULL;
- 
--	vaddr = gen_pool_alloc(pool, size);
-+	vaddr = gen_pool_alloc_algo(pool, size, algo, data);
- 	if (!vaddr)
- 		return NULL;
- 
-@@ -362,7 +382,31 @@ void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
- 
- 	return (void *)vaddr;
- }
--EXPORT_SYMBOL(gen_pool_dma_alloc);
-+EXPORT_SYMBOL(gen_pool_dma_alloc_algo);
-+
-+/**
-+ * gen_pool_dma_zalloc_align - allocate special from the pool for DMA usage
-+ * with the given alignment
-+ * @pool: pool to allocate from
-+ * @size: number of bytes to allocate from the pool
-+ * @dma: dma-view physical address return value.  Use %NULL if unneeded.
-+ * @align: alignment in bytes for starting address
-+ *
-+ * Allocate the requested number bytes from the specified pool, with the given
-+ * alignment restriction. Can not be used in NMI handler on architectures
-+ * without NMI-safe cmpxchg implementation.
-+ *
-+ * Return: virtual address of the allocated memory, or %NULL on failure
-+ */
-+void *gen_pool_dma_alloc_align(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, int align)
-+{
-+	struct genpool_data_align data = { .align = align };
-+
-+	return gen_pool_dma_alloc_algo(pool, size, dma,
-+			gen_pool_first_fit_align, &data);
-+}
-+EXPORT_SYMBOL(gen_pool_dma_alloc_align);
- 
- /**
-  * gen_pool_dma_zalloc - allocate special zeroed memory from the pool for
-@@ -380,14 +424,60 @@ EXPORT_SYMBOL(gen_pool_dma_alloc);
-  */
- void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
- {
--	void *vaddr = gen_pool_dma_alloc(pool, size, dma);
-+	return gen_pool_dma_zalloc_algo(pool, size, dma, pool->algo, pool->data);
-+}
-+EXPORT_SYMBOL(gen_pool_dma_zalloc);
-+
-+/**
-+ * gen_pool_dma_zalloc_algo - allocate special zeroed memory from the pool for
-+ * DMA usage with the given pool algorithm
-+ * @pool: pool to allocate from
-+ * @size: number of bytes to allocate from the pool
-+ * @dma: dma-view physical address return value.  Use %NULL if unneeded.
-+ * @algo: algorithm passed from caller
-+ * @data: data passed to algorithm
-+ *
-+ * Allocate the requested number of zeroed bytes from the specified pool. Uses
-+ * the pool allocation function. Can not be used in NMI handler on
-+ * architectures without NMI-safe cmpxchg implementation.
-+ *
-+ * Return: virtual address of the allocated zeroed memory, or %NULL on failure
-+ */
-+void *gen_pool_dma_zalloc_algo(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, genpool_algo_t algo, void *data)
-+{
-+	void *vaddr = gen_pool_dma_alloc_algo(pool, size, dma, algo, data);
- 
- 	if (vaddr)
- 		memset(vaddr, 0, size);
- 
- 	return vaddr;
- }
--EXPORT_SYMBOL(gen_pool_dma_zalloc);
-+EXPORT_SYMBOL(gen_pool_dma_zalloc_algo);
-+
-+/**
-+ * gen_pool_dma_zalloc_align - allocate special zeroed memory from the pool for
-+ * DMA usage with the given alignment
-+ * @pool: pool to allocate from
-+ * @size: number of bytes to allocate from the pool
-+ * @dma: dma-view physical address return value.  Use %NULL if unneeded.
-+ * @align: alignment in bytes for starting address
-+ *
-+ * Allocate the requested number of zeroed bytes from the specified pool,
-+ * with the given alignment restriction. Can not be used in NMI handler on
-+ * architectures without NMI-safe cmpxchg implementation.
-+ *
-+ * Return: virtual address of the allocated zeroed memory, or %NULL on failure
-+ */
-+void *gen_pool_dma_zalloc_align(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, int align)
-+{
-+	struct genpool_data_align data = { .align = align };
-+
-+	return gen_pool_dma_zalloc_algo(pool, size, dma,
-+			gen_pool_first_fit_align, &data);
-+}
-+EXPORT_SYMBOL(gen_pool_dma_zalloc_align);
- 
- /**
-  * gen_pool_free - free allocated special memory back to the pool
+-- 
+Kalle Valo
