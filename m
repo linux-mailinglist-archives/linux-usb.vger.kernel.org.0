@@ -2,66 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A96D55194F
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 19:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD0F51966
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 19:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732275AbfFXRJZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 24 Jun 2019 13:09:25 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:57674 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729008AbfFXRJZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 13:09:25 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 1C200150614A5;
-        Mon, 24 Jun 2019 10:09:25 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 10:09:24 -0700 (PDT)
-Message-Id: <20190624.100924.819846587872121764.davem@davemloft.net>
-To:     bjorn@mork.no
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        hdanton@sina.com, kristian.evensen@gmail.com
-Subject: Re: [PATCH net,stable] qmi_wwan: Fix out-of-bounds read
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190624164511.831-1-bjorn@mork.no>
-References: <20190624164511.831-1-bjorn@mork.no>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 24 Jun 2019 10:09:25 -0700 (PDT)
+        id S1732351AbfFXRRC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 13:17:02 -0400
+Received: from mail-io1-f44.google.com ([209.85.166.44]:39980 "EHLO
+        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726628AbfFXRRC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 13:17:02 -0400
+Received: by mail-io1-f44.google.com with SMTP id n5so3816908ioc.7;
+        Mon, 24 Jun 2019 10:17:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HKVZVeTIp0VzP4z4Uro5y3TTUO1hlLUucOTNEWyo+tU=;
+        b=kqK76VCJ2Tc+wIyI2JOQ/ZV6Fh/BExUX9pt0s72wbQbVVyV1s3YFexA2Gu8SlQXp/I
+         EtwsZB2BoZlFJ983KZ+zCm7b6Hx46/GF4b2NSjWh7Cibsg0DXEe892VrJteOTB1cH4oX
+         qtNqLS6uspEqD/Kv7ScBHkdRbALxcS/Lx/QzuVUazygm6YFZt1yG7WFkhytp0HSKX72H
+         x0m2BId2noXj/eTO969WTKThIe7izvrU6zXhLBJ0b6nid0VrT2YnaAJLuR5+rju5cVwW
+         mRvhGzNcNLwu+FZcbkOT1TVBV0gHEjmj9EuSB+Dy2PBTIzgnpRd31SbVOnGG3LWWElb2
+         D5Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HKVZVeTIp0VzP4z4Uro5y3TTUO1hlLUucOTNEWyo+tU=;
+        b=sgl0e1leW2n3EZ7cZRckUajBpqBZtKtfiSewpfrsVKrZwt3Q9RqpL4/brTGPwTqZCk
+         LMo3boGzDRIY2/kYnkK3SWCj4nWK83Kda4VEEKBD8/mQpSSS+Br7uJgNSUtzcZ8GWhpr
+         gZ8SmyGCMYzlAhu8BLknD8I3jaQK9/1LDrYai9/kPb7EKNFVzp4tqg+ltiisRM222IGM
+         ie7qhZV4T4xG+9IhjULrnsHDu72TjlVk6kcLFmm9gSuFbSyLHimquirODQsBZB0aRH8K
+         E+PW3xAmkXrwHnHE+FB8hmfrZgI84arOHuEwV4Vp/N/RA9Yx0LTZpKD0Gz8ksM2NAGH+
+         hrKw==
+X-Gm-Message-State: APjAAAWwq5EVPbVz4LCiAcYQI9auYU3ies39Ocy23jJeBvG4fO5IeKWb
+        r89Ek00fUj3cKyEKikz2VEZ/N2+7SHwt5bViAyw=
+X-Google-Smtp-Source: APXvYqys+HijZUTbiXSyiQ6GHQWE2ih7NaysqfQN4H4DvhAB8KcMe+qfcJYvq6imH+Gw3Fh/B+mOTRB6JLhN8F9jSlk=
+X-Received: by 2002:a5e:8f42:: with SMTP id x2mr15878117iop.35.1561396621141;
+ Mon, 24 Jun 2019 10:17:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <0000000000008f19f7058c10a633@google.com> <871rzj6sww.fsf@miraculix.mork.no>
+ <87tvcf54qc.fsf@miraculix.mork.no>
+In-Reply-To: <87tvcf54qc.fsf@miraculix.mork.no>
+From:   Kristian Evensen <kristian.evensen@gmail.com>
+Date:   Mon, 24 Jun 2019 19:16:50 +0200
+Message-ID: <CAKfDRXjnUZx2rAVV1-9em9YyNvJbFG+vciZHihsKiu66Uz2Dgw@mail.gmail.com>
+Subject: Re: KASAN: global-out-of-bounds Read in qmi_wwan_probe
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, David Miller <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bjørn Mork <bjorn@mork.no>
-Date: Mon, 24 Jun 2019 18:45:11 +0200
+Hi,
 
-> The syzbot reported
-> 
->  Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x67/0x231 mm/kasan/report.c:188
->   __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
->   kasan_report+0xe/0x20 mm/kasan/common.c:614
->   qmi_wwan_probe+0x342/0x360 drivers/net/usb/qmi_wwan.c:1417
->   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x281/0x660 drivers/base/dd.c:509
->   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-> 
-> Caused by too many confusing indirections and casts.
-> id->driver_info is a pointer stored in a long.  We want the
-> pointer here, not the address of it.
-> 
-> Thanks-to: Hillf Danton <hdanton@sina.com>
-> Reported-by: syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com
-> Cc: Kristian Evensen <kristian.evensen@gmail.com>
-> Fixes: e4bf63482c30 ("qmi_wwan: Add quirk for Quectel dynamic config")
-> Signed-off-by: Bjørn Mork <bjorn@mork.no>
+On Mon, Jun 24, 2019 at 6:26 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
+> Doh! Right you are.  Thanks to both you and Andrey for quick and good
+> help.
+>
+> We obviously have some bad code patterns here, since this apparently
+> worked for Kristian by pure luck.
 
-Applied, thanks.
+Thanks a lot to everyone for spotting and fixing my mistake, and sorry
+for not replying earlier. The patch from Bj=C3=B8rn is probably a candidate
+for stable as well. I don't remember exactly when the quirk was
+accepted in the kernel, but I recently submitted and got the quirk
+accepted into 4.14.
+
+BR,
+Kristian
