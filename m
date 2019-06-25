@@ -2,378 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF5154CB9
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 12:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A2854CF9
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 12:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730040AbfFYKvR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jun 2019 06:51:17 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7318 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727924AbfFYKvQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 06:51:16 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5PAghCp111969
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2019 06:51:14 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tbguvm225-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2019 06:51:14 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-usb@vger.kernel.org> from <maier@linux.ibm.com>;
-        Tue, 25 Jun 2019 11:51:11 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 25 Jun 2019 11:51:06 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5PAp5ij59441256
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jun 2019 10:51:05 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D2F542047;
-        Tue, 25 Jun 2019 10:51:05 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5960A4204B;
-        Tue, 25 Jun 2019 10:51:04 +0000 (GMT)
-Received: from oc4120165700.ibm.com (unknown [9.152.97.9])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Jun 2019 10:51:04 +0000 (GMT)
-Subject: Re: [PATCH V5 10/16] s390: zfcp_fc: use sg helper to operate
- scatterlist
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-s390@vger.kernel.org
-References: <20190618013757.22401-1-ming.lei@redhat.com>
- <20190618013757.22401-11-ming.lei@redhat.com>
- <95bfa1fb-d0eb-fc61-ecc0-001ae52a326f@linux.ibm.com>
- <20190625011902.GA23777@ming.t460p>
-From:   Steffen Maier <maier@linux.ibm.com>
-Date:   Tue, 25 Jun 2019 12:51:04 +0200
+        id S1732261AbfFYK67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jun 2019 06:58:59 -0400
+Received: from mga12.intel.com ([192.55.52.136]:4483 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732391AbfFYK6v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 Jun 2019 06:58:51 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jun 2019 03:58:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,415,1557212400"; 
+   d="scan'208";a="152261881"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by orsmga007.jf.intel.com with ESMTP; 25 Jun 2019 03:58:49 -0700
+Subject: Re: USB bug
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Harutyun Khachatryan <kh_harut@mail.ru>
+Cc:     USB list <linux-usb@vger.kernel.org>
+References: <Pine.LNX.4.44L0.1906241349270.1609-300000@iolanthe.rowland.org>
+From:   Mathias Nyman <mathias.nyman@intel.com>
+Message-ID: <0c3d2bff-0093-2cbc-d16c-a27aa2ef1523@intel.com>
+Date:   Tue, 25 Jun 2019 14:01:43 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-In-Reply-To: <20190625011902.GA23777@ming.t460p>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <Pine.LNX.4.44L0.1906241349270.1609-300000@iolanthe.rowland.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19062510-0012-0000-0000-0000032C35CD
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062510-0013-0000-0000-000021656A97
-Message-Id: <93d3d89e-a9ae-691f-d1f8-0463f714957d@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-25_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906250087
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Ming,
-
-I don't mind doing this change for zfcp. However, I'm having doubts regarding 
-the rationale in the commit description. If I understood your patch series 
-correctly from its cover letter (would have been nice to copy the SCSI MQ 
-detail part of its core statement in (one of) the patches so it would make its 
-way into git log), you plan to make a change to scatterlist allocations *in 
-SCSI MQ*.
-
-All zfcp changes in this patch set only refer to zfcp-internal remote port 
-discovery, i.e. they neither come from SCSI (internally) nor from block(mq).
-
-zfcp_fc.h:
-/**
-  * struct zfcp_fc_req - Container for FC ELS and CT requests sent from zfcp
-  * @ct_els: data required for issuing fsf command
-  * @sg_req: scatterlist entry for request data, refers to embedded @u submember
-  * @sg_rsp: scatterlist entry for response data, refers to embedded @u submember
-  * @u: request and response specific data
-
-  * @u.gpn_ft: GPN_FT specific data
-  * @u.gpn_ft.sg_rsp2: GPN_FT response, not embedded here, allocated elsewhere
-  * @u.gpn_ft.req: GPN_FT request
-
-  */
-struct zfcp_fc_req {
-	struct zfcp_fsf_ct_els				ct_els;
-	struct scatterlist				sg_req;
-	struct scatterlist				sg_rsp;
-	union {
-
-		struct {
-			struct scatterlist sg_rsp2[ZFCP_FC_GPN_FT_NUM_BUFS - 1];
-			struct zfcp_fc_gpn_ft_req	req;
-		} gpn_ft;
-
-	} u;
-};
-
-So this should be guaranteed to be a linear unchained scatterlist, 
-independently of your SCSI (or block) changes.
-Note: Only remote port discovery also uses u.gpn_ft.sg_rsp2 instead of just sg_rsp.
-  zfcp_fc_scan_ports(work)
-   zfcp_fc_alloc_sg_env(buf_num)
-    zfcp_fc_sg_setup_table(&fc_req->sg_rsp, buf_num)
-(In fact it's somewhat intricate, because it actually uses sg_rsp and seems to 
-rely on the fact that the subsequent sg_rsp2[] gives enough contiguous memory 
-to hold buf_num linear scatterlist entries starting with field offset sg_rsp.)
-The other cases use single element and thus linear unchained scatterlist with 
-sg_rsp (and all cases use sg_req):
-Finding symbol: sg_init_one
-Database directory: /home/maier/docs/zfcp/tuxmaker/linux/drivers/s390/scsi/
--------------------------------------------------------------------------------
-*** zfcp_dbf.c:
-zfcp_dbf_san_in_els[601]       sg_init_one(&sg, srb->payload.data, length);
-// above tracing part is unrelated to all of scsi/block/zfcp-internal-ct/els
-*** zfcp_fc.c:
-zfcp_fc_ns_gid_pn_request[388] sg_init_one(&fc_req->sg_req, gid_pn_req, 
-sizeof(*gid_pn_req));
-zfcp_fc_ns_gid_pn_request[389] sg_init_one(&fc_req->sg_rsp, gid_pn_rsp, 
-sizeof(*gid_pn_rsp));
-zfcp_fc_adisc[546]             sg_init_one(&fc_req->sg_req, &fc_req->u.adisc.req,
-zfcp_fc_adisc[548]             sg_init_one(&fc_req->sg_rsp, &fc_req->u.adisc.rsp,
-zfcp_fc_alloc_sg_env[668]      sg_init_one(&fc_req->sg_req, &fc_req->u.gpn_ft.req,
-zfcp_fc_gspn[841]              sg_init_one(&fc_req->sg_req, gspn_req, 
-sizeof(*gspn_req));
-zfcp_fc_gspn[842]              sg_init_one(&fc_req->sg_rsp, gspn_rsp, 
-sizeof(*gspn_rsp));
-zfcp_fc_rspn[889]              sg_init_one(&fc_req->sg_req, rspn_req, 
-sizeof(*rspn_req));
-zfcp_fc_rspn[890]              sg_init_one(&fc_req->sg_rsp, rspn_rsp, 
-sizeof(*rspn_rsp));
--------------------------------------------------------------------------------
-
-I/O requests from SCSI (MQ) coming through queuecommand have already been safe 
-for non-linear chained scatterlists in zfcp:
-
-  zfcp_scsi_queuecommand()
-   zfcp_fsf_fcp_cmnd()
-    zfcp_qdio_sbals_from_sg(qdio, &req->qdio_req, scsi_sglist(scsi_cmnd))
-	for (; sg; sg = sg_next(sg)) {
-
-I/O requests from the block layer coming through BSG should also have already 
-been safe for non-linear chained scatterlists in zfcp:
-
-  zfcp_fc_exec_bsg_job()
-   zfcp_fc_exec_els_job()
-    zfcp_fsf_send_els()
-     zfcp_fsf_setup_ct_els()
-      zfcp_fsf_setup_ct_els_sbals(req, sg_req, sg_resp)
-	//depending on hardware features, translate sg into HW control blocks
-	if (zfcp_adapter_multi_buffer_active())
-         	zfcp_qdio_sbals_from_sg() //for req&resp, see above
-         	return 0
-	/* use single, unchained SBAL if it can hold the request */
-	if (zfcp_qdio_sg_one_sbale(sg_req) && zfcp_qdio_sg_one_sbale(sg_resp))
-         	zfcp_fsf_setup_ct_els_unchained() //single element for req&resp
-         	return 0
-	if (!(feat & FSF_FEATURE_ELS_CT_CHAINED_SBALS))
-		return -EOPNOTSUPP;
-        zfcp_qdio_sbals_from_sg() for req&resp, see above
-   OR
-   zfcp_fc_exec_ct_job()
-    zfcp_fsf_send_ct()
-     zfcp_fsf_setup_ct_els() //see above
-
-If I was not mistaken above, the following could be more descriptive parts of a 
-patch/commit description, with hopefully less confusion for anyone having to 
-look at zfcp git history a few weeks/months/years from now:
-
-"While not required for this SCSI MQ change regarding scatterlist allocation, 
-change all other scatterlist iterators in zfcp to the safe sg_next() even if 
-not necessary as these changed zfcp-internal scatterlists are linear and 
-unchained. This may avoid confusion about a potential need for conversions in 
-the future."
-
-
-On 6/25/19 3:19 AM, Ming Lei wrote:
-> On Mon, Jun 24, 2019 at 05:13:24PM +0200, Steffen Maier wrote:
->> On 6/18/19 3:37 AM, Ming Lei wrote:
->>> Use the scatterlist iterators and remove direct indexing of the
->>> scatterlist array.
->>>
->>> This way allows us to pre-allocate one small scatterlist, which can be
->>> chained with one runtime allocated scatterlist if the pre-allocated one
->>> isn't enough for the whole request.
-
->>> Acked-by: Benjamin Block <bblock@linux.ibm.com>
->>> Reviewed-by: Christoph Hellwig <hch@lst.de>
->>> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
->>> Signed-off-by: Ming Lei <ming.lei@redhat.com>
->>> ---
->>>    drivers/s390/scsi/zfcp_fc.c | 4 ++--
->>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
->>> index 33eddb02ee30..b018b61bd168 100644
->>> --- a/drivers/s390/scsi/zfcp_fc.c
->>> +++ b/drivers/s390/scsi/zfcp_fc.c
->>> @@ -620,7 +620,7 @@ static void zfcp_fc_sg_free_table(struct scatterlist *sg, int count)
->>>    {
->>>    	int i;
->>> -	for (i = 0; i < count; i++, sg++)
->>> +	for (i = 0; i < count; i++, sg = sg_next(sg))
->>>    		if (sg)
->>>    			free_page((unsigned long) sg_virt(sg));
->>>    		else
->>> @@ -641,7 +641,7 @@ static int zfcp_fc_sg_setup_table(struct scatterlist *sg, int count)
->>>    	int i;
->>>    	sg_init_table(sg, count);
->>> -	for (i = 0; i < count; i++, sg++) {
->>> +	for (i = 0; i < count; i++, sg = sg_next(sg)) {
->>>    		addr = (void *) get_zeroed_page(GFP_KERNEL);
->>>    		if (!addr) {
->>>    			zfcp_fc_sg_free_table(sg, i);
->>>
->>
->> I'm still catching up with emails that came during my vacation, so I'm not
->> fully up-to-date on the current state of this and how to bring in potential
->> fixups on top.
->>
->> I think, we also have two more (not so obvious) places in the corresponding
->> response/completion code path, where we might need to introduce the proper
->> iterator helper:
->>
->> zfcp_fsf.c:
->>
->> static int zfcp_fc_eval_gpn_ft(struct zfcp_fc_req *fc_req,
->> 			       struct zfcp_adapter *adapter, int max_entries)
->> {
->> 	struct scatterlist *sg = &fc_req->sg_rsp;
->> ...
->> 	/* first entry is the header */
->> 	for (x = 1; x < max_entries && !last; x++) {
->> ...
->> 		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
->> ...
->> 		else
->> 			acc = sg_virt(++sg);
->>                                        ^^^^
->>
->> zfcp_dbf.c:
->>
->> static u16 zfcp_dbf_san_res_cap_len_if_gpn_ft(char *tag,
->> 					      struct zfcp_fsf_req *fsf,
->> 					      u16 len)
->> {
->> 	struct scatterlist *resp_entry = ct_els->resp;
->> ...
->> 	/* the basic CT_IU preamble is the same size as one entry in the GPN_FT
->> 	 * response, allowing us to skip special handling for it - just skip it
->> 	 */
->> 	for (x = 1; x < max_entries && !last; x++) {
->> 		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
->> ...
->> 		else
->> 			acc = sg_virt(++resp_entry);
->>                                        ^^^^^^^^^^^^
->>
->>
->> What do you think?
+On 24.6.2019 21.11, Alan Stern wrote:
+> On Sun, 23 Jun 2019, Harutyun Khachatryan wrote:
 > 
-> Yeah, looks this one is missed, so we need the following patch:
+>> Dear Alan Stern,
+>>
+>> I thought that I should wait Mathias's response. I am terribly sorry for
+>> that. I am sending dmesg log and trace content as you asked. I tried the
+>> procedure on kernel 5.1.12-050112-generic since it's most recent now and
+>> the bug still exists in it. If you need for 5.0 write me back. Thank you
+>> in advance.
+>>
+>> Regards, Harutyun Khachatryan
 > 
->  From c9c368308fefbf034d670984fe9746a4181fe514 Mon Sep 17 00:00:00 2001
-> From: Ming Lei <ming.lei@redhat.com>
-> Date: Tue, 25 Jun 2019 09:15:34 +0800
-> Subject: [PATCH] s390: scsi: use sg helper to iterate over scatterlist
+> Mathias, can you please look through the log and trace output that
+> Harutyun sent?  His message doesn't appear to have gotten onto the
+> mailing list, so I have attached copies of his files here.
 > 
-> Unlike the legacy I/O path, scsi-mq preallocates a large array to hold
-> the scatterlist for each request. This static allocation can consume
-> substantial amounts of memory on modern controllers which support a
-> large number of concurrently outstanding requests.
-
-Very nice, as it disambiguates which scatterlist allocation this patch set is 
-about.
-
-> To facilitate a switch to a smaller static allocation combined with a
-> dynamic allocation for requests that need it, we need to make sure all
-> SCSI drivers handle chained scatterlists correctly.
+> I guess he tried to follow the procedure given in
 > 
-> Convert remaining drivers that directly dereference the scatterlist
-> array to using the iterator functions.
+> 	https://marc.info/?l=linux-usb&m=155293069118478&w=2
 > 
-> Cc: Steffen Maier <maier@linux.ibm.com>
-
-> Cc: Benjamin Block <bblock@linux.ibm.com>
-
-> Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
-> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-
-> Cc: Benjamin Block <bblock@linux.ibm.com>
-
-Minor: duplicate Cc ?
-
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->   drivers/s390/scsi/zfcp_dbf.c | 2 +-
->   drivers/s390/scsi/zfcp_fc.c  | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+> Namely:
 > 
-> diff --git a/drivers/s390/scsi/zfcp_dbf.c b/drivers/s390/scsi/zfcp_dbf.c
-> index dccdb41bed8c..c7129f5234f0 100644
-> --- a/drivers/s390/scsi/zfcp_dbf.c
-> +++ b/drivers/s390/scsi/zfcp_dbf.c
-> @@ -552,7 +552,7 @@ static u16 zfcp_dbf_san_res_cap_len_if_gpn_ft(char *tag,
->   		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
->   			acc++;
->   		else
-> -			acc = sg_virt(++resp_entry);
-> +			acc = sg_virt(resp_entry = sg_next(resp_entry));
->   
->   		last = acc->fp_flags & FC_NS_FID_LAST;
->   	}
-> diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
-> index b018b61bd168..5048812ce660 100644
-> --- a/drivers/s390/scsi/zfcp_fc.c
-> +++ b/drivers/s390/scsi/zfcp_fc.c
-> @@ -742,7 +742,7 @@ static int zfcp_fc_eval_gpn_ft(struct zfcp_fc_req *fc_req,
->   		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
->   			acc++;
->   		else
-> -			acc = sg_virt(++sg);
-> +			acc = sg_virt(sg = sg_next(sg));
->   
->   		last = acc->fp_flags & FC_NS_FID_LAST;
->   		d_id = ntoh24(acc->fp_fid);
+> Boot with the Seagate HDD attached
+> mount -t debugfs none /sys/kernel/debug
+> echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+> <Plug in other USB device>
+> <Wait 10 seconds>
+> <Unplug other USB device>
+> <Unplug the Seagate HDD>
+> <Plug in other USB device>
+> Send output of dmesg
+> Send content of /sys/kernel/debug/tracing/trace
+> 
+> The problem is that the other USB device is not detected.  Harutyun
+> didn't say at what points in the log the other device was plugged in,
+> or which port it was plugged into.  It looks like the Seagate HDD was
+> plugged into 4-1.
 > 
 
-Apart from above rationale discussion, the code change looks good.
+There are no other port events than the disconnect of the 4-1 Seagate HDD
+in the traces: (port link goes to Inactive first, then Disabled)
 
--- 
-Mit freundlichen Gruessen / Kind regards
-Steffen Maier
+153.590150: xhci_handle_port_status: port-0: Powered Not-connected Disabled Link:Inactive PortSpeed:0 Change: CSC PLC Wake
+153.590130: xhci_handle_event: EVENT: TRB 0000000005000000 status 'Success' len 0 slot 0 ep 0 type 'Port Status Change Event' flags e:C
+153.590157: xhci_hub_status_data: port-0: Powered Not-connected Disabled Link:Inactive PortSpeed:0 Change: CSC PLC Wake:
+153.590158: xhci_hub_status_data: port-1: Powered Connected Enabled Link:U2 PortSpeed:4 Change: Wake:
+153.590160: xhci_hub_status_data: port-2: Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change: Wake:
+153.590163: xhci_hub_status_data: port-3: Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change: Wake:
+...
+153.689459: xhci_handle_event: EVENT: TRB 0000000005000000 status 'Success' len 0 slot 0 ep 0 type 'Port Status Change Event' flags e:C
+153.689477: xhci_handle_port_status: port-0: Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change: WRC PRC Wake:
+< disabling slot, freeing ring etc here>
 
-Linux on IBM Z Development
+After a while the SS bus is suspended, xhci traces show wake flags are
+set for SS roothub ports. Then there's nothing for 12 seconds, after which
+we see a Interrupt URB being handled a few times every a second, probably
+the external hub. Nothing else, no other port activity or traffic is seen.
 
-https://www.ibm.com/privacy/us/en/
-IBM Deutschland Research & Development GmbH
-Vorsitzender des Aufsichtsrats: Matthias Hartmann
-Geschaeftsfuehrung: Dirk Wittkopp
-Sitz der Gesellschaft: Boeblingen
-Registergericht: Amtsgericht Stuttgart, HRB 243294
+154.839474: xhci_hub_status_data: port-0: Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change: Wake: WCE WOE
+154.839476: xhci_hub_status_data: port-1: Powered Connected Enabled Link:U2 PortSpeed:4 Change: Wake: WDE WOE
+154.839478: xhci_hub_status_data: port-2: Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change: Wake: WCE WOE
+154.839479: xhci_hub_status_data: port-3: Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change: Wake: WCE WOE
+166.604073: xhci_handle_event: EVENT: TRB 000000044dd539c0 status 'Success' len 0 slot 4 ep 3 type 'Transfer Event' flags e:C
+166.604080: xhci_handle_transfer: INTR: Buffer 000000044dd57000 length 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
+166.604083: xhci_inc_deq: INTR ..
+166.604086: xhci_urb_giveback: ep1in-intr: urb 0000000046808855 pipe 1077969792 slot 4 length 8/8 sgs 0/0 stream 0 flags 00000204
 
+I can't spot any activity on the HS/FS side of xhci at all, and the SS bus
+(usb4) is suspended here with a device (external hub?) in U2 link state.
+Best guess so far is that it is related to runtime or link power management
+withand the external hub.
+
+Could be related to the SS device with LPM resume issue fixed here:
+https://marc.info/?l=linux-usb&m=156101728630448&w=2
+
+Harutyun Khachatryan, how about disabling runtime power management
+for hubs before disconnecting the Seagate drive, can you check if
+that helps. (as sudo or root, do)
+
+echo on > /sys/bus/usb/devices/usb3/power/control
+echo on > /sys/bus/usb/devices/usb4/power/control
+echo on > /sys/bus/usb/devices/usb3/3-2/power/control
+echo on > /sys/bus/usb/devices/usb4/4-2/power/control
+
+Does it help?
+
+-Mathias
