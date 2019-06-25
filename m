@@ -2,68 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2692454C99
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 12:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B652854CA5
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 12:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbfFYKol (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jun 2019 06:44:41 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:46619 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbfFYKol (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 06:44:41 -0400
-Received: by mail-lj1-f196.google.com with SMTP id v24so15721737ljg.13
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2019 03:44:39 -0700 (PDT)
+        id S1727709AbfFYKrl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jun 2019 06:47:41 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:38502 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbfFYKrl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 06:47:41 -0400
+Received: by mail-lf1-f68.google.com with SMTP id b11so12304655lfa.5
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2019 03:47:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jsvGDP3O+XzFp/xfkf+e0ws5gNSJsQ+j5+W+9OgxK2I=;
-        b=gpKBF6Fr3SWTHkXloOK3bqab5HWcaBUrFM84VNJ9gOYFWCzTe+yr+bVrp0jdUekwpd
-         C3jKxlB1PLe01sjo0VHY78ITl1KTyKIjJMNa0GgnmLD4Mcsl0p2EBIUiJROgWxLYUv3c
-         l/OuHbFSJMRMFHYsRV+jN5HL2uIudHx3Z3q5Vc8ghC1jTeFb7a6BOxcTP27CAxSgUxAG
-         dRjlCKdxWX4u9w7WTPNE65fCJbUrGx/g5YLwFQuljqXkdGqryy/IpItwvIjPNHrPFp4L
-         K1/8xfxZweoGz/MUjyxzj+hwbZPLAp0b3X2FdppqQlhErVa/nHI8p163GTc1jeyElC6T
-         oNBA==
+        h=from:subject:to:references:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=nxbb4pRpRzjQTDs6+thXKRJbtRyOLPYVzfZr4POdHvk=;
+        b=DrXaN+IBfHTiHmi5K1X6vQFLHMGYoGYolSFW31h9j+y9OA7HaCnVkB2dSpjROUD86b
+         xgw5xjfVEU1Td8o9EHx9Ry2WsH0Gkjuqq0wekbocKKjyYMkU6Cq72V7rvr6h5N7nH/zz
+         5JNHv4J3GX0outuUDVpl9/zkDUSoZZqH3V4mddO6uT89C9525S0X9jtyUG882C4XyRxZ
+         lRVDnE014jIfPmCUXbGxOM1AKKI6aiMTyPCuVT6DelfrgI5b+mOtvWtXTCAaTxkQTzE5
+         gxpCM4qfDHSYjAoSx1K/0uLDq2/Locrz1OX5UQaRNeL/D8ZHtdNLykvWMh6zIj8diBdi
+         LCDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:from:subject:to:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=jsvGDP3O+XzFp/xfkf+e0ws5gNSJsQ+j5+W+9OgxK2I=;
-        b=OQv3YvperN3QcflNxogQKT1ieLuNzK9u7bybE5W/tSziz9OwSvkwTpWhs66VnfH/A6
-         74dOM93auvtZQQqsg2g0QtqOco16bEcfJDcHUK5kCVQMn5XiW25jacjhYD0G5AYG/gOW
-         Fg9ggRJxTMb8brht+Vz95FtCkDDZRR5ZChiBBaaOw185rtCnqj9JDknuHucAy3FQODEu
-         skXwINQN1M1+5fsciP3crp8pgAdeeiay3JEwwR3J9KdFrFGhQpA5HxDdg72I1kkZOC92
-         /YGNQQivT4r28NHfftYqmxeV34bEbaZO2sbyYMYtkgafuGTGXN8dp1+82i7eoKPdlq9E
-         VawQ==
-X-Gm-Message-State: APjAAAVisg66R1l0nU6dhEn+7UREwmekUcGyS+ROi1L+OlthFj8Yh55p
-        vgaybTZpBf6O7CQWO/jwXq0nok631Mg=
-X-Google-Smtp-Source: APXvYqxI2jFR9JznTkJkKHZQjIwY1mg/2t3rJgPvLAWFigH6qUGCnFy6MFatythU6HZZ5fwMjlS2bw==
-X-Received: by 2002:a05:651c:150:: with SMTP id c16mr42375330ljd.193.1561459478823;
-        Tue, 25 Jun 2019 03:44:38 -0700 (PDT)
+        bh=nxbb4pRpRzjQTDs6+thXKRJbtRyOLPYVzfZr4POdHvk=;
+        b=O28MAbGhDZHAAnIhlb5OF24y7X5RmxqTdPSzwuOEMnvW4REg0HDbyw0tLE/BMn2KPX
+         lFo+iyWtwMSV9y5iC6w84+Yh01K6ovlB3Opz7H1csG8vLnfspkSIakhCsqOQT6qEgkw2
+         IZ9v1MMvE0FpCMKj6zHu2Yc8bMurB5+J9HMB2v3wWH0zkzMcAd2sRKSsjwL3YSz/nnfP
+         7vbeeoLgooPrMAJmB37GstqcoFTtXxOBN3q/VWVkazWxRLr2eeTMr6YmDL/wHSMWQkW+
+         VslvqRxWs7jvTqzke0ASzMES3ilHqIzBhGEbF9/ZXdgfGJgt4u/0KHVK+5Kjltdqzrnc
+         AKuw==
+X-Gm-Message-State: APjAAAWr3Hj90Yra+wd8wXoczt20eSy1ndi+vVB2MjFkiwD0zLtdm2lH
+        0GkBM1nNB69RLN/EqvGLXaEbxImgYrM=
+X-Google-Smtp-Source: APXvYqxx4BbfXAroa7SuxZo6dANGDIcUGyVDgv7nT3uxIf91785cMusrPrrBBfumARw0aV9dSvDs8w==
+X-Received: by 2002:a19:4a49:: with SMTP id x70mr40438567lfa.151.1561459659416;
+        Tue, 25 Jun 2019 03:47:39 -0700 (PDT)
 Received: from [192.168.1.100] ([213.87.147.32])
-        by smtp.gmail.com with ESMTPSA id h84sm2189770ljf.42.2019.06.25.03.44.37
+        by smtp.gmail.com with ESMTPSA id p12sm2043365lja.23.2019.06.25.03.47.38
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 03:44:38 -0700 (PDT)
-Subject: Re: [PATCH] ARM: imx25: provide a fixed regulator for usb phys
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20190625100412.11815-1-u.kleine-koenig@pengutronix.de>
+        Tue, 25 Jun 2019 03:47:38 -0700 (PDT)
 From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <8b8ffbd5-e481-b425-aa8c-c1b13e93faee@cogentembedded.com>
-Date:   Tue, 25 Jun 2019 13:44:30 +0300
+Subject: Re: [PATCH] gpss: core: no waiters left behind on deregister
+To:     Oliver Neukum <oneukum@suse.com>, johan@kernel.org,
+        linux-usb@vger.kernel.org
+References: <20190624083323.11876-1-oneukum@suse.com>
+Message-ID: <761d0c5b-264d-3289-037d-b7a0cf621df8@cogentembedded.com>
+Date:   Tue, 25 Jun 2019 13:47:31 +0300
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190625100412.11815-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20190624083323.11876-1-oneukum@suse.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -71,47 +66,31 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hello!
 
-On 25.06.2019 13:04, Uwe Kleine-König wrote:
+    The subject has gpss ISO gnss. You hardly meant the General Purpose
+System Simulation. :-)
 
-> The usb phys are internal to the SoC and so it their 5V supply. With
+On 24.06.2019 11:33, Oliver Neukum wrote:
 
-    s/it/is/?
-
-> this regulator added explicitly the following (harmless) boot messages
-> go away:
+> If you deregister a device you need to wake up all waiters
+> as there will be no further wakeups.
 > 
-> 	usb_phy_generic usbphy:usb-phy@0: usbphy:usb-phy@0 supply vcc not found, using dummy regulator
-> 	usb_phy_generic usbphy:usb-phy@1: usbphy:usb-phy@1 supply vcc not found, using dummy regulator
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
 > ---
-> Hello,
+>   drivers/gnss/core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> note I'm an USB noob, so please consider carefully before applying :-)
-> I also put the regulator near the usbphy node instead of in alphabetic
-> order. Not sure what is sensible/usual here, too.
-> 
-> Best regards
-> Uwe
-> 
->   arch/arm/boot/dts/imx25.dtsi | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/imx25.dtsi b/arch/arm/boot/dts/imx25.dtsi
-> --- a/arch/arm/boot/dts/imx25.dtsi
-> +++ b/arch/arm/boot/dts/imx25.dtsi
-> @@ -614,6 +614,11 @@
->   		};
->   	};
->   
-> +	reg_usb: regulator_usbphy {
-
-    Hyphens are preferred to underscores in the prop names.
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "usb-phy supply";
-> +	};
-> +
-[...]
+> diff --git a/drivers/gnss/core.c b/drivers/gnss/core.c
+> index e6f94501cb28..0d13bd2cefd5 100644
+> --- a/drivers/gnss/core.c
+> +++ b/drivers/gnss/core.c
+> @@ -303,7 +303,7 @@ void gnss_deregister_device(struct gnss_device *gdev)
+>   	down_write(&gdev->rwsem);
+>   	gdev->disconnected = true;
+>   	if (gdev->count) {
+> -		wake_up_interruptible(&gdev->read_queue);
+> +		wake_up_interruptible_all(&gdev->read_queue);
+>   		gdev->ops->close(gdev);
+>   	}
+>   	up_write(&gdev->rwsem);
 
 MBR, Sergei
