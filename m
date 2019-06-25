@@ -2,131 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB7E51C07
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jun 2019 22:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E8D5204F
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 03:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731553AbfFXUJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 16:09:13 -0400
-Received: from mail-pl1-f181.google.com ([209.85.214.181]:33990 "EHLO
-        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729879AbfFXUJM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jun 2019 16:09:12 -0400
-Received: by mail-pl1-f181.google.com with SMTP id i2so7508220plt.1
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jun 2019 13:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gnarbox-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NPtyegdpNC4BqNoq+ZWko7iuPtqXZMeBMglWMacX7Lg=;
-        b=VnPvT0J4mSFyUCVArMl3zBh3yikj5V3y9DlyE+o0t7N4yWK/OXX/6WmPlRr65igmk3
-         pE6FT1M/BxgOgbuo17cSkYfJX5+lAafAR83iI/1pyIrw99mVmmBqnjPFRXAFfDrFTTZk
-         OCxEUvHTAZqfS+clz5zfKcuuvR1vpOWWG93aFm3zwOYdV084JubssNlkVIEVPZ8SSGaj
-         7qaUGMMRUxU1XeYOcllWnAFAGjy8rh1iCGFdO1gsGo7C/lfgnQzpY6MrlhqXIGFZJACK
-         8o2C6SGK5om/bP36vsBAI4dwAR9x0eMbrk4FdcEq8UN7z/aRt6ebph+EMH80MWeWDFjc
-         kzRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NPtyegdpNC4BqNoq+ZWko7iuPtqXZMeBMglWMacX7Lg=;
-        b=uHMtbRNheWjVTr+fozDxe6UVi1vHSGNPqBDZnkIMQPatP0NscB+PRg5cMvtRbnWM84
-         QD1wcplnyPrCwe+uZLIyuxKYteIXNkSOqMFSKiSI4mH0jO4CcOB3efgUsOwXEwH4g0i8
-         SCNT+yIPnXsyh/QMKb8OpR1u3IuWsCPrHs4JvjEP5YYsCOlS2VAFZ2QqbTuuhw+HhiXP
-         2oqjxX31oDccBJODMMsg+c8u3tzdg9ejCmkUd/HWxIgeqe3x40ILIMbK+0xSMkZFl/EG
-         WViGmdvucJsDT1ngIVHl7nd//9GamDpR94Z19RHlc8EWPLyKxskl0C+wjkRaM/SYSYiE
-         OwIw==
-X-Gm-Message-State: APjAAAUuEmKxvAWpGmHFUbIoX/eb3Rd35i6/abQsSqmH8EOuVZ6a6hxC
-        8Qpcm0xincWfuM9Edwd41An5T7Xey08BIA==
-X-Google-Smtp-Source: APXvYqwXFixqSXhspKyGOgkPawdjKbC8oLMzNMVP1kVnY0WBGYs9D3RaTgVM1e17HX4QdEvysESbzQ==
-X-Received: by 2002:a17:902:6b86:: with SMTP id p6mr81412286plk.14.1561406951860;
-        Mon, 24 Jun 2019 13:09:11 -0700 (PDT)
-Received: from coops ([12.244.160.210])
-        by smtp.gmail.com with ESMTPSA id a16sm15687417pfd.68.2019.06.24.13.09.10
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 24 Jun 2019 13:09:10 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 13:09:08 -0700
-From:   Rob Weber <rob@gnarbox.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org
-Subject: Re: xHCI Driver Compliance Test Support
-Message-ID: <20190624200908.GA25232@coops>
-References: <20190619190307.GA18466@coops>
- <fc2609bc-2441-0293-1eca-3781af410414@linux.intel.com>
+        id S1729269AbfFYBTk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jun 2019 21:19:40 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:34476 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725784AbfFYBTk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Jun 2019 21:19:40 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id DB5FD13A82;
+        Tue, 25 Jun 2019 01:19:21 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4094E5D9C5;
+        Tue, 25 Jun 2019 01:19:06 +0000 (UTC)
+Date:   Tue, 25 Jun 2019 09:19:03 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Steffen Maier <maier@linux.ibm.com>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH V5 10/16] s390: zfcp_fc: use sg helper to operate
+ scatterlist
+Message-ID: <20190625011902.GA23777@ming.t460p>
+References: <20190618013757.22401-1-ming.lei@redhat.com>
+ <20190618013757.22401-11-ming.lei@redhat.com>
+ <95bfa1fb-d0eb-fc61-ecc0-001ae52a326f@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fc2609bc-2441-0293-1eca-3781af410414@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <95bfa1fb-d0eb-fc61-ecc0-001ae52a326f@linux.ibm.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Tue, 25 Jun 2019 01:19:39 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-On Mon, Jun 24, 2019 at 09:15:24AM +0300, Mathias Nyman wrote:
-> On 19.6.2019 22.03, Rob Weber wrote:
-> > I am working on running our custom USB dual-role product through some
-> > compliance testing. It seems that the SoC and host controller are
-> > not responding to the LFPS signaling and timeout that is supposed to
-> > automatically begin the compliance test sequence.
+On Mon, Jun 24, 2019 at 05:13:24PM +0200, Steffen Maier wrote:
+> Hi Ming,
+> 
+> On 6/18/19 3:37 AM, Ming Lei wrote:
+> > Use the scatterlist iterators and remove direct indexing of the
+> > scatterlist array.
 > > 
-> > I'm currently running a 4.9.115 kernel, and I'm afraid I might be
-> > missing some critical patches for compliance test support. I noticed
-> > these two patches came up in a google search:
+> > This way allows us to pre-allocate one small scatterlist, which can be
+> > chained with one runtime allocated scatterlist if the pre-allocated one
+> > isn't enough for the whole request.
 > > 
-> > https://patchwork.kernel.org/patch/10415345/
-> > https://www.spinics.net/lists/linux-usb/msg160002.html
+> > Cc: Steffen Maier <maier@linux.ibm.com>
+> > Cc: Benjamin Block <bblock@linux.ibm.com>
+> > Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+> > Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+> > Cc: linux-s390@vger.kernel.org
+> > Acked-by: Benjamin Block <bblock@linux.ibm.com>
+> > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> > ---
+> >   drivers/s390/scsi/zfcp_fc.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
 > > 
-> > Besides these patches, is there anything else that comes to mind that I
-> > might need to do to start compliance testing? I'm about to build a more
-> > recent kernel to see if that improves my situation as well.
-> 
-> If xHC hw has a "Compliance Transition Capability" (CTC) bit set in the
-> HCCPARAMS2 register then ports won't go to compliance unless software
-> specifically allows it.
-> 
-> see xhci spec section 4.19.1.2.4.1 for more details.
-> 
-> Compliance can be allowed either with a SetPortFeature(PORT_LINK_STATE) request,
-> or via debugfs.
-> 
-> To allow compliance using debugfs, first check port is in disabled state:
-> 
-> # cat /sys/kernel/debug/usb/xhci/0000:00:15.0/ports/port01/portsc
-> Powered Not-connected Disabled Link:RxDetect PortSpeed:0 Change: Wake:
-> 
-> enable compliance by writing "compliance" to the port:
-> # echo compliance > /sys/kernel/debug/usb/xhci/0000:00:15.0/ports/port01/portsc
-> 
-> This needs to be done for that specific port, and after every port warm reset.
-> 
-> After 1st LFPS timeout the port should go to compliance, can be read from portsc
-> 
-> Also make sure you don't have XHCI_COMP_MODE_QUIRK or XHCI_MISSING_CAS quirks set,
-> these try to recover ports that accidentally enter compliance mode in normal use.
-
-Thanks for the tip! I will try this approach with a newer kernel soon. I
-learned that the port enters compliance mode after the 1st LFPS polling
-timeout last week after watching the port become "disabled" after
-the first connection. We're currently doing a full power cycle to
-correct this state, but unbinding and re-binding the pci device with the
-xhci_hcd driver has also been successful at resetting the xHC. The portsc
-register and warm_reset file will help improve our workflow for compliance
-testing.
-
-> > Just for reference, our product uses an intel atom z8550 SoC that uses
-> > an xHCI host controller and a dwc3 device controller. Our platform also
-> > uses a USB 3.0 redriver. The datasheet for this redriver (tusb542)
-> > indicates that it's internal LFPS controller supports full USB 3.0
-> > compliance requirements.
+> > diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
+> > index 33eddb02ee30..b018b61bd168 100644
+> > --- a/drivers/s390/scsi/zfcp_fc.c
+> > +++ b/drivers/s390/scsi/zfcp_fc.c
+> > @@ -620,7 +620,7 @@ static void zfcp_fc_sg_free_table(struct scatterlist *sg, int count)
+> >   {
+> >   	int i;
+> > -	for (i = 0; i < count; i++, sg++)
+> > +	for (i = 0; i < count; i++, sg = sg_next(sg))
+> >   		if (sg)
+> >   			free_page((unsigned long) sg_virt(sg));
+> >   		else
+> > @@ -641,7 +641,7 @@ static int zfcp_fc_sg_setup_table(struct scatterlist *sg, int count)
+> >   	int i;
+> >   	sg_init_table(sg, count);
+> > -	for (i = 0; i < count; i++, sg++) {
+> > +	for (i = 0; i < count; i++, sg = sg_next(sg)) {
+> >   		addr = (void *) get_zeroed_page(GFP_KERNEL);
+> >   		if (!addr) {
+> >   			zfcp_fc_sg_free_table(sg, i);
 > > 
 > 
-> z8550 is Cherry Trail? I unfortunately don't have those around anymore.
+> I'm still catching up with emails that came during my vacation, so I'm not
+> fully up-to-date on the current state of this and how to bring in potential
+> fixups on top.
+> 
+> I think, we also have two more (not so obvious) places in the corresponding
+> response/completion code path, where we might need to introduce the proper
+> iterator helper:
+> 
+> zfcp_fsf.c:
+> 
+> static int zfcp_fc_eval_gpn_ft(struct zfcp_fc_req *fc_req,
+> 			       struct zfcp_adapter *adapter, int max_entries)
+> {
+> 	struct scatterlist *sg = &fc_req->sg_rsp;
+> ...
+> 	/* first entry is the header */
+> 	for (x = 1; x < max_entries && !last; x++) {
+> ...
+> 		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
+> ...
+> 		else
+> 			acc = sg_virt(++sg);
+>                                       ^^^^
+> 
+> zfcp_dbf.c:
+> 
+> static u16 zfcp_dbf_san_res_cap_len_if_gpn_ft(char *tag,
+> 					      struct zfcp_fsf_req *fsf,
+> 					      u16 len)
+> {
+> 	struct scatterlist *resp_entry = ct_els->resp;
+> ...
+> 	/* the basic CT_IU preamble is the same size as one entry in the GPN_FT
+> 	 * response, allowing us to skip special handling for it - just skip it
+> 	 */
+> 	for (x = 1; x < max_entries && !last; x++) {
+> 		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
+> ...
+> 		else
+> 			acc = sg_virt(++resp_entry);
+>                                       ^^^^^^^^^^^^
+> 
+> 
+> What do you think?
 
-Yeah, they are increasingly hard to come by. But so far your description
-aligns with our findings and research about the xHCI implementation in
-this SoC. Thanks for your help!
+Yeah, looks this one is missed, so we need the following patch:
 
-Cheers,
-Rob Weber
+From c9c368308fefbf034d670984fe9746a4181fe514 Mon Sep 17 00:00:00 2001
+From: Ming Lei <ming.lei@redhat.com>
+Date: Tue, 25 Jun 2019 09:15:34 +0800
+Subject: [PATCH] s390: scsi: use sg helper to iterate over scatterlist
+
+Unlike the legacy I/O path, scsi-mq preallocates a large array to hold
+the scatterlist for each request. This static allocation can consume
+substantial amounts of memory on modern controllers which support a
+large number of concurrently outstanding requests.
+
+To facilitate a switch to a smaller static allocation combined with a
+dynamic allocation for requests that need it, we need to make sure all
+SCSI drivers handle chained scatterlists correctly.
+
+Convert remaining drivers that directly dereference the scatterlist
+array to using the iterator functions.
+
+Cc: Steffen Maier <maier@linux.ibm.com>
+Cc: Benjamin Block <bblock@linux.ibm.com>
+Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: linux-s390@vger.kernel.org
+Cc: Benjamin Block <bblock@linux.ibm.com>
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+---
+ drivers/s390/scsi/zfcp_dbf.c | 2 +-
+ drivers/s390/scsi/zfcp_fc.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/s390/scsi/zfcp_dbf.c b/drivers/s390/scsi/zfcp_dbf.c
+index dccdb41bed8c..c7129f5234f0 100644
+--- a/drivers/s390/scsi/zfcp_dbf.c
++++ b/drivers/s390/scsi/zfcp_dbf.c
+@@ -552,7 +552,7 @@ static u16 zfcp_dbf_san_res_cap_len_if_gpn_ft(char *tag,
+ 		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
+ 			acc++;
+ 		else
+-			acc = sg_virt(++resp_entry);
++			acc = sg_virt(resp_entry = sg_next(resp_entry));
+ 
+ 		last = acc->fp_flags & FC_NS_FID_LAST;
+ 	}
+diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
+index b018b61bd168..5048812ce660 100644
+--- a/drivers/s390/scsi/zfcp_fc.c
++++ b/drivers/s390/scsi/zfcp_fc.c
+@@ -742,7 +742,7 @@ static int zfcp_fc_eval_gpn_ft(struct zfcp_fc_req *fc_req,
+ 		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
+ 			acc++;
+ 		else
+-			acc = sg_virt(++sg);
++			acc = sg_virt(sg = sg_next(sg));
+ 
+ 		last = acc->fp_flags & FC_NS_FID_LAST;
+ 		d_id = ntoh24(acc->fp_fid);
+-- 
+2.20.1
+
+
+Thanks,
+Ming
