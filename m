@@ -2,147 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9346E552F4
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 17:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82F05553D
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 18:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731866AbfFYPIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jun 2019 11:08:42 -0400
-Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:47660 "EHLO
-        pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731330AbfFYPIl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 11:08:41 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id CA9AD3F732;
-        Tue, 25 Jun 2019 17:08:33 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.899
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.899 tagged_above=-999 required=6.31
-        tests=[ALL_TRUSTED=-1, BAYES_00=-1.9, URIBL_BLOCKED=0.001]
-        autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1mKKqNFww7JF; Tue, 25 Jun 2019 17:08:24 +0200 (CEST)
-Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
-        (Authenticated sender: mb547485)
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 12E773F3B2;
-        Tue, 25 Jun 2019 17:08:23 +0200 (CEST)
-Date:   Tue, 25 Jun 2019 17:08:23 +0200
-From:   Fredrik Noring <noring@nocrew.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>, laurentiu.tudor@nxp.com,
-        stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, marex@denx.de, leoyang.li@nxp.com,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        JuergenUrban@gmx.de
-Subject: [PATCH 2/2] usb: host: Fix excessive alignment restriction for local
- memory allocations
-Message-ID: <20190625150823.GB2560@sx9>
-References: <20190611190343.GA18459@roeck-us.net>
- <20190613134033.GA2489@sx9>
- <bdfd2178-9e3c-dc15-6aa1-ec1f1fbcb191@roeck-us.net>
- <20190613153414.GA909@sx9>
- <3f2164cd-7655-b7cc-ec57-d8751886728c@roeck-us.net>
- <20190614142816.GA2574@sx9>
- <20190624063515.GA3296@lst.de>
- <20190624125916.GA2516@sx9>
- <20190625060000.GA28986@lst.de>
- <20190625150558.GA2560@sx9>
+        id S1728142AbfFYQ4k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jun 2019 12:56:40 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36708 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727763AbfFYQ4k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 12:56:40 -0400
+Received: by mail-pg1-f196.google.com with SMTP id c13so225630pgg.3;
+        Tue, 25 Jun 2019 09:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bK83zTa34d/KXkbi82In/9/Xz+oQsr3IYBuIQqRd50o=;
+        b=dvBCz/UcF4n4G75Q7NrRmFUhQLzXKSZQzOJTy4/n/5RlTWEPHc/MDsHBF1uH/qM2fR
+         +i1fZQ1sLEx9Bzp50BWMKASIt2aLqj0QgCbcAoTgaDxirdGAWIzwusyRZK5UPpnUifM1
+         o2KVAxiw2IRYNpYDSYCotyi9uEJacHcbu4VGrNk7FCC0ZTwOEAUbgl0srODbfjyw1s3w
+         LraoUz6N/cLgmnoa47A/cGWZi9n7KZR4z1yuKYSYebf0LCcNWHgmhJHoL1hgljvCxu+n
+         PTYAmYHeoXo3YG9gKnV1rZ24WU16b2s04C1LHel1gMEv75y8N/KbFF05BssbHjsXgyFs
+         OxRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bK83zTa34d/KXkbi82In/9/Xz+oQsr3IYBuIQqRd50o=;
+        b=eGhf5Xb+TReWr9irfr0PUdP/mZ5uLNFNTaBH/QdrMUUh+UgpqnmP+MjJYAaxqmzW7s
+         me7tRdKt+BAJtU6JsPYtLWrrNlQt4iRpIdrj5Ho1jvcXoy7yeRiroq6wfvi8hhzdnLOe
+         wSUDhTRjs+NGFM7tVqKl33FRJh0ttVLNAENrNmo6xwtHkbRnW4/LIqxFqjlGpAk49WpJ
+         FESZqKRu48RSd4yW0373rOQIkSxQIEawS8uZOqcpistuV5WleL+A52jcmMeyNRJ/5eQT
+         oVdLeal+niXv9RF65h6CJesWHbpoN0Q6agiHgd193sUOjwcMMXDqhcBWnsXTvpU7keIB
+         DLow==
+X-Gm-Message-State: APjAAAWs3yC4zx5/GvKIvKvipvXlkIiIDQPDVqdyKPV/l9UKfpCKDKu7
+        tuOnisoCxVPgf5hSbRRYsOUhLYxe8jM=
+X-Google-Smtp-Source: APXvYqz16a2CNmNDX90XGSIt9WWz8e9FHgjvaiP6MpkRu71CJ40y9e1tWvHH9ImfRidNlozE8DybWg==
+X-Received: by 2002:a17:90a:2163:: with SMTP id a90mr31515981pje.3.1561481799115;
+        Tue, 25 Jun 2019 09:56:39 -0700 (PDT)
+Received: from continental ([177.132.134.92])
+        by smtp.gmail.com with ESMTPSA id g2sm14134483pgi.92.2019.06.25.09.56.35
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 25 Jun 2019 09:56:37 -0700 (PDT)
+Date:   Tue, 25 Jun 2019 13:57:11 -0300
+From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB MASS STORAGE DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:USB MASS STORAGE DRIVER" 
+        <usb-storage@lists.one-eyed-alien.net>
+Subject: Re: [PATCH v2] usb: storage: scsiglue: Do not skip VPD if
+ try_vpd_pages is set
+Message-ID: <20190625165709.GA31932@continental>
+References: <20190618224454.16595-1-marcos.souza.org@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190625150558.GA2560@sx9>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190618224454.16595-1-marcos.souza.org@gmail.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The PAGE_SHIFT alignment restriction to devm_gen_pool_create() quickly
-exhaust local memory because most allocations are much smaller than
-PAGE_SIZE. This causes USB device failures such as
+humble ping :)
 
-	usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-	sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-	sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 08 7c 00 00 f0 00
-	print_req_error: I/O error, dev sda, sector 2172 flags 80700
-
-when trying to boot from the SM501 USB controller on SH4 with QEMU.
-
-Align allocations as required but not necessarily much more than that.
-The HCCA, TD and ED structures align with 256, 32 and 16 byte memory
-boundaries, as specified by the Open HCI[1]. The min_alloc_order argument
-to devm_gen_pool_create is now somewhat arbitrarily set to 4 (16 bytes).
-Perhaps it could be somewhat lower for general buffer allocations.
-
-Reference:
-
-[1] "Open Host Controller Interface Specification for USB",
-    release 1.0a, Compaq, Microsoft, National Semiconductor, 1999,
-    pp. 16, 19, 33.
-
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Fredrik Noring <noring@nocrew.org>
----
- drivers/usb/core/hcd.c      | 2 +-
- drivers/usb/host/ohci-hcd.c | 4 ++--
- drivers/usb/host/ohci-mem.c | 6 ++++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index b2362303d32f..48483fa71854 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -3014,7 +3014,7 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
- 	int err;
- 	void __iomem *local_mem;
- 
--	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, PAGE_SHIFT,
-+	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, 4,
- 						  dev_to_node(hcd->self.sysdev),
- 						  dev_name(hcd->self.sysdev));
- 	if (IS_ERR(hcd->localmem_pool))
-diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-index 5801858d867e..b457fdaff297 100644
---- a/drivers/usb/host/ohci-hcd.c
-+++ b/drivers/usb/host/ohci-hcd.c
-@@ -507,9 +507,9 @@ static int ohci_init (struct ohci_hcd *ohci)
- 	ohci->prev_frame_no = IO_WATCHDOG_OFF;
- 
- 	if (hcd->localmem_pool)
--		ohci->hcca = gen_pool_dma_alloc(hcd->localmem_pool,
-+		ohci->hcca = gen_pool_dma_alloc_align(hcd->localmem_pool,
- 						sizeof(*ohci->hcca),
--						&ohci->hcca_dma);
-+						&ohci->hcca_dma, 256);
- 	else
- 		ohci->hcca = dma_alloc_coherent(hcd->self.controller,
- 						sizeof(*ohci->hcca),
-diff --git a/drivers/usb/host/ohci-mem.c b/drivers/usb/host/ohci-mem.c
-index 4afe27cc7e46..1425335c6baf 100644
---- a/drivers/usb/host/ohci-mem.c
-+++ b/drivers/usb/host/ohci-mem.c
-@@ -94,7 +94,8 @@ td_alloc (struct ohci_hcd *hc, gfp_t mem_flags)
- 	struct usb_hcd	*hcd = ohci_to_hcd(hc);
- 
- 	if (hcd->localmem_pool)
--		td = gen_pool_dma_zalloc(hcd->localmem_pool, sizeof(*td), &dma);
-+		td = gen_pool_dma_zalloc_align(hcd->localmem_pool,
-+				sizeof(*td), &dma, 32);
- 	else
- 		td = dma_pool_zalloc(hc->td_cache, mem_flags, &dma);
- 	if (td) {
-@@ -137,7 +138,8 @@ ed_alloc (struct ohci_hcd *hc, gfp_t mem_flags)
- 	struct usb_hcd	*hcd = ohci_to_hcd(hc);
- 
- 	if (hcd->localmem_pool)
--		ed = gen_pool_dma_zalloc(hcd->localmem_pool, sizeof(*ed), &dma);
-+		ed = gen_pool_dma_zalloc_align(hcd->localmem_pool,
-+				sizeof(*ed), &dma, 16);
- 	else
- 		ed = dma_pool_zalloc(hc->ed_cache, mem_flags, &dma);
- 	if (ed) {
--- 
-2.21.0
-
+On Tue, Jun 18, 2019 at 07:44:54PM -0300, Marcos Paulo de Souza wrote:
+> If BLIST_TRY_VPD_PAGES is set for a device, even for an USB, it should
+> be honored, so only set skip_vpd_pages is try_vpd_pages is not set.
+> 
+> Signed-off-by: Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> ---
+> 
+>  Changes from v1:
+>  changed the check of try_vpd_pages from:
+>  	sdev->try_vpd_pages == 0;
+>  to:
+>  	!sdev->try_vpd_pages;
+>  (as suggested by Alan Stern)
+> 
+>  drivers/usb/storage/scsiglue.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
+> index 59190d88fa9f..30790240aec6 100644
+> --- a/drivers/usb/storage/scsiglue.c
+> +++ b/drivers/usb/storage/scsiglue.c
+> @@ -195,8 +195,11 @@ static int slave_configure(struct scsi_device *sdev)
+>  		 */
+>  		sdev->skip_ms_page_8 = 1;
+>  
+> -		/* Some devices don't handle VPD pages correctly */
+> -		sdev->skip_vpd_pages = 1;
+> +		/*
+> +		 * Some devices don't handle VPD pages correctly, so skip vpd
+> +		 * pages if not forced by SCSI layer.
+> +		 */
+> +		sdev->skip_vpd_pages = !sdev->try_vpd_pages;
+>  
+>  		/* Do not attempt to use REPORT SUPPORTED OPERATION CODES */
+>  		sdev->no_report_opcodes = 1;
+> -- 
+> 2.21.0
+> 
