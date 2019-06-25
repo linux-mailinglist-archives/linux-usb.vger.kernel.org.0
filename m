@@ -2,129 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE61F5223C
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 06:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D10C522ED
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 07:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbfFYEnW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jun 2019 00:43:22 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:48118 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726421AbfFYEnV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 00:43:21 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 6BB25608CE; Tue, 25 Jun 2019 04:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561437800;
-        bh=PzVp8KkogA+HpuLr/YP8oqFfRobqR8lFNoY9waydybM=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=gdxfop57atEjvmRF8gPOTqZFUYIpLMuvk3v7sa0hocaPU7Kiz1gYQuaZrWgvdX+Dj
-         Z82ssd8e6DCvYle2B+GdHKCaTPcvcHO57m9WyJsdZBA6btr/pRDPQYBQI9hi+D06mu
-         P3tgaB/Bs8jFMztruF+3HFd82d2D7PPmbLPutqHs=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,MISSING_DATE,MISSING_MID,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2E23260709;
-        Tue, 25 Jun 2019 04:43:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561437799;
-        bh=PzVp8KkogA+HpuLr/YP8oqFfRobqR8lFNoY9waydybM=;
-        h=Subject:From:In-Reply-To:References:To:Cc:From;
-        b=PBPwg7IrJqMMukLWvzfIZX+whOYm0ZznKI/3wi9SCk5H3k6H/D+0I4GAZgV2o/bps
-         SfaDPbUvmqd720DbwWT8+WtOldqLomy5tytCONSAs4sGw5dQ79adiUIPunmzEQt2IX
-         elxmnUfr7YzxgldSiUhoq7DCqzjOoQLhaLjBuQSs=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2E23260709
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] p54usb: Fix race between disconnect and firmware loading
-From:   Kalle Valo <kvalo@codeaurora.org>
-In-Reply-To: <Pine.LNX.4.44L0.1905201042110.1498-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1905201042110.1498-100000@iolanthe.rowland.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Christian Lamparter <chunkeey@gmail.com>,
-        syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>,
-        <davem@davemloft.net>, <andreyknvl@google.com>,
-        <syzkaller-bugs@googlegroups.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>
-User-Agent: pwcli/0.0.0-git (https://github.com/kvalo/pwcli/) Python/2.7.12
-Message-Id: <20190625044320.6BB25608CE@smtp.codeaurora.org>
-Date:   Tue, 25 Jun 2019 04:43:20 +0000 (UTC)
+        id S1728358AbfFYFjf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jun 2019 01:39:35 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:53837 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728311AbfFYFjf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 01:39:35 -0400
+X-IronPort-AV: E=Sophos;i="5.62,413,1554735600"; 
+   d="scan'208";a="19607549"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 25 Jun 2019 14:39:32 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 5AAC240031EF;
+        Tue, 25 Jun 2019 14:39:32 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH 00/13] usb: renesas_usbhs: refactor this driver
+Date:   Tue, 25 Jun 2019 14:38:44 +0900
+Message-Id: <1561441137-3090-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Alan Stern <stern@rowland.harvard.edu> wrote:
+This patch series is based on Greg's usb.git / usb-next branch.
 
-> The syzbot fuzzer found a bug in the p54 USB wireless driver.  The
-> issue involves a race between disconnect and the firmware-loader
-> callback routine, and it has several aspects.
-> 
-> One big problem is that when the firmware can't be loaded, the
-> callback routine tries to unbind the driver from the USB _device_ (by
-> calling device_release_driver) instead of from the USB _interface_ to
-> which it is actually bound (by calling usb_driver_release_interface).
-> 
-> The race involves access to the private data structure.  The driver's
-> disconnect handler waits for a completion that is signalled by the
-> firmware-loader callback routine.  As soon as the completion is
-> signalled, you have to assume that the private data structure may have
-> been deallocated by the disconnect handler -- even if the firmware was
-> loaded without errors.  However, the callback routine does access the
-> private data several times after that point.
-> 
-> Another problem is that, in order to ensure that the USB device
-> structure hasn't been freed when the callback routine runs, the driver
-> takes a reference to it.  This isn't good enough any more, because now
-> that the callback routine calls usb_driver_release_interface, it has
-> to ensure that the interface structure hasn't been freed.
-> 
-> Finally, the driver takes an unnecessary reference to the USB device
-> structure in the probe function and drops the reference in the
-> disconnect handler.  This extra reference doesn't accomplish anything,
-> because the USB core already guarantees that a device structure won't
-> be deallocated while a driver is still bound to any of its interfaces.
-> 
-> To fix these problems, this patch makes the following changes:
-> 
-> 	Call usb_driver_release_interface() rather than
-> 	device_release_driver().
-> 
-> 	Don't signal the completion until after the important
-> 	information has been copied out of the private data structure,
-> 	and don't refer to the private data at all thereafter.
-> 
-> 	Lock udev (the interface's parent) before unbinding the driver
-> 	instead of locking udev->parent.
-> 
-> 	During the firmware loading process, take a reference to the
-> 	USB interface instead of the USB device.
-> 
-> 	Don't take an unnecessary reference to the device during probe
-> 	(and then don't drop it during disconnect).
-> 
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> Reported-and-tested-by: syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com
-> CC: <stable@vger.kernel.org>
-> Acked-by: Christian Lamparter <chunkeey@gmail.com>
+The previous code had redundant memory allocations so that
+the code readability was not good. I believe this patch series
+makes it better.
 
-Patch applied to wireless-drivers-next.git, thanks.
+Yoshihiro Shimoda (13):
+  usb: renesas_usbhs: revise the irq_vbus comments
+  usb: renesas_usbhs: remove notify_hotplug callback
+  usb: renesas_usbhs: move macros from mod.c to the mod.h
+  usb: renesas_usbhs: Avoid to write platform_data's value
+  usb: renesas_usbhs: Use a specific flag instead of type for multi_clks
+  usb: renesas_usbhs: Remove type member from renesas_usbhs_driver_param
+  usb: renesas_usbhs: Use dev_of_node macro instead of open coded
+  usb: renesas_usbhs: Add has_new_pipe_configs flag
+  usb: renesas_usbhs: Add struct device * declaration in usbhs_probe()
+  usb: renesas_usbhs: move device tree properties parsing
+  usb: renesas_usbhs: Add a common function for the .get_id
+  usb: renesas_usbhs: Use renesas_usbhs_platform_info on
+    of_device_id.data
+  usb: renesas_usbhs: Use struct platform_callback pointer
 
-6e41e2257f10 p54usb: Fix race between disconnect and firmware loading
+ drivers/usb/renesas_usbhs/common.c     | 197 +++++++++++----------------------
+ drivers/usb/renesas_usbhs/common.h     |  11 +-
+ drivers/usb/renesas_usbhs/fifo.c       |   3 +-
+ drivers/usb/renesas_usbhs/mod.c        |  23 ++--
+ drivers/usb/renesas_usbhs/mod.h        |  26 ++++-
+ drivers/usb/renesas_usbhs/mod_gadget.c |   7 +-
+ drivers/usb/renesas_usbhs/rcar2.c      |  22 ++--
+ drivers/usb/renesas_usbhs/rcar2.h      |   3 +-
+ drivers/usb/renesas_usbhs/rcar3.c      |  33 ++++--
+ drivers/usb/renesas_usbhs/rcar3.h      |   5 +-
+ drivers/usb/renesas_usbhs/rza.c        |  18 +--
+ drivers/usb/renesas_usbhs/rza.h        |   4 +-
+ drivers/usb/renesas_usbhs/rza2.c       |  22 ++--
+ include/linux/usb/renesas_usbhs.h      |  35 +-----
+ 14 files changed, 168 insertions(+), 241 deletions(-)
 
 -- 
-https://patchwork.kernel.org/patch/10951527/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.7.4
 
