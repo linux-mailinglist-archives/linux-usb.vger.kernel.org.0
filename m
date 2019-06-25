@@ -2,18 +2,18 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF8D552D7
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 17:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9346E552F4
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 17:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731153AbfFYPGQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jun 2019 11:06:16 -0400
-Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:44504 "EHLO
-        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730607AbfFYPGQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 11:06:16 -0400
+        id S1731866AbfFYPIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jun 2019 11:08:42 -0400
+Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:47660 "EHLO
+        pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731330AbfFYPIl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 11:08:41 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 446863F4F6;
-        Tue, 25 Jun 2019 17:06:08 +0200 (CEST)
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id CA9AD3F732;
+        Tue, 25 Jun 2019 17:08:33 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -2.899
@@ -21,14 +21,14 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.899 tagged_above=-999 required=6.31
         tests=[ALL_TRUSTED=-1, BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MJyxLx7KEe2Y; Tue, 25 Jun 2019 17:06:01 +0200 (CEST)
+Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1mKKqNFww7JF; Tue, 25 Jun 2019 17:08:24 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id D86033F44A;
-        Tue, 25 Jun 2019 17:05:58 +0200 (CEST)
-Date:   Tue, 25 Jun 2019 17:05:58 +0200
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 12E773F3B2;
+        Tue, 25 Jun 2019 17:08:23 +0200 (CEST)
+Date:   Tue, 25 Jun 2019 17:08:23 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Guenter Roeck <linux@roeck-us.net>, laurentiu.tudor@nxp.com,
@@ -36,11 +36,10 @@ Cc:     Guenter Roeck <linux@roeck-us.net>, laurentiu.tudor@nxp.com,
         linux-usb@vger.kernel.org, marex@denx.de, leoyang.li@nxp.com,
         linux-kernel@vger.kernel.org, robin.murphy@arm.com,
         JuergenUrban@gmx.de
-Subject: [PATCH 1/2] lib/genalloc.c: Add algorithm, align and zeroed family
- of DMA allocators
-Message-ID: <20190625150558.GA2560@sx9>
-References: <20190611172654.GA2602@sx9>
- <20190611190343.GA18459@roeck-us.net>
+Subject: [PATCH 2/2] usb: host: Fix excessive alignment restriction for local
+ memory allocations
+Message-ID: <20190625150823.GB2560@sx9>
+References: <20190611190343.GA18459@roeck-us.net>
  <20190613134033.GA2489@sx9>
  <bdfd2178-9e3c-dc15-6aa1-ec1f1fbcb191@roeck-us.net>
  <20190613153414.GA909@sx9>
@@ -49,194 +48,101 @@ References: <20190611172654.GA2602@sx9>
  <20190624063515.GA3296@lst.de>
  <20190624125916.GA2516@sx9>
  <20190625060000.GA28986@lst.de>
+ <20190625150558.GA2560@sx9>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190625060000.GA28986@lst.de>
+In-Reply-To: <20190625150558.GA2560@sx9>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Provide the algorithm option to DMA allocators as well, along with
-convenience variants for zeroed and aligned memory. The following
-four functions are added:
+The PAGE_SHIFT alignment restriction to devm_gen_pool_create() quickly
+exhaust local memory because most allocations are much smaller than
+PAGE_SIZE. This causes USB device failures such as
 
-- gen_pool_dma_alloc_algo()
-- gen_pool_dma_alloc_align()
-- gen_pool_dma_zalloc_algo()
-- gen_pool_dma_zalloc_align()
+	usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
+	sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
+	sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 08 7c 00 00 f0 00
+	print_req_error: I/O error, dev sda, sector 2172 flags 80700
 
+when trying to boot from the SM501 USB controller on SH4 with QEMU.
+
+Align allocations as required but not necessarily much more than that.
+The HCCA, TD and ED structures align with 256, 32 and 16 byte memory
+boundaries, as specified by the Open HCI[1]. The min_alloc_order argument
+to devm_gen_pool_create is now somewhat arbitrarily set to 4 (16 bytes).
+Perhaps it could be somewhat lower for general buffer allocations.
+
+Reference:
+
+[1] "Open Host Controller Interface Specification for USB",
+    release 1.0a, Compaq, Microsoft, National Semiconductor, 1999,
+    pp. 16, 19, 33.
+
+Reported-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
-Hi Christoph,
+ drivers/usb/core/hcd.c      | 2 +-
+ drivers/usb/host/ohci-hcd.c | 4 ++--
+ drivers/usb/host/ohci-mem.c | 6 ++++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-This patch is based on my v5.0.21 branch, with Laurentiu Tudor's other
-local memory changes.
-
-Fredrik
----
- include/linux/genalloc.h |  10 +++-
- lib/genalloc.c           | 100 +++++++++++++++++++++++++++++++++++++--
- 2 files changed, 105 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/genalloc.h b/include/linux/genalloc.h
---- a/include/linux/genalloc.h
-+++ b/include/linux/genalloc.h
-@@ -121,7 +121,15 @@ extern unsigned long gen_pool_alloc_algo(struct gen_pool *, size_t,
- 		genpool_algo_t algo, void *data);
- extern void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size,
- 		dma_addr_t *dma);
--void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma);
-+extern void *gen_pool_dma_alloc_algo(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, genpool_algo_t algo, void *data);
-+extern void *gen_pool_dma_alloc_align(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, int align);
-+extern void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma);
-+extern void *gen_pool_dma_zalloc_algo(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, genpool_algo_t algo, void *data);
-+extern void *gen_pool_dma_zalloc_align(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, int align);
- extern void gen_pool_free(struct gen_pool *, unsigned long, size_t);
- extern void gen_pool_for_each_chunk(struct gen_pool *,
- 	void (*)(struct gen_pool *, struct gen_pool_chunk *, void *), void *);
-diff --git a/lib/genalloc.c b/lib/genalloc.c
---- a/lib/genalloc.c
-+++ b/lib/genalloc.c
-@@ -347,13 +347,35 @@ EXPORT_SYMBOL(gen_pool_alloc_algo);
-  * Return: virtual address of the allocated memory, or %NULL on failure
-  */
- void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
-+{
-+	return gen_pool_dma_alloc_algo(pool, size, dma, pool->algo, pool->data);
-+}
-+EXPORT_SYMBOL(gen_pool_dma_alloc);
-+
-+/**
-+ * gen_pool_dma_alloc_algo - allocate special memory from the pool for DMA
-+ * usage with the given pool algorithm
-+ * @pool: pool to allocate from
-+ * @size: number of bytes to allocate from the pool
-+ * @dma: DMA-view physical address return value. Use %NULL if unneeded.
-+ * @algo: algorithm passed from caller
-+ * @data: data passed to algorithm
-+ *
-+ * Allocate the requested number of bytes from the specified pool. Uses the
-+ * given pool allocation function. Can not be used in NMI handler on
-+ * architectures without NMI-safe cmpxchg implementation.
-+ *
-+ * Return: virtual address of the allocated memory, or %NULL on failure
-+ */
-+void *gen_pool_dma_alloc_algo(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, genpool_algo_t algo, void *data)
- {
- 	unsigned long vaddr;
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index b2362303d32f..48483fa71854 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -3014,7 +3014,7 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
+ 	int err;
+ 	void __iomem *local_mem;
  
- 	if (!pool)
- 		return NULL;
+-	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, PAGE_SHIFT,
++	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, 4,
+ 						  dev_to_node(hcd->self.sysdev),
+ 						  dev_name(hcd->self.sysdev));
+ 	if (IS_ERR(hcd->localmem_pool))
+diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+index 5801858d867e..b457fdaff297 100644
+--- a/drivers/usb/host/ohci-hcd.c
++++ b/drivers/usb/host/ohci-hcd.c
+@@ -507,9 +507,9 @@ static int ohci_init (struct ohci_hcd *ohci)
+ 	ohci->prev_frame_no = IO_WATCHDOG_OFF;
  
--	vaddr = gen_pool_alloc(pool, size);
-+	vaddr = gen_pool_alloc_algo(pool, size, algo, data);
- 	if (!vaddr)
- 		return NULL;
+ 	if (hcd->localmem_pool)
+-		ohci->hcca = gen_pool_dma_alloc(hcd->localmem_pool,
++		ohci->hcca = gen_pool_dma_alloc_align(hcd->localmem_pool,
+ 						sizeof(*ohci->hcca),
+-						&ohci->hcca_dma);
++						&ohci->hcca_dma, 256);
+ 	else
+ 		ohci->hcca = dma_alloc_coherent(hcd->self.controller,
+ 						sizeof(*ohci->hcca),
+diff --git a/drivers/usb/host/ohci-mem.c b/drivers/usb/host/ohci-mem.c
+index 4afe27cc7e46..1425335c6baf 100644
+--- a/drivers/usb/host/ohci-mem.c
++++ b/drivers/usb/host/ohci-mem.c
+@@ -94,7 +94,8 @@ td_alloc (struct ohci_hcd *hc, gfp_t mem_flags)
+ 	struct usb_hcd	*hcd = ohci_to_hcd(hc);
  
-@@ -362,7 +384,31 @@ void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
+ 	if (hcd->localmem_pool)
+-		td = gen_pool_dma_zalloc(hcd->localmem_pool, sizeof(*td), &dma);
++		td = gen_pool_dma_zalloc_align(hcd->localmem_pool,
++				sizeof(*td), &dma, 32);
+ 	else
+ 		td = dma_pool_zalloc(hc->td_cache, mem_flags, &dma);
+ 	if (td) {
+@@ -137,7 +138,8 @@ ed_alloc (struct ohci_hcd *hc, gfp_t mem_flags)
+ 	struct usb_hcd	*hcd = ohci_to_hcd(hc);
  
- 	return (void *)vaddr;
- }
--EXPORT_SYMBOL(gen_pool_dma_alloc);
-+EXPORT_SYMBOL(gen_pool_dma_alloc_algo);
-+
-+/**
-+ * gen_pool_dma_alloc_align - allocate special memory from the pool for DMA
-+ * usage with the given alignment
-+ * @pool: pool to allocate from
-+ * @size: number of bytes to allocate from the pool
-+ * @dma: DMA-view physical address return value. Use %NULL if unneeded.
-+ * @align: alignment in bytes for starting address
-+ *
-+ * Allocate the requested number bytes from the specified pool, with the given
-+ * alignment restriction. Can not be used in NMI handler on architectures
-+ * without NMI-safe cmpxchg implementation.
-+ *
-+ * Return: virtual address of the allocated memory, or %NULL on failure
-+ */
-+void *gen_pool_dma_alloc_align(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, int align)
-+{
-+	struct genpool_data_align data = { .align = align };
-+
-+	return gen_pool_dma_alloc_algo(pool, size, dma,
-+			gen_pool_first_fit_align, &data);
-+}
-+EXPORT_SYMBOL(gen_pool_dma_alloc_align);
- 
- /**
-  * gen_pool_dma_zalloc - allocate special zeroed memory from the pool for
-@@ -380,14 +426,60 @@ EXPORT_SYMBOL(gen_pool_dma_alloc);
-  */
- void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
- {
--	void *vaddr = gen_pool_dma_alloc(pool, size, dma);
-+	return gen_pool_dma_zalloc_algo(pool, size, dma, pool->algo, pool->data);
-+}
-+EXPORT_SYMBOL(gen_pool_dma_zalloc);
-+
-+/**
-+ * gen_pool_dma_zalloc_algo - allocate special zeroed memory from the pool for
-+ * DMA usage with the given pool algorithm
-+ * @pool: pool to allocate from
-+ * @size: number of bytes to allocate from the pool
-+ * @dma: DMA-view physical address return value. Use %NULL if unneeded.
-+ * @algo: algorithm passed from caller
-+ * @data: data passed to algorithm
-+ *
-+ * Allocate the requested number of zeroed bytes from the specified pool. Uses
-+ * the given pool allocation function. Can not be used in NMI handler on
-+ * architectures without NMI-safe cmpxchg implementation.
-+ *
-+ * Return: virtual address of the allocated zeroed memory, or %NULL on failure
-+ */
-+void *gen_pool_dma_zalloc_algo(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, genpool_algo_t algo, void *data)
-+{
-+	void *vaddr = gen_pool_dma_alloc_algo(pool, size, dma, algo, data);
- 
- 	if (vaddr)
- 		memset(vaddr, 0, size);
- 
- 	return vaddr;
- }
--EXPORT_SYMBOL(gen_pool_dma_zalloc);
-+EXPORT_SYMBOL(gen_pool_dma_zalloc_algo);
-+
-+/**
-+ * gen_pool_dma_zalloc_align - allocate special zeroed memory from the pool for
-+ * DMA usage with the given alignment
-+ * @pool: pool to allocate from
-+ * @size: number of bytes to allocate from the pool
-+ * @dma: DMA-view physical address return value. Use %NULL if unneeded.
-+ * @align: alignment in bytes for starting address
-+ *
-+ * Allocate the requested number of zeroed bytes from the specified pool,
-+ * with the given alignment restriction. Can not be used in NMI handler on
-+ * architectures without NMI-safe cmpxchg implementation.
-+ *
-+ * Return: virtual address of the allocated zeroed memory, or %NULL on failure
-+ */
-+void *gen_pool_dma_zalloc_align(struct gen_pool *pool, size_t size,
-+		dma_addr_t *dma, int align)
-+{
-+	struct genpool_data_align data = { .align = align };
-+
-+	return gen_pool_dma_zalloc_algo(pool, size, dma,
-+			gen_pool_first_fit_align, &data);
-+}
-+EXPORT_SYMBOL(gen_pool_dma_zalloc_align);
- 
- /**
-  * gen_pool_free - free allocated special memory back to the pool
+ 	if (hcd->localmem_pool)
+-		ed = gen_pool_dma_zalloc(hcd->localmem_pool, sizeof(*ed), &dma);
++		ed = gen_pool_dma_zalloc_align(hcd->localmem_pool,
++				sizeof(*ed), &dma, 16);
+ 	else
+ 		ed = dma_pool_zalloc(hc->ed_cache, mem_flags, &dma);
+ 	if (ed) {
 -- 
 2.21.0
 
