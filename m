@@ -2,167 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D69A45599E
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 23:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606D555B80
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 00:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726009AbfFYVCG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jun 2019 17:02:06 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35051 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726401AbfFYVCG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 17:02:06 -0400
-Received: by mail-pg1-f193.google.com with SMTP id s27so52999pgl.2;
-        Tue, 25 Jun 2019 14:02:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=793hX21onYxPim3s0acooI0U3fxL6frgDB3Bl1198VI=;
-        b=MXuFXVi6fhIxk907/vWNDNYg5Bk975lj83+GVeFsAkvQZ9/dRmNMPNrGnn5e7aHCbF
-         or0QJttTrIGHMfH/2dV1v1Vy3RPvlWDyarBWB0vy7JBzeo2flKU0TxlgfR9Q20Lztijk
-         HQ+v4rFfed75hOwi8Sn+YBBu5NxKIc5UlaJmwh0bo/ROGaBKjT6/0Fb4Ud8JDnkzzHp8
-         EWadSCPLbUPHAlZ4NfkHc9eMJ96fMcQ8NKE2QW09J66RvE9GfBVSbMhGbKVZpVVG8OLQ
-         8jOrk3iCxLmFrNBjFUM6xlox6J5WftC0QjCpdXcuyH/dipkL+tZ+ZhzA55v+7MRmeuF5
-         fwUQ==
+        id S1726383AbfFYWrH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jun 2019 18:47:07 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:55441 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726362AbfFYWrG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 18:47:06 -0400
+Received: by mail-io1-f71.google.com with SMTP id f22so150051ioh.22
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jun 2019 15:47:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=793hX21onYxPim3s0acooI0U3fxL6frgDB3Bl1198VI=;
-        b=VHIrs5brKwnpzaA/o6rgffIZ01aKy7/PXkw9gsX6DdGwo8QZMJcgtNoX4QpCMiNYuJ
-         od+H4yQZ0rx2a7W3odiS/UUrPBb/Rra8bDxmZaQ/35qaCHXXTlPMAHYQx7q6Vxw+nGQx
-         XAKTqtyF7pz3Uczpcj9IJXdOj39xIhahUTQh981FhT2hwWmm3IZ4Ss4amKprLfOc7m8F
-         /6k13VKp+pcv+Gdf3Jcqiqgmd5zJSe0e0uDMGitTFvFbIWvQICp8gnG1VDG2cVW+CN5G
-         CNFKKOtqxRcp+TKtjLNsCTAspPHLIrb2+ZJohiuB8CnlbE7poaV8kWUYjCjXCPb0yXSv
-         DfoQ==
-X-Gm-Message-State: APjAAAXesW2+ywu2AR+TPmYfz/x5G6P8XDukQP7q0IrbtEuDQSjuZtC9
-        drz2BxupalS5onZOLwCq3zU=
-X-Google-Smtp-Source: APXvYqx6cSD3q36naHciSVSmKXHTCIskuGlU9u/TTqOZsrD1JEa4dVV9v8VXWsn4CpFC/PST9eUYWQ==
-X-Received: by 2002:a17:90a:db08:: with SMTP id g8mr853612pjv.39.1561496086723;
-        Tue, 25 Jun 2019 13:54:46 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j23sm16701617pgb.63.2019.06.25.13.54.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 13:54:46 -0700 (PDT)
-Date:   Tue, 25 Jun 2019 13:54:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Fredrik Noring <noring@nocrew.org>
-Cc:     Christoph Hellwig <hch@lst.de>, laurentiu.tudor@nxp.com,
-        stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, marex@denx.de, leoyang.li@nxp.com,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        JuergenUrban@gmx.de
-Subject: Re: [PATCH 2/2] usb: host: Fix excessive alignment restriction for
- local memory allocations
-Message-ID: <20190625205445.GB7449@roeck-us.net>
-References: <20190613134033.GA2489@sx9>
- <bdfd2178-9e3c-dc15-6aa1-ec1f1fbcb191@roeck-us.net>
- <20190613153414.GA909@sx9>
- <3f2164cd-7655-b7cc-ec57-d8751886728c@roeck-us.net>
- <20190614142816.GA2574@sx9>
- <20190624063515.GA3296@lst.de>
- <20190624125916.GA2516@sx9>
- <20190625060000.GA28986@lst.de>
- <20190625150558.GA2560@sx9>
- <20190625150823.GB2560@sx9>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Vw6MJY7BFxpWAU+MjwyOxPcnR+sho3N/M68uPuBFnGU=;
+        b=D5HjjB6LCn8aRFH4IJgXNob9VKFmoMPQO5OG/SQcsV0QAPgCZrEHv3FzdTzCCghkes
+         /GYxdYkm4o4Jem4El4qjpLDl7e0Y+TDDvsIH8FvphUm05TI0iFdYeC1SeI3WIhwnnNcy
+         YBaip4DTx+jAyDJWncdJ5IXqOaGCjpf4SeEh6i9C1oZUH2DLVYToL2dr/5HFDwWfQW7Z
+         Imewm/XPgvoXbmzHKsdIqzb8uLkDB2Xpr0acRCDOg+ZuD46Lvw8RDdKc1fgqT7z92QaW
+         CHr6++CpLhPo1yJMTHocMwumozlRJDsrcvCdtvFdCnVbAjxBSNSZ+I4O/KiJ/ZZweR9X
+         nvGg==
+X-Gm-Message-State: APjAAAXlKoFP8GmD6qeSN3+RZ05PgR+P6Zks5jhqZGVellCnBOM9L3ez
+        siRDo4gL0RxBF1QqLeKiOFGTnHykLdmEgWPDEQBChd42hOpn
+X-Google-Smtp-Source: APXvYqw3FPGBs+xBmYD7Bm5K5bn6fZbFnVRr1zstkNRTrOudHW+rhnCoXXsHdhc0JAXMg8tPslu60h9QbiEUzTK10ICQwMYq5Whi
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190625150823.GB2560@sx9>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Received: by 2002:a02:3f0a:: with SMTP id d10mr909996jaa.23.1561502825823;
+ Tue, 25 Jun 2019 15:47:05 -0700 (PDT)
+Date:   Tue, 25 Jun 2019 15:47:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003fc6ef058c2db557@google.com>
+Subject: KASAN: slab-out-of-bounds Read in hdpvr_probe
+From:   syzbot <syzbot+79d18aac4bf1770dd050@syzkaller.appspotmail.com>
+To:     allison@lohutok.net, andreyknvl@google.com,
+        gregkh@linuxfoundation.org, hverkuil@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 05:08:23PM +0200, Fredrik Noring wrote:
-> The PAGE_SHIFT alignment restriction to devm_gen_pool_create() quickly
-> exhaust local memory because most allocations are much smaller than
-> PAGE_SIZE. This causes USB device failures such as
-> 
-> 	usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> 	sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> 	sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 08 7c 00 00 f0 00
-> 	print_req_error: I/O error, dev sda, sector 2172 flags 80700
-> 
-> when trying to boot from the SM501 USB controller on SH4 with QEMU.
-> 
-> Align allocations as required but not necessarily much more than that.
-> The HCCA, TD and ED structures align with 256, 32 and 16 byte memory
-> boundaries, as specified by the Open HCI[1]. The min_alloc_order argument
-> to devm_gen_pool_create is now somewhat arbitrarily set to 4 (16 bytes).
-> Perhaps it could be somewhat lower for general buffer allocations.
-> 
-> Reference:
-> 
-> [1] "Open Host Controller Interface Specification for USB",
->     release 1.0a, Compaq, Microsoft, National Semiconductor, 1999,
->     pp. 16, 19, 33.
-> 
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Fredrik Noring <noring@nocrew.org>
+Hello,
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+syzbot found the following crash on:
 
-> ---
->  drivers/usb/core/hcd.c      | 2 +-
->  drivers/usb/host/ohci-hcd.c | 4 ++--
->  drivers/usb/host/ohci-mem.c | 6 ++++--
->  3 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index b2362303d32f..48483fa71854 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -3014,7 +3014,7 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
->  	int err;
->  	void __iomem *local_mem;
->  
-> -	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, PAGE_SHIFT,
-> +	hcd->localmem_pool = devm_gen_pool_create(hcd->self.sysdev, 4,
->  						  dev_to_node(hcd->self.sysdev),
->  						  dev_name(hcd->self.sysdev));
->  	if (IS_ERR(hcd->localmem_pool))
-> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-> index 5801858d867e..b457fdaff297 100644
-> --- a/drivers/usb/host/ohci-hcd.c
-> +++ b/drivers/usb/host/ohci-hcd.c
-> @@ -507,9 +507,9 @@ static int ohci_init (struct ohci_hcd *ohci)
->  	ohci->prev_frame_no = IO_WATCHDOG_OFF;
->  
->  	if (hcd->localmem_pool)
-> -		ohci->hcca = gen_pool_dma_alloc(hcd->localmem_pool,
-> +		ohci->hcca = gen_pool_dma_alloc_align(hcd->localmem_pool,
->  						sizeof(*ohci->hcca),
-> -						&ohci->hcca_dma);
-> +						&ohci->hcca_dma, 256);
->  	else
->  		ohci->hcca = dma_alloc_coherent(hcd->self.controller,
->  						sizeof(*ohci->hcca),
-> diff --git a/drivers/usb/host/ohci-mem.c b/drivers/usb/host/ohci-mem.c
-> index 4afe27cc7e46..1425335c6baf 100644
-> --- a/drivers/usb/host/ohci-mem.c
-> +++ b/drivers/usb/host/ohci-mem.c
-> @@ -94,7 +94,8 @@ td_alloc (struct ohci_hcd *hc, gfp_t mem_flags)
->  	struct usb_hcd	*hcd = ohci_to_hcd(hc);
->  
->  	if (hcd->localmem_pool)
-> -		td = gen_pool_dma_zalloc(hcd->localmem_pool, sizeof(*td), &dma);
-> +		td = gen_pool_dma_zalloc_align(hcd->localmem_pool,
-> +				sizeof(*td), &dma, 32);
->  	else
->  		td = dma_pool_zalloc(hc->td_cache, mem_flags, &dma);
->  	if (td) {
-> @@ -137,7 +138,8 @@ ed_alloc (struct ohci_hcd *hc, gfp_t mem_flags)
->  	struct usb_hcd	*hcd = ohci_to_hcd(hc);
->  
->  	if (hcd->localmem_pool)
-> -		ed = gen_pool_dma_zalloc(hcd->localmem_pool, sizeof(*ed), &dma);
-> +		ed = gen_pool_dma_zalloc_align(hcd->localmem_pool,
-> +				sizeof(*ed), &dma, 16);
->  	else
->  		ed = dma_pool_zalloc(hc->ed_cache, mem_flags, &dma);
->  	if (ed) {
-> -- 
-> 2.21.0
-> 
+HEAD commit:    9939f56e usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=12e0f72da00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df134eda130bb43a
+dashboard link: https://syzkaller.appspot.com/bug?extid=79d18aac4bf1770dd050
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+79d18aac4bf1770dd050@syzkaller.appspotmail.com
+
+usb 2-1: config 0 descriptor??
+==================================================================
+BUG: KASAN: slab-out-of-bounds in string_nocheck+0x1d2/0x200  
+lib/vsprintf.c:605
+Read of size 1 at addr ffff8881cda45b20 by task kworker/0:0/5
+
+CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.2.0-rc5+ #11
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description+0x67/0x231 mm/kasan/report.c:188
+  __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
+  kasan_report+0xe/0x20 mm/kasan/common.c:614
+  string_nocheck+0x1d2/0x200 lib/vsprintf.c:605
+  string+0xe5/0xf0 lib/vsprintf.c:668
+  vsnprintf+0x7d3/0x14f0 lib/vsprintf.c:2503
+  vscnprintf+0x29/0x80 lib/vsprintf.c:2606
+  vprintk_store+0x40/0x4b0 kernel/printk/printk.c:1907
+  vprintk_emit+0xc8/0x3e0 kernel/printk/printk.c:1968
+  vprintk_func+0x75/0x113 kernel/printk/printk_safe.c:386
+  printk+0xba/0xed kernel/printk/printk.c:2046
+  device_authorization drivers/media/usb/hdpvr/hdpvr-core.c:140 [inline]
+  hdpvr_device_init drivers/media/usb/hdpvr/hdpvr-core.c:201 [inline]
+  hdpvr_probe.cold+0x194/0x1247 drivers/media/usb/hdpvr/hdpvr-core.c:342
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+  kthread+0x30b/0x410 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 5:
+  save_stack+0x1b/0x80 mm/kasan/common.c:71
+  set_track mm/kasan/common.c:79 [inline]
+  __kasan_kmalloc mm/kasan/common.c:489 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:462
+  kmalloc include/linux/slab.h:547 [inline]
+  hdpvr_probe+0x1ce/0xac0 drivers/media/usb/hdpvr/hdpvr-core.c:297
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+  kthread+0x30b/0x410 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 0:
+(stack is not available)
+
+The buggy address belongs to the object at ffff8881cda45ae0
+  which belongs to the cache kmalloc-64 of size 64
+The buggy address is located 0 bytes to the right of
+  64-byte region [ffff8881cda45ae0, ffff8881cda45b20)
+The buggy address belongs to the page:
+page:ffffea0007369140 refcount:1 mapcount:0 mapping:ffff8881dac03600  
+index:0x0
+flags: 0x200000000000200(slab)
+raw: 0200000000000200 dead000000000100 dead000000000200 ffff8881dac03600
+raw: 0000000000000000 00000000802a002a 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8881cda45a00: fc fc fc fc fb fb fb fb fb fb fb fb fc fc fc fc
+  ffff8881cda45a80: fb fb fb fb fb fb fb fb fc fc fc fc 00 00 00 00
+> ffff8881cda45b00: 00 00 00 00 fc fc fc fc fb fb fb fb fb fb fb fb
+                                ^
+  ffff8881cda45b80: fc fc fc fc 00 00 00 00 00 00 00 00 fc fc fc fc
+  ffff8881cda45c00: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
