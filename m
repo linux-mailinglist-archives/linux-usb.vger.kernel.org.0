@@ -2,142 +2,241 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7077355119
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 16:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF8D552D7
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 17:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728773AbfFYOIG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jun 2019 10:08:06 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:46132 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727807AbfFYOIG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 10:08:06 -0400
-Received: (qmail 2585 invoked by uid 2102); 25 Jun 2019 10:08:05 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 25 Jun 2019 10:08:05 -0400
-Date:   Tue, 25 Jun 2019 10:08:05 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        <patches@opensource.cirrus.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-In-Reply-To: <1561459300.3795.39.camel@opensource.cirrus.com>
-Message-ID: <Pine.LNX.4.44L0.1906250945410.1493-100000@iolanthe.rowland.org>
+        id S1731153AbfFYPGQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jun 2019 11:06:16 -0400
+Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:44504 "EHLO
+        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730607AbfFYPGQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 11:06:16 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 446863F4F6;
+        Tue, 25 Jun 2019 17:06:08 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Flag: NO
+X-Spam-Score: -2.899
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.899 tagged_above=-999 required=6.31
+        tests=[ALL_TRUSTED=-1, BAYES_00=-1.9, URIBL_BLOCKED=0.001]
+        autolearn=ham autolearn_force=no
+Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id MJyxLx7KEe2Y; Tue, 25 Jun 2019 17:06:01 +0200 (CEST)
+Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
+        (Authenticated sender: mb547485)
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id D86033F44A;
+        Tue, 25 Jun 2019 17:05:58 +0200 (CEST)
+Date:   Tue, 25 Jun 2019 17:05:58 +0200
+From:   Fredrik Noring <noring@nocrew.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>, laurentiu.tudor@nxp.com,
+        stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, marex@denx.de, leoyang.li@nxp.com,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        JuergenUrban@gmx.de
+Subject: [PATCH 1/2] lib/genalloc.c: Add algorithm, align and zeroed family
+ of DMA allocators
+Message-ID: <20190625150558.GA2560@sx9>
+References: <20190611172654.GA2602@sx9>
+ <20190611190343.GA18459@roeck-us.net>
+ <20190613134033.GA2489@sx9>
+ <bdfd2178-9e3c-dc15-6aa1-ec1f1fbcb191@roeck-us.net>
+ <20190613153414.GA909@sx9>
+ <3f2164cd-7655-b7cc-ec57-d8751886728c@roeck-us.net>
+ <20190614142816.GA2574@sx9>
+ <20190624063515.GA3296@lst.de>
+ <20190624125916.GA2516@sx9>
+ <20190625060000.GA28986@lst.de>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190625060000.GA28986@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 25 Jun 2019, Mayuresh Kulkarni wrote:
+Provide the algorithm option to DMA allocators as well, along with
+convenience variants for zeroed and aligned memory. The following
+four functions are added:
 
-> > There are two possible ways a userspace program can monitor the 
-> > device's state:
-> > 
-> >     1.	The program can leave an URB (typically on an interrupt 
-> > 	endpoint) running constantly, and the device can send its 
-> > 	response to the URB whenever something happens.
-> > 
-> >     2.	The program can poll the device by submitting an URB 
-> > 	periodically to see if anything has happened since the last 
-> > 	poll.
-> > 
-> > In case 1, the program would leave the URB running even after doing
-> > the 
-> > ALLOW_SUSPEND ioctl.  That way the program will be aware of anything 
-> > that happens to the device before it suspends.  When the device does
-> > go 
-> > into suspend, the URB will be terminated.
-> > 
-> > In case 2, the program would continue polling the device even after 
-> > doing the ALLOW_SUSPEND ioctl.  When the device does go into suspend, 
-> > the polling URB will fail.
-> > 
-> 
-> Right, so user space should do the following when it determines the
-> device is idle from its point of view -
-> 
-> 1. Call ALLOW_SUSPEND ioctl
-> 2. Queue an URB and wait for its REAP. When the wait returns -EFAIL (or
-> something similar), that is the indication that the device is no longer
-> active (or suspended)
-> 3. Call WAIT_FOR_RESUME ioctl
-> 4. When WAIT_FOR_RESUME ioctl returns, it is guaranteed that device is
-> active.
-> 5. Call FORBID_SUSPEND ioctl and read the cause of resume.
-> 6. Go to (1) when appropriate
-> 
-> Have I summarized this approach correctly from user-space point of view?
+- gen_pool_dma_alloc_algo()
+- gen_pool_dma_alloc_align()
+- gen_pool_dma_zalloc_algo()
+- gen_pool_dma_zalloc_align()
 
-Yes, except for one thing: In step 4, it is _not_ guaranteed that the 
-device is active when WAIT_FOR_RESUME returns.  The only guarantee is 
-that a resume did occur sometime after step 1, but the device might 
-have gone back into suspend after that occurred.
+Signed-off-by: Fredrik Noring <noring@nocrew.org>
+---
+Hi Christoph,
 
-And note that step 2 (queuing an URB) is something your program would
-do anyway, even if the device wasn't going to be suspended or wasn't
-idle.
+This patch is based on my v5.0.21 branch, with Laurentiu Tudor's other
+local memory changes.
 
+Fredrik
+---
+ include/linux/genalloc.h |  10 +++-
+ lib/genalloc.c           | 100 +++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 105 insertions(+), 5 deletions(-)
 
-> Based on discussion so far and my understanding, how about below
-> approach -
-> 
-> 1. Have ALLOW_SUSPEND and WAIT_FOR_RESUME ioctls. As before,
-> ALLOW_SUSPEND calls usb_autosuspend_device() while WAIT_FOR_RESUME waits
-> for resume.
-> 2. Have usbfs_notify_suspend() and usbfs_notify_resume() as per your
-> previous patch (i.e.: system/resume callbacks at device level).
-> 3. Extend usbdev_poll() to wait for udev->state == USB_STATE_SUSPENDED
-> when events == POLLPRI. Return POLLPRI when state = USB_STATE_SUSPENDED.
-> 4. As before, any ioctl != (ALLOW_SUSPEND or WAIT_FOR_RESUME)
-> calls usb_autoresume_device().
-
-3 sounds reasonable at first, but I'm not sure it would work.  
-Consider what would happen if the device is suspended very briefly and
-then wakes up.  The usbdev_poll() call might not return, because by the
-time it checks udev->state, the state has already changed back to
-USB_STATE_CONFIGURED.
-
-In any case, we shouldn't do 4.  It would prevent the device from ever
-going into suspend, because the program would want to continue making
-usbfs ioctl calls while waiting for the suspend to occur.
-
-> The corresponding user-space calls would be -
-> A. When determined device is idle, call ALLOW_SUSPEND ioctl.
-> B. Call poll(device_fd, POLLPRI). When poll returns check revents
-> == POLLPRI.
-
-What if the device never does go into suspend?  The poll() call
-wouldn't return and the program would just stop working.
-
-> C. Call WAIT_FOR_RESUME ioctl.
-> D. When WAIT_FOR_RESUME ioctl returns, read resume reason.
-> E. Go to (A).
-> 
-> The constraint on (1) above is - ALLOW_SUSPEND should be called when
-> user-space decides device is idle. I think this is not a hard constraint
-> since poll() for suspend will return POLLPRI when device is suspended
-> which is different from what it returns when ASYNC URB is completed.
-> 
-> Few points I am unsure of are -
-> 1. Is it OK for a driver to re-purpose POLLPRI for its own use
-> or POLLPRI has a unique meaning system wide?
-
-POLLPRI does not have a unique system-wide meaning.  We could use it to 
-indicate the device is suspended, if we want to.  But I'm not convinced 
-that it would be a good idea.
-
-> 2. Is it safe to wait for udev->state to be of a particular value?
-
-No, not really, because the state can change.
-
-> If this approach could work, I can spend time on this one as well.
-
-What advantage do you think your proposal has over my proposal?
-
-Alan Stern
+diff --git a/include/linux/genalloc.h b/include/linux/genalloc.h
+--- a/include/linux/genalloc.h
++++ b/include/linux/genalloc.h
+@@ -121,7 +121,15 @@ extern unsigned long gen_pool_alloc_algo(struct gen_pool *, size_t,
+ 		genpool_algo_t algo, void *data);
+ extern void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size,
+ 		dma_addr_t *dma);
+-void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma);
++extern void *gen_pool_dma_alloc_algo(struct gen_pool *pool, size_t size,
++		dma_addr_t *dma, genpool_algo_t algo, void *data);
++extern void *gen_pool_dma_alloc_align(struct gen_pool *pool, size_t size,
++		dma_addr_t *dma, int align);
++extern void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma);
++extern void *gen_pool_dma_zalloc_algo(struct gen_pool *pool, size_t size,
++		dma_addr_t *dma, genpool_algo_t algo, void *data);
++extern void *gen_pool_dma_zalloc_align(struct gen_pool *pool, size_t size,
++		dma_addr_t *dma, int align);
+ extern void gen_pool_free(struct gen_pool *, unsigned long, size_t);
+ extern void gen_pool_for_each_chunk(struct gen_pool *,
+ 	void (*)(struct gen_pool *, struct gen_pool_chunk *, void *), void *);
+diff --git a/lib/genalloc.c b/lib/genalloc.c
+--- a/lib/genalloc.c
++++ b/lib/genalloc.c
+@@ -347,13 +347,35 @@ EXPORT_SYMBOL(gen_pool_alloc_algo);
+  * Return: virtual address of the allocated memory, or %NULL on failure
+  */
+ void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
++{
++	return gen_pool_dma_alloc_algo(pool, size, dma, pool->algo, pool->data);
++}
++EXPORT_SYMBOL(gen_pool_dma_alloc);
++
++/**
++ * gen_pool_dma_alloc_algo - allocate special memory from the pool for DMA
++ * usage with the given pool algorithm
++ * @pool: pool to allocate from
++ * @size: number of bytes to allocate from the pool
++ * @dma: DMA-view physical address return value. Use %NULL if unneeded.
++ * @algo: algorithm passed from caller
++ * @data: data passed to algorithm
++ *
++ * Allocate the requested number of bytes from the specified pool. Uses the
++ * given pool allocation function. Can not be used in NMI handler on
++ * architectures without NMI-safe cmpxchg implementation.
++ *
++ * Return: virtual address of the allocated memory, or %NULL on failure
++ */
++void *gen_pool_dma_alloc_algo(struct gen_pool *pool, size_t size,
++		dma_addr_t *dma, genpool_algo_t algo, void *data)
+ {
+ 	unsigned long vaddr;
+ 
+ 	if (!pool)
+ 		return NULL;
+ 
+-	vaddr = gen_pool_alloc(pool, size);
++	vaddr = gen_pool_alloc_algo(pool, size, algo, data);
+ 	if (!vaddr)
+ 		return NULL;
+ 
+@@ -362,7 +384,31 @@ void *gen_pool_dma_alloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
+ 
+ 	return (void *)vaddr;
+ }
+-EXPORT_SYMBOL(gen_pool_dma_alloc);
++EXPORT_SYMBOL(gen_pool_dma_alloc_algo);
++
++/**
++ * gen_pool_dma_alloc_align - allocate special memory from the pool for DMA
++ * usage with the given alignment
++ * @pool: pool to allocate from
++ * @size: number of bytes to allocate from the pool
++ * @dma: DMA-view physical address return value. Use %NULL if unneeded.
++ * @align: alignment in bytes for starting address
++ *
++ * Allocate the requested number bytes from the specified pool, with the given
++ * alignment restriction. Can not be used in NMI handler on architectures
++ * without NMI-safe cmpxchg implementation.
++ *
++ * Return: virtual address of the allocated memory, or %NULL on failure
++ */
++void *gen_pool_dma_alloc_align(struct gen_pool *pool, size_t size,
++		dma_addr_t *dma, int align)
++{
++	struct genpool_data_align data = { .align = align };
++
++	return gen_pool_dma_alloc_algo(pool, size, dma,
++			gen_pool_first_fit_align, &data);
++}
++EXPORT_SYMBOL(gen_pool_dma_alloc_align);
+ 
+ /**
+  * gen_pool_dma_zalloc - allocate special zeroed memory from the pool for
+@@ -380,14 +426,60 @@ EXPORT_SYMBOL(gen_pool_dma_alloc);
+  */
+ void *gen_pool_dma_zalloc(struct gen_pool *pool, size_t size, dma_addr_t *dma)
+ {
+-	void *vaddr = gen_pool_dma_alloc(pool, size, dma);
++	return gen_pool_dma_zalloc_algo(pool, size, dma, pool->algo, pool->data);
++}
++EXPORT_SYMBOL(gen_pool_dma_zalloc);
++
++/**
++ * gen_pool_dma_zalloc_algo - allocate special zeroed memory from the pool for
++ * DMA usage with the given pool algorithm
++ * @pool: pool to allocate from
++ * @size: number of bytes to allocate from the pool
++ * @dma: DMA-view physical address return value. Use %NULL if unneeded.
++ * @algo: algorithm passed from caller
++ * @data: data passed to algorithm
++ *
++ * Allocate the requested number of zeroed bytes from the specified pool. Uses
++ * the given pool allocation function. Can not be used in NMI handler on
++ * architectures without NMI-safe cmpxchg implementation.
++ *
++ * Return: virtual address of the allocated zeroed memory, or %NULL on failure
++ */
++void *gen_pool_dma_zalloc_algo(struct gen_pool *pool, size_t size,
++		dma_addr_t *dma, genpool_algo_t algo, void *data)
++{
++	void *vaddr = gen_pool_dma_alloc_algo(pool, size, dma, algo, data);
+ 
+ 	if (vaddr)
+ 		memset(vaddr, 0, size);
+ 
+ 	return vaddr;
+ }
+-EXPORT_SYMBOL(gen_pool_dma_zalloc);
++EXPORT_SYMBOL(gen_pool_dma_zalloc_algo);
++
++/**
++ * gen_pool_dma_zalloc_align - allocate special zeroed memory from the pool for
++ * DMA usage with the given alignment
++ * @pool: pool to allocate from
++ * @size: number of bytes to allocate from the pool
++ * @dma: DMA-view physical address return value. Use %NULL if unneeded.
++ * @align: alignment in bytes for starting address
++ *
++ * Allocate the requested number of zeroed bytes from the specified pool,
++ * with the given alignment restriction. Can not be used in NMI handler on
++ * architectures without NMI-safe cmpxchg implementation.
++ *
++ * Return: virtual address of the allocated zeroed memory, or %NULL on failure
++ */
++void *gen_pool_dma_zalloc_align(struct gen_pool *pool, size_t size,
++		dma_addr_t *dma, int align)
++{
++	struct genpool_data_align data = { .align = align };
++
++	return gen_pool_dma_zalloc_algo(pool, size, dma,
++			gen_pool_first_fit_align, &data);
++}
++EXPORT_SYMBOL(gen_pool_dma_zalloc_align);
+ 
+ /**
+  * gen_pool_free - free allocated special memory back to the pool
+-- 
+2.21.0
 
