@@ -2,985 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F53652153
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 05:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE61F5223C
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 06:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbfFYDov (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jun 2019 23:44:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34110 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726810AbfFYDov (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 Jun 2019 23:44:51 -0400
-Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        id S1726912AbfFYEnW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jun 2019 00:43:22 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:48118 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726421AbfFYEnV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 00:43:21 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 6BB25608CE; Tue, 25 Jun 2019 04:43:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561437800;
+        bh=PzVp8KkogA+HpuLr/YP8oqFfRobqR8lFNoY9waydybM=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=gdxfop57atEjvmRF8gPOTqZFUYIpLMuvk3v7sa0hocaPU7Kiz1gYQuaZrWgvdX+Dj
+         Z82ssd8e6DCvYle2B+GdHKCaTPcvcHO57m9WyJsdZBA6btr/pRDPQYBQI9hi+D06mu
+         P3tgaB/Bs8jFMztruF+3HFd82d2D7PPmbLPutqHs=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,MISSING_DATE,MISSING_MID,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B94220656;
-        Tue, 25 Jun 2019 03:44:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561434288;
-        bh=OrAjED2TvUyu9tensJvBrduA07/kaIOLD21cXCGAw+s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DHnWJZmr4wG1KEgewMaIdyHsrPdtNXOF+07Zbu6/EIQBC9sL49VJL9g8eZZntLgLU
-         +1PZRMgMwX8W362zDCA5hDnSwJmDTpjmN1i3G/NxOGcNlGDfKYJOolzzQhrAqu5duV
-         9EyO5HiDhwYKu4AFDV+Rd7Cbl6bo2K13Kgud6zRs=
-Date:   Mon, 24 Jun 2019 20:44:46 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Reminder: 42 open syzbot bugs in usb subsystem
-Message-ID: <20190625034446.GA719@sol.localdomain>
+        (Authenticated sender: kvalo@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2E23260709;
+        Tue, 25 Jun 2019 04:43:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561437799;
+        bh=PzVp8KkogA+HpuLr/YP8oqFfRobqR8lFNoY9waydybM=;
+        h=Subject:From:In-Reply-To:References:To:Cc:From;
+        b=PBPwg7IrJqMMukLWvzfIZX+whOYm0ZznKI/3wi9SCk5H3k6H/D+0I4GAZgV2o/bps
+         SfaDPbUvmqd720DbwWT8+WtOldqLomy5tytCONSAs4sGw5dQ79adiUIPunmzEQt2IX
+         elxmnUfr7YzxgldSiUhoq7DCqzjOoQLhaLjBuQSs=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2E23260709
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] p54usb: Fix race between disconnect and firmware loading
+From:   Kalle Valo <kvalo@codeaurora.org>
+In-Reply-To: <Pine.LNX.4.44L0.1905201042110.1498-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1905201042110.1498-100000@iolanthe.rowland.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Christian Lamparter <chunkeey@gmail.com>,
+        syzbot <syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com>,
+        <davem@davemloft.net>, <andreyknvl@google.com>,
+        <syzkaller-bugs@googlegroups.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>
+User-Agent: pwcli/0.0.0-git (https://github.com/kvalo/pwcli/) Python/2.7.12
+Message-Id: <20190625044320.6BB25608CE@smtp.codeaurora.org>
+Date:   Tue, 25 Jun 2019 04:43:20 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[This email was generated by a script.  Let me know if you have any suggestions
-to make it better.]
-
-Of the currently open syzbot reports against the upstream kernel, I've manually
-marked 42 of them as possibly being bugs in the usb subsystem.  This category
-mostly includes USB driver bugs, but it might include some core USB bugs too. 
-I've listed these reports below, sorted by an algorithm that tries to list first
-the reports most likely to be still valid, important, and actionable.
-
-Of these 42 bugs, 24 were seen in mainline in the last week.
-
-If you believe a bug is no longer valid, please close the syzbot report by
-sending a '#syz fix', '#syz dup', or '#syz invalid' command in reply to the
-original thread, as explained at https://goo.gl/tpsmEJ#status
-
-If you believe I misattributed a bug to the usb subsystem, please let me know,
-and if possible forward the report to the correct people or mailing list.
-
-Here are the bugs:
-
---------------------------------------------------------------------------------
-Title:              possible deadlock in mon_bin_vma_fault
-Last occurred:      0 days ago
-Reported:           294 days ago
-Branches:           Mainline and others
-Dashboard link:     https://syzkaller.appspot.com/bug?id=2b061d1fabd9760e98f92163543189b637c4af36
-Original thread:    https://lkml.kernel.org/lkml/0000000000006ad6030574fead2e@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one replied to the original thread for this bug.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000006ad6030574fead2e@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING in rollback_registered_many (2)
-Last occurred:      0 days ago
-Reported:           229 days ago
-Branches:           Mainline and others
-Dashboard link:     https://syzkaller.appspot.com/bug?id=d39aca7a05a76d146ba96cddbb3242075d9171a7
-Original thread:    https://lkml.kernel.org/lkml/000000000000d9f094057a17b97b@google.com/T/#u
-
-This bug has a C reproducer.
-
-The original thread for this bug received 1 reply, 73 days ago.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+40918e4d826fb2ff9b96@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000d9f094057a17b97b@google.com
-
---------------------------------------------------------------------------------
-Title:              general protection fault in ath6kl_usb_alloc_urb_from_pipe
-Last occurred:      0 days ago
-Reported:           73 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=cd8b9cfe50a0bf36ee19eda2d7e2e06843dfbeaf
-Original thread:    https://lkml.kernel.org/lkml/0000000000008e825105865615e3@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+ead4037ec793e025e66f@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000008e825105865615e3@google.com
-
---------------------------------------------------------------------------------
-Title:              INFO: trying to register non-static key in rtl_c2hcmd_launcher
-Last occurred:      0 days ago
-Reported:           73 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=9c910719e185e47dad63741d473518b365286eb7
-Original thread:    https://lkml.kernel.org/lkml/000000000000727264058653d9a7@google.com/T/#u
-
-This bug has a C reproducer.
-
-The original thread for this bug has received 1 reply, 27 days ago.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+1fcc5ef45175fc774231@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000727264058653d9a7@google.com
-
---------------------------------------------------------------------------------
-Title:              general protection fault in flexcop_usb_probe
-Last occurred:      0 days ago
-Reported:           73 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=c0203bd72037d07493f4b7562411e4f5f4553a8f
-Original thread:    https://lkml.kernel.org/lkml/00000000000010fe260586536e86@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a media USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/00000000000010fe260586536e86@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING: ODEBUG bug in rsi_probe
-Last occurred:      0 days ago
-Reported:           71 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=3b35267abf182bd98ba95c0943bc0f957e021101
-Original thread:    https://lkml.kernel.org/lkml/00000000000024bbd7058682eda1@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+1d1597a5aa3679c65b9f@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/00000000000024bbd7058682eda1@google.com
-
---------------------------------------------------------------------------------
-Title:              INFO: trying to register non-static key in del_timer_sync (2)
-Last occurred:      0 days ago
-Reported:           73 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=26525f643f454dd7be0078423e3cdb0d57744959
-Original thread:    https://lkml.kernel.org/lkml/000000000000927a7b0586561537@google.com/T/#u
-
-This bug has a C reproducer.
-
-The original thread for this bug has received 5 replies; the last was 12 days
-ago.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+dc4127f950da51639216@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please reply to the original
-thread, which had activity only 12 days ago.  For the git send-email command to
-use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
-instructions" at https://lkml.kernel.org/r/000000000000927a7b0586561537@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING in zd_mac_clear
-Last occurred:      0 days ago
-Reported:           73 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=46e5ae5074764b5f0eed428a8c4989d9efbe9146
-Original thread:    https://lkml.kernel.org/lkml/00000000000075a7a6058653d977@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+74c65761783d66a9c97c@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/00000000000075a7a6058653d977@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: stack-out-of-bounds Read in hfcsusb_probe
-Last occurred:      0 days ago
-Reported:           71 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=30a04378dac680c5d521304a00a86156bb913522
-Original thread:    https://lkml.kernel.org/lkml/000000000000f2b23d05868310f9@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in an isdn USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+8750abbc3a46ef47d509@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000f2b23d05868310f9@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING in spi_register_controller
-Last occurred:      0 days ago
-Reported:           73 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=c2f000b7826e712b064b66b32ed73e21ee09d7a5
-Original thread:    https://lkml.kernel.org/lkml/00000000000089dace058653b58e@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a media USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+c60ddb60b685777d9d59@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/00000000000089dace058653b58e@google.com
-
---------------------------------------------------------------------------------
-Title:              INFO: trying to register non-static key in mxl111sf_ctrl_msg
-Last occurred:      0 days ago
-Reported:           71 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=d7240bc21ef4b00a01e5ac7a7e616bdb7da26104
-Original thread:    https://lkml.kernel.org/lkml/000000000000f64e71058683105b@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a media USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+5ca0bf339f13c4243001@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000f64e71058683105b@google.com
-
---------------------------------------------------------------------------------
-Title:              general protection fault in device_del (3)
-Last occurred:      0 days ago
-Reported:           40 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=0679c2d2763a0fe87ae1ec1bf52d0560f70d54e7
-Original thread:    https://lkml.kernel.org/lkml/00000000000032a1d60588ec68dd@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+d7f6a4fd149fcdaf780b@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/00000000000032a1d60588ec68dd@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING: ath10k USB support is incomplete, don't expect anything to work!
-Last occurred:      0 days ago
-Reported:           46 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=8b74d6028d19ea25be1d3ee73502dc90833859d8
-Original thread:    https://lkml.kernel.org/lkml/000000000000a3ca70058872de7c@google.com/T/#u
-
-This bug has a C reproducer.
-
-The original thread for this bug has received 1 reply, 46 days ago.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+c1b25598aa60dcd47e78@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000a3ca70058872de7c@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: invalid-free in rsi_91x_deinit
-Last occurred:      5 days ago
-Reported:           62 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=426fbebc1eac728afa08e52b1bcf8171c9413e29
-Original thread:    https://lkml.kernel.org/lkml/0000000000005ae4cd058731d407@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+7c72edfb407b2bd866ce@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000005ae4cd058731d407@google.com
-
---------------------------------------------------------------------------------
-Title:              KMSAN: uninit-value in ax88772_bind
-Last occurred:      0 days ago
-Reported:           21 days ago
-Branches:           Mainline (with KMSAN patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=c4199edd5d559780b6f0fb3874fcc253f070786f
-Original thread:    https://lkml.kernel.org/lkml/00000000000008f06d058a6e9783@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+8a3fc6674bbc3978ed4e@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/00000000000008f06d058a6e9783@google.com
-
---------------------------------------------------------------------------------
-Title:              KMSAN: uninit-value in sd_init
-Last occurred:      1 day ago
-Reported:           20 days ago
-Branches:           Mainline (with KMSAN patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=3fc6579f907ab3449adb030e8dc65fafdb8e09e4
-Original thread:    https://lkml.kernel.org/lkml/0000000000009bf1bd058a887277@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a media USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+1a35278dd0ebfb3a038a@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000009bf1bd058a887277@google.com
-
---------------------------------------------------------------------------------
-Title:              KMSAN: uninit-value in r871xu_drv_init
-Last occurred:      1 day ago
-Reported:           18 days ago
-Branches:           Mainline (with KMSAN patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=3cd92b1d85428b128503bfa7a250294c9ae00bd8
-Original thread:    https://lkml.kernel.org/lkml/000000000000417702058aa80506@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000417702058aa80506@google.com
-
---------------------------------------------------------------------------------
-Title:              INFO: task hung in usb_bulk_msg
-Last occurred:      2 days ago
-Reported:           291 days ago
-Branches:           Mainline and others
-Dashboard link:     https://syzkaller.appspot.com/bug?id=bf172344c5f1d3487a4feff67c3dd30e08d5b635
-Original thread:    https://lkml.kernel.org/lkml/000000000000d3c499057536ce86@google.com/T/#u
-
-Unfortunately, this bug does not have a reproducer.
-
-No one replied to the original thread for this bug.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000d3c499057536ce86@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: slab-out-of-bounds Read in p54u_load_firmware_cb
-Last occurred:      5 days ago
-Reported:           49 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=a7d7aec13ac4d6981c15814acb900348d340dd70
-Original thread:    https://lkml.kernel.org/lkml/00000000000001de810588363aaf@google.com/T/#u
-
-This bug has a syzkaller reproducer only.
-
-The original thread for this bug has received 4 replies; the last was 7 hours
-ago.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+6d237e74cdc13f036473@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please reply to the original
-thread, which had activity only 7 hours ago.  For the git send-email command to
-use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
-instructions" at https://lkml.kernel.org/r/00000000000001de810588363aaf@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING in submit_rx_urb/usb_submit_urb
-Last occurred:      1 day ago
-Reported:           26 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=97fff2c33c48264fba4d185f5f0f0961bdcd2ae2
-Original thread:    https://lkml.kernel.org/lkml/0000000000004da71e058a06318b@google.com/T/#u
-
-This bug has a C reproducer.
-
-The original thread for this bug has received 1 reply, 26 days ago.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+c2a1fa67c02faa0de723@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000004da71e058a06318b@google.com
-
---------------------------------------------------------------------------------
-Title:              BUG: unable to handle kernel paging request in au0828_usb_disconnect
-Last occurred:      0 days ago
-Reported:           56 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=4b76fcf12dea9e3aec69294b5d66b0831b60c627
-Original thread:    https://lkml.kernel.org/lkml/000000000000ffc8c80587aa1bb1@google.com/T/#u
-
-Unfortunately, this bug does not have a reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a media USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+15e91d49c4c757c3d363@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000ffc8c80587aa1bb1@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING in aiptek_open/usb_submit_urb
-Last occurred:      0 days ago
-Reported:           17 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=0e35393fd821f0570b2a1663a01ac7bdcd15046a
-Original thread:    https://lkml.kernel.org/lkml/0000000000001abc1c058ab95b3e@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in an input USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+75cccf2b7da87fb6f84b@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000001abc1c058ab95b3e@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING in ar5523_submit_rx_cmd/usb_submit_urb
-Last occurred:      2 days ago
-Reported:           21 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=d4cdc65d1db112b294b568e0cff47bca7cd3edbd
-Original thread:    https://lkml.kernel.org/lkml/000000000000f4900f058a69d6c5@google.com/T/#u
-
-This bug has a C reproducer.
-
-The original thread for this bug has received 1 reply, 21 days ago.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+6101b0c732dea13ea55b@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000f4900f058a69d6c5@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: use-after-free Read in usb_kill_anchored_urbs
-Last occurred:      13 days ago
-Reported:           13 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=18b605fd212e6e477e038c699430b44ca5946eac
-Original thread:    https://lkml.kernel.org/lkml/000000000000e84a3a058b0f9307@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+eb6ab607626fd1dac0f1@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please reply to the original
-thread.  For the git send-email command to use, or tips on how to reply if the
-thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000e84a3a058b0f9307@google.com
-
---------------------------------------------------------------------------------
-Title:              INFO: trying to register non-static key in usbtouch_reset_resume
-Last occurred:      4 days ago
-Reported:           28 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=64fd387d8358406dc0037511ee44db159f6f1605
-Original thread:    https://lkml.kernel.org/lkml/0000000000005463aa0589dcfb85@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in an input USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+933daad9be4e67ba91a9@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000005463aa0589dcfb85@google.com
-
---------------------------------------------------------------------------------
-Title:              KMSAN: uninit-value in mii_nway_restart
-Last occurred:      15 days ago
-Reported:           20 days ago
-Branches:           Mainline (with KMSAN patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=835562bfa4dd92c72f323f29ad388c9cb4b0e63f
-Original thread:    https://lkml.kernel.org/lkml/000000000000f71859058a7cfdc8@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+1f53a30781af65d2c955@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000f71859058a7cfdc8@google.com
-
---------------------------------------------------------------------------------
-Title:              KMSAN: uninit-value in read_sensor_register
-Last occurred:      18 days ago
-Reported:           17 days ago
-Branches:           Mainline (with KMSAN patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=cd81ee9a4ef2297ef27f95a3637b3f8a3db71de2
-Original thread:    https://lkml.kernel.org/lkml/000000000000f8c953058ac2dae4@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a media USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+06ddf1788cfd048c5e82@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000f8c953058ac2dae4@google.com
-
---------------------------------------------------------------------------------
-Title:              KMSAN: uninit-value in rt2500usb_bbp_read
-Last occurred:      13 days ago
-Reported:           18 days ago
-Branches:           Mainline (with KMSAN patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=f35d123de7d393019c1ed4d4e60dc66596ed62cd
-Original thread:    https://lkml.kernel.org/lkml/000000000000cf6a70058aa48695@google.com/T/#u
-
-This bug has a C reproducer.
-
-The original thread for this bug has received 1 reply, 18 days ago.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+a106a5b084a6890d2607@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000cf6a70058aa48695@google.com
-
---------------------------------------------------------------------------------
-Title:              general protection fault in cdev_del
-Last occurred:      18 days ago
-Reported:           27 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=dc0ead75c30e6aa27153b6cab86194e55e290a98
-Original thread:    https://lkml.kernel.org/lkml/000000000000532b860589f0669a@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+67b2bd0e34f952d0321e@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000532b860589f0669a@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: use-after-free Read in ds_probe
-Last occurred:      29 days ago
-Reported:           71 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=2d87f9f3ffe216db0978f948f4d6f92c8cd87d31
-Original thread:    https://lkml.kernel.org/lkml/00000000000000631505868311c8@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+5620801aaaf778ca83c6@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/00000000000000631505868311c8@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: use-after-free Read in p54u_load_firmware_cb
-Last occurred:      11 days ago
-Reported:           49 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=082c09653e43e33a6a56f8c57cf051eeacae9d5f
-Original thread:    https://lkml.kernel.org/lkml/000000000000050c5f0588363ad6@google.com/T/#u
-
-This bug has a syzkaller reproducer only.
-
-The original thread for this bug has received 13 replies; the last was 27 days
-ago.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000050c5f0588363ad6@google.com
-
---------------------------------------------------------------------------------
-Title:              KMSAN: uninit-value in i2c_w
-Last occurred:      21 days ago
-Reported:           20 days ago
-Branches:           Mainline (with KMSAN patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=5b6be32aa55adc05444701e80c3b1eae5d9079d2
-Original thread:    https://lkml.kernel.org/lkml/000000000000a0a468058a88723d@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a media USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+397fd082ce5143e2f67d@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000a0a468058a88723d@google.com
-
---------------------------------------------------------------------------------
-Title:              general protection fault in drain_workqueue
-Last occurred:      10 days ago
-Reported:           42 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=4a4b04b94b33e7d1de6f1213355499ab529a3018
-Original thread:    https://lkml.kernel.org/lkml/000000000000caab290588c4083e@google.com/T/#u
-
-This bug has a syzkaller reproducer only.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+09139d1a5ed6b898e29d@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000caab290588c4083e@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: global-out-of-bounds Read in hdpvr_probe
-Last occurred:      54 days ago
-Reported:           53 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=69bf3422c0eb7a37dec8c1a6c2d56ea40bf6bacf
-Original thread:    https://lkml.kernel.org/lkml/000000000000bc655f0587e6e01f@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a media USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+aac8d0d7205f112045d2@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000bc655f0587e6e01f@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING in snd_usb_motu_microbookii_communicate/usb_submit_urb
-Last occurred:      16 days ago
-Reported:           13 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=125081d1f7eba4b9b25f53aaae53176cd4abb2b7
-Original thread:    https://lkml.kernel.org/lkml/000000000000acb99a058b0d5741@google.com/T/#u
-
-This bug has a syzkaller reproducer only.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a sound USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+d952e5e28f5fb7718d23@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please reply to the original
-thread.  For the git send-email command to use, or tips on how to reply if the
-thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000acb99a058b0d5741@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: slab-out-of-bounds Read in hex_string
-Last occurred:      57 days ago
-Reported:           56 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=84ff1bf058b825b77439e1ced9ede4d39044158c
-Original thread:    https://lkml.kernel.org/lkml/000000000000f69c3b0587aa1bc5@google.com/T/#u
-
-This bug has a syzkaller reproducer only.
-
-The original thread for this bug has received 4 replies; the last was 55 days
-ago.
-
-This looks like a bug in a USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+a9fefd18c7b240f19c54@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000f69c3b0587aa1bc5@google.com
-
---------------------------------------------------------------------------------
-Title:              KMSAN: uninit-value in ax88178_bind
-Last occurred:      19 days ago
-Reported:           17 days ago
-Branches:           Mainline (with KMSAN patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=d601416c178e3d67888024bdf7774477a034840b
-Original thread:    https://lkml.kernel.org/lkml/000000000000cba2b6058ac09eeb@google.com/T/#u
-
-Unfortunately, this bug does not have a reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+abd25d675d47f23f188c@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000cba2b6058ac09eeb@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: use-after-free Read in vhci_hub_control
-Last occurred:      249 days ago
-Reported:           294 days ago
-Branches:           Mainline and others
-Dashboard link:     https://syzkaller.appspot.com/bug?id=00aa2c9aba775f0761d3dabd7fb176964685051a
-Original thread:    https://lkml.kernel.org/lkml/00000000000075c8d70574f40fbc@google.com/T/#u
-
-This bug has a C reproducer.
-
-No one replied to the original thread for this bug.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+600b03e0cf1b73bb23c4@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/00000000000075c8d70574f40fbc@google.com
-
---------------------------------------------------------------------------------
-Title:              KASAN: use-after-free Read in device_del
-Last occurred:      22 days ago
-Reported:           21 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=2aa2f730c9d353ad29bb92acf8fd0b426ce1b393
-Original thread:    https://lkml.kernel.org/lkml/000000000000fa11f3058a69d67b@google.com/T/#u
-
-Unfortunately, this bug does not have a reproducer.
-
-The original thread for this bug has received 2 replies; the last was 18 days
-ago.
-
-This looks like a bug in a net USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+93f2f45b19519b289613@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000fa11f3058a69d67b@google.com
-
---------------------------------------------------------------------------------
-Title:              general protection fault in usb_gadget_udc_reset (2)
-Last occurred:      26 days ago
-Reported:           26 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=87da2e47b2fd5fb4b9b3a8453346a8d00ed56dd2
-Original thread:    https://lkml.kernel.org/lkml/000000000000689ecb058a074f45@google.com/T/#u
-
-Unfortunately, this bug does not have a reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+326669f39a76a997dc02@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000689ecb058a074f45@google.com
-
---------------------------------------------------------------------------------
-Title:              WARNING: suspicious RCU usage in line6_pcm_acquire
-Last occurred:      29 days ago
-Reported:           60 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=a0ea128a37bfe56208042c02d080873dcbdf69a0
-Original thread:    https://lkml.kernel.org/lkml/0000000000007cb1ee0587591549@google.com/T/#u
-
-Unfortunately, this bug does not have a reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a sound USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+06b7a5a8c4acc0445995@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000007cb1ee0587591549@google.com
-
---------------------------------------------------------------------------------
-Title:              BUG: unable to handle kernel paging request in osq_lock
-Last occurred:      63 days ago
-Reported:           67 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=541944363389fada3583295a3454a1eac5089fd6
-Original thread:    https://lkml.kernel.org/lkml/000000000000e9e1990586cd3e40@google.com/T/#u
-
-Unfortunately, this bug does not have a reproducer.
-
-No one has replied to the original thread for this bug yet.
-
-This looks like a bug in a media USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+e5c9afc3e1eed1dfc2b0@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/000000000000e9e1990586cd3e40@google.com
+Alan Stern <stern@rowland.harvard.edu> wrote:
+
+> The syzbot fuzzer found a bug in the p54 USB wireless driver.  The
+> issue involves a race between disconnect and the firmware-loader
+> callback routine, and it has several aspects.
+> 
+> One big problem is that when the firmware can't be loaded, the
+> callback routine tries to unbind the driver from the USB _device_ (by
+> calling device_release_driver) instead of from the USB _interface_ to
+> which it is actually bound (by calling usb_driver_release_interface).
+> 
+> The race involves access to the private data structure.  The driver's
+> disconnect handler waits for a completion that is signalled by the
+> firmware-loader callback routine.  As soon as the completion is
+> signalled, you have to assume that the private data structure may have
+> been deallocated by the disconnect handler -- even if the firmware was
+> loaded without errors.  However, the callback routine does access the
+> private data several times after that point.
+> 
+> Another problem is that, in order to ensure that the USB device
+> structure hasn't been freed when the callback routine runs, the driver
+> takes a reference to it.  This isn't good enough any more, because now
+> that the callback routine calls usb_driver_release_interface, it has
+> to ensure that the interface structure hasn't been freed.
+> 
+> Finally, the driver takes an unnecessary reference to the USB device
+> structure in the probe function and drops the reference in the
+> disconnect handler.  This extra reference doesn't accomplish anything,
+> because the USB core already guarantees that a device structure won't
+> be deallocated while a driver is still bound to any of its interfaces.
+> 
+> To fix these problems, this patch makes the following changes:
+> 
+> 	Call usb_driver_release_interface() rather than
+> 	device_release_driver().
+> 
+> 	Don't signal the completion until after the important
+> 	information has been copied out of the private data structure,
+> 	and don't refer to the private data at all thereafter.
+> 
+> 	Lock udev (the interface's parent) before unbinding the driver
+> 	instead of locking udev->parent.
+> 
+> 	During the firmware loading process, take a reference to the
+> 	USB interface instead of the USB device.
+> 
+> 	Don't take an unnecessary reference to the device during probe
+> 	(and then don't drop it during disconnect).
+> 
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Reported-and-tested-by: syzbot+200d4bb11b23d929335f@syzkaller.appspotmail.com
+> CC: <stable@vger.kernel.org>
+> Acked-by: Christian Lamparter <chunkeey@gmail.com>
+
+Patch applied to wireless-drivers-next.git, thanks.
+
+6e41e2257f10 p54usb: Fix race between disconnect and firmware loading
+
+-- 
+https://patchwork.kernel.org/patch/10951527/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
