@@ -2,110 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB97522F8
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 07:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E412252339
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jun 2019 08:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728422AbfFYFjk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jun 2019 01:39:40 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:59344 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728400AbfFYFjj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jun 2019 01:39:39 -0400
-X-IronPort-AV: E=Sophos;i="5.62,413,1554735600"; 
-   d="scan'208";a="19607568"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 25 Jun 2019 14:39:33 +0900
-Received: from localhost.localdomain (unknown [10.166.17.210])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 05D15400856C;
-        Tue, 25 Jun 2019 14:39:33 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH 13/13] usb: renesas_usbhs: Use struct platform_callback pointer
-Date:   Tue, 25 Jun 2019 14:38:57 +0900
-Message-Id: <1561441137-3090-14-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1561441137-3090-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-References: <1561441137-3090-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+        id S1728509AbfFYGAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jun 2019 02:00:36 -0400
+Received: from verein.lst.de ([213.95.11.211]:59667 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726495AbfFYGAg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 Jun 2019 02:00:36 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id 1546568B02; Tue, 25 Jun 2019 08:00:00 +0200 (CEST)
+Date:   Tue, 25 Jun 2019 08:00:00 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Fredrik Noring <noring@nocrew.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Guenter Roeck <linux@roeck-us.net>,
+        laurentiu.tudor@nxp.com, stern@rowland.harvard.edu,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        marex@denx.de, leoyang.li@nxp.com, linux-kernel@vger.kernel.org,
+        robin.murphy@arm.com, JuergenUrban@gmx.de
+Subject: Re: [PATCH v7 3/5] usb: host: ohci-sm501: init genalloc for local
+ memory
+Message-ID: <20190625060000.GA28986@lst.de>
+References: <20190611133223.GA30054@roeck-us.net> <20190611172654.GA2602@sx9> <20190611190343.GA18459@roeck-us.net> <20190613134033.GA2489@sx9> <bdfd2178-9e3c-dc15-6aa1-ec1f1fbcb191@roeck-us.net> <20190613153414.GA909@sx9> <3f2164cd-7655-b7cc-ec57-d8751886728c@roeck-us.net> <20190614142816.GA2574@sx9> <20190624063515.GA3296@lst.de> <20190624125916.GA2516@sx9>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190624125916.GA2516@sx9>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now the driver fixes the issue of the commit 482982062f1b ("usb:
-gadget: renesas_usbhs: bugfix: don't modify platform data") by
-using usbhs_mod_info.get_vbus, this patches uses the pointer
-instead of copied value to avoid redundancy. Note that struct
-renesas_usbhs_driver_param has to use copied value because
-the driver has to set some members (e.g. buswait_bwait).
+On Mon, Jun 24, 2019 at 02:59:16PM +0200, Fredrik Noring wrote:
+> Hi Christoph,
+> 
+> > Can you send me the patch formally so that I can queue it up for the
+> > dma-mapping tree?
+> 
+> That patch would be detrimental to local memory devices, as previously
+> discussed, so I would like to suggest a much better approach, as shown below,
+> where allocations are aligned as required but not necessarily much more than
+> that.
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
- drivers/usb/renesas_usbhs/common.c | 8 ++++----
- drivers/usb/renesas_usbhs/common.h | 2 +-
- drivers/usb/renesas_usbhs/mod.c    | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-index fe7dc91..4c3de77 100644
---- a/drivers/usb/renesas_usbhs/common.c
-+++ b/drivers/usb/renesas_usbhs/common.c
-@@ -53,8 +53,8 @@
-  */
- #define usbhs_platform_call(priv, func, args...)\
- 	(!(priv) ? -ENODEV :			\
--	 !((priv)->pfunc.func) ? 0 :		\
--	 (priv)->pfunc.func(args))
-+	 !((priv)->pfunc->func) ? 0 :		\
-+	 (priv)->pfunc->func(args))
- 
- /*
-  *		common functions
-@@ -644,7 +644,7 @@ static int usbhs_probe(struct platform_device *pdev)
- 		dev_err(dev, "no platform callbacks\n");
- 		return -EINVAL;
- 	}
--	priv->pfunc = info->platform_callback;
-+	priv->pfunc = &info->platform_callback;
- 
- 	/* set default param if platform doesn't have */
- 	if (usbhs_get_dparam(priv, has_new_pipe_configs)) {
-@@ -665,7 +665,7 @@ static int usbhs_probe(struct platform_device *pdev)
- 
- 	/* FIXME */
- 	/* runtime power control ? */
--	if (priv->pfunc.get_vbus)
-+	if (priv->pfunc->get_vbus)
- 		usbhs_get_dparam(priv, runtime_pwctrl) = 1;
- 
- 	/*
-diff --git a/drivers/usb/renesas_usbhs/common.h b/drivers/usb/renesas_usbhs/common.h
-index f6ffdb2..d1a0a35 100644
---- a/drivers/usb/renesas_usbhs/common.h
-+++ b/drivers/usb/renesas_usbhs/common.h
-@@ -252,7 +252,7 @@ struct usbhs_priv {
- 	unsigned int irq;
- 	unsigned long irqflags;
- 
--	struct renesas_usbhs_platform_callback	pfunc;
-+	const struct renesas_usbhs_platform_callback *pfunc;
- 	struct renesas_usbhs_driver_param	dparam;
- 
- 	struct delayed_work notify_hotplug_work;
-diff --git a/drivers/usb/renesas_usbhs/mod.c b/drivers/usb/renesas_usbhs/mod.c
-index ddf0153..10fc655 100644
---- a/drivers/usb/renesas_usbhs/mod.c
-+++ b/drivers/usb/renesas_usbhs/mod.c
-@@ -52,7 +52,7 @@ void usbhs_mod_non_autonomy_mode(struct usbhs_priv *priv)
- {
- 	struct usbhs_mod_info *info = usbhs_priv_to_modinfo(priv);
- 
--	info->get_vbus = priv->pfunc.get_vbus;
-+	info->get_vbus = priv->pfunc->get_vbus;
- }
- 
- /*
--- 
-2.7.4
-
+This looks sensible to me.  Can you submit it with a proper patch
+description and split into a separate patch for genalloc vs the user of
+the new interface?
