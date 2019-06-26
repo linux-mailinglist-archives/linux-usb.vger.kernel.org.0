@@ -2,294 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D0656D08
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 17:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E1F56D4C
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 17:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbfFZPB5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jun 2019 11:01:57 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:53155 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726029AbfFZPB5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jun 2019 11:01:57 -0400
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1hg9Qm-0006pq-2o; Wed, 26 Jun 2019 17:01:52 +0200
-Message-ID: <1561561310.4870.7.camel@pengutronix.de>
-Subject: Re: Not enough bandwidth with Magewell XI100DUSB-HDMI
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Curt Meyers <cmeyers@fb.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>
-Cc:     linux-usb <linux-usb@vger.kernel.org>, kernel@pengutronix.de,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        "Xing, Zhengjun" <zhengjun.xing@linux.intel.com>
-Date:   Wed, 26 Jun 2019 17:01:50 +0200
-In-Reply-To: <1561387203.6134.6.camel@pengutronix.de>
-References: <20180117174638.7e1b375d@litschi.hi.pengutronix.de>
-         <0cb1a3e6-7a34-0357-95f6-f0615defbe1b@linux.intel.com>
-         <20180119141022.2f18a677@litschi.hi.pengutronix.de>
-         <CA+gwMce-h9LPCv1hhfEcRz_2w9mEQLOjy42dcjvPxTeawSU5kQ@mail.gmail.com>
-         <6abe2cfe-8752-ca4a-e5a7-6da4fd787c0b@linux.intel.com>
-         <20180216142835.2bcb30b5@litschi.hi.pengutronix.de>
-         <89c974c8-8baf-8cbd-ab26-df8ae0d4066f@linux.intel.com>
-         <20180409102129.6be79e46@litschi.hi.pengutronix.de>
-         <31257288-a0eb-3893-8ef9-325d68663f9b@linux.intel.com>
-         <20180515112251.51392d42@litschi.hi.pengutronix.de>
-         <87b24b29-c3a2-05e6-c2d6-2c3b5e70b950@linux.intel.com>
-         <d3fe8187-6806-90b4-582b-49087b72aad5@fb.com>
-         <1561387203.6134.6.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+        id S1727562AbfFZPHF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jun 2019 11:07:05 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:36592 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727146AbfFZPHE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jun 2019 11:07:04 -0400
+Received: (qmail 3407 invoked by uid 2102); 26 Jun 2019 11:07:03 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 26 Jun 2019 11:07:03 -0400
+Date:   Wed, 26 Jun 2019 11:07:03 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
+cc:     Oliver Neukum <oneukum@suse.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        <patches@opensource.cirrus.com>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
+In-Reply-To: <1561558529.13461.33.camel@opensource.cirrus.com>
+Message-ID: <Pine.LNX.4.44L0.1906261043300.1550-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2019-06-24 at 16:40 +0200, Philipp Zabel wrote:
-> Hi,
-> 
-> On Mon, 2018-05-21 at 15:03 -0700, Curt Meyers wrote:
-> > On 05/16/2018 04:55 AM, Mathias Nyman wrote:
-> > > On 15.05.2018 12:22, Michael Tretter wrote:
-> > > > Hi Mathias,
-> > > > 
-> > > > On Tue, 10 Apr 2018 18:22:03 +0300, Mathias Nyman wrote:
-> > > > > On 09.04.2018 11:21, Michael Tretter wrote:
-> > > > > > On Tue, 20 Feb 2018 15:29:28 +0200, Mathias Nyman wrote:
-> > > > > > > On 16.02.2018 15:28, Michael Tretter wrote:
-> > > > > > > > On Mon, 29 Jan 2018 14:02:57 +0200, Mathias Nyman wrote:
-> > > > > > > > > On 19.01.2018 22:12, Philipp Zabel wrote:
-> > > > > > > > > > On Fri, Jan 19, 2018 at 2:10 PM, Michael Tretter
-> > > > > > > > > > <m.tretter@pengutronix.de> wrote:
-> > > > > > > > > > > I found the old thread and it sounds exactly like my issue. 
-> > > > > > > > > > > Different
-> > > > > > > > > > > camera, but same xHCI controller.
-> > > > > > > > > > 
-> > > > > > > > > > I have exactly the same issue with the xHCI controller of my 
-> > > > > > > > > > laptop and
-> > > > > > > > > > "Oculus Sensor" USB3 isochronous mostly-UVC cameras:
-> > > > > > > > > > 
-> > > > > > > > > > 00:14.0 USB controller: Intel Corporation Wildcat Point-LP USB 
-> > > > > > > > > > xHCI
-> > > > > > > > > > Controller (rev 03) (prog-if 30 [XHCI])
-> > > > > > > > > >         Subsystem: Lenovo Wildcat Point-LP USB xHCI Controller
-> > > > > > > > > >         Flags: bus master, medium devsel, latency 0, IRQ 44
-> > > > > > > > > >         Memory at f2220000 (64-bit, non-prefetchable) [size=64K]
-> > > > > > > > > >         Capabilities: [70] Power Management version 2
-> > > > > > > > > >         Capabilities: [80] MSI: Enable+ Count=1/8 Maskable- 64bit+
-> > > > > > > > > >         Kernel driver in use: xhci_hcd
-> > > > > > > > > >         Kernel modules: xhci_pci
-> > > > > > > > > > 
-> > > > > > > > > > T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-> > > > > > > > > > D:  Ver= 3.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-> > > > > > > > > > P:  Vendor=2833 ProdID=0211 Rev= 0.00
-> > > > > > > > > > S:  Manufacturer=Oculus VR
-> > > > > > > > > > S:  Product=Rift Sensor
-> > > > > > > > > > S:  SerialNumber=WMTD3034300BCT
-> > > > > > > > > > C:* #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=800mA
-> > > > > > > > > > A:  FirstIf#= 0 IfCount= 2 Cls=ff(vend.) Sub=03 Prot=00
-> > > > > > > > > > I:* If#= 0 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=01 Prot=00 
-> > > > > > > > > > Driver=uvcvideo
-> > > > > > > > > > E:  Ad=83(I) Atr=03(Int.) MxPS=  32 Ivl=128ms
-> > > > > > > > > > I:* If#= 1 Alt= 0 #EPs= 0 Cls=ff(vend.) Sub=02 Prot=00 
-> > > > > > > > > > Driver=uvcvideo
-> > > > > > > > > > I:  If#= 1 Alt= 1 #EPs= 1 Cls=ff(vend.) Sub=02 Prot=00 
-> > > > > > > > > > Driver=uvcvideo
-> > > > > > > > > > E:  Ad=81(I) Atr=05(Isoc) MxPS=1024 Ivl=125us
-> > > > > > > > > > I:  If#= 1 Alt= 2 #EPs= 1 Cls=ff(vend.) Sub=02 Prot=00 
-> > > > > > > > > > Driver=uvcvideo
-> > > > > > > > > > E:  Ad=81(I) Atr=05(Isoc) MxPS=1024 Ivl=125us
-> > > > > > > > > > 
-> > > > > > > > > > Any USB2 or USB3 device that I plug in while the first camera 
-> > > > > > > > > > is streaming in
-> > > > > > > > > > altsetting 1 or 2 causes the bandwidth error. The same happens 
-> > > > > > > > > > when I try to
-> > > > > > > > > > change the altsetting on an isochronous endpoint of an already 
-> > > > > > > > > > plugged device.
-> > > > > > > > > > While the camera is in altsetting 0, other devices can be 
-> > > > > > > > > > probed and work.
-> > > > > > > > > > > For some tests, I changed the xhci_change_max_exit_latency() 
-> > > > > > > > > > > function
-> > > > > > > > > > > to ignore the requested MEL and set the MEL to 0. Now the USB 
-> > > > > > > > > > > devices
-> > > > > > > > > > > are detected correctly.
-> > > > > > > > > > 
-> > > > > > > > > > Exactly the same thing helps here, as well. With this hack, 
-> > > > > > > > > > streaming from two
-> > > > > > > > > > of those cameras at the same time works without any apparent 
-> > > > > > > > > > problem:
-> > > > > > > > > > 
-> > > > > > > > > > ----------8<----------
-> > > > > > > > > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > > > > > > > > > index 297536c9fd00..3cb4a60d8822 100644
-> > > > > > > > > > --- a/drivers/usb/host/xhci.c
-> > > > > > > > > > +++ b/drivers/usb/host/xhci.c
-> > > > > > > > > > @@ -4025,7 +4025,7 @@ static int __maybe_unused
-> > > > > > > > > > xhci_change_max_exit_latency(struct xhci_hcd *xhci,
-> > > > > > > > > >             ctrl_ctx->add_flags |= cpu_to_le32(SLOT_FLAG);
-> > > > > > > > > >             slot_ctx = xhci_get_slot_ctx(xhci, command->in_ctx);
-> > > > > > > > > >             slot_ctx->dev_info2 &= cpu_to_le32(~((u32) MAX_EXIT));
-> > > > > > > > > > -       slot_ctx->dev_info2 |= cpu_to_le32(max_exit_latency);
-> > > > > > > > > > +       slot_ctx->dev_info2 |= cpu_to_le32(0);
-> > > > > > > > > >             slot_ctx->dev_state = 0;
-> > > > > > > > > > 
-> > > > > > > > > >             xhci_dbg_trace(xhci, trace_xhci_dbg_context_change,
-> > > > > > > > > > ---------->8----------
-> > > > > > > > > 
-> > > > > > > > > Ok, back after a week on sickleave.
-> > > > > > > > > I'm getting the magewell capture device and try to reproduce 
-> > > > > > > > > this myself.
-> > > > > > > > 
-> > > > > > > > I don't think that the issue is specific to the magewell capture
-> > > > > > > > device, but rather should be reproducible with any USB3 device with
-> > > > > > > > isochronous endpoints.
-> > > > > > > > 
-> > > > > > > > Anyway, please tell me, if I can somehow help you to get this 
-> > > > > > > > properly
-> > > > > > > > fixed.
-> > > > > > > 
-> > > > > > > I'm currently looking at device reset issues after suspend, but 
-> > > > > > > this is on the
-> > > > > > > todo list.
-> > > > > > > 
-> > > > > > > I got a magewell device, (haven't unboxed it yet)
-> > > > > > > Maybe step by step instructions to reproduce it could speed things 
-> > > > > > > up.
-> > > > > > 
-> > > > > > Did you have time to unbox and test the Magewell device?
-> > > > > 
-> > > > > This seems to always get postponed due to other work,
-> > > > > 
-> > > > > I just tried it out once today on a nearby laptop, gst-launch seems 
-> > > > > to work
-> > > > > but couldn't reproduce the bandwidth issue when connecting a second 
-> > > > > usb device.
-> > > > > 
-> > > > > But I haven't really tested it out properly yet.
-> > > > 
-> > > > I just tested with 4.17-rc5 and the behavior remains the same. Is there
-> > > > anything else I could do to get this fixed?
-> > > > 
+On Wed, 26 Jun 2019, Mayuresh Kulkarni wrote:
+
+> On Tue, 2019-06-25 at 10:08 -0400, Alan Stern wrote:
+
+> > > Based on discussion so far and my understanding, how about below
+> > > approach -
 > > > 
-> > > Briefed Zhengjun about this issue, one more brain on it.
-> > > Adding him to the thread.
-> > > 
+> > > 1. Have ALLOW_SUSPEND and WAIT_FOR_RESUME ioctls. As before,
+> > > ALLOW_SUSPEND calls usb_autosuspend_device() while WAIT_FOR_RESUME
+> > > waits
+> > > for resume.
+> > > 2. Have usbfs_notify_suspend() and usbfs_notify_resume() as per your
+> > > previous patch (i.e.: system/resume callbacks at device level).
+> > > 3. Extend usbdev_poll() to wait for udev->state ==
+> > > USB_STATE_SUSPENDED
+> > > when events == POLLPRI. Return POLLPRI when state =
+> > > USB_STATE_SUSPENDED.
+> > > 4. As before, any ioctl != (ALLOW_SUSPEND or WAIT_FOR_RESUME)
+> > > calls usb_autoresume_device().
+> > 3 sounds reasonable at first, but I'm not sure it would work.  
+> > Consider what would happen if the device is suspended very briefly and
+> > then wakes up.  The usbdev_poll() call might not return, because by
+> > the
+> > time it checks udev->state, the state has already changed back to
+> > USB_STATE_CONFIGURED.
 > > 
-> > Isochronous has been a problem for me for 2 years. I am using a rare 3D 
-> > stereo camera from Etron and had Isochronous problems and recently I 
-> > have discovered that the Logitech Brio also has what appears to be the 
-> > same issue. The Logitech Brio is the first Logitech USB3 camera that 
-> > uses Isochronous mode and you can do a search and find that linux users 
-> > are having problems with it.
 > 
-> The Oculus Sensor devices contain Etron controllers as well (eSP770).
+> I see what you mean here, could be problematic.
 > 
-> > My suggestion would be for the USB3 team to order several Logitech Brio 
-> > cameras and debug the Isochronous problems. My company paid for someone 
-> > to try and debug the problem and we came up with a patch that we sent to 
-> > Mathias but it was not accepted because the change was not well 
-> > understood. I can probably buy cameras for Mathias if he is interested, 
-> > you only need 2 to get started, would like to see 5 or more running 
-> > simultaneously.
+> > In any case, we shouldn't do 4.  It would prevent the device from ever
+> > going into suspend, because the program would want to continue making
+> > usbfs ioctl calls while waiting for the suspend to occur.
 > > 
-> > The people at Etron also discovered that if you plug Isochronous cameras 
-> > into a hub with a Genesys Logic - GL3520 controller then it for some 
-> > reason masks the problem and allows multiple cameras to work. 
-> > Unfortunately this USB hub is extremely rare and I only found it in this 
-> > StarTech ST7300USBME hub. Also it doesn't work flawlessly but I have 
-> > tested it with 5 cameras.
+> 
+> In poll approach, due to the contraint I mentioned, it is not expected
+> from user-space to interact with device *after* it calls ALLOW_SUSPEND
+> ioctl. This is because, it has determined that device is idle from its
+> point of view.
+
+What if the user interacts with the device at this point?  Wouldn't 
+the program want to know about it?
+
+Even if your program doesn't care about user interaction with an idle
+device, there undoubtedly will be other programs that _do_ care.  This 
+mechanism we are designing needs to work with all programs.
+
+> But after a while, there could be a situation where the user-space wants
+> to send some message to device (due to end user interaction) then,
+> having (4) would be handy to cancel the undone suspend or cause host-
+> wake.
+
+That's what the FORBID_SUSPEND ioctl does.  We don't need (4) for this.
+
+> > > 2. Is it safe to wait for udev->state to be of a particular value?
+> > No, not really, because the state can change.
 > > 
-> > My all Intel motherboard and chipset machines work perfect with MS 
-> > Windows but not with Linux so it is hard to blame the hardware.
 > 
-> Does anybody have new information about this issue? I tested last week
-> on v5.2-rc5, and the issue still persists unchanged (and forcing MEL=0
-> still helps).
+> If you remember, I had also suggested to use root-hub suspend in
+> generic_suspend() to call usbfs_notify_suspend/_resume APIs. It might be
+> possible to use that in usbdev_poll() and send POLLPRI when root-hub
+> suspends.
+
+I don't see how that would help.  It would just make things more 
+confusing.  Forget about root-hub events for now.
+
+> > > If this approach could work, I can spend time on this one as well.
+> > What advantage do you think your proposal has over my proposal?
+> > 
 > 
-> regards
-> Philipp
+> Not necessarily advantage(s), but few things that I could think of are -
+> 
+> 1. In poll based approach, user-space notion of device's state is in
+> sync with actual device state.
 
-FTR, Michael pointed out that 0472bf06c6fd ("xhci: Prevent U1/U2 link pm
-states if exit latency is too long") solves the problem for him, but in
-my case the ESIT < MEL checks do not trigger:
+NO!  That simply is not true.  You don't seem to be able to grasp this
+point.
 
-----------8<----------
-From: Philipp Zabel <philipp.zabel@gmail.com>
-Subject: [PATCH] HACK: usb: xhci: always set MEL to 0
+Consider this: Suppose the computer is busy running many other 
+programs.  Your program gets swapped out because a bunch of other 
+higher-priority tasks need to run.  By the time your program gets a 
+chance to run again, the device could have gone through several 
+suspend/resume transitions.  There's no way the program can keep track 
+of all that.
 
-This allows to stream from multiple Oculus Sensors simultaneously on a
-Lenovo T450s.
+If you want a more likely example, consider this: Your program calls 
+ALLOW_SUSPEND and then calls poll().  The device suspends and the 
+poll() returns.  But then, before your program can do anything else, 
+the device resumes.  Now the device is active but your program thinks 
+it is suspended -- the program is out of sync.
 
-Signed-off-by: Philipp Zabel <philipp.zabel@gmail.com>
----
-Jun 26 08:24:25 ped kernel: usb 2-2: new SuperSpeed Gen 1 USB device number 3 using xhci_hcd
-Jun 26 08:24:26 ped kernel: usb 2-2: New USB device found, idVendor=2833, idProduct=0211, bcdDevice= 0.00
-Jun 26 08:24:26 ped kernel: usb 2-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-Jun 26 08:24:26 ped kernel: usb 2-2: Product: Rift Sensor
-Jun 26 08:24:26 ped kernel: usb 2-2: Manufacturer: Oculus VR
-Jun 26 08:24:26 ped kernel: usb 2-2: SerialNumber: WMTD3034300BCT
-Jun 26 08:24:26 ped kernel: uvcvideo: Found UVC 1.00 device Rift Sensor (2833:0211)
-Jun 26 08:24:26 ped kernel: xhci_hcd 0000:00:14.0: add ep 0x83, slot id 5, new drop flags = 0x0, new add flags = 0x80
-Jun 26 08:24:26 ped kernel: xhci_hcd 0000:00:14.0: xhci_check_bandwidth called for udev 00000000919e8856
-Jun 26 08:24:26 ped kernel: usb 2-2: xhci_calculate_u1_timeout: service interval = 128000000
-Jun 26 08:24:26 ped kernel: usb 2-2: xhci_calculate_u1_timeout: max exit latency = 10000
-Jun 26 08:24:26 ped kernel: usb 2-2: Hub-initiated U1 disabled due to long timeout 134400 ms
-Jun 26 08:24:26 ped kernel: usb 2-2: xhci_change_max_exit_latency: MEL = 10 µs, but using 0
-Jun 26 08:24:26 ped kernel: usb 2-2: xhci_calculate_u2_timeout: service interval = 128000000
-Jun 26 08:24:26 ped kernel: usb 2-2: xhci_calculate_u2_timeout: max exit latency = 512000
-Jun 26 08:24:26 ped kernel: usb 2-2: Hub-initiated U2 disabled due to long timeout 500 ms
-Jun 26 08:24:26 ped kernel: usb 2-2: xhci_change_max_exit_latency: MEL = 512 µs, but using 0
----
- drivers/usb/host/xhci.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Face it: It is _impossible_ for a program to truly know the device's 
+current state at all times (unless the device is not allowed to suspend 
+at all).
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 3f79f35d0b19..ef26285eb7a6 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4212,7 +4212,9 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
- 	ctrl_ctx->add_flags |= cpu_to_le32(SLOT_FLAG);
- 	slot_ctx = xhci_get_slot_ctx(xhci, command->in_ctx);
- 	slot_ctx->dev_info2 &= cpu_to_le32(~((u32) MAX_EXIT));
--	slot_ctx->dev_info2 |= cpu_to_le32(max_exit_latency);
-+	dev_dbg(&udev->dev, "%s: MEL = %u µs, but using 0\n", __func__,
-+		max_exit_latency);
-+	slot_ctx->dev_info2 |= cpu_to_le32(0);
- 	slot_ctx->dev_state = 0;
- 
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_context_change,
-@@ -4549,6 +4551,10 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
- 
- 	/* Prevent U1 if service interval is shorter than U1 exit latency */
- 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
-+		dev_dbg(&udev->dev, "%s: service interval = %lu\n", __func__,
-+			(unsigned long)xhci_service_interval_to_ns(desc));
-+		dev_dbg(&udev->dev, "%s: max exit latency = %lu\n", __func__,
-+			(unsigned long)udev->u1_params.mel);
- 		if (xhci_service_interval_to_ns(desc) <= udev->u1_params.mel) {
- 			dev_dbg(&udev->dev, "Disable U1, ESIT shorter than exit latency\n");
- 			return USB3_LPM_DISABLED;
-@@ -4613,6 +4619,10 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
- 
- 	/* Prevent U2 if service interval is shorter than U2 exit latency */
- 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
-+		dev_dbg(&udev->dev, "%s: service interval = %lu\n", __func__,
-+			(unsigned long)xhci_service_interval_to_ns(desc));
-+		dev_dbg(&udev->dev, "%s: max exit latency = %lu\n", __func__,
-+			(unsigned long)udev->u2_params.mel);
- 		if (xhci_service_interval_to_ns(desc) <= udev->u2_params.mel) {
- 			dev_dbg(&udev->dev, "Disable U2, ESIT shorter than exit latency\n");
- 			return USB3_LPM_DISABLED;
--- 
-2.20.1
----------->8----------
+> This is partially true with the 3 ioctl
+> approach suggested by you (partially because resume might not be current
+> device state when wait-for-resume returns).
 
-regards
-Philipp
+Agreed.  But so what?  What abilities does your program lose as a 
+result of the fact that the device might be suspended when 
+WAIT_FOR_RESUME returns?
+
+> 2. In 3 ioctl approach, user-space can still communicate with device
+> after calling ALLOW_SUSPEND. With poll based approach, we put a
+> constraint on user-space that, call ALLOW_SUSPEND only when you
+> determine you are not going to interact with device.
+
+That sounds like a disadvantage for your poll-based approach: It 
+constrains the behavior of userspace programs.
+
+> I know for (2) above, you have commented before that -
+> A. It is desirable to be able to communicate with the device till it is
+> actually suspended.
+> B. The possibility of device not going into suspend for long time, so
+> user-space will not be able to proceed.
+> 
+> The counter comments to them are:
+> For (A), *usually*, the driver by some means determine device is idle
+> and then schedules a suspend. After that, it is not expecting to
+> communicate with the device till resume happens. If it has to
+> communicate, it has to call resume first and then proceed.
+
+_Some_ programs will behave that way but other programs will not;
+they will want to continue communicating with the device right up until
+the time it suspends.  The kernel has to work with _all_ programs.
+
+> For (B), that is why we need ability to cancel current undone suspend
+> operation, to allow the user-space to initiate the communication.
+
+And that is what FORBID_SUSPEND does.  You don't need to give up on (A) 
+in order to handle (B).
+
+> Hope some of these points makes sense.
+
+None of them seem convincing, at least, not to me.
+
+Alan Stern
+
