@@ -2,82 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E12456054
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 05:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAF5561EC
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 07:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728060AbfFZDqz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jun 2019 23:46:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58792 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728044AbfFZDqw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 25 Jun 2019 23:46:52 -0400
-Received: from sasha-vm.mshome.net (mobile-107-77-172-90.mobile.att.net [107.77.172.90])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3A59A205ED;
-        Wed, 26 Jun 2019 03:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561520811;
-        bh=snwXb/1Pl27ttUkLcEKMD4IYTwwdeDCbPOUtZ32LCu4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UcGKrI0WPr8AbfjB+URD5wgjeDCqyc7N7OIyRf+sYkHAor6d9GtE0SrGknW/GkU/g
-         W1OHd4flqLb/qStT9uSwba3u6S6akOh4bSwKuwDWqYS9hcGBimcspfYgnIHSrEQoIG
-         qKEYwkhdrZutCYhLrhmXg8aYYoKZDv/qNS8Lz7rg=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        James Grant <jamesg@zaltys.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 5/6] usb: gadget: udc: lpc32xx: allocate descriptor with GFP_ATOMIC
-Date:   Tue, 25 Jun 2019 23:46:36 -0400
-Message-Id: <20190626034637.24515-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190626034637.24515-1-sashal@kernel.org>
-References: <20190626034637.24515-1-sashal@kernel.org>
+        id S1725954AbfFZFyM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jun 2019 01:54:12 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53187 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725536AbfFZFyM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jun 2019 01:54:12 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1hg0sk-000438-38; Wed, 26 Jun 2019 07:54:10 +0200
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1hg0sj-00026T-6k; Wed, 26 Jun 2019 07:54:09 +0200
+Date:   Wed, 26 Jun 2019 07:54:09 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH] ARM: imx25: provide a fixed regulator for usb phys
+Message-ID: <20190626055409.jjiwptyths6p6jty@pengutronix.de>
+References: <20190625100412.11815-1-u.kleine-koenig@pengutronix.de>
+ <VI1PR04MB5327E09DB0DFEB7E868DB59D8BE20@VI1PR04MB5327.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <VI1PR04MB5327E09DB0DFEB7E868DB59D8BE20@VI1PR04MB5327.eurprd04.prod.outlook.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 07:52:11 up 39 days, 12:10, 47 users,  load average: 0.01, 0.04,
+ 0.00
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On 19-06-26 02:40, Peter Chen wrote:
+>  
+> > Subject: [PATCH] ARM: imx25: provide a fixed regulator for usb phys
+> > 
+> > The usb phys are internal to the SoC and so it their 5V supply. With this regulator
+> > added explicitly the following (harmless) boot messages go away:
+> > 
+> > 	usb_phy_generic usbphy:usb-phy@0: usbphy:usb-phy@0 supply vcc not
+> > found, using dummy regulator
+> > 	usb_phy_generic usbphy:usb-phy@1: usbphy:usb-phy@1 supply vcc not
+> > found, using dummy regulator
+> > 
+> 
+> To eliminate the warning message, I suggest doing below changes, as vcc
+> supply is not mandatory.
+> 
+> diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.c
+> index a53b89be5324..01a5ff1a0515 100644
+> --- a/drivers/usb/phy/phy-generic.c
+> +++ b/drivers/usb/phy/phy-generic.c
+> @@ -275,7 +275,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop,
+>                 }   
+>         }   
+>  
+> -       nop->vcc = devm_regulator_get(dev, "vcc");
+> +       nop->vcc = devm_regulator_get_optional(dev, "vcc");
 
-[ Upstream commit fbc318afadd6e7ae2252d6158cf7d0c5a2132f7d ]
+Is the regulator optional? IMHO this shouldn't be the fix. I think the
+right fix is Uwe's approach.
 
-Gadget drivers may queue request in interrupt context. This would lead to
-a descriptor allocation in that context. In that case we would hit
-BUG_ON(in_interrupt()) in __get_vm_area_node.
+Regards,
+  Marco
 
-Also remove the unnecessary cast.
+>         if (IS_ERR(nop->vcc)) {
+>                 dev_dbg(dev, "Error getting vcc regulator: %ld\n",
+>                                         PTR_ERR(nop->vcc));
+> 
+> Peter
+> 
+> > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> > ---
+> > Hello,
+> > 
+> > note I'm an USB noob, so please consider carefully before applying :-) I also put the
+> > regulator near the usbphy node instead of in alphabetic order. Not sure what is
+> > sensible/usual here, too.
+> > 
+> > Best regards
+> > Uwe
+> > 
+> >  arch/arm/boot/dts/imx25.dtsi | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/arch/arm/boot/dts/imx25.dtsi b/arch/arm/boot/dts/imx25.dtsi
+> > --- a/arch/arm/boot/dts/imx25.dtsi
+> > +++ b/arch/arm/boot/dts/imx25.dtsi
+> > @@ -614,6 +614,11 @@
+> >  		};
+> >  	};
+> > 
+> > +	reg_usb: regulator_usbphy {
+> > +		compatible = "regulator-fixed";
+> > +		regulator-name = "usb-phy supply";
+> > +	};
+> > +
+> >  	usbphy {
+> >  		compatible = "simple-bus";
+> >  		#address-cells = <1>;
+> > @@ -623,12 +630,14 @@
+> >  			reg = <0>;
+> >  			compatible = "usb-nop-xceiv";
+> >  			#phy-cells = <0>;
+> > +			vcc-supply = <&reg_usb>;
+> >  		};
+> > 
+> >  		usbphy1: usb-phy@1 {
+> >  			reg = <1>;
+> >  			compatible = "usb-nop-xceiv";
+> >  			#phy-cells = <0>;
+> > +			vcc-supply = <&reg_usb>;
+> >  		};
+> >  	};
+> >  };
+> > --
+> > 2.20.1
+> 
 
-Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
-Tested-by: James Grant <jamesg@zaltys.org>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/gadget/udc/lpc32xx_udc.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-index 00b5006baf15..90d24f62bd81 100644
---- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -964,8 +964,7 @@ static struct lpc32xx_usbd_dd_gad *udc_dd_alloc(struct lpc32xx_udc *udc)
- 	dma_addr_t			dma;
- 	struct lpc32xx_usbd_dd_gad	*dd;
- 
--	dd = (struct lpc32xx_usbd_dd_gad *) dma_pool_alloc(
--			udc->dd_cache, (GFP_KERNEL | GFP_DMA), &dma);
-+	dd = dma_pool_alloc(udc->dd_cache, GFP_ATOMIC | GFP_DMA, &dma);
- 	if (dd)
- 		dd->this_dma = dma;
- 
 -- 
-2.20.1
-
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
