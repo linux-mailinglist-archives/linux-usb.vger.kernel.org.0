@@ -2,115 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDC4567D7
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 13:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DB25681B
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 14:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727336AbfFZLlo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jun 2019 07:41:44 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:35542 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbfFZLlo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jun 2019 07:41:44 -0400
-Received: by mail-lf1-f68.google.com with SMTP id a25so1356987lfg.2
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jun 2019 04:41:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4HE6ziFQJhIceyHT13zKToUqAcftLDKJ+TU0RtxjOo0=;
-        b=m3E5Hn1/CGpT8DB+rwl8ytp70VlIYpudH1QiPUlvu4GA+oilYZHva6l+adX4QD8P4E
-         bPTwDhxBBQXUivVg24UP+IwpvRluNf38cIsWFm2BXj6aeu9NyDE/VLBIwFEFFJH2Vofh
-         EC1/uRrLUuxZErQqflfleWQokXsz3xIuO+rUbLNqab3wRLciDxKxuuMUcs4eWj0aiwCb
-         tnDqpMkI2qTmUgfsH+HZTS4Acat+RRexQ1twhwCyyNsrNw6WWF7aWg+vvMAsAtGQXtF5
-         jbmUkNNkSqjMVeKN6V8b0LrnMC2UZuShnS1CUe4SpLz+YJ3Ohr3EXcpjt2S+EbfBSCR4
-         FNdA==
-X-Gm-Message-State: APjAAAXux8DTL0N/CV6Ul87OO81qY920ouSan2Tv1Yl6Yz4NG6N6ss7r
-        RFmhPq5Y761gTYwpX3f54SNFfbd/
-X-Google-Smtp-Source: APXvYqz5k5BVxKbP3RezwAnOQbI0y3WAWiTgwRfA5Qi04tBN7Y4haD2AVSL+qEn1ZGjqX4Wl6xV8wg==
-X-Received: by 2002:a19:6e4d:: with SMTP id q13mr2469893lfk.6.1561549302092;
-        Wed, 26 Jun 2019 04:41:42 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id r70sm990977ljr.26.2019.06.26.04.41.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Jun 2019 04:41:41 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1hg6J1-0000aj-6r; Wed, 26 Jun 2019 13:41:39 +0200
-Date:   Wed, 26 Jun 2019 13:41:39 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] gpss: core: no waiters left behind on deregister
-Message-ID: <20190626114139.GC508@localhost>
-References: <20190624083323.11876-1-oneukum@suse.com>
- <20190625070436.GC14867@localhost>
- <1561547047.23604.15.camel@suse.com>
+        id S1726242AbfFZMA2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jun 2019 08:00:28 -0400
+Received: from mail-eopbgr30091.outbound.protection.outlook.com ([40.107.3.91]:58432
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726104AbfFZMA2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Jun 2019 08:00:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=targetsg.onmicrosoft.com; s=selector1-targetsg-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YAjZT1y4h8huJIfF8gnd1gTv/bao8Vb8dYcD+uojBNw=;
+ b=Npbye1fQDvAuXz0dFNI0rMpM/s8u1SJbqanCtJBStkpJDrv5duxJ3LO3JTca48DF9HtXwpQD7fQCm4ptJRGK3FNc7xFRbGcAYXMCXJxYkrDYwidvGM/WzUITD1nLaEfghs8CYnyx/J2jm7xPPYIL1lufWmMr7kPEoHRqrmJooMM=
+Received: from AM0PR02MB3841.eurprd02.prod.outlook.com (52.134.87.30) by
+ AM0PR02MB4337.eurprd02.prod.outlook.com (20.177.109.150) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.16; Wed, 26 Jun 2019 12:00:22 +0000
+Received: from AM0PR02MB3841.eurprd02.prod.outlook.com
+ ([fe80::31ee:1319:473f:66e3]) by AM0PR02MB3841.eurprd02.prod.outlook.com
+ ([fe80::31ee:1319:473f:66e3%3]) with mapi id 15.20.2008.014; Wed, 26 Jun 2019
+ 12:00:22 +0000
+From:   Kai Ruhnau <kai.ruhnau@target-sg.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: No carrier lost information with gadget RNDIS/ECM
+Thread-Topic: No carrier lost information with gadget RNDIS/ECM
+Thread-Index: AdUsFPmU+UglLYdrSGuD1S1toRllig==
+Date:   Wed, 26 Jun 2019 12:00:22 +0000
+Message-ID: <AM0PR02MB3841F110F7B6931A087DF566C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=kai.ruhnau@target-sg.com; 
+x-originating-ip: [2003:c5:174d:e100:5155:be7d:c1b3:c36a]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: acac5fce-bf8b-4dc8-0ae8-08d6fa2dde02
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:AM0PR02MB4337;
+x-ms-traffictypediagnostic: AM0PR02MB4337:
+x-microsoft-antispam-prvs: <AM0PR02MB43379A3260F0B6B8C1EDCE06C5E20@AM0PR02MB4337.eurprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 00808B16F3
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(396003)(136003)(39830400003)(366004)(346002)(189003)(199004)(76116006)(7696005)(44832011)(2501003)(316002)(46003)(486006)(71200400001)(99286004)(68736007)(71190400001)(52536014)(73956011)(256004)(508600001)(64756008)(66476007)(6916009)(14454004)(66446008)(5024004)(66556008)(66946007)(33656002)(476003)(86362001)(8676002)(81156014)(81166006)(6436002)(55016002)(2906002)(53936002)(9686003)(74316002)(305945005)(5660300002)(7736002)(8936002)(25786009)(186003)(102836004)(6506007)(6116002)(5640700003)(2351001);DIR:OUT;SFP:1102;SCL:1;SRVR:AM0PR02MB4337;H:AM0PR02MB3841.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: target-sg.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: UBeb8rTODC970I3vHmFp/Fx+lBxeuatRb5u0aECagNurWLmG1xxfBF/crJyiMqOwOKQ8q7H0T5cNCzxPNf4sJzBd7QtfclPhYPwY+Jz5DqSMv4GoUXk2r8sjTjmQnp8S0cjSvu79XrW7unC7m+1WRrkmWMSr2EhO+nKZT6X2jCrNpBFNKuHQd81WtW60S422qs/ppor1aA92lFuIgvC4WqdyUs0bR0Sq+H+yAiLGcbQMCvq5OX4caWiKmPfih0gdviS7shyLdPkz4RNP6kC2pd0LLwVoTbCAMi1MO4bUMdUqAkaN/Yzl6HBT6ARfGcgMTB4nTe4bkgvMeo0HjfkUTGey+2evd/iBSEZfzq8Zf3j83XGQjOVLR3uo8XiQ3/sLU/GM7WDChFrsbtZSuqmsIEEo36efeKkJ+dlKYf3BStk=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1561547047.23604.15.camel@suse.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-OriginatorOrg: target-sg.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: acac5fce-bf8b-4dc8-0ae8-08d6fa2dde02
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2019 12:00:22.4312
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 52a4fe2f-f30a-452d-90b1-03ecc8ab0c0d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kai.ruhnau@target-sg.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR02MB4337
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 26, 2019 at 01:04:07PM +0200, Oliver Neukum wrote:
-> Am Dienstag, den 25.06.2019, 09:04 +0200 schrieb Johan Hovold:
-> > On Mon, Jun 24, 2019 at 10:33:23AM +0200, Oliver Neukum wrote:
-> > > If you deregister a device you need to wake up all waiters
-> > > as there will be no further wakeups.
-> > > 
-> > > Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> > > ---
-> > >  drivers/gnss/core.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/gnss/core.c b/drivers/gnss/core.c
-> > > index e6f94501cb28..0d13bd2cefd5 100644
-> > > --- a/drivers/gnss/core.c
-> > > +++ b/drivers/gnss/core.c
-> > > @@ -303,7 +303,7 @@ void gnss_deregister_device(struct gnss_device *gdev)
-> > >  	down_write(&gdev->rwsem);
-> > >  	gdev->disconnected = true;
-> > >  	if (gdev->count) {
-> > > -		wake_up_interruptible(&gdev->read_queue);
-> > > +		wake_up_interruptible_all(&gdev->read_queue);
-> > 
-> > GNSS core doesn't have any exclusive waiters, so no need to use use the
-> > exclusive wake-up (all) interface.
-> 
-> Well, yes, but that is the problem. In gnss_read() you drop the lock:
+Hi,
 
-> That means that an arbitrary number of tasks can get here.
-> 
->                 ret = wait_event_interruptible(gdev->read_queue,
->                                 gdev->disconnected ||
->                                 !kfifo_is_empty(&gdev->read_fifo));
-> 
-> Meaning that an arbitrary number can be sleeping here.
+On my i.MX6 SoloX, I have configured one of the OTG ports for a combined RN=
+DIS/ECM gadget. After boot, I have two network interfaces (usb0 and usb1) w=
+hich are managed by systemd-networkd.
 
-I understand wait you're getting at, but I think your mistaken regarding
-exclusive wait. Note that wait_event_interruptible() uses nonexclusive
-wait.
+With kernel 4.9.153, systemd-networkd reports an immediate carrier loss whe=
+n I pull the USB cable from a Windows or macOS host. With 4.19.53 or 5.1.15=
+ that carrier loss is only reported when I re-attach the cable, meaning the=
+re is a "Lost carrier" for the last used interface immediately followed by =
+a "Gained carrier" for the newly connected interface.
 
-> Yet in gnss_deregister_device() you use a simple wake_up:
-> 
-> void gnss_deregister_device(struct gnss_device *gdev)
-> 
-> {
-> 
->         down_write(&gdev->rwsem);
->         gdev->disconnected = true;
->         if (gdev->count) {
->                 wake_up_interruptible(&gdev->read_queue);
-> 
-> 
-> wake_up_interruptible() will wake up one waiting task. But after that
-> the device is gone. There will be no further events. The other tasks
-> will sleep forever.
+I have activated CONFIG_USB_GADGET_DEBUG_FILES, and the contents of /proc/d=
+river/rndis-000 don't change when I pull the cable:
+Config Nr. 0
+used      : y
+state     : RNDIS_DATA_INITIALIZED
+medium    : 0x00000000
+speed     : 425984000
+cable     : connected
+vendor ID : 0x00000000
+vendor    : (null)
 
-No, wake_up_interruptible() will wake up all nonexclusive waiters,
-which is all we care about here.
+Only when changing the host to a Mac, it's different:
+Config Nr. 0
+used      : y
+state     : RNDIS_UNINITIALIZED
+medium    : 0x00000000
+speed     : 425984000
+cable     : connected
+vendor ID : 0x00000000
+vendor    : (null)
 
-Johan
+Thanks for any help.
+
+Cheers,
+Kai
