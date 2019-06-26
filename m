@@ -2,121 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB3D562E8
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 09:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7698563D5
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 09:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbfFZHKM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jun 2019 03:10:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49672 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725790AbfFZHKM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Jun 2019 03:10:12 -0400
-Received: from localhost (unknown [106.201.40.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 440012085A;
-        Wed, 26 Jun 2019 07:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561533011;
-        bh=AUEWjtPdMoOuK2irlTMWvyn/3X6hMlzz74tKCbXQNgE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GZk0dd5D/1FQvDSac92ZUKviP86dIfsRQl2WHoYCuGqQWYeSyFUrrXQuBhMHEX/ZA
-         CeJStsNxjsGnI28G7TNBgRkYBRHzC+C9ISPyeTuCLC+lxkpkI+e4epQCO4zA6vH9fr
-         6mK9Satqrlew9vRtbJIZ8doQi+Ji2KyPugGjcn3Q=
-Date:   Wed, 26 Jun 2019 12:36:58 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Lamparter <chunkeey@gmail.com>
-Subject: Re: [PATCH v3 1/4] usb: xhci: add firmware loader for uPD720201 and
- uPD720202 w/o ROM
-Message-ID: <20190626070658.GP2962@vkoul-mobl>
-References: <20190624061126.11938-1-vkoul@kernel.org>
- <20190624061126.11938-2-vkoul@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190624061126.11938-2-vkoul@kernel.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+        id S1726654AbfFZH4Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jun 2019 03:56:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52174 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725379AbfFZH4Z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Jun 2019 03:56:25 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id D1CC1ACC5;
+        Wed, 26 Jun 2019 07:56:23 +0000 (UTC)
+Message-ID: <1561534960.23604.6.camel@suse.com>
+Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        patches@opensource.cirrus.com, USB list <linux-usb@vger.kernel.org>
+Date:   Wed, 26 Jun 2019 09:42:40 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1906250945410.1493-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1906250945410.1493-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24-06-19, 11:41, Vinod Koul wrote:
-> From: Christian Lamparter <chunkeey@googlemail.com>
-> 
-> This patch adds a firmware loader for the uPD720201K8-711-BAC-A
-> and uPD720202K8-711-BAA-A variant. Both of these chips are listed
-> in Renesas' R19UH0078EJ0500 Rev.5.00 "User's Manual: Hardware" as
-> devices which need the firmware loader on page 2 in order to
-> work as they "do not support the External ROM".
-> 
-> The "Firmware Download Sequence" is describe in chapter
-> "7.1 FW Download Interface" R19UH0078EJ0500 Rev.5.00 page 131.
-> 
-> The firmware "K2013080.mem" is available from a USB3.0 Host to
-> PCIe Adapter (PP2U-E card) "Firmware download" archive. An
-> alternative version can be sourced from Netgear's WNDR4700 GPL
-> archives.
-> 
-> The release notes of the PP2U-E's "Firmware Download" ver 2.0.1.3
-> (2012-06-15) state that the firmware is for the following devices:
->  - uPD720201 ES 2.0 sample whose revision ID is 2.
->  - uPD720201 ES 2.1 sample & CS sample & Mass product, ID is 3.
->  - uPD720202 ES 2.0 sample & CS sample & Mass product, ID is 2.
-> 
-> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> [vkoul: fixed comments:
-> 	used macros for timeout count and delay
-> 	removed renesas_fw_alive_check
-> 	cleaned renesas_fw_callback
-> 	removed recurion for renesas_fw_download
-> 	added MODULE_FIRMWARE
-> 	removed length check]
-> Tested-by: Christian Lamparter <chunkeey@gmail.com>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  drivers/usb/host/xhci-pci.c | 454 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 454 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index c2fe218e051f..89ca46dd6825 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -12,6 +12,8 @@
->  #include <linux/slab.h>
->  #include <linux/module.h>
->  #include <linux/acpi.h>
-> +#include <linux/firmware.h>
-> +#include <linux/unaligned/access_ok.h>
->  
->  #include "xhci.h"
->  #include "xhci-trace.h"
-> @@ -55,6 +57,9 @@
->  #define PCI_DEVICE_ID_AMD_PROMONTORYA_1			0x43bc
->  #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
->  
-> +#define RENESAS_RETRY	1000
-> +#define RENESAS_DELAY	10
+Am Dienstag, den 25.06.2019, 10:08 -0400 schrieb Alan Stern:
+> On Tue, 25 Jun 2019, Mayuresh Kulkarni wrote:
 
-So some devices are exhibiting failure on both ROM programming as well
-as RAM load with messages:
+> > Right, so user space should do the following when it determines the
+> > device is idle from its point of view -
+> > 
+> > 1. Call ALLOW_SUSPEND ioctl
 
-ROM Download Step 34 failed at position 136 bytes
-Firmware Download Step 2 failed at position 8 bytes with (-110)
+That is a race in principle. You should reverse steps 1 and 2
 
-So I am going to revert to older delay values! With those we dont get a
-failures. yeah looks like ROM load takes a while on these
+> > 2. Queue an URB and wait for its REAP. When the wait returns -EFAIL (or
+> > something similar), that is the indication that the device is no longer
+> > active (or suspended)
+> > 3. Call WAIT_FOR_RESUME ioctl
 
-Thanks
+It seems to me that there ought to be one API for that. Either an
+ioctl or poll.
 
--- 
-~Vinod
+> > 4. When WAIT_FOR_RESUME ioctl returns, it is guaranteed that device is
+> > active.
+> > 5. Call FORBID_SUSPEND ioctl and read the cause of resume.
+> > 6. Go to (1) when appropriate
+> > 
+> > Have I summarized this approach correctly from user-space point of view?
+> 
+> Yes, except for one thing: In step 4, it is _not_ guaranteed that the 
+> device is active when WAIT_FOR_RESUME returns.  The only guarantee is 
+> that a resume did occur sometime after step 1, but the device might 
+> have gone back into suspend after that occurred.
+
+Now is that a good API? Shouldn't we rather have an API for either
+* resume the device now and bump the counter
+* bump the counter when te device resumes
+
+I don't see a value in not having a defined power state after resume.
+
+> > 3. Extend usbdev_poll() to wait for udev->state == USB_STATE_SUSPENDED
+> > when events == POLLPRI. Return POLLPRI when state = USB_STATE_SUSPENDED.
+> > 4. As before, any ioctl != (ALLOW_SUSPEND or WAIT_FOR_RESUME)
+> > calls usb_autoresume_device().
+> 
+> 3 sounds reasonable at first, but I'm not sure it would work.  
+> Consider what would happen if the device is suspended very briefly and
+> then wakes up.  The usbdev_poll() call might not return, because by the
+> time it checks udev->state, the state has already changed back to
+> USB_STATE_CONFIGURED.
+
+Indeed. It seems to me that any power transition should be reported
+back.
+
+> In any case, we shouldn't do 4.  It would prevent the device from ever
+> going into suspend, because the program would want to continue making
+> usbfs ioctl calls while waiting for the suspend to occur.
+
+Exactly.
+
+> > The corresponding user-space calls would be -
+> > A. When determined device is idle, call ALLOW_SUSPEND ioctl.
+> > B. Call poll(device_fd, POLLPRI). When poll returns check revents
+> > == POLLPRI.
+> 
+> What if the device never does go into suspend?  The poll() call
+> wouldn't return and the program would just stop working.
+
+Well, that is why you can poll for multiple events at the same
+time and the syscall has a timeout.
+
+> > 2. Is it safe to wait for udev->state to be of a particular value?
+> 
+> No, not really, because the state can change.
+
+That is a general issue with poll. You cannot be sure that there
+is still data to be read when you are ready to read.
+
+	Regards
+		Oliver
+
