@@ -2,127 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD73569C2
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 14:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCDE569FF
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jun 2019 15:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbfFZMxy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jun 2019 08:53:54 -0400
-Received: from mail-eopbgr20120.outbound.protection.outlook.com ([40.107.2.120]:3478
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726484AbfFZMxy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Jun 2019 08:53:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=targetsg.onmicrosoft.com; s=selector1-targetsg-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+xEUaqHwHLum/JzKF3yyrvXr1zZFvRL98vB7sBzU7vo=;
- b=fKMXZdpF6soWz96I0XU8I1N2PHishMvH2PIV9smT/FY4BbiaHXxoqsBVkeaL5vsZMMSH3Y/BN45ZQD10RpcWrPOTAnqJie4G9AquO9Z/O0lIMMd/JkOKxzbyiDdqQFB7sUTrHRaUXcJZ/XMRgYuwyonwhEoUw9AKgC3JjmFWa7U=
-Received: from AM0PR02MB3841.eurprd02.prod.outlook.com (52.134.87.30) by
- AM0PR02MB5937.eurprd02.prod.outlook.com (52.132.214.209) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.13; Wed, 26 Jun 2019 12:53:50 +0000
-Received: from AM0PR02MB3841.eurprd02.prod.outlook.com
- ([fe80::31ee:1319:473f:66e3]) by AM0PR02MB3841.eurprd02.prod.outlook.com
- ([fe80::31ee:1319:473f:66e3%3]) with mapi id 15.20.2008.014; Wed, 26 Jun 2019
- 12:53:50 +0000
-From:   Kai Ruhnau <kai.ruhnau@target-sg.com>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: No carrier lost information with gadget RNDIS/ECM
-Thread-Topic: No carrier lost information with gadget RNDIS/ECM
-Thread-Index: AdUsFPmU+UglLYdrSGuD1S1toRlligAA5T8AAAEwZfA=
-Date:   Wed, 26 Jun 2019 12:53:50 +0000
-Message-ID: <AM0PR02MB384108B692229DF41816A363C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
-References: <AM0PR02MB3841F110F7B6931A087DF566C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
- <87o92kk0ih.fsf@linux.intel.com>
-In-Reply-To: <87o92kk0ih.fsf@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=kai.ruhnau@target-sg.com; 
-x-originating-ip: [2003:c5:174d:e100:25a7:3c39:a66b:ad15]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 507e0935-f810-49b4-d5a8-08d6fa355661
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:AM0PR02MB5937;
-x-ms-traffictypediagnostic: AM0PR02MB5937:
-x-microsoft-antispam-prvs: <AM0PR02MB59378B75E838C6A1D8CDFF34C5E20@AM0PR02MB5937.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 00808B16F3
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39830400003)(376002)(396003)(366004)(346002)(136003)(199004)(189003)(186003)(86362001)(44832011)(68736007)(53936002)(6436002)(6506007)(11346002)(102836004)(446003)(55016002)(486006)(6116002)(71200400001)(71190400001)(110136005)(316002)(476003)(2906002)(46003)(5660300002)(229853002)(14454004)(52536014)(76176011)(81166006)(73956011)(8676002)(256004)(8936002)(5024004)(81156014)(25786009)(508600001)(74316002)(99286004)(6246003)(33656002)(66476007)(66556008)(64756008)(66446008)(7696005)(9686003)(2501003)(7736002)(66946007)(305945005)(76116006);DIR:OUT;SFP:1102;SCL:1;SRVR:AM0PR02MB5937;H:AM0PR02MB3841.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: target-sg.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: MSQSygGpWVPBiQ9amcKnVTgK8V7mfnDwGkpMs6XeEUhYcHYSD2Wkm69B+sJ5s/Z7qyaXuZQrXNpVLTyzXh0xRp+U79Ebmb3iZQEa3RuEfso7tkQvadNvAuoupX1809lk5fP8WGD55uv9ULu6Yo2gTjlVwxTdQKGadFHyB/3VtMlAIwfSTRkMrv/rqTNM53yZuSQITqpQrjtrDwCCsnRN8gQjLLHWvIwEnu7aE7Rm/ByeR9O7c/cpdP56U/3I6LBSaJcSn5xGzCSjWBJzAOkQjUkxaZLrrJ8xRdZ+rAwOFJ3ovHoluwZ8w5jdTJ3yWKmG02+RqSGtAPaPkZTXKcIBwJLULU4hU964X298JrMlO9aJnIYpSL1kHMHZdqPIyvn8MLKm2K+wZdi8PEcywpDE28nMZiz8/+VmeVHyCrwMIw4=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: target-sg.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 507e0935-f810-49b4-d5a8-08d6fa355661
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2019 12:53:50.7357
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 52a4fe2f-f30a-452d-90b1-03ecc8ab0c0d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kai.ruhnau@target-sg.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR02MB5937
+        id S1727353AbfFZNHM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jun 2019 09:07:12 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:20322 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726157AbfFZNHM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jun 2019 09:07:12 -0400
+X-IronPort-AV: E=Sophos;i="5.62,419,1554735600"; 
+   d="scan'208";a="19770037"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 26 Jun 2019 22:07:09 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 0357041145A0;
+        Wed, 26 Jun 2019 22:07:09 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "# v4 . 1+" <stable@vger.kernel.org>
+Subject: [PATCH] usb: renesas_usbhs: add a workaround for a race condition of workqueue
+Date:   Wed, 26 Jun 2019 22:06:33 +0900
+Message-Id: <1561554393-6027-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The old commit 6e4b74e4690d ("usb: renesas: fix scheduling in atomic
+context bug") fixed an atomic issue by using workqueue for the shdmac
+dmaengine driver. However, this has a potential race condition issue
+between the work pending and usbhsg_ep_free_request() in gadget mode.
+When usbhsg_ep_free_request() is called while pending the queue,
+since the work_struct will be freed and then the work handler is
+called, kernel panic happens on process_one_work().
 
-Felipe Balbi writes:
-> Kai Ruhnau <kai.ruhnau@target-sg.com> writes:
->> On my i.MX6 SoloX, I have configured one of the OTG ports for a=20
->> combined RNDIS/ECM gadget. After boot, I have two network interfaces
->> (usb0 and usb1) which are managed by systemd-networkd.
->>
->> With kernel 4.9.153, systemd-networkd reports an immediate carrier=20
->> loss when I pull the USB cable from a Windows or macOS host. With
->> 4.19.53 or 5.1.15 that carrier loss is only reported when I re-attach=20
->> the cable, meaning there is a "Lost carrier" for the last used=20
->> interface immediately followed by a "Gained carrier" for the newly=20
->> connected interface.
->
-> First of all, thanks for actually testing the most recent stable kernels.=
- Much appreciated :-)
+To fix the issue, if we could call cancel_work_sync() at somewhere
+before the free request, it could be easy. However,
+the usbhsg_ep_free_request() is called on atomic (e.g. f_ncm driver
+calls free request via gether_disconnect()).
 
-Sure. Having so much support for the i.MX6 in mainline helps a lot :)
+For now, almost all users are having "USB-DMAC" and the DMAengine
+driver can be used on atomic. So, this patch adds a workaround for
+a race condition to call the DMAengine APIs without the workqueue.
 
->> I have activated CONFIG_USB_GADGET_DEBUG_FILES, and the contents of
->> /proc/driver/rndis-000 don't change when I pull the cable:
->>
->> Config Nr. 0
->> used      : y
->> state     : RNDIS_DATA_INITIALIZED
->> medium    : 0x00000000
->> speed     : 425984000
->> cable     : connected
->> vendor ID : 0x00000000
->> vendor    : (null)
->>
->> Only when changing the host to a Mac, it's different:
->> Config Nr. 0
->> used      : y
->> state     : RNDIS_UNINITIALIZED
->> medium    : 0x00000000
->> speed     : 425984000
->> cable     : connected
->> vendor ID : 0x00000000
->> vendor    : (null)
->>
->> Thanks for any help.
->
-> Which peripheral controller is this board using? Is it chipidea? dwc2?
-> dwc3? High Speed or Super Speed?
+This means we still have TODO on shdmac environment (SH7724), but
+since it doesn't have SMP, the race condition might not happen.
 
-According to the device tree it's 'fsl,imx6sx-usb' driven by chipidea/ci_hd=
-rc_imx.c
-When connecting to Windows, the dmesg shows:
- configfs-gadget gadget: high-speed config #2: c
+Fixes: ab330cf3888d ("usb: renesas_usbhs: add support for USB-DMAC")
+Cc: <stable@vger.kernel.org> # v4.1+
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+ This patch is based on Greg's usb.git / usb-linus branch.
 
-Cheers,
-Kai
+ I have no idea why this issue doesn't happen on previous kernel versions
+ though, but this issue happens on v5.2-rc6 + g_ncm + R-Car H3. So,
+ if possible, I'd like to apply this patch on v5.2-stable.
+
+ drivers/usb/renesas_usbhs/fifo.c | 34 ++++++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
+index 39fa2fc..6036cba 100644
+--- a/drivers/usb/renesas_usbhs/fifo.c
++++ b/drivers/usb/renesas_usbhs/fifo.c
+@@ -802,9 +802,8 @@ static int __usbhsf_dma_map_ctrl(struct usbhs_pkt *pkt, int map)
+ }
+ 
+ static void usbhsf_dma_complete(void *arg);
+-static void xfer_work(struct work_struct *work)
++static void usbhsf_dma_xfer_preparing(struct usbhs_pkt *pkt)
+ {
+-	struct usbhs_pkt *pkt = container_of(work, struct usbhs_pkt, work);
+ 	struct usbhs_pipe *pipe = pkt->pipe;
+ 	struct usbhs_fifo *fifo;
+ 	struct usbhs_priv *priv = usbhs_pipe_to_priv(pipe);
+@@ -812,12 +811,10 @@ static void xfer_work(struct work_struct *work)
+ 	struct dma_chan *chan;
+ 	struct device *dev = usbhs_priv_to_dev(priv);
+ 	enum dma_transfer_direction dir;
+-	unsigned long flags;
+ 
+-	usbhs_lock(priv, flags);
+ 	fifo = usbhs_pipe_to_fifo(pipe);
+ 	if (!fifo)
+-		goto xfer_work_end;
++		return;
+ 
+ 	chan = usbhsf_dma_chan_get(fifo, pkt);
+ 	dir = usbhs_pipe_is_dir_in(pipe) ? DMA_DEV_TO_MEM : DMA_MEM_TO_DEV;
+@@ -826,7 +823,7 @@ static void xfer_work(struct work_struct *work)
+ 					pkt->trans, dir,
+ 					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+ 	if (!desc)
+-		goto xfer_work_end;
++		return;
+ 
+ 	desc->callback		= usbhsf_dma_complete;
+ 	desc->callback_param	= pipe;
+@@ -834,7 +831,7 @@ static void xfer_work(struct work_struct *work)
+ 	pkt->cookie = dmaengine_submit(desc);
+ 	if (pkt->cookie < 0) {
+ 		dev_err(dev, "Failed to submit dma descriptor\n");
+-		goto xfer_work_end;
++		return;
+ 	}
+ 
+ 	dev_dbg(dev, "  %s %d (%d/ %d)\n",
+@@ -845,8 +842,17 @@ static void xfer_work(struct work_struct *work)
+ 	dma_async_issue_pending(chan);
+ 	usbhsf_dma_start(pipe, fifo);
+ 	usbhs_pipe_enable(pipe);
++}
++
++static void xfer_work(struct work_struct *work)
++{
++	struct usbhs_pkt *pkt = container_of(work, struct usbhs_pkt, work);
++	struct usbhs_pipe *pipe = pkt->pipe;
++	struct usbhs_priv *priv = usbhs_pipe_to_priv(pipe);
++	unsigned long flags;
+ 
+-xfer_work_end:
++	usbhs_lock(priv, flags);
++	usbhsf_dma_xfer_preparing(pkt);
+ 	usbhs_unlock(priv, flags);
+ }
+ 
+@@ -899,8 +905,13 @@ static int usbhsf_dma_prepare_push(struct usbhs_pkt *pkt, int *is_done)
+ 	pkt->trans = len;
+ 
+ 	usbhsf_tx_irq_ctrl(pipe, 0);
+-	INIT_WORK(&pkt->work, xfer_work);
+-	schedule_work(&pkt->work);
++	/* FIXME: Workaound for usb dmac that driver can be used in atomic */
++	if (usbhs_get_dparam(priv, has_usb_dmac)) {
++		usbhsf_dma_xfer_preparing(pkt);
++	} else {
++		INIT_WORK(&pkt->work, xfer_work);
++		schedule_work(&pkt->work);
++	}
+ 
+ 	return 0;
+ 
+@@ -1006,8 +1017,7 @@ static int usbhsf_dma_prepare_pop_with_usb_dmac(struct usbhs_pkt *pkt,
+ 
+ 	pkt->trans = pkt->length;
+ 
+-	INIT_WORK(&pkt->work, xfer_work);
+-	schedule_work(&pkt->work);
++	usbhsf_dma_xfer_preparing(pkt);
+ 
+ 	return 0;
+ 
+-- 
+2.7.4
+
