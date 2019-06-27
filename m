@@ -2,57 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA12158C0F
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 22:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621F058C11
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 22:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbfF0Uw5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jun 2019 16:52:57 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35986 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726525AbfF0Uw4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 16:52:56 -0400
-Received: by mail-pf1-f195.google.com with SMTP id r7so1820201pfl.3
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2019 13:52:56 -0700 (PDT)
+        id S1726558AbfF0Uw6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jun 2019 16:52:58 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:45493 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726543AbfF0Uw6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 16:52:58 -0400
+Received: by mail-pg1-f195.google.com with SMTP id z19so1535951pgl.12
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2019 13:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=sJy5RsZ+XgQxP8NLHGHXPC++ycB1Ut5oAgR2rBDauhI=;
-        b=eV+URhzutNlGwIftbtsLHQnZL/iqKcoUJpTwLk6FovaHQF/pihPA4h8aU4Zpny0ymN
-         NqrEyZ9vDESdgjnnCKHLxNAjPNhH2fF7mNaRFVY1JCmUh7QwS4j7MBKU+fVjB+Av1f6m
-         HZumFLQ5tSHeyaGF/unoC3vzkXGwV8/W60N80XgvyOGy4PKAT13CFRMA+TMWolda16Qt
-         VjZ4RJXR9SHAGHPnQBEikUydJCmQXNitcDWkG5SJd0M2rKwrs1aWi+KOm2+F3yoLkSfe
-         UrB2IWO2ozLNTSRqcwVfpjaKM292fnrMcjYqBXw2hKegjPX3X9MuFrl5BU6P8q1zTeaR
-         eZNQ==
+        bh=ueb/BBqVPcgcgShNRILhcqgksfTQMKckAnG70UYWi7Y=;
+        b=YpvV2Bf75JwXf8zBL791UUdonRQB1s2FnGsM4WUtvTVpxINnBkWjZ071FmocfAawdX
+         NUs7QZyUSMflrdueEkKNZn9NWZ0WFSd0BMoBbgVFI5CNI3Jy/3PqRQG5CiELjJsbTe7n
+         7ZKZIJxq2tyv7zO25HRedUVCmwi4yQcjKfFA0NDeRjcRQ5wRGMThZDHBuoYYiRYQZL3o
+         ZVaV0DUDHhPPUU7PDFsaVBnfkwLRsHmgJ/s9bDUd8xjY0m/o3hRmWRv9fH/utDBHoYvc
+         li6z6fOj2GinZGhmyoz943Bvp32xwUlZvCpgbV7dtm+ijB9ymVQJABsQzEBldCzBHOu5
+         jnJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=sJy5RsZ+XgQxP8NLHGHXPC++ycB1Ut5oAgR2rBDauhI=;
-        b=sGQUNh/u3aNq839YDXcicVIm+faWRrCZOb80z1W/gnCkpA/6SNdFyIXH8OFDe7onuD
-         EvACihG/MP0FhtsgdI1Jfe3J2EtfIeJN7RPegvo94QQgaFI9JCi+kD3ao3/BW4PPVoQv
-         93C6FouxhuRnXb4zproDU4V5tRpcb2fohZAzZD/o2zDs2KkBeWbbAKGWWWf4CzRHCcf0
-         Q/ykX6Y7yVNEleOLGnjtbqsOZmycmoPjhl7nWjGA36Xn1xFdLpfvT40/ejcidEfndgfK
-         gXFoq3wPA+Wauwf0A0JOipGD3zFja/so6vLKzs69LN1tno3a/UrKnad6xR2x4idCf36r
-         20sw==
-X-Gm-Message-State: APjAAAWmRHsy6N0FZdNhNm7jzVE84GEAbAH2Fw4q53bxgywCSf9Q4hqQ
-        TBxNWy/6IrGc5PMxmPgSCxikQg==
-X-Google-Smtp-Source: APXvYqx6BBy9Nzx+u+U0xZbdLTdsXsNMmWr2PYmfOqM0/uZF8Eo8cbUuQX5EkeX7TpofkKfNfpKylg==
-X-Received: by 2002:a17:90a:be0a:: with SMTP id a10mr8017668pjs.112.1561668775599;
-        Thu, 27 Jun 2019 13:52:55 -0700 (PDT)
+        bh=ueb/BBqVPcgcgShNRILhcqgksfTQMKckAnG70UYWi7Y=;
+        b=lO68dOblE7i68IJDn2Cej1Rp4U8vG3FxoW5/ZN6NPs59MZdLrYjCcEcQx0AazMQ6ku
+         Ogbo4+6jU8AM5YM/7jevCxB8Sq/NQjMMZBifbzXvgM4w7eylgHcqoybzhzlpJiHW39HG
+         tx0XX2KW/tsnTAx8rBfnq+hOxfiRAEbzkHE8C2sLEEqEzAQTEVBy6d5X4Esf6sgPas0N
+         T1VYLWKTUZ3ttnSCJoNmbBy7hsakj+5RLaapxpMGdR/imUGpfqgivB44GVjaIvG4TNoC
+         qvOXULrJgCSZ3enNzYvviLxsAQQp9zNOYJLALyycJOTBfKw7htlBMlchuJDgF43KLiez
+         Sn8Q==
+X-Gm-Message-State: APjAAAXda++jtMWnaUX70X7saMfl3++2cGFUGBQNyKANDxKw4bx4XYny
+        Dxv6y2Zks2+uv0A7NP/JpWtm3mUjOos=
+X-Google-Smtp-Source: APXvYqw6yndLJFqzJcTPdL5U8C6p4mcNBLoGKWs5pKly+0Z18tO3DXGXGcUh3kXtYe8GJ+Y6ng9frA==
+X-Received: by 2002:a65:6694:: with SMTP id b20mr5506490pgw.155.1561668777440;
+        Thu, 27 Jun 2019 13:52:57 -0700 (PDT)
 Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id 2sm3674083pff.174.2019.06.27.13.52.53
+        by smtp.gmail.com with ESMTPSA id 2sm3674083pff.174.2019.06.27.13.52.55
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 27 Jun 2019 13:52:54 -0700 (PDT)
+        Thu, 27 Jun 2019 13:52:56 -0700 (PDT)
 From:   John Stultz <john.stultz@linaro.org>
 To:     stable@vger.kernel.org
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+Cc:     John Stultz <john.stultz@linaro.org>,
         Fei Yang <fei.yang@intel.com>,
         Sam Protsenko <semen.protsenko@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        John Stultz <john.stultz@linaro.org>
-Subject: [PATCH 4.19.y 7/9] usb: dwc3: gadget: remove wait_end_transfer
-Date:   Thu, 27 Jun 2019 20:52:38 +0000
-Message-Id: <20190627205240.38366-8-john.stultz@linaro.org>
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH 4.19.y 8/9] Revert "usb: dwc3: gadget: Clear req->needs_extra_trb flag on cleanup"
+Date:   Thu, 27 Jun 2019 20:52:39 +0000
+Message-Id: <20190627205240.38366-9-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190627205240.38366-1-john.stultz@linaro.org>
 References: <20190627205240.38366-1-john.stultz@linaro.org>
@@ -61,131 +60,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Felipe Balbi <felipe.balbi@linux.intel.com>
-
-commit fec9095bdef4e7c988adb603d0d4f92ee735d4a1 upstream
-
-Now that we have a list of cancelled requests, we can skip over TRBs
-when END_TRANSFER command completes.
+This reverts commit 25ad17d692ad54c3c33b2a31e5ce2a82e38de14e,
+as with other patches backported to -stable, we can now apply
+the actual upstream commit that matches this.
 
 Cc: Fei Yang <fei.yang@intel.com>
 Cc: Sam Protsenko <semen.protsenko@linaro.org>
 Cc: Felipe Balbi <balbi@kernel.org>
 Cc: linux-usb@vger.kernel.org
 Cc: stable@vger.kernel.org # 4.19.y
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-(cherry picked from commit fec9095bdef4e7c988adb603d0d4f92ee735d4a1)
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
- drivers/usb/dwc3/core.h   |  3 ---
- drivers/usb/dwc3/gadget.c | 40 +--------------------------------------
- 2 files changed, 1 insertion(+), 42 deletions(-)
+ drivers/usb/dwc3/gadget.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 24f0b108b7f6..131028501752 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -639,7 +639,6 @@ struct dwc3_event_buffer {
-  * @cancelled_list: list of cancelled requests for this endpoint
-  * @pending_list: list of pending requests for this endpoint
-  * @started_list: list of started requests on this endpoint
-- * @wait_end_transfer: wait_queue_head_t for waiting on End Transfer complete
-  * @lock: spinlock for endpoint request queue traversal
-  * @regs: pointer to first endpoint register
-  * @trb_pool: array of transaction buffers
-@@ -664,8 +663,6 @@ struct dwc3_ep {
- 	struct list_head	pending_list;
- 	struct list_head	started_list;
- 
--	wait_queue_head_t	wait_end_transfer;
--
- 	spinlock_t		lock;
- 	void __iomem		*regs;
- 
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 25cdce359736..879f652c5580 100644
+index 879f652c5580..843586f20572 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -640,8 +640,6 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
- 		reg |= DWC3_DALEPENA_EP(dep->number);
- 		dwc3_writel(dwc->regs, DWC3_DALEPENA, reg);
+@@ -177,8 +177,6 @@ static void dwc3_gadget_del_and_unmap_request(struct dwc3_ep *dep,
+ 	req->started = false;
+ 	list_del(&req->list);
+ 	req->remaining = 0;
+-	req->unaligned = false;
+-	req->zero = false;
  
--		init_waitqueue_head(&dep->wait_end_transfer);
--
- 		if (usb_endpoint_xfer_control(desc))
- 			goto out;
- 
-@@ -1406,15 +1404,11 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 		if (r == req) {
- 			/* wait until it is processed */
- 			dwc3_stop_active_transfer(dep, true);
--			wait_event_lock_irq(dep->wait_end_transfer,
--					!(dep->flags & DWC3_EP_END_TRANSFER_PENDING),
--					dwc->lock);
- 
- 			if (!r->trb)
- 				goto out0;
- 
- 			dwc3_gadget_move_cancelled_request(req);
--			dwc3_gadget_ep_cleanup_cancelled_requests(dep);
- 			goto out0;
- 		}
- 		dev_err(dwc->dev, "request %pK was not queued to %s\n",
-@@ -1915,8 +1909,6 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
- 	unsigned long		flags;
--	int			epnum;
--	u32			tmo_eps = 0;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 
-@@ -1925,36 +1917,6 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
- 
- 	__dwc3_gadget_stop(dwc);
- 
--	for (epnum = 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
--		struct dwc3_ep  *dep = dwc->eps[epnum];
--		int ret;
--
--		if (!dep)
--			continue;
--
--		if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING))
--			continue;
--
--		ret = wait_event_interruptible_lock_irq_timeout(dep->wait_end_transfer,
--			    !(dep->flags & DWC3_EP_END_TRANSFER_PENDING),
--			    dwc->lock, msecs_to_jiffies(5));
--
--		if (ret <= 0) {
--			/* Timed out or interrupted! There's nothing much
--			 * we can do so we just log here and print which
--			 * endpoints timed out at the end.
--			 */
--			tmo_eps |= 1 << epnum;
--			dep->flags &= DWC3_EP_END_TRANSFER_PENDING;
--		}
--	}
--
--	if (tmo_eps) {
--		dev_err(dwc->dev,
--			"end transfer timed out on endpoints 0x%x [bitmap]\n",
--			tmo_eps);
--	}
--
- out:
- 	dwc->gadget_driver	= NULL;
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-@@ -2451,7 +2413,7 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
- 
- 		if (cmd == DWC3_DEPCMD_ENDTRANSFER) {
- 			dep->flags &= ~DWC3_EP_END_TRANSFER_PENDING;
--			wake_up(&dep->wait_end_transfer);
-+			dwc3_gadget_ep_cleanup_cancelled_requests(dep);
- 		}
- 		break;
- 	case DWC3_DEPEVT_STREAMEVT:
+ 	if (req->request.status == -EINPROGRESS)
+ 		req->request.status = status;
 -- 
 2.17.1
 
