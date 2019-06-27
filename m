@@ -2,272 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F84758351
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 15:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8F858356
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 15:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbfF0NVX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jun 2019 09:21:23 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:10164 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726059AbfF0NVX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 09:21:23 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5RDIgUE006914;
-        Thu, 27 Jun 2019 08:20:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=PODMain02222019;
- bh=OFU7/UwkyWdnfIx2QpANicTMoetLyx9uuUhWpvP17kA=;
- b=quYjBmee/nA0TWw1hgANNWqzKXyzvFbsHb9UI8lmLC98TZliwtr7mjlHUihFCeqZ2+/r
- Z/BUTeS78PaRIhpekP54RLljkOANhjSNp9MnLvEp1rbd9rKmLrXNjGwsTzG5icS0vBqy
- W1/LN0SaGdkIsNTMuR8Xkf4jsDIam1MArPinXxKMemJ99rnyh17NRPn1QV8D7ORPUYX6
- iy2aMxt5b+o+SB5pGjX9MaejbvgNdNr4Bwc6r/EMqWOK8FCLA+9Vo2S3wM4RkqRGJiZI
- 5Pyvr9cQEde3I6wQ5c3YuSMzYX7Ijr5MVQ704TtU5SCCg/2AUYB1ea+Ypx9+0Yt0ja8y XQ== 
-Authentication-Results: ppops.net;
-        spf=none smtp.mailfrom=mkulkarni@opensource.cirrus.com
-Received: from mail2.cirrus.com (mail2.cirrus.com [141.131.128.20])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2t9hr2h2tc-1;
-        Thu, 27 Jun 2019 08:20:26 -0500
-Received: from EDIEX01.ad.cirrus.com (unknown [198.61.84.80])
-        by mail2.cirrus.com (Postfix) with ESMTP id 5CAA6605A6A7;
-        Thu, 27 Jun 2019 08:20:25 -0500 (CDT)
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 27 Jun
- 2019 14:20:24 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Thu, 27 Jun 2019 14:20:24 +0100
-Received: from mkulkarni-laptop.ad.cirrus.com (mkulkarni-laptop.ad.cirrus.com [198.90.199.28])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A4CE62DA;
-        Thu, 27 Jun 2019 14:20:24 +0100 (BST)
-Message-ID: <1561641624.14683.11.camel@opensource.cirrus.com>
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-From:   Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Oliver Neukum <oneukum@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        <patches@opensource.cirrus.com>,
-        USB list <linux-usb@vger.kernel.org>
-Date:   Thu, 27 Jun 2019 14:20:24 +0100
-In-Reply-To: <Pine.LNX.4.44L0.1906261043300.1550-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1906261043300.1550-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+        id S1726631AbfF0NVm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jun 2019 09:21:42 -0400
+Received: from mail-wr1-f45.google.com ([209.85.221.45]:46414 "EHLO
+        mail-wr1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726059AbfF0NVm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 09:21:42 -0400
+Received: by mail-wr1-f45.google.com with SMTP id n4so2525223wrw.13;
+        Thu, 27 Jun 2019 06:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=oA5GMdnGrxF6sTzzRcKYXpIVUL/ec5EzcBXgMsfLGhA=;
+        b=en28+nAK8m6rZ3ZTvk3LC0DPGjptazamkjHHl1rH5uXYhTNzshicqWF/MxlyQbCGJy
+         wLuU0DGTApf9VNNPze75OixM7kRciu2fpb0vhYmy2Qq0CBAOPb0e3EI+cV+xrurrGXHw
+         iJoKglsPEo/6pRu3GO3DRVtQSbU/1zlHfqC1MI86vbuySlVzM6qCnnxsbqiuHhGMHBZM
+         0Z2uQxO4DI9vj8fnrTnkqG8z40Zz78NmesPA9e8cPBS2YS/rdZSQVsg+YWOmHHh8Gd+w
+         uSRHJa9BgPGfPAadm4ccZc3zSKMSCriq+sWFz8/sPtW6YfLFC3KvkDEa3WNDPYknY2nq
+         60tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=oA5GMdnGrxF6sTzzRcKYXpIVUL/ec5EzcBXgMsfLGhA=;
+        b=jiy/F09TtQLKTIT/w5xqwB1KDoVEO+tWexwQiHQAQdKykyiiRYcihIza+a/+Fgq6U/
+         k/EVOEDcaEs9F+XQbo75Jl4a+0D0x1RuCkzbK1xua13q6sY8VgrDHjYImo87Vg6ZXxz8
+         SYnVnyw9YQ1wyvqgni7UbocthBItVa/DA0A3JtW+xkjFL0XQnNEWDhGXcQjVl5HOKfnx
+         i+MTkt0+Z7qTQyf/ZtdbxJu4m1CgWogcS+a1q9zRdQjKez2FdKuF+KSg6ON2eNveWcWs
+         HQNLC9UzZuZ9bS22esXcPX2BHMv2tDFC+kKSre8auufwUH09YYRnUMQyNEFwZZ/YwOpT
+         63cg==
+X-Gm-Message-State: APjAAAXl2jcVUKw00yd8B+K6IhckV+l6/Qc8zxuB86Htv7GzwuTKJM5k
+        hsA2GJxLU8vRz6wvzJzzgKsOgRzB
+X-Google-Smtp-Source: APXvYqz8Px8uNRXsni/Sj397utzkvUuRY9u81z04/43rRNRo8t9A9KODuzgnmA0SgLx39801L+DiTA==
+X-Received: by 2002:a5d:4090:: with SMTP id o16mr3463732wrp.292.1561641700045;
+        Thu, 27 Jun 2019 06:21:40 -0700 (PDT)
+Received: from Red ([2a01:cb1d:147:7200:2e56:dcff:fed2:c6d6])
+        by smtp.googlemail.com with ESMTPSA id y4sm3712762wrn.68.2019.06.27.06.21.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 27 Jun 2019 06:21:39 -0700 (PDT)
+Date:   Thu, 27 Jun 2019 15:21:37 +0200
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     jacmet@sunsite.dk, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [BUG] net: dm9600: false link status
+Message-ID: <20190627132137.GB29016@Red>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906270156
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2019-06-26 at 11:07 -0400, Alan Stern wrote:
-> On Wed, 26 Jun 2019, Mayuresh Kulkarni wrote:
-> 
-> > 
-> > On Tue, 2019-06-25 at 10:08 -0400, Alan Stern wrote:
-> > 
-> > > 
-> > > > 
-> > > > Based on discussion so far and my understanding, how about below
-> > > > approach -
-> > > > 
-> > > > 1. Have ALLOW_SUSPEND and WAIT_FOR_RESUME ioctls. As before,
-> > > > ALLOW_SUSPEND calls usb_autosuspend_device() while
-> > > > WAIT_FOR_RESUME
-> > > > waits
-> > > > for resume.
-> > > > 2. Have usbfs_notify_suspend() and usbfs_notify_resume() as per
-> > > > your
-> > > > previous patch (i.e.: system/resume callbacks at device level).
-> > > > 3. Extend usbdev_poll() to wait for udev->state ==
-> > > > USB_STATE_SUSPENDED
-> > > > when events == POLLPRI. Return POLLPRI when state =
-> > > > USB_STATE_SUSPENDED.
-> > > > 4. As before, any ioctl != (ALLOW_SUSPEND or WAIT_FOR_RESUME)
-> > > > calls usb_autoresume_device().
-> > > 3 sounds reasonable at first, but I'm not sure it would work.  
-> > > Consider what would happen if the device is suspended very briefly
-> > > and
-> > > then wakes up.  The usbdev_poll() call might not return, because
-> > > by
-> > > the
-> > > time it checks udev->state, the state has already changed back to
-> > > USB_STATE_CONFIGURED.
-> > > 
-> > I see what you mean here, could be problematic.
-> > 
-> > > 
-> > > In any case, we shouldn't do 4.  It would prevent the device from
-> > > ever
-> > > going into suspend, because the program would want to continue
-> > > making
-> > > usbfs ioctl calls while waiting for the suspend to occur.
-> > > 
-> > In poll approach, due to the contraint I mentioned, it is not
-> > expected
-> > from user-space to interact with device *after* it calls
-> > ALLOW_SUSPEND
-> > ioctl. This is because, it has determined that device is idle from
-> > its
-> > point of view.
-> What if the user interacts with the device at this point?  Wouldn't 
-> the program want to know about it?
-> 
-> Even if your program doesn't care about user interaction with an idle
-> device, there undoubtedly will be other programs that _do_
-> care.  This 
-> mechanism we are designing needs to work with all programs.
-> 
+Hello
 
-OK.
+I own an USB dongle which is a "Davicom DM96xx USB 10/100 Ethernet".
+According to the CHIP_ID, it is a DM9620.
 
-> > 
-> > But after a while, there could be a situation where the user-space
-> > wants
-> > to send some message to device (due to end user interaction) then,
-> > having (4) would be handy to cancel the undone suspend or cause
-> > host-
-> > wake.
-> That's what the FORBID_SUSPEND ioctl does.  We don't need (4) for
-> this.
-> 
+Since I needed for bringing network to uboot for a board, I have started to create its uboot's driver.
+My uboot driver is based on the dm9600 Linux driver.
 
-Right, OK.
+The dongle was working but very very slowy (24Kib/s).
+After some debug i found that the main problem was that it always link to 10Mbit/s Half-duplex. (according to the MAC registers)
 
-> > 
-> > > 
-> > > > 
-> > > > 2. Is it safe to wait for udev->state to be of a particular
-> > > > value?
-> > > No, not really, because the state can change.
-> > > m[c]++;
-> > If you remember, I had also suggested to use root-hub suspend in
-> > generic_suspend() to call usbfs_notify_suspend/_resume APIs. It
-> > might be
-> > possible to use that in usbdev_poll() and send POLLPRI when root-hub
-> > suspends.
-> I don't see how that would help.  It would just make things more 
-> confusing.  Forget about root-hub events for now.
-> 
+For checking the status of the dongle I have plugged it on a Linux box which give me:
+dm9601 6-2:1.0 enp0s29f0u2: link up, 100Mbps, full-duplex, lpa 0xFFFF
 
-Yes sure. Thanks.
+But in fact the Linux driver is tricked.
 
-> > 
-> > > 
-> > > > 
-> > > > If this approach could work, I can spend time on this one as
-> > > > well.
-> > > What advantage do you think your proposal has over my proposal?
-> > > 
-> > Not necessarily advantage(s), but few things that I could think of
-> > are -
-> > 
-> > 1. In poll based approach, user-space notion of device's state is in
-> > sync with actual device state.
-> NO!  That simply is not true.  You don't seem to be able to grasp this
-> point.
-> 
-> Consider this: Suppose the computer is busy running many other 
-> programs.  Your program gets swapped out because a bunch of other 
-> higher-priority tasks need to run.  By the time your program gets a 
-> chance to run again, the device could have gone through several 
-> suspend/resume transitions.  There's no way the program can keep
-> track 
-> of all that.
-> 
+I have added debug of MDIO write/read and got:
+[157550.926974] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_write() phy_id=0x00, loc=0x00, val=0x8000
+[157550.931962] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_write() phy_id=0x00, loc=0x04, val=0x05e1
+[157550.951967] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_read() phy_id=0x00, loc=0x00, returns=0xffff
+[157550.951971] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_write() phy_id=0x00, loc=0x00, val=0xffff
+[157567.781989] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x01, returns=0xffff
+[157567.796985] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x01, returns=0xffff
+[157567.811989] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x04, returns=0xffff
+[157567.826974] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x05, returns=0xffff
+[157567.841972] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x00, returns=0xffff
+[157567.856974] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x01, returns=0xffff
+[157567.871990] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x04, returns=0xffff
+[157567.886974] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x05, returns=0xffff
+[157567.906010] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x01, returns=0xffff
+[157567.920986] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x01, returns=0xffff
+[157567.935975] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x04, returns=0xffff
+[157567.950974] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x05, returns=0xffff
+[157567.965974] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x00, returns=0xffff
+[157567.980970] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x01, returns=0xffff
+[157567.995973] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x04, returns=0xffff
+[157568.010971] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x05, returns=0xffff
+[157568.025973] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x01, returns=0xffff
+[157568.040969] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x01, returns=0xffff
+[157568.055971] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x04, returns=0xffff
+[157568.070970] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x05, returns=0xffff
+[157568.085971] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x00, returns=0xffff
+[157568.100971] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x01, returns=0xffff
+[157568.115973] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x04, returns=0xffff
+[157568.130970] dm9601 6-2:1.0 enp0s29f0u2: dm9601_mdio_read() phy_id=0x00, loc=0x05, returns=0xffff
 
-Yeah I see what you mean.
+So the problem is the same than in my uboot driver, the PHY always return 0xFFFF.
 
-> If you want a more likely example, consider this: Your program calls 
-> ALLOW_SUSPEND and then calls poll().  The device suspends and the 
-> poll() returns.  But then, before your program can do anything else, 
-> the device resumes.  Now the device is active but your program thinks 
-> it is suspended -- the program is out of sync.
-> 
-> Face it: It is _impossible_ for a program to truly know the device's 
-> current state at all times (unless the device is not allowed to
-> suspend 
-> at all).
-> 
+I have tried lots of hack but fail to bring the PHY up.
 
-Yep, thanks.
+So it exsists two problem:
+- Linux saying 100Mbps, full-duplex even if it is false.
+- the PHY which seems in bad state.
 
-> > 
-> > This is partially true with the 3 ioctl
-> > approach suggested by you (partially because resume might not be
-> > current
-> > device state when wait-for-resume returns).
-> Agreed.  But so what?  What abilities does your program lose as a 
-> result of the fact that the device might be suspended when 
-> WAIT_FOR_RESUME returns?
-> 
-> > 
-> > 2. In 3 ioctl approach, user-space can still communicate with device
-> > after calling ALLOW_SUSPEND. With poll based approach, we put a
-> > constraint on user-space that, call ALLOW_SUSPEND only when you
-> > determine you are not going to interact with device.
-> That sounds like a disadvantage for your poll-based approach: It 
-> constrains the behavior of userspace programs.
-> 
-> > 
-> > I know for (2) above, you have commented before that -
-> > A. It is desirable to be able to communicate with the device till it
-> > is
-> > actually suspended.
-> > B. The possibility of device not going into suspend for long time,
-> > so
-> > user-space will not be able to proceed.
-> > 
-> > The counter comments to them are:
-> > For (A), *usually*, the driver by some means determine device is
-> > idle
-> > and then schedules a suspend. After that, it is not expecting to
-> > communicate with the device till resume happens. If it has to
-> > communicate, it has to call resume first and then proceed.
-> _Some_ programs will behave that way but other programs will not;
-> they will want to continue communicating with the device right up
-> until
-> the time it suspends.  The kernel has to work with _all_ programs.
-> 
+For further information, the PHY is the internal one.
+On the dongle, only the davicom chip is present (along with some resistors/capacitors and a quartz), so I think of the absence of an external PHY.
 
-Right, OK.
-
-> > 
-> > For (B), that is why we need ability to cancel current undone
-> > suspend
-> > operation, to allow the user-space to initiate the communication.
-> And that is what FORBID_SUSPEND does.  You don't need to give up on
-> (A) 
-> in order to handle (B).
-> 
-> > 
-> > Hope some of these points makes sense.
-> None of them seem convincing, at least, not to me.
-> 
-
-Thanks for all the comments and clarifications, Alan.
-
-I will check the 3-ioctl approach on the platform I have using the test
-program I had used to send my original patch.
-
-Just for my understanding, the below sequence should also work -
-1. Call ALLOW_SUSPEND
-2. Previously queued URB fails ==> device no longer active
-3. Call WAIT_FOR_RESUME
-4. After a while (say > 10 sec), assume no remote-wake by device. But
-user-space wants to communicate with the device (due to some end-user
-activity).
-In this case, the user space needs to call FORBID_SUSPEND ioctl. When
-that returns, it is safe to assume device is active.
-5. Once done, go-to (1).
-
-Could you please cross-confirm? Thanks,
-
-> Alan Stern
-> 
+Regards
