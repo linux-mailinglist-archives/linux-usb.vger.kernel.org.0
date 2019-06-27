@@ -2,96 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C616588D6
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 19:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227CB5893C
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 19:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726813AbfF0Rl2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jun 2019 13:41:28 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:45999 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726605AbfF0Rl2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 13:41:28 -0400
-Received: by mail-pg1-f196.google.com with SMTP id z19so1330117pgl.12;
-        Thu, 27 Jun 2019 10:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=bbsWcZhbi7tBjumCYh7c25rbCEMw05IRcZEp5w+Bqv8=;
-        b=nkctCI919D3H2HAHj7Li5sMf4QI2MjWWSCS+6KMuqdSXKpN8gwJhb3MmBGllFO1ceN
-         Bgw/6wPjGv2dHNBC9Hzh1RkALT70lFkQ94x5LtmDlIUwq6gqXBN91TjeX6jsng8/DbKt
-         PAS7VMKBXomBA4aqMbdWMRguwCGlHE30zMXSP9xC1trQ0J8llH57/F196n/ZqfXLNYZF
-         NVb9pB9SupqBNIbXXB7nKOgnJfMt/4mfcRDeXx2FdK5/G1B53IlmpoiZ48vqh6/N76yF
-         ywjuJGK+WFtguWaiME4Ae24MYIQFzWKAI22S8sRUWgQ2I/UKnghH7ocQVng2YueT1+25
-         oxkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=bbsWcZhbi7tBjumCYh7c25rbCEMw05IRcZEp5w+Bqv8=;
-        b=BQMoB0syiTio/j7s5dB+4YaFTVkhm3QcTADjvXeTnmrCyfD+OVC4ganvq4oMt9bthB
-         dCSWYlhGhXyCs14bRq+4zAKpXPOzq48KxbT1of3eSojIprNqLUWgZ5eh+1NaBzFYfD05
-         Vnije/HOiaxXDIgnkTyC3Vfz+2/SAsAqEzyisSbY1uILvuNb7hMZIkqbQBbG5sIaZApC
-         F/+Z+pAdH/Uinc3kiF0ryNChX8gxbjnZBIjRnDaQocuqPP4JkPS9SxODssWhAs18XOcN
-         44a/eHr1oTDlbsY5K4460kQXWi6CvLo5/wb4vqlnZgkU2f2BK+lp7XpRA338r20WxlF3
-         BDNA==
-X-Gm-Message-State: APjAAAUiYrLoHIX3JRZFnm89xuFKprrwWcyMNy4S5YfXZ70Xw+qs9dr9
-        fUbozWw7mFNf4wSMXAZVhnU=
-X-Google-Smtp-Source: APXvYqw4aAJHoEfPjueXB2Onvl7IQhmEAtujSfPEQs4jH3va43Islqk084XE58m7Ascoj5sz1OhX6Q==
-X-Received: by 2002:a63:c60b:: with SMTP id w11mr4735667pgg.356.1561657287612;
-        Thu, 27 Jun 2019 10:41:27 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id s7sm5350176pjn.28.2019.06.27.10.41.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 10:41:27 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Fuqian Huang <huangfq.daxian@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 46/87] usb: host: remove memset after dma_alloc_coherent in xhci
-Date:   Fri, 28 Jun 2019 01:41:20 +0800
-Message-Id: <20190627174121.4399-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        id S1727350AbfF0RrW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jun 2019 13:47:22 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:53200 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727190AbfF0RrV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 13:47:21 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 3FE25602F4; Thu, 27 Jun 2019 17:47:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561657640;
+        bh=93h5ucWKnjebqgnyo9qwcQbfcwMVTlGOyy79/6hwPmA=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=FW7o1oL+XivN3qkf1HZyb7Jmo+WYURWvmEJeALM2KsSmGrb9PxT2m1u9mAKttP7AX
+         r1sWvfwp1E9BxAhXa76tqTrs5jwgth3BWT3cLWqj/FqMLRz1Lga+W1UoxGkE13WJnq
+         Uv3/+5YiXINSmQIbHxGjezSpQAlTXT0mobmW3LPQ=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,MISSING_DATE,MISSING_MID,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4F90F6016D;
+        Thu, 27 Jun 2019 17:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561657639;
+        bh=93h5ucWKnjebqgnyo9qwcQbfcwMVTlGOyy79/6hwPmA=;
+        h=Subject:From:In-Reply-To:References:To:Cc:From;
+        b=WwkFBCxtt2qhe/d8479dEVmxTsGKBF2XGy+7GoM/LmAeI2pQ1jCJiRySMH019FNzu
+         NWdzvs3dhH7nKmYkSg1iSECCM56V0/OxJAOasta5BE+sC/RBKnX2+zT1o0xMyPHHNA
+         QVgUHeKqIv4+N4AjIaY5qWCkgr/W+wfbPvlgHQzA=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4F90F6016D
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2] carl9170: fix misuse of device driver API
+From:   Kalle Valo <kvalo@codeaurora.org>
+In-Reply-To: <20190608144947.744-3-chunkeey@gmail.com>
+References: <20190608144947.744-3-chunkeey@gmail.com>
+To:     Christian Lamparter <chunkeey@gmail.com>
+Cc:     linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>
+User-Agent: pwcli/0.0.0-git (https://github.com/kvalo/pwcli/) Python/2.7.12
+Message-Id: <20190627174720.3FE25602F4@smtp.codeaurora.org>
+Date:   Thu, 27 Jun 2019 17:47:20 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In commit af7ddd8a627c
-("Merge tag 'dma-mapping-4.21' of git://git.infradead.org/users/hch/dma-mapping"),
-dma_alloc_coherent has already zeroed the memory.
-So memset is not needed.
+Christian Lamparter <chunkeey@gmail.com> wrote:
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
- drivers/usb/host/xhci-dbgcap.c | 1 -
- drivers/usb/host/xhci-mem.c    | 1 -
- 2 files changed, 2 deletions(-)
+> This patch follows Alan Stern's recent patch:
+> "p54: Fix race between disconnect and firmware loading"
+> 
+> that overhauled carl9170 buggy firmware loading and driver
+> unbinding procedures.
+> 
+> Since the carl9170 code was adapted from p54 it uses the
+> same functions and is likely to have the same problem, but
+> it's just that the syzbot hasn't reproduce them (yet).
+> 
+> a summary from the changes (copied from the p54 patch):
+>  * Call usb_driver_release_interface() rather than
+>    device_release_driver().
+> 
+>  * Lock udev (the interface's parent) before unbinding the
+>    driver instead of locking udev->parent.
+> 
+>  * During the firmware loading process, take a reference
+>    to the USB interface instead of the USB device.
+> 
+>  * Don't take an unnecessary reference to the device during
+>    probe (and then don't drop it during disconnect).
+> 
+> and
+> 
+>  * Make sure to prevent use-after-free bugs by explicitly
+>    setting the driver context to NULL after signaling the
+>    completion.
+> 
+> Cc: <stable@vger.kernel.org>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
 
-diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
-index 52e32644a4b2..93e2cca5262d 100644
---- a/drivers/usb/host/xhci-dbgcap.c
-+++ b/drivers/usb/host/xhci-dbgcap.c
-@@ -22,7 +22,6 @@ dbc_dma_alloc_coherent(struct xhci_hcd *xhci, size_t size,
- 
- 	vaddr = dma_alloc_coherent(xhci_to_hcd(xhci)->self.sysdev,
- 				   size, dma_handle, flags);
--	memset(vaddr, 0, size);
- 	return vaddr;
- }
- 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index cf5e17962179..e16eda6e2b8b 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2399,7 +2399,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 			flags);
- 	if (!xhci->dcbaa)
- 		goto fail;
--	memset(xhci->dcbaa, 0, sizeof *(xhci->dcbaa));
- 	xhci->dcbaa->dma = dma;
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"// Device context base array address = 0x%llx (DMA), %p (virt)",
+Patch applied to ath-next branch of ath.git, thanks.
+
+feb09b293327 carl9170: fix misuse of device driver API
+
 -- 
-2.11.0
+https://patchwork.kernel.org/patch/10983223/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
