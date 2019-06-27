@@ -2,120 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D33E579EA
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 05:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4811257C0C
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 08:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbfF0DWd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jun 2019 23:22:33 -0400
-Received: from mail-eopbgr20080.outbound.protection.outlook.com ([40.107.2.80]:18919
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726663AbfF0DWc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Jun 2019 23:22:32 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=testarcselector01; d=microsoft.com; cv=none;
- b=rs7/FJp+TBuxazlr2h3qhZx7IoOMzZ7ttlGG96WX6eqPp7slkNfq/wwoGY19NjoYCac4Ew0ukUpD6MqoeUjjenHTdpzbRMQKX8WxgzztEXS1Z9eKDAXgk4vu3AZq8oeFk+DAj3P/ybqTXiZIDOY7vCVw5V5xCTxH/SM+hjLct3c=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=testarcselector01;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TKCaCzqk8iPMb0NaVEzmbNvV2P8j5hv99P06lISxRF8=;
- b=XbQsPUSXkkH5szlN3BvmP/53n3liDhea2jvtdciOj4p3GmSCJCS/yaGMcGzh8XeLPyAGDKCneB0tsIAqFj/sDwSC+XkPqCqXNirmaAsIgiwVPeyO6exAv8nt5KxyWF5GkWylNCSUrrtBygaxAaxMJ6h7c/4uJEXE3tL34QelRPk=
-ARC-Authentication-Results: i=1; test.office365.com
- 1;spf=none;dmarc=none;dkim=none;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TKCaCzqk8iPMb0NaVEzmbNvV2P8j5hv99P06lISxRF8=;
- b=KaVYPVGqIOD0AIQY7lzLagITF5HslABdTXRrAO9s9zNkHBfI7obm5Qg+2hCwHVj68R/p7JED5QKBw929V/KfNOYtwYRvKX6kTfLWxVIKLUxK52fOZ4zGr88DjLYgJC0Dr27V1plBsZFeLJg2Nh/KTvgRCDRz2XxQ4P0Sdt8ucdY=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB6237.eurprd04.prod.outlook.com (20.179.24.74) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.17; Thu, 27 Jun 2019 03:22:26 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c1bf:7842:6630:b87a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c1bf:7842:6630:b87a%7]) with mapi id 15.20.2008.014; Thu, 27 Jun 2019
- 03:22:26 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Krzysztof Michonski <michonskikrzysztof@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "afenkart@gmail.com" <afenkart@gmail.com>
-Subject: RE: [PATCH] imx: usb: get pinctrl if it's not yet initialized
-Thread-Topic: [PATCH] imx: usb: get pinctrl if it's not yet initialized
-Thread-Index: AQHVK/i90+WXqSm7OU2u5W2oAqYjPaau1pkA
-Date:   Thu, 27 Jun 2019 03:22:26 +0000
-Message-ID: <VI1PR04MB53274E7E20C099F0F84B18198BFD0@VI1PR04MB5327.eurprd04.prod.outlook.com>
-References: <20190626082512.7637-1-michonskikrzysztof@gmail.com>
-In-Reply-To: <20190626082512.7637-1-michonskikrzysztof@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ca7090bc-5d98-4848-9050-08d6faaeadba
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB6237;
-x-ms-traffictypediagnostic: VI1PR04MB6237:
-x-microsoft-antispam-prvs: <VI1PR04MB6237CBCB19EB5D9637F52FCD8BFD0@VI1PR04MB6237.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2887;
-x-forefront-prvs: 008184426E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(366004)(136003)(376002)(39860400002)(199004)(189003)(66446008)(55016002)(71200400001)(81166006)(73956011)(81156014)(14454004)(52536014)(5660300002)(66066001)(6436002)(4744005)(71190400001)(8936002)(478600001)(9686003)(14444005)(256004)(66556008)(64756008)(66476007)(26005)(74316002)(53936002)(6246003)(8676002)(305945005)(7736002)(25786009)(99286004)(54906003)(76176011)(7696005)(476003)(44832011)(6116002)(76116006)(2906002)(186003)(486006)(66946007)(4326008)(11346002)(86362001)(446003)(229853002)(110136005)(3846002)(102836004)(68736007)(2501003)(33656002)(6506007)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6237;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: aUEjglVWCvjl4F1uf4GhK9ceJV8s7MLu9CmnlJYWrw8mss22L8gQxVIBoX9uTH5IgxBWjoUKenw+8HpQvhld4n9R2XNWSGIfi6EqqzNOxGbFeDCjEX27sYlXW41hGJBsVf5Fz0GG5kgDOCncyAJfwplkmvcs59TpBqsTOgaH3ItT5fTdXkjJq+6YiADIePWZqb7ux42goYYY1gNulp5DBOk02YwuTin0ColPU0Uh3a9DAAynz0WsAMKnTKOOgk51VRzo4KUgFNaJUqi23XMJIIsKlf1X9OuWrHxFfZ+Cy+ShXoTwkJ4GyveZKl1mbnN+OhenjYw0L2hvIGpM+pmJkOAxYVWiSjxtjX/F9vqmFf/s2vIb9vZ/lQACIrnwAW/dn15nc8F+Qipc5tCLwS5lLDRipiIvvBylEKVr4TmEbfY=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726526AbfF0GVv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jun 2019 02:21:51 -0400
+Received: from mga14.intel.com ([192.55.52.115]:48577 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725385AbfF0GVv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Jun 2019 02:21:51 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Jun 2019 23:21:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,422,1557212400"; 
+   d="scan'208";a="361043963"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Jun 2019 23:21:50 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Kai Ruhnau <kai.ruhnau@target-sg.com>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Peter Chen <peter.chen@nxp.com>
+Subject: RE: No carrier lost information with gadget RNDIS/ECM
+In-Reply-To: <AM0PR02MB384108B692229DF41816A363C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
+References: <AM0PR02MB3841F110F7B6931A087DF566C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com> <87o92kk0ih.fsf@linux.intel.com> <AM0PR02MB384108B692229DF41816A363C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
+Date:   Thu, 27 Jun 2019 09:21:49 +0300
+Message-ID: <871rzffszm.fsf@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca7090bc-5d98-4848-9050-08d6faaeadba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2019 03:22:26.4812
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: peter.chen@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6237
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> In case usb phy mode is other than USBPHY_INTERFACE_MODE_HSIC the pinctrl
-> for device is not acquired. It is however used later regardless of the mo=
-de, hence
-> leads to requesting access to uninitialized data.
->=20
-> Signed-off-by: Krzysztof Michonski <michonskikrzysztof@gmail.com>
-> ---
->  drivers/usb/chipidea/ci_hdrc_imx.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci=
-_hdrc_imx.c
-> index a4b482c3dc65..2f02b35c40b6 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
-> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-> @@ -428,6 +428,9 @@ static int ci_hdrc_imx_probe(struct platform_device *=
-pdev)
->  		pm_runtime_enable(dev);
->  	}
->=20
-> +	if (!data->pinctrl)
-> +		data->pinctrl =3D devm_pinctrl_get(dev);
-> +
->  	if (!IS_ERR(data->pinctrl)) {
->  		struct pinctrl_state *state;
->=20
 
-Sorry, what kernel version you are using? The recent kernel is different wi=
-th the patch you posted.
+Hi,
 
-Peter
+Kai Ruhnau <kai.ruhnau@target-sg.com> writes:
+>>> I have activated CONFIG_USB_GADGET_DEBUG_FILES, and the contents of
+>>> /proc/driver/rndis-000 don't change when I pull the cable:
+>>>
+>>> Config Nr. 0
+>>> used      : y
+>>> state     : RNDIS_DATA_INITIALIZED
+>>> medium    : 0x00000000
+>>> speed     : 425984000
+>>> cable     : connected
+>>> vendor ID : 0x00000000
+>>> vendor    : (null)
+>>>
+>>> Only when changing the host to a Mac, it's different:
+>>> Config Nr. 0
+>>> used      : y
+>>> state     : RNDIS_UNINITIALIZED
+>>> medium    : 0x00000000
+>>> speed     : 425984000
+>>> cable     : connected
+>>> vendor ID : 0x00000000
+>>> vendor    : (null)
+>>>
+>>> Thanks for any help.
+>>
+>> Which peripheral controller is this board using? Is it chipidea? dwc2?
+>> dwc3? High Speed or Super Speed?
+>
+> According to the device tree it's 'fsl,imx6sx-usb' driven by chipidea/ci_hdrc_imx.c
+> When connecting to Windows, the dmesg shows:
+>  configfs-gadget gadget: high-speed config #2: c
 
+Okay, adding Peter (chipidea maintainer) to the loop here. There are a
+few changes on UDC side of chipidea between 4.9 and 5.1:
+
+$ git --no-pager log --no-merges --oneline v4.9..v5.1 -- drivers/usb/chipidea/udc.c
+16caf1fa37db usb: chipidea: Add dynamic pinctrl selection
+51b751f112dc USB: chipidea: Remove redundant license text
+5fd54ace4721 USB: add SPDX identifiers to all remaining files in drivers/usb/
+fc5b920c3b9b usb: chipidea: do charger detection in vbus session
+581821ae7f7e usb: chipidea: udc: Support SKB alignment quirk
+734c58aefcc4 usb: chipidea: udc: compress return logic into line
+aa1f058d7d92 usb: chipidea: udc: fix NULL pointer dereference if udc_start failed
+a932a8041ff9 usb: chipidea: core: add sysfs group
+aeb78cda5100 usb: chipidea: use bus->sysdev for DMA configuration
+4f4555cfe704 usb: chipidea: udc: update gadget state after bus resume
+afff6067b305 usb: chipidea: Drop lock across event_notify during gadget stop
+732a4af85e87 usb: chipidea: Remove locking in ci_udc_start()
+34445fb4333f usb: chipidea: Properly mark little endian descriptors
+63b9e901e461 usb: chipidea: udc: remove unnecessary & operation
+a98e25e71d11 usb: chipidea: udc: make use of new usb_endpoint_maxp_mult()
+
+Peter, have you seen the problem described before?
+
+-- 
+balbi
