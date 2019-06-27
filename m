@@ -2,102 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EE85774A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 02:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED7B578E8
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 03:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729422AbfF0Ak7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jun 2019 20:40:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44832 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729416AbfF0Ak6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:40:58 -0400
-Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8D00F21852;
-        Thu, 27 Jun 2019 00:40:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561596058;
-        bh=yQj7GRZcrGmqj0rAa2h+OxBqbAmyi4APGjFARM4z0DY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yqzCKYuPlOzVcapu50M8NF0vJpRYHlkfY018WgSoL3Zes3AvKfvMGJ60DJNeZDebF
-         bpn66negVl9Hz8UBLLTEoCs4jDJ+kmrg2DGggZWQWfKy0b3A/yYbTzEJwhXmdB0QIW
-         z+JYoMlVJ/MPwcDSQ17pqJn2kyZzZakyr/jmm3qY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Reinhard Speyerer <rspmn@arcor.de>,
-        Daniele Palmas <dnlplm@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 27/35] qmi_wwan: extend permitted QMAP mux_id value range
-Date:   Wed, 26 Jun 2019 20:39:15 -0400
-Message-Id: <20190627003925.21330-27-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190627003925.21330-1-sashal@kernel.org>
-References: <20190627003925.21330-1-sashal@kernel.org>
+        id S1726829AbfF0BPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jun 2019 21:15:43 -0400
+Received: from mail-eopbgr1410099.outbound.protection.outlook.com ([40.107.141.99]:51280
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726373AbfF0BPn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Jun 2019 21:15:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P2avVQiR3lQuclFmlL/N/rnJt6G4lneF2E4ydIRrq24=;
+ b=FZyxg24LHqxTFFpAFkdk+O6ve/ZxgYoGErDeqjnaqWnFtun4Vh7ybs7dr9qToYZ5zz5NscLNSluj6Q0H3EDbE+qgHO12thli68c8tBQ2peuabY8v6wa91mTbNo4AVRRyFCJRulJ9p4tcuoIutk0pC0BnI7/qvSyQu8TbbEIP4aE=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.174.85) by
+ TYAPR01MB3887.jpnprd01.prod.outlook.com (20.178.138.214) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.16; Thu, 27 Jun 2019 01:15:40 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::602d:62cc:de62:eaba]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::602d:62cc:de62:eaba%6]) with mapi id 15.20.2008.014; Thu, 27 Jun 2019
+ 01:15:40 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Colin King <colin.king@canonical.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: gadget: udc: renesas_usb3: remove redundant
+ assignment to ret
+Thread-Topic: [PATCH] usb: gadget: udc: renesas_usb3: remove redundant
+ assignment to ret
+Thread-Index: AQHVLD0mdKJKZlZQqUCpEjW4XqxaaqausuBA
+Date:   Thu, 27 Jun 2019 01:15:39 +0000
+Message-ID: <TYAPR01MB4544D0BC2802B2F914153190D8FD0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <20190626163517.18530-1-colin.king@canonical.com>
+In-Reply-To: <20190626163517.18530-1-colin.king@canonical.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b87bb337-658e-4f29-1bfa-08d6fa9cf803
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TYAPR01MB3887;
+x-ms-traffictypediagnostic: TYAPR01MB3887:
+x-microsoft-antispam-prvs: <TYAPR01MB38871BF6619BEB0713B0DED0D8FD0@TYAPR01MB3887.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3968;
+x-forefront-prvs: 008184426E
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39850400004)(366004)(396003)(376002)(136003)(346002)(189003)(199004)(68736007)(54906003)(8676002)(478600001)(71190400001)(256004)(11346002)(316002)(74316002)(2501003)(4744005)(99286004)(53936002)(7696005)(66476007)(7736002)(52536014)(9686003)(81166006)(81156014)(8936002)(86362001)(14454004)(73956011)(229853002)(66446008)(76116006)(110136005)(6436002)(305945005)(55016002)(64756008)(3846002)(486006)(4326008)(2906002)(71200400001)(66556008)(6116002)(33656002)(446003)(6246003)(66066001)(5660300002)(25786009)(66946007)(76176011)(26005)(186003)(102836004)(476003)(6506007);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB3887;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 6nWM5R7XYEQz1XCEqJllsluIarH7jrF/kmYAaLAlvegB7y5HHpT+BVgwTZJjWrZa78i6WLlH1LPRCGw6+gMD/gYMoQyRhARqof7vWhaeEoTD0ZsHI/l6U69av7qbtGWgzlelSeIamDTDqWNgoxXgegKL8BEfgplq4Fk2gA5kbbzQtpY+npjU8No0ppOEo1BE38wKR7pI6vo6+0mQq/DOAfp/pJbhpt0byWhaWCQPb7owBP+VfCeaty+kGBpvcCj9u/M24lgGszDxHeWDbEgTKmPfFdqZU3cHMSUoaUItEm0PtVVWkfyjO+YCvisW+o0CQJWcDT8XbSXowpJS7rZC2RyDLhQ41Oi5IDAjIRt8bIKacgvfjt6Jpi45DsoHmKfOrM5w+g1tZNBjZ3Njl2iWMn8w26ELHa6ZdZA9A+u0GSo=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b87bb337-658e-4f29-1bfa-08d6fa9cf803
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2019 01:15:39.9830
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3887
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Reinhard Speyerer <rspmn@arcor.de>
-
-[ Upstream commit 36815b416fa48766ac5a98e4b2dc3ebc5887222e ]
-
-Permit mux_id values up to 254 to be used in qmimux_register_device()
-for compatibility with ip(8) and the rmnet driver.
-
-Fixes: c6adf77953bc ("net: usb: qmi_wwan: add qmap mux protocol support")
-Cc: Daniele Palmas <dnlplm@gmail.com>
-Signed-off-by: Reinhard Speyerer <rspmn@arcor.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- Documentation/ABI/testing/sysfs-class-net-qmi | 4 ++--
- drivers/net/usb/qmi_wwan.c                    | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-net-qmi b/Documentation/ABI/testing/sysfs-class-net-qmi
-index 7122d6264c49..c310db4ccbc2 100644
---- a/Documentation/ABI/testing/sysfs-class-net-qmi
-+++ b/Documentation/ABI/testing/sysfs-class-net-qmi
-@@ -29,7 +29,7 @@ Contact:	Bjørn Mork <bjorn@mork.no>
- Description:
- 		Unsigned integer.
- 
--		Write a number ranging from 1 to 127 to add a qmap mux
-+		Write a number ranging from 1 to 254 to add a qmap mux
- 		based network device, supported by recent Qualcomm based
- 		modems.
- 
-@@ -46,5 +46,5 @@ Contact:	Bjørn Mork <bjorn@mork.no>
- Description:
- 		Unsigned integer.
- 
--		Write a number ranging from 1 to 127 to delete a previously
-+		Write a number ranging from 1 to 254 to delete a previously
- 		created qmap mux based network device.
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index a77223887022..65b1ea4f5baf 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -363,8 +363,8 @@ static ssize_t add_mux_store(struct device *d,  struct device_attribute *attr, c
- 	if (kstrtou8(buf, 0, &mux_id))
- 		return -EINVAL;
- 
--	/* mux_id [1 - 0x7f] range empirically found */
--	if (mux_id < 1 || mux_id > 0x7f)
-+	/* mux_id [1 - 254] for compatibility with ip(8) and the rmnet driver */
-+	if (mux_id < 1 || mux_id > 254)
- 		return -EINVAL;
- 
- 	if (!rtnl_trylock())
--- 
-2.20.1
-
+SGkgQ29saW4sDQoNCj4gRnJvbTogQ29saW4gS2luZywgU2VudDogVGh1cnNkYXksIEp1bmUgMjcs
+IDIwMTkgMTozNSBBTQ0KPiANCj4gRnJvbTogQ29saW4gSWFuIEtpbmcgPGNvbGluLmtpbmdAY2Fu
+b25pY2FsLmNvbT4NCj4gDQo+IFZhcmlhYmxlIHJldCBpcyBiZWluZyBpbml0aWFsaXplZCB3aXRo
+IGEgdmFsdWUgdGhhdCBpcyBuZXZlciByZWFkIGFuZA0KPiByZXQgaXMgYmVpbmcgcmUtYXNzaWdu
+ZWQgaW1tZWRpYXRlbHkgYWZ0ZXIgdGhlIGluaXRpYWxpemF0aW9uIGluIGJvdGgNCj4gcGF0aHMg
+b2YgYW4gaWYgc3RhdGVtZW50LiBUaGlzIGlzIHJlZHVuZGFudCBhbmQgY2FuIGJlIHJlbW92ZWQu
+DQo+IA0KPiBBZGRyZXNzZXMtQ292ZXJpdHk6ICgiVW51c2VkIHZhbHVlIikNCj4gU2lnbmVkLW9m
+Zi1ieTogQ29saW4gSWFuIEtpbmcgPGNvbGluLmtpbmdAY2Fub25pY2FsLmNvbT4NCg0KVGhhbmsg
+eW91IGZvciB0aGUgcGF0Y2ghDQoNClJldmlld2VkLWJ5OiBZb3NoaWhpcm8gU2hpbW9kYSA8eW9z
+aGloaXJvLnNoaW1vZGEudWhAcmVuZXNhcy5jb20+DQoNCkJlc3QgcmVnYXJkcywNCllvc2hpaGly
+byBTaGltb2RhDQoNCg==
