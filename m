@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D51A95766E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 02:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B2C576AA
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 02:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728954AbfF0Aiu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jun 2019 20:38:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43076 "EHLO mail.kernel.org"
+        id S1729409AbfF0Akz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jun 2019 20:40:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44720 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728942AbfF0Ait (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:38:49 -0400
+        id S1729400AbfF0Akx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Jun 2019 20:40:53 -0400
 Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B210C21871;
-        Thu, 27 Jun 2019 00:38:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA4532187F;
+        Thu, 27 Jun 2019 00:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561595928;
-        bh=E8TsNWqqX7qcM4nyVjmHw2lrxq2b78X7JmRXlJJM+Zc=;
+        s=default; t=1561596052;
+        bh=j1GUYaiCZcexAtzUmVTur61ILYbN9uxfHuWzcidjug4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NQ0XV6u2e1vv5pNQptmhxZEOQw5GMADwc/DqX6cuPtsXCyb6m0WwLCPJwbrXxKt+S
-         v3paOg8oUzeJqJJ+d3eKVPZpVuCAUSghQH6EP6UHSANs3yxeD98ZRQ4W16QcF7MDqX
-         bDoX0rEJ2A7veVBhn6Nv82itkLYObfuzeIkeisYM=
+        b=gqAUCRUS51ScWclphFlsAXLYUwZgQ1x/JvI3gxs+pu3kCnfqWMCjpperwdN6jPVjY
+         lZTzjGFxxH//8zRx9pphzwHBqT1S+N+/auuq/+vN7zDlaxROIO7GYgsliWNQa9leoE
+         fOn93kvF94n35NVcViaLnsxZYYt0vgYDb74bkiSo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Reinhard Speyerer <rspmn@arcor.de>,
@@ -30,16 +30,15 @@ Cc:     Reinhard Speyerer <rspmn@arcor.de>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 48/60] qmi_wwan: extend permitted QMAP mux_id value range
-Date:   Wed, 26 Jun 2019 20:36:03 -0400
-Message-Id: <20190627003616.20767-48-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 25/35] qmi_wwan: add support for QMAP padding in the RX path
+Date:   Wed, 26 Jun 2019 20:39:13 -0400
+Message-Id: <20190627003925.21330-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190627003616.20767-1-sashal@kernel.org>
-References: <20190627003616.20767-1-sashal@kernel.org>
+In-Reply-To: <20190627003925.21330-1-sashal@kernel.org>
+References: <20190627003925.21330-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -48,10 +47,12 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Reinhard Speyerer <rspmn@arcor.de>
 
-[ Upstream commit 36815b416fa48766ac5a98e4b2dc3ebc5887222e ]
+[ Upstream commit 61356088ace1866a847a727d4d40da7bf00b67fc ]
 
-Permit mux_id values up to 254 to be used in qmimux_register_device()
-for compatibility with ip(8) and the rmnet driver.
+The QMAP code in the qmi_wwan driver is based on the CodeAurora GobiNet
+driver which does not process QMAP padding in the RX path correctly.
+Add support for QMAP padding to qmimux_rx_fixup() according to the
+description of the rmnet driver.
 
 Fixes: c6adf77953bc ("net: usb: qmi_wwan: add qmap mux protocol support")
 Cc: Daniele Palmas <dnlplm@gmail.com>
@@ -59,45 +60,49 @@ Signed-off-by: Reinhard Speyerer <rspmn@arcor.de>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/ABI/testing/sysfs-class-net-qmi | 4 ++--
- drivers/net/usb/qmi_wwan.c                    | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/usb/qmi_wwan.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-net-qmi b/Documentation/ABI/testing/sysfs-class-net-qmi
-index 7122d6264c49..c310db4ccbc2 100644
---- a/Documentation/ABI/testing/sysfs-class-net-qmi
-+++ b/Documentation/ABI/testing/sysfs-class-net-qmi
-@@ -29,7 +29,7 @@ Contact:	Bjørn Mork <bjorn@mork.no>
- Description:
- 		Unsigned integer.
- 
--		Write a number ranging from 1 to 127 to add a qmap mux
-+		Write a number ranging from 1 to 254 to add a qmap mux
- 		based network device, supported by recent Qualcomm based
- 		modems.
- 
-@@ -46,5 +46,5 @@ Contact:	Bjørn Mork <bjorn@mork.no>
- Description:
- 		Unsigned integer.
- 
--		Write a number ranging from 1 to 127 to delete a previously
-+		Write a number ranging from 1 to 254 to delete a previously
- 		created qmap mux based network device.
 diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 4165113c435a..2f8e957a0496 100644
+index c2d6c501dd85..023bb2daa72f 100644
 --- a/drivers/net/usb/qmi_wwan.c
 +++ b/drivers/net/usb/qmi_wwan.c
-@@ -363,8 +363,8 @@ static ssize_t add_mux_store(struct device *d,  struct device_attribute *attr, c
- 	if (kstrtou8(buf, 0, &mux_id))
- 		return -EINVAL;
+@@ -153,7 +153,7 @@ static bool qmimux_has_slaves(struct usbnet *dev)
  
--	/* mux_id [1 - 0x7f] range empirically found */
--	if (mux_id < 1 || mux_id > 0x7f)
-+	/* mux_id [1 - 254] for compatibility with ip(8) and the rmnet driver */
-+	if (mux_id < 1 || mux_id > 254)
- 		return -EINVAL;
+ static int qmimux_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ {
+-	unsigned int len, offset = 0;
++	unsigned int len, offset = 0, pad_len, pkt_len;
+ 	struct qmimux_hdr *hdr;
+ 	struct net_device *net;
+ 	struct sk_buff *skbn;
+@@ -171,10 +171,16 @@ static int qmimux_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 		if (hdr->pad & 0x80)
+ 			goto skip;
  
- 	if (!rtnl_trylock())
++		/* extract padding length and check for valid length info */
++		pad_len = hdr->pad & 0x3f;
++		if (len == 0 || pad_len >= len)
++			goto skip;
++		pkt_len = len - pad_len;
++
+ 		net = qmimux_find_dev(dev, hdr->mux_id);
+ 		if (!net)
+ 			goto skip;
+-		skbn = netdev_alloc_skb(net, len);
++		skbn = netdev_alloc_skb(net, pkt_len);
+ 		if (!skbn)
+ 			return 0;
+ 		skbn->dev = net;
+@@ -191,7 +197,7 @@ static int qmimux_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 			goto skip;
+ 		}
+ 
+-		skb_put_data(skbn, skb->data + offset + qmimux_hdr_sz, len);
++		skb_put_data(skbn, skb->data + offset + qmimux_hdr_sz, pkt_len);
+ 		if (netif_rx(skbn) != NET_RX_SUCCESS)
+ 			return 0;
+ 
 -- 
 2.20.1
 
