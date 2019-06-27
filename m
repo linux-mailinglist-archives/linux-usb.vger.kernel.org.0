@@ -2,73 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 122F8583DD
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 15:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FCB584B3
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 16:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbfF0NwW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jun 2019 09:52:22 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:38820 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726370AbfF0NwV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 09:52:21 -0400
-Received: (qmail 2648 invoked by uid 2102); 27 Jun 2019 09:52:20 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 27 Jun 2019 09:52:20 -0400
-Date:   Thu, 27 Jun 2019 09:52:20 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        <patches@opensource.cirrus.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-In-Reply-To: <1561641624.14683.11.camel@opensource.cirrus.com>
-Message-ID: <Pine.LNX.4.44L0.1906270944150.1492-100000@iolanthe.rowland.org>
+        id S1726545AbfF0Onn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jun 2019 10:43:43 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:37094 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726425AbfF0Onn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Jun 2019 10:43:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=tx6dF92XYQvz4YacD0VR8WVxRaiNwFBa+2vW1h35TBI=; b=F1tWzUYqbyKtgS6PIeqs3RaAq/
+        Q/TGgUztRsGKuL0McSm5Sa5oRGuSsC4zkZiof69ujvLInt7txfhqHyQMgsCNYEpP2QJ55mxWB00u1
+        Or12BnnWm+Wc1RVkI9tqCCGVTE71TW+kWZqjxrHv1a9z9piOaW82mLB96XZnBk3/+9JM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hgVch-0000Yx-16; Thu, 27 Jun 2019 16:43:39 +0200
+Date:   Thu, 27 Jun 2019 16:43:39 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>
+Cc:     jacmet@sunsite.dk, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [BUG] net: dm9600: false link status
+Message-ID: <20190627144339.GG31189@lunn.ch>
+References: <20190627132137.GB29016@Red>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190627132137.GB29016@Red>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 27 Jun 2019, Mayuresh Kulkarni wrote:
-
-> Thanks for all the comments and clarifications, Alan.
+On Thu, Jun 27, 2019 at 03:21:37PM +0200, Corentin Labbe wrote:
+> Hello
 > 
-> I will check the 3-ioctl approach on the platform I have using the test
-> program I had used to send my original patch.
+> I own an USB dongle which is a "Davicom DM96xx USB 10/100 Ethernet".
+> According to the CHIP_ID, it is a DM9620.
 > 
-> Just for my understanding, the below sequence should also work -
-> 1. Call ALLOW_SUSPEND
-> 2. Previously queued URB fails ==> device no longer active
-> 3. Call WAIT_FOR_RESUME
-
-You don't have to perform (2) if you don't want to.  You can proceed
-directly to (3); the WAIT_FOR_RESUME ioctl won't return until the
-device has both suspended and resumed (or the call is interrupted by a
-signal -- such as a 10-second timer expiring).
-
-> 4. After a while (say > 10 sec), assume no remote-wake by device. But
-> user-space wants to communicate with the device (due to some end-user
-> activity).
-> In this case, the user space needs to call FORBID_SUSPEND ioctl. When
-> that returns, it is safe to assume device is active.
-
-Or maybe the WAIT_FOR_RESUME ioctl returns because there was a remote 
-wakeup.  In this case also you would call FORBID_SUSPEND.
-
-In fact, you should call FORBID_SUSPEND _whenever_ WAIT_FOR_RESUME
-returns, unless your program has decided not to use the device any more
-(in which case you don't care whether the device is suspended or
-resumed).
-
-> 5. Once done, go-to (1).
+> Since I needed for bringing network to uboot for a board, I have started to create its uboot's driver.
+> My uboot driver is based on the dm9600 Linux driver.
 > 
-> Could you please cross-confirm? Thanks,
+> The dongle was working but very very slowy (24Kib/s).
+> After some debug i found that the main problem was that it always link to 10Mbit/s Half-duplex. (according to the MAC registers)
+> 
+> For checking the status of the dongle I have plugged it on a Linux box which give me:
+> dm9601 6-2:1.0 enp0s29f0u2: link up, 100Mbps, full-duplex, lpa 0xFFFF
+> 
+> But in fact the Linux driver is tricked.
+> 
+> I have added debug of MDIO write/read and got:
+> [157550.926974] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_write() phy_id=0x00, loc=0x00, val=0x8000
 
-That's all correct.
+Writing the reset bit. Ideally you should read back the register and
+wait for this bit to clear. Try adding this, and see if this helps, or
+you get 0xffff.
 
-Alan Stern
+> [157550.931962] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_write() phy_id=0x00, loc=0x04, val=0x05e1
 
+Advertisement control register.  
+
+> [157550.951967] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_read() phy_id=0x00, loc=0x00, returns=0xffff
+
+And now things are bad. In theory, the power down bit is set, and some
+PHYs don't respond properly when powered down. However, it is unclear
+how it got into this state. Did the reset kill it, or setting the
+advertisement? Or is the PHY simply not responding at all. The MDIO
+data lines have a pull up, so if the device does not respond, reads
+give 0xffff.
+
+Maybe also check register 0, bit 7, EXT_PHY. Is it 0, indicating the
+internal PHY should be used?
+
+You could also try reading PHY registers 2 and 3 and see if you can
+get a valid looking PHY ID. Maybe try that before hitting the reset
+bit?
+
+> So it exsists two problem:
+> - Linux saying 100Mbps, full-duplex even if it is false.
+
+The driver is using the old mii code, not a phy driver. So i cannot
+help too much with linux. But if you can get the MDIO bus working
+reliably, it should be possible to move this over to phylib. The
+internal PHY appears to have all the standard registers, so the
+generic PHY driver has a good chance of working.
+
+     Andrew
