@@ -2,72 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A12DA57FC0
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 11:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BCF57FFB
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 12:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726375AbfF0J4I convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 27 Jun 2019 05:56:08 -0400
-Received: from unicorn.mansr.com ([81.2.72.234]:53204 "EHLO unicorn.mansr.com"
+        id S1726432AbfF0KNu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jun 2019 06:13:50 -0400
+Received: from smtp2.ono.com ([62.42.230.179]:30323 "EHLO smtp2.ono.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726292AbfF0J4H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Jun 2019 05:56:07 -0400
-Received: by unicorn.mansr.com (Postfix, from userid 51770)
-        id ECF0715393; Thu, 27 Jun 2019 10:56:05 +0100 (BST)
-From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-To:     Bin Liu <b-liu@ti.com>, Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: musb: sunxi: propagate devicetree node to glue pdev
-References: <20190228112031.8122-1-mans@mansr.com>
-Date:   Thu, 27 Jun 2019 10:56:05 +0100
-In-Reply-To: <20190228112031.8122-1-mans@mansr.com> (Mans Rullgard's message
-        of "Thu, 28 Feb 2019 11:20:31 +0000")
-Message-ID: <yw1x1rzfic7e.fsf@mansr.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
+        id S1726187AbfF0KNu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Jun 2019 06:13:50 -0400
+X-Junkmail-Premium-Raw: score=26/50,refid=2.7.2:2019.6.27.94517:17:26.894,ip=62.42.230.144,rules=__HAS_MSGID,
+ __SANE_MSGID, MSGID_JMAIL_DEFAULT, INVALID_MSGID_NO_FQDN, __HAS_FROM,
+ FROM_NAME_PHRASE, FROM_NAME_ALLCAPS, __HAS_REPLYTO, __FRAUD_WEBMAIL_REPLYTO,
+ __SUBJECT_NOLC, __SUBJECT_ALLCAPS, SUBJ_1WORD, __MIME_VERSION, __CT,
+ __CT_TEXT_PLAIN, __CTE, MISSING_HEADERS, __ANY_URI, __FRAUD_BODY_WEBMAIL,
+ __URI_NO_WWW, __NO_HTML_TAG_RAW, BODYTEXTP_SIZE_400_LESS, BODY_SIZE_200_299,
+ BODYTEXTP_SIZE_3000_LESS, __MIME_TEXT_P1, __MIME_TEXT_ONLY, __URI_NS,
+ HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, __FRAUD_WEBMAIL,
+ WEBMAIL_REPLYTO_NOT_FROM, FRAUD_WEBMAIL_R_NOT_F, __MIME_TEXT_P,
+ FRAUD_LITTLE_BODY, __PHISH_SPEAR_STRUCTURE_1, BODY_SIZE_1000_LESS,
+ BODY_SIZE_2000_LESS, SMALL_BODY, __PHISH_SPEAR_STRUCTURE_2,
+ REPLYTO_FROM_DIFF_ADDY, NO_URI_HTTPS, BODY_SIZE_7000_LESS, TO_MALFORMED
+Received: from resprs05 (62.42.230.144) by smtp2.ono.com (9.0.019.09-1)
+        id 5CAF0F5D03C867A2; Thu, 27 Jun 2019 12:13:45 +0200
+Received: from (149.126.75.7) by webmailcpr05n.ono.com;  Thu, 27 Jun 2019 12:13:44 +0200
+Message-ID: <21336663.1149931561630424807.JavaMail.defaultUser@defaultHost>
+Date:   Thu, 27 Jun 2019 12:13:44 +0200 (CEST)
+From:   DR ALBERT ZONGO <rjpd@ono.com>
+Reply-To: dralbertddzongo@gmail.com
+Subject: HI
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain;charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Mans Rullgard <mans@mansr.com> writes:
 
-> In order for devicetree nodes to be correctly associated with attached
-> devices, the controller node needs to be propagated to the glue device.
->
-> Signed-off-by: Mans Rullgard <mans@mansr.com>
-> ---
-> This depends on 2c1ea6abde88 ("platform: set of_node in
-> platform_device_register_full()") which is currently winding its way
-> through the staging trees.
 
-That patch is in v5.1, so this one can go ahead now.  Assuming there are
-no objections, of course.
 
-> ---
->  drivers/usb/musb/sunxi.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
-> index 832a41f9ee7d..a72665fbf111 100644
-> --- a/drivers/usb/musb/sunxi.c
-> +++ b/drivers/usb/musb/sunxi.c
-> @@ -781,6 +781,8 @@ static int sunxi_musb_probe(struct platform_device *pdev)
->  	pinfo.name	 = "musb-hdrc";
->  	pinfo.id	= PLATFORM_DEVID_AUTO;
->  	pinfo.parent	= &pdev->dev;
-> +	pinfo.fwnode	= of_fwnode_handle(pdev->dev.of_node);
-> +	pinfo.of_node_reused = true;
->  	pinfo.res	= pdev->resource;
->  	pinfo.num_res	= pdev->num_resources;
->  	pinfo.data	= &pdata;
-> -- 
-> 2.20.1
->
+--
 
--- 
-Måns Rullgård
+Greetings,
+
+I have an intending proposal for you please i need you to contact my 
+private
+
+ E-mail(dralbertddzongo@gmail.com) for more updates,
+
+Best Wishes.
+
+DR ALBERT ZONGO
+--
+
