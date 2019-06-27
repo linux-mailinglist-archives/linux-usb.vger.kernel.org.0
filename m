@@ -2,90 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED7B578E8
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 03:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2594E579E4
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 05:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbfF0BPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jun 2019 21:15:43 -0400
-Received: from mail-eopbgr1410099.outbound.protection.outlook.com ([40.107.141.99]:51280
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        id S1726801AbfF0DPz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jun 2019 23:15:55 -0400
+Received: from mail-eopbgr80055.outbound.protection.outlook.com ([40.107.8.55]:35779
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726373AbfF0BPn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Jun 2019 21:15:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+        id S1726658AbfF0DPy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Jun 2019 23:15:54 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=testarcselector01; d=microsoft.com; cv=none;
+ b=eOpPOJORTld4S5EGUtNArXZhNWedGwkNSuWZV6/lJn418/yIH9iypZm1C4n/r9drUq8exdnowpMltqpR3Gxu1ICU5owNn0lp4WhY0g7PCq/WssAwGE9Id9tlNJ2RAO2qnLljp8KZH28t2Y0/atHDLsibgEkIIBZplU5/A+EJBCE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=testarcselector01;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P2avVQiR3lQuclFmlL/N/rnJt6G4lneF2E4ydIRrq24=;
- b=FZyxg24LHqxTFFpAFkdk+O6ve/ZxgYoGErDeqjnaqWnFtun4Vh7ybs7dr9qToYZ5zz5NscLNSluj6Q0H3EDbE+qgHO12thli68c8tBQ2peuabY8v6wa91mTbNo4AVRRyFCJRulJ9p4tcuoIutk0pC0BnI7/qvSyQu8TbbEIP4aE=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.174.85) by
- TYAPR01MB3887.jpnprd01.prod.outlook.com (20.178.138.214) with Microsoft SMTP
+ bh=//FTMzMLu4qy16pZrlWVzETg1EFJoMb9nkKmOsuKJR0=;
+ b=sGcQua/UZMIlzjJ2D5wNvHSaPZzQy/1vPBRSmRTSDE4Mw7E33jQU5yDNhbKzQd9VPnV50LBl5o4pYxLMZAHgbnpqPJHhbvbmBo7f2MmvCe437faxzScP2r+2KygIZmHNjUCfMaRGrSdmXDYpP6sY0xlrNLCYA7Ga0jF+lEItoEg=
+ARC-Authentication-Results: i=1; test.office365.com
+ 1;spf=none;dmarc=none;dkim=none;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=//FTMzMLu4qy16pZrlWVzETg1EFJoMb9nkKmOsuKJR0=;
+ b=W0jmCSawPWsjdYNnrVf2hx2B946jULC0iJCaVWfqkNOxrndDGwnu0IOX9l7+wrKC1SOJ9mNFxJ8lbxtxNv1/UPgFxCZSTD9GK4J5FxiOXE/0ruw8O8+6xNpTSI4+sBM9tFmbCwVQzx6B8TegUpopBASqYECBgl7nD8pCkU+lpzU=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
+ VI1PR04MB3247.eurprd04.prod.outlook.com (10.170.232.160) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Thu, 27 Jun 2019 01:15:40 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::602d:62cc:de62:eaba]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::602d:62cc:de62:eaba%6]) with mapi id 15.20.2008.014; Thu, 27 Jun 2019
- 01:15:40 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Colin King <colin.king@canonical.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: gadget: udc: renesas_usb3: remove redundant
- assignment to ret
-Thread-Topic: [PATCH] usb: gadget: udc: renesas_usb3: remove redundant
- assignment to ret
-Thread-Index: AQHVLD0mdKJKZlZQqUCpEjW4XqxaaqausuBA
-Date:   Thu, 27 Jun 2019 01:15:39 +0000
-Message-ID: <TYAPR01MB4544D0BC2802B2F914153190D8FD0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <20190626163517.18530-1-colin.king@canonical.com>
-In-Reply-To: <20190626163517.18530-1-colin.king@canonical.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
+ 15.20.2008.16; Thu, 27 Jun 2019 03:15:10 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c1bf:7842:6630:b87a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c1bf:7842:6630:b87a%7]) with mapi id 15.20.2008.014; Thu, 27 Jun 2019
+ 03:15:10 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Marco Felsch <m.felsch@pengutronix.de>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>
+CC:     =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: RE: [PATCH] ARM: imx25: provide a fixed regulator for usb phys
+Thread-Topic: [PATCH] ARM: imx25: provide a fixed regulator for usb phys
+Thread-Index: AQHVKz1enai+x3/0XUiWuEOLFWXTl6atMdCggAA+2YCAAWVgEA==
+Date:   Thu, 27 Jun 2019 03:15:10 +0000
+Message-ID: <VI1PR04MB53270E979BA9817D47A7AFC88BFD0@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <20190625100412.11815-1-u.kleine-koenig@pengutronix.de>
+ <VI1PR04MB5327E09DB0DFEB7E868DB59D8BE20@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <20190626055409.jjiwptyths6p6jty@pengutronix.de>
+In-Reply-To: <20190626055409.jjiwptyths6p6jty@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b87bb337-658e-4f29-1bfa-08d6fa9cf803
+x-ms-office365-filtering-correlation-id: be3b1208-ab83-4d52-b975-08d6faada9b2
 x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TYAPR01MB3887;
-x-ms-traffictypediagnostic: TYAPR01MB3887:
-x-microsoft-antispam-prvs: <TYAPR01MB38871BF6619BEB0713B0DED0D8FD0@TYAPR01MB3887.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3968;
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB3247;
+x-ms-traffictypediagnostic: VI1PR04MB3247:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <VI1PR04MB3247A1E13C951FA5A26CD8348BFD0@VI1PR04MB3247.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
 x-forefront-prvs: 008184426E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39850400004)(366004)(396003)(376002)(136003)(346002)(189003)(199004)(68736007)(54906003)(8676002)(478600001)(71190400001)(256004)(11346002)(316002)(74316002)(2501003)(4744005)(99286004)(53936002)(7696005)(66476007)(7736002)(52536014)(9686003)(81166006)(81156014)(8936002)(86362001)(14454004)(73956011)(229853002)(66446008)(76116006)(110136005)(6436002)(305945005)(55016002)(64756008)(3846002)(486006)(4326008)(2906002)(71200400001)(66556008)(6116002)(33656002)(446003)(6246003)(66066001)(5660300002)(25786009)(66946007)(76176011)(26005)(186003)(102836004)(476003)(6506007);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB3887;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(39860400002)(396003)(366004)(136003)(346002)(199004)(189003)(6436002)(76176011)(5660300002)(99286004)(2501003)(53546011)(68736007)(14444005)(3846002)(54906003)(6506007)(476003)(66574012)(186003)(6246003)(55016002)(71200400001)(2906002)(256004)(52536014)(110136005)(11346002)(66066001)(71190400001)(7696005)(81156014)(33656002)(53936002)(8936002)(305945005)(81166006)(6116002)(102836004)(446003)(45080400002)(66476007)(7736002)(26005)(9686003)(64756008)(14454004)(73956011)(44832011)(86362001)(8676002)(316002)(76116006)(66556008)(6306002)(486006)(4326008)(66946007)(74316002)(25786009)(229853002)(66446008)(966005)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3247;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 6nWM5R7XYEQz1XCEqJllsluIarH7jrF/kmYAaLAlvegB7y5HHpT+BVgwTZJjWrZa78i6WLlH1LPRCGw6+gMD/gYMoQyRhARqof7vWhaeEoTD0ZsHI/l6U69av7qbtGWgzlelSeIamDTDqWNgoxXgegKL8BEfgplq4Fk2gA5kbbzQtpY+npjU8No0ppOEo1BE38wKR7pI6vo6+0mQq/DOAfp/pJbhpt0byWhaWCQPb7owBP+VfCeaty+kGBpvcCj9u/M24lgGszDxHeWDbEgTKmPfFdqZU3cHMSUoaUItEm0PtVVWkfyjO+YCvisW+o0CQJWcDT8XbSXowpJS7rZC2RyDLhQ41Oi5IDAjIRt8bIKacgvfjt6Jpi45DsoHmKfOrM5w+g1tZNBjZ3Njl2iWMn8w26ELHa6ZdZA9A+u0GSo=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-microsoft-antispam-message-info: ZpbfG2WyoMpzpdQcf7Zr16DmTKXOifMmJlACHQ6jOF37wC4cCTGBw7zTL+KI4l07UvUb9V93XIRU1rdimQUb69CWHdI7txzp8BJx6mBA1i706XEqA0p9SLTbo/Rl5z6FxVV9wUZAdlPiVk19EQlgojIERocZ9RMh6C+DBpq7j/QHBcjZWWBBdQyM2BjlHhIfDeUb8WJQ3IaJWtx049T0mc4YmBQWu9jDPpfUZHbl1Hoodg2xP44pjNhjPZWeuKZrWjYND+RhsPh0PYknoumNOlCGUfAue3QEw86zS87WAeayQtRol0M8RgB6iHJE1whGWKqWLSMjbkwk8KfJmRQXLqZah24dS6K3eX0dzGijWiDOSu1ViFO1Gnni7aIWxWC9Zm4P78DWTUYjt2nlkuFpXv4HvmVLnTk2vegarEMBHzQ=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b87bb337-658e-4f29-1bfa-08d6fa9cf803
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2019 01:15:39.9830
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be3b1208-ab83-4d52-b975-08d6faada9b2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2019 03:15:10.2272
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3887
+X-MS-Exchange-CrossTenant-userprincipalname: peter.chen@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3247
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgQ29saW4sDQoNCj4gRnJvbTogQ29saW4gS2luZywgU2VudDogVGh1cnNkYXksIEp1bmUgMjcs
-IDIwMTkgMTozNSBBTQ0KPiANCj4gRnJvbTogQ29saW4gSWFuIEtpbmcgPGNvbGluLmtpbmdAY2Fu
-b25pY2FsLmNvbT4NCj4gDQo+IFZhcmlhYmxlIHJldCBpcyBiZWluZyBpbml0aWFsaXplZCB3aXRo
-IGEgdmFsdWUgdGhhdCBpcyBuZXZlciByZWFkIGFuZA0KPiByZXQgaXMgYmVpbmcgcmUtYXNzaWdu
-ZWQgaW1tZWRpYXRlbHkgYWZ0ZXIgdGhlIGluaXRpYWxpemF0aW9uIGluIGJvdGgNCj4gcGF0aHMg
-b2YgYW4gaWYgc3RhdGVtZW50LiBUaGlzIGlzIHJlZHVuZGFudCBhbmQgY2FuIGJlIHJlbW92ZWQu
-DQo+IA0KPiBBZGRyZXNzZXMtQ292ZXJpdHk6ICgiVW51c2VkIHZhbHVlIikNCj4gU2lnbmVkLW9m
-Zi1ieTogQ29saW4gSWFuIEtpbmcgPGNvbGluLmtpbmdAY2Fub25pY2FsLmNvbT4NCg0KVGhhbmsg
-eW91IGZvciB0aGUgcGF0Y2ghDQoNClJldmlld2VkLWJ5OiBZb3NoaWhpcm8gU2hpbW9kYSA8eW9z
-aGloaXJvLnNoaW1vZGEudWhAcmVuZXNhcy5jb20+DQoNCkJlc3QgcmVnYXJkcywNCllvc2hpaGly
-byBTaGltb2RhDQoNCg==
+=20
+> On 19-06-26 02:40, Peter Chen wrote:
+> >
+> > > Subject: [PATCH] ARM: imx25: provide a fixed regulator for usb phys
+> > >
+> > > The usb phys are internal to the SoC and so it their 5V supply. With
+> > > this regulator added explicitly the following (harmless) boot message=
+s go away:
+> > >
+> > > 	usb_phy_generic usbphy:usb-phy@0: usbphy:usb-phy@0 supply vcc not
+> > > found, using dummy regulator
+> > > 	usb_phy_generic usbphy:usb-phy@1: usbphy:usb-phy@1 supply vcc not
+> > > found, using dummy regulator
+> > >
+> >
+> > To eliminate the warning message, I suggest doing below changes, as
+> > vcc supply is not mandatory.
+> >
+> > diff --git a/drivers/usb/phy/phy-generic.c
+> > b/drivers/usb/phy/phy-generic.c index a53b89be5324..01a5ff1a0515
+> > 100644
+> > --- a/drivers/usb/phy/phy-generic.c
+> > +++ b/drivers/usb/phy/phy-generic.c
+> > @@ -275,7 +275,7 @@ int usb_phy_gen_create_phy(struct device *dev, stru=
+ct
+> usb_phy_generic *nop,
+> >                 }
+> >         }
+> >
+> > -       nop->vcc =3D devm_regulator_get(dev, "vcc");
+> > +       nop->vcc =3D devm_regulator_get_optional(dev, "vcc");
+>=20
+> Is the regulator optional? IMHO this shouldn't be the fix. I think the ri=
+ght fix is Uwe's
+> approach.
+>=20
+
+Add Felipe.
+
+Some USB PHY's power are from the core system's power (eg, DDR), and some a=
+re
+fixed at the board and no switch for it. So, it is transparent for software=
+ at some cases.
+
+Peter
+
+> Regards,
+>   Marco
+>=20
+> >         if (IS_ERR(nop->vcc)) {
+> >                 dev_dbg(dev, "Error getting vcc regulator: %ld\n",
+> >                                         PTR_ERR(nop->vcc));
+> >
+> > Peter
+> >
+> > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > ---
+> > > Hello,
+> > >
+> > > note I'm an USB noob, so please consider carefully before applying
+> > > :-) I also put the regulator near the usbphy node instead of in
+> > > alphabetic order. Not sure what is sensible/usual here, too.
+> > >
+> > > Best regards
+> > > Uwe
+> > >
+> > >  arch/arm/boot/dts/imx25.dtsi | 9 +++++++++
+> > >  1 file changed, 9 insertions(+)
+> > >
+> > > diff --git a/arch/arm/boot/dts/imx25.dtsi
+> > > b/arch/arm/boot/dts/imx25.dtsi
+> > > --- a/arch/arm/boot/dts/imx25.dtsi
+> > > +++ b/arch/arm/boot/dts/imx25.dtsi
+> > > @@ -614,6 +614,11 @@
+> > >  		};
+> > >  	};
+> > >
+> > > +	reg_usb: regulator_usbphy {
+> > > +		compatible =3D "regulator-fixed";
+> > > +		regulator-name =3D "usb-phy supply";
+> > > +	};
+> > > +
+> > >  	usbphy {
+> > >  		compatible =3D "simple-bus";
+> > >  		#address-cells =3D <1>;
+> > > @@ -623,12 +630,14 @@
+> > >  			reg =3D <0>;
+> > >  			compatible =3D "usb-nop-xceiv";
+> > >  			#phy-cells =3D <0>;
+> > > +			vcc-supply =3D <&reg_usb>;
+> > >  		};
+> > >
+> > >  		usbphy1: usb-phy@1 {
+> > >  			reg =3D <1>;
+> > >  			compatible =3D "usb-nop-xceiv";
+> > >  			#phy-cells =3D <0>;
+> > > +			vcc-supply =3D <&reg_usb>;
+> > >  		};
+> > >  	};
+> > >  };
+> > > --
+> > > 2.20.1
+> >
+>=20
+> --
+> Pengutronix e.K.                           |                             =
+|
+> Industrial Linux Solutions                 |
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.pe=
+ngutro
+> nix.de%2F&amp;data=3D02%7C01%7Cpeter.chen%40nxp.com%7Cd1a839827b3a49
+> 0624f508d6f9fab73f%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63
+> 6971252538657445&amp;sdata=3DkfTeGJ99AfS74BqdRAOLVJm52jIFIdNmZXXYPX
+> SzAcA%3D&amp;reserved=3D0  |
+> Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    =
+|
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
+|
