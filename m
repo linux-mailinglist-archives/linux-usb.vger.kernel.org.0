@@ -2,178 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4D558ADB
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 21:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2074B58C01
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 22:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbfF0TRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jun 2019 15:17:37 -0400
-Received: from fallback15.mail.ru ([94.100.179.50]:56288 "EHLO
-        fallback15.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726384AbfF0TRg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 15:17:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail2;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=HBkjWKP3tFjNi6ZZ+ZK9LXJ8173TfLcSkUZrdmEXTCU=;
-        b=Z53wC0ruTrrs4F9PYsU1Gr9MRs8egvK0F27u9y52RfP57NPLXJo5od+iHpz6BWEM7pzwljcFzozgqOhSfcltJst4aYhmzCI/+2iYWmdRiuIZ9pG8+NqHruMrVuYXGa+DXsHACky6OaisAYIOhouh5Edg+zBhZIjZDgp2R7yuY7Y=;
-Received: from [10.161.8.33] (port=57868 helo=smtp14.mail.ru)
-        by fallback15.m.smailru.net with esmtp (envelope-from <kh_harut@mail.ru>)
-        id 1hgZtk-0000EL-84; Thu, 27 Jun 2019 22:17:32 +0300
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail2;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=HBkjWKP3tFjNi6ZZ+ZK9LXJ8173TfLcSkUZrdmEXTCU=;
-        b=Z53wC0ruTrrs4F9PYsU1Gr9MRs8egvK0F27u9y52RfP57NPLXJo5od+iHpz6BWEM7pzwljcFzozgqOhSfcltJst4aYhmzCI/+2iYWmdRiuIZ9pG8+NqHruMrVuYXGa+DXsHACky6OaisAYIOhouh5Edg+zBhZIjZDgp2R7yuY7Y=;
-Received: by smtp14.mail.ru with esmtpa (envelope-from <kh_harut@mail.ru>)
-        id 1hgZta-00022Q-7s; Thu, 27 Jun 2019 22:17:22 +0300
-Subject: Re: USB bug
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB list <linux-usb@vger.kernel.org>
-References: <Pine.LNX.4.44L0.1906241349270.1609-300000@iolanthe.rowland.org>
- <0c3d2bff-0093-2cbc-d16c-a27aa2ef1523@intel.com>
-From:   Harutyun Khachatryan <kh_harut@mail.ru>
-Message-ID: <afe2c5d9-d435-beac-e015-181e0790f465@mail.ru>
-Date:   Thu, 27 Jun 2019 23:17:18 +0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-MIME-Version: 1.0
-In-Reply-To: <0c3d2bff-0093-2cbc-d16c-a27aa2ef1523@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-77F55803: 260C666A7D66B36A5A78504BD2AC2941481933ED0AD08792B628FACBBF6C64876F01B01FA0313873C7B75F9035D394FB
-X-7FA49CB5: 0D63561A33F958A575FB9F887AF743EDB3F1D4B7403AEFA2896F71D402040B8A8941B15DA834481FA18204E546F3947CD23BF7408B3F9022F6B57BC7E64490618DEB871D839B7333395957E7521B51C2545D4CF71C94A83E9FA2833FD35BB23D27C277FBC8AE2E8BF77088377309FF52A471835C12D1D977C4224003CC8364767815B9869FA544D8D32BA5DBAC0009BE9E8FC8737B5C224992B0BE0DA6BB795D3AA81AA40904B5D9CF19DD082D7633A093541453170D46FCD81D268191BDAD3D78DA827A17800CE73C350047980234DBCD04E86FAF290E2DBBC930A3941E20C675ECD9A6C639B01B78DA827A17800CE73611F2D37873D32BD99A60562D1D3A1875ECD9A6C639B01B4E70A05D1297E1BBC6867C52282FAC8519DC0BE04022C72727F269C8F02392CD5571747095F342E88FB05168BE4CE3AF
-X-Mailru-Sender: D506DE885219FA6AACC540DC0644B2C193F167A19BCDD52566087F9DEB502637C1762CDF3CC0E93FC16205A4B6DDF17FC77752E0C033A69E72BAB3D1E5E95DF258F734EE8946DBCD3453F38A29522196
-X-Mras: OK
-X-77F55803: 669901E4625912A97F9F52485CB584D7271FD7DF62800FDC21840F6D13696A215D057087E85900F730345F449E5309372E772F064DB4DBE6
-X-7FA49CB5: 0D63561A33F958A5947D7249CC2AE06271BEB957846648342EDE52065942B4CB8941B15DA834481FA18204E546F3947CD166953D3EA3826BF6B57BC7E64490618DEB871D839B7333395957E7521B51C2545D4CF71C94A83E9FA2833FD35BB23D27C277FBC8AE2E8BEC1C9C6CFAD2A0F5A471835C12D1D977C4224003CC836476C0CAF46E325F83A50BF2EBBBDD9D6B0F2AF38021CC9F462D574AF45C6390F7469DAA53EE0834AAEE
-X-Mailru-MI: 800000
-X-Mailru-Sender: A5480F10D64C9005D917D4885F602B38E9FA4517CE363BE043139340FCE0CEB4CAD9E41E18892B0FFD10878B7E0ACC67FB559BB5D741EB96E710EA8653A4FBC80F2DC73CC0BFB1A30DA7A0AF5A3A8387
-X-Mras: OK
+        id S1726463AbfF0Uwp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jun 2019 16:52:45 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33355 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726384AbfF0Uwp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 16:52:45 -0400
+Received: by mail-pf1-f196.google.com with SMTP id x15so1823122pfq.0
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jun 2019 13:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=j4UAHd5jEgwrnNSvgUERX+teOkMFsnYeMyJ1l9cr6K4=;
+        b=gJXPTYzxr6WkAkTh8nZt1EhLYOAnRpHvmztof9MZmVHsF84zasnk1xsnlG5lQfMZzs
+         g5LOVY0jdOW3uaEFhPQPCuKGakweV1GI1YOOLBCkKfPLyqlvTYRZw+bxQvv3fN2ZFORO
+         yk0ee+Mf9caRv2gwdTnryKbbrp/vf3ENEMs8N6v1xxaR5NjGEQmlslU0FqWId3pF2Zbz
+         aDO6QiYRXVHk1e+iLa/JYJx3UclxZOkMRx7HjL+b4cGp77ChKXJchFYyMkDZpz8vXte/
+         ckpEdPOoXWO5p7qgeKTvBz+UryniX2yzKF3lUMt1Uu1OYlDbH5tooTKeioK9QvGANQxD
+         poCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=j4UAHd5jEgwrnNSvgUERX+teOkMFsnYeMyJ1l9cr6K4=;
+        b=M7jJMidOnFbX9DrpwFM1bj1+glwIqzEZHaXO7/SAoCa8qy1/nXBBGyN4rrg838zNbV
+         6g8Yd6iLyXW1ayBnppxL/8hdirxPS0nzcbxGIHYXRWSapePoXhfBNo0nnGESvGVKZ03k
+         DeXS4ynlXXzvPvB4GvVg65Xa94d1KE1925XqhGYooZCKIjAMmgBKUun9qrpg3VHkJUqU
+         KVet5kU74k5Qt/ls2s1EWFk54uEIY3XH34loDghoKcT+b45nM/0lGdZDxBb7eqs6f6+B
+         j5Ry6dIGBpTIyKRFdiA7CH+97DOWP2Rrkt2snX6URaFzpfgtosBWVGAQVQJasx+Ctlye
+         chhA==
+X-Gm-Message-State: APjAAAVJ/jvsnclsGpMabjk1aFlqSGs5DsBPxv5isS18uIiv1AbWKzbh
+        9fpWRyN8Ax0gQKH8ezNzXLOlyw==
+X-Google-Smtp-Source: APXvYqyhbTsZQMFsW3ELLkqN5sax4BzTvpxSrOSr3VfUZe47uoNQpiu/YuLbkVwsNZ24MrcsbqyUEQ==
+X-Received: by 2002:a17:90a:c504:: with SMTP id k4mr8373953pjt.104.1561668764743;
+        Thu, 27 Jun 2019 13:52:44 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id 2sm3674083pff.174.2019.06.27.13.52.42
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 27 Jun 2019 13:52:43 -0700 (PDT)
+From:   John Stultz <john.stultz@linaro.org>
+To:     stable@vger.kernel.org
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Fei Yang <fei.yang@intel.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH 4.19.y 0/9] Fix scheduling while atomic in dwc3_gadget_ep_dequeue
+Date:   Thu, 27 Jun 2019 20:52:31 +0000
+Message-Id: <20190627205240.38366-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Mathias Nyman,
+With recent changes in AOSP, adb is using asynchronous io, which
+causes the following crash usually on a reboot:
 
-the commands has actually helped. But it is strange that the system 
-behavior has changed, without that command no more usb devices can be 
-connected to the machine. Even Seagate HDD after disconnecting was not 
-able to be connected again. So only with that commands you had written 
-all usb devices was able to work.
+[  184.278302] BUG: scheduling while atomic: ksoftirqd/0/9/0x00000104
+[  184.284617] Modules linked in: wl18xx wlcore snd_soc_hdmi_codec wlcore_sdio tcpci_rt1711h tcpci tcpm typec adv7511 cec dwc3 phy_hi3660_usb3 snd_soc_simple_card snd_soc_a
+[  184.316034] Preemption disabled at:
+[  184.316072] [<ffffff8008081de4>] __do_softirq+0x64/0x398
+[  184.324953] CPU: 0 PID: 9 Comm: ksoftirqd/0 Tainted: G S                4.19.43-00669-g8e4970572c43-dirty #356
+[  184.334963] Hardware name: HiKey960 (DT)
+[  184.338892] Call trace:
+[  184.341352]  dump_backtrace+0x0/0x158
+[  184.345025]  show_stack+0x14/0x20
+[  184.348355]  dump_stack+0x80/0xa4
+[  184.351685]  __schedule_bug+0x6c/0xc0
+[  184.355363]  __schedule+0x64c/0x978
+[  184.358863]  schedule+0x2c/0x90
+[  184.362053]  dwc3_gadget_ep_dequeue+0x274/0x388 [dwc3]
+[  184.367210]  usb_ep_dequeue+0x24/0xf8
+[  184.370884]  ffs_aio_cancel+0x3c/0x80
+[  184.374561]  free_ioctx_users+0x40/0x148
+[  184.378500]  percpu_ref_switch_to_atomic_rcu+0x180/0x1c0
+[  184.383830]  rcu_process_callbacks+0x24c/0x5d8
+[  184.388283]  __do_softirq+0x13c/0x398
+[  184.391959]  run_ksoftirqd+0x3c/0x48
+[  184.395549]  smpboot_thread_fn+0x220/0x288
+[  184.399660]  kthread+0x12c/0x130
+[  184.402901]  ret_from_fork+0x10/0x1c
 
-Regards, Harutyun Khachatryan
 
-On 6/25/19 3:01 PM, Mathias Nyman wrote:
-> On 24.6.2019 21.11, Alan Stern wrote:
->> On Sun, 23 Jun 2019, Harutyun Khachatryan wrote:
->>
->>> Dear Alan Stern,
->>>
->>> I thought that I should wait Mathias's response. I am terribly sorry 
->>> for
->>> that. I am sending dmesg log and trace content as you asked. I tried 
->>> the
->>> procedure on kernel 5.1.12-050112-generic since it's most recent now 
->>> and
->>> the bug still exists in it. If you need for 5.0 write me back. Thank 
->>> you
->>> in advance.
->>>
->>> Regards, Harutyun Khachatryan
->>
->> Mathias, can you please look through the log and trace output that
->> Harutyun sent?  His message doesn't appear to have gotten onto the
->> mailing list, so I have attached copies of his files here.
->>
->> I guess he tried to follow the procedure given in
->>
->>     https://marc.info/?l=linux-usb&m=155293069118478&w=2
->>
->> Namely:
->>
->> Boot with the Seagate HDD attached
->> mount -t debugfs none /sys/kernel/debug
->> echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
->> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
->> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
->> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
->> <Plug in other USB device>
->> <Wait 10 seconds>
->> <Unplug other USB device>
->> <Unplug the Seagate HDD>
->> <Plug in other USB device>
->> Send output of dmesg
->> Send content of /sys/kernel/debug/tracing/trace
->>
->> The problem is that the other USB device is not detected. Harutyun
->> didn't say at what points in the log the other device was plugged in,
->> or which port it was plugged into.  It looks like the Seagate HDD was
->> plugged into 4-1.
->>
->
-> There are no other port events than the disconnect of the 4-1 Seagate HDD
-> in the traces: (port link goes to Inactive first, then Disabled)
->
-> 153.590150: xhci_handle_port_status: port-0: Powered Not-connected 
-> Disabled Link:Inactive PortSpeed:0 Change: CSC PLC Wake
-> 153.590130: xhci_handle_event: EVENT: TRB 0000000005000000 status 
-> 'Success' len 0 slot 0 ep 0 type 'Port Status Change Event' flags e:C
-> 153.590157: xhci_hub_status_data: port-0: Powered Not-connected 
-> Disabled Link:Inactive PortSpeed:0 Change: CSC PLC Wake:
-> 153.590158: xhci_hub_status_data: port-1: Powered Connected Enabled 
-> Link:U2 PortSpeed:4 Change: Wake:
-> 153.590160: xhci_hub_status_data: port-2: Powered Not-connected 
-> Disabled Link:RxDetect PortSpeed:0 Change: Wake:
-> 153.590163: xhci_hub_status_data: port-3: Powered Not-connected 
-> Disabled Link:RxDetect PortSpeed:0 Change: Wake:
-> ...
-> 153.689459: xhci_handle_event: EVENT: TRB 0000000005000000 status 
-> 'Success' len 0 slot 0 ep 0 type 'Port Status Change Event' flags e:C
-> 153.689477: xhci_handle_port_status: port-0: Powered Not-connected 
-> Disabled Link:RxDetect PortSpeed:0 Change: WRC PRC Wake:
-> < disabling slot, freeing ring etc here>
->
-> After a while the SS bus is suspended, xhci traces show wake flags are
-> set for SS roothub ports. Then there's nothing for 12 seconds, after 
-> which
-> we see a Interrupt URB being handled a few times every a second, probably
-> the external hub. Nothing else, no other port activity or traffic is 
-> seen.
->
-> 154.839474: xhci_hub_status_data: port-0: Powered Not-connected 
-> Disabled Link:RxDetect PortSpeed:0 Change: Wake: WCE WOE
-> 154.839476: xhci_hub_status_data: port-1: Powered Connected Enabled 
-> Link:U2 PortSpeed:4 Change: Wake: WDE WOE
-> 154.839478: xhci_hub_status_data: port-2: Powered Not-connected 
-> Disabled Link:RxDetect PortSpeed:0 Change: Wake: WCE WOE
-> 154.839479: xhci_hub_status_data: port-3: Powered Not-connected 
-> Disabled Link:RxDetect PortSpeed:0 Change: Wake: WCE WOE
-> 166.604073: xhci_handle_event: EVENT: TRB 000000044dd539c0 status 
-> 'Success' len 0 slot 4 ep 3 type 'Transfer Event' flags e:C
-> 166.604080: xhci_handle_transfer: INTR: Buffer 000000044dd57000 length 
-> 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
-> 166.604083: xhci_inc_deq: INTR ..
-> 166.604086: xhci_urb_giveback: ep1in-intr: urb 0000000046808855 pipe 
-> 1077969792 slot 4 length 8/8 sgs 0/0 stream 0 flags 00000204
->
-> I can't spot any activity on the HS/FS side of xhci at all, and the SS 
-> bus
-> (usb4) is suspended here with a device (external hub?) in U2 link state.
-> Best guess so far is that it is related to runtime or link power 
-> management
-> withand the external hub.
->
-> Could be related to the SS device with LPM resume issue fixed here:
-> https://marc.info/?l=linux-usb&m=156101728630448&w=2
->
-> Harutyun Khachatryan, how about disabling runtime power management
-> for hubs before disconnecting the Seagate drive, can you check if
-> that helps. (as sudo or root, do)
->
-> echo on > /sys/bus/usb/devices/usb3/power/control
-> echo on > /sys/bus/usb/devices/usb4/power/control
-> echo on > /sys/bus/usb/devices/usb3/3-2/power/control
-> echo on > /sys/bus/usb/devices/usb4/4-2/power/control
->
-> Does it help?
->
-> -Mathias
+This happens as usb_ep_dequeue can be called in interrupt
+context, and dwc3_gadget_ep_dequeue() then calls
+wait_event_lock_irq() which can sleep.
+
+Upstream kernels are not affected due to the change
+fec9095bdef4 ("dwc3: gadget: remove wait_end_transfer") which
+removes the wait_even_lock_irq code. Unfortunately that change
+has a number of dependencies, which I'm submitting here.
+
+Also, to match upstream, in this series I've reverted one
+change that was backported to -stable, to replace it with the
+cherry-picked upstream commit (as the dependencies are now
+there)
+
+This issue also affects 4.14,4.9 and I believe 4.4 kernels,
+however I don't know how to best backport this functionality
+that far back. Help from the maintainers would be very much
+appreciated!
+
+Feedback and comments would be welcome!
+
+thanks
+-john
+
+Cc: Fei Yang <fei.yang@intel.com>
+Cc: Sam Protsenko <semen.protsenko@linaro.org>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: linux-usb@vger.kernel.org
+Cc: stable@vger.kernel.org # 4.19.y
+
+Felipe Balbi (7):
+  usb: dwc3: gadget: combine unaligned and zero flags
+  usb: dwc3: gadget: track number of TRBs per request
+  usb: dwc3: gadget: use num_trbs when skipping TRBs on ->dequeue()
+  usb: dwc3: gadget: extract dwc3_gadget_ep_skip_trbs()
+  usb: dwc3: gadget: introduce cancelled_list
+  usb: dwc3: gadget: move requests to cancelled_list
+  usb: dwc3: gadget: remove wait_end_transfer
+
+Jack Pham (1):
+  usb: dwc3: gadget: Clear req->needs_extra_trb flag on cleanup
+
+John Stultz (1):
+  Revert "usb: dwc3: gadget: Clear req->needs_extra_trb flag on cleanup"
+
+ drivers/usb/dwc3/core.h   |  15 ++--
+ drivers/usb/dwc3/gadget.c | 158 +++++++++++++-------------------------
+ drivers/usb/dwc3/gadget.h |  15 ++++
+ 3 files changed, 75 insertions(+), 113 deletions(-)
+
+-- 
+2.17.1
+
