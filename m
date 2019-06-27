@@ -2,203 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D058589F8
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 20:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE4C58AD4
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jun 2019 21:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbfF0S2W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jun 2019 14:28:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56674 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726384AbfF0S2V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Jun 2019 14:28:21 -0400
-Received: from earth.universe (unknown [185.62.205.103])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D92F205F4;
-        Thu, 27 Jun 2019 18:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561660100;
-        bh=taqyQ1APEgX+EVCAzATmMcA2vqF2xWfz1x10hWSRsgI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hR15WHn5VGnYjJBJF3P3KfFz2mIU6gWMdyBW1J9JfNrAe3Wkox4nvnMreFyFc8Oga
-         gHHKlRxzScRITQpZl1lYB4jheGTy3CTkrWujVUNozMy3/DQtRu1+16z5GQ7OQZL9gE
-         dfQ26EIv4VN+fxjVF3qFiQDlpLL05BiHlURmYc7g=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 66ADF3C08D5; Thu, 27 Jun 2019 20:28:17 +0200 (CEST)
-Date:   Thu, 27 Jun 2019 20:28:17 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devel@driverdev.osuosl.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/34] treewide: simplify getting the adapter of an I2C
- client
-Message-ID: <20190627182817.5vrfmuzn7kanvtwu@earth.universe>
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
+        id S1726587AbfF0TPw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jun 2019 15:15:52 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:33741 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726426AbfF0TPw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jun 2019 15:15:52 -0400
+Received: from [IPv6:2001:980:42b2:1:864c:11e8:201d:7c52] ([IPv6:2001:980:42b2:1:864c:11e8:201d:7c52])
+        by smtp-cloud8.xs4all.net with ESMTPSA
+        id gZs2hJGlE7KeZgZs3hqXKo; Thu, 27 Jun 2019 21:15:49 +0200
+To:     linux-usb@vger.kernel.org
+Reply-To: bjdouma@xs4all.nl
+From:   Bauke Jan Douma <bjdouma@xs4all.nl>
+Organization: a training zoo
+Subject: HDD's attached via USB3 ports not automatically seen by kernel
+Message-ID: <0a7055a3-1664-0099-09cf-c4c0fdbd205d@xs4all.nl>
+Date:   Thu, 27 Jun 2019 21:15:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dtrjmbi6re7vojrt"
-Content-Disposition: inline
-In-Reply-To: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfE/bRC2Tf7H2yxPfG7PN2bVzNW3zOtszwmZC1OZzN98Gwj6bGeMw58D1BaGcklxc3KOl+2Bp1ONNv3RhSnLf3Jpm6iAoBr0vFmOsGw6w+1+LxHVOycYu
+ /3xmZWlpevxEHKfpvHWgiSaJmyGhnZtp5SzINkogc+hx+HgjS1G4xyJzQHYRMgR0yScuEO2Vgy+U205GDt83XYVoWYxVYQeUkS3ZGbwVZJudib7+oAAw1XwZ
+ bS78xAgLnaN78pKT4KBxRQCUB6Ntc78rmW/2EeY6nXQ=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Kernel: Linux 4.15.0-52-generic #56~16.04.1-Ubuntu SMP Thu Jun 6 12:03:31 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
 
---dtrjmbi6re7vojrt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+I have two additional ('DeLock') USB docks in my pc. One with two USB3 ports+2USB2 ports, the other with two USB3 ports.  I have several external HDD's, some that I hook up through an external SATA adapter through USB, some (e.g. Western Digital My 
+Passport) that seem to directly hook up to USB.
 
-On Sat, Jun 08, 2019 at 12:55:39PM +0200, Wolfram Sang wrote:
-> While preparing a refactoring series, I noticed that some drivers use a
-> complicated way of determining the adapter of a client. The easy way is
-> to use the intended pointer: client->adapter
->=20
-> These drivers do:
-> 	to_i2c_adapter(client->dev.parent);
->=20
-> The I2C core populates the parent pointer as:
-> 	client->dev.parent =3D &client->adapter->dev;
->=20
-> Now take into consideration that
-> 	to_i2c_adapter(&adapter->dev);
->=20
-> is a complicated way of saying 'adapter', then we can even formally
-> prove that the complicated expression can be simplified by using
-> client->adapter.
->=20
-> The conversion was done using a coccinelle script with some manual
-> indentation fixes applied on top.
->=20
-> To avoid a brown paper bag mistake, I double checked this on a Renesas
-> Salvator-XS board (R-Car M3N) and verified both expression result in the
-> same pointer. Other than that, the series is only build tested.
->=20
-> A branch can be found here:
->=20
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/no_to_ada=
-pter
->=20
-> Please apply the patches to the individual subsystem trees. There are no
-> dependencies.
->=20
-> Thanks and kind regards,
->=20
->    Wolfram
+The two docks are seen as follows (nothing externally attached) by lsusb:
 
-Thanks, I queued the patches prefixed with "power: supply: [...]".
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 174c:3074 ASMedia Technology Inc. ASM1074 SuperSpeed hub    <---
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID abcd:5555 Unknown
+Bus 001 Device 002: ID 174c:2074 ASMedia Technology Inc. ASM1074 High-Speed hub    <---
+Bus 001 Device 006: ID 0b05:18a3 ASUSTek Computer, Inc.
+Bus 001 Device 005: ID 05e3:0610 Genesys Logic, Inc. 4-port hub
+Bus 001 Device 004: ID 046d:c537 Logitech, Inc.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
--- Sebastian
+I suppose the 174c:2074 is the USB2 ports and the 174c:3074 is the USB3 ports on the two docks.
+Now when I hook up let's say an external WD My Passport 4TB drive, the kernel does emit /no messages/ at all in /var/log/kern.log. The drive is 'not seen' at all by the kernel.
 
-> Wolfram Sang (34):
->   clk: clk-cdce706: simplify getting the adapter of a client
->   gpu: drm: bridge: sii9234: simplify getting the adapter of a client
->   iio: light: bh1780: simplify getting the adapter of a client
->   leds: leds-pca955x: simplify getting the adapter of a client
->   leds: leds-tca6507: simplify getting the adapter of a client
->   media: i2c: ak881x: simplify getting the adapter of a client
->   media: i2c: mt9m001: simplify getting the adapter of a client
->   media: i2c: mt9m111: simplify getting the adapter of a client
->   media: i2c: mt9p031: simplify getting the adapter of a client
->   media: i2c: ov2640: simplify getting the adapter of a client
->   media: i2c: tw9910: simplify getting the adapter of a client
->   misc: fsa9480: simplify getting the adapter of a client
->   misc: isl29003: simplify getting the adapter of a client
->   misc: tsl2550: simplify getting the adapter of a client
->   mtd: maps: pismo: simplify getting the adapter of a client
->   power: supply: bq24190_charger: simplify getting the adapter of a client
->   power: supply: bq24257_charger: simplify getting the adapter of a client
->   power: supply: bq25890_charger: simplify getting the adapter of a client
->   power: supply: max14656_charger_detector: simplify getting the adapter
->     of a client
->   power: supply: max17040_battery: simplify getting the adapter of a clie=
-nt
->   power: supply: max17042_battery: simplify getting the adapter of a clie=
-nt
->   power: supply: rt5033_battery: simplify getting the adapter of a client
->   power: supply: rt9455_charger: simplify getting the adapter of a client
->   power: supply: sbs-manager: simplify getting the adapter of a client
->   regulator: max8952: simplify getting the adapter of a client
->   rtc: fm3130: simplify getting the adapter of a client
->   rtc: m41t80: simplify getting the adapter of a client
->   rtc: rv8803: simplify getting the adapter of a client
->   rtc: rx8010: simplify getting the adapter of a client
->   rtc: rx8025: simplify getting the adapter of a client
->   staging: media: soc_camera: imx074: simplify getting the adapter of a c=
-lient
->   staging: media: soc_camera: mt9t031: simplify getting the adapter of a =
-client
->   staging: media: soc_camera: soc_mt9v022: simplify getting the adapter
->     of a client
->   usb: typec: tcpm: fusb302: simplify getting the adapter of a client
->=20
->  drivers/clk/clk-cdce706.c                        | 2 +-
->  drivers/gpu/drm/bridge/sii9234.c                 | 4 ++--
->  drivers/iio/light/bh1780.c                       | 2 +-
->  drivers/leds/leds-pca955x.c                      | 2 +-
->  drivers/leds/leds-tca6507.c                      | 2 +-
->  drivers/media/i2c/ak881x.c                       | 2 +-
->  drivers/media/i2c/mt9m001.c                      | 2 +-
->  drivers/media/i2c/mt9m111.c                      | 2 +-
->  drivers/media/i2c/mt9p031.c                      | 2 +-
->  drivers/media/i2c/ov2640.c                       | 2 +-
->  drivers/media/i2c/tw9910.c                       | 3 +--
->  drivers/misc/fsa9480.c                           | 2 +-
->  drivers/misc/isl29003.c                          | 2 +-
->  drivers/misc/tsl2550.c                           | 2 +-
->  drivers/mtd/maps/pismo.c                         | 2 +-
->  drivers/power/supply/bq24190_charger.c           | 2 +-
->  drivers/power/supply/bq24257_charger.c           | 2 +-
->  drivers/power/supply/bq25890_charger.c           | 2 +-
->  drivers/power/supply/max14656_charger_detector.c | 2 +-
->  drivers/power/supply/max17040_battery.c          | 2 +-
->  drivers/power/supply/max17042_battery.c          | 2 +-
->  drivers/power/supply/rt5033_battery.c            | 2 +-
->  drivers/power/supply/rt9455_charger.c            | 2 +-
->  drivers/power/supply/sbs-manager.c               | 2 +-
->  drivers/regulator/max8952.c                      | 2 +-
->  drivers/rtc/rtc-fm3130.c                         | 8 +++-----
->  drivers/rtc/rtc-m41t80.c                         | 2 +-
->  drivers/rtc/rtc-rv8803.c                         | 2 +-
->  drivers/rtc/rtc-rx8010.c                         | 2 +-
->  drivers/rtc/rtc-rx8025.c                         | 2 +-
->  drivers/staging/media/soc_camera/imx074.c        | 2 +-
->  drivers/staging/media/soc_camera/mt9t031.c       | 2 +-
->  drivers/staging/media/soc_camera/soc_mt9v022.c   | 2 +-
->  drivers/usb/typec/tcpm/fusb302.c                 | 3 +--
->  34 files changed, 37 insertions(+), 41 deletions(-)
->=20
-> --=20
-> 2.19.1
->=20
+I found out that the drive /is reconized', when /as root/, I run 'lsusb -v -d 174c:2074' or 'lsusb -v -d 174c:3074'.
+After this, kernel output is:
 
---dtrjmbi6re7vojrt
-Content-Type: application/pgp-signature; name="signature.asc"
+Jun 24 15:10:12 skyscraper kernel: [12351.798828] usb 2-2.1: new SuperSpeed USB device number 12 using xhci_hcd
+Jun 24 15:10:12 skyscraper kernel: [12351.819758] usb 2-2.1: New USB device found, idVendor=1058, idProduct=25e2
+Jun 24 15:10:12 skyscraper kernel: [12351.819764] usb 2-2.1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
+Jun 24 15:10:12 skyscraper kernel: [12351.819768] usb 2-2.1: Product: My Passport 25E2
+Jun 24 15:10:12 skyscraper kernel: [12351.819772] usb 2-2.1: Manufacturer: Western Digital
+Jun 24 15:10:12 skyscraper kernel: [12351.819775] usb 2-2.1: SerialNumber: 575831314438375237413535
+Jun 24 15:10:12 skyscraper kernel: [12351.844428] usb-storage 2-2.1:1.0: USB Mass Storage device detected
+Jun 24 15:10:12 skyscraper kernel: [12351.844896] scsi host6: usb-storage 2-2.1:1.0
+Jun 24 15:10:13 skyscraper kernel: [12352.875529] scsi 6:0:0:0: Direct-Access     WD       My Passport 25E2 4004 PQ: 0 ANSI: 6
+Jun 24 15:10:13 skyscraper kernel: [12352.875979] scsi 6:0:0:1: Enclosure         WD       SES Device       4004 PQ: 0 ANSI: 6
+Jun 24 15:10:13 skyscraper kernel: [12352.877672] sd 6:0:0:0: Attached scsi generic sg4 type 0
+Jun 24 15:10:13 skyscraper kernel: [12352.877984] ses 6:0:0:1: Attached Enclosure device
+Jun 24 15:10:13 skyscraper kernel: [12352.878003] sd 6:0:0:0: [sdd] Very big device. Trying to use READ CAPACITY(16).
+Jun 24 15:10:13 skyscraper kernel: [12352.878146] sd 6:0:0:0: [sdd] 7813969920 512-byte logical blocks: (4.00 TB/3.64 TiB)
+Jun 24 15:10:13 skyscraper kernel: [12352.878150] sd 6:0:0:0: [sdd] 4096-byte physical blocks
+Jun 24 15:10:13 skyscraper kernel: [12352.878257] ses 6:0:0:1: Attached scsi generic sg5 type 13
+Jun 24 15:10:13 skyscraper kernel: [12352.878360] sd 6:0:0:0: [sdd] Write Protect is off
+Jun 24 15:10:13 skyscraper kernel: [12352.878365] sd 6:0:0:0: [sdd] Mode Sense: 47 00 10 08
+Jun 24 15:10:13 skyscraper kernel: [12352.878482] ses 6:0:0:1: Wrong diagnostic page; asked for 1 got 8
+Jun 24 15:10:13 skyscraper kernel: [12352.878491] ses 6:0:0:1: Failed to get diagnostic page 0x1
+Jun 24 15:10:13 skyscraper kernel: [12352.878497] ses 6:0:0:1: Failed to bind enclosure -19
+Jun 24 15:10:13 skyscraper kernel: [12352.878681] sd 6:0:0:0: [sdd] No Caching mode page found
+Jun 24 15:10:13 skyscraper kernel: [12352.878689] sd 6:0:0:0: [sdd] Assuming drive cache: write through
+Jun 24 15:10:13 skyscraper kernel: [12352.879314] sd 6:0:0:0: [sdd] Very big device. Trying to use READ CAPACITY(16).
+Jun 24 15:10:13 skyscraper kernel: [12353.068512]  sdd: sdd1
+Jun 24 15:10:13 skyscraper kernel: [12353.069456] sd 6:0:0:0: [sdd] Very big device. Trying to use READ CAPACITY(16).
+Jun 24 15:10:13 skyscraper kernel: [12353.070066] sd 6:0:0:0: [sdd] Attached SCSI disk
 
------BEGIN PGP SIGNATURE-----
+and lsusb reports:
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 174c:3074 ASMedia Technology Inc. ASM1074 SuperSpeed hub
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID abcd:5555 Unknown
+Bus 001 Device 002: ID 174c:2074 ASMedia Technology Inc. ASM1074 High-Speed hub
+Bus 001 Device 006: ID 0b05:18a3 ASUSTek Computer, Inc.
+Bus 001 Device 005: ID 05e3:0610 Genesys Logic, Inc. 4-port hub
+Bus 001 Device 004: ID 046d:c537 Logitech, Inc.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0VCsEACgkQ2O7X88g7
-+poEpxAAm77/GZ4czva5lDqclyAk1YfbiV55qi+jow32xQwZ17FXo8Ch9G11Qrwl
-famQPiB/pD3r3m2TfihhFAcFjOGiwl9GxQJ+4at64Atab2w5BWh9zwDQWdtT80jF
-3ytFncogbL36MVBgIv5YQUZQiqIiZlUei6lTOnnyfv3PLtvNVbIodxSVYp5qJWMy
-M+qrdy6tAVsuK6yqAwPRhfjBzlmlLZVudUZqbAWKMbK1YBt0rkkSNw9xpF1pLrv6
-zLbGdmBngoivDyNJldn+5bhMiwsDyxf/8E7eblcAMkO/D1oPrb51zV92FFX7qyzT
-eI5KRHwY88XkUuIK25aDnO1bR3eDn3RDcxtW8MMMeRihWX3gNSL+hKZ24XGxOgz5
-L3tL9nm6X6sHg867+V5voAxNACnbgFT/Mrzhal4HGbN8adctDoaSEuiMPAQlAkEG
-PbW3c2B0n+Bav3XksRT4h19t7drSk4a3aR04I/GHc3l9jDQicnDr4DwiVaPpd1UF
-gpPhBXgO4NSZr5yUEzoVOSOsW6WS2k5SFV+sQjU1C5R+oXBH59J9oIMlOOaNKo0w
-rTXxOtxQ38vqyMiQZBLwoTh1remxiOBp+5lwmYWGWYpBDVcr9HB+kzNJPFxDVk5A
-YgiEzXje0LsgjUBgpmiq5YPAmsNIntDezydWTc20Otk1+Vgotgo=
-=CJhg
------END PGP SIGNATURE-----
+For the external drive with SATA adapter with USB cable, the following is reported upon running
+'lsusb -v -d 174c:2074' or 'lsusb -v -d 174c:3074' as root:
 
---dtrjmbi6re7vojrt--
+Jun 24 15:13:15 skyscraper kernel: [12535.113834] usb 2-2.1: new SuperSpeed USB device number 13 using xhci_hcd
+Jun 24 15:13:15 skyscraper kernel: [12535.134627] usb 2-2.1: New USB device found, idVendor=174c, idProduct=55aa
+Jun 24 15:13:15 skyscraper kernel: [12535.134632] usb 2-2.1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
+Jun 24 15:13:15 skyscraper kernel: [12535.134637] usb 2-2.1: Product: ASMT1153e
+Jun 24 15:13:15 skyscraper kernel: [12535.134640] usb 2-2.1: Manufacturer: asmedia
+Jun 24 15:13:15 skyscraper kernel: [12535.134644] usb 2-2.1: SerialNumber: 1234567892F2
+Jun 24 15:13:15 skyscraper kernel: [12535.159184] usb-storage 2-2.1:1.0: USB Mass Storage device detected
+Jun 24 15:13:15 skyscraper kernel: [12535.159360] usb-storage 2-2.1:1.0: Quirks match for vid 174c pid 55aa: 400000
+Jun 24 15:13:15 skyscraper kernel: [12535.159433] scsi host6: usb-storage 2-2.1:1.0
+Jun 24 15:13:16 skyscraper kernel: [12536.200851] scsi 6:0:0:0: Direct-Access     WDC WD40 EFRX-68N32N0     0    PQ: 0 ANSI: 6
+Jun 24 15:13:16 skyscraper kernel: [12536.201613] sd 6:0:0:0: Attached scsi generic sg4 type 0
+Jun 24 15:13:16 skyscraper kernel: [12536.201889] sd 6:0:0:0: [sdd] 7814037168 512-byte logical blocks: (4.00 TB/3.64 TiB)
+Jun 24 15:13:16 skyscraper kernel: [12536.201895] sd 6:0:0:0: [sdd] 4096-byte physical blocks
+Jun 24 15:13:16 skyscraper kernel: [12536.202285] sd 6:0:0:0: [sdd] Write Protect is off
+Jun 24 15:13:16 skyscraper kernel: [12536.202291] sd 6:0:0:0: [sdd] Mode Sense: 43 00 00 00
+Jun 24 15:13:16 skyscraper kernel: [12536.202570] sd 6:0:0:0: [sdd] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Jun 24 15:13:16 skyscraper kernel: [12536.383027]  sdd: sdd1
+Jun 24 15:13:16 skyscraper kernel: [12536.384195] sd 6:0:0:0: [sdd] Attached SCSI disk
+
+with lsusb:
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 013: ID 174c:55aa ASMedia Technology Inc. ASM1051E SATA 6Gb/s bridge, ASM1053E SATA 6Gb/s bridge, ASM1153 SATA 3Gb/s bridge
+Bus 002 Device 002: ID 174c:3074 ASMedia Technology Inc. ASM1074 SuperSpeed hub
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID abcd:5555 Unknown
+Bus 001 Device 002: ID 174c:2074 ASMedia Technology Inc. ASM1074 High-Speed hub
+Bus 001 Device 006: ID 0b05:18a3 ASUSTek Computer, Inc.
+Bus 001 Device 005: ID 05e3:0610 Genesys Logic, Inc. 4-port hub
+Bus 001 Device 004: ID 046d:c537 Logitech, Inc.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+I am not an expert here, but did try a suggestion to add lines:
+options usb-storage quirks=174c:2074:u
+options usb-storage quirks=174c:3074:u
+options usb-storage quirks=174c:55aa:u
+
+to /etc/modprobe.d/blacklist_uas.conf (each line individually, and also all the lines together) and run
+sudo update-initramfs -u; sudo reboot, but all this did not change the behaviour. The above described behavious is with none of those lines in /etc/modprobe.d/blacklist_uas.conf.
+
+
+So the bizarre thing is: I have to run , as root (regular user does NOT work) 'lsusb -v -d 174c:2074' or 'lsusb -v -d 174c:3074' to 'trigger' recognition as it were, to make the external drive be seen by the kernel. After that, it can be mounted of course, 
+etc.
+
