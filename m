@@ -2,391 +2,397 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C96959634
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2019 10:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037A159666
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2019 10:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbfF1Ief (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jun 2019 04:34:35 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:51918 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726420AbfF1Ief (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jun 2019 04:34:35 -0400
-Received: by mail-wm1-f68.google.com with SMTP id 207so8203127wma.1
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2019 01:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/s3L7c/xEr7UaGOR01xuFcIrckpVPmvl8Lfa0GRVWIE=;
-        b=Sc+x+4HeZHyKsj1vdB8o6LF7i8GUuKrJIimrw/nMVDGbjlLt/WlaayWENGwQnpS9nV
-         bURGY49wip42qjCzu+gdSC4RkvDj0Q4vT6KAlN5Ezq3aeuIyhRjOpKprmvE9OIPDMLIA
-         i83Z+M/aU3hy+semKgmygqpKIfFvVBXdavywCnCt1JMW+MoguXF9MKe+xqiAwdmXewXB
-         QWOWfxYi9b1PqLmhyehuX4bpIZ+AZt+xRI8gbAyBA8uR794sxOQh/VpBbQsTUXZYRlfC
-         bZLTzx12tt67o3fay8R172IAB5PP4Du79efLDjcgYL7GxkQXGF93uAsVNI5Taj1/x/1t
-         22FQ==
+        id S1726472AbfF1ItI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jun 2019 04:49:08 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37926 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbfF1ItH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jun 2019 04:49:07 -0400
+Received: by mail-lj1-f195.google.com with SMTP id r9so5185030ljg.5;
+        Fri, 28 Jun 2019 01:49:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/s3L7c/xEr7UaGOR01xuFcIrckpVPmvl8Lfa0GRVWIE=;
-        b=EuwPw7LDwihc/rvqtyvTDfFjqXBcu7TkT+ee/F5qvxL1oeioBtB7H7cxQyQ0K/zUv0
-         i1MaJnEgfUqLs5KDr8MMRNXzXvvFgKxo1w8uN4Scv4v9uM9yiQc57N8YtGMwvay/q4KC
-         csVYBT6kAHvZX/zL3PHQFXQVq41RIJdop5WLep+3uTiF8xpb8GTWnnkwEl4lz2KLZfph
-         g74AKPGJUWqfJiEfwRpfgzngJDL/fyzlCfuJYcOm9EuDkZOKgMaFnVQgMVrXZt3G+dCc
-         swWVc65+A/4nNg58VuMfAOmQ1VXGYGLpXlFZ+rC/W/yXUQedTN/ogsalktXIrUC8IIaK
-         Fb3g==
-X-Gm-Message-State: APjAAAWkMpPTMTiYZ/JIHjK4qOMpa/QebcIMKBZWV0BH105pl2GWvCCR
-        zPZpJqeff/imMP7UhQKS4mp2zZyWduqblH3hqvo=
-X-Google-Smtp-Source: APXvYqybGgoe7rsew9fUu4S8ga0uvUBtxB0P8jtPTbuH8oqc/QLwThT/vnXZyw+Yzqg8U/C/juw6vUkq16YnFU2bcAg=
-X-Received: by 2002:a1c:c305:: with SMTP id t5mr6165050wmf.163.1561710871698;
- Fri, 28 Jun 2019 01:34:31 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ueeendIGLf70OCoX1OMoqwF0t/dgqXWVYtWS5BaXCTA=;
+        b=h1NkDvlMJHNuMhYBrkX4ZxK5pmyvq3dsfE76oYy7jcCatdxtC7ijmtBhvfe1stwtRl
+         AvbatzuBvgGXIZ2P8aG8RNX9OzYVUQK8NG0w48aohGHL5IkR1WO9MzKD5T3spiMTO/Nq
+         E87Cv9dBeNkRmVgDlYnw0zvujLrmHo4x5xHEpo6JB9fuA3hYCn11y7P1ZVq1cYlgEdVm
+         908FklA1njzWsfXr9BAXE/WWbUpsWGCU5p6MyxvGh5jbh3K1rVTOqZvTaTQeUf+9uNaR
+         Jrfm2p56aDpl+HGptjWUkJGSrECZri3ET6MSVj6u4EhOr9dBMKsxlrnD58t7kWPWH7RO
+         mlUg==
+X-Gm-Message-State: APjAAAWgWUoU1X0hVIphsuWQi+D8gb/prLhk1mUXrL1gVWOh3xQ6Rbfs
+        cvwzsAwyeSpnFGzFjp1ubwM=
+X-Google-Smtp-Source: APXvYqxhVXLl2eRdARMV6sa2FccYruDNAQSY1SJUDpzjXdHCsQeZtm7dt6hyBiPhJ/Mth6QNKMzKhw==
+X-Received: by 2002:a2e:9198:: with SMTP id f24mr5540531ljg.221.1561711743672;
+        Fri, 28 Jun 2019 01:49:03 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id u21sm526310lju.2.2019.06.28.01.49.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jun 2019 01:49:02 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92)
+        (envelope-from <johan@kernel.org>)
+        id 1hgmZ3-0004XX-9A; Fri, 28 Jun 2019 10:49:01 +0200
+Date:   Fri, 28 Jun 2019 10:49:01 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Serge Semin <Sergey.Semin@t-platforms.ru>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: cp210x: Add cp2108 GPIOs support
+Message-ID: <20190628084901.GK508@localhost>
+References: <20190514105358.18818-1-fancer.lancer@gmail.com>
+ <20190615230214.30061-1-fancer.lancer@gmail.com>
 MIME-Version: 1.0
-References: <20190613134544.6404-1-charlesyeh522@gmail.com>
-In-Reply-To: <20190613134544.6404-1-charlesyeh522@gmail.com>
-From:   Charles Yeh <charlesyeh522@gmail.com>
-Date:   Fri, 28 Jun 2019 16:34:17 +0800
-Message-ID: <CAAZvQQ7Znh5eTbESRFBPbA-q6_g6dLT4wT=Cfx+pipf0scXeOQ@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH v5] USB: serial: pl2303: Add new PID to support
- PL2303HXN (TYPE_HXN)
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Cc:     =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190615230214.30061-1-fancer.lancer@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Is there any need to modify it?
-If there is no need to modify, how long does it take to complete REVIEW?
-
-Charles Yeh
-
-Charles Yeh <charlesyeh522@gmail.com> =E6=96=BC 2019=E5=B9=B46=E6=9C=8813=
-=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=889:46=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> Prolific has developed a new USB to UART chip: PL2303HXN
-> PL2303HXN : PL2303GC/PL2303GS/PL2303GT/PL2303GL/PL2303GE/PL2303GB
-> The Vendor request used by the PL2303HXN (TYPE_HXN) is different from
-> the existing PL2303 series (TYPE_HX & TYPE_01).
-> Therefore, different Vendor requests are used to issue related commands.
->
-> 1. Added a new TYPE_HXN type in pl2303_type_data, and then executes
->    new Vendor request,new flow control and other related instructions
->    if TYPE_HXN is recognized.
->
-> 2. Because the new PL2303HXN only accept the new Vendor request,
->    the old Vendor request cannot be accepted (the error message
->    will be returned)
->    So first determine the TYPE_HX or TYPE_HXN through
->    PL2303_READ_TYPE_HX_STATUS in pl2303_startup.
->
->   2.1 If the return message is "1", then the PL2303 is the existing
->       TYPE_HX/ TYPE_01 series.
->       The other settings in pl2303_startup are to continue execution.
->   2.2 If the return message is "not 1", then the PL2303 is the new
->       TYPE_HXN series.
->       The other settings in pl2303_startup are ignored.
->       (PL2303HXN will directly use the default value in the hardware,
->        no need to add additional settings through the software)
->
-> 3. In pl2303_open: Because TYPE_HXN is different from the instruction of =
-reset
->    down/up stream used by TYPE_HX.
->    Therefore, we will also execute different instructions here.
->
-> 4. In pl2303_set_termios: The UART flow control instructions used by
->    TYPE_HXN/TYPE_HX/TYPE_01 are different.
->    Therefore, we will also execute different instructions here.
->
-> 5. In pl2303_vendor_read & pl2303_vendor_write, since TYPE_HXN is differe=
-nt
->    from the vendor request instruction used by TYPE_HX/TYPE_01,
->    it will also execute different instructions here.
->
-> 6. In pl2303_update_reg: TYPE_HXN used different register for flow contro=
-l.
->    Therefore, we will also execute different instructions here.
->
-> Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
+On Sun, Jun 16, 2019 at 02:02:15AM +0300, Serge Semin wrote:
+> Each chip from the cp210x series got GPIOs on board. This commit
+> provides the support for sixteen ones placed on the cp2108 four-ports
+> serial console controller. Since all GPIOs are accessible via any
+> cp2108 USB interface we manually and equally distributed them between
+> all interfaces in accordance with GPIOs alternative functions attachment.
+> So the driver provides four GPIOs per each cp2108 USB interface.
+> 
+> cp2108 GPIOs can be either in open-drain or push-pull modes setup once
+> after reset was cleared. In this matter it doesn't differ from the rest
+> of cp210x devices supported by the driver. So with minor alterations the
+> standard output/intput GPIO interface is implemented for cp2108.
+> 
+> Aside from traditional GPIO functions like setting/getting pins value,
+> each GPIO is also multiplexed with alternative functions: TX/RX LEDs, RS485
+> TX-enable and Clocks source. These functions can't be activated on-fly.
+> Instead the chips firmware should be properly setup, so they would be
+> enabled in the ports-config structure at the controller logic startup.
+> Needless to say, that when the alternative functions are activated,
+> the GPIOs can't be used. Thus we need to check the GPIO pin config in the
+> request callback and deny the request if GPIO standard function is
+> disabled.
+> 
+> Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
 > ---
-> changelog:
-> v5:
-> 1. Modify pl2303_update_reg
-> 2. Add a patch version on subject
-> 3. Add a space after each colon at subject line
+> 
+> Changelog v2:
+> - Rebase onto kernel 5.2.0-rc4.
+> - Move USB_SERIAL_CP210X config descriptor modification to a separate patch.
+> - Add more descriptive info of cp2108 state and config structures.
+> - Replace _NUM suffix with _CNT.
+> - Add _IDX suffix to CP2108_GPIO_PB macro.
+> - Add _MODE suffix to CP2108_DYNAMIC_SUSPEND macro.
+> - Discard __packed attribute from struct cp2108_gpio_write.
+> - Discard CP2108_GPIO_CNT macro and use literal 4 instead.
+> - Simplify cp210x_gpio_get() method by replacing the union with a u16 buffer.
+> - Replace ternary operations of cp210x_gpio_set() with a conditional statement.
+> - Add more descriptive comments regarding the gpio_altfunc bits collection.
+> - Fix a bug in the GPIOs setter/getter methods of invalid bit being utilized
+> to set/get GPIO values.
 > ---
->  drivers/usb/serial/pl2303.c | 113 +++++++++++++++++++++++++++++-------
->  drivers/usb/serial/pl2303.h |   7 ++-
->  2 files changed, 97 insertions(+), 23 deletions(-)
->
-> diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-> index 55122ac84518..22ad82aa3894 100644
-> --- a/drivers/usb/serial/pl2303.c
-> +++ b/drivers/usb/serial/pl2303.c
-> @@ -47,6 +47,12 @@ static const struct usb_device_id id_table[] =3D {
->         { USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_MOTOROLA) },
->         { USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_ZTEK) },
->         { USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_TB) },
-> +       { USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GC) },
-> +       { USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GB) },
-> +       { USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GT) },
-> +       { USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GL) },
-> +       { USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GE) },
-> +       { USB_DEVICE(PL2303_VENDOR_ID, PL2303_PRODUCT_ID_GS) },
->         { USB_DEVICE(IODATA_VENDOR_ID, IODATA_PRODUCT_ID) },
->         { USB_DEVICE(IODATA_VENDOR_ID, IODATA_PRODUCT_ID_RSAQ5) },
->         { USB_DEVICE(ATEN_VENDOR_ID, ATEN_PRODUCT_ID),
-> @@ -129,9 +135,11 @@ MODULE_DEVICE_TABLE(usb, id_table);
->
->  #define VENDOR_WRITE_REQUEST_TYPE      0x40
->  #define VENDOR_WRITE_REQUEST           0x01
-> +#define VENDOR_WRITE_NREQUEST          0x80
->
->  #define VENDOR_READ_REQUEST_TYPE       0xc0
->  #define VENDOR_READ_REQUEST            0x01
-> +#define VENDOR_READ_NREQUEST           0x81
->
->  #define UART_STATE_INDEX               8
->  #define UART_STATE_MSR_MASK            0x8b
-> @@ -146,12 +154,20 @@ MODULE_DEVICE_TABLE(usb, id_table);
->  #define UART_CTS                       0x80
->
->  #define PL2303_FLOWCTRL_MASK           0xf0
-> +#define PL2303_HXN_FLOWCTRL_MASK       0x1C
-> +#define PL2303_READ_TYPE_HX_STATUS     0x8080
-> +#define PL2303_HXN_FLOWCTRL            0x0A
-> +#define PL2303_HXN_CTRL_RTS_CTS                0x18
-> +#define PL2303_HXN_CTRL_XON_XOFF       0x0C
-> +#define PL2303_HXN_CTRL_NONE           0x1C
-> +#define PL2303_HXN_RESET_DOWN_UPSTREAM 0x07
->
->  static void pl2303_set_break(struct usb_serial_port *port, bool enable);
->
->  enum pl2303_type {
->         TYPE_01,        /* Type 0 and 1 (difference unknown) */
->         TYPE_HX,        /* HX version of the pl2303 chip */
-> +       TYPE_HXN,       /* HXN version of the pl2303 chip */
->         TYPE_COUNT
->  };
->
-> @@ -183,16 +199,26 @@ static const struct pl2303_type_data pl2303_type_da=
-ta[TYPE_COUNT] =3D {
->         [TYPE_HX] =3D {
->                 .max_baud_rate          =3D 12000000,
->         },
-> +       [TYPE_HXN] =3D {
-> +               .max_baud_rate          =3D 12000000,
-> +       },
->  };
->
->  static int pl2303_vendor_read(struct usb_serial *serial, u16 value,
->                                                         unsigned char buf=
-[1])
+>  drivers/usb/serial/cp210x.c | 178 +++++++++++++++++++++++++++++++++---
+>  1 file changed, 164 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index 979bef9bfb6b..32f0a4273abb 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -505,6 +505,60 @@ struct cp210x_gpio_write {
+>  	u8	state;
+>  } __packed;
+>  
+> +/*
+> + * Number of CP2108 USB interfaces, port-blocks and GPIO port-block index,
+> + * where port-blocks are the internal pins containers of the chip.
+> + */
+> +#define CP2108_IFACE_CNT		4
+> +#define CP2108_PB_CNT			5
+> +#define CP2108_GPIO_PB_IDX		1
+
+s/CNT/COUNT/
+
+> +/*
+> + * CP2108 default pins state. There are five port-blocks (PB). Each one is with
+
+pin state?
+
+> + * it' specific pins-set: Port 0 - UART 0 and 1, Port 1 - GPIOs, Port 2 - chip
+
+typos: it's, pin-set
+
+> + * suspend and a part of UART 2 pins, Port 3 and 4 - UART 2 and 3 pins
+
+Probably more readable as a table (one line per port block).
+
+> + * (for details see USB Express SDK sources or SDK-based smt application
+> + * accessible here https://github.com/fancer/smt-cp210x).
+> + */
+> +struct cp2108_state {
+> +	__le16	mode[CP2108_PB_CNT];	/* 0 - Open-Drain, 1 - Push-Pull */
+> +	__le16	low_power[CP2108_PB_CNT];
+> +	__le16	latch[CP2108_PB_CNT];	/* 0 - Logic Low, 1 - Logic High */
+> +} __packed;
+
+Still not clear to me how these affect one of the UARTs pins, or what
+the "chip suspend" port-block is.
+
+Do you think you can add something short about that?
+
+> +/*
+> + * CP210X_VENDOR_SPECIFIC, CP210X_GET_PORTCONFIG call reads these 73 bytes.
+> + * Reset/Suspend latches describe default states after reset/suspend of the
+> + * pins.
+
+Don't we need to consider also the suspend state when declaring as
+input?
+
+By leaving the pin as an output if it will be driven high during
+suspend, users would at least get an indication that things may not be
+configured as expected.
+
+>           The rest are responsible for alternate functions settings of the
+> + * chip pins (see USB Express SDK sources or SDK-based smt application
+> + * https://github.com/fancer/smt-cp210x for details).
+> + */
+> +struct cp2108_config {
+> +	struct cp2108_state reset_latch;
+> +	struct cp2108_state suspend_latch;
+> +	u8	ip_delay[CP2108_IFACE_CNT];
+> +	u8	enhanced_fxn[CP2108_IFACE_CNT];
+> +	u8	enhanced_fxn_dev;
+> +	u8	ext_clock_freq[CP2108_IFACE_CNT];
+> +} __packed;
+> +
+> +/* CP2108 port alternate functions fields. */
+> +#define CP2108_GPIO_TXLED_MODE		BIT(0)
+> +#define CP2108_GPIO_RXLED_MODE		BIT(1)
+> +#define CP2108_GPIO_RS485_MODE		BIT(2)
+> +#define CP2108_GPIO_RS485_LOGIC		BIT(3)
+> +#define CP2108_GPIO_CLOCK_MODE		BIT(4)
+> +#define CP2108_DYNAMIC_SUSPEND_MODE	BIT(5)
+> +
+> +/*
+> + * CP210X_VENDOR_SPECIFIC, CP210X_WRITE_LATCH call writes these 0x4 bytes
+> + * to CP2108 controller.
+> + */
+> +struct cp2108_gpio_write {
+> +	__le16	mask;
+> +	__le16	state;
+> +};
+> +
+>  /*
+>   * Helper to get interface number when we only have struct usb_serial.
+>   */
+> @@ -1366,10 +1420,13 @@ static int cp210x_gpio_get(struct gpio_chip *gc, unsigned int gpio)
+>  	struct usb_serial *serial = gpiochip_get_data(gc);
+>  	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
+>  	u8 req_type = REQTYPE_DEVICE_TO_HOST;
+> +	int bufsize = 1;
+>  	int result;
+> -	u8 buf;
+> +	u16 buf;
+>  
+> -	if (priv->partnum == CP210X_PARTNUM_CP2105)
+> +	if (priv->partnum == CP210X_PARTNUM_CP2108)
+> +		bufsize = 2;
+> +	else if (priv->partnum == CP210X_PARTNUM_CP2105)
+>  		req_type = REQTYPE_INTERFACE_TO_HOST;
+>  
+>  	result = usb_autopm_get_interface(serial->interface);
+> @@ -1377,39 +1434,62 @@ static int cp210x_gpio_get(struct gpio_chip *gc, unsigned int gpio)
+>  		return result;
+>  
+>  	result = cp210x_read_vendor_block(serial, req_type,
+> -					  CP210X_READ_LATCH, &buf, sizeof(buf));
+> +					  CP210X_READ_LATCH, &buf, bufsize);
+>  	usb_autopm_put_interface(serial->interface);
+>  	if (result < 0)
+>  		return result;
+>  
+> -	return !!(buf & BIT(gpio));
+> +	if (priv->partnum == CP210X_PARTNUM_CP2108) {
+> +		u8 intf_num = cp210x_interface_num(serial);
+> +
+> +		gpio += intf_num * 4;
+> +	}
+
+So with the gpio-index bug fixed we still get a conditional here...
+
+Did you try adding a dedicated cp2108x_gpio_get callback (I'm aware that
+the generic init code needs to be updated for this)?
+
+> +
+> +	return !!(le16_to_cpu(buf) & BIT(gpio));
+>  }
+>  
+>  static void cp210x_gpio_set(struct gpio_chip *gc, unsigned int gpio, int value)
 >  {
->         struct device *dev =3D &serial->interface->dev;
-> +       struct pl2303_serial_private *spriv =3D usb_get_serial_data(seria=
-l);
->         int res;
-> +       u8 request;
-> +
-> +       if (spriv->type =3D=3D &pl2303_type_data[TYPE_HXN])
-> +               request =3D VENDOR_READ_NREQUEST;
-> +       else
-> +               request =3D VENDOR_READ_REQUEST;
->
->         res =3D usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev,=
- 0),
-> -                       VENDOR_READ_REQUEST, VENDOR_READ_REQUEST_TYPE,
-> +                       request, VENDOR_READ_REQUEST_TYPE,
->                         value, 0, buf, 1, 100);
->         if (res !=3D 1) {
->                 dev_err(dev, "%s - failed to read [%04x]: %d\n", __func__=
-,
-> @@ -211,12 +237,19 @@ static int pl2303_vendor_read(struct usb_serial *se=
-rial, u16 value,
->  static int pl2303_vendor_write(struct usb_serial *serial, u16 value, u16=
- index)
->  {
->         struct device *dev =3D &serial->interface->dev;
-> +       struct pl2303_serial_private *spriv =3D usb_get_serial_data(seria=
-l);
->         int res;
-> +       u8 request;
->
->         dev_dbg(dev, "%s - [%04x] =3D %02x\n", __func__, value, index);
->
-> +       if (spriv->type =3D=3D &pl2303_type_data[TYPE_HXN])
-> +               request =3D VENDOR_WRITE_NREQUEST;
-> +       else
-> +               request =3D VENDOR_WRITE_REQUEST;
-> +
->         res =3D usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev,=
- 0),
-> -                       VENDOR_WRITE_REQUEST, VENDOR_WRITE_REQUEST_TYPE,
-> +                       request, VENDOR_WRITE_REQUEST_TYPE,
->                         value, index, NULL, 0, 100);
->         if (res) {
->                 dev_err(dev, "%s - failed to write [%04x]: %d\n", __func_=
-_,
-> @@ -231,12 +264,17 @@ static int pl2303_update_reg(struct usb_serial *ser=
-ial, u8 reg, u8 mask, u8 val)
->  {
->         int ret =3D 0;
->         u8 *buf;
-> +       struct pl2303_serial_private *spriv =3D usb_get_serial_data(seria=
-l);
->
->         buf =3D kmalloc(1, GFP_KERNEL);
->         if (!buf)
->                 return -ENOMEM;
->
-> -       ret =3D pl2303_vendor_read(serial, reg | 0x80, buf);
-> +       if (spriv->type =3D=3D &pl2303_type_data[TYPE_HXN])
-> +               ret =3D pl2303_vendor_read(serial, reg, buf);
-> +       else
-> +               ret =3D pl2303_vendor_read(serial, reg | 0x80, buf);
-> +
->         if (ret)
->                 goto out_free;
->
-> @@ -319,6 +357,7 @@ static int pl2303_startup(struct usb_serial *serial)
->         struct pl2303_serial_private *spriv;
->         enum pl2303_type type =3D TYPE_01;
->         unsigned char *buf;
-> +       int res;
->
->         spriv =3D kzalloc(sizeof(*spriv), GFP_KERNEL);
->         if (!spriv)
-> @@ -340,26 +379,37 @@ static int pl2303_startup(struct usb_serial *serial=
-)
->                 type =3D TYPE_01;         /* type 1 */
->         dev_dbg(&serial->interface->dev, "device type: %d\n", type);
->
-> +       if (type =3D=3D TYPE_HX) {
-> +               res =3D usb_control_msg(serial->dev,
-> +                       usb_rcvctrlpipe(serial->dev, 0),
-> +                       VENDOR_READ_REQUEST, VENDOR_READ_REQUEST_TYPE,
-> +                       PL2303_READ_TYPE_HX_STATUS, 0, buf, 1, 100);
-> +               if (res !=3D 1)
-> +                       type =3D TYPE_HXN;
-> +       }
-> +
->         spriv->type =3D &pl2303_type_data[type];
->         spriv->quirks =3D (unsigned long)usb_get_serial_data(serial);
->         spriv->quirks |=3D spriv->type->quirks;
->
->         usb_set_serial_data(serial, spriv);
->
-> -       pl2303_vendor_read(serial, 0x8484, buf);
-> -       pl2303_vendor_write(serial, 0x0404, 0);
-> -       pl2303_vendor_read(serial, 0x8484, buf);
-> -       pl2303_vendor_read(serial, 0x8383, buf);
-> -       pl2303_vendor_read(serial, 0x8484, buf);
-> -       pl2303_vendor_write(serial, 0x0404, 1);
-> -       pl2303_vendor_read(serial, 0x8484, buf);
-> -       pl2303_vendor_read(serial, 0x8383, buf);
-> -       pl2303_vendor_write(serial, 0, 1);
-> -       pl2303_vendor_write(serial, 1, 0);
-> -       if (spriv->quirks & PL2303_QUIRK_LEGACY)
-> -               pl2303_vendor_write(serial, 2, 0x24);
-> -       else
-> -               pl2303_vendor_write(serial, 2, 0x44);
-> +       if (type !=3D TYPE_HXN) {
-> +               pl2303_vendor_read(serial, 0x8484, buf);
-> +               pl2303_vendor_write(serial, 0x0404, 0);
-> +               pl2303_vendor_read(serial, 0x8484, buf);
-> +               pl2303_vendor_read(serial, 0x8383, buf);
-> +               pl2303_vendor_read(serial, 0x8484, buf);
-> +               pl2303_vendor_write(serial, 0x0404, 1);
-> +               pl2303_vendor_read(serial, 0x8484, buf);
-> +               pl2303_vendor_read(serial, 0x8383, buf);
-> +               pl2303_vendor_write(serial, 0, 1);
-> +               pl2303_vendor_write(serial, 1, 0);
-> +               if (spriv->quirks & PL2303_QUIRK_LEGACY)
-> +                       pl2303_vendor_write(serial, 2, 0x24);
-> +               else
-> +                       pl2303_vendor_write(serial, 2, 0x44);
-> +       }
->
->         kfree(buf);
->
-> @@ -720,12 +770,26 @@ static void pl2303_set_termios(struct tty_struct *t=
-ty,
->         if (C_CRTSCTS(tty)) {
->                 if (spriv->quirks & PL2303_QUIRK_LEGACY)
->                         pl2303_update_reg(serial, 0, PL2303_FLOWCTRL_MASK=
-, 0x40);
-> -               else
-> +               else if (spriv->type =3D=3D &pl2303_type_data[TYPE_HXN]) =
-{
-> +                       pl2303_update_reg(serial, PL2303_HXN_FLOWCTRL,
-> +                       PL2303_HXN_FLOWCTRL_MASK, PL2303_HXN_CTRL_RTS_CTS=
-);
-> +               } else {
->                         pl2303_update_reg(serial, 0, PL2303_FLOWCTRL_MASK=
-, 0x60);
-> +               }
->         } else if (pl2303_enable_xonxoff(tty, spriv->type)) {
-> -               pl2303_update_reg(serial, 0, PL2303_FLOWCTRL_MASK, 0xc0);
-> +               if (spriv->type =3D=3D &pl2303_type_data[TYPE_HXN]) {
-> +                       pl2303_update_reg(serial, PL2303_HXN_FLOWCTRL,
-> +                       PL2303_HXN_FLOWCTRL_MASK, PL2303_HXN_CTRL_XON_XOF=
-F);
-> +               } else {
-> +                       pl2303_update_reg(serial, 0, PL2303_FLOWCTRL_MASK=
-, 0xc0);
-> +               }
->         } else {
-> -               pl2303_update_reg(serial, 0, PL2303_FLOWCTRL_MASK, 0);
-> +               if (spriv->type =3D=3D &pl2303_type_data[TYPE_HXN]) {
-> +                       pl2303_update_reg(serial, PL2303_HXN_FLOWCTRL,
-> +                       PL2303_HXN_FLOWCTRL_MASK, PL2303_HXN_CTRL_NONE);
-> +               } else {
-> +                       pl2303_update_reg(serial, 0, PL2303_FLOWCTRL_MASK=
-, 0);
-> +               }
->         }
->
->         kfree(buf);
-> @@ -766,8 +830,13 @@ static int pl2303_open(struct tty_struct *tty, struc=
-t usb_serial_port *port)
->                 usb_clear_halt(serial->dev, port->read_urb->pipe);
->         } else {
->                 /* reset upstream data pipes */
-> -               pl2303_vendor_write(serial, 8, 0);
-> -               pl2303_vendor_write(serial, 9, 0);
-> +               if (spriv->type =3D=3D &pl2303_type_data[TYPE_HXN]) {
-> +                       pl2303_vendor_write(serial,
-> +                       PL2303_HXN_RESET_DOWN_UPSTREAM, 0);
-> +               } else {
-> +                       pl2303_vendor_write(serial, 8, 0);
-> +                       pl2303_vendor_write(serial, 9, 0);
-> +               }
->         }
->
->         /* Setup termios */
-> diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
-> index 559941ca884d..f1c8b5a36816 100644
-> --- a/drivers/usb/serial/pl2303.h
-> +++ b/drivers/usb/serial/pl2303.h
-> @@ -20,7 +20,12 @@
->  #define PL2303_PRODUCT_ID_HCR331       0x331a
->  #define PL2303_PRODUCT_ID_MOTOROLA     0x0307
->  #define PL2303_PRODUCT_ID_ZTEK         0xe1f1
+>  	struct usb_serial *serial = gpiochip_get_data(gc);
+>  	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
+> -	struct cp210x_gpio_write buf;
+>  	int result;
+>  
+> -	if (value == 1)
+> -		buf.state = BIT(gpio);
+> -	else
+> -		buf.state = 0;
 > -
-> +#define PL2303_PRODUCT_ID_GC           0x23A3
-> +#define PL2303_PRODUCT_ID_GB           0x23B3
-> +#define PL2303_PRODUCT_ID_GT           0x23C3
-> +#define PL2303_PRODUCT_ID_GL           0x23D3
-> +#define PL2303_PRODUCT_ID_GE           0x23E3
-> +#define PL2303_PRODUCT_ID_GS           0x23F3
->
->  #define ATEN_VENDOR_ID         0x0557
->  #define ATEN_VENDOR_ID2                0x0547
-> --
-> 2.20.1
->
+> -	buf.mask = BIT(gpio);
+> -
+>  	result = usb_autopm_get_interface(serial->interface);
+>  	if (result)
+>  		goto out;
+>  
+> -	if (priv->partnum == CP210X_PARTNUM_CP2105) {
+> +	if (priv->partnum == CP210X_PARTNUM_CP2108) {
+> +		u8 intf_num = cp210x_interface_num(serial);
+> +		struct cp2108_gpio_write buf;
+> +
+> +		buf.mask = cpu_to_le16(BIT(intf_num * 4 + gpio));
+> +		if (value == 1)
+> +			buf.state = buf.mask;
+> +		else
+> +			buf.state = 0;
+> +
+> +		result = cp210x_write_vendor_block(serial,
+> +						   REQTYPE_HOST_TO_DEVICE,
+> +						   CP210X_WRITE_LATCH, &buf,
+> +						   sizeof(buf));
+
+And if adding a cp2108 get callback, you may as well break this out as
+well.
+
+> +	} else if (priv->partnum == CP210X_PARTNUM_CP2105) {
+> +		struct cp210x_gpio_write buf;
+> +
+> +		buf.mask = BIT(gpio);
+> +		if (value == 1)
+> +			buf.state = buf.mask;
+> +		else
+> +			buf.state = 0;
+> +
+>  		result = cp210x_write_vendor_block(serial,
+>  						   REQTYPE_HOST_TO_INTERFACE,
+>  						   CP210X_WRITE_LATCH, &buf,
+>  						   sizeof(buf));
+>  	} else {
+> -		u16 wIndex = buf.state << 8 | buf.mask;
+> +		u16 wIndex = BIT(gpio);
+> +
+> +		if (value == 1)
+> +			wIndex |= (BIT(gpio) << 8);
+>  
+>  		result = usb_control_msg(serial->dev,
+>  					 usb_sndctrlpipe(serial->dev, 0),
+> @@ -1489,6 +1569,73 @@ static int cp210x_gpio_set_config(struct gpio_chip *gc, unsigned int gpio,
+>  	return -ENOTSUPP;
+>  }
+>  
+> +/*
+> + * CP2108 got 16 GPIOs, each of which can be configured either as input, or
+> + * as open-drain with weak pulling up to VIO or as push-pull with strong
+> + * pulling up to VIO. Similar to the rest of devices the open-drain mode
+> + * with latch set high is treated as input mode. All GPIOs are equally
+> + * distributed between four interfaces. Thanks to the mask-state based
+> + * write-latch control message we don't need to worry about possible races.
+> + */
+> +static int cp2108_gpioconf_init(struct usb_serial *serial)
+> +{
+> +	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
+> +	struct cp2108_config config;
+> +	u16 mode, latch;
+> +	u8 intf_num;
+> +	int result;
+> +
+> +	result = cp210x_read_vendor_block(serial, REQTYPE_DEVICE_TO_HOST,
+> +					  CP210X_GET_PORTCONFIG, &config,
+> +					  sizeof(config));
+> +	if (result < 0)
+> +		return result;
+> +
+> +	/*
+> +	 * There are four interfaces with four GPIOs manually distributed for
+> +	 * each of them. Here we parse the device config data to comply with
+> +	 * the driver interface. Note that the mode (push-pull, open-drain,
+> +	 * etc) can be changed only after reset, which causes the driver
+> +	 * reloading anyway. So we can safely read the config just once at the
+> +	 * device attachment procedure.
+> +	 */
+> +	intf_num = cp210x_interface_num(serial);
+> +	if (intf_num >= CP2108_IFACE_CNT)
+> +		return -ENODEV;
+> +	mode = le16_to_cpu(config.reset_latch.mode[CP2108_GPIO_PB_IDX]);
+> +	latch = le16_to_cpu(config.reset_latch.latch[CP2108_GPIO_PB_IDX]);
+> +
+> +	priv->gpio_altfunc = config.enhanced_fxn[intf_num];
+
+gpio_altfunc isn't the same as as enhanced_fxn; use a temporary or move
+where you finally set gpio_altfunc (which is a per-pin bitmask).
+
+> +	priv->gpio_pushpull = (mode >> (intf_num * 4)) & 0x0f;
+> +	priv->gpio_input = (latch >> (intf_num * 4)) & 0x0f;
+
+Add a temporary or reuse latch here; this isn't gpio_input which is set
+below.
+
+> +	priv->gc.ngpio = 4;
+> +
+> +	/*
+> +	 * Each GPIO[i*4 + x] can have an alternative function enabled
+> +	 * (x = 0 - UART i TX toggle, x = 1 - UART i RX toggle, x = 2 - UART i
+> +	 * RS485 mode and x = 3  - clock output i), in which case the GPIO
+
+A table would be more readable (i.e. one value per line).
+
+> +	 * functionality isn't available. If it is switched on we deny the GPIO
+> +	 * requests. GPIO alternative functions state resides the
+> +	 * enhanced_fxn[i] bitfield, where each bit linearly corresponds to
+> +	 * the specific GPIO, except GPIO[3] - clock output function, which
+> +	 * alas is placed at fourth bit, while the third bit is busy with RS485
+> +	 * logic mode flag. In order to make the generic cp210x GPIO request
+> +	 * method being suitable for cp2108, lets copy the GPIO[4] clock
+> +	 * alternative function state bit to the GPIO[3] RS485 logic mode bit.
+> +	 */
+
+So instead of this wall of text, why not use the pattern from the other
+init functions, which is mostly self-explantory? That is, four
+conditionals like:
+
+	if (enhanced_fxn & CP2108_GPIO_CLOCK_MODE)
+		priv->gpio_altfunc |= BIT(3);
+
+> +	priv->gpio_altfunc &= ~CP2108_GPIO_RS485_LOGIC;
+> +	if (priv->gpio_altfunc & CP2108_GPIO_CLOCK_MODE)
+> +		priv->gpio_altfunc |= CP2108_GPIO_RS485_LOGIC;
+
+This really doesn't make any sense without the comment and knowing the
+values of the macros, which kind of defeats their purpose.
+
+> +
+> +	/*
+> +	 * Open-drain mode in combination with a high latch value is used
+> +	 * to emulate the GPIO input pin.
+> +	 */
+
+This only hints at how we implement input mode. Also add something about
+the initial direction which is what the following code is setting, along
+the lines of:
+
+	Set direction to "input" iff pin is open-drain and reset
+	value is 1.
+
+> +	priv->gpio_input &= ~priv->gpio_pushpull;
+
+	priv->gpio_input = latch & ~priv->gpio_pushpull
+
+where latch has been shifted as required (here or above).
+
+Johan
