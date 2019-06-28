@@ -2,78 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD47D5A324
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2019 20:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DD25A342
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2019 20:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726660AbfF1SHQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jun 2019 14:07:16 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:46676 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725783AbfF1SHQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jun 2019 14:07:16 -0400
-Received: (qmail 4946 invoked by uid 2102); 28 Jun 2019 14:07:15 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 28 Jun 2019 14:07:15 -0400
-Date:   Fri, 28 Jun 2019 14:07:15 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: Pass transfer_buffer to gadget drivers
-In-Reply-To: <CAAeHK+wVdjCein2rtWVYTq5Cp9jf0pcVSEvyWHYKDEh78-1xrg@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1906281403020.1335-100000@iolanthe.rowland.org>
+        id S1726537AbfF1SOn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jun 2019 14:14:43 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:40200 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726498AbfF1SOn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jun 2019 14:14:43 -0400
+Received: by mail-wr1-f65.google.com with SMTP id p11so7210360wre.7
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2019 11:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0cnkDQbZpYRwQd96ngx4qAoaZ3lYPa92yT2sfzzvlI8=;
+        b=XwDtmRhAErV28ymeatsy9mbPyRbmUhbMtL4IxQFBX2esLP4L8Dg8DWEwrL5BpJDUt4
+         FHRVSXQ1ngsz97D33lJZp/5oSvvvJp3Xn3Xp+l3Oi3NFIYedPuJPE5XUsgA4yAFlOBZK
+         R61+sxOpWgg2nnLgORSYKvlsaGx/RJDmoN1aCeRDxGVr6Nsz8ZBc0JKYLWMx6DhH/oYm
+         8hwcJ2qt1U9LddwPOhjIpppT500w8NuYeTkrluLzzC9EWsDm/yVNdCna15DArgpfthsK
+         VrWPoJMdZkoT/ecFhNSgtI8sKXSdlzAt5YEHjAWCSXECby4juochBV6t/gP7+4gZybzO
+         VWmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0cnkDQbZpYRwQd96ngx4qAoaZ3lYPa92yT2sfzzvlI8=;
+        b=YS1nel/qgAb3Os3DxqeXPO51kMe93rhCNWSn6AZL226LXHcsm6DOVokDCuOW4bBCz7
+         oXol7GK88riEXV8+fLARJxg0fu8WhY6MiWY24doWFxL+EBOKr8LrNXXQRsIB+NZwFlf+
+         lp2Hbn/9razMLtYcsKv7twEMiJ25Mh2iy64peoryrH7pFSR0XRzWFE5FQHGYCGDgKWLX
+         4ECn7HeYGT+8ZRPgqgE6j4wwdItwDj28iYkf3qaTUTmNvBK7kWp+TI5ImUs8kosshKpK
+         XFRyVTDPtTU4652oQ6Q/O5ppZDCHnx4OvT7HUQZToMAHGXAB0R87GLmyqb9l4ZjyrZ7U
+         NNjQ==
+X-Gm-Message-State: APjAAAWEtuEMQDio3SBO587TJqZZKemhprdnACoTTQRHgzOs9Y6Lzgpx
+        CN6RJ+7FiKm2eg3lRzhFuzP3p2ZDOUDMpEOnv+K0cg==
+X-Google-Smtp-Source: APXvYqyPkk7Org4QWv5TFR0K0XoNu4JXCnOJoZS2v/LCBIqCN4kbi9bo5JAU+vf3rEyhsGCgeUEQE1wJJRMYIGip/88=
+X-Received: by 2002:adf:fe4e:: with SMTP id m14mr9497003wrs.21.1561745682146;
+ Fri, 28 Jun 2019 11:14:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <20190627205240.38366-1-john.stultz@linaro.org> <C672AA6DAAC36042A98BAD0B0B25BDA94CC59E46@BGSMSX104.gar.corp.intel.com>
+In-Reply-To: <C672AA6DAAC36042A98BAD0B0B25BDA94CC59E46@BGSMSX104.gar.corp.intel.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Fri, 28 Jun 2019 11:14:31 -0700
+Message-ID: <CALAqxLXxbvgv6zeBPgE4n6opTJX_-pqEZ+hLB3pNMHZyBpCr8A@mail.gmail.com>
+Subject: Re: [PATCH 4.19.y 0/9] Fix scheduling while atomic in dwc3_gadget_ep_dequeue
+To:     "Gopal, Saranya" <saranya.gopal@intel.com>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "Yang, Fei" <fei.yang@intel.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 28 Jun 2019, Andrey Konovalov wrote:
-
-> On Fri, Jun 28, 2019 at 6:44 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+On Fri, Jun 28, 2019 at 3:10 AM Gopal, Saranya <saranya.gopal@intel.com> wrote:
+>
+> > With recent changes in AOSP, adb is using asynchronous io, which
+> > causes the following crash usually on a reboot:
 > >
-> > On Tue, Jun 18, 2019 at 3:53 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-
-...
-
-> > > > > Another question: do I understand correctly, that we only proceed with
-> > > > > submitting an URB to get the data for the control OUT request
-> > > > > (ctrl->bRequestType doesn't have the USB_DIR_IN bit set) if
-> > > > > ctrl->wLength != 0?
-> > >
-> > > That's right.  If a control-OUT transfer has wLength == 0, it means
-> > > there is no data stage.  (And control-IN transfers are not allowed to
-> > > have wLength == 0.)
+> > [  184.278302] BUG: scheduling while atomic: ksoftirqd/0/9/0x00000104
+> > [  184.284617] Modules linked in: wl18xx wlcore snd_soc_hdmi_codec
+> > wlcore_sdio tcpci_rt1711h tcpci tcpm typec adv7511 cec dwc3 phy_hi3660_usb3
+> > snd_soc_simple_card snd_soc_a
+> > [  184.316034] Preemption disabled at:
+> > [  184.316072] [<ffffff8008081de4>] __do_softirq+0x64/0x398
+> > [  184.324953] CPU: 0 PID: 9 Comm: ksoftirqd/0 Tainted: G S                4.19.43-
+> > 00669-g8e4970572c43-dirty #356
+> > [  184.334963] Hardware name: HiKey960 (DT)
+> > [  184.338892] Call trace:
+> > [  184.341352]  dump_backtrace+0x0/0x158
+> > [  184.345025]  show_stack+0x14/0x20
+> > [  184.348355]  dump_stack+0x80/0xa4
+> > [  184.351685]  __schedule_bug+0x6c/0xc0
+> > [  184.355363]  __schedule+0x64c/0x978
+> > [  184.358863]  schedule+0x2c/0x90
+> > [  184.362053]  dwc3_gadget_ep_dequeue+0x274/0x388 [dwc3]
+>
+>
+> > This happens as usb_ep_dequeue can be called in interrupt
+> > context, and dwc3_gadget_ep_dequeue() then calls
+> > wait_event_lock_irq() which can sleep.
 > >
-> > And another one to clarify :)
+> > Upstream kernels are not affected due to the change
+> > fec9095bdef4 ("dwc3: gadget: remove wait_end_transfer") which
+> > removes the wait_even_lock_irq code. Unfortunately that change
+> > has a number of dependencies, which I'm submitting here.
 > >
-> > So if we got a setup() callback, which denotes:
-> > 1. an IN transfer, we need to submit an URB with response (even if
-> > wLength == 0). When it completes, the transaction is over, and we will
-> > get the next setup() callback (if there's going to be any).
-
-Yes, except that wLength should never be 0 for an IN transfer.  If it 
-is, it's a bug in the host.
-
-> > 2. an OUT transfer, we need to submit an URB to fetch the data (even
-> > if wLength == 0).
-> 
-> Or more like: to fetch the data when wLength != 0 and to acknowledge
-> the request when wLength == 0.
-> 
-> > When it completes, the transaction is over, and we
-> > will get the next setup() callback (if there's going to be any).
+> > Also, to match upstream, in this series I've reverted one
+> > change that was backported to -stable, to replace it with the
+> > cherry-picked upstream commit (as the dependencies are now
+> > there)
 > >
-> > Is the above correct?
+> > This issue also affects 4.14,4.9 and I believe 4.4 kernels,
+> > however I don't know how to best backport this functionality
+> > that far back. Help from the maintainers would be very much
+> > appreciated!
+> >
+> > Feedback and comments would be welcome!
+> >
+> > thanks
+> > -john
+>
+> I confirm that this patch series fixes crash seen on reboot.
+> Considering that many Android platforms use 4.19 stable kernel with latest AOSP codebase, it would be really helpful if these patches are merged to 4.19 stable.
+>
 
-Correct.
+Thanks so much for the testing! Do let me know if you come across any
+ideas on how to cleanly resolve this for 4.14/4.9/4.4!
 
-There has been some discussion (and a few patches posted) about
-modifying this approach.  But for now, this is the way to do it.
-
-Alan Stern
-
+thanks
+-john
