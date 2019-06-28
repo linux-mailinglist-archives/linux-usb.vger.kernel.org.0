@@ -2,72 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB10596AD
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2019 11:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A4E59806
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2019 11:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbfF1JBX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jun 2019 05:01:23 -0400
-Received: from mail.steuer-voss.de ([85.183.69.95]:40966 "EHLO
-        mail.steuer-voss.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726484AbfF1JBX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jun 2019 05:01:23 -0400
-X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
-X-Amavis-Alert: BAD HEADER SECTION, Duplicate header field: "References"
-Received: from pc-niv.weinmann.com (localhost [127.0.0.1])
-        by mail.steuer-voss.de (Postfix) with ESMTP id 8D42A4BAAC;
-        Fri, 28 Jun 2019 11:01:21 +0200 (CEST)
-From:   Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>,
+        id S1726620AbfF1J6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jun 2019 05:58:46 -0400
+Received: from mga12.intel.com ([192.55.52.136]:51701 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726514AbfF1J6q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Jun 2019 05:58:46 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Jun 2019 02:58:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,427,1557212400"; 
+   d="scan'208";a="183657368"
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 28 Jun 2019 02:58:43 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 28 Jun 2019 12:58:43 +0300
+Date:   Fri, 28 Jun 2019 12:58:43 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, nv@vosn.de
-Subject: [PATCH 2/2] drivers/usb/typec/tps6598x.c: fix 4CC cmd write
-Date:   Fri, 28 Jun 2019 11:01:09 +0200
-Message-Id: <47a0d3b0b725c58bf7f422261a7c5d3accafea57.1561712364.git.nikolaus.voss@loewensteinmedical.de>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <f8daf204d49fff00db33e2b417a20afcc58ad56e.1561712364.git.nikolaus.voss@loewensteinmedical.de>
-References: <f8daf204d49fff00db33e2b417a20afcc58ad56e.1561712364.git.nikolaus.voss@loewensteinmedical.de>
-In-Reply-To: <20190628083417.GA21701@kuha.fi.intel.com>
+Subject: Re: [PATCH 1/2] drivers/usb/typec/tps6598x.c: fix portinfo width
+Message-ID: <20190628095843.GB21701@kuha.fi.intel.com>
 References: <20190628083417.GA21701@kuha.fi.intel.com>
+ <f8daf204d49fff00db33e2b417a20afcc58ad56e.1561712364.git.nikolaus.voss@loewensteinmedical.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8daf204d49fff00db33e2b417a20afcc58ad56e.1561712364.git.nikolaus.voss@loewensteinmedical.de>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Writing 4CC commands with tps6598x_write_4cc() already has
-a pointer arg, don't reference it when using as arg to
-tps6598x_block_write(). Correcting this enforces the constness
-of the pointer to propagate to tps6598x_block_write(), so add
-the const qualifier there to avoid the warning.
+On Fri, Jun 28, 2019 at 11:01:08AM +0200, Nikolaus Voss wrote:
+> Portinfo bit field is 3 bits wide, not 2 bits. This led to
+> a wrong driver configuration for some tps6598x configurations.
+> 
+> Fixes: 0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
+> Signed-off-by: Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>
 
-Fixes: 0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
-Signed-off-by: Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>
----
- drivers/usb/typec/tps6598x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Shouldn't this be applied to the stable trees as well?
 
-diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-index a170c49c2542..a38d1409f15b 100644
---- a/drivers/usb/typec/tps6598x.c
-+++ b/drivers/usb/typec/tps6598x.c
-@@ -127,7 +127,7 @@ tps6598x_block_read(struct tps6598x *tps, u8 reg, void *val, size_t len)
- }
- 
- static int tps6598x_block_write(struct tps6598x *tps, u8 reg,
--				void *val, size_t len)
-+				const void *val, size_t len)
- {
- 	u8 data[TPS_MAX_LEN + 1];
- 
-@@ -173,7 +173,7 @@ static inline int tps6598x_write64(struct tps6598x *tps, u8 reg, u64 val)
- static inline int
- tps6598x_write_4cc(struct tps6598x *tps, u8 reg, const char *val)
- {
--	return tps6598x_block_write(tps, reg, &val, sizeof(u32));
-+	return tps6598x_block_write(tps, reg, val, 4);
- }
- 
- static int tps6598x_read_partner_identity(struct tps6598x *tps)
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/tps6598x.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
+> index c674abe3cf99..a170c49c2542 100644
+> --- a/drivers/usb/typec/tps6598x.c
+> +++ b/drivers/usb/typec/tps6598x.c
+> @@ -41,7 +41,7 @@
+>  #define TPS_STATUS_VCONN(s)		(!!((s) & BIT(7)))
+>  
+>  /* TPS_REG_SYSTEM_CONF bits */
+> -#define TPS_SYSCONF_PORTINFO(c)		((c) & 3)
+> +#define TPS_SYSCONF_PORTINFO(c)		((c) & 7)
+>  
+>  enum {
+>  	TPS_PORTINFO_SINK,
+> -- 
+> 2.17.1
+
+thanks,
+
 -- 
-2.17.1
-
+heikki
