@@ -2,117 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DD25A342
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2019 20:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EDB5A36B
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jun 2019 20:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbfF1SOn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jun 2019 14:14:43 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:40200 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726498AbfF1SOn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jun 2019 14:14:43 -0400
-Received: by mail-wr1-f65.google.com with SMTP id p11so7210360wre.7
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2019 11:14:43 -0700 (PDT)
+        id S1726587AbfF1SYS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jun 2019 14:24:18 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:39806 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726056AbfF1SYS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jun 2019 14:24:18 -0400
+Received: by mail-pl1-f196.google.com with SMTP id b7so3689991pls.6
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2019 11:24:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0cnkDQbZpYRwQd96ngx4qAoaZ3lYPa92yT2sfzzvlI8=;
-        b=XwDtmRhAErV28ymeatsy9mbPyRbmUhbMtL4IxQFBX2esLP4L8Dg8DWEwrL5BpJDUt4
-         FHRVSXQ1ngsz97D33lJZp/5oSvvvJp3Xn3Xp+l3Oi3NFIYedPuJPE5XUsgA4yAFlOBZK
-         R61+sxOpWgg2nnLgORSYKvlsaGx/RJDmoN1aCeRDxGVr6Nsz8ZBc0JKYLWMx6DhH/oYm
-         8hwcJ2qt1U9LddwPOhjIpppT500w8NuYeTkrluLzzC9EWsDm/yVNdCna15DArgpfthsK
-         VrWPoJMdZkoT/ecFhNSgtI8sKXSdlzAt5YEHjAWCSXECby4juochBV6t/gP7+4gZybzO
-         VWmw==
+        h=from:to:cc:subject:date:message-id;
+        bh=Lui3xxG+jUxHBZj//7cb1eS4egCiB5B/SX3zID9r9OU=;
+        b=iYx+PZHPfVmdW5etNZ+RS83FEtBUrZ7pZMN9PI2pP6nCZR+REurZv8JdDysfhHYwXA
+         q4m+qa4gvoBEjQ9f9OFDuAmDXO+iOdAr50cRe1Y/8HZSBTf7rws2Wk1wf1BOOJGip1SP
+         Jn9z4jqAUaXUeQhJ/k1RSmEetn4Y9stjBOM6LDqWATPf1czqS0Q4vDNZkGfRZ4/s8SaQ
+         etMHT5N9J+T/7xN4NFZumbOpp8BcKD1E2YlVU7vZL6bO6r+1+mvPlsWcVCYctZ0ES/jG
+         ZVLciF5eArnbAR2ramfq30d3VYF1mnXyUBHDXPkBFMTvdQl9TxFpRlIfQDnv0olBSTc0
+         GQxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0cnkDQbZpYRwQd96ngx4qAoaZ3lYPa92yT2sfzzvlI8=;
-        b=YS1nel/qgAb3Os3DxqeXPO51kMe93rhCNWSn6AZL226LXHcsm6DOVokDCuOW4bBCz7
-         oXol7GK88riEXV8+fLARJxg0fu8WhY6MiWY24doWFxL+EBOKr8LrNXXQRsIB+NZwFlf+
-         lp2Hbn/9razMLtYcsKv7twEMiJ25Mh2iy64peoryrH7pFSR0XRzWFE5FQHGYCGDgKWLX
-         4ECn7HeYGT+8ZRPgqgE6j4wwdItwDj28iYkf3qaTUTmNvBK7kWp+TI5ImUs8kosshKpK
-         XFRyVTDPtTU4652oQ6Q/O5ppZDCHnx4OvT7HUQZToMAHGXAB0R87GLmyqb9l4ZjyrZ7U
-         NNjQ==
-X-Gm-Message-State: APjAAAWEtuEMQDio3SBO587TJqZZKemhprdnACoTTQRHgzOs9Y6Lzgpx
-        CN6RJ+7FiKm2eg3lRzhFuzP3p2ZDOUDMpEOnv+K0cg==
-X-Google-Smtp-Source: APXvYqyPkk7Org4QWv5TFR0K0XoNu4JXCnOJoZS2v/LCBIqCN4kbi9bo5JAU+vf3rEyhsGCgeUEQE1wJJRMYIGip/88=
-X-Received: by 2002:adf:fe4e:: with SMTP id m14mr9497003wrs.21.1561745682146;
- Fri, 28 Jun 2019 11:14:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190627205240.38366-1-john.stultz@linaro.org> <C672AA6DAAC36042A98BAD0B0B25BDA94CC59E46@BGSMSX104.gar.corp.intel.com>
-In-Reply-To: <C672AA6DAAC36042A98BAD0B0B25BDA94CC59E46@BGSMSX104.gar.corp.intel.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Lui3xxG+jUxHBZj//7cb1eS4egCiB5B/SX3zID9r9OU=;
+        b=nX4f8eK8tQypXEhOWC6vdj/SNvuGx0E+YO/vwgZTfT0jDIB5ezZfo8Qci62FNgoDu+
+         96YWoAGvtAZDGs8F5y1MLIos0CAOqAEsYE73DFGZUAFvbayX6A677VwXT4Bvc1xJrOCI
+         JlagR3phV3hnmoky6kNLlpyHV+5AqlPUcUPzVE/IjaDOJep4GY0AwnCv9rp1amW9COas
+         yt/U2G5l1VgOHE2PBQGp3kAsY0+e+Hb4DFE6Z4+f8CqtPYplM4QOCG09y5dHyQXUxoJX
+         tcr4VWEAhyWa9K7MKt0ENAusEcPw9SiLSuoQYRnYIWYpQba/mPQ4lJ8bFu/8pQtEuuwJ
+         4HRA==
+X-Gm-Message-State: APjAAAVXf/2FU6/74PgbVNK/ljrse2a/ECDIGRlo6EPiz5GUzXThBDEm
+        qdfUVdpDRht26Viz9NPRfp+aFA==
+X-Google-Smtp-Source: APXvYqxS8O+2ugxIClJkG+iQuKCU0kL/+QCqeqEOCq1YVQiab6kk18FcwGCfKCfCMj3/CDrnfa235A==
+X-Received: by 2002:a17:902:2be8:: with SMTP id l95mr12325680plb.231.1561746257338;
+        Fri, 28 Jun 2019 11:24:17 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id s15sm2916223pfd.183.2019.06.28.11.24.15
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 28 Jun 2019 11:24:16 -0700 (PDT)
 From:   John Stultz <john.stultz@linaro.org>
-Date:   Fri, 28 Jun 2019 11:14:31 -0700
-Message-ID: <CALAqxLXxbvgv6zeBPgE4n6opTJX_-pqEZ+hLB3pNMHZyBpCr8A@mail.gmail.com>
-Subject: Re: [PATCH 4.19.y 0/9] Fix scheduling while atomic in dwc3_gadget_ep_dequeue
-To:     "Gopal, Saranya" <saranya.gopal@intel.com>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Yang, Fei" <fei.yang@intel.com>,
+To:     stable@vger.kernel.org
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Fei Yang <fei.yang@intel.com>,
         Sam Protsenko <semen.protsenko@linaro.org>,
         Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org
+Subject: [PATCH 4.19.y v2 0/9] Fix scheduling while atomic in dwc3_gadget_ep_dequeue
+Date:   Fri, 28 Jun 2019 18:24:04 +0000
+Message-Id: <20190628182413.33225-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 28, 2019 at 3:10 AM Gopal, Saranya <saranya.gopal@intel.com> wrote:
->
-> > With recent changes in AOSP, adb is using asynchronous io, which
-> > causes the following crash usually on a reboot:
-> >
-> > [  184.278302] BUG: scheduling while atomic: ksoftirqd/0/9/0x00000104
-> > [  184.284617] Modules linked in: wl18xx wlcore snd_soc_hdmi_codec
-> > wlcore_sdio tcpci_rt1711h tcpci tcpm typec adv7511 cec dwc3 phy_hi3660_usb3
-> > snd_soc_simple_card snd_soc_a
-> > [  184.316034] Preemption disabled at:
-> > [  184.316072] [<ffffff8008081de4>] __do_softirq+0x64/0x398
-> > [  184.324953] CPU: 0 PID: 9 Comm: ksoftirqd/0 Tainted: G S                4.19.43-
-> > 00669-g8e4970572c43-dirty #356
-> > [  184.334963] Hardware name: HiKey960 (DT)
-> > [  184.338892] Call trace:
-> > [  184.341352]  dump_backtrace+0x0/0x158
-> > [  184.345025]  show_stack+0x14/0x20
-> > [  184.348355]  dump_stack+0x80/0xa4
-> > [  184.351685]  __schedule_bug+0x6c/0xc0
-> > [  184.355363]  __schedule+0x64c/0x978
-> > [  184.358863]  schedule+0x2c/0x90
-> > [  184.362053]  dwc3_gadget_ep_dequeue+0x274/0x388 [dwc3]
->
->
-> > This happens as usb_ep_dequeue can be called in interrupt
-> > context, and dwc3_gadget_ep_dequeue() then calls
-> > wait_event_lock_irq() which can sleep.
-> >
-> > Upstream kernels are not affected due to the change
-> > fec9095bdef4 ("dwc3: gadget: remove wait_end_transfer") which
-> > removes the wait_even_lock_irq code. Unfortunately that change
-> > has a number of dependencies, which I'm submitting here.
-> >
-> > Also, to match upstream, in this series I've reverted one
-> > change that was backported to -stable, to replace it with the
-> > cherry-picked upstream commit (as the dependencies are now
-> > there)
-> >
-> > This issue also affects 4.14,4.9 and I believe 4.4 kernels,
-> > however I don't know how to best backport this functionality
-> > that far back. Help from the maintainers would be very much
-> > appreciated!
-> >
-> > Feedback and comments would be welcome!
-> >
-> > thanks
-> > -john
->
-> I confirm that this patch series fixes crash seen on reboot.
-> Considering that many Android platforms use 4.19 stable kernel with latest AOSP codebase, it would be really helpful if these patches are merged to 4.19 stable.
->
+With recent changes in AOSP, adb is using asynchronous io, which
+causes the following crash usually on a reboot:
 
-Thanks so much for the testing! Do let me know if you come across any
-ideas on how to cleanly resolve this for 4.14/4.9/4.4!
+[  184.278302] BUG: scheduling while atomic: ksoftirqd/0/9/0x00000104
+[  184.284617] Modules linked in: wl18xx wlcore snd_soc_hdmi_codec wlcore_sdio tcpci_rt1711h tcpci tcpm typec adv7511 cec dwc3 phy_hi3660_usb3 snd_soc_simple_card snd_soc_a
+[  184.316034] Preemption disabled at:
+[  184.316072] [<ffffff8008081de4>] __do_softirq+0x64/0x398
+[  184.324953] CPU: 0 PID: 9 Comm: ksoftirqd/0 Tainted: G S                4.19.43-00669-g8e4970572c43-dirty #356
+[  184.334963] Hardware name: HiKey960 (DT)
+[  184.338892] Call trace:
+[  184.341352]  dump_backtrace+0x0/0x158
+[  184.345025]  show_stack+0x14/0x20
+[  184.348355]  dump_stack+0x80/0xa4
+[  184.351685]  __schedule_bug+0x6c/0xc0
+[  184.355363]  __schedule+0x64c/0x978
+[  184.358863]  schedule+0x2c/0x90
+[  184.362053]  dwc3_gadget_ep_dequeue+0x274/0x388 [dwc3]
+[  184.367210]  usb_ep_dequeue+0x24/0xf8
+[  184.370884]  ffs_aio_cancel+0x3c/0x80
+[  184.374561]  free_ioctx_users+0x40/0x148
+[  184.378500]  percpu_ref_switch_to_atomic_rcu+0x180/0x1c0
+[  184.383830]  rcu_process_callbacks+0x24c/0x5d8
+[  184.388283]  __do_softirq+0x13c/0x398
+[  184.391959]  run_ksoftirqd+0x3c/0x48
+[  184.395549]  smpboot_thread_fn+0x220/0x288
+[  184.399660]  kthread+0x12c/0x130
+[  184.402901]  ret_from_fork+0x10/0x1c
+
+
+This happens as usb_ep_dequeue can be called in interrupt
+context, and dwc3_gadget_ep_dequeue() then calls
+wait_event_lock_irq() which can sleep.
+
+Upstream kernels are not affected due to the change
+fec9095bdef4 ("dwc3: gadget: remove wait_end_transfer") which
+removes the wait_even_lock_irq code. Unfortunately that change
+has a number of dependencies, which I'm submitting here.
+
+Also, to match upstream, in this series I've reverted one
+change that was backported to -stable, to replace it with the
+cherry-picked upstream commit (as the dependencies are now
+there)
+
+This issue also affects 4.14,4.9 and I believe 4.4 kernels,
+however I don't know how to best backport this functionality
+that far back. Help from the maintainers would be very much
+appreciated!
+
+
+New in v2:
+* Reordered the patchset to put the revert patch first, which
+  avoids any bisection build issues. (Thanks to Jack Pham for
+  the suggestion!)
+
+
+Feedback and comments would be welcome!
 
 thanks
 -john
+
+Cc: Fei Yang <fei.yang@intel.com>
+Cc: Sam Protsenko <semen.protsenko@linaro.org>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Jack Pham <jackp@codeaurora.org>
+Cc: linux-usb@vger.kernel.org
+Cc: stable@vger.kernel.org # 4.19.y
+
+
+Felipe Balbi (7):
+  usb: dwc3: gadget: combine unaligned and zero flags
+  usb: dwc3: gadget: track number of TRBs per request
+  usb: dwc3: gadget: use num_trbs when skipping TRBs on ->dequeue()
+  usb: dwc3: gadget: extract dwc3_gadget_ep_skip_trbs()
+  usb: dwc3: gadget: introduce cancelled_list
+  usb: dwc3: gadget: move requests to cancelled_list
+  usb: dwc3: gadget: remove wait_end_transfer
+
+Jack Pham (1):
+  usb: dwc3: gadget: Clear req->needs_extra_trb flag on cleanup
+
+John Stultz (1):
+  Revert "usb: dwc3: gadget: Clear req->needs_extra_trb flag on cleanup"
+
+ drivers/usb/dwc3/core.h   |  15 ++--
+ drivers/usb/dwc3/gadget.c | 158 +++++++++++++-------------------------
+ drivers/usb/dwc3/gadget.h |  15 ++++
+ 3 files changed, 75 insertions(+), 113 deletions(-)
+
+-- 
+2.17.1
+
