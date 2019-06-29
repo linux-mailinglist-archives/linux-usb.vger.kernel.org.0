@@ -2,53 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A96A5A975
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2019 09:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECA15A9B7
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2019 10:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbfF2Hcs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Jun 2019 03:32:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51202 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726527AbfF2Hcs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 29 Jun 2019 03:32:48 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1F222086D;
-        Sat, 29 Jun 2019 07:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561793567;
-        bh=X2dSxB2Ah+HB5UDxEdDNNV/WTOdlP9hBwBhbEOUWHQs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QNzyB1/4DPH0G0rNvHI/J3o5fhu4olQI7sgdz8jo3IisiUt1Lf8WUJI832/UOkvOq
-         irxnJwyizTtd+q9nTxWAHYvXfkPLRspM8Y3lTyVtXP4mYspHM+t8zO4QAfQNdCfqnW
-         u1/hntKHXUixLkMoj+OA+CxoqD4v2W1E7+OKSH18=
-Date:   Sat, 29 Jun 2019 09:32:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     yuan linyu <cugyly@163.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: core: message: remove memset in usb_get_descriptor()
-Message-ID: <20190629073244.GA27250@kroah.com>
-References: <20190629060314.7352-1-cugyly@163.com>
+        id S1726950AbfF2IzV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Jun 2019 04:55:21 -0400
+Received: from mail-m974.mail.163.com ([123.126.97.4]:35684 "EHLO
+        mail-m974.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726818AbfF2IzV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jun 2019 04:55:21 -0400
+X-Greylist: delayed 901 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Jun 2019 04:55:20 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Wo892
+        MP6Fw3mZgqiRNYn/8T56AWJO8/+HS75b1PMiJY=; b=p79M0qShRXsF3Pu1XziJh
+        NH3vRT2YoYEIYGW/otkTkZ/jw//kCdZMpqROlsbV1y4ryfFFJZNBfH/1us65NFU8
+        y2iVkJllAkD1Mgm7H7sfTkMiWPbjNUMXpcYT1JG8cZUxZbb+6AUKtchJZt4zncKB
+        IEVTuVXdOVscSyPUKAEfD0=
+Received: from localhost.localdomain (unknown [222.65.47.109])
+        by smtp4 (Coremail) with SMTP id HNxpCgB3fsbxIxddMKOjAA--.96S2;
+        Sat, 29 Jun 2019 16:40:17 +0800 (CST)
+From:   yuan linyu <cugyly@163.com>
+To:     linux-usb@vger.kernel.org
+Cc:     yuan linyu <cugyly@163.com>
+Subject: [PATCH v2] usb: core: message: remove memset in usb_get_descriptor()
+Date:   Sat, 29 Jun 2019 16:40:11 +0800
+Message-Id: <20190629084011.8101-1-cugyly@163.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190629060314.7352-1-cugyly@163.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: HNxpCgB3fsbxIxddMKOjAA--.96S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Gr1kGr4Duw4fXr1DuF4UJwb_yoWfJrb_Cr
+        18ZwnrCF109a47GF92kwsxArWFv3WSvrykWa9avr93AFn09a45ZryIvrZ3Cr15G3WYyF9r
+        G3W8Jr18uFs5WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUeZ0ePUUUUU==
+X-Originating-IP: [222.65.47.109]
+X-CM-SenderInfo: pfxj5zr16rljoofrz/1tbiShLi41PAGEsC2AAAsD
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jun 29, 2019 at 02:03:14PM +0800, yuan linyu wrote:
-> in the loop, if get a descriptor which is not desired type,
-> the buf will be not clean.
-> caller check return length to decide success or not.
+when below condition occur, the buf will be dirty again.
+if (result > 1 && ((u8 *)buf)[1] != type) {
+	result = -ENODATA;
+	continue;
+}
+so caller should check return length which indicate buffer valid or not.
 
-I'm sorry, but I can not understand these sentances at all.  How does
-this relate to remiving a memset() call?  Why do you need to, or want
-to, remove it?  What does this fix?
+Signed-off-by: yuan linyu <cugyly@163.com>
+---
+ drivers/usb/core/message.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index e844bb7b5676..03425e6b3da9 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -640,8 +640,6 @@ int usb_get_descriptor(struct usb_device *dev, unsigned char type,
+ 	int i;
+ 	int result;
+ 
+-	memset(buf, 0, size);	/* Make sure we parse really received data */
+-
+ 	for (i = 0; i < 3; ++i) {
+ 		/* retry on length 0 or error; some devices are flakey */
+ 		result = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
+-- 
+2.17.1
 
-greg k-h
