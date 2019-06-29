@@ -2,71 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECA15A9B7
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2019 10:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0A55A9C9
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2019 11:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726950AbfF2IzV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Jun 2019 04:55:21 -0400
-Received: from mail-m974.mail.163.com ([123.126.97.4]:35684 "EHLO
-        mail-m974.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726818AbfF2IzV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jun 2019 04:55:21 -0400
-X-Greylist: delayed 901 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Jun 2019 04:55:20 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Wo892
-        MP6Fw3mZgqiRNYn/8T56AWJO8/+HS75b1PMiJY=; b=p79M0qShRXsF3Pu1XziJh
-        NH3vRT2YoYEIYGW/otkTkZ/jw//kCdZMpqROlsbV1y4ryfFFJZNBfH/1us65NFU8
-        y2iVkJllAkD1Mgm7H7sfTkMiWPbjNUMXpcYT1JG8cZUxZbb+6AUKtchJZt4zncKB
-        IEVTuVXdOVscSyPUKAEfD0=
-Received: from localhost.localdomain (unknown [222.65.47.109])
-        by smtp4 (Coremail) with SMTP id HNxpCgB3fsbxIxddMKOjAA--.96S2;
-        Sat, 29 Jun 2019 16:40:17 +0800 (CST)
-From:   yuan linyu <cugyly@163.com>
-To:     linux-usb@vger.kernel.org
-Cc:     yuan linyu <cugyly@163.com>
-Subject: [PATCH v2] usb: core: message: remove memset in usb_get_descriptor()
-Date:   Sat, 29 Jun 2019 16:40:11 +0800
-Message-Id: <20190629084011.8101-1-cugyly@163.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726883AbfF2JNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Jun 2019 05:13:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38938 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726818AbfF2JNd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 29 Jun 2019 05:13:33 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D89EB214DA;
+        Sat, 29 Jun 2019 09:13:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561799612;
+        bh=XOMpgE+blhfInx6/hwPJkv/+STLv2bw75k9vygWd6+g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AnDgmyRnhvy7/8CM1EnhUvDg55zddU8kF981dXjADTkY1DqMskBBL7gbeOJ59h1d0
+         yejJWg6slbsOsXLU0JXQNC27hD2a7FIdgLVQTNg6IFyTloMY7ZmVwYEm9mo94oPy+d
+         75NpL9P7Akc/SIWtbMN81TeF93IKLdN9dJOwTxIQ=
+Date:   Sat, 29 Jun 2019 11:13:29 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     yuan linyu <cugyly@163.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: core: message: remove memset in
+ usb_get_descriptor()
+Message-ID: <20190629091329.GC4198@kroah.com>
+References: <20190629084011.8101-1-cugyly@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: HNxpCgB3fsbxIxddMKOjAA--.96S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Gr1kGr4Duw4fXr1DuF4UJwb_yoWfJrb_Cr
-        18ZwnrCF109a47GF92kwsxArWFv3WSvrykWa9avr93AFn09a45ZryIvrZ3Cr15G3WYyF9r
-        G3W8Jr18uFs5WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUeZ0ePUUUUU==
-X-Originating-IP: [222.65.47.109]
-X-CM-SenderInfo: pfxj5zr16rljoofrz/1tbiShLi41PAGEsC2AAAsD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190629084011.8101-1-cugyly@163.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-when below condition occur, the buf will be dirty again.
-if (result > 1 && ((u8 *)buf)[1] != type) {
-	result = -ENODATA;
-	continue;
-}
-so caller should check return length which indicate buffer valid or not.
+On Sat, Jun 29, 2019 at 04:40:11PM +0800, yuan linyu wrote:
+> when below condition occur, the buf will be dirty again.
+> if (result > 1 && ((u8 *)buf)[1] != type) {
+> 	result = -ENODATA;
+> 	continue;
+> }
+> so caller should check return length which indicate buffer valid or not.
 
-Signed-off-by: yuan linyu <cugyly@163.com>
----
- drivers/usb/core/message.c | 2 --
- 1 file changed, 2 deletions(-)
+I still fail to see what this means at all.
 
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index e844bb7b5676..03425e6b3da9 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -640,8 +640,6 @@ int usb_get_descriptor(struct usb_device *dev, unsigned char type,
- 	int i;
- 	int result;
- 
--	memset(buf, 0, size);	/* Make sure we parse really received data */
--
- 	for (i = 0; i < 3; ++i) {
- 		/* retry on length 0 or error; some devices are flakey */
- 		result = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
--- 
-2.17.1
+A changelog comment should explain what the problem is and why it is
+being fixed in this way.
 
+> 
+> Signed-off-by: yuan linyu <cugyly@163.com>
+> ---
+>  drivers/usb/core/message.c | 2 --
+>  1 file changed, 2 deletions(-)
+
+Also you need to put what changed from a previous patch below the ---
+line like the documentation states to do.
+
+thanks,
+
+greg k-h
