@@ -2,133 +2,362 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5C65A75C
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2019 01:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F365A7CF
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2019 02:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbfF1XDs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jun 2019 19:03:48 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:33480 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726563AbfF1XDs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jun 2019 19:03:48 -0400
-Received: by mail-wm1-f65.google.com with SMTP id h19so10281116wme.0
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2019 16:03:46 -0700 (PDT)
+        id S1726822AbfF2AF3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jun 2019 20:05:29 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:44866 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726707AbfF2AF3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jun 2019 20:05:29 -0400
+Received: by mail-pf1-f195.google.com with SMTP id t16so3743823pfe.11
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jun 2019 17:05:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=evLd5fuBi/6693RrazYIrEMj1Q5RZjaPJkFls4ewXBM=;
-        b=qeakDdgKB5w9Hmsi+xzjcS5m0U0+VO2ERiaiLxNeUpDZBuCOCywA7CeFkOTkdYZMEl
-         g3is6OrREW+twxkAj8x5tOu3ZPABxzx5BBYLvPsm+JB7wI196Urm+3SiYxIYd5dFvpLD
-         a3CODGnMcPhDEU5mTufi+dsKBzm4F/UqzQe//blNUuiGLtvowAg377iHWEnSpZhD/o66
-         VIyEX6D1SH0HNyIUcFcM36ZY8xt+6FQ/MtGc4bHD57wIKi4f4L9D08VK+BMzHa6/uUTu
-         7xCVNfSRd93ScSiLPHIFRp4wARaLSTxjEgZ/wD9k4ByMh/jW539s2GiMfrRRjXqksxhv
-         W55A==
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:references:in-reply-to:subject:date:message-id
+         :mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=DfvelMKIlsOTz0qcDlMVWLNl6p2Acnk5G0oHiLIjku4=;
+        b=FzzhVdLP7GUL300gCvtwCbMA8ci6WLwEjsStvNt8M8s76GhVg0AIcpNfYJ7KcvWpG+
+         XNM5cifeEhhVdWDJ6z8Faacfk/NvCofLDtnVqFTZSwB64AOfOc5ois0Fa3WCIW0/Cl5t
+         Gig4JJBwBRpC4iCyHGBsKPHyL/JPHb1GWDkMLyi8Du+hn2pJaPgQ7dGjiqMmNfUHJftq
+         G3vvBnSal8wjq7kscrfiChNRN+989SI+O0xJAo9pUgMriqNBWvHifkVQeozGHZxIpB5v
+         TZLJASCCr/246gZvw96OlXbdiS7S4/GNBA1QMA2/bnK7Bwh3cqwIvpsSP0zHUqSWR/Ns
+         /XOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=evLd5fuBi/6693RrazYIrEMj1Q5RZjaPJkFls4ewXBM=;
-        b=QwYdtXiMdHzKpFrmM2bb9zdux4a0xSVZRMTH4v570foriX3tGl4wha160bVA3owDII
-         lq3tlgyY+i0RcaEG13pxqdWWezAVRah5j7GyJuHqlIGvxL+RprXKx0a2PVFcTCfTKW3y
-         96EWT7aBxiJRmnAKCK4YWbWvUj/bTpMn0uI8YuuQtn37GF5VPnZFNRUMz6aHk6YGR0u0
-         h5vEzv293tLukAgcpJR+wzvLpklODBO4QQ9DR6G6+tPT8t85Vz/rWD+eoq8PSlZpQH2e
-         NvV2AWJzjHzZ6kUEFLsKSe6EXcuLG6p97lBAzgIhJXed94pmt13Ds4DjnHI05cZFk5Jx
-         yWDw==
-X-Gm-Message-State: APjAAAVe2o2sA3ead778hw1J0V0aoSMtNtQNJTyW47UFbS/E4WN/w10v
-        p4P9qfFF2NtVeH3gyh00zstimfNrd86AQccbpMyPcg==
-X-Google-Smtp-Source: APXvYqxRgj7KT3n/jQByQgPUCRsBOP9jo3SfFB2exGaApvMsicoPI28k+RklEuSAsE+jORUTMAS8wMhvKUyN8wXmzHU=
-X-Received: by 2002:a05:600c:2201:: with SMTP id z1mr8099094wml.59.1561763026019;
- Fri, 28 Jun 2019 16:03:46 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:references:in-reply-to:subject
+         :date:message-id:mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=DfvelMKIlsOTz0qcDlMVWLNl6p2Acnk5G0oHiLIjku4=;
+        b=UYc5riTt6wXtaWa+bDKpBGBQyg6ZISp/SKvsLtflsNPoOxtJu7UF9MEKvK8X2ptkgj
+         E7PWcjXRtf9eS/D+AdUzRVCpBbr+mQ5XK146oiMOwBuUSQay4OXQkW/ozW75VBUZlwq/
+         1Fkq5eJC5Sf4D9pZOhbQ3ThkJn3TPAaPmsYxlaMOoxX5dKK+S4R0XzFP+FEkCzZTJX1p
+         KlPpoa8iHflTPFDeq3y9CfGGL2JRG78IRBY5ic8X/z6FxMCx8LvzUkP57J9oRco5myij
+         4q5LsZr6ttKyOLDn670qCO8LDjl8gkNJTNXgRYBZmXgz0NVRlYGTCxoQoqjxfg0ZSasU
+         Bfyw==
+X-Gm-Message-State: APjAAAXPhTKU655yAzLGL6Pjm7Vwu8xt+5fML3qgv2Q6X2esMPBc8DEP
+        qdhkK3XH2mSOci9m/HJf9wA=
+X-Google-Smtp-Source: APXvYqz8goAlIUHY9yv7q/FiYf53Vk/X2YYgr9C4YnPPcra3tu8rG7lw5rGjpk1rZhu1e4DIEdGJog==
+X-Received: by 2002:a63:d415:: with SMTP id a21mr11391174pgh.229.1561766728466;
+        Fri, 28 Jun 2019 17:05:28 -0700 (PDT)
+Received: from PC201407091922 (28.215.252.27.dyn.cust.vf.net.nz. [27.252.215.28])
+        by smtp.gmail.com with ESMTPSA id g9sm2436365pgq.88.2019.06.28.17.05.24
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 28 Jun 2019 17:05:27 -0700 (PDT)
+From:   "Jonathan Olds" <jontio@i4free.co.nz>
+To:     "'Johan Hovold'" <johan@kernel.org>
+Cc:     <linux-usb@vger.kernel.org>, <frank@kingswood-consulting.co.uk>,
+        <werner@cornelius-consult.de>, <boris@hajduk.org>,
+        "'Jonathan Olds'" <joldsphone@gmail.com>
+References: <jontio@i4free.co.nz> <20190608051309.4689-1-jontio@i4free.co.nz> <20190620134318.GL6241@localhost>
+In-Reply-To: <20190620134318.GL6241@localhost>
+Subject: RE: [PATCH] USB: serial: ch341: fix wrong baud rate setting calculation
+Date:   Sat, 29 Jun 2019 12:05:08 +1200
+Message-ID: <000001d52e0e$5303de80$f90b9b80$@co.nz>
 MIME-Version: 1.0
-References: <20190628182413.33225-1-john.stultz@linaro.org> <20190628225803.GK11506@sasha-vm>
-In-Reply-To: <20190628225803.GK11506@sasha-vm>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Fri, 28 Jun 2019 16:03:33 -0700
-Message-ID: <CALAqxLX002_9jqCVpZ9esd9xj=ikC4soYDbCKH4etmUDYUXvrQ@mail.gmail.com>
-Subject: Re: [PATCH 4.19.y v2 0/9] Fix scheduling while atomic in dwc3_gadget_ep_dequeue
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     stable <stable@vger.kernel.org>, Fei Yang <fei.yang@intel.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdUnbiGLwtclKSWwR26jtDvHA1nrnwGmsFsw
+Content-Language: en-nz
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 28, 2019 at 3:58 PM Sasha Levin <sashal@kernel.org> wrote:
->
-> On Fri, Jun 28, 2019 at 06:24:04PM +0000, John Stultz wrote:
-> >With recent changes in AOSP, adb is using asynchronous io, which
-> >causes the following crash usually on a reboot:
-> >
-> >[  184.278302] BUG: scheduling while atomic: ksoftirqd/0/9/0x00000104
-> >[  184.284617] Modules linked in: wl18xx wlcore snd_soc_hdmi_codec wlcore_sdio tcpci_rt1711h tcpci tcpm typec adv7511 cec dwc3 phy_hi3660_usb3 snd_soc_simple_card snd_soc_a
-> >[  184.316034] Preemption disabled at:
-> >[  184.316072] [<ffffff8008081de4>] __do_softirq+0x64/0x398
-> >[  184.324953] CPU: 0 PID: 9 Comm: ksoftirqd/0 Tainted: G S                4.19.43-00669-g8e4970572c43-dirty #356
-> >[  184.334963] Hardware name: HiKey960 (DT)
-> >[  184.338892] Call trace:
-> >[  184.341352]  dump_backtrace+0x0/0x158
-> >[  184.345025]  show_stack+0x14/0x20
-> >[  184.348355]  dump_stack+0x80/0xa4
-> >[  184.351685]  __schedule_bug+0x6c/0xc0
-> >[  184.355363]  __schedule+0x64c/0x978
-> >[  184.358863]  schedule+0x2c/0x90
-> >[  184.362053]  dwc3_gadget_ep_dequeue+0x274/0x388 [dwc3]
-> >[  184.367210]  usb_ep_dequeue+0x24/0xf8
-> >[  184.370884]  ffs_aio_cancel+0x3c/0x80
-> >[  184.374561]  free_ioctx_users+0x40/0x148
-> >[  184.378500]  percpu_ref_switch_to_atomic_rcu+0x180/0x1c0
-> >[  184.383830]  rcu_process_callbacks+0x24c/0x5d8
-> >[  184.388283]  __do_softirq+0x13c/0x398
-> >[  184.391959]  run_ksoftirqd+0x3c/0x48
-> >[  184.395549]  smpboot_thread_fn+0x220/0x288
-> >[  184.399660]  kthread+0x12c/0x130
-> >[  184.402901]  ret_from_fork+0x10/0x1c
-> >
-> >
-> >This happens as usb_ep_dequeue can be called in interrupt
-> >context, and dwc3_gadget_ep_dequeue() then calls
-> >wait_event_lock_irq() which can sleep.
-> >
-> >Upstream kernels are not affected due to the change
-> >fec9095bdef4 ("dwc3: gadget: remove wait_end_transfer") which
-> >removes the wait_even_lock_irq code. Unfortunately that change
-> >has a number of dependencies, which I'm submitting here.
-> >
-> >Also, to match upstream, in this series I've reverted one
-> >change that was backported to -stable, to replace it with the
-> >cherry-picked upstream commit (as the dependencies are now
-> >there)
-> >
-> >This issue also affects 4.14,4.9 and I believe 4.4 kernels,
-> >however I don't know how to best backport this functionality
-> >that far back. Help from the maintainers would be very much
-> >appreciated!
-> >
-> >
-> >New in v2:
-> >* Reordered the patchset to put the revert patch first, which
-> >  avoids any bisection build issues. (Thanks to Jack Pham for
-> >  the suggestion!)
-> >
-> >
-> >Feedback and comments would be welcome!
->
-> I've queued it up for 4.19.
->
-> Is it the case that for older kernels the dependency list is too long?
+Hi Johan,
 
-Yea. It gets ugly and I'm not enough of an expert on the driver to
-feel comfortable knowing if I'm doing the right thing reworking this
-stack onto an even older tree.
+Sorry for the slow reply. Thanks for the feedback.
 
-But I do see crashes on reboot w/ 4.14 and 4.9 (I and suspect 4.4 as
-well), so I'll need to figure out something eventually.
+I've amended the patch and is below. I think I've done all of your
+suggestions and looks more Linux Kernelish style.
 
-thanks
--john
+> drop the denom outmost parenthesis (also in some expressions below)
+
+I removed the outmost parenthesis from the " denom = " line but wasn't too
+sure what the "some expressions below" were. 
+
+int only guarantees 16bits so that's why I went for ones of the form
+long/s32/int32_t for some variables. I noticed that other things like
+"priv->baud_rate" for example is an unsigned int so that wouldn't work for
+some 16bit systems (such as the dsPIC with xc16) for speeds beyond 65KBaud.
+
+Here's the amended patch, any feedback greatly appreciated...
+
+For some wanted baud rates ch341_set_baudrate_lcr() calculates the "a"
+value such that it produces a significantly different baud rate than the
+desired one. This means some hardware can't communicate with the CH34x
+chip. Particularly obvious wrong baud rates are 256000 and 921600 which
+deviate by 2.3% and 7.4% respectively. This proposed patch will bring the
+errors for these baud rates to below 0.5%. This patch will significantly
+improve the error of some other unusual baud rates too (such as 1333333
+from 10% error to 0% error). Currently ch341_set_baudrate_lcr() will
+accept any baud rate and can produce a practically arbitrary large error
+(for example a 40% error for 5000000). This patch does not address this
+issue.
+
+The patch has been tested on two computers and only with the CH340G chip.
+
+With a CH340G chip with "Chip version: 0x31" on a JPIC I tested the
+bitrate error using a RIGOL DS1054 scope without the patch and measured
+the following...
+
+Baud wanted	Baud measured	Error as % of wanted
+50	50	0.0%
+75	75.2	0.3%
+110	109.5	0.5%
+135	134.6	0.3%
+150	150.4	0.3%
+300	300.8	0.3%
+600	601.3	0.2%
+1200	1201.9	0.2%
+1800	1801.8	0.1%
+2400	2403.8	0.2%
+4800	4807.7	0.2%
+7200	7215	0.2%
+9600	9615.4	0.2%
+14400	14430	0.2%
+19200	19231	0.2%
+38400	38462	0.2%
+56000	56054	0.1%
+57600	57837	0.4%
+115200	115207	0.0%
+128000	127551	0.4%
+230400	230415	0.0%
+256000	250000	2.3%
+460800	460617	0.0%
+921600	853242	7.4%
+1000000	999001	0.1%
+1333333	1204819	9.6%
+1843200	1496334	18.8%
+2000000	1984127	0.8%
+5000000	2985075	40.3%
+
+Measurements and working as a libre/open office document can be found at
+https://jontio.github.io/linux_kernel_work/ch43x_tests.ods
+
+Signed-off-by: Jonathan Olds <jontio@i4free.co.nz>
+---
+ drivers/usb/serial/ch341.c | 46 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+index 3bb1fff02bed..5ef8db2974d5 100644
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -54,6 +54,11 @@
+ #define CH341_BAUDBASE_FACTOR 1532620800
+ #define CH341_BAUDBASE_DIVMAX 3
+ 
++/* Chip frequency is 12Mhz. not quite the same as
++ * (CH341_BAUDBASE_FACTOR>>7)
++ */
++#define CH341_OSC_FREQUENCY 12000000
++
+ /* Break support - the information used to implement this was gleaned from
+  * the Net/FreeBSD uchcom.c driver by Takanori Watanabe.  Domo arigato.
+  */
+@@ -151,6 +156,9 @@ static int ch341_set_baudrate_lcr(struct usb_device
+*dev,
+ 	int r;
+ 	unsigned long factor;
+ 	short divisor;
++	u8 msb;
++	s32 baud_wanted;
++	u32 denom;
+ 
+ 	if (!priv->baud_rate)
+ 		return -EINVAL;
+@@ -168,6 +176,44 @@ static int ch341_set_baudrate_lcr(struct usb_device
+*dev,
+ 	factor = 0x10000 - factor;
+ 	a = (factor & 0xff00) | divisor;
+ 
++	/*
++	 * Calculate baud error using the 0,1,2,3 lsb and
++	 * also the error without the divisor (lsb==7).
++	 * Decide whether the divisor should be used.
++	 */
++	msb = (a >> 8) & 0xff;
++	baud_wanted = priv->baud_rate;
++	denom = (1ul << (10 - 3 * (divisor & 0x03))) * (256 - msb);
++	/*
++	 * baud_wanted==(CH341_OSC_FREQUENCY/256) implies msb==0 for no
+divisor
++	 * the 100 is for rounding.
++	 */
++	if (denom && ((baud_wanted + 100) >= (((u32)CH341_OSC_FREQUENCY) >>
+8))) {
++		/* Calculate error for divisor */
++		long baud_expected = ((u32)CH341_OSC_FREQUENCY) / denom;
++		u32 baud_error_difference = abs(baud_expected-baud_wanted);
++
++		/* Calculate a for no divisor */
++		u32 a_no_divisor = ((0x10000 - (((u32)CH341_OSC_FREQUENCY)
+<< 8) /
++			baud_wanted + 128) & 0xff00) | 0x07;
++
++		/* a_no_divisor is only valid for msb<248 */
++		if ((a_no_divisor >> 8) < 248) {
++			/* Calculate error for no divisor */
++			long baud_expected_no_divisor =
+((u32)CH341_OSC_FREQUENCY) /
++				(256 - (a_no_divisor >> 8));
++			u32 baud_error_difference_no_divisor =
++				abs(baud_expected_no_divisor-baud_wanted);
++
++			/*
++			 * If error using no divisor is less than using
++			 * a divisor then use it instead for the "a" word.
++			 */
++			if (baud_error_difference_no_divisor <
+baud_error_difference)
++				a = a_no_divisor;
++		}
++	}
++
+ 	/*
+ 	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
+ 	 * has been received unless bit 7 is set.
+-- 
+2.17.1
+
+Cheers,
+Jonti
+
+-----Original Message-----
+From: Johan Hovold [mailto:johan@kernel.org] 
+Sent: Friday, 21 June 2019 1:43 a.m.
+To: jontio
+Cc: johan@kernel.org; linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ch341: fix wrong baud rate setting
+calculation
+
+On Sat, Jun 08, 2019 at 05:13:09PM +1200, jontio wrote:
+> For some wanted baud rates ch341_set_baudrate_lcr() calculates the "a"
+> value such that it produces a significantly different baud rate than 
+> the desired one. This means some hardware can't communicate with the 
+> CH34x chip. Particularly obvious wrong baud rates are 256000 and 
+> 921600 which deviate by 2.3% and 7.4% respectively. This proposed 
+> patch will bring the errors for these baud rates to below 0.5%. This 
+> patch will significantly improve the error of some other unusual baud 
+> rates too (such as 1333333 from 10% error to 0% error). Currently 
+> ch341_set_baudrate_lcr() will accept any baud rate and can produce a 
+> practically arbitrary large error (for example a 40% error for 
+> 5000000) this patch does not address this issue.
+
+It doesn't hurt to expand the commit message with further details from your
+other mail.
+
+> Signed-off-by: jontio <jontio@i4free.co.nz>
+
+You need to sign off with your full name. It should also match the From line
+(author).
+
+> ---
+>  drivers/usb/serial/ch341.c | 45 
+> ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c 
+> index 3bb1fff02bed..7cd1d6f70b56 100644
+> --- a/drivers/usb/serial/ch341.c
+> +++ b/drivers/usb/serial/ch341.c
+> @@ -54,6 +54,9 @@
+>  #define CH341_BAUDBASE_FACTOR 1532620800  #define 
+> CH341_BAUDBASE_DIVMAX 3
+>  
+> +/* Chip frequency is 12Mhz. not quite the same as 
+> +(CH341_BAUDBASE_FACTOR>>7) */ #define CH341_OSC_FREQUENCY 12000000
+> +
+>  /* Break support - the information used to implement this was gleaned
+from
+>   * the Net/FreeBSD uchcom.c driver by Takanori Watanabe.  Domo arigato.
+>   */
+> @@ -168,6 +171,48 @@ static int ch341_set_baudrate_lcr(struct usb_device
+*dev,
+>  	factor = 0x10000 - factor;
+>  	a = (factor & 0xff00) | divisor;
+>  
+> +	/*
+> +	 * Calculate baud error using the 0,1,2,3 LSB and
+> +	 * also the error without the divisor (LSB==7).
+> +	 * Decide whether the divisor should be used.
+
+Wrap also comments at 72 cols or so.
+
+> +	 */
+> +	uint32_t msB = (a>>8) & 0xFF;
+> +	uint32_t lsB = a & 0xFF;
+> +	int32_t baud_wanted = priv->baud_rate;
+> +	uint32_t denom = ((1<<(10-3*lsB))*(256-msB));
+
+It's not obvious from just looking at the above chunk that 3*lsB < 10.
+
+And some style issues:
+
+ - declare variables at the start of the function (or possibly start of
+   block), and defer non-trivial initialisation
+ - use the kernel types u32, s32 or plain (unsigned) int instead of the
+   c99 types.
+ - no camel case, msb, lsb is fine
+ - add a space on both sides of operators (also in your comments)
+ - drop the denom outmost parenthesis (also in some expressions below)
+ - please use lowercase hex notation for consistency with the rest of
+   the driver (function)
+
+> +	/*
+> +	 * baud_wanted==(CH341_OSC_FREQUENCY/256) implies MSB==0 for no
+divisor
+> +	 * the 100 is for rounding.
+> +	 */
+> +	if (denom && ((baud_wanted+100) >= 
+> +(((uint32_t)CH341_OSC_FREQUENCY)>>8))) {
+> +
+> +		/* Calculate error for divisor */
+> +		int32_t baud_expected = ((uint32_t)CH341_OSC_FREQUENCY) /
+denom;
+> +		uint32_t baud_error_difference =
+abs(baud_expected-baud_wanted);
+> +
+> +		/* Calculate a for no divisor */
+> +		uint32_t a_no_divisor =
+((0x10000-(((uint32_t)CH341_OSC_FREQUENCY)<<8) /
+> +			baud_wanted+128) & 0xFF00) | 0x07;
+> +
+> +		/* a_no_divisor is only valid for MSB<248 */
+> +		if ((a_no_divisor>>8) < 248) {
+> +
+> +			/* Calculate error for no divisor */
+> +			int32_t baud_expected_no_divisor =
+((uint32_t)CH341_OSC_FREQUENCY) /
+> +				(256-(a_no_divisor>>8));
+> +			uint32_t baud_error_difference_no_divisor =
+> +				abs(baud_expected_no_divisor-baud_wanted);
+> +
+> +			/*
+> +			 * If error using no divisor is less than using
+> +			 * a divisor then use it instead for the "a" word.
+> +			 */
+> +			if (baud_error_difference_no_divisor <
+baud_error_difference)
+> +				a = a_no_divisor;
+> +		}
+> +
+
+Stray newline.
+
+> +	}
+> +
+>  	/*
+>  	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
+>  	 * has been received unless bit 7 is set.
+
+Ok, I'm gonna have to look at this again, but perhaps you can consider the
+style input meanwhile.
+
+Johan
+
