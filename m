@@ -2,126 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A975AD56
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jun 2019 22:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805B25AFA5
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Jun 2019 12:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726923AbfF2U0M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Jun 2019 16:26:12 -0400
-Received: from mail-ed1-f48.google.com ([209.85.208.48]:39222 "EHLO
-        mail-ed1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726909AbfF2U0M (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jun 2019 16:26:12 -0400
-Received: by mail-ed1-f48.google.com with SMTP id m10so16668755edv.6
-        for <linux-usb@vger.kernel.org>; Sat, 29 Jun 2019 13:26:11 -0700 (PDT)
+        id S1726519AbfF3Kbm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Jun 2019 06:31:42 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:40031 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbfF3Kbm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jun 2019 06:31:42 -0400
+Received: by mail-io1-f68.google.com with SMTP id n5so22108639ioc.7
+        for <linux-usb@vger.kernel.org>; Sun, 30 Jun 2019 03:31:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=W4YaRX8EFf5ho9bnusaVvRQSnMJ5ux8F4WWcpUTPgaI=;
-        b=YUnbpfSWXr74XBw2M4RqMKa3/+KqoGTtccj5fTOH71UQs6x2fKInROeKm0QDMLEqW3
-         0oKSFsIV/WTeeeFntQvj9wvMrsaM1j4JxL6DHqv0HX5KryYDhI2Sh/e0iYt4APpy8sm0
-         t1GsyEVib64IQe8ByipKIbB45ADOLRhEeinA7Z1GAxGXRWtBr5GD/qgQVkULq5aVenl6
-         Ygrg7tk/ouHWv+0ALxjAXoN4rOburigP7CBcBNUFAZ2t4xnH1yy3XQjoDqbtQTeVefcH
-         MWhSb7f3wNAumjpQIPnZ5rXYA1WLin0L6dWsJReR220z+Kv9+97t3C+m2bzckf4YXyHl
-         Gd+g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=2oqIz75KNESlOqUJhBPXcjPOp+quk31+qKsCBUMp1bY=;
+        b=tlU1bOJpyygzlPoTZQyUZDvcfsOWRUcyVdyAFqatjxNKTiHCepSZfFygc01h99WQG9
+         rpZketCL3kRNJ2lD9X0TFADuR+R5J/Xh9l+8wxe90yq5udZW3WDs9MyKpsSwOXFwWUSc
+         1ugwmJ3EJ+m3d8u1lkWerGKlklTDpVdRzB6kdK82C8QmaPDQS9rN/eWskIZU//5TPtiy
+         akxA5lp9guFiLdAXkRXAV5QvdsPy6Z25yuiIVNjxAjzadMhKK4fjtiHTC4mVxAhPPFJW
+         S7Ch+ODlA8Nn7fCdG89NuAxganpscmqO/dMvs+kh8iAFf6WR79wiefaMCw/g+2KqrIwn
+         SUKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=W4YaRX8EFf5ho9bnusaVvRQSnMJ5ux8F4WWcpUTPgaI=;
-        b=rgJ50+AGiqxUepSVtVlW7ngiIt4vfeG/uFYlnrsMqPkWU7TzYbrW/ZTiRfn12mawM1
-         qslX0PFScsyWfkCWimgGaMl++QuD2udzMA7/F30349KPvEl4Qr1SuKTKhkwBdoRehgzH
-         0W7OnEoTuA3q8OOicZ9gK4gLrYmEc8TxBVpKtNPxL2Pb27ka2rIGi5Qw1D7pF2BsGiHs
-         N2Ulg4CWwO9CXhf8NNRdhqEpLnDcO4/mKFYV7+lJG6wVYiEAidVvr9d5E+EFFfOm39DS
-         NSRnOqFpJRNVSJ9rGBcFSvN194XaRUgvsg/2IFUObayDe2796jETbNjvT9IoIyIenwA8
-         57yw==
-X-Gm-Message-State: APjAAAXwSeMNw5rJQ80Qk2mxsRjbAv2fHj8QVehz7quFBfaftEICnS8D
-        OsEHLrjcphkEDLrXREHrG2I=
-X-Google-Smtp-Source: APXvYqw1nQisMvZ314D6KJhif0Kr5s0CWGDNw8Lekt4fKyinNN1eTwJ8ldT7cLpPRhI5JhP41e9kyA==
-X-Received: by 2002:a17:906:edd7:: with SMTP id sb23mr5619278ejb.309.1561839970564;
-        Sat, 29 Jun 2019 13:26:10 -0700 (PDT)
-Received: from [192.168.1.60] (0126800801.0.fullrate.ninja. [2.110.44.75])
-        by smtp.gmail.com with ESMTPSA id y9sm952974eds.15.2019.06.29.13.26.09
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sat, 29 Jun 2019 13:26:09 -0700 (PDT)
-Message-ID: <6dbe8df06875947d7ea6d6a21f83ac68315c0ef4.camel@gmail.com>
-Subject: Clarification of set_sel handling when dwc3 is a device (gadget)
-From:   claus.stovgaard@gmail.com
-To:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     linux-usb@vger.kernel.org, v.anuragkumar@gmail.com,
-        Rob Weber <rob@gnarbox.com>
-Date:   Sat, 29 Jun 2019 22:26:08 +0200
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2oqIz75KNESlOqUJhBPXcjPOp+quk31+qKsCBUMp1bY=;
+        b=XQr1hR1HQQdpUS1SKqt9rtzoxKT1bydB5FnYViY7mgWFvODJhl57cyAEQTeSEzCD9a
+         orykvcjYNj0O8l3R5TiUiujCDPHTRziwqmnoTioJ9Olh6TjKPvgps0YWbii0xbk0QFrC
+         NrmegCypR7DDSffSoSeDYoJoi2TYUalSAUppPylOaK4kweV55cOol0N2FGjNNvdAowUq
+         lxITcY1/YmvarZrFodhZt69D1o3qw++57mnNEJuJbeHMUf18D17LrqjgD+1LhaXmL0gn
+         35UYyS6kKJmH/eduabadzjrl6eTP1cDpbQ7Lvm4EceZK8ngGeBhR9HWvrofXQ5Er6i/l
+         l/Sw==
+X-Gm-Message-State: APjAAAVFcQdZFaXwwYs78fkph2QAJM9oq+BRfHgsTAIwSN3nWIcjvogU
+        +L3TUVFDLcLhDod98+vPlYZXVVDO70KDKxsNsKk=
+X-Google-Smtp-Source: APXvYqzLtrrAb53eIs9wY6s+sNSZRXSfLxPUWK5FR9BnBkqBGhKdyZJzjY65DKBiSib9WSMIg5tmp/NCa4lbL2OGm5c=
+X-Received: by 2002:a02:5502:: with SMTP id e2mr21875994jab.87.1561890701191;
+ Sun, 30 Jun 2019 03:31:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20190626082512.7637-1-michonskikrzysztof@gmail.com> <VI1PR04MB53274E7E20C099F0F84B18198BFD0@VI1PR04MB5327.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB53274E7E20C099F0F84B18198BFD0@VI1PR04MB5327.eurprd04.prod.outlook.com>
+From:   =?UTF-8?Q?Krzysztof_Micho=C5=84ski?= <michonskikrzysztof@gmail.com>
+Date:   Sun, 30 Jun 2019 12:31:30 +0200
+Message-ID: <CAOiNxGDs9Ki7_y_=Mv1tnSsqObv9EYzkdmo+yLCO6gMPBLNwYA@mail.gmail.com>
+Subject: Re: [PATCH] imx: usb: get pinctrl if it's not yet initialized
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "afenkart@gmail.com" <afenkart@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+Hi Peter,
+Yes you are right! This file's been patched previously in my fork.
+Sorry about that.
 
-I have earlier worked with the possibility for disabling U1/U2 to solve
-an issue where the dwc3 acting as a gadget device sometimes failing to
-leave U2.
+Regards,
+Krzysztof Micho=C5=84ski
 
-Analyzing the situation when the dwc3 failing to leave U2, it happens
-when the link is in U2 after timeout from U1, and when the device wants
-to leave U2. Not when the host wants to leave U2.
-
-Going back the BOS descriptor from the device reports
-
-bU1DevExitLat 1us
-bU2DevExitLat 500us
-
-And the SetSystemExitLatency control transfer ends with
-
-U1 System Exit Latency 86 us
-U1 Device to Host Exit Latency 1 us
-U2 System Exit Latency 585 us
-U2 Device to Host Exit Latency 500 us
-
-Looking at the length of LFPS etc. it seems that the U2 exit is just
-above 80 us,and it start link training just after.
-
-So I was wandering how the exit latency of the system is communicated
-to dwc3 core, and found the following code from ep0.c
-dwc3_ep0_set_sel_cmpl
-
-----
-reg = dwc3_readl(dwc->regs, DWC3_DCTL);
-if (reg & DWC3_DCTL_INITU2ENA)
-	param = dwc->u2pel;
-if (reg & DWC3_DCTL_INITU1ENA)
-	param = dwc->u1pel;
-
-/*
- * According to Synopsys Databook, if parameter is
- * greater than 125, a value of zero should be
- * programmed in the register.
- */
-if (param > 125)
-	param = 0;
-
-/* now that we have the time, issue DGCMD Set Sel */
-ret = dwc3_send_gadget_generic_command(dwc,
-		DWC3_DGCMD_SET_PERIODIC_PAR, param);
-WARN_ON(ret < 0);
-----
-
-I don't have access to Synopsys Databook, so I am puzzled about
-the DWC3_DGCMD_SET_PERIODIC_PAR command. The code favor to use the
-device to host exit latency, and use the u1 if present over the u2.
-
-So the dwc3 core never get the system exit latency times, and they just
-disapeer.
-
-I hope that someone have access to the Databook, and is able to share
-some details about the set periodic command and the parameter.
-
-Regards
-Claus
-
-
+czw., 27 cze 2019 o 05:22 Peter Chen <peter.chen@nxp.com> napisa=C5=82(a):
+>
+>
+> > In case usb phy mode is other than USBPHY_INTERFACE_MODE_HSIC the pinct=
+rl
+> > for device is not acquired. It is however used later regardless of the =
+mode, hence
+> > leads to requesting access to uninitialized data.
+> >
+> > Signed-off-by: Krzysztof Michonski <michonskikrzysztof@gmail.com>
+> > ---
+> >  drivers/usb/chipidea/ci_hdrc_imx.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/=
+ci_hdrc_imx.c
+> > index a4b482c3dc65..2f02b35c40b6 100644
+> > --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> > +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> > @@ -428,6 +428,9 @@ static int ci_hdrc_imx_probe(struct platform_device=
+ *pdev)
+> >               pm_runtime_enable(dev);
+> >       }
+> >
+> > +     if (!data->pinctrl)
+> > +             data->pinctrl =3D devm_pinctrl_get(dev);
+> > +
+> >       if (!IS_ERR(data->pinctrl)) {
+> >               struct pinctrl_state *state;
+> >
+>
+> Sorry, what kernel version you are using? The recent kernel is different =
+with the patch you posted.
+>
+> Peter
+>
