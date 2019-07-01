@@ -2,29 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B615BDEB
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 16:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14325BE02
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 16:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729484AbfGAORJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 10:17:09 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:51310 "HELO
+        id S1729507AbfGAOUi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jul 2019 10:20:38 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:51328 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727185AbfGAORI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 10:17:08 -0400
-Received: (qmail 1620 invoked by uid 2102); 1 Jul 2019 10:17:07 -0400
+        with SMTP id S1729453AbfGAOUh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 10:20:37 -0400
+Received: (qmail 1634 invoked by uid 2102); 1 Jul 2019 10:20:36 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 1 Jul 2019 10:17:07 -0400
-Date:   Mon, 1 Jul 2019 10:17:07 -0400 (EDT)
+  by localhost with SMTP; 1 Jul 2019 10:20:36 -0400
+Date:   Mon, 1 Jul 2019 10:20:36 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
 To:     Oliver Neukum <oneukum@suse.com>
-cc:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        <patches@opensource.cirrus.com>,
+cc:     Tejun Heo <tj@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-In-Reply-To: <1561972691.10014.8.camel@suse.com>
-Message-ID: <Pine.LNX.4.44L0.1907011015120.1536-100000@iolanthe.rowland.org>
+Subject: Re: [RFC] deadlock with flush_work() in UAS
+In-Reply-To: <1561978947.10014.12.camel@suse.com>
+Message-ID: <Pine.LNX.4.44L0.1907011017130.1536-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -34,28 +33,31 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Mon, 1 Jul 2019, Oliver Neukum wrote:
 
-> Am Donnerstag, den 27.06.2019, 09:52 -0400 schrieb Alan Stern:
-> 
+> Am Mittwoch, den 26.06.2019, 10:38 -0400 schrieb Alan Stern:
+> > On Wed, 26 Jun 2019, Oliver Neukum wrote:
 > > 
-> > Or maybe the WAIT_FOR_RESUME ioctl returns because there was a remote 
-> > wakeup.  In this case also you would call FORBID_SUSPEND.
+> > > Am Montag, den 24.06.2019, 10:22 -0400 schrieb Alan Stern:
+> > > > But that pattern makes no sense; a driver would never use it.  The 
+> > > > driver would just do the reset itself.
+> > > 
+> > > Correct. But UAS and storage themselves still need to use
+> > > WQ_MEM_RECLAIM for their workqueues, don't they?
 > > 
-> > In fact, you should call FORBID_SUSPEND _whenever_ WAIT_FOR_RESUME
+> > Perhaps so for uas.  usb-storage uses a work queue only for scanning 
+> > targets, which doesn't interfere with the block I/O pathway.
 > 
-> Well, this kind of indicates that the original syscall should bump
-> the counter.
+> Are you sure? What about hub_tt_work?
 
-Perhaps it does, but...
+Technically speaking, hub_tt_work is used by the hub driver, not by 
+usb-storage.  :-)
 
-> > returns, unless your program has decided not to use the device any more
-> > (in which case you don't care whether the device is suspended or
-> > resumed).
-> 
-> Then you should close the device.
+> As far as I can tell, hub_quiesce
+> will flush it, hence it is used in error handling.
 
-Exactly.  Suppose WAIT_FOR_RESUME is interrupted and then the program
-closes the device.  There's no need to force the device back to full 
-power in this situation.
+Yes, it needs to use a work queue with WQ_MEM_RECLAIM set.  
+Unfortunately, I don't think we can use hub_wq for this purpose (we
+could end up with a work item waiting for another work item later on in
+the same queue, not good).
 
 Alan Stern
 
