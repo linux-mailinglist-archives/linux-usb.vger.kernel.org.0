@@ -2,69 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F078D5B736
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 10:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0F05B73C
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 10:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbfGAIww (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 04:52:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33430 "EHLO mail.kernel.org"
+        id S1728161AbfGAIxG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 1 Jul 2019 04:53:06 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:57336 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726442AbfGAIww (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Jul 2019 04:52:52 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726442AbfGAIxF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Jul 2019 04:53:05 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B81AA208C4;
+        by mx1.redhat.com (Postfix) with ESMTPS id 1E43F308FC4D;
+        Mon,  1 Jul 2019 08:52:55 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-219.rdu2.redhat.com [10.10.120.219])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 173CA19C6A;
         Mon,  1 Jul 2019 08:52:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561971171;
-        bh=3chGK0gprd1kh+pxU66lzTIhvo2YldKPF6w724fjlIY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K9HCOZBERRuq+R/68bB3W08jIh8ZYFcTOY9nXZBozKWQ77kLWh9n2jmHWNXH5rGDy
-         WOnPxDmDLugNDjQY/f7PD/4BfoYVqyIl4pvkqFFfCVvJfmeLFg9iXJPM8+niVqz2Sh
-         1b/KzukH+sHFrmNBX2Re77oz2Cw+QOJBWu6w5iZk=
-Date:   Mon, 1 Jul 2019 10:52:48 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     JC Kuo <jckuo@nvidia.com>
-Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        usb-storage@lists.one-eyed-alien.net, oneukum@suse.com
-Subject: Re: [PATCH] usb: storage: skip only when uas driver is loaded
-Message-ID: <20190701085248.GA28681@kroah.com>
-References: <20190701084848.32502-1-jckuo@nvidia.com>
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <7a288c2c-11a1-87df-9550-b247d6ce3010@infradead.org>
+References: <7a288c2c-11a1-87df-9550-b247d6ce3010@infradead.org> <156173701358.15650.8735203424342507015.stgit@warthog.procyon.org.uk> <156173703546.15650.14319137940607993268.stgit@warthog.procyon.org.uk>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] Adjust watch_queue documentation to mention mount and superblock watches. [ver #5]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190701084848.32502-1-jckuo@nvidia.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <8211.1561971170.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: 8BIT
+Date:   Mon, 01 Jul 2019 09:52:50 +0100
+Message-ID: <8212.1561971170@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Mon, 01 Jul 2019 08:53:05 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 01, 2019 at 04:48:48PM +0800, JC Kuo wrote:
-> When usb-storage driver detects a UAS capable device, it ignores the
-> device if CONFIG_USB_UAS is enabled. usb-storage driver assumes uas
-> driver certainly will be loaded. However, it's possible that uas
-> driver will not be loaded, for example, uas kernel module is not
-> installed properly or it is in modprobe blacklist.
-> 
-> In case of uas driver not being loaded, the UAS capable device will
-> not fallback to work at Bulk-only-transfer mode. The device just
-> disappears without any notification to user/userspace.
-> 
-> This commit changes usb-storage driver to skip UAS capable device
-> only when uas driver is already loaded to make sure the device will
-> at least work with Bulk protocol.
+Randy Dunlap <rdunlap@infradead.org> wrote:
 
-But what happens if the driver is loaded afterward, because 'modprobe'
-was called by the driver core (or it should have been, because this is a
-device that supports that protocol)?
+> I'm having a little trouble parsing that sentence.
+> Could you clarify it or maybe rewrite/modify it?
+> Thanks.
 
-I think you just broke working systems :(
+How about:
 
-Why wouldn't the UAS driver get loaded automatically if it is configured
-in the system as it is today?
+  * ``info_filter`` and ``info_mask`` act as a filter on the info field of the
+    notification record.  The notification is only written into the buffer if::
 
-thanks,
+	(watch.info & info_mask) == info_filter
 
-greg k-h
+    This could be used, for example, to ignore events that are not exactly on
+    the watched point in a mount tree by specifying NOTIFY_MOUNT_IN_SUBTREE
+    must not be set, e.g.::
+
+	{
+		.type = WATCH_TYPE_MOUNT_NOTIFY,
+		.info_filter = 0,
+		.info_mask = NOTIFY_MOUNT_IN_SUBTREE,
+		.subtype_filter = ...,
+	}
+
+    as an event would be only permissible with this filter if::
+
+    	(watch.info & NOTIFY_MOUNT_IN_SUBTREE) == 0
+
+David
