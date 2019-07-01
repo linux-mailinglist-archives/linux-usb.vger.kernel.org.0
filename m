@@ -2,55 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5605B810
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 11:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617A45B809
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 11:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728410AbfGAJcY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 05:32:24 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51598 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728143AbfGAJcY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Jul 2019 05:32:24 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5DE6EB035;
-        Mon,  1 Jul 2019 09:32:23 +0000 (UTC)
-Message-ID: <1561972691.10014.8.camel@suse.com>
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        patches@opensource.cirrus.com, USB list <linux-usb@vger.kernel.org>
-Date:   Mon, 01 Jul 2019 11:18:11 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1906270944150.1492-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1906270944150.1492-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1728424AbfGAJ3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jul 2019 05:29:40 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:37682 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728366AbfGAJ3k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 05:29:40 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 19so6290442pfa.4;
+        Mon, 01 Jul 2019 02:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=KrfXpIQxr/cn2+9rwoAEVrRZR4QKKQe4lr3NtCXDl9w=;
+        b=smmR1WDj9hEEUk0Fi/hV9Yntct1psX33m2A/KLnuExax/YWgDzvlGKgOxwdePAWmXA
+         h4aI9Ej6GQpkipSZDJG1obdyHVrOm7BMcih7ah3c36xxIj6FbIwqaoRi5ZYT4WYmRdL3
+         gD2zvsMTEPggGtdn72k+qQ+McyXFDD4i1AqQxCyrgg5VwbrHe4UWh4uKeowRlMTjDG1k
+         170+kns5ylrfzHdM4170qVNcyVe61muK5///zIMjo4MZfAa+wiP0b4yHQVXR0oNhExgQ
+         v9m5TPBfx0flrzxVf2S06zMK8D+XnTm23Tt6Njj9QjfbI5XUkI0dhIsHkJ/udYPKemY+
+         Tp+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=KrfXpIQxr/cn2+9rwoAEVrRZR4QKKQe4lr3NtCXDl9w=;
+        b=nZRZB/XQ5ZpZOcTQ2Pxg/ErfBY2SNK/R86kutWFT7iBrjCEiFSBq1Vy3p//gNZ8rUT
+         5Y4st9yShiZ+QZ+odr2KH0dVTBu7OOmSR9Y38SI188coVtKGxotHRDAYPVYroU99dwC1
+         /8eRddVBRTDSxD2p+KzHrcuvKrBO14bwv1pyYnlOdLy+vPugAVd5BoewPVYaexiT1q9q
+         I9cjluH2H2PTazmJEBITV052uJG/S54lR7f/FBgh9jGrM13TlYiLNAbfrJUJFQ7rEUM/
+         wHZsahIka+D2uXkN303k2V0fPxVVmvPCH2bX6xFXLTs8Cghfhs5EKtXB3klmhxGLsRFk
+         Bhfw==
+X-Gm-Message-State: APjAAAX9XhjWp2LGETFvcqMOtkg0Mc4e1Zfksy5ZvOrbfVNvejc9mL/Z
+        5NYrnUdvJkI8y+VCNuelwnEK52gB
+X-Google-Smtp-Source: APXvYqwUTe5RkYuin8LohkLDd/WteibKN2lDHhZAR6zoj23sp8Osx8FE8Zi29HB0PC/d+AlBfwtMsA==
+X-Received: by 2002:a17:90a:206a:: with SMTP id n97mr30227096pjc.10.1561973379791;
+        Mon, 01 Jul 2019 02:29:39 -0700 (PDT)
+Received: from localhost.localdomain ([163.152.3.133])
+        by smtp.gmail.com with ESMTPSA id u65sm23209068pjb.1.2019.07.01.02.29.37
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 01 Jul 2019 02:29:39 -0700 (PDT)
+Date:   Mon, 1 Jul 2019 18:29:34 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah <shuah@kernel.org>
+Cc:     stern@rowland.harvard.edu, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] usbip: Skip DMA mapping and unmapping for urb at vhci
+Message-ID: <20190701092932.GA3939@localhost.localdomain>
+References: <20190621174553.28862-1-suwan.kim027@gmail.com>
+ <20190621174553.28862-2-suwan.kim027@gmail.com>
+ <10a4f10a-d271-9331-b847-bdc06f9fc9cf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <10a4f10a-d271-9331-b847-bdc06f9fc9cf@kernel.org>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 27.06.2019, 09:52 -0400 schrieb Alan Stern:
-
+On Fri, Jun 28, 2019 at 06:11:54PM -0600, shuah wrote:
+> Hi Suwan,
 > 
-> Or maybe the WAIT_FOR_RESUME ioctl returns because there was a remote 
-> wakeup.  In this case also you would call FORBID_SUSPEND.
+> On 6/21/19 11:45 AM, Suwan Kim wrote:
+> > vhci doesn’t do dma for remote device. Actually, the real dma
+> > operation is done by network card driver. So, vhci doesn’t use and
+> > need dma address of transfer buffer of urb.
+> > 
+> > When vhci supports SG, it is useful to use native SG list instead
+> > of mapped SG list because dma mapping fnuction can adjust the
+> > number of SG list that is urb->num_mapped_sgs.
+> > 
+> > But hcd provides dma mapping and unmapping function by defualt.
 > 
-> In fact, you should call FORBID_SUSPEND _whenever_ WAIT_FOR_RESUME
+> Typo "defualt"
+> 
+> > Moreover, it causes unnecessary dma mapping and unmapping which
+> > will be done again at the NIC driver and it wastes CPU cycles.
+> > So, implement map_urb_for_dma and unmap_urb_for_dma function for
+> > vhci in order to skip the dma mapping and unmapping procedure.
+> > 
+> 
+> How did you verify that unnecessary dma map/unmap are happening?
+> How many CPU cycles did you manage to reduce with this change?
 
-Well, this kind of indicates that the original syscall should bump
-the counter.
+Dma mapping/unmapping is not required for vhci because vhci passes
+the virtual address of the buffer to the network stack without
+passing the dma address of the buffer. Network stack receive the
+virtual address of the buffer from vhci and later, network card
+driver performs dma mapping for the buffer. So, as far as I know,
+dma address of the buffer is not used for vhci and virtual address
+is only used by vhci.
 
-> returns, unless your program has decided not to use the device any more
-> (in which case you don't care whether the device is suspended or
-> resumed).
+I used ftrace to measure a duration of usb_hcd_map_urb_for_dma().
+As a result, usb_hcd_map_urb_for_dma() took a duration of about
+0.14us out of about 10us which is the duration of usb_hcd_submit_urb().
+However, this figure is the dma mapping measurement value for
+physically contiguous buffers when vhci does not support SG, and
+if vhci supports SG, more CPU cycles will be consumed for SG dma
+mapping.
 
-Then you should close the device.
+I think that the important point is dma mapping/unmapping is
+unnecessary at vhci. So we can skip dma mapping/unmapping and save
+the CPU cycles (even if it is small). This is an opportunity to
+reduce the end-to-end latency of usbip and improve the performance.
 
-	Regards
-		Oliver
+Regards
 
+Suwan Kim
