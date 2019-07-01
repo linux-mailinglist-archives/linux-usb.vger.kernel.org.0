@@ -2,118 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 617A45B809
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 11:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF6F5B8CC
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 12:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728424AbfGAJ3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 05:29:40 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:37682 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728366AbfGAJ3k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 05:29:40 -0400
-Received: by mail-pf1-f193.google.com with SMTP id 19so6290442pfa.4;
-        Mon, 01 Jul 2019 02:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=KrfXpIQxr/cn2+9rwoAEVrRZR4QKKQe4lr3NtCXDl9w=;
-        b=smmR1WDj9hEEUk0Fi/hV9Yntct1psX33m2A/KLnuExax/YWgDzvlGKgOxwdePAWmXA
-         h4aI9Ej6GQpkipSZDJG1obdyHVrOm7BMcih7ah3c36xxIj6FbIwqaoRi5ZYT4WYmRdL3
-         gD2zvsMTEPggGtdn72k+qQ+McyXFDD4i1AqQxCyrgg5VwbrHe4UWh4uKeowRlMTjDG1k
-         170+kns5ylrfzHdM4170qVNcyVe61muK5///zIMjo4MZfAa+wiP0b4yHQVXR0oNhExgQ
-         v9m5TPBfx0flrzxVf2S06zMK8D+XnTm23Tt6Njj9QjfbI5XUkI0dhIsHkJ/udYPKemY+
-         Tp+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=KrfXpIQxr/cn2+9rwoAEVrRZR4QKKQe4lr3NtCXDl9w=;
-        b=nZRZB/XQ5ZpZOcTQ2Pxg/ErfBY2SNK/R86kutWFT7iBrjCEiFSBq1Vy3p//gNZ8rUT
-         5Y4st9yShiZ+QZ+odr2KH0dVTBu7OOmSR9Y38SI188coVtKGxotHRDAYPVYroU99dwC1
-         /8eRddVBRTDSxD2p+KzHrcuvKrBO14bwv1pyYnlOdLy+vPugAVd5BoewPVYaexiT1q9q
-         I9cjluH2H2PTazmJEBITV052uJG/S54lR7f/FBgh9jGrM13TlYiLNAbfrJUJFQ7rEUM/
-         wHZsahIka+D2uXkN303k2V0fPxVVmvPCH2bX6xFXLTs8Cghfhs5EKtXB3klmhxGLsRFk
-         Bhfw==
-X-Gm-Message-State: APjAAAX9XhjWp2LGETFvcqMOtkg0Mc4e1Zfksy5ZvOrbfVNvejc9mL/Z
-        5NYrnUdvJkI8y+VCNuelwnEK52gB
-X-Google-Smtp-Source: APXvYqwUTe5RkYuin8LohkLDd/WteibKN2lDHhZAR6zoj23sp8Osx8FE8Zi29HB0PC/d+AlBfwtMsA==
-X-Received: by 2002:a17:90a:206a:: with SMTP id n97mr30227096pjc.10.1561973379791;
-        Mon, 01 Jul 2019 02:29:39 -0700 (PDT)
-Received: from localhost.localdomain ([163.152.3.133])
-        by smtp.gmail.com with ESMTPSA id u65sm23209068pjb.1.2019.07.01.02.29.37
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 01 Jul 2019 02:29:39 -0700 (PDT)
-Date:   Mon, 1 Jul 2019 18:29:34 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>
-Cc:     stern@rowland.harvard.edu, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] usbip: Skip DMA mapping and unmapping for urb at vhci
-Message-ID: <20190701092932.GA3939@localhost.localdomain>
-References: <20190621174553.28862-1-suwan.kim027@gmail.com>
- <20190621174553.28862-2-suwan.kim027@gmail.com>
- <10a4f10a-d271-9331-b847-bdc06f9fc9cf@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <10a4f10a-d271-9331-b847-bdc06f9fc9cf@kernel.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+        id S1728757AbfGAKO3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jul 2019 06:14:29 -0400
+Received: from mx2.suse.de ([195.135.220.15]:34468 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727707AbfGAKO3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Jul 2019 06:14:29 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 24117AD17;
+        Mon,  1 Jul 2019 10:14:28 +0000 (UTC)
+Message-ID: <1561975238.10014.10.camel@suse.com>
+Subject: Re: [PATCH] gpss: core: no waiters left behind on deregister
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Date:   Mon, 01 Jul 2019 12:00:38 +0200
+In-Reply-To: <20190626114139.GC508@localhost>
+References: <20190624083323.11876-1-oneukum@suse.com>
+         <20190625070436.GC14867@localhost> <1561547047.23604.15.camel@suse.com>
+         <20190626114139.GC508@localhost>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 28, 2019 at 06:11:54PM -0600, shuah wrote:
-> Hi Suwan,
-> 
-> On 6/21/19 11:45 AM, Suwan Kim wrote:
-> > vhci doesn’t do dma for remote device. Actually, the real dma
-> > operation is done by network card driver. So, vhci doesn’t use and
-> > need dma address of transfer buffer of urb.
+Am Mittwoch, den 26.06.2019, 13:41 +0200 schrieb Johan Hovold:
+> On Wed, Jun 26, 2019 at 01:04:07PM +0200, Oliver Neukum wrote:
+> > Am Dienstag, den 25.06.2019, 09:04 +0200 schrieb Johan Hovold:
+> > > On Mon, Jun 24, 2019 at 10:33:23AM +0200, Oliver Neukum wrote:
+> > > > If you deregister a device you need to wake up all waiters
+> > > > as there will be no further wakeups.
+> > > > 
+> > > > Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> > > > ---
+> > > >  drivers/gnss/core.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/gnss/core.c b/drivers/gnss/core.c
+> > > > index e6f94501cb28..0d13bd2cefd5 100644
+> > > > --- a/drivers/gnss/core.c
+> > > > +++ b/drivers/gnss/core.c
+> > > > @@ -303,7 +303,7 @@ void gnss_deregister_device(struct gnss_device *gdev)
+> > > >  	down_write(&gdev->rwsem);
+> > > >  	gdev->disconnected = true;
+> > > >  	if (gdev->count) {
+> > > > -		wake_up_interruptible(&gdev->read_queue);
+> > > > +		wake_up_interruptible_all(&gdev->read_queue);
+> > > 
+> > > GNSS core doesn't have any exclusive waiters, so no need to use use the
+> > > exclusive wake-up (all) interface.
 > > 
-> > When vhci supports SG, it is useful to use native SG list instead
-> > of mapped SG list because dma mapping fnuction can adjust the
-> > number of SG list that is urb->num_mapped_sgs.
+> > Well, yes, but that is the problem. In gnss_read() you drop the lock:
+> > That means that an arbitrary number of tasks can get here.
 > > 
-> > But hcd provides dma mapping and unmapping function by defualt.
-> 
-> Typo "defualt"
-> 
-> > Moreover, it causes unnecessary dma mapping and unmapping which
-> > will be done again at the NIC driver and it wastes CPU cycles.
-> > So, implement map_urb_for_dma and unmap_urb_for_dma function for
-> > vhci in order to skip the dma mapping and unmapping procedure.
+> >                 ret = wait_event_interruptible(gdev->read_queue,
+> >                                 gdev->disconnected ||
+> >                                 !kfifo_is_empty(&gdev->read_fifo));
 > > 
+> > Meaning that an arbitrary number can be sleeping here.
 > 
-> How did you verify that unnecessary dma map/unmap are happening?
-> How many CPU cycles did you manage to reduce with this change?
+> I understand wait you're getting at, but I think your mistaken regarding
+> exclusive wait. Note that wait_event_interruptible() uses nonexclusive
+> wait.
+> 
+> > Yet in gnss_deregister_device() you use a simple wake_up:
+> > 
+> > void gnss_deregister_device(struct gnss_device *gdev)
+> > 
+> > {
+> > 
+> >         down_write(&gdev->rwsem);
+> >         gdev->disconnected = true;
+> >         if (gdev->count) {
+> >                 wake_up_interruptible(&gdev->read_queue);
+> > 
+> > 
+> > wake_up_interruptible() will wake up one waiting task. But after that
+> > the device is gone. There will be no further events. The other tasks
+> > will sleep forever.
+> 
+> No, wake_up_interruptible() will wake up all nonexclusive waiters,
+> which is all we care about here.
 
-Dma mapping/unmapping is not required for vhci because vhci passes
-the virtual address of the buffer to the network stack without
-passing the dma address of the buffer. Network stack receive the
-virtual address of the buffer from vhci and later, network card
-driver performs dma mapping for the buffer. So, as far as I know,
-dma address of the buffer is not used for vhci and virtual address
-is only used by vhci.
+You are right and tracing this is hard.
 
-I used ftrace to measure a duration of usb_hcd_map_urb_for_dma().
-As a result, usb_hcd_map_urb_for_dma() took a duration of about
-0.14us out of about 10us which is the duration of usb_hcd_submit_urb().
-However, this figure is the dma mapping measurement value for
-physically contiguous buffers when vhci does not support SG, and
-if vhci supports SG, more CPU cycles will be consumed for SG dma
-mapping.
+	Regards & Sorry
+		Oliver
 
-I think that the important point is dma mapping/unmapping is
-unnecessary at vhci. So we can skip dma mapping/unmapping and save
-the CPU cycles (even if it is small). This is an opportunity to
-reduce the end-to-end latency of usbip and improve the performance.
-
-Regards
-
-Suwan Kim
