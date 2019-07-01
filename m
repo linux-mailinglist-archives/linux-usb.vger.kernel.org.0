@@ -2,62 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D14325BE02
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 16:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1925BEB5
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 16:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729507AbfGAOUi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 10:20:38 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:51328 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729453AbfGAOUh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 10:20:37 -0400
-Received: (qmail 1634 invoked by uid 2102); 1 Jul 2019 10:20:36 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 1 Jul 2019 10:20:36 -0400
-Date:   Mon, 1 Jul 2019 10:20:36 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Oliver Neukum <oneukum@suse.com>
-cc:     Tejun Heo <tj@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [RFC] deadlock with flush_work() in UAS
-In-Reply-To: <1561978947.10014.12.camel@suse.com>
-Message-ID: <Pine.LNX.4.44L0.1907011017130.1536-100000@iolanthe.rowland.org>
+        id S1729871AbfGAOwF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jul 2019 10:52:05 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:47448 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726967AbfGAOwF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 10:52:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=iNgGMHAOMdwbYrGUW9dUANMTp/OnqfmLFCUXKRGNhqU=; b=tKAdlaBkc6+ZhWNkkzk5/6n+v
+        9FLtdiXQhfQnlRJPwhhhuN7r6QAfd7K2X5s5fBgSViAS+piJS1JIqKLf5tSXkUX7FiFrdWYlm9lJj
+        n3HotnqonJghfRMa66zYF+c+C7dhQ9LdhW2e6HSNiiYicixA9R9pBedgTX+fkOdHoXGm/GCUxVzAp
+        QoR1IcodhQcJLz8OwyX7ucYFio2hkDTxx9SilsZ+OYRaq1W+3vt3E5/K8meT3t3JW7Zf8Q8YtxMzO
+        1/eSFB0FTnl950+jA4eE2B+XQW27I0BXn10RSPUY+W144d/BPUjMMLME8n2VoMPHixcfv0MJvtVUs
+        rf9M2wc9Q==;
+Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hhxf1-0008LD-9H; Mon, 01 Jul 2019 14:52:03 +0000
+Subject: Re: [PATCH 2/6] Adjust watch_queue documentation to mention mount and
+ superblock watches. [ver #5]
+To:     David Howells <dhowells@redhat.com>
+Cc:     viro@zeniv.linux.org.uk, Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <7a288c2c-11a1-87df-9550-b247d6ce3010@infradead.org>
+ <156173701358.15650.8735203424342507015.stgit@warthog.procyon.org.uk>
+ <156173703546.15650.14319137940607993268.stgit@warthog.procyon.org.uk>
+ <8212.1561971170@warthog.procyon.org.uk>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <90d07cf5-5ba4-1fb6-72b3-f120423a7726@infradead.org>
+Date:   Mon, 1 Jul 2019 07:52:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <8212.1561971170@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 1 Jul 2019, Oliver Neukum wrote:
-
-> Am Mittwoch, den 26.06.2019, 10:38 -0400 schrieb Alan Stern:
-> > On Wed, 26 Jun 2019, Oliver Neukum wrote:
-> > 
-> > > Am Montag, den 24.06.2019, 10:22 -0400 schrieb Alan Stern:
-> > > > But that pattern makes no sense; a driver would never use it.  The 
-> > > > driver would just do the reset itself.
-> > > 
-> > > Correct. But UAS and storage themselves still need to use
-> > > WQ_MEM_RECLAIM for their workqueues, don't they?
-> > 
-> > Perhaps so for uas.  usb-storage uses a work queue only for scanning 
-> > targets, which doesn't interfere with the block I/O pathway.
+On 7/1/19 1:52 AM, David Howells wrote:
+> Randy Dunlap <rdunlap@infradead.org> wrote:
 > 
-> Are you sure? What about hub_tt_work?
+>> I'm having a little trouble parsing that sentence.
+>> Could you clarify it or maybe rewrite/modify it?
+>> Thanks.
+> 
+> How about:
+> 
+>   * ``info_filter`` and ``info_mask`` act as a filter on the info field of the
+>     notification record.  The notification is only written into the buffer if::
+> 
+> 	(watch.info & info_mask) == info_filter
+> 
+>     This could be used, for example, to ignore events that are not exactly on
+>     the watched point in a mount tree by specifying NOTIFY_MOUNT_IN_SUBTREE
+>     must not be set, e.g.::
+> 
+> 	{
+> 		.type = WATCH_TYPE_MOUNT_NOTIFY,
+> 		.info_filter = 0,
+> 		.info_mask = NOTIFY_MOUNT_IN_SUBTREE,
+> 		.subtype_filter = ...,
+> 	}
+> 
+>     as an event would be only permissible with this filter if::
+> 
+>     	(watch.info & NOTIFY_MOUNT_IN_SUBTREE) == 0
+> 
+> David
+> 
 
-Technically speaking, hub_tt_work is used by the hub driver, not by 
-usb-storage.  :-)
+Yes, better.  Thanks.
 
-> As far as I can tell, hub_quiesce
-> will flush it, hence it is used in error handling.
-
-Yes, it needs to use a work queue with WQ_MEM_RECLAIM set.  
-Unfortunately, I don't think we can use hub_wq for this purpose (we
-could end up with a work item waiting for another work item later on in
-the same queue, not good).
-
-Alan Stern
-
+-- 
+~Randy
