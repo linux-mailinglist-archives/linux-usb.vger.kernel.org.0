@@ -2,126 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3F65BAD7
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 13:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EB15BB60
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 14:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728454AbfGALiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 07:38:06 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:57262 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727296AbfGALiG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 07:38:06 -0400
-Received: by mail-io1-f71.google.com with SMTP id u25so14724947iol.23
-        for <linux-usb@vger.kernel.org>; Mon, 01 Jul 2019 04:38:05 -0700 (PDT)
+        id S1727846AbfGAMUz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jul 2019 08:20:55 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:42683 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727243AbfGAMUz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 08:20:55 -0400
+Received: by mail-wr1-f66.google.com with SMTP id x17so13586051wrl.9;
+        Mon, 01 Jul 2019 05:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wDK+VGNLOh5xPyZh6wAjqtdgmRlRlNiDvHJYuCNXtQI=;
+        b=DGmE2t0LmdkCDNwjx/jVMYLqQGB9FcnDRaBOVKqAZX077VZuX92c5e0iTPy4Cr3aTo
+         pwvh9lcYW3jrw0dt0eKg/BGzryj9CRirOXTPyAeqZ+TQOSCmBThRSAMKcV6VTgyn7Qnm
+         uFF7SzS6zmvNJO5larxrkPcaco+TjJuykfzz7clS5iJPYQ/pXGoTD6khn2OgTtKsNJ7x
+         IIUBxIW/AQ8vczIQJTZuSIG5DqY4SUIfGFBHxgQ4tZKym4HGnBJr9gc4TKQwmM3O0Llv
+         2pMJUDam/OLPrXrG5fRt9c4w4+qEktF4LUyVNLXeyfCeZ01ZVyjyM/oUOdR6g4KTSXxG
+         qh2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=2e1SntskR1wk3R8YDQNaXdZrPYNsv+rRW/w+w1Z7SRM=;
-        b=HD68PCZP69U4DYsnOL6rDzo1s7ug77vYhNcfxfx7mg+Rr9SnuwBCOtR8EIo/Z//K4K
-         Xwpa3WR4M/xqaw0RL3MR9i/2BHLFJLYHOz1zfKTb7fPKgHiD/ptmRWso6xVYAH4Wq3D/
-         fGMOingTDS4njnuX1fGJbHCxrrSxdoZ8mtc2hIxJUsGhYG7yVF+h4tHiwFxeQjP6ty1f
-         qdq7d7ew/kESbXjWXFAwblt8H7ywOF1hURUZ2+iXs+J6psjPxcbTUGni7C7a9s0Eej4r
-         gvJEmYsjY8BXZrKkhrniEQPqJVRkzW6VSeJDuI7yupWHPeekBam73If9MlMtPN+FhA3D
-         Ra7w==
-X-Gm-Message-State: APjAAAXT9DTU9OfqNB4D8ZWEQGEmeVR7/kWv4VskRl5wxzZ1Ibv6k906
-        L9+yz9CEiNSCvG5nAFO3iCUNvMQYq0M6IWDH53cGW6/u3eHi
-X-Google-Smtp-Source: APXvYqzb4b/7WqvWityk7fhaVl/oiH2xTFhn6YPl44xVi7nfsucuhRQW3JmnuwKx2YDBmqQOU/2rmVfWmlYWSlwLSD3eGgz2hWsP
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wDK+VGNLOh5xPyZh6wAjqtdgmRlRlNiDvHJYuCNXtQI=;
+        b=rwMSWYtIvtxcWk7BqAo0Obz3zEMGtoY3ptavyTWlEWRVLX+p26/wTv9/yC7fBQ+J13
+         SQZ/8V6gG5EwpQuKWHwKAk34kfeNsd7CvWDrPKI8mvqTLQF3KI+flcD9t41u9Sddbv7x
+         Dvbktxh6dbxpOCcBydF/unh2oGv1f5kNIQqp6u3zLzSe168g2uoTVcydCu27NANSKFGY
+         s/GLKlwxWpS3z8ngwK+oh35+00hoaOaqKaApkt7SJ1JO/24ab60mbPdUfBNosuq3HX/I
+         9jHEMltSk8rtlGXhfd2BKxbODckJeFLKntvFDv3pngAPsQKQ0+NLmMaEoUgU+zKit17w
+         qtQQ==
+X-Gm-Message-State: APjAAAXvuzJGuhqxSSucNqt00Q1TxOlv57+2+iXP69dcxBCnyGRh3Lx4
+        tXS7KMAjK8lMW7ybNxfmVrcZQWm3
+X-Google-Smtp-Source: APXvYqyQ7atvdEI+wUbwck5kAALCn2WuV1fSHPqK0zpVspqgBezpseLvGFdydiRzCtyK24pLPQ7xBA==
+X-Received: by 2002:adf:ab0f:: with SMTP id q15mr3238025wrc.325.1561983652973;
+        Mon, 01 Jul 2019 05:20:52 -0700 (PDT)
+Received: from Red ([2a01:cb1d:147:7200:2e56:dcff:fed2:c6d6])
+        by smtp.googlemail.com with ESMTPSA id h19sm19567752wrb.81.2019.07.01.05.20.51
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 01 Jul 2019 05:20:52 -0700 (PDT)
+Date:   Mon, 1 Jul 2019 14:20:50 +0200
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     jacmet@sunsite.dk, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [BUG] net: dm9600: false link status
+Message-ID: <20190701122050.GA11021@Red>
+References: <20190627132137.GB29016@Red>
+ <20190627144339.GG31189@lunn.ch>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:63a:: with SMTP id h26mr27782115jar.92.1561981085266;
- Mon, 01 Jul 2019 04:38:05 -0700 (PDT)
-Date:   Mon, 01 Jul 2019 04:38:05 -0700
-In-Reply-To: <000000000000cba2b6058ac09eeb@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bbbb3d058c9d0f6d@google.com>
-Subject: Re: KMSAN: uninit-value in ax88178_bind
-From:   syzbot <syzbot+abd25d675d47f23f188c@syzkaller.appspotmail.com>
-To:     allison@lohutok.net, davem@davemloft.net, glider@google.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, lynxis@fe80.eu,
-        marcel.ziswiler@toradex.com, netdev@vger.kernel.org,
-        opensource@jilayne.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, yang.wei9@zte.com.cn, zhang.run@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190627144339.GG31189@lunn.ch>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+On Thu, Jun 27, 2019 at 04:43:39PM +0200, Andrew Lunn wrote:
+> On Thu, Jun 27, 2019 at 03:21:37PM +0200, Corentin Labbe wrote:
+> > Hello
+> > 
+> > I own an USB dongle which is a "Davicom DM96xx USB 10/100 Ethernet".
+> > According to the CHIP_ID, it is a DM9620.
+> > 
+> > Since I needed for bringing network to uboot for a board, I have started to create its uboot's driver.
+> > My uboot driver is based on the dm9600 Linux driver.
+> > 
+> > The dongle was working but very very slowy (24Kib/s).
+> > After some debug i found that the main problem was that it always link to 10Mbit/s Half-duplex. (according to the MAC registers)
+> > 
+> > For checking the status of the dongle I have plugged it on a Linux box which give me:
+> > dm9601 6-2:1.0 enp0s29f0u2: link up, 100Mbps, full-duplex, lpa 0xFFFF
+> > 
+> > But in fact the Linux driver is tricked.
+> > 
+> > I have added debug of MDIO write/read and got:
+> > [157550.926974] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_write() phy_id=0x00, loc=0x00, val=0x8000
+> 
+> Writing the reset bit. Ideally you should read back the register and
+> wait for this bit to clear. Try adding this, and see if this helps, or
+> you get 0xffff.
+> 
 
-HEAD commit:    41550654 [UPSTREAM] KVM: x86: degrade WARN to pr_warn_rate..
-git tree:       kmsan
-console output: https://syzkaller.appspot.com/x/log.txt?x=1577f4d5a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=40511ad0c5945201
-dashboard link: https://syzkaller.appspot.com/bug?extid=abd25d675d47f23f188c
-compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
-80fee25776c2fb61e74c1ecb1a523375c2500b69)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17ea8283a00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11a1f57ba00000
+I get 0xFFFF
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+abd25d675d47f23f188c@syzkaller.appspotmail.com
+> > [157550.931962] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_write() phy_id=0x00, loc=0x04, val=0x05e1
+> 
+> Advertisement control register.  
+> 
+> > [157550.951967] dm9601 6-2:1.0 (unnamed net_device) (uninitialized): dm9601_mdio_read() phy_id=0x00, loc=0x00, returns=0xffff
+> 
+> And now things are bad. In theory, the power down bit is set, and some
+> PHYs don't respond properly when powered down. However, it is unclear
+> how it got into this state. Did the reset kill it, or setting the
+> advertisement? Or is the PHY simply not responding at all. The MDIO
+> data lines have a pull up, so if the device does not respond, reads
+> give 0xffff.
+> 
+> Maybe also check register 0, bit 7, EXT_PHY. Is it 0, indicating the
+> internal PHY should be used?
+> 
+> You could also try reading PHY registers 2 and 3 and see if you can
+> get a valid looking PHY ID. Maybe try that before hitting the reset
+> bit?
+> 
 
-usb 1-1: config 0 has no interface number 0
-usb 1-1: New USB device found, idVendor=04bb, idProduct=0930,  
-bcdDevice=d2.4a
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-==================================================================
-BUG: KMSAN: uninit-value in is_valid_ether_addr  
-include/linux/etherdevice.h:195 [inline]
-BUG: KMSAN: uninit-value in asix_set_netdev_dev_addr  
-drivers/net/usb/asix_devices.c:61 [inline]
-BUG: KMSAN: uninit-value in ax88178_bind+0x635/0xad0  
-drivers/net/usb/asix_devices.c:1075
-CPU: 1 PID: 30 Comm: kworker/1:1 Not tainted 5.2.0-rc4+ #7
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-  kmsan_report+0x162/0x2d0 mm/kmsan/kmsan.c:611
-  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:304
-  is_valid_ether_addr include/linux/etherdevice.h:195 [inline]
-  asix_set_netdev_dev_addr drivers/net/usb/asix_devices.c:61 [inline]
-  ax88178_bind+0x635/0xad0 drivers/net/usb/asix_devices.c:1075
-  usbnet_probe+0x10d3/0x3950 drivers/net/usb/usbnet.c:1722
-  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
-  really_probe+0x1344/0x1d90 drivers/base/dd.c:513
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x489/0x750 drivers/base/dd.c:843
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2111
-  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
-  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
-  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
-  really_probe+0x1344/0x1d90 drivers/base/dd.c:513
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x489/0x750 drivers/base/dd.c:843
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2111
-  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x5853/0x7320 drivers/usb/core/hub.c:5432
-  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
-  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
-  kthread+0x4b5/0x4f0 kernel/kthread.c:256
-  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+Always get 0xFFFF before and after
 
-Local variable description: ----buf@ax88178_bind
-Variable was created at:
-  ax88178_bind+0x60/0xad0 drivers/net/usb/asix_devices.c:1064
-  usbnet_probe+0x10d3/0x3950 drivers/net/usb/usbnet.c:1722
-==================================================================
+Note that the eeprom dump via ethtool -e suffer the same problem.
 
+> > So it exsists two problem:
+> > - Linux saying 100Mbps, full-duplex even if it is false.
+> 
+> The driver is using the old mii code, not a phy driver. So i cannot
+> help too much with linux. But if you can get the MDIO bus working
+> reliably, it should be possible to move this over to phylib. The
+> internal PHY appears to have all the standard registers, so the
+> generic PHY driver has a good chance of working.
+> 
+
+I have investigated more and in fact I dont have a dm9620.
+I own another diferent dongle in my stock that i never used and fun fact, it has the same VID/PID and the same bug.
+I opened both dongle and all chips have no marking and got only 4x8 pins.
+Since dm9620 have 64 pins, my dongles are clearly not such hw.
+
+I googled the inscription written on the second case and found a dm9620 clone/counterfeiting named qf9700/sr9700.
+But thoses chips should have marking (according to some photos on the web), so I probably own a counterfeiting of a clone/counterfeiting.
+
+Note that the sr9700 driver is mainline but fail to work with my dongle.
+
+At least, now i know that have a chip not designed to work with an external PHY, so all EXTPHY registers could be ignored.
+My last ressort is to brute force all values until something happen.
+
+My simple tries, write 0xsomeval everywhere, lead to something, phy/eeprom return now 0x000y.
+Probably, this chip doesnt have any PHY...
+
+Regards
