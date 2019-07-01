@@ -2,141 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1385B623
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 09:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A3E5B726
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jul 2019 10:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727435AbfGAHxq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 03:53:46 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:33209 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726036AbfGAHxq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 03:53:46 -0400
-Authenticated-By: 
-X-SpamFilter-By: BOX Solutions SpamTrap 5.62 with qID x617rh0D004617, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (RTITCASV01.realtek.com.tw[172.21.6.18])
-        by rtits2.realtek.com.tw (8.15.2/2.57/5.78) with ESMTPS id x617rh0D004617
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Mon, 1 Jul 2019 15:53:43 +0800
-Received: from fc30.localdomain (172.21.177.138) by RTITCASV01.realtek.com.tw
- (172.21.6.18) with Microsoft SMTP Server id 14.3.439.0; Mon, 1 Jul 2019
- 15:53:42 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <netdev@vger.kernel.org>
-CC:     <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net] r8152: fix the setting of detecting the linking change for runtime suspend
-Date:   Mon, 1 Jul 2019 15:53:19 +0800
-Message-ID: <1394712342-15778-286-albertk@realtek.com>
-X-Mailer: Microsoft Office Outlook 11
+        id S1728040AbfGAItC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jul 2019 04:49:02 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:17874 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726442AbfGAItC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 04:49:02 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d19c8fc0002>; Mon, 01 Jul 2019 01:49:00 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 01 Jul 2019 01:49:01 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 01 Jul 2019 01:49:01 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 1 Jul
+ 2019 08:49:01 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 1 Jul
+ 2019 08:49:01 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 1 Jul 2019 08:49:01 +0000
+Received: from jckuo-lt.nvidia.com (Not Verified[10.19.108.127]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d19c8fc0002>; Mon, 01 Jul 2019 01:49:01 -0700
+From:   JC Kuo <jckuo@nvidia.com>
+To:     <linux-usb@vger.kernel.org>, <stern@rowland.harvard.edu>,
+        <usb-storage@lists.one-eyed-alien.net>, <oneukum@suse.com>
+CC:     JC Kuo <jckuo@nvidia.com>
+Subject: [PATCH] usb: storage: skip only when uas driver is loaded
+Date:   Mon, 1 Jul 2019 16:48:48 +0800
+Message-ID: <20190701084848.32502-1-jckuo@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.138]
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1561970940; bh=NMa2kpkFyVuDAYM2DG7p4ti7V3iwbEjLpuSET89Dm/I=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:Content-Type;
+        b=UELMapZm0v50A4Cd36sX7BhInHHWGliU7Wsy+P/MnoQIwFa4K8djzAGlf7nC1xJHk
+         0LBtAkQHv0WCsSsAbK58KIOphlN081ArvOTFnxsv4IzSGPJqgbkejED+FZ0JXG7ZsV
+         BJQ7iuLhrjxLbr+ugHZuLfU3zTggtyyXjDgcwfEsjCkC1p7jH3gG6XRH7/Uqwki3MC
+         W160oNa9w2QWcWT58jfSXfKdAsY1HVgas5mzSCxkt2Sd4ylwg8rGrMyHHrvia4slxf
+         ub2pLRxvLsBhtC6GyMjcU95Pp12VEef2Ls5mugDtNzJN2kiicElc3yK8L/pxjvdzbU
+         FvFtPmtNYaN9Q==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-1. Rename r8153b_queue_wake() to r8153_queue_wake().
+When usb-storage driver detects a UAS capable device, it ignores the
+device if CONFIG_USB_UAS is enabled. usb-storage driver assumes uas
+driver certainly will be loaded. However, it's possible that uas
+driver will not be loaded, for example, uas kernel module is not
+installed properly or it is in modprobe blacklist.
 
-2. Correct the setting. The enable bit should be 0xd38c bit 0. Besides,
-   the 0xd38a bit 0 and 0xd398 bit 8 have to be cleared for both enabled
-   and disabled.
+In case of uas driver not being loaded, the UAS capable device will
+not fallback to work at Bulk-only-transfer mode. The device just
+disappears without any notification to user/userspace.
 
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+This commit changes usb-storage driver to skip UAS capable device
+only when uas driver is already loaded to make sure the device will
+at least work with Bulk protocol.
+
+Signed-off-by: JC Kuo <jckuo@nvidia.com>
 ---
- drivers/net/usb/r8152.c | 38 +++++++++++++++++++++++++++-----------
- 1 file changed, 27 insertions(+), 11 deletions(-)
+ drivers/usb/core/driver.c | 1 +
+ drivers/usb/storage/usb.c | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index e0dcb681cfe5..101d1325f3f1 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -53,6 +53,9 @@
- #define PAL_BDC_CR		0xd1a0
- #define PLA_TEREDO_TIMER	0xd2cc
- #define PLA_REALWOW_TIMER	0xd2e8
-+#define PLA_SUSPEND_FLAG	0xd38a
-+#define PLA_INDICATE_FALG	0xd38c
-+#define PLA_EXTRA_STATUS	0xd398
- #define PLA_EFUSE_DATA		0xdd00
- #define PLA_EFUSE_CMD		0xdd02
- #define PLA_LEDSEL		0xdd90
-@@ -336,6 +339,15 @@
- /* PLA_BOOT_CTRL */
- #define AUTOLOAD_DONE		0x0002
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index ebcadaad89d1..265c5dd490d2 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1923,3 +1923,4 @@ struct bus_type usb_bus_type = {
+ 	.uevent =	usb_uevent,
+ 	.need_parent_lock =	true,
+ };
++EXPORT_SYMBOL_GPL(usb_bus_type);
+diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
+index 9a79cd9762f3..d8f64e808783 100644
+--- a/drivers/usb/storage/usb.c
++++ b/drivers/usb/storage/usb.c
+@@ -1097,9 +1097,10 @@ static int storage_probe(struct usb_interface *intf,
+ 	int result;
+ 	int size;
  
-+/* PLA_SUSPEND_FLAG */
-+#define LINK_CHG_EVENT		BIT(0)
-+
-+/* PLA_INDICATE_FALG */
-+#define UPCOMING_RUNTIME_D3	BIT(0)
-+
-+/* PLA_EXTRA_STATUS */
-+#define LINK_CHANGE_FLAG	BIT(8)
-+
- /* USB_USB2PHY */
- #define USB2PHY_SUSPEND		0x0001
- #define USB2PHY_L1		0x0002
-@@ -2806,20 +2818,24 @@ static void r8153b_power_cut_en(struct r8152 *tp, bool enable)
- 	ocp_write_word(tp, MCU_TYPE_USB, USB_MISC_0, ocp_data);
- }
+-	/* If uas is enabled and this device can do uas then ignore it. */
++	/* If uas driver is loaded and this device can do uas then ignore it. */
+ #if IS_ENABLED(CONFIG_USB_UAS)
+-	if (uas_use_uas_driver(intf, id, NULL))
++	if (driver_find("uas", &usb_bus_type) &&
++		uas_use_uas_driver(intf, id, NULL))
+ 		return -ENXIO;
+ #endif
  
--static void r8153b_queue_wake(struct r8152 *tp, bool enable)
-+static void r8153_queue_wake(struct r8152 *tp, bool enable)
- {
- 	u32 ocp_data;
- 
--	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, 0xd38a);
-+	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_INDICATE_FALG);
- 	if (enable)
--		ocp_data |= BIT(0);
-+		ocp_data |= UPCOMING_RUNTIME_D3;
- 	else
--		ocp_data &= ~BIT(0);
--	ocp_write_byte(tp, MCU_TYPE_PLA, 0xd38a, ocp_data);
-+		ocp_data &= ~UPCOMING_RUNTIME_D3;
-+	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_INDICATE_FALG, ocp_data);
-+
-+	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_SUSPEND_FLAG);
-+	ocp_data &= ~LINK_CHG_EVENT;
-+	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_SUSPEND_FLAG, ocp_data);
- 
--	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, 0xd38c);
--	ocp_data &= ~BIT(0);
--	ocp_write_byte(tp, MCU_TYPE_PLA, 0xd38c, ocp_data);
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS);
-+	ocp_data &= ~LINK_CHANGE_FLAG;
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS, ocp_data);
- }
- 
- static bool rtl_can_wakeup(struct r8152 *tp)
-@@ -2887,14 +2903,14 @@ static void rtl8153_runtime_enable(struct r8152 *tp, bool enable)
- static void rtl8153b_runtime_enable(struct r8152 *tp, bool enable)
- {
- 	if (enable) {
--		r8153b_queue_wake(tp, true);
-+		r8153_queue_wake(tp, true);
- 		r8153b_u1u2en(tp, false);
- 		r8153_u2p3en(tp, false);
- 		rtl_runtime_suspend_enable(tp, true);
- 		r8153b_ups_en(tp, true);
- 	} else {
- 		r8153b_ups_en(tp, false);
--		r8153b_queue_wake(tp, false);
-+		r8153_queue_wake(tp, false);
- 		rtl_runtime_suspend_enable(tp, false);
- 		r8153_u2p3en(tp, true);
- 		r8153b_u1u2en(tp, true);
-@@ -4221,7 +4237,7 @@ static void r8153b_init(struct r8152 *tp)
- 
- 	r8153b_power_cut_en(tp, false);
- 	r8153b_ups_en(tp, false);
--	r8153b_queue_wake(tp, false);
-+	r8153_queue_wake(tp, false);
- 	rtl_runtime_suspend_enable(tp, false);
- 	r8153b_u1u2en(tp, true);
- 	usb_enable_lpm(tp->udev);
 -- 
-2.21.0
+2.17.1
 
+
+-----------------------------------------------------------------------------------
+This email message is for the sole use of the intended recipient(s) and may contain
+confidential information.  Any unauthorized review, use, disclosure or distribution
+is prohibited.  If you are not the intended recipient, please contact the sender by
+reply email and destroy all copies of the original message.
+-----------------------------------------------------------------------------------
