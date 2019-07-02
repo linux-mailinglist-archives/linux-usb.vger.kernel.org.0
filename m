@@ -2,168 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D69895D429
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 18:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451D95D4BD
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 18:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726150AbfGBQW6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 12:22:58 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:41325 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725858AbfGBQW6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 12:22:58 -0400
-Received: by mail-wr1-f66.google.com with SMTP id c2so18553798wrm.8
-        for <linux-usb@vger.kernel.org>; Tue, 02 Jul 2019 09:22:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=jG/Q75qDOR7plmuYpaGm0iLn7CnHXYAvRBkK8IXCAog=;
-        b=g3WmdNfSyLLFPq0kH7dJwg2DK/lI8Dz7liEQLYgZPtQsYC9ETw+qPRdiL4EqJvD5t7
-         ad8WYjoT0ovYMls+4n4aN28233tx48mh8s0QPlq3k2Gl4t3arn+PDbgL9dRVLDLaLCLO
-         B4MKrvOtXd0T+/biow1uUkIQn6HExfJ/QdQkpBXhaJX5zIOWz0aDXo2U+nbwD7vgpKow
-         gfppvvD/O6Nsp+yH/7fT5Xl5flwEcO46v2Mxx4T2zf3+IHr1MY3TyKY6/7JmkiYJHYcX
-         nnf5QM6/WyDQ0ZADC/auL9ZVDzH21q7RwVpiLKEeoXGVRYILk70TaXQ/9xsL0UBsg/9M
-         oiUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=jG/Q75qDOR7plmuYpaGm0iLn7CnHXYAvRBkK8IXCAog=;
-        b=VXs4ZsJRQ+JTVl6YpGmwFB9H4VJS+zUZz1YvJHazoWSsXVj4vkJJi6Atd2XIIZ3XBc
-         1qDnXFLpTkFDoKr3BlSBg3Lu2xZ/nSQdj5kHERJrJP3nnMYM4Vn6m+5F21EFFGvJoRPt
-         31TRTAdMv6jJguaPP7GtezG/CZ781zCkZktiDm266VgGcsCJi3U9x0L0IaVonKCrq0bt
-         SFLwoULEbZ8nvh1k/zRTLbYJvpNdulBmCd4QqQLt3lWGHPqqtQJOZvtDdtFNkfPuCn23
-         OK4zWwsBWFWLkT2jHF/QPGchQz5LOd1oszqTISNFMzBOmH4jatg8LLT7Z/HEt4c+PGUI
-         /4Mg==
-X-Gm-Message-State: APjAAAX9d+0u+gBBfGm66B4sekXMX60xwDxXpay9zXshb+TSb1HWc9fx
-        ip/HndGdYgb3lckN3AM/aLNqwcJtAtB2Q2ucnLI=
-X-Google-Smtp-Source: APXvYqzejQoOQww8WULJ3mBGNcet3EOpZeC+x1Wa4eiEi9Hq868ZX/Q7VnMbQs3o0Y4tREvoknmdNBQ+9gmwbS4N9Ic=
-X-Received: by 2002:adf:b64e:: with SMTP id i14mr25050442wre.248.1562084576275;
- Tue, 02 Jul 2019 09:22:56 -0700 (PDT)
+        id S1726255AbfGBQv3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 12:51:29 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:57872 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725996AbfGBQv3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 12:51:29 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id CA8E6607DF; Tue,  2 Jul 2019 16:51:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1562086287;
+        bh=7sXSc17bVAuf7CbORgrBmCFPSGy1FMafDntP+ShkZ+I=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=ElfqaMCmAQFZZuM27RVkXOa8ly7g9MpLoBzbACX3okex/JloyxueUstSWmRzJjrK4
+         SH0MZX12YGhscuzdVwFpq7WB+NLDeRAnUaAfyG1VVHumngHLyjfMfTWKkGTEihD3EX
+         6zkh5THCmvQUWJktPOgc4HrmEWsmrXMAt/y9Qqac=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 02D8460746;
+        Tue,  2 Jul 2019 16:51:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1562086287;
+        bh=7sXSc17bVAuf7CbORgrBmCFPSGy1FMafDntP+ShkZ+I=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=ElfqaMCmAQFZZuM27RVkXOa8ly7g9MpLoBzbACX3okex/JloyxueUstSWmRzJjrK4
+         SH0MZX12YGhscuzdVwFpq7WB+NLDeRAnUaAfyG1VVHumngHLyjfMfTWKkGTEihD3EX
+         6zkh5THCmvQUWJktPOgc4HrmEWsmrXMAt/y9Qqac=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 02D8460746
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
+Date:   Tue, 2 Jul 2019 09:51:22 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Bin Liu <b-liu@ti.com>, linux-usb@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: configfs on dwc3: msc enum failed if three functions defined
+Message-ID: <20190702165122.GA15112@jackp-linux.qualcomm.com>
+References: <20190422134357.GA2071@uda0271908>
+ <20190425224456.GA27553@jackp-linux.qualcomm.com>
+ <20190702144842.GA20724@uda0271908>
 MIME-Version: 1.0
-References: <20190701122114.2952-1-charlesyeh522@gmail.com>
- <20190701133233.GI27333@localhost> <CAAZvQQ4Eb8CZbFUG=ZApDyft2ig8mOSj4shbQv_UVCw0pm8p_Q@mail.gmail.com>
- <20190701152942.GA3787@localhost>
-In-Reply-To: <20190701152942.GA3787@localhost>
-From:   Charles Yeh <charlesyeh522@gmail.com>
-Date:   Wed, 3 Jul 2019 00:22:45 +0800
-Message-ID: <CAAZvQQ6JDgkC2SD4eYzBVYhq3ApMwWc_-gXQQVMBH+CaXZSK5A@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH v6] USB: serial: pl2303: Add new PID to support
- PL2303HXN (TYPE_HXN)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190702144842.GA20724@uda0271908>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
->         pl2303_update_reg(serial, PL2303_HXN_FLOWCTRL,
->                         PL2303_HXN_FLOWCTRL_MASK,
->                         PL2303_HXN_CTRL_RTS_CTS);
->
+Hi Bin,
 
-Indent continuation lines at least two tabs<<--Done.
+On Tue, Jul 02, 2019 at 09:48:42AM -0500, Bin Liu wrote:
+> Hi,
+> 
+> Sorry for the delay getting back on this. I was offline for quite some
+> time.
+> 
+> On Thu, Apr 25, 2019 at 03:44:57PM -0700, Jack Pham wrote:
+> > Hi Bin,
+> > 
+> > On Mon, Apr 22, 2019 at 08:43:57AM -0500, Bin Liu wrote:
+> > > Hi Felipe,
+> > > 
+> > > I am having an issue with dwc3 on TI AM57x device, and would like to ask
+> > > for your comments.
+> > > 
+> > > I use configfs to create a multi-function gadget on dwc3, mass_storage
+> > > is the last function, it seems if I create 3 functions, the mass_storage
+> > > enumeration will fail on the host. It works fine if only create 2
+> > > functions.
+> > > 
+> > > The dwc3 tracepoints log shows after all the ep0 transfers for
+> > > mass_storage, the very first epXin transfer is not complete - dwc3
+> > > programmed the urb, but never generates RX completion event. This also
+> > > matches the bus analyzer trace - dwc3 NAKs the very first IN token for
+> > > ever.
+> > > 
+> > > I use the attached script to create the gadget, The macro FUNCS in the
+> > > beginning of the script defines the functions to be created.
+> > > 
+> > > Any comments are appreciated.
+> > 
+> > A stab in the dark here but what is the value of GTXFIFOSIZ(X)[15:0]
+> > for epXin on your device? Is it at least wMaxPacketSize? Depending on
+> > the default hardware values it might be deficient as compared to the
+> > working endpoint that gets assigned in your 2-function config.
+> 
+> Jack,
+> 
+> thanks for the pointer, it is indeed the issue on AM57x device.  The
+> reset value of GTXFIFOSIZ for ep1~4 have size of 0x184, but ep5~15 have
+> only size of 0x13 (which is 120 bytes), which is not enough for
+> high-speed bulk xfers. I manually adjusted the fifo memory allocation,
+> now my test case works.
 
-> I'm asking why you write the value 0 instead of 3 (or say, 0xfc)? Your
-> documentation said bit 0 and 1 are used to reset the up and downstream
-> pipes.
->
-> To be more specific; what happens if I
->
->         1. set bit 0
->         2. clear bit 0?
->
-> and leave the other bits alone (write back the same value, e.g. 0xfe).
->
+Cool! I'm glad my suggestion was on the right track.
+ 
+> Felipe,
+> 
+> Is there anything the dwc3 gadget driver can do to better handle this
+> kind of devices, which don't have enough fifo buffers for all TX eps?
 
-You are right..
-set "1" is reset.
-set "0" is nothing.
+A long time ago...
 
-I have used pl2303_update_reg instead pl2303_vendor_write which to reset
-the upstream and downstream pipe data
+commit bc5081617faeb3b2f0c126dc37264b87af7da47f
+Author: Felipe Balbi <felipe.balbi@linux.intel.com>
+Date:   Thu Feb 4 14:18:01 2016 +0200
 
-Charles.
+    usb: dwc3: drop FIFO resizing logic
 
+    That FIFO resizing logic was added to support OMAP5
+    ES1.0 which had a bogus default FIFO size. I can't
+    remember the exact size of default FIFO, but it was
+    less than one bulk superspeed packet (<1024) which
+    would prevent USB3 from ever working on OMAP5 ES1.0.
 
-Johan Hovold <johan@kernel.org> =E6=96=BC 2019=E5=B9=B47=E6=9C=881=E6=97=A5=
- =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=8811:29=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Mon, Jul 01, 2019 at 11:11:02PM +0800, Charles Yeh wrote:
-> > > > +             if (spriv->quirks & PL2303_QUIRK_LEGACY) {
-> > > > +                     pl2303_update_reg(serial, 0, PL2303_FLOWCTRL_=
-MASK,
-> > > > +                             0x40);
-> > >
-> > > No need to break this line even if you end up with slightly more than=
- 80
-> > > chars.
-> > >
-> > OK. I will ignore "WARNING: line over 80 characters".
->
-> Yeah, it's ok to go slightly above 80 chars when it improves readability.
->
-> > > > +             } else if (spriv->type =3D=3D &pl2303_type_data[TYPE_=
-HXN]) {
-> > > > +                     pl2303_update_reg(serial, PL2303_HXN_FLOWCTRL=
-,
-> > > > +                             PL2303_HXN_FLOWCTRL_MASK,
-> > > > +                             PL2303_HXN_CTRL_RTS_CTS);
-> > >
-> > > Again, continuation lines should be indented at least two tabs furthe=
-r
-> > > (you only use one tab now).
-> > >
-> >
-> > I have done it the way you do today...but after checking
-> > ./scripts/checkpatch.pl.. I got another warning message...
-> > So I am a little confused now...
-> > Previously before submitting.. must first pass ./scripts/checkpatch.pl
-> > check. No ERROR, or WARRING message...
-> >
-> > I will return to the office tomorrow ... I will post another warning
-> > message (according to the way you mentioned)
->
-> checkpatch isn't always right. Just remember to indent continuation
-> lines at least two tabs further, such as
->
->         pl2303_update_reg(serial, PL2303_HXN_FLOWCTRL,
->                         PL2303_HXN_FLOWCTRL_MASK,
->                         PL2303_HXN_CTRL_RTS_CTS);
->
-> > >         } else if (spriv->type =3D=3D &pl2303_type_data[TYPE_HXN]) {
-> > >
-> > > > +                     pl2303_vendor_write(serial, PL2303_HXN_RESET_=
-CONTROL,
-> > > > +                             0);
-> > >
-> > > You again completely ignored my question about why you're wring 0
-> > > instead of 3 here.
-> > >
-> > > I'll ignore your patch until you explain.
-> >
-> > 3. In pl2303_open: Because TYPE_HXN is different from the instruction o=
-f reset
-> >    down/up stream used by TYPE_HX.
-> >    Therefore, we will also execute different instructions here.
-> >    The default of chip Reset Control is 0xFF(TYPE_HXN), therefore we wi=
-ll
-> >    write 0x00 to reset down/up stream(TYPE_HXN).
->
-> I'm asking why you write the value 0 instead of 3 (or say, 0xfc)? Your
-> documentation said bit 0 and 1 are used to reset the up and downstream
-> pipes.
->
-> To be more specific; what happens if I
->
->         1. set bit 0
->         2. clear bit 0?
->
-> and leave the other bits alone (write back the same value, e.g. 0xfe).
->
-> Johan
+    However, OMAP5 ES1.0 support has been dropped by
+    commit aa2f4b16f830 ("ARM: OMAP5: id: Remove ES1.0
+    support") which renders FIFO resizing unnecessary.
+
+    Tested-by: Kishon Vijay Abraham I <kishon@ti.com>
+    Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+
+Prior to this there was a function dwc3_gadget_resize_tx_fifo(),
+enabled via DT flag, which enumerated all the endpoints and
+recalculated the TX FIFO sizes based on the transfer type of the
+EPs' configuration.
+
+Unfortunately some Qualcomm SoCs are still plagued by having
+insufficient defaults, so we resort to carrying this function on our
+downstream kernels. It seems TI AM57x still has this problem too?
+
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
