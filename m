@@ -2,64 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6245D558
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 19:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A725D5A1
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 19:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbfGBRdj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 13:33:39 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:38468 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbfGBRdi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 13:33:38 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x62HXax1076702;
-        Tue, 2 Jul 2019 12:33:36 -0500
+        id S1726457AbfGBRuR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 13:50:17 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:48914 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726329AbfGBRuR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 13:50:17 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x62HoDW8002404;
+        Tue, 2 Jul 2019 12:50:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1562088816;
-        bh=jJt2O4ZjhRQkHi9yXofxN7jfMiav968m938Q3F3wSR0=;
+        s=ti-com-17Q1; t=1562089813;
+        bh=eIGSqnzA0YYRmxA6COE8ZHpcB9ypaEQ2/zA/AN+P6eQ=;
         h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=l/bkEEibeU5UJSGc4K/5lpqqez1z+v1WO24Q3wQydPKTPimoF++kqQGVSnv8YMeoQ
-         iKabra84CTfSYny3ECtbs2nXFVa2CfyGSQm3CEwVVQ/KFbMaW0MUS+Klc2hqZZlIWj
-         IcgptF33aN7NxfgQLKHckisxNi788WV9Gvm+Sbbw=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x62HXaiU029088
+        b=mLHO/hzbTM716PWMl1Jjf7J45e7/wQg8nBL56ggg4lEbxeUi+PUrnzBp8ioaKDBW0
+         Y28qlIlrnkCopgSMnNntiveid91iM0zHyGa8x4HZDNXcPS+Yi+ZO0NvkENSNL4v4VB
+         sk6T8s54nBm2sWoS6KLKcLWxzE0OPRxcyMtepCFY=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x62HoDUK005139
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 2 Jul 2019 12:33:36 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 2 Jul 2019 12:50:13 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 2 Jul
- 2019 12:33:35 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 12:50:13 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 2 Jul 2019 12:33:35 -0500
+ Frontend Transport; Tue, 2 Jul 2019 12:50:13 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x62HXZmV072144;
-        Tue, 2 Jul 2019 12:33:35 -0500
-Date:   Tue, 2 Jul 2019 12:33:35 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x62HoDVO095663;
+        Tue, 2 Jul 2019 12:50:13 -0500
+Date:   Tue, 2 Jul 2019 12:50:13 -0500
 From:   Bin Liu <b-liu@ti.com>
-To:     "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "open list:MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER" 
-        <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/6] musb: Improve performance for hub-attached webcams
-Message-ID: <20190702173335.GA2724@uda0271908>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        "Matwey V. Kornilov" <matwey.kornilov@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "open list:MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20190403185310.8437-1-matwey@sai.msu.ru>
- <20190614164554.27679-1-matwey@sai.msu.ru>
- <CAJs94EZy7HD-ge8vKGSeMMS+WYw-U=Zxw9gXMLoobpYX6rVt4A@mail.gmail.com>
+To:     Jack Pham <jackp@codeaurora.org>
+CC:     <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>
+Subject: Re: configfs on dwc3: msc enum failed if three functions defined
+Message-ID: <20190702175013.GB2724@uda0271908>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>, Jack Pham <jackp@codeaurora.org>,
+        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
+References: <20190422134357.GA2071@uda0271908>
+ <20190425224456.GA27553@jackp-linux.qualcomm.com>
+ <20190702144842.GA20724@uda0271908>
+ <20190702165122.GA15112@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJs94EZy7HD-ge8vKGSeMMS+WYw-U=Zxw9gXMLoobpYX6rVt4A@mail.gmail.com>
+In-Reply-To: <20190702165122.GA15112@jackp-linux.qualcomm.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
@@ -67,90 +59,90 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Matwey,
+On Tue, Jul 02, 2019 at 09:51:22AM -0700, Jack Pham wrote:
+> Hi Bin,
+> 
+> On Tue, Jul 02, 2019 at 09:48:42AM -0500, Bin Liu wrote:
+> > Hi,
+> > 
+> > Sorry for the delay getting back on this. I was offline for quite some
+> > time.
+> > 
+> > On Thu, Apr 25, 2019 at 03:44:57PM -0700, Jack Pham wrote:
+> > > Hi Bin,
+> > > 
+> > > On Mon, Apr 22, 2019 at 08:43:57AM -0500, Bin Liu wrote:
+> > > > Hi Felipe,
+> > > > 
+> > > > I am having an issue with dwc3 on TI AM57x device, and would like to ask
+> > > > for your comments.
+> > > > 
+> > > > I use configfs to create a multi-function gadget on dwc3, mass_storage
+> > > > is the last function, it seems if I create 3 functions, the mass_storage
+> > > > enumeration will fail on the host. It works fine if only create 2
+> > > > functions.
+> > > > 
+> > > > The dwc3 tracepoints log shows after all the ep0 transfers for
+> > > > mass_storage, the very first epXin transfer is not complete - dwc3
+> > > > programmed the urb, but never generates RX completion event. This also
+> > > > matches the bus analyzer trace - dwc3 NAKs the very first IN token for
+> > > > ever.
+> > > > 
+> > > > I use the attached script to create the gadget, The macro FUNCS in the
+> > > > beginning of the script defines the functions to be created.
+> > > > 
+> > > > Any comments are appreciated.
+> > > 
+> > > A stab in the dark here but what is the value of GTXFIFOSIZ(X)[15:0]
+> > > for epXin on your device? Is it at least wMaxPacketSize? Depending on
+> > > the default hardware values it might be deficient as compared to the
+> > > working endpoint that gets assigned in your 2-function config.
+> > 
+> > Jack,
+> > 
+> > thanks for the pointer, it is indeed the issue on AM57x device.  The
+> > reset value of GTXFIFOSIZ for ep1~4 have size of 0x184, but ep5~15 have
+> > only size of 0x13 (which is 120 bytes), which is not enough for
+> > high-speed bulk xfers. I manually adjusted the fifo memory allocation,
+> > now my test case works.
+> 
+> Cool! I'm glad my suggestion was on the right track.
+>  
+> > Felipe,
+> > 
+> > Is there anything the dwc3 gadget driver can do to better handle this
+> > kind of devices, which don't have enough fifo buffers for all TX eps?
+> 
+> A long time ago...
+> 
+> commit bc5081617faeb3b2f0c126dc37264b87af7da47f
+> Author: Felipe Balbi <felipe.balbi@linux.intel.com>
+> Date:   Thu Feb 4 14:18:01 2016 +0200
+> 
+>     usb: dwc3: drop FIFO resizing logic
+> 
+>     That FIFO resizing logic was added to support OMAP5
+>     ES1.0 which had a bogus default FIFO size. I can't
+>     remember the exact size of default FIFO, but it was
+>     less than one bulk superspeed packet (<1024) which
+>     would prevent USB3 from ever working on OMAP5 ES1.0.
+> 
+>     However, OMAP5 ES1.0 support has been dropped by
+>     commit aa2f4b16f830 ("ARM: OMAP5: id: Remove ES1.0
+>     support") which renders FIFO resizing unnecessary.
+> 
+>     Tested-by: Kishon Vijay Abraham I <kishon@ti.com>
+>     Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+> 
+> Prior to this there was a function dwc3_gadget_resize_tx_fifo(),
+> enabled via DT flag, which enumerated all the endpoints and
+> recalculated the TX FIFO sizes based on the transfer type of the
+> EPs' configuration.
+> 
+> Unfortunately some Qualcomm SoCs are still plagued by having
+> insufficient defaults, so we resort to carrying this function on our
+> downstream kernels. It seems TI AM57x still has this problem too?
 
-On Tue, Jul 02, 2019 at 08:29:03PM +0300, Matwey V. Kornilov wrote:
-> Ping?
-
-I was offline and just got back. I will review it soon. Sorry for the
-delay.
+Yes, it appears to be the case.
 
 -Bin.
-
-> 
-> пт, 14 июн. 2019 г. в 19:47, Matwey V. Kornilov <matwey@sai.msu.ru>:
-> >
-> > The series is concerned to issues with isochronous transfer while
-> > streaming the USB webcam data. I discovered the issue first time
-> > when attached PWC USB webcam to AM335x-based BeagleBone Black SBC.
-> > It appeared that the root issue was in numerous missed IN requests
-> > during isochronous transfer where each missing leaded to the frame
-> > drop. Since every IN request is triggered in MUSB driver
-> > individually, it is important to queue the send IN request as
-> > earlier as possible when the previous IN completed. At the same
-> > time the URB giveback handler of the device driver has also to be
-> > called there, that leads to arbitrarily delay depending on the
-> > device driver performance. The details with the references are
-> > described in [1].
-> >
-> > The issue has two parts:
-> >
-> >   1) peripheral driver URB callback performance
-> >   2) MUSB host driver performance
-> >
-> > It appeared that the first part is related to the wrong memory
-> > allocation strategy in the most USB webcam drivers. Non-cached
-> > memory is used in assumption that coherent DMA memory leads to
-> > the better performance than non-coherent memory in conjunction with
-> > the proper synchronization. Yet the assumption might be valid for
-> > x86 platforms some time ago, the issue was fixed for PWC driver in:
-> >
-> >     1161db6776bd ("media: usb: pwc: Don't use coherent DMA buffers for ISO transfer")
-> >
-> > that leads to 3.5x performance gain. The more generic fix for this
-> > common issue are coming for the rest drivers [2].
-> >
-> > The patch allowed successfully running full-speed USB PWC webcams
-> > attached directly to BeagleBone Black USB port.
-> >
-> > However, the second part of the issue is still present for
-> > peripheral device attached through the high-speed USB hub due to
-> > its 125us frame time. The patch series is intended to reorganize
-> > musb_advance_schedule() to allow host to send IN request quicker.
-> >
-> > The patch series is organized as the following. First three patches
-> > improve readability of the existing code in
-> > musb_advance_schedule(). Patches 4 and 5 introduce updated
-> > signature for musb_start_urb(). The last patch introduce new
-> > code-path in musb_advance_schedule() which allows for faster
-> > response.
-> >
-> > References:
-> >
-> > [1] https://www.spinics.net/lists/linux-usb/msg165735.html
-> > [2] https://www.spinics.net/lists/linux-media/msg144279.html
-> >
-> > Changes since v1:
-> >  - Patch 6 was redone to keep URB giveback order and stop transmission at
-> >    erroneous URB.
-> >
-> > Matwey V. Kornilov (6):
-> >   usb: musb: Use USB_DIR_IN when calling musb_advance_schedule()
-> >   usb: musb: Introduce musb_qh_empty() helper function
-> >   usb: musb: Introduce musb_qh_free() helper function
-> >   usb: musb: Rename musb_start_urb() to musb_start_next_urb()
-> >   usb: musb: Introduce musb_start_urb()
-> >   usb: musb: Decrease URB starting latency in musb_advance_schedule()
-> >
-> >  drivers/usb/musb/musb_host.c | 132 ++++++++++++++++++++++++++++---------------
-> >  drivers/usb/musb/musb_host.h |   1 +
-> >  2 files changed, 86 insertions(+), 47 deletions(-)
-> >
-> > --
-> > 2.16.4
-> >
-> 
-> 
-> -- 
-> With best regards,
-> Matwey V. Kornilov
