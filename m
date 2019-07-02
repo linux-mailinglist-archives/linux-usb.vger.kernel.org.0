@@ -2,39 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 951B15CB94
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 10:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27F15CB8E
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 10:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728033AbfGBIOb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 04:14:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52680 "EHLO mail.kernel.org"
+        id S1728083AbfGBIGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 04:06:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52764 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728060AbfGBIGN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Jul 2019 04:06:13 -0400
+        id S1727560AbfGBIGQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jul 2019 04:06:16 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2E83620659;
-        Tue,  2 Jul 2019 08:06:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DF34221841;
+        Tue,  2 Jul 2019 08:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562054772;
-        bh=f31brRCLJwDLQmLPVh+HVaNtwvSkOXwIuRLFN02XLk0=;
+        s=default; t=1562054775;
+        bh=cCBhwgoIit/dyguMJVOpnTShQ/wzIKfPyyIC+BFGoQ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kiAK2WldXgM9gPEnZb+KGesKg7uk8vV5SMPFVyvdSMfKIYtsB4vaGAgUYU2073uOv
-         ZJznXlXfcg6FSeixClqi/2yjCXImZvyGd+D6nXewlnqfkR1R/XEf+jSrB7N69+s7DY
-         nYAwneJpfJdIyGYprMTP0XZdkK2uS8uo4uClTOzA=
+        b=NMZEz04Rfa26fqnVRSFWEjGksMmHyvZZgXFkT7f9L5OUHxHLa/vl/YByyloLF1v5i
+         /ZJnUoDU4a5C1/4Qm0UW9iSCafEn8GTNgFOC+ZFUCSdG74P9N1I2MkVvhc05TgOU6C
+         wrmAGbVHSfHURZdiHOrCAy/z9uqVeCbUra07u/0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Fei Yang <fei.yang@intel.com>,
         Sam Protsenko <semen.protsenko@linaro.org>,
         Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Jack Pham <jackp@codeaurora.org>,
         Felipe Balbi <felipe.balbi@linux.intel.com>,
         John Stultz <john.stultz@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 30/72] usb: dwc3: gadget: remove wait_end_transfer
-Date:   Tue,  2 Jul 2019 10:01:31 +0200
-Message-Id: <20190702080126.229595910@linuxfoundation.org>
+Subject: [PATCH 4.19 31/72] usb: dwc3: gadget: Clear req->needs_extra_trb flag on cleanup
+Date:   Tue,  2 Jul 2019 10:01:32 +0200
+Message-Id: <20190702080126.279660004@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190702080124.564652899@linuxfoundation.org>
 References: <20190702080124.564652899@linuxfoundation.org>
@@ -47,130 +48,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-commit fec9095bdef4e7c988adb603d0d4f92ee735d4a1 upstream
+commit bd6742249b9ca918565e4e3abaa06665e587f4b5 upstream
 
-Now that we have a list of cancelled requests, we can skip over TRBs
-when END_TRANSFER command completes.
+OUT endpoint requests may somtimes have this flag set when
+preparing to be submitted to HW indicating that there is an
+additional TRB chained to the request for alignment purposes.
+If that request is removed before the controller can execute the
+transfer (e.g. ep_dequeue/ep_disable), the request will not go
+through the dwc3_gadget_ep_cleanup_completed_request() handler
+and will not have its needs_extra_trb flag cleared when
+dwc3_gadget_giveback() is called.  This same request could be
+later requeued for a new transfer that does not require an
+extra TRB and if it is successfully completed, the cleanup
+and TRB reclamation will incorrectly process the additional TRB
+which belongs to the next request, and incorrectly advances the
+TRB dequeue pointer, thereby messing up calculation of the next
+requeust's actual/remaining count when it completes.
 
+The right thing to do here is to ensure that the flag is cleared
+before it is given back to the function driver.  A good place
+to do that is in dwc3_gadget_del_and_unmap_request().
+
+Fixes: c6267a51639b ("usb: dwc3: gadget: align transfers to wMaxPacketSize")
 Cc: Fei Yang <fei.yang@intel.com>
 Cc: Sam Protsenko <semen.protsenko@linaro.org>
 Cc: Felipe Balbi <balbi@kernel.org>
 Cc: linux-usb@vger.kernel.org
 Cc: stable@vger.kernel.org # 4.19.y
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
 Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-(cherry picked from commit fec9095bdef4e7c988adb603d0d4f92ee735d4a1)
+(cherry picked from commit bd6742249b9ca918565e4e3abaa06665e587f4b5)
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/core.h   |  3 ---
- drivers/usb/dwc3/gadget.c | 40 +--------------------------------------
- 2 files changed, 1 insertion(+), 42 deletions(-)
+ drivers/usb/dwc3/gadget.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 24f0b108b7f6..131028501752 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -639,7 +639,6 @@ struct dwc3_event_buffer {
-  * @cancelled_list: list of cancelled requests for this endpoint
-  * @pending_list: list of pending requests for this endpoint
-  * @started_list: list of started requests on this endpoint
-- * @wait_end_transfer: wait_queue_head_t for waiting on End Transfer complete
-  * @lock: spinlock for endpoint request queue traversal
-  * @regs: pointer to first endpoint register
-  * @trb_pool: array of transaction buffers
-@@ -664,8 +663,6 @@ struct dwc3_ep {
- 	struct list_head	pending_list;
- 	struct list_head	started_list;
- 
--	wait_queue_head_t	wait_end_transfer;
--
- 	spinlock_t		lock;
- 	void __iomem		*regs;
- 
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 8291fa1624e1..843586f20572 100644
+index 843586f20572..e7122b5199d2 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -638,8 +638,6 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
- 		reg |= DWC3_DALEPENA_EP(dep->number);
- 		dwc3_writel(dwc->regs, DWC3_DALEPENA, reg);
+@@ -177,6 +177,7 @@ static void dwc3_gadget_del_and_unmap_request(struct dwc3_ep *dep,
+ 	req->started = false;
+ 	list_del(&req->list);
+ 	req->remaining = 0;
++	req->needs_extra_trb = false;
  
--		init_waitqueue_head(&dep->wait_end_transfer);
--
- 		if (usb_endpoint_xfer_control(desc))
- 			goto out;
- 
-@@ -1404,15 +1402,11 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 		if (r == req) {
- 			/* wait until it is processed */
- 			dwc3_stop_active_transfer(dep, true);
--			wait_event_lock_irq(dep->wait_end_transfer,
--					!(dep->flags & DWC3_EP_END_TRANSFER_PENDING),
--					dwc->lock);
- 
- 			if (!r->trb)
- 				goto out0;
- 
- 			dwc3_gadget_move_cancelled_request(req);
--			dwc3_gadget_ep_cleanup_cancelled_requests(dep);
- 			goto out0;
- 		}
- 		dev_err(dwc->dev, "request %pK was not queued to %s\n",
-@@ -1913,8 +1907,6 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
- 	unsigned long		flags;
--	int			epnum;
--	u32			tmo_eps = 0;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 
-@@ -1923,36 +1915,6 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
- 
- 	__dwc3_gadget_stop(dwc);
- 
--	for (epnum = 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
--		struct dwc3_ep  *dep = dwc->eps[epnum];
--		int ret;
--
--		if (!dep)
--			continue;
--
--		if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING))
--			continue;
--
--		ret = wait_event_interruptible_lock_irq_timeout(dep->wait_end_transfer,
--			    !(dep->flags & DWC3_EP_END_TRANSFER_PENDING),
--			    dwc->lock, msecs_to_jiffies(5));
--
--		if (ret <= 0) {
--			/* Timed out or interrupted! There's nothing much
--			 * we can do so we just log here and print which
--			 * endpoints timed out at the end.
--			 */
--			tmo_eps |= 1 << epnum;
--			dep->flags &= DWC3_EP_END_TRANSFER_PENDING;
--		}
--	}
--
--	if (tmo_eps) {
--		dev_err(dwc->dev,
--			"end transfer timed out on endpoints 0x%x [bitmap]\n",
--			tmo_eps);
--	}
--
- out:
- 	dwc->gadget_driver	= NULL;
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-@@ -2449,7 +2411,7 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
- 
- 		if (cmd == DWC3_DEPCMD_ENDTRANSFER) {
- 			dep->flags &= ~DWC3_EP_END_TRANSFER_PENDING;
--			wake_up(&dep->wait_end_transfer);
-+			dwc3_gadget_ep_cleanup_cancelled_requests(dep);
- 		}
- 		break;
- 	case DWC3_DEPEVT_STREAMEVT:
+ 	if (req->request.status == -EINPROGRESS)
+ 		req->request.status = status;
 -- 
 2.20.1
 
