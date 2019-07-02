@@ -2,107 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 973DF5D210
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 16:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220BD5D2D1
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 17:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727078AbfGBOsq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 10:48:46 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:46256 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbfGBOsq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 10:48:46 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x62Emhbk034509;
-        Tue, 2 Jul 2019 09:48:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1562078923;
-        bh=St5rNKb54j8OHwpnqLfi1htLncawFXF5WhUSpKmLjwg=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=k8J4WM8K1n4qKGpe3f7giqnWYShVAHejL3b10bUzhmsOYQICxOAJQ/G2KdSzkANFd
-         nhaiHv2XVezRKrwBKajf1OahL8WZoi1qYCLoi7Yo8YN22fZn/Fro1OG/uRMQ8okAhW
-         MDIobHhTnVkq6Dyp76gAJkl36PSjIFs7X5uiYciY=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x62EmhDW005029
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 2 Jul 2019 09:48:43 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 2 Jul
- 2019 09:48:42 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 2 Jul 2019 09:48:42 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x62EmgK3084215;
-        Tue, 2 Jul 2019 09:48:42 -0500
-Date:   Tue, 2 Jul 2019 09:48:42 -0500
-From:   Bin Liu <b-liu@ti.com>
-To:     Jack Pham <jackp@codeaurora.org>
-CC:     <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>
-Subject: Re: configfs on dwc3: msc enum failed if three functions defined
-Message-ID: <20190702144842.GA20724@uda0271908>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>, Jack Pham <jackp@codeaurora.org>,
-        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
-References: <20190422134357.GA2071@uda0271908>
- <20190425224456.GA27553@jackp-linux.qualcomm.com>
+        id S1726213AbfGBP1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 11:27:07 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:44207 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726046AbfGBP1H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 11:27:07 -0400
+Received: by mail-io1-f71.google.com with SMTP id i133so19215903ioa.11
+        for <linux-usb@vger.kernel.org>; Tue, 02 Jul 2019 08:27:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=0X3TCO1su/kGqXMIRUoaNL5vt0ixUM5T6mGPngF8Nvc=;
+        b=ir8Uwq1ipdjkXvAnOM3khMZm3Cl3dW51RHVhgGYTR6a9UZyA3fpfcY9crGQTHvwWuC
+         9uIhOzE34T2q56N1a1+CfZloc5MQdupFVeKkMFUGBbRHQcz/Xelu/TwsV7O4E5CCJsDH
+         snDTbKbZ1Lqu6q8YT3RAGc7iZUvbFIEN/bNwcUD7Zx+hljI4x4BsQeOICLBg/saLinPO
+         ulrLE5HzsNSlTyIu/GU1diymG3KahGz+SAsx1i3SSWUdiWrEE10/54s4t4ylDygmqSy+
+         XqIturVqgCQ3ESsdnzstlWlibra8Kgng36FIKPLCoqWqM2KwcoUO6qSb9JHH+w50KtLt
+         0WeQ==
+X-Gm-Message-State: APjAAAVPqdAkSydC0TNp6unSTa+TG7G/MuiOEj7zwl5R7I6B2Wa2OwPU
+        4m4xVtF/ul6SRCZuBwzD/yhXxL0+htQ+6Pg/5fYgdOSYs2LS
+X-Google-Smtp-Source: APXvYqxcRzXZZ5aOvB/tQXfy8kQwcP/ODUzWbM5JT8tLzIyegjNyREyloqqVxALzNn2X0WSa56IC0ckTkRcyKO+05HQ7on/CzRFc
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20190425224456.GA27553@jackp-linux.qualcomm.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Received: by 2002:a5d:8447:: with SMTP id w7mr34696184ior.197.1562081226696;
+ Tue, 02 Jul 2019 08:27:06 -0700 (PDT)
+Date:   Tue, 02 Jul 2019 08:27:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a0b1df058cb460c8@google.com>
+Subject: WARNING in sisusb_send_bulk_msg/usb_submit_urb
+From:   syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello,
 
-Sorry for the delay getting back on this. I was offline for quite some
-time.
+syzbot found the following crash on:
 
-On Thu, Apr 25, 2019 at 03:44:57PM -0700, Jack Pham wrote:
-> Hi Bin,
-> 
-> On Mon, Apr 22, 2019 at 08:43:57AM -0500, Bin Liu wrote:
-> > Hi Felipe,
-> > 
-> > I am having an issue with dwc3 on TI AM57x device, and would like to ask
-> > for your comments.
-> > 
-> > I use configfs to create a multi-function gadget on dwc3, mass_storage
-> > is the last function, it seems if I create 3 functions, the mass_storage
-> > enumeration will fail on the host. It works fine if only create 2
-> > functions.
-> > 
-> > The dwc3 tracepoints log shows after all the ep0 transfers for
-> > mass_storage, the very first epXin transfer is not complete - dwc3
-> > programmed the urb, but never generates RX completion event. This also
-> > matches the bus analyzer trace - dwc3 NAKs the very first IN token for
-> > ever.
-> > 
-> > I use the attached script to create the gadget, The macro FUNCS in the
-> > beginning of the script defines the functions to be created.
-> > 
-> > Any comments are appreciated.
-> 
-> A stab in the dark here but what is the value of GTXFIFOSIZ(X)[15:0]
-> for epXin on your device? Is it at least wMaxPacketSize? Depending on
-> the default hardware values it might be deficient as compared to the
-> working endpoint that gets assigned in your 2-function config.
+HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a4cb55a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
+dashboard link: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=123963d9a00000
 
-Jack,
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com
 
-thanks for the pointer, it is indeed the issue on AM57x device.  The
-reset value of GTXFIFOSIZ for ep1~4 have size of 0x184, but ep5~15 have
-only size of 0x13 (which is 120 bytes), which is not enough for
-high-speed bulk xfers. I manually adjusted the fifo memory allocation,
-now my test case works.
+usb 6-1: USB2VGA dongle found at address 2
+usb 6-1: Allocated 8 output buffers
+------------[ cut here ]------------
+usb 6-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 0 PID: 12 at drivers/usb/core/urb.c:477  
+usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.2.0-rc6+ #13
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x292/0x6c9 kernel/panic.c:219
+  __warn.cold+0x20/0x4b kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
+RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Code: 4d 85 ed 74 2c e8 78 db e8 fd 4c 89 f7 e8 a0 36 13 ff 41 89 d8 44 89  
+e1 4c 89 ea 48 89 c6 48 c7 c7 80 23 1a 86 e8 03 a0 be fd <0f> 0b e9 20 f4  
+ff ff e8 4c db e8 fd 4c 89 f2 48 b8 00 00 00 00 00
+RSP: 0018:ffff8881d9e0ed28 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3c1d97
+RBP: ffff8881d0662f00 R08: ffff8881d9df9800 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000003
+R13: ffff8881d3c5ebe8 R14: ffff8881c70d11a0 R15: ffff8881d0670700
+  sisusb_bulkout_msg drivers/usb/misc/sisusbvga/sisusb.c:238 [inline]
+  sisusb_send_bulk_msg.constprop.0+0x88a/0x1030  
+drivers/usb/misc/sisusbvga/sisusb.c:393
+  sisusb_send_bridge_packet.constprop.0+0x11c/0x240  
+drivers/usb/misc/sisusbvga/sisusb.c:581
+  sisusb_do_init_gfxdevice+0x8a/0x450  
+drivers/usb/misc/sisusbvga/sisusb.c:2137
+  sisusb_init_gfxdevice+0xe0/0x18d0 drivers/usb/misc/sisusbvga/sisusb.c:2237
+  sisusb_probe+0x924/0xbcb drivers/usb/misc/sisusbvga/sisusb.c:3122
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x30b/0x410 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-Felipe,
 
-Is there anything the dwc3 gadget driver can do to better handle this
-kind of devices, which don't have enough fifo buffers for all TX eps?
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--Bin.
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
