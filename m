@@ -2,196 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 736A35C71C
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 04:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DD75C763
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 04:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbfGBCWp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 22:22:45 -0400
-Received: from mail-eopbgr130081.outbound.protection.outlook.com ([40.107.13.81]:39136
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726638AbfGBCWp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Jul 2019 22:22:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s/gDAUpFXewypvzk2IdH6qNRNYJxfwIs6YnMoRAYLqM=;
- b=K7TGkKAfaTSWmYY7hakRWlcbAp3KnwoXgX+cx+Ci6zSqpLA8loa2zU6wR9VxG0oCUKMxMWC0WtJ4dyx7YUbNZDa4Eez4BHjuZn/6AVbSr3CakGqIguZsXQDrbep9E+DJmMMOd6V2ulHpfYrep6LWXpgd2GG2GTKLNMTaVCVjIBA=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB5519.eurprd04.prod.outlook.com (20.178.122.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2032.18; Tue, 2 Jul 2019 02:22:36 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c1bf:7842:6630:b87a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c1bf:7842:6630:b87a%7]) with mapi id 15.20.2032.019; Tue, 2 Jul 2019
- 02:22:36 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Peter Chen <hzpeterchen@gmail.com>,
-        "balbi@kernel.org" <balbi@kernel.org>
-CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "chunfeng.yun@mediatek.com" <chunfeng.yun@mediatek.com>,
-        "sergei.shtylyov@cogentembedded.com" 
-        <sergei.shtylyov@cogentembedded.com>
-Subject: RE: [PATCH v5 2/8] usb: phy: phy-mxs-usb: add imx7ulp support
-Thread-Topic: [PATCH v5 2/8] usb: phy: phy-mxs-usb: add imx7ulp support
-Thread-Index: AQHVKjC2+eUELMfK2Ee5/v4ACES1I6aqH/uAgAyFV4A=
-Date:   Tue, 2 Jul 2019 02:22:36 +0000
-Message-ID: <VI1PR04MB53271C703961E9DA4C04714A8BF80@VI1PR04MB5327.eurprd04.prod.outlook.com>
-References: <20190624020258.21690-1-peter.chen@nxp.com>
- <20190624020258.21690-3-peter.chen@nxp.com>
- <CAL411-r_=44bAi6zupcM7cG7-ivcEH_Mu3YYffoE8Ve0d+xqRg@mail.gmail.com>
-In-Reply-To: <CAL411-r_=44bAi6zupcM7cG7-ivcEH_Mu3YYffoE8Ve0d+xqRg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 51f1d84e-2e80-47ac-956a-08d6fe942604
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5519;
-x-ms-traffictypediagnostic: VI1PR04MB5519:
-x-microsoft-antispam-prvs: <VI1PR04MB551941C32FA52B0AD6B51CEB8BF80@VI1PR04MB5519.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 008663486A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(396003)(136003)(376002)(346002)(199004)(189003)(54906003)(316002)(110136005)(55016002)(86362001)(5660300002)(71200400001)(71190400001)(256004)(44832011)(14444005)(7416002)(6116002)(68736007)(229853002)(305945005)(3846002)(7736002)(99286004)(66946007)(11346002)(66476007)(73956011)(52536014)(76116006)(66446008)(64756008)(33656002)(81166006)(8936002)(2501003)(66556008)(478600001)(81156014)(8676002)(486006)(2906002)(74316002)(186003)(102836004)(446003)(6506007)(76176011)(66066001)(53936002)(476003)(7696005)(6246003)(6436002)(14454004)(26005)(4326008)(9686003)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5519;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: j3igr7iDLTd7j0mMc6R5ElNXuYUdezHCEVlAV53A6QHL09XB8cF8wcqcc9qCDB3We0u4k7RbTSsalvNsNHXn236eIfE5t49RbjRcE0MKxvjeALlCPcuYJPvQ4aDi3LR+sX3+9Rr9+JiBXO8Z+LKUAcFGEyYXI5Rsjcn5TESfSlQFlE4lGpbM2IlYj//a57dHnnxvd1G+YGEAOHr52GuId9s8ypW+2l0tL/VMxd1Q0JvQergLUEVvJSTi1o9cc2FIe/FgX8b6pie0SiHKglKNw8ho+VofWAmJsMLiSpTDzrTzDXb9ZsekHGbdVmnAP0qVdAn7n+Kzvxxp3t3TH6ZSsXhSKAa05vC1chNZewovLvzoRqcykFlpGBImLmkVlIAfHsk/v1KysK861bm8El1bgPZ8Slq2P/IadQOJNmsTjT4=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726936AbfGBChD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jul 2019 22:37:03 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:3110 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726434AbfGBChD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 22:37:03 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d1ac34d0000>; Mon, 01 Jul 2019 19:37:01 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 01 Jul 2019 19:37:02 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 01 Jul 2019 19:37:02 -0700
+Received: from [10.19.108.127] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 2 Jul
+ 2019 02:37:01 +0000
+Subject: Re: [PATCH] usb: storage: skip only when uas driver is loaded
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <stern@rowland.harvard.edu>,
+        <usb-storage@lists.one-eyed-alien.net>, <oneukum@suse.com>
+References: <20190701084848.32502-1-jckuo@nvidia.com>
+ <20190701085248.GA28681@kroah.com>
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <8e8e8703-8620-b625-4917-bbb8d999caa4@nvidia.com>
+Date:   Tue, 2 Jul 2019 10:36:59 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51f1d84e-2e80-47ac-956a-08d6fe942604
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2019 02:22:36.4374
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: peter.chen@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5519
+In-Reply-To: <20190701085248.GA28681@kroah.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1562035021; bh=77aJVnm/xorkjQ2KebRy3Sx0Cp8Zc4bA3d8JzQexgwo=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=AnYkRgAPjcYArgNuf+hJz5gnAAUw4BlV3S5H979f/NmoWq5pIr08Vdvra/ZkHoKs8
+         WfbBvMkuEExbDSlspAW7w8otoOylZAVNSI834rgPYdgkWwZzNr5Ou46SGqNyWYvZpw
+         SMqe5k9VuRGdyC1WKkeMOTfiQ677U8YsN6Tt0kEV6BRV4xhVtHIybmL65v3lx3CPf6
+         8+hPzGCc2WETrLKXN/eYDJXDXZL/9RHN+rHZiYW9IjN3B+8W+qnRCapDkWF0QJ+L/5
+         Ofz4Rx6L7s+bcB3bZilL6EyD95r/mlW2uIrAzCYW0yyhpdEcHApVsCDzveyZpvxvbo
+         3a1X+XUNJE20A==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KPiANCj4gSGkgRmVsaXBlLA0KPiANCj4gV291bGQgeW91IHBsZWFzZSBoYXZlIGEgcmV2aWV3
-IGZvciBQYXRjaCAxIGFuZCBQYXRjaCAyIGluIHRoaXMgc2VyaWVzPw0KPiBUaGFua3MuDQo+IA0K
-DQpQaW5nLi4uDQoNClRoZSBEVFMgYW5kIGNvbnRyb2xsZXIgcGF0Y2hlcyBoYXZlIGFscmVhZHkg
-cXVldWVkLiBUaGFua3MuDQoNClBldGVyDQoNCj4gUGV0ZXINCj4gDQo+ID4gU2lnbmVkLW9mZi1i
-eTogUGV0ZXIgQ2hlbiA8cGV0ZXIuY2hlbkBueHAuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJz
-L3VzYi9waHkvcGh5LW14cy11c2IuYyB8IDY3DQo+ID4gKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNjYgaW5zZXJ0aW9ucygr
-KSwgMSBkZWxldGlvbigtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3BoeS9w
-aHktbXhzLXVzYi5jDQo+ID4gYi9kcml2ZXJzL3VzYi9waHkvcGh5LW14cy11c2IuYyBpbmRleCA2
-ZmExNmFiMzFlMmUuLjcwYjhjODI0OGNhZg0KPiA+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMv
-dXNiL3BoeS9waHktbXhzLXVzYi5jDQo+ID4gKysrIGIvZHJpdmVycy91c2IvcGh5L3BoeS1teHMt
-dXNiLmMNCj4gPiBAQCAtMTcsOSArMTcsMTEgQEANCj4gPiAgI2luY2x1ZGUgPGxpbnV4L29mX2Rl
-dmljZS5oPg0KPiA+ICAjaW5jbHVkZSA8bGludXgvcmVnbWFwLmg+DQo+ID4gICNpbmNsdWRlIDxs
-aW51eC9tZmQvc3lzY29uLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9pb3BvbGwuaD4NCj4gPg0K
-PiA+ICAjZGVmaW5lIERSSVZFUl9OQU1FICJteHNfcGh5Ig0KPiA+DQo+ID4gKy8qIFJlZ2lzdGVy
-IE1hY3JvICovDQo+ID4gICNkZWZpbmUgSFdfVVNCUEhZX1BXRCAgICAgICAgICAgICAgICAgICAg
-ICAgICAgMHgwMA0KPiA+ICAjZGVmaW5lIEhXX1VTQlBIWV9UWCAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIDB4MTANCj4gPiAgI2RlZmluZSBIV19VU0JQSFlfQ1RSTCAgICAgICAgICAgICAgICAg
-ICAgICAgICAweDMwDQo+ID4gQEAgLTM3LDYgKzM5LDExIEBADQo+ID4gICNkZWZpbmUgR01fVVNC
-UEhZX1RYX1RYQ0FMNDVETih4KSAgICAgICAgICAgICgoKHgpICYgMHhmKSA8PCA4KQ0KPiA+ICAj
-ZGVmaW5lIEdNX1VTQlBIWV9UWF9EX0NBTCh4KSAgICAgICAgICAgICAgICAoKCh4KSAmIDB4Zikg
-PDwgMCkNCj4gPg0KPiA+ICsvKiBpbXg3dWxwICovDQo+ID4gKyNkZWZpbmUgSFdfVVNCUEhZX1BM
-TF9TSUMgICAgICAgICAgICAgICAgICAgICAgMHhhMA0KPiA+ICsjZGVmaW5lIEhXX1VTQlBIWV9Q
-TExfU0lDX1NFVCAgICAgICAgICAgICAgICAgIDB4YTQNCj4gPiArI2RlZmluZSBIV19VU0JQSFlf
-UExMX1NJQ19DTFIgICAgICAgICAgICAgICAgICAweGE4DQo+ID4gKw0KPiA+ICAjZGVmaW5lIEJN
-X1VTQlBIWV9DVFJMX1NGVFJTVCAgICAgICAgICAgICAgICAgIEJJVCgzMSkNCj4gPiAgI2RlZmlu
-ZSBCTV9VU0JQSFlfQ1RSTF9DTEtHQVRFICAgICAgICAgICAgICAgICBCSVQoMzApDQo+ID4gICNk
-ZWZpbmUgQk1fVVNCUEhZX0NUUkxfT1RHX0lEX1ZBTFVFICAgICAgICAgICAgQklUKDI3KQ0KPiA+
-IEBAIC01NSw2ICs2MiwxMiBAQA0KPiA+ICAjZGVmaW5lIEJNX1VTQlBIWV9JUF9GSVggICAgICAg
-ICAgICAgICAgICAgICAgIChCSVQoMTcpIHwgQklUKDE4KSkNCj4gPg0KPiA+ICAjZGVmaW5lIEJN
-X1VTQlBIWV9ERUJVR19DTEtHQVRFICAgICAgICAgICAgICAgICAgICAgICAgQklUKDMwKQ0KPiA+
-ICsvKiBpbXg3dWxwICovDQo+ID4gKyNkZWZpbmUgQk1fVVNCUEhZX1BMTF9MT0NLICAgICAgICAg
-ICAgICAgICAgICAgQklUKDMxKQ0KPiA+ICsjZGVmaW5lIEJNX1VTQlBIWV9QTExfUkVHX0VOQUJM
-RSAgICAgICAgICAgICAgIEJJVCgyMSkNCj4gPiArI2RlZmluZSBCTV9VU0JQSFlfUExMX0JZUEFT
-UyAgICAgICAgICAgICAgICAgICBCSVQoMTYpDQo+ID4gKyNkZWZpbmUgQk1fVVNCUEhZX1BMTF9Q
-T1dFUiAgICAgICAgICAgICAgICAgICAgQklUKDEyKQ0KPiA+ICsjZGVmaW5lIEJNX1VTQlBIWV9Q
-TExfRU5fVVNCX0NMS1MgICAgICAgICAgICAgIEJJVCg2KQ0KPiA+DQo+ID4gIC8qIEFuYXRvcCBS
-ZWdpc3RlcnMgKi8NCj4gPiAgI2RlZmluZSBBTkFESUdfQU5BX01JU0MwICAgICAgICAgICAgICAg
-ICAgICAgICAweDE1MA0KPiA+IEBAIC0xNjgsNiArMTgxLDkgQEAgc3RhdGljIGNvbnN0IHN0cnVj
-dCBteHNfcGh5X2RhdGEgaW14NnVsX3BoeV9kYXRhID0gew0KPiA+ICAgICAgICAgLmZsYWdzID0g
-TVhTX1BIWV9ESVNDT05ORUNUX0xJTkVfV0lUSE9VVF9WQlVTLA0KPiA+ICB9Ow0KPiA+DQo+ID4g
-K3N0YXRpYyBjb25zdCBzdHJ1Y3QgbXhzX3BoeV9kYXRhIGlteDd1bHBfcGh5X2RhdGEgPSB7IH07
-DQo+ID4gKw0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBteHNfcGh5X2R0
-X2lkc1tdID0gew0KPiA+ICAgICAgICAgeyAuY29tcGF0aWJsZSA9ICJmc2wsaW14NnN4LXVzYnBo
-eSIsIC5kYXRhID0gJmlteDZzeF9waHlfZGF0YSwgfSwNCj4gPiAgICAgICAgIHsgLmNvbXBhdGli
-bGUgPSAiZnNsLGlteDZzbC11c2JwaHkiLCAuZGF0YSA9ICZpbXg2c2xfcGh5X2RhdGEsDQo+ID4g
-fSwgQEAgLTE3NSw2ICsxOTEsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBt
-eHNfcGh5X2R0X2lkc1tdID0gew0KPiA+ICAgICAgICAgeyAuY29tcGF0aWJsZSA9ICJmc2wsaW14
-MjMtdXNicGh5IiwgLmRhdGEgPSAmaW14MjNfcGh5X2RhdGEsIH0sDQo+ID4gICAgICAgICB7IC5j
-b21wYXRpYmxlID0gImZzbCx2ZjYxMC11c2JwaHkiLCAuZGF0YSA9ICZ2ZjYxMF9waHlfZGF0YSwg
-fSwNCj4gPiAgICAgICAgIHsgLmNvbXBhdGlibGUgPSAiZnNsLGlteDZ1bC11c2JwaHkiLCAuZGF0
-YSA9ICZpbXg2dWxfcGh5X2RhdGEsDQo+ID4gfSwNCj4gPiArICAgICAgIHsgLmNvbXBhdGlibGUg
-PSAiZnNsLGlteDd1bHAtdXNicGh5IiwgLmRhdGEgPQ0KPiA+ICsgJmlteDd1bHBfcGh5X2RhdGEs
-IH0sDQo+ID4gICAgICAgICB7IC8qIHNlbnRpbmVsICovIH0NCj4gPiAgfTsNCj4gPiAgTU9EVUxF
-X0RFVklDRV9UQUJMRShvZiwgbXhzX3BoeV9kdF9pZHMpOyBAQCAtMTk5LDYgKzIxNiwxMSBAQCBz
-dGF0aWMNCj4gPiBpbmxpbmUgYm9vbCBpc19pbXg2c2xfcGh5KHN0cnVjdCBteHNfcGh5ICpteHNf
-cGh5KQ0KPiA+ICAgICAgICAgcmV0dXJuIG14c19waHktPmRhdGEgPT0gJmlteDZzbF9waHlfZGF0
-YTsgIH0NCj4gPg0KPiA+ICtzdGF0aWMgaW5saW5lIGJvb2wgaXNfaW14N3VscF9waHkoc3RydWN0
-IG14c19waHkgKm14c19waHkpIHsNCj4gPiArICAgICAgIHJldHVybiBteHNfcGh5LT5kYXRhID09
-ICZpbXg3dWxwX3BoeV9kYXRhOyB9DQo+ID4gKw0KPiA+ICAvKg0KPiA+ICAgKiBQSFkgbmVlZHMg
-c29tZSAzMksgY3ljbGVzIHRvIHN3aXRjaCBmcm9tIDMySyBjbG9jayB0bw0KPiA+ICAgKiBidXMg
-KHN1Y2ggYXMgQUhCL0FYSSwgZXRjKSBjbG9jay4NCj4gPiBAQCAtMjIyLDE0ICsyNDQsNDkgQEAg
-c3RhdGljIHZvaWQgbXhzX3BoeV90eF9pbml0KHN0cnVjdCBteHNfcGh5ICpteHNfcGh5KQ0KPiA+
-ICAgICAgICAgfQ0KPiA+ICB9DQo+ID4NCj4gPiArc3RhdGljIGludCBteHNfcGh5X3BsbF9lbmFi
-bGUodm9pZCBfX2lvbWVtICpiYXNlLCBib29sIGVuYWJsZSkNCj4gPiArew0KPiA+ICsgICAgICAg
-aW50IHJldCA9IDA7DQo+ID4gKw0KPiA+ICsgICAgICAgaWYgKGVuYWJsZSkgew0KPiA+ICsgICAg
-ICAgICAgICAgICB1MzIgdmFsdWU7DQo+ID4gKw0KPiA+ICsgICAgICAgICAgICAgICB3cml0ZWwo
-Qk1fVVNCUEhZX1BMTF9SRUdfRU5BQkxFLCBiYXNlICsNCj4gSFdfVVNCUEhZX1BMTF9TSUNfU0VU
-KTsNCj4gPiArICAgICAgICAgICAgICAgd3JpdGVsKEJNX1VTQlBIWV9QTExfQllQQVNTLCBiYXNl
-ICsNCj4gSFdfVVNCUEhZX1BMTF9TSUNfQ0xSKTsNCj4gPiArICAgICAgICAgICAgICAgd3JpdGVs
-KEJNX1VTQlBIWV9QTExfUE9XRVIsIGJhc2UgKw0KPiBIV19VU0JQSFlfUExMX1NJQ19TRVQpOw0K
-PiA+ICsgICAgICAgICAgICAgICByZXQgPSByZWFkbF9wb2xsX3RpbWVvdXQoYmFzZSArIEhXX1VT
-QlBIWV9QTExfU0lDLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIHZhbHVlLCAodmFsdWUg
-JiBCTV9VU0JQSFlfUExMX0xPQ0spICE9IDAsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
-MTAwLCAxMDAwMCk7DQo+ID4gKyAgICAgICAgICAgICAgIGlmIChyZXQpDQo+ID4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gPiArDQo+ID4gKyAgICAgICAgICAgICAgIHdy
-aXRlbChCTV9VU0JQSFlfUExMX0VOX1VTQl9DTEtTLCBiYXNlICsNCj4gPiArICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIEhXX1VTQlBIWV9QTExfU0lDX1NFVCk7DQo+ID4gKyAgICAgICB9
-IGVsc2Ugew0KPiA+ICsgICAgICAgICAgICAgICB3cml0ZWwoQk1fVVNCUEhZX1BMTF9FTl9VU0Jf
-Q0xLUywgYmFzZSArDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBIV19VU0JQ
-SFlfUExMX1NJQ19DTFIpOw0KPiA+ICsgICAgICAgICAgICAgICB3cml0ZWwoQk1fVVNCUEhZX1BM
-TF9QT1dFUiwgYmFzZSArDQo+IEhXX1VTQlBIWV9QTExfU0lDX0NMUik7DQo+ID4gKyAgICAgICAg
-ICAgICAgIHdyaXRlbChCTV9VU0JQSFlfUExMX0JZUEFTUywgYmFzZSArDQo+IEhXX1VTQlBIWV9Q
-TExfU0lDX1NFVCk7DQo+ID4gKyAgICAgICAgICAgICAgIHdyaXRlbChCTV9VU0JQSFlfUExMX1JF
-R19FTkFCTEUsIGJhc2UgKw0KPiBIV19VU0JQSFlfUExMX1NJQ19DTFIpOw0KPiA+ICsgICAgICAg
-fQ0KPiA+ICsNCj4gPiArICAgICAgIHJldHVybiByZXQ7DQo+ID4gK30NCj4gPiArDQo+ID4gIHN0
-YXRpYyBpbnQgbXhzX3BoeV9od19pbml0KHN0cnVjdCBteHNfcGh5ICpteHNfcGh5KQ0KPiA+ICB7
-DQo+ID4gICAgICAgICBpbnQgcmV0Ow0KPiA+ICAgICAgICAgdm9pZCBfX2lvbWVtICpiYXNlID0g
-bXhzX3BoeS0+cGh5LmlvX3ByaXY7DQo+ID4NCj4gPiArICAgICAgIGlmIChpc19pbXg3dWxwX3Bo
-eShteHNfcGh5KSkgew0KPiA+ICsgICAgICAgICAgICAgICByZXQgPSBteHNfcGh5X3BsbF9lbmFi
-bGUoYmFzZSwgdHJ1ZSk7DQo+ID4gKyAgICAgICAgICAgICAgIGlmIChyZXQpDQo+ID4gKyAgICAg
-ICAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gPiArICAgICAgIH0NCj4gPiArDQo+ID4g
-ICAgICAgICByZXQgPSBzdG1wX3Jlc2V0X2Jsb2NrKGJhc2UgKyBIV19VU0JQSFlfQ1RSTCk7DQo+
-ID4gICAgICAgICBpZiAocmV0KQ0KPiA+IC0gICAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiA+
-ICsgICAgICAgICAgICAgICBnb3RvIGRpc2FibGVfcGxsOw0KPiA+DQo+ID4gICAgICAgICAvKiBQ
-b3dlciB1cCB0aGUgUEhZICovDQo+ID4gICAgICAgICB3cml0ZWwoMCwgYmFzZSArIEhXX1VTQlBI
-WV9QV0QpOw0KPiA+IEBAIC0yNjcsNiArMzI0LDExIEBAIHN0YXRpYyBpbnQgbXhzX3BoeV9od19p
-bml0KHN0cnVjdCBteHNfcGh5ICpteHNfcGh5KQ0KPiA+ICAgICAgICAgbXhzX3BoeV90eF9pbml0
-KG14c19waHkpOw0KPiA+DQo+ID4gICAgICAgICByZXR1cm4gMDsNCj4gPiArDQo+ID4gK2Rpc2Fi
-bGVfcGxsOg0KPiA+ICsgICAgICAgaWYgKGlzX2lteDd1bHBfcGh5KG14c19waHkpKQ0KPiA+ICsg
-ICAgICAgICAgICAgICBteHNfcGh5X3BsbF9lbmFibGUoYmFzZSwgZmFsc2UpOw0KPiA+ICsgICAg
-ICAgcmV0dXJuIHJldDsNCj4gPiAgfQ0KPiA+DQo+ID4gIC8qIFJldHVybiB0cnVlIGlmIHRoZSB2
-YnVzIGlzIHRoZXJlICovDQo+ID4gQEAgLTM4OCw2ICs0NTAsOSBAQCBzdGF0aWMgdm9pZCBteHNf
-cGh5X3NodXRkb3duKHN0cnVjdCB1c2JfcGh5ICpwaHkpDQo+ID4gICAgICAgICB3cml0ZWwoQk1f
-VVNCUEhZX0NUUkxfQ0xLR0FURSwNCj4gPiAgICAgICAgICAgICAgICBwaHktPmlvX3ByaXYgKyBI
-V19VU0JQSFlfQ1RSTF9TRVQpOw0KPiA+DQo+ID4gKyAgICAgICBpZiAoaXNfaW14N3VscF9waHko
-bXhzX3BoeSkpDQo+ID4gKyAgICAgICAgICAgICAgIG14c19waHlfcGxsX2VuYWJsZShwaHktPmlv
-X3ByaXYsIGZhbHNlKTsNCj4gPiArDQo+ID4gICAgICAgICBjbGtfZGlzYWJsZV91bnByZXBhcmUo
-bXhzX3BoeS0+Y2xrKTsNCj4gPiAgfQ0KPiA+DQo+ID4gLS0NCj4gPiAyLjE0LjENCj4gPg0K
+On 7/1/19 4:52 PM, Greg KH wrote:
+> On Mon, Jul 01, 2019 at 04:48:48PM +0800, JC Kuo wrote:
+>> When usb-storage driver detects a UAS capable device, it ignores the
+>> device if CONFIG_USB_UAS is enabled. usb-storage driver assumes uas
+>> driver certainly will be loaded. However, it's possible that uas
+>> driver will not be loaded, for example, uas kernel module is not
+>> installed properly or it is in modprobe blacklist.
+>>
+>> In case of uas driver not being loaded, the UAS capable device will
+>> not fallback to work at Bulk-only-transfer mode. The device just
+>> disappears without any notification to user/userspace.
+>>
+>> This commit changes usb-storage driver to skip UAS capable device
+>> only when uas driver is already loaded to make sure the device will
+>> at least work with Bulk protocol.
+> 
+> But what happens if the driver is loaded afterward, because 'modprobe'
+> was called by the driver core (or it should have been, because this is a
+> device that supports that protocol)?
+If uas driver is loaded after usb-storage driver probed the device, the device will still work with Bulk-only protocol, though it can't make uses of streams.
+
+> 
+> I think you just broke working systems :(
+> 
+> Why wouldn't the UAS driver get loaded automatically if it is configured
+> in the system as it is today?
+An user might want to completely disable uas for some reason so he/she adds "blacklist uas" to modprobe conf file. I think in case of this, usb-storage driver has to enable this device with the legacy Bulk-only protocol instead of ignoring the device.
+
+As an alternative to this patch, I thought I could get uas driver loaded before usb-storage driver so I tried moving the functions in drivers/usb/storage/uas-detect.h into uas.c and letting usb-storage links uas_use_uas_driver() of uas.ko. However, that didn't work because uas driver actually depends on usb-storage driver for usb_stor_adjust_quirks(). There will be a recursive dependency.
+
+Please let me know if there is better approach to avoid the issue.
+
+Thanks,
+JC
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+-----------------------------------------------------------------------------------
+This email message is for the sole use of the intended recipient(s) and may contain
+confidential information.  Any unauthorized review, use, disclosure or distribution
+is prohibited.  If you are not the intended recipient, please contact the sender by
+reply email and destroy all copies of the original message.
+-----------------------------------------------------------------------------------
