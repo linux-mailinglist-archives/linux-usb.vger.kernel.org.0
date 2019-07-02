@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAE35CAA0
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 10:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F7A5CAA1
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 10:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727691AbfGBIGL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1728053AbfGBIGL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Tue, 2 Jul 2019 04:06:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52510 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:52584 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727560AbfGBIGI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Jul 2019 04:06:08 -0400
+        id S1727638AbfGBIGK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jul 2019 04:06:10 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 598A920659;
-        Tue,  2 Jul 2019 08:06:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF8152183F;
+        Tue,  2 Jul 2019 08:06:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562054766;
-        bh=CB5n+a0I0IeR56VJdQ4Is5/pAx6Z9g+uxpADhmcURPo=;
+        s=default; t=1562054769;
+        bh=laaMfB6GJi+RjTfheKYuRjfFtHFXzzuj98IyPvCP3RI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m79YMNG+4JFt41RzygCFD2lpaep8Y2pzgaRC+DhKaB/SsRNqk/odM6SYmeHhClON3
-         PCI96k17V5irwXd5OLZg0HGtqNtNtJ5zkaxoR6l6fNd0yrpXdO71BuW/FcTR6ctmnG
-         Q3aD9jAcHjL0oEnnfYCqX72hHq7OsnG5U6GYfkRo=
+        b=REAFnLjTXEnP0xIrT4FV6hxw8YJVDIOhZb4hAdlNzOvZq4Q4HXUIAI1UrQuMRyE3/
+         LA2maqD3NHG/ixYERhDExq5100FETvzO0ND9wpEIp1kQNsTxRXI+4t0loMC3ocwHAH
+         eB/9zbrURt1A8X9vTlQG47jga34YwUoJy0iPgu60=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,9 +32,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <felipe.balbi@linux.intel.com>,
         John Stultz <john.stultz@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 28/72] usb: dwc3: gadget: introduce cancelled_list
-Date:   Tue,  2 Jul 2019 10:01:29 +0200
-Message-Id: <20190702080126.132412439@linuxfoundation.org>
+Subject: [PATCH 4.19 29/72] usb: dwc3: gadget: move requests to cancelled_list
+Date:   Tue,  2 Jul 2019 10:01:30 +0200
+Message-Id: <20190702080126.178119054@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190702080124.564652899@linuxfoundation.org>
 References: <20190702080124.564652899@linuxfoundation.org>
@@ -47,10 +47,11 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-commit d5443bbf5fc8f8389cce146b1fc2987cdd229d12 upstream
+commit d4f1afe5e896c18ae01099a85dab5e1a198bd2a8 upstream
 
-This list will host cancelled requests who still have TRBs being
-processed.
+Whenever we have a request in flight, we can move it to the cancelled
+list and later simply iterate over that list and skip over any TRBs we
+find.
 
 Cc: Fei Yang <fei.yang@intel.com>
 Cc: Sam Protsenko <semen.protsenko@linaro.org>
@@ -58,73 +59,55 @@ Cc: Felipe Balbi <balbi@kernel.org>
 Cc: linux-usb@vger.kernel.org
 Cc: stable@vger.kernel.org # 4.19.y
 Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-(cherry picked from commit d5443bbf5fc8f8389cce146b1fc2987cdd229d12)
+(cherry picked from commit d4f1afe5e896c18ae01099a85dab5e1a198bd2a8)
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/core.h   |  2 ++
- drivers/usb/dwc3/gadget.c |  1 +
- drivers/usb/dwc3/gadget.h | 15 +++++++++++++++
- 3 files changed, 18 insertions(+)
+ drivers/usb/dwc3/gadget.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 0de78cb29f2c..24f0b108b7f6 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -636,6 +636,7 @@ struct dwc3_event_buffer {
- /**
-  * struct dwc3_ep - device side endpoint representation
-  * @endpoint: usb endpoint
-+ * @cancelled_list: list of cancelled requests for this endpoint
-  * @pending_list: list of pending requests for this endpoint
-  * @started_list: list of started requests on this endpoint
-  * @wait_end_transfer: wait_queue_head_t for waiting on End Transfer complete
-@@ -659,6 +660,7 @@ struct dwc3_event_buffer {
-  */
- struct dwc3_ep {
- 	struct usb_ep		endpoint;
-+	struct list_head	cancelled_list;
- 	struct list_head	pending_list;
- 	struct list_head	started_list;
- 
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 46aa20b376cd..c2169bc626c8 100644
+index c2169bc626c8..8291fa1624e1 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -2144,6 +2144,7 @@ static int dwc3_gadget_init_endpoint(struct dwc3 *dwc, u8 epnum)
- 
- 	INIT_LIST_HEAD(&dep->pending_list);
- 	INIT_LIST_HEAD(&dep->started_list);
-+	INIT_LIST_HEAD(&dep->cancelled_list);
- 
- 	return 0;
- }
-diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
-index 2aacd1afd9ff..023a473648eb 100644
---- a/drivers/usb/dwc3/gadget.h
-+++ b/drivers/usb/dwc3/gadget.h
-@@ -79,6 +79,21 @@ static inline void dwc3_gadget_move_started_request(struct dwc3_request *req)
- 	list_move_tail(&req->list, &dep->started_list);
+@@ -1364,6 +1364,17 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
+ 	}
  }
  
-+/**
-+ * dwc3_gadget_move_cancelled_request - move @req to the cancelled_list
-+ * @req: the request to be moved
-+ *
-+ * Caller should take care of locking. This function will move @req from its
-+ * current list to the endpoint's cancelled_list.
-+ */
-+static inline void dwc3_gadget_move_cancelled_request(struct dwc3_request *req)
++static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
 +{
-+	struct dwc3_ep		*dep = req->dep;
++	struct dwc3_request		*req;
++	struct dwc3_request		*tmp;
 +
-+	req->started = false;
-+	list_move_tail(&req->list, &dep->cancelled_list);
++	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
++		dwc3_gadget_ep_skip_trbs(dep, req);
++		dwc3_gadget_giveback(dep, req, -ECONNRESET);
++	}
 +}
 +
- void dwc3_gadget_giveback(struct dwc3_ep *dep, struct dwc3_request *req,
- 		int status);
+ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+ 		struct usb_request *request)
+ {
+@@ -1400,8 +1411,9 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+ 			if (!r->trb)
+ 				goto out0;
  
+-			dwc3_gadget_ep_skip_trbs(dep, r);
+-			goto out1;
++			dwc3_gadget_move_cancelled_request(req);
++			dwc3_gadget_ep_cleanup_cancelled_requests(dep);
++			goto out0;
+ 		}
+ 		dev_err(dwc->dev, "request %pK was not queued to %s\n",
+ 				request, ep->name);
+@@ -1409,7 +1421,6 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+ 		goto out0;
+ 	}
+ 
+-out1:
+ 	dwc3_gadget_giveback(dep, req, -ECONNRESET);
+ 
+ out0:
 -- 
 2.20.1
 
