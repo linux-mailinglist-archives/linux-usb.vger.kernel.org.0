@@ -2,28 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 559E75DD10
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 05:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4A15D9DE
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 02:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbfGCDjY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 23:39:24 -0400
-Received: from [163.204.240.231] ([163.204.240.231]:45852 "EHLO
-        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727025AbfGCDjY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 23:39:24 -0400
-X-Greylist: delayed 4483 seconds by postgrey-1.27 at vger.kernel.org; Tue, 02 Jul 2019 23:39:23 EDT
-Received: from localhost (localhost [IPv6:::1])
-        by localhost.localdomain (Postfix) with SMTP id B892612386F6;
-        Wed,  3 Jul 2019 05:30:10 +0800 (CST)
-From:   BC9wvo2u52yr@outlook.com
-To:     ubpdvo2u52yr@outlook.com
-Reply-To: demexinruslan+GRq@gmail.com
-Subject: Klientskie bazy. Email: prodawez@armyspy.com Uznajte podrobnee!
-Message-Id: <20190702213010.B892612386F6@localhost.localdomain>
-Date:   Wed,  3 Jul 2019 05:30:10 +0800 (CST)
+        id S1727358AbfGCAzf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 20:55:35 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:45368 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726930AbfGCAzf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 20:55:35 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id EDD7A1400EF15;
+        Tue,  2 Jul 2019 15:25:09 -0700 (PDT)
+Date:   Tue, 02 Jul 2019 15:25:09 -0700 (PDT)
+Message-Id: <20190702.152509.767279980793826503.davem@davemloft.net>
+To:     tranmanphong@gmail.com
+Cc:     dcbw@redhat.com, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        glider@google.com, linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, lynxis@fe80.eu,
+        marcel.ziswiler@toradex.com, skhan@linuxfoundation.org,
+        syzbot+8a3fc6674bbc3978ed4e@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, yang.wei9@zte.com.cn,
+        zhang.run@zte.com.cn
+Subject: Re: [PATCH V2] net: usb: asix: init MAC address buffers
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190702001008.26048-1-tranmanphong@gmail.com>
+References: <20190630234533.15089-1-tranmanphong@gmail.com>
+        <20190702001008.26048-1-tranmanphong@gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 02 Jul 2019 15:25:10 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Klientskie bazy. Email: prodawez@armyspy.com Uznajte podrobnee!
+From: Phong Tran <tranmanphong@gmail.com>
+Date: Tue,  2 Jul 2019 07:10:08 +0700
+
+> This is for fixing bug KMSAN: uninit-value in ax88772_bind
+> 
+> Tested by
+> https://groups.google.com/d/msg/syzkaller-bugs/aFQurGotng4/eB_HlNhhCwAJ
+> 
+> Reported-by: syzbot+8a3fc6674bbc3978ed4e@syzkaller.appspotmail.com
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    f75e4cfe kmsan: use kmsan_handle_urb() in urb.c
+> git tree:       kmsan
+ ...
+> Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+
+Applied, thanks.
