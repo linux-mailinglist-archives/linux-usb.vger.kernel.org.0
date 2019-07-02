@@ -2,118 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3131C5CDD7
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 12:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AD75CE2E
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 13:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725991AbfGBKqt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 06:46:49 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:43367 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbfGBKqt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 06:46:49 -0400
-Received: by mail-wr1-f66.google.com with SMTP id p13so17196530wru.10
-        for <linux-usb@vger.kernel.org>; Tue, 02 Jul 2019 03:46:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=9mIX77VsesszTW96gmZViT/lzljGya5DrmFYXssiQzM=;
-        b=UitxjCgkhI6hoKRwmwkLv8eMr6jLTmJUZ+haYwn39HWZ7s94VjadUEkxrhZZSKgizJ
-         DO/8SqYOP9tBer8DSOfmQn/ONgtuS7XwZqO30BzEEs9nsWTT1dv3dI1wVVPhKpcqVrwz
-         CmW/ZVN26S8fSDl9PK3qhpt6Lape6Ntv+RH1Q43lG4+ZYf0T5x6EHA/K6TbkRK6A0v4c
-         jSpcuOSgCDf7vebknx9pH8CzM9X5EJqNbIYlci5OgrCqCyNA67kcQL9B3wBXLDu7ag3L
-         FEahq/hRBANL843AVBENnPeY0SuKm/Mvep7atpq+11mZLAcWt3RtC1iNc473Dxk6OM5v
-         Lq4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=9mIX77VsesszTW96gmZViT/lzljGya5DrmFYXssiQzM=;
-        b=JBzsWBN+i5oOKSFXG0F09/dFTm+NFlh/h81o9JNz7D8b9l6RPiPyUid+kPIQx6MaMY
-         o0daTuO57KoHxJ50H9hmcz99ydllN/kYnIN+Y89f/TsOb6dQwtQq+sULV/56j5t7w49b
-         OdUfWRNXHb5K4KvP4Fu0xhXLWONXEE+DUcmg6l5kqPcwdp6+YiHZbNDsSsZ25Pe+MYMQ
-         Au6inE4lwUv4MTjEvIyTbyb9latqf4xAaTiAh/zUUO94n0nRNQPfW+b2hrHyVQsqduLx
-         p2uGg7ptcEixqTR3pTGs2PNQrxpm/xn3zxYULtgEVKEUKG4sEr+25dC0IA/IcrOBLIpw
-         nJ+Q==
-X-Gm-Message-State: APjAAAU/ZoeEaB5GMyS4OhQhKu9pXpxb/8epvloVjYwQ/hwyN0r6ZJIo
-        COehwIMW61ucCqRGBgfGFORCuw==
-X-Google-Smtp-Source: APXvYqyfunA/pT/9Y+WYN7pOIW4S9jagoY5RLRfSr4ahsHXb7LVWMIsZPFALTXaiFLUWm548AhyrWQ==
-X-Received: by 2002:a5d:494d:: with SMTP id r13mr24507695wrs.152.1562064406731;
-        Tue, 02 Jul 2019 03:46:46 -0700 (PDT)
-Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
-        by smtp.gmail.com with ESMTPSA id c1sm26364690wrh.1.2019.07.02.03.46.46
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 02 Jul 2019 03:46:46 -0700 (PDT)
-Message-ID: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
-Subject: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Date:   Tue, 02 Jul 2019 12:46:45 +0200
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        id S1726896AbfGBLMX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 07:12:23 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50284 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726861AbfGBLMV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jul 2019 07:12:21 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 5CB96AD1E;
+        Tue,  2 Jul 2019 11:12:20 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     oneukum@suse.com, Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] xhci: clear port_remote_wakeup after resume failure
+Date:   Tue,  2 Jul 2019 13:12:00 +0200
+Message-Id: <20190702111200.15164-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-  I have a problem writing data to a USB pendrive, and it seems
-kernel-related. With the help of Greg an Alan (thanks) and some
-bisect, I found out the offending commit being
+This was seen on a Dell Precision 5520 using it's WD15 dock. The dock's
+Ethernet connectivity is provided though USB. While idle, both the
+Ethernet device and XHCI are suspended by runtime PM. To be then resumed
+on behalf of the Ethernet device, which has remote wake-up capabilities.
 
-commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Author: Jens Axboe <axboe@kernel.dk>
-Date:   Thu Nov 1 16:36:27 2018 -0600
+The Ethernet device was observed to randomly disconnect from the USB
+port shortly after submitting it's remote wake-up request. Probably a
+weird timing issue yet to be investigated. This causes runtime PM to
+busyloop causing some tangible CPU load. The reason is the port gets
+stuck in the middle of a remote wake-up operation, waiting for the
+device to switch to U0. This never happens, leaving "port_remote_wakeup"
+enabled, and automatically triggering a failure on any further suspend
+operation.
 
-    scsi: kill off the legacy IO path
-    
-    This removes the legacy (non-mq) IO path for SCSI.
-    
-So, here I am to notify you about the problem and ask you if I can
-help in any way to work it out and fix it.
+This patch clears "port_remote_wakeup" upon detecting a device with a
+wrong PORT_CONNECT state. Making sure the above mentioned situation
+doesn't trigger a PM busyloop.
 
-The problem is that if I copy a file from the internal SATA HD to the
-pendrive, it takes ~10 times to complete (in respect of the time
-needed with the patch reverted).
+Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+---
 
-The test script, which I use to detect if the problem triggers or not,
-is:
+Changes since v1:
+  - Do not trigger clear based on PLS_MASK != XDEV_RESUME to avoid a
+    potential race condition between the irq handler and hub thread.
 
-#!/bin/bash
-logfile=...
-uname -a | tee -a $logfile
-echo -n "Begin: " | tee -a $logfile
-date | tee -a $logfile
-touch inizio
-SECONDS=0
-mount UUID="05141239-4ea5-494d-aa91-acd67db89ce5" /mnt/pendrive
-cp /NoBackup/buttare/testfile /mnt/pendrive
-umount /mnt/pendrive
-tempo=$SECONDS
-touch fine
-echo -n "...end: " | tee -a $logfile
-date | tee -a $logfile
-echo "It took $tempo seconds!" | tee -a $logfile
+ drivers/usb/host/xhci-hub.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-If I run the test with a 512MB file it takes >10min vs. half a minute.
-
-The problem is still present in last tested git (cloned today in the
-morning).
-
-You can see the previous discussion that lead to these results at
-
-https://marc.info/?t=155922230700001&r=1&w=2
-
-Thanks, and bye
-Andrea
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 3abe70ff1b1e..05cd46a11c0c 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1047,8 +1047,8 @@ static u32 xhci_get_port_status(struct usb_hcd *hcd,
+ 		xhci_get_usb2_port_status(port, &status, raw_port_status,
+ 					  flags);
+ 	/*
+-	 * Clear stale usb2 resume signalling variables in case port changed
+-	 * state during resume signalling. For example on error
++	 * Clear stale resume signalling variables in case port changed
++	 * state during resume signalling. For example on error.
+ 	 */
+ 	if ((bus_state->resume_done[wIndex] ||
+ 	     test_bit(wIndex, &bus_state->resuming_ports)) &&
+@@ -1057,6 +1057,9 @@ static u32 xhci_get_port_status(struct usb_hcd *hcd,
+ 		bus_state->resume_done[wIndex] = 0;
+ 		clear_bit(wIndex, &bus_state->resuming_ports);
+ 		usb_hcd_end_port_resume(&hcd->self, wIndex);
++	} else if (bus_state->port_remote_wakeup & (1 << port->hcd_portnum) &&
++		   !(raw_port_status & PORT_CONNECT)) {
++		bus_state->port_remote_wakeup &= ~(1 << port->hcd_portnum);
+ 	}
+ 
+ 	if (bus_state->port_c_suspend & (1 << wIndex))
+-- 
+2.22.0
 
