@@ -2,203 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C785C5F1
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 01:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855425C62C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 02:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbfGAXgj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 19:36:39 -0400
-Received: from smtprelay-out1.synopsys.com ([198.182.47.102]:60016 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726866AbfGAXgi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 19:36:38 -0400
-Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 8AF7EC01C6;
-        Mon,  1 Jul 2019 23:36:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1562024197; bh=+WUkjo37UD0/qeRhfRnDAQj40ov+Z+tE7Yj66w6tdAg=;
-        h=From:To:CC:Subject:Date:References:From;
-        b=dtnmaqbTRR6kGPblOdVOfE7WQBaV5iM1mgBfyfG47y8oBp40wSXpzxYSxokANdUZz
-         VvrPoTPJCLzXySd3nUsHN+Pnf98W1ZGbh+yUQ4iG4RHmHmkp/fKrDEka1PHVKpHayQ
-         JB1hKYnjC0qP2za1L5jBTT/5SNtuhvFAuwUT1KBn6WI67MgsT24FldhiLUGBtXkyZ2
-         WgCFCMvQg4/aqWBI+smhudbo7VvbKZUABBoOyDhxoL+3oSjV4lq4alejAOQSACap3r
-         aLQUox9mocIoSyspcsEXgmSMtCjOGlEjvnttQ5YJ1d0H/7syRtEg1UYs6qGCT7Bcq/
-         FR2SncIaFdXEw==
-Received: from US01WXQAHTC1.internal.synopsys.com (us01wxqahtc1.internal.synopsys.com [10.12.238.230])
-        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 0BB3FA009A;
-        Mon,  1 Jul 2019 23:36:36 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WXQAHTC1.internal.synopsys.com (10.12.238.230) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Mon, 1 Jul 2019 16:36:36 -0700
-Received: from NAM01-BN3-obe.outbound.protection.outlook.com (10.13.134.195)
- by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Mon, 1 Jul 2019 16:36:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=testarcselector01; d=microsoft.com; cv=none;
- b=bIXG8nXKDZuF75ArRuXv+8uONpbu6/X9djOxjILGX+C58kCoVFDfxAG3bTFwp7w/Xz9hMYoNaFMG2U9iF/e1uND0AjwMRt+aDqU2/Kja/eqiYW0226ZgpVowY3aWRjUTjTfKBNJpP8pAcn1bUma2CiJ1hWvHSqy7CThgJcb2CUI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=testarcselector01;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BPL9tATMYVF7Pp05uCiCUL1y2YaVObvN0svEJUoBaYU=;
- b=wcdqlNtjL6kgpUCPjEliuWA3agIbMmrz9jFKR2gmfcrTGu5vObsPX2yXZ1db3O0tEbWIr0p3pf0AHp5G9M+Do9geI/RMFYH6SOcH3PUVHTJwO6U6W2Z6TYW5amF37NNspLjYgCtKil6zZYDZnFZtSApPcvaj+TCmgLrKbn8epwE=
-ARC-Authentication-Results: i=1; test.office365.com
- 1;spf=none;dmarc=none;dkim=none;arc=none
+        id S1727071AbfGBADJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jul 2019 20:03:09 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:35611 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726966AbfGBADJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 20:03:09 -0400
+Received: by mail-wm1-f66.google.com with SMTP id c6so1299493wml.0;
+        Mon, 01 Jul 2019 17:03:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.onmicrosoft.com; s=selector1-synopsys-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BPL9tATMYVF7Pp05uCiCUL1y2YaVObvN0svEJUoBaYU=;
- b=Jb0LZCraFlDuTrCApC9YxvqpnuGtMlquC4YtDk3QEj+xCg/qI+jRqVyB1uKbVfBfj+BU9f3gNa12GOhg8eFbmOPPoZQQvcNF1rywVrNhJPIIbufdHtyKOyvXWlKnt5WQJ2KYCBvGtI3cDRAP20GVwQWo/QFpLLuYPLfK+ylRQS8=
-Received: from CY4PR1201MB0037.namprd12.prod.outlook.com (10.172.78.22) by
- CY4PR1201MB0117.namprd12.prod.outlook.com (10.174.53.9) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Mon, 1 Jul 2019 23:36:34 +0000
-Received: from CY4PR1201MB0037.namprd12.prod.outlook.com
- ([fe80::f520:c8d1:43e6:5fc3]) by CY4PR1201MB0037.namprd12.prod.outlook.com
- ([fe80::f520:c8d1:43e6:5fc3%6]) with mapi id 15.20.2032.019; Mon, 1 Jul 2019
- 23:36:34 +0000
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     John Stultz <john.stultz@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-CC:     stable <stable@vger.kernel.org>, Fei Yang <fei.yang@intel.com>,
-        "Sam Protsenko" <semen.protsenko@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 4.19.y v2 0/9] Fix scheduling while atomic in
- dwc3_gadget_ep_dequeue
-Thread-Topic: [PATCH 4.19.y v2 0/9] Fix scheduling while atomic in
- dwc3_gadget_ep_dequeue
-Thread-Index: AQHVLd7CuQRa1B0Xck+F6olJkOIlJg==
-Date:   Mon, 1 Jul 2019 23:36:34 +0000
-Message-ID: <CY4PR1201MB003740D460297DCF1585B198AAF90@CY4PR1201MB0037.namprd12.prod.outlook.com>
-References: <20190628182413.33225-1-john.stultz@linaro.org>
- <20190628225803.GK11506@sasha-vm>
- <CALAqxLX002_9jqCVpZ9esd9xj=ikC4soYDbCKH4etmUDYUXvrQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=thinhn@synopsys.com; 
-x-originating-ip: [198.182.56.5]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ab39c015-742b-42e6-310f-08d6fe7cf44f
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CY4PR1201MB0117;
-x-ms-traffictypediagnostic: CY4PR1201MB0117:
-x-microsoft-antispam-prvs: <CY4PR1201MB0117A7618301877199E1821EAAF90@CY4PR1201MB0117.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 00851CA28B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(366004)(39840400004)(136003)(396003)(199004)(189003)(25786009)(2906002)(6116002)(7696005)(486006)(74316002)(3846002)(45080400002)(73956011)(68736007)(102836004)(76176011)(66446008)(66946007)(66556008)(91956017)(110136005)(99286004)(76116006)(478600001)(66476007)(64756008)(53546011)(229853002)(316002)(6506007)(446003)(14454004)(5660300002)(86362001)(52536014)(476003)(305945005)(26005)(66066001)(54906003)(55016002)(9686003)(256004)(8936002)(81166006)(81156014)(6436002)(6246003)(71200400001)(14444005)(71190400001)(8676002)(53936002)(186003)(7736002)(33656002)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR1201MB0117;H:CY4PR1201MB0037.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 6vm2G9yS+ygE0XpI03ELbZ00C9e+PHbZRn/CG8W7LFesU9zbGqgl5EsZuH3kOHz1+w04VJwpolcxAOHbMtY0DaIoQPO62fsWvwt6yZn2DgGzWfWEpiVfDXzsFQzwE/9oLilCKDhg1118eX0aRdz86xX7ru+AeuFmHeZKPiXfs0fN7qusiutaEYv9yR2IR/CsZYsv7ymwWpTkGmj4yDK6NfcHyCj9o6fPnoyUJA8x5fl8X1thuPNNj4GOXWQO/Jj9A4heyNG2eS7LSpJzDp0XCHeC2Fw04DhpWBSeVVSIUcC78jHa7qp//8qcq68OjRGsQNT+ccVf6QczNUjYwBEZ8hRN++h1KEpYI93aubUECeytiMEASajnySyPHgrIfeYbRU235J4fbfksN848I3ZsyNhpIYfi2V83DSHM+pOXj8c=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0oaxktBwYbCWBPSqdN0UkPZkDbNAm7KH/JUupR9080w=;
+        b=oRGq7VKp/ev5G44cgKJrJdtTZgMtAaTjzmwbmWsDX+l+moJA5+oC4k5T03y/N2NvNP
+         5R70EIlg7w8u8jqHvrX3pOWp+U4zivNz4TV2FC04n32CeL+8MJhIRi6fhP8LE4vmqRec
+         mI6wq80nTR3/3msqi64IkB8UXe1QtaEbS8BQogXnRVETtOyOWQirjoH7vItJacrekpWO
+         RVRV79t6gKrqoH2REzv7O+adaPrnzRtw3NKWP4a748USAQdBMNvnS5oy4wwz1KkMogLA
+         hchF/mS4b1UCkVDxo0ZdDP1FRZHfGylrw8ddlG5LhAf2IDtYW7CLFNUSZqI8egmJ5FUQ
+         mZQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0oaxktBwYbCWBPSqdN0UkPZkDbNAm7KH/JUupR9080w=;
+        b=lyNSYGMd7TticVvl0ohMEQae8OxihxujHQb2c90L93ROmMxQTT8JevwZS818WmuV/V
+         IlsOrsPAVeYC/xaBVlk9S5zbVee1FjSI+agJ/ZxHrV2I6jcUv4IUyvuKcZ9szJztN2gC
+         G5VBNF9LyHJ49W2YJcIVsktMGy2xCTgEfyPBvEffcXYPICRPF5E0SbvV/r7ifk01BmtV
+         6mRtdmBkeFgOUNrixSUwyDZw123nFaug6AStwyw8V02usHrQHzrmFTkBwIBrOzf0fKb7
+         MOCygf+OpLWStEJYMaDIfq7XOe24F3Q0++OqYftzG3mx2BceFYjTW8s8+qr+1pvun30h
+         vDrg==
+X-Gm-Message-State: APjAAAWuw1fI4OuXbfOO/w4OVd0FkI4SNp+/zd59dEmLnMMJ8bvj9/kU
+        TT1xgAgGAJMR27ckKoI6/m1It5w/nSC6vg0QXMg=
+X-Google-Smtp-Source: APXvYqy6YC9Qi89zIU1hYTAoVPy6IqhePQIEP0I5BDd6BFDwHK6p6hhu9oME8YwuZ9p3JG3hPNbyqVV77eUz3i9ZEj4=
+X-Received: by 2002:a05:600c:2549:: with SMTP id e9mr992279wma.46.1562025785805;
+ Mon, 01 Jul 2019 17:03:05 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab39c015-742b-42e6-310f-08d6fe7cf44f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2019 23:36:34.5962
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: thinhn@synopsys.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0117
-X-OriginatorOrg: synopsys.com
+References: <00000000000008f06d058a6e9783@google.com> <20190630234533.15089-1-tranmanphong@gmail.com>
+ <279519d5386680b3353b994a02475df08df13e29.camel@redhat.com>
+In-Reply-To: <279519d5386680b3353b994a02475df08df13e29.camel@redhat.com>
+From:   Phong Tran <tranmanphong@gmail.com>
+Date:   Tue, 2 Jul 2019 07:02:54 +0700
+Message-ID: <CAD3AR6EHq6+5kjyCLsu6AYbu7WGLhjE5cVL58g3SCr4b8D7UkA@mail.gmail.com>
+Subject: Re: [PATCH] net: usb: asix: init MAC address buffers
+To:     Dan Williams <dcbw@redhat.com>
+Cc:     syzbot <syzbot+8a3fc6674bbc3978ed4e@syzkaller.appspotmail.com>,
+        davem@davemloft.net, Alexander Potapenko <glider@google.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        lynxis@fe80.eu, marcel.ziswiler@toradex.com,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        yang.wei9@zte.com.cn, zhang.run@zte.com.cn,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,=0A=
-=0A=
-John Stultz wrote:=0A=
-> On Fri, Jun 28, 2019 at 3:58 PM Sasha Levin <sashal@kernel.org> wrote:=0A=
->> On Fri, Jun 28, 2019 at 06:24:04PM +0000, John Stultz wrote:=0A=
->>> With recent changes in AOSP, adb is using asynchronous io, which=0A=
->>> causes the following crash usually on a reboot:=0A=
->>>=0A=
->>> [  184.278302] BUG: scheduling while atomic: ksoftirqd/0/9/0x00000104=
-=0A=
->>> [  184.284617] Modules linked in: wl18xx wlcore snd_soc_hdmi_codec wlco=
-re_sdio tcpci_rt1711h tcpci tcpm typec adv7511 cec dwc3 phy_hi3660_usb3 snd=
-_soc_simple_card snd_soc_a=0A=
->>> [  184.316034] Preemption disabled at:=0A=
->>> [  184.316072] [<ffffff8008081de4>] __do_softirq+0x64/0x398=0A=
->>> [  184.324953] CPU: 0 PID: 9 Comm: ksoftirqd/0 Tainted: G S            =
-    4.19.43-00669-g8e4970572c43-dirty #356=0A=
->>> [  184.334963] Hardware name: HiKey960 (DT)=0A=
->>> [  184.338892] Call trace:=0A=
->>> [  184.341352]  dump_backtrace+0x0/0x158=0A=
->>> [  184.345025]  show_stack+0x14/0x20=0A=
->>> [  184.348355]  dump_stack+0x80/0xa4=0A=
->>> [  184.351685]  __schedule_bug+0x6c/0xc0=0A=
->>> [  184.355363]  __schedule+0x64c/0x978=0A=
->>> [  184.358863]  schedule+0x2c/0x90=0A=
->>> [  184.362053]  dwc3_gadget_ep_dequeue+0x274/0x388 [dwc3]=0A=
->>> [  184.367210]  usb_ep_dequeue+0x24/0xf8=0A=
->>> [  184.370884]  ffs_aio_cancel+0x3c/0x80=0A=
->>> [  184.374561]  free_ioctx_users+0x40/0x148=0A=
->>> [  184.378500]  percpu_ref_switch_to_atomic_rcu+0x180/0x1c0=0A=
->>> [  184.383830]  rcu_process_callbacks+0x24c/0x5d8=0A=
->>> [  184.388283]  __do_softirq+0x13c/0x398=0A=
->>> [  184.391959]  run_ksoftirqd+0x3c/0x48=0A=
->>> [  184.395549]  smpboot_thread_fn+0x220/0x288=0A=
->>> [  184.399660]  kthread+0x12c/0x130=0A=
->>> [  184.402901]  ret_from_fork+0x10/0x1c=0A=
->>>=0A=
->>>=0A=
->>> This happens as usb_ep_dequeue can be called in interrupt=0A=
->>> context, and dwc3_gadget_ep_dequeue() then calls=0A=
->>> wait_event_lock_irq() which can sleep.=0A=
->>>=0A=
->>> Upstream kernels are not affected due to the change=0A=
->>> fec9095bdef4 ("dwc3: gadget: remove wait_end_transfer") which=0A=
->>> removes the wait_even_lock_irq code. Unfortunately that change=0A=
->>> has a number of dependencies, which I'm submitting here.=0A=
->>>=0A=
->>> Also, to match upstream, in this series I've reverted one=0A=
->>> change that was backported to -stable, to replace it with the=0A=
->>> cherry-picked upstream commit (as the dependencies are now=0A=
->>> there)=0A=
->>>=0A=
->>> This issue also affects 4.14,4.9 and I believe 4.4 kernels,=0A=
->>> however I don't know how to best backport this functionality=0A=
->>> that far back. Help from the maintainers would be very much=0A=
->>> appreciated!=0A=
->>>=0A=
->>>=0A=
->>> New in v2:=0A=
->>> * Reordered the patchset to put the revert patch first, which=0A=
->>>  avoids any bisection build issues. (Thanks to Jack Pham for=0A=
->>>  the suggestion!)=0A=
->>>=0A=
->>>=0A=
->>> Feedback and comments would be welcome!=0A=
->> I've queued it up for 4.19.=0A=
->>=0A=
->> Is it the case that for older kernels the dependency list is too long?=
-=0A=
-> Yea. It gets ugly and I'm not enough of an expert on the driver to=0A=
-> feel comfortable knowing if I'm doing the right thing reworking this=0A=
-> stack onto an even older tree.=0A=
->=0A=
-> But I do see crashes on reboot w/ 4.14 and 4.9 (I and suspect 4.4 as=0A=
-> well), so I'll need to figure out something eventually.=0A=
->=0A=
->=0A=
-=0A=
-If you're backporting this series, then you also need to apply these=0A=
-fixes for this series:=0A=
-=0A=
-This fixes a race issue:=0A=
-c5353b225df9 ("usb: dwc3: gadget: don't enable interrupt when disabling=0A=
-endpoint")=0A=
-=0A=
-This fixes incorrect TRB skip:=0A=
-c7152763f02e ("usb: dwc3: Reset num_trbs after skipping")=0A=
-=0A=
-BR,=0A=
-Thinh=0A=
+Hello Dan,
+
+On Mon, Jul 1, 2019 at 10:30 PM Dan Williams <dcbw@redhat.com> wrote:
+>
+> On Mon, 2019-07-01 at 06:45 +0700, Phong Tran wrote:
+> > This is for fixing bug KMSAN: uninit-value in ax88772_bind
+> >
+> > Tested by
+> > https://groups.google.com/d/msg/syzkaller-bugs/aFQurGotng4/cFe9nxMCCwAJ
+> >
+> > Reported-by: syzbot+8a3fc6674bbc3978ed4e@syzkaller.appspotmail.com
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    f75e4cfe kmsan: use kmsan_handle_urb() in urb.c
+> > git tree:       kmsan
+> > console output:
+> > https://syzkaller.appspot.com/x/log.txt?x=136d720ea00000
+> > kernel config:
+> > https://syzkaller.appspot.com/x/.config?x=602468164ccdc30a
+> > dashboard link:
+> > https://syzkaller.appspot.com/bug?extid=8a3fc6674bbc3978ed4e
+> > compiler:       clang version 9.0.0 (/home/glider/llvm/clang
+> > 06d00afa61eef8f7f501ebdb4e8612ea43ec2d78)
+> > syz repro:
+> > https://syzkaller.appspot.com/x/repro.syz?x=12788316a00000
+> > C reproducer:
+> > https://syzkaller.appspot.com/x/repro.c?x=120359aaa00000
+> >
+> > ==================================================================
+> > BUG: KMSAN: uninit-value in is_valid_ether_addr
+> > include/linux/etherdevice.h:200 [inline]
+> > BUG: KMSAN: uninit-value in asix_set_netdev_dev_addr
+> > drivers/net/usb/asix_devices.c:73 [inline]
+> > BUG: KMSAN: uninit-value in ax88772_bind+0x93d/0x11e0
+> > drivers/net/usb/asix_devices.c:724
+> > CPU: 0 PID: 3348 Comm: kworker/0:2 Not tainted 5.1.0+ #1
+> > Hardware name: Google Google Compute Engine/Google Compute Engine,
+> > BIOS
+> > Google 01/01/2011
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >   __dump_stack lib/dump_stack.c:77 [inline]
+> >   dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+> >   kmsan_report+0x130/0x2a0 mm/kmsan/kmsan.c:622
+> >   __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:310
+> >   is_valid_ether_addr include/linux/etherdevice.h:200 [inline]
+> >   asix_set_netdev_dev_addr drivers/net/usb/asix_devices.c:73 [inline]
+> >   ax88772_bind+0x93d/0x11e0 drivers/net/usb/asix_devices.c:724
+> >   usbnet_probe+0x10f5/0x3940 drivers/net/usb/usbnet.c:1728
+> >   usb_probe_interface+0xd66/0x1320 drivers/usb/core/driver.c:361
+> >   really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+> >   driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+> >   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+> >   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+> >   __device_attach+0x454/0x730 drivers/base/dd.c:844
+> >   device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+> >   bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+> >   device_add+0x288d/0x30e0 drivers/base/core.c:2106
+> >   usb_set_configuration+0x30dc/0x3750 drivers/usb/core/message.c:2027
+> >   generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+> >   usb_probe_device+0x14c/0x200 drivers/usb/core/driver.c:266
+> >   really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+> >   driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+> >   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+> >   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+> >   __device_attach+0x454/0x730 drivers/base/dd.c:844
+> >   device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+> >   bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+> >   device_add+0x288d/0x30e0 drivers/base/core.c:2106
+> >   usb_new_device+0x23e5/0x2ff0 drivers/usb/core/hub.c:2534
+> >   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+> >   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+> >   port_event drivers/usb/core/hub.c:5350 [inline]
+> >   hub_event+0x48d1/0x7290 drivers/usb/core/hub.c:5432
+> >   process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
+> >   process_scheduled_works kernel/workqueue.c:2331 [inline]
+> >   worker_thread+0x189c/0x2460 kernel/workqueue.c:2417
+> >   kthread+0x4b5/0x4f0 kernel/kthread.c:254
+> >   ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+> >
+> > Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+> > ---
+> >  drivers/net/usb/asix_devices.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/net/usb/asix_devices.c
+> > b/drivers/net/usb/asix_devices.c
+> > index c9bc96310ed4..f514d19316b1 100644
+> > --- a/drivers/net/usb/asix_devices.c
+> > +++ b/drivers/net/usb/asix_devices.c
+> > @@ -230,6 +230,7 @@ static int ax88172_bind(struct usbnet *dev,
+> > struct usb_interface *intf)
+> >       int i;
+> >       unsigned long gpio_bits = dev->driver_info->data;
+> >
+> > +     memset(buf, 0, sizeof(buf));
+>
+> For array variables defined in the function itself, isn't this usually
+> done with:
+>
+>          int ret = 0;
+> -        u8 buf[ETH_ALEN];
+> +        u8 buf[ETH_ALEN] = {0};
+>          int i;
+>          unsigned long gpio_bits = dev->driver_info->data;
+>
+> eg make the compiler do it (though maybe it's smart enough to elide the
+> memset, I don't know). See drivers/net/ethernet/intel/igb/e1000_mac.c
+> for an example.
+>
+
+Thank suggestion, applied in v2 without using memset().
+
+Phong
