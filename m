@@ -2,146 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B075C8CB
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 07:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4240B5C982
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 08:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbfGBF3T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 01:29:19 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:10318 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726793AbfGBF3S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 01:29:18 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d1aebac0000>; Mon, 01 Jul 2019 22:29:16 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 01 Jul 2019 22:29:17 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 01 Jul 2019 22:29:17 -0700
-Received: from [10.19.108.127] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 2 Jul
- 2019 05:29:16 +0000
-Subject: Re: [PATCH] usb: storage: skip only when uas driver is loaded
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <stern@rowland.harvard.edu>,
-        <usb-storage@lists.one-eyed-alien.net>, <oneukum@suse.com>
-References: <20190701084848.32502-1-jckuo@nvidia.com>
- <20190701085248.GA28681@kroah.com>
- <8e8e8703-8620-b625-4917-bbb8d999caa4@nvidia.com>
- <20190702044249.GA694@kroah.com>
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <f6ed2505-5da9-c217-a052-a19d197c5c8e@nvidia.com>
-Date:   Tue, 2 Jul 2019 13:29:14 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-MIME-Version: 1.0
-In-Reply-To: <20190702044249.GA694@kroah.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL106.nvidia.com (172.18.146.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
+        id S1726830AbfGBGsX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 02:48:23 -0400
+Received: from mail-eopbgr60122.outbound.protection.outlook.com ([40.107.6.122]:41654
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725812AbfGBGsW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jul 2019 02:48:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=targetsg.onmicrosoft.com; s=selector1-targetsg-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YcOOnh7gKeGCiucywSQEZpkBz018ak+95M+7lq5ykmo=;
+ b=Y6TllmpfYKkeKWOaH2fdmF3k+xMr2/5MpI+agfSL6kmCW3fkI44ZsMUcx48CjTsZ0YKjfTmkkSxqCxSSQPKuihnAPoE9mlTESKhouhSLdbcWRXmJOw8/Wpk900YA+tle0XEfbw2mdvyuBKlMUKTfkTD6ligJa5YL5XgE3eKgGHU=
+Received: from AM0PR02MB3841.eurprd02.prod.outlook.com (52.134.87.30) by
+ AM0PR02MB4163.eurprd02.prod.outlook.com (20.177.110.91) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2032.18; Tue, 2 Jul 2019 06:48:16 +0000
+Received: from AM0PR02MB3841.eurprd02.prod.outlook.com
+ ([fe80::31ee:1319:473f:66e3]) by AM0PR02MB3841.eurprd02.prod.outlook.com
+ ([fe80::31ee:1319:473f:66e3%3]) with mapi id 15.20.2032.019; Tue, 2 Jul 2019
+ 06:48:16 +0000
+From:   Kai Ruhnau <kai.ruhnau@target-sg.com>
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: No carrier lost information with gadget RNDIS/ECM
+Thread-Topic: No carrier lost information with gadget RNDIS/ECM
+Thread-Index: AdUsFPmU+UglLYdrSGuD1S1toRlligAA5T8AAAEwZfAAJNKCgAAS92iQABTOtQAADByYoAANCr7wAIiH2PAABPEL0AAkgO9AAAj0V4A=
+Date:   Tue, 2 Jul 2019 06:48:16 +0000
+Message-ID: <AM0PR02MB38416C39915E57C8855BBDA7C5F80@AM0PR02MB3841.eurprd02.prod.outlook.com>
+References: <AM0PR02MB3841F110F7B6931A087DF566C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <87o92kk0ih.fsf@linux.intel.com>
+ <AM0PR02MB384108B692229DF41816A363C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <871rzffszm.fsf@linux.intel.com>
+ <AM0PR02MB38418BFC9965F044B307B13CC5FD0@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <CAL411-oZUtL6LETk+oNZXXezeLK4PahPz3_iVZJiM33A3KLaqw@mail.gmail.com>
+ <AM0PR02MB38419422D499F45C8475A000C5FC0@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <AM0PR02MB38415FA372C7A8B8B7BAFF22C5FC0@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <VI1PR04MB5327BA15817CA04C5ACC4A8C8BF90@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <AM0PR02MB3841CFA0BC4FC084D8517E00C5F90@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <VI1PR04MB532799F3F92BCBD8616B51868BF80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB532799F3F92BCBD8616B51868BF80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1562045356; bh=cGO5oVOl6Tcoyjq+IeJlWiq2/aXzxMPj3o/BESBGJtk=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=BSjsVnTYR3g6zSD/JxoQuG6RuxjBWaoEHrJe56U+F9YTin7c6TE9Z5+S59YekRVHb
-         xDollmWmm4bOEao6tT2S8nedl2hCKcb11vGZoufHNcy8m2NZx5cXJlB8xCccFGhML+
-         0tAQximVwCfOmA6nCBB2lWTwPECXVHBDJl/xbaudZL+xt4eCQdZXKiXV+fEn4G0Zny
-         wt0wRQHb3b+sUckv0NzWVIpHAejV9tJaVzhJQp9HLZ6jFMfVcc/ivIMGdJ23dBX88M
-         iL+315FEHygKppB6Q5PWHTbD3CIuNFSHXF1z3b4khOmJHmZhbaS9VAVrHYFThxz/b+
-         67vVpIYA3urRQ==
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=kai.ruhnau@target-sg.com; 
+x-originating-ip: [2003:c5:174d:e100:d913:201d:8092:cfec]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d0b4de1b-371b-4e6e-43fd-08d6feb942ee
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:AM0PR02MB4163;
+x-ms-traffictypediagnostic: AM0PR02MB4163:
+x-microsoft-antispam-prvs: <AM0PR02MB41636E0C90D036ECC6DA7BA4C5F80@AM0PR02MB4163.eurprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 008663486A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(136003)(39830400003)(366004)(376002)(396003)(189003)(199004)(66946007)(73956011)(66446008)(64756008)(66556008)(66476007)(71190400001)(71200400001)(52536014)(76116006)(14454004)(508600001)(7736002)(74316002)(4326008)(305945005)(86362001)(81166006)(6862004)(68736007)(8676002)(2906002)(5660300002)(81156014)(25786009)(46003)(5024004)(102836004)(8936002)(6246003)(53936002)(229853002)(99286004)(33656002)(486006)(54906003)(55016002)(6436002)(256004)(14444005)(44832011)(6506007)(11346002)(7696005)(6116002)(476003)(316002)(446003)(186003)(76176011)(9686003);DIR:OUT;SFP:1102;SCL:1;SRVR:AM0PR02MB4163;H:AM0PR02MB3841.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: target-sg.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 0IKRHb/0NQYS/B/U8SLTn8BilifNT02VIBVpBjM22XpAqjEa67QhEN3LZ5BPLnueE94CV8KB51BYzuHvv+utk4amzA6xG1yo3Z0sYi3k4si3aL7qEzdZQr8y+mfUbD90TshQ20nuGF9EUXOI+SY1fRE7sZPjE1CNThT0GS57vSpN9nn2Dpp8SoRWVQf6zR0i3qL3W3bc6RSuNnTjCFmFh1RpIP7rZqW5ALLVFc0FPn4vITBA/mQsaRtRzyuACn9lRrz4zwH/+JGBJHy16WqOLZChX6tvBVeE1jPpxWDMbqYC6cN1+XmcLlC6XDhsCGzzjEzFpfevLKxBoQ3qHNjuoGSagE9nMeQrJ8Cm29gb2rDFEa7YAfNb/lV/feE8ztXgMUyxRWRfAL+Q0FMWbG2cg4HOBmh5tmD2KJKY0eZNNB8=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: target-sg.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0b4de1b-371b-4e6e-43fd-08d6feb942ee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2019 06:48:16.4020
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 52a4fe2f-f30a-452d-90b1-03ecc8ab0c0d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kai.ruhnau@target-sg.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR02MB4163
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/2/19 12:42 PM, Greg KH wrote:
-> On Tue, Jul 02, 2019 at 10:36:59AM +0800, JC Kuo wrote:
->> On 7/1/19 4:52 PM, Greg KH wrote:
->>> On Mon, Jul 01, 2019 at 04:48:48PM +0800, JC Kuo wrote:
->>>> When usb-storage driver detects a UAS capable device, it ignores the
->>>> device if CONFIG_USB_UAS is enabled. usb-storage driver assumes uas
->>>> driver certainly will be loaded. However, it's possible that uas
->>>> driver will not be loaded, for example, uas kernel module is not
->>>> installed properly or it is in modprobe blacklist.
->>>>
->>>> In case of uas driver not being loaded, the UAS capable device will
->>>> not fallback to work at Bulk-only-transfer mode. The device just
->>>> disappears without any notification to user/userspace.
->>>>
->>>> This commit changes usb-storage driver to skip UAS capable device
->>>> only when uas driver is already loaded to make sure the device will
->>>> at least work with Bulk protocol.
->>>
->>> But what happens if the driver is loaded afterward, because 'modprobe'
->>> was called by the driver core (or it should have been, because this is a
->>> device that supports that protocol)?
->> If uas driver is loaded after usb-storage driver probed the device,
->> the device will still work with Bulk-only protocol, though it can't
->> make uses of streams.
-> 
-> Which is not a good thing, and is what the original code was there to
-> prevent happening.
-> 
->>> I think you just broke working systems :(
->>>
->>> Why wouldn't the UAS driver get loaded automatically if it is configured
->>> in the system as it is today?
->> An user might want to completely disable uas for some reason so he/she
->> adds "blacklist uas" to modprobe conf file. I think in case of this,
->> usb-storage driver has to enable this device with the legacy Bulk-only
->> protocol instead of ignoring the device.
-> 
-> Why would they want to do that?  Where are people doing this in ways
-> that breaks their systems?
-
-I think that could be because user sees issues with UAS but he/she is not
-aware of the quirks parameter that usb-storage module offers to disable UAS
-for any particular device.
-
-IMHO, blacklisting uas driver should not break the system because the UAS
-devices are supposed to be working fine with legacy Bulk-only protocol if
-system software doesn't have UAS support.
-
-> 
->> As an alternative to this patch, I thought I could get uas driver
->> loaded before usb-storage driver so I tried moving the functions in
->> drivers/usb/storage/uas-detect.h into uas.c and letting usb-storage
->> links uas_use_uas_driver() of uas.ko. However, that didn't work
->> because uas driver actually depends on usb-storage driver for
->> usb_stor_adjust_quirks(). There will be a recursive dependency.
->>
->> Please let me know if there is better approach to avoid the issue.
-> 
-> If users blacklist the uas driver, that's their choice and they should
-> rebuild their kernel :)
-> 
-> Or better yet, talk to us to get the issue fixed for why they would want
-> to blacklist such a driver.
-
-Agree. :)
-
-> 
-> As it is, this patch is not acceptable.
-
-Understood. Thanks for the comments. I will drop this patch.
-
-Thanks,
-JC
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
------------------------------------------------------------------------------------
-This email message is for the sole use of the intended recipient(s) and may contain
-confidential information.  Any unauthorized review, use, disclosure or distribution
-is prohibited.  If you are not the intended recipient, please contact the sender by
-reply email and destroy all copies of the original message.
------------------------------------------------------------------------------------
+SGksDQoNClBldGVyIENoZW4gd3JpdGVzOiANCj4+IFBldGVyIENoZW4gd3JpdGVzOg0KPj4+IFRo
+YXQncyB2ZXJ5IHN0cmFuZ2UsIHRoYXQgbWVhbnMgdGhlIFNvQyBkb2Vzbid0IGtub3cgVkJVUyBm
+YWlscyBkb3duIA0KPj4+IGFmdGVyIGRldGFjaGluZyBmcm9tIHRoZSBob3N0Lg0KPj4+IFlvdSBj
+b3VsZCBtZWFzdXJlIHRoZSBWQlVTIHZhbHVlIGF0IHRoZSBib2FyZCwgdGhlbiByZWFkIHRoZSBW
+QlVTIA0KPj4+IHZhbHVlIGF0IHJlZ2lzdGVyIHRvIGNvbmZpcm0gaXQuDQo+PiANCj4+IEkgaGF2
+ZSBwdXQgYSBzY29wZSBvbiBWQlVTLiBXaXRoIGtlcm5lbCA0LjkgYWZ0ZXIgZGV0YWNoaW5nLCBp
+dCANCj4+IGRpc2NoYXJnZXMgYWxsIHRoZSB3YXkgZG93biB0byBhYm91dCA1MDAgbVYsIHdpdGgg
+NC4xOSB0aGlzIA0KPj4gZGlzY2hhcmdpbmcgc3RvcHMgYWZ0ZXIgYWJvdXQgNCBzZWNvbmRzIGF0
+IGFib3V0IDIuNFYgYW5kIHJlbWFpbnMgdGhlcmUuDQo+PiANCj4NCj4gSSBzdXNwZWN0IGl0IGlz
+IG5vdCByZWxhdGVkIHRvIFVTQiwgd291bGQgeW91IHBsZWFzZSBkaXNhYmxlIFVTQiBub2RlIGF0
+IERUUyB0byBtZWFzdXJlIGFnYWluPw0KDQpXaXRoIFVTQiBkaXNhYmxlZCAoJnVzYm90ZzEgYW5k
+ICZ1c2JvdGcyKSwgVkJVUyBpcyBhdmFpbGFibGUgd2hlbiBJIGNvbm5lY3QgdG8gdGhlIGhvc3Qg
+YW5kIHByb3Blcmx5IGRpc2NoYXJnZWQgd2hlbiBJIGRpc2Nvbm5lY3QuDQpJIGFsc28gdHJpZWQg
+dGhlIE9URydzIGhvc3QgbW9kZSB5ZXN0ZXJkYXkuIFdoZW4gSSBhdHRhY2ggYSBNaWNyby1CIHBs
+dWcgdG8gQS1yZWNlcHRhYmxlIGFkYXB0ZXIgKGFuZCBubyBhY3R1YWwgZ2FkZ2V0KSwgdGhlIEdQ
+SU8tY29udHJvbGxlZCByZWd1bGF0b3IgaXMgdHVybmVkIG9uIGFuZCBkcml2ZXMgVkJVUy4gV2hl
+biBJIGRldGFjaCBpdCBhbmQgdGhlIGJvYXJkIHN3aXRjaGVzIGJhY2sgdG8gZ2FkZ2V0LCB0aGUg
+cmVndWxhdG9yIGlzIHR1cm5lZCBvZmYgYW5kIFZCVVMgaXMgcHJvcGVybHkgZHJhaW5lZC4NCg0K
+Q2hlZXJzLA0KS2FpDQo=
