@@ -2,102 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A27F15CB8E
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 10:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C61F5CB93
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 10:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728083AbfGBIGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 04:06:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52764 "EHLO mail.kernel.org"
+        id S1728088AbfGBIO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 04:14:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727560AbfGBIGQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Jul 2019 04:06:16 -0400
+        id S1727735AbfGBIO1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jul 2019 04:14:27 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF34221841;
-        Tue,  2 Jul 2019 08:06:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6FFE520645;
+        Tue,  2 Jul 2019 08:14:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562054775;
-        bh=cCBhwgoIit/dyguMJVOpnTShQ/wzIKfPyyIC+BFGoQ8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NMZEz04Rfa26fqnVRSFWEjGksMmHyvZZgXFkT7f9L5OUHxHLa/vl/YByyloLF1v5i
-         /ZJnUoDU4a5C1/4Qm0UW9iSCafEn8GTNgFOC+ZFUCSdG74P9N1I2MkVvhc05TgOU6C
-         wrmAGbVHSfHURZdiHOrCAy/z9uqVeCbUra07u/0Q=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fei Yang <fei.yang@intel.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 31/72] usb: dwc3: gadget: Clear req->needs_extra_trb flag on cleanup
-Date:   Tue,  2 Jul 2019 10:01:32 +0200
-Message-Id: <20190702080126.279660004@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190702080124.564652899@linuxfoundation.org>
-References: <20190702080124.564652899@linuxfoundation.org>
-User-Agent: quilt/0.66
+        s=default; t=1562055266;
+        bh=/hqUavSM9jF40GYQlnoxzOeSzhs5r4KnNGS0tgqpMmw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LY8IBqQZTRTt/uW3FLWUWwDni0+hT5KCwmSW8QMU3nrKeFHQtCL4/XBjNETj8Fye+
+         Tm1JAYPU8LTyLCTKuseUqdCQ2yaAqitEvkZsga44BQM0XoR/ArXqksiv9PZqK1qRNX
+         wYReplZJP1chTiDrXxc6lWY8IzzAhDd4iDc+imAs=
+Date:   Tue, 2 Jul 2019 10:14:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     JC Kuo <jckuo@nvidia.com>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        usb-storage@lists.one-eyed-alien.net, oneukum@suse.com
+Subject: Re: [PATCH] usb: storage: skip only when uas driver is loaded
+Message-ID: <20190702081424.GA4162@kroah.com>
+References: <20190701084848.32502-1-jckuo@nvidia.com>
+ <20190701085248.GA28681@kroah.com>
+ <8e8e8703-8620-b625-4917-bbb8d999caa4@nvidia.com>
+ <20190702044249.GA694@kroah.com>
+ <f6ed2505-5da9-c217-a052-a19d197c5c8e@nvidia.com>
+ <f43e7ecf-64d5-20d2-0461-85a55fa28a33@nvidia.com>
+ <20190702073432.GA9265@kroah.com>
+ <136cd205-6114-2be5-4244-f6689ce6bf3b@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <136cd205-6114-2be5-4244-f6689ce6bf3b@nvidia.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-commit bd6742249b9ca918565e4e3abaa06665e587f4b5 upstream
+On Tue, Jul 02, 2019 at 03:57:04PM +0800, JC Kuo wrote:
+> On 7/2/19 3:34 PM, Greg KH wrote:
+> > 
+> > Footers like this are not allowed on public mailing lists, and forbid me
+> > to respond to...
+> > 
+> 
+> Hi Greg,
+> I am truly sorry for that. I have just figured out how to tell mail server
+> not to add the footer. Please allow me to query again.
+> 
+> Since blacklisting uas kernel module is not a good idea and could break UAS 
+> capable storage functionality, although user-space should be blamed for the
+> improper configuration, do we consider forbidding making uas driver as
+> module? That means to make CONFIG_USB_UAS a bool option.
 
-OUT endpoint requests may somtimes have this flag set when
-preparing to be submitted to HW indicating that there is an
-additional TRB chained to the request for alignment purposes.
-If that request is removed before the controller can execute the
-transfer (e.g. ep_dequeue/ep_disable), the request will not go
-through the dwc3_gadget_ep_cleanup_completed_request() handler
-and will not have its needs_extra_trb flag cleared when
-dwc3_gadget_giveback() is called.  This same request could be
-later requeued for a new transfer that does not require an
-extra TRB and if it is successfully completed, the cleanup
-and TRB reclamation will incorrectly process the additional TRB
-which belongs to the next request, and incorrectly advances the
-TRB dequeue pointer, thereby messing up calculation of the next
-requeust's actual/remaining count when it completes.
+Step back and try to describe the real problem that you are having here.
 
-The right thing to do here is to ensure that the flag is cleared
-before it is given back to the function driver.  A good place
-to do that is in dwc3_gadget_del_and_unmap_request().
+Why is the kernel responsible for fixing a broken userspace
+configuration?  What UAS devices are not working with Linux that could
+cause someone to want to blacklist the uas driver and who is telling
+them to do that?
 
-Fixes: c6267a51639b ("usb: dwc3: gadget: align transfers to wMaxPacketSize")
-Cc: Fei Yang <fei.yang@intel.com>
-Cc: Sam Protsenko <semen.protsenko@linaro.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: linux-usb@vger.kernel.org
-Cc: stable@vger.kernel.org # 4.19.y
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-(cherry picked from commit bd6742249b9ca918565e4e3abaa06665e587f4b5)
-Signed-off-by: John Stultz <john.stultz@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/dwc3/gadget.c | 1 +
- 1 file changed, 1 insertion(+)
+Also see Oliver's response.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 843586f20572..e7122b5199d2 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -177,6 +177,7 @@ static void dwc3_gadget_del_and_unmap_request(struct dwc3_ep *dep,
- 	req->started = false;
- 	list_del(&req->list);
- 	req->remaining = 0;
-+	req->needs_extra_trb = false;
- 
- 	if (req->request.status == -EINPROGRESS)
- 		req->request.status = status;
--- 
-2.20.1
+thanks,
 
-
-
+greg k-h
