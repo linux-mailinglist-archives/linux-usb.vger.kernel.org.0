@@ -2,104 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 731CE5CEFF
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 14:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39C65CF59
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 14:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726457AbfGBMBf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 08:01:35 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:40400 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725922AbfGBMBf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Jul 2019 08:01:35 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 456A1307D974;
-        Tue,  2 Jul 2019 12:01:25 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C41F617114;
-        Tue,  2 Jul 2019 12:01:18 +0000 (UTC)
-Date:   Tue, 2 Jul 2019 20:01:13 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20190702120112.GA19890@ming.t460p>
-References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
+        id S1726936AbfGBMYi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 08:24:38 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:56405 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726418AbfGBMYh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 08:24:37 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 5D010333;
+        Tue,  2 Jul 2019 08:24:34 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 02 Jul 2019 08:24:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=r71Da2XXMo8899fCN5pyLHypfoU
+        YFitPms3DC0y7yAg=; b=XH6sPmzu+57I8iY46Tp9B45Soikar+iKVzzxuoWPJAj
+        1yaiTk9lAl3YTe4uCH886w4NZpIDLTuDYc6YPSI8Xvd02mtPFSZ03uATU4QrpIXy
+        8pTCCQ7uCCzgNW+48etmy2E8/JC3NTAPXjwZwd74xfkw9PV9V9jeyVaA+jKJzXM9
+        hIVraVtlpr6zyhvCMWkXTTfZSkR+HWG+iLICm6GdvPZMV15Hbpcg5nXfkoCmHZlP
+        CeQA9moaKDf3kXFuXY2B8wLZsX9NVucuxLrRnLE23wnc3DvJAMzD33ea3xANUpoo
+        OzGUc//0QTmCgfDGIhendoF0vpqcBiqzBDYHaI/medQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=r71Da2
+        XXMo8899fCN5pyLHypfoUYFitPms3DC0y7yAg=; b=a5Z4CME5TRxEzKLHbc/Zmz
+        zNyh+TtbuTz1oa/uCiu4xoSvWAU874DIsrhNbtKKYVGop6cKHQQMOrrZKnEXJVfQ
+        SU8hGj6ZlFLV45v/2bmShS2QHkKpDzp3V2ZhZ9QmurS2V39iksED3c97hN/8Qle2
+        V9ObUIgV5fI/uOcnrH1c6oth/RYUY9M0RLtUam3WD5DSrqlu72nxjU9lRZ9svC7n
+        bLnfZbHjgjUvwLv3uSFMRCqrkGvyG7bg6VgQ183zmVNbhVxhGk/iXVTbzmNbp8RQ
+        h8mdRNLbIzJdmAGWmwHyusBtQkMiUn6I1u6YH1dGZpL2sgshpuYdZ9/fe7mEOvpg
+        ==
+X-ME-Sender: <xms:AU0bXXZKgSK0BvJ01vd_78kNgYnWJ-GKI_53JY1ZZBHGK_w6UE2UlA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrvdekgdehgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
+    ejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhenucev
+    lhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:AU0bXWgH3TUBsdWINwZUt6OJ9bBvVIorO03uu_D5M8GYNccaEncJ6w>
+    <xmx:AU0bXeFjNQn8VdX5-Nh3U6Xm5_boG1H2Ly3d0HTIL2757oGh_D2Jaw>
+    <xmx:AU0bXWH1GGRwkUedyieLoilzBzKZWFh1yWs4mCnsuAkI3o7YXbz4cA>
+    <xmx:AU0bXdbqVRJqxXYKbbfBtU5kiKQfnmk0fn8X4DgmFcXfWKXP-7czfQ>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id E14328005B;
+        Tue,  2 Jul 2019 08:24:32 -0400 (EDT)
+Date:   Tue, 2 Jul 2019 14:24:30 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Subject: Re: Aspeed vhub configuration
+Message-ID: <20190702122430.GC12019@kroah.com>
+References: <44bb150fb8b283a3036a382fa7e821b045554c15.camel@kernel.crashing.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.48]); Tue, 02 Jul 2019 12:01:29 +0000 (UTC)
+In-Reply-To: <44bb150fb8b283a3036a382fa7e821b045554c15.camel@kernel.crashing.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
-> Hi,
->   I have a problem writing data to a USB pendrive, and it seems
-> kernel-related. With the help of Greg an Alan (thanks) and some
-> bisect, I found out the offending commit being
+On Tue, Jul 02, 2019 at 09:33:11PM +1000, Benjamin Herrenschmidt wrote:
+> Hi folks !
 > 
-> commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-> Author: Jens Axboe <axboe@kernel.dk>
-> Date:   Thu Nov 1 16:36:27 2018 -0600
+> The Aspeed USB gadget "vhub" implements a hub emulation with a number
+> of UDCs representing the hub slots. It's working ok now and has been
+> upstream for a bit, however, one thing that's been annoying to some
+> users is that I've just hard coded the hub's device descriptor. IE, the
+> vendor/product ID, strings etc...
 > 
->     scsi: kill off the legacy IO path
->     
->     This removes the legacy (non-mq) IO path for SCSI.
->     
-> So, here I am to notify you about the problem and ask you if I can
-> help in any way to work it out and fix it.
+> Various BMC SW stack vendors want to customize that, also possibly the
+> number of ports etc...
 > 
-> The problem is that if I copy a file from the internal SATA HD to the
-> pendrive, it takes ~10 times to complete (in respect of the time
-> needed with the patch reverted).
+> I originally thought about configfs but after more thoughts I don't
+> think it's really a good fit. The vhub is a fixed thing. When you have
+> the HW, you have that hub, it's not like you can create different
+> things, and populate differently.
 > 
-> The test script, which I use to detect if the problem triggers or not,
-> is:
+> That leaves me with two approaches, that aren't mutually exclusive, but
+> I'd like to run them past the folks here before I start coding:
 > 
-> #!/bin/bash
-> logfile=...
-> uname -a | tee -a $logfile
-> echo -n "Begin: " | tee -a $logfile
-> date | tee -a $logfile
-> touch inizio
-> SECONDS=0
-> mount UUID="05141239-4ea5-494d-aa91-acd67db89ce5" /mnt/pendrive
-> cp /NoBackup/buttare/testfile /mnt/pendrive
-> umount /mnt/pendrive
-> tempo=$SECONDS
-> touch fine
-> echo -n "...end: " | tee -a $logfile
-> date | tee -a $logfile
-> echo "It took $tempo seconds!" | tee -a $logfile
+>  - The defaults, currently hard coded, could be replaced with Kconfig
+> options.
 > 
-> If I run the test with a 512MB file it takes >10min vs. half a minute.
+>  - The device-tree node could contain optional override of those
+> defaults, allowing a vendor to customize the hub for a given board.
+> It's not per-se a HW description, but the device-tree is also fairly
+> commonly used for HW configuration, even if some people disagree with
+> me on that one (hint: they are wrong :-)
 > 
-> The problem is still present in last tested git (cloned today in the
-> morning).
+>  - I could add sysfs properties underneath the vhub device instance to
+> customize it. This would also allow userspace to control whether the
+> hub is "connected" to the host or not, which could be useful, some
+> systems don't want it to always be there. Today there's no choice.
 > 
-> You can see the previous discussion that lead to these results at
-> 
-> https://marc.info/?t=155922230700001&r=1&w=2
+> Any other option ? If somebody says netlink I will scream :)
 
-One possible reason may be related with too small 'nr_requests', could
-you apply the following command and see if any difference can be made?
+DT seems like the logical choice, I'll not object to that.
 
-echo 32 > /sys/block/sdN/queue/nr_requests
+thanks,
 
-
-Thanks,
-Ming
+greg k-h
