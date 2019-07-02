@@ -2,240 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6385C6D8
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 03:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0445C70A
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 04:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbfGBB6t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jul 2019 21:58:49 -0400
-Received: from smtprelay-out1.synopsys.com ([198.182.47.102]:35290 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726781AbfGBB6t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jul 2019 21:58:49 -0400
-Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id ECB47C01C9;
-        Tue,  2 Jul 2019 01:58:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1562032728; bh=ov8WcVSwcgAmTu0Icsmn/YP2Ioh259eIVruoSrHcRgo=;
-        h=From:To:CC:Subject:Date:References:From;
-        b=ba/CaXdY4kKNNmsndVjWe2ASDrElaTDrKliJzd8EXBDFccQqm4xABN9ajjk/HZTtm
-         7ZpWEUN+H79vF47JhQK61ESykimWz1Ea57ef39jqpiMHWBFHwNQdWbtaJZixJeoTie
-         vRFnDcYt6uQ19tc1+/ksdUQFAnj+JoO3sOq1So4nBpq6eRCrLwEtORl1nyu4Gu8UkW
-         FMlJheXgpV4D3MtO0tCQvLsGxBJ3AOaTJ87E+93FrWU/S9+3mDv5QZXZOqPFcC1rvn
-         2OiJGPfIg6jGAuSJbMjQ3f1iDPHF7Jwviu33j+i2TDd1AiL8HMVX2Ro1zxizXNS1xL
-         UialKlb+WS1YQ==
-Received: from US01WEHTC2.internal.synopsys.com (us01wehtc2.internal.synopsys.com [10.12.239.237])
-        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id C1E44A023B;
-        Tue,  2 Jul 2019 01:58:47 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC2.internal.synopsys.com (10.12.239.237) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Mon, 1 Jul 2019 18:58:47 -0700
-Received: from NAM04-SN1-obe.outbound.protection.outlook.com (10.13.134.195)
- by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Mon, 1 Jul 2019 18:58:47 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.onmicrosoft.com; s=selector1-synopsys-onmicrosoft-com;
+        id S1726781AbfGBCTE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jul 2019 22:19:04 -0400
+Received: from mail-eopbgr10063.outbound.protection.outlook.com ([40.107.1.63]:62430
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726434AbfGBCTE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Jul 2019 22:19:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IeZ2kiRMcLQ3xa5PM+unJ/fhvfUWgvLpEbhXu69VlMk=;
- b=nOL7apDc5/NzwkT4bDvY/+WvuJFhcJhZN4tNBKpAKwpcf7z42goH86qOhzEYy/FKrfONpT6GeY8e8MVhL2Q82is+HAAahw/AMA9B+zW71XHLOovOwEwZfaaGTyuKG6kGr7hRDMTXutJRUHDuzTWVCcoMeK/fqAbLfXAl4TFwBvU=
-Received: from CY4PR1201MB0037.namprd12.prod.outlook.com (10.172.78.22) by
- CY4PR1201MB2535.namprd12.prod.outlook.com (10.172.121.143) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2032.20; Tue, 2 Jul 2019 01:58:45 +0000
-Received: from CY4PR1201MB0037.namprd12.prod.outlook.com
- ([fe80::f520:c8d1:43e6:5fc3]) by CY4PR1201MB0037.namprd12.prod.outlook.com
- ([fe80::f520:c8d1:43e6:5fc3%6]) with mapi id 15.20.2032.019; Tue, 2 Jul 2019
- 01:58:45 +0000
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Alan Stern <stern@rowland.harvard.edu>, EJ Hsu <ejh@nvidia.com>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
+ bh=WUcp4hKOByEWSwYB/B/ESJ1Q/mTU4oVh2KAQzeuwoa0=;
+ b=AHDHJF75O2xFqTk9D1k8uRHFKoxFOqtgh4VH/VRXIEBY9rE5WkZlInpIy74Iy33M7mBjdBW5I6KmSVdtutilzRAuT1+YSoXT/G0JjIXvNSmbt1wXd5Ny52Upv2EXrDckTP8vAAJ9AIGrX3WxI9f337Y1CWrEF3W8JT9jlK2lvrs=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
+ VI1PR04MB5519.eurprd04.prod.outlook.com (20.178.122.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2032.18; Tue, 2 Jul 2019 02:18:59 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c1bf:7842:6630:b87a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c1bf:7842:6630:b87a%7]) with mapi id 15.20.2032.019; Tue, 2 Jul 2019
+ 02:18:59 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Kai Ruhnau <kai.ruhnau@target-sg.com>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH V3] usb: gadget: storage: Remove warning message
-Thread-Topic: [PATCH V3] usb: gadget: storage: Remove warning message
-Thread-Index: AQHVBx/hjwLl90oF1Ui1cduuEUYtTw==
-Date:   Tue, 2 Jul 2019 01:58:45 +0000
-Message-ID: <CY4PR1201MB003732F412EFABD4046D7FD4AAF80@CY4PR1201MB0037.namprd12.prod.outlook.com>
-References: <Pine.LNX.4.44L0.1905101023400.1516-100000@iolanthe.rowland.org>
+Subject: RE: No carrier lost information with gadget RNDIS/ECM
+Thread-Topic: No carrier lost information with gadget RNDIS/ECM
+Thread-Index: AdUsFPmU+UglLYdrSGuD1S1toRlligAA5T8AAAEwZfAAJNKCgAAS92iQABTOtQAADByYoAANCr7wAIiH2PAABPEL0AAkgO9A
+Date:   Tue, 2 Jul 2019 02:18:59 +0000
+Message-ID: <VI1PR04MB532799F3F92BCBD8616B51868BF80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <AM0PR02MB3841F110F7B6931A087DF566C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <87o92kk0ih.fsf@linux.intel.com>
+ <AM0PR02MB384108B692229DF41816A363C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <871rzffszm.fsf@linux.intel.com>
+ <AM0PR02MB38418BFC9965F044B307B13CC5FD0@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <CAL411-oZUtL6LETk+oNZXXezeLK4PahPz3_iVZJiM33A3KLaqw@mail.gmail.com>
+ <AM0PR02MB38419422D499F45C8475A000C5FC0@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <AM0PR02MB38415FA372C7A8B8B7BAFF22C5FC0@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <VI1PR04MB5327BA15817CA04C5ACC4A8C8BF90@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <AM0PR02MB3841CFA0BC4FC084D8517E00C5F90@AM0PR02MB3841.eurprd02.prod.outlook.com>
+In-Reply-To: <AM0PR02MB3841CFA0BC4FC084D8517E00C5F90@AM0PR02MB3841.eurprd02.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=thinhn@synopsys.com; 
-x-originating-ip: [198.182.56.5]
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3b77941b-9d87-4411-9ce4-08d6fe90d12e
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CY4PR1201MB2535;
-x-ms-traffictypediagnostic: CY4PR1201MB2535:
-x-microsoft-antispam-prvs: <CY4PR1201MB253534F9339C03C73F3FB28CAAF80@CY4PR1201MB2535.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-office365-filtering-correlation-id: 8200b376-6afb-4413-8f18-08d6fe93a479
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5519;
+x-ms-traffictypediagnostic: VI1PR04MB5519:
+x-microsoft-antispam-prvs: <VI1PR04MB5519496781CF3372F3E3DCDF8BF80@VI1PR04MB5519.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
 x-forefront-prvs: 008663486A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(136003)(346002)(396003)(39850400004)(376002)(189003)(199004)(486006)(14444005)(68736007)(6506007)(186003)(256004)(26005)(86362001)(25786009)(102836004)(7696005)(76176011)(476003)(6246003)(2171002)(15650500001)(14454004)(3846002)(81166006)(8676002)(74316002)(8936002)(81156014)(305945005)(7736002)(446003)(2906002)(6116002)(52536014)(33656002)(229853002)(110136005)(4326008)(66476007)(66556008)(66946007)(64756008)(76116006)(55016002)(6436002)(54906003)(66066001)(53936002)(73956011)(71200400001)(66446008)(316002)(91956017)(71190400001)(9686003)(5660300002)(478600001)(99286004);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR1201MB2535;H:CY4PR1201MB0037.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(396003)(136003)(376002)(346002)(199004)(189003)(54906003)(316002)(55016002)(86362001)(5660300002)(71200400001)(71190400001)(256004)(44832011)(14444005)(5024004)(6116002)(6916009)(68736007)(229853002)(305945005)(3846002)(7736002)(99286004)(66946007)(11346002)(66476007)(73956011)(52536014)(76116006)(66446008)(64756008)(33656002)(81166006)(8936002)(66556008)(478600001)(81156014)(8676002)(486006)(2906002)(74316002)(186003)(102836004)(446003)(6506007)(76176011)(66066001)(53936002)(476003)(7696005)(6246003)(6436002)(14454004)(26005)(4326008)(9686003)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5519;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: VbJ1g8VTnCCZvgwELfhVCXPGmGPyTIhUQZVIMs7ylwPf50/qJT/d55X3LWF1JE4xyfcmCs0OTRlHisRnhSbYNXyJpbw7pqZMrq8D47NkyROum6G4wVq6LS2whUk6Y/Fw6XDIJeOtpaTpNIHScxhTanQ5hsG6IOuNI94/fQREz/Yn7mG5KtzkvmAXGecj9lNEZ5v4C920lsnW1C2WsUnXDq7lCPdcwo7i1pGbysqXPoLlF1UzREhu04pv20JoqIJx9lstf7DVc0Q5n/HHqvBevkyoourdYTuosillKZIOSBjFTqWdkoLZxa0ltOvaaK0NmjE/dAUvuZ1VOQICT6grrXOPchBk+7XmstMU6BNTddgLFDRE/ro2HkmBivVKaSIM3H11IyKWOuVtcNJbIhvXAj50gUuetWhir3x7nxXTmro=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-microsoft-antispam-message-info: /iX2rLZr3g1nUlwxbmvGDpppuGZEvUTJEYJNz7MG0/Mo08BncOEITIcrR/3G4FO2BFwuKWhgLPwpTbTX2F6tT6P8/dnG3n6jYp6C8wzl070+eyOrvIp1MJM2XjZJhkfclWM49HhMT5EXVykrY1C2E+JKgthWnp4XLzsG454eq0H9pi1We8sKxtT48rBjLi0xiwMtiFTTspF+hif9y4pZbV8MJJLmAtnImjEMk5UVND9qaPmVTP4kOvr0rriaM0Eeln0EEAkKd5boi3L8O+tbn6qdtMHni0JRqZ+p+myNYjtNWLhL39Xj7qOUMTgbU5Z81oBAwYHrJAZmfOwhqGid1qLhLaNKL44nP89gmG888n1IAk2yrrigjJAQig5zXps6gFWjp6FzDe59PCak7NF/pppKg/Kny21GsyiNKq6wn+k=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b77941b-9d87-4411-9ce4-08d6fe90d12e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2019 01:58:45.6001
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8200b376-6afb-4413-8f18-08d6fe93a479
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2019 02:18:59.1392
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: thinhn@synopsys.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB2535
-X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-userprincipalname: peter.chen@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5519
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,=0A=
-=0A=
-Alan Stern wrote:=0A=
-> On Fri, 10 May 2019, EJ Hsu wrote:=0A=
->=0A=
->> This change is to fix below warning message in following scenario:=0A=
->> usb_composite_setup_continue: Unexpected call=0A=
->>=0A=
->> When system tried to enter suspend, the fsg_disable() will be called to=
-=0A=
->> disable fsg driver and send a signal to fsg_main_thread. However, at=0A=
->> this point, the fsg_main_thread has already been frozen and can not=0A=
->> respond to this signal. So, this signal will be pended until=0A=
->> fsg_main_thread wakes up.=0A=
->>=0A=
->> Once system resumes from suspend, fsg_main_thread will detect a signal=
-=0A=
->> pended and do some corresponding action (in handle_exception()). Then,=
-=0A=
->> host will send some setup requests (get descriptor, set configuration...=
-)=0A=
->> to UDC driver trying to enumerate this device. During the handling of "s=
-et=0A=
->> configuration" request, it will try to sync up with fsg_main_thread by=
-=0A=
->> sending a signal (which is the same as the signal sent by fsg_disable)=
-=0A=
->> to it. In a similar manner, once the fsg_main_thread receives this=0A=
->> signal, it will call handle_exception() to handle the request.=0A=
->>=0A=
->> However, if the fsg_main_thread wakes up from suspend a little late and=
-=0A=
->> "set configuration" request from Host arrives a little earlier,=0A=
->> fsg_main_thread might come across the request from "set configuration"=
-=0A=
->> when it handles the signal from fsg_disable(). In this case, it will=0A=
->> handle this request as well. So, when fsg_main_thread tries to handle=0A=
->> the signal sent from "set configuration" later, there will nothing left=
-=0A=
->> to do and warning message "Unexpected call" is printed.=0A=
->>=0A=
->> Signed-off-by: EJ Hsu <ejh@nvidia.com>=0A=
->> ---=0A=
->> v2: remove the copyright info=0A=
->> v3: change fsg_unbind() to use FSG_STATE_DISCONNECT=0A=
->> ---=0A=
->>  drivers/usb/gadget/function/f_mass_storage.c | 21 +++++++++++++++------=
-=0A=
->>  drivers/usb/gadget/function/storage_common.h |  1 +=0A=
->>  2 files changed, 16 insertions(+), 6 deletions(-)=0A=
->>=0A=
->> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/=
-gadget/function/f_mass_storage.c=0A=
->> index 043f97a..982c3e8 100644=0A=
->> --- a/drivers/usb/gadget/function/f_mass_storage.c=0A=
->> +++ b/drivers/usb/gadget/function/f_mass_storage.c=0A=
->> @@ -2293,8 +2293,7 @@ static int fsg_set_alt(struct usb_function *f, uns=
-igned intf, unsigned alt)=0A=
->>  static void fsg_disable(struct usb_function *f)=0A=
->>  {=0A=
->>  	struct fsg_dev *fsg =3D fsg_from_func(f);=0A=
->> -	fsg->common->new_fsg =3D NULL;=0A=
->> -	raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);=0A=
->> +	raise_exception(fsg->common, FSG_STATE_DISCONNECT);=0A=
->>  }=0A=
->>  =0A=
->>  =0A=
->> @@ -2307,6 +2306,7 @@ static void handle_exception(struct fsg_common *co=
-mmon)=0A=
->>  	enum fsg_state		old_state;=0A=
->>  	struct fsg_lun		*curlun;=0A=
->>  	unsigned int		exception_req_tag;=0A=
->> +	struct fsg_dev		*fsg;=0A=
->>  =0A=
->>  	/*=0A=
->>  	 * Clear the existing signals.  Anything but SIGUSR1 is converted=0A=
->> @@ -2413,9 +2413,19 @@ static void handle_exception(struct fsg_common *c=
-ommon)=0A=
->>  		break;=0A=
->>  =0A=
->>  	case FSG_STATE_CONFIG_CHANGE:=0A=
->> -		do_set_interface(common, common->new_fsg);=0A=
->> -		if (common->new_fsg)=0A=
->> +		fsg =3D common->new_fsg;=0A=
->> +		/*=0A=
->> +		 * Add a check here to double confirm if a disconnect event=0A=
->> +		 * occurs and common->new_fsg has been cleared.=0A=
->> +		 */=0A=
->> +		if (fsg) {=0A=
->> +			do_set_interface(common, fsg);=0A=
->>  			usb_composite_setup_continue(common->cdev);=0A=
->> +		}=0A=
->> +		break;=0A=
->> +=0A=
->> +	case FSG_STATE_DISCONNECT:=0A=
->> +		do_set_interface(common, NULL);=0A=
->>  		break;=0A=
->>  =0A=
->>  	case FSG_STATE_EXIT:=0A=
->> @@ -2989,8 +2999,7 @@ static void fsg_unbind(struct usb_configuration *c=
-, struct usb_function *f)=0A=
->>  =0A=
->>  	DBG(fsg, "unbind\n");=0A=
->>  	if (fsg->common->fsg =3D=3D fsg) {=0A=
->> -		fsg->common->new_fsg =3D NULL;=0A=
->> -		raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);=0A=
->> +		raise_exception(fsg->common, FSG_STATE_DISCONNECT);=0A=
->>  		/* FIXME: make interruptible or killable somehow? */=0A=
->>  		wait_event(common->fsg_wait, common->fsg !=3D fsg);=0A=
->>  	}=0A=
->> diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/=
-gadget/function/storage_common.h=0A=
->> index e5e3a25..12687f7 100644=0A=
->> --- a/drivers/usb/gadget/function/storage_common.h=0A=
->> +++ b/drivers/usb/gadget/function/storage_common.h=0A=
->> @@ -161,6 +161,7 @@ enum fsg_state {=0A=
->>  	FSG_STATE_ABORT_BULK_OUT,=0A=
->>  	FSG_STATE_PROTOCOL_RESET,=0A=
->>  	FSG_STATE_CONFIG_CHANGE,=0A=
->> +	FSG_STATE_DISCONNECT,=0A=
->>  	FSG_STATE_EXIT,=0A=
->>  	FSG_STATE_TERMINATED=0A=
->>  };=0A=
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>=0A=
->=0A=
-> Although at this point the comment you have added to the CONFIG_CHANGE=0A=
-> case and the following test are useless.  Since common->new_fsg doesn't=
-=0A=
-> get cleared any more, it will never be NULL at this point.=0A=
->=0A=
-> What really matters is that the FSG_STATE_DISCONNECT case doesn't call=0A=
-> usb_composite_setup_continue().=0A=
->=0A=
-> Alan Stern=0A=
-=0A=
-This patch causes a failure in USB CV TD 9.13 Set Configuration Test.=0A=
-Please review and help resolve it.=0A=
-Apologize for the short report description. I'll try to capture more=0A=
-info if you cannot reproduce it.=0A=
-=0A=
-Thanks,=0A=
-Thinh=0A=
-=0A=
-=0A=
+IA0KPiBQZXRlciBDaGVuIHdyaXRlczoNCj4gPiBUaGF0J3MgdmVyeSBzdHJhbmdlLCB0aGF0IG1l
+YW5zIHRoZSBTb0MgZG9lc24ndCBrbm93IFZCVVMgZmFpbHMgZG93biBhZnRlcg0KPiBkZXRhY2hp
+bmcgZnJvbSB0aGUgaG9zdC4NCj4gPiBZb3UgY291bGQgbWVhc3VyZSB0aGUgVkJVUyB2YWx1ZSBh
+dCB0aGUgYm9hcmQsIHRoZW4gcmVhZCB0aGUgVkJVUyB2YWx1ZSBhdA0KPiByZWdpc3RlciB0byBj
+b25maXJtIGl0Lg0KPiANCj4gSSBoYXZlIHB1dCBhIHNjb3BlIG9uIFZCVVMuIFdpdGgga2VybmVs
+IDQuOSBhZnRlciBkZXRhY2hpbmcsIGl0IGRpc2NoYXJnZXMgYWxsIHRoZQ0KPiB3YXkgZG93biB0
+byBhYm91dCA1MDAgbVYsIHdpdGggNC4xOSB0aGlzIGRpc2NoYXJnaW5nIHN0b3BzIGFmdGVyIGFi
+b3V0IDQgc2Vjb25kcw0KPiBhdCBhYm91dCAyLjRWIGFuZCByZW1haW5zIHRoZXJlLg0KPiANCg0K
+SSBzdXNwZWN0IGl0IGlzIG5vdCByZWxhdGVkIHRvIFVTQiwgd291bGQgeW91IHBsZWFzZSBkaXNh
+YmxlIFVTQiBub2RlIGF0IERUUyB0bw0KbWVhc3VyZSBhZ2Fpbj8NCg0KPiA+IEkganVzdCB0cmll
+ZCBteSBib2FyZCAoaW14NnN4LXNkYiksIGl0IHdvcmtlZCBPSyBhdCBhdCB2NS4yLXJjNS4gSWYN
+Cj4gPiB5b3UgaGF2ZSBtZW10b29sICh0aGUgdG9vbCB0byByZWFkIHBoeXNpY2FsIG1lbW9yeSks
+IHlvdSBjb3VsZCByZWFkDQo+ID4gcmVnaXN0ZXIgT1RHU0MgYXQgdGhhdCB0aW1lIHVzaW5nIGJl
+bG93IGNvbW1hbmQ6DQo+IA0KPiBJdCdzIGFscmVhZHkgcGFydCBvZiAvc3lzL2tlcm5lbC9kZWJ1
+Zy9jaV9oZHJjLjAvcmVnaXN0ZXJzLCBidXQgcmVhZGluZyBmcm9tIGl0cw0KPiBtZW1vcnkgYWRk
+cmVzcyB3b3JrcyBlcXVhbGx5IHdlbGwuDQo+ID4gMHgwMjE4NDFBNDogIDA5MjQyRjIwDQo+IFl1
+cCwgSSBoYXZlIDAyMTg0MWE0OiAwOTI0MGYyMCwgd2hpY2ggb25seSBkaWZmZXJzIGJ5IFRPR18x
+TVMuDQo+IA0KPiA+ICMgY2FibGUgZGV0YWNoDQo+ID4gMHgwMjE4NDFBNDogIDA5MzQxMTIwDQo+
+IDAyMTg0MWE0OiAwOTM0MGQyMA0KPiBXaXRoIEJTViByZWZsZWN0aW5nIHRoZSBzdG9wcGVkIGRp
+c2NoYXJnZS4NCj4gDQo+ID4gWW91IGNvdWxkIHBvbGwgdGhlIC9zeXMvY2xhc3MvdWRjL2NpX2hk
+cmMuMC9zdGF0ZSB0byBrbm93IHRoZSBjb25uZWN0aW9uLg0KPiA+DQo+ID4gcm9vdEBpbXg2cXBk
+bHNvbG94On4jIFsgIDIzMC4wNzQ4NTBdIGNvbmZpZ2ZzLWdhZGdldCBnYWRnZXQ6DQo+ID4gaGln
+aC1zcGVlZCBjb25maWcgIzE6IGMNCj4gPg0KPiA+IHJvb3RAaW14NnFwZGxzb2xveDp+IyBjYXQg
+L3N5cy9jbGFzcy91ZGMvY2lfaGRyYy4wL3N0YXRlICA8PT09IGNhYmxlDQo+ID4gYXR0YWNoZWQg
+Y29uZmlndXJlZCByb290QGlteDZxcGRsc29sb3g6fiMgY2F0DQo+ID4gL3N5cy9jbGFzcy91ZGMv
+Y2lfaGRyYy4wL3N0YXRlICA8PT09IGNhYmxlIGRldGFjaGVkIG5vdCBhdHRhY2hlZA0KPiANCj4g
+R29vZCB0byBrbm93LiBUaGUgbGF0dGVyIHR1cm5zIG91dCBhcyAic3VzcGVuZGVkIiwgdGhvdWdo
+Lg0KPiANCg0KWWVzLCB0aGUgYnVzIGlzICJzdXNwZW5kZWQiIGR1ZSB0byB0aGVyZSBpcyBubyBT
+b0Ygd2l0aGluIDNtcywgYnV0IHRoZSBkaXNjb25uZWN0aW9uIGlzDQpub3QgZGV0ZWN0ZWQgZHVl
+IHRvIFZCVVMgaXMgc3RpbGwgaGlnaGVyIHRoYW4gQlNWLg0KDQpQZXRlcg0K
