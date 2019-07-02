@@ -2,70 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E53D5D1BF
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 16:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973DF5D210
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jul 2019 16:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfGBO3p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 10:29:45 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:48442 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726341AbfGBO3p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 10:29:45 -0400
-Received: (qmail 2917 invoked by uid 2102); 2 Jul 2019 10:29:44 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Jul 2019 10:29:44 -0400
-Date:   Tue, 2 Jul 2019 10:29:44 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Oliver Neukum <oneukum@suse.com>
-cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>,
-        <patches@opensource.cirrus.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: core: devio: add ioctls for suspend and resume
-In-Reply-To: <1562059312.5819.11.camel@suse.com>
-Message-ID: <Pine.LNX.4.44L0.1907021028200.1647-100000@iolanthe.rowland.org>
+        id S1727078AbfGBOsq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 10:48:46 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:46256 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726434AbfGBOsq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 10:48:46 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x62Emhbk034509;
+        Tue, 2 Jul 2019 09:48:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1562078923;
+        bh=St5rNKb54j8OHwpnqLfi1htLncawFXF5WhUSpKmLjwg=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=k8J4WM8K1n4qKGpe3f7giqnWYShVAHejL3b10bUzhmsOYQICxOAJQ/G2KdSzkANFd
+         nhaiHv2XVezRKrwBKajf1OahL8WZoi1qYCLoi7Yo8YN22fZn/Fro1OG/uRMQ8okAhW
+         MDIobHhTnVkq6Dyp76gAJkl36PSjIFs7X5uiYciY=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x62EmhDW005029
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 2 Jul 2019 09:48:43 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 2 Jul
+ 2019 09:48:42 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 2 Jul 2019 09:48:42 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x62EmgK3084215;
+        Tue, 2 Jul 2019 09:48:42 -0500
+Date:   Tue, 2 Jul 2019 09:48:42 -0500
+From:   Bin Liu <b-liu@ti.com>
+To:     Jack Pham <jackp@codeaurora.org>
+CC:     <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>
+Subject: Re: configfs on dwc3: msc enum failed if three functions defined
+Message-ID: <20190702144842.GA20724@uda0271908>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>, Jack Pham <jackp@codeaurora.org>,
+        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
+References: <20190422134357.GA2071@uda0271908>
+ <20190425224456.GA27553@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190425224456.GA27553@jackp-linux.qualcomm.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2 Jul 2019, Oliver Neukum wrote:
+Hi,
 
-> Am Montag, den 01.07.2019, 10:17 -0400 schrieb Alan Stern:
-> > On Mon, 1 Jul 2019, Oliver Neukum wrote:
-> > 
-> > > Am Donnerstag, den 27.06.2019, 09:52 -0400 schrieb Alan Stern:
-> > > 
-> > > > 
-> > > > Or maybe the WAIT_FOR_RESUME ioctl returns because there was a remote 
-> > > > wakeup.  In this case also you would call FORBID_SUSPEND.
-> > > > 
-> > > > In fact, you should call FORBID_SUSPEND _whenever_ WAIT_FOR_RESUME
-> > > 
-> > > Well, this kind of indicates that the original syscall should bump
-> > > the counter.
-> > 
-> > Perhaps it does, but...
-> > 
-> > > > returns, unless your program has decided not to use the device any more
-> > > > (in which case you don't care whether the device is suspended or
-> > > > resumed).
-> > > 
-> > > Then you should close the device.
-> > 
-> > Exactly.  Suppose WAIT_FOR_RESUME is interrupted and then the program
-> > closes the device.  There's no need to force the device back to full 
-> > power in this situation.
+Sorry for the delay getting back on this. I was offline for quite some
+time.
+
+On Thu, Apr 25, 2019 at 03:44:57PM -0700, Jack Pham wrote:
+> Hi Bin,
 > 
-> But that is the error case. You return an error code. The point of that
-> is to report that a syscall did not have all requested effects.
+> On Mon, Apr 22, 2019 at 08:43:57AM -0500, Bin Liu wrote:
+> > Hi Felipe,
+> > 
+> > I am having an issue with dwc3 on TI AM57x device, and would like to ask
+> > for your comments.
+> > 
+> > I use configfs to create a multi-function gadget on dwc3, mass_storage
+> > is the last function, it seems if I create 3 functions, the mass_storage
+> > enumeration will fail on the host. It works fine if only create 2
+> > functions.
+> > 
+> > The dwc3 tracepoints log shows after all the ep0 transfers for
+> > mass_storage, the very first epXin transfer is not complete - dwc3
+> > programmed the urb, but never generates RX completion event. This also
+> > matches the bus analyzer trace - dwc3 NAKs the very first IN token for
+> > ever.
+> > 
+> > I use the attached script to create the gadget, The macro FUNCS in the
+> > beginning of the script defines the functions to be created.
+> > 
+> > Any comments are appreciated.
+> 
+> A stab in the dark here but what is the value of GTXFIFOSIZ(X)[15:0]
+> for epXin on your device? Is it at least wMaxPacketSize? Depending on
+> the default hardware values it might be deficient as compared to the
+> working endpoint that gets assigned in your 2-function config.
 
-Okay, I can change the patch to work as you suggest.  The 
-WAIT_FOR_RESUME ioctl will do the equivalent of FORBID_SUSPEND whenever 
-it returns with no error.
+Jack,
 
-Alan Stern
+thanks for the pointer, it is indeed the issue on AM57x device.  The
+reset value of GTXFIFOSIZ for ep1~4 have size of 0x184, but ep5~15 have
+only size of 0x13 (which is 120 bytes), which is not enough for
+high-speed bulk xfers. I manually adjusted the fifo memory allocation,
+now my test case works.
 
+Felipe,
+
+Is there anything the dwc3 gadget driver can do to better handle this
+kind of devices, which don't have enough fifo buffers for all TX eps?
+
+-Bin.
