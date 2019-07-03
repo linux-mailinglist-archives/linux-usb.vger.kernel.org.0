@@ -2,79 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CF05EA37
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 19:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D805EA6E
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 19:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727029AbfGCRQ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 13:16:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37410 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726550AbfGCRQ0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jul 2019 13:16:26 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BA2A721881;
-        Wed,  3 Jul 2019 17:16:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562174185;
-        bh=wAY71ePpwrDaNFkq0PM1Dpq4LuZP2NtIHZTtqRudRyA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aXCzjGovYsJE9GxJZUFPNADxn+l7zIN2HKBArp3F1hPAV1IK7L1Ern/YQCbbMW7mH
-         li5SzyGQ3VrRvnV0s/pRv+iwUEYWuuJb6KbZ6lAhZc2mdfHSVQKi5Sz9AAoqhd4ZbB
-         4GBlGioG7fpE8qE7mMpzcsyL+8lfUf4ATvsaDI0g=
-Date:   Wed, 3 Jul 2019 19:16:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     viro@zeniv.linux.org.uk, Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>, nicolas.dichtel@6wind.com,
-        raven@themaw.net, Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] Add a general, global device notification watch list
- [ver #5]
-Message-ID: <20190703171623.GD24672@kroah.com>
-References: <156173690158.15137.3985163001079120218.stgit@warthog.procyon.org.uk>
- <156173697086.15137.9549379251509621554.stgit@warthog.procyon.org.uk>
+        id S1726762AbfGCRZ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 13:25:56 -0400
+Received: from mail.steuer-voss.de ([85.183.69.95]:54796 "EHLO
+        mail.steuer-voss.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726430AbfGCRZ4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 13:25:56 -0400
+X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
+Received: by mail.steuer-voss.de (Postfix, from userid 1000)
+        id 6E4EF4D456; Wed,  3 Jul 2019 19:25:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.steuer-voss.de (Postfix) with ESMTP id 6857B4D455;
+        Wed,  3 Jul 2019 19:25:53 +0200 (CEST)
+Date:   Wed, 3 Jul 2019 19:25:53 +0200 (CEST)
+From:   Nikolaus Voss <nv@vosn.de>
+X-X-Sender: nv@fox.voss.local
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] drivers/usb/typec/tps6598x.c: fix portinfo width
+In-Reply-To: <20190703163908.GB17160@kroah.com>
+Message-ID: <alpine.DEB.2.20.1907031924190.23225@fox.voss.local>
+References: <20190628083417.GA21701@kuha.fi.intel.com> <f8daf204d49fff00db33e2b417a20afcc58ad56e.1561712364.git.nikolaus.voss@loewensteinmedical.de> <20190628095843.GB21701@kuha.fi.intel.com> <alpine.DEB.2.20.1906281208190.21573@fox.voss.local>
+ <20190703163908.GB17160@kroah.com>
+User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <156173697086.15137.9549379251509621554.stgit@warthog.procyon.org.uk>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 28, 2019 at 04:49:30PM +0100, David Howells wrote:
-> Create a general, global watch list that can be used for the posting of
-> device notification events, for such things as device attachment,
-> detachment and errors on sources such as block devices and USB devices.
-> This can be enabled with:
-> 
-> 	CONFIG_DEVICE_NOTIFICATIONS
-> 
-> To add a watch on this list, an event queue must be created and configured:
-> 
->         fd = open("/dev/event_queue", O_RDWR);
->         ioctl(fd, IOC_WATCH_QUEUE_SET_SIZE, page_size << n);
-> 
-> and then a watch can be placed upon it using a system call:
-> 
->         watch_devices(fd, 12, 0);
-> 
-> Unless the application wants to receive all events, it should employ
-> appropriate filters.
+On Wed, 3 Jul 2019, Greg Kroah-Hartman wrote:
+> On Fri, Jun 28, 2019 at 12:10:41PM +0200, Nikolaus Voss wrote:
+>> On Fri, 28 Jun 2019, Heikki Krogerus wrote:
+>>> On Fri, Jun 28, 2019 at 11:01:08AM +0200, Nikolaus Voss wrote:
+>>>> Portinfo bit field is 3 bits wide, not 2 bits. This led to
+>>>> a wrong driver configuration for some tps6598x configurations.
+>>>>
+>>>> Fixes: 0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
+>>>> Signed-off-by: Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>
+>>>
+>>> Shouldn't this be applied to the stable trees as well?
+>>
+>> Oh, yes, forgot that again... Greg, could you...?
+>
+> It's not like I have anything else to do... :)
 
-What "filter"?  Who is going to use this and why a new system call for
-this?  You can do this today with udev/netlink/hotplug/whatever so why
-create yet-another-way?
+I know. Sorry. I'll repost if you want, just say ick or something then...
 
-I don't think this is a good idea unless we really nail down the api and
-who is going to be using it.
-
-thanks,
-
-greg k-h
+Nikolaus
