@@ -2,82 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C02885DB45
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 04:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C83C5DB4C
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 04:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbfGCCBy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 22:01:54 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:50448 "EHLO mx1.redhat.com"
+        id S1727100AbfGCCDO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 22:03:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51734 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726329AbfGCCBy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Jul 2019 22:01:54 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726329AbfGCCDO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jul 2019 22:03:14 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 90F7D368E3;
-        Wed,  3 Jul 2019 02:01:53 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 737371001B01;
-        Wed,  3 Jul 2019 02:01:33 +0000 (UTC)
-Date:   Wed, 3 Jul 2019 10:01:23 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20190703020119.GA23872@ming.t460p>
-References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
- <20190702120112.GA19890@ming.t460p>
- <20190702223931.GB3735@brian.unipv.it>
+        by mail.kernel.org (Postfix) with ESMTPSA id 8974221721;
+        Wed,  3 Jul 2019 02:03:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562119393;
+        bh=uIc8npXlDPzr+S/7B9hYr82BsRCFFHm8wnQz4nRRXLA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eKVNhoH6yiXM4DcZdP9dFYzRSb5LfAM9PGXt0vLsoAJzOZmdzggO/D7Sfz7thPWV6
+         r+uM33/XmK8AX8+eZ1zb2k5x/t6oruxpGWAcpczVahXlnZSfP2pSPmx0Yu6VOzx3MH
+         OJNGZZwQeCAsdos/8f2wGWFed8rhke3HFkSZJgjc=
+Date:   Tue, 2 Jul 2019 22:03:12 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Fei Yang <fei.yang@intel.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        John Stultz <john.stultz@linaro.org>
+Subject: Re: [PATCH 4.19 26/72] usb: dwc3: gadget: use num_trbs when skipping
+ TRBs on ->dequeue()
+Message-ID: <20190703020312.GS11506@sasha-vm>
+References: <20190702080124.564652899@linuxfoundation.org>
+ <20190702080126.031346654@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20190702223931.GB3735@brian.unipv.it>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.30]); Wed, 03 Jul 2019 02:01:54 +0000 (UTC)
+In-Reply-To: <20190702080126.031346654@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 12:39:31AM +0200, Andrea Vai wrote:
-> On 02/07/19 20:01:13, Ming Lei wrote:
-> > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
-> > > Hi,
-> > >   I have a problem writing data to a USB pendrive, and it seems
-> > > kernel-related. With the help of Greg an Alan (thanks) and some
-> > > bisect, I found out the offending commit being
-> > > 
-> > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-> > > 
-> > >  [...]    
-> > >     
-> > 
-> > One possible reason may be related with too small 'nr_requests', could
-> > you apply the following command and see if any difference can be made?
-> > 
-> > echo 32 > /sys/block/sdN/queue/nr_requests
-> 
-> I applied it (echo 32 > /sys/block/sdf/queue/nr_requests), ran the test again, and still failed. I assumed I didn't have to build the kernel again, did I? (sorry but I am not skilled)
-> 
+On Tue, Jul 02, 2019 at 10:01:27AM +0200, Greg Kroah-Hartman wrote:
+>commit c3acd59014148470dc58519870fbc779785b4bf7 upstream
+>
+>Now that we track how many TRBs a request uses, it's easier to skip
+>over them in case of a call to usb_ep_dequeue(). Let's do so and
+>simplify the code a bit.
+>
+>Cc: Fei Yang <fei.yang@intel.com>
+>Cc: Sam Protsenko <semen.protsenko@linaro.org>
+>Cc: Felipe Balbi <balbi@kernel.org>
+>Cc: linux-usb@vger.kernel.org
+>Cc: stable@vger.kernel.org # 4.19.y
+>Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+>(cherry picked from commit c3acd59014148470dc58519870fbc779785b4bf7)
+>Signed-off-by: John Stultz <john.stultz@linaro.org>
+>Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-You don't need to build kernel.
+This one has an upstream fix: c7152763f02e05567da27462b2277a554e507c89
+("usb: dwc3: Reset num_trbs after skipping").
 
-I just run same write test on one slow usb drive in my laptop, which
-runs '5.1.11-200.fc29.x86_64', and can't reproduce your issue, maybe it
-depends on your drive.
-
-Could you collect the queue limits sysfs log via the following command?
-
-	find /sys/block/sdN/queue -type f -exec grep -aH . {} \;
-
+--
 Thanks,
-Ming
+Sasha
