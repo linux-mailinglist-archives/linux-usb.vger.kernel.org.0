@@ -2,66 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5C55E331
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 13:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8325E3E9
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 14:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727130AbfGCLvy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 07:51:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725786AbfGCLvx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jul 2019 07:51:53 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B4C8E218A4;
-        Wed,  3 Jul 2019 11:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562154713;
-        bh=gT1W9FpYgLIZiPMnzHLuDY0pcsCFD31S2SJrvmc+3fg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yUkIOP/fUAgWAYZCeVfyKadic59+wjtxBVN5ZomudJT3b8FaxuAHXwYrb8J794k46
-         76CzH/NYTLE4LHCEk5ibb3UDwyjog4AXfkE9hj9p0dFTBzz/3Fe7FXXAIt8ZPlrLBT
-         xMzgzF3uknJZ4/6SnrSWv4HUlwc/T7Bfwmatk50Y=
-Date:   Wed, 3 Jul 2019 13:51:22 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL part2] USB: changes for v5.3 merge window
-Message-ID: <20190703115122.GA2064@kroah.com>
-References: <87a7dv4a6n.fsf@linux.intel.com>
+        id S1726621AbfGCM3E convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 3 Jul 2019 08:29:04 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:46345 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726473AbfGCM3E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 08:29:04 -0400
+Received: by mail-ot1-f68.google.com with SMTP id z23so2096178ote.13;
+        Wed, 03 Jul 2019 05:29:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pKHVWszZZEtGMfrkxlS6Mr1MOgzz8lcLJEA6ynRIBiw=;
+        b=ISUKMQp/IWzkdqGvB+v0kSGPMc1/abtK+hcQKd4A0LdbMmhJyAih0bqNE/Iucen+/Y
+         9dmisA1rmVtcErXef0GumYywzY/j7aMl02O3bzS7oD+weySnALhfgPwSVT1QgqVRmZAw
+         ERF/YyEmgCpJziXtFd6TrdljKvWeVwN2EilADeXr+SfFLB474mJOJ4LEEUeQ5FTJ3ZUG
+         lnSr0ppqNGyRQHbwyZ3TZ6rF6CogiwPRDWTW4TI9ZNFd4xZyLt2c+Gy/wTSsTNxqUXJ4
+         P2tq9gRAiS/lmc+qZ6JRuYpoAr7nrtrYu6oKr7z5HeYMqMrDgecxsOcIyUes3OGKMb73
+         4IJQ==
+X-Gm-Message-State: APjAAAX+U38DFu/hX4YuLTC7GH/MjF6kvdZMVgMepNCzKuOMShQz2h2k
+        47vQUxLtUycSMkWXdyensbnhB8vKWBGQVttA1p7BtSd7
+X-Google-Smtp-Source: APXvYqxfyGKRIQlSeSi4rdMAJk89SgbdTTUtOXFiMGg+V5s+74l/jRcvT8vNlzEoWGFUeChWyQOfxr8pJhQnQZp1WEY=
+X-Received: by 2002:a9d:704f:: with SMTP id x15mr8468680otj.297.1562156943524;
+ Wed, 03 Jul 2019 05:29:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a7dv4a6n.fsf@linux.intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20190703083514.32385-1-horms+renesas@verge.net.au> <20190703083514.32385-3-horms+renesas@verge.net.au>
+In-Reply-To: <20190703083514.32385-3-horms+renesas@verge.net.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 3 Jul 2019 14:28:51 +0200
+Message-ID: <CAMuHMdVgx9N0yeeei5qcg1yz2WEdDf0gQ6GcwUOAz7u09S_D4A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: renesas_gen3: Rename bindings
+ documentation file
+To:     Simon Horman <horms+renesas@verge.net.au>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 02:41:36PM +0300, Felipe Balbi wrote:
-> 
-> Hi Greg,
-> 
-> Hopefully there's still time to merge these other patches.
-> 
-> They came a little late but should be safe to merge. I've tested what I
-> could with platforms I had.
-> 
-> The biggest thing here is the new Cadence USB DRD controller driver and
-> an important fix on dwc2.
-> 
-> cheers
-> 
-> The following changes since commit aa23ce847ddac1fd5ffe987ff12e12ff48318e45:
-> 
->   usb: dwc3: remove unused @lock member of dwc3_ep struct (2019-06-20 11:50:19 +0300)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/usb-for-v5.3-part2
+Hi Simon,
 
-Pulled and pushed out, thanks.
+On Wed, Jul 3, 2019 at 10:35 AM Simon Horman <horms+renesas@verge.net.au> wrote:
+> For consistency with the naming of (most) other documentation files for DT
+> bindings for Renesas IP blocks rename the Renesas USB3.0 peripheral
+> documentation file from renesas-gen3.txt to renesas,usb3-peri.txt
+>
+> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+>
+> ---
+> v2
+> * Accumulate review tags
+> * Use renesas,usb3-peri.txt as new filename as suggested by Shimoda-san
 
-greg k-h
+Unfortunately the previous version has already made it into usb-next
+23c46801d14cb647 dt-bindings: usb: renesas_gen3: Rename bindings
+documentation file
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
