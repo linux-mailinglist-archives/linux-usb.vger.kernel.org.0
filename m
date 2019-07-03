@@ -2,83 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF6B5EA22
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 19:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3405EA2B
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 19:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbfGCRKM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 13:10:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34404 "EHLO mail.kernel.org"
+        id S1727011AbfGCRL7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 13:11:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726430AbfGCRKM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jul 2019 13:10:12 -0400
-Received: from gmail.com (unknown [104.132.1.77])
+        id S1726430AbfGCRL7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Jul 2019 13:11:59 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F16D62187F;
-        Wed,  3 Jul 2019 17:10:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5575A2187F;
+        Wed,  3 Jul 2019 17:11:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562173811;
-        bh=hNvlqa9Fb/vTevUDg9J9JPrZV+5aYMRCnTxukE4NKzw=;
+        s=default; t=1562173917;
+        bh=436WDhYAGRaHC7DhWZalpPfSr0ODNk1419c0VWx8viE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qh+S3jsa9i3jCqMHbgkplmRLB+c/yfi0XwOn9QqX+JgIIeMTyYtCYuF7A3XPBoiW7
-         XYsjRECGVVe5LkwQCWEnWTLsC8CgInDgkI4YJc9ewrhvD2xa+dLiPOfF8GUMAGbM7j
-         beFJxHYk/5JPzw8cELeKcdQTO4HAXMWYPcwbzjAA=
-Date:   Wed, 3 Jul 2019 10:10:09 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+0c90fc937c84f97d0aa6@syzkaller.appspotmail.com>,
-        keescook@chromium.org, andreyknvl@google.com,
-        syzkaller-bugs@googlegroups.com, mchehab@kernel.org,
-        tglx@linutronix.de, sakari.ailus@linux.intel.com,
-        kstewart@linuxfoundation.org, allison@lohutok.net,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, hverkuil-cisco@xs4all.nl
-Subject: Re: KASAN: use-after-free Read in cpia2_usb_disconnect
-Message-ID: <20190703171008.GA10080@gmail.com>
-References: <0000000000006d7e14058cbc6545@google.com>
- <1562139729.5819.28.camel@suse.com>
+        b=LW8bdLtCYoDfg6i3v8/Zb0LcmNqE8rpNUBgIps/4onsP5WYZ8jFkGmxdI9HoGhFV/
+         0d/AgJ6q/XRAimimUZT/3XK7cS2LB9i7IFiLCpLtrxyTMU6j5c6r0990l9bYQUWtk5
+         gCSth1cwabsT5F31+PUYCFKvhk3LouU7MR1EZeZw=
+Date:   Wed, 3 Jul 2019 19:11:55 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     viro@zeniv.linux.org.uk, Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>, nicolas.dichtel@6wind.com,
+        raven@themaw.net, Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/9] General notification queue with user mmap()'able
+ ring buffer [ver #5]
+Message-ID: <20190703171155.GC24672@kroah.com>
+References: <156173690158.15137.3985163001079120218.stgit@warthog.procyon.org.uk>
+ <156173695061.15137.17196611619288074120.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1562139729.5819.28.camel@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <156173695061.15137.17196611619288074120.stgit@warthog.procyon.org.uk>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 09:42:09AM +0200, Oliver Neukum wrote:
-> Am Dienstag, den 02.07.2019, 18:01 -0700 schrieb syzbot:
-> > syzbot has found a reproducer for the following crash on:
-> > 
-> > HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=11e19043a00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=0c90fc937c84f97d0aa6
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147d42eda00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=104c268ba00000
-> > 
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+0c90fc937c84f97d0aa6@syzkaller.appspotmail.com
-> > 
-> > cpia2: Message: count = 1, register[0] = 0x0
-> > cpia2: Unexpected error: -19
-> > ==================================================================
-> > BUG: KASAN: use-after-free in cpia2_usb_disconnect+0x1a4/0x1c0  
-> > drivers/media/usb/cpia2/cpia2_usb.c:898
-> > Read of size 8 at addr ffff8881cf6c4e50 by task kworker/1:1/22
+On Fri, Jun 28, 2019 at 04:49:10PM +0100, David Howells wrote:
+> Implement a misc device that implements a general notification queue as a
+> ring buffer that can be mmap()'d from userspace.
 > 
-> Please try this:
+> The way this is done is:
 > 
-> From a0a73298fc23acb95e7b6487e960be707563eb34 Mon Sep 17 00:00:00 2001
-> From: Oliver Neukum <oneukum@suse.com>
-> Date: Wed, 8 May 2019 12:36:40 +0200
-> Subject: [PATCH] cpia2_usb: first wake up, then free in disconnect
+>  (1) An application opens the device and indicates the size of the ring
+>      buffer that it wants to reserve in pages (this can only be set once):
 > 
+> 	fd = open("/dev/watch_queue", O_RDWR);
+> 	ioctl(fd, IOC_WATCH_QUEUE_NR_PAGES, nr_of_pages);
+> 
+>  (2) The application should then map the pages that the device has
+>      reserved.  Each instance of the device created by open() allocates
+>      separate pages so that maps of different fds don't interfere with one
+>      another.  Multiple mmap() calls on the same fd, however, will all work
+>      together.
+> 
+> 	page_size = sysconf(_SC_PAGESIZE);
+> 	mapping_size = nr_of_pages * page_size;
+> 	char *buf = mmap(NULL, mapping_size, PROT_READ|PROT_WRITE,
+> 			 MAP_SHARED, fd, 0);
+> 
+> The ring is divided into 8-byte slots.  Entries written into the ring are
+> variable size and can use between 1 and 63 slots.  A special entry is
+> maintained in the first two slots of the ring that contains the head and
+> tail pointers.  This is skipped when the ring wraps round.  Note that
+> multislot entries, therefore, aren't allowed to be broken over the end of
+> the ring, but instead "skip" entries are inserted to pad out the buffer.
+> 
+> Each entry has a 1-slot header that describes it:
+> 
+> 	struct watch_notification {
+> 		__u32	type:24;
+> 		__u32	subtype:8;
+> 		__u32	info;
+> 	};
+> 
+> The type indicates the source (eg. mount tree changes, superblock events,
+> keyring changes, block layer events) and the subtype indicates the event
+> type (eg. mount, unmount; EIO, EDQUOT; link, unlink).  The info field
+> indicates a number of things, including the entry length, an ID assigned to
+> a watchpoint contributing to this buffer, type-specific flags and meta
+> flags, such as an overrun indicator.
+> 
+> Supplementary data, such as the key ID that generated an event, are
+> attached in additional slots.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
 
-Who are you talking to?  If you want syzbot to test your patch, follow the
-directions at https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
+I don't know if I mentioned this before, but your naming seems a bit
+"backwards" from other subsystems. Should "watch_queue" always be the
+prefix, instead of a mix of prefix/suffix usage?
 
-- Eric
+Anyway, your call, it's your code :)
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
