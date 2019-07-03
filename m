@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E03D5E666
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 16:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5025E679
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 16:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbfGCOT5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 10:19:57 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:48362 "HELO
+        id S1726966AbfGCOXO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 10:23:14 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:48386 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726255AbfGCOT5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 10:19:57 -0400
-Received: (qmail 2823 invoked by uid 2102); 3 Jul 2019 10:19:56 -0400
+        with SMTP id S1725944AbfGCOXO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 10:23:14 -0400
+Received: (qmail 2846 invoked by uid 2102); 3 Jul 2019 10:23:13 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 3 Jul 2019 10:19:56 -0400
-Date:   Wed, 3 Jul 2019 10:19:56 -0400 (EDT)
+  by localhost with SMTP; 3 Jul 2019 10:23:13 -0400
+Date:   Wed, 3 Jul 2019 10:23:13 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-cc:     Greg KH <greg@kroah.com>, shuah <shuah@kernel.org>,
-        Suwan Kim <suwan.kim027@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "usb-storage@lists.one-eyed-alien.net" 
-        <usb-storage@lists.one-eyed-alien.net>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: RE: [PATCH v2] usb-storage: Add a limitation for blk_queue_max_hw_sectors()
-In-Reply-To: <TYAPR01MB454441748DB5CBCDFCF207D3D8FB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-Message-ID: <Pine.LNX.4.44L0.1907031015140.1547-100000@iolanthe.rowland.org>
+To:     Johannes Thumshirn <jthumshirn@suse.de>
+cc:     Andrea Vai <andrea.vai@unipv.it>, Jens Axboe <axboe@kernel.dk>,
+        <linux-usb@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+In-Reply-To: <20190703072934.GA4026@x250.microfocus.com>
+Message-ID: <Pine.LNX.4.44L0.1907031020220.1547-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -35,60 +35,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 3 Jul 2019, Yoshihiro Shimoda wrote:
+On Wed, 3 Jul 2019, Johannes Thumshirn wrote:
 
-> > I would really prefer to see a different solution.
+> On Wed, Jul 03, 2019 at 12:36:30AM +0200, Andrea Vai wrote:
+> > On 02/07/19 13:51:17, Johannes Thumshirn wrote:
+> > > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
+> > > > Hi,
+> > > >   I have a problem writing data to a USB pendrive, and it seems
+> > > > kernel-related. With the help of Greg an Alan (thanks) and some
+> > > > bisect, I found out the offending commit being
+> > > > 
+> > > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+> > > >
+> > > > [...]
+> > > 
+> > > Hi,
+> > > 
+> > > Can you please check what IO scheduler you have set for your USB pendrive?
+> > > 
+> > > i.e. with:
+> > > cat /sys/block/$DISK/queue/scheduler
+> > >
 > > 
-> > The actual problem is that the usb_device and usb_interface structures
-> > are supposed to inherit all of their DMA properties from the bus's host
-> > controller.  But the existing code copies only the dma_mask and
-> > dma_pfn_offset fields in the embedded device structures.  If we copied
-> > all of the important DMA fields then this patch wouldn't be needed; the
-> > max_sectors value for the request queue would be set up correctly to
-> > begin with.
+> > # cat /sys/block/sdf/queue/scheduler
+> > [mq-deadline] none
 > 
-> I'm sorry, but I cannot understand what are important DMA fields.
+> One thing you can try as well is building a kernel with CONFIG_IOSCHED_BFQ and
+> use it. Deadline is probably not the best choice for a slow drive.
 
-Probably all of them are important; I don't know.
+Andrea, another thing you could try is to collect a usbmon trace under 
+one of the "slow" kernels.  Follow the instructions in 
+Documentation/usb/usbmon.txt.  I think you could kill the file-copy 
+operation after just a couple of seconds; that should provide enough 
+trace information to help see what causes the slowdown.
 
-> IIUC, usb-storage driver should take care of calling blk_queue_ APIs anyway because:
-> 
->  - As Christoph mentioned before on the email [1], usb-storage has a special
->    max_sectors quirk for tape and SuperSpeed devices.
->  - Since blk_queue_* APIs don't take device structure pointer, the block layer
->    cannot call any DMA mapping APIs. So, even if any other DMA fields are copied,
->    the behavior is not changed.
-
-Although the blk_queue_* APIs don't take device structure pointers, the
-SCSI layer does know about devices.  And since it is the SCSI layer
-which creates the request queue, changing the DMA fields should change
-the behavior.
-
-However, you are correct that usb-storage has to call the blk_queue_* 
-APIs anyway.  So I guess your patch is the right thing to do after all.
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-I still think that copying the DMA fields would be a good idea, though.
+(If you want, do the same test with a "fast" kernel and then we'll 
+compare the results.)
 
 Alan Stern
-
-> [1]
-> https://www.spinics.net/lists/linux-usb/msg181527.html
-> 
-> What do you think?
-> 
-> Best regards,
-> Yoshihiro Shimoda
-> 
-> > So what I would like to see is a new subroutine -- perhaps in the
-> > driver core -- that copies the DMA fields from one struct device to
-> > another.  Then we could call this subroutine in usb_alloc_dev() and
-> > usb_set_configuration() instead of copying the information manually.
-> > 
-> > Greg and Christoph, does that make sense?
-> > 
-> > Yoshihiro, would you like to write a patch that does this?
-> > 
-> > Alan Stern
 
