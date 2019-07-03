@@ -2,94 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5D75E903
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 18:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E3B5E930
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 18:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbfGCQau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 12:30:50 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:38986 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727172AbfGCQau (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 12:30:50 -0400
-Received: by mail-pf1-f193.google.com with SMTP id j2so1535129pfe.6;
-        Wed, 03 Jul 2019 09:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=TrUa09acIW6HvvTGIpKx9PQFnQ16L2qeMF4zqtIgcwg=;
-        b=StUzsoCdTyphOOOBhHCvimsHOl/lw6873T7vbUGAhmcpeJckEl2APf6QxyfvODfDIx
-         6sv+a39EElywHWTMqTyLFrLV0YQedXL2l1LNtjU/b13C/pXw15WkDbAg2FPIuLC4gimN
-         0auJd7+Z7/WvneBw6+x2kNagrFfkxpL6rvIHgXU+nV8xFZf3EsEZwf7wv6Y6SYY2zGSq
-         9Lw8CMkOLH6e9MkO+4Sa7hWcfrWMxV1YQoFN4kpk4jOpLN8LNE1SUjmXxf6jNgfTbV47
-         /mIcNT3WshuviL+x5ENk2SgPUA8mV8XGgfPOnywr/LF4HBCswaXpLNYbDMyh0JA8a/3M
-         GM1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=TrUa09acIW6HvvTGIpKx9PQFnQ16L2qeMF4zqtIgcwg=;
-        b=iNQPhyIe9Fg4nRequEbF+YOVvJS18rnXZsYneaSeUpWwXZ31Sto+/gy4mH4Incb7H4
-         NUc0B3M2yXuz6S/U0MDAaizqaq7TzHFLl2XL0oZwVWS0DS12+Csp8nLeD9A6PsbE4b4F
-         CPCTkxu8dtgjejkiYWwP2xdf1I+2qeoyDf/BQArIODWPUTOyFRWSU3bC1UlrMERsI1f8
-         bYzhEt4rje24jGfcmpV5fcrvgUPAbUuwVIImAXyr6TrJZTFQPy2qA4mVr2bF2ACtUAW/
-         8uXVA74NRopD/u3hPdpRgDNbL2A8O1PnhHbx76gvHhx0h7rO4Xor9K41+SlSwcYiF+gd
-         tAZA==
-X-Gm-Message-State: APjAAAX0Wr7jr4UmOGZjthAEY+6nIutTaTz8XvPYU7h8ndB2c8ZqMXPD
-        bXirx9cczhgCfSVbyxYeNPYL1ZN0KZ8=
-X-Google-Smtp-Source: APXvYqzrAQZn0dTjmrb2UFa9XjdmKRW+czq3frTlrHV+50QMJKlhEapEIE3unKDC385LasKzv1BhLw==
-X-Received: by 2002:a63:d84e:: with SMTP id k14mr38156512pgj.234.1562171449109;
-        Wed, 03 Jul 2019 09:30:49 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id v4sm2915326pff.45.2019.07.03.09.30.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Jul 2019 09:30:48 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH v2 25/35] usb: Use kmemdup rather than duplicating its implementation
-Date:   Thu,  4 Jul 2019 00:30:43 +0800
-Message-Id: <20190703163043.524-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726928AbfGCQd7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 12:33:59 -0400
+Received: from eddie.linux-mips.org ([148.251.95.138]:50426 "EHLO
+        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726718AbfGCQd7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 12:33:59 -0400
+Received: (from localhost user: 'ladis' uid#1021 fake: STDIN
+        (ladis@eddie.linux-mips.org)) by eddie.linux-mips.org
+        id S23992643AbfGCQd4oOvUC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Jul 2019 18:33:56 +0200
+Date:   Wed, 3 Jul 2019 18:33:55 +0200
+From:   Ladislav Michl <ladis@linux-mips.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 0/3] usb: gadget: u_serial: Fix and cleanup
+Message-ID: <20190703163355.GA28579@lenoch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-kmemdup is introduced to duplicate a region of memory in a neat way.
-Rather than kmalloc/kzalloc + memcpy, which the programmer needs to
-write the size twice (sometimes lead to mistakes), kmemdup improves
-readability, leads to smaller code and also reduce the chances of mistakes.
-Suggestion to use kmemdup rather than using kmalloc/kzalloc + memcpy.
+Following patchset makes console work (patch 1) for at AT91SAM9G20 board
+connected to xhci_hcd and does some cleanup.
+Tested with "console=ttyS0,115200n8 console=ttyGS0,115200n8" on kernel
+command line and following inittab:
+console::respawn:/sbin/getty -L 115200 ttyS0 vt100
+console::respawn:/sbin/getty -L 115200 ttyGS0 vt100
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
-Changes in v2:
-  - Fix a typo in commit message (memset -> memcpy)
+There are issues remaining:
 
- drivers/usb/class/cdc-acm.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+- first usb disconnect works while each next triggers WARN_ON in gs_close:
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 501 at drivers/usb/gadget/function/u_serial.c:706 gs_close+0x3c/0x1e4
+Modules linked in:
+CPU: 0 PID: 501 Comm: getty Not tainted 5.2.0-rc7 #44
+Hardware name: Atmel AT91SAM9
+[<c0107514>] (unwind_backtrace) from [<c01051c0>] (show_stack+0x10/0x18)
+[<c01051c0>] (show_stack) from [<c05465a8>] (dump_stack+0x18/0x24)
+[<c05465a8>] (dump_stack) from [<c010fa80>] (__warn+0xcc/0xe4)
+[<c010fa80>] (__warn) from [<c010fad0>] (warn_slowpath_null+0x38/0x48)
+[<c010fad0>] (warn_slowpath_null) from [<c03b6648>] (gs_close+0x3c/0x1e4)
+[<c03b6648>] (gs_close) from [<c03036b0>] (tty_release+0x1d4/0x460)
+[<c03036b0>] (tty_release) from [<c01ce464>] (__fput+0xe4/0x1b0)
+[<c01ce464>] (__fput) from [<c0124e1c>] (task_work_run+0x8c/0xa8)
+[<c0124e1c>] (task_work_run) from [<c011155c>] (do_exit+0x354/0x814)
+[<c011155c>] (do_exit) from [<c0111a9c>] (do_group_exit+0x54/0xb8)
+[<c0111a9c>] (do_group_exit) from [<c011a190>] (get_signal+0x18c/0x658)
+[<c011a190>] (get_signal) from [<c0104bbc>] (do_work_pending+0xe0/0x44c)
+[<c0104bbc>] (do_work_pending) from [<c0101068>] (slow_work_pending+0xc/0x20)
+Exception stack(0xc3797fb0 to 0xc3797ff8)
+7fa0:                                     00000000 beb87d0c 00000001 00000000
+7fc0: 0009a150 00000000 00099c04 00000003 0009a198 0007e049 00099bd4 0009a1e4
+7fe0: b6e3f000 beb87cd8 00018210 b6dbcc40 60000010 00000000
+---[ end trace 70af570fde0de49b ]---
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 183b41753c98..cc4a96d59ffc 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1410,12 +1410,11 @@ static int acm_probe(struct usb_interface *intf,
- 		struct usb_cdc_country_functional_desc * cfd =
- 					h.usb_cdc_country_functional_desc;
- 
--		acm->country_codes = kmalloc(cfd->bLength - 4, GFP_KERNEL);
-+		acm->country_codes = kmemdup((u8 *)&cfd->wCountyCode0,
-+					cfd->bLength - 4, GFP_KERNEL);
- 		if (!acm->country_codes)
- 			goto skip_countries;
- 		acm->country_code_size = cfd->bLength - 4;
--		memcpy(acm->country_codes, (u8 *)&cfd->wCountyCode0,
--							cfd->bLength - 4);
- 		acm->country_rel_date = cfd->iCountryCodeRelDate;
- 
- 		i = device_create_file(&intf->dev, &dev_attr_wCountryCodes);
+- init (both busybox' and systemd) waits for usb host to be plugged in,
+otherwise boot is stuck and continues after host is connected.
+
+Will investigate those two later, however comments and suggestions
+to the following patches are appreciated.
+
+Ladislav Michl (3):
+  usb: gadget: u_serial: Fix console_req complete event race
+  usb: gadget: u_serial: Remove console specific alloc/free req
+    functions
+  usb: gadget: u_serial: Use bool for req_busy
+
+ drivers/usb/gadget/function/u_serial.c | 88 +++++++++-----------------
+ 1 file changed, 30 insertions(+), 58 deletions(-)
+
 -- 
-2.11.0
+2.20.1
 
