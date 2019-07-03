@@ -2,53 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF075DEC4
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 09:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40E55DEE8
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 09:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727172AbfGCHVH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 03:21:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41490 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726327AbfGCHVH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jul 2019 03:21:07 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D860A2187F;
-        Wed,  3 Jul 2019 07:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562138466;
-        bh=YMIYC73Qup6/WDnppW7wMr3kVnkBDJkkJszs7AyzT9A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=epNJ0TUkVfbRJK2HeG6CP8sEqJTROC3vp4SvtNFGTf84jG+OsTHSpJiAzVWERlmdY
-         gLhynW1N9YnmnH+badt+CYIY3QSpXtgP+Gg1KgbwypcuUl/gwNtmW1nz6Z7dmUDv6W
-         RlXBdfQ+1NJT5yUEW7CC29ExDAj/zJUiNjKRpMHA=
-Date:   Wed, 3 Jul 2019 09:20:56 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial updates for 5.3-rc1
-Message-ID: <20190703072056.GB3033@kroah.com>
-References: <20190703063451.GA1508@localhost>
+        id S1727116AbfGCH3j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 03:29:39 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54346 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726670AbfGCH3j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Jul 2019 03:29:39 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id B9713AFB0;
+        Wed,  3 Jul 2019 07:29:35 +0000 (UTC)
+Date:   Wed, 3 Jul 2019 09:29:34 +0200
+From:   Johannes Thumshirn <jthumshirn@suse.de>
+To:     Andrea Vai <andrea.vai@unipv.it>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20190703072934.GA4026@x250.microfocus.com>
+References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
+ <20190702115117.GC4463@x250.microfocus.com>
+ <20190702223630.GA3735@brian.unipv.it>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190703063451.GA1508@localhost>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190702223630.GA3735@brian.unipv.it>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 08:34:51AM +0200, Johan Hovold wrote:
-> The following changes since commit 9e0babf2c06c73cda2c0cd37a1653d823adb40ec:
+On Wed, Jul 03, 2019 at 12:36:30AM +0200, Andrea Vai wrote:
+> On 02/07/19 13:51:17, Johannes Thumshirn wrote:
+> > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
+> > > Hi,
+> > >   I have a problem writing data to a USB pendrive, and it seems
+> > > kernel-related. With the help of Greg an Alan (thanks) and some
+> > > bisect, I found out the offending commit being
+> > > 
+> > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+> > >
+> > > [...]
+> > 
+> > Hi,
+> > 
+> > Can you please check what IO scheduler you have set for your USB pendrive?
+> > 
+> > i.e. with:
+> > cat /sys/block/$DISK/queue/scheduler
+> >
 > 
->   Linux 5.2-rc5 (2019-06-16 08:49:45 -1000)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.3-rc1
+> # cat /sys/block/sdf/queue/scheduler
+> [mq-deadline] none
 
-Pulled and pushed out, thanks!
+One thing you can try as well is building a kernel with CONFIG_IOSCHED_BFQ and
+use it. Deadline is probably not the best choice for a slow drive.
 
-greg k-h
+Byte,
+	Johannes
+-- 
+Johannes Thumshirn                            SUSE Labs Filesystems
+jthumshirn@suse.de                                +49 911 74053 689
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
+Key fingerprint = EC38 9CAB C2C4 F25D 8600 D0D0 0393 969D 2D76 0850
