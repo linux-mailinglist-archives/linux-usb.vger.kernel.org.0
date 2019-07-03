@@ -2,83 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 598E55ED0F
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 21:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895685EDA3
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 22:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbfGCT7K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 15:59:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53362 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726821AbfGCT7K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jul 2019 15:59:10 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4626421882;
-        Wed,  3 Jul 2019 19:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562183949;
-        bh=qyhSe/m3iFJvhjLT7XfiQp9W/+VrvcZY//8DOqO8pmo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0glXAHEjYCtRfQ5vgverCgt8lN8cjzwgJLzBScTnm4hRnf3ldUCMP9XpFA1splffi
-         FUkETyP3XuHqUK65m2k+5kiWTWSssP+CnWNZof/ivMKz5ZY8Po2X7RIVmE7ls0wVs6
-         09PoNq5qg00FHriHOQZGjufA54HkOAKIB7mNepRk=
-Date:   Wed, 3 Jul 2019 15:59:08 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Fei Yang <fei.yang@intel.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        John Stultz <john.stultz@linaro.org>
-Subject: Re: [PATCH 4.19 26/72] usb: dwc3: gadget: use num_trbs when skipping
- TRBs on ->dequeue()
-Message-ID: <20190703195908.GC2733@sasha-vm>
-References: <20190702080124.564652899@linuxfoundation.org>
- <20190702080126.031346654@linuxfoundation.org>
- <20190703020312.GS11506@sasha-vm>
- <20190703072012.GA3033@kroah.com>
+        id S1727246AbfGCUeV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 16:34:21 -0400
+Received: from mail-lj1-f182.google.com ([209.85.208.182]:39105 "EHLO
+        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726833AbfGCUeV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 16:34:21 -0400
+Received: by mail-lj1-f182.google.com with SMTP id v18so3851620ljh.6
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jul 2019 13:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=esmbGIK2+TRUCl5zAQF1Uk4NOAeqwC8H/Gxq83rEAY0=;
+        b=M6dRfOHE5kwH8q20HBto8Yvj3xMjePzLKssvqkvjEka8IdCc+I6rBZazpdaGrb/YXD
+         awNIEIEwHuTOogQgRMLbfvTXhnnb8r/RJfFuCBXuiNp7GJuY4d29gRyPFxQvPM5KcsOr
+         nbUD9MTDo4+NMYNVWktpsrx8GrQrAhg47oPCMbo0nKdTGGx68ttCTqkwJPpxUdcwkD8j
+         3P0AOo5D1V0r6pv26B7sY7h1rBGCDTgpNqYWFJLe0HiouaVhThLGCFBaEph8RUdsoiID
+         hRxANfqbiOkcI+igmZCkkhgGKMutGTWiN/keptvfK6oOQcH+Z4O1908FjrWznYRJ8WiU
+         MlHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=esmbGIK2+TRUCl5zAQF1Uk4NOAeqwC8H/Gxq83rEAY0=;
+        b=M4FfGmv2AyQAPJ3UxT2x+Dyr5pZ3RWuKnJKAnev719HRN/1IhUryewHv3TROLkGQUY
+         j2O6TXTxoBEZRFQgQHwv4A9aRqUiycW4rfl1W3vLI5xXR6qVetCHkjATLODDLsOBxN6Z
+         H5FT2qkAG+uGrsNxJASfIZAhvPBsbJLavCf083eq/6rSsKtzotTCNLihU34rxqqf4d3M
+         SHVsh8gURdwz7mBMk1ZcsbYrDEH2V4Voy1QtGc3/PVGQcf+EyZB5mLuveaA1PMNvI5Au
+         1tEVmX55LZ7l8e6nbJmKIGDp5OYQ4DW57eA0eKUXrkI8mUJfBQB0jWN/fXwK5cmKWer9
+         haJA==
+X-Gm-Message-State: APjAAAW5qhhHSmuasGKJdn76k4r6OtKl6uIgjEebewKbpWZU8B9siyp1
+        wUnSFH4fDGNyQ1iiiKlvkqHD06w7Y+4=
+X-Google-Smtp-Source: APXvYqynokKKgaYILb1BTpMt3bFk3/r8odov0+bb0Z53yl/EQoO5WLChzuOLEp4p1KQ75V6CPoKsgw==
+X-Received: by 2002:a2e:a0d6:: with SMTP id f22mr687467ljm.182.1562186058955;
+        Wed, 03 Jul 2019 13:34:18 -0700 (PDT)
+Received: from [192.168.1.60] (0126800801.0.fullrate.ninja. [2.110.44.75])
+        by smtp.gmail.com with ESMTPSA id h22sm661187ljj.105.2019.07.03.13.34.17
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 03 Jul 2019 13:34:17 -0700 (PDT)
+Message-ID: <847524769f1229b1a96d5ccea53c999497dccfff.camel@gmail.com>
+Subject: Re: Clarification of set_sel handling when dwc3 is a device (gadget)
+From:   claus.stovgaard@gmail.com
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "v.anuragkumar@gmail.com" <v.anuragkumar@gmail.com>,
+        Rob Weber <rob@gnarbox.com>
+Date:   Wed, 03 Jul 2019 22:34:16 +0200
+In-Reply-To: <CY4PR1201MB0037D801D920ACAD8B4CF3B6AAF90@CY4PR1201MB0037.namprd12.prod.outlook.com>
+References: <6dbe8df06875947d7ea6d6a21f83ac68315c0ef4.camel@gmail.com>
+         <CY4PR1201MB0037D801D920ACAD8B4CF3B6AAF90@CY4PR1201MB0037.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190703072012.GA3033@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 09:20:12AM +0200, Greg Kroah-Hartman wrote:
->On Tue, Jul 02, 2019 at 10:03:12PM -0400, Sasha Levin wrote:
->> On Tue, Jul 02, 2019 at 10:01:27AM +0200, Greg Kroah-Hartman wrote:
->> > commit c3acd59014148470dc58519870fbc779785b4bf7 upstream
->> >
->> > Now that we track how many TRBs a request uses, it's easier to skip
->> > over them in case of a call to usb_ep_dequeue(). Let's do so and
->> > simplify the code a bit.
->> >
->> > Cc: Fei Yang <fei.yang@intel.com>
->> > Cc: Sam Protsenko <semen.protsenko@linaro.org>
->> > Cc: Felipe Balbi <balbi@kernel.org>
->> > Cc: linux-usb@vger.kernel.org
->> > Cc: stable@vger.kernel.org # 4.19.y
->> > Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
->> > (cherry picked from commit c3acd59014148470dc58519870fbc779785b4bf7)
->> > Signed-off-by: John Stultz <john.stultz@linaro.org>
->> > Signed-off-by: Sasha Levin <sashal@kernel.org>
->>
->> This one has an upstream fix: c7152763f02e05567da27462b2277a554e507c89
->> ("usb: dwc3: Reset num_trbs after skipping").
->
->You were the one who queued this series up :)
+On man, 2019-07-01 at 20:48 +0000, Thinh Nguyen wrote:
+> Hi,
+> 
+> 
 
-Indeed, and I'm actually quite happy about this.
+> > ----
+> > reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+> > if (reg & DWC3_DCTL_INITU2ENA)
+> > 	param = dwc->u2pel;
+> > if (reg & DWC3_DCTL_INITU1ENA)
+> > 	param = dwc->u1pel;
+> 
+> This is incorrect. If the controller is enabled for both U1 and U2,
+> then
+> periodic param is U2PEL. If the controller is only enabled for U1,
+> then
+> U1PEL is used. Probably the original author intended but missed the
+> "else" on the second if case.
+> 
+> 
+> According to the databook, currently the controller doesn't use these
+> programmed values. It uses the value from CoreConsultant
+> configuration
+> setting.
+> 
 
-Even though I goofed up and didn't notice the fix when it got queued up,
-the automation we have in place to catch these cases worked and we were
-able to get the fix in as well before release.
+Thanks for your quick reply.
 
---
-Thanks,
-Sasha
+So my understanding from your message is that the code is wrong, and I
+was correct in being puzzled. Though the core currently does not use
+the values, so currently the code is unimportant as it is unused by the
+hardware.
+
+Regards
+Claus
+
+
+> BR,
+> Thinh
+
