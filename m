@@ -2,154 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4B95DCCA
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 05:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08F05DDB0
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 07:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727179AbfGCDKf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 23:10:35 -0400
-Received: from mail-eopbgr1410094.outbound.protection.outlook.com ([40.107.141.94]:61336
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727049AbfGCDKf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Jul 2019 23:10:35 -0400
+        id S1725999AbfGCFLZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 01:11:25 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37982 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbfGCFLZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 01:11:25 -0400
+Received: by mail-wr1-f66.google.com with SMTP id p11so1112374wro.5
+        for <linux-usb@vger.kernel.org>; Tue, 02 Jul 2019 22:11:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZYqLO6+U5LWl+wYzfaeZohAa2IS82Xjq5Bnl1d1ZbHk=;
- b=ktUAR1+5cefTZT70i3Q3AwJBqm2j4/lvtvOtT0oeLX/CovC16sO06kAmeotgHeQat58rJpe0YF9Zoh/gKkMiVpHKb84ArD9tGOoJ2AoHeKXp3o5TQQQsYeFAehGkcMgrwW6o2aykWQw6VyuDWsjqb85N7phSOB6OFPqeJNLufv4=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.174.85) by
- TYAPR01MB4880.jpnprd01.prod.outlook.com (20.179.175.215) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2032.20; Wed, 3 Jul 2019 03:10:31 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::602d:62cc:de62:eaba]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::602d:62cc:de62:eaba%6]) with mapi id 15.20.2032.019; Wed, 3 Jul 2019
- 03:10:31 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Alan Stern <stern@rowland.harvard.edu>, Greg KH <greg@kroah.com>
-CC:     shuah <shuah@kernel.org>, Suwan Kim <suwan.kim027@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "usb-storage@lists.one-eyed-alien.net" 
-        <usb-storage@lists.one-eyed-alien.net>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: RE: [PATCH v2] usb-storage: Add a limitation for
- blk_queue_max_hw_sectors()
-Thread-Topic: [PATCH v2] usb-storage: Add a limitation for
- blk_queue_max_hw_sectors()
-Thread-Index: AQHVIcuW138W6xs/SU+mBATKJYat56aZ0SQAgAABRQCAAAL1gIAFZkqggAAqzACAF8/kEIAASseAgADLi2A=
-Date:   Wed, 3 Jul 2019 03:10:31 +0000
-Message-ID: <TYAPR01MB454441748DB5CBCDFCF207D3D8FB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <TYAPR01MB454412603157D6DDCB512092D8F80@TYAPR01MB4544.jpnprd01.prod.outlook.com>
- <Pine.LNX.4.44L0.1907021018220.1647-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1907021018220.1647-100000@iolanthe.rowland.org>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 97391305-1046-4447-08b0-08d6ff640220
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TYAPR01MB4880;
-x-ms-traffictypediagnostic: TYAPR01MB4880:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <TYAPR01MB488062653B815BBF6F6AFBA8D8FB0@TYAPR01MB4880.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 00872B689F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(189003)(43544003)(199004)(66946007)(64756008)(76116006)(66476007)(66446008)(66556008)(73956011)(305945005)(14444005)(74316002)(76176011)(316002)(7696005)(8936002)(81166006)(4326008)(5660300002)(52536014)(66066001)(71200400001)(71190400001)(7736002)(256004)(8676002)(81156014)(478600001)(25786009)(11346002)(229853002)(476003)(486006)(446003)(6116002)(55016002)(6246003)(102836004)(186003)(2171002)(6306002)(9686003)(6436002)(26005)(68736007)(14454004)(86362001)(99286004)(966005)(54906003)(33656002)(3846002)(53936002)(2906002)(110136005)(6506007)(6606295002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB4880;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: giLm67VTVR5c9WnFZEsY+Nxn9+8XDt2LpHjKeq8DgLULkCGJl27cZC8wqVtGM9liEfFSteFkcI4WVQCasWR6JXafu5N8O5U4759aAJTrmM2MFFsQTAH+FAQb8sR0smQtRAAx7iLcKDQo84cEHE9f+q8kss/GIoTSwQK44QZzL/aciDupMXhG4cz4loClzaxuaXvMnpWsH1o6DhnCxS9EF0njrKIKzpRoIWLCmXcN8l+uU7/z0VmkhEMXYuEUX6vf+2qEc1E8HpQCV1nKE1Q+JmIFMwHfkHPHsyybphQGfU9ELPzrNdQOlksPvmhoqGhJ139rQc0mH2gNxegGvE3dAnqLP2/QViadHQ6AGJ6yRnZ5GL3sA5QhkqF90flNGn/OAucGYVsKD10TpOHmcCNptSYd37dhj1oYInH91fG4Arw=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MCBo68cNpu9K2+/oD1vEHNbliIsfq9Q6CFA9cda7BCg=;
+        b=FgoMN7QZ/bicRCJawMdgeHwPb8Zzg2uCzZIfnfJsd+dOlXrOvXOT/hxM1XaGoEpMQQ
+         VyfZu7jaHdZgGHkxfffWsEMDiAADqvJh7J9Xp9TrrrjaghEUVsVeAj1NFoccXhBOlXMO
+         1MNze9hl+xyHxyVZd9xgbSprLM680eE0ptrKCJ7XaixcpWIlA3Mn8kSN1ni6S7elKva+
+         MJT17ORah4To3ezs3jZLJIcoRA4vr4vrgWAN8q5WSgr6COh+nEkq9Yuopj9SLE89stRj
+         oFKeUg+XkpizZwL2pGdxbSxoQWZ7BO1AAcawIx6OEa5U4RvdZf886OWavhMoSAlWy+G7
+         4PpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MCBo68cNpu9K2+/oD1vEHNbliIsfq9Q6CFA9cda7BCg=;
+        b=F7uLnwNdgvnk/04SSApEPBNyzKRKBEMIW/eR062ozueN3BJe9Yzq86GMFkMdIglQvQ
+         OUYhSX9MwUIZbmxqGJt0zuhiCQYzUxSAq6BCyF7F6SIowXZIJIWWd2moElCjnJjPvvRd
+         UQ12551yXGwPs+D5hr/gJP0MWcCL23o8tcjl6Jg5vGvbTFyTb+EEke6cl849hSK56B+v
+         sGHfpD0wEPFFWkBRhr3QCzteSSz6Bv/041ho+9uYSvzu6iP+K6QSlSl1AibHja8o0P+H
+         O/Pj0eA4b9QgfTLoIpMj8uQQFFTw8s76VWcibp2MoFHTUf3N1WF72jC/MFSinhcNbkLI
+         jOeQ==
+X-Gm-Message-State: APjAAAVQRUShYxYo4aSQ3MPvdbXSwMxauwJIB2Ox5v49Ort16m/z/Myb
+        O4ieiOGt8u4Xo3US9udA2W1vQQ==
+X-Google-Smtp-Source: APXvYqwItJ1xofEc3Pxg0+Z9V98mKz2e3BPbyQS7r3T5ZG7OniQHTnn6RQnCoNsTnG05RFqgShLrYg==
+X-Received: by 2002:adf:ea92:: with SMTP id s18mr25804612wrm.257.1562130682903;
+        Tue, 02 Jul 2019 22:11:22 -0700 (PDT)
+Received: from brian.unipv.it ([37.162.54.227])
+        by smtp.gmail.com with ESMTPSA id l8sm1953716wrg.40.2019.07.02.22.11.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 02 Jul 2019 22:11:22 -0700 (PDT)
+Date:   Wed, 3 Jul 2019 07:11:17 +0200
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20190703051117.GA6458@brian.unipv.it>
+References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
+ <20190702120112.GA19890@ming.t460p>
+ <20190702223931.GB3735@brian.unipv.it>
+ <20190703020119.GA23872@ming.t460p>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97391305-1046-4447-08b0-08d6ff640220
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2019 03:10:31.4631
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4880
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190703020119.GA23872@ming.t460p>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+On 03/07/19 10:01:23, Ming Lei wrote:
+> On Wed, Jul 03, 2019 at 12:39:31AM +0200, Andrea Vai wrote:
+> > On 02/07/19 20:01:13, Ming Lei wrote:
+> > > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
+> > > > Hi,
+> > > >   I have a problem writing data to a USB pendrive, and it seems
+> > > > kernel-related. With the help of Greg an Alan (thanks) and some
+> > > > bisect, I found out the offending commit being
+> > > > 
+> > > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+> > > > 
+> > > >  [...]    
+> > > >     
+> > > 
+> > > One possible reason may be related with too small 'nr_requests', could
+> > > you apply the following command and see if any difference can be made?
+> > > 
+> > > echo 32 > /sys/block/sdN/queue/nr_requests
+> > 
+> > I applied it (echo 32 > /sys/block/sdf/queue/nr_requests), ran the test again, and still failed. I assumed I didn't have to build the kernel again, did I? (sorry but I am not skilled)
+> > 
+> 
+> You don't need to build kernel.
+> 
+> I just run same write test on one slow usb drive in my laptop, which
+> runs '5.1.11-200.fc29.x86_64', and can't reproduce your issue, maybe it
+> depends on your drive.
+> 
+> Could you collect the queue limits sysfs log via the following command?
+> 
+> 	find /sys/block/sdN/queue -type f -exec grep -aH . {} \;
+>
 
-> From: Alan Stern, Sent: Tuesday, July 2, 2019 11:28 PM
->=20
-> On Tue, 2 Jul 2019, Yoshihiro Shimoda wrote:
->=20
-> > Hi Alan, shuah, Suwan,
-> >
-> > > From: Christoph Hellwig, Sent: Monday, June 17, 2019 3:22 PM
-> > >
-> > > On Mon, Jun 17, 2019 at 04:17:43AM +0000, Yoshihiro Shimoda wrote:
-> > > > Thank you for the comments. So, should I wait for getting rid of th=
-e
-> > > > virt_boundary_mask stuff? If I revise the commit log of this patch,
-> > > > is it acceptable for v5.2-stable as a workaround? In other words,
-> > > > I worry about this issue exists on v5.2-stable.
-> > >
-> > > It does exist on 5.2-stable and we should fix it.  I'll plan to resen=
-d
-> > > my series to fix the virt_boundary issues for the other SCSI driver
-> > > soon, but we'll still need to sort out usb-storage.
-> >
-> > I guess that getting rid of the virt_boundary_mask stuff [1] needs more=
- time.
-> > So, for v5.2-stable, would you accept my patch as a workaround?
-> > JFYI, v5.2-rc7 still has this "swiotlb buffer is full" issue.
-> >
-> > [1]
-> > https://marc.info/?l=3Dlinux-kernel&m=3D156114524808042&w=3D2
->=20
-> I would really prefer to see a different solution.
->=20
-> The actual problem is that the usb_device and usb_interface structures
-> are supposed to inherit all of their DMA properties from the bus's host
-> controller.  But the existing code copies only the dma_mask and
-> dma_pfn_offset fields in the embedded device structures.  If we copied
-> all of the important DMA fields then this patch wouldn't be needed; the
-> max_sectors value for the request queue would be set up correctly to
-> begin with.
+# find /sys/block/sdf/queue -type f -exec grep -aH . {} ;
+/sys/block/sdf/queue/io_poll_delay:-1
+/sys/block/sdf/queue/max_integrity_segments:0
+/sys/block/sdf/queue/zoned:none
+/sys/block/sdf/queue/scheduler:[mq-deadline] none
+/sys/block/sdf/queue/io_poll:0
+/sys/block/sdf/queue/discard_zeroes_data:0
+/sys/block/sdf/queue/minimum_io_size:512
+/sys/block/sdf/queue/nr_zones:0
+/sys/block/sdf/queue/write_same_max_bytes:0
+/sys/block/sdf/queue/max_segments:2048
+/sys/block/sdf/queue/dax:0
+/sys/block/sdf/queue/physical_block_size:512
+/sys/block/sdf/queue/logical_block_size:512
+/sys/block/sdf/queue/io_timeout:30000
+/sys/block/sdf/queue/nr_requests:2
+/sys/block/sdf/queue/write_cache:write through/sys/block/sdf/queue/max_segment_size:4294967295
+/sys/block/sdf/queue/rotational:1
+/sys/block/sdf/queue/discard_max_bytes:0
+/sys/block/sdf/queue/add_random:1
+/sys/block/sdf/queue/discard_max_hw_bytes:0
+/sys/block/sdf/queue/optimal_io_size:0
+/sys/block/sdf/queue/chunk_sectors:0
+/sys/block/sdf/queue/iosched/front_merges:1
+/sys/block/sdf/queue/iosched/read_expire:500
+/sys/block/sdf/queue/iosched/fifo_batch:16
+/sys/block/sdf/queue/iosched/write_expire:5000/sys/block/sdf/queue/iosched/writes_starved:2
+/sys/block/sdf/queue/read_ahead_kb:128
+/sys/block/sdf/queue/max_discard_segments:1
+/sys/block/sdf/queue/write_zeroes_max_bytes:0
+/sys/block/sdf/queue/nomerges:0
+/sys/block/sdf/queue/wbt_lat_usec:75000
+/sys/block/sdf/queue/fua:0
+/sys/block/sdf/queue/discard_granularity:0
+/sys/block/sdf/queue/rq_affinity:1
+/sys/block/sdf/queue/max_sectors_kb:120
+/sys/block/sdf/queue/hw_sector_size:512
+/sys/block/sdf/queue/max_hw_sectors_kb:120
+/sys/block/sdf/queue/iostats:1 
 
-I'm sorry, but I cannot understand what are important DMA fields.
-IIUC, usb-storage driver should take care of calling blk_queue_ APIs anyway=
- because:
-
- - As Christoph mentioned before on the email [1], usb-storage has a specia=
-l
-   max_sectors quirk for tape and SuperSpeed devices.
- - Since blk_queue_* APIs don't take device structure pointer, the block la=
-yer
-   cannot call any DMA mapping APIs. So, even if any other DMA fields are c=
-opied,
-   the behavior is not changed.
-
-[1]
-https://www.spinics.net/lists/linux-usb/msg181527.html
-
-What do you think?
-
-Best regards,
-Yoshihiro Shimoda
-
-> So what I would like to see is a new subroutine -- perhaps in the
-> driver core -- that copies the DMA fields from one struct device to
-> another.  Then we could call this subroutine in usb_alloc_dev() and
-> usb_set_configuration() instead of copying the information manually.
->=20
-> Greg and Christoph, does that make sense?
->=20
-> Yoshihiro, would you like to write a patch that does this?
->=20
-> Alan Stern
-
+Thanks, and bye,
+Andrea
