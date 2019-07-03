@@ -2,137 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 159B75E5CE
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 15:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E03D5E666
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 16:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbfGCNyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 09:54:32 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54448 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725830AbfGCNyb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jul 2019 09:54:31 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id C4095AEBB;
-        Wed,  3 Jul 2019 13:54:29 +0000 (UTC)
-Message-ID: <1562162068.5819.47.camel@suse.com>
-Subject: Re: [PATCH] Fix chipmunk-like voice when using Logitech C270 for
- recording audio.
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Aidan Thornton <makosoft@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Marco Zatta <marco@zatta.me>
-Date:   Wed, 03 Jul 2019 15:54:28 +0200
-In-Reply-To: <CAB=c7ToV==vGZWOXaRqRcoOb4TNeVqi4QNAvgtiN0K6JjoF8Tg@mail.gmail.com>
-References: <20190601075257.GA24550@jimmy.localdomain>
-         <1559555890.25071.5.camel@suse.com>
-         <CAB=c7ToV==vGZWOXaRqRcoOb4TNeVqi4QNAvgtiN0K6JjoF8Tg@mail.gmail.com>
-Content-Type: multipart/mixed; boundary="=-2HPWkJKfa/LDsbT18ISQ"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1726635AbfGCOT5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 10:19:57 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:48362 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726255AbfGCOT5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 10:19:57 -0400
+Received: (qmail 2823 invoked by uid 2102); 3 Jul 2019 10:19:56 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 3 Jul 2019 10:19:56 -0400
+Date:   Wed, 3 Jul 2019 10:19:56 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+cc:     Greg KH <greg@kroah.com>, shuah <shuah@kernel.org>,
+        Suwan Kim <suwan.kim027@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "usb-storage@lists.one-eyed-alien.net" 
+        <usb-storage@lists.one-eyed-alien.net>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
+Subject: RE: [PATCH v2] usb-storage: Add a limitation for blk_queue_max_hw_sectors()
+In-Reply-To: <TYAPR01MB454441748DB5CBCDFCF207D3D8FB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+Message-ID: <Pine.LNX.4.44L0.1907031015140.1547-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, 3 Jul 2019, Yoshihiro Shimoda wrote:
 
---=-2HPWkJKfa/LDsbT18ISQ
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Donnerstag, den 20.06.2019, 21:19 +0100 schrieb Aidan Thornton:
-
-> What's particularly annoying is that since this is an intermittent
-> problem, it's hard to tell if I'm chasing a phantom solution for it
-> again. Haven't managed to replicate it since applying this fix and did
-> so pretty quickly before but you never know.
+> > I would really prefer to see a different solution.
+> > 
+> > The actual problem is that the usb_device and usb_interface structures
+> > are supposed to inherit all of their DMA properties from the bus's host
+> > controller.  But the existing code copies only the dma_mask and
+> > dma_pfn_offset fields in the embedded device structures.  If we copied
+> > all of the important DMA fields then this patch wouldn't be needed; the
+> > max_sectors value for the request queue would be set up correctly to
+> > begin with.
 > 
+> I'm sorry, but I cannot understand what are important DMA fields.
 
-This is time for the sledge hammer. No more surgical solutions.
-Could you test the attached patch?
+Probably all of them are important; I don't know.
 
-	Regards
-		Oliver
+> IIUC, usb-storage driver should take care of calling blk_queue_ APIs anyway because:
+> 
+>  - As Christoph mentioned before on the email [1], usb-storage has a special
+>    max_sectors quirk for tape and SuperSpeed devices.
+>  - Since blk_queue_* APIs don't take device structure pointer, the block layer
+>    cannot call any DMA mapping APIs. So, even if any other DMA fields are copied,
+>    the behavior is not changed.
 
---=-2HPWkJKfa/LDsbT18ISQ
-Content-Disposition: attachment;
-	filename*0=0001-Revert-usb-Add-USB_QUIRK_RESET_RESUME-for-all-Logite.pat;
-	filename*1=ch
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch;
-	name="0001-Revert-usb-Add-USB_QUIRK_RESET_RESUME-for-all-Logite.patch";
-	charset="UTF-8"
+Although the blk_queue_* APIs don't take device structure pointers, the
+SCSI layer does know about devices.  And since it is the SCSI layer
+which creates the request queue, changing the DMA fields should change
+the behavior.
 
-RnJvbSAwNmI4MjZiZjNlMmQzZmIxNWFlZTY3NjE4NWM2MzJiOWYwOGExMGRiIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBXZWQsIDMgSnVsIDIwMTkgMTU6MzE6MDUgKzAyMDAKU3ViamVjdDogW1BBVENIXSBSZXZlcnQg
-InVzYjogQWRkIFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgZm9yIGFsbCBMb2dpdGVjaCBVVkMKIHdl
-YmNhbXMiCgpUaGlzIHMgYSBwYXJ0aWFsIHJldmVydCBvZiBjb21taXQgZTM4N2VmNWM0N2RkZWFl
-YWEzY2JkYzU0NDI0Y2RiN2EyOGRhZTJjMC4KVGhlIG9yaWdpbmFsIGZpeCBmb3IgdGhlICJzcXVl
-YWt5IHZvaWNlIiBidWcgb2Ygc29tZSBMb2dpdGVjaCB3ZWJjYW1zCndoZW4gdXNlZCBhcyBhdWRp
-byBkZXZpY2VzIHdhcyBpbgoKMjM5NGQ2N2U0NDZiZjYxNmEwODg1MTY3ZDVmMGQzOTdiZGFjZmRm
-YyAoIlVTQjogYWRkIFJFU0VUX1JFU1VNRSBmb3IKd2ViY2FtcyBzaG93biB0byBiZSBxdWlya3ki
-KQoKd2hpY2ggaW4gc3Vic2VxdWVudCBkZXZlbG9wbWVudCB3YXMgdW5kb25lLiBMYXRlciB0ZXN0
-cyBoYXZlIHNob3duCnRoZSBjb25zb2xvZGlhdGlvbiB0byBiZSBub3QgZXF1aXZhbGVudC4KU28g
-SSBhbSB0YWtpbmcgdGhlIGNvbnNlcnZhdGl2ZSBhcHByb2FjaCwgYmxhY2tsaXN0aW5nIGV2ZXJ5
-dGhpbmcgdGhhdAp3YXMgYmxhY2tsaXN0ZWQgYXQgYW55IHBvaW50IGluIHRoZSBwYXN0LiBXZSBo
-YXZlIHJlcG9ydHMgb2YgbXVsdGlwbGUKZGV2aWNlcyBhZmZlY3RlZCBhbmQgcmV0ZXN0aW5nIHRo
-aXMgb24gc28gbWFueSBvbGQgZGV2aWNlcyBpcwppbXByYWN0aWNhbC4KClNpZ25lZC1vZmYtYnk6
-IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+ClJlcG9ydGVkLWJ5OiBBaWRhbiBUaG9y
-bnRvbiA8bWFrb3NvZnRAZ21haWwuY29tPgpSZXBvcnRlZC1ieTogTWFyY28gWmF0dGEgPG1hcmNv
-QHphdHRhLm1lPgotLS0KIGRyaXZlcnMvdXNiL2NvcmUvcXVpcmtzLmMgfCA1MyArKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDQz
-IGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNi
-L2NvcmUvcXVpcmtzLmMgYi9kcml2ZXJzL3VzYi9jb3JlL3F1aXJrcy5jCmluZGV4IDUzM2ZlOGMw
-ZjBhMi4uZTNjMjRkNWIyOTU5IDEwMDY0NAotLS0gYS9kcml2ZXJzL3VzYi9jb3JlL3F1aXJrcy5j
-CisrKyBiL2RyaXZlcnMvdXNiL2NvcmUvcXVpcmtzLmMKQEAgLTIzNCwyMCArMjM0LDUzIEBAIHN0
-YXRpYyBjb25zdCBzdHJ1Y3QgdXNiX2RldmljZV9pZCB1c2JfcXVpcmtfbGlzdFtdID0gewogCS8q
-IExvZ2l0ZWNoIFF1aWNrY2FtIEZ1c2lvbiAqLwogCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDhj
-MSksIC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKIAotCS8qIExvZ2l0
-ZWNoIFF1aWNrY2FtIE9yYml0IE1QICovCi0JeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwOGMyKSwg
-LmRyaXZlcl9pbmZvID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAorCS8qIExvZ2l0ZWNoIFdl
-YmNhbSBDMjAwICovCisJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwODAyKSwgLmRyaXZlcl9pbmZv
-ID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAogCi0JLyogTG9naXRlY2ggUXVpY2tjYW0gUHJv
-IGZvciBOb3RlYm9vayAqLwotCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDhjMyksIC5kcml2ZXJf
-aW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKKwkvKiBMb2dpdGVjaCBXZWJjYW0gQzI1
-MCAqLworCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDgwNCksIC5kcml2ZXJfaW5mbyA9IFVTQl9R
-VUlSS19SRVNFVF9SRVNVTUUgfSwKIAotCS8qIExvZ2l0ZWNoIFF1aWNrY2FtIFBybyA1MDAwICov
-Ci0JeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwOGM1KSwgLmRyaXZlcl9pbmZvID0gVVNCX1FVSVJL
-X1JFU0VUX1JFU1VNRSB9LAorCS8qIExvZ2l0ZWNoIFdlYmNhbSBDMzAwICovCisJeyBVU0JfREVW
-SUNFKDB4MDQ2ZCwgMHgwODA1KSwgLmRyaXZlcl9pbmZvID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VN
-RSB9LAogCi0JLyogTG9naXRlY2ggUXVpY2tjYW0gT0VNIERlbGwgTm90ZWJvb2sgKi8KLQl7IFVT
-Ql9ERVZJQ0UoMHgwNDZkLCAweDA4YzYpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRf
-UkVTVU1FIH0sCisJLyogTG9naXRlY2ggV2ViY2FtIEIvQzUwMCAqLworCXsgVVNCX0RFVklDRSgw
-eDA0NmQsIDB4MDgwNyksIC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwK
-IAotCS8qIExvZ2l0ZWNoIFF1aWNrY2FtIE9FTSBDaXNjbyBWVCBDYW1lcmEgSUkgKi8KLQl7IFVT
-Ql9ERVZJQ0UoMHgwNDZkLCAweDA4YzcpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRf
-UkVTVU1FIH0sCisJLyogTG9naXRlY2ggV2ViY2FtIEM2MDAgKi8KKwl7IFVTQl9ERVZJQ0UoMHgw
-NDZkLCAweDA4MDgpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRfUkVTVU1FIH0sCisK
-KwkvKiBMb2dpdGVjaCBXZWJjYW0gUHJvIDkwMDAgKi8KKwl7IFVTQl9ERVZJQ0UoMHgwNDZkLCAw
-eDA4MDkpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRfUkVTVU1FIH0sCisKKwkvKiBM
-b2dpdGVjaCBXZWJjYW0gQzkwNSAqLworCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDgwYSksIC5k
-cml2ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKKworCS8qIExvZ2l0ZWNoIFdl
-YmNhbSBDMjEwICovCisJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwODE5KSwgLmRyaXZlcl9pbmZv
-ID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAorCisJLyogTG9naXRlY2ggV2ViY2FtIEMyNjAg
-Ki8KKwl7IFVTQl9ERVZJQ0UoMHgwNDZkLCAweDA4MWEpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJ
-UktfUkVTRVRfUkVTVU1FIH0sCisKKwkvKiBMb2dpdGVjaCBXZWJjYW0gQzMxMCAqLworCXsgVVNC
-X0RFVklDRSgweDA0NmQsIDB4MDgxYiksIC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9S
-RVNVTUUgfSwKKworCS8qIExvZ2l0ZWNoIFdlYmNhbSBDOTEwICovCisJeyBVU0JfREVWSUNFKDB4
-MDQ2ZCwgMHgwODIxKSwgLmRyaXZlcl9pbmZvID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAor
-CisJLyogTG9naXRlY2ggV2ViY2FtIEMxNjAgKi8KKwl7IFVTQl9ERVZJQ0UoMHgwNDZkLCAweDA4
-MjQpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRfUkVTVU1FIH0sCisKKwkvKiBMb2dp
-dGVjaCBXZWJjYW0gQzI3MCAqLworCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDgyNSksIC5kcml2
-ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKKworCS8qIExvZ2l0ZWNoIFF1aWNr
-Y2FtIFBybyA5MDAwICovCisJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwOTkwKSwgLmRyaXZlcl9p
-bmZvID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAorCisJLyogTG9naXRlY2ggUXVpY2tjYW0g
-RTM1MDAgKi8KKwl7IFVTQl9ERVZJQ0UoMHgwNDZkLCAweDA5YTQpLCAuZHJpdmVyX2luZm8gPSBV
-U0JfUVVJUktfUkVTRVRfUkVTVU1FIH0sCisKKwkvKiBMb2dpdGVjaCBRdWlja2NhbSBWaXNpb24g
-UHJvICovCisJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwOWE2KSwgLmRyaXZlcl9pbmZvID0gVVNC
-X1FVSVJLX1JFU0VUX1JFU1VNRSB9LAogCiAJLyogTG9naXRlY2ggSGFybW9ueSA3MDAtc2VyaWVz
-ICovCiAJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHhjMTIyKSwgLmRyaXZlcl9pbmZvID0gVVNCX1FV
-SVJLX0RFTEFZX0lOSVQgfSwKLS0gCjIuMTYuNAoK
+However, you are correct that usb-storage has to call the blk_queue_* 
+APIs anyway.  So I guess your patch is the right thing to do after all.
 
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
---=-2HPWkJKfa/LDsbT18ISQ--
+I still think that copying the DMA fields would be a good idea, though.
+
+Alan Stern
+
+> [1]
+> https://www.spinics.net/lists/linux-usb/msg181527.html
+> 
+> What do you think?
+> 
+> Best regards,
+> Yoshihiro Shimoda
+> 
+> > So what I would like to see is a new subroutine -- perhaps in the
+> > driver core -- that copies the DMA fields from one struct device to
+> > another.  Then we could call this subroutine in usb_alloc_dev() and
+> > usb_set_configuration() instead of copying the information manually.
+> > 
+> > Greg and Christoph, does that make sense?
+> > 
+> > Yoshihiro, would you like to write a patch that does this?
+> > 
+> > Alan Stern
 
