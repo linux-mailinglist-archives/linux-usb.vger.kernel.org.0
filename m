@@ -2,133 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C980E5DC81
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 04:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4B95DCCA
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 05:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727271AbfGCC0f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 22:26:35 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43514 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727219AbfGCC0e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 22:26:34 -0400
-Received: by mail-pf1-f195.google.com with SMTP id i189so396879pfg.10
-        for <linux-usb@vger.kernel.org>; Tue, 02 Jul 2019 19:26:34 -0700 (PDT)
+        id S1727179AbfGCDKf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 23:10:35 -0400
+Received: from mail-eopbgr1410094.outbound.protection.outlook.com ([40.107.141.94]:61336
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727049AbfGCDKf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jul 2019 23:10:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9LSa6wcOyCAEFmmrefvYQyX7fTvyeHlG+veSDCcI4eE=;
-        b=ZGzQGMEI0xBc+6ht3TyJxLoqzKZvxKS3cyCqFs5aNkK82JwWf02bh1UI6nY7VvlV1d
-         uxCEdDgsuN+DEyiHLBmniA2W8TDStSwHNgznxmpeHL6R2gayEYEOJNRFT2roT+TZEonK
-         aegVewSeCatWM1lQmM9X0xcytloRWyF8MrjaU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9LSa6wcOyCAEFmmrefvYQyX7fTvyeHlG+veSDCcI4eE=;
-        b=JB93i5EcFoymeTSZgsYGDVZIF3pKo9AVA1dUpovuW6BaV5bq2jVvhOzTP8m41r1ArO
-         BeoFqNN2W4dJkhgi/AKsmLw440ii/7f5luso/CKG5ajml7vEEBH0pVmLc06wQHy30TiZ
-         a5jM7BLfU474u8h7yzojpD+tfOOUw/aZ/kUsaCoCvVIYopt1Bh2RNv/6qk0I/5gHu9CA
-         1LDZgkWTackAnulZEzjnil850p8y99YPHZ+L0HJ2VGOlwMRX+8yYC71TgigPK74ZIiZw
-         wOYl+9p/Jry3xFrSxGoubmjqgwU/iwnC5bJfM/EuFbNGbBpM5D+6INuNW00OY1qEwOYP
-         TxHQ==
-X-Gm-Message-State: APjAAAXd7J5oepWlBPg9GGmJHIOwSG3MB/cLq8f9TuNaelCrvBshKXzc
-        PpS5/rp4xZEDukRhue7HPqT5KQ==
-X-Google-Smtp-Source: APXvYqzUnWHYQYw1cWjaDgpFIjT2QkKOSvq0HCjk5aFq7gXYzZR0rDEacBdmW9A7MSnrcYSG4GBVCQ==
-X-Received: by 2002:a63:d756:: with SMTP id w22mr33125752pgi.156.1562120794171;
-        Tue, 02 Jul 2019 19:26:34 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y133sm404949pfb.28.2019.07.02.19.26.33
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 02 Jul 2019 19:26:33 -0700 (PDT)
-Date:   Tue, 2 Jul 2019 19:26:32 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Phong Tran <tranmanphong@gmail.com>
-Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        hans.verkuil@cisco.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        skhan@linuxfoundation.org,
-        syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, glider@google.com
-Subject: Re: [PATCH V2] media: usb: technisat-usb2: fix buffer overflow
-Message-ID: <201907021925.1F24D6ADA3@keescook>
-References: <20190702140211.28399-1-tranmanphong@gmail.com>
- <20190703021444.19954-1-tranmanphong@gmail.com>
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZYqLO6+U5LWl+wYzfaeZohAa2IS82Xjq5Bnl1d1ZbHk=;
+ b=ktUAR1+5cefTZT70i3Q3AwJBqm2j4/lvtvOtT0oeLX/CovC16sO06kAmeotgHeQat58rJpe0YF9Zoh/gKkMiVpHKb84ArD9tGOoJ2AoHeKXp3o5TQQQsYeFAehGkcMgrwW6o2aykWQw6VyuDWsjqb85N7phSOB6OFPqeJNLufv4=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.174.85) by
+ TYAPR01MB4880.jpnprd01.prod.outlook.com (20.179.175.215) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2032.20; Wed, 3 Jul 2019 03:10:31 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::602d:62cc:de62:eaba]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::602d:62cc:de62:eaba%6]) with mapi id 15.20.2032.019; Wed, 3 Jul 2019
+ 03:10:31 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Alan Stern <stern@rowland.harvard.edu>, Greg KH <greg@kroah.com>
+CC:     shuah <shuah@kernel.org>, Suwan Kim <suwan.kim027@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "usb-storage@lists.one-eyed-alien.net" 
+        <usb-storage@lists.one-eyed-alien.net>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
+Subject: RE: [PATCH v2] usb-storage: Add a limitation for
+ blk_queue_max_hw_sectors()
+Thread-Topic: [PATCH v2] usb-storage: Add a limitation for
+ blk_queue_max_hw_sectors()
+Thread-Index: AQHVIcuW138W6xs/SU+mBATKJYat56aZ0SQAgAABRQCAAAL1gIAFZkqggAAqzACAF8/kEIAASseAgADLi2A=
+Date:   Wed, 3 Jul 2019 03:10:31 +0000
+Message-ID: <TYAPR01MB454441748DB5CBCDFCF207D3D8FB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <TYAPR01MB454412603157D6DDCB512092D8F80@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+ <Pine.LNX.4.44L0.1907021018220.1647-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1907021018220.1647-100000@iolanthe.rowland.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 97391305-1046-4447-08b0-08d6ff640220
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TYAPR01MB4880;
+x-ms-traffictypediagnostic: TYAPR01MB4880:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <TYAPR01MB488062653B815BBF6F6AFBA8D8FB0@TYAPR01MB4880.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 00872B689F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(189003)(43544003)(199004)(66946007)(64756008)(76116006)(66476007)(66446008)(66556008)(73956011)(305945005)(14444005)(74316002)(76176011)(316002)(7696005)(8936002)(81166006)(4326008)(5660300002)(52536014)(66066001)(71200400001)(71190400001)(7736002)(256004)(8676002)(81156014)(478600001)(25786009)(11346002)(229853002)(476003)(486006)(446003)(6116002)(55016002)(6246003)(102836004)(186003)(2171002)(6306002)(9686003)(6436002)(26005)(68736007)(14454004)(86362001)(99286004)(966005)(54906003)(33656002)(3846002)(53936002)(2906002)(110136005)(6506007)(6606295002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB4880;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: giLm67VTVR5c9WnFZEsY+Nxn9+8XDt2LpHjKeq8DgLULkCGJl27cZC8wqVtGM9liEfFSteFkcI4WVQCasWR6JXafu5N8O5U4759aAJTrmM2MFFsQTAH+FAQb8sR0smQtRAAx7iLcKDQo84cEHE9f+q8kss/GIoTSwQK44QZzL/aciDupMXhG4cz4loClzaxuaXvMnpWsH1o6DhnCxS9EF0njrKIKzpRoIWLCmXcN8l+uU7/z0VmkhEMXYuEUX6vf+2qEc1E8HpQCV1nKE1Q+JmIFMwHfkHPHsyybphQGfU9ELPzrNdQOlksPvmhoqGhJ139rQc0mH2gNxegGvE3dAnqLP2/QViadHQ6AGJ6yRnZ5GL3sA5QhkqF90flNGn/OAucGYVsKD10TpOHmcCNptSYd37dhj1oYInH91fG4Arw=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190703021444.19954-1-tranmanphong@gmail.com>
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97391305-1046-4447-08b0-08d6ff640220
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2019 03:10:31.4631
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4880
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 09:14:44AM +0700, Phong Tran wrote:
-> The buffer will be overflow in case of the while loop can not break.
-> Add the checking buffer condition in while loop for avoiding
-> overlooping index.
-> 
-> This issue was reported by syzbot
-> 
-> Reported-by: syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com
-> 
-> Tested-by:
-> https://groups.google.com/d/msg/syzkaller-bugs/CySBCKuUOOs/t3PvVheSAAAJ
-> 
+Hi Alan,
 
-Avoid these blank lines please. (More below...)
+> From: Alan Stern, Sent: Tuesday, July 2, 2019 11:28 PM
+>=20
+> On Tue, 2 Jul 2019, Yoshihiro Shimoda wrote:
+>=20
+> > Hi Alan, shuah, Suwan,
+> >
+> > > From: Christoph Hellwig, Sent: Monday, June 17, 2019 3:22 PM
+> > >
+> > > On Mon, Jun 17, 2019 at 04:17:43AM +0000, Yoshihiro Shimoda wrote:
+> > > > Thank you for the comments. So, should I wait for getting rid of th=
+e
+> > > > virt_boundary_mask stuff? If I revise the commit log of this patch,
+> > > > is it acceptable for v5.2-stable as a workaround? In other words,
+> > > > I worry about this issue exists on v5.2-stable.
+> > >
+> > > It does exist on 5.2-stable and we should fix it.  I'll plan to resen=
+d
+> > > my series to fix the virt_boundary issues for the other SCSI driver
+> > > soon, but we'll still need to sort out usb-storage.
+> >
+> > I guess that getting rid of the virt_boundary_mask stuff [1] needs more=
+ time.
+> > So, for v5.2-stable, would you accept my patch as a workaround?
+> > JFYI, v5.2-rc7 still has this "swiotlb buffer is full" issue.
+> >
+> > [1]
+> > https://marc.info/?l=3Dlinux-kernel&m=3D156114524808042&w=3D2
+>=20
+> I would really prefer to see a different solution.
+>=20
+> The actual problem is that the usb_device and usb_interface structures
+> are supposed to inherit all of their DMA properties from the bus's host
+> controller.  But the existing code copies only the dma_mask and
+> dma_pfn_offset fields in the embedded device structures.  If we copied
+> all of the important DMA fields then this patch wouldn't be needed; the
+> max_sectors value for the request queue would be set up correctly to
+> begin with.
 
-> Signed-off-by: Phong Tran <tranmanphong@gmail.com>
-> ---
-> Change Log:
->  * V2: add IR_MAX_BUFFER_INDEX and adjust the while loop condition as comments
-> ---
->  drivers/media/usb/dvb-usb/technisat-usb2.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/usb/dvb-usb/technisat-usb2.c b/drivers/media/usb/dvb-usb/technisat-usb2.c
-> index c659e18b358b..cdabff97c1ea 100644
-> --- a/drivers/media/usb/dvb-usb/technisat-usb2.c
-> +++ b/drivers/media/usb/dvb-usb/technisat-usb2.c
-> @@ -49,6 +49,7 @@ MODULE_PARM_DESC(disable_led_control,
->  		"disable LED control of the device (default: 0 - LED control is active).");
->  
->  /* device private data */
-> +#define IR_MAX_BUFFER_INDEX	63
+I'm sorry, but I cannot understand what are important DMA fields.
+IIUC, usb-storage driver should take care of calling blk_queue_ APIs anyway=
+ because:
 
-How does this map to the literal "62" used before the loop you're
-fixing?
+ - As Christoph mentioned before on the email [1], usb-storage has a specia=
+l
+   max_sectors quirk for tape and SuperSpeed devices.
+ - Since blk_queue_* APIs don't take device structure pointer, the block la=
+yer
+   cannot call any DMA mapping APIs. So, even if any other DMA fields are c=
+opied,
+   the behavior is not changed.
 
-Otherwise, it's looking good; thanks!
+[1]
+https://www.spinics.net/lists/linux-usb/msg181527.html
 
--Kees
+What do you think?
 
->  struct technisat_usb2_state {
->  	struct dvb_usb_device *dev;
->  	struct delayed_work green_led_work;
-> @@ -56,7 +57,7 @@ struct technisat_usb2_state {
->  
->  	u16 last_scan_code;
->  
-> -	u8 buf[64];
-> +	u8 buf[IR_MAX_BUFFER_INDEX + 1];
->  };
->  
->  /* debug print helpers */
-> @@ -655,7 +656,7 @@ static int technisat_usb2_get_ir(struct dvb_usb_device *d)
->  #endif
->  
->  	ev.pulse = 0;
-> -	while (1) {
-> +	while (b <= (buf + IR_MAX_BUFFER_INDEX)) {
->  		ev.pulse = !ev.pulse;
->  		ev.duration = (*b * FIRMWARE_CLOCK_DIVISOR * FIRMWARE_CLOCK_TICK) / 1000;
->  		ir_raw_event_store(d->rc_dev, &ev);
-> -- 
-> 2.11.0
-> 
+Best regards,
+Yoshihiro Shimoda
 
--- 
-Kees Cook
+> So what I would like to see is a new subroutine -- perhaps in the
+> driver core -- that copies the DMA fields from one struct device to
+> another.  Then we could call this subroutine in usb_alloc_dev() and
+> usb_set_configuration() instead of copying the information manually.
+>=20
+> Greg and Christoph, does that make sense?
+>=20
+> Yoshihiro, would you like to write a patch that does this?
+>=20
+> Alan Stern
+
