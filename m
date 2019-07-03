@@ -2,139 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 062775DE1D
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 08:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AE25DE71
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 09:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727103AbfGCGgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 02:36:24 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:38796 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726236AbfGCGgY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jul 2019 02:36:24 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 39B133084243;
-        Wed,  3 Jul 2019 06:36:24 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-26.pek2.redhat.com [10.72.8.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 794CA7841E;
-        Wed,  3 Jul 2019 06:36:10 +0000 (UTC)
-Date:   Wed, 3 Jul 2019 14:36:05 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20190703063603.GA32123@ming.t460p>
-References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
- <20190702120112.GA19890@ming.t460p>
- <20190702223931.GB3735@brian.unipv.it>
- <20190703020119.GA23872@ming.t460p>
- <20190703051117.GA6458@brian.unipv.it>
+        id S1727008AbfGCHNX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 03:13:23 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:53762 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726236AbfGCHNX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 03:13:23 -0400
+Authenticated-By: 
+X-SpamFilter-By: BOX Solutions SpamTrap 5.62 with qID x637DKYn012691, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (RTITCASV01.realtek.com.tw[172.21.6.18])
+        by rtits2.realtek.com.tw (8.15.2/2.57/5.78) with ESMTPS id x637DKYn012691
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Wed, 3 Jul 2019 15:13:21 +0800
+Received: from fc30.localdomain (172.21.177.138) by RTITCASV01.realtek.com.tw
+ (172.21.6.18) with Microsoft SMTP Server id 14.3.439.0; Wed, 3 Jul 2019
+ 15:13:19 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <netdev@vger.kernel.org>
+CC:     <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net] r8152: move calling r8153b_rx_agg_chg_indicate()
+Date:   Wed, 3 Jul 2019 15:11:56 +0800
+Message-ID: <1394712342-15778-287-albertk@realtek.com>
+X-Mailer: Microsoft Office Outlook 11
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190703051117.GA6458@brian.unipv.it>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Wed, 03 Jul 2019 06:36:24 +0000 (UTC)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.21.177.138]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 07:11:17AM +0200, Andrea Vai wrote:
-> On 03/07/19 10:01:23, Ming Lei wrote:
-> > On Wed, Jul 03, 2019 at 12:39:31AM +0200, Andrea Vai wrote:
-> > > On 02/07/19 20:01:13, Ming Lei wrote:
-> > > > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
-> > > > > Hi,
-> > > > >   I have a problem writing data to a USB pendrive, and it seems
-> > > > > kernel-related. With the help of Greg an Alan (thanks) and some
-> > > > > bisect, I found out the offending commit being
-> > > > > 
-> > > > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-> > > > > 
-> > > > >  [...]    
-> > > > >     
-> > > > 
-> > > > One possible reason may be related with too small 'nr_requests', could
-> > > > you apply the following command and see if any difference can be made?
-> > > > 
-> > > > echo 32 > /sys/block/sdN/queue/nr_requests
-> > > 
-> > > I applied it (echo 32 > /sys/block/sdf/queue/nr_requests), ran the test again, and still failed. I assumed I didn't have to build the kernel again, did I? (sorry but I am not skilled)
-> > > 
-> > 
-> > You don't need to build kernel.
-> > 
-> > I just run same write test on one slow usb drive in my laptop, which
-> > runs '5.1.11-200.fc29.x86_64', and can't reproduce your issue, maybe it
-> > depends on your drive.
-> > 
-> > Could you collect the queue limits sysfs log via the following command?
-> > 
-> > 	find /sys/block/sdN/queue -type f -exec grep -aH . {} \;
-> >
-> 
-> # find /sys/block/sdf/queue -type f -exec grep -aH . {} ;
-> /sys/block/sdf/queue/io_poll_delay:-1
-> /sys/block/sdf/queue/max_integrity_segments:0
-> /sys/block/sdf/queue/zoned:none
-> /sys/block/sdf/queue/scheduler:[mq-deadline] none
-> /sys/block/sdf/queue/io_poll:0
-> /sys/block/sdf/queue/discard_zeroes_data:0
-> /sys/block/sdf/queue/minimum_io_size:512
-> /sys/block/sdf/queue/nr_zones:0
-> /sys/block/sdf/queue/write_same_max_bytes:0
-> /sys/block/sdf/queue/max_segments:2048
-> /sys/block/sdf/queue/dax:0
-> /sys/block/sdf/queue/physical_block_size:512
-> /sys/block/sdf/queue/logical_block_size:512
-> /sys/block/sdf/queue/io_timeout:30000
-> /sys/block/sdf/queue/nr_requests:2
-> /sys/block/sdf/queue/write_cache:write through/sys/block/sdf/queue/max_segment_size:4294967295
-> /sys/block/sdf/queue/rotational:1
-> /sys/block/sdf/queue/discard_max_bytes:0
-> /sys/block/sdf/queue/add_random:1
-> /sys/block/sdf/queue/discard_max_hw_bytes:0
-> /sys/block/sdf/queue/optimal_io_size:0
-> /sys/block/sdf/queue/chunk_sectors:0
-> /sys/block/sdf/queue/iosched/front_merges:1
-> /sys/block/sdf/queue/iosched/read_expire:500
-> /sys/block/sdf/queue/iosched/fifo_batch:16
-> /sys/block/sdf/queue/iosched/write_expire:5000/sys/block/sdf/queue/iosched/writes_starved:2
-> /sys/block/sdf/queue/read_ahead_kb:128
-> /sys/block/sdf/queue/max_discard_segments:1
-> /sys/block/sdf/queue/write_zeroes_max_bytes:0
-> /sys/block/sdf/queue/nomerges:0
-> /sys/block/sdf/queue/wbt_lat_usec:75000
-> /sys/block/sdf/queue/fua:0
-> /sys/block/sdf/queue/discard_granularity:0
-> /sys/block/sdf/queue/rq_affinity:1
-> /sys/block/sdf/queue/max_sectors_kb:120
-> /sys/block/sdf/queue/hw_sector_size:512
-> /sys/block/sdf/queue/max_hw_sectors_kb:120
-> /sys/block/sdf/queue/iostats:1 
+r8153b_rx_agg_chg_indicate() needs to be called after enabling TX/RX and
+before calling rxdy_gated_en(tp, false). Otherwise, the change of the
+settings of RX aggregation wouldn't work.
 
-The above is basically same with my USB drive's queue setting, and looks
-all are fine.
+Besides, adjust rtl8152_set_coalesce() for the same reason. If
+rx_coalesce_usecs is changed, restart TX/RX to let the setting work.
 
-BTW, 'rotational' shouldn't be set for USB drive, except for USB HDD,
-but that shouldn't be related with your issue.
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+---
+ drivers/net/usb/r8152.c | 36 ++++++++++++++++++++++++++----------
+ 1 file changed, 26 insertions(+), 10 deletions(-)
 
-Then could you install bcc package and collect the IO trace?
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 101d1325f3f1..e887ac86fbef 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -2367,6 +2367,12 @@ static int rtl_stop_rx(struct r8152 *tp)
+ 	return 0;
+ }
+ 
++static inline void r8153b_rx_agg_chg_indicate(struct r8152 *tp)
++{
++	ocp_write_byte(tp, MCU_TYPE_USB, USB_UPT_RXDMA_OWN,
++		       OWN_UPDATE | OWN_CLEAR);
++}
++
+ static int rtl_enable(struct r8152 *tp)
+ {
+ 	u32 ocp_data;
+@@ -2377,6 +2383,15 @@ static int rtl_enable(struct r8152 *tp)
+ 	ocp_data |= CR_RE | CR_TE;
+ 	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CR, ocp_data);
+ 
++	switch (tp->version) {
++	case RTL_VER_08:
++	case RTL_VER_09:
++		r8153b_rx_agg_chg_indicate(tp);
++		break;
++	default:
++		break;
++	}
++
+ 	rxdy_gated_en(tp, false);
+ 
+ 	return 0;
+@@ -2393,12 +2408,6 @@ static int rtl8152_enable(struct r8152 *tp)
+ 	return rtl_enable(tp);
+ }
+ 
+-static inline void r8153b_rx_agg_chg_indicate(struct r8152 *tp)
+-{
+-	ocp_write_byte(tp, MCU_TYPE_USB, USB_UPT_RXDMA_OWN,
+-		       OWN_UPDATE | OWN_CLEAR);
+-}
+-
+ static void r8153_set_rx_early_timeout(struct r8152 *tp)
+ {
+ 	u32 ocp_data = tp->coalesce / 8;
+@@ -2421,7 +2430,6 @@ static void r8153_set_rx_early_timeout(struct r8152 *tp)
+ 			       128 / 8);
+ 		ocp_write_word(tp, MCU_TYPE_USB, USB_RX_EXTRA_AGGR_TMR,
+ 			       ocp_data);
+-		r8153b_rx_agg_chg_indicate(tp);
+ 		break;
+ 
+ 	default:
+@@ -2445,7 +2453,6 @@ static void r8153_set_rx_early_size(struct r8152 *tp)
+ 	case RTL_VER_09:
+ 		ocp_write_word(tp, MCU_TYPE_USB, USB_RX_EARLY_SIZE,
+ 			       ocp_data / 8);
+-		r8153b_rx_agg_chg_indicate(tp);
+ 		break;
+ 	default:
+ 		WARN_ON_ONCE(1);
+@@ -4919,8 +4926,17 @@ static int rtl8152_set_coalesce(struct net_device *netdev,
+ 	if (tp->coalesce != coalesce->rx_coalesce_usecs) {
+ 		tp->coalesce = coalesce->rx_coalesce_usecs;
+ 
+-		if (netif_running(tp->netdev) && netif_carrier_ok(netdev))
+-			r8153_set_rx_early_timeout(tp);
++		if (netif_running(netdev) && netif_carrier_ok(netdev)) {
++			netif_stop_queue(netdev);
++			napi_disable(&tp->napi);
++			tp->rtl_ops.disable(tp);
++			tp->rtl_ops.enable(tp);
++			rtl_start_rx(tp);
++			clear_bit(RTL8152_SET_RX_MODE, &tp->flags);
++			_rtl8152_set_rx_mode(netdev);
++			napi_enable(&tp->napi);
++			netif_wake_queue(netdev);
++		}
+ 	}
+ 
+ 	mutex_unlock(&tp->control);
+-- 
+2.21.0
 
-	sudo /usr/share/bcc/tools/biosnoop | grep sdN
-
-sdN is your USB disk device name.
-
-Thanks,
-Ming
