@@ -2,91 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F005E528
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 15:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159B75E5CE
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 15:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727031AbfGCNRQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 09:17:16 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:43599 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726823AbfGCNRP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 09:17:15 -0400
-Received: by mail-pl1-f196.google.com with SMTP id cl9so1232502plb.10;
-        Wed, 03 Jul 2019 06:17:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=I+BQdeOmtZ7IKz7FF6jeB1KL5T/xBTm14TBegiYeXME=;
-        b=hdsznt0KttbCFAXsabxfmtp6+t3geEt/8abokOpKd1ElP53l0GSKy0MBAUpFPJcOif
-         JBioFRWlKeEeDIWHLfVe0qj0++/hrYP1LlmdK33cPh0rtqqMLkeD/7bRdTkH6MTU8IFK
-         B0QreONXGKVnrs23PFCGqnt/RV08JDl5MPyywByMOOxwUXQHrjPT6igdxI5xMGotGMWQ
-         6MOIGXNcFni2XFwHeeCWafZIH98vWVQTxA1XpVf9cvuIsNu7sP1WEHY4YC+ha0iMyy6R
-         bzUrKde6mulNWxDiLBgmUsid/y30NEUGglrQP4nLYAZyrOZk6YZCiqpdXKOTuqO3busO
-         79Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=I+BQdeOmtZ7IKz7FF6jeB1KL5T/xBTm14TBegiYeXME=;
-        b=DghvIRtT9PD7ec4VvERhNAqaALDL6SifqQluAUhxYO0DQ53E9iTfyknrZQrMp+5dcL
-         Od7F+1uKDqIUSynGnhibi2s5vF2TRNA4QJtXi9iZoSjTVnA1puwXfgdGqUHkJrO2Jjyb
-         NzHpKvc4AJ0CqrKyquZSH5lEW2Fyv/99MkKuKgknpXkS1k+LZgRJhPmpS+i6LLAtCDvM
-         qMPNST9Kbvpc3xxZnEmPJTqsDwi6SmCwEcay4PyOo9GyxdIEjwkOkbCN2LmbcUnWUhhi
-         PUrSw0fwCR62Y93ARfnMRZbOWvQ8ge5JEbze0QzojVXrG2CMFHPn2456pWQlMuomncLr
-         pXkQ==
-X-Gm-Message-State: APjAAAVUND+B6skd8CRrMG718icZHFJzandzxVKxaMVOhjIAs0WV28bD
-        XTXvnJDflEDInrhjPKqRfuw=
-X-Google-Smtp-Source: APXvYqz1JM4wam5zMtbtXbBfTaBciNfEsEphGiFSLqsyi9hSRtN44xP9VYYQ2792VhdXx9bcswss8Q==
-X-Received: by 2002:a17:902:aa41:: with SMTP id c1mr41914634plr.201.1562159835315;
-        Wed, 03 Jul 2019 06:17:15 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id u5sm2184456pgp.19.2019.07.03.06.17.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Jul 2019 06:17:14 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH 21/30] usb: Use kmemdup rather than duplicating its implementation
-Date:   Wed,  3 Jul 2019 21:17:05 +0800
-Message-Id: <20190703131705.25643-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726550AbfGCNyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 09:54:32 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54448 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725830AbfGCNyb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Jul 2019 09:54:31 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id C4095AEBB;
+        Wed,  3 Jul 2019 13:54:29 +0000 (UTC)
+Message-ID: <1562162068.5819.47.camel@suse.com>
+Subject: Re: [PATCH] Fix chipmunk-like voice when using Logitech C270 for
+ recording audio.
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Aidan Thornton <makosoft@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Marco Zatta <marco@zatta.me>
+Date:   Wed, 03 Jul 2019 15:54:28 +0200
+In-Reply-To: <CAB=c7ToV==vGZWOXaRqRcoOb4TNeVqi4QNAvgtiN0K6JjoF8Tg@mail.gmail.com>
+References: <20190601075257.GA24550@jimmy.localdomain>
+         <1559555890.25071.5.camel@suse.com>
+         <CAB=c7ToV==vGZWOXaRqRcoOb4TNeVqi4QNAvgtiN0K6JjoF8Tg@mail.gmail.com>
+Content-Type: multipart/mixed; boundary="=-2HPWkJKfa/LDsbT18ISQ"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-kmemdup is introduced to duplicate a region of memory in a neat way.
-Rather than kmalloc/kzalloc + memset, which the programmer needs to
-write the size twice (sometimes lead to mistakes), kmemdup improves
-readability, leads to smaller code and also reduce the chances of mistakes.
-Suggestion to use kmemdup rather than using kmalloc/kzalloc + memset.
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
- drivers/usb/class/cdc-acm.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+--=-2HPWkJKfa/LDsbT18ISQ
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 183b41753c98..cc4a96d59ffc 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1410,12 +1410,11 @@ static int acm_probe(struct usb_interface *intf,
- 		struct usb_cdc_country_functional_desc * cfd =
- 					h.usb_cdc_country_functional_desc;
- 
--		acm->country_codes = kmalloc(cfd->bLength - 4, GFP_KERNEL);
-+		acm->country_codes = kmemdup((u8 *)&cfd->wCountyCode0,
-+					cfd->bLength - 4, GFP_KERNEL);
- 		if (!acm->country_codes)
- 			goto skip_countries;
- 		acm->country_code_size = cfd->bLength - 4;
--		memcpy(acm->country_codes, (u8 *)&cfd->wCountyCode0,
--							cfd->bLength - 4);
- 		acm->country_rel_date = cfd->iCountryCodeRelDate;
- 
- 		i = device_create_file(&intf->dev, &dev_attr_wCountryCodes);
--- 
-2.11.0
+Am Donnerstag, den 20.06.2019, 21:19 +0100 schrieb Aidan Thornton:
+
+> What's particularly annoying is that since this is an intermittent
+> problem, it's hard to tell if I'm chasing a phantom solution for it
+> again. Haven't managed to replicate it since applying this fix and did
+> so pretty quickly before but you never know.
+> 
+
+This is time for the sledge hammer. No more surgical solutions.
+Could you test the attached patch?
+
+	Regards
+		Oliver
+
+--=-2HPWkJKfa/LDsbT18ISQ
+Content-Disposition: attachment;
+	filename*0=0001-Revert-usb-Add-USB_QUIRK_RESET_RESUME-for-all-Logite.pat;
+	filename*1=ch
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch;
+	name="0001-Revert-usb-Add-USB_QUIRK_RESET_RESUME-for-all-Logite.patch";
+	charset="UTF-8"
+
+RnJvbSAwNmI4MjZiZjNlMmQzZmIxNWFlZTY3NjE4NWM2MzJiOWYwOGExMGRiIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBXZWQsIDMgSnVsIDIwMTkgMTU6MzE6MDUgKzAyMDAKU3ViamVjdDogW1BBVENIXSBSZXZlcnQg
+InVzYjogQWRkIFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgZm9yIGFsbCBMb2dpdGVjaCBVVkMKIHdl
+YmNhbXMiCgpUaGlzIHMgYSBwYXJ0aWFsIHJldmVydCBvZiBjb21taXQgZTM4N2VmNWM0N2RkZWFl
+YWEzY2JkYzU0NDI0Y2RiN2EyOGRhZTJjMC4KVGhlIG9yaWdpbmFsIGZpeCBmb3IgdGhlICJzcXVl
+YWt5IHZvaWNlIiBidWcgb2Ygc29tZSBMb2dpdGVjaCB3ZWJjYW1zCndoZW4gdXNlZCBhcyBhdWRp
+byBkZXZpY2VzIHdhcyBpbgoKMjM5NGQ2N2U0NDZiZjYxNmEwODg1MTY3ZDVmMGQzOTdiZGFjZmRm
+YyAoIlVTQjogYWRkIFJFU0VUX1JFU1VNRSBmb3IKd2ViY2FtcyBzaG93biB0byBiZSBxdWlya3ki
+KQoKd2hpY2ggaW4gc3Vic2VxdWVudCBkZXZlbG9wbWVudCB3YXMgdW5kb25lLiBMYXRlciB0ZXN0
+cyBoYXZlIHNob3duCnRoZSBjb25zb2xvZGlhdGlvbiB0byBiZSBub3QgZXF1aXZhbGVudC4KU28g
+SSBhbSB0YWtpbmcgdGhlIGNvbnNlcnZhdGl2ZSBhcHByb2FjaCwgYmxhY2tsaXN0aW5nIGV2ZXJ5
+dGhpbmcgdGhhdAp3YXMgYmxhY2tsaXN0ZWQgYXQgYW55IHBvaW50IGluIHRoZSBwYXN0LiBXZSBo
+YXZlIHJlcG9ydHMgb2YgbXVsdGlwbGUKZGV2aWNlcyBhZmZlY3RlZCBhbmQgcmV0ZXN0aW5nIHRo
+aXMgb24gc28gbWFueSBvbGQgZGV2aWNlcyBpcwppbXByYWN0aWNhbC4KClNpZ25lZC1vZmYtYnk6
+IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+ClJlcG9ydGVkLWJ5OiBBaWRhbiBUaG9y
+bnRvbiA8bWFrb3NvZnRAZ21haWwuY29tPgpSZXBvcnRlZC1ieTogTWFyY28gWmF0dGEgPG1hcmNv
+QHphdHRhLm1lPgotLS0KIGRyaXZlcnMvdXNiL2NvcmUvcXVpcmtzLmMgfCA1MyArKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDQz
+IGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNi
+L2NvcmUvcXVpcmtzLmMgYi9kcml2ZXJzL3VzYi9jb3JlL3F1aXJrcy5jCmluZGV4IDUzM2ZlOGMw
+ZjBhMi4uZTNjMjRkNWIyOTU5IDEwMDY0NAotLS0gYS9kcml2ZXJzL3VzYi9jb3JlL3F1aXJrcy5j
+CisrKyBiL2RyaXZlcnMvdXNiL2NvcmUvcXVpcmtzLmMKQEAgLTIzNCwyMCArMjM0LDUzIEBAIHN0
+YXRpYyBjb25zdCBzdHJ1Y3QgdXNiX2RldmljZV9pZCB1c2JfcXVpcmtfbGlzdFtdID0gewogCS8q
+IExvZ2l0ZWNoIFF1aWNrY2FtIEZ1c2lvbiAqLwogCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDhj
+MSksIC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKIAotCS8qIExvZ2l0
+ZWNoIFF1aWNrY2FtIE9yYml0IE1QICovCi0JeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwOGMyKSwg
+LmRyaXZlcl9pbmZvID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAorCS8qIExvZ2l0ZWNoIFdl
+YmNhbSBDMjAwICovCisJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwODAyKSwgLmRyaXZlcl9pbmZv
+ID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAogCi0JLyogTG9naXRlY2ggUXVpY2tjYW0gUHJv
+IGZvciBOb3RlYm9vayAqLwotCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDhjMyksIC5kcml2ZXJf
+aW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKKwkvKiBMb2dpdGVjaCBXZWJjYW0gQzI1
+MCAqLworCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDgwNCksIC5kcml2ZXJfaW5mbyA9IFVTQl9R
+VUlSS19SRVNFVF9SRVNVTUUgfSwKIAotCS8qIExvZ2l0ZWNoIFF1aWNrY2FtIFBybyA1MDAwICov
+Ci0JeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwOGM1KSwgLmRyaXZlcl9pbmZvID0gVVNCX1FVSVJL
+X1JFU0VUX1JFU1VNRSB9LAorCS8qIExvZ2l0ZWNoIFdlYmNhbSBDMzAwICovCisJeyBVU0JfREVW
+SUNFKDB4MDQ2ZCwgMHgwODA1KSwgLmRyaXZlcl9pbmZvID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VN
+RSB9LAogCi0JLyogTG9naXRlY2ggUXVpY2tjYW0gT0VNIERlbGwgTm90ZWJvb2sgKi8KLQl7IFVT
+Ql9ERVZJQ0UoMHgwNDZkLCAweDA4YzYpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRf
+UkVTVU1FIH0sCisJLyogTG9naXRlY2ggV2ViY2FtIEIvQzUwMCAqLworCXsgVVNCX0RFVklDRSgw
+eDA0NmQsIDB4MDgwNyksIC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwK
+IAotCS8qIExvZ2l0ZWNoIFF1aWNrY2FtIE9FTSBDaXNjbyBWVCBDYW1lcmEgSUkgKi8KLQl7IFVT
+Ql9ERVZJQ0UoMHgwNDZkLCAweDA4YzcpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRf
+UkVTVU1FIH0sCisJLyogTG9naXRlY2ggV2ViY2FtIEM2MDAgKi8KKwl7IFVTQl9ERVZJQ0UoMHgw
+NDZkLCAweDA4MDgpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRfUkVTVU1FIH0sCisK
+KwkvKiBMb2dpdGVjaCBXZWJjYW0gUHJvIDkwMDAgKi8KKwl7IFVTQl9ERVZJQ0UoMHgwNDZkLCAw
+eDA4MDkpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRfUkVTVU1FIH0sCisKKwkvKiBM
+b2dpdGVjaCBXZWJjYW0gQzkwNSAqLworCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDgwYSksIC5k
+cml2ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKKworCS8qIExvZ2l0ZWNoIFdl
+YmNhbSBDMjEwICovCisJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwODE5KSwgLmRyaXZlcl9pbmZv
+ID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAorCisJLyogTG9naXRlY2ggV2ViY2FtIEMyNjAg
+Ki8KKwl7IFVTQl9ERVZJQ0UoMHgwNDZkLCAweDA4MWEpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJ
+UktfUkVTRVRfUkVTVU1FIH0sCisKKwkvKiBMb2dpdGVjaCBXZWJjYW0gQzMxMCAqLworCXsgVVNC
+X0RFVklDRSgweDA0NmQsIDB4MDgxYiksIC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9S
+RVNVTUUgfSwKKworCS8qIExvZ2l0ZWNoIFdlYmNhbSBDOTEwICovCisJeyBVU0JfREVWSUNFKDB4
+MDQ2ZCwgMHgwODIxKSwgLmRyaXZlcl9pbmZvID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAor
+CisJLyogTG9naXRlY2ggV2ViY2FtIEMxNjAgKi8KKwl7IFVTQl9ERVZJQ0UoMHgwNDZkLCAweDA4
+MjQpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfUkVTRVRfUkVTVU1FIH0sCisKKwkvKiBMb2dp
+dGVjaCBXZWJjYW0gQzI3MCAqLworCXsgVVNCX0RFVklDRSgweDA0NmQsIDB4MDgyNSksIC5kcml2
+ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKKworCS8qIExvZ2l0ZWNoIFF1aWNr
+Y2FtIFBybyA5MDAwICovCisJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwOTkwKSwgLmRyaXZlcl9p
+bmZvID0gVVNCX1FVSVJLX1JFU0VUX1JFU1VNRSB9LAorCisJLyogTG9naXRlY2ggUXVpY2tjYW0g
+RTM1MDAgKi8KKwl7IFVTQl9ERVZJQ0UoMHgwNDZkLCAweDA5YTQpLCAuZHJpdmVyX2luZm8gPSBV
+U0JfUVVJUktfUkVTRVRfUkVTVU1FIH0sCisKKwkvKiBMb2dpdGVjaCBRdWlja2NhbSBWaXNpb24g
+UHJvICovCisJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHgwOWE2KSwgLmRyaXZlcl9pbmZvID0gVVNC
+X1FVSVJLX1JFU0VUX1JFU1VNRSB9LAogCiAJLyogTG9naXRlY2ggSGFybW9ueSA3MDAtc2VyaWVz
+ICovCiAJeyBVU0JfREVWSUNFKDB4MDQ2ZCwgMHhjMTIyKSwgLmRyaXZlcl9pbmZvID0gVVNCX1FV
+SVJLX0RFTEFZX0lOSVQgfSwKLS0gCjIuMTYuNAoK
+
+
+--=-2HPWkJKfa/LDsbT18ISQ--
 
