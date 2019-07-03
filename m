@@ -2,79 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B40E55DEE8
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 09:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0C25DF2D
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 09:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbfGCH3j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 03:29:39 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54346 "EHLO mx1.suse.de"
+        id S1727108AbfGCH4F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 03:56:05 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35528 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726670AbfGCH3j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jul 2019 03:29:39 -0400
+        id S1726670AbfGCH4F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Jul 2019 03:56:05 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B9713AFB0;
-        Wed,  3 Jul 2019 07:29:35 +0000 (UTC)
-Date:   Wed, 3 Jul 2019 09:29:34 +0200
-From:   Johannes Thumshirn <jthumshirn@suse.de>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20190703072934.GA4026@x250.microfocus.com>
-References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
- <20190702115117.GC4463@x250.microfocus.com>
- <20190702223630.GA3735@brian.unipv.it>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190702223630.GA3735@brian.unipv.it>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        by mx1.suse.de (Postfix) with ESMTP id BC276AF10;
+        Wed,  3 Jul 2019 07:56:03 +0000 (UTC)
+Message-ID: <1562139729.5819.28.camel@suse.com>
+Subject: Re: KASAN: use-after-free Read in cpia2_usb_disconnect
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+0c90fc937c84f97d0aa6@syzkaller.appspotmail.com>,
+        keescook@chromium.org, andreyknvl@google.com,
+        syzkaller-bugs@googlegroups.com, mchehab@kernel.org,
+        tglx@linutronix.de, sakari.ailus@linux.intel.com,
+        kstewart@linuxfoundation.org, allison@lohutok.net,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, hverkuil-cisco@xs4all.nl
+Date:   Wed, 03 Jul 2019 09:42:09 +0200
+In-Reply-To: <0000000000006d7e14058cbc6545@google.com>
+References: <0000000000006d7e14058cbc6545@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 12:36:30AM +0200, Andrea Vai wrote:
-> On 02/07/19 13:51:17, Johannes Thumshirn wrote:
-> > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
-> > > Hi,
-> > >   I have a problem writing data to a USB pendrive, and it seems
-> > > kernel-related. With the help of Greg an Alan (thanks) and some
-> > > bisect, I found out the offending commit being
-> > > 
-> > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-> > >
-> > > [...]
-> > 
-> > Hi,
-> > 
-> > Can you please check what IO scheduler you have set for your USB pendrive?
-> > 
-> > i.e. with:
-> > cat /sys/block/$DISK/queue/scheduler
-> >
+Am Dienstag, den 02.07.2019, 18:01 -0700 schrieb syzbot:
+> syzbot has found a reproducer for the following crash on:
 > 
-> # cat /sys/block/sdf/queue/scheduler
-> [mq-deadline] none
+> HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11e19043a00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
+> dashboard link: https://syzkaller.appspot.com/bug?extid=0c90fc937c84f97d0aa6
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147d42eda00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=104c268ba00000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+0c90fc937c84f97d0aa6@syzkaller.appspotmail.com
+> 
+> cpia2: Message: count = 1, register[0] = 0x0
+> cpia2: Unexpected error: -19
+> ==================================================================
+> BUG: KASAN: use-after-free in cpia2_usb_disconnect+0x1a4/0x1c0  
+> drivers/media/usb/cpia2/cpia2_usb.c:898
+> Read of size 8 at addr ffff8881cf6c4e50 by task kworker/1:1/22
 
-One thing you can try as well is building a kernel with CONFIG_IOSCHED_BFQ and
-use it. Deadline is probably not the best choice for a slow drive.
+Please try this:
 
-Byte,
-	Johannes
+From a0a73298fc23acb95e7b6487e960be707563eb34 Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Wed, 8 May 2019 12:36:40 +0200
+Subject: [PATCH] cpia2_usb: first wake up, then free in disconnect
+
+Kasan reported a use after free in cpia2_usb_disconnect()
+It first freed everything and then woke up those waiting.
+The reverse order is correct.
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: syzbot+0c90fc937c84f97d0aa6@syzkaller.appspotmail.com
+Fixes: 6c493f8b28c67 ("[media] cpia2: major overhaul to get it in a working state again")
+---
+ drivers/media/usb/cpia2/cpia2_usb.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/cpia2/cpia2_usb.c b/drivers/media/usb/cpia2/cpia2_usb.c
+index e5d8dee38fe4..44bd7e5ad3eb 100644
+--- a/drivers/media/usb/cpia2/cpia2_usb.c
++++ b/drivers/media/usb/cpia2/cpia2_usb.c
+@@ -902,7 +902,6 @@ static void cpia2_usb_disconnect(struct usb_interface *intf)
+ 	cpia2_unregister_camera(cam);
+ 	v4l2_device_disconnect(&cam->v4l2_dev);
+ 	mutex_unlock(&cam->v4l2_lock);
+-	v4l2_device_put(&cam->v4l2_dev);
+ 
+ 	if(cam->buffers) {
+ 		DBG("Wakeup waiting processes\n");
+@@ -911,6 +910,8 @@ static void cpia2_usb_disconnect(struct usb_interface *intf)
+ 		wake_up_interruptible(&cam->wq_stream);
+ 	}
+ 
++	v4l2_device_put(&cam->v4l2_dev);
++
+ 	LOG("CPiA2 camera disconnected.\n");
+ }
+ 
 -- 
-Johannes Thumshirn                            SUSE Labs Filesystems
-jthumshirn@suse.de                                +49 911 74053 689
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
-Key fingerprint = EC38 9CAB C2C4 F25D 8600 D0D0 0393 969D 2D76 0850
+2.16.4
+
