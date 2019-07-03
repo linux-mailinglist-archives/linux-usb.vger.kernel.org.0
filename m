@@ -2,117 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCB55DB65
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 04:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7935DC58
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 04:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726963AbfGCCPC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jul 2019 22:15:02 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:45575 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726329AbfGCCPC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jul 2019 22:15:02 -0400
-Received: by mail-pl1-f193.google.com with SMTP id bi6so299697plb.12;
-        Tue, 02 Jul 2019 19:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Isqfps/O6LwRnu+dRSzriy5CxI0umRBIFUrqM+okdCs=;
-        b=eMgdo5cxD8xocs0qEkS5EHNLEtNLZV+yO9aTlypZIbft8FBVAa/yS1ZqB/gmuI9J/0
-         Y8Pu2DxexEkDszk9Vt58d1mBAWJBnWu1X/ISi5igs1bfkab1EeO/UYJxuIodJvv+bug8
-         RLH6+zu3qy8OB+mCmUxEv2K/a6RmUkDmtOIcoYpld8hLAO5MFAPgxNp+m6D4M9n0Ouc3
-         DHY9n/2eiMdeYjvHF07NkRPu7wpGYeBMmMZXtpBr1e91vJDDJf405wmxpI0DIi/xxU+x
-         tuuOLTUVeWD5skWO0zu3+1OIW3Bq7UykHev7jtjweIeTsCh1C7mqHXKyVYOfCz+rDy+o
-         mSPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Isqfps/O6LwRnu+dRSzriy5CxI0umRBIFUrqM+okdCs=;
-        b=Aeavo+47bzaP0DLTpADFMMtDRqyFIN21vTuHT0oykWfA0sH1wajrDBV2i0dF5Xf084
-         XUu7NH3rM9vbTCbhwcbJebcbZvp/T9gBQeNcGa8qN0SzTEyCyB8icjg3U948Qmbx6IDr
-         8RnTIPCWbg/A7lZl7d9P+dcWhuXuKmTUA74yzhWCms0ASn8PmoYU9bqB99HxmEugOgfF
-         oH/UH5HFoylAjLfMLaSQQML6CYpU0EYJCGIZVXIWUlwbvane7Q1k25a9WJVTp4CIcTvq
-         oHu/TL77NNqXszzIg604TGu1JfHaCPpfFmZ4XQqJqhkDHfBkxvnYKhx4WENUL7tRTrV3
-         VhgQ==
-X-Gm-Message-State: APjAAAWtoVjybjiq8ADL66h6clmA+A7EqoyeqmmgdVMQM6Qn+wv6Ssxh
-        B2d0iuaULxImOdOiD6oFDa4=
-X-Google-Smtp-Source: APXvYqzbJaktcOHx/dP/TVDMSw89q+FpGXl/R5M9ermN1pbkJ4Zt5sJqY6gmBfin0c4K0V1idxIXQA==
-X-Received: by 2002:a17:902:b944:: with SMTP id h4mr30236136pls.179.1562120101420;
-        Tue, 02 Jul 2019 19:15:01 -0700 (PDT)
-Received: from debian.net.fpt ([2405:4800:58f7:1cb1:98e0:87d3:2c8b:b6ed])
-        by smtp.gmail.com with ESMTPSA id h2sm382955pgs.17.2019.07.02.19.14.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Jul 2019 19:15:00 -0700 (PDT)
-From:   Phong Tran <tranmanphong@gmail.com>
-To:     tranmanphong@gmail.com
-Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        hans.verkuil@cisco.com, keescook@chromium.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        skhan@linuxfoundation.org,
-        syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, glider@google.com
-Subject: [PATCH V2] media: usb: technisat-usb2: fix buffer overflow
-Date:   Wed,  3 Jul 2019 09:14:44 +0700
-Message-Id: <20190703021444.19954-1-tranmanphong@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190702140211.28399-1-tranmanphong@gmail.com>
-References: <20190702140211.28399-1-tranmanphong@gmail.com>
+        id S1727885AbfGCCV6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jul 2019 22:21:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54110 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727726AbfGCCPs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jul 2019 22:15:48 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B37462189E;
+        Wed,  3 Jul 2019 02:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562120147;
+        bh=LSwEiAyPY+KjA1cb5aSdkiBAeVpkrlpKj2sAb7zAvlw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zrKCo7Td7UdEHYyHGMIdsHYHTgReMRvLk4yDA3SdLNwV3+i4KwzIg1g2UDN4t+NVF
+         JrMAHNjlU8AdB7DB2fMs7NtitPwf6Svk6Idrw4aNK5bO7Ok8EhDRxkgOvt8Nr3QW78
+         j47NxewCh4BiICfffuF8LsgZ9gPC7WMBPBOxBq5U=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com,
+        Kristian Evensen <kristian.evensen@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 22/39] qmi_wwan: Fix out-of-bounds read
+Date:   Tue,  2 Jul 2019 22:14:57 -0400
+Message-Id: <20190703021514.17727-22-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190703021514.17727-1-sashal@kernel.org>
+References: <20190703021514.17727-1-sashal@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The buffer will be overflow in case of the while loop can not break.
-Add the checking buffer condition in while loop for avoiding
-overlooping index.
+From: Bjørn Mork <bjorn@mork.no>
 
-This issue was reported by syzbot
+[ Upstream commit 904d88d743b0c94092c5117955eab695df8109e8 ]
 
-Reported-by: syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com
+The syzbot reported
 
-Tested-by:
-https://groups.google.com/d/msg/syzkaller-bugs/CySBCKuUOOs/t3PvVheSAAAJ
+ Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description+0x67/0x231 mm/kasan/report.c:188
+  __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
+  kasan_report+0xe/0x20 mm/kasan/common.c:614
+  qmi_wwan_probe+0x342/0x360 drivers/net/usb/qmi_wwan.c:1417
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
 
-Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+Caused by too many confusing indirections and casts.
+id->driver_info is a pointer stored in a long.  We want the
+pointer here, not the address of it.
+
+Thanks-to: Hillf Danton <hdanton@sina.com>
+Reported-by: syzbot+b68605d7fadd21510de1@syzkaller.appspotmail.com
+Cc: Kristian Evensen <kristian.evensen@gmail.com>
+Fixes: e4bf63482c30 ("qmi_wwan: Add quirk for Quectel dynamic config")
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-Change Log:
- * V2: add IR_MAX_BUFFER_INDEX and adjust the while loop condition as comments
----
- drivers/media/usb/dvb-usb/technisat-usb2.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/usb/qmi_wwan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb/technisat-usb2.c b/drivers/media/usb/dvb-usb/technisat-usb2.c
-index c659e18b358b..cdabff97c1ea 100644
---- a/drivers/media/usb/dvb-usb/technisat-usb2.c
-+++ b/drivers/media/usb/dvb-usb/technisat-usb2.c
-@@ -49,6 +49,7 @@ MODULE_PARM_DESC(disable_led_control,
- 		"disable LED control of the device (default: 0 - LED control is active).");
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index d9a6699abe59..e657d8947125 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1412,7 +1412,7 @@ static int qmi_wwan_probe(struct usb_interface *intf,
+ 	 * different. Ignore the current interface if the number of endpoints
+ 	 * equals the number for the diag interface (two).
+ 	 */
+-	info = (void *)&id->driver_info;
++	info = (void *)id->driver_info;
  
- /* device private data */
-+#define IR_MAX_BUFFER_INDEX	63
- struct technisat_usb2_state {
- 	struct dvb_usb_device *dev;
- 	struct delayed_work green_led_work;
-@@ -56,7 +57,7 @@ struct technisat_usb2_state {
- 
- 	u16 last_scan_code;
- 
--	u8 buf[64];
-+	u8 buf[IR_MAX_BUFFER_INDEX + 1];
- };
- 
- /* debug print helpers */
-@@ -655,7 +656,7 @@ static int technisat_usb2_get_ir(struct dvb_usb_device *d)
- #endif
- 
- 	ev.pulse = 0;
--	while (1) {
-+	while (b <= (buf + IR_MAX_BUFFER_INDEX)) {
- 		ev.pulse = !ev.pulse;
- 		ev.duration = (*b * FIRMWARE_CLOCK_DIVISOR * FIRMWARE_CLOCK_TICK) / 1000;
- 		ir_raw_event_store(d->rc_dev, &ev);
+ 	if (info->data & QMI_WWAN_QUIRK_QUECTEL_DYNCFG) {
+ 		if (desc->bNumEndpoints == 2)
 -- 
-2.11.0
+2.20.1
 
