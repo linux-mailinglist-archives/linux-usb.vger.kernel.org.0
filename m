@@ -2,148 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C08F05DDB0
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 07:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4F65DDEA
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 08:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbfGCFLZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 01:11:25 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:37982 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbfGCFLZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 01:11:25 -0400
-Received: by mail-wr1-f66.google.com with SMTP id p11so1112374wro.5
-        for <linux-usb@vger.kernel.org>; Tue, 02 Jul 2019 22:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=MCBo68cNpu9K2+/oD1vEHNbliIsfq9Q6CFA9cda7BCg=;
-        b=FgoMN7QZ/bicRCJawMdgeHwPb8Zzg2uCzZIfnfJsd+dOlXrOvXOT/hxM1XaGoEpMQQ
-         VyfZu7jaHdZgGHkxfffWsEMDiAADqvJh7J9Xp9TrrrjaghEUVsVeAj1NFoccXhBOlXMO
-         1MNze9hl+xyHxyVZd9xgbSprLM680eE0ptrKCJ7XaixcpWIlA3Mn8kSN1ni6S7elKva+
-         MJT17ORah4To3ezs3jZLJIcoRA4vr4vrgWAN8q5WSgr6COh+nEkq9Yuopj9SLE89stRj
-         oFKeUg+XkpizZwL2pGdxbSxoQWZ7BO1AAcawIx6OEa5U4RvdZf886OWavhMoSAlWy+G7
-         4PpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MCBo68cNpu9K2+/oD1vEHNbliIsfq9Q6CFA9cda7BCg=;
-        b=F7uLnwNdgvnk/04SSApEPBNyzKRKBEMIW/eR062ozueN3BJe9Yzq86GMFkMdIglQvQ
-         OUYhSX9MwUIZbmxqGJt0zuhiCQYzUxSAq6BCyF7F6SIowXZIJIWWd2moElCjnJjPvvRd
-         UQ12551yXGwPs+D5hr/gJP0MWcCL23o8tcjl6Jg5vGvbTFyTb+EEke6cl849hSK56B+v
-         sGHfpD0wEPFFWkBRhr3QCzteSSz6Bv/041ho+9uYSvzu6iP+K6QSlSl1AibHja8o0P+H
-         O/Pj0eA4b9QgfTLoIpMj8uQQFFTw8s76VWcibp2MoFHTUf3N1WF72jC/MFSinhcNbkLI
-         jOeQ==
-X-Gm-Message-State: APjAAAVQRUShYxYo4aSQ3MPvdbXSwMxauwJIB2Ox5v49Ort16m/z/Myb
-        O4ieiOGt8u4Xo3US9udA2W1vQQ==
-X-Google-Smtp-Source: APXvYqwItJ1xofEc3Pxg0+Z9V98mKz2e3BPbyQS7r3T5ZG7OniQHTnn6RQnCoNsTnG05RFqgShLrYg==
-X-Received: by 2002:adf:ea92:: with SMTP id s18mr25804612wrm.257.1562130682903;
-        Tue, 02 Jul 2019 22:11:22 -0700 (PDT)
-Received: from brian.unipv.it ([37.162.54.227])
-        by smtp.gmail.com with ESMTPSA id l8sm1953716wrg.40.2019.07.02.22.11.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Jul 2019 22:11:22 -0700 (PDT)
-Date:   Wed, 3 Jul 2019 07:11:17 +0200
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20190703051117.GA6458@brian.unipv.it>
-References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
- <20190702120112.GA19890@ming.t460p>
- <20190702223931.GB3735@brian.unipv.it>
- <20190703020119.GA23872@ming.t460p>
+        id S1726670AbfGCGMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 02:12:49 -0400
+Received: from mga14.intel.com ([192.55.52.115]:10477 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725927AbfGCGMt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Jul 2019 02:12:49 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Jul 2019 23:12:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,446,1557212400"; 
+   d="scan'208";a="362926028"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga006.fm.intel.com with ESMTP; 02 Jul 2019 23:12:47 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Bin Liu <b-liu@ti.com>, Jack Pham <jackp@codeaurora.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: configfs on dwc3: msc enum failed if three functions defined
+In-Reply-To: <20190702182050.GB20724@uda0271908>
+References: <20190422134357.GA2071@uda0271908> <20190425224456.GA27553@jackp-linux.qualcomm.com> <20190702144842.GA20724@uda0271908> <20190702165122.GA15112@jackp-linux.qualcomm.com> <20190702175013.GB2724@uda0271908> <20190702182050.GB20724@uda0271908>
+Date:   Wed, 03 Jul 2019 09:12:41 +0300
+Message-ID: <87muhvd4ti.fsf@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190703020119.GA23872@ming.t460p>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03/07/19 10:01:23, Ming Lei wrote:
-> On Wed, Jul 03, 2019 at 12:39:31AM +0200, Andrea Vai wrote:
-> > On 02/07/19 20:01:13, Ming Lei wrote:
-> > > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
-> > > > Hi,
-> > > >   I have a problem writing data to a USB pendrive, and it seems
-> > > > kernel-related. With the help of Greg an Alan (thanks) and some
-> > > > bisect, I found out the offending commit being
-> > > > 
-> > > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-> > > > 
-> > > >  [...]    
-> > > >     
-> > > 
-> > > One possible reason may be related with too small 'nr_requests', could
-> > > you apply the following command and see if any difference can be made?
-> > > 
-> > > echo 32 > /sys/block/sdN/queue/nr_requests
-> > 
-> > I applied it (echo 32 > /sys/block/sdf/queue/nr_requests), ran the test again, and still failed. I assumed I didn't have to build the kernel again, did I? (sorry but I am not skilled)
-> > 
-> 
-> You don't need to build kernel.
-> 
-> I just run same write test on one slow usb drive in my laptop, which
-> runs '5.1.11-200.fc29.x86_64', and can't reproduce your issue, maybe it
-> depends on your drive.
-> 
-> Could you collect the queue limits sysfs log via the following command?
-> 
-> 	find /sys/block/sdN/queue -type f -exec grep -aH . {} \;
+
+Hi,
+
+Bin Liu <b-liu@ti.com> writes:
+
+> On Tue, Jul 02, 2019 at 12:50:13PM -0500, Bin Liu wrote:
+>> On Tue, Jul 02, 2019 at 09:51:22AM -0700, Jack Pham wrote:
+>> > Hi Bin,
+>> > 
+>> > On Tue, Jul 02, 2019 at 09:48:42AM -0500, Bin Liu wrote:
+>> > > Hi,
+>> > > 
+>> > > Sorry for the delay getting back on this. I was offline for quite some
+>> > > time.
+>> > > 
+>> > > On Thu, Apr 25, 2019 at 03:44:57PM -0700, Jack Pham wrote:
+>> > > > Hi Bin,
+>> > > > 
+>> > > > On Mon, Apr 22, 2019 at 08:43:57AM -0500, Bin Liu wrote:
+>> > > > > Hi Felipe,
+>> > > > > 
+>> > > > > I am having an issue with dwc3 on TI AM57x device, and would like to ask
+>> > > > > for your comments.
+>> > > > > 
+>> > > > > I use configfs to create a multi-function gadget on dwc3, mass_storage
+>> > > > > is the last function, it seems if I create 3 functions, the mass_storage
+>> > > > > enumeration will fail on the host. It works fine if only create 2
+>> > > > > functions.
+>> > > > > 
+>> > > > > The dwc3 tracepoints log shows after all the ep0 transfers for
+>> > > > > mass_storage, the very first epXin transfer is not complete - dwc3
+>> > > > > programmed the urb, but never generates RX completion event. This also
+>> > > > > matches the bus analyzer trace - dwc3 NAKs the very first IN token for
+>> > > > > ever.
+>> > > > > 
+>> > > > > I use the attached script to create the gadget, The macro FUNCS in the
+>> > > > > beginning of the script defines the functions to be created.
+>> > > > > 
+>> > > > > Any comments are appreciated.
+>> > > > 
+>> > > > A stab in the dark here but what is the value of GTXFIFOSIZ(X)[15:0]
+>> > > > for epXin on your device? Is it at least wMaxPacketSize? Depending on
+>> > > > the default hardware values it might be deficient as compared to the
+>> > > > working endpoint that gets assigned in your 2-function config.
+>> > > 
+>> > > Jack,
+>> > > 
+>> > > thanks for the pointer, it is indeed the issue on AM57x device.  The
+>> > > reset value of GTXFIFOSIZ for ep1~4 have size of 0x184, but ep5~15 have
+>> > > only size of 0x13 (which is 120 bytes), which is not enough for
+>> > > high-speed bulk xfers. I manually adjusted the fifo memory allocation,
+>> > > now my test case works.
+>> > 
+>> > Cool! I'm glad my suggestion was on the right track.
+>> >  
+>> > > Felipe,
+>> > > 
+>> > > Is there anything the dwc3 gadget driver can do to better handle this
+>> > > kind of devices, which don't have enough fifo buffers for all TX eps?
+>> > 
+>> > A long time ago...
+>> > 
+>> > commit bc5081617faeb3b2f0c126dc37264b87af7da47f
+>> > Author: Felipe Balbi <felipe.balbi@linux.intel.com>
+>> > Date:   Thu Feb 4 14:18:01 2016 +0200
+>> > 
+>> >     usb: dwc3: drop FIFO resizing logic
+>> > 
+>> >     That FIFO resizing logic was added to support OMAP5
+>> >     ES1.0 which had a bogus default FIFO size. I can't
+>> >     remember the exact size of default FIFO, but it was
+>> >     less than one bulk superspeed packet (<1024) which
+>> >     would prevent USB3 from ever working on OMAP5 ES1.0.
+>> > 
+>> >     However, OMAP5 ES1.0 support has been dropped by
+>> >     commit aa2f4b16f830 ("ARM: OMAP5: id: Remove ES1.0
+>> >     support") which renders FIFO resizing unnecessary.
+>> > 
+>> >     Tested-by: Kishon Vijay Abraham I <kishon@ti.com>
+>> >     Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+>> > 
+>> > Prior to this there was a function dwc3_gadget_resize_tx_fifo(),
+>> > enabled via DT flag, which enumerated all the endpoints and
+>> > recalculated the TX FIFO sizes based on the transfer type of the
+>> > EPs' configuration.
+>> > 
+>> > Unfortunately some Qualcomm SoCs are still plagued by having
+>> > insufficient defaults, so we resort to carrying this function on our
+>> > downstream kernels. It seems TI AM57x still has this problem too?
+
+Why was I never told about this? We had ONE SoC that needed this feature
+because of a known-bad silicon that was completely dropped from
+mainline. Note that this commit was doing a "best-effort" at getting
+something know-bad to work. There's no guarantee that we even have
+enough FIFO space while configuring everything to 1024 bytes FIFO size.
+
+If you to bring that back, please propose a patch, but it'll be
+difficult to make it work reliably for everybody.
+
+>> Yes, it appears to be the case.
 >
+> Wait, AM57x seems to be different. The issue mentioned in the commit
+> above is about bogus FIFO size, but GTXFIFOSIZ on AM57x are correct. it
+> is just that AM57x only has about total 13K+ FIFO memory, so only up to
+> 4 TX endpoints which can have 3K FIFO, any use case which requires more
+> than 4 TX endpoints will fail.
 
-# find /sys/block/sdf/queue -type f -exec grep -aH . {} ;
-/sys/block/sdf/queue/io_poll_delay:-1
-/sys/block/sdf/queue/max_integrity_segments:0
-/sys/block/sdf/queue/zoned:none
-/sys/block/sdf/queue/scheduler:[mq-deadline] none
-/sys/block/sdf/queue/io_poll:0
-/sys/block/sdf/queue/discard_zeroes_data:0
-/sys/block/sdf/queue/minimum_io_size:512
-/sys/block/sdf/queue/nr_zones:0
-/sys/block/sdf/queue/write_same_max_bytes:0
-/sys/block/sdf/queue/max_segments:2048
-/sys/block/sdf/queue/dax:0
-/sys/block/sdf/queue/physical_block_size:512
-/sys/block/sdf/queue/logical_block_size:512
-/sys/block/sdf/queue/io_timeout:30000
-/sys/block/sdf/queue/nr_requests:2
-/sys/block/sdf/queue/write_cache:write through/sys/block/sdf/queue/max_segment_size:4294967295
-/sys/block/sdf/queue/rotational:1
-/sys/block/sdf/queue/discard_max_bytes:0
-/sys/block/sdf/queue/add_random:1
-/sys/block/sdf/queue/discard_max_hw_bytes:0
-/sys/block/sdf/queue/optimal_io_size:0
-/sys/block/sdf/queue/chunk_sectors:0
-/sys/block/sdf/queue/iosched/front_merges:1
-/sys/block/sdf/queue/iosched/read_expire:500
-/sys/block/sdf/queue/iosched/fifo_batch:16
-/sys/block/sdf/queue/iosched/write_expire:5000/sys/block/sdf/queue/iosched/writes_starved:2
-/sys/block/sdf/queue/read_ahead_kb:128
-/sys/block/sdf/queue/max_discard_segments:1
-/sys/block/sdf/queue/write_zeroes_max_bytes:0
-/sys/block/sdf/queue/nomerges:0
-/sys/block/sdf/queue/wbt_lat_usec:75000
-/sys/block/sdf/queue/fua:0
-/sys/block/sdf/queue/discard_granularity:0
-/sys/block/sdf/queue/rq_affinity:1
-/sys/block/sdf/queue/max_sectors_kb:120
-/sys/block/sdf/queue/hw_sector_size:512
-/sys/block/sdf/queue/max_hw_sectors_kb:120
-/sys/block/sdf/queue/iostats:1 
+wait, your GTXFIFOSZ is configured for 3K? That's completely
+unnecessary, even for high bandwidth highspeed isoc endpoints. Otherwise
+we would use 16kiB FIFO size for bulk endpoints with burst enabled.
 
-Thanks, and bye,
-Andrea
+> So maybe the driver could have a sanity check on FIFO size when
+> allocating endpoints?
+
+We have a "sanity check". We read FIFO configuration from HW while
+telling the framework what the endpoint can do. Now, if you during
+coreConsultant the core was badly configured, then the driver doesn't do much.
+
+static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
+{
+	struct dwc3 *dwc = dep->dwc;
+	int mdwidth;
+	int kbytes;
+	int size;
+
+	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
+	/* MDWIDTH is represented in bits, we need it in bytes */
+	mdwidth /= 8;
+
+	size = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1));
+	if (dwc3_is_usb31(dwc))
+		size = DWC31_GTXFIFOSIZ_TXFDEF(size);
+	else
+		size = DWC3_GTXFIFOSIZ_TXFDEF(size);
+
+	/* FIFO Depth is in MDWDITH bytes. Multiply */
+	size *= mdwidth;
+
+	kbytes = size / 1024;
+	if (kbytes == 0)
+		kbytes = 1;
+
+	/*
+	 * FIFO sizes account an extra MDWIDTH * (kbytes + 1) bytes for
+	 * internal overhead. We don't really know how these are used,
+	 * but documentation say it exists.
+	 */
+	size -= mdwidth * (kbytes + 1);
+	size /= kbytes;
+
+	usb_ep_set_maxpacket_limit(&dep->endpoint, size);
+
+	dep->endpoint.max_streams = 15;
+	dep->endpoint.ops = &dwc3_gadget_ep_ops;
+	list_add_tail(&dep->endpoint.ep_list,
+			&dwc->gadget.ep_list);
+	dep->endpoint.caps.type_iso = true;
+	dep->endpoint.caps.type_bulk = true;
+	dep->endpoint.caps.type_int = true;
+
+	return dwc3_alloc_trb_pool(dep);
+}
+
+
+-- 
+balbi
