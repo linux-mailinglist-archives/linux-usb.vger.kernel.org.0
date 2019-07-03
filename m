@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 570315E8E9
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 18:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5D75E903
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jul 2019 18:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727259AbfGCQ3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jul 2019 12:29:05 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:37213 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727076AbfGCQ3F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 12:29:05 -0400
-Received: by mail-pl1-f193.google.com with SMTP id bh12so1522472plb.4;
-        Wed, 03 Jul 2019 09:29:04 -0700 (PDT)
+        id S1727244AbfGCQau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jul 2019 12:30:50 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:38986 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727172AbfGCQau (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jul 2019 12:30:50 -0400
+Received: by mail-pf1-f193.google.com with SMTP id j2so1535129pfe.6;
+        Wed, 03 Jul 2019 09:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=WTPoqn8CSbIoCMVQ2nER3Fw2FFFBtKsXZetFkbEpLjQ=;
-        b=Fwv33z2RbQDYeP/BBRyfjMj18Q/gq19jPWitm//Ck+muhSMn3RePYHZuoMn2fmiofM
-         WOtLoznwgdhF7EYQYOFR6QZYWiSumAHxJPn18a8W2cWbgWn9o7DgzWxBKHAicFV6T4Fe
-         8yTP3cBaKpba/vLZCM77LR/B9/WjNlk/iKlWP6sC6+fIpTVU2Fke04qsVaIp43IuFi5q
-         S3yAxN3ERbDdPOqAjadQ32k7M5Wh45siiK/rktwDfUzP6TCC1SVhOpRE1RDvG6SFTAEx
-         25SUZQ841IPDQEKorMEEGwz9Xb9GxX2PMQERAVgAQN2E9OqySyONq2xKtokFKgmPTDuA
-         kkPQ==
+        bh=TrUa09acIW6HvvTGIpKx9PQFnQ16L2qeMF4zqtIgcwg=;
+        b=StUzsoCdTyphOOOBhHCvimsHOl/lw6873T7vbUGAhmcpeJckEl2APf6QxyfvODfDIx
+         6sv+a39EElywHWTMqTyLFrLV0YQedXL2l1LNtjU/b13C/pXw15WkDbAg2FPIuLC4gimN
+         0auJd7+Z7/WvneBw6+x2kNagrFfkxpL6rvIHgXU+nV8xFZf3EsEZwf7wv6Y6SYY2zGSq
+         9Lw8CMkOLH6e9MkO+4Sa7hWcfrWMxV1YQoFN4kpk4jOpLN8LNE1SUjmXxf6jNgfTbV47
+         /mIcNT3WshuviL+x5ENk2SgPUA8mV8XGgfPOnywr/LF4HBCswaXpLNYbDMyh0JA8a/3M
+         GM1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=WTPoqn8CSbIoCMVQ2nER3Fw2FFFBtKsXZetFkbEpLjQ=;
-        b=Hsckt4aYI/oB0VuqT+QqoJgtU1YydWtXaW9J/7PaJnR6d5XGgJrdWtPVrmTTEEPpbj
-         uqGzgS/lF5NPJisbhaxFxclUI0UThsavnmtUT5BZ6K6Q/wHOW+feediC8fVuP4LaTjPG
-         KJuno9DcJp6ABToERZp5X6zGDGmezang4MYcqQPFyRKxS2LgOdtcsZtzstWSh2QsSXvZ
-         r1adxujVjxft9d6TGRPgV0k+/pTWYc3jwyOEQAERNl7QxNkGLNK8cXeFCHEnhSkY+LuU
-         x/92ZYnJ2VxDEE4irbaSu/M7QdTmVLlszjUVqRNqsf5guR0nrCxDcw6QVwqkTissOyeD
-         Kb+Q==
-X-Gm-Message-State: APjAAAVlfu16GD9J2ObQX8GLzvq2IomBoUSJTFtHFVIN3PJI2+NGeIOH
-        ynu0Kpt3y9NCmv5GsRVqd7k=
-X-Google-Smtp-Source: APXvYqx4RhzhvsPhhu2IsE3MGklbR4iTL9WJ66Wr86pl4WRq3FsjNXmqDGH99pfEyrSTD+j3sS8QYQ==
-X-Received: by 2002:a17:902:8c98:: with SMTP id t24mr44631754plo.320.1562171344636;
-        Wed, 03 Jul 2019 09:29:04 -0700 (PDT)
+        bh=TrUa09acIW6HvvTGIpKx9PQFnQ16L2qeMF4zqtIgcwg=;
+        b=iNQPhyIe9Fg4nRequEbF+YOVvJS18rnXZsYneaSeUpWwXZ31Sto+/gy4mH4Incb7H4
+         NUc0B3M2yXuz6S/U0MDAaizqaq7TzHFLl2XL0oZwVWS0DS12+Csp8nLeD9A6PsbE4b4F
+         CPCTkxu8dtgjejkiYWwP2xdf1I+2qeoyDf/BQArIODWPUTOyFRWSU3bC1UlrMERsI1f8
+         bYzhEt4rje24jGfcmpV5fcrvgUPAbUuwVIImAXyr6TrJZTFQPy2qA4mVr2bF2ACtUAW/
+         8uXVA74NRopD/u3hPdpRgDNbL2A8O1PnhHbx76gvHhx0h7rO4Xor9K41+SlSwcYiF+gd
+         tAZA==
+X-Gm-Message-State: APjAAAX0Wr7jr4UmOGZjthAEY+6nIutTaTz8XvPYU7h8ndB2c8ZqMXPD
+        bXirx9cczhgCfSVbyxYeNPYL1ZN0KZ8=
+X-Google-Smtp-Source: APXvYqzrAQZn0dTjmrb2UFa9XjdmKRW+czq3frTlrHV+50QMJKlhEapEIE3unKDC385LasKzv1BhLw==
+X-Received: by 2002:a63:d84e:: with SMTP id k14mr38156512pgj.234.1562171449109;
+        Wed, 03 Jul 2019 09:30:49 -0700 (PDT)
 Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id z186sm3060038pfz.7.2019.07.03.09.29.01
+        by smtp.googlemail.com with ESMTPSA id v4sm2915326pff.45.2019.07.03.09.30.47
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Jul 2019 09:29:04 -0700 (PDT)
+        Wed, 03 Jul 2019 09:30:48 -0700 (PDT)
 From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Antoine Jacquet <royale@zerezo.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH v2 13/35] media/usb: Use kmemdup rather than duplicating its implementation
-Date:   Thu,  4 Jul 2019 00:28:57 +0800
-Message-Id: <20190703162857.32461-1-huangfq.daxian@gmail.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fuqian Huang <huangfq.daxian@gmail.com>
+Subject: [PATCH v2 25/35] usb: Use kmemdup rather than duplicating its implementation
+Date:   Thu,  4 Jul 2019 00:30:43 +0800
+Message-Id: <20190703163043.524-1-huangfq.daxian@gmail.com>
 X-Mailer: git-send-email 2.11.0
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
@@ -68,47 +68,28 @@ Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
 Changes in v2:
   - Fix a typo in commit message (memset -> memcpy)
 
- drivers/media/usb/em28xx/em28xx-cards.c | 3 +--
- drivers/media/usb/zr364xx/zr364xx.c     | 4 +---
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ drivers/usb/class/cdc-acm.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
-index 1283c7ca9ad5..6e33782c3ca6 100644
---- a/drivers/media/usb/em28xx/em28xx-cards.c
-+++ b/drivers/media/usb/em28xx/em28xx-cards.c
-@@ -3566,13 +3566,12 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
- static int em28xx_duplicate_dev(struct em28xx *dev)
- {
- 	int nr;
--	struct em28xx *sec_dev = kzalloc(sizeof(*sec_dev), GFP_KERNEL);
-+	struct em28xx *sec_dev = kmemdup(dev, sizeof(*sec_dev), GFP_KERNEL);
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 183b41753c98..cc4a96d59ffc 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1410,12 +1410,11 @@ static int acm_probe(struct usb_interface *intf,
+ 		struct usb_cdc_country_functional_desc * cfd =
+ 					h.usb_cdc_country_functional_desc;
  
- 	if (!sec_dev) {
- 		dev->dev_next = NULL;
- 		return -ENOMEM;
- 	}
--	memcpy(sec_dev, dev, sizeof(*sec_dev));
- 	/* Check to see next free device and mark as used */
- 	do {
- 		nr = find_first_zero_bit(em28xx_devused, EM28XX_MAXBOARDS);
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 37a7992585df..39df6bfece2c 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -199,12 +199,10 @@ static int send_control_msg(struct usb_device *udev, u8 request, u16 value,
- {
- 	int status;
+-		acm->country_codes = kmalloc(cfd->bLength - 4, GFP_KERNEL);
++		acm->country_codes = kmemdup((u8 *)&cfd->wCountyCode0,
++					cfd->bLength - 4, GFP_KERNEL);
+ 		if (!acm->country_codes)
+ 			goto skip_countries;
+ 		acm->country_code_size = cfd->bLength - 4;
+-		memcpy(acm->country_codes, (u8 *)&cfd->wCountyCode0,
+-							cfd->bLength - 4);
+ 		acm->country_rel_date = cfd->iCountryCodeRelDate;
  
--	unsigned char *transfer_buffer = kmalloc(size, GFP_KERNEL);
-+	unsigned char *transfer_buffer = kmemdup(cp, size, GFP_KERNEL);
- 	if (!transfer_buffer)
- 		return -ENOMEM;
- 
--	memcpy(transfer_buffer, cp, size);
--
- 	status = usb_control_msg(udev,
- 				 usb_sndctrlpipe(udev, 0),
- 				 request,
+ 		i = device_create_file(&intf->dev, &dev_attr_wCountryCodes);
 -- 
 2.11.0
 
