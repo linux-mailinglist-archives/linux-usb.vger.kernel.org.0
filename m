@@ -2,140 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE4C5F6B5
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 12:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D255F6F4
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 13:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727556AbfGDKhW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 06:37:22 -0400
-Received: from mail-eopbgr1400125.outbound.protection.outlook.com ([40.107.140.125]:33616
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727385AbfGDKhW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Jul 2019 06:37:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tW/XrGflnLpiE+GcowS+8JkARY0qQ0lkKnPqgJfgc1s=;
- b=Skn/kjQ/DWrAsQUfbWJShvJAlzdTuAADf0UAJfGFsrWsQqBdWEg6mltHlRw3bpJAPMzjNieje65B2KGVYz9yB9acFT7yq7JrDqOFCBu2nvsYXdYYPXwhPmr7L4QGgh5BAhFBCTQGLaFKgZfCrnYbQ9kUXnC0fcoE+lgQS/msev4=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.174.85) by
- TYAPR01MB3072.jpnprd01.prod.outlook.com (20.177.105.74) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2032.20; Thu, 4 Jul 2019 10:37:19 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::6999:a5c2:83ef:18bb]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::6999:a5c2:83ef:18bb%6]) with mapi id 15.20.2052.010; Thu, 4 Jul 2019
- 10:37:19 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Alan Stern <stern@rowland.harvard.edu>, Greg KH <greg@kroah.com>
-CC:     shuah <shuah@kernel.org>, Suwan Kim <suwan.kim027@gmail.com>,
+        id S1727536AbfGDLDc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 07:03:32 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:42993 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727499AbfGDLDb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 07:03:31 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9F8A820355;
+        Thu,  4 Jul 2019 07:03:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 04 Jul 2019 07:03:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=0iZYXzwFrmQtPuuQr4Pn9G8zFL3
+        fT36VF37zsMwW3/8=; b=jMgP5S4n2qiSYCBrubBqAYQ561dsYlw5KG0qqbi8BMm
+        sybJfP01GrtXM7a+Rhbj+YMGmh5AGX7IcC2oWGtxsPhiXrJyRYVu7+D1d4Q14ggO
+        0dFLLze53UE98nbp5AYEQodXIWrRKOjQ9SyJHL0Bk/CFbTuxl1W8xmjNQa0r4cDB
+        pDcJUsvbqNbJAoT7t7PJt5MhtOv35WBJVBMu/czLbJK+o39dEZF+9/Ja9oU0bVNC
+        YD189ZWcHh6hdZbo4NC1/uwCexnGmNnadgThDYVA8BElq79LgXT4cPbxO38nWUyZ
+        zoxvvEkttCij19zB0+HJYAcYrkg8UX7biiVEwEex9hA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=0iZYXz
+        wFrmQtPuuQr4Pn9G8zFL3fT36VF37zsMwW3/8=; b=DK4CgGdj8vj4uZ1MjmJDrp
+        MK3B4NcOPeTefwjrWoawexOfPtmXl1oZslogd9uXP405U2uL7/kCj35Z4HAADPfG
+        +n7N9189+05I6us8DhVUsOxUjCYik6onHtqDmxkiEZxyHSmbZutTjPOszfQCez9b
+        OOWKuVtIMqRkn7+7op/K9mqebvY1GSjhCEK44SFcC3Qeuil8HOBXxWaY1H7v6S7z
+        Vt3NRzJBqvRxjDDeWDdKOAPRgUxSkqx/jy+9oOIIAoHUDlL7aICy22J39a4/Sxv/
+        sS0+MoJFyaesrauSMrBtMg8fTXr6u8OIiIo0lxug12bPWkSEG3yNwq8VkdtB/d/A
+        ==
+X-ME-Sender: <xms:Ad0dXSE2HN3-3YYk4eHrEjEGGuu3zQkH3c8SBL6V8EeFxhGNMEMeRQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrfedvgdefjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
+    ejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhenucev
+    lhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:Ad0dXVU5fQFI8JG-QCTsx4oOgT4I5oZ4xIf9j-cE223PGYVRmBFqag>
+    <xmx:Ad0dXQd8amZvY2cVH3EyMgwzt0zcAk-b0qCh6oaxsQPjoV7FsbFccg>
+    <xmx:Ad0dXUQ1HdGrOBustYrld8CtLgECfZB5VVvgNdR7Wu372iIkGdYEuw>
+    <xmx:At0dXbTkiXXkHBm9WAmtrg6fRYcXMF9bfB60RY646XIXdddcqEreeg>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 027E88005B;
+        Thu,  4 Jul 2019 07:03:28 -0400 (EDT)
+Date:   Thu, 4 Jul 2019 13:03:06 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Pawel Laszczak <pawell@cadence.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "usb-storage@lists.one-eyed-alien.net" 
-        <usb-storage@lists.one-eyed-alien.net>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: RE: [PATCH v2] usb-storage: Add a limitation for
- blk_queue_max_hw_sectors()
-Thread-Topic: [PATCH v2] usb-storage: Add a limitation for
- blk_queue_max_hw_sectors()
-Thread-Index: AQHVIcuW138W6xs/SU+mBATKJYat56aZ0SQAgAABRQCAAAL1gIAFZkqggAAqzACAF8/kEIAASseAgADLi2CAAMSFAIABU2HA
-Date:   Thu, 4 Jul 2019 10:37:19 +0000
-Message-ID: <TYAPR01MB4544D30CE40795E07BB44CC0D8FA0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <TYAPR01MB454441748DB5CBCDFCF207D3D8FB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
- <Pine.LNX.4.44L0.1907031015140.1547-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1907031015140.1547-100000@iolanthe.rowland.org>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 47fb9a85-e26b-4b25-a94b-08d7006b9768
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TYAPR01MB3072;
-x-ms-traffictypediagnostic: TYAPR01MB3072:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <TYAPR01MB3072BDC5789806CC5785FC5FD8FA0@TYAPR01MB3072.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0088C92887
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(136003)(396003)(376002)(346002)(39860400002)(43544003)(199004)(189003)(53936002)(55016002)(66556008)(66946007)(6436002)(66476007)(64756008)(6246003)(86362001)(2171002)(9686003)(8936002)(73956011)(2906002)(476003)(11346002)(5660300002)(25786009)(76116006)(229853002)(186003)(316002)(33656002)(54906003)(446003)(102836004)(6306002)(71200400001)(66446008)(52536014)(26005)(486006)(110136005)(4326008)(81166006)(76176011)(66066001)(71190400001)(966005)(99286004)(478600001)(6506007)(256004)(7696005)(81156014)(14444005)(6116002)(3846002)(8676002)(14454004)(68736007)(74316002)(305945005)(7736002);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB3072;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: MXqPfpaGXn9gQN82DiE/8RYmNOIh0CEx5mMHLTBDOAQwmIp0EeKjFnOQ0MXa+B8AuUaVwrK6kfw921eOYImbx8KlQb+R9+t8e4RpSKINdqpVwV/cYqg/pyj167teONFSl5VXqOFVfr3wNIiSYhwJ5HSSx9VRRYPbXRo9xHBlb6+zgfbaRLZlvqxacDBR19poSBmecJL38dYen68Bz5NEqHfkR/JMKQVkTfPg2Ae55j53NQDYvR14s/x/4NBOUFpVq+4PKI2JYyr8RjnI3xaYOgkCqp1sGxD4xTDQZxO+kiBGJxgU+9MqxcAXCOvSYff4F6sTj2z08gz5GfesaopQTPo6Rl4fJC3PZGp//ysnCKGsmrwY7yuddt33Jyz4CSeHPHLuPjEBOuvJ6BrptKZUq03HWALEIOdjMx/UqxHgrvc=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Roger Quadros <rogerq@ti.com>, Nishanth Menon <nm@ti.com>
+Subject: Re: linux-next: build failure after merge of the usb and usb-gadget
+ trees
+Message-ID: <20190704110306.GA1404@kroah.com>
+References: <20190704163458.63ed69d2@canb.auug.org.au>
+ <20190704065949.GA32707@kroah.com>
+ <CAH8TKc_4ggxOPgii8gLGo2d7nvx08cbTk8_xDUQfA2Ckcxb_Aw@mail.gmail.com>
+ <BYAPR07MB470946609232100714B3EA29DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <87imsiyzo3.fsf@linux.intel.com>
+ <20190704083233.GH6438@kroah.com>
+ <87ftnmyyqw.fsf@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47fb9a85-e26b-4b25-a94b-08d7006b9768
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2019 10:37:19.6354
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3072
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ftnmyyqw.fsf@linux.intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
-
-> From: Alan Stern, Sent: Wednesday, July 3, 2019 11:20 PM
->=20
-> On Wed, 3 Jul 2019, Yoshihiro Shimoda wrote:
-<snip>
-> > IIUC, usb-storage driver should take care of calling blk_queue_ APIs an=
-yway because:
+On Thu, Jul 04, 2019 at 11:45:11AM +0300, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Greg KH <greg@kroah.com> writes:
+> 
+> > On Thu, Jul 04, 2019 at 11:25:16AM +0300, Felipe Balbi wrote:
+> >> 
+> >> Hi,
+> >> 
+> >> Pawel Laszczak <pawell@cadence.com> writes:
+> >> 
+> >> >>
+> >> >>Hi,
+> >> >>
+> >> >>On Thu, Jul 4, 2019 at 9:59 AM Greg KH <greg@kroah.com> wrote:
+> >> >>>
+> >> >>> On Thu, Jul 04, 2019 at 04:34:58PM +1000, Stephen Rothwell wrote:
+> >> >>> > Hi all,
+> >> >>> >
+> >> >>> > After merging the usb tree, today's linux-next build (arm
+> >> >>> > multi_v7_defconfig) failed like this:
+> >> >>> >
+> >> >>> > arm-linux-gnueabi-ld: drivers/usb/dwc3/trace.o: in function `trace_raw_output_dwc3_log_ctrl':
+> >> >>> > trace.c:(.text+0x119c): undefined reference to `usb_decode_ctrl'
+> >> >>> >
+> >> >>> > Caused by commit
+> >> >>> >
+> >> >>> >   3db1b636c07e ("usb:gadget Separated decoding functions from dwc3 driver.")
+> >> >>> >
+> >> >>> > I have used the usb tree from next-20190703 for today.
+> >> >>> >
+> >> >>> > This also occurs in the usb-gadget tree so I have used the version of
+> >> >>> > that from next-20190703 as well.
+> >> >>>
+> >> >>> Odd, I thought I pulled the usb-gadget tree into mine.  Felipe, can you
+> >> >>> take a look at this to see if I messed something up?
+> >> >>
+> >> >>This looks like it was caused by Pawel's patches.
+> >> >>
+> >> >>I'll try to reproduce here and see what's causing it.
+> >> >
+> >> > Problem is in my Patch. I reproduced it, but I don't understand why compiler 
+> >> > complains about usb_decode_ctrl. It's compiled into libcomposite.ko and
+> >> > declaration is in drivers/usb/gadget.h. 
+> >> 
+> >> That's because in multi_v7_defconfig dwc3 is built-in while libcomposite
+> >> is a module:
+> >> 
+> >> CONFIG_USB_DWC3=y
+> >> CONFIG_USB_LIBCOMPOSITE=m
+> >> 
+> >> 
+> >> I remember that when you were doing this work, I asked you to move
+> >> functions to usb/common. Why did you deviate from that suggestion? It's
+> >> clear that decoding a ctrl request can be used by peripheral and host
+> >> and we wouldn't have to deal with this problem if you had just followed
+> >> the suggestion.
+> >> 
+> >> Now we have to come up with a way to fix this that doesn't involve
+> >> reverting my part2 tag in its entirety because there are other important
+> >> things there.
+> >> 
+> >> This is what I get for trusting people to do their part. I couldn't even
+> >> compile test this since I don't have ARM compilers anymore (actually,
+> >> just installed to test). Your customer, however, uses ARM cores so I
+> >> would expect you to have at least compile tested this on ARM. How come
+> >> this wasn't verified by anybody at TI?
+> >> 
+> >> TI used to have automated testing for many of the important defconfigs,
+> >> is that completely gone? Are you guys relying entirely on linux-next?
+> >> 
+> >> Greg, if you prefer, please revert my part2 tag. If you do so, please
+> >> let me know so I can drop the tag and commits from my tree as well.
 > >
-> >  - As Christoph mentioned before on the email [1], usb-storage has a sp=
-ecial
-> >    max_sectors quirk for tape and SuperSpeed devices.
-> >  - Since blk_queue_* APIs don't take device structure pointer, the bloc=
-k layer
-> >    cannot call any DMA mapping APIs. So, even if any other DMA fields a=
-re copied,
-> >    the behavior is not changed.
->=20
-> Although the blk_queue_* APIs don't take device structure pointers, the
-> SCSI layer does know about devices.  And since it is the SCSI layer
-> which creates the request queue, changing the DMA fields should change
-> the behavior.
->=20
-> However, you are correct that usb-storage has to call the blk_queue_*
-> APIs anyway.  So I guess your patch is the right thing to do after all.
->=20
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > How do I revert a tag?  How about I just revert individual commits,
+> > which ones should I revert?
+> 
+> Anything from Pawel. Here's the full list:
+> 
+> 573aff747ee3 usb:cdns3 Fix for stuck packets in on-chip OUT buffer.
+> 8bc1901ca7b0 usb:cdns3 Add Cadence USB3 DRD Driver
+> c2af6b07803e usb:gadget Simplify usb_decode_get_set_descriptor function.
+> ca888ce7495e usb:gadget Patch simplify usb_decode_set_clear_feature function.
+> 3db1b636c07e usb:gadget Separated decoding functions from dwc3 driver.
+> e8a8b40cc892 dt-bindings: add binding for USBSS-DRD controller.
+> 
+> I just tested a branch without these patches and it builds fine:
+> 
+> $ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- multi_v7_defconfig
+>   HOSTCC  scripts/kconfig/conf.o
+>   HOSTCC  scripts/kconfig/confdata.o
+>   HOSTCC  scripts/kconfig/expr.o
+>   HOSTCC  scripts/kconfig/lexer.lex.o
+>   HOSTCC  scripts/kconfig/parser.tab.o
+>   HOSTCC  scripts/kconfig/preprocess.o
+>   HOSTCC  scripts/kconfig/symbol.o
+>   HOSTLD  scripts/kconfig/conf
+> #
+> # configuration written to .config
+> #
+> $ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -j32 -s
+> $
 
-Thank you very much for your Acked-by!
+All now reverted.
 
-Greg, if possible, would you merge this patch into v5.2?
+When these are resent, I want to review them as well as I thought the
+cdns3 driver still needed work before it could be merged...
 
-Best regards,
-Yoshihiro Shimoda
+thanks,
 
-> I still think that copying the DMA fields would be a good idea, though.
->=20
-> Alan Stern
->=20
-> > [1]
-> > https://www.spinics.net/lists/linux-usb/msg181527.html
-> >
-> > What do you think?
-> >
-> > Best regards,
-> > Yoshihiro Shimoda
-> >
-> > > So what I would like to see is a new subroutine -- perhaps in the
-> > > driver core -- that copies the DMA fields from one struct device to
-> > > another.  Then we could call this subroutine in usb_alloc_dev() and
-> > > usb_set_configuration() instead of copying the information manually.
-> > >
-> > > Greg and Christoph, does that make sense?
-> > >
-> > > Yoshihiro, would you like to write a patch that does this?
-> > >
-> > > Alan Stern
-
+greg k-h
