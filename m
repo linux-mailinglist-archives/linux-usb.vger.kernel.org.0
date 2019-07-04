@@ -2,133 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 307845F700
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 13:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5EC5F7CA
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 14:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727544AbfGDLGQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 07:06:16 -0400
-Received: from mga05.intel.com ([192.55.52.43]:48415 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727436AbfGDLGQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Jul 2019 07:06:16 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jul 2019 04:06:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,450,1557212400"; 
-   d="scan'208";a="339576906"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga005.jf.intel.com with ESMTP; 04 Jul 2019 04:06:12 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Pawel Laszczak <pawell@cadence.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Roger Quadros <rogerq@ti.com>, Nishanth Menon <nm@ti.com>
-Subject: Re: linux-next: build failure after merge of the usb and usb-gadget trees
-In-Reply-To: <20190704110333.GB1404@kroah.com>
-References: <20190704163458.63ed69d2@canb.auug.org.au> <20190704065949.GA32707@kroah.com> <CAH8TKc_4ggxOPgii8gLGo2d7nvx08cbTk8_xDUQfA2Ckcxb_Aw@mail.gmail.com> <BYAPR07MB470946609232100714B3EA29DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com> <87imsiyzo3.fsf@linux.intel.com> <BYAPR07MB4709076903F55352193FC78FDDFA0@BYAPR07MB4709.namprd07.prod.outlook.com> <877e8y6snr.fsf@linux.intel.com> <20190704110333.GB1404@kroah.com>
-Date:   Thu, 04 Jul 2019 14:06:11 +0300
-Message-ID: <87sgrm9hzw.fsf@linux.intel.com>
+        id S1727657AbfGDMQj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 08:16:39 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:14524 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727615AbfGDMQj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 08:16:39 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d1dee210000>; Thu, 04 Jul 2019 05:16:35 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 04 Jul 2019 05:16:38 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 04 Jul 2019 05:16:38 -0700
+Received: from [10.21.132.148] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 4 Jul
+ 2019 12:16:34 +0000
+Subject: Re: [PATCH 1/8] clk: tegra: Add PLLE HW power sequencer control
+To:     JC Kuo <jckuo@nvidia.com>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <pdeschrijver@nvidia.com>,
+        <afrid@nvidia.com>
+CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <nkristam@nvidia.com>,
+        <skomatineni@nvidia.com>
+References: <20190614074652.21960-1-jckuo@nvidia.com>
+ <20190614074652.21960-2-jckuo@nvidia.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <1d215b49-73f7-8f5c-c8cb-81bf73553b19@nvidia.com>
+Date:   Thu, 4 Jul 2019 13:16:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20190614074652.21960-2-jckuo@nvidia.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL104.nvidia.com (172.18.146.11) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1562242595; bh=kPBN7I4yROEjJs3EsoKD53ipFuBC+PQNhAmybDbzyQ8=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=dcxAftlcML140IFi2MrvmJ3yRzYaty7I8GHEPLr56VoJptkdh20XDwKJdSADRFZLR
+         MWIB7OPtW79iG6YSdWwRTW1E2aeh2mJJLWp93wx9nDg9EnFYiElXsukhfFXcrH3YT4
+         tTqDF2YeQ22NqIOdu4E62mHM5HRHqB3Jc2G5JrLDsMzrtcppOGRF8/qY9y1esF7LsM
+         IX5tePmSuMucHJ0/ZjFUEKDDIHzrEPzm7EqvYvHZLN4AJj5XGKv0GnZkzJrlQkUIa5
+         dIeMMNczYWYRusRnqOMb/0iv9MGzklj3KXdsguPr+rbLLFM+0pBjXUr4TCgpkyVlDU
+         rZxHv1AjhFxCQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-Hi,
+On 14/06/2019 08:46, JC Kuo wrote:
+> PLLE hardware power sequencer has to be enabled after PEX/SATA
+> UPHY PLL's sequencers are enabled.
+> 
+> tegra210_plle_hw_sequence_start() for XUSB PADCTL driver to enable
+> PLLE hardware sequencer at proper time.
+> 
+> tegra210_plle_hw_sequence_is_enabled() for XUSB PADCTL driver to
+> check whether PLLE hardware sequencer has been enabled or not.
 
-Greg KH <greg@kroah.com> writes:
+I think that here to be clear about what is going on you should state
+that you are "adding the function tegra210_plle_hw_sequence_start() ..."
 
-> On Thu, Jul 04, 2019 at 12:44:08PM +0300, Felipe Balbi wrote:
->> 
->> Hi,
->> 
->> Pawel Laszczak <pawell@cadence.com> writes:
->> 
->> >>
->> >>
->> >>Hi,
->> >>
->> >>Pawel Laszczak <pawell@cadence.com> writes:
->> >>
->> >>>>
->> >>>>Hi,
->> >>>>
->> >>>>On Thu, Jul 4, 2019 at 9:59 AM Greg KH <greg@kroah.com> wrote:
->> >>>>>
->> >>>>> On Thu, Jul 04, 2019 at 04:34:58PM +1000, Stephen Rothwell wrote:
->> >>>>> > Hi all,
->> >>>>> >
->> >>>>> > After merging the usb tree, today's linux-next build (arm
->> >>>>> > multi_v7_defconfig) failed like this:
->> >>>>> >
->> >>>>> > arm-linux-gnueabi-ld: drivers/usb/dwc3/trace.o: in function `trace_raw_output_dwc3_log_ctrl':
->> >>>>> > trace.c:(.text+0x119c): undefined reference to `usb_decode_ctrl'
->> >>>>> >
->> >>>>> > Caused by commit
->> >>>>> >
->> >>>>> >   3db1b636c07e ("usb:gadget Separated decoding functions from dwc3 driver.")
->> >>>>> >
->> >>>>> > I have used the usb tree from next-20190703 for today.
->> >>>>> >
->> >>>>> > This also occurs in the usb-gadget tree so I have used the version of
->> >>>>> > that from next-20190703 as well.
->> >>>>>
->> >>>>> Odd, I thought I pulled the usb-gadget tree into mine.  Felipe, can you
->> >>>>> take a look at this to see if I messed something up?
->> >>>>
->> >>>>This looks like it was caused by Pawel's patches.
->> >>>>
->> >>>>I'll try to reproduce here and see what's causing it.
->> >>>
->> >>> Problem is in my Patch. I reproduced it, but I don't understand why compiler
->> >>> complains about usb_decode_ctrl. It's compiled into libcomposite.ko and
->> >>> declaration is in drivers/usb/gadget.h.
->> >>
->> >>That's because in multi_v7_defconfig dwc3 is built-in while libcomposite
->> >>is a module:
->> >>
->> >>CONFIG_USB_DWC3=y
->> >>CONFIG_USB_LIBCOMPOSITE=m
->> >>
->> >>
->> >>I remember that when you were doing this work, I asked you to move
->> >>functions to usb/common. Why did you deviate from that suggestion? It's
->> >>clear that decoding a ctrl request can be used by peripheral and host
->> >>and we wouldn't have to deal with this problem if you had just followed
->> >>the suggestion.
->> >
->> > Some time ago Greg wrote: 
->> > " It's nice to have these in a common place, but you just bloated all of
->> > the USB-enabled systems in the world for the use of 2 odd-ball system
->> > controllers that almost no one has :) "
->> >
->> > So I moved these functions to gadget directory. 
->> >
->> > It was mistake that I added debug.c file to libcomposite.ko.
->> 
->> The plan is to use this decoding function for xHCI as well. Other host
->> controllers can use it as well.
->> 
->> The biggest mistake was to put this under gadget. What you should have
->> done was create a file under usb/common that only gets compile in if
->> tracing is enabled.
->> 
->> Then there's no bloating unless you have a kernel purposefuly built for
->> debugging and tracing.
->> 
->> Greg, does that work for you?
->
-> I guess, but I'd like to see patches before answering that :)
+Are these functions dependent upon clk_plle_tegra210_enable() already
+being called? I assume that there must be some dependency between the
+above functions and the existing plle enable function. If there is a
+dependency, how do you ensure the existing enable is already called?
 
-Sure, understandable. I should've done a better job at filtering that
-out. Sorry about htat
+Cheers
+Jon
 
 -- 
-balbi
+nvpublic
