@@ -2,122 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E095FDDE
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 22:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9117C5FE3D
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 23:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbfGDUrx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 16:47:53 -0400
-Received: from mout.gmx.net ([212.227.15.19]:32807 "EHLO mout.gmx.net"
+        id S1726273AbfGDVox (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 17:44:53 -0400
+Received: from gate.crashing.org ([63.228.1.57]:47761 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726038AbfGDUrw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Jul 2019 16:47:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1562273271;
-        bh=26fPD/mu2KXmqfPSVY0sY6E9aWgXFS3AiXIK8JFRjXQ=;
-        h=X-UI-Sender-Class:Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Y+3bEZKw7ZlbTeJRKvr9S5bymRkqCeQpqACXZ7ROXmn0e/x/w2ECSPGUbkiS5IybE
-         nabYwWS4Np0UPRsK2xce5NGWWquJWcqp8RxnfrIfEhq8NU5ZO8cGqT9/x/OLzQATbU
-         osZauJp8yPLRHiEc5qYAJKxa8IePnKUUIrU6QnW8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.2.102] ([94.218.88.45]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MEm2D-1hl3Vd3YS3-00GEuN; Thu, 04
- Jul 2019 22:47:50 +0200
-Message-ID: <5D1E65F3.6090307@gmx.net>
-Date:   Thu, 04 Jul 2019 22:47:47 +0200
-From:   Markus Breunig <Markus.L.Breunig@gmx.net>
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.5.0
-MIME-Version: 1.0
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     linux-usb@vger.kernel.org
-Subject: Fwd: Re: New USB Device
-References: <5D1D1376.7070202@gmx.net>
-In-Reply-To: <5D1D1376.7070202@gmx.net>
-X-Forwarded-Message-Id: <5D1D1376.7070202@gmx.net>
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+        id S1725917AbfGDVox (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jul 2019 17:44:53 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x64LifPd031202;
+        Thu, 4 Jul 2019 16:44:42 -0500
+Message-ID: <776c8b72bff0d7dc80d56e58a0c8c1f46b882eb5.camel@kernel.crashing.org>
+Subject: Re: Virtual hub, resets etc...
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Michal Nazarewicz <mina86@mina86.com>
+Date:   Fri, 05 Jul 2019 07:44:39 +1000
+In-Reply-To: <Pine.LNX.4.44L0.1907041142410.18767-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.1907041142410.18767-100000@netrider.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:hZ5rAfhhAjK8sMnGjjTFwRgPPJjzXPLYL19Jko7Arf7wES+9kWs
- H4SjzyCEeF/Zv0FqS9FpWWjEEYrDVDSzPqFkK2p1GI83d3rQTKB+B/7ZHF5kzyHWy5X8VB/
- 8vQ9/sZNdq7Ujmp2ntvCyFoBAVdbHdQA4wJYvYBcqSpKFZIQN+dSeaNa/qYJRWrXE0p0j5Y
- GzroYis+bNCqvrdW67Idw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:T80DfdFwMB0=:68A0C4g35z+G/p/dch0NXy
- b/1OcDiYwYGJe4UvggwGdYDs/48VhiWaIAv6W8yr4lsbg5SZpNH1GolnTUvs/Zxx0p4Ie4lnW
- RIMYrQaSeeJgs43I0En4RxIglu+02X5scPxY1u6otXCSkCt20HRIfGPdrmLHh5RKmRJtqJS9B
- e2pA3LH74DgmNh7IL05vgRHY44bWIY6GFGDQDTCTxFQPEK2FlPpVuMziaaKeiHm9i+r+44FRP
- fZomykJAP+bGNsWvcD3aLE07z1NDap5ezq+1KBjDFnu9+3dqNdyPHjmJu2jokdxGAhCKoq9rB
- fjcHF4slIvrpl3H3/wcS4xIuBY4DLMRGuotljNudciydG9wGVEYgYBronZFF6tsH2N1dQYFYy
- tbPUV2XHaL75EgUUW8CyDvQwbgksJma0vvD+7tHtnBNSumtWj9GAy96sE4FJpI4QW4ggR+pb9
- dBPOjO+jpzrSFhC/pcuY6JT5v9f42GC0DAY9isDNAsIMMU7VCKStyPukEB/36jJPVYsp+u5yY
- l/2wId+anC/tGzywbrsheJHqNOSAh8sYNTFXPGSZOIq0oTjZ0r+uA0Lai+aEuyQRte1IL/NrP
- 6H9C7VePeD/244uPJ+e+ORm4eByUe2D+dPK2KeNY1p4aVNXr3mXk9OpZ02WtCO41SJFedzfXQ
- p/tC5T8/G8uH8K2+H9bAWRkC94IpAJ7z35fjJ6eaUTmGuuCJ0oMqAOygv3XcUzmZf+ke+PBa6
- 3TwdP7zme44kErYdSh2FBGzquCuhNX7X2ZkIfXbh5ZbsA/qEY/YcGi9B4OPAIZ9+pLU6Buuac
- IpcJFXVju1Q5DKSCcr3AG16cC2zPbfaJ6ejCnFV07xRZvLIatssdaVkbpmBn4pGuPlQmo5pjK
- rQ+gFcZ5jZFvWJo4fk6y0QRnc4f9geXrHmUDXzOM1mN0hlym18Gq4qA91naMtl1Tkl6F66Vj3
- dpLQfwZWSOwCw8i2y9+NDp7b25OE9uMFxwwM306trBflglhS2id11FDt1pvl8E7HqYq6+JIMN
- /sIfhF2xCDJHMHHayKzi89xJpsmo3fAHS88S7NKZ49kDpzl30ReeEPpOQDbX3hbji9IEh7h43
- 5w3aqcHCcvOyuSNa8+I4B+MzwcCCyF9KWdG
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On Thu, 2019-07-04 at 12:13 -0400, Alan Stern wrote:
+> >   - bus reset: When I sense a bus reset, that's where I'm not too sure
+> > what to do. Currently I clear all the status bits of the ports
+> > except USB_PORT_STAT_SUSPEND. Thus I clear USB_PORT_STAT_ENABLE.
+> > But I'm not sure what to do with the gadget. I currently call
+> > the gadget suspend as "hinted" by the spec calling for S0 state iirc,
+> > but I don't think it's the best thing to do, it doesn't make that much
+> > sense... Should I do a gadget reset instead ? 
+> 
+> You should also clear USB_PORT_STAT_SUSPEND.  Calling the gadget's
+> suspend routine (if the gadget isn't already suspended) is the right
+> thing to do; the spec says a USB device goes into suspend if it doesn't
+> receive any packets for a period of 3 (or 5? -- something like that)  
+> ms, and that certainly would be the case here.
+> 
+> >   - If the host clears USB_PORT_STAT_ENABLE, what should I do ? I
+> > currently do a suspend as well, which isn't great... mostly it does
+> > nothing and keep potentially the gadget trying to do stuff. I could
+> > do a reset. I don't want to do a disconnect because we are still
+> > connected to the hub so that's not really the right call, but at least
+> > for composite it's the same thing...
+> 
+> As above, doing a suspend is the right thing.
 
-using a serial device driver is the idea of the manufacturer
-"www.gns-gmbh.com". In the LINUX instructions of the ADS-B receiver some
-hints to use the device are given via usbserial.
+It is the right HW behaviour. But with our gadget stack, it doesn't
+reset or cleanup anything. Though since the port gets disabled, I
+suppose re-enabling it will cause a reset and will sort that out.
 
-In practice the "GNS 5890 ADS-B Receiver" is similare to some GPS
-Receivers with NMEA 0183 interface starting to send information on the
-serial interface after power on and signal availabillity (with 115200
-boud data rate).
+> > Now, a few things i noticed while at it:
+> > 
+> >   - At some point I had code to reject EP queue() if the device is
+> > suspended with -ESHUTDOWN. The end result was bad ... f_mass_storage
+> > goes into an infinite loop of trying to queue the same stuff in
+> > start_out_transfer() when that happens. It looks like it's not really
+> > handling errors from queue() in a particularily useful way.
+> 
+> Don't reject EP queue requests.  Accept them as you would at any time;
+> they will complete after the port is resumed.
 
-does this help?
+Except the suspend on a bus reset clears the port enable. You can't
+resume from that, only reset the port no ? Or am I missing something ?
 
-best regards
+> As for f_mass_storage, repeatedly attempting to queue an OUT transfer
+> is normal behavior.  The fact that one attempt gets an error doesn't
+> stop the driver from making more attempts; the only thing that would
+> stop it is being disabled by a config change, a suspend, a disconnect,
+> or an unbind.
 
-Markus
+Except it does that in a tight loop and locks up the machine...
 
-Am 03.07.2019 18:38, schrieb Greg KH:
-> On Sun, Jun 30, 2019 at 02:18:24PM +0200, Markus Breunig wrote:
->> Hello,
->>
->> my Raspberry Pi told me to send you the following information. I hope it
->> helps ...
->>
->> best regards
->>
->> Markus
->>
->> --------------------------------
->> [    2.081893] usb 1-1.2: new full-speed USB device number 4 using dwc_otg
->> [    2.219804] usb 1-1.2: New USB device found, idVendor=04d8,
->> idProduct=f8e8, bcdDevice=48.12
->> [    2.219821] usb 1-1.2: New USB device strings: Mfr=1, Product=2,
->> SerialNumber=3
->> [    2.219830] usb 1-1.2: Product: GNS 5890 ADS-B Receiver
->> [    2.219839] usb 1-1.2: Manufacturer: www.gns-gmbh.com
->> [ 1517.863755] usbcore: registered new interface driver usbserial_generic
->> [ 1517.863830] usbserial: USB Serial support registered for generic
->> [ 1517.863916] usbserial_generic 1-1.2:1.0: The "generic" usb-serial
->> driver is only for testing and one-off prototypes.
->> [ 1517.863927] usbserial_generic 1-1.2:1.0: Tell
->> linux-usb@vger.kernel.org to add your device to a proper driver.
->> [ 1517.863939] usbserial_generic 1-1.2:1.0: device has no bulk endpoints
->> [ 1517.864009] usbserial_generic 1-1.2:1.1: The "generic" usb-serial
->> driver is only for testing and one-off prototypes.
->> [ 1517.864018] usbserial_generic 1-1.2:1.1: Tell
->> linux-usb@vger.kernel.org to add your device to a proper driver.
->> [ 1517.864028] usbserial_generic 1-1.2:1.1: generic converter detected
->> [ 1517.865108] usb 1-1.2: generic converter now attached to ttyUSB0
->
-> This device isn't even a generic usb to serial converter, why did you
-> tell your module configuration to bind to this specific device?
->
-> thanks,
->
-> greg k-h
->
+> >   - With my current code doing suspend/resume on bus resets, when I
+> > reboot some hosts, and they re-enumerate, I tend to hit the WARN_ON
+> > drivers/usb/gadget/function/f_mass_storage.c:341
+> > 
+> > static inline int __fsg_is_set(struct fsg_common *common,
+> >                               const char *func, unsigned line)
+> > {
+> >        if (common->fsg)
+> >                return 1;
+> >        ERROR(common, "common->fsg is NULL in %s at %u\n", func, line);
+> >        WARN_ON(1);
+> >        return 0;
+> > }
+> > 
+> > This happens a little while after a successul set_configuration. Here's
+> > a trace:
+> 
+> ...
+> 
+> > I have to get my head around that code, but if one of you have a clue, I
+> > would welcome it :-)
+> > 
+> > Interestingly it recovers. The host seems to then reset the prot, then reconfigure and
+> > the second time around it all works fine.
+> 
+> I suspect this is related to the race you found.  EJ Hsu has been 
+> working on much the same thing (see the mailing list archive).
+
+Right. I debugged the race and produced the fix I posted *after* I had
+change my code to do a reset rather than a suspend on the hub receiving
+an upstream bus reset.
+
+I will switch back to doing suspend instead and see whether that stays
+fixed.
+
+Cheers,
+Ben.
 
 
