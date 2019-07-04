@@ -2,125 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ECF75F5E3
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 11:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE4C5F6B5
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 12:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727372AbfGDJpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 05:45:13 -0400
-Received: from mga07.intel.com ([134.134.136.100]:2174 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727298AbfGDJpN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Jul 2019 05:45:13 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jul 2019 02:45:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,450,1557212400"; 
-   d="scan'208";a="184965334"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Jul 2019 02:45:09 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>, Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Roger Quadros <rogerq@ti.com>, Nishanth Menon <nm@ti.com>
-Subject: RE: linux-next: build failure after merge of the usb and usb-gadget trees
-In-Reply-To: <BYAPR07MB4709BB98AE258C4AC4EE6F60DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com>
-References: <20190704163458.63ed69d2@canb.auug.org.au> <20190704065949.GA32707@kroah.com> <CAH8TKc_4ggxOPgii8gLGo2d7nvx08cbTk8_xDUQfA2Ckcxb_Aw@mail.gmail.com> <BYAPR07MB470946609232100714B3EA29DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com> <87imsiyzo3.fsf@linux.intel.com> <BYAPR07MB4709076903F55352193FC78FDDFA0@BYAPR07MB4709.namprd07.prod.outlook.com> <BYAPR07MB4709BB98AE258C4AC4EE6F60DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com>
-Date:   Thu, 04 Jul 2019 12:45:09 +0300
-Message-ID: <874l426sm2.fsf@linux.intel.com>
+        id S1727556AbfGDKhW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 06:37:22 -0400
+Received: from mail-eopbgr1400125.outbound.protection.outlook.com ([40.107.140.125]:33616
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727385AbfGDKhW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jul 2019 06:37:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tW/XrGflnLpiE+GcowS+8JkARY0qQ0lkKnPqgJfgc1s=;
+ b=Skn/kjQ/DWrAsQUfbWJShvJAlzdTuAADf0UAJfGFsrWsQqBdWEg6mltHlRw3bpJAPMzjNieje65B2KGVYz9yB9acFT7yq7JrDqOFCBu2nvsYXdYYPXwhPmr7L4QGgh5BAhFBCTQGLaFKgZfCrnYbQ9kUXnC0fcoE+lgQS/msev4=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.174.85) by
+ TYAPR01MB3072.jpnprd01.prod.outlook.com (20.177.105.74) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2032.20; Thu, 4 Jul 2019 10:37:19 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::6999:a5c2:83ef:18bb]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::6999:a5c2:83ef:18bb%6]) with mapi id 15.20.2052.010; Thu, 4 Jul 2019
+ 10:37:19 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Alan Stern <stern@rowland.harvard.edu>, Greg KH <greg@kroah.com>
+CC:     shuah <shuah@kernel.org>, Suwan Kim <suwan.kim027@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "usb-storage@lists.one-eyed-alien.net" 
+        <usb-storage@lists.one-eyed-alien.net>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
+Subject: RE: [PATCH v2] usb-storage: Add a limitation for
+ blk_queue_max_hw_sectors()
+Thread-Topic: [PATCH v2] usb-storage: Add a limitation for
+ blk_queue_max_hw_sectors()
+Thread-Index: AQHVIcuW138W6xs/SU+mBATKJYat56aZ0SQAgAABRQCAAAL1gIAFZkqggAAqzACAF8/kEIAASseAgADLi2CAAMSFAIABU2HA
+Date:   Thu, 4 Jul 2019 10:37:19 +0000
+Message-ID: <TYAPR01MB4544D30CE40795E07BB44CC0D8FA0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <TYAPR01MB454441748DB5CBCDFCF207D3D8FB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+ <Pine.LNX.4.44L0.1907031015140.1547-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1907031015140.1547-100000@iolanthe.rowland.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [118.238.235.108]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 47fb9a85-e26b-4b25-a94b-08d7006b9768
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TYAPR01MB3072;
+x-ms-traffictypediagnostic: TYAPR01MB3072:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <TYAPR01MB3072BDC5789806CC5785FC5FD8FA0@TYAPR01MB3072.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0088C92887
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(136003)(396003)(376002)(346002)(39860400002)(43544003)(199004)(189003)(53936002)(55016002)(66556008)(66946007)(6436002)(66476007)(64756008)(6246003)(86362001)(2171002)(9686003)(8936002)(73956011)(2906002)(476003)(11346002)(5660300002)(25786009)(76116006)(229853002)(186003)(316002)(33656002)(54906003)(446003)(102836004)(6306002)(71200400001)(66446008)(52536014)(26005)(486006)(110136005)(4326008)(81166006)(76176011)(66066001)(71190400001)(966005)(99286004)(478600001)(6506007)(256004)(7696005)(81156014)(14444005)(6116002)(3846002)(8676002)(14454004)(68736007)(74316002)(305945005)(7736002);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB3072;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: MXqPfpaGXn9gQN82DiE/8RYmNOIh0CEx5mMHLTBDOAQwmIp0EeKjFnOQ0MXa+B8AuUaVwrK6kfw921eOYImbx8KlQb+R9+t8e4RpSKINdqpVwV/cYqg/pyj167teONFSl5VXqOFVfr3wNIiSYhwJ5HSSx9VRRYPbXRo9xHBlb6+zgfbaRLZlvqxacDBR19poSBmecJL38dYen68Bz5NEqHfkR/JMKQVkTfPg2Ae55j53NQDYvR14s/x/4NBOUFpVq+4PKI2JYyr8RjnI3xaYOgkCqp1sGxD4xTDQZxO+kiBGJxgU+9MqxcAXCOvSYff4F6sTj2z08gz5GfesaopQTPo6Rl4fJC3PZGp//ysnCKGsmrwY7yuddt33Jyz4CSeHPHLuPjEBOuvJ6BrptKZUq03HWALEIOdjMx/UqxHgrvc=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47fb9a85-e26b-4b25-a94b-08d7006b9768
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2019 10:37:19.6354
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3072
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Alan,
 
-Hi,
+> From: Alan Stern, Sent: Wednesday, July 3, 2019 11:20 PM
+>=20
+> On Wed, 3 Jul 2019, Yoshihiro Shimoda wrote:
+<snip>
+> > IIUC, usb-storage driver should take care of calling blk_queue_ APIs an=
+yway because:
+> >
+> >  - As Christoph mentioned before on the email [1], usb-storage has a sp=
+ecial
+> >    max_sectors quirk for tape and SuperSpeed devices.
+> >  - Since blk_queue_* APIs don't take device structure pointer, the bloc=
+k layer
+> >    cannot call any DMA mapping APIs. So, even if any other DMA fields a=
+re copied,
+> >    the behavior is not changed.
+>=20
+> Although the blk_queue_* APIs don't take device structure pointers, the
+> SCSI layer does know about devices.  And since it is the SCSI layer
+> which creates the request queue, changing the DMA fields should change
+> the behavior.
+>=20
+> However, you are correct that usb-storage has to call the blk_queue_*
+> APIs anyway.  So I guess your patch is the right thing to do after all.
+>=20
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Pawel Laszczak <pawell@cadence.com> writes:
+Thank you very much for your Acked-by!
 
->>>
->>>
->>>Hi,
->>>
->>>Pawel Laszczak <pawell@cadence.com> writes:
->>>
->>>>>
->>>>>Hi,
->>>>>
->>>>>On Thu, Jul 4, 2019 at 9:59 AM Greg KH <greg@kroah.com> wrote:
->>>>>>
->>>>>> On Thu, Jul 04, 2019 at 04:34:58PM +1000, Stephen Rothwell wrote:
->>>>>> > Hi all,
->>>>>> >
->>>>>> > After merging the usb tree, today's linux-next build (arm
->>>>>> > multi_v7_defconfig) failed like this:
->>>>>> >
->>>>>> > arm-linux-gnueabi-ld: drivers/usb/dwc3/trace.o: in function `trace_raw_output_dwc3_log_ctrl':
->>>>>> > trace.c:(.text+0x119c): undefined reference to `usb_decode_ctrl'
->>>>>> >
->>>>>> > Caused by commit
->>>>>> >
->>>>>> >   3db1b636c07e ("usb:gadget Separated decoding functions from dwc3 driver.")
->>>>>> >
->>>>>> > I have used the usb tree from next-20190703 for today.
->>>>>> >
->>>>>> > This also occurs in the usb-gadget tree so I have used the version of
->>>>>> > that from next-20190703 as well.
->>>>>>
->>>>>> Odd, I thought I pulled the usb-gadget tree into mine.  Felipe, can you
->>>>>> take a look at this to see if I messed something up?
->>>>>
->>>>>This looks like it was caused by Pawel's patches.
->>>>>
->>>>>I'll try to reproduce here and see what's causing it.
->>>>
->>>> Problem is in my Patch. I reproduced it, but I don't understand why compiler
->>>> complains about usb_decode_ctrl. It's compiled into libcomposite.ko and
->>>> declaration is in drivers/usb/gadget.h.
->>>
->>>That's because in multi_v7_defconfig dwc3 is built-in while libcomposite
->>>is a module:
->>>
->>>CONFIG_USB_DWC3=y
->>>CONFIG_USB_LIBCOMPOSITE=m
->>>
->>>
->>>I remember that when you were doing this work, I asked you to move
->>>functions to usb/common. Why did you deviate from that suggestion? It's
->>>clear that decoding a ctrl request can be used by peripheral and host
->>>and we wouldn't have to deal with this problem if you had just followed
->>>the suggestion.
->>
->>Some time ago Greg wrote:
->>" It's nice to have these in a common place, but you just bloated all of
->>the USB-enabled systems in the world for the use of 2 odd-ball system
->>controllers that almost no one has :) "
->>
->>So I moved these functions to gadget directory.
->>
->>It was mistake that I added debug.c file to libcomposite.ko.
->>
->
-> I think that the best choice is leaving debug.c file 
-> In drivers/usb/gadget/ directory. 
->
-> But to do this I must to add this file to drivers/usb/dwc3/Makefile file and 
-> drivers/usb/cdns3/Makefile. The code will be compiled into both drivers,
-> It will increase the size of kernel only when these driver will be enabled.
->
-> What do you think about such solution ? 
+Greg, if possible, would you merge this patch into v5.2?
 
-Frankly, I think it's not a solution :-)
+Best regards,
+Yoshihiro Shimoda
 
-If we _must_ keep it under drivers/usb/gadget, then we need to find a
-way to build this so that if any user is built-in, that file has to be
-built-in as well.
+> I still think that copying the DMA fields would be a good idea, though.
+>=20
+> Alan Stern
+>=20
+> > [1]
+> > https://www.spinics.net/lists/linux-usb/msg181527.html
+> >
+> > What do you think?
+> >
+> > Best regards,
+> > Yoshihiro Shimoda
+> >
+> > > So what I would like to see is a new subroutine -- perhaps in the
+> > > driver core -- that copies the DMA fields from one struct device to
+> > > another.  Then we could call this subroutine in usb_alloc_dev() and
+> > > usb_set_configuration() instead of copying the information manually.
+> > >
+> > > Greg and Christoph, does that make sense?
+> > >
+> > > Yoshihiro, would you like to write a patch that does this?
+> > >
+> > > Alan Stern
 
--- 
-balbi
