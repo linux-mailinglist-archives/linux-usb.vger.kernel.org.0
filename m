@@ -2,80 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2975F5F3BC
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 09:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350EF5F436
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 10:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727180AbfGDH2P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 03:28:15 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:43848 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727058AbfGDH2P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 03:28:15 -0400
-Received: by mail-wr1-f66.google.com with SMTP id p13so5404023wru.10;
-        Thu, 04 Jul 2019 00:28:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yJ2qF6WswaWh96cn5HP5uy/GUcGaruE8FXgQ/WQTJv4=;
-        b=osEXVYsxBy03KybZ7sPbEALbw7zYr/2xdVANwUc3oenqNmgeKcMzUt4mE63UZCFnnE
-         /veMXWKEeA8c+tdJK4l/RVs70vY24A+4mPsDMA5aj+A3ePtqtPc8iLl5oMfSW15hRi2L
-         5VpxqetdRfqn9vLEn3voh8jHpf0r+GOdgD1ylJpaur90bKAJduIGYvMtn00LrI+6lAzp
-         oAyACxbapUec7+lA7Ggw6RLsM5cQ91x8gOKHw/rqJchRijUVGPdoiVSHjI33goMXrvh0
-         xKU3IjVJ1StQsKeZjGj3C2vwZ1+U6x+8VaMHUyHpoYN/l89scBgLI/1jqgT/CGhzUiPR
-         LhIg==
-X-Gm-Message-State: APjAAAXrmeiCPz6E47QCsxgL/b0hx9IIYJEelIE+0UX7xUbABRfIORGG
-        bhMLYSfRQbEkWHt9cIq1+2M5G3E2/T/PZsh7naU=
-X-Google-Smtp-Source: APXvYqyS2u/lE6Z3jB9ospQ0eVycgRKJl0bdmGtr3M8/SxpS3tBKVBAgO7TRgcJ+wGFnscxTUZV1bEYtjz/aTOqPpps=
-X-Received: by 2002:a5d:66ca:: with SMTP id k10mr11033017wrw.61.1562225292427;
- Thu, 04 Jul 2019 00:28:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190704163458.63ed69d2@canb.auug.org.au> <20190704065949.GA32707@kroah.com>
-In-Reply-To: <20190704065949.GA32707@kroah.com>
-From:   Felipe Balbi <balbi@kernel.org>
-Date:   Thu, 4 Jul 2019 10:28:34 +0300
-Message-ID: <CAH8TKc_4ggxOPgii8gLGo2d7nvx08cbTk8_xDUQfA2Ckcxb_Aw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the usb and usb-gadget trees
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+        id S1726844AbfGDIDE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 04:03:04 -0400
+Received: from gate.crashing.org ([63.228.1.57]:60432 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726605AbfGDIDD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jul 2019 04:03:03 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x6482muW028913;
+        Thu, 4 Jul 2019 03:02:49 -0500
+Message-ID: <f6d0ca0d258fa69fdcd46c04b908ff4ff9205181.camel@kernel.crashing.org>
+Subject: f_mass_storage configuration races (Was: Virtual hub, resets etc...)
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Michal Nazarewicz <mina86@mina86.com>
+Date:   Thu, 04 Jul 2019 18:02:48 +1000
+In-Reply-To: <617c4ba96b9664377c24444e8b82ffa75a8a5357.camel@kernel.crashing.org>
+References: <617c4ba96b9664377c24444e8b82ffa75a8a5357.camel@kernel.crashing.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Sooo...
 
-On Thu, Jul 4, 2019 at 9:59 AM Greg KH <greg@kroah.com> wrote:
->
-> On Thu, Jul 04, 2019 at 04:34:58PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the usb tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >
-> > arm-linux-gnueabi-ld: drivers/usb/dwc3/trace.o: in function `trace_raw_output_dwc3_log_ctrl':
-> > trace.c:(.text+0x119c): undefined reference to `usb_decode_ctrl'
-> >
-> > Caused by commit
-> >
-> >   3db1b636c07e ("usb:gadget Separated decoding functions from dwc3 driver.")
-> >
-> > I have used the usb tree from next-20190703 for today.
-> >
-> > This also occurs in the usb-gadget tree so I have used the version of
-> > that from next-20190703 as well.
->
-> Odd, I thought I pulled the usb-gadget tree into mine.  Felipe, can you
-> take a look at this to see if I messed something up?
+I think I found what's going on with some of the issues triggering
+things like
 
-This looks like it was caused by Pawel's patches.
+	usb_composite_setup_continue: Unexpected call 
 
-I'll try to reproduce here and see what's causing it.
+Or possibly
 
--- 
-balbi
+	gadget: common->fsg is NULL in fsg_setup at 489
+
+But I mostly tracked down the former.
+
+Fundamentally, it boils down to the storage going through multiple
+attempts at FSG_STATE_CONFIG_CHANGE too quickly. In my case:
+
+ - The hub port gets reset, this eventually calls fsg_disable
+
+ - In the middle of handle_exception, we get a fsg_set_alt(), after
+common->state is set back to FSG_STATE_NORMAL and before we get to
+call do_set_interface (or inside it).
+
+What happens is that not only new_fsg is indeterminate and possibly
+racy (maybe not a huge deal per-se), but we end up in that
+interesting situation where the handle_exception caused by fsg_disable
+ends up applying "new_fsg" *and* calling usb_composite_setup_continue
+because it sees new_fsg being set by fsg_set_alt.
+
+But *then*, fsg_set_alt() also queues up a new exception. So we come
+back a second time around. We call do_set_interface() again, which
+resets everything for no reason, re-established the fsg and ... we call
+usb_composite_setup_continue() again, this time completely at the wrong
+time since there's nothing to continue.
+
+I think the right fix is to replace that racy exception crap with a
+little queue so we remove those races.
+
+In the meantime however, I think the simpler patch that I'll send as
+a reply to this works around it, provided the host doesn't do multiple
+set_alt too quickly. The latter could be handled by setting new_fsg
+with the lock used for the state, and reading it from that same lock.
+But I haven't observed that problem in practice.
+
+With this patch, I can now unplug & replug on my host solidly, this
+wasn't the case before.
+
+Cheers,
+Ben.
+
+
+
