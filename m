@@ -2,104 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB995FC75
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 19:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24775FCF7
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 20:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727589AbfGDRYo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 13:24:44 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:43999 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727308AbfGDRYn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 13:24:43 -0400
-Received: by mail-pl1-f195.google.com with SMTP id cl9so3346524plb.10;
-        Thu, 04 Jul 2019 10:24:43 -0700 (PDT)
+        id S1727091AbfGDSa7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 14:30:59 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41184 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727040AbfGDSa6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 14:30:58 -0400
+Received: by mail-pf1-f196.google.com with SMTP id m30so3243101pff.8;
+        Thu, 04 Jul 2019 11:30:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=55QfSNtbMpn+MJxisNfI6ew+wl/zossrT+kRgSB+uK8=;
-        b=cck1/oH35+TwFzlHwtp8kI9dhL7sa7e0x16TEOFTU8wG1hlmZ2SNQqOFWQuLhrWd8v
-         LULq0Oy78tMkxMBHSeWbuTcylNGO8i2mnHtZIzMGQwp2RrTpnfdSwJWH33HLce1OKxaJ
-         A+X+OO2r6yE58l9QVLe+DiuIESi77WQqLr5Nx3hvq68OSoKTPzSHUo2HhvzkxpVMBkvi
-         DN4yrrmMaCqWsabjAUZyIJ3kN0WlzYtXbthr2DateTQv1FlyNcy4yWtGfDceoBslsGQ7
-         ljvxpI5gGdlH+wAe7TDhDDdmWvQPnV9beCqTq52z+2MYQJHZgoE+6jQ4d6jxTOF7NpZC
-         YJEA==
+        h=from:to:subject:date:message-id;
+        bh=paC7XP+MGJ6PoJ3R2NPttyVKxGnJcIpnnAdo5a1VLqY=;
+        b=qMNxVsXijxwND/UqXJfqS/oBGWHUropl/OwukheuI3W9d4410d+JFkE8WJWOs+4Ypw
+         xToWI/ux1Jb2V+a2NKnXh57QNIfY8/QpRGuM63hustZvo/zhiRLvrFKRLFll9WPIz2en
+         KOTmUDz2BYdkXZ3S58VzcJSwk6le1uXydU/P5/0Px3RAnKTZQc55Ak2dms5A5eXQ/OZJ
+         Z1Q0px6hbTX/meC+0yivTVX1MqkahnVgtBsDreWxS6NfVIUz4QxnOWWKH5mTmaa6NC7P
+         1Exx1xj82bJu2lAccKgoz9bYazeEQj0u5UTHx2/rSmM1p5sLOaYFQVgb3Kv0XsMDcfMJ
+         zTOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=55QfSNtbMpn+MJxisNfI6ew+wl/zossrT+kRgSB+uK8=;
-        b=MrFY2hUvkU8tjruhOJxfiTbdDYn7t902UL8pNlFZK5fRH4QBcJgSER3zJNKLrSA0KL
-         /yR0zEC4gHE2D1oYKEookK3hEKzpHTN2uqglGudADCk1hdDLVWmG3pVAjuzYqFZ10Z7g
-         E6G6JHZkkLTlGwqOd2uCc4qVcCcwqX/B8COsZe1O/JRjgLJW2Ho5KUVNxdXc/lXIGcob
-         ZNSIltj+pBkRBBedcVUTxvKsXr7/OE3K/vPf6W5wijJmaQ9McKII7fgajCYHiOd/OYR5
-         w03yvHXu1OyJd2WOtBIXm8GBKr4RIaZyjKyWdhLo8DAB/IthIaxBrNkZIamjbQPQZG1R
-         YLDA==
-X-Gm-Message-State: APjAAAXpRLgWxc8rmpav1sAi1OLFll796U+OYYMN0G+3NRa0pzzMW6vf
-        DzWwGSIZ6RnOdLqHly5KZuE=
-X-Google-Smtp-Source: APXvYqw070wr57pOgxmvfwOzrmdszFf8Ygs+RZ20bau1tLRpA0P9ugWeweLchEeESdNY9W2e8U3xQA==
-X-Received: by 2002:a17:902:61:: with SMTP id 88mr48065179pla.50.1562261083171;
-        Thu, 04 Jul 2019 10:24:43 -0700 (PDT)
-Received: from localhost.localdomain ([125.142.23.13])
-        by smtp.gmail.com with ESMTPSA id s20sm6739366pfe.169.2019.07.04.10.24.40
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 04 Jul 2019 10:24:42 -0700 (PDT)
-Date:   Fri, 5 Jul 2019 02:24:37 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     shuah@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usbip: Implement SG support to vhci
-Message-ID: <20190704172435.GA11673@localhost.localdomain>
-References: <20190624145852.GC7547@localhost.localdomain>
- <Pine.LNX.4.44L0.1906241322140.1609-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1906241322140.1609-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=paC7XP+MGJ6PoJ3R2NPttyVKxGnJcIpnnAdo5a1VLqY=;
+        b=bd92EonqJX9JL1CxDi7aTBqApjJ4RNF5PYFsG9Ts6GwFIC/s24q6B0LqjvQE+gtf62
+         rORoxGp3vHHNySQ3wP482YlqWqchLrJR6Jdq3EfNy+eK/SwwBdXLd80APCqF5+HOOIUk
+         03Fo9gYkkFIlKON0uII2C1k0pOlMy77EhFH76bkKoH91q2twpDd7t5x1kVZsf2RJX92W
+         9NIToZQhKBDhsjolobZYPycPQyfRHUfZFFwkQT1hu9/WNonUSkv6LBBEFIIeGPMuMtGI
+         RkaS7Pz7sxD+YnxTsqMfpvGjoa46LcZ38S2JO0KZ07PFuTL+3183fPbHBgvoxxa741XW
+         DtQQ==
+X-Gm-Message-State: APjAAAUBiLSUaXpHcyI0aHyaUMLbVNRZ12kbEepSaGxVrsSS8v7cgjf9
+        HTTS9+3GuaOen+DBQ989pKgD3Da0DDU=
+X-Google-Smtp-Source: APXvYqzVAjljoOwjzQAoXjFrqhRotkklVdawn+tvLn6IgOmDmtN1NGbAymDCZf2NgbJ2BgCEuNkHFg==
+X-Received: by 2002:a63:724f:: with SMTP id c15mr16567263pgn.257.1562265057796;
+        Thu, 04 Jul 2019 11:30:57 -0700 (PDT)
+Received: from localhost.localdomain ([49.34.169.150])
+        by smtp.gmail.com with ESMTPSA id f10sm6699177pfd.151.2019.07.04.11.30.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 04 Jul 2019 11:30:57 -0700 (PDT)
+From:   Shreeya Patel <shreeya.patel23498@gmail.com>
+To:     skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        dmitry.torokhov@gmail.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-input@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] Documentation: input: Add HID gadget driver's docs to Input subsystem
+Date:   Fri,  5 Jul 2019 00:00:48 +0530
+Message-Id: <20190704183048.32360-1-shreeya.patel23498@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 01:24:15PM -0400, Alan Stern wrote:
-> On Mon, 24 Jun 2019, Suwan Kim wrote:
-> 
-> > > > +	hcd->self.sg_tablesize = ~0;
-> > > > +	hcd->self.no_sg_constraint = 1;
-> > > 
-> > > You probably shouldn't do this, for two reasons.  First, sg_tablesize
-> > > of the server's HCD may be smaller than ~0.  If the client's value is
-> > > larger than the server's, a transfer could be accepted on the client
-> > > but then fail on the server because the SG list was too big.
-> 
-> On the other hand, I don't know of any examples where an HCD has 
-> sg_tablesize set to anything other than 0 or ~0.  vhci-hcd might end up 
-> being the only one.
-> 
-> > > Also, you may want to restrict the size of SG transfers even further,
-> > > so that you don't have to allocate a tremendous amount of memory all at
-> > > once on the server.  An SG transfer can be quite large.  I don't know 
-> > > what a reasonable limit would be -- 16 perhaps?
-> > 
-> > Is there any reason why you think that 16 is ok? Or Can I set this
-> > value as the smallest value of all HC? I think that sg_tablesize
-> > cannot be a variable value because vhci interacts with different
-> > machines and all machines has different sg_tablesize value.
-> 
-> I didn't have any good reason for picking 16.  Using the smallest value 
-> of all the HCDs seems like a good idea.
+Convert gadget_hid file to ReST format, in order to allow it to
+be parsed by Sphinx.
+Also move the file in the Input subsystem documentation so as to
+put it in the right place.
 
-I also have not seen an HCD with a value other than ~0 or 0 except for
-whci which uses 2048, but is not 2048 the maximum value of sg_tablesize?
-If so, ~0 is the minimum value of sg_tablesize that supports SG. Then
-can vhci use ~0 if we don't consider memory pressure of the server?
+Signed-off-by: Shreeya Patel <shreeya.patel23498@gmail.com>
+---
+ .../devices/gadget_hid.rst}                        | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+ rename Documentation/{usb/gadget_hid.txt => input/devices/gadget_hid.rst} (96%)
 
-If all of the HCDs supporting SG have ~0 as sg_tablesize value, I
-think that whether we use an HCD locally or remotely, the degree of
-memory pressure is same in both local and remote usage.
+diff --git a/Documentation/usb/gadget_hid.txt b/Documentation/input/devices/gadget_hid.rst
+similarity index 96%
+rename from Documentation/usb/gadget_hid.txt
+rename to Documentation/input/devices/gadget_hid.rst
+index 098d563040cc..132a8d6719f0 100644
+--- a/Documentation/usb/gadget_hid.txt
++++ b/Documentation/input/devices/gadget_hid.rst
+@@ -1,3 +1,5 @@
++.. SPDX-License-Identifier: GPL-2.0+
++
+ ===========================
+ Linux USB HID gadget driver
+ ===========================
+@@ -8,15 +10,15 @@ Introduction
+ The HID Gadget driver provides emulation of USB Human Interface
+ Devices (HID). The basic HID handling is done in the kernel,
+ and HID reports can be sent/received through I/O on the
+-/dev/hidgX character devices.
++:file:`/dev/hidgX` character devices.
+ 
+ For more details about HID, see the developer page on
+-http://www.usb.org/developers/hidpage/
++`<http://www.usb.org/developers/hidpage/>`_
+ 
+ Configuration
+ =============
+ 
+-g_hid is a platform driver, so to use it you need to add
++*g_hid* is a platform driver, so to use it you need to add
+ struct platform_device(s) to your platform code defining the
+ HID function descriptors you want to use - E.G. something
+ like::
+@@ -89,16 +91,16 @@ Send and receive HID reports
+ ============================
+ 
+ HID reports can be sent/received using read/write on the
+-/dev/hidgX character devices. See below for an example program
++:file:`/dev/hidgX` character devices. See below for an example program
+ to do this.
+ 
+-hid_gadget_test is a small interactive program to test the HID
++*hid_gadget_test* is a small interactive program to test the HID
+ gadget driver. To use, point it at a hidg device and set the
+ device type (keyboard / mouse / joystick) - E.G.::
+ 
+ 	# hid_gadget_test /dev/hidg0 keyboard
+ 
+-You are now in the prompt of hid_gadget_test. You can type any
++You are now in the prompt of *hid_gadget_test*. You can type any
+ combination of options and values. Available options and
+ values are listed at program start. In keyboard mode you can
+ send up to six values.
+-- 
+2.17.1
 
-Regards
-
-Suwan Kim
