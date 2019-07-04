@@ -2,136 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE765F9C2
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 16:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BF95FA4A
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 16:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727308AbfGDOJH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 10:09:07 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:35250 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727196AbfGDOJG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 10:09:06 -0400
-Received: by mail-io1-f71.google.com with SMTP id w17so6585381iom.2
-        for <linux-usb@vger.kernel.org>; Thu, 04 Jul 2019 07:09:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=ihONyH8UAyP8YEt7eORDaqs5Q56aaulsoMnZyH6j0Ek=;
-        b=qcKMiWyazGwP+OCdQR/asgveNwBhwAIonQ14sQi4yXGP5sg0oHIiVUYcG2+snsSv3+
-         dzcQ+XuhNYMC6ecCKwyP2ScEpOwSaRFONhUZFnuS7gSENPDeSzv5DryyJm6rOZQDz5W3
-         EmscFGLFZi0HL98ag0d5uEp/34sDUVnUmjZZwDd92wa+GzRt85Zu9pAUzBfmxaD/aFXi
-         wu6PSjZFuiHdvxMBEp5rRv6s5SXwCMWWjvoqmIXTjKIwKB1HbqLgqbtUzl67tb20cHHm
-         8Rulzqn+RZsh8DbLiKJ8NHgW30SKXFV4T3T4WHsZDgJU6S3mPcbuGZoSoxZvxBWQWaVN
-         87HA==
-X-Gm-Message-State: APjAAAWm5FUMmi7t20dCfQ2eRaMhRgExndfAXg74bA5mej17sbw9fBcY
-        MpQvIW7JHkT60XjpX1SmWLhqk+23pFcPFLSvgRra1QjsURn4
-X-Google-Smtp-Source: APXvYqzzTMgKs5gdQbfrqCY/mlGs0xnXZ9P+2aRYZ+z7FjaeXEihcDHvIMKMCU2+fqjMo4FHvgULPwB0CeLYufrWziX6K6g/zDFD
-MIME-Version: 1.0
-X-Received: by 2002:a02:22c6:: with SMTP id o189mr4144787jao.35.1562249345637;
- Thu, 04 Jul 2019 07:09:05 -0700 (PDT)
-Date:   Thu, 04 Jul 2019 07:09:05 -0700
-In-Reply-To: <000000000000a0b1df058cb460c8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004c2556058cdb850c@google.com>
-Subject: Re: WARNING in sisusb_send_bulk_msg/usb_submit_urb
-From:   syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        id S1727392AbfGDOsS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 10:48:18 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45634 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727066AbfGDOsS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jul 2019 10:48:18 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 7C4C9AEE1;
+        Thu,  4 Jul 2019 14:48:16 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     alsa-devel@alsa-project.org
+Cc:     Stefan Sauer <ensonic@hora-obscura.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] ALSA: usb-audio: Fix parse of UAC2 Extension Units
+Date:   Thu,  4 Jul 2019 16:48:06 +0200
+Message-Id: <20190704144806.30513-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+Extension Unit (XU) is used to have a compatible layout with
+Processing Unit (PU) on UAC1, and the usb-audio driver code assumed it
+for parsing the descriptors.  Meanwhile, on UAC2, XU became slightly
+incompatible with PU; namely, XU has a one-byte bmControls bitmap
+while PU has two bytes bmControls bitmap.  This incompatibility
+results in the read of a wrong address for the last iExtension field,
+which ended up with an incorrect string for the mixer element name, as
+recently reported for Focusrite Scarlett 18i20 device.
 
-HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=12e5bf93a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
-dashboard link: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11effc85a00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172189aba00000
+This patch corrects the present misalignment by introducing a couple
+of new macros and calling them depending on the descriptor type.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com
+Reported-by: Stefan Sauer <ensonic@hora-obscura.de>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ include/uapi/linux/usb/audio.h | 37 +++++++++++++++++++++++++++++++++++++
+ sound/usb/mixer.c              | 16 ++++++++++------
+ 2 files changed, 47 insertions(+), 6 deletions(-)
 
-usb 1-1: string descriptor 0 read error: -22
-usb 1-1: New USB device found, idVendor=0711, idProduct=0550,  
-bcdDevice=da.7e
-usb 1-1: New USB device strings: Mfr=37, Product=1, SerialNumber=1
-usb 1-1: USB2VGA dongle found at address 2
-usb 1-1: Allocated 8 output buffers
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-WARNING: CPU: 1 PID: 21 at drivers/usb/core/urb.c:477  
-usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #13
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x292/0x6c9 kernel/panic.c:219
-  __warn.cold+0x20/0x4b kernel/panic.c:576
-  report_bug+0x262/0x2a0 lib/bug.c:186
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
-RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Code: 4d 85 ed 74 2c e8 78 db e8 fd 4c 89 f7 e8 a0 36 13 ff 41 89 d8 44 89  
-e1 4c 89 ea 48 89 c6 48 c7 c7 80 23 1a 86 e8 03 a0 be fd <0f> 0b e9 20 f4  
-ff ff e8 4c db e8 fd 4c 89 f2 48 b8 00 00 00 00 00
-RSP: 0018:ffff8881d9efed28 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3dfd97
-RBP: ffff8881d09bbb80 R08: ffff8881d9e36000 R09: ffffed103b665d30
-R10: ffffed103b665d2f R11: ffff8881db32e97f R12: 0000000000000003
-R13: ffff8881ccdd79a8 R14: ffff8881d03711a0 R15: ffff8881d9449000
-  sisusb_bulkout_msg drivers/usb/misc/sisusbvga/sisusb.c:238 [inline]
-  sisusb_send_bulk_msg.constprop.0+0x88a/0x1030  
-drivers/usb/misc/sisusbvga/sisusb.c:393
-  sisusb_send_bridge_packet.constprop.0+0x11c/0x240  
-drivers/usb/misc/sisusbvga/sisusb.c:581
-  sisusb_do_init_gfxdevice+0x8a/0x450  
-drivers/usb/misc/sisusbvga/sisusb.c:2137
-  sisusb_init_gfxdevice+0xe0/0x18d0 drivers/usb/misc/sisusbvga/sisusb.c:2237
-  sisusb_probe+0x924/0xbcb drivers/usb/misc/sisusbvga/sisusb.c:3122
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
-  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x30b/0x410 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+diff --git a/include/uapi/linux/usb/audio.h b/include/uapi/linux/usb/audio.h
+index ddc5396800aa..76b7c3f6cd0d 100644
+--- a/include/uapi/linux/usb/audio.h
++++ b/include/uapi/linux/usb/audio.h
+@@ -450,6 +450,43 @@ static inline __u8 *uac_processing_unit_specific(struct uac_processing_unit_desc
+ 	}
+ }
+ 
++/*
++ * Extension Unit (XU) has almost compatible layout with Processing Unit, but
++ * on UAC2, it has a different bmControls size (bControlSize); it's 1 byte for
++ * XU while 2 bytes for PU.  The last iExtension field is a one-byte index as
++ * well as iProcessing field of PU.
++ */
++static inline __u8 uac_extension_unit_bControlSize(struct uac_processing_unit_descriptor *desc,
++						   int protocol)
++{
++	switch (protocol) {
++	case UAC_VERSION_1:
++		return desc->baSourceID[desc->bNrInPins + 4];
++	case UAC_VERSION_2:
++		return 1; /* in UAC2, this value is constant */
++	case UAC_VERSION_3:
++		return 4; /* in UAC3, this value is constant */
++	default:
++		return 1;
++	}
++}
++
++static inline __u8 uac_extension_unit_iExtension(struct uac_processing_unit_descriptor *desc,
++						 int protocol)
++{
++	__u8 control_size = uac_extension_unit_bControlSize(desc, protocol);
++
++	switch (protocol) {
++	case UAC_VERSION_1:
++	case UAC_VERSION_2:
++	default:
++		return *(uac_processing_unit_bmControls(desc, protocol)
++			 + control_size);
++	case UAC_VERSION_3:
++		return 0; /* UAC3 does not have this field */
++	}
++}
++
+ /* 4.5.2 Class-Specific AS Interface Descriptor */
+ struct uac1_as_header_descriptor {
+ 	__u8  bLength;			/* in bytes: 7 */
+diff --git a/sound/usb/mixer.c b/sound/usb/mixer.c
+index e003b5e7b01a..ac121b10c51c 100644
+--- a/sound/usb/mixer.c
++++ b/sound/usb/mixer.c
+@@ -2318,7 +2318,7 @@ static struct procunit_info extunits[] = {
+  */
+ static int build_audio_procunit(struct mixer_build *state, int unitid,
+ 				void *raw_desc, struct procunit_info *list,
+-				char *name)
++				bool extension_unit)
+ {
+ 	struct uac_processing_unit_descriptor *desc = raw_desc;
+ 	int num_ins;
+@@ -2335,6 +2335,8 @@ static int build_audio_procunit(struct mixer_build *state, int unitid,
+ 	static struct procunit_info default_info = {
+ 		0, NULL, default_value_info
+ 	};
++	const char *name = extension_unit ?
++		"Extension Unit" : "Processing Unit";
+ 
+ 	if (desc->bLength < 13) {
+ 		usb_audio_err(state->chip, "invalid %s descriptor (id %d)\n", name, unitid);
+@@ -2448,7 +2450,10 @@ static int build_audio_procunit(struct mixer_build *state, int unitid,
+ 		} else if (info->name) {
+ 			strlcpy(kctl->id.name, info->name, sizeof(kctl->id.name));
+ 		} else {
+-			nameid = uac_processing_unit_iProcessing(desc, state->mixer->protocol);
++			if (extension_unit)
++				nameid = uac_extension_unit_iExtension(desc, state->mixer->protocol);
++			else
++				nameid = uac_processing_unit_iProcessing(desc, state->mixer->protocol);
+ 			len = 0;
+ 			if (nameid)
+ 				len = snd_usb_copy_string_desc(state->chip,
+@@ -2481,10 +2486,10 @@ static int parse_audio_processing_unit(struct mixer_build *state, int unitid,
+ 	case UAC_VERSION_2:
+ 	default:
+ 		return build_audio_procunit(state, unitid, raw_desc,
+-				procunits, "Processing Unit");
++					    procunits, false);
+ 	case UAC_VERSION_3:
+ 		return build_audio_procunit(state, unitid, raw_desc,
+-				uac3_procunits, "Processing Unit");
++					    uac3_procunits, false);
+ 	}
+ }
+ 
+@@ -2495,8 +2500,7 @@ static int parse_audio_extension_unit(struct mixer_build *state, int unitid,
+ 	 * Note that we parse extension units with processing unit descriptors.
+ 	 * That's ok as the layout is the same.
+ 	 */
+-	return build_audio_procunit(state, unitid, raw_desc,
+-				    extunits, "Extension Unit");
++	return build_audio_procunit(state, unitid, raw_desc, extunits, true);
+ }
+ 
+ /*
+-- 
+2.16.4
 
