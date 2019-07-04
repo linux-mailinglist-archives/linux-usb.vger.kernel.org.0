@@ -2,91 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C30C85FB41
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 17:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7125FB6A
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 18:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727388AbfGDPxv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 11:53:51 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:41610 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727359AbfGDPxu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 11:53:50 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x64FrZX0020307;
-        Thu, 4 Jul 2019 10:53:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1562255615;
-        bh=1aAOg3DUMC85aQ9Mtdo75I0mcP1z9dseQgr2lPYDhZk=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=FBtrqnbKFYQJQvmXJao71IvWQ6Gm+lWocwFUoL2t4AAtfHpjUe5LCyxqEaEW5muCq
-         mp0iMJK4FDvXg/jFlkwX3C2Lp0Ns9O2b1ru2pviiOZQhMidbW908Bb0GZqja3tWNxM
-         LfZ78kN/DnmDEMAi9ckFXZNzIkYQs69MvKODIqTo=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x64FrZuS071648
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 4 Jul 2019 10:53:35 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 4 Jul
- 2019 10:53:35 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Thu, 4 Jul 2019 10:53:35 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x64FrZOf078909;
-        Thu, 4 Jul 2019 10:53:35 -0500
-Date:   Thu, 4 Jul 2019 10:53:26 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Felipe Balbi <balbi@kernel.org>
-CC:     Pawel Laszczak <pawell@cadence.com>, Greg KH <greg@kroah.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Roger Quadros <rogerq@ti.com>
-Subject: Re: linux-next: build failure after merge of the usb and usb-gadget
- trees
-Message-ID: <20190704155326.f75xhkpyh5mq4467@kahuna>
-References: <20190704163458.63ed69d2@canb.auug.org.au>
- <20190704065949.GA32707@kroah.com>
- <CAH8TKc_4ggxOPgii8gLGo2d7nvx08cbTk8_xDUQfA2Ckcxb_Aw@mail.gmail.com>
- <BYAPR07MB470946609232100714B3EA29DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com>
- <87imsiyzo3.fsf@linux.intel.com>
+        id S1726411AbfGDQEv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 12:04:51 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:58875 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725865AbfGDQEv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jul 2019 12:04:51 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id D4784C058CA8;
+        Thu,  4 Jul 2019 16:04:39 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-9.rdu2.redhat.com [10.10.120.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AE1C37D958;
+        Thu,  4 Jul 2019 16:04:26 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20190703190846.GA15663@kroah.com>
+References: <20190703190846.GA15663@kroah.com> <156173690158.15137.3985163001079120218.stgit@warthog.procyon.org.uk> <156173697086.15137.9549379251509621554.stgit@warthog.procyon.org.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>, nicolas.dichtel@6wind.com,
+        raven@themaw.net, Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/9] Add a general, global device notification watch list [ver #5]
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <87imsiyzo3.fsf@linux.intel.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-ID: <10294.1562256260.1@warthog.procyon.org.uk>
+Date:   Thu, 04 Jul 2019 17:04:20 +0100
+Message-ID: <10295.1562256260@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Thu, 04 Jul 2019 16:04:50 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11:25-20190704, Felipe Balbi wrote:
-[...]
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-> This is what I get for trusting people to do their part. I couldn't even
-> compile test this since I don't have ARM compilers anymore (actually,
-> just installed to test). Your customer, however, uses ARM cores so I
-> would expect you to have at least compile tested this on ARM. How come
-> this wasn't verified by anybody at TI?
+> Don't we need a manpage and a kselftest for it?
 
-Sorry about that Felipe/Greg, will try and make sure we put in steps so
-that this does'nt happen again.
+I've got part of a manpage, but it needs more work.
 
+How do you do a kselftest for this when it does nothing unless hardware events
+happen?
+
+> > +	u64 id = 0; /* Might want to allow dev# here. */
 > 
-> TI used to have automated testing for many of the important defconfigs,
-> is that completely gone? Are you guys relying entirely on linux-next?
+> I don't understand the comment here, what does "dev#" refer to?
 
-We still do. Kind of a unfortunately co-incidence, there has been for a
-few weeks a downtime given the test infrastructure has been changing and
-the continual automated testing env is down for community kernel. But,
-that said, we also did move to focussing on linux-next, which should be
-revisited.
+This is really for mount subtree watches, so I'm removing it for now.
 
+The reason it's there is because a mount object may have multiple watches, but
+each watch is set on a dentry within that mount, and it doesn't have to be the
+same dentry each time.  The queue is shared between all the dentries, and the
+ID is used (a) to label them so that they can be manually removed, (b) to
+match them to each dentry when the notification is being propagated rootwards
+along the tree and (c) to avoid adding another field to struct dentry.
 
--- 
-Regards,
-Nishanth Menon
+David
