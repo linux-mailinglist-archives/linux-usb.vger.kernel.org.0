@@ -2,131 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D07455F43B
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 10:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0155F44A
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 10:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbfGDIEU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 04:04:20 -0400
-Received: from gate.crashing.org ([63.228.1.57]:34406 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726601AbfGDIEU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Jul 2019 04:04:20 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x6484C2W028966;
-        Thu, 4 Jul 2019 03:04:13 -0500
-Message-ID: <074323c563626a462ea5ce42309a04138f8c9b6e.camel@kernel.crashing.org>
-Subject: [PATCH] usb: gadget: mass_storage: Fix races between fsg_disable
- and fsg_set_alt
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Michal Nazarewicz <mina86@mina86.com>
-Date:   Thu, 04 Jul 2019 18:04:12 +1000
-In-Reply-To: <f6d0ca0d258fa69fdcd46c04b908ff4ff9205181.camel@kernel.crashing.org>
-References: <617c4ba96b9664377c24444e8b82ffa75a8a5357.camel@kernel.crashing.org>
-         <f6d0ca0d258fa69fdcd46c04b908ff4ff9205181.camel@kernel.crashing.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726877AbfGDIH2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 04:07:28 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:34090 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726012AbfGDIH1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 04:07:27 -0400
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x64829cK020557;
+        Thu, 4 Jul 2019 01:07:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=TruY0iE5bTN7MBnx0PzHnBM4nCKHO4VmLyK3JhX9qkE=;
+ b=QZAnvdijTUCfTarE4S8P3+daSwzpbMJbkbJwOOfeRuy+C6Vl0fO8JEIgY2iER1CYmG5E
+ 5lmsRKRWJkvG106IVO2AByvrHB7UjJjN8nPP6OTYnZBdjtDQMXJWHSei8ZmQkRquArN2
+ tqLYfs5zoHEEVVMwT+FF4DREBJzzj86CvxSdl1c/qkPNh6eh5TI8nnyIjDZJk+C6B123
+ tnIZsQzhYzbPelJt67nrPaugyd6E80bOZZBfBMfRvdHXm8I9yY2IgmOSbYuDHbhhA5pR
+ O2363aBRUHi2MpgFzeVbM43XUbful85/bVuEIWbJYP+JBI9Nx9wEJcU8yr8Cxql2+zC5 MQ== 
+Authentication-Results: cadence.com;
+        spf=pass smtp.mailfrom=pawell@cadence.com
+Received: from nam01-by2-obe.outbound.protection.outlook.com (mail-by2nam01lp2056.outbound.protection.outlook.com [104.47.34.56])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 2thby2rdd4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 04 Jul 2019 01:07:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TruY0iE5bTN7MBnx0PzHnBM4nCKHO4VmLyK3JhX9qkE=;
+ b=a1JQwZH60bjRjfiOqyqtCiiB0Uq+H7WdjHKKG1nAUlNFES0M05KSUTZTZiZzmUNYjSfXlsRrGGh4XRfzIiasjfyZgqp/CaEpT/EMF78jMb42R4VrRczeSx6abTncoJA6wY1BSCLpSvDf7vxJl2A02DPnhAtNZRfpRn2vcAnmyZM=
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
+ BYAPR07MB4871.namprd07.prod.outlook.com (52.135.205.145) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2052.18; Thu, 4 Jul 2019 08:07:06 +0000
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::fd8c:399c:929b:33e2]) by BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::fd8c:399c:929b:33e2%6]) with mapi id 15.20.2032.019; Thu, 4 Jul 2019
+ 08:07:06 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Felipe Balbi <balbi@kernel.org>, Greg KH <greg@kroah.com>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: linux-next: build failure after merge of the usb and usb-gadget
+ trees
+Thread-Topic: linux-next: build failure after merge of the usb and usb-gadget
+ trees
+Thread-Index: AQHVMjKg7+jonhPbpUSjvye7Qm/1waa6B76AgAAICQCAAAlA8A==
+Date:   Thu, 4 Jul 2019 08:07:06 +0000
+Message-ID: <BYAPR07MB470946609232100714B3EA29DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com>
+References: <20190704163458.63ed69d2@canb.auug.org.au>
+ <20190704065949.GA32707@kroah.com>
+ <CAH8TKc_4ggxOPgii8gLGo2d7nvx08cbTk8_xDUQfA2Ckcxb_Aw@mail.gmail.com>
+In-Reply-To: <CAH8TKc_4ggxOPgii8gLGo2d7nvx08cbTk8_xDUQfA2Ckcxb_Aw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctYjRhMjhmYWUtOWUzMi0xMWU5LTg3NDItMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XGI0YTI4ZmFmLTllMzItMTFlOS04NzQyLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMTMzMCIgdD0iMTMyMDY3MDEyMjM4MDY4NzQ2IiBoPSJnVXh3T2N5Y0t6Qi96Z0RHT0lBd251S2M0ZWM9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: 
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fcb5fb3b-ca0c-41e9-fdf6-08d700569b3c
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR07MB4871;
+x-ms-traffictypediagnostic: BYAPR07MB4871:
+x-microsoft-antispam-prvs: <BYAPR07MB4871193D659617D68E9F8E9FDDFA0@BYAPR07MB4871.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1201;
+x-forefront-prvs: 0088C92887
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(396003)(346002)(366004)(39860400002)(189003)(199004)(36092001)(53754006)(446003)(68736007)(11346002)(6246003)(8676002)(53936002)(476003)(14454004)(25786009)(7736002)(81166006)(81156014)(33656002)(305945005)(74316002)(6436002)(66066001)(256004)(2906002)(229853002)(55016002)(9686003)(478600001)(4326008)(71190400001)(71200400001)(486006)(186003)(6506007)(86362001)(102836004)(26005)(5660300002)(3846002)(110136005)(54906003)(52536014)(73956011)(66946007)(316002)(66446008)(64756008)(66556008)(66476007)(7696005)(99286004)(6116002)(76176011)(8936002)(76116006);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB4871;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: cadence.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: +WDUknoSHtIXUWOKlYJ8zdx3sBAL3p7BbRfFevrgVpYIz8Ynw+CVpG9m6DfS0HjwzJ2hwUIiLTRDoCPHRM3FE9m/oG4Dec9cQUdVmgwZtVLX2nf7DK5kllhpp1JaoNcbNK3ZeFVEUdMiB5ud3JrecA9/Vtpj33vE58XTf5h2zAMUp5Kj/C2lyDaXOsNWHk/qZ81ee1HLq6yXz21PBLB5TeWAJz2KZQUi+qRo24ktH3JBApAUEt+L4T40Sup0qEotoyUIXyWvxDZB8/M1kvxu9obYEXDh5/33IWzVZKRBNHnVbsmv654ZXUse8qsParzgVkMcIbWMY3xUaLVGM6AC5dntH4V3J7d8KDFUH2QF0HcCnKlJSr5yCiZ/xTc1r9A0vVnAxPfSmiP+uB9EiI9JOwamtplj12HGtMIBQT5E5U0=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcb5fb3b-ca0c-41e9-fdf6-08d700569b3c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2019 08:07:06.6048
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pawell@global.cadence.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB4871
+X-Proofpoint-SPF-Result: pass
+X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
+ include:mktomail.com include:spf-0014ca01.pphosted.com
+ include:spf.protection.outlook.com include:auth.msgapp.com
+ include:spf.mandrillapp.com ~all
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-04_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
+ spamscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=599 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907040105
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If fsg_disable() and fsg_set_alt() are called too closely to each
-other (for example due to a quick reset/reconnect), what can happen
-is that fsg_set_alt sets common->new_fsg from an interrupt while
-handle_exception is trying to process the config change caused by
-fsg_disable():
-
-	fsg_disable()
-	...
-	handle_exception()
-		sets state back to FSG_STATE_NORMAL
-		hasn't yet called do_set_interface()
-		or is inside it.
-
- ---> interrupt
-	fsg_set_alt
-		sets common->new_fsg
-		queues a new FSG_STATE_CONFIG_CHANGE
- <---
-
-Now, the first handle_exception can "see" the updated
-new_fsg, treats it as if it was a fsg_set_alt() response,
-call usb_composite_setup_continue() etc...
-
-But then, the thread sees the second FSG_STATE_CONFIG_CHANGE,
-and goes back down the same path, wipes and reattaches a now
-active fsg, and .. calls usb_composite_setup_continue() which
-at this point is wrong.
-
-Not only we get a backtrace, but I suspect the second set_interface
-wrecks some state causing the host to get upset in my case.
-
-This fixes it by using a separate state for "clearing" the fsg
-so that new_fsg isn't clobbered, and FSG_STATE_CONFIG_CHANGE
-is only ever called for the real thing.
-
-Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
----
- drivers/usb/gadget/function/f_mass_storage.c | 13 +++++++------
- drivers/usb/gadget/function/storage_common.h |  1 +
- 2 files changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 043f97ad8f22..72f12bdd0dae 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -2293,8 +2293,7 @@ static int fsg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- static void fsg_disable(struct usb_function *f)
- {
- 	struct fsg_dev *fsg = fsg_from_func(f);
--	fsg->common->new_fsg = NULL;
--	raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
-+	raise_exception(fsg->common, FSG_STATE_CONFIG_CLEAR);
- }
- 
- 
-@@ -2412,10 +2411,13 @@ static void handle_exception(struct fsg_common *common)
- 		/*			SS_RESET_OCCURRED;  */
- 		break;
- 
-+	case FSG_STATE_CONFIG_CLEAR:
-+		do_set_interface(common, NULL);
-+		break;
-+
- 	case FSG_STATE_CONFIG_CHANGE:
- 		do_set_interface(common, common->new_fsg);
--		if (common->new_fsg)
--			usb_composite_setup_continue(common->cdev);
-+		usb_composite_setup_continue(common->cdev);
- 		break;
- 
- 	case FSG_STATE_EXIT:
-@@ -2989,8 +2991,7 @@ static void fsg_unbind(struct usb_configuration *c, struct usb_function *f)
- 
- 	DBG(fsg, "unbind\n");
- 	if (fsg->common->fsg == fsg) {
--		fsg->common->new_fsg = NULL;
--		raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
-+		raise_exception(fsg->common, FSG_STATE_CONFIG_CLEAR);
- 		/* FIXME: make interruptible or killable somehow? */
- 		wait_event(common->fsg_wait, common->fsg != fsg);
- 	}
-diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
-index e5e3a2553aaa..5f8cdc08ad85 100644
---- a/drivers/usb/gadget/function/storage_common.h
-+++ b/drivers/usb/gadget/function/storage_common.h
-@@ -160,6 +160,7 @@ enum fsg_state {
- 	FSG_STATE_NORMAL,
- 	FSG_STATE_ABORT_BULK_OUT,
- 	FSG_STATE_PROTOCOL_RESET,
-+	FSG_STATE_CONFIG_CLEAR,
- 	FSG_STATE_CONFIG_CHANGE,
- 	FSG_STATE_EXIT,
- 	FSG_STATE_TERMINATED
-
-
+Pg0KPkhpLA0KPg0KPk9uIFRodSwgSnVsIDQsIDIwMTkgYXQgOTo1OSBBTSBHcmVnIEtIIDxncmVn
+QGtyb2FoLmNvbT4gd3JvdGU6DQo+Pg0KPj4gT24gVGh1LCBKdWwgMDQsIDIwMTkgYXQgMDQ6MzQ6
+NThQTSArMTAwMCwgU3RlcGhlbiBSb3Rod2VsbCB3cm90ZToNCj4+ID4gSGkgYWxsLA0KPj4gPg0K
+Pj4gPiBBZnRlciBtZXJnaW5nIHRoZSB1c2IgdHJlZSwgdG9kYXkncyBsaW51eC1uZXh0IGJ1aWxk
+IChhcm0NCj4+ID4gbXVsdGlfdjdfZGVmY29uZmlnKSBmYWlsZWQgbGlrZSB0aGlzOg0KPj4gPg0K
+Pj4gPiBhcm0tbGludXgtZ251ZWFiaS1sZDogZHJpdmVycy91c2IvZHdjMy90cmFjZS5vOiBpbiBm
+dW5jdGlvbiBgdHJhY2VfcmF3X291dHB1dF9kd2MzX2xvZ19jdHJsJzoNCj4+ID4gdHJhY2UuYzoo
+LnRleHQrMHgxMTljKTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgdXNiX2RlY29kZV9jdHJsJw0K
+Pj4gPg0KPj4gPiBDYXVzZWQgYnkgY29tbWl0DQo+PiA+DQo+PiA+ICAgM2RiMWI2MzZjMDdlICgi
+dXNiOmdhZGdldCBTZXBhcmF0ZWQgZGVjb2RpbmcgZnVuY3Rpb25zIGZyb20gZHdjMyBkcml2ZXIu
+IikNCj4+ID4NCj4+ID4gSSBoYXZlIHVzZWQgdGhlIHVzYiB0cmVlIGZyb20gbmV4dC0yMDE5MDcw
+MyBmb3IgdG9kYXkuDQo+PiA+DQo+PiA+IFRoaXMgYWxzbyBvY2N1cnMgaW4gdGhlIHVzYi1nYWRn
+ZXQgdHJlZSBzbyBJIGhhdmUgdXNlZCB0aGUgdmVyc2lvbiBvZg0KPj4gPiB0aGF0IGZyb20gbmV4
+dC0yMDE5MDcwMyBhcyB3ZWxsLg0KPj4NCj4+IE9kZCwgSSB0aG91Z2h0IEkgcHVsbGVkIHRoZSB1
+c2ItZ2FkZ2V0IHRyZWUgaW50byBtaW5lLiAgRmVsaXBlLCBjYW4geW91DQo+PiB0YWtlIGEgbG9v
+ayBhdCB0aGlzIHRvIHNlZSBpZiBJIG1lc3NlZCBzb21ldGhpbmcgdXA/DQo+DQo+VGhpcyBsb29r
+cyBsaWtlIGl0IHdhcyBjYXVzZWQgYnkgUGF3ZWwncyBwYXRjaGVzLg0KPg0KPkknbGwgdHJ5IHRv
+IHJlcHJvZHVjZSBoZXJlIGFuZCBzZWUgd2hhdCdzIGNhdXNpbmcgaXQuDQoNClByb2JsZW0gaXMg
+aW4gbXkgUGF0Y2guIEkgcmVwcm9kdWNlZCBpdCwgYnV0IEkgZG9uJ3QgdW5kZXJzdGFuZCB3aHkg
+Y29tcGlsZXIgDQpjb21wbGFpbnMgYWJvdXQgdXNiX2RlY29kZV9jdHJsLiBJdCdzIGNvbXBpbGVk
+IGludG8gbGliY29tcG9zaXRlLmtvIGFuZA0KZGVjbGFyYXRpb24gaXMgaW4gZHJpdmVycy91c2Iv
+Z2FkZ2V0LmguIA0KDQo+DQo+LS0NCj5iYWxiaQ0K
