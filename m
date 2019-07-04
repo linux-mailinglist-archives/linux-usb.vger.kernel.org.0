@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E51A5F5E1
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 11:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECF75F5E3
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 11:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727445AbfGDJoN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 05:44:13 -0400
-Received: from mga12.intel.com ([192.55.52.136]:46969 "EHLO mga12.intel.com"
+        id S1727372AbfGDJpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 05:45:13 -0400
+Received: from mga07.intel.com ([134.134.136.100]:2174 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727349AbfGDJoN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Jul 2019 05:44:13 -0400
+        id S1727298AbfGDJpN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jul 2019 05:45:13 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jul 2019 02:44:11 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jul 2019 02:45:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,450,1557212400"; 
-   d="scan'208";a="166789157"
+   d="scan'208";a="184965334"
 Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga003.jf.intel.com with ESMTP; 04 Jul 2019 02:44:09 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jul 2019 02:45:09 -0700
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Pawel Laszczak <pawell@cadence.com>, Greg KH <greg@kroah.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
@@ -28,10 +28,10 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
         Roger Quadros <rogerq@ti.com>, Nishanth Menon <nm@ti.com>
 Subject: RE: linux-next: build failure after merge of the usb and usb-gadget trees
-In-Reply-To: <BYAPR07MB4709076903F55352193FC78FDDFA0@BYAPR07MB4709.namprd07.prod.outlook.com>
-References: <20190704163458.63ed69d2@canb.auug.org.au> <20190704065949.GA32707@kroah.com> <CAH8TKc_4ggxOPgii8gLGo2d7nvx08cbTk8_xDUQfA2Ckcxb_Aw@mail.gmail.com> <BYAPR07MB470946609232100714B3EA29DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com> <87imsiyzo3.fsf@linux.intel.com> <BYAPR07MB4709076903F55352193FC78FDDFA0@BYAPR07MB4709.namprd07.prod.outlook.com>
-Date:   Thu, 04 Jul 2019 12:44:08 +0300
-Message-ID: <877e8y6snr.fsf@linux.intel.com>
+In-Reply-To: <BYAPR07MB4709BB98AE258C4AC4EE6F60DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com>
+References: <20190704163458.63ed69d2@canb.auug.org.au> <20190704065949.GA32707@kroah.com> <CAH8TKc_4ggxOPgii8gLGo2d7nvx08cbTk8_xDUQfA2Ckcxb_Aw@mail.gmail.com> <BYAPR07MB470946609232100714B3EA29DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com> <87imsiyzo3.fsf@linux.intel.com> <BYAPR07MB4709076903F55352193FC78FDDFA0@BYAPR07MB4709.namprd07.prod.outlook.com> <BYAPR07MB4709BB98AE258C4AC4EE6F60DDFA0@BYAPR07MB4709.namprd07.prod.outlook.com>
+Date:   Thu, 04 Jul 2019 12:45:09 +0300
+Message-ID: <874l426sm2.fsf@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
@@ -44,79 +44,83 @@ Hi,
 
 Pawel Laszczak <pawell@cadence.com> writes:
 
->>
->>
->>Hi,
->>
->>Pawel Laszczak <pawell@cadence.com> writes:
->>
->>>>
->>>>Hi,
->>>>
->>>>On Thu, Jul 4, 2019 at 9:59 AM Greg KH <greg@kroah.com> wrote:
->>>>>
->>>>> On Thu, Jul 04, 2019 at 04:34:58PM +1000, Stephen Rothwell wrote:
->>>>> > Hi all,
->>>>> >
->>>>> > After merging the usb tree, today's linux-next build (arm
->>>>> > multi_v7_defconfig) failed like this:
->>>>> >
->>>>> > arm-linux-gnueabi-ld: drivers/usb/dwc3/trace.o: in function `trace_raw_output_dwc3_log_ctrl':
->>>>> > trace.c:(.text+0x119c): undefined reference to `usb_decode_ctrl'
->>>>> >
->>>>> > Caused by commit
->>>>> >
->>>>> >   3db1b636c07e ("usb:gadget Separated decoding functions from dwc3 driver.")
->>>>> >
->>>>> > I have used the usb tree from next-20190703 for today.
->>>>> >
->>>>> > This also occurs in the usb-gadget tree so I have used the version of
->>>>> > that from next-20190703 as well.
->>>>>
->>>>> Odd, I thought I pulled the usb-gadget tree into mine.  Felipe, can you
->>>>> take a look at this to see if I messed something up?
->>>>
->>>>This looks like it was caused by Pawel's patches.
->>>>
->>>>I'll try to reproduce here and see what's causing it.
 >>>
->>> Problem is in my Patch. I reproduced it, but I don't understand why compiler
->>> complains about usb_decode_ctrl. It's compiled into libcomposite.ko and
->>> declaration is in drivers/usb/gadget.h.
+>>>
+>>>Hi,
+>>>
+>>>Pawel Laszczak <pawell@cadence.com> writes:
+>>>
+>>>>>
+>>>>>Hi,
+>>>>>
+>>>>>On Thu, Jul 4, 2019 at 9:59 AM Greg KH <greg@kroah.com> wrote:
+>>>>>>
+>>>>>> On Thu, Jul 04, 2019 at 04:34:58PM +1000, Stephen Rothwell wrote:
+>>>>>> > Hi all,
+>>>>>> >
+>>>>>> > After merging the usb tree, today's linux-next build (arm
+>>>>>> > multi_v7_defconfig) failed like this:
+>>>>>> >
+>>>>>> > arm-linux-gnueabi-ld: drivers/usb/dwc3/trace.o: in function `trace_raw_output_dwc3_log_ctrl':
+>>>>>> > trace.c:(.text+0x119c): undefined reference to `usb_decode_ctrl'
+>>>>>> >
+>>>>>> > Caused by commit
+>>>>>> >
+>>>>>> >   3db1b636c07e ("usb:gadget Separated decoding functions from dwc3 driver.")
+>>>>>> >
+>>>>>> > I have used the usb tree from next-20190703 for today.
+>>>>>> >
+>>>>>> > This also occurs in the usb-gadget tree so I have used the version of
+>>>>>> > that from next-20190703 as well.
+>>>>>>
+>>>>>> Odd, I thought I pulled the usb-gadget tree into mine.  Felipe, can you
+>>>>>> take a look at this to see if I messed something up?
+>>>>>
+>>>>>This looks like it was caused by Pawel's patches.
+>>>>>
+>>>>>I'll try to reproduce here and see what's causing it.
+>>>>
+>>>> Problem is in my Patch. I reproduced it, but I don't understand why compiler
+>>>> complains about usb_decode_ctrl. It's compiled into libcomposite.ko and
+>>>> declaration is in drivers/usb/gadget.h.
+>>>
+>>>That's because in multi_v7_defconfig dwc3 is built-in while libcomposite
+>>>is a module:
+>>>
+>>>CONFIG_USB_DWC3=y
+>>>CONFIG_USB_LIBCOMPOSITE=m
+>>>
+>>>
+>>>I remember that when you were doing this work, I asked you to move
+>>>functions to usb/common. Why did you deviate from that suggestion? It's
+>>>clear that decoding a ctrl request can be used by peripheral and host
+>>>and we wouldn't have to deal with this problem if you had just followed
+>>>the suggestion.
 >>
->>That's because in multi_v7_defconfig dwc3 is built-in while libcomposite
->>is a module:
+>>Some time ago Greg wrote:
+>>" It's nice to have these in a common place, but you just bloated all of
+>>the USB-enabled systems in the world for the use of 2 odd-ball system
+>>controllers that almost no one has :) "
 >>
->>CONFIG_USB_DWC3=y
->>CONFIG_USB_LIBCOMPOSITE=m
+>>So I moved these functions to gadget directory.
 >>
+>>It was mistake that I added debug.c file to libcomposite.ko.
 >>
->>I remember that when you were doing this work, I asked you to move
->>functions to usb/common. Why did you deviate from that suggestion? It's
->>clear that decoding a ctrl request can be used by peripheral and host
->>and we wouldn't have to deal with this problem if you had just followed
->>the suggestion.
 >
-> Some time ago Greg wrote: 
-> " It's nice to have these in a common place, but you just bloated all of
-> the USB-enabled systems in the world for the use of 2 odd-ball system
-> controllers that almost no one has :) "
+> I think that the best choice is leaving debug.c file 
+> In drivers/usb/gadget/ directory. 
 >
-> So I moved these functions to gadget directory. 
+> But to do this I must to add this file to drivers/usb/dwc3/Makefile file and 
+> drivers/usb/cdns3/Makefile. The code will be compiled into both drivers,
+> It will increase the size of kernel only when these driver will be enabled.
 >
-> It was mistake that I added debug.c file to libcomposite.ko.
+> What do you think about such solution ? 
 
-The plan is to use this decoding function for xHCI as well. Other host
-controllers can use it as well.
+Frankly, I think it's not a solution :-)
 
-The biggest mistake was to put this under gadget. What you should have
-done was create a file under usb/common that only gets compile in if
-tracing is enabled.
-
-Then there's no bloating unless you have a kernel purposefuly built for
-debugging and tracing.
-
-Greg, does that work for you?
+If we _must_ keep it under drivers/usb/gadget, then we need to find a
+way to build this so that if any user is built-in, that file has to be
+built-in as well.
 
 -- 
 balbi
