@@ -2,146 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 060245FB90
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 18:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C94A5FBC3
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 18:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726679AbfGDQNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 12:13:40 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:53649 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726038AbfGDQNk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 12:13:40 -0400
-Received: (qmail 19777 invoked by uid 500); 4 Jul 2019 12:13:39 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 4 Jul 2019 12:13:39 -0400
-Date:   Thu, 4 Jul 2019 12:13:39 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Michal Nazarewicz <mina86@mina86.com>
-Subject: Re: Virtual hub, resets etc...
-In-Reply-To: <617c4ba96b9664377c24444e8b82ffa75a8a5357.camel@kernel.crashing.org>
-Message-ID: <Pine.LNX.4.44L0.1907041142410.18767-100000@netrider.rowland.org>
+        id S1727278AbfGDQdC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 12:33:02 -0400
+Received: from eddie.linux-mips.org ([148.251.95.138]:37140 "EHLO
+        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726024AbfGDQdC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 12:33:02 -0400
+Received: (from localhost user: 'ladis' uid#1021 fake: STDIN
+        (ladis@eddie.linux-mips.org)) by eddie.linux-mips.org
+        id S23991063AbfGDQc5SlTW5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jul 2019 18:32:57 +0200
+Date:   Thu, 4 Jul 2019 18:32:56 +0200
+From:   Ladislav Michl <ladis@linux-mips.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 0/3] usb: gadget: u_serial: Fix and cleanup
+Message-ID: <20190704163256.GA7834@lenoch>
+References: <20190703163355.GA28579@lenoch>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190703163355.GA28579@lenoch>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 4 Jul 2019, Benjamin Herrenschmidt wrote:
+On Wed, Jul 03, 2019 at 06:33:55PM +0200, Ladislav Michl wrote:
+> Following patchset makes console work (patch 1) for at AT91SAM9G20 board
+> connected to xhci_hcd and does some cleanup.
+> Tested with "console=ttyS0,115200n8 console=ttyGS0,115200n8" on kernel
+> command line and following inittab:
+> console::respawn:/sbin/getty -L 115200 ttyS0 vt100
+> console::respawn:/sbin/getty -L 115200 ttyGS0 vt100
+> 
+> There are issues remaining:
+> 
+> - first usb disconnect works while each next triggers WARN_ON in gs_close:
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 501 at drivers/usb/gadget/function/u_serial.c:706 gs_close+0x3c/0x1e4
+> Modules linked in:
+> CPU: 0 PID: 501 Comm: getty Not tainted 5.2.0-rc7 #44
+> Hardware name: Atmel AT91SAM9
+> [<c0107514>] (unwind_backtrace) from [<c01051c0>] (show_stack+0x10/0x18)
+> [<c01051c0>] (show_stack) from [<c05465a8>] (dump_stack+0x18/0x24)
+> [<c05465a8>] (dump_stack) from [<c010fa80>] (__warn+0xcc/0xe4)
+> [<c010fa80>] (__warn) from [<c010fad0>] (warn_slowpath_null+0x38/0x48)
+> [<c010fad0>] (warn_slowpath_null) from [<c03b6648>] (gs_close+0x3c/0x1e4)
+> [<c03b6648>] (gs_close) from [<c03036b0>] (tty_release+0x1d4/0x460)
+> [<c03036b0>] (tty_release) from [<c01ce464>] (__fput+0xe4/0x1b0)
+> [<c01ce464>] (__fput) from [<c0124e1c>] (task_work_run+0x8c/0xa8)
+> [<c0124e1c>] (task_work_run) from [<c011155c>] (do_exit+0x354/0x814)
+> [<c011155c>] (do_exit) from [<c0111a9c>] (do_group_exit+0x54/0xb8)
+> [<c0111a9c>] (do_group_exit) from [<c011a190>] (get_signal+0x18c/0x658)
+> [<c011a190>] (get_signal) from [<c0104bbc>] (do_work_pending+0xe0/0x44c)
+> [<c0104bbc>] (do_work_pending) from [<c0101068>] (slow_work_pending+0xc/0x20)
+> Exception stack(0xc3797fb0 to 0xc3797ff8)
+> 7fa0:                                     00000000 beb87d0c 00000001 00000000
+> 7fc0: 0009a150 00000000 00099c04 00000003 0009a198 0007e049 00099bd4 0009a1e4
+> 7fe0: b6e3f000 beb87cd8 00018210 b6dbcc40 60000010 00000000
+> ---[ end trace 70af570fde0de49b ]---
 
-> Hi Folks !
-> 
-> (Michal: Mass storage issue near the end...)
-> 
-> So I'd like to pick your brains on what you think is the best policy to
-> implement for this case:
-> 
-> The issue is around the Aspeed vhub driver which I wrote.
-> 
-> To recap, the HW shows on the host as a USB hub with 5 ports for which
-> I create five UDC for gadgets. The actual hub emulation is largely done
-> in SW with HW assist.
-> 
-> At the moment, the hub always pulls up, so it's always present on the
-> host when there's a host connected. So far so good (this is the subject
-> of another discussion).
-> 
-> When any of the child UDC pulls up, I show the USB_PORT_STAT_CONNECTION
-> on that port, so the host enumerates. At the moment,
-> USB_PORT_STAT_POWER is always set and I don't emulate power control.
-> 
-> The opposite with the child pulling down of course.
-> 
-> The interesting question however is how to react to events on the
-> upstream leg of the hub such as suspend, resume and USB reset. So far I
-> don't seem to be able to detect connection/disconnection but I'll dig a
-> bit more.
-> 
-> So far, I've tried to implement what I understand of the USB spec (I
-> might have misread) which consists of the following:
-> 
->  - suspend: For each enabled port that isn't explicitely in
-> USB_PORT_STAT_SUSPEND state already (host initiated port suspend), call
-> the corresponding gadget suspend callback if any. I do NOT set
-> USB_PORT_STAT_SUSPEND in the port state.
-> 
->  - resume: As above but with the resume callback
+This one is explained in drivers/tty/serial/ip22zilog.c line 751 (see also
+__tty_hangup) And it also explains why patch 2 in this serie is actually wrong.
+Will send v2.
 
-That sounds right.
-
-> (Note: See below about issues with suspend)
+> - init (both busybox' and systemd) waits for usb host to be plugged in,
+> otherwise boot is stuck and continues after host is connected.
 > 
->  - bus reset: When I sense a bus reset, that's where I'm not too sure
-> what to do. Currently I clear all the status bits of the ports
-> except USB_PORT_STAT_SUSPEND. Thus I clear USB_PORT_STAT_ENABLE.
-> But I'm not sure what to do with the gadget. I currently call
-> the gadget suspend as "hinted" by the spec calling for S0 state iirc,
-> but I don't think it's the best thing to do, it doesn't make that much
-> sense... Should I do a gadget reset instead ? 
-
-You should also clear USB_PORT_STAT_SUSPEND.  Calling the gadget's
-suspend routine (if the gadget isn't already suspended) is the right
-thing to do; the spec says a USB device goes into suspend if it doesn't
-receive any packets for a period of 3 (or 5? -- something like that)  
-ms, and that certainly would be the case here.
-
->  - If the host clears USB_PORT_STAT_ENABLE, what should I do ? I
-> currently do a suspend as well, which isn't great... mostly it does
-> nothing and keep potentially the gadget trying to do stuff. I could
-> do a reset. I don't want to do a disconnect because we are still
-> connected to the hub so that's not really the right call, but at least
-> for composite it's the same thing...
-
-As above, doing a suspend is the right thing.
-
-> Now, a few things i noticed while at it:
+> Will investigate those two later, however comments and suggestions
+> to the following patches are appreciated.
 > 
->  - At some point I had code to reject EP queue() if the device is
-> suspended with -ESHUTDOWN. The end result was bad ... f_mass_storage
-> goes into an infinite loop of trying to queue the same stuff in
-> start_out_transfer() when that happens. It looks like it's not really
-> handling errors from queue() in a particularily useful way.
-
-Don't reject EP queue requests.  Accept them as you would at any time;
-they will complete after the port is resumed.
-
-As for f_mass_storage, repeatedly attempting to queue an OUT transfer
-is normal behavior.  The fact that one attempt gets an error doesn't
-stop the driver from making more attempts; the only thing that would
-stop it is being disabled by a config change, a suspend, a disconnect,
-or an unbind.
-
->  - With my current code doing suspend/resume on bus resets, when I
-> reboot some hosts, and they re-enumerate, I tend to hit the WARN_ON
-> drivers/usb/gadget/function/f_mass_storage.c:341
+> Ladislav Michl (3):
+>   usb: gadget: u_serial: Fix console_req complete event race
+>   usb: gadget: u_serial: Remove console specific alloc/free req
+>     functions
+>   usb: gadget: u_serial: Use bool for req_busy
 > 
-> static inline int __fsg_is_set(struct fsg_common *common,
-> 			       const char *func, unsigned line)
-> {
-> 	if (common->fsg)
-> 		return 1;
-> 	ERROR(common, "common->fsg is NULL in %s at %u\n", func, line);
-> 	WARN_ON(1);
-> 	return 0;
-> }
+>  drivers/usb/gadget/function/u_serial.c | 88 +++++++++-----------------
+>  1 file changed, 30 insertions(+), 58 deletions(-)
 > 
-> This happens a little while after a successul set_configuration. Here's
-> a trace:
-
-...
-
-> I have to get my head around that code, but if one of you have a clue, I
-> would welcome it :-)
+> -- 
+> 2.20.1
 > 
-> Interestingly it recovers. The host seems to then reset the prot, then reconfigure and
-> the second time around it all works fine.
-
-I suspect this is related to the race you found.  EJ Hsu has been 
-working on much the same thing (see the mailing list archive).
-
-Alan Stern
-
