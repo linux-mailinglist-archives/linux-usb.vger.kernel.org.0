@@ -2,72 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7125FB6A
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 18:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BE95FB81
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jul 2019 18:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbfGDQEv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 12:04:51 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:58875 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725865AbfGDQEv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Jul 2019 12:04:51 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id D4784C058CA8;
-        Thu,  4 Jul 2019 16:04:39 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-9.rdu2.redhat.com [10.10.120.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AE1C37D958;
-        Thu,  4 Jul 2019 16:04:26 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20190703190846.GA15663@kroah.com>
-References: <20190703190846.GA15663@kroah.com> <156173690158.15137.3985163001079120218.stgit@warthog.procyon.org.uk> <156173697086.15137.9549379251509621554.stgit@warthog.procyon.org.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>, nicolas.dichtel@6wind.com,
-        raven@themaw.net, Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] Add a general, global device notification watch list [ver #5]
+        id S1726012AbfGDQGh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 12:06:37 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:56475 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725865AbfGDQGh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 12:06:37 -0400
+Received: (qmail 19624 invoked by uid 500); 4 Jul 2019 12:06:36 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 4 Jul 2019 12:06:36 -0400
+Date:   Thu, 4 Jul 2019 12:06:36 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     EJ Hsu <ejh@nvidia.com>
+cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        WK Tsai <wtsai@nvidia.com>
+Subject: RE: [PATCH V3] usb: gadget: storage: Remove warning message
+In-Reply-To: <BN7PR12MB26449A2DC32EC2767CBF6687CFFA0@BN7PR12MB2644.namprd12.prod.outlook.com>
+Message-ID: <Pine.LNX.4.44L0.1907041204570.18767-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <10294.1562256260.1@warthog.procyon.org.uk>
-Date:   Thu, 04 Jul 2019 17:04:20 +0100
-Message-ID: <10295.1562256260@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Thu, 04 Jul 2019 16:04:50 +0000 (UTC)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+On Thu, 4 Jul 2019, EJ Hsu wrote:
 
-> Don't we need a manpage and a kselftest for it?
-
-I've got part of a manpage, but it needs more work.
-
-How do you do a kselftest for this when it does nothing unless hardware events
-happen?
-
-> > +	u64 id = 0; /* Might want to allow dev# here. */
+> Based on my initial debugging, USB CV TD 9.13 will consecutively set device to configuration #1 by sending "Set Configuration" transfer.
+> So, in set_config() function, it will try to disable each interface first and then set up each interface. That is, the fsg_disable() will be called first and then fsg_set_alt().
+> There might be a chance that the request (FSG_STATE_DISCONNECT) from fsg_disabled() has not been handled by fsg_main_thread before fsg_set_alt() is called.
+> In this case, fsg_set_alt() will try to queue its request (FSG_STATE_CONFIG_CHANGE) to fsg_main_thread, but find that FSG_STATE_DISCONNECT has not been handled.
+> Because the priority of FSG_STATE_DISCONNECT is higher than FSG_STATE_CONFIG_CHANGE, FSG_STATE_CONFIG_CHANGE will be discarded accordingly.
+> This might lead to the missing of usb_composite_setup_continue() which result in the failure of "Set Configuration" transfer.
 > 
-> I don't understand the comment here, what does "dev#" refer to?
+> Will push a new patch to fix this issue.
 
-This is really for mount subtree watches, so I'm removing it for now.
+Have you seen these emails?
 
-The reason it's there is because a mount object may have multiple watches, but
-each watch is set on a dentry within that mount, and it doesn't have to be the
-same dentry each time.  The queue is shared between all the dentries, and the
-ID is used (a) to label them so that they can be manually removed, (b) to
-match them to each dentry when the notification is being propagated rootwards
-along the tree and (c) to avoid adding another field to struct dentry.
+	https://marc.info/?l=linux-usb&m=156222739324546&w=2
+	https://marc.info/?l=linux-usb&m=156222747024558&w=2
 
-David
+They are probably related to this same issue.
+
+Alan Stern
+
