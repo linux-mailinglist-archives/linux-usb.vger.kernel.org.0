@@ -2,66 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF49860083
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 07:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD3F6008A
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 07:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbfGEFRj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 01:17:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56860 "EHLO mail.kernel.org"
+        id S1726061AbfGEFTD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 01:19:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59088 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725681AbfGEFRi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Jul 2019 01:17:38 -0400
+        id S1725778AbfGEFTD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Jul 2019 01:19:03 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF97D216FD;
-        Fri,  5 Jul 2019 05:17:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D295218A0;
+        Fri,  5 Jul 2019 05:19:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562303857;
-        bh=7wlnbU7f7NI4tp/aNkJpCkcXuqZ5WwcXUMv6L1ELc9A=;
+        s=default; t=1562303942;
+        bh=7e/bH7EgTT0KFsBceMi0WQk/n8T0fNBn8sy979earwc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ugFyFfFKxNGYgqcsh/MHx4NXJCIKEN54oVlmcVYIMOOV+VWzrlEZvmbebID8zJ5bL
-         eqmwYQmbvOmjFYhkaVSALkugyKBmfb1VfnBe27/tme7AWsfKHTvt939Fp5y9LAsG40
-         T1T2qcyfsYKp8T79H0xukTrXjRdyvTpc+Fm0NASY=
-Date:   Fri, 5 Jul 2019 07:17:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     viro@zeniv.linux.org.uk, Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>, nicolas.dichtel@6wind.com,
-        raven@themaw.net, Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] Add a general, global device notification watch list
- [ver #5]
-Message-ID: <20190705051733.GA15821@kroah.com>
-References: <20190703190846.GA15663@kroah.com>
- <156173690158.15137.3985163001079120218.stgit@warthog.procyon.org.uk>
- <156173697086.15137.9549379251509621554.stgit@warthog.procyon.org.uk>
- <10295.1562256260@warthog.procyon.org.uk>
+        b=gYJdxWCHsG6x3bHTjUgANRXS+SGBvOKPylsPhjRkb8kNXAWW/jX9mgspbXDygExVj
+         dYA63jNKEBSZjkVjtLu1KH/f+kFhwY0bx3GHq0jbZkabQCrzlC8TUgNnPB4qggKfPh
+         8tEKOlZMqBDM3nHghvNf36XOuhVecWWSPHrXvhmY=
+Date:   Fri, 5 Jul 2019 07:18:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Charles Yeh <charlesyeh522@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>
+Subject: Re: [PATCH] [PATCH v7] USB: serial: pl2303: Add new PID to support
+ PL2303HXN (TYPE_HXN)
+Message-ID: <20190705051859.GB15821@kroah.com>
+References: <20190702123006.11320-1-charlesyeh522@gmail.com>
+ <CAAZvQQ6pxvhVKsH1oOwToF1n=rYAbShzVnPBGowZhivO2NYPiQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <10295.1562256260@warthog.procyon.org.uk>
+In-Reply-To: <CAAZvQQ6pxvhVKsH1oOwToF1n=rYAbShzVnPBGowZhivO2NYPiQ@mail.gmail.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 04, 2019 at 05:04:20PM +0100, David Howells wrote:
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> 
-> > Don't we need a manpage and a kselftest for it?
-> 
-> I've got part of a manpage, but it needs more work.
-> 
-> How do you do a kselftest for this when it does nothing unless hardware events
-> happen?
 
-Hm, good point, but there should be some way to test this to verify it
-works.  Maybe for the other types of events?
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
+
+A: No.
+Q: Should I include quotations after my reply?
+
+http://daringfireball.net/2007/07/on_top
+
+On Fri, Jul 05, 2019 at 10:57:11AM +0800, Charles Yeh wrote:
+> Is there any need to modify it?
+> If there is no need to modify, how long does it take to complete REVIEW?
+
+Please be patient, only ask after a week or two, all of us have lots and
+lots of other patches to also review.
 
 thanks,
 
