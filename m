@@ -2,125 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A2960B97
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 20:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07FE60BA7
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 21:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727508AbfGESzl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 14:55:41 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:42129 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727341AbfGESzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 14:55:41 -0400
-Received: by mail-pl1-f194.google.com with SMTP id ay6so4965344plb.9;
-        Fri, 05 Jul 2019 11:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=SEw+f+WvSmW4ZE4Ix9oVBZdz8BUyqrL3rZLhlP8kF3w=;
-        b=Hwq3MtMgrXzlCba1rAUyQnQPYMyf9O41lrJvgv0jf/QiHGgc7QVvrGQgMYq6V2ETEU
-         eWa+2HdTM1R/TPYWU6esr2gkb4eBXAVNTBau36JnnfZ1kbg9n5koLiH/Up4Gk0mr9EGP
-         7x6jtG0m2kqJDjHo0Eo2CCxd8I4foehy8Nrp8eqQDLeugbKVDhP63nj0EwM7EyC/kFpI
-         kZ2HkMmyZmP0Paqz/NzG5GQVXAzzTazVFnDLbseqzDBOG9HpyZG1WwqUILiWgeV99BdD
-         t/5fFA+d8UOYxlCuoh32QeYJiUUlIUR5+uysabpmQtyTpsy/MhjonO3FQeiYqeP40jy6
-         O3rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=SEw+f+WvSmW4ZE4Ix9oVBZdz8BUyqrL3rZLhlP8kF3w=;
-        b=HVlR49qwS3QS9PQuAYl2dAdEeub+Y5eNIjfSHjn52reH381sXGUi6XP4BJJcZMHbGT
-         sXZfcj9KZsDhx9G73bmHyCoPxn12OeOHnbHUi3oHDa5R4X/bc/U9nTcXdvYjzuzTepf4
-         QhmA/YvQiYvB64iiTyfkr6MAzR1oGQlrI9G+/p3egwmlNsB75EFgk1luf3nWMp4ubAyv
-         cg9oUirxefNy1fIoeO1dZOc3hdO9+Y7DTCzO/vASNlsjNSCXGKFRDpFTBSdyY4NBVtFF
-         RPcAirz6tUOWHOJyE86iep6/RRh21uOeehUB2N7RSai4nC1OVMKSE13PttdYAu4VNneP
-         nQxw==
-X-Gm-Message-State: APjAAAVKNcIrGnnZ/ubm7TjTp3rtihoNGt6qRtAZUpL8Ch+HzhCA3k/l
-        R5pLYOiC9AJdMwgoAEJ//uc=
-X-Google-Smtp-Source: APXvYqzG0MQIdevaUAq4AnUl9vDE9sY2FiUD//CskItSu3ZLMv6JHfS/Un4WlwTwGx1YysOT3Su+GQ==
-X-Received: by 2002:a17:902:b28b:: with SMTP id u11mr7042427plr.11.1562352940444;
-        Fri, 05 Jul 2019 11:55:40 -0700 (PDT)
-Received: from debian.net.fpt ([2405:4800:58f7:1cb1:98e0:87d3:2c8b:b6ed])
-        by smtp.gmail.com with ESMTPSA id j24sm13447599pgg.86.2019.07.05.11.55.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 05 Jul 2019 11:55:39 -0700 (PDT)
-From:   Phong Tran <tranmanphong@gmail.com>
-To:     corbet@lwn.net, gregkh@linuxfoundation.org,
-        skhan@linuxfoundation.org, mchehab@kernel.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Phong Tran <tranmanphong@gmail.com>
-Subject: [PATCH] Documentation: usb: convert usb-help to rst
-Date:   Sat,  6 Jul 2019 01:55:19 +0700
-Message-Id: <20190705185519.31033-1-tranmanphong@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        id S1727340AbfGETE3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 15:04:29 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:47660 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725884AbfGETE3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 15:04:29 -0400
+Received: (qmail 5565 invoked by uid 2102); 5 Jul 2019 15:04:28 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 5 Jul 2019 15:04:28 -0400
+Date:   Fri, 5 Jul 2019 15:04:28 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Ryan Kennedy <ryan5544@gmail.com>
+cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] usb: pci-quirks: Correct AMD PLL quirk detection
+In-Reply-To: <20190704153529.9429-2-ryan5544@gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1907051504160.1606-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add new index.rst and change usb-help.txt format
-to rst.
+On Thu, 4 Jul 2019, Ryan Kennedy wrote:
 
-Signed-off-by: Phong Tran <tranmanphong@gmail.com>
----
- Documentation/index.rst                          |  1 +
- Documentation/usb/index.rst                      | 22 ++++++++++++++++++++++
- Documentation/usb/{usb-help.txt => usb-help.rst} |  1 -
- 3 files changed, 23 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/usb/index.rst
- rename Documentation/usb/{usb-help.txt => usb-help.rst} (97%)
+> The AMD PLL USB quirk is incorrectly enabled on newer Ryzen
+> chipsets. The logic in usb_amd_find_chipset_info currently checks
+> for unaffected chipsets rather than affected ones. This broke
+> once a new chipset was added in e788787ef. It makes more sense
+> to reverse the logic so it won't need to be updated as new
+> chipsets are added. Note that the core of the workaround in
+> usb_amd_quirk_pll does correctly check the chipset.
+> 
+> Signed-off-by: Ryan Kennedy <ryan5544@gmail.com>
+> ---
+>  drivers/usb/host/pci-quirks.c | 31 +++++++++++++++++++------------
+>  1 file changed, 19 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+> index 3ce71cbfbb58..ad05c27b3a7b 100644
+> --- a/drivers/usb/host/pci-quirks.c
+> +++ b/drivers/usb/host/pci-quirks.c
+> @@ -205,7 +205,7 @@ int usb_amd_find_chipset_info(void)
+>  {
+>  	unsigned long flags;
+>  	struct amd_chipset_info info;
+> -	int ret;
+> +	int need_pll_quirk = 0;
+>  
+>  	spin_lock_irqsave(&amd_lock, flags);
+>  
+> @@ -219,21 +219,28 @@ int usb_amd_find_chipset_info(void)
+>  	spin_unlock_irqrestore(&amd_lock, flags);
+>  
+>  	if (!amd_chipset_sb_type_init(&info)) {
+> -		ret = 0;
+>  		goto commit;
+>  	}
+>  
+> -	/* Below chipset generations needn't enable AMD PLL quirk */
+> -	if (info.sb_type.gen == AMD_CHIPSET_UNKNOWN ||
+> -			info.sb_type.gen == AMD_CHIPSET_SB600 ||
+> -			info.sb_type.gen == AMD_CHIPSET_YANGTZE ||
+> -			(info.sb_type.gen == AMD_CHIPSET_SB700 &&
+> -			info.sb_type.rev > 0x3b)) {
+> +	switch (info.sb_type.gen) {
+> +	case AMD_CHIPSET_SB700:
+> +		need_pll_quirk = info.sb_type.rev <= 0x3B;
+> +		break;
+> +	case AMD_CHIPSET_SB800:
+> +	case AMD_CHIPSET_HUDSON2:
+> +	case AMD_CHIPSET_BOLTON:
+> +		need_pll_quirk = 1;
+> +		break;
+> +	default:
+> +		need_pll_quirk = 0;
+> +		break;
+> +	}
+> +
+> +	if (!need_pll_quirk) {
+>  		if (info.smbus_dev) {
+>  			pci_dev_put(info.smbus_dev);
+>  			info.smbus_dev = NULL;
+>  		}
+> -		ret = 0;
+>  		goto commit;
+>  	}
+>  
+> @@ -252,7 +259,7 @@ int usb_amd_find_chipset_info(void)
+>  		}
+>  	}
+>  
+> -	ret = info.probe_result = 1;
+> +	need_pll_quirk = info.probe_result = 1;
+>  	printk(KERN_DEBUG "QUIRK: Enable AMD PLL fix\n");
+>  
+>  commit:
+> @@ -263,7 +270,7 @@ int usb_amd_find_chipset_info(void)
+>  
+>  		/* Mark that we where here */
+>  		amd_chipset.probe_count++;
+> -		ret = amd_chipset.probe_result;
+> +		need_pll_quirk = amd_chipset.probe_result;
+>  
+>  		spin_unlock_irqrestore(&amd_lock, flags);
+>  
+> @@ -277,7 +284,7 @@ int usb_amd_find_chipset_info(void)
+>  		spin_unlock_irqrestore(&amd_lock, flags);
+>  	}
+>  
+> -	return ret;
+> +	return need_pll_quirk;
+>  }
+>  EXPORT_SYMBOL_GPL(usb_amd_find_chipset_info);
 
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index a7566ef62411..4e7498f39063 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -102,6 +102,7 @@ needed).
-    vm/index
-    bpf/index
-    misc-devices/index
-+   usb/index
- 
- Architecture-specific documentation
- -----------------------------------
-diff --git a/Documentation/usb/index.rst b/Documentation/usb/index.rst
-new file mode 100644
-index 000000000000..5688ceaf0826
---- /dev/null
-+++ b/Documentation/usb/index.rst
-@@ -0,0 +1,22 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Linux USB Subsystem Documentation
-+===================================
-+
-+.. only:: html
-+
-+   .. class:: toc-title
-+
-+        Table of Contents
-+
-+.. toctree::
-+   :maxdepth: 2
-+
-+   usb-help
-+
-+.. only:: html and subproject
-+
-+   Indices
-+   =======
-+
-+   * :ref:`genindex`
-diff --git a/Documentation/usb/usb-help.txt b/Documentation/usb/usb-help.rst
-similarity index 97%
-rename from Documentation/usb/usb-help.txt
-rename to Documentation/usb/usb-help.rst
-index dc23ecd4d802..03abc4e501ae 100644
---- a/Documentation/usb/usb-help.txt
-+++ b/Documentation/usb/usb-help.rst
-@@ -1,4 +1,3 @@
--==============
- USB references
- ==============
- 
--- 
-2.11.0
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
