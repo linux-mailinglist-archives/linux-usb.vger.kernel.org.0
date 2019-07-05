@@ -2,803 +2,233 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A5C60125
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 08:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7827260139
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 09:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbfGEGs5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 02:48:57 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:17385 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725772AbfGEGs5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 02:48:57 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d1ef2d40000>; Thu, 04 Jul 2019 23:48:52 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 04 Jul 2019 23:48:53 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 04 Jul 2019 23:48:53 -0700
-Received: from [10.19.108.127] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 5 Jul
- 2019 06:48:51 +0000
-Subject: Re: [PATCH 3/8] phy: tegra: xusb: t210: rearrange UPHY init
-To:     Jon Hunter <jonathanh@nvidia.com>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <pdeschrijver@nvidia.com>,
-        <afrid@nvidia.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <nkristam@nvidia.com>,
-        <skomatineni@nvidia.com>
-References: <20190614074652.21960-1-jckuo@nvidia.com>
- <20190614074652.21960-4-jckuo@nvidia.com>
- <1a57e3e6-a9b2-87ba-a76b-1785ddd0d935@nvidia.com>
-From:   JC Kuo <jckuo@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <94af84e5-5bc3-d481-b784-c0e0dd2b7859@nvidia.com>
-Date:   Fri, 5 Jul 2019 14:48:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <1a57e3e6-a9b2-87ba-a76b-1785ddd0d935@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL104.nvidia.com (172.18.146.11) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1562309332; bh=izBimcFtBiF9YTaK9qpjhvk19j0GqIIC0RLSagh4/30=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=kdEEXPOvdTVnt2UWEulMnG5nclbg2do8sH0Wtn1CxkivYLXMjDLs0h//jZeqvtCuE
-         0LZr0TnwpgKw8v8NfAdzv9s6tPWQLKq8pTX/UwfU60DLB7/NEjZ0nwgR70FFAQqDB5
-         hEOL+NFWSXPU5ZwayZkylgbveMoS97S5iI/x8h/+GIetTrR811mhXh6+QTcUVFCQn7
-         Pt6cYPrxrdMrEKGRDN9Czw3vsH+0Cqyc9qRNhb7FOBR89ZT0WvdRXVT1a7jyEgmI1s
-         c58hhlwQoo3HgyJBxFn+fRBiF37kANx+R2wfDwsvTMiNymf+WORcccwhXoN7PgRlOP
-         l81FIa7e/yHUw==
+        id S1727724AbfGEHCI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 03:02:08 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:36685 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727717AbfGEHCI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 03:02:08 -0400
+Received: from mail-pg1-f198.google.com ([209.85.215.198])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hjIEQ-0006n8-O6
+        for linux-usb@vger.kernel.org; Fri, 05 Jul 2019 07:02:07 +0000
+Received: by mail-pg1-f198.google.com with SMTP id n7so5052261pgr.12
+        for <linux-usb@vger.kernel.org>; Fri, 05 Jul 2019 00:02:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=6A/z/6gCXRgu4Sew2nX566i24DxAdSKJXVRbLCiJwfw=;
+        b=WBMTyr/ALuZU7ZM21Cv5JKjvF5jC7MM7KoL2la4aSX/XiInoY1gvc2UE0mHnDIGcFl
+         MaqbfdzXqByaA/mZmkAFLAe2u6vITS7IatADqWiIP3wWshgIwHgESytg+DMCmF3dwsuz
+         a77zgGpierP08GzVM50KR9kMT8b+E9g3h5uCSAAN1qcrvkmctVaG6k9xk4EnvrVwEcK0
+         OtUnCW2S5MG462uStbg2mYrTJCV1vVz99m7sPtoDgVQK+YorR73mzJB6OI4wP8ZBKWQl
+         1CSEKk+8ca0on/IiVsTkFwOyUUkgR8Ko5Z4E3UqhBjVH7RMFqbc9kD9XL/mbNwXZuiQ8
+         7fLQ==
+X-Gm-Message-State: APjAAAXC0XIqnHvxU20fbZpxsRwotPCjnm1p0DWRRH24VgzuQjpgU3nG
+        mF0lWb+ynI76Hb1IGg/m+qfSorhthU9ZL9wC0yo2TEoZmjzDmj7mPnp9stoYSOGdMAfExCHgLC3
+        q+hUvFeqRWmGcl5TqjoCP7uCkJ7m1ujSYqeYJeQ==
+X-Received: by 2002:a17:90a:3401:: with SMTP id o1mr3064611pjb.7.1562310125176;
+        Fri, 05 Jul 2019 00:02:05 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqwUboE066orKSpevR1TBn0H9YLC+Bxt7bXZJ/p1ZiNiELvTVihG0yXhNZKBMU9rZwSHG0arYQ==
+X-Received: by 2002:a17:90a:3401:: with SMTP id o1mr3064567pjb.7.1562310124901;
+        Fri, 05 Jul 2019 00:02:04 -0700 (PDT)
+Received: from 2001-b011-380f-3511-154d-4126-51e3-28cb.dynamic-ip6.hinet.net (2001-b011-380f-3511-154d-4126-51e3-28cb.dynamic-ip6.hinet.net. [2001:b011:380f:3511:154d:4126:51e3:28cb])
+        by smtp.gmail.com with ESMTPSA id c8sm15620361pjq.2.2019.07.05.00.02.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Jul 2019 00:02:04 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH] PCI / PM: Don't runtime suspend when device only supports
+ wakeup from D0
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <20190605115724.GE84290@google.com>
+Date:   Fri, 5 Jul 2019 15:02:01 +0800
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Message-Id: <7E5CD0E5-2C23-4339-9660-74994FC5C111@canonical.com>
+References: <20190522181157.GC79339@google.com>
+ <Pine.LNX.4.44L0.1905221433310.1410-100000@iolanthe.rowland.org>
+ <20190522205231.GD79339@google.com>
+ <010C1D41-C66D-45C0-8AFF-6F746306CE29@canonical.com>
+ <20190527165747.GF79339@google.com> <20190605115724.GE84290@google.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/4/19 9:32 PM, Jon Hunter wrote:
-> 
-> On 14/06/2019 08:46, JC Kuo wrote:
->> This commit is a preparation for enabling XUSB LP0 support.
-> 
-> By LP0 do you mean ELPG? If so please stick to using one name for
-> referring to the power-state in question.
-> 
->> It rearranges T210 XUSB PADCTL UPHY initialization sequence,
-> 
-> Please use Tegra210 and not T210.
-Thanks, I will correct this.
-> 
->> for the following reasons:
->>
->> 1. PLLE hardware power sequencer has to be enabled only after
->>    both PEX UPHY PLL and SATA UPHY PLL are initialized.
->>
->> 2. Once UPHY PLL hardware power sequncer is enabled, do not
-> 
-> s/sequncer/sequencer
-Thanks, I will correct this.
-> 
->>    assert reset to PEX/SATA PLLs.
-> 
-> Maybe worth clarifying why here.
-When UPHY PLLs are managed by hardware power sequencers, asserting reset to the
-PLL will break PLL and sequencer functionality.
-> 	
->>
->> 3. At LP0 exit, XUSB_PADCTL_ELPG_PROGRAM1_AUX_MUX_LP0_CLAMP_EN,
->>    XUSB_PADCTL_ELPG_PROGRAM1_AUX_MUX_LP0_CLAMP_EN_EARLY, and
->>    XUSB_PADCTL_ELPG_PROGRAM1_AUX_MUX_LP0_VCORE_DOWN bits have
->>    to be cleared after XUSB_PADCTL_USB3_PAD_MUX_SATA_IDDQ_DISABLE
->>    and XUSB_PADCTL_USB3_PAD_MUX_PCIE_IDDQ_DISABLE bits get set.
->>
->> 4. Move XUSB_PADCTL_SS_PORT_MAP and XUSB_PADCTL_UPHY_USB3_PADX_ECTL*
->>    registers programming from tegra210_usb3_port_enable() to
->>    tegra210_pcie_phy_power_on()/tegra210_sata_phy_power_on() so that
->>    XUSB USB3 ports will be programmed at LP0 exit.
-> 
-> Looks like you are moving all the code from the port enable to the phy
-> enable and after this change the port enable does nothing. Do we not
-> differentiate between phy and port? I think a bit more description is
-> necessary here to describe the impact of this change.
-Sorry that I am not sure whether I should use "LP0" or "SC7" for Linux system
-suspend (either to ram or disk). Should I use SC7 instead of LP0?
-*_port_enable() APIs will only get invoked once in driver .probe(). At system
-resume, hardware (XUSB PADCTL block) is in power-on-reset state. We need to
-program hardware once again, so I moved the programming sequence to
-*_phy_power_on() that will be invoked at system resume.
-> 
->>
->> Signed-off-by: JC Kuo <jckuo@nvidia.com>
->> ---
->>  drivers/phy/tegra/xusb-tegra210.c | 443 ++++++++++++++++++------------
->>  drivers/phy/tegra/xusb.c          |   2 +-
->>  drivers/phy/tegra/xusb.h          |   2 +
->>  3 files changed, 264 insertions(+), 183 deletions(-)
->>
->> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
->> index 18cea8311d22..007bf352b45e 100644
->> --- a/drivers/phy/tegra/xusb-tegra210.c
->> +++ b/drivers/phy/tegra/xusb-tegra210.c
->> @@ -240,6 +240,8 @@ to_tegra210_xusb_padctl(struct tegra_xusb_padctl *padctl)
->>  	return container_of(padctl, struct tegra210_xusb_padctl, base);
->>  }
->>  
->> +static int tegra210_usb3_lane_map(struct tegra_xusb_lane *lane);
->> +
-> 
-> Can we avoid adding this prototype?
-Thanks, I will move tegra210_usb3_lane_map() function here.
-> 
->>  /* must be called under padctl->lock */
->>  static int tegra210_pex_uphy_enable(struct tegra_xusb_padctl *padctl)
->>  {
->> @@ -453,35 +455,44 @@ static int tegra210_pex_uphy_enable(struct tegra_xusb_padctl *padctl)
->>  static void tegra210_pex_uphy_disable(struct tegra_xusb_padctl *padctl)
->>  {
->>  	struct tegra_xusb_pcie_pad *pcie = to_pcie_pad(padctl->pcie);
->> -
->> -	mutex_lock(&padctl->lock);
->> +	u32 value;
->> +	int i;
->>  
->>  	if (WARN_ON(pcie->enable == 0))
->> -		goto unlock;
->> +		return;
->>  
->>  	if (--pcie->enable > 0)
->> -		goto unlock;
->> +		return;
->>  
->> -	reset_control_assert(pcie->rst);
->> +	for (i = 0; i < padctl->pcie->soc->num_lanes; i++) {
->> +		value = padctl_readl(padctl, XUSB_PADCTL_USB3_PAD_MUX);
->> +		value &= ~XUSB_PADCTL_USB3_PAD_MUX_PCIE_IDDQ_DISABLE(i);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_USB3_PAD_MUX);
->> +	}
->>  	clk_disable_unprepare(pcie->pll);
->> -
->> -unlock:
->> -	mutex_unlock(&padctl->lock);
->>  }
->>  
->>  /* must be called under padctl->lock */
->> -static int tegra210_sata_uphy_enable(struct tegra_xusb_padctl *padctl, bool usb)
->> +static int tegra210_sata_uphy_enable(struct tegra_xusb_padctl *padctl)
->>  {
->>  	struct tegra_xusb_sata_pad *sata = to_sata_pad(padctl->sata);
->> +	struct tegra_xusb_lane *lane = tegra_xusb_find_lane(padctl, "sata", 0);
->>  	unsigned long timeout;
->>  	u32 value;
->>  	int err;
->> +	bool usb = false;
->>  
->>  	if (sata->enable > 0) {
->>  		sata->enable++;
->>  		return 0;
->>  	}
->>  
->> +	if (!lane)
->> +		return 0;
->> +
->> +	if (tegra_xusb_lane_check(lane, "usb3-ss"))
->> +		usb = true;
-> 
-> This return a boolean type so you can just ...
-> 
-> 	usb = tegra_xusb_lane_check(lane, "usb3-ss");
-Thanks. I will modify this.
-> 
->> +
->>  	err = clk_prepare_enable(sata->pll);
->>  	if (err < 0)
->>  		return err;
->> @@ -695,30 +706,36 @@ static int tegra210_sata_uphy_enable(struct tegra_xusb_padctl *padctl, bool usb)
->>  static void tegra210_sata_uphy_disable(struct tegra_xusb_padctl *padctl)
->>  {
->>  	struct tegra_xusb_sata_pad *sata = to_sata_pad(padctl->sata);
->> -
->> -	mutex_lock(&padctl->lock);
->> +	u32 value;
->> +	int i;
->>  
->>  	if (WARN_ON(sata->enable == 0))
->> -		goto unlock;
->> +		return;
->>  
->>  	if (--sata->enable > 0)
->> -		goto unlock;
->> +		return;
->>  
->> -	reset_control_assert(sata->rst);
->> +	for (i = 0; i < padctl->sata->soc->num_lanes; i++) {
->> +		value = padctl_readl(padctl, XUSB_PADCTL_USB3_PAD_MUX);
->> +		value &= ~XUSB_PADCTL_USB3_PAD_MUX_SATA_IDDQ_DISABLE(i);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_USB3_PAD_MUX);
->> +	}
->>  	clk_disable_unprepare(sata->pll);
->> -
->> -unlock:
->> -	mutex_unlock(&padctl->lock);
->>  }
->>  
->>  static int tegra210_xusb_padctl_enable(struct tegra_xusb_padctl *padctl)
->>  {
->> -	u32 value;
->> +	return 0;
->> +}
->>  
->> -	mutex_lock(&padctl->lock);
->> +static int tegra210_xusb_padctl_disable(struct tegra_xusb_padctl *padctl)
->> +{
->> +	return 0;
->> +}
-> 
-> Why bother keeping these functions at all if they now do nothing?
-Thanks. I will remove the functions.
-> 
->>  
->> -	if (padctl->enable++ > 0)
->> -		goto out;
->> +static void tegra210_aux_mux_lp0_clamp_disable(struct tegra_xusb_padctl *padctl)
-> 
-> Any reason for renaming these? These appear to deal with the XUSB_PADCTL
-> and so the previous names seem fine.
-> 
-To me, enabling XUSB_PADCTL means the sequence of 1) enabling clock to XUSB
-PADCTL and 2) de-asserting reset to XUSB PADCTL; disabling XUSB_PADCTL means the
-reverse operation. These two functions are for toggling clamping and vcore_down
-signals which can be done only after XUSB_PADCTL is enabled.
+at 19:57, Bjorn Helgaas <helgaas@kernel.org> wrote:
 
->> +{
->> +	u32 value;
->>  
->>  	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->>  	value &= ~XUSB_PADCTL_ELPG_PROGRAM1_AUX_MUX_LP0_CLAMP_EN;
->> @@ -735,24 +752,12 @@ static int tegra210_xusb_padctl_enable(struct tegra_xusb_padctl *padctl)
->>  	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->>  	value &= ~XUSB_PADCTL_ELPG_PROGRAM1_AUX_MUX_LP0_VCORE_DOWN;
->>  	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> -
->> -out:
->> -	mutex_unlock(&padctl->lock);
->> -	return 0;
->>  }
->>  
->> -static int tegra210_xusb_padctl_disable(struct tegra_xusb_padctl *padctl)
->> +static void tegra210_aux_mux_lp0_clamp_enable(struct tegra_xusb_padctl *padctl)
->>  {
->>  	u32 value;
->>  
->> -	mutex_lock(&padctl->lock);
->> -
->> -	if (WARN_ON(padctl->enable == 0))
->> -		goto out;
->> -
->> -	if (--padctl->enable > 0)
->> -		goto out;
->> -
->>  	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->>  	value |= XUSB_PADCTL_ELPG_PROGRAM1_AUX_MUX_LP0_VCORE_DOWN;
->>  	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> @@ -768,12 +773,76 @@ static int tegra210_xusb_padctl_disable(struct tegra_xusb_padctl *padctl)
->>  	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->>  	value |= XUSB_PADCTL_ELPG_PROGRAM1_AUX_MUX_LP0_CLAMP_EN;
->>  	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +}
->> +
->> +static int tegra210_uphy_init(struct tegra_xusb_padctl *padctl)
->> +{
->> +	struct tegra_xusb_pcie_pad *pcie;
->> +	struct tegra_xusb_sata_pad *sata;
->> +	u32 value;
->> +	int err;
->> +	int i;
->> +
->> +	if (tegra210_plle_hw_sequence_is_enabled()) {
->> +		dev_dbg(padctl->dev, "PLLE is already in HW control\n");
->> +		/* skip pll initialization, update plle refcount only */
->> +		if (padctl->pcie) {
->> +			pcie = to_pcie_pad(padctl->pcie);
->> +			if (pcie->enable == 0) {
->> +				err = clk_prepare_enable(pcie->pll);
->> +				if (err < 0)
->> +					return err;
->> +				pcie->enable++;
-> 
-> Do we need all this additional ref counting around clk_prepare_enable?
-I will change pcie->enable/sata->enable to be boolean type variable. Thanks.
-> 
->> +			}
->> +		}
->> +		if (padctl->sata) {
->> +			sata = to_sata_pad(padctl->sata);
->> +			if (sata->enable == 0) {
->> +				err = clk_prepare_enable(sata->pll);
->> +				if (err < 0)
->> +					return err;
->> +				sata->enable++;
-> 
-> Same here.
-> 
->> +			}
->> +		}
->> +		goto skip_pll_init;
->> +	}
->> +
->> +	if (padctl->pcie)
->> +		tegra210_pex_uphy_enable(padctl);
->> +	if (padctl->sata)
->> +		tegra210_sata_uphy_enable(padctl);
->> +
->> +	tegra210_plle_hw_sequence_start();
->> +
->> +skip_pll_init:
->> +	for (i = 0; i < padctl->pcie->soc->num_lanes; i++) {
->> +		value = padctl_readl(padctl, XUSB_PADCTL_USB3_PAD_MUX);
->> +		value |= XUSB_PADCTL_USB3_PAD_MUX_PCIE_IDDQ_DISABLE(i);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_USB3_PAD_MUX);
->> +	}
->> +
->> +	for (i = 0; i < padctl->sata->soc->num_lanes; i++) {
->> +		value = padctl_readl(padctl, XUSB_PADCTL_USB3_PAD_MUX);
->> +		value |= XUSB_PADCTL_USB3_PAD_MUX_SATA_IDDQ_DISABLE(i);
->> +		padctl_writel(padctl, value, XUSB_PADCTL_USB3_PAD_MUX);
->> +	}
->> +
->> +	tegra210_aux_mux_lp0_clamp_disable(padctl);
->>  
->> -out:
->> -	mutex_unlock(&padctl->lock);
->>  	return 0;
->>  }
->>  
->> +static void __maybe_unused
->> +tegra210_uphy_deinit(struct tegra_xusb_padctl *padctl)
->> +{
->> +	tegra210_aux_mux_lp0_clamp_enable(padctl);
->> +
->> +	if (padctl->pcie)
->> +		tegra210_pex_uphy_disable(padctl);
->> +	if (padctl->sata)
->> +		tegra210_sata_uphy_disable(padctl);
-> 
-> What about the clocks that were enabled?
-pcie->pll will be disabled in tegra210_pex_uphy_disable().
-sata->pll will be disabled in tegra210_sata_uphy_disable().
-
-> 
->> +}
->> +
->>  static int tegra210_hsic_set_idle(struct tegra_xusb_padctl *padctl,
->>  				  unsigned int index, bool idle)
->>  {
->> @@ -1420,6 +1489,113 @@ static const struct tegra_xusb_lane_soc tegra210_pcie_lanes[] = {
->>  	TEGRA210_LANE("pcie-6", 0x028, 24, 0x3, pcie),
->>  };
->>  
->> +static int tegra210_usb3_phy_power_on(struct phy *phy)
->> +{
->> +	struct device *dev = &phy->dev;
->> +	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
->> +	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
->> +	struct tegra_xusb_usb3_port *usb3 = tegra_xusb_find_usb3_port(padctl,
->> +					    tegra210_usb3_lane_map(lane));
-> 
-> I think that this should be placed on separate lines. Other places you
-> check the return value of tegra210_usb3_lane_map() but here you don't.
-> We should be consistent.
-Thanks. I will modify this.
-> 
->> +	int index;
->> +	u32 value;
->> +
->> +	if (!usb3) {
->> +		dev_err(dev, "no USB3 port found for lane %u\n", lane->index);
->> +		return -ENODEV;
->> +	}
->> +	index = usb3->base.index;
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_SS_PORT_MAP);
->> +
->> +	if (!usb3->internal)
->> +		value &= ~XUSB_PADCTL_SS_PORT_MAP_PORTX_INTERNAL(index);
->> +	else
->> +		value |= XUSB_PADCTL_SS_PORT_MAP_PORTX_INTERNAL(index);
->> +
->> +	value &= ~XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP_MASK(index);
->> +	value |= XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP(index, usb3->port);
->> +	padctl_writel(padctl, value, XUSB_PADCTL_SS_PORT_MAP);
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_UPHY_USB3_PADX_ECTL1(index));
->> +	value &= ~(XUSB_PADCTL_UPHY_USB3_PAD_ECTL1_TX_TERM_CTRL_MASK <<
->> +		   XUSB_PADCTL_UPHY_USB3_PAD_ECTL1_TX_TERM_CTRL_SHIFT);
->> +	value |= XUSB_PADCTL_UPHY_USB3_PAD_ECTL1_TX_TERM_CTRL_VAL <<
->> +		 XUSB_PADCTL_UPHY_USB3_PAD_ECTL1_TX_TERM_CTRL_SHIFT;
->> +	padctl_writel(padctl, value, XUSB_PADCTL_UPHY_USB3_PADX_ECTL1(index));
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_UPHY_USB3_PADX_ECTL2(index));
->> +	value &= ~(XUSB_PADCTL_UPHY_USB3_PAD_ECTL2_RX_CTLE_MASK <<
->> +		   XUSB_PADCTL_UPHY_USB3_PAD_ECTL2_RX_CTLE_SHIFT);
->> +	value |= XUSB_PADCTL_UPHY_USB3_PAD_ECTL2_RX_CTLE_VAL <<
->> +		 XUSB_PADCTL_UPHY_USB3_PAD_ECTL2_RX_CTLE_SHIFT;
->> +	padctl_writel(padctl, value, XUSB_PADCTL_UPHY_USB3_PADX_ECTL2(index));
->> +
->> +	padctl_writel(padctl, XUSB_PADCTL_UPHY_USB3_PAD_ECTL3_RX_DFE_VAL,
->> +		      XUSB_PADCTL_UPHY_USB3_PADX_ECTL3(index));
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_UPHY_USB3_PADX_ECTL4(index));
->> +	value &= ~(XUSB_PADCTL_UPHY_USB3_PAD_ECTL4_RX_CDR_CTRL_MASK <<
->> +		   XUSB_PADCTL_UPHY_USB3_PAD_ECTL4_RX_CDR_CTRL_SHIFT);
->> +	value |= XUSB_PADCTL_UPHY_USB3_PAD_ECTL4_RX_CDR_CTRL_VAL <<
->> +		 XUSB_PADCTL_UPHY_USB3_PAD_ECTL4_RX_CDR_CTRL_SHIFT;
->> +	padctl_writel(padctl, value, XUSB_PADCTL_UPHY_USB3_PADX_ECTL4(index));
->> +
->> +	padctl_writel(padctl, XUSB_PADCTL_UPHY_USB3_PAD_ECTL6_RX_EQ_CTRL_H_VAL,
->> +		      XUSB_PADCTL_UPHY_USB3_PADX_ECTL6(index));
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +	value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_VCORE_DOWN(index);
->> +	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +	usleep_range(100, 200);
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +	value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN_EARLY(index);
->> +	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +	usleep_range(100, 200);
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +	value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN(index);
->> +	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +	return 0;
->> +}
->> +
->> +static int tegra210_usb3_phy_power_off(struct phy *phy)
->> +{
->> +	struct device *dev = &phy->dev;
->> +	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
->> +	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
->> +	struct tegra_xusb_usb3_port *usb3 = tegra_xusb_find_usb3_port(padctl,
->> +					    tegra210_usb3_lane_map(lane));
->> +	int index;
->> +	u32 value;
->> +
->> +	if (!usb3) {
->> +		dev_err(dev, "no USB3 port found for lane %u\n", lane->index);
->> +		return -ENODEV;
->> +	}
->> +	index = usb3->base.index;
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +	value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN_EARLY(index);
->> +	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +	usleep_range(100, 200);
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +	value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN(index);
->> +	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +	usleep_range(250, 350);
->> +
->> +	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> +	value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_VCORE_DOWN(index);
->> +	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> +
->> +	return 0;
->> +}
->>  static struct tegra_xusb_lane *
->>  tegra210_pcie_lane_probe(struct tegra_xusb_pad *pad, struct device_node *np,
->>  			 unsigned int index)
->> @@ -1461,6 +1637,13 @@ static const struct tegra_xusb_lane_ops tegra210_pcie_lane_ops = {
->>  static int tegra210_pcie_phy_init(struct phy *phy)
->>  {
->>  	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
->> +	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
->> +
->> +	mutex_lock(&padctl->lock);
->> +
->> +	tegra210_uphy_init(padctl);
->> +
->> +	mutex_unlock(&padctl->lock);
->>  
->>  	return tegra210_xusb_padctl_enable(lane->pad->padctl);
->>  }
->> @@ -1476,20 +1659,13 @@ static int tegra210_pcie_phy_power_on(struct phy *phy)
->>  {
->>  	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
->>  	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
->> -	u32 value;
->> -	int err;
->> +	int err = 0;
->>  
->>  	mutex_lock(&padctl->lock);
->>  
->> -	err = tegra210_pex_uphy_enable(padctl);
->> -	if (err < 0)
->> -		goto unlock;
->> +	if (tegra_xusb_lane_check(lane, "usb3-ss"))
->> +		err = tegra210_usb3_phy_power_on(phy);
->>  
->> -	value = padctl_readl(padctl, XUSB_PADCTL_USB3_PAD_MUX);
->> -	value |= XUSB_PADCTL_USB3_PAD_MUX_PCIE_IDDQ_DISABLE(lane->index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_USB3_PAD_MUX);
->> -
->> -unlock:
->>  	mutex_unlock(&padctl->lock);
->>  	return err;
->>  }
->> @@ -1498,15 +1674,15 @@ static int tegra210_pcie_phy_power_off(struct phy *phy)
->>  {
->>  	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
->>  	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
->> -	u32 value;
->> +	int err = 0;
->>  
->> -	value = padctl_readl(padctl, XUSB_PADCTL_USB3_PAD_MUX);
->> -	value &= ~XUSB_PADCTL_USB3_PAD_MUX_PCIE_IDDQ_DISABLE(lane->index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_USB3_PAD_MUX);
->> +	mutex_lock(&padctl->lock);
->>  
->> -	tegra210_pex_uphy_disable(padctl);
->> +	if (tegra_xusb_lane_check(lane, "usb3-ss"))
->> +		err = tegra210_usb3_phy_power_off(phy);
->>  
->> -	return 0;
->> +	mutex_unlock(&padctl->lock);
->> +	return err;
->>  }
->>  
->>  static const struct phy_ops tegra210_pcie_phy_ops = {
->> @@ -1632,7 +1808,13 @@ static const struct tegra_xusb_lane_ops tegra210_sata_lane_ops = {
->>  static int tegra210_sata_phy_init(struct phy *phy)
->>  {
->>  	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
->> +	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
->> +
->> +	mutex_lock(&padctl->lock);
->> +
->> +	tegra210_uphy_init(padctl);
->>  
->> +	mutex_unlock(&padctl->lock);
->>  	return tegra210_xusb_padctl_enable(lane->pad->padctl);
->>  }
->>  
->> @@ -1647,20 +1829,13 @@ static int tegra210_sata_phy_power_on(struct phy *phy)
->>  {
->>  	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
->>  	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
->> -	u32 value;
->> -	int err;
->> +	int err = 0;
->>  
->>  	mutex_lock(&padctl->lock);
->>  
->> -	err = tegra210_sata_uphy_enable(padctl, false);
->> -	if (err < 0)
->> -		goto unlock;
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_USB3_PAD_MUX);
->> -	value |= XUSB_PADCTL_USB3_PAD_MUX_SATA_IDDQ_DISABLE(lane->index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_USB3_PAD_MUX);
->> +	if (tegra_xusb_lane_check(lane, "usb3-ss"))
->> +		err = tegra210_usb3_phy_power_on(phy);
->>  
->> -unlock:
->>  	mutex_unlock(&padctl->lock);
->>  	return err;
->>  }
->> @@ -1669,15 +1844,15 @@ static int tegra210_sata_phy_power_off(struct phy *phy)
->>  {
->>  	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
->>  	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
->> -	u32 value;
->> +	int err = 0;
->>  
->> -	value = padctl_readl(padctl, XUSB_PADCTL_USB3_PAD_MUX);
->> -	value &= ~XUSB_PADCTL_USB3_PAD_MUX_SATA_IDDQ_DISABLE(lane->index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_USB3_PAD_MUX);
->> +	mutex_lock(&padctl->lock);
->>  
->> -	tegra210_sata_uphy_disable(lane->pad->padctl);
->> +	if (tegra_xusb_lane_check(lane, "usb3-ss"))
->> +		err = tegra210_usb3_phy_power_off(phy);
->>  
->> -	return 0;
->> +	mutex_unlock(&padctl->lock);
->> +	return err;
->>  }
->>  
->>  static const struct phy_ops tegra210_sata_phy_ops = {
->> @@ -1802,125 +1977,11 @@ static const struct tegra_xusb_port_ops tegra210_hsic_port_ops = {
->>  
->>  static int tegra210_usb3_port_enable(struct tegra_xusb_port *port)
->>  {
->> -	struct tegra_xusb_usb3_port *usb3 = to_usb3_port(port);
->> -	struct tegra_xusb_padctl *padctl = port->padctl;
->> -	struct tegra_xusb_lane *lane = usb3->base.lane;
->> -	unsigned int index = port->index;
->> -	u32 value;
->> -	int err;
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_SS_PORT_MAP);
->> -
->> -	if (!usb3->internal)
->> -		value &= ~XUSB_PADCTL_SS_PORT_MAP_PORTX_INTERNAL(index);
->> -	else
->> -		value |= XUSB_PADCTL_SS_PORT_MAP_PORTX_INTERNAL(index);
->> -
->> -	value &= ~XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP_MASK(index);
->> -	value |= XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP(index, usb3->port);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_SS_PORT_MAP);
->> -
->> -	/*
->> -	 * TODO: move this code into the PCIe/SATA PHY ->power_on() callbacks
->> -	 * and conditionalize based on mux function? This seems to work, but
->> -	 * might not be the exact proper sequence.
->> -	 */
->> -	err = regulator_enable(usb3->supply);
->> -	if (err < 0)
->> -		return err;
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_UPHY_USB3_PADX_ECTL1(index));
->> -	value &= ~(XUSB_PADCTL_UPHY_USB3_PAD_ECTL1_TX_TERM_CTRL_MASK <<
->> -		   XUSB_PADCTL_UPHY_USB3_PAD_ECTL1_TX_TERM_CTRL_SHIFT);
->> -	value |= XUSB_PADCTL_UPHY_USB3_PAD_ECTL1_TX_TERM_CTRL_VAL <<
->> -		 XUSB_PADCTL_UPHY_USB3_PAD_ECTL1_TX_TERM_CTRL_SHIFT;
->> -	padctl_writel(padctl, value, XUSB_PADCTL_UPHY_USB3_PADX_ECTL1(index));
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_UPHY_USB3_PADX_ECTL2(index));
->> -	value &= ~(XUSB_PADCTL_UPHY_USB3_PAD_ECTL2_RX_CTLE_MASK <<
->> -		   XUSB_PADCTL_UPHY_USB3_PAD_ECTL2_RX_CTLE_SHIFT);
->> -	value |= XUSB_PADCTL_UPHY_USB3_PAD_ECTL2_RX_CTLE_VAL <<
->> -		 XUSB_PADCTL_UPHY_USB3_PAD_ECTL2_RX_CTLE_SHIFT;
->> -	padctl_writel(padctl, value, XUSB_PADCTL_UPHY_USB3_PADX_ECTL2(index));
->> -
->> -	padctl_writel(padctl, XUSB_PADCTL_UPHY_USB3_PAD_ECTL3_RX_DFE_VAL,
->> -		      XUSB_PADCTL_UPHY_USB3_PADX_ECTL3(index));
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_UPHY_USB3_PADX_ECTL4(index));
->> -	value &= ~(XUSB_PADCTL_UPHY_USB3_PAD_ECTL4_RX_CDR_CTRL_MASK <<
->> -		   XUSB_PADCTL_UPHY_USB3_PAD_ECTL4_RX_CDR_CTRL_SHIFT);
->> -	value |= XUSB_PADCTL_UPHY_USB3_PAD_ECTL4_RX_CDR_CTRL_VAL <<
->> -		 XUSB_PADCTL_UPHY_USB3_PAD_ECTL4_RX_CDR_CTRL_SHIFT;
->> -	padctl_writel(padctl, value, XUSB_PADCTL_UPHY_USB3_PADX_ECTL4(index));
->> -
->> -	padctl_writel(padctl, XUSB_PADCTL_UPHY_USB3_PAD_ECTL6_RX_EQ_CTRL_H_VAL,
->> -		      XUSB_PADCTL_UPHY_USB3_PADX_ECTL6(index));
->> -
->> -	if (lane->pad == padctl->sata)
->> -		err = tegra210_sata_uphy_enable(padctl, true);
->> -	else
->> -		err = tegra210_pex_uphy_enable(padctl);
->> -
->> -	if (err) {
->> -		dev_err(&port->dev, "%s: failed to enable UPHY: %d\n",
->> -			__func__, err);
->> -		return err;
->> -	}
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> -	value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_VCORE_DOWN(index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> -
->> -	usleep_range(100, 200);
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> -	value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN_EARLY(index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> -
->> -	usleep_range(100, 200);
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> -	value &= ~XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN(index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> -
->>  	return 0;
->>  }
->>  
->>  static void tegra210_usb3_port_disable(struct tegra_xusb_port *port)
->>  {
->> -	struct tegra_xusb_usb3_port *usb3 = to_usb3_port(port);
->> -	struct tegra_xusb_padctl *padctl = port->padctl;
->> -	struct tegra_xusb_lane *lane = port->lane;
->> -	unsigned int index = port->index;
->> -	u32 value;
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> -	value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN_EARLY(index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> -
->> -	usleep_range(100, 200);
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> -	value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_CLAMP_EN(index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> -
->> -	usleep_range(250, 350);
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM1);
->> -	value |= XUSB_PADCTL_ELPG_PROGRAM1_SSPX_ELPG_VCORE_DOWN(index);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM1);
->> -
->> -	if (lane->pad == padctl->sata)
->> -		tegra210_sata_uphy_disable(padctl);
->> -	else
->> -		tegra210_pex_uphy_disable(padctl);
->> -
->> -	regulator_disable(usb3->supply);
->> -
->> -	value = padctl_readl(padctl, XUSB_PADCTL_SS_PORT_MAP);
->> -	value &= ~XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP_MASK(index);
->> -	value |= XUSB_PADCTL_SS_PORT_MAP_PORTX_MAP(index, 0x7);
->> -	padctl_writel(padctl, value, XUSB_PADCTL_SS_PORT_MAP);
->>  }
->>  
->>  static const struct tegra_xusb_lane_map tegra210_usb3_map[] = {
->> @@ -1933,6 +1994,24 @@ static const struct tegra_xusb_lane_map tegra210_usb3_map[] = {
->>  	{ 0, NULL,   0 }
->>  };
->>  
->> +static int tegra210_usb3_lane_map(struct tegra_xusb_lane *lane)
->> +{
->> +	const struct tegra_xusb_lane_map *map;
->> +
->> +	for (map = tegra210_usb3_map; map->type; map++) {
->> +		if (map->index == lane->index &&
->> +		    strcmp(map->type, lane->pad->soc->name) == 0) {
->> +			dev_dbg(lane->pad->padctl->dev,
->> +				"lane = %s map to port = usb3-%d\n",
->> +				lane->pad->soc->lanes[lane->index].name,
->> +				map->port);
->> +			return map->port;
->> +		}
->> +	}
->> +
->> +	return -1;
-> 
-> Return a proper errno please.
-I will change the errno to be -EINVAL. Thanks.
-> 
->> +}
->> +
->>  static struct tegra_xusb_lane *
->>  tegra210_usb3_port_map(struct tegra_xusb_port *port)
->>  {
->> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
->> index 2ea8497af82a..7fbba53f6097 100644
->> --- a/drivers/phy/tegra/xusb.c
->> +++ b/drivers/phy/tegra/xusb.c
->> @@ -370,7 +370,7 @@ static int tegra_xusb_setup_pads(struct tegra_xusb_padctl *padctl)
->>  	return 0;
->>  }
->>  
->> -static bool tegra_xusb_lane_check(struct tegra_xusb_lane *lane,
->> +bool tegra_xusb_lane_check(struct tegra_xusb_lane *lane,
->>  				  const char *function)
->>  {
->>  	const char *func = lane->soc->funcs[lane->function];
->> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
->> index 093076ca27fd..1bfe14b2a274 100644
->> --- a/drivers/phy/tegra/xusb.h
->> +++ b/drivers/phy/tegra/xusb.h
->> @@ -127,6 +127,8 @@ struct tegra_xusb_lane_ops {
->>  	void (*remove)(struct tegra_xusb_lane *lane);
->>  };
->>  
->> +bool tegra_xusb_lane_check(struct tegra_xusb_lane *lane, const char *function);
->> +
->>  /*
->>   * pads
->>   */
+> On Mon, May 27, 2019 at 11:57:47AM -0500, Bjorn Helgaas wrote:
+>> On Thu, May 23, 2019 at 12:39:23PM +0800, Kai-Heng Feng wrote:
+>>> at 04:52, Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>>> On Wed, May 22, 2019 at 02:39:56PM -0400, Alan Stern wrote:
+>>>>> On Wed, 22 May 2019, Bjorn Helgaas wrote:
+>>>>>> On Wed, May 22, 2019 at 11:46:25PM +0800, Kai Heng Feng wrote:
+>>>>>>>> On May 22, 2019, at 9:48 PM, Bjorn Helgaas <helgaas@kernel.org>  
+>>>>>>>> wrote:
+>>>>>>>> On Wed, May 22, 2019 at 11:42:14AM +0800, Kai Heng Feng wrote:
+>>>>>>>>> at 6:23 AM, Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>>>>>>>>> On Wed, May 22, 2019 at 12:31:04AM +0800, Kai-Heng Feng wrote:
+>>>>>>>>>>> There's an xHC device that doesn't wake when
+>>>>>>>>>>> a USB device gets plugged
+>>>>>>>>>>> to its USB port. The driver's own runtime
+>>>>>>>>>>> suspend callback was called,
+>>>>>>>>>>> PME signaling was enabled, but it stays at PCI D0.
+>>>>>>
+>>>>>>>> ...
+>>>>>>>> And I guess this patch basically means we wouldn't call
+>>>>>>>> the driver's suspend callback if we're merely going to
+>>>>>>>> stay at D0, so the driver would have no idea anything
+>>>>>>>> happened.  That might match Documentation/power/pci.txt
+>>>>>>>> better, because it suggests that the suspend callback is
+>>>>>>>> related to putting a device in a low-power state, and D0
+>>>>>>>> is not a low-power state.
+>>>>>>>
+>>>>>>> Yes, the patch is to let the device stay at D0 and don’t run
+>>>>>>> driver’s own runtime suspend routine.
+>>>>>>>
+>>>>>>> I guess I’ll just proceed to send a V2 with updated commit message?
+>>>>>>
+>>>>>> Now that I understand what "runtime suspended to D0" means, help me
+>>>>>> understand what's actually wrong.
+>>>>>
+>>>>> Kai's point is that the xhci-hcd driver thinks the device is now
+>>>>> in runtime suspend, because the runtime_suspend method has been
+>>>>> executed.  But in fact the device is still in D0, and as a
+>>>>> result, PME signalling may not work correctly.
+>>>>
+>>>> The device claims to be able to signal PME from D0 (this is from the  
+>>>> lspci
+>>>> in https://bugzilla.kernel.org/show_bug.cgi?id=203673):
+>>>>
+>>>>   00:10.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB XHCI Controller (rev 20) (prog-if 30 [XHCI])
+>>>>     Capabilities: [50] Power Management version 3
+>>>>       Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+>>>>
+>>>> From the xHCI spec r1.0, sec 4.15.2.3, it looks like a connect
+>>>> detected while in D0 should assert PME# if enabled (and WCE is
+>>>> set).
+>>>
+>>> I think section 4.15.2.3 is about S3 wake up, no S0 we are
+>>> discussing here.
 >>
-> 
+>> S0 and S3 are system-level ideas and have no meaning to an individual
+>> PCI device.  The xHC is a PCI device and can't tell whether the system
+>> as a whole is in S0 or S3.  If a PCI device claims to be able to
+>> generate PME while in D0, that applies regardless of the system state.
+>>
+>> xHCI r1.0, sec A.1 says "The host controller should be capable of
+>> asserting PME# when in any supported device state."  In sec 4.19.2,
+>> Figure 42 says PME# should be asserted whenever PMCSR.PME_En=1 and
+>> WCE=1 and a connection is detected.
+>>
+>> Figure 42 also shows that CSC (Connect Status Change) and related bits
+>> feed into Port Status Change Event Generation.  So I assume the xhci
+>> driver normally detects connect/disconnect via CSC, but the runtime
+>> suspend method makes it use PME# instead?
+>>
+>> And the way your patch works is by avoiding that xhci runtime suspend
+>> method, so it *always* uses CSC and never uses PME#?  If that's the
+>> case, we're just papering over a problem without really understanding
+>> it.
+>>
+>> I'm wondering if this platform has a firmware defect.  Here's my
+>> thinking.  The xHC is a Root Complex Integrated Endpoint, so its PME
+>> signaling is a little unusual.
+>>
+>> The typical scenario is that a PCIe device is below a Root Port.  In
+>> that case, it would send a PME Message upstream to the Root Port.  Per
+>> PCIe r4.0, sec 6.1.6, when configured for native PME support (for ACPI
+>> systems, I assume this means "when firmware has granted PME control to
+>> the OS via _OSC"), the Root Port would generate a normal PCI INTx or
+>> MSI interrupt:
+>>
+>>   PCI Express-aware software can enable a mode where the Root Complex
+>>   signals PME via an interrupt. When configured for native PME
+>>   support, a Root Port receives the PME Message and sets the PME
+>>   Status bit in its Root Status register. If software has set the PME
+>>   Interrupt Enable bit in the Root Control register to 1b, the Root
+>>   Port then generates an interrupt.
+>>
+>> But on this platform the xHC is a Root Complex Integrated Endpoint, so
+>> there is no Root Port upstream from it, and that mechanism can't be
+>> used.  Per PCIe r4.0, sec 1.3.2.3, RCiEPs signal PME via "the same
+>> mechanism as PCI systems" or via Root Complex Event Collectors:
+>>
+>>   An RCiEP must signal PME and error conditions through the same
+>>   mechanisms used on PCI systems. If a Root Complex Event Collector is
+>>   implemented, an RCiEP may optionally signal PME and error conditions
+>>   through a Root Complex Event Collector.
+>>
+>> This platform has no Root Complex Event Collectors, so the xHC should
+>> signal PME via the same mechanism as PCI systems, i.e., asserting a
+>> PME# signal.  I think this means the OS cannot use native PCIe PME
+>> control because it doesn't know what interrupt PME# is connected to.
+>> The PCI Firmware Spec r3.2, sec 4.5.1 (also quoted in ACPI v6.2, sec
+>> 6.2.11.3), says:
+>>
+>>   PCI Express Native Power Management Events control
+>>
+>>   The firmware sets this bit to 1 to grant control over PCI Express
+>>   native power management event interrupts (PMEs). If firmware
+>>   allows the operating system control of this feature, then in the
+>>   context of the _OSC method, it must ensure that all PMEs are
+>>   routed to root port interrupts as described in the PCI Express
+>>   Base Specification.
+>>
+>> This platform cannot route all PMEs to Root Port interrupts because
+>> the xHC RCiEP cannot report PME via a Root Port, so I think its _OSC
+>> method should not grant control of PCIe Native Power Management Events
+>> to the OS, and I think that would mean we have to use the ACPI
+>> mechanism for PME on this platform.
+>>
+>> Can you confirm or deny any of this line of reasoning?  I'm wondering
+>> if there's something wrong with the platform's _OSC, so Linux thinks
+>> it can use native PME, but that doesn't work for this device.
+>>
+>>> It’s a platform in development so the name can’t be disclosed.
+>>
+>> Please attach a complete dmesg log to the bugzilla.  You can remove
+>> identifying details like the platform name, but I want to see the
+>> results of the _OSC negotiation.
+>
+> Thanks for the dmesg log
+> (https://bugzilla.kernel.org/attachment.cgi?id=283109).  It shows:
+>
+>   acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI HPX-Type3]
+>   acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug LTR]
+>   acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME AER PCIeCapability]
+>
+> I think it is incorrect for the platform to give the OS native control
+> over PME because the OS has no way to know how the RCiEP PMEs are
+> routed.  But it would be interesting to know how BIOSes on other
+> platforms with RCiEPs handle this, and I did post a question to the
+> PCI-SIG to see if there's any guidance there.
+
+Is there any update from PCI-SIG?
+
+I really think we don’t need wakeup capability in D0 because D0 is a  
+working state.
+Also, is there any real hardware which depends on D0 PME?
+
+Kai-Heng
+
+>
+> Bjorn
+
+
