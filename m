@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F8B5FF69
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 04:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300C05FF6D
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 04:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727114AbfGECIt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 22:08:49 -0400
-Received: from gate.crashing.org ([63.228.1.57]:37511 "EHLO gate.crashing.org"
+        id S1727053AbfGECPx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 22:15:53 -0400
+Received: from gate.crashing.org ([63.228.1.57]:40041 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726404AbfGECIs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Jul 2019 22:08:48 -0400
+        id S1726404AbfGECPx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jul 2019 22:15:53 -0400
 Received: from localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x6528XGo004910;
-        Thu, 4 Jul 2019 21:08:34 -0500
-Message-ID: <03595b660f319d5fb958ccbacbfe51002bff2314.camel@kernel.crashing.org>
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x652FivE005015;
+        Thu, 4 Jul 2019 21:15:45 -0500
+Message-ID: <cd91ee110c9fa39756e34d020ef284540a30feb2.camel@kernel.crashing.org>
 Subject: Re: Virtual hub, resets etc...
 From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
 To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         Michal Nazarewicz <mina86@mina86.com>
-Date:   Fri, 05 Jul 2019 12:08:33 +1000
-In-Reply-To: <Pine.LNX.4.44L0.1907042125420.840-100000@netrider.rowland.org>
-References: <Pine.LNX.4.44L0.1907042125420.840-100000@netrider.rowland.org>
+Date:   Fri, 05 Jul 2019 12:15:44 +1000
+In-Reply-To: <Pine.LNX.4.44L0.1907042135090.840-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.1907042135090.840-100000@netrider.rowland.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
 Mime-Version: 1.0
@@ -33,98 +33,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2019-07-04 at 21:34 -0400, Alan Stern wrote:
-> > It is the right HW behaviour. But with our gadget stack, it doesn't
-> > reset or cleanup anything. Though since the port gets disabled, I
-> > suppose re-enabling it will cause a reset and will sort that out.
-> 
-> That's right.  (Except that you got the cause and effect reversed; 
-> resetting the port is what causes it to be re-enabled.  :-)
-
-Right.
-
-> > > > Now, a few things i noticed while at it:
-> > > > 
-> > > >   - At some point I had code to reject EP queue() if the device is
-> > > > suspended with -ESHUTDOWN. The end result was bad ... f_mass_storage
-> > > > goes into an infinite loop of trying to queue the same stuff in
-> > > > start_out_transfer() when that happens. It looks like it's not really
-> > > > handling errors from queue() in a particularily useful way.
-> > > 
-> > > Don't reject EP queue requests.  Accept them as you would at any time;
-> > > they will complete after the port is resumed.
+On Thu, 2019-07-04 at 21:37 -0400, Alan Stern wrote:
 > > 
-> > Except the suspend on a bus reset clears the port enable. You can't
-> > resume from that, only reset the port no ? Or am I missing something ?
-> 
-> You're right.  Nevertheless, the driver should accept queue requests, 
-> even if they will eventually fail.  It's what the gadget drivers 
-> expect.
-
-Ok. Things seem to work. I went back to suspend on bus reset, and with
-some other fixes I did to my enable/reset logic and the mass storage
-fix I posted yesterday it seems to be solid. Yay !
-
-> > > As for f_mass_storage, repeatedly attempting to queue an OUT transfer
-> > > is normal behavior.  The fact that one attempt gets an error doesn't
-> > > stop the driver from making more attempts; the only thing that would
-> > > stop it is being disabled by a config change, a suspend, a disconnect,
-> > > or an unbind.
+> > Talking of which... do we need this ?
 > > 
-> > Except it does that in a tight loop and locks up the machine...
+> > --- a/drivers/usb/gadget/composite.c
+> > +++ b/drivers/usb/gadget/composite.c
+> > @@ -1976,6 +1976,7 @@ void composite_disconnect(struct usb_gadget *gadget)
+> >         * disconnect callbacks?
+> >         */
+> >        spin_lock_irqsave(&cdev->lock, flags);
+> > +     cdev->suspended = 0;
+> >        if (cdev->config)
+> >                reset_config(cdev);
+> >        if (cdev->driver->disconnect)
+> > 
+> > Otherwise with my vhub or with dummy_hcd, a suspend followed by a reset
+> > will keep that stale suspended flag to 1 (which has no effect at the moment
+> > but still...)
+> > 
+> > If yes, I'll submit a patch accordingly...
 > 
-> Well, that wouldn't happen if your UDC accepted the requests, right?  
+> According to the USB spec, a host is not supposed to reset a suspended 
+> port (it's supposed to resume the port and then do the reset).  But of 
+> course this can happen anyway, so we should handle it properly.
 
-Sure but it would be nice if the mass storage dealt with -ESHUTDOWN
-properly and stopped :-) Or other errors... if the UDC HW for example
-dies for some reason, mass storage will lockup.
+Right. I do see the resume coming in, but I don't forward it to the
+gadget because here's what happens in that order:
 
-> Besides, f_mass_storage won't repeatedly try to queue an OUT transfer 
-> once it knows that it is suspended.
+ 1- Host gets shutdown (or cable disconnected)
 
-Not afaik. But I might have missed something. I didn't see any suspend
-callback in f_mass_storage.c...
+ 2- Upstream bus suspend: I call ->suspend on the gadgets on all
+enabled ports that don't have USB_PORT_STAT_SUSPEND already set. I
+don't change the port status, I don't set USB_PORT_STAT_SUSPEND
+
+ 3- Machine gets turned back on (or cable reconnected)
+ 
+ 4- Upstream bus resume: I call ->resume on the gadgets on all
+enabled ports that don't have USB_PORT_STAT_SUSPEND set.
+
+ 5- Upstream bus reset: I call ->suspend on all enabled ports after
+clearing their status (I preserve only USB_PORT_STAT_SUSPEND and
+USB_PORT_STAT_POWER which is always set for me). Note: I currently do
+this even if the port had USB_PORT_STAT_SUSPEND set, so such as port
+will get a double suspend ... maybe I shouldn't.
+
+ 6- Hosts sets port reset: I reset the gadget since it's already
+bound/enabled. It's still "suspended".
+
+So we do have a legitimate case of "reset while suspended".
+
+I'll tidy up the patch and submit it.
 
 Cheers,
 Ben.
 
-> Alan Stern
-> 
-> > > >   - With my current code doing suspend/resume on bus resets, when I
-> > > > reboot some hosts, and they re-enumerate, I tend to hit the WARN_ON
-> > > > drivers/usb/gadget/function/f_mass_storage.c:341
-> > > > 
-> > > > static inline int __fsg_is_set(struct fsg_common *common,
-> > > >                               const char *func, unsigned line)
-> > > > {
-> > > >        if (common->fsg)
-> > > >                return 1;
-> > > >        ERROR(common, "common->fsg is NULL in %s at %u\n", func, line);
-> > > >        WARN_ON(1);
-> > > >        return 0;
-> > > > }
-> > > > 
-> > > > This happens a little while after a successul set_configuration. Here's
-> > > > a trace:
-> > > 
-> > > ...
-> > > 
-> > > > I have to get my head around that code, but if one of you have a clue, I
-> > > > would welcome it :-)
-> > > > 
-> > > > Interestingly it recovers. The host seems to then reset the prot, then reconfigure and
-> > > > the second time around it all works fine.
-> > > 
-> > > I suspect this is related to the race you found.  EJ Hsu has been 
-> > > working on much the same thing (see the mailing list archive).
-> > 
-> > Right. I debugged the race and produced the fix I posted *after* I had
-> > change my code to do a reset rather than a suspend on the hub receiving
-> > an upstream bus reset.
-> > 
-> > I will switch back to doing suspend instead and see whether that stays
-> > fixed.
-> > 
-> > Cheers,
-> > Ben.
 
