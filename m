@@ -2,62 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6180660D51
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 23:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4029460D94
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2019 00:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728167AbfGEVtk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 17:49:40 -0400
-Received: from out12.masterobox.work ([178.156.202.12]:42704 "EHLO
-        slot0.mathewsons.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1725882AbfGEVtj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 17:49:39 -0400
-X-Greylist: delayed 623 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Jul 2019 17:49:37 EDT
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=mathewsons.ga;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=purchase@mathewsons.ga;
- bh=onxYcir3NvpNjk2I/gjm/O+ljxo=;
- b=AE9arMlCzZJNmc4rIX9JPlqg5GudcOZhxGFP96qBi7OYarw/TTUR+yJq079qN0oQXxCBORSHH6At
-   n4rNCNMiqAFyJKK0fw6sBXLWjI8EUGh+jXonu9kd5g5Mb+z1BzzGJv9V29ggTRrCxw7VSaYSkZjf
-   aNt6/08CyMofxzeEperuUPSAxbUPNdqXhj/75KO/nuanhazYK+zyG3qr3giEtj+y54fZknUdY7Fj
-   aMZ9+Nl8/+UhNiIvhWRBYt4Y+soWI38qNuw9mBfnECet0XhVHIcckZqdDf9fXcfE85pI+CtgUj42
-   hJIziUW7xG19s4zVom31dG+QTxUvNwQQHJuOjA==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=mathewsons.ga;
- b=JvwqzllsHLr3+H6pNhKA4BSRjiRzvEUI6RayMAzsrRFE6158+WyKZL851Z7knPtVfFgq+eF4tKJh
-   Mwr1z8xEB3Re60o6LyUc4pxegZwPknW2EDMirRgA2NREH0SNWhW4/pmjxMbYtsSQ35UunEd1qY8i
-   YadwMr2q/xi2KUZsWAamTM2S5gwY8wvRXYQomuuTc5Lc0KfSgS3x78GW0l2IV+rLzkQAsIDKs7Ch
-   NN9C018sREfICb6xsxRIJzidTg7jF1P3qcvYY69JDQiS6QbH9koNP5uDeJOiPDzXkEB+w0Nz0dqm
-   FI1g9u7qDbya8AzaXZEu74zXTyu8SYsoN2257w==;
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Quotes needed For July Shipments
-To:     Recipients <purchase@mathewsons.ga>
-From:   "Sales -Jpexcc." <purchase@mathewsons.ga>
-Date:   Sat, 06 Jul 2019 00:39:05 +0300
-Reply-To: jpexcc@aol.com
-Message-ID: <0.0.4D.12D.1D53379E0115B52.0@slot0.mathewsons.ga>
+        id S1728251AbfGEWBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 18:01:34 -0400
+Received: from gate.crashing.org ([63.228.1.57]:40935 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725884AbfGEWBe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Jul 2019 18:01:34 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x65M1HGt013708;
+        Fri, 5 Jul 2019 17:01:18 -0500
+Message-ID: <15f6a7e8cbe534cbc4f647f6f99cdef80a7b01ad.camel@kernel.crashing.org>
+Subject: Re: Virtual hub, resets etc...
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Michal Nazarewicz <mina86@mina86.com>
+Date:   Sat, 06 Jul 2019 08:01:17 +1000
+In-Reply-To: <Pine.LNX.4.44L0.1907051005410.1606-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1907051005410.1606-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello dear,
- =
+On Fri, 2019-07-05 at 10:08 -0400, Alan Stern wrote:
+> On Fri, 5 Jul 2019, Benjamin Herrenschmidt wrote:
+> 
+> > > > > As for f_mass_storage, repeatedly attempting to queue an OUT transfer
+> > > > > is normal behavior.  The fact that one attempt gets an error doesn't
+> > > > > stop the driver from making more attempts; the only thing that would
+> > > > > stop it is being disabled by a config change, a suspend, a disconnect,
+> > > > > or an unbind.
+> > > > 
+> > > > Except it does that in a tight loop and locks up the machine...
+> > > 
+> > > Well, that wouldn't happen if your UDC accepted the requests, right?  
+> > 
+> > Sure but it would be nice if the mass storage dealt with -ESHUTDOWN
+> > properly and stopped :-) Or other errors... if the UDC HW for example
+> > dies for some reason, mass storage will lockup.
+> 
+> I suppose we could add code to check for this case and handle it, 
+> although I'm not sure what would be the right thing to do.  Delay for 
+> one second and try again?  Disable the gadget until the host does a 
+> reset?
 
-We are in the market for your products after meeting at your stand during l=
-ast expo.
- =
+I think just stop it until the next reset yes.
 
-Please kindly send us your latest catalog and price list so as to start a n=
-ew project/order as promised during the exhibition. =
+> > > Besides, f_mass_storage won't repeatedly try to queue an OUT transfer 
+> > > once it knows that it is suspended.
+> > 
+> > Not afaik. But I might have missed something. I didn't see any suspend
+> > callback in f_mass_storage.c...
+> 
+> Oops, right.  Sorry about that; my memory is slowly decaying.  I need
+> to upgrade my brain's RAM...
 
- =
+Haha, I wish I didn't have that problem too :)
 
-I would appreciate your response about the above details required so we can=
- revert back to you asap.
- =
+Cheers,
+Ben.
 
-Kind regards
- =
 
-Rhema Zoeh
