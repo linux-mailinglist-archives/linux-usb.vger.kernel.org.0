@@ -2,198 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 591D8605AA
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 14:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E63605ED
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 14:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728132AbfGEMEX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 08:04:23 -0400
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:31352 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725601AbfGEMEX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 08:04:23 -0400
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x65C20ux024796;
-        Fri, 5 Jul 2019 05:03:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=E+2CRFbwtMJXmjMp4ntZdmmnIKzkR/9/f1cPxsSs6y0=;
- b=TSU67RgfoPtA9nHgHHfDpGU/f6Zn4abeb5Cp3NsdK+RHNMkgnQIxqyywobWj1Zk8y3Zh
- dbPfv+OAa47c+jCWwiMpVcAnAbC19IZBtHN2VkJWeQa1bP0vkIPD57zKI+7lj7qHZzjn
- J4A/4/uZ7XW5z60/VSaDXYCN6L517+riZSSk8K7nyYr/IdLNZCusniPbyVQb054VJ5r5
- duxKqFoYjJ/YMEdkhbCXY5vw94pwGqe1c3S1x/oYpGLXUHYehJojcFZZeSNzqg68LJYQ
- LmkciaRBF9U/pPOwIq6yuFJx9rIOXNr/UJZPhawiZqSZNPLKFWQxiP3yl8lbcwgwbOQ3 Zw== 
-Authentication-Results: cadence.com;
-        spf=pass smtp.mailfrom=pawell@cadence.com
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2050.outbound.protection.outlook.com [104.47.36.50])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 2thby2w7b7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 05 Jul 2019 05:03:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E+2CRFbwtMJXmjMp4ntZdmmnIKzkR/9/f1cPxsSs6y0=;
- b=dhzut4wHrfk8M/1qJ3H3pW/bNlgW0Y8T1crQXQYpjN2eMh4gXJHX9WgY1m0SdbQqiHfpsGt2QDPodIMTk2I4bhbSPx9jXF8hwJ2uFdov63ubZ6SH0aYjWoRmY+5e4XgLgqahQ/hQsuL06Bszu3ShodlekJ+p1DfukVANHws8ZNI=
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
- BYAPR07MB5813.namprd07.prod.outlook.com (20.179.90.206) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.18; Fri, 5 Jul 2019 12:03:40 +0000
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::fd8c:399c:929b:33e2]) by BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::fd8c:399c:929b:33e2%6]) with mapi id 15.20.2052.010; Fri, 5 Jul 2019
- 12:03:40 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        id S1728042AbfGEM3P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 08:29:15 -0400
+Received: from gate.crashing.org ([63.228.1.57]:53751 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726794AbfGEM3P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Jul 2019 08:29:15 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x65CSxOJ024146;
+        Fri, 5 Jul 2019 07:29:00 -0500
+Message-ID: <588e0e632b91cbdd927ac5d5f6ad8ae8f61d19ee.camel@kernel.crashing.org>
+Subject: Re: [PATCH V3] usb: gadget: storage: Remove warning message
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     EJ Hsu <ejh@nvidia.com>, Alan Stern <stern@rowland.harvard.edu>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>
-Subject: RE: [PATCH v9 2/6] usb:gadget Separated decoding functions from dwc3
- driver.
-Thread-Topic: [PATCH v9 2/6] usb:gadget Separated decoding functions from dwc3
- driver.
-Thread-Index: AQHVMyB8KL4t/wzfvkK+3nlF+Rqn1Ka74vsAgAAAvUCAAAVZgIAAA+DQ
-Date:   Fri, 5 Jul 2019 12:03:40 +0000
-Message-ID: <BYAPR07MB47096E7B9383A300856A76D7DDF50@BYAPR07MB4709.namprd07.prod.outlook.com>
-References: <1562324238-16655-1-git-send-email-pawell@cadence.com>
- <1562324238-16655-3-git-send-email-pawell@cadence.com>
- <20190705112724.GA4294@kroah.com>
- <BYAPR07MB4709AAF54E7C58B51FC26D20DDF50@BYAPR07MB4709.namprd07.prod.outlook.com>
- <20190705114911.GA31190@kroah.com>
-In-Reply-To: <20190705114911.GA31190@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZWJhMTgyYzgtOWYxYy0xMWU5LTg3NDItMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XGViYTE4MmNhLTlmMWMtMTFlOS04NzQyLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMjYxOSIgdD0iMTMyMDY4MDE4MTgyODIxNDgzIiBoPSJqRWJKSGJ5aEoyWHZEVDhzSEZSUlNjd2dSczA9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: 
-x-originating-ip: [185.217.253.59]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3e909ef0-0402-47a7-4f68-08d70140d1f5
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR07MB5813;
-x-ms-traffictypediagnostic: BYAPR07MB5813:
-x-microsoft-antispam-prvs: <BYAPR07MB58138DECBBDE9CB183165254DDF50@BYAPR07MB5813.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-forefront-prvs: 008960E8EC
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(366004)(39860400002)(136003)(376002)(36092001)(189003)(199004)(6506007)(102836004)(26005)(6916009)(186003)(7416002)(76176011)(99286004)(7696005)(3846002)(6116002)(71190400001)(71200400001)(86362001)(107886003)(6246003)(55016002)(53936002)(478600001)(9686003)(54906003)(76116006)(68736007)(8676002)(33656002)(5660300002)(229853002)(81156014)(256004)(446003)(11346002)(305945005)(316002)(81166006)(2906002)(25786009)(8936002)(73956011)(476003)(66446008)(14454004)(486006)(4326008)(66066001)(52536014)(74316002)(6436002)(7736002)(66476007)(66556008)(64756008)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB5813;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: cadence.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 0QCXAcOxed+Xh2YeyhHhSzhvitM1xc/EizUJSDeTV/HJ8I1MhbBJKyEkZ/znOCwx47Vbkp/V5UFeMpZCuBFptlvjLx6WKxsLPqePw3Ct7GHXBUxW4P+8tCvC+g9xjjOy4Zxkpt1ByV+H7nXsRm5d4elvM5k/Oxcg2g+xM0wzEZRKXTQvrNXVEGb65v+hK1MLcSzD9HYSTTcialiQRfVzmyQBT1ZE03ZtLJxc3/L+Xjffy1eV3RaA7+oKK4HMmWYObVx1nmwQ3ZaQ8mwMgU4ggOXo93BwpeXT4DebvFTDN55lnPG2Wyrmq4p/UqxbVbeI2by+4h5GJYa+vS3qCFpwgsLAK5NnJKnwYsXYHrLddn3xoSQ0M83OKX7s0Bwznv0KgPrP0wJSQG1o5d8Xxeb/+qmTWqv9ZiKG0ldwtSocxbg=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e909ef0-0402-47a7-4f68-08d70140d1f5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2019 12:03:40.5335
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pawell@global.cadence.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5813
-X-Proofpoint-SPF-Result: pass
-X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
- include:mktomail.com include:spf-0014ca01.pphosted.com
- include:spf.protection.outlook.com include:auth.msgapp.com
- include:spf.mandrillapp.com ~all
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-05_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
- priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
- spamscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=891 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907050146
+        WK Tsai <wtsai@nvidia.com>
+Date:   Fri, 05 Jul 2019 22:28:58 +1000
+In-Reply-To: <BN7PR12MB2644CE5F029CD6A5DE353D88CFF50@BN7PR12MB2644.namprd12.prod.outlook.com>
+References: <BN7PR12MB26449A2DC32EC2767CBF6687CFFA0@BN7PR12MB2644.namprd12.prod.outlook.com>
+         <Pine.LNX.4.44L0.1907041204570.18767-100000@netrider.rowland.org>
+         <BN7PR12MB2644CE5F029CD6A5DE353D88CFF50@BN7PR12MB2644.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
->
->On Fri, Jul 05, 2019 at 11:39:57AM +0000, Pawel Laszczak wrote:
->>
->> >On Fri, Jul 05, 2019 at 11:57:14AM +0100, Pawel Laszczak wrote:
->> >> Patch moves some decoding functions from driver/usb/dwc3/debug.h driv=
-er
->> >> to driver/usb/gadget/debug.c file. These moved functions include:
->> >>     dwc3_decode_get_status
->> >>     dwc3_decode_set_clear_feature
->> >>     dwc3_decode_set_address
->> >>     dwc3_decode_get_set_descriptor
->> >>     dwc3_decode_get_configuration
->> >>     dwc3_decode_set_configuration
->> >>     dwc3_decode_get_intf
->> >>     dwc3_decode_set_intf
->> >>     dwc3_decode_synch_frame
->> >>     dwc3_decode_set_sel
->> >>     dwc3_decode_set_isoch_delay
->> >>     dwc3_decode_ctrl
->> >>
->> >> These functions are used also in inroduced cdns3 driver.
->> >>
->> >> All functions prefixes were changed from dwc3 to usb.
->> >> Also, function's parameters has been extended according to the name
->> >> of fields in standard SETUP packet.
->> >> Additionally, patch adds usb_decode_ctrl function to
->> >> include/linux/usb/gadget.h file.
->> >
->> >No it does not :(
->>
->> I've forgot about this :(
->>
->> It should be include/linux/usb/ch.9.h
->>
->> >
->> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> >> ---
->> >>  drivers/usb/common/Makefile |   5 +
->> >>  drivers/usb/common/debug.c  | 268 ++++++++++++++++++++++++++++++++++=
-++
->> >>  drivers/usb/dwc3/debug.h    | 252 ---------------------------------
->> >>  drivers/usb/dwc3/trace.h    |   2 +-
->> >>  include/linux/usb/ch9.h     |  25 ++++
->> >>  5 files changed, 299 insertions(+), 253 deletions(-)
->> >>  create mode 100644 drivers/usb/common/debug.c
->> >>
->> >> diff --git a/drivers/usb/common/Makefile b/drivers/usb/common/Makefil=
-e
->> >> index 0a7c45e85481..cdc66b59a6f0 100644
->> >> --- a/drivers/usb/common/Makefile
->> >> +++ b/drivers/usb/common/Makefile
->> >> @@ -5,6 +5,11 @@
->> >>
->> >>  obj-$(CONFIG_USB_COMMON)	  +=3D usb-common.o
->> >>  usb-common-y			  +=3D common.o
->> >> +
->> >> +ifneq ($(CONFIG_TRACING),)
->> >> +	usb-common-y		  +=3D debug.o
->> >> +endif
->> >
->> >So only enable this if tracing is not emabled?  Or if enabled?  I'm
->> >confused, isn't there an easier way to write this?
->>
->> It's checks if CONFIG_TRACING is enable.
->> It's a common way checking if option is enabled in usb subsystem.
->
->Why not just write this as:
->	usb-common-$(CONFIG_TRACING)	+=3D debug.o
->?
+On Fri, 2019-07-05 at 10:49 +0000, EJ Hsu wrote:
+> 
+> Yes, looks like we are facing the same issue.
+> 
+> The change of Ben is similar to mine, but the priority of FSG_STATE_CONFIG_CHANGE in his patch is higher than FSG_STATE_CONFIG_CLEAR.
+> So, it will not hit the USB CV TD 9.13 failure as above.
 
-Ok, I will do this in this way.
+Correct. This is on purpose. A CONFIG_CHANGE will wipe out the previous
+config, so if the queued state was CONFIG_CLEAR, and we haven't
+dequeued it yet, we can skip it.
 
-Thanks.
->
->thanks,
->
->greg k-h
+> However, in my opinion, I think we should keep the handling of
+> FSG_STATE_CONFIG_CHANGE as it was. FSG_STATE_CONFIG_CHANGE should
+> take care of handling FSG_STATE_CONFIG_CLEAR because of its higher
+> priority.
+
+My patch does just that. If you get a clear and a change fast enough
+(ie, the clear hasn't been dequeued), then the change will override,
+which is what we want, since that will cleanup the previous config
+regardless.
+
+The entire point of my patch is to make sure that new_fsg is only ever
+set in that one place, the config change, and there is no possible
+confusion with the async continuation.
+
+> Think about below case:
+> When fsg_main_thread tries to handle the FSG_STATE_CONFIG_CHANGE, a disconnect event arise at the same time and fsg_disable() is called accordingly. 
+> In this case, FSG_STATE_CONFIG_CLEAR might not be queued. (depending on if FSG_STATE_CONFIG_CHANGE is cleared in handle_exception() )
+> If we still call usb_composite_setup_continue() without checking common->new_fsg, the " Unexpected call" message might still be printed (if delayed_status has been cleared in reset_config() ).
+> Please correct me if I have any misunderstanding.
+
+new_fsg will never be clear if we do FSG_STATE_CONFIG_CHANGE, that's
+the whole point of my patch.
+
+Otherwise we keep having the problem that I described in my cset
+comment where two parties stomp on that one variable and confusion
+ensures.
+
+Now, there's indeed one remaining issue as you pointed out. If we
+disconnect before we've dequeued FSG_STATE_CONFIG_CHANGE.
+
+Is that an issue in practice however ? There are several ways we could
+handle that one:
+
+ - We can do a fully ordered queue of events. But that's more complex
+and somewhat suboptimal, but would be the most robust I suppose.
+
+ - Or we could be a bit smarter here, and have additional state
+information protected by the lock set while queuing
+FSG_STATE_CONFIG_CHANGE. This would include the fact that we have a
+pending set_alt and thus a delayed status to complete. Then we could
+have a flag indicating a disable/disconnect. fsg_disable would set it,
+fsg_set_alt would clear it. Those would need to be established with the
+same lock that queues the state and *retreived* in the same lock as
+well, otherwise we go back to having them change on the fly leading to
+inconsistent state.
+
+But in any case, having more than one agent stomping on new_fsg
+locklessly from interrupts is going to be a problem and I don't want to
+get back down that path.
+ 
+As it is, my patch makes things work for me. Does it work for you ? We
+can look at polishing more later.
+
+Cheers,
+Ben.
+
+
