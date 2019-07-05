@@ -2,65 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D26A60BB4
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 21:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6180660D51
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 23:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727711AbfGETKe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 15:10:34 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:47684 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727615AbfGETKd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 15:10:33 -0400
-Received: (qmail 5585 invoked by uid 2102); 5 Jul 2019 15:10:32 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 5 Jul 2019 15:10:32 -0400
-Date:   Fri, 5 Jul 2019 15:10:32 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Ryan Kennedy <ryan5544@gmail.com>
-cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usb: pci-quirks: Minor cleanup for AMD PLL quirk
-In-Reply-To: <20190704153529.9429-3-ryan5544@gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1907051504310.1606-100000@iolanthe.rowland.org>
+        id S1728167AbfGEVtk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 17:49:40 -0400
+Received: from out12.masterobox.work ([178.156.202.12]:42704 "EHLO
+        slot0.mathewsons.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbfGEVtj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 17:49:39 -0400
+X-Greylist: delayed 623 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Jul 2019 17:49:37 EDT
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=mathewsons.ga;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=purchase@mathewsons.ga;
+ bh=onxYcir3NvpNjk2I/gjm/O+ljxo=;
+ b=AE9arMlCzZJNmc4rIX9JPlqg5GudcOZhxGFP96qBi7OYarw/TTUR+yJq079qN0oQXxCBORSHH6At
+   n4rNCNMiqAFyJKK0fw6sBXLWjI8EUGh+jXonu9kd5g5Mb+z1BzzGJv9V29ggTRrCxw7VSaYSkZjf
+   aNt6/08CyMofxzeEperuUPSAxbUPNdqXhj/75KO/nuanhazYK+zyG3qr3giEtj+y54fZknUdY7Fj
+   aMZ9+Nl8/+UhNiIvhWRBYt4Y+soWI38qNuw9mBfnECet0XhVHIcckZqdDf9fXcfE85pI+CtgUj42
+   hJIziUW7xG19s4zVom31dG+QTxUvNwQQHJuOjA==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=mathewsons.ga;
+ b=JvwqzllsHLr3+H6pNhKA4BSRjiRzvEUI6RayMAzsrRFE6158+WyKZL851Z7knPtVfFgq+eF4tKJh
+   Mwr1z8xEB3Re60o6LyUc4pxegZwPknW2EDMirRgA2NREH0SNWhW4/pmjxMbYtsSQ35UunEd1qY8i
+   YadwMr2q/xi2KUZsWAamTM2S5gwY8wvRXYQomuuTc5Lc0KfSgS3x78GW0l2IV+rLzkQAsIDKs7Ch
+   NN9C018sREfICb6xsxRIJzidTg7jF1P3qcvYY69JDQiS6QbH9koNP5uDeJOiPDzXkEB+w0Nz0dqm
+   FI1g9u7qDbya8AzaXZEu74zXTyu8SYsoN2257w==;
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Quotes needed For July Shipments
+To:     Recipients <purchase@mathewsons.ga>
+From:   "Sales -Jpexcc." <purchase@mathewsons.ga>
+Date:   Sat, 06 Jul 2019 00:39:05 +0300
+Reply-To: jpexcc@aol.com
+Message-ID: <0.0.4D.12D.1D53379E0115B52.0@slot0.mathewsons.ga>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 4 Jul 2019, Ryan Kennedy wrote:
+Hello dear,
+ =
 
-> usb_amd_find_chipset_info() is used for chipset detection for
-> several quirks. It is strange that its return value indicates
-> the need for the PLL quirk, which means it is often ignored.
-> This patch adds a function specifically for checking the PLL
-> quirk like the other ones. Additionally, rename probe_result to
-> something more appropriate.
-> 
-> Signed-off-by: Ryan Kennedy <ryan5544@gmail.com>
+We are in the market for your products after meeting at your stand during l=
+ast expo.
+ =
 
-> @@ -322,6 +317,13 @@ bool usb_amd_prefetch_quirk(void)
->  }
->  EXPORT_SYMBOL_GPL(usb_amd_prefetch_quirk);
->  
-> +bool usb_amd_quirk_pll_check(void)
-> +{
-> +	usb_amd_find_chipset_info();
-> +	return amd_chipset.need_pll_quirk;
-> +}
-> +EXPORT_SYMBOL_GPL(usb_amd_quirk_pll_check);
+Please kindly send us your latest catalog and price list so as to start a n=
+ew project/order as promised during the exhibition. =
 
-I really don't see the point of separating out all but one line into a
-different function.  You might as well just rename 
-usb_amd_find_chipset_info to usb_amd_quirk_pll_check (along with the 
-other code adjustments) and be done with it.
+ =
 
-However, in the end I don't care if you still want to do this.  Either 
-way:
+I would appreciate your response about the above details required so we can=
+ revert back to you asap.
+ =
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Kind regards
+ =
 
-Alan Stern
-
+Rhema Zoeh
