@@ -2,138 +2,319 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CB860B68
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 20:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D82760B93
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 20:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727665AbfGES26 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 14:28:58 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:47436 "HELO
+        id S1727090AbfGESvB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 14:51:01 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:47642 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727615AbfGES26 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 14:28:58 -0400
-Received: (qmail 4967 invoked by uid 2102); 5 Jul 2019 14:28:57 -0400
+        with SMTP id S1725778AbfGESvB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 14:51:01 -0400
+Received: (qmail 5492 invoked by uid 2102); 5 Jul 2019 14:51:00 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 5 Jul 2019 14:28:57 -0400
-Date:   Fri, 5 Jul 2019 14:28:57 -0400 (EDT)
+  by localhost with SMTP; 5 Jul 2019 14:51:00 -0400
+Date:   Fri, 5 Jul 2019 14:51:00 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-cc:     EJ Hsu <ejh@nvidia.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        WK Tsai <wtsai@nvidia.com>
-Subject: Re: [PATCH V3] usb: gadget: storage: Remove warning message
-In-Reply-To: <4addd98e5f7edc17783201cde43c166488acc0df.camel@kernel.crashing.org>
-Message-ID: <Pine.LNX.4.44L0.1907051422000.1606-100000@iolanthe.rowland.org>
+To:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>,
+        Greg KH <greg@kroah.com>
+cc:     USB list <linux-usb@vger.kernel.org>
+Subject: [RFC] usbfs: Add ioctls for runtime suspend and resume
+In-Reply-To: <1562165075.7481.27.camel@opensource.cirrus.com>
+Message-ID: <Pine.LNX.4.44L0.1907051433420.1606-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: TEXT/PLAIN; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 5 Jul 2019, Benjamin Herrenschmidt wrote:
+On Wed, 3 Jul 2019, Mayuresh Kulkarni wrote:
 
-> (following our conversation)
+> As you had mentioned in one of the comment before, the only addition to
+> the patch I have locally is -
+> usbfs_notify_resume() has usbfs_mutex lock around list traversal.
 > 
-> Here's a completely untested alternative patch (it replaces my previous
-> one) that fixes it a bit differently.
-> 
-> This time it should handle the case of a disconnect happening
-> before we have dequeued a config change.
-> 
-> This assumes that it's correct to never call
-> usb_composite_setup_continue() if an fsg_disable() happens after a
-> fsg_set_alt() and before we have processed the latter.
+> Could you please send the patch for review? Please note, I think I am
+> not a part of linux-usb mailing-list, so probably need to be in cc to
+> get the patch email. Do let me know if something else is needed from me.
 
-That should be handled okay.  If it isn't, the composite core needs to 
-be fixed.
+Here it is.  There are two changes from the previous version:
 
-> I will try to test it tomorrow if time permits, otherwise some time
-> next week:
-> ---
-> 
-> [PATCH] usb: gadget: mass_storage: Fix races between fsg_disable and fsg_set_alt
-> 
-> If fsg_disable() and fsg_set_alt() are called too closely to each
-> other (for example due to a quick reset/reconnect), what can happen
-> is that fsg_set_alt sets common->new_fsg from an interrupt while
-> handle_exception is trying to process the config change caused by
-> fsg_disable():
-> 
-> 	fsg_disable()
-> 	...
-> 	handle_exception()
-> 		sets state back to FSG_STATE_NORMAL
-> 		hasn't yet called do_set_interface()
-> 		or is inside it.
-> 
->  ---> interrupt
-> 	fsg_set_alt
-> 		sets common->new_fsg
-> 		queues a new FSG_STATE_CONFIG_CHANGE
->  <---
-> 
-> Now, the first handle_exception can "see" the updated
-> new_fsg, treats it as if it was a fsg_set_alt() response,
-> call usb_composite_setup_continue() etc...
-> 
-> But then, the thread sees the second FSG_STATE_CONFIG_CHANGE,
-> and goes back down the same path, wipes and reattaches a now
-> active fsg, and .. calls usb_composite_setup_continue() which
-> at this point is wrong.
-> 
-> Not only we get a backtrace, but I suspect the second set_interface
-> wrecks some state causing the host to get upset in my case.
-> 
-> This fixes it by replacing "new_fsg" by a "state argument" (same
-> principle) which is set in the same lock section as the state
-> update, and retrieved similarly.
-> 
-> That way, there is never any discrepancy between the dequeued
-> state and the observed value of it. We keep the ability to have
-> the latest reconfig operation take precedence, but we guarantee
-> that once "dequeued" the argument (new_fsg) will not be clobbered
-> by any new event.
-> 
-> Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+1.	This is rebased on top of a separate patch which Greg has 
+	already accepted:
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit?id=ffed60971f3d95923b99ea970862c6ab6a22c20f
 
-Yes, this looks just right.  If I had thought about this a little more
-deeply earlier on, I would have come up with a patch very much like
-this.
+2.	I implemented Oliver's recommendation that the WAIT_FOR_RESUME
+	ioctl should automatically do FORBID_SUSPEND before it returns, 
+	if the return code is 0 (that is, it wasn't interrupted by a 
+	signal).
 
-My only comments are cosmetic.
+Still to do: Write up the documentation.  In fact, the existing
+description of usbfs in Documentation/driver-api/usb/usb.rst is sadly
+out of date.  And it deserves to be split out into a separate file of
+its own -- but I'm not sure where it really belongs, considering that
+it is an API for userspace, not an internal kernel API.
 
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 26 ++++++++++++--------
->  1 file changed, 16 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 043f97ad8f22..2ef029413b01 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-
-> @@ -2285,16 +2292,14 @@ static int do_set_interface(struct fsg_common *common, struct fsg_dev *new_fsg)
->  static int fsg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
->  {
->  	struct fsg_dev *fsg = fsg_from_func(f);
-
-While you're changing this, it would be nice to add the customary blank 
-line here.
-
-> -	fsg->common->new_fsg = fsg;
-> -	raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
-> +	__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, fsg);
->  	return USB_GADGET_DELAYED_STATUS;
->  }
->  
->  static void fsg_disable(struct usb_function *f)
->  {
->  	struct fsg_dev *fsg = fsg_from_func(f);
-
-And here.  Otherwise:
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Greg, suggestions?
 
 Alan Stern
+
+
+ drivers/usb/core/devio.c          |   96 ++++++++++++++++++++++++++++++++++++--
+ drivers/usb/core/generic.c        |    5 +
+ drivers/usb/core/usb.h            |    3 +
+ include/uapi/linux/usbdevice_fs.h |    3 +
+ 4 files changed, 102 insertions(+), 5 deletions(-)
+
+Index: usb-devel/drivers/usb/core/devio.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/devio.c
++++ usb-devel/drivers/usb/core/devio.c
+@@ -48,6 +48,9 @@
+ #define USB_DEVICE_MAX			(USB_MAXBUS * 128)
+ #define USB_SG_SIZE			16384 /* split-size for large txs */
+ 
++/* Mutual exclusion for ps->list in resume vs. release and remove */
++static DEFINE_MUTEX(usbfs_mutex);
++
+ struct usb_dev_state {
+ 	struct list_head list;      /* state list */
+ 	struct usb_device *dev;
+@@ -57,14 +60,17 @@ struct usb_dev_state {
+ 	struct list_head async_completed;
+ 	struct list_head memory_list;
+ 	wait_queue_head_t wait;     /* wake up if a request completed */
++	wait_queue_head_t wait_for_resume;   /* wake up upon runtime resume */
+ 	unsigned int discsignr;
+ 	struct pid *disc_pid;
+ 	const struct cred *cred;
+ 	void __user *disccontext;
+ 	unsigned long ifclaimed;
+ 	u32 disabled_bulk_eps;
+-	bool privileges_dropped;
+ 	unsigned long interface_allowed_mask;
++	int not_yet_resumed;
++	bool suspend_allowed;
++	bool privileges_dropped;
+ };
+ 
+ struct usb_memory {
+@@ -696,9 +702,7 @@ static void driver_disconnect(struct usb
+ 	destroy_async_on_interface(ps, ifnum);
+ }
+ 
+-/* The following routines are merely placeholders.  There is no way
+- * to inform a user task about suspend or resumes.
+- */
++/* We don't care about suspend/resume of claimed interfaces */
+ static int driver_suspend(struct usb_interface *intf, pm_message_t msg)
+ {
+ 	return 0;
+@@ -709,12 +713,32 @@ static int driver_resume(struct usb_inte
+ 	return 0;
+ }
+ 
++/* The following routines apply to the entire device, not interfaces */
++void usbfs_notify_suspend(struct usb_device *udev)
++{
++	/* We don't need to handle this */
++}
++
++void usbfs_notify_resume(struct usb_device *udev)
++{
++	struct usb_dev_state *ps;
++
++	/* Protect against simultaneous remove or release */
++	mutex_lock(&usbfs_mutex);
++	list_for_each_entry(ps, &udev->filelist, list) {
++		WRITE_ONCE(ps->not_yet_resumed, 0);
++		wake_up_all(&ps->wait_for_resume);
++	}
++	mutex_unlock(&usbfs_mutex);
++}
++
+ struct usb_driver usbfs_driver = {
+ 	.name =		"usbfs",
+ 	.probe =	driver_probe,
+ 	.disconnect =	driver_disconnect,
+ 	.suspend =	driver_suspend,
+ 	.resume =	driver_resume,
++	.supports_autosuspend = 1,
+ };
+ 
+ static int claimintf(struct usb_dev_state *ps, unsigned int ifnum)
+@@ -999,9 +1023,12 @@ static int usbdev_open(struct inode *ino
+ 	INIT_LIST_HEAD(&ps->async_completed);
+ 	INIT_LIST_HEAD(&ps->memory_list);
+ 	init_waitqueue_head(&ps->wait);
++	init_waitqueue_head(&ps->wait_for_resume);
+ 	ps->disc_pid = get_pid(task_pid(current));
+ 	ps->cred = get_current_cred();
+ 	smp_wmb();
++
++	/* Can't race with resume; the device is already active */
+ 	list_add_tail(&ps->list, &dev->filelist);
+ 	file->private_data = ps;
+ 	usb_unlock_device(dev);
+@@ -1027,7 +1054,10 @@ static int usbdev_release(struct inode *
+ 	usb_lock_device(dev);
+ 	usb_hub_release_all_ports(dev, ps);
+ 
++	/* Protect against simultaneous resume */
++	mutex_lock(&usbfs_mutex);
+ 	list_del_init(&ps->list);
++	mutex_unlock(&usbfs_mutex);
+ 
+ 	for (ifnum = 0; ps->ifclaimed && ifnum < 8*sizeof(ps->ifclaimed);
+ 			ifnum++) {
+@@ -1035,7 +1065,8 @@ static int usbdev_release(struct inode *
+ 			releaseintf(ps, ifnum);
+ 	}
+ 	destroy_all_async(ps);
+-	usb_autosuspend_device(dev);
++	if (!ps->suspend_allowed)
++		usb_autosuspend_device(dev);
+ 	usb_unlock_device(dev);
+ 	usb_put_dev(dev);
+ 	put_pid(ps->disc_pid);
+@@ -2346,6 +2377,47 @@ static int proc_drop_privileges(struct u
+ 	return 0;
+ }
+ 
++static int proc_forbid_suspend(struct usb_dev_state *ps)
++{
++	int ret = 0;
++
++	if (ps->suspend_allowed) {
++		ret = usb_autoresume_device(ps->dev);
++		if (ret == 0)
++			ps->suspend_allowed = false;
++		else if (ret != -ENODEV)
++			ret = -EIO;
++	}
++	return ret;
++}
++
++static int proc_allow_suspend(struct usb_dev_state *ps)
++{
++	if (!connected(ps))
++		return -ENODEV;
++
++	WRITE_ONCE(ps->not_yet_resumed, 1);
++	if (!ps->suspend_allowed) {
++		usb_autosuspend_device(ps->dev);
++		ps->suspend_allowed = true;
++	}
++	return 0;
++}
++
++static int proc_wait_for_resume(struct usb_dev_state *ps)
++{
++	int ret;
++
++	usb_unlock_device(ps->dev);
++	ret = wait_event_interruptible(ps->wait_for_resume,
++			READ_ONCE(ps->not_yet_resumed) == 0);
++	usb_lock_device(ps->dev);
++
++	if (ret != 0)
++		return ret;
++	return proc_forbid_suspend(ps);
++}
++
+ /*
+  * NOTE:  All requests here that have interface numbers as parameters
+  * are assuming that somehow the configuration has been prevented from
+@@ -2540,6 +2612,15 @@ static long usbdev_do_ioctl(struct file
+ 	case USBDEVFS_GET_SPEED:
+ 		ret = ps->dev->speed;
+ 		break;
++	case USBDEVFS_FORBID_SUSPEND:
++		ret = proc_forbid_suspend(ps);
++		break;
++	case USBDEVFS_ALLOW_SUSPEND:
++		ret = proc_allow_suspend(ps);
++		break;
++	case USBDEVFS_WAIT_FOR_RESUME:
++		ret = proc_wait_for_resume(ps);
++		break;
+ 	}
+ 
+  done:
+@@ -2607,10 +2688,14 @@ static void usbdev_remove(struct usb_dev
+ 	struct usb_dev_state *ps;
+ 	struct kernel_siginfo sinfo;
+ 
++	/* Protect against simultaneous resume */
++	mutex_lock(&usbfs_mutex);
+ 	while (!list_empty(&udev->filelist)) {
+ 		ps = list_entry(udev->filelist.next, struct usb_dev_state, list);
+ 		destroy_all_async(ps);
+ 		wake_up_all(&ps->wait);
++		WRITE_ONCE(ps->not_yet_resumed, 0);
++		wake_up_all(&ps->wait_for_resume);
+ 		list_del_init(&ps->list);
+ 		if (ps->discsignr) {
+ 			clear_siginfo(&sinfo);
+@@ -2622,6 +2707,7 @@ static void usbdev_remove(struct usb_dev
+ 					ps->disc_pid, ps->cred);
+ 		}
+ 	}
++	mutex_unlock(&usbfs_mutex);
+ }
+ 
+ static int usbdev_notify(struct notifier_block *self,
+Index: usb-devel/drivers/usb/core/generic.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/generic.c
++++ usb-devel/drivers/usb/core/generic.c
+@@ -257,6 +257,8 @@ static int generic_suspend(struct usb_de
+ 	else
+ 		rc = usb_port_suspend(udev, msg);
+ 
++	if (rc == 0)
++		usbfs_notify_suspend(udev);
+ 	return rc;
+ }
+ 
+@@ -273,6 +275,9 @@ static int generic_resume(struct usb_dev
+ 		rc = hcd_bus_resume(udev, msg);
+ 	else
+ 		rc = usb_port_resume(udev, msg);
++
++	if (rc == 0)
++		usbfs_notify_resume(udev);
+ 	return rc;
+ }
+ 
+Index: usb-devel/drivers/usb/core/usb.h
+===================================================================
+--- usb-devel.orig/drivers/usb/core/usb.h
++++ usb-devel/drivers/usb/core/usb.h
+@@ -95,6 +95,9 @@ extern int usb_runtime_idle(struct devic
+ extern int usb_enable_usb2_hardware_lpm(struct usb_device *udev);
+ extern int usb_disable_usb2_hardware_lpm(struct usb_device *udev);
+ 
++extern void usbfs_notify_suspend(struct usb_device *udev);
++extern void usbfs_notify_resume(struct usb_device *udev);
++
+ #else
+ 
+ static inline int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
+Index: usb-devel/include/uapi/linux/usbdevice_fs.h
+===================================================================
+--- usb-devel.orig/include/uapi/linux/usbdevice_fs.h
++++ usb-devel/include/uapi/linux/usbdevice_fs.h
+@@ -197,5 +197,8 @@ struct usbdevfs_streams {
+ #define USBDEVFS_FREE_STREAMS      _IOR('U', 29, struct usbdevfs_streams)
+ #define USBDEVFS_DROP_PRIVILEGES   _IOW('U', 30, __u32)
+ #define USBDEVFS_GET_SPEED         _IO('U', 31)
++#define USBDEVFS_FORBID_SUSPEND    _IO('U', 32)
++#define USBDEVFS_ALLOW_SUSPEND     _IO('U', 33)
++#define USBDEVFS_WAIT_FOR_RESUME   _IO('U', 34)
+ 
+ #endif /* _UAPI_LINUX_USBDEVICE_FS_H */
 
