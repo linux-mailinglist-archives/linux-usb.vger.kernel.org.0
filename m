@@ -2,61 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E7660812
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 16:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C5160844
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 16:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727086AbfGEOkh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 10:40:37 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:46898 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725983AbfGEOkh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 10:40:37 -0400
-Received: (qmail 1961 invoked by uid 2102); 5 Jul 2019 10:40:36 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 5 Jul 2019 10:40:36 -0400
-Date:   Fri, 5 Jul 2019 10:40:36 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     David Howells <dhowells@redhat.com>, <viro@zeniv.linux.org.uk>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        <nicolas.dichtel@6wind.com>, <raven@themaw.net>,
-        Christian Brauner <christian@brauner.io>,
-        <keyrings@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/9] Add a general, global device notification watch list
- [ver #5]
-In-Reply-To: <20190705084459.GA2579@kroah.com>
-Message-ID: <Pine.LNX.4.44L0.1907051038550.1606-100000@iolanthe.rowland.org>
+        id S1725837AbfGEOsZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 10:48:25 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38572 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725681AbfGEOsZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 10:48:25 -0400
+Received: by mail-pg1-f193.google.com with SMTP id z75so4419297pgz.5;
+        Fri, 05 Jul 2019 07:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4B5XvbAIoIr4H/nccPHJhvJByPo3v2+X8sDst0stIaA=;
+        b=twB5Bu5LO0iS+ky5NCg0mWCJiC3Nz1bV4XCTBsB79dGmIJZITDLuE9L+iXCCEf4DOl
+         AMTRuQZiVFfuZnfTfzV0MsmxhoFacoA5gkjtIKDOReKMaGjNhULybaAtDGSTeO9GQw3C
+         pTHDV50xThG7Rg3ek7al7Bc2bwa35e8WwS1RurmAcvg11SPQG0e9Cxbu1qtoohtEvbZE
+         En8i/IP7XsYdxEOHuRTw9IcqhOAfpbXeLyFLv8W+cnPxq7K7OEFRBDgr3JdauVFSr1kV
+         EL4+Zd0f3Tk6XjdzHRPrr1znCUVljNZ8MZzyFDeUicAUPgLwxBRbuzcClTlvNmL70C01
+         PlBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4B5XvbAIoIr4H/nccPHJhvJByPo3v2+X8sDst0stIaA=;
+        b=hXxsTN/JnFlKR3b7JUxiXQz2XnwJJwnloou1c+E05DHg7MecFQL38B7FT/TZ/OzDLd
+         yM+aX5b9h6tvy9qKFtDVj3LYwE/7H++oo67AJrfvwRjgSEaA0PcMpQ5oMGFHSrTHUylr
+         tCnpJ/igcoHv1tukqBynZei29LOO7JOO16OqQTTbxAJ2o6C+ntaQqijmoDp1S151FsQz
+         7g6DNUteqo0IYDY8eZroXmBRtbfsvFhAKGBu67N4XlqeHnxW9jh1lkZKHMJ8kog3oR6p
+         8LvWXOp/ibymk+43M5gGyodtrjz1kpo6teeibgf6xaokgSONQSJc3fqYI845hWZx2cc2
+         04dQ==
+X-Gm-Message-State: APjAAAVNkVEYvNrRpEjUQ97Kx1kPJLfxTWT3jOmwXlLvOqaPfJ8q87xf
+        aRWQQhejTAHVVUPASd2w3DA6VgroCCho+B4rETE=
+X-Google-Smtp-Source: APXvYqxUVOVt1xiMlerzjvYodulQOj61CTpzagtzy+7JthX+YBBFX6YrqZtz44pzkgCN5N+nBRLQcTTs5XMlRa+1pc0=
+X-Received: by 2002:a17:90a:4f0e:: with SMTP id p14mr5952998pjh.40.1562338104173;
+ Fri, 05 Jul 2019 07:48:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <20190704153529.9429-1-ryan5544@gmail.com> <20190704153529.9429-2-ryan5544@gmail.com>
+ <20190705052208.GE15821@kroah.com>
+In-Reply-To: <20190705052208.GE15821@kroah.com>
+From:   Ryan Kennedy <ryan5544@gmail.com>
+Date:   Fri, 5 Jul 2019 10:48:13 -0400
+Message-ID: <CAJRN7XN0rKVsLtfOTeEt7JN69pdOtPkV31iAnN3fLiyYtejcQw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: pci-quirks: Correct AMD PLL quirk detection
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 5 Jul 2019, Greg Kroah-Hartman wrote:
+On Fri, Jul 5, 2019 at 1:22 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jul 04, 2019 at 11:35:28AM -0400, Ryan Kennedy wrote:
+> > The AMD PLL USB quirk is incorrectly enabled on newer Ryzen
+> > chipsets. The logic in usb_amd_find_chipset_info currently checks
+> > for unaffected chipsets rather than affected ones. This broke
+> > once a new chipset was added in e788787ef. It makes more sense
+> > to reverse the logic so it won't need to be updated as new
+> > chipsets are added. Note that the core of the workaround in
+> > usb_amd_quirk_pll does correctly check the chipset.
+> >
+> > Signed-off-by: Ryan Kennedy <ryan5544@gmail.com>
+> > ---
+> >  drivers/usb/host/pci-quirks.c | 31 +++++++++++++++++++------------
+> >  1 file changed, 19 insertions(+), 12 deletions(-)
+>
+> Should this be backported to stable kernels?
 
-> On Fri, Jul 05, 2019 at 09:04:17AM +0100, David Howells wrote:
-> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > 
-> > > Hm, good point, but there should be some way to test this to verify it
-> > > works.  Maybe for the other types of events?
-> > 
-> > Keyrings is the simplest.  keyutils's testsuite will handle that.  I'm trying
-> > to work out if I can simply make every macro in there that does a modification
-> > perform a watch automatically to make sure the appropriate events happen.
-> 
-> That should be good enough to test the basic functionality.  After this
-> gets merged I'll see if I can come up with a way to test the USB
-> stuff...
+The bug is fairly harmless, so I wouldn't say it's a must-have. I only
+noticed this because I saw the log message and was curious what the
+quirk was for. The fix saves us calling usb_amd_quirk_pll() and taking
+the lock in there. Others here should know better than I what's stable
+worthy.
 
-You can create USB connect and disconnect events programmatically by
-using dummy-hcd with gadget-zero.  Turning off the port's POWER feature
-will cause a disconnect, and turning it back on will cause a connect.
+Ryan
 
-Alan Stern
-
+>
+> thanks,
+>
+> greg k-h
