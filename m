@@ -2,105 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E74D560DA8
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2019 00:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1980D60DE9
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2019 00:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726001AbfGEWMA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 18:12:00 -0400
-Received: from gate.crashing.org ([63.228.1.57]:57779 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725884AbfGEWMA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Jul 2019 18:12:00 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x65MBlIZ013990;
-        Fri, 5 Jul 2019 17:11:49 -0500
-Message-ID: <7469123f1d33e5aacdabc447cd124ca173bf350d.camel@kernel.crashing.org>
-Subject: Re: [PATCH V3] usb: gadget: storage: Remove warning message
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     EJ Hsu <ejh@nvidia.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        WK Tsai <wtsai@nvidia.com>
-Date:   Sat, 06 Jul 2019 08:11:47 +1000
-In-Reply-To: <Pine.LNX.4.44L0.1907051422000.1606-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1907051422000.1606-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+        id S1725971AbfGEWit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 18:38:49 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:43700 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfGEWis (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 18:38:48 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id EA2ED150428B0;
+        Fri,  5 Jul 2019 15:38:47 -0700 (PDT)
+Date:   Fri, 05 Jul 2019 15:38:45 -0700 (PDT)
+Message-Id: <20190705.153845.1823378152620818460.davem@davemloft.net>
+To:     hayeswang@realtek.com
+Cc:     netdev@vger.kernel.org, nic_swsd@realtek.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH net] r8152: set RTL8152_UNPLUG only for real
+ disconnection
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <1394712342-15778-288-albertk@realtek.com>
+References: <1394712342-15778-288-albertk@realtek.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
 Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 05 Jul 2019 15:38:48 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2019-07-05 at 14:28 -0400, Alan Stern wrote:
-> On Fri, 5 Jul 2019, Benjamin Herrenschmidt wrote:
-> 
-> > (following our conversation)
-> > 
-> > Here's a completely untested alternative patch (it replaces my previous
-> > one) that fixes it a bit differently.
-> > 
-> > This time it should handle the case of a disconnect happening
-> > before we have dequeued a config change.
-> > 
-> > This assumes that it's correct to never call
-> > usb_composite_setup_continue() if an fsg_disable() happens after a
-> > fsg_set_alt() and before we have processed the latter.
-> 
-> That should be handled okay.  If it isn't, the composite core needs to 
-> be fixed.
+From: Hayes Wang <hayeswang@realtek.com>
+Date: Thu, 4 Jul 2019 17:36:32 +0800
 
-Ok. I'll have a quick look to make sure.
-
- .../...
-
-> Yes, this looks just right.  If I had thought about this a little more
-> deeply earlier on, I would have come up with a patch very much like
-> this.
-
-Right, so as I grow more familiar with that code and its intent, I
-agree, I'm much happier with this. Hopefully it passes my tests. I'll
-tidy up as per your comments and repost properly if all goes well along
-with some other things I piled up.
-
-Cheers,
-Ben.
-
-
-> My only comments are cosmetic.
+> Set the flag of RTL8152_UNPLUG if and only if the device is unplugged.
+> Some error codes sometimes don't mean the real disconnection of usb device.
+> For those situations, set the flag of RTL8152_UNPLUG causes the driver skips
+> some flows of disabling the device, and it let the device stay at incorrect
+> state.
 > 
-> > ---
-> >  drivers/usb/gadget/function/f_mass_storage.c | 26 ++++++++++++--------
-> >  1 file changed, 16 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> > index 043f97ad8f22..2ef029413b01 100644
-> > --- a/drivers/usb/gadget/function/f_mass_storage.c
-> > +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> 
-> > @@ -2285,16 +2292,14 @@ static int do_set_interface(struct fsg_common *common, struct fsg_dev *new_fsg)
-> >  static int fsg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
-> >  {
-> >       struct fsg_dev *fsg = fsg_from_func(f);
-> 
-> While you're changing this, it would be nice to add the customary blank 
-> line here.
-> 
-> > -     fsg->common->new_fsg = fsg;
-> > -     raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
-> > +     __raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, fsg);
-> >       return USB_GADGET_DELAYED_STATUS;
-> >  }
-> >  
-> >  static void fsg_disable(struct usb_function *f)
-> >  {
-> >       struct fsg_dev *fsg = fsg_from_func(f);
-> 
-> And here.  Otherwise:
-> 
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> Alan Stern
+> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
 
+Applied.
