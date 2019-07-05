@@ -2,28 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE5D5FF5C
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 03:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF3B5FF5E
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 03:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727391AbfGEBhJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 21:37:09 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36635 "HELO
+        id S1727481AbfGEBlF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 21:41:05 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:37623 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727345AbfGEBhJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 21:37:09 -0400
-Received: (qmail 1221 invoked by uid 500); 4 Jul 2019 21:37:08 -0400
+        with SMTP id S1727345AbfGEBlF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 21:41:05 -0400
+Received: (qmail 1325 invoked by uid 500); 4 Jul 2019 21:41:04 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 4 Jul 2019 21:37:08 -0400
-Date:   Thu, 4 Jul 2019 21:37:08 -0400 (EDT)
+  by localhost with SMTP; 4 Jul 2019 21:41:04 -0400
+Date:   Thu, 4 Jul 2019 21:41:04 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Michal Nazarewicz <mina86@mina86.com>
-Subject: Re: Virtual hub, resets etc...
-In-Reply-To: <e1e27dc501bdb1c6dfb41019d0d9d3760280f4a7.camel@kernel.crashing.org>
-Message-ID: <Pine.LNX.4.44L0.1907042135090.840-100000@netrider.rowland.org>
+To:     Suwan Kim <suwan.kim027@gmail.com>
+cc:     shuah@kernel.org, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] usbip: Implement SG support to vhci
+In-Reply-To: <20190704172435.GA11673@localhost.localdomain>
+Message-ID: <Pine.LNX.4.44L0.1907042138091.840-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -31,48 +30,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 5 Jul 2019, Benjamin Herrenschmidt wrote:
+On Fri, 5 Jul 2019, Suwan Kim wrote:
 
-> On Fri, 2019-07-05 at 07:44 +1000, Benjamin Herrenschmidt wrote:
-> > > >    - At some point I had code to reject EP queue() if the device
-> > > > is
-> > > > suspended with -ESHUTDOWN. The end result was bad ...
-> > > > f_mass_storage
-> > > > goes into an infinite loop of trying to queue the same stuff in
-> > > > start_out_transfer() when that happens. It looks like it's not
-> > > > really
-> > > > handling errors from queue() in a particularily useful way.
+> On Mon, Jun 24, 2019 at 01:24:15PM -0400, Alan Stern wrote:
+> > On Mon, 24 Jun 2019, Suwan Kim wrote:
+> > 
+> > > > > +	hcd->self.sg_tablesize = ~0;
+> > > > > +	hcd->self.no_sg_constraint = 1;
+> > > > 
+> > > > You probably shouldn't do this, for two reasons.  First, sg_tablesize
+> > > > of the server's HCD may be smaller than ~0.  If the client's value is
+> > > > larger than the server's, a transfer could be accepted on the client
+> > > > but then fail on the server because the SG list was too big.
+> > 
+> > On the other hand, I don't know of any examples where an HCD has 
+> > sg_tablesize set to anything other than 0 or ~0.  vhci-hcd might end up 
+> > being the only one.
+> > 
+> > > > Also, you may want to restrict the size of SG transfers even further,
+> > > > so that you don't have to allocate a tremendous amount of memory all at
+> > > > once on the server.  An SG transfer can be quite large.  I don't know 
+> > > > what a reasonable limit would be -- 16 perhaps?
 > > > 
-> > > Don't reject EP queue requests.  Accept them as you would at any
-> > > time;
-> > > they will complete after the port is resumed.
-> >
-> > Except the suspend on a bus reset clears the port enable. You can't
-> > resume from that, only reset the port no ? Or am I missing something
-> > ?
+> > > Is there any reason why you think that 16 is ok? Or Can I set this
+> > > value as the smallest value of all HC? I think that sg_tablesize
+> > > cannot be a variable value because vhci interacts with different
+> > > machines and all machines has different sg_tablesize value.
+> > 
+> > I didn't have any good reason for picking 16.  Using the smallest value 
+> > of all the HCDs seems like a good idea.
 > 
-> Talking of which... do we need this ?
+> I also have not seen an HCD with a value other than ~0 or 0 except for
+> whci which uses 2048, but is not 2048 the maximum value of sg_tablesize?
+> If so, ~0 is the minimum value of sg_tablesize that supports SG. Then
+> can vhci use ~0 if we don't consider memory pressure of the server?
 > 
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -1976,6 +1976,7 @@ void composite_disconnect(struct usb_gadget *gadget)
->  	 * disconnect callbacks?
->  	 */
->  	spin_lock_irqsave(&cdev->lock, flags);
-> +	cdev->suspended = 0;
->  	if (cdev->config)
->  		reset_config(cdev);
->  	if (cdev->driver->disconnect)
-> 
-> Otherwise with my vhub or with dummy_hcd, a suspend followed by a reset
-> will keep that stale suspended flag to 1 (which has no effect at the moment
-> but still...)
-> 
-> If yes, I'll submit a patch accordingly...
+> If all of the HCDs supporting SG have ~0 as sg_tablesize value, I
+> think that whether we use an HCD locally or remotely, the degree of
+> memory pressure is same in both local and remote usage.
 
-According to the USB spec, a host is not supposed to reset a suspended 
-port (it's supposed to resume the port and then do the reset).  But of 
-course this can happen anyway, so we should handle it properly.
+You have a lot of leeway.  For example, there's no reason a single SG
+transfer on the client has to correspond to a single SG transfer on the
+host.  In theory the client's vhci-hcd can break a large SG transfer up
+into a bunch of smaller pieces and send them to the host one by one,
+then reassemble the results to complete the original transfer.  That
+way the memory pressure on the host would be a lot smaller than on the
+client.
 
 Alan Stern
 
