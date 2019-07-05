@@ -2,88 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C5160844
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 16:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A68260A99
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 18:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725837AbfGEOsZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 10:48:25 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38572 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725681AbfGEOsZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 10:48:25 -0400
-Received: by mail-pg1-f193.google.com with SMTP id z75so4419297pgz.5;
-        Fri, 05 Jul 2019 07:48:24 -0700 (PDT)
+        id S1725894AbfGEQoS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 12:44:18 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:46860 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725681AbfGEQoS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 12:44:18 -0400
+Received: by mail-pl1-f195.google.com with SMTP id c2so3275599plz.13;
+        Fri, 05 Jul 2019 09:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4B5XvbAIoIr4H/nccPHJhvJByPo3v2+X8sDst0stIaA=;
-        b=twB5Bu5LO0iS+ky5NCg0mWCJiC3Nz1bV4XCTBsB79dGmIJZITDLuE9L+iXCCEf4DOl
-         AMTRuQZiVFfuZnfTfzV0MsmxhoFacoA5gkjtIKDOReKMaGjNhULybaAtDGSTeO9GQw3C
-         pTHDV50xThG7Rg3ek7al7Bc2bwa35e8WwS1RurmAcvg11SPQG0e9Cxbu1qtoohtEvbZE
-         En8i/IP7XsYdxEOHuRTw9IcqhOAfpbXeLyFLv8W+cnPxq7K7OEFRBDgr3JdauVFSr1kV
-         EL4+Zd0f3Tk6XjdzHRPrr1znCUVljNZ8MZzyFDeUicAUPgLwxBRbuzcClTlvNmL70C01
-         PlBw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sJeCNY3p/cFJV5YjbkNxBrOSN1fSG/Fhqmle0nH3XgU=;
+        b=nejGd5n/U2KC/Kjj4rnjP9Ocyey+yeGL2V2n9eNM74mJLE5Dtq4QX+0Dl6MFotYCqs
+         WFFVzbcpq9H+UT1h7lReJDrCEimNiuR8Xi5cUbjzTh5lyCEFrmv2h/E0MiNloi9rX3GH
+         e88Qcl172Jpn8nEaOvKfsKxIx8I3JLgeD4IBH5hRw0wG+JNvsw73/cZm5IvIOZileahD
+         JGWM9+BeFbSKU/+dvubpvP7rtosuv7effagK9IU1LjpoGXPJAVf2pZB33Qv446jeGMi2
+         DnI7uUgUeJ34vAosDhNc6c9IXmPWypcfRGH/dkukuMV98krdhN4OuNk1d7be2Fu9F2Ra
+         2tiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4B5XvbAIoIr4H/nccPHJhvJByPo3v2+X8sDst0stIaA=;
-        b=hXxsTN/JnFlKR3b7JUxiXQz2XnwJJwnloou1c+E05DHg7MecFQL38B7FT/TZ/OzDLd
-         yM+aX5b9h6tvy9qKFtDVj3LYwE/7H++oo67AJrfvwRjgSEaA0PcMpQ5oMGFHSrTHUylr
-         tCnpJ/igcoHv1tukqBynZei29LOO7JOO16OqQTTbxAJ2o6C+ntaQqijmoDp1S151FsQz
-         7g6DNUteqo0IYDY8eZroXmBRtbfsvFhAKGBu67N4XlqeHnxW9jh1lkZKHMJ8kog3oR6p
-         8LvWXOp/ibymk+43M5gGyodtrjz1kpo6teeibgf6xaokgSONQSJc3fqYI845hWZx2cc2
-         04dQ==
-X-Gm-Message-State: APjAAAVNkVEYvNrRpEjUQ97Kx1kPJLfxTWT3jOmwXlLvOqaPfJ8q87xf
-        aRWQQhejTAHVVUPASd2w3DA6VgroCCho+B4rETE=
-X-Google-Smtp-Source: APXvYqxUVOVt1xiMlerzjvYodulQOj61CTpzagtzy+7JthX+YBBFX6YrqZtz44pzkgCN5N+nBRLQcTTs5XMlRa+1pc0=
-X-Received: by 2002:a17:90a:4f0e:: with SMTP id p14mr5952998pjh.40.1562338104173;
- Fri, 05 Jul 2019 07:48:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sJeCNY3p/cFJV5YjbkNxBrOSN1fSG/Fhqmle0nH3XgU=;
+        b=VPNZJAIYDk69MAauJCP6DzHqfF9Zo8pSq4fSOZFT9cPvcj7eRJ/XmlY+hHUKJESa0f
+         FqRF8ilXXUZXdzJWGS9gTVJEh0fWmld2AcLBdDhf/ExHGZLyjKasmA+JImFw24WBBhEu
+         37p9Zpl7vKj7aUAXd4IQ6WbRU5Z+O4Taf9JN+jvB/lx2zbxyvbhWJEzzecCm2v866dCd
+         +X3RMCsKY0//2TuElWFPnLIWDNTKubHtVCrxf1yLK7BIxlAKDsCwrddcZkNp/h3op5vn
+         pMWJhIXMCuaM1+4PLNbR5c4f92qfQMB+QnLhLmUgu6c4OZIOIVrUU9LemnyX7Eq2T7M5
+         6Lfw==
+X-Gm-Message-State: APjAAAUJrfZci5d5tYEy0Hv1hoepO1pzGglnjsYShBnHlV+RyTrGSEGw
+        ZvzeLVWgEN+ePTJtyd5NGZ4=
+X-Google-Smtp-Source: APXvYqxS0khdI/5kkPIXwsnPaRD4+hSBjMK4KBe2juLmPP4XyBf9RmQm2hgW4W4nofvVZ/1wUvTTfQ==
+X-Received: by 2002:a17:902:106:: with SMTP id 6mr6861614plb.64.1562345057870;
+        Fri, 05 Jul 2019 09:44:17 -0700 (PDT)
+Received: from localhost.localdomain ([125.142.23.13])
+        by smtp.googlemail.com with ESMTPSA id n89sm22033297pjc.0.2019.07.05.09.44.15
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 05 Jul 2019 09:44:17 -0700 (PDT)
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah@kernel.org, valentina.manea.m@gmail.com,
+        stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suwan Kim <suwan.kim027@gmail.com>
+Subject: [PATCH v2 0/2] usbip: Implement SG support
+Date:   Sat,  6 Jul 2019 01:43:53 +0900
+Message-Id: <20190705164355.14025-1-suwan.kim027@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190704153529.9429-1-ryan5544@gmail.com> <20190704153529.9429-2-ryan5544@gmail.com>
- <20190705052208.GE15821@kroah.com>
-In-Reply-To: <20190705052208.GE15821@kroah.com>
-From:   Ryan Kennedy <ryan5544@gmail.com>
-Date:   Fri, 5 Jul 2019 10:48:13 -0400
-Message-ID: <CAJRN7XN0rKVsLtfOTeEt7JN69pdOtPkV31iAnN3fLiyYtejcQw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: pci-quirks: Correct AMD PLL quirk detection
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 5, 2019 at 1:22 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Jul 04, 2019 at 11:35:28AM -0400, Ryan Kennedy wrote:
-> > The AMD PLL USB quirk is incorrectly enabled on newer Ryzen
-> > chipsets. The logic in usb_amd_find_chipset_info currently checks
-> > for unaffected chipsets rather than affected ones. This broke
-> > once a new chipset was added in e788787ef. It makes more sense
-> > to reverse the logic so it won't need to be updated as new
-> > chipsets are added. Note that the core of the workaround in
-> > usb_amd_quirk_pll does correctly check the chipset.
-> >
-> > Signed-off-by: Ryan Kennedy <ryan5544@gmail.com>
-> > ---
-> >  drivers/usb/host/pci-quirks.c | 31 +++++++++++++++++++------------
-> >  1 file changed, 19 insertions(+), 12 deletions(-)
->
-> Should this be backported to stable kernels?
+There are bugs on vhci with usb 3.0 storage device. Originally, vhci
+doesn't supported SG, so USB storage driver on vhci breaks SG list
+into multiple URBs and it causes error that a transfer got terminated
+too early because the transfer length for one of the URBs was not
+divisible by the maxpacket size.
 
-The bug is fairly harmless, so I wouldn't say it's a must-have. I only
-noticed this because I saw the log message and was curious what the
-quirk was for. The fix saves us calling usb_amd_quirk_pll() and taking
-the lock in there. Others here should know better than I what's stable
-worthy.
+To support SG, vhci doesn't map and unmap URB for DMA to use native
+SG list (urb->num_sgs). In DMA mapping function of vhci, it sets
+URB_DMA_MAP_SG flag in urb->transfer_flags if URB has SG list and
+this flag will tell the stub driver to use SG list.
 
-Ryan
+In this patch, vhci basically support SG and it sends each SG list
+entry to the stub driver. Then, the stub driver sees the total length
+of the buffer and allocates SG table and pages according to the total
+buffer length calling sgl_alloc(). After the stub driver receives
+completed URB, it again sends each SG list entry to vhci.
 
->
-> thanks,
->
-> greg k-h
+If HCD of the server doesn't support SG, the stub driver breaks a
+single SG reqeust into several URBs and submit them to the server's
+HCD. When all the split URBs are completed, the stub driver
+reassembles the URBs into a single return command and sends it to
+vhci.
+
+Alan fixed vhci bug with the USB 3.0 storage device by modifying
+USB storage driver.
+("usb-storage: Set virt_boundary_mask to avoid SG overflows")
+But the fundamental solution of it is to add SG support to vhci.
+
+This patch works well with the USB 3.0 storage devices without Alan's
+patch, and we can revert Alan's patch if it causes some troubles.
+
+Suwan Kim (2):
+  usbip: Skip DMA mapping and unmapping for urb at vhci
+  usbip: Implement SG support to vhci
+
+ drivers/usb/usbip/stub.h         |   7 +-
+ drivers/usb/usbip/stub_main.c    |  52 +++++---
+ drivers/usb/usbip/stub_rx.c      | 207 ++++++++++++++++++++++---------
+ drivers/usb/usbip/stub_tx.c      | 108 +++++++++++-----
+ drivers/usb/usbip/usbip_common.c |  60 +++++++--
+ drivers/usb/usbip/vhci_hcd.c     |  29 ++++-
+ drivers/usb/usbip/vhci_tx.c      |  49 ++++++--
+ 7 files changed, 391 insertions(+), 121 deletions(-)
+
+-- 
+2.20.1
+
