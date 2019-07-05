@@ -2,68 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD3F6008A
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 07:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869D66008B
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 07:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbfGEFTD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 01:19:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59088 "EHLO mail.kernel.org"
+        id S1726182AbfGEFUs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 01:20:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725778AbfGEFTD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Jul 2019 01:19:03 -0400
+        id S1725778AbfGEFUs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Jul 2019 01:20:48 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D295218A0;
-        Fri,  5 Jul 2019 05:19:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2E328218A0;
+        Fri,  5 Jul 2019 05:20:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562303942;
-        bh=7e/bH7EgTT0KFsBceMi0WQk/n8T0fNBn8sy979earwc=;
+        s=default; t=1562304047;
+        bh=HA+KJYO57AKbSF4NhY15SbyqCtAeKE1/iTN+Qn9pNzk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gYJdxWCHsG6x3bHTjUgANRXS+SGBvOKPylsPhjRkb8kNXAWW/jX9mgspbXDygExVj
-         dYA63jNKEBSZjkVjtLu1KH/f+kFhwY0bx3GHq0jbZkabQCrzlC8TUgNnPB4qggKfPh
-         8tEKOlZMqBDM3nHghvNf36XOuhVecWWSPHrXvhmY=
-Date:   Fri, 5 Jul 2019 07:18:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Charles Yeh <charlesyeh522@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>
-Subject: Re: [PATCH] [PATCH v7] USB: serial: pl2303: Add new PID to support
- PL2303HXN (TYPE_HXN)
-Message-ID: <20190705051859.GB15821@kroah.com>
-References: <20190702123006.11320-1-charlesyeh522@gmail.com>
- <CAAZvQQ6pxvhVKsH1oOwToF1n=rYAbShzVnPBGowZhivO2NYPiQ@mail.gmail.com>
+        b=rcm4oSoFLEiFcyS1nlqHnT4DeIOI9KTeXX9n+a205eN/A0m1jPe3PX9Vv5MAuxxMt
+         4bbpzqjp5+TL0PdsrZ93bVoycOXEqZcjOUCVh5TUxgMjsGxMTYVHZarDVSBW40rPi9
+         yMLFCOgUbYfLQ2IdIcMCwcldf94lkQW5YJOO9sgE=
+Date:   Fri, 5 Jul 2019 07:20:35 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [GIT PULL] usb: chipidea: changes for v5.3-rc1
+Message-ID: <20190705052035.GC15821@kroah.com>
+References: <AM0PR04MB5314EF9667220C996B5860378BF50@AM0PR04MB5314.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAZvQQ6pxvhVKsH1oOwToF1n=rYAbShzVnPBGowZhivO2NYPiQ@mail.gmail.com>
+In-Reply-To: <AM0PR04MB5314EF9667220C996B5860378BF50@AM0PR04MB5314.eurprd04.prod.outlook.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Jul 05, 2019 at 03:32:40AM +0000, Peter Chen wrote:
+> The following changes since commit 8ea5b2abd07e2280a332bd9c1a7f4dd15b9b6c13:
+> 
+>   Merge branch 'fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs (2019-05-09 19:35:41 -0700)
+> 
+> are available in the git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/ tags/usb-ci-v5.3-rc1
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
-
-A: No.
-Q: Should I include quotations after my reply?
-
-http://daringfireball.net/2007/07/on_top
-
-On Fri, Jul 05, 2019 at 10:57:11AM +0800, Charles Yeh wrote:
-> Is there any need to modify it?
-> If there is no need to modify, how long does it take to complete REVIEW?
-
-Please be patient, only ask after a week or two, all of us have lots and
-lots of other patches to also review.
-
-thanks,
+Pulled and pushed out, thanks.
 
 greg k-h
