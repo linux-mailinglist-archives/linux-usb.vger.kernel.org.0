@@ -2,80 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF3B5FF5E
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 03:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F8B5FF69
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 04:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727481AbfGEBlF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jul 2019 21:41:05 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:37623 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727345AbfGEBlF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jul 2019 21:41:05 -0400
-Received: (qmail 1325 invoked by uid 500); 4 Jul 2019 21:41:04 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 4 Jul 2019 21:41:04 -0400
-Date:   Thu, 4 Jul 2019 21:41:04 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Suwan Kim <suwan.kim027@gmail.com>
-cc:     shuah@kernel.org, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usbip: Implement SG support to vhci
-In-Reply-To: <20190704172435.GA11673@localhost.localdomain>
-Message-ID: <Pine.LNX.4.44L0.1907042138091.840-100000@netrider.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1727114AbfGECIt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jul 2019 22:08:49 -0400
+Received: from gate.crashing.org ([63.228.1.57]:37511 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726404AbfGECIs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jul 2019 22:08:48 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x6528XGo004910;
+        Thu, 4 Jul 2019 21:08:34 -0500
+Message-ID: <03595b660f319d5fb958ccbacbfe51002bff2314.camel@kernel.crashing.org>
+Subject: Re: Virtual hub, resets etc...
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Michal Nazarewicz <mina86@mina86.com>
+Date:   Fri, 05 Jul 2019 12:08:33 +1000
+In-Reply-To: <Pine.LNX.4.44L0.1907042125420.840-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.1907042125420.840-100000@netrider.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 5 Jul 2019, Suwan Kim wrote:
+On Thu, 2019-07-04 at 21:34 -0400, Alan Stern wrote:
+> > It is the right HW behaviour. But with our gadget stack, it doesn't
+> > reset or cleanup anything. Though since the port gets disabled, I
+> > suppose re-enabling it will cause a reset and will sort that out.
+> 
+> That's right.  (Except that you got the cause and effect reversed; 
+> resetting the port is what causes it to be re-enabled.  :-)
 
-> On Mon, Jun 24, 2019 at 01:24:15PM -0400, Alan Stern wrote:
-> > On Mon, 24 Jun 2019, Suwan Kim wrote:
-> > 
-> > > > > +	hcd->self.sg_tablesize = ~0;
-> > > > > +	hcd->self.no_sg_constraint = 1;
+Right.
+
+> > > > Now, a few things i noticed while at it:
 > > > > 
-> > > > You probably shouldn't do this, for two reasons.  First, sg_tablesize
-> > > > of the server's HCD may be smaller than ~0.  If the client's value is
-> > > > larger than the server's, a transfer could be accepted on the client
-> > > > but then fail on the server because the SG list was too big.
-> > 
-> > On the other hand, I don't know of any examples where an HCD has 
-> > sg_tablesize set to anything other than 0 or ~0.  vhci-hcd might end up 
-> > being the only one.
-> > 
-> > > > Also, you may want to restrict the size of SG transfers even further,
-> > > > so that you don't have to allocate a tremendous amount of memory all at
-> > > > once on the server.  An SG transfer can be quite large.  I don't know 
-> > > > what a reasonable limit would be -- 16 perhaps?
+> > > >   - At some point I had code to reject EP queue() if the device is
+> > > > suspended with -ESHUTDOWN. The end result was bad ... f_mass_storage
+> > > > goes into an infinite loop of trying to queue the same stuff in
+> > > > start_out_transfer() when that happens. It looks like it's not really
+> > > > handling errors from queue() in a particularily useful way.
 > > > 
-> > > Is there any reason why you think that 16 is ok? Or Can I set this
-> > > value as the smallest value of all HC? I think that sg_tablesize
-> > > cannot be a variable value because vhci interacts with different
-> > > machines and all machines has different sg_tablesize value.
+> > > Don't reject EP queue requests.  Accept them as you would at any time;
+> > > they will complete after the port is resumed.
 > > 
-> > I didn't have any good reason for picking 16.  Using the smallest value 
-> > of all the HCDs seems like a good idea.
+> > Except the suspend on a bus reset clears the port enable. You can't
+> > resume from that, only reset the port no ? Or am I missing something ?
 > 
-> I also have not seen an HCD with a value other than ~0 or 0 except for
-> whci which uses 2048, but is not 2048 the maximum value of sg_tablesize?
-> If so, ~0 is the minimum value of sg_tablesize that supports SG. Then
-> can vhci use ~0 if we don't consider memory pressure of the server?
+> You're right.  Nevertheless, the driver should accept queue requests, 
+> even if they will eventually fail.  It's what the gadget drivers 
+> expect.
+
+Ok. Things seem to work. I went back to suspend on bus reset, and with
+some other fixes I did to my enable/reset logic and the mass storage
+fix I posted yesterday it seems to be solid. Yay !
+
+> > > As for f_mass_storage, repeatedly attempting to queue an OUT transfer
+> > > is normal behavior.  The fact that one attempt gets an error doesn't
+> > > stop the driver from making more attempts; the only thing that would
+> > > stop it is being disabled by a config change, a suspend, a disconnect,
+> > > or an unbind.
+> > 
+> > Except it does that in a tight loop and locks up the machine...
 > 
-> If all of the HCDs supporting SG have ~0 as sg_tablesize value, I
-> think that whether we use an HCD locally or remotely, the degree of
-> memory pressure is same in both local and remote usage.
+> Well, that wouldn't happen if your UDC accepted the requests, right?  
 
-You have a lot of leeway.  For example, there's no reason a single SG
-transfer on the client has to correspond to a single SG transfer on the
-host.  In theory the client's vhci-hcd can break a large SG transfer up
-into a bunch of smaller pieces and send them to the host one by one,
-then reassemble the results to complete the original transfer.  That
-way the memory pressure on the host would be a lot smaller than on the
-client.
+Sure but it would be nice if the mass storage dealt with -ESHUTDOWN
+properly and stopped :-) Or other errors... if the UDC HW for example
+dies for some reason, mass storage will lockup.
 
-Alan Stern
+> Besides, f_mass_storage won't repeatedly try to queue an OUT transfer 
+> once it knows that it is suspended.
+
+Not afaik. But I might have missed something. I didn't see any suspend
+callback in f_mass_storage.c...
+
+Cheers,
+Ben.
+
+> Alan Stern
+> 
+> > > >   - With my current code doing suspend/resume on bus resets, when I
+> > > > reboot some hosts, and they re-enumerate, I tend to hit the WARN_ON
+> > > > drivers/usb/gadget/function/f_mass_storage.c:341
+> > > > 
+> > > > static inline int __fsg_is_set(struct fsg_common *common,
+> > > >                               const char *func, unsigned line)
+> > > > {
+> > > >        if (common->fsg)
+> > > >                return 1;
+> > > >        ERROR(common, "common->fsg is NULL in %s at %u\n", func, line);
+> > > >        WARN_ON(1);
+> > > >        return 0;
+> > > > }
+> > > > 
+> > > > This happens a little while after a successul set_configuration. Here's
+> > > > a trace:
+> > > 
+> > > ...
+> > > 
+> > > > I have to get my head around that code, but if one of you have a clue, I
+> > > > would welcome it :-)
+> > > > 
+> > > > Interestingly it recovers. The host seems to then reset the prot, then reconfigure and
+> > > > the second time around it all works fine.
+> > > 
+> > > I suspect this is related to the race you found.  EJ Hsu has been 
+> > > working on much the same thing (see the mailing list archive).
+> > 
+> > Right. I debugged the race and produced the fix I posted *after* I had
+> > change my code to do a reset rather than a suspend on the hub receiving
+> > an upstream bus reset.
+> > 
+> > I will switch back to doing suspend instead and see whether that stays
+> > fixed.
+> > 
+> > Cheers,
+> > Ben.
 
