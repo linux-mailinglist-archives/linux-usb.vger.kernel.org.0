@@ -2,233 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7827260139
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 09:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE9860159
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 09:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727724AbfGEHCI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 03:02:08 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:36685 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727717AbfGEHCI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 03:02:08 -0400
-Received: from mail-pg1-f198.google.com ([209.85.215.198])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1hjIEQ-0006n8-O6
-        for linux-usb@vger.kernel.org; Fri, 05 Jul 2019 07:02:07 +0000
-Received: by mail-pg1-f198.google.com with SMTP id n7so5052261pgr.12
-        for <linux-usb@vger.kernel.org>; Fri, 05 Jul 2019 00:02:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=6A/z/6gCXRgu4Sew2nX566i24DxAdSKJXVRbLCiJwfw=;
-        b=WBMTyr/ALuZU7ZM21Cv5JKjvF5jC7MM7KoL2la4aSX/XiInoY1gvc2UE0mHnDIGcFl
-         MaqbfdzXqByaA/mZmkAFLAe2u6vITS7IatADqWiIP3wWshgIwHgESytg+DMCmF3dwsuz
-         a77zgGpierP08GzVM50KR9kMT8b+E9g3h5uCSAAN1qcrvkmctVaG6k9xk4EnvrVwEcK0
-         OtUnCW2S5MG462uStbg2mYrTJCV1vVz99m7sPtoDgVQK+YorR73mzJB6OI4wP8ZBKWQl
-         1CSEKk+8ca0on/IiVsTkFwOyUUkgR8Ko5Z4E3UqhBjVH7RMFqbc9kD9XL/mbNwXZuiQ8
-         7fLQ==
-X-Gm-Message-State: APjAAAXC0XIqnHvxU20fbZpxsRwotPCjnm1p0DWRRH24VgzuQjpgU3nG
-        mF0lWb+ynI76Hb1IGg/m+qfSorhthU9ZL9wC0yo2TEoZmjzDmj7mPnp9stoYSOGdMAfExCHgLC3
-        q+hUvFeqRWmGcl5TqjoCP7uCkJ7m1ujSYqeYJeQ==
-X-Received: by 2002:a17:90a:3401:: with SMTP id o1mr3064611pjb.7.1562310125176;
-        Fri, 05 Jul 2019 00:02:05 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwUboE066orKSpevR1TBn0H9YLC+Bxt7bXZJ/p1ZiNiELvTVihG0yXhNZKBMU9rZwSHG0arYQ==
-X-Received: by 2002:a17:90a:3401:: with SMTP id o1mr3064567pjb.7.1562310124901;
-        Fri, 05 Jul 2019 00:02:04 -0700 (PDT)
-Received: from 2001-b011-380f-3511-154d-4126-51e3-28cb.dynamic-ip6.hinet.net (2001-b011-380f-3511-154d-4126-51e3-28cb.dynamic-ip6.hinet.net. [2001:b011:380f:3511:154d:4126:51e3:28cb])
-        by smtp.gmail.com with ESMTPSA id c8sm15620361pjq.2.2019.07.05.00.02.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 05 Jul 2019 00:02:04 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8;
-        delsp=yes;
-        format=flowed
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH] PCI / PM: Don't runtime suspend when device only supports
- wakeup from D0
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <20190605115724.GE84290@google.com>
-Date:   Fri, 5 Jul 2019 15:02:01 +0800
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org
-Content-Transfer-Encoding: 8bit
-Message-Id: <7E5CD0E5-2C23-4339-9660-74994FC5C111@canonical.com>
-References: <20190522181157.GC79339@google.com>
- <Pine.LNX.4.44L0.1905221433310.1410-100000@iolanthe.rowland.org>
- <20190522205231.GD79339@google.com>
- <010C1D41-C66D-45C0-8AFF-6F746306CE29@canonical.com>
- <20190527165747.GF79339@google.com> <20190605115724.GE84290@google.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-X-Mailer: Apple Mail (2.3445.104.11)
+        id S1727651AbfGEHV1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 03:21:27 -0400
+Received: from mail-eopbgr30112.outbound.protection.outlook.com ([40.107.3.112]:21825
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725894AbfGEHV1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Jul 2019 03:21:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=targetsg.onmicrosoft.com; s=selector1-targetsg-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hBwo2CIPRyDhMA9J04pUl1iHeOVEiieGFh+lNIL1U44=;
+ b=BzBky75N9G4q42D5aiXo8IVuF0KAw675uG6JEz/uPH3Ye+o8aHsVFqxFqlLo1qbqU61v+Gpl7pQY2nSc5GByUS/YYliYR0dNzXsuoU4kY2ep0HhgY3hemcrRWFLP/3pcpNLZ85pGm6U85uKm0+4ucI6uHjfVjpqKda1QJEJNNm4=
+Received: from AM0PR02MB3841.eurprd02.prod.outlook.com (52.134.87.30) by
+ AM0PR02MB5905.eurprd02.prod.outlook.com (52.132.214.77) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2052.18; Fri, 5 Jul 2019 07:21:22 +0000
+Received: from AM0PR02MB3841.eurprd02.prod.outlook.com
+ ([fe80::31ee:1319:473f:66e3]) by AM0PR02MB3841.eurprd02.prod.outlook.com
+ ([fe80::31ee:1319:473f:66e3%3]) with mapi id 15.20.2032.019; Fri, 5 Jul 2019
+ 07:21:22 +0000
+From:   Kai Ruhnau <kai.ruhnau@target-sg.com>
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: No carrier lost information with gadget RNDIS/ECM
+Thread-Topic: No carrier lost information with gadget RNDIS/ECM
+Thread-Index: AdUsFPmU+UglLYdrSGuD1S1toRlligAA5T8AAAEwZfAAJNKCgAAS92iQABTOtQAADByYoAANCr7wAIiH2PAABPEL0AAkgO9AAAj0V4AAA/2TMAACNVdgAF1YWiAANNltoA==
+Date:   Fri, 5 Jul 2019 07:21:22 +0000
+Message-ID: <AM0PR02MB3841FC93308A86E88F1D4A0BC5F50@AM0PR02MB3841.eurprd02.prod.outlook.com>
+References: <AM0PR02MB3841F110F7B6931A087DF566C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <87o92kk0ih.fsf@linux.intel.com>
+ <AM0PR02MB384108B692229DF41816A363C5E20@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <871rzffszm.fsf@linux.intel.com>
+ <AM0PR02MB38418BFC9965F044B307B13CC5FD0@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <CAL411-oZUtL6LETk+oNZXXezeLK4PahPz3_iVZJiM33A3KLaqw@mail.gmail.com>
+ <AM0PR02MB38419422D499F45C8475A000C5FC0@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <AM0PR02MB38415FA372C7A8B8B7BAFF22C5FC0@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <VI1PR04MB5327BA15817CA04C5ACC4A8C8BF90@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <AM0PR02MB3841CFA0BC4FC084D8517E00C5F90@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <VI1PR04MB532799F3F92BCBD8616B51868BF80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <AM0PR02MB38416C39915E57C8855BBDA7C5F80@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <VI1PR04MB5327E9F0660A36A52A3E258E8BF80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <AM0PR02MB3841A430DEB6ECEC0CBEE9B6C5F80@AM0PR02MB3841.eurprd02.prod.outlook.com>
+ <VI1PR04MB5327B582FFEF33AA52F7E6C58BFA0@VI1PR04MB5327.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB5327B582FFEF33AA52F7E6C58BFA0@VI1PR04MB5327.eurprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=kai.ruhnau@target-sg.com; 
+x-originating-ip: [2003:c5:174d:e100:784c:7665:d0c5:734b]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b84edb15-5d6d-4142-5cb1-08d7011961fd
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:AM0PR02MB5905;
+x-ms-traffictypediagnostic: AM0PR02MB5905:
+x-microsoft-antispam-prvs: <AM0PR02MB5905E1754F458C1C066315DCC5F50@AM0PR02MB5905.eurprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-forefront-prvs: 008960E8EC
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39830400003)(396003)(366004)(346002)(136003)(376002)(40764003)(189003)(199004)(6506007)(102836004)(186003)(99286004)(76176011)(7696005)(46003)(71190400001)(6116002)(508600001)(71200400001)(9686003)(86362001)(6246003)(53936002)(55016002)(54906003)(446003)(76116006)(68736007)(8676002)(33656002)(5660300002)(229853002)(81156014)(256004)(11346002)(305945005)(44832011)(316002)(81166006)(2906002)(25786009)(8936002)(73956011)(476003)(6862004)(66446008)(14454004)(486006)(4326008)(52536014)(6436002)(7736002)(66476007)(74316002)(64756008)(66556008)(66946007);DIR:OUT;SFP:1102;SCL:1;SRVR:AM0PR02MB5905;H:AM0PR02MB3841.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: target-sg.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: unwpCY+5oQ/cxveo9KByrjV6x2Lp9ZPRCQHB7kQ8mh/lYWBa5DXyWrB2tndHAeDMPDnLyTEvvN3iuO7+Fy1383o+zdsXnDVAMBveXXK8YTVisqVY9yq7wPociv8X9shbO2OZ39lHOjn8fAzOuyz9dw9VNuZgB+IdjohU59MSauoqjCIqOghl3zKoa6qLT5p1IIZETeR65GnKGbTh6pemgNM502oKUC486OgzFecia7MSf7Unses2RJc+v0pw9/8EbhI3mxYiI3xhG4UrEHFQ5+JRKFsNX7aYgIDYjYQ7pksUNUjxw+aC6n4Fotni2ZFGV3XHfsWgu/lLuk9z9yeCJ/2WhtY1LuUYMXm3mySw3GNea/qnoPAC8EejZRdBtsxzldW/V1MPiBpuBasHWu/HaDT9DND8YZFR+V1DLNLfyQ0=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: target-sg.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b84edb15-5d6d-4142-5cb1-08d7011961fd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2019 07:21:22.4419
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 52a4fe2f-f30a-452d-90b1-03ecc8ab0c0d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kai.ruhnau@target-sg.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR02MB5905
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-at 19:57, Bjorn Helgaas <helgaas@kernel.org> wrote:
-
-> On Mon, May 27, 2019 at 11:57:47AM -0500, Bjorn Helgaas wrote:
->> On Thu, May 23, 2019 at 12:39:23PM +0800, Kai-Heng Feng wrote:
->>> at 04:52, Bjorn Helgaas <helgaas@kernel.org> wrote:
->>>> On Wed, May 22, 2019 at 02:39:56PM -0400, Alan Stern wrote:
->>>>> On Wed, 22 May 2019, Bjorn Helgaas wrote:
->>>>>> On Wed, May 22, 2019 at 11:46:25PM +0800, Kai Heng Feng wrote:
->>>>>>>> On May 22, 2019, at 9:48 PM, Bjorn Helgaas <helgaas@kernel.org>  
->>>>>>>> wrote:
->>>>>>>> On Wed, May 22, 2019 at 11:42:14AM +0800, Kai Heng Feng wrote:
->>>>>>>>> at 6:23 AM, Bjorn Helgaas <helgaas@kernel.org> wrote:
->>>>>>>>>> On Wed, May 22, 2019 at 12:31:04AM +0800, Kai-Heng Feng wrote:
->>>>>>>>>>> There's an xHC device that doesn't wake when
->>>>>>>>>>> a USB device gets plugged
->>>>>>>>>>> to its USB port. The driver's own runtime
->>>>>>>>>>> suspend callback was called,
->>>>>>>>>>> PME signaling was enabled, but it stays at PCI D0.
->>>>>>
->>>>>>>> ...
->>>>>>>> And I guess this patch basically means we wouldn't call
->>>>>>>> the driver's suspend callback if we're merely going to
->>>>>>>> stay at D0, so the driver would have no idea anything
->>>>>>>> happened.  That might match Documentation/power/pci.txt
->>>>>>>> better, because it suggests that the suspend callback is
->>>>>>>> related to putting a device in a low-power state, and D0
->>>>>>>> is not a low-power state.
->>>>>>>
->>>>>>> Yes, the patch is to let the device stay at D0 and don’t run
->>>>>>> driver’s own runtime suspend routine.
->>>>>>>
->>>>>>> I guess I’ll just proceed to send a V2 with updated commit message?
->>>>>>
->>>>>> Now that I understand what "runtime suspended to D0" means, help me
->>>>>> understand what's actually wrong.
->>>>>
->>>>> Kai's point is that the xhci-hcd driver thinks the device is now
->>>>> in runtime suspend, because the runtime_suspend method has been
->>>>> executed.  But in fact the device is still in D0, and as a
->>>>> result, PME signalling may not work correctly.
->>>>
->>>> The device claims to be able to signal PME from D0 (this is from the  
->>>> lspci
->>>> in https://bugzilla.kernel.org/show_bug.cgi?id=203673):
->>>>
->>>>   00:10.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB XHCI Controller (rev 20) (prog-if 30 [XHCI])
->>>>     Capabilities: [50] Power Management version 3
->>>>       Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
->>>>
->>>> From the xHCI spec r1.0, sec 4.15.2.3, it looks like a connect
->>>> detected while in D0 should assert PME# if enabled (and WCE is
->>>> set).
->>>
->>> I think section 4.15.2.3 is about S3 wake up, no S0 we are
->>> discussing here.
->>
->> S0 and S3 are system-level ideas and have no meaning to an individual
->> PCI device.  The xHC is a PCI device and can't tell whether the system
->> as a whole is in S0 or S3.  If a PCI device claims to be able to
->> generate PME while in D0, that applies regardless of the system state.
->>
->> xHCI r1.0, sec A.1 says "The host controller should be capable of
->> asserting PME# when in any supported device state."  In sec 4.19.2,
->> Figure 42 says PME# should be asserted whenever PMCSR.PME_En=1 and
->> WCE=1 and a connection is detected.
->>
->> Figure 42 also shows that CSC (Connect Status Change) and related bits
->> feed into Port Status Change Event Generation.  So I assume the xhci
->> driver normally detects connect/disconnect via CSC, but the runtime
->> suspend method makes it use PME# instead?
->>
->> And the way your patch works is by avoiding that xhci runtime suspend
->> method, so it *always* uses CSC and never uses PME#?  If that's the
->> case, we're just papering over a problem without really understanding
->> it.
->>
->> I'm wondering if this platform has a firmware defect.  Here's my
->> thinking.  The xHC is a Root Complex Integrated Endpoint, so its PME
->> signaling is a little unusual.
->>
->> The typical scenario is that a PCIe device is below a Root Port.  In
->> that case, it would send a PME Message upstream to the Root Port.  Per
->> PCIe r4.0, sec 6.1.6, when configured for native PME support (for ACPI
->> systems, I assume this means "when firmware has granted PME control to
->> the OS via _OSC"), the Root Port would generate a normal PCI INTx or
->> MSI interrupt:
->>
->>   PCI Express-aware software can enable a mode where the Root Complex
->>   signals PME via an interrupt. When configured for native PME
->>   support, a Root Port receives the PME Message and sets the PME
->>   Status bit in its Root Status register. If software has set the PME
->>   Interrupt Enable bit in the Root Control register to 1b, the Root
->>   Port then generates an interrupt.
->>
->> But on this platform the xHC is a Root Complex Integrated Endpoint, so
->> there is no Root Port upstream from it, and that mechanism can't be
->> used.  Per PCIe r4.0, sec 1.3.2.3, RCiEPs signal PME via "the same
->> mechanism as PCI systems" or via Root Complex Event Collectors:
->>
->>   An RCiEP must signal PME and error conditions through the same
->>   mechanisms used on PCI systems. If a Root Complex Event Collector is
->>   implemented, an RCiEP may optionally signal PME and error conditions
->>   through a Root Complex Event Collector.
->>
->> This platform has no Root Complex Event Collectors, so the xHC should
->> signal PME via the same mechanism as PCI systems, i.e., asserting a
->> PME# signal.  I think this means the OS cannot use native PCIe PME
->> control because it doesn't know what interrupt PME# is connected to.
->> The PCI Firmware Spec r3.2, sec 4.5.1 (also quoted in ACPI v6.2, sec
->> 6.2.11.3), says:
->>
->>   PCI Express Native Power Management Events control
->>
->>   The firmware sets this bit to 1 to grant control over PCI Express
->>   native power management event interrupts (PMEs). If firmware
->>   allows the operating system control of this feature, then in the
->>   context of the _OSC method, it must ensure that all PMEs are
->>   routed to root port interrupts as described in the PCI Express
->>   Base Specification.
->>
->> This platform cannot route all PMEs to Root Port interrupts because
->> the xHC RCiEP cannot report PME via a Root Port, so I think its _OSC
->> method should not grant control of PCIe Native Power Management Events
->> to the OS, and I think that would mean we have to use the ACPI
->> mechanism for PME on this platform.
->>
->> Can you confirm or deny any of this line of reasoning?  I'm wondering
->> if there's something wrong with the platform's _OSC, so Linux thinks
->> it can use native PME, but that doesn't work for this device.
->>
->>> It’s a platform in development so the name can’t be disclosed.
->>
->> Please attach a complete dmesg log to the bugzilla.  You can remove
->> identifying details like the platform name, but I want to see the
->> results of the _OSC negotiation.
->
-> Thanks for the dmesg log
-> (https://bugzilla.kernel.org/attachment.cgi?id=283109).  It shows:
->
->   acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI HPX-Type3]
->   acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug LTR]
->   acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME AER PCIeCapability]
->
-> I think it is incorrect for the platform to give the OS native control
-> over PME because the OS has no way to know how the RCiEP PMEs are
-> routed.  But it would be interesting to know how BIOSes on other
-> platforms with RCiEPs handle this, and I did post a question to the
-> PCI-SIG to see if there's any guidance there.
-
-Is there any update from PCI-SIG?
-
-I really think we don’t need wakeup capability in D0 because D0 is a  
-working state.
-Also, is there any real hardware which depends on D0 PME?
-
-Kai-Heng
-
->
-> Bjorn
-
-
+SGkgUGV0ZXIsDQoNCj4+IA0KPj4gPiBEbyB5b3UgaGF2ZSBhbnkgY29tcG9uZW50cyBhdCBWQlVT
+Pw0KPj4gDQo+PiBUaGVyZSB3ZXJlIEVTRCBwcm90ZWN0aW9uIGRpb2RlcyB0aGF0IGNvbm5lY3Rl
+ZCBEKy9ELSB3aXRoIFZCVVMuICBXZSANCj4+IHJlbW92ZWQgdGhvc2UgZnJvbSB0aGUgUENCIGFu
+ZCB0aGUgcHJvYmxlbSBpcyBnb25lIG1lYW5pbmcgVkJVUyANCj4+IGRpc2NoYXJnZXMgYXMgZXhw
+ZWN0ZWQsIHRoZSBjb250cm9sbGVyIHJ1bnRpbWUtc3VzcGVuZHMgYW5kIHVsdGltYXRlbHkgDQo+
+PiBzeXN0ZW1kLW5ldHdvcmtkIHJlcG9ydHMgYSBsb3N0IGNhcnJpZXIuDQo+PiBUaG9zZSBkaW9k
+ZXMgaGF2ZW4ndCBiZWVuIGEgcHJvYmxlbSB3aXRoIDQuOSwgdGhvdWdoLiBEaWQgc29tZXRoaW5n
+IGNoYW5nZSBoZXJlPw0KPj4gSSBzdXBlcmZpY2lhbGx5IGxvb2tlZCBhdCBTUlAsIEhOUCBhbmQg
+QURQLCBidXQgbm90aGluZyBjYXVnaHQgbXkgZXllLi4uDQo+PiANCj4gDQo+IFlvdSBuZWVkIHRv
+IGRpc2FibGUgT1RHIHN0dWZmcyBhdCBkdHMgaWYgT1RHIGFuZCBPVEdfRlNNIGFyZSBlbmFibGVk
+IGF0IGNvbmZpZ3VyYXRpb24uDQo+IFNlZSBiZWxvdzoNCj4NCj4gNjU1ICZ1c2JvdGcxIHsNCj4g
+NjU2ICAgICAgICAgdmJ1cy1zdXBwbHkgPSA8JnJlZ191c2Jfb3RnMV92YnVzPjsNCj4gNjU3ICAg
+ICAgICAgcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsNCj4gNjU4ICAgICAgICAgcGluY3RybC0w
+ID0gPCZwaW5jdHJsX3VzYl9vdGcxX2lkPjsNCj4gNjU5ICAgICAgICAgc3JwLWRpc2FibGU7DQo+
+IDY2MCAgICAgICAgIGhucC1kaXNhYmxlOw0KPiA2NjEgICAgICAgICBhZHAtZGlzYWJsZTsNCj4g
+NjYyICAgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiA2NjMgfTsNCj4NCj4gSXMgaXQgYXZhaWxh
+YmxlIHRvIHNoYXJlIHlvdXIgVVNCIHBhcnQgc2NoZW1hdGljPw0KDQpXZSBoYXZlIGRlY2lkZWQg
+dG8gY3JlYXRlIGEgaGFyZHdhcmUgcmV2aXNpb24uIFRoaW5ncyBsaWtlIHRoZSAiVVNCIFBsdWdn
+ZWQtSW4gRGV0ZWN0b3IiIHRoYXQgZHJpdmUgRFAgYW5kIEROIGhpZ2ggd2lsbCBjaGFyZ2UgdXAg
+VkJVUyBpbiBvdXIgY3VycmVudCBkZXNpZ24gYW5kIGFyZSBsaWtlbHkgb25lIG9mIHRoZSAoaWYg
+bm90ICJ0aGUiKSBjb250cmlidXRpbmcgZmFjdG9ycyB0byB0aGUgaXNzdWUuIEkgd2lsbCBwaW5n
+IGJhY2sgd2hlbiB3ZSBoYXZlIHRoZSBuZWNlc3NhcnkgY29tcG9uZW50cyB0byB0ZXN0Lg0KDQpU
+aGFua3MgZm9yIHlvdXIgaGVscCwgUGV0ZXIhDQoNCkNoZWVycywNCkthaQ0K
