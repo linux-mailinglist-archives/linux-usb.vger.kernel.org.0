@@ -2,121 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27267602E0
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 11:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF47C6033B
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jul 2019 11:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbfGEJHP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 05:07:15 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:33742 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726116AbfGEJHP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 05:07:15 -0400
-Received: by mail-pg1-f195.google.com with SMTP id m4so4035221pgk.0;
-        Fri, 05 Jul 2019 02:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oAbtO0VVEgPrns4ECpP/l7PElOulKUdNK8WJ9smHNMY=;
-        b=Tgep8XUSV0dm/4njOv+mq3T9bmSTqiX2/FXEOlNqGtx6ARJjfBTy7NN3QIRxz+fDwf
-         a5nYIv9Z26yE+U4P8icDrSSzw2c33eauBtLiQkMaOwZSW14zK21kIsQHZT/gPkHMGlQU
-         sWme3teVQ7zob+AJqr3DZIV5TaJHR6Vo1cm6mjfjPcoWq28iB54FPan93CNGTzLgUiVK
-         Jurj+8efcZJSx0U4m7zoZYxeNpMDkvyktFmW+RjxOe3hVAGD4yI0EOL1Q+d0KWZASk6Z
-         QbpLmcrgRhHTC3LZ2KX2Ri9NtzBXM1VsnxZreuqJxgeA0DeJxl9oYN/Q+hbaCplVXpIh
-         iiQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oAbtO0VVEgPrns4ECpP/l7PElOulKUdNK8WJ9smHNMY=;
-        b=WO62YA4W7nU9TrxrqKxXvP+oecgqnQllLhxRSXjiHxIapJmVK9fEJw9Ksm82RZZHgq
-         /cgvPZiHiyV+ThxHOFXZxffxS2ioAL+elOUKOz+QBX44C5Bz/tceTATr5KHDgbMMiw6e
-         dCucNwDWsXThS5qWJ5my+hDcv2v48GyCgQkBwzRon65BByi5ImlU0XqPpHqDkbNEVvPT
-         rzR4f8YRp58hZfe2hGNZMpDQ84bJmJXV1oilBjZX2jIoHqrfQvwv53rPhOjQqQqzIPO3
-         Y2Ah9HHx1Lnaf4ee2PEvK1W0q+4waUc8/g4AloZwMD+7QgSnMwV777yR+/AgafXA/BSS
-         O8SA==
-X-Gm-Message-State: APjAAAV4+yZj4/JslhZ9t4SeSblG9VDB45HA93kPfwMqOqzoBWF85Ggk
-        12IGLHx2v02jdypXuHmL1AA=
-X-Google-Smtp-Source: APXvYqyCLI0BwJN0qCmMnQOPG1rfLeBXg7tea+um46myS9fGSPFJ6NaKneXX18rGafWT/n39F5kHYw==
-X-Received: by 2002:a17:90a:1aa4:: with SMTP id p33mr4012219pjp.27.1562317634927;
-        Fri, 05 Jul 2019 02:07:14 -0700 (PDT)
-Received: from localhost.localdomain ([163.152.162.99])
-        by smtp.gmail.com with ESMTPSA id x26sm8587339pfq.69.2019.07.05.02.07.13
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 05 Jul 2019 02:07:14 -0700 (PDT)
-Date:   Fri, 5 Jul 2019 18:07:09 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     shuah@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usbip: Implement SG support to vhci
-Message-ID: <20190705090708.GA3251@localhost.localdomain>
-References: <20190704172435.GA11673@localhost.localdomain>
- <Pine.LNX.4.44L0.1907042138091.840-100000@netrider.rowland.org>
+        id S1728041AbfGEJjS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 5 Jul 2019 05:39:18 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:53965 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727487AbfGEJjS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 05:39:18 -0400
+Received: from 79.184.254.216.ipv4.supernova.orange.pl (79.184.254.216) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id 3343b395ea8803c3; Fri, 5 Jul 2019 11:39:14 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] PCI / PM: Don't runtime suspend when device only supports wakeup from D0
+Date:   Fri, 05 Jul 2019 11:39:13 +0200
+Message-ID: <2067449.jKPth8Qelp@kreacher>
+In-Reply-To: <7E5CD0E5-2C23-4339-9660-74994FC5C111@canonical.com>
+References: <20190522181157.GC79339@google.com> <20190605115724.GE84290@google.com> <7E5CD0E5-2C23-4339-9660-74994FC5C111@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1907042138091.840-100000@netrider.rowland.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 04, 2019 at 09:41:04PM -0400, Alan Stern wrote:
-> On Fri, 5 Jul 2019, Suwan Kim wrote:
+On Friday, July 5, 2019 9:02:01 AM CEST Kai-Heng Feng wrote:
+> at 19:57, Bjorn Helgaas <helgaas@kernel.org> wrote:
 > 
-> > On Mon, Jun 24, 2019 at 01:24:15PM -0400, Alan Stern wrote:
-> > > On Mon, 24 Jun 2019, Suwan Kim wrote:
-> > > 
-> > > > > > +	hcd->self.sg_tablesize = ~0;
-> > > > > > +	hcd->self.no_sg_constraint = 1;
-> > > > > 
-> > > > > You probably shouldn't do this, for two reasons.  First, sg_tablesize
-> > > > > of the server's HCD may be smaller than ~0.  If the client's value is
-> > > > > larger than the server's, a transfer could be accepted on the client
-> > > > > but then fail on the server because the SG list was too big.
-> > > 
-> > > On the other hand, I don't know of any examples where an HCD has 
-> > > sg_tablesize set to anything other than 0 or ~0.  vhci-hcd might end up 
-> > > being the only one.
-> > > 
-> > > > > Also, you may want to restrict the size of SG transfers even further,
-> > > > > so that you don't have to allocate a tremendous amount of memory all at
-> > > > > once on the server.  An SG transfer can be quite large.  I don't know 
-> > > > > what a reasonable limit would be -- 16 perhaps?
-> > > > 
-> > > > Is there any reason why you think that 16 is ok? Or Can I set this
-> > > > value as the smallest value of all HC? I think that sg_tablesize
-> > > > cannot be a variable value because vhci interacts with different
-> > > > machines and all machines has different sg_tablesize value.
-> > > 
-> > > I didn't have any good reason for picking 16.  Using the smallest value 
-> > > of all the HCDs seems like a good idea.
-> > 
-> > I also have not seen an HCD with a value other than ~0 or 0 except for
-> > whci which uses 2048, but is not 2048 the maximum value of sg_tablesize?
-> > If so, ~0 is the minimum value of sg_tablesize that supports SG. Then
-> > can vhci use ~0 if we don't consider memory pressure of the server?
-> > 
-> > If all of the HCDs supporting SG have ~0 as sg_tablesize value, I
-> > think that whether we use an HCD locally or remotely, the degree of
-> > memory pressure is same in both local and remote usage.
+> > On Mon, May 27, 2019 at 11:57:47AM -0500, Bjorn Helgaas wrote:
+> >> On Thu, May 23, 2019 at 12:39:23PM +0800, Kai-Heng Feng wrote:
+> >>> at 04:52, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >>>> On Wed, May 22, 2019 at 02:39:56PM -0400, Alan Stern wrote:
+> >>>>> On Wed, 22 May 2019, Bjorn Helgaas wrote:
+> >>>>>> On Wed, May 22, 2019 at 11:46:25PM +0800, Kai Heng Feng wrote:
+> >>>>>>>> On May 22, 2019, at 9:48 PM, Bjorn Helgaas <helgaas@kernel.org>  
+> >>>>>>>> wrote:
+> >>>>>>>> On Wed, May 22, 2019 at 11:42:14AM +0800, Kai Heng Feng wrote:
+> >>>>>>>>> at 6:23 AM, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >>>>>>>>>> On Wed, May 22, 2019 at 12:31:04AM +0800, Kai-Heng Feng wrote:
+> >>>>>>>>>>> There's an xHC device that doesn't wake when
+> >>>>>>>>>>> a USB device gets plugged
+> >>>>>>>>>>> to its USB port. The driver's own runtime
+> >>>>>>>>>>> suspend callback was called,
+> >>>>>>>>>>> PME signaling was enabled, but it stays at PCI D0.
+> >>>>>>
+> >>>>>>>> ...
+> >>>>>>>> And I guess this patch basically means we wouldn't call
+> >>>>>>>> the driver's suspend callback if we're merely going to
+> >>>>>>>> stay at D0, so the driver would have no idea anything
+> >>>>>>>> happened.  That might match Documentation/power/pci.txt
+> >>>>>>>> better, because it suggests that the suspend callback is
+> >>>>>>>> related to putting a device in a low-power state, and D0
+> >>>>>>>> is not a low-power state.
+> >>>>>>>
+> >>>>>>> Yes, the patch is to let the device stay at D0 and don’t run
+> >>>>>>> driver’s own runtime suspend routine.
+> >>>>>>>
+> >>>>>>> I guess I’ll just proceed to send a V2 with updated commit message?
+> >>>>>>
+> >>>>>> Now that I understand what "runtime suspended to D0" means, help me
+> >>>>>> understand what's actually wrong.
+> >>>>>
+> >>>>> Kai's point is that the xhci-hcd driver thinks the device is now
+> >>>>> in runtime suspend, because the runtime_suspend method has been
+> >>>>> executed.  But in fact the device is still in D0, and as a
+> >>>>> result, PME signalling may not work correctly.
+> >>>>
+> >>>> The device claims to be able to signal PME from D0 (this is from the  
+> >>>> lspci
+> >>>> in https://bugzilla.kernel.org/show_bug.cgi?id=203673):
+> >>>>
+> >>>>   00:10.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB XHCI Controller (rev 20) (prog-if 30 [XHCI])
+> >>>>     Capabilities: [50] Power Management version 3
+> >>>>       Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+> >>>>
+> >>>> From the xHCI spec r1.0, sec 4.15.2.3, it looks like a connect
+> >>>> detected while in D0 should assert PME# if enabled (and WCE is
+> >>>> set).
+> >>>
+> >>> I think section 4.15.2.3 is about S3 wake up, no S0 we are
+> >>> discussing here.
+> >>
+> >> S0 and S3 are system-level ideas and have no meaning to an individual
+> >> PCI device.  The xHC is a PCI device and can't tell whether the system
+> >> as a whole is in S0 or S3.  If a PCI device claims to be able to
+> >> generate PME while in D0, that applies regardless of the system state.
+> >>
+> >> xHCI r1.0, sec A.1 says "The host controller should be capable of
+> >> asserting PME# when in any supported device state."  In sec 4.19.2,
+> >> Figure 42 says PME# should be asserted whenever PMCSR.PME_En=1 and
+> >> WCE=1 and a connection is detected.
+> >>
+> >> Figure 42 also shows that CSC (Connect Status Change) and related bits
+> >> feed into Port Status Change Event Generation.  So I assume the xhci
+> >> driver normally detects connect/disconnect via CSC, but the runtime
+> >> suspend method makes it use PME# instead?
+> >>
+> >> And the way your patch works is by avoiding that xhci runtime suspend
+> >> method, so it *always* uses CSC and never uses PME#?  If that's the
+> >> case, we're just papering over a problem without really understanding
+> >> it.
+> >>
+> >> I'm wondering if this platform has a firmware defect.  Here's my
+> >> thinking.  The xHC is a Root Complex Integrated Endpoint, so its PME
+> >> signaling is a little unusual.
+> >>
+> >> The typical scenario is that a PCIe device is below a Root Port.  In
+> >> that case, it would send a PME Message upstream to the Root Port.  Per
+> >> PCIe r4.0, sec 6.1.6, when configured for native PME support (for ACPI
+> >> systems, I assume this means "when firmware has granted PME control to
+> >> the OS via _OSC"), the Root Port would generate a normal PCI INTx or
+> >> MSI interrupt:
+> >>
+> >>   PCI Express-aware software can enable a mode where the Root Complex
+> >>   signals PME via an interrupt. When configured for native PME
+> >>   support, a Root Port receives the PME Message and sets the PME
+> >>   Status bit in its Root Status register. If software has set the PME
+> >>   Interrupt Enable bit in the Root Control register to 1b, the Root
+> >>   Port then generates an interrupt.
+> >>
+> >> But on this platform the xHC is a Root Complex Integrated Endpoint, so
+> >> there is no Root Port upstream from it, and that mechanism can't be
+> >> used.  Per PCIe r4.0, sec 1.3.2.3, RCiEPs signal PME via "the same
+> >> mechanism as PCI systems" or via Root Complex Event Collectors:
+> >>
+> >>   An RCiEP must signal PME and error conditions through the same
+> >>   mechanisms used on PCI systems. If a Root Complex Event Collector is
+> >>   implemented, an RCiEP may optionally signal PME and error conditions
+> >>   through a Root Complex Event Collector.
+> >>
+> >> This platform has no Root Complex Event Collectors, so the xHC should
+> >> signal PME via the same mechanism as PCI systems, i.e., asserting a
+> >> PME# signal.  I think this means the OS cannot use native PCIe PME
+> >> control because it doesn't know what interrupt PME# is connected to.
+> >> The PCI Firmware Spec r3.2, sec 4.5.1 (also quoted in ACPI v6.2, sec
+> >> 6.2.11.3), says:
+> >>
+> >>   PCI Express Native Power Management Events control
+> >>
+> >>   The firmware sets this bit to 1 to grant control over PCI Express
+> >>   native power management event interrupts (PMEs). If firmware
+> >>   allows the operating system control of this feature, then in the
+> >>   context of the _OSC method, it must ensure that all PMEs are
+> >>   routed to root port interrupts as described in the PCI Express
+> >>   Base Specification.
+> >>
+> >> This platform cannot route all PMEs to Root Port interrupts because
+> >> the xHC RCiEP cannot report PME via a Root Port, so I think its _OSC
+> >> method should not grant control of PCIe Native Power Management Events
+> >> to the OS, and I think that would mean we have to use the ACPI
+> >> mechanism for PME on this platform.
+> >>
+> >> Can you confirm or deny any of this line of reasoning?  I'm wondering
+> >> if there's something wrong with the platform's _OSC, so Linux thinks
+> >> it can use native PME, but that doesn't work for this device.
+> >>
+> >>> It’s a platform in development so the name can’t be disclosed.
+> >>
+> >> Please attach a complete dmesg log to the bugzilla.  You can remove
+> >> identifying details like the platform name, but I want to see the
+> >> results of the _OSC negotiation.
+> >
+> > Thanks for the dmesg log
+> > (https://bugzilla.kernel.org/attachment.cgi?id=283109).  It shows:
+> >
+> >   acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI HPX-Type3]
+> >   acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug LTR]
+> >   acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME AER PCIeCapability]
+> >
+> > I think it is incorrect for the platform to give the OS native control
+> > over PME because the OS has no way to know how the RCiEP PMEs are
+> > routed.  But it would be interesting to know how BIOSes on other
+> > platforms with RCiEPs handle this, and I did post a question to the
+> > PCI-SIG to see if there's any guidance there.
 > 
-> You have a lot of leeway.  For example, there's no reason a single SG
-> transfer on the client has to correspond to a single SG transfer on the
-> host.  In theory the client's vhci-hcd can break a large SG transfer up
-> into a bunch of smaller pieces and send them to the host one by one,
-> then reassemble the results to complete the original transfer.  That
-> way the memory pressure on the host would be a lot smaller than on the
-> client.
+> Is there any update from PCI-SIG?
+> 
+> I really think we don’t need wakeup capability in D0 because D0 is a  
+> working state.
 
-Thank you for the feedback, Alan. I understood your comment. It
-seems to be a good idea to use sg_tablesize to alleviate the memory
-pressure of the host. But I think 16 is too small for USB 3.0 device
-because USB 3.0 storage device in my machine usually uses more than
-30 SG entries. So, I will set sg_tablesize to 32.
+Well, in theory, devices may stay in D0 over suspend-to-idle and they may need to
+signal wakeup then.  Using PME for that would be kind of handy (if it worked) as it
+would allow special handling of in-band IRQs to be avoided in that case.
 
-Regards
 
-Suwan Kim
+
