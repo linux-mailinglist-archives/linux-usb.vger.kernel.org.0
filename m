@@ -2,85 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1EF610AD
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2019 14:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB81612AE
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2019 20:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbfGFMfA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Jul 2019 08:35:00 -0400
-Received: from gate.crashing.org ([63.228.1.57]:59548 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726065AbfGFMfA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 6 Jul 2019 08:35:00 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x66CYim7005303;
-        Sat, 6 Jul 2019 07:34:45 -0500
-Message-ID: <2748681b2967d3fe99a83606432ae63e1cd8ee52.camel@kernel.crashing.org>
-Subject: Re: [PATCH 02/10] usb: gadget: aspeed: Cleanup EP0 state on port
- reset
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, Joel Stanley <joel@jms.id.au>,
-        Alan Stern <stern@rowland.harvard.edu>
-Date:   Sat, 06 Jul 2019 22:34:43 +1000
-In-Reply-To: <6e554955-6a4f-06b1-82b3-982e5e299d19@cogentembedded.com>
-References: <20190706005345.18131-1-benh@kernel.crashing.org>
-         <20190706005345.18131-3-benh@kernel.crashing.org>
-         <6e554955-6a4f-06b1-82b3-982e5e299d19@cogentembedded.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726966AbfGFSh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Jul 2019 14:37:28 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:51091 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726743AbfGFSh2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Jul 2019 14:37:28 -0400
+Received: (qmail 1206 invoked by uid 500); 6 Jul 2019 14:37:27 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 6 Jul 2019 14:37:27 -0400
+Date:   Sat, 6 Jul 2019 14:37:27 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+cc:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Michal Nazarewicz <mina86@mina86.com>
+Subject: Re: Virtual hub, resets etc...
+In-Reply-To: <15f6a7e8cbe534cbc4f647f6f99cdef80a7b01ad.camel@kernel.crashing.org>
+Message-ID: <Pine.LNX.4.44L0.1907061436180.406-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 2019-07-06 at 11:11 +0300, Sergei Shtylyov wrote:
-> Hello!
-> 
-> On 06.07.2019 3:53, Benjamin Herrenschmidt wrote:
-> 
-> > Otherwise, we can have a stale state after a disconnect and
-> > reconnect
-> > causing errors on the first SETUP packet to the device.
+On Sat, 6 Jul 2019, Benjamin Herrenschmidt wrote:
+
+> On Fri, 2019-07-05 at 10:08 -0400, Alan Stern wrote:
+> > On Fri, 5 Jul 2019, Benjamin Herrenschmidt wrote:
+
+> > > Sure but it would be nice if the mass storage dealt with -ESHUTDOWN
+> > > properly and stopped :-) Or other errors... if the UDC HW for example
+> > > dies for some reason, mass storage will lockup.
 > > 
-> > Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> > I suppose we could add code to check for this case and handle it, 
+> > although I'm not sure what would be the right thing to do.  Delay for 
+> > one second and try again?  Disable the gadget until the host does a 
+> > reset?
 > 
-> [...]
-> > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-> > b/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-> > index e2927fb083cf..5054c6343ead 100644
-> > --- a/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-> > @@ -459,6 +459,15 @@ static const struct usb_ep_ops
-> > ast_vhub_ep0_ops = {
-> >   	.free_request	= ast_vhub_free_request,
-> >   };
-> >   
-> > +void ast_vhub_reset_ep0(struct ast_vhub_dev *dev)
-> > +{
-> > +	struct ast_vhub_ep *ep = &dev->ep0;
-> > +
-> > +	ast_vhub_nuke(ep, -EIO);
-> > +        ep->ep0.state = ep0_state_token;
-> 
->     This line is indented with spaces, previous with a tab.
+> I think just stop it until the next reset yes.
 
-Thanks, will clean up.
+Can you test this patch?
 
-Cheers,
-Ben.
-> 
-> > +}
-> > +
-> > +
-> >   void ast_vhub_init_ep0(struct ast_vhub *vhub, struct ast_vhub_ep
-> > *ep,
-> >   		       struct ast_vhub_dev *dev)
-> >   {
-> 
-> [...]
-> 
-> MBR, Sergei
+Alan Stern
+
+
+
+Index: usb-devel/drivers/usb/gadget/function/f_mass_storage.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/function/f_mass_storage.c
++++ usb-devel/drivers/usb/gadget/function/f_mass_storage.c
+@@ -552,13 +552,14 @@ static int start_transfer(struct fsg_dev
+ 
+ 		/* We can't do much more than wait for a reset */
+ 		req->status = rc;
++		if (rc == -ESHUTDOWN)
++			fsg->common->running = 0;
+ 
+ 		/*
+ 		 * Note: currently the net2280 driver fails zero-length
+ 		 * submissions if DMA is enabled.
+ 		 */
+-		if (rc != -ESHUTDOWN &&
+-				!(rc == -EOPNOTSUPP && req->length == 0))
++		else if (!(rc == -EOPNOTSUPP && req->length == 0))
+ 			WARNING(fsg, "error in submission: %s --> %d\n",
+ 					ep->name, rc);
+ 	}
 
