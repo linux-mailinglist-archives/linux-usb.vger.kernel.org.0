@@ -2,26 +2,26 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6FE60E58
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2019 02:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180F760E5A
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2019 02:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbfGFAyI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 20:54:08 -0400
-Received: from gate.crashing.org ([63.228.1.57]:42805 "EHLO gate.crashing.org"
+        id S1726585AbfGFAyL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 20:54:11 -0400
+Received: from gate.crashing.org ([63.228.1.57]:42813 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725776AbfGFAyI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Jul 2019 20:54:08 -0400
+        id S1726411AbfGFAyK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Jul 2019 20:54:10 -0400
 Received: from ufdda393ec48b57.ant.amazon.com (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x660rlMN017940;
-        Fri, 5 Jul 2019 19:54:02 -0500
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x660rlMO017940;
+        Fri, 5 Jul 2019 19:54:04 -0500
 From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
 To:     linux-usb@vger.kernel.org
 Cc:     balbi@kernel.org, Joel Stanley <joel@jms.id.au>,
         Alan Stern <stern@rowland.harvard.edu>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Subject: [PATCH 06/10] usb: gadget: aspeed: Check suspend/resume callback existence
-Date:   Sat,  6 Jul 2019 10:53:41 +1000
-Message-Id: <20190706005345.18131-7-benh@kernel.crashing.org>
+Subject: [PATCH 07/10] usb: gadget: aspeed: Rework the reset logic
+Date:   Sat,  6 Jul 2019 10:53:42 +1000
+Message-Id: <20190706005345.18131-8-benh@kernel.crashing.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190706005345.18131-1-benh@kernel.crashing.org>
 References: <20190706005345.18131-1-benh@kernel.crashing.org>
@@ -30,35 +30,111 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-.. before calling them
+We had some dodgy code using the speed setting to decide whether a
+port reset would reset the device or just enable it.
+
+Instead, if the device is disabled and has a gadget attached, a
+reset will enable it. If it's already enabled, a reset will
+reset it.
 
 Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 ---
- drivers/usb/gadget/udc/aspeed-vhub/dev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/udc/aspeed-vhub/dev.c | 58 +++++++++++-------------
+ 1 file changed, 27 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index 71e2416858fd..5f7e3b6de531 100644
+index 5f7e3b6de531..79d3cb6bd2e7 100644
 --- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
 +++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -458,7 +458,7 @@ static const struct usb_gadget_ops ast_vhub_udc_ops = {
- void ast_vhub_dev_suspend(struct ast_vhub_dev *d)
+@@ -50,7 +50,7 @@ void ast_vhub_dev_irq(struct ast_vhub_dev *d)
+ 
+ static void ast_vhub_dev_enable(struct ast_vhub_dev *d)
  {
- 	d->suspended = true;
--	if (d->driver) {
-+	if (d->driver && d->driver->suspend) {
- 		spin_unlock(&d->vhub->lock);
- 		d->driver->suspend(&d->gadget);
- 		spin_lock(&d->vhub->lock);
-@@ -468,7 +468,7 @@ void ast_vhub_dev_suspend(struct ast_vhub_dev *d)
- void ast_vhub_dev_resume(struct ast_vhub_dev *d)
+-	u32 reg, hmsk;
++	u32 reg, hmsk, i;
+ 
+ 	if (d->enabled)
+ 		return;
+@@ -76,6 +76,20 @@ static void ast_vhub_dev_enable(struct ast_vhub_dev *d)
+ 	/* Set EP0 DMA buffer address */
+ 	writel(d->ep0.buf_dma, d->regs + AST_VHUB_DEV_EP0_DATA);
+ 
++	/* Clear stall on all EPs */
++	for (i = 0; i < AST_VHUB_NUM_GEN_EPs; i++) {
++		struct ast_vhub_ep *ep = d->epns[i];
++
++		if (ep && (ep->epn.stalled || ep->epn.wedged)) {
++			ep->epn.stalled = false;
++			ep->epn.wedged = false;
++			ast_vhub_update_epn_stall(ep);
++		}
++	}
++
++	/* Additional cleanups */
++	d->wakeup_en = false;
++	d->suspended = false;
+ 	d->enabled = true;
+ }
+ 
+@@ -477,46 +491,28 @@ void ast_vhub_dev_resume(struct ast_vhub_dev *d)
+ 
+ void ast_vhub_dev_reset(struct ast_vhub_dev *d)
  {
- 	d->suspended = false;
--	if (d->driver) {
-+	if (d->driver && d->driver->resume) {
+-	/*
+-	 * If speed is not set, we enable the port. If it is,
+-	 * send reset to the gadget and reset "speed".
+-	 *
+-	 * Speed is an indication that we have got the first
+-	 * setup packet to the device.
+-	 */
+-	if (d->gadget.speed == USB_SPEED_UNKNOWN && !d->enabled) {
+-		DDBG(d, "Reset at unknown speed of disabled device, enabling...\n");
+-		ast_vhub_dev_enable(d);
+-		d->suspended = false;
++	/* No driver, just disable the device and return */
++	if (!d->driver) {
++		ast_vhub_dev_disable(d);
++		return;
+ 	}
+-	if (d->gadget.speed != USB_SPEED_UNKNOWN && d->driver) {
+-		unsigned int i;
+ 
+-		DDBG(d, "Reset at known speed of bound device, resetting...\n");
++	/* If the port isn't enabled, just enable it */
++	if (!d->enabled) {
++		DDBG(d, "Reset of disabled device, enabling...\n");
++		ast_vhub_dev_enable(d);
++	} else {
++		DDBG(d, "Reset of enabled device, resetting...\n");
  		spin_unlock(&d->vhub->lock);
- 		d->driver->resume(&d->gadget);
+-		d->driver->reset(&d->gadget);
++		usb_gadget_udc_reset(&d->gadget, d->driver);
  		spin_lock(&d->vhub->lock);
+ 
+ 		/*
+-		 * Disable/re-enable HW, this will clear the address
++		 * Disable and maybe re-enable HW, this will clear the address
+ 		 * and speed setting.
+ 		 */
+ 		ast_vhub_dev_disable(d);
+ 		ast_vhub_dev_enable(d);
+-
+-		/* Clear stall on all EPs */
+-		for (i = 0; i < AST_VHUB_NUM_GEN_EPs; i++) {
+-			struct ast_vhub_ep *ep = d->epns[i];
+-
+-			if (ep && ep->epn.stalled) {
+-				ep->epn.stalled = false;
+-				ast_vhub_update_epn_stall(ep);
+-			}
+-		}
+-
+-		/* Additional cleanups */
+-		d->wakeup_en = false;
+-		d->suspended = false;
+ 	}
+ }
+ 
 -- 
 2.17.1
 
