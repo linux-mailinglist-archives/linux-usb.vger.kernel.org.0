@@ -2,105 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B0D60E71
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2019 03:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CD160E8D
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Jul 2019 04:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbfGFB3x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jul 2019 21:29:53 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36690 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725878AbfGFB3x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 21:29:53 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l21so959634pgm.3;
-        Fri, 05 Jul 2019 18:29:52 -0700 (PDT)
+        id S1725945AbfGFCuk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jul 2019 22:50:40 -0400
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:37085 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725917AbfGFCuj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jul 2019 22:50:39 -0400
+Received: by mail-pg1-f178.google.com with SMTP id g15so5020462pgi.4
+        for <linux-usb@vger.kernel.org>; Fri, 05 Jul 2019 19:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x5jjwLY7dcGw5169QC417LalHnYGcUOiwki3nVFs4lw=;
-        b=XHBVhXF2h1GwnWjBNmXZjiGTl39trxTsI4dOK3oflYgHM9klJyOOhq1bsOwyGzmxTL
-         wnkY6igycborjm1aIv4bmPQGKlz7X0yfSctqODIChRTanMSQqZ/mDmb2n+ZRIZNKDZjO
-         AiubDbCZn358CTccuM+DvkegkMCRMiwa/lm79HevI0fTf8QWcQB/cqz4S9n5IanGwFOD
-         7FmAxfdWh2eQ9c4EwjKj5FraGvU6b/1aNxw3+iDR+7T/D7s4uOIDGFLcH2xIFxl2wz+U
-         MaDEfV1HTNJys9G3KMDs+hrRNuBGf84BMZ19NI1CZ17kJfi7VoB6pt1CL2rxz6jIfGeI
-         JogA==
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=LH+eE6E1X/eo+Y6kqKPrc64jzalOKEXU22ILe9GYqLo=;
+        b=YY6PmOyLD89wwKtGWOW98bgM2jk0+KJrcyY9F26lQv/XcBskU52ANnRUmHAhRhbKm4
+         rOE7lPSL3yIeEy0qPou8Rsz/QD1DRcuWZeNM9X5U8V2HtnddqvFZZ6opNo2+wNJ3Neqg
+         J1SvyLr4d/R6jSB5FqtHweXCMK3mjte0xfR5RjC1CyyZdFSMDxpA52ip4C3chD25XeHQ
+         XOQPQB/18MatlGsW8aL+kql8QHIQoqIpK9ut1d8wicx1NgkkT8zqD5NjpXUlZeFmq4Pr
+         HKfu8Mo99G+ruyc6/S8GShxnjB6iHzaeBYoA/R7YKiAEsrAXtE9vvChCEIkxGb7d6I5A
+         OeFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x5jjwLY7dcGw5169QC417LalHnYGcUOiwki3nVFs4lw=;
-        b=RFC2lFhp9hotiX620V+XJ1tAWM3p8veugXYElKdkcIDJ4JHHAH6T1qIJx4RluK2R8a
-         yRVrpMu6yScclXuBAry5lqPh2266ZUUmUwGS1VacnBh1/RlVRIH8JMbC6GIwogzIvfQl
-         vhbZ4c5xaCtXjxV388+nceQUVWGchHQFwjBacovcDbIxbFwfXdraX1DCDr4KZ53u071Q
-         jT0UDB2/mNXKV+Wsis6EJdp0R5YDYUJvXFM+sqLLutPIxjoJ0SP8zp3VT7CrJkWssBU2
-         KCv6Q4/QZ/vKH5y0AhoAxr/v+Xdp8Iceeiamuf0a7uHR07xszqgj4IchOgcPA859L4FG
-         l3yw==
-X-Gm-Message-State: APjAAAVJEM3Hvx2OqqIXcthBbtjeB03d4iHMaNtDbwyeVA5eXD58SnPX
-        7Zu39hXeC4dhvPli62XI+R4Zls9fr8RBaBQQOdElX0Lg+aINpA==
-X-Google-Smtp-Source: APXvYqwj73I7bj75wjiG+TfYW3IxNuib3qU9H3/SUmdUO/Gb/qvcCdfSkA9GO3qXXsfr+7xVrb4xP4I4FW4xxbUvMZg=
-X-Received: by 2002:a17:90a:eb08:: with SMTP id j8mr9147386pjz.72.1562376592474;
- Fri, 05 Jul 2019 18:29:52 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=LH+eE6E1X/eo+Y6kqKPrc64jzalOKEXU22ILe9GYqLo=;
+        b=Gl7sGExlsc92hrKzRI65YNNb/Oc9o+fIE4NwROexAQ28+D0Zgti4PGyS5NJt43FKiR
+         vxkvgt74AzTytt7Kcj4VWeZQFZSGeRZVCj+qQSSbQ9CGBcYEZkmXB2yJubiEfq6xd/Ag
+         iS8I/VdaVNwP8NzsLA8FeatmbLVrKxi9a2INdzVOPbe4bPHp+yjiAeG6ytxPfu4MwI9d
+         sOkCGrqTQ8nKmuPtuyqcGKFjj/gCQrfsNMylhRFQQT/+Y5Jequg7oPfgy/YCZp4DC9DI
+         ZfOQswfiTefswTC+oGB75N8ARwoR4DfyAOmHUpXeKZdH7WKenP9MiYFXjMYsELQDHQvR
+         cWVw==
+X-Gm-Message-State: APjAAAVa3HARus6Wg1g0uxeN44BkNm9Wim75M4mqn2GRl5ohvPOI9XIz
+        XW/t43fZ5/nEBz7XTulv3jGSOLp7Mb2jFPtIEZJDGSwMJOs=
+X-Google-Smtp-Source: APXvYqzk4JvVFbcSsGKly/itjN3QiJkCbj8tfNd6/1b94lgOzhXs7MGkg3Snbn6nS+4qr/E5C67KSoyE81BJww0wl08=
+X-Received: by 2002:a17:90a:5884:: with SMTP id j4mr9632796pji.142.1562381438946;
+ Fri, 05 Jul 2019 19:50:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190704153529.9429-3-ryan5544@gmail.com> <Pine.LNX.4.44L0.1907051504310.1606-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1907051504310.1606-100000@iolanthe.rowland.org>
-From:   Ryan Kennedy <ryan5544@gmail.com>
-Date:   Fri, 5 Jul 2019 21:29:41 -0400
-Message-ID: <CAJRN7XOzk03s6k+EpLKxE6g-7-EeSZ9JxMF9Jphe24vXHktTKQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: pci-quirks: Minor cleanup for AMD PLL quirk
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, mathias.nyman@intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   yunhua li <yunhual@gmail.com>
+Date:   Fri, 5 Jul 2019 19:50:28 -0700
+Message-ID: <CAMqbrUg3bz=i8nh4W2-NWOsnQdqcaB3nvZnMJQ1sGXuD0ogk7Q@mail.gmail.com>
+Subject: Per USB device interrupt handler for xhci
+To:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 5, 2019 at 3:10 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Thu, 4 Jul 2019, Ryan Kennedy wrote:
->
-> > usb_amd_find_chipset_info() is used for chipset detection for
-> > several quirks. It is strange that its return value indicates
-> > the need for the PLL quirk, which means it is often ignored.
-> > This patch adds a function specifically for checking the PLL
-> > quirk like the other ones. Additionally, rename probe_result to
-> > something more appropriate.
-> >
-> > Signed-off-by: Ryan Kennedy <ryan5544@gmail.com>
->
-> > @@ -322,6 +317,13 @@ bool usb_amd_prefetch_quirk(void)
-> >  }
-> >  EXPORT_SYMBOL_GPL(usb_amd_prefetch_quirk);
-> >
-> > +bool usb_amd_quirk_pll_check(void)
-> > +{
-> > +     usb_amd_find_chipset_info();
-> > +     return amd_chipset.need_pll_quirk;
-> > +}
-> > +EXPORT_SYMBOL_GPL(usb_amd_quirk_pll_check);
->
-> I really don't see the point of separating out all but one line into a
-> different function.  You might as well just rename
-> usb_amd_find_chipset_info to usb_amd_quirk_pll_check (along with the
-> other code adjustments) and be done with it.
+Hi  all
 
-I did this for consistency with the others:
+xhci_msi_irq is the interrupt handler for xhci, the controller it self
+is a PCI device, on my system it is a Intel chip. I have multiple USB
+device connect to this USB host controller,  xhci_msi_irq is interrupt
+handler for the PCI device(USB Host controller).
+Is it possible to have multiple IRQ, and different IRQ for different
+USB device? If so how? the chip(USB Host controller) should know which
+USB device=E2=80=99s transaction,
+When the chip decide to assert an interrupt, it should be a reason for
+a specified USB device, then assert a correspondence MSI interrupt.
+Thanks.
 
-usb_amd_prefetch_quirk()
-usb_amd_hang_symptom_quirk()
-usb_hcd_amd_remote_wakeup_quirk()
+sudo lspci -s 00:14.0 -v
+00:14.0 USB controller: Intel Corporation Device a2af (prog-if 30 [XHCI])
+        Subsystem: Dell Device 0738
+        Flags: bus master, medium devsel, latency 0, IRQ 29
+        Memory at 38003ff10000 (64-bit, non-prefetchable) [size=3D64K]
+        Capabilities: [70] Power Management version 2
+        Capabilities: [80] MSI: Enable+ Count=3D1/8 Maskable- 64bit+
+        Kernel driver in use: xhci_hcd
 
-They all need to ensure the chipset information exists then decide if
-the particular quirk should be applied to the chipset.
 
-Ryan
 
->
-> However, in the end I don't care if you still want to do this.  Either
-> way:
->
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
->
-> Alan Stern
->
+Regards
