@@ -2,95 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EC66133D
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Jul 2019 01:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E951D614EB
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Jul 2019 14:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726859AbfGFXo4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Jul 2019 19:44:56 -0400
-Received: from gate.crashing.org ([63.228.1.57]:44944 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726731AbfGFXo4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 6 Jul 2019 19:44:56 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x66NiZR3021900;
-        Sat, 6 Jul 2019 18:44:36 -0500
-Message-ID: <e105c23c31526e00e45eea21ad647e7902ab5386.camel@kernel.crashing.org>
-Subject: Re: Virtual hub, resets etc...
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Michal Nazarewicz <mina86@mina86.com>
-Date:   Sun, 07 Jul 2019 09:44:34 +1000
-In-Reply-To: <Pine.LNX.4.44L0.1907061436180.406-100000@netrider.rowland.org>
-References: <Pine.LNX.4.44L0.1907061436180.406-100000@netrider.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726921AbfGGMRc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Jul 2019 08:17:32 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:34593 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726825AbfGGMRb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Jul 2019 08:17:31 -0400
+Received: by mail-lj1-f193.google.com with SMTP id p17so13245066ljg.1;
+        Sun, 07 Jul 2019 05:17:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=SAMwT6DUHJKtrCvN/jv0WTWZlT3Adyo0fAKhCuWcf/M=;
+        b=UGXb9TYxQ1dBTwuX3uGHVTmta0ifDlJxXCd4M9XkNcUsWKPrmDg/CZbHn+FrBTHdbS
+         QfermUCUSCzF7h87ARN2ABT3YKJHtW/wUqxrzM7hrTHsooQpQ7mUvqjM46s0sDh9oeMa
+         z0f74B/exNKvRNUCS57FdYfRE724+VU0UpwJPETsWqYFhzoZjeNFTqvfcXjwRGUVUJhE
+         5jtqNWWueunkokujlQNtNbDsXzkiGaWK3PKinIQMOwq91oCb+wa+KA/TNtAO91HiLCc/
+         jnrWcNF1ibLWXns72CIeXDaYvXWr/IBR++C7HKFjVDFNWrBKatuA/NWE7j2lkZWw+zxw
+         RuTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=SAMwT6DUHJKtrCvN/jv0WTWZlT3Adyo0fAKhCuWcf/M=;
+        b=ezDV6l01Q0YHKKnTDoEsRcavknyxi8ZhJOdHTXiuITNOslSU6DzrxFzBGNwNGJMfeC
+         ffWkm/1q8eu0T0VrWleZ0ijF7aN8AIDndcsUA7NCpeZqcCt9Z533qi7oWn/VvX/QDa0P
+         k2vcuoU47I6pGSbri1iL3jv8qecN6cmuJugpJW7wDNUbrtIODFHWFoOJ48LGU63FO6Ml
+         BdxY0Vz3q1yL9lxKiF/OL1JpvOZwN5+ygHAm/Jfjw30cjcwU3Z97RnRFADBiQMeW7M5B
+         oA3NPrMvRfJEM0qTL6TalcC6sXHvDvJN+H/YjViSxMav1QfhNC6Hpqrt9Qch+NyUmiMY
+         Ki4g==
+X-Gm-Message-State: APjAAAVMv+0okSbeeZxyt03CP9ZAYn+K+3gYEtHyDNfPpAGVAG4ERV3j
+        vjXIwE8ZR85XUdoWRyG+G/6NS/BC
+X-Google-Smtp-Source: APXvYqzNMEnTfyeHiRkT/y6hMxdp+rpP0WXLeaAkmVVzTOIjXt8uOj2OZlcpOAEi7CsgYl/Jk1hz4A==
+X-Received: by 2002:a2e:b0f0:: with SMTP id h16mr7289700ljl.21.1562501849425;
+        Sun, 07 Jul 2019 05:17:29 -0700 (PDT)
+Received: from localhost (122-109-207-82.ip.ukrtel.net. [82.207.109.122])
+        by smtp.gmail.com with ESMTPSA id n1sm2225136lfk.19.2019.07.07.05.17.28
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sun, 07 Jul 2019 05:17:28 -0700 (PDT)
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com
+Subject: [PATCH] usb: host: xhci-hub: fix extra endianness conversion
+Date:   Sun,  7 Jul 2019 15:17:19 +0300
+Message-Id: <1562501839-26522-1-git-send-email-ruslan.bilovol@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 2019-07-06 at 14:37 -0400, Alan Stern wrote:
-> On Sat, 6 Jul 2019, Benjamin Herrenschmidt wrote:
-> 
-> > On Fri, 2019-07-05 at 10:08 -0400, Alan Stern wrote:
-> > > On Fri, 5 Jul 2019, Benjamin Herrenschmidt wrote:
-> 
-> > > > Sure but it would be nice if the mass storage dealt with
-> -ESHUTDOWN
-> > > > properly and stopped :-) Or other errors... if the UDC HW for
-> example
-> > > > dies for some reason, mass storage will lockup.
-> > > 
-> > > I suppose we could add code to check for this case and handle
-> it, 
-> > > although I'm not sure what would be the right thing to do.  Delay
-> for 
-> > > one second and try again?  Disable the gadget until the host does
-> a 
-> > > reset?
-> > 
-> > I think just stop it until the next reset yes.
-> 
-> Can you test this patch?
+Don't do extra cpu_to_le32 conversion for
+put_unaligned_le32 because it is already implemented
+in this function.
 
-Not for a few days, I'm away from the machine and that test requires me
-being physically present, but I will when I'm back.
+Fixes sparse error:
+xhci-hub.c:1152:44: warning: incorrect type in argument 1 (different base types)
+xhci-hub.c:1152:44:    expected unsigned int [usertype] val
+xhci-hub.c:1152:44:    got restricted __le32 [usertype]
 
-Thanks !
+Fixes: 395f540 "xhci: support new USB 3.1 hub request to get extended port status"
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
+Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+---
+ drivers/usb/host/xhci-hub.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
-Ben.
-
-> Alan Stern
-> 
-> 
-> 
-> Index: usb-devel/drivers/usb/gadget/function/f_mass_storage.c
-> ===================================================================
-> --- usb-devel.orig/drivers/usb/gadget/function/f_mass_storage.c
-> +++ usb-devel/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -552,13 +552,14 @@ static int start_transfer(struct fsg_dev
->  
->                 /* We can't do much more than wait for a reset */
->                 req->status = rc;
-> +               if (rc == -ESHUTDOWN)
-> +                       fsg->common->running = 0;
->  
->                 /*
->                  * Note: currently the net2280 driver fails zero-
-> length
->                  * submissions if DMA is enabled.
->                  */
-> -               if (rc != -ESHUTDOWN &&
-> -                               !(rc == -EOPNOTSUPP && req->length ==
-> 0))
-> +               else if (!(rc == -EOPNOTSUPP && req->length == 0))
->                         WARNING(fsg, "error in submission: %s -->
-> %d\n",
->                                         ep->name, rc);
->         }
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 3abe70f..b7d23c4 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1149,7 +1149,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			}
+ 			port_li = readl(ports[wIndex]->addr + PORTLI);
+ 			status = xhci_get_ext_port_status(temp, port_li);
+-			put_unaligned_le32(cpu_to_le32(status), &buf[4]);
++			put_unaligned_le32(status, &buf[4]);
+ 		}
+ 		break;
+ 	case SetPortFeature:
+-- 
+1.9.1
 
