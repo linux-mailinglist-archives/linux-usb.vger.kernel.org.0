@@ -2,75 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD38461B71
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jul 2019 09:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9A361BBB
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Jul 2019 10:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727912AbfGHHzv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Jul 2019 03:55:51 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:8648 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725836AbfGHHzv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Jul 2019 03:55:51 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d22f7010000>; Mon, 08 Jul 2019 00:55:45 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 08 Jul 2019 00:55:50 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 08 Jul 2019 00:55:50 -0700
-Received: from tbergstrom-lnx.Nvidia.com (172.20.13.39) by
- HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3; Mon, 8 Jul 2019 07:55:49 +0000
-Received: by tbergstrom-lnx.Nvidia.com (Postfix, from userid 1000)
-        id A8A4342890; Mon,  8 Jul 2019 10:55:47 +0300 (EEST)
-Date:   Mon, 8 Jul 2019 10:55:47 +0300
-From:   Peter De Schrijver <pdeschrijver@nvidia.com>
-To:     JC Kuo <jckuo@nvidia.com>
-CC:     Jon Hunter <jonathanh@nvidia.com>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <afrid@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <nkristam@nvidia.com>,
-        <skomatineni@nvidia.com>
-Subject: Re: [PATCH 3/8] phy: tegra: xusb: t210: rearrange UPHY init
-Message-ID: <20190708075547.GC12715@pdeschrijver-desktop.Nvidia.com>
-References: <20190614074652.21960-1-jckuo@nvidia.com>
- <20190614074652.21960-4-jckuo@nvidia.com>
- <1a57e3e6-a9b2-87ba-a76b-1785ddd0d935@nvidia.com>
- <94af84e5-5bc3-d481-b784-c0e0dd2b7859@nvidia.com>
+        id S1728874AbfGHIam (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Jul 2019 04:30:42 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:35916 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726222AbfGHIam (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Jul 2019 04:30:42 -0400
+Received: by mail-lf1-f65.google.com with SMTP id q26so10300468lfc.3
+        for <linux-usb@vger.kernel.org>; Mon, 08 Jul 2019 01:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ztkKFuoNyYWW8TvhBAfe9IkmKE0E5S6jFYK6qsfI+as=;
+        b=2FLKiWfJ6TELTzv2UmKaQ8Ce56VitiUoFyz37Mt8idG0Tcb4aShmNk9A2xRnAANDpr
+         Wbg75xrRLdbKNJ9uoFgb+pO81pUcwd90P8+6xsLyLKWhMtbPz4bHKlO7X4f83xbPsAp5
+         f9Uz94axmque8KceNcL14YcYjqYwtHUYfXJeO4UHb9UbtCRYUUpB7JCRQpgzt7IVzHKY
+         7a018YhWOu8XMrX6cE2ddTJzD7zApYVPIwACOiH5/sw/WWJIt2l45fcdutxjIl6JVqaI
+         jJ6fM+bdvubDrKkV6uQ49DLMg1kEf+q5pwn2eFlIjWPdOmwIfNMSHbu9bt/fkcAC/Gvv
+         MvhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ztkKFuoNyYWW8TvhBAfe9IkmKE0E5S6jFYK6qsfI+as=;
+        b=CVJ2QhIG+sYC9r3oe+9sYK+6REO0I89gLTBGYpOJNc3bDG98E08ytU1r1p/SrHDxRD
+         ECXOve6z4/Jm3xXDGLmTzruQAcHSdcwaBJLayOkBqZOpgdXxBTHsSH/0TjbzOHh2C1Xu
+         OL6y8NPkwkeFH0PAT4BjNXLtjmJF7YVFanxkdTeYw5pveMJvQDd+jNR6SOh2pD9V897T
+         paj8GMEAKPWJTIXIaS9hEUdX3QI5MhjnGGpxRH295IldHp4gqPkupWxWrb7D1lnoNavb
+         7k/Tk+eCPU0GTeHB+lebG5/HrD1uU4bmRKT5UTx/EquYmojZV80kdp7M4LeCTftK4r5A
+         uChw==
+X-Gm-Message-State: APjAAAW/c2H9ZmdEVSaSen+DmtIHmXTfb7VULbZ5QLnWtJtOEkNT0i2K
+        V51cMqfX/d71QRe1Vk7OvTYKbw==
+X-Google-Smtp-Source: APXvYqxI1tVn7Kh3jFQltkzQRum0mRc1xHVC7YeMg/XXBNxCzrBu9D7uRCAaeKQOWInbA16ct1+25A==
+X-Received: by 2002:ac2:455a:: with SMTP id j26mr7890772lfm.18.1562574640173;
+        Mon, 08 Jul 2019 01:30:40 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:80a:6f53:f8ef:3097:c1a4:9983? ([2a00:1fa0:80a:6f53:f8ef:3097:c1a4:9983])
+        by smtp.gmail.com with ESMTPSA id j7sm3887470lji.27.2019.07.08.01.30.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Jul 2019 01:30:39 -0700 (PDT)
+Subject: Re: [PATCH] usb: roles: Add PM callbacks
+To:     "Chen, Hu" <hu1.chen@intel.com>, hdegoede@redhat.com
+Cc:     Balaji <m.balaji@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190708022514.7161-1-hu1.chen@intel.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <699cc89d-7366-c167-4295-5153ab7b5716@cogentembedded.com>
+Date:   Mon, 8 Jul 2019 11:30:36 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <94af84e5-5bc3-d481-b784-c0e0dd2b7859@nvidia.com>
-X-NVConfidentiality: public
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL106.nvidia.com (172.18.146.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1562572546; bh=s7gBsVMVHBYedTs39MDLgXJIF7Cw3ubVGD31xQtf62k=;
-        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
-         MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-         X-NVConfidentiality:User-Agent:X-Originating-IP:X-ClientProxiedBy;
-        b=p6WUTZQY4cm2PThQd0HgVbUZbnnY1U85OUByI1mZ9YCqzCq7bT16pIGNKKKkmOeKG
-         NDlhAB75e62a7dCRWHs2wXPvwaFzmCpW6cF4HokXIHtOIsttsbxo3UZpHOdK1Ij+UA
-         JuYNd22yjjQea03IESbEabSg6i2MpsC4l8KrBz0c74DRKO58ano11g3LDByDe7Aywu
-         qBtJElKuIZWMD7WI9ptY10GEj4PKUozaPkjX2UbJhf6ofTZDNCTPkliLcrmpek2YST
-         nfBV47i0Lcl3oBVl4jU2AY2rdA4vE0a7H5hvAm0cvzVxgz/V2nF+3tMlFWQumnj8gy
-         GpAULTRybhNmg==
+In-Reply-To: <20190708022514.7161-1-hu1.chen@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 05, 2019 at 02:48:49PM +0800, JC Kuo wrote:
-> > Looks like you are moving all the code from the port enable to the phy
-> > enable and after this change the port enable does nothing. Do we not
-> > differentiate between phy and port? I think a bit more description is
-> > necessary here to describe the impact of this change.
-> Sorry that I am not sure whether I should use "LP0" or "SC7" for Linux system
-> suspend (either to ram or disk). Should I use SC7 instead of LP0?
+Hello!
 
-Please use SC7 rather than LP0.
+On 08.07.2019 5:25, Chen, Hu wrote:
 
-Peter.
+> On some Broxton NUC, the usb role is lost after S3 (it becomes "none").
+> Add PM callbacks to address this issue: save the role during suspend and
+> restore usb to that role during resume.
+> 
+> Test:
+> Run Android on UC6CAY, a NUC powered by Broxton. Access this NUC via
+> "adb shell" from a host PC. After a suspend/resume cycle, the adb still
+> works well.
+> 
+> Signed-off-by: Chen, Hu <hu1.chen@intel.com>
+> Signed-off-by: Balaji <m.balaji@intel.com>
+> 
+> diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+> index 277de96181f9..caa1cfab41cc 100644
+> --- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
+> +++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+[...]
+> @@ -167,6 +168,30 @@ static int intel_xhci_usb_remove(struct platform_device *pdev)
+>   	return 0;
+>   }
+>   
+> +static int intel_xhci_usb_suspend(struct platform_device *pdev,
+> +				  pm_message_t state)
+> +{
+> +	struct intel_xhci_usb_data *data = platform_get_drvdata(pdev);
+> +	struct device *dev = &pdev->dev;
+> +
+> +	data->role = intel_xhci_usb_get_role(dev);
 
+    Why not just pass &pdev->dev here?
+
+> +
+> +	return 0;
+> +}
+> +
+[...]
+
+MBR, Sergei
