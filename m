@@ -2,45 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E1661AAD
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jul 2019 08:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1752D61AF6
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Jul 2019 09:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729154AbfGHG3Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Jul 2019 02:29:16 -0400
-Received: from mga07.intel.com ([134.134.136.100]:49163 "EHLO mga07.intel.com"
+        id S1729367AbfGHHLY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Jul 2019 03:11:24 -0400
+Received: from mga14.intel.com ([192.55.52.115]:25110 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727052AbfGHG3Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Jul 2019 02:29:16 -0400
-X-Amp-Result: UNSCANNABLE
+        id S1728956AbfGHHLX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Jul 2019 03:11:23 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jul 2019 23:29:15 -0700
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jul 2019 00:11:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,465,1557212400"; 
-   d="asc'?scan'208";a="192212086"
+   d="asc'?scan'208";a="167593734"
 Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Jul 2019 23:29:11 -0700
+  by orsmga003.jf.intel.com with ESMTP; 08 Jul 2019 00:11:16 -0700
 From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Pawel Laszczak <pawell@cadence.com>,
-        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>
-Cc:     "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "hdegoede\@redhat.com" <hdegoede@redhat.com>,
-        "heikki.krogerus\@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "robh+dt\@kernel.org" <robh+dt@kernel.org>,
-        "rogerq\@ti.com" <rogerq@ti.com>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel\@ti.com" <jbergsagel@ti.com>,
-        "nsekhar\@ti.com" <nsekhar@ti.com>, "nm\@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        "peter.chen\@nxp.com" <peter.chen@nxp.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>
-Subject: RE: [PATCH v9 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
-In-Reply-To: <BYAPR07MB4709EF3753AC0B87606B1182DDF70@BYAPR07MB4709.namprd07.prod.outlook.com>
-References: <1562324238-16655-1-git-send-email-pawell@cadence.com> <1562324238-16655-6-git-send-email-pawell@cadence.com> <87r274lmqk.fsf@linux.intel.com> <BYAPR07MB4709EF3753AC0B87606B1182DDF70@BYAPR07MB4709.namprd07.prod.outlook.com>
-Date:   Mon, 08 Jul 2019 09:29:01 +0300
-Message-ID: <87a7dpm442.fsf@linux.intel.com>
+To:     Pawel Laszczak <pawell@cadence.com>, devicetree@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        hdegoede@redhat.com, heikki.krogerus@linux.intel.com,
+        robh+dt@kernel.org, rogerq@ti.com, linux-kernel@vger.kernel.org,
+        jbergsagel@ti.com, nsekhar@ti.com, nm@ti.com, sureshp@cadence.com,
+        peter.chen@nxp.com, jpawar@cadence.com, kurahul@cadence.com,
+        Pawel Laszczak <pawell@cadence.com>
+Subject: Re: [PATCH v9 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
+In-Reply-To: <1562324238-16655-6-git-send-email-pawell@cadence.com>
+References: <1562324238-16655-1-git-send-email-pawell@cadence.com> <1562324238-16655-6-git-send-email-pawell@cadence.com>
+Date:   Mon, 08 Jul 2019 10:11:12 +0300
+Message-ID: <877e8tm25r.fsf@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -57,168 +50,383 @@ Content-Transfer-Encoding: quoted-printable
 Hi,
 
 Pawel Laszczak <pawell@cadence.com> writes:
->>> +void cdns3_role_stop(struct cdns3 *cdns)
->>
->>not static? Why is it so that _start() is static but _stop() is not?
->>Looks fishy
->
-> This function is used in cdns3_role_stop in debugfs.c file so it can't
-> be static.
+> +static void cdns3_gadget_config(struct cdns3_device *priv_dev)
+> +{
+> +	struct cdns3_usb_regs __iomem *regs =3D priv_dev->regs;
+> +	u32 reg;
+> +
+> +	cdns3_ep0_config(priv_dev);
+> +
+> +	/* enable interrupts for endpoint 0 (in and out) */
+> +	writel(EP_IEN_EP_OUT0 | EP_IEN_EP_IN0, &regs->ep_ien);
+> +
+> +	/*
+> +	 *Driver need modify LFPS minimal U1 Exit time for 0x00024505 revision
 
-it's still super fishy. Why don't you need _start() from debugfs.c? In
-any case, the role framework would remove the need for any of this, I
-suppose.
+comment style
 
->>> +static int cdns3_idle_role_start(struct cdns3 *cnds)
->>> +{	/* Hold PHY in RESET */
->>
->>huh?
->>
->>> +	return 0;
->>> +}
->>> +
->>> +static void cdns3_idle_role_stop(struct cdns3 *cnds)
->>> +{
->>> +	/* Program Lane swap and bring PHY out of RESET */
->>
->>double huh?
->>
->
-> These functions were added for consistency with FSM described in controll=
-er specification.=20
-> Yes, I know that you don't like empty functions :), but it could be helpf=
-ul in
-> understanding how this controller work.
+> +	 * of controller
+> +	 */
+> +	if (priv_dev->dev_ver =3D=3D DEV_VER_TI_V1) {
 
-frankly, it really doesn't. An empty function doesn't really help IMHO.
+this version is really only for TI? And there's another only for NXP?
 
->>> +static const char *const cdns3_mode[] =3D {
->>> +	[USB_DR_MODE_UNKNOWN]		=3D "unknown",
->>> +	[USB_DR_MODE_OTG]		=3D "otg",
->>> +	[USB_DR_MODE_HOST]		=3D "host",
->>> +	[USB_DR_MODE_PERIPHERAL]	=3D "device",
->>> +};
->>
->>don't we have a generic version of this under usb/common ?
->>
-> Yes, there is a similar array, but it is defined also as static=20
-> and there is no function for converting value to string.=20
-> There is only function for converting string to value.
++#define DEV_VER_NXP_V1		0x00024502
++#define DEV_VER_TI_V1		0x00024509
++#define DEV_VER_V2		0x0002450C
++#define DEV_VER_V3		0x0002450d
 
-right. You can add the missing interface generically instead of
-duplicating the enumeration.
+How do you actually decode this?
 
-> There is also:=20=20
-> [USB_DR_MODE_UNKNOWN]		=3D "",
-> Instead of:=20
-> [USB_DR_MODE_UNKNOWN]		=3D "unknown",
->
-> So, for USB_DR_MODE_UNKNOWN user will not see anything information.
+> +static int cdns3_gadget_udc_stop(struct usb_gadget *gadget)
+> +{
+> +	struct cdns3_device *priv_dev =3D gadget_to_cdns3_device(gadget);
+> +	struct cdns3_endpoint *priv_ep;
+> +	u32 bEndpointAddress;
+> +	struct usb_ep *ep;
+> +	int ret =3D 0;
+> +
+> +	priv_dev->gadget_driver =3D NULL;
+> +
+> +	priv_dev->onchip_used_size =3D 0;
+> +	priv_dev->out_mem_is_allocated =3D 0;
+> +	priv_dev->gadget.speed =3D USB_SPEED_UNKNOWN;
+> +
+> +	list_for_each_entry(ep, &priv_dev->gadget.ep_list, ep_list) {
+> +		priv_ep =3D ep_to_cdns3_ep(ep);
+> +		bEndpointAddress =3D priv_ep->num | priv_ep->dir;
+> +		cdns3_select_ep(priv_dev, bEndpointAddress);
+> +		writel(EP_CMD_EPRST, &priv_dev->regs->ep_cmd);
+> +		ret =3D cdns3_handshake(&priv_dev->regs->ep_cmd,
+> +				      EP_CMD_EPRST, 0, 100);
+> +		cdns3_free_trb_pool(priv_ep);
 
-But that's what "unknown" means :-) We don't know the information.
+are you sure you want to free your trb pool when a gadget driver is
+unloaded? One can easily fragment memory by constantly loading and
+unloading a gadget driver, no?
 
->>> +static irqreturn_t cdns3_drd_irq(int irq, void *data)
->>> +{
->>> +	irqreturn_t ret =3D IRQ_NONE;
->>> +	struct cdns3 *cdns =3D data;
->>> +	u32 reg;
->>> +
->>> +	if (cdns->dr_mode !=3D USB_DR_MODE_OTG)
->>> +		return ret;
->>> +
->>> +	reg =3D readl(&cdns->otg_regs->ivect);
->>> +
->>> +	if (!reg)
->>> +		return ret;
->>> +
->>> +	if (reg & OTGIEN_ID_CHANGE_INT) {
->>> +		dev_dbg(cdns->dev, "OTG IRQ: new ID: %d\n",
->>> +			cdns3_get_id(cdns));
->>> +
->>> +		ret =3D IRQ_HANDLED;
->>> +	}
->>> +
->>> +	if (reg & (OTGIEN_VBUSVALID_RISE_INT | OTGIEN_VBUSVALID_FALL_INT)) {
->>> +		dev_dbg(cdns->dev, "OTG IRQ: new VBUS: %d\n",
->>> +			cdns3_get_vbus(cdns));
->>> +
->>> +		ret =3D IRQ_HANDLED;
->>> +	}
->>> +
->>> +	if (ret =3D=3D IRQ_HANDLED)
->>> +		queue_work(system_freezable_wq, &cdns->role_switch_wq);
->>> +
->>> +	writel(~0, &cdns->otg_regs->ivect);
->>> +	return ret;
->>> +}
->>
->>seems like you could use threaded irq to avoid this workqueue.
->
->
-> This function is also called in cdns3_mode_write (debugfs.c file),
-> therefor after changing it to threaded irq I will still need workqueue.=20
+How about you allocate the trb poll during cdns3 load and free it when
+cdns3 is unloaded?
 
-Why? debugfs writes are not atomic. They run in process context, right?
-Just don't disable interrupts while running this and you should be fine.
+> +static int cdns3_gadget_start(struct cdns3 *cdns)
+> +{
+> +	struct cdns3_device *priv_dev;
+> +	u32 max_speed;
+> +	int ret;
+> +
+> +	priv_dev =3D kzalloc(sizeof(*priv_dev), GFP_KERNEL);
+> +	if (!priv_dev)
+> +		return -ENOMEM;
+> +
+> +	cdns->gadget_dev =3D priv_dev;
+> +	priv_dev->sysdev =3D cdns->dev;
+> +	priv_dev->dev =3D cdns->dev;
+> +	priv_dev->regs =3D cdns->dev_regs;
+> +
+> +	device_property_read_u16(priv_dev->dev, "cdns,on-chip-buff-size",
+> +				 &priv_dev->onchip_buffers);
+> +
+> +	if (priv_dev->onchip_buffers <=3D  0) {
+> +		u32 reg =3D readl(&priv_dev->regs->usb_cap2);
+> +
+> +		priv_dev->onchip_buffers =3D USB_CAP2_ACTUAL_MEM_SIZE(reg);
+> +	}
+> +
+> +	if (!priv_dev->onchip_buffers)
+> +		priv_dev->onchip_buffers =3D 256;
+> +
+> +	max_speed =3D usb_get_maximum_speed(cdns->dev);
+> +
+> +	/* Check the maximum_speed parameter */
+> +	switch (max_speed) {
+> +	case USB_SPEED_FULL:
+> +	case USB_SPEED_HIGH:
+> +	case USB_SPEED_SUPER:
+> +		break;
+> +	default:
+> +		dev_err(cdns->dev, "invalid maximum_speed parameter %d\n",
+> +			max_speed);
+> +		/* fall through */
+> +	case USB_SPEED_UNKNOWN:
+> +		/* default to superspeed */
+> +		max_speed =3D USB_SPEED_SUPER;
+> +		break;
+> +	}
+> +
+> +	/* fill gadget fields */
+> +	priv_dev->gadget.max_speed =3D max_speed;
+> +	priv_dev->gadget.speed =3D USB_SPEED_UNKNOWN;
+> +	priv_dev->gadget.ops =3D &cdns3_gadget_ops;
+> +	priv_dev->gadget.name =3D "usb-ss-gadget";
+> +	priv_dev->gadget.sg_supported =3D 1;
+> +
+> +	spin_lock_init(&priv_dev->lock);
+> +	INIT_WORK(&priv_dev->pending_status_wq,
+> +		  cdns3_pending_setup_status_handler);
+> +
+> +	/* initialize endpoint container */
+> +	INIT_LIST_HEAD(&priv_dev->gadget.ep_list);
+> +	INIT_LIST_HEAD(&priv_dev->aligned_buf_list);
+> +
+> +	ret =3D cdns3_init_eps(priv_dev);
+> +	if (ret) {
+> +		dev_err(priv_dev->dev, "Failed to create endpoints\n");
+> +		goto err1;
+> +	}
+> +
+> +	/* allocate memory for setup packet buffer */
+> +	priv_dev->setup_buf =3D dma_alloc_coherent(priv_dev->sysdev, 8,
+> +						 &priv_dev->setup_dma, GFP_DMA);
+> +	if (!priv_dev->setup_buf) {
+> +		ret =3D -ENOMEM;
+> +		goto err2;
+> +	}
+> +
+> +	priv_dev->dev_ver =3D readl(&priv_dev->regs->usb_cap6);
+> +
+> +	dev_dbg(priv_dev->dev, "Device Controller version: %08x\n",
+> +		readl(&priv_dev->regs->usb_cap6));
+> +	dev_dbg(priv_dev->dev, "USB Capabilities:: %08x\n",
+> +		readl(&priv_dev->regs->usb_cap1));
+> +	dev_dbg(priv_dev->dev, "On-Chip memory cnfiguration: %08x\n",
+> +		readl(&priv_dev->regs->usb_cap2));
+> +
+> +	priv_dev->dev_ver =3D GET_DEV_BASE_VERSION(priv_dev->dev_ver);
+> +
+> +	priv_dev->zlp_buf =3D kzalloc(CDNS3_EP_ZLP_BUF_SIZE, GFP_KERNEL);
+> +	if (!priv_dev->zlp_buf) {
+> +		ret =3D -ENOMEM;
+> +		goto err3;
+> +	}
+> +
+> +	/* add USB gadget device */
+> +	ret =3D usb_add_gadget_udc(priv_dev->dev, &priv_dev->gadget);
+> +	if (ret < 0) {
+> +		dev_err(priv_dev->dev,
+> +			"Failed to register USB device controller\n");
+> +		goto err4;
+> +	}
+> +
+> +	return 0;
+> +err4:
+> +	kfree(priv_dev->zlp_buf);
+> +err3:
+> +	dma_free_coherent(priv_dev->sysdev, 8, priv_dev->setup_buf,
+> +			  priv_dev->setup_dma);
+> +err2:
+> +	cdns3_free_all_eps(priv_dev);
+> +err1:
+> +	cdns->gadget_dev =3D NULL;
+> +	return ret;
+> +}
+> +
+> +static int __cdns3_gadget_init(struct cdns3 *cdns)
+> +{
+> +	struct cdns3_device *priv_dev;
+> +	int ret =3D 0;
+> +
+> +	cdns3_drd_switch_gadget(cdns, 1);
+> +	pm_runtime_get_sync(cdns->dev);
+> +
+> +	ret =3D cdns3_gadget_start(cdns);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv_dev =3D cdns->gadget_dev;
+> +	ret =3D devm_request_threaded_irq(cdns->dev, cdns->dev_irq,
+> +					cdns3_device_irq_handler,
+> +					cdns3_device_thread_irq_handler,
+> +					IRQF_SHARED, dev_name(cdns->dev), cdns);
 
->>> +	cdns->desired_dr_mode =3D cdns->dr_mode;
->>> +	cdns->current_dr_mode =3D USB_DR_MODE_UNKNOWN;
->>> +
->>> +	ret =3D devm_request_threaded_irq(cdns->dev, cdns->otg_irq,
->>> +					cdns3_drd_irq,
->>> +					NULL, IRQF_SHARED,
->>
->>if you don't have a threaded handler, you should set IRQF_ONESHOT. I
->>would prefer if you implement a threaded handler that doesn't require
->>IRQF_ONESHOT, though.
->>
->
-> IRQF_ONESHOT can be used  only in threaded handled.=20
-> "
->  * IRQF_ONESHOT - Interrupt is not reenabled after the hardirq handler fi=
-nished.
->  *                Used by threaded interrupts which need to keep the
->  *                irq line disabled until the threaded handler has been r=
-un.
-> "
+copied handlers here for commenting. Note that you don't have
+IRQF_ONESHOT:
 
-so?
+> +static irqreturn_t cdns3_device_irq_handler(int irq, void *data)
+> +{
+> +	struct cdns3_device *priv_dev;
+> +	struct cdns3 *cdns =3D data;
+> +	irqreturn_t ret =3D IRQ_NONE;
+> +	unsigned long flags;
+> +	u32 reg;
+> +
+> +	priv_dev =3D cdns->gadget_dev;
+> +	spin_lock_irqsave(&priv_dev->lock, flags);
 
->>> +	} else {
->>> +		struct usb_request *request;
->>> +
->>> +		if (priv_dev->eps[index]->flags & EP_WEDGE) {
->>> +			cdns3_select_ep(priv_dev, 0x00);
->>> +			return 0;
->>> +		}
->>> +
->>> +		cdns3_dbg(priv_ep->cdns3_dev, "Clear Stalled endpoint %s\n",
->>> +			  priv_ep->name);
->>
->>why do you need your own wrapper around dev_dbg()? This looks quite unnec=
-essary.
->
-> It's generic function used for adding message to trace.log.  It's not wra=
-pper to dev_dbg=20
->
-> void cdns3_dbg(struct cdns3_device *priv_dev, const char *fmt, ...)
-> {
-> 	struct va_format vaf;
-> 	va_list args;
->
-> 	va_start(args, fmt);
-> 	vaf.fmt =3D fmt;
-> 	vaf.va =3D &args;
-> 	trace_cdns3_log(priv_dev, &vaf);
-> 	va_end(args);
-> }
+the top half handler runs in hardirq context. You don't need any locks
+here. Also IRQs are *already* disabled, you don't need to disable them agai=
+n.
 
-oh. Don't do it like that. Add a proper trace event that actually
-decodes the information you want. These random messages will give you
-trouble in the future. I had this sort of construct in dwc3 for a while
-and it became clear that it's a bad idea. It's best to have trace events
-that decode information coming from the HW. That way your trace logs
-have a "predictable" shape/format and you can easily find problem areas.
+> +
+> +	/* check USB device interrupt */
+> +	reg =3D readl(&priv_dev->regs->usb_ists);
+> +
+> +	if (reg) {
+> +		writel(reg, &priv_dev->regs->usb_ists);
+> +		cdns3_check_usb_interrupt_proceed(priv_dev, reg);
+> +		ret =3D IRQ_HANDLED;
+
+now, because you _don't_ mask this interrupt, you're gonna have
+issues. Say we actually get both device and endpoint interrupts while
+the thread is already running with previous endpoint interrupts. Now
+we're gonna reenter the top half, because device interrupts are *not*
+masked, which will read usb_ists and handle it here.
+
+Then it will ahead and read ep_ists and wake the thread that's already
+running.
+
+This hasn't really been tested, has it?
+
+> +static irqreturn_t cdns3_device_thread_irq_handler(int irq, void *data)
+> +{
+> +	struct cdns3_device *priv_dev;
+> +	struct cdns3 *cdns =3D data;
+> +	irqreturn_t ret =3D IRQ_NONE;
+> +	unsigned long flags;
+> +	u32 ep_ien;
+> +	int bit;
+> +	u32 reg;
+> +
+> +	priv_dev =3D cdns->gadget_dev;
+> +	spin_lock_irqsave(&priv_dev->lock, flags);
+
+Ideally, the _irqsave() here wouldn't be necessary (since this device's
+interrupts are already masked), but removing _irqsave() causes problem
+with networking gadgets. Just thought I'd leave a note here, nothing to
+change in this handler.
+
+> +	reg =3D readl(&priv_dev->regs->ep_ists);
+> +
+> +	/* handle default endpoint OUT */
+> +	if (reg & EP_ISTS_EP_OUT0) {
+> +		cdns3_check_ep0_interrupt_proceed(priv_dev, USB_DIR_OUT);
+> +		ret =3D IRQ_HANDLED;
+> +	}
+> +
+> +	/* handle default endpoint IN */
+> +	if (reg & EP_ISTS_EP_IN0) {
+> +		cdns3_check_ep0_interrupt_proceed(priv_dev, USB_DIR_IN);
+> +		ret =3D IRQ_HANDLED;
+> +	}
+> +
+> +	/* check if interrupt from non default endpoint, if no exit */
+> +	reg &=3D ~(EP_ISTS_EP_OUT0 | EP_ISTS_EP_IN0);
+> +	if (!reg)
+> +		goto irqend;
+> +
+> +	for_each_set_bit(bit, (unsigned long *)&reg,
+> +			 sizeof(u32) * BITS_PER_BYTE) {
+> +		priv_dev->shadow_ep_en |=3D BIT(bit);
+> +		cdns3_check_ep_interrupt_proceed(priv_dev->eps[bit]);
+> +		ret =3D IRQ_HANDLED;
+> +	}
+> +
+> +	if (priv_dev->run_garbage_colector) {
+
+wait, what?
+
+ps: correct spelling is "collector" ;-)
+
+> +		struct cdns3_aligned_buf *buf, *tmp;
+> +
+> +		list_for_each_entry_safe(buf, tmp, &priv_dev->aligned_buf_list,
+> +					 list) {
+> +			if (!buf->in_use) {
+> +				list_del(&buf->list);
+> +
+> +				spin_unlock_irqrestore(&priv_dev->lock, flags);
+
+creates the possibility of a race condition
+
+> +				dma_free_coherent(priv_dev->sysdev, buf->size,
+> +						  buf->buf,
+> +						  buf->dma);
+> +				spin_lock_irqsave(&priv_dev->lock, flags);
+> +
+> +				kfree(buf);
+
+why do you even need this "garbage collector"?
+
+> +static int cdns3_gadget_suspend(struct cdns3 *cdns, bool do_wakeup)
+> +{
+> +	cdns3_gadget_exit(cdns);
+
+so on suspend you completely teardown the entire controller? This means
+that a mounted mass storage gadget will, actually, disconnect from the
+host, no?
+
+> diff --git a/drivers/usb/cdns3/trace.h b/drivers/usb/cdns3/trace.h
+> new file mode 100644
+> index 000000000000..1cc2abca320c
+> --- /dev/null
+> +++ b/drivers/usb/cdns3/trace.h
+> @@ -0,0 +1,447 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * USBSS device controller driver.
+> + * Trace support header file.
+> + *
+> + * Copyright (C) 2018 Cadence.
+> + *
+> + * Author: Pawel Laszczak <pawell@cadence.com>
+> + */
+> +
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM cdns3
+> +
+> +#if !defined(__LINUX_CDNS3_TRACE) || defined(TRACE_HEADER_MULTI_READ)
+> +#define __LINUX_CDNS3_TRACE
+> +
+> +#include <linux/types.h>
+> +#include <linux/tracepoint.h>
+> +#include <asm/byteorder.h>
+> +#include <linux/usb/ch9.h>
+> +#include "core.h"
+> +#include "gadget.h"
+> +#include "debug.h"
+> +
+> +#define CDNS3_MSG_MAX	500
+> +
+> +TRACE_EVENT(cdns3_log,
+> +	TP_PROTO(struct cdns3_device *priv_dev, struct va_format *vaf),
+> +	TP_ARGS(priv_dev, vaf),
+> +	TP_STRUCT__entry(
+> +		__string(name, dev_name(priv_dev->dev))
+> +		__dynamic_array(char, msg, CDNS3_MSG_MAX)
+> +	),
+> +	TP_fast_assign(
+> +		__assign_str(name, dev_name(priv_dev->dev));
+> +		vsnprintf(__get_str(msg), CDNS3_MSG_MAX, vaf->fmt, *vaf->va);
+> +	),
+> +	TP_printk("%s: %s", __get_str(name), __get_str(msg))
+> +);
+> +
+> +DECLARE_EVENT_CLASS(cdns3_log_doorbell,
+> +	TP_PROTO(const char *ep_name, u32 ep_trbaddr),
+> +	TP_ARGS(ep_name, ep_trbaddr),
+> +	TP_STRUCT__entry(
+> +		__string(name, ep_name)
+> +		__field(u32, ep_trbaddr)
+> +	),
+> +	TP_fast_assign(
+> +		__assign_str(name, ep_name);
+> +		__entry->ep_trbaddr =3D ep_trbaddr;
+> +	),
+> +	TP_printk("//Ding Dong %s, ep_trbaddr %08x", __get_str(name),
+
+nit-picking but... the event name will be printed on trace log. You
+don't need this "Ding Dong" string here :-p
+
+> +	TP_printk("%s: req: %p, req buff %p, length: %u/%u %s%s%s, status: %d,"
+> +		  " trb: [start:%d, end:%d: virt addr %pa], flags:%x ",
+> +		__get_str(name), __entry->req, __entry->buf, __entry->actual,
+> +		__entry->length,
+> +		__entry->zero ? "zero | " : "",
+> +		__entry->short_not_ok ? "short | " : "",
+> +		__entry->no_interrupt ? "no int" : "",
+
+I guess you didn't really think the formatting through. Think about what
+happens if you get a request with only zero flag or only short flag. How
+will this log look like?
 
 =2D-=20
 balbi
@@ -228,18 +436,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0i4q8ACgkQzL64meEa
-mQbupxAAoD9jP3fUR7sr+ju1et+756dRsmCz7XHRrOZ9P3xUMg34BanHMCMQ+mbv
-80xqcplc95kH8ZEujbDdv863UNdUdvTRdtS6arMAT0OAwayXJPIA38zI7iFkIlkW
-UupgYUSNJydp9IUGUE7VzvcaAPmULCFfJA3oorUTVSZb9+YTkLnZGmoBrZY7viEi
-Q1gS/Kv74vJMaSQNdYoTyhNNWguoWPn3spfzRpf49DwIzoe5f3LFoff2BT1wFh3B
-cFsB3n8hu9+4TR8SCCQtvyXHqws70B7ePXaOltIdGPvjJLgniHxDbMyDbvqPwv4d
-SUIdqcx2NORh5u1Q1SB/XuR08Q73CsjdQnxdOp1AV3qLA6J8sOPV/WuXPuqxkFmv
-vwjWsqaT9VX0iCbY5p8FTwKJ7qlLCmLVnMbDTyGl8lQqofRb/4s/zUf5IPqDEwHu
-9sg+srJere77OybK48AkBTwfoNLqYrgFauQNVXSqEiIfOp/RuXoXhJNXoA/fcVOw
-KTOrwLikCHvwzX2g7Hs+j6efx5EvzJ9UhYrvO3KIPs2THgZvSt+/exsgT4x8DI5E
-sMqNVpHuHCMZ6r0/cG51O82AamnmNq/gxZKIuhxj14wnBDkvX8Ytjzj/7lftwF9G
-URecaNSnwLSjhHRc/KTDIKbSzaDyIwfKbDzONwIGThB3DvwKNbk=
-=KpNf
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0i7JAACgkQzL64meEa
+mQa0SRAA0QbauBgn1+5VjUBNWRDTgfhMJVocbpkZo/vbej4zcFE8fNOIudRmB1OQ
+68JOTBfizhCZ19NSumgutpPLtLa6c/agaPUEZ3wbtf2fHj8ODXEiV//+S+O0IcuI
+SoRvSNKoyFh/HD3cWh7FDruwonJhztJEHDemfkFYL8QKC7M7QdbddaTQTNWxzaQ/
+vzuatBYU9Lv9oA51joS8xXOtwGnyxAAsmSjSiujwNkRHCYZxW/EFuqeq3aKimCES
+8chSMwjRiA6gLhXrM6Qi56sAxD2ZhwExtui250EIJjstpI1Wl44WLSa7NmvJtsTA
+7YfIPczFLEqT5OAJJ4LbUaL5uGuGz9LTYLe/ZIwrkB5+rh6B0yy/CIigaNKmiR7W
+Yl2zbTek5f7tF3AZnCh3J5qE+6fK/xp2s3UZc+9LflXnurV6fYCW6VsqMjGroAUz
+5/QHaaIf23rOQuIs+Fe1ZI3rjFLjQE4ilIzJ7r2sAZA8RsU2Jlnu5ayVnpmCJqcf
+0PYK4EXFPbDNRx4kdvmJgd+q3btj0g41z3u0vlnQbpeo9+TzQ/puyZ2hQX5zunMc
+qd5f9IRFmWPlyMTXCvwHNjgpN6dzCaLYtqIQ9dAeGTq/MHoR2xewvnsv5haYJeUs
+x9TYrAt4DIRipHvXKnWvhlBYpRzjZ6/aOk9ukhvxwKc2XRIUrWc=
+=UFAH
 -----END PGP SIGNATURE-----
 --=-=-=--
