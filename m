@@ -2,91 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EE4618AC
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jul 2019 03:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CBA6195A
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Jul 2019 04:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727912AbfGHBBt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Jul 2019 21:01:49 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34184 "EHLO mx1.redhat.com"
+        id S1727455AbfGHCov (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Jul 2019 22:44:51 -0400
+Received: from mga04.intel.com ([192.55.52.120]:3515 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727163AbfGHBBt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 7 Jul 2019 21:01:49 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 1326181DFE;
-        Mon,  8 Jul 2019 01:01:48 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A273019C77;
-        Mon,  8 Jul 2019 01:01:39 +0000 (UTC)
-Date:   Mon, 8 Jul 2019 09:01:35 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20190708010134.GA7248@ming.t460p>
-References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
- <20190702120112.GA19890@ming.t460p>
- <20190702223931.GB3735@brian.unipv.it>
- <20190703020119.GA23872@ming.t460p>
- <20190703051117.GA6458@brian.unipv.it>
- <20190703063603.GA32123@ming.t460p>
- <20190706093327.GA31927@brian.unipv.it>
+        id S1726105AbfGHCov (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 7 Jul 2019 22:44:51 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jul 2019 19:44:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,465,1557212400"; 
+   d="scan'208";a="340322921"
+Received: from hu.sh.intel.com ([10.239.158.51])
+  by orsmga005.jf.intel.com with ESMTP; 07 Jul 2019 19:44:49 -0700
+From:   "Chen, Hu" <hu1.chen@intel.com>
+To:     hdegoede@redhat.com
+Cc:     hu1.chen@intel.com, Balaji <m.balaji@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: roles: Add PM callbacks
+Date:   Mon,  8 Jul 2019 10:25:14 +0800
+Message-Id: <20190708022514.7161-1-hu1.chen@intel.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190706093327.GA31927@brian.unipv.it>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Mon, 08 Jul 2019 01:01:48 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 06, 2019 at 11:33:27AM +0200, Andrea Vai wrote:
-> On 03/07/19 14:36:05, Ming Lei wrote:
-> > On Wed, Jul 03, 2019 at 07:11:17AM +0200, Andrea Vai wrote:
-> > > On 03/07/19 10:01:23, Ming Lei wrote:
-> > > > On Wed, Jul 03, 2019 at 12:39:31AM +0200, Andrea Vai wrote:
-> > > > > On 02/07/19 20:01:13, Ming Lei wrote:
-> > > > > > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
-> > > > > > > Hi,
-> > > > > > >   I have a problem writing data to a USB pendrive, and it seems
-> > > > > > > kernel-related. With the help of Greg an Alan (thanks) and some
-> > > > > > > bisect, I found out the offending commit being
-> > > > > > > 
-> > > > > > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-> > > > > > > 
-> > > > > > >  [...]    
-> > > > > > >     
-> > [...]
-> > Then could you install bcc package and collect the IO trace?
-> > 
-> > 	sudo /usr/share/bcc/tools/biosnoop | grep sdN
-> > 
-> > sdN is your USB disk device name.
-> 
-> The command runs forever (or at least for hours) without giving any output through "|grep sdf". The device is connected, but not mounted. Maybe I should run the command with the device mounted? Or while performing the test?
-> The command itself seems to work, as /usr/share/bcc/tools/biosnoop | tee -a biosnoop.txt produces an output file sized about some MB in some hours. 
-> 
-> What should I do?
+On some Broxton NUC, the usb role is lost after S3 (it becomes "none").
+Add PM callbacks to address this issue: save the role during suspend and
+restore usb to that role during resume.
 
-1) run the bcc biosnoop trace in one terminal after mounting the fs on the USB dirve
+Test:
+Run Android on UC6CAY, a NUC powered by Broxton. Access this NUC via
+"adb shell" from a host PC. After a suspend/resume cycle, the adb still
+works well.
 
-2) start the write test in another teminal
+Signed-off-by: Chen, Hu <hu1.chen@intel.com>
+Signed-off-by: Balaji <m.balaji@intel.com>
 
-3) wait for 10 seconds, and stop the bcc trace via ctrl^ + C, then post the bcc biosnoop
-trace log
+diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+index 277de96181f9..caa1cfab41cc 100644
+--- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
++++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+@@ -37,6 +37,7 @@
+ struct intel_xhci_usb_data {
+ 	struct usb_role_switch *role_sw;
+ 	void __iomem *base;
++	enum usb_role role;
+ };
+ 
+ static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
+@@ -167,6 +168,30 @@ static int intel_xhci_usb_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static int intel_xhci_usb_suspend(struct platform_device *pdev,
++				  pm_message_t state)
++{
++	struct intel_xhci_usb_data *data = platform_get_drvdata(pdev);
++	struct device *dev = &pdev->dev;
++
++	data->role = intel_xhci_usb_get_role(dev);
++
++	return 0;
++}
++
++static int intel_xhci_usb_resume(struct platform_device *pdev)
++{
++	struct intel_xhci_usb_data *data = platform_get_drvdata(pdev);
++	struct device *dev = &pdev->dev;
++
++	if (intel_xhci_usb_get_role(dev) != data->role) {
++		if (intel_xhci_usb_set_role(dev, data->role) != 0)
++			dev_warn(dev, "Failed to set role during resume\n");
++	}
++
++	return 0;
++}
++
+ static const struct platform_device_id intel_xhci_usb_table[] = {
+ 	{ .name = DRV_NAME },
+ 	{}
+@@ -180,6 +205,8 @@ static struct platform_driver intel_xhci_usb_driver = {
+ 	.id_table = intel_xhci_usb_table,
+ 	.probe = intel_xhci_usb_probe,
+ 	.remove = intel_xhci_usb_remove,
++	.suspend = intel_xhci_usb_suspend,
++	.resume = intel_xhci_usb_resume,
+ };
+ 
+ module_platform_driver(intel_xhci_usb_driver);
+-- 
+2.22.0
 
-
-Thanks, 
-Ming
