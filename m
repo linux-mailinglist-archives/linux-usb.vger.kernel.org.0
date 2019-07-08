@@ -2,80 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C4862A04
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jul 2019 21:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B1D62B74
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2019 00:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729924AbfGHT6w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Jul 2019 15:58:52 -0400
-Received: from mail-pl1-f176.google.com ([209.85.214.176]:33904 "EHLO
-        mail-pl1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729108AbfGHT6v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Jul 2019 15:58:51 -0400
-Received: by mail-pl1-f176.google.com with SMTP id i2so8820375plt.1
-        for <linux-usb@vger.kernel.org>; Mon, 08 Jul 2019 12:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7V+zYtHiOU5KbBa1aQMebYvCgwz3SI9LWyIoa1sCpdw=;
-        b=a0ZNdiHp+0VEZkLH96+IsIPzVfrLFUQodgQDlJtv5AtKvFlAC3io0KALqBV4JIWeTC
-         thdpoXJNRYoRKOfzue0XV4HE496MKdNnwLVRZZRATctzYDqnCywzG0hpBNi0yqZ9d0jy
-         7LADGt+13Sc17C1LS1uqwILyj6y94fwque/MMxTrVLcmTgj9DoExayg6YvuJFAOdakjC
-         Ux0iadFEjL/+lBFAfzfPGxuCq1EzXKoRYYQIXxpL0HBiehkkJZdFp03cBnevIxmgxYX6
-         OPIQkQtKorHq3JrsxTZKy88Y08aMrC3vrSNpVh2xoKCiaTlFAYC6Jm/s1MgOVXfeam3r
-         du4Q==
+        id S1726692AbfGHWaj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Jul 2019 18:30:39 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:35599 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726371AbfGHWaj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Jul 2019 18:30:39 -0400
+Received: by mail-io1-f68.google.com with SMTP id m24so29454806ioo.2;
+        Mon, 08 Jul 2019 15:30:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7V+zYtHiOU5KbBa1aQMebYvCgwz3SI9LWyIoa1sCpdw=;
-        b=awhye0EIjIefjyhAsAlszkRKbuVqXTmem/3eaeohLCG0bOq3rzg2sEXLmep6qBLk8G
-         oSzxfJrcFueu/t99UkfCFAEI5gMq4nFGBSvzgPvgvqsDGfzRbK3yb1Vx4C5snhP+LTu1
-         2k5tADT/vV1smgD71fKNc6NCT45Fyabej4AE4cUZCVbrv1zXbSlA9LYVwJtfiJdjMdez
-         U7uEDIYUMzQT83U5quZeIdQbWIn/NFLfWelxz+NePnf/Lp1UridxPVdtW4hiFtoBsFaG
-         Z2B1wOvh/OLv3QOyFSFrhLkHY3KlrWPx/4dKHaZeg0leoodNAC3lpkggONzJMyEu8nG2
-         S3Ww==
-X-Gm-Message-State: APjAAAUuZbaalgx95TImW4Q1TRDNwjPLzAjNwRRTyjCHSOYKinKg08JQ
-        OH3CKtI+FTeelA8QLo4nXzCjhMSh35HEixMUNH8UdLt2
-X-Google-Smtp-Source: APXvYqxH3R0FdHNLLSBDTVaB/T4dSnC0fI11bqlcK/0Fu+fuRYnKbK6E3AygjPYkaRLdzeAYDs8DAy8OAdGPaUTZ1ks=
-X-Received: by 2002:a17:902:30a3:: with SMTP id v32mr27476800plb.6.1562615931000;
- Mon, 08 Jul 2019 12:58:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DKbe5Bw/ZWkGGevk11CJOS1MNbgfdugSW24hlqZbzbo=;
+        b=tHMaGIsLukSuB6CqKCJfcHL9Q2DOFCpwAXWWSJqaAnjJK7Dccec+nKsYSuzgWH1Qsx
+         OjYvYIkG3UklEh2PUBZnhTXpyY45+9DQJ/dfsozrg18ACjNAyHpx7M0apPwC5TOdr+dk
+         zCFpxo4g9KWhOE3WYJfsbw5YxJqwfxMtwQ08PZxLECgnXcWQJTpoVV7cANRHkPVhzy8J
+         /4WvOLHa6u+kJVvOSqyKIaklRRiI2rXfWFDz9iomvPvcBGkuThS5OKQPBTOdB6Q9We79
+         SWSyaQCvTopobbSFB00XXp6+BwoyBUPd4iEDRc7fqNSs8nIomdzKQK0L27lQ7l8Mmrht
+         Qdaw==
+X-Gm-Message-State: APjAAAUcwDDdnycTaKhTUoaRWJSSIcrwWbRoEi9yt9/deASN568xaA8W
+        Ll7zRL0jxaoN3V+nQ1NEVA==
+X-Google-Smtp-Source: APXvYqzSDWN6ooiwDgwx+KLeyHhdjBuL+QsFBURU2G0UGLCiUVOLkcMQl1URO5AdsIaKlOsojsMMsg==
+X-Received: by 2002:a5e:c00e:: with SMTP id u14mr7422195iol.196.1562625037976;
+        Mon, 08 Jul 2019 15:30:37 -0700 (PDT)
+Received: from localhost ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id x22sm14429132iob.84.2019.07.08.15.30.36
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 08 Jul 2019 15:30:36 -0700 (PDT)
+Date:   Mon, 8 Jul 2019 16:30:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     min.guo@mediatek.com
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, tony@atomide.com,
+        hdegoede@redhat.com
+Subject: Re: [PATCH v6 1/6] dt-bindings: usb: musb: Add support for MediaTek
+ musb controller
+Message-ID: <20190708223035.GA7005@bogus>
+References: <1559648359-6569-1-git-send-email-min.guo@mediatek.com>
+ <1559648359-6569-2-git-send-email-min.guo@mediatek.com>
 MIME-Version: 1.0
-References: <CAMqbrUg3bz=i8nh4W2-NWOsnQdqcaB3nvZnMJQ1sGXuD0ogk7Q@mail.gmail.com>
- <20190706044627.GA21685@kroah.com>
-In-Reply-To: <20190706044627.GA21685@kroah.com>
-From:   yunhua li <yunhual@gmail.com>
-Date:   Mon, 8 Jul 2019 12:58:40 -0700
-Message-ID: <CAMqbrUjzZoTE9onNZtmDfwdVyBjDAwggv1=xRKgLjFGS10Ed7A@mail.gmail.com>
-Subject: Re: Per USB device interrupt handler for xhci
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1559648359-6569-2-git-send-email-min.guo@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thank you Greg, So it seems xhci's interrupt based on it's rx/tx
-queue(ring), the ring is shared by all USB device,  it is not aware of
-"per USB device"?
+On Tue, Jun 04, 2019 at 07:39:14PM +0800, min.guo@mediatek.com wrote:
+> From: Min Guo <min.guo@mediatek.com>
+> 
+> This adds support for MediaTek musb controller in
+> host, peripheral and otg mode.
+> 
+> Signed-off-by: Min Guo <min.guo@mediatek.com>
+> ---
+> changes in v6:
+> 1. Modify usb connector child node
+> 
+> changes in v5:
+> suggested by Rob:
+> 1. Modify compatible as 
+> - compatible : should be one of:
+>                "mediatek,mt-2701"
 
-Regards
-Yunhua
+No, should be: mediatek,mt2701-musb
 
-On Fri, Jul 5, 2019 at 9:46 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Jul 05, 2019 at 07:50:28PM -0700, yunhua li wrote:
-> > Hi  all
-> >
-> > xhci_msi_irq is the interrupt handler for xhci, the controller it self
-> > is a PCI device, on my system it is a Intel chip. I have multiple USB
-> > device connect to this USB host controller,  xhci_msi_irq is interrupt
-> > handler for the PCI device(USB Host controller).
-> > Is it possible to have multiple IRQ, and different IRQ for different
-> > USB device?
->
-> Nope.  That is not how USB works.  Please read the xhci spec if you are
-> curious as to why.
->
-> greg k-h
+>                ...
+>                followed by "mediatek,mtk-musb"
+> 2. Add usb connector child node
+> 
+> changes in v4:
+> suggested by Sergei:
+> 1. String alignment
+> 
+> changes in v3:
+> 1. no changes
+> 
+> changes in v2:
+> suggested by Bin:
+> 1. Modify DRC to DRD
+> suggested by Rob:
+> 2. Drop the "<soc-model>-musb" in compatible
+> 3. Remove phy-names
+> 4. Add space after comma in clock-names
+> ---
+>  .../devicetree/bindings/usb/mediatek,musb.txt      | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,musb.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,musb.txt b/Documentation/devicetree/bindings/usb/mediatek,musb.txt
+> new file mode 100644
+> index 0000000..7434299
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,musb.txt
+> @@ -0,0 +1,55 @@
+> +MediaTek musb DRD/OTG controller
+> +-------------------------------------------
+> +
+> +Required properties:
+> + - compatible      : should be one of:
+> +                     "mediatek,mt-2701"
+> +                     ...
+> +                     followed by "mediatek,mtk-musb"
+> + - reg             : specifies physical base address and size of
+> +                     the registers
+> + - interrupts      : interrupt used by musb controller
+> + - interrupt-names : must be "mc"
+> + - phys            : PHY specifier for the OTG phy
+> + - dr_mode         : should be one of "host", "peripheral" or "otg",
+> +                     refer to usb/generic.txt
+> + - clocks          : a list of phandle + clock-specifier pairs, one for
+> +                     each entry in clock-names
+> + - clock-names     : must contain "main", "mcu", "univpll"
+> +                     for clocks of controller
+> +
+> +Optional properties:
+> + - power-domains   : a phandle to USB power domain node to control USB's
+> +                     MTCMOS
+> +
+> +Required child nodes:
+> + usb connector node as defined in bindings/connector/usb-connector.txt
+> +Optional properties:
+> + - id-gpios        : input GPIO for USB ID pin.
+> + - vbus-gpios      : input GPIO for USB VBUS pin.
+> + - vbus-supply     : reference to the VBUS regulator, needed when supports
+> +                     dual-role mode
+> +
+> +Example:
+> +
+> +usb2: usb@11200000 {
+> +	compatible = "mediatek,mt2701-musb",
+> +		     "mediatek,mtk-musb";
+> +	reg = <0 0x11200000 0 0x1000>;
+> +	interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
+> +	interrupt-names = "mc";
+> +	phys = <&u2port2 PHY_TYPE_USB2>;
+> +	dr_mode = "otg";
+> +	clocks = <&pericfg CLK_PERI_USB0>,
+> +		 <&pericfg CLK_PERI_USB0_MCU>,
+> +		 <&pericfg CLK_PERI_USB_SLV>;
+> +	clock-names = "main","mcu","univpll";
+> +	power-domains = <&scpsys MT2701_POWER_DOMAIN_IFR_MSC>;
+> +	connector{
+> +		compatible = "linux,typeb-conn-gpio", "usb-b-connector";
+
+linux,typeb-conn-gpio is not an accepted compatible string.
+
+> +		label = "micro-USB";
+> +		type = "micro";
+> +		id-gpios = <&pio 44 GPIO_ACTIVE_HIGH>;
+> +		vbus-supply = <&usb_vbus>;
+> +	};
+> +};
+> -- 
+> 1.9.1
+> 
