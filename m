@@ -2,233 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B657A63279
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2019 09:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004D26334A
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2019 11:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbfGIHzk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jul 2019 03:55:40 -0400
-Received: from mail-eopbgr50079.outbound.protection.outlook.com ([40.107.5.79]:42887
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725911AbfGIHzj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Jul 2019 03:55:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l7JOqoZNLF1ch2AXaETC6HGqHaRuhuy6+juS3/DgGdc=;
- b=XhtqQP9aiQyyWmUlJ2fsn6lQ9DnHBOi9cR0RE8+Ur4APKHlRTp4wQrmsXq+pqUslTWWmWwKmKpvzRSnjUMha01K+66Wixt0NejRapsc9M8iTwJvdRQ0XHPXhJ/iscCK8OUA846b6M/Jt+js67ZvZalaNhjZySGaGmk+k6Ge6y74=
-Received: from VE1PR04MB6655.eurprd04.prod.outlook.com (20.179.235.94) by
- VE1PR04MB6735.eurprd04.prod.outlook.com (20.179.235.212) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.19; Tue, 9 Jul 2019 07:55:31 +0000
-Received: from VE1PR04MB6655.eurprd04.prod.outlook.com
- ([fe80::846e:134d:2731:fcd]) by VE1PR04MB6655.eurprd04.prod.outlook.com
- ([fe80::846e:134d:2731:fcd%7]) with mapi id 15.20.2052.020; Tue, 9 Jul 2019
- 07:55:31 +0000
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Felipe Balbi <balbi@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Leo Li <leoyang.li@nxp.com>
-Subject: RE: [PATCH] usb: dwc3: Enable the USB snooping
-Thread-Topic: [PATCH] usb: dwc3: Enable the USB snooping
-Thread-Index: AQHTXdpMV/QBUrO8J0eNmcCmR0ATg6MVIlkAgAAD6zCAABVWgINueaJwgAAMz4CAAwpoAIAF38DwgBavPgCACkIu0IAASk0AgBejzDA=
-Date:   Tue, 9 Jul 2019 07:55:30 +0000
-Message-ID: <VE1PR04MB6655D052B076C52F7F24A387F1F10@VE1PR04MB6655.eurprd04.prod.outlook.com>
-References: <20171115060459.45375-1-ran.wang_1@nxp.com>
- <87ineb9b5v.fsf@linux.intel.com>
- <VI1PR04MB1504776EF3D4D8C374F0C069F1290@VI1PR04MB1504.eurprd04.prod.outlook.com>
- <87shdfet90.fsf@linux.intel.com>
- <AM5PR0402MB28654EBE2D431CC2F8061CF8F11E0@AM5PR0402MB2865.eurprd04.prod.outlook.com>
- <87k1eaanjw.fsf@linux.intel.com>
- <AM5PR0402MB2865F3735D808E1BC9F67968F1180@AM5PR0402MB2865.eurprd04.prod.outlook.com>
- <AM5PR0402MB2865D0F0E2B4F65C86D051F8F1140@AM5PR0402MB2865.eurprd04.prod.outlook.com>
- <87o92wgyqj.fsf@linux.intel.com>
- <VE1PR04MB66557834D3588FC8B558950AF1E00@VE1PR04MB6655.eurprd04.prod.outlook.com>
- <87v9wvsex3.fsf@linux.intel.com>
-In-Reply-To: <87v9wvsex3.fsf@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ran.wang_1@nxp.com; 
-x-originating-ip: [92.121.36.197]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c9c4a4c7-3feb-476e-7082-08d70442d097
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VE1PR04MB6735;
-x-ms-traffictypediagnostic: VE1PR04MB6735:
-x-microsoft-antispam-prvs: <VE1PR04MB6735CFA97D7A01FA7A5ADF27F1F10@VE1PR04MB6735.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0093C80C01
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(376002)(346002)(366004)(396003)(136003)(189003)(199004)(504964003)(3846002)(7696005)(186003)(6116002)(74316002)(6246003)(102836004)(6506007)(26005)(53546011)(76176011)(52536014)(86362001)(229853002)(33656002)(486006)(8676002)(81166006)(81156014)(5660300002)(2906002)(446003)(8936002)(316002)(9686003)(25786009)(14454004)(76116006)(73956011)(55016002)(478600001)(4326008)(476003)(71190400001)(54906003)(99286004)(71200400001)(110136005)(305945005)(68736007)(66446008)(64756008)(66556008)(66946007)(66476007)(7736002)(53936002)(256004)(14444005)(66066001)(6436002)(11346002);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6735;H:VE1PR04MB6655.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: /LBlbvyE4InEq3vOIdp05vwA/+sTkagOMRYEP8wQNKiN0N8MN6MBVh0DM2P2AJ+Me5NKpXA7HLzfc3/a0HCjuErNQiYpz/mf4TW3UCLOsrRzd41lctK+GvJu+KattMuWG+mPbXs8jrCUseoi/g/S3f66jc1VBLoDVmjnN2NsESakVXl8w+ZgQOqt8XlMdXILEFVGwvYNRKU0neyjOLCztSr8bBxgw1Oa2kpSDzFZMf3WK9O9FsW5KayQJeSTTKYTT62TPPXzVFvO0OEYRZMrViVbJ9CWD+ANSmTeE4cIRnH22H68/3Ae9ueaFxRNO+12o9LJztw/SrrglINeKz7cEgmel7U4VrUsDVoJOdoV5PNvCfo5OiayI878z0COKmw+ySduzWQngKuZnghEr9celEtSepvQpORfMdZg8CBb5SE=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726197AbfGIJKz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jul 2019 05:10:55 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:55649 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725975AbfGIJKz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Jul 2019 05:10:55 -0400
+X-UUID: 9dca87f76bdd4679bd04d6402cac12ea-20190709
+X-UUID: 9dca87f76bdd4679bd04d6402cac12ea-20190709
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <min.guo@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1636331047; Tue, 09 Jul 2019 17:10:47 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 9 Jul
+ 2019 17:10:43 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 9 Jul 2019 17:10:42 +0800
+Message-ID: <1562663442.17100.8.camel@mhfsdcap03>
+Subject: Re: [PATCH v6 1/6] dt-bindings: usb: musb: Add support for MediaTek
+ musb controller
+From:   Min Guo <min.guo@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <tony@atomide.com>,
+        <hdegoede@redhat.com>
+Date:   Tue, 9 Jul 2019 17:10:42 +0800
+In-Reply-To: <20190708223035.GA7005@bogus>
+References: <1559648359-6569-1-git-send-email-min.guo@mediatek.com>
+         <1559648359-6569-2-git-send-email-min.guo@mediatek.com>
+         <20190708223035.GA7005@bogus>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9c4a4c7-3feb-476e-7082-08d70442d097
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2019 07:55:30.8443
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ran.wang_1@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6735
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: F0DCFFEEE23D6BF2E5BB0AABD4DE8DDE5463016EB5873A380B873EE4248B482E2000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+Hi Rob,
+On Mon, 2019-07-08 at 16:30 -0600, Rob Herring wrote:
+> On Tue, Jun 04, 2019 at 07:39:14PM +0800, min.guo@mediatek.com wrote:
+> > From: Min Guo <min.guo@mediatek.com>
+> > 
+> > This adds support for MediaTek musb controller in
+> > host, peripheral and otg mode.
+> > 
+> > Signed-off-by: Min Guo <min.guo@mediatek.com>
+> > ---
+> > changes in v6:
+> > 1. Modify usb connector child node
+> > 
+> > changes in v5:
+> > suggested by Rob:
+> > 1. Modify compatible as 
+> > - compatible : should be one of:
+> >                "mediatek,mt-2701"
+> 
+> No, should be: mediatek,mt2701-musb
+OK.
 
-On Monday, June 24, 2019 13:58, Felipe Balbi wrote:
->=20
-> Hi,
->=20
-> Ran Wang <ran.wang_1@nxp.com> writes:
-> >> >> > >> >> >  /* Global Debug Queue/FIFO Space Available Register */
-> >> >> > >> >> >  #define DWC3_GDBGFIFOSPACE_NUM(n)	((n) & 0x1f)
-> >> >> > >> >> >  #define DWC3_GDBGFIFOSPACE_TYPE(n)	(((n) << 5) & 0x1e0)
-> >> >> > >> >> > @@ -859,6 +867,7 @@ struct dwc3_scratchpad_array {
-> >> >> > >> >> >   * 	3	- Reserved
-> >> >> > >> >> >   * @imod_interval: set the interrupt moderation interval=
- in
-> 250ns
-> >> >> > >> >> >   *                 increments or 0 to disable.
-> >> >> > >> >> > + * @dma_coherent: set if enable dma-coherent.
-> >> >> > >> >>
-> >> >> > >> >> you're not enabling dma coherency, you're enabling cache
-> snooping.
-> >> >> > >> >> And this property should describe that. Also, keep in mind
-> >> >> > >> >> that different devices may want different cache types for
-> >> >> > >> >> each of those fields, so your property would have to be a
-> >> >> > >> >> lot more complex. Something
-> >> >> > like:
-> >> >> > >> >>
-> >> >> > >> >> 	snps,cache-type =3D <foobar "cacheable">, <baz "cacheable"=
->, ...
-> >> >> > >> >>
-> >> >> > >> >> Then driver would have to parse this properly to setup GSBU=
-SCFG0.
-> >> >> > >
-> >> >> > > According to the DesignWare Cores SuperSpeed USB 3.0
-> >> >> > > Controller Databook (v2.60a), it has described Type Bit
-> >> >> > > Assignments for all supported
-> >> >> > master bus type:
-> >> >> > > AHB, AXI3, AXI4 and Native. I found the bit definition are
-> >> >> > > different among
-> >> >> > them.
-> >> >> > > So, for the example you gave above, feel a little bit confused.
-> >> >> > > Did you mean:
-> >> >> > >     snps,cache-type =3D <DATA_RD  "write allocate">, <DESC_RD
-> >> >> > > "cacheable">, <DATA_WR  "bufferable">, <DESC_WR  "read
-> >> >> > > allocate">
-> >> >> >
-> >> >> > yeah, something like that.
-> >> >>
-> >> >> I think DATA_RD  should be a macro, right? So, where I can put its =
-define?
-> >> >> Create a dwc3.h in include/dt-bindings/usb/ ?
-> >> >
-> >> > Could you please give me some advice here? I'd like to prepare next
-> >> > version patch after getting this settled.
-> >> >
-> >> >> Another question about this remain open is: DWC3 data book's Table
-> >> >> 6-5 Cache Type Bit Assignments show that bits definition will
-> >> >> differ per MBUS_TYPEs as
-> >> >> below:
-> >> >> ----------------------------------------------------------------
-> >> >>  MBUS_TYPE| bit[3]       |bit[2]       |bit[1]     |bit[0]
-> >> >>  ----------------------------------------------------------------
-> >> >>  AHB      |Cacheable     |Bufferable   |Privilegge |Data
-> >> >>  AXI3     |Write Allocate|Read Allocate|Cacheable  |Bufferable
-> >> >>  AXI4     |Allocate Other|Allocate     |Modifiable |Bufferable
-> >> >>  AXI4     |Other Allocate|Allocate     |Modifiable |Bufferable
-> >> >>  Native   |Same as AXI   |Same as AXI  |Same as AXI|Same as AXI
-> >> >>  ----------------------------------------------------------------
-> >> >>  Note: The AHB, AXI3, AXI4, and PCIe busses use different names
-> >> >> for certain  signals, which have the same meaning:
-> >> >>    Bufferable =3D Posted
-> >> >>    Cacheable =3D Modifiable =3D Snoop (negation of No Snoop)
-> >> >>
-> >> >> For Layerscape SoCs, MBUS_TYPE is AXI3. So I am not sure how to
-> >> >> use snps,cache-type =3D <DATA_RD  "write allocate">, to cover all
-> MBUS_TYPE?
-> >> >> (you can notice that AHB and AXI3's cacheable are on different
-> >> >> bit) Or I just need to handle AXI3 case?
-> >> >
-> >> > Also on this open. Thank you in advance.
-> >>
-> >> You could pass two strings and let the driver process them. Something
-> >> like:
-> >>
-> >> 	snps,cache_type =3D <"data_wr" "write allocate">, <"desc_rd"
-> >> "cacheable">...
-> >>
-> >> And so on. The only thing missing is for the mbus_type to be known by =
-the
-> driver.
-> >> Is that something we can figure out on any of the HWPARAMS registers
-> >> or does it have to be told explicitly?
-> >
-> > I have checked Layerscape Reference manual, HWPARAMS0~8 doesn't
-> > contain mbus_type Info, and I didn't know where have declared it explic=
-itly.
-> >
-> >> Another option would be to pass a string followed by one hex digit for=
- the
-> bits:
-> >>
-> >> 	snps,cache_type =3D <"data_wr" 0x8>, <"desc_rd" 0x2>...;
-> >>
-> >> Then we don't need to describe mbus_type since the bits are what matte=
-rs.
+> >                ...
+> >                followed by "mediatek,mtk-musb"
+> > 2. Add usb connector child node
+> > 
+> > changes in v4:
+> > suggested by Sergei:
+> > 1. String alignment
+> > 
+> > changes in v3:
+> > 1. no changes
+> > 
+> > changes in v2:
+> > suggested by Bin:
+> > 1. Modify DRC to DRD
+> > suggested by Rob:
+> > 2. Drop the "<soc-model>-musb" in compatible
+> > 3. Remove phy-names
+> > 4. Add space after comma in clock-names
+> > ---
+> >  .../devicetree/bindings/usb/mediatek,musb.txt      | 55 ++++++++++++++++++++++
+> >  1 file changed, 55 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,musb.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/mediatek,musb.txt b/Documentation/devicetree/bindings/usb/mediatek,musb.txt
+> > new file mode 100644
+> > index 0000000..7434299
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/mediatek,musb.txt
+> > @@ -0,0 +1,55 @@
+> > +MediaTek musb DRD/OTG controller
+> > +-------------------------------------------
+> > +
+> > +Required properties:
+> > + - compatible      : should be one of:
+> > +                     "mediatek,mt-2701"
+> > +                     ...
+> > +                     followed by "mediatek,mtk-musb"
+> > + - reg             : specifies physical base address and size of
+> > +                     the registers
+> > + - interrupts      : interrupt used by musb controller
+> > + - interrupt-names : must be "mc"
+> > + - phys            : PHY specifier for the OTG phy
+> > + - dr_mode         : should be one of "host", "peripheral" or "otg",
+> > +                     refer to usb/generic.txt
+> > + - clocks          : a list of phandle + clock-specifier pairs, one for
+> > +                     each entry in clock-names
+> > + - clock-names     : must contain "main", "mcu", "univpll"
+> > +                     for clocks of controller
+> > +
+> > +Optional properties:
+> > + - power-domains   : a phandle to USB power domain node to control USB's
+> > +                     MTCMOS
+> > +
+> > +Required child nodes:
+> > + usb connector node as defined in bindings/connector/usb-connector.txt
+> > +Optional properties:
+> > + - id-gpios        : input GPIO for USB ID pin.
+> > + - vbus-gpios      : input GPIO for USB VBUS pin.
+> > + - vbus-supply     : reference to the VBUS regulator, needed when supports
+> > +                     dual-role mode
+> > +
+> > +Example:
+> > +
+> > +usb2: usb@11200000 {
+> > +	compatible = "mediatek,mt2701-musb",
+> > +		     "mediatek,mtk-musb";
+> > +	reg = <0 0x11200000 0 0x1000>;
+> > +	interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
+> > +	interrupt-names = "mc";
+> > +	phys = <&u2port2 PHY_TYPE_USB2>;
+> > +	dr_mode = "otg";
+> > +	clocks = <&pericfg CLK_PERI_USB0>,
+> > +		 <&pericfg CLK_PERI_USB0_MCU>,
+> > +		 <&pericfg CLK_PERI_USB_SLV>;
+> > +	clock-names = "main","mcu","univpll";
+> > +	power-domains = <&scpsys MT2701_POWER_DOMAIN_IFR_MSC>;
+> > +	connector{
+> > +		compatible = "linux,typeb-conn-gpio", "usb-b-connector";
+> 
+> linux,typeb-conn-gpio is not an accepted compatible string.
+The compatible depends on connector driver, currently under review.
+https://patchwork.kernel.org/patch/10986245
 
-For this option, looks like DTC doesn't allow form of <"data_wr" 0x8>, <"de=
-sc_rd" 0x2>...=20
-It will report error when compiling:
+> > +		label = "micro-USB";
+> > +		type = "micro";
+> > +		id-gpios = <&pio 44 GPIO_ACTIVE_HIGH>;
+> > +		vbus-supply = <&usb_vbus>;
+> > +	};
+> > +};
+> > -- 
+> > 1.9.1
+> > 
 
-DTC     arch/arm64/boot/dts/freescale/fsl-ls1088a-rdb.dtb
-Error: arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi:383.23-24 syntax erro=
-r
-FATAL ERROR: Unable to parse input tree
-scripts/Makefile.lib:294: recipe for target 'arch/arm64/boot/dts/freescale/=
-fsl-ls1088a-qds.dtb' failed
-make[2]: *** [arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dtb] Error 1
-make[2]: *** Waiting for unfinished jobs....
-Error: arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi:383.23-24 syntax erro=
-r
-FATAL ERROR: Unable to parse input tree
+Regards,
+Min.
 
-One of the solution I can figure out is to use macro to replace "data_wr", =
-like below:
-<DATA_WR 0x8>, <DESC_RD 0x2>...
-
-However, it will require creating file in include/dt-bindings/usb/dwc3.h to
-place macro definitions.
-
-Or may I use:  "data_wr", <0x8>,  "desc_rd",  <0x2>... ?
-
-Thanks & Regards,
-Ran
-
-> > Yes, it's also what we prefer to use, it will be more flexible, I can
-> > add above Table
-> > 6-5 Cache Type Bit Assignments in binding to help user decide which
-> > value they would use.
-> >
-> > I would submit another version of patch for further review, thank you v=
-ery
-> much.
->=20
-> cool, thanks
->=20
-> --
-> balbi
