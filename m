@@ -2,122 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFFC63487
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2019 12:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0FA63574
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2019 14:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbfGIKuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jul 2019 06:50:12 -0400
-Received: from mga02.intel.com ([134.134.136.20]:28940 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726628AbfGIKuL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Jul 2019 06:50:11 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jul 2019 03:50:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,470,1557212400"; 
-   d="scan'208";a="316996020"
-Received: from hu.sh.intel.com ([10.239.158.51])
-  by orsmga004.jf.intel.com with ESMTP; 09 Jul 2019 03:50:02 -0700
-From:   "Chen, Hu" <hu1.chen@intel.com>
-To:     hdegoede@redhat.com
-Cc:     hu1.chen@intel.com, m.balaji@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: roles: Add PM callbacks
-Date:   Tue,  9 Jul 2019 18:30:25 +0800
-Message-Id: <20190709103025.25761-1-hu1.chen@intel.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <8d304bb6-9849-ea77-3bd6-fe378de78ce7@redhat.com>
-References: <8d304bb6-9849-ea77-3bd6-fe378de78ce7@redhat.com>
+        id S1726335AbfGIMQe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jul 2019 08:16:34 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:35583 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726046AbfGIMQe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Jul 2019 08:16:34 -0400
+Received: by mail-pl1-f194.google.com with SMTP id w24so9997309plp.2
+        for <linux-usb@vger.kernel.org>; Tue, 09 Jul 2019 05:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0zlbBIFtD0vfqGiiC5BfU9/XKOMbPaIAPFIK/AnAxu4=;
+        b=ZMLaa5Dph0P050+LJkf9aSETNp+8QDl4sQ+AF2F26HB+gSVME3a04EKJDjtV3riczo
+         kQgIzuot2KNiVSro9eoQpDFZqDBUHAL9wCTrUFvkitCnsS+lgFC+X0pJmUexaYhVpC+p
+         5DabHxAo0P0jvK1PgjWep2MVRRiM4TRGulsguruyjY6oPzf4goVJtWM3qZFTHIe9fzrZ
+         nyx5/UwC4OooQ9bCiCQc5mWnXubR56/wokFupNL9+ZMJlOaICL8t5+A4MFyisIMgI8vP
+         tc1n641PV806RRbRchVICPC2OgdBy9qZYtFuMvt6cNFgjyhVFL6ETJa4ZDBWsuOVdPMI
+         asNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0zlbBIFtD0vfqGiiC5BfU9/XKOMbPaIAPFIK/AnAxu4=;
+        b=lJSuDtIFP3RCpJS/nLTYXyGIJ9eZARFiAdLunXmE9VK7/LYbFBVxD0fQLa8jL3SYsI
+         8zjuEAPZa1il56HRc5O83pbUS7/J6Tvx/EFDxIyukrez3aqInKKpKwrqdWCyvdZcQWC7
+         P5j2M4aJP1ssjKY9Pd03mUUimbTqvuzUjCvDaDZZBsec32hhfo/igymvMTE4PwxMtOA+
+         jUAS8sndAGe9mAVULhwUqBku/DFPPUZo2by5nhQeskTtBtF1kyyFhaNqcbqu+xkTlDpn
+         ZV77LxCqUPnmABD9Kkg2comlu9nFELEbt1y3hqEBfSs6gXQ5KoH8cH5yVx+bUo5xFIq0
+         Ycsw==
+X-Gm-Message-State: APjAAAXaaetMdtBbajIm3t1ydHYrsPgfkpNBCQk2dh4sLExuFyUdzr66
+        J1ijt1cpqZCRHMQWOzmVMY0+OAChvHxeMOvOhcyxrg==
+X-Google-Smtp-Source: APXvYqyRpvMOsKpgvvFIm5hO+l9JY3DLMLSJQjGh4uU2h63Vzd3ovnMK0LWU62SotvP96tXm+dm8Ny3O5J/DRJnNYUY=
+X-Received: by 2002:a17:902:6a87:: with SMTP id n7mr31246385plk.336.1562674593241;
+ Tue, 09 Jul 2019 05:16:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <000000000000a0b1df058cb460c8@google.com> <20190705095012.13096-1-hdanton@sina.com>
+In-Reply-To: <20190705095012.13096-1-hdanton@sina.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 9 Jul 2019 14:16:22 +0200
+Message-ID: <CAAeHK+zO6s5zWmz_QP6HiXd81Q217X6Viua+v1HkyXiowS_2Sg@mail.gmail.com>
+Subject: Re: WARNING in sisusb_send_bulk_msg/usb_submit_urb
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On some Broxton NUC, the usb role is lost after S3 (it becomes "none").
-Add PM callbacks to address this. In .suspend, save the role. In
-.resume, restore usb role to saved one if it's lost.
+On Fri, Jul 5, 2019 at 11:50 AM Hillf Danton <hdanton@sina.com> wrote:
+>
+>
+> On Thu, 04 Jul 2019 07:09:05 -0700 (PDT)
+> > syzbot has found a reproducer for the following crash on:
+> >
+> > HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=12e5bf93a00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11effc85a00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172189aba00000
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com
+> >
+> > usb 1-1: string descriptor 0 read error: -22
+> > usb 1-1: New USB device found, idVendor=0711, idProduct=0550,
+> > bcdDevice=da.7e
+> > usb 1-1: New USB device strings: Mfr=37, Product=1, SerialNumber=1
+> > usb 1-1: USB2VGA dongle found at address 2
+> > usb 1-1: Allocated 8 output buffers
+> > ------------[ cut here ]------------
+> > usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+> > WARNING: CPU: 1 PID: 21 at drivers/usb/core/urb.c:477
+> > usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+> > Kernel panic - not syncing: panic_on_warn set ...
+> > CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #13
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > Google 01/01/2011
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >   __dump_stack lib/dump_stack.c:77 [inline]
+> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
+> >   panic+0x292/0x6c9 kernel/panic.c:219
+> >   __warn.cold+0x20/0x4b kernel/panic.c:576
+> >   report_bug+0x262/0x2a0 lib/bug.c:186
+> >   fixup_bug arch/x86/kernel/traps.c:179 [inline]
+> >   fixup_bug arch/x86/kernel/traps.c:174 [inline]
+> >   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+> >   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+> >   invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
+> > RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+> > Code: 4d 85 ed 74 2c e8 78 db e8 fd 4c 89 f7 e8 a0 36 13 ff 41 89 d8 44 89
+> > e1 4c 89 ea 48 89 c6 48 c7 c7 80 23 1a 86 e8 03 a0 be fd <0f> 0b e9 20 f4
+> > ff ff e8 4c db e8 fd 4c 89 f2 48 b8 00 00 00 00 00
+> > RSP: 0018:ffff8881d9efed28 EFLAGS: 00010282
+> > RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3dfd97
+> > RBP: ffff8881d09bbb80 R08: ffff8881d9e36000 R09: ffffed103b665d30
+> > R10: ffffed103b665d2f R11: ffff8881db32e97f R12: 0000000000000003
+> > R13: ffff8881ccdd79a8 R14: ffff8881d03711a0 R15: ffff8881d9449000
+> >   sisusb_bulkout_msg drivers/usb/misc/sisusbvga/sisusb.c:238 [inline]
+> >   sisusb_send_bulk_msg.constprop.0+0x88a/0x1030  drivers/usb/misc/sisusbvga/sisusb.c:393
+> >   sisusb_send_bridge_packet.constprop.0+0x11c/0x240  drivers/usb/misc/sisusbvga/sisusb.c:581
+> >   sisusb_do_init_gfxdevice+0x8a/0x450  drivers/usb/misc/sisusbvga/sisusb.c:2137
+> >   sisusb_init_gfxdevice+0xe0/0x18d0 drivers/usb/misc/sisusbvga/sisusb.c:2237
+> >   sisusb_probe+0x924/0xbcb drivers/usb/misc/sisusbvga/sisusb.c:3122
+> >   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+> >   really_probe+0x281/0x660 drivers/base/dd.c:509
+> >   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+> >   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+> >   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+> >   __device_attach+0x217/0x360 drivers/base/dd.c:843
+> >   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+> >   device_add+0xae6/0x16f0 drivers/base/core.c:2111
+> >   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+> >   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+> >   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+> >   really_probe+0x281/0x660 drivers/base/dd.c:509
+> >   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+> >   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+> >   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+> >   __device_attach+0x217/0x360 drivers/base/dd.c:843
+> >   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+> >   device_add+0xae6/0x16f0 drivers/base/core.c:2111
+> >   usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
+> >   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+> >   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+> >   port_event drivers/usb/core/hub.c:5350 [inline]
+> >   hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
+> >   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+> >   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+> >   kthread+0x30b/0x410 kernel/kthread.c:255
+> >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> > Kernel Offset: disabled
+> > Rebooting in 86400 seconds..
+> >
+>
+> There are three defines that can be found currently in the mainline.
+>
+> ===define-1=== linux/usb.h
+>
+> /* NOTE:  these are not the standard USB_ENDPOINT_XFER_* values!! */
+> /* (yet ... they're the values used by usbfs) */
+> #define PIPE_ISOCHRONOUS                0
+> #define PIPE_INTERRUPT                  1
+> #define PIPE_CONTROL                    2
+> #define PIPE_BULK                       3
+>
+>
+> ===define-2=== usb/core/urb.c
+>
+> static const int pipetypes[4] = {
+>         PIPE_CONTROL, PIPE_ISOCHRONOUS, PIPE_BULK, PIPE_INTERRUPT
+> };
+>
+>
+> ===define-3=== uapi/linux/usb/ch9.h
+>
+> #define USB_ENDPOINT_XFERTYPE_MASK      0x03    /* in bmAttributes */
+> #define USB_ENDPOINT_XFER_CONTROL       0
+> #define USB_ENDPOINT_XFER_ISOC          1
+> #define USB_ENDPOINT_XFER_BULK          2
+> #define USB_ENDPOINT_XFER_INT           3
+>
+> And PIPE_BULK is unable to match its counterpart in pipetypes array as long as
+> code is correct. Nor XFER_BULK.
+>
 
-Tests:
-Run Android on UC6CAY, a NUC powered by Broxton. The usb port near to
-the power button is switchable.
-- as device. Access the NUC via "adb shell" from a host PC. Adb works
-after S3 cycle.
-- as host. Mouse works on that usb port after S3 cycle.
+Hi Hilf,
 
-Without this fix, both of tests fails.
+The USB stack produces this kind of WARNING when the driver uses a
+bulk pipe and usb_fill_bulk_urb(), but the endpoint is actually
+interrupt. The driver should check that the ep has the expected type
+before using it.
 
-Signed-off-by: Chen, Hu <hu1.chen@intel.com>
-Signed-off-by: Balaji <m.balaji@intel.com>
----
-v2: The role maybe changed by ISR or firmware etc. between .suspend and
-.resume (Hans).
- .../usb/roles/intel-xhci-usb-role-switch.c    | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-index 277de96181f9..e830299c401e 100644
---- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
-+++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-@@ -20,6 +20,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/usb/role.h>
-+#include <linux/power_supply.h>
- 
- /* register definition */
- #define DUAL_ROLE_CFG0			0x68
-@@ -37,6 +38,7 @@
- struct intel_xhci_usb_data {
- 	struct usb_role_switch *role_sw;
- 	void __iomem *base;
-+	enum usb_role role;
- };
- 
- static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
-@@ -167,6 +169,29 @@ static int intel_xhci_usb_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static int intel_xhci_usb_suspend(struct platform_device *pdev,
-+				  pm_message_t state)
-+{
-+	struct intel_xhci_usb_data *data = platform_get_drvdata(pdev);
-+	struct device *dev = &pdev->dev;
-+
-+	data->role = intel_xhci_usb_get_role(dev);
-+
-+	return 0;
-+}
-+
-+static int intel_xhci_usb_resume(struct platform_device *pdev)
-+{
-+	struct intel_xhci_usb_data *data = platform_get_drvdata(pdev);
-+	struct device *dev = &pdev->dev;
-+
-+	if (intel_xhci_usb_get_role(dev) == USB_ROLE_NONE &&
-+	    power_supply_is_system_supplied())
-+		intel_xhci_usb_set_role(dev, data->role);
-+
-+	return 0;
-+}
-+
- static const struct platform_device_id intel_xhci_usb_table[] = {
- 	{ .name = DRV_NAME },
- 	{}
-@@ -180,6 +205,8 @@ static struct platform_driver intel_xhci_usb_driver = {
- 	.id_table = intel_xhci_usb_table,
- 	.probe = intel_xhci_usb_probe,
- 	.remove = intel_xhci_usb_remove,
-+	.suspend = intel_xhci_usb_suspend,
-+	.resume = intel_xhci_usb_resume,
- };
- 
- module_platform_driver(intel_xhci_usb_driver);
--- 
-2.22.0
-
+Thanks!
