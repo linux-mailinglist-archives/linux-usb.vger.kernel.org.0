@@ -2,173 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 004D26334A
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2019 11:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFFC63487
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2019 12:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726197AbfGIJKz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jul 2019 05:10:55 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:55649 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725975AbfGIJKz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Jul 2019 05:10:55 -0400
-X-UUID: 9dca87f76bdd4679bd04d6402cac12ea-20190709
-X-UUID: 9dca87f76bdd4679bd04d6402cac12ea-20190709
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <min.guo@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1636331047; Tue, 09 Jul 2019 17:10:47 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 9 Jul
- 2019 17:10:43 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 9 Jul 2019 17:10:42 +0800
-Message-ID: <1562663442.17100.8.camel@mhfsdcap03>
-Subject: Re: [PATCH v6 1/6] dt-bindings: usb: musb: Add support for MediaTek
- musb controller
-From:   Min Guo <min.guo@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Bin Liu <b-liu@ti.com>,
+        id S1726641AbfGIKuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jul 2019 06:50:12 -0400
+Received: from mga02.intel.com ([134.134.136.20]:28940 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726628AbfGIKuL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Jul 2019 06:50:11 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jul 2019 03:50:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,470,1557212400"; 
+   d="scan'208";a="316996020"
+Received: from hu.sh.intel.com ([10.239.158.51])
+  by orsmga004.jf.intel.com with ESMTP; 09 Jul 2019 03:50:02 -0700
+From:   "Chen, Hu" <hu1.chen@intel.com>
+To:     hdegoede@redhat.com
+Cc:     hu1.chen@intel.com, m.balaji@intel.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <tony@atomide.com>,
-        <hdegoede@redhat.com>
-Date:   Tue, 9 Jul 2019 17:10:42 +0800
-In-Reply-To: <20190708223035.GA7005@bogus>
-References: <1559648359-6569-1-git-send-email-min.guo@mediatek.com>
-         <1559648359-6569-2-git-send-email-min.guo@mediatek.com>
-         <20190708223035.GA7005@bogus>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: roles: Add PM callbacks
+Date:   Tue,  9 Jul 2019 18:30:25 +0800
+Message-Id: <20190709103025.25761-1-hu1.chen@intel.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <8d304bb6-9849-ea77-3bd6-fe378de78ce7@redhat.com>
+References: <8d304bb6-9849-ea77-3bd6-fe378de78ce7@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: F0DCFFEEE23D6BF2E5BB0AABD4DE8DDE5463016EB5873A380B873EE4248B482E2000:8
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
-On Mon, 2019-07-08 at 16:30 -0600, Rob Herring wrote:
-> On Tue, Jun 04, 2019 at 07:39:14PM +0800, min.guo@mediatek.com wrote:
-> > From: Min Guo <min.guo@mediatek.com>
-> > 
-> > This adds support for MediaTek musb controller in
-> > host, peripheral and otg mode.
-> > 
-> > Signed-off-by: Min Guo <min.guo@mediatek.com>
-> > ---
-> > changes in v6:
-> > 1. Modify usb connector child node
-> > 
-> > changes in v5:
-> > suggested by Rob:
-> > 1. Modify compatible as 
-> > - compatible : should be one of:
-> >                "mediatek,mt-2701"
-> 
-> No, should be: mediatek,mt2701-musb
-OK.
+On some Broxton NUC, the usb role is lost after S3 (it becomes "none").
+Add PM callbacks to address this. In .suspend, save the role. In
+.resume, restore usb role to saved one if it's lost.
 
-> >                ...
-> >                followed by "mediatek,mtk-musb"
-> > 2. Add usb connector child node
-> > 
-> > changes in v4:
-> > suggested by Sergei:
-> > 1. String alignment
-> > 
-> > changes in v3:
-> > 1. no changes
-> > 
-> > changes in v2:
-> > suggested by Bin:
-> > 1. Modify DRC to DRD
-> > suggested by Rob:
-> > 2. Drop the "<soc-model>-musb" in compatible
-> > 3. Remove phy-names
-> > 4. Add space after comma in clock-names
-> > ---
-> >  .../devicetree/bindings/usb/mediatek,musb.txt      | 55 ++++++++++++++++++++++
-> >  1 file changed, 55 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,musb.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/mediatek,musb.txt b/Documentation/devicetree/bindings/usb/mediatek,musb.txt
-> > new file mode 100644
-> > index 0000000..7434299
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/mediatek,musb.txt
-> > @@ -0,0 +1,55 @@
-> > +MediaTek musb DRD/OTG controller
-> > +-------------------------------------------
-> > +
-> > +Required properties:
-> > + - compatible      : should be one of:
-> > +                     "mediatek,mt-2701"
-> > +                     ...
-> > +                     followed by "mediatek,mtk-musb"
-> > + - reg             : specifies physical base address and size of
-> > +                     the registers
-> > + - interrupts      : interrupt used by musb controller
-> > + - interrupt-names : must be "mc"
-> > + - phys            : PHY specifier for the OTG phy
-> > + - dr_mode         : should be one of "host", "peripheral" or "otg",
-> > +                     refer to usb/generic.txt
-> > + - clocks          : a list of phandle + clock-specifier pairs, one for
-> > +                     each entry in clock-names
-> > + - clock-names     : must contain "main", "mcu", "univpll"
-> > +                     for clocks of controller
-> > +
-> > +Optional properties:
-> > + - power-domains   : a phandle to USB power domain node to control USB's
-> > +                     MTCMOS
-> > +
-> > +Required child nodes:
-> > + usb connector node as defined in bindings/connector/usb-connector.txt
-> > +Optional properties:
-> > + - id-gpios        : input GPIO for USB ID pin.
-> > + - vbus-gpios      : input GPIO for USB VBUS pin.
-> > + - vbus-supply     : reference to the VBUS regulator, needed when supports
-> > +                     dual-role mode
-> > +
-> > +Example:
-> > +
-> > +usb2: usb@11200000 {
-> > +	compatible = "mediatek,mt2701-musb",
-> > +		     "mediatek,mtk-musb";
-> > +	reg = <0 0x11200000 0 0x1000>;
-> > +	interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
-> > +	interrupt-names = "mc";
-> > +	phys = <&u2port2 PHY_TYPE_USB2>;
-> > +	dr_mode = "otg";
-> > +	clocks = <&pericfg CLK_PERI_USB0>,
-> > +		 <&pericfg CLK_PERI_USB0_MCU>,
-> > +		 <&pericfg CLK_PERI_USB_SLV>;
-> > +	clock-names = "main","mcu","univpll";
-> > +	power-domains = <&scpsys MT2701_POWER_DOMAIN_IFR_MSC>;
-> > +	connector{
-> > +		compatible = "linux,typeb-conn-gpio", "usb-b-connector";
-> 
-> linux,typeb-conn-gpio is not an accepted compatible string.
-The compatible depends on connector driver, currently under review.
-https://patchwork.kernel.org/patch/10986245
+Tests:
+Run Android on UC6CAY, a NUC powered by Broxton. The usb port near to
+the power button is switchable.
+- as device. Access the NUC via "adb shell" from a host PC. Adb works
+after S3 cycle.
+- as host. Mouse works on that usb port after S3 cycle.
 
-> > +		label = "micro-USB";
-> > +		type = "micro";
-> > +		id-gpios = <&pio 44 GPIO_ACTIVE_HIGH>;
-> > +		vbus-supply = <&usb_vbus>;
-> > +	};
-> > +};
-> > -- 
-> > 1.9.1
-> > 
+Without this fix, both of tests fails.
 
-Regards,
-Min.
+Signed-off-by: Chen, Hu <hu1.chen@intel.com>
+Signed-off-by: Balaji <m.balaji@intel.com>
+---
+v2: The role maybe changed by ISR or firmware etc. between .suspend and
+.resume (Hans).
+ .../usb/roles/intel-xhci-usb-role-switch.c    | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+index 277de96181f9..e830299c401e 100644
+--- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
++++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+@@ -20,6 +20,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/usb/role.h>
++#include <linux/power_supply.h>
+ 
+ /* register definition */
+ #define DUAL_ROLE_CFG0			0x68
+@@ -37,6 +38,7 @@
+ struct intel_xhci_usb_data {
+ 	struct usb_role_switch *role_sw;
+ 	void __iomem *base;
++	enum usb_role role;
+ };
+ 
+ static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
+@@ -167,6 +169,29 @@ static int intel_xhci_usb_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static int intel_xhci_usb_suspend(struct platform_device *pdev,
++				  pm_message_t state)
++{
++	struct intel_xhci_usb_data *data = platform_get_drvdata(pdev);
++	struct device *dev = &pdev->dev;
++
++	data->role = intel_xhci_usb_get_role(dev);
++
++	return 0;
++}
++
++static int intel_xhci_usb_resume(struct platform_device *pdev)
++{
++	struct intel_xhci_usb_data *data = platform_get_drvdata(pdev);
++	struct device *dev = &pdev->dev;
++
++	if (intel_xhci_usb_get_role(dev) == USB_ROLE_NONE &&
++	    power_supply_is_system_supplied())
++		intel_xhci_usb_set_role(dev, data->role);
++
++	return 0;
++}
++
+ static const struct platform_device_id intel_xhci_usb_table[] = {
+ 	{ .name = DRV_NAME },
+ 	{}
+@@ -180,6 +205,8 @@ static struct platform_driver intel_xhci_usb_driver = {
+ 	.id_table = intel_xhci_usb_table,
+ 	.probe = intel_xhci_usb_probe,
+ 	.remove = intel_xhci_usb_remove,
++	.suspend = intel_xhci_usb_suspend,
++	.resume = intel_xhci_usb_resume,
+ };
+ 
+ module_platform_driver(intel_xhci_usb_driver);
+-- 
+2.22.0
 
