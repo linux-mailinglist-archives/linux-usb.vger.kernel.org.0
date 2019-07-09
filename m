@@ -2,44 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1908635DA
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2019 14:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B68D635D4
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jul 2019 14:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727059AbfGIM1k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jul 2019 08:27:40 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:32887 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbfGIM1I (ORCPT
+        id S1726679AbfGIM1I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jul 2019 08:27:08 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:48902 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbfGIM1I (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Jul 2019 08:27:08 -0400
-Received: by mail-io1-f70.google.com with SMTP id 132so20262995iou.0
-        for <linux-usb@vger.kernel.org>; Tue, 09 Jul 2019 05:27:08 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id z19so22918591ioi.15
+        for <linux-usb@vger.kernel.org>; Tue, 09 Jul 2019 05:27:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=NebuMAkCn1+znBhCDmKMJxR+15w2PZJUV9MwEwc6ooc=;
-        b=RP8JrnsHrmBPem3CQxmYfVqYF4nGQ7wcIAyPEjc5qdVD9kY3SfP5k5RyyaqRvv0g5T
-         ml5FILsbhxAd2y/Qm3GkTrjXy/fRnSrJxvzvPAr/oujr9O8k59KUHYaaFe/D/v2XyLyc
-         rZaCTGmg47Agu0rxIPNo3H+cwXL6pFEtB7ZMnE1gz/htpD/BtqF1bSF0j/sFYVRJOWuh
-         3tk5smZgB1o8MmdxdwmKijcWmeyTjRZL/qC+1gkKKI9McWrxKR1LlgFUBuo1t6EmwF0J
-         H1/Vm+MiqphfCyyy5EgvAWeDT7mslSDH4vNY/Lp9t31wAt6guwXNPrVWSR3p5wO4A4Kp
-         8iMA==
-X-Gm-Message-State: APjAAAUkMbn90sVnVr3X7IFh4X13XsovUBTUd+09WlJchgiixgQ1Mn9u
-        hrHlAh2Ke8dags7h5mz7MvLwYa3biw8eEMuyPLCBPXCxOg7r
-X-Google-Smtp-Source: APXvYqxOnYwlM/KwfZvRBaNh/afE0RR6116tCNtS6/Reiv8S1pCZegG1cKFDfqh8NqnK8YMGCdy5qXYdKkDVtdhbvxfaQWKUamSh
+        bh=hGo8EbEA3ZKfqUVxyvabXM+z4gyY4A3JpCgTFSwOIxY=;
+        b=M86SeKnhUc5EMxLPUpEkRHvI7X1L9GZn4vyFmKG3LY/L/Tt1pNnGuGpqL36Lqldz3I
+         0dIzdX8CcHfReA7tNM79pALPW5qeOWO/keLMXSGLfWKBds6uF2zLA/EGO9n28y+eym7E
+         j7VxR2BhrdmwB3w38KUatY2ZTnb15MOp1KFCdkWW387yjW/dp/VgK8x875YoQ77o1OvH
+         43uZA/4iQbo+ALImR6yMtLjV1psFMww+tiD5DxuuTKLj3PNqBERso4ZNAqsxwn1EbU3W
+         wlt8j77UeOvF9arCMINZPp2pt4rl2cNMxXeghBmAxnK8NgG1D1m4lXJx0Mo8/2WWfe+d
+         R+DA==
+X-Gm-Message-State: APjAAAUYqzU0USAhyVfVibkjLgiRg4eVMJrMZI/yZD0sUO91X8Jd3xi4
+        hJ3vKVqBJ90EnKxmTYEY6vwSPuTzD4KCpvkt/38v7yL75NMg
+X-Google-Smtp-Source: APXvYqxfFL7rbB9NNuNdYve/wnQ+LnO/p1FfoKru10JjwRiTTBhM1RedITaDY+N8Dre9ohQuLEBEKe+9QOz+lFWoQJQqCKLl4a+D
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8b43:: with SMTP id z3mr3852350iom.287.1562675227812;
+X-Received: by 2002:a02:2245:: with SMTP id o66mr28683555jao.53.1562675227511;
  Tue, 09 Jul 2019 05:27:07 -0700 (PDT)
 Date:   Tue, 09 Jul 2019 05:27:07 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000da6a0e058d3ead50@google.com>
-Subject: general protection fault in vidioc_querycap
-From:   syzbot <syzbot+646272341e25afebff05@syzkaller.appspotmail.com>
-To:     allison@lohutok.net, andreyknvl@google.com,
-        gregkh@linuxfoundation.org, hverkuil@xs4all.nl,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Message-ID: <000000000000d5d567058d3eadcf@google.com>
+Subject: general protection fault in vmk80xx_write_packet
+From:   syzbot <syzbot+009f546aa1370056b1c2@syzkaller.appspotmail.com>
+To:     abbotti@mev.co.uk, andreyknvl@google.com,
+        devel@driverdev.osuosl.org, gregkh@linuxfoundation.org,
+        hsweeten@visionengravers.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -52,78 +51,78 @@ syzbot found the following crash on:
 
 HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
 git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1321f9a3a00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=126dd493a00000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
-dashboard link: https://syzkaller.appspot.com/bug?extid=646272341e25afebff05
+dashboard link: https://syzkaller.appspot.com/bug?extid=009f546aa1370056b1c2
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12ac261ba00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=171d6739a00000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1684570ba00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=132c91f5a00000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+646272341e25afebff05@syzkaller.appspotmail.com
+Reported-by: syzbot+009f546aa1370056b1c2@syzkaller.appspotmail.com
 
+usb 1-1: config 0 interface 160 has no altsetting 0
+usb 1-1: New USB device found, idVendor=10cf, idProduct=5501,  
+bcdDevice=eb.5b
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
 kasan: CONFIG_KASAN_INLINE enabled
 kasan: GPF could be caused by NULL-ptr deref or user memory access
 general protection fault: 0000 [#1] SMP KASAN
-CPU: 1 PID: 1878 Comm: v4l_id Not tainted 5.2.0-rc6+ #13
+CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #13
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
-RIP: 0010:usb_make_path include/linux/usb.h:913 [inline]
-RIP: 0010:vidioc_querycap+0x12d/0x3e0  
-drivers/media/usb/usbvision/usbvision-video.c:461
-Code: 3c 02 00 0f 85 ba 02 00 00 49 8b ac 24 58 16 00 00 48 b8 00 00 00 00  
-00 fc ff df 48 8d 7d 48 4c 8d 45 04 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f  
-85 7d 02 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
-RSP: 0018:ffff8881cc727a28 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: ffff8881cc727c20 RCX: 0000000000000000
-RDX: 0000000000000009 RSI: 451f481f4b404f27 RDI: 0000000000000048
-RBP: 0000000000000000 R08: 0000000000000004 R09: fffffbfff0c9ba38
-R10: fffffbfff0c9ba37 R11: ffffffff864dd1b8 R12: ffff8881cc9aa100
-R13: ffff8881cc9ab804 R14: ffff8881cc9aa998 R15: ffff8881cc727c50
-FS:  00007f579210f700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:vmk80xx_write_packet+0x75/0x260  
+drivers/staging/comedi/drivers/vmk80xx.c:204
+Code: 48 8d 7b 68 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 d3 01 00 00 48 b8  
+00 00 00 00 00 fc ff df 4c 8b 6b 68 4c 89 ea 48 c1 ea 03 <0f> b6 04 02 4c  
+89 ea 83 e2 07 38 d0 7f 08 84 c0 0f 85 84 01 00 00
+RSP: 0018:ffff8881d9eff1b0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff8881d4f596c0 RCX: 0000000000000000
+RDX: 0000000000000002 RSI: ffffffff847cda93 RDI: ffff8881d4f59728
+RBP: ffff8881cfc79900 R08: ffff8881d9e36000 R09: 0000000000000010
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff8881c5d84c80
+R13: 0000000000000010 R14: 0000000000000000 R15: ffff8881d2690128
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000625208 CR3: 00000001cd192000 CR4: 00000000001406e0
+CR2: 00007f9c904c4000 CR3: 00000001d2b52000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
-  v4l_querycap+0x121/0x340 drivers/media/v4l2-core/v4l2-ioctl.c:1058
-  __video_do_ioctl+0x5b0/0xb30 drivers/media/v4l2-core/v4l2-ioctl.c:2871
-  video_usercopy+0x446/0xee0 drivers/media/v4l2-core/v4l2-ioctl.c:3053
-  v4l2_ioctl+0x147/0x1a0 drivers/media/v4l2-core/v4l2-dev.c:360
-  vfs_ioctl fs/ioctl.c:46 [inline]
-  file_ioctl fs/ioctl.c:509 [inline]
-  do_vfs_ioctl+0xcda/0x12e0 fs/ioctl.c:696
-  ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
-  __do_sys_ioctl fs/ioctl.c:720 [inline]
-  __se_sys_ioctl fs/ioctl.c:718 [inline]
-  __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
-  do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x7f5791c42347
-Code: 90 90 90 48 8b 05 f1 fa 2a 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff  
-ff c3 90 90 90 90 90 90 90 90 90 90 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 73 01 c3 48 8b 0d c1 fa 2a 00 31 d2 48 29 c2 64
-RSP: 002b:00007ffced1878d8 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f5791c42347
-RDX: 00007ffced1878e0 RSI: 0000000080685600 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000400884
-R13: 00007ffced187a30 R14: 0000000000000000 R15: 0000000000000000
+  vmk80xx_reset_device drivers/staging/comedi/drivers/vmk80xx.c:226 [inline]
+  vmk80xx_auto_attach+0x13b1/0x17c0  
+drivers/staging/comedi/drivers/vmk80xx.c:814
+  comedi_auto_config+0x16e/0x250 drivers/staging/comedi/drivers.c:1067
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x30b/0x410 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 Modules linked in:
----[ end trace 5550531bc37b28bc ]---
-RIP: 0010:usb_make_path include/linux/usb.h:913 [inline]
-RIP: 0010:vidioc_querycap+0x12d/0x3e0  
-drivers/media/usb/usbvision/usbvision-video.c:461
-Code: 3c 02 00 0f 85 ba 02 00 00 49 8b ac 24 58 16 00 00 48 b8 00 00 00 00  
-00 fc ff df 48 8d 7d 48 4c 8d 45 04 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f  
-85 7d 02 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
-RSP: 0018:ffff8881cc727a28 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: ffff8881cc727c20 RCX: 0000000000000000
-RDX: 0000000000000009 RSI: 451f481f4b404f27 RDI: 0000000000000048
-RBP: 0000000000000000 R08: 0000000000000004 R09: fffffbfff0c9ba38
-R10: fffffbfff0c9ba37 R11: ffffffff864dd1b8 R12: ffff8881cc9aa100
-R13: ffff8881cc9ab804 R14: ffff8881cc9aa998 R15: ffff8881cc727c50
-FS:  00007f579210f700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000625208 CR3: 00000001cd192000 CR4: 00000000001406e0
+---[ end trace 8425c817ce1da187 ]---
 
 
 ---
