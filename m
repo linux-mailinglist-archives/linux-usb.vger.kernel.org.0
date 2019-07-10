@@ -2,43 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F4664596
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2019 13:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8335D64598
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2019 13:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727500AbfGJLHT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Jul 2019 07:07:19 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:53754 "EHLO
+        id S1727502AbfGJLHV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Jul 2019 07:07:21 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:39067 "EHLO
         mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727410AbfGJLHK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Jul 2019 07:07:10 -0400
-Received: by mail-io1-f69.google.com with SMTP id h3so2437181iob.20
+        with ESMTP id S1727415AbfGJLHJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Jul 2019 07:07:09 -0400
+Received: by mail-io1-f69.google.com with SMTP id y13so2469217iol.6
         for <linux-usb@vger.kernel.org>; Wed, 10 Jul 2019 04:07:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=hv0vy7ZJWnUYzBFo0bloao/Xl9soIKCPd2v/8FZXHxc=;
-        b=ZtrLdlF7aqLxJ0USfefZhIfZlZjZc6qCjcUDdQt+SS/F02PJNhxZMT0jbjZ7eNNDIi
-         c5boLtSYstSZUrGWYNPz6rEmAOc8SVktaehRGleFIgBfQYamLrDvx3vlrEISYWVj33Qe
-         3RkfWBJWZHcrE272UGSt1aiRtZ1X1fhpjiG9oP0epwhZvY+z0wYu0xS8YvkOBo6gmWOz
-         oyxHboJtdlJyl0jW6AoWfREHhi/aFRi3fGvQzs/itgbSEQt+6S+rq/H6T1Sl3MTSHZZc
-         0j4PhF/EQTW2XmX6l/Qco0mrd+rVvkey90xZnMYMJBCOWJgvRaVVDz4sFfNJOtGeKkAh
-         MREw==
-X-Gm-Message-State: APjAAAU5S62YTZc0V9VrV5gXzqAOd+1eHKBEIzrkHalX9nHDUx01MS3Y
-        3M9IxF5ebyi3LD5W0TJcyTPMPkLBS+OSWLgJ/+cBkeLiFAIe
-X-Google-Smtp-Source: APXvYqxEEGS/ghj/1vE7ea05Uht+o+rbVNxtrazAxFRZpWclqstSRdP+wA0klStRB8FjeBzTQnxuUoHvqJ74LwHD6lvYE/I45Zuk
+        bh=p+M5s/mlRcDbjC1pxByHP5L2NlEPGo3vh3ovYs5w88s=;
+        b=UdebrgIA6QGsRsDdXouV5kAAcNRi1rXbESBRvbDZV1bgPjX4HN4+w7JoKW+mKZd+nU
+         mG7wEeKDhsXV9nXgqm1UtuBp+nXPAP8gUAv3nQcZUntAaGYmSiFQQ89TC+bpqwBeY9D4
+         pj2T94Jehp5Oay4pLk9yzWxyk48QS/adaRXsaH8D7En0EgBuge2Rypv7MTL7s4Vshkv4
+         oxVlVqDDKvtrYSxysEzyJ4sUWYS8qcjNhQgMFRf3iZmLWgTs+iVkIHSjTODQ/6+KQPRC
+         BfoHDd7XxrrWBM1h+S0rytWniPr7KWO53Sdw32tCLByuk05RaO9lVyeFyO53oGUQRuIa
+         nVsA==
+X-Gm-Message-State: APjAAAWaugQg3xwKW0C0pRfy5VbiC7yCJjZ7jxhnbZeKS/L4hK5g5boG
+        s6jDp8CLx2KWhwrkR+F3VhPD1EluLDvXorzTUtqPno66xpP1
+X-Google-Smtp-Source: APXvYqy4/DnMgq+O4PmLMQM1K3yMHdg8miYSpC2L9tUv+3JSk2niQpN7xWxGR/a+HwjFBvLVZ8iCuhKFkmUmK5LBG2Ne9SmYjAD7
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6001:: with SMTP id r1mr6903652iog.229.1562756828714;
- Wed, 10 Jul 2019 04:07:08 -0700 (PDT)
-Date:   Wed, 10 Jul 2019 04:07:08 -0700
+X-Received: by 2002:a5d:8890:: with SMTP id d16mr28364378ioo.274.1562756829195;
+ Wed, 10 Jul 2019 04:07:09 -0700 (PDT)
+Date:   Wed, 10 Jul 2019 04:07:09 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a55d7d058d51ad4f@google.com>
-Subject: WARNING in gpio_to_desc
-From:   syzbot <syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, bgolaszewski@baylibre.com,
-        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000acb38c058d51ad4f@google.com>
+Subject: WARNING in wa_nep_create/usb_submit_urb
+From:   syzbot <syzbot+5da93055dfbb6bc54963@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -51,32 +50,27 @@ syzbot found the following crash on:
 
 HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
 git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=136a97d8600000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17cd354fa00000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
-dashboard link: https://syzkaller.appspot.com/bug?extid=cf35b76f35e068a1107f
+dashboard link: https://syzkaller.appspot.com/bug?extid=5da93055dfbb6bc54963
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15660838600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15ff38cfa00000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16919490600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a2667ba00000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com
+Reported-by: syzbot+5da93055dfbb6bc54963@syzkaller.appspotmail.com
 
-usb 1-1: config 0 interface 60 altsetting 0 bulk endpoint 0x2 has invalid  
-maxpacket 0
-usb 1-1: New USB device found, idVendor=1286, idProduct=2046,  
-bcdDevice=33.1a
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-usb 1-1: NFC: intf 000000003523355a id 0000000011a20f39
-nfcmrvl 1-1:0.60: NFC: failed to request reset_n io
+usb 1-1: string descriptor 0 read error: -22
+usb 1-1: New USB device found, idVendor=13dc, idProduct=5611,  
+bcdDevice=60.5c
+usb 1-1: New USB device strings: Mfr=4, Product=2, SerialNumber=5
+usb 1-1: BUG? WUSB host has no security descriptors
 ------------[ cut here ]------------
-invalid GPIO -22
-WARNING: CPU: 1 PID: 21 at drivers/gpio/gpiolib.c:124 gpio_to_desc  
-drivers/gpio/gpiolib.c:124 [inline]
-WARNING: CPU: 1 PID: 21 at drivers/gpio/gpiolib.c:124  
-gpio_to_desc+0x152/0x1f0 drivers/gpio/gpiolib.c:106
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 1 PID: 106 at drivers/usb/core/urb.c:477  
+usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
 Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #13
+CPU: 1 PID: 106 Comm: kworker/1:2 Not tainted 5.2.0-rc6+ #13
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
 Workqueue: usb_hub_wq hub_event
@@ -91,22 +85,21 @@ Call Trace:
   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
   invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
-RIP: 0010:gpio_to_desc drivers/gpio/gpiolib.c:124 [inline]
-RIP: 0010:gpio_to_desc+0x152/0x1f0 drivers/gpio/gpiolib.c:106
-Code: 00 00 77 13 e8 cf e0 57 ff 4c 89 e8 5b 5d 41 5c 41 5d 41 5e 41 5f c3  
-e8 bc e0 57 ff 89 ee 48 c7 c7 80 24 db 85 e8 59 a5 2d ff <0f> 0b eb d6 e8  
-a5 e0 57 ff 48 c7 c7 80 d6 08 87 4c 89 f6 e8 f6 23
-RSP: 0018:ffff8881d9eff138 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff8881d1605180 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3dfe19
-RBP: 00000000ffffffea R08: ffff8881d9e36000 R09: ffffed103b663ed7
-R10: ffffed103b663ed6 R11: ffff8881db31f6b7 R12: ffff8881d1605180
-R13: 0000000000000000 R14: 0000000000000293 R15: 0000000000000000
-  __gpio_set_value include/asm-generic/gpio.h:104 [inline]
-  gpio_set_value include/linux/gpio.h:71 [inline]
-  nfcmrvl_chip_halt+0x4e/0x70 drivers/nfc/nfcmrvl/main.c:259
-  nfcmrvl_nci_register_dev+0x2d4/0x378 drivers/nfc/nfcmrvl/main.c:176
-  nfcmrvl_probe+0x4e9/0x5e0 drivers/nfc/nfcmrvl/usb.c:344
+RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Code: 4d 85 ed 74 2c e8 78 db e8 fd 4c 89 f7 e8 a0 36 13 ff 41 89 d8 44 89  
+e1 4c 89 ea 48 89 c6 48 c7 c7 80 23 1a 86 e8 03 a0 be fd <0f> 0b e9 20 f4  
+ff ff e8 4c db e8 fd 4c 89 f2 48 b8 00 00 00 00 00
+RSP: 0018:ffff8881d410f060 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103a821dfe
+RBP: ffff8881cfe74ae0 R08: ffff8881d44ab000 R09: ffffed103b665d30
+R10: ffffed103b665d2f R11: ffff8881db32e97f R12: 0000000000000001
+R13: ffff8881cc3c9a68 R14: ffff8881d0329a20 R15: ffff8881d4baeb00
+  wa_nep_arm drivers/usb/wusbcore/wa-hc.h:261 [inline]
+  wa_nep_create+0x4f9/0x720 drivers/usb/wusbcore/wa-nep.c:269
+  wa_create+0x26e/0x340 drivers/usb/wusbcore/wa-hc.c:44
+  hwahc_create drivers/usb/host/hwa-hc.c:749 [inline]
+  hwahc_probe.cold+0xc9/0x48b drivers/usb/host/hwa-hc.c:805
   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
   really_probe+0x281/0x660 drivers/base/dd.c:509
   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
