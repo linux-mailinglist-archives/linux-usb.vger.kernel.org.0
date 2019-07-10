@@ -2,259 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AF263F6D
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2019 04:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFF26437F
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jul 2019 10:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbfGJCoz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jul 2019 22:44:55 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34156 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725866AbfGJCoz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Jul 2019 22:44:55 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id F17863091799;
-        Wed, 10 Jul 2019 02:44:53 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EC2E95F9C8;
-        Wed, 10 Jul 2019 02:44:45 +0000 (UTC)
-Date:   Wed, 10 Jul 2019 10:44:40 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20190710024439.GA2621@ming.t460p>
-References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
- <20190702120112.GA19890@ming.t460p>
- <20190702223931.GB3735@brian.unipv.it>
- <20190703020119.GA23872@ming.t460p>
- <20190703051117.GA6458@brian.unipv.it>
- <20190703063603.GA32123@ming.t460p>
- <20190706093327.GA31927@brian.unipv.it>
- <20190708010134.GA7248@ming.t460p>
- <20190709211838.GA9645@brian.unipv.it>
+        id S1727539AbfGJIZ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Jul 2019 04:25:26 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:27320 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727341AbfGJIZ0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Jul 2019 04:25:26 -0400
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6A87XN3022873;
+        Wed, 10 Jul 2019 01:25:11 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=4bqHHbmbC2R4T/5g4w9ojG9RSzRFaLktUk83MoAtoJM=;
+ b=O+mUbPtO+EaFdUlJYu95Pwj/RQIgNfAw5giE5XbJOb/umLAJD2V8t9VBb8aLR0nILxRX
+ DZ4bm86mFpyiBs9oMKC6aIWCpafIHh/WGHBgeiA4LPXWQt7Q1SeD2AKUJcXX9ZK54QXR
+ 96cLAfu6CCtvOzRm1F8SU0sNiWMOl263LWjX9sJYjFCv3sSMFHR171qQMrmXzIHCCphR
+ VRVQQtyhbLRw2IC0DT9G6d2NTWaGnp2qJ1SEQkMTwPzZco/rvqy7n6x4LT+rR8UkPSo0
+ hQF0cI3dqMt+s90HQVWOo6yVCOu+K9SG/gVc1vky0d7GbOLCOljdKmoOBqVBktyW1qhV Lg== 
+Authentication-Results: cadence.com;
+        spf=pass smtp.mailfrom=pawell@cadence.com
+Received: from nam03-co1-obe.outbound.protection.outlook.com (mail-co1nam03lp2050.outbound.protection.outlook.com [104.47.40.50])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 2tjr6vq116-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 10 Jul 2019 01:25:11 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4bqHHbmbC2R4T/5g4w9ojG9RSzRFaLktUk83MoAtoJM=;
+ b=ZFfRk/NoPkylwrUWiPxA03jdBuD+czwVICoJ87LHpwN7MZcq32DreZ6064TcSRjlk12AW6dwDezffPqFOaSIqfu0GxsXWzbuXKkOFNA0ScEk4JcckIFz7yaKOZsq71e+FYa1CYeq4zUC0tWRBrjL+U8bRB/xcHflSgwn93BUP8c=
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
+ BYAPR07MB5877.namprd07.prod.outlook.com (20.179.91.138) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2052.19; Wed, 10 Jul 2019 08:25:08 +0000
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::fd8c:399c:929b:33e2]) by BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::fd8c:399c:929b:33e2%6]) with mapi id 15.20.2052.020; Wed, 10 Jul 2019
+ 08:25:08 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jbergsagel@ti.com" <jbergsagel@ti.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
+        Suresh Punnoose <sureshp@cadence.com>,
+        "peter.chen@nxp.com" <peter.chen@nxp.com>,
+        Jayshri Dajiram Pawar <jpawar@cadence.com>,
+        Rahul Kumar <kurahul@cadence.com>
+Subject: RE: [PATCH v9 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
+Thread-Topic: [PATCH v9 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
+Thread-Index: AQHVMyCBLRb+XoB9zUqxphM8AIPBC6a76sKAgAN7ISCABBicwA==
+Date:   Wed, 10 Jul 2019 08:25:08 +0000
+Message-ID: <BYAPR07MB47090E2221C96D0B8178235CDDF00@BYAPR07MB4709.namprd07.prod.outlook.com>
+References: <1562324238-16655-1-git-send-email-pawell@cadence.com>
+ <1562324238-16655-6-git-send-email-pawell@cadence.com>
+ <87r274lmqk.fsf@linux.intel.com>
+ <BYAPR07MB4709EF3753AC0B87606B1182DDF70@BYAPR07MB4709.namprd07.prod.outlook.com>
+In-Reply-To: <BYAPR07MB4709EF3753AC0B87606B1182DDF70@BYAPR07MB4709.namprd07.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-tag-bcast: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMzdjN2M5OWUtYTJlYy0xMWU5LTg3NDItMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDM3YzdjOTlmLWEyZWMtMTFlOS04NzQyLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMzA4MCIgdD0iMTMyMDcyMjA3MDUzODM4MTI1IiBoPSJCTjNPQXNuT2lDUnovay8vUWpGdDZEMnJxanM9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-paste: 
+x-dg-rorf: 
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c5c6b387-8e38-458d-7c83-08d705101e9b
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR07MB5877;
+x-ms-traffictypediagnostic: BYAPR07MB5877:
+x-microsoft-antispam-prvs: <BYAPR07MB58770E5238654E71E0224E1FDDF00@BYAPR07MB5877.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0094E3478A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(39860400002)(396003)(366004)(346002)(136003)(36092001)(189003)(199004)(102836004)(14454004)(26005)(52536014)(6506007)(8676002)(7696005)(7416002)(33656002)(76176011)(53936002)(71200400001)(71190400001)(66066001)(81156014)(99286004)(107886003)(81166006)(86362001)(6246003)(5660300002)(476003)(68736007)(2501003)(8936002)(55016002)(3846002)(6116002)(478600001)(186003)(9686003)(256004)(14444005)(305945005)(446003)(6436002)(2906002)(486006)(66476007)(66556008)(66946007)(54906003)(64756008)(66446008)(110136005)(74316002)(7736002)(316002)(11346002)(4326008)(229853002)(76116006)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB5877;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: cadence.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: W/ilHZcFTRvblVqiesVUzPVY4M7TXn1vh6/Ys8k85i+jvB53ajbR7yXFABI9k688Vi+O2JvnGW7BEhpS/zs6o5aeQw6zW/E2wCN///VQ8hNNnyiXMEazscx0FVN1H7ttXKljlQoCcsr3TJq8ZOgT2wQ+sPnIT5N55fxXkMkabLnw95IM0hHRT9jcSJKHovVtoK7Rk0pq2jIe0h70XfWryyuA9zke0fSDxvoQJ5GnLLw6z8HnpxAxLoAFkkAQuDuhXNz1MFpqy93GsILrRWUte9Tner+fKPZOQlT2IZ61gMNxz8lrpVzZWTufEMTYAYtkkDTsJ+RtJo8QnyaCHYKLsmtpquPKqNa6Hu/bu6DxiMDNW/14cAsUD151RZ5PXqMNG45vGYdtiEd3OY7aX8+Auqem/BgByMUIReeK5i1VxRc=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190709211838.GA9645@brian.unipv.it>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Wed, 10 Jul 2019 02:44:54 +0000 (UTC)
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5c6b387-8e38-458d-7c83-08d705101e9b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2019 08:25:08.5857
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pawell@global.cadence.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5877
+X-Proofpoint-SPF-Result: pass
+X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
+ include:mktomail.com include:spf-0014ca01.pphosted.com
+ include:spf.protection.outlook.com include:auth.msgapp.com
+ include:spf.mandrillapp.com ~all
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-10_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
+ spamscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=797 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907100099
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 09, 2019 at 11:18:38PM +0200, Andrea Vai wrote:
-> On 08/07/19 09:01:35, Ming Lei wrote:
-> > > > > > > > > 
-> > > > > > > > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-> > > > > > > > > 
-> > > > > > > > >  [...]    
-> > 
-> > 1) run the bcc biosnoop trace in one terminal after mounting the fs on the USB dirve
-> > 
-> > 2) start the write test in another teminal
-> > 
-> > 3) wait for 10 seconds, and stop the bcc trace via ctrl^ + C, then post the bcc biosnoop
-> > trace log
-> >
-> 
-> Done, attached.
-> 
-> Thanks,
-> Andrea
+Hi Felipe
 
-> 5.420198000    jbd2/sdf1-8    6775   sdf     W  29624320  4096       0.37
-> 5.423601000    jbd2/sdf1-8    6775   sdf     W  29624328  12288      3.29
-> 5.424009000    jbd2/sdf1-8    6775   sdf     W  29624352  4096       0.30
-> 6.665732000    kworker/u8:0   6401   sdf     R  10248     4096     841.64
-> 6.666891000    kworker/u8:0   6401   sdf     R  10256     4096       0.98
-> 6.668141000    kworker/u8:0   6401   sdf     R  4196352   4096       1.07
-> 6.669312000    kworker/u8:0   6401   sdf     R  8390656   4096       0.99
-> 6.670568000    kworker/u8:0   6401   sdf     R  12584960  4096       1.06
-> 6.674257000    kworker/u8:0   6401   sdf     R  16779264  4096       3.50
-> 6.675510000    kworker/u8:0   6401   sdf     R  20973568  4096       1.06
-> 6.678344000    kworker/u8:0   6401   sdf     R  25167872  4096       2.64
-> 6.680384000    kworker/u8:0   6401   sdf     R  29362176  4096       1.83
-> 6.681622000    kworker/u8:0   6401   sdf     R  33556480  4096       1.03
-> 6.682713000    kworker/u8:0   6401   sdf     R  37750784  4096       0.92
-> 6.686360000    kworker/u8:0   6401   sdf     R  41945088  4096       3.48
-> 6.687589000    kworker/u8:0   6401   sdf     R  46139392  4096       1.04
-> 6.688639000    kworker/u8:0   6401   sdf     R  46139424  4096       0.88
-> 6.766336000    kworker/u8:0   6401   sdf     W  47351808  122880    77.17
-> 6.773563000    kworker/u8:0   6401   sdf     W  47352048  122880     7.08
-> 6.780980000    kworker/u8:0   6401   sdf     W  47352288  122880     7.29
-> 6.786366000    kworker/u8:0   6401   sdf     W  47352528  122880     5.27
-> 6.793831000    kworker/u8:0   6401   sdf     W  47352768  122880     7.38
-> 6.801085000    kworker/u8:0   6401   sdf     W  47353008  122880     7.20
-> 6.808405000    kworker/u8:0   6401   sdf     W  47353248  122880     7.27
-> 6.813799000    kworker/u8:0   6401   sdf     W  47353488  122880     5.35
-> 6.821103000    kworker/u8:0   6401   sdf     W  47353728  118784     7.25
-> 6.828459000    kworker/u8:0   6401   sdf     W  47353960  122880     7.09
-> 6.835722000    kworker/u8:0   6401   sdf     W  47354200  122880     7.20
-> 6.842813000    kworker/u8:0   6401   sdf     W  47354440  122880     7.05
-> 6.850184000    kworker/u8:0   6401   sdf     W  47354680  122880     7.32
-> 6.857452000    kworker/u8:0   6401   sdf     W  47354920  122880     7.22
-> 6.864874000    kworker/u8:0   6401   sdf     W  47355160  122880     7.38
-> 6.871841000    kworker/u8:0   6401   sdf     W  47355400  122880     6.92
-> 6.879380000    kworker/u8:0   6401   sdf     W  47355640  122880     7.50
-> 6.886497000    kworker/u8:0   6401   sdf     W  47355880  122880     7.04
-> 6.893940000    kworker/u8:0   6401   sdf     W  47356120  122880     7.40
-> 6.899304000    kworker/u8:0   6401   sdf     W  47356360  122880     5.33
-> 6.906635000    kworker/u8:0   6401   sdf     W  47356600  122880     7.29
-> 6.913957000    kworker/u8:0   6401   sdf     W  47356840  122880     7.29
-> 6.921308000    kworker/u8:0   6401   sdf     W  47357080  122880     7.31
-> 6.924391000    kworker/u8:0   6401   sdf     W  47357320  53248      3.03
-> 6.931971000    kworker/u8:0   6401   sdf     W  47357424  122880     7.22
-> 6.939169000    kworker/u8:0   6401   sdf     W  47357664  122880     7.14
-> 6.944985000    kworker/u8:0   6401   sdf     W  47357904  122880     5.76
-> 6.952113000    kworker/u8:0   6401   sdf     W  47358144  122880     7.06
-> 6.959608000    kworker/u8:0   6401   sdf     W  47358384  122880     7.45
-> 6.966820000    kworker/u8:0   6401   sdf     W  47358624  122880     7.16
-> 6.972393000    kworker/u8:0   6401   sdf     W  47358864  122880     5.53
-> 6.979550000    kworker/u8:0   6401   sdf     W  47359104  122880     7.09
-> 6.986879000    kworker/u8:0   6401   sdf     W  47359344  122880     7.28
-> 6.994306000    kworker/u8:0   6401   sdf     W  47359584  122880     7.40
-> 7.001338000    kworker/u8:0   6401   sdf     W  47359824  122880     6.98
-> 7.008740000    kworker/u8:0   6401   sdf     W  47360064  122880     7.37
-> 7.016114000    kworker/u8:0   6401   sdf     W  47360304  122880     7.31
-> 7.023546000    kworker/u8:0   6401   sdf     W  47360544  122880     7.39
-> 7.030437000    kworker/u8:0   6401   sdf     W  47360784  122880     6.82
-> 7.037834000    kworker/u8:0   6401   sdf     W  47361024  122880     7.35
-> 7.045224000    kworker/u8:0   6401   sdf     W  47361264  122880     7.32
-> 7.052687000    kworker/u8:0   6401   sdf     W  47361504  122880     7.39
-> 7.057977000    kworker/u8:0   6401   sdf     W  47361744  122880     5.01
-> 7.065390000    kworker/u8:0   6401   sdf     W  47361984  122880     7.35
-> 7.072749000    kworker/u8:0   6401   sdf     W  47362224  122880     7.28
-> 7.080174000    kworker/u8:0   6401   sdf     W  47362464  122880     7.36
-> 7.085335000    kworker/u8:0   6401   sdf     W  47362704  122880     5.08
-> 7.092881000    kworker/u8:0   6401   sdf     W  47362944  122880     7.50
-> 7.100197000    kworker/u8:0   6401   sdf     W  47363184  122880     7.23
-> 7.107507000    kworker/u8:0   6401   sdf     W  47363424  122880     7.24
-> 7.114684000    kworker/u8:0   6401   sdf     W  47363664  122880     7.09
-> 7.121936000    kworker/u8:0   6401   sdf     W  47363904  122880     7.18
-> 7.129299000    kworker/u8:0   6401   sdf     W  47364144  122880     7.29
-> 7.136645000    kworker/u8:0   6401   sdf     W  47364384  122880     7.27
-> 7.143733000    kworker/u8:0   6401   sdf     W  47364624  122880     7.02
-> 7.151112000    kworker/u8:0   6401   sdf     W  47364864  122880     7.31
-> 7.158509000    kworker/u8:0   6401   sdf     W  47365104  122880     7.33
-> 7.165735000    kworker/u8:0   6401   sdf     W  47365344  122880     7.14
-> 7.171205000    kworker/u8:0   6401   sdf     W  47365584  122880     5.40
-> 7.178625000    kworker/u8:0   6401   sdf     W  47365824  122880     7.37
-> 7.185980000    kworker/u8:0   6401   sdf     W  47366064  122880     7.31
-> 7.193593000    kworker/u8:0   6401   sdf     W  47366304  122880     7.57
-> 7.198674000    kworker/u8:0   6401   sdf     W  47366544  122880     5.02
-> 7.205996000    kworker/u8:0   6401   sdf     W  47366784  122880     7.25
-> 7.213419000    kworker/u8:0   6401   sdf     W  47367024  122880     7.37
-> 7.221005000    kworker/u8:0   6401   sdf     W  47367264  122880     7.52
-> 7.227906000    kworker/u8:0   6401   sdf     W  47367504  122880     6.83
-> 7.235251000    kworker/u8:0   6401   sdf     W  47367744  122880     7.28
-> 7.241892000    kworker/u8:0   6401   sdf     W  47367984  106496     6.59
-> 7.249617000    kworker/u8:0   6401   sdf     W  47368192  122880     6.88
-> 7.256892000    kworker/u8:0   6401   sdf     W  47368432  122880     7.20
-> 7.264223000    kworker/u8:0   6401   sdf     W  47368672  122880     7.26
-> 7.269672000    kworker/u8:0   6401   sdf     W  47368912  122880     5.39
-> 7.277066000    kworker/u8:0   6401   sdf     W  47369152  122880     7.36
-> 7.284630000    kworker/u8:0   6401   sdf     W  47369392  122880     7.52
-> 7.291891000    kworker/u8:0   6401   sdf     W  47369632  122880     7.20
-> 7.297211000    kworker/u8:0   6401   sdf     W  47369872  122880     5.29
-> 7.304665000    kworker/u8:0   6401   sdf     W  47370112  122880     7.41
-> 7.312050000    kworker/u8:0   6401   sdf     W  47370352  122880     7.33
-> 7.319520000    kworker/u8:0   6401   sdf     W  47370592  122880     7.41
-> 7.326494000    kworker/u8:0   6401   sdf     W  47370832  122880     6.89
-> 7.334082000    kworker/u8:0   6401   sdf     W  47371072  122880     7.52
-> 7.341505000    kworker/u8:0   6401   sdf     W  47371312  122880     7.34
-> 7.348600000    kworker/u8:0   6401   sdf     W  47371552  122880     7.01
-> 7.355806000    kworker/u8:0   6401   sdf     W  47371792  122880     7.16
-> 7.363147000    kworker/u8:0   6401   sdf     W  47372032  122880     7.27
-> 7.370377000    kworker/u8:0   6401   sdf     W  47372272  122880     7.16
-> 7.377770000    kworker/u8:0   6401   sdf     W  47372512  122880     7.36
-> 7.383323000    kworker/u8:0   6401   sdf     W  47372752  122880     5.50
-> 7.390651000    kworker/u8:0   6401   sdf     W  47372992  122880     7.27
-> 7.398245000    kworker/u8:0   6401   sdf     W  47373232  122880     7.52
-> 7.405347000    kworker/u8:0   6401   sdf     W  47373472  122880     7.04
-> 7.410761000    kworker/u8:0   6401   sdf     W  47373712  122880     5.36
-> 7.418075000    kworker/u8:0   6401   sdf     W  47373952  122880     7.26
-> 7.425451000    kworker/u8:0   6401   sdf     W  47374192  122880     7.33
-> 7.432864000    kworker/u8:0   6401   sdf     W  47374432  122880     7.36
-> 7.439913000    kworker/u8:0   6401   sdf     W  47374672  122880     6.99
-> 7.447312000    kworker/u8:0   6401   sdf     W  47374912  122880     7.35
-> 7.454721000    kworker/u8:0   6401   sdf     W  47375152  122880     7.35
-> 7.461955000    kworker/u8:0   6401   sdf     W  47375392  122880     7.19
-> 7.469040000    kworker/u8:0   6401   sdf     W  47375632  122880     7.04
-> 7.476416000    kworker/u8:0   6401   sdf     W  47375872  122880     7.31
-> 7.483856000    kworker/u8:0   6401   sdf     W  47376112  122880     7.38
-> 7.491270000    kworker/u8:0   6401   sdf     W  47376352  122880     7.37
-> 7.496452000    kworker/u8:0   6401   sdf     W  47376592  122880     5.12
-> 7.504011000    kworker/u8:0   6401   sdf     W  47376832  122880     7.52
-> 7.511217000    kworker/u8:0   6401   sdf     W  47377072  122880     7.12
-> 7.518511000    kworker/u8:0   6401   sdf     W  47377312  122880     7.23
-> 7.523956000    kworker/u8:0   6401   sdf     W  47377552  122880     5.41
-> 7.531197000    kworker/u8:0   6401   sdf     W  47377792  122880     7.21
-> 7.538546000    kworker/u8:0   6401   sdf     W  47378032  122880     7.31
-> 7.545757000    kworker/u8:0   6401   sdf     W  47378272  122880     7.17
-> 7.552919000    kworker/u8:0   6401   sdf     W  47378512  122880     7.13
-> 7.560269000    kworker/u8:0   6401   sdf     W  47378752  122880     7.31
-> 7.567555000    kworker/u8:0   6401   sdf     W  47378992  122880     7.25
-> 7.574863000    kworker/u8:0   6401   sdf     W  47379232  122880     7.27
-> 7.581802000    kworker/u8:0   6401   sdf     W  47379472  122880     6.87
-> 7.588979000    kworker/u8:0   6401   sdf     W  47379712  122880     7.13
-> 7.596343000    kworker/u8:0   6401   sdf     W  47379952  122880     7.30
-> 7.603224000    kworker/u8:0   6401   sdf     W  47380192  122880     6.84
-> 7.608655000    kworker/u8:0   6401   sdf     W  47380432  122880     5.38
-> 7.615811000    kworker/u8:0   6401   sdf     W  47380672  122880     7.12
-> 7.623028000    kworker/u8:0   6401   sdf     W  47380912  122880     7.18
-> 7.630413000    kworker/u8:0   6401   sdf     W  47381152  122880     7.34
-> 7.635223000    kworker/u8:0   6401   sdf     W  47381392  122880     4.75
-> 7.642268000    kworker/u8:0   6401   sdf     W  47381632  122880     6.98
-> 7.649383000    kworker/u8:0   6401   sdf     W  47381872  122880     7.04
-> 7.656619000    kworker/u8:0   6401   sdf     W  47382112  122880     7.19
-> 7.661918000    kworker/u8:0   6401   sdf     W  47382352  122880     5.25
-> 8.268039000    kworker/u8:0   6401   sdf     W  47382592  122880   606.07
-> 8.280414000    kworker/u8:0   6401   sdf     W  47382832  122880    12.30
-> 8.286503000    kworker/u8:0   6401   sdf     W  47383072  122880     6.02
-> 8.293627000    kworker/u8:0   6401   sdf     W  47383312  122880     7.07
-> 8.300777000    kworker/u8:0   6401   sdf     W  47383552  122880     7.08
-> 8.307733000    kworker/u8:0   6401   sdf     W  47383792  122880     6.89
-> 8.315212000    kworker/u8:0   6401   sdf     W  47384032  122880     7.43
-> 8.320697000    kworker/u8:0   6401   sdf     W  47384272  122880     5.41
-> 8.323335000    kworker/u8:0   6401   sdf     W  47384512  32768      2.58
-> 8.331116000    kworker/u8:0   6401   sdf     W  47384576  122880     6.58
-> 8.338586000    kworker/u8:0   6401   sdf     W  47384816  122880     7.40
-> 8.346113000    kworker/u8:0   6401   sdf     W  47385056  122880     7.46
-> 8.351558000    kworker/u8:0   6401   sdf     W  47385296  122880     5.37
-> 8.359030000    kworker/u8:0   6401   sdf     W  47385536  122880     7.43
-> 8.366425000    kworker/u8:0   6401   sdf     W  47385776  122880     7.34
-> 8.373712000    kworker/u8:0   6401   sdf     W  47386016  122880     7.22
-> 8.940689000    cp             6828   sdf     W  47400960  122880   566.92
-> 9.614647000    kworker/u8:0   6401   sdf     W  47386256  122880   673.87
-> 10.179120000   cp             6828   sdf     W  47401200  122880   564.38
+>>> +
+>>> +static int cdns3_idle_init(struct cdns3 *cdns)
+>>> +{
+>>> +	struct cdns3_role_driver *rdrv;
+>>> +
+>>> +	rdrv =3D devm_kzalloc(cdns->dev, sizeof(*rdrv), GFP_KERNEL);
+>>> +	if (!rdrv)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	rdrv->start =3D cdns3_idle_role_start;
+>>> +	rdrv->stop =3D cdns3_idle_role_stop;
+>>> +	rdrv->state =3D CDNS3_ROLE_STATE_INACTIVE;
+>>> +	rdrv->suspend =3D NULL;
+>>> +	rdrv->resume =3D NULL;
+>>> +	rdrv->name =3D "idle";
+>>
+>>why don't you use the mux framework for this? This looks a bit fishy
+>>too. Why do you have your own driver registration structure for your
+>>driver only?
+>>
+>
+>I assume you mean interface defined in include/linux/usb/role.h.
+>It's quite new framework and probably was added after I've start implement=
+ing cdns3 driver.
+>At first glance it's look that I could use it.
 
-5 of 165 IO requests(1 4096 READ and 4 120K WRITE) take more than 500ms, and
-most of others only needs <10ms. That is the reason why the performance
-drops, and it is highly related with your USB pen drive.
+I've started integrating driver with role switch framework. =20
 
-biosnoop collects the trace data in blk_mq_start_request() and
-blk_account_io_completion(), both happens during dispatching request to
-LLD & device.
+Even if I use role switch interface , I still need this internal driver reg=
+istration.=20
+It's convenient to use fallowing structure.=20
 
-From my understanding, scsi-mq should only change the timing, or maybe
-some setting is changed(still very unlikely), you may follow Alan's suggestion
-to collect usbmon on 'bad' & 'good' kernel, and check if the setting is
-changed.
+struct cdns3_role_driver {
+	int (*start)(struct cdns3 *cdns);
+	void (*stop)(struct cdns3 *cdns);
+	int (*suspend)(struct cdns3 *cdns, bool do_wakeup);
+	int (*resume)(struct cdns3 *cdns, bool hibernated);
+	const char *name;
+#define CDNS3_ROLE_STATE_INACTIVE	0
+#define CDNS3_ROLE_STATE_ACTIVE		1
+	int state;
+};
 
-If the initialization setting is same, maybe you can try US_FL_GO_SLOW
-quirk.
+Driver can supports: only Host, only Device or DRD - depending on configura=
+tion.
 
-Thanks,
-Ming
+If current configuration support only Host then driver assigns:
+	rdrv_host->start	=3D __cdns3_host_init;
+	rdrv_host->stop	=3D cdns3_host_exit;
+
+	cdns->roles[CDNS3_ROLE_HOST]  =3D 	rdrv_host
+	cdns->roles[CDNS3_ROLE_GADGET	=3D NULL;
+if support only Device then:
+	rdrv_dev->start	=3D __cdns3_ gadget _init;
+	rdrv_dev->stop	=3D cdns3_ gadget _exit;
+	cdns->roles[CDNS3_ROLE_HOST]	=3D NULL;
+for DRD:
+	cdns->roles[CDNS3_ROLE_HOST =3D rdrv_host;
+	cdns->roles[CDNS3_ROLE_GADGET] =3D rdrv_dev;
+
+So for DRD we will have both filled, but for only Device or Host we=20
+will have filled single element of array.=20
+
+With such array we can easily start/stop role by=20
+	if (!cdns->roles[role])
+		not supported by configuration.
+	else
+		cdns->roles[role]->start / cdns->roles[role]->stop
+
+I don't need any extra: switch instruction or #ifdef statement.=20
+
+The name cdns3_role_driver can be misleading.=20
+Driver doesn't register the driver but rather the interface to Device/Host.=
+=20
+
+Maybe I should change this name to  cdns3_role_interface or cdns3_role_acti=
+on ?
+
+Now I have my private enum:
+enum cdns3_roles {
+	CDNS3_ROLE_IDLE =3D 0,
+	CDNS3_ROLE_HOST,
+	CDNS3_ROLE_GADGET,
+	CDNS3_ROLE_END,
+};
+
+I think I could replace it with usb_role. I need one extra state for IDLE b=
+ut
+Instead of CDNS3_ROLE_IDLE I can use USB_ROLE_NONE.
+
+It should little simplify the driver and improve readability.=20
+
+Do you have any comments or suggestion ?
+
+Cheers,=20
+Pawel
+
+>
+>>> +
+>>> +	cdns->roles[CDNS3_ROLE_IDLE] =3D rdrv;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+
