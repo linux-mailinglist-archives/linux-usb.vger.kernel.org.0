@@ -2,106 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B68F65219
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2019 08:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15E465292
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jul 2019 09:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728135AbfGKGx3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Jul 2019 02:53:29 -0400
-Received: from mail1.bemta24.messagelabs.com ([67.219.250.208]:45620 "EHLO
-        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728124AbfGKGx2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Jul 2019 02:53:28 -0400
-Received: from [67.219.251.52] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-1.bemta.az-c.us-west-2.aws.symcld.net id 00/A1-15262-6ECD62D5; Thu, 11 Jul 2019 06:53:26 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOIsWRWlGSWpSXmKPExsUyLfyHiO7TO2q
-  xBoe3GVssWtbK7MDo8XmTXABjFGtmXlJ+RQJrxvaTb9kKbvBXHDrSxNTAeJC3i5GLQ0hgLqPE
-  k18d7BDOb0aJlQ/eATmcHMICDhJzdrcD2RwcbAJmEpv/SoKERQREJF6ee8gMYjMLWEusaXwDV
-  s4koCSx+cBSNhCbRUBVYsPVqWwgrbwCcRK3N7qAhEUF5CRWXm5hBbF5BQQlTs58wgJSwiygKb
-  F+lz7ERHmJ7W/ngE0XEtCS2DR3C9h0CYFgiaW3ZzBOYOSfhaR7FkL3LCTdCxiZVzFaJBVlpme
-  U5CZm5ugaGhjoGhoa6RoaW+oaGpnpJVbpJuuVFuuWpxaX6BrpJZYX6xVX5ibnpOjlpZZsYgSG
-  Z0pBd90OxsWz3ugdYpTkYFIS5ZU9qRYrxJeUn1KZkVicEV9UmpNafIhRhoNDSYJX7iZQTrAoN
-  T21Ii0zBxgrMGkJDh4lEV43kDRvcUFibnFmOkTqFKOilDgv3y2ghABIIqM0D64NFp+XGGWlhH
-  kZGRgYhHgKUotyM0tQ5V8xinMwKgnzloCM58nMK4Gb/gpoMRPQYlU/sMUliQgpqQamLdf/SN5
-  7d2/F2eb8P2WvWAymLbjccX6pf/el5xp/9x4ODs3pedTXevyrS5OyjdJpKR/Hp7IBRXf7kmZv
-  C5x+rdj93MZbv3y+y/5p2nFUvXX2xsnGzg+9elWZz/4O0ngZmWVxcFFSKwcrT0PMgprFwHS3c
-  K7eUX/VQxIimV4nfq/9Z7m81loid8asEyy8AZe+Tdq4adGL0BfzHrm+PfT4Te6sZx+MX7yd8Z
-  rjUVpF0VPOzD2L77/aO3W3zP8Lq3aKuf7vM/lasM//zA5vlzbZXpsdF4VzVz/8ciOj9ewt9up
-  6jfWGEmzPb3fsiTy08+uO+WfvSrZMLGMufZt61sI61D/fvPXu4ZvH3ssEPal0e6LEUpyRaKjF
-  XFScCADzy9+kSgMAAA==
-X-Env-Sender: yokamoto@allied-telesis.co.jp
-X-Msg-Ref: server-22.tower-364.messagelabs.com!1562828004!1467984!1
-X-Originating-IP: [150.87.248.20]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.31.5; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 23084 invoked from network); 11 Jul 2019 06:53:25 -0000
-Received: from abricot-inet.allied-telesis.co.jp (HELO TKY-DS01.at.lc) (150.87.248.20)
-  by server-22.tower-364.messagelabs.com with SMTP; 11 Jul 2019 06:53:25 -0000
-Received: from swim-manx.rd.allied-telesis.co.jp ([150.87.21.50]) by TKY-DS01.at.lc with Microsoft SMTPSVC(8.0.9200.16384);
-         Thu, 11 Jul 2019 15:53:24 +0900
-Received: from yokamoto-pc.rd.allied-telesis.co.jp by swim-manx.rd.allied-telesis.co.jp
- (AlliedTelesis SMTPRS 1.3 pl 1 ++E6B86F8C687C6288D9B5559052954DC9) with ESMTP id <B0004497151@swim-manx.rd.allied-telesis.co.jp>;
- Thu, 11 Jul 2019 15:53:22 +0900
-Subject: [PATCH] USB: serial: option: Add support for ZTE MF871A
-From:   Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>
-To:     johan@kernel.org
-Cc:     hyamamo@allied-telesis.co.jp, linux-usb@vger.kernel.org
-Date:   Thu, 11 Jul 2019 15:53:24 +0900
-Message-ID: <156282800460.29653.5486306531486471871.stgit@yokamoto-pc.rd.allied-telesis.co.jp>
-User-Agent: StGit/0.17.1-dirty
+        id S1728205AbfGKHhP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Jul 2019 03:37:15 -0400
+Received: from mga09.intel.com ([134.134.136.24]:51049 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725963AbfGKHhP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Jul 2019 03:37:15 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jul 2019 00:37:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,476,1557212400"; 
+   d="scan'208";a="189420825"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Jul 2019 00:37:12 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Rob Weber <rob@gnarbox.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: dwc3 Disable Compliance Mode
+In-Reply-To: <20190710230110.GA3188@coops>
+References: <20190710230110.GA3188@coops>
+Date:   Thu, 11 Jul 2019 10:37:11 +0300
+Message-ID: <877e8phviw.fsf@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-OriginalArrivalTime: 11 Jul 2019 06:53:24.0571 (UTC) FILETIME=[55D1AAB0:01D537B5]
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds support for MF871A USB modem (aka Speed USB STICK U03)
-to option driver. This modem is manufactured by ZTE corporation, and
-sold by KDDI.
 
-Interface layout:
-0: AT
-1: MODEM
+Hi Rob,
 
-usb-devices output:
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  9 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=19d2 ProdID=1481 Rev=52.87
-S:  Manufacturer=ZTE,Incorporated
-S:  Product=ZTE Technologies MSM
-S:  SerialNumber=1234567890ABCDEF
-C:  #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+Rob Weber <rob@gnarbox.com> writes:
 
-Signed-off-by: Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>
-Signed-off-by: Hiroyuki Yamamoto <hyamamo@allied-telesis.co.jp>
----
- drivers/usb/serial/option.c |    2 ++
- 1 file changed, 2 insertions(+)
+> Hi Felipe,
+>
+> I hope you are doing well. My team and I are frequently experiencing an
+> issue with the dwc3 in our CherryTrail SoC where we encounter an LFPS
+> Polling timeout while our device is being enumerated.
+>
+> We configured the dwc3 as an ethernet gadget using configfs and the ecm
+> and RNDIS functions. The dwc3 transitions to U3 after configuration as
+> expected. Only once we connect our device to a USB host do we see the
+> link state transition to Polling. We are assuming LFPS Polling times
+> out because the link_state file in debugfs shows the link has
+> transitioned to compliance mode only after entering LFPS.Polling, and we
+> recently learned that compliance mode is triggered by a timeout during
+> LFPS.Polling.
+>
+> This issue is not 100% reproducible, but is occuring rather frequently
+> at the moment. We're unsure of the root cause of the issue as well. One
+> culprit might be the USB SuperSpeed Redriver we use in our design.
+>
+> We would like to disable compliance mode in the meantime to allow other
+> team members to continue developing and testing USB device mode features
+> while we dig into the root cause of the issue. Is there a proper way to
+> disable compliance mode entirely?
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index a0aaf0635359..e11ae2092229 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -308,6 +308,7 @@ static void option_instat_callback(struct urb *urb);
- #define ZTE_PRODUCT_ME3620_MBIM			0x0426
- #define ZTE_PRODUCT_ME3620_X			0x1432
- #define ZTE_PRODUCT_ME3620_L			0x1433
-+#define ZTE_PRODUCT_MF871A			0x1481
- #define ZTE_PRODUCT_AC2726			0xfff1
- #define ZTE_PRODUCT_MG880			0xfffd
- #define ZTE_PRODUCT_CDMA_TECH			0xfffe
-@@ -1548,6 +1549,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1428, 0xff, 0xff, 0xff),  /* Telewell TW-LTE 4G v2 */
- 	  .driver_info = RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1476, 0xff) },	/* GosunCn ZTE WeLink ME3630 (ECM/NCM mode) */
-+	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, ZTE_PRODUCT_MF871A, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1533, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1534, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1535, 0xff, 0xff, 0xff) },
+That's not something that can be done, unfortunately.
 
+> If not, is there some mechanism we could implement to reset the
+> dwc3 when we enter compliance mode? I attempted some sort of mechanism
+> to reset the link state, but it does not seem to help the issue. I've
+> attached my patch and the trace events for my attempted workaround to
+> this email. My initial approach was to transition the link from
+> Compliance -> SS.Disabled -> Rx.Detect when we detect we've entered
+> compliance mode. The traces show that the dwc3 just enters LFPS.Polling
+> and subsequently enters compliance mode, despite the link being reset.
+
+I think you would have to go through the entire Power On Reset
+sequence, but that's likely to be flakey.
+
+> Do you have any ideas on how we might work around compliance mode in the
+> meantime?
+
+We have a few quirk flags that may help. snps,u2exit_lfps_quirk comes to
+mind, but I suggest trying a few of them and see if any helps.
+
+All flags are described in
+Documentation/devicetree/bindings/usb/dwc3.txt
+
+>  /* -------------------------------------------------------------------------- */
+> # tracer: nop
+> #
+> # entries-in-buffer/entries-written: 220/220   #P:4
+> #
+> #                              _-----=> irqs-off
+> #                             / _----=> need-resched
+> #                            | / _---=> hardirq/softirq
+> #                            || / _--=> preempt-depth
+> #                            ||| /     delay
+> #           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+> #              | |       |   ||||       |         |
+>           <idle>-0     [003] ..s1   178.444339: dwc3_core: Tick! Checking for compliance mode
+>
+>           <idle>-0     [003] d.s2   178.444352: dwc3_core: Compliance Mode detected. Attempting recovery routine
+
+>      irq/23-dwc3-1115  [002] d..1   178.445380: dwc3_event: event (00140301): Link Change [SS.Disabled]
+>      irq/23-dwc3-1115  [002] d..1   178.445826: dwc3_event: event (00150301): Link Change [RX.Detect]
+>      irq/23-dwc3-1115  [002] d..1   178.445832: dwc3_event: event (00170301): Link Change [Polling]
+>           <idle>-0     [003] ..s1   180.492293: dwc3_core: Tick! Checking for compliance mode
+>
+>           <idle>-0     [003] d.s2   180.492306: dwc3_core: Compliance Mode detected. Attempting recovery routine
+>
+>      irq/23-dwc3-1115  [002] d..1   180.493333: dwc3_event: event (00140301): Link Change [SS.Disabled]
+>      irq/23-dwc3-1115  [002] d..1   180.493636: dwc3_event: event (00150301): Link Change [RX.Detect]
+>      irq/23-dwc3-1115  [002] d..1   180.493641: dwc3_event: event (00170301): Link Change [Polling]
+>           <idle>-0     [003] ..s1   182.540350: dwc3_core: Tick! Checking for compliance mode
+>
+>           <idle>-0     [003] d.s2   182.540362: dwc3_core: Compliance Mode detected. Attempting recovery routine
+>
+>      irq/23-dwc3-1115  [002] d..1   182.541392: dwc3_event: event (00140301): Link Change [SS.Disabled]
+>      irq/23-dwc3-1115  [002] d..1   182.541976: dwc3_event: event (00150301): Link Change [RX.Detect]
+>      irq/23-dwc3-1115  [002] d..1   182.541982: dwc3_event: event (00170301): Link Change [Polling]
+>           <idle>-0     [003] .Ns1   184.588211: dwc3_core: Tick! Checking for compliance mode
+>
+>           <idle>-0     [003] dNs2   184.588232: dwc3_core: Compliance Mode detected. Attempting recovery routine
+
+Don't we get an interrupt for Compliance mode entry?
+
+cheers
+
+-- 
+balbi
