@@ -2,92 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D47166380
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2019 03:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EB2664AC
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2019 04:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729331AbfGLByK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Jul 2019 21:54:10 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:58997 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729313AbfGLByK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Jul 2019 21:54:10 -0400
-X-UUID: 4d6d757b1aab4299bc5ad7308f3dc51c-20190712
-X-UUID: 4d6d757b1aab4299bc5ad7308f3dc51c-20190712
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1804235620; Fri, 12 Jul 2019 09:54:00 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 12 Jul
- 2019 09:53:55 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 12 Jul 2019 09:53:54 +0800
-Message-ID: <1562896434.32589.26.camel@mhfsdcap03>
-Subject: Re: [PATCH 3/5] dt-bindings: usb: mtk-xhci: add an optional xhci_ck
- clock
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Mathias Nyman" <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Jumin Li <jumin.li@mediatek.com>
-Date:   Fri, 12 Jul 2019 09:53:54 +0800
-In-Reply-To: <20190709142235.GA11951@bogus>
-References: <5e06482a0be15476c7b5825f155accf98275afa8.1560246390.git.chunfeng.yun@mediatek.com>
-         <9b6ad8dee142d73b56d653ecb7475c4ed28e5eb8.1560246390.git.chunfeng.yun@mediatek.com>
-         <20190709142235.GA11951@bogus>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: AD446FD5990E933C4FDE78939AF1A0F49FEC44906C060D90748162CC59974F922000:8
-X-MTK:  N
+        id S1729084AbfGLCyA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Jul 2019 22:54:00 -0400
+Received: from gate.crashing.org ([63.228.1.57]:54425 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728485AbfGLCyA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Jul 2019 22:54:00 -0400
+Received: from ufdda393ec48b57.ant.amazon.com (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x6C2rnGb010240;
+        Thu, 11 Jul 2019 21:53:50 -0500
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     linux-usb@vger.kernel.org
+Cc:     balbi@kernel.org, Joel Stanley <joel@jms.id.au>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH 00/10] usb: gadget: aspeed: Bug fixes
+Date:   Fri, 12 Jul 2019 12:53:36 +1000
+Message-Id: <20190712025348.21019-1-benh@kernel.crashing.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-07-09 at 08:22 -0600, Rob Herring wrote:
-> On Wed, Jun 12, 2019 at 01:55:19PM +0800, Chunfeng Yun wrote:
-> > Add a new optional clock xhci_ck
-> > 
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
-> > index 266c2d917a28..91c0704b586b 100644
-> > --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
-> > +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
-> > @@ -29,6 +29,7 @@ Required properties:
-> >  	"sys_ck": controller clock used by normal mode,
-> >  	the following ones are optional:
-> >  	"ref_ck": reference clock used by low power mode etc,
-> > +	"xhci_ck": controller clock,
-> >  	"mcu_ck": mcu_bus clock for register access,
-> >  	"dma_ck": dma_bus clock for data transfer by DMA
-> 
-> A new clock should go at the end to stay backwards compatible.
-Ok, will fix it, thanks
-> 
-> >  
-> > @@ -100,7 +101,7 @@ Required properties:
-> >   - clocks : a list of phandle + clock-specifier pairs, one for each
-> >  	entry in clock-names
-> >   - clock-names : must contain "sys_ck", and the following ones are optional:
-> > -	"ref_ck", "mcu_ck" and "dma_ck"
-> > +	"ref_ck", "xhci_ck", "mcu_ck" and "dma_ck"
-> >  
-> >  Optional properties:
-> >   - vbus-supply : reference to the VBUS regulator;
-> > -- 
-> > 2.21.0
-> > 
+So I finally got back an Aspeed eval board, and thus resumed maintaining
+and handling bug reports for this driver.
+
+This is a series that fixes a number of enumeration related issues with
+a variety of hosts, OSes, and circumstances (ie, plugging/unplugging at
+funny times, etc...).
+
+I also added dummy support for the TT requests, it doesn't hurt as some
+host seem to send them even when TT support isn't advertized.
+
+Most of this is bug fixes and probably shouldn't wait for another
+merge window, except possibly the last 2 patches.
+
+v2: - Fix a space vs. tab issue in patch 2 reported by Sergei Shtylyov
+    - Put the TT patches at the end of the list as they aren't
+     as clear cut "bug fixes".
 
 
