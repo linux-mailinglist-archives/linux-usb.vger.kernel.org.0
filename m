@@ -2,166 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C33D466747
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2019 08:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110E96678B
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jul 2019 09:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbfGLGvt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Jul 2019 02:51:49 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:43216 "EHLO inva021.nxp.com"
+        id S1726078AbfGLHP1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Jul 2019 03:15:27 -0400
+Received: from mga03.intel.com ([134.134.136.65]:29405 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726057AbfGLGvt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Jul 2019 02:51:49 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8D00F2000A1;
-        Fri, 12 Jul 2019 08:51:46 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E515E200099;
-        Fri, 12 Jul 2019 08:51:41 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 4A39540293;
-        Fri, 12 Jul 2019 14:51:36 +0800 (SGT)
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ran Wang <ran.wang_1@nxp.com>
-Subject: [PATCH V2 2/2] usb: dwc3: Add cache type configuration support
-Date:   Fri, 12 Jul 2019 14:42:06 +0800
-Message-Id: <20190712064206.48249-2-ran.wang_1@nxp.com>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20190712064206.48249-1-ran.wang_1@nxp.com>
-References: <20190712064206.48249-1-ran.wang_1@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1725877AbfGLHP0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Jul 2019 03:15:26 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jul 2019 00:15:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,481,1557212400"; 
+   d="asc'?scan'208";a="174381080"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Jul 2019 00:15:23 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Rob Weber <rob@gnarbox.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: dwc3 Disable Compliance Mode
+In-Reply-To: <20190712050139.GA28879@coops>
+References: <20190710230110.GA3188@coops> <877e8phviw.fsf@linux.intel.com> <20190712050139.GA28879@coops>
+Date:   Fri, 12 Jul 2019 10:15:19 +0300
+Message-ID: <871ryvu3js.fsf@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support to configure cache type for 4 different transfer types: Data Read,
-Desc Read, Data Write and Desc write. For each treasfer type, controller has a
-4-bit register field to enable different cache type.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Some Layerscape platforms might need this to resolve USB detect problem
-when DWC3 node apply dma-coherent.
 
-Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
----
-Change in v2:
-	- Change most program logic to meet new DTS property define.
-	- Rename related register address macros.
-	- Rename function  dwc3_enable_snooping() to dwc3_set_cache_type().
+Hi,
 
- drivers/usb/dwc3/core.c | 64 +++++++++++++++++++++++++++++++++++++++++++++++++
- drivers/usb/dwc3/core.h | 12 ++++++++++
- 2 files changed, 76 insertions(+)
+Rob Weber <rob@gnarbox.com> writes:
+>> > If not, is there some mechanism we could implement to reset the
+>> > dwc3 when we enter compliance mode? I attempted some sort of mechanism
+>> > to reset the link state, but it does not seem to help the issue. I've
+>> > attached my patch and the trace events for my attempted workaround to
+>> > this email. My initial approach was to transition the link from
+>> > Compliance -> SS.Disabled -> Rx.Detect when we detect we've entered
+>> > compliance mode. The traces show that the dwc3 just enters LFPS.Polling
+>> > and subsequently enters compliance mode, despite the link being reset.
+>>=20
+>> I think you would have to go through the entire Power On Reset
+>> sequence, but that's likely to be flakey.
+>
+> Okay, good to know. I am not confident in this approach as well because of
+> the state management / recovery we might have to perform.
+>
+> I wanted to explain our goal a little bit more in depth in case some
+> other apprach might come to mind. Our product supports 3 ways in which
+> the user can work with the USB port: Host mode, Mass Storage Mode, and
+> Ethernet Mode. Host mode is pretty straightforward. Users will generally
+> work with USB mass storage devices and USB-Ethernet adapters in host
+> mode. Mass storage mode exposes an internal user data partition using
+> f_mass_storage and configfs so the user can connect our product to their
+> host computer for backing up data. Ethernet uses the f_ecm and f_rndis
+> functions creating an ethernet connection with USB hosts, particularly
+> mobile devices, to interact with our mobile applications and servers
+> through a wired connection.
+>
+> We control this functionality through a userspace application written in =
+Go
+> that creates the gadget/function configuration in configfs. Given this
+> background information, are there any approaches that come to mind, such
+> as reconfiguring the gadget? Thanks in advance for your input.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 4aff1d8..43bdd73 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -284,6 +284,69 @@ static const struct clk_bulk_data dwc3_core_clks[] = {
- };
- 
- /*
-+ * dwc3_set_cache_type - Configure cache type
-+ * @dwc3: Pointer to our controller context structure
-+ */
-+static void dwc3_set_cache_type(struct dwc3 *dwc)
-+{
-+	int ret;
-+	u32 tmp, reg, cache_type;
-+	struct fwnode_handle *fwnode;
-+
-+	reg = dwc3_readl(dwc->regs,  DWC3_GSBUSCFG0);
-+	tmp = reg;
-+
-+	fwnode = device_get_named_child_node(dwc->dev, "cache_type");
-+	if (!fwnode) {
-+		dev_info(dwc->dev, "Cache_type node no found, skip.\n");
-+		return;
-+	}
-+
-+	ret = fwnode_property_read_u32(fwnode,
-+				       "transfer_type_datard", &cache_type);
-+	if (ret) {
-+		dev_err(dwc->dev,
-+			"Can't find property transfer_type_datard.\n");
-+		return;
-+	}
-+	reg &= ~DWC3_GSBUSCFG0_DATARD(~0);
-+	reg |= DWC3_GSBUSCFG0_DATARD(cache_type);
-+
-+	ret = fwnode_property_read_u32(fwnode,
-+				       "transfer_type_descrd", &cache_type);
-+	if (ret) {
-+		dev_err(dwc->dev,
-+			"Can't find property transfer_type_descrd.\n");
-+		return;
-+	}
-+	reg &= ~DWC3_GSBUSCFG0_DESCRD(~0);
-+	reg |= DWC3_GSBUSCFG0_DESCRD(cache_type);
-+
-+	ret = fwnode_property_read_u32(fwnode,
-+				       "transfer_type_datawr", &cache_type);
-+	if (ret) {
-+		dev_err(dwc->dev,
-+			"Can't find property transfer_type_datawr.\n");
-+		return;
-+	}
-+	reg &= ~DWC3_GSBUSCFG0_DATAWR(~0);
-+	reg |= DWC3_GSBUSCFG0_DATAWR(cache_type);
-+
-+	ret = fwnode_property_read_u32(fwnode,
-+				       "transfer_type_descwr", &cache_type);
-+	if (ret) {
-+		dev_err(dwc->dev,
-+			"Can't find property transfer_type_descwr.\n");
-+		return;
-+	}
-+	reg &= ~DWC3_GSBUSCFG0_DESCWR(~0);
-+	reg |= DWC3_GSBUSCFG0_DESCWR(cache_type);
-+
-+	if (tmp != reg)
-+		dwc3_writel(dwc->regs, DWC3_GSBUSCFG0, reg);
-+}
-+
-+/*
-  * dwc3_frame_length_adjustment - Adjusts frame length if required
-  * @dwc3: Pointer to our controller context structure
-  */
-@@ -942,6 +1005,7 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 	dwc3_frame_length_adjustment(dwc);
- 
- 	dwc3_set_incr_burst_type(dwc);
-+	dwc3_set_cache_type(dwc);
- 
- 	usb_phy_set_suspend(dwc->usb2_phy, 0);
- 	usb_phy_set_suspend(dwc->usb3_phy, 0);
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index f19cbeb..24a613f 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -165,6 +165,18 @@
- /* Bit fields */
- 
- /* Global SoC Bus Configuration INCRx Register 0 */
-+#define DWC3_GSBUSCFG0_DATARD_SHIFT	28
-+#define DWC3_GSBUSCFG0_DATARD(n)	(((n) & 0xf)		\
-+			<< DWC3_GSBUSCFG0_DATARD_SHIFT)
-+#define DWC3_GSBUSCFG0_DESCRD_SHIFT	24
-+#define DWC3_GSBUSCFG0_DESCRD(n)	(((n) & 0xf)		\
-+			<< DWC3_GSBUSCFG0_DESCRD_SHIFT)
-+#define DWC3_GSBUSCFG0_DATAWR_SHIFT	20
-+#define DWC3_GSBUSCFG0_DATAWR(n)	(((n) & 0xf)		\
-+			<< DWC3_GSBUSCFG0_DATAWR_SHIFT)
-+#define DWC3_GSBUSCFG0_DESCWR_SHIFT	16
-+#define DWC3_GSBUSCFG0_DESCWR(n)	(((n) & 0xf)		\
-+			<< DWC3_GSBUSCFG0_DESCWR_SHIFT)
- #define DWC3_GSBUSCFG0_INCR256BRSTENA	(1 << 7) /* INCR256 burst */
- #define DWC3_GSBUSCFG0_INCR128BRSTENA	(1 << 6) /* INCR128 burst */
- #define DWC3_GSBUSCFG0_INCR64BRSTENA	(1 << 5) /* INCR64 burst */
--- 
-2.7.4
+Not really, if it goes into compliance mode, the only way to get it out
+of there is with a power-on reset. You can't even change link state back
+to U0 as that will just tell dwc3 to walk through the compliance
+patterns :-p
 
+I think our best bet is understanding why we're transitioning to
+compliance and preventing that.
+
+One question comes to mind: Does this happen *only* with the ethernet
+gadget? Does it happen with *all* hosts or just a particular host?
+
+Any chance you can capture a full session with both CATC or Beagle 5000
+analyzer and dwc3 tracepoints and send it to me?
+
+>> >           <idle>-0     [003] dNs2   184.588232: dwc3_core: Compliance =
+Mode detected. Attempting recovery routine
+>>=20
+>> Don't we get an interrupt for Compliance mode entry?
+>
+> Not that I've seen, surprisingly. My compliance mode recovery mechanism
+> looks for both compliance mode and loopback mode, neither of which I
+> have ever seen in the link state change events.
+
+That's odd, I would expect it to still give the event. Oh well, moving
+on :-)
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0oM4cACgkQzL64meEa
+mQaQMRAAzuY4UPkQcdf9kV973pRn0J6mq35vCl8FMvWFQHiQPTIRKA+ktFYz6qt6
+cPVuy5A5wF9f7SAC8a61/C6am0RTtWPlsTg+9lxRW1wpWt+4geSWBfr1dlH1Djse
+SfZ2Q+Bj/UHPX0W73gT8AMnaLY1TvRa+iGZJH6SrlKnX25IkIeaQgV882GDzny5G
+aTwfBhe6g2ixgI36Scsn7Ahk4d4SkVA+frgtWGgX610AH7EvGYts046XIni9Of2d
+J35nMmHvHu96suhY1RVpF4b4HLGLZYhoTjW6zpZDQm5j5fR/1ld2G9aiCuFU8gfX
+K6WtRNG0ljgWD/VwPJ6pzcCa1ybDrRu812gxfz+O555vtMycPr5RZdxM4EdNufzd
+THmQ42N35g3M20c+4RQwk1+XEFCwdO7ZA4V+fgZQKUVL86yRBGxwasgfpa70dWhO
+n3yr1IDjaE7SsLU4Wau3pNJzvhbM03op0PToDhgu51jDMkXqZi8ZQQdlPSSfTbUI
+xS8ljz+55FCc6OenEFdp2a8TPkfc7Om82h9khL64lZOTfMT1RM2eLl/E0nOS3UqC
+aDTLgSc+0VOFoogahEsNLZOxz9+ZbB8ETgSZXqdQ/22yHMCfnIpNBFSV2KyBdAFO
+ub7LsEXT7jQjq1+x75F5mYTt8RqCgcX2N5FhPusS4of+9vIbf7g=
+=5KaN
+-----END PGP SIGNATURE-----
+--=-=-=--
