@@ -2,85 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 356466791E
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2019 10:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D75F67BFC
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jul 2019 23:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbfGMIC5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Jul 2019 04:02:57 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41507 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726301AbfGMIC5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Jul 2019 04:02:57 -0400
-Received: by mail-pf1-f195.google.com with SMTP id m30so5304388pff.8;
-        Sat, 13 Jul 2019 01:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Kj4uxPGdjaQYSaMuuVNbxfkypLtBd+PP6doHp41Sdvw=;
-        b=TfbaSb+wKJQO1BfU3gPeuDDOQ0afR7dEZVFg7bMs4ExZAQTP+XrDI0p9huDKX01AgS
-         WrVYj+lpyyjVHELjzJSME6O03n8ooA0R93Up704piESYzy5vpvS47UfRy6bjbP3Lx4ua
-         SXW9L/BKKj87Q+Bt58WX69CcH2saeJLjlOvZdPpMVnvWAtvhnPJBWIMnR2rK4sLReEcv
-         1XBbVKCrjjLhUUUbqN2EXXNDDSeYfpkWoLaolFIhU/9iYQsH0ABJZjAJfIVAzBd7q+/A
-         TM5AICEg6W6P7ZJw122OSqCOz17csQN7efSiCGytjnZG9qp7gmo5hFKI657RQ179feQo
-         Tw3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Kj4uxPGdjaQYSaMuuVNbxfkypLtBd+PP6doHp41Sdvw=;
-        b=t1eSp3MZ7mySh1eEk7gr00NkoY16rTJDTjZyRo5Ad7LAK2aBnS6y6PYxjBDXzX2fAd
-         R7E1jmhF5Eka5eKE1KRRKDa3z8js69uVnSfvcbKfENVf5RK7RmkjTkv/K++moxFpfc1z
-         W0Ksd4o9anv1in86R26Pawana73N/+7YRw6TachCLQlAA1yF5vHiikUiPZ3ICfKBDc2s
-         Vki4LwJrEMlvkP2qU7OtxXasrupVSAvmQIVa8WLR/uiMgDwVnk69J5dCiROJKgTlaRD6
-         kk7RnWnmhFHnLNb5LIe9iSPxwFu/wthBZ4Ny86gq+8+F3m8nr+XHNPWnV9xqPn5JCAQZ
-         2+Pw==
-X-Gm-Message-State: APjAAAVGh4wX4rH2XrYTcXszLrlFHmLce8q3jp8T55gvIuPe65F9Qnrz
-        i8zCD9pFY1grugvvZXbYspo=
-X-Google-Smtp-Source: APXvYqwFtg0Ta37HZ2EceDeMi683MnFrEts9LcjRUdAP4VhfzlrfbFRYDMBSPCj1WCr1oACKZeqJBg==
-X-Received: by 2002:a65:6401:: with SMTP id a1mr15733616pgv.42.1563004976459;
-        Sat, 13 Jul 2019 01:02:56 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id w3sm9831951pgl.31.2019.07.13.01.02.55
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sat, 13 Jul 2019 01:02:55 -0700 (PDT)
-Date:   Sat, 13 Jul 2019 01:02:54 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Grant Hernandez <granthernandez@google.com>
-Cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] Input: gtco - bounds check collection indent level
-Message-ID: <20190713080254.GB243807@dtor-ws>
-References: <20190711222232.77701-1-granthernandez@google.com>
+        id S1728000AbfGMVI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Jul 2019 17:08:59 -0400
+Received: from eddie.linux-mips.org ([148.251.95.138]:37654 "EHLO
+        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727553AbfGMVI7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Jul 2019 17:08:59 -0400
+Received: (from localhost user: 'ladis' uid#1021 fake: STDIN
+        (ladis@eddie.linux-mips.org)) by eddie.linux-mips.org
+        id S23992479AbfGMVIzSG7pN (ORCPT
+        <rfc822;linux-serial@vger.kernel.org> + 1 other);
+        Sat, 13 Jul 2019 23:08:55 +0200
+Date:   Sat, 13 Jul 2019 23:08:53 +0200
+From:   Ladislav Michl <ladis@linux-mips.org>
+To:     linux-usb@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH v2 0/5] usb: gadget: u_serial: Fix and cleanup
+Message-ID: <20190713210853.GA25753@lenoch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190711222232.77701-1-granthernandez@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 11, 2019 at 03:22:32PM -0700, Grant Hernandez wrote:
-> The GTCO tablet input driver configures itself from an HID report sent
-> via USB during the initial enumeration process. Some debugging messages
-> are generated during the parsing. A debugging message indentation
-> counter is not bounds checked, leading to the ability for a specially
-> crafted HID report to cause '-' and null bytes be written past the end
-> of the indentation array. As long as the kernel has CONFIG_DYNAMIC_DEBUG
-> enabled, this code will not be optimized out.  This was discovered
-> during code review after a previous syzkaller bug was found in this
-> driver.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Grant Hernandez <granthernandez@google.com>
+Following patchset makes console work (patch 1 and 4) for an AT91SAM9G20
+board connected to xhci_hcd and does some cleanup.
+Tested with "console=ttyS0,115200n8 console=ttyGS0" on kernel command line
+and following inittab:
+console::respawn:/sbin/getty -L 115200 ttyS0 vt100
+console::respawn:/sbin/getty -L 115200 ttyGS0 vt100
 
-I wish we could convert gtco to be proper HID driver, so we woudl not
-have to deal with custom HID parsing, but in the meantime this is
-needed.
+However there is an issue remaining:
+Disconnect triggers WARN_ON in gs_close:
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 501 at drivers/usb/gadget/function/u_serial.c:706 gs_close+0x3c/0x1e4
+Modules linked in:
+CPU: 0 PID: 501 Comm: getty Not tainted 5.2.0-rc7 #44
+Hardware name: Atmel AT91SAM9
+[<c0107514>] (unwind_backtrace) from [<c01051c0>] (show_stack+0x10/0x18)
+[<c01051c0>] (show_stack) from [<c05465a8>] (dump_stack+0x18/0x24)
+[<c05465a8>] (dump_stack) from [<c010fa80>] (__warn+0xcc/0xe4)
+[<c010fa80>] (__warn) from [<c010fad0>] (warn_slowpath_null+0x38/0x48)
+[<c010fad0>] (warn_slowpath_null) from [<c03b6648>] (gs_close+0x3c/0x1e4)
+[<c03b6648>] (gs_close) from [<c03036b0>] (tty_release+0x1d4/0x460)
+[<c03036b0>] (tty_release) from [<c01ce464>] (__fput+0xe4/0x1b0)
+[<c01ce464>] (__fput) from [<c0124e1c>] (task_work_run+0x8c/0xa8)
+[<c0124e1c>] (task_work_run) from [<c011155c>] (do_exit+0x354/0x814)
+[<c011155c>] (do_exit) from [<c0111a9c>] (do_group_exit+0x54/0xb8)
+[<c0111a9c>] (do_group_exit) from [<c011a190>] (get_signal+0x18c/0x658)
+[<c011a190>] (get_signal) from [<c0104bbc>] (do_work_pending+0xe0/0x44c)
+[<c0104bbc>] (do_work_pending) from [<c0101068>] (slow_work_pending+0xc/0x20)
+Exception stack(0xc3797fb0 to 0xc3797ff8)
+7fa0:                                     00000000 beb87d0c 00000001 00000000
+7fc0: 0009a150 00000000 00099c04 00000003 0009a198 0007e049 00099bd4 0009a1e4
+7fe0: b6e3f000 beb87cd8 00018210 b6dbcc40 60000010 00000000
+---[ end trace 70af570fde0de49b ]---
 
-Applied, thank you.
+Explanation lives in drivers/tty/serial/ip22zilog.c at line 751 (see also
+__tty_hangup), but naive approach adding
+	if (test_bit(TTY_HUPPING, &tty->flags))
+		return 0;
+at the beginning of gs_close does not work as this way port->port.count
+never drops back to zero. Ideas welcome.
+
+Btw, it would seem nicer to have single output kfifo for both kernel
+console and tty, but that involves greater changes and I'd like to have
+driver working in stable as well. 
+
+Changes:
+- v2: Fixed locking, patches splitted, starving write fixed.
+
+Ladislav Michl (5):
+  usb: gadget: u_serial: Fix console_req complete event race
+  usb: gadget: u_serial: Remove console specific alloc/free req
+    functions
+  usb: gadget: u_serial: Fix console_req access race
+  usb: gadget: u_serial: Fix starving write
+  usb: gadget: u_serial: Use bool for req_busy
+
+ drivers/usb/gadget/function/u_serial.c | 120 +++++++++++--------------
+ 1 file changed, 51 insertions(+), 69 deletions(-)
 
 -- 
-Dmitry
+2.22.0
