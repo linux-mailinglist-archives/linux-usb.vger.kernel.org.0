@@ -2,53 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1939569832
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2019 17:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E82D699AA
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2019 19:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730824AbfGOPQl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jul 2019 11:16:41 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:43786 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730221AbfGOPQl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jul 2019 11:16:41 -0400
-Received: (qmail 5441 invoked by uid 2102); 15 Jul 2019 11:16:39 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 15 Jul 2019 11:16:39 -0400
-Date:   Mon, 15 Jul 2019 11:16:39 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>
-cc:     gregkh@linuxfoundation.org, USB list <linux-usb@vger.kernel.org>,
-        <bugzilla-daemon@bugzilla.kernel.org>
-Subject: Re: [bugzilla-daemon@bugzilla.kernel.org: [Bug 204095] New: freeze
- while write on external usb 3.0 hard disk]
-In-Reply-To: <20190715021543.GB12214@mit.edu>
-Message-ID: <Pine.LNX.4.44L0.1907151108580.1465-100000@iolanthe.rowland.org>
+        id S1731672AbfGORXZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 15 Jul 2019 13:23:25 -0400
+Received: from mail.bacgiang.gov.vn ([125.212.128.218]:45782 "EHLO
+        mta1.bacgiang.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731563AbfGORXY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jul 2019 13:23:24 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mta1.bacgiang.gov.vn (Postfix) with ESMTP id 0CFF8811CC93;
+        Mon, 15 Jul 2019 11:45:18 -0400 (EDT)
+Received: from mta1.bacgiang.gov.vn ([127.0.0.1])
+        by localhost (mta1.bacgiang.gov.vn [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id wbSYlnI0pGqX; Mon, 15 Jul 2019 11:45:16 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mta1.bacgiang.gov.vn (Postfix) with ESMTP id 8A785811E0AF;
+        Mon, 15 Jul 2019 11:45:16 -0400 (EDT)
+X-Virus-Scanned: amavisd-new at mta1.bacgiang.gov.vn
+Received: from mta1.bacgiang.gov.vn ([127.0.0.1])
+        by localhost (mta1.bacgiang.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id MdhcRgc_160Z; Mon, 15 Jul 2019 11:45:16 -0400 (EDT)
+Received: from [100.75.177.160] (unknown [223.225.21.62])
+        by mta1.bacgiang.gov.vn (Postfix) with ESMTPSA id 4E33F811CC93;
+        Mon, 15 Jul 2019 11:44:58 -0400 (EDT)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Hi
+To:     Recipients <bantiepcongdan_tpbg@bacgiang.gov.vn>
+From:   bantiepcongdan_tpbg@bacgiang.gov.vn
+Date:   Mon, 15 Jul 2019 21:14:40 +0530
+Reply-To: sgtmlbrown@aol.com
+Message-Id: <20190715154459.4E33F811CC93@mta1.bacgiang.gov.vn>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 14 Jul 2019, Theodore Y. Ts'o wrote:
-
-> This bug was initially (and wrongly) assigned to the ext4 component,
-> when it's very clearly a regression in the USB mass storage driver in
-> the 5.2.0 kernel.
-> 
-> For people who hate bugzilla, you can also see the full thread at:
-> 
-> https://lore.kernel.org/linux-ext4/bug-204095-13602@https.bugzilla.kernel.org%2F/T/#ra57c95759df5bee542d85f2541bda87735c09f16
-
-I'm not so sure it's a regression in the USB mass-storage driver, but
-in any case, it looks very much like the problem fixed by this patch 
-(not yet merged):
-
-	https://marc.info/?l=linux-usb&m=156044081619171&w=2
-
-Maybe the original bug reporters can try it out and tell us if it 
-works.
-
-Alan Stern
-
+I need your help
