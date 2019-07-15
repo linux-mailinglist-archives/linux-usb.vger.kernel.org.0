@@ -2,38 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DE169683
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2019 17:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C349E695CC
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2019 17:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388208AbfGOOFx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jul 2019 10:05:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52742 "EHLO mail.kernel.org"
+        id S2389606AbfGOOPu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Jul 2019 10:15:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60280 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388201AbfGOOFv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:05:51 -0400
+        id S2388999AbfGOOPs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:15:48 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EC72A2184C;
-        Mon, 15 Jul 2019 14:05:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1AF8220868;
+        Mon, 15 Jul 2019 14:15:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199550;
-        bh=/fNXGfW6l26M++rBtxKXdycB0jSkuZbTYwwrHNgQUnw=;
+        s=default; t=1563200148;
+        bh=R64sEWjE7fOnTDcA1+Fn6biGjYQ/zL3DIacAU7VyayE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fhs5LqKr1w/Lo+/Ks3u+8X+6+N5OIvU1Szp/H0IcDRx+RSxu0LaYplm7TU1kLLNoE
-         a6sIeCJxFgBGp3OXhcL+4A8ww5c9t4WahsHz5Z/wn3ugPg/elFXxZFcNSHQtpORxAa
-         kA5m8Be9bCKAg3Rj/VwuXY1Yvmc/rs1JtY4TrnUg=
+        b=005O3z3A6Xo7SA+L8rh3yfLnicrWWHv11gdbUroMX4uGpjeV+LfPhpAK3U7ZhhqLu
+         DoU1jZR474TCc6vaEfOyVkZBVB2yPOJJQqfTKwg6fgTWASsryspOCxaz08X8yK9n/1
+         PqsTq761uO93sh8mukeOaDL4jbA534TYMou01A0c=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vandana BN <bnvandana@gmail.com>,
-        syzbot+66010012fd4c531a1a96@syzkaller.appspotmail.com,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+Cc:     Phong Tran <tranmanphong@gmail.com>,
+        syzbot+8a3fc6674bbc3978ed4e@syzkaller.appspotmail.com,
+        "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 040/219] media: usb:zr364xx:Fix KASAN:null-ptr-deref Read in zr364xx_vidioc_querycap
-Date:   Mon, 15 Jul 2019 10:00:41 -0400
-Message-Id: <20190715140341.6443-40-sashal@kernel.org>
+        netdev@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.1 194/219] net: usb: asix: init MAC address buffers
+Date:   Mon, 15 Jul 2019 10:03:15 -0400
+Message-Id: <20190715140341.6443-194-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -46,81 +45,121 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Vandana BN <bnvandana@gmail.com>
+From: Phong Tran <tranmanphong@gmail.com>
 
-[ Upstream commit 5d2e73a5f80a5b5aff3caf1ec6d39b5b3f54b26e ]
+[ Upstream commit 78226f6eaac80bf30256a33a4926c194ceefdf36 ]
 
-SyzKaller hit the null pointer deref while reading from uninitialized
-udev->product in zr364xx_vidioc_querycap().
+This is for fixing bug KMSAN: uninit-value in ax88772_bind
+
+Tested by
+https://groups.google.com/d/msg/syzkaller-bugs/aFQurGotng4/eB_HlNhhCwAJ
+
+Reported-by: syzbot+8a3fc6674bbc3978ed4e@syzkaller.appspotmail.com
+
+syzbot found the following crash on:
+
+HEAD commit:    f75e4cfe kmsan: use kmsan_handle_urb() in urb.c
+git tree:       kmsan
+console output: https://syzkaller.appspot.com/x/log.txt?x=136d720ea00000
+kernel config:
+https://syzkaller.appspot.com/x/.config?x=602468164ccdc30a
+dashboard link:
+https://syzkaller.appspot.com/bug?extid=8a3fc6674bbc3978ed4e
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang
+06d00afa61eef8f7f501ebdb4e8612ea43ec2d78)
+syz repro:
+https://syzkaller.appspot.com/x/repro.syz?x=12788316a00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120359aaa00000
 
 ==================================================================
-BUG: KASAN: null-ptr-deref in read_word_at_a_time+0xe/0x20
-include/linux/compiler.h:274
-Read of size 1 at addr 0000000000000000 by task v4l_id/5287
-
-CPU: 1 PID: 5287 Comm: v4l_id Not tainted 5.1.0-rc3-319004-g43151d6 #6
+BUG: KMSAN: uninit-value in is_valid_ether_addr
+include/linux/etherdevice.h:200 [inline]
+BUG: KMSAN: uninit-value in asix_set_netdev_dev_addr
+drivers/net/usb/asix_devices.c:73 [inline]
+BUG: KMSAN: uninit-value in ax88772_bind+0x93d/0x11e0
+drivers/net/usb/asix_devices.c:724
+CPU: 0 PID: 3348 Comm: kworker/0:2 Not tainted 5.1.0+ #1
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
 Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
 Call Trace:
   __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xe8/0x16e lib/dump_stack.c:113
-  kasan_report.cold+0x5/0x3c mm/kasan/report.c:321
-  read_word_at_a_time+0xe/0x20 include/linux/compiler.h:274
-  strscpy+0x8a/0x280 lib/string.c:207
-  zr364xx_vidioc_querycap+0xb5/0x210 drivers/media/usb/zr364xx/zr364xx.c:706
-  v4l_querycap+0x12b/0x340 drivers/media/v4l2-core/v4l2-ioctl.c:1062
-  __video_do_ioctl+0x5bb/0xb40 drivers/media/v4l2-core/v4l2-ioctl.c:2874
-  video_usercopy+0x44e/0xf00 drivers/media/v4l2-core/v4l2-ioctl.c:3056
-  v4l2_ioctl+0x14e/0x1a0 drivers/media/v4l2-core/v4l2-dev.c:364
-  vfs_ioctl fs/ioctl.c:46 [inline]
-  file_ioctl fs/ioctl.c:509 [inline]
-  do_vfs_ioctl+0xced/0x12f0 fs/ioctl.c:696
-  ksys_ioctl+0xa0/0xc0 fs/ioctl.c:713
-  __do_sys_ioctl fs/ioctl.c:720 [inline]
-  __se_sys_ioctl fs/ioctl.c:718 [inline]
-  __x64_sys_ioctl+0x74/0xb0 fs/ioctl.c:718
-  do_syscall_64+0xcf/0x4f0 arch/x86/entry/common.c:290
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x7f3b56d8b347
-Code: 90 90 90 48 8b 05 f1 fa 2a 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff
-ff c3 90 90 90 90 90 90 90 90 90 90 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff
-ff 73 01 c3 48 8b 0d c1 fa 2a 00 31 d2 48 29 c2 64
-RSP: 002b:00007ffe005d5d68 EFLAGS: 00000202 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3b56d8b347
-RDX: 00007ffe005d5d70 RSI: 0000000080685600 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000400884
-R13: 00007ffe005d5ec0 R14: 0000000000000000 R15: 0000000000000000
-==================================================================
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x130/0x2a0 mm/kmsan/kmsan.c:622
+  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:310
+  is_valid_ether_addr include/linux/etherdevice.h:200 [inline]
+  asix_set_netdev_dev_addr drivers/net/usb/asix_devices.c:73 [inline]
+  ax88772_bind+0x93d/0x11e0 drivers/net/usb/asix_devices.c:724
+  usbnet_probe+0x10f5/0x3940 drivers/net/usb/usbnet.c:1728
+  usb_probe_interface+0xd66/0x1320 drivers/usb/core/driver.c:361
+  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x454/0x730 drivers/base/dd.c:844
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+  device_add+0x288d/0x30e0 drivers/base/core.c:2106
+  usb_set_configuration+0x30dc/0x3750 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x14c/0x200 drivers/usb/core/driver.c:266
+  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x454/0x730 drivers/base/dd.c:844
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+  device_add+0x288d/0x30e0 drivers/base/core.c:2106
+  usb_new_device+0x23e5/0x2ff0 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x48d1/0x7290 drivers/usb/core/hub.c:5432
+  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x189c/0x2460 kernel/workqueue.c:2417
+  kthread+0x4b5/0x4f0 kernel/kthread.c:254
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
 
-For this device udev->product is not initialized and accessing it causes a NULL pointer deref.
-
-The fix is to check for NULL before strscpy() and copy empty string, if
-product is NULL
-
-Reported-by: syzbot+66010012fd4c531a1a96@syzkaller.appspotmail.com
-Signed-off-by: Vandana BN <bnvandana@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/zr364xx/zr364xx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/usb/asix_devices.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 96fee8d5b865..cd2bc9ed0cd9 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -703,7 +703,8 @@ static int zr364xx_vidioc_querycap(struct file *file, void *priv,
- 	struct zr364xx_camera *cam = video_drvdata(file);
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 3d93993e74da..2eca4168af2f 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -238,7 +238,7 @@ static void asix_phy_reset(struct usbnet *dev, unsigned int reset_bits)
+ static int ax88172_bind(struct usbnet *dev, struct usb_interface *intf)
+ {
+ 	int ret = 0;
+-	u8 buf[ETH_ALEN];
++	u8 buf[ETH_ALEN] = {0};
+ 	int i;
+ 	unsigned long gpio_bits = dev->driver_info->data;
  
- 	strscpy(cap->driver, DRIVER_DESC, sizeof(cap->driver));
--	strscpy(cap->card, cam->udev->product, sizeof(cap->card));
-+	if (cam->udev->product)
-+		strscpy(cap->card, cam->udev->product, sizeof(cap->card));
- 	strscpy(cap->bus_info, dev_name(&cam->udev->dev),
- 		sizeof(cap->bus_info));
- 	cap->device_caps = V4L2_CAP_VIDEO_CAPTURE |
+@@ -689,7 +689,7 @@ static int asix_resume(struct usb_interface *intf)
+ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+ {
+ 	int ret, i;
+-	u8 buf[ETH_ALEN], chipcode = 0;
++	u8 buf[ETH_ALEN] = {0}, chipcode = 0;
+ 	u32 phyid;
+ 	struct asix_common_private *priv;
+ 
+@@ -1073,7 +1073,7 @@ static const struct net_device_ops ax88178_netdev_ops = {
+ static int ax88178_bind(struct usbnet *dev, struct usb_interface *intf)
+ {
+ 	int ret;
+-	u8 buf[ETH_ALEN];
++	u8 buf[ETH_ALEN] = {0};
+ 
+ 	usbnet_get_endpoints(dev,intf);
+ 
 -- 
 2.20.1
 
