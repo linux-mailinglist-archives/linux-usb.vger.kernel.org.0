@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FADE69277
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2019 16:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F286931C
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2019 16:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403990AbfGOOej (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jul 2019 10:34:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51868 "EHLO mail.kernel.org"
+        id S2404821AbfGOOlE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Jul 2019 10:41:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43536 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391048AbfGOOeh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:34:37 -0400
+        id S2404817AbfGOOlD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:41:03 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D388204FD;
-        Mon, 15 Jul 2019 14:34:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 76FBC204FD;
+        Mon, 15 Jul 2019 14:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563201276;
-        bh=PvNVaEj39Y0W8MzPo8TYSC/g+8BAomzevcla9rs/khc=;
+        s=default; t=1563201662;
+        bh=x1qJAsCrM6VNcRG4y2o/vAneux3uQttu5GFyWKGEP7U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gInT6q9i+NlS0aSvMsi0qQIgrPAnjSNrXGOnZVd3AYjE1qMaON+joD5K9u5EjnSBo
-         qB9HJBfhKxpcGTChiycrUrG08v41Y0IYzPmOL9/TJWiMDs5M+pmqJlgetvcPyK3hK4
-         gyGHP2gRaM5fjwrQxkJ1Ny7M9+RyxVayDPVeAfbo=
+        b=Xvy0E4lKH9tk/iCGwEUD7TkIKDRW/BeGFl+WHzh8a2aQQ5vaqDABSEL+bzUNY8U5+
+         +xF4IVxZXjPR7Q59h8mfC+DLs7NbhS7WwekYcPXwny0C+zRRJPFui+J/FMSjaFSjJ8
+         QbVzW1mdAzBxyc4DD8bxb6Cg0aTa1FqO0dpbrhyM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Phong Tran <tranmanphong@gmail.com>,
@@ -30,12 +30,12 @@ Cc:     Phong Tran <tranmanphong@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.14 094/105] net: usb: asix: init MAC address buffers
-Date:   Mon, 15 Jul 2019 10:28:28 -0400
-Message-Id: <20190715142839.9896-94-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 66/73] net: usb: asix: init MAC address buffers
+Date:   Mon, 15 Jul 2019 10:36:22 -0400
+Message-Id: <20190715143629.10893-66-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715142839.9896-1-sashal@kernel.org>
-References: <20190715142839.9896-1-sashal@kernel.org>
+In-Reply-To: <20190715143629.10893-1-sashal@kernel.org>
+References: <20190715143629.10893-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -130,10 +130,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index d0c0ac0c3519..9b751d4bd327 100644
+index 393fd3ed6b94..4b12b6da3fab 100644
 --- a/drivers/net/usb/asix_devices.c
 +++ b/drivers/net/usb/asix_devices.c
-@@ -238,7 +238,7 @@ static void asix_phy_reset(struct usbnet *dev, unsigned int reset_bits)
+@@ -237,7 +237,7 @@ static void asix_phy_reset(struct usbnet *dev, unsigned int reset_bits)
  static int ax88172_bind(struct usbnet *dev, struct usb_interface *intf)
  {
  	int ret = 0;
@@ -142,7 +142,7 @@ index d0c0ac0c3519..9b751d4bd327 100644
  	int i;
  	unsigned long gpio_bits = dev->driver_info->data;
  
-@@ -689,7 +689,7 @@ static int asix_resume(struct usb_interface *intf)
+@@ -687,7 +687,7 @@ static int asix_resume(struct usb_interface *intf)
  static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
  {
  	int ret, i;
@@ -151,7 +151,7 @@ index d0c0ac0c3519..9b751d4bd327 100644
  	u32 phyid;
  	struct asix_common_private *priv;
  
-@@ -1065,7 +1065,7 @@ static const struct net_device_ops ax88178_netdev_ops = {
+@@ -1064,7 +1064,7 @@ static const struct net_device_ops ax88178_netdev_ops = {
  static int ax88178_bind(struct usbnet *dev, struct usb_interface *intf)
  {
  	int ret;
