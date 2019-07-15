@@ -2,99 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D86E682AB
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2019 05:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 057C368365
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jul 2019 08:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728952AbfGODUQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 Jul 2019 23:20:16 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35626 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727006AbfGODUQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Jul 2019 23:20:16 -0400
-Received: by mail-pg1-f193.google.com with SMTP id s1so691485pgr.2;
-        Sun, 14 Jul 2019 20:20:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=a7cYkb48u1/THE35/OWlII8Gna9fLu0HquRGryosopo=;
-        b=k3URqt7PLHSS3RC8pv4JgWz9tCWnECtG/Jv9Fay1Sq1/hbHjdBvcq4mk6mSsU/nyQg
-         fZdHvyl6nIFNwTGXVgzVY6ms1trWSSANURfgs0l4wdBlBTa7XPAl2kcrms0BX6pvZQ3y
-         EIRW+wWc2ay0IW2rRRWaha/Z2cemrTxfyhk9OTlg6E9mD9+8aZ7+htD1Xs0MUGN4FPqQ
-         XfX/AkqZVqwACClQKomlExZFLnRqm/cbHO1dzB3OLEsgKM4gdvB6fgUXITOjX6Nemey/
-         kMZLrSNN+JGRb5p/Mu5GuyRvAhzBlkQDkT6VD+yHjcmG+ru9sGP7rKk/EDaTakw5o9Sv
-         oFVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=a7cYkb48u1/THE35/OWlII8Gna9fLu0HquRGryosopo=;
-        b=kuB00giwnRmK72BSQYtUdh5d1/3gqD5Sp16ZOt/ij7IIQ+j65M3U1rAu/F0MLQRtW3
-         qfqCADUmACbtwKrSYeAr7pY49SV9ILmpZndV8fPLxC6Gr4jhVnlaqd6IZTOQRjR2PnXF
-         7fY80IPOksAhUCPYz0JS571/+Vt4oI4c2kEd85K6DvY2WzspDan8fXBV83s3T3rBGBkC
-         wX/ghfg+d5nCB9JQlWDQL8bjnPAWj/8rJBEVmM+WYCqcPFoWqt9ui+/O8ajsRtlhfDWU
-         rcALSpB4NOTzzZ8BLBloEUWoygETB4X/T0DQyyKm/4p9MNwuynHQklTkPzZLR7KU0WPV
-         MAmg==
-X-Gm-Message-State: APjAAAXl7TbQ1vmWUY92uF38bEiE8NDWz9fSCGoTp3Ss7T2I30t+h/T3
-        lH9GYgW8dNAwL0pCL0EWf/I=
-X-Google-Smtp-Source: APXvYqzBOwMbkLZkidheWKf1vGfsCvmAVMCMhhIPC6TjyIm64u5BM/c0K5fo5vREjjOr1yQwrTOVsA==
-X-Received: by 2002:a63:c20e:: with SMTP id b14mr23864892pgd.96.1563160815362;
-        Sun, 14 Jul 2019 20:20:15 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id p2sm24360227pfb.118.2019.07.14.20.20.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 14 Jul 2019 20:20:15 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH v3 23/24] usb: host: Remove call to memset after dma_alloc_coherent
-Date:   Mon, 15 Jul 2019 11:20:10 +0800
-Message-Id: <20190715032010.7258-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726748AbfGOGFy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Jul 2019 02:05:54 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:56402 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726425AbfGOGFy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jul 2019 02:05:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1563170752; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z1MaOt0jW59xYgvE7c4XkSzT9zY9zvt+sXJ111t6oK4=;
+        b=wjhDRBgyh9wpm9oRX0H1916idSKCg0Ie8HZwIh6+VLKjzbLkSFTPT0Es6B81OLvJ3lxWu8
+        JNddxONRUczkKGDRXrB6wRxXkzafNLmBpM1ORhkdE8I1EAm0eWCWun3FDkkTPsR3tJ245f
+        y8cvtm2KBkAf1Qf5MLBYd6WSAvJduKY=
+Date:   Mon, 15 Jul 2019 02:05:40 -0400
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] usb: musb: Disable pullup in gadget setup
+To:     Bin Liu <b-liu@ti.com>
+Cc:     od@zcrc.me, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <1563170740.1702.0@crapouillou.net>
+In-Reply-To: <20190430150506.GF20993@uda0271908>
+References: <20190404093743.6470-1-paul@crapouillou.net>
+        <20190404161046.GA30182@uda0271908> <20190430150506.GF20993@uda0271908>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In commit 518a2f1925c3
-("dma-mapping: zero memory returned from dma_alloc_*"),
-dma_alloc_coherent has already zeroed the memory.
-So memset is not needed.
+Hi Bin,
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
-Changes in v3:
-  - Use actual commit rather than the merge commit in the commit message
 
- drivers/usb/host/xhci-dbgcap.c | 1 -
- drivers/usb/host/xhci-mem.c    | 1 -
- 2 files changed, 2 deletions(-)
+Le mar. 30 avril 2019 =E0 11:05, Bin Liu <b-liu@ti.com> a =E9crit :
+> Hi Paul,
+>=20
+> On Thu, Apr 04, 2019 at 11:10:46AM -0500, Bin Liu wrote:
+>>  On Thu, Apr 04, 2019 at 11:37:43AM +0200, Paul Cercueil wrote:
+>>  > The pullup may be already enabled before the driver is=20
+>> initialized.
+>>  > It has to be disabled at init time, as we cannot guarantee that a=20
+>> gadget
+>>  > driver will be bound to the UDC.
+>>  >
+>>  > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  > ---
+>>  >  drivers/usb/musb/musb_gadget.c | 1 +
+>>  >  1 file changed, 1 insertion(+)
+>>  >
+>>  > diff --git a/drivers/usb/musb/musb_gadget.c=20
+>> b/drivers/usb/musb/musb_gadget.c
+>>  > index ffe462a657b1..094dc59c834c 100644
+>>  > --- a/drivers/usb/musb/musb_gadget.c
+>>  > +++ b/drivers/usb/musb/musb_gadget.c
+>>  > @@ -1794,6 +1794,7 @@ int musb_gadget_setup(struct musb *musb)
+>>  >
+>>  >  	musb->is_active =3D 0;
+>>  >  	musb_platform_try_idle(musb, 0);
+>>  > +	musb_pullup(musb, 0);
+>>  >
+>>  >  	status =3D usb_add_gadget_udc(musb->controller, &musb->g);
+>>  >  	if (status)
+>>=20
+>>  Applied.
+>=20
+> Sorry, I have dropped this patch from my tree. I realized the gadget
+> core already defines callbacks to control the pullup. I think the
+> proper fix should be calling usb_udc_vbus_handler() in musb gadget or
+> glue layers.
+>=20
+> -Bin.
 
-diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
-index 52e32644a4b2..93e2cca5262d 100644
---- a/drivers/usb/host/xhci-dbgcap.c
-+++ b/drivers/usb/host/xhci-dbgcap.c
-@@ -22,7 +22,6 @@ dbc_dma_alloc_coherent(struct xhci_hcd *xhci, size_t size,
- 
- 	vaddr = dma_alloc_coherent(xhci_to_hcd(xhci)->self.sysdev,
- 				   size, dma_handle, flags);
--	memset(vaddr, 0, size);
- 	return vaddr;
- }
- 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index cf5e17962179..e16eda6e2b8b 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2399,7 +2399,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 			flags);
- 	if (!xhci->dcbaa)
- 		goto fail;
--	memset(xhci->dcbaa, 0, sizeof *(xhci->dcbaa));
- 	xhci->dcbaa->dma = dma;
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"// Device context base array address = 0x%llx (DMA), %p (virt)",
--- 
-2.11.0
+usb_udc_vbus_handler() requires a usb_gadget *, I don't see where I can
+get that from the struct musb.
+
+Besides, the point is to have the pullup disabled before a gadget is=20
+bound,
+so I don't understand why you suggest that?
+
+-Paul
+
+=
 
