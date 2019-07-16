@@ -2,178 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B736A4D4
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2019 11:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FD06A6A5
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2019 12:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732103AbfGPJXM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jul 2019 05:23:12 -0400
-Received: from mail-lj1-f177.google.com ([209.85.208.177]:40279 "EHLO
-        mail-lj1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727105AbfGPJXK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jul 2019 05:23:10 -0400
-Received: by mail-lj1-f177.google.com with SMTP id m8so19174885lji.7
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 02:23:08 -0700 (PDT)
+        id S1733148AbfGPKiH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jul 2019 06:38:07 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:33341 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732081AbfGPKiG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jul 2019 06:38:06 -0400
+Received: by mail-io1-f70.google.com with SMTP id 132so22995561iou.0
+        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 03:38:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dSQySKc5D28DozEGEVwD/pff6MLnsi0bcLRyztNAS4c=;
-        b=muxeIy+zlX64/6aa8mXab0weh1F3NMpzGhNzaC5nGbjrvHPEJTrT6U15vZ3Yu3HN0r
-         /qsWL+/zG20uvgsgjrAACVQ81zNk/7CDjnJU6ZEYgUA9I7UtbQudGZZwJ6P92MUlnPpn
-         k4pOGu9Po8/tMD1nEDxO+J7cfubIJfSQ0LX29nrLNGRGz857a7McGWTfXCpECYYPBBJi
-         g+I6UGawF3QL0wFvXBPKgsS6gdFMfAxTZZZMVFSTNgOHe4D6F6DTQJdEXD4cT5w3P9xC
-         PSJK+d6eVuHryT8krHlKtRU6QeVjVUqrzKJDLFRWLSONEFRsmc++nBvwggOPfU7L71a2
-         r9dA==
-X-Gm-Message-State: APjAAAUMSJ5GjhJOA95gaDbuMiBQNt+EtJD2UP09p+04u+iKkknITKXC
-        pAG9bhW3ggYTlrglvijQ2aQBzWETuxQ=
-X-Google-Smtp-Source: APXvYqxfG2TYbJJHwQ+Tw4TMimwlnCoyIzXPLHBj0XdPvLemZ5PnAou7kBQbEsVVSQhvBmYx1pPK/Q==
-X-Received: by 2002:a2e:2d12:: with SMTP id t18mr17223758ljt.175.1563268987990;
-        Tue, 16 Jul 2019 02:23:07 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id w8sm2720184lfq.62.2019.07.16.02.23.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 02:23:07 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1hnJft-0004HI-GO; Tue, 16 Jul 2019 11:23:05 +0200
-Date:   Tue, 16 Jul 2019 11:23:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Markus Breunig <Markus.L.Breunig@gmx.net>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Subject: Re: Fwd: Re: New USB Device
-Message-ID: <20190716092305.GC3522@localhost>
-References: <5D1D1376.7070202@gmx.net>
- <5D1E65F3.6090307@gmx.net>
- <20190705052121.GD15821@kroah.com>
- <5D224A18.2070907@gmx.net>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=oW/HWWjjYHHi5wFF5o9/pG7QsieQMhoWbLKzyHk0u8o=;
+        b=tmXrivAqfu2cYUiNeM5dgi2ALlBB1yvvqdAjYvIKkSU0z4TGe6kIuTUPrXbn1lZKDj
+         JVej23SZ+CGqRPERMeIZY1c9SXemaX6v0Ec2RW69RuHy+DI5iEhd8EE0Id0dvNzq9+1F
+         TLAf99tdjBHl9U7Y/azsmRG9GVwjJDhcM5Qp03zZ8niUHQD0d0ehvEFKHg1t+Wv1kCre
+         TuVSlLHDdzLqIx9WgH1Zos6eA6gFa5AXjdXSXTQ93CynGtLDpL6iKWPHS3sEb0m0NmAV
+         r0DNbGuVpH9Ec32+gq4DFGS8oQcaK/NVLs0CqjkrUpE1xumo/EjkUW1HNFbvDevqKCQg
+         VFzQ==
+X-Gm-Message-State: APjAAAV1FOsUfPQolBLAaI+bh80WZxO/bBVZbDtSGnOOlrFshrcAYNOY
+        SCzO6f/Y7XiO5rTT5QmAX7MYtFo40+rXbNcN+uqRKJsVdTI2
+X-Google-Smtp-Source: APXvYqyqmz3/2jnkLJY2+Cc9UahCylxmUvu5/sL8Jh+77UHF8agMxF5fOSvKau9bcWkyeTZ/7TWyPfLGMoHKsrO//vFLTwUHnmzm
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5D224A18.2070907@gmx.net>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Received: by 2002:a02:9a03:: with SMTP id b3mr34355376jal.0.1563273485901;
+ Tue, 16 Jul 2019 03:38:05 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 03:38:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d06dc2058dc9f8f2@google.com>
+Subject: WARNING in shark_write_reg/usb_submit_urb
+From:   syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ Pleas avoid top posting. ]
+Hello,
 
-On Sun, Jul 07, 2019 at 09:38:00PM +0200, Markus Breunig wrote:
-> Hi Greg,
-> 
-> also the company GNS has a fragmented homepage, the handbook ist
-> available here:
-> http://www.servicedocs.com/ARTIKELEN/7200284490001.pdf
-> habe a look to page 10 "Remarks to Linux"
-> 
-> This is the log of "lsusb -v" (full scan result attached):
-> 
-> Bus 001 Device 004: ID 04d8:f8e8 Microchip Technology, Inc. Harmony
-> 300/350 Remote
+syzbot found the following crash on:
 
-Are you sure this is the right device? This looks like a remote control,
-and one that should be using the cdc-acm driver.
+HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=111fc400600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d90745bdf884fc0a
+dashboard link: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10784148600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d826a4600000
 
-> Device Descriptor:
->    bLength                18
->    bDescriptorType         1
->    bcdUSB               2.00
->    bDeviceClass          255 Vendor Specific Class
->    bDeviceSubClass         0
->    bDeviceProtocol         0
->    bMaxPacketSize0         8
->    idVendor           0x04d8 Microchip Technology, Inc.
->    idProduct          0xf8e8 Harmony 300/350 Remote
->    bcdDevice           48.12
->    iManufacturer           1
->    iProduct                2
->    iSerial                 3
->    bNumConfigurations      1
->    Configuration Descriptor:
->      bLength                 9
->      bDescriptorType         2
->      wTotalLength           67
->      bNumInterfaces          2
->      bConfigurationValue     1
->      iConfiguration          0
->      bmAttributes         0xc0
->        Self Powered
->      MaxPower              100mA
->      Interface Descriptor:
->        bLength                 9
->        bDescriptorType         4
->        bInterfaceNumber        0
->        bAlternateSetting       0
->        bNumEndpoints           1
->        bInterfaceClass         2 Communications
->        bInterfaceSubClass      2 Abstract (modem)
->        bInterfaceProtocol      1 AT-commands (v.25ter)
->        iInterface              0
->        CDC Header:
->          bcdCDC               1.10
->        CDC ACM:
->          bmCapabilities       0x02
->            line coding and serial state
->        CDC Union:
->          bMasterInterface        0
->          bSlaveInterface         1
->        CDC Call Management:
->          bmCapabilities       0x00
->          bDataInterface          1
->        Endpoint Descriptor:
->          bLength                 7
->          bDescriptorType         5
->          bEndpointAddress     0x82  EP 2 IN
->          bmAttributes            3
->            Transfer Type            Interrupt
->            Synch Type               None
->            Usage Type               Data
->          wMaxPacketSize     0x0008  1x 8 bytes
->          bInterval               2
->      Interface Descriptor:
->        bLength                 9
->        bDescriptorType         4
->        bInterfaceNumber        1
->        bAlternateSetting       0
->        bNumEndpoints           2
->        bInterfaceClass        10 CDC Data
->        bInterfaceSubClass      0 Unused
->        bInterfaceProtocol      0
->        iInterface              0
->        Endpoint Descriptor:
->          bLength                 7
->          bDescriptorType         5
->          bEndpointAddress     0x03  EP 3 OUT
->          bmAttributes            2
->            Transfer Type            Bulk
->            Synch Type               None
->            Usage Type               Data
->          wMaxPacketSize     0x0040  1x 64 bytes
->          bInterval               0
->        Endpoint Descriptor:
->          bLength                 7
->          bDescriptorType         5
->          bEndpointAddress     0x83  EP 3 IN
->          bmAttributes            2
->            Transfer Type            Bulk
->            Synch Type               None
->            Usage Type               Data
->          wMaxPacketSize     0x0040  1x 64 bytes
->          bInterval               0
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com
 
-> Am 05.07.2019 07:21, schrieb Greg KH:
-> > On Thu, Jul 04, 2019 at 10:47:47PM +0200, Markus Breunig wrote:
-> >> Hi Greg,
-> >>
-> >> using a serial device driver is the idea of the manufacturer
-> >> "www.gns-gmbh.com". In the LINUX instructions of the ADS-B receiver some
-> >> hints to use the device are given via usbserial.
-> >
-> > Any pointers to those instructions?
-> >
-> >> In practice the "GNS 5890 ADS-B Receiver" is similare to some GPS
-> >> Receivers with NMEA 0183 interface starting to send information on the
-> >> serial interface after power on and signal availabillity (with 115200
-> >> boud data rate).
+usb 1-1: string descriptor 0 read error: -22
+usb 1-1: New USB device found, idVendor=077d, idProduct=627a, bcdDevice=  
+0.10
+usb 1-1: New USB device strings: Mfr=63, Product=5, SerialNumber=1
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 1 PID: 22 at drivers/usb/core/urb.c:477  
+usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #14
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x292/0x6c9 kernel/panic.c:219
+  __warn.cold+0x20/0x4b kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
+RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Code: 4d 85 ed 74 2c e8 c8 69 e8 fd 4c 89 f7 e8 f0 c4 12 ff 41 89 d8 44 89  
+e1 4c 89 ea 48 89 c6 48 c7 c7 60 3a 1a 86 e8 53 2e be fd <0f> 0b e9 20 f4  
+ff ff e8 9c 69 e8 fd 4c 89 f2 48 b8 00 00 00 00 00
+RSP: 0018:ffff8881d9f96f58 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3f2ddd
+RBP: ffff8881cf557590 R08: ffff8881d9f88000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: ffff8881d0c77000 R14: ffff8881d553cd20 R15: ffff8881d5123b00
+  usb_start_wait_urb+0x108/0x2b0 drivers/usb/core/message.c:57
+  usb_bulk_msg+0x228/0x550 drivers/usb/core/message.c:253
+  shark_write_reg+0x1ef/0x2b0 drivers/media/radio/radio-shark2.c:88
+  radio_tea5777_set_freq+0x1ed/0x470 drivers/media/radio/radio-tea5777.c:213
+  radio_tea5777_init+0xb7/0x600 drivers/media/radio/radio-tea5777.c:544
+  usb_shark_probe+0x5b9/0x740 drivers/media/radio/radio-shark2.c:318
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1b3d/0x35f0 drivers/usb/core/hub.c:5441
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x30b/0x410 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-Johan
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
