@@ -2,344 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 339B06A72F
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2019 13:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790086AAAD
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2019 16:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387619AbfGPLRR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jul 2019 07:17:17 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:36635 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387582AbfGPLRQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jul 2019 07:17:16 -0400
-Received: by mail-lf1-f68.google.com with SMTP id q26so13416237lfc.3
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 04:17:13 -0700 (PDT)
+        id S1728513AbfGPOfD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jul 2019 10:35:03 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:44015 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726997AbfGPOfD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jul 2019 10:35:03 -0400
+Received: by mail-pg1-f194.google.com with SMTP id f25so9537018pgv.10
+        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 07:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2R7OgIABLceHFgV2ACZ6uadj21R788V47JENYqhfrRI=;
+        b=AJEy+x8T4wkdU59jpzzZsqwyQvdRJPzG3ZR/9oCMCIFtr/jZrckqIQPtwFEJp9Ai5l
+         snDqpIrYAg4Hx6b0KdXbS43kVLYCTbE35C+egXJVxFIiSVqPewj40nYQIj66wxeZFw4b
+         EVM7KyDN0o38cmbNn5jC9TEFpbzErjFdeKa5gnpcIs8KSk1BnqkpX+twPrtZSKqDm0jc
+         F4hVjbTHghJ5p9vOkp0C0B08MUUNvxKrvda6j5H4w9kQ3VS5XQh9GRUN1vJ2C8Hmi5zS
+         as2MqBKsvpAjJh+9XXdn8w+1QlF4cvs+DvtXVJvwD4S1KUQH6bGDvGbGd9VjqD+R1c2W
+         NbWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FANLzRCk5g3JwxXhaE6JZI5wKMDrbGqMO65Q37pZsZo=;
-        b=bds/XYdgqPVO/30/NuGwXK6mQWjl2PHk82ePsEoD0TsmX9qXsxiLs4LTzqjcx5iqdt
-         Za1l5A5/C5k9kb2j8d0J7jhbK9HnwCWed0g1yirkvi2vcI5w5LRc5vmX0WW3PMATPoWK
-         NtvR2+ebg71iptyZV8C+lIHe39FhMo/Ajv6jguDB2EvEQ3Z7Wdo7fowqj30osD8Rt720
-         s6o5uVRawBvuZjuZbFFUsqRTQeErzZ2UKV1lS+qQhJMWFHTZmvBsnjG0rDXeLlm2j5ih
-         KwplcGum++h6/QW8+0XNEFjTqau8vD/OPIOTmDbq/COULA3qcqI5+TrN31WKD4G8Wqjp
-         0mLg==
-X-Gm-Message-State: APjAAAV3yLkvghtcGyKzSUillmYV+ys6YfMWkwcqa82c5nuJb1kuqSWJ
-        4Lc2HC7px3WjdNFJECl5hgk=
-X-Google-Smtp-Source: APXvYqz7pVWf+pwCcIK7M5nwsMbpvmpi+ydiYeiGdO4UFeLxz1SfRvW4g+G24TfrSMjylvYoTQxUSw==
-X-Received: by 2002:ac2:596c:: with SMTP id h12mr14645451lfp.101.1563275833042;
-        Tue, 16 Jul 2019 04:17:13 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id z83sm3685133ljb.73.2019.07.16.04.17.12
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2R7OgIABLceHFgV2ACZ6uadj21R788V47JENYqhfrRI=;
+        b=r/WtKCqGHxYar3fv1asUlgCZPKdEU+VzC9ClW3LcC9ozkVRHNgDgiYnk25HFoOxGcG
+         Y6sICGsGiWJvA5W6yUkTkUk98A+YD++swSqflVXA0BQTtdTflRxqzkRLI4KZq9O/eCWM
+         U9QhfJIF3Dag8w4oxg9SAQEk/uS+FFdYa/JeHQhIRSXJv18mndRDgTtAvcg+kJXsQ2Ul
+         DpTeVA8zw/XN/dilPd9ll/J/FJ7ZsEpq0JrhXy9ynM7xVdyIuVhlBkJUY4rLmrascgz6
+         AILJQnCnFBGA+JOKjnpfAD5Kn72f4mAW9ramkeZWriT93ovF0liBqZXGIS+25KQeF0q+
+         1dyg==
+X-Gm-Message-State: APjAAAUbhha1zMNWNEo5cb3kNZBEpqwncNPAUUT6N7mPwJyJz6+RaPY5
+        nc07HOgfTMySFRMQvCY8SGquFf0DVsk=
+X-Google-Smtp-Source: APXvYqxhyQROlztUa2T/A5TglaOI7q6GApNma2zCaCRm8AW31Lsy+vZrFaj8Ej69qInW0qq51h7Jpw==
+X-Received: by 2002:a17:90a:9a83:: with SMTP id e3mr36214820pjp.105.1563287702491;
+        Tue, 16 Jul 2019 07:35:02 -0700 (PDT)
+Received: from [192.168.1.5] ([110.77.195.91])
+        by smtp.googlemail.com with ESMTPSA id 14sm32285925pfj.36.2019.07.16.07.35.00
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 04:17:12 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1hnLSJ-0004c5-Nl; Tue, 16 Jul 2019 13:17:11 +0200
-Date:   Tue, 16 Jul 2019 13:17:11 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Rogan Dawes <rogan@dawes.za.net>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Lars Melin <larsm17@gmail.com>, Dan Williams <dcbw@redhat.com>
+        Tue, 16 Jul 2019 07:35:01 -0700 (PDT)
 Subject: Re: [PATCH] USB: serial: option: add D-Link DWM-222 device ID
  [version 2]
-Message-ID: <20190716111711.GD3522@localhost>
+To:     Johan Hovold <johan@kernel.org>, Rogan Dawes <rogan@dawes.za.net>
+Cc:     linux-usb@vger.kernel.org, Dan Williams <dcbw@redhat.com>
 References: <20190711094012.GA16316@lisa.dawes.za.net>
- <20190711103457.GA17414@lisa.dawes.za.net>
- <20190716091122.GB3522@localhost>
+ <20190711103457.GA17414@lisa.dawes.za.net> <20190716091122.GB3522@localhost>
  <CAOYdKdiEUsk9O=ytis=u2yD-69LoKNSE8=ivwer8K3sMNCd8Dw@mail.gmail.com>
+ <20190716111711.GD3522@localhost>
+From:   Lars Melin <larsm17@gmail.com>
+Message-ID: <1eda7a85-f71d-950b-8efd-d3258ffeeab5@gmail.com>
+Date:   Tue, 16 Jul 2019 21:34:56 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOYdKdiEUsk9O=ytis=u2yD-69LoKNSE8=ivwer8K3sMNCd8Dw@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20190716111711.GD3522@localhost>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 12:55:17PM +0200, Rogan Dawes wrote:
+On 7/16/2019 18:17, Johan Hovold wrote:
 
-> After binding the Option driver, lsusb -v -d 2001:7e3d
+snip
+
+> Ok, thanks. Do you have any idea what all those vendor interface are
+> for? Some of the other D-Link entries blacklist a speech and debug port
+> for example.
 > 
-> Bus 001 Device 062: ID 2001:7e3d D-Link Corp. Mobile Connect
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.01
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x2001 D-Link Corp.
->   idProduct          0x7e3d
->   bcdDevice            2.28
->   iManufacturer           1 Mobile Connect
->   iProduct                2 Mobile Connect
->   iSerial                 3 0123456789ABCDEF
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x00e8
->     bNumInterfaces          6
->     bConfigurationValue     1
->     iConfiguration          0
->     bmAttributes         0x80
->       (Bus Powered)
->     MaxPower              500mA
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass    255 Vendor Specific Subclass
->       bInterfaceProtocol    255 Vendor Specific Protocol
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x81  EP 1 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x01  EP 1 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        1
->       bAlternateSetting       0
->       bNumEndpoints           3
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass      0
->       bInterfaceProtocol      0
->       iInterface              0
->       ** UNRECOGNIZED:  05 24 00 10 01
->       ** UNRECOGNIZED:  05 24 01 00 00
->       ** UNRECOGNIZED:  04 24 02 02
->       ** UNRECOGNIZED:  05 24 06 00 00
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x83  EP 3 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x000a  1x 10 bytes
->         bInterval               9
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x82  EP 2 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x02  EP 2 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        2
->       bAlternateSetting       0
->       bNumEndpoints           3
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass      0
->       bInterfaceProtocol      0
->       iInterface              0
->       ** UNRECOGNIZED:  05 24 00 10 01
->       ** UNRECOGNIZED:  05 24 01 00 00
->       ** UNRECOGNIZED:  04 24 02 02
->       ** UNRECOGNIZED:  05 24 06 00 00
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x85  EP 5 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x000a  1x 10 bytes
->         bInterval               9
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x84  EP 4 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x03  EP 3 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        3
->       bAlternateSetting       0
->       bNumEndpoints           3
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass      0
->       bInterfaceProtocol      0
->       iInterface              0
->       ** UNRECOGNIZED:  05 24 00 10 01
->       ** UNRECOGNIZED:  05 24 01 00 00
->       ** UNRECOGNIZED:  04 24 02 02
->       ** UNRECOGNIZED:  05 24 06 00 00
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x87  EP 7 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x000a  1x 10 bytes
->         bInterval               9
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x86  EP 6 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x04  EP 4 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        4
->       bAlternateSetting       0
->       bNumEndpoints           3
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass    255 Vendor Specific Subclass
->       bInterfaceProtocol    255 Vendor Specific Protocol
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x89  EP 9 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0008  1x 8 bytes
->         bInterval               9
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x88  EP 8 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x05  EP 5 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        5
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass         8 Mass Storage
->       bInterfaceSubClass      6 SCSI
->       bInterfaceProtocol     80 Bulk-Only
->       iInterface              4 Mass Storage
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x8a  EP 10 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x06  EP 6 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               1
-> Binary Object Store Descriptor:
->   bLength                 5
->   bDescriptorType        15
->   wTotalLength       0x000c
->   bNumDeviceCaps          1
->   USB 2.0 Extension Device Capability:
->     bLength                 7
->     bDescriptorType        16
->     bDevCapabilityType      2
->     bmAttributes   0x00000002
->       HIRD Link Power Management (LPM) Supported
-> can't get debug descriptor: Resource temporarily unavailable
-> Device Status:     0x0000
->   (Bus Powered)
+> We can always do that later if we need to, but perhaps you or someone
+> already know (also adding Lars and Dan on CC).
+> 
+> Johan
+> 
 
-Ok, thanks. Do you have any idea what all those vendor interface are
-for? Some of the other D-Link entries blacklist a speech and debug port
-for example.
+This is the interface composition:
 
-We can always do that later if we need to, but perhaps you or someone
-already know (also adding Lars and Dan on CC).
+MI_00 D-Link HS-USB Diagnostics
+MI_01 D-Link HS-USB Modem
+MI_02 D-Link HS-USB AT Port
+MI_03 D-Link HS-USB NMEA
+MI_04 D-Link HS-USB WWAN Adapter (qmi_wwan)
+MI_05 USB Mass Storage Device
 
-Johan
+rgds
+/Lars
+
