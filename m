@@ -2,81 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D686B00A
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2019 21:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487A06B164
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2019 23:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728366AbfGPToN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jul 2019 15:44:13 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:42873 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726213AbfGPToN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jul 2019 15:44:13 -0400
-Received: by mail-lj1-f194.google.com with SMTP id t28so21148736lje.9
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 12:44:12 -0700 (PDT)
+        id S1728766AbfGPVwd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jul 2019 17:52:33 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:41377 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728235AbfGPVwd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jul 2019 17:52:33 -0400
+Received: by mail-lf1-f68.google.com with SMTP id 62so9955044lfa.8
+        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 14:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sChX2tjZXXzFm/FF0+gISHJ8+I30zgl6h1ocaPpSr4w=;
+        b=TVDnEiknWAcRrVYjpkVEp+7UlZza/YL/doDnWkXLRwGqJ9YS6xQoSpx94TtYwkM0Zm
+         9JcQMIFbg+AGr5yblr8fIfyWGtAiWjIILXfM7IITLcHbJNA9fCyb6PLAg+BasgvkoPqY
+         mOu8Q8JEY5ecE/Co/dtC9Acv0384Ahf5uv5clQz+i59KnETYFC1wsz8UK5PiDYs/T9n1
+         cgi/EyRXEgBnePqIEVvybyK+Lmko4rVlZEkLGBTQU7Ct2fceE6jFBcW+cy4RZHOvyaT4
+         yK6DJECW1VMyuUV4EO4RpgP01Zcz3GnzbCKe0KHKjUI5P8ZOseBMqWLKAA5U3ku+AEek
+         v3mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1+0VNCVHZqhO1uG67Uu8Kx87UamIcw879woFYT6vOC0=;
-        b=g9hre17A8wPStyi3AW3es6JDEWMvAtinUIPcoCTsXXri9ahdaXGHBwMJrtUnTz3hmF
-         D5INCZkGkdKZeC1+3p7VZou2MkS7aiMlJZhCaWKsZXqPCmK0UGcAhvjBlxcNnmft2hQR
-         Zpm/0WCex4D7pg0Gugi4VgFo/wHdI6z11ZxSGZDPlu24JkEe5oapj9OeXv0+0dQZ6/c3
-         QPgBmONKSwgtVfu1RF64nVBXR2oZvtXpe/XQ1xrSJ4b4vbYyfvrksUsX+wwgh3IxDOqR
-         bWv/0g0GK0IVHvrFqGSFNFO8S9hRje4I364LiWqFMsqAVzYu2/5140hr5v9b/3tstjlL
-         uCxw==
-X-Gm-Message-State: APjAAAXwGyYE+XgIyH5zNfYno8bE/BedOUpwzEWHpZ3aG8Q5NLUmsItN
-        mZOOyPhG/FWkn877bjgEAr0=
-X-Google-Smtp-Source: APXvYqy8GpV3WIegsceEcy5Uj0kRNar8h+RyBeVHDwBdegn9CgRN9HnLNh3DiBEDurt1nDDqDCZnsg==
-X-Received: by 2002:a2e:93c5:: with SMTP id p5mr18232786ljh.79.1563306251330;
-        Tue, 16 Jul 2019 12:44:11 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id 63sm3980771ljs.84.2019.07.16.12.44.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 12:44:10 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1hnTMx-0006E0-6Z; Tue, 16 Jul 2019 21:44:11 +0200
-Date:   Tue, 16 Jul 2019 21:44:11 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Rogan Dawes <rogan@dawes.za.net>
-Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Lars Melin <larsm17@gmail.com>, Dan Williams <dcbw@redhat.com>
-Subject: Re: [PATCH v5] USB: serial/qmi_wwan: add D-Link DWM-222 device ID
-Message-ID: <20190716194411.GV3522@localhost>
-References: <20190716190210.GA27056@lisa.dawes.za.net>
- <20190716191205.GA27426@lisa.dawes.za.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sChX2tjZXXzFm/FF0+gISHJ8+I30zgl6h1ocaPpSr4w=;
+        b=llT3BfgCs3g80Ma+H/0UWU1OCeSh6jnhrEa2+uInRhH2LA27X5hQqjpTGqMRK/OpRD
+         XjWayhI0nj3ahUmQTjF1zXseTdWC02boxjFg4V47nxXEj97zcK2NBmISHnVpmeNeStL2
+         Oa1qkyaeGi3jpdpWwLR8gvBXtRPyDJifNToOFTjtfjoNGcnRAiyB1xBWRQ6XIIaRRElX
+         ulCrbsI3maXGpAR5pr+1w5F5l+ThserGAZCg/OkwjEud7Dz4M9XYMFSvKE1hvlxYeYzV
+         UJ+P1hqdZW7dumA4HjA8fs12fcezulEbOOrVvnJomYwDDDyylvyMXnCuQX4UCYl9ucU8
+         Gcpg==
+X-Gm-Message-State: APjAAAW4PGnQlFUwAcBAuUSEZALaSjiQGlrQltnM3g8GqcCrE1e5yaGz
+        FMyEjKbQNXCGC1EUU0wIDJFSgr6HpMPel9krs4XxIhsNU1A=
+X-Google-Smtp-Source: APXvYqxF5LGbIM5rW+0/RUz7xG/c4ekdZJIfr+EH8zBCsdrd9zerb9uo3Zsk8A9BlRzj6R313IgBGYMpeLNcjo9YvBk=
+X-Received: by 2002:a19:6a01:: with SMTP id u1mr15820032lfu.141.1563313950958;
+ Tue, 16 Jul 2019 14:52:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190716191205.GA27426@lisa.dawes.za.net>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <000000000000a55d7d058d51ad4f@google.com>
+In-Reply-To: <000000000000a55d7d058d51ad4f@google.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 16 Jul 2019 23:52:19 +0200
+Message-ID: <CACRpkdYbuJ_yJ+UKtvWrkmBCbQzfk-1mn1-A836dkNMrmTtZow@mail.gmail.com>
+Subject: Re: WARNING in gpio_to_desc
+To:     syzbot <syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Vincent Cuissard <cuissard@marvell.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 09:12:05PM +0200, Rogan Dawes wrote:
-> Add device id for D-Link DWM-222.
-> 
-> Cc: stable@vger.kernel.org
-> ---
-> Also add the qmi_wwan entry, since it was blacklisted already in option
-> 
-> Apologies for the spam!
+On Wed, Jul 10, 2019 at 1:07 PM syzbot
+<syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com> wrote:
 
-No worries, you're getting there. :)
+> HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
+(...)
+>   __gpio_set_value include/asm-generic/gpio.h:104 [inline]
+>   gpio_set_value include/linux/gpio.h:71 [inline]
+>   nfcmrvl_chip_halt+0x4e/0x70 drivers/nfc/nfcmrvl/main.c:259
+>   nfcmrvl_nci_register_dev+0x2d4/0x378 drivers/nfc/nfcmrvl/main.c:176
+>   nfcmrvl_probe+0x4e9/0x5e0 drivers/nfc/nfcmrvl/usb.c:344
 
->  drivers/net/usb/qmi_wwan.c  | 1 +
->  drivers/usb/serial/option.c | 2 ++
->  2 files changed, 3 insertions(+)
+This bug is somewhere in the drivers/nfc/nfcmrvl* code handling
+GPIOs.
 
-But please split this up in two patches and run get_maintainer.pl on
-each. The qmi_wwan one will go through the network tree.
+It should be converted to GPIO descriptors and fixed up, see
+drivers/gpio/TODO for details on how to do this.
 
-Also include the interface layout that Lars provided in the USB serial
-commit message.
+Johan/Vincent, tell me if you want me to forward the full fuzzing
+robot crash dump.
 
-And don't forget the SoB line as Greg pointed out.
-
-Thanks,
-Johan
+Yours,
+Linus Walleij
