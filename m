@@ -2,129 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0A36A436
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2019 10:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AB56A484
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2019 11:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731691AbfGPItD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jul 2019 04:49:03 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41737 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbfGPItC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jul 2019 04:49:02 -0400
-Received: by mail-lf1-f65.google.com with SMTP id 62so8196088lfa.8
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 01:49:01 -0700 (PDT)
+        id S1728001AbfGPJF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jul 2019 05:05:57 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36439 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727829AbfGPJF4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jul 2019 05:05:56 -0400
+Received: by mail-lj1-f195.google.com with SMTP id i21so19156988ljj.3
+        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 02:05:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kL50jzzK/8VHtX1nIcdZh9QBCxRnkP+nytMm5FY3fPI=;
-        b=lu4YrHyxFK4uAOunEda09HY0W5n1/6q0gOCS2wLSxAwjw+VMITP1t5qsfhFF4/e/0x
-         JOWU3COVKSoWmL0cfw7WSGOHpQPVh4f1zDLhK9pnDTtrQzY490m5yZnvEcszQ7k7U4XE
-         v1CDao9Dm3hWPesDYDHGxt/v38s+zHBsJ8jLUGU4H7xc9A1MVS0FT5iq46K+0I6zXRDF
-         8iv06fpChZztmD4/aQRy1raku6NhmQhuLRwAdS5v4xBSD9rTj73OFalGtF7vnGporbhS
-         sTNdduCwQ+TQ7r7gKTTLv0ZiGozxOM0cmo841iyltp/JsicQvnLMSOpRitY7+S5Bm3H1
-         Boeg==
-X-Gm-Message-State: APjAAAWRG40h+aZGtRreIMxeGUul65baGW2iB9jG0elJ+AMsx0nIjeXT
-        4bAj8BftZSJFDkCK1irnVQc=
-X-Google-Smtp-Source: APXvYqxDfGbrbWJVudow6pEWLkz/+b2CQQHWUWk2n/jCl2vwvZCgQMPTrLPPg6F1ji1Bhb+9L40ysw==
-X-Received: by 2002:ac2:5337:: with SMTP id f23mr14310675lfh.15.1563266941057;
-        Tue, 16 Jul 2019 01:49:01 -0700 (PDT)
+        bh=GUdvMVRJjR5gDZCveaKBilqhHot/qyhNLcr/aJIDGbY=;
+        b=EbfVNt1hs823rv1JWc80e+m2AEMVHRvSeYRjj/VbhxQh+T7VsNusnv1vmi+of4rtJg
+         rPI/eOPvwZxp590gj4s3IVrc/K1rybuCFcq/LsyHfH+0TahDbi4roe5wt1rmhbrQjTID
+         JOLLOot5wOQf/IOVNZptdY2+NR8mSeSz/56DcLhCCz47ld4zT66KFmI76lyKADHMHY6m
+         EqE3iwU6KNG2l3qT6WPgAhpkNBc+ts3yVM6jgQPA1aWb9XKum/sGONwBFbxXuJItWE79
+         2q02aKSj9UF0ZVOwuJt8NiChs9KANGQQxuatGSm9mnO0tk4pwSsFJOMll23E9iTmrC1G
+         zBLQ==
+X-Gm-Message-State: APjAAAWBpFJMXOjVzwy0d1ZYofPl9dzcJ1vVcg2KjVH65J6Xu0LVFFwf
+        0p+e3Z1jjD9tObXT63RZYOw=
+X-Google-Smtp-Source: APXvYqwXohAbO4SV4IiQHppwdFDVMeRQdXofxbwyi8Z0FixMqjzidyxWb/mV+kQmG85baesDxoU29g==
+X-Received: by 2002:a2e:9f57:: with SMTP id v23mr3566380ljk.138.1563267954845;
+        Tue, 16 Jul 2019 02:05:54 -0700 (PDT)
 Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id v86sm3599377lje.74.2019.07.16.01.48.59
+        by smtp.gmail.com with ESMTPSA id j11sm2740889lfm.29.2019.07.16.02.05.53
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 01:49:00 -0700 (PDT)
+        Tue, 16 Jul 2019 02:05:54 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92)
         (envelope-from <johan@kernel.org>)
-        id 1hnJ91-0002zd-CP; Tue, 16 Jul 2019 10:49:08 +0200
-Date:   Tue, 16 Jul 2019 10:49:07 +0200
+        id 1hnJPF-00043F-Ca; Tue, 16 Jul 2019 11:05:53 +0200
+Date:   Tue, 16 Jul 2019 11:05:53 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Charles Yeh <charlesyeh522@gmail.com>
-Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-usb@vger.kernel.org, charles-yeh@prolific.com.tw
-Subject: Re: [PATCH] [PATCH v7] USB: serial: pl2303: Add new PID to support
- PL2303HXN (TYPE_HXN)
-Message-ID: <20190716084907.GB10939@localhost>
-References: <20190702123006.11320-1-charlesyeh522@gmail.com>
+To:     Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>
+Cc:     johan@kernel.org, hyamamo@allied-telesis.co.jp,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: Add support for ZTE MF871A
+Message-ID: <20190716090553.GA3522@localhost>
+References: <156282800460.29653.5486306531486471871.stgit@yokamoto-pc.rd.allied-telesis.co.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190702123006.11320-1-charlesyeh522@gmail.com>
+In-Reply-To: <156282800460.29653.5486306531486471871.stgit@yokamoto-pc.rd.allied-telesis.co.jp>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 02, 2019 at 08:30:06PM +0800, Charles Yeh wrote:
-> Prolific has developed a new USB to UART chip: PL2303HXN
-> PL2303HXN : PL2303GC/PL2303GS/PL2303GT/PL2303GL/PL2303GE/PL2303GB
-> The Vendor request used by the PL2303HXN (TYPE_HXN) is different from
-> the existing PL2303 series (TYPE_HX & TYPE_01).
-> Therefore, different Vendor requests are used to issue related commands.
+On Thu, Jul 11, 2019 at 03:53:24PM +0900, Yoshiaki Okamoto wrote:
+> This patch adds support for MF871A USB modem (aka Speed USB STICK U03)
+> to option driver. This modem is manufactured by ZTE corporation, and
+> sold by KDDI.
+> 
+> Interface layout:
+> 0: AT
+> 1: MODEM
+> 
+> usb-devices output:
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  9 Spd=480 MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=19d2 ProdID=1481 Rev=52.87
+> S:  Manufacturer=ZTE,Incorporated
+> S:  Product=ZTE Technologies MSM
+> S:  SerialNumber=1234567890ABCDEF
+> C:  #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+> I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
 
-> Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
-> ---
-> changelog:
-> v7:
-> 1. Add PL2303_HXN_RESET_CONTROL_MASK define.
-> 2. In pl2303_open,use PL2303_HXN_RESET_CONTROL_MASK & PL2303_HXN_RESET_CONTROL
->    to reset the upstream and downstream pipe data
-> 3. Ignore "WARNING: line over 80 characters" at #776,#782,#790
+Thanks for the patch. Looks good, but please fix up the two minor issues
+pointed out below and resend, and I'll apply it after the merge window
+closes.
  
->  #define PL2303_FLOWCTRL_MASK		0xf0
-> +#define PL2303_HXN_FLOWCTRL_MASK	0x1C
-> +#define PL2303_HXN_FLOWCTRL		0x0A
+> Signed-off-by: Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>
+> Signed-off-by: Hiroyuki Yamamoto <hyamamo@allied-telesis.co.jp>
 
-I asked you to keep related defines together (and to move the mask where
-the register define was, not the other way round). Please move these to
-the other HXN defines below, and keep the register address defines
-before the corresponding bit defines.
+Since you are the one submitting the patch your SoB should go last. We
+have a Co-developed-by tag which can you use to indicate co-authorship
+(the second SoB is still required). The documentation for this was
+recently updated in commit
 
-> +#define PL2303_READ_TYPE_HX_STATUS	0x8080
-> +
-> +#define PL2303_HXN_RESET_CONTROL_MASK	0x03
+	24a2bb90741b ("docs: Clarify the usage and sign-off requirements for Co-developed-by")
 
-This makes no sense. The whole register is used for reset. If you want a
-define that can be used for resetting both pipes then add two separate
-defines for up and down respectively, and add a third define for
-resetting both buffer as a bitwise OR of the two.
+> ---
+>  drivers/usb/serial/option.c |    2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index a0aaf0635359..e11ae2092229 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -308,6 +308,7 @@ static void option_instat_callback(struct urb *urb);
+>  #define ZTE_PRODUCT_ME3620_MBIM			0x0426
+>  #define ZTE_PRODUCT_ME3620_X			0x1432
+>  #define ZTE_PRODUCT_ME3620_L			0x1433
+> +#define ZTE_PRODUCT_MF871A			0x1481
+>  #define ZTE_PRODUCT_AC2726			0xfff1
+>  #define ZTE_PRODUCT_MG880			0xfffd
+>  #define ZTE_PRODUCT_CDMA_TECH			0xfffe
+> @@ -1548,6 +1549,7 @@ static const struct usb_device_id option_ids[] = {
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1428, 0xff, 0xff, 0xff),  /* Telewell TW-LTE 4G v2 */
+>  	  .driver_info = RSVD(2) },
+>  	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1476, 0xff) },	/* GosunCn ZTE WeLink ME3630 (ECM/NCM mode) */
+> +	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, ZTE_PRODUCT_MF871A, 0xff) },
 
-Remember that the code should be self-documenting as far as possible so
-picking descriptive names is important.
+We're trying to move away from adding product-id defines, so please just
+use a constant here as most ZTE entries do and add a short comment after
+the entry. It's fine to go above 80 columns here even if checkpatch.pl
+complains.
 
-Also move this one after the corresponding register address define
-below.
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1533, 0xff, 0xff, 0xff) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1534, 0xff, 0xff, 0xff) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1535, 0xff, 0xff, 0xff) },
 
-> +#define PL2303_HXN_RESET_CONTROL	0x07
-> +#define PL2303_HXN_CTRL_XON_XOFF	0x0C
-> +#define PL2303_HXN_CTRL_RTS_CTS		0x18
-> +#define PL2303_HXN_CTRL_NONE		0x1C
-
-> @@ -765,8 +835,11 @@ static int pl2303_open(struct tty_struct *tty, struct usb_serial_port *port)
->  	if (spriv->quirks & PL2303_QUIRK_LEGACY) {
->  		usb_clear_halt(serial->dev, port->write_urb->pipe);
->  		usb_clear_halt(serial->dev, port->read_urb->pipe);
-> -	} else {
-> +	} else if (spriv->type == &pl2303_type_data[TYPE_HXN]) {
->  		/* reset upstream data pipes */
-
-This comment belongs in the last else block. Your new code shouldn't
-need one.
-
-> +		pl2303_update_reg(serial, PL2303_HXN_RESET_CONTROL,
-> +				PL2303_HXN_RESET_CONTROL_MASK, 0x03);
-
-So two things; first, do you really need to read back the current value?
-I would assume that it always reads back as 0 and that writing 0x03 in
-this case would be sufficient to reset both buffers.
-
-Second, please use a define for 0x03; no magic constants, as we have
-discussed before. You don't need a separate mask define if you're always
-resetting both buffers together (just use the same value define twice).
-
-> +	} else {
->  		pl2303_vendor_write(serial, 8, 0);
->  		pl2303_vendor_write(serial, 9, 0);
->  	}
-
+Thanks,
 Johan
