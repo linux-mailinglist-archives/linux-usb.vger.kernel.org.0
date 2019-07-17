@@ -2,106 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C696B60C
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 07:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1ED6B685
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 08:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725873AbfGQFkZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jul 2019 01:40:25 -0400
-Received: from mail1.bemta23.messagelabs.com ([67.219.246.213]:53787 "EHLO
-        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725799AbfGQFkZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 01:40:25 -0400
-Received: from [67.219.246.196] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-1.bemta.az-c.us-east-1.aws.symcld.net id C2/E3-10285-7C4BE2D5; Wed, 17 Jul 2019 05:40:23 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHIsWRWlGSWpSXmKPExsUyLfyHiO6xLXq
-  xBm/vGlksWtbK7MDo8XmTXABjFGtmXlJ+RQJrxurLS9gLtvNVzD2yir2BcStPFyMXh5DAXEaJ
-  1g/r2SCc34wS8z8uY+5i5OQQFnCWOPb3IZDNwcEmYCax+a8kSFhEQETi5bmHYCXMAtYSaxrfs
-  IPYTAJKEpsPLGUDsVkEVCVath0Ds3kF4iTO3ZoFVs8poCcx/e4iMFtIQFdi0oRPTCC2qICcxM
-  rLLawQ9YISJ2c+YQFZyyygKbF+lz7EKnmJ7W/nQLVqSWyauwVsrYRAsMTjB3PZJzAKzkLSPQu
-  hexaS7gWMzKsYzZKKMtMzSnITM3N0DQ0MdA0NjXTNdI2MzPUSq3ST9UqLdVMTi0t0DfUSy4v1
-  iitzk3NS9PJSSzYxAoM5pYDt8Q7GVzPf6B1ilORgUhLlvc+uFyvEl5SfUpmRWJwRX1Sak1p8i
-  FGGg0NJgrdhM1BOsCg1PbUiLTMHGFkwaQkOHiUR3rubgNK8xQWJucWZ6RCpU4yKUuK8iiB9Ai
-  CJjNI8uDZYNF9ilJUS5mVkYGAQ4ilILcrNLEGVf8UozsGoJMy7AmQKT2ZeCdz0V0CLmYAWT7E
-  EW1ySiJCSamDa5KJzSiPtPnuqi979m28dsgS6bLpeuJ3mnVKg9H9qXduLRf/rSt0Ltpv9L/YL
-  vmkjXxfl6fn+z7mva+7lKB6xbjhV6rNz+6Yj4Z1/YvfaqQe0Jly3fX101Z+cmIynq4ULz1sGv
-  us4yjhrZynb1TLeQIMZv11MbwV8ymV2i5QInjBlL1/z4Z/HJn9wbu66dvdT+Db1ELsXqcc+Vy
-  vz1VT8//PukKJTzstFu97WvYvaxuK2X/pKeP9cm33udyTMxJk8tSZP3cXxfLP8WtXzS/vuS2s
-  G95yNYZlYdSLgZd/m80WHZmntn9A4bZGVCF96uP+cD5tjz8hPzPh37/727uSA4gl8J7fc/LqI
-  w4/58PHJSizFGYmGWsxFxYkA8hJsBmEDAAA=
-X-Env-Sender: yokamoto@allied-telesis.co.jp
-X-Msg-Ref: server-9.tower-404.messagelabs.com!1563342021!92595!1
-X-Originating-IP: [150.87.248.20]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.43.9; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 27278 invoked from network); 17 Jul 2019 05:40:22 -0000
-Received: from abricot-inet.allied-telesis.co.jp (HELO TKY-DS01.at.lc) (150.87.248.20)
-  by server-9.tower-404.messagelabs.com with SMTP; 17 Jul 2019 05:40:22 -0000
-Received: from swim-manx.rd.allied-telesis.co.jp ([150.87.21.50]) by TKY-DS01.at.lc with Microsoft SMTPSVC(8.0.9200.16384);
-         Wed, 17 Jul 2019 14:40:21 +0900
-Received: from yokamoto-pc.rd.allied-telesis.co.jp by swim-manx.rd.allied-telesis.co.jp
- (AlliedTelesis SMTPRS 1.3 pl 1 ++E6B86F8C687C6288D9B5559052954DC9) with ESMTP id <B0004499500@swim-manx.rd.allied-telesis.co.jp>;
- Wed, 17 Jul 2019 14:40:21 +0900
-Subject: [PATCH v2] USB: serial: option: Add support for ZTE MF871A
-From:   Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>
-To:     johan@kernel.org
-Cc:     hyamamo@allied-telesis.co.jp, linux-usb@vger.kernel.org
-Date:   Wed, 17 Jul 2019 14:40:16 +0900
-Message-ID: <156334196350.13827.8927178214233271211.stgit@yokamoto-pc.rd.allied-telesis.co.jp>
-In-Reply-To: <20190716090553.GA3522@localhost>
-References: <20190716090553.GA3522@localhost>
-User-Agent: StGit/0.17.1-dirty
+        id S1727582AbfGQGTG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jul 2019 02:19:06 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:44920 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726207AbfGQGTG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 02:19:06 -0400
+Received: by mail-lf1-f66.google.com with SMTP id r15so10633452lfm.11
+        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 23:19:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=aH/SAwaqv5TSu6OPBnP/osFLGwYtmZuKApxjHM0xiTU=;
+        b=SCFCm8DVv1xsIO43YAqcj6nYKPZzEFnDoGQneQJNgflGNFIaB33Xwz4qZhlm+ck1Fo
+         9h36IqtC8fU3YAagVMKJO+ox7M9Gf49cy2jfxougXF/eU342gUyPqy7rh1X9ETv+OtuB
+         PXS/YuHiU4vgfge9mu6XlPidQWnVR3uSAOE73Ud+NvVdbJ4YdKtq/dYxKMAPTEDjJbcB
+         qOAA0oyD3I/SqHDlS2IuQZb/LHoKrfvQwUgJG+BbY0ZIgfnHVLMNqDnJdgW1L9pRSpSF
+         6hlXpSSQo9rMjadcpfCc6Ynj1Nnnsv7188qQJfwsjZ7evfvGZh21oqalYQcyixMEoCZm
+         /J4w==
+X-Gm-Message-State: APjAAAWw6Rti9QdLIYq5htRPZao8bX1h4AOvMCjoNeOphsyFjGhlLpD3
+        P75U2kf/pEMSPACrgKcucfU=
+X-Google-Smtp-Source: APXvYqz+2jF0g72dOVyDvZ/GLxQJdv1nA0kmxLNFiSc1cZ+YtjxJEWPX0b6N8H7FloGKvhzvPhWdLQ==
+X-Received: by 2002:ac2:52ac:: with SMTP id r12mr15941509lfm.54.1563344344162;
+        Tue, 16 Jul 2019 23:19:04 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id b6sm3536901lfa.54.2019.07.16.23.19.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Jul 2019 23:19:03 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92)
+        (envelope-from <johan@kernel.org>)
+        id 1hndHK-0004Ol-VX; Wed, 17 Jul 2019 08:19:03 +0200
+Date:   Wed, 17 Jul 2019 08:19:02 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dan Williams <dcbw@redhat.com>
+Cc:     Rogan Dawes <rogan@dawes.za.net>, linux-usb@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>, Lars Melin <larsm17@gmail.com>
+Subject: Re: [PATCH v5] USB: serial/qmi_wwan: add D-Link DWM-222 device ID
+Message-ID: <20190717061902.GA16694@localhost>
+References: <20190716191205.GA27426@lisa.dawes.za.net>
+ <c80b2d08453ba94d3762021d6a184acfd6b1762e.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-OriginalArrivalTime: 17 Jul 2019 05:40:21.0545 (UTC) FILETIME=[1FCF7990:01D53C62]
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c80b2d08453ba94d3762021d6a184acfd6b1762e.camel@redhat.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds support for MF871A USB modem (aka Speed USB STICK U03)
-to option driver. This modem is manufactured by ZTE corporation, and
-sold by KDDI.
+On Tue, Jul 16, 2019 at 08:43:52PM -0500, Dan Williams wrote:
+> On Tue, 2019-07-16 at 21:12 +0200, Rogan Dawes wrote:
+> > Add device id for D-Link DWM-222.
 
-Interface layout:
-0: AT
-1: MODEM
+> > @@ -1951,6 +1951,8 @@ static const struct usb_device_id option_ids[] = {
+> >  	  .driver_info = RSVD(4) },
+> >  	{ USB_DEVICE_INTERFACE_CLASS(0x2001, 0x7e35, 0xff),			/* D-Link DWM-222 */
+> >  	  .driver_info = RSVD(4) },
+> > +	{ USB_DEVICE_INTERFACE_CLASS(0x2001, 0x7e3d, 0xff),			/* D-Link DWM-222 A2 */
+> > +	  .driver_info = RSVD(0) | RSVD(4) },
+> 
+> I don't think we actually do need to blacklist interface 0, since
+> that's likely a QCDM/DIAG interface and that does need a serial driver
+> like option or qcserial.
+> 
+> Johan, any reason why you thought we should blacklist 0?
 
-usb-devices output:
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  9 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=19d2 ProdID=1481 Rev=52.87
-S:  Manufacturer=ZTE,Incorporated
-S:  Product=ZTE Technologies MSM
-S:  SerialNumber=1234567890ABCDEF
-C:  #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+It was just me being confused about the Qualcomm protocols and how the
+diag port was accessed from user space. Thanks, Dan.
 
-Co-developed-by: Hiroyuki Yamamoto <hyamamo@allied-telesis.co.jp>
-Signed-off-by: Hiroyuki Yamamoto <hyamamo@allied-telesis.co.jp>
-Signed-off-by: Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>
----
+Rogan, let's keep interface 0 and only blacklist interface 4 as you did
+originally. Sorry about the confusion.
 
-Changes in v2:
-- Add Co-developed-by tag.
-- Move away product-id define and add short comment after the entry.
-
- drivers/usb/serial/option.c |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index a0aaf0635359..3188b3cb0f21 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1548,6 +1548,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1428, 0xff, 0xff, 0xff),  /* Telewell TW-LTE 4G v2 */
- 	  .driver_info = RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1476, 0xff) },	/* GosunCn ZTE WeLink ME3630 (ECM/NCM mode) */
-+	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1481, 0xff) },	/* ZTE MF871A */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1533, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1534, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1535, 0xff, 0xff, 0xff) },
-
+Johan
