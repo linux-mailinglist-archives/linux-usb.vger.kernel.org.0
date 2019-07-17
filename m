@@ -2,67 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D9B6BC56
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 14:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F376BD0F
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 15:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727123AbfGQM3C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jul 2019 08:29:02 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:39104 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727090AbfGQM3B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 08:29:01 -0400
-Received: by mail-io1-f72.google.com with SMTP id y13so26937406iol.6
-        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2019 05:29:01 -0700 (PDT)
+        id S1726494AbfGQNcP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jul 2019 09:32:15 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:43213 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726155AbfGQNcP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 09:32:15 -0400
+Received: by mail-pg1-f194.google.com with SMTP id f25so11171810pgv.10
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2019 06:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=u26Fai7lHv3nkVtjjE5k4aBy44JSMb2FIFGp5N5fLwA=;
+        b=p5IghuqSJhbOaRQYgq+JeruIeq/2nSyezkYiqAlpg9QGz7eL0sPOpACn99VBlmofZe
+         PdNpmhLi0uJ63cGOD3h44d6VDnaj36aHq3/OkGUamDDJApzHNym9fIfyORic4AzCMaEr
+         XvUsIRVeL6nQf0qIUIcEAk0kgFqIClloO2Vu1wjEErLTpmdkfPRK6Xt6eaJZ3v+kw8bO
+         3q9tWZskknl7cfOlChzyJ6shV2bIsgwyyTrHydrTwQ8SvPyprLuhrIjci+K6ryM21m1r
+         bOIvAMjKcebBfONWjOQgZADNQvL2J4J9qJAjsL7xf96/+LIosWxqJeX5yaDXPAAjAUOg
+         Wytg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=AByShyV8MxugdrVAP52bTC11/zp2agBi1wk+fUcF/g8=;
-        b=MreShv9xOYMqvEAwDNJYY3M2Osusa09MTO0s7R0ThO4R+/IRZVYiCBB8WfZ3KdX03v
-         9H6KyHZ2NUwYc3hILMyPzGwOfIBIgc7cMBp6XhIl2BOlGVxpTvPZTZLnubQFLE4ALu6C
-         MXXNOJBYcdQzNp9H6Bt7LYmdDo2xRdLBFvWnx//TbaCbuq1K7awtmM4/rRzziisx6EXL
-         HEd1EJySyLAx64AdODXPVVTWnnr2S1hjAfFfAYVqj75gCZQ5R0tKnlIJY21rY/X1CQbH
-         jruunt5joTpzRsVmfhTx7mgPwB+Sp5WNW+ajWoUhvAtTKEuLKO/GE1Ug1v35Rcji+A8S
-         ANEw==
-X-Gm-Message-State: APjAAAUVR5i3PQUojfuQAOzRRTdWZmsy9x3LV2syV4d/wM6Bgba3QHdb
-        nLDiKTH6SPzRVdpzsaWvfwL8t/YEodrO2ToGfSkk+F4HnqBU
-X-Google-Smtp-Source: APXvYqxoVSLYclq8vROH6mYIXxVdmTx0TM+Zs7tz/C19ac1rQJfL74aTHycQ78ufw/LQNLLowRXhr3VuOu/dGV+La6CLKhQSGzQp
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=u26Fai7lHv3nkVtjjE5k4aBy44JSMb2FIFGp5N5fLwA=;
+        b=F9eHm+bF+9fxfkKCo1oJDtg+4kgEf0tRKuuzrElnw4pJepIBo9RsVLJPEmYldCS51m
+         5bYkiN2bYSS0snx+D1hhYxkmywuaN/D6WIgvqubD2cCHjFuBO979l43kCclEHIv0/xRV
+         zJrtwr/urDakCKH5ZWblDyCRAWr0Bo2lEomQJH9Njkr/L4FRu80gSmztFPb2cV7RHhAU
+         7CC6uoUxGjFYhttKnnU5pvS1KhojpKr7HZe5wsuORj+6rmJuYBKqRpKMepi0yjCXTDWi
+         +xSunY+xy09MrwxTG+9vq7kKqIFoxtKK7ABQBjIEY4ZEJKsiQT6UsB2hdIHjt89qjeF4
+         hd8w==
+X-Gm-Message-State: APjAAAXrZWmVCaRipKFm2SQ8eLbmtp+ix8wW31rO4/XbODBvvpM8CMO2
+        VewlpiFL2S9msYmKzDi9mIl5HrRJ
+X-Google-Smtp-Source: APXvYqzEWQaGWdM8fvuShcd1SUDnGbKQvIDuy2fD+xXq+rQ0wibeteoYcfROfO0ASPhnhC4C62wFwA==
+X-Received: by 2002:a65:4189:: with SMTP id a9mr15497162pgq.399.1563370334250;
+        Wed, 17 Jul 2019 06:32:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g2sm32337867pfb.95.2019.07.17.06.32.12
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 17 Jul 2019 06:32:13 -0700 (PDT)
+Subject: Re: [PATCH 1/2] usb: typec: tcpm: free log buf memory when remove
+ debug file
+To:     jun.li@nxp.com, heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-imx@nxp.com
+References: <20190717080646.30421-1-jun.li@nxp.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <72dd5da0-5e17-04aa-c586-8e4972b16fe3@roeck-us.net>
+Date:   Wed, 17 Jul 2019 06:32:11 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-Received: by 2002:a6b:90c1:: with SMTP id s184mr1909577iod.244.1563366541028;
- Wed, 17 Jul 2019 05:29:01 -0700 (PDT)
-Date:   Wed, 17 Jul 2019 05:29:01 -0700
-In-Reply-To: <CAAeHK+zPDgvDr_Bao9dz_7hGEg+Ud6-tj7pZaihKeYHJ8M386Q@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000054f8bd058ddfa341@google.com>
-Subject: Re: KASAN: global-out-of-bounds Read in dvb_pll_attach
-From:   syzbot <syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com>
-To:     allison@lohutok.net, andreyknvl@google.com, bnvandana@gmail.com,
-        hverkuil-cisco@xs4all.nl, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, rfontana@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        tskd08@gmail.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <20190717080646.30421-1-jun.li@nxp.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 7/17/19 1:06 AM, jun.li@nxp.com wrote:
+> From: Li Jun <jun.li@nxp.com>
+> 
+> The logbuffer memory should be freed when remove debug file.
+> 
+> Cc: stable@vger.kernel.org # v4.15+
+> Fixes: 4b4e02c83167 ("typec: tcpm: Move out of staging")
+> Signed-off-by: Li Jun <jun.li@nxp.com>
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Reported-and-tested-by:  
-syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index fba32d8..1249d8e 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -586,6 +586,15 @@ static void tcpm_debugfs_init(struct tcpm_port *port)
+>   
+>   static void tcpm_debugfs_exit(struct tcpm_port *port)
+>   {
+> +	int i;
+> +
+> +	mutex_lock(&port->logbuffer_lock);
+> +	for (i = 0; i < LOG_BUFFER_ENTRIES; i++) {
+> +		kfree(port->logbuffer[i]);
+> +		port->logbuffer[i] = NULL;
+> +	}
+> +	mutex_unlock(&port->logbuffer_lock);
+> +
+>   	debugfs_remove(port->dentry);
+>   }
+>   
+> 
 
-Tested on:
-
-commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d90745bdf884fc0a
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1454f4d0600000
-
-Note: testing is done by a robot and is best-effort only.
