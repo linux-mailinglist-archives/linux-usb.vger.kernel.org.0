@@ -2,291 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 842CE6BBD8
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 13:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CFA6BC15
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 14:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730980AbfGQLvF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jul 2019 07:51:05 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36544 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726063AbfGQLvE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 07:51:04 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r7so10731915pfl.3
-        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2019 04:51:04 -0700 (PDT)
+        id S1726081AbfGQMFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jul 2019 08:05:36 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:42480 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbfGQMFg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 08:05:36 -0400
+Received: by mail-pl1-f195.google.com with SMTP id ay6so11873943plb.9
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2019 05:05:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BT3GMkq4GIjy027YHLDtJdq+Rfg7/G7Q187ry/Wlyhg=;
-        b=Y77N3nWXhja+UsOPgMcVd7MhrNHtJUgZUpGEBMUH7f70Xb00PuFFJ586QBvk4MAr15
-         jk3Z9Q6t5Wq956KWm0PXVUuRjuRc1HM6AmSDY6w/A8R9ws7/QUWWKURiPSP9lkHfiSnv
-         iWG0ueOWObAeLwglNHb5XZzVL+Y12HELvolEReuRvbpn94ZhxcHzuV7bz4TorNrjSumL
-         +Zj122E2SsWqjg/L3JTzKcZ7WwSNo72GlHK1HiQ45bsCy1gi3H4UF7QNap2mjD1mH81q
-         pzo7p4Aswi0WzpqZoN3iNwKzUYi+JW8pMYgTB4+qqmLAx0lTq5HPagvDV54JsfAvk4ba
-         x6lw==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bV4oFTVrR5ITw61uV0+hRpWZlLTeGAeSnKjtK//VhYI=;
+        b=tjQTDJKOdrR2RzWTomurz0zVY2xwINFhSGftsH4DvdFDLTqPt3kd5iTZQG/I/wiqH/
+         hSptuXyBjShdfure20VlD+dHqW4rCyEJ0YA5UPkco7g61fKm/3rl7cv850ApBGxoRPBG
+         TAenP7nyJKBYTtBRiaFQ7Sui5rLDd2qoQfmW5PB8VSXt/3MeESiO3F9xGDRqQkPfLJjm
+         Y2gJ+D58sfmOX17WHYzHpmJ1g/wZlGGeQj7z5wqoZzluMN2GJ+2m6CWNzKQ6B4UbfHrq
+         L0q8vaFXCINu8XBoyN+ku5HblzqkSEOQTSQ1J51IPtGXQWxF568nzS5ZVaWjhq3uuIhC
+         Q3xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BT3GMkq4GIjy027YHLDtJdq+Rfg7/G7Q187ry/Wlyhg=;
-        b=NxuiG7NGVNsq+eP3yqMoDZiQ72vYTjnxx6Out4m7efZvRLvoV7Mi/hpcofVB4+wWdG
-         Jh2mNshGNdm+JU1RMh5PMIw/E3A2nZvQ8DWXJ1U2ycwgnfHfZLbObhcL3xlTyi3CAEGi
-         xny5vBNO7fC/ZQIINWrdcgMqDl0QbCduM9BZjXwFodOOiu6y0ZVM0hdv/RTDbHDCsrWe
-         tBWyOw1FI26w0Nc4RZKKI83Ufch3WCKR/D/oaGYjuOTMTdGBIFgGk315QNrEpY4G5K/z
-         gub3wt1SkmNzCeonOT1YI+ymfYpVzWaLuD2ki3gIReq0nrSEy5dL4DoZn3S8F4IChwKI
-         eUXg==
-X-Gm-Message-State: APjAAAWhhWHRGfuuTKiYlzLUkPW76DuZNKH+5ossykR4kjpMrjZLoDdJ
-        5Q9NhwSmMV8bwDsQBJdmuG8x5nf+x39ffRmGKnEpXg==
-X-Google-Smtp-Source: APXvYqyPoKfFzoxmu8FLTIEyyLVq7NQy+peU8ZfyeP+M7Yyn8Yimphae8KkPOHTDfv1lUahfT0+wvX7W4bamIkUkCQc=
-X-Received: by 2002:a63:f312:: with SMTP id l18mr41065583pgh.440.1563364263465;
- Wed, 17 Jul 2019 04:51:03 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bV4oFTVrR5ITw61uV0+hRpWZlLTeGAeSnKjtK//VhYI=;
+        b=cMWlenWprkSsdwwzQM53Amm8Zwa0Ks9QN9i7by764u3WC89l7yRZ0AhTJWWm0srNiB
+         8O15OEBhaFQEumFYRmeIWI9tVIPUtZXqKd5j6pF0rgdwwIxZdf87+QgQHgn+ftnago7y
+         msa4ddYDNQRwmPhrWCYzF2iK7Se1XInlr+9OVfs/F6cx2+rccKMEm4OIPVa7eFlU+Puh
+         iXgToS//XFtYjMqm+z1X/6A3AMw66KiX4q5BepVGufdcNIaWARRKD1q4+3+Ktt8uwiQM
+         iS0b0bXzYzq4IITtCqssC0Bjgcn7uFgybCFTY0An6jHs5q6E+5t8hvARq25KtcNxgSS/
+         Gc7w==
+X-Gm-Message-State: APjAAAXJMXqZBgsm1TkYu4NP93qY0D0PZAxbtxHM644flE1WExC/wwX4
+        5WJJK/L6NBw+MgiIhtEaa53ECxfTIddjQw==
+X-Google-Smtp-Source: APXvYqwfO5gFTpRp4pKby1ng8xi/OSduTIMam/E4HHvoYYuFJmTsgjIj4k8a3tXBt/F8WZuK+/pQcQ==
+X-Received: by 2002:a17:902:2be6:: with SMTP id l93mr43037551plb.0.1563365135567;
+        Wed, 17 Jul 2019 05:05:35 -0700 (PDT)
+Received: from [10.37.0.94] ([45.56.153.209])
+        by smtp.googlemail.com with ESMTPSA id 30sm58548682pjk.17.2019.07.17.05.05.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 17 Jul 2019 05:05:35 -0700 (PDT)
+Subject: Re: [PATCH v2] USB: serial: option: Add support for ZTE MF871A
+To:     Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>, johan@kernel.org
+Cc:     hyamamo@allied-telesis.co.jp, linux-usb@vger.kernel.org
+References: <20190716090553.GA3522@localhost>
+ <156334196350.13827.8927178214233271211.stgit@yokamoto-pc.rd.allied-telesis.co.jp>
+From:   Lars Melin <larsm17@gmail.com>
+Message-ID: <5b4971b3-64e7-605a-948c-9e1e02b11eb2@gmail.com>
+Date:   Wed, 17 Jul 2019 19:05:27 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <000000000000717347058d56dcc2@google.com>
-In-Reply-To: <000000000000717347058d56dcc2@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 17 Jul 2019 13:50:52 +0200
-Message-ID: <CAAeHK+zPDgvDr_Bao9dz_7hGEg+Ud6-tj7pZaihKeYHJ8M386Q@mail.gmail.com>
-Subject: Re: KASAN: global-out-of-bounds Read in dvb_pll_attach
-To:     syzbot <syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com>,
-        bnvandana@gmail.com
-Cc:     allison@lohutok.net, hverkuil-cisco@xs4all.nl,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        rfontana@redhat.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>, tskd08@gmail.com
-Content-Type: multipart/mixed; boundary="00000000000094a173058ddf1b3a"
+In-Reply-To: <156334196350.13827.8927178214233271211.stgit@yokamoto-pc.rd.allied-telesis.co.jp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---00000000000094a173058ddf1b3a
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, Jul 10, 2019 at 7:18 PM syzbot
-<syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=150f8c47a00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8a8f48672560c8ca59dd
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16384e27a00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16056038600000
-
-You need to keep the bot in the recipients and also USB bugs can only
-be tested on the usb-fuzzer tree.
-
-#syz test: https://github.com/google/kasan.git usb-fuzzer
-
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com
->
-> usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the
-> software demuxer
-> dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
-> usb 1-1: media controller created
-> dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
-> tc90522 0-0018: Toshiba TC90522 attached.
-> usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T
-> module)...
-> dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T
-> module' registered.
-> ==================================================================
-> BUG: KASAN: global-out-of-bounds in dvb_pll_attach+0x6c5/0x830
-> drivers/media/dvb-frontends/dvb-pll.c:798
-> Read of size 4 at addr ffffffff89c9e5e0 by task kworker/0:1/12
->
-> CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.2.0-rc6+ #13
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x67/0x231 mm/kasan/report.c:188
->   __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
->   kasan_report+0xe/0x20 mm/kasan/common.c:614
->   dvb_pll_attach+0x6c5/0x830 drivers/media/dvb-frontends/dvb-pll.c:798
->   dvb_pll_probe+0xfe/0x174 drivers/media/dvb-frontends/dvb-pll.c:877
->   i2c_device_probe+0x790/0xaa0 drivers/i2c/i2c-core-base.c:389
->   really_probe+0x281/0x660 drivers/base/dd.c:509
->   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:843
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2111
->   i2c_new_client_device+0x5b3/0xc40 drivers/i2c/i2c-core-base.c:778
->   i2c_new_device+0x19/0x50 drivers/i2c/i2c-core-base.c:821
->   dvb_module_probe+0xf9/0x220 drivers/media/dvb-core/dvbdev.c:985
->   friio_tuner_attach+0x125/0x1d0 drivers/media/usb/dvb-usb-v2/gl861.c:536
->   dvb_usbv2_adapter_frontend_init
-> drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:675 [inline]
->   dvb_usbv2_adapter_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:804
-> [inline]
->   dvb_usbv2_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:865 [inline]
->   dvb_usbv2_probe.cold+0x24dc/0x255d
-> drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:980
->   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x281/0x660 drivers/base/dd.c:509
->   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:843
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2111
->   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
->   really_probe+0x281/0x660 drivers/base/dd.c:509
->   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:843
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2111
->   usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
->   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
->   port_event drivers/usb/core/hub.c:5350 [inline]
->   hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
->   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
->   process_scheduled_works kernel/workqueue.c:2331 [inline]
->   worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
->   kthread+0x30b/0x410 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> The buggy address belongs to the variable:
->   id+0x100/0x120
->
-> Memory state around the buggy address:
->   ffffffff89c9e480: fa fa fa fa 00 00 fa fa fa fa fa fa 00 00 00 00
->   ffffffff89c9e500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > ffffffff89c9e580: 00 00 00 00 00 00 00 00 00 00 00 00 fa fa fa fa
->                                                         ^
->   ffffffff89c9e600: 04 fa fa fa fa fa fa fa 04 fa fa fa fa fa fa fa
->   ffffffff89c9e680: 04 fa fa fa fa fa fa fa 04 fa fa fa fa fa fa fa
-> ==================================================================
->
->
+On 7/17/2019 12:40, Yoshiaki Okamoto wrote:
+> This patch adds support for MF871A USB modem (aka Speed USB STICK U03)
+> to option driver. This modem is manufactured by ZTE corporation, and
+> sold by KDDI.
+> 
+> Interface layout:
+> 0: AT
+> 1: MODEM
+> 
+> usb-devices output:
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  9 Spd=480 MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=19d2 ProdID=1481 Rev=52.87
+> S:  Manufacturer=ZTE,Incorporated
+> S:  Product=ZTE Technologies MSM
+> S:  SerialNumber=1234567890ABCDEF
+> C:  #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+> I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> 
+> Co-developed-by: Hiroyuki Yamamoto <hyamamo@allied-telesis.co.jp>
+> Signed-off-by: Hiroyuki Yamamoto <hyamamo@allied-telesis.co.jp>
+> Signed-off-by: Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>
 > ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+> 
+> Changes in v2:
+> - Add Co-developed-by tag.
+> - Move away product-id define and add short comment after the entry.
+> 
+>   drivers/usb/serial/option.c |    1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index a0aaf0635359..3188b3cb0f21 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -1548,6 +1548,7 @@ static const struct usb_device_id option_ids[] = {
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1428, 0xff, 0xff, 0xff),  /* Telewell TW-LTE 4G v2 */
+>   	  .driver_info = RSVD(2) },
+>   	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1476, 0xff) },	/* GosunCn ZTE WeLink ME3630 (ECM/NCM mode) */
+> +	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1481, 0xff) },	/* ZTE MF871A */
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1533, 0xff, 0xff, 0xff) },
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1534, 0xff, 0xff, 0xff) },
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1535, 0xff, 0xff, 0xff) },
+> 
 
---00000000000094a173058ddf1b3a
-Content-Type: text/x-patch; charset="US-ASCII"; name="usb-dvb.patch"
-Content-Disposition: attachment; filename="usb-dvb.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jy76ow6t0>
-X-Attachment-Id: f_jy76ow6t0
+Please do a full test of the interface attributes (Class/SubClass/Proto) 
+whenever possible, this could be helpful in case the mfgr makes a device 
+with different interface layout but re-uses an already used vid:pid.
+Both interfaces has attributes ff/00/00 so there is no reason for doing 
+a less accurate test.
 
-RnJvbSBlOWY5MmYyNjdmMGM2ODI0ZGQxMjlkNjg4YWM3ZDFlNjlhNmQ2ZTMyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiB2YW5kYW5hYm4gPGJudmFuZGFuYUBnbWFpbC5jb20+CkRhdGU6
-IFdlZCwgMTcgSnVsIDIwMTkgMDE6MzQ6MjcgKzA1MzAKU3ViamVjdDogW1BBVENIXSBtZWRpYTpk
-dmItZnJvbnRlbmQ6IGZpeCBzeXpib3QgZ2xvYmFsIG91dCBvZiBib3VuZHMgaXNzdWUuCgpSZXBv
-cnRlZC1ieTogc3l6Ym90KzhhOGY0ODY3MjU2MGM4Y2E1OWRkQHN5emthbGxlci5hcHBzcG90bWFp
-bC5jb20KCnVzYiAxLTE6IGR2Yl91c2JfdjI6IHdpbGwgcGFzcyB0aGUgY29tcGxldGUgTVBFRzIg
-dHJhbnNwb3J0IHN0cmVhbSB0byB0aGUKc29mdHdhcmUgZGVtdXhlcgpkdmJkZXY6IERWQjogcmVn
-aXN0ZXJpbmcgbmV3IGFkYXB0ZXIgKDc3NCBGcmlpbyBXaGl0ZSBJU0RCLVQgVVNCMi4wKQp1c2Ig
-MS0xOiBtZWRpYSBjb250cm9sbGVyIGNyZWF0ZWQKZHZiZGV2OiBkdmJfY3JlYXRlX21lZGlhX2Vu
-dGl0eTogbWVkaWEgZW50aXR5ICdkdmItZGVtdXgnIHJlZ2lzdGVyZWQuCnRjOTA1MjIgMC0wMDE4
-OiBUb3NoaWJhIFRDOTA1MjIgYXR0YWNoZWQuCnVzYiAxLTE6IERWQjogcmVnaXN0ZXJpbmcgYWRh
-cHRlciAwIGZyb250ZW5kIDAgKFRvc2hpYmEgVEM5MDUyMiBJU0RCLVQKbW9kdWxlKS4uLgpkdmJk
-ZXY6IGR2Yl9jcmVhdGVfbWVkaWFfZW50aXR5OiBtZWRpYSBlbnRpdHkgJ1Rvc2hpYmEgVEM5MDUy
-MiBJU0RCLVQKbW9kdWxlJyByZWdpc3RlcmVkLgo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KQlVHOiBLQVNBTjogZ2xvYmFs
-LW91dC1vZi1ib3VuZHMgaW4gZHZiX3BsbF9hdHRhY2grMHg2YzUvMHg4MzAKZHJpdmVycy9tZWRp
-YS9kdmItZnJvbnRlbmRzL2R2Yi1wbGwuYzo3OTgKUmVhZCBvZiBzaXplIDQgYXQgYWRkciBmZmZm
-ZmZmZjg5YzllNWUwIGJ5IHRhc2sga3dvcmtlci8wOjEvMTIKCkNQVTogMCBQSUQ6IDEyIENvbW06
-IGt3b3JrZXIvMDoxIE5vdCB0YWludGVkIDUuMi4wLXJjNisgIzEzCkhhcmR3YXJlIG5hbWU6IEdv
-b2dsZSBHb29nbGUgQ29tcHV0ZSBFbmdpbmUvR29vZ2xlIENvbXB1dGUgRW5naW5lLCBCSU9TCkdv
-b2dsZSAwMS8wMS8yMDExCldvcmtxdWV1ZTogdXNiX2h1Yl93cSBodWJfZXZlbnQKQ2FsbCBUcmFj
-ZToKICBfX2R1bXBfc3RhY2sgbGliL2R1bXBfc3RhY2suYzo3NyBbaW5saW5lXQogIGR1bXBfc3Rh
-Y2srMHhjYS8weDEzZSBsaWIvZHVtcF9zdGFjay5jOjExMwogIHByaW50X2FkZHJlc3NfZGVzY3Jp
-cHRpb24rMHg2Ny8weDIzMSBtbS9rYXNhbi9yZXBvcnQuYzoxODgKICBfX2thc2FuX3JlcG9ydC5j
-b2xkKzB4MWEvMHgzMiBtbS9rYXNhbi9yZXBvcnQuYzozMTcKICBrYXNhbl9yZXBvcnQrMHhlLzB4
-MjAgbW0va2FzYW4vY29tbW9uLmM6NjE0CiAgZHZiX3BsbF9hdHRhY2grMHg2YzUvMHg4MzAgZHJp
-dmVycy9tZWRpYS9kdmItZnJvbnRlbmRzL2R2Yi1wbGwuYzo3OTgKICBkdmJfcGxsX3Byb2JlKzB4
-ZmUvMHgxNzQgZHJpdmVycy9tZWRpYS9kdmItZnJvbnRlbmRzL2R2Yi1wbGwuYzo4NzcKICBpMmNf
-ZGV2aWNlX3Byb2JlKzB4NzkwLzB4YWEwIGRyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuYzozODkK
-ICByZWFsbHlfcHJvYmUrMHgyODEvMHg2NjAgZHJpdmVycy9iYXNlL2RkLmM6NTA5CiAgZHJpdmVy
-X3Byb2JlX2RldmljZSsweDEwNC8weDIxMCBkcml2ZXJzL2Jhc2UvZGQuYzo2NzAKICBfX2Rldmlj
-ZV9hdHRhY2hfZHJpdmVyKzB4MWMyLzB4MjIwIGRyaXZlcnMvYmFzZS9kZC5jOjc3NwogIGJ1c19m
-b3JfZWFjaF9kcnYrMHgxNWMvMHgxZTAgZHJpdmVycy9iYXNlL2J1cy5jOjQ1NAogIF9fZGV2aWNl
-X2F0dGFjaCsweDIxNy8weDM2MCBkcml2ZXJzL2Jhc2UvZGQuYzo4NDMKICBidXNfcHJvYmVfZGV2
-aWNlKzB4MWU0LzB4MjkwIGRyaXZlcnMvYmFzZS9idXMuYzo1MTQKICBkZXZpY2VfYWRkKzB4YWU2
-LzB4MTZmMCBkcml2ZXJzL2Jhc2UvY29yZS5jOjIxMTEKICBpMmNfbmV3X2NsaWVudF9kZXZpY2Ur
-MHg1YjMvMHhjNDAgZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5jOjc3OAogIGkyY19uZXdfZGV2
-aWNlKzB4MTkvMHg1MCBkcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNlLmM6ODIxCiAgZHZiX21vZHVs
-ZV9wcm9iZSsweGY5LzB4MjIwIGRyaXZlcnMvbWVkaWEvZHZiLWNvcmUvZHZiZGV2LmM6OTg1CiAg
-ZnJpaW9fdHVuZXJfYXR0YWNoKzB4MTI1LzB4MWQwIGRyaXZlcnMvbWVkaWEvdXNiL2R2Yi11c2It
-djIvZ2w4NjEuYzo1MzYKICBkdmJfdXNidjJfYWRhcHRlcl9mcm9udGVuZF9pbml0CmRyaXZlcnMv
-bWVkaWEvdXNiL2R2Yi11c2ItdjIvZHZiX3VzYl9jb3JlLmM6Njc1IFtpbmxpbmVdCiAgZHZiX3Vz
-YnYyX2FkYXB0ZXJfaW5pdCBkcml2ZXJzL21lZGlhL3VzYi9kdmItdXNiLXYyL2R2Yl91c2JfY29y
-ZS5jOjgwNApbaW5saW5lXQogIGR2Yl91c2J2Ml9pbml0IGRyaXZlcnMvbWVkaWEvdXNiL2R2Yi11
-c2ItdjIvZHZiX3VzYl9jb3JlLmM6ODY1IFtpbmxpbmVdCiAgZHZiX3VzYnYyX3Byb2JlLmNvbGQr
-MHgyNGRjLzB4MjU1ZApkcml2ZXJzL21lZGlhL3VzYi9kdmItdXNiLXYyL2R2Yl91c2JfY29yZS5j
-Ojk4MAogIHVzYl9wcm9iZV9pbnRlcmZhY2UrMHgzMDUvMHg3YTAgZHJpdmVycy91c2IvY29yZS9k
-cml2ZXIuYzozNjEKICByZWFsbHlfcHJvYmUrMHgyODEvMHg2NjAgZHJpdmVycy9iYXNlL2RkLmM6
-NTA5CiAgZHJpdmVyX3Byb2JlX2RldmljZSsweDEwNC8weDIxMCBkcml2ZXJzL2Jhc2UvZGQuYzo2
-NzAKICBfX2RldmljZV9hdHRhY2hfZHJpdmVyKzB4MWMyLzB4MjIwIGRyaXZlcnMvYmFzZS9kZC5j
-Ojc3NwogIGJ1c19mb3JfZWFjaF9kcnYrMHgxNWMvMHgxZTAgZHJpdmVycy9iYXNlL2J1cy5jOjQ1
-NAogIF9fZGV2aWNlX2F0dGFjaCsweDIxNy8weDM2MCBkcml2ZXJzL2Jhc2UvZGQuYzo4NDMKICBi
-dXNfcHJvYmVfZGV2aWNlKzB4MWU0LzB4MjkwIGRyaXZlcnMvYmFzZS9idXMuYzo1MTQKICBkZXZp
-Y2VfYWRkKzB4YWU2LzB4MTZmMCBkcml2ZXJzL2Jhc2UvY29yZS5jOjIxMTEKICB1c2Jfc2V0X2Nv
-bmZpZ3VyYXRpb24rMHhkZjYvMHgxNjcwIGRyaXZlcnMvdXNiL2NvcmUvbWVzc2FnZS5jOjIwMjMK
-ICBnZW5lcmljX3Byb2JlKzB4OWQvMHhkNSBkcml2ZXJzL3VzYi9jb3JlL2dlbmVyaWMuYzoyMTAK
-ICB1c2JfcHJvYmVfZGV2aWNlKzB4OTkvMHgxMDAgZHJpdmVycy91c2IvY29yZS9kcml2ZXIuYzoy
-NjYKICByZWFsbHlfcHJvYmUrMHgyODEvMHg2NjAgZHJpdmVycy9iYXNlL2RkLmM6NTA5CiAgZHJp
-dmVyX3Byb2JlX2RldmljZSsweDEwNC8weDIxMCBkcml2ZXJzL2Jhc2UvZGQuYzo2NzAKICBfX2Rl
-dmljZV9hdHRhY2hfZHJpdmVyKzB4MWMyLzB4MjIwIGRyaXZlcnMvYmFzZS9kZC5jOjc3NwogIGJ1
-c19mb3JfZWFjaF9kcnYrMHgxNWMvMHgxZTAgZHJpdmVycy9iYXNlL2J1cy5jOjQ1NAogIF9fZGV2
-aWNlX2F0dGFjaCsweDIxNy8weDM2MCBkcml2ZXJzL2Jhc2UvZGQuYzo4NDMKICBidXNfcHJvYmVf
-ZGV2aWNlKzB4MWU0LzB4MjkwIGRyaXZlcnMvYmFzZS9idXMuYzo1MTQKICBkZXZpY2VfYWRkKzB4
-YWU2LzB4MTZmMCBkcml2ZXJzL2Jhc2UvY29yZS5jOjIxMTEKICB1c2JfbmV3X2RldmljZS5jb2xk
-KzB4OGMxLzB4MTAxNiBkcml2ZXJzL3VzYi9jb3JlL2h1Yi5jOjI1MzQKICBodWJfcG9ydF9jb25u
-ZWN0IGRyaXZlcnMvdXNiL2NvcmUvaHViLmM6NTA4OSBbaW5saW5lXQogIGh1Yl9wb3J0X2Nvbm5l
-Y3RfY2hhbmdlIGRyaXZlcnMvdXNiL2NvcmUvaHViLmM6NTIwNCBbaW5saW5lXQogIHBvcnRfZXZl
-bnQgZHJpdmVycy91c2IvY29yZS9odWIuYzo1MzUwIFtpbmxpbmVdCiAgaHViX2V2ZW50KzB4MWFk
-YS8weDM1OTAgZHJpdmVycy91c2IvY29yZS9odWIuYzo1NDMyCiAgcHJvY2Vzc19vbmVfd29yaysw
-eDkwNS8weDE1NzAga2VybmVsL3dvcmtxdWV1ZS5jOjIyNjkKICBwcm9jZXNzX3NjaGVkdWxlZF93
-b3JrcyBrZXJuZWwvd29ya3F1ZXVlLmM6MjMzMSBbaW5saW5lXQogIHdvcmtlcl90aHJlYWQrMHg3
-YWIvMHhlMjAga2VybmVsL3dvcmtxdWV1ZS5jOjI0MTcKICBrdGhyZWFkKzB4MzBiLzB4NDEwIGtl
-cm5lbC9rdGhyZWFkLmM6MjU1CiAgcmV0X2Zyb21fZm9yaysweDI0LzB4MzAgYXJjaC94ODYvZW50
-cnkvZW50cnlfNjQuUzozNTIKClRoZSBidWdneSBhZGRyZXNzIGJlbG9uZ3MgdG8gdGhlIHZhcmlh
-YmxlOgogIGlkKzB4MTAwLzB4MTIwCgpNZW1vcnkgc3RhdGUgYXJvdW5kIHRoZSBidWdneSBhZGRy
-ZXNzOgogIGZmZmZmZmZmODljOWU0ODA6IGZhIGZhIGZhIGZhIDAwIDAwIGZhIGZhIGZhIGZhIGZh
-IGZhIDAwIDAwIDAwIDAwCiAgZmZmZmZmZmY4OWM5ZTUwMDogMDAgMDAgMDAgMDAgMDAgMDAgMDAg
-MDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAKPiBmZmZmZmZmZjg5YzllNTgwOiAwMCAwMCAwMCAw
-MCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCBmYSBmYSBmYSBmYQogICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4KICBmZmZmZmZmZjg5YzllNjAw
-OiAwNCBmYSBmYSBmYSBmYSBmYSBmYSBmYSAwNCBmYSBmYSBmYSBmYSBmYSBmYSBmYQogIGZmZmZm
-ZmZmODljOWU2ODA6IDA0IGZhIGZhIGZhIGZhIGZhIGZhIGZhIDA0IGZhIGZhIGZhIGZhIGZhIGZh
-IGZhCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PQotLS0KIGRyaXZlcnMvbWVkaWEvZHZiLWZyb250ZW5kcy9kdmItcGxsLmMg
-fCAzICsrKwogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvbWVkaWEvZHZiLWZyb250ZW5kcy9kdmItcGxsLmMgYi9kcml2ZXJzL21lZGlhL2R2Yi1m
-cm9udGVuZHMvZHZiLXBsbC5jCmluZGV4IGJhMGM0OTEwN2JkMjhiLi4wMzJmMWIyYzJlM2FhZiAx
-MDA2NDQKLS0tIGEvZHJpdmVycy9tZWRpYS9kdmItZnJvbnRlbmRzL2R2Yi1wbGwuYworKysgYi9k
-cml2ZXJzL21lZGlhL2R2Yi1mcm9udGVuZHMvZHZiLXBsbC5jCkBAIC03ODcsNiArNzg3LDkgQEAg
-c3RydWN0IGR2Yl9mcm9udGVuZCAqZHZiX3BsbF9hdHRhY2goc3RydWN0IGR2Yl9mcm9udGVuZCAq
-ZmUsIGludCBwbGxfYWRkciwKIAlzdHJ1Y3QgZHZiX3BsbF9wcml2ICpwcml2ID0gTlVMTDsKIAlp
-bnQgcmV0OwogCWNvbnN0IHN0cnVjdCBkdmJfcGxsX2Rlc2MgKmRlc2M7CisJCisgICAgICAgIGlm
-IChkdmJfcGxsX2RldmNvdW50ID4gRFZCX1BMTF9NQVgtMSkKKyAgICAgICAgICAgICAgICByZXR1
-cm4gTlVMTDsKIAogCWIxID0ga21hbGxvYygxLCBHRlBfS0VSTkVMKTsKIAlpZiAoIWIxKQo=
---00000000000094a173058ddf1b3a--
+rgds
+/Lars
+
