@@ -2,169 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 737A76B922
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 11:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58666B967
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 11:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbfGQJXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jul 2019 05:23:23 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:46741 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725873AbfGQJXW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 05:23:22 -0400
-Received: by mail-ed1-f67.google.com with SMTP id d4so24554532edr.13
-        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2019 02:23:21 -0700 (PDT)
+        id S1725912AbfGQJhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jul 2019 05:37:53 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37471 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbfGQJhx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 05:37:53 -0400
+Received: by mail-lj1-f195.google.com with SMTP id z28so22994599ljn.4
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2019 02:37:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=dawes-za-net.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GjXFQQeHJ+fl2jQ+pppRGYrRRfSPb6dldy9chydzl8s=;
-        b=Jm2NGPcY1MgQ8E6LT0Yms4VtrWynODXiXXFZl9RKGUlcK77XK1D8emXNmS7gDR7DSZ
-         5oAFdfi4or0iw0PvqKJnJcFLh19MtP3tCo8hv4f15eFUynr028/tEqBRT4cK4p7qN416
-         xYsBcAxP29bmFLYYc++YeT2IC965Y6q3c3CNOBDHIHEHk58mL+mIFNa7xyE+J8HVB4dR
-         ArqdHIe95EEyUO2GiIWgFninEPRYGjFywEZGXGE5suxIBTpYBQQhTd2+o5heZUaEd7P4
-         eHRid+lpoOlKmVHn4bEVNbVRlBM1TYtdGRsaHqnjY84s1snd08LfWAXpnoki1Ew64805
-         s1CA==
+        bh=2iaQRv5fbN519F8sRP3Bts2ZxB15aMVnHnuJaJZ1r6c=;
+        b=JJ/RmJ2P6ixySa28EVG0QVzQWr0OvbmxCzxYyQRrjQqwBGAZpvEAhRZlh98m0GSmAH
+         hZz8TagEjks6rNo8s2HHEAo4XVyVQE9T4Wk/D2+SXocZwfxOuWf2rvoogjultxpgoM0d
+         W9fV4PsknrS5k/V580PO5ufR5+8bFm+tDhVq81O9tFNvoidOPGbYf28REL3cbEP5MSs8
+         xVNiJjGz3lV6uzjPWvhknhFskeKmrgMeQ9nX6ewmJbi2Pp5a6vOnYNhpulqxI3Fwrcsl
+         siu4Z+ZNzewUUMablsJE51J/EtAPpBLqGzU1jevTZOuSDXnckLRihcV/sAObucZMoVoa
+         LktA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GjXFQQeHJ+fl2jQ+pppRGYrRRfSPb6dldy9chydzl8s=;
-        b=Hb53VqKr6/B7OhDAhR9UZAPgUHBPkNpgtFTjUypZW8D3nIXeH9pRExn0UH4TobwFDv
-         5owm7R7Afhz4fsBZYfAGv2HjMmUMZEwFFBko9XtcYK7BjW3rkYhQ9sfIi8dxvt8RdMx7
-         tcPRaeC6zVl7ql0pPbX+mLDkhBmZY50c5QP3I/wW4ol9F48MAotK+wioOf4V98NT+Rnm
-         yicyTNJfxoU0M0wicDZBwB8y+1e6egMINAVeWVlfTK9mP7npRMo3k3NSPCjiDm77UhRb
-         T4QsIOUwfDgyU0WII/Xc91QV8XW5z5HgYk3LT/ahQWCfxKNpXU2Ta8GAFHgxSp19hFP2
-         mMZw==
-X-Gm-Message-State: APjAAAWdiHw0Yyzm2IMq4Wd2613S2qO+XBZ8xb7vbdOYcD4Huw4uHqEq
-        YmEWWO+46aoMY9OaA32w9cECychfml9Q3rk8KdBJJg==
-X-Google-Smtp-Source: APXvYqxPihozv+RQ6usOA6Dd2Ft4DEFbhMpmKG9moDXs/PmkqCmmUtwcWQeBtQWFjiqFep92RJ92opmkftOqX46zrEU=
-X-Received: by 2002:a17:906:e0cd:: with SMTP id gl13mr29714304ejb.52.1563355400215;
- Wed, 17 Jul 2019 02:23:20 -0700 (PDT)
+        bh=2iaQRv5fbN519F8sRP3Bts2ZxB15aMVnHnuJaJZ1r6c=;
+        b=fFGx9Bi/cSwQG+NirWhwaC/Ig2ciShwbDoFHGRJKceFmrLo5iF5Cag+I76tgguR/1J
+         TaX2f76GD5c4bHPqLa+alro0yOQ0PiTvYsTweNyAvY/9uZX7jDWotqLYO8qPLNcbVE6P
+         GSzpZ6iL23sW5Wh8AGdc64AK1B5qjPy7VKdo1Y4omb50fVrZF6NvlL3vJVy4nAX3Coso
+         ucZESEWlQLoDEAeXptFNDOAJ+CekCFOljpIcsqTm5FYM10jw9GMdvCahXWPaXBzx1l9s
+         oBSYTuO7KW/qccQOlIavmxMIAuV4T91pkBkeLFhg3XTDKzanzoDfxgrJr6FU+XzCpP6q
+         lg5Q==
+X-Gm-Message-State: APjAAAXdSGaa1hRJ5e+1QKblnBz7WQTaBJpsb5zlrqKntwwbcA2nTDzL
+        tI9gcOs/M0zqhEMOu0uIyYOsaVqF2BwdCOBHvWo=
+X-Google-Smtp-Source: APXvYqxy026+R8bszCpw5t2mUK5wElKd960icVsVtWsJZBAFap8rWFHIzfddMDPatA0Zs1K4HiJj/fyZM28qnsBUP8Y=
+X-Received: by 2002:a2e:720b:: with SMTP id n11mr20837164ljc.213.1563356270807;
+ Wed, 17 Jul 2019 02:37:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000a55d7d058d51ad4f@google.com> <CACRpkdYbuJ_yJ+UKtvWrkmBCbQzfk-1mn1-A836dkNMrmTtZow@mail.gmail.com>
- <20190717091621.GC16694@localhost>
-In-Reply-To: <20190717091621.GC16694@localhost>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 17 Jul 2019 11:23:07 +0200
-Message-ID: <CACT4Y+b_KhNhYb0TdnR65MLvqnq0r25LsP-m8Bw0id9z1+Kb5g@mail.gmail.com>
-Subject: Re: WARNING in gpio_to_desc
+References: <CAOYdKdjBtYt_2CuBxaTYKXCt7En+ESdOKeJ+kEEvvcNhkYs_7w@mail.gmail.com>
+ <20190717091134.GA5179@lisa.dawes.za.net> <20190717092007.GD16694@localhost>
+In-Reply-To: <20190717092007.GD16694@localhost>
+From:   Rogan Dawes <rogan@dawes.za.net>
+Date:   Wed, 17 Jul 2019 11:37:39 +0200
+Message-ID: <CAOYdKdiL2j4n7_+neFK1zZ4oidKpXiTV5WZjdz7R1oJuJB=JRQ@mail.gmail.com>
+Subject: Re: [PATCH v6] USB: serial: option: add D-Link DWM-222 device ID
 To:     Johan Hovold <johan@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        syzbot <syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com>,
-        Vincent Cuissard <cuissard@marvell.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Samuel Ortiz <sameo@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 17, 2019 at 11:16 AM Johan Hovold <johan@kernel.org> wrote:
+Thank you for all the hand holding ...
+
+On Wed, Jul 17, 2019 at 11:20 AM Johan Hovold <johan@kernel.org> wrote:
 >
-> On Tue, Jul 16, 2019 at 11:52:19PM +0200, Linus Walleij wrote:
-> > On Wed, Jul 10, 2019 at 1:07 PM syzbot
-> > <syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com> wrote:
+> On Wed, Jul 17, 2019 at 11:11:34AM +0200, Rogan Dawes wrote:
+> > Add device id for D-Link DWM-222 A2.
 > >
-> > > HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
-> > (...)
-> > >   __gpio_set_value include/asm-generic/gpio.h:104 [inline]
-> > >   gpio_set_value include/linux/gpio.h:71 [inline]
-> > >   nfcmrvl_chip_halt+0x4e/0x70 drivers/nfc/nfcmrvl/main.c:259
-> > >   nfcmrvl_nci_register_dev+0x2d4/0x378 drivers/nfc/nfcmrvl/main.c:176
-> > >   nfcmrvl_probe+0x4e9/0x5e0 drivers/nfc/nfcmrvl/usb.c:344
+> > MI_00 D-Link HS-USB Diagnostics
+> > MI_01 D-Link HS-USB Modem
+> > MI_02 D-Link HS-USB AT Port
+> > MI_03 D-Link HS-USB NMEA
+> > MI_04 D-Link HS-USB WWAN Adapter (qmi_wwan)
+> > MI_05 USB Mass Storage Device
 > >
-> > This bug is somewhere in the drivers/nfc/nfcmrvl* code handling
-> > GPIOs.
+> > Cc: stable@vger.kernel.org
+> > Signed-Off-By: Rogan Dawes <rogan@dawes.za.net>
 >
-> Right, and it's my bug.
+> Perfect, thanks for sticking with it.
 >
-> > It should be converted to GPIO descriptors and fixed up, see
-> > drivers/gpio/TODO for details on how to do this.
->
-> Conversion will have to wait, let's fix the regression first. :)
->
-> > Johan/Vincent, tell me if you want me to forward the full fuzzing
-> > robot crash dump.
->
-> No need, thanks. I got it the report.
->
-> Something like the below compiles and should fix it. Vacation starts
-> today so I'll revisit and send a proper patch in a couple of weeks.
->
-> Perhaps someone can feed it to the bot meanwhile (no time to play with
-> it right now).
->
-> Note that this issue has been there since 4.12, so guess no one uses
-> these devices...
+> I'll queue this is up after the merge window closes.
 >
 > Johan
->
->
-> From e9d9d0ef5ffd6b306cffb2f4e2514f503aa626a5 Mon Sep 17 00:00:00 2001
-> From: Johan Hovold <johan@kernel.org>
-> Date: Wed, 17 Jul 2019 11:07:13 +0200
-> Subject: [PATCH] NFC: nfcmrvl: fix gpio-handling regression
->
-> FIXME
->
-> Fixes: e33a3f84f88f ("NFC: nfcmrvl: allow gpio 0 for reset signalling")
-> Not-Signed-off-by: Johan Hovold <johan@kernel.org>
-
-Please don't forget:
-
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com
-
-> ---
->  drivers/nfc/nfcmrvl/main.c | 4 ++--
->  drivers/nfc/nfcmrvl/usb.c  | 1 +
->  2 files changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/nfc/nfcmrvl/main.c b/drivers/nfc/nfcmrvl/main.c
-> index e65d027b91fa..529be35ac178 100644
-> --- a/drivers/nfc/nfcmrvl/main.c
-> +++ b/drivers/nfc/nfcmrvl/main.c
-> @@ -244,7 +244,7 @@ void nfcmrvl_chip_reset(struct nfcmrvl_private *priv)
->         /* Reset possible fault of previous session */
->         clear_bit(NFCMRVL_PHY_ERROR, &priv->flags);
->
-> -       if (priv->config.reset_n_io) {
-> +       if (gpio_is_valid(priv->config.reset_n_io)) {
->                 nfc_info(priv->dev, "reset the chip\n");
->                 gpio_set_value(priv->config.reset_n_io, 0);
->                 usleep_range(5000, 10000);
-> @@ -255,7 +255,7 @@ void nfcmrvl_chip_reset(struct nfcmrvl_private *priv)
->
->  void nfcmrvl_chip_halt(struct nfcmrvl_private *priv)
->  {
-> -       if (priv->config.reset_n_io)
-> +       if (gpio_is_valid(priv->config.reset_n_io))
->                 gpio_set_value(priv->config.reset_n_io, 0);
->  }
->
-> diff --git a/drivers/nfc/nfcmrvl/usb.c b/drivers/nfc/nfcmrvl/usb.c
-> index 945cc903d8f1..888e298f610b 100644
-> --- a/drivers/nfc/nfcmrvl/usb.c
-> +++ b/drivers/nfc/nfcmrvl/usb.c
-> @@ -305,6 +305,7 @@ static int nfcmrvl_probe(struct usb_interface *intf,
->
->         /* No configuration for USB */
->         memset(&config, 0, sizeof(config));
-> +       config.reset_n_io = -EINVAL;
->
->         nfc_info(&udev->dev, "intf %p id %p\n", intf, id);
->
-> --
-> 2.22.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/20190717091621.GC16694%40localhost.
-> For more options, visit https://groups.google.com/d/optout.
