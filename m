@@ -2,89 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A426BF7D
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 18:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8950E6C257
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 22:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727215AbfGQQNw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jul 2019 12:13:52 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:47694 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726620AbfGQQNu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Jul 2019 12:13:50 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id BBF80605C121F65CC65C;
-        Thu, 18 Jul 2019 00:13:46 +0800 (CST)
-Received: from localhost (10.202.226.61) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Thu, 18 Jul 2019
- 00:13:42 +0800
-Date:   Wed, 17 Jul 2019 17:13:20 +0100
-From:   Jonathan Cameron <jonathan.cameron@huawei.com>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-CC:     <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Len Brown" <lenb@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
-        "Hartmut Knaack" <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Peter Meerwald-Stadler" <pmeerw@pmeerw.net>,
-        Peter Rosin <peda@axentia.se>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        "Frederic Barrat" <fbarrat@linux.ibm.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        "Stefano Stabellini" <sstabellini@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, <linux-acpi@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-pm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <xen-devel@lists.xenproject.org>,
-        <linux-mm@kvack.org>, <netdev@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v4 13/15] docs: ABI: testing: make the files compatible
- with ReST output
-Message-ID: <20190717171320.000035c2@huawei.com>
-In-Reply-To: <88d15fa38167e3f2e73e65e1c1a1f39bca0267b4.1563365880.git.mchehab+samsung@kernel.org>
-References: <cover.1563365880.git.mchehab+samsung@kernel.org>
-        <88d15fa38167e3f2e73e65e1c1a1f39bca0267b4.1563365880.git.mchehab+samsung@kernel.org>
-Organization: Huawei
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.61]
-X-CFilter-Loop: Reflected
+        id S1727229AbfGQUxS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jul 2019 16:53:18 -0400
+Received: from mga09.intel.com ([134.134.136.24]:32450 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726063AbfGQUxS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Jul 2019 16:53:18 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jul 2019 13:53:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,275,1559545200"; 
+   d="scan'208";a="170366132"
+Received: from fei-dev-host.jf.intel.com ([10.7.198.158])
+  by orsmga003.jf.intel.com with ESMTP; 17 Jul 2019 13:53:17 -0700
+From:   fei.yang@intel.com
+To:     felipe.balbi@linux.intel.com, john.stultz@linaro.org,
+        andrzej.p@collabora.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org
+Subject: [PATCH V2] usb: dwc3: gadget: trb_dequeue is not updated properly
+Date:   Wed, 17 Jul 2019 13:53:08 -0700
+Message-Id: <1563396788-126034-1-git-send-email-fei.yang@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 17 Jul 2019 09:28:17 -0300
-Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
+From: Fei Yang <fei.yang@intel.com>
 
-> Some files over there won't parse well by Sphinx.
-> 
-> Fix them.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Hi Mauro,
+If scatter-gather operation is allowed, a large USB request would be split
+into multiple TRBs. These TRBs are chained up by setting DWC3_TRB_CTRL_CHN
+bit except the last one which has DWC3_TRB_CTRL_IOC bit set instead.
+Since only the last TRB has IOC set, dwc3_gadget_ep_reclaim_completed_trb()
+would be called only once for the whole USB request, thus all the TRBs need
+to be reclaimed within this single call. However that is not what the current
+code does.
 
-Does feel like this one should perhaps have been broken up a touch!
+This patch addresses the issue by checking each TRB in function
+dwc3_gadget_ep_reclaim_trb_sg() and reclaiming the chained ones right there.
+Only the last TRB gets passed to dwc3_gadget_ep_reclaim_completed_trb(). This
+would guarantee all TRBs are reclaimed and trb_dequeue/num_trbs are updated
+properly.
 
-For the IIO ones I've eyeballed it rather than testing the results
+Signed-off-by: Fei Yang <fei.yang@intel.com>
+Cc: stable <stable@vger.kernel.org>
+---
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+V2: Better solution is to reclaim chained TRBs in dwc3_gadget_ep_reclaim_trb_sg()
+    and leave the last TRB to the dwc3_gadget_ep_reclaim_completed_trb().
 
+---
+
+ drivers/usb/dwc3/gadget.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 173f532..c0662c2 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2404,7 +2404,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
+ 		struct dwc3_request *req, const struct dwc3_event_depevt *event,
+ 		int status)
+ {
+-	struct dwc3_trb *trb = &dep->trb_pool[dep->trb_dequeue];
++	struct dwc3_trb *trb;
+ 	struct scatterlist *sg = req->sg;
+ 	struct scatterlist *s;
+ 	unsigned int pending = req->num_pending_sgs;
+@@ -2419,7 +2419,15 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
+ 
+ 		req->sg = sg_next(s);
+ 		req->num_pending_sgs--;
++		if (!(trb->ctrl & DWC3_TRB_CTRL_IOC)) {
++			/* reclaim the TRB without calling
++			 * dwc3_gadget_ep_reclaim_completed_trb */
++			dwc3_ep_inc_deq(dep);
++			req->num_trbs--;
++			continue;
++		}
+ 
++		/* Only the last TRB in the sg list would reach here */
+ 		ret = dwc3_gadget_ep_reclaim_completed_trb(dep, req,
+ 				trb, event, status, true);
+ 		if (ret)
+-- 
+2.7.4
 
