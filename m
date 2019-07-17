@@ -2,85 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 487A06B164
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jul 2019 23:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302BE6B2A8
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 02:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728766AbfGPVwd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jul 2019 17:52:33 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41377 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728235AbfGPVwd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jul 2019 17:52:33 -0400
-Received: by mail-lf1-f68.google.com with SMTP id 62so9955044lfa.8
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jul 2019 14:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sChX2tjZXXzFm/FF0+gISHJ8+I30zgl6h1ocaPpSr4w=;
-        b=TVDnEiknWAcRrVYjpkVEp+7UlZza/YL/doDnWkXLRwGqJ9YS6xQoSpx94TtYwkM0Zm
-         9JcQMIFbg+AGr5yblr8fIfyWGtAiWjIILXfM7IITLcHbJNA9fCyb6PLAg+BasgvkoPqY
-         mOu8Q8JEY5ecE/Co/dtC9Acv0384Ahf5uv5clQz+i59KnETYFC1wsz8UK5PiDYs/T9n1
-         cgi/EyRXEgBnePqIEVvybyK+Lmko4rVlZEkLGBTQU7Ct2fceE6jFBcW+cy4RZHOvyaT4
-         yK6DJECW1VMyuUV4EO4RpgP01Zcz3GnzbCKe0KHKjUI5P8ZOseBMqWLKAA5U3ku+AEek
-         v3mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sChX2tjZXXzFm/FF0+gISHJ8+I30zgl6h1ocaPpSr4w=;
-        b=llT3BfgCs3g80Ma+H/0UWU1OCeSh6jnhrEa2+uInRhH2LA27X5hQqjpTGqMRK/OpRD
-         XjWayhI0nj3ahUmQTjF1zXseTdWC02boxjFg4V47nxXEj97zcK2NBmISHnVpmeNeStL2
-         Oa1qkyaeGi3jpdpWwLR8gvBXtRPyDJifNToOFTjtfjoNGcnRAiyB1xBWRQ6XIIaRRElX
-         ulCrbsI3maXGpAR5pr+1w5F5l+ThserGAZCg/OkwjEud7Dz4M9XYMFSvKE1hvlxYeYzV
-         UJ+P1hqdZW7dumA4HjA8fs12fcezulEbOOrVvnJomYwDDDyylvyMXnCuQX4UCYl9ucU8
-         Gcpg==
-X-Gm-Message-State: APjAAAW4PGnQlFUwAcBAuUSEZALaSjiQGlrQltnM3g8GqcCrE1e5yaGz
-        FMyEjKbQNXCGC1EUU0wIDJFSgr6HpMPel9krs4XxIhsNU1A=
-X-Google-Smtp-Source: APXvYqxF5LGbIM5rW+0/RUz7xG/c4ekdZJIfr+EH8zBCsdrd9zerb9uo3Zsk8A9BlRzj6R313IgBGYMpeLNcjo9YvBk=
-X-Received: by 2002:a19:6a01:: with SMTP id u1mr15820032lfu.141.1563313950958;
- Tue, 16 Jul 2019 14:52:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000a55d7d058d51ad4f@google.com>
-In-Reply-To: <000000000000a55d7d058d51ad4f@google.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 16 Jul 2019 23:52:19 +0200
-Message-ID: <CACRpkdYbuJ_yJ+UKtvWrkmBCbQzfk-1mn1-A836dkNMrmTtZow@mail.gmail.com>
-Subject: Re: WARNING in gpio_to_desc
-To:     syzbot <syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Vincent Cuissard <cuissard@marvell.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1729263AbfGQAHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jul 2019 20:07:34 -0400
+Received: from mga09.intel.com ([134.134.136.24]:42048 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728597AbfGQAHd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 16 Jul 2019 20:07:33 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jul 2019 17:07:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,272,1559545200"; 
+   d="scan'208";a="172698735"
+Received: from fei-dev-host.jf.intel.com ([10.7.198.158])
+  by orsmga006.jf.intel.com with ESMTP; 16 Jul 2019 17:07:33 -0700
+From:   fei.yang@intel.com
+To:     felipe.balbi@linux.intel.com, john.stultz@linaro.org,
+        andrzej.p@samsung.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org
+Subject: [PATCH] usb: dwc3: gadget: trb_dequeue is not updated properly
+Date:   Tue, 16 Jul 2019 17:07:25 -0700
+Message-Id: <1563322045-49515-1-git-send-email-fei.yang@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 10, 2019 at 1:07 PM syzbot
-<syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com> wrote:
+From: Fei Yang <fei.yang@intel.com>
 
-> HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
-(...)
->   __gpio_set_value include/asm-generic/gpio.h:104 [inline]
->   gpio_set_value include/linux/gpio.h:71 [inline]
->   nfcmrvl_chip_halt+0x4e/0x70 drivers/nfc/nfcmrvl/main.c:259
->   nfcmrvl_nci_register_dev+0x2d4/0x378 drivers/nfc/nfcmrvl/main.c:176
->   nfcmrvl_probe+0x4e9/0x5e0 drivers/nfc/nfcmrvl/usb.c:344
+If scatter-gather operation is allowed, a large USB request is split into
+multiple TRBs. These TRBs are chained up by setting DWC3_TRB_CTRL_CHN bit
+except the last one which has DWC3_TRB_CTRL_IOC bit set instead.
+Since only the last TRB has IOC set for the whole USB request, the
+dwc3_gadget_ep_reclaim_completed_trb() gets called only once for the request
+and all TRBs are supposed to be reclaimed. However that is not what happens
+with the current code.
 
-This bug is somewhere in the drivers/nfc/nfcmrvl* code handling
-GPIOs.
+This patch addresses the issue by checking req->num_pending_sgs. In case the
+pending sgs is not zero, update trb_dequeue and req->num_trbs accordingly.
 
-It should be converted to GPIO descriptors and fixed up, see
-drivers/gpio/TODO for details on how to do this.
+Signed-off-by: Fei Yang <fei.yang@intel.com>
+Cc: stable <stable@vger.kernel.org>
+---
+ drivers/usb/dwc3/gadget.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Johan/Vincent, tell me if you want me to forward the full fuzzing
-robot crash dump.
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 173f532..4d5b4eb 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2394,8 +2394,14 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
+ 	if (event->status & DEPEVT_STATUS_SHORT && !chain)
+ 		return 1;
+ 
+-	if (event->status & DEPEVT_STATUS_IOC)
++	if (event->status & DEPEVT_STATUS_IOC) {
++		for (count = 0; count < req->num_pending_sgs; count++) {
++			dwc3_ep_inc_deq(dep);
++			req->num_trbs--;
++		}
++		req->num_pending_sgs = 0;
+ 		return 1;
++	}
+ 
+ 	return 0;
+ }
+@@ -2404,7 +2410,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
+ 		struct dwc3_request *req, const struct dwc3_event_depevt *event,
+ 		int status)
+ {
+-	struct dwc3_trb *trb = &dep->trb_pool[dep->trb_dequeue];
++	struct dwc3_trb *trb;
+ 	struct scatterlist *sg = req->sg;
+ 	struct scatterlist *s;
+ 	unsigned int pending = req->num_pending_sgs;
+-- 
+2.7.4
 
-Yours,
-Linus Walleij
