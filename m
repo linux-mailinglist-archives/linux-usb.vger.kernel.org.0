@@ -2,154 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC08E6B915
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 11:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A2A6B918
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jul 2019 11:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbfGQJQZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jul 2019 05:16:25 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33044 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbfGQJQZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 05:16:25 -0400
-Received: by mail-lj1-f195.google.com with SMTP id h10so22889638ljg.0;
-        Wed, 17 Jul 2019 02:16:23 -0700 (PDT)
+        id S1726251AbfGQJUL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jul 2019 05:20:11 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:35116 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbfGQJUK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jul 2019 05:20:10 -0400
+Received: by mail-lj1-f196.google.com with SMTP id x25so22907803ljh.2
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jul 2019 02:20:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rPah5Qpv5P0JRwz088t4Ysl3stEYDPS6P+J+WjV7Sf4=;
-        b=GN12OzSbEqkvl8H4gTw+/y0fraiRutEjxuekhhpuPy4G/YvxE93ztxKWuLhvUm5h3t
-         IS+/xizzRzHNl1SmOBTpK9bq0Jg9A+95vej8amq4DFxd6C67D4RLzoaVq1wbD2HM+kdP
-         aSJ0bsftBtZi97s+1CxoDGHvupsNSIvSHqlNLz4TKGElkXvGPIVFMOnie2t/S0mj5aBu
-         aDYPH67ex5+cAHMitm+WRXm0b9XEG+x8djVsy/C0/K0hgwr57Ks87l+KRSVjG4SLxkDf
-         F16wNdi/U2j6oH0+UTgoT3sYIiYhK5wwbHmL73ZoW0GHoafN8w8VDgU+HdUioYNivEnO
-         XlxQ==
-X-Gm-Message-State: APjAAAVeaNvvNpKK1skjExrFUbcKBlA0ukTLKVkE43wSiAIfo37DAkbJ
-        BXYHPKw1qlS72bdE/lBGYyM=
-X-Google-Smtp-Source: APXvYqzxDjM6kiTgHolhJTGqH1ygByQkQ7SS/tOO9TW4F/owWJscMGcGhNgkD2g8HwgS7ftZ+rmMuw==
-X-Received: by 2002:a2e:4b12:: with SMTP id y18mr19583499lja.238.1563354983092;
-        Wed, 17 Jul 2019 02:16:23 -0700 (PDT)
+        bh=hYXI+l8Qu5NweSPrUwfQUJuPuL+qi2u4WVczzUwmQ9U=;
+        b=iFCNHiGyubutk/9c683ObfyjOEW5pBz2yRW5I/ZCsneI7y0tI+xy5hIh0p10BjI6yt
+         Ku6IGA3UxnHYlQmQMRioOFdeKspbW1qqVl5KGOs56QTNl763ILTe2SPUNHp30VxaPvMM
+         EOeM4mAe0/stGZcigFjGfB8OFDhW5cN6Re6j8AQH/NOsJB9kOuFNI5+1pxopF0idTiPU
+         Pm/ViHW2HT8iq7XEGJcEc4sVOe7MZ6foeA+p4/FQEu/r4Rc8MWwqUJggJeB7fcKKgcUT
+         lhyfWF/skxdeCigqOLunlS4engq+qhOgcG1FhMjyBTmIFYPmETnJk6Azg6D2Xhu0ovlb
+         WVeg==
+X-Gm-Message-State: APjAAAXm3CDUgqFrlrz3wGGKjZbWcm2IxuQEhV7oh3XkuhbYBMtuHW0h
+        PAjY+RjaADmOdt8h2MOZP24gJfLOLy4=
+X-Google-Smtp-Source: APXvYqxqVbM0AUpFqGqgMYr6wNIC2vT1M/u+0o4+yRMNZM2cfn4UAjGGVCwZaqdmOYgkdaNGrLTl0w==
+X-Received: by 2002:a2e:7a19:: with SMTP id v25mr20396947ljc.39.1563355208329;
+        Wed, 17 Jul 2019 02:20:08 -0700 (PDT)
 Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id j3sm3344403lfp.34.2019.07.17.02.16.21
+        by smtp.gmail.com with ESMTPSA id h3sm4366058lja.93.2019.07.17.02.20.07
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Jul 2019 02:16:21 -0700 (PDT)
+        Wed, 17 Jul 2019 02:20:07 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92)
         (envelope-from <johan@kernel.org>)
-        id 1hng2v-0003l5-9H; Wed, 17 Jul 2019 11:16:22 +0200
-Date:   Wed, 17 Jul 2019 11:16:21 +0200
+        id 1hng6Z-0003nQ-R6; Wed, 17 Jul 2019 11:20:07 +0200
+Date:   Wed, 17 Jul 2019 11:20:07 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     syzbot <syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Vincent Cuissard <cuissard@marvell.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com,
-        Samuel Ortiz <sameo@linux.intel.com>
-Subject: Re: WARNING in gpio_to_desc
-Message-ID: <20190717091621.GC16694@localhost>
-References: <000000000000a55d7d058d51ad4f@google.com>
- <CACRpkdYbuJ_yJ+UKtvWrkmBCbQzfk-1mn1-A836dkNMrmTtZow@mail.gmail.com>
+To:     Rogan Dawes <rogan@dawes.za.net>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v6] USB: serial: option: add D-Link DWM-222 device ID
+Message-ID: <20190717092007.GD16694@localhost>
+References: <CAOYdKdjBtYt_2CuBxaTYKXCt7En+ESdOKeJ+kEEvvcNhkYs_7w@mail.gmail.com>
+ <20190717091134.GA5179@lisa.dawes.za.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdYbuJ_yJ+UKtvWrkmBCbQzfk-1mn1-A836dkNMrmTtZow@mail.gmail.com>
+In-Reply-To: <20190717091134.GA5179@lisa.dawes.za.net>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 11:52:19PM +0200, Linus Walleij wrote:
-> On Wed, Jul 10, 2019 at 1:07 PM syzbot
-> <syzbot+cf35b76f35e068a1107f@syzkaller.appspotmail.com> wrote:
+On Wed, Jul 17, 2019 at 11:11:34AM +0200, Rogan Dawes wrote:
+> Add device id for D-Link DWM-222 A2.
 > 
-> > HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
-> (...)
-> >   __gpio_set_value include/asm-generic/gpio.h:104 [inline]
-> >   gpio_set_value include/linux/gpio.h:71 [inline]
-> >   nfcmrvl_chip_halt+0x4e/0x70 drivers/nfc/nfcmrvl/main.c:259
-> >   nfcmrvl_nci_register_dev+0x2d4/0x378 drivers/nfc/nfcmrvl/main.c:176
-> >   nfcmrvl_probe+0x4e9/0x5e0 drivers/nfc/nfcmrvl/usb.c:344
+> MI_00 D-Link HS-USB Diagnostics
+> MI_01 D-Link HS-USB Modem
+> MI_02 D-Link HS-USB AT Port
+> MI_03 D-Link HS-USB NMEA
+> MI_04 D-Link HS-USB WWAN Adapter (qmi_wwan)
+> MI_05 USB Mass Storage Device
 > 
-> This bug is somewhere in the drivers/nfc/nfcmrvl* code handling
-> GPIOs.
+> Cc: stable@vger.kernel.org
+> Signed-Off-By: Rogan Dawes <rogan@dawes.za.net>
 
-Right, and it's my bug.
+Perfect, thanks for sticking with it.
 
-> It should be converted to GPIO descriptors and fixed up, see
-> drivers/gpio/TODO for details on how to do this.
-
-Conversion will have to wait, let's fix the regression first. :)
-
-> Johan/Vincent, tell me if you want me to forward the full fuzzing
-> robot crash dump.
-
-No need, thanks. I got it the report.
-
-Something like the below compiles and should fix it. Vacation starts
-today so I'll revisit and send a proper patch in a couple of weeks.
-
-Perhaps someone can feed it to the bot meanwhile (no time to play with
-it right now).
-
-Note that this issue has been there since 4.12, so guess no one uses
-these devices...
+I'll queue this is up after the merge window closes.
 
 Johan
-
-
-From e9d9d0ef5ffd6b306cffb2f4e2514f503aa626a5 Mon Sep 17 00:00:00 2001
-From: Johan Hovold <johan@kernel.org>
-Date: Wed, 17 Jul 2019 11:07:13 +0200
-Subject: [PATCH] NFC: nfcmrvl: fix gpio-handling regression
-
-FIXME
-
-Fixes: e33a3f84f88f ("NFC: nfcmrvl: allow gpio 0 for reset signalling")
-Not-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/nfc/nfcmrvl/main.c | 4 ++--
- drivers/nfc/nfcmrvl/usb.c  | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/nfc/nfcmrvl/main.c b/drivers/nfc/nfcmrvl/main.c
-index e65d027b91fa..529be35ac178 100644
---- a/drivers/nfc/nfcmrvl/main.c
-+++ b/drivers/nfc/nfcmrvl/main.c
-@@ -244,7 +244,7 @@ void nfcmrvl_chip_reset(struct nfcmrvl_private *priv)
- 	/* Reset possible fault of previous session */
- 	clear_bit(NFCMRVL_PHY_ERROR, &priv->flags);
- 
--	if (priv->config.reset_n_io) {
-+	if (gpio_is_valid(priv->config.reset_n_io)) {
- 		nfc_info(priv->dev, "reset the chip\n");
- 		gpio_set_value(priv->config.reset_n_io, 0);
- 		usleep_range(5000, 10000);
-@@ -255,7 +255,7 @@ void nfcmrvl_chip_reset(struct nfcmrvl_private *priv)
- 
- void nfcmrvl_chip_halt(struct nfcmrvl_private *priv)
- {
--	if (priv->config.reset_n_io)
-+	if (gpio_is_valid(priv->config.reset_n_io))
- 		gpio_set_value(priv->config.reset_n_io, 0);
- }
- 
-diff --git a/drivers/nfc/nfcmrvl/usb.c b/drivers/nfc/nfcmrvl/usb.c
-index 945cc903d8f1..888e298f610b 100644
---- a/drivers/nfc/nfcmrvl/usb.c
-+++ b/drivers/nfc/nfcmrvl/usb.c
-@@ -305,6 +305,7 @@ static int nfcmrvl_probe(struct usb_interface *intf,
- 
- 	/* No configuration for USB */
- 	memset(&config, 0, sizeof(config));
-+	config.reset_n_io = -EINVAL;
- 
- 	nfc_info(&udev->dev, "intf %p id %p\n", intf, id);
- 
--- 
-2.22.0
-
