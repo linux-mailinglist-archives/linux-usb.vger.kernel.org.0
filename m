@@ -2,123 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF5B6E037
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 06:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B736E089
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 07:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbfGSD5L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jul 2019 23:57:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56456 "EHLO mail.kernel.org"
+        id S1726442AbfGSFWK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 01:22:10 -0400
+Received: from muru.com ([72.249.23.125]:55306 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727035AbfGSD5J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Jul 2019 23:57:09 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D6FB72082E;
-        Fri, 19 Jul 2019 03:57:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563508628;
-        bh=5nlIZ57dU3SdNGPEIFlIlrt5lL6UPSybcNW76JuMcZM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UuyOqfCtfJIQA/mmmDP8AmQkKRhVJ/MGH5597KuSGL1wSbg8W7mwUJdYMGJXKYV31
-         x0PJY+4JQILvVoEDlFkcE4+OHpCME33LFEcgIeOcfBdQZThkYy5/kfHoMyEOql9YK0
-         CZLnxTvrtdAQV+ISHOX1zaJ6WiT/SedGAtDps0Ts=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 010/171] usb: core: hub: Disable hub-initiated U1/U2
-Date:   Thu, 18 Jul 2019 23:54:01 -0400
-Message-Id: <20190719035643.14300-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190719035643.14300-1-sashal@kernel.org>
-References: <20190719035643.14300-1-sashal@kernel.org>
+        id S1725794AbfGSFWK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 19 Jul 2019 01:22:10 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id D34C8809B;
+        Fri, 19 Jul 2019 05:22:33 +0000 (UTC)
+Date:   Thu, 18 Jul 2019 22:22:05 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-omap@vger.kernel.org, sre@kernel.org, nekit1000@gmail.com,
+        mpartap@gmx.net, merlijn@wizzup.org, johan@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: USB Modem support for Droid 4
+Message-ID: <20190719052205.GK5447@atomide.com>
+References: <20190718201713.GA25103@amd>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190718201713.GA25103@amd>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Hi,
 
-[ Upstream commit 561759292774707b71ee61aecc07724905bb7ef1 ]
+* Pavel Machek <pavel@denx.de> [190718 20:17]:
+> From: Tony Lindgren <tony@atomide.com>
+> 
+> Droid starts to have useful support in linux-next. Modem is tricky to
+> play with, but this is enough to get basic support.
 
-If the device rejects the control transfer to enable device-initiated
-U1/U2 entry, then the device will not initiate U1/U2 transition. To
-improve the performance, the downstream port should not initate
-transition to U1/U2 to avoid the delay from the device link command
-response (no packet can be transmitted while waiting for a response from
-the device). If the device has some quirks and does not implement U1/U2,
-it may reject all the link state change requests, and the downstream
-port may resend and flood the bus with more requests. This will affect
-the device performance even further. This patch disables the
-hub-initated U1/U2 if the device-initiated U1/U2 entry fails.
+Below is a better patch using option driver adding support for all
+the ports. I'll send it out with a proper description after -rc1.
 
-Reference: USB 3.2 spec 7.2.4.2.3
+Regards,
 
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/core/hub.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+Tony
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 2f94568ba385..79a9f0302ff6 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3999,6 +3999,9 @@ static int usb_set_lpm_timeout(struct usb_device *udev,
-  * control transfers to set the hub timeout or enable device-initiated U1/U2
-  * will be successful.
-  *
-+ * If the control transfer to enable device-initiated U1/U2 entry fails, then
-+ * hub-initiated U1/U2 will be disabled.
-+ *
-  * If we cannot set the parent hub U1/U2 timeout, we attempt to let the xHCI
-  * driver know about it.  If that call fails, it should be harmless, and just
-  * take up more slightly more bus bandwidth for unnecessary U1/U2 exit latency.
-@@ -4053,23 +4056,24 @@ static void usb_enable_link_state(struct usb_hcd *hcd, struct usb_device *udev,
- 		 * host know that this link state won't be enabled.
- 		 */
- 		hcd->driver->disable_usb3_lpm_timeout(hcd, udev, state);
--	} else {
--		/* Only a configured device will accept the Set Feature
--		 * U1/U2_ENABLE
--		 */
--		if (udev->actconfig)
--			usb_set_device_initiated_lpm(udev, state, true);
-+		return;
-+	}
+8< ----------------
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -83,6 +83,12 @@ static void option_instat_callback(struct urb *urb);
+ #define HUAWEI_PRODUCT_K4605			0x14C6
+ #define HUAWEI_PRODUCT_E173S6			0x1C07
  
--		/* As soon as usb_set_lpm_timeout(timeout) returns 0, the
--		 * hub-initiated LPM is enabled. Thus, LPM is enabled no
--		 * matter the result of usb_set_device_initiated_lpm().
--		 * The only difference is whether device is able to initiate
--		 * LPM.
--		 */
-+	/* Only a configured device will accept the Set Feature
-+	 * U1/U2_ENABLE
-+	 */
-+	if (udev->actconfig &&
-+	    usb_set_device_initiated_lpm(udev, state, true) == 0) {
- 		if (state == USB3_LPM_U1)
- 			udev->usb3_lpm_u1_enabled = 1;
- 		else if (state == USB3_LPM_U2)
- 			udev->usb3_lpm_u2_enabled = 1;
-+	} else {
-+		/* Don't request U1/U2 entry if the device
-+		 * cannot transition to U1/U2.
-+		 */
-+		usb_set_lpm_timeout(udev, state, 0);
-+		hcd->driver->disable_usb3_lpm_timeout(hcd, udev, state);
- 	}
- }
++#define MOTOROLA_VENDOR_ID			0x22b8
++#define MOTOROLA_PRODUCT_MDM6600		0x2a70
++#define MOTOROLA_PRODUCT_MDM9600		0x2e0a
++#define MOTOROLA_PRODUCT_MDM_RAM_DL		0x4281
++#define MOTOROLA_PRODUCT_MDM_QC_DL		0x900e
++
+ #define QUANTA_VENDOR_ID			0x0408
+ #define QUANTA_PRODUCT_Q101			0xEA02
+ #define QUANTA_PRODUCT_Q111			0xEA03
+@@ -968,6 +974,10 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_VENDOR_AND_INTERFACE_INFO(HUAWEI_VENDOR_ID, 0xff, 0x06, 0x7B) },
+ 	{ USB_VENDOR_AND_INTERFACE_INFO(HUAWEI_VENDOR_ID, 0xff, 0x06, 0x7C) },
  
--- 
-2.20.1
-
++	{ USB_DEVICE_AND_INTERFACE_INFO(MOTOROLA_VENDOR_ID, MOTOROLA_PRODUCT_MDM6600, 0xff, 0xff, 0xff) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(MOTOROLA_VENDOR_ID, MOTOROLA_PRODUCT_MDM9600, 0xff, 0xff, 0xff) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(MOTOROLA_VENDOR_ID, MOTOROLA_PRODUCT_MDM_RAM_DL, 0x0a, 0x00, 0xfc) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(MOTOROLA_VENDOR_ID, MOTOROLA_PRODUCT_MDM_QC_DL, 0xff, 0xff, 0xff) },
+ 
+ 	{ USB_DEVICE(NOVATELWIRELESS_VENDOR_ID, NOVATELWIRELESS_PRODUCT_V640) },
+ 	{ USB_DEVICE(NOVATELWIRELESS_VENDOR_ID, NOVATELWIRELESS_PRODUCT_V620) },
