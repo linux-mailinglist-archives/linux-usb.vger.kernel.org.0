@@ -2,101 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E6E6E3E8
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 12:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B65E6E404
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 12:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727736AbfGSKGA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 06:06:00 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:39890 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbfGSKGA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 06:06:00 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x6JA5ubt031335;
-        Fri, 19 Jul 2019 05:05:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1563530756;
-        bh=kEvJafuT1mgVbVr5vHN42Lk/YX5x6Xiii0b77v5ee/M=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=h2ZRrvKub8w1lRclaH1XGeYI9et46t8uhXdTmcqPzYSwd6/I3wcpVc0YY1YNCYDmL
-         NBS5iKvrV9p0iuw/30ExYNkaY/SxlfIiceAeUG1utTmQHJcP3PwYgMfNnrkjfF74C/
-         YUikXxhCOljROFaSjLWqyolVLMJlZA+w1Kicecbw=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x6JA5uou020375
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 19 Jul 2019 05:05:56 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 19
- Jul 2019 05:05:56 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 19 Jul 2019 05:05:56 -0500
-Received: from [172.24.190.233] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x6JA5sIR062705;
-        Fri, 19 Jul 2019 05:05:54 -0500
-Subject: Re: [PATCH] phy: core: document calibrate() method
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        <linux-usb@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <CGME20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485@eucas1p2.samsung.com>
- <20190719095245.17401-1-m.szyprowski@samsung.com>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <085b8093-d7bc-d960-f0d8-8776818ebab0@ti.com>
-Date:   Fri, 19 Jul 2019 15:34:14 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727330AbfGSKLp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 06:11:45 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:32827 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725794AbfGSKLp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 06:11:45 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 0CA3780302; Fri, 19 Jul 2019 12:11:30 +0200 (CEST)
+Date:   Fri, 19 Jul 2019 12:11:41 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Pavel Machek <pavel@denx.de>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-omap@vger.kernel.org, sre@kernel.org, nekit1000@gmail.com,
+        mpartap@gmx.net, merlijn@wizzup.org, johan@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: USB Modem support for Droid 4
+Message-ID: <20190719101141.GA18760@amd>
+References: <20190718201713.GA25103@amd>
+ <20190719052205.GK5447@atomide.com>
 MIME-Version: 1.0
-In-Reply-To: <20190719095245.17401-1-m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
+Content-Disposition: inline
+In-Reply-To: <20190719052205.GK5447@atomide.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Marek,
 
-On 19/07/19 3:22 PM, Marek Szyprowski wrote:
-> Commit 36914111e682 ("drivers: phy: add calibrate method") added support
-> for generic phy_calibrate() method, but it didn't explain in detail when
-> such method is supposed to be called. Add some more documentation directly
-> to the phy.h to make it clean that it is intended to be called after every
-> host controller reset.
-> 
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->  include/linux/phy/phy.h | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
-> index 15032f145063..46775e8b0ed9 100644
-> --- a/include/linux/phy/phy.h
-> +++ b/include/linux/phy/phy.h
-> @@ -101,6 +101,18 @@ struct phy_ops {
->  	int	(*validate)(struct phy *phy, enum phy_mode mode, int submode,
->  			    union phy_configure_opts *opts);
->  	int	(*reset)(struct phy *phy);
+--yrj/dFKFPuw6o+aM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> * Pavel Machek <pavel@denx.de> [190718 20:17]:
+> > From: Tony Lindgren <tony@atomide.com>
+> >=20
+> > Droid starts to have useful support in linux-next. Modem is tricky to
+> > play with, but this is enough to get basic support.
+>=20
+> Below is a better patch using option driver adding support for all
+> the ports. I'll send it out with a proper description after -rc1.
+
+Thanks!
+
+It works for me, too.
+
+Tested-by: Pavel Machek <pavel@ucw.cz>
+
+> @@ -83,6 +83,12 @@ static void option_instat_callback(struct urb *urb);
+>  #define HUAWEI_PRODUCT_K4605			0x14C6
+>  #define HUAWEI_PRODUCT_E173S6			0x1C07
+> =20
+> +#define MOTOROLA_VENDOR_ID			0x22b8
+> +#define MOTOROLA_PRODUCT_MDM6600		0x2a70
+> +#define MOTOROLA_PRODUCT_MDM9600		0x2e0a
+> +#define MOTOROLA_PRODUCT_MDM_RAM_DL		0x4281
+> +#define MOTOROLA_PRODUCT_MDM_QC_DL		0x900e
 > +
-> +	/**
-> +	 * @calibrate:
-> +	 *
-> +	 * Optional.
-> +	 *
-> +	 * Used to calibrate phy, typically by adjusting some parameters
-> +	 * in runtime, which are otherwise lost after host controller
-> +	 * reset and cannot be set in phy_init() and phy_power_on().
-> +	 *
-> +	 * Returns: 0 if successful, an negative error code otherwise
-> +	 */
->  	int	(*calibrate)(struct phy *phy);
+>  #define QUANTA_VENDOR_ID			0x0408
+>  #define QUANTA_PRODUCT_Q101			0xEA02
+>  #define QUANTA_PRODUCT_Q111			0xEA03
+> @@ -968,6 +974,10 @@ static const struct usb_device_id option_ids[] =3D {
+>  	{ USB_VENDOR_AND_INTERFACE_INFO(HUAWEI_VENDOR_ID, 0xff, 0x06, 0x7B) },
+>  	{ USB_VENDOR_AND_INTERFACE_INFO(HUAWEI_VENDOR_ID, 0xff, 0x06, 0x7C) },
+> =20
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(MOTOROLA_VENDOR_ID, MOTOROLA_PRODUCT_MD=
+M6600, 0xff, 0xff, 0xff) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(MOTOROLA_VENDOR_ID, MOTOROLA_PRODUCT_MD=
+M9600, 0xff, 0xff, 0xff) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(MOTOROLA_VENDOR_ID, MOTOROLA_PRODUCT_MD=
+M_RAM_DL, 0x0a, 0x00, 0xfc) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(MOTOROLA_VENDOR_ID, MOTOROLA_PRODUCT_MD=
+M_QC_DL, 0xff, 0xff, 0xff) },
+> =20
+>  	{ USB_DEVICE(NOVATELWIRELESS_VENDOR_ID, NOVATELWIRELESS_PRODUCT_V640) },
+>  	{ USB_DEVICE(NOVATELWIRELESS_VENDOR_ID, NOVATELWIRELESS_PRODUCT_V620) },
 
-This should be added in drivers/phy/phy-core.c before phy_calibrate()? We could
-add a separate section in Documentation/phy.txt to document these phy_ops.
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-Thanks
-Kishon
+--yrj/dFKFPuw6o+aM
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl0xl10ACgkQMOfwapXb+vLrVACfXkgc5UNVTqP4Cs6nTFriszl9
+quwAmwWLaqYxjvrh50FxYi5/99eL4kxh
+=GSbE
+-----END PGP SIGNATURE-----
+
+--yrj/dFKFPuw6o+aM--
