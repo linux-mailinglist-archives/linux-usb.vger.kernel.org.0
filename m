@@ -2,109 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C636E1CD
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 09:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2636E1F9
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 09:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbfGSHg6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 03:36:58 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:36802 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726243AbfGSHg5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 03:36:57 -0400
-Received: by mail-pf1-f194.google.com with SMTP id r7so13798757pfl.3;
-        Fri, 19 Jul 2019 00:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7+fNM12/nljLUHg+OWnuw+9Qm4IaKfoKesEI410bL8g=;
-        b=HO8zPHQL1iASaJUNxgEeHKBCHWNwgbpSook1NIo35yhm5Jbyi013Exkt2AkRoq6tyr
-         RMuDwCkMJmgamWuDVGEslmeNCzRG9mSn8vVw47pk+6mgdsor9XF7HnTs9BgQ5y5HrQRK
-         U1s3FgEeqnOmqyT1DcFwHuGcnRKkwfCXM/1S1SnmwlebCac1O/7WumlfbBL4+Rl9nSip
-         74GyT/TL53a5qFwp7N4KFGEoJ+iFTfjJ06JMj86W4uDy731wtWJEfhzZwdM8gMWD0lvI
-         uLkZ99EiDvtHrZaDeSd8S2YZb+/vfKZEJmB8lPWL2dI1oT/7vk1cvCp8VMR6Vh4Isk2o
-         xS9Q==
+        id S1727056AbfGSHwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 03:52:01 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:33931 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727001AbfGSHwA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 03:52:00 -0400
+Received: by mail-io1-f72.google.com with SMTP id u84so33861491iod.1
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2019 00:52:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7+fNM12/nljLUHg+OWnuw+9Qm4IaKfoKesEI410bL8g=;
-        b=hB9u4DccS8kyb7bDxp1B4P6efw20yfnpIeWW4lo7mN7TQHo++NJXHxFWmB1qmKyfCj
-         SB+5mLv0LHqSEa3hO4sHDGPQx+CXJr/mPCvGBKwfgnByartJlOpQwlOVZSxlO8PTjQbX
-         /IvqtdBJmgcIewTmSBK/LDRDcI+fnk39GdbgC8oTKKQMm6Wp6WnusWiJb6/JTS1n3GoU
-         VL1gvswA3BVsFmRFY4cMuS/1vOZqL+C4x+buHeyYZ7T6XIT8Ws233D6gZLHKeL8WyDng
-         gsHAoRHjUaNXW3S35bHjVRGrvoO0GkjxbY12QGQPWNN3H5QqT1V/KtVN0EvNZl8vurar
-         s//A==
-X-Gm-Message-State: APjAAAXqPWQMU3tXPEvo4bAF0tu/iTpVgkVylj6NMd83wJUdAOF8rs9l
-        gnnOpaGrIPlkQgohsXghsFA=
-X-Google-Smtp-Source: APXvYqyJP1loJXy3J8DMh9em8LSA2Gqoo6xLOWUhOPOXJp3sso3+MNFrDf2reEr93tW0jl++UOFiiQ==
-X-Received: by 2002:a65:6815:: with SMTP id l21mr6135736pgt.146.1563521817101;
-        Fri, 19 Jul 2019 00:36:57 -0700 (PDT)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([89.31.126.54])
-        by smtp.gmail.com with ESMTPSA id x9sm8929978pgp.75.2019.07.19.00.36.54
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 19 Jul 2019 00:36:56 -0700 (PDT)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] net: lan78xx: Merge memcpy + lexx_to_cpus to get_unaligned_lexx
-Date:   Fri, 19 Jul 2019 15:36:15 +0800
-Message-Id: <20190719073614.1850-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=K7+ltczxOF5ec7xwUwwm0mcqoPFbc+qj4S9WQ778w3E=;
+        b=Tx0UyQaN/OjL6iTcDiwHt+oI0fMftWXqcXvJMAVWKTiWxrfc/XvifBbEnqdHWqi6PS
+         XDHc7Xfhv+tzsxCpNaFTIAa9QP0wQpo24fMAMJl3lNICtBE1CPTePL2A9CO1Cy/oelQZ
+         hqYXf8WnjhYvC7v5kf152dZvqjnghghbtFhOoEIEj+yGpiOhcWMtiHJRSdwCXSMOhUCT
+         RUxuebFU/W+Vj0wUafwOE5vSnpep4VQWW9IIu6gNbtgZyEfy9SHZgRCGHrCFHdRyOzRs
+         YNBD2GSChSKzbXH3lPkemkEVp2MOw/lUwZ11RID0/Cy5mJ6q/KFdJRNoRU4FkaF+bG8S
+         JE0w==
+X-Gm-Message-State: APjAAAUAtrEKJ1lHVgx1lE+rj39O1IkA2dphPN9sW+S3UqeK2QcYwYK3
+        CktIYyFGMk4iOWB5nflER83zwco/3ULMjrtZlaIz3rmUjMy8
+X-Google-Smtp-Source: APXvYqyupNDa+g+KEVhidPqN8odS/OREcVICYfkEh4Ipoej6+q4U3LM4sycHC9cn5h2fkqwp21trDBAioJv8oM9mfIt9XbnNd2ch
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-Received: by 2002:a5e:9701:: with SMTP id w1mr49010959ioj.294.1563522720182;
+ Fri, 19 Jul 2019 00:52:00 -0700 (PDT)
+Date:   Fri, 19 Jul 2019 00:52:00 -0700
+In-Reply-To: <dd743f2b-4f86-196b-bdae-16c3286c8904@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000055da8c058e04001c@google.com>
+Subject: Re: KASAN: global-out-of-bounds Read in dvb_pll_attach
+From:   syzbot <syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com>
+To:     allison@lohutok.net, bnvandana@gmail.com, hverkuil-cisco@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, rfontana@redhat.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        tskd08@gmail.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Merge the combo use of memcpy and lexx_to_cpus.
-Use get_unaligned_lexx instead.
-This simplifies the code.
+Hello,
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
----
- drivers/net/usb/lan78xx.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 3d92ea6fcc02..9c33b35bd155 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -1258,8 +1258,7 @@ static void lan78xx_status(struct lan78xx_net *dev, struct urb *urb)
- 		return;
- 	}
- 
--	memcpy(&intdata, urb->transfer_buffer, 4);
--	le32_to_cpus(&intdata);
-+	intdata = get_unaligned_le32(urb->transfer_buffer);
- 
- 	if (intdata & INT_ENP_PHY_INT) {
- 		netif_dbg(dev, link, dev->net, "PHY INTR: 0x%08x\n", intdata);
-@@ -3105,16 +3104,13 @@ static int lan78xx_rx(struct lan78xx_net *dev, struct sk_buff *skb)
- 		struct sk_buff *skb2;
- 		unsigned char *packet;
- 
--		memcpy(&rx_cmd_a, skb->data, sizeof(rx_cmd_a));
--		le32_to_cpus(&rx_cmd_a);
-+		rx_cmd_a = get_unaligned_le32(skb->data);
- 		skb_pull(skb, sizeof(rx_cmd_a));
- 
--		memcpy(&rx_cmd_b, skb->data, sizeof(rx_cmd_b));
--		le32_to_cpus(&rx_cmd_b);
-+		rx_cmd_b = get_unaligned_le32(skb->data);
- 		skb_pull(skb, sizeof(rx_cmd_b));
- 
--		memcpy(&rx_cmd_c, skb->data, sizeof(rx_cmd_c));
--		le16_to_cpus(&rx_cmd_c);
-+		rx_cmd_c = get_unaligned_le16(skb->data);
- 		skb_pull(skb, sizeof(rx_cmd_c));
- 
- 		packet = skb->data;
--- 
-2.20.1
+Reported-and-tested-by:  
+syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com
 
+Tested on:
+
+commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d90745bdf884fc0a
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=145eaa34600000
+
+Note: testing is done by a robot and is best-effort only.
