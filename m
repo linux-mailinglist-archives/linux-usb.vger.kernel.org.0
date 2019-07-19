@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 576446E1A4
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 09:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDF96E1B1
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 09:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726297AbfGSHYB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 03:24:01 -0400
-Received: from mga12.intel.com ([192.55.52.136]:9432 "EHLO mga12.intel.com"
+        id S1727010AbfGSH2E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 03:28:04 -0400
+Received: from mga05.intel.com ([192.55.52.43]:58150 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726072AbfGSHYB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 19 Jul 2019 03:24:01 -0400
+        id S1726036AbfGSH2E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 19 Jul 2019 03:28:04 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jul 2019 00:24:01 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jul 2019 00:28:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,281,1559545200"; 
-   d="asc'?scan'208";a="168482198"
+   d="asc'?scan'208";a="187944515"
 Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Jul 2019 00:23:59 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 19 Jul 2019 00:28:01 -0700
 From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Kent Lin <kent.lin@canonical.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Subject: Re: Titan Ridge xHCI may stop to working after re-plugging the dock
-In-Reply-To: <1562759399.5312.6.camel@suse.com>
-References: <993E78A1-2A60-46D8-AA51-F4CB077E48D1@canonical.com> <1562759399.5312.6.camel@suse.com>
-Date:   Fri, 19 Jul 2019 10:23:55 +0300
-Message-ID: <87pnm6sd10.fsf@linux.intel.com>
+To:     "Yang\, Fei" <fei.yang@intel.com>,
+        "john.stultz\@linaro.org" <john.stultz@linaro.org>,
+        "andrzej.p\@collabora.com" <andrzej.p@collabora.com>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "stable\@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH V2] usb: dwc3: gadget: trb_dequeue is not updated properly
+In-Reply-To: <02E7334B1630744CBDC55DA8586225837F8DD883@ORSMSX102.amr.corp.intel.com>
+References: <1563396788-126034-1-git-send-email-fei.yang@intel.com> <87o91riux9.fsf@linux.intel.com> <02E7334B1630744CBDC55DA8586225837F8DD883@ORSMSX102.amr.corp.intel.com>
+Date:   Fri, 19 Jul 2019 10:27:57 +0300
+Message-ID: <87muhascua.fsf@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -43,90 +43,59 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 --=-=-=
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+"Yang, Fei" <fei.yang@intel.com> writes:
 
 Hi,
 
-Oliver Neukum <oneukum@suse.com> writes:
-> Am Dienstag, den 09.07.2019, 21:10 +0800 schrieb Kai-Heng Feng:
->> Hi Mika and Mathias,
->>=20
->> I=E2=80=99ve filed a bug [1] which renders docking station unusable.
->>=20
->> I am not sure it's a bug in PCI, Thunderbolt or xHCI so raise the issue =
-to=20=20
->> you both.
->>=20
->> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D203885
->>=20
->> Kai-Heng
->>=20
+>> Can only be true for last TRB
+>>
+> | 	if (event->status & DEPEVT_STATUS_IOC)
+> | 		return 1;
 >
-> The issue starts before you unplug. In fact it starts before
-> the dock is even detected the first time:
+> This is the problem. The whole USB request gets only one interrupt
+> when the last TRB completes, so dwc3_gadget_ep_reclaim_trb_sg() gets
+> called with event->status =3D 0x6 which has DEPEVT_STATUS_IOC bit
+> set. Thus dwc3_gadget_ep_reclaim_completed_trb() returns 1 for the
+> first TRB and the for-loop ends without having a chance to iterate
+> through the sg list.
+
+IOC is only set for the last TRB, so this will iterate over and over
+again until it reaches the last TRB. Please collect tracepoints of the
+failure case.
+
+>> If we have a short packet, then we may fall here. Is that the case?
 >
-> [   13.171167] rfkill: input handler disabled
-> [   19.781905] pcieport 0000:00:1c.0: PME: Spurious native interrupt!
-> [   19.781909] pcieport 0000:00:1c.0: PME: Spurious native interrupt!
-> [   20.109251] usb 4-1: new SuperSpeedPlus Gen 2 USB device number 2 usin=
-g xhci_hcd
-> [   20.136000] usb 4-1: New USB device found, idVendor=3D0bda, idProduct=
-=3D0487, bcdDevice=3D 1.47
-> [   20.136004] usb 4-1: New USB device strings: Mfr=3D1, Product=3D2, Ser=
-ialNumber=3D0
-> [   20.136007] usb 4-1: Product: Dell dock
-> [   20.136009] usb 4-1: Manufacturer: Dell Inc.
-> [   20.140607] hub 4-1:1.0: USB hub found
-> [   20.141004] hub 4-1:1.0: 4 ports detected
-> [   20.253025] usb 1-4: new high-speed USB device number 5 using xhci_hcd
-> [   20.403520] usb 1-4: New USB device found, idVendor=3D0bda, idProduct=
-=3D5487, bcdDevice=3D 1.47
-> [   20.403521] usb 1-4: New USB device strings: Mfr=3D1, Product=3D2, Ser=
-ialNumber=3D0
-> [   20.403522] usb 1-4: Product: Dell dock
-> [   20.403522] usb 1-4: Manufacturer: Dell Inc.
-> [   20.404348] hub 1-4:1.0: USB hub found
+> No need for a short packet to make it fail. In my case below, a 16384
+> byte request got slipt into 4 TRBs of 4096 bytes. All TRBs were
+> completed normally, but the for-loop in
+> dwc3_gadget_ep_reclaim_trb_sg() was terminated right after handling
+> the first TRB. After that the trb_dequeue is messed up.
+
+I need tracepoints to se what's going on, please collect tracepoints.
+
+> buffer_addr,size,type,ioc,isp_imi,csp,chn,lst,hwo
+> 0000000077849000, 4096,normal,0,0,1,1,0,0
+> 000000007784a000, 4096,normal,0,0,1,1,0,0
+> 000000007784b000, 4096,normal,0,0,1,1,0,0
+> 000000007784c000, 4096,normal,1,0,1,0,0,0
+> 000000007784d000, 512,normal,1,0,1,0,0,0
 >
-> This looks like a PCI issue.
-> In general, this kind of reporting sucks. We have to guess what you did a=
-t 19.781905
+> My first version of the patch was trying to address the issue in
+> dwc3_gadget_ep_reclaim_completed_trb(), but then I thought it's a bad
+> idea to touch this function because that is also called from non
+> scatter_gather list case, and I was not sure if returning 1 for the
+> linear case is correct or not.
 
-It might be nice to know which device is generating that and why it's
-not found. This may help:
+That function *must* be called for all cases. We want to reduce the
+amount of special cases so code is more straight forward and easier to
+maintain. Again, please collect tracepoints of the failure case with the
+latest tag from Linus, otherwise you won't be able to convince me we
+need your patch.
 
-diff --git a/drivers/pci/pcie/pme.c b/drivers/pci/pcie/pme.c
-index f38e6c19dd50..33285ef29362 100644
-=2D-- a/drivers/pci/pcie/pme.c
-+++ b/drivers/pci/pcie/pme.c
-@@ -203,7 +203,7 @@ static void pcie_pme_handle_request(struct pci_dev *por=
-t, u16 req_id)
-=20
-  out:
- 	if (!found)
-=2D		pci_info(port, "Spurious native interrupt!\n");
-+		pci_info(port, "Spurious native interrupt! (Bus# %d DevFn %d)\n", busnr,=
- devfn);
- }
-=20
- /**
-
-
-Also, according to what Kai-Heng said, xHCI stops working even after
-repluggin the Dock. We could be dealing with two bugs here:
-
-1. Spurious PME event being generated by an unexistent device
-2. xHCI not handling hot-plug very well
-
-Kai-Heng,
-
-please run your tests again and make note of when you unplugged the dock
-and when you replugged it so we can correlate the time stampts with what
-you have done otherwise we will never be able to pin-point what's going
-on.
-
-cheers
+I also think your version is the wrong way to sort it out.
 
 =2D-=20
 balbi
@@ -136,18 +105,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0xcAsACgkQzL64meEa
-mQZKkxAAuYjD1tjMF1x1I145/c0JegbKZXr5kkBUzkRIM4UKq7iO9PpQzWtLiQYb
-sCnRj3iNxa2SY7vGXadmJeOucyDxEtBgtxOvuQyn315EivjrWobcqCeMcHkJhQ8N
-qOxqI/Om6IPh+A+U75+NEJM9OVyuU+sePfQSEjZ4spL9yz4llgNcQ/kFn+nyunSC
-kC+nJgozApbgR2mOtzkIIiKV0e/l4BwGNL2E+GjmkzAIHJ28nBtP1rkE8jZPnvEV
-ZH4q0LZAN54E/rtqeIbABIQC1x3+c5sn+oVMMF6FSP/Iz5t7XGD5LEINaoEfhAas
-Z6e6xZsf16WNy+Oq6ArO9ir83FvyX5Rn4qgMc5uo3as61egWz2tR2NY8S6tVgD64
-p3DcnrBoeiqSsSgCvbQHfD0BcsYRfuMDXHz9AFxQaqkA+UXRO6P3TIcwtvx6t66O
-E1IDO5bqU/zgfrz+qOu/fuPNJ5svqOWFJiLogha1uewoSyIn2GagFFft2+AQnNHX
-b5BinB0VcAcFxV9Waqhi/IWexhzaPPrGaszhRUWsMxh9leETK7B47in7hQJ0qKIF
-GdTeWVymxRmUgkmSsj8WQ+ZibQR2aDSzYSV51euoRNAve58Qjj2udnQBDMG2Gta6
-fh2tZa2n2yH69nZP0xZcPUZwAMQQDiMxrAhgXfPwUKTgesiEITM=
-=yJA1
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0xcP0ACgkQzL64meEa
+mQa+BRAApybjl0kw74kvUCbgq5JoZMjTCG8mNVR2WL2+gE9qRwGiJ00aSJakl06A
+EH2CUWRGDNzuGyQCajC/GHLl8ZC+yLK5Qu5OSXelZU6k4Ghd9kAfqN57zLbuH6fa
+I2nVdhAehADII/57+s1E86s5d3BctlNd4qZi72dK9GvH55IukzeZWotWiIxUH1F7
+zO5NxKvFV1EIOa/PezcE2bdnbsrzCs6uCySYGlWYDTP2fEfm9XK7/L5/kQGJYpVJ
+0yORd/HLvNPq3bjBPCNOkCkQ3TTv2uc9ybKwlTlPufRET7uTtQD0F8ZRqoGxWZ0j
+8OiSwYcEnzOWhA+o4RpX1XfIkMug75hlsV2BKrTsR9z7e/+isNro6tFqAu/xp/k0
+pRHIHnmDFmkHX9OmwbUQZbBAZGsxm2WB6yh3sqVW0eWQnzlS4TelUu568Nk9La6y
+Jdv6BocpfZ0C3VvvTAxQMncqA4zRiFQZ4ZcFxcJBZzloMn3dBW2bKycpJZkoX1bG
+jyaIKvANmbKjdtdYFWmOsgMNaFCYQvTWHHCBwybskX6lI/0lgmgYx5z72GJ0VTQ9
+THlw7VRPF6u4HXwWd0cSfQFnL5kPRLOzj6i82mhOXZLRQFEHWIMhz8ayKzcQPqh3
+pafP951OscsQdOvOc2tT6lRaItN9j4fIoSuPy7iKlJSOYKWrqyc=
+=YdDN
 -----END PGP SIGNATURE-----
 --=-=-=--
