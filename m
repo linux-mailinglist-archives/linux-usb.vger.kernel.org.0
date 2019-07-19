@@ -2,43 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EE86D74F
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 01:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B006D7EF
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 02:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726131AbfGRXes (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jul 2019 19:34:48 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:57254 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725992AbfGRXes (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jul 2019 19:34:48 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id B177A1528C8D5;
-        Thu, 18 Jul 2019 16:34:47 -0700 (PDT)
-Date:   Thu, 18 Jul 2019 16:34:47 -0700 (PDT)
-Message-Id: <20190718.163447.1589002554948899397.davem@davemloft.net>
-To:     rogan@dawes.za.net
-Cc:     bjorn@mork.no, netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: qmi_wwan: add D-Link DWM-222 A2 device ID
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190717091433.GA5325@lisa.dawes.za.net>
-References: <20190717091134.GA5179@lisa.dawes.za.net>
-        <20190717091433.GA5325@lisa.dawes.za.net>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 18 Jul 2019 16:34:47 -0700 (PDT)
+        id S1726300AbfGSAqd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jul 2019 20:46:33 -0400
+Received: from mga07.intel.com ([134.134.136.100]:8592 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726015AbfGSAqd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Jul 2019 20:46:33 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jul 2019 17:46:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,280,1559545200"; 
+   d="scan'208";a="170749011"
+Received: from fei-dev-host.jf.intel.com ([10.7.198.158])
+  by orsmga003.jf.intel.com with ESMTP; 18 Jul 2019 17:46:32 -0700
+From:   fei.yang@intel.com
+To:     felipe.balbi@linux.intel.com, john.stultz@linaro.org,
+        andrzej.p@collabora.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org
+Subject: [PATCH v3] usb: dwc3: gadget: trb_dequeue is not updated properly
+Date:   Thu, 18 Jul 2019 17:46:23 -0700
+Message-Id: <1563497183-7114-1-git-send-email-fei.yang@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Rogan Dawes <rogan@dawes.za.net>
-Date: Wed, 17 Jul 2019 11:14:33 +0200
+From: Fei Yang <fei.yang@intel.com>
 
-> Signed-off-by: Rogan Dawes <rogan@dawes.za.net>
+If scatter-gather operation is allowed, a large USB request is split into
+multiple TRBs. These TRBs are chained up by setting DWC3_TRB_CTRL_CHN bit
+except the last one which has DWC3_TRB_CTRL_IOC bit set instead.
+Since only the last TRB has IOC set for the whole USB request, the
+dwc3_gadget_ep_reclaim_trb_sg() gets called only once after the last TRB
+completes and all the TRBs allocated for this request are supposed to be
+reclaimed. However that is not what the current code does.
 
-Applied.
+dwc3_gadget_ep_reclaim_trb_sg() is trying to reclaim all the TRBs in the
+following for-loop,
+	for_each_sg(sg, s, pending, i) {
+		trb = &dep->trb_pool[dep->trb_dequeue];
+
+                if (trb->ctrl & DWC3_TRB_CTRL_HWO)
+                        break;
+
+                req->sg = sg_next(s);
+                req->num_pending_sgs--;
+
+                ret = dwc3_gadget_ep_reclaim_completed_trb(dep, req,
+                                trb, event, status, chain);
+                if (ret)
+                        break;
+        }
+but since the interrupt comes only after the last TRB completes, the
+event->status has DEPEVT_STATUS_IOC bit set, so that the for-loop ends for
+the first TRB due to dwc3_gadget_ep_reclaim_completed_trb() returns 1.
+	if (event->status & DEPEVT_STATUS_IOC)
+		return 1;
+
+This patch addresses the issue by checking each TRB in function
+dwc3_gadget_ep_reclaim_trb_sg() and maing sure the chained ones are properly
+reclaimed. dwc3_gadget_ep_reclaim_completed_trb() will return 1 Only for the
+last TRB.
+
+Signed-off-by: Fei Yang <fei.yang@intel.com>
+Cc: stable <stable@vger.kernel.org>
+---
+v2: Better solution is to reclaim chained TRBs in dwc3_gadget_ep_reclaim_trb_sg()
+    and leave the last TRB to the dwc3_gadget_ep_reclaim_completed_trb().
+v3: Checking DWC3_TRB_CTRL_CHN bit for each TRB instead, and making sure that
+    dwc3_gadget_ep_reclaim_completed_trb() returns 1 only for the last TRB.
+---
+ drivers/usb/dwc3/gadget.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 173f532..88eed49 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2394,7 +2394,7 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
+ 	if (event->status & DEPEVT_STATUS_SHORT && !chain)
+ 		return 1;
+ 
+-	if (event->status & DEPEVT_STATUS_IOC)
++	if (event->status & DEPEVT_STATUS_IOC && !chain)
+ 		return 1;
+ 
+ 	return 0;
+@@ -2404,11 +2404,12 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
+ 		struct dwc3_request *req, const struct dwc3_event_depevt *event,
+ 		int status)
+ {
+-	struct dwc3_trb *trb = &dep->trb_pool[dep->trb_dequeue];
++	struct dwc3_trb *trb;
+ 	struct scatterlist *sg = req->sg;
+ 	struct scatterlist *s;
+ 	unsigned int pending = req->num_pending_sgs;
+ 	unsigned int i;
++	int chain = false;
+ 	int ret = 0;
+ 
+ 	for_each_sg(sg, s, pending, i) {
+@@ -2419,9 +2420,13 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
+ 
+ 		req->sg = sg_next(s);
+ 		req->num_pending_sgs--;
++		if (trb->ctrl & DWC3_TRB_CTRL_CHN)
++			chain = true;
++		else
++			chain = false;
+ 
+ 		ret = dwc3_gadget_ep_reclaim_completed_trb(dep, req,
+-				trb, event, status, true);
++				trb, event, status, chain);
+ 		if (ret)
+ 			break;
+ 	}
+-- 
+2.7.4
+
