@@ -2,152 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9024C6DDFE
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 06:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF836DDEA
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 06:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733238AbfGSEIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 00:08:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43204 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731920AbfGSEIt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 19 Jul 2019 00:08:49 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8282A2189D;
-        Fri, 19 Jul 2019 04:08:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563509329;
-        bh=sjrm5f2fQ8z79TJJx53UQ+uXfdj9Q8vaJfurVb6GqNo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1/HYzGe/dQ687YY8Upw4hcv+31YDRjp9V3TdlG/bSuuPxZPn6FvKRxQrmY24EeFI7
-         q/l+fD2LAfF5TPEBT50bUWov6Y4YU09rsVJqELkS/Fc3BDAdfybNDbTpS00xk1iOOK
-         htCX3YTIo+LRHpXTRpdjswdceGXXLQj0g2qHxQ+Y=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     EJ Hsu <ejh@nvidia.com>, Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 036/101] usb: gadget: storage: Remove warning message
-Date:   Fri, 19 Jul 2019 00:06:27 -0400
-Message-Id: <20190719040732.17285-36-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190719040732.17285-1-sashal@kernel.org>
-References: <20190719040732.17285-1-sashal@kernel.org>
+        id S1730143AbfGSEZN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 00:25:13 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:34796 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387448AbfGSEJK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 00:09:10 -0400
+Received: by mail-pf1-f196.google.com with SMTP id b13so13576899pfo.1
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jul 2019 21:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OUawRzj0HC2FyLhPznZXUTxWMFP9kFRNCQTEDA5r5UA=;
+        b=Mj/pz/1T8DIm0ZSxq6rgUT5LPRmG8hNJBSBXE4RudNLZhs2aQ5fux+brYAjBeyhiMK
+         GX3xPe90pJ8Uv7UagddPuVB9PaN7n3/+TpY85WuQobp9Kppygov314idPuCpUmqzrlmj
+         laVE1PWpyHQOLAS+Xm4Ys4fmZcfUuqSkXV9MQi/y4ROwionW76Y1AaZWEdxPb2JdYx01
+         h71jS+0mAUhvGgX8TUY0qx6xZJfaTaJXT98SL9GR8ad/I4vXGtjGSvSK2ldH4f4coaUU
+         VHGJ/aiKukeyVK6rH3nKs7zRnN001yR4AIDyC3rA6LcjAVMSi1bheGfvk5HkjQyt0b9/
+         ZTXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OUawRzj0HC2FyLhPznZXUTxWMFP9kFRNCQTEDA5r5UA=;
+        b=kYzO56tGLeNOTQgtO72wyrq8SrFL+0riXMuBoKMWervl4ZeE/VQxN0yo/XBgf4CYhL
+         qkGS5MWuMQGwMTnzWmTJ/66of6V9iATNYUM9b7C8Zo1JpLcELUzD/LWSE/SKNqWOFwal
+         WQYZtwoVux7SDepX7GZP/5y6OpLaxVyKL/K7psRRhAK9/DcZUJJbscSAw7RqHMlRaNti
+         JRCJuhxM1Uw8sEEv6J1g1rxmBDyI9gu+kB4EmNdisigKUtxZRvbKlpOnRRD5dohuz0/O
+         cLe74RtHxy86W+UfzZQr/rQPCh9JdTT39r/EKP7nSyIhPVyF+yblddffHwbJ1nBpCaLH
+         SMGw==
+X-Gm-Message-State: APjAAAXCihV8Dw/hMB/GnIxFozpzJuneH/B+m7jFVDEtO2iLSgMjZG+8
+        0QLXNLJNSUrLzn+/tgQU2ltNfh8DEk8=
+X-Google-Smtp-Source: APXvYqzY+Sp50uVN5Rb0cYVHAKBIxk00HpEp31CyDb6NSRF/MsGaV1ex+NBE7iykF4rMrAYpyHeoeg==
+X-Received: by 2002:a63:211c:: with SMTP id h28mr51518904pgh.438.1563509349645;
+        Thu, 18 Jul 2019 21:09:09 -0700 (PDT)
+Received: from [10.43.0.94] ([45.56.153.101])
+        by smtp.googlemail.com with ESMTPSA id m4sm55521891pff.108.2019.07.18.21.09.07
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Jul 2019 21:09:09 -0700 (PDT)
+Subject: Re: [PATCH v2] USB: serial: option: Add support for ZTE MF871A
+To:     OKAMOTO Yoshiaki <yokamoto@allied-telesis.co.jp>,
+        "johan@kernel.org" <johan@kernel.org>
+Cc:     YAMAMOTO Hiroyuki <hyamamo@allied-telesis.co.jp>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20190716090553.GA3522@localhost>
+ <156334196350.13827.8927178214233271211.stgit@yokamoto-pc.rd.allied-telesis.co.jp>
+ <5b4971b3-64e7-605a-948c-9e1e02b11eb2@gmail.com>
+ <OSBPR01MB3973A00B1FB1E0930DF0AC13BCC80@OSBPR01MB3973.jpnprd01.prod.outlook.com>
+From:   Lars Melin <larsm17@gmail.com>
+Message-ID: <1dde5abb-2399-6bb7-531b-c88e5f0b4fae@gmail.com>
+Date:   Fri, 19 Jul 2019 11:09:04 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <OSBPR01MB3973A00B1FB1E0930DF0AC13BCC80@OSBPR01MB3973.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: EJ Hsu <ejh@nvidia.com>
+On 7/18/2019 21:46, OKAMOTO Yoshiaki wrote:
+> 
+> Hi Lars,
+> 
+>> Please do a full test of the interface attributes (Class/SubClass/Proto)
+>> whenever possible, this could be helpful in case the mfgr makes a device
+>> with different interface layout but re-uses an already used vid:pid.
+>>
+> What should we do specifically for "a full test of the interface attributes"?
+> 
+> 
+>> Both interfaces has attributes ff/00/00 so there is no reason for doing a less accurate test.
+>>
+> Forgive me if I’m wrong, did you say mean that we should use USB_DEVICE_AND_INTERFACE_INFO" instead of "USB_DEVICE_INTERFACE_CLASS" ?
+> 
+> Regards,
+> Yoshiaki Okamoto
+> 
 
-[ Upstream commit e70b3f5da00119e057b7faa557753fee7f786f17 ]
 
-This change is to fix below warning message in following scenario:
-usb_composite_setup_continue: Unexpected call
+Yes, USB_DEVICE_AND_INTERFACE_INFO is the one to use when all the  
+interfaces you add support for has identical class/subclass/protocol  
+attributes.
 
-When system tried to enter suspend, the fsg_disable() will be called to
-disable fsg driver and send a signal to fsg_main_thread. However, at
-this point, the fsg_main_thread has already been frozen and can not
-respond to this signal. So, this signal will be pended until
-fsg_main_thread wakes up.
-
-Once system resumes from suspend, fsg_main_thread will detect a signal
-pended and do some corresponding action (in handle_exception()). Then,
-host will send some setup requests (get descriptor, set configuration...)
-to UDC driver trying to enumerate this device. During the handling of "set
-configuration" request, it will try to sync up with fsg_main_thread by
-sending a signal (which is the same as the signal sent by fsg_disable)
-to it. In a similar manner, once the fsg_main_thread receives this
-signal, it will call handle_exception() to handle the request.
-
-However, if the fsg_main_thread wakes up from suspend a little late and
-"set configuration" request from Host arrives a little earlier,
-fsg_main_thread might come across the request from "set configuration"
-when it handles the signal from fsg_disable(). In this case, it will
-handle this request as well. So, when fsg_main_thread tries to handle
-the signal sent from "set configuration" later, there will nothing left
-to do and warning message "Unexpected call" is printed.
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: EJ Hsu <ejh@nvidia.com>
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/gadget/function/f_mass_storage.c | 21 ++++++++++++++------
- drivers/usb/gadget/function/storage_common.h |  1 +
- 2 files changed, 16 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 1074cb82ec17..c712b338f05f 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -2293,8 +2293,7 @@ static int fsg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- static void fsg_disable(struct usb_function *f)
- {
- 	struct fsg_dev *fsg = fsg_from_func(f);
--	fsg->common->new_fsg = NULL;
--	raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
-+	raise_exception(fsg->common, FSG_STATE_DISCONNECT);
- }
- 
- 
-@@ -2307,6 +2306,7 @@ static void handle_exception(struct fsg_common *common)
- 	enum fsg_state		old_state;
- 	struct fsg_lun		*curlun;
- 	unsigned int		exception_req_tag;
-+	struct fsg_dev		*fsg;
- 
- 	/*
- 	 * Clear the existing signals.  Anything but SIGUSR1 is converted
-@@ -2413,9 +2413,19 @@ static void handle_exception(struct fsg_common *common)
- 		break;
- 
- 	case FSG_STATE_CONFIG_CHANGE:
--		do_set_interface(common, common->new_fsg);
--		if (common->new_fsg)
-+		fsg = common->new_fsg;
-+		/*
-+		 * Add a check here to double confirm if a disconnect event
-+		 * occurs and common->new_fsg has been cleared.
-+		 */
-+		if (fsg) {
-+			do_set_interface(common, fsg);
- 			usb_composite_setup_continue(common->cdev);
-+		}
-+		break;
-+
-+	case FSG_STATE_DISCONNECT:
-+		do_set_interface(common, NULL);
- 		break;
- 
- 	case FSG_STATE_EXIT:
-@@ -2989,8 +2999,7 @@ static void fsg_unbind(struct usb_configuration *c, struct usb_function *f)
- 
- 	DBG(fsg, "unbind\n");
- 	if (fsg->common->fsg == fsg) {
--		fsg->common->new_fsg = NULL;
--		raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
-+		raise_exception(fsg->common, FSG_STATE_DISCONNECT);
- 		/* FIXME: make interruptible or killable somehow? */
- 		wait_event(common->fsg_wait, common->fsg != fsg);
- 	}
-diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
-index e5e3a2553aaa..12687f7e3de9 100644
---- a/drivers/usb/gadget/function/storage_common.h
-+++ b/drivers/usb/gadget/function/storage_common.h
-@@ -161,6 +161,7 @@ enum fsg_state {
- 	FSG_STATE_ABORT_BULK_OUT,
- 	FSG_STATE_PROTOCOL_RESET,
- 	FSG_STATE_CONFIG_CHANGE,
-+	FSG_STATE_DISCONNECT,
- 	FSG_STATE_EXIT,
- 	FSG_STATE_TERMINATED
- };
--- 
-2.20.1
+rgds
+/Lars
 
