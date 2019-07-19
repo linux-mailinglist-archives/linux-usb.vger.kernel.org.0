@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1826DFE5
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 06:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3146DEDA
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 06:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728566AbfGSD7N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jul 2019 23:59:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58690 "EHLO mail.kernel.org"
+        id S1731107AbfGSEEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 00:04:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728543AbfGSD7M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Jul 2019 23:59:12 -0400
+        id S1731009AbfGSEEa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 19 Jul 2019 00:04:30 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DA0D521852;
-        Fri, 19 Jul 2019 03:59:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 854AC21873;
+        Fri, 19 Jul 2019 04:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563508751;
-        bh=dFjx6SYhIGvhPMZ2Z3/ULBmQ8XVIK4WXF63iZ1aAseE=;
+        s=default; t=1563509070;
+        bh=IgqLmc9gab5vB2kgwbuIUQkckeqHIN4ozj7XkneYH2c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ldJgndeEqQceHXqubdb0VMYL8C4fNPgED5qfxzfjUZvTe2V3T+Jgd8IdbdKUtVbvR
-         hAT1hTIIYZFKvM7uh/RLqIgbCFmaNfJCwxgmKjEbP4A+Vpyemde0hGaXUFZMLZXGBk
-         C2+o1nImY7l4F/vubzuT8b5Opj+Fvmdzd6r1OVmw=
+        b=pkx/qd9sNjLjrYJLgV3i/3Pn7z5nwqq0sIetBrlWv9SkSjR+Z4/RCT4KbtJPJUGV9
+         j5nMR0Qu6H8/UhNkhnNHgtMbfWq7kHdb64jZmK6IWF71Pv1JmH2moUtomR3XJgT6rM
+         MMjXA/UIHu2JIa3HxUZ125fIASO2QrF2pvObGgFU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
         Felipe Balbi <felipe.balbi@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 070/171] usb: dwc3: Fix core validation in probe, move after clocks are enabled
-Date:   Thu, 18 Jul 2019 23:55:01 -0400
-Message-Id: <20190719035643.14300-70-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 052/141] usb: gadget: Zero ffs_io_data
+Date:   Fri, 19 Jul 2019 00:01:17 -0400
+Message-Id: <20190719040246.15945-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190719035643.14300-1-sashal@kernel.org>
-References: <20190719035643.14300-1-sashal@kernel.org>
+In-Reply-To: <20190719040246.15945-1-sashal@kernel.org>
+References: <20190719040246.15945-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,70 +43,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-[ Upstream commit dc1b5d9aed1794b5a1c6b0da46e372cc09974cbc ]
+[ Upstream commit 508595515f4bcfe36246e4a565cf280937aeaade ]
 
-The required clocks needs to be enabled before the first register
-access. After commit fe8abf332b8f ("usb: dwc3: support clocks and resets
-for DWC3 core"), this happens when the dwc3_core_is_valid function is
-called, but the mentioned commit adds that call in the wrong place,
-before the clocks are enabled. So, move that call after the
-clk_bulk_enable() to ensure the clocks are enabled and the reset
-deasserted.
+In some cases the "Allocate & copy" block in ffs_epfile_io() is not
+executed. Consequently, in such a case ffs_alloc_buffer() is never called
+and struct ffs_io_data is not initialized properly. This in turn leads to
+problems when ffs_free_buffer() is called at the end of ffs_epfile_io().
 
-I detected this while, as experiment, I tried to move the clocks and resets
-from the glue layer to the DWC3 core on a Samsung Chromebook Plus.
+This patch uses kzalloc() instead of kmalloc() in the aio case and memset()
+in non-aio case to properly initialize struct ffs_io_data.
 
-That was not detected before because, in most cases, the glue layer
-initializes SoC-specific things and then populates the child "snps,dwc3"
-with those clocks already enabled.
-
-Fixes: b873e2d0ea1ef ("usb: dwc3: Do core validation early on probe")
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/core.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/function/f_fs.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 4aff1d8dbc4f..6e9e172010fc 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1423,11 +1423,6 @@ static int dwc3_probe(struct platform_device *pdev)
- 	dwc->regs	= regs;
- 	dwc->regs_size	= resource_size(&dwc_res);
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index c7ed90084d1a..213ff03c8a9f 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1183,11 +1183,12 @@ static ssize_t ffs_epfile_write_iter(struct kiocb *kiocb, struct iov_iter *from)
+ 	ENTER();
  
--	if (!dwc3_core_is_valid(dwc)) {
--		dev_err(dwc->dev, "this is not a DesignWare USB3 DRD Core\n");
--		return -ENODEV;
--	}
--
- 	dwc3_get_properties(dwc);
+ 	if (!is_sync_kiocb(kiocb)) {
+-		p = kmalloc(sizeof(io_data), GFP_KERNEL);
++		p = kzalloc(sizeof(io_data), GFP_KERNEL);
+ 		if (unlikely(!p))
+ 			return -ENOMEM;
+ 		p->aio = true;
+ 	} else {
++		memset(p, 0, sizeof(*p));
+ 		p->aio = false;
+ 	}
  
- 	dwc->reset = devm_reset_control_get_optional_shared(dev, NULL);
-@@ -1460,6 +1455,12 @@ static int dwc3_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto unprepare_clks;
+@@ -1219,11 +1220,12 @@ static ssize_t ffs_epfile_read_iter(struct kiocb *kiocb, struct iov_iter *to)
+ 	ENTER();
  
-+	if (!dwc3_core_is_valid(dwc)) {
-+		dev_err(dwc->dev, "this is not a DesignWare USB3 DRD Core\n");
-+		ret = -ENODEV;
-+		goto disable_clks;
-+	}
-+
- 	platform_set_drvdata(pdev, dwc);
- 	dwc3_cache_hwparams(dwc);
+ 	if (!is_sync_kiocb(kiocb)) {
+-		p = kmalloc(sizeof(io_data), GFP_KERNEL);
++		p = kzalloc(sizeof(io_data), GFP_KERNEL);
+ 		if (unlikely(!p))
+ 			return -ENOMEM;
+ 		p->aio = true;
+ 	} else {
++		memset(p, 0, sizeof(*p));
+ 		p->aio = false;
+ 	}
  
-@@ -1525,6 +1526,7 @@ static int dwc3_probe(struct platform_device *pdev)
- 	pm_runtime_put_sync(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
- 
-+disable_clks:
- 	clk_bulk_disable(dwc->num_clks, dwc->clks);
- unprepare_clks:
- 	clk_bulk_unprepare(dwc->num_clks, dwc->clks);
 -- 
 2.20.1
 
