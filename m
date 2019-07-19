@@ -2,138 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5FD6E256
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 10:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AEC6E27F
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 10:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbfGSINh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 04:13:37 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:34739 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726339AbfGSINh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 04:13:37 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190719081336euoutp01caccbe2547130238d1a0470cf54e9e72~ywM8aWHA00994709947euoutp01-
-        for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2019 08:13:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190719081336euoutp01caccbe2547130238d1a0470cf54e9e72~ywM8aWHA00994709947euoutp01-
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563524016;
-        bh=drg5AOx0OUTEFNPddGl8KS3mvIQGIebASAgTyhQFOYY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b2PGbYAbRFFvpouRZpOauHV+NF7L+jEx7ktGC68JZq6rY6coYbGma7nAnSzEWm7DQ
-         IuTczRrD+KuWE4p+8h1CkUVG2RivaILppSXASMH7PiWZmFAMdvPGrOg6SOFeNVHJlj
-         lt0rd28GCQw7vgxJTy+2U9H4sspIxL4tyrtD3bhc=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190719081335eucas1p1870db09343e0104a6690a0a246c78e2e~ywM7qcup42868428684eucas1p1X;
-        Fri, 19 Jul 2019 08:13:35 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id C6.D8.04298.FAB713D5; Fri, 19
-        Jul 2019 09:13:35 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190719081334eucas1p1fd614e56c1ec0dfa654d0bb77f17ba5d~ywM6tFXO82473624736eucas1p1u;
-        Fri, 19 Jul 2019 08:13:34 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190719081334eusmtrp2e4ca084ef0679af6a6f0c14cec324c81~ywM6jDSiK3201232012eusmtrp2H;
-        Fri, 19 Jul 2019 08:13:34 +0000 (GMT)
-X-AuditID: cbfec7f2-f13ff700000010ca-25-5d317baff1c7
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id EE.EE.04146.EAB713D5; Fri, 19
-        Jul 2019 09:13:34 +0100 (BST)
-Received: from AMDC2765.DIGITAL.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190719081333eusmtip2e227f34779f0b92d208bf023e8e626ce~ywM6DCQNQ3189331893eusmtip20;
-        Fri, 19 Jul 2019 08:13:33 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jochen Sprickerhof <jochen@sprickerhof.de>,
-        Anand Moon <linux.amoon@gmail.com>
-Subject: [PATCH v2 2/2] usb: dwc3: remove generic PHY calibrate() calls
-Date:   Fri, 19 Jul 2019 10:13:26 +0200
-Message-Id: <20190719081326.9347-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190719081212.9249-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WSe0hTYRjG/Xa2c85Wk+O0/LBIWFYUeYOIQy0xCjrhPxIklUquPKnkpuyo
-        af4jSlJmoeJlLdPhrZy56Royl2VauNJ0XnHOCxZlaJmULopM2/Es++/3Pe/zfC88vDgi0Qj8
-        8CRlGq1SypOlqIjf1vNrINCQHRobUmjeRraqDQKyJ/8DRubVGlCy/s8MIG22FowcsVSipNr2
-        nEfWNNxASH2rAyObX027fMZSQfgWql0zjVG1HfM8yqi7hVKdDx5j1F2TDlAtpjU+tWzcFYld
-        EMni6eSkDFoVHBYnSrxXd0eQqhVl/qjJRXNAL14AcBwSh+CnRhcKcQnxCMD3o7sLgMjFKwCW
-        fJ4G3GMZQOfSbYx1sYFxfZWAGzwEcEZt4m1GptrZiRBHiVBYsFiAsuxDhMO6+imUNSHEOg9W
-        2F9vmLyJU9BR3rXBfGIP7Bwq57EsJmRwtanWvc4fNrW8QFgWEsdgUY4DYz+CRBUGtf1at+kk
-        1I/aUI694YLV5NZ3wvX2ah4XyAPw3UCzO10I4EiuGnCuo/CldUjA1oEQ+6HBEszJx+GTLh3g
-        WvKE9kUvVkZcWNJWgXCyGN7Ml3DuvVBj1W+u7RocRjimoN4y5W6oyNWjpg8rAv6a/8u0AOiA
-        L53OKBJoJlRJXwti5AomXZkQdDlFYQSui+lbs343A+fwpW5A4EC6VRypCImVCOQZTJaiG0Ac
-        kfqIJ+eDYyXieHnWdVqVclGVnkwz3WAHzpf6irM9ZqMlRII8jb5K06m06t+Uhwv9csCJr5bA
-        5Mr+rrPfAibnYyoPSqMqmn7zTWM8Kj6iQjY3UGz2Or8cEz3rNbbq3zF4uNi5nf8xLpgfwUhz
-        GpHqZ+nm8SXBlfCwCQQmlSpRjwDnwpEz5gZVFGLXLKjLnCfQn44vvvv6EU9dmj1ztSx1buV+
-        79OJt3jkudOyxiHTGymfSZSHHkBUjPwvmYcCGS0DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDLMWRmVeSWpSXmKPExsVy+t/xe7rrqg1jDbZfELHYOGM9q8Wxtifs
-        Fs2L17NZLP17j9Hi/PkN7BaXd81hs5hxfh+TxaJlrcwW6zbeYrdYe+QuUN2mKawO3B47Z91l
-        91i85yWTx6ZVnWwe++euYffo27KK0WPDln8sHp83yQWwR+nZFOWXlqQqZOQXl9gqRRtaGOkZ
-        WlroGZlY6hkam8daGZkq6dvZpKTmZJalFunbJehlzFzSy1qwgKvi26ImtgbGUxxdjJwcEgIm
-        EtfXzWPtYuTiEBJYyihxaN9hFoiEjMTJaQ2sELawxJ9rXWwQRZ8YJbpudDCCJNgEDCW63oIk
-        ODlEBJwkOteeBitiFmhllujecYMZJCEs4C5xa9pBsEksAqoS+y9OYwKxeQVsJP6sXswOsUFe
-        YvWGA2D1nAK2EhMaboHFhYBq1j46xziBkW8BI8MqRpHU0uLc9NxiQ73ixNzi0rx0veT83E2M
-        wJDfduzn5h2MlzYGH2IU4GBU4uENyDWIFWJNLCuuzD3EKMHBrCTCe/ulfqwQb0piZVVqUX58
-        UWlOavEhRlOgoyYyS4km5wPjMa8k3tDU0NzC0tDc2NzYzEJJnLdD4GCMkEB6YklqdmpqQWoR
-        TB8TB6dUA2P/Oz0ZnbWNF76+OeYW8eGCmeLeQBuhezwh/txHxZ//e2N9VT3JLa/8wX1O7s0h
-        J9PfBk9oW1l5ImtVt+W5v+ybbz++xa6z/rT8IhfhJzzy3gdmfBDSvjhRp6VxDldZnOMTkb0S
-        Fn3eku8VDU+Hq9l69HBkf+Pdb78jP7v75SbnuHuLLVd91lJiKc5INNRiLipOBAA7sX+QjwIA
-        AA==
-X-CMS-MailID: 20190719081334eucas1p1fd614e56c1ec0dfa654d0bb77f17ba5d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190719081334eucas1p1fd614e56c1ec0dfa654d0bb77f17ba5d
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190719081334eucas1p1fd614e56c1ec0dfa654d0bb77f17ba5d
-References: <20190719081212.9249-1-m.szyprowski@samsung.com>
-        <CGME20190719081334eucas1p1fd614e56c1ec0dfa654d0bb77f17ba5d@eucas1p1.samsung.com>
+        id S1726328AbfGSI2t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 04:28:49 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40025 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbfGSI2t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 04:28:49 -0400
+Received: by mail-pf1-f193.google.com with SMTP id p184so13848828pfp.7;
+        Fri, 19 Jul 2019 01:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LVGzUddFUDDTd3XNu9CaLaSeJBDagIzKEuUQ6S8/s64=;
+        b=qN+wKk3BWFLjRh9ab2e6MyK9FKz8VnKuCBk/inm6CAhxWcF6tuiUlSD3Vw6ZSQWfih
+         +nOgLhtQp22wCw/LyvjpD93gPJNonWeMlCIk5zaf0VqxSFvpr6sj4ydfKHdVbeBFgeSV
+         GO0LzpkpnRa7iZ54liIdH2CtzkRkqF+iDyK9GLSD7suwEr06ER97sL7V37d6ElDNi1dG
+         ybtqo1YZlLg5aR2/SryKOmY5sI4UW29biCd5t3Zur+BsV3dFivwA57qAUXo8e2jvNpr+
+         T75HuSNFsCNgIqCvHp4PII4uU7fsrnqstRaP5TkoR8ibPFbgmcYOKKy2l6lJBeZHO2oG
+         uhfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LVGzUddFUDDTd3XNu9CaLaSeJBDagIzKEuUQ6S8/s64=;
+        b=ib4740gZ1c3vQ+XteXKvAozvxN11d9S8kJasPm7pSPW7vZDgMgJkJxQZbUuas+nVTq
+         P1zy9N5ZcciKM0pVPN4JG9iUzxh4b/6fqmbRWQXRBLzzage+Na8nWQVS6HpdTyIdOCMc
+         K28fCEX+GQdmF+oj9L3ecVfFWVjs52QdUR7+7wdzwjz/d8xFTPjjVT8YbcmsTzD70PJD
+         7Jytak4o+zvZyp30LRKeYKLZKW9Dn4atJItj89BtrCv/7BMMDzw0VnwoObkXmrGdl+hz
+         ohb3btFL79AB9YAtMXJnUfII6yr4gnYnBpBdP2KiKNN8T7RDtmP/yriZ5ShlLHc/o1/c
+         1JRA==
+X-Gm-Message-State: APjAAAU/mN/xRWb+RrhZ0us55ZLCkllnbeb1gvynhwKtGO0TYe2KvRfd
+        G4x4KqCI23MBLiNv2f44RB4joBSHWWg=
+X-Google-Smtp-Source: APXvYqwSJYJRDkiPvTx+U2mHyK7domPC9FfXywft7CFvpQJ7ZlWy5IN+8l64JYP/oblGlRkxzGAdUw==
+X-Received: by 2002:a63:5920:: with SMTP id n32mr51055663pgb.352.1563524928589;
+        Fri, 19 Jul 2019 01:28:48 -0700 (PDT)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([89.31.126.54])
+        by smtp.gmail.com with ESMTPSA id f197sm30023348pfa.161.2019.07.19.01.28.45
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 19 Jul 2019 01:28:47 -0700 (PDT)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH] usbnet: smsc75xx: Merge memcpy + le32_to_cpus to get_unaligned_le32
+Date:   Fri, 19 Jul 2019 16:27:31 +0800
+Message-Id: <20190719082730.6378-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Calls to USB2 generic PHY calibrate() method has been moved to HCD core,
-which now successfully handles generic PHYs and their calibration after
-every HCD reset. This fixes all the timing issues related to PHY
-calibration done directly from DWC3 driver: incorrect operation after
-system suspend/resume or USB3.0 detection failure when XHCI-plat driver
-compiled as separate module.
+Merge the combo use of memcpy and le32_to_cpus.
+Use get_unaligned_le32 instead.
+This simplifies the code.
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 ---
- drivers/usb/dwc3/core.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/net/usb/smsc75xx.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index c9bb93a2c81e..7dd6d419254d 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -168,7 +168,6 @@ static void __dwc3_set_mode(struct work_struct *work)
- 				otg_set_vbus(dwc->usb2_phy->otg, true);
- 			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
- 			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
--			phy_calibrate(dwc->usb2_generic_phy);
- 		}
- 		break;
- 	case DWC3_GCTL_PRTCAP_DEVICE:
-@@ -1166,7 +1165,6 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
- 				dev_err(dev, "failed to initialize host\n");
- 			return ret;
- 		}
--		phy_calibrate(dwc->usb2_generic_phy);
- 		break;
- 	case USB_DR_MODE_OTG:
- 		INIT_WORK(&dwc->drd_work, __dwc3_set_mode);
+diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+index 1417a22962a1..7fac9db5380d 100644
+--- a/drivers/net/usb/smsc75xx.c
++++ b/drivers/net/usb/smsc75xx.c
+@@ -661,8 +661,7 @@ static void smsc75xx_status(struct usbnet *dev, struct urb *urb)
+ 		return;
+ 	}
+ 
+-	memcpy(&intdata, urb->transfer_buffer, 4);
+-	le32_to_cpus(&intdata);
++	intdata = get_unaligned_le32(urb->transfer_buffer);
+ 
+ 	netif_dbg(dev, link, dev->net, "intdata: 0x%08X\n", intdata);
+ 
+@@ -2181,12 +2180,10 @@ static int smsc75xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 		struct sk_buff *ax_skb;
+ 		unsigned char *packet;
+ 
+-		memcpy(&rx_cmd_a, skb->data, sizeof(rx_cmd_a));
+-		le32_to_cpus(&rx_cmd_a);
++		rx_cmd_a = get_unaligned_le32(skb->data);
+ 		skb_pull(skb, 4);
+ 
+-		memcpy(&rx_cmd_b, skb->data, sizeof(rx_cmd_b));
+-		le32_to_cpus(&rx_cmd_b);
++		rx_cmd_b = get_unaligned_le32(skb->data);
+ 		skb_pull(skb, 4 + RXW_PADDING);
+ 
+ 		packet = skb->data;
 -- 
-2.17.1
+2.20.1
 
