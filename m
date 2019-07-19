@@ -2,87 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DD26E325
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 11:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FA16E369
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 11:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726926AbfGSJHi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 05:07:38 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:41071 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726029AbfGSJHh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 05:07:37 -0400
-Received: by mail-pf1-f194.google.com with SMTP id m30so13907827pff.8;
-        Fri, 19 Jul 2019 02:07:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XVW3vUyQIGlttxB7d4coQNzCIFhrIEtf8tciYiOHfMM=;
-        b=kSJour3PB25SjVK+zTOUmCSVJJMU+pBRgmBaNXOp4U2TLYeO899DuO4rmrR0V8c8Tx
-         8SRLDCDqcc/z3pdAT2ITifncdNMk1q131CqOUMdUFTE3oso5CqWpEv6sXOfK4HV/l8P0
-         SDASWajXB4cmXRFtwZbK7Ci0Hd84CRuP7dg/3Y5mRi8R0uzWmo68dOVpKytCmrzuaKwU
-         +DSgmOykXwmdm4MIuNlrxsY9wHAwzhE4oynOg+DKa7zSGn6mAOmfBr1Doa1J4PKZgWnn
-         I//Tsuj40cNKYCtqC6vk4YcGO9p+Rw9mBsgEu006hQNLRn3qIEER6q9pMUk4yS8/NvNO
-         lXZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XVW3vUyQIGlttxB7d4coQNzCIFhrIEtf8tciYiOHfMM=;
-        b=nJMesKNyTEuXHbddf2Qf3RGjcTKZtuMUBcvbumvrQnE02JtvJhYLNvDVn1gDLmNqJr
-         qvsmf+9c/BZ4e/gsWjJNnaNfE66apvSyGVy2RThQxWHxGLqFVtlJTPKJrI9qdy513iex
-         V/mmKaZXt/972yIxfJYAT0whMZ+HIfEhvNytzy2+rHwW9ED9PNZZQk5HFUVd15B9jBL+
-         YxuCiWrMfS+7g59RMf+GGpHAtTiqP4rvWVBz9F0QSumXWc4SE8io38dUtjWbCaQk5E6h
-         EzxYW5P1KVXRWsdMdJ5UjI5bkZ17azDPziVh+/kmaOIo5oqVtMm7b/CXWjPiNG7v4x38
-         JfyA==
-X-Gm-Message-State: APjAAAWTad4L8qV0S/fYOTbI8fuznv0fcJZbQXID4R1Sbrcenct4cJ0R
-        GEKRkk6WLA7lCCZr7JfTAWg=
-X-Google-Smtp-Source: APXvYqyjSDLx5lH9egeR88KsrwSkCirIGl9HHEdsM3Nz+aKE8lyMEY5RzKoWTbu1soMFSage/QWrEQ==
-X-Received: by 2002:a63:db45:: with SMTP id x5mr40825943pgi.293.1563527256835;
-        Fri, 19 Jul 2019 02:07:36 -0700 (PDT)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([89.31.126.54])
-        by smtp.gmail.com with ESMTPSA id d2sm27223139pjs.21.2019.07.19.02.07.34
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 19 Jul 2019 02:07:36 -0700 (PDT)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] ax88179_178a: Merge memcpy + le32_to_cpus to get_unaligned_le32
-Date:   Fri, 19 Jul 2019 17:07:15 +0800
-Message-Id: <20190719090714.19037-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726858AbfGSJ1r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 05:27:47 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:49343 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725794AbfGSJ1r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 05:27:47 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190719092745euoutp02340e10eb7f7157e67c3144769370c662~yxNscFo8J2823628236euoutp022
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2019 09:27:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190719092745euoutp02340e10eb7f7157e67c3144769370c662~yxNscFo8J2823628236euoutp022
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1563528466;
+        bh=Spljwi04NPz7tPwQDU3ylhpMAcBmPOyA+LcLqOe48yU=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=fC9BomUpsql2COyJ6gc4WDI6fHvJC+/hdyejnXPtXym/Mf8NBhFzk95rsRaQRuSdc
+         KWcWgDc/xOQnP4nkP1j5stZ8RYhe8oHkP8LQNIKM2s8Rx84qNcBpV9GA3fkf/EQJTr
+         EOMjJ2L131jySWjtf0lxGx8bKyFDI3ZqYYTGaaL4=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190719092745eucas1p2d63ead0ad0ba74f60f0fefac910e87ea~yxNsEYFit0571605716eucas1p2M;
+        Fri, 19 Jul 2019 09:27:45 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 7D.1D.04325.11D813D5; Fri, 19
+        Jul 2019 10:27:45 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190719092744eucas1p24f1b497e46cf66ac3ae8c717b626a5d4~yxNrQ3dVU0485504855eucas1p2a;
+        Fri, 19 Jul 2019 09:27:44 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190719092744eusmtrp1d31cf3cd69253e47b48dfc82134eb1af~yxNrC0zDS1975419754eusmtrp1S;
+        Fri, 19 Jul 2019 09:27:44 +0000 (GMT)
+X-AuditID: cbfec7f5-b75ff700000010e5-9f-5d318d1196c9
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 6C.01.04140.01D813D5; Fri, 19
+        Jul 2019 10:27:44 +0100 (BST)
+Received: from AMDC2765.DIGITAL.local (unknown [106.120.51.73]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190719092744eusmtip243b0f5902555ec37e058b710f169bcc7~yxNqp7hk01330413304eusmtip2b;
+        Fri, 19 Jul 2019 09:27:44 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH] phy: exynos5-usbdrd: Calibrating makes sense only for
+ USB2.0 PHY
+Date:   Fri, 19 Jul 2019 11:27:34 +0200
+Message-Id: <20190719092734.12501-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNIsWRmVeSWpSXmKPExsWy7djP87qCvYaxBlP+ilhsnLGe1eLC0x42
+        i/PnN7BbXN41h81ixvl9TBaLlrUyW6w9cpfdgd1j06pONo++LasYPY7f2M7k8XmTXABLFJdN
+        SmpOZllqkb5dAlfGpfO/GQt2clQ8u/mdrYFxBXsXIyeHhICJxOJdPaxdjFwcQgIrGCXmfjnN
+        COF8YZToW30fyvnMKPF+52W4lrXdm9kgEssZJW6unMsM1/Jm6gZGkCo2AUOJrrddbCC2iICD
+        xJKld8A6mAWuMUo8b3zFBJIQFgiWuP/zJFgRi4CqRFPvL6AVHBy8ArYSW7r8IbbJS6zecABs
+        gYTAGTaJ3r+noc5wkbh2cBcbhC0s8er4Fqi4jMTpyT0sEA3NjBIPz61lh3B6GCUuN81ghKiy
+        ljh8/CIryDZmAU2J9bv0IcKOEq1tN8HCEgJ8EjfeCoKEmYHMSdumM0OEeSU62oQgqtUkZh1f
+        B7f24IVLzBC2h8SPlmlgLwoJxEoc3b6KfQKj3CyEXQsYGVcxiqeWFuempxYb56WW6xUn5haX
+        5qXrJefnbmIEJoHT/45/3cG470/SIUYBDkYlHt6AXINYIdbEsuLK3EOMEhzMSiK8t1/qxwrx
+        piRWVqUW5ccXleakFh9ilOZgURLnrWZ4EC0kkJ5YkpqdmlqQWgSTZeLglGpgvCOuuavS+tLj
+        NP/mSK2Ti474X3d8rfjo0udMkYe9U2oZWMw1vwmsW/FD4W9j21YZN5Yb9x+0lqYUn/nFfOTF
+        AcXK+duqxOMlD1yz5rj4qnv9hq6ZK0U4Vr7QmH7mc+/ztsr2K1YHrl16ZpAtrbH7n5Xp6Y12
+        kfwqU290eYSbBy+7ec9278q4ZiWW4oxEQy3mouJEAKPKhdj+AgAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrALMWRmVeSWpSXmKPExsVy+t/xe7oCvYaxBk9/yFhsnLGe1eLC0x42
+        i/PnN7BbXN41h81ixvl9TBaLlrUyW6w9cpfdgd1j06pONo++LasYPY7f2M7k8XmTXABLlJ5N
+        UX5pSapCRn5xia1StKGFkZ6hpYWekYmlnqGxeayVkamSvp1NSmpOZllqkb5dgl7GpfO/GQt2
+        clQ8u/mdrYFxBXsXIyeHhICJxNruzWxdjFwcQgJLGSW27D3FCJGQkTg5rYEVwhaW+HOtC6ro
+        E6PE9hXfwRJsAoYSXW9BEpwcIgJOEp1rT4MVMQvcYpT4PP8cM0hCWCBQ4uqXuywgNouAqkRT
+        7y+g1RwcvAK2Elu6/CEWyEus3nCAeQIjzwJGhlWMIqmlxbnpucVGesWJucWleel6yfm5mxiB
+        obft2M8tOxi73gUfYhTgYFTi4Q3INYgVYk0sK67MPcQowcGsJMJ7+6V+rBBvSmJlVWpRfnxR
+        aU5q8SFGU6DdE5mlRJPzgXGRVxJvaGpobmFpaG5sbmxmoSTO2yFwMEZIID2xJDU7NbUgtQim
+        j4mDU6qBcVakvUfebN0Dckcdl77b9/qk4xLLKLH79kmpXMaVGm7x3RV3dhbnpXV9OG2j/Cfc
+        Ittge0hs0ByRTwv8PFhL/XVWPTSfFXSTS/+5+yq1lBdF99VsmH6kXXQJvH/tw/z/LUbhR//4
+        TdP+K1nfG9OVeP1faVXnq0XzJgnyb93ie1HJrcVQzTNXiaU4I9FQi7moOBEAdHBeY1MCAAA=
+X-CMS-MailID: 20190719092744eucas1p24f1b497e46cf66ac3ae8c717b626a5d4
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190719092744eucas1p24f1b497e46cf66ac3ae8c717b626a5d4
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190719092744eucas1p24f1b497e46cf66ac3ae8c717b626a5d4
+References: <CGME20190719092744eucas1p24f1b497e46cf66ac3ae8c717b626a5d4@eucas1p2.samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Merge the combo use of memcpy and le32_to_cpus.
-Use get_unaligned_le32 instead.
-This simplifies the code.
+PHY calibration is needed only for USB2.0 (UTMI) PHY, so skip calling
+calibration code when phy_calibrate() is called for USB3.0 (PIPE3) PHY.
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+Fixes: d8c80bb3b55b ("phy: exynos5-usbdrd: Calibrate LOS levels for exynos5420/5800")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 ---
- drivers/net/usb/ax88179_178a.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/phy/samsung/phy-exynos5-usbdrd.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 0bc457ba8574..72d165114b67 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1366,8 +1366,7 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 		return 0;
+diff --git a/drivers/phy/samsung/phy-exynos5-usbdrd.c b/drivers/phy/samsung/phy-exynos5-usbdrd.c
+index 646259bee909..f07edd80d2f3 100644
+--- a/drivers/phy/samsung/phy-exynos5-usbdrd.c
++++ b/drivers/phy/samsung/phy-exynos5-usbdrd.c
+@@ -714,7 +714,9 @@ static int exynos5_usbdrd_phy_calibrate(struct phy *phy)
+ 	struct phy_usb_instance *inst = phy_get_drvdata(phy);
+ 	struct exynos5_usbdrd_phy *phy_drd = to_usbdrd_phy(inst);
  
- 	skb_trim(skb, skb->len - 4);
--	memcpy(&rx_hdr, skb_tail_pointer(skb), 4);
--	le32_to_cpus(&rx_hdr);
-+	rx_hdr = get_unaligned_le32(skb_tail_pointer(skb));
+-	return exynos5420_usbdrd_phy_calibrate(phy_drd);
++	if (inst->phy_cfg->id == EXYNOS5_DRDPHY_UTMI)
++		return exynos5420_usbdrd_phy_calibrate(phy_drd);
++	return 0;
+ }
  
- 	pkt_cnt = (u16)rx_hdr;
- 	hdr_off = (u16)(rx_hdr >> 16);
+ static const struct phy_ops exynos5_usbdrd_phy_ops = {
 -- 
-2.20.1
+2.17.1
 
