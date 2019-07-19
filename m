@@ -2,186 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB9A6E59B
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 14:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3806E8CD
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 18:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728171AbfGSMZo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 08:25:44 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:47304 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728151AbfGSMZo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 08:25:44 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190719122543euoutp022548e538cfade07d4230d64bf64c7f0b~yzpEXWSJ_2520625206euoutp024
-        for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2019 12:25:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190719122543euoutp022548e538cfade07d4230d64bf64c7f0b~yzpEXWSJ_2520625206euoutp024
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563539143;
-        bh=ZkJKWho2ClrEqfnUpDTH/xfBXBjcM+BhDvk5JIuR9Jc=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=GV9+iVN/pilqUPir3EvADoEpImt88QXgGpf+c9DSpXIoicsISn8ys+FzM4E/fqwns
-         XppsKBePc7I6b+4MBLR1i8Sh5i/PnijNZPaZhtkMnbgl8yiAVnf5p4H39XPgZYglEL
-         pU0pk8rpzFKbuxgixDPWbEaVItA7pD2avjaT5FgE=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190719122542eucas1p2fec19789ea42d61b6eb9df50fd0bdbb4~yzpD02QXr2925729257eucas1p2N;
-        Fri, 19 Jul 2019 12:25:42 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 46.16.04298.6C6B13D5; Fri, 19
-        Jul 2019 13:25:42 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190719122541eucas1p2448ec705f84347c0a79732883daeb2b4~yzpDGyAAe0324603246eucas1p2M;
-        Fri, 19 Jul 2019 12:25:41 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190719122541eusmtrp2e746679023378e3301c751821a0905f3~yzpC4tkfV2814328143eusmtrp2g;
-        Fri, 19 Jul 2019 12:25:41 +0000 (GMT)
-X-AuditID: cbfec7f2-f2dff700000010ca-b1-5d31b6c66fb7
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 95.45.04140.5C6B13D5; Fri, 19
-        Jul 2019 13:25:41 +0100 (BST)
-Received: from AMDC2765.DIGITAL.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190719122541eusmtip2a19a3ae7e05f05acf108082c2e80e1be~yzpCdNE8t2842128421eusmtip2B;
-        Fri, 19 Jul 2019 12:25:41 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] phy: samsung: disable bind/unbind platform driver feature
-Date:   Fri, 19 Jul 2019 14:25:32 +0200
-Message-Id: <20190719122532.29591-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBIsWRmVeSWpSXmKPExsWy7djP87rHthnGGuw5JWqxccZ6VosLT3vY
-        LM6f38BucXnXHDaLGef3MVksWtbKbLH2yF12B3aPTas62Tz6tqxi9Dh+YzuTx+dNcgEsUVw2
-        Kak5mWWpRfp2CVwZzxezFmyVrTj+7Q1bA+MiyS5GTg4JAROJ5eemMHYxcnEICaxglJi24TYT
-        SEJI4AujxMHWKAj7M6PEiT0cMA13d55hh4gvZ5S49pkXohmo/tyS+WDNbAKGEl1vu9hAbBEB
-        B4klS++wgRQxC1xjlHje+AqsSFjAS+L5tOMsIDaLgKrEufPHWEFsXgFbifVzJrNCbJOXWL3h
-        ADNIs4TAGTaJu/t/sUEkXCR+NL1mgrCFJV4d38IOYctI/N8JcgVIQzOjxMNza9khnB5GictN
-        MxghqqwlDh+/CLSCA+gmTYn1u/Qhwo4Smx+fZgYJSwjwSdx4KwgSZgYyJ22bDhXmlehoE4Ko
-        VpOYdXwd3NqDFy4xQ9geEifv7mKFhFCsxPmF09kmMMrNQti1gJFxFaN4amlxbnpqsWFearle
-        cWJucWleul5yfu4mRmD8n/53/NMOxq+Xkg4xCnAwKvHwBuQaxAqxJpYVV+YeYpTgYFYS4b39
-        Uj9WiDclsbIqtSg/vqg0J7X4EKM0B4uSOG81w4NoIYH0xJLU7NTUgtQimCwTB6dUA+NsH8c5
-        X9ZW8BftkF/EdiPF6rydj9TbGx/iZGrEwn+Wd87wPXcx6LxKsfzjwnPfrM8Zz3FdtjBii1uK
-        /7en/fHyzAtvbsm6V744rI3/Xv4y2Qluqd8ZrCWf3b78+tJOj59LsxJyi1qX3p+9/fT3OgP1
-        2ozlpxbcmmOzvOgS17eNpxgMY+NPaz5SYinOSDTUYi4qTgQAsueR2vsCAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPLMWRmVeSWpSXmKPExsVy+t/xe7pHtxnGGnxfK2+xccZ6VosLT3vY
-        LM6f38BucXnXHDaLGef3MVksWtbKbLH2yF12B3aPTas62Tz6tqxi9Dh+YzuTx+dNcgEsUXo2
-        RfmlJakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5mWWpRfp2CXoZzxezFmyV
-        rTj+7Q1bA+MiyS5GTg4JAROJuzvPsIPYQgJLGSVa/7FBxGUkTk5rYIWwhSX+XOsCinMB1Xxi
-        lJj6ZA4jSIJNwFCi620XWIOIgJNE59rTYEXMArcYJT7PP8cMkhAW8JJ4Pu04C4jNIqAqce78
-        MbCpvAK2EuvnTIbaIC+xesMB5gmMPAsYGVYxiqSWFuem5xYb6RUn5haX5qXrJefnbmIEBt62
-        Yz+37GDsehd8iFGAg1GJhzcg1yBWiDWxrLgy9xCjBAezkgjv7Zf6sUK8KYmVValF+fFFpTmp
-        xYcYTYGWT2SWEk3OB0ZFXkm8oamhuYWlobmxubGZhZI4b4fAwRghgfTEktTs1NSC1CKYPiYO
-        TqkGRu/F6RzXb/z75LDy5Wq3Lncbhcoj/wO1L/9Zd//s/bzPrAePX2qtOpmr5X1sXmCDfUaw
-        YPCM3OqVs69o5c5zvxwTyHA4cJVtqUmwnhSXbLzN7/D6izvLD7e+k/oULzYr5sjkeQdipXef
-        lpFZZX9HK/TKt0ztGXxz9qbdDft4U7FYafpx0SVnZyuxFGckGmoxFxUnAgBAgHK4UgIAAA==
-X-CMS-MailID: 20190719122541eucas1p2448ec705f84347c0a79732883daeb2b4
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190719122541eucas1p2448ec705f84347c0a79732883daeb2b4
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190719122541eucas1p2448ec705f84347c0a79732883daeb2b4
-References: <CGME20190719122541eucas1p2448ec705f84347c0a79732883daeb2b4@eucas1p2.samsung.com>
+        id S1728956AbfGSQaW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 12:30:22 -0400
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:2837 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727577AbfGSQaW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 12:30:22 -0400
+Received-SPF: Pass (esa5.microchip.iphmx.com: domain of
+  Woojung.Huh@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
+  envelope-from="Woojung.Huh@microchip.com";
+  x-sender="Woojung.Huh@microchip.com"; x-conformance=spf_only;
+  x-record-type="v=spf1"; x-record-text="v=spf1 mx
+  a:ushub1.microchip.com a:smtpout.microchip.com
+  a:mx1.microchip.iphmx.com a:mx2.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa5.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
+  envelope-from="Woojung.Huh@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa5.microchip.iphmx.com; spf=Pass smtp.mailfrom=Woojung.Huh@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: Pd3SpoSWCZNc1ql8bM9WKK+WlsPFS/qpJysAO39n7a5RwmCJCKZs8S600sp7UwUbIt8gjwhnKY
+ 8N4lpHflv3/UyMhd31c+ZaYTVLpuLYo0+iBaF5SOa/1zflKYYGE0KMJj+AL8W7PM1a3PA/w/BD
+ P+FvDl5EjH25HVJPIvgci/a2z08G3ua4dkWtVLDS0ERgrNKGh+r7goTer6nhSlv0OHYsbK/0ll
+ W+b1iiZCoAbvqfibprBC3JkwcCFpM+GFdE2z6YeVFbzYUTUOpsjPYT3QUFL4skAK7ITdeICiQd
+ AQY=
+X-IronPort-AV: E=Sophos;i="5.64,283,1559545200"; 
+   d="scan'208";a="40365325"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jul 2019 09:30:22 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex01.mchp-main.com (10.10.87.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 19 Jul 2019 09:30:20 -0700
+Received: from NAM04-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5 via Frontend
+ Transport; Fri, 19 Jul 2019 09:30:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fOQpF0JvIE8yz8GvMGfefPcfINi8AItHe/P70LDquj/RYq0koARZsRyRvvPrVhFeiJy3VHNAxQzZx4Ij1s79DFc7BHW7E56Q76PKOkQuslmVHfSXZA10uiqGKsgcs32VyvVLIjCnI1baj6Gr3g/krRSTHjXZRxdx22WiPluNSmnVrooHCRcN+OW8cLcAEHsStOG6dec5s8lSGI/2eh8wvnLZvthzWuhMK2bDjf/zyfjQjgqDVpIPygKrTOQK1g9fXMF4Gvf1LwNUYHlsRre/hNEochNhgk4SANu2V4P/20gHMADoBQgyMtVjMx3QQ3pQC0PN0xEFTfvm88J+JeL1ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vx41ok5ne+uq++xDhDwPawhysxVXsLvAdB2I112yFjI=;
+ b=fLi6iMoeVev48Ihc5KPE0DRwQfudmqssKZvgd87kAln4JbpuIu2utjn12AE5lfS+x0ETSuJ9ZQXahX0NbmFPqrPxjBARV2UYgOVOlsUTImlMxfq/KvJHu/n/8awq7T/33fSSWAOfG88beRjujP4OmDx5ciilzq0bz9zIb0P75/mkaqVuZD/lc6xhf/wyfgv2prKd2j3LJo+FvbFiGs26GNxKdOvixo5ODTFX99zLcTctSgX6aXax2FvYgm+PR5Hg64g3fDNaV73Tx4qFXV4Qd6ifDSPxdnjMJPwcY31ANeHpjgTOlKepwDlZbtEkRk5fyVfUw81rvqiFIlo/4oB2WA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=microchip.com;dmarc=pass action=none
+ header.from=microchip.com;dkim=pass header.d=microchip.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector1-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vx41ok5ne+uq++xDhDwPawhysxVXsLvAdB2I112yFjI=;
+ b=zkTDfDPwu3fB2dIrRTE6VENgeUYH3lzo3WbMPY78PcE1hWwqRD5E9gkhp8GQYB6nvGSTlu8cXh/j9I/IE0oPg0YKXSZiIl6o+/yJUek+nxDjeIlpEVVrkPXAUNr0j8a0hOhKCnTdK3swHwNCVBB5W364MrzIWZXsMgIqgPzn790=
+Received: from BL0PR11MB3012.namprd11.prod.outlook.com (20.177.204.78) by
+ BL0PR11MB3105.namprd11.prod.outlook.com (20.177.206.221) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2094.14; Fri, 19 Jul 2019 16:30:16 +0000
+Received: from BL0PR11MB3012.namprd11.prod.outlook.com
+ ([fe80::ddc2:1e17:4240:66c2]) by BL0PR11MB3012.namprd11.prod.outlook.com
+ ([fe80::ddc2:1e17:4240:66c2%5]) with mapi id 15.20.2094.011; Fri, 19 Jul 2019
+ 16:30:16 +0000
+From:   <Woojung.Huh@microchip.com>
+To:     <hslester96@gmail.com>
+CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] net: lan78xx: Merge memcpy + lexx_to_cpus to
+ get_unaligned_lexx
+Thread-Topic: [PATCH] net: lan78xx: Merge memcpy + lexx_to_cpus to
+ get_unaligned_lexx
+Thread-Index: AQHVPgTHyJaBP0f9DEmIPm44Nph4NabSIkjA
+Date:   Fri, 19 Jul 2019 16:30:16 +0000
+Message-ID: <BL0PR11MB3012321DF5FF319EE0C50D86E7CB0@BL0PR11MB3012.namprd11.prod.outlook.com>
+References: <20190719073614.1850-1-hslester96@gmail.com>
+In-Reply-To: <20190719073614.1850-1-hslester96@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [47.19.18.123]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 28ca42f1-7cbe-461c-ba43-08d70c66621e
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BL0PR11MB3105;
+x-ms-traffictypediagnostic: BL0PR11MB3105:
+x-microsoft-antispam-prvs: <BL0PR11MB3105F00E383DD55C043750FDE7CB0@BL0PR11MB3105.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:510;
+x-forefront-prvs: 01039C93E4
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(136003)(376002)(366004)(39860400002)(346002)(189003)(199004)(3846002)(25786009)(14444005)(6116002)(86362001)(256004)(446003)(11346002)(186003)(26005)(6916009)(229853002)(476003)(102836004)(7696005)(76176011)(81166006)(74316002)(2906002)(14454004)(81156014)(6506007)(486006)(33656002)(5660300002)(52536014)(66446008)(71190400001)(71200400001)(66476007)(6246003)(53936002)(8936002)(4326008)(66556008)(305945005)(7736002)(76116006)(66066001)(4744005)(1411001)(66946007)(99286004)(478600001)(6436002)(55016002)(8676002)(68736007)(64756008)(316002)(54906003)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR11MB3105;H:BL0PR11MB3012.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: DgXDteNGMROL0fwnHKytJFNE8fZcglPq1GjPSdS2BgewhgrhidEEKQMnR/gO45DjYvgpUqQMg+vQY6gUQFe3/8UF434McMUr+rtHrahmx+3/CJG1ql8PAriZ4cZIR7KEMNtgNVOijeyvs0pFwiNlv2vxOWa2HQOLAYddFD46TmH+crgnBTfBSwLDaw9HmLymOcKIxgtshVBJA2c+veOy8384sxuzElz0j3Lh7IphuNX8fZjj7S+F+hP5xA0oeXFLQYoFKwve2QdGnTAFD1aRriqACwZK5Sax+zj2HPSt+RE38WmWzbVIfiab1XVmB061WRjLu/gPmN2QLLnexRv0aoZU4KAL/0nbPMTfO8HDYQGhJDvVDFJOAoOl9QWk6kH22diqGDebvMlas9X9kympjd9/i1+8WTbVWiyf1D1KGbk=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28ca42f1-7cbe-461c-ba43-08d70c66621e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2019 16:30:16.6594
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: woojung.huh@microchip.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3105
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Samsung PHY drivers control the power to the SoC core components needed by
-their client devices (USB HCDs, SATA, camera ISP bridge, DP encoder) to
-properly operate. Disabling PHYs in runtime usually causes the client
-device to crash with external abort exception or similar issue due to lack
-of API to notify clients about PHY removal. This patch removes the
-possiblity to unbind Samsung Exynos PHY drivers in runtime.
+> From: Chuhong Yuan <hslester96@gmail.com>
+> Sent: Friday, July 19, 2019 3:36 AM
+> Cc: Woojung Huh - C21699 <Woojung.Huh@microchip.com>; UNGLinuxDriver
+> <UNGLinuxDriver@microchip.com>; David S . Miller <davem@davemloft.net>;
+> netdev@vger.kernel.org; linux-usb@vger.kernel.org; linux-kernel@vger.kern=
+el.org; Chuhong Yuan
+> <hslester96@gmail.com>
+> Subject: [PATCH] net: lan78xx: Merge memcpy + lexx_to_cpus to get_unalign=
+ed_lexx
+>=20
+> External E-Mail
+>=20
+>=20
+> Merge the combo use of memcpy and lexx_to_cpus.
+> Use get_unaligned_lexx instead.
+> This simplifies the code.
+>=20
+> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/phy/samsung/phy-exynos-dp-video.c   | 1 +
- drivers/phy/samsung/phy-exynos-mipi-video.c | 1 +
- drivers/phy/samsung/phy-exynos-pcie.c       | 1 +
- drivers/phy/samsung/phy-exynos5-usbdrd.c    | 1 +
- drivers/phy/samsung/phy-exynos5250-sata.c   | 1 +
- drivers/phy/samsung/phy-samsung-usb2.c      | 1 +
- 6 files changed, 6 insertions(+)
-
-diff --git a/drivers/phy/samsung/phy-exynos-dp-video.c b/drivers/phy/samsung/phy-exynos-dp-video.c
-index aebd216dcf2f..6c607df1dc9a 100644
---- a/drivers/phy/samsung/phy-exynos-dp-video.c
-+++ b/drivers/phy/samsung/phy-exynos-dp-video.c
-@@ -109,6 +109,7 @@ static struct platform_driver exynos_dp_video_phy_driver = {
- 	.driver = {
- 		.name	= "exynos-dp-video-phy",
- 		.of_match_table	= exynos_dp_video_phy_of_match,
-+		.suppress_bind_attrs = true,
- 	}
- };
- module_platform_driver(exynos_dp_video_phy_driver);
-diff --git a/drivers/phy/samsung/phy-exynos-mipi-video.c b/drivers/phy/samsung/phy-exynos-mipi-video.c
-index 3784bf100b95..bb51195f189f 100644
---- a/drivers/phy/samsung/phy-exynos-mipi-video.c
-+++ b/drivers/phy/samsung/phy-exynos-mipi-video.c
-@@ -359,6 +359,7 @@ static struct platform_driver exynos_mipi_video_phy_driver = {
- 	.driver = {
- 		.of_match_table	= exynos_mipi_video_phy_of_match,
- 		.name  = "exynos-mipi-video-phy",
-+		.suppress_bind_attrs = true,
- 	}
- };
- module_platform_driver(exynos_mipi_video_phy_driver);
-diff --git a/drivers/phy/samsung/phy-exynos-pcie.c b/drivers/phy/samsung/phy-exynos-pcie.c
-index 1b4ba8bdb43c..659e7ae0a6cf 100644
---- a/drivers/phy/samsung/phy-exynos-pcie.c
-+++ b/drivers/phy/samsung/phy-exynos-pcie.c
-@@ -272,6 +272,7 @@ static struct platform_driver exynos_pcie_phy_driver = {
- 	.driver = {
- 		.of_match_table	= exynos_pcie_phy_match,
- 		.name		= "exynos_pcie_phy",
-+		.suppress_bind_attrs = true,
- 	}
- };
- 
-diff --git a/drivers/phy/samsung/phy-exynos5-usbdrd.c b/drivers/phy/samsung/phy-exynos5-usbdrd.c
-index f07edd80d2f3..7f6279fb4f8f 100644
---- a/drivers/phy/samsung/phy-exynos5-usbdrd.c
-+++ b/drivers/phy/samsung/phy-exynos5-usbdrd.c
-@@ -955,6 +955,7 @@ static struct platform_driver exynos5_usb3drd_phy = {
- 	.driver = {
- 		.of_match_table	= exynos5_usbdrd_phy_of_match,
- 		.name		= "exynos5_usb3drd_phy",
-+		.suppress_bind_attrs = true,
- 	}
- };
- 
-diff --git a/drivers/phy/samsung/phy-exynos5250-sata.c b/drivers/phy/samsung/phy-exynos5250-sata.c
-index 9e5fc126032c..4dd7324d91b2 100644
---- a/drivers/phy/samsung/phy-exynos5250-sata.c
-+++ b/drivers/phy/samsung/phy-exynos5250-sata.c
-@@ -237,6 +237,7 @@ static struct platform_driver exynos_sata_phy_driver = {
- 	.driver = {
- 		.of_match_table	= exynos_sata_phy_of_match,
- 		.name  = "samsung,sata-phy",
-+		.suppress_bind_attrs = true,
- 	}
- };
- module_platform_driver(exynos_sata_phy_driver);
-diff --git a/drivers/phy/samsung/phy-samsung-usb2.c b/drivers/phy/samsung/phy-samsung-usb2.c
-index 6c82f4fbe8a2..090aa02e02de 100644
---- a/drivers/phy/samsung/phy-samsung-usb2.c
-+++ b/drivers/phy/samsung/phy-samsung-usb2.c
-@@ -250,6 +250,7 @@ static struct platform_driver samsung_usb2_phy_driver = {
- 	.driver = {
- 		.of_match_table	= samsung_usb2_phy_of_match,
- 		.name		= "samsung-usb2-phy",
-+		.suppress_bind_attrs = true,
- 	}
- };
- 
--- 
-2.17.1
-
+Acked-by: Woojung Huh <woojung.huh@microchip.com>
