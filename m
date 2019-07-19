@@ -2,103 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AEC6E27F
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 10:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0BF6E2C0
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 10:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726328AbfGSI2t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 04:28:49 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40025 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726029AbfGSI2t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 04:28:49 -0400
-Received: by mail-pf1-f193.google.com with SMTP id p184so13848828pfp.7;
-        Fri, 19 Jul 2019 01:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LVGzUddFUDDTd3XNu9CaLaSeJBDagIzKEuUQ6S8/s64=;
-        b=qN+wKk3BWFLjRh9ab2e6MyK9FKz8VnKuCBk/inm6CAhxWcF6tuiUlSD3Vw6ZSQWfih
-         +nOgLhtQp22wCw/LyvjpD93gPJNonWeMlCIk5zaf0VqxSFvpr6sj4ydfKHdVbeBFgeSV
-         GO0LzpkpnRa7iZ54liIdH2CtzkRkqF+iDyK9GLSD7suwEr06ER97sL7V37d6ElDNi1dG
-         ybtqo1YZlLg5aR2/SryKOmY5sI4UW29biCd5t3Zur+BsV3dFivwA57qAUXo8e2jvNpr+
-         T75HuSNFsCNgIqCvHp4PII4uU7fsrnqstRaP5TkoR8ibPFbgmcYOKKy2l6lJBeZHO2oG
-         uhfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LVGzUddFUDDTd3XNu9CaLaSeJBDagIzKEuUQ6S8/s64=;
-        b=ib4740gZ1c3vQ+XteXKvAozvxN11d9S8kJasPm7pSPW7vZDgMgJkJxQZbUuas+nVTq
-         P1zy9N5ZcciKM0pVPN4JG9iUzxh4b/6fqmbRWQXRBLzzage+Na8nWQVS6HpdTyIdOCMc
-         K28fCEX+GQdmF+oj9L3ecVfFWVjs52QdUR7+7wdzwjz/d8xFTPjjVT8YbcmsTzD70PJD
-         7Jytak4o+zvZyp30LRKeYKLZKW9Dn4atJItj89BtrCv/7BMMDzw0VnwoObkXmrGdl+hz
-         ohb3btFL79AB9YAtMXJnUfII6yr4gnYnBpBdP2KiKNN8T7RDtmP/yriZ5ShlLHc/o1/c
-         1JRA==
-X-Gm-Message-State: APjAAAU/mN/xRWb+RrhZ0us55ZLCkllnbeb1gvynhwKtGO0TYe2KvRfd
-        G4x4KqCI23MBLiNv2f44RB4joBSHWWg=
-X-Google-Smtp-Source: APXvYqwSJYJRDkiPvTx+U2mHyK7domPC9FfXywft7CFvpQJ7ZlWy5IN+8l64JYP/oblGlRkxzGAdUw==
-X-Received: by 2002:a63:5920:: with SMTP id n32mr51055663pgb.352.1563524928589;
-        Fri, 19 Jul 2019 01:28:48 -0700 (PDT)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([89.31.126.54])
-        by smtp.gmail.com with ESMTPSA id f197sm30023348pfa.161.2019.07.19.01.28.45
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 19 Jul 2019 01:28:47 -0700 (PDT)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] usbnet: smsc75xx: Merge memcpy + le32_to_cpus to get_unaligned_le32
-Date:   Fri, 19 Jul 2019 16:27:31 +0800
-Message-Id: <20190719082730.6378-1-hslester96@gmail.com>
+        id S1726316AbfGSIoN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 04:44:13 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44449 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726271AbfGSIoM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 04:44:12 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1hoOUp-00006H-N9; Fri, 19 Jul 2019 10:44:07 +0200
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Richard Leitner <richard.leitner@skidata.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        kernel@pengutronix.de, patchwork-lst@pengutronix.de
+Subject: [PATCH 1/3] Revert "usb: usb251xb: Add US lanes inversion dts-bindings"
+Date:   Fri, 19 Jul 2019 10:44:05 +0200
+Message-Id: <20190719084407.28041-1-l.stach@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Merge the combo use of memcpy and le32_to_cpus.
-Use get_unaligned_le32 instead.
-This simplifies the code.
+This reverts commit 3342ce35a1, as there is no need for this separate
+property and it breaks compatibility with existing devicetree files
+(arch/arm64/boot/dts/freescale/imx8mq.dtsi).
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+CC: stable@vger.kernel.org #5.2
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 ---
- drivers/net/usb/smsc75xx.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ Documentation/devicetree/bindings/usb/usb251xb.txt | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
-index 1417a22962a1..7fac9db5380d 100644
---- a/drivers/net/usb/smsc75xx.c
-+++ b/drivers/net/usb/smsc75xx.c
-@@ -661,8 +661,7 @@ static void smsc75xx_status(struct usbnet *dev, struct urb *urb)
- 		return;
- 	}
+diff --git a/Documentation/devicetree/bindings/usb/usb251xb.txt b/Documentation/devicetree/bindings/usb/usb251xb.txt
+index bc7945e9dbfe..17915f64b8ee 100644
+--- a/Documentation/devicetree/bindings/usb/usb251xb.txt
++++ b/Documentation/devicetree/bindings/usb/usb251xb.txt
+@@ -64,10 +64,8 @@ Optional properties :
+  - power-on-time-ms : Specifies the time it takes from the time the host
+ 	initiates the power-on sequence to a port until the port has adequate
+ 	power. The value is given in ms in a 0 - 510 range (default is 100ms).
+- - swap-dx-lanes : Specifies the downstream ports which will swap the
+-	differential-pair (D+/D-), default is not-swapped.
+- - swap-us-lanes : Selects the upstream port differential-pair (D+/D-)
+-	swapping (boolean, default is not-swapped)
++ - swap-dx-lanes : Specifies the ports which will swap the differential-pair
++	(D+/D-), default is not-swapped.
  
--	memcpy(&intdata, urb->transfer_buffer, 4);
--	le32_to_cpus(&intdata);
-+	intdata = get_unaligned_le32(urb->transfer_buffer);
- 
- 	netif_dbg(dev, link, dev->net, "intdata: 0x%08X\n", intdata);
- 
-@@ -2181,12 +2180,10 @@ static int smsc75xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 		struct sk_buff *ax_skb;
- 		unsigned char *packet;
- 
--		memcpy(&rx_cmd_a, skb->data, sizeof(rx_cmd_a));
--		le32_to_cpus(&rx_cmd_a);
-+		rx_cmd_a = get_unaligned_le32(skb->data);
- 		skb_pull(skb, 4);
- 
--		memcpy(&rx_cmd_b, skb->data, sizeof(rx_cmd_b));
--		le32_to_cpus(&rx_cmd_b);
-+		rx_cmd_b = get_unaligned_le32(skb->data);
- 		skb_pull(skb, 4 + RXW_PADDING);
- 
- 		packet = skb->data;
+ Examples:
+ 	usb2512b@2c {
 -- 
 2.20.1
 
