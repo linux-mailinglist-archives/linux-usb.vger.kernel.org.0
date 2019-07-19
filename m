@@ -2,70 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F996E548
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 13:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764986E58A
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 14:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728166AbfGSL4C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 07:56:02 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:47509 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728006AbfGSL4B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 07:56:01 -0400
-Received: by mail-io1-f71.google.com with SMTP id r27so34375155iob.14
-        for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2019 04:56:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=dOaMMRNUwOpnO5Eysa44CTptPt5oL3VmnBhbF84fcE0=;
-        b=WSDl93MrV6yKjo5QxblTGUPrmw7E2befFxXVQMAAEeOSoC7arZbF4tBlOCVdfDO/VH
-         peL/fK61SVasFhEB4CtXLOc+904qfiLsRnnRDe8Kz1HpJQmiznRscQU8WWAjFdZRLOhJ
-         AwqLveKsx3xrdxqzzTWqXzpq7dVlDwuIZdFx6KkOqpWJys8t47bYxHuzl9o21puYExTQ
-         rIYLPCjnbGtCbaiX7pwQu0chmgDFxcv+ADOpuahcJ2AmHzD97HIQy7kRga5GuCXAg1Wc
-         Got/mxEUxW2v98mgVYXIjeaCkriW5iHatgGcfkDkb2FSv1amZUT7IrbqngMHi3TY85LB
-         NjqA==
-X-Gm-Message-State: APjAAAWWw1sZHstO+MRSoVzRWvDZqorm7BOWgKhpz99T6O7IjiH4XaM0
-        uNcP+IcFcIlL06j5E55HwoW8uqnClgXVfvOTm3Pj6E1I8E1l
-X-Google-Smtp-Source: APXvYqzkybw6Wn+Li7jpXIwPEu6DrrvHCNxZ0RdTQuikJ9CC9uXJlEMhd5vO6oTUXbRLRUh+jGq2W7vI11/mWSSm4gb3GnXjFk6h
+        id S1728034AbfGSMVF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 08:21:05 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:56718 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726076AbfGSMVF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 08:21:05 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190719122103euoutp0169965f1b369d542ada8fd395d52fb74d~yzlAKp3iD2809228092euoutp01c
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2019 12:21:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190719122103euoutp0169965f1b369d542ada8fd395d52fb74d~yzlAKp3iD2809228092euoutp01c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1563538863;
+        bh=AkuwhZsflWxMXUSYgKx6guf5e1rL6IupidnXfiBZd8s=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=ssvriqIpsLeB+ToRpRalsCZAaR75IjkgxeynIhQvAen7qw8Fu7QJ7vJnUfCF4YWRl
+         hc0enUQzsMff5XgMGYhHW/d23EmtlYNJAkEIZ2gq5i8jlBw2ZpsoXPl/PbYRAR8gQG
+         fakjfJ1UBZYob9Z6wiAm4pGL5Ue2rJ7MGCITwhW8=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190719122103eucas1p14d41939bf6a118ab6e0eea9afef0323c~yzk-1OhZI2099320993eucas1p1e;
+        Fri, 19 Jul 2019 12:21:03 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 4D.30.04325.FA5B13D5; Fri, 19
+        Jul 2019 13:21:03 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190719122102eucas1p1a23e35476bd6203cc11bc503b6cd30ee~yzk-GNFF02097120971eucas1p1P;
+        Fri, 19 Jul 2019 12:21:02 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190719122102eusmtrp2d36b25121083461a91d10adf3e5f1ac3~yzk_3CbsC2520025200eusmtrp23;
+        Fri, 19 Jul 2019 12:21:02 +0000 (GMT)
+X-AuditID: cbfec7f5-b75ff700000010e5-84-5d31b5af1b68
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id E0.C4.04140.DA5B13D5; Fri, 19
+        Jul 2019 13:21:01 +0100 (BST)
+Received: from [106.120.50.63] (unknown [106.120.50.63]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190719122101eusmtip1f1aca9fb75903b6d1bf116560b8e4579~yzk_JRCQV2514225142eusmtip1K;
+        Fri, 19 Jul 2019 12:21:01 +0000 (GMT)
+Subject: Re: [PATCH] phy: core: document calibrate() method
+To:     Kishon Vijay Abraham I <kishon@ti.com>, linux-usb@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <1865da50-000f-e235-4090-1058d2aa217b@samsung.com>
+Date:   Fri, 19 Jul 2019 14:21:00 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9643:: with SMTP id d3mr51164262ios.227.1563537360868;
- Fri, 19 Jul 2019 04:56:00 -0700 (PDT)
-Date:   Fri, 19 Jul 2019 04:56:00 -0700
-In-Reply-To: <000000000000d8b010058e03aaf8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fcdf6c058e076819@google.com>
-Subject: Re: BUG: unable to handle kernel paging request in corrupted (2)
-From:   syzbot <syzbot+08b7a2c58acdfa12c82d@syzkaller.appspotmail.com>
-To:     dave.stevenson@raspberrypi.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        unglinuxdriver@microchip.com, woojung.huh@microchip.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <085b8093-d7bc-d960-f0d8-8776818ebab0@ti.com>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGKsWRmVeSWpSXmKPExsWy7djP87rrtxrGGnxq4LHYOGM9q8WFpz1s
+        Fpd3zWGzmHF+H5PFomWtzA6sHn1bVjF6HL+xncnj8ya5AOYoLpuU1JzMstQifbsEroxbzbEF
+        V3krnu+ezNLA+J6ri5GTQ0LARGLG3z9sILaQwApGibuziroYuYDsL4wSjTf+skA4nxklmnec
+        YIfpeLvhDCNEYjmjxLb1u5ggnLeMEpte/mEFqRIWsJbYdeAx2FwRgSyJW9e+M4LYzAIREt1t
+        e5hAbDYBQ4mut11gNbwCdhLNP5exgNgsAqoSX9/fAqsXFYiR2PmmhxmiRlDi5MwnYDWcAlYS
+        01dMYoKYKS+x/e0cZghbXOLWk/lgB0kI9LNL7HxwmRnibBeJJVeuskDYwhKvjm+BekdG4v9O
+        mIZmRomH59ayQzg9jBKXm2YwQlRZSxw+fhHoNQ6gFZoS63fpQ4QdJbZPbGMBCUsI8EnceCsI
+        cQSfxKRt05khwrwSHW1CENVqErOOr4Nbe/DCJeYJjEqzkLw2C8k7s5C8Mwth7wJGllWM4qml
+        xbnpqcXGeanlesWJucWleel6yfm5mxiBqeX0v+NfdzDu+5N0iFGAg1GJhzcg1yBWiDWxrLgy
+        9xCjBAezkgjv7Zf6sUK8KYmVValF+fFFpTmpxYcYpTlYlMR5qxkeRAsJpCeWpGanphakFsFk
+        mTg4pRoYLTQ73R9/udsdtV5nzgUd7amRRklMj9796bH4pBnEv88pS1ptrrIQ79RXqUeWJc0z
+        aFjY4Lys/RWTr86nTQV7t1w3rEwWMJuQNTdjy5RXNU/WytbxmrX/2SyxzuncTEHfd37+1zge
+        mB+1+7BxS7Pk6ZoT19Nea50p453yM3DLnJqSThnpOKnTSizFGYmGWsxFxYkAYN8XLSkDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsVy+t/xu7rrthrGGmyYLWGxccZ6VosLT3vY
+        LC7vmsNmMeP8PiaLRctamR1YPfq2rGL0OH5jO5PH501yAcxRejZF+aUlqQoZ+cUltkrRhhZG
+        eoaWFnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehm3mmMLrvJWPN89maWB8T1XFyMnh4SA
+        icTbDWcYuxi5OIQEljJKXDp7lhkiISNxcloDK4QtLPHnWhcbRNFrRonH8/YzgSSEBawldh14
+        zAZiiwhkSfy/8ROsmVkgQqJz+g9miIaDjBJnzraCTWITMJToetsF1sArYCfR/HMZC4jNIqAq
+        8fX9LUYQW1QgRmLfme3sEDWCEidnPgGr4RSwkpi+YhITxAIziXmbH0Itk5fY/nYOlC0ucevJ
+        fKYJjEKzkLTPQtIyC0nLLCQtCxhZVjGKpJYW56bnFhvpFSfmFpfmpesl5+duYgRG07ZjP7fs
+        YOx6F3yIUYCDUYmHNyDXIFaINbGsuDL3EKMEB7OSCO/tl/qxQrwpiZVVqUX58UWlOanFhxhN
+        gZ6byCwlmpwPjPS8knhDU0NzC0tDc2NzYzMLJXHeDoGDMUIC6YklqdmpqQWpRTB9TBycUg2M
+        iZtNRDZIt855smtvj+784p5c6fKTyWXlHurTFQ85yWx7auWsdS0ruuLk+hPlRf4u65/Esz8w
+        PX4p5LnldPulizyUXRtMrymyxPvcmK+5e27OxiQ1A5PvbxdPe5MeJv/hTtZvhzmHFU6dW9VZ
+        cI6tJ1vC6dZp27KsluCdxQuD758VqwzJPHxKiaU4I9FQi7moOBEALP9t17wCAAA=
+X-CMS-MailID: 20190719122102eucas1p1a23e35476bd6203cc11bc503b6cd30ee
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485
+References: <CGME20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485@eucas1p2.samsung.com>
+        <20190719095245.17401-1-m.szyprowski@samsung.com>
+        <085b8093-d7bc-d960-f0d8-8776818ebab0@ti.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has bisected this bug to:
+Hi Kishon,
 
-commit 9343ac87f2a4e09bf6e27b5f31e72e9e3a82abff
-Author: Dave Stevenson <dave.stevenson@raspberrypi.org>
-Date:   Mon Jun 25 14:07:15 2018 +0000
+On 2019-07-19 12:04, Kishon Vijay Abraham I wrote:
+> Hi Marek,
+>
+> On 19/07/19 3:22 PM, Marek Szyprowski wrote:
+>> Commit 36914111e682 ("drivers: phy: add calibrate method") added support
+>> for generic phy_calibrate() method, but it didn't explain in detail when
+>> such method is supposed to be called. Add some more documentation directly
+>> to the phy.h to make it clean that it is intended to be called after every
+>> host controller reset.
+>>
+>> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>> ---
+>>   include/linux/phy/phy.h | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+>> index 15032f145063..46775e8b0ed9 100644
+>> --- a/include/linux/phy/phy.h
+>> +++ b/include/linux/phy/phy.h
+>> @@ -101,6 +101,18 @@ struct phy_ops {
+>>   	int	(*validate)(struct phy *phy, enum phy_mode mode, int submode,
+>>   			    union phy_configure_opts *opts);
+>>   	int	(*reset)(struct phy *phy);
+>> +
+>> +	/**
+>> +	 * @calibrate:
+>> +	 *
+>> +	 * Optional.
+>> +	 *
+>> +	 * Used to calibrate phy, typically by adjusting some parameters
+>> +	 * in runtime, which are otherwise lost after host controller
+>> +	 * reset and cannot be set in phy_init() and phy_power_on().
+>> +	 *
+>> +	 * Returns: 0 if successful, an negative error code otherwise
+>> +	 */
+>>   	int	(*calibrate)(struct phy *phy);
+> This should be added in drivers/phy/phy-core.c before phy_calibrate()?
 
-     net: lan78xx: Use s/w csum check on VLANs without tag stripping
+Okay. Do you want to keep it also in phy.h (like for validate and 
+configure)?
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=102feb84600000
-start commit:   49d05fe2 ipv6: rt6_check should return NULL if 'from' is N..
-git tree:       net
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=122feb84600000
-console output: https://syzkaller.appspot.com/x/log.txt?x=142feb84600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=87305c3ca9c25c70
-dashboard link: https://syzkaller.appspot.com/bug?extid=08b7a2c58acdfa12c82d
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143a78f4600000
 
-Reported-by: syzbot+08b7a2c58acdfa12c82d@syzkaller.appspotmail.com
-Fixes: 9343ac87f2a4 ("net: lan78xx: Use s/w csum check on VLANs without tag  
-stripping")
+> We could
+> add a separate section in Documentation/phy.txt to document these phy_ops.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
