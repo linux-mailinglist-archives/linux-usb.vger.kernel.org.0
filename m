@@ -2,172 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E95FB6E378
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 11:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8966E3C4
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 11:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbfGSJat (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 05:30:49 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:50325 "EHLO
+        id S1726316AbfGSJw5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 05:52:57 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:57264 "EHLO
         mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726029AbfGSJas (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 05:30:48 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190719093047euoutp02cc5f3d3f59e9244af9630c4134f46a58~yxQVK3iWs2887528875euoutp02Y
-        for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2019 09:30:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190719093047euoutp02cc5f3d3f59e9244af9630c4134f46a58~yxQVK3iWs2887528875euoutp02Y
+        with ESMTP id S1725794AbfGSJw5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 05:52:57 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190719095255euoutp0258ec2b0c98539ed20d334d38d3b92e81~yxjqGdYfh0981009810euoutp02g
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2019 09:52:55 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190719095255euoutp0258ec2b0c98539ed20d334d38d3b92e81~yxjqGdYfh0981009810euoutp02g
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563528647;
-        bh=4WJcerrgtqpZTnMzI8e8akF7VisSMSEGx9wGghtcB1M=;
+        s=mail20170921; t=1563529975;
+        bh=24T3A28SosJC8MyaHhiGeUg1hqsvNYUj7VMLtMfMHOE=;
         h=From:To:Cc:Subject:Date:References:From;
-        b=dqAvGEd5xl10PjmvaVjQYm/TMtBAi0wo53BIP7/mWXlWM9qeImA1F66OfD6ljfsVJ
-         st4fU23yIvsWgqrwVbSz/UPNKkk3lH5+65DTnyCy6VcY4cdkfxYc9KAUtUo/4TAaEc
-         GuPeZgi8Qt1/FReRR85kEmhTHRz1jrOpwBp01wyU=
+        b=A5Gv9zEa+JO5PDr45Ro2GRJqBtFHUR3Q3UhiOLtRv/hReJzqPcB2O+LOIkY6e/oAI
+         f+3dUYJidsFkg2fgYaMBajHIUawzClPeHdsMs9Q2ihlVAkY8WuscfHpBlq4tSaBfWw
+         KtoyBhKEB4xj+aTT88OeFVKalenHMHIElrePt0PA=
 Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190719093046eucas1p2bb8352bf1b3c2e8dac7829539acd8c0e~yxQUYzFPB2488424884eucas1p2S;
-        Fri, 19 Jul 2019 09:30:46 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 62.D2.04377.5CD813D5; Fri, 19
-        Jul 2019 10:30:46 +0100 (BST)
+        20190719095254eucas1p2b2bb9a402bbce8e847370dc9b6317957~yxjpvEnZE2084820848eucas1p2i;
+        Fri, 19 Jul 2019 09:52:54 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id AB.55.04377.6F2913D5; Fri, 19
+        Jul 2019 10:52:54 +0100 (BST)
 Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190719093045eucas1p1a1c6f26ae4103e9ed283fff2396beaef~yxQTmz3S31684216842eucas1p1x;
-        Fri, 19 Jul 2019 09:30:45 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485~yxjo_5ELw2084820848eucas1p2h;
+        Fri, 19 Jul 2019 09:52:54 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190719093045eusmtrp2432848cc26ad2cd414490ba5972aab52~yxQTaq_lj1662516625eusmtrp23;
-        Fri, 19 Jul 2019 09:30:45 +0000 (GMT)
-X-AuditID: cbfec7f4-113ff70000001119-4e-5d318dc598c2
+        20190719095254eusmtrp23e635a321dba676a9fe289638cd3e1ce~yxjo_Tu-C2986729867eusmtrp2T;
+        Fri, 19 Jul 2019 09:52:54 +0000 (GMT)
+X-AuditID: cbfec7f4-12dff70000001119-e0-5d3192f6facf
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 67.79.04146.5CD813D5; Fri, 19
-        Jul 2019 10:30:45 +0100 (BST)
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 3A.04.04140.5F2913D5; Fri, 19
+        Jul 2019 10:52:54 +0100 (BST)
 Received: from AMDC2765.DIGITAL.local (unknown [106.120.51.73]) by
         eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190719093044eusmtip179cb8ff21b96772ee15df951a7268fbf~yxQTAQUsN1578415784eusmtip1d;
-        Fri, 19 Jul 2019 09:30:44 +0000 (GMT)
+        20190719095253eusmtip1fd8598824a9077f63724d3157d3d42db~yxjonc0TH2663426634eusmtip1G;
+        Fri, 19 Jul 2019 09:52:53 +0000 (GMT)
 From:   Marek Szyprowski <m.szyprowski@samsung.com>
 To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] usb: dwc3: remove generic PHYs forwarding for XHCI device
-Date:   Fri, 19 Jul 2019 11:30:37 +0200
-Message-Id: <20190719093037.16181-1-m.szyprowski@samsung.com>
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: [PATCH] phy: core: document calibrate() method
+Date:   Fri, 19 Jul 2019 11:52:45 +0200
+Message-Id: <20190719095245.17401-1-m.szyprowski@samsung.com>
 X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHIsWRmVeSWpSXmKPExsWy7djPc7rHeg1jDY4dZ7LYOGM9q8Wxtifs
-        FufPb2C3uLxrDpvFjPP7mCwWLWtltlh75C67RfOmKawOHB6L97xk8ti0qpPNo2/LKkaPz5vk
-        AliiuGxSUnMyy1KL9O0SuDJaVrxnLHgqXPF77grGBsaZAl2MnBwSAiYSvfP3M4HYQgIrGCVO
-        L1LuYuQCsr8wSnyYtpYRwvnMKPHkfhdQFQdYx759hRDx5YwS777/ZYfr2PX7HQvIKDYBQ4mu
-        t11sILaIgIPEkqV3wGxmgV+MEk2zNEFsYQEviYML57KD2CwCqhI9V6eC1fAK2Ep86njCCnGe
-        vMTqDQeYQRZICFxnk5h48w4jRMJF4taDQ0wQtrDEq+Nb2CFsGYn/O+czQTQ0M0o8PLeWHcLp
-        YZS43DQDqtta4vDxi6wg/zALaEqs36UPEXaUuDVrKgvEm3wSN94KQhzNJzFp23RmiDCvREeb
-        EES1msSs4+vg1h68cIkZwvaQ2Nm5mg0SpLESXxonM09glJuFsGsBI+MqRvHU0uLc9NRio7zU
-        cr3ixNzi0rx0veT83E2MwFRw+t/xLzsYd/1JOsQowMGoxMMbkGsQK8SaWFZcmXuIUYKDWUmE
-        9/ZL/Vgh3pTEyqrUovz4otKc1OJDjNIcLErivNUMD6KFBNITS1KzU1MLUotgskwcnFINjBo2
-        Wu6+P/Wqbv4K3BZ+9zK33LGDv/b8jzUPeqBz4mIQV1it4YTkOYrrDbZGf3sk9TPidUOR7Kdv
-        TMVvCjbdWqp8r+Rezg0VzvZ9HyXevwp8vnT77nalXomM77LaszfJGd+ZI24cpLu5x0UxmYmx
-        ISHE3Mxuhuwn263NXxfJrROQDfaJ9a7sVmIpzkg01GIuKk4EAIb9HfYBAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKLMWRmVeSWpSXmKPExsVy+t/xu7pHew1jDSZs5LPYOGM9q8Wxtifs
-        FufPb2C3uLxrDpvFjPP7mCwWLWtltlh75C67RfOmKawOHB6L97xk8ti0qpPNo2/LKkaPz5vk
-        Alii9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DJa
-        VrxnLHgqXPF77grGBsaZAl2MHBwSAiYS+/YVdjFycQgJLGWU6Pv8k6WLkRMoLiNxcloDK4Qt
-        LPHnWhcbRNEnRon7/afAitgEDCW63oIkODlEBJwkOteeBitiFvjHKPFr9ydmkISwgJfEwYVz
-        2UFsFgFViZ6rU8EaeAVsJT51PIHaIC+xesMB5gmMPAsYGVYxiqSWFuem5xYb6hUn5haX5qXr
-        JefnbmIEBuG2Yz8372C8tDH4EKMAB6MSD29ArkGsEGtiWXFl7iFGCQ5mJRHe2y/1Y4V4UxIr
-        q1KL8uOLSnNSiw8xmgItn8gsJZqcD4yQvJJ4Q1NDcwtLQ3Njc2MzCyVx3g6BgzFCAumJJanZ
-        qakFqUUwfUwcnFINjJVMix9P4ii5NTFvtqDSDCGDM8IRdjtcT7nqvGT3vfLL7ZGsaU3+3aji
-        c0zFkcIzAp+xVHlbyF/OCYjUy570evmHxHvbdu/eJXvQtbtd6JvHnu4/Eks1mUOUH4vlH628
-        nSQgIDy/jVH2mXhAz4fQi5E+PU/9b5nVO8hkims8cq7vXJaxuCVAiaU4I9FQi7moOBEAkFq8
-        z1gCAAA=
-X-CMS-MailID: 20190719093045eucas1p1a1c6f26ae4103e9ed283fff2396beaef
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPIsWRmVeSWpSXmKPExsWy7djP87rfJhnGGtz4qmSxccZ6VosLT3vY
+        LC7vmsNmMeP8PiaLRctamS3WHrnL7sDm0bdlFaPH8RvbmTw+b5ILYI7isklJzcksSy3St0vg
+        ymia95m14CtnxdJXIQ2MjRxdjJwcEgImEi+m32TsYuTiEBJYwSjx+GEfM4TzhVHi5aFHLBDO
+        Z0aJll8n2WFaZhw4wQZiCwksB0psM4fr+LNwJzNIgk3AUKLrbRdYkYiAg8SSpXfYQIqYBdYz
+        Sqxc/B1oEgeHsIC5xNNtCSA1LAKqEts3LmEFsXkFbCW29P1ihVgmL7F6wwGwkyQEDrBJrH93
+        lBki4SLRvGcLI4QtLPHq+Bao62Qk/u+czwTR0Mwo8fDcWnYIp4dR4nLTDKgOa4nDxy+yglzB
+        LKApsX6XPkTYUWL7xDYWkLCEAJ/EjbeCIGFmIHPStunMEGFeiY42IYhqNYlZx9fBrT144RLU
+        aR4Stzs/M0ECKFaifddqpgmMcrMQdi1gZFzFKJ5aWpybnlpslJdarlecmFtcmpeul5yfu4kR
+        GO2n/x3/soNx15+kQ4wCHIxKPLwBuQaxQqyJZcWVuYcYJTiYlUR4b7/UjxXiTUmsrEotyo8v
+        Ks1JLT7EKM3BoiTOW83wIFpIID2xJDU7NbUgtQgmy8TBKdXAKJEmzr8+nmuvYmFluo3JrjXe
+        7L2mPCULni1YOvHUm332ohG1MspxRwL7W1rzA7aye7dekLPXZ9dwfrZ588O4TQa/RVjenjgl
+        f2jT90midhI28y+u16wvv7Cp+0PW9LJVe3TSXmfPetObbOeYpft61Q527tRZFd2S9SZX2x5v
+        jgs5nfehSP+AEktxRqKhFnNRcSIAFWpAuvICAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKLMWRmVeSWpSXmKPExsVy+t/xu7rfJhnGGny9yWSxccZ6VosLT3vY
+        LC7vmsNmMeP8PiaLRctamS3WHrnL7sDm0bdlFaPH8RvbmTw+b5ILYI7SsynKLy1JVcjILy6x
+        VYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy2ia95m14CtnxdJXIQ2MjRxd
+        jJwcEgImEjMOnGDrYuTiEBJYyijx8vU6ZoiEjMTJaQ2sELawxJ9rXVBFnxglriz6zwSSYBMw
+        lOh6C5Lg5BARcJLoXHsarIhZYCOjxNOdVxm7GDk4hAXMJZ5uSwCpYRFQldi+cQnYUF4BW4kt
+        fb+gFshLrN5wgHkCI88CRoZVjCKppcW56bnFRnrFibnFpXnpesn5uZsYgUG27djPLTsYu94F
+        H2IU4GBU4uENyDWIFWJNLCuuzD3EKMHBrCTCe/ulfqwQb0piZVVqUX58UWlOavEhRlOg5ROZ
+        pUST84ERkFcSb2hqaG5haWhubG5sZqEkztshcDBGSCA9sSQ1OzW1ILUIpo+Jg1OqgbFgjRc/
+        +86Fh9eWW1b++dO77fjcuwKrVkhrfnNvt/VZafYgw3HGidM3fef9KFc0mJapuz/lStK22NlP
+        d7wR3LDJRT7k5UGnBZuEJacX3Kzpm8X1aXJ6ec9SViHTJKEUo/JfhWy8hY8PXJbZenRuVFDy
+        bF9etc3nol/8nh/KwFK3bsu3eceUb6xTYinOSDTUYi4qTgQAcVtSdUgCAAA=
+X-CMS-MailID: 20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190719093045eucas1p1a1c6f26ae4103e9ed283fff2396beaef
+X-RootMTR: 20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20190719093045eucas1p1a1c6f26ae4103e9ed283fff2396beaef
-References: <CGME20190719093045eucas1p1a1c6f26ae4103e9ed283fff2396beaef@eucas1p1.samsung.com>
+X-CMS-RootMailID: 20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485
+References: <CGME20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485@eucas1p2.samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 08f871a3aca2 ("usb: dwc3: host: convey the PHYs to xhci") added
-forwarding of the generic PHYs from DWC3 core to the instantiated XHCI-plat
-device. However XHCI(-plat) driver never gained support for generic PHYs,
-thus the lookup added by that commit is never used. In meantime the commit
-d64ff406e51e ("usb: dwc3: use bus->sysdev for DMA configuration")
-incorrectly changed the device used for creating lookup, making the lookup
-useless and generic PHYs inaccessible from XHCI device.
-
-However since commit 178a0bce05cb ("usb: core: hcd: integrate the PHY
-wrapper into the HCD core") USB HCD already handles generic PHYs acquired
-from the HCD's 'sysdev', which in this case is DWC3 core device. This means
-that creating any custom lookup entries for XHCI driver is no longer needed
-and can be simply removed.
+Commit 36914111e682 ("drivers: phy: add calibrate method") added support
+for generic phy_calibrate() method, but it didn't explain in detail when
+such method is supposed to be called. Add some more documentation directly
+to the phy.h to make it clean that it is intended to be called after every
+host controller reset.
 
 Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 ---
- drivers/usb/dwc3/host.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+ include/linux/phy/phy.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index f55947294f7c..8deea8c91e03 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -85,7 +85,7 @@ int dwc3_host_init(struct dwc3 *dwc)
- 						DWC3_XHCI_RESOURCES_NUM);
- 	if (ret) {
- 		dev_err(dwc->dev, "couldn't add resources to xHCI device\n");
--		goto err1;
-+		goto err;
- 	}
- 
- 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
-@@ -112,37 +112,23 @@ int dwc3_host_init(struct dwc3 *dwc)
- 		ret = platform_device_add_properties(xhci, props);
- 		if (ret) {
- 			dev_err(dwc->dev, "failed to add properties to xHCI\n");
--			goto err1;
-+			goto err;
- 		}
- 	}
- 
--	phy_create_lookup(dwc->usb2_generic_phy, "usb2-phy",
--			  dev_name(dwc->dev));
--	phy_create_lookup(dwc->usb3_generic_phy, "usb3-phy",
--			  dev_name(dwc->dev));
--
- 	ret = platform_device_add(xhci);
- 	if (ret) {
- 		dev_err(dwc->dev, "failed to register xHCI device\n");
--		goto err2;
-+		goto err;
- 	}
- 
- 	return 0;
--err2:
--	phy_remove_lookup(dwc->usb2_generic_phy, "usb2-phy",
--			  dev_name(dwc->dev));
--	phy_remove_lookup(dwc->usb3_generic_phy, "usb3-phy",
--			  dev_name(dwc->dev));
--err1:
-+err:
- 	platform_device_put(xhci);
- 	return ret;
- }
- 
- void dwc3_host_exit(struct dwc3 *dwc)
- {
--	phy_remove_lookup(dwc->usb2_generic_phy, "usb2-phy",
--			  dev_name(dwc->dev));
--	phy_remove_lookup(dwc->usb3_generic_phy, "usb3-phy",
--			  dev_name(dwc->dev));
- 	platform_device_unregister(dwc->xhci);
- }
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index 15032f145063..46775e8b0ed9 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -101,6 +101,18 @@ struct phy_ops {
+ 	int	(*validate)(struct phy *phy, enum phy_mode mode, int submode,
+ 			    union phy_configure_opts *opts);
+ 	int	(*reset)(struct phy *phy);
++
++	/**
++	 * @calibrate:
++	 *
++	 * Optional.
++	 *
++	 * Used to calibrate phy, typically by adjusting some parameters
++	 * in runtime, which are otherwise lost after host controller
++	 * reset and cannot be set in phy_init() and phy_power_on().
++	 *
++	 * Returns: 0 if successful, an negative error code otherwise
++	 */
+ 	int	(*calibrate)(struct phy *phy);
+ 	void	(*release)(struct phy *phy);
+ 	struct module *owner;
 -- 
 2.17.1
 
