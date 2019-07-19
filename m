@@ -2,130 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8966E3C4
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 11:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E6E6E3E8
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jul 2019 12:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbfGSJw5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jul 2019 05:52:57 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:57264 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725794AbfGSJw5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 05:52:57 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190719095255euoutp0258ec2b0c98539ed20d334d38d3b92e81~yxjqGdYfh0981009810euoutp02g
-        for <linux-usb@vger.kernel.org>; Fri, 19 Jul 2019 09:52:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190719095255euoutp0258ec2b0c98539ed20d334d38d3b92e81~yxjqGdYfh0981009810euoutp02g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563529975;
-        bh=24T3A28SosJC8MyaHhiGeUg1hqsvNYUj7VMLtMfMHOE=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=A5Gv9zEa+JO5PDr45Ro2GRJqBtFHUR3Q3UhiOLtRv/hReJzqPcB2O+LOIkY6e/oAI
-         f+3dUYJidsFkg2fgYaMBajHIUawzClPeHdsMs9Q2ihlVAkY8WuscfHpBlq4tSaBfWw
-         KtoyBhKEB4xj+aTT88OeFVKalenHMHIElrePt0PA=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190719095254eucas1p2b2bb9a402bbce8e847370dc9b6317957~yxjpvEnZE2084820848eucas1p2i;
-        Fri, 19 Jul 2019 09:52:54 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id AB.55.04377.6F2913D5; Fri, 19
-        Jul 2019 10:52:54 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485~yxjo_5ELw2084820848eucas1p2h;
-        Fri, 19 Jul 2019 09:52:54 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190719095254eusmtrp23e635a321dba676a9fe289638cd3e1ce~yxjo_Tu-C2986729867eusmtrp2T;
-        Fri, 19 Jul 2019 09:52:54 +0000 (GMT)
-X-AuditID: cbfec7f4-12dff70000001119-e0-5d3192f6facf
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 3A.04.04140.5F2913D5; Fri, 19
-        Jul 2019 10:52:54 +0100 (BST)
-Received: from AMDC2765.DIGITAL.local (unknown [106.120.51.73]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190719095253eusmtip1fd8598824a9077f63724d3157d3d42db~yxjonc0TH2663426634eusmtip1G;
-        Fri, 19 Jul 2019 09:52:53 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        id S1727736AbfGSKGA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jul 2019 06:06:00 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:39890 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726076AbfGSKGA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jul 2019 06:06:00 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x6JA5ubt031335;
+        Fri, 19 Jul 2019 05:05:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1563530756;
+        bh=kEvJafuT1mgVbVr5vHN42Lk/YX5x6Xiii0b77v5ee/M=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=h2ZRrvKub8w1lRclaH1XGeYI9et46t8uhXdTmcqPzYSwd6/I3wcpVc0YY1YNCYDmL
+         NBS5iKvrV9p0iuw/30ExYNkaY/SxlfIiceAeUG1utTmQHJcP3PwYgMfNnrkjfF74C/
+         YUikXxhCOljROFaSjLWqyolVLMJlZA+w1Kicecbw=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x6JA5uou020375
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 19 Jul 2019 05:05:56 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 19
+ Jul 2019 05:05:56 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Fri, 19 Jul 2019 05:05:56 -0500
+Received: from [172.24.190.233] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x6JA5sIR062705;
+        Fri, 19 Jul 2019 05:05:54 -0500
+Subject: Re: [PATCH] phy: core: document calibrate() method
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        <linux-usb@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH] phy: core: document calibrate() method
-Date:   Fri, 19 Jul 2019 11:52:45 +0200
-Message-Id: <20190719095245.17401-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPIsWRmVeSWpSXmKPExsWy7djP87rfJhnGGtz4qmSxccZ6VosLT3vY
-        LC7vmsNmMeP8PiaLRctamS3WHrnL7sDm0bdlFaPH8RvbmTw+b5ILYI7isklJzcksSy3St0vg
-        ymia95m14CtnxdJXIQ2MjRxdjJwcEgImEi+m32TsYuTiEBJYwSjx+GEfM4TzhVHi5aFHLBDO
-        Z0aJll8n2WFaZhw4wQZiCwksB0psM4fr+LNwJzNIgk3AUKLrbRdYkYiAg8SSpXfYQIqYBdYz
-        Sqxc/B1oEgeHsIC5xNNtCSA1LAKqEts3LmEFsXkFbCW29P1ihVgmL7F6wwGwkyQEDrBJrH93
-        lBki4SLRvGcLI4QtLPHq+Bao62Qk/u+czwTR0Mwo8fDcWnYIp4dR4nLTDKgOa4nDxy+yglzB
-        LKApsX6XPkTYUWL7xDYWkLCEAJ/EjbeCIGFmIHPStunMEGFeiY42IYhqNYlZx9fBrT144RLU
-        aR4Stzs/M0ECKFaifddqpgmMcrMQdi1gZFzFKJ5aWpybnlpslJdarlecmFtcmpeul5yfu4kR
-        GO2n/x3/soNx15+kQ4wCHIxKPLwBuQaxQqyJZcWVuYcYJTiYlUR4b7/UjxXiTUmsrEotyo8v
-        Ks1JLT7EKM3BoiTOW83wIFpIID2xJDU7NbUgtQgmy8TBKdXAKJEmzr8+nmuvYmFluo3JrjXe
-        7L2mPCULni1YOvHUm332ohG1MspxRwL7W1rzA7aye7dekLPXZ9dwfrZ588O4TQa/RVjenjgl
-        f2jT90midhI28y+u16wvv7Cp+0PW9LJVe3TSXmfPetObbOeYpft61Q527tRZFd2S9SZX2x5v
-        jgs5nfehSP+AEktxRqKhFnNRcSIAFWpAuvICAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKLMWRmVeSWpSXmKPExsVy+t/xu7rfJhnGGny9yWSxccZ6VosLT3vY
-        LC7vmsNmMeP8PiaLRctamS3WHrnL7sDm0bdlFaPH8RvbmTw+b5ILYI7SsynKLy1JVcjILy6x
-        VYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy2ia95m14CtnxdJXIQ2MjRxd
-        jJwcEgImEjMOnGDrYuTiEBJYyijx8vU6ZoiEjMTJaQ2sELawxJ9rXVBFnxglriz6zwSSYBMw
-        lOh6C5Lg5BARcJLoXHsarIhZYCOjxNOdVxm7GDk4hAXMJZ5uSwCpYRFQldi+cQnYUF4BW4kt
-        fb+gFshLrN5wgHkCI88CRoZVjCKppcW56bnFRnrFibnFpXnpesn5uZsYgUG27djPLTsYu94F
-        H2IU4GBU4uENyDWIFWJNLCuuzD3EKMHBrCTCe/ulfqwQb0piZVVqUX58UWlOavEhRlOg5ROZ
-        pUST84ERkFcSb2hqaG5haWhubG5sZqEkztshcDBGSCA9sSQ1OzW1ILUIpo+Jg1OqgbFgjRc/
-        +86Fh9eWW1b++dO77fjcuwKrVkhrfnNvt/VZafYgw3HGidM3fef9KFc0mJapuz/lStK22NlP
-        d7wR3LDJRT7k5UGnBZuEJacX3Kzpm8X1aXJ6ec9SViHTJKEUo/JfhWy8hY8PXJbZenRuVFDy
-        bF9etc3nol/8nh/KwFK3bsu3eceUb6xTYinOSDTUYi4qTgQAcVtSdUgCAAA=
-X-CMS-MailID: 20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485
 References: <CGME20190719095254eucas1p29c9e6c7aac20cf89b589fd2f2036c485@eucas1p2.samsung.com>
+ <20190719095245.17401-1-m.szyprowski@samsung.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <085b8093-d7bc-d960-f0d8-8776818ebab0@ti.com>
+Date:   Fri, 19 Jul 2019 15:34:14 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20190719095245.17401-1-m.szyprowski@samsung.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 36914111e682 ("drivers: phy: add calibrate method") added support
-for generic phy_calibrate() method, but it didn't explain in detail when
-such method is supposed to be called. Add some more documentation directly
-to the phy.h to make it clean that it is intended to be called after every
-host controller reset.
+Hi Marek,
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- include/linux/phy/phy.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On 19/07/19 3:22 PM, Marek Szyprowski wrote:
+> Commit 36914111e682 ("drivers: phy: add calibrate method") added support
+> for generic phy_calibrate() method, but it didn't explain in detail when
+> such method is supposed to be called. Add some more documentation directly
+> to the phy.h to make it clean that it is intended to be called after every
+> host controller reset.
+> 
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+>  include/linux/phy/phy.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+> index 15032f145063..46775e8b0ed9 100644
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -101,6 +101,18 @@ struct phy_ops {
+>  	int	(*validate)(struct phy *phy, enum phy_mode mode, int submode,
+>  			    union phy_configure_opts *opts);
+>  	int	(*reset)(struct phy *phy);
+> +
+> +	/**
+> +	 * @calibrate:
+> +	 *
+> +	 * Optional.
+> +	 *
+> +	 * Used to calibrate phy, typically by adjusting some parameters
+> +	 * in runtime, which are otherwise lost after host controller
+> +	 * reset and cannot be set in phy_init() and phy_power_on().
+> +	 *
+> +	 * Returns: 0 if successful, an negative error code otherwise
+> +	 */
+>  	int	(*calibrate)(struct phy *phy);
 
-diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
-index 15032f145063..46775e8b0ed9 100644
---- a/include/linux/phy/phy.h
-+++ b/include/linux/phy/phy.h
-@@ -101,6 +101,18 @@ struct phy_ops {
- 	int	(*validate)(struct phy *phy, enum phy_mode mode, int submode,
- 			    union phy_configure_opts *opts);
- 	int	(*reset)(struct phy *phy);
-+
-+	/**
-+	 * @calibrate:
-+	 *
-+	 * Optional.
-+	 *
-+	 * Used to calibrate phy, typically by adjusting some parameters
-+	 * in runtime, which are otherwise lost after host controller
-+	 * reset and cannot be set in phy_init() and phy_power_on().
-+	 *
-+	 * Returns: 0 if successful, an negative error code otherwise
-+	 */
- 	int	(*calibrate)(struct phy *phy);
- 	void	(*release)(struct phy *phy);
- 	struct module *owner;
--- 
-2.17.1
+This should be added in drivers/phy/phy-core.c before phy_calibrate()? We could
+add a separate section in Documentation/phy.txt to document these phy_ops.
 
+Thanks
+Kishon
