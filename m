@@ -2,125 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAA96F253
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2019 11:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430E96F3C1
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2019 16:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726129AbfGUJBf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jul 2019 05:01:35 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:42268 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725851AbfGUJBf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jul 2019 05:01:35 -0400
-Received: by mail-pl1-f195.google.com with SMTP id ay6so17710267plb.9;
-        Sun, 21 Jul 2019 02:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=uMCT1sRvSpYaoD1Z8FlxTMQ/VpyVpjBJDn9MHa/ZVPo=;
-        b=bo0U1egZOrd62N2e2VId7EPbVmrGg8I6+LSmMCOOlbh1JSpDDny0jX6sY6Aj8uQZ0V
-         FDwFWUnBN6gqTfizZciyH98orjrfc3S1wNDrSeFt9xfMUwXuEtMPunSq0mmpn/0yBnII
-         LbXxrVBLoabcRCyF38hBvo0lu78uBosAsIruwJI7fabIvOmk502+1WzwSFBkr0r4opP5
-         AOSCNTjUvXB075IaUcpmXtQ/yzFSo4xaLu4+9HD61M4u1Y2DKy69Eu7BOV8xhhCEn7kD
-         rcKWZW93sIpMRRIBniwanhC0t1cWsyyxu/XeFP5EZ1PbxEMTLrTOa6mLnNSmLyW+yWfH
-         Qy0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=uMCT1sRvSpYaoD1Z8FlxTMQ/VpyVpjBJDn9MHa/ZVPo=;
-        b=tEtSZ+2YxJ9X0igWYXGuVOov7YAGhoGbleh+va98G32s3conZVtdoX26yARQTE+QxD
-         6uOpbS2LNL4H9XjJMqNf8ieon10Z6RFLA/GvN9M7SlgRUZERxXBAPKUEoKmbmqAaBX1g
-         wR131os/5itDbgq2rhtEplMyfMXBfiM5gWSXJ8Oi0xU0wIfBXgMgJcVUTd32U8AA0Ovu
-         75At1Ea3mzDHPsNrHJ1ArXs1IZyzVNUrK3qkyUex3B3oWZD7EiX8cWuAKvLUokQeu+6c
-         kCDp0p9EGL9kgTciTM4/08ofZYwg7CBLpuoqQ5gOIcuaSGpTx2QEqPmwQtlc0zIyJez3
-         Kzkg==
-X-Gm-Message-State: APjAAAWkK+RQ8NPkg4t8nF/0xEGY5G4NmBHp6iTrbXqo/jFttokop71g
-        LgemRtCH9334Fk4HSG/IEhI=
-X-Google-Smtp-Source: APXvYqyikdxi8c6IvDgbXlRE72AiaNOa+eepRpqSFBRQj/PNMLJamXs6jgijafuJBKPoUp8opfJD2Q==
-X-Received: by 2002:a17:902:b603:: with SMTP id b3mr69739706pls.9.1563699694660;
-        Sun, 21 Jul 2019 02:01:34 -0700 (PDT)
-Received: from localhost.localdomain ([125.142.23.13])
-        by smtp.gmail.com with ESMTPSA id r1sm34548144pgv.70.2019.07.21.02.01.32
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 21 Jul 2019 02:01:34 -0700 (PDT)
-Date:   Sun, 21 Jul 2019 18:01:29 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>
-Cc:     valentina.manea.m@gmail.com, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        id S1726580AbfGUOte (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Jul 2019 10:49:34 -0400
+Received: from conuserg-11.nifty.com ([210.131.2.78]:46833 "EHLO
+        conuserg-11.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726449AbfGUOte (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jul 2019 10:49:34 -0400
+X-Greylist: delayed 25934 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Jul 2019 10:49:33 EDT
+Received: from grover.flets-west.jp (softbank126026094249.bbtec.net [126.26.94.249]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id x6LEnDGu018230;
+        Sun, 21 Jul 2019 23:49:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com x6LEnDGu018230
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1563720553;
+        bh=ZvBmqSLOzfHz/hzO4+w3rXciLrI8mgXK07czQ76JAGk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ahjxzbJhU1v9pWW0Ea6BPbxGhDopYgTjQkgf0PNgBvdUTpnRZFlEImnmfz2yB7e+D
+         1VelLDCfe33uBdpRFB3c+oh0IUmQRWzbTV7Slo16YeNATLZnBx73vS9cm+XfO2/XO4
+         dw7hkD2cqMWWOq+0h7zrZeC3j506qBvd/Da956PuT5WRYLnOKYqqYjBIiSIaWFLgdu
+         lD3nOGToFrySjDHG32u2mriokdJ1Lqn7VG09JweVzkIAE3bS74AiNPJE3Lh5kKx2JI
+         OZBGU7Xme/QsksCTRx1gbMYlLqRSDs6QWv78RkuZoIa6Vf4iDE+aNj45dpqGkeEkb1
+         JuIYmU+3lxgvQ==
+X-Nifty-SrcIP: [126.26.94.249]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] usbip: Implement SG support
-Message-ID: <20190721090129.GA13527@localhost.localdomain>
-References: <20190705164355.14025-1-suwan.kim027@gmail.com>
- <7eaaf016-8da5-6089-fe19-bf62c3bbe187@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7eaaf016-8da5-6089-fe19-bf62c3bbe187@kernel.org>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Subject: [PATCH 1/2] usb: host: oxu210hp-hcd: remove include/linux/oxu210hp.h
+Date:   Sun, 21 Jul 2019 23:49:08 +0900
+Message-Id: <20190721144909.5295-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 19, 2019 at 04:04:20PM -0600, shuah wrote:
-> On 7/5/19 10:43 AM, Suwan Kim wrote:
-> > There are bugs on vhci with usb 3.0 storage device. Originally, vhci
-> > doesn't supported SG, so USB storage driver on vhci breaks SG list
-> > into multiple URBs and it causes error that a transfer got terminated
-> > too early because the transfer length for one of the URBs was not
-> > divisible by the maxpacket size.
-> > 
-> > To support SG, vhci doesn't map and unmap URB for DMA to use native
-> > SG list (urb->num_sgs). In DMA mapping function of vhci, it sets
-> > URB_DMA_MAP_SG flag in urb->transfer_flags if URB has SG list and
-> > this flag will tell the stub driver to use SG list.
-> > 
-> > In this patch, vhci basically support SG and it sends each SG list
-> > entry to the stub driver. Then, the stub driver sees the total length
-> > of the buffer and allocates SG table and pages according to the total
-> > buffer length calling sgl_alloc(). After the stub driver receives
-> > completed URB, it again sends each SG list entry to vhci.
-> > 
-> > If HCD of the server doesn't support SG, the stub driver breaks a
-> > single SG reqeust into several URBs and submit them to the server's
-> > HCD. When all the split URBs are completed, the stub driver
-> > reassembles the URBs into a single return command and sends it to
-> > vhci.
-> > 
-> > Alan fixed vhci bug with the USB 3.0 storage device by modifying
-> > USB storage driver.
-> > ("usb-storage: Set virt_boundary_mask to avoid SG overflows")
-> > But the fundamental solution of it is to add SG support to vhci.
-> > 
-> > This patch works well with the USB 3.0 storage devices without Alan's
-> > patch, and we can revert Alan's patch if it causes some troubles.
-> > 
-> > Suwan Kim (2):
-> >    usbip: Skip DMA mapping and unmapping for urb at vhci
-> >    usbip: Implement SG support to vhci
-> > 
-> >   drivers/usb/usbip/stub.h         |   7 +-
-> >   drivers/usb/usbip/stub_main.c    |  52 +++++---
-> >   drivers/usb/usbip/stub_rx.c      | 207 ++++++++++++++++++++++---------
-> >   drivers/usb/usbip/stub_tx.c      | 108 +++++++++++-----
-> >   drivers/usb/usbip/usbip_common.c |  60 +++++++--
-> >   drivers/usb/usbip/vhci_hcd.c     |  29 ++++-
-> >   drivers/usb/usbip/vhci_tx.c      |  49 ++++++--
-> >   7 files changed, 391 insertions(+), 121 deletions(-)
-> > 
-> 
-> Hi Suwan,
-> 
-> I have been traveling and would like to test this series before I ask
-> Greg to pick it up.
-> 
-> Just a quick note that I will get to this early next week.
+struct oxu210hp_platform_data is defined, but not used at all.
 
-Ok. Thank you for reviewing the patch, Shuah.
-Please let me know if you have any problems reviewing the patch :)
+$ git grep oxu210hp_platform_data
+include/linux/oxu210hp.h:struct oxu210hp_platform_data {
 
-Regards
+include/linux/oxu210hp.h exists just for defining an unused structure,
+so it can go away.
 
-Suwan Kim
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
+
+ drivers/usb/host/oxu210hp.h | 2 --
+ include/linux/oxu210hp.h    | 8 --------
+ 2 files changed, 10 deletions(-)
+ delete mode 100644 include/linux/oxu210hp.h
+
+diff --git a/drivers/usb/host/oxu210hp.h b/drivers/usb/host/oxu210hp.h
+index 437044147862..67ebea4993b6 100644
+--- a/drivers/usb/host/oxu210hp.h
++++ b/drivers/usb/host/oxu210hp.h
+@@ -444,5 +444,3 @@ enum ehci_timer_action {
+ 	TIMER_ASYNC_SHRINK,
+ 	TIMER_ASYNC_OFF,
+ };
+-
+-#include <linux/oxu210hp.h>
+diff --git a/include/linux/oxu210hp.h b/include/linux/oxu210hp.h
+deleted file mode 100644
+index 94cd25165c08..000000000000
+--- a/include/linux/oxu210hp.h
++++ /dev/null
+@@ -1,8 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/* platform data for the OXU210HP HCD */
+-
+-struct oxu210hp_platform_data {
+-	unsigned int bus16:1;
+-	unsigned int use_hcd_otg:1;
+-	unsigned int use_hcd_sph:1;
+-};
+-- 
+2.17.1
+
