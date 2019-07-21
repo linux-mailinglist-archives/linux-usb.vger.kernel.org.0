@@ -2,89 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D78F6F4ED
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2019 21:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5976F4F1
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2019 21:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727321AbfGUTOY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jul 2019 15:14:24 -0400
-Received: from smtprelay0048.hostedemail.com ([216.40.44.48]:33249 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727232AbfGUTOY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jul 2019 15:14:24 -0400
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave03.hostedemail.com (Postfix) with ESMTP id 8E68A1801DBEC
-        for <linux-usb@vger.kernel.org>; Sun, 21 Jul 2019 19:08:01 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id E50A8181D3368;
-        Sun, 21 Jul 2019 19:07:59 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::::,RULES_HIT:41:69:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2691:2828:3138:3139:3140:3141:3142:3352:3622:3865:3867:3868:3871:4321:5007:6119:6742:8531:10004:10400:10848:11026:11232:11473:11658:11914:12043:12114:12297:12438:12683:12740:12760:12895:13069:13255:13311:13357:13439:13618:14181:14659:14721:21080:21627:30054:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:24,LUA_SUMMARY:none
-X-HE-Tag: drain48_b525613ac200
-X-Filterd-Recvd-Size: 2305
-Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
-        (Authenticated sender: joe@perches.com)
-        by omf04.hostedemail.com (Postfix) with ESMTPA;
-        Sun, 21 Jul 2019 19:07:57 +0000 (UTC)
-Message-ID: <300d3c06763883bc4af2d25d5466b7188d20e8f3.camel@perches.com>
-Subject: Re: [PATCH v10 3/6] usb:common Patch simplify
- usb_decode_set_clear_feature function.
-From:   Joe Perches <joe@perches.com>
-To:     Pawel Laszczak <pawell@cadence.com>, felipe.balbi@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        rogerq@ti.com, linux-kernel@vger.kernel.org, jbergsagel@ti.com,
-        nsekhar@ti.com, nm@ti.com, sureshp@cadence.com, jpawar@cadence.com,
-        kurahul@cadence.com, aniljoy@cadence.com
-Date:   Sun, 21 Jul 2019 12:07:56 -0700
-In-Reply-To: <1563733939-21214-4-git-send-email-pawell@cadence.com>
-References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
-         <1563733939-21214-4-git-send-email-pawell@cadence.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
+        id S1727036AbfGUTYP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Jul 2019 15:24:15 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:51083 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726997AbfGUTYP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jul 2019 15:24:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1563737054; x=1595273054;
+  h=to:from:subject:message-id:date:mime-version:
+   content-transfer-encoding;
+  bh=nJaJOf4oeBNt8gWicZmXhV61THh95xs3fSMZAFxmaLI=;
+  b=qZscZooSMGo6De0FFtO7vSOdQwuKcDc8vWjvbr/J3sTtx2sp858PhMZf
+   43EN74Gl90Q+oYjVhJR78+PUc0xXFp4nHrfCYvvgEnAhmPNCiwSSSjpBe
+   emxzLyJHKdzvbA3dWGDaUygh8WYoXjlfWb8GO8pWVx8teonG6kY/k1Z4C
+   A=;
+X-IronPort-AV: E=Sophos;i="5.64,292,1559520000"; 
+   d="scan'208";a="686796337"
+Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-2c-4e7c8266.us-west-2.amazon.com) ([10.47.22.34])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 21 Jul 2019 19:24:12 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2c-4e7c8266.us-west-2.amazon.com (Postfix) with ESMTPS id E125BA1D62
+        for <linux-usb@vger.kernel.org>; Sun, 21 Jul 2019 19:24:12 +0000 (UTC)
+Received: from EX13D07UWA002.ant.amazon.com (10.43.160.77) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Sun, 21 Jul 2019 19:24:12 +0000
+Received: from c4b301cf6c3f.ant.amazon.com (10.94.89.238) by
+ EX13D07UWA002.ant.amazon.com (10.43.160.77) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Sun, 21 Jul 2019 19:24:12 +0000
+To:     <linux-usb@vger.kernel.org>
+From:   Peter Bowen <pzb@amazon.com>
+Subject: typec class users
+Message-ID: <d0b357e0-b915-c035-3c34-65d03f597f1c@amazon.com>
+Date:   Sun, 21 Jul 2019 12:24:51 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0)
+ Gecko/20100101 Thunderbird/60.8.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.94.89.238]
+X-ClientProxiedBy: EX13MTAUWB001.ant.amazon.com (10.43.161.207) To
+ EX13D07UWA002.ant.amazon.com (10.43.160.77)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 2019-07-21 at 19:32 +0100, Pawel Laszczak wrote:
-> Patch adds usb_decode_test_mode and usb_decode_device_feature functions,
-> which allow to make more readable and simplify the
-> usb_decode_set_clear_feature function.
+The typec class claims to provide comprehensive info about ports,
+cables, and plugs.  While there is code to register cables and plugs, I
+can't find any users of these APIs.
 
-<chuckle>  I need to read entire patch series before
-commenting more I guess...
+I'd like to write some userland tools that help debug issues with Type-C
+(e.g. wrong cable type).  However none of drivers seem to use the typec
+cable or plug interface.  Are there any known drivers that use these APIs?
 
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->  drivers/usb/common/debug.c | 89 ++++++++++++++++++--------------------
->  1 file changed, 43 insertions(+), 46 deletions(-)
-> 
-> diff --git a/drivers/usb/common/debug.c b/drivers/usb/common/debug.c
-[]
-> +static const char *usb_decode_device_feature(u16 wValue)
-
-I believe this is still unnecessary hungarian.
-
-> +{
-> +	switch (wValue) {
-> +	case USB_DEVICE_SELF_POWERED:
-> +		return "Self Powered";
-> +	case USB_DEVICE_REMOTE_WAKEUP:
-> +		return "Remote Wakeup";
-> +	case USB_DEVICE_TEST_MODE:
-> +		return "Test Mode";
-> +	case USB_DEVICE_U1_ENABLE:
-> +		return "U1 Enable";
-> +	case USB_DEVICE_U2_ENABLE:
-> +		return "U2 Enable";
-> +	case USB_DEVICE_LTM_ENABLE:
-> +		return "LTM Enable";
-> +	default:
-> +		return "UNKNOWN";
-> +	}
-> +}
-
-But yeah, exactly like this... ;)
-
-
+Thanks,
+Peter
