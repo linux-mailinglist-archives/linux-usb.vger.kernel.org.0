@@ -2,109 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 820A96EF76
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Jul 2019 15:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7486F231
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2019 09:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727109AbfGTNX1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 Jul 2019 09:23:27 -0400
-Received: from mail1.bemta23.messagelabs.com ([67.219.246.215]:56417 "EHLO
-        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725834AbfGTNX1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Jul 2019 09:23:27 -0400
-Received: from [67.219.246.196] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-3.bemta.az-c.us-east-1.aws.symcld.net id 12/F0-11074-DC5133D5; Sat, 20 Jul 2019 13:23:25 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRWlGSWpSXmKPExsUyLfyHiO5ZUeN
-  Yg7mHWC0WLWtldmD0+LxJLoAxijUzLym/IoE1Y8bqPuaCHv6Kv2sqGhj/8XQxcnEICcxllNjb
-  u5IFwvnNKLF071Mgh5NDWMBZYsf1iUxdjBwcbAJmEpv/SoKERQTUJdb9n8gOYjMLWEusaXwDZ
-  jMJKElsPrCUDcRmEVCVmPNlHyNIK69AvETvG2OQMKeArcStw7PAyoUEbCTmL78OtklUQE5i5e
-  UWVhCbV0BQ4uTMJywgrcwCmhLrd+lDbJKX2P52DjNEq5bEprlbwMZICARLzD7wl3UCo+AsJN2
-  zELpnIelewMi8itEsqSgzPaMkNzEzR9fQwEDX0NBI10zXyMhcL7FKN1mvtFg3NbG4RNdQL7G8
-  WK+4Mjc5J0UvL7VkEyMwkFMK2B7vYHw1843eIUZJDiYlUd4IV6NYIb6k/JTKjMTijPii0pzU4
-  kOMMhwcShK8icDYEBIsSk1PrUjLzAFGFUxagoNHSYT3jQhQmre4IDG3ODMdInWKUZdjwdYli5
-  iFWPLy81KlxHmNQYoEQIoySvPgRsAi/BKjrJQwLyMDA4MQT0FqUW5mCar8K0ZxDkYlYd5LIFN
-  4MvNK4Da9AjqCCeiIx3pGIEeUJCKkpBqY1q8tF/x0+HvbhZzfTze1R4R1W0RJL8+Jy9ZLebPp
-  VuSeI21a/93E/j9pDyqasPBb2ItbPBv+3fXS+8meo7oycPVf38t5+zWynglu567o4v/+eY+E/
-  1IVv31t/FOu9j2YPYsnLotB8ODG+3OyPJ89u2zy0nOvilexrtQrv+tTTnOc5VWx36l7OKCG73
-  Yd/xvNX0urf/JOkOS2NxN3bN98dmszw221tzeZj3S9ex/CZc/RO7ckzWnPSTFjt6I3mbXyP24
-  mNbJ0frF3uLymWX52umropJddrX5tB4Ov/RMVz9rnwvBe9/us7tNlWyz/7nlp+P1onUbfjZrL
-  v5LuzuF567OhaOuFA9t3V78K+eb/W4mlOCPRUIu5qDgRAK83KexrAwAA
-X-Env-Sender: yokamoto@allied-telesis.co.jp
-X-Msg-Ref: server-44.tower-404.messagelabs.com!1563629004!211269!1
-X-Originating-IP: [150.87.248.20]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.43.9; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 1358 invoked from network); 20 Jul 2019 13:23:24 -0000
-Received: from abricot-inet.allied-telesis.co.jp (HELO TKY-DS01.at.lc) (150.87.248.20)
-  by server-44.tower-404.messagelabs.com with SMTP; 20 Jul 2019 13:23:24 -0000
-Received: from swim-manx.rd.allied-telesis.co.jp ([150.87.21.50]) by TKY-DS01.at.lc with Microsoft SMTPSVC(8.0.9200.16384);
-         Sat, 20 Jul 2019 22:23:23 +0900
-Received: from yokamoto-pc.rd.allied-telesis.co.jp by swim-manx.rd.allied-telesis.co.jp
- (AlliedTelesis SMTPRS 1.3 pl 1 ++E6B86F8C687C6288D9B5559052954DC9) with ESMTP id <B0004502046@swim-manx.rd.allied-telesis.co.jp>;
- Sat, 20 Jul 2019 22:23:22 +0900
-Subject: [PATCH v3] USB: serial: option: Add support for ZTE MF871A
-From:   Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>
-To:     larsm17@gmail.com, johan@kernel.org
-Cc:     hyamamo@allied-telesis.co.jp, linux-usb@vger.kernel.org
-Date:   Sat, 20 Jul 2019 22:23:18 +0900
-Message-ID: <156362896395.30109.15607667410549474761.stgit@yokamoto-pc.rd.allied-telesis.co.jp>
-In-Reply-To: <1dde5abb-2399-6bb7-531b-c88e5f0b4fae@gmail.com>
-References: <1dde5abb-2399-6bb7-531b-c88e5f0b4fae@gmail.com>
-User-Agent: StGit/0.17.1-dirty
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-OriginalArrivalTime: 20 Jul 2019 13:23:23.0862 (UTC) FILETIME=[4E99DF60:01D53EFE]
+        id S1726122AbfGUHrG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Jul 2019 03:47:06 -0400
+Received: from condef-07.nifty.com ([202.248.20.72]:50927 "EHLO
+        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725933AbfGUHrF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jul 2019 03:47:05 -0400
+X-Greylist: delayed 370 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Jul 2019 03:47:03 EDT
+Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-07.nifty.com with ESMTP id x6L7bHGA019038;
+        Sun, 21 Jul 2019 16:37:21 +0900
+Received: from grover.flets-west.jp (softbank126026094249.bbtec.net [126.26.94.249]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id x6L7app4023640;
+        Sun, 21 Jul 2019 16:36:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com x6L7app4023640
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1563694612;
+        bh=wTXJF9fhQh2D0Z3FIBOZ7YbgbP65Cu8NPe1b56CrBY4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UUMyY7PdwUXFxgwVA1qrpTAkFxOMkkDnDinMaytewX3bPxk0jzE6ufeO/VW+mpAp1
+         0Ba8MmMi3em0cO8j5V2B9pGvZ2jnYzu1uR/faKEOx8HtUAZgjOAa0qxHC7L7wVvDbk
+         WSGhCzvCJzvL7/eEvTiVHgFfs6HCKsNbR43VFHef0kRijq7TaUbxO4Pl3LYWz0kql8
+         Wpesc1sETHdLpA1mXg6Fj5lprMEXTuoeTRRy74qUwzrD4VfWObDF4IYreuor86ZXVV
+         I9XC/dINSs6huiqAQ86CfcBUgkrLOm4mJGTwwQaHN8KsX9r/eJtzy4PeKo3aoBdjxW
+         7yCyu7drYPWkg==
+X-Nifty-SrcIP: [126.26.94.249]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: [PATCH] usb: dwc3: omap: squash include/linux/platform_data/dwc3-omap.h
+Date:   Sun, 21 Jul 2019 16:36:49 +0900
+Message-Id: <20190721073649.11100-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds support for MF871A USB modem (aka Speed USB STICK U03)
-to option driver. This modem is manufactured by ZTE corporation, and
-sold by KDDI.
+This enum is only used in drivers/usb/dwc3/dwc3-omap3.c
 
-Interface layout:
-0: AT
-1: MODEM
-
-usb-devices output:
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  9 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=19d2 ProdID=1481 Rev=52.87
-S:  Manufacturer=ZTE,Incorporated
-S:  Product=ZTE Technologies MSM
-S:  SerialNumber=1234567890ABCDEF
-C:  #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-
-Co-developed-by: Hiroyuki Yamamoto <hyamamo@allied-telesis.co.jp>
-Signed-off-by: Hiroyuki Yamamoto <hyamamo@allied-telesis.co.jp>
-Signed-off-by: Yoshiaki Okamoto <yokamoto@allied-telesis.co.jp>
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
 
-Changes in v3:
-- Change used macro to USB_DEVICE_AND_INTERFACE_INFO.
+ drivers/usb/dwc3/dwc3-omap.c            |  7 +++-
+ include/linux/platform_data/dwc3-omap.h | 43 -------------------------
+ 2 files changed, 6 insertions(+), 44 deletions(-)
+ delete mode 100644 include/linux/platform_data/dwc3-omap.h
 
-Changes in v2:
-- Add Co-developed-by tag.
-- Move away product-id define and add short comment after the entry.
-
- drivers/usb/serial/option.c |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index a0aaf0635359..071e62164478 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1548,6 +1548,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1428, 0xff, 0xff, 0xff),  /* Telewell TW-LTE 4G v2 */
- 	  .driver_info = RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1476, 0xff) },	/* GosunCn ZTE WeLink ME3630 (ECM/NCM mode) */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1481, 0xff, 0x00, 0x00) }, /* ZTE MF871A */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1533, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1534, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1535, 0xff, 0xff, 0xff) },
+diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
+index ed8b86517675..4f51523a07ac 100644
+--- a/drivers/usb/dwc3/dwc3-omap.c
++++ b/drivers/usb/dwc3/dwc3-omap.c
+@@ -14,7 +14,6 @@
+ #include <linux/irq.h>
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
+-#include <linux/platform_data/dwc3-omap.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/ioport.h>
+@@ -106,6 +105,12 @@
+ #define USBOTGSS_UTMI_OTG_CTRL_SESSVALID	BIT(2)
+ #define USBOTGSS_UTMI_OTG_CTRL_VBUSVALID	BIT(1)
+ 
++enum dwc3_omap_utmi_mode {
++	DWC3_OMAP_UTMI_MODE_UNKNOWN = 0,
++	DWC3_OMAP_UTMI_MODE_HW,
++	DWC3_OMAP_UTMI_MODE_SW,
++};
++
+ struct dwc3_omap {
+ 	struct device		*dev;
+ 
+diff --git a/include/linux/platform_data/dwc3-omap.h b/include/linux/platform_data/dwc3-omap.h
+deleted file mode 100644
+index 1d36ca874cc8..000000000000
+--- a/include/linux/platform_data/dwc3-omap.h
++++ /dev/null
+@@ -1,43 +0,0 @@
+-/**
+- * dwc3-omap.h - OMAP Specific Glue layer, header.
+- *
+- * Copyright (C) 2010-2011 Texas Instruments Incorporated - http://www.ti.com
+- * All rights reserved.
+- *
+- * Author: Felipe Balbi <balbi@ti.com>
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions, and the following disclaimer,
+- *    without modification.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The names of the above-listed copyright holders may not be used
+- *    to endorse or promote products derived from this software without
+- *    specific prior written permission.
+- *
+- * ALTERNATIVELY, this software may be distributed under the terms of the
+- * GNU General Public License ("GPL") version 2, as published by the Free
+- * Software Foundation.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- */
+-
+-enum dwc3_omap_utmi_mode {
+-	DWC3_OMAP_UTMI_MODE_UNKNOWN = 0,
+-	DWC3_OMAP_UTMI_MODE_HW,
+-	DWC3_OMAP_UTMI_MODE_SW,
+-};
+-- 
+2.17.1
 
