@@ -2,131 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7486F231
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2019 09:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAA96F253
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jul 2019 11:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726122AbfGUHrG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jul 2019 03:47:06 -0400
-Received: from condef-07.nifty.com ([202.248.20.72]:50927 "EHLO
-        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725933AbfGUHrF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jul 2019 03:47:05 -0400
-X-Greylist: delayed 370 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Jul 2019 03:47:03 EDT
-Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-07.nifty.com with ESMTP id x6L7bHGA019038;
-        Sun, 21 Jul 2019 16:37:21 +0900
-Received: from grover.flets-west.jp (softbank126026094249.bbtec.net [126.26.94.249]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id x6L7app4023640;
-        Sun, 21 Jul 2019 16:36:52 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com x6L7app4023640
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1563694612;
-        bh=wTXJF9fhQh2D0Z3FIBOZ7YbgbP65Cu8NPe1b56CrBY4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UUMyY7PdwUXFxgwVA1qrpTAkFxOMkkDnDinMaytewX3bPxk0jzE6ufeO/VW+mpAp1
-         0Ba8MmMi3em0cO8j5V2B9pGvZ2jnYzu1uR/faKEOx8HtUAZgjOAa0qxHC7L7wVvDbk
-         WSGhCzvCJzvL7/eEvTiVHgFfs6HCKsNbR43VFHef0kRijq7TaUbxO4Pl3LYWz0kql8
-         Wpesc1sETHdLpA1mXg6Fj5lprMEXTuoeTRRy74qUwzrD4VfWObDF4IYreuor86ZXVV
-         I9XC/dINSs6huiqAQ86CfcBUgkrLOm4mJGTwwQaHN8KsX9r/eJtzy4PeKo3aoBdjxW
-         7yCyu7drYPWkg==
-X-Nifty-SrcIP: [126.26.94.249]
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: [PATCH] usb: dwc3: omap: squash include/linux/platform_data/dwc3-omap.h
-Date:   Sun, 21 Jul 2019 16:36:49 +0900
-Message-Id: <20190721073649.11100-1-yamada.masahiro@socionext.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726129AbfGUJBf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Jul 2019 05:01:35 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:42268 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725851AbfGUJBf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jul 2019 05:01:35 -0400
+Received: by mail-pl1-f195.google.com with SMTP id ay6so17710267plb.9;
+        Sun, 21 Jul 2019 02:01:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=uMCT1sRvSpYaoD1Z8FlxTMQ/VpyVpjBJDn9MHa/ZVPo=;
+        b=bo0U1egZOrd62N2e2VId7EPbVmrGg8I6+LSmMCOOlbh1JSpDDny0jX6sY6Aj8uQZ0V
+         FDwFWUnBN6gqTfizZciyH98orjrfc3S1wNDrSeFt9xfMUwXuEtMPunSq0mmpn/0yBnII
+         LbXxrVBLoabcRCyF38hBvo0lu78uBosAsIruwJI7fabIvOmk502+1WzwSFBkr0r4opP5
+         AOSCNTjUvXB075IaUcpmXtQ/yzFSo4xaLu4+9HD61M4u1Y2DKy69Eu7BOV8xhhCEn7kD
+         rcKWZW93sIpMRRIBniwanhC0t1cWsyyxu/XeFP5EZ1PbxEMTLrTOa6mLnNSmLyW+yWfH
+         Qy0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=uMCT1sRvSpYaoD1Z8FlxTMQ/VpyVpjBJDn9MHa/ZVPo=;
+        b=tEtSZ+2YxJ9X0igWYXGuVOov7YAGhoGbleh+va98G32s3conZVtdoX26yARQTE+QxD
+         6uOpbS2LNL4H9XjJMqNf8ieon10Z6RFLA/GvN9M7SlgRUZERxXBAPKUEoKmbmqAaBX1g
+         wR131os/5itDbgq2rhtEplMyfMXBfiM5gWSXJ8Oi0xU0wIfBXgMgJcVUTd32U8AA0Ovu
+         75At1Ea3mzDHPsNrHJ1ArXs1IZyzVNUrK3qkyUex3B3oWZD7EiX8cWuAKvLUokQeu+6c
+         kCDp0p9EGL9kgTciTM4/08ofZYwg7CBLpuoqQ5gOIcuaSGpTx2QEqPmwQtlc0zIyJez3
+         Kzkg==
+X-Gm-Message-State: APjAAAWkK+RQ8NPkg4t8nF/0xEGY5G4NmBHp6iTrbXqo/jFttokop71g
+        LgemRtCH9334Fk4HSG/IEhI=
+X-Google-Smtp-Source: APXvYqyikdxi8c6IvDgbXlRE72AiaNOa+eepRpqSFBRQj/PNMLJamXs6jgijafuJBKPoUp8opfJD2Q==
+X-Received: by 2002:a17:902:b603:: with SMTP id b3mr69739706pls.9.1563699694660;
+        Sun, 21 Jul 2019 02:01:34 -0700 (PDT)
+Received: from localhost.localdomain ([125.142.23.13])
+        by smtp.gmail.com with ESMTPSA id r1sm34548144pgv.70.2019.07.21.02.01.32
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 21 Jul 2019 02:01:34 -0700 (PDT)
+Date:   Sun, 21 Jul 2019 18:01:29 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah <shuah@kernel.org>
+Cc:     valentina.manea.m@gmail.com, stern@rowland.harvard.edu,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] usbip: Implement SG support
+Message-ID: <20190721090129.GA13527@localhost.localdomain>
+References: <20190705164355.14025-1-suwan.kim027@gmail.com>
+ <7eaaf016-8da5-6089-fe19-bf62c3bbe187@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7eaaf016-8da5-6089-fe19-bf62c3bbe187@kernel.org>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This enum is only used in drivers/usb/dwc3/dwc3-omap3.c
+On Fri, Jul 19, 2019 at 04:04:20PM -0600, shuah wrote:
+> On 7/5/19 10:43 AM, Suwan Kim wrote:
+> > There are bugs on vhci with usb 3.0 storage device. Originally, vhci
+> > doesn't supported SG, so USB storage driver on vhci breaks SG list
+> > into multiple URBs and it causes error that a transfer got terminated
+> > too early because the transfer length for one of the URBs was not
+> > divisible by the maxpacket size.
+> > 
+> > To support SG, vhci doesn't map and unmap URB for DMA to use native
+> > SG list (urb->num_sgs). In DMA mapping function of vhci, it sets
+> > URB_DMA_MAP_SG flag in urb->transfer_flags if URB has SG list and
+> > this flag will tell the stub driver to use SG list.
+> > 
+> > In this patch, vhci basically support SG and it sends each SG list
+> > entry to the stub driver. Then, the stub driver sees the total length
+> > of the buffer and allocates SG table and pages according to the total
+> > buffer length calling sgl_alloc(). After the stub driver receives
+> > completed URB, it again sends each SG list entry to vhci.
+> > 
+> > If HCD of the server doesn't support SG, the stub driver breaks a
+> > single SG reqeust into several URBs and submit them to the server's
+> > HCD. When all the split URBs are completed, the stub driver
+> > reassembles the URBs into a single return command and sends it to
+> > vhci.
+> > 
+> > Alan fixed vhci bug with the USB 3.0 storage device by modifying
+> > USB storage driver.
+> > ("usb-storage: Set virt_boundary_mask to avoid SG overflows")
+> > But the fundamental solution of it is to add SG support to vhci.
+> > 
+> > This patch works well with the USB 3.0 storage devices without Alan's
+> > patch, and we can revert Alan's patch if it causes some troubles.
+> > 
+> > Suwan Kim (2):
+> >    usbip: Skip DMA mapping and unmapping for urb at vhci
+> >    usbip: Implement SG support to vhci
+> > 
+> >   drivers/usb/usbip/stub.h         |   7 +-
+> >   drivers/usb/usbip/stub_main.c    |  52 +++++---
+> >   drivers/usb/usbip/stub_rx.c      | 207 ++++++++++++++++++++++---------
+> >   drivers/usb/usbip/stub_tx.c      | 108 +++++++++++-----
+> >   drivers/usb/usbip/usbip_common.c |  60 +++++++--
+> >   drivers/usb/usbip/vhci_hcd.c     |  29 ++++-
+> >   drivers/usb/usbip/vhci_tx.c      |  49 ++++++--
+> >   7 files changed, 391 insertions(+), 121 deletions(-)
+> > 
+> 
+> Hi Suwan,
+> 
+> I have been traveling and would like to test this series before I ask
+> Greg to pick it up.
+> 
+> Just a quick note that I will get to this early next week.
 
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
----
+Ok. Thank you for reviewing the patch, Shuah.
+Please let me know if you have any problems reviewing the patch :)
 
- drivers/usb/dwc3/dwc3-omap.c            |  7 +++-
- include/linux/platform_data/dwc3-omap.h | 43 -------------------------
- 2 files changed, 6 insertions(+), 44 deletions(-)
- delete mode 100644 include/linux/platform_data/dwc3-omap.h
+Regards
 
-diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
-index ed8b86517675..4f51523a07ac 100644
---- a/drivers/usb/dwc3/dwc3-omap.c
-+++ b/drivers/usb/dwc3/dwc3-omap.c
-@@ -14,7 +14,6 @@
- #include <linux/irq.h>
- #include <linux/interrupt.h>
- #include <linux/platform_device.h>
--#include <linux/platform_data/dwc3-omap.h>
- #include <linux/pm_runtime.h>
- #include <linux/dma-mapping.h>
- #include <linux/ioport.h>
-@@ -106,6 +105,12 @@
- #define USBOTGSS_UTMI_OTG_CTRL_SESSVALID	BIT(2)
- #define USBOTGSS_UTMI_OTG_CTRL_VBUSVALID	BIT(1)
- 
-+enum dwc3_omap_utmi_mode {
-+	DWC3_OMAP_UTMI_MODE_UNKNOWN = 0,
-+	DWC3_OMAP_UTMI_MODE_HW,
-+	DWC3_OMAP_UTMI_MODE_SW,
-+};
-+
- struct dwc3_omap {
- 	struct device		*dev;
- 
-diff --git a/include/linux/platform_data/dwc3-omap.h b/include/linux/platform_data/dwc3-omap.h
-deleted file mode 100644
-index 1d36ca874cc8..000000000000
---- a/include/linux/platform_data/dwc3-omap.h
-+++ /dev/null
-@@ -1,43 +0,0 @@
--/**
-- * dwc3-omap.h - OMAP Specific Glue layer, header.
-- *
-- * Copyright (C) 2010-2011 Texas Instruments Incorporated - http://www.ti.com
-- * All rights reserved.
-- *
-- * Author: Felipe Balbi <balbi@ti.com>
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- * 1. Redistributions of source code must retain the above copyright
-- *    notice, this list of conditions, and the following disclaimer,
-- *    without modification.
-- * 2. Redistributions in binary form must reproduce the above copyright
-- *    notice, this list of conditions and the following disclaimer in the
-- *    documentation and/or other materials provided with the distribution.
-- * 3. The names of the above-listed copyright holders may not be used
-- *    to endorse or promote products derived from this software without
-- *    specific prior written permission.
-- *
-- * ALTERNATIVELY, this software may be distributed under the terms of the
-- * GNU General Public License ("GPL") version 2, as published by the Free
-- * Software Foundation.
-- *
-- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- */
--
--enum dwc3_omap_utmi_mode {
--	DWC3_OMAP_UTMI_MODE_UNKNOWN = 0,
--	DWC3_OMAP_UTMI_MODE_HW,
--	DWC3_OMAP_UTMI_MODE_SW,
--};
--- 
-2.17.1
-
+Suwan Kim
