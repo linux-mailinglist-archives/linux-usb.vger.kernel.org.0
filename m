@@ -2,20 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2B16FF12
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 13:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E806FF4E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 14:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730088AbfGVL4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jul 2019 07:56:49 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:43020 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727507AbfGVL4t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 07:56:49 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 828CF80342; Mon, 22 Jul 2019 13:56:35 +0200 (CEST)
-Date:   Mon, 22 Jul 2019 13:56:45 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+        id S1729199AbfGVMLW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jul 2019 08:11:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54330 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728413AbfGVMLW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 22 Jul 2019 08:11:22 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 096412190D;
+        Mon, 22 Jul 2019 12:11:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563797481;
+        bh=7/4GGkbSj/BIq0gPMtDTgby1bEClkS3rXbv3+CaxRj0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E/45y5utMHS76gj+/OZzr0orMa3o8x7cTZ/fsUoKlaM+CKlmpNv8OiNUk40QmXIql
+         YNBt2DsE/pLGp2n1usNQV3Tz87lvNu8VOfuJ33ROfhSqYZlZhXXkttks4VI9mOgNTw
+         H7tIQ9/ZuPZ96thOespCgXoaFUU9Pm7VeVxvpQNY=
+Date:   Mon, 22 Jul 2019 14:11:18 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
 Cc:     Pawel Laszczak <pawell@cadence.com>,
         "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -28,79 +38,56 @@ Cc:     Pawel Laszczak <pawell@cadence.com>,
         Rahul Kumar <kurahul@cadence.com>,
         Anil Joy Varughese <aniljoy@cadence.com>
 Subject: Re: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
-Message-ID: <20190722115644.GA12069@amd>
+Message-ID: <20190722121118.GA31543@kroah.com>
 References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
  <20190721190335.GA19831@xo-6d-61-c0.localdomain>
  <BYAPR07MB470904ACCD1ED91B10BB6BEFDDC40@BYAPR07MB4709.namprd07.prod.outlook.com>
  <20190722114839.GA10515@kroah.com>
+ <20190722115644.GA12069@amd>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="OXfL5xGRrasGEqWY"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190722114839.GA10515@kroah.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190722115644.GA12069@amd>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Jul 22, 2019 at 01:56:45PM +0200, Pavel Machek wrote:
+> Hi!
+> 
+> > > >> This patch introduce new Cadence USBSS DRD driver to linux kernel.
+> > > >>
+> > > >> The Cadence USBSS DRD Controller is a highly configurable IP Core which
+> > > >> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
+> > > >> Host Only (XHCI)configurations.
+> > > >
+> > > >I see you are using debugfs to select between DRD, peripheral-onlyh and XHCI...
+> > > >
+> > > >Is that good idea?
+> > > 
+> > > Yes driver allows selecting dr_mode by debugfs. Controller also support such functionality 
+> > > so I don't understand why would it not be a good idea. 
+> > > 
+> > > I personally use this for testing but it can be used to limit controller functionality without 
+> > > recompiling kernel. 
+> > 
+> > debugfs is ONLY for debugging, never rely on it being enabled, or
+> > mounted, on a system in order to have any normal operation happen.
+> > 
+> > So for testing, yes, this is fine.  If this is going to be the normal
+> > api/interface for how to control this driver, no, that is not acceptable
+> > at all.
+> 
+> It makes a lot of sense for end-user to toggle this... for example
+> when he is lacking right cable for proper otg detection. As it is
+> third driver offering this functionality, I believe we should stop
+> treating it as debugging.
 
---OXfL5xGRrasGEqWY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Then it needs to get out of debugfs, as again, that can not be used for
+any normal end-user operation.
 
-Hi!
+thanks,
 
-> > >> This patch introduce new Cadence USBSS DRD driver to linux kernel.
-> > >>
-> > >> The Cadence USBSS DRD Controller is a highly configurable IP Core wh=
-ich
-> > >> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
-> > >> Host Only (XHCI)configurations.
-> > >
-> > >I see you are using debugfs to select between DRD, peripheral-onlyh an=
-d XHCI...
-> > >
-> > >Is that good idea?
-> >=20
-> > Yes driver allows selecting dr_mode by debugfs. Controller also support=
- such functionality=20
-> > so I don't understand why would it not be a good idea.=20
-> >=20
-> > I personally use this for testing but it can be used to limit controlle=
-r functionality without=20
-> > recompiling kernel.=20
->=20
-> debugfs is ONLY for debugging, never rely on it being enabled, or
-> mounted, on a system in order to have any normal operation happen.
->=20
-> So for testing, yes, this is fine.  If this is going to be the normal
-> api/interface for how to control this driver, no, that is not acceptable
-> at all.
-
-It makes a lot of sense for end-user to toggle this... for example
-when he is lacking right cable for proper otg detection. As it is
-third driver offering this functionality, I believe we should stop
-treating it as debugging.
-
-Best regards,
-									Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---OXfL5xGRrasGEqWY
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl01pHwACgkQMOfwapXb+vIDNQCgwTTLQIqZhxOPwF0uWn3pcLMd
-9qQAnjloOlNoULIYu4F5WNb9967eMecO
-=BZoL
------END PGP SIGNATURE-----
-
---OXfL5xGRrasGEqWY--
+greg k-h
