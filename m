@@ -2,114 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 495F870AF2
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 23:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7EF70B66
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 23:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730496AbfGVVAZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jul 2019 17:00:25 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:55991 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730284AbfGVVAY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 17:00:24 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id D5A94802EE; Mon, 22 Jul 2019 23:00:10 +0200 (CEST)
-Date:   Mon, 22 Jul 2019 23:00:21 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Anil Joy Varughese <aniljoy@cadence.com>
-Subject: Re: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
-Message-ID: <20190722210021.GA25235@amd>
-References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
- <20190721190335.GA19831@xo-6d-61-c0.localdomain>
- <BYAPR07MB470904ACCD1ED91B10BB6BEFDDC40@BYAPR07MB4709.namprd07.prod.outlook.com>
- <20190722114839.GA10515@kroah.com>
- <20190722115644.GA12069@amd>
+        id S1730536AbfGVVbU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jul 2019 17:31:20 -0400
+Received: from mail-ed1-f52.google.com ([209.85.208.52]:35902 "EHLO
+        mail-ed1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728016AbfGVVbU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 17:31:20 -0400
+Received: by mail-ed1-f52.google.com with SMTP id k21so41918226edq.3
+        for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2019 14:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rohanlean.de; s=google;
+        h=message-id:subject:from:to:date:user-agent:mime-version;
+        bh=zx/3OX/FhNtnxv6l1ChVLsxrN24UCaSNAx5y3Md+w5k=;
+        b=b1XW/FVWBXf2qdW+jwXt65hCShhq30CZkqJUsgoKPEQoTRpRYAgCWj5RTCDx0qLW1/
+         tvNmDbinAu/HtAtmRt40cU9TsupdTZIjCGbONwRHHCGY34VsGsV913ULv2ySpk5n5SE9
+         K6Ro+X4mQUvlN332y2EriXZyDRjC7sc3/F17x99hzn9DxfIMdlMxjHVFTd/UGJSzSUUF
+         vJW8qPrtyRfJT52vJVGlEFTlv2NQ5e7pGopZ5dOiB2+E+vJLrSusmWXXlToNFVEMq7KG
+         jQoWLGT4HBHrXGwxCuF0Rmdvs1xldOQt3ws0ei3PIRWcvpXh/sSvHzcmVfmzi2b7M8tQ
+         Y+vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:date:user-agent
+         :mime-version;
+        bh=zx/3OX/FhNtnxv6l1ChVLsxrN24UCaSNAx5y3Md+w5k=;
+        b=hyo0AJkYPfzj+qT3wZ2qRr8buEpVOZasScyPXHYmLTiuZjOfk0K4wIFkxaThdGeOK6
+         ckywSeCb4VOMaU/cwz4jGM9e+Wtft+ccuAbS3r5cWQfUt0qh2LBrXGLv4BRBqiH1lOSA
+         8S1i4xJFttP3QHCw76HMb5RTfLv2rrDlG4z+giCoF1O1wyk3+itDOWACYu76F7ePw3ak
+         /Gvg6WVoBfAj0czcONb3tVM11qxoFgwrzO9K6lHH9xz1+SkaezoC1JL0+vK9oHahbZTS
+         NLTUp9EFrDuqAhUcgNpREsQ0q8pAAJZfbHi58LRoi52OvZKaetwBbNnEGBsmbMw3Yx3b
+         Zu8g==
+X-Gm-Message-State: APjAAAVr002cHNzmngzIlSt+UVLQoG9qx73/o4x/hx9wS0PMIWArk+AM
+        hYS/t3nNz+ApA+FmLpfT9F7Iahq/mFA=
+X-Google-Smtp-Source: APXvYqyZsBy2AJda2lR8T9KJrLemBbQZ3c5w39N2PI2VNDYjoY2vm10jt2sCCFeD7PwLSqC03cATWQ==
+X-Received: by 2002:a50:f982:: with SMTP id q2mr62498531edn.270.1563831078771;
+        Mon, 22 Jul 2019 14:31:18 -0700 (PDT)
+Received: from ?IPv6:2a02:8108:96bf:f239:db96:22ef:529:30a1? ([2a02:8108:96bf:f239:db96:22ef:529:30a1])
+        by smtp.gmail.com with ESMTPSA id x8sm11464531edx.67.2019.07.22.14.31.18
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 22 Jul 2019 14:31:18 -0700 (PDT)
+Message-ID: <e63353a229a3fc61c2467a87a12064ac876e87b3.camel@rohanlean.de>
+Subject: Enumeration of USB keyboard connected to dock fails during boot
+From:   Rohan Hendrik Jotz-Lean <rohan@rohanlean.de>
+To:     linux-usb@vger.kernel.org
+Date:   Mon, 22 Jul 2019 23:31:17 +0200
+Content-Type: multipart/mixed; boundary="=-VskOqwfWX7uXuM70FpJt"
+User-Agent: Evolution 3.32.4 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="VS++wcV0S1rZb1Fb"
-Content-Disposition: inline
-In-Reply-To: <20190722115644.GA12069@amd>
-User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---VS++wcV0S1rZb1Fb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--=-VskOqwfWX7uXuM70FpJt
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-On Mon 2019-07-22 13:56:44, Pavel Machek wrote:
-> Hi!
->=20
-> > > >> This patch introduce new Cadence USBSS DRD driver to linux kernel.
-> > > >>
-> > > >> The Cadence USBSS DRD Controller is a highly configurable IP Core =
-which
-> > > >> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
-> > > >> Host Only (XHCI)configurations.
-> > > >
-> > > >I see you are using debugfs to select between DRD, peripheral-onlyh =
-and XHCI...
-> > > >
-> > > >Is that good idea?
-> > >=20
-> > > Yes driver allows selecting dr_mode by debugfs. Controller also suppo=
-rt such functionality=20
-> > > so I don't understand why would it not be a good idea.=20
-> > >=20
-> > > I personally use this for testing but it can be used to limit control=
-ler functionality without=20
-> > > recompiling kernel.=20
-> >=20
-> > debugfs is ONLY for debugging, never rely on it being enabled, or
-> > mounted, on a system in order to have any normal operation happen.
-> >=20
-> > So for testing, yes, this is fine.  If this is going to be the normal
-> > api/interface for how to control this driver, no, that is not acceptable
-> > at all.
->=20
-> It makes a lot of sense for end-user to toggle this... for example
-> when he is lacking right cable for proper otg detection. As it is
-> third driver offering this functionality, I believe we should stop
-> treating it as debugging.
+Hi,
 
-At least renesas usb controller seems to have variables in sysfs:
-drivers/phy/renesas/phy-rcar-gen3-usb2.c : functions role_show and
-role_store. See also
-Documentation/ABI/testing/sysfs-platform-phy-rcar-gen3-usb2 .
+I have a USB keyboard that works in UEFI apps (and grub) but if plugged
+into a dock stops working when Linux boots. It works when hotplugged
+into the dock or plugged into the laptop directly before or after
+booting. A mouse plugged into the dock does not share this problem. (I
+have no other keyboard to test at hand.)
 
-I believe this driver should do same.
+Kernel version: 5.1.18-300.fc30.x86_64
+XHCI USB controller: Advanced Micro Devices, Inc. [AMD] Raven USB 3.1
+Hub: 17ef:a38f Lenovo USB2.0 Hub
+Keyboard: 04d9:0192 Holtek Semiconductor, Inc. USB-HID Keyboard
 
-Thanks and best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Relevant kernel messages are attached.
 
---VS++wcV0S1rZb1Fb
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+My ignorant initial thought is that the hub should be transparent to
+the keyboard, so that the fault is unlikely to lie with the keyboard. I
+have unsuccessfully tried the delayed initialisation quirk on the
+keyboard.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+I have asked the Fedora kernel developers about this problem first --
+they told me to ask here.
 
-iEYEARECAAYFAl02I+UACgkQMOfwapXb+vLksgCcDVEb7y8BZQQVDtLc5uhbTm3O
-4soAn0QMwPr/VfDUGwp4kC7STMJmZn30
-=blsD
------END PGP SIGNATURE-----
 
---VS++wcV0S1rZb1Fb--
+Thanks for your help.
+
+--=-VskOqwfWX7uXuM70FpJt
+Content-Disposition: attachment; filename="kernel_messages.txt"
+Content-Type: text/plain; name="kernel_messages.txt"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+SnVsIDIyIDE5OjE2OjE0IGtlcm5lbDogdXNiIDItMS4zLjMuMzogbmV3IGZ1bGwtc3BlZWQgVVNC
+IGRldmljZSBudW1iZXIgOSB1c2luZyB4aGNpX2hjZApKdWwgMjIgMTk6MTY6MTQga2VybmVsOiB1
+c2IgMi0xLjMuMy4zOiBkZXZpY2UgZGVzY3JpcHRvciByZWFkLzY0LCBlcnJvciAtMzIKSnVsIDIy
+IDE5OjE2OjE0IGtlcm5lbDogdXNiIDItMS4zLjMuMzogZGV2aWNlIGRlc2NyaXB0b3IgcmVhZC82
+NCwgZXJyb3IgLTMyCkp1bCAyMiAxOToxNjoxNSBrZXJuZWw6IHVzYiAyLTEuMy4zLjM6IG5ldyBm
+dWxsLXNwZWVkIFVTQiBkZXZpY2UgbnVtYmVyIDEwIHVzaW5nIHhoY2lfaGNkCkp1bCAyMiAxOTox
+NjoxNSBrZXJuZWw6IHVzYiAyLTEuMy4zLjM6IGRldmljZSBkZXNjcmlwdG9yIHJlYWQvNjQsIGVy
+cm9yIC0zMgpKdWwgMjIgMTk6MTY6MTUga2VybmVsOiB1c2IgMi0xLjMuMy4zOiBkZXZpY2UgZGVz
+Y3JpcHRvciByZWFkLzY0LCBlcnJvciAtMzIKSnVsIDIyIDE5OjE2OjE1IGtlcm5lbDogdXNiIDIt
+MS4zLjMtcG9ydDM6IGF0dGVtcHQgcG93ZXIgY3ljbGUKSnVsIDIyIDE5OjE2OjE1IGtlcm5lbDog
+dXNiIDItMS4zLjMuMzogbmV3IGZ1bGwtc3BlZWQgVVNCIGRldmljZSBudW1iZXIgMTEgdXNpbmcg
+eGhjaV9oY2QKSnVsIDIyIDE5OjE2OjE1IGtlcm5lbDogdXNiIDItMS4zLjMuMzogRGV2aWNlIG5v
+dCByZXNwb25kaW5nIHRvIHNldHVwIGFkZHJlc3MuCkp1bCAyMiAxOToxNjoxNiBrZXJuZWw6IHVz
+YiAyLTEuMy4zLjM6IERldmljZSBub3QgcmVzcG9uZGluZyB0byBzZXR1cCBhZGRyZXNzLgpKdWwg
+MjIgMTk6MTY6MTYga2VybmVsOiB1c2IgMi0xLjMuMy4zOiBkZXZpY2Ugbm90IGFjY2VwdGluZyBh
+ZGRyZXNzIDExLCBlcnJvciAtNzEKSnVsIDIyIDE5OjE2OjE2IGtlcm5lbDogdXNiIDItMS4zLjMu
+MzogbmV3IGZ1bGwtc3BlZWQgVVNCIGRldmljZSBudW1iZXIgMTIgdXNpbmcgeGhjaV9oY2QKSnVs
+IDIyIDE5OjE2OjE2IGtlcm5lbDogdXNiIDItMS4zLjMuMzogRGV2aWNlIG5vdCByZXNwb25kaW5n
+IHRvIHNldHVwIGFkZHJlc3MuCkp1bCAyMiAxOToxNjoxNiBrZXJuZWw6IHVzYiAyLTEuMy4zLjM6
+IERldmljZSBub3QgcmVzcG9uZGluZyB0byBzZXR1cCBhZGRyZXNzLgpKdWwgMjIgMTk6MTY6MTYg
+a2VybmVsOiB1c2IgMi0xLjMuMy4zOiBkZXZpY2Ugbm90IGFjY2VwdGluZyBhZGRyZXNzIDEyLCBl
+cnJvciAtNzEKSnVsIDIyIDE5OjE2OjE2IGtlcm5lbDogdXNiIDItMS4zLjMtcG9ydDM6IHVuYWJs
+ZSB0byBlbnVtZXJhdGUgVVNCIGRldmljZQoK
+
+
+--=-VskOqwfWX7uXuM70FpJt--
+
