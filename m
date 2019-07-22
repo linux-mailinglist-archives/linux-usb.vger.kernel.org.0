@@ -2,173 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8996FF50
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 14:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492D56FFDD
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 14:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729292AbfGVMLw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jul 2019 08:11:52 -0400
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:10984 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728413AbfGVMLw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 08:11:52 -0400
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6MC77df011535;
-        Mon, 22 Jul 2019 05:11:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=LsW8GUUQuC9LIS5ZwpXbRs8DB8jte9c48VVXpKPmcvM=;
- b=P22BMGfbDDojbZGx0hc+tFRBt4pH2DizL/05mX9+WS8Rs6RXjZsqNbcpTNAuJYkJGxvK
- CPm4L7s3FZ1hU+yIYwT9KS0HQXUgE++G58m72FQgn2XYUOqYt3pgI8T1174NbpvNKte9
- +gn0ba8Tn9ex+lC8De01RBbAUmv7m3HLSo8W9wYcCskkQ5USULFjX36M2CKdmVLdCjui
- omE6TU9fUjBwpqF5sADiLqSShxcpRk02Cr4mnpALK9V4pbjjGYvKEcOOGoV0HKYpXYkK
- sE37Eb5qA3ShSMHt3o+v0y6j3Tto9aXV8jSal1umGp3ssI9dq6Wf5a9gnKBu6okx+AjH Xg== 
-Authentication-Results: cadence.com;
-        spf=pass smtp.mailfrom=pawell@cadence.com
-Received: from nam03-by2-obe.outbound.protection.outlook.com (mail-by2nam03lp2056.outbound.protection.outlook.com [104.47.42.56])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 2tuygwpc23-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 22 Jul 2019 05:11:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PnwtkRArf+F34NnZDE+qpAavwcTzG/Q7qsFM8ubaQCJhBE3S4sAH1qojS6hcT/EVuj6XD9onUJy55D0qYTokj5c96AWeSBK88BbUkXotEkT36kEowZRKycJ9K7HFMFNmSB5enDqzLeE/514IwMg+ExR0w4DQLuDPQxwuFSlHpsEaSsCPsy3E7yyIHqT3+/qPRrW5qvgf5xmgpcmWkxi5MPvJYRsnpiWkx5MotX6iRa5tsfkXuiMbAfKg9kXCnUwYIjC0SsFcKpkNOSkpVgR6gy5QQmQXKgovoq8/7gxpWTlp+ezObPwaY9KWJ9JjHVRmbpKECvP9SN1bKwY6YtuQZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LsW8GUUQuC9LIS5ZwpXbRs8DB8jte9c48VVXpKPmcvM=;
- b=JsTxNLuYRIhjqYMIBnCkZF1NTgsengNiObRK/fWalH+OKUv9SsyMtQcYxb8cEeN0B2FTHINtANAhCfYO6+kTjoiUISD0MZjtDHkwfaWzHNB+ktBbwG5pfh/tBaZVobqN7GnFj/fLaH2idntFhrkll1ZDO1qVhx78v/PPSiReIyqdEB/djlXPYHikpgHv4wj6vc5oPQiVdkqN5sr3EIbQ/bwltfaSpNur9lYSF5kyGEKGVw8pU1neolXQxFD5+odE2joxoMY362DRL+YbbR3Z3s99/eMRkUYHRf5NNtkUEznWcIPGmD0AsSdA+8fiXzL1MaiSaF0uplWyJEKVRvog5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=cadence.com;dmarc=pass action=none
- header.from=cadence.com;dkim=pass header.d=cadence.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LsW8GUUQuC9LIS5ZwpXbRs8DB8jte9c48VVXpKPmcvM=;
- b=oH4bbIBdO9o5VF8dsZKh5Ol1sEsnEVD3Xu8QXkrSashAXkciXam6Tc/d7NxtW+53PqSKc9xhGxmPYKxSbkzVAMJRA4dCsGd1F1G8StDTDYMQo29iAuAOrMhHZJhCCfRg3BfSUOAgyeEnv24dK45ndTmO82wFkfKWYAm+CUnXtFs=
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
- BYAPR07MB5671.namprd07.prod.outlook.com (20.178.0.13) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2073.14; Mon, 22 Jul 2019 12:11:40 +0000
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::41f8:6c26:5cc9:743d]) by BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::41f8:6c26:5cc9:743d%3]) with mapi id 15.20.2094.013; Mon, 22 Jul 2019
- 12:11:40 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Pavel Machek <pavel@denx.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Anil Joy Varughese <aniljoy@cadence.com>
-Subject: RE: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
-Thread-Topic: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
-Thread-Index: AQHVP/K3++/PZvX91EKpHiAZrLktoabVbhiAgAD3BZCAACHLgIAAAkOAgAAB8kA=
-Date:   Mon, 22 Jul 2019 12:11:40 +0000
-Message-ID: <BYAPR07MB470924FB97951364BD3AB5B3DDC40@BYAPR07MB4709.namprd07.prod.outlook.com>
-References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
- <20190721190335.GA19831@xo-6d-61-c0.localdomain>
- <BYAPR07MB470904ACCD1ED91B10BB6BEFDDC40@BYAPR07MB4709.namprd07.prod.outlook.com>
- <20190722114839.GA10515@kroah.com> <20190722115644.GA12069@amd>
-In-Reply-To: <20190722115644.GA12069@amd>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZGFjYmE1OWItYWM3OS0xMWU5LTg3NDMtMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XGRhY2JhNTlkLWFjNzktMTFlOS04NzQzLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMTc2NSIgdD0iMTMyMDgyNzEwOTgzNTE5ODA4IiBoPSJvaWc0eHN3cFI5dEkvNlB6QjBXVVZQTXRPQnc9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: 
-x-originating-ip: [185.217.253.59]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 243f0d79-5ea9-462c-4f7b-08d70e9dc0d7
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR07MB5671;
-x-ms-traffictypediagnostic: BYAPR07MB5671:
-x-microsoft-antispam-prvs: <BYAPR07MB5671984B5A03464D3CDB27F8DDC40@BYAPR07MB5671.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 01068D0A20
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(346002)(136003)(39850400004)(396003)(189003)(199004)(36092001)(52536014)(4326008)(7736002)(6506007)(8676002)(478600001)(305945005)(107886003)(476003)(25786009)(68736007)(446003)(7696005)(64756008)(66556008)(26005)(186003)(66446008)(66476007)(76116006)(5660300002)(71190400001)(102836004)(6436002)(229853002)(11346002)(86362001)(54906003)(66946007)(76176011)(486006)(9686003)(14444005)(6246003)(6116002)(99286004)(3846002)(256004)(53936002)(74316002)(8936002)(2501003)(110136005)(66066001)(33656002)(14454004)(55016002)(81166006)(316002)(71200400001)(81156014)(2906002);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB5671;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: cadence.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: iUkshYMr4l7BGs1jsIrTmRfnRrsvGXdbD1BdsvBN/+ENO8eMejdAIbkTVDDXSpJgHadmVakvXV94MrWjv5ZW15XM1UgsOGuEL9sstG5pbPzfeOuFxwc7DuSQu/zGKFRz7ApA+cktd60AyepTAIjzy9f2UWJW7KyY8oU8jeYAMu/uNinFl/4ujIrKzAw4RnwWh4DAfdTNUDsYsn3ZFcbhwQKEvvd+B8UTX9bTbdC6osgsUrrKOT1pPY0CHvoKxffMHV0eD+E2BvUsqqZJ6knD5KyNEPFVVG8HzZVaH3RXu0jiM/aqrbdhr589wr6PfgnMp9mMm9nh/Ys4CjQAguEgTdKSK9LFl/tHeQ0WRbSJyaWVa4L4mQCRj7JQYZDi4OQzz6SnV52lNI7waxUaAtd2jEFkTHBMX1zr5A5TyT/Th74=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1728570AbfGVMiI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jul 2019 08:38:08 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:43605 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727753AbfGVMiI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 08:38:08 -0400
+Received: by mail-io1-f70.google.com with SMTP id q26so43303835ioi.10
+        for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2019 05:38:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=XN7mQ/LbwS2GODYkDwnmvqmvNwPxxRZ0Psf5NFa9KBE=;
+        b=GIH62UAoXfjvgVSrGhDi03DOITffxo+ekkAQpf+JXMJa9hAOTVaLkYXT7+GqT+ND00
+         nHR0oxaozA8TZ3+BYBlMQ9JKihpaC/QYuyew0KqW/jvEIB1TedjOFELeYkEaQK1pchqj
+         tZyycZHVWbXPkOFYOQbimzq1jPoYyZAP8SzNASb5Mzq/lRhg3frk39mj2/JTLI4zcHjs
+         MTowdKrN8x+zQPG7gFdi56h/YBaQWAheUK+f0zHcXaOzgTdsul26WnL3+kkvDNhTZYu5
+         NgPwc59WJJ3liD2xUUl66IQcEsIv+Ft+XmolcKXLRsFT3uAj4V+twPB0AFNewKGEu8jv
+         5C7w==
+X-Gm-Message-State: APjAAAUmBmuqnuF6UdDKQT+p7JowZfPqQmdJBXPJRIU0dyzBr5SNsuCK
+        ws0Yq8PZJ1GMs/IcWm/KtnzyfjvEqhCz+INm5tJROZz2QeAM
+X-Google-Smtp-Source: APXvYqzLgm7H+0s4vjrNik4iYDGcdItZNbvxNBMTEFEnQ3ka+wAyuLJOjfoii/Kln7+76lgFX66PYizRZuXfL4C3T/GD3RYvn5c2
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 243f0d79-5ea9-462c-4f7b-08d70e9dc0d7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 12:11:40.2615
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pawell@global.cadence.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5671
-X-Proofpoint-SPF-Result: pass
-X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
- include:mktomail.com include:spf-0014ca01.pphosted.com
- include:spf.protection.outlook.com include:auth.msgapp.com
- include:spf.mandrillapp.com ~all
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-22_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
- priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
- spamscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=452 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907220145
+X-Received: by 2002:a5d:9749:: with SMTP id c9mr67412596ioo.258.1563799086829;
+ Mon, 22 Jul 2019 05:38:06 -0700 (PDT)
+Date:   Mon, 22 Jul 2019 05:38:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000121ea5058e445936@google.com>
+Subject: WARNING in shark_write_val/usb_submit_urb
+From:   syzbot <syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
->Hi!
->
->> > >> This patch introduce new Cadence USBSS DRD driver to linux kernel.
->> > >>
->> > >> The Cadence USBSS DRD Controller is a highly configurable IP Core w=
-hich
->> > >> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
->> > >> Host Only (XHCI)configurations.
->> > >
->> > >I see you are using debugfs to select between DRD, peripheral-onlyh a=
-nd XHCI...
->> > >
->> > >Is that good idea?
->> >
->> > Yes driver allows selecting dr_mode by debugfs. Controller also suppor=
-t such functionality
->> > so I don't understand why would it not be a good idea.
->> >
->> > I personally use this for testing but it can be used to limit controll=
-er functionality without
->> > recompiling kernel.
->>
->> debugfs is ONLY for debugging, never rely on it being enabled, or
->> mounted, on a system in order to have any normal operation happen.
->>
->> So for testing, yes, this is fine.  If this is going to be the normal
->> api/interface for how to control this driver, no, that is not acceptable
->> at all.
->
->It makes a lot of sense for end-user to toggle this... for example
->when he is lacking right cable for proper otg detection. As it is
->third driver offering this functionality, I believe we should stop
->treating it as debugging.
->
+Hello,
 
-Exactly I use this for this purpose. Depending on my testing platform I hav=
-e=20
-the adapter with Typ-c plugs or normal Type A plugs. In the second case,=20
-by means of this property I can force Device or Host mode from driver=20
-without changing adapter.=20
+syzbot found the following crash on:
 
-Bu as I wrote I use it only for debugging purpose.  I believe  that device =
-on=20
-the market should not work in this way.=20
+HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=138da9d0600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+dashboard link: https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=159ab958600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177bd6afa00000
 
-Cheers,
-Pawel.=20
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com
 
+usb 1-1: string descriptor 0 read error: -22
+usb 1-1: New USB device found, idVendor=077d, idProduct=627a, bcdDevice=  
+0.01
+usb 1-1: New USB device strings: Mfr=1, Product=64, SerialNumber=255
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 1 PID: 21 at drivers/usb/core/urb.c:477  
+usb_submit_urb+0x1188/0x13b0 /drivers/usb/core/urb.c:477
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #15
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack /lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e /lib/dump_stack.c:113
+  panic+0x292/0x6c9 /kernel/panic.c:219
+  __warn.cold+0x20/0x4b /kernel/panic.c:576
+  report_bug+0x262/0x2a0 /lib/bug.c:186
+  fixup_bug /arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug /arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 /arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 /arch/x86/kernel/traps.c:291
+  invalid_op+0x14/0x20 /arch/x86/entry/entry_64.S:986
+RIP: 0010:usb_submit_urb+0x1188/0x13b0 /drivers/usb/core/urb.c:477
+Code: 4d 85 ed 74 2c e8 f8 d3 f4 fd 4c 89 f7 e8 a0 51 1c ff 41 89 d8 44 89  
+e1 4c 89 ea 48 89 c6 48 c7 c7 00 0e f7 85 e8 83 98 ca fd <0f> 0b e9 20 f4  
+ff ff e8 cc d3 f4 fd 4c 89 f2 48 b8 00 00 00 00 00
+RSP: 0018:ffff8881d9efefe0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3dfdee
+RBP: ffff8881d41e5e60 R08: ffff8881d9e36000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: ffff8881cff4cbd0 R14: ffff8881d7b33c20 R15: ffff8881d41c9b00
+  usb_start_wait_urb+0x108/0x2b0 /drivers/usb/core/message.c:57
+  usb_bulk_msg+0x228/0x550 /drivers/usb/core/message.c:253
+  shark_write_val+0x20b/0x310 /drivers/media/radio/radio-shark.c:94
+  snd_tea575x_write+0x78/0x330 /drivers/media/radio/tea575x.c:88
+  snd_tea575x_hw_init+0x8d/0x170 /drivers/media/radio/tea575x.c:506
+  snd_tea575x_init+0x1f/0x6b8 /drivers/media/radio/tea575x.c:521
+  usb_shark_probe+0x5e1/0x770 /drivers/media/radio/radio-shark.c:353
+  usb_probe_interface+0x305/0x7a0 /drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 /drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 /drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 /drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 /drivers/base/bus.c:454
+  __device_attach+0x217/0x360 /drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 /drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 /drivers/base/core.c:2111
+  usb_set_configuration+0xdf6/0x1670 /drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 /drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 /drivers/usb/core/driver.c:266
+  really_probe+0x281/0x660 /drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 /drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 /drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 /drivers/base/bus.c:454
+  __device_attach+0x217/0x360 /drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 /drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 /drivers/base/core.c:2111
+  usb_new_device.cold+0x6a4/0xe61 /drivers/usb/core/hub.c:2536
+  hub_port_connect /drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change /drivers/usb/core/hub.c:5213 [inline]
+  port_event /drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1abd/0x3550 /drivers/usb/core/hub.c:5441
+  process_one_work+0x905/0x1570 /kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 /kernel/workqueue.c:2415
+  kthread+0x30b/0x410 /kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 /arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
