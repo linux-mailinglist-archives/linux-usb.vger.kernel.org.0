@@ -2,128 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC09A70755
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 19:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DEE7092D
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 21:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbfGVRck (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jul 2019 13:32:40 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:49822 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726283AbfGVRck (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 13:32:40 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190722173237euoutp025a05bf7f7bd5132a769567398cb6a947~zyw5RVsN81895118951euoutp02X
-        for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2019 17:32:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190722173237euoutp025a05bf7f7bd5132a769567398cb6a947~zyw5RVsN81895118951euoutp02X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563816758;
-        bh=85hIYZIUSz2sajlTBWW2bBjChuGeN2EeF//kqgRb2D0=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=OHjE6sHoiNqzCbItWqawhgvrAuOW2eiqD/pVQfFtTC7+OvmdPaEG8Na56+A2I/37i
-         PhU1dRXmapRqQx9PJiSiFDK2KPW3W4n9ZrdGyXK4hLrjkviR8E/sGQzhYQRvv9Ih2e
-         pktuyWcZ737ubkcuWeHJ8+WvcHU09/8v8T+zTh3E=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190722173237eucas1p16e96da4835c4f0ac84c47c31cefda747~zyw4Z8IC11305913059eucas1p1v;
-        Mon, 22 Jul 2019 17:32:37 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id C8.DC.04298.433F53D5; Mon, 22
-        Jul 2019 18:32:36 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190722173236eucas1p171299dfaa34f3124622df488bfe57a89~zyw3m9yeP0714007140eucas1p1l;
-        Mon, 22 Jul 2019 17:32:36 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190722173235eusmtrp1a484cb96a4f7d585c54b0134f26c21d9~zyw3Y7q9v0411704117eusmtrp1g;
-        Mon, 22 Jul 2019 17:32:35 +0000 (GMT)
-X-AuditID: cbfec7f2-f13ff700000010ca-73-5d35f334eb5c
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 54.47.04146.333F53D5; Mon, 22
-        Jul 2019 18:32:35 +0100 (BST)
-Received: from AMDC2765.DIGITAL.local (unknown [106.120.51.73]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190722173235eusmtip1e2c9e2516c30587a1479aaf27bb423bc~zyw3DIbIi0484004840eusmtip15;
-        Mon, 22 Jul 2019 17:32:35 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH v2] phy: core: document phy_calibrate()
-Date:   Mon, 22 Jul 2019 19:32:23 +0200
-Message-Id: <20190722173223.19518-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrIIsWRmVeSWpSXmKPExsWy7djPc7omn01jDQ4tNbDYOGM9q8WFpz1s
-        Fpd3zWGzmHF+H5PFomWtzBZrj9xld2Dz6NuyitHj+I3tTB6fN8kFMEdx2aSk5mSWpRbp2yVw
-        ZUy7OYelYBNnxZy7s1gbGG+xdzFyckgImEhM3nmRtYuRi0NIYAWjxK65z1kgnC+MEp8X3oPK
-        fGaUWPhxGStMy/nOzUwQieWMEhMbTyO0bNiwlwmkik3AUKLrbRcbiC0i4CCxZOkdNpAiZoH1
-        jBIrF38H2y4sYC4x4e9RMJtFQFWi988LRhCbV8BWYuW7WUwQ6+QlVm84wAzSLCGwh03i28of
-        UHe4SExo+gVVJCzx6vgWqJdkJE5P7mGBaGhmlHh4bi07hNPDKHG5aQYjRJW1xOHjII9zAN2k
-        KbF+lz5E2FFiTdt+dpCwhACfxI23giBhZiBz0rbpzBBhXomONiGIajWJWcfXwa09eOESVImH
-        RPNcdZCwkECsRM+T5ywTGOVmIaxawMi4ilE8tbQ4Nz212DAvtVyvODG3uDQvXS85P3cTIzDi
-        T/87/mkH49dLSYcYBTgYlXh4N+wxjRViTSwrrsw9xCjBwawkwptnABTiTUmsrEotyo8vKs1J
-        LT7EKM3BoiTOW83wIFpIID2xJDU7NbUgtQgmy8TBKdXAmNtpXhiw2+D63eMyIXE5zhFOpYx/
-        Q5UUxW2i3N9GdbPPcPoWvu/r7gQ1o0tnH88/VfDX5vhGPgV11W9P8316WPwlmy+dkp8uH29w
-        OyN9daS5pAz/qbhprz0FpzwNrv8c/OaLQKFfM0PaIXmjhRLnrpff90ncdksvj3lRiopol+Xs
-        a0Elc/SVWIozEg21mIuKEwEGbCqh9AIAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOLMWRmVeSWpSXmKPExsVy+t/xu7rGn01jDXY/NLfYOGM9q8WFpz1s
-        Fpd3zWGzmHF+H5PFomWtzBZrj9xld2Dz6NuyitHj+I3tTB6fN8kFMEfp2RTll5akKmTkF5fY
-        KkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZUy7OYelYBNnxZy7s1gbGG+x
-        dzFyckgImEic79zM1MXIxSEksJRRYvKZs2wQCRmJk9MaWCFsYYk/17rYIIo+MUrM3/YOLMEm
-        YCjR9bYLrEFEwEmic+1psCJmgY2MEk93XmUESQgLmEtM+HsUbB2LgKpE758XYHFeAVuJle9m
-        MUFskJdYveEA8wRGngWMDKsYRVJLi3PTc4sN9YoTc4tL89L1kvNzNzECA23bsZ+bdzBe2hh8
-        iFGAg1GJh3fDHtNYIdbEsuLK3EOMEhzMSiK8eQZAId6UxMqq1KL8+KLSnNTiQ4ymQMsnMkuJ
-        JucDoyCvJN7Q1NDcwtLQ3Njc2MxCSZy3Q+BgjJBAemJJanZqakFqEUwfEwenVAMj08RpOdnM
-        ht8Vs7mXrcucurDo/P0cbiFzr6kMs94stvv22k3t3KJdR+bum3HlbM6cvKJ1QcY8P840f4rI
-        X1t06p707F1SjqfrZZWVH71LfpqxNyPQsmzOEWcbWZNvsam9yrqvq1b3L9vY5BaRLiQ8bS67
-        8pQV/e8+Rr7Z8zb4MYOdgm2PvMIlJZbijERDLeai4kQA5ftaukoCAAA=
-X-CMS-MailID: 20190722173236eucas1p171299dfaa34f3124622df488bfe57a89
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190722173236eucas1p171299dfaa34f3124622df488bfe57a89
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190722173236eucas1p171299dfaa34f3124622df488bfe57a89
-References: <CGME20190722173236eucas1p171299dfaa34f3124622df488bfe57a89@eucas1p1.samsung.com>
+        id S1728221AbfGVTAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jul 2019 15:00:49 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:35002 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727646AbfGVTAt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 15:00:49 -0400
+Received: by mail-io1-f67.google.com with SMTP id m24so76367816ioo.2;
+        Mon, 22 Jul 2019 12:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RBH9NIjlTcz6w4LQP6KUauPzdnEDTuEqG8uCadh2V7Y=;
+        b=Thqb/v9opT4RgtSlBn8G7N0zOcK1ag8GBp6HPcrEvHcGc825fInQRAIbtEyY6TOyQX
+         OjwvkJJH3hMBlWe2Q4luG2wAvSZSeAC868gukwHrydSCqGXgN8XnBcW/Na1NulFslp6U
+         C7VPDptL8vEv95huLfZmv0Kq73HXmz2C/3ixLVx+tQHXrOI9YLTbUHjd+ZO+jn7Uo50T
+         yA885eWYoCUP/J7IuSeiWKLF3O1zVPVTjqHqUWMR0YlnDe70o/JQDkjZlBg3hjWva58J
+         3+AC2lMMZkERGNFgv9t90jr9E9Xor1A9g378FxeRbRlZTqWLNvGoXDRLlrvlHR2WhRwG
+         f0mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RBH9NIjlTcz6w4LQP6KUauPzdnEDTuEqG8uCadh2V7Y=;
+        b=hQ8Xfeot23yyGTGw0Es1htsru7QSnAg00GGIkhlm9Byoe0BGPYgHo5OzTKcmMwW/lr
+         29m6QEIvwNdlI0ziv+LtZ+4oKE8uYcDTJ4a77JKjPWHczfBtBCQh4UZd/qNSgnpf2wXR
+         LtXOxvrsepbYDP2VDbWd7VbebvaJUaSyZYa3fTZ8pNji4qJ8dUoc0r4wmq6L0ciA1Wu3
+         rfMa7jFtFP56T5Fc3Ca+Gzfg5u/YH/J35x97RzBoEIQ2+ZWj3sRjTmAnm04RT40waAOe
+         3gPTUy1VGBGWZVGEQ7DVrMIq5MZEqaRbZG6UEd6SeNgvdCCkHZOcp0LcbeHR61791HS8
+         46Kg==
+X-Gm-Message-State: APjAAAXWm1VIYRjxi2ixl/u/kgm/4CGoQnLPX4+P7paqDfKoLew56zC8
+        pKIx4llIiRfCXYcpEYzZRWe1unwEI65XM1/t5IA=
+X-Google-Smtp-Source: APXvYqx0OklHPUoU4sLmJG1e2HuxNjh0YNPtvpHXVRBFrFvEF0pCtsqnsKShS1f8DVX91bEIxTnI/dP1zeP1s2AQF0w=
+X-Received: by 2002:a6b:b3c1:: with SMTP id c184mr20876106iof.222.1563822047914;
+ Mon, 22 Jul 2019 12:00:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <CGME20190719081322eucas1p1f3114c43ca3c53b60766edf1846347cc@eucas1p1.samsung.com>
+ <20190719081212.9249-1-m.szyprowski@samsung.com> <20190719081316.9298-1-m.szyprowski@samsung.com>
+In-Reply-To: <20190719081316.9298-1-m.szyprowski@samsung.com>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Tue, 23 Jul 2019 00:30:37 +0530
+Message-ID: <CANAwSgR3kdZsDn-x9FwynAPtVEf4ci0BfiGPr1NzJ-a1n5B_Ng@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] usb: core: phy: add support for PHY calibration
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jochen Sprickerhof <jochen@sprickerhof.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 36914111e682 ("drivers: phy: add calibrate method") added support
-for generic phy_calibrate() method, but it didn't explain in detail when
-such method is supposed to be called. Add some more documentation directly
-to the phy.h to make it clean that it is intended to be called after every
-host controller reset.
+Hi Marek,
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/phy/phy-core.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+On Fri, 19 Jul 2019 at 13:43, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>
+> Some PHYs (for example Exynos5 USB3.0 DRD PHY) require calibration to be
+> done after every USB HCD reset. Generic PHY framework has been already
+> extended with phy_calibrate() function in commit 36914111e682 ("drivers:
+> phy: add calibrate method"). This patch adds support for it to generic
+> PHY handling code in USB HCD core.
+>
 
-diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
-index e3880c4a15f2..b04f4fe85ac2 100644
---- a/drivers/phy/phy-core.c
-+++ b/drivers/phy/phy-core.c
-@@ -394,6 +394,16 @@ int phy_reset(struct phy *phy)
- }
- EXPORT_SYMBOL_GPL(phy_reset);
- 
-+/**
-+ * phy_calibrate() - Tunes the phy hw parameters for current configuration
-+ * @phy: the phy returned by phy_get()
-+ *
-+ * Used to calibrate phy hardware, typically by adjusting some parameters in
-+ * runtime, which are otherwise lost after host controller reset and cannot
-+ * be applied in phy_init() or phy_power_on().
-+ *
-+ * Returns: 0 if successful, an negative error code otherwise
-+ */
- int phy_calibrate(struct phy *phy)
- {
- 	int ret;
--- 
-2.17.1
+Tested on my XU3 / XU4 / HC1
+Tested-by: Anand Moon <linux.amoon@gmail.com>
 
+
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+>  drivers/usb/core/hcd.c |  7 +++++++
+>  drivers/usb/core/phy.c | 21 +++++++++++++++++++++
+>  drivers/usb/core/phy.h |  1 +
+>  3 files changed, 29 insertions(+)
+>
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 88533938ce19..b89936c1df23 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -2291,6 +2291,9 @@ int hcd_bus_resume(struct usb_device *rhdev, pm_message_t msg)
+>         hcd->state = HC_STATE_RESUMING;
+>         status = hcd->driver->bus_resume(hcd);
+>         clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+> +       if (status == 0)
+> +               status = usb_phy_roothub_calibrate(hcd->phy_roothub);
+> +
+>         if (status == 0) {
+>                 struct usb_device *udev;
+>                 int port1;
+> @@ -2864,6 +2867,10 @@ int usb_add_hcd(struct usb_hcd *hcd,
+>         }
+>         hcd->rh_pollable = 1;
+>
+> +       retval = usb_phy_roothub_calibrate(hcd->phy_roothub);
+> +       if (retval)
+> +               goto err_hcd_driver_setup;
+> +
+>         /* NOTE: root hub and controller capabilities may not be the same */
+>         if (device_can_wakeup(hcd->self.controller)
+>                         && device_can_wakeup(&hcd->self.root_hub->dev))
+> diff --git a/drivers/usb/core/phy.c b/drivers/usb/core/phy.c
+> index 7580493b867a..fb1588e7c282 100644
+> --- a/drivers/usb/core/phy.c
+> +++ b/drivers/usb/core/phy.c
+> @@ -151,6 +151,27 @@ int usb_phy_roothub_set_mode(struct usb_phy_roothub *phy_roothub,
+>  }
+>  EXPORT_SYMBOL_GPL(usb_phy_roothub_set_mode);
+>
+> +int usb_phy_roothub_calibrate(struct usb_phy_roothub *phy_roothub)
+> +{
+> +       struct usb_phy_roothub *roothub_entry;
+> +       struct list_head *head;
+> +       int err;
+> +
+> +       if (!phy_roothub)
+> +               return 0;
+> +
+> +       head = &phy_roothub->list;
+> +
+> +       list_for_each_entry(roothub_entry, head, list) {
+> +               err = phy_calibrate(roothub_entry->phy);
+> +               if (err)
+> +                       return err;
+> +       }
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(usb_phy_roothub_calibrate);
+> +
+>  int usb_phy_roothub_power_on(struct usb_phy_roothub *phy_roothub)
+>  {
+>         struct usb_phy_roothub *roothub_entry;
+> diff --git a/drivers/usb/core/phy.h b/drivers/usb/core/phy.h
+> index dad564e2d2d4..20a267cd986b 100644
+> --- a/drivers/usb/core/phy.h
+> +++ b/drivers/usb/core/phy.h
+> @@ -18,6 +18,7 @@ int usb_phy_roothub_exit(struct usb_phy_roothub *phy_roothub);
+>
+>  int usb_phy_roothub_set_mode(struct usb_phy_roothub *phy_roothub,
+>                              enum phy_mode mode);
+> +int usb_phy_roothub_calibrate(struct usb_phy_roothub *phy_roothub);
+>  int usb_phy_roothub_power_on(struct usb_phy_roothub *phy_roothub);
+>  void usb_phy_roothub_power_off(struct usb_phy_roothub *phy_roothub);
+>
+> --
+> 2.17.1
+>
