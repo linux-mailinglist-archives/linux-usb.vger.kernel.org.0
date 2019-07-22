@@ -2,35 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE417035F
+	by mail.lfdr.de (Postfix) with ESMTP id AB42F7035E
 	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 17:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728249AbfGVPOn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jul 2019 11:14:43 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:63343 "EHLO rere.qmqm.pl"
+        id S1728260AbfGVPOo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jul 2019 11:14:44 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:37655 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728170AbfGVPOm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1728197AbfGVPOm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Mon, 22 Jul 2019 11:14:42 -0400
 Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 45slVS1DPPzLD;
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 45slVS3KnfzPG;
         Mon, 22 Jul 2019 17:13:20 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1563808400; bh=cP8Dq9CjSBWX918uwEZHXky22UdYhXp96dosoGdXsUA=;
+        t=1563808400; bh=bV7ZRlATv/Qjz2jBKkSwfcGxFs02Tfxl4M9Cx/BZiDs=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=cFRxQO+RGbp4QHnrl4ig8yiwKHMvhxkPv8PAjw9ZZREf3bd2g/HMn2jfixtGJUiQP
-         hGaaWU7AQQOE+DpT/B2cbzPeC9bVBo4sri5fhJkuwRLFqkcpgMlqXftjspz3/43dUD
-         x/lnJqb6djWPvZZl4jnJKAQ+PD2C2B6eMbw6SofvKdkI0Ctbz+WD//NKZrFT3L59Np
-         2YMLkR1y7Nr5BnBtkxSLvT8Aeprg/OEIajdzOnemYzzHlvEOmuut4IAz76xCx4eXHf
-         O2zlCXmavSzPdJuY/wBs8CX5yYfIO+Opd4o4zOhFCr9LoYdmIIxP+8jJM3Wo5BCyp7
-         eqTiDPcRHwESw==
+        b=Tg+Bjr6iQJUfnb/SRuhN+vh77VKYcPUGAMUBLGVKKo3Gv/X0vFgsPbrxNgFFtcVE4
+         FpOftkNoMN9yPpGwduYYDHk6DIAVUmLWQpSX34XcitqSsLHoFpeF7ZS0NaKfbFlPu3
+         9pAGDVACwj+iSo9Cc4M9fLvbJUK0woEpvrkvyPHo7GYIlEztvC1iC5bMyPzUIjXnNq
+         p1wWp8RxgROx9xUQpZwVK2ZmYyugpdT+ZBuqxPIJR++ke+4BqxuY7M9rd6Co2V9gnu
+         WU3eeEvpvuInDXffvZbkNwSwqlMkyJwfKlV7DQQvqQflS/c4mRGRPLo24NoZxsy2Ut
+         ZhFMQFPVTpx+Q==
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.100.3 at mail
 Date:   Mon, 22 Jul 2019 17:14:39 +0200
-Message-Id: <0f82c726dcf2d4c7819a7ccfb7be250b031884f7.1563808218.git.mirq-linux@rere.qmqm.pl>
+Message-Id: <0c85b6a77a527ef6a4dbe85dec04b74e4ba1f1ec.1563808218.git.mirq-linux@rere.qmqm.pl>
 In-Reply-To: <cover.1563808218.git.mirq-linux@rere.qmqm.pl>
 References: <cover.1563808218.git.mirq-linux@rere.qmqm.pl>
 From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v4 4/6] usb: gadget: u_serial: allow more console gadget ports
+Subject: [PATCH v4 5/6] usb: gadget: u_serial: diagnose missed console
+ messages
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -43,180 +44,74 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Allow configuring more than one console using USB serial or ACM gadget.
+Insert markers in console stream marking places where data
+is missing. This makes the hole in the data stand out clearly
+instead of glueing together unrelated messages.
 
-By default, only first (ttyGS0) is a console, but this may be changed
-using function's new "console" attribute.
+Example output as seen from USB host side:
+
+[    0.064078] pinctrl core: registered pin 16 (UART3_RTS_N PC0) on 70000868.pinmux
+[    0.064130] pinctrl
+[missed 114987 bytes]
+[    4.302299] udevd[134]: starting version 3.2.5
+[    4.306845] random: udevd: uninitialized urandom read (16 bytes read)
 
 Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
-  v4: fixed locking in gserial_set_console()
-  v3: no changes
-  v2: no changes
+  v4: no changes
+  v3: added example output
+    + lowercase "missed"
+  v2: commit message massage
 
 ---
- drivers/usb/gadget/function/f_acm.c    | 21 +++++++++++
- drivers/usb/gadget/function/f_serial.c | 21 +++++++++++
- drivers/usb/gadget/function/u_serial.c | 48 ++++++++++++++++++++++++++
- drivers/usb/gadget/function/u_serial.h |  7 ++++
- 4 files changed, 97 insertions(+)
+ drivers/usb/gadget/function/u_serial.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/f_acm.c b/drivers/usb/gadget/function/f_acm.c
-index 9fc98de83624..7c152c28b26c 100644
---- a/drivers/usb/gadget/function/f_acm.c
-+++ b/drivers/usb/gadget/function/f_acm.c
-@@ -771,6 +771,24 @@ static struct configfs_item_operations acm_item_ops = {
- 	.release                = acm_attr_release,
- };
- 
-+#ifdef CONFIG_U_SERIAL_CONSOLE
-+
-+static ssize_t f_acm_console_store(struct config_item *item,
-+		const char *page, size_t count)
-+{
-+	return gserial_set_console(to_f_serial_opts(item)->port_num,
-+				   page, count);
-+}
-+
-+static ssize_t f_acm_console_show(struct config_item *item, char *page)
-+{
-+	return gserial_get_console(to_f_serial_opts(item)->port_num, page);
-+}
-+
-+CONFIGFS_ATTR(f_acm_, console);
-+
-+#endif /* CONFIG_U_SERIAL_CONSOLE */
-+
- static ssize_t f_acm_port_num_show(struct config_item *item, char *page)
- {
- 	return sprintf(page, "%u\n", to_f_serial_opts(item)->port_num);
-@@ -779,6 +797,9 @@ static ssize_t f_acm_port_num_show(struct config_item *item, char *page)
- CONFIGFS_ATTR_RO(f_acm_, port_num);
- 
- static struct configfs_attribute *acm_attrs[] = {
-+#ifdef CONFIG_U_SERIAL_CONSOLE
-+	&f_acm_attr_console,
-+#endif
- 	&f_acm_attr_port_num,
- 	NULL,
- };
-diff --git a/drivers/usb/gadget/function/f_serial.c b/drivers/usb/gadget/function/f_serial.c
-index c860f30a0ea2..1406255d0865 100644
---- a/drivers/usb/gadget/function/f_serial.c
-+++ b/drivers/usb/gadget/function/f_serial.c
-@@ -266,6 +266,24 @@ static struct configfs_item_operations serial_item_ops = {
- 	.release	= serial_attr_release,
- };
- 
-+#ifdef CONFIG_U_SERIAL_CONSOLE
-+
-+static ssize_t f_serial_console_store(struct config_item *item,
-+		const char *page, size_t count)
-+{
-+	return gserial_set_console(to_f_serial_opts(item)->port_num,
-+				   page, count);
-+}
-+
-+static ssize_t f_serial_console_show(struct config_item *item, char *page)
-+{
-+	return gserial_get_console(to_f_serial_opts(item)->port_num, page);
-+}
-+
-+CONFIGFS_ATTR(f_serial_, console);
-+
-+#endif /* CONFIG_U_SERIAL_CONSOLE */
-+
- static ssize_t f_serial_port_num_show(struct config_item *item, char *page)
- {
- 	return sprintf(page, "%u\n", to_f_serial_opts(item)->port_num);
-@@ -274,6 +292,9 @@ static ssize_t f_serial_port_num_show(struct config_item *item, char *page)
- CONFIGFS_ATTR_RO(f_serial_, port_num);
- 
- static struct configfs_attribute *acm_attrs[] = {
-+#ifdef CONFIG_U_SERIAL_CONSOLE
-+	&f_serial_attr_console,
-+#endif
- 	&f_serial_attr_port_num,
- 	NULL,
- };
 diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 62280c23cde2..ccfa8c6a35ac 100644
+index ccfa8c6a35ac..c88ad020f9e2 100644
 --- a/drivers/usb/gadget/function/u_serial.c
 +++ b/drivers/usb/gadget/function/u_serial.c
-@@ -1081,6 +1081,54 @@ static void gs_console_exit(struct gs_port *port)
- 	port->console = NULL;
- }
+@@ -88,6 +88,7 @@ struct gs_console {
+ 	spinlock_t		lock;
+ 	struct usb_request	*req;
+ 	struct kfifo		buf;
++	size_t			missed;
+ };
  
-+ssize_t gserial_set_console(unsigned char port_num, const char *page, size_t count)
-+{
-+	struct gs_port *port;
-+	bool enable;
-+	int ret;
+ /*
+@@ -931,6 +932,15 @@ static void __gs_console_push(struct gs_console *cons)
+ 	if (!size)
+ 		return;
+ 
++	if (cons->missed && ep->maxpacket >= 64) {
++		char buf[64];
++		size_t len;
 +
-+	ret = strtobool(page, &enable);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&ports[port_num].lock);
-+	port = ports[port_num].port;
-+
-+	if (WARN_ON(port == NULL)) {
-+		ret = -ENXIO;
-+		goto out;
++		len = sprintf(buf, "\n[missed %zu bytes]\n", cons->missed);
++		kfifo_in(&cons->buf, buf, len);
++		cons->missed = 0;
 +	}
 +
-+	if (enable)
-+		ret = gs_console_init(port);
-+	else
-+		gs_console_exit(port);
-+out:
-+	mutex_unlock(&ports[port_num].lock);
-+
-+	return ret < 0 ? ret : count;
-+}
-+EXPORT_SYMBOL_GPL(gserial_set_console);
-+
-+ssize_t gserial_get_console(unsigned char port_num, char *page)
-+{
-+	struct gs_port *port;
-+	ssize_t ret = -ENXIO;
-+
-+	mutex_lock(&ports[port_num].lock);
-+	port = ports[port_num].port;
-+
-+	if (WARN_ON(port == NULL))
-+		goto out;
-+
-+	ret = sprintf(page, "%u\n", !!port->console);
-+
-+	mutex_unlock(&ports[port_num].lock);
-+out:
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(gserial_get_console);
-+
- #else
+ 	req->length = size;
+ 	if (usb_ep_queue(ep, req, GFP_ATOMIC))
+ 		req->length = 0;
+@@ -952,10 +962,13 @@ static void gs_console_write(struct console *co,
+ {
+ 	struct gs_console *cons = container_of(co, struct gs_console, console);
+ 	unsigned long flags;
++	size_t n;
  
- static int gs_console_connect(struct gs_port *port)
-diff --git a/drivers/usb/gadget/function/u_serial.h b/drivers/usb/gadget/function/u_serial.h
-index 8b472b0c8cb4..e5b08ab8cf7a 100644
---- a/drivers/usb/gadget/function/u_serial.h
-+++ b/drivers/usb/gadget/function/u_serial.h
-@@ -58,6 +58,13 @@ int gserial_alloc_line_no_console(unsigned char *port_line);
- int gserial_alloc_line(unsigned char *port_line);
- void gserial_free_line(unsigned char port_line);
+ 	spin_lock_irqsave(&cons->lock, flags);
  
-+#ifdef CONFIG_U_SERIAL_CONSOLE
-+
-+ssize_t gserial_set_console(unsigned char port_num, const char *page, size_t count);
-+ssize_t gserial_get_console(unsigned char port_num, char *page);
-+
-+#endif /* CONFIG_U_SERIAL_CONSOLE */
-+
- /* connect/disconnect is handled by individual functions */
- int gserial_connect(struct gserial *, u8 port_num);
- void gserial_disconnect(struct gserial *);
+-	kfifo_in(&cons->buf, buf, count);
++	n = kfifo_in(&cons->buf, buf, count);
++	if (n < count)
++		cons->missed += count - n;
+ 
+ 	if (cons->req && !cons->req->length)
+ 		schedule_work(&cons->work);
 -- 
 2.20.1
 
