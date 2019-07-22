@@ -2,150 +2,249 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AF26FAA0
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 09:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3106FC6E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 11:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbfGVHqc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jul 2019 03:46:32 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:35667 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbfGVHqb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 03:46:31 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1hpT1g-0004Nc-Kh; Mon, 22 Jul 2019 09:46:28 +0200
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1hpT1e-0006Vc-I6; Mon, 22 Jul 2019 09:46:26 +0200
-Date:   Mon, 22 Jul 2019 09:46:26 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, patchwork-lst@pengutronix.de,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: Re: [PATCH 1/3] Revert "usb: usb251xb: Add US lanes inversion
- dts-bindings"
-Message-ID: <20190722074626.wf523mw3uvymi5vo@pengutronix.de>
-References: <20190719084407.28041-1-l.stach@pengutronix.de>
- <20190719101337.36omwmqc4lbtw6do@mobilestation>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190719101337.36omwmqc4lbtw6do@mobilestation>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:25:25 up 65 days, 13:43, 51 users,  load average: 0.27, 0.12,
- 0.07
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+        id S1728770AbfGVJoS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jul 2019 05:44:18 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:38185 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728021AbfGVJoR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 05:44:17 -0400
+Received: from mail-pg1-f200.google.com ([209.85.215.200])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hpUre-0007e2-Ch
+        for linux-usb@vger.kernel.org; Mon, 22 Jul 2019 09:44:14 +0000
+Received: by mail-pg1-f200.google.com with SMTP id p29so15097566pgm.10
+        for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2019 02:44:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=T+CGFXP/ZTkPSuuKplrt+BimTSZT5d2EvBWr5Dwk8x4=;
+        b=iOJ3SyyBIK4kQsGAUFA5Oh3W3+sPqGc9QhLhDjACirlStaGNoRlskEV965q2bfwq+8
+         w8qZ8u+AcCDsDzN7AlEzfLtmE+W4gZ5qSZSuAykuTZa4Mnr7YAwLuyFugJ+8HOakx39S
+         SLFiRGv/39NN5oWhAz46VkQsLEqTYjdQZaGGG6ICIeaaiGuwZi5DIPGcWOCeejyMTB28
+         aZ5/IKGlUyGRc2EcjLaUDLl3rVVn4o3gfQf8TsdLF9C1XUJok1iBn9qspzVganZAf+gD
+         gLK0ciBl8XbFnB8QRp8dG3SZBN9xIv6MJqAmIfwASdX1otqK6+l3vEw+7fuopjf4VJoD
+         xYKQ==
+X-Gm-Message-State: APjAAAWkkkTLFtGSi5haVbGhHxkdmighmIuKrV8YTnCBW0Xe7BzY05iK
+        a1FK/SbBwnWlwWf2F9IjnpV9w3IjEWEFjTgh5peOLcyuaaovnIjtWUCbBn2b8rpoQFTliBMHKLW
+        aPSyuFivN44VhjHaQ8Ef2l2BlwHyTDHGkdEK+XQ==
+X-Received: by 2002:a17:902:6a85:: with SMTP id n5mr69442589plk.73.1563788653094;
+        Mon, 22 Jul 2019 02:44:13 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqy8atjxygD9Z7zS/ir9XN5E7ZaqOBDCRcYgCxfsVIs+5JAPFZuiswiENCHJuX+Hlf1oEnRQZg==
+X-Received: by 2002:a17:902:6a85:: with SMTP id n5mr69442545plk.73.1563788652761;
+        Mon, 22 Jul 2019 02:44:12 -0700 (PDT)
+Received: from 2001-b011-380f-3c20-e8e0-1150-3bec-1563.dynamic-ip6.hinet.net (2001-b011-380f-3c20-e8e0-1150-3bec-1563.dynamic-ip6.hinet.net. [2001:b011:380f:3c20:e8e0:1150:3bec:1563])
+        by smtp.gmail.com with ESMTPSA id i124sm71547785pfe.61.2019.07.22.02.44.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Jul 2019 02:44:12 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: Titan Ridge xHCI may stop to working after re-plugging the dock
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <87blxqs3fh.fsf@linux.intel.com>
+Date:   Mon, 22 Jul 2019 17:44:09 +0800
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kent Lin <kent.lin@canonical.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Transfer-Encoding: 8bit
+Message-Id: <749516DB-65B6-4D59-8C77-7883649D1F25@canonical.com>
+References: <993E78A1-2A60-46D8-AA51-F4CB077E48D1@canonical.com>
+ <1562759399.5312.6.camel@suse.com> <87pnm6sd10.fsf@linux.intel.com>
+ <77580193-D67B-48B1-8528-03ED4E7E8D64@canonical.com>
+ <87blxqs3fh.fsf@linux.intel.com>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Serge,
+Hi Felipe,
 
-On 19-07-19 13:13, Serge Semin wrote:
-> Hello Lucas
-> 
-> On Fri, Jul 19, 2019 at 10:44:05AM +0200, Lucas Stach wrote:
-> > This reverts commit 3342ce35a1, as there is no need for this separate
-> > property and it breaks compatibility with existing devicetree files
-> > (arch/arm64/boot/dts/freescale/imx8mq.dtsi).
-> > 
-> 
-> Hmm, didn't know there had been anything staged to merge and touching this
-> property before submitting the update. We must have done it nearly at the same
-> time, or your patch hasn't been merged at the time I prepared mine.
-> 
-> Anyway why would you prefer to change the interface again instead of
-> following the existing way? Firstly It is much easier to fix the dts-file
-> than to revert the interface back and break dts-files of possible other users.
+at 18:51, Felipe Balbi <felipe.balbi@linux.intel.com> wrote:
 
-Since the dtbs are firmware thats not possible everytime. You can't even
-say that nobody uses that binding because it's not grepable within the
-kernel repo. Most vendors do not publish their dts files but use the
-bindings and rely on stable bindings.
+>
+> Hi,
+>
+> Kai Heng Feng <kai.heng.feng@canonical.com> writes:
+>>> Oliver Neukum <oneukum@suse.com> writes:
+>>>> Am Dienstag, den 09.07.2019, 21:10 +0800 schrieb Kai-Heng Feng:
+>>>>> Hi Mika and Mathias,
+>>>>>
+>>>>> I’ve filed a bug [1] which renders docking station unusable.
+>>>>>
+>>>>> I am not sure it's a bug in PCI, Thunderbolt or xHCI so raise the issue
+>>>>> to
+>>>>> you both.
+>>>>>
+>>>>> [1] https://bugzilla.kernel.org/show_bug.cgi?id=203885
+>>>>>
+>>>>> Kai-Heng
+>>>>
+>>>> The issue starts before you unplug. In fact it starts before
+>>>> the dock is even detected the first time:
+>>>>
+>>>> [   13.171167] rfkill: input handler disabled
+>>>> [   19.781905] pcieport 0000:00:1c.0: PME: Spurious native interrupt!
+>>>> [   19.781909] pcieport 0000:00:1c.0: PME: Spurious native interrupt!
+>>>> [   20.109251] usb 4-1: new SuperSpeedPlus Gen 2 USB device number 2
+>>>> using xhci_hcd
+>>>> [   20.136000] usb 4-1: New USB device found, idVendor=0bda,
+>>>> idProduct=0487, bcdDevice= 1.47
+>>>> [   20.136004] usb 4-1: New USB device strings: Mfr=1, Product=2,
+>>>> SerialNumber=0
+>>>> [   20.136007] usb 4-1: Product: Dell dock
+>>>> [   20.136009] usb 4-1: Manufacturer: Dell Inc.
+>>>> [   20.140607] hub 4-1:1.0: USB hub found
+>>>> [   20.141004] hub 4-1:1.0: 4 ports detected
+>>>> [   20.253025] usb 1-4: new high-speed USB device number 5 using  
+>>>> xhci_hcd
+>>>> [   20.403520] usb 1-4: New USB device found, idVendor=0bda,
+>>>> idProduct=5487, bcdDevice= 1.47
+>>>> [   20.403521] usb 1-4: New USB device strings: Mfr=1, Product=2,
+>>>> SerialNumber=0
+>>>> [   20.403522] usb 1-4: Product: Dell dock
+>>>> [   20.403522] usb 1-4: Manufacturer: Dell Inc.
+>>>> [   20.404348] hub 1-4:1.0: USB hub found
+>>>>
+>>>> This looks like a PCI issue.
+>>>> In general, this kind of reporting sucks. We have to guess what you did
+>>>> at 19.781905
+>>>
+>>> It might be nice to know which device is generating that and why it's
+>>> not found. This may help:
+>>>
+>>> diff --git a/drivers/pci/pcie/pme.c b/drivers/pci/pcie/pme.c
+>>> index f38e6c19dd50..33285ef29362 100644
+>>> --- a/drivers/pci/pcie/pme.c
+>>> +++ b/drivers/pci/pcie/pme.c
+>>> @@ -203,7 +203,7 @@ static void pcie_pme_handle_request(struct pci_dev
+>>> *port, u16 req_id)
+>>>
+>>>   out:
+>>>  	if (!found)
+>>> -		pci_info(port, "Spurious native interrupt!\n");
+>>> +		pci_info(port, "Spurious native interrupt! (Bus# %d DevFn
+>>> %d)\n", busnr, devfn);
+>>>  }
+>>>
+>>>  /**
+>>>
+>>>
+>>> Also, according to what Kai-Heng said, xHCI stops working even after
+>>> repluggin the Dock. We could be dealing with two bugs here:
+>>>
+>>> 1. Spurious PME event being generated by an unexistent device
+>>> 2. xHCI not handling hot-plug very well
+>>>
+>>> Kai-Heng,
+>>>
+>>> please run your tests again and make note of when you unplugged the dock
+>>> and when you replugged it so we can correlate the time stampts with what
+>>> you have done otherwise we will never be able to pin-point what's going
+>>> on.
+>>
+>> I upgraded the system firmware, TBT firmware and docking station firmware
+>> to latest, and used latest mainline kernel.
+>> Now the issue can be reproduced at the very first time I plugged the
+>> docking station.
+>>
+>> Attach dmesg to BKO since there are lots of message after XHCI dyndbg is
+>> enabled.
+>
+> I saw that you annotated the plug, but not the unplug. Where does the
+> unplug start? There are many places where it could be, but I need to be
+> sure.
 
-> Secondly the chip documentation doesn't have anything regarding port 0.
+Request log attached to Bugzilla.
 
-Thats not true. I've checked the usb2517 documentation and PRTSP register
-description. Bit-0 points to the upstream port and the dt-binding
-is such generic to cover that too. By swap-dx-lanes I mean swap d+/d-
-lanes else it would be something like swap-downstream-lanes. Since the
-upstream port have d+/d- lanes too it would be covered too.
+>
+> Also, wasn't it so that the problem is when you *replug* the dock? So
+> can you better describe what you're doing? Are you booting with dock
+> connected then disconnect and reconnect or are you booting without dock
+> and it fails on first plug?
 
-> It states to swap the Ports from 1 to 4 (usb2514) corresponding to the bits
-> 1 - 4 of the 'PORT SWAP' register, while bit 0 is connected with explicitly
-> named Upstream Port (without any numbering). Thirdly having a separate
-> property for US port makes the driver bindings interface a bit better
-> readable/logical, since in current implementation there is no implicit/unspoken/hidden
-> rule that port 0 corresponds to the Upstream Port, Port 0 just doesn't exists
-> (following the chip datasheet text), and the other port-related properties are
-> only applicable for downstream ports. So the driver code rejects them being
+The weird behavior I described in my previous replay is because the devices  
+need to be fully power cycled after firmware upgrade.
+So it’s false alarm.
 
-So the correct fix should be extending the documentation rather than
-introducing a new binding?
+The only issue now is the original bug.
 
-> utilized for a port with 0 identifier. The only port-related setting being
-> exposed by the interface is the swap-port-one and it has a separately bound
-> property 'swap-us-lanes' for the Upstream port.
-> 
-> As for me, all of this makes more sense than having an implicit Port 0 - Upstream
-> port binding (as you suggest). Although the final decision of which solution is
-> better is after the subsystem maintainer after all.
+>
+> What are you consider a fail here? Can't you see the xhci bus? USB
+> Devices don't show? What do you have on lsusb -t?
 
-That's true but he had to cover the dt-backward compatibility.
+The 0000:39:00.0 xHCI stops working, so the USB ethernet (r8152) connects  
+to it doesn’t work anymore.
 
-Regards,
-  Marco
+Normal case:
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+         |__ Port 3: Dev 3, If 0, Class=Hub, Driver=hub/4p, 5000M
+         |__ Port 4: Dev 4, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
+     |__ Port 4: Dev 2, If 0, Class=Hub, Driver=hub/5p, 480M
+         |__ Port 5: Dev 6, If 0, Class=Human Interface Device, Driver=usbhid, 480M
+         |__ Port 3: Dev 4, If 0, Class=Hub, Driver=hub/6p, 480M
+             |__ Port 4: Dev 7, If 0, Class=Audio, Driver=snd-usb-audio, 480M
+             |__ Port 4: Dev 7, If 3, Class=Audio, Driver=snd-usb-audio, 480M
+             |__ Port 4: Dev 7, If 1, Class=Audio, Driver=snd-usb-audio, 480M
+             |__ Port 4: Dev 7, If 2, Class=Audio, Driver=snd-usb-audio, 480M
+             |__ Port 5: Dev 9, If 0, Class=Human Interface Device, Driver=usbhid, 480M
+     |__ Port 9: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+     |__ Port 10: Dev 5, If 2, Class=Chip/SmartCard, Driver=, 480M
+     |__ Port 10: Dev 5, If 0, Class=Application Specific Interface, Driver=, 480M
+     |__ Port 10: Dev 5, If 3, Class=Vendor Specific Class, Driver=, 480M
+     |__ Port 10: Dev 5, If 1, Class=Chip/SmartCard, Driver=, 480M
+     |__ Port 11: Dev 8, If 0, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 11: Dev 8, If 1, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 14: Dev 10, If 0, Class=Wireless, Driver=btusb, 12M
+     |__ Port 14: Dev 10, If 1, Class=Wireless, Driver=btusb, 12M
 
-> Regards,
-> -Sergey
-> 
-> > CC: stable@vger.kernel.org #5.2
-> > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> > ---
-> >  Documentation/devicetree/bindings/usb/usb251xb.txt | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/usb251xb.txt b/Documentation/devicetree/bindings/usb/usb251xb.txt
-> > index bc7945e9dbfe..17915f64b8ee 100644
-> > --- a/Documentation/devicetree/bindings/usb/usb251xb.txt
-> > +++ b/Documentation/devicetree/bindings/usb/usb251xb.txt
-> > @@ -64,10 +64,8 @@ Optional properties :
-> >   - power-on-time-ms : Specifies the time it takes from the time the host
-> >  	initiates the power-on sequence to a port until the port has adequate
-> >  	power. The value is given in ms in a 0 - 510 range (default is 100ms).
-> > - - swap-dx-lanes : Specifies the downstream ports which will swap the
-> > -	differential-pair (D+/D-), default is not-swapped.
-> > - - swap-us-lanes : Selects the upstream port differential-pair (D+/D-)
-> > -	swapping (boolean, default is not-swapped)
-> > + - swap-dx-lanes : Specifies the ports which will swap the differential-pair
-> > +	(D+/D-), default is not-swapped.
-> >  
-> >  Examples:
-> >  	usb2512b@2c {
-> > -- 
-> > 2.20.1
-> > 
-> 
-> 
+Once the issue occurs:
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
+     |__ Port 4: Dev 2, If 0, Class=Hub, Driver=hub/5p, 480M
+         |__ Port 5: Dev 6, If 0, Class=Human Interface Device, Driver=usbhid, 480M
+         |__ Port 3: Dev 4, If 0, Class=Hub, Driver=hub/6p, 480M
+             |__ Port 4: Dev 7, If 0, Class=Audio, Driver=snd-usb-audio, 480M
+             |__ Port 4: Dev 7, If 3, Class=Audio, Driver=snd-usb-audio, 480M
+             |__ Port 4: Dev 7, If 1, Class=Audio, Driver=snd-usb-audio, 480M
+             |__ Port 4: Dev 7, If 2, Class=Audio, Driver=snd-usb-audio, 480M
+             |__ Port 5: Dev 9, If 0, Class=Human Interface Device, Driver=usbhid, 480M
+     |__ Port 9: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+     |__ Port 10: Dev 5, If 2, Class=Chip/SmartCard, Driver=, 480M
+     |__ Port 10: Dev 5, If 0, Class=Application Specific Interface, Driver=, 480M
+     |__ Port 10: Dev 5, If 3, Class=Vendor Specific Class, Driver=, 480M
+     |__ Port 10: Dev 5, If 1, Class=Chip/SmartCard, Driver=, 480M
+     |__ Port 11: Dev 8, If 0, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 11: Dev 8, If 1, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 14: Dev 10, If 0, Class=Wireless, Driver=btusb, 12M
+     |__ Port 14: Dev 10, If 1, Class=Wireless, Driver=btusb, 12M
 
--- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+So we don’t have USB ethernet anymore.
+
+Kai-Heng
+
+>
+> Best regards
+>
+> -- 
+> balbi
+
+
