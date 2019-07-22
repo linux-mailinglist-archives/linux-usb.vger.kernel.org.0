@@ -2,31 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E32A16FEF4
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 13:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2B16FF12
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 13:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729995AbfGVLtT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jul 2019 07:49:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728929AbfGVLtT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Jul 2019 07:49:19 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5FCA32184E;
-        Mon, 22 Jul 2019 11:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563796158;
-        bh=lfCsJto9RujbowCe09F/3388kpRaij+nFMO9+8CcYSw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oYOcVUTx5ataZt6ry78DD/qh6hiSk+JEEayS9GoSUcHP8EL5tZtnwTWIZ7IYvadoS
-         hVw7qKAY4taSUGTuqorqgYB9aMoexAgwCZFFNrAl/YTVvsCtsxHz/SpFimDP3/r1p6
-         Y+V8Fvn1BdDDBCeByBv3mLVmVCcm1v9/23E8bVmY=
-Date:   Mon, 22 Jul 2019 13:49:15 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     Joe Perches <joe@perches.com>,
+        id S1730088AbfGVL4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jul 2019 07:56:49 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:43020 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727507AbfGVL4t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 07:56:49 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 828CF80342; Mon, 22 Jul 2019 13:56:35 +0200 (CEST)
+Date:   Mon, 22 Jul 2019 13:56:45 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     Pawel Laszczak <pawell@cadence.com>,
         "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "rogerq@ti.com" <rogerq@ti.com>,
@@ -37,46 +27,80 @@ Cc:     Joe Perches <joe@perches.com>,
         Jayshri Dajiram Pawar <jpawar@cadence.com>,
         Rahul Kumar <kurahul@cadence.com>,
         Anil Joy Varughese <aniljoy@cadence.com>
-Subject: Re: [PATCH v10 2/6] usb:common Separated decoding functions from
- dwc3 driver.
-Message-ID: <20190722114915.GB10515@kroah.com>
+Subject: Re: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
+Message-ID: <20190722115644.GA12069@amd>
 References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
- <1563733939-21214-3-git-send-email-pawell@cadence.com>
- <4d4a8a02e4ec7fad9213302d17a6acd17851d8da.camel@perches.com>
- <BYAPR07MB4709115020BE99B5EB34D232DDC40@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <20190721190335.GA19831@xo-6d-61-c0.localdomain>
+ <BYAPR07MB470904ACCD1ED91B10BB6BEFDDC40@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <20190722114839.GA10515@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="OXfL5xGRrasGEqWY"
 Content-Disposition: inline
-In-Reply-To: <BYAPR07MB4709115020BE99B5EB34D232DDC40@BYAPR07MB4709.namprd07.prod.outlook.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20190722114839.GA10515@kroah.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 22, 2019 at 10:06:38AM +0000, Pawel Laszczak wrote:
-> Hi,
-> 
-> >
-> >On Sun, 2019-07-21 at 19:32 +0100, Pawel Laszczak wrote:
-> >> Patch moves some decoding functions from driver/usb/dwc3/debug.h driver
-> >> to driver/usb/common/debug.c file. These moved functions include:
-> >[]
-> >> diff --git a/drivers/usb/common/debug.c b/drivers/usb/common/debug.c
-> >[]
-> >> +static void usb_decode_set_clear_feature(__u8 bRequestType, __u8 bRequest,
-> >> +					 __u16 wValue, __u16 wIndex,
-> >> +					 char *str, size_t size)
-> >
-> >It's probably not necessary to use Hungarian
-> >when moving these functions into generic code.
-> 
-> In my opinion it's ok in this place. It's consistence with USB specification ch9 and with
-> https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/usb/ch9.h. (look at usb_ctrlrequest). 
 
-Yes, this is fine, the USB subsystem has this everywhere, and we all
-know exactly what it means when we see it.
+--OXfL5xGRrasGEqWY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
+Hi!
 
-greg k-h
+> > >> This patch introduce new Cadence USBSS DRD driver to linux kernel.
+> > >>
+> > >> The Cadence USBSS DRD Controller is a highly configurable IP Core wh=
+ich
+> > >> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
+> > >> Host Only (XHCI)configurations.
+> > >
+> > >I see you are using debugfs to select between DRD, peripheral-onlyh an=
+d XHCI...
+> > >
+> > >Is that good idea?
+> >=20
+> > Yes driver allows selecting dr_mode by debugfs. Controller also support=
+ such functionality=20
+> > so I don't understand why would it not be a good idea.=20
+> >=20
+> > I personally use this for testing but it can be used to limit controlle=
+r functionality without=20
+> > recompiling kernel.=20
+>=20
+> debugfs is ONLY for debugging, never rely on it being enabled, or
+> mounted, on a system in order to have any normal operation happen.
+>=20
+> So for testing, yes, this is fine.  If this is going to be the normal
+> api/interface for how to control this driver, no, that is not acceptable
+> at all.
+
+It makes a lot of sense for end-user to toggle this... for example
+when he is lacking right cable for proper otg detection. As it is
+third driver offering this functionality, I believe we should stop
+treating it as debugging.
+
+Best regards,
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--OXfL5xGRrasGEqWY
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl01pHwACgkQMOfwapXb+vIDNQCgwTTLQIqZhxOPwF0uWn3pcLMd
+9qQAnjloOlNoULIYu4F5WNb9967eMecO
+=BZoL
+-----END PGP SIGNATURE-----
+
+--OXfL5xGRrasGEqWY--
