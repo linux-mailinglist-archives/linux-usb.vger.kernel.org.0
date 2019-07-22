@@ -2,249 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3106FC6E
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 11:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C256FD53
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jul 2019 12:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728770AbfGVJoS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jul 2019 05:44:18 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:38185 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728021AbfGVJoR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 05:44:17 -0400
-Received: from mail-pg1-f200.google.com ([209.85.215.200])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1hpUre-0007e2-Ch
-        for linux-usb@vger.kernel.org; Mon, 22 Jul 2019 09:44:14 +0000
-Received: by mail-pg1-f200.google.com with SMTP id p29so15097566pgm.10
-        for <linux-usb@vger.kernel.org>; Mon, 22 Jul 2019 02:44:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=T+CGFXP/ZTkPSuuKplrt+BimTSZT5d2EvBWr5Dwk8x4=;
-        b=iOJ3SyyBIK4kQsGAUFA5Oh3W3+sPqGc9QhLhDjACirlStaGNoRlskEV965q2bfwq+8
-         w8qZ8u+AcCDsDzN7AlEzfLtmE+W4gZ5qSZSuAykuTZa4Mnr7YAwLuyFugJ+8HOakx39S
-         SLFiRGv/39NN5oWhAz46VkQsLEqTYjdQZaGGG6ICIeaaiGuwZi5DIPGcWOCeejyMTB28
-         aZ5/IKGlUyGRc2EcjLaUDLl3rVVn4o3gfQf8TsdLF9C1XUJok1iBn9qspzVganZAf+gD
-         gLK0ciBl8XbFnB8QRp8dG3SZBN9xIv6MJqAmIfwASdX1otqK6+l3vEw+7fuopjf4VJoD
-         xYKQ==
-X-Gm-Message-State: APjAAAWkkkTLFtGSi5haVbGhHxkdmighmIuKrV8YTnCBW0Xe7BzY05iK
-        a1FK/SbBwnWlwWf2F9IjnpV9w3IjEWEFjTgh5peOLcyuaaovnIjtWUCbBn2b8rpoQFTliBMHKLW
-        aPSyuFivN44VhjHaQ8Ef2l2BlwHyTDHGkdEK+XQ==
-X-Received: by 2002:a17:902:6a85:: with SMTP id n5mr69442589plk.73.1563788653094;
-        Mon, 22 Jul 2019 02:44:13 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqy8atjxygD9Z7zS/ir9XN5E7ZaqOBDCRcYgCxfsVIs+5JAPFZuiswiENCHJuX+Hlf1oEnRQZg==
-X-Received: by 2002:a17:902:6a85:: with SMTP id n5mr69442545plk.73.1563788652761;
-        Mon, 22 Jul 2019 02:44:12 -0700 (PDT)
-Received: from 2001-b011-380f-3c20-e8e0-1150-3bec-1563.dynamic-ip6.hinet.net (2001-b011-380f-3c20-e8e0-1150-3bec-1563.dynamic-ip6.hinet.net. [2001:b011:380f:3c20:e8e0:1150:3bec:1563])
-        by smtp.gmail.com with ESMTPSA id i124sm71547785pfe.61.2019.07.22.02.44.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Jul 2019 02:44:12 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8;
-        delsp=yes;
-        format=flowed
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: Titan Ridge xHCI may stop to working after re-plugging the dock
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <87blxqs3fh.fsf@linux.intel.com>
-Date:   Mon, 22 Jul 2019 17:44:09 +0800
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kent Lin <kent.lin@canonical.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Transfer-Encoding: 8bit
-Message-Id: <749516DB-65B6-4D59-8C77-7883649D1F25@canonical.com>
-References: <993E78A1-2A60-46D8-AA51-F4CB077E48D1@canonical.com>
- <1562759399.5312.6.camel@suse.com> <87pnm6sd10.fsf@linux.intel.com>
- <77580193-D67B-48B1-8528-03ED4E7E8D64@canonical.com>
- <87blxqs3fh.fsf@linux.intel.com>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>
-X-Mailer: Apple Mail (2.3445.104.11)
+        id S1728453AbfGVJ7y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jul 2019 05:59:54 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:52710 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726846AbfGVJ7y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jul 2019 05:59:54 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6M9sD5r028561;
+        Mon, 22 Jul 2019 02:58:45 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=K0hkKvO7YZPlHlbXWV4QF/ol6xFH7ed6OgLtRkuHfDM=;
+ b=YiMGzvE7hXf4KqwJ7lMOhfr4CYM2spvaAUf4OqqO4gRk6zp13AKHJ6GNRLQeal2zJ4xH
+ klgctrxJcZaVNLCnOgo/LFZkq0l/WRTb/mNS4gdRoE/rolE8HDIdooQzggpjTAT/Q/rW
+ j6pkoYWeLRA9tr0JCrTrFpDM/z8HQZPkVJS8OZezNTPKL2+0Hyy0/5oZ9uxqsqBbv0Pa
+ LBkla6+hAvt+wAZsiY7RzvkwztNXzJJC7clfjdl6itU7/6gQVLLE5zRYuvcOdrEIZLir
+ uw0eAJ2cXEZCKkEX4tPoc7Az2rf63euT0AkfcZbirsNzgxexiRJYrl8I3yyApw8TYmkc oA== 
+Authentication-Results: cadence.com;
+        spf=pass smtp.mailfrom=pawell@cadence.com
+Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2058.outbound.protection.outlook.com [104.47.38.58])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 2tuxhwebya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 22 Jul 2019 02:58:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YstHRofUFRfs+g1R6qW6zrE4Nigi92w+BqU0Fywus/XXINbZsu+jEExRCcUJMnLe45fAlkYMpj9DEmK1BqmiL6cHupHPMs9St9YvmRPb2jvRRKD9iTr2OTsJG0Ac2ZDR0KV3gvp1cfHNCSi6HDiQ1g4tjI4QdeerzqD9YwOx+MESn9swiG7tW8c9DTzalbVr5/e/nivwZErGbv3oXqQJrz8Ddez/gt9SxHM+QlsCarWiUMQSGukAypR3RgY53NWrS65I8Lw3UhhRc2t8Py/776xyI2gLXZYq/QjJQktACk+j20yCAWOa4Ihewlytv//8XGGSWXn6da1ga+NeJAUfnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K0hkKvO7YZPlHlbXWV4QF/ol6xFH7ed6OgLtRkuHfDM=;
+ b=WF+M7qundlVmCOQqOMPxh9UFRaXUqfjcJ35OXxH3pW/Wp4pIptfc9urpOx5u1t8C1kWPj4qt7HFyBNSp8quT6nii6QlrpSoRhGFReJa1BdgWXEAJCjL2Hs0OMDe9V6U1/C+Ce4TFkGdSYEK5V9bHN2/9AU5UCnFjP9h2WmyNFHbnr5P9x/RIySZV28/zjdJVmt6FHHNGd5HbxTYSK+ubTl0C5+le2T5UUOMhFtnB31eeNeyNCLyuPKyDUhg2xE+mAETPEduWXwjprUbFg9ORDkPuAFQVjctR04tHyqgglAYhoKz/SiLuQlpPErY1XHI44wZRxffa2LRbAGgDBl1iTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=cadence.com;dmarc=pass action=none
+ header.from=cadence.com;dkim=pass header.d=cadence.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K0hkKvO7YZPlHlbXWV4QF/ol6xFH7ed6OgLtRkuHfDM=;
+ b=BFOqndkBL75XUurnmYz/2OBvB1SZFaWAnUN8BHrKFtnISSpbu0zxnVqJbZD7B+lLj1nNG14XVT5waO5qtd7NoSfhju2/ogVZUGrOITFmQVov/EopxoNffAXlrY8BtUEkEnaVhoWi/MwHr8fH24lsE4oVFK3rP6ws+EC3ltbz8jk=
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
+ BYAPR07MB6231.namprd07.prod.outlook.com (20.179.63.26) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2094.16; Mon, 22 Jul 2019 09:58:43 +0000
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::41f8:6c26:5cc9:743d]) by BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::41f8:6c26:5cc9:743d%3]) with mapi id 15.20.2094.013; Mon, 22 Jul 2019
+ 09:58:43 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Pavel Machek <pavel@ucw.cz>
+CC:     "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jbergsagel@ti.com" <jbergsagel@ti.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
+        Suresh Punnoose <sureshp@cadence.com>,
+        Jayshri Dajiram Pawar <jpawar@cadence.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        Anil Joy Varughese <aniljoy@cadence.com>
+Subject: RE: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
+Thread-Topic: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
+Thread-Index: AQHVP/K3++/PZvX91EKpHiAZrLktoabVbhiAgAD3BZA=
+Date:   Mon, 22 Jul 2019 09:58:42 +0000
+Message-ID: <BYAPR07MB470904ACCD1ED91B10BB6BEFDDC40@BYAPR07MB4709.namprd07.prod.outlook.com>
+References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
+ <20190721190335.GA19831@xo-6d-61-c0.localdomain>
+In-Reply-To: <20190721190335.GA19831@xo-6d-61-c0.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNDZkZjM2ZjMtYWM2Ny0xMWU5LTg3NDMtMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDQ2ZGYzNmY1LWFjNjctMTFlOS04NzQzLTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iODU5IiB0PSIxMzIwODI2MzExOTIyOTc5MzYiIGg9ImFWQXo5UVpka05PU1F5V1dKK2M4UmpCSE40Yz0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
+x-dg-rorf: 
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a65282f9-0d5d-4595-0190-08d70e8b2dfb
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR07MB6231;
+x-ms-traffictypediagnostic: BYAPR07MB6231:
+x-microsoft-antispam-prvs: <BYAPR07MB6231E51472F862FABD4E317BDDC40@BYAPR07MB6231.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 01068D0A20
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(396003)(346002)(376002)(136003)(39860400002)(189003)(199004)(36092001)(52536014)(64756008)(66556008)(66476007)(66946007)(102836004)(107886003)(6246003)(2906002)(7736002)(14454004)(305945005)(6506007)(86362001)(3846002)(486006)(68736007)(99286004)(5660300002)(76116006)(66066001)(66446008)(6116002)(256004)(14444005)(55016002)(316002)(7696005)(33656002)(6916009)(478600001)(6436002)(53936002)(76176011)(11346002)(54906003)(4744005)(71200400001)(71190400001)(8936002)(74316002)(229853002)(4326008)(476003)(25786009)(9686003)(81166006)(81156014)(186003)(26005)(8676002)(446003);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB6231;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: cadence.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: GQ9n1fMd3MRiCUuJn1xuR/CCAz/kA8vEZY9cq/9BxJii89mPB662MsY6AjoxuohNkx8N64ymN3QOWjQtTNiJDpHO4ti7OCwd8lWz88iYWmqUaFrLudkbjx/XQ4WYqeOx2hD8kn+JHHsY7Ps6dXoBONuT1mFbpvhqbrJvbVm1dhQiqrxqwxuEO6T4aKRM48BoyuK5xOYW5KadFjqLdguytBl6GhWhl012GF5LW3sNAyymgMgXanuCX8ngJLyKb9z4QIICHKr5QVucEgA7VBoe/fbeyvOyUl5c9IdkmUZQfovP6EJH1+BXs4eg/0AyVJsIRWq4QSc02vWNvsqfFPEiMJkCRnDke7I4eCOSmUJf8hEckPaDv6Ts/I+eiA/FwtZH0o1Xj/m3F8qLa5b2jo1eu8dO4gew4uqtSFKTN6ZJdYw=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a65282f9-0d5d-4595-0190-08d70e8b2dfb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 09:58:42.9133
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pawell@global.cadence.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB6231
+X-Proofpoint-SPF-Result: pass
+X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
+ include:mktomail.com include:spf-0014ca01.pphosted.com
+ include:spf.protection.outlook.com include:auth.msgapp.com
+ include:spf.mandrillapp.com ~all
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-22_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
+ spamscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=325 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907220118
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
-
-at 18:51, Felipe Balbi <felipe.balbi@linux.intel.com> wrote:
+Hi,=20
 
 >
-> Hi,
->
-> Kai Heng Feng <kai.heng.feng@canonical.com> writes:
->>> Oliver Neukum <oneukum@suse.com> writes:
->>>> Am Dienstag, den 09.07.2019, 21:10 +0800 schrieb Kai-Heng Feng:
->>>>> Hi Mika and Mathias,
->>>>>
->>>>> I’ve filed a bug [1] which renders docking station unusable.
->>>>>
->>>>> I am not sure it's a bug in PCI, Thunderbolt or xHCI so raise the issue
->>>>> to
->>>>> you both.
->>>>>
->>>>> [1] https://bugzilla.kernel.org/show_bug.cgi?id=203885
->>>>>
->>>>> Kai-Heng
->>>>
->>>> The issue starts before you unplug. In fact it starts before
->>>> the dock is even detected the first time:
->>>>
->>>> [   13.171167] rfkill: input handler disabled
->>>> [   19.781905] pcieport 0000:00:1c.0: PME: Spurious native interrupt!
->>>> [   19.781909] pcieport 0000:00:1c.0: PME: Spurious native interrupt!
->>>> [   20.109251] usb 4-1: new SuperSpeedPlus Gen 2 USB device number 2
->>>> using xhci_hcd
->>>> [   20.136000] usb 4-1: New USB device found, idVendor=0bda,
->>>> idProduct=0487, bcdDevice= 1.47
->>>> [   20.136004] usb 4-1: New USB device strings: Mfr=1, Product=2,
->>>> SerialNumber=0
->>>> [   20.136007] usb 4-1: Product: Dell dock
->>>> [   20.136009] usb 4-1: Manufacturer: Dell Inc.
->>>> [   20.140607] hub 4-1:1.0: USB hub found
->>>> [   20.141004] hub 4-1:1.0: 4 ports detected
->>>> [   20.253025] usb 1-4: new high-speed USB device number 5 using  
->>>> xhci_hcd
->>>> [   20.403520] usb 1-4: New USB device found, idVendor=0bda,
->>>> idProduct=5487, bcdDevice= 1.47
->>>> [   20.403521] usb 1-4: New USB device strings: Mfr=1, Product=2,
->>>> SerialNumber=0
->>>> [   20.403522] usb 1-4: Product: Dell dock
->>>> [   20.403522] usb 1-4: Manufacturer: Dell Inc.
->>>> [   20.404348] hub 1-4:1.0: USB hub found
->>>>
->>>> This looks like a PCI issue.
->>>> In general, this kind of reporting sucks. We have to guess what you did
->>>> at 19.781905
->>>
->>> It might be nice to know which device is generating that and why it's
->>> not found. This may help:
->>>
->>> diff --git a/drivers/pci/pcie/pme.c b/drivers/pci/pcie/pme.c
->>> index f38e6c19dd50..33285ef29362 100644
->>> --- a/drivers/pci/pcie/pme.c
->>> +++ b/drivers/pci/pcie/pme.c
->>> @@ -203,7 +203,7 @@ static void pcie_pme_handle_request(struct pci_dev
->>> *port, u16 req_id)
->>>
->>>   out:
->>>  	if (!found)
->>> -		pci_info(port, "Spurious native interrupt!\n");
->>> +		pci_info(port, "Spurious native interrupt! (Bus# %d DevFn
->>> %d)\n", busnr, devfn);
->>>  }
->>>
->>>  /**
->>>
->>>
->>> Also, according to what Kai-Heng said, xHCI stops working even after
->>> repluggin the Dock. We could be dealing with two bugs here:
->>>
->>> 1. Spurious PME event being generated by an unexistent device
->>> 2. xHCI not handling hot-plug very well
->>>
->>> Kai-Heng,
->>>
->>> please run your tests again and make note of when you unplugged the dock
->>> and when you replugged it so we can correlate the time stampts with what
->>> you have done otherwise we will never be able to pin-point what's going
->>> on.
+>> This patch introduce new Cadence USBSS DRD driver to linux kernel.
 >>
->> I upgraded the system firmware, TBT firmware and docking station firmware
->> to latest, and used latest mainline kernel.
->> Now the issue can be reproduced at the very first time I plugged the
->> docking station.
->>
->> Attach dmesg to BKO since there are lots of message after XHCI dyndbg is
->> enabled.
+>> The Cadence USBSS DRD Controller is a highly configurable IP Core which
+>> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
+>> Host Only (XHCI)configurations.
 >
-> I saw that you annotated the plug, but not the unplug. Where does the
-> unplug start? There are many places where it could be, but I need to be
-> sure.
-
-Request log attached to Bugzilla.
-
+>I see you are using debugfs to select between DRD, peripheral-onlyh and XH=
+CI...
 >
-> Also, wasn't it so that the problem is when you *replug* the dock? So
-> can you better describe what you're doing? Are you booting with dock
-> connected then disconnect and reconnect or are you booting without dock
-> and it fails on first plug?
+>Is that good idea?
 
-The weird behavior I described in my previous replay is because the devices  
-need to be fully power cycled after firmware upgrade.
-So it’s false alarm.
+Yes driver allows selecting dr_mode by debugfs. Controller also support suc=
+h functionality=20
+so I don't understand why would it not be a good idea.=20
 
-The only issue now is the original bug.
+I personally use this for testing but it can be used to limit controller fu=
+nctionality without=20
+recompiling kernel.=20
 
+>This is at least 3rd driver needing that capability, and debugfs does not
+>sound like a good match.
 >
-> What are you consider a fail here? Can't you see the xhci bus? USB
-> Devices don't show? What do you have on lsusb -t?
 
-The 0000:39:00.0 xHCI stops working, so the USB ethernet (r8152) connects  
-to it doesn’t work anymore.
-
-Normal case:
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
-     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
-         |__ Port 3: Dev 3, If 0, Class=Hub, Driver=hub/4p, 5000M
-         |__ Port 4: Dev 4, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
-/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 5000M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
-     |__ Port 4: Dev 2, If 0, Class=Hub, Driver=hub/5p, 480M
-         |__ Port 5: Dev 6, If 0, Class=Human Interface Device, Driver=usbhid, 480M
-         |__ Port 3: Dev 4, If 0, Class=Hub, Driver=hub/6p, 480M
-             |__ Port 4: Dev 7, If 0, Class=Audio, Driver=snd-usb-audio, 480M
-             |__ Port 4: Dev 7, If 3, Class=Audio, Driver=snd-usb-audio, 480M
-             |__ Port 4: Dev 7, If 1, Class=Audio, Driver=snd-usb-audio, 480M
-             |__ Port 4: Dev 7, If 2, Class=Audio, Driver=snd-usb-audio, 480M
-             |__ Port 5: Dev 9, If 0, Class=Human Interface Device, Driver=usbhid, 480M
-     |__ Port 9: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 12M
-     |__ Port 10: Dev 5, If 2, Class=Chip/SmartCard, Driver=, 480M
-     |__ Port 10: Dev 5, If 0, Class=Application Specific Interface, Driver=, 480M
-     |__ Port 10: Dev 5, If 3, Class=Vendor Specific Class, Driver=, 480M
-     |__ Port 10: Dev 5, If 1, Class=Chip/SmartCard, Driver=, 480M
-     |__ Port 11: Dev 8, If 0, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 11: Dev 8, If 1, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 14: Dev 10, If 0, Class=Wireless, Driver=btusb, 12M
-     |__ Port 14: Dev 10, If 1, Class=Wireless, Driver=btusb, 12M
-
-Once the issue occurs:
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
-/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 5000M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
-     |__ Port 4: Dev 2, If 0, Class=Hub, Driver=hub/5p, 480M
-         |__ Port 5: Dev 6, If 0, Class=Human Interface Device, Driver=usbhid, 480M
-         |__ Port 3: Dev 4, If 0, Class=Hub, Driver=hub/6p, 480M
-             |__ Port 4: Dev 7, If 0, Class=Audio, Driver=snd-usb-audio, 480M
-             |__ Port 4: Dev 7, If 3, Class=Audio, Driver=snd-usb-audio, 480M
-             |__ Port 4: Dev 7, If 1, Class=Audio, Driver=snd-usb-audio, 480M
-             |__ Port 4: Dev 7, If 2, Class=Audio, Driver=snd-usb-audio, 480M
-             |__ Port 5: Dev 9, If 0, Class=Human Interface Device, Driver=usbhid, 480M
-     |__ Port 9: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 12M
-     |__ Port 10: Dev 5, If 2, Class=Chip/SmartCard, Driver=, 480M
-     |__ Port 10: Dev 5, If 0, Class=Application Specific Interface, Driver=, 480M
-     |__ Port 10: Dev 5, If 3, Class=Vendor Specific Class, Driver=, 480M
-     |__ Port 10: Dev 5, If 1, Class=Chip/SmartCard, Driver=, 480M
-     |__ Port 11: Dev 8, If 0, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 11: Dev 8, If 1, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 14: Dev 10, If 0, Class=Wireless, Driver=btusb, 12M
-     |__ Port 14: Dev 10, If 1, Class=Wireless, Driver=btusb, 12M
-
-So we don’t have USB ethernet anymore.
-
-Kai-Heng
-
->
-> Best regards
->
-> -- 
-> balbi
-
-
+Pawell
