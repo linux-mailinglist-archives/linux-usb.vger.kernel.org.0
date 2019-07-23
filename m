@@ -2,125 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D4671DAF
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 19:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D801071FA3
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 20:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391088AbfGWR2K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jul 2019 13:28:10 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:42564 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732740AbfGWR2G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 13:28:06 -0400
-Received: by mail-io1-f70.google.com with SMTP id f22so47944334ioj.9
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jul 2019 10:28:06 -0700 (PDT)
+        id S2388804AbfGWSwC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jul 2019 14:52:02 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:41391 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726352AbfGWSwB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 14:52:01 -0400
+Received: by mail-wr1-f67.google.com with SMTP id c2so41072980wrm.8
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jul 2019 11:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fyhJlYS/nmZVWKWvi27Hp7abC+DbsGqwswaGohdPOpA=;
+        b=zYaV2dx0GCGELJRDEgnEx66kKYH6fLEWGmcTfHxHp8NiO832NO1LV81qL8RIhK9Tsj
+         hAmNwACbpLQr/SARJZqkrV5Brs/mkIBkJ66SR8RQrdD3P8Rb74m8ALaG3ZvugP6HISMV
+         lVG8R8vkB1aqiPQy4ff57S+GbKMrdWCYRLA27pDhg2fyAUHppqyPmvyBX3EoRwzX4vea
+         nDktXIkOmtngTtXxPpPG4fWhlq3hNuDtaCSJjzwI/wh92oa9M7XzcbntymOu0moJLN7+
+         2UZTvjHbBH9fBJ04/M14wCNpciOtmbW2JiwZp1oPyB78/W1tEXGQG6PB73YGjqJBft9T
+         TwNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=VS4Bt6gRUI0iCEjeclK/MehYBe9DRzG6KUlRpmzHu8M=;
-        b=F51enlo9bj2MCFMHbfVq9ed2r+IV5crGBrjFla46ZcrSQ0ThyyQmA1GYLUj9oUSSAt
-         c7cUbIPyt+c9TgwIG0WQx7elHs5I+YSv7458LlmaIcvh0Rm8Td3QLGHEgmvaDECCIvua
-         G9/ZxZEA4mZKIFS7y41Wf/3iPvG0j9It+cUAjn9JVrAlW/i99e51YqRn8/PJu894gqMc
-         k8UUnfmySmrwWx9RxcAaL0ed7UEPOJgC3PnH2daHOPA2l7jiQnF57tbEzou+KkGLenA3
-         e0Pd2j129mZgXXdydOwFtHSh0uxHadyFNNQXlx3RbVVyVKlHFe9GmPFm4ErlJEwL91gM
-         9+qA==
-X-Gm-Message-State: APjAAAX4orWrXtkxonlncIZti2/Ee85CDHNoIPObvF6MrST+v6rfgzNw
-        xtgwiMrxYsM3jJbYE0HBcK/nAbtsZdAn9BkpU1cGAYmt5t6M
-X-Google-Smtp-Source: APXvYqz3I7VwxAcfIyrDbyi76ZQCOvr6DAJmvT6nhYP5CjKnbmHNILNt8mQOIdlnbE0JpEUBmdlHYXZKJMZ54PRsIus0xGmXId/o
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fyhJlYS/nmZVWKWvi27Hp7abC+DbsGqwswaGohdPOpA=;
+        b=V3CEu6lLsAf1Oew2WJO/4xrjIKSBn9Fq8BNGgxXTgvK6tFKr6bWTb2SYWz1fy24hEA
+         OkTwTBYO4fch06StuJD/epWBZtLX5Xa4EIPtBchs8CfbnWYYZTPhcY6zUU/4T+7H4tpJ
+         W6UvZTCtaBWiD6cJY8ZtmZuO7enw+2uNKKxNZtjyrbkTiub0Yp3US6qz+u2j9vZARBTa
+         FlQyCO2ccZZA9SK6Un4qgAn+/nmTQijM5uhmAzTV+lg8qY1oUCGdcwEU40iG8I/FbBqR
+         9VsgvfKWluEdwmoXuBCiW7nplsc7e0TGWZyCfWPJBR6g/fD2IlR7uKr2wWEl1Q/8unfM
+         lcOg==
+X-Gm-Message-State: APjAAAWA784l6TyMsbnUIy4EcvClVva3viFvYsazDgGBD2hqqosc7jMp
+        NOezT51/ntfrh+o/ggXWYtrOx+yaoKE4yBgKr+wJ+Q==
+X-Google-Smtp-Source: APXvYqzlIepC9KXFaJ7DC2ZH9C3Jxw5UZ5QWzvCKIs/BFU+5pWBvVgbB6otUiss1YIbgTou6fEMr3+zplpwjb1jwh8w=
+X-Received: by 2002:a05:6000:145:: with SMTP id r5mr3390652wrx.208.1563907919536;
+ Tue, 23 Jul 2019 11:51:59 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6505:: with SMTP id z5mr68888857iob.295.1563902885918;
- Tue, 23 Jul 2019 10:28:05 -0700 (PDT)
-Date:   Tue, 23 Jul 2019 10:28:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fa7ce2058e5c8318@google.com>
-Subject: WARNING in kbtab_open/usb_submit_urb
-From:   syzbot <syzbot+c7df50363aaff50aa363@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+References: <1563497183-7114-1-git-send-email-fei.yang@intel.com> <CY4PR1201MB003708ADAD79BF4FD24D3445AACB0@CY4PR1201MB0037.namprd12.prod.outlook.com>
+In-Reply-To: <CY4PR1201MB003708ADAD79BF4FD24D3445AACB0@CY4PR1201MB0037.namprd12.prod.outlook.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Tue, 23 Jul 2019 11:51:47 -0700
+Message-ID: <CALAqxLURCLHf3UJsMWKZUirDE9bWNYEhv-sKb01g7cTfCz5tOg@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: dwc3: gadget: trb_dequeue is not updated properly
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "fei.yang@intel.com" <fei.yang@intel.com>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "andrzej.p@collabora.com" <andrzej.p@collabora.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Thu, Jul 18, 2019 at 6:12 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> fei.yang@intel.com wrote:
+> > From: Fei Yang <fei.yang@intel.com>
+> >
+> > If scatter-gather operation is allowed, a large USB request is split into
+> > multiple TRBs. These TRBs are chained up by setting DWC3_TRB_CTRL_CHN bit
+> > except the last one which has DWC3_TRB_CTRL_IOC bit set instead.
+> > Since only the last TRB has IOC set for the whole USB request, the
+> > dwc3_gadget_ep_reclaim_trb_sg() gets called only once after the last TRB
+> > completes and all the TRBs allocated for this request are supposed to be
+> > reclaimed. However that is not what the current code does.
+> >
+> > dwc3_gadget_ep_reclaim_trb_sg() is trying to reclaim all the TRBs in the
+> > following for-loop,
+> >       for_each_sg(sg, s, pending, i) {
+> >               trb = &dep->trb_pool[dep->trb_dequeue];
+> >
+> >                 if (trb->ctrl & DWC3_TRB_CTRL_HWO)
+> >                         break;
+> >
+> >                 req->sg = sg_next(s);
+> >                 req->num_pending_sgs--;
+> >
+> >                 ret = dwc3_gadget_ep_reclaim_completed_trb(dep, req,
+> >                                 trb, event, status, chain);
+> >                 if (ret)
+> >                         break;
+> >         }
+> > but since the interrupt comes only after the last TRB completes, the
+> > event->status has DEPEVT_STATUS_IOC bit set, so that the for-loop ends for
+> > the first TRB due to dwc3_gadget_ep_reclaim_completed_trb() returns 1.
+> >       if (event->status & DEPEVT_STATUS_IOC)
+> >               return 1;
+> >
+> > This patch addresses the issue by checking each TRB in function
+> > dwc3_gadget_ep_reclaim_trb_sg() and maing sure the chained ones are properly
+> > reclaimed. dwc3_gadget_ep_reclaim_completed_trb() will return 1 Only for the
+> > last TRB.
+> >
+> > Signed-off-by: Fei Yang <fei.yang@intel.com>
+> > Cc: stable <stable@vger.kernel.org>
+> > ---
+> > v2: Better solution is to reclaim chained TRBs in dwc3_gadget_ep_reclaim_trb_sg()
+> >     and leave the last TRB to the dwc3_gadget_ep_reclaim_completed_trb().
+> > v3: Checking DWC3_TRB_CTRL_CHN bit for each TRB instead, and making sure that
+> >     dwc3_gadget_ep_reclaim_completed_trb() returns 1 only for the last TRB.
+> > ---
+> >  drivers/usb/dwc3/gadget.c | 11 ++++++++---
+> >  1 file changed, 8 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 173f532..88eed49 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -2394,7 +2394,7 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
+> >       if (event->status & DEPEVT_STATUS_SHORT && !chain)
+> >               return 1;
+> >
+> > -     if (event->status & DEPEVT_STATUS_IOC)
+> > +     if (event->status & DEPEVT_STATUS_IOC && !chain)
+> >               return 1;
+> >
+> >       return 0;
+> > @@ -2404,11 +2404,12 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
+> >               struct dwc3_request *req, const struct dwc3_event_depevt *event,
+> >               int status)
+> >  {
+> > -     struct dwc3_trb *trb = &dep->trb_pool[dep->trb_dequeue];
+> > +     struct dwc3_trb *trb;
+> >       struct scatterlist *sg = req->sg;
+> >       struct scatterlist *s;
+> >       unsigned int pending = req->num_pending_sgs;
+> >       unsigned int i;
+> > +     int chain = false;
+> >       int ret = 0;
+> >
+> >       for_each_sg(sg, s, pending, i) {
+> > @@ -2419,9 +2420,13 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
+> >
+> >               req->sg = sg_next(s);
+> >               req->num_pending_sgs--;
+> > +             if (trb->ctrl & DWC3_TRB_CTRL_CHN)
+> > +                     chain = true;
+> > +             else
+> > +                     chain = false;
+> >
+> >               ret = dwc3_gadget_ep_reclaim_completed_trb(dep, req,
+> > -                             trb, event, status, true);
+> > +                             trb, event, status, chain);
+> >               if (ret)
+> >                       break;
+> >       }
+>
+> There was already a fix a long time ago by Anurag. But it never made it
+> to the kernel mainline. You can check this out:
+> https://patchwork.kernel.org/patch/10640137/
 
-syzbot found the following crash on:
+So, back from a vacation last week, and just validated that both Fei's
+patch and a forward ported version of this patch Thinh pointed out
+both seem to resolve the usb stalls I've been seeing sinice 4.20 w/
+dwc3 hardware on both hikey960 and dragonboard 845c.
 
-HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=10334194600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-dashboard link: https://syzkaller.appspot.com/bug?extid=c7df50363aaff50aa363
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17309e94600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10929358600000
+Felipe: Does Anurag's patch above make more sense as a proper fix?
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+c7df50363aaff50aa363@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 0 PID: 1732 at drivers/usb/core/urb.c:477  
-usb_submit_urb+0x1188/0x13b0 /drivers/usb/core/urb.c:477
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 1732 Comm: syz-executor835 Not tainted 5.2.0-rc6+ #15
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack /lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e /lib/dump_stack.c:113
-  panic+0x292/0x6c9 /kernel/panic.c:219
-  __warn.cold+0x20/0x4b /kernel/panic.c:576
-  report_bug+0x262/0x2a0 /lib/bug.c:186
-  fixup_bug /arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug /arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 /arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 /arch/x86/kernel/traps.c:291
-  invalid_op+0x14/0x20 /arch/x86/entry/entry_64.S:986
-RIP: 0010:usb_submit_urb+0x1188/0x13b0 /drivers/usb/core/urb.c:477
-Code: 4d 85 ed 74 2c e8 f8 d3 f4 fd 4c 89 f7 e8 a0 51 1c ff 41 89 d8 44 89  
-e1 4c 89 ea 48 89 c6 48 c7 c7 00 0e f7 85 e8 83 98 ca fd <0f> 0b e9 20 f4  
-ff ff e8 cc d3 f4 fd 4c 89 f2 48 b8 00 00 00 00 00
-RSP: 0018:ffff8881d06bf878 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103a0d7f01
-RBP: ffff8881d0bf5500 R08: ffff8881d2678000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff8881d40b58a0 R14: ffff8881d0904d20 R15: ffff8881d3cd9900
-  kbtab_open+0xd5/0x130 /drivers/input/tablet/kbtab.c:96
-  input_open_device+0x170/0x280 /drivers/input/input.c:607
-  evdev_open_device /drivers/input/evdev.c:433 [inline]
-  evdev_open+0x3fe/0x510 /drivers/input/evdev.c:518
-  chrdev_open+0x219/0x5c0 /fs/char_dev.c:413
-  do_dentry_open+0x497/0x1040 /fs/open.c:778
-  do_last /fs/namei.c:3416 [inline]
-  path_openat+0x1430/0x3ff0 /fs/namei.c:3533
-  do_filp_open+0x1a1/0x280 /fs/namei.c:3563
-  do_sys_open+0x3c0/0x580 /fs/open.c:1070
-  do_syscall_64+0xb7/0x560 /arch/x86/entry/common.c:301
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x4010c0
-Code: 01 f0 ff ff 0f 83 00 0b 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f  
-44 00 00 83 3d cd 4c 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 d4 0a 00 00 c3 48 83 ec 08 e8 3a 00 00 00
-RSP: 002b:00007ffd69a61888 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00000000004010c0
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007ffd69a61890
-RBP: 6666666666666667 R08: 000000000000000f R09: 000000000000000b
-R10: 0000000000000075 R11: 0000000000000246 R12: 0000000000402020
-R13: 00000000004020b0 R14: 0000000000000000 R15: 0000000000000000
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+thanks
+-john
