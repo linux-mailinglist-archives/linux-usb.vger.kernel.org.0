@@ -2,149 +2,286 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 582B871981
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 15:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAF3719D1
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 15:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389859AbfGWNkT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jul 2019 09:40:19 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39412 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726141AbfGWNkT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 09:40:19 -0400
-Received: by mail-pl1-f194.google.com with SMTP id b7so20667460pls.6;
-        Tue, 23 Jul 2019 06:40:18 -0700 (PDT)
+        id S1733016AbfGWN4j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jul 2019 09:56:39 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35844 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725907AbfGWN4j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 09:56:39 -0400
+Received: by mail-pl1-f195.google.com with SMTP id k8so20665391plt.3;
+        Tue, 23 Jul 2019 06:56:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=BOVz1Kra82hvNBDxaReMCbJJTvETWWuqjVtK593JxVg=;
-        b=UKCz6nXPPMCWqPF41HW9bNtwUGdbj5rSSH1jwIFH++xNuEzFlFd7CDAr7fw3vkiS98
-         /aasHjo0MjqTA16kYFth+5RYuejKYNMgxLs1SUiMOzKleZYl8o1X9FeXeioylDMz81Lh
-         f7P88/TOAd44OUhuteOseWGkJcIZdkRWPie7sMQyV5FolIaJCEhV5+Sr9o8LluQD5Wkp
-         ENzRsW68zxrARTrhHDCKGfHpKdcn/5VWYnR4TW+5GsMJ9rCneIFwv8xuCiAW86D1+wHK
-         cVli1HRc3iDb+InjAAoGWVtY/kpbd45jRoFLDP+8VEfswzyk4bdefYpwT4WBvXuSmaGy
-         ooew==
+         :content-disposition:in-reply-to:user-agent;
+        bh=rEaM5iARO/otY5CB0Q+ud/LRqI7Ysq17G3aAmdafXi8=;
+        b=SeyXjkQAhvbw+tUwvo+eecFXjxIz3000spt05+4PQ146TkcTNLUDoZ+cIL7VBbcFhU
+         WInpgqv0jahR+72BKNZc1XatHi13pLhnHmg+vCGOTvufKAE19A9BQlJ5Z35htv54Ylnd
+         uYIRQOtdWFo4zdMCefVVPOVSlg5l5Ui7vLdUoAR6DOSb7gJkD9zOCM5jA+CRbSQx0iwn
+         6fxNf7439Q2oErrhpb/K3MeSBFDBlDMLdOm4B7AX+e+WhXosjhtQCxBpbMvI2I04dFBk
+         KXceBqIZ98NEL0LwAMeN0nY85Ril7FI/1Zkiq44NJ34No13OQ9cUvagioh5rAZlIHOEq
+         nAww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=BOVz1Kra82hvNBDxaReMCbJJTvETWWuqjVtK593JxVg=;
-        b=D+m35PmVUJse6+qaj/1iRoE7Pdvs9w5QaPYupj510G/SQ91bQpod2prtX0NScT/c38
-         mOkLnsgdQCvGhA3NVX/ZNbwQd3TIDIYwHBN3LJH9cQbZ5iVakzEyEYSU59jG90iJIFHU
-         8tCMMfbq1sd5L6jSiw2sZCIdFEobBhgIAOaluCim1yU6jaTUOmqad8t0lPbrmFKYiT2s
-         ZqTfQM+I4VtOgkZSLGBCTYFBajHNx8Yh1xIJ6BUxEqbDZMffr3/oIMYkw6wb0chYQfLr
-         pWV7hU1sNHEmROEa6Pw3zewn9TE7mpfIkJr2hLjEjHnTEycwaAnVV/M1jjmvyAaOCKZ/
-         Z52g==
-X-Gm-Message-State: APjAAAWwVNg5839fvFVYoU0pn5B4J5pmm+lT1K4XXn5WlYtHzOqGtlUa
-        bzeprZqKxMSnfDoorb3Jb9g=
-X-Google-Smtp-Source: APXvYqxY2wAyoAcNyqtGx+9qMC4h6LiQiC7bwt8cnuKWM7LHRHO75xH4vxYdWAEdtUbyeSSgS5bYrA==
-X-Received: by 2002:a17:902:7407:: with SMTP id g7mr81559137pll.214.1563889218366;
-        Tue, 23 Jul 2019 06:40:18 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rEaM5iARO/otY5CB0Q+ud/LRqI7Ysq17G3aAmdafXi8=;
+        b=Se7b+U7hiF/0OY6oYyeevjRyhq1ZGpevcQZ/NQw4uivIuMBnAqvVi7rzzndqQ3tjp3
+         Q7i7RtIGbIVF1XAyHfUffscEN8cuag5xj5SLnFpsp5Uv0iE6za5dEllL2cO1E/gAhasA
+         3sXMswzKptqctAJ9xGT+dn0sFfMDHK2VP6uftqWhpqIuD3xTdoXiL80Qy5YpMB6rogb4
+         xovet5Un667ZBHleaCnSnLmEQF0mO9H9zLX6oE50E7K8sMh6/MtdxS2OzBRhcG3U8gwa
+         T4hLXxkEEYyxjf8xWbS3ncmy+Dvgz4vbUzEYzOBmhkuPm6XR2c6Al2Lbc8nJe26F/E41
+         1gvA==
+X-Gm-Message-State: APjAAAU74MWdZKk0vpBEeU9/4KzLc2MfdKisr7eHGFd+NPBj1H5e6eGY
+        SK6npO6T3aq6oJX+x13C+uA=
+X-Google-Smtp-Source: APXvYqwy0UdFfEUTseNw57g/L1CWJYiz26hdYYO3uV8l9BcOz+fo1TP4AbbyXm8FzaNUmTtLdwFIXQ==
+X-Received: by 2002:a17:902:7894:: with SMTP id q20mr77830015pll.339.1563890198681;
+        Tue, 23 Jul 2019 06:56:38 -0700 (PDT)
 Received: from localhost.localdomain ([125.142.23.13])
-        by smtp.gmail.com with ESMTPSA id g62sm41407999pje.11.2019.07.23.06.40.15
+        by smtp.gmail.com with ESMTPSA id v10sm43807453pfe.163.2019.07.23.06.56.36
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 23 Jul 2019 06:40:17 -0700 (PDT)
-Date:   Tue, 23 Jul 2019 22:40:12 +0900
+        Tue, 23 Jul 2019 06:56:38 -0700 (PDT)
+Date:   Tue, 23 Jul 2019 22:56:33 +0900
 From:   Suwan Kim <suwan.kim027@gmail.com>
 To:     shuah <shuah@kernel.org>
 Cc:     valentina.manea.m@gmail.com, stern@rowland.harvard.edu,
         gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] usbip: Skip DMA mapping and unmapping for urb at
- vhci
-Message-ID: <20190723134012.GA5532@localhost.localdomain>
+Subject: Re: [PATCH v2 2/2] usbip: Implement SG support to vhci
+Message-ID: <20190723135633.GB5532@localhost.localdomain>
 References: <20190705164355.14025-1-suwan.kim027@gmail.com>
- <20190705164355.14025-2-suwan.kim027@gmail.com>
- <d10b23b3-601d-c2c6-df2e-77b2ed9adc66@kernel.org>
+ <20190705164355.14025-3-suwan.kim027@gmail.com>
+ <f66e55a2-16e0-8822-8b5b-3390b6c4073b@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d10b23b3-601d-c2c6-df2e-77b2ed9adc66@kernel.org>
+In-Reply-To: <f66e55a2-16e0-8822-8b5b-3390b6c4073b@kernel.org>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 22, 2019 at 02:26:42PM -0600, shuah wrote:
-> Hi Suwan,
-> 
+On Mon, Jul 22, 2019 at 09:51:30PM -0600, shuah wrote:
 > On 7/5/19 10:43 AM, Suwan Kim wrote:
-> > vhci doesn’t do DMA for remote device. Actually, the real DMA
-> > operation is done by network card driver. vhci just passes virtual
-> > address of the buffer to the network stack, so vhci doesn’t use and
-> > need dma address of the buffer of the URB.
+> > There are bugs on vhci with usb 3.0 storage device. Originally, vhci
+> > doesn't supported SG, so USB storage driver on vhci breaks SG list
+> 
+> grammar - Currently vhci doesn't support?
+
+Yes, that is what I intended. Please excuse my poor english.
+
+> > into multiple URBs and it causes error that a transfer got terminated
+> > too early because the transfer length for one of the URBs was not
+> > divisible by the maxpacket size.
 > > 
-> > When it comes to supporting SG for vhci, it is useful to use native
-> > SG list (urb->num_sgs) instead of mapped SG list because DMA mapping
-> > fnuction can adjust the number of SG list (urb->num_mapped_sgs).
+> > In this patch, vhci basically support SG and it sends each SG list
+> 
+> What does basically support mean here? Do you mean basic support?
+
+What I intended was that vhci supports SG regardless of whether the
+server's host controller supports SG or not, because stub driver
+splits SG list into several URBs if the server's host controller
+doesn't support SG. I will rewrite the description to make it more
+clear.
+
+> > entry to the stub driver. Then, the stub driver sees the total length
+> > of the buffer and allocates SG table and pages according to the total
+> > buffer length calling sgl_alloc(). After the stub driver receives
+> > completed URB, it again sends each SG list entry to vhci.
 > > 
-> > But HCD provides DMA mapping and unmapping function by default.
-> > Moreover, it causes unnecessary DMA mapping and unmapping which
-> > will be done again at the NIC driver and it wastes CPU cycles.
-> > So, implement map_urb_for_dma and unmap_urb_for_dma function for
-> > vhci in order to skip the DMA mapping and unmapping procedure.
-> > 
-> > To support SG, vhci_map_urb_for_dma() sets URB_DMA_MAP_SG flag in
-> > urb->transfer_flags if URB has SG list and this flag will tell the
-> > stub driver to use SG list.
+> > If HCD of the server doesn't support SG, the stub driver breaks a
+> > single SG reqeust into several URBs and submit them to the server's
+> > HCD. When all the split URBs are completed, the stub driver
+> > reassembles the URBs into a single return command and sends it to
+> > vhci.
 > > 
 > > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
 > > ---
-> >   drivers/usb/usbip/vhci_hcd.c | 19 +++++++++++++++++++
-> >   1 file changed, 19 insertions(+)
+> >   drivers/usb/usbip/stub.h         |   7 +-
+> >   drivers/usb/usbip/stub_main.c    |  52 +++++---
+> >   drivers/usb/usbip/stub_rx.c      | 207 ++++++++++++++++++++++---------
+> >   drivers/usb/usbip/stub_tx.c      | 108 +++++++++++-----
+> >   drivers/usb/usbip/usbip_common.c |  60 +++++++--
+> >   drivers/usb/usbip/vhci_hcd.c     |  10 +-
+> >   drivers/usb/usbip/vhci_tx.c      |  49 ++++++--
+> >   7 files changed, 372 insertions(+), 121 deletions(-)
 > > 
-> > diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> > index 000ab7225717..14fc6d9f4e6a 100644
-> > --- a/drivers/usb/usbip/vhci_hcd.c
-> > +++ b/drivers/usb/usbip/vhci_hcd.c
-> > @@ -1288,6 +1288,22 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
-> >   	return 0;
+> 
+> btw checkpatch isn't very happy with this patch. A few coding style
+> issues. Please run checkpatch before sending patches.
+
+I'm sorry for sending it without running checkpatch.
+I will fix all problems with checkpatch and resend v3.
+
+> > diff --git a/drivers/usb/usbip/stub.h b/drivers/usb/usbip/stub.h
+> > index 35618ceb2791..d11270560c24 100644
+> > --- a/drivers/usb/usbip/stub.h
+> > +++ b/drivers/usb/usbip/stub.h
+> > @@ -52,7 +52,11 @@ struct stub_priv {
+> >   	unsigned long seqnum;
+> >   	struct list_head list;
+> >   	struct stub_device *sdev;
+> > -	struct urb *urb;
+> > +	struct urb **urbs;
+> > +	struct scatterlist *sgl;
+> > +	int num_urbs;
+> > +	int completed_urbs;
+> > +	int urb_status;
+> >   	int unlinking;
+> >   };
+> > @@ -86,6 +90,7 @@ extern struct usb_device_driver stub_driver;
+> >   struct bus_id_priv *get_busid_priv(const char *busid);
+> >   void put_busid_priv(struct bus_id_priv *bid);
+> >   int del_match_busid(char *busid);
+> > +void stub_free_priv_and_urb(struct stub_priv *priv);
+> >   void stub_device_cleanup_urbs(struct stub_device *sdev);
+> >   /* stub_rx.c */
+> > diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
+> > index 2e4bfccd4bfc..dec5af9f7179 100644
+> > --- a/drivers/usb/usbip/stub_main.c
+> > +++ b/drivers/usb/usbip/stub_main.c
+> > @@ -6,6 +6,7 @@
+> >   #include <linux/string.h>
+> >   #include <linux/module.h>
+> >   #include <linux/device.h>
+> > +#include <linux/scatterlist.h>
+> >   #include "usbip_common.h"
+> >   #include "stub.h"
+> > @@ -288,6 +289,39 @@ static struct stub_priv *stub_priv_pop_from_listhead(struct list_head *listhead)
+> >   	return NULL;
 > >   }
-> > +static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
-> > +			gfp_t mem_flags)
+> > +void stub_free_priv_and_urb(struct stub_priv *priv)
 > > +{
-> > +	dev_dbg(hcd->self.controller, "vhci does not map urb for dma\n");
+> > +	struct urb *urb;
+> > +	int i;
 > > +
-> > +	if (urb->num_sgs)
-> > +		urb->transfer_flags |= URB_DMA_MAP_SG;
+> > +	for (i = 0; i < priv->num_urbs; i++) {
+> > +		urb = priv->urbs[i];
+> > +		if (urb->setup_packet) {
+> > +			kfree(urb->setup_packet);
+> > +			urb->setup_packet = NULL;
+> > +		}
 > > +
 > 
-> Shouldn't this be part of patch 2. The debug message saying "no map"
-> and setting flag doesn't make sense.
+> You don't need urb->setup_packet null check. kfree() is safe
+> to call with null pointer. btw checkpatch tells you this.
 
-I think you are right. Setting flag should be in patch 2. Thank you
-for pointing out :)
-I will remove unnecessary debug messages and move setting flag to
-patch 2.
+Ok. I will remove null check.
 
-> > +       return 0;
+> > +		if (urb->transfer_buffer && !priv->sgl) {
 > 
-> This should be a tab and no spaces btw. chekpatch isn't happy.
-> 
+> Is this conditional necessary? Why are you checking priv->sgl?
+> Are there cases where you have memory leak? Is there a case
+> when urb->transfer_buffer valid when priv->sgl isn't null?
+
+In my implementation, if URB has an SG list, whether SG is supported
+by the server's host controller or not, stub driver allocates SG list
+and pages calling sg_alloc().
+
+At this time, if the server's host controller does not support SG,
+stub driver stores SG list in stub_priv->sgl (not in urb->sg) and
+allocates URBs according to each entry of SG list. The page of each
+SG list entry is mapped to each URB's transfer buffer.
+(urb->transfer_buffer = sg_virt(sg))
+
+So, when deallocating these URBs, stub driver doesn't deallocate the
+URB's buffer with kfree(), but use sgl_free() to deallocate the SG
+list stored in stub_priv (priv->sgl) and all the pages mapped to each
+URB's buffer at once.
+
+> > +			kfree(urb->transfer_buffer);
+> > +			urb->transfer_buffer = NULL;
+> > +		}
+> > +
+> > +		if (urb->num_sgs) {
+> > +			sgl_free(urb->sg);
+> > +			urb->sg = NULL;
+> > +			urb->num_sgs = 0;
+> > +		}
+> > +
+> > +		usb_free_urb(urb);
+> > +	}
+> > +
+> > +	list_del(&priv->list);
+> > +	if (priv->sgl)
+> > +		sgl_free(priv->sgl);
+> > +	kfree(priv->urbs);
+> > +	kmem_cache_free(stub_priv_cache, priv);
 > > +}
 > > +
-> > +static void vhci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
-> > +{
-> > +       dev_dbg(hcd->self.controller, "vhci does not unmap urb for dma\n");
+> >   static struct stub_priv *stub_priv_pop(struct stub_device *sdev)
+> >   {
+> >   	unsigned long flags;
+> > @@ -314,25 +348,15 @@ static struct stub_priv *stub_priv_pop(struct stub_device *sdev)
+> >   void stub_device_cleanup_urbs(struct stub_device *sdev)
+> >   {
+> >   	struct stub_priv *priv;
+> > -	struct urb *urb;
+> > +	int i;
+> >   	dev_dbg(&sdev->udev->dev, "Stub device cleaning up urbs\n");
+> >   	while ((priv = stub_priv_pop(sdev))) {
+> > -		urb = priv->urb;
+> > -		dev_dbg(&sdev->udev->dev, "free urb seqnum %lu\n",
+> > -			priv->seqnum);
+> > -		usb_kill_urb(urb);
+> > -
+> > -		kmem_cache_free(stub_priv_cache, priv);
+> > -
+> > -		kfree(urb->transfer_buffer);
+> > -		urb->transfer_buffer = NULL;
+> > +		for (i = 0; i < priv->num_urbs; i++)
+> > +			usb_kill_urb(priv->urbs[i]);
+> > -		kfree(urb->setup_packet);
+> > -		urb->setup_packet = NULL;
+> > -
+> > -		usb_free_urb(urb);
+> > +		stub_free_priv_and_urb(priv);
+> >   	}
+> >   }
+> > diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+> > index b0a855acafa3..8e32697acabb 100644
+> > --- a/drivers/usb/usbip/stub_rx.c
+> > +++ b/drivers/usb/usbip/stub_rx.c
+> > @@ -7,6 +7,7 @@
+> >   #include <linux/kthread.h>
+> >   #include <linux/usb.h>
+> >   #include <linux/usb/hcd.h>
+> > +#include <linux/scatterlist.h>
+> >   #include "usbip_common.h"
+> >   #include "stub.h"
+> > @@ -201,7 +202,7 @@ static void tweak_special_requests(struct urb *urb)
+> >   static int stub_recv_cmd_unlink(struct stub_device *sdev,
+> >   				struct usbip_header *pdu)
+> >   {
+> > -	int ret;
+> > +	int ret, i;
+> >   	unsigned long flags;
+> >   	struct stub_priv *priv;
+> > @@ -246,12 +247,13 @@ static int stub_recv_cmd_unlink(struct stub_device *sdev,
+> >   		 * so a driver in a client host will know the failure
+> >   		 * of the unlink request ?
+> >   		 */
+> > -		ret = usb_unlink_urb(priv->urb);
+> > -		if (ret != -EINPROGRESS)
+> > -			dev_err(&priv->urb->dev->dev,
+> > -				"failed to unlink a urb # %lu, ret %d\n",
+> > -				priv->seqnum, ret);
+> > -
+> > +		for (i = priv->completed_urbs; i < priv->num_urbs; i++) {
+> > +			ret = usb_unlink_urb(priv->urbs[i]);
+> > +			if (ret != -EINPROGRESS)
+> > +				dev_err(&priv->urbs[i]->dev->dev,
+> > +					"failed to unlink a urb # %lu, ret %d\n",
+> > +					priv->seqnum, ret);
 > 
-> This should be a tab and no spaces btw. chekpatch isn't happy.
-> 
-> 
-> WARNING: please, no spaces at the start of a line
-> #144: FILE: drivers/usb/usbip/vhci_hcd.c:1299:
-> +       return 0;$
-> 
-> WARNING: please, no spaces at the start of a line
-> #149: FILE: drivers/usb/usbip/vhci_hcd.c:1304:
-> +       dev_dbg(hcd->self.controller, "vhci does not unmap urb for dma\n");$
-> 
-> total: 0 errors, 2 warnings, 31 lines checked
+> This could result in several error messages. This code path is much
+> longer now compared to previous.
 
-I'm sorry for my fault. I will check it.
+I don't know what function or part you point to. stub_recv_cmd_unlink()?
 
 Regards,
 Suwan Kim
