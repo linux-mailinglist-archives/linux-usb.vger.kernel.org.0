@@ -2,143 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B5771893
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 14:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94137191D
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 15:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389941AbfGWMsV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jul 2019 08:48:21 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:53406 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389903AbfGWMsK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 08:48:10 -0400
-Received: by mail-io1-f72.google.com with SMTP id h3so47105478iob.20
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jul 2019 05:48:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=kQbHTv12UWJ75r48zbBLw3Y6lUFzP91zXHFCNF2crgY=;
-        b=CGDsZFi70CGKrJeEsH5b4IeTQ094qSmEGcWtdJwZTw7KBTIouVsXahG3rDnuuF17m6
-         jnc1Gra2HYyhcdk5wzmrxP/FjzpNplw8MUq0KWN9efbWQEmKeQyuo7bmkcZmPsdfWyfW
-         VO6c0LxzH/OjftaKMqVzKMmtidt8PlFcSp00Ekjtus+1OsBkY9wrbTjuOFXR0VnBwmGa
-         PDZ7qfyiGqAc54NEhEqt32IxERo8NTHcdDw79wckHrU7aqQHbxeR82NFcBh/xWvVf25Q
-         660wGNb1TdyHHPHP7EElsw2u/Dev25v23KawsP40BoMh1I/61PQvqaQvXEKsMIOmphHK
-         /4fg==
-X-Gm-Message-State: APjAAAUvh0tkL9nmkcMWmq35tm6pkIMEPkVwgiF3XdX7YUMew0sy2Z7q
-        SUBEa0fHDN4v0IksRE3UrZA6I1WpDFDD8dzX0DoqE+/buHkj
-X-Google-Smtp-Source: APXvYqyHjYV9xpc7g0W38YsQCuopju9KIve1wsoLO+Nr624Nb4j2UPzeOYHu79ZXHFo0HDjVpFujRQ8Of9pknXJ4Am4c+Anp2r3A
+        id S1732448AbfGWNYX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jul 2019 09:24:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48586 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725778AbfGWNYX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Jul 2019 09:24:23 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C4E5521903;
+        Tue, 23 Jul 2019 13:24:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563888262;
+        bh=87Zyy2CdkssSH6p/eKKxbb30U3YFgI1PYy404oOesDc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y/XpzaL+K9YLOLKaRUOj4WOI1SP5bYTKaPgFmdLJylSvnj2AL1CwWenU/lGf+v6Zi
+         ZsUYUiYbha2AkKNbL/6CmYggCOZjSHVSzYbXfCMZC+eC6dQgXb8NF2GTjXcJoI6oC1
+         M2ldNCFctleGlCPoIU4OcqfLOYRimNtuCHXUGla0=
+Date:   Tue, 23 Jul 2019 15:24:19 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Frank Bergmann <frank.bergmann@project-open.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: High-Impact: xhci_hid - "Not enough bandwidth for new device
+ state"
+Message-ID: <20190723132419.GA4848@kroah.com>
+References: <27f21154-659d-67b5-ac90-b931695614c8@project-open.com>
+ <20190723124457.GB5356@kroah.com>
+ <41433e67-2496-97a5-a233-8026f13dfaba@project-open.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9047:: with SMTP id v7mr3057021ioq.18.1563886089437;
- Tue, 23 Jul 2019 05:48:09 -0700 (PDT)
-Date:   Tue, 23 Jul 2019 05:48:09 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d48965058e589a94@google.com>
-Subject: kernel BUG at drivers/usb/wusbcore/wusbhc.c:LINE!
-From:   syzbot <syzbot+fd2bd7df88c606eea4ef@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org, joe@perches.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        louis@kragniz.eu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <41433e67-2496-97a5-a233-8026f13dfaba@project-open.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, Jul 23, 2019 at 03:12:53PM +0200, Frank Bergmann wrote:
+> Hi Greg,
+> 
+> 
+> Thank you for answering! You are my hero.
+> 
+> 
+> > not much to be done [...] bandwidth
+> > [...] we can't do the impossible here
+> 
+> 
+> It is not the bandwidth! That would be easy...
+> 
+> 
+> 1. USB 3.0 on my Dell XPS 15 9370 has 10GB/s, that's enough for a Webcam
+> (USB 2.0) plus some audio...
 
-syzbot found the following crash on:
+Are you sure?  It all depends on what that devices are asking for.
+Remember USB 2 devices suck the bandwidth of a USB connection like a
+starving sponge.
 
-HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1417be94600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-dashboard link: https://syzkaller.appspot.com/bug?extid=fd2bd7df88c606eea4ef
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15d5d25c600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c29358600000
+> 2. It works after a reboot for a while, if I first add the Webcam and
+> then(!) start the VM (VMware Player or Workstation 15)
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+fd2bd7df88c606eea4ef@syzkaller.appspotmail.com
+It depends on the order in which you ask for resources.
 
-usb 1-1: BUG? WUSB host has no security descriptors
-hwa-hc 1-1:0.66: Wireless USB HWA host controller
-hwa-hc 1-1:0.66: new USB bus registered, assigned bus number 11
-hwa-hc 1-1:0.66: Cannot set WUSB Cluster ID to 0xfe: -71
-hwa-hc 1-1:0.66: Wireless USB Cluster ID set to 0xfe
-------------[ cut here ]------------
-kernel BUG at drivers/usb/wusbcore/wusbhc.c:385!
-invalid opcode: 0000 [#1] SMP KASAN
-CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #15
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:wusb_cluster_id_put+0x6b/0x80 /drivers/usb/wusbcore/wusbhc.c:385
-Code: 7b 9d ce fd 40 84 ed 74 23 e8 41 9c ce fd f0 48 0f b3 1d e8 d6 0e 06  
-5b 48 c7 c7 60 1b 06 87 5d e9 8a 3c e9 01 e8 25 9c ce fd <0f> 0b e8 1e 9c  
-ce fd 0f 0b eb d4 66 2e 0f 1f 84 00 00 00 00 00 41
-RSP: 0018:ffff8881d9eff0e8 EFLAGS: 00010293
-RAX: ffff8881d9e36000 RBX: 00000000ffffffff RCX: ffffffff836e3f37
-RDX: 0000000000000000 RSI: ffffffff836e3f8b RDI: 0000000000000001
-RBP: 00000000000000fe R08: ffff8881d9e36000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 00000000ffffffb9
-R13: ffff8881d4a52600 R14: ffff8881d0b5d530 R15: 00000000000000fe
-FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007efcea69e000 CR3: 00000001d4f3a000 CR4: 00000000001406e0
-Call Trace:
-  hwahc_op_start.cold+0x159/0x183 /drivers/usb/host/hwa-hc.c:162
-  usb_add_hcd.cold+0xaac/0x15a1 /drivers/usb/core/hcd.c:2887
-  hwahc_probe.cold+0xef/0x48b /drivers/usb/host/hwa-hc.c:810
-  usb_probe_interface+0x305/0x7a0 /drivers/usb/core/driver.c:361
-  really_probe+0x281/0x660 /drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 /drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 /drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 /drivers/base/bus.c:454
-  __device_attach+0x217/0x360 /drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 /drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 /drivers/base/core.c:2111
-  usb_set_configuration+0xdf6/0x1670 /drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 /drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 /drivers/usb/core/driver.c:266
-  really_probe+0x281/0x660 /drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 /drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 /drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 /drivers/base/bus.c:454
-  __device_attach+0x217/0x360 /drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 /drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 /drivers/base/core.c:2111
-  usb_new_device.cold+0x6a4/0xe61 /drivers/usb/core/hub.c:2536
-  hub_port_connect /drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change /drivers/usb/core/hub.c:5213 [inline]
-  port_event /drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1abd/0x3550 /drivers/usb/core/hub.c:5441
-  process_one_work+0x905/0x1570 /kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 /kernel/workqueue.c:2415
-  kthread+0x30b/0x410 /kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 /arch/x86/entry/entry_64.S:352
-Modules linked in:
----[ end trace 328f1b9a8fbb35b6 ]---
-RIP: 0010:wusb_cluster_id_put+0x6b/0x80 /drivers/usb/wusbcore/wusbhc.c:385
-Code: 7b 9d ce fd 40 84 ed 74 23 e8 41 9c ce fd f0 48 0f b3 1d e8 d6 0e 06  
-5b 48 c7 c7 60 1b 06 87 5d e9 8a 3c e9 01 e8 25 9c ce fd <0f> 0b e8 1e 9c  
-ce fd 0f 0b eb d4 66 2e 0f 1f 84 00 00 00 00 00 41
-RSP: 0018:ffff8881d9eff0e8 EFLAGS: 00010293
-RAX: ffff8881d9e36000 RBX: 00000000ffffffff RCX: ffffffff836e3f37
-RDX: 0000000000000000 RSI: ffffffff836e3f8b RDI: 0000000000000001
-RBP: 00000000000000fe R08: ffff8881d9e36000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 00000000ffffffb9
-R13: ffff8881d4a52600 R14: ffff8881d0b5d530 R15: 00000000000000fe
-FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007efcea69e000 CR3: 00000001d4f3a000 CR4: 00000000001406e0
+I have no idea what vmware does, and how it is faking all of this out by
+possibly using kernel drivers or userspace interactions.  So I wouldn't
+use that as an example of anything working well :)
 
+> 3. It worked in Windows 7 and Windows 10 (WebCam plus audio from VMware
+> Player (Windows versions)) before I switched to Ubuntu 18.04.
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Windows 7, like older versions of Linux, would not try to calculate the
+bandwidth requirements ahead of time, and would just try to work.  That
+causes problems with dropped packets and other fun issues.  Linux solved
+this in newer releases by doing the calculations "up front" and you are
+seeing the result.  You always were going over the max limit, but when
+using the device, "getting lucky".
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+I think Windows 10 also does what Windows 7 did, but am not quite sure.
+Try asking on a Windows list...
+
+> 4. RedHad guys acknowledged the bug:
+> https://bugzilla.redhat.com/show_bug.cgi?id=1411604
+> 
+> 
+> > Many people have that configuration
+> 
+> 
+> Please search Google for 'USB "Not enough bandwidth for new device state"'.
+> You will find 650 results with quite specific and similar error
+> descriptions.
+
+It all comes down to the configuration of your devices and root hubs and
+controller.  Yes, lots of people can duplicate this issue, but then
+again, that's why we put the check in there, to give people a chance to
+understand why things would later stop working.
+
+> The bug seems to occur in the isochronic transmission part of USB 3.0.
+> Somebody suspected it occurs if there are two devices trying to transmit at
+> the same time (WebCam + VM audio).
+
+Probably.
+
+> > separate USB hub
+> 
+> 
+> Already tried that and zillions of other combinations. In particular I tried
+> with no USB hub at all, just WebCam + VM and no other hardware.
+
+Root hub.  The device that connects the PCI device to the USB bus.  On
+some laptops there is one root hub per USB port, on others, only 1 root
+hub for all plugs together.  It depends on your system.  If you have a
+desktop system, try plugging in a new PCI USB controller, that is a root
+hub device.
+
+> After downgrading to USB 2.0 via BIOS it worked, though... But that's not
+> possible for other reasons.
+
+Yes, that is a normal solution as then your USB 3 devices do not ask for
+"too much" bandwidth.  There's also issues with having to reserve ahead
+of time the max bandwidth possible for a 2.0 device on a 3.0 bus that
+causes problems as you can see.
+
+It's not a simple problem and is always easier to just get a different
+USB controller as you will end up having issues on other operating
+systems as well, if they don't try to do the reservations ahead of time,
+it's just harder to notice.
+
+sorry,
+
+greg k-h
