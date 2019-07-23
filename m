@@ -2,52 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB72471CB7
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 18:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DEA71D4D
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 19:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732518AbfGWQTR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jul 2019 12:19:17 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38601 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730075AbfGWQTR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 12:19:17 -0400
-Received: by mail-pg1-f195.google.com with SMTP id f5so10846055pgu.5
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jul 2019 09:19:17 -0700 (PDT)
+        id S2388814AbfGWRDn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jul 2019 13:03:43 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41380 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730268AbfGWRDn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 13:03:43 -0400
+Received: by mail-pf1-f193.google.com with SMTP id m30so19459777pff.8
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jul 2019 10:03:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=k6qSq4o0syiIlSo9H20B/KXoTNHS9WcPVDD4fQ3Lgi0=;
-        b=lsIKRLV4x0ERjGK4IEH3OBK2zF5gYz64nv/JsEpmGJVJjFTs2JS1i99PbxjS8ybmYJ
-         Cgj+wg9J0U+N513/ZKtXrP6yYiC+XEcwu1v9YzgvesZpRLUQ5JFI2VqBRUEjYQyx0Wlu
-         sZ6bk1bWJJEDP2Mnh3Gd/u4xvpI4zn3BaxlRfmIpUSBrlBGEJ7DQcdQKs0GWiuDmXGu3
-         2O6ncl6Gjw3qO8XZrBT2R0GrNVk6T/JSonbbf1B7yGoO+iL27EA5p2b486R6pp7oktrU
-         L5SnBvdEYgWSju6yaP3af3iSuDLbJXgHG9zEVUxfIB7zVabcviwP+CvBf/nbn2inasie
-         GUjg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JKGzsnNbo5fu1aH8bTo2DamYZKTo8Iui0R3ANSx0cMY=;
+        b=chFIHmorjaFTB9tyIfbdCKVVuJfAONRd+Wvbp9x+QGWWwj+IscZ1JYRLkt1SR2HFpr
+         YNpNM21CyYkf8PlKOggtATeLhj/kHoxdTgEzGoZL6x79GB5Hu4t3w6zekSS5QPH0hv1u
+         h/R/TvDNifKNFP9/xIXybKQokBZXGQNGqKsmipfRkzVoHaip6U6QQfhn+OV26O7rGevC
+         KPVAiHckzKaMeKqtCZllPu0Qj2wibqTHgqDkNZxP8030v80HK9pV35GFVeFDu26educ4
+         MlxKK25UBlUMs+odvXHqQfoJ9hrByIczrCqY7axlUNrRwNfhM3m5fjVOlD8LBiGZLSSf
+         jdmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=k6qSq4o0syiIlSo9H20B/KXoTNHS9WcPVDD4fQ3Lgi0=;
-        b=qvQkpvDVNyYwVhCcERx8//nWrtyAk9MemFs/ZPNShPoTlWAUdRq8T8R7bPkOw/1V9l
-         GLvVTIl2x0eS4VOd/l8/2GlulbT7VX0JY624lIKLphm0XB5J2GCK2SvX4R0zMHu3GHXy
-         kKz9R4qzEE5HxgaRkQ5+IjKFdB7J+sCE+qJ72tLNQhtz7dcUOXv296nIzlSogUB7RS5I
-         jtqQWlLuaM7kcSs9NiVvIVB7MtbpQgl4ltbbr4G5fgbdyyQ1AEqVDwqg93HtyGcokY9u
-         w5UvorxiA5LT7d+53qKf0IX6p6fg5dX4HGCsTt4V8ivVZfDh98lUqUdzlh5C6UXAs5TN
-         IRtg==
-X-Gm-Message-State: APjAAAXE+qGwlWWV2B0vGl1vOlFHkCjZij3i2V7nyAmSlcp+YibMgb30
-        7/ER7Pc0xaOcYrP+czyxhCxM50EveqltJ3hsWjpXug==
-X-Google-Smtp-Source: APXvYqzsqnUu1mGmxVsrC3tzWgaabrbpIQ0xS56aCUWixYIdYaRw1m16xFXnMJhOJkHmVM4h/SAIVwbw6ey/bu9wXLk=
-X-Received: by 2002:aa7:86c6:: with SMTP id h6mr6710764pfo.51.1563898756123;
- Tue, 23 Jul 2019 09:19:16 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=JKGzsnNbo5fu1aH8bTo2DamYZKTo8Iui0R3ANSx0cMY=;
+        b=s8BkHMyAxtV7OPADOQPmO0507SRN1x7TpK1f01I1GIlkz7pkJsOxMWyoknuTUEyP+t
+         dWANibASICvEn5MWHzQ42bvWFQPGUVziNkwQIBrqIPCJA8YgBkU1d76KtiRsYR8Ebvjq
+         wPIW8as927vezCa4FRts0eKYx1YMiMfdZVQIM6P8bVWcG8zoFnlcSGJSAOkJzj5F55HY
+         342JX2FF4Dx9qI9mRoJBq9yjk0/bTqOXFUtHM6LrLWOnLqy6KIQLAID27PGCjnUNIkk4
+         GtS2Y7Xagd58UBKz0tXeA/bbzZJm1PNFo4zSn0hGCBflCtlu9mNiMYJPkR5BpinY7Ykw
+         cztg==
+X-Gm-Message-State: APjAAAUf07KRs+5VgXrvLkBvQL0szeqmmfPd3uiAlSTt2JT04XQEi2WD
+        UwojbKa+Y4eMI4abJlfcWKSMPWPyNxB//2d0vsqmDA==
+X-Google-Smtp-Source: APXvYqynh5+89A7gSkNmrYA4J0NBxNEei9fbqKgf6M4cMpQxlQIu0qfq5kU9qzZRW9dV9JnNjVi7PBJfbeWcPIdq9i4=
+X-Received: by 2002:aa7:97bb:: with SMTP id d27mr6713331pfq.93.1563901421607;
+ Tue, 23 Jul 2019 10:03:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000c3c7b6058e5a47af@google.com> <20190723161425.GA23641@gmail.com>
-In-Reply-To: <20190723161425.GA23641@gmail.com>
+References: <000000000000acb99a058b0d5741@google.com> <000000000000ac8f77058e0d11e9@google.com>
+In-Reply-To: <000000000000ac8f77058e0d11e9@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 23 Jul 2019 18:19:04 +0200
-Message-ID: <CAAeHK+zMdTKg3kJgbJjsVKp_HFR5SeXLxUs1kV0bbXE-DDFizw@mail.gmail.com>
-Subject: Re: usb-fuzzer boot error: general protection fault in dma_direct_max_mapping_size
-To:     syzbot <syzbot+4efacf59126f1ae87000@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
+Date:   Tue, 23 Jul 2019 19:03:29 +0200
+Message-ID: <CAAeHK+zT+VhrxPDNFxCoVDrgBhmTiAuRjQv_A6SC91x8w0HmoQ@mail.gmail.com>
+Subject: Re: WARNING in snd_usb_motu_microbookii_communicate/usb_submit_urb
+To:     Hillf Danton <hdanton@sina.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Takashi Iwai <tiwai@suse.de>
+Cc:     syzbot <syzbot+d952e5e28f5fb7718d23@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
@@ -57,174 +62,358 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 6:14 PM Eric Biggers <ebiggers@kernel.org> wrote:
+On Sat, Jul 20, 2019 at 4:14 PM Hillf Danton <hdanton@sina.com> wrote:
 >
-> On Tue, Jul 23, 2019 at 07:48:05AM -0700, syzbot wrote:
-> > Hello,
+>
+> On Fri, 19 Jul 2019 11:41:05 -0700 (PDT)
+> > syzbot has found a reproducer for the following crash on:
 > >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    1154c0b0 wip
+> > HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
 > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1197774c600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=b228fb19779df17d
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=4efacf59126f1ae87000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=149006d0600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=d952e5e28f5fb7718d23
 > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> >
-> > Unfortunately, I don't have any reproducer for this crash yet.
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1710cd48600000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17650a34600000
 > >
 > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+4efacf59126f1ae87000@syzkaller.appspotmail.com
+> > Reported-by: syzbot+d952e5e28f5fb7718d23@syzkaller.appspotmail.com
 > >
-> > RPC: Registered udp transport module.
-> > RPC: Registered tcp transport module.
-> > RPC: Registered tcp NFSv4.1 backchannel transport module.
-> > pci 0000:00:00.0: Limiting direct PCI/PCI transfers
-> > PCI: CLS 0 bytes, default 64
-> > PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
-> > software IO TLB: mapped [mem 0xbbffd000-0xbfffd000] (64MB)
-> > RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl
-> > timer
-> > clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x212735223b2,
-> > max_idle_ns: 440795277976 ns
-> > clocksource: Switched to clocksource tsc
-> > check: Scanning for low memory corruption every 60 seconds
-> > Initialise system trusted keyrings
-> > workingset: timestamp_bits=40 max_order=21 bucket_order=0
-> > NFS: Registering the id_resolver key type
-> > Key type id_resolver registered
-> > Key type id_legacy registered
-> > 9p: Installing v9fs 9p2000 file system support
-> > Key type asymmetric registered
-> > Asymmetric key parser 'x509' registered
-> > Block layer SCSI generic (bsg) driver version 0.4 loaded (major 247)
-> > io scheduler mq-deadline registered
-> > io scheduler kyber registered
-> > usbcore: registered new interface driver udlfb
-> > usbcore: registered new interface driver smscufx
-> > input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-> > ACPI: Power Button [PWRF]
-> > input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-> > ACPI: Sleep Button [SLPF]
-> > PCI Interrupt Link [LNKC] enabled at IRQ 11
-> > virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-> > PCI Interrupt Link [LNKD] enabled at IRQ 10
-> > virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-> > Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-> > 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-> > 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-> > 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-> > 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-> > Non-volatile memory driver v1.3
-> > Linux agpgart interface v0.103
-> > usbcore: registered new interface driver udl
-> > loop: module loaded
-> > usbcore: registered new interface driver rtsx_usb
-> > usbcore: registered new interface driver viperboard
-> > usbcore: registered new interface driver dln2
-> > usbcore: registered new interface driver pn533_usb
-> > usbcore: registered new interface driver port100
-> > usbcore: registered new interface driver nfcmrvl
-> > scsi host0: Virtio SCSI HBA
-> > kasan: CONFIG_KASAN_INLINE enabled
-> > kasan: GPF could be caused by NULL-ptr deref or user memory access
-> > general protection fault: 0000 [#1] SMP KASAN
-> > CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.3.0-rc1+ #16
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 01/01/2011
-> > RIP: 0010:dma_addressing_limited /./include/linux/dma-mapping.h:692 [inline]
-> > RIP: 0010:dma_direct_max_mapping_size+0x73/0x19a /kernel/dma/direct.c:408
-> > Code: df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 1e 01 00 00 48 8b 9d 38 03
-> > 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85
-> > 06 01 00 00 48 8d bd 48 03 00 00 48 8b 1b 48 b8
-> > RSP: 0000:ffff8881da18f628 EFLAGS: 00010246
-> > RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff812d716c
-> > RDX: 0000000000000000 RSI: ffffffff812d7189 RDI: ffff8881d7428378
-> > RBP: ffff8881d7428040 R08: ffff8881da180000 R09: ffffed103ade30cb
-> > R10: ffffed103ade30ca R11: ffff8881d6f18657 R12: ffff8881d7428040
-> > R13: ffff8881d769e8b0 R14: 0000000000000200 R15: 0000000000000000
-> > FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 0000000000000000 CR3: 0000000006a21000 CR4: 00000000001406e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > usb 1-1: string descriptor 0 read error: -22
+> > usb 1-1: New USB device found, idVendor=07fd, idProduct=0004, bcdDevice=59.23
+> > usb 1-1: New USB device strings: Mfr=5, Product=75, SerialNumber=0
+> > usb 1-1: Waiting for MOTU Microbook II to boot up...
+> > ------------[ cut here ]------------
+> > usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+> > WARNING: CPU: 1 PID: 21 at drivers/usb/core/urb.c:477
+> > usb_submit_urb+0x1188/0x13b0 /drivers/usb/core/urb.c:477
+> > Kernel panic - not syncing: panic_on_warn set ...
+> > CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #15
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Workqueue: usb_hub_wq hub_event
 > > Call Trace:
-> >  dma_max_mapping_size+0xb5/0xf0 /kernel/dma/mapping.c:375
-> >  __scsi_init_queue+0x17e/0x510 /drivers/scsi/scsi_lib.c:1787
-> >  scsi_mq_alloc_queue+0xcb/0x170 /drivers/scsi/scsi_lib.c:1833
-> >  scsi_alloc_sdev+0x82e/0xc50 /drivers/scsi/scsi_scan.c:269
-> >  scsi_probe_and_add_lun+0x1ee5/0x2cd0 /drivers/scsi/scsi_scan.c:1078
-> >  __scsi_scan_target+0x273/0xc30 /drivers/scsi/scsi_scan.c:1562
-> >  scsi_scan_channel.part.0+0x126/0x1a0 /drivers/scsi/scsi_scan.c:1650
-> >  scsi_scan_channel /drivers/scsi/scsi_scan.c:1677 [inline]
-> >  scsi_scan_host_selected+0x2bb/0x3f0 /drivers/scsi/scsi_scan.c:1679
-> >  do_scsi_scan_host /drivers/scsi/scsi_scan.c:1817 [inline]
-> >  do_scsi_scan_host+0x1e8/0x260 /drivers/scsi/scsi_scan.c:1807
-> >  scsi_scan_host /drivers/scsi/scsi_scan.c:1847 [inline]
-> >  scsi_scan_host+0x37c/0x440 /drivers/scsi/scsi_scan.c:1835
-> >  virtscsi_probe+0x9b7/0xbb5 /drivers/scsi/virtio_scsi.c:847
-> >  virtio_dev_probe+0x463/0x710 /drivers/virtio/virtio.c:248
-> >  really_probe+0x281/0x650 /drivers/base/dd.c:548
-> >  driver_probe_device+0x101/0x1b0 /drivers/base/dd.c:709
-> >  device_driver_attach+0x108/0x140 /drivers/base/dd.c:983
-> >  __driver_attach+0xda/0x240 /drivers/base/dd.c:1060
-> >  bus_for_each_dev+0x14b/0x1d0 /drivers/base/bus.c:304
-> >  bus_add_driver+0x44e/0x5a0 /drivers/base/bus.c:645
-> >  driver_register+0x1c4/0x320 /drivers/base/driver.c:170
-> >  __write_once_size /./include/linux/compiler.h:226 [inline]
-> >  INIT_LIST_HEAD /./include/linux/list.h:28 [inline]
-> >  init+0xa1/0x115 /drivers/char/virtio_console.c:2251
-> >  do_one_initcall+0xf0/0x614 /init/main.c:939
-> >  do_initcall_level /init/main.c:1007 [inline]
-> >  do_initcalls /init/main.c:1015 [inline]
-> >  do_basic_setup /init/main.c:1032 [inline]
-> >  kernel_init_freeable+0x4a9/0x596 /init/main.c:1192
-> >  kernel_init+0xd/0x1bf /init/main.c:1110
-> >  ret_from_fork+0x24/0x30 /arch/x86/entry/entry_64.S:352
-> > Modules linked in:
-> > ---[ end trace 73ab592d53bc046f ]---
-> > RIP: 0010:dma_addressing_limited /./include/linux/dma-mapping.h:692 [inline]
-> > RIP: 0010:dma_direct_max_mapping_size+0x73/0x19a /kernel/dma/direct.c:408
-> > Code: df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 1e 01 00 00 48 8b 9d 38 03
-> > 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85
-> > 06 01 00 00 48 8d bd 48 03 00 00 48 8b 1b 48 b8
-> > RSP: 0000:ffff8881da18f628 EFLAGS: 00010246
-> > RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff812d716c
-> > RDX: 0000000000000000 RSI: ffffffff812d7189 RDI: ffff8881d7428378
-> > RBP: ffff8881d7428040 R08: ffff8881da180000 R09: ffffed103ade30cb
-> > R10: ffffed103ade30ca R11: ffff8881d6f18657 R12: ffff8881d7428040
-> > R13: ffff8881d769e8b0 R14: 0000000000000200 R15: 0000000000000000
-> > FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 0000000000000000 CR3: 0000000006a21000 CR4: 00000000001406e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> >
-> >
-> > ---
-> > This bug is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this bug report. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> >
-> > --
-> > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000c3c7b6058e5a47af%40google.com.
+> >   __dump_stack /lib/dump_stack.c:77 [inline]
+> >   dump_stack+0xca/0x13e /lib/dump_stack.c:113
+> >   panic+0x292/0x6c9 /kernel/panic.c:219
+> >   __warn.cold+0x20/0x4b /kernel/panic.c:576
+> >   report_bug+0x262/0x2a0 /lib/bug.c:186
+> >   fixup_bug /arch/x86/kernel/traps.c:179 [inline]
+> >   fixup_bug /arch/x86/kernel/traps.c:174 [inline]
+> >   do_error_trap+0x12b/0x1e0 /arch/x86/kernel/traps.c:272
+> >   do_invalid_op+0x32/0x40 /arch/x86/kernel/traps.c:291
+> >   invalid_op+0x14/0x20 /arch/x86/entry/entry_64.S:986
+> > RIP: 0010:usb_submit_urb+0x1188/0x13b0 /drivers/usb/core/urb.c:477
+> > Code: 4d 85 ed 74 2c e8 f8 d3 f4 fd 4c 89 f7 e8 a0 51 1c ff 41 89 d8 44 89
+> > e1 4c 89 ea 48 89 c6 48 c7 c7 00 0e f7 85 e8 83 98 ca fd <0f> 0b e9 20 f4
+> > ff ff e8 cc d3 f4 fd 4c 89 f2 48 b8 00 00 00 00 00
+> > RSP: 0018:ffff8881d9efee68 EFLAGS: 00010286
+> > RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3dfdbf
+> > RBP: ffff8881cfd97b70 R08: ffff8881d9e36000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+> > R13: ffff8881cfcdea98 R14: ffff8881d0f511a0 R15: ffff8881d4b46200
+> >   usb_start_wait_urb+0x108/0x2b0 /drivers/usb/core/message.c:57
+> >   usb_bulk_msg+0x228/0x550 /drivers/usb/core/message.c:253
+> >   snd_usb_motu_microbookii_communicate.constprop.0+0xe3/0x240 /sound/usb/quirks.c:999
+> >   snd_usb_motu_microbookii_boot_quirk /sound/usb/quirks.c:1039 [inline]
+> >   snd_usb_apply_boot_quirk.cold+0x140/0x36b /sound/usb/quirks.c:1268
+> >   usb_audio_probe+0x2ec/0x2010 /sound/usb/card.c:576
+> >   usb_probe_interface+0x305/0x7a0 /drivers/usb/core/driver.c:361
+> >   really_probe+0x281/0x660 /drivers/base/dd.c:509
+> >   driver_probe_device+0x104/0x210 /drivers/base/dd.c:670
+> >   __device_attach_driver+0x1c2/0x220 /drivers/base/dd.c:777
+> >   bus_for_each_drv+0x15c/0x1e0 /drivers/base/bus.c:454
+> >   __device_attach+0x217/0x360 /drivers/base/dd.c:843
+> >   bus_probe_device+0x1e4/0x290 /drivers/base/bus.c:514
+> >   device_add+0xae6/0x16f0 /drivers/base/core.c:2111
+> >   usb_set_configuration+0xdf6/0x1670 /drivers/usb/core/message.c:2023
+> >   generic_probe+0x9d/0xd5 /drivers/usb/core/generic.c:210
+> >   usb_probe_device+0x99/0x100 /drivers/usb/core/driver.c:266
+> >   really_probe+0x281/0x660 /drivers/base/dd.c:509
+> >   driver_probe_device+0x104/0x210 /drivers/base/dd.c:670
+> >   __device_attach_driver+0x1c2/0x220 /drivers/base/dd.c:777
+> >   bus_for_each_drv+0x15c/0x1e0 /drivers/base/bus.c:454
+> >   __device_attach+0x217/0x360 /drivers/base/dd.c:843
+> >   bus_probe_device+0x1e4/0x290 /drivers/base/bus.c:514
+> >   device_add+0xae6/0x16f0 /drivers/base/core.c:2111
+> >   usb_new_device.cold+0x6a4/0xe61 /drivers/usb/core/hub.c:2536
+> >   hub_port_connect /drivers/usb/core/hub.c:5098 [inline]
+> >   hub_port_connect_change /drivers/usb/core/hub.c:5213 [inline]
+> >   port_event /drivers/usb/core/hub.c:5359 [inline]
+> >   hub_event+0x1abd/0x3550 /drivers/usb/core/hub.c:5441
+> >   process_one_work+0x905/0x1570 /kernel/workqueue.c:2269
+> >   worker_thread+0x96/0xe20 /kernel/workqueue.c:2415
+> >   kthread+0x30b/0x410 /kernel/kthread.c:255
+> >   ret_from_fork+0x24/0x30 /arch/x86/entry/entry_64.S:352
+> > Kernel Offset: disabled
+> > Rebooting in 86400 seconds..
 >
-> Seems there is a fix for this queued in the SCSI tree.
+> Wow it finally comes up at the third time with sound/usb/quirks.c:999
+> tippointing to commit 801ebf1043ae ("ALSA: usb-audio: Sanity checks
+> for each pipe and EP types").
 >
-> #syz fix: scsi: core: fix the dma_max_mapping_size call
+> That commit not only proves this warning is bogus but casts light
+> on fixing it.
+>
+> 1, Make the helper created in the commit available outside sound/usb
+> with a new name. No functionality change intended.
+>
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -1748,7 +1748,20 @@ static inline int usb_urb_dir_out(struct urb *urb)
+>         return (urb->transfer_flags & URB_DIR_MASK) == URB_DIR_OUT;
+>  }
+>
+> -int usb_urb_ep_type_check(const struct urb *urb);
+> +int usb_pipe_ep_type_check(struct usb_device *dev, unsigned int pipe);
+> +
+> +/**
+> + * usb_urb_ep_type_check - sanity check of endpoint in the given urb
+> + * @urb: urb to be checked
+> + *
+> + * This performs a light-weight sanity check for the endpoint in the
+> + * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+> + * a negative error code.
+> + */
+> +static inline int usb_urb_ep_type_check(const struct urb *urb)
+> +{
+> +       return usb_pipe_ep_type_check(urb->dev, urb->pipe);
+> +}
+>
+>  void *usb_alloc_coherent(struct usb_device *dev, size_t size,
+>         gfp_t mem_flags, dma_addr_t *dma);
+> --- a/drivers/usb/core/urb.c
+> +++ b/drivers/usb/core/urb.c
+> @@ -191,25 +191,24 @@ static const int pipetypes[4] = {
+>  };
+>
+>  /**
+> - * usb_urb_ep_type_check - sanity check of endpoint in the given urb
+> - * @urb: urb to be checked
+> + * usb_pipe_ep_type_check - sanity type check of endpoint against the given pipe
+> + * @dev: usb device whose endpoint to be checked
+> + * @pipe: the pipe type to match
+>   *
+> - * This performs a light-weight sanity check for the endpoint in the
+> - * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+> - * a negative error code.
+> + * Return 0 if endpoint matches pipe, otherwise error code.
+>   */
+> -int usb_urb_ep_type_check(const struct urb *urb)
+> +int usb_pipe_ep_type_check(struct usb_device *dev, unsigned int pipe)
+>  {
+>         const struct usb_host_endpoint *ep;
+>
+> -       ep = usb_pipe_endpoint(urb->dev, urb->pipe);
+> +       ep = usb_pipe_endpoint(dev, pipe);
+>         if (!ep)
+>                 return -EINVAL;
+> -       if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+> +       if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+>                 return -EINVAL;
+>         return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
+> +EXPORT_SYMBOL_GPL(usb_pipe_ep_type_check);
+>
+>  /**
+>   * usb_submit_urb - issue an asynchronous transfer request for an endpoint
+> --
+>
+> 2, With helper in place, make the warning not bogus any more.
+>
+>
+> --- a/drivers/usb/core/message.c
+> +++ b/drivers/usb/core/message.c
+> @@ -242,7 +242,12 @@ int usb_bulk_msg(struct usb_device *usb_dev, unsigned int pipe,
+>
+>         if ((ep->desc.bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) ==
+>                         USB_ENDPOINT_XFER_INT) {
+> -               pipe = (pipe & ~(3 << 30)) | (PIPE_INTERRUPT << 30);
+> +               /*
+> +                * change pipe unless we mess things up
+> +                */
+> +               if (usb_pipe_ep_type_check(usb_dev, pipe))
+> +                       pipe = (pipe & ~(3 << 30)) | (PIPE_INTERRUPT << 30);
+> +
+>                 usb_fill_int_urb(urb, usb_dev, pipe, data, len,
+>                                 usb_api_blocking_completion, NULL,
+>                                 ep->desc.bInterval);
+> --
+>
+> 3, Do some cleanup in sound/usb.
+>
+>
+> --- a/sound/usb/helper.h
+> +++ b/sound/usb/helper.h
+> @@ -7,7 +7,6 @@ unsigned int snd_usb_combine_bytes(unsigned char *bytes, int size);
+>  void *snd_usb_find_desc(void *descstart, int desclen, void *after, u8 dtype);
+>  void *snd_usb_find_csint_desc(void *descstart, int desclen, void *after, u8 dsubtype);
+>
+> -int snd_usb_pipe_sanity_check(struct usb_device *dev, unsigned int pipe);
+>  int snd_usb_ctl_msg(struct usb_device *dev, unsigned int pipe,
+>                     __u8 request, __u8 requesttype, __u16 value, __u16 index,
+>                     void *data, __u16 size);
+> --- a/sound/usb/helper.c
+> +++ b/sound/usb/helper.c
+> @@ -63,20 +63,6 @@ void *snd_usb_find_csint_desc(void *buffer, int buflen, void *after, u8 dsubtype
+>         return NULL;
+>  }
+>
+> -/* check the validity of pipe and EP types */
+> -int snd_usb_pipe_sanity_check(struct usb_device *dev, unsigned int pipe)
+> -{
+> -       static const int pipetypes[4] = {
+> -               PIPE_CONTROL, PIPE_ISOCHRONOUS, PIPE_BULK, PIPE_INTERRUPT
+> -       };
+> -       struct usb_host_endpoint *ep;
+> -
+> -       ep = usb_pipe_endpoint(dev, pipe);
+> -       if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+> -               return -EINVAL;
+> -       return 0;
+> -}
+> -
+>  /*
+>   * Wrapper for usb_control_msg().
+>   * Allocates a temp buffer to prevent dmaing from/to the stack.
+> @@ -89,7 +75,7 @@ int snd_usb_ctl_msg(struct usb_device *dev, unsigned int pipe, __u8 request,
+>         void *buf = NULL;
+>         int timeout;
+>
+> -       if (snd_usb_pipe_sanity_check(dev, pipe))
+> +       if (usb_pipe_ep_type_check(dev, pipe))
+>                 return -EINVAL;
+>
+>         if (size > 0) {
+> --- a/sound/usb/quirks.c
+> +++ b/sound/usb/quirks.c
+> @@ -832,7 +832,7 @@ static int snd_usb_accessmusic_boot_quirk(struct usb_device *dev)
+>         static const u8 seq[] = { 0x4e, 0x73, 0x52, 0x01 };
+>         void *buf;
+>
+> -       if (snd_usb_pipe_sanity_check(dev, usb_sndintpipe(dev, 0x05)))
+> +       if (usb_pipe_ep_type_check(dev, usb_sndintpipe(dev, 0x05)))
+>                 return -EINVAL;
+>         buf = kmemdup(seq, ARRAY_SIZE(seq), GFP_KERNEL);
+>         if (!buf)
+> @@ -861,7 +861,7 @@ static int snd_usb_nativeinstruments_boot_quirk(struct usb_device *dev)
+>  {
+>         int ret;
+>
+> -       if (snd_usb_pipe_sanity_check(dev, usb_sndctrlpipe(dev, 0)))
+> +       if (usb_pipe_ep_type_check(dev, usb_sndctrlpipe(dev, 0)))
+>                 return -EINVAL;
+>         ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+>                                   0xaf, USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+> @@ -970,7 +970,7 @@ static int snd_usb_axefx3_boot_quirk(struct usb_device *dev)
+>
+>         dev_dbg(&dev->dev, "Waiting for Axe-Fx III to boot up...\n");
+>
+> -       if (snd_usb_pipe_sanity_check(dev, usb_sndctrlpipe(dev, 0)))
+> +       if (usb_pipe_ep_type_check(dev, usb_sndctrlpipe(dev, 0)))
+>                 return -EINVAL;
+>         /* If the Axe-Fx III has not fully booted, it will timeout when trying
+>          * to enable the audio streaming interface. A more generous timeout is
+> @@ -1004,7 +1004,7 @@ static int snd_usb_motu_microbookii_communicate(struct usb_device *dev, u8 *buf,
+>  {
+>         int err, actual_length;
+>
+> -       if (snd_usb_pipe_sanity_check(dev, usb_sndintpipe(dev, 0x01)))
+> +       if (usb_pipe_ep_type_check(dev, usb_sndintpipe(dev, 0x01)))
+>                 return -EINVAL;
+>         err = usb_interrupt_msg(dev, usb_sndintpipe(dev, 0x01), buf, *length,
+>                                 &actual_length, 1000);
+> @@ -1016,7 +1016,7 @@ static int snd_usb_motu_microbookii_communicate(struct usb_device *dev, u8 *buf,
+>
+>         memset(buf, 0, buf_size);
+>
+> -       if (snd_usb_pipe_sanity_check(dev, usb_rcvintpipe(dev, 0x82)))
+> +       if (usb_pipe_ep_type_check(dev, usb_rcvintpipe(dev, 0x82)))
+>                 return -EINVAL;
+>         err = usb_interrupt_msg(dev, usb_rcvintpipe(dev, 0x82), buf, buf_size,
+>                                 &actual_length, 1000);
+> --
 
-Great, thanks! Because of this bug USB fuzzing is currently broken.
++Alan and Takashi to take a look at this.
+
+(Takashi, with your helper check syzkaller now generates a new bug
+report (not reported by syzbot yet due to breakage during kernel boot
+on 5.3-rc1, so see below) and I guess this has to do with a missing ep
+!= NULL check).
+
+kasan: CONFIG_KASAN_INLINE enabled
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] SMP KASAN
+CPU: 1 PID: 74 Comm: kworker/1:1 Not tainted 5.3.0-rc1+ #40
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:snd_usb_pipe_sanity_check+0x80/0x130 sound/usb/helper.c:75
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 b3 00 00 00 48 8b 6d 00 c1 eb 1e
+48 b8 00 00 00 00 00 fc ff df 48 8d 7d 03 48 89 fa 48 c1 ea 03 <0f> b6
+04 02 48 89 fa 83 e2 07 38 d0 7f 04 84 c0 75 7b 48 b8 00 00
+RSP: 0018:ffff88806c33f0a8 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: 0000000000000001 RCX: ffffffff833819c2
+RDX: 0000000000000000 RSI: ffffffff833819dc RDI: 0000000000000003
+RBP: 0000000000000000 R08: ffff88806c330000 R09: fffffbfff0d1a792
+R10: fffffbfff0d1a791 R11: ffffffff868d3c8f R12: 0000000000000000
+R13: dffffc0000000000 R14: ffff88806975cc80 R15: ffff88806975c4a0
+FS:  0000000000000000(0000) GS:ffff88806d100000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fcc3a48c000 CR3: 000000006861c003 CR4: 0000000000160ee0
+Call Trace:
+ snd_usb_accessmusic_boot_quirk sound/usb/quirks.c:835 [inline]
+ snd_usb_apply_boot_quirk+0xa19/0xc60 sound/usb/quirks.c:1267
+ usb_audio_probe+0x2ec/0x1f40 sound/usb/card.c:576
+ usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+ really_probe+0x281/0x650 drivers/base/dd.c:548
+ driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+ __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+ bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+ __device_attach+0x217/0x360 drivers/base/dd.c:882
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+ device_add+0xa85/0x1690 drivers/base/core.c:2111
+ usb_set_configuration+0xde7/0x1650 drivers/usb/core/message.c:2023
+ generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+ usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+ really_probe+0x281/0x650 drivers/base/dd.c:548
+ driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+ __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+ bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+ __device_attach+0x217/0x360 drivers/base/dd.c:882
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+ device_add+0xa85/0x1690 drivers/base/core.c:2111
+ usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+ hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+ port_event drivers/usb/core/hub.c:5359 [inline]
+ hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+ process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Modules linked in:
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+---[ end trace d916533ad631874a ]---
+RIP: 0010:snd_usb_pipe_sanity_check+0x80/0x130 sound/usb/helper.c:75
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 b3 00 00 00 48 8b 6d 00 c1 eb 1e
+48 b8 00 00 00 00 00 fc ff df 48 8d 7d 03 48 89 fa 48 c1 ea 03 <0f> b6
+04 02 48 89 fa 83 e2 07 38 d0 7f 04 84 c0 75 7b 48 b8 00 00
+RSP: 0018:ffff88806c33f0a8 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: 0000000000000001 RCX: ffffffff833819c2
+RDX: 0000000000000000 RSI: ffffffff833819dc RDI: 0000000000000003
+RBP: 0000000000000000 R08: ffff88806c330000 R09: fffffbfff0d1a792
+R10: fffffbfff0d1a791 R11: ffffffff868d3c8f R12: 0000000000000000
+R13: dffffc0000000000 R14: ffff88806975cc80 R15: ffff88806975c4a0
+FS:  0000000000000000(0000) GS:ffff88806d100000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fcc3a48c000 CR3: 000000006861c003 CR4: 0000000000160ee0
+
 
 >
-> Other threads:
->
-> https://marc.info/?l=linux-scsi&m=156378725427719&w=2
-> https://lkml.kernel.org/lkml/20190722163759.GA28686@codemonkey.org.uk/
-> https://lkml.kernel.org/lkml/CACVXFVMWM3xg6EEyoyNjkLPv=8+wQKiHj6erMS_gGX25f-Ot4g@mail.gmail.com/
->
-> - Eric
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000ac8f77058e0d11e9%40google.com.
