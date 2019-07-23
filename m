@@ -2,310 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A967272235
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 00:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE4C72335
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 01:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392485AbfGWWTj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jul 2019 18:19:39 -0400
-Received: from foss.arm.com ([217.140.110.172]:60742 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387599AbfGWWTT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Jul 2019 18:19:19 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 944E215BF;
-        Tue, 23 Jul 2019 15:19:18 -0700 (PDT)
-Received: from dawn-kernel.cambridge.arm.com (unknown [10.1.197.116])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AC3E63F694;
-        Tue, 23 Jul 2019 15:19:16 -0700 (PDT)
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-usb@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joe Perches <joe@perches.com>
-Subject: [PATCH v3 4/7] drivers: Introduce device lookup variants by device type
-Date:   Tue, 23 Jul 2019 23:18:35 +0100
-Message-Id: <20190723221838.12024-5-suzuki.poulose@arm.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190723221838.12024-1-suzuki.poulose@arm.com>
-References: <20190723221838.12024-1-suzuki.poulose@arm.com>
+        id S1727082AbfGWXzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jul 2019 19:55:14 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44852 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726520AbfGWXzO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 19:55:14 -0400
+Received: by mail-pg1-f196.google.com with SMTP id i18so20202307pgl.11
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jul 2019 16:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gbLOkP3Zk+05iV/76VtkINMHige630DMWAurznznUXU=;
+        b=TJOAfNJZMWpg0ynXINtYh6LkuNV5DY6F1GtsYBp2XZhgzBBH1pGDD0VtYUH11XDM4R
+         echwfqk1h0YJqCT991lo58t1M0a29FOtE2ET7vfS/tc2LX3RfR6+N0mFfIHa0uuJAc5s
+         69JIO9YIKUTZHfiT0i/fvc9bpEr6MWUWakNXtL5BndSuBhBPzPfhMBDXytK290BtDkrY
+         iQLclOIPglGNOm2V13UFleiiqi0pljZZzhveg0+5+mZEykkhCRUNeovnqjjSveuFaE8c
+         EyXu+MRhJTtuQ3lGAjZ+aPxtofcdtPalYGFaPurJmsNEW2w79hfLhCxBgAqzy4z7Lj+C
+         MjBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gbLOkP3Zk+05iV/76VtkINMHige630DMWAurznznUXU=;
+        b=Mjd3RAspvHBQ+MGmfrhrmY344QOye9xypvN5MxEusfINSu3O/Uga8pfiTR29fHDUjs
+         MiB7l6jOPYIYbTdgMjdsGB28I7Q+qA94NIi7yWG9R6l3Wu9R13xeAgeNhMRiNqDCefCu
+         hbaPfXcf7tQFd+h1AWgWhaaQnMDNWFOPwNuiD9CVDm5K3WFb9XAM1H9qKFuoN7/gIsdr
+         RoRuDcFCcAXzsHcew2E+19QQ6xl+yQFmu/xnrtSRbNK5b467Pl0mpi4aiM/CKFg9jbJt
+         NR8ocVHTuAsRVM4J5Pxb7cKXfOqCqMcy+7BmE5QODGkutmh4Uao5L7VxhTfHzsVa5yxU
+         VVWg==
+X-Gm-Message-State: APjAAAXxOnua1lRqZioCF9JKjfwBqSJ635hLVVlTlkU9MvITHuc5M1aP
+        RYjcFgVkZLD+z/d3q7Zn44apBr0m
+X-Google-Smtp-Source: APXvYqyZL9BuhOikrL5mBm6/YjDnvyU9sSUUlxG9LLeREHnF2rLjXqvcwrAp+y0cemyaygiBObbZIQ==
+X-Received: by 2002:a63:1020:: with SMTP id f32mr48950343pgl.203.1563926112955;
+        Tue, 23 Jul 2019 16:55:12 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 22sm51500400pfu.179.2019.07.23.16.55.12
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jul 2019 16:55:12 -0700 (PDT)
+Date:   Tue, 23 Jul 2019 16:55:11 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Douglas Gilbert <dgilbert@interlog.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
+Subject: Re: 5.1.18 oops: echo source > /sys/class/typec/port0/preferred_role
+Message-ID: <20190723235511.GB11756@roeck-us.net>
+References: <fab64d97-19f3-057a-c5c4-926e9551e788@interlog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fab64d97-19f3-057a-c5c4-926e9551e788@interlog.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a helper to match a device by its type and provide wrappers
-for {bus/class/driver}_find_device() APIs.
+Hi Doug,
 
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Harald Freudenberger <freude@linux.ibm.com>
-Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-Cc: linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Tomas Winkler <tomas.winkler@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Joe Perches <joe@perches.com>
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+On Tue, Jul 23, 2019 at 07:26:34PM -0400, Douglas Gilbert wrote:
+> Hi,
+> Apologies if this is not code you maintain or the wrong medium.
+> 
+No worries. You should copy the respective mailing lists, but I'll do that
+for you.
+
+> I'm experimenting with a NXP OM 13588 board (USB Type C Arduino shield)
+> on a Atmel SAMA5D2_XPLAINED board running lk 5.1.18 and Debian 10 .
+> When I did the "echo" command in the subject line to sysfs I saw the
+> following:
+> 
+> [28988.750000] Unable to handle kernel NULL pointer dereference at virtual
+> address 00000028
+> [28988.750000] pgd = f69149ad
+> [28988.760000] [00000028] *pgd=00000000
+> [28988.760000] Internal error: Oops: 5 [#1] THUMB2
+> [28988.760000] Modules linked in: tcpci tcpm
+> [28988.760000] CPU: 0 PID: 1882 Comm: bash Not tainted 5.1.18-sama5-armv7-r2 #4
+> [28988.760000] Hardware name: Atmel SAMA5
+> [28988.760000] PC is at tcpm_try_role+0x3a/0x4c [tcpm]
+> [28988.760000] LR is at tcpm_try_role+0x15/0x4c [tcpm]
+> [28988.760000] pc : [<bf8000e2>]    lr : [<bf8000bd>]    psr: 60030033
+> [28988.760000] sp : dc1a1e88  ip : c03fb47d  fp : 00000000
+> [28988.760000] r10: dc216190  r9 : dc1a1f78  r8 : 00000001
+> [28988.760000] r7 : df4ae044  r6 : dd032e90  r5 : dd1ce340  r4 : df4ae054
+> [28988.760000] r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : df4ae044
+> [28988.760000] Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA Thumb  Segment none
+> [28988.760000] Control: 50c53c7d  Table: 3efec059  DAC: 00000051
+> [28988.760000] Process bash (pid: 1882, stack limit = 0x6a6d4aa5)
+> [28988.760000] Stack: (0xdc1a1e88 to 0xdc1a2000)
+> [28988.760000] 1e80:                   dd05d808 dd1ce340 00000001 00000007
+> dd1ce340 c03fb4a7
+> [28988.760000] 1ea0: 00000007 00000007 dc216180 00000000 00000000 c01e1e03
+> 00000000 00000000
+> [28988.760000] 1ec0: c0907008 dee98b40 c01e1d5d c06106c4 00000000 00000000
+> 00000007 c0194e8b
+> [28988.760000] 1ee0: 0000000a 00000400 00000000 c01a97db dc22bf00 ffffe000
+> df4b6a00 df745900
+> [28988.760000] 1f00: 00000001 00000001 000000dd c01a9c2f 7aeab3be c0907008
+> 00000000 dc22bf00
+> [28988.760000] 1f20: c0907008 00000000 00000000 00000000 00000000 7aeab3be
+> 00000007 dee98b40
+> [28988.760000] 1f40: 005dc318 dc1a1f78 00000000 00000000 00000007 c01969f7
+> 0000000a c01a20cb
+> [28988.760000] 1f60: dee98b40 c0907008 dee98b40 005dc318 00000000 c0196b9b
+> 00000000 00000000
+> [28988.760000] 1f80: dee98b40 7aeab3be 00000074 005dc318 b6f3bdb0 00000004
+> c0101224 dc1a0000
+> [28988.760000] 1fa0: 00000004 c0101001 00000074 005dc318 00000001 005dc318
+> 00000007 00000000
+> [28988.760000] 1fc0: 00000074 005dc318 b6f3bdb0 00000004 00000007 00000007
+> 00000000 00000000
+> [28988.760000] 1fe0: 00000004 be800880 b6ed35b3 b6e5c746 60030030 00000001
+> 00000000 00000000
+> [28988.760000] [<bf8000e2>] (tcpm_try_role [tcpm]) from [<c03fb4a7>]
+> (preferred_role_store+0x2b/0x5c)
+> [28988.760000] [<c03fb4a7>] (preferred_role_store) from [<c01e1e03>]
+> (kernfs_fop_write+0xa7/0x150)
+> [28988.760000] [<c01e1e03>] (kernfs_fop_write) from [<c0194e8b>]
+> (__vfs_write+0x1f/0x104)
+> [28988.760000] [<c0194e8b>] (__vfs_write) from [<c01969f7>] (vfs_write+0x6b/0x104)
+> [28988.760000] [<c01969f7>] (vfs_write) from [<c0196b9b>] (ksys_write+0x43/0x94)
+> [28988.760000] [<c0196b9b>] (ksys_write) from [<c0101001>]
+> (ret_fast_syscall+0x1/0x62)
+> [28988.760000] Exception stack(0xdc1a1fa8 to 0xdc1a1ff0)
+> [28988.760000] 1fa0:                   00000074 005dc318 00000001 005dc318
+> 00000007 00000000
+> [28988.760000] 1fc0: 00000074 005dc318 b6f3bdb0 00000004 00000007 00000007
+> 00000000 00000000
+> [28988.760000] 1fe0: 00000004 be800880 b6ed35b3 b6e5c746
+> [28988.760000] Code: 4628 e8bd 81f0 6833 (f893) 5028
+> [28989.020000] ---[ end trace d842183af2e975d9 ]---
+> 
+> The dts file is attached. It is not quite right since OF complains it
+> can't find that port (but there really isn't a "port" from the
+> "xplained" board's Point of view with my set up). The full oops is
+> also attached.
+> 
+> Doug Gilbert
+
+Can you try the following ?
+
+Thanks,
+Guenter
+
 ---
- drivers/base/core.c               | 15 ++++++-------
- drivers/hwtracing/intel_th/core.c | 10 +--------
- drivers/misc/mei/main.c           |  9 +-------
- drivers/s390/crypto/zcrypt_api.c  | 11 +--------
- drivers/tty/tty_io.c              |  8 +------
- drivers/usb/core/devio.c          |  8 +------
- include/linux/device.h            | 37 +++++++++++++++++++++++++++++++
- 7 files changed, 49 insertions(+), 49 deletions(-)
-
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index e8f81a667545..3abc32b60c0a 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2867,13 +2867,6 @@ struct device *device_create_with_groups(struct class *class,
- }
- EXPORT_SYMBOL_GPL(device_create_with_groups);
- 
--static int __match_devt(struct device *dev, const void *data)
--{
--	const dev_t *devt = data;
--
--	return dev->devt == *devt;
--}
--
- /**
-  * device_destroy - removes a device that was created with device_create()
-  * @class: pointer to the struct class that this device was registered with
-@@ -2886,7 +2879,7 @@ void device_destroy(struct class *class, dev_t devt)
- {
- 	struct device *dev;
- 
--	dev = class_find_device(class, NULL, &devt, __match_devt);
-+	dev = class_find_device_by_devt(class, devt);
- 	if (dev) {
- 		put_device(dev);
- 		device_unregister(dev);
-@@ -3374,3 +3367,9 @@ int device_match_fwnode(struct device *dev, const void *fwnode)
- 	return dev_fwnode(dev) == fwnode;
- }
- EXPORT_SYMBOL_GPL(device_match_fwnode);
-+
-+int device_match_devt(struct device *dev, const void *pdevt)
-+{
-+	return dev->devt == *(dev_t *)pdevt;
-+}
-+EXPORT_SYMBOL_GPL(device_match_devt);
-diff --git a/drivers/hwtracing/intel_th/core.c b/drivers/hwtracing/intel_th/core.c
-index 55922896d862..d5c1821b31c6 100644
---- a/drivers/hwtracing/intel_th/core.c
-+++ b/drivers/hwtracing/intel_th/core.c
-@@ -789,12 +789,6 @@ static int intel_th_populate(struct intel_th *th)
- 	return 0;
- }
- 
--static int match_devt(struct device *dev, const void *data)
--{
--	dev_t devt = (dev_t)(unsigned long)(void *)data;
--	return dev->devt == devt;
--}
--
- static int intel_th_output_open(struct inode *inode, struct file *file)
- {
- 	const struct file_operations *fops;
-@@ -802,9 +796,7 @@ static int intel_th_output_open(struct inode *inode, struct file *file)
- 	struct device *dev;
- 	int err;
- 
--	dev = bus_find_device(&intel_th_bus, NULL,
--			      (void *)(unsigned long)inode->i_rdev,
--			      match_devt);
-+	dev = bus_find_device_by_devt(&intel_th_bus, inode->i_rdev);
- 	if (!dev || !dev->driver)
- 		return -ENODEV;
- 
-diff --git a/drivers/misc/mei/main.c b/drivers/misc/mei/main.c
-index f894d1f8a53e..7310b476323c 100644
---- a/drivers/misc/mei/main.c
-+++ b/drivers/misc/mei/main.c
-@@ -858,13 +858,6 @@ static ssize_t dev_state_show(struct device *device,
- }
- static DEVICE_ATTR_RO(dev_state);
- 
--static int match_devt(struct device *dev, const void *data)
--{
--	const dev_t *devt = data;
--
--	return dev->devt == *devt;
--}
--
- /**
-  * dev_set_devstate: set to new device state and notify sysfs file.
-  *
-@@ -880,7 +873,7 @@ void mei_set_devstate(struct mei_device *dev, enum mei_dev_state state)
- 
- 	dev->dev_state = state;
- 
--	clsdev = class_find_device(mei_class, NULL, &dev->cdev.dev, match_devt);
-+	clsdev = class_find_device_by_devt(mei_class, dev->cdev.dev);
- 	if (clsdev) {
- 		sysfs_notify(&clsdev->kobj, NULL, "dev_state");
- 		put_device(clsdev);
-diff --git a/drivers/s390/crypto/zcrypt_api.c b/drivers/s390/crypto/zcrypt_api.c
-index 38a5a47b8c9c..150f6236c9bb 100644
---- a/drivers/s390/crypto/zcrypt_api.c
-+++ b/drivers/s390/crypto/zcrypt_api.c
-@@ -133,12 +133,6 @@ struct zcdn_device {
- static int zcdn_create(const char *name);
- static int zcdn_destroy(const char *name);
- 
--/* helper function, matches the devt value for find_zcdndev_by_devt() */
--static int __match_zcdn_devt(struct device *dev, const void *data)
--{
--	return dev->devt == *((dev_t *) data);
--}
--
- /*
-  * Find zcdn device by name.
-  * Returns reference to the zcdn device which needs to be released
-@@ -158,10 +152,7 @@ static inline struct zcdn_device *find_zcdndev_by_name(const char *name)
-  */
- static inline struct zcdn_device *find_zcdndev_by_devt(dev_t devt)
- {
--	struct device *dev =
--		class_find_device(zcrypt_class, NULL,
--				  (void *) &devt,
--				  __match_zcdn_devt);
-+	struct device *dev = class_find_device_by_devt(zcrypt_class, devt);
- 
- 	return dev ? to_zcdn_dev(dev) : NULL;
- }
-diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-index 566728fbaf3c..802c1210558f 100644
---- a/drivers/tty/tty_io.c
-+++ b/drivers/tty/tty_io.c
-@@ -2952,17 +2952,11 @@ void do_SAK(struct tty_struct *tty)
- 
- EXPORT_SYMBOL(do_SAK);
- 
--static int dev_match_devt(struct device *dev, const void *data)
--{
--	const dev_t *devt = data;
--	return dev->devt == *devt;
--}
--
- /* Must put_device() after it's unused! */
- static struct device *tty_get_device(struct tty_struct *tty)
- {
- 	dev_t devt = tty_devnum(tty);
--	return class_find_device(tty_class, NULL, &devt, dev_match_devt);
-+	return class_find_device_by_devt(tty_class, devt);
- }
- 
- 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index b265ab5405f9..60268aee93a8 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -942,17 +942,11 @@ static int parse_usbdevfs_streams(struct usb_dev_state *ps,
- 	return ret;
- }
- 
--static int match_devt(struct device *dev, const void *data)
--{
--	return dev->devt == (dev_t)(unsigned long)(void *)data;
--}
--
- static struct usb_device *usbdev_lookup_by_devt(dev_t devt)
- {
- 	struct device *dev;
- 
--	dev = bus_find_device(&usb_bus_type, NULL,
--			      (void *) (unsigned long) devt, match_devt);
-+	dev = bus_find_device_by_devt(&usb_bus_type, devt);
- 	if (!dev)
- 		return NULL;
- 	return to_usb_device(dev);
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 7133fc1c285d..93b2f55ef44e 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -167,6 +167,7 @@ void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
- int device_match_name(struct device *dev, const void *name);
- int device_match_of_node(struct device *dev, const void *np);
- int device_match_fwnode(struct device *dev, const void *fwnode);
-+int device_match_devt(struct device *dev, const void *pdevt);
- 
- int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
- 		     int (*fn)(struct device *dev, void *data));
-@@ -211,6 +212,18 @@ bus_find_device_by_fwnode(struct bus_type *bus, const struct fwnode_handle *fwno
- 	return bus_find_device(bus, NULL, fwnode, device_match_fwnode);
- }
- 
-+/**
-+ * bus_find_device_by_devt : device iterator for locating a particular device
-+ * matching the device type.
-+ * @bus: bus type
-+ * @devt: device type of the device to match.
-+ */
-+static inline struct device *bus_find_device_by_devt(struct bus_type *bus,
-+						     dev_t devt)
-+{
-+	return bus_find_device(bus, NULL, &devt, device_match_devt);
-+}
-+
- struct device *subsys_find_device_by_id(struct bus_type *bus, unsigned int id,
- 					struct device *hint);
- int bus_for_each_drv(struct bus_type *bus, struct device_driver *start,
-@@ -417,6 +430,18 @@ driver_find_device_by_fwnode(struct device_driver *drv,
- 	return driver_find_device(drv, NULL, fwnode, device_match_fwnode);
- }
- 
-+/**
-+ * driver_find_device_by_devt- device iterator for locating a particular device
-+ * by devt.
-+ * @driver: the driver we're iterating
-+ * @devt: devt pointer to match.
-+ */
-+static inline struct device *driver_find_device_by_devt(struct device_driver *drv,
-+							dev_t devt)
-+{
-+	return driver_find_device(drv, NULL, &devt, device_match_devt);
-+}
-+
- void driver_deferred_probe_add(struct device *dev);
- int driver_deferred_probe_check_state(struct device *dev);
- int driver_deferred_probe_check_state_continue(struct device *dev);
-@@ -583,6 +608,18 @@ class_find_device_by_fwnode(struct class *class,
- 	return class_find_device(class, NULL, fwnode, device_match_fwnode);
- }
- 
-+/**
-+ * class_find_device_by_devt : device iterator for locating a particular device
-+ * matching the device type.
-+ * @class: class type
-+ * @devt: device type of the device to match.
-+ */
-+static inline struct device *class_find_device_by_devt(struct class *class,
-+						       dev_t devt)
-+{
-+	return class_find_device(class, NULL, &devt, device_match_devt);
-+}
-+
- struct class_attribute {
- 	struct attribute attr;
- 	ssize_t (*show)(struct class *class, struct class_attribute *attr,
--- 
-2.21.0
-
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index fba32d84e578..6edacf60a226 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4114,7 +4114,7 @@ static int tcpm_try_role(const struct typec_capability *cap, int role)
+ 	mutex_lock(&port->lock);
+ 	if (tcpc->try_role)
+ 		ret = tcpc->try_role(tcpc, role);
+-	if (!ret && !tcpc->config->try_role_hw)
++	if (!ret && (!tcpc->config || !tcpc->config->try_role_hw))
+ 		port->try_role = role;
+ 	port->try_src_count = 0;
+ 	port->try_snk_count = 0;
