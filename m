@@ -2,82 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD8F71FAC
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 20:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8494671FFB
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 21:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391593AbfGWSxP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 23 Jul 2019 14:53:15 -0400
-Received: from mga06.intel.com ([134.134.136.31]:41103 "EHLO mga06.intel.com"
+        id S1730274AbfGWTQn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jul 2019 15:16:43 -0400
+Received: from mga11.intel.com ([192.55.52.93]:39759 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726621AbfGWSxP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Jul 2019 14:53:15 -0400
+        id S1728935AbfGWTQn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Jul 2019 15:16:43 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jul 2019 11:53:14 -0700
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jul 2019 12:16:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,300,1559545200"; 
-   d="scan'208";a="180829860"
-Received: from orsmsx110.amr.corp.intel.com ([10.22.240.8])
-  by orsmga002.jf.intel.com with ESMTP; 23 Jul 2019 11:53:14 -0700
-Received: from orsmsx112.amr.corp.intel.com (10.22.240.13) by
- ORSMSX110.amr.corp.intel.com (10.22.240.8) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Tue, 23 Jul 2019 11:53:14 -0700
-Received: from orsmsx103.amr.corp.intel.com ([169.254.5.29]) by
- ORSMSX112.amr.corp.intel.com ([169.254.3.253]) with mapi id 14.03.0439.000;
- Tue, 23 Jul 2019 11:53:14 -0700
-From:   "Yang, Fei" <fei.yang@intel.com>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        "john.stultz@linaro.org" <john.stultz@linaro.org>,
-        "andrzej.p@collabora.com" <andrzej.p@collabora.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v3] usb: dwc3: gadget: trb_dequeue is not updated
- properly
-Thread-Topic: [PATCH v3] usb: dwc3: gadget: trb_dequeue is not updated
- properly
-Thread-Index: AQHVPgQR482iA1i8Sk2wptVdWd1tF6bYj1lg
-Date:   Tue, 23 Jul 2019 18:53:13 +0000
-Message-ID: <02E7334B1630744CBDC55DA8586225837F8E94AC@ORSMSX103.amr.corp.intel.com>
-References: <1563497183-7114-1-git-send-email-fei.yang@intel.com>
- <87k1cescnc.fsf@linux.intel.com>
-In-Reply-To: <87k1cescnc.fsf@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ctpclassification: CTP_NT
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMGZlNTUxYTctMDE1Ni00MjQyLWFjOTEtY2M5ZjBiYzU3YzVhIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiREhrRWRSYjdoaUpJc0h2QzhsMnF5WjljUFNCMkRSbWxlZzhrS2FCOE56bEMwU2FiNTFBZ1NmN2tScEFzZDQrdiJ9
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.22.254.139]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+   d="scan'208";a="368981847"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Jul 2019 12:16:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6B63781; Tue, 23 Jul 2019 22:16:40 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] usb: dwc2: Switch to use device_property_count_u32()
+Date:   Tue, 23 Jul 2019 22:16:39 +0300
+Message-Id: <20190723191639.67883-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c 
->> index 173f532..88eed49 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2394,7 +2394,7 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
->>  	if (event->status & DEPEVT_STATUS_SHORT && !chain)
->>  		return 1;
->>  
->> -	if (event->status & DEPEVT_STATUS_IOC)
->> +	if (event->status & DEPEVT_STATUS_IOC && !chain)
->>  		return 1;
->
-> This will break the situation when we have more SGs than available TRBs. In that case we set IOC before the last so we have time to update transfer to append more TRBs.
-What's your opinion on https://patchwork.kernel.org/patch/10640137/? Checking condition "(event->status & DEPEVT_STATUS_IOC) && (trb->ctrl & DWC3_TRB_CTRL_IOC)"
-won't cause problem handling TRB shortage cases, right?
+Use use device_property_count_u32() directly, that makes code neater.
 
-> Please, send me tracepoints
-I sent you the tracepoints last Friday, any new findings?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/dwc2/params.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+index 55f841a54015..31e090ac9f1e 100644
+--- a/drivers/usb/dwc2/params.c
++++ b/drivers/usb/dwc2/params.c
+@@ -404,10 +404,7 @@ static void dwc2_get_device_properties(struct dwc2_hsotg *hsotg)
+ 		device_property_read_u32(hsotg->dev, "g-np-tx-fifo-size",
+ 					 &p->g_np_tx_fifo_size);
+ 
+-		num = device_property_read_u32_array(hsotg->dev,
+-						     "g-tx-fifo-size",
+-						     NULL, 0);
+-
++		num = device_property_count_u32(hsotg->dev, "g-tx-fifo-size");
+ 		if (num > 0) {
+ 			num = min(num, 15);
+ 			memset(p->g_tx_fifo_size, 0,
+-- 
+2.20.1
 
