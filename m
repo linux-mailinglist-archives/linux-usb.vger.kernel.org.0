@@ -2,286 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAF3719D1
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 15:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A9371A4D
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jul 2019 16:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733016AbfGWN4j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jul 2019 09:56:39 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:35844 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbfGWN4j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 09:56:39 -0400
-Received: by mail-pl1-f195.google.com with SMTP id k8so20665391plt.3;
-        Tue, 23 Jul 2019 06:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rEaM5iARO/otY5CB0Q+ud/LRqI7Ysq17G3aAmdafXi8=;
-        b=SeyXjkQAhvbw+tUwvo+eecFXjxIz3000spt05+4PQ146TkcTNLUDoZ+cIL7VBbcFhU
-         WInpgqv0jahR+72BKNZc1XatHi13pLhnHmg+vCGOTvufKAE19A9BQlJ5Z35htv54Ylnd
-         uYIRQOtdWFo4zdMCefVVPOVSlg5l5Ui7vLdUoAR6DOSb7gJkD9zOCM5jA+CRbSQx0iwn
-         6fxNf7439Q2oErrhpb/K3MeSBFDBlDMLdOm4B7AX+e+WhXosjhtQCxBpbMvI2I04dFBk
-         KXceBqIZ98NEL0LwAMeN0nY85Ril7FI/1Zkiq44NJ34No13OQ9cUvagioh5rAZlIHOEq
-         nAww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rEaM5iARO/otY5CB0Q+ud/LRqI7Ysq17G3aAmdafXi8=;
-        b=Se7b+U7hiF/0OY6oYyeevjRyhq1ZGpevcQZ/NQw4uivIuMBnAqvVi7rzzndqQ3tjp3
-         Q7i7RtIGbIVF1XAyHfUffscEN8cuag5xj5SLnFpsp5Uv0iE6za5dEllL2cO1E/gAhasA
-         3sXMswzKptqctAJ9xGT+dn0sFfMDHK2VP6uftqWhpqIuD3xTdoXiL80Qy5YpMB6rogb4
-         xovet5Un667ZBHleaCnSnLmEQF0mO9H9zLX6oE50E7K8sMh6/MtdxS2OzBRhcG3U8gwa
-         T4hLXxkEEYyxjf8xWbS3ncmy+Dvgz4vbUzEYzOBmhkuPm6XR2c6Al2Lbc8nJe26F/E41
-         1gvA==
-X-Gm-Message-State: APjAAAU74MWdZKk0vpBEeU9/4KzLc2MfdKisr7eHGFd+NPBj1H5e6eGY
-        SK6npO6T3aq6oJX+x13C+uA=
-X-Google-Smtp-Source: APXvYqwy0UdFfEUTseNw57g/L1CWJYiz26hdYYO3uV8l9BcOz+fo1TP4AbbyXm8FzaNUmTtLdwFIXQ==
-X-Received: by 2002:a17:902:7894:: with SMTP id q20mr77830015pll.339.1563890198681;
-        Tue, 23 Jul 2019 06:56:38 -0700 (PDT)
-Received: from localhost.localdomain ([125.142.23.13])
-        by smtp.gmail.com with ESMTPSA id v10sm43807453pfe.163.2019.07.23.06.56.36
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 23 Jul 2019 06:56:38 -0700 (PDT)
-Date:   Tue, 23 Jul 2019 22:56:33 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>
-Cc:     valentina.manea.m@gmail.com, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usbip: Implement SG support to vhci
-Message-ID: <20190723135633.GB5532@localhost.localdomain>
-References: <20190705164355.14025-1-suwan.kim027@gmail.com>
- <20190705164355.14025-3-suwan.kim027@gmail.com>
- <f66e55a2-16e0-8822-8b5b-3390b6c4073b@kernel.org>
+        id S1730334AbfGWO16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jul 2019 10:27:58 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:40977 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729666AbfGWO16 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 10:27:58 -0400
+Received: from [192.168.0.144] ([85.219.89.53]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MvKGv-1igeqX1MA5-00rE7b; Tue, 23 Jul 2019 16:27:52 +0200
+Subject: Re: High-Impact: xhci_hid - "Not enough bandwidth for new device
+ state"
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <27f21154-659d-67b5-ac90-b931695614c8@project-open.com>
+ <20190723124457.GB5356@kroah.com>
+ <41433e67-2496-97a5-a233-8026f13dfaba@project-open.com>
+ <20190723132419.GA4848@kroah.com>
+From:   Frank Bergmann <frank.bergmann@project-open.com>
+Message-ID: <85fa403c-4e46-c0eb-d594-6d859f9cb5af@project-open.com>
+Date:   Tue, 23 Jul 2019 16:27:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f66e55a2-16e0-8822-8b5b-3390b6c4073b@kernel.org>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <20190723132419.GA4848@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:vsOIEhTGanrYmBfkiZTNZw0jUTaoKhFPvOqbT4IRbCHeWktRVT6
+ ylO2X+wTk5fo4GA8mvI12ijnNPVZdAyi2G5g+/W8aT/Lyx515DkVf2WRd08vEFgtJEGgnTt
+ N5louq5XlkTB48YmrztNStDtEO8+JXQvaGVKVpJtIXQV2imrc6b9JiKl5SBFYHqBhcfNcja
+ Hsud2VnjnV3kzug/kTEXg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9/K3g3AJxRA=:NJJy/2p3t5kYsibZ3PCkWd
+ BLoAgQZWOdInZNx1v+qOolbZQjOQv9cmdRX80GY9wlGNsKc/+KjJsH33zJs7Nq819Jhes9yfq
+ weEyYLQe8DfjTe2ZleRPLThTqwDOukJgzMDWyn+/rd+/t7djoM6jk15UjRGg5lUEflPFTF03J
+ ZCj5tFf3r+WF63aBYyu9M/VumnLlLhU2ZbTQJIrRvIdBIs3BC6TTJHRgLd6BQLG2i1JDcMBhs
+ BRvFQBEuh7oEAnANY3+6Yy07i1nh1X9UTrIwW9nGC+h6ICMN54rIxY41/XwQsoVQ96XuPkinW
+ VmTXduQPn+UL2jlBd217lyrUQos+9xD1JWDSRA7LTL2cyd4cxqt41Q1KqLQerNJHBq+mRCMYW
+ cRQho5BapMVGYHCqEmB9QA8aKbMXHF1fwHG41nTCTFDNRGqiRPhoG9yWPrAG5yrlWYFqTk1xl
+ AwVVhoJAH5GGT/eiUqDeSdARhZieHRJKAY2Ey2pD5x/fmpn9uOwAcBfKW2piMbtveg8254EUU
+ yiCfnFiWJpiYLWtCCFQdH4f5B547rpubp0rLoeZDTByDh8Oiv1nk/iLySgLex+Pq43qLYzL+u
+ 9lnEQ8c2YuemHxJhtGoYKiqsLtRotDVl1PvYn/GLPwm80FFP2mAEYa/PSHUiHuz4u7iM91Qu/
+ XcauSAYq8uMnoIbZExFWZ1fDADhzWWu4jmoAjuLzzAJJixJa9HWIrqrRBD61JZpNXv6CcXNAp
+ Z9tsUBxt4e7MN9Rw0xRlEQWwW3omU+rJjWcT0XyqY6g1HhqX57zObi/qcDk3vUsxFX+/UW1Rp
+ NMeuzy/
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 22, 2019 at 09:51:30PM -0600, shuah wrote:
-> On 7/5/19 10:43 AM, Suwan Kim wrote:
-> > There are bugs on vhci with usb 3.0 storage device. Originally, vhci
-> > doesn't supported SG, so USB storage driver on vhci breaks SG list
-> 
-> grammar - Currently vhci doesn't support?
+Hi!
 
-Yes, that is what I intended. Please excuse my poor english.
 
-> > into multiple URBs and it causes error that a transfer got terminated
-> > too early because the transfer length for one of the URBs was not
-> > divisible by the maxpacket size.
-> > 
-> > In this patch, vhci basically support SG and it sends each SG list
-> 
-> What does basically support mean here? Do you mean basic support?
+I just want to make the case that this is quite an important issue. I 
+was very surprised to hear from the CIO of one of our customers that 
+they had the same issue. This kept them from offering Ubuntu and an 
+option for their Dell laptops. Like myself, these guys need to run 
+GoToMeeting/WebEx together with a Windows VM for business.
 
-What I intended was that vhci supports SG regardless of whether the
-server's host controller supports SG or not, because stub driver
-splits SG list into several URBs if the server's host controller
-doesn't support SG. I will rewrite the description to make it more
-clear.
 
-> > entry to the stub driver. Then, the stub driver sees the total length
-> > of the buffer and allocates SG table and pages according to the total
-> > buffer length calling sgl_alloc(). After the stub driver receives
-> > completed URB, it again sends each SG list entry to vhci.
-> > 
-> > If HCD of the server doesn't support SG, the stub driver breaks a
-> > single SG reqeust into several URBs and submit them to the server's
-> > HCD. When all the split URBs are completed, the stub driver
-> > reassembles the URBs into a single return command and sends it to
-> > vhci.
-> > 
-> > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> > ---
-> >   drivers/usb/usbip/stub.h         |   7 +-
-> >   drivers/usb/usbip/stub_main.c    |  52 +++++---
-> >   drivers/usb/usbip/stub_rx.c      | 207 ++++++++++++++++++++++---------
-> >   drivers/usb/usbip/stub_tx.c      | 108 +++++++++++-----
-> >   drivers/usb/usbip/usbip_common.c |  60 +++++++--
-> >   drivers/usb/usbip/vhci_hcd.c     |  10 +-
-> >   drivers/usb/usbip/vhci_tx.c      |  49 ++++++--
-> >   7 files changed, 372 insertions(+), 121 deletions(-)
-> > 
-> 
-> btw checkpatch isn't very happy with this patch. A few coding style
-> issues. Please run checkpatch before sending patches.
+I understand this is probably a difficult bug and that it is difficult 
+to reproduce. However, this combination of WebCam + VM is required by 
+everybody except for a very few privileged "Linux only" developers.
 
-I'm sorry for sending it without running checkpatch.
-I will fix all problems with checkpatch and resend v3.
 
-> > diff --git a/drivers/usb/usbip/stub.h b/drivers/usb/usbip/stub.h
-> > index 35618ceb2791..d11270560c24 100644
-> > --- a/drivers/usb/usbip/stub.h
-> > +++ b/drivers/usb/usbip/stub.h
-> > @@ -52,7 +52,11 @@ struct stub_priv {
-> >   	unsigned long seqnum;
-> >   	struct list_head list;
-> >   	struct stub_device *sdev;
-> > -	struct urb *urb;
-> > +	struct urb **urbs;
-> > +	struct scatterlist *sgl;
-> > +	int num_urbs;
-> > +	int completed_urbs;
-> > +	int urb_status;
-> >   	int unlinking;
-> >   };
-> > @@ -86,6 +90,7 @@ extern struct usb_device_driver stub_driver;
-> >   struct bus_id_priv *get_busid_priv(const char *busid);
-> >   void put_busid_priv(struct bus_id_priv *bid);
-> >   int del_match_busid(char *busid);
-> > +void stub_free_priv_and_urb(struct stub_priv *priv);
-> >   void stub_device_cleanup_urbs(struct stub_device *sdev);
-> >   /* stub_rx.c */
-> > diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-> > index 2e4bfccd4bfc..dec5af9f7179 100644
-> > --- a/drivers/usb/usbip/stub_main.c
-> > +++ b/drivers/usb/usbip/stub_main.c
-> > @@ -6,6 +6,7 @@
-> >   #include <linux/string.h>
-> >   #include <linux/module.h>
-> >   #include <linux/device.h>
-> > +#include <linux/scatterlist.h>
-> >   #include "usbip_common.h"
-> >   #include "stub.h"
-> > @@ -288,6 +289,39 @@ static struct stub_priv *stub_priv_pop_from_listhead(struct list_head *listhead)
-> >   	return NULL;
-> >   }
-> > +void stub_free_priv_and_urb(struct stub_priv *priv)
-> > +{
-> > +	struct urb *urb;
-> > +	int i;
-> > +
-> > +	for (i = 0; i < priv->num_urbs; i++) {
-> > +		urb = priv->urbs[i];
-> > +		if (urb->setup_packet) {
-> > +			kfree(urb->setup_packet);
-> > +			urb->setup_packet = NULL;
-> > +		}
-> > +
-> 
-> You don't need urb->setup_packet null check. kfree() is safe
-> to call with null pointer. btw checkpatch tells you this.
 
-Ok. I will remove null check.
+ > It all depends on what that devices are asking for
 
-> > +		if (urb->transfer_buffer && !priv->sgl) {
-> 
-> Is this conditional necessary? Why are you checking priv->sgl?
-> Are there cases where you have memory leak? Is there a case
-> when urb->transfer_buffer valid when priv->sgl isn't null?
 
-In my implementation, if URB has an SG list, whether SG is supported
-by the server's host controller or not, stub driver allocates SG list
-and pages calling sg_alloc().
+The Logitech C922 has a H.264 compression on the chip. The "bandwidth 
+calculator" (https://www.google.es/search?q=H.264+bandwidth) says it 
+needs 1024kBps for 1080p @ 30fps.
 
-At this time, if the server's host controller does not support SG,
-stub driver stores SG list in stub_priv->sgl (not in urb->sg) and
-allocates URBs according to each entry of SG list. The page of each
-SG list entry is mapped to each URB's transfer buffer.
-(urb->transfer_buffer = sg_virt(sg))
+Not sure if this is true, and I'm not sure what the devices actually 
+does, though...
 
-So, when deallocating these URBs, stub driver doesn't deallocate the
-URB's buffer with kfree(), but use sgl_free() to deallocate the SG
-list stored in stub_priv (priv->sgl) and all the pages mapped to each
-URB's buffer at once.
 
-> > +			kfree(urb->transfer_buffer);
-> > +			urb->transfer_buffer = NULL;
-> > +		}
-> > +
-> > +		if (urb->num_sgs) {
-> > +			sgl_free(urb->sg);
-> > +			urb->sg = NULL;
-> > +			urb->num_sgs = 0;
-> > +		}
-> > +
-> > +		usb_free_urb(urb);
-> > +	}
-> > +
-> > +	list_del(&priv->list);
-> > +	if (priv->sgl)
-> > +		sgl_free(priv->sgl);
-> > +	kfree(priv->urbs);
-> > +	kmem_cache_free(stub_priv_cache, priv);
-> > +}
-> > +
-> >   static struct stub_priv *stub_priv_pop(struct stub_device *sdev)
-> >   {
-> >   	unsigned long flags;
-> > @@ -314,25 +348,15 @@ static struct stub_priv *stub_priv_pop(struct stub_device *sdev)
-> >   void stub_device_cleanup_urbs(struct stub_device *sdev)
-> >   {
-> >   	struct stub_priv *priv;
-> > -	struct urb *urb;
-> > +	int i;
-> >   	dev_dbg(&sdev->udev->dev, "Stub device cleaning up urbs\n");
-> >   	while ((priv = stub_priv_pop(sdev))) {
-> > -		urb = priv->urb;
-> > -		dev_dbg(&sdev->udev->dev, "free urb seqnum %lu\n",
-> > -			priv->seqnum);
-> > -		usb_kill_urb(urb);
-> > -
-> > -		kmem_cache_free(stub_priv_cache, priv);
-> > -
-> > -		kfree(urb->transfer_buffer);
-> > -		urb->transfer_buffer = NULL;
-> > +		for (i = 0; i < priv->num_urbs; i++)
-> > +			usb_kill_urb(priv->urbs[i]);
-> > -		kfree(urb->setup_packet);
-> > -		urb->setup_packet = NULL;
-> > -
-> > -		usb_free_urb(urb);
-> > +		stub_free_priv_and_urb(priv);
-> >   	}
-> >   }
-> > diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-> > index b0a855acafa3..8e32697acabb 100644
-> > --- a/drivers/usb/usbip/stub_rx.c
-> > +++ b/drivers/usb/usbip/stub_rx.c
-> > @@ -7,6 +7,7 @@
-> >   #include <linux/kthread.h>
-> >   #include <linux/usb.h>
-> >   #include <linux/usb/hcd.h>
-> > +#include <linux/scatterlist.h>
-> >   #include "usbip_common.h"
-> >   #include "stub.h"
-> > @@ -201,7 +202,7 @@ static void tweak_special_requests(struct urb *urb)
-> >   static int stub_recv_cmd_unlink(struct stub_device *sdev,
-> >   				struct usbip_header *pdu)
-> >   {
-> > -	int ret;
-> > +	int ret, i;
-> >   	unsigned long flags;
-> >   	struct stub_priv *priv;
-> > @@ -246,12 +247,13 @@ static int stub_recv_cmd_unlink(struct stub_device *sdev,
-> >   		 * so a driver in a client host will know the failure
-> >   		 * of the unlink request ?
-> >   		 */
-> > -		ret = usb_unlink_urb(priv->urb);
-> > -		if (ret != -EINPROGRESS)
-> > -			dev_err(&priv->urb->dev->dev,
-> > -				"failed to unlink a urb # %lu, ret %d\n",
-> > -				priv->seqnum, ret);
-> > -
-> > +		for (i = priv->completed_urbs; i < priv->num_urbs; i++) {
-> > +			ret = usb_unlink_urb(priv->urbs[i]);
-> > +			if (ret != -EINPROGRESS)
-> > +				dev_err(&priv->urbs[i]->dev->dev,
-> > +					"failed to unlink a urb # %lu, ret %d\n",
-> > +					priv->seqnum, ret);
-> 
-> This could result in several error messages. This code path is much
-> longer now compared to previous.
+ > Linux solved
 
-I don't know what function or part you point to. stub_recv_cmd_unlink()?
 
-Regards,
-Suwan Kim
+Ok, so you have a clear idea what part of the driver causes the error, 
+that's a step forward.
+
+
+But I can't imagine it's "real" bandwidth. USB 3.1 can handle two 
+full-HD screens plus a Gigabit Ethernet on the same 5GBit lanes... A few 
+megabit for compressed vido plus a few _kilo_ bits/s for audio...
+
+=> Is there a way to debug these bandwidth requests for me? Maybe you 
+want to include bandwidth requests in the kernel logs in the future if 
+these issues are so wide spread?
+
+=> Maybe you can recommend me a WebCam with tripod option that is known 
+to work well with Linux?
+
+=> From what I understand I should now test with VirtualBox and KVM/QEMU 
+and check if the same issue appears. I will do this and let you know 
+about the results.
+
+
+ > configuration of your devices and root hubs
+
+
+I've got a brand new Dell XPX 15 9370 Laptop. No other USB hubs, 
+devices, no change to any configuration. I chose the model because it is 
+supposed to be the same that Linus Torvalds uses (well, XPS 13...)
+
+
+
+I can offer OpenVPN access to my laptop for reproducing the issues. I 
+also offer to buy a Logitech C922 WebCam if somebody wants to get 
+seriously down to this issue.
+
+
+Best Regards,
+Frank
+
+---
+Frank Bergmann
+Dipl.-Ing., MBA
+Founder ]project-open[
+Tel: +34 932 202 088 (Spain)
+Cell: +34 609 953 751
+Fax: +34 932 890 729
+
+mailto:frank.bergmann@project-open.com
+http://www.project-open.com
+http://www.twitter.com/projop
+http://www.facebook.com/projectopen.org
+http://www.linkedin.com/in/fraber
+http://www.xing.com/profile/Frank_Bergmann23
+
