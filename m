@@ -2,148 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C175B72FF6
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 15:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4597300A
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 15:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbfGXNdk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Jul 2019 09:33:40 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:37211 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726702AbfGXNdk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Jul 2019 09:33:40 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 19so20975501pfa.4
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2019 06:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J0GhZpS0srXIOnUiUqnG1RMs2asMr9aCIfA9MEV0O0k=;
-        b=VE6f3B/j/Hloq91g34w7cU6EJwSi1nIsFo5cpqcKPB4wSjLqKtCjrk6xV/Qo+dRQOj
-         ustHBXwbg8hQtIVMrjFZDuKIMOWob41/CDoTVSQR15xSnaEqk3DSfWoxxEkNXfSiEuNB
-         79J9NqA3VyqEPRGuxPUzsUAWpzzgTU8YTkYQLsfl7Q8uCiez7HeRd9MLqvNP/n8gPFEE
-         z9mztfOCLm560W8DqpGZgC7TS/+uLCZMQsTPil2XheMQfCvJpd3L4u4uKlER48iLnFao
-         vcyF62OzJgmLEUHKUAchb1ImUpaGkLw4B7CoaK6xFUvEB+Zmup6CFM7xKaT7zTKO4liY
-         awHQ==
+        id S1726939AbfGXNiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Jul 2019 09:38:06 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:47081 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726720AbfGXNiG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Jul 2019 09:38:06 -0400
+Received: by mail-io1-f69.google.com with SMTP id s83so51076574iod.13
+        for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2019 06:38:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J0GhZpS0srXIOnUiUqnG1RMs2asMr9aCIfA9MEV0O0k=;
-        b=Uqy8IAOJ2V+Mn1AXjrnEGmWfgaJxZXZbmbd76OecwQkuFdMai71ODIUy1E2v0hTrvp
-         ckoIYp63omAtZGPtfiYU0SE4D0U+lQLZwTjy+8iRXzNtAri4Vbih/yPBFS4u7d4QkSol
-         Xk5bKmXbpM7DKF90ZLmAmfatGrWdR7XAG1CJItOg0LQ2u2f64JxJ1ZF3n8yb0qy0YW58
-         gaQcOJkldeNGAn/Ny79DzsZg/pO1bIujfkEzCWeLxK43HcdHLgPSvn5Hr+DnhxzbRMdq
-         G2iwr3pIIKmwm4Yrym8kHo1SEsdPk7/dQnNwkJRO1UaMAbLwFssNCYaf7+PouyFwl83g
-         QCNw==
-X-Gm-Message-State: APjAAAV2orVCEEOUgmX710H4DYnUgpsVF3A2fow7lxaa37rg8GkueEjs
-        6/R9rUNcMr3aIiKyg/KU/bKzpt0LMMeIL1BlYH+GOw==
-X-Google-Smtp-Source: APXvYqyIpN5q5sz17jm2tXisdxSgvqQnfx2AqqarX+pX6yvcEDL6Esp3HraF93WgvRR0H/jzRHcEuZasgMbwifhPGjY=
-X-Received: by 2002:a63:c442:: with SMTP id m2mr82713180pgg.286.1563975213181;
- Wed, 24 Jul 2019 06:33:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=YmlYbeeXg8KipqZm+95RyiuSWYiaWNME9/ZKLNADTzI=;
+        b=NOWAB9CLcQ7S+wHzPrCsxHtucRVP+HaRgnNAb8PMOFQz71H5PJLALZ1PAQWnUFsGNl
+         eSakvPiRHXmZuMkZEJnhcoLHB45GgUssxCl0t840CQN4UkWivQl2OYhOAvKtWewfUqAr
+         4fopNKHPI5IN/F7Sv3J7O/VpBQcoTYggA5vZpTkDTDf/FipekLLg1CiOc2eWPNFp2BcR
+         vh5c7qR53QobctnErs1Er/l5XcaCskarkSzgtl9I6+fySoKOYL70roXsXcf9UeiUXJlH
+         O92bcLOp7VNAag6FCjUAtALS8g5o8dqovfcJMmZyQXocYcUHB3NRWuLJjsgZ7K81Py3j
+         gOEw==
+X-Gm-Message-State: APjAAAVCGGUnF0gJIWfqNKZG3xA/LLkaqDPGH2hurrsB2wQgD0m4BMqQ
+        dTLioUa9/Af6kzmFoex204jtOLaoQ1azDYOejjBxJpSCF4ER
+X-Google-Smtp-Source: APXvYqz2PxYFGpRCTtrjQIXkXtIveQHB4aG4N+6UmgzI6K4L4WM1q80LZoqSsv2AF51hyBZCqSCxZDmCm99YFNaGIo/9e+AxJw1A
 MIME-Version: 1.0
-References: <000000000000acb99a058b0d5741@google.com> <000000000000ac8f77058e0d11e9@google.com>
- <CAAeHK+zT+VhrxPDNFxCoVDrgBhmTiAuRjQv_A6SC91x8w0HmoQ@mail.gmail.com> <s5hlfwn376e.wl-tiwai@suse.de>
-In-Reply-To: <s5hlfwn376e.wl-tiwai@suse.de>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 24 Jul 2019 15:33:21 +0200
-Message-ID: <CAAeHK+x_P3WHxMmgimSKrHwew_HCyi9a67Tw3qPu5TTESAhL3w@mail.gmail.com>
-Subject: Re: WARNING in snd_usb_motu_microbookii_communicate/usb_submit_urb
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+d952e5e28f5fb7718d23@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a02:c550:: with SMTP id g16mr83081468jaj.49.1563975485145;
+ Wed, 24 Jul 2019 06:38:05 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 06:38:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003acc06058e6d6b70@google.com>
+Subject: general protection fault in __pm_runtime_resume
+From:   syzbot <syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        len.brown@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, pavel@ucw.cz,
+        rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 3:15 PM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Tue, 23 Jul 2019 19:03:29 +0200,
-> Andrey Konovalov wrote:
-> >
-> > (Takashi, with your helper check syzkaller now generates a new bug
-> > report (not reported by syzbot yet due to breakage during kernel boot
-> > on 5.3-rc1, so see below) and I guess this has to do with a missing ep
-> > != NULL check).
-> >
-> > kasan: CONFIG_KASAN_INLINE enabled
-> > kasan: GPF could be caused by NULL-ptr deref or user memory access
-> > general protection fault: 0000 [#1] SMP KASAN
-> > CPU: 1 PID: 74 Comm: kworker/1:1 Not tainted 5.3.0-rc1+ #40
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-> > Workqueue: usb_hub_wq hub_event
-> > RIP: 0010:snd_usb_pipe_sanity_check+0x80/0x130 sound/usb/helper.c:75
-> > Code: 48 c1 ea 03 80 3c 02 00 0f 85 b3 00 00 00 48 8b 6d 00 c1 eb 1e
-> > 48 b8 00 00 00 00 00 fc ff df 48 8d 7d 03 48 89 fa 48 c1 ea 03 <0f> b6
-> > 04 02 48 89 fa 83 e2 07 38 d0 7f 04 84 c0 75 7b 48 b8 00 00
-> > RSP: 0018:ffff88806c33f0a8 EFLAGS: 00010246
-> > RAX: dffffc0000000000 RBX: 0000000000000001 RCX: ffffffff833819c2
-> > RDX: 0000000000000000 RSI: ffffffff833819dc RDI: 0000000000000003
-> > RBP: 0000000000000000 R08: ffff88806c330000 R09: fffffbfff0d1a792
-> > R10: fffffbfff0d1a791 R11: ffffffff868d3c8f R12: 0000000000000000
-> > R13: dffffc0000000000 R14: ffff88806975cc80 R15: ffff88806975c4a0
-> > FS:  0000000000000000(0000) GS:ffff88806d100000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007fcc3a48c000 CR3: 000000006861c003 CR4: 0000000000160ee0
-> > Call Trace:
-> >  snd_usb_accessmusic_boot_quirk sound/usb/quirks.c:835 [inline]
-> >  snd_usb_apply_boot_quirk+0xa19/0xc60 sound/usb/quirks.c:1267
-> >  usb_audio_probe+0x2ec/0x1f40 sound/usb/card.c:576
-> (snip)
->
-> So it's a NULL pointer returned from usb_pipe_endpoint() with an
-> invalid pipe.  The fix patch is attached below.
+Hello,
 
-Thanks for the fix! Do you think it makes sense to reuse the already
-existing usb_urb_ep_type_check() function instead of
-snd_usb_pipe_sanity_check() as Hillf suggested? They seem to be doing
-essentially the same thing.
+syzbot found the following crash on:
 
->
->
-> thanks,
->
-> Takashi
->
-> -- 8< --
-> From: Takashi Iwai <tiwai@suse.de>
-> Subject: [PATCH] ALSA: usb-audio: Fix NULL dereference at pipe sanity check
->
-> The newly introduced helper for a sanity check of a pipe causes an
-> Oops due to the NULL pointer returned from usb_pipe_endpoint() with an
-> invalid pipe.  Let's fix it.
->
-> Fixes: 801ebf1043ae ("ALSA: usb-audio: Sanity checks for each pipe and EP types")
-> Reported-by: Andrey Konovalov <andreyknvl@google.com>
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> ---
->  sound/usb/helper.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/sound/usb/helper.c b/sound/usb/helper.c
-> index 71d5f540334a..919d69e0aba3 100644
-> --- a/sound/usb/helper.c
-> +++ b/sound/usb/helper.c
-> @@ -72,6 +72,8 @@ int snd_usb_pipe_sanity_check(struct usb_device *dev, unsigned int pipe)
->         struct usb_host_endpoint *ep;
->
->         ep = usb_pipe_endpoint(dev, pipe);
-> +       if (!ep)
-> +               return -EINVAL;
->         if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
->                 return -EINVAL;
->         return 0;
-> --
-> 2.16.4
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/s5hlfwn376e.wl-tiwai%40suse.de.
+HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=15562358600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+dashboard link: https://syzkaller.appspot.com/bug?extid=3cbe5cd105d2ad56a1df
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
+
+kasan: CONFIG_KASAN_INLINE enabled
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] SMP KASAN
+CPU: 0 PID: 3715 Comm: syz-executor.3 Not tainted 5.2.0-rc6+ #15
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
+Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
+00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
+89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
+RSP: 0018:ffff8881d99d78e0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffc90003f3f000
+RDX: 0000000416d8686d RSI: ffffffff82676841 RDI: 00000020b6c3436a
+RBP: 00000020b6c340a9 R08: ffff8881c6d64800 R09: fffffbfff0e84c25
+R10: ffff8881d99d7940 R11: ffffffff87426127 R12: 0000000000000004
+R13: 0000000000000000 R14: ffff8881d9b94000 R15: ffffffff897f9048
+FS:  00007f047f542700(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30f21000 CR3: 00000001ca032000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
+  usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1707
+  usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
+  hid_hw_power include/linux/hid.h:1038 [inline]
+  hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
+  chrdev_open+0x219/0x5c0 fs/char_dev.c:413
+  do_dentry_open+0x497/0x1040 fs/open.c:778
+  do_last fs/namei.c:3416 [inline]
+  path_openat+0x1430/0x3ff0 fs/namei.c:3533
+  do_filp_open+0x1a1/0x280 fs/namei.c:3563
+  do_sys_open+0x3c0/0x580 fs/open.c:1070
+  do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x413711
+Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48  
+83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48  
+89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
+RSP: 002b:00007f047f5417a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 0000000000413711
+RDX: 0000000000000000 RSI: 0000000000084002 RDI: 00007f047f541850
+RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000293 R12: 00007f047f5426d4
+R13: 00000000004c8a7a R14: 00000000004df748 R15: 00000000ffffffff
+Modules linked in:
+---[ end trace a2dcf3f649bfec9a ]---
+RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
+Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
+00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
+89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
+RSP: 0018:ffff8881d99d78e0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffc90003f3f000
+RDX: 0000000416d8686d RSI: ffffffff82676841 RDI: 00000020b6c3436a
+RBP: 00000020b6c340a9 R08: ffff8881c6d64800 R09: fffffbfff0e84c25
+R10: ffff8881d99d7940 R11: ffffffff87426127 R12: 0000000000000004
+R13: 0000000000000000 R14: ffff8881d9b94000 R15: ffffffff897f9048
+FS:  00007f047f542700(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30f21000 CR3: 00000001ca032000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
