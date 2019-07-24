@@ -2,125 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE49C744AB
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 07:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A788674687
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 07:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390350AbfGYFEG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jul 2019 01:04:06 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:39331 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390344AbfGYFEG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 01:04:06 -0400
-Received: by mail-io1-f71.google.com with SMTP id y13so53557306iol.6
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2019 22:04:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=L3X65vZ3rUayuRUS9zN2GDw/XxLqoFgPS3n++Iwna6A=;
-        b=EjxU1t1kLJD3L9CKW+OeKsvmzLE9BRvaqI2HvWss9xZPRUDTO3BijMDWw1QCoMAqhq
-         uH+hVP5abjhvvSotqvakaJRAsrohxEVq4tJVVl8GS2cW2MXYy2y3lxbYri4RWh839Y4N
-         C51/3cHcM4wF14fyJozrklLyp962UTJX+EhpS70dlJPGiAFm5fjeBWUtOnxE9r1CtMjE
-         U6efSCVWIlyhRxpcFw8LcsBwbz4LjRApzqj1oY9HGRnhbGiEIxdTmPZjWm7aecuNQGSt
-         9U9DfNX5Yjhk5iiC55dE3sOoJZ4eBzn7P5rvxlPw5jM3ccFeiA1IU+AYfW0Wat6uB6BZ
-         ZHew==
-X-Gm-Message-State: APjAAAU2S91FbvVud8u+UOaDIOy1FYwVhGZrRLk/M4BWMGADeFkImg28
-        iFUm5YAiv2+/9nM1hNKSDFgrKfiaMD3KKBsNsuXPrQxFIbxQ
-X-Google-Smtp-Source: APXvYqzY2yjxTZN7foDFPwt5tMSC/DMH88SCMokplXfOZycOYHM8wdRoZvOlXN32Jc9l/IU3X+nVJ88t3J/1E7NAJoWMPDLtLebS
+        id S1728240AbfGYFxD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 01:53:03 -0400
+Received: from lancar.cloudhost.id ([103.134.152.236]:36091 "EHLO
+        lancar.cloudhost.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726300AbfGYFw7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 01:52:59 -0400
+X-Greylist: delayed 38405 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Jul 2019 01:52:56 EDT
+Received: from iix4.cloudhost.id ([103.15.226.60])
+        by lancar.cloudhost.id with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <admin@primasera.net>)
+        id 1hqMe2-0008P7-7z; Thu, 25 Jul 2019 03:09:57 +0800
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=primasera.net; s=default; h=Message-ID:Reply-To:Subject:To:From:Date:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=tFOQkngbiUGH23Rpb5LJFqmmucu7AUiSNKprvbGt7Mg=; b=AiyPnhVwyiro+UkaX6cFvVVBlN
+        bPH0YZOTyYDKazsGBFc9wVOnorntNilNaTocq2QafsLq+E8Sj0ws9+ptKMbCCdnq7Yn04KERuIpm+
+        FbWUawukvIy80e87X7/sdK00+23KBqahHx+sWn5X4qppjYvk1SVALDsUsXvexF42tpdFzpnmmPVNx
+        APvDxTbu4K1yaJjQ6FGHfbSU0TdCLsUZ2sAbKnn9UucpxikNmEfPRika4B3usjHf2Cty7kzW1TG2i
+        xEIi/YIL8z9QUhVCz9kUeyi1yhDBvD4+gWt/wslL1Dt8UZybXstMHjANV9nYaHuxPlZavPwjnRmX5
+        TairBu6Q==;
+Received: from [127.0.0.1] (port=44656 helo=iix4.cloudhost.id)
+        by iix4.cloudhost.id with esmtpa (Exim 4.92)
+        (envelope-from <admin@primasera.net>)
+        id 1hqL7o-004M5q-1T; Thu, 25 Jul 2019 00:32:25 +0700
 MIME-Version: 1.0
-X-Received: by 2002:a6b:b985:: with SMTP id j127mr27063494iof.186.1564031045859;
- Wed, 24 Jul 2019 22:04:05 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 22:04:05 -0700
-In-Reply-To: <0000000000003acc06058e6d6b70@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e80c0e058e7a5a31@google.com>
-Subject: Re: general protection fault in __pm_runtime_resume
-From:   syzbot <syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        len.brown@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, pavel@ucw.cz,
-        rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Thu, 25 Jul 2019 00:32:21 +0700
+From:   lzz <admin@primasera.net>
+To:     undisclosed-recipients:;
+Subject: Trabaja conmigo
+Reply-To: info.attltz244@gmail.com
+Mail-Reply-To: info.attltz244@gmail.com
+Message-ID: <6358ee700a2090d45424beacaa2b846f@primasera.net>
+X-Sender: admin@primasera.net
+User-Agent: Roundcube Webmail/1.3.8
+X-OutGoing-Spam-Status: No, score=1.8
+X-AuthUser: admin@primasera.net
+X-Originating-IP: 103.15.226.60
+X-SpamExperts-Domain: masuk.web.id
+X-SpamExperts-Username: iix4
+Authentication-Results: cloudhost.id; auth=pass (login) smtp.auth=iix4@masuk.web.id
+X-SpamExperts-Outgoing-Class: unsure
+X-SpamExperts-Outgoing-Evidence: Combined (0.86)
+X-Recommended-Action: accept
+X-Filter-ID: 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
+ Kjs=
+X-Report-Abuse-To: spam@lancar.cloudhost.id
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
 
-HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=108edb68600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-dashboard link: https://syzkaller.appspot.com/bug?extid=3cbe5cd105d2ad56a1df
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13f0b4c8600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172d8758600000
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
+Hola,
 
-kasan: CONFIG_KASAN_INLINE enabled
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] SMP KASAN
-CPU: 0 PID: 1740 Comm: syz-executor618 Not tainted 5.2.0-rc6+ #15
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
-Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
-00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
-89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
-RSP: 0018:ffff8881cf5878e0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffffff82676833
-RDX: 000000021d463be5 RSI: ffffffff82676841 RDI: 00000010ea31df2b
-RBP: 00000010ea31dc6a R08: ffff8881d1b7e000 R09: fffffbfff0e84c25
-R10: ffff8881cf587940 R11: ffffffff87426127 R12: 0000000000000004
-R13: 0000000000000000 R14: ffff8881cfd7a500 R15: ffffffff897f9040
-FS:  0000555555808880(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000043f760 CR3: 00000001d0f29000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
-  pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
-  usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1707
-  usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
-  hid_hw_power include/linux/hid.h:1038 [inline]
-  hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
-  chrdev_open+0x219/0x5c0 fs/char_dev.c:413
-  do_dentry_open+0x497/0x1040 fs/open.c:778
-  do_last fs/namei.c:3416 [inline]
-  path_openat+0x1430/0x3ff0 fs/namei.c:3533
-  do_filp_open+0x1a1/0x280 fs/namei.c:3563
-  do_sys_open+0x3c0/0x580 fs/open.c:1070
-  do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x401ad0
-Code: 01 f0 ff ff 0f 83 c0 0b 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f  
-44 00 00 83 3d fd 5b 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 94 0b 00 00 c3 48 83 ec 08 e8 fa 00 00 00
-RSP: 002b:00007ffed8d15738 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000401ad0
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007ffed8d15740
-RBP: 6666666666666667 R08: 000000000000000f R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402af0
-R13: 0000000000402b80 R14: 0000000000000000 R15: 0000000000000000
-Modules linked in:
----[ end trace 60987a9feed42828 ]---
-RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
-Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
-00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
-89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
-RSP: 0018:ffff8881cf5878e0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffffff82676833
-RDX: 000000021d463be5 RSI: ffffffff82676841 RDI: 00000010ea31df2b
-RBP: 00000010ea31dc6a R08: ffff8881d1b7e000 R09: fffffbfff0e84c25
-R10: ffff8881cf587940 R11: ffffffff87426127 R12: 0000000000000004
-R13: 0000000000000000 R14: ffff8881cfd7a500 R15: ffffffff897f9040
-FS:  0000555555808880(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000043f760 CR3: 00000001d0f29000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Tenemos algunas finanzas en su nombre de familia amablemente Póngase en 
+contacto conmigo aquí [(info.attltz244@gmail.com)] para más información.
 
+Saludos,
+Lutz
