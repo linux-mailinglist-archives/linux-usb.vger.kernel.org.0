@@ -2,54 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6C4731C8
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 16:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DB8731D8
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 16:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbfGXOhR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Jul 2019 10:37:17 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:45287 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbfGXOhR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Jul 2019 10:37:17 -0400
-Received: by mail-pf1-f193.google.com with SMTP id r1so21054505pfq.12;
-        Wed, 24 Jul 2019 07:37:16 -0700 (PDT)
+        id S1727149AbfGXOii (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Jul 2019 10:38:38 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:41702 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbfGXOih (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Jul 2019 10:38:37 -0400
+Received: by mail-pg1-f196.google.com with SMTP id x15so10994954pgg.8;
+        Wed, 24 Jul 2019 07:38:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id;
-        bh=pRKU9ZsfXWZZ6HXEE4+hVO3uJ28ZYXaqoFlhsjaVxi4=;
-        b=fMWGhYPKcg1fuDOKsGn8CYQvFZAuaZIB7tE7rMgC6NDQMQBj/0QyzUrxlcMRlxEVmF
-         tK4epoaqK+H6dO7CaiBn8iUtWOnmg4cgxB50ddYJ0cyMj3vqRSHq/UzwpFXmX84IRMY8
-         EyMM1e6q/T9MUftK6cipdFzbgiToXfk7+wN48E9vtlyuuJzCN0O0AxT7mqgSrtnCsHpi
-         hJ6AAzho5nsiJ1zs1GBclFkV5ZMU2vunN6zBr86IRYe+FIzZixZFVa63kqSwgg0R0kxl
-         1v2Nx+qe+2AwFjY+Ix/1sMbLh9YdLfLpDSpa+QIYTYdmeLIMG1vY1x6fVMVBybk5NgU+
-         t1nQ==
+        bh=0iznxlynbk39CbIbmo83U4Zr8dPr0WxLvC+oe7K53eQ=;
+        b=JN+C3fqBlkbxgvkb+ckuifgolUKHpLW7Ztn31ZM5bou89Wqtx74x+Sn3o83iXzQlYo
+         iUrLaGPsGq2M5Z2xGMPaQXkPJ64jxNVoSLEVGoCAdcnW9TDB6/NFaAk1MzPKLI6k6Dsk
+         /A2w4diGZuW55NVXsZjesK6rvLstiNG2QjdBeiprBzj39rPuNJTdoQoxter2D7MmYkV9
+         oYV+rxC6sw8DNqC1Ub0yO3ozOXapUhnvCe0J+YH4GIGEBbuYDOwntxqFNHu8YkgstcHr
+         suBApW9o0c0xWjjdWqkpBDlsZrDnsITZ91rh4UYjaNRUgxzFerVn8/2lVVgDc7S1HNQF
+         8hpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=pRKU9ZsfXWZZ6HXEE4+hVO3uJ28ZYXaqoFlhsjaVxi4=;
-        b=MP52jop4GxSbHrZerhNssakyAyvNfjBNJfDxr20oZsjuRFh7NETq72HerfR7z/vlXX
-         XW8RBI3I1KuwrXAwzr5LISFXhWGkrJosKxY5tfq5egupoEdYzqPXociVES3FLD1KO7WL
-         KH7Wqh9r7jvgc7+PXVRFGQrpRecx080Ee8nd40LT6sClpJWW2ODJy1lh8bR0bPJm2jr9
-         uP+xhlE5JL/tnPhY2O/fgM1LEnOYNLapPxqlUftDiEIA/qA6Uj8PoQQLq85nNk2F02p3
-         4vdXYnRWq06umN+4dVJ9qLLBHlF25ZVP7cOSGnMkZjPsBSSp1pzBRO719fXJdXYuCCxv
-         Q1Wg==
-X-Gm-Message-State: APjAAAUv5HTuwz2o994Eki3OqSbnrDHCl/pA+r4QvUCAwWq7YJEo78cE
-        nMJE/oTmRqBKUvSQ8slyBNRZHHkm
-X-Google-Smtp-Source: APXvYqwieKraIPU1vuqXBs2P3vEya9b94cEWHxfDEQcWqcn/r7eQv2O5QuSQBdz7xh3zbcwKr7DllQ==
-X-Received: by 2002:a62:35c6:: with SMTP id c189mr11694721pfa.96.1563979036030;
-        Wed, 24 Jul 2019 07:37:16 -0700 (PDT)
+        bh=0iznxlynbk39CbIbmo83U4Zr8dPr0WxLvC+oe7K53eQ=;
+        b=oEqhsxaVFtOkTMdS0A1ifIYs27CCzFk85b6Mv+Reh9iIY+ORQLdejDNcVHhnJ8S8ZP
+         Fb3GJ7iZrWNKgXIX2Yut3puBkbz7KHD8rfMLJFhi4WhJdEOTjX2k2m4oPdqUovIHlTAk
+         FkEiX3TxUIw7djAKIOkhwvLQj8g6094FrxE1PlQdWa5NmdyzBONgmWs5rRblBLmsdOvU
+         3wS+TiIpGe9AloFLhQbd/9fI1AGdKivDTclc7FBNtYkXbWGbCGNeFpGM9bwu5/14sbWt
+         7hYCOgCs0Kp78rYpuA0r3gea1cwXOccQVl051G/A4hK5k5WU/055vmtZVUyeAWRDJlVI
+         wJwg==
+X-Gm-Message-State: APjAAAXbscnuZk7bRRgxJOtyeY86lH8cYHC5ww9VimzcbnZGeDVDR1rP
+        Q/L1ZpjuCfbPOIGp7Psh6c8=
+X-Google-Smtp-Source: APXvYqyPZVcUWxK6eV6RiLAGeroO6wC5AeE1qigo5TrI1yz/eURowZFNBPZgKQXwzArOrZixf5Ab3g==
+X-Received: by 2002:a17:90a:8a0b:: with SMTP id w11mr87505460pjn.125.1563979116714;
+        Wed, 24 Jul 2019 07:38:36 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v14sm47825090pfm.164.2019.07.24.07.37.14
+        by smtp.gmail.com with ESMTPSA id a3sm49391326pfi.63.2019.07.24.07.38.35
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Jul 2019 07:37:14 -0700 (PDT)
+        Wed, 24 Jul 2019 07:38:36 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] usb: typec: tcpm: Add NULL check before dereferencing config
-Date:   Wed, 24 Jul 2019 07:37:12 -0700
-Message-Id: <1563979032-25292-1-git-send-email-linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Douglas Gilbert <dgilbert@interlog.com>
+Subject: [PATCH v2] usb: typec: tcpm: Add NULL check before dereferencing config
+Date:   Wed, 24 Jul 2019 07:38:32 -0700
+Message-Id: <1563979112-22483-1-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -103,9 +104,12 @@ is optional when registering a Type-C port. Since it is optional, we have
 to check if it is NULL before dereferencing it.
 
 Reported-by: Douglas Gilbert <dgilbert@interlog.com>
+Cc: Douglas Gilbert <dgilbert@interlog.com>
 Fixes: 96232cbc6c994 ("usb: typec: tcpm: support get typec and pd config from device properties")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
+v2: Added missing Cc:. Sorry for the noise.
+
 Doug:
     I didn't add your Tested-by: since I added more code.
     It would be great if you can re-test.
