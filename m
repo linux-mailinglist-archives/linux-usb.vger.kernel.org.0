@@ -2,133 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D9F73344
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 18:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0764473372
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 18:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728495AbfGXQB1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Jul 2019 12:01:27 -0400
-Received: from mga04.intel.com ([192.55.52.120]:23744 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728494AbfGXQB1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Jul 2019 12:01:27 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Jul 2019 09:01:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,303,1559545200"; 
-   d="scan'208";a="321380911"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jul 2019 09:01:25 -0700
-Subject: Re: KERNEL CRASH when using XHCI devices (affects any architecture,
- any USB device)
-To:     Maik Stohn <maik.stohn@seal-one.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-References: <21B63064-BAD5-4DC3-8E1A-3986CD948A93@seal-one.com>
- <20190724142031.GA3087@kroah.com>
- <F200CEE8-2611-4A83-A5FE-3D8A9E588BCD@seal-one.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <fca83889-e320-d0e0-fbb7-d260f1fcaaed@linux.intel.com>
-Date:   Wed, 24 Jul 2019 19:03:16 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727211AbfGXQOo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Jul 2019 12:14:44 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:45865 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726099AbfGXQOn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Jul 2019 12:14:43 -0400
+Received: by mail-io1-f65.google.com with SMTP id g20so90765560ioc.12;
+        Wed, 24 Jul 2019 09:14:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=U+1/75xZAzRWTYlUhVUY0io4DCPgugEaKO5dzrfUzCg=;
+        b=Jom3cCcKCdIjdKHK36v0+Rixw+zNQp9Y1uZS2BLcrqFec8yf/tPySNh6DIXI2BLp0G
+         HClAupm8QqbjVgzD8YmgE9z5BkhaGKdTVXm8HP0BgnPL+FbKYSL7/+rgp3cvx5btXg7k
+         PafbhZoMQvBb7zOcfhgfC27fUhWwn+kQyLA/lea9twrePAv/AXy1FgUquNLtQXGqkhdq
+         d4Ycwg6U6/uehqQO95vTCL7e3cYBTlSa3VB48qKLOK/Qp6vFmDTMQJqhrr/ylhBuAdWV
+         d1LlVk7JM6HTtGBJzWQ2p/dsCeXyWQ8TcMu4EbyIJMW05yOgLkYmhoGHpugs3lQ5cPuL
+         vS4A==
+X-Gm-Message-State: APjAAAWespELFb/DIv+ASbUS7MkZITUpCfU0ax2uxi0Dkg/EudoF9FBZ
+        /tRVo4CA3628NrmigRH5KQ==
+X-Google-Smtp-Source: APXvYqw/2u0AejiCtJ2dnt2U6+ugYb6v99MWFKK9mR3zL7gqP8joHRKeGopKNVlAvpBse3T2Pg2/Nw==
+X-Received: by 2002:a5d:8347:: with SMTP id q7mr72718745ior.277.1563984882457;
+        Wed, 24 Jul 2019 09:14:42 -0700 (PDT)
+Received: from localhost ([64.188.179.254])
+        by smtp.gmail.com with ESMTPSA id t14sm39192427ioi.60.2019.07.24.09.14.40
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 24 Jul 2019 09:14:41 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 10:14:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        mark.rutland@arm.com, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [Patch V5 4/8] dt-bindings: usb: Add NVIDIA Tegra XUSB device
+ mode controller binding
+Message-ID: <20190724161436.GA9624@bogus>
+References: <1562326911-26855-1-git-send-email-nkristam@nvidia.com>
+ <1562326911-26855-5-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <F200CEE8-2611-4A83-A5FE-3D8A9E588BCD@seal-one.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1562326911-26855-5-git-send-email-nkristam@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.7.2019 17.34, Maik Stohn wrote:
->>
->> Am 24.07.2019 um 16:20 schrieb Greg KH <gregkh@linuxfoundation.org>:
->>
->> On Wed, Jul 24, 2019 at 03:27:51PM +0200, Maik Stohn wrote:
->>> KERNEL CRASH when using XHCI devices (affects any architecture, any USB device)
->>>
->>> This was already reported as a kernel bug in bugzilla (https://bugzilla.kernel.org/show_bug.cgi?id=204257) but I got told to report it here since it is usb related...
->>>
->>> Affected kernels: 5.2, 5.2.1, 5.2.2, 5.3-rc1, ...
->>>
->>> This bug is already causing real world problems with existing software and devices using SCSI BOT with raw SCSI commands and libusb software.
->>>
->>> Reproduce (tested on several different machines with 5.2,5.2.1,5.2.2,5.3rc1):
->>>
->>> - usb flash drive attached to XHCI controller (e.g. USB3.0 flash drive attached to USB3.0 port)
->>> - generic scsi module loaded (e.g. /dev/sg0 comes up when attaching the flash drive)
->>> - command line tool "sg_raw" from "sg3-utils"
->>> - execute: and press a key + return (-s1 sends one byte which is read from stdin)
->>>    $ sudo sg_raw -s1 /dev/sg0 00 00 00 00 00 00 00 00 00 00
->>>
->>> -> KERNEL Oops
->>>
->>> - same for -s2, -s3, ... up to -s8   (sending 1 to 8 bytes, exactly the maximum of bytes on my 64 bit machine where the "DMA bypass optimization / IDT" kicks in, see below)
->>>
->>> Since this can be triggered by any normal user (without any special USB device needed) I think it is important enough to fix it for the existing 5.2 kernel as well.
->>>
->>> ---
->>>
->>> Patch introducing the crash:  https://patchwork.kernel.org/patch/10919167 / commit 33e39350ebd20fe6a77a51b8c21c3aa6b4a208cf - "usb: xhci: add Immediate Data Transfer support"
->>>
->>> Reason: NULL pointer dereference
->>>
->>> ---
->>>
->>> I took me quite some time to find the cause of this.
->>>
->>> I narrowed the crash down to the place inside of "xhci_queue_bulk_tx" in "xhci-ring.c" where the next SG is loaded
->>>
->>> ...
->>>     while (sg && sent_len >= block_len) {
->>>       /* New sg entry */
->>>       --num_sgs;
->>>       sent_len -= block_len;
->>>       if (num_sgs != 0) {
->>>         sg = sg_next(sg);
->>>         block_len = sg_dma_len(sg);           <================= CRASH
->>>                                                                  The comment of "sg_dma_len" clearly states "These macros should be used after a dma_map_sg call has been done..." - which was
->>>                                                                  omitted by the new "xhci_map_urb_for_dma" function since the transfer was considered suitable for IDT.
->>>         addr = (u64) sg_dma_address(sg);
->>>         addr += sent_len;
->>>       }
->>>     }
->>>     block_len -= sent_len;
->>>     send_addr = addr;
->>> ...
->>>
->>> This only happens if the transfer was cosnideres suitable for IDT.
->>> When I patched the function "xhci_urb_suitable_for_idt" to always return false (nothing suitable for IDT) everything was working fine.
->>>
->>>
->>> Unfortunately I'm not deep enough into the inner workings of the kernel usb host driver to find a solution for this other than reverting the patch for IDT.
+On Fri, Jul 05, 2019 at 05:11:47PM +0530, Nagarjuna Kristam wrote:
+> Add device-tree binding documentation for the XUSB device mode controller
+> present on Tegra210 SoC. This controller supports the USB 3.0
+> specification.
+> 
+> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+> Reviewed-by: JC Kuo <jckuo@nvidia.com>
+> ---
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  | 110 +++++++++++++++++++++
+>  1 file changed, 110 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+> new file mode 100644
+> index 0000000..c6a1b81
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+> @@ -0,0 +1,110 @@
+> +Device tree binding for NVIDIA Tegra XUSB device mode controller (XUDC)
+> +=======================================================================
+> +
+> +The Tegra XUDC controller supports both USB 2.0 HighSpeed/FullSpeed and
+> +USB 3.0 SuperSpeed protocols.
+> +
+> +Required properties:
+> +--------------------
+> +- compatible: For Tegra210, must contain "nvidia,tegra210-xudc".
+> +- reg: Must contain the base and length of all registers used.
+> +- interrupts: Must contain the XUSB device interrupt.
+> +- clocks: Must contain an entry for all clocks used.
+> +  See ../clock/clock-bindings.txt for details.
+> +- clock-names: Must include the following entries:
+> +   - dev: Clock to enable core XUSB dev clock.
+> +   - ss: Clock to enable XUSB super speed clock.
+> +   - ss_src: Clock to enable XUSB super speed dev clock.
+> +   - hs_src: Clock to enable XUSB high speed dev clock.
+> +   - fs_src: Clock to enable XUSB full speed dev clock.
+> +- nvidia,xusb-padctl: phandle to the XUSB pad controller that is used to
+> +  configure the USB pads used by the XUDC controller.
+> +- power-domains: A list of PM domain specifiers that reference each power-domain
+> +  used by the XUSB device mode controller. This list must comprise of a specifier
+> +  for the XUSBA and XUSBB power-domains. See ../power/power_domain.txt and
+> +  ../arm/tegra/nvidia,tegra20-pmc.txt for details.
+> +- power-domain-names: A list of names that represent each of the specifiers in
+> +  the 'power-domains' property. Must include 'ss' and 'dev'.
 
-Nice catch.
-The immediate data (IDT) support assumed that when there is max 8 bytes of data,
-and it's not already dma mapped then we can just copy the data directly from
-urb->transfer_buffer.
-											
-I didn't take into account that this small amount of data can be in a sg list.
+The order matters and is the opposite of the example.
 
-Does the below code help:
+> +- phys: Must contain an entry for each entry in phy-names.
+> +  See ../phy/phy-bindings.txt for details.
+> +- phy-names: Should include an entry for each PHY used by the controller.
+> +  Names must be "usb2", and "usb3" if support SuperSpeed device mode.
+> +  - "usb3" phy, SuperSpeed (SSTX+/SSTX-/SSRX+/SSRX-) data lines.
+> +  - "usb2" phy, USB 2.0 (D+/D-) data lines.
+> +
+> +For Tegra210:
+> +- reg-names: Must include the following entries:
+> +   - base: XUSB device controller registers.
+> +   - fpci: XUSB device PCI Config registers.
+> +   - ipfs: XUSB device registers.
+> +- avddio-usb-supply: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
+> +- hvdd-usb-supply: USB controller power supply. Must supply 3.3 V.
+> +
+> +
+> +Optional properties:
+> +--------------------
+> +- usb-role-switch: boolean property to indicate use of USB Role Switch driver.
+> +
+> +Sub-nodes:
+> +----------
+> +- The port would be added as subnode if use "usb-role-switch" property.
+> +  see graph.txt.
+> +
+> +Example:
+> +--------
+> +	pmc: pmc@7000e400 {
+> +		compatible = "nvidia,tegra210-pmc";
+> +		reg = <0x0 0x7000e400 0x0 0x400>;
+> +		clocks = <&tegra_car TEGRA210_CLK_PCLK>, <&clk32k_in>;
+> +		clock-names = "pclk", "clk32k_in";
+> +
+> +		powergates {
+> +			pd_xusbss: xusba {
+> +				clocks = <&tegra_car TEGRA210_CLK_XUSB_SS>;
+> +				resets = <&tegra_car 156>;
+> +				#power-domain-cells = <0>;
+> +			};
+> +
+> +			pd_xusbdev: xusbb {
+> +				clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>;
+> +				resets = <&tegra_car 95>;
+> +				#power-domain-cells = <0>;
+> +			};
+> +		};
+> +	};
+> +
+> +	xudc@700d0000 {
 
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 7a26496..f5c4144 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2175,7 +2175,8 @@ static inline bool xhci_urb_suitable_for_idt(struct urb *urb)
-         if (!usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
-             usb_endpoint_maxp(&urb->ep->desc) >= TRB_IDT_MAX_SIZE &&
-             urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE &&
--           !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
-+           !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP) &&
-+           !urb->num_sgs)
-                 return true;
-  
-         return false;
+usb@...
 
+> +		compatible = "nvidia,tegra210-xudc";
+> +		reg = <0x0 0x700d0000 0x0 0x8000>,
+> +		      <0x0 0x700d8000 0x0 0x1000>,
+> +		      <0x0 0x700d9000 0x0 0x1000>;
+> +		reg-names = "base", "fpci", "ipfs";
+> +
+> +		interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +		clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>,
+> +			 <&tegra_car TEGRA210_CLK_XUSB_SS>,
+> +			 <&tegra_car TEGRA210_CLK_XUSB_SSP_SRC>,
+> +			 <&tegra_car TEGRA210_CLK_XUSB_HS_SRC>,
+> +			 <&tegra_car TEGRA210_CLK_XUSB_FS_SRC>;
+> +		clock-names = "dev", "ss", "ss_src", "hs_src", "fs_src";
+> +
+> +		power-domains = <&pd_xusbdev>, <&pd_xusbss>;
+> +		power-domain-names = "dev", "ss";
+> +
+> +		nvidia,xusb-padctl = <&padctl>;
+> +
+> +		phys = <&{/padctl@7009f000/pads/usb2/lanes/usb2-0}>;
 
--Mathias
+Use a label.
+
+> +		phy-names = "usb2;
+> +
+> +		avddio-usb-supply = <&vdd_pex_1v05>;
+> +		hvdd-usb-supply = <&vdd_3v3_sys>;
+> +
+> +		usb-role-switch;
+> +		port {
+> +			usb_role_switch: endpoint@0 {
+
+Don't need a unit address.
+
+> +				remote-endpoint = <&bconn_ep>;
+> +			};
+> +		};
+> +
+> +	};
+> -- 
+> 2.7.4
+> 
