@@ -2,119 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAAF72438
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 04:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1991C724B9
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jul 2019 04:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727820AbfGXCGU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jul 2019 22:06:20 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:45934 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726544AbfGXCGU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 22:06:20 -0400
-Received: by mail-pg1-f196.google.com with SMTP id o13so20330081pgp.12;
-        Tue, 23 Jul 2019 19:06:20 -0700 (PDT)
+        id S1728856AbfGXCeP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jul 2019 22:34:15 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36387 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbfGXCeO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jul 2019 22:34:14 -0400
+Received: by mail-pg1-f194.google.com with SMTP id l21so20376272pgm.3;
+        Tue, 23 Jul 2019 19:34:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eUEsu1aJQ43M1dFiRUsIH0xR8QMlq0eMWSMkix2nG/s=;
-        b=SpmUwRuIct58AB5vD4iMiE7f2Wp/E4iU/jQyuqwEp/xyS9ElMer8ikqdVjtrNj3EkT
-         Z42ODOk1Yi6RlKG6jAwgXhbFKJawYA6q1E2S5mKgw37wmAJ0dbIOR/7Ng5qdm6DqkK3p
-         HkACORz9DtEO0gLLCRp1IhH1j4jhb0lfpavqRe5LVPc7fMLq1BxTMGMwkHh/0JN4zpBE
-         6RgXGsITgVOh8i1Vz3e5ucjLC9x6SeWBoWq9ZrUThpLGAtlh52CwWYJdgCXPUWW5BCPb
-         0VhQPINV/CrfaiEP/V8C2z+Vuz7kYTzXGYtIYijCf0VnuoqEtZBJmf39NE3/tVAcZS36
-         gTnw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zLRKL/gPs+H8SY77w9eVBrRyeHltVjkGP2Avoqt8jdk=;
+        b=A1c4BoDRmx0ORVvKKiL72V4Q6T65Dly7SwVr7+L8Z8PoVqhMCd5V+h3oDgzqhF0xlS
+         ZlJ7J9Vbr41LsJCV46TKMxMdiUav5iiRAbeEW/goapwL0PE8/kp5UbsQvCBCFPT9AORV
+         ICxXCjOC7KafO89PTQnfamcfZyvnOoOzc5Vk4qJApDpd/DZ7jt0f1yv5HmyrBnRAvxbg
+         9WcDNJcPQlLP1RXjnZv75dsEtr8g2WFQW8t2lkASc9U59F5Iy2iO0w06QmL0AUt8Ld5l
+         gkr5ubVzpi9i9wOrQlgbqdhZY7wz4td7IbR3XYK+nSJEdjyTBIdz88jnWffHhRwNeibw
+         GcNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eUEsu1aJQ43M1dFiRUsIH0xR8QMlq0eMWSMkix2nG/s=;
-        b=qXoh1otb4BlWYQ1SUNmO9p8zBC+0DGuGgenlgna8iyeXhuXiyMvpITdBY5yXPyGfV3
-         f4nTREu2Miq6rIi03aFI/2aZSZeRlwvQ7E0cJHsykPjyScSUZT7s8nA0LJg60dfe6lLk
-         GviYKlDZBk12ylzVZeAJPqh6qKBM07DEgOR52U9n4ma71TaaIT24Yt4NL9e6jMQ4DfcX
-         HhC8CsCNLwsZWDdbAIZnlc9Lcc3AG7tlLISsJJvlerLeibUvV6BbasYMJUyjv83+8Wy/
-         7VJcNX2VqzSf74QwOncmJv0hwMsVkdEu3S3+jinT6IQij1S9+Ownwl8IqfaTtwxGjzEk
-         xv3A==
-X-Gm-Message-State: APjAAAVn2SXA8zlxrQ5Me3oMlUrT+s2p58QGecwPsGkSIcDwmdmjcrNR
-        8rL7uy5VzxZWptcF2jX5JiA=
-X-Google-Smtp-Source: APXvYqyCAo/u0tdEDjAYadfSuXMI69XqXtjzYOL2ostY7UBdmnKxDtc1QPd76Njk33ivnhowdAXeYg==
-X-Received: by 2002:a62:1d8f:: with SMTP id d137mr8975675pfd.207.1563933979631;
-        Tue, 23 Jul 2019 19:06:19 -0700 (PDT)
-Received: from debian.net.fpt ([2405:4800:58f7:33d1:2651:be77:cf4e:952])
-        by smtp.gmail.com with ESMTPSA id 65sm48163919pgf.30.2019.07.23.19.06.16
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 23 Jul 2019 19:06:18 -0700 (PDT)
-From:   Phong Tran <tranmanphong@gmail.com>
-To:     syzbot+fd2bd7df88c606eea4ef@syzkaller.appspotmail.com
-Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org, joe@perches.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        louis@kragniz.eu, syzkaller-bugs@googlegroups.com,
-        benquike@gmail.com, linux-kernel-mentees@lists.linuxfoundation.org,
-        Phong Tran <tranmanphong@gmail.com>
-Subject: [PATCH] usb: wusbcore: fix unbalanced get/put cluster_id
-Date:   Wed, 24 Jul 2019 09:06:01 +0700
-Message-Id: <20190724020601.15257-1-tranmanphong@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <000000000000d48965058e589a94@google.com>
-References: <000000000000d48965058e589a94@google.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zLRKL/gPs+H8SY77w9eVBrRyeHltVjkGP2Avoqt8jdk=;
+        b=OTJt7pqUw+4qxm8fCFdeIOwWJWlSCn9vR3YdtDOJv5rA3myV+iS3AqXsqXCwrX4bpF
+         yZ0w1myAgfu+3IRH2oujhwgy0tIf5Vvn3TYDCnVmeWV19l1d9BLNsB+TerI3jJqEpa1F
+         K3C+NNXMvCqCPEDLwCVCfcg9FK4nXeDoGM2iZE4vBgU5OstIGwpQekrkLtaHqIrulgT9
+         BK5M3moFgPMByIExEN67N2jP0TRGEB7GT/KR2wM10mvTgo4qEMgGxpH4YqnF6g+C2qYM
+         ONngGNkTSruunPLmJvZPIKRXMvxtjsWPfE0Rk4CRENBTldFvHeXlS9uFtWdh7sMWg9dQ
+         5TLg==
+X-Gm-Message-State: APjAAAWVV27wd62xMnnwVAha2ychwlpPx/DOSJFvad6NmEC6xtTbXSY6
+        LuLRpNqiG20Y1HSC6CTonfM=
+X-Google-Smtp-Source: APXvYqzfA83c3TncrVOHNCO4gafJ0pOTxGRqj3ih5x1kS51UKLt8voYTdn970u/vx83IkL0x3MjUow==
+X-Received: by 2002:a63:5a4d:: with SMTP id k13mr76810401pgm.174.1563935654132;
+        Tue, 23 Jul 2019 19:34:14 -0700 (PDT)
+Received: from [192.168.1.5] ([110.78.179.210])
+        by smtp.googlemail.com with ESMTPSA id s66sm48054058pfs.8.2019.07.23.19.34.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jul 2019 19:34:13 -0700 (PDT)
+Subject: Re: [PATCH] USB: serial: option: Add Motorola modem UARTs
+To:     Tony Lindgren <tony@atomide.com>, Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sre@kernel.org>
+References: <20190723144956.55753-1-tony@atomide.com>
+From:   Lars Melin <larsm17@gmail.com>
+Message-ID: <75e9bccc-d76d-2bc6-f9f3-a0efc25e8238@gmail.com>
+Date:   Wed, 24 Jul 2019 09:34:09 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190723144956.55753-1-tony@atomide.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzboot reported that
-https://syzkaller.appspot.com/bug?extid=fd2bd7df88c606eea4ef
+On 7/23/2019 21:49, Tony Lindgren wrote:
 
-There is not consitency parameter in cluste_id_get/put calling.
-In case of getting the id with result is failure, the wusbhc->cluster_id
-will not be updated and this can not be used for wusb_cluster_id_put().
+> +#define MOTOROLA_VENDOR_ID			0x22b8
+> +#define MOTOROLA_PRODUCT_MDM6600		0x2a70
+> +#define MOTOROLA_PRODUCT_MDM9600		0x2e0a
+> +#define MOTOROLA_PRODUCT_MDM_RAM_DL		0x4281
+> +#define MOTOROLA_PRODUCT_MDM_QC_DL		0x900e
+> +
 
-Tested report
-https://groups.google.com/d/msg/syzkaller-bugs/0znZopp3-9k/oxOrhLkLEgAJ
+Johan, when he is back from vacation, will tell you to drop those 
+defines and instead use the values directly in the list with a comment 
+behind reflecting the device model.
+Just telling you so you can save time by sending out your v2 early..
 
-Reported-by: syzbot+fd2bd7df88c606eea4ef@syzkaller.appspotmail.com
 
-Reproduce and gdb got the details:
-
-139		addr = wusb_cluster_id_get();
-(gdb) n
-140		if (addr == 0)
-(gdb) print addr
-$1 = 254 '\376'
-(gdb) n
-142		result = __hwahc_set_cluster_id(hwahc, addr);
-(gdb) print result
-$2 = -71
-(gdb) break wusb_cluster_id_put
-Breakpoint 3 at 0xffffffff836e3f20: file drivers/usb/wusbcore/wusbhc.c, line 384.
-(gdb) s
-Thread 2 hit Breakpoint 3, wusb_cluster_id_put (id=0 '\000') at drivers/usb/wusbcore/wusbhc.c:384
-384		id = 0xff - id;
-(gdb) n
-385		BUG_ON(id >= CLUSTER_IDS);
-(gdb) print id
-$3 = 255 '\377'
-
-Signed-off-by: Phong Tran <tranmanphong@gmail.com>
----
- drivers/usb/host/hwa-hc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/hwa-hc.c b/drivers/usb/host/hwa-hc.c
-index 09a8ebd95588..6968b9f2b76b 100644
---- a/drivers/usb/host/hwa-hc.c
-+++ b/drivers/usb/host/hwa-hc.c
-@@ -159,7 +159,7 @@ static int hwahc_op_start(struct usb_hcd *usb_hcd)
- 	return result;
- 
- error_set_cluster_id:
--	wusb_cluster_id_put(wusbhc->cluster_id);
-+	wusb_cluster_id_put(addr);
- error_cluster_id_get:
- 	goto out;
- 
--- 
-2.20.1
-
+best rgds
+/Lars
