@@ -2,41 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1316374816
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 09:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C0074872
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 09:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388111AbfGYH3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jul 2019 03:29:33 -0400
-Received: from mga17.intel.com ([192.55.52.151]:29860 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388107AbfGYH3c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Jul 2019 03:29:32 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jul 2019 00:29:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,306,1559545200"; 
-   d="scan'208";a="321588438"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by orsmga004.jf.intel.com with ESMTP; 25 Jul 2019 00:29:31 -0700
-Subject: Re: KERNEL CRASH when using XHCI devices (affects any architecture,
- any USB device)
-To:     Maik Stohn <maik.stohn@seal-one.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-References: <21B63064-BAD5-4DC3-8E1A-3986CD948A93@seal-one.com>
- <20190724142031.GA3087@kroah.com>
- <F200CEE8-2611-4A83-A5FE-3D8A9E588BCD@seal-one.com>
- <fca83889-e320-d0e0-fbb7-d260f1fcaaed@linux.intel.com>
- <8F5BB91F-39D7-43D0-AED1-EE74E5BC717F@seal-one.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <48336068-5a17-1b65-fa27-e9073e522b20@linux.intel.com>
-Date:   Thu, 25 Jul 2019 10:31:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2388388AbfGYHuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 03:50:08 -0400
+Received: from smtprelay-out1.synopsys.com ([198.182.61.142]:33286 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2387988AbfGYHuI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 03:50:08 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 94951C0AE6;
+        Thu, 25 Jul 2019 07:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1564041007; bh=Q9XoYl4c4Fyjc8KGZ4LFQNYhsDGYZyt7qitsFimd5zA=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=B6LQxjFhCv8VFeVK4Mb+WJfnzRp6TE9lrymdMvwe1Wmg2G3dzKEbsZp89lajclE5z
+         DH3sYlUbFxS1H3bBC9BoKqGByyrlPz7zQ8+S/ILTDBNpEmaGYGrrbx345ovl24RPT8
+         6+ge/zq1lIhEIhSDTJudarjJJcPzkKljMMaoslR6EvrKWeywFdUHb9O7iWJJVG3GeW
+         thWltFSU5lxpk7VQUjYN79t1Phy3N3D586R6PcLaVhSt2dMPOGQjY4tm4nhU5CKRo4
+         x1DJxxEbz1jKEnQNsbRa4iTU+BLZZ3vm0VBTPliavsMoBfc1HFcbWmnb1Z5NwzFuAf
+         Ot3Obztvg1lmg==
+Received: from [10.116.70.206] (hminas-7480.internal.synopsys.com [10.116.70.206])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 6F00FA0057;
+        Thu, 25 Jul 2019 07:50:05 +0000 (UTC)
+Subject: Re: [PATCH v1] usb: dwc2: Switch to use device_property_count_u32()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20190723191639.67883-1-andriy.shevchenko@linux.intel.com>
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Message-ID: <7be5b50b-04d8-1878-317a-ad020348c92d@synopsys.com>
+Date:   Thu, 25 Jul 2019 11:50:04 +0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <8F5BB91F-39D7-43D0-AED1-EE74E5BC717F@seal-one.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <20190723191639.67883-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -44,114 +50,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.7.2019 19.29, Maik Stohn wrote:
->>
->> Am 24.07.2019 um 18:03 schrieb Mathias Nyman <mathias.nyman@linux.intel.com>:
->>
->> On 24.7.2019 17.34, Maik Stohn wrote:
->>>>
->>>> Am 24.07.2019 um 16:20 schrieb Greg KH <gregkh@linuxfoundation.org>:
->>>>
->>>> On Wed, Jul 24, 2019 at 03:27:51PM +0200, Maik Stohn wrote:
->>>>> KERNEL CRASH when using XHCI devices (affects any architecture, any USB device)
->>>>>
->>>>> This was already reported as a kernel bug in bugzilla (https://bugzilla.kernel.org/show_bug.cgi?id=204257) but I got told to report it here since it is usb related...
->>>>>
->>>>> Affected kernels: 5.2, 5.2.1, 5.2.2, 5.3-rc1, ...
->>>>>
->>>>> This bug is already causing real world problems with existing software and devices using SCSI BOT with raw SCSI commands and libusb software.
->>>>>
->>>>> Reproduce (tested on several different machines with 5.2,5.2.1,5.2.2,5.3rc1):
->>>>>
->>>>> - usb flash drive attached to XHCI controller (e.g. USB3.0 flash drive attached to USB3.0 port)
->>>>> - generic scsi module loaded (e.g. /dev/sg0 comes up when attaching the flash drive)
->>>>> - command line tool "sg_raw" from "sg3-utils"
->>>>> - execute: and press a key + return (-s1 sends one byte which is read from stdin)
->>>>>    $ sudo sg_raw -s1 /dev/sg0 00 00 00 00 00 00 00 00 00 00
->>>>>
->>>>> -> KERNEL Oops
->>>>>
->>>>> - same for -s2, -s3, ... up to -s8   (sending 1 to 8 bytes, exactly the maximum of bytes on my 64 bit machine where the "DMA bypass optimization / IDT" kicks in, see below)
->>>>>
->>>>> Since this can be triggered by any normal user (without any special USB device needed) I think it is important enough to fix it for the existing 5.2 kernel as well.
->>>>>
->>>>> ---
->>>>>
->>>>> Patch introducing the crash:  https://patchwork.kernel.org/patch/10919167 / commit 33e39350ebd20fe6a77a51b8c21c3aa6b4a208cf - "usb: xhci: add Immediate Data Transfer support"
->>>>>
->>>>> Reason: NULL pointer dereference
->>>>>
->>>>> ---
->>>>>
->>>>> I took me quite some time to find the cause of this.
->>>>>
->>>>> I narrowed the crash down to the place inside of "xhci_queue_bulk_tx" in "xhci-ring.c" where the next SG is loaded
->>>>>
->>>>> ...
->>>>>     while (sg && sent_len >= block_len) {
->>>>>       /* New sg entry */
->>>>>       --num_sgs;
->>>>>       sent_len -= block_len;
->>>>>       if (num_sgs != 0) {
->>>>>         sg = sg_next(sg);
->>>>>         block_len = sg_dma_len(sg);           <================= CRASH
->>>>>                                                                  The comment of "sg_dma_len" clearly states "These macros should be used after a dma_map_sg call has been done..." - which was
->>>>>                                                                  omitted by the new "xhci_map_urb_for_dma" function since the transfer was considered suitable for IDT.
->>>>>         addr = (u64) sg_dma_address(sg);
->>>>>         addr += sent_len;
->>>>>       }
->>>>>     }
->>>>>     block_len -= sent_len;
->>>>>     send_addr = addr;
->>>>> ...
->>>>>
->>>>> This only happens if the transfer was cosnideres suitable for IDT.
->>>>> When I patched the function "xhci_urb_suitable_for_idt" to always return false (nothing suitable for IDT) everything was working fine.
->>>>>
->>>>>
->>>>> Unfortunately I'm not deep enough into the inner workings of the kernel usb host driver to find a solution for this other than reverting the patch for IDT.
->>
->> Nice catch.
->> The immediate data (IDT) support assumed that when there is max 8 bytes of data,
->> and it's not already dma mapped then we can just copy the data directly from
->> urb->transfer_buffer.
->> 											
->> I didn't take into account that this small amount of data can be in a sg list.
->>
->> Does the below code help:
->>
->> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
->> index 7a26496..f5c4144 100644
->> --- a/drivers/usb/host/xhci.h
->> +++ b/drivers/usb/host/xhci.h
->> @@ -2175,7 +2175,8 @@ static inline bool xhci_urb_suitable_for_idt(struct urb *urb)
->>         if (!usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
->>             usb_endpoint_maxp(&urb->ep->desc) >= TRB_IDT_MAX_SIZE &&
->>             urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE &&
->> -           !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
->> +           !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP) &&
->> +           !urb->num_sgs)
->>                 return true;
->>          return false;
->>
->>
->> -Mathias
+On 7/23/2019 11:17 PM, Andy Shevchenko wrote:
+> Use use device_property_count_u32() directly, that makes code neater.
 > 
-> Hello Matthias,
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+
+>   drivers/usb/dwc2/params.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> Your patch fixes the problem with short SGs and IDT.
-> No more crashes. Tested on 5.3-rc.
-> 
-> Will this be applied to 5.2.*  as well?
-> I need to inform some users how this problem is mitigated (e.g. using updated 5.2.3? when available or not using 5.2 at all and wait for 5.3).
-> 
-> Thanks for the fast feedback,
-> 
-> Greetings,
-> 
-> Maik Stohn
+> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+> index 55f841a54015..31e090ac9f1e 100644
+> --- a/drivers/usb/dwc2/params.c
+> +++ b/drivers/usb/dwc2/params.c
+> @@ -404,10 +404,7 @@ static void dwc2_get_device_properties(struct dwc2_hsotg *hsotg)
+>   		device_property_read_u32(hsotg->dev, "g-np-tx-fifo-size",
+>   					 &p->g_np_tx_fifo_size);
+>   
+> -		num = device_property_read_u32_array(hsotg->dev,
+> -						     "g-tx-fifo-size",
+> -						     NULL, 0);
+> -
+> +		num = device_property_count_u32(hsotg->dev, "g-tx-fifo-size");
+>   		if (num > 0) {
+>   			num = min(num, 15);
+>   			memset(p->g_tx_fifo_size, 0,
 > 
 
-I'll make a proper patch, and add stable tag so it should end up in a later 5.2.y kernel
-
--Mathias
