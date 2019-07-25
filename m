@@ -2,174 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D05974473
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 06:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE49C744AB
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 07:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387666AbfGYEal (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jul 2019 00:30:41 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38707 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726102AbfGYEal (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 00:30:41 -0400
-Received: by mail-pg1-f193.google.com with SMTP id f5so13499631pgu.5;
-        Wed, 24 Jul 2019 21:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=2OOipR6ExT2jNJi4jbCkya5oL8OY5qKBVN4HVC3rk40=;
-        b=FzHCkuX/yPdx2rB65HPx3xPsnFpinwzY8xUPsFsNkqk20Pd9KYCc5MaZH8/4FR6wFc
-         kY09+WnE+PA3hkaSW+6kt+6bFZje6pzjOciyxjiU+lglVJQStTJBJ3sV61VRB12o/p3C
-         vogzuNi4N2XHLc5CPnNK/DfXwEbV7aUUF2Oae75AtiRF1SavbX9uV3x45t2CP+XneUWp
-         HLaEj/3kH5bKi0h7uonSPVeEeGs+DBI/smg/WZ/OJOvMHAI/hB2Whwfidn2GQA2pmy9h
-         x8ITDWxZEmw9mpEqKBezniQDW7OkNvxkeCOjEZ2EDWim8qeaUsl417pwYiildxpDArjw
-         HI7g==
+        id S2390350AbfGYFEG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 01:04:06 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:39331 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390344AbfGYFEG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 01:04:06 -0400
+Received: by mail-io1-f71.google.com with SMTP id y13so53557306iol.6
+        for <linux-usb@vger.kernel.org>; Wed, 24 Jul 2019 22:04:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=2OOipR6ExT2jNJi4jbCkya5oL8OY5qKBVN4HVC3rk40=;
-        b=md9B0ChXfNkBdrL5/D9KNdNryY5+VG61Ko43DI4STp42VUrc4HvmdhxLXcASEX2gTY
-         gXw0dzP5hrlukribNsyPsY+tvDx/6+dvZCmLrBj2XBVvLD68AW933yf+bp5synhZOv5E
-         aQlJvqpWhi8REONZQ9VNX6oDQTwp4dyNaNTIUvq9MQaxi9ISkVPwESOLtwjy3V7kXwD/
-         V27RL6/kV3vLi7t/oDXnvHreXmB1Dtm37gRtqkrOGM0+r28gr8TLpi3xQOn4XC9NyCom
-         acFne6LurcFOFRwKR8DafGJ9E+kUTNWZ2h364Rstn8PrDS56VYDRqsKDtC+3DjWK+4wt
-         33ig==
-X-Gm-Message-State: APjAAAWm7eZYSnxxtPjGqZODjzv9IrZCbNu2B+J+kwoWaItMCnPHI/ef
-        VNATtemQpN7z0SeY4ryi+txwADVC
-X-Google-Smtp-Source: APXvYqxZPyLC+zW4PLVN9gRsznLhYfP5lFVWO1Mywd6VzjZseDLRdCth8ccSI0PNWuDWNK7ePiBjxA==
-X-Received: by 2002:a17:90a:cb18:: with SMTP id z24mr39609687pjt.108.1564029040397;
-        Wed, 24 Jul 2019 21:30:40 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t9sm48380995pji.18.2019.07.24.21.30.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Jul 2019 21:30:39 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Douglas Gilbert <dgilbert@interlog.com>
-Subject: [RFC PATCH] usb: typec: tcpm: Ignore unsupported/unknown alternate mode requests
-Date:   Wed, 24 Jul 2019 21:30:37 -0700
-Message-Id: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=L3X65vZ3rUayuRUS9zN2GDw/XxLqoFgPS3n++Iwna6A=;
+        b=EjxU1t1kLJD3L9CKW+OeKsvmzLE9BRvaqI2HvWss9xZPRUDTO3BijMDWw1QCoMAqhq
+         uH+hVP5abjhvvSotqvakaJRAsrohxEVq4tJVVl8GS2cW2MXYy2y3lxbYri4RWh839Y4N
+         C51/3cHcM4wF14fyJozrklLyp962UTJX+EhpS70dlJPGiAFm5fjeBWUtOnxE9r1CtMjE
+         U6efSCVWIlyhRxpcFw8LcsBwbz4LjRApzqj1oY9HGRnhbGiEIxdTmPZjWm7aecuNQGSt
+         9U9DfNX5Yjhk5iiC55dE3sOoJZ4eBzn7P5rvxlPw5jM3ccFeiA1IU+AYfW0Wat6uB6BZ
+         ZHew==
+X-Gm-Message-State: APjAAAU2S91FbvVud8u+UOaDIOy1FYwVhGZrRLk/M4BWMGADeFkImg28
+        iFUm5YAiv2+/9nM1hNKSDFgrKfiaMD3KKBsNsuXPrQxFIbxQ
+X-Google-Smtp-Source: APXvYqzY2yjxTZN7foDFPwt5tMSC/DMH88SCMokplXfOZycOYHM8wdRoZvOlXN32Jc9l/IU3X+nVJ88t3J/1E7NAJoWMPDLtLebS
+MIME-Version: 1.0
+X-Received: by 2002:a6b:b985:: with SMTP id j127mr27063494iof.186.1564031045859;
+ Wed, 24 Jul 2019 22:04:05 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 22:04:05 -0700
+In-Reply-To: <0000000000003acc06058e6d6b70@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e80c0e058e7a5a31@google.com>
+Subject: Re: general protection fault in __pm_runtime_resume
+From:   syzbot <syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        len.brown@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, pavel@ucw.cz,
+        rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-TCPM may receive PD messages associated with unknown or unsupported
-alternate modes. If that happens, calls to typec_match_altmode()
-will return NULL. The tcpm code does not currently take this into
-account. This results in crashes.
+syzbot has found a reproducer for the following crash on:
 
-Unable to handle kernel NULL pointer dereference at virtual address 000001f0
-pgd = 41dad9a1
-[000001f0] *pgd=00000000
-Internal error: Oops: 5 [#1] THUMB2
-Modules linked in: tcpci tcpm
-CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
-Hardware name: Atmel SAMA5
-Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
-PC is at typec_altmode_attention+0x0/0x14
-LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
-...
-[<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
-				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
-[<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
-				(process_one_work+0x123/0x2a8)
-[<c012082b>] (process_one_work) from [<c0120a6d>]
-				(worker_thread+0xbd/0x3b0)
-[<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
-[<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
+HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=108edb68600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+dashboard link: https://syzkaller.appspot.com/bug?extid=3cbe5cd105d2ad56a1df
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13f0b4c8600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172d8758600000
 
-Ignore PD messages if the asociated alternate mode is not supported.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
 
-Reported-by: Douglas Gilbert <dgilbert@interlog.com>
-Cc: Douglas Gilbert <dgilbert@interlog.com>
-Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-Taking a stab at the problem. I don't really know if this is the correct
-fix, or even if my understanding of the problem is correct, thus marking
-the patch as RFC.
-
- drivers/usb/typec/tcpm/tcpm.c | 38 ++++++++++++++++++++++++--------------
- 1 file changed, 24 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 77f71f602f73..1df2844469aa 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1096,7 +1096,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
- 			break;
- 		case CMD_ATTENTION:
- 			/* Attention command does not have response */
--			typec_altmode_attention(adev, p[1]);
-+			if (adev)
-+				typec_altmode_attention(adev, p[1]);
- 			return 0;
- 		default:
- 			break;
-@@ -1148,20 +1149,26 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
- 			}
- 			break;
- 		case CMD_ENTER_MODE:
--			typec_altmode_update_active(pdev, true);
--
--			if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
--				response[0] = VDO(adev->svid, 1, CMD_EXIT_MODE);
--				response[0] |= VDO_OPOS(adev->mode);
--				return 1;
-+			if (adev && pdev) {
-+				typec_altmode_update_active(pdev, true);
-+
-+				if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
-+					response[0] = VDO(adev->svid, 1,
-+							  CMD_EXIT_MODE);
-+					response[0] |= VDO_OPOS(adev->mode);
-+					return 1;
-+				}
- 			}
- 			return 0;
- 		case CMD_EXIT_MODE:
--			typec_altmode_update_active(pdev, false);
-+			if (adev && pdev) {
-+				typec_altmode_update_active(pdev, false);
- 
--			/* Back to USB Operation */
--			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
--						     NULL));
-+				/* Back to USB Operation */
-+				WARN_ON(typec_altmode_notify(adev,
-+							     TYPEC_STATE_USB,
-+							     NULL));
-+			}
- 			break;
- 		default:
- 			break;
-@@ -1171,8 +1178,10 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
- 		switch (cmd) {
- 		case CMD_ENTER_MODE:
- 			/* Back to USB Operation */
--			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
--						     NULL));
-+			if (adev)
-+				WARN_ON(typec_altmode_notify(adev,
-+							     TYPEC_STATE_USB,
-+							     NULL));
- 			break;
- 		default:
- 			break;
-@@ -1183,7 +1192,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
- 	}
- 
- 	/* Informing the alternate mode drivers about everything */
--	typec_altmode_vdm(adev, p[0], &p[1], cnt);
-+	if (adev)
-+		typec_altmode_vdm(adev, p[0], &p[1], cnt);
- 
- 	return rlen;
- }
--- 
-2.7.4
+kasan: CONFIG_KASAN_INLINE enabled
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] SMP KASAN
+CPU: 0 PID: 1740 Comm: syz-executor618 Not tainted 5.2.0-rc6+ #15
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
+Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
+00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
+89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
+RSP: 0018:ffff8881cf5878e0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffffff82676833
+RDX: 000000021d463be5 RSI: ffffffff82676841 RDI: 00000010ea31df2b
+RBP: 00000010ea31dc6a R08: ffff8881d1b7e000 R09: fffffbfff0e84c25
+R10: ffff8881cf587940 R11: ffffffff87426127 R12: 0000000000000004
+R13: 0000000000000000 R14: ffff8881cfd7a500 R15: ffffffff897f9040
+FS:  0000555555808880(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000000043f760 CR3: 00000001d0f29000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
+  usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1707
+  usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
+  hid_hw_power include/linux/hid.h:1038 [inline]
+  hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
+  chrdev_open+0x219/0x5c0 fs/char_dev.c:413
+  do_dentry_open+0x497/0x1040 fs/open.c:778
+  do_last fs/namei.c:3416 [inline]
+  path_openat+0x1430/0x3ff0 fs/namei.c:3533
+  do_filp_open+0x1a1/0x280 fs/namei.c:3563
+  do_sys_open+0x3c0/0x580 fs/open.c:1070
+  do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x401ad0
+Code: 01 f0 ff ff 0f 83 c0 0b 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f  
+44 00 00 83 3d fd 5b 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 94 0b 00 00 c3 48 83 ec 08 e8 fa 00 00 00
+RSP: 002b:00007ffed8d15738 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000401ad0
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007ffed8d15740
+RBP: 6666666666666667 R08: 000000000000000f R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402af0
+R13: 0000000000402b80 R14: 0000000000000000 R15: 0000000000000000
+Modules linked in:
+---[ end trace 60987a9feed42828 ]---
+RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
+Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
+00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
+89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
+RSP: 0018:ffff8881cf5878e0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffffff82676833
+RDX: 000000021d463be5 RSI: ffffffff82676841 RDI: 00000010ea31df2b
+RBP: 00000010ea31dc6a R08: ffff8881d1b7e000 R09: fffffbfff0e84c25
+R10: ffff8881cf587940 R11: ffffffff87426127 R12: 0000000000000004
+R13: 0000000000000000 R14: ffff8881cfd7a500 R15: ffffffff897f9040
+FS:  0000555555808880(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000000043f760 CR3: 00000001d0f29000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
