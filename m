@@ -2,78 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B2F74965
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 10:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FBC74996
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 11:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389872AbfGYIxL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jul 2019 04:53:11 -0400
-Received: from mga01.intel.com ([192.55.52.88]:22618 "EHLO mga01.intel.com"
+        id S2390241AbfGYJJv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 05:09:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388889AbfGYIxL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Jul 2019 04:53:11 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jul 2019 01:53:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,306,1559545200"; 
-   d="scan'208";a="253871913"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.164])
-  by orsmga001.jf.intel.com with ESMTP; 25 Jul 2019 01:53:08 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "# v5 . 2" <stable@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: [PATCH] xhci: Fix crash if scatter gather is used with Immediate Data Transfer (IDT).
-Date:   Thu, 25 Jul 2019 11:54:21 +0300
-Message-Id: <1564044861-1445-1-git-send-email-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
+        id S2389193AbfGYJJu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Jul 2019 05:09:50 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 98F3D22BEF;
+        Thu, 25 Jul 2019 09:09:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564045789;
+        bh=UJklCQIMbqJ/C40B1mwKDt7g/ktJslmVu3RjIiTQfow=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZafDt1UAYG3OPijZYQFKdNyZ1wARNXWQRtT9Tb3m8KEtxIRv7od1dCaj98HPubSu8
+         NuZpwvhBKVNczE1rjskKyognI5ucxb7u+3ihXGszQixwtdKPGDMiGEkUh0KfnOBtq/
+         h4xRY6JblvmqepRWNTf5EY2w0olc1dzb5CWQAY4k=
+Date:   Thu, 25 Jul 2019 11:09:46 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Simon Horman <horms@verge.net.au>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: renesas_gen3: Rename bindings
+ documentation file
+Message-ID: <20190725090946.GA3311@kroah.com>
+References: <20190703083514.32385-1-horms+renesas@verge.net.au>
+ <20190703083514.32385-3-horms+renesas@verge.net.au>
+ <CAMuHMdVgx9N0yeeei5qcg1yz2WEdDf0gQ6GcwUOAz7u09S_D4A@mail.gmail.com>
+ <20190711080302.qeotxueyvlr7pvhe@verge.net.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190711080302.qeotxueyvlr7pvhe@verge.net.au>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A second regression was found in the immediate data transfer (IDT)
-support which was added to 5.2 kernel
+On Thu, Jul 11, 2019 at 10:03:03AM +0200, Simon Horman wrote:
+> On Wed, Jul 03, 2019 at 02:28:51PM +0200, Geert Uytterhoeven wrote:
+> > Hi Simon,
+> > 
+> > On Wed, Jul 3, 2019 at 10:35 AM Simon Horman <horms+renesas@verge.net.au> wrote:
+> > > For consistency with the naming of (most) other documentation files for DT
+> > > bindings for Renesas IP blocks rename the Renesas USB3.0 peripheral
+> > > documentation file from renesas-gen3.txt to renesas,usb3-peri.txt
+> > >
+> > > Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> > > Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> > >
+> > > ---
+> > > v2
+> > > * Accumulate review tags
+> > > * Use renesas,usb3-peri.txt as new filename as suggested by Shimoda-san
+> > 
+> > Unfortunately the previous version has already made it into usb-next
+> > 23c46801d14cb647 dt-bindings: usb: renesas_gen3: Rename bindings
+> > documentation file
+> 
+> Ok, I guess we should go with that version.
 
-IDT is used to transfer small amounts of data (up to 8 bytes) in the
-field normally used for data dma address, thus avoiding dma mapping.
+So can you resend this series based on 5.3-rc1 so I know what to apply?
 
-If the data was not already dma mapped, then IDT support assumed data was
-in urb->transfer_buffer, and did not take into accound that even
-small amounts of data (8 bytes) can be in a scatterlist instead.
+thanks,
 
-This caused a NULL pointer dereference when sg_dma_len() was used
-with non-dma mapped data.
-
-Solve this by not using IDT if scatter gather buffer list is used.
-
-Fixes: 33e39350ebd2 ("usb: xhci: add Immediate Data Transfer support")
-Cc: <stable@vger.kernel.org> # v5.2
-Reported-by: Maik Stohn <maik.stohn@seal-one.com>
-Tested-by: Maik Stohn <maik.stohn@seal-one.com>
-CC: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 7a26496..f5c4144 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2175,7 +2175,8 @@ static inline bool xhci_urb_suitable_for_idt(struct urb *urb)
- 	if (!usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
- 	    usb_endpoint_maxp(&urb->ep->desc) >= TRB_IDT_MAX_SIZE &&
- 	    urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE &&
--	    !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
-+	    !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP) &&
-+	    !urb->num_sgs)
- 		return true;
- 
- 	return false;
--- 
-2.7.4
-
+greg k-h
