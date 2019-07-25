@@ -2,106 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 108BB751AC
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 16:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6767522F
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 17:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388363AbfGYOqI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jul 2019 10:46:08 -0400
-Received: from mga11.intel.com ([192.55.52.93]:64275 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387829AbfGYOqH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Jul 2019 10:46:07 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jul 2019 07:46:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,307,1559545200"; 
-   d="scan'208";a="170264934"
-Received: from jerryopenix.sh.intel.com (HELO jerryopenix) ([10.239.158.171])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Jul 2019 07:46:06 -0700
-Date:   Thu, 25 Jul 2019 22:44:41 +0800
-From:   "Liu, Changcheng" <changcheng.liu@intel.com>
-To:     shuah <shuah@kernel.org>
-Cc:     valentina.manea.m@gmail.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usbip: tools: fix GCC8 warning for strncpy
-Message-ID: <20190725144441.GA10957@jerryopenix>
-References: <20190725132209.GA27590@jerryopenix>
- <2cac538b-3806-8b1f-9dce-34be9d862102@kernel.org>
+        id S2389011AbfGYPJ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 11:09:26 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:41716 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2388922AbfGYPJ0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 11:09:26 -0400
+Received: (qmail 29070 invoked by uid 2102); 25 Jul 2019 11:09:24 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 25 Jul 2019 11:09:24 -0400
+Date:   Thu, 25 Jul 2019 11:09:24 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Oliver Neukum <oneukum@suse.com>
+cc:     andreyknvl@google.com, <syzkaller-bugs@googlegroups.com>,
+        syzbot <syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: KASAN: use-after-free Read in usbhid_power
+In-Reply-To: <1564047229.4670.14.camel@suse.com>
+Message-ID: <Pine.LNX.4.44L0.1907251057110.1512-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2cac538b-3806-8b1f-9dce-34be9d862102@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08:19 Thu 25 Jul, shuah wrote:
-> On 7/25/19 7:22 AM, Liu, Changcheng wrote:
-> > GCC8 started emitting warning about using strncpy with number of bytes
-> > exactly equal destination size which could lead to non-zero terminated
-> > string being copied. Use "SYSFS_PATH_MAX - 1" & "SYSFS_BUS_ID_SIZE - 1"
-> > as number of bytes to ensure name is always zero-terminated.
-> > 
-> > Signed-off-by: Changcheng Liu <changcheng.liu@aliyun.com>
-> > ---
-> > v1 -> v2:
-> >   * Correct array tail index
-> > ---
-> >   tools/usb/usbip/libsrc/usbip_common.c        | 6 ++++--
-> >   tools/usb/usbip/libsrc/usbip_device_driver.c | 6 ++++--
-> >   2 files changed, 8 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/tools/usb/usbip/libsrc/usbip_common.c b/tools/usb/usbip/libsrc/usbip_common.c
-> > index bb424638d75b..b8d7d480595a 100644
-> > --- a/tools/usb/usbip/libsrc/usbip_common.c
-> > +++ b/tools/usb/usbip/libsrc/usbip_common.c
-> > @@ -226,8 +226,10 @@ int read_usb_device(struct udev_device *sdev, struct usbip_usb_device *udev)
-> >   	path = udev_device_get_syspath(sdev);
-> >   	name = udev_device_get_sysname(sdev);
-> > -	strncpy(udev->path,  path,  SYSFS_PATH_MAX);
-> > -	strncpy(udev->busid, name, SYSFS_BUS_ID_SIZE);
-> > +	strncpy(udev->path,  path,  SYSFS_PATH_MAX - 1);
-> > +	udev->path[SYSFS_PATH_MAX - 1] = '\0';
-> > +	strncpy(udev->busid, name, SYSFS_BUS_ID_SIZE - 1);
-> > +	udev->busid[SYSFS_BUS_ID_SIZE - 1] = '\0';
-> 
-> strlcpy() would be better choice here. Any reason to not use that?
-> 
-@Shuah: linux tools link with libc which doesn't implment strlcpy yet.
-So tools source code can't use strlcpy function like other kernel source
-code.
+On Thu, 25 Jul 2019, Oliver Neukum wrote:
 
-> >   	sscanf(name, "%u-%u", &busnum, &devnum);
-> >   	udev->busnum = busnum;
-> > diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> > index 5a3726eb44ab..051d7d3f443b 100644
-> > --- a/tools/usb/usbip/libsrc/usbip_device_driver.c
-> > +++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> > @@ -91,7 +91,8 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
-> >   	copy_descr_attr16(dev, &descr, idProduct);
-> >   	copy_descr_attr16(dev, &descr, bcdDevice);
-> > -	strncpy(dev->path, path, SYSFS_PATH_MAX);
-> > +	strncpy(dev->path, path, SYSFS_PATH_MAX - 1);
-> > +	dev->path[SYSFS_PATH_MAX - 1] = '\0';
-> >   	dev->speed = USB_SPEED_UNKNOWN;
-> >   	speed = udev_device_get_sysattr_value(sdev, "current_speed");
-> > @@ -110,7 +111,8 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
-> >   	dev->busnum = 0;
-> >   	name = udev_device_get_sysname(plat);
-> > -	strncpy(dev->busid, name, SYSFS_BUS_ID_SIZE);
-> > +	strncpy(dev->busid, name, SYSFS_BUS_ID_SIZE - 1);
-> > +	dev->busid[SYSFS_BUS_ID_SIZE - 1] = '\0';
-> 
-> strlcpy() would be better choice here. Any reason to not use that?
-> 
-> >   	return 0;
-> >   err:
-> >   	fclose(fd);
+> Am Mittwoch, den 24.07.2019, 17:02 -0400 schrieb Alan Stern:
+> > On Wed, 24 Jul 2019, Oliver Neukum wrote:
 > > 
+> > >  drivers/hid/usbhid/hid-core.c | 13 +++++++++++++
+> > >  1 file changed, 13 insertions(+)
+> > > 
+> > > diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+> > > index c7bc9db5b192..98b996ecf4d3 100644
+> > > --- a/drivers/hid/usbhid/hid-core.c
+> > > +++ b/drivers/hid/usbhid/hid-core.c
+> > > @@ -1229,6 +1229,17 @@ static int usbhid_power(struct hid_device *hid, int lvl)
+> > >  	struct usbhid_device *usbhid = hid->driver_data;
+> > >  	int r = 0;
+> > >  
+> > > +	spin_lock_irq(&usbhid->lock);
+> > > +	if (test_bit(HID_DISCONNECTED, &usbhid->iofl)) {
+> > > +		r = -ENODEV;
+> > > +		spin_unlock_irq(&usbhid->lock);
+> > > +		goto bail_out;
+> > > +	} else {
+> > > +		/* protect against disconnect */
+> > > +		usb_get_dev(interface_to_usbdev(usbhid->intf));
+> > > +		spin_unlock_irq(&usbhid->lock);
+> > > +	}
+> > > +
+> > >  	switch (lvl) {
+> > >  	case PM_HINT_FULLON:
+> > >  		r = usb_autopm_get_interface(usbhid->intf);
+> > > @@ -1238,7 +1249,9 @@ static int usbhid_power(struct hid_device *hid, int lvl)
+> > >  		usb_autopm_put_interface(usbhid->intf);
+> > >  		break;
+> > >  	}
+> > > +	usb_put_dev(interface_to_usbdev(usbhid->intf));
+> > >  
+> > > +bail_out:
+> > >  	return r;
+> > >  }
+> > 
+> > Isn't this treating the symptom instead of the cause?
 > 
-> thanks,
-> -- Shuah
+> Sort of. Holding a reference for the whole time would have merit,
+> but I doubt it is strictly necessary.
+
+Just to be crystal clear, I was talking about a device reference --
+usb_{get,put}_dev or usb_{get,put}_intf -- not a runtime PM reference.  
+
+(Incidentally, your patch could be simplified by using usb_get_intf
+instead of usb_get_dev.)
+
+> > Shouldn't the hid_device hold a reference to usbhid->intf throughout 
+> > its lifetime?  That way this sort of problem wouldn't arise in any 
+> > routine, not just usbhid_power().
+> 
+> Unfortunately the semantics would still be wrong without the check
+> in corner cases. In case disconnect() is called without a physical
+> unplug, we must not touch the power state.
+> I am indeed afraid that in that case my putative fix is still racy.
+> But I don't to just introduce a mutex just for this. Any ideas?
+
+That's a separate issue.  USB drivers -- indeed, all drivers -- are 
+required to balance their runtime PM gets and puts (although in the 
+case of a physical disconnection it doesn't matter).  Are you asking 
+about the best way to do this?
+
+Normally a driver's release or disconnect routine will stop all
+asynchronous accesses to the device (interrupt handlers, work queues,
+URBs, and so on).  At that point the only remaining runtime PM activity
+will be whatever the routine itself does.  So it can see if any extra
+runtime PM gets or puts are needed, and do whatever is necessary.
+
+Does that answer your question?  I can't tell for sure...
+
+Note: I did not try to track down the reason for the invalid access 
+reported by syzbot.  It looked like a simple use-after-free, which 
+would normally be fixed by taking the appropriate reference.  Which is 
+what your patch does, except that it holds the reference only for a 
+short time instead of over the entire lifetime of the private data 
+structure (the usbhid structure), which is what normally happens.
+
+Alan Stern
+
