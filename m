@@ -2,115 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6767522F
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 17:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7B275260
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 17:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389011AbfGYPJ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jul 2019 11:09:26 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:41716 "HELO
+        id S2389020AbfGYPSK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 11:18:10 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:39460 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2388922AbfGYPJ0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 11:09:26 -0400
-Received: (qmail 29070 invoked by uid 2102); 25 Jul 2019 11:09:24 -0400
+        with SMTP id S2388457AbfGYPSK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 11:18:10 -0400
+Received: (qmail 1410 invoked by uid 2102); 25 Jul 2019 11:18:09 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 25 Jul 2019 11:09:24 -0400
-Date:   Thu, 25 Jul 2019 11:09:24 -0400 (EDT)
+  by localhost with SMTP; 25 Jul 2019 11:18:09 -0400
+Date:   Thu, 25 Jul 2019 11:18:09 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Oliver Neukum <oneukum@suse.com>
-cc:     andreyknvl@google.com, <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com>,
-        <linux-usb@vger.kernel.org>
-Subject: Re: KASAN: use-after-free Read in usbhid_power
-In-Reply-To: <1564047229.4670.14.camel@suse.com>
-Message-ID: <Pine.LNX.4.44L0.1907251057110.1512-100000@iolanthe.rowland.org>
+To:     Greg KH <greg@kroah.com>
+cc:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [RFC] usbfs: Add ioctls for runtime suspend and resume
+In-Reply-To: <20190725091844.GA18907@kroah.com>
+Message-ID: <Pine.LNX.4.44L0.1907251112390.1343-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: TEXT/PLAIN; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 25 Jul 2019, Oliver Neukum wrote:
+On Thu, 25 Jul 2019, Greg KH wrote:
 
-> Am Mittwoch, den 24.07.2019, 17:02 -0400 schrieb Alan Stern:
-> > On Wed, 24 Jul 2019, Oliver Neukum wrote:
-> > 
-> > >  drivers/hid/usbhid/hid-core.c | 13 +++++++++++++
-> > >  1 file changed, 13 insertions(+)
+> > > Still to do: Write up the documentation.  In fact, the existing
+> > > description of usbfs in Documentation/driver-api/usb/usb.rst is sadly
+> > > out of date.  And it deserves to be split out into a separate file of
+> > > its own -- but I'm not sure where it really belongs, considering that
+> > > it is an API for userspace, not an internal kernel API.
 > > > 
-> > > diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-> > > index c7bc9db5b192..98b996ecf4d3 100644
-> > > --- a/drivers/hid/usbhid/hid-core.c
-> > > +++ b/drivers/hid/usbhid/hid-core.c
-> > > @@ -1229,6 +1229,17 @@ static int usbhid_power(struct hid_device *hid, int lvl)
-> > >  	struct usbhid_device *usbhid = hid->driver_data;
-> > >  	int r = 0;
-> > >  
-> > > +	spin_lock_irq(&usbhid->lock);
-> > > +	if (test_bit(HID_DISCONNECTED, &usbhid->iofl)) {
-> > > +		r = -ENODEV;
-> > > +		spin_unlock_irq(&usbhid->lock);
-> > > +		goto bail_out;
-> > > +	} else {
-> > > +		/* protect against disconnect */
-> > > +		usb_get_dev(interface_to_usbdev(usbhid->intf));
-> > > +		spin_unlock_irq(&usbhid->lock);
-> > > +	}
-> > > +
-> > >  	switch (lvl) {
-> > >  	case PM_HINT_FULLON:
-> > >  		r = usb_autopm_get_interface(usbhid->intf);
-> > > @@ -1238,7 +1249,9 @@ static int usbhid_power(struct hid_device *hid, int lvl)
-> > >  		usb_autopm_put_interface(usbhid->intf);
-> > >  		break;
-> > >  	}
-> > > +	usb_put_dev(interface_to_usbdev(usbhid->intf));
-> > >  
-> > > +bail_out:
-> > >  	return r;
-> > >  }
+> > > Greg, suggestions?
 > > 
-> > Isn't this treating the symptom instead of the cause?
+> > Hi Greg,
+> > 
+> > Did you got a chance to look into the above documentation query by Alan?
+> > How should we go about documenting these new IOCTLs?
 > 
-> Sort of. Holding a reference for the whole time would have merit,
-> but I doubt it is strictly necessary.
-
-Just to be crystal clear, I was talking about a device reference --
-usb_{get,put}_dev or usb_{get,put}_intf -- not a runtime PM reference.  
-
-(Incidentally, your patch could be simplified by using usb_get_intf
-instead of usb_get_dev.)
-
-> > Shouldn't the hid_device hold a reference to usbhid->intf throughout 
-> > its lifetime?  That way this sort of problem wouldn't arise in any 
-> > routine, not just usbhid_power().
+> Not yet, sorry, dealing with the backlog of patches after the merge
+> window closed.
 > 
-> Unfortunately the semantics would still be wrong without the check
-> in corner cases. In case disconnect() is called without a physical
-> unplug, we must not touch the power state.
-> I am indeed afraid that in that case my putative fix is still racy.
-> But I don't to just introduce a mutex just for this. Any ideas?
+> Give me a week or so...
+> 
+> But if you want to try your hand at it first, it's always easier to
+> review a patch than it is to come up with a new one.
 
-That's a separate issue.  USB drivers -- indeed, all drivers -- are 
-required to balance their runtime PM gets and puts (although in the 
-case of a physical disconnection it doesn't matter).  Are you asking 
-about the best way to do this?
+Would Documentation/userspace-api/ be the right place to put this 
+information?  It looks like we could take a large chunk of 
+driver-api/usb/usb.rst (most of it, in fact) and move it over there.
 
-Normally a driver's release or disconnect routine will stop all
-asynchronous accesses to the device (interrupt handlers, work queues,
-URBs, and so on).  At that point the only remaining runtime PM activity
-will be whatever the routine itself does.  So it can see if any extra
-runtime PM gets or puts are needed, and do whatever is necessary.
-
-Does that answer your question?  I can't tell for sure...
-
-Note: I did not try to track down the reason for the invalid access 
-reported by syzbot.  It looked like a simple use-after-free, which 
-would normally be fixed by taking the appropriate reference.  Which is 
-what your patch does, except that it holds the reference only for a 
-short time instead of over the entire lifetime of the private data 
-structure (the usbhid structure), which is what normally happens.
+By the way, do you know anything about how the information in
+Documentation/userspace-api gets presented to users in general?  Is
+there anything comparable to the Linux man-pages project?  Or are
+people just supposed to get hold of the kernel source from somewhere
+and read the files there?
 
 Alan Stern
 
