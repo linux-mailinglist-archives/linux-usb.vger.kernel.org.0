@@ -2,87 +2,375 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FBC74996
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 11:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4587499A
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 11:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390241AbfGYJJv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jul 2019 05:09:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45302 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389193AbfGYJJu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Jul 2019 05:09:50 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 98F3D22BEF;
-        Thu, 25 Jul 2019 09:09:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564045789;
-        bh=UJklCQIMbqJ/C40B1mwKDt7g/ktJslmVu3RjIiTQfow=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZafDt1UAYG3OPijZYQFKdNyZ1wARNXWQRtT9Tb3m8KEtxIRv7od1dCaj98HPubSu8
-         NuZpwvhBKVNczE1rjskKyognI5ucxb7u+3ihXGszQixwtdKPGDMiGEkUh0KfnOBtq/
-         h4xRY6JblvmqepRWNTf5EY2w0olc1dzb5CWQAY4k=
-Date:   Thu, 25 Jul 2019 11:09:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: renesas_gen3: Rename bindings
- documentation file
-Message-ID: <20190725090946.GA3311@kroah.com>
-References: <20190703083514.32385-1-horms+renesas@verge.net.au>
- <20190703083514.32385-3-horms+renesas@verge.net.au>
- <CAMuHMdVgx9N0yeeei5qcg1yz2WEdDf0gQ6GcwUOAz7u09S_D4A@mail.gmail.com>
- <20190711080302.qeotxueyvlr7pvhe@verge.net.au>
+        id S2390245AbfGYJKg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 05:10:36 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:19686 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2389193AbfGYJKg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 05:10:36 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x6P98t0v002178;
+        Thu, 25 Jul 2019 04:10:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : subject
+ : from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=PODMain02222019;
+ bh=Q/VECmiEEUWan+hkwg30c1gaEo+qewplc3L3zWI/KvU=;
+ b=EmhAfGUuFMaKzpwm58eXN0OvsLLC4qRx98ZVV+2TwC6D3N/PGbfPcItQR9Xav8xoiPzy
+ 8GdsgmlZJWFf+Q+GcuZb6jzjB0P3nr9kkmqvgSXtAYfvppDLvcgHT2YdjX7O7F1uKUuo
+ Y6F/rox/HADYm4b0gtHra0/FCToPJalVTZrF7LWf+WZskXQd9ez1z/wgxkJOKawzIx+C
+ keAo91+SluIOx/vB57jLMUI/C4DukEUOV6CRg72n/NJXMos5W3KOvtZh0ub18H8K1O3+
+ NbhBw3jEE2r8XPoKP38OgUrhvpjF8f7+pwHaqENo93Sx42PUJBjAyDXx6b8DcKZ1pfnL Og== 
+Authentication-Results: ppops.net;
+        spf=fail smtp.mailfrom=mkulkarni@opensource.cirrus.com
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 2tx61s32up-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 25 Jul 2019 04:10:30 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 25 Jul
+ 2019 10:10:28 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Thu, 25 Jul 2019 10:10:28 +0100
+Received: from mkulkarni-laptop.ad.cirrus.com (mkulkarni-laptop.ad.cirrus.com [198.90.199.28])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0C4252A1;
+        Thu, 25 Jul 2019 10:10:28 +0100 (BST)
+Message-ID: <1564045827.5612.1.camel@opensource.cirrus.com>
+Subject: Re: [RFC] usbfs: Add ioctls for runtime suspend and resume
+From:   Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
+To:     Alan Stern <stern@rowland.harvard.edu>, Greg KH <greg@kroah.com>
+CC:     USB list <linux-usb@vger.kernel.org>
+Date:   Thu, 25 Jul 2019 10:10:27 +0100
+In-Reply-To: <Pine.LNX.4.44L0.1907051433420.1606-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1907051433420.1606-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190711080302.qeotxueyvlr7pvhe@verge.net.au>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Proofpoint-SPF-Result: fail
+X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
+ -all
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 spamscore=0
+ adultscore=0 bulkscore=0 impostorscore=0 phishscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1906280000 definitions=main-1907250109
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 11, 2019 at 10:03:03AM +0200, Simon Horman wrote:
-> On Wed, Jul 03, 2019 at 02:28:51PM +0200, Geert Uytterhoeven wrote:
-> > Hi Simon,
-> > 
-> > On Wed, Jul 3, 2019 at 10:35 AM Simon Horman <horms+renesas@verge.net.au> wrote:
-> > > For consistency with the naming of (most) other documentation files for DT
-> > > bindings for Renesas IP blocks rename the Renesas USB3.0 peripheral
-> > > documentation file from renesas-gen3.txt to renesas,usb3-peri.txt
-> > >
-> > > Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
-> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > > Reviewed-by: Niklas S�derlund <niklas.soderlund+renesas@ragnatech.se>
-> > >
-> > > ---
-> > > v2
-> > > * Accumulate review tags
-> > > * Use renesas,usb3-peri.txt as new filename as suggested by Shimoda-san
-> > 
-> > Unfortunately the previous version has already made it into usb-next
-> > 23c46801d14cb647 dt-bindings: usb: renesas_gen3: Rename bindings
-> > documentation file
+On Fri, 2019-07-05 at 14:51 -0400, Alan Stern wrote:
+> On Wed, 3 Jul 2019, Mayuresh Kulkarni wrote:
 > 
-> Ok, I guess we should go with that version.
+> > 
+> > As you had mentioned in one of the comment before, the only addition
+> > to
+> > the patch I have locally is -
+> > usbfs_notify_resume() has usbfs_mutex lock around list traversal.
+> > 
+> > Could you please send the patch for review? Please note, I think I
+> > am
+> > not a part of linux-usb mailing-list, so probably need to be in cc
+> > to
+> > get the patch email. Do let me know if something else is needed from
+> > me.
+> Here it is.  There are two changes from the previous version:
+> 
+> 1.	This is rebased on top of a separate patch which Greg has 
+> 	already accepted:
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit?
+> id=ffed60971f3d95923b99ea970862c6ab6a22c20f
+> 
+> 2.	I implemented Oliver's recommendation that the
+> WAIT_FOR_RESUME
+> 	ioctl should automatically do FORBID_SUSPEND before it returns, 
+> 	if the return code is 0 (that is, it wasn't interrupted by a 
+> 	signal).
+> 
+> Still to do: Write up the documentation.  In fact, the existing
+> description of usbfs in Documentation/driver-api/usb/usb.rst is sadly
+> out of date.  And it deserves to be split out into a separate file of
+> its own -- but I'm not sure where it really belongs, considering that
+> it is an API for userspace, not an internal kernel API.
+> 
+> Greg, suggestions?
 
-So can you resend this series based on 5.3-rc1 so I know what to apply?
+Hi Greg,
 
-thanks,
-
-greg k-h
+Did you got a chance to look into the above documentation query by Alan?
+How should we go about documenting these new IOCTLs?
+> 
+> Alan Stern
+> 
+> 
+>  drivers/usb/core/devio.c          |   96
+> ++++++++++++++++++++++++++++++++++++--
+>  drivers/usb/core/generic.c        |    5 +
+>  drivers/usb/core/usb.h            |    3 +
+>  include/uapi/linux/usbdevice_fs.h |    3 +
+>  4 files changed, 102 insertions(+), 5 deletions(-)
+> 
+> Index: usb-devel/drivers/usb/core/devio.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/core/devio.c
+> +++ usb-devel/drivers/usb/core/devio.c
+> @@ -48,6 +48,9 @@
+>  #define USB_DEVICE_MAX			(USB_MAXBUS * 128)
+>  #define USB_SG_SIZE			16384 /* split-size for
+> large txs */
+>  
+> +/* Mutual exclusion for ps->list in resume vs. release and remove */
+> +static DEFINE_MUTEX(usbfs_mutex);
+> +
+>  struct usb_dev_state {
+>  	struct list_head list;      /* state list */
+>  	struct usb_device *dev;
+> @@ -57,14 +60,17 @@ struct usb_dev_state {
+>  	struct list_head async_completed;
+>  	struct list_head memory_list;
+>  	wait_queue_head_t wait;     /* wake up if a request completed
+> */
+> +	wait_queue_head_t wait_for_resume;   /* wake up upon runtime
+> resume */
+>  	unsigned int discsignr;
+>  	struct pid *disc_pid;
+>  	const struct cred *cred;
+>  	void __user *disccontext;
+>  	unsigned long ifclaimed;
+>  	u32 disabled_bulk_eps;
+> -	bool privileges_dropped;
+>  	unsigned long interface_allowed_mask;
+> +	int not_yet_resumed;
+> +	bool suspend_allowed;
+> +	bool privileges_dropped;
+>  };
+>  
+>  struct usb_memory {
+> @@ -696,9 +702,7 @@ static void driver_disconnect(struct usb
+>  	destroy_async_on_interface(ps, ifnum);
+>  }
+>  
+> -/* The following routines are merely placeholders.  There is no way
+> - * to inform a user task about suspend or resumes.
+> - */
+> +/* We don't care about suspend/resume of claimed interfaces */
+>  static int driver_suspend(struct usb_interface *intf, pm_message_t
+> msg)
+>  {
+>  	return 0;
+> @@ -709,12 +713,32 @@ static int driver_resume(struct usb_inte
+>  	return 0;
+>  }
+>  
+> +/* The following routines apply to the entire device, not interfaces
+> */
+> +void usbfs_notify_suspend(struct usb_device *udev)
+> +{
+> +	/* We don't need to handle this */
+> +}
+> +
+> +void usbfs_notify_resume(struct usb_device *udev)
+> +{
+> +	struct usb_dev_state *ps;
+> +
+> +	/* Protect against simultaneous remove or release */
+> +	mutex_lock(&usbfs_mutex);
+> +	list_for_each_entry(ps, &udev->filelist, list) {
+> +		WRITE_ONCE(ps->not_yet_resumed, 0);
+> +		wake_up_all(&ps->wait_for_resume);
+> +	}
+> +	mutex_unlock(&usbfs_mutex);
+> +}
+> +
+>  struct usb_driver usbfs_driver = {
+>  	.name =		"usbfs",
+>  	.probe =	driver_probe,
+>  	.disconnect =	driver_disconnect,
+>  	.suspend =	driver_suspend,
+>  	.resume =	driver_resume,
+> +	.supports_autosuspend = 1,
+>  };
+>  
+>  static int claimintf(struct usb_dev_state *ps, unsigned int ifnum)
+> @@ -999,9 +1023,12 @@ static int usbdev_open(struct inode *ino
+>  	INIT_LIST_HEAD(&ps->async_completed);
+>  	INIT_LIST_HEAD(&ps->memory_list);
+>  	init_waitqueue_head(&ps->wait);
+> +	init_waitqueue_head(&ps->wait_for_resume);
+>  	ps->disc_pid = get_pid(task_pid(current));
+>  	ps->cred = get_current_cred();
+>  	smp_wmb();
+> +
+> +	/* Can't race with resume; the device is already active */
+>  	list_add_tail(&ps->list, &dev->filelist);
+>  	file->private_data = ps;
+>  	usb_unlock_device(dev);
+> @@ -1027,7 +1054,10 @@ static int usbdev_release(struct inode *
+>  	usb_lock_device(dev);
+>  	usb_hub_release_all_ports(dev, ps);
+>  
+> +	/* Protect against simultaneous resume */
+> +	mutex_lock(&usbfs_mutex);
+>  	list_del_init(&ps->list);
+> +	mutex_unlock(&usbfs_mutex);
+>  
+>  	for (ifnum = 0; ps->ifclaimed && ifnum < 8*sizeof(ps-
+> >ifclaimed);
+>  			ifnum++) {
+> @@ -1035,7 +1065,8 @@ static int usbdev_release(struct inode *
+>  			releaseintf(ps, ifnum);
+>  	}
+>  	destroy_all_async(ps);
+> -	usb_autosuspend_device(dev);
+> +	if (!ps->suspend_allowed)
+> +		usb_autosuspend_device(dev);
+>  	usb_unlock_device(dev);
+>  	usb_put_dev(dev);
+>  	put_pid(ps->disc_pid);
+> @@ -2346,6 +2377,47 @@ static int proc_drop_privileges(struct u
+>  	return 0;
+>  }
+>  
+> +static int proc_forbid_suspend(struct usb_dev_state *ps)
+> +{
+> +	int ret = 0;
+> +
+> +	if (ps->suspend_allowed) {
+> +		ret = usb_autoresume_device(ps->dev);
+> +		if (ret == 0)
+> +			ps->suspend_allowed = false;
+> +		else if (ret != -ENODEV)
+> +			ret = -EIO;
+> +	}
+> +	return ret;
+> +}
+> +
+> +static int proc_allow_suspend(struct usb_dev_state *ps)
+> +{
+> +	if (!connected(ps))
+> +		return -ENODEV;
+> +
+> +	WRITE_ONCE(ps->not_yet_resumed, 1);
+> +	if (!ps->suspend_allowed) {
+> +		usb_autosuspend_device(ps->dev);
+> +		ps->suspend_allowed = true;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int proc_wait_for_resume(struct usb_dev_state *ps)
+> +{
+> +	int ret;
+> +
+> +	usb_unlock_device(ps->dev);
+> +	ret = wait_event_interruptible(ps->wait_for_resume,
+> +			READ_ONCE(ps->not_yet_resumed) == 0);
+> +	usb_lock_device(ps->dev);
+> +
+> +	if (ret != 0)
+> +		return ret;
+> +	return proc_forbid_suspend(ps);
+> +}
+> +
+>  /*
+>   * NOTE:  All requests here that have interface numbers as parameters
+>   * are assuming that somehow the configuration has been prevented
+> from
+> @@ -2540,6 +2612,15 @@ static long usbdev_do_ioctl(struct file
+>  	case USBDEVFS_GET_SPEED:
+>  		ret = ps->dev->speed;
+>  		break;
+> +	case USBDEVFS_FORBID_SUSPEND:
+> +		ret = proc_forbid_suspend(ps);
+> +		break;
+> +	case USBDEVFS_ALLOW_SUSPEND:
+> +		ret = proc_allow_suspend(ps);
+> +		break;
+> +	case USBDEVFS_WAIT_FOR_RESUME:
+> +		ret = proc_wait_for_resume(ps);
+> +		break;
+>  	}
+>  
+>   done:
+> @@ -2607,10 +2688,14 @@ static void usbdev_remove(struct usb_dev
+>  	struct usb_dev_state *ps;
+>  	struct kernel_siginfo sinfo;
+>  
+> +	/* Protect against simultaneous resume */
+> +	mutex_lock(&usbfs_mutex);
+>  	while (!list_empty(&udev->filelist)) {
+>  		ps = list_entry(udev->filelist.next, struct
+> usb_dev_state, list);
+>  		destroy_all_async(ps);
+>  		wake_up_all(&ps->wait);
+> +		WRITE_ONCE(ps->not_yet_resumed, 0);
+> +		wake_up_all(&ps->wait_for_resume);
+>  		list_del_init(&ps->list);
+>  		if (ps->discsignr) {
+>  			clear_siginfo(&sinfo);
+> @@ -2622,6 +2707,7 @@ static void usbdev_remove(struct usb_dev
+>  					ps->disc_pid, ps->cred);
+>  		}
+>  	}
+> +	mutex_unlock(&usbfs_mutex);
+>  }
+>  
+>  static int usbdev_notify(struct notifier_block *self,
+> Index: usb-devel/drivers/usb/core/generic.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/core/generic.c
+> +++ usb-devel/drivers/usb/core/generic.c
+> @@ -257,6 +257,8 @@ static int generic_suspend(struct usb_de
+>  	else
+>  		rc = usb_port_suspend(udev, msg);
+>  
+> +	if (rc == 0)
+> +		usbfs_notify_suspend(udev);
+>  	return rc;
+>  }
+>  
+> @@ -273,6 +275,9 @@ static int generic_resume(struct usb_dev
+>  		rc = hcd_bus_resume(udev, msg);
+>  	else
+>  		rc = usb_port_resume(udev, msg);
+> +
+> +	if (rc == 0)
+> +		usbfs_notify_resume(udev);
+>  	return rc;
+>  }
+>  
+> Index: usb-devel/drivers/usb/core/usb.h
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/core/usb.h
+> +++ usb-devel/drivers/usb/core/usb.h
+> @@ -95,6 +95,9 @@ extern int usb_runtime_idle(struct devic
+>  extern int usb_enable_usb2_hardware_lpm(struct usb_device *udev);
+>  extern int usb_disable_usb2_hardware_lpm(struct usb_device *udev);
+>  
+> +extern void usbfs_notify_suspend(struct usb_device *udev);
+> +extern void usbfs_notify_resume(struct usb_device *udev);
+> +
+>  #else
+>  
+>  static inline int usb_port_suspend(struct usb_device *udev,
+> pm_message_t msg)
+> Index: usb-devel/include/uapi/linux/usbdevice_fs.h
+> ===================================================================
+> --- usb-devel.orig/include/uapi/linux/usbdevice_fs.h
+> +++ usb-devel/include/uapi/linux/usbdevice_fs.h
+> @@ -197,5 +197,8 @@ struct usbdevfs_streams {
+>  #define USBDEVFS_FREE_STREAMS      _IOR('U', 29, struct
+> usbdevfs_streams)
+>  #define USBDEVFS_DROP_PRIVILEGES   _IOW('U', 30, __u32)
+>  #define USBDEVFS_GET_SPEED         _IO('U', 31)
+> +#define USBDEVFS_FORBID_SUSPEND    _IO('U', 32)
+> +#define USBDEVFS_ALLOW_SUSPEND     _IO('U', 33)
+> +#define USBDEVFS_WAIT_FOR_RESUME   _IO('U', 34)
+>  
+>  #endif /* _UAPI_LINUX_USBDEVICE_FS_H */
+> 
