@@ -2,134 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A788674687
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 07:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC8F746D8
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 08:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728240AbfGYFxD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jul 2019 01:53:03 -0400
-Received: from lancar.cloudhost.id ([103.134.152.236]:36091 "EHLO
-        lancar.cloudhost.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726300AbfGYFw7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 01:52:59 -0400
-X-Greylist: delayed 38405 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Jul 2019 01:52:56 EDT
-Received: from iix4.cloudhost.id ([103.15.226.60])
-        by lancar.cloudhost.id with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <admin@primasera.net>)
-        id 1hqMe2-0008P7-7z; Thu, 25 Jul 2019 03:09:57 +0800
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=primasera.net; s=default; h=Message-ID:Reply-To:Subject:To:From:Date:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tFOQkngbiUGH23Rpb5LJFqmmucu7AUiSNKprvbGt7Mg=; b=AiyPnhVwyiro+UkaX6cFvVVBlN
-        bPH0YZOTyYDKazsGBFc9wVOnorntNilNaTocq2QafsLq+E8Sj0ws9+ptKMbCCdnq7Yn04KERuIpm+
-        FbWUawukvIy80e87X7/sdK00+23KBqahHx+sWn5X4qppjYvk1SVALDsUsXvexF42tpdFzpnmmPVNx
-        APvDxTbu4K1yaJjQ6FGHfbSU0TdCLsUZ2sAbKnn9UucpxikNmEfPRika4B3usjHf2Cty7kzW1TG2i
-        xEIi/YIL8z9QUhVCz9kUeyi1yhDBvD4+gWt/wslL1Dt8UZybXstMHjANV9nYaHuxPlZavPwjnRmX5
-        TairBu6Q==;
-Received: from [127.0.0.1] (port=44656 helo=iix4.cloudhost.id)
-        by iix4.cloudhost.id with esmtpa (Exim 4.92)
-        (envelope-from <admin@primasera.net>)
-        id 1hqL7o-004M5q-1T; Thu, 25 Jul 2019 00:32:25 +0700
+        id S1729038AbfGYGJ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 02:09:26 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:34692 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726325AbfGYGJZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 02:09:25 -0400
+Received: by mail-vs1-f65.google.com with SMTP id m23so32999783vso.1;
+        Wed, 24 Jul 2019 23:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8n+oScGCx7XOhecxHmlqcG+ta+ra65NsPlKdfashxxc=;
+        b=giC78xbUtZGlw2pKKUVQXWhgYXtov7f+F+vAMBXe13zQy9KhW+JXMmAwgs8M8abups
+         3ou2cRmq59VoizF+dalnKhbqoOzgSUB9OnvIYpEvIsr+J4oxoPaO31Iaj45B3rWianib
+         F0tORVau3XntYhNPwf7cDpsCqArA6kgCQVo0YCYgiWkQwitekH0o7baxCBHAjPID8IYH
+         raV4pjRnR+aPX0aEBPZLu5SRF8PEPjmqhteynZC8NhnPyOSzdq+Mm2NI6hZE5AP/uc3u
+         Jg4PfaiHkwdxlPzu7dZ/lyAXdzffQAqOhlpRijTP70053mtCZa1v8tBZ96dkAizX72hy
+         5kgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8n+oScGCx7XOhecxHmlqcG+ta+ra65NsPlKdfashxxc=;
+        b=clZSJGzlCjAE9DtbrOJU1pEpRVbX5A2FqIZYMcDacheJWN+7JH0PqOTLo/6plK4vjL
+         wm6KZZBAg6LOnomA7wmfAkwziHSVqYqxaxgWcwdOrS/YPS5fS6oQQxF6U9EnAYxtc+Vz
+         RsK/n3yxO4pGgarxREGZ4PLVWTRIZSCvzr9DScSOAJDIiJPbhH4r2yyIfzobgizjGWoa
+         poEMAJ11uwgwUtmBXaoTteAGNI05T4J8ia2J5YC8OsT8OsaOkY4+oPEqiMLp72+crkPg
+         gG2SC6H+VQhsOmao3nN7hsaPJMIZ0lBEPz2Q9n4c7wr93Xev/LXgaxVxHKXDeUAu1fBw
+         BC8w==
+X-Gm-Message-State: APjAAAWnSAC+/H3vI67rOQAvLxoSaFkyjS0c1Cp1hkAmoDjC8lEIADY3
+        M/1eyfkWXZv5tHN7aOd6vkPHMEDoN9w9RJEk3CE=
+X-Google-Smtp-Source: APXvYqxJOMoQJ1TicOfUb0mMN+vDK2H8hUL/7uBcPgwwEThqBClMb2rLab75oLaA2sO6jBVg0NPKYx9vmEdL2HciGsU=
+X-Received: by 2002:a67:cd1a:: with SMTP id u26mr54804933vsl.155.1564034964325;
+ Wed, 24 Jul 2019 23:09:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Thu, 25 Jul 2019 00:32:21 +0700
-From:   lzz <admin@primasera.net>
-To:     undisclosed-recipients:;
-Subject: Trabaja conmigo
-Reply-To: info.attltz244@gmail.com
-Mail-Reply-To: info.attltz244@gmail.com
-Message-ID: <6358ee700a2090d45424beacaa2b846f@primasera.net>
-X-Sender: admin@primasera.net
-User-Agent: Roundcube Webmail/1.3.8
-X-OutGoing-Spam-Status: No, score=1.8
-X-AuthUser: admin@primasera.net
-X-Originating-IP: 103.15.226.60
-X-SpamExperts-Domain: masuk.web.id
-X-SpamExperts-Username: iix4
-Authentication-Results: cloudhost.id; auth=pass (login) smtp.auth=iix4@masuk.web.id
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.86)
-X-Recommended-Action: accept
-X-Filter-ID: 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
- Kjs=
-X-Report-Abuse-To: spam@lancar.cloudhost.id
+References: <1563979112-22483-1-git-send-email-linux@roeck-us.net>
+In-Reply-To: <1563979112-22483-1-git-send-email-linux@roeck-us.net>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Thu, 25 Jul 2019 14:09:12 +0800
+Message-ID: <CAKgpwJV_gJ7sBvtv6B89GBSFam6Dn97=BxKkBM8waDKmEa72-g@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: typec: tcpm: Add NULL check before dereferencing config
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Douglas Gilbert <dgilbert@interlog.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Guenter Roeck <linux@roeck-us.net> =E4=BA=8E2019=E5=B9=B47=E6=9C=8824=E6=97=
+=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=8810:40=E5=86=99=E9=81=93=EF=BC=9A
+>
+> When instantiating tcpm on an NXP OM 13588 board with NXP PTN5110,
+> the following crash is seen when writing into the 'preferred_role'
+> sysfs attribute.
+>
+> Unable to handle kernel NULL pointer dereference at virtual address 00000=
+028
+> pgd =3D f69149ad
+> [00000028] *pgd=3D00000000
+> Internal error: Oops: 5 [#1] THUMB2
+> Modules linked in: tcpci tcpm
+> CPU: 0 PID: 1882 Comm: bash Not tainted 5.1.18-sama5-armv7-r2 #4
+> Hardware name: Atmel SAMA5
+> PC is at tcpm_try_role+0x3a/0x4c [tcpm]
+> LR is at tcpm_try_role+0x15/0x4c [tcpm]
+> pc : [<bf8000e2>]    lr : [<bf8000bd>]    psr: 60030033
+> sp : dc1a1e88  ip : c03fb47d  fp : 00000000
+> r10: dc216190  r9 : dc1a1f78  r8 : 00000001
+> r7 : df4ae044  r6 : dd032e90  r5 : dd1ce340  r4 : df4ae054
+> r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : df4ae044
+> Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA Thumb  Segment none
+> Control: 50c53c7d  Table: 3efec059  DAC: 00000051
+> Process bash (pid: 1882, stack limit =3D 0x6a6d4aa5)
+> Stack: (0xdc1a1e88 to 0xdc1a2000)
+> 1e80:                   dd05d808 dd1ce340 00000001 00000007 dd1ce340 c03f=
+b4a7
+> 1ea0: 00000007 00000007 dc216180 00000000 00000000 c01e1e03 00000000 0000=
+0000
+> 1ec0: c0907008 dee98b40 c01e1d5d c06106c4 00000000 00000000 00000007 c019=
+4e8b
+> 1ee0: 0000000a 00000400 00000000 c01a97db dc22bf00 ffffe000 df4b6a00 df74=
+5900
+> 1f00: 00000001 00000001 000000dd c01a9c2f 7aeab3be c0907008 00000000 dc22=
+bf00
+> 1f20: c0907008 00000000 00000000 00000000 00000000 7aeab3be 00000007 dee9=
+8b40
+> 1f40: 005dc318 dc1a1f78 00000000 00000000 00000007 c01969f7 0000000a c01a=
+20cb
+> 1f60: dee98b40 c0907008 dee98b40 005dc318 00000000 c0196b9b 00000000 0000=
+0000
+> 1f80: dee98b40 7aeab3be 00000074 005dc318 b6f3bdb0 00000004 c0101224 dc1a=
+0000
+> 1fa0: 00000004 c0101001 00000074 005dc318 00000001 005dc318 00000007 0000=
+0000
+> 1fc0: 00000074 005dc318 b6f3bdb0 00000004 00000007 00000007 00000000 0000=
+0000
+> 1fe0: 00000004 be800880 b6ed35b3 b6e5c746 60030030 00000001 00000000 0000=
+0000
+> [<bf8000e2>] (tcpm_try_role [tcpm]) from [<c03fb4a7>] (preferred_role_sto=
+re+0x2b/0x5c)
+> [<c03fb4a7>] (preferred_role_store) from [<c01e1e03>] (kernfs_fop_write+0=
+xa7/0x150)
+> [<c01e1e03>] (kernfs_fop_write) from [<c0194e8b>] (__vfs_write+0x1f/0x104=
+)
+> [<c0194e8b>] (__vfs_write) from [<c01969f7>] (vfs_write+0x6b/0x104)
+> [<c01969f7>] (vfs_write) from [<c0196b9b>] (ksys_write+0x43/0x94)
+> [<c0196b9b>] (ksys_write) from [<c0101001>] (ret_fast_syscall+0x1/0x62)
+>
+> Since commit 96232cbc6c994 ("usb: typec: tcpm: support get typec and pd
+> config from device properties"), the 'config' pointer in struct tcpc_dev
+> is optional when registering a Type-C port. Since it is optional, we have
+> to check if it is NULL before dereferencing it.
+>
+> Reported-by: Douglas Gilbert <dgilbert@interlog.com>
+> Cc: Douglas Gilbert <dgilbert@interlog.com>
+> Fixes: 96232cbc6c994 ("usb: typec: tcpm: support get typec and pd config =
+from device properties")
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
+Reviewed-by: Jun Li <jun.li@nxp.com>
 
-Hola,
-
-Tenemos algunas finanzas en su nombre de familia amablemente Póngase en 
-contacto conmigo aquí [(info.attltz244@gmail.com)] para más información.
-
-Saludos,
-Lutz
+> ---
+> v2: Added missing Cc:. Sorry for the noise.
+>
+> Doug:
+>     I didn't add your Tested-by: since I added more code.
+>     It would be great if you can re-test.
+>
+>  drivers/usb/typec/tcpm/tcpm.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
+c
+> index fba32d84e578..77f71f602f73 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -379,7 +379,8 @@ static enum tcpm_state tcpm_default_state(struct tcpm=
+_port *port)
+>                         return SNK_UNATTACHED;
+>                 else if (port->try_role =3D=3D TYPEC_SOURCE)
+>                         return SRC_UNATTACHED;
+> -               else if (port->tcpc->config->default_role =3D=3D TYPEC_SI=
+NK)
+> +               else if (port->tcpc->config &&
+> +                        port->tcpc->config->default_role =3D=3D TYPEC_SI=
+NK)
+>                         return SNK_UNATTACHED;
+>                 /* Fall through to return SRC_UNATTACHED */
+>         } else if (port->port_type =3D=3D TYPEC_PORT_SNK) {
+> @@ -4114,7 +4115,7 @@ static int tcpm_try_role(const struct typec_capabil=
+ity *cap, int role)
+>         mutex_lock(&port->lock);
+>         if (tcpc->try_role)
+>                 ret =3D tcpc->try_role(tcpc, role);
+> -       if (!ret && !tcpc->config->try_role_hw)
+> +       if (!ret && (!tcpc->config || !tcpc->config->try_role_hw))
+>                 port->try_role =3D role;
+>         port->try_src_count =3D 0;
+>         port->try_snk_count =3D 0;
+> @@ -4701,7 +4702,7 @@ static int tcpm_copy_caps(struct tcpm_port *port,
+>         port->typec_caps.prefer_role =3D tcfg->default_role;
+>         port->typec_caps.type =3D tcfg->type;
+>         port->typec_caps.data =3D tcfg->data;
+> -       port->self_powered =3D port->tcpc->config->self_powered;
+> +       port->self_powered =3D tcfg->self_powered;
+>
+>         return 0;
+>  }
+> --
+> 2.7.4
+>
