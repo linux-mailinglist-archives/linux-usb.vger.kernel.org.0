@@ -2,150 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F143B7434B
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 04:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D05974473
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 06:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389131AbfGYC3M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Jul 2019 22:29:12 -0400
-Received: from mail-eopbgr30058.outbound.protection.outlook.com ([40.107.3.58]:44806
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388525AbfGYC3M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Jul 2019 22:29:12 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HnRRlDPchAFpljNdAiTwpJtSscF4C1qZNCSke5NVbyf00as3QKTv7v4t5Vq27cQa+pgRalqmhx/+5UdUO8vxvOVp4fHHkIY3POVP5qB9Gd0o0Ys0W+iVW0eJAapNHKN1btHEBhWRjX7GUdTAcTuAJCAuXBBHyLaDqwdtzJeA3sPmhr6bpJpIs+gIQZmMe2XtLvo8r54Q2CkpYw0ERW2Dp3JB8HxTWztu0JuOOAUDEn/zBrwBwUQ6gZJYH/PrR+rrRtwzYvmZfJviRBH7GKwQtZIc9hD/WyjyR4xt0kzsXJDk5JzFvgdFenWUOoPSElIgHM9XtQKWEonoZ2lyMYrLSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FDGa+OqLRAYmgnda2KStB4zwnQ2VEII9riOZw1AyXY4=;
- b=LbCvAtFbPTRgcVHatuM5dXx/AEkGh1E6YcnrpYYd+BVHfDBWUtFtBjYMios31iHKuBNTHEBKcwqA6yPYpVFclpCZtx62w4gX1hc7mMP8JFetTFXQAKd6j6oa6JJt8KRi3qkQ+muomS2+3MhuGXBgY5iYLgU3vUs9q8vGLAMHhNkA03rWRfHzEJh4/yCkHt7NvlulTzl0U/NrvFt3GpKOpCeU6c03RmuI82AdDPVPGgOsMXLGxFe7d1lfU5D5OZvfN2MuAPU7IdnSlZIaGmLzmwUtv1uQVqioo4314wnEP0skJSfCxypIE6DfSVQYQCugWgq39Ax8ACOY3pcWZmmfVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
- header.d=nxp.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FDGa+OqLRAYmgnda2KStB4zwnQ2VEII9riOZw1AyXY4=;
- b=q4cp9vhM4PwO3cZjmVCAZhlteKWvN2EGKkVD4Xtg0tMkV23iMEPiNjWb/xTgagNSuSI9XFfZzIV2LMbYbtSfLRrySUIyiKDXC6rR9Dm+RquaMKIrrcgNdnjjdPVkwz2xPicYSx1Arzp8r8XhxXw/UNZ8Q07I1rGxN/D+DX7CTmk=
-Received: from DB8PR04MB6826.eurprd04.prod.outlook.com (52.133.240.82) by
- DB8PR04MB5593.eurprd04.prod.outlook.com (20.179.11.151) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2115.10; Thu, 25 Jul 2019 02:29:07 +0000
-Received: from DB8PR04MB6826.eurprd04.prod.outlook.com
- ([fe80::a5a4:22ca:7b9b:2d92]) by DB8PR04MB6826.eurprd04.prod.outlook.com
- ([fe80::a5a4:22ca:7b9b:2d92%2]) with mapi id 15.20.2094.017; Thu, 25 Jul 2019
- 02:29:07 +0000
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH V2 1/2] usb: dwc3: Add node to update cache type setting
-Thread-Topic: [PATCH V2 1/2] usb: dwc3: Add node to update cache type setting
-Thread-Index: AQHVOH5G67Ou1TF8sk6MaGtvp7Q7iKbaT5kAgABcbSA=
-Date:   Thu, 25 Jul 2019 02:29:07 +0000
-Message-ID: <DB8PR04MB6826B4479A5A67A66025E89CF1C10@DB8PR04MB6826.eurprd04.prod.outlook.com>
-References: <20190712064206.48249-1-ran.wang_1@nxp.com>
- <20190724204222.GA1234@bogus>
-In-Reply-To: <20190724204222.GA1234@bogus>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ran.wang_1@nxp.com; 
-x-originating-ip: [92.121.36.198]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d520d5df-8695-4c69-9070-08d710a7de8c
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB8PR04MB5593;
-x-ms-traffictypediagnostic: DB8PR04MB5593:
-x-microsoft-antispam-prvs: <DB8PR04MB55932CFC83D4852D475C3124F1C10@DB8PR04MB5593.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0109D382B0
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(366004)(136003)(39860400002)(396003)(199004)(189003)(71200400001)(71190400001)(446003)(74316002)(53546011)(55016002)(6916009)(7736002)(305945005)(6506007)(6116002)(186003)(6246003)(15650500001)(4326008)(3846002)(229853002)(256004)(14444005)(9686003)(476003)(11346002)(486006)(316002)(8936002)(68736007)(81156014)(81166006)(52536014)(76176011)(478600001)(25786009)(54906003)(86362001)(33656002)(76116006)(5660300002)(99286004)(66476007)(66556008)(66946007)(64756008)(66446008)(2906002)(6436002)(53936002)(26005)(102836004)(8676002)(14454004)(7696005)(66066001);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR04MB5593;H:DB8PR04MB6826.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 5HhAJmcyV0r2CEMPbXuPOKVAzDrfoYboCI+34kCU62QThClIaCQl8CUIeL7eU22TP+yOo2e04QuEDeNLmJDcEHbjuJw/JpTOkDpz3B3vN1uzC7ceK7P8tgVf8ihRFV72eoUUJmsewPnOqFMyzbK4ZaLWYlXgf7LzyHQtXKwIoKMk4JlYeAGAkQuUByO2wm/lHlHfJvIpfY5Gsj8UXpH+d8hqUHWU7JwXSHRIyEMY3/eF81EebSs9VScXTeNq7KmuMAsJXiO89/hcsMjoQiSe/fXzMfKtXwva+a6BZ+4a4ip7YkAIzKJhA/77fdqixP52ZGjOREpTvBpkmAF/YHZGbiDKOZ67Jd8B79znXU9DtV+MP9BVib/2Sg1pAhSTFK4K0w8PICRKp4XXYJEAZMWFyh8F0USjcJ5pFa4cQKhnIA4=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d520d5df-8695-4c69-9070-08d710a7de8c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2019 02:29:07.4150
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ran.wang_1@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB5593
+        id S2387666AbfGYEal (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 00:30:41 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38707 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726102AbfGYEal (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 00:30:41 -0400
+Received: by mail-pg1-f193.google.com with SMTP id f5so13499631pgu.5;
+        Wed, 24 Jul 2019 21:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=2OOipR6ExT2jNJi4jbCkya5oL8OY5qKBVN4HVC3rk40=;
+        b=FzHCkuX/yPdx2rB65HPx3xPsnFpinwzY8xUPsFsNkqk20Pd9KYCc5MaZH8/4FR6wFc
+         kY09+WnE+PA3hkaSW+6kt+6bFZje6pzjOciyxjiU+lglVJQStTJBJ3sV61VRB12o/p3C
+         vogzuNi4N2XHLc5CPnNK/DfXwEbV7aUUF2Oae75AtiRF1SavbX9uV3x45t2CP+XneUWp
+         HLaEj/3kH5bKi0h7uonSPVeEeGs+DBI/smg/WZ/OJOvMHAI/hB2Whwfidn2GQA2pmy9h
+         x8ITDWxZEmw9mpEqKBezniQDW7OkNvxkeCOjEZ2EDWim8qeaUsl417pwYiildxpDArjw
+         HI7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=2OOipR6ExT2jNJi4jbCkya5oL8OY5qKBVN4HVC3rk40=;
+        b=md9B0ChXfNkBdrL5/D9KNdNryY5+VG61Ko43DI4STp42VUrc4HvmdhxLXcASEX2gTY
+         gXw0dzP5hrlukribNsyPsY+tvDx/6+dvZCmLrBj2XBVvLD68AW933yf+bp5synhZOv5E
+         aQlJvqpWhi8REONZQ9VNX6oDQTwp4dyNaNTIUvq9MQaxi9ISkVPwESOLtwjy3V7kXwD/
+         V27RL6/kV3vLi7t/oDXnvHreXmB1Dtm37gRtqkrOGM0+r28gr8TLpi3xQOn4XC9NyCom
+         acFne6LurcFOFRwKR8DafGJ9E+kUTNWZ2h364Rstn8PrDS56VYDRqsKDtC+3DjWK+4wt
+         33ig==
+X-Gm-Message-State: APjAAAWm7eZYSnxxtPjGqZODjzv9IrZCbNu2B+J+kwoWaItMCnPHI/ef
+        VNATtemQpN7z0SeY4ryi+txwADVC
+X-Google-Smtp-Source: APXvYqxZPyLC+zW4PLVN9gRsznLhYfP5lFVWO1Mywd6VzjZseDLRdCth8ccSI0PNWuDWNK7ePiBjxA==
+X-Received: by 2002:a17:90a:cb18:: with SMTP id z24mr39609687pjt.108.1564029040397;
+        Wed, 24 Jul 2019 21:30:40 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t9sm48380995pji.18.2019.07.24.21.30.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 24 Jul 2019 21:30:39 -0700 (PDT)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Douglas Gilbert <dgilbert@interlog.com>
+Subject: [RFC PATCH] usb: typec: tcpm: Ignore unsupported/unknown alternate mode requests
+Date:   Wed, 24 Jul 2019 21:30:37 -0700
+Message-Id: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+TCPM may receive PD messages associated with unknown or unsupported
+alternate modes. If that happens, calls to typec_match_altmode()
+will return NULL. The tcpm code does not currently take this into
+account. This results in crashes.
 
-On Thursday, July 25, 2019 04:42 Rob Herring <robh@kernel.org> wrote:
->=20
-> On Fri, Jul 12, 2019 at 02:42:05PM +0800, Ran Wang wrote:
-> > Some Layerscape paltforms (such as LS1088A, LS2088A, etc) encounter
-> > USB detect failues when adding dma-coherent to DWC3 node. This is
-> > because the HW default cache type configuration of those SoC are not
-> > right, need to be updated in DTS.
-> >
-> > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> > ---
-> > Change in v2:
-> > 	- New file.
-> >
-> >  Documentation/devicetree/bindings/usb/dwc3.txt | 43
-> > ++++++++++++++++++++++++++
-> >  1 file changed, 43 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt
-> > b/Documentation/devicetree/bindings/usb/dwc3.txt
-> > index 8e5265e..7bc1cef 100644
-> > --- a/Documentation/devicetree/bindings/usb/dwc3.txt
-> > +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-> > @@ -110,6 +110,43 @@ Optional properties:
-> >   - in addition all properties from usb-xhci.txt from the current direc=
-tory are
-> >     supported as well
-> >
-> > +* Cache type nodes (optional)
-> > +
-> > +The Cache type node is used to tell how to configure cache type on 4
-> > +different transfer types: Data Read, Desc Read, Data Write and Desc
-> > +write. For each treasfer type, controller has a 4-bit register field
-> > +to enable different cache type. Quoted from DWC3 data book Table 6-5
-> Cache Type Bit Assignments:
-> > +----------------------------------------------------------------
-> > +MBUS_TYPE| bit[3]       |bit[2]       |bit[1]     |bit[0]
-> > +----------------------------------------------------------------
-> > +AHB      |Cacheable     |Bufferable   |Privilegge |Data
-> > +AXI3     |Write Allocate|Read Allocate|Cacheable  |Bufferable
-> > +AXI4     |Allocate Other|Allocate     |Modifiable |Bufferable
-> > +AXI4     |Other Allocate|Allocate     |Modifiable |Bufferable
-> > +Native   |Same as AXI   |Same as AXI  |Same as AXI|Same as AXI
-> > +----------------------------------------------------------------
-> > +Note: The AHB, AXI3, AXI4, and PCIe busses use different names for
-> > +certain signals, which have the same meaning:
-> > +  Bufferable =3D Posted
-> > +  Cacheable =3D Modifiable =3D Snoop (negation of No Snoop)
->=20
-> This should all be implied from the SoC specific compatible strings.
+Unable to handle kernel NULL pointer dereference at virtual address 000001f0
+pgd = 41dad9a1
+[000001f0] *pgd=00000000
+Internal error: Oops: 5 [#1] THUMB2
+Modules linked in: tcpci tcpm
+CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
+Hardware name: Atmel SAMA5
+Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
+PC is at typec_altmode_attention+0x0/0x14
+LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
+...
+[<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
+				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
+[<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
+				(process_one_work+0x123/0x2a8)
+[<c012082b>] (process_one_work) from [<c0120a6d>]
+				(worker_thread+0xbd/0x3b0)
+[<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
+[<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
 
-Did you mean I could implement a soc driver which can be matched by compati=
-ble of 'fsl,ls1088a-dwc3' which will pass known bus type to DWC3 driver? If=
- yes, how to pass?
+Ignore PD messages if the asociated alternate mode is not supported.
 
-Or I need to add a property snps,mbus_type=3D"AXI3" to DWC3 node, which wil=
-l co-work with property  transfer_type-datard =3D "cacheable" to set cache =
-type properly?
+Reported-by: Douglas Gilbert <dgilbert@interlog.com>
+Cc: Douglas Gilbert <dgilbert@interlog.com>
+Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+Taking a stab at the problem. I don't really know if this is the correct
+fix, or even if my understanding of the problem is correct, thus marking
+the patch as RFC.
 
-Thanks & Regards,
-Ran
+ drivers/usb/typec/tcpm/tcpm.c | 38 ++++++++++++++++++++++++--------------
+ 1 file changed, 24 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 77f71f602f73..1df2844469aa 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1096,7 +1096,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+ 			break;
+ 		case CMD_ATTENTION:
+ 			/* Attention command does not have response */
+-			typec_altmode_attention(adev, p[1]);
++			if (adev)
++				typec_altmode_attention(adev, p[1]);
+ 			return 0;
+ 		default:
+ 			break;
+@@ -1148,20 +1149,26 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+ 			}
+ 			break;
+ 		case CMD_ENTER_MODE:
+-			typec_altmode_update_active(pdev, true);
+-
+-			if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
+-				response[0] = VDO(adev->svid, 1, CMD_EXIT_MODE);
+-				response[0] |= VDO_OPOS(adev->mode);
+-				return 1;
++			if (adev && pdev) {
++				typec_altmode_update_active(pdev, true);
++
++				if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
++					response[0] = VDO(adev->svid, 1,
++							  CMD_EXIT_MODE);
++					response[0] |= VDO_OPOS(adev->mode);
++					return 1;
++				}
+ 			}
+ 			return 0;
+ 		case CMD_EXIT_MODE:
+-			typec_altmode_update_active(pdev, false);
++			if (adev && pdev) {
++				typec_altmode_update_active(pdev, false);
+ 
+-			/* Back to USB Operation */
+-			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
+-						     NULL));
++				/* Back to USB Operation */
++				WARN_ON(typec_altmode_notify(adev,
++							     TYPEC_STATE_USB,
++							     NULL));
++			}
+ 			break;
+ 		default:
+ 			break;
+@@ -1171,8 +1178,10 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+ 		switch (cmd) {
+ 		case CMD_ENTER_MODE:
+ 			/* Back to USB Operation */
+-			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
+-						     NULL));
++			if (adev)
++				WARN_ON(typec_altmode_notify(adev,
++							     TYPEC_STATE_USB,
++							     NULL));
+ 			break;
+ 		default:
+ 			break;
+@@ -1183,7 +1192,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+ 	}
+ 
+ 	/* Informing the alternate mode drivers about everything */
+-	typec_altmode_vdm(adev, p[0], &p[1], cnt);
++	if (adev)
++		typec_altmode_vdm(adev, p[0], &p[1], cnt);
+ 
+ 	return rlen;
+ }
+-- 
+2.7.4
+
