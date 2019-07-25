@@ -2,183 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC8F746D8
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 08:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1316374816
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jul 2019 09:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729038AbfGYGJ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jul 2019 02:09:26 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:34692 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726325AbfGYGJZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jul 2019 02:09:25 -0400
-Received: by mail-vs1-f65.google.com with SMTP id m23so32999783vso.1;
-        Wed, 24 Jul 2019 23:09:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8n+oScGCx7XOhecxHmlqcG+ta+ra65NsPlKdfashxxc=;
-        b=giC78xbUtZGlw2pKKUVQXWhgYXtov7f+F+vAMBXe13zQy9KhW+JXMmAwgs8M8abups
-         3ou2cRmq59VoizF+dalnKhbqoOzgSUB9OnvIYpEvIsr+J4oxoPaO31Iaj45B3rWianib
-         F0tORVau3XntYhNPwf7cDpsCqArA6kgCQVo0YCYgiWkQwitekH0o7baxCBHAjPID8IYH
-         raV4pjRnR+aPX0aEBPZLu5SRF8PEPjmqhteynZC8NhnPyOSzdq+Mm2NI6hZE5AP/uc3u
-         Jg4PfaiHkwdxlPzu7dZ/lyAXdzffQAqOhlpRijTP70053mtCZa1v8tBZ96dkAizX72hy
-         5kgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8n+oScGCx7XOhecxHmlqcG+ta+ra65NsPlKdfashxxc=;
-        b=clZSJGzlCjAE9DtbrOJU1pEpRVbX5A2FqIZYMcDacheJWN+7JH0PqOTLo/6plK4vjL
-         wm6KZZBAg6LOnomA7wmfAkwziHSVqYqxaxgWcwdOrS/YPS5fS6oQQxF6U9EnAYxtc+Vz
-         RsK/n3yxO4pGgarxREGZ4PLVWTRIZSCvzr9DScSOAJDIiJPbhH4r2yyIfzobgizjGWoa
-         poEMAJ11uwgwUtmBXaoTteAGNI05T4J8ia2J5YC8OsT8OsaOkY4+oPEqiMLp72+crkPg
-         gG2SC6H+VQhsOmao3nN7hsaPJMIZ0lBEPz2Q9n4c7wr93Xev/LXgaxVxHKXDeUAu1fBw
-         BC8w==
-X-Gm-Message-State: APjAAAWnSAC+/H3vI67rOQAvLxoSaFkyjS0c1Cp1hkAmoDjC8lEIADY3
-        M/1eyfkWXZv5tHN7aOd6vkPHMEDoN9w9RJEk3CE=
-X-Google-Smtp-Source: APXvYqxJOMoQJ1TicOfUb0mMN+vDK2H8hUL/7uBcPgwwEThqBClMb2rLab75oLaA2sO6jBVg0NPKYx9vmEdL2HciGsU=
-X-Received: by 2002:a67:cd1a:: with SMTP id u26mr54804933vsl.155.1564034964325;
- Wed, 24 Jul 2019 23:09:24 -0700 (PDT)
+        id S2388111AbfGYH3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jul 2019 03:29:33 -0400
+Received: from mga17.intel.com ([192.55.52.151]:29860 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388107AbfGYH3c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Jul 2019 03:29:32 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jul 2019 00:29:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,306,1559545200"; 
+   d="scan'208";a="321588438"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by orsmga004.jf.intel.com with ESMTP; 25 Jul 2019 00:29:31 -0700
+Subject: Re: KERNEL CRASH when using XHCI devices (affects any architecture,
+ any USB device)
+To:     Maik Stohn <maik.stohn@seal-one.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+References: <21B63064-BAD5-4DC3-8E1A-3986CD948A93@seal-one.com>
+ <20190724142031.GA3087@kroah.com>
+ <F200CEE8-2611-4A83-A5FE-3D8A9E588BCD@seal-one.com>
+ <fca83889-e320-d0e0-fbb7-d260f1fcaaed@linux.intel.com>
+ <8F5BB91F-39D7-43D0-AED1-EE74E5BC717F@seal-one.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <48336068-5a17-1b65-fa27-e9073e522b20@linux.intel.com>
+Date:   Thu, 25 Jul 2019 10:31:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <1563979112-22483-1-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1563979112-22483-1-git-send-email-linux@roeck-us.net>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Thu, 25 Jul 2019 14:09:12 +0800
-Message-ID: <CAKgpwJV_gJ7sBvtv6B89GBSFam6Dn97=BxKkBM8waDKmEa72-g@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: tcpm: Add NULL check before dereferencing config
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Douglas Gilbert <dgilbert@interlog.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <8F5BB91F-39D7-43D0-AED1-EE74E5BC717F@seal-one.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Guenter Roeck <linux@roeck-us.net> =E4=BA=8E2019=E5=B9=B47=E6=9C=8824=E6=97=
-=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=8810:40=E5=86=99=E9=81=93=EF=BC=9A
->
-> When instantiating tcpm on an NXP OM 13588 board with NXP PTN5110,
-> the following crash is seen when writing into the 'preferred_role'
-> sysfs attribute.
->
-> Unable to handle kernel NULL pointer dereference at virtual address 00000=
-028
-> pgd =3D f69149ad
-> [00000028] *pgd=3D00000000
-> Internal error: Oops: 5 [#1] THUMB2
-> Modules linked in: tcpci tcpm
-> CPU: 0 PID: 1882 Comm: bash Not tainted 5.1.18-sama5-armv7-r2 #4
-> Hardware name: Atmel SAMA5
-> PC is at tcpm_try_role+0x3a/0x4c [tcpm]
-> LR is at tcpm_try_role+0x15/0x4c [tcpm]
-> pc : [<bf8000e2>]    lr : [<bf8000bd>]    psr: 60030033
-> sp : dc1a1e88  ip : c03fb47d  fp : 00000000
-> r10: dc216190  r9 : dc1a1f78  r8 : 00000001
-> r7 : df4ae044  r6 : dd032e90  r5 : dd1ce340  r4 : df4ae054
-> r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : df4ae044
-> Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA Thumb  Segment none
-> Control: 50c53c7d  Table: 3efec059  DAC: 00000051
-> Process bash (pid: 1882, stack limit =3D 0x6a6d4aa5)
-> Stack: (0xdc1a1e88 to 0xdc1a2000)
-> 1e80:                   dd05d808 dd1ce340 00000001 00000007 dd1ce340 c03f=
-b4a7
-> 1ea0: 00000007 00000007 dc216180 00000000 00000000 c01e1e03 00000000 0000=
-0000
-> 1ec0: c0907008 dee98b40 c01e1d5d c06106c4 00000000 00000000 00000007 c019=
-4e8b
-> 1ee0: 0000000a 00000400 00000000 c01a97db dc22bf00 ffffe000 df4b6a00 df74=
-5900
-> 1f00: 00000001 00000001 000000dd c01a9c2f 7aeab3be c0907008 00000000 dc22=
-bf00
-> 1f20: c0907008 00000000 00000000 00000000 00000000 7aeab3be 00000007 dee9=
-8b40
-> 1f40: 005dc318 dc1a1f78 00000000 00000000 00000007 c01969f7 0000000a c01a=
-20cb
-> 1f60: dee98b40 c0907008 dee98b40 005dc318 00000000 c0196b9b 00000000 0000=
-0000
-> 1f80: dee98b40 7aeab3be 00000074 005dc318 b6f3bdb0 00000004 c0101224 dc1a=
-0000
-> 1fa0: 00000004 c0101001 00000074 005dc318 00000001 005dc318 00000007 0000=
-0000
-> 1fc0: 00000074 005dc318 b6f3bdb0 00000004 00000007 00000007 00000000 0000=
-0000
-> 1fe0: 00000004 be800880 b6ed35b3 b6e5c746 60030030 00000001 00000000 0000=
-0000
-> [<bf8000e2>] (tcpm_try_role [tcpm]) from [<c03fb4a7>] (preferred_role_sto=
-re+0x2b/0x5c)
-> [<c03fb4a7>] (preferred_role_store) from [<c01e1e03>] (kernfs_fop_write+0=
-xa7/0x150)
-> [<c01e1e03>] (kernfs_fop_write) from [<c0194e8b>] (__vfs_write+0x1f/0x104=
-)
-> [<c0194e8b>] (__vfs_write) from [<c01969f7>] (vfs_write+0x6b/0x104)
-> [<c01969f7>] (vfs_write) from [<c0196b9b>] (ksys_write+0x43/0x94)
-> [<c0196b9b>] (ksys_write) from [<c0101001>] (ret_fast_syscall+0x1/0x62)
->
-> Since commit 96232cbc6c994 ("usb: typec: tcpm: support get typec and pd
-> config from device properties"), the 'config' pointer in struct tcpc_dev
-> is optional when registering a Type-C port. Since it is optional, we have
-> to check if it is NULL before dereferencing it.
->
-> Reported-by: Douglas Gilbert <dgilbert@interlog.com>
-> Cc: Douglas Gilbert <dgilbert@interlog.com>
-> Fixes: 96232cbc6c994 ("usb: typec: tcpm: support get typec and pd config =
-from device properties")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+On 24.7.2019 19.29, Maik Stohn wrote:
+>>
+>> Am 24.07.2019 um 18:03 schrieb Mathias Nyman <mathias.nyman@linux.intel.com>:
+>>
+>> On 24.7.2019 17.34, Maik Stohn wrote:
+>>>>
+>>>> Am 24.07.2019 um 16:20 schrieb Greg KH <gregkh@linuxfoundation.org>:
+>>>>
+>>>> On Wed, Jul 24, 2019 at 03:27:51PM +0200, Maik Stohn wrote:
+>>>>> KERNEL CRASH when using XHCI devices (affects any architecture, any USB device)
+>>>>>
+>>>>> This was already reported as a kernel bug in bugzilla (https://bugzilla.kernel.org/show_bug.cgi?id=204257) but I got told to report it here since it is usb related...
+>>>>>
+>>>>> Affected kernels: 5.2, 5.2.1, 5.2.2, 5.3-rc1, ...
+>>>>>
+>>>>> This bug is already causing real world problems with existing software and devices using SCSI BOT with raw SCSI commands and libusb software.
+>>>>>
+>>>>> Reproduce (tested on several different machines with 5.2,5.2.1,5.2.2,5.3rc1):
+>>>>>
+>>>>> - usb flash drive attached to XHCI controller (e.g. USB3.0 flash drive attached to USB3.0 port)
+>>>>> - generic scsi module loaded (e.g. /dev/sg0 comes up when attaching the flash drive)
+>>>>> - command line tool "sg_raw" from "sg3-utils"
+>>>>> - execute: and press a key + return (-s1 sends one byte which is read from stdin)
+>>>>>    $ sudo sg_raw -s1 /dev/sg0 00 00 00 00 00 00 00 00 00 00
+>>>>>
+>>>>> -> KERNEL Oops
+>>>>>
+>>>>> - same for -s2, -s3, ... up to -s8   (sending 1 to 8 bytes, exactly the maximum of bytes on my 64 bit machine where the "DMA bypass optimization / IDT" kicks in, see below)
+>>>>>
+>>>>> Since this can be triggered by any normal user (without any special USB device needed) I think it is important enough to fix it for the existing 5.2 kernel as well.
+>>>>>
+>>>>> ---
+>>>>>
+>>>>> Patch introducing the crash:  https://patchwork.kernel.org/patch/10919167 / commit 33e39350ebd20fe6a77a51b8c21c3aa6b4a208cf - "usb: xhci: add Immediate Data Transfer support"
+>>>>>
+>>>>> Reason: NULL pointer dereference
+>>>>>
+>>>>> ---
+>>>>>
+>>>>> I took me quite some time to find the cause of this.
+>>>>>
+>>>>> I narrowed the crash down to the place inside of "xhci_queue_bulk_tx" in "xhci-ring.c" where the next SG is loaded
+>>>>>
+>>>>> ...
+>>>>>     while (sg && sent_len >= block_len) {
+>>>>>       /* New sg entry */
+>>>>>       --num_sgs;
+>>>>>       sent_len -= block_len;
+>>>>>       if (num_sgs != 0) {
+>>>>>         sg = sg_next(sg);
+>>>>>         block_len = sg_dma_len(sg);           <================= CRASH
+>>>>>                                                                  The comment of "sg_dma_len" clearly states "These macros should be used after a dma_map_sg call has been done..." - which was
+>>>>>                                                                  omitted by the new "xhci_map_urb_for_dma" function since the transfer was considered suitable for IDT.
+>>>>>         addr = (u64) sg_dma_address(sg);
+>>>>>         addr += sent_len;
+>>>>>       }
+>>>>>     }
+>>>>>     block_len -= sent_len;
+>>>>>     send_addr = addr;
+>>>>> ...
+>>>>>
+>>>>> This only happens if the transfer was cosnideres suitable for IDT.
+>>>>> When I patched the function "xhci_urb_suitable_for_idt" to always return false (nothing suitable for IDT) everything was working fine.
+>>>>>
+>>>>>
+>>>>> Unfortunately I'm not deep enough into the inner workings of the kernel usb host driver to find a solution for this other than reverting the patch for IDT.
+>>
+>> Nice catch.
+>> The immediate data (IDT) support assumed that when there is max 8 bytes of data,
+>> and it's not already dma mapped then we can just copy the data directly from
+>> urb->transfer_buffer.
+>> 											
+>> I didn't take into account that this small amount of data can be in a sg list.
+>>
+>> Does the below code help:
+>>
+>> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+>> index 7a26496..f5c4144 100644
+>> --- a/drivers/usb/host/xhci.h
+>> +++ b/drivers/usb/host/xhci.h
+>> @@ -2175,7 +2175,8 @@ static inline bool xhci_urb_suitable_for_idt(struct urb *urb)
+>>         if (!usb_endpoint_xfer_isoc(&urb->ep->desc) && usb_urb_dir_out(urb) &&
+>>             usb_endpoint_maxp(&urb->ep->desc) >= TRB_IDT_MAX_SIZE &&
+>>             urb->transfer_buffer_length <= TRB_IDT_MAX_SIZE &&
+>> -           !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
+>> +           !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP) &&
+>> +           !urb->num_sgs)
+>>                 return true;
+>>          return false;
+>>
+>>
+>> -Mathias
+> 
+> Hello Matthias,
+> 
+> Your patch fixes the problem with short SGs and IDT.
+> No more crashes. Tested on 5.3-rc.
+> 
+> Will this be applied to 5.2.*  as well?
+> I need to inform some users how this problem is mitigated (e.g. using updated 5.2.3? when available or not using 5.2 at all and wait for 5.3).
+> 
+> Thanks for the fast feedback,
+> 
+> Greetings,
+> 
+> Maik Stohn
+> 
 
-Reviewed-by: Jun Li <jun.li@nxp.com>
+I'll make a proper patch, and add stable tag so it should end up in a later 5.2.y kernel
 
-> ---
-> v2: Added missing Cc:. Sorry for the noise.
->
-> Doug:
->     I didn't add your Tested-by: since I added more code.
->     It would be great if you can re-test.
->
->  drivers/usb/typec/tcpm/tcpm.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
-c
-> index fba32d84e578..77f71f602f73 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -379,7 +379,8 @@ static enum tcpm_state tcpm_default_state(struct tcpm=
-_port *port)
->                         return SNK_UNATTACHED;
->                 else if (port->try_role =3D=3D TYPEC_SOURCE)
->                         return SRC_UNATTACHED;
-> -               else if (port->tcpc->config->default_role =3D=3D TYPEC_SI=
-NK)
-> +               else if (port->tcpc->config &&
-> +                        port->tcpc->config->default_role =3D=3D TYPEC_SI=
-NK)
->                         return SNK_UNATTACHED;
->                 /* Fall through to return SRC_UNATTACHED */
->         } else if (port->port_type =3D=3D TYPEC_PORT_SNK) {
-> @@ -4114,7 +4115,7 @@ static int tcpm_try_role(const struct typec_capabil=
-ity *cap, int role)
->         mutex_lock(&port->lock);
->         if (tcpc->try_role)
->                 ret =3D tcpc->try_role(tcpc, role);
-> -       if (!ret && !tcpc->config->try_role_hw)
-> +       if (!ret && (!tcpc->config || !tcpc->config->try_role_hw))
->                 port->try_role =3D role;
->         port->try_src_count =3D 0;
->         port->try_snk_count =3D 0;
-> @@ -4701,7 +4702,7 @@ static int tcpm_copy_caps(struct tcpm_port *port,
->         port->typec_caps.prefer_role =3D tcfg->default_role;
->         port->typec_caps.type =3D tcfg->type;
->         port->typec_caps.data =3D tcfg->data;
-> -       port->self_powered =3D port->tcpc->config->self_powered;
-> +       port->self_powered =3D tcfg->self_powered;
->
->         return 0;
->  }
-> --
-> 2.7.4
->
+-Mathias
