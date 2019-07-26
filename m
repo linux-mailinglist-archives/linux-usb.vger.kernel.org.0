@@ -2,182 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C97F76C84
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2019 17:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806E376F62
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2019 18:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727895AbfGZPVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jul 2019 11:21:36 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:52302 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726731AbfGZPVg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Jul 2019 11:21:36 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 3618C204194;
-        Fri, 26 Jul 2019 17:21:33 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WrYd0Hozk3az; Fri, 26 Jul 2019 17:21:26 +0200 (CEST)
-Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 473D7204187;
-        Fri, 26 Jul 2019 17:21:24 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [RFC PATCH] usb: typec: tcpm: Ignore unsupported/unknown
- alternate mode requests
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <a6bff0eb-6b6f-5724-ddca-42bc46e794b8@interlog.com>
-Date:   Fri, 26 Jul 2019 11:21:23 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727571AbfGZQw3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jul 2019 12:52:29 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:38754 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726827AbfGZQw3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jul 2019 12:52:29 -0400
+Received: by mail-qt1-f193.google.com with SMTP id n11so53221939qtl.5
+        for <linux-usb@vger.kernel.org>; Fri, 26 Jul 2019 09:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=qaOWGs23G49TWwws7WjjdoCv06+sXW9upizbWmsREGM=;
+        b=MBKJbuMrs9FSTsgDbpfMEC2iM+Mgo/gNYAa3SM3aaQ8NIBY6v4rD+MmM6UONYqYX8y
+         fV6WIXzbBAtiC04TwawPu+avmWl7u6cCkPHfj7xZ7EBr3sjoSW9pLTlEWMwG4I9nEBuB
+         kbcCDp0IYhpUBF9aQOgKEjOHuISU6K21Q/KE9/ocl8zP/tfnDZYWpUKHH4fwMyEo1IVp
+         Ex0vqVhpapA0o+umQN6+Mh/SRg/Ff8VCFCxkyc6aHlXs2QQ89RTq1BaWvSq3RxCyQgBl
+         QnyScmmox2OYfEA5SrYaInW8kG1ozHCMQxHZWV3Vz8yXtGI4WanKuJwTW8cQPAjXIO9j
+         pUVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=qaOWGs23G49TWwws7WjjdoCv06+sXW9upizbWmsREGM=;
+        b=ile/XICbZD4funJ3hjoDu7gv/MU1xQZBKrd5vRRYPPui++p7rUe64uzm0+5kv9Reks
+         ZMYd0ZOvaNMujSqqmCuKNXNY013X3SquLIGUrM4Xp1U7vTJFtbGYKxVYW32ZNkWP94G3
+         bIJgIhNaYrWdyWrvjoKOOR8Pwy3yo6jAuNQ0+xUlpXvmpVUBwl7KogmG27LrlxX386Hp
+         B3RjsX88WyZhh7lGDB/IjqwXJkeIhdgDHg5EHejXwSFT9ePtpwue8+KVToystZWEgKgI
+         o7IHYaKSr7vgHupTLkVDEvrYEa43/KHxzr+W+XBtZSA07p+LzI7arxOEDzc4yetc4ozG
+         AzqQ==
+X-Gm-Message-State: APjAAAXI2tFjre2qH4v7yFBtzrD35FPhC4MK9t2I7fvZlfOft/9WLXV/
+        kQ19PBX4VynRT6YZd2mVg+mfhHygGh1I8MUraU0=
+X-Google-Smtp-Source: APXvYqyRqfPcz7rcgMGQO0a1Xg8BgrG0FA5d73BKM93l8ujPyfPbiSSGVebQirNV9WxwZB6CZnlKxYXOzdXOIou0f1E=
+X-Received: by 2002:ac8:4252:: with SMTP id r18mr6404984qtm.357.1564159527359;
+ Fri, 26 Jul 2019 09:45:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Fri, 26 Jul 2019 09:45:26
+ -0700 (PDT)
+Reply-To: dhl.benin2019@outlook.com
+From:   "DR, MOHAMMED BUHARI, PRESIDENT OF NIGERIA" 
+        <westernunion.benin982@gmail.com>
+Date:   Fri, 26 Jul 2019 17:45:26 +0100
+Message-ID: <CAP=nHBKv0J2KVfmfnQs7YrrDs_VuL_F5x-ghM0J6qN3=fYF1qA@mail.gmail.com>
+Subject: Attn Dear Atm Card beneficiary. GOOD NEWS,Shipment number:
+ 4Z69536197319960 Content Packages: ATM Visa Card, amount of $18.5Million
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2019-07-25 12:30 a.m., Guenter Roeck wrote:
-> TCPM may receive PD messages associated with unknown or unsupported
-> alternate modes. If that happens, calls to typec_match_altmode()
-> will return NULL. The tcpm code does not currently take this into
-> account. This results in crashes.
-> 
-> Unable to handle kernel NULL pointer dereference at virtual address 000001f0
-> pgd = 41dad9a1
-> [000001f0] *pgd=00000000
-> Internal error: Oops: 5 [#1] THUMB2
-> Modules linked in: tcpci tcpm
-> CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
-> Hardware name: Atmel SAMA5
-> Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
-> PC is at typec_altmode_attention+0x0/0x14
-> LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
-> ...
-> [<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
-> 				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
-> [<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
-> 				(process_one_work+0x123/0x2a8)
-> [<c012082b>] (process_one_work) from [<c0120a6d>]
-> 				(worker_thread+0xbd/0x3b0)
-> [<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
-> [<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
-> 
-> Ignore PD messages if the asociated alternate mode is not supported.
-> 
-> Reported-by: Douglas Gilbert <dgilbert@interlog.com>
-> Cc: Douglas Gilbert <dgilbert@interlog.com>
-> Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> Taking a stab at the problem. I don't really know if this is the correct
-> fix, or even if my understanding of the problem is correct, thus marking
-> the patch as RFC.
+Attn Dear Atm Card beneficiary.
 
-Tested-by: Douglas Gilbert <dgilbert@interlog.com>
+GOOD NEWS,
+This is to inform you that i have paid the delivery fees for your ATM
+Master Card
+I paid it because our bank director stated that before, they
+So contact Dr. William Roberts, Director DHL Courier
+Company Benin to receive your delivery ATM Visa Card amount of $18.5m US Dollars
+It is shipment was registered to your addres.
+Contact the office now to know when they will delivery arrive to your country
 
-Took a little while because I was changing my Linux end to being based
-on a Acme Systems Arietta (at91sam9g25). Reason: on the sama5d2xplained
-I can't have the shield plugged into the Arduino sockets because it
-drives the pin used by the OM13588 for its interrupt (nalert). So I
-need to "jump" the pins needed (SDA, SCL, nALERT, 3v3 and ground) to
-get this working (and 'cat /proc/interrupts' shows me its working
-with >0 interrupts on "2-0050").
+Email id: dhl.benin2019@outlook.com
+Tel/mobile, +229 99652699
+Contact the office now to know when they will delivery arrive to your
+country today
+Shipment Details
+-----------------------------------------------------
+Shipment number: 4Z69536197319960
+Content Packages: ATM Visa Card amount of $18.5Million
+Scheduled Delivery
+Remember I have paid the insurance and Security Keeping fees for you
+But the only money you are required to send to this company is $125.00
+been your accurate ATM Visa Card clearance Fee before they will effect
+the delivery to you.
+Send the required delivery fee $125.00 only to the DHL Office on this
+information
+Payment is to be made via Western Union or Money Gram transfer for
+security purposes.
 
-Anyway the DUT is a OM13588+sama5d2xplained running lk 5.1.18 and the
-other end of the USB-C cable is a OM13588+KL27Z running NXP PD
-software. Both ends can "play" sink or source (power). The oops
-occurred when the DUT was source and the other end sent a "send
-attention" ("l") command. With this patch I do not see the oops.
+Receive's Name---------------------Alan Ude
+Country-------------------------------------Benin
+City-----------------------------------Cotonou
+Quest-------------------------------Honest
+Answer----------------------------------Trust
+Amount---------------------------$125.00 only
+Let me know once you send the fee today okay.
 
+Blessing upon, blessing upon, blessing upon blessing upon,God has
+chosen you for testimony time,
+I wait for your urgent reply
 
-BTW I have tried to run lk 5.2.1 on the sama5d2xplained and the
-kernel wouldn't start :-( Zilch after u-boot said it was loading
-the kernel.
-
->   drivers/usb/typec/tcpm/tcpm.c | 38 ++++++++++++++++++++++++--------------
->   1 file changed, 24 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 77f71f602f73..1df2844469aa 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1096,7 +1096,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
->   			break;
->   		case CMD_ATTENTION:
->   			/* Attention command does not have response */
-> -			typec_altmode_attention(adev, p[1]);
-> +			if (adev)
-> +				typec_altmode_attention(adev, p[1]);
->   			return 0;
->   		default:
->   			break;
-> @@ -1148,20 +1149,26 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
->   			}
->   			break;
->   		case CMD_ENTER_MODE:
-> -			typec_altmode_update_active(pdev, true);
-> -
-> -			if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
-> -				response[0] = VDO(adev->svid, 1, CMD_EXIT_MODE);
-> -				response[0] |= VDO_OPOS(adev->mode);
-> -				return 1;
-> +			if (adev && pdev) {
-> +				typec_altmode_update_active(pdev, true);
-> +
-> +				if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
-> +					response[0] = VDO(adev->svid, 1,
-> +							  CMD_EXIT_MODE);
-> +					response[0] |= VDO_OPOS(adev->mode);
-> +					return 1;
-> +				}
->   			}
->   			return 0;
->   		case CMD_EXIT_MODE:
-> -			typec_altmode_update_active(pdev, false);
-> +			if (adev && pdev) {
-> +				typec_altmode_update_active(pdev, false);
->   
-> -			/* Back to USB Operation */
-> -			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
-> -						     NULL));
-> +				/* Back to USB Operation */
-> +				WARN_ON(typec_altmode_notify(adev,
-> +							     TYPEC_STATE_USB,
-> +							     NULL));
-> +			}
->   			break;
->   		default:
->   			break;
-> @@ -1171,8 +1178,10 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
->   		switch (cmd) {
->   		case CMD_ENTER_MODE:
->   			/* Back to USB Operation */
-> -			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
-> -						     NULL));
-> +			if (adev)
-> +				WARN_ON(typec_altmode_notify(adev,
-> +							     TYPEC_STATE_USB,
-> +							     NULL));
->   			break;
->   		default:
->   			break;
-> @@ -1183,7 +1192,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
->   	}
->   
->   	/* Informing the alternate mode drivers about everything */
-> -	typec_altmode_vdm(adev, p[0], &p[1], cnt);
-> +	if (adev)
-> +		typec_altmode_vdm(adev, p[0], &p[1], cnt);
->   
->   	return rlen;
->   }
-> 
-
+Sincerely
+DR, MOHAMMED BUHARI, PRESIDENT OF NIGERIA
