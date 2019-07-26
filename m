@@ -2,118 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F55D76B6F
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2019 16:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C97F76C84
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2019 17:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727722AbfGZOWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jul 2019 10:22:09 -0400
-Received: from mail-qk1-f179.google.com ([209.85.222.179]:35798 "EHLO
-        mail-qk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725869AbfGZOWI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jul 2019 10:22:08 -0400
-Received: by mail-qk1-f179.google.com with SMTP id r21so39189081qke.2
-        for <linux-usb@vger.kernel.org>; Fri, 26 Jul 2019 07:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Qu+GUHYMiXIaNn9bHhKBGonN0veqvfBYcXQGguF4XVg=;
-        b=oiXtbinDG7g8GKuGU1MjqT2aanVSHLgPevsLAlK0jhoUYwI6iToEvIAnKWWMqIoN3S
-         YbXelHQMgEnWhu5MXI7gJFNt9K1nn5U7IDCHC0KE9x5miqlGQ5aRvgpSGwxv0CZpcy/g
-         hXu93hPuE7WMpOusdgOTnfKHcHzUbMPiCBY01qrP42Kr21odD5Ev/pNvjpJgsMmjO5WE
-         4fz2Ur/ek501yKm7Wyd3RU6hj6Mef73kog00hxHnBV9Sc4OJsxh+sn9CLwnDI9j7tERG
-         p3hCrHzpPphR9yrjMdJgeCK0irz4Oj4YNy4aEMLijhc/qtQEiSL944SBYHLe/IWGwDdQ
-         wYLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qu+GUHYMiXIaNn9bHhKBGonN0veqvfBYcXQGguF4XVg=;
-        b=hWR5Ybv4ZpOvmXPLsjejyGiDxZl2uh5mqxidp1ZNDe+XNbn257BF9afLbhj/6VhmwI
-         xRJkhf8eczY/7NZ3NhGTYeqORXph+lYaejnO0b0766pibc/F90FgLDyod9EJIDeokL6+
-         MgTWw08q/wTtiJTcL+qgSmPcmwp3CtekzO/XXlvDF3J+TqHkh9fRnL5IQKYfFq7OS5X2
-         UYFX2zzGM5B/KMSehhw91Dp1SOXy0zmbxO+8HFa1D4j7j7ZbrKt71PI9sO5DdLFrI1y/
-         3oqUpxBuqgKRPl1uECoumR1puEFuFv+Vb9QGWAIBaOT06tGapBrcLBPJ/j1nq9Rs++dp
-         V97Q==
-X-Gm-Message-State: APjAAAV/JjrdGxrbnu+7Rc5AGfbeyMvH/AoqbYhUQWnD7m5HKBGb1ukL
-        dQzOcKBXJuLIE9Fl7c75WzUFYj4dcgKvUBqCL5h/N94z0N8=
-X-Google-Smtp-Source: APXvYqwrkcZVWSexptrF4QwiZB4bI0wDXLaQ+xN9oJvpZNYLK9i5nJW1YybOy+uqjbVK0g6tYyuFWGXwElC0HiXav2Q=
-X-Received: by 2002:a05:620a:12f7:: with SMTP id f23mr60858323qkl.499.1564150927505;
- Fri, 26 Jul 2019 07:22:07 -0700 (PDT)
+        id S1727895AbfGZPVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jul 2019 11:21:36 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:52302 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726731AbfGZPVg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Jul 2019 11:21:36 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 3618C204194;
+        Fri, 26 Jul 2019 17:21:33 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WrYd0Hozk3az; Fri, 26 Jul 2019 17:21:26 +0200 (CEST)
+Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id 473D7204187;
+        Fri, 26 Jul 2019 17:21:24 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [RFC PATCH] usb: typec: tcpm: Ignore unsupported/unknown
+ alternate mode requests
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <a6bff0eb-6b6f-5724-ddca-42bc46e794b8@interlog.com>
+Date:   Fri, 26 Jul 2019 11:21:23 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <CAGRyCJGg8Z6PO1tuWJr9NgXgVEVgxC5jsbN_qSdEDT-t+pHehA@mail.gmail.com>
- <325d7934-092c-2e01-1e34-cd4ad06b7088@linux.intel.com>
-In-Reply-To: <325d7934-092c-2e01-1e34-cd4ad06b7088@linux.intel.com>
-From:   Daniele Palmas <dnlplm@gmail.com>
-Date:   Fri, 26 Jul 2019 16:21:55 +0200
-Message-ID: <CAGRyCJH12SgezRMgyTcLD1sKD2ctZJX37jhy07w7ZwtUMm-3kA@mail.gmail.com>
-Subject: Re: xhci-hcd errors with Qualcomm based modem and Asmedia ASM1042A
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+On 2019-07-25 12:30 a.m., Guenter Roeck wrote:
+> TCPM may receive PD messages associated with unknown or unsupported
+> alternate modes. If that happens, calls to typec_match_altmode()
+> will return NULL. The tcpm code does not currently take this into
+> account. This results in crashes.
+> 
+> Unable to handle kernel NULL pointer dereference at virtual address 000001f0
+> pgd = 41dad9a1
+> [000001f0] *pgd=00000000
+> Internal error: Oops: 5 [#1] THUMB2
+> Modules linked in: tcpci tcpm
+> CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
+> Hardware name: Atmel SAMA5
+> Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
+> PC is at typec_altmode_attention+0x0/0x14
+> LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
+> ...
+> [<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
+> 				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
+> [<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
+> 				(process_one_work+0x123/0x2a8)
+> [<c012082b>] (process_one_work) from [<c0120a6d>]
+> 				(worker_thread+0xbd/0x3b0)
+> [<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
+> [<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
+> 
+> Ignore PD messages if the asociated alternate mode is not supported.
+> 
+> Reported-by: Douglas Gilbert <dgilbert@interlog.com>
+> Cc: Douglas Gilbert <dgilbert@interlog.com>
+> Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> Taking a stab at the problem. I don't really know if this is the correct
+> fix, or even if my understanding of the problem is correct, thus marking
+> the patch as RFC.
 
-Il giorno ven 26 lug 2019 alle ore 10:50 Mathias Nyman
-<mathias.nyman@linux.intel.com> ha scritto:
->
-> On 24.7.2019 22.09, Daniele Palmas wrote:
-> > Hello all,
-> >
-> > I've a system with kernel 4.14.127 that is showing unexpected xhci-hcd
-> > (ASM1042A) errors with a Qualcomm based modem, when running the
-> > following test:
-> >
-> > - signal strength qmi requests looping every few seconds on
-> > /dev/cdc-wdm (driver qmi_wwan)
-> > - iperf tcp data connection test on the modem network interface
-> >
-> > The issue is showing also with kernel 5.0
-> >
-> > The issues is showing in three different ways:
-> >
-> > First one:
-> >
-> > 2019-07-24 15:17:45.495293 kern.err kernel:xhci_hcd 0000:03:00.0:
-> > ERROR Transfer event TRB DMA ptr not part of current TD ep_index 28
-> > comp_code 13
->
->
-> > 2019-07-24 15:17:45.495392 kern.warning kernel:xhci_hcd 0000:03:00.0:
-> > Looking for event-dma 000000007725b420 trb-start 000000007725b400
-> > trb-end 000000007725b400 seg-start 000000007725b000 seg-end
-> > 000000007725bff0
->
-> The xhci driver expects events for transfers in the same order they were
-> queued. For some reason we get an event for the transfer block queued at
-> address b420 before we get events for transfers at b400 and b410.
->
-> xhci traces of a 5.0 kernel would show in more detail what's going on.
-> can be taken with:
->
-> mount -t debugfs none /sys/kernel/debug
-> echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-> < reproduce the issue >
-> Send output of dmesg
-> Send content of /sys/kernel/debug/tracing/trace
->
-> Note that the trace file can be huge
->
+Tested-by: Douglas Gilbert <dgilbert@interlog.com>
 
-thanks for the explanation.
+Took a little while because I was changing my Linux end to being based
+on a Acme Systems Arietta (at91sam9g25). Reason: on the sama5d2xplained
+I can't have the shield plugged into the Arduino sockets because it
+drives the pin used by the OM13588 for its interrupt (nalert). So I
+need to "jump" the pins needed (SDA, SCL, nALERT, 3v3 and ground) to
+get this working (and 'cat /proc/interrupts' shows me its working
+with >0 interrupts on "2-0050").
 
-For 4.14.127 I already gathered traces related to that dmesg (you can
-find them at https://drive.google.com/open?id=1c-vjusa44UgMzrIjAvpz6HKbxEk1Trw1),
-but I'll try to get the same info for 5.
+Anyway the DUT is a OM13588+sama5d2xplained running lk 5.1.18 and the
+other end of the USB-C cable is a OM13588+KL27Z running NXP PD
+software. Both ends can "play" sink or source (power). The oops
+occurred when the DUT was source and the other end sent a "send
+attention" ("l") command. With this patch I do not see the oops.
 
-Thanks,
-Daniele
 
-> -Mathias
+BTW I have tried to run lk 5.2.1 on the sama5d2xplained and the
+kernel wouldn't start :-( Zilch after u-boot said it was loading
+the kernel.
+
+>   drivers/usb/typec/tcpm/tcpm.c | 38 ++++++++++++++++++++++++--------------
+>   1 file changed, 24 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 77f71f602f73..1df2844469aa 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -1096,7 +1096,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+>   			break;
+>   		case CMD_ATTENTION:
+>   			/* Attention command does not have response */
+> -			typec_altmode_attention(adev, p[1]);
+> +			if (adev)
+> +				typec_altmode_attention(adev, p[1]);
+>   			return 0;
+>   		default:
+>   			break;
+> @@ -1148,20 +1149,26 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+>   			}
+>   			break;
+>   		case CMD_ENTER_MODE:
+> -			typec_altmode_update_active(pdev, true);
+> -
+> -			if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
+> -				response[0] = VDO(adev->svid, 1, CMD_EXIT_MODE);
+> -				response[0] |= VDO_OPOS(adev->mode);
+> -				return 1;
+> +			if (adev && pdev) {
+> +				typec_altmode_update_active(pdev, true);
+> +
+> +				if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
+> +					response[0] = VDO(adev->svid, 1,
+> +							  CMD_EXIT_MODE);
+> +					response[0] |= VDO_OPOS(adev->mode);
+> +					return 1;
+> +				}
+>   			}
+>   			return 0;
+>   		case CMD_EXIT_MODE:
+> -			typec_altmode_update_active(pdev, false);
+> +			if (adev && pdev) {
+> +				typec_altmode_update_active(pdev, false);
+>   
+> -			/* Back to USB Operation */
+> -			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
+> -						     NULL));
+> +				/* Back to USB Operation */
+> +				WARN_ON(typec_altmode_notify(adev,
+> +							     TYPEC_STATE_USB,
+> +							     NULL));
+> +			}
+>   			break;
+>   		default:
+>   			break;
+> @@ -1171,8 +1178,10 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+>   		switch (cmd) {
+>   		case CMD_ENTER_MODE:
+>   			/* Back to USB Operation */
+> -			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
+> -						     NULL));
+> +			if (adev)
+> +				WARN_ON(typec_altmode_notify(adev,
+> +							     TYPEC_STATE_USB,
+> +							     NULL));
+>   			break;
+>   		default:
+>   			break;
+> @@ -1183,7 +1192,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+>   	}
+>   
+>   	/* Informing the alternate mode drivers about everything */
+> -	typec_altmode_vdm(adev, p[0], &p[1], cnt);
+> +	if (adev)
+> +		typec_altmode_vdm(adev, p[0], &p[1], cnt);
+>   
+>   	return rlen;
+>   }
+> 
+
