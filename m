@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E9E763ED
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2019 12:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867BB763FE
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jul 2019 13:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbfGZKy7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jul 2019 06:54:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56194 "EHLO mail.kernel.org"
+        id S1726769AbfGZLAR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jul 2019 07:00:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57148 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726000AbfGZKy6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Jul 2019 06:54:58 -0400
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+        id S1725842AbfGZLAQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Jul 2019 07:00:16 -0400
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 646E322BEF;
-        Fri, 26 Jul 2019 10:54:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4697D22BE8;
+        Fri, 26 Jul 2019 11:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564138497;
-        bh=QcBqmWT1eDFbfXvQltSJTXQK5VgWFDe6L5qUdYNzU14=;
+        s=default; t=1564138815;
+        bh=i7Jv+hmXcDo23S/41bZqkwblKmiu8ujCGUBjwwXkgyg=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kDX1jvTAaFmwAHF6um8LZ858MvupTznpm2wUipBN5PeE3H1947MUCSEAVZ2Nvbc4F
-         tgm7iWphS/2V5GzQzjmZNPinPrJyBl1SbYuJnfvi2Zpuz0G0VnY9mE8hCnhjQV0yza
-         V5HQXd+UartsYT3UBHwR+RoelE+NSohHyQtFVEx0=
-Received: by mail-lj1-f171.google.com with SMTP id x25so51120090ljh.2;
-        Fri, 26 Jul 2019 03:54:57 -0700 (PDT)
-X-Gm-Message-State: APjAAAXXpnxF4BiNG4Xt8MXYIsZI+mG3T1UHSbb684LcZDraa2+BZtkJ
-        frWwXAwDAQqheFkeWxHWSV2PiM4GLpTh6sQiV5A=
-X-Google-Smtp-Source: APXvYqxTlRzDSn9sbhFxeql0yCfXveBv7a1iK7aO3MeMerFVnh2aP1/nHaikwd3WzBomLVdxTjE3GlOxz7unJ0BF6jw=
-X-Received: by 2002:a2e:124b:: with SMTP id t72mr49683952lje.143.1564138495608;
- Fri, 26 Jul 2019 03:54:55 -0700 (PDT)
+        b=D4IEBPKR/Lciqf1UMucQfUMvmavvkwQlRphFXnvYqpNlvPccVIHEhplBGZL1h4Yhb
+         OBnN3Yc8QiRRucyn8zerHxgil/jPSPB9celT1zwCovCbmMMUCJkFCJn+lYUIWL+/4W
+         hBClJ4NC7naV5LjVZgA0POAvxBFj8jkrlx7jyXSc=
+Received: by mail-lf1-f42.google.com with SMTP id c9so36746018lfh.4;
+        Fri, 26 Jul 2019 04:00:15 -0700 (PDT)
+X-Gm-Message-State: APjAAAXXwpxFjDLqYgyhQmyaHR1MCzXd8EGkjBttJ1TvGJY/Ctx2qEYa
+        TrKiSS2ZKn13k1tIhfsFUbxtvofFUHOFFEjN/eQ=
+X-Google-Smtp-Source: APXvYqxiPnbM3nCACHxnT20KdTP4mvzTb2t9ta89yEo/4pk1w14sOxpUlAKxoYBFtMwLQbX8e1ZPaZeidwzTdl6YbF4=
+X-Received: by 2002:a19:48c5:: with SMTP id v188mr43199380lfa.69.1564138813527;
+ Fri, 26 Jul 2019 04:00:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20190726081505eucas1p22472e5d1e81180b7bca4f0c0af302af5@eucas1p2.samsung.com>
- <20190726081453.9456-1-m.szyprowski@samsung.com> <20190726081453.9456-2-m.szyprowski@samsung.com>
-In-Reply-To: <20190726081453.9456-2-m.szyprowski@samsung.com>
+References: <CGME20190726081505eucas1p146c14eed320c57050aa968b7c97b227b@eucas1p1.samsung.com>
+ <20190726081453.9456-1-m.szyprowski@samsung.com> <20190726081453.9456-3-m.szyprowski@samsung.com>
+In-Reply-To: <20190726081453.9456-3-m.szyprowski@samsung.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Fri, 26 Jul 2019 12:54:44 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPceXJ4UPu9HDAy5rb0zqfe98YyS0pXCNMiT4zjjxQ0+nQ@mail.gmail.com>
-Message-ID: <CAJKOXPceXJ4UPu9HDAy5rb0zqfe98YyS0pXCNMiT4zjjxQ0+nQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: switch Exynos EHCI/OHCI bindings to
- use array of generic PHYs
+Date:   Fri, 26 Jul 2019 13:00:02 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPddpDso=Zjktwm0ofLe20o_FHD4REtuR5dEG64ttVwLEg@mail.gmail.com>
+Message-ID: <CAJKOXPddpDso=Zjktwm0ofLe20o_FHD4REtuR5dEG64ttVwLEg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] usb: exynos: add support for getting PHYs from the
+ standard dt array
 To:     Marek Szyprowski <m.szyprowski@samsung.com>
 Cc:     linux-usb@vger.kernel.org,
         "linux-samsung-soc@vger.kernel.org" 
@@ -62,25 +62,19 @@ X-Mailing-List: linux-usb@vger.kernel.org
 On Fri, 26 Jul 2019 at 10:15, Marek Szyprowski <m.szyprowski@samsung.com> w=
 rote:
 >
-> Commit 69bec7259853 ("USB: core: let USB device know device node") added
-> support for attaching devicetree node for USB devices. Those nodes are
-> children of their USB host controller. However Exynos EHCI and OHCI
-> driver bindings already define child-nodes for each physical root hub
-> port and assigns respective PHY controller and parameters to them. This
-> leads to the conflict. A workaround for it has been merged as commit
-> 01d4071486fe ("usb: exynos: add workaround for the USB device bindings
-> conflict"), but it disabled support for USB device binding for Exynos
-> EHCI/OHCI controllers.
->
-> To resolve it properly, lets move PHYs from the sub-nodes to a standard
-> array under the 'phys' property.
+> Add the code for getting generic PHYs from standard device tree array
+> from the main controller device node. This is a first step in resolving
+> the conflict between Exynos EHCI/OHCI sub-nodes and generic USB device
+> bindings. Later the sub-nodes currently used for assigning PHYs to root
+> ports of the controller will be removed making a place for the generic
+> USB device bindings nodes.
 >
 > Suggested-by: M=C3=A5ns Rullg=C3=A5rd <mans@mansr.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
 > Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
->  .../devicetree/bindings/usb/exynos-usb.txt    | 41 +++++++------------
->  1 file changed, 14 insertions(+), 27 deletions(-)
+>  drivers/usb/host/ehci-exynos.c | 23 +++++++++++++++++++----
+>  drivers/usb/host/ohci-exynos.c | 23 +++++++++++++++++++----
+>  2 files changed, 38 insertions(+), 8 deletions(-)
 
 Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
