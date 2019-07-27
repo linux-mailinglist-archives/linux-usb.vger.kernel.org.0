@@ -2,100 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDAD778F4
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2019 15:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F847795F
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Jul 2019 17:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387665AbfG0NcA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Jul 2019 09:32:00 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:32327 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387649AbfG0NcA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Jul 2019 09:32:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1564234314;
-        s=strato-dkim-0002; d=hashmail.org;
-        h=Message-ID:Subject:To:From:Date:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=Wyc8l23+okwGL4O/wkorS+DQ8xZXpi9g667Edb0WYdU=;
-        b=tDb7wjOzhAzwZz3t3rlLWW36txAMvSSlXVEpjD7NwMgDFHW4DODJx9ldVdl9akmZjc
-        SLQBvWf3OSG+es1X9uoh3nub4cUKlGnp2NlYGwQIt5bJwy+uZwYiUrErPW26EbcXE0nF
-        n8F7Uem/8M++1LraX/q+i5TLoRaVpZoBjZM9O4sI5cc3df494qEzQ9/L/Ls5BIOHZalK
-        Qw+Qjj7eitTdBwjx/JQL41hW0Y81dN86BZrH4v0dgjoJWAQ45eVzUrHEqXnBsJRDzrFH
-        yhVvMW1bo15eOGMoF9eIQBHD2w7tIdhBOhZvc1e4rCc4Tro4rc/EShJkzR2mTXXQVfdU
-        5raw==
-X-RZG-AUTH: ":O2kGeEG7b/pS1F+/SC3i33Z09cEcHcRBAtqtGgRBDGeSaUqOsX4glAsBpQEeWZB4JIsouA=="
-X-RZG-CLASS-ID: mo00
-Received: from localhost
-        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
-        with ESMTPSA id f0aa24v6RDVsrao
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate)
-        for <linux-usb@vger.kernel.org>;
-        Sat, 27 Jul 2019 15:31:54 +0200 (CEST)
-Date:   Sat, 27 Jul 2019 15:31:48 +0200
-From:   yvahkhfo.1df7f8c2@hashmail.org
-To:     linux-usb@vger.kernel.org
-Subject: usbip device reset handling
-Message-ID: <20190727133148.GA19172@priv-mua.localdomain>
+        id S1728824AbfG0PFU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Jul 2019 11:05:20 -0400
+Received: from sonic306-23.consmr.mail.gq1.yahoo.com ([98.137.68.86]:37488
+        "EHLO sonic306-23.consmr.mail.gq1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726370AbfG0PFU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Jul 2019 11:05:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bellsouth.net; s=s2048; t=1564239919; bh=KZsfHOP/BA7epzqxxZTuePfuF83Q1YzB+f1jx0Q2mfI=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=AwvfatpIiqEhRjFK56FioH8IqVtFKZmF6VGL0WNmilF+xs9arFIdqElO+4dv1zob2vGSZpXgIuSSjiHdEiM4WQ6/zKU0j6iIO6ynrlwU+g0x0o9cBr3MFkU8wHqdX+Im/M/h9xzNXu3oM2kZAfJh/ksmQXcg2qvFEsoLowtoAcsLaSrIT3hrFzOFdBOPT5WSxmrsjd0m7nQ8V3lL0gIiD4oS1m0OG/Yd/dHf1I0tIq9sB9oSrmJqCGbWExjeVLIO0rML/vSjEkcCEAEiRyTT9TNqxTC8QhTMSRUKH5aOusey+SyQj9GbqEqGq8OSNI3Fc8w+ILci9hgsGUhDHxNiUA==
+X-YMail-OSG: ehyC_6sVM1lRvLETXUtMVV.Ff1Pp41xLLtjB9TmVC0wG5F2w6GlfjiDX5WoI0Wr
+ fh4VNWXkWj.ax6Fvq7GZtPCecZleNJDajBkSGznLaA6nPHqJnigZ93w0lsC5fZ.uLzRKR4GZsAda
+ _9V5fFAMEimAA47TuMo28K.u.AT5XgLT8abFMB1K4u3byL3inJkHTX4.60FjwBW9ks_9oVPbZc.S
+ phTHmwE80lnCVsOff.TMXSvIuqlVlvpuIfNjxFjdMowA3XBfv0lhyMO80bCvIqbW3PDhO3CSrK30
+ AzMx6G0rtXPYKgo4F1ERp3QSZFm.Z7jf9K8maeWmLwqLgUbALDIFOY_r7YLhPQ6WnRh24nM7Fu1I
+ 918XBwbfB3vKZ2EzuFtcLJ7TD3MNNyjW1wkcoQY6KAcMBssrlnFmsVgA8Xerf5v4r8KvzXLu5R9b
+ ionuVBPlYr3dK0K1nHQu.mOnZ.BhsCi8PwxV2vOxkM99rQT1s7Yu0LEWISAqZw9j5FIYfo228B1N
+ uUqy275T3c2bLP5TWTw0hr8e9vpiEpvVa0UuY0sk44qd.TR7zvrjfB1JCe1oeZ09R_My8Q.6OYp9
+ SUmuOHz.8i5pxZHSP_0yKpKKNCgguEHjYU82cfVrsqKxYCz_2ZtwV2i2Mz1sKAp6HKi1BKt4TjLE
+ r3BKTU6ICJRz1XmephGQsX9Om4ah4VMNUt8.f9hlWwNLz_XOTKDr7FJ_zrOMhG5syC91N317GC99
+ tV9wduoNZUUpyEMpeVc.8G5CKevzUWRJ3TaqDr53ItsJtUbwn83wOsgFGv7qOB7tpobIV2dKKoX7
+ VtR8HC9BNKyUeI35rBdF0JLYdQobINXF4..RS3LxU6r.KnqK92ZzFxSrNNmwo5y0hE1epw0dNkBB
+ iQxP_tUAe9zwqmodv6XHoFcOgAcwzemVQIPJu22t2LZ.6tvj_olDkEQwPR4BBaPrSdMg2Gdii0mj
+ PJt8jAHVNOG_WSb6dW_AgXpr3TVN1lzLJaVG_O9XT6nYtIcQHccL1b2iZY_dvngZFHpqspBDJ7Fj
+ OOhq8V192MF0hX9tiLqKNW9RWRIDjUdPOPHVgBNt_KYetYvp2w5cbHG4HvhY8.1j7VkOVcWzlZ47
+ p90mJc7HakvS2QpVYPu0pgQ7L68Qp1PUdQlg2z7sg9JGyfipffZWNw7xntQcpUPZ2O1K5IhbPQHM
+ 1OvPO4kA7R6d209iHy4jsLrxIlg.O3uyQ.dHh3koQh.5hAHEEsqHt3fmNPhSeiz5paAh7_AgR
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.gq1.yahoo.com with HTTP; Sat, 27 Jul 2019 15:05:19 +0000
+Received: by smtp421.mail.gq1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 3db7d607082dc8bb73edfaeb7b004fc6;
+          Sat, 27 Jul 2019 15:05:16 +0000 (UTC)
+Subject: Re: Oops in xhci_endpoint_reset
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <a24f7305-abcc-c2ff-bba0-a02b23e34434@bellsouth.net>
+ <20190727105955.GE458@kroah.com>
+From:   Bob Gleitsmann <rjgleits@bellsouth.net>
+Message-ID: <f7b5872a-ad30-453a-c9d7-b9fd649b6eb8@bellsouth.net>
+Date:   Sat, 27 Jul 2019 11:05:14 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190727105955.GE458@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello linux-usb.
+I'm working on it,.
 
-currently it seems most network interfaces (ethernet + wifi) can not
-be forwarded using usbip.
-
-my context for the problem is QubesOS, which uses usbip (over ipc
-sockets instead of tcp) to pass around usb devices between xen vms.
-there are enough different reports to make it unlikely it is a hardware
-issue. https://github.com/QubesOS/qubes-issues/issues/3778
-
-a check with two plain fedora installs shows the same problem,
-so it does not seem to be anything qubes specific either.
-additional testing was performed using kernel 5.1.6 on qubes for convenience.
-a quick git/log check against current 5.2 and 5.3 says there have
-not been any relevant changes since then.
-
-comparing USBIP_DEBUG traces for working and non-working devices 
-says things go wrong if/when the receiving side device-specific driver
-tries to reset the device as part of its firmware+config intialization
-ritual. this seems to be very common for network drivers. 
-the reset is caught+handled receiver side in vhci_hcd and is never 
-passed on to the giver side.
-
-on the giver side, there is code for handling reset urbs in stub_rx. 
-i was unable to determine whether this ever worked or is just a code
-artifact, so i am unsure how to proceed.
-
-if there is an urb for the reset somewhere, its probably in whatever
-calls vhci_hub_control through the hc_driver.hub_control abstraction.
-should it just make sure that urb is passed on to the giver?
-
-i added code to make up a reset urb from scratch in vhci_hcd, and toss 
-it over to stub_rx which actualy makes the reset code trigger, but
-then get lost in what feels like usb device state engine hell. 
-
-currently the code in stub_rx submits the tweak-handled urbs anyways,
-with a comment indicating that may or may not be a good idea.
-adding code to not submit the reset urb just leads to a different-flavored
-mess of timeouts and small explosions.
-
-my current guesses are i either need to send some additional message
-or something gets dropped because it happens while the 50ms reset on
-the giver side is still ongoing at the time.
-
-please advise on how to proceed with this, i would feel more comfortable
-randomly stumbling around kernel source if i knew i was headed
-in the right direction. ;)
-
-of course i would also settle for an "ugh, fixed" without any additional
-explanation. 
-
-regards,
-   x23
-
+On 7/27/19 6:59 AM, Greg KH wrote:
+> On Fri, Jul 26, 2019 at 11:15:46PM -0400, Bob Gleitsmann wrote:
+>> Hello,
+>>
+>>
+>> I have seen kernel oopses on waking from suspend to memory. I got this
+>> twice, one dmesg with backtrace attached. The other one had the failure
+>> in the same place in the code.
+>>
+>>
+>> This is kernel 5.3.0-rc1, patched for another problem in ethernet PHY
+>> driver. Have not had the problem with earlier kernels. Using Gentoo
+>> linux, amd64, but git kernel.
+> Any chance you can run 'git bisect' to track down the offending commit?
+>
+> thanks,
+>
+> greg k-h
+>
