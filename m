@@ -2,104 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F01677F56
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2019 13:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00697803E
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2019 17:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726030AbfG1L7b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Jul 2019 07:59:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38326 "EHLO mail.kernel.org"
+        id S1726215AbfG1Phc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 Jul 2019 11:37:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47686 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725978AbfG1L7b (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 28 Jul 2019 07:59:31 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        id S1726148AbfG1Phc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 28 Jul 2019 11:37:32 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 515472075E;
-        Sun, 28 Jul 2019 11:59:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A4A3A2075E;
+        Sun, 28 Jul 2019 15:37:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564315170;
-        bh=WJlyT460EUhNGiA4JYlmJGNUH6qou2CmDkk/ihQx9VQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=U+J333FIPz72+jSZ1pALhyx0ZODwaUyQqKuiSPjeP7LBclmjy9FQmXptP6Od1qBEV
-         BFoxv9m4/A7TVQwQKFK1NU4LGSc6BWVu3PJRR/yLYhWQx97gYRVGrP8x7LIYhd2pwe
-         M9fePhOYVr5Rvr+uS3TtBCdPDaqx/Ma8Dy4qCThw=
-Date:   Sun, 28 Jul 2019 13:59:28 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.3-rc2
-Message-ID: <20190728115928.GA15888@kroah.com>
+        s=default; t=1564328250;
+        bh=dtpU0JvrhpmoMYOOkgibEwwTx2ITKEaj/zaUT14NMXY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e7+0iwwQS6zexQs9n1mZQqR2usI1hB7F3+6QneIJaBy2NftphI4L0qR4SIx3Q9+Vz
+         dUTsOKQ5LtocYpvFHRFzQqT1ehu7Hyb3yQE/ZpQ1JdYvso09pFNRAvH8rwE932CwHd
+         8dN2F1VOIKhd0rHnT3oQEUw6is3bVqQqL+sKjvgM=
+Date:   Sun, 28 Jul 2019 11:37:29 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        EJ Hsu <ejh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH AUTOSEL 5.1 054/141] usb: gadget: storage: Remove warning
+ message
+Message-ID: <20190728153729.GG8637@sasha-vm>
+References: <20190719040246.15945-1-sashal@kernel.org>
+ <20190719040246.15945-54-sashal@kernel.org>
+ <CY4PR1201MB003731626E6A487A7CFC0E33AACB0@CY4PR1201MB0037.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <CY4PR1201MB003731626E6A487A7CFC0E33AACB0@CY4PR1201MB0037.namprd12.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b:
+On Fri, Jul 19, 2019 at 05:27:31AM +0000, Thinh Nguyen wrote:
+>Hi Sasha,
+>
+>Sasha Levin wrote:
+>> From: EJ Hsu <ejh@nvidia.com>
+>>
+>> [ Upstream commit e70b3f5da00119e057b7faa557753fee7f786f17 ]
+>>
+>> This change is to fix below warning message in following scenario:
+>> usb_composite_setup_continue: Unexpected call
+>>
+>> When system tried to enter suspend, the fsg_disable() will be called to
+>> disable fsg driver and send a signal to fsg_main_thread. However, at
+>> this point, the fsg_main_thread has already been frozen and can not
+>> respond to this signal. So, this signal will be pended until
+>> fsg_main_thread wakes up.
+>>
+>> Once system resumes from suspend, fsg_main_thread will detect a signal
+>> pended and do some corresponding action (in handle_exception()). Then,
+>> host will send some setup requests (get descriptor, set configuration...)
+>> to UDC driver trying to enumerate this device. During the handling of "set
+>> configuration" request, it will try to sync up with fsg_main_thread by
+>> sending a signal (which is the same as the signal sent by fsg_disable)
+>> to it. In a similar manner, once the fsg_main_thread receives this
+>> signal, it will call handle_exception() to handle the request.
+>>
+>> However, if the fsg_main_thread wakes up from suspend a little late and
+>> "set configuration" request from Host arrives a little earlier,
+>> fsg_main_thread might come across the request from "set configuration"
+>> when it handles the signal from fsg_disable(). In this case, it will
+>> handle this request as well. So, when fsg_main_thread tries to handle
+>> the signal sent from "set configuration" later, there will nothing left
+>> to do and warning message "Unexpected call" is printed.
+>>
+>> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+>> Signed-off-by: EJ Hsu <ejh@nvidia.com>
+>> Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> ---
+>>  drivers/usb/gadget/function/f_mass_storage.c | 21 ++++++++++++++------
+>>  drivers/usb/gadget/function/storage_common.h |  1 +
+>>  2 files changed, 16 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+>> index 043f97ad8f22..982c3e89eb0d 100644
+>> --- a/drivers/usb/gadget/function/f_mass_storage.c
+>> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+>>
+>
+>This patch may have issue. It was reverted upstream. Please don't queue
+>to stable.
 
-  Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
+I've dropped it, thanks!
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.3-rc2
-
-for you to fetch changes up to d39b5bad8658d6d94cb2d98a44a7e159db4f5030:
-
-  xhci: Fix crash if scatter gather is used with Immediate Data Transfer (IDT). (2019-07-25 11:26:42 +0200)
-
-----------------------------------------------------------------
-USB fixes for 5.3-rc2
-
-Here are some small fixes for 5.3-rc2.  All of these resolve some
-reported issues, some more than others :)
-
-Included in here is:
-	- xhci fix for an annoying issue with odd devices
-	- reversion of some usb251xb patches that should not have been
-	  merged
-	- usb pci quirk additions and fixups
-	- usb storage fix
-	- usb host controller error test fix
-
-All of these have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      usb/hcd: Fix a NULL vs IS_ERR() bug in usb_hcd_setup_local_mem()
-
-Lucas Stach (3):
-      Revert "usb: usb251xb: Add US lanes inversion dts-bindings"
-      Revert "usb: usb251xb: Add US port lanes inversion property"
-      usb: usb251xb: Reallow swap-dx-lanes to apply to the upstream port
-
-Mathias Nyman (1):
-      xhci: Fix crash if scatter gather is used with Immediate Data Transfer (IDT).
-
-Phong Tran (1):
-      usb: wusbcore: fix unbalanced get/put cluster_id
-
-Ryan Kennedy (2):
-      usb: pci-quirks: Correct AMD PLL quirk detection
-      usb: pci-quirks: Minor cleanup for AMD PLL quirk
-
-Yoshihiro Shimoda (1):
-      usb-storage: Add a limitation for blk_queue_max_hw_sectors()
-
- Documentation/devicetree/bindings/usb/usb251xb.txt |  6 +--
- drivers/usb/core/hcd.c                             |  4 +-
- drivers/usb/host/ehci-pci.c                        |  4 +-
- drivers/usb/host/hwa-hc.c                          |  2 +-
- drivers/usb/host/ohci-pci.c                        |  2 +-
- drivers/usb/host/pci-quirks.c                      | 45 +++++++++++++---------
- drivers/usb/host/pci-quirks.h                      |  2 +-
- drivers/usb/host/xhci-pci.c                        |  2 +-
- drivers/usb/host/xhci.h                            |  3 +-
- drivers/usb/misc/usb251xb.c                        | 15 ++++----
- drivers/usb/storage/scsiglue.c                     | 11 ++++++
- 11 files changed, 57 insertions(+), 39 deletions(-)
+--
+Thanks,
+Sasha
