@@ -2,106 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B00697803E
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2019 17:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D797805B
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jul 2019 18:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726215AbfG1Phc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Jul 2019 11:37:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47686 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbfG1Phc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 28 Jul 2019 11:37:32 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A4A3A2075E;
-        Sun, 28 Jul 2019 15:37:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564328250;
-        bh=dtpU0JvrhpmoMYOOkgibEwwTx2ITKEaj/zaUT14NMXY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e7+0iwwQS6zexQs9n1mZQqR2usI1hB7F3+6QneIJaBy2NftphI4L0qR4SIx3Q9+Vz
-         dUTsOKQ5LtocYpvFHRFzQqT1ehu7Hyb3yQE/ZpQ1JdYvso09pFNRAvH8rwE932CwHd
-         8dN2F1VOIKhd0rHnT3oQEUw6is3bVqQqL+sKjvgM=
-Date:   Sun, 28 Jul 2019 11:37:29 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        EJ Hsu <ejh@nvidia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH AUTOSEL 5.1 054/141] usb: gadget: storage: Remove warning
- message
-Message-ID: <20190728153729.GG8637@sasha-vm>
-References: <20190719040246.15945-1-sashal@kernel.org>
- <20190719040246.15945-54-sashal@kernel.org>
- <CY4PR1201MB003731626E6A487A7CFC0E33AACB0@CY4PR1201MB0037.namprd12.prod.outlook.com>
+        id S1726098AbfG1QDb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 Jul 2019 12:03:31 -0400
+Received: from smtprelay04.ispgateway.de ([80.67.31.32]:48332 "EHLO
+        smtprelay04.ispgateway.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726046AbfG1QDb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Jul 2019 12:03:31 -0400
+X-Greylist: delayed 327 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Jul 2019 12:03:30 EDT
+Received: from [91.248.2.20] (helo=localhost)
+        by smtprelay04.ispgateway.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jochen@sprickerhof.de>)
+        id 1hrlYc-00070U-4O; Sun, 28 Jul 2019 17:57:58 +0200
+Date:   Sun, 28 Jul 2019 17:57:57 +0200
+From:   Jochen Sprickerhof <jochen@sprickerhof.de>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Anand Moon <linux.amoon@gmail.com>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v2 1/2] usb: core: phy: add support for PHY calibration
+Message-ID: <20190728155757.GE10770@vis>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dVWk8uzOCD9exnpL"
 Content-Disposition: inline
-In-Reply-To: <CY4PR1201MB003731626E6A487A7CFC0E33AACB0@CY4PR1201MB0037.namprd12.prod.outlook.com>
+In-Reply-To: <CANAwSgR3kdZsDn-x9FwynAPtVEf4ci0BfiGPr1NzJ-a1n5B_Ng@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Df-Sender: NTc3MDAz
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 19, 2019 at 05:27:31AM +0000, Thinh Nguyen wrote:
->Hi Sasha,
+
+--dVWk8uzOCD9exnpL
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+
+Hi Marek,
+
+thanks for working on this!
+
+Tested on my XU4
+Tested-by: Jochen Sprickerhof <jochen@sprickerhof.de>
+
+* Anand Moon <linux.amoon@gmail.com> [2019-07-23 00:30]:
+>Hi Marek,
 >
->Sasha Levin wrote:
->> From: EJ Hsu <ejh@nvidia.com>
+>On Fri, 19 Jul 2019 at 13:43, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
 >>
->> [ Upstream commit e70b3f5da00119e057b7faa557753fee7f786f17 ]
+>> Some PHYs (for example Exynos5 USB3.0 DRD PHY) require calibration to be
+>> done after every USB HCD reset. Generic PHY framework has been already
+>> extended with phy_calibrate() function in commit 36914111e682 ("drivers:
+>> phy: add calibrate method"). This patch adds support for it to generic
+>> PHY handling code in USB HCD core.
 >>
->> This change is to fix below warning message in following scenario:
->> usb_composite_setup_continue: Unexpected call
->>
->> When system tried to enter suspend, the fsg_disable() will be called to
->> disable fsg driver and send a signal to fsg_main_thread. However, at
->> this point, the fsg_main_thread has already been frozen and can not
->> respond to this signal. So, this signal will be pended until
->> fsg_main_thread wakes up.
->>
->> Once system resumes from suspend, fsg_main_thread will detect a signal
->> pended and do some corresponding action (in handle_exception()). Then,
->> host will send some setup requests (get descriptor, set configuration...)
->> to UDC driver trying to enumerate this device. During the handling of "set
->> configuration" request, it will try to sync up with fsg_main_thread by
->> sending a signal (which is the same as the signal sent by fsg_disable)
->> to it. In a similar manner, once the fsg_main_thread receives this
->> signal, it will call handle_exception() to handle the request.
->>
->> However, if the fsg_main_thread wakes up from suspend a little late and
->> "set configuration" request from Host arrives a little earlier,
->> fsg_main_thread might come across the request from "set configuration"
->> when it handles the signal from fsg_disable(). In this case, it will
->> handle this request as well. So, when fsg_main_thread tries to handle
->> the signal sent from "set configuration" later, there will nothing left
->> to do and warning message "Unexpected call" is printed.
->>
->> Acked-by: Alan Stern <stern@rowland.harvard.edu>
->> Signed-off-by: EJ Hsu <ejh@nvidia.com>
->> Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>Tested on my XU3 / XU4 / HC1
+>Tested-by: Anand Moon <linux.amoon@gmail.com>
+>
+>
+>> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 >> ---
->>  drivers/usb/gadget/function/f_mass_storage.c | 21 ++++++++++++++------
->>  drivers/usb/gadget/function/storage_common.h |  1 +
->>  2 files changed, 16 insertions(+), 6 deletions(-)
+>>  drivers/usb/core/hcd.c |  7 +++++++
+>>  drivers/usb/core/phy.c | 21 +++++++++++++++++++++
+>>  drivers/usb/core/phy.h |  1 +
+>>  3 files changed, 29 insertions(+)
 >>
->> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
->> index 043f97ad8f22..982c3e89eb0d 100644
->> --- a/drivers/usb/gadget/function/f_mass_storage.c
->> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+>> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+>> index 88533938ce19..b89936c1df23 100644
+>> --- a/drivers/usb/core/hcd.c
+>> +++ b/drivers/usb/core/hcd.c
+>> @@ -2291,6 +2291,9 @@ int hcd_bus_resume(struct usb_device *rhdev, pm_message_t msg)
+>>         hcd->state = HC_STATE_RESUMING;
+>>         status = hcd->driver->bus_resume(hcd);
+>>         clear_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+>> +       if (status == 0)
+>> +               status = usb_phy_roothub_calibrate(hcd->phy_roothub);
+>> +
+>>         if (status == 0) {
+>>                 struct usb_device *udev;
+>>                 int port1;
+>> @@ -2864,6 +2867,10 @@ int usb_add_hcd(struct usb_hcd *hcd,
+>>         }
+>>         hcd->rh_pollable = 1;
+>>
+>> +       retval = usb_phy_roothub_calibrate(hcd->phy_roothub);
+>> +       if (retval)
+>> +               goto err_hcd_driver_setup;
+>> +
+>>         /* NOTE: root hub and controller capabilities may not be the same */
+>>         if (device_can_wakeup(hcd->self.controller)
+>>                         && device_can_wakeup(&hcd->self.root_hub->dev))
+>> diff --git a/drivers/usb/core/phy.c b/drivers/usb/core/phy.c
+>> index 7580493b867a..fb1588e7c282 100644
+>> --- a/drivers/usb/core/phy.c
+>> +++ b/drivers/usb/core/phy.c
+>> @@ -151,6 +151,27 @@ int usb_phy_roothub_set_mode(struct usb_phy_roothub *phy_roothub,
+>>  }
+>>  EXPORT_SYMBOL_GPL(usb_phy_roothub_set_mode);
+>>
+>> +int usb_phy_roothub_calibrate(struct usb_phy_roothub *phy_roothub)
+>> +{
+>> +       struct usb_phy_roothub *roothub_entry;
+>> +       struct list_head *head;
+>> +       int err;
+>> +
+>> +       if (!phy_roothub)
+>> +               return 0;
+>> +
+>> +       head = &phy_roothub->list;
+>> +
+>> +       list_for_each_entry(roothub_entry, head, list) {
+>> +               err = phy_calibrate(roothub_entry->phy);
+>> +               if (err)
+>> +                       return err;
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(usb_phy_roothub_calibrate);
+>> +
+>>  int usb_phy_roothub_power_on(struct usb_phy_roothub *phy_roothub)
+>>  {
+>>         struct usb_phy_roothub *roothub_entry;
+>> diff --git a/drivers/usb/core/phy.h b/drivers/usb/core/phy.h
+>> index dad564e2d2d4..20a267cd986b 100644
+>> --- a/drivers/usb/core/phy.h
+>> +++ b/drivers/usb/core/phy.h
+>> @@ -18,6 +18,7 @@ int usb_phy_roothub_exit(struct usb_phy_roothub *phy_roothub);
+>>
+>>  int usb_phy_roothub_set_mode(struct usb_phy_roothub *phy_roothub,
+>>                              enum phy_mode mode);
+>> +int usb_phy_roothub_calibrate(struct usb_phy_roothub *phy_roothub);
+>>  int usb_phy_roothub_power_on(struct usb_phy_roothub *phy_roothub);
+>>  void usb_phy_roothub_power_off(struct usb_phy_roothub *phy_roothub);
+>>
+>> --
+>> 2.17.1
 >>
 >
->This patch may have issue. It was reverted upstream. Please don't queue
->to stable.
 
-I've dropped it, thanks!
+--dVWk8uzOCD9exnpL
+Content-Type: application/pgp-signature; name="signature.asc"
 
---
-Thanks,
-Sasha
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEc7KZy9TurdzAF+h6W//cwljmlDMFAl09xgEACgkQW//cwljm
+lDPASA//a0c4bN2fqhttPuRzcuHRM5hwLmqcyyGi8X3juGKvrV9/AqocZI5dV4/q
+yBORuACD84j2cqCkHjZ3Oy8FYPg0c64I6qcb973EEM9xfpCwL1xWNDnXeFu8+L7A
+ig2yq4qKk4krmKAhFFd8x+O/Caqm16hiRQQqibGa5mW8jhfMyglOWA5WxPDpNt/x
+HpeBsv7UXoBJrhZoMOAL+ycs+MDFXmybP7xGCMrN5cJqTTCHV+f184HMnGCnVXld
++r7E5SF0k4QsbV4jrfdH8cmiaVGPZhEHLrhbHlk5LAuJeTjquYxEeJTag9ZMV5/B
+geDZF1RlDdIJppwWv2ChyskMmfzDHC8z7XeA5xRjKFspnJhba7iuZir3G3MO4c+G
+Eehn/QLniT+kETjIvEDiUh0UOVm2ph//v3o3CVNs/ILWbEFQtVdfjgMBcoazeQXR
+GfNi5z0+5s/q/d/sDZq6BQ0hGSOpxHd/54cdwbOUWoFd1H+sPC+MT2ubFHhnCKUC
+Xm7p3GAND0bEqwbpaPr8zSvDQWySh5/XS7QF3+Rvutvn6MVq5jT8Dtn5OjfBCG+b
+KOZ+ibf2JTPZ1EDKabfvWRzy9EmVVQ7Ep1iAz2esWmiYglCj/f18+4KRL7u9VSVa
+CxoN1+3BT8wC+kRv2eCaRi73Yke5bZ0itcOoY5zkHZKj2PuUTN8=
+=Hue+
+-----END PGP SIGNATURE-----
+
+--dVWk8uzOCD9exnpL--
