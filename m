@@ -2,148 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C8579123
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912BC79188
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728778AbfG2QiJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 12:38:09 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:39005 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729147AbfG2QiH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 12:38:07 -0400
-Received: by mail-io1-f72.google.com with SMTP id y13so68067929iol.6
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 09:38:06 -0700 (PDT)
+        id S2387485AbfG2QzF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 12:55:05 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38989 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387461AbfG2QzF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 12:55:05 -0400
+Received: by mail-pl1-f193.google.com with SMTP id b7so27782587pls.6
+        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 09:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6TLt8tonvJoZZysUQOtplrQz5SXXq81A/8sUR2cjqCQ=;
+        b=hjeuwLek2Mr8pD+eGSXyu+lndx7hjIScD3RgOJ06mL75WNSp+zlOMwtZ48E6Q0omWH
+         vhPjHYR+fHmWWkhqoLOnaSPLEgEAAlUaae7DltJG3MNtYoVg7WH45fSogKU1XQPrTpbJ
+         UM+ATYx+WtVeC1Myu9Hskzm0dyQwpLR3GhWcHh5U6QlvV+7pP9r35ygIA7neJrD0GqyB
+         jpZzLAKdr2vysKNCmFxXzJg5gDU/4usm9mwByCDT+GyxarwxeHGJMdiPfcmrjRBnhwv6
+         4XGeQa//qHetQ3im5FUgzg9O0J2KWk/jCsBnvZB5qEv5kzQIa0OOTczMYi5duhDg8cGs
+         OiQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=64wPHD2ub5C9dTsMGHD0dC6MBn1HBlNLnJVwhPQmaw0=;
-        b=LanvtTOZwrAGHuAN0VQy0Ax4Y5MRXn5ItaDgItvWuLUhfguma2W8cN/Gi7sUuwboLR
-         t5e6s2jhFknIrfxY8VLOmmTGTcKLBiPsK8VGbSbVEK+8XJFKvAxoNLdXsEIe2Jhd5kSu
-         A4qPMK5xkqQ6f/za62vzga4OBJoXGcVJkXF5PiGnTKNmyp+YFOkKTvcg2VX5ywT00pIo
-         46eif3MaHN8q8tC1u0/hP8Pxsfjjlmh6pmSD0ABEvsCK+Q9y8eoLWzeSHQFlFvnw4bhf
-         aFY7EFgDq/nGZh9OztbKPbqIjaHf7ARYmSkKZz6tJgzmXP5l22y/h9j2nzKdsV3N/d/q
-         BBBQ==
-X-Gm-Message-State: APjAAAUY8u8JmvMImzL/0WU8PBTOxS/78cRu1m8h8qx2vi2S8apZiawV
-        h8B97s+79VWX0qkRydOVUwoYXBXsd47XPAE4uoucz3e0aoNE
-X-Google-Smtp-Source: APXvYqxzFMhYbEwKIncPaiNMzBUEdjZ57ZVTF1OhCLo4KLuAdkXvyFewG439cG6kUJaLkhfKqw3JQ+/Wr6msXYv1wiapA58de+BX
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6TLt8tonvJoZZysUQOtplrQz5SXXq81A/8sUR2cjqCQ=;
+        b=DxYQXCt0KotPJpdfoYaZCzj5xszG8obMDwj+fP6kkgNOChlrutbsDFF+ORFjndZiEG
+         J90WeToSifjltnxIYmizsPwM9imc1DHjqrmv90IakeSvBDkdFSh/70S+PEOH43v1hym+
+         vTodkHFUQV64yoNsCIU/Ajw0iGlTs4qQCOKwUti/wrSM8sQrpD3W+qbiSGYZZN0pSkl4
+         pt3qzUTp5JZIwiAwugmQg4wDnju7lU3FGi4j9Rk/eRixrZHzBBJDw1e3EXZ20IHgGn+i
+         PNsh/g0PaaOI1WHIizqC5d8FAHUdTRzNmp4b8Q69YjHxZ1aG+dcZUNJxhokqWln1zggJ
+         0qOQ==
+X-Gm-Message-State: APjAAAXBTWbzwEuo7BKADdEzg0Otbsdg3Y/dd8Mo/OFQOhStzcbHFvBK
+        pf0PvrMI7UbFQdFNcDUCjzcAD9QT+DsmUWyAWR3Y8Q==
+X-Google-Smtp-Source: APXvYqw26xEeNpL4i8BxqeKJoGMAwqFpC54ci6OcdJNahjqSRekD8A14aGLzeYiVuv4+su0mbCHEEfrNRP0osqmKcqQ=
+X-Received: by 2002:a17:902:6a87:: with SMTP id n7mr109264939plk.336.1564419304320;
+ Mon, 29 Jul 2019 09:55:04 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:cc8e:: with SMTP id s14mr25813979jap.142.1564418286421;
- Mon, 29 Jul 2019 09:38:06 -0700 (PDT)
-Date:   Mon, 29 Jul 2019 09:38:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003e112b058ed484c4@google.com>
-Subject: general protection fault in snd_usb_pipe_sanity_check
-From:   syzbot <syzbot+d59c4387bfb6eced94e2@syzkaller.appspotmail.com>
-To:     allison@lohutok.net, alsa-devel@alsa-project.org,
-        andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        perex@perex.cz, rfontana@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, tiwai@suse.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+References: <1564410374.25582.15.camel@suse.com> <000000000000488c6d058ed337b2@google.com>
+In-Reply-To: <000000000000488c6d058ed337b2@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 29 Jul 2019 18:54:53 +0200
+Message-ID: <CAAeHK+yY3JWAj+EZ5wzqUOMbN+cdddCoRn7Nxn759-7zR-J7BQ@mail.gmail.com>
+Subject: Re: general protection fault in flexcop_usb_probe
+To:     Oliver Neukum <oneukum@suse.com>,
+        syzbot <syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com>
+Cc:     linux-media@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: multipart/mixed; boundary="000000000000ea7d07058ed4c0e8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+--000000000000ea7d07058ed4c0e8
+Content-Type: text/plain; charset="UTF-8"
 
-syzbot found the following crash on:
+On Mon, Jul 29, 2019 at 5:05 PM syzbot
+<syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot has tested the proposed patch and the reproducer did not trigger
+> crash:
+>
+> Reported-and-tested-by:
+> syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
+>
+> Tested on:
+>
+> commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git
+> usb-fuzzer-usb-testing-2019.07.11
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=662450485a75f217
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=1036e80c600000
+>
+> Note: testing is done by a robot and is best-effort only.
 
-HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=12befdc8600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
-dashboard link: https://syzkaller.appspot.com/bug?extid=d59c4387bfb6eced94e2
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16efc49fa00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13245854600000
+Hi Oliver,
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+d59c4387bfb6eced94e2@syzkaller.appspotmail.com
+Thanks a lot for fixing all of these USB bugs!
 
-usb 1-1: New USB device found, idVendor=07fd, idProduct=0004,  
-bcdDevice=d5.ac
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-usb 1-1: string descriptor 0 read error: -71
-usb 1-1: Waiting for MOTU Microbook II to boot up...
-kasan: CONFIG_KASAN_INLINE enabled
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] SMP KASAN
-CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.3.0-rc2+ #23
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:snd_usb_pipe_sanity_check+0x80/0x130 sound/usb/helper.c:75
-Code: 48 c1 ea 03 80 3c 02 00 0f 85 b3 00 00 00 48 8b 6d 00 c1 eb 1e 48 b8  
-00 00 00 00 00 fc ff df 48 8d 7d 03 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
-89 fa 83 e2 07 38 d0 7f 04 84 c0 75 7b 48 b8 00 00
-RSP: 0018:ffff8881da2f7010 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000001 RCX: ffffffff8484d252
-RDX: 0000000000000000 RSI: ffffffff8484d26c RDI: 0000000000000003
-RBP: 0000000000000000 R08: ffff8881da22e000 R09: ffffed103b665d58
-R10: ffffed103b665d57 R11: ffff8881db32eabf R12: 0000000000000000
-R13: ffff8881d400ba80 R14: 1ffff1103b45ee06 R15: ffff8881c79244a0
-FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f31b2a87000 CR3: 00000001d3fd4000 CR4: 00000000001406e0
-Call Trace:
-  snd_usb_motu_microbookii_communicate.constprop.0+0xa0/0x2fb  
-sound/usb/quirks.c:1007
-  snd_usb_motu_microbookii_boot_quirk sound/usb/quirks.c:1051 [inline]
-  snd_usb_apply_boot_quirk.cold+0x163/0x370 sound/usb/quirks.c:1280
-  usb_audio_probe+0x2ec/0x2010 sound/usb/card.c:576
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Modules linked in:
----[ end trace 41e8577a8c48635e ]---
-RIP: 0010:snd_usb_pipe_sanity_check+0x80/0x130 sound/usb/helper.c:75
-Code: 48 c1 ea 03 80 3c 02 00 0f 85 b3 00 00 00 48 8b 6d 00 c1 eb 1e 48 b8  
-00 00 00 00 00 fc ff df 48 8d 7d 03 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
-89 fa 83 e2 07 38 d0 7f 04 84 c0 75 7b 48 b8 00 00
-RSP: 0018:ffff8881da2f7010 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000001 RCX: ffffffff8484d252
-RDX: 0000000000000000 RSI: ffffffff8484d26c RDI: 0000000000000003
-RBP: 0000000000000000 R08: ffff8881da22e000 R09: ffffed103b665d58
-R10: ffffed103b665d57 R11: ffff8881db32eabf R12: 0000000000000000
-R13: ffff8881d400ba80 R14: 1ffff1103b45ee06 R15: ffff8881c79244a0
-FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f31b2a87000 CR3: 00000001d3fd4000 CR4: 00000000001406e0
+The usb-fuzzer branch is working again, so it should be possible to
+use it for testing. But, I've actually just realized, that the proper
+way to test fixes for USB bugs is to use the exact commit hash that is
+provided in each bug report (the kernel interface for emulating USB
+device is not stable yet, and has significantly changed at least
+once). I've updated syzbot documentation to reflect this.
+
+Let's try to retest this one with the right kernel commit id:
+
+#syz test: https://github.com/google/kasan.git 9a33b369
+
+Thanks!
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000488c6d058ed337b2%40google.com.
+
+--000000000000ea7d07058ed4c0e8
+Content-Type: text/plain; charset="US-ASCII"; name="flexcop.txt"
+Content-Disposition: attachment; filename="flexcop.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_jyomq61v0>
+X-Attachment-Id: f_jyomq61v0
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvdXNiL2IyYzIvZmxleGNvcC11c2IuYyBiL2RyaXZl
+cnMvbWVkaWEvdXNiL2IyYzIvZmxleGNvcC11c2IuYwppbmRleCAxODI2ZmY4MjVjMmUuLjFhODAx
+ZGMyODZmOCAxMDA2NDQKLS0tIGEvZHJpdmVycy9tZWRpYS91c2IvYjJjMi9mbGV4Y29wLXVzYi5j
+CisrKyBiL2RyaXZlcnMvbWVkaWEvdXNiL2IyYzIvZmxleGNvcC11c2IuYwpAQCAtNTM4LDYgKzUz
+OCw5IEBAIHN0YXRpYyBpbnQgZmxleGNvcF91c2JfcHJvYmUoc3RydWN0IHVzYl9pbnRlcmZhY2Ug
+KmludGYsCiAJc3RydWN0IGZsZXhjb3BfZGV2aWNlICpmYyA9IE5VTEw7CiAJaW50IHJldDsKIAor
+CWlmIChpbnRmLT5jdXJfYWx0c2V0dGluZy0+ZGVzYy5iTnVtRW5kcG9pbnRzIDwgMSkKKwkJcmV0
+dXJuIC1FTk9ERVY7CisKIAlpZiAoKGZjID0gZmxleGNvcF9kZXZpY2Vfa21hbGxvYyhzaXplb2Yo
+c3RydWN0IGZsZXhjb3BfdXNiKSkpID09IE5VTEwpIHsKIAkJZXJyKCJvdXQgb2YgbWVtb3J5XG4i
+KTsKIAkJcmV0dXJuIC1FTk9NRU07Cg==
+--000000000000ea7d07058ed4c0e8--
