@@ -2,144 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 824A578D91
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 16:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1219378DC9
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 16:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387591AbfG2OPv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 10:15:51 -0400
-Received: from mga12.intel.com ([192.55.52.136]:58806 "EHLO mga12.intel.com"
+        id S1727723AbfG2OZI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 10:25:08 -0400
+Received: from mga14.intel.com ([192.55.52.115]:45406 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727861AbfG2OPv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Jul 2019 10:15:51 -0400
+        id S1726780AbfG2OZH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Jul 2019 10:25:07 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 07:15:50 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 07:25:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,323,1559545200"; 
-   d="scan'208";a="190590604"
+   d="scan'208";a="190601545"
 Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 29 Jul 2019 07:15:48 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 29 Jul 2019 17:15:47 +0300
-Date:   Mon, 29 Jul 2019 17:15:47 +0300
+  by fmsmga001.fm.intel.com with SMTP; 29 Jul 2019 07:25:01 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 29 Jul 2019 17:25:00 +0300
+Date:   Mon, 29 Jul 2019 17:25:00 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Douglas Gilbert <dgilbert@interlog.com>
-Subject: Re: [PATCH v2] usb: typec: tcpm: Add NULL check before dereferencing
- config
-Message-ID: <20190729141547.GD28600@kuha.fi.intel.com>
-References: <1563979112-22483-1-git-send-email-linux@roeck-us.net>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v8 08/11] usb: roles: get usb-role-switch from parent
+Message-ID: <20190729142500.GE28600@kuha.fi.intel.com>
+References: <1563958245-6321-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1563958245-6321-9-git-send-email-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1563979112-22483-1-git-send-email-linux@roeck-us.net>
+In-Reply-To: <1563958245-6321-9-git-send-email-chunfeng.yun@mediatek.com>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 07:38:32AM -0700, Guenter Roeck wrote:
-> When instantiating tcpm on an NXP OM 13588 board with NXP PTN5110,
-> the following crash is seen when writing into the 'preferred_role'
-> sysfs attribute.
+On Wed, Jul 24, 2019 at 04:50:42PM +0800, Chunfeng Yun wrote:
+> when the USB host controller is the parent of the connector,
+> usually type-B, sometimes don't need the graph, so we should
+> check whether it's parent registers usb-role-switch or not
+> firstly, and get it if exists.
 > 
-> Unable to handle kernel NULL pointer dereference at virtual address 00000028
-> pgd = f69149ad
-> [00000028] *pgd=00000000
-> Internal error: Oops: 5 [#1] THUMB2
-> Modules linked in: tcpci tcpm
-> CPU: 0 PID: 1882 Comm: bash Not tainted 5.1.18-sama5-armv7-r2 #4
-> Hardware name: Atmel SAMA5
-> PC is at tcpm_try_role+0x3a/0x4c [tcpm]
-> LR is at tcpm_try_role+0x15/0x4c [tcpm]
-> pc : [<bf8000e2>]    lr : [<bf8000bd>]    psr: 60030033
-> sp : dc1a1e88  ip : c03fb47d  fp : 00000000
-> r10: dc216190  r9 : dc1a1f78  r8 : 00000001
-> r7 : df4ae044  r6 : dd032e90  r5 : dd1ce340  r4 : df4ae054
-> r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : df4ae044
-> Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA Thumb  Segment none
-> Control: 50c53c7d  Table: 3efec059  DAC: 00000051
-> Process bash (pid: 1882, stack limit = 0x6a6d4aa5)
-> Stack: (0xdc1a1e88 to 0xdc1a2000)
-> 1e80:                   dd05d808 dd1ce340 00000001 00000007 dd1ce340 c03fb4a7
-> 1ea0: 00000007 00000007 dc216180 00000000 00000000 c01e1e03 00000000 00000000
-> 1ec0: c0907008 dee98b40 c01e1d5d c06106c4 00000000 00000000 00000007 c0194e8b
-> 1ee0: 0000000a 00000400 00000000 c01a97db dc22bf00 ffffe000 df4b6a00 df745900
-> 1f00: 00000001 00000001 000000dd c01a9c2f 7aeab3be c0907008 00000000 dc22bf00
-> 1f20: c0907008 00000000 00000000 00000000 00000000 7aeab3be 00000007 dee98b40
-> 1f40: 005dc318 dc1a1f78 00000000 00000000 00000007 c01969f7 0000000a c01a20cb
-> 1f60: dee98b40 c0907008 dee98b40 005dc318 00000000 c0196b9b 00000000 00000000
-> 1f80: dee98b40 7aeab3be 00000074 005dc318 b6f3bdb0 00000004 c0101224 dc1a0000
-> 1fa0: 00000004 c0101001 00000074 005dc318 00000001 005dc318 00000007 00000000
-> 1fc0: 00000074 005dc318 b6f3bdb0 00000004 00000007 00000007 00000000 00000000
-> 1fe0: 00000004 be800880 b6ed35b3 b6e5c746 60030030 00000001 00000000 00000000
-> [<bf8000e2>] (tcpm_try_role [tcpm]) from [<c03fb4a7>] (preferred_role_store+0x2b/0x5c)
-> [<c03fb4a7>] (preferred_role_store) from [<c01e1e03>] (kernfs_fop_write+0xa7/0x150)
-> [<c01e1e03>] (kernfs_fop_write) from [<c0194e8b>] (__vfs_write+0x1f/0x104)
-> [<c0194e8b>] (__vfs_write) from [<c01969f7>] (vfs_write+0x6b/0x104)
-> [<c01969f7>] (vfs_write) from [<c0196b9b>] (ksys_write+0x43/0x94)
-> [<c0196b9b>] (ksys_write) from [<c0101001>] (ret_fast_syscall+0x1/0x62)
-> 
-> Since commit 96232cbc6c994 ("usb: typec: tcpm: support get typec and pd
-> config from device properties"), the 'config' pointer in struct tcpc_dev
-> is optional when registering a Type-C port. Since it is optional, we have
-> to check if it is NULL before dereferencing it.
-> 
-> Reported-by: Douglas Gilbert <dgilbert@interlog.com>
-> Cc: Douglas Gilbert <dgilbert@interlog.com>
-> Fixes: 96232cbc6c994 ("usb: typec: tcpm: support get typec and pd config from device properties")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I don't think I actually wrote the patch. I may have proposed the code
+for you, but I never prepared a patch out out that. Please drop the
+above Signed-off-by line if that is the case. I case I really did
+write the patch, then you are missing the "From: Heikki..." first
+line, but I really don't remember preparing the patch.
 
+If the idea came from me, you can use for example the suggested-by
+tag: "Suggested-by: Heikki Krogerus <heikki.krogerus...".
+
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
-> v2: Added missing Cc:. Sorry for the noise.
+> v8: no changes
+> v7:
+>   add signed-off-by Chunfeng
 > 
-> Doug:
->     I didn't add your Tested-by: since I added more code.
->     It would be great if you can re-test.
+> v6:
+>   new patch
+> ---
+>  drivers/usb/roles/class.c | 25 +++++++++++++++++++++----
+>  1 file changed, 21 insertions(+), 4 deletions(-)
 > 
->  drivers/usb/typec/tcpm/tcpm.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index fba32d84e578..77f71f602f73 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -379,7 +379,8 @@ static enum tcpm_state tcpm_default_state(struct tcpm_port *port)
->  			return SNK_UNATTACHED;
->  		else if (port->try_role == TYPEC_SOURCE)
->  			return SRC_UNATTACHED;
-> -		else if (port->tcpc->config->default_role == TYPEC_SINK)
-> +		else if (port->tcpc->config &&
-> +			 port->tcpc->config->default_role == TYPEC_SINK)
->  			return SNK_UNATTACHED;
->  		/* Fall through to return SRC_UNATTACHED */
->  	} else if (port->port_type == TYPEC_PORT_SNK) {
-> @@ -4114,7 +4115,7 @@ static int tcpm_try_role(const struct typec_capability *cap, int role)
->  	mutex_lock(&port->lock);
->  	if (tcpc->try_role)
->  		ret = tcpc->try_role(tcpc, role);
-> -	if (!ret && !tcpc->config->try_role_hw)
-> +	if (!ret && (!tcpc->config || !tcpc->config->try_role_hw))
->  		port->try_role = role;
->  	port->try_src_count = 0;
->  	port->try_snk_count = 0;
-> @@ -4701,7 +4702,7 @@ static int tcpm_copy_caps(struct tcpm_port *port,
->  	port->typec_caps.prefer_role = tcfg->default_role;
->  	port->typec_caps.type = tcfg->type;
->  	port->typec_caps.data = tcfg->data;
-> -	port->self_powered = port->tcpc->config->self_powered;
-> +	port->self_powered = tcfg->self_powered;
->  
->  	return 0;
+> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+> index 5b637aaf311f..87439a84c983 100644
+> --- a/drivers/usb/roles/class.c
+> +++ b/drivers/usb/roles/class.c
+> @@ -114,6 +114,19 @@ static void *usb_role_switch_match(struct device_connection *con, int ep,
+>  	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
 >  }
+>  
+> +static struct usb_role_switch *
+> +usb_role_switch_is_parent(struct fwnode_handle *fwnode)
+> +{
+> +	struct fwnode_handle *parent = fwnode_get_parent(fwnode);
+> +	struct device *dev;
+> +
+> +	if (!parent || !fwnode_property_present(parent, "usb-role-switch"))
+> +		return NULL;
+> +
+> +	dev = class_find_device(role_class, NULL, parent, switch_fwnode_match);
+> +	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
+> +}
+> +
+>  /**
+>   * usb_role_switch_get - Find USB role switch linked with the caller
+>   * @dev: The caller device
+> @@ -125,8 +138,10 @@ struct usb_role_switch *usb_role_switch_get(struct device *dev)
+>  {
+>  	struct usb_role_switch *sw;
+>  
+> -	sw = device_connection_find_match(dev, "usb-role-switch", NULL,
+> -					  usb_role_switch_match);
+> +	sw = usb_role_switch_is_parent(dev_fwnode(dev));
+> +	if (!sw)
+> +		sw = device_connection_find_match(dev, "usb-role-switch", NULL,
+> +						  usb_role_switch_match);
+>  
+>  	if (!IS_ERR_OR_NULL(sw))
+>  		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
+> @@ -146,8 +161,10 @@ struct usb_role_switch *fwnode_usb_role_switch_get(struct fwnode_handle *fwnode)
+>  {
+>  	struct usb_role_switch *sw;
+>  
+> -	sw = fwnode_connection_find_match(fwnode, "usb-role-switch", NULL,
+> -					  usb_role_switch_match);
+> +	sw = usb_role_switch_is_parent(fwnode);
+> +	if (!sw)
+> +		sw = fwnode_connection_find_match(fwnode, "usb-role-switch",
+> +						  NULL, usb_role_switch_match);
+>  	if (!IS_ERR_OR_NULL(sw))
+>  		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
+>  
 > -- 
-> 2.7.4
+> 2.21.0
 
 thanks,
 
