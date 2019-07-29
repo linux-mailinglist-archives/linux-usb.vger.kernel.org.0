@@ -2,66 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B505B78C18
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 14:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3804B78D0C
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 15:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727996AbfG2M6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 08:58:17 -0400
-Received: from mx2.suse.de ([195.135.220.15]:38030 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727336AbfG2M6R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Jul 2019 08:58:17 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id CBCADAF39;
-        Mon, 29 Jul 2019 12:58:15 +0000 (UTC)
-Message-ID: <1564405088.25582.13.camel@suse.com>
-Subject: KASAN reporting bug in ath6kl
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Kalle Valo <kvalo@codeaurora.org>
-Cc:     linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org
-Date:   Mon, 29 Jul 2019 14:58:08 +0200
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727313AbfG2NnJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 09:43:09 -0400
+Received: from mga01.intel.com ([192.55.52.88]:48791 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726926AbfG2NnJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Jul 2019 09:43:09 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 06:43:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,322,1559545200"; 
+   d="scan'208";a="370495825"
+Received: from saranya-h97m-d3h.iind.intel.com ([10.66.254.8])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jul 2019 06:43:07 -0700
+From:   Saranya Gopal <saranya.gopal@intel.com>
+To:     stable@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, fei.yang@intel.com,
+        john.stultz@linaro.org, Saranya Gopal <saranya.gopal@intel.com>
+Subject: [PATCH 4.19.y 0/3] usb: dwc3: Prevent requests from being queued twice
+Date:   Mon, 29 Jul 2019 19:13:36 +0530
+Message-Id: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+With recent changes in AOSP, adb is now using asynchronous I/O.
+While adb works good for the most part, there have been issues with
+adb root/unroot commands which cause adb hang. The issue is caused
+by a request being queued twice. A series of 3 patches from
+Felipe Balbi in upstream tree fixes this issue.
 
-I am looking at this report:
+Felipe Balbi (3):
+  usb: dwc3: gadget: add dwc3_request status tracking
+  usb: dwc3: gadget: prevent dwc3_request from being queued twice
+  usb: dwc3: gadget: remove req->started flag
 
-Title:              general protection fault in
-ath6kl_usb_alloc_urb_from_pipe
-Last occurred:      0 days ago
-Reported:           102 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=cd8b9cfe50a0bf
-36ee19eda2d7e2e06843dfbeaf
-Original thread:    https://lkml.kernel.org/lkml/0000000000008e82510586
-5615e3@google.com/T/#u
+ drivers/usb/dwc3/core.h   | 11 +++++++++--
+ drivers/usb/dwc3/gadget.c |  9 ++++++++-
+ drivers/usb/dwc3/gadget.h |  4 ++--
+ 3 files changed, 19 insertions(+), 5 deletions(-)
 
-This bug has a C reproducer.
-
-No one replied to the original thread for this bug.
-
-This looks like a bug in a net/wireless USB driver.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+ead4037ec793e025e66f@syzkaller.appspotmail.com
-
---
-
-It looks like a bug in
-static int ath6kl_usb_setup_pipe_resources(struct ath6kl_usb *ar_usb)
-to me, which happily does nothing if the device has no endpoints.
-THis needs sanity checking, but it looks like the driver
-really uses 8 endpoints. Can you confirm that all 8 of them
-are indeed needed?
-
-	Regards
-		Oliver
+-- 
+1.9.1
 
