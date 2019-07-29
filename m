@@ -2,174 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA0079114
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B89D79125
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387579AbfG2Qgo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 12:36:44 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45257 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387444AbfG2Qgo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 12:36:44 -0400
-Received: by mail-pf1-f194.google.com with SMTP id r1so28301038pfq.12
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 09:36:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mdTXOfOovTlwSda3O/fFZhQvp67cV9yb0CIwUeXn1RI=;
-        b=mbozBovkfIRC7KNEazYHxHu01ZoXIL0Td88QY3+N6rKBFGzZtbLhA90H8M40LuAgMM
-         ZmxMzySYaivWafsimcD6zJRJyVWPpmu4AFUYLBNqyrEwAez+9j1Uh+EHuoZvRC7eaD/y
-         FjXj19LO1WfiIS+5RTmoHCzxPc6FI+nkeOz6A=
+        id S1729192AbfG2QiH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 12:38:07 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:45693 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729146AbfG2QiH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 12:38:07 -0400
+Received: by mail-io1-f71.google.com with SMTP id e20so67683696ioe.12
+        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 09:38:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mdTXOfOovTlwSda3O/fFZhQvp67cV9yb0CIwUeXn1RI=;
-        b=Uhh9pfuUhOAzZnTl1X0/QTC5Hnr1Cy1NXurKVqRhI/+EIm+7hPDA5L7/MC22j0R7pS
-         zTS00jPsAoU0Aa3CfAH2sXFTUTFGMDswMdsgEX8EtZ9+zxZca+9YkLzgURwGd7Mh5MFm
-         QexDvAfkvqBCb0N4EXjCodFD78t/0hSlDG+guZsq2mKwekShbjIYcQM0xYqdgHxPQ28+
-         6PSsAN8ukeijbwDg9ytkR+8qWirUTeoetWbhQnrghbR5kPRR+F3oTrXJoBy6BkUFrsfZ
-         ZP0q92V/SbKUV//PLCl3lrsy6hYGDE04cMap5GDEydBV0UY0btlHSlcW6qqap/VHYRzb
-         3cow==
-X-Gm-Message-State: APjAAAVtio3WM4mcnAA2pKMtilyFU4ZtJM221956y3IxIq/G72gF+OWU
-        pEHOSODMabH78+CtJ8uA8XYPug==
-X-Google-Smtp-Source: APXvYqxtHJKAufED/RCPFm9yEysNVZtjbSiuXSyxRiv/JBXXpYS7nVlw0zidAqBr5VA2SLe1r0VaqA==
-X-Received: by 2002:a63:9dcb:: with SMTP id i194mr59867132pgd.444.1564418203148;
-        Mon, 29 Jul 2019 09:36:43 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l1sm81044255pfl.9.2019.07.29.09.36.41
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Jul 2019 09:36:41 -0700 (PDT)
-Date:   Mon, 29 Jul 2019 09:36:40 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] usb: phy: ab8500-usb: Mark expected switch fall-throughs
-Message-ID: <201907290936.F5F486A6F@keescook>
-References: <20190729000631.GA24165@embeddedor>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=wGtsh4LHVqfKGzY145InjKGz5bNHgbf3FLGwAMZ6gLQ=;
+        b=WTtW1N6CfD9rvgT3fSxJGWkH6+pntjvSDoBftKRAYzo7COH1aJC9o6Ug9eE07WgtsS
+         SgpzMXKb+Ly8C7m4Dls2RTe3VrLLeQApuxuI8Z2a7QaXv2kp2BaPSGxRM8Rz3nx7mhWf
+         SnYRj1G0m2+w3nQ5N6fD6nPGF45OQD7eU0A8L94KstmNFLvVRzaebgMamxfrpMBTTeic
+         bf59cwq4zmjbZPDXrSqKIWI/BPXwwxBSrcJVryN2CYFDt8FNzRnUW5Mtx8459ox1ZZj3
+         NW5n37VLYUPC13XcOTlYR3FQF9mKsYkprY+8mVg3qIhPVVGgHA3ZUxGccInk/NqZEK1h
+         TS0Q==
+X-Gm-Message-State: APjAAAUhUt1VDX46R6kefxht34KnWzIUtWlbYrmaI+/HRb8acIvQ2kfD
+        yu95hyUziz/WaRjw5h9zR1q8FJSDOjTJlTe3/k5DwQ7lBWFU
+X-Google-Smtp-Source: APXvYqwxx3vJ6RmdfNcXCsQ3loSDEEjsGDpw2kG0TqsxPvnMbEdFJV4h/UsG+b1nZf4yl9FpYvgEEbT/7CHEw2g3WQRYJ6bxEeEl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190729000631.GA24165@embeddedor>
+X-Received: by 2002:a5d:87c6:: with SMTP id q6mr32794880ios.115.1564418286108;
+ Mon, 29 Jul 2019 09:38:06 -0700 (PDT)
+Date:   Mon, 29 Jul 2019 09:38:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000394df0058ed48487@google.com>
+Subject: WARNING in usbtouch_open
+From:   syzbot <syzbot+199ea16c7f26418b4365@syzkaller.appspotmail.com>
+To:     allison@lohutok.net, andreyknvl@google.com,
+        dmitry.torokhov@gmail.com, gregkh@linuxfoundation.org,
+        kstewart@linuxfoundation.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mpe@ellerman.id.au, rydberg@bitmath.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jul 28, 2019 at 07:06:31PM -0500, Gustavo A. R. Silva wrote:
-> Mark switch cases where we are expecting to fall through.
-> 
-> This patch fixes the following warnings:
-> 
-> drivers/usb/phy/phy-ab8500-usb.c: In function 'ab8500_usb_link_status_update':
-> drivers/usb/phy/phy-ab8500-usb.c:424:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    event = UX500_MUSB_RIDB;
->    ~~~~~~^~~~~~~~~~~~~~~~~
-> drivers/usb/phy/phy-ab8500-usb.c:425:2: note: here
->   case USB_LINK_NOT_CONFIGURED_8500:
->   ^~~~
-> drivers/usb/phy/phy-ab8500-usb.c:440:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    event = UX500_MUSB_RIDC;
->    ~~~~~~^~~~~~~~~~~~~~~~~
-> drivers/usb/phy/phy-ab8500-usb.c:441:2: note: here
->   case USB_LINK_STD_HOST_NC_8500:
->   ^~~~
-> drivers/usb/phy/phy-ab8500-usb.c:459:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    event = UX500_MUSB_RIDA;
->    ~~~~~~^~~~~~~~~~~~~~~~~
-> drivers/usb/phy/phy-ab8500-usb.c:460:2: note: here
->   case USB_LINK_HM_IDGND_8500:
->   ^~~~
-> drivers/usb/phy/phy-ab8500-usb.c: In function 'ab8505_usb_link_status_update':
-> drivers/usb/phy/phy-ab8500-usb.c:332:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    event = UX500_MUSB_RIDB;
->    ~~~~~~^~~~~~~~~~~~~~~~~
-> drivers/usb/phy/phy-ab8500-usb.c:333:2: note: here
->   case USB_LINK_NOT_CONFIGURED_8505:
->   ^~~~
-> drivers/usb/phy/phy-ab8500-usb.c:352:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    event = UX500_MUSB_RIDC;
->    ~~~~~~^~~~~~~~~~~~~~~~~
-> drivers/usb/phy/phy-ab8500-usb.c:353:2: note: here
->   case USB_LINK_STD_HOST_NC_8505:
->   ^~~~
-> drivers/usb/phy/phy-ab8500-usb.c:370:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    event = UX500_MUSB_RIDA;
->    ~~~~~~^~~~~~~~~~~~~~~~~
-> drivers/usb/phy/phy-ab8500-usb.c:371:2: note: here
->   case USB_LINK_HM_IDGND_8505:
->   ^~~~
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Hello,
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+syzbot found the following crash on:
 
--Kees
+HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1503f4ec600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+dashboard link: https://syzkaller.appspot.com/bug?extid=199ea16c7f26418b4365
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=173e4442600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=115482b2600000
 
-> ---
->  drivers/usb/phy/phy-ab8500-usb.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/phy/phy-ab8500-usb.c b/drivers/usb/phy/phy-ab8500-usb.c
-> index aaf363f19714..14b432982fd3 100644
-> --- a/drivers/usb/phy/phy-ab8500-usb.c
-> +++ b/drivers/usb/phy/phy-ab8500-usb.c
-> @@ -330,6 +330,7 @@ static int ab8505_usb_link_status_update(struct ab8500_usb *ab,
->  	switch (lsts) {
->  	case USB_LINK_ACA_RID_B_8505:
->  		event = UX500_MUSB_RIDB;
-> +		/* Fall through */
->  	case USB_LINK_NOT_CONFIGURED_8505:
->  	case USB_LINK_RESERVED0_8505:
->  	case USB_LINK_RESERVED1_8505:
-> @@ -350,6 +351,7 @@ static int ab8505_usb_link_status_update(struct ab8500_usb *ab,
->  
->  	case USB_LINK_ACA_RID_C_NM_8505:
->  		event = UX500_MUSB_RIDC;
-> +		/* Fall through */
->  	case USB_LINK_STD_HOST_NC_8505:
->  	case USB_LINK_STD_HOST_C_NS_8505:
->  	case USB_LINK_STD_HOST_C_S_8505:
-> @@ -368,6 +370,7 @@ static int ab8505_usb_link_status_update(struct ab8500_usb *ab,
->  	case USB_LINK_ACA_RID_A_8505:
->  	case USB_LINK_ACA_DOCK_CHGR_8505:
->  		event = UX500_MUSB_RIDA;
-> +		/* Fall through */
->  	case USB_LINK_HM_IDGND_8505:
->  		if (ab->mode == USB_IDLE) {
->  			ab->mode = USB_HOST;
-> @@ -422,6 +425,7 @@ static int ab8500_usb_link_status_update(struct ab8500_usb *ab,
->  	switch (lsts) {
->  	case USB_LINK_ACA_RID_B_8500:
->  		event = UX500_MUSB_RIDB;
-> +		/* Fall through */
->  	case USB_LINK_NOT_CONFIGURED_8500:
->  	case USB_LINK_NOT_VALID_LINK_8500:
->  		ab->mode = USB_IDLE;
-> @@ -438,6 +442,7 @@ static int ab8500_usb_link_status_update(struct ab8500_usb *ab,
->  	case USB_LINK_ACA_RID_C_HS_8500:
->  	case USB_LINK_ACA_RID_C_HS_CHIRP_8500:
->  		event = UX500_MUSB_RIDC;
-> +		/* Fall through */
->  	case USB_LINK_STD_HOST_NC_8500:
->  	case USB_LINK_STD_HOST_C_NS_8500:
->  	case USB_LINK_STD_HOST_C_S_8500:
-> @@ -457,6 +462,7 @@ static int ab8500_usb_link_status_update(struct ab8500_usb *ab,
->  
->  	case USB_LINK_ACA_RID_A_8500:
->  		event = UX500_MUSB_RIDA;
-> +		/* Fall through */
->  	case USB_LINK_HM_IDGND_8500:
->  		if (ab->mode == USB_IDLE) {
->  			ab->mode = USB_HOST;
-> -- 
-> 2.22.0
-> 
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+199ea16c7f26418b4365@syzkaller.appspotmail.com
 
--- 
-Kees Cook
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 0 PID: 1724 at kernel/locking/mutex.c:912 __mutex_lock_common  
+kernel/locking/mutex.c:912 [inline]
+WARNING: CPU: 0 PID: 1724 at kernel/locking/mutex.c:912  
+__mutex_lock+0xd31/0x1360 kernel/locking/mutex.c:1077
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 1724 Comm: syz-executor025 Not tainted 5.3.0-rc2+ #23
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x2a3/0x6da kernel/panic.c:219
+  __warn.cold+0x20/0x4a kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1026
+RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:912 [inline]
+RIP: 0010:__mutex_lock+0xd31/0x1360 kernel/locking/mutex.c:1077
+Code: d2 0f 85 f6 05 00 00 44 8b 05 bb 99 0a 02 45 85 c0 0f 85 0a f4 ff ff  
+48 c7 c6 00 87 a6 85 48 c7 c7 a0 84 a6 85 e8 f4 24 b8 fb <0f> 0b e9 f0 f3  
+ff ff 65 48 8b 1c 25 00 ef 01 00 be 08 00 00 00 48
+RSP: 0018:ffff8881d29cf740 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff812830fd RDI: ffffed103a539eda
+RBP: ffff8881d29cf8b0 R08: ffff8881d3e84800 R09: fffffbfff0d5eb25
+R10: fffffbfff0d5eb24 R11: ffffffff86af5923 R12: 0000000000000000
+R13: dffffc0000000000 R14: ffff8881d33cdbc8 R15: ffff8881d3e97140
+  usbtouch_open+0x101/0x310 drivers/input/touchscreen/usbtouchscreen.c:1537
+  input_open_device+0x170/0x280 drivers/input/input.c:607
+  evdev_open_device drivers/input/evdev.c:433 [inline]
+  evdev_open+0x3fe/0x510 drivers/input/evdev.c:518
+  chrdev_open+0x219/0x5c0 fs/char_dev.c:414
+  do_dentry_open+0x494/0x1120 fs/open.c:797
+  do_last fs/namei.c:3416 [inline]
+  path_openat+0x1430/0x3f50 fs/namei.c:3533
+  do_filp_open+0x1a1/0x280 fs/namei.c:3563
+  do_sys_open+0x3c0/0x580 fs/open.c:1089
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4011f0
+Code: 01 f0 ff ff 0f 83 00 0b 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f  
+44 00 00 83 3d 9d 4b 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 d4 0a 00 00 c3 48 83 ec 08 e8 3a 00 00 00
+RSP: 002b:00007ffc88d90d38 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 0000000000000124 RCX: 00000000004011f0
+RDX: 0000000000000000 RSI: 0000000000020000 RDI: 00007ffc88d90d40
+RBP: 6666666666666667 R08: 000000000000000f R09: 0000000000000023
+R10: 0000000000000075 R11: 0000000000000246 R12: 0000000000402150
+R13: 00000000004021e0 R14: 0000000000000000 R15: 0000000000000000
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
