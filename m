@@ -2,127 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 912BC79188
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0303E79193
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387485AbfG2QzF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 12:55:05 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38989 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387461AbfG2QzF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 12:55:05 -0400
-Received: by mail-pl1-f193.google.com with SMTP id b7so27782587pls.6
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 09:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6TLt8tonvJoZZysUQOtplrQz5SXXq81A/8sUR2cjqCQ=;
-        b=hjeuwLek2Mr8pD+eGSXyu+lndx7hjIScD3RgOJ06mL75WNSp+zlOMwtZ48E6Q0omWH
-         vhPjHYR+fHmWWkhqoLOnaSPLEgEAAlUaae7DltJG3MNtYoVg7WH45fSogKU1XQPrTpbJ
-         UM+ATYx+WtVeC1Myu9Hskzm0dyQwpLR3GhWcHh5U6QlvV+7pP9r35ygIA7neJrD0GqyB
-         jpZzLAKdr2vysKNCmFxXzJg5gDU/4usm9mwByCDT+GyxarwxeHGJMdiPfcmrjRBnhwv6
-         4XGeQa//qHetQ3im5FUgzg9O0J2KWk/jCsBnvZB5qEv5kzQIa0OOTczMYi5duhDg8cGs
-         OiQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6TLt8tonvJoZZysUQOtplrQz5SXXq81A/8sUR2cjqCQ=;
-        b=DxYQXCt0KotPJpdfoYaZCzj5xszG8obMDwj+fP6kkgNOChlrutbsDFF+ORFjndZiEG
-         J90WeToSifjltnxIYmizsPwM9imc1DHjqrmv90IakeSvBDkdFSh/70S+PEOH43v1hym+
-         vTodkHFUQV64yoNsCIU/Ajw0iGlTs4qQCOKwUti/wrSM8sQrpD3W+qbiSGYZZN0pSkl4
-         pt3qzUTp5JZIwiAwugmQg4wDnju7lU3FGi4j9Rk/eRixrZHzBBJDw1e3EXZ20IHgGn+i
-         PNsh/g0PaaOI1WHIizqC5d8FAHUdTRzNmp4b8Q69YjHxZ1aG+dcZUNJxhokqWln1zggJ
-         0qOQ==
-X-Gm-Message-State: APjAAAXBTWbzwEuo7BKADdEzg0Otbsdg3Y/dd8Mo/OFQOhStzcbHFvBK
-        pf0PvrMI7UbFQdFNcDUCjzcAD9QT+DsmUWyAWR3Y8Q==
-X-Google-Smtp-Source: APXvYqw26xEeNpL4i8BxqeKJoGMAwqFpC54ci6OcdJNahjqSRekD8A14aGLzeYiVuv4+su0mbCHEEfrNRP0osqmKcqQ=
-X-Received: by 2002:a17:902:6a87:: with SMTP id n7mr109264939plk.336.1564419304320;
- Mon, 29 Jul 2019 09:55:04 -0700 (PDT)
+        id S2387591AbfG2Q4P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 12:56:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727165AbfG2Q4O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Jul 2019 12:56:14 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4FEC3206E0;
+        Mon, 29 Jul 2019 16:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564419373;
+        bh=Jb7YttoUfhXk57tI+td6fw5yT58F4sBic2hI+PXmoR4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FvEucwLp9F/97X8skoF+H8Wz10sVG1GIsV67VKgXl8I6siTOxMPv55fryyZ/wJ/XO
+         cOcRut/6QT2SZSqhKdxd5kQ9W1nGAfPtBFWyf4lqspLrmAf6GObQEfzv95jQKIIiMm
+         XEdddmHh458+5qHmcwmIyJHnOiDl9zs27NxITJ1M=
+Date:   Mon, 29 Jul 2019 18:56:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Saranya Gopal <saranya.gopal@intel.com>
+Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        fei.yang@intel.com, john.stultz@linaro.org,
+        Felipe Balbi <felipe.balbi@linux.intel.com>
+Subject: Re: [PATCH 4.19.y 3/3] usb: dwc3: gadget: remove req->started flag
+Message-ID: <20190729165611.GA14160@kroah.com>
+References: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
+ <1564407819-10746-4-git-send-email-saranya.gopal@intel.com>
 MIME-Version: 1.0
-References: <1564410374.25582.15.camel@suse.com> <000000000000488c6d058ed337b2@google.com>
-In-Reply-To: <000000000000488c6d058ed337b2@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 29 Jul 2019 18:54:53 +0200
-Message-ID: <CAAeHK+yY3JWAj+EZ5wzqUOMbN+cdddCoRn7Nxn759-7zR-J7BQ@mail.gmail.com>
-Subject: Re: general protection fault in flexcop_usb_probe
-To:     Oliver Neukum <oneukum@suse.com>,
-        syzbot <syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com>
-Cc:     linux-media@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: multipart/mixed; boundary="000000000000ea7d07058ed4c0e8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1564407819-10746-4-git-send-email-saranya.gopal@intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000ea7d07058ed4c0e8
-Content-Type: text/plain; charset="UTF-8"
+On Mon, Jul 29, 2019 at 07:13:39PM +0530, Saranya Gopal wrote:
+> From: Felipe Balbi <felipe.balbi@linux.intel.com>
+> 
+> [Upstream commit 7c3d7dc89e57a1d43acea935882dd8713c9e639f]
+> 
+> Now that we have req->status, we don't need this extra flag
+> anymore. It's safe to remove it.
+> 
+> Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+> Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
+> ---
+>  drivers/usb/dwc3/core.h   | 2 --
+>  drivers/usb/dwc3/gadget.c | 1 -
+>  drivers/usb/dwc3/gadget.h | 2 --
+>  3 files changed, 5 deletions(-)
 
-On Mon, Jul 29, 2019 at 5:05 PM syzbot
-<syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot has tested the proposed patch and the reproducer did not trigger
-> crash:
->
-> Reported-and-tested-by:
-> syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
->
-> Tested on:
->
-> commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git
-> usb-fuzzer-usb-testing-2019.07.11
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=662450485a75f217
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=1036e80c600000
->
-> Note: testing is done by a robot and is best-effort only.
+Why is this patch needed for a stable tree?  It just cleans stuff up, it
+doesn't actually change any functionality.
 
-Hi Oliver,
+thanks,
 
-Thanks a lot for fixing all of these USB bugs!
-
-The usb-fuzzer branch is working again, so it should be possible to
-use it for testing. But, I've actually just realized, that the proper
-way to test fixes for USB bugs is to use the exact commit hash that is
-provided in each bug report (the kernel interface for emulating USB
-device is not stable yet, and has significantly changed at least
-once). I've updated syzbot documentation to reflect this.
-
-Let's try to retest this one with the right kernel commit id:
-
-#syz test: https://github.com/google/kasan.git 9a33b369
-
-Thanks!
-
-
-
-
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000488c6d058ed337b2%40google.com.
-
---000000000000ea7d07058ed4c0e8
-Content-Type: text/plain; charset="US-ASCII"; name="flexcop.txt"
-Content-Disposition: attachment; filename="flexcop.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jyomq61v0>
-X-Attachment-Id: f_jyomq61v0
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvdXNiL2IyYzIvZmxleGNvcC11c2IuYyBiL2RyaXZl
-cnMvbWVkaWEvdXNiL2IyYzIvZmxleGNvcC11c2IuYwppbmRleCAxODI2ZmY4MjVjMmUuLjFhODAx
-ZGMyODZmOCAxMDA2NDQKLS0tIGEvZHJpdmVycy9tZWRpYS91c2IvYjJjMi9mbGV4Y29wLXVzYi5j
-CisrKyBiL2RyaXZlcnMvbWVkaWEvdXNiL2IyYzIvZmxleGNvcC11c2IuYwpAQCAtNTM4LDYgKzUz
-OCw5IEBAIHN0YXRpYyBpbnQgZmxleGNvcF91c2JfcHJvYmUoc3RydWN0IHVzYl9pbnRlcmZhY2Ug
-KmludGYsCiAJc3RydWN0IGZsZXhjb3BfZGV2aWNlICpmYyA9IE5VTEw7CiAJaW50IHJldDsKIAor
-CWlmIChpbnRmLT5jdXJfYWx0c2V0dGluZy0+ZGVzYy5iTnVtRW5kcG9pbnRzIDwgMSkKKwkJcmV0
-dXJuIC1FTk9ERVY7CisKIAlpZiAoKGZjID0gZmxleGNvcF9kZXZpY2Vfa21hbGxvYyhzaXplb2Yo
-c3RydWN0IGZsZXhjb3BfdXNiKSkpID09IE5VTEwpIHsKIAkJZXJyKCJvdXQgb2YgbWVtb3J5XG4i
-KTsKIAkJcmV0dXJuIC1FTk9NRU07Cg==
---000000000000ea7d07058ed4c0e8--
+greg k-h
