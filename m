@@ -2,64 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E50B47923A
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 19:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BFA7923D
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 19:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728424AbfG2ReB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 13:34:01 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:52489 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726432AbfG2ReB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 13:34:01 -0400
-Received: by mail-io1-f69.google.com with SMTP id p12so68229896iog.19
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 10:34:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=syvtJEG7USwiD/3Hl7rGPBe7rMf4IwYj1Akgur62+14=;
-        b=ssV03qJTh14p3N3wM0wMlmkrVtXfKDXO4FpidO7vULeuvk6ISfSFL89Q70xRwNCQ4R
-         46e9082CV4IOHuz3MKRa8FKLk0kTMZEzp5H3GaU2kfjTs+Ik/F07RV7vfu0pqumfxwU3
-         LhZUWd3cugFvs8kJ25B/EGS+gIQfCDKTC2mUh7e9Zf+sZne02HJOZC+LBp78AEWE0/1p
-         YQvsGnWQDm36Mt+6Bvk/ht6QhASMtWNOchCjHBJBWtpQY6DMDkiHFXKCnL1juHM9RW6z
-         lUhvC4siAeDnQ4gNoJi4N6fc9IypFmiNCvIar4qCDf1V2D9HOeI7vNqkHTnxyLFbhBQb
-         kugA==
-X-Gm-Message-State: APjAAAWiyDgEPh9eMJQuZawDjnXlct3OKVu9PrRduNUneMP0O3JEVhS5
-        Z5s+BcsOLl600rkoYXKLXh1HJwFrunSsg/gA1u8tioHbXeO5
-X-Google-Smtp-Source: APXvYqzBpic4jveIaJHaymS7PGeJjXNGUXe/2V3f3+gCrnwDqmqFEB8RN3soewFR+0pvvH6Hm6Us3vIRWDdXigm2rmw3KmoU542w
+        id S1728998AbfG2Reb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 13:34:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45112 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726709AbfG2Reb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Jul 2019 13:34:31 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F307206DD;
+        Mon, 29 Jul 2019 17:34:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564421670;
+        bh=39evUAcSrSvfKfe9/QD/pwrA0wKQ04OygmMi8FdjU/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eBMSma+Rrtk44+AQg+TLQcURMHDT8sg+zEX7DXluY+gHtERMXTJX3AC4FzU8jD3nx
+         dCzlwU8nERvDJidx/TY1RkOHt/FjrqxHjAYUXAksZQIuEai8ch1lXXnzKbca2r9nM9
+         slkRBHhBKiE6NUW76HJ7R+rZeh1VfdtutuNHQoXw=
+Date:   Mon, 29 Jul 2019 19:34:27 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Saranya Gopal <saranya.gopal@intel.com>
+Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        fei.yang@intel.com, john.stultz@linaro.org
+Subject: Re: [PATCH 4.19.y 0/3] usb: dwc3: Prevent requests from being queued
+ twice
+Message-ID: <20190729173427.GA19326@kroah.com>
+References: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:90c8:: with SMTP id c8mr20066537jag.22.1564421640620;
- Mon, 29 Jul 2019 10:34:00 -0700 (PDT)
-Date:   Mon, 29 Jul 2019 10:34:00 -0700
-In-Reply-To: <CAAeHK+yY3JWAj+EZ5wzqUOMbN+cdddCoRn7Nxn759-7zR-J7BQ@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002b0f41058ed54cf4@google.com>
-Subject: Re: general protection fault in flexcop_usb_probe
-From:   syzbot <syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Jul 29, 2019 at 07:13:36PM +0530, Saranya Gopal wrote:
+> With recent changes in AOSP, adb is now using asynchronous I/O.
+> While adb works good for the most part, there have been issues with
+> adb root/unroot commands which cause adb hang. The issue is caused
+> by a request being queued twice. A series of 3 patches from
+> Felipe Balbi in upstream tree fixes this issue.
+> 
+> Felipe Balbi (3):
+>   usb: dwc3: gadget: add dwc3_request status tracking
+>   usb: dwc3: gadget: prevent dwc3_request from being queued twice
+>   usb: dwc3: gadget: remove req->started flag
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+I would like to get an ack from Felipe before I take these.
 
-Reported-and-tested-by:  
-syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
+thanks,
 
-Tested on:
-
-commit:         9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11cc12d8600000
-
-Note: testing is done by a robot and is best-effort only.
+greg k-h
