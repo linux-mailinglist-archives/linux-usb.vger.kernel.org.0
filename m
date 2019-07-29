@@ -2,106 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C4279195
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E294879198
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387594AbfG2Q4x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 12:56:53 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:52255 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727165AbfG2Q4x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 12:56:53 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 46DD421B42;
-        Mon, 29 Jul 2019 12:56:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 29 Jul 2019 12:56:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=dXt+y2OikSZHX8DwfF0NTpZ/VZB
-        EKbTy7A/AfNd2IhE=; b=Zb1OhdcIG1jl+rS+EiFW+7zi73um7cLj0sVCzi3ijn1
-        jJsKcBrnEeE91EVljTU+L2sWbvuB/gjNPFy8QC7PFLFv7SKktvFlxSPCk5sBL4WH
-        OLQ3qY/u/aTMpwm1tMBCsC0kx972s2/P9Ycau2B5lCH6BWb80nQJBrMegZgpNHnl
-        Ka43JCa9JK9bfQrGzMw3ws6kBQIbm9+u3npoODW2+YNFvgn2XJw1/5LJrD12sf6c
-        MY1bwf+Hwn5YjWrm8cQIStOD3WM3rwDTLPLICspkY2jgOmbU19pKJBHx+BKT40kN
-        w2gEX71cX/7Y0L0C0eRBlqB8AwvHtZJEqNOTRDOHjZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=dXt+y2
-        OikSZHX8DwfF0NTpZ/VZBEKbTy7A/AfNd2IhE=; b=mK09SJipVKYhK1oLU68fUf
-        TqFFpoivOKD8SGUpYLGhVVgck5UWv/0DIvccG3iLASg5bYroQRq702qPkLbEixa9
-        8tM8+8Ydpq0rp6ZI3Sj2oWsPxJAynGRLNT6zahUXH+EjN3JV3AzUDeCXLd76aYsl
-        y6c8oUu+d/FKBxM+4acxHp87dzXdG9dvuIuxSWz0jcbyqxk2qQcM+zxVALgWwb0d
-        FxEVeh/ratESOQ35d2Q5B/3g157UDvI5E+el8L9j112sWa/NneKYF4knOUvwnmSP
-        7JB7BsPJJ/rLUT387ZRo6T/41RKzB7neC3BmkplTSNv6q78QsypyL1KY997NBPaA
-        ==
-X-ME-Sender: <xms:UyU_XReB5tX-mqTwKZoP-dj02QK99X2lh-4oIOllAGhki1QfmeviYw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrledugddutdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
-    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
-    vehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:UyU_XUJZBnRfZuVc6HKVXjpUGq4v7fGWHBFFt5o9rKmZsAMegl7UKg>
-    <xmx:UyU_XWAqEoiiNZrKUWwZ2kX2pcUx8_ilo9_-ESuqkhEvf51JxKqtJQ>
-    <xmx:UyU_XeFQc_GURo0lFOT2D4WM6jkU6poIjy3hwVYLOED2JKpWxlSufg>
-    <xmx:VCU_XV3PWKvk8XHq9fCq12FgwDgMSDvE4VYjqjYg0bLH6J7CkfVJFw>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 4E844380076;
-        Mon, 29 Jul 2019 12:56:51 -0400 (EDT)
-Date:   Mon, 29 Jul 2019 18:56:49 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Saranya Gopal <saranya.gopal@intel.com>
-Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        fei.yang@intel.com, john.stultz@linaro.org,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-Subject: Re: [PATCH 4.19.y 2/3] usb: dwc3: gadget: prevent dwc3_request from
- being queued twice
-Message-ID: <20190729165649.GB14160@kroah.com>
-References: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
- <1564407819-10746-3-git-send-email-saranya.gopal@intel.com>
+        id S2387439AbfG2Q6I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 12:58:08 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:41196 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726940AbfG2Q6I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 12:58:08 -0400
+Received: by mail-io1-f71.google.com with SMTP id x17so67728109iog.8
+        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 09:58:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=zYSkCumP1m3hb2mgGhDNo5Y0jDgglbE754iR6vBUBG0=;
+        b=rCogDJL1vJaQdSV3X1SM54oJUF0QeYtX7GqopXLEsAj5vyrsm+gAcNFltfOxoYl1Dj
+         ccFDcJK1CDhwEhnCTfiLGELZ4yxeyc8FSMNW50JrcTd9ZekY8kNrTNeQI3KaOJJZLMMo
+         cCgg4CRGY9OwKDE2nsmLfjMXicE7HiU2aordzunikRP1++d8QCDnCWxFv5baRoUbYWJq
+         4eL6rt6idfWoPB7Ad5jxAcxfdAPJWtjOqsA5Z9Mdshf3o3CgG9aUvFc4INx72/BWsoG3
+         7u/R2hTmvqugbrvEffCEbSfgD1QzI2Irgt3KY1PeX7MKyc7JNWZE7W50JbwUJqf7Mm1T
+         gehA==
+X-Gm-Message-State: APjAAAVc1A7y4cj58Ki0ZedFHysztOBtSJ5/PdTyfjKCrE/Kg2/0X9gp
+        lBKgdd/J0M4/y+eW2sxAACCNYd8vSYSpYoYqmkEuI2x0SZA/
+X-Google-Smtp-Source: APXvYqwuAgYNcogscmSVDpjnPxCyHn2aBg3ZoPD8eQBq+t81HbZYsudho/QxwG2zDw+sZzNmhiXgQ+5V54xCJdOGzWLkw7wZrAaz
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1564407819-10746-3-git-send-email-saranya.gopal@intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Received: by 2002:a5d:94d7:: with SMTP id y23mr80916050ior.296.1564419487345;
+ Mon, 29 Jul 2019 09:58:07 -0700 (PDT)
+Date:   Mon, 29 Jul 2019 09:58:07 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d2b175058ed4cb3f@google.com>
+Subject: INFO: trying to register non-static key in ida_destroy
+From:   syzbot <syzbot+c86454eb3af9e8a4da20@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 07:13:38PM +0530, Saranya Gopal wrote:
-> From: Felipe Balbi <felipe.balbi@linux.intel.com>
-> 
-> [Upstream commit b2b6d601365a1acb90b87c85197d79]
-> 
-> Queueing the same request twice can introduce hard-to-debug
-> problems. At least one function driver - Android's f_mtp.c - is known
-> to cause this problem.
-> 
-> While that function is out-of-tree, this is a problem that's easy
-> enough to avoid.
-> 
-> Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-> Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
-> ---
->  drivers/usb/dwc3/gadget.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 3f337a0..a56a92a 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -1291,6 +1291,11 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
->  				&req->request, req->dep->name))
->  		return -EINVAL;
->  
-> +	if (WARN(req->status < DWC3_REQUEST_STATUS_COMPLETED,
-> +				"%s: request %pK already in flight\n",
-> +				dep->name, &req->request))
-> +		return -EINVAL;
+Hello,
 
-So we are going to trip syzbot up on this out-of-tree driver?  Brave...
+syzbot found the following crash on:
 
+HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ee1d7c600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+dashboard link: https://syzkaller.appspot.com/bug?extid=c86454eb3af9e8a4da20
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15eacab4600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178293c8600000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+c86454eb3af9e8a4da20@syzkaller.appspotmail.com
+
+usb 1-1: config 0 interface 197 altsetting 0 bulk endpoint 0xA has invalid  
+maxpacket 0
+usb 1-1: New USB device found, idVendor=972f, idProduct=41a3,  
+bcdDevice=d9.98
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+INFO: trying to register non-static key.
+the code is fine but needs lockdep annotation.
+turning off the locking correctness validator.
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc2+ #23
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  assign_lock_key kernel/locking/lockdep.c:813 [inline]
+  register_lock_class+0x1022/0x11d0 kernel/locking/lockdep.c:1122
+  __lock_acquire+0xfc/0x3b50 kernel/locking/lockdep.c:3762
+  lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
+  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+  _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
+  ida_destroy+0xb0/0x3a0 lib/idr.c:551
+  media_device_cleanup+0x15/0x70 drivers/media/mc/mc-device.c:722
+  uvc_delete+0x8e/0x2f0 drivers/media/usb/uvc/uvc_driver.c:1872
+  kref_put include/linux/kref.h:65 [inline]
+  uvc_probe+0xf95/0x64e4 drivers/media/usb/uvc/uvc_driver.c:2223
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
