@@ -2,132 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4752C78A6E
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 13:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5317A78AC7
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 13:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387693AbfG2L0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 07:26:08 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:52309 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387450AbfG2L0H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 07:26:07 -0400
-Received: by mail-io1-f72.google.com with SMTP id p12so67193753iog.19
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 04:26:07 -0700 (PDT)
+        id S2387778AbfG2LoK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 07:44:10 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43611 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387701AbfG2LoK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 07:44:10 -0400
+Received: by mail-pf1-f195.google.com with SMTP id i189so27905981pfg.10;
+        Mon, 29 Jul 2019 04:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=/GdbQmHDgRxOIS9Wz7Qs+ZEMMYW4qyH6JYf9o6A1T0U=;
+        b=OarXZMdjsEIRH/B2hQgEb/RKA3uNUmUrj/k5djGinq6oLebsIYvUwa6wNSoYX6RAfW
+         QeeSa4wZ6xZDk0h9GfP6/ya67iYrpV+8SZ05T0c5+RPVhigzCm6CW6hlwn99gdAGb15V
+         0RkEqZudL0Pmw4ZFHjoxenhULkWdsfZyYIa86MmfPsPETKlD5khr0WnI4zV3712tWpMm
+         JI7s34YoD2VACRzirHt0oQrfaAB4j5HnAyeHpQZapbzsLizkjFStVHmaq2zD6vpTMqaJ
+         B+WZX8inoo3mTfh/IERGkPm7npXdbNp/r6f7IX3NpHVRqP6DPD7uqFt0mx2OsipuUzW2
+         /IFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc;
-        bh=CiTsFwy01HY+45xZWkPRSyqJ30c3ZUdDwfNLV3u64lQ=;
-        b=tkfyL29tlhptu7dXMePubXrjzAvKR0sqdsa1d1mZPa59HGUgVl+uaAQNXqSqtDmajV
-         XXBIBTRdcB6aDRHNsmlz2r8wKTj7gH9iELf6qE3yATjw4gp+HRT2Uw0FACJ8xtDyg/07
-         urjBIcFv4mfbO7+HrZx4oyrVlPBSj9i9NQfkKqyQkMN7c2/v7SjbZF2YXS8gWPPjTBse
-         Ln3ObktCdwMNKu9INkIpCqGHN35qRQOLEN30enwETjCCd8vYJbnEivDUPYbse9vIy+HF
-         2DNkI/MywzGhkdaEGWMv0FJFi3p791b9JgQ/1K3WvZ5tiAJefgYNMUp3oBDu2N4SJn79
-         UccQ==
-X-Gm-Message-State: APjAAAUO+i15Z/WhyCBbv8RFMq4BM6vh3C/gPvIMQ3jwKmTrowS1m3bc
-        RYzfW3EaD59/A0hbHwNc4GDy0xcQ/hXN2PYifhZuytBw2oUu
-X-Google-Smtp-Source: APXvYqwO0ePpVSbSPAM3YZRYg1LDnzHtT0mXbTayoB4XQ1/jhncoTw791M2ecgXMexBfnxEQMcp11YASrxIWfcVCHWUqTzs/m9gD
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=/GdbQmHDgRxOIS9Wz7Qs+ZEMMYW4qyH6JYf9o6A1T0U=;
+        b=mvlstNHGWpPWmNrITbHSCx/GglpXY7J3WQAbXpsz/qr7eJ4KtKij0c8jqfEY9Si8eT
+         ABxrOZTEELGLRKOZwv5cRaeAwUBKvHzTws5CwKQZF+KcCslNZh3zZVudWHJaXXby2sU6
+         d+EPgFtNmsla6P+RbuoKKYwNEGHBs1kA3t7lVPnBgV2EEyVE6a36+ZNjGbWZ5NvTRdJp
+         yZzm05ECiq1kYNBuR+KQs0EVhTKNy1Uw/MaufGz1NjrK/64q5iBf+h9iv9j0en9ypY+M
+         T0T9P7Ct16V7Wf0jDe7dS2wCSxfXUiDugwV9t8+Updp8hL0z1bdvZa+BhELtvn34SPII
+         eoPg==
+X-Gm-Message-State: APjAAAUIVYMl9U2IRvajEQ2uME+7oT5Qk40H++FPgN4ePxqNGzmUgoq9
+        vKoRIeen24NhYBYPCK3OSOHrcuhoysw=
+X-Google-Smtp-Source: APXvYqy3GsKrIff1bHm1Y5Fg99sIIA4Iv+DUlUtjbfv6ilsoa/uoUdhdryfVBc72f6L3uxxptqcfCA==
+X-Received: by 2002:a17:90a:cb01:: with SMTP id z1mr110535882pjt.93.1564400649494;
+        Mon, 29 Jul 2019 04:44:09 -0700 (PDT)
+Received: from ?IPv6:2402:f000:4:72:808::177e? ([2402:f000:4:72:808::177e])
+        by smtp.gmail.com with ESMTPSA id z12sm42867392pfn.29.2019.07.29.04.44.07
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Jul 2019 04:44:08 -0700 (PDT)
+Subject: Re: [PATCH] usb: storage: sddr55: Fix a possible null-pointer
+ dereference in sddr55_transport()
+To:     Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu
+Cc:     usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20190729100555.2081-1-baijiaju1990@gmail.com>
+ <1564398922.25582.6.camel@suse.com>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Message-ID: <8d21d256-8c03-7864-d45b-fb7f2590721e@gmail.com>
+Date:   Mon, 29 Jul 2019 19:44:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9c46:: with SMTP id 6mr43195713iof.6.1564399567073;
- Mon, 29 Jul 2019 04:26:07 -0700 (PDT)
-Date:   Mon, 29 Jul 2019 04:26:07 -0700
-In-Reply-To: <1564399552.25582.8.camel@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007b7990058ed028d0@google.com>
-Subject: Re: Re: WARNING in iguanair_probe/usb_submit_urb
-From:   syzbot <syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <1564398922.25582.6.camel@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Am Freitag, den 26.07.2019, 05:28 -0700 schrieb syzbot:
->> Hello,
-
->> syzbot found the following crash on:
-
->> HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
->> git tree:       https://github.com/google/kasan.git usb-fuzzer
->> console output: https://syzkaller.appspot.com/x/log.txt?x=164ab1f0600000
->> kernel config:   
->> https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
->> dashboard link:  
->> https://syzkaller.appspot.com/bug?extid=01a77b82edaa374068e1
->> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->> syz repro:       
->> https://syzkaller.appspot.com/x/repro.syz?x=143d7978600000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=134623f4600000
-
->> IMPORTANT: if you fix the bug, please add the following tag to the  
->> commit:
->> Reported-by: syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com
-
-> #syz test: https://github.com/google/kasan.git  
-> usb-fuzzer-usb-testing-2019.07.11]
-
-"usb-fuzzer-usb-testing-2019.07.11]" does not look like a valid git branch  
-or commit.
 
 
->  From 0b0a7f7e980973e0c0d17f1dfe2bd7742492bfcc Mon Sep 17 00:00:00 2001
-> From: Oliver Neukum <oneukum@suse.com>
-> Date: Mon, 29 Jul 2019 11:49:00 +0200
-> Subject: [PATCH] iguanair: add sanity checks
+On 2019/7/29 19:15, Oliver Neukum wrote:
+> Am Montag, den 29.07.2019, 18:05 +0800 schrieb Jia-Ju Bai:
+>
+> Hi,
+>
+>> In sddr55_transport(), there is an if statement on line 836 to check
+>> whether info->lba_to_pba is NULL:
+>>      if (info->lba_to_pba == NULL || ...)
+>>
+>> When info->lba_to_pba is NULL, it is used on line 948:
+>>      pba = info->lba_to_pba[lba];
+>>
+>> Thus, a possible null-pointer dereference may occur.
+> Yes, in practice READ_CAPACITY will always be called and set
+> up the correct translation table, but you can probably exploit
+> this.
+>
+>> To fix this bug, info->lba_to_pba is checked before being used.
+>>
+>> This bug is found by a static analysis tool STCheck written by us.
+>>
+>> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+>> ---
+>>   drivers/usb/storage/sddr55.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
+>> index b8527c55335b..50afc39aa21d 100644
+>> --- a/drivers/usb/storage/sddr55.c
+>> +++ b/drivers/usb/storage/sddr55.c
+>> @@ -945,7 +945,8 @@ static int sddr55_transport(struct scsi_cmnd *srb, struct us_data *us)
+>>   			return USB_STOR_TRANSPORT_FAILED;
+>>   		}
+>>   
+>> -		pba = info->lba_to_pba[lba];
+>> +		if (info->lba_to_pba)
+>> +			pba = info->lba_to_pba[lba];
+> If you use that fix, pba will be uninitialized when used. It should be
+> something like:
+>
+> pba = info->lba_to_pba ? info->lba_to_pba[lba] : 0;
 
-> The driver needs to check the endpoint types, too, as opposed
-> to the number of endpoints. This also requires moving the check earlier.
+Thanks for the advice.
+I will send a v2 patch.
 
-> Reported-by: syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->   drivers/media/rc/iguanair.c | 15 +++++++--------
->   1 file changed, 7 insertions(+), 8 deletions(-)
 
-> diff --git a/drivers/media/rc/iguanair.c b/drivers/media/rc/iguanair.c
-> index ea05e125016a..663083a6b399 100644
-> --- a/drivers/media/rc/iguanair.c
-> +++ b/drivers/media/rc/iguanair.c
-> @@ -413,6 +413,10 @@ static int iguanair_probe(struct usb_interface *intf,
->   	int ret, pipein, pipeout;
->   	struct usb_host_interface *idesc;
-
-> +	idesc = intf->altsetting;
-> +	if (idesc->desc.bNumEndpoints < 2)
-> +		return -ENODEV;
-> +
->   	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
->   	rc = rc_allocate_device(RC_DRIVER_IR_RAW);
->   	if (!ir || !rc) {
-> @@ -427,18 +431,13 @@ static int iguanair_probe(struct usb_interface  
-> *intf,
->   	ir->urb_in = usb_alloc_urb(0, GFP_KERNEL);
->   	ir->urb_out = usb_alloc_urb(0, GFP_KERNEL);
-
-> -	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out) {
-> +	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out ||
-> +			!usb_endpoint_is_int_in(&idesc->endpoint[0].desc) ||
-> +			!usb_endpoint_is_int_out(&idesc->endpoint[1].desc)) {
->   		ret = -ENOMEM;
->   		goto out;
->   	}
-
-> -	idesc = intf->altsetting;
-> -
-> -	if (idesc->desc.bNumEndpoints < 2) {
-> -		ret = -ENODEV;
-> -		goto out;
-> -	}
-> -
->   	ir->rc = rc;
->   	ir->dev = &intf->dev;
->   	ir->udev = udev;
-> --
-> 2.16.4
-
+Best wishes,
+Jia-Ju Bai
