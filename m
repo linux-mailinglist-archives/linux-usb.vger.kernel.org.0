@@ -2,60 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BFA7923D
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 19:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF7F79327
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 20:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728998AbfG2Reb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 13:34:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45112 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726709AbfG2Reb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Jul 2019 13:34:31 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F307206DD;
-        Mon, 29 Jul 2019 17:34:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564421670;
-        bh=39evUAcSrSvfKfe9/QD/pwrA0wKQ04OygmMi8FdjU/M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eBMSma+Rrtk44+AQg+TLQcURMHDT8sg+zEX7DXluY+gHtERMXTJX3AC4FzU8jD3nx
-         dCzlwU8nERvDJidx/TY1RkOHt/FjrqxHjAYUXAksZQIuEai8ch1lXXnzKbca2r9nM9
-         slkRBHhBKiE6NUW76HJ7R+rZeh1VfdtutuNHQoXw=
-Date:   Mon, 29 Jul 2019 19:34:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Saranya Gopal <saranya.gopal@intel.com>
-Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        fei.yang@intel.com, john.stultz@linaro.org
-Subject: Re: [PATCH 4.19.y 0/3] usb: dwc3: Prevent requests from being queued
- twice
-Message-ID: <20190729173427.GA19326@kroah.com>
-References: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
+        id S2387982AbfG2SeZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 14:34:25 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38959 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387665AbfG2SeZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 14:34:25 -0400
+Received: by mail-wr1-f66.google.com with SMTP id x4so9769334wrt.6
+        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 11:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tpTNef2J2++QNO/OkHVy/yBR1B5TUwAqqnweG/iXLyQ=;
+        b=LZVoxJO0kBPqiF/uiAFqrbcV2bFOZTwsBdFA28Xc8nQJSw/oSIaMTOi0CJ/jTHW+kb
+         kACkHaaTGZ5nbO7JbvxdhhGQC1iFHZEBGxy/Igms3FH3htza/94TRLm1nZBPT9nmcPIX
+         v9S963ibaBpFPqm4rgg0MujYPEqxWeU/d6/97rEBTKPfdGMLcW6ZcrFefJNKbV1H0OS/
+         icvQypSExJN8HtE5YcyKj5QcOgKFTxA50dxbjFLH95maIKNImEPobXrcWyik2Buz5FQK
+         BOw0crkgXtXYCvOdhJMxsFBd0H614pBW3ZAS7IpKS+PHXoMGpfRDC/MDTFeo/UccetOM
+         Bv0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tpTNef2J2++QNO/OkHVy/yBR1B5TUwAqqnweG/iXLyQ=;
+        b=MKKgroR/Ob4hAv6rx5/Ceduvcf0BuJzgEKf68OQqXyiH3ddklXj+UWQQXYx+Hj7MTu
+         3IJoevwR2JdVcJA0bX5/wsWMbVW/yeGCUKXMqh0a6lAGtMl+CmcBz35X8fTQAGijGHP3
+         9lDtnR5yTmB2gBA7NaBcZGTIZZMB7p+bYXfq2aw3lFNIhY4GEB9ZGp4rAVhcvfhWBpD7
+         QafmZnv/OTaLJiCmUYSQTO21LhJdGlM7KdBlCBdUzCe5oyEM+1DYcolC/k2981+PyjEJ
+         4wgD3IZ8V0no2iiTzU/tfZmPkUQYcBrS4RAr4w9eSIkRoyyiI63gBjcixf6APYUV3ukJ
+         2B5g==
+X-Gm-Message-State: APjAAAWkn328ITZ+z4vQ5sVhsIT5xrMDNJRkGYgyAMFp0N/KSjY4XQiY
+        7qmFGqlvZwHT6O2TrdGK0mSmZgpNwCx5CGoXRmVL7g==
+X-Google-Smtp-Source: APXvYqzm6XO0MjlmwEOBSDGQInrilKkrrqCvL/4sjBmTp50wT9ZFDcnAsnubc3selGc8g3TuMaB/fX2ZNp0VmcyOQa0=
+X-Received: by 2002:adf:b1cb:: with SMTP id r11mr114636138wra.328.1564425262685;
+ Mon, 29 Jul 2019 11:34:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <CY4PR1201MB003708ADAD79BF4FD24D3445AACB0@CY4PR1201MB0037.namprd12.prod.outlook.com>
+ <20190723202735.113381-1-john.stultz@linaro.org>
+In-Reply-To: <20190723202735.113381-1-john.stultz@linaro.org>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 29 Jul 2019 11:34:10 -0700
+Message-ID: <CALAqxLW0HWJpPUK5JBDhuQ_m3w6teWo6eg1BeEd9YcfSmG+iHQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: Check for IOC/LST bit in both event->status
+ and TRB->ctrl fields
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Fei Yang <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 07:13:36PM +0530, Saranya Gopal wrote:
-> With recent changes in AOSP, adb is now using asynchronous I/O.
-> While adb works good for the most part, there have been issues with
-> adb root/unroot commands which cause adb hang. The issue is caused
-> by a request being queued twice. A series of 3 patches from
-> Felipe Balbi in upstream tree fixes this issue.
-> 
-> Felipe Balbi (3):
->   usb: dwc3: gadget: add dwc3_request status tracking
->   usb: dwc3: gadget: prevent dwc3_request from being queued twice
->   usb: dwc3: gadget: remove req->started flag
+On Tue, Jul 23, 2019 at 1:27 PM John Stultz <john.stultz@linaro.org> wrote:
+>
+> From: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+>
+> The present code in dwc3_gadget_ep_reclaim_completed_trb() will check
+> for IOC/LST bit in the event->status and returns if IOC/LST bit is
+> set. This logic doesn't work if multiple TRBs are queued per
+> request and the IOC/LST bit is set on the last TRB of that request.
+> Consider an example where a queued request has multiple queued TRBs
+> and IOC/LST bit is set only for the last TRB. In this case, the Core
+> generates XferComplete/XferInProgress events only for the last TRB
+> (since IOC/LST are set only for the last TRB). As per the logic in
+> dwc3_gadget_ep_reclaim_completed_trb() event->status is checked for
+> IOC/LST bit and returns on the first TRB. This makes the remaining
+> TRBs left unhandled.
+> To aviod this, changed the code to check for IOC/LST bits in both
+> event->status & TRB->ctrl. This patch does the same.
+>
+> At a practical level, this patch resolves USB transfer stalls seen
+> with adb on dwc3 based Android devices after functionfs gadget
+> added scatter-gather support around v4.20.
+>
+> Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
+> Cc: Fei Yang <fei.yang@intel.com>
+> Cc: Thinh Nguyen <thinhn@synopsys.com>
+> Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+> Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> Cc: Greg KH <gregkh@linuxfoundation.org>
+> Cc: Linux USB List <linux-usb@vger.kernel.org>
+> Cc: stable <stable@vger.kernel.org>
+> Tested-By: Tejas Joglekar <tejas.joglekar@synopsys.com>
+> Reviewed-by: Thinh Nguyen <thinhn@synopsys.com>
+> Signed-off-by: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+> [jstultz: forward ported to mainline, added note to commit log]
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
+> Just wanted to send this out so we're all looking at the same thing.
+> Not sure if its correct, but it seems to solve the adb stalls I've
+> been seeing for awhile.
 
-I would like to get an ack from Felipe before I take these.
+Felipe: Any thoughts on this patch?
 
-thanks,
-
-greg k-h
+thanks
+-john
