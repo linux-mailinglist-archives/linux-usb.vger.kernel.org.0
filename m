@@ -2,108 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F5878D12
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 15:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6497B78D16
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 15:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728266AbfG2Nn1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 09:43:27 -0400
-Received: from mga05.intel.com ([192.55.52.43]:59656 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726926AbfG2Nn1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Jul 2019 09:43:27 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 06:43:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,322,1559545200"; 
-   d="scan'208";a="370495888"
-Received: from saranya-h97m-d3h.iind.intel.com ([10.66.254.8])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jul 2019 06:43:25 -0700
-From:   Saranya Gopal <saranya.gopal@intel.com>
-To:     stable@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, fei.yang@intel.com,
-        john.stultz@linaro.org,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Saranya Gopal <saranya.gopal@intel.com>
-Subject: [PATCH 4.19.y 3/3] usb: dwc3: gadget: remove req->started flag
-Date:   Mon, 29 Jul 2019 19:13:39 +0530
-Message-Id: <1564407819-10746-4-git-send-email-saranya.gopal@intel.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
-References: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
+        id S1727337AbfG2NoW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 09:44:22 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:41039 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727036AbfG2NoW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 09:44:22 -0400
+Received: (qmail 23760 invoked by uid 500); 29 Jul 2019 09:44:21 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 29 Jul 2019 09:44:21 -0400
+Date:   Mon, 29 Jul 2019 09:44:21 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+cc:     gregkh@linuxfoundation.org, USB list <linux-usb@vger.kernel.org>,
+        USB Storage list <usb-storage@lists.one-eyed-alien.net>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: storage: sddr55: Fix a possible null-pointer
+ dereference in sddr55_transport()
+In-Reply-To: <20190729114936.6103-1-baijiaju1990@gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1907290939250.22244-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Felipe Balbi <felipe.balbi@linux.intel.com>
+On Mon, 29 Jul 2019, Jia-Ju Bai wrote:
 
-[Upstream commit 7c3d7dc89e57a1d43acea935882dd8713c9e639f]
+> In sddr55_transport(), there is an if statement on line 836 to check
+> whether info->lba_to_pba is NULL:
+>     if (info->lba_to_pba == NULL || ...)
+> 
+> When info->lba_to_pba is NULL, it is used on line 948:
+>     pba = info->lba_to_pba[lba];
+> 
+> Thus, a possible null-pointer dereference may occur.
+> 
+> To fix this bug, info->lba_to_pba is checked before being used.
+> 
+> This bug is found by a static analysis tool STCheck written by us.
 
-Now that we have req->status, we don't need this extra flag
-anymore. It's safe to remove it.
+This is not the right way to fix the bug.
 
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
----
- drivers/usb/dwc3/core.h   | 2 --
- drivers/usb/dwc3/gadget.c | 1 -
- drivers/usb/dwc3/gadget.h | 2 --
- 3 files changed, 5 deletions(-)
+The code already contains a test on line 938:
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 301bf94..6ea3e48 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -852,7 +852,6 @@ struct dwc3_hwparams {
-  *	or unaligned OUT)
-  * @direction: IN or OUT direction flag
-  * @mapped: true when request has been dma-mapped
-- * @started: request is started
-  */
- struct dwc3_request {
- 	struct usb_request	request;
-@@ -881,7 +880,6 @@ struct dwc3_request {
- 	unsigned		needs_extra_trb:1;
- 	unsigned		direction:1;
- 	unsigned		mapped:1;
--	unsigned		started:1;
- };
- 
- /*
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index a56a92a..f29068d 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -174,7 +174,6 @@ static void dwc3_gadget_del_and_unmap_request(struct dwc3_ep *dep,
- {
- 	struct dwc3			*dwc = dep->dwc;
- 
--	req->started = false;
- 	list_del(&req->list);
- 	req->remaining = 0;
- 	req->needs_extra_trb = false;
-diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
-index 6aebe8c..3ed738e 100644
---- a/drivers/usb/dwc3/gadget.h
-+++ b/drivers/usb/dwc3/gadget.h
-@@ -75,7 +75,6 @@ static inline void dwc3_gadget_move_started_request(struct dwc3_request *req)
- {
- 	struct dwc3_ep		*dep = req->dep;
- 
--	req->started = true;
- 	req->status = DWC3_REQUEST_STATUS_STARTED;
- 	list_move_tail(&req->list, &dep->started_list);
- }
-@@ -91,7 +90,6 @@ static inline void dwc3_gadget_move_cancelled_request(struct dwc3_request *req)
- {
- 	struct dwc3_ep		*dep = req->dep;
- 
--	req->started = false;
- 	req->status = DWC3_REQUEST_STATUS_CANCELLED;
- 	list_move_tail(&req->list, &dep->cancelled_list);
- }
--- 
-1.9.1
+		if (lba >= info->max_log_blks) {
+
+If this test fails, the driver doesn't try to dereference 
+info->lba_to_pba.
+
+The problem is that info->max_log_blks may be set even though 
+info->lba_to_pba is NULL, because the READ_CAPACITY case in 
+sddr55_transport() doesn't check the return code from 
+sddr55_read_map().  _That_ is what needs to be fixed.
+
+Alan Stern
+
+> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+> ---
+> v2:
+> * Avoid uninitialized access of pba.
+>   Thank Oliver for helpful advice.
+> 
+> ---
+>  drivers/usb/storage/sddr55.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
+> index b8527c55335b..d23aff16091e 100644
+> --- a/drivers/usb/storage/sddr55.c
+> +++ b/drivers/usb/storage/sddr55.c
+> @@ -945,7 +945,7 @@ static int sddr55_transport(struct scsi_cmnd *srb, struct us_data *us)
+>  			return USB_STOR_TRANSPORT_FAILED;
+>  		}
+>  
+> -		pba = info->lba_to_pba[lba];
+> +		pba = info->lba_to_pba ? info->lba_to_pba[lba] : 0;
+>  
+>  		if (srb->cmnd[0] == WRITE_10) {
+>  			usb_stor_dbg(us, "WRITE_10: write block %04X (LBA %04X) page %01X pages %d\n",
+> 
 
