@@ -2,95 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1511078ADE
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 13:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9628D78AE9
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 13:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387742AbfG2Ltn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 07:49:43 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:47094 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387482AbfG2Ltn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 07:49:43 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c3so4772434pfa.13;
-        Mon, 29 Jul 2019 04:49:43 -0700 (PDT)
+        id S2387781AbfG2Lva (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 07:51:30 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:38825 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387482AbfG2Lva (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 07:51:30 -0400
+Received: by mail-pl1-f195.google.com with SMTP id az7so27408357plb.5;
+        Mon, 29 Jul 2019 04:51:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=t4LrUjq6T4dirnuW+FmcNbvRfUA+DI+0HKJt+m2bWqc=;
-        b=eo/5Z10vJWswbhZ9Liy5f3E/5hKOoioHrjunY9OWkIDNBuYO9CPUY4Hep3kZuuOR92
-         /ncIb+PR8zLWvRXC8k6awPKhRgY4Qa+qQBpLG3vER8qVzic5LUM7Pi7kneKywt8AKkS3
-         terYnDeO56bO1rs86xancM02QDKUuh9dLzQDiTFzxTCslCHTvUPVpzAOkBtjzfgaBhtn
-         iYLV4kE6GZzDTXXi7pKoe28TApuM4Bsd7xHbkzgqhfIWdpW44cgdqoHPVX3hBG0jz37c
-         3ATMEIXYebV6LRFQq77V2j+24/US12CJWXpKpvi5XbjuriwQuUZFlIw9f3vh6GakZF3i
-         qk9A==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=WqRMMRupBKE7/qZ1bepdmX1qSW8ae9qt5Rfev+leb0o=;
+        b=o3Tcex775jyj393JOvhgfSQii40lor3lqmNDKnKYrp4RyejYNoFeZbb8c+8pHt4RUG
+         mB6AxYPQvl7abU759YyuyhcmO5iL9CsftWKLqXLuZ+S+1GPKKB34WV/RuoFQFOEVbtCl
+         ADt6brn5ZQXcjAG8WBkjUJ5DanrJmS8CEQ1YB5Kd2yIM6RdocFKPgm8hayCic59SN1NX
+         sMca4fzw6Dy1UYzEsTTAOO5yFzj8bkDh902E2aNoZpDIoZA/4pw0hC+g6NH3cIyrEjCN
+         CdaXtKIq5jL3Enwq94oGP4JwHwlboX/YjQMY1pDRMJvNLeOJaoDblYQy5h+WpCFcpYFu
+         Ulcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=t4LrUjq6T4dirnuW+FmcNbvRfUA+DI+0HKJt+m2bWqc=;
-        b=sWV5TtZr9iA/wM95iXdsZ53WFk1DbBAQzzgaV5d0twepgDoFkTUtgLaGvkTHnWIXaR
-         bf8zyA148370qfHNhsLImV2/oNSYYdwe8Y/nJCyP1f6oLrEbt64p1+AVmh2eWvvqKNOn
-         HapHRnifphf9DPReSvU6kQ4S8rSMekzWkdFSxsOU19e3EOo4WPzGHK/5WIenI138qXbe
-         puYfUIf14TXoYiK2eHQtVwjRoYmgoVef+UO3aBSVWw1zz45xGFsgAQ8nTIE0f2YvPH88
-         KPsBYkfq6CQbujfezVEISi6YarL9wv4EDcBnbR9qVIB3mjl5qUA1Ei6iAcmZZkvKUUgc
-         cJvA==
-X-Gm-Message-State: APjAAAXHyOonSisXabpqnSHydIRrU1tPKSaxy97dL9iQ5Elej5Rlzc1L
-        jIhdYrUD/FHRXcjdJekBLQE=
-X-Google-Smtp-Source: APXvYqy33Qp2byQh79yNYIetAkyhvaxtnAn6cxcHG55JXV0s6XNNCvNvnKJUszQYhHI+enW0sLmk/A==
-X-Received: by 2002:a63:2252:: with SMTP id t18mr104148160pgm.5.1564400982701;
-        Mon, 29 Jul 2019 04:49:42 -0700 (PDT)
-Received: from oslab.tsinghua.edu.cn ([2402:f000:4:72:808::3ca])
-        by smtp.gmail.com with ESMTPSA id x1sm50673215pjo.4.2019.07.29.04.49.40
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=WqRMMRupBKE7/qZ1bepdmX1qSW8ae9qt5Rfev+leb0o=;
+        b=F0w+F5xlo06yYxujSZGfIi3Bn5zYNp7dagM6Xv6S4Hi8oiTnTU0F5GsPoM6fR8tdOv
+         M8c8jS1XK31KYhnj5t2pBOANZ+L/BRMBmHq2+U1CIiZ8QvdzDQYPaOGNzZHweHn61gFF
+         CxjIx07hXzzvZVaL1tJDRGtLEB7lDGsjPGU9c0JJbLwkOjI6BrT76N3/jHAd9/g2Mhwp
+         4LXB7edcxt7QTR32528NK7mdd2Q6v2r6Lc1Wap+Zv//Ua/S81VKkqWa+cRT7MobSe4ls
+         jo3Cx/lJ2GLo7N+ZqRbGdmb2IIb+vAIWHZ19FUT5/vy5t/e3CE+/q2kUkh9VUOXS+TMD
+         7vgw==
+X-Gm-Message-State: APjAAAXvQ8TrmEqZErZpOJe4JmEullBLJA6Q1Iv2k6TBq/QBOpaKwH0F
+        SWmUwPxrHGSD8uvorD8GL5ZRqu0AkMw=
+X-Google-Smtp-Source: APXvYqxoLosNXhTxkQU9yUOK5c7Ht5RUsb+YjkuU+pomYjU99vvynJxGwZxviUZ+S7Apez3HVTQGyw==
+X-Received: by 2002:a17:902:9349:: with SMTP id g9mr107924212plp.262.1564401089268;
+        Mon, 29 Jul 2019 04:51:29 -0700 (PDT)
+Received: from ?IPv6:2402:f000:4:72:808::177e? ([2402:f000:4:72:808::177e])
+        by smtp.gmail.com with ESMTPSA id h11sm62244985pfn.120.2019.07.29.04.51.27
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Jul 2019 04:49:42 -0700 (PDT)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+        Mon, 29 Jul 2019 04:51:28 -0700 (PDT)
+Subject: Re: [PATCH v2] usb: storage: sddr55: Fix a possible null-pointer
+ dereference in sddr55_transport()
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        Oliver Neukum <oneukum@suse.com>
 Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org, Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH v2] usb: storage: sddr55: Fix a possible null-pointer dereference in sddr55_transport()
-Date:   Mon, 29 Jul 2019 19:49:36 +0800
-Message-Id: <20190729114936.6103-1-baijiaju1990@gmail.com>
-X-Mailer: git-send-email 2.17.0
+        linux-kernel@vger.kernel.org
+References: <20190729114936.6103-1-baijiaju1990@gmail.com>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Message-ID: <b843a770-2262-3d0a-75ee-8c714d804963@gmail.com>
+Date:   Mon, 29 Jul 2019 19:51:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190729114936.6103-1-baijiaju1990@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In sddr55_transport(), there is an if statement on line 836 to check
-whether info->lba_to_pba is NULL:
-    if (info->lba_to_pba == NULL || ...)
+Sorry, I forgot to send to Oliver, so send it again.
 
-When info->lba_to_pba is NULL, it is used on line 948:
-    pba = info->lba_to_pba[lba];
-
-Thus, a possible null-pointer dereference may occur.
-
-To fix this bug, info->lba_to_pba is checked before being used.
-
-This bug is found by a static analysis tool STCheck written by us.
-
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
----
-v2:
-* Avoid uninitialized access of pba.
-  Thank Oliver for helpful advice.
-
----
- drivers/usb/storage/sddr55.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
-index b8527c55335b..d23aff16091e 100644
---- a/drivers/usb/storage/sddr55.c
-+++ b/drivers/usb/storage/sddr55.c
-@@ -945,7 +945,7 @@ static int sddr55_transport(struct scsi_cmnd *srb, struct us_data *us)
- 			return USB_STOR_TRANSPORT_FAILED;
- 		}
- 
--		pba = info->lba_to_pba[lba];
-+		pba = info->lba_to_pba ? info->lba_to_pba[lba] : 0;
- 
- 		if (srb->cmnd[0] == WRITE_10) {
- 			usb_stor_dbg(us, "WRITE_10: write block %04X (LBA %04X) page %01X pages %d\n",
--- 
-2.17.0
+On 2019/7/29 19:49, Jia-Ju Bai wrote:
+> In sddr55_transport(), there is an if statement on line 836 to check
+> whether info->lba_to_pba is NULL:
+>      if (info->lba_to_pba == NULL || ...)
+>
+> When info->lba_to_pba is NULL, it is used on line 948:
+>      pba = info->lba_to_pba[lba];
+>
+> Thus, a possible null-pointer dereference may occur.
+>
+> To fix this bug, info->lba_to_pba is checked before being used.
+>
+> This bug is found by a static analysis tool STCheck written by us.
+>
+> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+> ---
+> v2:
+> * Avoid uninitialized access of pba.
+>    Thank Oliver for helpful advice.
+>
+> ---
+>   drivers/usb/storage/sddr55.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
+> index b8527c55335b..d23aff16091e 100644
+> --- a/drivers/usb/storage/sddr55.c
+> +++ b/drivers/usb/storage/sddr55.c
+> @@ -945,7 +945,7 @@ static int sddr55_transport(struct scsi_cmnd *srb, struct us_data *us)
+>   			return USB_STOR_TRANSPORT_FAILED;
+>   		}
+>   
+> -		pba = info->lba_to_pba[lba];
+> +		pba = info->lba_to_pba ? info->lba_to_pba[lba] : 0;
+>   
+>   		if (srb->cmnd[0] == WRITE_10) {
+>   			usb_stor_dbg(us, "WRITE_10: write block %04X (LBA %04X) page %01X pages %d\n",
 
