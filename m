@@ -2,45 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B89D79125
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C8579123
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 18:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729192AbfG2QiH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 12:38:07 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:45693 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729146AbfG2QiH (ORCPT
+        id S1728778AbfG2QiJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 12:38:09 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:39005 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729147AbfG2QiH (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 12:38:07 -0400
-Received: by mail-io1-f71.google.com with SMTP id e20so67683696ioe.12
+Received: by mail-io1-f72.google.com with SMTP id y13so68067929iol.6
         for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 09:38:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=wGtsh4LHVqfKGzY145InjKGz5bNHgbf3FLGwAMZ6gLQ=;
-        b=WTtW1N6CfD9rvgT3fSxJGWkH6+pntjvSDoBftKRAYzo7COH1aJC9o6Ug9eE07WgtsS
-         SgpzMXKb+Ly8C7m4Dls2RTe3VrLLeQApuxuI8Z2a7QaXv2kp2BaPSGxRM8Rz3nx7mhWf
-         SnYRj1G0m2+w3nQ5N6fD6nPGF45OQD7eU0A8L94KstmNFLvVRzaebgMamxfrpMBTTeic
-         bf59cwq4zmjbZPDXrSqKIWI/BPXwwxBSrcJVryN2CYFDt8FNzRnUW5Mtx8459ox1ZZj3
-         NW5n37VLYUPC13XcOTlYR3FQF9mKsYkprY+8mVg3qIhPVVGgHA3ZUxGccInk/NqZEK1h
-         TS0Q==
-X-Gm-Message-State: APjAAAUhUt1VDX46R6kefxht34KnWzIUtWlbYrmaI+/HRb8acIvQ2kfD
-        yu95hyUziz/WaRjw5h9zR1q8FJSDOjTJlTe3/k5DwQ7lBWFU
-X-Google-Smtp-Source: APXvYqwxx3vJ6RmdfNcXCsQ3loSDEEjsGDpw2kG0TqsxPvnMbEdFJV4h/UsG+b1nZf4yl9FpYvgEEbT/7CHEw2g3WQRYJ6bxEeEl
+        bh=64wPHD2ub5C9dTsMGHD0dC6MBn1HBlNLnJVwhPQmaw0=;
+        b=LanvtTOZwrAGHuAN0VQy0Ax4Y5MRXn5ItaDgItvWuLUhfguma2W8cN/Gi7sUuwboLR
+         t5e6s2jhFknIrfxY8VLOmmTGTcKLBiPsK8VGbSbVEK+8XJFKvAxoNLdXsEIe2Jhd5kSu
+         A4qPMK5xkqQ6f/za62vzga4OBJoXGcVJkXF5PiGnTKNmyp+YFOkKTvcg2VX5ywT00pIo
+         46eif3MaHN8q8tC1u0/hP8Pxsfjjlmh6pmSD0ABEvsCK+Q9y8eoLWzeSHQFlFvnw4bhf
+         aFY7EFgDq/nGZh9OztbKPbqIjaHf7ARYmSkKZz6tJgzmXP5l22y/h9j2nzKdsV3N/d/q
+         BBBQ==
+X-Gm-Message-State: APjAAAUY8u8JmvMImzL/0WU8PBTOxS/78cRu1m8h8qx2vi2S8apZiawV
+        h8B97s+79VWX0qkRydOVUwoYXBXsd47XPAE4uoucz3e0aoNE
+X-Google-Smtp-Source: APXvYqxzFMhYbEwKIncPaiNMzBUEdjZ57ZVTF1OhCLo4KLuAdkXvyFewG439cG6kUJaLkhfKqw3JQ+/Wr6msXYv1wiapA58de+BX
 MIME-Version: 1.0
-X-Received: by 2002:a5d:87c6:: with SMTP id q6mr32794880ios.115.1564418286108;
+X-Received: by 2002:a02:cc8e:: with SMTP id s14mr25813979jap.142.1564418286421;
  Mon, 29 Jul 2019 09:38:06 -0700 (PDT)
 Date:   Mon, 29 Jul 2019 09:38:06 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000394df0058ed48487@google.com>
-Subject: WARNING in usbtouch_open
-From:   syzbot <syzbot+199ea16c7f26418b4365@syzkaller.appspotmail.com>
-To:     allison@lohutok.net, andreyknvl@google.com,
-        dmitry.torokhov@gmail.com, gregkh@linuxfoundation.org,
-        kstewart@linuxfoundation.org, linux-input@vger.kernel.org,
+Message-ID: <0000000000003e112b058ed484c4@google.com>
+Subject: general protection fault in snd_usb_pipe_sanity_check
+From:   syzbot <syzbot+d59c4387bfb6eced94e2@syzkaller.appspotmail.com>
+To:     allison@lohutok.net, alsa-devel@alsa-project.org,
+        andreyknvl@google.com, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mpe@ellerman.id.au, rydberg@bitmath.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+        perex@perex.cz, rfontana@redhat.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, tiwai@suse.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -53,72 +52,90 @@ syzbot found the following crash on:
 
 HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
 git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1503f4ec600000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12befdc8600000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
-dashboard link: https://syzkaller.appspot.com/bug?extid=199ea16c7f26418b4365
+dashboard link: https://syzkaller.appspot.com/bug?extid=d59c4387bfb6eced94e2
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=173e4442600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=115482b2600000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16efc49fa00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13245854600000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+199ea16c7f26418b4365@syzkaller.appspotmail.com
+Reported-by: syzbot+d59c4387bfb6eced94e2@syzkaller.appspotmail.com
 
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-WARNING: CPU: 0 PID: 1724 at kernel/locking/mutex.c:912 __mutex_lock_common  
-kernel/locking/mutex.c:912 [inline]
-WARNING: CPU: 0 PID: 1724 at kernel/locking/mutex.c:912  
-__mutex_lock+0xd31/0x1360 kernel/locking/mutex.c:1077
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 1724 Comm: syz-executor025 Not tainted 5.3.0-rc2+ #23
+usb 1-1: New USB device found, idVendor=07fd, idProduct=0004,  
+bcdDevice=d5.ac
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: string descriptor 0 read error: -71
+usb 1-1: Waiting for MOTU Microbook II to boot up...
+kasan: CONFIG_KASAN_INLINE enabled
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] SMP KASAN
+CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.3.0-rc2+ #23
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:snd_usb_pipe_sanity_check+0x80/0x130 sound/usb/helper.c:75
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 b3 00 00 00 48 8b 6d 00 c1 eb 1e 48 b8  
+00 00 00 00 00 fc ff df 48 8d 7d 03 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
+89 fa 83 e2 07 38 d0 7f 04 84 c0 75 7b 48 b8 00 00
+RSP: 0018:ffff8881da2f7010 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: 0000000000000001 RCX: ffffffff8484d252
+RDX: 0000000000000000 RSI: ffffffff8484d26c RDI: 0000000000000003
+RBP: 0000000000000000 R08: ffff8881da22e000 R09: ffffed103b665d58
+R10: ffffed103b665d57 R11: ffff8881db32eabf R12: 0000000000000000
+R13: ffff8881d400ba80 R14: 1ffff1103b45ee06 R15: ffff8881c79244a0
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f31b2a87000 CR3: 00000001d3fd4000 CR4: 00000000001406e0
 Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x2a3/0x6da kernel/panic.c:219
-  __warn.cold+0x20/0x4a kernel/panic.c:576
-  report_bug+0x262/0x2a0 lib/bug.c:186
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1026
-RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:912 [inline]
-RIP: 0010:__mutex_lock+0xd31/0x1360 kernel/locking/mutex.c:1077
-Code: d2 0f 85 f6 05 00 00 44 8b 05 bb 99 0a 02 45 85 c0 0f 85 0a f4 ff ff  
-48 c7 c6 00 87 a6 85 48 c7 c7 a0 84 a6 85 e8 f4 24 b8 fb <0f> 0b e9 f0 f3  
-ff ff 65 48 8b 1c 25 00 ef 01 00 be 08 00 00 00 48
-RSP: 0018:ffff8881d29cf740 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812830fd RDI: ffffed103a539eda
-RBP: ffff8881d29cf8b0 R08: ffff8881d3e84800 R09: fffffbfff0d5eb25
-R10: fffffbfff0d5eb24 R11: ffffffff86af5923 R12: 0000000000000000
-R13: dffffc0000000000 R14: ffff8881d33cdbc8 R15: ffff8881d3e97140
-  usbtouch_open+0x101/0x310 drivers/input/touchscreen/usbtouchscreen.c:1537
-  input_open_device+0x170/0x280 drivers/input/input.c:607
-  evdev_open_device drivers/input/evdev.c:433 [inline]
-  evdev_open+0x3fe/0x510 drivers/input/evdev.c:518
-  chrdev_open+0x219/0x5c0 fs/char_dev.c:414
-  do_dentry_open+0x494/0x1120 fs/open.c:797
-  do_last fs/namei.c:3416 [inline]
-  path_openat+0x1430/0x3f50 fs/namei.c:3533
-  do_filp_open+0x1a1/0x280 fs/namei.c:3563
-  do_sys_open+0x3c0/0x580 fs/open.c:1089
-  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x4011f0
-Code: 01 f0 ff ff 0f 83 00 0b 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f  
-44 00 00 83 3d 9d 4b 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 d4 0a 00 00 c3 48 83 ec 08 e8 3a 00 00 00
-RSP: 002b:00007ffc88d90d38 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0000000000000124 RCX: 00000000004011f0
-RDX: 0000000000000000 RSI: 0000000000020000 RDI: 00007ffc88d90d40
-RBP: 6666666666666667 R08: 000000000000000f R09: 0000000000000023
-R10: 0000000000000075 R11: 0000000000000246 R12: 0000000000402150
-R13: 00000000004021e0 R14: 0000000000000000 R15: 0000000000000000
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+  snd_usb_motu_microbookii_communicate.constprop.0+0xa0/0x2fb  
+sound/usb/quirks.c:1007
+  snd_usb_motu_microbookii_boot_quirk sound/usb/quirks.c:1051 [inline]
+  snd_usb_apply_boot_quirk.cold+0x163/0x370 sound/usb/quirks.c:1280
+  usb_audio_probe+0x2ec/0x2010 sound/usb/card.c:576
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Modules linked in:
+---[ end trace 41e8577a8c48635e ]---
+RIP: 0010:snd_usb_pipe_sanity_check+0x80/0x130 sound/usb/helper.c:75
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 b3 00 00 00 48 8b 6d 00 c1 eb 1e 48 b8  
+00 00 00 00 00 fc ff df 48 8d 7d 03 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
+89 fa 83 e2 07 38 d0 7f 04 84 c0 75 7b 48 b8 00 00
+RSP: 0018:ffff8881da2f7010 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: 0000000000000001 RCX: ffffffff8484d252
+RDX: 0000000000000000 RSI: ffffffff8484d26c RDI: 0000000000000003
+RBP: 0000000000000000 R08: ffff8881da22e000 R09: ffffed103b665d58
+R10: ffffed103b665d57 R11: ffff8881db32eabf R12: 0000000000000000
+R13: ffff8881d400ba80 R14: 1ffff1103b45ee06 R15: ffff8881c79244a0
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f31b2a87000 CR3: 00000001d3fd4000 CR4: 00000000001406e0
 
 
 ---
