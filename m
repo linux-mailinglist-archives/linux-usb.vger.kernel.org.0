@@ -2,30 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B8778A44
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 13:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91DC78A70
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jul 2019 13:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387635AbfG2LPb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 07:15:31 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37792 "EHLO mx1.suse.de"
+        id S2387665AbfG2L0F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jul 2019 07:26:05 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40042 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387575AbfG2LPb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Jul 2019 07:15:31 -0400
+        id S2387450AbfG2L0F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Jul 2019 07:26:05 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A69DFAF0B;
-        Mon, 29 Jul 2019 11:15:29 +0000 (UTC)
-Message-ID: <1564398922.25582.6.camel@suse.com>
-Subject: Re: [PATCH] usb: storage: sddr55: Fix a possible null-pointer
- dereference in sddr55_transport()
+        by mx1.suse.de (Postfix) with ESMTP id 3F6FAB01C;
+        Mon, 29 Jul 2019 11:26:04 +0000 (UTC)
+Message-ID: <1564399552.25582.8.camel@suse.com>
+Subject: Re: WARNING in iguanair_probe/usb_submit_urb
 From:   Oliver Neukum <oneukum@suse.com>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu
-Cc:     usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Date:   Mon, 29 Jul 2019 13:15:22 +0200
-In-Reply-To: <20190729100555.2081-1-baijiaju1990@gmail.com>
-References: <20190729100555.2081-1-baijiaju1990@gmail.com>
+To:     syzbot <syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com>,
+        gustavo@embeddedor.com, andreyknvl@google.com,
+        syzkaller-bugs@googlegroups.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Mon, 29 Jul 2019 13:25:52 +0200
+In-Reply-To: <0000000000009af3e9058e94ac05@google.com>
+References: <0000000000009af3e9058e94ac05@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
@@ -35,49 +34,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 29.07.2019, 18:05 +0800 schrieb Jia-Ju Bai:
-
-Hi,
-
-> In sddr55_transport(), there is an if statement on line 836 to check
-> whether info->lba_to_pba is NULL:
->     if (info->lba_to_pba == NULL || ...)
+Am Freitag, den 26.07.2019, 05:28 -0700 schrieb syzbot:
+> Hello,
 > 
-> When info->lba_to_pba is NULL, it is used on line 948:
->     pba = info->lba_to_pba[lba];
+> syzbot found the following crash on:
 > 
-> Thus, a possible null-pointer dereference may occur.
-
-Yes, in practice READ_CAPACITY will always be called and set
-up the correct translation table, but you can probably exploit
-this.
-
-> To fix this bug, info->lba_to_pba is checked before being used.
+> HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=164ab1f0600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+> dashboard link: https://syzkaller.appspot.com/bug?extid=01a77b82edaa374068e1
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143d7978600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=134623f4600000
 > 
-> This bug is found by a static analysis tool STCheck written by us.
-> 
-> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-> ---
->  drivers/usb/storage/sddr55.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
-> index b8527c55335b..50afc39aa21d 100644
-> --- a/drivers/usb/storage/sddr55.c
-> +++ b/drivers/usb/storage/sddr55.c
-> @@ -945,7 +945,8 @@ static int sddr55_transport(struct scsi_cmnd *srb, struct us_data *us)
->  			return USB_STOR_TRANSPORT_FAILED;
->  		}
->  
-> -		pba = info->lba_to_pba[lba];
-> +		if (info->lba_to_pba)
-> +			pba = info->lba_to_pba[lba];
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com
 
-If you use that fix, pba will be uninitialized when used. It should be
-something like:
+#syz test: https://github.com/google/kasan.git usb-fuzzer-usb-testing-2019.07.11]
 
-pba = info->lba_to_pba ? info->lba_to_pba[lba] : 0;
+From 0b0a7f7e980973e0c0d17f1dfe2bd7742492bfcc Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Mon, 29 Jul 2019 11:49:00 +0200
+Subject: [PATCH] iguanair: add sanity checks
 
-	Regards
-		Oliver
+The driver needs to check the endpoint types, too, as opposed
+to the number of endpoints. This also requires moving the check earlier.
+
+Reported-by: syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/media/rc/iguanair.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/media/rc/iguanair.c b/drivers/media/rc/iguanair.c
+index ea05e125016a..663083a6b399 100644
+--- a/drivers/media/rc/iguanair.c
++++ b/drivers/media/rc/iguanair.c
+@@ -413,6 +413,10 @@ static int iguanair_probe(struct usb_interface *intf,
+ 	int ret, pipein, pipeout;
+ 	struct usb_host_interface *idesc;
+ 
++	idesc = intf->altsetting;
++	if (idesc->desc.bNumEndpoints < 2)
++		return -ENODEV;
++
+ 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
+ 	rc = rc_allocate_device(RC_DRIVER_IR_RAW);
+ 	if (!ir || !rc) {
+@@ -427,18 +431,13 @@ static int iguanair_probe(struct usb_interface *intf,
+ 	ir->urb_in = usb_alloc_urb(0, GFP_KERNEL);
+ 	ir->urb_out = usb_alloc_urb(0, GFP_KERNEL);
+ 
+-	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out) {
++	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out ||
++			!usb_endpoint_is_int_in(&idesc->endpoint[0].desc) ||
++			!usb_endpoint_is_int_out(&idesc->endpoint[1].desc)) {
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
+ 
+-	idesc = intf->altsetting;
+-
+-	if (idesc->desc.bNumEndpoints < 2) {
+-		ret = -ENODEV;
+-		goto out;
+-	}
+-
+ 	ir->rc = rc;
+ 	ir->dev = &intf->dev;
+ 	ir->udev = udev;
+-- 
+2.16.4
 
