@@ -2,126 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E90DA79C82
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 00:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B017A257
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 09:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728203AbfG2Wmc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jul 2019 18:42:32 -0400
-Received: from gateway34.websitewelcome.com ([192.185.149.62]:43140 "EHLO
-        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728031AbfG2Wmc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jul 2019 18:42:32 -0400
-X-Greylist: delayed 1225 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 18:42:31 EDT
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id C3D8E3331E
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jul 2019 17:22:05 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id sE1thkDzo3Qi0sE1thUzNU; Mon, 29 Jul 2019 17:22:05 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xNIJpvv5u3a1as5uH9x/Q6ptS0OoU1xyUYc7XIdGD1I=; b=hkSlPZxF1QFiDjTINlQ8LVVtG3
-        ZwijVBoTnjmrEboZPa0fv/BppGQu1M13l5+BjfUXc5E0+Rh+B0Cgd44xDafJpZX7C3XsVwzcRMqV4
-        iIvPMb2Sk5OOVES07DTwZO9fs4/KowoGWBPFg+H5DaHqX1S1JaE+oyBt1dA9RUzDI7blTCneRucFO
-        pRDCOnh4VNeOcPm6XKYmgh8+3Jvjz/2oagE7ujpTi2uAawJG3+Mee/1ONrfr8eo2MlTRhDeEoSFNZ
-        9zi4G7WxdCqr51N87eWxrvWywMVXNDvkDKIAxZAd4VGicNGIFuqH9S131xQBNpKuc9V9CSAetBU1i
-        3wHnUXyg==;
-Received: from [187.192.11.120] (port=60858 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hsE1s-0021nZ-Jk; Mon, 29 Jul 2019 17:22:04 -0500
-Date:   Mon, 29 Jul 2019 17:22:01 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH] usb: host: ohci-tmio: Mark expected switch fall-throughs
-Message-ID: <20190729222201.GA19408@embeddedor>
+        id S1730537AbfG3Het (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jul 2019 03:34:49 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:33705 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730504AbfG3Her (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 03:34:47 -0400
+X-UUID: 0d8ca158fbb7499ab9b555112207c27f-20190730
+X-UUID: 0d8ca158fbb7499ab9b555112207c27f-20190730
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 568279707; Tue, 30 Jul 2019 15:34:38 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 30 Jul 2019 15:34:33 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 30 Jul 2019 15:34:33 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        Daniel Kurtz <djkurtz@chromium.org>
+Subject: [PATCH v2 1/2] dt-bindings: usb: mtk-xhci: add an optional xhci_ck clock
+Date:   Tue, 30 Jul 2019 15:34:15 +0800
+Message-ID: <1564472056-27875-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.192.11.120
-X-Source-L: No
-X-Exim-ID: 1hsE1s-0021nZ-Jk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [187.192.11.120]:60858
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 17
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 147A02A2D28A053AF47239BB8AEC3BDE4930BA5F6B6165F1BDEBE0E466D4E08B2000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Mark switch cases where we are expecting to fall through.
+Add a new optional clock xhci_ck
 
-This patch fixes the following warning (Building: arm):
-
-drivers/usb/host/ohci-tmio.c: In function ‘tmio_stop_hc’:
-./include/linux/device.h:1499:2: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/usb/host/ohci-tmio.c:99:4: note: in expansion of macro ‘dev_err’
-    dev_err(&dev->dev, "Unsupported amount of ports: %d\n", ohci->num_ports);
-    ^~~~~~~
-In file included from drivers/usb/host/ohci-hcd.c:1257:0:
-drivers/usb/host/ohci-tmio.c:100:3: note: here
-   case 3:
-   ^~~~
-drivers/usb/host/ohci-tmio.c:101:7: warning: this statement may fall through [-Wimplicit-fallthrough=]
-    pm |= CCR_PM_USBPW3;
-       ^
-drivers/usb/host/ohci-tmio.c:102:3: note: here
-   case 2:
-   ^~~~
-drivers/usb/host/ohci-tmio.c:103:7: warning: this statement may fall through [-Wimplicit-fallthrough=]
-    pm |= CCR_PM_USBPW2;
-       ^
-drivers/usb/host/ohci-tmio.c:104:3: note: here
-   case 1:
-   ^~~~
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- drivers/usb/host/ohci-tmio.c | 3 +++
- 1 file changed, 3 insertions(+)
+v2 changes:
+  1. add the new clock at the end, suggested by Rob
+---
+ Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
-index d5a293a707b6..fb6f5e9ae5c6 100644
---- a/drivers/usb/host/ohci-tmio.c
-+++ b/drivers/usb/host/ohci-tmio.c
-@@ -97,10 +97,13 @@ static void tmio_stop_hc(struct platform_device *dev)
- 	switch (ohci->num_ports) {
- 		default:
- 			dev_err(&dev->dev, "Unsupported amount of ports: %d\n", ohci->num_ports);
-+			/* fall through */
- 		case 3:
- 			pm |= CCR_PM_USBPW3;
-+			/* fall through */
- 		case 2:
- 			pm |= CCR_PM_USBPW2;
-+			/* fall through */
- 		case 1:
- 			pm |= CCR_PM_USBPW1;
- 	}
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
+index 266c2d917a28..f3e4acecabe8 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
+@@ -30,7 +30,8 @@ Required properties:
+ 	the following ones are optional:
+ 	"ref_ck": reference clock used by low power mode etc,
+ 	"mcu_ck": mcu_bus clock for register access,
+-	"dma_ck": dma_bus clock for data transfer by DMA
++	"dma_ck": dma_bus clock for data transfer by DMA,
++	"xhci_ck": controller clock
+ 
+  - phys : see usb-hcd.txt in the current directory
+ 
+@@ -100,7 +101,7 @@ Required properties:
+  - clocks : a list of phandle + clock-specifier pairs, one for each
+ 	entry in clock-names
+  - clock-names : must contain "sys_ck", and the following ones are optional:
+-	"ref_ck", "mcu_ck" and "dma_ck"
++	"ref_ck", "mcu_ck" and "dma_ck", "xhci_ck"
+ 
+ Optional properties:
+  - vbus-supply : reference to the VBUS regulator;
 -- 
-2.22.0
+2.21.0
 
