@@ -2,94 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD0D7A426
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 11:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4727C7A4A9
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 11:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731341AbfG3J3X convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 30 Jul 2019 05:29:23 -0400
-Received: from mga07.intel.com ([134.134.136.100]:27888 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727247AbfG3J3X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Jul 2019 05:29:23 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 02:29:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,326,1559545200"; 
-   d="scan'208";a="165791932"
-Received: from fmsmsx105.amr.corp.intel.com ([10.18.124.203])
-  by orsmga008.jf.intel.com with ESMTP; 30 Jul 2019 02:29:22 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- FMSMSX105.amr.corp.intel.com (10.18.124.203) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Tue, 30 Jul 2019 02:29:21 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 30 Jul 2019 02:29:21 -0700
-Received: from BGSMSX108.gar.corp.intel.com (10.223.4.192) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
- via Frontend Transport; Tue, 30 Jul 2019 02:29:20 -0700
-Received: from bgsmsx104.gar.corp.intel.com ([169.254.5.156]) by
- BGSMSX108.gar.corp.intel.com ([169.254.8.155]) with mapi id 14.03.0439.000;
- Tue, 30 Jul 2019 14:59:18 +0530
-From:   "Gopal, Saranya" <saranya.gopal@intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Yang, Fei" <fei.yang@intel.com>,
-        "john.stultz@linaro.org" <john.stultz@linaro.org>
-Subject: RE: [PATCH 4.19.y 0/3] usb: dwc3: Prevent requests from being
- queued twice
-Thread-Topic: [PATCH 4.19.y 0/3] usb: dwc3: Prevent requests from being
- queued twice
-Thread-Index: AQHVRhOUnK9XeBaQ9UCn6YgdpRfpLKbhf2KAgAFlo/A=
-Date:   Tue, 30 Jul 2019 09:29:18 +0000
-Message-ID: <C672AA6DAAC36042A98BAD0B0B25BDA94CC83271@BGSMSX104.gar.corp.intel.com>
-References: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
- <20190729173427.GA19326@kroah.com>
-In-Reply-To: <20190729173427.GA19326@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.0.600.7
-dlp-reaction: no-action
-x-ctpclassification: CTP_NT
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiZTYyZDU5MWQtNWIxZi00MmI4LTgxM2UtMzJhN2IwYzM5OTdhIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiVlZUcjlzOVV2djJUWFI4TUF4XC9aTXpYR3huVFF1eXlwcjVOK1ZEazJwVmFIUzRFZjVzTmk3YkJscWxZWWZVem8ifQ==
-x-originating-ip: [10.223.10.10]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1731722AbfG3JiY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jul 2019 05:38:24 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:53530 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731721AbfG3JiH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 05:38:07 -0400
+Received: by mail-io1-f71.google.com with SMTP id h3so70820466iob.20
+        for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2019 02:38:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=qC0fsXMfMK53cx7YDAcq54+W59oVrprCrvBMxYygca4=;
+        b=f6Kp7QmZ/ZkE/gq5OJnEqUh+8o2/UzPIfTAsw0OJel0rLMf34PBYQ9+gnUFFeQOMam
+         p6gIlttnxMGOHVm1+VsZNyz9zdDckq3DPsShgaM7WPFsOwVIGfwPfZEoyqe3hz9mIXJq
+         MYxZ3U0WRsC6Pmw8eWVckO+UAdEifxdeP1bQft7T33Tut67KfC67cL2VKRrZeRpX5AH1
+         TNyYIFTR8bPU6f0oW261O5bpK20UcSyyjsG5TWwKU7+nsqrwSKYSNGVfyyqLz/iiHgZs
+         85Vn9LWX/Fy38ZV+fYBNZcFeuXLEFa+WXrr91ND7MqzH0cFnRgiREGbxTG/uC9HnyV4x
+         DUdg==
+X-Gm-Message-State: APjAAAWKipgVCw8rSHJ9hk1SStDInIFbm3KBbYVNRKYP/J1gi+FYaY9H
+        sm7GQ/95IUfZ72q3Hw83ekS8QTWn+Krfd3TfEF7oAduOcs2B
+X-Google-Smtp-Source: APXvYqyo3rkj27TdtlaK6oaBRgH2PsyoSXAuRfFg1fLBcyAHxQrF8W1UQ5JGC7mZ4ggPnZE95T2p7fbVHS8sPd1Wr+rVxudl7GZQ
 MIME-Version: 1.0
+X-Received: by 2002:a02:ac03:: with SMTP id a3mr121670663jao.132.1564479487000;
+ Tue, 30 Jul 2019 02:38:07 -0700 (PDT)
+Date:   Tue, 30 Jul 2019 02:38:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000014c877058ee2c4a6@google.com>
+Subject: KMSAN: kernel-usb-infoleak in pcan_usb_pro_send_req
+From:   syzbot <syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com>
+To:     glider@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On Mon, Jul 29, 2019 at 07:13:36PM +0530, Saranya Gopal wrote:
-> > With recent changes in AOSP, adb is now using asynchronous I/O.
-> > While adb works good for the most part, there have been issues with
-> > adb root/unroot commands which cause adb hang. The issue is caused
-> > by a request being queued twice. A series of 3 patches from
-> > Felipe Balbi in upstream tree fixes this issue.
-> >
-> > Felipe Balbi (3):
-> >   usb: dwc3: gadget: add dwc3_request status tracking
-> >   usb: dwc3: gadget: prevent dwc3_request from being queued twice
-> >   usb: dwc3: gadget: remove req->started flag
-> 
-> I would like to get an ack from Felipe before I take these.
-> 
-> thanks,
-> 
-> greg k-h
+Hello,
 
-I just realized that I had been testing this patch series with the flag to enable async IO on adb disabled!
-It requires a few more patches on top for adb to work properly in async IO mode.
-It has been working reliably in our internal tree for some time.
-Let me resubmit the whole series after getting it reviewed by Felipe.
+syzbot found the following crash on:
 
-Thanks,
-Saranya
+HEAD commit:    41550654 [UPSTREAM] KVM: x86: degrade WARN to pr_warn_rate..
+git tree:       kmsan
+console output: https://syzkaller.appspot.com/x/log.txt?x=13e95183a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=40511ad0c5945201
+dashboard link: https://syzkaller.appspot.com/bug?extid=513e4d0985298538bf9b
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17eafa1ba00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b87983a00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com
+
+usb 1-1: config 0 has no interface number 0
+usb 1-1: New USB device found, idVendor=0c72, idProduct=0014,  
+bcdDevice=8b.53
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+peak_usb 1-1:0.146: PEAK-System PCAN-USB X6 v0 fw v0.0.0 (2 channels)
+==================================================================
+BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x7ef/0x1f50  
+drivers/usb/core/urb.c:405
+CPU: 0 PID: 3359 Comm: kworker/0:2 Not tainted 5.2.0-rc4+ #7
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x162/0x2d0 mm/kmsan/kmsan.c:611
+  kmsan_internal_check_memory+0x974/0xa80 mm/kmsan/kmsan.c:705
+  kmsan_handle_urb+0x28/0x40 mm/kmsan/kmsan_hooks.c:617
+  usb_submit_urb+0x7ef/0x1f50 drivers/usb/core/urb.c:405
+  usb_start_wait_urb+0x143/0x410 drivers/usb/core/message.c:58
+  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+  usb_control_msg+0x49f/0x7f0 drivers/usb/core/message.c:156
+  pcan_usb_pro_send_req+0x26b/0x3e0  
+drivers/net/can/usb/peak_usb/pcan_usb_pro.c:336
+  pcan_usb_fd_drv_loaded drivers/net/can/usb/peak_usb/pcan_usb_fd.c:460  
+[inline]
+  pcan_usb_fd_init+0x16ee/0x1900  
+drivers/net/can/usb/peak_usb/pcan_usb_fd.c:885
+  peak_usb_create_dev drivers/net/can/usb/peak_usb/pcan_usb_core.c:809  
+[inline]
+  peak_usb_probe+0x1416/0x1b20  
+drivers/net/can/usb/peak_usb/pcan_usb_core.c:907
+  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+  really_probe+0x1344/0x1d90 drivers/base/dd.c:513
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:843
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
