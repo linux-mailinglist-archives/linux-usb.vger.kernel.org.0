@@ -2,161 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 294607A98B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 15:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9F47AA1A
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 15:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727903AbfG3N2z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jul 2019 09:28:55 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42617 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726377AbfG3N2z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 09:28:55 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q10so29837373pff.9;
-        Tue, 30 Jul 2019 06:28:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3TCazDgar7kzrWDfaJ/SvNyVqEI0BptwG+QBAYkIWoI=;
-        b=QOlFFV10FvPTu13MZHW4vbvP28axPG5jvrGKqlZf9a76uybOUqKBiCrslrNU7AfwxC
-         H97Y8/jHVb7Gk8hcXNZiwDiFPj1Nz9mwmSpbDOoVgVH/Ug000+zkMTpsCETE09unWUdS
-         Q6ypThiyZYbUjIkTRipPwcHWO7Kj0k+v0WXvD3NkiOy8P7eqAkfTjSazehJQ2VAJAFj0
-         aGSA0DB6ePH/0CML+iTRLI35Cv+kT1t/MYHTj1+r8DAwS3gm2bC9++gq8ww9om57daTk
-         TyLiOuZf/RtOUhIJSlqCW31ou7Uuvzn2YMuGbjNXyx1oo5OlKS+9r3LjqDnjtIv1XR9k
-         d24w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3TCazDgar7kzrWDfaJ/SvNyVqEI0BptwG+QBAYkIWoI=;
-        b=kDSsxJkhonnlCXW0PbXaKdjUEftYg50vwHDo7BIRB+hn9ZlmWFcDIWh0LxmmtLuMhG
-         dTgCQYwY2IVg//t0tQuyrRWJ16lx6uomjPF1FKvVsEy+pbCodDYOz07jDAIWWUD52Doz
-         4yRWOXhZ/xCV7IptDPTziKmwGt8AoDACC5E9Q9IYK3kptZZ2xjFzuQdNQbAWKywaeo1c
-         32IY46Jd7p+qKhCkT8mScJ1k8N72s2LnR1ixDP+PFVVXB55+HDQ2dzqY/4kEQOjgMF2z
-         4DfGxdJvvdQKByFBWd5CWdVEmZb5QkvzUephp9GGPkO9bnzTUHW87M6pdjR0WeWrAFxX
-         fp3Q==
-X-Gm-Message-State: APjAAAUcon7j/gjcsCxddgDfRA+lBjbNv3EhV1jCjHcuT8edhlP6CF2q
-        kJ19eLuDX/1TvTz6wlGSbIzYnNXP
-X-Google-Smtp-Source: APXvYqwpDkh8n5pQNxMvEPEnKNGzp/Dd+2rP4CVJRlWQ/48oQNXcqEC1g+DssoEeCm2lwTCofo+UBA==
-X-Received: by 2002:a65:6114:: with SMTP id z20mr110727777pgu.141.1564493333919;
-        Tue, 30 Jul 2019 06:28:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p20sm102368133pgj.47.2019.07.30.06.28.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 06:28:53 -0700 (PDT)
-Subject: Re: [RFC PATCH] usb: typec: tcpm: Ignore unsupported/unknown
- alternate mode requests
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Douglas Gilbert <dgilbert@interlog.com>,
+        id S1727128AbfG3NtN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jul 2019 09:49:13 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:37766 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726490AbfG3NtN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 09:49:13 -0400
+Received: (qmail 1700 invoked by uid 2102); 30 Jul 2019 09:49:12 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 30 Jul 2019 09:49:12 -0400
+Date:   Tue, 30 Jul 2019 09:49:12 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     Hillf Danton <hdanton@sina.com>, Takashi Iwai <tiwai@suse.de>,
+        syzbot <syzbot+d952e5e28f5fb7718d23@syzkaller.appspotmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
- <20190729140457.GC28600@kuha.fi.intel.com>
- <20190729173104.GA32556@roeck-us.net>
- <20190730120747.GL28600@kuha.fi.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <a14d8a51-85f6-65d8-2e1e-19538a7bf3d3@roeck-us.net>
-Date:   Tue, 30 Jul 2019 06:28:52 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING in snd_usb_motu_microbookii_communicate/usb_submit_urb
+In-Reply-To: <CAAeHK+zT+VhrxPDNFxCoVDrgBhmTiAuRjQv_A6SC91x8w0HmoQ@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1907300941150.1507-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20190730120747.GL28600@kuha.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/30/19 5:07 AM, Heikki Krogerus wrote:
-> On Mon, Jul 29, 2019 at 10:31:04AM -0700, Guenter Roeck wrote:
->> On Mon, Jul 29, 2019 at 05:04:57PM +0300, Heikki Krogerus wrote:
->>> Hi,
->>>
->>> On Wed, Jul 24, 2019 at 09:30:37PM -0700, Guenter Roeck wrote:
->>>> TCPM may receive PD messages associated with unknown or unsupported
->>>> alternate modes. If that happens, calls to typec_match_altmode()
->>>> will return NULL. The tcpm code does not currently take this into
->>>> account. This results in crashes.
->>>>
->>>> Unable to handle kernel NULL pointer dereference at virtual address 000001f0
->>>> pgd = 41dad9a1
->>>> [000001f0] *pgd=00000000
->>>> Internal error: Oops: 5 [#1] THUMB2
->>>> Modules linked in: tcpci tcpm
->>>> CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
->>>> Hardware name: Atmel SAMA5
->>>> Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
->>>> PC is at typec_altmode_attention+0x0/0x14
->>>> LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
->>>> ...
->>>> [<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
->>>> 				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
->>>> [<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
->>>> 				(process_one_work+0x123/0x2a8)
->>>> [<c012082b>] (process_one_work) from [<c0120a6d>]
->>>> 				(worker_thread+0xbd/0x3b0)
->>>> [<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
->>>> [<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
->>>>
->>>> Ignore PD messages if the asociated alternate mode is not supported.
->>>>
->>>> Reported-by: Douglas Gilbert <dgilbert@interlog.com>
->>>> Cc: Douglas Gilbert <dgilbert@interlog.com>
->>>> Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
->>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->>>> ---
->>>> Taking a stab at the problem. I don't really know if this is the correct
->>>> fix, or even if my understanding of the problem is correct, thus marking
->>>> the patch as RFC.
->>>
->>> My guess is that typec_match_altmode() is the real culprit. We can't
->>> rely on the partner mode index number when identifying the port alt
->>> mode.
->>>
->>> Douglas, can you test the attached hack instead of this patch?
->>>
->>>
->>> thanks,
->>>
->>> -- 
->>> heikki
->>
->>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
->>> index ec525811a9eb..033dc097ba83 100644
->>> --- a/drivers/usb/typec/tcpm/tcpm.c
->>> +++ b/drivers/usb/typec/tcpm/tcpm.c
->>> @@ -1067,12 +1067,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
->>>   
->>>   	modep = &port->mode_data;
->>>   
->>> -	adev = typec_match_altmode(port->port_altmode, ALTMODE_DISCOVERY_MAX,
->>> -				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
->>> -
->>>   	pdev = typec_match_altmode(port->partner_altmode, ALTMODE_DISCOVERY_MAX,
->>>   				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
->>>   
->>> +	adev = (void *)typec_altmode_get_partner(pdev);
->>> +
->>
->> I understand that typec_altmode_get_partner() returns a const *;
->> maybe adev should be declared as const struct typec_altmode *
->> instead of using a typecast.
-> 
-> Yes...
-> 
->> Also, typec_altmode_get_partner() can return NULL as well if pdev is NULL.
->> Is it guaranteed that typec_match_altmode() never returns NULL for pdev ?
-> 
-> ...and probable no. But I don't think we can receive Attention to a
-> mode that hasn't been entered.
-> 
+On Tue, 23 Jul 2019, Andrey Konovalov wrote:
 
-If I understand correctly, the Attention was generated by a test system.
-What prevents badly implemented code in the connected system from sending
-such an Attention message ?
+> On Sat, Jul 20, 2019 at 4:14 PM Hillf Danton <hdanton@sina.com> wrote:
 
-Thanks,
-Guenter
+> > Wow it finally comes up at the third time with sound/usb/quirks.c:999
+> > tippointing to commit 801ebf1043ae ("ALSA: usb-audio: Sanity checks
+> > for each pipe and EP types").
+> >
+> > That commit not only proves this warning is bogus but casts light
+> > on fixing it.
+> >
+> > 1, Make the helper created in the commit available outside sound/usb
+> > with a new name. No functionality change intended.
+> >
+> > --- a/include/linux/usb.h
+> > +++ b/include/linux/usb.h
+> > @@ -1748,7 +1748,20 @@ static inline int usb_urb_dir_out(struct urb *urb)
+> >         return (urb->transfer_flags & URB_DIR_MASK) == URB_DIR_OUT;
+> >  }
+> >
+> > -int usb_urb_ep_type_check(const struct urb *urb);
+> > +int usb_pipe_ep_type_check(struct usb_device *dev, unsigned int pipe);
+> > +
+> > +/**
+> > + * usb_urb_ep_type_check - sanity check of endpoint in the given urb
+> > + * @urb: urb to be checked
+> > + *
+> > + * This performs a light-weight sanity check for the endpoint in the
+> > + * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+> > + * a negative error code.
+> > + */
+> > +static inline int usb_urb_ep_type_check(const struct urb *urb)
+> > +{
+> > +       return usb_pipe_ep_type_check(urb->dev, urb->pipe);
+> > +}
+
+Okay, fine.
+
+> >
+> >  void *usb_alloc_coherent(struct usb_device *dev, size_t size,
+> >         gfp_t mem_flags, dma_addr_t *dma);
+> > --- a/drivers/usb/core/urb.c
+> > +++ b/drivers/usb/core/urb.c
+> > @@ -191,25 +191,24 @@ static const int pipetypes[4] = {
+> >  };
+> >
+> >  /**
+> > - * usb_urb_ep_type_check - sanity check of endpoint in the given urb
+> > - * @urb: urb to be checked
+> > + * usb_pipe_ep_type_check - sanity type check of endpoint against the given pipe
+> > + * @dev: usb device whose endpoint to be checked
+> > + * @pipe: the pipe type to match
+> >   *
+> > - * This performs a light-weight sanity check for the endpoint in the
+> > - * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+> > - * a negative error code.
+> > + * Return 0 if endpoint matches pipe, otherwise error code.
+> >   */
+> > -int usb_urb_ep_type_check(const struct urb *urb)
+> > +int usb_pipe_ep_type_check(struct usb_device *dev, unsigned int pipe)
+> >  {
+> >         const struct usb_host_endpoint *ep;
+> >
+> > -       ep = usb_pipe_endpoint(urb->dev, urb->pipe);
+> > +       ep = usb_pipe_endpoint(dev, pipe);
+> >         if (!ep)
+> >                 return -EINVAL;
+> > -       if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+> > +       if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+> >                 return -EINVAL;
+> >         return 0;
+> >  }
+> > -EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
+> > +EXPORT_SYMBOL_GPL(usb_pipe_ep_type_check);
+
+Again, fine.
+
+> >
+> >  /**
+> >   * usb_submit_urb - issue an asynchronous transfer request for an endpoint
+> > --
+> >
+> > 2, With helper in place, make the warning not bogus any more.
+> >
+> >
+> > --- a/drivers/usb/core/message.c
+> > +++ b/drivers/usb/core/message.c
+> > @@ -242,7 +242,12 @@ int usb_bulk_msg(struct usb_device *usb_dev, unsigned int pipe,
+> >
+> >         if ((ep->desc.bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) ==
+> >                         USB_ENDPOINT_XFER_INT) {
+> > -               pipe = (pipe & ~(3 << 30)) | (PIPE_INTERRUPT << 30);
+> > +               /*
+> > +                * change pipe unless we mess things up
+> > +                */
+> > +               if (usb_pipe_ep_type_check(usb_dev, pipe))
+> > +                       pipe = (pipe & ~(3 << 30)) | (PIPE_INTERRUPT << 30);
+> > +
+> >                 usb_fill_int_urb(urb, usb_dev, pipe, data, len,
+> >                                 usb_api_blocking_completion, NULL,
+> >                                 ep->desc.bInterval);
+
+What reason is there for adding this extra test?  It probably takes
+longer to do the test than it does to just perform the bitmask and
+store.
+
+> > --
+> >
+> > 3, Do some cleanup in sound/usb.
+> >
+> >
+> > --- a/sound/usb/helper.h
+> > +++ b/sound/usb/helper.h
+> > @@ -7,7 +7,6 @@ unsigned int snd_usb_combine_bytes(unsigned char *bytes, int size);
+> >  void *snd_usb_find_desc(void *descstart, int desclen, void *after, u8 dtype);
+> >  void *snd_usb_find_csint_desc(void *descstart, int desclen, void *after, u8 dsubtype);
+> >
+> > -int snd_usb_pipe_sanity_check(struct usb_device *dev, unsigned int pipe);
+> >  int snd_usb_ctl_msg(struct usb_device *dev, unsigned int pipe,
+> >                     __u8 request, __u8 requesttype, __u16 value, __u16 index,
+> >                     void *data, __u16 size);
+> > --- a/sound/usb/helper.c
+> > +++ b/sound/usb/helper.c
+> > @@ -63,20 +63,6 @@ void *snd_usb_find_csint_desc(void *buffer, int buflen, void *after, u8 dsubtype
+> >         return NULL;
+> >  }
+> >
+> > -/* check the validity of pipe and EP types */
+> > -int snd_usb_pipe_sanity_check(struct usb_device *dev, unsigned int pipe)
+> > -{
+> > -       static const int pipetypes[4] = {
+> > -               PIPE_CONTROL, PIPE_ISOCHRONOUS, PIPE_BULK, PIPE_INTERRUPT
+> > -       };
+> > -       struct usb_host_endpoint *ep;
+> > -
+> > -       ep = usb_pipe_endpoint(dev, pipe);
+> > -       if (usb_pipetype(pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+> > -               return -EINVAL;
+> > -       return 0;
+> > -}
+> > -
+> >  /*
+> >   * Wrapper for usb_control_msg().
+> >   * Allocates a temp buffer to prevent dmaing from/to the stack.
+> > @@ -89,7 +75,7 @@ int snd_usb_ctl_msg(struct usb_device *dev, unsigned int pipe, __u8 request,
+> >         void *buf = NULL;
+> >         int timeout;
+> >
+> > -       if (snd_usb_pipe_sanity_check(dev, pipe))
+> > +       if (usb_pipe_ep_type_check(dev, pipe))
+> >                 return -EINVAL;
+
+This looks sane.  I'll leave to it Takashi to comment on the rest of 
+the sound driver changes.
+
+Alan Stern
+
