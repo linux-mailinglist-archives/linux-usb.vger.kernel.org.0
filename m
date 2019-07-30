@@ -2,85 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B027A367
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 10:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD0D7A426
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 11:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731172AbfG3Iwf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jul 2019 04:52:35 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:46666 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728206AbfG3Iwf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 04:52:35 -0400
-Received: by mail-io1-f68.google.com with SMTP id i10so12987463iol.13
-        for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2019 01:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KZBc4JuoBoitGCeCfz1fTkJZWC6uNTzfMWVRVk5mqmk=;
-        b=q2FqjjQOO4Od2TjVnBr0XI76YwSq/QZxoIJdKsgBpHVOLhVPbpvge/7DZJJe5SmKtb
-         NtAkZ7UGCulTG1syPON0BBi4nNWoDGgILFGK9leVVEQoB7nOTGqzSiBQOzNteXD7jCF/
-         97SnBTrLDt1FFRAAn48SZWW1O5648m4h/yyG7u7XEiKQGG6j+EV4qYAl+2gjOxE2ATGh
-         xxNGSUGKlGk4hftXY8AzaHKsq5ocYPcMTfwth2zATbQ34KArd5ODrMW658RrZLjUw8Lq
-         9HeoFR4lvOxXoXJFxMvPz6Aw98qNd9lUeM4LhWVEDUDEqj5cFGK6pfA1FDg3TmtgXvLd
-         YYpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KZBc4JuoBoitGCeCfz1fTkJZWC6uNTzfMWVRVk5mqmk=;
-        b=Qj5EbCfIDX5lk5rNQTgTUCvo3UApNc5VfP9c9MC1TeiHYrBw+fYlaAsTgEUkfdWtSp
-         JOtFxgzlUozaZVFCq5OQAE6fh6VI1unCxEmh1TdJgrjGjRB+poYfa28cp0YhF9sX+muz
-         QoxeKrMQFKjccZK6oTGoTUD8jbpQoTuY0fUxjfozcrJOTUH88uKvXEYyLThPXsrDTHju
-         fUSMp5TkmmiSu3gEl89HvRWoxELlrOMuQ+B+s3JuJKlv0ZF9WnqmLhzJOCTKStZxG1ix
-         9z5OVfZ9oVe8CQv6pSjW3+/WbsadHtVFv/9FwK9grS1RHV940S2fEg9QCkz6ODRopA8X
-         rbRA==
-X-Gm-Message-State: APjAAAXSLoGUqK8q4LVEqBXbpo6lx6z88q6N0eKmV3YNAgOzQdZmHEWO
-        97J1EF/bjbOG3UnNKX/cEzbBN5vrJI1OMieROZJP9Q==
-X-Google-Smtp-Source: APXvYqw8+BtKHmmrc3lK/cH3wHyY4TmeHoP7Aj/d3Qv71Gh5yvAfyAwWFsFhzddtaipqUo2Tukj19iZd9GZdWMJMkwU=
-X-Received: by 2002:a02:a07:: with SMTP id 7mr119631327jaw.65.1564476754235;
- Tue, 30 Jul 2019 01:52:34 -0700 (PDT)
+        id S1731341AbfG3J3X convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 30 Jul 2019 05:29:23 -0400
+Received: from mga07.intel.com ([134.134.136.100]:27888 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727247AbfG3J3X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Jul 2019 05:29:23 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 02:29:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,326,1559545200"; 
+   d="scan'208";a="165791932"
+Received: from fmsmsx105.amr.corp.intel.com ([10.18.124.203])
+  by orsmga008.jf.intel.com with ESMTP; 30 Jul 2019 02:29:22 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ FMSMSX105.amr.corp.intel.com (10.18.124.203) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Tue, 30 Jul 2019 02:29:21 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 30 Jul 2019 02:29:21 -0700
+Received: from BGSMSX108.gar.corp.intel.com (10.223.4.192) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Tue, 30 Jul 2019 02:29:20 -0700
+Received: from bgsmsx104.gar.corp.intel.com ([169.254.5.156]) by
+ BGSMSX108.gar.corp.intel.com ([169.254.8.155]) with mapi id 14.03.0439.000;
+ Tue, 30 Jul 2019 14:59:18 +0530
+From:   "Gopal, Saranya" <saranya.gopal@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Yang, Fei" <fei.yang@intel.com>,
+        "john.stultz@linaro.org" <john.stultz@linaro.org>
+Subject: RE: [PATCH 4.19.y 0/3] usb: dwc3: Prevent requests from being
+ queued twice
+Thread-Topic: [PATCH 4.19.y 0/3] usb: dwc3: Prevent requests from being
+ queued twice
+Thread-Index: AQHVRhOUnK9XeBaQ9UCn6YgdpRfpLKbhf2KAgAFlo/A=
+Date:   Tue, 30 Jul 2019 09:29:18 +0000
+Message-ID: <C672AA6DAAC36042A98BAD0B0B25BDA94CC83271@BGSMSX104.gar.corp.intel.com>
+References: <1564407819-10746-1-git-send-email-saranya.gopal@intel.com>
+ <20190729173427.GA19326@kroah.com>
+In-Reply-To: <20190729173427.GA19326@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.0.600.7
+dlp-reaction: no-action
+x-ctpclassification: CTP_NT
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiZTYyZDU5MWQtNWIxZi00MmI4LTgxM2UtMzJhN2IwYzM5OTdhIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiVlZUcjlzOVV2djJUWFI4TUF4XC9aTXpYR3huVFF1eXlwcjVOK1ZEazJwVmFIUzRFZjVzTmk3YkJscWxZWWZVem8ifQ==
+x-originating-ip: [10.223.10.10]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <1564410374.25582.15.camel@suse.com> <000000000000488c6d058ed337b2@google.com>
- <CAAeHK+yY3JWAj+EZ5wzqUOMbN+cdddCoRn7Nxn759-7zR-J7BQ@mail.gmail.com> <1564473085.25582.19.camel@suse.com>
-In-Reply-To: <1564473085.25582.19.camel@suse.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 30 Jul 2019 10:52:22 +0200
-Message-ID: <CACT4Y+Ym6K6VOZ9-qbMXo3tPNALH+9MMdfN9uP3BXn1QDGCw=A@mail.gmail.com>
-Subject: Re: general protection fault in flexcop_usb_probe
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        syzbot <syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        linux-media@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 30, 2019 at 9:51 AM Oliver Neukum <oneukum@suse.com> wrote:
->
-> Am Montag, den 29.07.2019, 18:54 +0200 schrieb Andrey Konovalov:
->
-> Hi,
->
-> > Thanks a lot for fixing all of these USB bugs!
->
-> I fear the day we get serious about MA USB.
-> All these issues will turn into security issues.
->
-> > The usb-fuzzer branch is working again, so it should be possible to
-> > use it for testing. But, I've actually just realized, that the proper
-> > way to test fixes for USB bugs is to use the exact commit hash that is
-> > provided in each bug report (the kernel interface for emulating USB
-> > device is not stable yet, and has significantly changed at least
-> > once). I've updated syzbot documentation to reflect this.
->
-> Where is taht documentation?
+> On Mon, Jul 29, 2019 at 07:13:36PM +0530, Saranya Gopal wrote:
+> > With recent changes in AOSP, adb is now using asynchronous I/O.
+> > While adb works good for the most part, there have been issues with
+> > adb root/unroot commands which cause adb hang. The issue is caused
+> > by a request being queued twice. A series of 3 patches from
+> > Felipe Balbi in upstream tree fixes this issue.
+> >
+> > Felipe Balbi (3):
+> >   usb: dwc3: gadget: add dwc3_request status tracking
+> >   usb: dwc3: gadget: prevent dwc3_request from being queued twice
+> >   usb: dwc3: gadget: remove req->started flag
+> 
+> I would like to get an ack from Felipe before I take these.
+> 
+> thanks,
+> 
+> greg k-h
 
-Hi Oliver,
+I just realized that I had been testing this patch series with the flag to enable async IO on adb disabled!
+It requires a few more patches on top for adb to work properly in async IO mode.
+It has been working reliably in our internal tree for some time.
+Let me resubmit the whole series after getting it reviewed by Felipe.
 
-The link is referenced in every bug report ;)
-https://groups.google.com/forum/#!topic/syzkaller-bugs/C4kgnyomFyQ
-> See https://goo.gl/tpsmEJ for more information about syzbot.
+Thanks,
+Saranya
