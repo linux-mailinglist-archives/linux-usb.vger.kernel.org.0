@@ -2,253 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C65C7AD80
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 18:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288BA7AE83
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 18:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728187AbfG3Q1D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jul 2019 12:27:03 -0400
-Received: from mga17.intel.com ([192.55.52.151]:22071 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727126AbfG3Q1C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Jul 2019 12:27:02 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 09:27:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,327,1559545200"; 
-   d="scan'208";a="323253632"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2019 09:27:00 -0700
-Subject: Re: Oops in xhci_endpoint_reset
-To:     Enric Balletbo Serra <eballetbo@gmail.com>,
-        Bob Gleitsmann <rjgleits@bellsouth.net>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-References: <a24f7305-abcc-c2ff-bba0-a02b23e34434@bellsouth.net>
- <20190727105955.GE458@kroah.com>
- <bd443170-6886-df60-0d05-849fc7229cd7@bellsouth.net>
- <CAFqH_53kZkH_nYpENO1QvEMpR4S3BP6GUncDt2c7yj_faSujrg@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <b257349a-7f2a-8214-4382-acf8005175f2@linux.intel.com>
-Date:   Tue, 30 Jul 2019 19:28:53 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1729505AbfG3Q6H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jul 2019 12:58:07 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:39254 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729495AbfG3Q6G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 12:58:06 -0400
+Received: by mail-io1-f72.google.com with SMTP id y13so72032837iol.6
+        for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2019 09:58:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=mSxvpAdL6N4fH/Hu5gQqP4xurABkshFnMu5lEyO1QyQ=;
+        b=G+2riHNhfcy4WIdtAhR08mcTxkfQ2qxM7M5lTq+3tVCWkR8rWobRzL+B2lb8wBXTq6
+         EewJpzwLM5UREMZGrqLWJ085/qUg2asTSa7Ej8e4g8FOWJeyyGp+08StIJ8eYdz0MT1M
+         bdXmA2OvHshFRE9K6sqgNhl1VO0vzmGExBESwjqu0DrPyiQS7SAXnw5sx90QHeMlCthK
+         1lXOFUexQbnFzsm5jcSzT9AfV+Fzpgml2UFL+yHT06Jz7UbFZhhEOfhKE42DlSkAlN8G
+         +8gk+iCPZWXMusho0tue5CjjMDRyIKrr/0Io5+gTg1ePKjdb23G59g9HMWeOX6OFV8Zi
+         13IQ==
+X-Gm-Message-State: APjAAAU77Mn8api6zejSrgziQY7pjCWMLf+np/8/SoeEy+I+brv29ql5
+        7rnyWHhktgNOt4SfVa6jtONG/u8Ji2WAEA94bJlqY9CEtutG
+X-Google-Smtp-Source: APXvYqxXG/IlT4HYMEvfo7WVTd5GOs1Vz/yiR1XopLuL+fw5tEIeYsJjbyfDleGdhO2NdW9dOeI5rsKKxAAKnzI+bU3dgFtKwST4
 MIME-Version: 1.0
-In-Reply-To: <CAFqH_53kZkH_nYpENO1QvEMpR4S3BP6GUncDt2c7yj_faSujrg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a5e:9e03:: with SMTP id i3mr37411748ioq.66.1564505885712;
+ Tue, 30 Jul 2019 09:58:05 -0700 (PDT)
+Date:   Tue, 30 Jul 2019 09:58:05 -0700
+In-Reply-To: <000000000000161dc3058ed0777c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000912b79058ee8e939@google.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb
+From:   syzbot <syzbot+a7a6b9c609b9457c62c6@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, oneukum@suse.com,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30.7.2019 18.49, Enric Balletbo Serra wrote:
-> Hi,
-> 
-> Missatge de Bob Gleitsmann <rjgleits@bellsouth.net> del dia ds., 27 de
-> jul. 2019 a les 23:39:
->>
->> OK, here's the result of the bisection:
->>
->> ef513be0a9057cc6baf5d29566aaaefa214ba344 is the first bad commit
->> commit ef513be0a9057cc6baf5d29566aaaefa214ba344
->> Author: Jim Lin <jilin@nvidia.com>
->> Date:???? Mon Jun 3 18:53:44 2019 +0800
->>
->> ?????? usb: xhci: Add Clear_TT_Buffer
-> 
-> I want to confirm that I get the same oops on a Samsung Chromebook
-> Plus (rk3399) and that reverting the above commit fixes the issue.
-> 
-> If it helps there is a decoded stacktrace below (I need to gain some
-> usb knowledge to deal with this), probably others can have a better
-> idea on what is happening.
-> 
-> [   75.613254] Unable to handle kernel NULL pointer dereference at
-> virtual address 0000000000000030
+syzbot has found a reproducer for the following crash on:
 
-> [   75.769594] pc : xhci_endpoint_reset
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.c:3096)
+HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=10619cec600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+dashboard link: https://syzkaller.appspot.com/bug?extid=a7a6b9c609b9457c62c6
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10606c42600000
 
-Thanks, guessing maybe host_ep->hcpriv used to be cleared after some endpoint was dropped,
-which in normal cases would cause xhci_endpoint_reset() to return early.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+a7a6b9c609b9457c62c6@syzkaller.appspotmail.com
 
-3074	static void xhci_endpoint_reset(struct usb_hcd *hcd,
-3075			struct usb_host_endpoint *host_ep)
-3076	{
-3077		struct xhci_hcd *xhci;
-3078		struct usb_device *udev;
-3079		struct xhci_virt_device *vdev;
-3080		struct xhci_virt_ep *ep;
-3081		struct xhci_input_control_ctx *ctrl_ctx;
-3082		struct xhci_command *stop_cmd, *cfg_cmd;
-3083		unsigned int ep_index;
-3084		unsigned long flags;
-3085		u32 ep_flag;
-3086	
-3087		xhci = hcd_to_xhci(hcd);
-3088		if (!host_ep->hcpriv)
-3089			return;
-3090		udev = (struct usb_device *) host_ep->hcpriv;
-3091		vdev = xhci->devs[udev->slot_id];
-3092		ep_index = xhci_get_endpoint_index(&host_ep->desc);
-3093		ep = &vdev->eps[ep_index];
-3094	
-3095		/* Bail out if toggle is already being cleared by a endpoint reset */
-3096		if (ep->ep_state & EP_HARD_CLEAR_TOGGLE) {
-
-commit ef513be" usb: xhci: Add Clear_TT_Buffer" sets hcpriv again when handling a halted endpoint behind a TT hub.
-If the event to handle the stalled endpoint is hadled late its possible we set a stale value to ep->hcpriv
-which should just be cleared.
-
-+static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td,
-+               struct xhci_virt_ep *ep)
-+{
-+       /*
-+        * As part of low/full-speed endpoint-halt processing
-+        * we must clear the TT buffer (USB 2.0 specification 11.17.5).
-+        */
-+       if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
-+           (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub) &&
-+           !(ep->ep_state & EP_CLEARING_TT)) {
-+               ep->ep_state |= EP_CLEARING_TT;
-+               td->urb->ep->hcpriv = td->urb->dev;
-+               if (usb_hub_clear_tt_buffer(td->urb))
-+                       ep->ep_state &= ~EP_CLEARING_TT;
-+       }
-+}
-
-Still just a guess.
-Does the below code fix your issue?
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 248cd7a..a0984aa 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3092,6 +3092,10 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
-         ep_index = xhci_get_endpoint_index(&host_ep->desc);
-         ep = &vdev->eps[ep_index];
-  
-+       if (!ep) {
-+               xhci_err(xhci, "Mathias: No ep for endpoint reset, bail out\n");
-+               return;
-+       }
-         /* Bail out if toggle is already being cleared by a endpoint reset */
-         if (ep->ep_state & EP_HARD_CLEAR_TOGGLE) {
-                 ep->ep_state &= ~EP_HARD_CLEAR_TOGGLE;
-
-
-Also logs and traces would better show the root cause:
-
-mount -t debugfs none /sys/kernel/debug
-echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-< suspend/resume >
-Send output of dmesg
-Send content of /sys/kernel/debug/tracing/trace
-
--Mathias
-
-
-> [   75.774741] lr : xhci_endpoint_reset
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.h:1913
-> /home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.c:3087)
-> [   75.779797] sp : ffff000011b6b930
-> [   75.783494] x29: ffff000011b6b930 x28: 00000000ffffff95
-> [   75.789426] x27: ffff8000ef657e00 x26: 0000000000000000
-> [   75.795358] x25: ffff8000efafeb80 x24: 0000000000000000
-> [   75.801289] x23: ffff8000efa4a250 x22: 0000000000000001
-> [   75.807212] x21: ffff8000efafe800 x20: ffff8000efa4a000
-> [   75.813143] x19: ffff8000efafe850 x18: 0000000000000000
-> [   75.819074] x17: 0000000000000000 x16: 0000000000000000
-> [   75.824997] x15: 0000000000000000 x14: 0000000000000000
-> [   75.830920] x13: ffff8000ef5ff180 x12: 0000000034d4d91d
-> [   75.836851] x11: 0000000000000000 x10: 0000000000000990
-> [   75.842773] x9 : ffff8000efa3d000 x8 : 0000000000000004
-> [   75.848695] x7 : ffff8000f55b8340 x6 : ffff8000ef65e700
-> [   75.854618] x5 : ffff8000efe844c0 x4 : 0000000000000000
-> [   75.860549] x3 : 0000000000000000 x2 : 0000000000000000
-> [   75.866471] x1 : 0000000000000000 x0 : 0000000000000000
-> [   75.872394] Call trace:
-> [   75.875122] xhci_endpoint_reset
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.c:3096)
-> [   75.879889] usb_hcd_reset_endpoint
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hcd.c:2090)
-> [   75.884753] usb_enable_endpoint
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/message.c:1294)
-> [   75.889324] usb_ep0_reinit
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:4423)
-> [   75.893402] usb_reset_and_verify_device
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:5716)
-> [   75.898848] usb_port_resume
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:3379
-> /home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:3579)
-> [   75.903217] generic_resume
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/generic.c:277)
-> [   75.907304] usb_resume_both
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/driver.c:1182
-> /home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/driver.c:1406)
-> [   75.911584] usb_resume
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/driver.c:1501)
-> [   75.915281] usb_dev_resume
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/usb.c:471)
-> [   75.919361] dpm_run_callback.isra.6
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:458)
-> [   75.924322] device_resume
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:999)
-> [   75.928408] dpm_resume
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:1055)
-> [   75.932203] dpm_resume_end
-> (/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:1171)
-> 
-> Thanks,
-> ~ Enric
-> 
->> ??????
->> ?????? USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
->> ?????? processing for full-/low-speed endpoints connected via a TT, the host
->> ?????? software must use the Clear_TT_Buffer request to the TT to ensure
->> ?????? that the buffer is not in the busy state".
->> ??????
->> ?????? In our case, a full-speed speaker (ConferenceCam) is behind a high-
->> ?????? speed hub (ConferenceCam Connect), sometimes once we get STALL on a
->> ?????? request we may continue to get STALL with the folllowing requests,
->> ?????? like Set_Interface.
->> ??????
->> ?????? Here we invoke usb_hub_clear_tt_buffer() to send Clear_TT_Buffer
->> ?????? request to the hub of the device for the following Set_Interface
->> ?????? requests to the device to get ACK successfully.
->> ??????
->> ?????? Signed-off-by: Jim Lin <jilin@nvidia.com>
->> ?????? Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> ?????? Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>
->> ??drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++++++++++++-
->> ??drivers/usb/host/xhci.c?????????? | 21 +++++++++++++++++++++
->> ??drivers/usb/host/xhci.h?????????? |?? 5 +++++
->> ??3 files changed, 52 insertions(+), 1 deletion(-)
->>
->>
->> On 7/27/19 6:59 AM, Greg KH wrote:
->>> On Fri, Jul 26, 2019 at 11:15:46PM -0400, Bob Gleitsmann wrote:
->>>> Hello,
->>>>
->>>>
->>>> I have seen kernel oopses on waking from suspend to memory. I got this
->>>> twice, one dmesg with backtrace attached. The other one had the failure
->>>> in the same place in the code.
->>>>
->>>>
->>>> This is kernel 5.3.0-rc1, patched for another problem in ethernet PHY
->>>> driver. Have not had the problem with earlier kernels. Using Gentoo
->>>> linux, amd64, but git kernel.
->>> Any chance you can run 'git bisect' to track down the offending commit?
->>>
->>> thanks,
->>>
->>> greg k-h
->>>
+------------[ cut here ]------------
+usb 2-1: BOGUS urb xfer, pipe 2 != type 2
+WARNING: CPU: 1 PID: 7429 at drivers/usb/core/urb.c:477  
+usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 7429 Comm: syz-executor.1 Not tainted 5.3.0-rc2+ #23
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x2a3/0x6da kernel/panic.c:219
+  __warn.cold+0x20/0x4a kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1026
+RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Code: 4d 85 ed 74 2c e8 38 e8 ed fd 4c 89 f7 e8 70 dc 1a ff 41 89 d8 44 89  
+e1 4c 89 ea 48 89 c6 48 c7 c7 60 cc f8 85 e8 4d b9 c3 fd <0f> 0b e9 20 f4  
+ff ff e8 0c e8 ed fd 4c 89 f2 48 b8 00 00 00 00 00
+RSP: 0018:ffff8881cef0f9d0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff812830fd RDI: ffffed1039de1f2c
+RBP: 0000000000000000 R08: ffff8881c853e000 R09: fffffbfff115e1a2
+R10: fffffbfff115e1a1 R11: ffffffff88af0d0f R12: 0000000000000002
+R13: ffff8881d976b0a8 R14: ffff8881d0e02b20 R15: ffff8881d1720600
+  usb_start_wait_urb+0x108/0x2b0 drivers/usb/core/message.c:57
+  usb_internal_control_msg drivers/usb/core/message.c:101 [inline]
+  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:152
+  usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:917 [inline]
+  usbhid_raw_request+0x21f/0x640 drivers/hid/usbhid/hid-core.c:1265
+  hid_hw_raw_request include/linux/hid.h:1079 [inline]
+  hidraw_send_report+0x296/0x500 drivers/hid/hidraw.c:151
+  hidraw_ioctl+0x5b4/0xae0 drivers/hid/hidraw.c:421
+  vfs_ioctl fs/ioctl.c:46 [inline]
+  file_ioctl fs/ioctl.c:509 [inline]
+  do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
+  ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
+  __do_sys_ioctl fs/ioctl.c:720 [inline]
+  __se_sys_ioctl fs/ioctl.c:718 [inline]
+  __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x459829
+Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f6a91f44c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459829
+RDX: 0000000020000240 RSI: 00000000c0404806 RDI: 0000000000000004
+RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6a91f456d4
+R13: 00000000004c22c3 R14: 00000000004d5688 R15: 00000000ffffffff
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
