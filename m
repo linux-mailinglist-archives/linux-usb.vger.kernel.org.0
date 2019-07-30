@@ -2,154 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EECF67ACC2
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 17:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34ED7ACF5
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 17:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732536AbfG3Ptz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jul 2019 11:49:55 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:41307 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727534AbfG3Pty (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 11:49:54 -0400
-Received: by mail-qk1-f195.google.com with SMTP id v22so46966000qkj.8
-        for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2019 08:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q5BR+LTy9Or6GNZcVFmndJaNoPu7CpGa/66lOGz/9mU=;
-        b=XWz1uejfNAElAw7jyhifkWnQ3OY/EBOy0OjLXtYnYLBua0tKYF++2FtHhe51Brv4Jq
-         3gQ6BxBQXJ09DNquf8Qj0hzYEnAQ0GFq9PwEzse++fqPoSzks5OzQJ3N4Fcy/OZWLXI8
-         gc7T1KGjiwtPhTKEAkLl6cKf9rzjKFfwYyfIivAyd5t1mDc4Jf9xA68UlTzHQ+O+S1i/
-         WZj4BD+oBrHuQaGTXhHxwcKT9kg7/4I4H/OY81TXmQOEGFhOr67ueFAdFOAW6Oy0yQVJ
-         8YBbcNKCJQ+aEzgmyAhHeUlTKp/1Hqus4ns6EpMG0UW3mRuRLx2N67ZvolZcyeNR5o/7
-         TrGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q5BR+LTy9Or6GNZcVFmndJaNoPu7CpGa/66lOGz/9mU=;
-        b=INs+PTgIS6EmSXdkq25hG6hXBBZn3iBVtM7cQrj1LpgtJhE7Vw4MFfvxBZ92biZskI
-         ZlxCRCqYWsE+RICxV4fdplm3ychMmoGOShuiUhuRWM1wWSSWcDMhLIlPM73OW/wZaFNR
-         vDTnDh2l5oNHDrvMOE/WRbtAwwptrp8/eQ8e4LA+kYuYCkCU24CHLzLN8J3uB+IMgDW+
-         kTqm1tcoTNyykykOig8s4SLtucQiI6lgE3ZCoSxti+WQx7pkD4mHfMqdLIojzIeUW1s6
-         zpEkTzAsaarGwVWQ+KJNSWjfw00dGhEpnPIs7UbYB5n3DPDu8aGqT7Rwc54BI7sHlQjb
-         FqCg==
-X-Gm-Message-State: APjAAAWLyOnNOIW80aycuBx0XJwk77CBAi2gzFRuIdEAg9MF99hVWEjX
-        4VnCUes420OgogrlSIYt2KWQWpsjbb8C/Tbd5r3QP6ztfe8=
-X-Google-Smtp-Source: APXvYqzadyK6DvjEA9/ZbOYpMaGu/RPP1F5uMyqjdSI4BBh2ixXV+syQRLNDkwOtqAwC+27/IzYvwF0wwXqu7PvYGUc=
-X-Received: by 2002:a37:4ad7:: with SMTP id x206mr79934072qka.85.1564501793073;
- Tue, 30 Jul 2019 08:49:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <a24f7305-abcc-c2ff-bba0-a02b23e34434@bellsouth.net>
- <20190727105955.GE458@kroah.com> <bd443170-6886-df60-0d05-849fc7229cd7@bellsouth.net>
-In-Reply-To: <bd443170-6886-df60-0d05-849fc7229cd7@bellsouth.net>
-From:   Enric Balletbo Serra <eballetbo@gmail.com>
-Date:   Tue, 30 Jul 2019 17:49:41 +0200
-Message-ID: <CAFqH_53kZkH_nYpENO1QvEMpR4S3BP6GUncDt2c7yj_faSujrg@mail.gmail.com>
+        id S1729585AbfG3PzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jul 2019 11:55:14 -0400
+Received: from mga07.intel.com ([134.134.136.100]:55358 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728813AbfG3PzO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Jul 2019 11:55:14 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 08:55:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,327,1559545200"; 
+   d="scan'208";a="323245421"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2019 08:55:12 -0700
 Subject: Re: Oops in xhci_endpoint_reset
-To:     Bob Gleitsmann <rjgleits@bellsouth.net>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To:     Bob Gleitsmann <rjgleits@bellsouth.net>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <a24f7305-abcc-c2ff-bba0-a02b23e34434@bellsouth.net>
+ <20190727105955.GE458@kroah.com>
+ <bd443170-6886-df60-0d05-849fc7229cd7@bellsouth.net>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <f2ad790f-6ff8-12dd-83fc-6eab89ea98df@linux.intel.com>
+Date:   Tue, 30 Jul 2019 18:57:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <bd443170-6886-df60-0d05-849fc7229cd7@bellsouth.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-Missatge de Bob Gleitsmann <rjgleits@bellsouth.net> del dia ds., 27 de
-jul. 2019 a les 23:39:
->
+On 27.7.2019 23.43, Bob Gleitsmann wrote:
 > OK, here's the result of the bisection:
->
+> 
 > ef513be0a9057cc6baf5d29566aaaefa214ba344 is the first bad commit
 > commit ef513be0a9057cc6baf5d29566aaaefa214ba344
 > Author: Jim Lin <jilin@nvidia.com>
 > Date:???? Mon Jun 3 18:53:44 2019 +0800
->
+> 
 > ?????? usb: xhci: Add Clear_TT_Buffer
-
-I want to confirm that I get the same oops on a Samsung Chromebook
-Plus (rk3399) and that reverting the above commit fixes the issue.
-
-If it helps there is a decoded stacktrace below (I need to gain some
-usb knowledge to deal with this), probably others can have a better
-idea on what is happening.
-
-[   75.613254] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000030
-[   75.623102] Mem abort info:
-[   75.626224]   ESR = 0x96000004
-[   75.629636]   Exception class = DABT (current EL), IL = 32 bits
-[   75.636252]   SET = 0, FnV = 0
-[   75.639662]   EA = 0, S1PTW = 0
-[   75.643164] Data abort info:
-[   75.646381]   ISV = 0, ISS = 0x00000004
-[   75.650667]   CM = 0, WnR = 0
-[   75.653981] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000e359e000
-[   75.661181] [0000000000000030] pgd=0000000000000000
-[   75.666633] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[   75.672856] Modules linked in: btusb btrtl ...
-[   75.751693] CPU: 4 PID: 916 Comm: systemd-sleep Not tainted 5.3.0-rc2+ #103
-[   75.759470] Hardware name: Google Kevin (DT)
-[   75.764237] pstate: 40000005 (nZcv daif -PAN -UAO)
-[   75.769594] pc : xhci_endpoint_reset
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.c:3096)
-[   75.774741] lr : xhci_endpoint_reset
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.h:1913
-/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.c:3087)
-[   75.779797] sp : ffff000011b6b930
-[   75.783494] x29: ffff000011b6b930 x28: 00000000ffffff95
-[   75.789426] x27: ffff8000ef657e00 x26: 0000000000000000
-[   75.795358] x25: ffff8000efafeb80 x24: 0000000000000000
-[   75.801289] x23: ffff8000efa4a250 x22: 0000000000000001
-[   75.807212] x21: ffff8000efafe800 x20: ffff8000efa4a000
-[   75.813143] x19: ffff8000efafe850 x18: 0000000000000000
-[   75.819074] x17: 0000000000000000 x16: 0000000000000000
-[   75.824997] x15: 0000000000000000 x14: 0000000000000000
-[   75.830920] x13: ffff8000ef5ff180 x12: 0000000034d4d91d
-[   75.836851] x11: 0000000000000000 x10: 0000000000000990
-[   75.842773] x9 : ffff8000efa3d000 x8 : 0000000000000004
-[   75.848695] x7 : ffff8000f55b8340 x6 : ffff8000ef65e700
-[   75.854618] x5 : ffff8000efe844c0 x4 : 0000000000000000
-[   75.860549] x3 : 0000000000000000 x2 : 0000000000000000
-[   75.866471] x1 : 0000000000000000 x0 : 0000000000000000
-[   75.872394] Call trace:
-[   75.875122] xhci_endpoint_reset
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.c:3096)
-[   75.879889] usb_hcd_reset_endpoint
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hcd.c:2090)
-[   75.884753] usb_enable_endpoint
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/message.c:1294)
-[   75.889324] usb_ep0_reinit
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:4423)
-[   75.893402] usb_reset_and_verify_device
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:5716)
-[   75.898848] usb_port_resume
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:3379
-/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:3579)
-[   75.903217] generic_resume
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/generic.c:277)
-[   75.907304] usb_resume_both
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/driver.c:1182
-/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/driver.c:1406)
-[   75.911584] usb_resume
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/driver.c:1501)
-[   75.915281] usb_dev_resume
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/usb.c:471)
-[   75.919361] dpm_run_callback.isra.6
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:458)
-[   75.924322] device_resume
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:999)
-[   75.928408] dpm_resume
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:1055)
-[   75.932203] dpm_resume_end
-(/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:1171)
-
-Thanks,
-~ Enric
-
 > ??????
 > ?????? USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
 > ?????? processing for full-/low-speed endpoints connected via a TT, the host
@@ -168,29 +69,95 @@ Thanks,
 > ?????? Signed-off-by: Jim Lin <jilin@nvidia.com>
 > ?????? Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > ?????? Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->
+> 
 > ??drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++++++++++++-
 > ??drivers/usb/host/xhci.c?????????? | 21 +++++++++++++++++++++
 > ??drivers/usb/host/xhci.h?????????? |?? 5 +++++
 > ??3 files changed, 52 insertions(+), 1 deletion(-)
->
->
-> On 7/27/19 6:59 AM, Greg KH wrote:
-> > On Fri, Jul 26, 2019 at 11:15:46PM -0400, Bob Gleitsmann wrote:
-> >> Hello,
-> >>
-> >>
-> >> I have seen kernel oopses on waking from suspend to memory. I got this
-> >> twice, one dmesg with backtrace attached. The other one had the failure
-> >> in the same place in the code.
-> >>
-> >>
-> >> This is kernel 5.3.0-rc1, patched for another problem in ethernet PHY
-> >> driver. Have not had the problem with earlier kernels. Using Gentoo
-> >> linux, amd64, but git kernel.
-> > Any chance you can run 'git bisect' to track down the offending commit?
-> >
-> > thanks,
-> >
-> > greg k-h
-> >
+> 
+> 
+
+Thanks, a quick look doesn't immediately open up the cause to me.
+Most likely an endpoint or struct usb_device got dropped and freed at suspend/resume,
+but we probably have some old stale pointer still in a a TD or URB to it.
+
+could you apply the hack below, it should show more details about this issue.
+
+grep for "Mathias" after resume, if you find it we just prevented a crash.
+
+also adding more xhci debugging and tracing would help:
+
+mount -t debugfs none /sys/kernel/debug
+echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+< suspend/resume >
+Send output of dmesg
+Send content of /sys/kernel/debug/tracing/trace
+
+8<---
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 9741cde..98a515c 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1809,14 +1809,33 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
+  static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td,
+                 struct xhci_virt_ep *ep)
+  {
++       struct usb_device *udev;
++
+         /*
+          * As part of low/full-speed endpoint-halt processing
+          * we must clear the TT buffer (USB 2.0 specification 11.17.5).
+          */
++
+         if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
+             (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub) &&
+             !(ep->ep_state & EP_CLEARING_TT)) {
++               udev = td->urb->dev;
++               if (!udev) {
++                       xhci_err(xhci, "Mathias: missing udev\n");
++                       return;
++               }
++               if (!udev->slot_id)  {
++                       xhci_err(xhci, "Mathias: missing udev->slot_id\n");
++                       return;
++               }
++
++               if (!xhci->devs[udev->slot_id])  {
++                       xhci_err(xhci, "Mathias: missing xhci->devs[udev->slot_id]\n");
++                       return;
++               }
+                 ep->ep_state |= EP_CLEARING_TT;
++               xhci_err(xhci, "urb->ep->hcpriv %p,  urb->hcpriv %p\n",
++                        td->urb->ep->hcpriv, td->urb->dev);
+                 td->urb->ep->hcpriv = td->urb->dev;
+                 if (usb_hub_clear_tt_buffer(td->urb))
+                         ep->ep_state &= ~EP_CLEARING_TT;
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 248cd7a..d7978e0 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3090,8 +3090,19 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
+         udev = (struct usb_device *) host_ep->hcpriv;
+         vdev = xhci->devs[udev->slot_id];
+         ep_index = xhci_get_endpoint_index(&host_ep->desc);
++
++       if (!vdev) {
++               xhci_warn(xhci, "Mathias: No vdev for slot id %d\n", udev->slot_id);
++               return;
++       }
+         ep = &vdev->eps[ep_index];
+  
++       if (!ep) {
++               xhci_warn(xhci, "Mathias: No ep for slot %d ep_index %d\n",
++                         udev->slot_id, ep_index);
++               return;
++       }
++
+         /* Bail out if toggle is already being cleared by a endpoint reset */
+         if (ep->ep_state & EP_HARD_CLEAR_TOGGLE) {
+                 ep->ep_state &= ~EP_HARD_CLEAR_TOGGLE;
+
