@@ -2,153 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9907AAF3
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 16:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECF67ACC2
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jul 2019 17:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731284AbfG3O2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jul 2019 10:28:46 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:50653 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbfG3O2q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 10:28:46 -0400
-Received: by mail-wm1-f65.google.com with SMTP id v15so57406560wml.0
-        for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2019 07:28:45 -0700 (PDT)
+        id S1732536AbfG3Ptz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jul 2019 11:49:55 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:41307 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727534AbfG3Pty (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 11:49:54 -0400
+Received: by mail-qk1-f195.google.com with SMTP id v22so46966000qkj.8
+        for <linux-usb@vger.kernel.org>; Tue, 30 Jul 2019 08:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=drd2LNgj2u9n38kicYZLHSfSh0oWvDUVZyGUG2VJqr0=;
-        b=I0wh7sV7Cx3IpITr4GHeKMa23hytZP0JMl1EgCUzYsdsJD0aU7BqagmuSep7vB3QwQ
-         FmCb1oxMnT2mJ4h8pWSBnGmuI6Yqso21kPc9Uvp1yEKPka2JkdYxBN2gKyVLqeUpzRd+
-         0juG+wDLUllnR3Hu8srp10tIvP03sjQiADQTzEC89VwZa5FakbdkTqOGHCT1swRZazEB
-         7bmcrDeN14qzlvjuYLLVpNr6T2w2wLHHPuna6zuh6Oza7PTBJqh9Acm7wzG0bEREWoCX
-         Uv/xWlkOIku5P896JXFnq4ggbQBwwMT3Vv9d0StWjmX1zxsFFvV6anKviwNDgI6C1DP8
-         h9Kg==
+         :cc;
+        bh=Q5BR+LTy9Or6GNZcVFmndJaNoPu7CpGa/66lOGz/9mU=;
+        b=XWz1uejfNAElAw7jyhifkWnQ3OY/EBOy0OjLXtYnYLBua0tKYF++2FtHhe51Brv4Jq
+         3gQ6BxBQXJ09DNquf8Qj0hzYEnAQ0GFq9PwEzse++fqPoSzks5OzQJ3N4Fcy/OZWLXI8
+         gc7T1KGjiwtPhTKEAkLl6cKf9rzjKFfwYyfIivAyd5t1mDc4Jf9xA68UlTzHQ+O+S1i/
+         WZj4BD+oBrHuQaGTXhHxwcKT9kg7/4I4H/OY81TXmQOEGFhOr67ueFAdFOAW6Oy0yQVJ
+         8YBbcNKCJQ+aEzgmyAhHeUlTKp/1Hqus4ns6EpMG0UW3mRuRLx2N67ZvolZcyeNR5o/7
+         TrGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=drd2LNgj2u9n38kicYZLHSfSh0oWvDUVZyGUG2VJqr0=;
-        b=gourmxw1shgs2CjzmJzuG+RAFnOxkQCOwjscTagSFJ8x/V+CeMfwVEYBLBmixmdLln
-         tDO6ACR9YF2wtm1rRfbhJhjT3oPa3sm83faCB9Fg+RYV35C1MQpzx3w6TqtgeP2S+TeP
-         fCT4VxwT4Gqkgi8kajN2UDBlaqJRoIo8w83fXIJsoBhNXQGjZiN3ziNEcO4CVOoQ1sWo
-         1asBkbDjjWmRHlBNSytq5X+4M91UAZLl/unNHao5nwPojl//41Bv9co3qDU3EhKl9DlE
-         NamBA5eKrhHFCxe6nTkjxsr4Msdx/gLaEA1zNMyDwjeKLDL22Nx9H0ZzMgvGNlcuwADU
-         aVWw==
-X-Gm-Message-State: APjAAAVayjKnntFVqOwxw1dOK6OEJ10RbXkRkyMolSN79+IKRKPgao6y
-        Dq9bx4wL2gcrDd5leHrTjiuk2sRHmkXkET4xJknktg==
-X-Google-Smtp-Source: APXvYqwNQph3+WP4wHWEnFcQvKMAPHapuue2F4bVj/8qJxiAU7k1P9fbW9Mp30FpN8ondlpPukDfXy0jbCMN4Vg8Ng8=
-X-Received: by 2002:a1c:7f93:: with SMTP id a141mr105995463wmd.131.1564496924133;
- Tue, 30 Jul 2019 07:28:44 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=Q5BR+LTy9Or6GNZcVFmndJaNoPu7CpGa/66lOGz/9mU=;
+        b=INs+PTgIS6EmSXdkq25hG6hXBBZn3iBVtM7cQrj1LpgtJhE7Vw4MFfvxBZ92biZskI
+         ZlxCRCqYWsE+RICxV4fdplm3ychMmoGOShuiUhuRWM1wWSSWcDMhLIlPM73OW/wZaFNR
+         vDTnDh2l5oNHDrvMOE/WRbtAwwptrp8/eQ8e4LA+kYuYCkCU24CHLzLN8J3uB+IMgDW+
+         kTqm1tcoTNyykykOig8s4SLtucQiI6lgE3ZCoSxti+WQx7pkD4mHfMqdLIojzIeUW1s6
+         zpEkTzAsaarGwVWQ+KJNSWjfw00dGhEpnPIs7UbYB5n3DPDu8aGqT7Rwc54BI7sHlQjb
+         FqCg==
+X-Gm-Message-State: APjAAAWLyOnNOIW80aycuBx0XJwk77CBAi2gzFRuIdEAg9MF99hVWEjX
+        4VnCUes420OgogrlSIYt2KWQWpsjbb8C/Tbd5r3QP6ztfe8=
+X-Google-Smtp-Source: APXvYqzadyK6DvjEA9/ZbOYpMaGu/RPP1F5uMyqjdSI4BBh2ixXV+syQRLNDkwOtqAwC+27/IzYvwF0wwXqu7PvYGUc=
+X-Received: by 2002:a37:4ad7:: with SMTP id x206mr79934072qka.85.1564501793073;
+ Tue, 30 Jul 2019 08:49:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <00000000000014c877058ee2c4a6@google.com> <Pine.LNX.4.44L0.1907301011100.1507-100000@iolanthe.rowland.org>
- <CAAeHK+wnhfMvoMbuv3Oco1eH35BL5tdR9-X5erEJmKLS1finAg@mail.gmail.com> <CAAeHK+z50rsvQypF5AivYJh0wQ04XAueC=Ms2cPt3+QuN1+KGg@mail.gmail.com>
-In-Reply-To: <CAAeHK+z50rsvQypF5AivYJh0wQ04XAueC=Ms2cPt3+QuN1+KGg@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 30 Jul 2019 16:28:31 +0200
-Message-ID: <CAG_fn=XOZVRkG+RLRsfn2Y4JNz+ovyjkA=Jf9TK5ttunmuNvmA@mail.gmail.com>
-Subject: Re: KMSAN: kernel-usb-infoleak in pcan_usb_pro_send_req
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <a24f7305-abcc-c2ff-bba0-a02b23e34434@bellsouth.net>
+ <20190727105955.GE458@kroah.com> <bd443170-6886-df60-0d05-849fc7229cd7@bellsouth.net>
+In-Reply-To: <bd443170-6886-df60-0d05-849fc7229cd7@bellsouth.net>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Tue, 30 Jul 2019 17:49:41 +0200
+Message-ID: <CAFqH_53kZkH_nYpENO1QvEMpR4S3BP6GUncDt2c7yj_faSujrg@mail.gmail.com>
+Subject: Re: Oops in xhci_endpoint_reset
+To:     Bob Gleitsmann <rjgleits@bellsouth.net>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 30, 2019 at 4:22 PM 'Andrey Konovalov' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
+Hi,
+
+Missatge de Bob Gleitsmann <rjgleits@bellsouth.net> del dia ds., 27 de
+jul. 2019 a les 23:39:
 >
-> On Tue, Jul 30, 2019 at 4:20 PM Andrey Konovalov <andreyknvl@google.com> =
-wrote:
+> OK, here's the result of the bisection:
+>
+> ef513be0a9057cc6baf5d29566aaaefa214ba344 is the first bad commit
+> commit ef513be0a9057cc6baf5d29566aaaefa214ba344
+> Author: Jim Lin <jilin@nvidia.com>
+> Date:???? Mon Jun 3 18:53:44 2019 +0800
+>
+> ?????? usb: xhci: Add Clear_TT_Buffer
+
+I want to confirm that I get the same oops on a Samsung Chromebook
+Plus (rk3399) and that reverting the above commit fixes the issue.
+
+If it helps there is a decoded stacktrace below (I need to gain some
+usb knowledge to deal with this), probably others can have a better
+idea on what is happening.
+
+[   75.613254] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000030
+[   75.623102] Mem abort info:
+[   75.626224]   ESR = 0x96000004
+[   75.629636]   Exception class = DABT (current EL), IL = 32 bits
+[   75.636252]   SET = 0, FnV = 0
+[   75.639662]   EA = 0, S1PTW = 0
+[   75.643164] Data abort info:
+[   75.646381]   ISV = 0, ISS = 0x00000004
+[   75.650667]   CM = 0, WnR = 0
+[   75.653981] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000e359e000
+[   75.661181] [0000000000000030] pgd=0000000000000000
+[   75.666633] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[   75.672856] Modules linked in: btusb btrtl ...
+[   75.751693] CPU: 4 PID: 916 Comm: systemd-sleep Not tainted 5.3.0-rc2+ #103
+[   75.759470] Hardware name: Google Kevin (DT)
+[   75.764237] pstate: 40000005 (nZcv daif -PAN -UAO)
+[   75.769594] pc : xhci_endpoint_reset
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.c:3096)
+[   75.774741] lr : xhci_endpoint_reset
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.h:1913
+/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.c:3087)
+[   75.779797] sp : ffff000011b6b930
+[   75.783494] x29: ffff000011b6b930 x28: 00000000ffffff95
+[   75.789426] x27: ffff8000ef657e00 x26: 0000000000000000
+[   75.795358] x25: ffff8000efafeb80 x24: 0000000000000000
+[   75.801289] x23: ffff8000efa4a250 x22: 0000000000000001
+[   75.807212] x21: ffff8000efafe800 x20: ffff8000efa4a000
+[   75.813143] x19: ffff8000efafe850 x18: 0000000000000000
+[   75.819074] x17: 0000000000000000 x16: 0000000000000000
+[   75.824997] x15: 0000000000000000 x14: 0000000000000000
+[   75.830920] x13: ffff8000ef5ff180 x12: 0000000034d4d91d
+[   75.836851] x11: 0000000000000000 x10: 0000000000000990
+[   75.842773] x9 : ffff8000efa3d000 x8 : 0000000000000004
+[   75.848695] x7 : ffff8000f55b8340 x6 : ffff8000ef65e700
+[   75.854618] x5 : ffff8000efe844c0 x4 : 0000000000000000
+[   75.860549] x3 : 0000000000000000 x2 : 0000000000000000
+[   75.866471] x1 : 0000000000000000 x0 : 0000000000000000
+[   75.872394] Call trace:
+[   75.875122] xhci_endpoint_reset
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/host/xhci.c:3096)
+[   75.879889] usb_hcd_reset_endpoint
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hcd.c:2090)
+[   75.884753] usb_enable_endpoint
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/message.c:1294)
+[   75.889324] usb_ep0_reinit
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:4423)
+[   75.893402] usb_reset_and_verify_device
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:5716)
+[   75.898848] usb_port_resume
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:3379
+/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/hub.c:3579)
+[   75.903217] generic_resume
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/generic.c:277)
+[   75.907304] usb_resume_both
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/driver.c:1182
+/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/driver.c:1406)
+[   75.911584] usb_resume
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/driver.c:1501)
+[   75.915281] usb_dev_resume
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/usb/core/usb.c:471)
+[   75.919361] dpm_run_callback.isra.6
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:458)
+[   75.924322] device_resume
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:999)
+[   75.928408] dpm_resume
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:1055)
+[   75.932203] dpm_resume_end
+(/home/eballetbo/Projects/chromebooks/kernel/drivers/base/power/main.c:1171)
+
+Thanks,
+~ Enric
+
+> ??????
+> ?????? USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+> ?????? processing for full-/low-speed endpoints connected via a TT, the host
+> ?????? software must use the Clear_TT_Buffer request to the TT to ensure
+> ?????? that the buffer is not in the busy state".
+> ??????
+> ?????? In our case, a full-speed speaker (ConferenceCam) is behind a high-
+> ?????? speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+> ?????? request we may continue to get STALL with the folllowing requests,
+> ?????? like Set_Interface.
+> ??????
+> ?????? Here we invoke usb_hub_clear_tt_buffer() to send Clear_TT_Buffer
+> ?????? request to the hub of the device for the following Set_Interface
+> ?????? requests to the device to get ACK successfully.
+> ??????
+> ?????? Signed-off-by: Jim Lin <jilin@nvidia.com>
+> ?????? Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> ?????? Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>
+> ??drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++++++++++++-
+> ??drivers/usb/host/xhci.c?????????? | 21 +++++++++++++++++++++
+> ??drivers/usb/host/xhci.h?????????? |?? 5 +++++
+> ??3 files changed, 52 insertions(+), 1 deletion(-)
+>
+>
+> On 7/27/19 6:59 AM, Greg KH wrote:
+> > On Fri, Jul 26, 2019 at 11:15:46PM -0400, Bob Gleitsmann wrote:
+> >> Hello,
+> >>
+> >>
+> >> I have seen kernel oopses on waking from suspend to memory. I got this
+> >> twice, one dmesg with backtrace attached. The other one had the failure
+> >> in the same place in the code.
+> >>
+> >>
+> >> This is kernel 5.3.0-rc1, patched for another problem in ethernet PHY
+> >> driver. Have not had the problem with earlier kernels. Using Gentoo
+> >> linux, amd64, but git kernel.
+> > Any chance you can run 'git bisect' to track down the offending commit?
 > >
-> > On Tue, Jul 30, 2019 at 4:17 PM Alan Stern <stern@rowland.harvard.edu> =
-wrote:
-> > >
-> > > On Tue, 30 Jul 2019, syzbot wrote:
-> > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following crash on:
-> > > >
-> > > > HEAD commit:    41550654 [UPSTREAM] KVM: x86: degrade WARN to pr_wa=
-rn_rate..
-> > > > git tree:       kmsan
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D13e9518=
-3a00000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D40511ad=
-0c5945201
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D513e4d098=
-5298538bf9b
-> > > > compiler:       clang version 9.0.0 (/home/glider/llvm/clang
-> > > > 80fee25776c2fb61e74c1ecb1a523375c2500b69)
-> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D17eaf=
-a1ba00000
-> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D17b8798=
-3a00000
-> > > >
-> > > > IMPORTANT: if you fix the bug, please add the following tag to the =
-commit:
-> > > > Reported-by: syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com
-> > > >
-> > > > usb 1-1: config 0 has no interface number 0
-> > > > usb 1-1: New USB device found, idVendor=3D0c72, idProduct=3D0014,
-> > > > bcdDevice=3D8b.53
-> > > > usb 1-1: New USB device strings: Mfr=3D0, Product=3D0, SerialNumber=
-=3D0
-> > > > usb 1-1: config 0 descriptor??
-> > > > peak_usb 1-1:0.146: PEAK-System PCAN-USB X6 v0 fw v0.0.0 (2 channel=
-s)
-> > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x7ef/0x1f50
-> > > > drivers/usb/core/urb.c:405
-> > >
-> > > What does "kernel-usb-infoleak" mean?
+> > thanks,
 > >
-> > That means that the kernel put some uninitialized data into a request
-> > that was sent to a USB device.
->
-> Here's a better report for this bug:
-Yes, for some reason syzkaller lost half of the original report when
-reproducing the bug.
-> https://syzkaller.appspot.com/text?tag=3DCrashReport&x=3D11dae8ec600000
->
-> This is a real bug, I was able to reproduce it with a hardware
-> reproducer and leak some kernel pointers AFAIR.
-
+> > greg k-h
 > >
-> > >
-> > > Alan Stern
-> > >
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/CAAeHK%2Bz50rsvQypF5AivYJh0wQ04XAueC%3DMs2cPt3%2BQuN1%2BKG=
-g%40mail.gmail.com.
-
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
