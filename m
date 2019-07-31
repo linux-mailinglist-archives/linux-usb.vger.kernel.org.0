@@ -2,124 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 660F07C91D
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 18:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE937CA7F
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 19:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729805AbfGaQrj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Jul 2019 12:47:39 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:44090 "EHLO smtp.infotech.no"
+        id S1728943AbfGaRcd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Jul 2019 13:32:33 -0400
+Received: from mout.gmx.net ([212.227.17.21]:35773 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727448AbfGaQrj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 31 Jul 2019 12:47:39 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id E6DB220419E;
-        Wed, 31 Jul 2019 18:47:35 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id epc1PxN29Z-Z; Wed, 31 Jul 2019 18:47:35 +0200 (CEST)
-Received: from [82.134.31.183] (unknown [82.134.31.183])
-        by smtp.infotech.no (Postfix) with ESMTPA id BD78E20414E;
-        Wed, 31 Jul 2019 18:47:35 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v2] usb: typec: tcpm: Add NULL check before dereferencing
- config
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1563979112-22483-1-git-send-email-linux@roeck-us.net>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <c9dc11ff-2303-7cce-10a8-9a6a1ef72db3@interlog.com>
-Date:   Wed, 31 Jul 2019 18:47:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        id S1730842AbfGaRcc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 31 Jul 2019 13:32:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1564594348;
+        bh=u1sIVInpXZxDwaaKSgMN/AyMaMhbmLQodmddOS1TRuM=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=MkPpKiaolJPGX50GeWA1gTTaZz0ZE42BCDS+1a3/hWx0WBG8t/ICn8FFQ83k0srU2
+         qhusYdtqSiNYG0CHcgNxXqvYJlWvrzgQh+kT2+x+pckYYLes7JAOKD2oCvOXx5k1Tz
+         0CwgPsmVnI8xI00YD+kcR3Xw5WGGJIBIpHMNUxuM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.2.103] ([88.65.35.191]) by mail.gmx.com (mrgmx102
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 0LqW8j-1iW2u23aTJ-00e3Ic; Wed, 31
+ Jul 2019 19:32:28 +0200
+Subject: Re: Fwd: Re: New USB Device
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+References: <5D1D1376.7070202@gmx.net> <5D1E65F3.6090307@gmx.net>
+ <20190705052121.GD15821@kroah.com> <5D224A18.2070907@gmx.net>
+ <20190716092305.GC3522@localhost>
+From:   Markus Breunig <Markus.L.Breunig@gmx.net>
+Message-ID: <4e9b3ecf-ca45-51a5-d582-d3d067ecc723@gmx.net>
+Date:   Wed, 31 Jul 2019 19:32:29 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1563979112-22483-1-git-send-email-linux@roeck-us.net>
+In-Reply-To: <20190716092305.GC3522@localhost>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:4TQ5/SqbcreNItOLyLAqO48r0unZo9lZQGJB8BEdmxn19DMa4T+
+ QjS+sL6tXd1QWm4cdpltniGvAbMp/xhheUoNYRnOSOeDXOd8BoBOQ03vGXn1l/hoFwnt/HB
+ 3nRDoVXh9+Bdpp4SePg9izSaLfjWZq3USYuacR2puwKqJcLRHf71P+woN7bBmFE4lA2HVQc
+ 9gOhW2Kv3vgstf6SmtQPg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lS+QsXs6GQ8=:mwNV6TZ/5Buak0jkBt4ShJ
+ PfL8Ndp9e7P+g7Pd9Pm4HalEh9cC/F5YC14l3dxuiqcZM3LMTx+ZbiG7MqrhRBVY70E6gpteV
+ KNHWees9L32/whF3FDhA18sxHO+r9p1MH3FGHhq3n82bcI/JDCvIXpqxV+pVsgrmui4rpy+pw
+ BuJ8ioFoxQz4WymewR/FvsDXlO1Bkh/fk/MdKmPfMtenKLQ9/YDDEG962qYJOkRa/iSn+jkKB
+ HWVSK3qKVtgGa1ReWEcIwLpPPac5eXL0vXbxzWa+kO6FB7SJ94Gd2z8zvs2+KdImmcZ9F6Aj3
+ gHTLeHM4arYPluvu5XrBihQW32qUdjWmThXyRxpkYpmOKJnrhc2BOvdA52GlCBjOiv7yFxO2Z
+ TJ8/AhTWRpVgdVVvHimDTNqMQKx0fqWpEwPmcrEyCYN0jIzqLkia/t9CCRuHCg027Tl8elmT0
+ yaLn/76K5qWYMlLbBOilXBw2+q81Ti7xljcWdEI9KHt0hQVldPQpYIc+ULfv4ffV3UPwhcUUx
+ ZnozSLlANpcEZOamfWYW/LsKYkcdLNXlNGnbex0LK2h0z/0OLXoz9coaUtBhFnpOAog/KrnGA
+ 3kxq60itFtnPEHk8EoZScdL2Kc/d8wz6C9T0c1f8Rm9Q1ZdeMgwgmkqKjav7fRf0noaoCs2Nb
+ fIWIFjPWs43PxblWvJXlx/Kksqz2YdvqmDo7AKCbmQmJdJxhMpaMuATd3rAWlid0TxCmN7FWN
+ HwP+eSmkTyk/t5iCfwuLaMeHwnn/ehw57S3YQutMIRmeFR+MYjpvTEJXOTEcqAQ54aHX3RXQE
+ K4sC2NCeodUZOjIO5PdmflzQLRm4dXoWWJj/I/6azGTub2IlaguUZLTSwxkNACyFRzKB7ekWT
+ ddATS9OMNQXY1uPnDaWPv7VdMpMdl1Jv8UxY87185e95R4E8qDfTwLcyAvzAR/yLfDiFLXeWe
+ ARyU01W2V2XZlVA4fpXOV7rsrAayizeKyAvb7DUsPVyCYun9PBzX3FZT/y5cnrTh0aGLCm1R9
+ qs3FA3TxUO0ckqvE0NbZMrAptVCgMMddtirLRGeZfyKzIZH2BPQzn1lzJeynAOemgzTH0jPkf
+ XB6t4wrKAx9mIogtmlk4PYrufogQpfSoLIQ
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2019-07-24 4:38 p.m., Guenter Roeck wrote:
-> When instantiating tcpm on an NXP OM 13588 board with NXP PTN5110,
-> the following crash is seen when writing into the 'preferred_role'
-> sysfs attribute.
-> 
-> Unable to handle kernel NULL pointer dereference at virtual address 00000028
-> pgd = f69149ad
-> [00000028] *pgd=00000000
-> Internal error: Oops: 5 [#1] THUMB2
-> Modules linked in: tcpci tcpm
-> CPU: 0 PID: 1882 Comm: bash Not tainted 5.1.18-sama5-armv7-r2 #4
-> Hardware name: Atmel SAMA5
-> PC is at tcpm_try_role+0x3a/0x4c [tcpm]
-> LR is at tcpm_try_role+0x15/0x4c [tcpm]
-> pc : [<bf8000e2>]    lr : [<bf8000bd>]    psr: 60030033
-> sp : dc1a1e88  ip : c03fb47d  fp : 00000000
-> r10: dc216190  r9 : dc1a1f78  r8 : 00000001
-> r7 : df4ae044  r6 : dd032e90  r5 : dd1ce340  r4 : df4ae054
-> r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : df4ae044
-> Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA Thumb  Segment none
-> Control: 50c53c7d  Table: 3efec059  DAC: 00000051
-> Process bash (pid: 1882, stack limit = 0x6a6d4aa5)
-> Stack: (0xdc1a1e88 to 0xdc1a2000)
-> 1e80:                   dd05d808 dd1ce340 00000001 00000007 dd1ce340 c03fb4a7
-> 1ea0: 00000007 00000007 dc216180 00000000 00000000 c01e1e03 00000000 00000000
-> 1ec0: c0907008 dee98b40 c01e1d5d c06106c4 00000000 00000000 00000007 c0194e8b
-> 1ee0: 0000000a 00000400 00000000 c01a97db dc22bf00 ffffe000 df4b6a00 df745900
-> 1f00: 00000001 00000001 000000dd c01a9c2f 7aeab3be c0907008 00000000 dc22bf00
-> 1f20: c0907008 00000000 00000000 00000000 00000000 7aeab3be 00000007 dee98b40
-> 1f40: 005dc318 dc1a1f78 00000000 00000000 00000007 c01969f7 0000000a c01a20cb
-> 1f60: dee98b40 c0907008 dee98b40 005dc318 00000000 c0196b9b 00000000 00000000
-> 1f80: dee98b40 7aeab3be 00000074 005dc318 b6f3bdb0 00000004 c0101224 dc1a0000
-> 1fa0: 00000004 c0101001 00000074 005dc318 00000001 005dc318 00000007 00000000
-> 1fc0: 00000074 005dc318 b6f3bdb0 00000004 00000007 00000007 00000000 00000000
-> 1fe0: 00000004 be800880 b6ed35b3 b6e5c746 60030030 00000001 00000000 00000000
-> [<bf8000e2>] (tcpm_try_role [tcpm]) from [<c03fb4a7>] (preferred_role_store+0x2b/0x5c)
-> [<c03fb4a7>] (preferred_role_store) from [<c01e1e03>] (kernfs_fop_write+0xa7/0x150)
-> [<c01e1e03>] (kernfs_fop_write) from [<c0194e8b>] (__vfs_write+0x1f/0x104)
-> [<c0194e8b>] (__vfs_write) from [<c01969f7>] (vfs_write+0x6b/0x104)
-> [<c01969f7>] (vfs_write) from [<c0196b9b>] (ksys_write+0x43/0x94)
-> [<c0196b9b>] (ksys_write) from [<c0101001>] (ret_fast_syscall+0x1/0x62)
-> 
-> Since commit 96232cbc6c994 ("usb: typec: tcpm: support get typec and pd
-> config from device properties"), the 'config' pointer in struct tcpc_dev
-> is optional when registering a Type-C port. Since it is optional, we have
-> to check if it is NULL before dereferencing it.
-> 
-> Reported-by: Douglas Gilbert <dgilbert@interlog.com>
-> Cc: Douglas Gilbert <dgilbert@interlog.com>
-> Fixes: 96232cbc6c994 ("usb: typec: tcpm: support get typec and pd config from device properties")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> v2: Added missing Cc:. Sorry for the noise.
-> 
-> Doug:
->      I didn't add your Tested-by: since I added more code.
->      It would be great if you can re-test.
-> 
->   drivers/usb/typec/tcpm/tcpm.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-
-Tested-by: Douglas Gilbert <dgilbert@interlog.com>
 
 
-This time the Linux system is an Acme Systems Arietta which is a
-Atmel at91sam9g25 based board. Test was run with lk 5.1.19 .
-Without the patch I got the oops described above ("PC is at
-tcpm_try_role+0x40/0x74 [tcpm]") when writing into the 'preferred_role'
-sysfs attribute. With this patch it worked okay.
+Am 16.07.2019 um 11:23 schrieb Johan Hovold:
+> [ Pleas avoid top posting. ]
+>
+> On Sun, Jul 07, 2019 at 09:38:00PM +0200, Markus Breunig wrote:
+>> Hi Greg,
+>>
+>> also the company GNS has a fragmented homepage, the handbook ist
+>> available here:
+>> http://www.servicedocs.com/ARTIKELEN/7200284490001.pdf
+>> habe a look to page 10 "Remarks to Linux"
+>>
+>> This is the log of "lsusb -v" (full scan result attached):
+>>
+>> Bus 001 Device 004: ID 04d8:f8e8 Microchip Technology, Inc. Harmony
+>> 300/350 Remote
+>
+> Are you sure this is the right device? This looks like a remote control,
+> and one that should be using the cdc-acm driver.
+>
 
-Can't test the "out of protocol" PD Attention command oops because I
-don't have another OM13588 at the other end (of the USB-C cable) to
-send it. I may be able to solve that problem as well. The OM13588
-seems like a good attack vector ... and NXP continue to improve
-its software (I'm talking about when it runs with a KL27Z which is
-an Arduino clone). It can now read the current capability of an
-E-marked USB-C (M to M) cable. The only 5 Amp cable I have is
-the one that Apple sells (as an _extra_ (cheapskates) to their 87W
-USB-C power adapter (for MacBooks)).
+The output of lsusb before plugging the GNS5890 device into the USB-port:
+
+Bus 001 Device 005: ID 046d:c05a Logitech, Inc. M90/M100 Optical Mouse
+Bus 001 Device 004: ID 046a:0001 Cherry GmbH Keyboard
+Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp.
+SMSC9512/9514 Fast Ethernet Adapter
+Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. SMC9514 Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+and the result of the lsusb after plugging the GNS5890 device into the
+USB-port:
+
+Bus 001 Device 005: ID 046d:c05a Logitech, Inc. M90/M100 Optical Mouse
+Bus 001 Device 004: ID 046a:0001 Cherry GmbH Keyboard
+Bus 001 Device 006: ID 04d8:f8e8 Microchip Technology, Inc. Harmony
+300/350 Remote
+Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp.
+SMSC9512/9514 Fast Ethernet Adapter
+Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. SMC9514 Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+
+>> Device Descriptor:
+>>     bLength                18
+>>     bDescriptorType         1
+>>     bcdUSB               2.00
+>>     bDeviceClass          255 Vendor Specific Class
+>>     bDeviceSubClass         0
+>>     bDeviceProtocol         0
+>>     bMaxPacketSize0         8
+>>     idVendor           0x04d8 Microchip Technology, Inc.
+>>     idProduct          0xf8e8 Harmony 300/350 Remote
+>>     bcdDevice           48.12
+>>     iManufacturer           1
+>>     iProduct                2
+>>     iSerial                 3
+>>     bNumConfigurations      1
+>>     Configuration Descriptor:
+>>       bLength                 9
+>>       bDescriptorType         2
+>>       wTotalLength           67
+>>       bNumInterfaces          2
+>>       bConfigurationValue     1
+>>       iConfiguration          0
+>>       bmAttributes         0xc0
+>>         Self Powered
+>>       MaxPower              100mA
+>>       Interface Descriptor:
+>>         bLength                 9
+>>         bDescriptorType         4
+>>         bInterfaceNumber        0
+>>         bAlternateSetting       0
+>>         bNumEndpoints           1
+>>         bInterfaceClass         2 Communications
+>>         bInterfaceSubClass      2 Abstract (modem)
+>>         bInterfaceProtocol      1 AT-commands (v.25ter)
+>>         iInterface              0
+>>         CDC Header:
+>>           bcdCDC               1.10
+>>         CDC ACM:
+>>           bmCapabilities       0x02
+>>             line coding and serial state
+>>         CDC Union:
+>>           bMasterInterface        0
+>>           bSlaveInterface         1
+>>         CDC Call Management:
+>>           bmCapabilities       0x00
+>>           bDataInterface          1
+>>         Endpoint Descriptor:
+>>           bLength                 7
+>>           bDescriptorType         5
+>>           bEndpointAddress     0x82  EP 2 IN
+>>           bmAttributes            3
+>>             Transfer Type            Interrupt
+>>             Synch Type               None
+>>             Usage Type               Data
+>>           wMaxPacketSize     0x0008  1x 8 bytes
+>>           bInterval               2
+>>       Interface Descriptor:
+>>         bLength                 9
+>>         bDescriptorType         4
+>>         bInterfaceNumber        1
+>>         bAlternateSetting       0
+>>         bNumEndpoints           2
+>>         bInterfaceClass        10 CDC Data
+>>         bInterfaceSubClass      0 Unused
+>>         bInterfaceProtocol      0
+>>         iInterface              0
+>>         Endpoint Descriptor:
+>>           bLength                 7
+>>           bDescriptorType         5
+>>           bEndpointAddress     0x03  EP 3 OUT
+>>           bmAttributes            2
+>>             Transfer Type            Bulk
+>>             Synch Type               None
+>>             Usage Type               Data
+>>           wMaxPacketSize     0x0040  1x 64 bytes
+>>           bInterval               0
+>>         Endpoint Descriptor:
+>>           bLength                 7
+>>           bDescriptorType         5
+>>           bEndpointAddress     0x83  EP 3 IN
+>>           bmAttributes            2
+>>             Transfer Type            Bulk
+>>             Synch Type               None
+>>             Usage Type               Data
+>>           wMaxPacketSize     0x0040  1x 64 bytes
+>>           bInterval               0
+>
+>> Am 05.07.2019 07:21, schrieb Greg KH:
+>>> On Thu, Jul 04, 2019 at 10:47:47PM +0200, Markus Breunig wrote:
+>>>> Hi Greg,
+>>>>
+>>>> using a serial device driver is the idea of the manufacturer
+>>>> "www.gns-gmbh.com". In the LINUX instructions of the ADS-B receiver s=
+ome
+>>>> hints to use the device are given via usbserial.
+>>>
+>>> Any pointers to those instructions?
+>>>
+>>>> In practice the "GNS 5890 ADS-B Receiver" is similare to some GPS
+>>>> Receivers with NMEA 0183 interface starting to send information on th=
+e
+>>>> serial interface after power on and signal availabillity (with 115200
+>>>> boud data rate).
+>
+> Johan
+>
