@@ -2,150 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9730F7B9AC
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 08:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D447BBD4
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 10:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727575AbfGaG3x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Jul 2019 02:29:53 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:42483 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727535AbfGaG3w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 02:29:52 -0400
-X-UUID: 663b382271d443cba710b10bf1255eb2-20190731
-X-UUID: 663b382271d443cba710b10bf1255eb2-20190731
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1945774679; Wed, 31 Jul 2019 14:29:21 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 31 Jul
- 2019 14:29:19 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 31 Jul 2019 14:29:18 +0800
-Message-ID: <1564554558.5579.7.camel@mhfsdcap03>
-Subject: Re: [PATCH v8 08/11] usb: roles: get usb-role-switch from parent
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
+        id S1727873AbfGaIiB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Jul 2019 04:38:01 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:32910 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726168AbfGaIiB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 31 Jul 2019 04:38:01 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id CD99FC007359;
+        Wed, 31 Jul 2019 08:38:00 +0000 (UTC)
+Received: from gondolin (dhcp-192-232.str.redhat.com [10.33.192.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 30EE16012E;
+        Wed, 31 Jul 2019 08:37:54 +0000 (UTC)
+Date:   Wed, 31 Jul 2019 10:37:51 +0200
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        devel@driverdev.osuosl.org, linux-input@vger.kernel.org,
+        kvm@vger.kernel.org, "Michael S . Tsirkin" <mst@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 31 Jul 2019 14:29:18 +0800
-In-Reply-To: <20190729142500.GE28600@kuha.fi.intel.com>
-References: <1563958245-6321-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1563958245-6321-9-git-send-email-chunfeng.yun@mediatek.com>
-         <20190729142500.GE28600@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        virtualization@lists.linux-foundation.org,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        linux-mtd@lists.infradead.org,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>, linux-fsdevel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 12/29] compat_ioctl: move drivers to compat_ptr_ioctl
+Message-ID: <20190731103751.3cc53132.cohuck@redhat.com>
+In-Reply-To: <20190730195227.742215-1-arnd@arndb.de>
+References: <20190730192552.4014288-1-arnd@arndb.de>
+        <20190730195227.742215-1-arnd@arndb.de>
+Organization: Red Hat GmbH
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: 34B54DA7E8EDA581CD499007594330F98B92C9106B9501712734F061E9E78ACA2000:8
-X-MTK:  N
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Wed, 31 Jul 2019 08:38:01 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+On Tue, 30 Jul 2019 21:50:28 +0200
+Arnd Bergmann <arnd@arndb.de> wrote:
 
-On Mon, 2019-07-29 at 17:25 +0300, Heikki Krogerus wrote:
-> On Wed, Jul 24, 2019 at 04:50:42PM +0800, Chunfeng Yun wrote:
-> > when the USB host controller is the parent of the connector,
-> > usually type-B, sometimes don't need the graph, so we should
-> > check whether it's parent registers usb-role-switch or not
-> > firstly, and get it if exists.
-> > 
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Each of these drivers has a copy of the same trivial helper function to
+> convert the pointer argument and then call the native ioctl handler.
 > 
-> I don't think I actually wrote the patch. I may have proposed the code
-> for you, but I never prepared a patch out out that. Please drop the
-> above Signed-off-by line if that is the case. I case I really did
-> write the patch, then you are missing the "From: Heikki..." first
-> line, but I really don't remember preparing the patch.
+> We now have a generic implementation of that, so use it.
 > 
-> If the idea came from me, you can use for example the suggested-by
-> tag: "Suggested-by: Heikki Krogerus <heikki.krogerus...".
-Ok, thanks
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-by: Michael S. Tsirkin <mst@redhat.com>
+> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
+> Reviewed-by: Jiri Kosina <jkosina@suse.cz>
+> Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-> 
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> > v8: no changes
-> > v7:
-> >   add signed-off-by Chunfeng
-> > 
-> > v6:
-> >   new patch
-> > ---
-> >  drivers/usb/roles/class.c | 25 +++++++++++++++++++++----
-> >  1 file changed, 21 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> > index 5b637aaf311f..87439a84c983 100644
-> > --- a/drivers/usb/roles/class.c
-> > +++ b/drivers/usb/roles/class.c
-> > @@ -114,6 +114,19 @@ static void *usb_role_switch_match(struct device_connection *con, int ep,
-> >  	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
-> >  }
-> >  
-> > +static struct usb_role_switch *
-> > +usb_role_switch_is_parent(struct fwnode_handle *fwnode)
-> > +{
-> > +	struct fwnode_handle *parent = fwnode_get_parent(fwnode);
-> > +	struct device *dev;
-> > +
-> > +	if (!parent || !fwnode_property_present(parent, "usb-role-switch"))
-> > +		return NULL;
-> > +
-> > +	dev = class_find_device(role_class, NULL, parent, switch_fwnode_match);
-> > +	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
-> > +}
-> > +
-> >  /**
-> >   * usb_role_switch_get - Find USB role switch linked with the caller
-> >   * @dev: The caller device
-> > @@ -125,8 +138,10 @@ struct usb_role_switch *usb_role_switch_get(struct device *dev)
-> >  {
-> >  	struct usb_role_switch *sw;
-> >  
-> > -	sw = device_connection_find_match(dev, "usb-role-switch", NULL,
-> > -					  usb_role_switch_match);
-> > +	sw = usb_role_switch_is_parent(dev_fwnode(dev));
-> > +	if (!sw)
-> > +		sw = device_connection_find_match(dev, "usb-role-switch", NULL,
-> > +						  usb_role_switch_match);
-> >  
-> >  	if (!IS_ERR_OR_NULL(sw))
-> >  		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
-> > @@ -146,8 +161,10 @@ struct usb_role_switch *fwnode_usb_role_switch_get(struct fwnode_handle *fwnode)
-> >  {
-> >  	struct usb_role_switch *sw;
-> >  
-> > -	sw = fwnode_connection_find_match(fwnode, "usb-role-switch", NULL,
-> > -					  usb_role_switch_match);
-> > +	sw = usb_role_switch_is_parent(fwnode);
-> > +	if (!sw)
-> > +		sw = fwnode_connection_find_match(fwnode, "usb-role-switch",
-> > +						  NULL, usb_role_switch_match);
-> >  	if (!IS_ERR_OR_NULL(sw))
-> >  		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
-> >  
-> > -- 
-> > 2.21.0
-> 
-> thanks,
-> 
+>  drivers/vfio/vfio.c               | 39 +++----------------------------
 
+vfio changes:
 
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
