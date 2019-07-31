@@ -2,66 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADAF7C23B
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 14:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091C67C3D6
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 15:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729170AbfGaMwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Jul 2019 08:52:01 -0400
-Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:20645 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728588AbfGaMwB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 08:52:01 -0400
-Received: from localhost.localdomain ([176.167.121.156])
-        by mwinf5d70 with ME
-        id jQrw2000P3NZnML03QrxTn; Wed, 31 Jul 2019 14:51:59 +0200
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 31 Jul 2019 14:51:59 +0200
-X-ME-IP: 176.167.121.156
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 2/2] usb: xhci: dbc: Use GFP_KERNEL instead of GFP_ATOMIC in 'xhci_dbc_alloc_requests()'
-Date:   Wed, 31 Jul 2019 14:52:02 +0200
-Message-Id: <557765ac7a028fa77f0e1ac6148ef2c0904f8ab7.1564577335.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1564577335.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1564577335.git.christophe.jaillet@wanadoo.fr>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727230AbfGaNmp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Jul 2019 09:42:45 -0400
+Received: from xavier.telenet-ops.be ([195.130.132.52]:58854 "EHLO
+        xavier.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726907AbfGaNmo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 09:42:44 -0400
+Received: from ramsan ([84.194.98.4])
+        by xavier.telenet-ops.be with bizsmtp
+        id jRii2000T05gfCL01RiihM; Wed, 31 Jul 2019 15:42:42 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hsosM-0001G5-KD; Wed, 31 Jul 2019 15:42:42 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hsosM-0004rU-JK; Wed, 31 Jul 2019 15:42:42 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] usb: wusbcore: Spelling s/disconenct/disconnect/
+Date:   Wed, 31 Jul 2019 15:42:41 +0200
+Message-Id: <20190731134241.18647-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is no need to use GFP_ATOMIC to allocate 'req'. GFP_KERNEL should be
-enough and is already used for another allocation juste a few lines below.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-I've done my best to check if a spinlock can be hold when reaching this
-code. Apparently it is never the case.
-But double check to be sure that it is not the kmalloc that should use
-GFP_ATOMIC.
----
- drivers/usb/host/xhci-dbgtty.c | 2 +-
+ drivers/usb/wusbcore/devconnect.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-index 845939f8a0b8..be726c791323 100644
---- a/drivers/usb/host/xhci-dbgtty.c
-+++ b/drivers/usb/host/xhci-dbgtty.c
-@@ -139,7 +139,7 @@ xhci_dbc_alloc_requests(struct dbc_ep *dep, struct list_head *head,
- 	struct dbc_request	*req;
- 
- 	for (i = 0; i < DBC_QUEUE_SIZE; i++) {
--		req = dbc_alloc_request(dep, GFP_ATOMIC);
-+		req = dbc_alloc_request(dep, GFP_KERNEL);
- 		if (!req)
- 			break;
- 
+diff --git a/drivers/usb/wusbcore/devconnect.c b/drivers/usb/wusbcore/devconnect.c
+index a93837d57d53bd04..1170f8baf6084df9 100644
+--- a/drivers/usb/wusbcore/devconnect.c
++++ b/drivers/usb/wusbcore/devconnect.c
+@@ -49,7 +49,7 @@
+  *                              for processing a DN_Alive pong from a device.
+  *
+  *   wusb_handle_dn_disconnect()Called by notif.c:wusb_handle_dn() to
+- *                              process a disconenct request from a
++ *                              process a disconnect request from a
+  *                              device.
+  *
+  *   __wusb_dev_disable()       Called by rh.c:wusbhc_rh_clear_port_feat() when
 -- 
-2.20.1
+2.17.1
 
