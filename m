@@ -2,43 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DD77BE40
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 12:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D9D7BE32
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 12:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727858AbfGaKUN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Jul 2019 06:20:13 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:39940 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725914AbfGaKUN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 06:20:13 -0400
-Received: by mail-pl1-f196.google.com with SMTP id a93so30232740pla.7
-        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2019 03:20:13 -0700 (PDT)
+        id S1727999AbfGaKUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Jul 2019 06:20:18 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:44238 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727936AbfGaKUR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 06:20:17 -0400
+Received: by mail-pg1-f195.google.com with SMTP id i18so31742458pgl.11
+        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2019 03:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=qG0whHfhXOjtcfLzk188sCOar57eu2kC3PTAbz1gCBo=;
-        b=OJw/xktcfO+P4ZQakjW7xr5hrf9cUCU/WoE6ccO8ljF+2fnEBdH+PiLzw/mr+QN3ZM
-         xcGe6PTn+eUF8ZHKDSEPxaMT2bvttHqJGAvz8OkjnCxA7ZXm9hXRTjgd93xa5RDfD7pn
-         aJSJMLq2r8GboOskpZVxFDFt5UvuWnUYd6nms=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=2O775qpjwYqwjNNK1jAWRm9r82jKhpePG9GnlR7OY0Q=;
+        b=Yyn7RWwAm3JMCXDcDeGBxlaI8XMQIA7FHvASa9guSVH5L7xlXw0b2zl5bASLjFlBrD
+         BNq04z6h80T08oj9ruwe1tr4he/+Y8CcouibUt5l4M07hNrarc/BzT45M+ohvaQ35kyI
+         8kyE/kbWoHb31fZ5jKIxodukMPslx+uW3psTo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=qG0whHfhXOjtcfLzk188sCOar57eu2kC3PTAbz1gCBo=;
-        b=LyeDp5/uk9Pw0r9mkNIGc3+cetqCpiSFhcJN41Hv9LilyueOmgfN8ZC6bYOnzoLHh3
-         8d/6KtoK6TTMupIAmdXfwemRDBWyZ6L5xDwzS9lSZS/oGRzSL4KYfyRWtg8oa4uOmAoc
-         OSrn28F98SMVQJfjsJtAzneea71VZTZ2VRIfxYndqi5eF1mDkpJ+cueq9enF+wyjUK1R
-         5C7FW3ebJ1/Wr8bSc4ZhUVCcNhjqV6d3x+o4aOKWvqmuLGPHObHq1zVrE2CrNcOYkNYA
-         /N9YaVbyvx+3KD9zhcCfwKpeUQVoHbf2+Jrdu4GSp2zczpy13Ky/2Z6NZRrKWlTPbcQG
-         DEnA==
-X-Gm-Message-State: APjAAAXM9s17HicX6UULwTT57/+b1CD+QjnuYITxWOPuWpz3QIdZRoHE
-        bj+H8Rrybn9NfhrUUR+o1gJqEQ==
-X-Google-Smtp-Source: APXvYqxo4nj3CQ1TbR22Q60IlXDAeO1/mETjinmS8a+Y2ov0Lk7OIA4TM0/MdXOXuCjdEFt/+9QbHA==
-X-Received: by 2002:a17:902:383:: with SMTP id d3mr35046302pld.176.1564568412688;
-        Wed, 31 Jul 2019 03:20:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=2O775qpjwYqwjNNK1jAWRm9r82jKhpePG9GnlR7OY0Q=;
+        b=KLsY5YSEEv20FBRRF8V8CN5NqSeNwAdyWKS1h6KQwzMR8KcOowIaLbrWOJnSzpkEIP
+         Qth3o7rmZIpVGwGQdG57luUU9MVY5xyAcCcYlxdyzVxRfoDJIw/m83pDDVAjBCLy21dw
+         kc0IQBfv7yihCa5XDCYxAkLN5BzHhOVIl21ZXL+pZabDME8im9v04RgZvld9r5Fl+KDb
+         USPWfZMMBNd8xUrjsNcaJCiqO/bulMRDkb0PMYWe4fs7RN27vpIGqARRo0li1WHEQUMo
+         4ghfoO6GBrN2mxHUN5xCl99DkHQDeCCuRxbFWtG//CK2LvSN4FCLMvZ1EFkLX8mYfEEF
+         OYoA==
+X-Gm-Message-State: APjAAAVZ0gJJHajlJgWkdqccQpSLLU42mvk/TwYZ3zm14CaaHmyPISaI
+        EQ+O7BYTvURQ9SfPH/ZR6jQLcw==
+X-Google-Smtp-Source: APXvYqwmgXRoUHYDivjjY1EWCO27W2YnDH7ba8VG7ljSozY+4a0KgWIr40lvoUBMMr627+3GTZe0Bg==
+X-Received: by 2002:a17:90b:949:: with SMTP id dw9mr2190902pjb.49.1564568416276;
+        Wed, 31 Jul 2019 03:20:16 -0700 (PDT)
 Received: from mannams-OptiPlex-7010.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id 3sm71161776pfg.186.2019.07.31.03.20.08
+        by smtp.gmail.com with ESMTPSA id 3sm71161776pfg.186.2019.07.31.03.20.12
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 31 Jul 2019 03:20:11 -0700 (PDT)
+        Wed, 31 Jul 2019 03:20:15 -0700 (PDT)
 From:   Srinath Mannam <srinath.mannam@broadcom.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@intel.com>,
@@ -49,51 +50,57 @@ Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com,
         Srinath Mannam <srinath.mannam@broadcom.com>
-Subject: [PATCH v2 0/4] Reset xHCI port PHY on disconnect
-Date:   Wed, 31 Jul 2019 15:49:50 +0530
-Message-Id: <1564568395-9980-1-git-send-email-srinath.mannam@broadcom.com>
+Subject: [PATCH v2 1/5] phy: Add phy ports in attrs
+Date:   Wed, 31 Jul 2019 15:49:51 +0530
+Message-Id: <1564568395-9980-2-git-send-email-srinath.mannam@broadcom.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1564568395-9980-1-git-send-email-srinath.mannam@broadcom.com>
+References: <1564568395-9980-1-git-send-email-srinath.mannam@broadcom.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch set adds a quirk in xHCI driver to reset PHY of xHCI port on
-its disconnect event.
+Add phy ports bitmask to contain enabled PHY ports.
+set and get APIs added to set and get phy ports value.
 
-This patch set is based on Linux-5.2-rc4.
+Signed-off-by: Srinath Mannam <srinath.mannam@broadcom.com>
+---
+ include/linux/phy/phy.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Changes from v1:
-  - Addressed Mathias's comments
-    - Modified mapping of HC ports and their corresponding PHYs
-  - Addressed Rob's comments
-    - Removed usb-phy-port-reset DT property.
-    - Added quirk in platform data using HCI compatible string.
-  - Add phy ports in phy attr structure to have enabled ports bitmask.
-  - Modified #phy-cells of sr-phy to pass phy ports bitmask.
-
-Srinath Mannam (4):
-  phy: Add phy ports in attrs
-  dt-bindings: phy: Modify Stingray USB PHY #phy-cells
-  phy: sr-usb: Set phy ports
-  dt-bindings: usb-xhci: Add platform specific compatible for Stingray
-    xHCI
-  drivers: xhci: Add quirk to reset xHCI port PHY
-
- .../devicetree/bindings/phy/brcm,stingray-usb-phy.txt | 14 ++++++++------
- Documentation/devicetree/bindings/usb/usb-xhci.txt    |  1 +
- drivers/phy/broadcom/phy-bcm-sr-usb.c                 |  9 ++++++++-
- drivers/usb/core/hcd.c                                |  6 ++++++
- drivers/usb/core/phy.c                                | 19 +++++++++++++++++++
- drivers/usb/core/phy.h                                |  1 +
- drivers/usb/host/xhci-plat.c                          | 10 ++++++++++
- drivers/usb/host/xhci-plat.h                          |  1 +
- drivers/usb/host/xhci-ring.c                          |  9 ++++++---
- drivers/usb/host/xhci.h                               |  1 +
- include/linux/phy/phy.h                               | 10 ++++++++++
- include/linux/usb/hcd.h                               |  1 +
- 12 files changed, 72 insertions(+), 10 deletions(-)
-
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index 15032f14..b8bca1d 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -109,10 +109,12 @@ struct phy_ops {
+ /**
+  * struct phy_attrs - represents phy attributes
+  * @bus_width: Data path width implemented by PHY
++ * @phy_ports: Bitmask of enabled ports
+  * @mode: PHY mode
+  */
+ struct phy_attrs {
+ 	u32			bus_width;
++	u32			phy_ports;
+ 	enum phy_mode		mode;
+ };
+ 
+@@ -225,6 +227,14 @@ static inline void phy_set_bus_width(struct phy *phy, int bus_width)
+ {
+ 	phy->attrs.bus_width = bus_width;
+ }
++static inline int phy_get_phy_ports(struct phy *phy)
++{
++	return phy->attrs.phy_ports;
++}
++static inline void phy_set_phy_ports(struct phy *phy, int phy_ports)
++{
++	phy->attrs.phy_ports |= phy_ports;
++}
+ struct phy *phy_get(struct device *dev, const char *string);
+ struct phy *phy_optional_get(struct device *dev, const char *string);
+ struct phy *devm_phy_get(struct device *dev, const char *string);
 -- 
 2.7.4
 
