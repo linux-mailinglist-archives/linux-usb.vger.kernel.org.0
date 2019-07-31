@@ -2,103 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 964FD7CEBD
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 22:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9587D13D
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2019 00:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729792AbfGaUgt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Jul 2019 16:36:49 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35339 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727857AbfGaUgs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 16:36:48 -0400
-Received: by mail-pg1-f196.google.com with SMTP id s1so26339538pgr.2;
-        Wed, 31 Jul 2019 13:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+3m34La6ccE3Dbo0nKkW6PAk5aFsT9gCe5QCc84QY/M=;
-        b=EFmwE6xHJZlI7fbJj4ayQvxsXiguUUOE/YUP+QGUdsdsqzIBCNFzDXIfMHIIReAeq0
-         YxhAhukgJsf9Zk6f6yV8s2LP8u0sSr3FNuF8EyxKSURPID2YZC8Lbo6cduEjaNrfdCwf
-         DDLHx35Gdmi2wKQrsQFGdxEic/BLubYM2PdbA3n+K81Up9x+c+BTo+EUmFexA3wLK1m3
-         HTdCvaEPFAiwwj9xS/aDlE76GEOL8mwW7ic1UhN2QVquK+WFAQH9I/3g+WFQQCGFh/i7
-         YgzaMh2a0V/ot/+SNV3Vet++cuduT7j8egp6XJg1gKkL7jCKsSeeDqSN4CHI6M9V8jx9
-         7pRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+3m34La6ccE3Dbo0nKkW6PAk5aFsT9gCe5QCc84QY/M=;
-        b=FoQwXb2Gd4fRQC3kd1b2VQ1KEJks1rGHoyJPJtOl9fz5dT2smrp2je2LCVpDRx8oGp
-         n3a8Th9bpxbdYV6upCl7M5vXT8bZJ0rG6uzqTG+bujq2tMVDzllKCApuC2M8lL4j2sUf
-         xDj5cD2sN+6yVlsNjbESKoAxaY8M224KynxrVViQYUxRDtzzmzl6aJfRUetDGFPIjgB+
-         d+SDev05KcL0hGvcMYlsidLr0Pwfg1Bmo6xaS5v59dyj+YRPmE+l+FPrPKNm7sR+hvyL
-         kaTCIYHvDAyq/n3c+QvOxxWhqc3xZcfSi3mcpLaOXaEZVPcvlZVQTYjhwf0He0lg/2TS
-         C12w==
-X-Gm-Message-State: APjAAAUJHMxv/QuhNpH6cwqz9Ke2QpUrj8n7l5HFfn95ewOrgT/A4ilU
-        VzqFPu6/IZY5O9PRfNfRjx0=
-X-Google-Smtp-Source: APXvYqybC01d0TByWxoDrJxw7C9lUUE3ShsoXGzUiQlHPWLWfdxiLqpUEK75wQICNDQ0Ydie1eRIGg==
-X-Received: by 2002:a63:e907:: with SMTP id i7mr113621516pgh.84.1564605407843;
-        Wed, 31 Jul 2019 13:36:47 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h16sm77972581pfo.34.2019.07.31.13.36.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 31 Jul 2019 13:36:47 -0700 (PDT)
-Date:   Wed, 31 Jul 2019 13:36:46 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     soc@kernel.org, Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S1728079AbfGaWjY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Jul 2019 18:39:24 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:54979 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727348AbfGaWjU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 18:39:20 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <colin.king@canonical.com>)
+        id 1hsxFd-0000Hh-Ps; Wed, 31 Jul 2019 22:39:17 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 03/14] watchdog: pnx4008_wdt: allow compile-testing
-Message-ID: <20190731203646.GB14817@roeck-us.net>
-References: <20190731195713.3150463-1-arnd@arndb.de>
- <20190731195713.3150463-4-arnd@arndb.de>
- <20190731202343.GA14817@roeck-us.net>
- <CAK8P3a2=gqeCMtdzdqg4d1n6v1-cdaHObeUoVXeB+=Okwd1rqA@mail.gmail.com>
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: musb: remove redundant assignment to variable ret
+Date:   Wed, 31 Jul 2019 23:39:17 +0100
+Message-Id: <20190731223917.16532-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2=gqeCMtdzdqg4d1n6v1-cdaHObeUoVXeB+=Okwd1rqA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 10:26:35PM +0200, Arnd Bergmann wrote:
-> On Wed, Jul 31, 2019 at 10:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Wed, Jul 31, 2019 at 09:56:45PM +0200, Arnd Bergmann wrote:
-> > > The only thing that prevents building this driver on other
-> > > platforms is the mach/hardware.h include, which is not actually
-> > > used here at all, so remove the line and allow CONFIG_COMPILE_TEST.
-> > >
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >
-> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> >
-> > What is the plan for this patch ? Push through watchdog
-> > or through your branch ?
-> 
-> I would prefer my branch so I can apply the final patch without waiting
-> for another release. Not in a hurry though, so if some other maintainer
+From: Colin Ian King <colin.king@canonical.com>
 
-Ok with me.
+Variable ret is being initialized with a value that is never read
+and ret is being re-assigned a little later on. The assignment is
+redundant and hence can be removed.
 
-Guenter
+Addresses-Coverity: ("Unused value")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/usb/musb/musb_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 9f5a4819a744..2bc55e0ceace 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -1721,7 +1721,7 @@ mode_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+ 	struct musb *musb = dev_to_musb(dev);
+ 	unsigned long flags;
+-	int ret = -EINVAL;
++	int ret;
+ 
+ 	spin_lock_irqsave(&musb->lock, flags);
+ 	ret = sprintf(buf, "%s\n", usb_otg_state_string(musb->xceiv->otg->state));
+-- 
+2.20.1
+
