@@ -2,205 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 475687B855
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 05:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9730F7B9AC
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 08:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728657AbfGaDtq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jul 2019 23:49:46 -0400
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:57554 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725851AbfGaDtq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jul 2019 23:49:46 -0400
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6V3nItM031522;
-        Tue, 30 Jul 2019 20:49:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=GSz3ZHW+GB/O7fBi+i82MWdJ9DfCJR08+VxXrj7Il0M=;
- b=VfoU/IfIsMGgaicnp4Jgekxtk166A9ITtELidCq/RnGd/M061uyLUpK9NE7tCqoBcZHI
- 7augVa32jOQ8VBlkCEVQhJKr+TdpRpG7W3Ty5i+Yql+5quWIBzPbOvDtqRJCLosFKwNO
- PfdjkpHTpNzaACGWvXS2NeD01chh7RYBFFvatt1vLmddFrNLKzkcTsifpkoFFy24jB4D
- 0SC1RCy1endd9RKWvmSMxm92pMhpbup3Dni1FmAJoYHXLkGxJfPJ4HDyYnupU+3tDTji
- mDPZsVX5RkRYdGAXHnItefi1FVAuOMR156qFRyez8b0pCrbubc7vvoetZ44AhFJeIbD6 7w== 
-Authentication-Results: cadence.com;
-        spf=pass smtp.mailfrom=pawell@cadence.com
-Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2055.outbound.protection.outlook.com [104.47.38.55])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 2u0j711d74-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 30 Jul 2019 20:49:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k/JQGQmbXYa1omN6oKVamJSVC1cHdDuzh/6w6tNOI0jGooeDLyq8n22zsYWNsjNvlflavAJvjeCiD+XgIw9jU5XxZX0jugUW6TLVhC/j7AXVb9Dul8Fi+d6L2tHQSHZ03EMyGA486RJWP/QLC2EOBe3AaR5Sl5v+gkDM7U/aa2ettzgA+W0oxk7tpW8PnG9aN0m6vU2wmv+p1YXAlboDaYQbsztPwAn/2LdcUWCiYZcXg5cHW3d2Ei/+MT5A7PqeU4DZ1aVYkN3tsjk4OsRFJ0nxAqyiNEV32XiynNn5aWXG8SpHUaVa4SiQHZNeFHR1ce3QJfP5/nmeebWs8ekjkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GSz3ZHW+GB/O7fBi+i82MWdJ9DfCJR08+VxXrj7Il0M=;
- b=MFmKcB3EkvmCHtqq+CHbNQ0kYGSznd8JuSrJ9XigSiReqc10t1lnEbZtbLbmOVU6SAgZ3DM/slt7oipNMwQoxf+BmQqet65oKn6nYtpif6KXITEF0QGbNuyaDmEcywY99C9cPQ/xhx4XarwVHeTN0eVyJrsk+zNxkBqd/6KjqEw8jWTuiw/t2jwZc6X0YurrPliccRRH3PsMZrbvmf8j6Qpn1G4QJJdNXa6BoVqoADRTX2HYWPPj7je2OLLrZUptO4dkQV52U7XGJQzmJRfax1NQqB+YOM4woUi+nAGznzQv6k+vNilYejDUKCT9WIe8jbJxTABv349fUpSOQUCk7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=cadence.com;dmarc=pass action=none
- header.from=cadence.com;dkim=pass header.d=cadence.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GSz3ZHW+GB/O7fBi+i82MWdJ9DfCJR08+VxXrj7Il0M=;
- b=c/OHnVAQVWP34KWkbn08IkXKniPQ/jB8//noXWImkDRnbJBuKAkIz2OA5zorfXa8ispSPEzweUolDUrTvbrsEtKV9xqSSjMJJPXR/PP1TtiRqibYrJDdaoCxotXBSlgVBK8y+lGdckJdiEin6voorRXXuVP963UURpUCTA4BOvk=
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
- BYAPR07MB6088.namprd07.prod.outlook.com (20.179.94.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2115.14; Wed, 31 Jul 2019 03:49:39 +0000
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::41f8:6c26:5cc9:743d]) by BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::41f8:6c26:5cc9:743d%3]) with mapi id 15.20.2115.005; Wed, 31 Jul 2019
- 03:49:39 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Anil Joy Varughese <aniljoy@cadence.com>
-Subject: RE: [PATCH 1/3] usb: common: Add usb_get_dr_mode_from_string and
- usb_dr_mode_to_string.
-Thread-Topic: [PATCH 1/3] usb: common: Add usb_get_dr_mode_from_string and
- usb_dr_mode_to_string.
-Thread-Index: AQHVNZIWpYuDGK3vWkS+CQXY8vq54abBz0qAgAAB1ECAAAMegIAAAK9ggBNmXgCADvxqMA==
-Date:   Wed, 31 Jul 2019 03:49:39 +0000
-Message-ID: <BYAPR07MB4709BC53081D0493198FB7A6DDDF0@BYAPR07MB4709.namprd07.prod.outlook.com>
-References: <1562592924-17528-1-git-send-email-pawell@cadence.com>
- <87y31768k0.fsf@linux.intel.com>
- <BYAPR07MB4709D1BD29C3E0FA6C5289FBDDF10@BYAPR07MB4709.namprd07.prod.outlook.com>
- <87sgrf67qi.fsf@linux.intel.com>
- <BYAPR07MB4709AC9C0BBC8822ACE5409BDDF10@BYAPR07MB4709.namprd07.prod.outlook.com>
- <BYAPR07MB470944CE1294AC9E5878792CDDC50@BYAPR07MB4709.namprd07.prod.outlook.com>
-In-Reply-To: <BYAPR07MB470944CE1294AC9E5878792CDDC50@BYAPR07MB4709.namprd07.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [185.217.253.59]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 69bfb076-b00c-43d5-b3e5-08d7156a1cff
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR07MB6088;
-x-ms-traffictypediagnostic: BYAPR07MB6088:
-x-microsoft-antispam-prvs: <BYAPR07MB6088B27BFFDD190EC03907E1DDDF0@BYAPR07MB6088.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 011579F31F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(396003)(376002)(136003)(366004)(189003)(51444003)(199004)(36092001)(107886003)(102836004)(186003)(5660300002)(2906002)(11346002)(25786009)(66066001)(4326008)(54906003)(26005)(6506007)(316002)(9686003)(55016002)(8676002)(6116002)(52536014)(486006)(81166006)(76176011)(256004)(478600001)(53936002)(3846002)(99286004)(7696005)(66476007)(76116006)(6916009)(7736002)(68736007)(64756008)(86362001)(33656002)(8936002)(66946007)(66556008)(66446008)(74316002)(305945005)(81156014)(476003)(71190400001)(6436002)(71200400001)(446003)(14454004)(229853002)(6246003);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB6088;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: cadence.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: glNjAPqQPV4Vsyl1jjIw+nZBYFdE9gk2pUzwiWPvPgqLtA5HNN6/fKt8/FSQzBcyKedr5oxEcgVfXWj5PrS+37PXPALMcwE/2nXOvJZmTYQXAsSMsDgudUKa7diNBSZVACsQ5qgnSfnjwOza6+Me7azwwNM9KGIf705/4TJYBjq62ZBZekIRUhGr7qx4MJWfNv2GFzNIdlxzGKkS7xIzU2Xt60nlH7yxegYBN7N48h//flLFedOMrh1djdUm1bXxfg5XskdsrslMKjJpiapvOgWAZt6FFfW2JBzYNRGKWyfDpiNFfwkR+Rh3HKkkGE6RAKWrCsbWQ1Ufg6H0NGHY2Rr7eX3yJSXjTjvj9+XIZeRHIErQKgiJ5VSf5Zab19KVyXa6EU5t1SnEs0fZ6HlfShf14qKOYCslusNXv5f4+j8=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727575AbfGaG3x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Jul 2019 02:29:53 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:42483 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727535AbfGaG3w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 02:29:52 -0400
+X-UUID: 663b382271d443cba710b10bf1255eb2-20190731
+X-UUID: 663b382271d443cba710b10bf1255eb2-20190731
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1945774679; Wed, 31 Jul 2019 14:29:21 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 31 Jul
+ 2019 14:29:19 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 31 Jul 2019 14:29:18 +0800
+Message-ID: <1564554558.5579.7.camel@mhfsdcap03>
+Subject: Re: [PATCH v8 08/11] usb: roles: get usb-role-switch from parent
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das@bp.renesas.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 31 Jul 2019 14:29:18 +0800
+In-Reply-To: <20190729142500.GE28600@kuha.fi.intel.com>
+References: <1563958245-6321-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1563958245-6321-9-git-send-email-chunfeng.yun@mediatek.com>
+         <20190729142500.GE28600@kuha.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69bfb076-b00c-43d5-b3e5-08d7156a1cff
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jul 2019 03:49:39.1122
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pawell@global.cadence.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB6088
-X-Proofpoint-SPF-Result: pass
-X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
- include:mktomail.com include:spf-0014ca01.pphosted.com
- include:spf.protection.outlook.com include:auth.msgapp.com
- include:spf.mandrillapp.com ~all
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-31_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
- priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
- spamscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907310038
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 34B54DA7E8EDA581CD499007594330F98B92C9106B9501712734F061E9E78ACA2000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+Hi Heikki,
 
-What about this patch. I just noticed that prefix is incorrect "1/3". Can i=
-t stay or should I send it again ?
+On Mon, 2019-07-29 at 17:25 +0300, Heikki Krogerus wrote:
+> On Wed, Jul 24, 2019 at 04:50:42PM +0800, Chunfeng Yun wrote:
+> > when the USB host controller is the parent of the connector,
+> > usually type-B, sometimes don't need the graph, so we should
+> > check whether it's parent registers usb-role-switch or not
+> > firstly, and get it if exists.
+> > 
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> 
+> I don't think I actually wrote the patch. I may have proposed the code
+> for you, but I never prepared a patch out out that. Please drop the
+> above Signed-off-by line if that is the case. I case I really did
+> write the patch, then you are missing the "From: Heikki..." first
+> line, but I really don't remember preparing the patch.
+> 
+> If the idea came from me, you can use for example the suggested-by
+> tag: "Suggested-by: Heikki Krogerus <heikki.krogerus...".
+Ok, thanks
 
-Cheers,
-Pawel=20
+> 
+> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > ---
+> > v8: no changes
+> > v7:
+> >   add signed-off-by Chunfeng
+> > 
+> > v6:
+> >   new patch
+> > ---
+> >  drivers/usb/roles/class.c | 25 +++++++++++++++++++++----
+> >  1 file changed, 21 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+> > index 5b637aaf311f..87439a84c983 100644
+> > --- a/drivers/usb/roles/class.c
+> > +++ b/drivers/usb/roles/class.c
+> > @@ -114,6 +114,19 @@ static void *usb_role_switch_match(struct device_connection *con, int ep,
+> >  	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
+> >  }
+> >  
+> > +static struct usb_role_switch *
+> > +usb_role_switch_is_parent(struct fwnode_handle *fwnode)
+> > +{
+> > +	struct fwnode_handle *parent = fwnode_get_parent(fwnode);
+> > +	struct device *dev;
+> > +
+> > +	if (!parent || !fwnode_property_present(parent, "usb-role-switch"))
+> > +		return NULL;
+> > +
+> > +	dev = class_find_device(role_class, NULL, parent, switch_fwnode_match);
+> > +	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
+> > +}
+> > +
+> >  /**
+> >   * usb_role_switch_get - Find USB role switch linked with the caller
+> >   * @dev: The caller device
+> > @@ -125,8 +138,10 @@ struct usb_role_switch *usb_role_switch_get(struct device *dev)
+> >  {
+> >  	struct usb_role_switch *sw;
+> >  
+> > -	sw = device_connection_find_match(dev, "usb-role-switch", NULL,
+> > -					  usb_role_switch_match);
+> > +	sw = usb_role_switch_is_parent(dev_fwnode(dev));
+> > +	if (!sw)
+> > +		sw = device_connection_find_match(dev, "usb-role-switch", NULL,
+> > +						  usb_role_switch_match);
+> >  
+> >  	if (!IS_ERR_OR_NULL(sw))
+> >  		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
+> > @@ -146,8 +161,10 @@ struct usb_role_switch *fwnode_usb_role_switch_get(struct fwnode_handle *fwnode)
+> >  {
+> >  	struct usb_role_switch *sw;
+> >  
+> > -	sw = fwnode_connection_find_match(fwnode, "usb-role-switch", NULL,
+> > -					  usb_role_switch_match);
+> > +	sw = usb_role_switch_is_parent(fwnode);
+> > +	if (!sw)
+> > +		sw = fwnode_connection_find_match(fwnode, "usb-role-switch",
+> > +						  NULL, usb_role_switch_match);
+> >  	if (!IS_ERR_OR_NULL(sw))
+> >  		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
+> >  
+> > -- 
+> > 2.21.0
+> 
+> thanks,
+> 
 
->>>Pawel Laszczak <pawell@cadence.com> writes:
->>>>>> diff --git a/include/linux/usb/otg.h b/include/linux/usb/otg.h
->>>>>> index 69f1b6328532..c156817672c4 100644
->>>>>> --- a/include/linux/usb/otg.h
->>>>>> +++ b/include/linux/usb/otg.h
->>>>>> @@ -129,4 +129,20 @@ enum usb_dr_mode {
->>>>>>   */
->>>>>>  extern enum usb_dr_mode usb_get_dr_mode(struct device *dev);
->>>>>>
->>>>>> +/**
->>>>>> + * usb_get_dr_mode_from_string - Convert string to dual role mode.
->>>>>> + * @str: Pointer to the given string
->>>>>> + *
->>>>>> + * The function gets string and returns the correspondig enum usb_d=
-r_mode.
->>>>>> + */
->>>>>> +extern enum usb_dr_mode usb_get_dr_mode_from_string(const char *str=
-);
->>>>>> +
->>>>>> +/**
->>>>>> + * usb_dr_mode_to_string - Convert dual role mode to string.
->>>>>> + * @dr_mode: Pointer to the given dual role mode
->>>>>> + *
->>>>>> + * The function gets enum usb_dr_mode, and returns the correspondig=
- string.
->>>>>> + */
->>>>>> +extern const char *usb_dr_mode_to_string(const enum usb_dr_mode dr_=
-mode);
->>>>>> +
->>>>>>  #endif /* __LINUX_USB_OTG_H */
->>>>>
->>>>>Still missing the stubs I mentioned. Did you try compiling with and
->>>>>without common enabled?
->>>>>
->>>> Sorry, I thought that I send answer yesterday but it's look like I pre=
-pared the answer but
->>>> I  forgot to send.
->>>>
->>>> In /drivers/usb/Kconfig we have:
->>>>
->>>> config USB
->>>> 	tristate "Support for Host-side USB"
->>>> 	depends on USB_ARCH_HAS_HCD
->>>> 	select USB_COMMON
->>>>
->>>> and in /drivers/usb/gadget/Kconfig we have:
->>>>
->>>> menuconfig USB_GADGET
->>>> 	tristate "USB Gadget Support"
->>>> 	select USB_COMMON
->>>>
->>>> I think that it should cover all cases.
->>>>
->>>> Am I right ?
->>>
->>>Run a few tens of randconfig builds and see if you ever catch any
->>>problem. I think randconfig can produce a defconfig where USB=3Dn
->>>USB_GADGET=3Dn and USB_COMMON=3Dy.
->>
->>Ok, I will test it, but I think that it should work.
->>The same situation we have for example with: usb_otg_state_string or usb_=
-ep_type_string.
->>
->
->I've been testing it with USB=3Dn USB_GADGET=3Dn and USB_COMMON=3Dy and al=
-so only with CONFIG_USB_COMMON=3Dy.
->Also I've tested this patch with different default configuration together =
-with CDNS3 driver which use these functions.
->I've test It mainly with x86 and arm architecture.
->So far I've not found any issue.
->
 
