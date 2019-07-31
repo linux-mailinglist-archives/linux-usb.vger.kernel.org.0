@@ -2,215 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE937CA7F
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 19:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139E97CD48
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 21:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728943AbfGaRcd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Jul 2019 13:32:33 -0400
-Received: from mout.gmx.net ([212.227.17.21]:35773 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730842AbfGaRcc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 31 Jul 2019 13:32:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1564594348;
-        bh=u1sIVInpXZxDwaaKSgMN/AyMaMhbmLQodmddOS1TRuM=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=MkPpKiaolJPGX50GeWA1gTTaZz0ZE42BCDS+1a3/hWx0WBG8t/ICn8FFQ83k0srU2
-         qhusYdtqSiNYG0CHcgNxXqvYJlWvrzgQh+kT2+x+pckYYLes7JAOKD2oCvOXx5k1Tz
-         0CwgPsmVnI8xI00YD+kcR3Xw5WGGJIBIpHMNUxuM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.2.103] ([88.65.35.191]) by mail.gmx.com (mrgmx102
- [212.227.17.168]) with ESMTPSA (Nemesis) id 0LqW8j-1iW2u23aTJ-00e3Ic; Wed, 31
- Jul 2019 19:32:28 +0200
-Subject: Re: Fwd: Re: New USB Device
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-References: <5D1D1376.7070202@gmx.net> <5D1E65F3.6090307@gmx.net>
- <20190705052121.GD15821@kroah.com> <5D224A18.2070907@gmx.net>
- <20190716092305.GC3522@localhost>
-From:   Markus Breunig <Markus.L.Breunig@gmx.net>
-Message-ID: <4e9b3ecf-ca45-51a5-d582-d3d067ecc723@gmx.net>
-Date:   Wed, 31 Jul 2019 19:32:29 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729033AbfGaT6L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Jul 2019 15:58:11 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:37177 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728336AbfGaT6K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 15:58:10 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1N5CMP-1iJtxV2cYX-0119Cu; Wed, 31 Jul 2019 21:57:28 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
+Date:   Wed, 31 Jul 2019 21:56:42 +0200
+Message-Id: <20190731195713.3150463-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-In-Reply-To: <20190716092305.GC3522@localhost>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:4TQ5/SqbcreNItOLyLAqO48r0unZo9lZQGJB8BEdmxn19DMa4T+
- QjS+sL6tXd1QWm4cdpltniGvAbMp/xhheUoNYRnOSOeDXOd8BoBOQ03vGXn1l/hoFwnt/HB
- 3nRDoVXh9+Bdpp4SePg9izSaLfjWZq3USYuacR2puwKqJcLRHf71P+woN7bBmFE4lA2HVQc
- 9gOhW2Kv3vgstf6SmtQPg==
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:1DhJgllZnoaEPYGs1RPUPXgQ/oF4uTuXo6cjjEDlbbMgcBjoaAv
+ /4Gqy5waGt8kWlKhcISqSvbWy0PqMUozbeltyk8i/JLnrBG/MVV5i1YTE1nD7PThG9QNAmS
+ 9iyG0heOlxZNdw6cfYwcabbQ4ypVIGuPXXQgozREfFxzQ2zdx45uahc4xbAtdP9o5sKxvCC
+ QICiay/kY46x1cxToEO+Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lS+QsXs6GQ8=:mwNV6TZ/5Buak0jkBt4ShJ
- PfL8Ndp9e7P+g7Pd9Pm4HalEh9cC/F5YC14l3dxuiqcZM3LMTx+ZbiG7MqrhRBVY70E6gpteV
- KNHWees9L32/whF3FDhA18sxHO+r9p1MH3FGHhq3n82bcI/JDCvIXpqxV+pVsgrmui4rpy+pw
- BuJ8ioFoxQz4WymewR/FvsDXlO1Bkh/fk/MdKmPfMtenKLQ9/YDDEG962qYJOkRa/iSn+jkKB
- HWVSK3qKVtgGa1ReWEcIwLpPPac5eXL0vXbxzWa+kO6FB7SJ94Gd2z8zvs2+KdImmcZ9F6Aj3
- gHTLeHM4arYPluvu5XrBihQW32qUdjWmThXyRxpkYpmOKJnrhc2BOvdA52GlCBjOiv7yFxO2Z
- TJ8/AhTWRpVgdVVvHimDTNqMQKx0fqWpEwPmcrEyCYN0jIzqLkia/t9CCRuHCg027Tl8elmT0
- yaLn/76K5qWYMlLbBOilXBw2+q81Ti7xljcWdEI9KHt0hQVldPQpYIc+ULfv4ffV3UPwhcUUx
- ZnozSLlANpcEZOamfWYW/LsKYkcdLNXlNGnbex0LK2h0z/0OLXoz9coaUtBhFnpOAog/KrnGA
- 3kxq60itFtnPEHk8EoZScdL2Kc/d8wz6C9T0c1f8Rm9Q1ZdeMgwgmkqKjav7fRf0noaoCs2Nb
- fIWIFjPWs43PxblWvJXlx/Kksqz2YdvqmDo7AKCbmQmJdJxhMpaMuATd3rAWlid0TxCmN7FWN
- HwP+eSmkTyk/t5iCfwuLaMeHwnn/ehw57S3YQutMIRmeFR+MYjpvTEJXOTEcqAQ54aHX3RXQE
- K4sC2NCeodUZOjIO5PdmflzQLRm4dXoWWJj/I/6azGTub2IlaguUZLTSwxkNACyFRzKB7ekWT
- ddATS9OMNQXY1uPnDaWPv7VdMpMdl1Jv8UxY87185e95R4E8qDfTwLcyAvzAR/yLfDiFLXeWe
- ARyU01W2V2XZlVA4fpXOV7rsrAayizeKyAvb7DUsPVyCYun9PBzX3FZT/y5cnrTh0aGLCm1R9
- qs3FA3TxUO0ckqvE0NbZMrAptVCgMMddtirLRGeZfyKzIZH2BPQzn1lzJeynAOemgzTH0jPkf
- XB6t4wrKAx9mIogtmlk4PYrufogQpfSoLIQ
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mD1LaNfCPok=:FewDXWtPUyzX3X8MXpV7JW
+ LaqXUelWhb8EMKM9tjVsXF3uv3rGnLUQLTL3SIhUo5xti4RrQb4v+7ZE9yZYkDT/kQUFglWBF
+ lvLzinWKjjV6sSbqWJx4qfC9UWznfZPTYFC0lU7lQvUiwKDJFULnI39CJPnfNf8oV1md80F+/
+ hRIBJf7UroozZKWXZBvCj6qhyUyZ/FiHCNNW2NDEdbLHw+RzE7exwMnGT1w0lIBEpoAGv2Dr0
+ PBNGV7aQ6xzA0jg4iovZdBo/K95EQQ01IeAqK8r5l+nAyvyv2QvsAJQ14dqS5qi25TZ1HWgbW
+ y4QfqDfSHyPqf/ou/tBXJfUqNTtkEHqRHevOyCywjUO6/+vmF0vXcTWkvwaAm4sGIptdKDXWf
+ vtBI71SeOlShLuGqMsOjWNfuDgHE1L/lu7MthTfzB10WFgxJcNmRo4s9WeGLQ70M32rGTuxj0
+ fSYfbzci3w+xK0+XnbveZhY0YH1dlePkcvm5RcBHfqcDSZeaxvZOEWZuQBdL5qA+OiCoOBHN/
+ TXPne5Yf1BBWIvVnrwfM04RWKmQCqibG92YYGeZ5RbfG0SnyxVH9lpvMOdClQg6oaUfXe5PDO
+ i0ClE84DAfmzelDecUQRNORb73/EiNmERpGmA3zwXKqxfIyWnfZ2quBv5cM9S7o9G+R4W+KSC
+ gcyOjCbSLMmxXz5/jt8neKqYJ0JYW7vreycPeVeKJaw2+fgZVKgvFFPHKu2AnGnd6ZR49ZNAT
+ gfRkW3tCbcUDHer3OPC2tLmSu8Ryf7Wm0PaGnw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+I revisited some older patches here, getting two of the remaining
+ARM platforms to build with ARCH_MULTIPLATFORM like most others do.
 
+In case of lpc32xx, I created a new set of patches, which seemed
+easier than digging out what I did for an older release many
+years ago.
 
-Am 16.07.2019 um 11:23 schrieb Johan Hovold:
-> [ Pleas avoid top posting. ]
->
-> On Sun, Jul 07, 2019 at 09:38:00PM +0200, Markus Breunig wrote:
->> Hi Greg,
->>
->> also the company GNS has a fragmented homepage, the handbook ist
->> available here:
->> http://www.servicedocs.com/ARTIKELEN/7200284490001.pdf
->> habe a look to page 10 "Remarks to Linux"
->>
->> This is the log of "lsusb -v" (full scan result attached):
->>
->> Bus 001 Device 004: ID 04d8:f8e8 Microchip Technology, Inc. Harmony
->> 300/350 Remote
->
-> Are you sure this is the right device? This looks like a remote control,
-> and one that should be using the cdc-acm driver.
->
+For dove, the patches are basically what I had proposed back in
+2015 when all other ARMv6/ARMv7 machines became part of a single
+kernel build. I don't know what the state is mach-dove support is,
+compared to the DT based support in mach-mvebu for the same
+hardware. If they are functionally the same, we could also just
+remove mach-dove rather than applying my patches.
 
-The output of lsusb before plugging the GNS5890 device into the USB-port:
+I also created patches to remove the w90x900 and ks8695 platforms
+that seem to have lost their last users a few years ago.
+I will post them separately, but plan to apply them in the same
+branch for linux-5.4 if there are no objections.
 
-Bus 001 Device 005: ID 046d:c05a Logitech, Inc. M90/M100 Optical Mouse
-Bus 001 Device 004: ID 046a:0001 Cherry GmbH Keyboard
-Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp.
-SMSC9512/9514 Fast Ethernet Adapter
-Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. SMC9514 Hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+      Arnd
 
-and the result of the lsusb after plugging the GNS5890 device into the
-USB-port:
+Arnd Bergmann (14):
+  usb: ohci-nxp: enable compile-testing
+  usb: udc: lpc32xx: allow compile-testing
+  watchdog: pnx4008_wdt: allow compile-testing
+  serial: lpc32xx_hs: allow compile-testing
+  gpio: lpc32xx: allow building on non-lpc32xx targets
+  net: lpc-enet: factor out iram access
+  net: lpc-enet: move phy setup into platform code
+  net: lpc-enet: allow compile testing
+  serial: lpc32xx: allow compile testing
+  ARM: lpc32xx: clean up header files
+  ARM: lpc32xx: allow multiplatform build
+  ARM: dove: clean up mach/*.h headers
+  ARM: orion/mvebu: unify debug-ll virtual addresses
+  ARM: dove: multiplatform support
 
-Bus 001 Device 005: ID 046d:c05a Logitech, Inc. M90/M100 Optical Mouse
-Bus 001 Device 004: ID 046a:0001 Cherry GmbH Keyboard
-Bus 001 Device 006: ID 04d8:f8e8 Microchip Technology, Inc. Harmony
-300/350 Remote
-Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp.
-SMSC9512/9514 Fast Ethernet Adapter
-Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. SMC9514 Hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+ arch/arm/Kconfig                              | 33 +---------
+ arch/arm/Kconfig.debug                        |  5 +-
+ arch/arm/configs/dove_defconfig               |  2 +
+ arch/arm/configs/lpc32xx_defconfig            |  1 +
+ arch/arm/mach-dove/Kconfig                    | 16 +++--
+ arch/arm/mach-dove/Makefile                   |  2 +
+ .../{include/mach => }/bridge-regs.h          |  4 +-
+ arch/arm/mach-dove/cm-a510.c                  |  3 +-
+ arch/arm/mach-dove/common.c                   |  4 +-
+ arch/arm/mach-dove/dove-db-setup.c            |  2 +-
+ arch/arm/mach-dove/{include/mach => }/dove.h  | 14 ++---
+ arch/arm/mach-dove/include/mach/hardware.h    | 19 ------
+ arch/arm/mach-dove/include/mach/uncompress.h  | 36 -----------
+ arch/arm/mach-dove/irq.c                      |  5 +-
+ arch/arm/mach-dove/{include/mach => }/irqs.h  |  2 -
+ arch/arm/mach-dove/mpp.c                      |  2 +-
+ arch/arm/mach-dove/pcie.c                     |  4 +-
+ arch/arm/mach-dove/{include/mach => }/pm.h    |  4 +-
+ arch/arm/mach-lpc32xx/Kconfig                 | 11 ++++
+ arch/arm/mach-lpc32xx/common.c                | 24 +++++--
+ arch/arm/mach-lpc32xx/common.h                |  1 -
+ arch/arm/mach-lpc32xx/include/mach/board.h    | 15 -----
+ .../mach-lpc32xx/include/mach/entry-macro.S   | 28 ---------
+ arch/arm/mach-lpc32xx/include/mach/hardware.h | 25 --------
+ .../mach-lpc32xx/include/mach/uncompress.h    | 50 ---------------
+ .../{include/mach/platform.h => lpc32xx.h}    | 18 +++++-
+ arch/arm/mach-lpc32xx/pm.c                    |  3 +-
+ arch/arm/mach-lpc32xx/serial.c                | 33 +++++++++-
+ arch/arm/mach-lpc32xx/suspend.S               |  3 +-
+ arch/arm/mach-mv78xx0/mv78xx0.h               |  4 +-
+ arch/arm/mach-orion5x/orion5x.h               |  4 +-
+ drivers/gpio/Kconfig                          |  8 +++
+ drivers/gpio/Makefile                         |  2 +-
+ drivers/gpio/gpio-lpc32xx.c                   | 63 ++++++++++++-------
+ drivers/net/ethernet/nxp/Kconfig              |  2 +-
+ drivers/net/ethernet/nxp/lpc_eth.c            | 30 +++------
+ drivers/tty/serial/Kconfig                    |  3 +-
+ drivers/tty/serial/lpc32xx_hs.c               | 37 ++---------
+ drivers/usb/gadget/udc/Kconfig                |  3 +-
+ drivers/usb/gadget/udc/lpc32xx_udc.c          |  2 -
+ drivers/usb/host/Kconfig                      |  3 +-
+ drivers/usb/host/ohci-nxp.c                   | 25 +++++---
+ drivers/watchdog/Kconfig                      |  2 +-
+ drivers/watchdog/pnx4008_wdt.c                |  1 -
+ include/linux/soc/nxp/lpc32xx-misc.h          | 33 ++++++++++
+ 45 files changed, 246 insertions(+), 345 deletions(-)
+ rename arch/arm/mach-dove/{include/mach => }/bridge-regs.h (96%)
+ rename arch/arm/mach-dove/{include/mach => }/dove.h (95%)
+ delete mode 100644 arch/arm/mach-dove/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-dove/include/mach/uncompress.h
+ rename arch/arm/mach-dove/{include/mach => }/irqs.h (98%)
+ rename arch/arm/mach-dove/{include/mach => }/pm.h (97%)
+ create mode 100644 arch/arm/mach-lpc32xx/Kconfig
+ delete mode 100644 arch/arm/mach-lpc32xx/include/mach/board.h
+ delete mode 100644 arch/arm/mach-lpc32xx/include/mach/entry-macro.S
+ delete mode 100644 arch/arm/mach-lpc32xx/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-lpc32xx/include/mach/uncompress.h
+ rename arch/arm/mach-lpc32xx/{include/mach/platform.h => lpc32xx.h} (98%)
+ create mode 100644 include/linux/soc/nxp/lpc32xx-misc.h
 
+-- 
+2.20.0
 
->> Device Descriptor:
->>     bLength                18
->>     bDescriptorType         1
->>     bcdUSB               2.00
->>     bDeviceClass          255 Vendor Specific Class
->>     bDeviceSubClass         0
->>     bDeviceProtocol         0
->>     bMaxPacketSize0         8
->>     idVendor           0x04d8 Microchip Technology, Inc.
->>     idProduct          0xf8e8 Harmony 300/350 Remote
->>     bcdDevice           48.12
->>     iManufacturer           1
->>     iProduct                2
->>     iSerial                 3
->>     bNumConfigurations      1
->>     Configuration Descriptor:
->>       bLength                 9
->>       bDescriptorType         2
->>       wTotalLength           67
->>       bNumInterfaces          2
->>       bConfigurationValue     1
->>       iConfiguration          0
->>       bmAttributes         0xc0
->>         Self Powered
->>       MaxPower              100mA
->>       Interface Descriptor:
->>         bLength                 9
->>         bDescriptorType         4
->>         bInterfaceNumber        0
->>         bAlternateSetting       0
->>         bNumEndpoints           1
->>         bInterfaceClass         2 Communications
->>         bInterfaceSubClass      2 Abstract (modem)
->>         bInterfaceProtocol      1 AT-commands (v.25ter)
->>         iInterface              0
->>         CDC Header:
->>           bcdCDC               1.10
->>         CDC ACM:
->>           bmCapabilities       0x02
->>             line coding and serial state
->>         CDC Union:
->>           bMasterInterface        0
->>           bSlaveInterface         1
->>         CDC Call Management:
->>           bmCapabilities       0x00
->>           bDataInterface          1
->>         Endpoint Descriptor:
->>           bLength                 7
->>           bDescriptorType         5
->>           bEndpointAddress     0x82  EP 2 IN
->>           bmAttributes            3
->>             Transfer Type            Interrupt
->>             Synch Type               None
->>             Usage Type               Data
->>           wMaxPacketSize     0x0008  1x 8 bytes
->>           bInterval               2
->>       Interface Descriptor:
->>         bLength                 9
->>         bDescriptorType         4
->>         bInterfaceNumber        1
->>         bAlternateSetting       0
->>         bNumEndpoints           2
->>         bInterfaceClass        10 CDC Data
->>         bInterfaceSubClass      0 Unused
->>         bInterfaceProtocol      0
->>         iInterface              0
->>         Endpoint Descriptor:
->>           bLength                 7
->>           bDescriptorType         5
->>           bEndpointAddress     0x03  EP 3 OUT
->>           bmAttributes            2
->>             Transfer Type            Bulk
->>             Synch Type               None
->>             Usage Type               Data
->>           wMaxPacketSize     0x0040  1x 64 bytes
->>           bInterval               0
->>         Endpoint Descriptor:
->>           bLength                 7
->>           bDescriptorType         5
->>           bEndpointAddress     0x83  EP 3 IN
->>           bmAttributes            2
->>             Transfer Type            Bulk
->>             Synch Type               None
->>             Usage Type               Data
->>           wMaxPacketSize     0x0040  1x 64 bytes
->>           bInterval               0
->
->> Am 05.07.2019 07:21, schrieb Greg KH:
->>> On Thu, Jul 04, 2019 at 10:47:47PM +0200, Markus Breunig wrote:
->>>> Hi Greg,
->>>>
->>>> using a serial device driver is the idea of the manufacturer
->>>> "www.gns-gmbh.com". In the LINUX instructions of the ADS-B receiver s=
-ome
->>>> hints to use the device are given via usbserial.
->>>
->>> Any pointers to those instructions?
->>>
->>>> In practice the "GNS 5890 ADS-B Receiver" is similare to some GPS
->>>> Receivers with NMEA 0183 interface starting to send information on th=
-e
->>>> serial interface after power on and signal availabillity (with 115200
->>>> boud data rate).
->
-> Johan
->
