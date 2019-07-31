@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5E87BE38
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 12:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334017BE3C
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 12:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728237AbfGaKUY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Jul 2019 06:20:24 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41566 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728219AbfGaKUY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 06:20:24 -0400
-Received: by mail-pl1-f193.google.com with SMTP id m9so30173633pls.8
-        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2019 03:20:23 -0700 (PDT)
+        id S1728362AbfGaKU2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Jul 2019 06:20:28 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:46118 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728268AbfGaKU1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 06:20:27 -0400
+Received: by mail-pf1-f196.google.com with SMTP id c3so8472254pfa.13
+        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2019 03:20:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=RQGFkwgFaLnGGoQ1NvDOCDLZIEZUzuJI5zevIe71AxU=;
-        b=DTXJINGXVoTql1fXQHHPFsg3EipbEhbHQzDr6FeRofUSP/OzviQIKQg+49YLikdEqQ
-         YjNM5/uykn2qAyF0kVd/+4V/lByaAjL4OlR1muQrRUKLmQ3xs48e9VAQruzJToarL/XU
-         3YIZuGVXB1XvgHJh22L/KCNzYkMI96K7Qz0es=
+        bh=rmBxdiW7S2WiXQ4zlUGo+/gbkMEWIhLilBouSwb9Zms=;
+        b=HJX07IgzuA3T2hq6Y26IP9Rn+7DO6LW+EcnXufRcqpZX4JAJUmAvVnptuZWkMbvsry
+         ESPOby87HWI3S8sEhCDQLCFGNSrCq5QBUcehvat5GmpdHGUyTmtjYoR9RGB85BdPbW9I
+         EpeJ7fKEpL8jHSFdoXFCCiagfU4ap+R6B8c/w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=RQGFkwgFaLnGGoQ1NvDOCDLZIEZUzuJI5zevIe71AxU=;
-        b=FnR4qYb/HOdfkGbKeYLHABBWn+epV+NaQrgmbIEPsO8oFSahpkn2kzs4Vkb+myLx/D
-         UUsJrTNLO4bXq5qNJEhQi7/GLMuug5BqV3QJyD1k2ITan7TeaGoQpP6DuSGgoPv4RT0N
-         foLfjw/q0uRccMXElTuVWDZaHtkMhQ0IXpD/53ZSIwoeUS9oq5pDVQdmzFCDkH7rokYA
-         jANJmo3l1oHuA4KFUg+TpaG5DUislX2VbUmn2Eiokq8/gnQGmrUaUEFFBp1lxuPGha2R
-         MWEvttACxkcTec4oR4O2lODcBCT4o8LCi83I7OBjA8TFld3Jy7rMxJwb1JsWm05i+UDg
-         WYAA==
-X-Gm-Message-State: APjAAAVCFdiqN1TDSGMk2878R38EwJVNcPlm9jWp3W3hzL5/TEwcYwe4
-        v5vJnCqI1of8SIm8368XU3wg4g==
-X-Google-Smtp-Source: APXvYqyQgTrw9DUSsZLKLghRHWUN5/nvwSS94vv8+O0RVIrayMcxuja5bB0RZ59O26Nh4mBQFbfI0w==
-X-Received: by 2002:a17:902:2926:: with SMTP id g35mr119247923plb.269.1564568423495;
-        Wed, 31 Jul 2019 03:20:23 -0700 (PDT)
+        bh=rmBxdiW7S2WiXQ4zlUGo+/gbkMEWIhLilBouSwb9Zms=;
+        b=qEV+NOH8uSRfdCwy5JTFEBd2tYBY77Wwge7yRhpp2+hWOKjBa/zWN8MFJdc3/1+Xgx
+         6Ud9j3kFnbnYsH8ZZyqvrlleFZ/523FwWAejA7E4NfvV+VD/HwbxfbUamIt+a0T63/RK
+         up+DXx5PONEyEziKyWFuG0eFuZaCJOT7ZszJYlmJZunlsHy9+UeV5X5B11r7m83DFQMg
+         SCCjwJGgQgtS8EbByvcsl9kFk0LdYe27cVh8wVWDeXh0DOuAeCI6Ws1Cm7kujVjZMnzD
+         f9ok8eQlNQkB0Wx+HRzjX9t+WVpZ0aRtkIfVTr/5+h+gSrQD6BSBly9HYMxERuLwzjOD
+         syfg==
+X-Gm-Message-State: APjAAAVu30Lg6FxIifxYvaBnoJsvZEDUg7ezTbbxYn4tgj/5j6gRTuDR
+        0OBoqO8cBmQ/QGOX/kw6SxqmTA==
+X-Google-Smtp-Source: APXvYqxIook3htLQsXXlA83hjcsGEZbtTQ038Kp8tgnmjDpYGMt7dCACN9TE2RD9YTyaG4BJePLbDA==
+X-Received: by 2002:a17:90a:8984:: with SMTP id v4mr2166486pjn.133.1564568427244;
+        Wed, 31 Jul 2019 03:20:27 -0700 (PDT)
 Received: from mannams-OptiPlex-7010.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id 3sm71161776pfg.186.2019.07.31.03.20.20
+        by smtp.gmail.com with ESMTPSA id 3sm71161776pfg.186.2019.07.31.03.20.23
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 31 Jul 2019 03:20:22 -0700 (PDT)
+        Wed, 31 Jul 2019 03:20:26 -0700 (PDT)
 From:   Srinath Mannam <srinath.mannam@broadcom.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@intel.com>,
@@ -50,9 +50,9 @@ Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com,
         Srinath Mannam <srinath.mannam@broadcom.com>
-Subject: [PATCH v2 3/5] phy: sr-usb: Set phy ports
-Date:   Wed, 31 Jul 2019 15:49:53 +0530
-Message-Id: <1564568395-9980-4-git-send-email-srinath.mannam@broadcom.com>
+Subject: [PATCH v2 4/5] dt-bindings: usb-xhci: Add platform specific compatible for Stingray xHCI
+Date:   Wed, 31 Jul 2019 15:49:54 +0530
+Message-Id: <1564568395-9980-5-git-send-email-srinath.mannam@broadcom.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1564568395-9980-1-git-send-email-srinath.mannam@broadcom.com>
 References: <1564568395-9980-1-git-send-email-srinath.mannam@broadcom.com>
@@ -61,36 +61,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-set phy ports value in xlate handler which is taken from second argument
-of PHY phandle.
+Add Platform specific compatible, because xHCI of this SoC has an issue
+with HS port which has to reset on disconnect event.
 
 Signed-off-by: Srinath Mannam <srinath.mannam@broadcom.com>
 ---
- drivers/phy/broadcom/phy-bcm-sr-usb.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/usb/usb-xhci.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/phy/broadcom/phy-bcm-sr-usb.c b/drivers/phy/broadcom/phy-bcm-sr-usb.c
-index fe6c589..5274e45 100644
---- a/drivers/phy/broadcom/phy-bcm-sr-usb.c
-+++ b/drivers/phy/broadcom/phy-bcm-sr-usb.c
-@@ -278,9 +278,16 @@ static struct phy *bcm_usb_phy_xlate(struct device *dev,
- 		if (WARN_ON(phy_idx > 1))
- 			return ERR_PTR(-ENODEV);
+diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+index 97400e8..ee1f051 100644
+--- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+@@ -22,6 +22,7 @@ Required properties:
+       device
+     - "renesas,rcar-gen3-xhci" for a generic R-Car Gen3 or RZ/G2 compatible
+       device
++    - "brcm,sr-xhci" for Stingray SoC
+     - "xhci-platform" (deprecated)
  
-+		if (args->args[1])
-+			phy_set_phy_ports(phy_cfg[phy_idx].phy, args->args[1]);
-+
- 		return phy_cfg[phy_idx].phy;
--	} else
-+	} else {
-+		if (args->args[0])
-+			phy_set_phy_ports(phy_cfg->phy, args->args[0]);
-+
- 		return phy_cfg->phy;
-+	}
- }
- 
- static int bcm_usb_phy_create(struct device *dev, struct device_node *node,
+     When compatible with the generic version, nodes must list the
 -- 
 2.7.4
 
