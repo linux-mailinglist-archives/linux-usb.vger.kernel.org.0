@@ -2,199 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7827BCC4
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 11:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725C37BDC7
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jul 2019 11:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727370AbfGaJST (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Jul 2019 05:18:19 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:37878 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725857AbfGaJSS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Jul 2019 05:18:18 -0400
-Received: by mail-qk1-f194.google.com with SMTP id d15so48650958qkl.4
-        for <linux-usb@vger.kernel.org>; Wed, 31 Jul 2019 02:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q6nM4bcHDdyrDcCps2NAV5dG1yMeizGtYY0JY5qG8HQ=;
-        b=b1/9CFCbIfdX0nOzRLYfsT1Y3Wg+HTtd+INVuUvmYArlPshmCi5xY1ftjUle1koDoL
-         AKaB8PhJiXxrNU37+npfdNfH2nKUwLKfJNtv5Pci+Bhfwpv58kEKPbzBZgs5WkfhR0FT
-         MmejJG9XUpiXQOnPKrz1DpXt+PZHaVO9ct0rBu4Y1Bxf0x9PK6FcSvCVLKAZLbpzRnxV
-         1ZpkP++57GgdbFJQdtngEt3FR+2NR0ZncEC76zLhU9jEl1SMn45BFSMaUkcWGvf5ZplL
-         kUVXiIwdrhey4/PXuG9QINW0rpiwqsLJOVdYpEbO9DXLp6zZFsdM0CHhka+0fCGwiGwU
-         YuXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q6nM4bcHDdyrDcCps2NAV5dG1yMeizGtYY0JY5qG8HQ=;
-        b=rmSyJGNg8vnGyX7SkpGNLPMGpGFL2mPjybtDMJnw/DZXrh5p76iEFYKYT2vECJ1h4b
-         uGyeK1IPtOH3hbjGIGp0Kx9NLqxul6Y6XZwn0up2HHgmONZfeKTIWdG4pmibxCZdPA5h
-         csfpcSnSyC6uEdgFBu6hvFzSzU4AXUeYbbvARVsCdP16WUjUC3bFLfi8DJJ+cLO97FdH
-         sztWLhFIbOUBvSekfQX9AJkczM7z3EAjxH27O7tiMRRUIp8x+VtY7Aew7z/86d7hv6Op
-         JUgjqSfO5hEQB1R5fH9NutR6vkXQR0x+/kj+aKGWsUMBb0gPbInWS46Hbo0SFoIqQ0ZN
-         Sv0g==
-X-Gm-Message-State: APjAAAWrBWdnrJ4N1TahFYVoQuKzM3UCOcNQbXfWadr6ZKFDp8YJynpF
-        6LVn2dUt3AeIE7mUEddxQZYLM4lfJIQlAvFxEk4=
-X-Google-Smtp-Source: APXvYqwV72BdVY5G55vV1yOud7QOl0/1Bm9YmLCzMJX9J8kwqXvoO+R4L7860Q5TQrEjHX9IWBJl1SalLnu509+x7Vw=
-X-Received: by 2002:a05:620a:15b3:: with SMTP id f19mr77598322qkk.314.1564564697638;
- Wed, 31 Jul 2019 02:18:17 -0700 (PDT)
+        id S1728955AbfGaJ4A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Jul 2019 05:56:00 -0400
+Received: from mga18.intel.com ([134.134.136.126]:2649 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725793AbfGaJz7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 31 Jul 2019 05:55:59 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Jul 2019 02:55:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,329,1559545200"; 
+   d="scan'208";a="191205897"
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 31 Jul 2019 02:55:56 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Jul 2019 12:55:55 +0300
+Date:   Wed, 31 Jul 2019 12:55:55 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Douglas Gilbert <dgilbert@interlog.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] usb: typec: tcpm: Ignore unsupported/unknown
+ alternate mode requests
+Message-ID: <20190731095555.GN28600@kuha.fi.intel.com>
+References: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
+ <20190729140457.GC28600@kuha.fi.intel.com>
+ <20190729173104.GA32556@roeck-us.net>
+ <20190730120747.GL28600@kuha.fi.intel.com>
+ <a14d8a51-85f6-65d8-2e1e-19538a7bf3d3@roeck-us.net>
 MIME-Version: 1.0
-References: <a24f7305-abcc-c2ff-bba0-a02b23e34434@bellsouth.net>
- <20190727105955.GE458@kroah.com> <bd443170-6886-df60-0d05-849fc7229cd7@bellsouth.net>
- <f2ad790f-6ff8-12dd-83fc-6eab89ea98df@linux.intel.com>
-In-Reply-To: <f2ad790f-6ff8-12dd-83fc-6eab89ea98df@linux.intel.com>
-From:   Enric Balletbo Serra <eballetbo@gmail.com>
-Date:   Wed, 31 Jul 2019 11:18:06 +0200
-Message-ID: <CAFqH_50B27aDDURHyoPvdreMUfbh=7cwwhN4AxKdaiZmp=vgdQ@mail.gmail.com>
-Subject: Re: Oops in xhci_endpoint_reset
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Bob Gleitsmann <rjgleits@bellsouth.net>,
-        Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a14d8a51-85f6-65d8-2e1e-19538a7bf3d3@roeck-us.net>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+On Tue, Jul 30, 2019 at 06:28:52AM -0700, Guenter Roeck wrote:
+> On 7/30/19 5:07 AM, Heikki Krogerus wrote:
+> > On Mon, Jul 29, 2019 at 10:31:04AM -0700, Guenter Roeck wrote:
+> > > On Mon, Jul 29, 2019 at 05:04:57PM +0300, Heikki Krogerus wrote:
+> > > > Hi,
+> > > > 
+> > > > On Wed, Jul 24, 2019 at 09:30:37PM -0700, Guenter Roeck wrote:
+> > > > > TCPM may receive PD messages associated with unknown or unsupported
+> > > > > alternate modes. If that happens, calls to typec_match_altmode()
+> > > > > will return NULL. The tcpm code does not currently take this into
+> > > > > account. This results in crashes.
+> > > > > 
+> > > > > Unable to handle kernel NULL pointer dereference at virtual address 000001f0
+> > > > > pgd = 41dad9a1
+> > > > > [000001f0] *pgd=00000000
+> > > > > Internal error: Oops: 5 [#1] THUMB2
+> > > > > Modules linked in: tcpci tcpm
+> > > > > CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
+> > > > > Hardware name: Atmel SAMA5
+> > > > > Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
+> > > > > PC is at typec_altmode_attention+0x0/0x14
+> > > > > LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
+> > > > > ...
+> > > > > [<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
+> > > > > 				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
+> > > > > [<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
+> > > > > 				(process_one_work+0x123/0x2a8)
+> > > > > [<c012082b>] (process_one_work) from [<c0120a6d>]
+> > > > > 				(worker_thread+0xbd/0x3b0)
+> > > > > [<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
+> > > > > [<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
+> > > > > 
+> > > > > Ignore PD messages if the asociated alternate mode is not supported.
+> > > > > 
+> > > > > Reported-by: Douglas Gilbert <dgilbert@interlog.com>
+> > > > > Cc: Douglas Gilbert <dgilbert@interlog.com>
+> > > > > Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
+> > > > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > > > > ---
+> > > > > Taking a stab at the problem. I don't really know if this is the correct
+> > > > > fix, or even if my understanding of the problem is correct, thus marking
+> > > > > the patch as RFC.
+> > > > 
+> > > > My guess is that typec_match_altmode() is the real culprit. We can't
+> > > > rely on the partner mode index number when identifying the port alt
+> > > > mode.
+> > > > 
+> > > > Douglas, can you test the attached hack instead of this patch?
+> > > > 
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > -- 
+> > > > heikki
+> > > 
+> > > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > > > index ec525811a9eb..033dc097ba83 100644
+> > > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > > @@ -1067,12 +1067,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+> > > >   	modep = &port->mode_data;
+> > > > -	adev = typec_match_altmode(port->port_altmode, ALTMODE_DISCOVERY_MAX,
+> > > > -				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
+> > > > -
+> > > >   	pdev = typec_match_altmode(port->partner_altmode, ALTMODE_DISCOVERY_MAX,
+> > > >   				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
+> > > > +	adev = (void *)typec_altmode_get_partner(pdev);
+> > > > +
+> > > 
+> > > I understand that typec_altmode_get_partner() returns a const *;
+> > > maybe adev should be declared as const struct typec_altmode *
+> > > instead of using a typecast.
+> > 
+> > Yes...
+> > 
+> > > Also, typec_altmode_get_partner() can return NULL as well if pdev is NULL.
+> > > Is it guaranteed that typec_match_altmode() never returns NULL for pdev ?
+> > 
+> > ...and probable no. But I don't think we can receive Attention to a
+> > mode that hasn't been entered.
+> > 
+> 
+> If I understand correctly, the Attention was generated by a test system.
+> What prevents badly implemented code in the connected system from sending
+> such an Attention message ?
 
-Thanks to look into this.
+Oh, if that is the case, then I don't think my change has any effect.
+I misunderstood the scenario. Sorry for that.
 
-Missatge de Mathias Nyman <mathias.nyman@linux.intel.com> del dia dt.,
-30 de jul. 2019 a les 21:39:
->
-> On 27.7.2019 23.43, Bob Gleitsmann wrote:
-> > OK, here's the result of the bisection:
-> >
-> > ef513be0a9057cc6baf5d29566aaaefa214ba344 is the first bad commit
-> > commit ef513be0a9057cc6baf5d29566aaaefa214ba344
-> > Author: Jim Lin <jilin@nvidia.com>
-> > Date:???? Mon Jun 3 18:53:44 2019 +0800
-> >
-> > ?????? usb: xhci: Add Clear_TT_Buffer
-> > ??????
-> > ?????? USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
-> > ?????? processing for full-/low-speed endpoints connected via a TT, the host
-> > ?????? software must use the Clear_TT_Buffer request to the TT to ensure
-> > ?????? that the buffer is not in the busy state".
-> > ??????
-> > ?????? In our case, a full-speed speaker (ConferenceCam) is behind a high-
-> > ?????? speed hub (ConferenceCam Connect), sometimes once we get STALL on a
-> > ?????? request we may continue to get STALL with the folllowing requests,
-> > ?????? like Set_Interface.
-> > ??????
-> > ?????? Here we invoke usb_hub_clear_tt_buffer() to send Clear_TT_Buffer
-> > ?????? request to the hub of the device for the following Set_Interface
-> > ?????? requests to the device to get ACK successfully.
-> > ??????
-> > ?????? Signed-off-by: Jim Lin <jilin@nvidia.com>
-> > ?????? Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > ?????? Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >
-> > ??drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++++++++++++-
-> > ??drivers/usb/host/xhci.c?????????? | 21 +++++++++++++++++++++
-> > ??drivers/usb/host/xhci.h?????????? |?? 5 +++++
-> > ??3 files changed, 52 insertions(+), 1 deletion(-)
-> >
-> >
->
-> Thanks, a quick look doesn't immediately open up the cause to me.
-> Most likely an endpoint or struct usb_device got dropped and freed at suspend/resume,
-> but we probably have some old stale pointer still in a a TD or URB to it.
->
-> could you apply the hack below, it should show more details about this issue.
->
-> grep for "Mathias" after resume, if you find it we just prevented a crash.
->
+I think we should use your patch to fix this issue.
 
-With the below patch the oops disappears and the reason is
+thanks,
 
-root@debian:~# dmesg | grep "Mathias"
-[   67.747933] xhci-hcd xhci-hcd.8.auto: Mathias: No vdev for slot id 0
-
-
-> also adding more xhci debugging and tracing would help:
->
-> mount -t debugfs none /sys/kernel/debug
-> echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-> < suspend/resume >
-> Send output of dmesg
-> Send content of /sys/kernel/debug/tracing/trace
->
-
-Unfortunately, when the oops happens the machine is unresponsive :-(
-
-Thanks,
-~ Enric
-
-
-> 8<---
->
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 9741cde..98a515c 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1809,14 +1809,33 @@ struct xhci_segment *trb_in_td(struct xhci_hcd *xhci,
->   static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td,
->                  struct xhci_virt_ep *ep)
->   {
-> +       struct usb_device *udev;
-> +
->          /*
->           * As part of low/full-speed endpoint-halt processing
->           * we must clear the TT buffer (USB 2.0 specification 11.17.5).
->           */
-> +
->          if (td->urb->dev->tt && !usb_pipeint(td->urb->pipe) &&
->              (td->urb->dev->tt->hub != xhci_to_hcd(xhci)->self.root_hub) &&
->              !(ep->ep_state & EP_CLEARING_TT)) {
-> +               udev = td->urb->dev;
-> +               if (!udev) {
-> +                       xhci_err(xhci, "Mathias: missing udev\n");
-> +                       return;
-> +               }
-> +               if (!udev->slot_id)  {
-> +                       xhci_err(xhci, "Mathias: missing udev->slot_id\n");
-> +                       return;
-> +               }
-> +
-> +               if (!xhci->devs[udev->slot_id])  {
-> +                       xhci_err(xhci, "Mathias: missing xhci->devs[udev->slot_id]\n");
-> +                       return;
-> +               }
->                  ep->ep_state |= EP_CLEARING_TT;
-> +               xhci_err(xhci, "urb->ep->hcpriv %p,  urb->hcpriv %p\n",
-> +                        td->urb->ep->hcpriv, td->urb->dev);
->                  td->urb->ep->hcpriv = td->urb->dev;
->                  if (usb_hub_clear_tt_buffer(td->urb))
->                          ep->ep_state &= ~EP_CLEARING_TT;
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 248cd7a..d7978e0 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -3090,8 +3090,19 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
->          udev = (struct usb_device *) host_ep->hcpriv;
->          vdev = xhci->devs[udev->slot_id];
->          ep_index = xhci_get_endpoint_index(&host_ep->desc);
-> +
-> +       if (!vdev) {
-> +               xhci_warn(xhci, "Mathias: No vdev for slot id %d\n", udev->slot_id);
-> +               return;
-> +       }
->          ep = &vdev->eps[ep_index];
->
-> +       if (!ep) {
-> +               xhci_warn(xhci, "Mathias: No ep for slot %d ep_index %d\n",
-> +                         udev->slot_id, ep_index);
-> +               return;
-> +       }
-> +
->          /* Bail out if toggle is already being cleared by a endpoint reset */
->          if (ep->ep_state & EP_HARD_CLEAR_TOGGLE) {
->                  ep->ep_state &= ~EP_HARD_CLEAR_TOGGLE;
->
+-- 
+heikki
