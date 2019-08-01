@@ -2,100 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D297DE3C
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2019 16:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00CC7DF0F
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2019 17:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730800AbfHAOtp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Aug 2019 10:49:45 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:15164 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726017AbfHAOto (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Aug 2019 10:49:44 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x71En4NQ010116
-        for <linux-usb@vger.kernel.org>; Thu, 1 Aug 2019 09:49:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : subject
- : from : to : date : content-type : mime-version :
- content-transfer-encoding; s=PODMain02222019;
- bh=ayLEmac+54CLbVvmaTj/V+CL4pxBdhjnoVJF9CIH9uE=;
- b=KLoNnlaQZzTLT5FWmFjqc2RUm3WJDiqvb9q/Hsm4BA1LklpRFl/z810Azyi3cUkPXJ/G
- G/qN7ZwBwEyoTEkTRoBm96lqpbRqrgbtXzfSwfXBVf8AXLBgVZ0G/AnVyc282mqW0zhw
- sJFb/0bq5wsGoJM/SYNYw8UrgiFBAexoT4bvr0LkgBhiOLCnrRT7yOcrMKsynSyIyI4n
- 4eZI4g6J2RyRnaZ5FsuhEXtD50UxV8Eez7yQ7L+JEXJ663y8soURB7YkC1wt1yJ3OruL
- 7d+pGH5gmouX9fisw+TpG2bX5xvDjQFKbA2pe2YyrLemhwM5lrcKfxCoprLBRfRE9BPY gA== 
-Authentication-Results: ppops.net;
-        spf=fail smtp.mailfrom=mkulkarni@opensource.cirrus.com
-Received: from ediex02.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2u3gpm1a1f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2019 09:49:43 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 1 Aug
- 2019 15:49:41 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Thu, 1 Aug 2019 15:49:41 +0100
-Received: from mkulkarni-laptop.ad.cirrus.com (mkulkarni-laptop.ad.cirrus.com [198.90.199.28])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id EC29545
-        for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2019 15:49:40 +0100 (BST)
-Message-ID: <1564670980.22099.3.camel@opensource.cirrus.com>
-Subject: About usb_new_device() API
-From:   Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-To:     <linux-usb@vger.kernel.org>
-Date:   Thu, 1 Aug 2019 15:49:40 +0100
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+        id S1731090AbfHAP2I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Aug 2019 11:28:08 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:39838 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729316AbfHAP2I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Aug 2019 11:28:08 -0400
+Received: by mail-io1-f72.google.com with SMTP id y13so79499405iol.6
+        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2019 08:28:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=gCTathP9+deOMTOkoLx5X6Fu8vQedW+V+zFsPJztVaA=;
+        b=tCWwPaMV87wz9Dh+oJcO4du2BsNjHD7VFjuLDKHI3vM5lxAmtKl+HvmLhZISoyS9Lv
+         90Wb9D/ddrVDfoGMVpyQKGRMNG3Fv9fbZ9GsmeR7MH7+1dCn/slXMxDJ5aeQmsS2SRCP
+         9VWe6CLIntRw5aA3xq/EkldL04lZt5bUOsUFh0jA/+sPAMc3ca0IpagqYp1NOm+jMj1+
+         MGFIY8dCh8+U1jYytwvoZyg07W6/oKSehgB3I8voLmy78tonv5Oe5Cf9dWSyEI0wHS/h
+         p+2GYNutPYnGw97mc0yhG25ck3WPcCDRhSbfUdXCK9Fjh453Rtcfq40lKEajgMl+dnp1
+         lLpQ==
+X-Gm-Message-State: APjAAAWmwKD3JN7EwxGash90rMJSnY+7cmxrtoXW0KLA6CAsVJDnAfb5
+        W++3heprTFFVkjQD/TXdcL2VEoOuTJsi5pLRUOrgvQQtFyI5
+X-Google-Smtp-Source: APXvYqywJxXSx2iBozgpyM03zIqWMN2l1OM3lh1SDKPHzzsQakmbjN/DVYMTJK1ABDjT6KPYQLiFJ3Y2OkyaZAZOxSIOeewZsPfa
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-SPF-Result: fail
-X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
- -all
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- impostorscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- mlxlogscore=916 phishscore=0 spamscore=0 clxscore=1031 bulkscore=0
- suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1906280000 definitions=main-1908010157
+X-Received: by 2002:a02:9f07:: with SMTP id z7mr13121827jal.29.1564673287515;
+ Thu, 01 Aug 2019 08:28:07 -0700 (PDT)
+Date:   Thu, 01 Aug 2019 08:28:07 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007df502058f0fe3df@google.com>
+Subject: WARNING in sysfs_create_file_ns
+From:   syzbot <syzbot+5b9bba68c833c84a1135@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi All,
+Hello,
 
-I am seeing a peculiar behaviour which I think *might* be 
-caused by usb_new_device(). Since usb_new_device() is one of the core
-APIs, I cannot explain how PM works for USB device at later point in
-time.
+syzbot found the following crash on:
 
-In a particular use-case, our composite USB device
-exposes HID interface with vendor report descriptor. Since the standard
-HID-class driver's HID-input part is unable to decode this vendor report
-descriptor, it is unable to bind itself to this interface.
-After this, we don't see any L2 requests on USB bus analyser.
-Obvious reason seems to be, since no driver is bound to interface, there
-cannot be PM call-backs since driver has these call-backs.
+HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=12119440600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
+dashboard link: https://syzkaller.appspot.com/bug?extid=5b9bba68c833c84a1135
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1486787fa00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11aa97d8600000
 
-But I am expecting that the USB device (which is parent of HID
-interface) should see L2. The reason being, USB-core seems to properly
-do runtime get/put wherever needed. And HID interface has no driver, so
-from USB-core point of view, it is a USB device w/o any interface.
-(please correct if this is incorrect expectation).
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+5b9bba68c833c84a1135@syzkaller.appspotmail.com
 
-With that said, I am confused about usb_new_device() in this context. It
-seems to call usb_disable_autosuspend() ==> pm_runtime_forbid() ==>
-increment usage_count.
-However, it never calls usb_enable_autosuspend() itself.
-Now since USB PM (and L2) works fine at later point in time (i.e.: after
-all the interfaces are bound to their appropriate drivers), I think
-somewhere the equivalent of usb_enable_autosuspend() gets called for the
-USB device and hence USB PM works fine.
+usbvision_audio_off: can't write reg
+usb 1-1: usbvision_write_reg: failed: error -2
+usb 1-1: usbvision_write_reg: failed: error -2
+usb 1-1: usbvision_write_reg: failed: error -2
+usb 1-1: usbvision_write_reg: failed: error -2
+usb 1-1: usbvision_write_reg: failed: error -2
+usbvision_i2c_register: can't write reg
+videodev: could not get a free minor
+usb 1-1: USBVision[129]: video_register_device() failed
+WARNING: CPU: 1 PID: 22 at fs/sysfs/file.c:327  
+sysfs_create_file_ns+0x13c/0x1c0 fs/sysfs/file.c:327
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #13
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x292/0x6c9 kernel/panic.c:219
+  __warn.cold+0x20/0x4b kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
+RIP: 0010:sysfs_create_file_ns+0x13c/0x1c0 fs/sysfs/file.c:327
+Code: 85 82 00 00 00 41 55 48 8b 7b 30 31 d2 48 89 ee 44 8b 4c 24 50 44 8b  
+44 24 40 e8 af f9 ff ff 41 89 c5 58 eb 0d e8 54 85 b6 ff <0f> 0b 41 bd ea  
+ff ff ff e8 47 85 b6 ff 44 89 e8 48 ba 00 00 00 00
+RSP: 0018:ffff8881d9f97130 EFLAGS: 00010293
+RAX: ffff8881d9f88000 RBX: ffff8881cbb0a490 RCX: ffffffff8266f244
+RDX: 0000000000000000 RSI: ffffffff8186565c RDI: ffff8881cbb0a490
+RBP: ffffffff8779e1a0 R08: ffff8881d9f88000 R09: ffffed103b665d30
+R10: ffffed103b665d2f R11: ffff8881db32e97f R12: 1ffff1103b3f2e27
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff8881cbb0a4c0
+  sysfs_create_file include/linux/sysfs.h:513 [inline]
+  device_create_file+0xe6/0x1d0 drivers/base/core.c:1559
+  usbvision_create_sysfs drivers/media/usb/usbvision/usbvision-video.c:252  
+[inline]
+  usbvision_probe.cold+0x1a73/0x1d69  
+drivers/media/usb/usbvision/usbvision-video.c:1530
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x660 drivers/base/dd.c:509
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:843
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2111
+  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
+  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x30b/0x410 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-I wonder this *may be* be an issue I am seeing with the use-case
-mentioned above. But definitely confused about it and hence thought of
-sending this email.
 
-Does this description makes sense? Is it necessary to
-call usb_enable_autosuspend() in usb_new_device()?
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Thanks,
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
