@@ -2,30 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB897D6A3
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2019 09:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0025B7D6B8
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2019 09:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731025AbfHAHr7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Aug 2019 03:47:59 -0400
-Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:55451 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728282AbfHAHr7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Aug 2019 03:47:59 -0400
-Received: from localhost.localdomain ([176.167.121.156])
-        by mwinf5d80 with ME
-        id jjnu200053NZnML03jnu6s; Thu, 01 Aug 2019 09:47:55 +0200
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 01 Aug 2019 09:47:55 +0200
-X-ME-IP: 176.167.121.156
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     jikos@kernel.org, benjamin.tissoires@redhat.com
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] HID: usbhid: Use GFP_KERNEL instead of GFP_ATOMIC when applicable
-Date:   Thu,  1 Aug 2019 09:47:59 +0200
-Message-Id: <20190801074759.32738-1-christophe.jaillet@wanadoo.fr>
+        id S1729465AbfHAHzP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Aug 2019 03:55:15 -0400
+Received: from mga12.intel.com ([192.55.52.136]:27913 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726407AbfHAHzP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 1 Aug 2019 03:55:15 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Aug 2019 00:55:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,333,1559545200"; 
+   d="scan'208";a="191563196"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Aug 2019 00:55:13 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org, kbuild test robot <lkp@intel.com>
+Subject: [PATCH] usb: typec: ucsi: ccg: Fix uninitilized symbol error
+Date:   Thu,  1 Aug 2019 10:55:12 +0300
+Message-Id: <20190801075512.24354-1-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -34,49 +35,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is no need to use GFP_ATOMIC when calling 'usb_alloc_coherent()'
-here. These calls are done from probe functions and using GFP_KERNEL should
-be safe.
-The memory itself is used within some interrupts, but it is not a
-problem, once it has been allocated.
+Fix smatch error:
+drivers/usb/typec/ucsi/ucsi_ccg.c:975 ccg_fw_update() error: uninitialized symbol 'err'.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Fixes: 5c9ae5a87573 ("usb: typec: ucsi: ccg: add firmware flashing support")
+Cc: stable@vger.kernel.org
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/hid/usbhid/usbkbd.c   | 4 ++--
- drivers/hid/usbhid/usbmouse.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hid/usbhid/usbkbd.c b/drivers/hid/usbhid/usbkbd.c
-index d5b7a696a68c..63e8ef8beb45 100644
---- a/drivers/hid/usbhid/usbkbd.c
-+++ b/drivers/hid/usbhid/usbkbd.c
-@@ -239,11 +239,11 @@ static int usb_kbd_alloc_mem(struct usb_device *dev, struct usb_kbd *kbd)
- 		return -1;
- 	if (!(kbd->led = usb_alloc_urb(0, GFP_KERNEL)))
- 		return -1;
--	if (!(kbd->new = usb_alloc_coherent(dev, 8, GFP_ATOMIC, &kbd->new_dma)))
-+	if (!(kbd->new = usb_alloc_coherent(dev, 8, GFP_KERNEL, &kbd->new_dma)))
- 		return -1;
- 	if (!(kbd->cr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_KERNEL)))
- 		return -1;
--	if (!(kbd->leds = usb_alloc_coherent(dev, 1, GFP_ATOMIC, &kbd->leds_dma)))
-+	if (!(kbd->leds = usb_alloc_coherent(dev, 1, GFP_KERNEL, &kbd->leds_dma)))
- 		return -1;
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index f7a79a23ebed..8e9f8fba55af 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -1018,7 +1018,7 @@ static int do_flash(struct ucsi_ccg *uc, enum enum_flash_mode mode)
+  ******************************************************************************/
+ static int ccg_fw_update(struct ucsi_ccg *uc, enum enum_flash_mode flash_mode)
+ {
+-	int err;
++	int err = 0;
  
- 	return 0;
-diff --git a/drivers/hid/usbhid/usbmouse.c b/drivers/hid/usbhid/usbmouse.c
-index 073127e65ac1..c89332017d5d 100644
---- a/drivers/hid/usbhid/usbmouse.c
-+++ b/drivers/hid/usbhid/usbmouse.c
-@@ -130,7 +130,7 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
- 	if (!mouse || !input_dev)
- 		goto fail1;
- 
--	mouse->data = usb_alloc_coherent(dev, 8, GFP_ATOMIC, &mouse->data_dma);
-+	mouse->data = usb_alloc_coherent(dev, 8, GFP_KERNEL, &mouse->data_dma);
- 	if (!mouse->data)
- 		goto fail1;
- 
+ 	while (flash_mode != FLASH_NOT_NEEDED) {
+ 		err = do_flash(uc, flash_mode);
 -- 
 2.20.1
 
