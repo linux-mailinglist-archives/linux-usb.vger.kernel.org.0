@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8221A7E516
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 00:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03767E52C
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 00:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732732AbfHAWBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Aug 2019 18:01:41 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:44448 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726403AbfHAWBl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Aug 2019 18:01:41 -0400
-Received: by mail-pl1-f195.google.com with SMTP id t14so32764327plr.11
-        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2019 15:01:40 -0700 (PDT)
+        id S2389329AbfHAWEp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Aug 2019 18:04:45 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:44920 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727987AbfHAWEp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Aug 2019 18:04:45 -0400
+Received: by mail-pf1-f196.google.com with SMTP id t16so34808281pfe.11
+        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2019 15:04:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=thegavinli.com; s=google;
         h=sender:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=Qyg4k1Y5K1bN/mVVU0NVVPjBjQ6AQIkhN58GkPGD0wc=;
-        b=Y0h8Z/MquZqkEqFv7Fm9y0X5XqZcz0jwWpGfSuOf1mMCgJVd1jhd7Uurn9pBGa8Gl/
-         v11HFs6LVIOIMvH1W3KJ0Gdqn5NqiENvCsxOQ8J7/5OnU+YIyd+BBDGymlqqZDSpEwDP
-         bDf1y5ahwEyA56+auzxPY3wEBoTjMpla8n4DY=
+        b=jr9TGXIUvjP0wszKXl6ESelkS6rn1QXIH6SghwcFGbxWlbNB6UK/I7cnzIdrrts+Lb
+         TbTKicDuZC7afFxcne2b+KlkjkPo/eCzxCJlEVxDLCDNvmf/NlWTc7TKHxTFt8bMBTBG
+         s2vH9ptAV9wc6jsiI6VbHpM3UcUNUMmtUc8p8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :mime-version:content-transfer-encoding;
         bh=Qyg4k1Y5K1bN/mVVU0NVVPjBjQ6AQIkhN58GkPGD0wc=;
-        b=GPfaoyA01Rcmjx4Zb3LQriKLTW3LlxhsHZwZBUft+spQt0VcsmNPZAhc4h8U9bMTPT
-         D7qVFW1GxMGRLHeL2P/pG+zOGqCnaEiqM1nP9yzUyAPkcauqNjkhm1ZUGI2yDdLPOj+m
-         ZBf6+JDq1uugaTmU5i+SLtvMkPq+X7ffiiQ6lAu+7oOZwxiMxLIYfNbIKwAA43cSOYfZ
-         +btAOnATmYzlJc/dt8bcFDbv9TcpditGylcjTcHBSa/A3Voi5CPVxrMUryB/maOo1N5V
-         1kZwPZcQGAAxw83yQoM1ywEEVPWD8OccBqvGvJQM/9mxkzNN3ldv60wmSFvQgPsvx+vI
-         R+uQ==
-X-Gm-Message-State: APjAAAV0hFcfomH2Q5W1GOhJg0JBIZjgF60pmHAlbVb0e4o++44xmihf
-        msD/VjEND7D4noZR/VzBxCU=
-X-Google-Smtp-Source: APXvYqw8oVropLuBP16STC8+wODnSAyPUG8j8LhavHmE0uJY25CArPms4He2OOs/lnfnA9A31uNojQ==
-X-Received: by 2002:a17:902:7612:: with SMTP id k18mr126391249pll.48.1564696900288;
-        Thu, 01 Aug 2019 15:01:40 -0700 (PDT)
+        b=RJzTG5b5nAqS/06cyZiaB3WTHg8w0eozYpbvahrAjVgjS8R9jVRSMgyxBYib4mLApH
+         1qiao+Oi0KlzO2VTwYYMPzBM7x0tpX0oGj7zpY0p+uArR3V98o1wnRIvei6Q5jxw7tNC
+         qb+FHTxLUuitNGSSvriZzcPtZrzbtSmBLL0vcwEgbyVp1QU430KHfi+mtkf7rFqhSgzd
+         hND36HtF0HAR7K8hMeMwHQKfqnz6rbS7pTvMXZUa5dQ5DtlYshPY+nLorIDmKe8/ydK0
+         zY1WmQbEUabIBevgOZIiKSvGiXKj+jepl5ZO4VXiwTARhioq2jDgrO1NZEsZIAqfkPvT
+         iEmQ==
+X-Gm-Message-State: APjAAAUQupc75KvMLapCUjzn2NiVr8ZHGQa1FUbpKC6W4LmR+rFwXMV0
+        zPPm2xCnvvNCzjLWXEAy33c=
+X-Google-Smtp-Source: APXvYqzj8SsyEmihZfIbIP2oDxa0SARZPEIDTxPXspxbceCFOxsdwI2qY2NyPNupf34tyXiSFZ2jWA==
+X-Received: by 2002:a63:4f18:: with SMTP id d24mr44628058pgb.126.1564697084591;
+        Thu, 01 Aug 2019 15:04:44 -0700 (PDT)
 Received: from mtgav.corp.matician.com ([2601:647:5a01:84c0::a53])
-        by smtp.gmail.com with ESMTPSA id r27sm79538731pgn.25.2019.08.01.15.01.38
+        by smtp.gmail.com with ESMTPSA id s185sm110415326pgs.67.2019.08.01.15.04.43
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 15:01:39 -0700 (PDT)
+        Thu, 01 Aug 2019 15:04:43 -0700 (PDT)
 From:   gavinli@thegavinli.com
-To:     gregkh@linuxfoundation.o, linux-usb@vger.kernel.org
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
 Cc:     Gavin Li <git@thegavinli.com>
 Subject: [PATCH] usb: devio: fix mmap() on non-coherent DMA architectures
-Date:   Thu,  1 Aug 2019 15:01:34 -0700
-Message-Id: <20190801220134.3295-1-gavinli@thegavinli.com>
+Date:   Thu,  1 Aug 2019 15:04:36 -0700
+Message-Id: <20190801220436.3871-1-gavinli@thegavinli.com>
 X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
