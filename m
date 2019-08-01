@@ -2,155 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB40E7DDA7
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2019 16:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D297DE3C
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2019 16:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731891AbfHAOSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Aug 2019 10:18:48 -0400
-Received: from mga02.intel.com ([134.134.136.20]:17591 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731868AbfHAOSs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 1 Aug 2019 10:18:48 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Aug 2019 07:18:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,334,1559545200"; 
-   d="scan'208";a="191630581"
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 01 Aug 2019 07:18:29 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 01 Aug 2019 17:18:28 +0300
-Date:   Thu, 1 Aug 2019 17:18:28 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Matthew Nicholson <matthew.nicholson@adaptcentre.ie>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        linux-usb@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Subject: Re: Linux 5.2, usb: typec: Support for Alternate Modes
-Message-ID: <20190801141828.GA11871@kuha.fi.intel.com>
-References: <CALko26OF4hqZ6-+KMarWU_skQj2mejgw++fShVQdAaEuQDQuiQ@mail.gmail.com>
- <20190730142756.GM28600@kuha.fi.intel.com>
- <CALko26NSuJHzH5K-nv7nM910kvW+Pcfqc09vgnZaD22hEkHO=g@mail.gmail.com>
+        id S1730800AbfHAOtp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Aug 2019 10:49:45 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:15164 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726017AbfHAOto (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Aug 2019 10:49:44 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x71En4NQ010116
+        for <linux-usb@vger.kernel.org>; Thu, 1 Aug 2019 09:49:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : subject
+ : from : to : date : content-type : mime-version :
+ content-transfer-encoding; s=PODMain02222019;
+ bh=ayLEmac+54CLbVvmaTj/V+CL4pxBdhjnoVJF9CIH9uE=;
+ b=KLoNnlaQZzTLT5FWmFjqc2RUm3WJDiqvb9q/Hsm4BA1LklpRFl/z810Azyi3cUkPXJ/G
+ G/qN7ZwBwEyoTEkTRoBm96lqpbRqrgbtXzfSwfXBVf8AXLBgVZ0G/AnVyc282mqW0zhw
+ sJFb/0bq5wsGoJM/SYNYw8UrgiFBAexoT4bvr0LkgBhiOLCnrRT7yOcrMKsynSyIyI4n
+ 4eZI4g6J2RyRnaZ5FsuhEXtD50UxV8Eez7yQ7L+JEXJ663y8soURB7YkC1wt1yJ3OruL
+ 7d+pGH5gmouX9fisw+TpG2bX5xvDjQFKbA2pe2YyrLemhwM5lrcKfxCoprLBRfRE9BPY gA== 
+Authentication-Results: ppops.net;
+        spf=fail smtp.mailfrom=mkulkarni@opensource.cirrus.com
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 2u3gpm1a1f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2019 09:49:43 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 1 Aug
+ 2019 15:49:41 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Thu, 1 Aug 2019 15:49:41 +0100
+Received: from mkulkarni-laptop.ad.cirrus.com (mkulkarni-laptop.ad.cirrus.com [198.90.199.28])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id EC29545
+        for <linux-usb@vger.kernel.org>; Thu,  1 Aug 2019 15:49:40 +0100 (BST)
+Message-ID: <1564670980.22099.3.camel@opensource.cirrus.com>
+Subject: About usb_new_device() API
+From:   Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
+To:     <linux-usb@vger.kernel.org>
+Date:   Thu, 1 Aug 2019 15:49:40 +0100
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALko26NSuJHzH5K-nv7nM910kvW+Pcfqc09vgnZaD22hEkHO=g@mail.gmail.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-SPF-Result: fail
+X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
+ -all
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=916 phishscore=0 spamscore=0 clxscore=1031 bulkscore=0
+ suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1906280000 definitions=main-1908010157
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Matthew,
+Hi All,
 
-On Thu, Aug 01, 2019 at 01:16:34PM +0100, Matthew Nicholson wrote:
-> [Resending as plain text email with attachments.]
-> 
-> Hi,
-> The kernel version testing I'm testing on is:  v5.2.4-arch1
-> I have disabled gmd, which seems to struggle with not being able to
-> configure displays and becomes unresponsive.
-> I'm running startx and have an xprofile script that is setting the
-> displays with xrandr.
-> 
-> *1. dmesg output*
-> I have attached two copies of dmesg and lsmod ouputs.
-> Both are for v5.2.4, one set is where ucsi_acpi is blacklisted,
-> another with no blacklisted modules.
-> 
-> *2. The exact XPS13 version*
-> XPS 13 (9370) Developer edition, ships with Ubuntu.
-> i7-8550U Processor
-> 
-> *3. BIOS version*
-> The output from fwupdmgr get-devices is attached.
-> XPS 13 9370 Thunderbolt Controller: v33.00
-> XPS 13 9370 System Firmware: v0.1.10.0
-> Synaptics VMM3332 inside Dell WD15/TB16/TB18 wired Dock: v3.10.002
-> 
-> At boot the firmware version listed is 1.10.0
-> 
-> *Can you unload the UCSI driver to see if it has any effect?*
-> No changes in being display functionality. I tried to unload and to
-> blacklist with config file in /etc/modprode.d
+I am seeing a peculiar behaviour which I think *might* be 
+caused by usb_new_device(). Since usb_new_device() is one of the core
+APIs, I cannot explain how PM works for USB device at later point in
+time.
 
-In that case the problem is not caused by the Type-C drivers. This is
-more likely a regression in the Thunderbolt drivers, or the graphics
-drivers.
+In a particular use-case, our composite USB device
+exposes HID interface with vendor report descriptor. Since the standard
+HID-class driver's HID-input part is unable to decode this vendor report
+descriptor, it is unable to bind itself to this interface.
+After this, we don't see any L2 requests on USB bus analyser.
+Obvious reason seems to be, since no driver is bound to interface, there
+cannot be PM call-backs since driver has these call-backs.
 
-Adding Mika and the graphics guys. Mika is the Thunderbolt maintainer
-in Linux kernel. He's away now, but he'll be back on Monday.
+But I am expecting that the USB device (which is parent of HID
+interface) should see L2. The reason being, USB-core seems to properly
+do runtime get/put wherever needed. And HID interface has no driver, so
+from USB-core point of view, it is a USB device w/o any interface.
+(please correct if this is incorrect expectation).
 
-> When ucsi_acpi is not blacked the error message:
-> > typec_displayport port1-partner.0: failed to enter mode
+With that said, I am confused about usb_new_device() in this context. It
+seems to call usb_disable_autosuspend() ==> pm_runtime_forbid() ==>
+increment usage_count.
+However, it never calls usb_enable_autosuspend() itself.
+Now since USB PM (and L2) works fine at later point in time (i.e.: after
+all the interfaces are bound to their appropriate drivers), I think
+somewhere the equivalent of usb_enable_autosuspend() gets called for the
+USB device and hence USB PM works fine.
 
-You can ignore that message for now. It is not fatal in this case.
+I wonder this *may be* be an issue I am seeing with the use-case
+mentioned above. But definitely confused about it and hence thought of
+sending this email.
 
-It happens because on this platform the embedded controller firmware
-does not allow the operating system to do anything to the alternate
-modes besides detecting them, not even enter or exit them (so the
-firmware handles the alternate modes on its own). The DisplayPort alt
-mode driver in Linux kernel does not know that, so it tries to enter
-DisplayPort mode (most likely the firmware has already entered the
-mode at this point). That attempt fails, and the driver prints the
-message, but it really is not fatal in any way.
+Does this description makes sense? Is it necessary to
+call usb_enable_autosuspend() in usb_new_device()?
 
-I'll see what could be done about that message, but for now you can
-just ignore it.
-
-> is displayed in dmseg and in getty.
-> 
-> *Are you able to build you own test kernels?*
-> It is not something that I have done but it is something I should be able to do.
-> 
-> A few more details.
-> The external monitors are detected and listed as available in xrandr.
-> I can enable one of them at a time, however attempting to enable both
-> of them will fail.
-> The returned error message is:
-> xrandr: Configure crtc 2 failed
-> 
-> 
-> On Tue, 30 Jul 2019 at 15:27, Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Hi Matthew,
-> >
-> > Copying the respective mailing list.
-> >
-> > On Wed, Jul 17, 2019 at 09:22:10AM +0100, Matthew Nicholson wrote:
-> > > Hi,
-> > >
-> > > Thanks for your work on the linux.
-> > >
-> > > I am using dell xps13 with a wd15 type-c docking station, on Archlinux.
-> > > Under kernel version 5.2 (and 5.2.1) I was running into some issue with
-> > > having the docking station connected to multiple monitors (Only one monitor
-> > > would work at a time).
-> > > I tried to get the monitors working under X/xrandr and wayland/gnome.
-> > > The issue is not present after downgrading back to linux 5.1.7.
-> > >
-> > > I am wondering what I should do to report this or help testing.
-> >
-> > I'm going to need some details about your platform:
-> >
-> > 1. dmesg output
-> > 2. The exact XPS13 version
-> > 3. BIOS version
-> >
-> > The UCSI driver got support for alternate modes in v5.2, so I'm
-> > guessing that is causing this problem, but to be sure, can you unload
-> > the UCSI driver to see if it has any effect?
-> >
-> >         % modprobe -r ucsi_acpi
-> >
-> > Are you able to build you own test kernels?
-
-thanks,
-
--- 
-heikki
+Thanks,
