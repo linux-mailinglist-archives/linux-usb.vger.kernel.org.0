@@ -2,206 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3159C7DFAC
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2019 18:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BF07DFBA
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Aug 2019 18:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731404AbfHAQB3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Aug 2019 12:01:29 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:46244 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729117AbfHAQBZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Aug 2019 12:01:25 -0400
-Received: by mail-pf1-f194.google.com with SMTP id c3so11182387pfa.13
-        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2019 09:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PQxZLZRTutL5Xn+lwvkaAPkB8pSid22ILZpW3pkhg8k=;
-        b=OlLKxSiiEr7ZIBVX/Udv1l5OqYxfcsUCnWkzLAiMJ7GDR3ws1Bx9T5y+IAnSjymzz6
-         0MwA8bVIWIJ3DSLGu4UmRqENsmSov9/MkTrRbGyHRA1MHLQ2QtwonXRSm+qk8gh0vSW4
-         wLw/B58RcJj1E2H/AIHXyvKcw+PqmFL6gaPxTPP5QlpNI918popz3aPJugduM9arx8YB
-         IxQkXA9EXM8TBrSM5KEak+xvAaYLg9q8qOOKFnnMihjlee1MHgzpbtZDGwMou+fvuTRt
-         0oiZqQbARdP3SrK+ns9TZKuWvxnl0wPHGDSTCb3qq3pXcMGR6NgmN507aV4FE2ziotDI
-         u+Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PQxZLZRTutL5Xn+lwvkaAPkB8pSid22ILZpW3pkhg8k=;
-        b=C2m7QWSHJNBlacVsYJSnq7YK+8xVrUGcAIRUVmx4vcQ/D889Q7uymiC6emWQ3nmKDp
-         ofHjXlURt0Rfx3CO+nkS1wp0jQ1tGRvyIxQMV3J0rnFO4nyRjFSZFOweKWOfBmX2ZlpQ
-         rfeKnXakc5BXF+MCaSLC4grzyloHjqEZBIIjdNP71ViVrwsXdLwhvgnmps+BERO9uM1D
-         6KmAUxUO67CP7h7BD7IvoL1AifHLY9Oxdll/a7MNh9yyVpoDsmFHCumtWKiNFM9EBtkR
-         gy4GMGTtBJJfHkfqnkZIn/4ei/pxApYkA7rgTGd5MxinYiBfqtHrR/UJ5DG5QpwGzI+k
-         /BHQ==
-X-Gm-Message-State: APjAAAWImog5nguSpMYxRexPkqrIy9naJC/wmoW2D/KwHUc5n5tzxU44
-        NsreECVlPXp/2IVPHS3/HctoofeDjnEjh+Z9RG5OrA==
-X-Google-Smtp-Source: APXvYqy1eiHI1RM1QkV1eH5Kybp/IFhvotCFYBI+1/RQolQyYljqufvrpfcA37lUHRLf+v/4ujkL+XbF8Xd47md967Q=
-X-Received: by 2002:a63:3006:: with SMTP id w6mr42192705pgw.440.1564675283933;
- Thu, 01 Aug 2019 09:01:23 -0700 (PDT)
+        id S1730202AbfHAQHM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Aug 2019 12:07:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57202 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727403AbfHAQHM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 1 Aug 2019 12:07:12 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9CFE4206B8;
+        Thu,  1 Aug 2019 16:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564675632;
+        bh=FyO14N9hdL7T+o4znc5y53gBxbiS53HRgMTnU1igtD4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=blbeNTn76GmBpQwumjGFE3Yzx6ZuMei3ImHsLEYOReE9oWpKcKYqNd/mcIOs/M+C9
+         wVAVEjP0PD1PFRY3gBzhJ6SJYBb8BsVKglxT9OEb6Pjd9TIQfwWE2pz7iZ9ElVULdO
+         ELZIiODuhD9Md5Qqlg4kDd154gUgu2cyBSRAplWg=
+Date:   Thu, 1 Aug 2019 18:07:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] usb: typec: tcpm: Ignore unsupported/unknown
+ alternate mode requests
+Message-ID: <20190801160709.GA20933@kroah.com>
+References: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
+ <20190729140457.GC28600@kuha.fi.intel.com>
+ <20190729173104.GA32556@roeck-us.net>
+ <20190730120747.GL28600@kuha.fi.intel.com>
+ <a14d8a51-85f6-65d8-2e1e-19538a7bf3d3@roeck-us.net>
+ <20190731095555.GN28600@kuha.fi.intel.com>
 MIME-Version: 1.0
-References: <00000000000044d8d0058e5a00da@google.com>
-In-Reply-To: <00000000000044d8d0058e5a00da@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 1 Aug 2019 18:01:12 +0200
-Message-ID: <CAAeHK+w4e=+qXOaas_Vmm0xnxLFkocN9uRJVxuYmvHhT0hSn1w@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190731095555.GN28600@kuha.fi.intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 4:28 PM syzbot
-<syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13f640cc600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1b2449b7b5dc240d107a
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116ce31fa00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1022f694600000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com
->
-> usb 1-1: USB disconnect, device number 2
-> ==================================================================
-> BUG: KASAN: use-after-free in __lock_acquire+0x3a5d/0x5340
-> /kernel/locking/lockdep.c:3665
-> Read of size 8 at addr ffff8881cfc4ef90 by task kworker/0:2/108
->
-> CPU: 0 PID: 108 Comm: kworker/0:2 Not tainted 5.2.0-rc6+ #15
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->   __dump_stack /lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e /lib/dump_stack.c:113
->   print_address_description+0x67/0x231 /mm/kasan/report.c:188
->   __kasan_report.cold+0x1a/0x32 /mm/kasan/report.c:317
->   kasan_report+0xe/0x20 /mm/kasan/common.c:614
->   __lock_acquire+0x3a5d/0x5340 /kernel/locking/lockdep.c:3665
->   lock_acquire+0x100/0x2b0 /kernel/locking/lockdep.c:4303
->   __mutex_lock_common /kernel/locking/mutex.c:926 [inline]
->   __mutex_lock+0xf9/0x12b0 /kernel/locking/mutex.c:1073
->   device_release_driver_internal+0x23/0x4c0 /drivers/base/dd.c:1109
->   bus_remove_device+0x2dc/0x4a0 /drivers/base/bus.c:556
->   device_del+0x460/0xb80 /drivers/base/core.c:2274
->   usb_disable_device+0x211/0x690 /drivers/usb/core/message.c:1237
->   usb_disconnect+0x284/0x830 /drivers/usb/core/hub.c:2199
->   hub_port_connect /drivers/usb/core/hub.c:4949 [inline]
->   hub_port_connect_change /drivers/usb/core/hub.c:5213 [inline]
->   port_event /drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x13bd/0x3550 /drivers/usb/core/hub.c:5441
->   process_one_work+0x905/0x1570 /kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 /kernel/workqueue.c:2415
->   kthread+0x30b/0x410 /kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 /arch/x86/entry/entry_64.S:352
->
-> Allocated by task 88:
->   save_stack+0x1b/0x80 /mm/kasan/common.c:71
->   set_track /mm/kasan/common.c:79 [inline]
->   __kasan_kmalloc /mm/kasan/common.c:489 [inline]
->   __kasan_kmalloc.constprop.0+0xbf/0xd0 /mm/kasan/common.c:462
->   kmalloc /./include/linux/slab.h:547 [inline]
->   kzalloc /./include/linux/slab.h:742 [inline]
->   usb_set_configuration+0x2c4/0x1670 /drivers/usb/core/message.c:1846
->   generic_probe+0x9d/0xd5 /drivers/usb/core/generic.c:210
->   usb_probe_device+0x99/0x100 /drivers/usb/core/driver.c:266
->   really_probe+0x281/0x660 /drivers/base/dd.c:509
->   driver_probe_device+0x104/0x210 /drivers/base/dd.c:670
->   __device_attach_driver+0x1c2/0x220 /drivers/base/dd.c:777
->   bus_for_each_drv+0x15c/0x1e0 /drivers/base/bus.c:454
->   __device_attach+0x217/0x360 /drivers/base/dd.c:843
->   bus_probe_device+0x1e4/0x290 /drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 /drivers/base/core.c:2111
->   usb_new_device.cold+0x6a4/0xe61 /drivers/usb/core/hub.c:2536
->   hub_port_connect /drivers/usb/core/hub.c:5098 [inline]
->   hub_port_connect_change /drivers/usb/core/hub.c:5213 [inline]
->   port_event /drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1abd/0x3550 /drivers/usb/core/hub.c:5441
->   process_one_work+0x905/0x1570 /kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 /kernel/workqueue.c:2415
->   kthread+0x30b/0x410 /kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 /arch/x86/entry/entry_64.S:352
->
-> Freed by task 108:
->   save_stack+0x1b/0x80 /mm/kasan/common.c:71
->   set_track /mm/kasan/common.c:79 [inline]
->   __kasan_slab_free+0x130/0x180 /mm/kasan/common.c:451
->   slab_free_hook /mm/slub.c:1421 [inline]
->   slab_free_freelist_hook /mm/slub.c:1448 [inline]
->   slab_free /mm/slub.c:2994 [inline]
->   kfree+0xd7/0x280 /mm/slub.c:3949
->   device_release+0x71/0x200 /drivers/base/core.c:1064
->   kobject_cleanup /lib/kobject.c:691 [inline]
->   kobject_release /lib/kobject.c:720 [inline]
->   kref_put /./include/linux/kref.h:65 [inline]
->   kobject_put+0x171/0x280 /lib/kobject.c:737
->   put_device+0x1b/0x30 /drivers/base/core.c:2210
->   klist_put+0xce/0x170 /lib/klist.c:221
->   bus_remove_device+0x3a4/0x4a0 /drivers/base/bus.c:552
->   device_del+0x460/0xb80 /drivers/base/core.c:2274
->   usb_disable_device+0x211/0x690 /drivers/usb/core/message.c:1237
->   usb_disconnect+0x284/0x830 /drivers/usb/core/hub.c:2199
->   hub_port_connect /drivers/usb/core/hub.c:4949 [inline]
->   hub_port_connect_change /drivers/usb/core/hub.c:5213 [inline]
->   port_event /drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x13bd/0x3550 /drivers/usb/core/hub.c:5441
->   process_one_work+0x905/0x1570 /kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 /kernel/workqueue.c:2415
->   kthread+0x30b/0x410 /kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 /arch/x86/entry/entry_64.S:352
->
-> The buggy address belongs to the object at ffff8881cfc4ee80
->   which belongs to the cache kmalloc-2k of size 2048
-> The buggy address is located 272 bytes inside of
->   2048-byte region [ffff8881cfc4ee80, ffff8881cfc4f680)
-> The buggy address belongs to the page:
-> page:ffffea00073f1200 refcount:1 mapcount:0 mapping:ffff8881dac02800
-> index:0x0 compound_mapcount: 0
-> flags: 0x200000000010200(slab|head)
-> raw: 0200000000010200 dead000000000100 dead000000000200 ffff8881dac02800
-> raw: 0000000000000000 00000000000f000f 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->   ffff8881cfc4ee80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881cfc4ef00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > ffff8881cfc4ef80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                           ^
->   ffff8881cfc4f000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881cfc4f080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
+On Wed, Jul 31, 2019 at 12:55:55PM +0300, Heikki Krogerus wrote:
+> On Tue, Jul 30, 2019 at 06:28:52AM -0700, Guenter Roeck wrote:
+> > On 7/30/19 5:07 AM, Heikki Krogerus wrote:
+> > > On Mon, Jul 29, 2019 at 10:31:04AM -0700, Guenter Roeck wrote:
+> > > > On Mon, Jul 29, 2019 at 05:04:57PM +0300, Heikki Krogerus wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On Wed, Jul 24, 2019 at 09:30:37PM -0700, Guenter Roeck wrote:
+> > > > > > TCPM may receive PD messages associated with unknown or unsupported
+> > > > > > alternate modes. If that happens, calls to typec_match_altmode()
+> > > > > > will return NULL. The tcpm code does not currently take this into
+> > > > > > account. This results in crashes.
+> > > > > > 
+> > > > > > Unable to handle kernel NULL pointer dereference at virtual address 000001f0
+> > > > > > pgd = 41dad9a1
+> > > > > > [000001f0] *pgd=00000000
+> > > > > > Internal error: Oops: 5 [#1] THUMB2
+> > > > > > Modules linked in: tcpci tcpm
+> > > > > > CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
+> > > > > > Hardware name: Atmel SAMA5
+> > > > > > Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
+> > > > > > PC is at typec_altmode_attention+0x0/0x14
+> > > > > > LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
+> > > > > > ...
+> > > > > > [<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
+> > > > > > 				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
+> > > > > > [<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
+> > > > > > 				(process_one_work+0x123/0x2a8)
+> > > > > > [<c012082b>] (process_one_work) from [<c0120a6d>]
+> > > > > > 				(worker_thread+0xbd/0x3b0)
+> > > > > > [<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
+> > > > > > [<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
+> > > > > > 
+> > > > > > Ignore PD messages if the asociated alternate mode is not supported.
+> > > > > > 
+> > > > > > Reported-by: Douglas Gilbert <dgilbert@interlog.com>
+> > > > > > Cc: Douglas Gilbert <dgilbert@interlog.com>
+> > > > > > Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
+> > > > > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > > > > > ---
+> > > > > > Taking a stab at the problem. I don't really know if this is the correct
+> > > > > > fix, or even if my understanding of the problem is correct, thus marking
+> > > > > > the patch as RFC.
+> > > > > 
+> > > > > My guess is that typec_match_altmode() is the real culprit. We can't
+> > > > > rely on the partner mode index number when identifying the port alt
+> > > > > mode.
+> > > > > 
+> > > > > Douglas, can you test the attached hack instead of this patch?
+> > > > > 
+> > > > > 
+> > > > > thanks,
+> > > > > 
+> > > > > -- 
+> > > > > heikki
+> > > > 
+> > > > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > > > > index ec525811a9eb..033dc097ba83 100644
+> > > > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > > > @@ -1067,12 +1067,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+> > > > >   	modep = &port->mode_data;
+> > > > > -	adev = typec_match_altmode(port->port_altmode, ALTMODE_DISCOVERY_MAX,
+> > > > > -				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
+> > > > > -
+> > > > >   	pdev = typec_match_altmode(port->partner_altmode, ALTMODE_DISCOVERY_MAX,
+> > > > >   				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
+> > > > > +	adev = (void *)typec_altmode_get_partner(pdev);
+> > > > > +
+> > > > 
+> > > > I understand that typec_altmode_get_partner() returns a const *;
+> > > > maybe adev should be declared as const struct typec_altmode *
+> > > > instead of using a typecast.
+> > > 
+> > > Yes...
+> > > 
+> > > > Also, typec_altmode_get_partner() can return NULL as well if pdev is NULL.
+> > > > Is it guaranteed that typec_match_altmode() never returns NULL for pdev ?
+> > > 
+> > > ...and probable no. But I don't think we can receive Attention to a
+> > > mode that hasn't been entered.
+> > > 
+> > 
+> > If I understand correctly, the Attention was generated by a test system.
+> > What prevents badly implemented code in the connected system from sending
+> > such an Attention message ?
+> 
+> Oh, if that is the case, then I don't think my change has any effect.
+> I misunderstood the scenario. Sorry for that.
+> 
+> I think we should use your patch to fix this issue.
 
-Hi Alan,
+So is this an "ack"?  I'm confused as to if this patch should be applied
+or not...
 
-Could you take a look at this report? This looks like some kind of bug
-in USB core code, but I can't really figure out what's going on here.
+thanks,
 
-Thanks!
-
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+greg k-h
