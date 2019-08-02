@@ -2,66 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAF67EF1E
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 10:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7232A7EF62
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 10:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404102AbfHBIYG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 04:24:06 -0400
-Received: from relay1.mentorg.com ([192.94.38.131]:49188 "EHLO
-        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726164AbfHBIYG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 04:24:06 -0400
-Received: from nat-ies.mentorg.com ([192.94.31.2] helo=SVR-IES-MBX-03.mgc.mentorg.com)
-        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
-        id 1htSqy-0001Dk-Sj from Carsten_Schmid@mentor.com ; Fri, 02 Aug 2019 01:23:56 -0700
-Received: from SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) by
- SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) with Microsoft SMTP Server
- (TLS) id 15.0.1320.4; Fri, 2 Aug 2019 09:22:39 +0100
-Received: from SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17]) by
- SVR-IES-MBX-03.mgc.mentorg.com ([fe80::1072:fb6e:87f1:ed17%22]) with mapi id
- 15.00.1320.000; Fri, 2 Aug 2019 09:22:39 +0100
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Fawad Lateef <fawadlateef@gmail.com>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: AW: Unhandled fault: imprecise external abort (0x1406) when loading
- xhci_pci.ko - uPD720202, PEX8605, iMX6Q and linux-4.19.25
-Thread-Topic: Unhandled fault: imprecise external abort (0x1406) when loading
- xhci_pci.ko - uPD720202, PEX8605, iMX6Q and linux-4.19.25
-Thread-Index: AQHVSEHAMPaxqF08hEykKiPIRN/jH6bmeLKAgAEMruA=
-Date:   Fri, 2 Aug 2019 08:22:39 +0000
-Message-ID: <743ef7fab5144df69bfc8673fff7f0f7@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <CAGgoGu5FfLFzCf0QiAd8UcMrZ7gtLyapgT3TZ-Hx0dknWy4LMQ@mail.gmail.com>
- <CAGgoGu4zP_7QpKHiXSkLfkb=zHEezBzstVfjQMQ4CO60+YubCw@mail.gmail.com>
- <CAGgoGu7rot61LSgu2syOMq9Onx26_u3PEtS7pf_QNQRxOaifhg@mail.gmail.com>
- <20190801171725.GD151852@google.com>
-In-Reply-To: <20190801171725.GD151852@google.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+        id S2404269AbfHBIew (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 04:34:52 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:48600 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729739AbfHBIew (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 04:34:52 -0400
+X-IronPort-AV: E=Sophos;i="5.64,337,1559487600"; 
+   d="scan'208";a="23157724"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 02 Aug 2019 17:34:50 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 3462A41DCD1E;
+        Fri,  2 Aug 2019 17:34:50 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     gregkh@linuxfoundation.org, mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        stable@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH] usb: host: xhci-rcar: Fix timeout in xhci_suspend()
+Date:   Fri,  2 Aug 2019 17:33:35 +0900
+Message-Id: <1564734815-17964-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiA+DQo+ID4gRmFjaW5nIGtlcm5lbCAiVW5oYW5kbGVkIGZhdWx0OiBpbXByZWNpc2UgZXh0ZXJu
-YWwgYWJvcnQgKDB4MTQwNikiDQo+ID4gd2hlbiB0cnlpbmcgdG8gbG9hZCB4aGNpX3BjaS5rbyBt
-b2R1bGUgZm9yIHVQRDcyMDIwMi4gUmVjZWl2aW5nIHRoaXMNCj4gPiBmYXVsdCBzdHJhaWdodC1h
-d2F5IHdoZW4gZHJpdmVyIHRyeWluZyB0byBzZXR1cCBkZXZpY2UuDQo+ID4NCkkgaGFkICJpbXBy
-ZWNpc2UgZXh0ZXJuYWwgYWJvcnQiIG9uIEFSTSBzeXN0ZW1zIGluIHRoZSBmb2xsb3dpbmcgY2Fz
-ZXM6DQotIFN1YnN5c3RlbSB0aGF0IHdhcyBhY2Nlc3NlZCB3YXMgbm90IHBvd2VyZWQNCi0gQ2xv
-Y2sgb2YgYWNjZXNzZWQgc3Vic3lzdGVtIHdhcyB0dXJuZWQgb2ZmDQpNYXliZSB0aGlzIGVuYWJs
-ZXMgeW91IHRvIGZpbmQgdGhlIHRydWUgcmVhc29uLg0KDQpDYW4geW91IHRyeSB0byBkaXNhYmxl
-IHJ1bnRpbWUgcG93ZXIgbWFuYWdlbWVudCB0byBjaGVjayBpZiBpdCB3b3Jrcz8NCg0KQmVzdCBy
-ZWdhcmRzDQpDYXJzdGVuDQo=
+When a USB device is connected to the host controller and
+the system enters suspend, the following error happens
+in xhci_suspend():
+
+	xhci-hcd ee000000.usb: WARN: xHC CMD_RUN timeout
+
+Since the firmware/internal CPU control the USBSTS.STS_HALT
+and the process speed is down when the roothub port enters U3,
+long delay for the handshake of STS_HALT is neeed in xhci_suspend().
+So, this patch adds to set the XHCI_SLOW_SUSPEND.
+
+Fixes: 435cc1138ec9 ("usb: host: xhci-plat: set resume_quirk() for R-Car controllers")
+Cc: <stable@vger.kernel.org> # v4.12+
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+ drivers/usb/host/xhci-rcar.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-rcar.c b/drivers/usb/host/xhci-rcar.c
+index 671bce1..8616c52 100644
+--- a/drivers/usb/host/xhci-rcar.c
++++ b/drivers/usb/host/xhci-rcar.c
+@@ -238,10 +238,15 @@ int xhci_rcar_init_quirk(struct usb_hcd *hcd)
+ 	 * pointers. So, this driver clears the AC64 bit of xhci->hcc_params
+ 	 * to call dma_set_coherent_mask(dev, DMA_BIT_MASK(32)) in
+ 	 * xhci_gen_setup().
++	 *
++	 * And, since the firmware/internal CPU control the USBSTS.STS_HALT
++	 * and the process speed is down when the roothub port enters U3,
++	 * long delay for the handshake of STS_HALT is neeed in xhci_suspend().
+ 	 */
+ 	if (xhci_rcar_is_gen2(hcd->self.controller) ||
+-			xhci_rcar_is_gen3(hcd->self.controller))
+-		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
++			xhci_rcar_is_gen3(hcd->self.controller)) {
++		xhci->quirks |= XHCI_NO_64BIT_SUPPORT | XHCI_SLOW_SUSPEND;
++	}
+ 
+ 	if (!xhci_rcar_wait_for_pll_active(hcd))
+ 		return -ETIMEDOUT;
+-- 
+2.7.4
+
