@@ -2,171 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBE37FAB1
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 15:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7847FB6F
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 15:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405817AbfHBNe0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 09:34:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44020 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405647AbfHBNeY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Aug 2019 09:34:24 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D9C320665;
-        Fri,  2 Aug 2019 13:34:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564752863;
-        bh=OPoLV3eQMYv05nIBms/7Cv1RsdbgG0/PHdN5JNyYsNU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Ot5FLTITGot5JlxK4l6yYVZ/wFaXM5TOuv6rzKqhuyXMRcc9mSpuw8h4+WAIqpRdK
-         ZzNtV395rnzohCxRJ7ann9CVof44owF7fiF803yJ5Sy9Gni1PK9ARFWSyNODzwVKFw
-         iPg0a8Cw4lyntiOL0JL+IvGF+u3tNvAG6AgObRco=
-Subject: Re: [PATCH v2 2/2] usbip: Implement SG support to vhci
-To:     Suwan Kim <suwan.kim027@gmail.com>
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <20190705164355.14025-1-suwan.kim027@gmail.com>
- <20190705164355.14025-3-suwan.kim027@gmail.com>
- <7c697904-53e3-b469-c907-25b8fb7859bc@kernel.org>
- <20190729145241.GA4557@localhost.localdomain>
- <787051b9-579d-6da5-9d04-3dd0ae3c770b@kernel.org>
- <20190801063859.GA9587@localhost.localdomain>
- <e581b566-65fb-c4d8-74fc-1c1b35b57b9f@kernel.org>
- <20190802074136.GA19534@localhost.localdomain>
-From:   shuah <shuah@kernel.org>
-Message-ID: <a7a00097-64ce-703e-84f3-04f105e46c80@kernel.org>
-Date:   Fri, 2 Aug 2019 07:33:59 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726340AbfHBNqq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 09:46:46 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:40285 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731735AbfHBNqq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 09:46:46 -0400
+Received: by mail-lj1-f193.google.com with SMTP id m8so39305475lji.7
+        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2019 06:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Mu7NYbreqoEOTwXaXQoIeI6193z1iQvheUkO76S1Lng=;
+        b=nC5Gtv5eDKt2LnSbL7CfQIQHnqfMPPm9o/9++Zl2SOrJrqV8hNGO3Z07qDwu8hUVo1
+         UWHElfXtE6fXlASAwqWUEqVNGnpuL547TNcakpoIm9zsgPzWV7h4UerS1JP2TkYytgZv
+         cJkLnDuIFO3jKU/qUEVJXeX7GHhCJ+0ApZ3sv7ZA/uxjdkyV6cUrFYAEaOLJhrYe+kN3
+         FCVIKElYP48I4LfPEFSYwpj7ck/d8rT8xF/N/xlJrMQKGHYnuROsF/kDkN4sVGtTVN7U
+         iWZN9va2oxccEjBUHH1I8HOrKqdME0EOkUamjjljtZwYBKQkOr187YmSiuujOuSi+4cq
+         wJuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Mu7NYbreqoEOTwXaXQoIeI6193z1iQvheUkO76S1Lng=;
+        b=VHzDIJoLamCOzNO37DR25/zZ2v61aTx/YPyXW1SXbk1g8HZUBVg/RBEB5OWW+iTxqs
+         UtrK/KYUOJnDLhx90FQPI1ibIfiD2QmUbcRnF/S7kf/Z6yZAOwJN1mGV3WQxCFOlRYfK
+         qGw/004RKkCr2Kb79dNWrhjJH0mP7WYCPo2/aE4n+EwkKRSrG+Gxa4oAkpyRUMwoX+WQ
+         JhceGNbVbcE4VxYOfg7SGYq0F1S4sVnTLsktXOpbViCVHVLhOoA2lKNOfNqG7I/obOne
+         FjNQYsnSRyzE1cRqatHK9mjGBeLFxWOLJuVcJR7BVIEAJlEd0U0xsb+lOMB6tdss8kiU
+         4BdA==
+X-Gm-Message-State: APjAAAWS+07dWbr5X1rL+bq0effxqUyT5FL8VOLsJU+h2g2iXUr97ZQ1
+        w2z75pprqe5TDUJvL+OVtVzRs43VfL5NkfC0AWs=
+X-Google-Smtp-Source: APXvYqx4OmY1AxHI8lSBkBXp3iPsaoCRDFlcKOqUifX/8yT5hFDEpDX0tUdP36PKtB2Q9g5MJZN4hevnc1ERwblRltM=
+X-Received: by 2002:a2e:9657:: with SMTP id z23mr16848411ljh.116.1564753604387;
+ Fri, 02 Aug 2019 06:46:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190802074136.GA19534@localhost.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a19:2d17:0:0:0:0:0 with HTTP; Fri, 2 Aug 2019 06:46:43 -0700 (PDT)
+Reply-To: frasma1000@gmail.com
+From:   "Sir.Francois Stamm" <ttapiaatt2@gmail.com>
+Date:   Fri, 2 Aug 2019 06:46:43 -0700
+Message-ID: <CAEYeuu+URvUMHza5bmHkEB2ngFW3vJ8WO=ePcYcs_EdhE9212g@mail.gmail.com>
+Subject: CHARITY WORK
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/2/19 1:41 AM, Suwan Kim wrote:
-> On Thu, Aug 01, 2019 at 08:03:59AM -0600, shuah wrote:
->> On 8/1/19 12:38 AM, Suwan Kim wrote:
->>> On Mon, Jul 29, 2019 at 10:32:31AM -0600, shuah wrote:
->>>> On 7/29/19 8:52 AM, Suwan Kim wrote:
->>>>> Hi Shuah,
->>>>>
->>>>> On Tue, Jul 23, 2019 at 06:21:53PM -0600, shuah wrote:
->>>>>> Hi Suwan,
->>>>>>
->>>>>> On 7/5/19 10:43 AM, Suwan Kim wrote:
->>>>>>> There are bugs on vhci with usb 3.0 storage device. Originally, vhci
->>>>>>> doesn't supported SG, so USB storage driver on vhci breaks SG list
->>>>>>> into multiple URBs and it causes error that a transfer got terminated
->>>>>>> too early because the transfer length for one of the URBs was not
->>>>>>> divisible by the maxpacket size.
->>>>>>>
->>>>>>> In this patch, vhci basically support SG and it sends each SG list
->>>>>>> entry to the stub driver. Then, the stub driver sees the total length
->>>>>>> of the buffer and allocates SG table and pages according to the total
->>>>>>> buffer length calling sgl_alloc(). After the stub driver receives
->>>>>>> completed URB, it again sends each SG list entry to vhci.
->>>>>>>
->>>>>>> If HCD of the server doesn't support SG, the stub driver breaks a
->>>>>>> single SG reqeust into several URBs and submit them to the server's
->>>>>>> HCD. When all the split URBs are completed, the stub driver
->>>>>>> reassembles the URBs into a single return command and sends it to
->>>>>>> vhci.
->>>>>>>
->>>>>>> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
->>>>>>> ---
->>>>>>>      drivers/usb/usbip/stub.h         |   7 +-
->>>>>>>      drivers/usb/usbip/stub_main.c    |  52 +++++---
->>>>>>>      drivers/usb/usbip/stub_rx.c      | 207 ++++++++++++++++++++++---------
->>>>>>>      drivers/usb/usbip/stub_tx.c      | 108 +++++++++++-----
->>>>>>>      drivers/usb/usbip/usbip_common.c |  60 +++++++-- >   drivers/usb/usbip/vhci_hcd.c     |  10 +-
->>>>>>>      drivers/usb/usbip/vhci_tx.c      |  49 ++++++--
->>>>>>>      7 files changed, 372 insertions(+), 121 deletions(-)
->>>>>>
->>>>>> While you are working on v3 to fix chekpatch and other issues
->>>>>> I pointed out, I have more for you.
->>>>>>
->>>>>> What happens when you have mismatched server and client side?
->>>>>> i.e stub does and vhci doesn't and vice versa.
->>>>>>
->>>>>> Make sure to run checkpatch. Also check spelling errors in
->>>>>> comments and your commit log.
->>>>>>
->>>>>> I am not sure if your eeror paths are correct. Run usbip_test.sh
->>>>>>
->>>>>> tools/testing/selftests/drivers/usb/usbip
->>>>>
->>>>> I don't know what mismatch you mentioned. Are you saying
->>>>> "match busid table" at the end of usbip_test.sh?
->>>>> How does it relate to SG support of this patch?
->>>>> Could you tell me more about the problem situation?
->>>>>
->>>>
->>>> What happens when usbip_host is running a kernel without the sg
->>>> support and vhci_hcd does? Just make sure this works with the
->>>> checks for sg support status as a one of your tests for this
->>>> sg feature.
->>>
->>> Now I understand. Thanks for the details!
->>> As a result of testing, in the situation where vhci supports SG,
->>> but stub does not, or vice versa, usbip works normally. Moreover,
->>> because there is no protocol modification, there is no problem in
->>> communication between server and client even if the one has a kernel
->>> without SG support.
->>>
->>> In the case of vhci supports SG and stub doesn't, because vhci sends
->>> only the total length of the buffer to stub as it did before the
->>> patch applied, stub only needs to allocate the required length of
->>> buffers regardless of whether vhci supports SG or not.
->>>
->>> If stub needs to send data buffer to vhci because of IN pipe, stub
->>> also sends only total length of buffer as metadata and then send real
->>> data as vhci does. Then vhci receive data from stub and store it to
->>> the corresponding buffer of SG list entry.
->>>
->>> In the case of stub that supports SG, if SG buffer is requested by
->>> vhci, buffer is allocated by sgl_alloc(). However, stub that does
->>> not support SG allocates buffer using only kmalloc(). Therefore, if
->>> vhci supports SG and stub doesn't, stub has to allocate buffer with
->>> kmalloc() as much as the total length of SG buffer which is quite
->>> huge when vhci sends SG request, so it has big overhead in buffer
->>> allocation.
->>>
->>> And for the case of stub supports SG and vhci doesn't, since the
->>> USB storage driver checks that vhci doesn't support SG and sends
->>> the request to stub by splitting the SG list into multiple URBs,
->>> stub allocates a buffer with kmalloc() as it did before this patch.
->>>
->>> Therefore, everything works normally in a mismatch situation.
->>
->> Looking for you add a test case for that. Please include this
->> in the commit log.
-> 
-> I'm confused about the test case. Do I add the test case for each
-> SG support status of vhci_hcd and usbip_host in usbip_test.sh?
-> Or, do I implement the test logic in vhci_hcd code that asks if
-> usbip_host supports SG when attaching a remote device?
-> I'm sorry but I don't know what exactly you want to add.
-> 
+I am Mr Francois Jean Stamm from Switzerland i am the chief delegate
+south Sudan red cross organisation, my objective to send this mail
+across to you on mere internet search of a friend from your country,i
+lost his contact , intent pump up your email is  to extend our
+humanitarian aid/assistance to your country  on behalf of my
+organization INTERNATIONAL COMMITTEE OF THE RED CROSS ORGANIZATION(
+ICRC) is an None governmental organization (NGO) at THE UNITED NATION
+is a journal of a humanitarian assistance such as:Transgression of
+Human Rights in Humanitarian Emergencies:The Case of Somali Refugees
+in Kenya and Zimbabwean Asylum-Seekers in South Africa Mapping
+Population Mobility in a Remote Context:Health Service Planning
+in the Whatnot District, Western Ethiopia,Humanitarian Challenges and
+Dilemmas in Crisis Settings.
 
-What I am asking you do is:
+Our objective is to reach the need and the less privileged globally
+through this project, we unanimously agreed to extend our charity work
+to your country as benefactor to this assistant project.
 
-1. test with mismatched host and client.
-2. run usbip_test.sh
+We need a sizable undisputed land in a good area where we can
+establish an orphanage home to effect life of the less
+privileged/orphans.On behalf of my organization International
+committee of the red cross organization(ICRC) I advised your urgent
+search of land at any cost as to enable the organization to exhibit
+action,furthermore the effective execution of this proposed project
+will be under your supervision .
 
-These two are separate tests. I am not asking you to add any tests.
-If you want to add it, I am not going say no :)
+Best Regards
 
-How close are you sending the patch?
-
-thanks,
--- Shuah
-
-
+Francois
