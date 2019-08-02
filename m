@@ -2,83 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7847FB6F
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 15:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF837FBD6
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 16:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbfHBNqq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 09:46:46 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40285 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731735AbfHBNqq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 09:46:46 -0400
-Received: by mail-lj1-f193.google.com with SMTP id m8so39305475lji.7
-        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2019 06:46:45 -0700 (PDT)
+        id S2389975AbfHBON1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 10:13:27 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:39540 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389183AbfHBON1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 10:13:27 -0400
+Received: by mail-pg1-f193.google.com with SMTP id u17so36146987pgi.6
+        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2019 07:13:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Mu7NYbreqoEOTwXaXQoIeI6193z1iQvheUkO76S1Lng=;
-        b=nC5Gtv5eDKt2LnSbL7CfQIQHnqfMPPm9o/9++Zl2SOrJrqV8hNGO3Z07qDwu8hUVo1
-         UWHElfXtE6fXlASAwqWUEqVNGnpuL547TNcakpoIm9zsgPzWV7h4UerS1JP2TkYytgZv
-         cJkLnDuIFO3jKU/qUEVJXeX7GHhCJ+0ApZ3sv7ZA/uxjdkyV6cUrFYAEaOLJhrYe+kN3
-         FCVIKElYP48I4LfPEFSYwpj7ck/d8rT8xF/N/xlJrMQKGHYnuROsF/kDkN4sVGtTVN7U
-         iWZN9va2oxccEjBUHH1I8HOrKqdME0EOkUamjjljtZwYBKQkOr187YmSiuujOuSi+4cq
-         wJuw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5treBjW4ojfofZKzbstHsda4v5OqUABJGRx6t6ZH9CA=;
+        b=DXHR6ABYqH0h3ErX1CGCyj9oFdGOkuWQz5xaeVmLGPxQHExg2mLZ8afYJcvtHmuXqE
+         L20AgP7+xUJ4V7qAQs5B/BJ11bjm8pSt9u+EnbShqDMGU0uhL+rRktj+PNPGxttUDcUO
+         IHhV4g3O+mQnpNSZgujQMBw0vY29Y5UlWzexdAaWhAtBOlJ7D06vuhabLGuonB0TomkS
+         5SlnmCjTIB5CDwJrozyi7Go3G8ThnoANR0iexUYoHhIr0PjXnnJdp3HWMh0wexSPboUD
+         +C8GOmO09pobgglUY/dTY1X3abZWEATbRdfmlraPBN2dxmD5GKuMW7DdLI3cpjayxpml
+         TVHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Mu7NYbreqoEOTwXaXQoIeI6193z1iQvheUkO76S1Lng=;
-        b=VHzDIJoLamCOzNO37DR25/zZ2v61aTx/YPyXW1SXbk1g8HZUBVg/RBEB5OWW+iTxqs
-         UtrK/KYUOJnDLhx90FQPI1ibIfiD2QmUbcRnF/S7kf/Z6yZAOwJN1mGV3WQxCFOlRYfK
-         qGw/004RKkCr2Kb79dNWrhjJH0mP7WYCPo2/aE4n+EwkKRSrG+Gxa4oAkpyRUMwoX+WQ
-         JhceGNbVbcE4VxYOfg7SGYq0F1S4sVnTLsktXOpbViCVHVLhOoA2lKNOfNqG7I/obOne
-         FjNQYsnSRyzE1cRqatHK9mjGBeLFxWOLJuVcJR7BVIEAJlEd0U0xsb+lOMB6tdss8kiU
-         4BdA==
-X-Gm-Message-State: APjAAAWS+07dWbr5X1rL+bq0effxqUyT5FL8VOLsJU+h2g2iXUr97ZQ1
-        w2z75pprqe5TDUJvL+OVtVzRs43VfL5NkfC0AWs=
-X-Google-Smtp-Source: APXvYqx4OmY1AxHI8lSBkBXp3iPsaoCRDFlcKOqUifX/8yT5hFDEpDX0tUdP36PKtB2Q9g5MJZN4hevnc1ERwblRltM=
-X-Received: by 2002:a2e:9657:: with SMTP id z23mr16848411ljh.116.1564753604387;
- Fri, 02 Aug 2019 06:46:44 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5treBjW4ojfofZKzbstHsda4v5OqUABJGRx6t6ZH9CA=;
+        b=ZpK1cb41V4iEwR4cCWf7w/SElYbjuaNo62q7x9fu8e7lNTHpEfPJwWc3DDgkJaSoDN
+         ga+UFCj/aZN2QOa4ffxJ7KtcI6smX2qn9vsr7cIEV8QSlWjF0o8B9pZG95uYUIVaFv7l
+         FjgUZJ5xDG5SwAZ6n4Fi54y7SG3/AqLqwEFPK+Lq3a2gNjN2+V6vgnhI9OjCLE5sMQJm
+         ut4t4JygwEiIPG0Ym6eJCHcmspGJKkd5iY5NVg4kKp7MgaXWX83+WEWsZdvb+7CELP7N
+         On0VQtnx2rxLekbhYHYTH1gMXqBdWEWBOcuerH+4XCKpHOOXtaRhl/xaFX7//wRHAezd
+         FiQQ==
+X-Gm-Message-State: APjAAAV60ow2dOJJU9Xm/lpvh60bn3rl2N3RRVJXMOPuWbxVe55tgIqi
+        UqJbtjhj4F3RL0o6zzBcRNRYX5cvAdRe8KtwKXV99zZAbFc=
+X-Google-Smtp-Source: APXvYqzJzMIq2BOAXKkfk2ONCggXPJ354hGozdppgPTsk/gVMr7/MXdnjVkdh4xqKYqTMjZSIuwIvWZwZ8GOnQ6Cmbo=
+X-Received: by 2002:a65:4b8b:: with SMTP id t11mr123928876pgq.130.1564755206144;
+ Fri, 02 Aug 2019 07:13:26 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a19:2d17:0:0:0:0:0 with HTTP; Fri, 2 Aug 2019 06:46:43 -0700 (PDT)
-Reply-To: frasma1000@gmail.com
-From:   "Sir.Francois Stamm" <ttapiaatt2@gmail.com>
-Date:   Fri, 2 Aug 2019 06:46:43 -0700
-Message-ID: <CAEYeuu+URvUMHza5bmHkEB2ngFW3vJ8WO=ePcYcs_EdhE9212g@mail.gmail.com>
-Subject: CHARITY WORK
-To:     undisclosed-recipients:;
+References: <000000000000cd0435058f21e8c3@google.com> <20190802133317.GA5538@amd>
+In-Reply-To: <20190802133317.GA5538@amd>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Fri, 2 Aug 2019 16:13:15 +0200
+Message-ID: <CAAeHK+ziKCz=SZss7mnWZWQXWBGyXkw5dcPfjdH-6MJLUJqO8Q@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in __pm_runtime_resume
+To:     Pavel Machek <pavel@denx.de>
+Cc:     syzbot <syzbot+b156665cf4d1b5e00c76@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        len.brown@intel.com, LKML <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        rjw@rjwysocki.net, syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I am Mr Francois Jean Stamm from Switzerland i am the chief delegate
-south Sudan red cross organisation, my objective to send this mail
-across to you on mere internet search of a friend from your country,i
-lost his contact , intent pump up your email is  to extend our
-humanitarian aid/assistance to your country  on behalf of my
-organization INTERNATIONAL COMMITTEE OF THE RED CROSS ORGANIZATION(
-ICRC) is an None governmental organization (NGO) at THE UNITED NATION
-is a journal of a humanitarian assistance such as:Transgression of
-Human Rights in Humanitarian Emergencies:The Case of Somali Refugees
-in Kenya and Zimbabwean Asylum-Seekers in South Africa Mapping
-Population Mobility in a Remote Context:Health Service Planning
-in the Whatnot District, Western Ethiopia,Humanitarian Challenges and
-Dilemmas in Crisis Settings.
+On Fri, Aug 2, 2019 at 3:33 PM Pavel Machek <pavel@denx.de> wrote:
+>
+> On Fri 2019-08-02 05:58:05, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=146071b4600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=b156665cf4d1b5e00c76
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> >
+> > Unfortunately, I don't have any reproducer for this crash yet.
+>
+> I asked a question, noone bothered to reply, yet you spam me again?
+>
+> You are a bad bot. Go away. Come back when your human master is
+> willing to communicate.
 
-Our objective is to reach the need and the less privileged globally
-through this project, we unanimously agreed to extend our charity work
-to your country as benefactor to this assistant project.
+Hi Pavel,
 
-We need a sizable undisputed land in a good area where we can
-establish an orphanage home to effect life of the less
-privileged/orphans.On behalf of my organization International
-committee of the red cross organization(ICRC) I advised your urgent
-search of land at any cost as to enable the organization to exhibit
-action,furthermore the effective execution of this proposed project
-will be under your supervision .
+What was the question that you've asked and where did you send it? I
+can't find anything in my inbox.
 
-Best Regards
+Thanks!
 
-Francois
+>
+>                                                                 Pavel
+>
+> --
+> (english) http://www.livejournal.com/~pavelmachek
+> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
