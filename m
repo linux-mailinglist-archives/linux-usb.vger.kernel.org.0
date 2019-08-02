@@ -2,183 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 610DF7FD76
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 17:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1CB7FDC0
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 17:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732484AbfHBPZV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 11:25:21 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:52223 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732454AbfHBPZV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Aug 2019 11:25:21 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 39F21204237;
-        Fri,  2 Aug 2019 17:25:18 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jq7iAZgMYHUl; Fri,  2 Aug 2019 17:25:18 +0200 (CEST)
-Received: from [82.134.31.183] (unknown [82.134.31.183])
-        by smtp.infotech.no (Postfix) with ESMTPA id 15BBC20415B;
-        Fri,  2 Aug 2019 17:25:17 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [RFC PATCH] usb: typec: tcpm: Ignore unsupported/unknown
- alternate mode requests
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <03853a25-cc33-cdf6-f12b-e8688c8491a5@interlog.com>
-Date:   Fri, 2 Aug 2019 17:25:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727987AbfHBPnu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 11:43:50 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:44450 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726150AbfHBPnu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 11:43:50 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x72FdRa6025285;
+        Fri, 2 Aug 2019 10:43:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : subject
+ : from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=PODMain02222019;
+ bh=yaFfIM1yw/5ks3A8bgf9fmMGkqHn3ont0OP7PY4ktPg=;
+ b=VKETM0cvq0xb6CNbz5nhOId1AFDiRZP15GYCOxBDpmT2PI5xBD0UpLsTIFYZSeOt0knU
+ UhgmEvpso9+yjwakvXCngcHWxeJloH6SCFfLrSv4pCNAOGnHvr5O0/BzcDAxamQEHxr5
+ zbwvWmMQcUCTle8+eRLE2l/CU6lbteMW6k+1qN9ihsfa0wJBWMsltRG2cuE1314LOc7i
+ olebUlv+S8Re6Bg/gVIk+OYgEjENA+cDKbhwuk950CZuApZA0eO5Ib6WaBRbxiONuukd
+ aL0zKeQEbYGfILao93xj844x7RftlBGSO5DzGe2hqo3t9+duOZaIBsV49iSjosSZFVtg kw== 
+Authentication-Results: ppops.net;
+        spf=fail smtp.mailfrom=mkulkarni@opensource.cirrus.com
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 2u3gpm32k4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 02 Aug 2019 10:43:47 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Fri, 2 Aug
+ 2019 16:43:45 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Fri, 2 Aug 2019 16:43:45 +0100
+Received: from mkulkarni-laptop.ad.cirrus.com (mkulkarni-laptop.ad.cirrus.com [198.90.199.28])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 609EB2A1;
+        Fri,  2 Aug 2019 16:43:45 +0100 (BST)
+Message-ID: <1564760625.15747.9.camel@opensource.cirrus.com>
+Subject: Re: About usb_new_device() API
+From:   Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <linux-usb@vger.kernel.org>
+Date:   Fri, 2 Aug 2019 16:43:45 +0100
+In-Reply-To: <Pine.LNX.4.44L0.1908011341010.1305-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1908011341010.1305-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
 MIME-Version: 1.0
-In-Reply-To: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-SPF-Result: fail
+X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
+ -all
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 clxscore=1031 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1906280000 definitions=main-1908020160
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2019-07-25 6:30 a.m., Guenter Roeck wrote:
-> TCPM may receive PD messages associated with unknown or unsupported
-> alternate modes. If that happens, calls to typec_match_altmode()
-> will return NULL. The tcpm code does not currently take this into
-> account. This results in crashes.
+On Thu, 2019-08-01 at 13:51 -0400, Alan Stern wrote:
+> On Thu, 1 Aug 2019, Mayuresh Kulkarni wrote:
 > 
-> Unable to handle kernel NULL pointer dereference at virtual address 000001f0
-> pgd = 41dad9a1
-> [000001f0] *pgd=00000000
-> Internal error: Oops: 5 [#1] THUMB2
-> Modules linked in: tcpci tcpm
-> CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
-> Hardware name: Atmel SAMA5
-> Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
-> PC is at typec_altmode_attention+0x0/0x14
-> LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
-> ...
-> [<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
-> 				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
-> [<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
-> 				(process_one_work+0x123/0x2a8)
-> [<c012082b>] (process_one_work) from [<c0120a6d>]
-> 				(worker_thread+0xbd/0x3b0)
-> [<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
-> [<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
+> > 
+> > Hi All,
+> > 
+> > I am seeing a peculiar behaviour which I think *might* be 
+> > caused by usb_new_device(). Since usb_new_device() is one of the
+> > core
+> > APIs, I cannot explain how PM works for USB device at later point in
+> > time.
+> > 
+> > In a particular use-case, our composite USB device
+> > exposes HID interface with vendor report descriptor. Since the
+> > standard
+> > HID-class driver's HID-input part is unable to decode this vendor
+> > report
+> > descriptor, it is unable to bind itself to this interface.
+> > After this, we don't see any L2 requests on USB bus analyser.
+> > Obvious reason seems to be, since no driver is bound to interface,
+> > there
+> > cannot be PM call-backs since driver has these call-backs.
+> There are other possible reasons.  For example, what is the setting 
+> stored in /sys/bus/usb/devices/.../power/control (fill in the "..." 
+> with the appropriate name for your device)?
 > 
-> Ignore PD messages if the asociated alternate mode is not supported.
-> 
-> Reported-by: Douglas Gilbert <dgilbert@interlog.com>
-> Cc: Douglas Gilbert <dgilbert@interlog.com>
-> Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> Taking a stab at the problem. I don't really know if this is the correct
-> fix, or even if my understanding of the problem is correct, thus marking
-> the patch as RFC.
-
-Tested-by: Douglas Gilbert <dgilbert@interlog.com>
-
-Tested on different hardware (Acme Arietta based on at91sam9g25) and
-lk 5.2.5 . Without this patch the oops was at
-    PC is at typec_altmode_attention+0x0/0x24 [typec]
-
-The DUT was a Arietta with a OM13588 attached acting as a PD sink.
-At the other end of the type C cable was a KL27Z+OM13588 running
-NXP's usb_pd_bm app and it was a PD source. The other end did a
-"send attention" to cause the oops.
-
-With this patch nothing happened. Notable there was no oops.
-The other end (KL27Z+OM13588 reported "send attention result:
-success" but it also did that in the previous "oops" case.
-
-Is there something to replace "tail -f" that would make it
-easier to monitor what is being sent to
-     /sys/kernel/debug/tcpm/1-0050
-?
-
-Doug Gilbert
-
->   drivers/usb/typec/tcpm/tcpm.c | 38 ++++++++++++++++++++++++--------------
->   1 file changed, 24 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 77f71f602f73..1df2844469aa 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1096,7 +1096,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
->   			break;
->   		case CMD_ATTENTION:
->   			/* Attention command does not have response */
-> -			typec_altmode_attention(adev, p[1]);
-> +			if (adev)
-> +				typec_altmode_attention(adev, p[1]);
->   			return 0;
->   		default:
->   			break;
-> @@ -1148,20 +1149,26 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
->   			}
->   			break;
->   		case CMD_ENTER_MODE:
-> -			typec_altmode_update_active(pdev, true);
-> -
-> -			if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
-> -				response[0] = VDO(adev->svid, 1, CMD_EXIT_MODE);
-> -				response[0] |= VDO_OPOS(adev->mode);
-> -				return 1;
-> +			if (adev && pdev) {
-> +				typec_altmode_update_active(pdev, true);
-> +
-> +				if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
-> +					response[0] = VDO(adev->svid, 1,
-> +							  CMD_EXIT_MODE);
-> +					response[0] |= VDO_OPOS(adev->mode);
-> +					return 1;
-> +				}
->   			}
->   			return 0;
->   		case CMD_EXIT_MODE:
-> -			typec_altmode_update_active(pdev, false);
-> +			if (adev && pdev) {
-> +				typec_altmode_update_active(pdev, false);
->   
-> -			/* Back to USB Operation */
-> -			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
-> -						     NULL));
-> +				/* Back to USB Operation */
-> +				WARN_ON(typec_altmode_notify(adev,
-> +							     TYPEC_STATE_USB,
-> +							     NULL));
-> +			}
->   			break;
->   		default:
->   			break;
-> @@ -1171,8 +1178,10 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
->   		switch (cmd) {
->   		case CMD_ENTER_MODE:
->   			/* Back to USB Operation */
-> -			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
-> -						     NULL));
-> +			if (adev)
-> +				WARN_ON(typec_altmode_notify(adev,
-> +							     TYPEC_STATE_USB,
-> +							     NULL));
->   			break;
->   		default:
->   			break;
-> @@ -1183,7 +1192,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
->   	}
->   
->   	/* Informing the alternate mode drivers about everything */
-> -	typec_altmode_vdm(adev, p[0], &p[1], cnt);
-> +	if (adev)
-> +		typec_altmode_vdm(adev, p[0], &p[1], cnt);
->   
->   	return rlen;
->   }
+> If the file contains "on" then runtime PM is forbidden and the device 
+> will always remain at full power.  If the file contains "auto" then
+> the 
+> device will be subject to normal runtime-PM suspends and resumes.
 > 
 
+Hi Alan,
+
+Thanks a lot for clearing out the confusion.
+
+Our USB device can operate in 2 mutually exclusive modes: one is normal
+composite USB audio mode and other is vendor specific HID device mode.
+
+On the same platform (Android based):
+- When the device is in normal composite USB audio mode,
+"cat /sys/bus/usb/devices/.../power/control" show "auto".
+- When the device is in vendor specific HID device mode,
+"cat /sys/bus/usb/devices/.../power/control" show "on".
+
+And hence as per your comment, I am unable to see USB-2.0 L2 for vendor
+specific HID device mode.
+
+I guess I need to find out "who" is setting the /power/control = "auto"
+when composite USB audio device is detected. And explore if it could be
+moved to a more generic place.
+
+Is there any module parameter (or some other means) by which,
+power/control (or deprecated power/level) will always be "auto", by
+default?
+
+> > 
+> > But I am expecting that the USB device (which is parent of HID
+> > interface) should see L2. The reason being, USB-core seems to
+> > properly
+> > do runtime get/put wherever needed. And HID interface has no driver,
+> > so
+> > from USB-core point of view, it is a USB device w/o any interface.
+> > (please correct if this is incorrect expectation).
+> More accurately, it is a USB device with one interface which is not 
+> bound to a driver.
+> 
+> > 
+> > With that said, I am confused about usb_new_device() in this
+> > context. It
+> > seems to call usb_disable_autosuspend() ==> pm_runtime_forbid() ==>
+> > increment usage_count.
+> Correct.  By default, all USB devices except hubs are forbidden to go 
+> into runtime suspend.  This setting can be changed by userspace (by 
+> writing to the sysfs file mentioned above).
+> 
+> > 
+> > However, it never calls usb_enable_autosuspend() itself.
+> > Now since USB PM (and L2) works fine at later point in time (i.e.:
+> > after
+> > all the interfaces are bound to their appropriate drivers), I think
+> > somewhere the equivalent of usb_enable_autosuspend() gets called for
+> > the
+> > USB device and hence USB PM works fine.
+> There are programs, like powertop, which will automatically write
+> "auto" to the power/control sysfs file when a new device appears.  
+> Doing so calls pm_runtime_allow(), which decrements usage_count.
+> 
+
+Cool, thanks for this info.
+
+> > 
+> > I wonder this *may be* be an issue I am seeing with the use-case
+> > mentioned above. But definitely confused about it and hence thought
+> > of
+> > sending this email.
+> > 
+> > Does this description makes sense? Is it necessary to
+> > call usb_enable_autosuspend() in usb_new_device()?
+> It is not necessary.  Check that sysfs file and see what it
+> contains.  
+> In fact, you can check the contents of all the files in the device's 
+> sysfs power/ subdirectory.
+
+Thanks, the files under power/ have useful info (great for doing
+diagnosis).
+
+> 
+> Alan Stern
+> 
