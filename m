@@ -2,175 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1CB7FDC0
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 17:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6796E7FDE5
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 17:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbfHBPnu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 11:43:50 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:44450 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726150AbfHBPnu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 11:43:50 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x72FdRa6025285;
-        Fri, 2 Aug 2019 10:43:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=PODMain02222019;
- bh=yaFfIM1yw/5ks3A8bgf9fmMGkqHn3ont0OP7PY4ktPg=;
- b=VKETM0cvq0xb6CNbz5nhOId1AFDiRZP15GYCOxBDpmT2PI5xBD0UpLsTIFYZSeOt0knU
- UhgmEvpso9+yjwakvXCngcHWxeJloH6SCFfLrSv4pCNAOGnHvr5O0/BzcDAxamQEHxr5
- zbwvWmMQcUCTle8+eRLE2l/CU6lbteMW6k+1qN9ihsfa0wJBWMsltRG2cuE1314LOc7i
- olebUlv+S8Re6Bg/gVIk+OYgEjENA+cDKbhwuk950CZuApZA0eO5Ib6WaBRbxiONuukd
- aL0zKeQEbYGfILao93xj844x7RftlBGSO5DzGe2hqo3t9+duOZaIBsV49iSjosSZFVtg kw== 
-Authentication-Results: ppops.net;
-        spf=fail smtp.mailfrom=mkulkarni@opensource.cirrus.com
-Received: from ediex02.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2u3gpm32k4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 02 Aug 2019 10:43:47 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Fri, 2 Aug
- 2019 16:43:45 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Fri, 2 Aug 2019 16:43:45 +0100
-Received: from mkulkarni-laptop.ad.cirrus.com (mkulkarni-laptop.ad.cirrus.com [198.90.199.28])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 609EB2A1;
-        Fri,  2 Aug 2019 16:43:45 +0100 (BST)
-Message-ID: <1564760625.15747.9.camel@opensource.cirrus.com>
-Subject: Re: About usb_new_device() API
-From:   Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <linux-usb@vger.kernel.org>
-Date:   Fri, 2 Aug 2019 16:43:45 +0100
-In-Reply-To: <Pine.LNX.4.44L0.1908011341010.1305-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1908011341010.1305-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+        id S2388417AbfHBP7i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 11:59:38 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:35790 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388260AbfHBP7h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 11:59:37 -0400
+Received: by mail-qt1-f193.google.com with SMTP id d23so74420443qto.2
+        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2019 08:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pIsJX2LHoorKgOTWWLAtugxG8wUBxcRrkIQVJZAnypY=;
+        b=c1icoLdBewBdwex7z72rchkW++i9RudnaRl9EMCLX/tApJQps1rKwcOkAgTfCJ5kKs
+         UxFzULy0f934atvgkm6vliKeVyJ0BA7MhzSpIuVJDG3ojjNmHCzlDApgNizFXduM5nD3
+         iyfPhulmYnRG+bFo90Mk7Zs920rLSAIx5TKIxeXPGudPq0kkcsCAKtaA4B4hUHDeUIz+
+         DrshSVCRPH6OBhG40w2/bsi7kUZosGyXjiVuV2vxDkBm0lS2b1x82MfL9d2ViOjYDUs5
+         rWO4ZlV4x9qZDxhhuvjO4yTRbS8VCui7Q+HWHfDRPbCC5LYS0a0lAm7XL2c5HO0qO/hF
+         Cp6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pIsJX2LHoorKgOTWWLAtugxG8wUBxcRrkIQVJZAnypY=;
+        b=ANG0u8dAWJgtHyn/d42CgMy7deBY3nU2rVM5N1Qe/oyJ6GuTw66eR6vuUcEctLEnFJ
+         1VQIMw+qVoabglzGv6y2aTeRbuWUcuzk92AqQ2aT5vhdujfN31PR1D+v8s46vJ3i1YtJ
+         k4XuVn/aUXB0kTEB9rQTBWl+EEsIDinkwgCPeLn/y2KN+q9A2INoF3ZfjMPGTmYRDmwK
+         spChUXaldsz7FQA76Goq1TZv2/XM7byJbGpmXc54Y1pZSexb0Ns0ZUVwaely7e+HmVGV
+         LJ/H1S6iWvH5FV6AUyjBaGC9PnnI4yPeVHgVT+hpDL354Z2hyjxnpkcYXhXSpUiWJAOK
+         7m2Q==
+X-Gm-Message-State: APjAAAVOBhR1ncVS/mssqHvLc0nKe+Na4jqqSoCSKA8WauR8XY4DYEPb
+        Rjr7U9rNZygBMxH7ARFTmBHd/XMyum7KC1pkYb8=
+X-Google-Smtp-Source: APXvYqwWTBnGyZKlyzSltcRUIDIZ4nq3/gIw0vb1OgkjF3w4Dgru2GFFsLpTQUnwFTusDJ1ACztQZPpSH3uBU0SwGUU=
+X-Received: by 2002:aed:2a39:: with SMTP id c54mr96667558qtd.272.1564761576784;
+ Fri, 02 Aug 2019 08:59:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-SPF-Result: fail
-X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
- -all
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- impostorscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- mlxlogscore=999 phishscore=0 spamscore=0 clxscore=1031 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1906280000 definitions=main-1908020160
+References: <1564758044-24748-1-git-send-email-mathias.nyman@linux.intel.com>
+In-Reply-To: <1564758044-24748-1-git-send-email-mathias.nyman@linux.intel.com>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Fri, 2 Aug 2019 17:59:25 +0200
+Message-ID: <CAFqH_51c73B+Qp3hbHuw3q1gwbGV0zkkNgwKaAe9bF4X2WaZAw@mail.gmail.com>
+Subject: Re: [PATCH] xhci: Fix NULL pointer dereference at endpoint zero reset.
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2019-08-01 at 13:51 -0400, Alan Stern wrote:
-> On Thu, 1 Aug 2019, Mayuresh Kulkarni wrote:
-> 
-> > 
-> > Hi All,
-> > 
-> > I am seeing a peculiar behaviour which I think *might* be 
-> > caused by usb_new_device(). Since usb_new_device() is one of the
-> > core
-> > APIs, I cannot explain how PM works for USB device at later point in
-> > time.
-> > 
-> > In a particular use-case, our composite USB device
-> > exposes HID interface with vendor report descriptor. Since the
-> > standard
-> > HID-class driver's HID-input part is unable to decode this vendor
-> > report
-> > descriptor, it is unable to bind itself to this interface.
-> > After this, we don't see any L2 requests on USB bus analyser.
-> > Obvious reason seems to be, since no driver is bound to interface,
-> > there
-> > cannot be PM call-backs since driver has these call-backs.
-> There are other possible reasons.  For example, what is the setting 
-> stored in /sys/bus/usb/devices/.../power/control (fill in the "..." 
-> with the appropriate name for your device)?
-> 
-> If the file contains "on" then runtime PM is forbidden and the device 
-> will always remain at full power.  If the file contains "auto" then
-> the 
-> device will be subject to normal runtime-PM suspends and resumes.
-> 
+Hi Mathias,
 
-Hi Alan,
+Missatge de Mathias Nyman <mathias.nyman@linux.intel.com> del dia dv.,
+2 d=E2=80=99ag. 2019 a les 16:59:
+>
+> Usb core will reset the default control endpoint "ep0" before resetting
+> a device. if the endpoint has a valid pointer back to the usb device
+> then the xhci driver reset callback will try to clear the toggle for
+> the endpoint.
+>
+> ep0 didn't use to have this pointer set as ep0 was always allocated
+> by default together with a xhci slot for the usb device. Other endpoints
+> got their usb device pointer set in xhci_add_endpoint()
+>
+> This changed with commit ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer")
+> which sets the pointer for any endpoint on a FS/LS device behind a
+> HS hub that halts, including ep0.
+>
+> If xHC controller needs to be reset at resume, then all the xhci slots
+> will be lost. Slots will be reenabled and reallocated at device reset,
+> but unlike other endpoints the ep0 is reset before device reset, while
+> the xhci slot may still be invalid, causing NULL pointer dereference.
+>
+> Fix it by checking that the endpoint has both a usb device pointer and
+> valid xhci slot before trying to clear the toggle.
+>
+> This issue was not seen earlier as ep0 didn't use to have a valid usb
+> device pointer, and other endpoints were only reset after device reset
+> when xhci slots were properly reenabled.
+>
+> Reported-by: Bob Gleitsmann <rjgleits@bellsouth.net>
+> Reported-by: Enric Balletbo Serra <eballetbo@gmail.com>
+> Fixes: ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer")
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-Thanks a lot for clearing out the confusion.
+Thanks for spending time looking at this issue and for the clear
+explanation. The patch fixes the issue for me, so
 
-Our USB device can operate in 2 mutually exclusive modes: one is normal
-composite USB audio mode and other is vendor specific HID device mode.
+Tested-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
-On the same platform (Android based):
-- When the device is in normal composite USB audio mode,
-"cat /sys/bus/usb/devices/.../power/control" show "auto".
-- When the device is in vendor specific HID device mode,
-"cat /sys/bus/usb/devices/.../power/control" show "on".
-
-And hence as per your comment, I am unable to see USB-2.0 L2 for vendor
-specific HID device mode.
-
-I guess I need to find out "who" is setting the /power/control = "auto"
-when composite USB audio device is detected. And explore if it could be
-moved to a more generic place.
-
-Is there any module parameter (or some other means) by which,
-power/control (or deprecated power/level) will always be "auto", by
-default?
-
-> > 
-> > But I am expecting that the USB device (which is parent of HID
-> > interface) should see L2. The reason being, USB-core seems to
-> > properly
-> > do runtime get/put wherever needed. And HID interface has no driver,
-> > so
-> > from USB-core point of view, it is a USB device w/o any interface.
-> > (please correct if this is incorrect expectation).
-> More accurately, it is a USB device with one interface which is not 
-> bound to a driver.
-> 
-> > 
-> > With that said, I am confused about usb_new_device() in this
-> > context. It
-> > seems to call usb_disable_autosuspend() ==> pm_runtime_forbid() ==>
-> > increment usage_count.
-> Correct.  By default, all USB devices except hubs are forbidden to go 
-> into runtime suspend.  This setting can be changed by userspace (by 
-> writing to the sysfs file mentioned above).
-> 
-> > 
-> > However, it never calls usb_enable_autosuspend() itself.
-> > Now since USB PM (and L2) works fine at later point in time (i.e.:
-> > after
-> > all the interfaces are bound to their appropriate drivers), I think
-> > somewhere the equivalent of usb_enable_autosuspend() gets called for
-> > the
-> > USB device and hence USB PM works fine.
-> There are programs, like powertop, which will automatically write
-> "auto" to the power/control sysfs file when a new device appears.  
-> Doing so calls pm_runtime_allow(), which decrements usage_count.
-> 
-
-Cool, thanks for this info.
-
-> > 
-> > I wonder this *may be* be an issue I am seeing with the use-case
-> > mentioned above. But definitely confused about it and hence thought
-> > of
-> > sending this email.
-> > 
-> > Does this description makes sense? Is it necessary to
-> > call usb_enable_autosuspend() in usb_new_device()?
-> It is not necessary.  Check that sysfs file and see what it
-> contains.  
-> In fact, you can check the contents of all the files in the device's 
-> sysfs power/ subdirectory.
-
-Thanks, the files under power/ have useful info (great for doing
-diagnosis).
-
-> 
-> Alan Stern
-> 
+> ---
+>  drivers/usb/host/xhci.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 248cd7a..03d1e55 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -3089,8 +3089,18 @@ static void xhci_endpoint_reset(struct usb_hcd *hc=
+d,
+>                 return;
+>         udev =3D (struct usb_device *) host_ep->hcpriv;
+>         vdev =3D xhci->devs[udev->slot_id];
+> +
+> +       /*
+> +        * vdev may be lost due to xHC restore error and re-initializatio=
+n
+> +        * during S3/S4 resume. A new vdev will be allocated later by
+> +        * xhci_discover_or_reset_device()
+> +        */
+> +       if (!udev->slot_id || !vdev)
+> +               return;
+>         ep_index =3D xhci_get_endpoint_index(&host_ep->desc);
+>         ep =3D &vdev->eps[ep_index];
+> +       if (!ep)
+> +               return;
+>
+>         /* Bail out if toggle is already being cleared by a endpoint rese=
+t */
+>         if (ep->ep_state & EP_HARD_CLEAR_TOGGLE) {
+> --
+> 2.7.4
+>
