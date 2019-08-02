@@ -2,108 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B0B7FFEA
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 19:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3449D80189
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 22:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406461AbfHBR5P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 13:57:15 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:39754 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405953AbfHBR5O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 13:57:14 -0400
-Received: by mail-ed1-f67.google.com with SMTP id m10so73190480edv.6
-        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2019 10:57:13 -0700 (PDT)
+        id S2406896AbfHBUD2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 16:03:28 -0400
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:40605 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406875AbfHBUD2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 16:03:28 -0400
+Received: by mail-pl1-f181.google.com with SMTP id a93so33976773pla.7
+        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2019 13:03:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thegavinli.com; s=google;
-        h=sender:mime-version:references:in-reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=IwMEZu4ZADd2eNh2oK81AED7DB6IuQ9aavP3PW0ESk4=;
-        b=O+pl/6RN5zIx0WlSkPa3bgDioy23NYdRNsE3cAcuD7/XxShGgsd4o2IEerMJofl3Hr
-         0Iii6/6ohdPAjGA8zqlnXMQzuqBALCnES26DbtffhQR83wNV6SiL38zMu0NaWr0kKuqe
-         fyT9k9fc7SOtnE+fSj52wQw25gmL3HCVjscnQ=
+        d=gnarbox-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LV4zBYHqP471tiMJhzxPidpLmDFGjtfCHjj0feLQ6RQ=;
+        b=1GhN8oCfyS5Geb//fx/sQ68mln1B0tE3WFvr99IMl0o3nOBxdtn7K4xyIBPGz/mHaK
+         0MY5cx5kNL7vfikQ5SSrGrjwIpoSTjq3u2W33o3Ea+MFP7AvO0HAT0m7BMFmY5DWtGu1
+         tAFLxw62YAnwog8Nn5QGzn2lXUTsPq7LqEZ5T2/kS43Y6GnKwbVFarla52UASgfJUeEs
+         Pwsha4dbXX8IMBft0dq7kdQWTRwILAH+lCZFA2/90SmnbiqnXRB+UWTbgE8Sc7tCPir4
+         V4c8nAL+rwJxE+WFB9f8hbLtaJFy1KAqhIBxxWGFvcLkskuEYBnk3zXg9TRDWAn0cJ1t
+         v/YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:mime-version:references:in-reply-to:from
-         :date:message-id:subject:to:cc;
-        bh=IwMEZu4ZADd2eNh2oK81AED7DB6IuQ9aavP3PW0ESk4=;
-        b=pAxF3vk+vHOvWeCZLbwDpdronRmHMZf9AhzU/SECldNor1PxHMBW2SO76So7gsd30a
-         2wrZzhLaJTV5MVyoZwpGgxFhoGkRDVwX/iSgGINRltDl9GejUjcu7GHVwSziNgNzlban
-         QYQ47/w9hjV7StnLVqiv5thi1C2NoAtIjW8lK99VHsZ54OcYsIFD0UxOYs8iAvduOeZr
-         /q6jkGCFbELQqq39Q1mzeqamLLBsDyeWkZUbgT+cq9309sQhSm+oYZYOezi7sBd+Ci2Z
-         U98vd1VifNwfnmjfcIZUqeCG6w6cWX7jO3WXwCOZuWXJxo0oQ39NVXA4/J2Cmxip3+PT
-         BoFg==
-X-Gm-Message-State: APjAAAXe3+evxcjaqxGIzgCyqk2+KjvAL5X3KZP6Wfh4hE9ORFqCL2Pv
-        sJ+uxFtCMMJO1DLp2JG2ySWj42XOU80=
-X-Google-Smtp-Source: APXvYqw0bZFCeO5lk/WZBIyyP7AoGI6DZ7CgcRuS05n3cQv5MBkEkJhBIdy2K6J8jWWXTnhpDL+GKg==
-X-Received: by 2002:aa7:ca41:: with SMTP id j1mr123070490edt.149.1564768632882;
-        Fri, 02 Aug 2019 10:57:12 -0700 (PDT)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
-        by smtp.gmail.com with ESMTPSA id m32sm18312368edc.89.2019.08.02.10.57.11
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 02 Aug 2019 10:57:11 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id p15so73159036eds.8
-        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2019 10:57:11 -0700 (PDT)
-X-Received: by 2002:a17:906:f85:: with SMTP id q5mr108361833ejj.192.1564768631171;
- Fri, 02 Aug 2019 10:57:11 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LV4zBYHqP471tiMJhzxPidpLmDFGjtfCHjj0feLQ6RQ=;
+        b=auVygU5jFLw0tSk1A5dZNLsibDGIWmD7r7I/YKoIUL66AKRuyUIiG6KCq80iQQl1A8
+         NyktBrC5IOM2WQmUAmsgnO0YUuLnFGjfbf+HYX6fpH9PTg8Vu4eqPCp+cZbMXImbG2F7
+         leFGw1Ol/Ka1iuOPC3w3XZA7OZw3awxdgbXDGDvDp7DSjq8+bM0fdEemWK7uw8ln46s2
+         36VmZximjZQPKY1y6GDuqUZP8g+9mTensm7jc3jMbhHCXUnS0wVL7MTF1PL5UHPo5ogW
+         5Ds3vxrlAo8/zxgr+R1tKEeBeBRDdkhVPOKN2TakjC3EMakpXN93V7IxVE4sd8k2V6DW
+         mH/w==
+X-Gm-Message-State: APjAAAU34tUJteiVAEh5NQCngCNFEfwsBgRSKYB2s4fM9Ye1vz3+/kIH
+        iVUI3yCEq/qooI4qaOemJ/v3zQCvOlU=
+X-Google-Smtp-Source: APXvYqzCW3YsUv+4Wtn99ubZ/Ezkw3k+KMU2EhR/bIFyesSbtSlAlJ8IKzOtsVkBb0i02BfwgEUfYQ==
+X-Received: by 2002:a17:902:102c:: with SMTP id b41mr130391778pla.204.1564776207332;
+        Fri, 02 Aug 2019 13:03:27 -0700 (PDT)
+Received: from gnarnia.home ([47.180.176.91])
+        by smtp.gmail.com with ESMTPSA id y11sm78148725pfb.119.2019.08.02.13.03.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 02 Aug 2019 13:03:26 -0700 (PDT)
+From:   Evan Gates <evan@gnarbox.com>
+To:     linux-usb@vger.kernel.org, rob@gnarbox.com, evan@gnarbox.com
+Subject: EHSET USB testing
+Date:   Fri,  2 Aug 2019 13:03:25 -0700
+Message-Id: <20190802200325.22897-1-evan@gnarbox.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20190801220436.3871-1-gavinli@thegavinli.com> <20190802121416.GA20689@kroah.com>
-In-Reply-To: <20190802121416.GA20689@kroah.com>
-From:   Gavin Li <gavinli@thegavinli.com>
-Date:   Fri, 2 Aug 2019 10:57:00 -0700
-X-Gmail-Original-Message-ID: <CA+GxvY7LswVFZvk0mLRLgUqdo=Gb0pQ1KMsgmWbiFEPvMvquXQ@mail.gmail.com>
-Message-ID: <CA+GxvY7LswVFZvk0mLRLgUqdo=Gb0pQ1KMsgmWbiFEPvMvquXQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: devio: fix mmap() on non-coherent DMA architectures
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Gavin Li <git@thegavinli.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-usbfs mmap() looks like it was introduced for 4.6 in commit
-f7d34b445abc, so it should probably be backported to 4.9 and onwards.
-This issue has been present since the introduction of the feature.
+I'm trying to get my device to pass the EHSET tests.  I found the thread
+"Using EHSET module" from March.  I'm having similar issues.
 
-One sidenote: this patch will cause the following warning on x86 due
-to dmap_mmap_coherent() trying to map normal memory in as uncached:
+I don't have access to the PID VID board that the lab uses.  Instead I'm
+using another computer setup as a mass storage gadget but set the VID:PID
+to 1a0a:0102 (TEST_J).  If that sounds like a problem or there is another,
+better way to do this please let me know.
 
-x86/PAT: ... map pfn RAM range req uncached-minus for [mem
-0x77b000000-0x77b210fff], got write-back
-
-This warning is harmless, as x86 is DMA coherent and the memory gets
-correctly mapped in as write-back. I will submit a patch to the DMA
-mapping team to eliminate this warning.
-
-Best,
-Gavin
-
-On Fri, Aug 2, 2019 at 5:14 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> The usb-storage driver bound to your device first.  Try building a
+> kernel without that driver and then it shoudl bind to the other driver.
 >
-> On Thu, Aug 01, 2019 at 03:04:36PM -0700, gavinli@thegavinli.com wrote:
-> > From: Gavin Li <git@thegavinli.com>
-> >
-> > On architectures that are not (or are optionally) DMA coherent,
-> > dma_alloc_coherent() returns an address into the vmalloc space,
-> > and calling virt_to_phys() on this address returns an unusable
-> > physical address.
-> >
-> > This patch replaces the raw remap_pfn_range() call with a call to
-> > dmap_mmap_coherent(), which takes care of the differences between
-> > coherent and non-coherent code paths.
-> >
-> > Tested on an arm64 rk3399 board.
-> >
-> > Signed-off-by: Gavin Li <git@thegavinli.com>
-> > ---
-> >  drivers/usb/core/devio.c | 7 +++----
-> >  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> Should this be backported to the stable kernel trees to fix the issue on
-> those platforms?  If so, how far back?  What commit caused this problem
-> to occur?
->
-> thanks,
->
-> greg k-h
+> Or manually bind the ehset driver to your device through sysfs.  Read up
+> on the documentation for the "new_id" and "bind" and "unbind" sysfs
+> files for how to do that.
+
+I did this.  I was able to unbind from usb-storage but binding to
+usb_ehset_test failed with error -32 (AFAICT EPIPE).  I tried both the
+usb_ehset_test/bind and usb_ehset_test/new_id methods.  In both cases
+I got the same error.
+
+I did another build without usb-storage.  Now I don't have to go through
+the unbind step but I still get the same error while probing.
+
+	[  296.089877] usb 1-1: new high-speed USB device number 2 using xhci_hcd
+	[  296.271081] usb_ehset_test: probe of 1-1:1.0 failed with error -32
+
+I notice that it says "using xhci_hcd."  Is that a problem?  Does it
+need to be ehci?  I tried a build without xhci but that caused other
+problems for me.
+
+1) Can I use a computer in device mode to present a VID:PID to get into
+EHSET mode?  If so how should I do that?
+
+2) What else do I need to do in order to get my box into EHSET mode?
