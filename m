@@ -2,96 +2,317 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F03767E52C
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 00:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5167D7ED2E
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 09:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389329AbfHAWEp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Aug 2019 18:04:45 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44920 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727987AbfHAWEp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Aug 2019 18:04:45 -0400
-Received: by mail-pf1-f196.google.com with SMTP id t16so34808281pfe.11
-        for <linux-usb@vger.kernel.org>; Thu, 01 Aug 2019 15:04:44 -0700 (PDT)
+        id S2389383AbfHBHKl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 03:10:41 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:36026 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389348AbfHBHKf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 03:10:35 -0400
+Received: by mail-ot1-f67.google.com with SMTP id r6so77114013oti.3
+        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2019 00:10:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thegavinli.com; s=google;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Qyg4k1Y5K1bN/mVVU0NVVPjBjQ6AQIkhN58GkPGD0wc=;
-        b=jr9TGXIUvjP0wszKXl6ESelkS6rn1QXIH6SghwcFGbxWlbNB6UK/I7cnzIdrrts+Lb
-         TbTKicDuZC7afFxcne2b+KlkjkPo/eCzxCJlEVxDLCDNvmf/NlWTc7TKHxTFt8bMBTBG
-         s2vH9ptAV9wc6jsiI6VbHpM3UcUNUMmtUc8p8=
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=aNOLjBPNnUmcQmvMToyFYssE9sARnDQ/c4luMj7emy0=;
+        b=ZByTvhWD45O5rbMJPm0e9wEVpnT9SZtPM8zMbVnlxfFzaGij7Mj9bLuhtDht6DumSV
+         X5+C/GbAojg2ZBuUa5sh+8yA7FU1/KNRmsztInjo9N3dLnWybMcoWDKeEPiB/ebLeZpq
+         91Vk7RjNwrJr3eX6fiW47RfyqivZcb8JLML4cHZmY3c+1BeBv+eXMAQCcWw/gg9bjuBU
+         vrss9yRxsUc1EFDB7ltk7uXcIFO5XrA7a28dWbscRQ7BYTq4viqVO6KIP4MaiEk1LZv+
+         c2Zjlzg2tQB2PTRRKAU228AWlqLZlrisj3ViQ0NKdyQApwjMNgsi0fcbZSR27jzLqADe
+         W3lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=Qyg4k1Y5K1bN/mVVU0NVVPjBjQ6AQIkhN58GkPGD0wc=;
-        b=RJzTG5b5nAqS/06cyZiaB3WTHg8w0eozYpbvahrAjVgjS8R9jVRSMgyxBYib4mLApH
-         1qiao+Oi0KlzO2VTwYYMPzBM7x0tpX0oGj7zpY0p+uArR3V98o1wnRIvei6Q5jxw7tNC
-         qb+FHTxLUuitNGSSvriZzcPtZrzbtSmBLL0vcwEgbyVp1QU430KHfi+mtkf7rFqhSgzd
-         hND36HtF0HAR7K8hMeMwHQKfqnz6rbS7pTvMXZUa5dQ5DtlYshPY+nLorIDmKe8/ydK0
-         zY1WmQbEUabIBevgOZIiKSvGiXKj+jepl5ZO4VXiwTARhioq2jDgrO1NZEsZIAqfkPvT
-         iEmQ==
-X-Gm-Message-State: APjAAAUQupc75KvMLapCUjzn2NiVr8ZHGQa1FUbpKC6W4LmR+rFwXMV0
-        zPPm2xCnvvNCzjLWXEAy33c=
-X-Google-Smtp-Source: APXvYqzj8SsyEmihZfIbIP2oDxa0SARZPEIDTxPXspxbceCFOxsdwI2qY2NyPNupf34tyXiSFZ2jWA==
-X-Received: by 2002:a63:4f18:: with SMTP id d24mr44628058pgb.126.1564697084591;
-        Thu, 01 Aug 2019 15:04:44 -0700 (PDT)
-Received: from mtgav.corp.matician.com ([2601:647:5a01:84c0::a53])
-        by smtp.gmail.com with ESMTPSA id s185sm110415326pgs.67.2019.08.01.15.04.43
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 15:04:43 -0700 (PDT)
-From:   gavinli@thegavinli.com
-To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     Gavin Li <git@thegavinli.com>
-Subject: [PATCH] usb: devio: fix mmap() on non-coherent DMA architectures
-Date:   Thu,  1 Aug 2019 15:04:36 -0700
-Message-Id: <20190801220436.3871-1-gavinli@thegavinli.com>
-X-Mailer: git-send-email 2.22.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aNOLjBPNnUmcQmvMToyFYssE9sARnDQ/c4luMj7emy0=;
+        b=jaFIROJqFcfw7k35hCHScd4//ut0QSBCZHa9Pr+OMN0lyVKkR0qJKrAONVz+lKI59j
+         bbG/VAipNoV7YTWB34Kw4oWk+qfK6sDlSUuRC3uj4tkvm/cKgtQBVjMzQDbXzNDPBY3H
+         WVNwPyU/yiVvEA0umt96LhroGQJExECA5lWoP5KyMw7UplB8S9+AjVg6qgHM0md56UvT
+         42JRcduEtwAPJZOiuI3CVTUuMS9mwtM0a2CqDsa5gltgwi8pMZaRQmDOAoyIioJTPOQK
+         a/5hUNW66nCimvu0AE6Y3RwDSZkUTW+2qaBBd3UZGIMM6V8tkO+T1+mjVvc9OS/A+XfQ
+         BWNg==
+X-Gm-Message-State: APjAAAUvzKW2pr4Dw7y6+t1T8nuxa7ZRQXMaQhGNdiKnuA3newKA8DBu
+        ev5FHsngs95MCXRWUj/k3wWiB/G5JhYS1xORSI9oTw==
+X-Google-Smtp-Source: APXvYqy4/Lk5jHB+v/1ocPg4upl5VRCkigymsxVJ4zA98u/jV3IYeAA2bS1N1TLTswamOCy90HSvHyGFfqUcSTl0o9w=
+X-Received: by 2002:a9d:7352:: with SMTP id l18mr37662907otk.292.1564729833627;
+ Fri, 02 Aug 2019 00:10:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190731195713.3150463-1-arnd@arndb.de> <20190731195713.3150463-6-arnd@arndb.de>
+In-Reply-To: <20190731195713.3150463-6-arnd@arndb.de>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Fri, 2 Aug 2019 09:10:22 +0200
+Message-ID: <CAMpxmJWFfT_vrDas2fzW5tnxskk9kmgHQpGnGQ-_C20UaS_jhA@mail.gmail.com>
+Subject: Re: [PATCH 05/14] gpio: lpc32xx: allow building on non-lpc32xx targets
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     soc@kernel.org, arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Gavin Li <git@thegavinli.com>
+=C5=9Br., 31 lip 2019 o 22:06 Arnd Bergmann <arnd@arndb.de> napisa=C5=82(a)=
+:
+>
+> The driver uses hardwire MMIO addresses instead of the data
+> that is passed in device tree. Change it over to only
+> hardcode the register offset values and allow compile-testing.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-On architectures that are not (or are optionally) DMA coherent,
-dma_alloc_coherent() returns an address into the vmalloc space,
-and calling virt_to_phys() on this address returns an unusable
-physical address.
+Hi Arnd,
 
-This patch replaces the raw remap_pfn_range() call with a call to
-dmap_mmap_coherent(), which takes care of the differences between
-coherent and non-coherent code paths.
+thanks for working on this.
 
-Tested on an arm64 rk3399 board.
+> ---
+>  drivers/gpio/Kconfig        |  8 +++++
+>  drivers/gpio/Makefile       |  2 +-
+>  drivers/gpio/gpio-lpc32xx.c | 63 ++++++++++++++++++++++++-------------
+>  3 files changed, 50 insertions(+), 23 deletions(-)
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index bb13c266c329..ae86ee963eae 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -311,6 +311,14 @@ config GPIO_LPC18XX
+>           Select this option to enable GPIO driver for
+>           NXP LPC18XX/43XX devices.
+>
+> +config GPIO_LPC32XX
+> +       tristate "NXP LPC32XX GPIO support"
+> +       default ARCH_LPC32XX
+> +       depends on OF_GPIO && (ARCH_LPC32XX || COMPILE_TEST)
+> +       help
+> +         Select this option to enable GPIO driver for
+> +         NXP LPC32XX devices.
+> +
+>  config GPIO_LYNXPOINT
+>         tristate "Intel Lynxpoint GPIO support"
+>         depends on ACPI && X86
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index a4e91175c708..87d659ae95eb 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -74,7 +74,7 @@ obj-$(CONFIG_GPIO_LP3943)             +=3D gpio-lp3943.=
+o
+>  obj-$(CONFIG_GPIO_LP873X)              +=3D gpio-lp873x.o
+>  obj-$(CONFIG_GPIO_LP87565)             +=3D gpio-lp87565.o
+>  obj-$(CONFIG_GPIO_LPC18XX)             +=3D gpio-lpc18xx.o
+> -obj-$(CONFIG_ARCH_LPC32XX)             +=3D gpio-lpc32xx.o
+> +obj-$(CONFIG_GPIO_LPC32XX)             +=3D gpio-lpc32xx.o
+>  obj-$(CONFIG_GPIO_LYNXPOINT)           +=3D gpio-lynxpoint.o
+>  obj-$(CONFIG_GPIO_MADERA)              +=3D gpio-madera.o
+>  obj-$(CONFIG_GPIO_MAX3191X)            +=3D gpio-max3191x.o
+> diff --git a/drivers/gpio/gpio-lpc32xx.c b/drivers/gpio/gpio-lpc32xx.c
+> index 24885b3db3d5..548f7cb69386 100644
+> --- a/drivers/gpio/gpio-lpc32xx.c
+> +++ b/drivers/gpio/gpio-lpc32xx.c
+> @@ -16,8 +16,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/module.h>
+>
+> -#include <mach/hardware.h>
+> -#include <mach/platform.h>
+> +#define _GPREG(x)                              (x)
 
-Signed-off-by: Gavin Li <git@thegavinli.com>
----
- drivers/usb/core/devio.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+What purpose does this macro serve?
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index a02448105527..76ec9aef3eff 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -241,11 +241,10 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
- 	usbm->vma_use_count = 1;
- 	INIT_LIST_HEAD(&usbm->memlist);
- 
--	if (remap_pfn_range(vma, vma->vm_start,
--			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
--			size, vma->vm_page_prot) < 0) {
-+	ret = dma_mmap_coherent(ps->dev->bus->sysdev, vma, mem, dma_handle, size);
-+	if (ret) {
- 		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
--		return -EAGAIN;
-+		return ret;
- 	}
- 
- 	vma->vm_flags |= VM_IO;
--- 
-2.22.0
+>
+>  #define LPC32XX_GPIO_P3_INP_STATE              _GPREG(0x000)
+>  #define LPC32XX_GPIO_P3_OUTP_SET               _GPREG(0x004)
+> @@ -72,12 +71,12 @@
+>  #define LPC32XX_GPO_P3_GRP     (LPC32XX_GPI_P3_GRP + LPC32XX_GPI_P3_MAX)
+>
+>  struct gpio_regs {
+> -       void __iomem *inp_state;
+> -       void __iomem *outp_state;
+> -       void __iomem *outp_set;
+> -       void __iomem *outp_clr;
+> -       void __iomem *dir_set;
+> -       void __iomem *dir_clr;
+> +       unsigned long inp_state;
+> +       unsigned long outp_state;
+> +       unsigned long outp_set;
+> +       unsigned long outp_clr;
+> +       unsigned long dir_set;
+> +       unsigned long dir_clr;
+>  };
+>
+>  /*
+> @@ -167,14 +166,26 @@ struct lpc32xx_gpio_chip {
+>         struct gpio_regs        *gpio_grp;
+>  };
+>
+> +void __iomem *gpio_reg_base;
 
+Any reason why this can't be made part of struct lpc32xx_gpio_chip?
+
+> +
+> +static inline u32 gpreg_read(unsigned long offset)
+
+Here and elsewhere: could you please keep the lpc32xx_gpio prefix for
+all symbols?
+
+> +{
+> +       return __raw_readl(gpio_reg_base + offset);
+> +}
+> +
+> +static inline void gpreg_write(u32 val, unsigned long offset)
+> +{
+> +       __raw_writel(val, gpio_reg_base + offset);
+> +}
+> +
+>  static void __set_gpio_dir_p012(struct lpc32xx_gpio_chip *group,
+>         unsigned pin, int input)
+>  {
+>         if (input)
+> -               __raw_writel(GPIO012_PIN_TO_BIT(pin),
+> +               gpreg_write(GPIO012_PIN_TO_BIT(pin),
+>                         group->gpio_grp->dir_clr);
+>         else
+> -               __raw_writel(GPIO012_PIN_TO_BIT(pin),
+> +               gpreg_write(GPIO012_PIN_TO_BIT(pin),
+>                         group->gpio_grp->dir_set);
+>  }
+>
+> @@ -184,19 +195,19 @@ static void __set_gpio_dir_p3(struct lpc32xx_gpio_c=
+hip *group,
+>         u32 u =3D GPIO3_PIN_TO_BIT(pin);
+>
+>         if (input)
+> -               __raw_writel(u, group->gpio_grp->dir_clr);
+> +               gpreg_write(u, group->gpio_grp->dir_clr);
+>         else
+> -               __raw_writel(u, group->gpio_grp->dir_set);
+> +               gpreg_write(u, group->gpio_grp->dir_set);
+>  }
+>
+>  static void __set_gpio_level_p012(struct lpc32xx_gpio_chip *group,
+>         unsigned pin, int high)
+>  {
+>         if (high)
+> -               __raw_writel(GPIO012_PIN_TO_BIT(pin),
+> +               gpreg_write(GPIO012_PIN_TO_BIT(pin),
+>                         group->gpio_grp->outp_set);
+>         else
+> -               __raw_writel(GPIO012_PIN_TO_BIT(pin),
+> +               gpreg_write(GPIO012_PIN_TO_BIT(pin),
+>                         group->gpio_grp->outp_clr);
+>  }
+>
+> @@ -206,31 +217,31 @@ static void __set_gpio_level_p3(struct lpc32xx_gpio=
+_chip *group,
+>         u32 u =3D GPIO3_PIN_TO_BIT(pin);
+>
+>         if (high)
+> -               __raw_writel(u, group->gpio_grp->outp_set);
+> +               gpreg_write(u, group->gpio_grp->outp_set);
+>         else
+> -               __raw_writel(u, group->gpio_grp->outp_clr);
+> +               gpreg_write(u, group->gpio_grp->outp_clr);
+>  }
+>
+>  static void __set_gpo_level_p3(struct lpc32xx_gpio_chip *group,
+>         unsigned pin, int high)
+>  {
+>         if (high)
+> -               __raw_writel(GPO3_PIN_TO_BIT(pin), group->gpio_grp->outp_=
+set);
+> +               gpreg_write(GPO3_PIN_TO_BIT(pin), group->gpio_grp->outp_s=
+et);
+>         else
+> -               __raw_writel(GPO3_PIN_TO_BIT(pin), group->gpio_grp->outp_=
+clr);
+> +               gpreg_write(GPO3_PIN_TO_BIT(pin), group->gpio_grp->outp_c=
+lr);
+>  }
+>
+>  static int __get_gpio_state_p012(struct lpc32xx_gpio_chip *group,
+>         unsigned pin)
+>  {
+> -       return GPIO012_PIN_IN_SEL(__raw_readl(group->gpio_grp->inp_state)=
+,
+> +       return GPIO012_PIN_IN_SEL(gpreg_read(group->gpio_grp->inp_state),
+>                 pin);
+>  }
+>
+>  static int __get_gpio_state_p3(struct lpc32xx_gpio_chip *group,
+>         unsigned pin)
+>  {
+> -       int state =3D __raw_readl(group->gpio_grp->inp_state);
+> +       int state =3D gpreg_read(group->gpio_grp->inp_state);
+>
+>         /*
+>          * P3 GPIO pin input mapping is not contiguous, GPIOP3-0..4 is ma=
+pped
+> @@ -242,13 +253,13 @@ static int __get_gpio_state_p3(struct lpc32xx_gpio_=
+chip *group,
+>  static int __get_gpi_state_p3(struct lpc32xx_gpio_chip *group,
+>         unsigned pin)
+>  {
+> -       return GPI3_PIN_IN_SEL(__raw_readl(group->gpio_grp->inp_state), p=
+in);
+> +       return GPI3_PIN_IN_SEL(gpreg_read(group->gpio_grp->inp_state), pi=
+n);
+>  }
+>
+>  static int __get_gpo_state_p3(struct lpc32xx_gpio_chip *group,
+>         unsigned pin)
+>  {
+> -       return GPO3_PIN_IN_SEL(__raw_readl(group->gpio_grp->outp_state), =
+pin);
+> +       return GPO3_PIN_IN_SEL(gpreg_read(group->gpio_grp->outp_state), p=
+in);
+>  }
+>
+>  /*
+> @@ -498,6 +509,10 @@ static int lpc32xx_gpio_probe(struct platform_device=
+ *pdev)
+>  {
+>         int i;
+>
+> +       gpio_reg_base =3D devm_platform_ioremap_resource(pdev, 0);
+> +       if (gpio_reg_base)
+> +               return -ENXIO;
+> +
+>         for (i =3D 0; i < ARRAY_SIZE(lpc32xx_gpiochip); i++) {
+>                 if (pdev->dev.of_node) {
+>                         lpc32xx_gpiochip[i].chip.of_xlate =3D lpc32xx_of_=
+xlate;
+> @@ -527,3 +542,7 @@ static struct platform_driver lpc32xx_gpio_driver =3D=
+ {
+>  };
+>
+>  module_platform_driver(lpc32xx_gpio_driver);
+> +
+> +MODULE_AUTHOR("Kevin Wells <kevin.wells@nxp.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("GPIO driver for LPC32xx SoC");
+> --
+> 2.20.0
+>
+
+Bart
