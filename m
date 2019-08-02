@@ -2,131 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6796E7FDE5
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 17:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D710D7FE0A
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 18:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388417AbfHBP7i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 11:59:38 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:35790 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388260AbfHBP7h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 11:59:37 -0400
-Received: by mail-qt1-f193.google.com with SMTP id d23so74420443qto.2
-        for <linux-usb@vger.kernel.org>; Fri, 02 Aug 2019 08:59:37 -0700 (PDT)
+        id S2387474AbfHBQDq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 12:03:46 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:37907 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728853AbfHBQDq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 12:03:46 -0400
+Received: by mail-pf1-f196.google.com with SMTP id y15so36272241pfn.5;
+        Fri, 02 Aug 2019 09:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pIsJX2LHoorKgOTWWLAtugxG8wUBxcRrkIQVJZAnypY=;
-        b=c1icoLdBewBdwex7z72rchkW++i9RudnaRl9EMCLX/tApJQps1rKwcOkAgTfCJ5kKs
-         UxFzULy0f934atvgkm6vliKeVyJ0BA7MhzSpIuVJDG3ojjNmHCzlDApgNizFXduM5nD3
-         iyfPhulmYnRG+bFo90Mk7Zs920rLSAIx5TKIxeXPGudPq0kkcsCAKtaA4B4hUHDeUIz+
-         DrshSVCRPH6OBhG40w2/bsi7kUZosGyXjiVuV2vxDkBm0lS2b1x82MfL9d2ViOjYDUs5
-         rWO4ZlV4x9qZDxhhuvjO4yTRbS8VCui7Q+HWHfDRPbCC5LYS0a0lAm7XL2c5HO0qO/hF
-         Cp6A==
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=w74jXhv7cVptNBuubv+E0L15wrqg95AlmaYa2Bd6Vzc=;
+        b=n6sX+Dwuq0vXWtL0awBliT2RTG9wIniMBTHmtZorHYR5prk9athV3qYQeyEo4TwZ4R
+         yTVYfcBD4Jhu3lTugoAK/P2DrPYbP5qOuYMFk7s77PGw9aOLGX+SOSgYvHdhH+A/h6rB
+         pF3h4RHQYGwR9LtLtP4u1Q30hDk0DCXKYortPB1vfTJbL04a5FmDPCtbBay9lMzLc/9p
+         NYsacTb0gJNhmo4kp0MCQfKCVXb/VdvgfKc/gJpwJJ8nHPKf2vrS+HiGH8e9rGmTh4TV
+         9ACrOtiahaXJNhaO9zBXmyOzVxzHVvzzdHeFgNXZk4YOeAnTT6L7e6YVsji3vNffdOMl
+         tuFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pIsJX2LHoorKgOTWWLAtugxG8wUBxcRrkIQVJZAnypY=;
-        b=ANG0u8dAWJgtHyn/d42CgMy7deBY3nU2rVM5N1Qe/oyJ6GuTw66eR6vuUcEctLEnFJ
-         1VQIMw+qVoabglzGv6y2aTeRbuWUcuzk92AqQ2aT5vhdujfN31PR1D+v8s46vJ3i1YtJ
-         k4XuVn/aUXB0kTEB9rQTBWl+EEsIDinkwgCPeLn/y2KN+q9A2INoF3ZfjMPGTmYRDmwK
-         spChUXaldsz7FQA76Goq1TZv2/XM7byJbGpmXc54Y1pZSexb0Ns0ZUVwaely7e+HmVGV
-         LJ/H1S6iWvH5FV6AUyjBaGC9PnnI4yPeVHgVT+hpDL354Z2hyjxnpkcYXhXSpUiWJAOK
-         7m2Q==
-X-Gm-Message-State: APjAAAVOBhR1ncVS/mssqHvLc0nKe+Na4jqqSoCSKA8WauR8XY4DYEPb
-        Rjr7U9rNZygBMxH7ARFTmBHd/XMyum7KC1pkYb8=
-X-Google-Smtp-Source: APXvYqwWTBnGyZKlyzSltcRUIDIZ4nq3/gIw0vb1OgkjF3w4Dgru2GFFsLpTQUnwFTusDJ1ACztQZPpSH3uBU0SwGUU=
-X-Received: by 2002:aed:2a39:: with SMTP id c54mr96667558qtd.272.1564761576784;
- Fri, 02 Aug 2019 08:59:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <1564758044-24748-1-git-send-email-mathias.nyman@linux.intel.com>
-In-Reply-To: <1564758044-24748-1-git-send-email-mathias.nyman@linux.intel.com>
-From:   Enric Balletbo Serra <eballetbo@gmail.com>
-Date:   Fri, 2 Aug 2019 17:59:25 +0200
-Message-ID: <CAFqH_51c73B+Qp3hbHuw3q1gwbGV0zkkNgwKaAe9bF4X2WaZAw@mail.gmail.com>
-Subject: Re: [PATCH] xhci: Fix NULL pointer dereference at endpoint zero reset.
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=w74jXhv7cVptNBuubv+E0L15wrqg95AlmaYa2Bd6Vzc=;
+        b=lLiWmEH5ok9JbjEjM/rBl+hfpHcCD7/e6mc5duUlTGehUvXnL0I9V2UU4rWZG59+Sr
+         T8uR+PFRQIyFkWgDAOpmpJRr9ItIk8Wtpzo1zxBzsXN/qWR8GaTm5HNXwIZxkd7h5NYi
+         XagnAeRb4gCBBVBLL5Mxec+FDaYYvWk3Ss4OUpRZYhqLnM3MCLPRrWuX9ZzMKHAWy8gM
+         hO2JD8Zm8AxT13sDkaS76HMUmbsgp0Cn2PTwHKhgalxfakZuMstOJ0Ap6zBmE6viboPX
+         t1kDORMS6lKieUILv3BGEd4o+nbeoQWEk1xw6jWDX1a1sI6GvSKoxOZ2MGfxOatbMMnW
+         WkxA==
+X-Gm-Message-State: APjAAAW/QLT3QcCq/YUhnv7p6Ytp4FGqcdQppeGXV/RvLKSjEs98KxYh
+        rXdxygHgkXty9/vj5S99G/8=
+X-Google-Smtp-Source: APXvYqzHMzSF/bzj/LXPFoJEXQoat8183wYi1WUNr8Xnj+YQby+qnunSzeUFOt9m+gRVEtqxehm5JA==
+X-Received: by 2002:a17:90b:949:: with SMTP id dw9mr5033485pjb.49.1564761825575;
+        Fri, 02 Aug 2019 09:03:45 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 195sm120671389pfu.75.2019.08.02.09.03.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 02 Aug 2019 09:03:44 -0700 (PDT)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Douglas Gilbert <dgilbert@interlog.com>
+Subject: [PATCH v2] usb: typec: tcpm: Ignore unsupported/unknown alternate mode requests
+Date:   Fri,  2 Aug 2019 09:03:42 -0700
+Message-Id: <1564761822-13984-1-git-send-email-linux@roeck-us.net>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+TCPM may receive PD messages associated with unknown or unsupported
+alternate modes. If that happens, calls to typec_match_altmode()
+will return NULL. The tcpm code does not currently take this into
+account. This results in crashes.
 
-Missatge de Mathias Nyman <mathias.nyman@linux.intel.com> del dia dv.,
-2 d=E2=80=99ag. 2019 a les 16:59:
->
-> Usb core will reset the default control endpoint "ep0" before resetting
-> a device. if the endpoint has a valid pointer back to the usb device
-> then the xhci driver reset callback will try to clear the toggle for
-> the endpoint.
->
-> ep0 didn't use to have this pointer set as ep0 was always allocated
-> by default together with a xhci slot for the usb device. Other endpoints
-> got their usb device pointer set in xhci_add_endpoint()
->
-> This changed with commit ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer")
-> which sets the pointer for any endpoint on a FS/LS device behind a
-> HS hub that halts, including ep0.
->
-> If xHC controller needs to be reset at resume, then all the xhci slots
-> will be lost. Slots will be reenabled and reallocated at device reset,
-> but unlike other endpoints the ep0 is reset before device reset, while
-> the xhci slot may still be invalid, causing NULL pointer dereference.
->
-> Fix it by checking that the endpoint has both a usb device pointer and
-> valid xhci slot before trying to clear the toggle.
->
-> This issue was not seen earlier as ep0 didn't use to have a valid usb
-> device pointer, and other endpoints were only reset after device reset
-> when xhci slots were properly reenabled.
->
-> Reported-by: Bob Gleitsmann <rjgleits@bellsouth.net>
-> Reported-by: Enric Balletbo Serra <eballetbo@gmail.com>
-> Fixes: ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer")
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Unable to handle kernel NULL pointer dereference at virtual address 000001f0
+pgd = 41dad9a1
+[000001f0] *pgd=00000000
+Internal error: Oops: 5 [#1] THUMB2
+Modules linked in: tcpci tcpm
+CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
+Hardware name: Atmel SAMA5
+Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
+PC is at typec_altmode_attention+0x0/0x14
+LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
+...
+[<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
+				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
+[<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
+				(process_one_work+0x123/0x2a8)
+[<c012082b>] (process_one_work) from [<c0120a6d>]
+				(worker_thread+0xbd/0x3b0)
+[<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
+[<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
 
-Thanks for spending time looking at this issue and for the clear
-explanation. The patch fixes the issue for me, so
+Ignore PD messages if the associated alternate mode is not supported.
 
-Tested-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
+Reported-by: Douglas Gilbert <dgilbert@interlog.com>
+Cc: Douglas Gilbert <dgilbert@interlog.com>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Tested-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: No functional change
+    Dropped RFC
+    Added Tested/by: / Acked-by: tags
 
-> ---
->  drivers/usb/host/xhci.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 248cd7a..03d1e55 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -3089,8 +3089,18 @@ static void xhci_endpoint_reset(struct usb_hcd *hc=
-d,
->                 return;
->         udev =3D (struct usb_device *) host_ep->hcpriv;
->         vdev =3D xhci->devs[udev->slot_id];
-> +
-> +       /*
-> +        * vdev may be lost due to xHC restore error and re-initializatio=
-n
-> +        * during S3/S4 resume. A new vdev will be allocated later by
-> +        * xhci_discover_or_reset_device()
-> +        */
-> +       if (!udev->slot_id || !vdev)
-> +               return;
->         ep_index =3D xhci_get_endpoint_index(&host_ep->desc);
->         ep =3D &vdev->eps[ep_index];
-> +       if (!ep)
-> +               return;
->
->         /* Bail out if toggle is already being cleared by a endpoint rese=
-t */
->         if (ep->ep_state & EP_HARD_CLEAR_TOGGLE) {
-> --
-> 2.7.4
->
+ drivers/usb/typec/tcpm/tcpm.c | 38 ++++++++++++++++++++++++--------------
+ 1 file changed, 24 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 77f71f602f73..1df2844469aa 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1096,7 +1096,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+ 			break;
+ 		case CMD_ATTENTION:
+ 			/* Attention command does not have response */
+-			typec_altmode_attention(adev, p[1]);
++			if (adev)
++				typec_altmode_attention(adev, p[1]);
+ 			return 0;
+ 		default:
+ 			break;
+@@ -1148,20 +1149,26 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+ 			}
+ 			break;
+ 		case CMD_ENTER_MODE:
+-			typec_altmode_update_active(pdev, true);
+-
+-			if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
+-				response[0] = VDO(adev->svid, 1, CMD_EXIT_MODE);
+-				response[0] |= VDO_OPOS(adev->mode);
+-				return 1;
++			if (adev && pdev) {
++				typec_altmode_update_active(pdev, true);
++
++				if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
++					response[0] = VDO(adev->svid, 1,
++							  CMD_EXIT_MODE);
++					response[0] |= VDO_OPOS(adev->mode);
++					return 1;
++				}
+ 			}
+ 			return 0;
+ 		case CMD_EXIT_MODE:
+-			typec_altmode_update_active(pdev, false);
++			if (adev && pdev) {
++				typec_altmode_update_active(pdev, false);
+ 
+-			/* Back to USB Operation */
+-			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
+-						     NULL));
++				/* Back to USB Operation */
++				WARN_ON(typec_altmode_notify(adev,
++							     TYPEC_STATE_USB,
++							     NULL));
++			}
+ 			break;
+ 		default:
+ 			break;
+@@ -1171,8 +1178,10 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+ 		switch (cmd) {
+ 		case CMD_ENTER_MODE:
+ 			/* Back to USB Operation */
+-			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB,
+-						     NULL));
++			if (adev)
++				WARN_ON(typec_altmode_notify(adev,
++							     TYPEC_STATE_USB,
++							     NULL));
+ 			break;
+ 		default:
+ 			break;
+@@ -1183,7 +1192,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const __le32 *payload, int cnt,
+ 	}
+ 
+ 	/* Informing the alternate mode drivers about everything */
+-	typec_altmode_vdm(adev, p[0], &p[1], cnt);
++	if (adev)
++		typec_altmode_vdm(adev, p[0], &p[1], cnt);
+ 
+ 	return rlen;
+ }
+-- 
+2.7.4
+
