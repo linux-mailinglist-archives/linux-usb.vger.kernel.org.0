@@ -2,86 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78435801FB
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 22:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD00802AA
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Aug 2019 00:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437036AbfHBUvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 16:51:19 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:42172 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726999AbfHBUvT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 16:51:19 -0400
-Received: (qmail 6861 invoked by uid 2102); 2 Aug 2019 16:51:18 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Aug 2019 16:51:18 -0400
-Date:   Fri, 2 Aug 2019 16:51:18 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Oliver Neukum <oneukum@suse.com>,
-        syzbot <syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>, <miquel@df.uba.ar>,
-        <rio500-users@lists.sourceforge.net>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: possible deadlock in open_rio
-In-Reply-To: <00000000000088af91058f0fe377@google.com>
-Message-ID: <Pine.LNX.4.44L0.1908021647090.1645-100000@iolanthe.rowland.org>
+        id S2388152AbfHBWW3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 18:22:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42534 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730633AbfHBWW3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Aug 2019 18:22:29 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB9D8206A3;
+        Fri,  2 Aug 2019 22:22:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564784548;
+        bh=TZAOdBkjZfMwv4fT9kCJuQsahj/V5oh+DLHfTohaZtc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=CEl0npNLAOOAPOxBTLUGeVUCwd/PjIV088vkA0mkPukyGbv9yzgUd1TbrZ+p6FHQ2
+         G4Ag2mUVRhF9nYlCMrm82mWcr2NscJiqG803/wdEA//CfUkFo5FFFcRaegOqRLBN4n
+         pUKw6RqJ58ipZVhIzYJ3ZGYH9Aon5tLqhccIRbJw=
+Subject: Re: [PATCH v3 1/2] usbip: Skip DMA mapping and unmapping for urb at
+ vhci
+To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190802173651.22247-1-suwan.kim027@gmail.com>
+ <20190802173651.22247-2-suwan.kim027@gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <c23b3ac1-68d9-bc1e-610b-955988e11055@kernel.org>
+Date:   Fri, 2 Aug 2019 16:22:27 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <20190802173651.22247-2-suwan.kim027@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 1 Aug 2019, syzbot wrote:
+On 8/2/19 11:36 AM, Suwan Kim wrote:
+> vhci doesn’t do DMA for remote device. Actually, the real DMA
+> operation is done by network card driver. vhci just passes virtual
+> address of the buffer to the network stack, so vhci doesn’t use and
+> need dma address of the buffer of the URB.
+> 
+> But HCD provides DMA mapping and unmapping function by default.
+> Moreover, it causes unnecessary DMA mapping and unmapping which
+> will be done again at the NIC driver and it wastes CPU cycles.
+> So, implement map_urb_for_dma and unmap_urb_for_dma function for
+> vhci in order to skip the DMA mapping and unmapping procedure.
+> 
+> When it comes to supporting SG for vhci, it is useful to use native
+> SG list (urb->num_sgs) instead of mapped SG list because DMA mapping
+> fnuction can adjust the number of SG list (urb->num_mapped_sgs).
+> And vhci_map_urb_for_dma() prevents isoc pipe from using SG as
+> hcd_map_urb_for_dma() does.
+> 
+> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+> ---
+>   drivers/usb/usbip/vhci_hcd.c | 19 +++++++++++++++++++
+>   1 file changed, 19 insertions(+)
+> 
+> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> index 000ab7225717..c62f7fa8118c 100644
+> --- a/drivers/usb/usbip/vhci_hcd.c
+> +++ b/drivers/usb/usbip/vhci_hcd.c
+> @@ -1288,6 +1288,22 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
+>   	return 0;
+>   }
+>   
+> +static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+> +		gfp_t mem_flags)
+> +{
+> +	if (usb_endpoint_xfer_isoc(&urb->ep->desc) && urb->num_sgs) {
+> +		WARN_ON(1);
 
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=136b6aec600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7bbcbe9c9ff0cd49592a
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> 
-> Unfortunately, I don't have any reproducer for this crash yet.
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com
-> 
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 5.3.0-rc2+ #23 Not tainted
-> ------------------------------------------------------
-> syz-executor.2/20386 is trying to acquire lock:
-> 00000000772249c6 (rio500_mutex){+.+.}, at: open_rio+0x16/0xc0  
-> drivers/usb/misc/rio500.c:64
-> 
-> but task is already holding lock:
-> 00000000d3e8f4b9 (minor_rwsem){++++}, at: usb_open+0x23/0x270  
-> drivers/usb/core/file.c:39
-> 
-> which lock already depends on the new lock.
-> 
-> 
-> the existing dependency chain (in reverse order) is:
-> 
-> -> #1 (minor_rwsem){++++}:
->         down_write+0x92/0x150 kernel/locking/rwsem.c:1500
->         usb_register_dev drivers/usb/core/file.c:187 [inline]
->         usb_register_dev+0x131/0x6a0 drivers/usb/core/file.c:156
->         probe_rio.cold+0x53/0x21d drivers/usb/misc/rio500.c:468
+Don't add WARN_ON. I cleaned them all up recently and don't want new
+ones added.
 
-This was caused by Oliver's commit 3864d33943b4 ("USB: rio500: refuse 
-more than one device at a time").  It added
-
-	mutex_lock(&rio500_mutex);
-
-to probe_rio().  I guess it will be necessary to add another mutex to 
-fix this.
-
-Alan Stern
-
+thanks,
+-- Shuah
