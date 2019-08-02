@@ -2,86 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D8E7F623
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 13:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FB97F6A7
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 14:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732817AbfHBLmx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 07:42:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49758 "EHLO mail.kernel.org"
+        id S2392586AbfHBMOU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 08:14:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59968 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732584AbfHBLmx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Aug 2019 07:42:53 -0400
+        id S2389277AbfHBMOT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Aug 2019 08:14:19 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 393E4206A3;
-        Fri,  2 Aug 2019 11:42:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 98D3A21842;
+        Fri,  2 Aug 2019 12:14:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564746172;
-        bh=Xan5DZzaMXhHwR3HpDUVQjKov78JoUNnq/m/XEFCYls=;
+        s=default; t=1564748059;
+        bh=tBaVZzQKYGo0thXHTMky4hXBroatrfowQ68AoBMN7qk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lC7CdGY5ef9KTz8k2VdyznVeoNv3FsQgPz7+h725TrJnTWJyNJWj20UxkJjRdYdqe
-         SByxkIzMHWMou1Y3AFn0emKcmOkBgqAMvUKXgM+17jwtALjeg3DxsRHPFBdA3ZE1Y2
-         fBjoRQN1QCa54hEWbM3lJGl5AIscKNLA1gxpWwA8=
-Date:   Fri, 2 Aug 2019 13:42:50 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Douglas Gilbert <dgilbert@interlog.com>
-Subject: Re: [RFC PATCH] usb: typec: tcpm: Ignore unsupported/unknown
- alternate mode requests
-Message-ID: <20190802114250.GA4721@kroah.com>
-References: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
+        b=E1o7AwevnOqhWW8TtBkNn2xUf8rIOKJp1C4umEVmK9rEExDbQHvMeI1ryrSyV1bFK
+         lSjM4OFytFX7kp0QXJjS2h5eK6L4khN3jD3yN0Wh8yLKt5iBGZIQrF0vN8FXJM4FBi
+         1LaYzsLdPwFGm9f4Gma8afC/YQ1BIGO2St62h2sM=
+Date:   Fri, 2 Aug 2019 14:14:16 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     gavinli@thegavinli.com
+Cc:     linux-usb@vger.kernel.org, Gavin Li <git@thegavinli.com>
+Subject: Re: [PATCH] usb: devio: fix mmap() on non-coherent DMA architectures
+Message-ID: <20190802121416.GA20689@kroah.com>
+References: <20190801220436.3871-1-gavinli@thegavinli.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1564029037-22929-1-git-send-email-linux@roeck-us.net>
+In-Reply-To: <20190801220436.3871-1-gavinli@thegavinli.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 09:30:37PM -0700, Guenter Roeck wrote:
-> TCPM may receive PD messages associated with unknown or unsupported
-> alternate modes. If that happens, calls to typec_match_altmode()
-> will return NULL. The tcpm code does not currently take this into
-> account. This results in crashes.
+On Thu, Aug 01, 2019 at 03:04:36PM -0700, gavinli@thegavinli.com wrote:
+> From: Gavin Li <git@thegavinli.com>
 > 
-> Unable to handle kernel NULL pointer dereference at virtual address 000001f0
-> pgd = 41dad9a1
-> [000001f0] *pgd=00000000
-> Internal error: Oops: 5 [#1] THUMB2
-> Modules linked in: tcpci tcpm
-> CPU: 0 PID: 2338 Comm: kworker/u2:0 Not tainted 5.1.18-sama5-armv7-r2 #6
-> Hardware name: Atmel SAMA5
-> Workqueue: 2-0050 tcpm_pd_rx_handler [tcpm]
-> PC is at typec_altmode_attention+0x0/0x14
-> LR is at tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm]
-> ...
-> [<c03fbee8>] (typec_altmode_attention) from [<bf8030fb>]
-> 				(tcpm_pd_rx_handler+0xa3b/0xda0 [tcpm])
-> [<bf8030fb>] (tcpm_pd_rx_handler [tcpm]) from [<c012082b>]
-> 				(process_one_work+0x123/0x2a8)
-> [<c012082b>] (process_one_work) from [<c0120a6d>]
-> 				(worker_thread+0xbd/0x3b0)
-> [<c0120a6d>] (worker_thread) from [<c012431f>] (kthread+0xcf/0xf4)
-> [<c012431f>] (kthread) from [<c01010f9>] (ret_from_fork+0x11/0x38)
+> On architectures that are not (or are optionally) DMA coherent,
+> dma_alloc_coherent() returns an address into the vmalloc space,
+> and calling virt_to_phys() on this address returns an unusable
+> physical address.
 > 
-> Ignore PD messages if the asociated alternate mode is not supported.
+> This patch replaces the raw remap_pfn_range() call with a call to
+> dmap_mmap_coherent(), which takes care of the differences between
+> coherent and non-coherent code paths.
 > 
-> Reported-by: Douglas Gilbert <dgilbert@interlog.com>
-> Cc: Douglas Gilbert <dgilbert@interlog.com>
-> Fixes: e9576fe8e605c ("usb: typec: tcpm: Support for Alternate Modes")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Tested on an arm64 rk3399 board.
+> 
+> Signed-off-by: Gavin Li <git@thegavinli.com>
 > ---
-> Taking a stab at the problem. I don't really know if this is the correct
-> fix, or even if my understanding of the problem is correct, thus marking
-> the patch as RFC.
+>  drivers/usb/core/devio.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 
-Now that I think everyone agrees this is a "real" fix, can you resend it
-in a format that I can apply it in, with the various acks added?
+Should this be backported to the stable kernel trees to fix the issue on
+those platforms?  If so, how far back?  What commit caused this problem
+to occur?
 
 thanks,
 
