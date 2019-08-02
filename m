@@ -2,31 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 153727F7C0
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 15:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E167F7D2
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 15:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389446AbfHBNFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 09:05:12 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3720 "EHLO huawei.com"
+        id S2392945AbfHBNGy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 09:06:54 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3736 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388458AbfHBNFM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Aug 2019 09:05:12 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 95FB79FACA09C48A77C3;
-        Fri,  2 Aug 2019 21:05:08 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Fri, 2 Aug 2019
- 21:04:24 +0800
+        id S1726808AbfHBNGy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Aug 2019 09:06:54 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 72485FD8B1E8C62B0D84;
+        Fri,  2 Aug 2019 21:06:51 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Fri, 2 Aug 2019
+ 21:06:42 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <khilman@baylibre.com>, <narmstrong@baylibre.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
 CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] usb: dwc3: meson-g12a: use devm_platform_ioremap_resource() to simplify code
-Date:   Fri, 2 Aug 2019 21:04:08 +0800
-Message-ID: <20190802130408.20336-1-yuehaibing@huawei.com>
+        <linux-omap@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] usb: dwc3: omap: use devm_platform_ioremap_resource() to simplify code
+Date:   Fri, 2 Aug 2019 21:06:16 +0800
+Message-ID: <20190802130616.8516-1-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -43,24 +40,24 @@ This is detected by coccinelle.
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/usb/dwc3/dwc3-meson-g12a.c | 4 +---
+ drivers/usb/dwc3/dwc3-omap.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-index bca7e92..d73ccd9 100644
---- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-+++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-@@ -386,7 +386,6 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 	struct device		*dev = &pdev->dev;
- 	struct device_node	*np = dev->of_node;
- 	void __iomem *base;
--	struct resource *res;
- 	enum phy_mode otg_id;
- 	int ret, i, irq;
+diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
+index 6f711d5..b9e25f5 100644
+--- a/drivers/usb/dwc3/dwc3-omap.c
++++ b/drivers/usb/dwc3/dwc3-omap.c
+@@ -446,7 +446,6 @@ static int dwc3_omap_probe(struct platform_device *pdev)
+ 	struct device_node	*node = pdev->dev.of_node;
  
-@@ -394,8 +393,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
+ 	struct dwc3_omap	*omap;
+-	struct resource		*res;
+ 	struct device		*dev = &pdev->dev;
+ 	struct regulator	*vbus_reg = NULL;
+ 
+@@ -472,8 +471,7 @@ static int dwc3_omap_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return irq;
  
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 -	base = devm_ioremap_resource(dev, res);
