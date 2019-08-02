@@ -2,70 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E167F7D2
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 15:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2497FA9E
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 15:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392945AbfHBNGy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 09:06:54 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:3736 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726808AbfHBNGy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Aug 2019 09:06:54 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 72485FD8B1E8C62B0D84;
-        Fri,  2 Aug 2019 21:06:51 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Fri, 2 Aug 2019
- 21:06:42 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] usb: dwc3: omap: use devm_platform_ioremap_resource() to simplify code
-Date:   Fri, 2 Aug 2019 21:06:16 +0800
-Message-ID: <20190802130616.8516-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S2391848AbfHBNdX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 09:33:23 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:48144 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389830AbfHBNdU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 09:33:20 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 6C1438037F; Fri,  2 Aug 2019 15:33:06 +0200 (CEST)
+Date:   Fri, 2 Aug 2019 15:33:17 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     syzbot <syzbot+b156665cf4d1b5e00c76@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        len.brown@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
+Subject: Re: KASAN: use-after-free Read in __pm_runtime_resume
+Message-ID: <20190802133317.GA5538@amd>
+References: <000000000000cd0435058f21e8c3@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="qMm9M+Fa2AknHoGS"
+Content-Disposition: inline
+In-Reply-To: <000000000000cd0435058f21e8c3@google.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify the code a bit.
-This is detected by coccinelle.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/usb/dwc3/dwc3-omap.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+--qMm9M+Fa2AknHoGS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
-index 6f711d5..b9e25f5 100644
---- a/drivers/usb/dwc3/dwc3-omap.c
-+++ b/drivers/usb/dwc3/dwc3-omap.c
-@@ -446,7 +446,6 @@ static int dwc3_omap_probe(struct platform_device *pdev)
- 	struct device_node	*node = pdev->dev.of_node;
- 
- 	struct dwc3_omap	*omap;
--	struct resource		*res;
- 	struct device		*dev = &pdev->dev;
- 	struct regulator	*vbus_reg = NULL;
- 
-@@ -472,8 +471,7 @@ static int dwc3_omap_probe(struct platform_device *pdev)
- 	if (irq < 0)
- 		return irq;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(dev, res);
-+	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
--- 
-2.7.4
+On Fri 2019-08-02 05:58:05, syzbot wrote:
+> Hello,
+>=20
+> syzbot found the following crash on:
+>=20
+> HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D146071b4600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D792eb47789f57=
+810
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Db156665cf4d1b5e=
+00c76
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>=20
+> Unfortunately, I don't have any reproducer for this crash yet.
 
+I asked a question, noone bothered to reply, yet you spam me again?
 
+You are a bad bot. Go away. Come back when your human master is
+willing to communicate.
+
+								Pavel
+							=09
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--qMm9M+Fa2AknHoGS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl1EO50ACgkQMOfwapXb+vKYhQCdHY91WvBbV3DB8W3q/3RcVQjz
+/pEAn0cD5LtqdCPW2XZorEGD4M4g0uPN
+=iWNk
+-----END PGP SIGNATURE-----
+
+--qMm9M+Fa2AknHoGS--
