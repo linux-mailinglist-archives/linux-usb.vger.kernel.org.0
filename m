@@ -2,174 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF547EDB9
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 09:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEA77EE0B
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Aug 2019 09:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733194AbfHBHlm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Aug 2019 03:41:42 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:44942 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726601AbfHBHll (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 03:41:41 -0400
-Received: by mail-pg1-f194.google.com with SMTP id i18so35643404pgl.11;
-        Fri, 02 Aug 2019 00:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=8Bu5B09gqik8ty3n7lRXyWL5jRpSFheUe4BaXX6kR88=;
-        b=HudlbV72c1Gey+g3bBwqwEVVs4x1lqg2LR9EPalQ4SZ5gFrC6j0xxl7qCBYKedapAz
-         43ryaJrLKtLRNsrWKkTvuHRQ+OXrABbw0+VXgE6WN0Ou2g46OCg+G1x4wPpMf8wozXZB
-         G8SknMGnszFXKJx6ItQ6fL+OsXQNkr5QL21kEqy1R2ZiJ6OOD8zoKH/uDJxcOwdBelkM
-         o2PU5yuUIr+seNy+RfLQ1469jmpN3T7vJT2lWrdyBJiGyNYTBoVuUGIolb9BSRatAPEp
-         3qoWuZWaQth7ubMHtRgKpACQgOTDHOmEaX93uqRLJSlAA+LT1dZxJQzwe8Q+35wBKNkU
-         xAuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8Bu5B09gqik8ty3n7lRXyWL5jRpSFheUe4BaXX6kR88=;
-        b=BkPH456ORQxcHhbUKS98XlicgcTsVsr2Tu1UQ+Jk3PRqMVXtoa4ixOF/PmugGsm73Z
-         IDDPzuRrMTl66AjjwQCCHKRoB/Eaw/Tj41qV1RPXu1rmBn5ZY2bGhK8lFhR6PvStS0IO
-         zWKNOZ7pQhdXTA71KNE0GnXb3TUazVI654021/dcKsn9bdyCvh5WSfk1LquOPrMinNOO
-         N+gzrSUxAuOM7M8j9Mb5D5DBKGOma1eUwOQyKEVFavt42eMlX8PimSJhb0zguddXcOxB
-         KE0iTinGCq8yVXJ+jd5iZK0Sc6iWVXiT1mF+qRQGon7PEOuVaHMTfWeh0G8Mcvut6cR4
-         WKcg==
-X-Gm-Message-State: APjAAAWruHocLb6ZVPmEwa/UliykbFo1lnX4UdLIHhqJRF0iUedgBBuk
-        AB8DkKBImhX/dWoT+fQMpkdbzIYE
-X-Google-Smtp-Source: APXvYqxZS7gNBvSYXD8UCDRGi8CGSQYsynxcTeR3RF2QJOBArAKJlfgjIiTBQGhzjWPYQ/SdfonQdQ==
-X-Received: by 2002:a62:ac11:: with SMTP id v17mr58294776pfe.236.1564731701156;
-        Fri, 02 Aug 2019 00:41:41 -0700 (PDT)
-Received: from localhost.localdomain ([163.152.162.125])
-        by smtp.gmail.com with ESMTPSA id x7sm10070265pga.0.2019.08.02.00.41.39
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 02 Aug 2019 00:41:40 -0700 (PDT)
-Date:   Fri, 2 Aug 2019 16:41:36 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usbip: Implement SG support to vhci
-Message-ID: <20190802074136.GA19534@localhost.localdomain>
-References: <20190705164355.14025-1-suwan.kim027@gmail.com>
- <20190705164355.14025-3-suwan.kim027@gmail.com>
- <7c697904-53e3-b469-c907-25b8fb7859bc@kernel.org>
- <20190729145241.GA4557@localhost.localdomain>
- <787051b9-579d-6da5-9d04-3dd0ae3c770b@kernel.org>
- <20190801063859.GA9587@localhost.localdomain>
- <e581b566-65fb-c4d8-74fc-1c1b35b57b9f@kernel.org>
+        id S2390173AbfHBHvg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Aug 2019 03:51:36 -0400
+Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:60961 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389372AbfHBHvg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Aug 2019 03:51:36 -0400
+Received: from [192.168.1.109] ([176.167.178.124])
+        by mwinf5d45 with ME
+        id k7rX2000A2hRaC0037rXnD; Fri, 02 Aug 2019 09:51:32 +0200
+X-ME-Helo: [192.168.1.109]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 02 Aug 2019 09:51:32 +0200
+X-ME-IP: 176.167.178.124
+Subject: Re: [PATCH] HID: usbhid: Use GFP_KERNEL instead of GFP_ATOMIC when
+ applicable
+To:     wharms@bfs.de
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <20190801074759.32738-1-christophe.jaillet@wanadoo.fr>
+ <5D42B98B.40900@bfs.de>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <36fe1980-9b92-084d-f9db-fac07e624076@wanadoo.fr>
+Date:   Fri, 2 Aug 2019 09:51:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e581b566-65fb-c4d8-74fc-1c1b35b57b9f@kernel.org>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <5D42B98B.40900@bfs.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 01, 2019 at 08:03:59AM -0600, shuah wrote:
-> On 8/1/19 12:38 AM, Suwan Kim wrote:
-> > On Mon, Jul 29, 2019 at 10:32:31AM -0600, shuah wrote:
-> > > On 7/29/19 8:52 AM, Suwan Kim wrote:
-> > > > Hi Shuah,
-> > > > 
-> > > > On Tue, Jul 23, 2019 at 06:21:53PM -0600, shuah wrote:
-> > > > > Hi Suwan,
-> > > > > 
-> > > > > On 7/5/19 10:43 AM, Suwan Kim wrote:
-> > > > > > There are bugs on vhci with usb 3.0 storage device. Originally, vhci
-> > > > > > doesn't supported SG, so USB storage driver on vhci breaks SG list
-> > > > > > into multiple URBs and it causes error that a transfer got terminated
-> > > > > > too early because the transfer length for one of the URBs was not
-> > > > > > divisible by the maxpacket size.
-> > > > > > 
-> > > > > > In this patch, vhci basically support SG and it sends each SG list
-> > > > > > entry to the stub driver. Then, the stub driver sees the total length
-> > > > > > of the buffer and allocates SG table and pages according to the total
-> > > > > > buffer length calling sgl_alloc(). After the stub driver receives
-> > > > > > completed URB, it again sends each SG list entry to vhci.
-> > > > > > 
-> > > > > > If HCD of the server doesn't support SG, the stub driver breaks a
-> > > > > > single SG reqeust into several URBs and submit them to the server's
-> > > > > > HCD. When all the split URBs are completed, the stub driver
-> > > > > > reassembles the URBs into a single return command and sends it to
-> > > > > > vhci.
-> > > > > > 
-> > > > > > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> > > > > > ---
-> > > > > >     drivers/usb/usbip/stub.h         |   7 +-
-> > > > > >     drivers/usb/usbip/stub_main.c    |  52 +++++---
-> > > > > >     drivers/usb/usbip/stub_rx.c      | 207 ++++++++++++++++++++++---------
-> > > > > >     drivers/usb/usbip/stub_tx.c      | 108 +++++++++++-----
-> > > > > >     drivers/usb/usbip/usbip_common.c |  60 +++++++-- >   drivers/usb/usbip/vhci_hcd.c     |  10 +-
-> > > > > >     drivers/usb/usbip/vhci_tx.c      |  49 ++++++--
-> > > > > >     7 files changed, 372 insertions(+), 121 deletions(-)
-> > > > > 
-> > > > > While you are working on v3 to fix chekpatch and other issues
-> > > > > I pointed out, I have more for you.
-> > > > > 
-> > > > > What happens when you have mismatched server and client side?
-> > > > > i.e stub does and vhci doesn't and vice versa.
-> > > > > 
-> > > > > Make sure to run checkpatch. Also check spelling errors in
-> > > > > comments and your commit log.
-> > > > > 
-> > > > > I am not sure if your eeror paths are correct. Run usbip_test.sh
-> > > > > 
-> > > > > tools/testing/selftests/drivers/usb/usbip
-> > > > 
-> > > > I don't know what mismatch you mentioned. Are you saying
-> > > > "match busid table" at the end of usbip_test.sh?
-> > > > How does it relate to SG support of this patch?
-> > > > Could you tell me more about the problem situation?
-> > > > 
-> > > 
-> > > What happens when usbip_host is running a kernel without the sg
-> > > support and vhci_hcd does? Just make sure this works with the
-> > > checks for sg support status as a one of your tests for this
-> > > sg feature.
-> > 
-> > Now I understand. Thanks for the details!
-> > As a result of testing, in the situation where vhci supports SG,
-> > but stub does not, or vice versa, usbip works normally. Moreover,
-> > because there is no protocol modification, there is no problem in
-> > communication between server and client even if the one has a kernel
-> > without SG support.
-> > 
-> > In the case of vhci supports SG and stub doesn't, because vhci sends
-> > only the total length of the buffer to stub as it did before the
-> > patch applied, stub only needs to allocate the required length of
-> > buffers regardless of whether vhci supports SG or not.
-> > 
-> > If stub needs to send data buffer to vhci because of IN pipe, stub
-> > also sends only total length of buffer as metadata and then send real
-> > data as vhci does. Then vhci receive data from stub and store it to
-> > the corresponding buffer of SG list entry.
-> > 
-> > In the case of stub that supports SG, if SG buffer is requested by
-> > vhci, buffer is allocated by sgl_alloc(). However, stub that does
-> > not support SG allocates buffer using only kmalloc(). Therefore, if
-> > vhci supports SG and stub doesn't, stub has to allocate buffer with
-> > kmalloc() as much as the total length of SG buffer which is quite
-> > huge when vhci sends SG request, so it has big overhead in buffer
-> > allocation.
-> > 
-> > And for the case of stub supports SG and vhci doesn't, since the
-> > USB storage driver checks that vhci doesn't support SG and sends
-> > the request to stub by splitting the SG list into multiple URBs,
-> > stub allocates a buffer with kmalloc() as it did before this patch.
-> > 
-> > Therefore, everything works normally in a mismatch situation.
+Hi, (and sorry if you receive this email twice. I've used a web mail 
+which sends HTML by default and it was rejected by ML)
+
+Le 01/08/2019 à 12:06, walter harms a écrit :
 > 
-> Looking for you add a test case for that. Please include this
-> in the commit log.
+> 
+> Am 01.08.2019 09:47, schrieb Christophe JAILLET:
+>> There is no need to use GFP_ATOMIC when calling 'usb_alloc_coherent()'
+>> here. These calls are done from probe functions and using GFP_KERNEL should
+>> be safe.
+>> The memory itself is used within some interrupts, but it is not a
+>> problem, once it has been allocated.
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>>   drivers/hid/usbhid/usbkbd.c   | 4 ++--
+>>   drivers/hid/usbhid/usbmouse.c | 2 +-
+>>   2 files changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/hid/usbhid/usbkbd.c b/drivers/hid/usbhid/usbkbd.c
+>> index d5b7a696a68c..63e8ef8beb45 100644
+>> --- a/drivers/hid/usbhid/usbkbd.c
+>> +++ b/drivers/hid/usbhid/usbkbd.c
+>> @@ -239,11 +239,11 @@ static int usb_kbd_alloc_mem(struct usb_device *dev, struct usb_kbd *kbd)
+>>   		return -1;
+>>   	if (!(kbd->led = usb_alloc_urb(0, GFP_KERNEL)))
+>>   		return -1;
+>> -	if (!(kbd->new = usb_alloc_coherent(dev, 8, GFP_ATOMIC, &kbd->new_dma)))
+>> +	if (!(kbd->new = usb_alloc_coherent(dev, 8, GFP_KERNEL, &kbd->new_dma)))
+>>   		return -1;
+>>   	if (!(kbd->cr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_KERNEL)))
+>>   		return -1;
+>> -	if (!(kbd->leds = usb_alloc_coherent(dev, 1, GFP_ATOMIC, &kbd->leds_dma)))
+>> +	if (!(kbd->leds = usb_alloc_coherent(dev, 1, GFP_KERNEL, &kbd->leds_dma)))
+>>   		return -1;
+>>   
+> 
+> the kernel style is usually:
+>   kbd->new = usb_alloc_coherent(dev, 8, GFP_ATOMIC, &kbd->new_dma);
+>   if (!kbd->new)
+> 	return -1;
+> 
 
-I'm confused about the test case. Do I add the test case for each
-SG support status of vhci_hcd and usbip_host in usbip_test.sh?
-Or, do I implement the test logic in vhci_hcd code that asks if
-usbip_host supports SG when attaching a remote device?
-I'm sorry but I don't know what exactly you want to add.
+Searching with coccinelle with:
+*   x = usb_alloc_coherent(..., <+... GFP_KERNEL ...+>, ...);
+finds 67 files,
 
-Regards
-Suwan Kim
+whereas:
+*   x = usb_alloc_coherent(..., <+... GFP_ATOMIC ...+>, ...);
+only finds 11 files.
+
+> 
+> in usbmouse.c this is done, any reason for the change here ?
+> 
+
+No real reason in fact, just to be consistent with surrounding code.
+
+Unless some allocations are done within a spin_lock/spin_unlock, using 
+both GFP_KERNEL and GFP_ATOMIC in the same function looks spurious to me.
+Either there is a bug (GFP_KERNEL should be GFP_ATOMIC), or a useless 
+constraint is given to the memory allocator.
+
+CJ
+
+> re,
+>   wh
+> 
+>>   	return 0;
+>> diff --git a/drivers/hid/usbhid/usbmouse.c b/drivers/hid/usbhid/usbmouse.c
+>> index 073127e65ac1..c89332017d5d 100644
+>> --- a/drivers/hid/usbhid/usbmouse.c
+>> +++ b/drivers/hid/usbhid/usbmouse.c
+>> @@ -130,7 +130,7 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
+>>   	if (!mouse || !input_dev)
+>>   		goto fail1;
+>>   
+>> -	mouse->data = usb_alloc_coherent(dev, 8, GFP_ATOMIC, &mouse->data_dma);
+>> +	mouse->data = usb_alloc_coherent(dev, 8, GFP_KERNEL, &mouse->data_dma);
+>>   	if (!mouse->data)
+>>   		goto fail1;
+>>   
+> 
+
