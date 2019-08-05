@@ -2,267 +2,309 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD568104C
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 04:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E838107D
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 05:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726999AbfHECii (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Aug 2019 22:38:38 -0400
-Received: from mail-eopbgr20081.outbound.protection.outlook.com ([40.107.2.81]:29593
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726767AbfHECii (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 4 Aug 2019 22:38:38 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DcGNqGrNZzCsRMz6oswC/tpdWayu79p5794lfASvaMM/NXm+nP5tksZi3QHsbS0bo77sJNHH0M9KdMouT06vtSYDzpsmydVwAhG6taeZ2ZqN79DEHBoDNJY8+yJLrqDeiqHXQkoDNvZRoihP5jTlOoLwV4I8kv305QuteRimcTFqW98hwcOH2+vD/4Le/z8nFcAn0U6VSHUDLgHJBZ01U8Zf0+Z+DV5dDPMUXnwNOg20bl2ENATU6A+zUdFhwTNsSNAR1Bj4QAkg5QKBmH6R1Ck9thmuCKQyImdAGQsa9atzEYual/it3iVKLOwCN+HDwzMfhRLGmZpwg2hmA+2LCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MOX05I6ZBeGSLr4y/biB3B/jpWJ25GmZ3AHINNfxVzM=;
- b=Cnp1Ekajywd3mpk8HitlbLxfYr67y2XHUXU0g/qOh7VuK41FIubr2q5kAU1CRbo0GEnOpsNIhzjdLLKcKlQlvYbn2N91BSPhf64CixtNnWRpGfaRZaMhCWJ5KOlbq7/EiEEfhTB+gT4Ik2tbgVW7Wic/k5Gfnnbwf2yHKtuuH0sxI0WTk6LECCO5G9OzomgyWnU27LS2MlIfz/I3W+tIAu4kk1o2DKXgDe+SJ+5GQgt+XKVlkCX04c0ZKPQHHlc8xa8Y4jUcDnp2Gniy2gQYJslt8sZw9DXvSbDJIJNZ171VLrs/bX3zHJwfAXCusUM983c7v0sdbhludemoTooGFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
- header.d=nxp.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MOX05I6ZBeGSLr4y/biB3B/jpWJ25GmZ3AHINNfxVzM=;
- b=WgMsl+GviYvRER1uh36XkkKhklWmWQd17s8KVJPOMxaZ1gZCH5B+ag/k7lr8M+ju9hj5JycOZnmP4dtLcOtLJH9jiYbIVifAn3FTlAxJ0wgVX0Kc/FyhbwiwydcsbKOYWPiAEK/x3jaQozI6qLvMYDoBKqtTRxJ9y/zE7JdCyaA=
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (20.179.233.225) by
- VE1PR04MB6623.eurprd04.prod.outlook.com (20.179.235.29) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2136.16; Mon, 5 Aug 2019 02:38:28 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::6025:6518:3420:7317]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::6025:6518:3420:7317%7]) with mapi id 15.20.2115.005; Mon, 5 Aug 2019
- 02:38:28 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Peter Chen <hzpeterchen@gmail.com>
-CC:     Peter Chen <peter.chen@nxp.com>,
+        id S1727005AbfHEDPY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Aug 2019 23:15:24 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:46672 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726766AbfHEDPY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Aug 2019 23:15:24 -0400
+Received: by mail-io1-f65.google.com with SMTP id i10so50972841iol.13
+        for <linux-usb@vger.kernel.org>; Sun, 04 Aug 2019 20:15:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GJ0tc7VBe6LZjl3MApGpZezG7tFQp7r4DFSmg7vWQno=;
+        b=dKpkClsIEqeZfcMjyxFZyb97l52G5I69ZDzIxmssksyFkUs4jnxbVAjbwodV27432r
+         2c65PDTDKqHyMB8Qp7CpqxC+NvgmyWrt49eEuwBzMCLDIlMJ1fqiojzPMq52lms+5fyu
+         mSScsrhkTDs7zbTVp2qN3fuQw/0HtJ25g4zYvehZWc5k4DDORvmwgC4BoshhkSadDsPZ
+         qSPRFCtVsy6DqCYzTcNq+GEmUAPDc9ZR7rnrPcOM4JUiTk8Zif2zvGBQhGO5NbeGxNwH
+         qb2qQuM3dgQxwW6hsgYmbwU2rptJXgy855bfm4HKKPrpiK+pt9jWl5EY1xQYJA8q259h
+         X2ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GJ0tc7VBe6LZjl3MApGpZezG7tFQp7r4DFSmg7vWQno=;
+        b=EoUVPCtN04WMeK3NXEPnm8rm6xQfr71FwXQsqOrTUIZ9jqwbQ5BXXRqytV3Ibxqp7A
+         cHIOdfFvj9+GDPaw2NBLH2ntS7yS+n+nj10dEQpP/qAC5WP17+J6zGt7yMQMsKwzfUAD
+         31WejdiWZC0wvGl9DOrICuRJP5afzeF/vMJ0KLwtNbACz2V/oTkboux277CMUFKveQH3
+         up9oM3US1IteeXd1YIlWMEE1poo9lihnFyLpZxXA3KOOg52qNaQ0Zb1wUuRP6+v5qD/x
+         PU5brRRm15yoLPyFtzuEobbAfVPI4pgE/J1ORxjs/b56bA4QOoLJp8cNILRaNnX0n6bb
+         WwlA==
+X-Gm-Message-State: APjAAAXCtKafnvuhG+ZxgWyUNFX6vJkO4YHHn02P/O6vaBpYopJnlEjZ
+        ukrdz2v8nziItusyIOpOwm475ea9LqLf5puPSjo=
+X-Google-Smtp-Source: APXvYqybyMfE1pvQOJeUjbJFnZSE3uXBD8JV8vqbTEQzOQ5nUBtskCBf5sPBr76X3XE65oWLHDIrYq7yUgXj3/TMXzE=
+X-Received: by 2002:a5e:8b43:: with SMTP id z3mr25413016iom.287.1564974923438;
+ Sun, 04 Aug 2019 20:15:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190703071953.38082-1-jun.li@nxp.com> <20190703071953.38082-2-jun.li@nxp.com>
+ <CAL411-oHEbC6Lkr-X=GBKbHhRfuoQsfMVnUKtUjC1c8wrf-k+Q@mail.gmail.com> <VE1PR04MB6528DEA1B84E9B85A8594E5089DA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+In-Reply-To: <VE1PR04MB6528DEA1B84E9B85A8594E5089DA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Mon, 5 Aug 2019 11:15:12 +0800
+Message-ID: <CAL411-o8pO=HQwRrgibpRsrfCBD0bqWaCM5imxtCVKTCdwa=ew@mail.gmail.com>
+Subject: Re: [PATCH 2/5] usb: chipidea: add role switch class support
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         dl-linux-imx <linux-imx@nxp.com>,
         USB list <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH 2/5] usb: chipidea: add role switch class support
-Thread-Topic: [PATCH 2/5] usb: chipidea: add role switch class support
-Thread-Index: AQHVMXEBpzW67j5jnEyJURF9gaNQo6bnyc4AgAQsJ/A=
-Date:   Mon, 5 Aug 2019 02:38:28 +0000
-Message-ID: <VE1PR04MB6528DEA1B84E9B85A8594E5089DA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-References: <20190703071953.38082-1-jun.li@nxp.com>
- <20190703071953.38082-2-jun.li@nxp.com>
- <CAL411-oHEbC6Lkr-X=GBKbHhRfuoQsfMVnUKtUjC1c8wrf-k+Q@mail.gmail.com>
-In-Reply-To: <CAL411-oHEbC6Lkr-X=GBKbHhRfuoQsfMVnUKtUjC1c8wrf-k+Q@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a25e1116-ed9a-4ffa-bf01-08d7194dff99
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VE1PR04MB6623;
-x-ms-traffictypediagnostic: VE1PR04MB6623:
-x-microsoft-antispam-prvs: <VE1PR04MB6623AA831A7D8C1201FFD88089DA0@VE1PR04MB6623.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:551;
-x-forefront-prvs: 01208B1E18
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(396003)(136003)(39860400002)(366004)(13464003)(189003)(199004)(6436002)(86362001)(486006)(66066001)(446003)(476003)(6506007)(76176011)(53546011)(44832011)(11346002)(186003)(316002)(6116002)(26005)(3846002)(66556008)(81156014)(54906003)(478600001)(6916009)(102836004)(1411001)(81166006)(68736007)(25786009)(4326008)(256004)(71200400001)(8936002)(74316002)(6246003)(5660300002)(33656002)(229853002)(52536014)(55016002)(14444005)(71190400001)(66946007)(14454004)(2906002)(8676002)(7736002)(64756008)(66446008)(76116006)(7696005)(99286004)(305945005)(66476007)(53936002)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6623;H:VE1PR04MB6528.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 714+gIu0KcirslCwtweHu/Pxl61RglgHkhoQ2e16n4E4y7cDChSqdDJ3TMm78AV+OUYdemqC0IfefiU6if+U//p0hP+oEBUfaHWv5Bn0jgq5D4lrI6Vxmb2HBcwH9lU+Yj/VaS2NHpp7fB3ZwFxWLZIeCjknZ7hhqoEQ/Qq+A9oBy2cvH7wwUzAIIAmhmP8TV4/ZDGZ1tA4ScE683xDoC4mas4RD9wAV0qsNzvDfOvdy5999gYzh2nk9YCb8/B5PJ16YSx52nqmOcyPx255DzvZu1FHKWVjZAOXrKXTqHOKO0MRacKmbzW+53VQtvVWoySQakfYXzkbCvkFhblj4T4DvT0rDBu0cwEnp5tpvbppT/wsW10/oB4epkyaEjlRCs/O6WA8pL+S/ZcIiTQnEX2kEiiIHEWDOREHv6HMdfis=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a25e1116-ed9a-4ffa-bf01-08d7194dff99
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2019 02:38:28.5917
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jun.li@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6623
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFBldGVyIENoZW4gPGh6cGV0
-ZXJjaGVuQGdtYWlsLmNvbT4NCj4gU2VudDogMjAxOeW5tDjmnIgy5pelIDE3OjQxDQo+IFRvOiBK
-dW4gTGkgPGp1bi5saUBueHAuY29tPg0KPiBDYzogUGV0ZXIgQ2hlbiA8cGV0ZXIuY2hlbkBueHAu
-Y29tPjsgR3JlZyBLcm9haC1IYXJ0bWFuDQo+IDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz47
-IGRsLWxpbnV4LWlteCA8bGludXgtaW14QG54cC5jb20+OyBVU0IgbGlzdA0KPiA8bGludXgtdXNi
-QHZnZXIua2VybmVsLm9yZz4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCAyLzVdIHVzYjogY2hpcGlk
-ZWE6IGFkZCByb2xlIHN3aXRjaCBjbGFzcyBzdXBwb3J0DQo+IA0KPiA+IFVTQiByb2xlIGlzIGZ1
-bGx5IGNvbnRyb2xsZWQgYnkgdXNiIHJvbGUgc3dpdGNoIGNvbnN1bWVyKGUuZy4gdHlwZWMpLA0K
-PiA+IHVzYiBwb3J0IGVpdGhlciBhdCBob3N0IG1vZGUsIG9yIGF0IGRldmljZSBjb25uZWN0ZWQg
-bW9kZSwgd2lsbCBub3QNCj4gPiBzdGF5IGF0IFVTQl9ST0xFX05PTkUgbW9kZS4NCj4gPg0KPiAN
-Cj4gVGhlbiwgaWYgdGhlIFR5cGUtQyBjYWJsZSBpcyBkaXNjb25uZWN0ZWQgZnJvbSBQQyBob3N0
-LCB0aGUgY29udHJvbGxlciBkcml2ZXIgY2FuJ3QgYmUNCj4gbm90aWZpZWQ/SWYgdGhhdCwgaG93
-IGNvbnRyb2xsZXIgZW50ZXJzIGxvdyBwb3dlciBtb2RlIGF0IHRoaXMgc2l0dWF0aW9uPw0KDQpU
-aGUgY29udHJvbGxlciBkcml2ZXIgY2FuIGJlIG5vdGlmaWVkLCBidXQgdGhlcmUgYXJlIG9ubHkg
-cm9sZShob3N0IG9yIGRldmljZSkNCkluZm9ybWF0aW9uLCBzbyBpbiB5b3UgbWVudGlvbmVkIGNh
-c2UsIGNvbnRyb2xsZXIgZHJpdmVyIHdpbGwgZ2V0IHRoZSBzYW1lDQppbnB1dCBiZWZvcmUgYW5k
-IGFmdGVyIGRpc2Nvbm5lY3QgZnJvbSBob3N0LCBjYW4ndCBrbm93IGRldGFjaG1lbnQgYW5kDQpl
-bnRlciBsb3cgcG93ZXIgbW9kZSBhY2NvcmRpbmdseSwgdGhpcyBpcyBtb3JlIGxpa2Ugc29tZXRo
-aW5nIGludGVybmFsDQpoYW5kbGluZyB1bmRlciBkZXZpY2Ugcm9sZS4NCg0KTGkgSnVuDQoNCj4g
-DQo+IFBldGVyDQo+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IExpIEp1biA8anVuLmxpQG54cC5jb20+
-DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvdXNiL2NoaXBpZGVhL2NpLmggICB8ICAgMiArDQo+ID4g
-IGRyaXZlcnMvdXNiL2NoaXBpZGVhL2NvcmUuYyB8IDEyNQ0KPiA+ICsrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKystLS0tLS0tLS0tDQo+ID4gIGRyaXZlcnMvdXNiL2NoaXBpZGVhL290
-Zy5jICB8ICAxMyArKysrKw0KPiA+ICAzIGZpbGVzIGNoYW5nZWQsIDExMSBpbnNlcnRpb25zKCsp
-LCAyOSBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jaGlw
-aWRlYS9jaS5oIGIvZHJpdmVycy91c2IvY2hpcGlkZWEvY2kuaA0KPiA+IGluZGV4IDgyYjg2Y2Qu
-LjVlMmYwYmMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvY2hpcGlkZWEvY2kuaA0KPiA+
-ICsrKyBiL2RyaXZlcnMvdXNiL2NoaXBpZGVhL2NpLmgNCj4gPiBAQCAtMjEyLDYgKzIxMiw3IEBA
-IHN0cnVjdCBjaV9oZHJjIHsNCj4gPiAgICAgICAgIGt0aW1lX3QgICAgICAgICAgICAgICAgICAg
-ICAgICAgaHJfdGltZW91dHNbTlVNX09UR19GU01fVElNRVJTXTsNCj4gPiAgICAgICAgIHVuc2ln
-bmVkICAgICAgICAgICAgICAgICAgICAgICAgZW5hYmxlZF9vdGdfdGltZXJfYml0czsNCj4gPiAg
-ICAgICAgIGVudW0gb3RnX2ZzbV90aW1lciAgICAgICAgICAgICAgbmV4dF9vdGdfdGltZXI7DQo+
-ID4gKyAgICAgICBzdHJ1Y3QgdXNiX3JvbGVfc3dpdGNoICAgICAgICAgICpyb2xlX3N3aXRjaDsN
-Cj4gPiAgICAgICAgIHN0cnVjdCB3b3JrX3N0cnVjdCAgICAgICAgICAgICAgd29yazsNCj4gPiAg
-ICAgICAgIHN0cnVjdCB3b3JrcXVldWVfc3RydWN0ICAgICAgICAgKndxOw0KPiA+DQo+ID4gQEAg
-LTI0NCw2ICsyNDUsNyBAQCBzdHJ1Y3QgY2lfaGRyYyB7DQo+ID4gICAgICAgICBzdHJ1Y3QgZGVu
-dHJ5ICAgICAgICAgICAgICAgICAgICpkZWJ1Z2ZzOw0KPiA+ICAgICAgICAgYm9vbCAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBpZF9ldmVudDsNCj4gPiAgICAgICAgIGJvb2wgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgYl9zZXNzX3ZhbGlkX2V2ZW50Ow0KPiA+ICsgICAgICAgYm9vbCAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICByb2xlX3N3aXRjaF9ldmVudDsNCj4gPiAgICAgICAg
-IGJvb2wgICAgICAgICAgICAgICAgICAgICAgICAgICAgaW14Mjhfd3JpdGVfZml4Ow0KPiA+ICAg
-ICAgICAgYm9vbCAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdXBwb3J0c19ydW50aW1lX3Bt
-Ow0KPiA+ICAgICAgICAgYm9vbCAgICAgICAgICAgICAgICAgICAgICAgICAgICBpbl9scG07DQo+
-ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NoaXBpZGVhL2NvcmUuYyBiL2RyaXZlcnMvdXNi
-L2NoaXBpZGVhL2NvcmUuYw0KPiA+IGluZGV4IGJjMjRjNWIuLjFiY2Y2ZjYgMTAwNjQ0DQo+ID4g
-LS0tIGEvZHJpdmVycy91c2IvY2hpcGlkZWEvY29yZS5jDQo+ID4gKysrIGIvZHJpdmVycy91c2Iv
-Y2hpcGlkZWEvY29yZS5jDQo+ID4gQEAgLTU4Nyw2ICs1ODcsNDcgQEAgc3RhdGljIGlycXJldHVy
-bl90IGNpX2lycShpbnQgaXJxLCB2b2lkICpkYXRhKQ0KPiA+ICAgICAgICAgcmV0dXJuIHJldDsN
-Cj4gPiAgfQ0KPiA+DQo+ID4gK3N0YXRpYyBpbnQgY2lfdXNiX3JvbGVfc3dpdGNoX3NldChzdHJ1
-Y3QgZGV2aWNlICpkZXYsIGVudW0gdXNiX3JvbGUNCj4gPiArcm9sZSkgew0KPiA+ICsgICAgICAg
-c3RydWN0IGNpX2hkcmMgKmNpID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ID4gKyAgICAgICB1
-bnNpZ25lZCBsb25nIGZsYWdzOw0KPiA+ICsNCj4gPiArICAgICAgIGlmIChjaS0+cm9sZSA9PSBy
-b2xlIHx8IHJvbGUgPT0gVVNCX1JPTEVfTk9ORSkNCj4gPiArICAgICAgICAgICAgICAgcmV0dXJu
-IDA7DQo+ID4gKw0KPiA+ICsgICAgICAgc3Bpbl9sb2NrX2lycXNhdmUoJmNpLT5sb2NrLCBmbGFn
-cyk7DQo+ID4gKyAgICAgICBjaS0+cm9sZV9zd2l0Y2hfZXZlbnQgPSB0cnVlOw0KPiA+ICsgICAg
-ICAgaWYgKGNpLT5yb2xlID09IFVTQl9ST0xFX05PTkUpIHsNCj4gPiArICAgICAgICAgICAgICAg
-aWYgKHJvbGUgPT0gVVNCX1JPTEVfREVWSUNFKQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
-IGNpLT5yb2xlID0gVVNCX1JPTEVfSE9TVDsNCj4gPiArICAgICAgICAgICAgICAgZWxzZQ0KPiA+
-ICsgICAgICAgICAgICAgICAgICAgICAgIGNpLT5yb2xlID0gVVNCX1JPTEVfREVWSUNFOw0KPiA+
-ICsgICAgICAgfQ0KPiA+ICsgICAgICAgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmY2ktPmxvY2ss
-IGZsYWdzKTsNCj4gPiArDQo+ID4gKyAgICAgICBjaV9vdGdfcXVldWVfd29yayhjaSk7DQo+ID4g
-Kw0KPiA+ICsgICAgICAgcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBlbnVt
-IHVzYl9yb2xlIGNpX3VzYl9yb2xlX3N3aXRjaF9nZXQoc3RydWN0IGRldmljZSAqZGV2KSB7DQo+
-ID4gKyAgICAgICBzdHJ1Y3QgY2lfaGRyYyAqY2kgPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsNCj4g
-PiArICAgICAgIHVuc2lnbmVkIGxvbmcgZmxhZ3M7DQo+ID4gKyAgICAgICBlbnVtIHVzYl9yb2xl
-IHJvbGU7DQo+ID4gKw0KPiA+ICsgICAgICAgc3Bpbl9sb2NrX2lycXNhdmUoJmNpLT5sb2NrLCBm
-bGFncyk7DQo+ID4gKyAgICAgICByb2xlID0gY2ktPnJvbGU7DQo+ID4gKyAgICAgICBzcGluX3Vu
-bG9ja19pcnFyZXN0b3JlKCZjaS0+bG9jaywgZmxhZ3MpOw0KPiA+ICsNCj4gPiArICAgICAgIHJl
-dHVybiByb2xlOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgc3RydWN0IHVzYl9yb2xlX3N3
-aXRjaF9kZXNjIGNpX3JvbGVfc3dpdGNoID0gew0KPiA+ICsgICAgICAgLnNldCA9IGNpX3VzYl9y
-b2xlX3N3aXRjaF9zZXQsDQo+ID4gKyAgICAgICAuZ2V0ID0gY2lfdXNiX3JvbGVfc3dpdGNoX2dl
-dCwgfTsNCj4gPiArDQo+ID4gIHN0YXRpYyBpbnQgY2lfY2FibGVfbm90aWZpZXIoc3RydWN0IG5v
-dGlmaWVyX2Jsb2NrICpuYiwgdW5zaWduZWQgbG9uZyBldmVudCwNCj4gPiAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHZvaWQgKnB0cikgIHsgQEAgLTY4OSw2ICs3MzAsOSBAQCBzdGF0aWMN
-Cj4gPiBpbnQgY2lfZ2V0X3BsYXRkYXRhKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gPiAgICAgICAg
-IGlmIChvZl9maW5kX3Byb3BlcnR5KGRldi0+b2Zfbm9kZSwgIm5vbi16ZXJvLXR0Y3RybC10dGhh
-IiwgTlVMTCkpDQo+ID4gICAgICAgICAgICAgICAgIHBsYXRkYXRhLT5mbGFncyB8PSBDSV9IRFJD
-X1NFVF9OT05fWkVST19UVEhBOw0KPiA+DQo+ID4gKyAgICAgICBpZiAoZGV2aWNlX3Byb3BlcnR5
-X3JlYWRfYm9vbChkZXYsICJ1c2Itcm9sZS1zd2l0Y2giKSkNCj4gPiArICAgICAgICAgICAgICAg
-Y2lfcm9sZV9zd2l0Y2guZndub2RlID0gZGV2LT5md25vZGU7DQo+ID4gKw0KPiA+ICAgICAgICAg
-ZXh0X2lkID0gRVJSX1BUUigtRU5PREVWKTsNCj4gPiAgICAgICAgIGV4dF92YnVzID0gRVJSX1BU
-UigtRU5PREVWKTsNCj4gPiAgICAgICAgIGlmIChvZl9wcm9wZXJ0eV9yZWFkX2Jvb2woZGV2LT5v
-Zl9ub2RlLCAiZXh0Y29uIikpIHsgQEAgLTkwOCw2DQo+ID4gKzk1Miw0MyBAQCBzdGF0aWMgY29u
-c3Qgc3RydWN0IGF0dHJpYnV0ZV9ncm91cCBjaV9hdHRyX2dyb3VwID0gew0KPiA+ICAgICAgICAg
-LmF0dHJzID0gY2lfYXR0cnMsDQo+ID4gIH07DQo+ID4NCj4gPiArc3RhdGljIGludCBjaV9zdGFy
-dF9pbml0aWFsX3JvbGUoc3RydWN0IGNpX2hkcmMgKmNpKSB7DQo+ID4gKyAgICAgICBpbnQgcmV0
-ID0gMDsNCj4gPiArDQo+ID4gKyAgICAgICBpZiAoY2ktPnJvbGVzW1VTQl9ST0xFX0hPU1RdICYm
-IGNpLT5yb2xlc1tVU0JfUk9MRV9ERVZJQ0VdKSB7DQo+ID4gKyAgICAgICAgICAgICAgIGlmIChj
-aS0+aXNfb3RnKSB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgY2ktPnJvbGUgPSBjaV9v
-dGdfcm9sZShjaSk7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgLyogRW5hYmxlIElEIGNo
-YW5nZSBpcnEgKi8NCj4gPiArICAgICAgICAgICAgICAgICAgICAgICBod193cml0ZV9vdGdzYyhj
-aSwgT1RHU0NfSURJRSwgT1RHU0NfSURJRSk7DQo+ID4gKyAgICAgICAgICAgICAgIH0gZWxzZSB7
-DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgLyoNCj4gPiArICAgICAgICAgICAgICAgICAg
-ICAgICAgKiBJZiB0aGUgY29udHJvbGxlciBpcyBub3QgT1RHIGNhcGFibGUsIGJ1dCBzdXBwb3J0
-DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICogcm9sZSBzd2l0Y2gsIHRoZSBkZWZhbHQg
-cm9sZSBpcyBnYWRnZXQsIGFuZCB0aGUNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgKiB1
-c2VyIGNhbiBzd2l0Y2ggaXQgdGhyb3VnaCBkZWJ1Z2ZzLg0KPiA+ICsgICAgICAgICAgICAgICAg
-ICAgICAgICAqLw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGNpLT5yb2xlID0gVVNCX1JP
-TEVfREVWSUNFOw0KPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4gKyAgICAgICB9IGVsc2Ugew0K
-PiA+ICsgICAgICAgICAgICAgICBjaS0+cm9sZSA9IGNpLT5yb2xlc1tVU0JfUk9MRV9IT1NUXQ0K
-PiA+ICsgICAgICAgICAgICAgICAgICAgICAgID8gVVNCX1JPTEVfSE9TVA0KPiA+ICsgICAgICAg
-ICAgICAgICAgICAgICAgIDogVVNCX1JPTEVfREVWSUNFOw0KPiA+ICsgICAgICAgfQ0KPiA+ICsN
-Cj4gPiArICAgICAgIGlmICghY2lfb3RnX2lzX2ZzbV9tb2RlKGNpKSkgew0KPiA+ICsgICAgICAg
-ICAgICAgICAvKiBvbmx5IHVwZGF0ZSB2YnVzIHN0YXR1cyBmb3IgcGVyaXBoZXJhbCAqLw0KPiA+
-ICsgICAgICAgICAgICAgICBpZiAoY2ktPnJvbGUgPT0gVVNCX1JPTEVfREVWSUNFKQ0KPiA+ICsg
-ICAgICAgICAgICAgICAgICAgICAgIGNpX2hhbmRsZV92YnVzX2NoYW5nZShjaSk7DQo+ID4gKw0K
-PiA+ICsgICAgICAgICAgICAgICByZXQgPSBjaV9yb2xlX3N0YXJ0KGNpLCBjaS0+cm9sZSk7DQo+
-ID4gKyAgICAgICAgICAgICAgIGlmIChyZXQpDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
-ZGV2X2VycihjaS0+ZGV2LCAiY2FuJ3Qgc3RhcnQgJXMgcm9sZVxuIiwNCj4gPiArICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaV9yb2xlKGNpKS0+bmFtZSk7
-DQo+ID4gKyAgICAgICB9DQo+ID4gKw0KPiA+ICsgICAgICAgcmV0dXJuIHJldDsNCj4gPiArfQ0K
-PiA+ICsNCj4gPiAgc3RhdGljIGludCBjaV9oZHJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZp
-Y2UgKnBkZXYpICB7DQo+ID4gICAgICAgICBzdHJ1Y3QgZGV2aWNlICAgKmRldiA9ICZwZGV2LT5k
-ZXY7DQo+ID4gQEAgLTEwNTEsMzYgKzExMzIsMTAgQEAgc3RhdGljIGludCBjaV9oZHJjX3Byb2Jl
-KHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ID4gICAgICAgICAgICAgICAgIH0NCj4g
-PiAgICAgICAgIH0NCj4gPg0KPiA+IC0gICAgICAgaWYgKGNpLT5yb2xlc1tVU0JfUk9MRV9IT1NU
-XSAmJiBjaS0+cm9sZXNbVVNCX1JPTEVfREVWSUNFXSkgew0KPiA+IC0gICAgICAgICAgICAgICBp
-ZiAoY2ktPmlzX290Zykgew0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgIGNpLT5yb2xlID0g
-Y2lfb3RnX3JvbGUoY2kpOw0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgIC8qIEVuYWJsZSBJ
-RCBjaGFuZ2UgaXJxICovDQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgaHdfd3JpdGVfb3Rn
-c2MoY2ksIE9UR1NDX0lESUUsIE9UR1NDX0lESUUpOw0KPiA+IC0gICAgICAgICAgICAgICB9IGVs
-c2Ugew0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgIC8qDQo+ID4gLSAgICAgICAgICAgICAg
-ICAgICAgICAgICogSWYgdGhlIGNvbnRyb2xsZXIgaXMgbm90IE9URyBjYXBhYmxlLCBidXQgc3Vw
-cG9ydA0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAqIHJvbGUgc3dpdGNoLCB0aGUgZGVm
-YWx0IHJvbGUgaXMgZ2FkZ2V0LCBhbmQgdGhlDQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAg
-ICogdXNlciBjYW4gc3dpdGNoIGl0IHRocm91Z2ggZGVidWdmcy4NCj4gPiAtICAgICAgICAgICAg
-ICAgICAgICAgICAgKi8NCj4gPiAtICAgICAgICAgICAgICAgICAgICAgICBjaS0+cm9sZSA9IFVT
-Ql9ST0xFX0RFVklDRTsNCj4gPiAtICAgICAgICAgICAgICAgfQ0KPiA+IC0gICAgICAgfSBlbHNl
-IHsNCj4gPiAtICAgICAgICAgICAgICAgY2ktPnJvbGUgPSBjaS0+cm9sZXNbVVNCX1JPTEVfSE9T
-VF0NCj4gPiAtICAgICAgICAgICAgICAgICAgICAgICA/IFVTQl9ST0xFX0hPU1QNCj4gPiAtICAg
-ICAgICAgICAgICAgICAgICAgICA6IFVTQl9ST0xFX0RFVklDRTsNCj4gPiAtICAgICAgIH0NCj4g
-PiAtDQo+ID4gLSAgICAgICBpZiAoIWNpX290Z19pc19mc21fbW9kZShjaSkpIHsNCj4gPiAtICAg
-ICAgICAgICAgICAgLyogb25seSB1cGRhdGUgdmJ1cyBzdGF0dXMgZm9yIHBlcmlwaGVyYWwgKi8N
-Cj4gPiAtICAgICAgICAgICAgICAgaWYgKGNpLT5yb2xlID09IFVTQl9ST0xFX0RFVklDRSkNCj4g
-PiAtICAgICAgICAgICAgICAgICAgICAgICBjaV9oYW5kbGVfdmJ1c19jaGFuZ2UoY2kpOw0KPiA+
-IC0NCj4gPiAtICAgICAgICAgICAgICAgcmV0ID0gY2lfcm9sZV9zdGFydChjaSwgY2ktPnJvbGUp
-Ow0KPiA+IC0gICAgICAgICAgICAgICBpZiAocmV0KSB7DQo+ID4gLSAgICAgICAgICAgICAgICAg
-ICAgICAgZGV2X2VycihkZXYsICJjYW4ndCBzdGFydCAlcyByb2xlXG4iLA0KPiA+IC0gICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNpX3JvbGUoY2kpLT5uYW1l
-KTsNCj4gPiArICAgICAgIGlmICghY2lfcm9sZV9zd2l0Y2guZndub2RlKSB7DQo+ID4gKyAgICAg
-ICAgICAgICAgIHJldCA9IGNpX3N0YXJ0X2luaXRpYWxfcm9sZShjaSk7DQo+ID4gKyAgICAgICAg
-ICAgICAgIGlmIChyZXQpDQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgZ290byBzdG9wOw0K
-PiA+IC0gICAgICAgICAgICAgICB9DQo+ID4gICAgICAgICB9DQo+ID4NCj4gPiAgICAgICAgIHJl
-dCA9IGRldm1fcmVxdWVzdF9pcnEoZGV2LCBjaS0+aXJxLCBjaV9pcnEsIElSUUZfU0hBUkVELCBA
-QA0KPiA+IC0xMDkyLDYgKzExNDcsMTUgQEAgc3RhdGljIGludCBjaV9oZHJjX3Byb2JlKHN0cnVj
-dCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ID4gICAgICAgICBpZiAocmV0KQ0KPiA+ICAgICAg
-ICAgICAgICAgICBnb3RvIHN0b3A7DQo+ID4NCj4gPiArICAgICAgIGlmIChjaV9yb2xlX3N3aXRj
-aC5md25vZGUpIHsNCj4gPiArICAgICAgICAgICAgICAgY2ktPnJvbGVfc3dpdGNoID0gdXNiX3Jv
-bGVfc3dpdGNoX3JlZ2lzdGVyKGRldiwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgJmNpX3JvbGVfc3dpdGNoKTsNCj4gPiArICAgICAgICAgICAgICAgaWYgKElT
-X0VSUihjaS0+cm9sZV9zd2l0Y2gpKSB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0
-ID0gUFRSX0VSUihjaS0+cm9sZV9zd2l0Y2gpOw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
-IGdvdG8gc3RvcDsNCj4gPiArICAgICAgICAgICAgICAgfQ0KPiA+ICsgICAgICAgfQ0KPiA+ICsN
-Cj4gPiAgICAgICAgIGlmIChjaS0+c3VwcG9ydHNfcnVudGltZV9wbSkgew0KPiA+ICAgICAgICAg
-ICAgICAgICBwbV9ydW50aW1lX3NldF9hY3RpdmUoJnBkZXYtPmRldik7DQo+ID4gICAgICAgICAg
-ICAgICAgIHBtX3J1bnRpbWVfZW5hYmxlKCZwZGV2LT5kZXYpOyBAQCAtMTEzMyw2ICsxMTk3LDkg
-QEANCj4gPiBzdGF0aWMgaW50IGNpX2hkcmNfcmVtb3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2Ug
-KnBkZXYpICB7DQo+ID4gICAgICAgICBzdHJ1Y3QgY2lfaGRyYyAqY2kgPSBwbGF0Zm9ybV9nZXRf
-ZHJ2ZGF0YShwZGV2KTsNCj4gPg0KPiA+ICsgICAgICAgaWYgKGNpLT5yb2xlX3N3aXRjaCkNCj4g
-PiArICAgICAgICAgICAgICAgdXNiX3JvbGVfc3dpdGNoX3VucmVnaXN0ZXIoY2ktPnJvbGVfc3dp
-dGNoKTsNCj4gPiArDQo+ID4gICAgICAgICBpZiAoY2ktPnN1cHBvcnRzX3J1bnRpbWVfcG0pIHsN
-Cj4gPiAgICAgICAgICAgICAgICAgcG1fcnVudGltZV9nZXRfc3luYygmcGRldi0+ZGV2KTsNCj4g
-PiAgICAgICAgICAgICAgICAgcG1fcnVudGltZV9kaXNhYmxlKCZwZGV2LT5kZXYpOyBkaWZmIC0t
-Z2l0DQo+ID4gYS9kcml2ZXJzL3VzYi9jaGlwaWRlYS9vdGcuYyBiL2RyaXZlcnMvdXNiL2NoaXBp
-ZGVhL290Zy5jIGluZGV4DQo+ID4gNWJkZTBiNS4uMGEyMjg1NSAxMDA2NDQNCj4gPiAtLS0gYS9k
-cml2ZXJzL3VzYi9jaGlwaWRlYS9vdGcuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2NoaXBpZGVh
-L290Zy5jDQo+ID4gQEAgLTIxNCw2ICsyMTQsMTkgQEAgc3RhdGljIHZvaWQgY2lfb3RnX3dvcmso
-c3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQ0KPiA+ICAgICAgICAgICAgICAgICBjaV9oYW5kbGVf
-dmJ1c19jaGFuZ2UoY2kpOw0KPiA+ICAgICAgICAgfQ0KPiA+DQo+ID4gKyAgICAgICBpZiAoY2kt
-PnJvbGVfc3dpdGNoX2V2ZW50KSB7DQo+ID4gKyAgICAgICAgICAgICAgIGNpLT5yb2xlX3N3aXRj
-aF9ldmVudCA9IGZhbHNlOw0KPiA+ICsNCj4gPiArICAgICAgICAgICAgICAgaWYgKGNpLT5yb2xl
-ID09IFVTQl9ST0xFX0RFVklDRSkgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIHVzYl9n
-YWRnZXRfdmJ1c19kaXNjb25uZWN0KCZjaS0+Z2FkZ2V0KTsNCj4gPiArICAgICAgICAgICAgICAg
-ICAgICAgICBjaV9yb2xlX3N0YXJ0KGNpLCBVU0JfUk9MRV9IT1NUKTsNCj4gPiArICAgICAgICAg
-ICAgICAgfSBlbHNlIGlmIChjaS0+cm9sZSA9PSBVU0JfUk9MRV9IT1NUKSB7DQo+ID4gKyAgICAg
-ICAgICAgICAgICAgICAgICAgY2lfcm9sZV9zdG9wKGNpKTsNCj4gPiArICAgICAgICAgICAgICAg
-ICAgICAgICB1c2JfZ2FkZ2V0X3ZidXNfY29ubmVjdCgmY2ktPmdhZGdldCk7DQo+ID4gKyAgICAg
-ICAgICAgICAgICAgICAgICAgY2ktPnJvbGUgPSBVU0JfUk9MRV9ERVZJQ0U7DQo+ID4gKyAgICAg
-ICAgICAgICAgIH0NCj4gPiArICAgICAgIH0NCj4gPiArDQo+ID4gICAgICAgICBwbV9ydW50aW1l
-X3B1dF9zeW5jKGNpLT5kZXYpOw0KPiA+DQo+ID4gICAgICAgICBlbmFibGVfaXJxKGNpLT5pcnEp
-Ow0KPiA+IC0tDQo+ID4gMi43LjQNCj4gPg0K
+> >
+> > > USB role is fully controlled by usb role switch consumer(e.g. typec),
+> > > usb port either at host mode, or at device connected mode, will not
+> > > stay at USB_ROLE_NONE mode.
+> > >
+> >
+> > Then, if the Type-C cable is disconnected from PC host, the controller driver can't be
+> > notified?If that, how controller enters low power mode at this situation?
+>
+> The controller driver can be notified, but there are only role(host or device)
+> Information, so in you mentioned case, controller driver will get the same
+> input before and after disconnect from host, can't know detachment and
+> enter low power mode accordingly, this is more like something internal
+> handling under device role.
+>
+
+If the Type-C can't pass "gadget disconnect" event, you may handle it
+at UDC driver itself, eg at ci_usb_role_switch_set. Otherwise, the gadget
+class driver can't be notified disconnection, and the controller itself can't
+enter LPM as well.
+
+Peter
+
+> Li Jun
+>
+> >
+> > Peter
+> >
+> > > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > > ---
+> > >  drivers/usb/chipidea/ci.h   |   2 +
+> > >  drivers/usb/chipidea/core.c | 125
+> > > ++++++++++++++++++++++++++++++++++----------
+> > >  drivers/usb/chipidea/otg.c  |  13 +++++
+> > >  3 files changed, 111 insertions(+), 29 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+> > > index 82b86cd..5e2f0bc 100644
+> > > --- a/drivers/usb/chipidea/ci.h
+> > > +++ b/drivers/usb/chipidea/ci.h
+> > > @@ -212,6 +212,7 @@ struct ci_hdrc {
+> > >         ktime_t                         hr_timeouts[NUM_OTG_FSM_TIMERS];
+> > >         unsigned                        enabled_otg_timer_bits;
+> > >         enum otg_fsm_timer              next_otg_timer;
+> > > +       struct usb_role_switch          *role_switch;
+> > >         struct work_struct              work;
+> > >         struct workqueue_struct         *wq;
+> > >
+> > > @@ -244,6 +245,7 @@ struct ci_hdrc {
+> > >         struct dentry                   *debugfs;
+> > >         bool                            id_event;
+> > >         bool                            b_sess_valid_event;
+> > > +       bool                            role_switch_event;
+> > >         bool                            imx28_write_fix;
+> > >         bool                            supports_runtime_pm;
+> > >         bool                            in_lpm;
+> > > diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> > > index bc24c5b..1bcf6f6 100644
+> > > --- a/drivers/usb/chipidea/core.c
+> > > +++ b/drivers/usb/chipidea/core.c
+> > > @@ -587,6 +587,47 @@ static irqreturn_t ci_irq(int irq, void *data)
+> > >         return ret;
+> > >  }
+> > >
+> > > +static int ci_usb_role_switch_set(struct device *dev, enum usb_role
+> > > +role) {
+> > > +       struct ci_hdrc *ci = dev_get_drvdata(dev);
+> > > +       unsigned long flags;
+> > > +
+> > > +       if (ci->role == role || role == USB_ROLE_NONE)
+> > > +               return 0;
+> > > +
+> > > +       spin_lock_irqsave(&ci->lock, flags);
+> > > +       ci->role_switch_event = true;
+> > > +       if (ci->role == USB_ROLE_NONE) {
+> > > +               if (role == USB_ROLE_DEVICE)
+> > > +                       ci->role = USB_ROLE_HOST;
+> > > +               else
+> > > +                       ci->role = USB_ROLE_DEVICE;
+> > > +       }
+> > > +       spin_unlock_irqrestore(&ci->lock, flags);
+> > > +
+> > > +       ci_otg_queue_work(ci);
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static enum usb_role ci_usb_role_switch_get(struct device *dev) {
+> > > +       struct ci_hdrc *ci = dev_get_drvdata(dev);
+> > > +       unsigned long flags;
+> > > +       enum usb_role role;
+> > > +
+> > > +       spin_lock_irqsave(&ci->lock, flags);
+> > > +       role = ci->role;
+> > > +       spin_unlock_irqrestore(&ci->lock, flags);
+> > > +
+> > > +       return role;
+> > > +}
+> > > +
+> > > +static struct usb_role_switch_desc ci_role_switch = {
+> > > +       .set = ci_usb_role_switch_set,
+> > > +       .get = ci_usb_role_switch_get, };
+> > > +
+> > >  static int ci_cable_notifier(struct notifier_block *nb, unsigned long event,
+> > >                              void *ptr)  { @@ -689,6 +730,9 @@ static
+> > > int ci_get_platdata(struct device *dev,
+> > >         if (of_find_property(dev->of_node, "non-zero-ttctrl-ttha", NULL))
+> > >                 platdata->flags |= CI_HDRC_SET_NON_ZERO_TTHA;
+> > >
+> > > +       if (device_property_read_bool(dev, "usb-role-switch"))
+> > > +               ci_role_switch.fwnode = dev->fwnode;
+> > > +
+> > >         ext_id = ERR_PTR(-ENODEV);
+> > >         ext_vbus = ERR_PTR(-ENODEV);
+> > >         if (of_property_read_bool(dev->of_node, "extcon")) { @@ -908,6
+> > > +952,43 @@ static const struct attribute_group ci_attr_group = {
+> > >         .attrs = ci_attrs,
+> > >  };
+> > >
+> > > +static int ci_start_initial_role(struct ci_hdrc *ci) {
+> > > +       int ret = 0;
+> > > +
+> > > +       if (ci->roles[USB_ROLE_HOST] && ci->roles[USB_ROLE_DEVICE]) {
+> > > +               if (ci->is_otg) {
+> > > +                       ci->role = ci_otg_role(ci);
+> > > +                       /* Enable ID change irq */
+> > > +                       hw_write_otgsc(ci, OTGSC_IDIE, OTGSC_IDIE);
+> > > +               } else {
+> > > +                       /*
+> > > +                        * If the controller is not OTG capable, but support
+> > > +                        * role switch, the defalt role is gadget, and the
+> > > +                        * user can switch it through debugfs.
+> > > +                        */
+> > > +                       ci->role = USB_ROLE_DEVICE;
+> > > +               }
+> > > +       } else {
+> > > +               ci->role = ci->roles[USB_ROLE_HOST]
+> > > +                       ? USB_ROLE_HOST
+> > > +                       : USB_ROLE_DEVICE;
+> > > +       }
+> > > +
+> > > +       if (!ci_otg_is_fsm_mode(ci)) {
+> > > +               /* only update vbus status for peripheral */
+> > > +               if (ci->role == USB_ROLE_DEVICE)
+> > > +                       ci_handle_vbus_change(ci);
+> > > +
+> > > +               ret = ci_role_start(ci, ci->role);
+> > > +               if (ret)
+> > > +                       dev_err(ci->dev, "can't start %s role\n",
+> > > +                                               ci_role(ci)->name);
+> > > +       }
+> > > +
+> > > +       return ret;
+> > > +}
+> > > +
+> > >  static int ci_hdrc_probe(struct platform_device *pdev)  {
+> > >         struct device   *dev = &pdev->dev;
+> > > @@ -1051,36 +1132,10 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+> > >                 }
+> > >         }
+> > >
+> > > -       if (ci->roles[USB_ROLE_HOST] && ci->roles[USB_ROLE_DEVICE]) {
+> > > -               if (ci->is_otg) {
+> > > -                       ci->role = ci_otg_role(ci);
+> > > -                       /* Enable ID change irq */
+> > > -                       hw_write_otgsc(ci, OTGSC_IDIE, OTGSC_IDIE);
+> > > -               } else {
+> > > -                       /*
+> > > -                        * If the controller is not OTG capable, but support
+> > > -                        * role switch, the defalt role is gadget, and the
+> > > -                        * user can switch it through debugfs.
+> > > -                        */
+> > > -                       ci->role = USB_ROLE_DEVICE;
+> > > -               }
+> > > -       } else {
+> > > -               ci->role = ci->roles[USB_ROLE_HOST]
+> > > -                       ? USB_ROLE_HOST
+> > > -                       : USB_ROLE_DEVICE;
+> > > -       }
+> > > -
+> > > -       if (!ci_otg_is_fsm_mode(ci)) {
+> > > -               /* only update vbus status for peripheral */
+> > > -               if (ci->role == USB_ROLE_DEVICE)
+> > > -                       ci_handle_vbus_change(ci);
+> > > -
+> > > -               ret = ci_role_start(ci, ci->role);
+> > > -               if (ret) {
+> > > -                       dev_err(dev, "can't start %s role\n",
+> > > -                                               ci_role(ci)->name);
+> > > +       if (!ci_role_switch.fwnode) {
+> > > +               ret = ci_start_initial_role(ci);
+> > > +               if (ret)
+> > >                         goto stop;
+> > > -               }
+> > >         }
+> > >
+> > >         ret = devm_request_irq(dev, ci->irq, ci_irq, IRQF_SHARED, @@
+> > > -1092,6 +1147,15 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+> > >         if (ret)
+> > >                 goto stop;
+> > >
+> > > +       if (ci_role_switch.fwnode) {
+> > > +               ci->role_switch = usb_role_switch_register(dev,
+> > > +                                       &ci_role_switch);
+> > > +               if (IS_ERR(ci->role_switch)) {
+> > > +                       ret = PTR_ERR(ci->role_switch);
+> > > +                       goto stop;
+> > > +               }
+> > > +       }
+> > > +
+> > >         if (ci->supports_runtime_pm) {
+> > >                 pm_runtime_set_active(&pdev->dev);
+> > >                 pm_runtime_enable(&pdev->dev); @@ -1133,6 +1197,9 @@
+> > > static int ci_hdrc_remove(struct platform_device *pdev)  {
+> > >         struct ci_hdrc *ci = platform_get_drvdata(pdev);
+> > >
+> > > +       if (ci->role_switch)
+> > > +               usb_role_switch_unregister(ci->role_switch);
+> > > +
+> > >         if (ci->supports_runtime_pm) {
+> > >                 pm_runtime_get_sync(&pdev->dev);
+> > >                 pm_runtime_disable(&pdev->dev); diff --git
+> > > a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c index
+> > > 5bde0b5..0a22855 100644
+> > > --- a/drivers/usb/chipidea/otg.c
+> > > +++ b/drivers/usb/chipidea/otg.c
+> > > @@ -214,6 +214,19 @@ static void ci_otg_work(struct work_struct *work)
+> > >                 ci_handle_vbus_change(ci);
+> > >         }
+> > >
+> > > +       if (ci->role_switch_event) {
+> > > +               ci->role_switch_event = false;
+> > > +
+> > > +               if (ci->role == USB_ROLE_DEVICE) {
+> > > +                       usb_gadget_vbus_disconnect(&ci->gadget);
+> > > +                       ci_role_start(ci, USB_ROLE_HOST);
+> > > +               } else if (ci->role == USB_ROLE_HOST) {
+> > > +                       ci_role_stop(ci);
+> > > +                       usb_gadget_vbus_connect(&ci->gadget);
+> > > +                       ci->role = USB_ROLE_DEVICE;
+> > > +               }
+> > > +       }
+> > > +
+> > >         pm_runtime_put_sync(ci->dev);
+> > >
+> > >         enable_irq(ci->irq);
+> > > --
+> > > 2.7.4
+> > >
