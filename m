@@ -2,36 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B580C81908
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 14:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B285081930
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 14:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728058AbfHEMR0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 08:17:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57062 "EHLO mail.kernel.org"
+        id S1728653AbfHEMYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 08:24:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58338 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727868AbfHEMR0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Aug 2019 08:17:26 -0400
+        id S1727259AbfHEMYY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Aug 2019 08:24:24 -0400
 Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E12212086D;
-        Mon,  5 Aug 2019 12:17:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F010020880;
+        Mon,  5 Aug 2019 12:24:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565007445;
-        bh=SnaKG2eaDaLZ+yKzSpFsYuS3H7I5y9zA6OUCChmyWbk=;
+        s=default; t=1565007863;
+        bh=Oj3FPFXjuZW8aPht4bbn3YgVA2X/7dkzPDjsNfH4nDc=;
         h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=PmNvXu5enS/bgXq1Ra2LbtuRhzLgQVgKXlpsBz00iH9YBQeAO/DucAuIAVUjhQM+G
-         bJB8e1Mg+BhWisG9m3uX9qGwki/HMfyGVJKEnYampK7vo27A0b4m2AmuMThuJZtAUp
-         Y/4ub7xva4Qgv5R4/pVUBfxJ+0teZOrP401XMNCE=
-Date:   Mon, 5 Aug 2019 14:17:21 +0200 (CEST)
+        b=rc67jfov6f45X1oYV0lXMBU96xnOstBh/8Wg3OI5C2o0BxO1BSdtBmM1vNkWAgIUc
+         j5ly81QJ4W/0Ql98gioJ5SB8T2fIG2+a4Yr39gyADL5XXNwVZlAzInsYNL+gqU/XO7
+         ce4eHcUuZzytfdLwAUSSzalZLcr3vNXcdLp9ndLo=
+Date:   Mon, 5 Aug 2019 14:24:18 +0200 (CEST)
 From:   Jiri Kosina <jikos@kernel.org>
-To:     Michael Bowcutt <mwb71@case.edu>
-cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: BUG: logitech-djreceiver: probe failed with error 7
-In-Reply-To: <CAL2OrGL9P91TL-4tbvJjCfoe_DEscV5kWujce0H8tgFZ=VVPvw@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.1908051416291.5899@cbobk.fhfr.pm>
-References: <CAL2OrGL9P91TL-4tbvJjCfoe_DEscV5kWujce0H8tgFZ=VVPvw@mail.gmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+cc:     syzbot <syzbot+62a1e04fd3ec2abf099e@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: KASAN: use-after-free Read in hiddev_release
+In-Reply-To: <20190805081212.3144-1-hdanton@sina.com>
+Message-ID: <nycvar.YFH.7.76.1908051423440.5899@cbobk.fhfr.pm>
+References: <20190805081212.3144-1-hdanton@sina.com>
 User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -40,23 +42,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 23 Jul 2019, Michael Bowcutt wrote:
+On Mon, 5 Aug 2019, Hillf Danton wrote:
 
-> Hi,
+> 1, no dev no open.
 > 
-> On the latest batch commit to the hid/hid tree, my USB keyboard + mouse
-> stopped working. I was able to determine that it was caused by
-> dbcbabf7da921f98beefb4a6f4b91eb62d072076 which affects
-> drivers/hid/hid-logitech-dj.c, but have not been able to come up with a
-> solution.
+> --- a/drivers/hid/usbhid/hiddev.c
+> +++ b/drivers/hid/usbhid/hiddev.c
+> @@ -284,6 +284,10 @@ static int hiddev_open(struct inode *ino
+>  	spin_unlock_irq(&list->hiddev->list_lock);
+>  
+>  	mutex_lock(&hiddev->existancelock);
+> +	if (!list->hiddev->exist) {
+> +		res = -ENODEV;
+> +		goto bail_unlock;
+> +	}
+>  	if (!list->hiddev->open++)
+>  		if (list->hiddev->exist) {
+>  			struct hid_device *hid = hiddev->hid;
+> --
+> 
+> 2, list_del before vfree.
+> 
+> --- a/drivers/hid/usbhid/hiddev.c
+> +++ b/drivers/hid/usbhid/hiddev.c
+> @@ -300,6 +304,9 @@ bail_normal_power:
+>  	hid_hw_power(hid, PM_HINT_NORMAL);
+>  bail_unlock:
+>  	mutex_unlock(&hiddev->existancelock);
+> +	spin_lock_irq(&list->hiddev->list_lock);
+> +	list_del(&list->node);
+> +	spin_unlock_irq(&list->hiddev->list_lock);
+>  bail:
+>  	file->private_data = NULL;
+>  	vfree(list);
 
-The fix is now queued in hid.git#for-5.3/upstream-fixes, namely
+Hilf,
 
-	6fb08f1a5f7e5c ("HID: logitech-dj: Really fix return value of logi_dj_recv_query_hidpp_devices")
-
-Could you please verify whether it fixes your issue as well?
-
-Thanks,
+both patches look good to me. Could you please resend them properly so 
+that I could apply them? Thanks,
 
 -- 
 Jiri Kosina
