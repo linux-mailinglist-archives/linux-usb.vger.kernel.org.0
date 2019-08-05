@@ -2,114 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5310481182
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 07:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8453B81215
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 08:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727081AbfHEFYF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 01:24:05 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41765 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725976AbfHEFYE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 01:24:04 -0400
-Received: by mail-pl1-f194.google.com with SMTP id m9so35861391pls.8;
-        Sun, 04 Aug 2019 22:24:04 -0700 (PDT)
+        id S1726436AbfHEGHf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 02:07:35 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:37237 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbfHEGHf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 02:07:35 -0400
+Received: by mail-io1-f66.google.com with SMTP id q22so45078762iog.4
+        for <linux-usb@vger.kernel.org>; Sun, 04 Aug 2019 23:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=kwMEz+087NG71UJ43Y4PF8iaz73tFFj8XFrCYqheyzM=;
-        b=RYStpXRdJ6l1TB5wKrJU7HiL/1JFuert86TTPAt7bqfUAgmkKErLM2V7eOfh80Dt2X
-         z7zdYP5OzQEjRfg6GxLfMGJx5i8X3s+g//iYCtV2yZNKceD6Ya66xqmj8jEJZ0x4z3OQ
-         43TQ1PL+flTx9iYukVvXCXiibP5xo1OjP9SbWR1oZbkY1uY6zZGLDoEN0/r6wsIRVgzU
-         3Noiq/QHVUllGwiToLVLy27y4uG1aCixTU4rLvpGd8YxUaPuwP/ba/CLQxcjYW586fb6
-         1W/dT88fozfMlEJD/QgB/3tin2mbI5vBE/RSIhH9/hQtob0Oxs1EXz4vbgjetDZz0uCm
-         Yf/w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=whdl1mEwmiB1uqZt5vOyJDG9JwPXDna4vr8UUq7q2fc=;
+        b=sg/NU8X3itWcvdU+/pjHp+HjeB+wAHrGff6wK8rXZoEzsZ4uiRygKOkPq1jr9KciP+
+         Hh0jnC491xGYj6qf1fNs7wxQma7SK94k61tCZzyRhfThm10LmctruL959VhW2GP/CvdE
+         dspqt3JQjnk0hr4b+B11CsLXgqUjBl1035ZkUTIYOsD1E7i7NJaOx2Jnm5EtKr+qKilh
+         xDpbyzmUm+b5sO/1e9HSEhI5FEmpF4orIdfFGSwcGWB1eVBMmeeBpf+HiWfJ2bb+dry5
+         L4L3ItnHKLgyf6hP3XOm2TLlqiEvThuuEmDJ6yf4aswFj1unGZEewmFs1wzZmry9c6Ut
+         3B+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=kwMEz+087NG71UJ43Y4PF8iaz73tFFj8XFrCYqheyzM=;
-        b=a3e0P6queC2BxB2HatvRW+Tl2BSUftyauGl3en0d9ygPijfEb4nyPRZBvDXHztzaFR
-         qW7ru7yIa27Aabyc8yy1KW6m4xU6mgczXNluP6QEeFUCHzZ/pLcjml3K3i1c1mYNFuzo
-         ofIWi91zFaV7yx2PRWR1Idafs/Dw8Q6Owp0KKwCHVo2IBO4jt6HRjYWhB1Cj4vSlzrWE
-         DGl639uXL9HWipk4XNb0DHoioyuIkEvA40gWmoUrdaQcYnMY8vuGAEgENes3Vu0M79pL
-         TXSFdp5gPGiZmCmJCc1p4Jxd3qkaQDp+qI1y6YP0BjFFTDAKyrby6CRzhaL0qWMgvFhu
-         A+Vw==
-X-Gm-Message-State: APjAAAW33hCF+FQq01ulgLEGErk1RFNU7hfMRsr9PBnXynN2UNbCtA5W
-        rJ96SZrOX648uSKa/ITlh1Q=
-X-Google-Smtp-Source: APXvYqwJG9ftnbw1vWkXErhnQDqqhwN5wPt0f+1hEmXWYKjYXk1pH+W1bk1sCUeNvKF1PgCaKoiyQg==
-X-Received: by 2002:a17:902:ba96:: with SMTP id k22mr146166694pls.44.1564982644123;
-        Sun, 04 Aug 2019 22:24:04 -0700 (PDT)
-Received: from localhost.localdomain ([163.152.162.125])
-        by smtp.gmail.com with ESMTPSA id o12sm12798313pjr.22.2019.08.04.22.24.01
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 04 Aug 2019 22:24:03 -0700 (PDT)
-Date:   Mon, 5 Aug 2019 14:23:58 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>
-Cc:     valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] usbip: Skip DMA mapping and unmapping for urb at
- vhci
-Message-ID: <20190805052358.GA8904@localhost.localdomain>
-References: <20190802173651.22247-1-suwan.kim027@gmail.com>
- <20190802173651.22247-2-suwan.kim027@gmail.com>
- <c23b3ac1-68d9-bc1e-610b-955988e11055@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=whdl1mEwmiB1uqZt5vOyJDG9JwPXDna4vr8UUq7q2fc=;
+        b=S3V2UDEGztH7pGmFSilAqhIpz29Qjylj1/bVt6jyKkpHqblxtpoEb3UjEwNCmPYxUS
+         VoaaHD9bUxKhAJDR+nXoKwGYxbwB3xaj92TjTklKNmUNb4MkMtZwqnbALmjJnpSGrUw3
+         Tnkp8r0IrsoZ/8d2c08MAbKQ1vuCAS8wgLHIOUnvfP9SxoPti8YCnk84Y1saTPPkhYS8
+         NCxgQj6bTdY9QCH3NkVZ8OId+6khAozkvd0DaKMUsNaYIOYm80q/MvOlUvuP3Amc/DNR
+         3EMspq3XX6wt8DOHDgLMAN1n+WXyNgqFX+zuFTBniu7sn2vwvo60dm19vQY/dx0i8STZ
+         4+RA==
+X-Gm-Message-State: APjAAAWz9Jgy/QbaRhMVGsy5h+qj8582F2kDeprAheOvjtrF72wDTOxt
+        mjHxk99/Ln2//CjmcGDxFvCUcMSnOB4S9S9Ufbjyj0bE
+X-Google-Smtp-Source: APXvYqw6PCntRqDuiOL3d2vi9QLgZ+Sahu6epBvsAIXrRS6EvX6caNdJRT1UqJwuXX6RmtMyvgBVn8HA6LhidqCP/q8=
+X-Received: by 2002:a02:c549:: with SMTP id g9mr18131010jaj.14.1564985254903;
+ Sun, 04 Aug 2019 23:07:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c23b3ac1-68d9-bc1e-610b-955988e11055@kernel.org>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+References: <20190802200325.22897-1-evan@gnarbox.com>
+In-Reply-To: <20190802200325.22897-1-evan@gnarbox.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Mon, 5 Aug 2019 14:07:23 +0800
+Message-ID: <CAL411-q1Hxkh+i3WRcAPM7QZ_yC-96jBfAx-t4PRJH7Cs1fvjA@mail.gmail.com>
+Subject: Re: EHSET USB testing
+To:     Evan Gates <evan@gnarbox.com>
+Cc:     USB list <linux-usb@vger.kernel.org>, rob@gnarbox.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 02, 2019 at 04:22:27PM -0600, shuah wrote:
-> On 8/2/19 11:36 AM, Suwan Kim wrote:
-> > vhci doesn’t do DMA for remote device. Actually, the real DMA
-> > operation is done by network card driver. vhci just passes virtual
-> > address of the buffer to the network stack, so vhci doesn’t use and
-> > need dma address of the buffer of the URB.
-> > 
-> > But HCD provides DMA mapping and unmapping function by default.
-> > Moreover, it causes unnecessary DMA mapping and unmapping which
-> > will be done again at the NIC driver and it wastes CPU cycles.
-> > So, implement map_urb_for_dma and unmap_urb_for_dma function for
-> > vhci in order to skip the DMA mapping and unmapping procedure.
-> > 
-> > When it comes to supporting SG for vhci, it is useful to use native
-> > SG list (urb->num_sgs) instead of mapped SG list because DMA mapping
-> > fnuction can adjust the number of SG list (urb->num_mapped_sgs).
-> > And vhci_map_urb_for_dma() prevents isoc pipe from using SG as
-> > hcd_map_urb_for_dma() does.
-> > 
-> > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> > ---
-> >   drivers/usb/usbip/vhci_hcd.c | 19 +++++++++++++++++++
-> >   1 file changed, 19 insertions(+)
-> > 
-> > diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> > index 000ab7225717..c62f7fa8118c 100644
-> > --- a/drivers/usb/usbip/vhci_hcd.c
-> > +++ b/drivers/usb/usbip/vhci_hcd.c
-> > @@ -1288,6 +1288,22 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
-> >   	return 0;
-> >   }
-> > +static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
-> > +		gfp_t mem_flags)
-> > +{
-> > +	if (usb_endpoint_xfer_isoc(&urb->ep->desc) && urb->num_sgs) {
-> > +		WARN_ON(1);
-> 
-> Don't add WARN_ON. I cleaned them all up recently and don't want new
-> ones added.
+On Sun, Aug 4, 2019 at 10:45 AM Evan Gates <evan@gnarbox.com> wrote:
+>
+> I'm trying to get my device to pass the EHSET tests.  I found the thread
+> "Using EHSET module" from March.  I'm having similar issues.
+>
+> I don't have access to the PID VID board that the lab uses.  Instead I'm
+> using another computer setup as a mass storage gadget but set the VID:PID
+> to 1a0a:0102 (TEST_J).  If that sounds like a problem or there is another,
+> better way to do this please let me know.
+>
+> > The usb-storage driver bound to your device first.  Try building a
+> > kernel without that driver and then it shoudl bind to the other driver.
+> >
+> > Or manually bind the ehset driver to your device through sysfs.  Read up
+> > on the documentation for the "new_id" and "bind" and "unbind" sysfs
+> > files for how to do that.
+>
+> I did this.  I was able to unbind from usb-storage but binding to
+> usb_ehset_test failed with error -32 (AFAICT EPIPE).  I tried both the
+> usb_ehset_test/bind and usb_ehset_test/new_id methods.  In both cases
+> I got the same error.
+>
+> I did another build without usb-storage.  Now I don't have to go through
+> the unbind step but I still get the same error while probing.
+>
+>         [  296.089877] usb 1-1: new high-speed USB device number 2 using xhci_hcd
+>         [  296.271081] usb_ehset_test: probe of 1-1:1.0 failed with error -32
+>
+> I notice that it says "using xhci_hcd."  Is that a problem?  Does it
+> need to be ehci?  I tried a build without xhci but that caused other
+> problems for me.
+>
+> 1) Can I use a computer in device mode to present a VID:PID to get into
+> EHSET mode?  If so how should I do that?
+>
 
-Ok. I will remove it and resend v4.
+Afaik, you can't. No Host computer will act as USB device. You may try
+to configure your box as USB device mode, for gadget driver, you could
+using legacy g_zero module, or source_sink function using configfs.
 
-Regards
-Suwan Kim
+> 2) What else do I need to do in order to get my box into EHSET mode?
+Only thing is your box need to be at host mode. For testing USB2 for xHCI,
+the mainline code should not support TEST_SINGLE_STEP_SET_FEATURE
+at my last access.
+
+Peter
