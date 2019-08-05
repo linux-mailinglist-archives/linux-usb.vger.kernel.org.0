@@ -2,134 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADFB81F8F
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 16:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C1481FC3
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 17:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728921AbfHEOxb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 10:53:31 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:41820 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728717AbfHEOxb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 10:53:31 -0400
-Received: by mail-pg1-f195.google.com with SMTP id x15so29522360pgg.8
-        for <linux-usb@vger.kernel.org>; Mon, 05 Aug 2019 07:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3yrZtEjMZiA0RuhclX++rYTRWQZnWKq123k2rmttsIk=;
-        b=YbOwPvWSkBrhOPFGfhuoQQPskms6KscbpIqua0m31ZzcLeCky60r4lgjY3QT9BleZQ
-         0sfifuIXXoh9U4S+he2BNUzLIZeS/d+hxdMRHzqR3BSXXv/VQOBtHNqelkqGtE/MZro0
-         EeQq+xKMO7qt9BUrU01mXGptULKI9uzQ4wQpverDIpKLAR65B+vOxYyuzaFTdzuvEfwK
-         f83jr6Ypn6LlwQm1wam9CI/pi/DRdEMFJYNKBgDSUCMmKJmdQIDeura9CfUN8fhDHcbk
-         I4Ol2cQyVamPqHWEk8LRv/0RRuarQ2ITIUvs6cIPjv0N94rWJHQYAug364UqLYeaXBTh
-         FNqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3yrZtEjMZiA0RuhclX++rYTRWQZnWKq123k2rmttsIk=;
-        b=eBNksizcWZE4HZenaz540fJI9U3r9O0NKxK0lvYEjv9HiGSSg6K1Yo53mNJzGPipah
-         h3NjGHjAHBm7OGKzr3N46vp5efvDQqay5scXXdTl/l+dquYi84m/Rcmg8inDSKMmYsm7
-         Pzm1gM9tgo9u8svYVj+mReBKFHts/VBRuffMrXDUyyr/yzE3M1Hi/zJgCC5iiocTrIK5
-         SzyTxBt7iftSUgKtA2UGv2SeLiFBGWQmWNUR8gw6PnDvWa0+mkGaHbaZ7IaMIBl6A0gW
-         NgYbmgtS8YFqIw/DHuwI/5OesWShCnPlpkWPKISkdVFKD1degsdvtIH6qfNbBMv/U6j1
-         KctQ==
-X-Gm-Message-State: APjAAAWBPqcJLDI/g0WaXLvPMK6dxuSS6gXgExlsZTK+HZQGdD23h3i9
-        UmwoAH9+9+xfrliM2rWJmCzwVWqDXc7/eUmRL1Tkzw==
-X-Google-Smtp-Source: APXvYqzzlBk6DPv8RuMCq7E9sUUUfAZEHeUAkO0PI0d+zpxQGbkl33n+v77hL+by703BxRqjh6GOhjnkMC5r6XjLWeM=
-X-Received: by 2002:a17:90a:a116:: with SMTP id s22mr18407803pjp.47.1565016810082;
- Mon, 05 Aug 2019 07:53:30 -0700 (PDT)
+        id S1729133AbfHEPH1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 11:07:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37232 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727259AbfHEPH0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Aug 2019 11:07:26 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1108A214C6;
+        Mon,  5 Aug 2019 15:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565017645;
+        bh=9M4E65v8ZxtfmG6qLjTi0p0PEhQAU1mHK32ZAmHQCNY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=fHKXsQmmVRNP+DwBO05m08ihZT8r8HqxgNyzTCBsK6BY7vrbY7mWpkwB6+0V9DEYy
+         8qWoqjAbUz1hAbBGABurVSO3ITLLhekfSFjI+owm9s4O1F72qIYYRqsM+Le6eLHUcC
+         RWb8yrMv36sSj7v3LWuC9IS9rEJxfGfi9+SjR3B0=
+Subject: Re: [PATCH v3 2/2] usbip: Implement SG support to vhci-hcd and stub
+ driver
+To:     Suwan Kim <suwan.kim027@gmail.com>
+Cc:     valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
+References: <20190802173651.22247-1-suwan.kim027@gmail.com>
+ <20190802173651.22247-3-suwan.kim027@gmail.com>
+ <43f32889-0117-cd94-2494-23ab29be6ca8@kernel.org>
+ <20190805080451.GB8904@localhost.localdomain>
+From:   shuah <shuah@kernel.org>
+Message-ID: <9490fd7e-b5e7-21fb-4094-ab9c9e0e0aa5@kernel.org>
+Date:   Mon, 5 Aug 2019 09:07:24 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <000000000000e5742c058f5dfaef@google.com> <1565014816.3375.1.camel@suse.com>
-In-Reply-To: <1565014816.3375.1.camel@suse.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 5 Aug 2019 16:53:18 +0200
-Message-ID: <CAAeHK+wS2YNDgtjQ-piggaMoYTVdKrYkn=iE=G8psEHRvPYK4w@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Write in lg4ff_init
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+94e2b9e9c7d1dd332345@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190805080451.GB8904@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 5, 2019 at 4:34 PM Oliver Neukum <oneukum@suse.com> wrote:
->
-> Am Montag, den 05.08.2019, 05:38 -0700 schrieb syzbot:
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=144c21dc600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=94e2b9e9c7d1dd332345
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169e8542600000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ec8262600000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+94e2b9e9c7d1dd332345@syzkaller.appspotmail.com
-> >
-> > usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,
-> > different from the interface descriptor's value: 9
-> > usb 1-1: New USB device found, idVendor=046d, idProduct=c298, bcdDevice=
-> > 0.00
-> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > usb 1-1: config 0 descriptor??
-> > logitech 0003:046D:C298.0001: unknown main item tag 0x0
-> > logitech 0003:046D:C298.0001: unknown main item tag 0x0
-> > logitech 0003:046D:C298.0001: hidraw0: USB HID v0.00 Device [HID 046d:c298]
-> > on usb-dummy_hcd.0-1/input0
-> > BUG: KASAN: slab-out-of-bounds in set_bit
-> > include/asm-generic/bitops-instrumented.h:28 [inline]
->
-> #syz test: https://github.com/google/kasan.git e96407b4
->
-> From 7e7f8ce9108b69613f8bb4ff2f95c258e22c3228 Mon Sep 17 00:00:00 2001
-> From: Oliver Neukum <oneukum@suse.com>
-> Date: Mon, 5 Aug 2019 16:14:47 +0200
-> Subject: [PATCH] hid-lg4ff: sanity check for offsets of FF effects
->
-> Malicious devices could provide huge offsets which would lead
-> to setting bits in random kernel memory. Adding a sanity check.
->
-> Reported-by: syzbot+94e2b9e9c7d1dd332345@syzkaller.appspotmail.com
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->  drivers/hid/hid-lg4ff.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/hid/hid-lg4ff.c b/drivers/hid/hid-lg4ff.c
-> index cefba038520c..f9572750d889 100644
-> --- a/drivers/hid/hid-lg4ff.c
-> +++ b/drivers/hid/hid-lg4ff.c
-> @@ -1327,8 +1327,12 @@ int lg4ff_init(struct hid_device *hid)
->         }
->
->         /* Set supported force feedback capabilities */
-> +       error = -ENODEV;
->         for (j = 0; lg4ff_devices[i].ff_effects[j] >= 0; j++)
-> -               set_bit(lg4ff_devices[i].ff_effects[j], dev->ffbit);
-> +               if (lg4ff_devices[i].ff_effects[j] <= 15)
+On 8/5/19 2:04 AM, Suwan Kim wrote:
+> On Fri, Aug 02, 2019 at 04:41:52PM -0600, shuah wrote:
+>> Hi Suwan,
+>>
+>> On 8/2/19 11:36 AM, Suwan Kim wrote:
+>>> There are bugs on vhci with usb 3.0 storage device.
+>>
+>> This sentence doesn't make sense to me. What bugs? Ca you eloborate?
+> 
+> Alan's patch description "usb-storage: Set virt_boundary_mask to
+> avoid SG overflows" elaborates the problem. In USB, each SG list
+> entry buffer should be divisible by the bulk maxpacket size. But
+> with native SG support, this problem doesn't matter because the
+> SG buffer is treated as contiguous buffer. But without native SG
+> support, storage driver breaks SG list into several URBs and each
+> URB is sparate transfer.
+> 
+> Let's assume that driver request 31.5 KB data and has SG list which
+> has 3584 bytes buffer followed by 7 4096 bytes buffer for some
+> reason. USB Storage driver splits this SG list into several URBs
+> because VHCI doesn't support SG and send them separately. So the
+> first URB buffer size is 3584 bytes. When receiving data from device,
+> USB 3.0 device sends data packet of 1024 bytes size because the max
+> packet size of BULK pipe is 1024 bytes. So device sends 4096 bytes.
+> But the first URB buffer has only 3584 bytes buffer size. So host
+> controller terminates the transfer even though there is more data
+> to receive.
+> 
+> Please also reference the mail thread
+> https://marc.info/?t=155449209600003&r=1&w=2
+> https://marc.info/?l=linux-usb&m=155482317722223&w=2
+> 
 
-Can't ff_effects have one of the FF_CONSTANT, FF_PERIODIC, etc.
-values? Those are 0x50, 0x51, ... Or maybe I'm just misunderstanding
-something. Are those ff_effects provided by the device?
+I am asking you to elaborate and add it to the commit log instead of
+just saying "There are bugs on vhci with usb 3.0 storage device."
 
-> +                       set_bit(lg4ff_devices[i].ff_effects[j], dev->ffbit);
-> +               else
-> +                       goto err_init;
->
->         error = input_ff_create_memless(dev, NULL, lg4ff_play);
->
-> --
-> 2.16.4
->
+thanks,
+-- Shuah
