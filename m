@@ -2,98 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DA281FC7
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 17:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34FD81FF0
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 17:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729431AbfHEPIU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 11:08:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37364 "EHLO mail.kernel.org"
+        id S1728933AbfHEPRQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 11:17:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39238 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728885AbfHEPIU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Aug 2019 11:08:20 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728468AbfHEPRQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Aug 2019 11:17:16 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C3148214C6;
-        Mon,  5 Aug 2019 15:08:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6256F216F4;
+        Mon,  5 Aug 2019 15:17:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565017699;
-        bh=pP2QV9RFikSg/QhS3JVeQ96q3EXCKWZuPOHE9VeEQNY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=dkPlqTiVJR4OM905QzzFSSRjr3/Uxz+ktVrFmuv+aN0S6asPuCW4+3IWyFIX7FRGO
-         hGVL/BqI2f1SNkrvob80iZePUX/TQy25TGkMewRLMx5QuCiScFbXFRS98WuE+uSPg6
-         l7tGs5oslOQjt75LlNWg0yvFQZmlnEDTK3ic8rmY=
-Subject: Re: [PATCH v3 1/2] usbip: Skip DMA mapping and unmapping for urb at
- vhci
-To:     Suwan Kim <suwan.kim027@gmail.com>
-Cc:     valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20190802173651.22247-1-suwan.kim027@gmail.com>
- <20190802173651.22247-2-suwan.kim027@gmail.com>
- <c23b3ac1-68d9-bc1e-610b-955988e11055@kernel.org>
- <20190805052358.GA8904@localhost.localdomain>
-From:   shuah <shuah@kernel.org>
-Message-ID: <8ce7b60c-6075-54ac-a917-921cb41003e6@kernel.org>
-Date:   Mon, 5 Aug 2019 09:08:18 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        s=default; t=1565018235;
+        bh=x10plgI7L0b67A1k2vgybhQdDfioCS+r/a9+H4Zcftk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uVtd7O8Yh7gmgrzaZiZTH1TZ/7VIb9NMu71+EnqCeO8Znhq4zHb+pwNplgT1u39uR
+         B+asBF8sXj5keDWeEUuChAjzXbhd5nlfLaQY3UqP4vGokJJ5rR89JSeX02o+vQRmKP
+         bS6PTFyE8Va1ubvPY509Nvo+B+6nfQ2N+rDrRwqo=
+Date:   Mon, 5 Aug 2019 17:17:13 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Gavin Li <gavinli@thegavinli.com>
+Cc:     linux-usb@vger.kernel.org, Gavin Li <git@thegavinli.com>
+Subject: Re: [PATCH] usb: devio: fix mmap() on non-coherent DMA architectures
+Message-ID: <20190805151713.GA7067@kroah.com>
+References: <20190801220436.3871-1-gavinli@thegavinli.com>
+ <20190802121416.GA20689@kroah.com>
+ <CA+GxvY7LswVFZvk0mLRLgUqdo=Gb0pQ1KMsgmWbiFEPvMvquXQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190805052358.GA8904@localhost.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+GxvY7LswVFZvk0mLRLgUqdo=Gb0pQ1KMsgmWbiFEPvMvquXQ@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/4/19 11:23 PM, Suwan Kim wrote:
-> On Fri, Aug 02, 2019 at 04:22:27PM -0600, shuah wrote:
->> On 8/2/19 11:36 AM, Suwan Kim wrote:
->>> vhci doesn’t do DMA for remote device. Actually, the real DMA
->>> operation is done by network card driver. vhci just passes virtual
->>> address of the buffer to the network stack, so vhci doesn’t use and
->>> need dma address of the buffer of the URB.
->>>
->>> But HCD provides DMA mapping and unmapping function by default.
->>> Moreover, it causes unnecessary DMA mapping and unmapping which
->>> will be done again at the NIC driver and it wastes CPU cycles.
->>> So, implement map_urb_for_dma and unmap_urb_for_dma function for
->>> vhci in order to skip the DMA mapping and unmapping procedure.
->>>
->>> When it comes to supporting SG for vhci, it is useful to use native
->>> SG list (urb->num_sgs) instead of mapped SG list because DMA mapping
->>> fnuction can adjust the number of SG list (urb->num_mapped_sgs).
->>> And vhci_map_urb_for_dma() prevents isoc pipe from using SG as
->>> hcd_map_urb_for_dma() does.
->>>
->>> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
->>> ---
->>>    drivers/usb/usbip/vhci_hcd.c | 19 +++++++++++++++++++
->>>    1 file changed, 19 insertions(+)
->>>
->>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
->>> index 000ab7225717..c62f7fa8118c 100644
->>> --- a/drivers/usb/usbip/vhci_hcd.c
->>> +++ b/drivers/usb/usbip/vhci_hcd.c
->>> @@ -1288,6 +1288,22 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
->>>    	return 0;
->>>    }
->>> +static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
->>> +		gfp_t mem_flags)
->>> +{
->>> +	if (usb_endpoint_xfer_isoc(&urb->ep->desc) && urb->num_sgs) {
->>> +		WARN_ON(1);
->>
->> Don't add WARN_ON. I cleaned them all up recently and don't want new
->> ones added.
+On Fri, Aug 02, 2019 at 10:57:00AM -0700, Gavin Li wrote:
+> usbfs mmap() looks like it was introduced for 4.6 in commit
+> f7d34b445abc, so it should probably be backported to 4.9 and onwards.
+> This issue has been present since the introduction of the feature.
 > 
-> Ok. I will remove it and resend v4.
+> One sidenote: this patch will cause the following warning on x86 due
+> to dmap_mmap_coherent() trying to map normal memory in as uncached:
 > 
+> x86/PAT: ... map pfn RAM range req uncached-minus for [mem
+> 0x77b000000-0x77b210fff], got write-back
+> 
+> This warning is harmless, as x86 is DMA coherent and the memory gets
+> correctly mapped in as write-back. I will submit a patch to the DMA
+> mapping team to eliminate this warning.
 
-Please add appropriate error message in place of WARN_ON
+Let me know what the git commit id of that patch is, I will wait for it
+to hit the tree before adding this one.
 
 thanks,
--- Shuah
 
+greg k-h
