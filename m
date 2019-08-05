@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D4282506
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 20:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB47482562
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 21:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729566AbfHESsq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 14:48:46 -0400
-Received: from gateway34.websitewelcome.com ([192.185.149.222]:34648 "EHLO
+        id S1730310AbfHETO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 15:14:28 -0400
+Received: from gateway34.websitewelcome.com ([192.185.149.222]:46865 "EHLO
         gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728885AbfHESsq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 14:48:46 -0400
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 0332BDE4216
-        for <linux-usb@vger.kernel.org>; Mon,  5 Aug 2019 13:48:45 -0500 (CDT)
+        by vger.kernel.org with ESMTP id S1727802AbfHETO2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 15:14:28 -0400
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 21CEB4A45D
+        for <linux-usb@vger.kernel.org>; Mon,  5 Aug 2019 14:14:28 -0500 (CDT)
 Received: from gator4166.hostgator.com ([108.167.133.22])
         by cmsmtp with SMTP
-        id ui2GhZRnU4FKpui2GhhucZ; Mon, 05 Aug 2019 13:48:45 -0500
+        id uiRAhalLl2PzOuiRAheizj; Mon, 05 Aug 2019 14:14:28 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
@@ -24,30 +24,25 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ZmIHx3XJdBaj7RV/vprnPWvpQjhw5au5H8dBkUDrmrs=; b=pEWHySVGZdwEQCJOFLM85qeI43
-        oVziUhmZKzQ7l8EwanqLkBnE9dI9SRdvXqVG57KsXoGW4VXuACI7MNjh8eOsIlpP+KZQBxq5BJ2uy
-        NiFTNGtExkxVOgaP/B29A7bFDsboYbrT64GubvieaUxil0LbDBTolT/aIJT3h5vjNi4SkB0ZjzQZ2
-        n+f5N9NEvypwPfkKJ30n3ijiYXv3hhdJcEQHvjVH8KEqOcUgTLg1Zd5oHhnT8QYuxrhtlY9G4CTbF
-        laka7sJP/Y+JJNVJJjZF3udsKIWoJgj5jrp665PYmEDnxAIxBUxwV8C86zdPduJ8c9uLkGf2xJIxR
-        RyZWXYCg==;
-Received: from [187.192.11.120] (port=37266 helo=embeddedor)
+        bh=dzFv/IwO8nS0LzTNEOrjXf+xKsPETwh6M5w7aEBoJKo=; b=CkqNqbpnX5kbciEOmfZEuJEDIu
+        5rBhPk5WDDEn7Wf6XcIVb250/7QVs3mt620PZ66j8+3MOZn3aUN2Vz5ztGMQ/Kzfj1dcR7+gkQrq1
+        nnptPu3LDK2/Pl/+kZxunxE7rPvclO1axBmRunNcsq0Rxn5HhaIfY04ivVXJ00b72SyjSPhkHpciQ
+        yHUEEdy2ahhmRyK2VE3d1A7Jz9PQ+ovpz6XQtsY9vHJknXd6+gOKoXIoqU7JFaQgiJfBsJq09x7fl
+        Rzi5u3Rzor1kVm7y9MGDiepmcUvOvnKccPPXJEjRiVTVoPaNZvl1XubYQUQ2FnBYxQ2mogBjQy60W
+        o2ovT6/w==;
+Received: from [187.192.11.120] (port=37378 helo=embeddedor)
         by gator4166.hostgator.com with esmtpa (Exim 4.92)
         (envelope-from <gustavo@embeddedor.com>)
-        id 1hui2F-002sVJ-Lx; Mon, 05 Aug 2019 13:48:43 -0500
-Date:   Mon, 5 Aug 2019 13:48:42 -0500
+        id 1huiR8-0037a8-QZ; Mon, 05 Aug 2019 14:14:26 -0500
+Date:   Mon, 5 Aug 2019 14:14:26 -0500
 From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Cristian Birsan <cristian.birsan@microchip.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] usb: gadget: atmel_usba_udc: Mark expected switch
- fall-through
-Message-ID: <20190805184842.GA8627@embeddedor>
+Subject: [PATCH] USB: gadget: udc: s3c2410_udc: Mark expected switch
+ fall-throughs
+Message-ID: <20190805191426.GA12414@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -60,13 +55,13 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.192.11.120
 X-Source-L: No
-X-Exim-ID: 1hui2F-002sVJ-Lx
+X-Exim-ID: 1huiR8-0037a8-QZ
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: (embeddedor) [187.192.11.120]:37266
+X-Source-Sender: (embeddedor) [187.192.11.120]:37378
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 8
+X-Email-Count: 3
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
@@ -76,27 +71,36 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Mark switch cases where we are expecting to fall through.
 
-This patch fixes the following warning (Building: at91_dt_defconfig arm):
+This patch fixes the following warning (Building: tct_hammer_defconfig arm):
 
-drivers/usb/gadget/udc/atmel_usba_udc.c:329:13: warning: this statement may fall through [-Wimplicit-fallthrough=]
+drivers/usb/gadget/udc/s3c2410_udc.c:314:7: warning: this statement may fall through [-Wimplicit-fallthrough=]
+drivers/usb/gadget/udc/s3c2410_udc.c:418:7: warning: this statement may fall through [-Wimplicit-fallthrough=]
 
 Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 ---
- drivers/usb/gadget/udc/atmel_usba_udc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/gadget/udc/s3c2410_udc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-index 503d275bc4c4..86ffc8307864 100644
---- a/drivers/usb/gadget/udc/atmel_usba_udc.c
-+++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-@@ -327,6 +327,7 @@ static int usba_config_fifo_table(struct usba_udc *udc)
- 	switch (fifo_mode) {
+diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
+index af3e63316ace..f82208fbc249 100644
+--- a/drivers/usb/gadget/udc/s3c2410_udc.c
++++ b/drivers/usb/gadget/udc/s3c2410_udc.c
+@@ -312,6 +312,7 @@ static int s3c2410_udc_write_fifo(struct s3c2410_ep *ep,
+ 	switch (idx) {
  	default:
- 		fifo_mode = 0;
+ 		idx = 0;
 +		/* fall through */
  	case 0:
- 		udc->fifo_cfg = NULL;
- 		n = 0;
+ 		fifo_reg = S3C2410_UDC_EP0_FIFO_REG;
+ 		break;
+@@ -416,6 +417,7 @@ static int s3c2410_udc_read_fifo(struct s3c2410_ep *ep,
+ 	switch (idx) {
+ 	default:
+ 		idx = 0;
++		/* fall through */
+ 	case 0:
+ 		fifo_reg = S3C2410_UDC_EP0_FIFO_REG;
+ 		break;
 -- 
 2.22.0
 
