@@ -2,92 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5136819EE
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 14:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8034981A12
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 14:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728716AbfHEMrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 08:47:18 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:35051 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726779AbfHEMrR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 08:47:17 -0400
-Received: by mail-io1-f67.google.com with SMTP id m24so167021337ioo.2;
-        Mon, 05 Aug 2019 05:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aNRu8d6P0l9UPeO2XHPUBXtwBghX09sN9CzqbrlIoh0=;
-        b=j/bAgWAil3mRiYky6AnRqLeM8V1zdbGU/zoXCwNDELkUqbe57Wb3Rqul+Yp7KZYmnp
-         /pXsxz4Ec1Ja6QFaBuqCCTyu4IjNEWuXjoThkG+AEQ3Th8XgyCwagIqsWbWYPl+qLynY
-         W81J2gSa/MLIwFXNv3zKXUKIu5+D6qnfW8TKgghA/61gAyF195B5MtLkiuE6PG8N0NnQ
-         /jqsrHJ7xyMicdJQmRxfBJG7YG5IsqcncR8/nnzSg6vU/sfnl9j+NaGJwjiVoItP7UVP
-         EROiUjX4A8VVYEfbXRhf/BX2VbQyKxkP3acsT18XJ41Jp698vRCg2ZZbbeGLgnFHmK/y
-         HpwA==
+        id S1726811AbfHEM6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 08:58:40 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:35201 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726559AbfHEM6k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 08:58:40 -0400
+Received: from mail-pg1-f200.google.com ([209.85.215.200])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hucZS-00075O-F0
+        for linux-usb@vger.kernel.org; Mon, 05 Aug 2019 12:58:38 +0000
+Received: by mail-pg1-f200.google.com with SMTP id p15so9038865pgl.18
+        for <linux-usb@vger.kernel.org>; Mon, 05 Aug 2019 05:58:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aNRu8d6P0l9UPeO2XHPUBXtwBghX09sN9CzqbrlIoh0=;
-        b=mJz9CU045Tvh6I/fIkeLnimMLsV/ZiIYruMmtModtZwQHS9xztZhMzMJjxiZ3o+toF
-         YmjsEhTrSPxZaa/UjlfaP+f1pkh7HrlTw0fKZwjuo2PpuOJ2plehJ1YhGIuum1n9W8DE
-         1kjc9RTlNAqYxT2dcpi7wWrx7E4NuRbxm6dJgKwt7y1mKOGSh8gAGbdtmvo8wBLcyNCx
-         ccjyBPjzAM7FrHRf8r5JFWJBXR7uRoXxItscZBaGw76K/UPLSRa/W5LZDnL0WFH+3Fhc
-         b3jtyylqqOD59RDnjWtvQI63It3GXi7o1u68UI9YAFI3bkIzAto1UIu9zfXBmW0ot2dR
-         pJMQ==
-X-Gm-Message-State: APjAAAXMEPukTE20sldkFSovfHUr+8vXoqM9C8WvSVogKZ9pK/yCRuUb
-        VjM+c7IZQk2OkrUArP9TvRdDpa6OH9hB8IJg2jw=
-X-Google-Smtp-Source: APXvYqzXL2hkLoxBzy0mGaLH2PFh9enoPkAIlPHpx/CXR2e8aI0nWFKy0Tu9frhpX5sT1w1c87ndw7D6azKbKOfDYYg=
-X-Received: by 2002:a02:cb4b:: with SMTP id k11mr152797148jap.109.1565009236799;
- Mon, 05 Aug 2019 05:47:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190731195713.3150463-1-arnd@arndb.de> <20190731195713.3150463-3-arnd@arndb.de>
- <20190801055821.GB24607@kroah.com>
-In-Reply-To: <20190801055821.GB24607@kroah.com>
-From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
-Date:   Mon, 5 Aug 2019 08:47:05 -0400
-Message-ID: <CA+rxa6rJE2R7R_r8nx7HyHu4xc8ujQB1rRG+0Yx2XzwtoiD5CQ@mail.gmail.com>
-Subject: Re: [PATCH 02/14] usb: udc: lpc32xx: allow compile-testing
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=kLQHkY6IzjLJ/SxKbqZprYGcodxnQqbLc6H8ulCgR/0=;
+        b=V9bqZG/3+pqbzyKkwJjW3e67/BiY70DqcW6uqc5O+WU71qhQEEhtcZWskGEMX3+ZIl
+         IyXetQvauLieoD71xMPR9qb8Ho8tATkboqWLfBZ6+a3xwG94vJ1o0FQ5x1qqGhNd4vxg
+         iwIy/ZiZS7b2x/WOL2yXKzCjVcqbLhq00w+qLEHeONyTgU2EhnorGKJKeTGYSmqfQDYO
+         8j9RfozuraVAitzeMZnSrgtdWs84rRd3SBIk7sHHR5+RXbCiWHjDC1iebzO3o7W4RXL9
+         Gx0nb51ZIUIr/257amATj9Jiqs4NbZ94uTSyxVNQu2L06yR+sgVN/0SAxBrHAB+5enFW
+         skvw==
+X-Gm-Message-State: APjAAAV4XIgSihPqN69hnZrlneP/l5DrJzVoYfe0zlqVQhSbNUIM7jBU
+        T4VBu0GdVlCY7M39ytFjrRllnijdR4gu9DPe8TD8FMcrUs8EpyV3sT/9tIniAJCAx0xlpZqV1YG
+        0XyeqdJhNVp1x3mUiIvygHAn7OR+jcs61JuT9hw==
+X-Received: by 2002:a17:90a:cb8e:: with SMTP id a14mr17818349pju.124.1565009916983;
+        Mon, 05 Aug 2019 05:58:36 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqy6wB7RQJuS893yP0lCto2JC6p6RMOWq5tsJVXCzjroOijdAwdM4YtEXc5wZU7Uw3eYJjb+Ow==
+X-Received: by 2002:a17:90a:cb8e:: with SMTP id a14mr17818334pju.124.1565009916772;
+        Mon, 05 Aug 2019 05:58:36 -0700 (PDT)
+Received: from 2001-b011-380f-37d3-1da7-2297-19d9-489e.dynamic-ip6.hinet.net (2001-b011-380f-37d3-1da7-2297-19d9-489e.dynamic-ip6.hinet.net. [2001:b011:380f:37d3:1da7:2297:19d9:489e])
+        by smtp.gmail.com with ESMTPSA id x24sm81693897pgl.84.2019.08.05.05.58.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Aug 2019 05:58:36 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH v2] USB: Disable USB2 LPM at shutdown
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <46147522-7BC2-4C30-B3E5-6568E9642982@canonical.com>
+Date:   Mon, 5 Aug 2019 20:58:33 +0800
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8bit
+Message-Id: <27A5C1CC-E0A4-4CAF-B81E-90EE76C8A887@canonical.com>
+References: <Pine.LNX.4.44L0.1906061013490.1641-100000@iolanthe.rowland.org>
+ <46147522-7BC2-4C30-B3E5-6568E9642982@canonical.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
+Hi Greg,
 
-On Thu, Aug 1, 2019 at 1:58 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+at 17:22, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+
+> at 22:17, Alan Stern <stern@rowland.harvard.edu> wrote:
+>>
+>> I agree with Kai-Heng, this seems like a fairly light-weight solution
+>> to a reasonable problem.
 >
-> On Wed, Jul 31, 2019 at 09:56:44PM +0200, Arnd Bergmann wrote:
-> > The only thing that prevents building this driver on other
-> > platforms is the mach/hardware.h include, which is not actually
-> > used here at all, so remove the line and allow CONFIG_COMPILE_TEST.
-> >
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  drivers/usb/gadget/udc/Kconfig       | 3 ++-
-> >  drivers/usb/gadget/udc/lpc32xx_udc.c | 2 --
-> >  2 files changed, 2 insertions(+), 3 deletions(-)
+> Thanks for your review.
 >
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> As to the issue of how much it will slow down system shutdowns, I have
+>> no idea.  Probably not very much, unless somebody has an unusually
+>> large number of USB devices plugged in, but only testing can give a
+>> real answer.
+>
+> In addition to that, only USB2 devices that enable LPM will slow down  
+> shutdown process.
+> Right now only internally connected USB2 devices enable LPM, so the  
+> numbers are even lower.
+>
+>> I suppose we could add an HCD flag for host controllers which require
+>> this workaround.  Either way, it's probably not a very big deal.
+>
+> IMO this is not necessary. Only xHCI that reports hw_lpm_support will be  
+> affected. At least for PC, this only became true after Whiskey Lake.
+>
+> Kai-Heng
+>
+>> Alan Stern
+
+This patch is included in Ubuntu’s kernel for a while now, and there’s no  
+regression report so far.
+Please consider merge this patch.
+
+Kai-Heng
