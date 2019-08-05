@@ -2,73 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9ED881843
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 13:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1604A81845
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 13:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727989AbfHELgP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 07:36:15 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:43502 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727328AbfHELgP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 07:36:15 -0400
-Received: by mail-lf1-f66.google.com with SMTP id c19so57663973lfm.10
-        for <linux-usb@vger.kernel.org>; Mon, 05 Aug 2019 04:36:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dPLfC8gHI3sZNkICGipvyJtZYpCb+woagnSYN8BemIE=;
-        b=e1tgHh5tGEMwC29YUF9Cj5T6sZV4oiHuWn8fTUYl2FSXIx+Lh/Oy3Jm13W6g+qC/qJ
-         ejw2ik9ZWJ9ImZayZX7vTZoxdJwyZaTGqs02xo5GRxBTOaabGjDKT4UFYsB75eE7yaZR
-         dkbdYwDPTP0eEF+iBSb9Q6S3vQMJ+wySqCaynjiKBnHWUm2qimZElNDnsEoEvUoX3wNN
-         0KWprZfb8kIOVnTHTybbShh8q5kxvUzm26Qmpq2zzELzUGQPqNCMIxKhPg5T3+Q9j5sm
-         zRW8TnYHV73a2w7PGnydITo3CAmYSO1e54kfJ689RN6rAZrZ831yoff9pfNTdpCMdHDv
-         NrFQ==
-X-Gm-Message-State: APjAAAXEm4f0Bv4VQfy+wu431f7BcgqVFRRlxMN+9c3PlHgV5T7D01xK
-        pgVpqR18So6QdGTnh7Zt2pg=
-X-Google-Smtp-Source: APXvYqzUGzlzoUxHbPjLFluVrgI/NLaAPGdAljUavjad6irklL5IqVO9RB0UY5uyGL/ugCjNDggVvQ==
-X-Received: by 2002:a19:a83:: with SMTP id 125mr51374964lfk.150.1565004973024;
-        Mon, 05 Aug 2019 04:36:13 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id u27sm14850299lfn.87.2019.08.05.04.36.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Aug 2019 04:36:12 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1hubHe-00066f-6x; Mon, 05 Aug 2019 13:36:10 +0200
-Date:   Mon, 5 Aug 2019 13:36:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Rogan Dawes <rogan@dawes.za.net>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6] USB: serial: option: add D-Link DWM-222 device ID
-Message-ID: <20190805113610.GE3574@localhost>
-References: <CAOYdKdjBtYt_2CuBxaTYKXCt7En+ESdOKeJ+kEEvvcNhkYs_7w@mail.gmail.com>
- <20190717091134.GA5179@lisa.dawes.za.net>
+        id S1728056AbfHELh1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 5 Aug 2019 07:37:27 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:38822 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727989AbfHELh0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 07:37:26 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-184-cuFDZAwxM2qp3yMrQEPfSQ-1; Mon, 05 Aug 2019 12:37:23 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 5 Aug 2019 12:37:23 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 5 Aug 2019 12:37:23 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'gavinli@thegavinli.com'" <gavinli@thegavinli.com>,
+        "gregkh@linuxfoundation.o" <gregkh@linuxfoundation.o>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     Gavin Li <git@thegavinli.com>
+Subject: RE: [PATCH] usb: devio: fix mmap() on non-coherent DMA architectures
+Thread-Topic: [PATCH] usb: devio: fix mmap() on non-coherent DMA architectures
+Thread-Index: AQHVSLS2ECcVwrHAe0C9/bkZ53HVZqbscVFQ
+Date:   Mon, 5 Aug 2019 11:37:22 +0000
+Message-ID: <95109056461d4721bc2d2742b18b97ee@AcuMS.aculab.com>
+References: <20190801220134.3295-1-gavinli@thegavinli.com>
+In-Reply-To: <20190801220134.3295-1-gavinli@thegavinli.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190717091134.GA5179@lisa.dawes.za.net>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-MC-Unique: cuFDZAwxM2qp3yMrQEPfSQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 17, 2019 at 11:11:34AM +0200, Rogan Dawes wrote:
-> Add device id for D-Link DWM-222 A2.
-> 
-> MI_00 D-Link HS-USB Diagnostics
-> MI_01 D-Link HS-USB Modem
-> MI_02 D-Link HS-USB AT Port
-> MI_03 D-Link HS-USB NMEA
-> MI_04 D-Link HS-USB WWAN Adapter (qmi_wwan)
-> MI_05 USB Mass Storage Device
-> 
-> Cc: stable@vger.kernel.org
-> Signed-Off-By: Rogan Dawes <rogan@dawes.za.net>
+From: gavinli@thegavinli.com
+> Sent: 01 August 2019 23:02
+>
+> On architectures that are not (or are optionally) DMA coherent,
+> dma_alloc_coherent() returns an address into the vmalloc space,
+> and calling virt_to_phys() on this address returns an unusable
+> physical address.
 
-Now applied, thanks.
+So? what is the code trying to use the return value of virt_to_phys() for?
 
-Johan
+The 'cpu physical address' isn't (usually) a very interesting number.
+The value you normally want is the address the hardware should use
+in order to access the memory - this isn't (in general) the same value.
+(It might be different for different devices.)
+
+ISTR that dma_alloc_coherent() returns this value to the caller.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
