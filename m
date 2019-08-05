@@ -2,64 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D34FD81FF0
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 17:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E814821A3
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 18:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728933AbfHEPRQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 11:17:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39238 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728468AbfHEPRQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Aug 2019 11:17:16 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6256F216F4;
-        Mon,  5 Aug 2019 15:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565018235;
-        bh=x10plgI7L0b67A1k2vgybhQdDfioCS+r/a9+H4Zcftk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uVtd7O8Yh7gmgrzaZiZTH1TZ/7VIb9NMu71+EnqCeO8Znhq4zHb+pwNplgT1u39uR
-         B+asBF8sXj5keDWeEUuChAjzXbhd5nlfLaQY3UqP4vGokJJ5rR89JSeX02o+vQRmKP
-         bS6PTFyE8Va1ubvPY509Nvo+B+6nfQ2N+rDrRwqo=
-Date:   Mon, 5 Aug 2019 17:17:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Gavin Li <gavinli@thegavinli.com>
-Cc:     linux-usb@vger.kernel.org, Gavin Li <git@thegavinli.com>
-Subject: Re: [PATCH] usb: devio: fix mmap() on non-coherent DMA architectures
-Message-ID: <20190805151713.GA7067@kroah.com>
-References: <20190801220436.3871-1-gavinli@thegavinli.com>
- <20190802121416.GA20689@kroah.com>
- <CA+GxvY7LswVFZvk0mLRLgUqdo=Gb0pQ1KMsgmWbiFEPvMvquXQ@mail.gmail.com>
+        id S1729045AbfHEQZf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 12:25:35 -0400
+Received: from dougal.metanate.com ([90.155.101.14]:49836 "EHLO metanate.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727928AbfHEQZf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Aug 2019 12:25:35 -0400
+X-Greylist: delayed 1425 seconds by postgrey-1.27 at vger.kernel.org; Mon, 05 Aug 2019 12:25:34 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=metanate.com;
+         s=stronger; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Mb0+WXDHWSc/rNkXJbc6lMJLOwyKt65paFmvwJ/SejM=; b=o/TXRB5b64C8hWjvr6mX7H06kv
+        VIGgsbS1DCOycyZPbyoYeD876x/PTwEz1CUpjs6+v08vj4CH6SMHggOVQPikmH96RRZySnnt0muRh
+        /nKLigUZWLfpAUPkge7xd9K0dXqkKEOO3IEJk8Y5r4eTevojkLLlp6jAggxZ/giZlu0mCONyEOfyW
+        vlyAowfG5AGz3rR+0FtHZTyCEwldjBQXhBWxRhQg9epS0xa6LnJe8DEwbduNXLK+sUPd19kXUGv9k
+        m2eylPwiqn1BXjOZ0pQw1ERSnKKkM1nTIDF01q4n/QsGdiI8jP0eLYoNVSmwAWZhJdVEjg1rK4aB/
+        09k9ADPQ==;
+Received: from dougal.metanate.com ([192.168.88.1] helo=localhost.localdomain)
+        by shrek.metanate.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <john@metanate.com>)
+        id 1hufQg-0000vT-0R; Mon, 05 Aug 2019 17:01:46 +0100
+From:   John Keeping <john@metanate.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Keeping <john@metanate.com>
+Subject: [PATCH] usb: dwc2: gadget: Fix kill_all_requests race
+Date:   Mon,  5 Aug 2019 17:01:21 +0100
+Message-Id: <20190805160121.27443-1-john@metanate.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+GxvY7LswVFZvk0mLRLgUqdo=Gb0pQ1KMsgmWbiFEPvMvquXQ@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 02, 2019 at 10:57:00AM -0700, Gavin Li wrote:
-> usbfs mmap() looks like it was introduced for 4.6 in commit
-> f7d34b445abc, so it should probably be backported to 4.9 and onwards.
-> This issue has been present since the introduction of the feature.
-> 
-> One sidenote: this patch will cause the following warning on x86 due
-> to dmap_mmap_coherent() trying to map normal memory in as uncached:
-> 
-> x86/PAT: ... map pfn RAM range req uncached-minus for [mem
-> 0x77b000000-0x77b210fff], got write-back
-> 
-> This warning is harmless, as x86 is DMA coherent and the memory gets
-> correctly mapped in as write-back. I will submit a patch to the DMA
-> mapping team to eliminate this warning.
+When a gadget is disabled, kill_all_requests() can be called
+simultaneously from both a user process via dwc2_hsotg_pullup() and from
+the interrupt handler if the hardware detects disconnection.
 
-Let me know what the git commit id of that patch is, I will wait for it
-to hit the tree before adding this one.
+Since we drop the lock in dwc2_hsotg_complete_request() in order to call
+the completion handler, this means that the list is modified
+concurrently and leads to an infinite loop in kill_all_requests().
 
-thanks,
+Replace the foreach loop with a while-not-empty loop in order to remove
+the danger of this concurrent modification.
 
-greg k-h
+Note: I observed this with threadirqs, I'm not sure if it can be
+triggered without threaded interrupts.
+
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ drivers/usb/dwc2/gadget.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 60ac98cd8ad8..92e8de9cb45c 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3227,14 +3227,15 @@ static void kill_all_requests(struct dwc2_hsotg *hsotg,
+ 			      struct dwc2_hsotg_ep *ep,
+ 			      int result)
+ {
+-	struct dwc2_hsotg_req *req, *treq;
+ 	unsigned int size;
+ 
+ 	ep->req = NULL;
+ 
+-	list_for_each_entry_safe(req, treq, &ep->queue, queue)
+-		dwc2_hsotg_complete_request(hsotg, ep, req,
+-					    result);
++	while (!list_empty(&ep->queue)) {
++		struct dwc2_hsotg_req *req = get_ep_head(ep);
++
++		dwc2_hsotg_complete_request(hsotg, ep, req, result);
++	}
+ 
+ 	if (!hsotg->dedicated_fifos)
+ 		return;
+-- 
+2.22.0
+
