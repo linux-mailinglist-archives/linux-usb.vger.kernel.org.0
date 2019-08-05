@@ -2,51 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2F181666
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 12:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C34A81674
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 12:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728159AbfHEKHK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 06:07:10 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:47021 "EHLO
+        id S1728329AbfHEKIQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 06:08:16 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:39109 "EHLO
         mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728058AbfHEKHK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 06:07:10 -0400
-Received: by mail-lf1-f67.google.com with SMTP id z15so53181021lfh.13
-        for <linux-usb@vger.kernel.org>; Mon, 05 Aug 2019 03:07:08 -0700 (PDT)
+        with ESMTP id S1727928AbfHEKIQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 06:08:16 -0400
+Received: by mail-lf1-f67.google.com with SMTP id x3so3688144lfn.6
+        for <linux-usb@vger.kernel.org>; Mon, 05 Aug 2019 03:08:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nVUZMecSchHo3ov4XgyeqBe+ricOQYDOHuC+qKYyro0=;
-        b=bhdM2UlaB2K8iOROiArDFJXYmMBmI0NM6/LKx7/XPm3GqnbIb/bPPiA9Pz8k6nIBF1
-         a9wtyCtkgQ0ZgwGYPUfVAbL+577Jz5tF8GafZQB9sMfUv4Nlj4rYl3Er6wl9+QH8Nxhy
-         FtkwAUSMAAQBSGeGVlWgZpDNyLCvoPBhP0pcgK2/BjumMbrw+T0pnm5VkmBeHWZ3nO4I
-         GPuHg6bPKKt6ASXdwolYWYyjGdwR+7o06PTxLel00izXGOs6Vp7hj8S46bBF1UOQ3xx7
-         4WFYidUocdAHqGiNAXEwabc3LLabLm4K7NaBqzO0dTJ+pDE/gdAlCjuDbCMU7TKWXxNK
-         QsKw==
+        bh=VmJocWvsymOdQ7NU7/6yMlP4/6K5DwEx+usK89GVi9s=;
+        b=kyJZW7fZfdLgtDs2aKngH2TyuWTJjTeVTLZyRgxZRY9MQ56FWUw3A52lCdt4c4YJ+1
+         3TgWOde1fzdSqgTWIgbjzvsDeaFtKgXf6SuYKrrM9YK82qK7s6dWcsjao4CGSwv8Ahlt
+         Crwmv8+ySmVuExNcK9irfRd7xd4YEh9epWXPM2OVxpgaQ8bRFBbu/lNMcWXb245BCABI
+         /yNpf25WGiE15uDcA+a++0LXluCfysTo88g0q7Hcvunkj67HSTRYbpqtQilt8t8aWCuR
+         NoBItyc2gaayKuIzBJdFKFHEpFkdC+iXQWdc8it3UQcFXi36FqTMsdYN8t8x8xKnWrM8
+         44vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nVUZMecSchHo3ov4XgyeqBe+ricOQYDOHuC+qKYyro0=;
-        b=R89f4G88xeNkOtVF+shagDqluZSod/8k3/4hdmVx+PnzLOU6Z6HP9gwJD1U2cEpQc6
-         r7FZfPJrBqBD8qPFEeEbDxdkmQDFOkSXzKRxH/j5ZkNaRx2EHh6eXeyE4ebnHTAvY+0q
-         MwMYO1EDbP8PswuYWhXB2ChgbyK7ANRVvWEuQjzv4fJ8yv0j+QaEfi0+LPc5jwFZKygl
-         WMrc839CSbmCzoO0NRu0KXqZtuKb9a9YBwrMqEGu4gV2za+Z9YaKgwRecExSO/HWjsxn
-         W4KUi7vlCXIhWqXew/Rva2Sthi77xIkJty4ddVqg3Ih7a5mDMz5QXAx9DT1SoRcAruMV
-         DaRg==
-X-Gm-Message-State: APjAAAX8JumGOxzcqRJJPu/yGrt6MHlWF5xoBLbQ39JiOfPm+RyLojie
-        3WaM8d5ZLFsgfevXY5ANnht2fRY0GEH20SmprA/SJw==
-X-Google-Smtp-Source: APXvYqzbr3N8Sty4/n+PKBjjuxasyEkPZbJo4c/cdLdH2JC6OzKmDCkMaV5/W8Fpx4+sg/pPghnAd39wNmbfOj5KmtU=
-X-Received: by 2002:ac2:5939:: with SMTP id v25mr1356862lfi.115.1564999628161;
- Mon, 05 Aug 2019 03:07:08 -0700 (PDT)
+        bh=VmJocWvsymOdQ7NU7/6yMlP4/6K5DwEx+usK89GVi9s=;
+        b=AUd4Fd+hp4NHEl2gAYGWgv0QMKelz6Dkamcsocrfgi/w/DkMQiJIIr/YNNHnq1O/VV
+         UfHysO8estQ9XA8jv4g2JqLruTO4pTFPSSwBaO35SGkKbmUucxsOANNLRfDi3jVuE3mF
+         zqz4Vy/ru1aj5NQkW/+FFq0ungfhipxbRtKNS42ykXy7sD85083vJHt5l3a7wTY2dymh
+         21Nx3nNpT5qAg7yQjLiXore/XcsO/yH5QrsUgggvaoF44Yy56UU/bkq9tQzbyKie6TPp
+         yXmiOBFeR8wrur/SkWsbfcHE5Wfn37rn54EjI0Cv64xMmF8/MVdAXdX1sIGFhTG1fc5N
+         gbYg==
+X-Gm-Message-State: APjAAAXodYpAjHSwxdmj650/GfNxFm/9N7NzIO1GAztPru5xw4K7wvsC
+        wUW9PR7vWyibZIcaxijlyzumlwD/Bphw9i/0w7qbcQ==
+X-Google-Smtp-Source: APXvYqxpqm0yndDdT3beIa5MGWi8lTPoZhzSa/lWFiqq6Dn3b88/pHlyJgXWVtBOlC/fjyLdOtrrqUOtG4JGHdovYiM=
+X-Received: by 2002:ac2:5c42:: with SMTP id s2mr60787048lfp.61.1564999694066;
+ Mon, 05 Aug 2019 03:08:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <1563958245-6321-1-git-send-email-chunfeng.yun@mediatek.com>
-In-Reply-To: <1563958245-6321-1-git-send-email-chunfeng.yun@mediatek.com>
+References: <1563958245-6321-1-git-send-email-chunfeng.yun@mediatek.com> <1563958245-6321-4-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1563958245-6321-4-git-send-email-chunfeng.yun@mediatek.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 5 Aug 2019 12:06:56 +0200
-Message-ID: <CACRpkdaBT24JPH_VsKtgp6fjWtVuqM50rXkDVYKmLHgR5hdJzA@mail.gmail.com>
-Subject: Re: [PATCH v8 00/11] add USB GPIO based connection detection driver
+Date:   Mon, 5 Aug 2019 12:08:02 +0200
+Message-ID: <CACRpkda5OUEfZRSMA-8H5jnhSan+VJ_3KB5CvOaRdZP1NeJQ+w@mail.gmail.com>
+Subject: Re: [PATCH v8 03/11] dt-bindings: usb: add binding for USB GPIO based
+ connection detection driver
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -75,26 +76,16 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Wed, Jul 24, 2019 at 10:51 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 
-> Because the USB Connector is introduced and the requirement of
-> usb-connector.txt binding, the old way using extcon to support
-> USB Dual-Role switch is now deprecated, meanwhile there is no
-> available common driver when use Type-B connector, typically
-> using an input GPIO to detect USB ID pin.
+> It's used to support dual role switch via GPIO when use Type-B
+> receptacle, typically the USB ID pin is connected to an input
+> GPIO, and also used to enable/disable device when the USB Vbus
+> pin is connected to an input GPIO.
+>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v8 changes:
 
-However while this was going on,
-drivers/extcon/extcon-fsa9480.c was merged and that detects
-not only GPIO on the USB port but multiplexed usecases such
-as UART over the USB micro PHY (and no that UART is not
-a USB UART, but an actual RX/TX over D-/D+).
-
-That driver also measure a whole slew of funny resistance
-values on the ID pin, that is how it does its job.
-
-But for just "hey I'm plugged in" we can surely keep this
-ID on GPIO detection in the USB subsystem.
-
-I just get a bit insecure about how we should ideally
-handle these "funny-PHY's".
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
