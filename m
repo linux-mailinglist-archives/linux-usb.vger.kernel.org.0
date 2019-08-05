@@ -2,97 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BC381860
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 13:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8748189E
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 13:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728111AbfHELrQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 07:47:16 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:45944 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727259AbfHELrQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 07:47:16 -0400
-Received: by mail-lf1-f66.google.com with SMTP id u10so18935029lfm.12;
-        Mon, 05 Aug 2019 04:47:14 -0700 (PDT)
+        id S1728649AbfHEL6H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 07:58:07 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:49682 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727989AbfHEL6H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 07:58:07 -0400
+Received: by mail-io1-f69.google.com with SMTP id x24so91908112ioh.16
+        for <linux-usb@vger.kernel.org>; Mon, 05 Aug 2019 04:58:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XqfbHS+kotk8JoRbfLuGqMSPe/L9zMN6nAynv8vWNNE=;
-        b=O+OAZdfs0epR4mar8rurpUaubeHEoz9RUhXnXCuUIg6fivHNXgeGlhOIz3MhMXy3jt
-         MEu7lumoLYRKU4Bf4XZ2+iLAIXDFudMGWug7EKm3kDy9lk+nKf/A016vXX58tflFzf+x
-         9FXuMkisWjyiAmR4iBYZsg23rY9w4e86gH21TdkZFyGIPD8fsYUdvL2cRolPFGGBlMg7
-         Bi7POE68YNYEYdBUd5IchMIhnZ4F0HV9bVw3/r5bENRwLQ/9xHXsx0AxwFIOs2AF6wm4
-         fd4HPt0NxWIio9LTlgp6YzbP9p5I4oPeSAfe9foFd4cYabD1aDlwgIr2DjCwTRFfaeVM
-         6rwA==
-X-Gm-Message-State: APjAAAXh+FjAQdSS8+xVCiKwg9SCmivlvwadI1R58wdgHLuBflabJfMF
-        IgzaHSChCyVskxvc0lkoMNtclfqY2GM=
-X-Google-Smtp-Source: APXvYqwCQQpWwF/H86pq5gU6luyGEhhHPzYgbnkV99GOKcMkH1wANYUuU+ymSzgAiP1aj/rOjAxasw==
-X-Received: by 2002:a19:a419:: with SMTP id q25mr5603054lfc.136.1565005633919;
-        Mon, 05 Aug 2019 04:47:13 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id p21sm14866073lfc.41.2019.08.05.04.47.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Aug 2019 04:47:13 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1hubSJ-0006DC-U0; Mon, 05 Aug 2019 13:47:11 +0200
-Date:   Mon, 5 Aug 2019 13:47:11 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     "Angus Ainslie (Purism)" <angus@akkea.ca>
-Cc:     kernel@puri.sm, =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bob Ham <bob.ham@puri.sm>
-Subject: Re: [PATCH 1/2] usb: serial: option: Add the BroadMobi BM818 card
-Message-ID: <20190805114711.GF3574@localhost>
-References: <20190724145227.27169-1-angus@akkea.ca>
- <20190724145227.27169-2-angus@akkea.ca>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=E0HDlQzbSlE7/q7GGhIjN7XOM4kiHha/WldHPep5EoY=;
+        b=dr3QTXUp37JXxTn06R5TQkiRYKpZs0Lqo/sg3zhWt6RIHMe7fpyJ3iCwGaqEzoCjq7
+         ec0siV662o5GNk9ZY+DUgWwCE7sI5JoBXZKmAG7fGyjpUsowVvGElYhgMz2XuaJbPqqK
+         duGFKXkjDxnyYGXNQd9ikvVYg8KUQ5wNx7kJnuXN0KeSHLnQVDV400MA5MUJQgI7uiAd
+         HWv7GOPilpkAPlHU+DdxejsQbmWmbHof6zkGCjmuiK9WyXqyzLQae7tx5lJt92ozn7g8
+         jRObt2kesHxwN5q/nF4z56ftJBiI1/eZvaId+3xG4hwml6a+D1vfdAiTEe3rvB5/pI3v
+         Olww==
+X-Gm-Message-State: APjAAAXbJYvhr78B0OxXjUMfNnfbhkEDrOa/WXLyXxyKOdjblLdeHOo5
+        dTlmod1hHoPuN9412RaWP4y8cVPnfATSYQRiUxhIcqcIkmMi
+X-Google-Smtp-Source: APXvYqyyyfnGwSOKyWHJqjjfQ+jylPBfbb9wlXv9C82KDjh++E0QKW3zIdZv6aGs+oOISpUz9yXhUz3tjrO/U8q7NDhzW2s6C+qJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190724145227.27169-2-angus@akkea.ca>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Received: by 2002:a02:7121:: with SMTP id n33mr149347643jac.19.1565006286345;
+ Mon, 05 Aug 2019 04:58:06 -0700 (PDT)
+Date:   Mon, 05 Aug 2019 04:58:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c4df6a058f5d6b70@google.com>
+Subject: WARNING in __iforce_usb_xmit/usb_submit_urb
+From:   syzbot <syzbot+5efc10c005014d061a74@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 07:52:26AM -0700, Angus Ainslie (Purism) wrote:
-> From: Bob Ham <bob.ham@puri.sm>
-> 
-> Add a VID:PID for the BroadModi BM818 M.2 card
+Hello,
 
-Would you mind posting the output of usb-devices (or lsusb -v) for this
-device?
+syzbot found the following crash on:
 
-> Signed-off-by: Bob Ham <bob.ham@puri.sm>
-> Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
-> ---
->  drivers/usb/serial/option.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index c1582fbd1150..674a68ee9564 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1975,6 +1975,8 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(4) | RSVD(5) },
->  	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
->  	  .driver_info = RSVD(6) },
-> +	{ USB_DEVICE(0x2020, 0x2060),						/* BroadMobi  */
+HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=10809e0c600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+dashboard link: https://syzkaller.appspot.com/bug?extid=5efc10c005014d061a74
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e40b1a600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=174a69d8600000
 
-Looks like you forgot to include the model in the comment here.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+5efc10c005014d061a74@syzkaller.appspotmail.com
 
-And please move this one after the other 0x2020 (PID 0x2031) entry.
+iforce 1-1:0.225: usb_submit_urb failed: -71
+iforce 1-1:0.225: usb_submit_urb failed: -71
+iforce 1-1:0.225: usb_submit_urb failed: -71
+iforce 1-1:0.225: usb_submit_urb failed: -71
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 1 PID: 22 at drivers/usb/core/urb.c:477  
+usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.3.0-rc2+ #25
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x2a3/0x6da kernel/panic.c:219
+  __warn.cold+0x20/0x4a kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1026
+RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
+Code: 4d 85 ed 74 2c e8 28 76 ed fd 4c 89 f7 e8 c0 6d 1a ff 41 89 d8 44 89  
+e1 4c 89 ea 48 89 c6 48 c7 c7 60 e7 18 86 e8 3d 47 c3 fd <0f> 0b e9 20 f4  
+ff ff e8 fc 75 ed fd 4c 89 f2 48 b8 00 00 00 00 00
+RSP: 0018:ffff8881da34f048 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8128a0fd RDI: ffffed103b469dfb
+RBP: ffff8881d598fd50 R08: ffff8881da340000 R09: ffffed103b663ee7
+R10: ffffed103b663ee6 R11: ffff8881db31f737 R12: 0000000000000001
+R13: ffff8881cda8d720 R14: ffff8881d67d22a0 R15: ffff8881d598f900
+  __iforce_usb_xmit+0x31a/0x490 drivers/input/joystick/iforce/iforce-usb.c:60
+  iforce_usb_xmit+0x49/0x50 drivers/input/joystick/iforce/iforce-usb.c:75
+  iforce_send_packet+0x277/0x2f0  
+drivers/input/joystick/iforce/iforce-packets.c:81
+  iforce_set_autocenter+0x9e/0x100  
+drivers/input/joystick/iforce/iforce-main.c:95
+  iforce_init_device+0x7db/0x13d7  
+drivers/input/joystick/iforce/iforce-main.c:314
+  iforce_usb_probe+0x757/0xab0 drivers/input/joystick/iforce/iforce-usb.c:233
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-Should you also be using USB_DEVICE_INTERFACE_CLASS() (e.g. to avoid
-matching a mass-storage interface)?
 
-> +	  .driver_info = RSVD(4) },
->  	{ } /* Terminating entry */
->  };
->  MODULE_DEVICE_TABLE(usb, option_ids);
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Johan
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
