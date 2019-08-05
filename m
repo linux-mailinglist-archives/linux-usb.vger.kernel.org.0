@@ -2,234 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2798196A
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 14:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CB7819E0
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Aug 2019 14:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728771AbfHEMiJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Aug 2019 08:38:09 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:41802 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728144AbfHEMiI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 08:38:08 -0400
-Received: by mail-io1-f71.google.com with SMTP id x17so91461941iog.8
-        for <linux-usb@vger.kernel.org>; Mon, 05 Aug 2019 05:38:08 -0700 (PDT)
+        id S1728724AbfHEMnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Aug 2019 08:43:11 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:39948 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726315AbfHEMnL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Aug 2019 08:43:11 -0400
+Received: by mail-io1-f67.google.com with SMTP id h6so41749880iom.7;
+        Mon, 05 Aug 2019 05:43:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KQm9NPghtf2wFJQFdwyuoe6G2q10wFofTqLGNt8zEfc=;
+        b=Jm9lN989x1LL1wAGmtgQW1PbFf7i6ALddtYVvYUT3D0ZuifbqBe7vXuKRfHJ1DVFyf
+         5E6ia0qFc+YxzkWLdGYvRSD2zIYvdSQi7desBh6dPVYOxX5FGHe8MZTcpO7SoBv2T+fx
+         rM6HGgCOlS1+Mq1T7ZsjoN47gJmVIc8qASDJbmnblb51sxAIIH83d2PNguaUH54zd0Pd
+         g8BJGwj/2VWcZL1lekXwBWPoMwwDfwE/1wbv8+ARLVMYNN37zc7ARSt2a3DyNCxJMg8n
+         X9boR31zKzMZP2i4KZCBZU3pIFAZQ4KVkLrRQcNoPYIaJXKm1UqQkctLH6lsqK5JS0DO
+         uLqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=lUBKmETtf0Ze6PAhIT1SVwO5KKpxge00CVK1/gtGagY=;
-        b=GBG/h0YlvQ+Nh7SqBUOHBvsyIYHEENutIPvNQhT7MQe/w88nBLKMiHOh3+O4kYsV31
-         UC4djWCPV1lNTpdMD/QFYEHIIBflURh9Zk/U8N/8ozxVchwkMCqdIOKO8aWnhgb8l3Dc
-         jiiVPaVf7mU7CFSvTAD1RH1xDuUrR3a1IfwkNmhEEtd2h8XLaPbhsAvWDfnv2wOUKfgP
-         YRLvbVqkxu4I9I10irpjFyTdQ+qgnZQxzDV7KJ/iCC0Nv2wIWLtEfUJmy41SwL7KLuqC
-         qO1r/JGn24f/jl7rLfg/HMbWaGdu+EdkifQMM1Nh9k7mzf3WYcRiC6jSL4zveNPzKF7D
-         J+NA==
-X-Gm-Message-State: APjAAAV1lQSC76QXxDEuPGxJQYcMH/c9b4SQNJWWEGkdNur61bDfU9nE
-        bohF/oYsGaGMkrbjr4Y2EO1hHFBOUN1G29T5M6RNLBPNRX8b
-X-Google-Smtp-Source: APXvYqyO/N4F8W54SWvkyjNKd1YVHe7viWFIZ8pUrmpSo/Ozc2VC1FDyuLEXxT5AHQTXgONLLCl49FoTciOKuH3pwOXdEGlkoZeP
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KQm9NPghtf2wFJQFdwyuoe6G2q10wFofTqLGNt8zEfc=;
+        b=l/PpOsVrGHqNxry9E6KpiL1m18rE+Y9jD6rlCTMP/NgLQsrD9kQHFa/0wMdqE1Ygmw
+         lPbqS6m7+u8nt/2SRFwMg/EQahAbtWPf8IPunWkV1lWfsUa1Cj+Sepn3kCWdFFiN3kRM
+         kXG+jYA5LlaLtHWDO9V/pHOICNxng7+Iuc+C253IZ3xYg/4bycVJmw3St31Hy6ATTKH0
+         YP4O2e0gksUmz0UaQ4O3XQbFWg+6NWIn0o40jXR4sChHiD6gYSTMEmYJ63JmtFcq2zMh
+         8dllAS8Ralb83GWveEoAQrIsezbwfoVf374l+jeFbWqwK8YptzZsaYUdTu/b3fztqjY+
+         O4tA==
+X-Gm-Message-State: APjAAAUTKR0LSE9ppQhhTeR6rZV8DMhLVJD1VggiP8DVJugrw+TU3TXI
+        y5G6lBvTu7rJkBnM81z706+P56gNLPKeNdZgLA8=
+X-Google-Smtp-Source: APXvYqz396zlNXAqcaOCvcqObVMswatfB+f2uh+zsXE7YIFo6iaQRklzHrm0RcU5f66HRRMmb5shLa66REY85aMxJmc=
+X-Received: by 2002:a6b:f114:: with SMTP id e20mr11104225iog.169.1565008990378;
+ Mon, 05 Aug 2019 05:43:10 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:940b:: with SMTP id v11mr66472275ion.69.1565008687621;
- Mon, 05 Aug 2019 05:38:07 -0700 (PDT)
-Date:   Mon, 05 Aug 2019 05:38:07 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e5742c058f5dfaef@google.com>
-Subject: KASAN: slab-out-of-bounds Write in lg4ff_init
-From:   syzbot <syzbot+94e2b9e9c7d1dd332345@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+References: <20190731195713.3150463-1-arnd@arndb.de> <20190731195713.3150463-4-arnd@arndb.de>
+ <20190731202343.GA14817@roeck-us.net> <CAK8P3a2=gqeCMtdzdqg4d1n6v1-cdaHObeUoVXeB+=Okwd1rqA@mail.gmail.com>
+ <20190731203646.GB14817@roeck-us.net>
+In-Reply-To: <20190731203646.GB14817@roeck-us.net>
+From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
+Date:   Mon, 5 Aug 2019 08:42:58 -0400
+Message-ID: <CA+rxa6oOxHH20Oiw1BKqa+9QF+J+M2cnQgMRKkLuxjcm9Ux2uQ@mail.gmail.com>
+Subject: Re: [PATCH 03/14] watchdog: pnx4008_wdt: allow compile-testing
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
 
-syzbot found the following crash on:
-
-HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=144c21dc600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-dashboard link: https://syzkaller.appspot.com/bug?extid=94e2b9e9c7d1dd332345
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169e8542600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ec8262600000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+94e2b9e9c7d1dd332345@syzkaller.appspotmail.com
-
-usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,  
-different from the interface descriptor's value: 9
-usb 1-1: New USB device found, idVendor=046d, idProduct=c298, bcdDevice=  
-0.00
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-logitech 0003:046D:C298.0001: unknown main item tag 0x0
-logitech 0003:046D:C298.0001: unknown main item tag 0x0
-logitech 0003:046D:C298.0001: hidraw0: USB HID v0.00 Device [HID 046d:c298]  
-on usb-dummy_hcd.0-1/input0
-==================================================================
-BUG: KASAN: slab-out-of-bounds in set_bit  
-include/asm-generic/bitops-instrumented.h:28 [inline]
-BUG: KASAN: slab-out-of-bounds in lg4ff_init+0x89c/0x1800  
-drivers/hid/hid-lg4ff.c:1331
-Write of size 8 at addr ffff8881d81fe9c0 by task kworker/1:2/83
-
-CPU: 1 PID: 83 Comm: kworker/1:2 Not tainted 5.3.0-rc2+ #25
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description+0x6a/0x32c mm/kasan/report.c:351
-  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-  kasan_report+0xe/0x12 mm/kasan/common.c:612
-  check_memory_region_inline mm/kasan/generic.c:185 [inline]
-  check_memory_region+0x128/0x190 mm/kasan/generic.c:192
-  set_bit include/asm-generic/bitops-instrumented.h:28 [inline]
-  lg4ff_init+0x89c/0x1800 drivers/hid/hid-lg4ff.c:1331
-  lg_probe+0x3b3/0x890 drivers/hid/hid-lg.c:850
-  hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  hid_add_device+0x33c/0x990 drivers/hid/hid-core.c:2365
-  usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Allocated by task 83:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_kmalloc mm/kasan/common.c:487 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:460
-  kmalloc include/linux/slab.h:552 [inline]
-  kzalloc include/linux/slab.h:748 [inline]
-  hidraw_connect+0x4b/0x3e0 drivers/hid/hidraw.c:513
-  hid_connect+0x5c7/0xbb0 drivers/hid/hid-core.c:1885
-  hid_hw_start drivers/hid/hid-core.c:1981 [inline]
-  hid_hw_start+0xa2/0x130 drivers/hid/hid-core.c:1972
-  lg_probe+0x2a4/0x890 drivers/hid/hid-lg.c:806
-  hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  hid_add_device+0x33c/0x990 drivers/hid/hid-core.c:2365
-  usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 12:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
-  slab_free_hook mm/slub.c:1423 [inline]
-  slab_free_freelist_hook mm/slub.c:1470 [inline]
-  slab_free mm/slub.c:3012 [inline]
-  kfree+0xe4/0x2f0 mm/slub.c:3953
-  blk_free_flush_queue+0x3f/0x4c block/blk-flush.c:500
-  blk_mq_hw_sysfs_release+0x98/0x160 block/blk-mq-sysfs.c:43
-  kobject_cleanup lib/kobject.c:693 [inline]
-  kobject_release lib/kobject.c:722 [inline]
-  kref_put include/linux/kref.h:65 [inline]
-  kobject_put+0x171/0x280 lib/kobject.c:739
-  blk_mq_release+0x258/0x3f0 block/blk-mq.c:2677
-  __blk_release_queue+0x1ba/0x320 block/blk-sysfs.c:900
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8881d81fe900
-  which belongs to the cache kmalloc-192 of size 192
-The buggy address is located 0 bytes to the right of
-  192-byte region [ffff8881d81fe900, ffff8881d81fe9c0)
-The buggy address belongs to the page:
-page:ffffea0007607f80 refcount:1 mapcount:0 mapping:ffff8881da002a00  
-index:0x0
-flags: 0x200000000000200(slab)
-raw: 0200000000000200 ffffea000760f000 0000000400000004 ffff8881da002a00
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8881d81fe880: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
-  ffff8881d81fe900: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> ffff8881d81fe980: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
-                                            ^
-  ffff8881d81fea00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-  ffff8881d81fea80: 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+On Wed, Jul 31, 2019 at 4:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Jul 31, 2019 at 10:26:35PM +0200, Arnd Bergmann wrote:
+> > On Wed, Jul 31, 2019 at 10:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > On Wed, Jul 31, 2019 at 09:56:45PM +0200, Arnd Bergmann wrote:
+> > > > The only thing that prevents building this driver on other
+> > > > platforms is the mach/hardware.h include, which is not actually
+> > > > used here at all, so remove the line and allow CONFIG_COMPILE_TEST.
+> > > >
+> > > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > >
+> > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > >
+> > > What is the plan for this patch ? Push through watchdog
+> > > or through your branch ?
+> >
+> > I would prefer my branch so I can apply the final patch without waiting
+> > for another release. Not in a hurry though, so if some other maintainer
+>
+> Ok with me.
+>
+> Guenter
