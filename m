@@ -2,34 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6038342D
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 16:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83A48342E
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 16:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733044AbfHFOpP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 10:45:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45844 "EHLO mail.kernel.org"
+        id S1733065AbfHFOpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 10:45:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45872 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730289AbfHFOpP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 10:45:15 -0400
+        id S1730289AbfHFOpS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 10:45:18 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3C94120C01;
-        Tue,  6 Aug 2019 14:45:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C6DDA214C6;
+        Tue,  6 Aug 2019 14:45:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565102714;
-        bh=ZhEt7u4OqC6CjIcRt5N05jx3q1hDz3f2g1UMq5amwqM=;
+        s=default; t=1565102717;
+        bh=vjl9pO5XLhUt6+WXZ1MT+7E4/kI123d72qUOkAyx8uE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=laIY0ZG4qBrFERtZamRTDBqfyCE9DvH+9cdBnpt74DUCog4di/Vq4wz4VX+9+GuE4
-         xNbQdklx343uX404j42+ZwFcVM0ux/wvUlWYFuLpaAoO9wiSBZx7z8n9R59xi+246u
-         2axJ0xCaFUnzOZN3JubrXqwZP0V3c1uUXa82HM3s=
+        b=DMPsvcgfn1+Kk+R+bGQ9by+poTu05AtHebdrE+iaKSMqU71ogIyL+tL4+b9CIlTwv
+         ZaT2uF0eVRqhXGtgcIQQ0tTAnkbhwUsVVV0Lu10hPMdU3clhbyGMlA5Unz4sR5hGtr
+         /GOj7eMZGisuexJLo4IbXRbnvnZinbHRPlV0wGJk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ding Xiang <dingxiang@cmss.chinamobile.com>
-Subject: [PATCH 10/12] USB: trancevibrator: convert to use dev_groups
-Date:   Tue,  6 Aug 2019 16:45:00 +0200
-Message-Id: <20190806144502.17792-11-gregkh@linuxfoundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 11/12] USB: usbsevseg: convert to use dev_groups
+Date:   Tue,  6 Aug 2019 16:45:01 +0200
+Message-Id: <20190806144502.17792-12-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190806144502.17792-1-gregkh@linuxfoundation.org>
 References: <20190806144502.17792-1-gregkh@linuxfoundation.org>
@@ -46,64 +45,70 @@ manner.  Take advantage of that by converting the driver to use this by
 moving the sysfs attributes into a group and assigning the dev_groups
 pointer to it.
 
-Cc: Ding Xiang <dingxiang@cmss.chinamobile.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/misc/trancevibrator.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ drivers/usb/misc/usbsevseg.c | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/usb/misc/trancevibrator.c b/drivers/usb/misc/trancevibrator.c
-index ac357ce2d1a6..a3dfc77578ea 100644
---- a/drivers/usb/misc/trancevibrator.c
-+++ b/drivers/usb/misc/trancevibrator.c
-@@ -71,9 +71,14 @@ static ssize_t speed_store(struct device *dev, struct device_attribute *attr,
- 	}
- 	return count;
- }
+diff --git a/drivers/usb/misc/usbsevseg.c b/drivers/usb/misc/usbsevseg.c
+index 1923d5b6d9c9..551074f5b7ad 100644
+--- a/drivers/usb/misc/usbsevseg.c
++++ b/drivers/usb/misc/usbsevseg.c
+@@ -316,7 +316,7 @@ MYDEV_ATTR_SIMPLE_UNSIGNED(powered, update_display_powered);
+ MYDEV_ATTR_SIMPLE_UNSIGNED(mode_msb, update_display_mode);
+ MYDEV_ATTR_SIMPLE_UNSIGNED(mode_lsb, update_display_mode);
+ 
+-static struct attribute *dev_attrs[] = {
++static struct attribute *sevseg_attrs[] = {
+ 	&dev_attr_powered.attr,
+ 	&dev_attr_text.attr,
+ 	&dev_attr_textmode.attr,
+@@ -325,10 +325,7 @@ static struct attribute *dev_attrs[] = {
+ 	&dev_attr_mode_lsb.attr,
+ 	NULL
+ };
 -
- static DEVICE_ATTR_RW(speed);
+-static const struct attribute_group dev_attr_grp = {
+-	.attrs = dev_attrs,
+-};
++ATTRIBUTE_GROUPS(sevseg);
  
-+static struct attribute *tv_attrs[] = {
-+	&dev_attr_speed.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(tv);
-+
- static int tv_probe(struct usb_interface *interface,
- 		    const struct usb_device_id *id)
- {
-@@ -89,15 +94,9 @@ static int tv_probe(struct usb_interface *interface,
+ static int sevseg_probe(struct usb_interface *interface,
+ 	const struct usb_device_id *id)
+@@ -354,17 +351,9 @@ static int sevseg_probe(struct usb_interface *interface,
+ 	mydev->mode_msb = 0x06; /* 6 characters */
+ 	mydev->mode_lsb = 0x3f; /* scanmode for 6 chars */
  
- 	dev->udev = usb_get_dev(udev);
- 	usb_set_intfdata(interface, dev);
--	retval = device_create_file(&interface->dev, &dev_attr_speed);
--	if (retval)
--		goto error_create_file;
- 
+-	rc = sysfs_create_group(&interface->dev.kobj, &dev_attr_grp);
+-	if (rc)
+-		goto error;
+-
+ 	dev_info(&interface->dev, "USB 7 Segment device now attached\n");
  	return 0;
  
--error_create_file:
--	usb_put_dev(udev);
+-error:
 -	usb_set_intfdata(interface, NULL);
- error:
- 	kfree(dev);
- 	return retval;
-@@ -108,7 +107,6 @@ static void tv_disconnect(struct usb_interface *interface)
- 	struct trancevibrator *dev;
+-	usb_put_dev(mydev->udev);
+-	kfree(mydev);
+ error_mem:
+ 	return rc;
+ }
+@@ -374,7 +363,6 @@ static void sevseg_disconnect(struct usb_interface *interface)
+ 	struct usb_sevsegdev *mydev;
  
- 	dev = usb_get_intfdata (interface);
--	device_remove_file(&interface->dev, &dev_attr_speed);
+ 	mydev = usb_get_intfdata(interface);
+-	sysfs_remove_group(&interface->dev.kobj, &dev_attr_grp);
  	usb_set_intfdata(interface, NULL);
- 	usb_put_dev(dev->udev);
- 	kfree(dev);
-@@ -120,6 +118,7 @@ static struct usb_driver tv_driver = {
- 	.probe =	tv_probe,
- 	.disconnect =	tv_disconnect,
+ 	usb_put_dev(mydev->udev);
+ 	kfree(mydev);
+@@ -423,6 +411,7 @@ static struct usb_driver sevseg_driver = {
+ 	.resume =	sevseg_resume,
+ 	.reset_resume =	sevseg_reset_resume,
  	.id_table =	id_table,
-+	.dev_groups =	tv_groups,
++	.dev_groups =	sevseg_groups,
+ 	.supports_autosuspend = 1,
  };
  
- module_usb_driver(tv_driver);
 -- 
 2.22.0
 
