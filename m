@@ -2,54 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DBB83554
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 17:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7561283571
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 17:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731902AbfHFPeW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 11:34:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55838 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728156AbfHFPeW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 11:34:22 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BDDA3AFBD;
-        Tue,  6 Aug 2019 15:34:20 +0000 (UTC)
-Message-ID: <1565105624.8136.32.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Date:   Tue, 06 Aug 2019 17:33:44 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1908061009450.1571-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1908061009450.1571-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1729680AbfHFPi5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 11:38:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38706 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728156AbfHFPi5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 11:38:57 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3D2CE20717;
+        Tue,  6 Aug 2019 15:38:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565105935;
+        bh=WSyjZn+YLypg21sFQeIjJZqQbHjw3ecOVTDeasZ6QE4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Chbn1UpOQSIkiQmbmfnz3vY2T8w8jfDOCzP60WH3GSv0NCvXaMV8z0zV9S+9hCPLM
+         YiUjcVLXt0gPO43bEiCiabBpUk/0K+RcdnKhupjr7PerFPsJBW8hAraqI7RCqNfjZ8
+         8aaNHzq1Fjl0qmJhFlOgNBRzmHjjZoYSaHQTbIj8=
+Subject: Re: [PATCH v4 1/2] usbip: Skip DMA mapping and unmapping for urb at
+ vhci
+To:     Suwan Kim <suwan.kim027@gmail.com>
+Cc:     valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
+References: <20190806123154.23798-1-suwan.kim027@gmail.com>
+ <20190806123154.23798-2-suwan.kim027@gmail.com>
+ <c3485edd-f7e3-95a7-38db-acda371575a2@kernel.org>
+ <20190806153241.GA3738@localhost.localdomain>
+From:   shuah <shuah@kernel.org>
+Message-ID: <b5c6c9e5-0855-c055-6bb5-47dbc497f606@kernel.org>
+Date:   Tue, 6 Aug 2019 09:38:54 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190806153241.GA3738@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 06.08.2019, 10:19 -0400 schrieb Alan Stern:
-> In any case, I don't know if this missing "get" would cause the 
-> problem, but it might well.
+On 8/6/19 9:32 AM, Suwan Kim wrote:
+> On Tue, Aug 06, 2019 at 09:11:30AM -0600, shuah wrote:
+>> On 8/6/19 6:31 AM, Suwan Kim wrote:
+>>> vhci doesn’t do DMA for remote device. Actually, the real DMA
+>>> operation is done by network card driver. vhci just passes virtual
+>>> address of the buffer to the network stack, so vhci doesn’t use and
+>>> need dma address of the buffer of the URB.
+>>>
+>>> But HCD provides DMA mapping and unmapping function by default.
+>>> Moreover, it causes unnecessary DMA mapping and unmapping which
+>>> will be done again at the NIC driver and it wastes CPU cycles.
+>>> So, implement map_urb_for_dma and unmap_urb_for_dma function for
+>>> vhci in order to skip the DMA mapping and unmapping procedure.
+>>>
+>>> When it comes to supporting SG for vhci, it is useful to use native
+>>> SG list (urb->num_sgs) instead of mapped SG list because DMA mapping
+>>> fnuction can adjust the number of SG list (urb->num_mapped_sgs).
+>>> And vhci_map_urb_for_dma() prevents isoc pipe from using SG as
+>>> hcd_map_urb_for_dma() does.
+>>>
+>>> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+>>> ---
+>>> v3 - v4:
+>>> - Replace WARN_ON() with pr_err() in the error path.
+>>>
+>>> v2 - v3
+>>> - Move setting URB_DMA_MAP_SG flag to the patch 2.
+>>> - Prevent isoc pipe from using SG buffer.
+>>>
+>>> v1 - v2
+>>> - Add setting URB_DMA_MAP_SG flag in urb->transfer_flags to tell
+>>> stub driver to use SG buffer.
+>>> ---
+>>>    drivers/usb/usbip/vhci_hcd.c | 19 +++++++++++++++++++
+>>>    1 file changed, 19 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+>>> index 000ab7225717..429e4e989f38 100644
+>>> --- a/drivers/usb/usbip/vhci_hcd.c
+>>> +++ b/drivers/usb/usbip/vhci_hcd.c
+>>> @@ -1288,6 +1288,22 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
+>>>    	return 0;
+>>>    }
+>>> +static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+>>> +				gfp_t mem_flags)
+>>> +{
+>>> +	if (usb_endpoint_xfer_isoc(&urb->ep->desc) && urb->num_sgs) {
+>>> +		pr_err("SG is not supported for isochronous transfer\n");
+>>
+>> Any reason to not use dev_err()?
+> 
+> Because some codes in vhci_hcd.c use pr_err().There is no other
+> reason. However, dev_err() seems more appropriate than pr_err().
+> I will replace pr_err() with dev_err(urb->dev->dev, "SG is ...")
+> Is it ok?
+> 
 
-Hi,
+Please. This way we will have the device information. pr_err()
+won't us that. In general I prefer dev_* if dev is available in
+the code path, which is the case here.
 
-upon further thought, this should be automated. Checking for
-refcount leaks is KASAN's job. In particular, refcounts
-should not
-
-* decrease in probe()
-* increase in disconnect()
-* change in case probe() fails
-
-	Regards
-		Oliver
+thanks,
+-- Shuah
 
