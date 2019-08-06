@@ -2,368 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4CE839E6
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 21:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C28839FB
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 22:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbfHFTyK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 15:54:10 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:43580 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725973AbfHFTyK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 15:54:10 -0400
-Received: by mail-qk1-f194.google.com with SMTP id m14so38204884qka.10
-        for <linux-usb@vger.kernel.org>; Tue, 06 Aug 2019 12:54:09 -0700 (PDT)
+        id S1726133AbfHFUCk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 16:02:40 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:40000 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725906AbfHFUCk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 16:02:40 -0400
+Received: by mail-ot1-f68.google.com with SMTP id l15so38386698oth.7;
+        Tue, 06 Aug 2019 13:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=1rHDXdmOEwR8xptFY1wQGCbwesX8kKKPC5gJB64uoto=;
-        b=b9GAepqRbKFM3pzqYg2LpdHR2OEdgWMc/HZxIv2Gp9vLLA3ZTzFCsANpReq6o3heh3
-         W1ptDk2UP62oVh0l6motNAk9K+wx+wzmppMPTOJTEgaxY2+N7G1GfJsdfjFGK9J/ydhd
-         1JAQk+iuy/FOLH+ODao/HTvc8ZtAAW1UurzvdNfmAUudfT/DZ0X+8DL+1u85ZSbBYCly
-         WgtOdpYIMLK+B2j83KqX+LKq9JgvsjwdwG7j0sTwebuX3AHqYlKN3JJ05J8D/90qYLwr
-         3ydTkB4DNAQnO7JPElLfGlkn1OHq07X5Z9MyGidOLtK0y+fU5ATneF1nAhI/NLAg8l8A
-         ZIEg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gqjViCXObN2WgC0+IhrtTb7Ll35AmMVzauFcMWGTI3Y=;
+        b=g6geZrRSw1Dk72HeV3MeqgqDiCymOKGzorDS9kcJv2KYasDx9IRJzWdUCQ5iz/Ck/a
+         sMOqtrYcPYFkeOtOkh3EZ6BQOFZFtjfX4FeNaR7psKg3xzJZZT2HZI2UO45VHTO99KCa
+         5DJfIPEVo7ChrD9UA9ksvW4WKmWAYqfMY6fVOBsARhj6ITM/Y954KCB64DT/86RovKv+
+         v3izTjlAuvKv3KGD3bthq9dyPH36SX8i7m0+F89SRk5FQznew6pgkuE+/KIjfgWA0K30
+         KRvE8YQ5YyG26Sgb8bPl/FmaHp9h4HQXgX6WZJSlRti8akUyiqMHCDslkE+F9DWvSgMq
+         +SWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=1rHDXdmOEwR8xptFY1wQGCbwesX8kKKPC5gJB64uoto=;
-        b=AoqMJ4KDSZ+2AXyeBNAD6s2gdhyYfYdoN8cYIY8RWVgRbj76Nc4kYBaFA2TnsNhAqw
-         gIkP52ot9Y76JPjCXT6ltNkHEPnVDE/H+WiDducRneRqxJRFZgOfK9re++AulTJb7YjI
-         irJ4PvGRAk6hs/vKV5Jy7ZjkQpb3qhTGOQR94CQDgWO2L05ZqLw3VWk/rj0SE/LK+wWR
-         OZLoydIaneU508D9SSUw0hztPUQ0KrRfQB0HP4GWuWovy1ejYI1SPY9JfLLkcGzSKpQx
-         +HD+xC5Un03W/S2lsGYOpS+AM42sXmrwLI5+/RFXRf5s3UGeTWugp2OMHsLpKBsIDJyk
-         SH5g==
-X-Gm-Message-State: APjAAAUEXJZcY1rkglPmYX9b3LI6mS3lHs6gYXWGfc2+ZOR4PkF/zsDo
-        90EV+Zg9WZBfIZINsOYybsZBrw==
-X-Google-Smtp-Source: APXvYqxrBdTEbJz96Q2eq+iIvW0j3N8XWLn08kcP6O+0VhSZ/q8ftrBCG23A5U4DAubf7/lDubR3mQ==
-X-Received: by 2002:ae9:df84:: with SMTP id t126mr2672184qkf.328.1565121249378;
-        Tue, 06 Aug 2019 12:54:09 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id l8sm2170230qtr.38.2019.08.06.12.54.08
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 06 Aug 2019 12:54:09 -0700 (PDT)
-Date:   Tue, 6 Aug 2019 12:53:42 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH net-next 2/5] r8152: replace array with linking list for
- rx information
-Message-ID: <20190806125342.4620a94f@cakuba.netronome.com>
-In-Reply-To: <1394712342-15778-291-albertk@realtek.com>
-References: <1394712342-15778-289-albertk@realtek.com>
-        <1394712342-15778-291-albertk@realtek.com>
-Organization: Netronome Systems, Ltd.
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gqjViCXObN2WgC0+IhrtTb7Ll35AmMVzauFcMWGTI3Y=;
+        b=DAVKmvYCat5Dj/ruLiTDzFFuhZq4kak1ETB6I0A26uw55TdS6uBJmEri64wRgyHQVs
+         GN0Hy5n4PPvA4kEaPHcBmPMzYLhiipyLt5cVtdtxMbMaA5/o5SReiskWf1eMKNW0iPH1
+         e4DwW70VB23KpGrgxdaSpWb29r9f194r6Ro7GM7esYhQ0u0xEquCc8jXCfeKeAqWU8rL
+         QHTybgeHsj6D1htR0yXbCfmlDtKElfBibDqXLIv4CfekibAMhtjmTZ3r04tBCHWvTopq
+         yXqopfEBABpB5N5VkeK5JNRcYTvhc2ynumq8hJR0CH5cmo0QtomaTzLcDwfnVnVl0N6f
+         1IVw==
+X-Gm-Message-State: APjAAAUv/enkbaZmdiOEMTkClH/qX+lO8nl3kZrRCiqzEPZP78AwDiNv
+        C4f3UQG58s/Izj9E+KwZXS+RfZRthcf/rEJWTYc=
+X-Google-Smtp-Source: APXvYqxUZRrA60vyMd0kzSQ4htAnblGQWHtpdj5jgj0q6G1y1gZxQTbe74lzuUCM09PKJHet7o8XCRwQJqJO6Q95G/0=
+X-Received: by 2002:a5d:9942:: with SMTP id v2mr5555846ios.177.1565121759065;
+ Tue, 06 Aug 2019 13:02:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20190731195713.3150463-1-arnd@arndb.de> <20190731195713.3150463-6-arnd@arndb.de>
+In-Reply-To: <20190731195713.3150463-6-arnd@arndb.de>
+From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
+Date:   Tue, 6 Aug 2019 16:02:27 -0400
+Message-ID: <CA+rxa6p4gD7+6-aRyd4-V4TvkyMiUh9ueMLc6ggBaDC=LG7fQg@mail.gmail.com>
+Subject: Re: [PATCH 05/14] gpio: lpc32xx: allow building on non-lpc32xx targets
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     soc@kernel.org,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 6 Aug 2019 19:18:01 +0800, Hayes Wang wrote:
-> The original method uses an array to store the rx information. The
-> new one uses a list to link each rx structure. Then, it is possible
-> to increase/decrease the number of rx structure dynamically.
-> 
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+Hi Arnd,
+
+On Wed, Jul 31, 2019 at 4:00 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> The driver uses hardwire MMIO addresses instead of the data
+> that is passed in device tree. Change it over to only
+> hardcode the register offset values and allow compile-testing.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/net/usb/r8152.c | 187 ++++++++++++++++++++++++++++------------
->  1 file changed, 132 insertions(+), 55 deletions(-)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 0f07ed05ab34..44d832ceb516 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -22,6 +22,7 @@
->  #include <linux/mdio.h>
->  #include <linux/usb/cdc.h>
->  #include <linux/suspend.h>
-> +#include <linux/atomic.h>
->  #include <linux/acpi.h>
->  
->  /* Information for net-next */
-> @@ -694,7 +695,7 @@ struct tx_desc {
->  struct r8152;
->  
->  struct rx_agg {
-> -	struct list_head list;
-> +	struct list_head list, info_list;
->  	struct urb *urb;
->  	struct r8152 *context;
->  	void *buffer;
-> @@ -719,7 +720,7 @@ struct r8152 {
->  	struct net_device *netdev;
->  	struct urb *intr_urb;
->  	struct tx_agg tx_info[RTL8152_MAX_TX];
-> -	struct rx_agg rx_info[RTL8152_MAX_RX];
-> +	struct list_head rx_info;
->  	struct list_head rx_done, tx_free;
->  	struct sk_buff_head tx_queue, rx_queue;
->  	spinlock_t rx_lock, tx_lock;
-> @@ -744,6 +745,8 @@ struct r8152 {
->  		void (*autosuspend_en)(struct r8152 *tp, bool enable);
->  	} rtl_ops;
->  
-> +	atomic_t rx_count;
+>  drivers/gpio/Kconfig        |  8 +++++
+>  drivers/gpio/Makefile       |  2 +-
+>  drivers/gpio/gpio-lpc32xx.c | 63 ++++++++++++++++++++++++-------------
+>  3 files changed, 50 insertions(+), 23 deletions(-)
+>
+[...]
 
-I wonder what the advantage of rx_count being atomic is, perhpas it
-could be protected by the same lock as the list head?
+> diff --git a/drivers/gpio/gpio-lpc32xx.c b/drivers/gpio/gpio-lpc32xx.c
+> index 24885b3db3d5..548f7cb69386 100644
+> --- a/drivers/gpio/gpio-lpc32xx.c
+> +++ b/drivers/gpio/gpio-lpc32xx.c
 
->  	int intr_interval;
->  	u32 saved_wolopts;
->  	u32 msg_enable;
-> @@ -1468,19 +1471,86 @@ static inline void *tx_agg_align(void *data)
->  	return (void *)ALIGN((uintptr_t)data, TX_ALIGN);
->  }
->  
-> +static void free_rx_agg(struct r8152 *tp, struct rx_agg *agg)
-> +{
-> +	list_del(&agg->info_list);
-> +
-> +	usb_free_urb(agg->urb);
-> +	kfree(agg->buffer);
-> +	kfree(agg);
-> +
-> +	atomic_dec(&tp->rx_count);
-> +}
-> +
-> +static struct rx_agg *alloc_rx_agg(struct r8152 *tp, gfp_t mflags)
-> +{
-> +	struct net_device *netdev = tp->netdev;
-> +	int node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
-> +	struct rx_agg *rx_agg;
-> +
-> +	rx_agg = kmalloc_node(sizeof(*rx_agg), mflags, node);
-> +	if (rx_agg) {
+[...]
 
-nit: you could possibly save the indentation by returning early here
-
-> +		unsigned long flags;
-> +		u8 *buf;
-> +
-> +		buf = kmalloc_node(tp->rx_buf_sz, mflags, node);
-> +		if (!buf)
-> +			goto free_rx;
-> +
-> +		if (buf != rx_agg_align(buf)) {
-> +			kfree(buf);
-> +			buf = kmalloc_node(tp->rx_buf_sz + RX_ALIGN, mflags,
-> +					   node);
-> +			if (!buf)
-> +				goto free_rx;
-> +		}
-> +
-> +		rx_agg->buffer = buf;
-> +		rx_agg->head = rx_agg_align(buf);
-> +
-> +		rx_agg->urb = usb_alloc_urb(0, mflags);
-> +		if (!rx_agg->urb)
-> +			goto free_buf;
-> +
-> +		rx_agg->context = tp;
-> +
-> +		INIT_LIST_HEAD(&rx_agg->list);
-> +		INIT_LIST_HEAD(&rx_agg->info_list);
-> +		spin_lock_irqsave(&tp->rx_lock, flags);
-> +		list_add_tail(&rx_agg->info_list, &tp->rx_info);
-> +		spin_unlock_irqrestore(&tp->rx_lock, flags);
-> +
-> +		atomic_inc(&tp->rx_count);
-> +	}
-> +
-> +	return rx_agg;
-> +
-> +free_buf:
-> +	kfree(rx_agg->buffer);
-> +free_rx:
-> +	kfree(rx_agg);
-> +	return NULL;
-> +}
-> +
->  static void free_all_mem(struct r8152 *tp)
+> @@ -498,6 +509,10 @@ static int lpc32xx_gpio_probe(struct platform_device *pdev)
 >  {
-> +	struct list_head *cursor, *next;
-> +	unsigned long flags;
->  	int i;
->  
-> -	for (i = 0; i < RTL8152_MAX_RX; i++) {
-> -		usb_free_urb(tp->rx_info[i].urb);
-> -		tp->rx_info[i].urb = NULL;
-> +	spin_lock_irqsave(&tp->rx_lock, flags);
->  
-> -		kfree(tp->rx_info[i].buffer);
-> -		tp->rx_info[i].buffer = NULL;
-> -		tp->rx_info[i].head = NULL;
-> +	list_for_each_safe(cursor, next, &tp->rx_info) {
+>         int i;
+>
+> +       gpio_reg_base = devm_platform_ioremap_resource(pdev, 0);
+> +       if (gpio_reg_base)
+> +               return -ENXIO;
 
-nit: list_for_each_entry_safe, perhaps?
+The probe function will always return an error.
+Please replace the previous 2 lines with:
+    if (IS_ERR(gpio_reg_base))
+        return PTR_ERR(gpio_reg_base);
 
-> +		struct rx_agg *agg;
-> +
-> +		agg = list_entry(cursor, struct rx_agg, info_list);
-> +		free_rx_agg(tp, agg);
->  	}
->  
-> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
-> +
-> +	WARN_ON(unlikely(atomic_read(&tp->rx_count)));
+You can add my acked-by and tested-by in the v2 patch.
+Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
+Tested-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
 
-nit: WARN_ON() has an unlikely() already built in
-
->  	for (i = 0; i < RTL8152_MAX_TX; i++) {
->  		usb_free_urb(tp->tx_info[i].urb);
->  		tp->tx_info[i].urb = NULL;
-> @@ -1503,46 +1573,28 @@ static int alloc_all_mem(struct r8152 *tp)
->  	struct usb_interface *intf = tp->intf;
->  	struct usb_host_interface *alt = intf->cur_altsetting;
->  	struct usb_host_endpoint *ep_intr = alt->endpoint + 2;
-> -	struct urb *urb;
->  	int node, i;
-> -	u8 *buf;
->  
->  	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
->  
->  	spin_lock_init(&tp->rx_lock);
->  	spin_lock_init(&tp->tx_lock);
-> +	INIT_LIST_HEAD(&tp->rx_info);
->  	INIT_LIST_HEAD(&tp->tx_free);
->  	INIT_LIST_HEAD(&tp->rx_done);
->  	skb_queue_head_init(&tp->tx_queue);
->  	skb_queue_head_init(&tp->rx_queue);
-> +	atomic_set(&tp->rx_count, 0);
->  
->  	for (i = 0; i < RTL8152_MAX_RX; i++) {
-> -		buf = kmalloc_node(tp->rx_buf_sz, GFP_KERNEL, node);
-> -		if (!buf)
-> -			goto err1;
-> -
-> -		if (buf != rx_agg_align(buf)) {
-> -			kfree(buf);
-> -			buf = kmalloc_node(tp->rx_buf_sz + RX_ALIGN, GFP_KERNEL,
-> -					   node);
-> -			if (!buf)
-> -				goto err1;
-> -		}
-> -
-> -		urb = usb_alloc_urb(0, GFP_KERNEL);
-> -		if (!urb) {
-> -			kfree(buf);
-> +		if (!alloc_rx_agg(tp, GFP_KERNEL))
->  			goto err1;
-> -		}
-> -
-> -		INIT_LIST_HEAD(&tp->rx_info[i].list);
-> -		tp->rx_info[i].context = tp;
-> -		tp->rx_info[i].urb = urb;
-> -		tp->rx_info[i].buffer = buf;
-> -		tp->rx_info[i].head = rx_agg_align(buf);
->  	}
->  
->  	for (i = 0; i < RTL8152_MAX_TX; i++) {
-> +		struct urb *urb;
-> +		u8 *buf;
 > +
->  		buf = kmalloc_node(agg_buf_sz, GFP_KERNEL, node);
->  		if (!buf)
->  			goto err1;
-> @@ -2331,44 +2383,69 @@ static void rxdy_gated_en(struct r8152 *tp, bool enable)
->  
->  static int rtl_start_rx(struct r8152 *tp)
->  {
-> -	int i, ret = 0;
-> +	struct list_head *cursor, *next, tmp_list;
-> +	unsigned long flags;
-> +	int ret = 0;
+>         for (i = 0; i < ARRAY_SIZE(lpc32xx_gpiochip); i++) {
+>                 if (pdev->dev.of_node) {
+>                         lpc32xx_gpiochip[i].chip.of_xlate = lpc32xx_of_xlate;
+> @@ -527,3 +542,7 @@ static struct platform_driver lpc32xx_gpio_driver = {
+>  };
+>
+>  module_platform_driver(lpc32xx_gpio_driver);
 > +
-> +	INIT_LIST_HEAD(&tmp_list);
-> +
-> +	spin_lock_irqsave(&tp->rx_lock, flags);
->  
->  	INIT_LIST_HEAD(&tp->rx_done);
-> -	for (i = 0; i < RTL8152_MAX_RX; i++) {
-> -		INIT_LIST_HEAD(&tp->rx_info[i].list);
-> -		ret = r8152_submit_rx(tp, &tp->rx_info[i], GFP_KERNEL);
-> -		if (ret)
-> -			break;
-> -	}
->  
-> -	if (ret && ++i < RTL8152_MAX_RX) {
-> -		struct list_head rx_queue;
-> -		unsigned long flags;
-> +	list_splice_init(&tp->rx_info, &tmp_list);
->  
-> -		INIT_LIST_HEAD(&rx_queue);
-> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
->  
-> -		do {
-> -			struct rx_agg *agg = &tp->rx_info[i++];
-> -			struct urb *urb = agg->urb;
-> +	list_for_each_safe(cursor, next, &tmp_list) {
-> +		struct rx_agg *agg;
->  
-> -			urb->actual_length = 0;
-> -			list_add_tail(&agg->list, &rx_queue);
-> -		} while (i < RTL8152_MAX_RX);
-> +		agg = list_entry(cursor, struct rx_agg, info_list);
-> +		INIT_LIST_HEAD(&agg->list);
->  
-> -		spin_lock_irqsave(&tp->rx_lock, flags);
-> -		list_splice_tail(&rx_queue, &tp->rx_done);
-> -		spin_unlock_irqrestore(&tp->rx_lock, flags);
-> +		if (ret < 0)
-> +			list_add_tail(&agg->list, &tp->rx_done);
-> +		else
-> +			ret = r8152_submit_rx(tp, agg, GFP_KERNEL);
->  	}
->  
-> +	spin_lock_irqsave(&tp->rx_lock, flags);
-> +	WARN_ON(unlikely(!list_empty(&tp->rx_info)));
-> +	list_splice(&tmp_list, &tp->rx_info);
-> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
-> +
->  	return ret;
->  }
->  
->  static int rtl_stop_rx(struct r8152 *tp)
->  {
-> -	int i;
-> +	struct list_head *cursor, *next, tmp_list;
-> +	unsigned long flags;
-> +
-> +	INIT_LIST_HEAD(&tmp_list);
->  
-> -	for (i = 0; i < RTL8152_MAX_RX; i++)
-> -		usb_kill_urb(tp->rx_info[i].urb);
-> +	/* The usb_kill_urb() couldn't be used in atomic.
-> +	 * Therefore, move the list of rx_info to a tmp one.
-> +	 * Then, list_for_each_safe could be used without
-> +	 * spin lock.
-> +	 */
-
-Would you mind explaining in a little more detail why taking the
-entries from the list for a brief period of time is safe? 
-
-> +	spin_lock_irqsave(&tp->rx_lock, flags);
-> +	list_splice_init(&tp->rx_info, &tmp_list);
-> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
-> +
-> +	list_for_each_safe(cursor, next, &tmp_list) {
-> +		struct rx_agg *agg;
-> +
-> +		agg = list_entry(cursor, struct rx_agg, info_list);
-> +		usb_kill_urb(agg->urb);
-> +	}
-> +
-> +	/* Move back the list of temp to the rx_info */
-> +	spin_lock_irqsave(&tp->rx_lock, flags);
-> +	WARN_ON(unlikely(!list_empty(&tp->rx_info)));
-> +	list_splice(&tmp_list, &tp->rx_info);
-> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
->  
->  	while (!skb_queue_empty(&tp->rx_queue))
->  		dev_kfree_skb(__skb_dequeue(&tp->rx_queue));
-
+> +MODULE_AUTHOR("Kevin Wells <kevin.wells@nxp.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("GPIO driver for LPC32xx SoC");
+> --
+> 2.20.0
+>
+Sylvain
