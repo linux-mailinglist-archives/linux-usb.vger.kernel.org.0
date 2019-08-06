@@ -2,62 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AD7830C6
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 13:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CAA83159
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 14:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729898AbfHFLhE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 07:37:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726783AbfHFLhE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 07:37:04 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8269F20C01;
-        Tue,  6 Aug 2019 11:37:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565091424;
-        bh=yil6PQ6BUh3GshAxh25B9TvtvnVV9meLxecoFUsQ4LE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hz9d9ZeRBpqGTzOeZyLtfDFJZS8vOZ+5nDn4fsKen1rUkrhzfrW9xn0o9sYkiomdD
-         +I4snaqq4GOZjZd/a6E0BqY9Z0dv59s7+/w0TybT7L+sbTOuqZ8iSSd2seKTdVpSoV
-         dgjDzF/b5rYahKpgvFHHbgsgzvFwe5FH7yKS+SXk=
-Date:   Tue, 6 Aug 2019 13:37:01 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     =?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: setup authorized_default using usb_bus_notify
-Message-ID: <20190806113701.GA18582@kroah.com>
-References: <20190806110050.38918-1-tweek@google.com>
+        id S1727259AbfHFMcK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 08:32:10 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44972 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726711AbfHFMcK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 08:32:10 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i18so41530001pgl.11;
+        Tue, 06 Aug 2019 05:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lV1YuQZ99UGBOPq70HJCVidBBglRZM90VerjusEDXcg=;
+        b=osk5U+XLfVNbOfnfzlWLJc5+XUjU+JSOMH33BsfpqN9hP+1ET9L3db+UChl+HcfXGv
+         eYsD1mp+f+aPsYq3vTfrsOR29noCbz0VzSyWJ+lq7CVpGKI88V/B5HQu+S3kJfvN66kG
+         +QCWetDGPLqYuqThQBKpc4Ei5VWO/cRMmLn1KSOZvPuEgE1/YKcOQXEpPJQQekJzIh23
+         eVSrL8ZQgjQiY0GOi0U8I2YmmO3Z9hl4Ne+RsrfTKWITCIDrENMS2QE2TLspRUIhMBin
+         gQj1yDb355TF0eXcy4gzvEKwT+rLNQpROsjLrGZGhzC6JDaa605K25zACSiku97N7YLh
+         lrXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lV1YuQZ99UGBOPq70HJCVidBBglRZM90VerjusEDXcg=;
+        b=WwLTeFjDqUlmWFv29WNK9spY5xpMSJJHpJYmfWlnkJtzJJbKdvtZ65jFBzmEtm9nVy
+         FvCetiwWyzOxV+xhKjwBaIJ5gw6CWsE976URmowN0qxIqzo424tfnRGGGowHCKU7138C
+         egrC4I0wk9Hb4QF7Z1D8IqHA82sEb/LxPoBkpM5Un62nDMK6U/G02OBShWgVYTy1PW2t
+         gEbLOPIvMALiWSM4mFqWyLEw3lbz4zcO+Xc9r8hIIb1LXX+N+swVVt0y1BGSOapiRW2Q
+         S0XLwtJSln8AZj7bYjR9yTa2U8BotyiHfVRXsT77ti1vlKKmAbRd05MFJsc7yGwhelTf
+         sjoQ==
+X-Gm-Message-State: APjAAAV/YP1sMKVhwj530+yaRh1g5EUo2ULtBPbH/CWbjtBWlxUgqufv
+        OUdNmvLnWCjMpFZ8RUmDk3I=
+X-Google-Smtp-Source: APXvYqyZXAWV0qNHDN63ndGyjzMoplTKc4ZgwZrvN8P/S8XfQ+a9QtS81uIKiw433oqThV/xDp12Wg==
+X-Received: by 2002:a17:90a:3aed:: with SMTP id b100mr2978568pjc.63.1565094729807;
+        Tue, 06 Aug 2019 05:32:09 -0700 (PDT)
+Received: from localhost.localdomain ([163.152.162.125])
+        by smtp.googlemail.com with ESMTPSA id a12sm15427778pgv.48.2019.08.06.05.32.06
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 06 Aug 2019 05:32:08 -0700 (PDT)
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suwan Kim <suwan.kim027@gmail.com>
+Subject: [PATCH v4 0/2] usbip: Implement SG support
+Date:   Tue,  6 Aug 2019 21:31:52 +0900
+Message-Id: <20190806123154.23798-1-suwan.kim027@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190806110050.38918-1-tweek@google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 06, 2019 at 01:00:50PM +0200, Thiébaud Weksteen wrote:
-> Currently, the authorized_default and interface_authorized_default
-> attributes for HCD are set up after the uevent has been sent to userland.
-> This creates a race condition where userland may fail to access this
-> file when processing the event. Move the appending of these attributes
-> earlier relying on the usb_bus_notify dispatcher.
-> 
-> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
-> ---
->  drivers/usb/core/hcd.c   | 123 ---------------------------------------
->  drivers/usb/core/sysfs.c | 121 ++++++++++++++++++++++++++++++++++++++
->  drivers/usb/core/usb.h   |   5 ++
->  3 files changed, 126 insertions(+), 123 deletions(-)
+There are bugs on vhci with usb 3.0 storage device. In USB, each SG
+list entry buffer should be divisible by the bulk max packet size.
+But with native SG support, this problem doesn't matter because the
+SG buffer is treated as contiguous buffer. But without native SG
+support, USB storage driver breaks SG list into several URBs and the
+error occurs because of a buffer size of URB that cannot be divided
+by the bulk max packet size. The error situation is as follows.
 
-And does this solve the issue you reported yesterday?  If so, I'll be
-glad to backport this to the older stable kernels as well.
+When USB Storage driver requests 31.5 KB data and has SG list which
+has 3584 bytes buffer followed by 7 4096 bytes buffer for some
+reason. USB Storage driver splits this SG list into several URBs
+because VHCI doesn't support SG and sends them separately. So the
+first URB buffer size is 3584 bytes. When receiving data from device,
+USB 3.0 device sends data packet of 1024 bytes size because the max
+packet size of BULK pipe is 1024 bytes. So device sends 4096 bytes.
+But the first URB buffer has only 3584 bytes buffer size. So host
+controller terminates the transfer even though there is more data to
+receive. So, vhci needs to support SG transfer to prevent this error.
 
-thanks,
+In this patch, vhci supports SG regardless of whether the server's
+host controller supports SG or not, because stub driver splits SG
+list into several URBs if the server's host controller doesn't
+support SG.
 
-greg k-h
+To support SG, vhci_map_urb_for_dma() sets URB_DMA_MAP_SG flag in
+urb->transfer_flags if URB has SG list and this flag will tell stub
+driver to use SG list.
+
+vhci sends each SG list entry to stub driver. Then, stub driver sees
+the total length of the buffer and allocates SG table and pages
+according to the total buffer length calling sgl_alloc(). After stub
+driver receives completed URB, it again sends each SG list entry to
+vhci.
+
+If the server's host controller doesn't support SG, stub driver
+breaks a single SG request into several URBs and submits them to
+the server's host controller. When all the split URBs are completed,
+stub driver reassembles the URBs into a single return command and
+sends it to vhci.
+
+Alan fixed vhci bug with the USB 3.0 storage device by modifying
+USB storage driver.
+("usb-storage: Set virt_boundary_mask to avoid SG overflows")
+But the fundamental solution of it is to add SG support to vhci.
+
+This patch works well with the USB 3.0 storage devices without Alan's
+patch, and we can revert Alan's patch if it causes some troubles.
+
+Suwan Kim (2):
+  usbip: Skip DMA mapping and unmapping for urb at vhci
+  usbip: Implement SG support to vhci-hcd and stub driver
+
+ drivers/usb/usbip/stub.h         |   7 +-
+ drivers/usb/usbip/stub_main.c    |  55 ++++++---
+ drivers/usb/usbip/stub_rx.c      | 204 ++++++++++++++++++++++---------
+ drivers/usb/usbip/stub_tx.c      |  99 +++++++++++----
+ drivers/usb/usbip/usbip_common.c |  59 ++++++---
+ drivers/usb/usbip/vhci_hcd.c     |  34 +++++-
+ drivers/usb/usbip/vhci_tx.c      |  63 ++++++++--
+ 7 files changed, 395 insertions(+), 126 deletions(-)
+
+-- 
+2.20.1
+
