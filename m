@@ -2,142 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADEE831DC
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 14:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF19A83209
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 14:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731909AbfHFMvD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 08:51:03 -0400
-Received: from mail-pl1-f177.google.com ([209.85.214.177]:37180 "EHLO
-        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731104AbfHFMvC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 08:51:02 -0400
-Received: by mail-pl1-f177.google.com with SMTP id b3so37875078plr.4
-        for <linux-usb@vger.kernel.org>; Tue, 06 Aug 2019 05:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o/Of7gnFjNlYZMBf78waHqPimHfP3RU+CQjMntOpVvM=;
-        b=eMzlPd4EBCnV+s/Ums9HwV+WL/jKoe1IKYlCEww1YgLdJ6/QiSxZeRizXYpixzAUxG
-         92GzDVmn4VtHpwVQ9/WVESJFdBIKqCR8rYd5UietWb4T/ss+gam86/P2HkyZmjhYodnS
-         5OnIoAM+Xvb66xOs1Gt2vB8vAxJpkyk/hdnnO5rDsM8Mj+0evcH+QOqX7Rr1KjHSMuj1
-         kbJ+xBj7d1HgpwcJSrKKQzQ478XUAxmZiSCaraq/7vVfdDv6BzyCga9yJ6Z3sdIa6LEB
-         ZsE5Sc45brqqHENg4ZU57PkT2L+/t9FdwerTRCRcydjOFllj0fTHlJCH/VvRysP58GVu
-         Mo9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o/Of7gnFjNlYZMBf78waHqPimHfP3RU+CQjMntOpVvM=;
-        b=iTbGtLinUFHesRBEbV0aIpl8ZMsPEB2F5kXpen1Y2INkxQqvxQms61IsTKgJOCbgjH
-         DelFNcPwPp8Qj2zBNMHJMtr4fbvpxcIuHz41NXng5+MyLFNHgT354IIWVoU66PJ6r3yh
-         IARkKHmCIhw26WesfzO83H8mAF8vIh+WBFV3vPt2lkW16ixG+UBcSsjBnnJ0/k9h6Feb
-         RonQfYAYyaUTdoQ7c2REI5xKMXuDkwr9stgQ1Hu3RAxUJmFvffZGl5Mq0LQiTUwbJ89w
-         t6j60CdTNhMIh/61gGt+PX7oxR7or8cQiccrWCg+gowWu4mn2e4ZovYjleZCv9qr1JdU
-         TLpg==
-X-Gm-Message-State: APjAAAWkDDqBIPG0j2mUjO9/VKnsWkwDGjA9pZ06C102d2QIK3BCl7oE
-        KW/Uog8GKkNu0O9i0jpV5UPJcAznsCAZ6+sqqeo+EA==
-X-Google-Smtp-Source: APXvYqzihCoaFQUPrkbjQsOtc0LFfMF/L5IY24117UvLqAZecCOTru0wu7N7UYzsH6gvCzbMwvpY85OkRbx6duvMjkA=
-X-Received: by 2002:a17:902:6a87:: with SMTP id n7mr2992398plk.336.1565095861407;
- Tue, 06 Aug 2019 05:51:01 -0700 (PDT)
+        id S1731272AbfHFM7w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 08:59:52 -0400
+Received: from mga18.intel.com ([134.134.136.126]:13583 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729898AbfHFM7w (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 08:59:52 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Aug 2019 05:59:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,353,1559545200"; 
+   d="scan'208";a="192656186"
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 06 Aug 2019 05:59:49 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 06 Aug 2019 15:59:48 +0300
+Date:   Tue, 6 Aug 2019 15:59:48 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Wei Yongjun <weiyongjun1@huawei.com>
+Subject: Re: [PATCH] USB: typec: ucsi_ccg: convert i2c driver to use
+ dev_groups
+Message-ID: <20190806125948.GB25061@kuha.fi.intel.com>
+References: <20190805193636.25560-6-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-References: <Pine.LNX.4.44L0.1908011359580.1305-100000@iolanthe.rowland.org> <1565095011.8136.20.camel@suse.com>
-In-Reply-To: <1565095011.8136.20.camel@suse.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 6 Aug 2019 14:50:50 +0200
-Message-ID: <CAAeHK+wyvJbi08ruuOn1qF0O1Jubz_BhZz5wXdNg4Vy5XeyQmw@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000dd87f8058f7246cd"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190805193636.25560-6-gregkh@linuxfoundation.org>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000dd87f8058f7246cd
-Content-Type: text/plain; charset="UTF-8"
+On Mon, Aug 05, 2019 at 09:36:36PM +0200, Greg Kroah-Hartman wrote:
+> The driver core now supports the option to automatically create and
+> remove any needed sysfs attribute files for a driver when the device is
+> bound/removed from it.  Convert the uscsi_ccg code to use that instead
+> of trying to create sysfs files "by hand".
+> 
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Ajay Gupta <ajayg@nvidia.com>
+> Cc: Wolfram Sang <wsa@the-dreams.de>
+> Cc: Wei Yongjun <weiyongjun1@huawei.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-On Tue, Aug 6, 2019 at 2:36 PM Oliver Neukum <oneukum@suse.com> wrote:
->
-> Am Donnerstag, den 01.08.2019, 14:47 -0400 schrieb Alan Stern:
-> >
-> > I think this must be caused by an unbalanced refcount.  That is,
-> > something must drop one more reference to the device than it takes.
-> > That would explain why the invalid access occurs inside a single
-> > bus_remove_device() call, between the klist_del() and
-> > device_release_driver().
-> >
-> > The kernel log indicates that the device was probed by rndis_wlan,
-> > rndis_host, and cdc_acm, all of which got errors because of the
-> > device's bogus descriptors.  Probably one of them is messing up the
-> > refcount.
->
-> Hi,
->
-> you made me look at cdc-acm. I suspect
->
-> cae2bc768d176bfbdad7035bbcc3cdc973eb7984 ("usb: cdc-acm: Decrement tty port's refcount if probe() fail")
->
-> is buggy decrementing the refcount on the interface in destroy()
-> even before the refcount is increased.
->
-> Unfortunately I cannot tell from the bug report how many and which
-> interfaces the emulated test device has. Hence it is unclear to me,
-> when exactly probe() would fail cdc-acm.
->
-> If you agree. I am attaching a putative fix.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Let's see if it fixes the issue.
+> ---
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 13 +++----------
+>  1 file changed, 3 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index f7a79a23ebed..e283a42e4f06 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -1104,14 +1104,11 @@ static ssize_t do_flash_store(struct device *dev,
+>  
+>  static DEVICE_ATTR_WO(do_flash);
+>  
+> -static struct attribute *ucsi_ccg_sysfs_attrs[] = {
+> +static struct attribute *ucsi_ccg_attrs[] = {
+>  	&dev_attr_do_flash.attr,
+>  	NULL,
+>  };
+> -
+> -static struct attribute_group ucsi_ccg_attr_group = {
+> -	.attrs = ucsi_ccg_sysfs_attrs,
+> -};
+> +ATTRIBUTE_GROUPS(ucsi_ccg);
+>  
+>  static int ucsi_ccg_probe(struct i2c_client *client,
+>  			  const struct i2c_device_id *id)
+> @@ -1189,10 +1186,6 @@ static int ucsi_ccg_probe(struct i2c_client *client,
+>  
+>  	i2c_set_clientdata(client, uc);
+>  
+> -	status = sysfs_create_group(&uc->dev->kobj, &ucsi_ccg_attr_group);
+> -	if (status)
+> -		dev_err(uc->dev, "cannot create sysfs group: %d\n", status);
+> -
+>  	pm_runtime_set_active(uc->dev);
+>  	pm_runtime_enable(uc->dev);
+>  	pm_runtime_idle(uc->dev);
+> @@ -1209,7 +1202,6 @@ static int ucsi_ccg_remove(struct i2c_client *client)
+>  	ucsi_unregister_ppm(uc->ucsi);
+>  	pm_runtime_disable(uc->dev);
+>  	free_irq(uc->irq, uc);
+> -	sysfs_remove_group(&uc->dev->kobj, &ucsi_ccg_attr_group);
+>  
+>  	return 0;
+>  }
+> @@ -1270,6 +1262,7 @@ static struct i2c_driver ucsi_ccg_driver = {
+>  	.driver = {
+>  		.name = "ucsi_ccg",
+>  		.pm = &ucsi_ccg_pm,
+> +		.dev_groups = ucsi_ccg_groups,
+>  	},
+>  	.probe = ucsi_ccg_probe,
+>  	.remove = ucsi_ccg_remove,
+> -- 
+> 2.22.0
 
-#syz fix: https://github.com/google/kasan.git 6a3599ce
+thanks,
 
->
->         Regards
->                 Oliver
-
---000000000000dd87f8058f7246cd
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-usb-cdc-acm-make-sure-a-refcount-is-taken-early-enou.patch"
-Content-Disposition: attachment; 
-	filename="0001-usb-cdc-acm-make-sure-a-refcount-is-taken-early-enou.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jyztngtt0>
-X-Attachment-Id: f_jyztngtt0
-
-RnJvbSA2YjMxOTA0ZTZjZjc1Zjg5NDQxZTMwOGI5ZTQyOGExZGU3NzI4ZmQ4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUdWUsIDYgQXVnIDIwMTkgMTQ6MzQ6MjcgKzAyMDAKU3ViamVjdDogW1BBVENIXSB1c2I6IGNk
-Yy1hY206IG1ha2Ugc3VyZSBhIHJlZmNvdW50IGlzIHRha2VuIGVhcmx5IGVub3VnaAoKZGVzdHJv
-eSgpIHdpbGwgZGVjcmVtZW50IHRoZSByZWZjb3VudCBvbiB0aGUgaW50ZXJmYWNlLCBzbyB0aGF0
-Cml0IG5lZWRzIHRvIGJlIHRha2VuIHNvIGVhcmx5IHRoYXQgaXQgbmV2ZXIgdW5kZXJjb3VudHMu
-CgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRy
-aXZlcnMvdXNiL2NsYXNzL2NkYy1hY20uYyB8IDEyICsrKysrKystLS0tLQogMSBmaWxlIGNoYW5n
-ZWQsIDcgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9jbGFzcy9jZGMtYWNtLmMgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMKaW5kZXgg
-MTgzYjQxNzUzYzk4Li4yOGUzZGU3NzVhZGEgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2NsYXNz
-L2NkYy1hY20uYworKysgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMKQEAgLTEzMDEsMTAg
-KzEzMDEsNiBAQCBzdGF0aWMgaW50IGFjbV9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50
-ZiwKIAl0dHlfcG9ydF9pbml0KCZhY20tPnBvcnQpOwogCWFjbS0+cG9ydC5vcHMgPSAmYWNtX3Bv
-cnRfb3BzOwogCi0JbWlub3IgPSBhY21fYWxsb2NfbWlub3IoYWNtKTsKLQlpZiAobWlub3IgPCAw
-KQotCQlnb3RvIGFsbG9jX2ZhaWwxOwotCiAJY3RybHNpemUgPSB1c2JfZW5kcG9pbnRfbWF4cChl
-cGN0cmwpOwogCXJlYWRzaXplID0gdXNiX2VuZHBvaW50X21heHAoZXByZWFkKSAqCiAJCQkJKHF1
-aXJrcyA9PSBTSU5HTEVfUlhfVVJCID8gMSA6IDIpOwpAQCAtMTMxMiw2ICsxMzA4LDEzIEBAIHN0
-YXRpYyBpbnQgYWNtX3Byb2JlKHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRmLAogCWFjbS0+d3Jp
-dGVzaXplID0gdXNiX2VuZHBvaW50X21heHAoZXB3cml0ZSkgKiAyMDsKIAlhY20tPmNvbnRyb2wg
-PSBjb250cm9sX2ludGVyZmFjZTsKIAlhY20tPmRhdGEgPSBkYXRhX2ludGVyZmFjZTsKKworCXVz
-Yl9nZXRfaW50ZihhY20tPmNvbnRyb2wpOyAvKiB1bmRvbmUgaW4gZGVzdHJveSgpICovCisKKwlt
-aW5vciA9IGFjbV9hbGxvY19taW5vcihhY20pOworCWlmIChtaW5vciA8IDApCisJCWdvdG8gYWxs
-b2NfZmFpbDE7CisKIAlhY20tPm1pbm9yID0gbWlub3I7CiAJYWNtLT5kZXYgPSB1c2JfZGV2Owog
-CWlmIChoLnVzYl9jZGNfYWNtX2Rlc2NyaXB0b3IpCkBAIC0xNDU4LDcgKzE0NjEsNiBAQCBzdGF0
-aWMgaW50IGFjbV9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50ZiwKIAl1c2JfZHJpdmVy
-X2NsYWltX2ludGVyZmFjZSgmYWNtX2RyaXZlciwgZGF0YV9pbnRlcmZhY2UsIGFjbSk7CiAJdXNi
-X3NldF9pbnRmZGF0YShkYXRhX2ludGVyZmFjZSwgYWNtKTsKIAotCXVzYl9nZXRfaW50Zihjb250
-cm9sX2ludGVyZmFjZSk7CiAJdHR5X2RldiA9IHR0eV9wb3J0X3JlZ2lzdGVyX2RldmljZSgmYWNt
-LT5wb3J0LCBhY21fdHR5X2RyaXZlciwgbWlub3IsCiAJCQkmY29udHJvbF9pbnRlcmZhY2UtPmRl
-dik7CiAJaWYgKElTX0VSUih0dHlfZGV2KSkgewotLSAKMi4xNi40Cgo=
---000000000000dd87f8058f7246cd--
+-- 
+heikki
