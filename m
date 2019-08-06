@@ -2,140 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC4683430
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 16:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC78F834C4
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 17:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733076AbfHFOpV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 10:45:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45916 "EHLO mail.kernel.org"
+        id S1732024AbfHFPLq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 11:11:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733066AbfHFOpV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 10:45:21 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726713AbfHFPLp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 11:11:45 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6359F214C6;
-        Tue,  6 Aug 2019 14:45:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BCA9F2089E;
+        Tue,  6 Aug 2019 15:11:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565102719;
-        bh=OlzchSyzpfZZvUBliJZhV89r2LswcZ3288cZR19mPlg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jWnRuePtMBkqEfgVddVuL3FNs0xQrpVzEBMqGJ8W9rTt/+cIjKpLSUjl97nUcLwkP
-         dyxU+X8SvFlPwabWQ12nyapc6D3TNgNRVVzq3R/2lwHeEhUJ+d1ex6scz9LzRCkJ2D
-         3ul8FzBbs2mw6fN/kQSAJvj4/ZDWYZToxDwqamuc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH 12/12] USB: usbip: convert to use dev_groups
-Date:   Tue,  6 Aug 2019 16:45:02 +0200
-Message-Id: <20190806144502.17792-13-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190806144502.17792-1-gregkh@linuxfoundation.org>
-References: <20190806144502.17792-1-gregkh@linuxfoundation.org>
+        s=default; t=1565104305;
+        bh=6UDrRhYrOs/0fVNeFUa7B2/tVmvKcooNzy/lwG+cCG0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=k6IBJzQx9Arxu9foQUy+C1P4gaB9mQ07b842qiWcYyMDUu8gNQN6rq7QT9uRCAvCb
+         8wEWWuGOGCTnGaGo3VBmag8BLg/EVF0Td+PCzKJ6fstT7C43cnYrGl8W0nztAj+aw4
+         cCjlwkwKoMmSn8gmQFpAvOh3Y348vzvNBshV5wno=
+Subject: Re: [PATCH v4 1/2] usbip: Skip DMA mapping and unmapping for urb at
+ vhci
+To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190806123154.23798-1-suwan.kim027@gmail.com>
+ <20190806123154.23798-2-suwan.kim027@gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <c3485edd-f7e3-95a7-38db-acda371575a2@kernel.org>
+Date:   Tue, 6 Aug 2019 09:11:30 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20190806123154.23798-2-suwan.kim027@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB drivers now support the ability for the driver core to handle the
-creation and removal of device-specific sysfs files in a race-free
-manner.  Take advantage of that by converting the driver to use this by
-moving the sysfs attributes into a group and assigning the dev_groups
-pointer to it.
+On 8/6/19 6:31 AM, Suwan Kim wrote:
+> vhci doesn’t do DMA for remote device. Actually, the real DMA
+> operation is done by network card driver. vhci just passes virtual
+> address of the buffer to the network stack, so vhci doesn’t use and
+> need dma address of the buffer of the URB.
+> 
+> But HCD provides DMA mapping and unmapping function by default.
+> Moreover, it causes unnecessary DMA mapping and unmapping which
+> will be done again at the NIC driver and it wastes CPU cycles.
+> So, implement map_urb_for_dma and unmap_urb_for_dma function for
+> vhci in order to skip the DMA mapping and unmapping procedure.
+> 
+> When it comes to supporting SG for vhci, it is useful to use native
+> SG list (urb->num_sgs) instead of mapped SG list because DMA mapping
+> fnuction can adjust the number of SG list (urb->num_mapped_sgs).
+> And vhci_map_urb_for_dma() prevents isoc pipe from using SG as
+> hcd_map_urb_for_dma() does.
+> 
+> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+> ---
+> v3 - v4:
+> - Replace WARN_ON() with pr_err() in the error path.
+> 
+> v2 - v3
+> - Move setting URB_DMA_MAP_SG flag to the patch 2.
+> - Prevent isoc pipe from using SG buffer.
+> 
+> v1 - v2
+> - Add setting URB_DMA_MAP_SG flag in urb->transfer_flags to tell
+> stub driver to use SG buffer.
+> ---
+>   drivers/usb/usbip/vhci_hcd.c | 19 +++++++++++++++++++
+>   1 file changed, 19 insertions(+)
+> 
+> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> index 000ab7225717..429e4e989f38 100644
+> --- a/drivers/usb/usbip/vhci_hcd.c
+> +++ b/drivers/usb/usbip/vhci_hcd.c
+> @@ -1288,6 +1288,22 @@ static int vhci_free_streams(struct usb_hcd *hcd, struct usb_device *udev,
+>   	return 0;
+>   }
+>   
+> +static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+> +				gfp_t mem_flags)
+> +{
+> +	if (usb_endpoint_xfer_isoc(&urb->ep->desc) && urb->num_sgs) {
+> +		pr_err("SG is not supported for isochronous transfer\n");
 
-Cc: Valentina Manea <valentina.manea.m@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/usbip/stub_dev.c | 50 ++++++------------------------------
- 1 file changed, 8 insertions(+), 42 deletions(-)
+Any reason to not use dev_err()?
 
-diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
-index 7931e6cecc70..2305d425e6c9 100644
---- a/drivers/usb/usbip/stub_dev.c
-+++ b/drivers/usb/usbip/stub_dev.c
-@@ -106,38 +106,13 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
- }
- static DEVICE_ATTR_WO(usbip_sockfd);
- 
--static int stub_add_files(struct device *dev)
--{
--	int err = 0;
--
--	err = device_create_file(dev, &dev_attr_usbip_status);
--	if (err)
--		goto err_status;
--
--	err = device_create_file(dev, &dev_attr_usbip_sockfd);
--	if (err)
--		goto err_sockfd;
--
--	err = device_create_file(dev, &dev_attr_usbip_debug);
--	if (err)
--		goto err_debug;
--
--	return 0;
--
--err_debug:
--	device_remove_file(dev, &dev_attr_usbip_sockfd);
--err_sockfd:
--	device_remove_file(dev, &dev_attr_usbip_status);
--err_status:
--	return err;
--}
--
--static void stub_remove_files(struct device *dev)
--{
--	device_remove_file(dev, &dev_attr_usbip_status);
--	device_remove_file(dev, &dev_attr_usbip_sockfd);
--	device_remove_file(dev, &dev_attr_usbip_debug);
--}
-+static struct attribute *usbip_attrs[] = {
-+	&dev_attr_usbip_status.attr,
-+	&dev_attr_usbip_sockfd.attr,
-+	&dev_attr_usbip_debug.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(usbip);
- 
- static void stub_shutdown_connection(struct usbip_device *ud)
- {
-@@ -379,17 +354,8 @@ static int stub_probe(struct usb_device *udev)
- 		goto err_port;
- 	}
- 
--	rc = stub_add_files(&udev->dev);
--	if (rc) {
--		dev_err(&udev->dev, "stub_add_files for %s\n", udev_busid);
--		goto err_files;
--	}
--
- 	return 0;
- 
--err_files:
--	usb_hub_release_port(udev->parent, udev->portnum,
--			     (struct usb_dev_state *) udev);
- err_port:
- 	dev_set_drvdata(&udev->dev, NULL);
- 	usb_put_dev(udev);
-@@ -457,7 +423,6 @@ static void stub_disconnect(struct usb_device *udev)
- 	/*
- 	 * NOTE: rx/tx threads are invoked for each usb_device.
- 	 */
--	stub_remove_files(&udev->dev);
- 
- 	/* release port */
- 	rc = usb_hub_release_port(udev->parent, udev->portnum,
-@@ -526,4 +491,5 @@ struct usb_device_driver stub_driver = {
- 	.resume		= stub_resume,
- #endif
- 	.supports_autosuspend	=	0,
-+	.dev_groups	= usbip_groups,
- };
--- 
-2.22.0
+Looks good otherwise.
 
+thanks,
+-- Shuah
