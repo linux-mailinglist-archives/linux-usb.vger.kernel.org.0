@@ -2,35 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E67BA83434
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 16:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B9883435
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 16:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733106AbfHFOp2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 10:45:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46022 "EHLO mail.kernel.org"
+        id S1733113AbfHFOpa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 10:45:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46054 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733066AbfHFOp2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 10:45:28 -0400
+        id S1733066AbfHFOpa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 10:45:30 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 15691214C6;
-        Tue,  6 Aug 2019 14:45:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB19520C01;
+        Tue,  6 Aug 2019 14:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565102727;
-        bh=nw47svV7ciaRtpZCXUFUGDPT7q5ye7QHw6bCSEb1QPQ=;
+        s=default; t=1565102730;
+        bh=3PaS4HqYKW6BYTPsCIgrHSQXLDcj7T1Il/0XM9y3FeQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D8ysuxXN8IF8IdgmVHWDkRUFdlIgQ+HmseBfu1FblG9tSt8/KtOWr6MlhDJUSppSO
-         JBCbRtMxd4uuPrnxfDlCKG8xIZqyYx2soPNrX5NOczLbqyYAGGS3cDIt7pA8m8nQth
-         nUZ6Tby22AILuxPS9wrtVyuSJxTO7HgyDus6zjHc=
+        b=NRI1QHHRxLlDUqDNen1f5jiT+qSQZTl9JyOXb2zpdAerP534oMwP+j354e/rd/sA/
+         iinD5EvrJiXa0LstCbFbJYs+olB4Gobr7P8cwHriB9cXje/Fb3kEgDPfy+q5K8XDUK
+         dQipnarQB2r4Dzxw+P8BXiWEKiKAfUQkJkdCBvGs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-usb@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthieu CASTET <castet.matthieu@free.fr>,
-        Stanislaw Gruszka <stf_xl@wp.pl>
-Subject: [PATCH 04/12] USB: ueagle-atm: convert to use dev_groups
-Date:   Tue,  6 Aug 2019 16:44:54 +0200
-Message-Id: <20190806144502.17792-5-gregkh@linuxfoundation.org>
+        Pete Zaitcev <zaitcev@redhat.com>
+Subject: [PATCH 05/12] USB: usblp: convert to use dev_groups
+Date:   Tue,  6 Aug 2019 16:44:55 +0200
+Message-Id: <20190806144502.17792-6-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190806144502.17792-1-gregkh@linuxfoundation.org>
 References: <20190806144502.17792-1-gregkh@linuxfoundation.org>
@@ -47,73 +46,64 @@ manner.  Take advantage of that by converting the driver to use this by
 moving the sysfs attributes into a group and assigning the dev_groups
 pointer to it.
 
-Cc: Matthieu CASTET <castet.matthieu@free.fr>
-Cc: Stanislaw Gruszka <stf_xl@wp.pl>
+Cc: Pete Zaitcev <zaitcev@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/atm/ueagle-atm.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+ drivers/usb/class/usblp.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/atm/ueagle-atm.c b/drivers/usb/atm/ueagle-atm.c
-index 8faa51b1a520..8b0ea8c70d73 100644
---- a/drivers/usb/atm/ueagle-atm.c
-+++ b/drivers/usb/atm/ueagle-atm.c
-@@ -2458,7 +2458,7 @@ static int claim_interface(struct usb_device *usb_dev,
- 	return ret;
- }
+diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+index 407a7a6198a2..7fea4999d352 100644
+--- a/drivers/usb/class/usblp.c
++++ b/drivers/usb/class/usblp.c
+@@ -1082,6 +1082,12 @@ static ssize_t ieee1284_id_show(struct device *dev, struct device_attribute *att
  
--static struct attribute *attrs[] = {
-+static struct attribute *uea_attrs[] = {
- 	&dev_attr_stat_status.attr,
- 	&dev_attr_stat_mflags.attr,
- 	&dev_attr_stat_human_status.attr,
-@@ -2479,9 +2479,7 @@ static struct attribute *attrs[] = {
- 	&dev_attr_stat_firmid.attr,
- 	NULL,
- };
--static const struct attribute_group attr_grp = {
--	.attrs = attrs,
--};
-+ATTRIBUTE_GROUPS(uea);
+ static DEVICE_ATTR_RO(ieee1284_id);
  
- static int uea_bind(struct usbatm_data *usbatm, struct usb_interface *intf,
- 		   const struct usb_device_id *id)
-@@ -2550,18 +2548,12 @@ static int uea_bind(struct usbatm_data *usbatm, struct usb_interface *intf,
- 		}
++static struct attribute *usblp_attrs[] = {
++	&dev_attr_ieee1284_id.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(usblp);
++
+ static int usblp_probe(struct usb_interface *intf,
+ 		       const struct usb_device_id *id)
+ {
+@@ -1156,9 +1162,6 @@ static int usblp_probe(struct usb_interface *intf,
+ 
+ 	/* Retrieve and store the device ID string. */
+ 	usblp_cache_device_id_string(usblp);
+-	retval = device_create_file(&intf->dev, &dev_attr_ieee1284_id);
+-	if (retval)
+-		goto abort_intfdata;
+ 
+ #ifdef DEBUG
+ 	usblp_check_status(usblp, 0);
+@@ -1189,7 +1192,6 @@ static int usblp_probe(struct usb_interface *intf,
+ 
+ abort_intfdata:
+ 	usb_set_intfdata(intf, NULL);
+-	device_remove_file(&intf->dev, &dev_attr_ieee1284_id);
+ abort:
+ 	kfree(usblp->readbuf);
+ 	kfree(usblp->statusbuf);
+@@ -1360,8 +1362,6 @@ static void usblp_disconnect(struct usb_interface *intf)
+ 		BUG();
  	}
  
--	ret = sysfs_create_group(&intf->dev.kobj, &attr_grp);
--	if (ret < 0)
--		goto error;
+-	device_remove_file(&intf->dev, &dev_attr_ieee1284_id);
 -
- 	ret = uea_boot(sc);
- 	if (ret < 0)
--		goto error_rm_grp;
-+		goto error;
- 
- 	return 0;
- 
--error_rm_grp:
--	sysfs_remove_group(&intf->dev.kobj, &attr_grp);
- error:
- 	kfree(sc);
- 	return ret;
-@@ -2571,7 +2563,6 @@ static void uea_unbind(struct usbatm_data *usbatm, struct usb_interface *intf)
- {
- 	struct uea_softc *sc = usbatm->driver_data;
- 
--	sysfs_remove_group(&intf->dev.kobj, &attr_grp);
- 	uea_stop(sc);
- 	kfree(sc);
- }
-@@ -2721,6 +2712,7 @@ static struct usb_driver uea_driver = {
- 	.id_table = uea_ids,
- 	.probe = uea_probe,
- 	.disconnect = uea_disconnect,
-+	.dev_groups = uea_groups,
+ 	mutex_lock(&usblp_mutex);
+ 	mutex_lock(&usblp->mut);
+ 	usblp->present = 0;
+@@ -1421,6 +1421,7 @@ static struct usb_driver usblp_driver = {
+ 	.suspend =	usblp_suspend,
+ 	.resume =	usblp_resume,
+ 	.id_table =	usblp_ids,
++	.dev_groups =	usblp_groups,
+ 	.supports_autosuspend =	1,
  };
  
- MODULE_DEVICE_TABLE(usb, uea_ids);
 -- 
 2.22.0
 
