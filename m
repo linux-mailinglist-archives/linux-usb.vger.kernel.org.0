@@ -2,92 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4001B833EC
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 16:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C416E83428
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 16:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731005AbfHFO0G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 10:26:06 -0400
-Received: from mx2.suse.de ([195.135.220.15]:57968 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728756AbfHFO0G (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 10:26:06 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B89FCAC1C;
-        Tue,  6 Aug 2019 14:26:04 +0000 (UTC)
-Message-ID: <1565101558.8136.30.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Date:   Tue, 06 Aug 2019 16:25:58 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1908061009450.1571-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1908061009450.1571-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1732972AbfHFOoB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 10:44:01 -0400
+Received: from mail-oi1-f198.google.com ([209.85.167.198]:37239 "EHLO
+        mail-oi1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730289AbfHFOoB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 10:44:01 -0400
+Received: by mail-oi1-f198.google.com with SMTP id f19so34971663oib.4
+        for <linux-usb@vger.kernel.org>; Tue, 06 Aug 2019 07:44:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=o7//8iB2+6zGco03+xFocLFfAcZonkdqACzLbnG2qjA=;
+        b=awiDYVvc//ZlCosOh13xuWRgaU30xJHEbWw6+x/OU2rCS2Kj2kBcogQH5nWQo9vRkC
+         6GztUGOlSK5ntqrI7UbszNXgd48IWjjvUiN03pBRelBAV8LFnMPFm2z6/KAQ9MAZG0WC
+         pG9B7uUf/I9tpoqtmf4TnN2cmeUCZZQ8ru2R4ubVbTon4QQ1stTmSkjU47aH9sagGGB/
+         gs3HUbhZHpVR9+hyXIIMaxzNUSv7xkemRxfX3dE5zhas2yKBG/U3dvOkf3QrMkuPqnDX
+         4ttUc9+p3Y2TPZLiYL2IglCMMlnM6o4H9+6yKsY/3qJOJ916AspdeM0NAgVDNlx5aTwN
+         7/2A==
+X-Gm-Message-State: APjAAAVsIOwHr+sweEeMVCwxkP/bp6PCD5cgArTOhcqUmDzU+8b1MM++
+        3mbcV9eTm03Y7pfCmTAChpEWy9AVnFSK7i/QpM7/mGKoo2eH
+X-Google-Smtp-Source: APXvYqxhrNwTseRTFw5wjrTjrawO4Y+BbVGzZ0FahUYV0NBNMjhohXbjEAHejKv5xErk7UrFlglOaKzTBOsYvQ0GHsAmi06aLr5x
+MIME-Version: 1.0
+X-Received: by 2002:a6b:dd17:: with SMTP id f23mr3667897ioc.213.1565102640986;
+ Tue, 06 Aug 2019 07:44:00 -0700 (PDT)
+Date:   Tue, 06 Aug 2019 07:44:00 -0700
+In-Reply-To: <1565096744.8136.23.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f400cd058f73dadd@google.com>
+Subject: Re: KMSAN: kernel-usb-infoleak in pcan_usb_pro_send_req
+From:   syzbot <syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com>
+To:     glider@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-usb@vger.kernel.org,
+        oneukum@suse.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 06.08.2019, 10:19 -0400 schrieb Alan Stern:
-> On Tue, 6 Aug 2019, Oliver Neukum wrote:
-> 
-> > Am Donnerstag, den 01.08.2019, 14:47 -0400 schrieb Alan Stern:
-> > > 
-> > > I think this must be caused by an unbalanced refcount.  That is,
-> > > something must drop one more reference to the device than it takes.
-> > > That would explain why the invalid access occurs inside a single
-> > > bus_remove_device() call, between the klist_del() and
-> > > device_release_driver().
-> > > 
-> > > The kernel log indicates that the device was probed by rndis_wlan,
-> > > rndis_host, and cdc_acm, all of which got errors because of the
-> > > device's bogus descriptors.  Probably one of them is messing up the
-> > > refcount.
-> > 
-> > Hi,
-> > 
-> > you made me look at cdc-acm. I suspect
-> > 
-> > cae2bc768d176bfbdad7035bbcc3cdc973eb7984 ("usb: cdc-acm: Decrement tty port's refcount if probe() fail")
-> > 
-> > is buggy decrementing the refcount on the interface in destroy()
-> > even before the refcount is increased.
-> > 
-> > Unfortunately I cannot tell from the bug report how many and which
-> > interfaces the emulated test device has. Hence it is unclear to me,
-> > when exactly probe() would fail cdc-acm.
-> 
-> Only one interface (numbered 234!).
+Hello,
 
-Yes. cdc-acm went into the look_for_collapsed_interface code path.
-But I cannot tell whether it proceeded to made_compressed_probe
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-(Yes, I know the code makes extensive use of "goto")
+Reported-and-tested-by:  
+syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com
 
-> > If you agree. I am attaching a putative fix.
-> 
-> Your patch adds a line saying:
-> 
-> > +	usb_get_intf(acm->control); /* undone in destroy() */
-> 
-> but I don't see any destroy() function in that source file.  Did you 
-> mean acm_port_destruct()?
+Tested on:
 
-Yes, sorry
+commit:         41550654 [UPSTREAM] KVM: x86: degrade WARN to pr_warn_rate..
+git tree:       https://github.com/google/kmsan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=40511ad0c5945201
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1170f88c600000
 
-> In any case, I don't know if this missing "get" would cause the 
-> problem, but it might well.
-
-Then let's wait for the result.
-
-	Regards
-		Oliver
-
+Note: testing is done by a robot and is best-effort only.
