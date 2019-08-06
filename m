@@ -2,35 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C6683436
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 16:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C9C83437
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 16:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733115AbfHFOpe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 10:45:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46084 "EHLO mail.kernel.org"
+        id S1733118AbfHFOpg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 10:45:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46116 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733066AbfHFOpe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 10:45:34 -0400
+        id S1733066AbfHFOpg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 10:45:36 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4CC0A20C01;
-        Tue,  6 Aug 2019 14:45:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D95F4214C6;
+        Tue,  6 Aug 2019 14:45:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565102732;
-        bh=BTvV1CThF/JUo51iU47xDDDbdE00Szro3HXoOb6Xuio=;
+        s=default; t=1565102735;
+        bh=fMTTJ97G/mUnj4BdI42YClaN06AMwAKfvjDVUD3gKZQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qG90LxUgaWu6vtxd0nt/WPndL+7yVfTY1CR0m5KX3+L69RUIKq5GESKUPTZpp8mJZ
-         nipbhMK0+cGoWyM5wWvFOngnAhHZYD5uf1tmxdab3Xh8/SGQmggxJH6VOq7WjkPrb3
-         GgA9DEiQVaPzppeQKl62F3sw4MaHnZt8sZ2nQ1VU=
+        b=Q5bupg7/5gVea8egyutBoNUNec+TDCnoysZ5O3af4LoXICkGR+eAxeVZhQi/96kJW
+         jXxhp7TmsR3U1p0ZluxjXxPN89CE6ZfpTKiVVgbTC4l2KzijbyE4MIak0KsoPjIwAq
+         jmvqr2qiLTbMzCb6ehOpY6j5cyZctnM2w7UAkweQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guido Kiener <guido.kiener@rohde-schwarz.com>,
-        Steve Bayless <steve_bayless@keysight.com>
-Subject: [PATCH 06/12] USB: usbtmc: convert to use dev_groups
-Date:   Tue,  6 Aug 2019 16:44:56 +0200
-Message-Id: <20190806144502.17792-7-gregkh@linuxfoundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 07/12] USB: cypress_cy7c63: convert to use dev_groups
+Date:   Tue,  6 Aug 2019 16:44:57 +0200
+Message-Id: <20190806144502.17792-8-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190806144502.17792-1-gregkh@linuxfoundation.org>
 References: <20190806144502.17792-1-gregkh@linuxfoundation.org>
@@ -47,71 +45,86 @@ manner.  Take advantage of that by converting the driver to use this by
 moving the sysfs attributes into a group and assigning the dev_groups
 pointer to it.
 
-Cc: Guido Kiener <guido.kiener@rohde-schwarz.com>
-Cc: Steve Bayless <steve_bayless@keysight.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/class/usbtmc.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ drivers/usb/misc/cypress_cy7c63.c | 29 ++++++++---------------------
+ 1 file changed, 8 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index 4942122b2346..7ff831f2fd21 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -1836,17 +1836,14 @@ capability_attribute(device_capabilities);
- capability_attribute(usb488_interface_capabilities);
- capability_attribute(usb488_device_capabilities);
- 
--static struct attribute *capability_attrs[] = {
-+static struct attribute *usbtmc_attrs[] = {
- 	&dev_attr_interface_capabilities.attr,
- 	&dev_attr_device_capabilities.attr,
- 	&dev_attr_usb488_interface_capabilities.attr,
- 	&dev_attr_usb488_device_capabilities.attr,
- 	NULL,
- };
--
--static const struct attribute_group capability_attr_grp = {
--	.attrs = capability_attrs,
--};
-+ATTRIBUTE_GROUPS(usbtmc);
- 
- static int usbtmc_ioctl_indicator_pulse(struct usbtmc_device_data *data)
+diff --git a/drivers/usb/misc/cypress_cy7c63.c b/drivers/usb/misc/cypress_cy7c63.c
+index 9d780b77314b..14faec51d7a5 100644
+--- a/drivers/usb/misc/cypress_cy7c63.c
++++ b/drivers/usb/misc/cypress_cy7c63.c
+@@ -183,6 +183,7 @@ static ssize_t port0_show(struct device *dev,
  {
-@@ -2383,9 +2380,6 @@ static int usbtmc_probe(struct usb_interface *intf,
- 	retcode = get_capabilities(data);
- 	if (retcode)
- 		dev_err(&intf->dev, "can't read capabilities\n");
--	else
--		retcode = sysfs_create_group(&intf->dev.kobj,
--					     &capability_attr_grp);
+ 	return read_port(dev, attr, buf, 0, CYPRESS_READ_PORT_ID0);
+ }
++static DEVICE_ATTR_RW(port0);
  
- 	if (data->iin_ep_present) {
- 		/* allocate int urb */
-@@ -2432,7 +2426,6 @@ static int usbtmc_probe(struct usb_interface *intf,
+ /* attribute callback handler (read) */
+ static ssize_t port1_show(struct device *dev,
+@@ -190,11 +191,14 @@ static ssize_t port1_show(struct device *dev,
+ {
+ 	return read_port(dev, attr, buf, 1, CYPRESS_READ_PORT_ID1);
+ }
+-
+-static DEVICE_ATTR_RW(port0);
+-
+ static DEVICE_ATTR_RW(port1);
+ 
++static struct attribute *cypress_attrs[] = {
++	&dev_attr_port0.attr,
++	&dev_attr_port1.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(cypress);
+ 
+ static int cypress_probe(struct usb_interface *interface,
+ 			 const struct usb_device_id *id)
+@@ -212,26 +216,11 @@ static int cypress_probe(struct usb_interface *interface,
+ 	/* save our data pointer in this interface device */
+ 	usb_set_intfdata(interface, dev);
+ 
+-	/* create device attribute files */
+-	retval = device_create_file(&interface->dev, &dev_attr_port0);
+-	if (retval)
+-		goto error;
+-	retval = device_create_file(&interface->dev, &dev_attr_port1);
+-	if (retval)
+-		goto error;
+-
+ 	/* let the user know that the device is now attached */
+ 	dev_info(&interface->dev,
+ 		 "Cypress CY7C63xxx device now attached\n");
  	return 0;
  
- error_register:
--	sysfs_remove_group(&intf->dev.kobj, &capability_attr_grp);
- 	usbtmc_free_int(data);
- err_put:
- 	kref_put(&data->kref, usbtmc_delete);
-@@ -2445,7 +2438,6 @@ static void usbtmc_disconnect(struct usb_interface *intf)
- 	struct list_head *elem;
+-error:
+-	device_remove_file(&interface->dev, &dev_attr_port0);
+-	device_remove_file(&interface->dev, &dev_attr_port1);
+-	usb_set_intfdata(interface, NULL);
+-	usb_put_dev(dev->udev);
+-	kfree(dev);
+-
+ error_mem:
+ 	return retval;
+ }
+@@ -242,9 +231,6 @@ static void cypress_disconnect(struct usb_interface *interface)
  
- 	usb_deregister_dev(intf, &usbtmc_class);
--	sysfs_remove_group(&intf->dev.kobj, &capability_attr_grp);
- 	mutex_lock(&data->io_mutex);
- 	data->zombie = 1;
- 	wake_up_interruptible_all(&data->waitq);
-@@ -2551,6 +2543,7 @@ static struct usb_driver usbtmc_driver = {
- 	.resume		= usbtmc_resume,
- 	.pre_reset	= usbtmc_pre_reset,
- 	.post_reset	= usbtmc_post_reset,
-+	.dev_groups	= usbtmc_groups,
+ 	dev = usb_get_intfdata(interface);
+ 
+-	/* remove device attribute files */
+-	device_remove_file(&interface->dev, &dev_attr_port0);
+-	device_remove_file(&interface->dev, &dev_attr_port1);
+ 	/* the intfdata can be set to NULL only after the
+ 	 * device files have been removed */
+ 	usb_set_intfdata(interface, NULL);
+@@ -262,6 +248,7 @@ static struct usb_driver cypress_driver = {
+ 	.probe = cypress_probe,
+ 	.disconnect = cypress_disconnect,
+ 	.id_table = cypress_table,
++	.dev_groups = cypress_groups,
  };
  
- module_usb_driver(usbtmc_driver);
+ module_usb_driver(cypress_driver);
 -- 
 2.22.0
 
