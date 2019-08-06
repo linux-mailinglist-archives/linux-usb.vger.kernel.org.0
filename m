@@ -2,62 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E66F482FBC
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 12:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F0E82FCE
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 12:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732409AbfHFK3o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 06:29:44 -0400
-Received: from smtprelay0078.hostedemail.com ([216.40.44.78]:57856 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732262AbfHFK3o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 06:29:44 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 67B4B6121;
-        Tue,  6 Aug 2019 10:29:43 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::,RULES_HIT:41:355:379:599:968:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1730:1747:1777:1792:1801:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:4250:4321:4559:4605:5007:7809:10004:10400:10848:11232:11658:11914:12297:12740:12760:12895:13069:13095:13311:13357:13439:14181:14581:14659:14721:21080:21433:21451:21627:30012:30025:30054:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:27,LUA_SUMMARY:none
-X-HE-Tag: goat74_37ab30b107b50
-X-Filterd-Recvd-Size: 1545
-Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
-        (Authenticated sender: joe@perches.com)
-        by omf14.hostedemail.com (Postfix) with ESMTPA;
-        Tue,  6 Aug 2019 10:29:42 +0000 (UTC)
-Message-ID: <b73f09c944625a40b2589e9bac7f8bd22a711ed3.camel@perches.com>
-Subject: Re: [PATCH] USB: Move wusbcore and UWB to staging as it is obsolete
-From:   Joe Perches <joe@perches.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org
-Date:   Tue, 06 Aug 2019 03:29:40 -0700
-In-Reply-To: <20190806101509.GA11280@kroah.com>
-References: <20190806101509.GA11280@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
-MIME-Version: 1.0
+        id S1732290AbfHFKiN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 06:38:13 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39412 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730068AbfHFKiN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 06:38:13 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id AAB67AF38;
+        Tue,  6 Aug 2019 10:38:11 +0000 (UTC)
+Message-ID: <1565087891.8136.11.camel@suse.com>
+Subject: Re: KASAN: slab-out-of-bounds Write in lg4ff_init
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+94e2b9e9c7d1dd332345@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, syzkaller-bugs@googlegroups.com,
+        jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Tue, 06 Aug 2019 12:38:11 +0200
+In-Reply-To: <000000000000e5742c058f5dfaef@google.com>
+References: <000000000000e5742c058f5dfaef@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-08-06 at 12:15 +0200, Greg Kroah-Hartman wrote:
-> The UWB and wusbcore code is long obsolete, so let us just move the code
-> out of the real part of the kernel and into the drivers/staging/
-> location with plans to remove it entirely in a few releases.
-[]
->  MAINTAINERS                                   | 15 +++-------
-[]
-> diff --git a/MAINTAINERS b/MAINTAINERS
-[]
-> @@ -3800,14 +3800,9 @@ F:	scripts/sign-file.c
->  F:	scripts/extract-cert.c
->  
->  CERTIFIED WIRELESS USB (WUSB) SUBSYSTEM:
-> -L:	linux-usb@vger.kernel.org
-> +L:	devel@driverdev.osuosl.org
->  S:	Orphan
+Am Montag, den 05.08.2019, 05:38 -0700 schrieb syzbot:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=144c21dc600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=94e2b9e9c7d1dd332345
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169e8542600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ec8262600000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+94e2b9e9c7d1dd332345@syzkaller.appspotmail.com
+> 
+> usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,  
+> different from the interface descriptor's value: 9
+> usb 1-1: New USB device found, idVendor=046d, idProduct=c298, bcdDevice=  
+> 0.00
+> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> usb 1-1: config 0 descriptor??
+> logitech 0003:046D:C298.0001: unknown main item tag 0x0
+> logitech 0003:046D:C298.0001: unknown main item tag 0x0
+> logitech 0003:046D:C298.0001: hidraw0: USB HID v0.00 Device [HID 046d:c298]  
+> on usb-dummy_hcd.0-1/input0
+> BUG: KASAN: slab-out-of-bounds in set_bit  
+> include/asm-generic/bitops-instrumented.h:28 [inline]
 
-Better to mark this as obsolete so checkpatch emits
-a message saying "no unnecessary modifications"
+#syz test: https://github.com/google/kasan.git e96407b4
 
+From 90b712f3e9b9a45996eb0dfe5f489a4502c9f843 Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Mon, 5 Aug 2019 16:14:47 +0200
+Subject: [PATCH] hid-lg4ff: sanity check for offsets of FF effects
+
+Malicious devices could provide huge offsets which would lead
+to setting bits in random kernel memory. Adding a sanity check.
+
+Reported-by: syzbot+94e2b9e9c7d1dd332345@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/hid/hid-lg4ff.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hid/hid-lg4ff.c b/drivers/hid/hid-lg4ff.c
+index cefba038520c..9e63da793a0d 100644
+--- a/drivers/hid/hid-lg4ff.c
++++ b/drivers/hid/hid-lg4ff.c
+@@ -1327,8 +1327,12 @@ int lg4ff_init(struct hid_device *hid)
+ 	}
+ 
+ 	/* Set supported force feedback capabilities */
++	error = -ENODEV;
+ 	for (j = 0; lg4ff_devices[i].ff_effects[j] >= 0; j++)
+-		set_bit(lg4ff_devices[i].ff_effects[j], dev->ffbit);
++		if (lg4ff_devices[i].ff_effects[j] < FF_CNT)
++			set_bit(lg4ff_devices[i].ff_effects[j], dev->ffbit);
++		else
++			goto err_init;
+ 
+ 	error = input_ff_create_memless(dev, NULL, lg4ff_play);
+ 
+-- 
+2.16.4
 
