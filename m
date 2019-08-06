@@ -2,116 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE6A8317B
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 14:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73954831AD
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 14:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730381AbfHFMgy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 08:36:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46616 "EHLO mx1.suse.de"
+        id S1730602AbfHFMp2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 08:45:28 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49154 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726834AbfHFMgy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 08:36:54 -0400
+        id S1728156AbfHFMp2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 08:45:28 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 4D8A3AF8C;
-        Tue,  6 Aug 2019 12:36:52 +0000 (UTC)
-Message-ID: <1565095011.8136.20.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
+        by mx1.suse.de (Postfix) with ESMTP id E5C91B62E;
+        Tue,  6 Aug 2019 12:45:26 +0000 (UTC)
+Message-ID: <1565095525.8136.22.camel@suse.com>
+Subject: Re: KMSAN: kernel-usb-infoleak in pcan_usb_pro_send_req
 From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrey Konovalov <andreyknvl@google.com>
-Cc:     syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Date:   Tue, 06 Aug 2019 14:36:51 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1908011359580.1305-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1908011359580.1305-100000@iolanthe.rowland.org>
-Content-Type: multipart/mixed; boundary="=-CqgVn5zigmmeKrUOHL2S"
+To:     syzbot <syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com>,
+        gustavo@embeddedor.com, glider@google.com,
+        syzkaller-bugs@googlegroups.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Date:   Tue, 06 Aug 2019 14:45:25 +0200
+In-Reply-To: <00000000000014c877058ee2c4a6@google.com>
+References: <00000000000014c877058ee2c4a6@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---=-CqgVn5zigmmeKrUOHL2S
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Donnerstag, den 01.08.2019, 14:47 -0400 schrieb Alan Stern:
+Am Dienstag, den 30.07.2019, 02:38 -0700 schrieb syzbot:
+> Hello,
 > 
-> I think this must be caused by an unbalanced refcount.  That is,
-> something must drop one more reference to the device than it takes.
-> That would explain why the invalid access occurs inside a single
-> bus_remove_device() call, between the klist_del() and
-> device_release_driver().
+> syzbot found the following crash on:
 > 
-> The kernel log indicates that the device was probed by rndis_wlan,
-> rndis_host, and cdc_acm, all of which got errors because of the
-> device's bogus descriptors.  Probably one of them is messing up the
-> refcount.
+> HEAD commit:    41550654 [UPSTREAM] KVM: x86: degrade WARN to pr_warn_rate..
+> git tree:       kmsan
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13e95183a00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=40511ad0c5945201
+> dashboard link: https://syzkaller.appspot.com/bug?extid=513e4d0985298538bf9b
+> compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+> 80fee25776c2fb61e74c1ecb1a523375c2500b69)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17eafa1ba00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b87983a00000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com
 
-Hi,
+#syz test: https://github.com/google/kasan.git 41550654
 
-you made me look at cdc-acm. I suspect
+From 6de76fa3df8aedc7a76dc0ecdea8308e38d4dccc Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Tue, 6 Aug 2019 14:41:52 +0200
+Subject: [PATCH] pcan_usb_fd: zero out the common command buffer
 
-cae2bc768d176bfbdad7035bbcc3cdc973eb7984 ("usb: cdc-acm: Decrement tty port's refcount if probe() fail")
+Lest we leak kernel memory to a device we better zero out buffers.
 
-is buggy decrementing the refcount on the interface in destroy()
-even before the refcount is increased.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Unfortunately I cannot tell from the bug report how many and which
-interfaces the emulated test device has. Hence it is unclear to me,
-when exactly probe() would fail cdc-acm.
-
-If you agree. I am attaching a putative fix.
-
-	Regards
-		Oliver
-
---=-CqgVn5zigmmeKrUOHL2S
-Content-Disposition: attachment;
-	filename*0=0001-usb-cdc-acm-make-sure-a-refcount-is-taken-early-enou.pat;
-	filename*1=ch
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch;
-	name="0001-usb-cdc-acm-make-sure-a-refcount-is-taken-early-enou.patch";
-	charset="UTF-8"
-
-RnJvbSA2YjMxOTA0ZTZjZjc1Zjg5NDQxZTMwOGI5ZTQyOGExZGU3NzI4ZmQ4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUdWUsIDYgQXVnIDIwMTkgMTQ6MzQ6MjcgKzAyMDAKU3ViamVjdDogW1BBVENIXSB1c2I6IGNk
-Yy1hY206IG1ha2Ugc3VyZSBhIHJlZmNvdW50IGlzIHRha2VuIGVhcmx5IGVub3VnaAoKZGVzdHJv
-eSgpIHdpbGwgZGVjcmVtZW50IHRoZSByZWZjb3VudCBvbiB0aGUgaW50ZXJmYWNlLCBzbyB0aGF0
-Cml0IG5lZWRzIHRvIGJlIHRha2VuIHNvIGVhcmx5IHRoYXQgaXQgbmV2ZXIgdW5kZXJjb3VudHMu
-CgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRy
-aXZlcnMvdXNiL2NsYXNzL2NkYy1hY20uYyB8IDEyICsrKysrKystLS0tLQogMSBmaWxlIGNoYW5n
-ZWQsIDcgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9jbGFzcy9jZGMtYWNtLmMgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMKaW5kZXgg
-MTgzYjQxNzUzYzk4Li4yOGUzZGU3NzVhZGEgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2NsYXNz
-L2NkYy1hY20uYworKysgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMKQEAgLTEzMDEsMTAg
-KzEzMDEsNiBAQCBzdGF0aWMgaW50IGFjbV9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50
-ZiwKIAl0dHlfcG9ydF9pbml0KCZhY20tPnBvcnQpOwogCWFjbS0+cG9ydC5vcHMgPSAmYWNtX3Bv
-cnRfb3BzOwogCi0JbWlub3IgPSBhY21fYWxsb2NfbWlub3IoYWNtKTsKLQlpZiAobWlub3IgPCAw
-KQotCQlnb3RvIGFsbG9jX2ZhaWwxOwotCiAJY3RybHNpemUgPSB1c2JfZW5kcG9pbnRfbWF4cChl
-cGN0cmwpOwogCXJlYWRzaXplID0gdXNiX2VuZHBvaW50X21heHAoZXByZWFkKSAqCiAJCQkJKHF1
-aXJrcyA9PSBTSU5HTEVfUlhfVVJCID8gMSA6IDIpOwpAQCAtMTMxMiw2ICsxMzA4LDEzIEBAIHN0
-YXRpYyBpbnQgYWNtX3Byb2JlKHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRmLAogCWFjbS0+d3Jp
-dGVzaXplID0gdXNiX2VuZHBvaW50X21heHAoZXB3cml0ZSkgKiAyMDsKIAlhY20tPmNvbnRyb2wg
-PSBjb250cm9sX2ludGVyZmFjZTsKIAlhY20tPmRhdGEgPSBkYXRhX2ludGVyZmFjZTsKKworCXVz
-Yl9nZXRfaW50ZihhY20tPmNvbnRyb2wpOyAvKiB1bmRvbmUgaW4gZGVzdHJveSgpICovCisKKwlt
-aW5vciA9IGFjbV9hbGxvY19taW5vcihhY20pOworCWlmIChtaW5vciA8IDApCisJCWdvdG8gYWxs
-b2NfZmFpbDE7CisKIAlhY20tPm1pbm9yID0gbWlub3I7CiAJYWNtLT5kZXYgPSB1c2JfZGV2Owog
-CWlmIChoLnVzYl9jZGNfYWNtX2Rlc2NyaXB0b3IpCkBAIC0xNDU4LDcgKzE0NjEsNiBAQCBzdGF0
-aWMgaW50IGFjbV9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50ZiwKIAl1c2JfZHJpdmVy
-X2NsYWltX2ludGVyZmFjZSgmYWNtX2RyaXZlciwgZGF0YV9pbnRlcmZhY2UsIGFjbSk7CiAJdXNi
-X3NldF9pbnRmZGF0YShkYXRhX2ludGVyZmFjZSwgYWNtKTsKIAotCXVzYl9nZXRfaW50Zihjb250
-cm9sX2ludGVyZmFjZSk7CiAJdHR5X2RldiA9IHR0eV9wb3J0X3JlZ2lzdGVyX2RldmljZSgmYWNt
-LT5wb3J0LCBhY21fdHR5X2RyaXZlciwgbWlub3IsCiAJCQkmY29udHJvbF9pbnRlcmZhY2UtPmRl
-dik7CiAJaWYgKElTX0VSUih0dHlfZGV2KSkgewotLSAKMi4xNi40Cgo=
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+index 34761c3a6286..47cc1ff5b88e 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+@@ -841,7 +841,7 @@ static int pcan_usb_fd_init(struct peak_usb_device *dev)
+ 			goto err_out;
+ 
+ 		/* allocate command buffer once for all for the interface */
+-		pdev->cmd_buffer_addr = kmalloc(PCAN_UFD_CMD_BUFFER_SIZE,
++		pdev->cmd_buffer_addr = kzalloc(PCAN_UFD_CMD_BUFFER_SIZE,
+ 						GFP_KERNEL);
+ 		if (!pdev->cmd_buffer_addr)
+ 			goto err_out_1;
+-- 
+2.16.4
 
 
---=-CqgVn5zigmmeKrUOHL2S--
 
