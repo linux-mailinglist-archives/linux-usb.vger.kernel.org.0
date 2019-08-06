@@ -2,108 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2E8832CD
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 15:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298B0832D2
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 15:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731118AbfHFNgy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 6 Aug 2019 09:36:54 -0400
-Received: from us-smtp-delivery-131.mimecast.com ([63.128.21.131]:23520 "EHLO
-        us-smtp-delivery-131.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726092AbfHFNgy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 09:36:54 -0400
-Received: from mailhub5.stratus.com (134.111.1.18 [134.111.1.18]) by
- relay.mimecast.com with ESMTP id us-mta-230-_M1ct889OuKjIhlOtpputw-1; Tue,
- 06 Aug 2019 09:36:53 -0400
-Received: from EXHQ1.corp.stratus.com (exhq1.corp.stratus.com [134.111.200.125])
-        by mailhub5.stratus.com (8.12.11/8.12.11) with ESMTP id x76DaqKG016766
-        for <linux-usb@vger.kernel.org>; Tue, 6 Aug 2019 09:36:52 -0400
-Received: from linuxdev.lnx.eng.stratus.com (134.111.220.63) by
- EXHQ1.corp.stratus.com (134.111.200.125) with Microsoft SMTP Server (TLS) id
- 14.3.279.2; Tue, 6 Aug 2019 09:36:40 -0400
-From:   Bill Kuzeja <William.Kuzeja@stratus.com>
-To:     <linux-usb@vger.kernel.org>, <William.Kuzeja@stratus.com>
-Subject: [PATCH] xhci: Prevent deadlock when xhci adapter breaks during init
-Date:   Tue, 6 Aug 2019 09:36:52 -0400
-Message-ID: <1565098612-8832-1-git-send-email-William.Kuzeja@stratus.com>
-X-Mailer: git-send-email 1.8.3.1
-MIME-Version: 1.0
-X-MC-Unique: _M1ct889OuKjIhlOtpputw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: 8BIT
+        id S1730478AbfHFNhS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 09:37:18 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40684 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726092AbfHFNhR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 09:37:17 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id C31ADADAA;
+        Tue,  6 Aug 2019 13:37:16 +0000 (UTC)
+Message-ID: <1565098635.8136.25.camel@suse.com>
+Subject: Re: WARNING in __iforce_usb_xmit/usb_submit_urb
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+5efc10c005014d061a74@syzkaller.appspotmail.com>,
+        gustavo@embeddedor.com, andreyknvl@google.com,
+        syzkaller-bugs@googlegroups.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Date:   Tue, 06 Aug 2019 15:37:15 +0200
+In-Reply-To: <000000000000c4df6a058f5d6b70@google.com>
+References: <000000000000c4df6a058f5d6b70@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The system can hit a deadlock if xhci adapter breaks while initializing. 
-The deadlock is between two threads: thread 1 is tearing down the 
-adapter and is stuck in usb_unlocked_disable_lpm waiting to lock the 
-hcd->handwidth_mutex. Thread 2 is holding this mutex (while still trying 
-to add a usb device), but is stuck in xhci_endpoint_reset waiting for a 
-stop or config command to complete. A reboot is required to resolve. 
+Am Montag, den 05.08.2019, 04:58 -0700 schrieb syzbot:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10809e0c600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5efc10c005014d061a74
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e40b1a600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=174a69d8600000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+5efc10c005014d061a74@syzkaller.appspotmail.com
 
-It turns out when calling xhci_queue_stop_endpoint and 
-xhci_queue_configure_endpoint in xhci_endpoint_reset, the return code is
-not checked for errors. If the timing is right and the adapter dies just
-before either of these commands get issued, we hang indefinitely waiting 
-for a completion on a command that didn't get issued.
+#syz test: https://github.com/google/kasan.git e96407b4
 
-This wasn't a problem before the following fix because we didn't send 
-commands in xhci_endpoint_reset:
+From 06be579ae09483c7c723067f4e5bf938ad302bda Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Tue, 6 Aug 2019 15:33:35 +0200
+Subject: [PATCH] iforce: add sanity checks
 
-commit f5249461b504 ("xhci: Clear the host side toggle manually when endpoint is soft reset")
+The endpoint type should also be checked before a device
+is accepted.
 
-With the patch I am submitting, a duration test which breaks adapters 
-during initialization (and which deadlocks with the standard kernel) runs 
-without issue.
-
-Fixes: f5249461b504 ("xhci: Clear the host side toggle manually when endpoint is soft reset")
-Signed-off-by: Bill Kuzeja <william.kuzeja@stratus.com>
+Reported-by: syzbot+5efc10c005014d061a74@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/usb/host/xhci.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ drivers/input/joystick/iforce/iforce-usb.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 248cd7a..835708d 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3132,7 +3132,16 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 		xhci_free_command(xhci, cfg_cmd);
- 		goto cleanup;
- 	}
--	xhci_queue_stop_endpoint(xhci, stop_cmd, udev->slot_id, ep_index, 0);
-+
-+	if (xhci_queue_stop_endpoint(xhci, stop_cmd, udev->slot_id,
-+					ep_index, 0) < 0) {
-+		spin_unlock_irqrestore(&xhci->lock, flags);
-+		xhci_free_command(xhci, cfg_cmd);
-+		xhci_warn(xhci, "%s: stop_cmd xhci_queue_stop_endpoint "
-+				"returns error, exiting\n", __func__);
-+		goto cleanup;
-+	}
-+
- 	xhci_ring_cmd_db(xhci);
- 	spin_unlock_irqrestore(&xhci->lock, flags);
+diff --git a/drivers/input/joystick/iforce/iforce-usb.c b/drivers/input/joystick/iforce/iforce-usb.c
+index 29abfeeef9a5..a481a226166c 100644
+--- a/drivers/input/joystick/iforce/iforce-usb.c
++++ b/drivers/input/joystick/iforce/iforce-usb.c
+@@ -203,6 +203,11 @@ static int iforce_usb_probe(struct usb_interface *intf,
+ 	epirq = &interface->endpoint[0].desc;
+ 	epout = &interface->endpoint[1].desc;
  
-@@ -3146,8 +3155,15 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 					   ctrl_ctx, ep_flag, ep_flag);
- 	xhci_endpoint_copy(xhci, cfg_cmd->in_ctx, vdev->out_ctx, ep_index);
- 
--	xhci_queue_configure_endpoint(xhci, cfg_cmd, cfg_cmd->in_ctx->dma,
--				      udev->slot_id, false);
-+	if (xhci_queue_configure_endpoint(xhci, cfg_cmd, cfg_cmd->in_ctx->dma,
-+				      udev->slot_id, false) < 0) {
-+		spin_unlock_irqrestore(&xhci->lock, flags);
-+		xhci_free_command(xhci, cfg_cmd);
-+		xhci_warn(xhci, "%s: cfg_cmd xhci_queue_configure_endpoint "
-+				"returns error, exiting\n", __func__);
-+		goto cleanup;
-+	}
++	if (!usb_endpoint_is_int_in(epirq))
++		return -ENODEV;
++	if (!usb_endpoint_is_int_out(epout))
++		return -ENODEV;
 +
- 	xhci_ring_cmd_db(xhci);
- 	spin_unlock_irqrestore(&xhci->lock, flags);
- 
+ 	iforce_usb = kzalloc(sizeof(*iforce_usb), GFP_KERNEL);
+ 	if (!iforce_usb)
+ 		goto fail;
 -- 
-1.8.3.1
+2.16.4
 
