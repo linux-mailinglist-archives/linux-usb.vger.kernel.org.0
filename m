@@ -2,329 +2,368 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4A9839CC
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 21:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4CE839E6
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 21:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726238AbfHFTqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 15:46:07 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:43944 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725881AbfHFTqH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 15:46:07 -0400
-Received: (qmail 7047 invoked by uid 2102); 6 Aug 2019 15:46:05 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 6 Aug 2019 15:46:05 -0400
-Date:   Tue, 6 Aug 2019 15:46:05 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Greg KH <greg@kroah.com>,
-        Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-cc:     USB list <linux-usb@vger.kernel.org>
-Subject: [PATCH] usbfs: Add ioctls for runtime power management
-Message-ID: <Pine.LNX.4.44L0.1908061542140.1571-100000@iolanthe.rowland.org>
+        id S1726461AbfHFTyK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 15:54:10 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:43580 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725973AbfHFTyK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 15:54:10 -0400
+Received: by mail-qk1-f194.google.com with SMTP id m14so38204884qka.10
+        for <linux-usb@vger.kernel.org>; Tue, 06 Aug 2019 12:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=1rHDXdmOEwR8xptFY1wQGCbwesX8kKKPC5gJB64uoto=;
+        b=b9GAepqRbKFM3pzqYg2LpdHR2OEdgWMc/HZxIv2Gp9vLLA3ZTzFCsANpReq6o3heh3
+         W1ptDk2UP62oVh0l6motNAk9K+wx+wzmppMPTOJTEgaxY2+N7G1GfJsdfjFGK9J/ydhd
+         1JAQk+iuy/FOLH+ODao/HTvc8ZtAAW1UurzvdNfmAUudfT/DZ0X+8DL+1u85ZSbBYCly
+         WgtOdpYIMLK+B2j83KqX+LKq9JgvsjwdwG7j0sTwebuX3AHqYlKN3JJ05J8D/90qYLwr
+         3ydTkB4DNAQnO7JPElLfGlkn1OHq07X5Z9MyGidOLtK0y+fU5ATneF1nAhI/NLAg8l8A
+         ZIEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=1rHDXdmOEwR8xptFY1wQGCbwesX8kKKPC5gJB64uoto=;
+        b=AoqMJ4KDSZ+2AXyeBNAD6s2gdhyYfYdoN8cYIY8RWVgRbj76Nc4kYBaFA2TnsNhAqw
+         gIkP52ot9Y76JPjCXT6ltNkHEPnVDE/H+WiDducRneRqxJRFZgOfK9re++AulTJb7YjI
+         irJ4PvGRAk6hs/vKV5Jy7ZjkQpb3qhTGOQR94CQDgWO2L05ZqLw3VWk/rj0SE/LK+wWR
+         OZLoydIaneU508D9SSUw0hztPUQ0KrRfQB0HP4GWuWovy1ejYI1SPY9JfLLkcGzSKpQx
+         +HD+xC5Un03W/S2lsGYOpS+AM42sXmrwLI5+/RFXRf5s3UGeTWugp2OMHsLpKBsIDJyk
+         SH5g==
+X-Gm-Message-State: APjAAAUEXJZcY1rkglPmYX9b3LI6mS3lHs6gYXWGfc2+ZOR4PkF/zsDo
+        90EV+Zg9WZBfIZINsOYybsZBrw==
+X-Google-Smtp-Source: APXvYqxrBdTEbJz96Q2eq+iIvW0j3N8XWLn08kcP6O+0VhSZ/q8ftrBCG23A5U4DAubf7/lDubR3mQ==
+X-Received: by 2002:ae9:df84:: with SMTP id t126mr2672184qkf.328.1565121249378;
+        Tue, 06 Aug 2019 12:54:09 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id l8sm2170230qtr.38.2019.08.06.12.54.08
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 06 Aug 2019 12:54:09 -0700 (PDT)
+Date:   Tue, 6 Aug 2019 12:53:42 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH net-next 2/5] r8152: replace array with linking list for
+ rx information
+Message-ID: <20190806125342.4620a94f@cakuba.netronome.com>
+In-Reply-To: <1394712342-15778-291-albertk@realtek.com>
+References: <1394712342-15778-289-albertk@realtek.com>
+        <1394712342-15778-291-albertk@realtek.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It has been requested that usbfs should implement runtime power
-management, instead of forcing the device to remain at full power as
-long as the device file is open.  This patch introduces that new
-feature.
+On Tue, 6 Aug 2019 19:18:01 +0800, Hayes Wang wrote:
+> The original method uses an array to store the rx information. The
+> new one uses a list to link each rx structure. Then, it is possible
+> to increase/decrease the number of rx structure dynamically.
+> 
+> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> ---
+>  drivers/net/usb/r8152.c | 187 ++++++++++++++++++++++++++++------------
+>  1 file changed, 132 insertions(+), 55 deletions(-)
+> 
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> index 0f07ed05ab34..44d832ceb516 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/mdio.h>
+>  #include <linux/usb/cdc.h>
+>  #include <linux/suspend.h>
+> +#include <linux/atomic.h>
+>  #include <linux/acpi.h>
+>  
+>  /* Information for net-next */
+> @@ -694,7 +695,7 @@ struct tx_desc {
+>  struct r8152;
+>  
+>  struct rx_agg {
+> -	struct list_head list;
+> +	struct list_head list, info_list;
+>  	struct urb *urb;
+>  	struct r8152 *context;
+>  	void *buffer;
+> @@ -719,7 +720,7 @@ struct r8152 {
+>  	struct net_device *netdev;
+>  	struct urb *intr_urb;
+>  	struct tx_agg tx_info[RTL8152_MAX_TX];
+> -	struct rx_agg rx_info[RTL8152_MAX_RX];
+> +	struct list_head rx_info;
+>  	struct list_head rx_done, tx_free;
+>  	struct sk_buff_head tx_queue, rx_queue;
+>  	spinlock_t rx_lock, tx_lock;
+> @@ -744,6 +745,8 @@ struct r8152 {
+>  		void (*autosuspend_en)(struct r8152 *tp, bool enable);
+>  	} rtl_ops;
+>  
+> +	atomic_t rx_count;
 
-It does so by adding three new usbfs ioctls:
+I wonder what the advantage of rx_count being atomic is, perhpas it
+could be protected by the same lock as the list head?
 
-	USBDEVFS_FORBID_SUSPEND: Prevents the device from going into
-	runtime suspend (and causes a resume if the device is already
-	suspended).
+>  	int intr_interval;
+>  	u32 saved_wolopts;
+>  	u32 msg_enable;
+> @@ -1468,19 +1471,86 @@ static inline void *tx_agg_align(void *data)
+>  	return (void *)ALIGN((uintptr_t)data, TX_ALIGN);
+>  }
+>  
+> +static void free_rx_agg(struct r8152 *tp, struct rx_agg *agg)
+> +{
+> +	list_del(&agg->info_list);
+> +
+> +	usb_free_urb(agg->urb);
+> +	kfree(agg->buffer);
+> +	kfree(agg);
+> +
+> +	atomic_dec(&tp->rx_count);
+> +}
+> +
+> +static struct rx_agg *alloc_rx_agg(struct r8152 *tp, gfp_t mflags)
+> +{
+> +	struct net_device *netdev = tp->netdev;
+> +	int node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
+> +	struct rx_agg *rx_agg;
+> +
+> +	rx_agg = kmalloc_node(sizeof(*rx_agg), mflags, node);
+> +	if (rx_agg) {
 
-	USBDEVFS_ALLOW_SUSPEND: Allows the device to go into runtime
-	suspend.  Some time may elapse before the device actually is
-	suspended, depending on things like the autosuspend delay.
+nit: you could possibly save the indentation by returning early here
 
-	USBDEVFS_WAIT_FOR_RESUME: Blocks until the call is interrupted
-	by a signal or at least one runtime resume has occurred since
-	the most recent ALLOW_SUSPEND ioctl call (which may mean
-	immediately, even if the device is currently suspended).  In
-	the latter case, the device is prevented from suspending again
-	just as if FORBID_SUSPEND was called before the ioctl returns.
+> +		unsigned long flags;
+> +		u8 *buf;
+> +
+> +		buf = kmalloc_node(tp->rx_buf_sz, mflags, node);
+> +		if (!buf)
+> +			goto free_rx;
+> +
+> +		if (buf != rx_agg_align(buf)) {
+> +			kfree(buf);
+> +			buf = kmalloc_node(tp->rx_buf_sz + RX_ALIGN, mflags,
+> +					   node);
+> +			if (!buf)
+> +				goto free_rx;
+> +		}
+> +
+> +		rx_agg->buffer = buf;
+> +		rx_agg->head = rx_agg_align(buf);
+> +
+> +		rx_agg->urb = usb_alloc_urb(0, mflags);
+> +		if (!rx_agg->urb)
+> +			goto free_buf;
+> +
+> +		rx_agg->context = tp;
+> +
+> +		INIT_LIST_HEAD(&rx_agg->list);
+> +		INIT_LIST_HEAD(&rx_agg->info_list);
+> +		spin_lock_irqsave(&tp->rx_lock, flags);
+> +		list_add_tail(&rx_agg->info_list, &tp->rx_info);
+> +		spin_unlock_irqrestore(&tp->rx_lock, flags);
+> +
+> +		atomic_inc(&tp->rx_count);
+> +	}
+> +
+> +	return rx_agg;
+> +
+> +free_buf:
+> +	kfree(rx_agg->buffer);
+> +free_rx:
+> +	kfree(rx_agg);
+> +	return NULL;
+> +}
+> +
+>  static void free_all_mem(struct r8152 *tp)
+>  {
+> +	struct list_head *cursor, *next;
+> +	unsigned long flags;
+>  	int i;
+>  
+> -	for (i = 0; i < RTL8152_MAX_RX; i++) {
+> -		usb_free_urb(tp->rx_info[i].urb);
+> -		tp->rx_info[i].urb = NULL;
+> +	spin_lock_irqsave(&tp->rx_lock, flags);
+>  
+> -		kfree(tp->rx_info[i].buffer);
+> -		tp->rx_info[i].buffer = NULL;
+> -		tp->rx_info[i].head = NULL;
+> +	list_for_each_safe(cursor, next, &tp->rx_info) {
 
-For backward compatibility, when the device file is first opened
-runtime suspends are forbidden.  The userspace program can then allow
-suspends whenever it wants, and either resume the device directly (by
-forbidding suspends again) or wait for a resume from some other source
-(such as a remote wakeup).  URBs submitted to a suspended device will
-fail or will complete with an appropriate error code.
+nit: list_for_each_entry_safe, perhaps?
 
-This combination of ioctls is sufficient for user programs to have
-nearly the same degree of control over a device's runtime power
-behavior as kernel drivers do.
+> +		struct rx_agg *agg;
+> +
+> +		agg = list_entry(cursor, struct rx_agg, info_list);
+> +		free_rx_agg(tp, agg);
+>  	}
+>  
+> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
+> +
+> +	WARN_ON(unlikely(atomic_read(&tp->rx_count)));
 
-Still lacking is documentation for the new ioctls.  I intend to add it
-later, after the existing documentation for the usbfs userspace API is
-straightened out into a reasonable form.
+nit: WARN_ON() has an unlikely() already built in
 
-Suggested-by: Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+>  	for (i = 0; i < RTL8152_MAX_TX; i++) {
+>  		usb_free_urb(tp->tx_info[i].urb);
+>  		tp->tx_info[i].urb = NULL;
+> @@ -1503,46 +1573,28 @@ static int alloc_all_mem(struct r8152 *tp)
+>  	struct usb_interface *intf = tp->intf;
+>  	struct usb_host_interface *alt = intf->cur_altsetting;
+>  	struct usb_host_endpoint *ep_intr = alt->endpoint + 2;
+> -	struct urb *urb;
+>  	int node, i;
+> -	u8 *buf;
+>  
+>  	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
+>  
+>  	spin_lock_init(&tp->rx_lock);
+>  	spin_lock_init(&tp->tx_lock);
+> +	INIT_LIST_HEAD(&tp->rx_info);
+>  	INIT_LIST_HEAD(&tp->tx_free);
+>  	INIT_LIST_HEAD(&tp->rx_done);
+>  	skb_queue_head_init(&tp->tx_queue);
+>  	skb_queue_head_init(&tp->rx_queue);
+> +	atomic_set(&tp->rx_count, 0);
+>  
+>  	for (i = 0; i < RTL8152_MAX_RX; i++) {
+> -		buf = kmalloc_node(tp->rx_buf_sz, GFP_KERNEL, node);
+> -		if (!buf)
+> -			goto err1;
+> -
+> -		if (buf != rx_agg_align(buf)) {
+> -			kfree(buf);
+> -			buf = kmalloc_node(tp->rx_buf_sz + RX_ALIGN, GFP_KERNEL,
+> -					   node);
+> -			if (!buf)
+> -				goto err1;
+> -		}
+> -
+> -		urb = usb_alloc_urb(0, GFP_KERNEL);
+> -		if (!urb) {
+> -			kfree(buf);
+> +		if (!alloc_rx_agg(tp, GFP_KERNEL))
+>  			goto err1;
+> -		}
+> -
+> -		INIT_LIST_HEAD(&tp->rx_info[i].list);
+> -		tp->rx_info[i].context = tp;
+> -		tp->rx_info[i].urb = urb;
+> -		tp->rx_info[i].buffer = buf;
+> -		tp->rx_info[i].head = rx_agg_align(buf);
+>  	}
+>  
+>  	for (i = 0; i < RTL8152_MAX_TX; i++) {
+> +		struct urb *urb;
+> +		u8 *buf;
+> +
+>  		buf = kmalloc_node(agg_buf_sz, GFP_KERNEL, node);
+>  		if (!buf)
+>  			goto err1;
+> @@ -2331,44 +2383,69 @@ static void rxdy_gated_en(struct r8152 *tp, bool enable)
+>  
+>  static int rtl_start_rx(struct r8152 *tp)
+>  {
+> -	int i, ret = 0;
+> +	struct list_head *cursor, *next, tmp_list;
+> +	unsigned long flags;
+> +	int ret = 0;
+> +
+> +	INIT_LIST_HEAD(&tmp_list);
+> +
+> +	spin_lock_irqsave(&tp->rx_lock, flags);
+>  
+>  	INIT_LIST_HEAD(&tp->rx_done);
+> -	for (i = 0; i < RTL8152_MAX_RX; i++) {
+> -		INIT_LIST_HEAD(&tp->rx_info[i].list);
+> -		ret = r8152_submit_rx(tp, &tp->rx_info[i], GFP_KERNEL);
+> -		if (ret)
+> -			break;
+> -	}
+>  
+> -	if (ret && ++i < RTL8152_MAX_RX) {
+> -		struct list_head rx_queue;
+> -		unsigned long flags;
+> +	list_splice_init(&tp->rx_info, &tmp_list);
+>  
+> -		INIT_LIST_HEAD(&rx_queue);
+> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
+>  
+> -		do {
+> -			struct rx_agg *agg = &tp->rx_info[i++];
+> -			struct urb *urb = agg->urb;
+> +	list_for_each_safe(cursor, next, &tmp_list) {
+> +		struct rx_agg *agg;
+>  
+> -			urb->actual_length = 0;
+> -			list_add_tail(&agg->list, &rx_queue);
+> -		} while (i < RTL8152_MAX_RX);
+> +		agg = list_entry(cursor, struct rx_agg, info_list);
+> +		INIT_LIST_HEAD(&agg->list);
+>  
+> -		spin_lock_irqsave(&tp->rx_lock, flags);
+> -		list_splice_tail(&rx_queue, &tp->rx_done);
+> -		spin_unlock_irqrestore(&tp->rx_lock, flags);
+> +		if (ret < 0)
+> +			list_add_tail(&agg->list, &tp->rx_done);
+> +		else
+> +			ret = r8152_submit_rx(tp, agg, GFP_KERNEL);
+>  	}
+>  
+> +	spin_lock_irqsave(&tp->rx_lock, flags);
+> +	WARN_ON(unlikely(!list_empty(&tp->rx_info)));
+> +	list_splice(&tmp_list, &tp->rx_info);
+> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
+> +
+>  	return ret;
+>  }
+>  
+>  static int rtl_stop_rx(struct r8152 *tp)
+>  {
+> -	int i;
+> +	struct list_head *cursor, *next, tmp_list;
+> +	unsigned long flags;
+> +
+> +	INIT_LIST_HEAD(&tmp_list);
+>  
+> -	for (i = 0; i < RTL8152_MAX_RX; i++)
+> -		usb_kill_urb(tp->rx_info[i].urb);
+> +	/* The usb_kill_urb() couldn't be used in atomic.
+> +	 * Therefore, move the list of rx_info to a tmp one.
+> +	 * Then, list_for_each_safe could be used without
+> +	 * spin lock.
+> +	 */
 
----
+Would you mind explaining in a little more detail why taking the
+entries from the list for a brief period of time is safe? 
 
-
-[as1905]
-
-
- drivers/usb/core/devio.c          |   96 ++++++++++++++++++++++++++++++++++++--
- drivers/usb/core/generic.c        |    5 +
- drivers/usb/core/usb.h            |    3 +
- include/uapi/linux/usbdevice_fs.h |    3 +
- 4 files changed, 102 insertions(+), 5 deletions(-)
-
-Index: usb-devel/drivers/usb/core/devio.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/devio.c
-+++ usb-devel/drivers/usb/core/devio.c
-@@ -48,6 +48,9 @@
- #define USB_DEVICE_MAX			(USB_MAXBUS * 128)
- #define USB_SG_SIZE			16384 /* split-size for large txs */
- 
-+/* Mutual exclusion for ps->list in resume vs. release and remove */
-+static DEFINE_MUTEX(usbfs_mutex);
-+
- struct usb_dev_state {
- 	struct list_head list;      /* state list */
- 	struct usb_device *dev;
-@@ -57,14 +60,17 @@ struct usb_dev_state {
- 	struct list_head async_completed;
- 	struct list_head memory_list;
- 	wait_queue_head_t wait;     /* wake up if a request completed */
-+	wait_queue_head_t wait_for_resume;   /* wake up upon runtime resume */
- 	unsigned int discsignr;
- 	struct pid *disc_pid;
- 	const struct cred *cred;
- 	sigval_t disccontext;
- 	unsigned long ifclaimed;
- 	u32 disabled_bulk_eps;
--	bool privileges_dropped;
- 	unsigned long interface_allowed_mask;
-+	int not_yet_resumed;
-+	bool suspend_allowed;
-+	bool privileges_dropped;
- };
- 
- struct usb_memory {
-@@ -694,9 +700,7 @@ static void driver_disconnect(struct usb
- 	destroy_async_on_interface(ps, ifnum);
- }
- 
--/* The following routines are merely placeholders.  There is no way
-- * to inform a user task about suspend or resumes.
-- */
-+/* We don't care about suspend/resume of claimed interfaces */
- static int driver_suspend(struct usb_interface *intf, pm_message_t msg)
- {
- 	return 0;
-@@ -707,12 +711,32 @@ static int driver_resume(struct usb_inte
- 	return 0;
- }
- 
-+/* The following routines apply to the entire device, not interfaces */
-+void usbfs_notify_suspend(struct usb_device *udev)
-+{
-+	/* We don't need to handle this */
-+}
-+
-+void usbfs_notify_resume(struct usb_device *udev)
-+{
-+	struct usb_dev_state *ps;
-+
-+	/* Protect against simultaneous remove or release */
-+	mutex_lock(&usbfs_mutex);
-+	list_for_each_entry(ps, &udev->filelist, list) {
-+		WRITE_ONCE(ps->not_yet_resumed, 0);
-+		wake_up_all(&ps->wait_for_resume);
-+	}
-+	mutex_unlock(&usbfs_mutex);
-+}
-+
- struct usb_driver usbfs_driver = {
- 	.name =		"usbfs",
- 	.probe =	driver_probe,
- 	.disconnect =	driver_disconnect,
- 	.suspend =	driver_suspend,
- 	.resume =	driver_resume,
-+	.supports_autosuspend = 1,
- };
- 
- static int claimintf(struct usb_dev_state *ps, unsigned int ifnum)
-@@ -997,9 +1021,12 @@ static int usbdev_open(struct inode *ino
- 	INIT_LIST_HEAD(&ps->async_completed);
- 	INIT_LIST_HEAD(&ps->memory_list);
- 	init_waitqueue_head(&ps->wait);
-+	init_waitqueue_head(&ps->wait_for_resume);
- 	ps->disc_pid = get_pid(task_pid(current));
- 	ps->cred = get_current_cred();
- 	smp_wmb();
-+
-+	/* Can't race with resume; the device is already active */
- 	list_add_tail(&ps->list, &dev->filelist);
- 	file->private_data = ps;
- 	usb_unlock_device(dev);
-@@ -1025,7 +1052,10 @@ static int usbdev_release(struct inode *
- 	usb_lock_device(dev);
- 	usb_hub_release_all_ports(dev, ps);
- 
-+	/* Protect against simultaneous resume */
-+	mutex_lock(&usbfs_mutex);
- 	list_del_init(&ps->list);
-+	mutex_unlock(&usbfs_mutex);
- 
- 	for (ifnum = 0; ps->ifclaimed && ifnum < 8*sizeof(ps->ifclaimed);
- 			ifnum++) {
-@@ -1033,7 +1063,8 @@ static int usbdev_release(struct inode *
- 			releaseintf(ps, ifnum);
- 	}
- 	destroy_all_async(ps);
--	usb_autosuspend_device(dev);
-+	if (!ps->suspend_allowed)
-+		usb_autosuspend_device(dev);
- 	usb_unlock_device(dev);
- 	usb_put_dev(dev);
- 	put_pid(ps->disc_pid);
-@@ -2384,6 +2415,47 @@ static int proc_drop_privileges(struct u
- 	return 0;
- }
- 
-+static int proc_forbid_suspend(struct usb_dev_state *ps)
-+{
-+	int ret = 0;
-+
-+	if (ps->suspend_allowed) {
-+		ret = usb_autoresume_device(ps->dev);
-+		if (ret == 0)
-+			ps->suspend_allowed = false;
-+		else if (ret != -ENODEV)
-+			ret = -EIO;
-+	}
-+	return ret;
-+}
-+
-+static int proc_allow_suspend(struct usb_dev_state *ps)
-+{
-+	if (!connected(ps))
-+		return -ENODEV;
-+
-+	WRITE_ONCE(ps->not_yet_resumed, 1);
-+	if (!ps->suspend_allowed) {
-+		usb_autosuspend_device(ps->dev);
-+		ps->suspend_allowed = true;
-+	}
-+	return 0;
-+}
-+
-+static int proc_wait_for_resume(struct usb_dev_state *ps)
-+{
-+	int ret;
-+
-+	usb_unlock_device(ps->dev);
-+	ret = wait_event_interruptible(ps->wait_for_resume,
-+			READ_ONCE(ps->not_yet_resumed) == 0);
-+	usb_lock_device(ps->dev);
-+
-+	if (ret != 0)
-+		return ret;
-+	return proc_forbid_suspend(ps);
-+}
-+
- /*
-  * NOTE:  All requests here that have interface numbers as parameters
-  * are assuming that somehow the configuration has been prevented from
-@@ -2578,6 +2650,15 @@ static long usbdev_do_ioctl(struct file
- 	case USBDEVFS_GET_SPEED:
- 		ret = ps->dev->speed;
- 		break;
-+	case USBDEVFS_FORBID_SUSPEND:
-+		ret = proc_forbid_suspend(ps);
-+		break;
-+	case USBDEVFS_ALLOW_SUSPEND:
-+		ret = proc_allow_suspend(ps);
-+		break;
-+	case USBDEVFS_WAIT_FOR_RESUME:
-+		ret = proc_wait_for_resume(ps);
-+		break;
- 	}
- 
- 	/* Handle variable-length commands */
-@@ -2651,15 +2732,20 @@ static void usbdev_remove(struct usb_dev
- {
- 	struct usb_dev_state *ps;
- 
-+	/* Protect against simultaneous resume */
-+	mutex_lock(&usbfs_mutex);
- 	while (!list_empty(&udev->filelist)) {
- 		ps = list_entry(udev->filelist.next, struct usb_dev_state, list);
- 		destroy_all_async(ps);
- 		wake_up_all(&ps->wait);
-+		WRITE_ONCE(ps->not_yet_resumed, 0);
-+		wake_up_all(&ps->wait_for_resume);
- 		list_del_init(&ps->list);
- 		if (ps->discsignr)
- 			kill_pid_usb_asyncio(ps->discsignr, EPIPE, ps->disccontext,
- 					     ps->disc_pid, ps->cred);
- 	}
-+	mutex_unlock(&usbfs_mutex);
- }
- 
- static int usbdev_notify(struct notifier_block *self,
-Index: usb-devel/drivers/usb/core/generic.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/generic.c
-+++ usb-devel/drivers/usb/core/generic.c
-@@ -257,6 +257,8 @@ static int generic_suspend(struct usb_de
- 	else
- 		rc = usb_port_suspend(udev, msg);
- 
-+	if (rc == 0)
-+		usbfs_notify_suspend(udev);
- 	return rc;
- }
- 
-@@ -273,6 +275,9 @@ static int generic_resume(struct usb_dev
- 		rc = hcd_bus_resume(udev, msg);
- 	else
- 		rc = usb_port_resume(udev, msg);
-+
-+	if (rc == 0)
-+		usbfs_notify_resume(udev);
- 	return rc;
- }
- 
-Index: usb-devel/drivers/usb/core/usb.h
-===================================================================
---- usb-devel.orig/drivers/usb/core/usb.h
-+++ usb-devel/drivers/usb/core/usb.h
-@@ -95,6 +95,9 @@ extern int usb_runtime_idle(struct devic
- extern int usb_enable_usb2_hardware_lpm(struct usb_device *udev);
- extern int usb_disable_usb2_hardware_lpm(struct usb_device *udev);
- 
-+extern void usbfs_notify_suspend(struct usb_device *udev);
-+extern void usbfs_notify_resume(struct usb_device *udev);
-+
- #else
- 
- static inline int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
-Index: usb-devel/include/uapi/linux/usbdevice_fs.h
-===================================================================
---- usb-devel.orig/include/uapi/linux/usbdevice_fs.h
-+++ usb-devel/include/uapi/linux/usbdevice_fs.h
-@@ -223,5 +223,8 @@ struct usbdevfs_streams {
-  * extending size of the data returned.
-  */
- #define USBDEVFS_CONNINFO_EX(len)  _IOC(_IOC_READ, 'U', 32, len)
-+#define USBDEVFS_FORBID_SUSPEND    _IO('U', 33)
-+#define USBDEVFS_ALLOW_SUSPEND     _IO('U', 34)
-+#define USBDEVFS_WAIT_FOR_RESUME   _IO('U', 35)
- 
- #endif /* _UAPI_LINUX_USBDEVICE_FS_H */
+> +	spin_lock_irqsave(&tp->rx_lock, flags);
+> +	list_splice_init(&tp->rx_info, &tmp_list);
+> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
+> +
+> +	list_for_each_safe(cursor, next, &tmp_list) {
+> +		struct rx_agg *agg;
+> +
+> +		agg = list_entry(cursor, struct rx_agg, info_list);
+> +		usb_kill_urb(agg->urb);
+> +	}
+> +
+> +	/* Move back the list of temp to the rx_info */
+> +	spin_lock_irqsave(&tp->rx_lock, flags);
+> +	WARN_ON(unlikely(!list_empty(&tp->rx_info)));
+> +	list_splice(&tmp_list, &tp->rx_info);
+> +	spin_unlock_irqrestore(&tp->rx_lock, flags);
+>  
+>  	while (!skb_queue_empty(&tp->rx_queue))
+>  		dev_kfree_skb(__skb_dequeue(&tp->rx_queue));
 
