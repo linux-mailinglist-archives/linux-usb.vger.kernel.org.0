@@ -2,33 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB94832BA
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 15:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2E8832CD
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 15:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726834AbfHFNeG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 6 Aug 2019 09:34:06 -0400
-Received: from us-smtp-delivery-131.mimecast.com ([63.128.21.131]:50676 "EHLO
+        id S1731118AbfHFNgy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 6 Aug 2019 09:36:54 -0400
+Received: from us-smtp-delivery-131.mimecast.com ([63.128.21.131]:23520 "EHLO
         us-smtp-delivery-131.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726092AbfHFNeG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 09:34:06 -0400
-X-Greylist: delayed 397 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Aug 2019 09:34:05 EDT
-Received: from mailhub4.stratus.com (134.111.1.17 [134.111.1.17]) by
- relay.mimecast.com with ESMTP id us-mta-240-AlsVV4v2MFi39xYRlpgXpA-1; Tue,
- 06 Aug 2019 09:27:25 -0400
+        by vger.kernel.org with ESMTP id S1726092AbfHFNgy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 09:36:54 -0400
+Received: from mailhub5.stratus.com (134.111.1.18 [134.111.1.18]) by
+ relay.mimecast.com with ESMTP id us-mta-230-_M1ct889OuKjIhlOtpputw-1; Tue,
+ 06 Aug 2019 09:36:53 -0400
 Received: from EXHQ1.corp.stratus.com (exhq1.corp.stratus.com [134.111.200.125])
-        by mailhub4.stratus.com (8.12.11/8.12.11) with ESMTP id x76DRP7P007998
-        for <linux-usb@vger.kernel.org>; Tue, 6 Aug 2019 09:27:25 -0400
+        by mailhub5.stratus.com (8.12.11/8.12.11) with ESMTP id x76DaqKG016766
+        for <linux-usb@vger.kernel.org>; Tue, 6 Aug 2019 09:36:52 -0400
 Received: from linuxdev.lnx.eng.stratus.com (134.111.220.63) by
  EXHQ1.corp.stratus.com (134.111.200.125) with Microsoft SMTP Server (TLS) id
- 14.3.279.2; Tue, 6 Aug 2019 09:27:12 -0400
+ 14.3.279.2; Tue, 6 Aug 2019 09:36:40 -0400
 From:   Bill Kuzeja <William.Kuzeja@stratus.com>
 To:     <linux-usb@vger.kernel.org>, <William.Kuzeja@stratus.com>
 Subject: [PATCH] xhci: Prevent deadlock when xhci adapter breaks during init
-Date:   Tue, 6 Aug 2019 09:27:24 -0400
-Message-ID: <1565098044-7970-1-git-send-email-William.Kuzeja@stratus.com>
+Date:   Tue, 6 Aug 2019 09:36:52 -0400
+Message-ID: <1565098612-8832-1-git-send-email-William.Kuzeja@stratus.com>
 X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-X-MC-Unique: AlsVV4v2MFi39xYRlpgXpA-1
+X-MC-Unique: _M1ct889OuKjIhlOtpputw-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: 8BIT
