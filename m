@@ -2,133 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F40D882CEB
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 09:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBB182D1F
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 09:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731787AbfHFHh7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 03:37:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42704 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728798AbfHFHh7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 03:37:59 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0080E20B1F;
-        Tue,  6 Aug 2019 07:37:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565077078;
-        bh=eXqquLCiXReR3xQN680K9YcA6m4LxHXmEELvff+wep0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tRXL5XVeLNpB8owmik6UElrJZta88y8oEn4ZSz/tYznfwnEa3JynlwHkeQs9oZG1w
-         j5F+gaj62hWDXTJdPSyH2Jy3BJmB4xS9a6tEZX00F1fELh3ZVHbvdGaO+Ay0kMYZyE
-         XWnGVLR9ZKk8CqYB663UktdokmGCMt0ouEnOPyZw=
-Date:   Tue, 6 Aug 2019 09:37:56 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     shuah <shuah@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        Valentina Manea <valentina.manea.m@gmail.com>
-Subject: Re: [PATCH] USB: usbip: convert platform driver to use dev_groups
-Message-ID: <20190806073756.GA25825@kroah.com>
-References: <20190805193636.25560-5-gregkh@linuxfoundation.org>
- <06d3e73f-ac2f-9ba5-047e-e99834b4860b@kernel.org>
+        id S1732122AbfHFHso (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 03:48:44 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:28502 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726834AbfHFHso (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Aug 2019 03:48:44 -0400
+X-UUID: 099a8d38323041caabbea4e9280874c5-20190806
+X-UUID: 099a8d38323041caabbea4e9280874c5-20190806
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 69678135; Tue, 06 Aug 2019 15:48:33 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 6 Aug
+ 2019 15:48:31 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 6 Aug 2019 15:48:30 +0800
+Message-ID: <1565077710.23705.21.camel@mhfsdcap03>
+Subject: Re: [PATCH v8 00/11] add USB GPIO based connection detection driver
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das@bp.renesas.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Date:   Tue, 6 Aug 2019 15:48:30 +0800
+In-Reply-To: <CACRpkdaBT24JPH_VsKtgp6fjWtVuqM50rXkDVYKmLHgR5hdJzA@mail.gmail.com>
+References: <1563958245-6321-1-git-send-email-chunfeng.yun@mediatek.com>
+         <CACRpkdaBT24JPH_VsKtgp6fjWtVuqM50rXkDVYKmLHgR5hdJzA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06d3e73f-ac2f-9ba5-047e-e99834b4860b@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 5974D75886B44E4363446BA9394912791E53F3E9496FF92EBA64D74B9A80C30C2000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 05, 2019 at 02:22:18PM -0600, shuah wrote:
-> On 8/5/19 1:36 PM, Greg Kroah-Hartman wrote:
-> > Platform drivers now have the option to have the platform core create
-> > and remove any needed sysfs attribute files.  So take advantage of that
-> > and do not register "by hand" any sysfs files.
-> > 
-> > Cc: Valentina Manea <valentina.manea.m@gmail.com>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >   drivers/usb/usbip/vudc.h       | 2 +-
-> >   drivers/usb/usbip/vudc_dev.c   | 9 ---------
-> >   drivers/usb/usbip/vudc_main.c  | 1 +
-> >   drivers/usb/usbip/vudc_sysfs.c | 7 ++++++-
-> >   4 files changed, 8 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/drivers/usb/usbip/vudc.h b/drivers/usb/usbip/vudc.h
-> > index cf968192e59f..1bd4bc005829 100644
-> > --- a/drivers/usb/usbip/vudc.h
-> > +++ b/drivers/usb/usbip/vudc.h
-> > @@ -115,7 +115,7 @@ struct vudc_device {
-> >   	struct list_head dev_entry;
-> >   };
-> > -extern const struct attribute_group vudc_attr_group;
-> > +extern const struct attribute_group *vudc_groups[];
-> >   /* visible everywhere */
-> > diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
-> > index a72c17ff1c6a..c8eeabdd9b56 100644
-> > --- a/drivers/usb/usbip/vudc_dev.c
-> > +++ b/drivers/usb/usbip/vudc_dev.c
-> > @@ -616,18 +616,10 @@ int vudc_probe(struct platform_device *pdev)
-> >   	if (ret < 0)
-> >   		goto err_add_udc;
-> > -	ret = sysfs_create_group(&pdev->dev.kobj, &vudc_attr_group);
-> > -	if (ret) {
-> > -		dev_err(&udc->pdev->dev, "create sysfs files\n");
-> > -		goto err_sysfs;
-> > -	}
-> > -
-> >   	platform_set_drvdata(pdev, udc);
-> >   	return ret;
-> > -err_sysfs:
-> > -	usb_del_gadget_udc(&udc->gadget);
-> >   err_add_udc:
-> >   	cleanup_vudc_hw(udc);
-> >   err_init_vudc_hw:
-> > @@ -640,7 +632,6 @@ int vudc_remove(struct platform_device *pdev)
-> >   {
-> >   	struct vudc *udc = platform_get_drvdata(pdev);
-> > -	sysfs_remove_group(&pdev->dev.kobj, &vudc_attr_group);
-> >   	usb_del_gadget_udc(&udc->gadget);
-> >   	cleanup_vudc_hw(udc);
-> >   	kfree(udc);
-> > diff --git a/drivers/usb/usbip/vudc_main.c b/drivers/usb/usbip/vudc_main.c
-> > index 390733e6937e..678faa82598c 100644
-> > --- a/drivers/usb/usbip/vudc_main.c
-> > +++ b/drivers/usb/usbip/vudc_main.c
-> > @@ -22,6 +22,7 @@ static struct platform_driver vudc_driver = {
-> >   	.remove		= vudc_remove,
-> >   	.driver		= {
-> >   		.name	= GADGET_NAME,
-> > +		.dev_groups = vudc_groups,
-> >   	},
-> >   };
-> > diff --git a/drivers/usb/usbip/vudc_sysfs.c b/drivers/usb/usbip/vudc_sysfs.c
-> > index 6dcd3ff655c3..100f680c572a 100644
-> > --- a/drivers/usb/usbip/vudc_sysfs.c
-> > +++ b/drivers/usb/usbip/vudc_sysfs.c
-> > @@ -215,7 +215,12 @@ static struct bin_attribute *dev_bin_attrs[] = {
-> >   	NULL,
-> >   };
-> > -const struct attribute_group vudc_attr_group = {
-> > +static const struct attribute_group vudc_attr_group = {
-> >   	.attrs = dev_attrs,
-> >   	.bin_attrs = dev_bin_attrs,
-> >   };
-> > +
-> > +const struct attribute_group *vudc_groups[] = {
-> > +	&vudc_attr_group,
-> > +	NULL,
-> > +};
-> > 
+On Mon, 2019-08-05 at 12:06 +0200, Linus Walleij wrote:
+> On Wed, Jul 24, 2019 at 10:51 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 > 
-> Looks good to me.
+> > Because the USB Connector is introduced and the requirement of
+> > usb-connector.txt binding, the old way using extcon to support
+> > USB Dual-Role switch is now deprecated, meanwhile there is no
+> > available common driver when use Type-B connector, typically
+> > using an input GPIO to detect USB ID pin.
 > 
-> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> However while this was going on,
+> drivers/extcon/extcon-fsa9480.c was merged and that detects
+> not only GPIO on the USB port but multiplexed usecases such
+> as UART over the USB micro PHY (and no that UART is not
+> a USB UART, but an actual RX/TX over D-/D+).
+> 
+> That driver also measure a whole slew of funny resistance
+> values on the ID pin, that is how it does its job.
+I look into the spec of fsa9480, it indeed detect many USB accessories.
+But this driver is used for simplest cases that only uses micro
+receptacle with id-pin/vbus-pin
 
-Thanks for the review!
+> 
+> But for just "hey I'm plugged in" we can surely keep this
+> ID on GPIO detection in the USB subsystem.
+Sorry, you mean provide a common API? could you please describe more
+clearer about your suggestion?
 
-greg k-h
+
+Introducing a single driver using usb_role_switch will help to keep
+transparent for USB controller driver, no matter it uses type-c or micro
+
+Thanks a lot
+> 
+> I just get a bit insecure about how we should ideally
+> handle these "funny-PHY's".
+
+> 
+> Yours,
+> Linus Walleij
+
+
