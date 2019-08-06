@@ -2,327 +2,1328 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E990382E9B
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 11:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F0182F9A
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Aug 2019 12:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732197AbfHFJXh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Aug 2019 05:23:37 -0400
-Received: from mail-eopbgr70058.outbound.protection.outlook.com ([40.107.7.58]:62499
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730068AbfHFJXh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Aug 2019 05:23:37 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iWgNP5OrzntgpLpIRrsCaZMitluXrmnSgdUbFbOSxjhvYF0/MV2/BrTe8VLTQRso8Iillkj53lRZRL97j5XUjMk3r0crjUJuYrB4+1SSybsXjRMbCh4D66psbRC+QeQBJX5bqztc04xBkTm1xW1GLBBJeXKg/jaF9H2CEBNyOWXUbZBBtWI7/A8S+0KI9uD6rSabscwAYvWOZtNAInO5hvkdEv7pO2ik6vGN7waBXJvsJX8QvfZPegExi8oZeAIn1zoJwdd+JOVLJcadU9yhspMZtdKxjJLgS/2zPyrgVg8kT6hsPcdrbsvAPMMbpjtpEHsXhvUSRl17oeIX1Jw/fQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l39yd1hVQe6SBuSZl/EBJI6jvZ/SeRtdqohn63qVouc=;
- b=QrKGGVU2WoM2f633HGm2G7HMCV+BHk/G0N0qFraXFDxdLANMdJb5Q3Soqus5Yaz0co416VdIztSpkq/OUZLf14Wlp7WeQEdANSlF4mCA5n/8dsKBBEA807AsmGZa/nrj/3xMjGtR/XBdglA5yqtGz4omx80XHOc6rQX+c+dY9rD90DbqCfIgdFKGB3Juo/FnkSYvNttbTxwi0RtQfNBqvFoLpuBk1I4yHuQb4oq22U+glbHWPU0VTu2+WwG6c5/3cUtllH4tc397yT4RuoewxAdURNv6p1kRz0xt+XsMsXua1dpDUtjIF5jWrqH3xN0pFej0Mx1UdyLGZf15teFFvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
- header.d=nxp.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l39yd1hVQe6SBuSZl/EBJI6jvZ/SeRtdqohn63qVouc=;
- b=s1ErnOe9dORx1Sc/YVo3ccPct95IB1hZ1bifPg2cABMRsMYOiIjjcxKabeHwkn6cM2BcUC0CBpFCM81pmjnTDroXntnKtEyowbKahYzhBIOnTu/P4178B89a3/08QzZmF0/7de+Q4VREk65GeQFGH7adgjL43o/r2VhK/We71iw=
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (20.179.233.225) by
- VE1PR04MB6478.eurprd04.prod.outlook.com (20.179.233.79) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2136.16; Tue, 6 Aug 2019 09:23:29 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::6025:6518:3420:7317]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::6025:6518:3420:7317%7]) with mapi id 15.20.2115.005; Tue, 6 Aug 2019
- 09:23:29 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Peter Chen <peter.chen@nxp.com>, Peter Chen <hzpeterchen@gmail.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH 2/5] usb: chipidea: add role switch class support
-Thread-Topic: [PATCH 2/5] usb: chipidea: add role switch class support
-Thread-Index: AQHVMXEBpzW67j5jnEyJURF9gaNQo6bnyc4AgAQsJ/CAAB8lAIAAGnMQgAACBICAAAQTsIABvxEAgAACXrA=
-Date:   Tue, 6 Aug 2019 09:23:29 +0000
-Message-ID: <VE1PR04MB652857AAEA39148AF5C5D6BF89D50@VE1PR04MB6528.eurprd04.prod.outlook.com>
-References: <20190703071953.38082-1-jun.li@nxp.com>
- <20190703071953.38082-2-jun.li@nxp.com>
- <CAL411-oHEbC6Lkr-X=GBKbHhRfuoQsfMVnUKtUjC1c8wrf-k+Q@mail.gmail.com>
- <VE1PR04MB6528DEA1B84E9B85A8594E5089DA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <CAL411-o8pO=HQwRrgibpRsrfCBD0bqWaCM5imxtCVKTCdwa=ew@mail.gmail.com>
- <VE1PR04MB652883E67829A33509B02E0E89DA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <VI1PR04MB53278DE4140B5B9FA7BDB2D08BDA0@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <VE1PR04MB65283BA3C45143002905E6FD89DA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <VI1PR04MB532730BFF128E0A4F9868A9F8BD50@VI1PR04MB5327.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB532730BFF128E0A4F9868A9F8BD50@VI1PR04MB5327.eurprd04.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d2ca5d9a-5e43-4a39-573f-08d71a4fbe5c
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VE1PR04MB6478;
-x-ms-traffictypediagnostic: VE1PR04MB6478:
-x-microsoft-antispam-prvs: <VE1PR04MB64781A1FEE08B2585C00948789D50@VE1PR04MB6478.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3968;
-x-forefront-prvs: 0121F24F22
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(346002)(366004)(39860400002)(396003)(199004)(189003)(13464003)(14454004)(30864003)(76176011)(5660300002)(102836004)(478600001)(53546011)(6506007)(71200400001)(71190400001)(66066001)(74316002)(9686003)(64756008)(66556008)(66476007)(66446008)(76116006)(66946007)(6436002)(55016002)(25786009)(8936002)(14444005)(446003)(256004)(2906002)(11346002)(486006)(7736002)(305945005)(476003)(3846002)(6116002)(53936002)(44832011)(81156014)(86362001)(8676002)(68736007)(81166006)(26005)(33656002)(7696005)(99286004)(4326008)(6246003)(52536014)(54906003)(110136005)(229853002)(186003)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6478;H:VE1PR04MB6528.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: sqkMI0xxtMUlfZsGKk/Nv2oZJ0b0ach8LkEVb7jcY8mXWHPPNAkbQ+4IKB79db1mrGoLT47LzruhPnZmx8HfTtemfEIpk+MPZ8PkoAk1yQnx9QVoyOv7dp2J5SzL1lNYLCXzd10bbFPD2yvGNLAIzq+SiKHdvYJzCTq2iZ0C1eRPE4rZMwdKC0yl9hY5Fcjs3/EHG88AW2ouSvJAIGmlJ+8SZ6ID+3ibT7tpkEUNWo/5GHUOY9CSFvOvsBUMTtpP6nLM4eIwuOstFynP3tSdrK2OZJEAicGkAdvLUgL93R39H9xZP6TQctCJQewrRvT7z1PgE1i0myjN7bw33XxprSA/IHwoQ+R6ZfbI2cFGLq8HwGDcMYu+QyQ8JfXI7jgatpFtQ8X/Jug2rJJtVzK7GBlXyAnG2w5aJxW6zUnHXmc=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1732570AbfHFKPR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Aug 2019 06:15:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32798 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726713AbfHFKPR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Aug 2019 06:15:17 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C73F420B1F;
+        Tue,  6 Aug 2019 10:15:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565086512;
+        bh=CmeI9vJSRYnmb8CP1QByver92TdDYC5IQADvIHuvbKs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UQQGCNyQFAkhs6I1JPlCRMJvQVPxdkeALm4g/uwHvibUQhSK/We4hGvHo2PxYjHM3
+         5GkLq0bk3Nab+7AyoCGh+Mz78Q1Ppf5Dk+WMMPRKfqMWa6beDRIpASUJroEBB+DCXA
+         +EW/VjVlt71kflvpBmsCIKAwI5mbSV5yaVNDJoxM=
+Date:   Tue, 6 Aug 2019 12:15:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org
+Subject: [PATCH] USB: Move wusbcore and UWB to staging as it is obsolete
+Message-ID: <20190806101509.GA11280@kroah.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2ca5d9a-5e43-4a39-573f-08d71a4fbe5c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Aug 2019 09:23:29.3666
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jun.li@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6478
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUGV0ZXIgQ2hlbg0KPiBT
-ZW50OiAyMDE55bm0OOaciDbml6UgMTU6NTINCj4gVG86IEp1biBMaSA8anVuLmxpQG54cC5jb20+
-OyBQZXRlciBDaGVuIDxoenBldGVyY2hlbkBnbWFpbC5jb20+DQo+IENjOiBHcmVnIEtyb2FoLUhh
-cnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPjsgZGwtbGludXgtaW14DQo+IDxsaW51
-eC1pbXhAbnhwLmNvbT47IFVTQiBsaXN0IDxsaW51eC11c2JAdmdlci5rZXJuZWwub3JnPg0KPiBT
-dWJqZWN0OiBSRTogW1BBVENIIDIvNV0gdXNiOiBjaGlwaWRlYTogYWRkIHJvbGUgc3dpdGNoIGNs
-YXNzIHN1cHBvcnQNCj4gDQo+IA0KPiA+ID4NCj4gPiA+IFlvdSBtYXkgdXNlIGNvbm5lY3QgYml0
-IGF0IHBvcnRzYyBzaW5jZSBWQlVTIG1heSBub3QgY29ubmVjdCB0byBTb0MuDQo+ID4NCj4gPiBC
-eSB0aGlzIHdheSwgZGlzY29ubmVjdCBjYW4gYmUgZGVjaWRlZCBidXQgY29ubmVjdCBpcyBhIHBy
-b2JsZW0gaW4NCj4gPiBjdXJyZW50IGRyaXZlciwgYXMgY29udHJvbGxlciB3YXMgc3RvcHBlZCBp
-biBsb3cgcG93ZXIgbW9kZSBzbyBjYW4ndA0KPiA+IGRldGVjdCBjb25uZWN0aW9uIGZyb20gaG9z
-dCwgdW5sZXNzIHdlIGFsc28gdXBkYXRlIHRoaXMgYmVoYXZpb3IgdG9vLg0KPiA+DQo+IA0KPiBG
-b3IgY29ubmVjdGlvbiwgaWYgY3VycmVudCByb2xlIGlzIFVTQl9ST0xFX05PTkUsIHlvdSBtYXkg
-c3RhcnQgZGV2aWNlIG1vZGUuDQoNClRoaXMgaXMgYXNzdW1pbmcgc2V0IHJvbGUgb25seSBjYW4g
-YmUgY2FsbGVkIG9uZSB0aW1lIGJldHdlZW4gZGlzY29ubmVjdA0KYW5kIGNvbm5lY3QgdG8gaG9z
-dCwgdGhpcyBtYXkgbm90IGFsd2F5cyB0cnVlLCBidXQgdGhpcyBjYW4gYmUgcmVzb2x2ZWQsDQpJ
-IHRoaW5rIHdlIG5lZWQgaGFuZGxlIHRoZSBjYXNlIGRldmljZSBtb2RlIGlzIHN0YXJ0ZWQgYnV0
-IGNvbm5lY3Rpb24gZG9lcw0Kbm90IGhhcHBlbiwgc28gdGhlIGdhZGdldCBuZWVkIGJlIHN0b3Bw
-ZWQgYW5kIGVudGVyIGxvdyBwb3dlciBtb2RlIGFnYWluLA0KaWYgdGhpcyBhcHByb2FjaCBpcyBP
-SyB0byB5b3UsIEkgd2lsbCBnbyBpbiB0aGlzIGRpcmVjdGlvbiBmb3IgbXkgdjIuDQoNCkxpIEp1
-biANCg0KPiANCj4gUGV0ZXINCj4gDQo+ID4gTGkgSnVuDQo+ID4gPg0KPiA+ID4gUGV0ZXINCj4g
-PiA+DQo+ID4gPiA+IExpIEp1bg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gUGV0ZXINCj4gPiA+ID4g
-Pg0KPiA+ID4gPiA+ID4gTGkgSnVuDQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPg0KPiA+ID4g
-PiA+ID4gPiBQZXRlcg0KPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+IFNpZ25lZC1vZmYt
-Ynk6IExpIEp1biA8anVuLmxpQG54cC5jb20+DQo+ID4gPiA+ID4gPiA+ID4gLS0tDQo+ID4gPiA+
-ID4gPiA+ID4gIGRyaXZlcnMvdXNiL2NoaXBpZGVhL2NpLmggICB8ICAgMiArDQo+ID4gPiA+ID4g
-PiA+ID4gIGRyaXZlcnMvdXNiL2NoaXBpZGVhL2NvcmUuYyB8IDEyNQ0KPiA+ID4gPiA+ID4gPiA+
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tDQo+ID4gPiA+ID4g
-PiA+ID4gIGRyaXZlcnMvdXNiL2NoaXBpZGVhL290Zy5jICB8ICAxMyArKysrKw0KPiA+ID4gPiA+
-ID4gPiA+ICAzIGZpbGVzIGNoYW5nZWQsIDExMSBpbnNlcnRpb25zKCspLCAyOSBkZWxldGlvbnMo
-LSkNCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9jaGlwaWRlYS9jaS5oDQo+ID4gPiA+ID4gPiA+ID4gYi9kcml2ZXJzL3VzYi9jaGlwaWRl
-YS9jaS5oIGluZGV4IDgyYjg2Y2QuLjVlMmYwYmMgMTAwNjQ0DQo+ID4gPiA+ID4gPiA+ID4gLS0t
-IGEvZHJpdmVycy91c2IvY2hpcGlkZWEvY2kuaA0KPiA+ID4gPiA+ID4gPiA+ICsrKyBiL2RyaXZl
-cnMvdXNiL2NoaXBpZGVhL2NpLmgNCj4gPiA+ID4gPiA+ID4gPiBAQCAtMjEyLDYgKzIxMiw3IEBA
-IHN0cnVjdCBjaV9oZHJjIHsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIGt0aW1lX3QNCj4gPiA+
-ID4gPiBocl90aW1lb3V0c1tOVU1fT1RHX0ZTTV9USU1FUlNdOw0KPiA+ID4gPiA+ID4gPiA+ICAg
-ICAgICAgdW5zaWduZWQgICAgICAgICAgICAgICAgICAgICAgICBlbmFibGVkX290Z190aW1lcl9i
-aXRzOw0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgZW51bSBvdGdfZnNtX3RpbWVyICAgICAgICAg
-ICAgICBuZXh0X290Z190aW1lcjsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgIHN0cnVjdCB1c2Jf
-cm9sZV9zd2l0Y2ggICAgICAgICAgKnJvbGVfc3dpdGNoOw0KPiA+ID4gPiA+ID4gPiA+ICAgICAg
-ICAgc3RydWN0IHdvcmtfc3RydWN0ICAgICAgICAgICAgICB3b3JrOw0KPiA+ID4gPiA+ID4gPiA+
-ICAgICAgICAgc3RydWN0IHdvcmtxdWV1ZV9zdHJ1Y3QgICAgICAgICAqd3E7DQo+ID4gPiA+ID4g
-PiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBAQCAtMjQ0LDYgKzI0NSw3IEBAIHN0cnVjdCBjaV9oZHJj
-IHsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIHN0cnVjdCBkZW50cnkgICAgICAgICAgICAgICAg
-ICAgKmRlYnVnZnM7DQo+ID4gPiA+ID4gPiA+ID4gICAgICAgICBib29sICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIGlkX2V2ZW50Ow0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgYm9vbCAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBiX3Nlc3NfdmFsaWRfZXZlbnQ7DQo+ID4gPiA+ID4gPiA+
-ID4gKyAgICAgICBib29sICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJvbGVfc3dpdGNoX2V2
-ZW50Ow0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgYm9vbCAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBpbXgyOF93cml0ZV9maXg7DQo+ID4gPiA+ID4gPiA+ID4gICAgICAgICBib29sICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHN1cHBvcnRzX3J1bnRpbWVfcG07DQo+ID4gPiA+ID4gPiA+
-ID4gICAgICAgICBib29sICAgICAgICAgICAgICAgICAgICAgICAgICAgIGluX2xwbTsNCj4gPiA+
-ID4gPiA+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvY2hpcGlkZWEvY29yZS5jDQo+ID4g
-PiA+ID4gPiA+ID4gYi9kcml2ZXJzL3VzYi9jaGlwaWRlYS9jb3JlLmMgaW5kZXggYmMyNGM1Yi4u
-MWJjZjZmNg0KPiA+ID4gPiA+ID4gPiA+IDEwMDY0NA0KPiA+ID4gPiA+ID4gPiA+IC0tLSBhL2Ry
-aXZlcnMvdXNiL2NoaXBpZGVhL2NvcmUuYw0KPiA+ID4gPiA+ID4gPiA+ICsrKyBiL2RyaXZlcnMv
-dXNiL2NoaXBpZGVhL2NvcmUuYw0KPiA+ID4gPiA+ID4gPiA+IEBAIC01ODcsNiArNTg3LDQ3IEBA
-IHN0YXRpYyBpcnFyZXR1cm5fdCBjaV9pcnEoaW50IGlycSwgdm9pZCAqZGF0YSkNCj4gPiA+ID4g
-PiA+ID4gPiAgICAgICAgIHJldHVybiByZXQ7DQo+ID4gPiA+ID4gPiA+ID4gIH0NCj4gPiA+ID4g
-PiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ICtzdGF0aWMgaW50IGNpX3VzYl9yb2xlX3N3aXRjaF9z
-ZXQoc3RydWN0IGRldmljZSAqZGV2LA0KPiA+ID4gPiA+ID4gPiA+ICtlbnVtIHVzYl9yb2xlDQo+
-ID4gPiA+ID4gPiA+ID4gK3JvbGUpIHsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgIHN0cnVjdCBj
-aV9oZHJjICpjaSA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPiA+ID4gPiA+ID4gPiA+ICsgICAg
-ICAgdW5zaWduZWQgbG9uZyBmbGFnczsNCj4gPiA+ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4gPiA+
-ID4gKyAgICAgICBpZiAoY2ktPnJvbGUgPT0gcm9sZSB8fCByb2xlID09IFVTQl9ST0xFX05PTkUp
-DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgIHJldHVybiAwOw0KPiA+ID4gPiA+ID4g
-PiA+ICsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgIHNwaW5fbG9ja19pcnFzYXZlKCZjaS0+bG9j
-aywgZmxhZ3MpOw0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgY2ktPnJvbGVfc3dpdGNoX2V2ZW50
-ID0gdHJ1ZTsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgIGlmIChjaS0+cm9sZSA9PSBVU0JfUk9M
-RV9OT05FKSB7DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgIGlmIChyb2xlID09IFVT
-Ql9ST0xFX0RFVklDRSkNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICBj
-aS0+cm9sZSA9IFVTQl9ST0xFX0hPU1Q7DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAg
-IGVsc2UNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICBjaS0+cm9sZSA9
-IFVTQl9ST0xFX0RFVklDRTsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgIH0NCj4gPiA+ID4gPiA+
-ID4gPiArICAgICAgIHNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmNpLT5sb2NrLCBmbGFncyk7DQo+
-ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgY2lfb3RnX3F1ZXVlX3dv
-cmsoY2kpOw0KPiA+ID4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgIHJldHVy
-biAwOw0KPiA+ID4gPiA+ID4gPiA+ICt9DQo+ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4g
-PiA+ICtzdGF0aWMgZW51bSB1c2Jfcm9sZSBjaV91c2Jfcm9sZV9zd2l0Y2hfZ2V0KHN0cnVjdCBk
-ZXZpY2UgKmRldikgew0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgc3RydWN0IGNpX2hkcmMgKmNp
-ID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICB1bnNpZ25l
-ZCBsb25nIGZsYWdzOw0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgZW51bSB1c2Jfcm9sZSByb2xl
-Ow0KPiA+ID4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgIHNwaW5fbG9ja19p
-cnFzYXZlKCZjaS0+bG9jaywgZmxhZ3MpOw0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgcm9sZSA9
-IGNpLT5yb2xlOw0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgc3Bpbl91bmxvY2tfaXJxcmVzdG9y
-ZSgmY2ktPmxvY2ssIGZsYWdzKTsNCj4gPiA+ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4gPiA+ID4g
-KyAgICAgICByZXR1cm4gcm9sZTsNCj4gPiA+ID4gPiA+ID4gPiArfQ0KPiA+ID4gPiA+ID4gPiA+
-ICsNCj4gPiA+ID4gPiA+ID4gPiArc3RhdGljIHN0cnVjdCB1c2Jfcm9sZV9zd2l0Y2hfZGVzYyBj
-aV9yb2xlX3N3aXRjaCA9IHsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgIC5zZXQgPSBjaV91c2Jf
-cm9sZV9zd2l0Y2hfc2V0LA0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgLmdldCA9IGNpX3VzYl9y
-b2xlX3N3aXRjaF9nZXQsIH07DQo+ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ICBz
-dGF0aWMgaW50IGNpX2NhYmxlX25vdGlmaWVyKHN0cnVjdCBub3RpZmllcl9ibG9jayAqbmIsIHVu
-c2lnbmVkIGxvbmcgZXZlbnQsDQo+ID4gPiA+ID4gPiA+ID4gICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICB2b2lkICpwdHIpICB7IEBAIC02ODksNg0KPiA+ID4gPiA+ID4gPiA+ICs3MzAsOSBA
-QCBzdGF0aWMgaW50IGNpX2dldF9wbGF0ZGF0YShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ID4gPiA+
-ID4gPiA+ID4gICAgICAgICBpZiAob2ZfZmluZF9wcm9wZXJ0eShkZXYtPm9mX25vZGUsICJub24t
-emVyby10dGN0cmwtdHRoYSIsIE5VTEwpKQ0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgICAgICAg
-ICBwbGF0ZGF0YS0+ZmxhZ3MgfD0NCj4gPiA+ID4gPiA+ID4gPiBDSV9IRFJDX1NFVF9OT05fWkVS
-T19UVEhBOw0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICBpZiAoZGV2
-aWNlX3Byb3BlcnR5X3JlYWRfYm9vbChkZXYsICJ1c2Itcm9sZS1zd2l0Y2giKSkNCj4gPiA+ID4g
-PiA+ID4gPiArICAgICAgICAgICAgICAgY2lfcm9sZV9zd2l0Y2guZndub2RlID0gZGV2LT5md25v
-ZGU7DQo+ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgZXh0X2lkID0g
-RVJSX1BUUigtRU5PREVWKTsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIGV4dF92YnVzID0gRVJS
-X1BUUigtRU5PREVWKTsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIGlmIChvZl9wcm9wZXJ0eV9y
-ZWFkX2Jvb2woZGV2LT5vZl9ub2RlLCAiZXh0Y29uIikpDQo+ID4gPiA+ID4gPiA+ID4geyBAQA0K
-PiA+ID4gPiA+ID4gPiA+IC05MDgsNg0KPiA+ID4gPiA+ID4gPiA+ICs5NTIsNDMgQEAgc3RhdGlj
-IGNvbnN0IHN0cnVjdCBhdHRyaWJ1dGVfZ3JvdXANCj4gPiA+ID4gPiA+ID4gPiArY2lfYXR0cl9n
-cm91cCA9IHsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIC5hdHRycyA9IGNpX2F0dHJzLCAgfTsN
-Cj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ICtzdGF0aWMgaW50IGNpX3N0YXJ0X2lu
-aXRpYWxfcm9sZShzdHJ1Y3QgY2lfaGRyYyAqY2kpIHsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAg
-IGludCByZXQgPSAwOw0KPiA+ID4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAg
-IGlmIChjaS0+cm9sZXNbVVNCX1JPTEVfSE9TVF0gJiYNCj4gPiA+ID4gPiA+ID4gPiArIGNpLT5y
-b2xlc1tVU0JfUk9MRV9ERVZJQ0VdKQ0KPiA+ID4gew0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAg
-ICAgICAgICBpZiAoY2ktPmlzX290Zykgew0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAg
-ICAgICAgICAgIGNpLT5yb2xlID0gY2lfb3RnX3JvbGUoY2kpOw0KPiA+ID4gPiA+ID4gPiA+ICsg
-ICAgICAgICAgICAgICAgICAgICAgIC8qIEVuYWJsZSBJRCBjaGFuZ2UgaXJxICovDQo+ID4gPiA+
-ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgaHdfd3JpdGVfb3Rnc2MoY2ksIE9UR1ND
-X0lESUUsDQo+IE9UR1NDX0lESUUpOw0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICB9
-IGVsc2Ugew0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIC8qDQo+ID4g
-PiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICogSWYgdGhlIGNvbnRyb2xsZXIg
-aXMgbm90IE9URyBjYXBhYmxlLCBidXQgc3VwcG9ydA0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAg
-ICAgICAgICAgICAgICAgICAqIHJvbGUgc3dpdGNoLCB0aGUgZGVmYWx0IHJvbGUgaXMgZ2FkZ2V0
-LCBhbmQgdGhlDQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICogdXNl
-ciBjYW4gc3dpdGNoIGl0IHRocm91Z2ggZGVidWdmcy4NCj4gPiA+ID4gPiA+ID4gPiArICAgICAg
-ICAgICAgICAgICAgICAgICAgKi8NCj4gPiA+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgICAg
-ICAgICBjaS0+cm9sZSA9IFVTQl9ST0xFX0RFVklDRTsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAg
-ICAgICAgICAgfQ0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgfSBlbHNlIHsNCj4gPiA+ID4gPiA+
-ID4gPiArICAgICAgICAgICAgICAgY2ktPnJvbGUgPSBjaS0+cm9sZXNbVVNCX1JPTEVfSE9TVF0N
-Cj4gPiA+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICA/IFVTQl9ST0xFX0hPU1QN
-Cj4gPiA+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICA6IFVTQl9ST0xFX0RFVklD
-RTsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgIH0NCj4gPiA+ID4gPiA+ID4gPiArDQo+ID4gPiA+
-ID4gPiA+ID4gKyAgICAgICBpZiAoIWNpX290Z19pc19mc21fbW9kZShjaSkpIHsNCj4gPiA+ID4g
-PiA+ID4gPiArICAgICAgICAgICAgICAgLyogb25seSB1cGRhdGUgdmJ1cyBzdGF0dXMgZm9yIHBl
-cmlwaGVyYWwgKi8NCj4gPiA+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgaWYgKGNpLT5yb2xl
-ID09IFVTQl9ST0xFX0RFVklDRSkNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgICAg
-ICAgICBjaV9oYW5kbGVfdmJ1c19jaGFuZ2UoY2kpOw0KPiA+ID4gPiA+ID4gPiA+ICsNCj4gPiA+
-ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgcmV0ID0gY2lfcm9sZV9zdGFydChjaSwgY2ktPnJv
-bGUpOw0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICBpZiAocmV0KQ0KPiA+ID4gPiA+
-ID4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGRldl9lcnIoY2ktPmRldiwgImNhbid0IHN0
-YXJ0ICVzIHJvbGVcbiIsDQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgY2lfcm9sZShjaSktPm5hbWUpOw0KPiA+ID4gPiA+ID4g
-PiA+ICsgICAgICAgfQ0KPiA+ID4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAg
-IHJldHVybiByZXQ7DQo+ID4gPiA+ID4gPiA+ID4gK30NCj4gPiA+ID4gPiA+ID4gPiArDQo+ID4g
-PiA+ID4gPiA+ID4gIHN0YXRpYyBpbnQgY2lfaGRyY19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2
-aWNlICpwZGV2KSAgew0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgc3RydWN0IGRldmljZSAgICpk
-ZXYgPSAmcGRldi0+ZGV2Ow0KPiA+ID4gPiA+ID4gPiA+IEBAIC0xMDUxLDM2ICsxMTMyLDEwIEBA
-IHN0YXRpYyBpbnQgY2lfaGRyY19wcm9iZShzdHJ1Y3QNCj4gPiA+ID4gcGxhdGZvcm1fZGV2aWNl
-ICpwZGV2KQ0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgICAgICAgICB9DQo+ID4gPiA+ID4gPiA+
-ID4gICAgICAgICB9DQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiAtICAgICAgIGlm
-IChjaS0+cm9sZXNbVVNCX1JPTEVfSE9TVF0gJiYgY2ktDQo+ID4gPnJvbGVzW1VTQl9ST0xFX0RF
-VklDRV0pIHsNCj4gPiA+ID4gPiA+ID4gPiAtICAgICAgICAgICAgICAgaWYgKGNpLT5pc19vdGcp
-IHsNCj4gPiA+ID4gPiA+ID4gPiAtICAgICAgICAgICAgICAgICAgICAgICBjaS0+cm9sZSA9IGNp
-X290Z19yb2xlKGNpKTsNCj4gPiA+ID4gPiA+ID4gPiAtICAgICAgICAgICAgICAgICAgICAgICAv
-KiBFbmFibGUgSUQgY2hhbmdlIGlycSAqLw0KPiA+ID4gPiA+ID4gPiA+IC0gICAgICAgICAgICAg
-ICAgICAgICAgIGh3X3dyaXRlX290Z3NjKGNpLCBPVEdTQ19JRElFLCBPVEdTQ19JRElFKTsNCj4g
-PiA+ID4gPiA+ID4gPiAtICAgICAgICAgICAgICAgfSBlbHNlIHsNCj4gPiA+ID4gPiA+ID4gPiAt
-ICAgICAgICAgICAgICAgICAgICAgICAvKg0KPiA+ID4gPiA+ID4gPiA+IC0gICAgICAgICAgICAg
-ICAgICAgICAgICAqIElmIHRoZSBjb250cm9sbGVyIGlzIG5vdCBPVEcgY2FwYWJsZSwgYnV0IHN1
-cHBvcnQNCj4gPiA+ID4gPiA+ID4gPiAtICAgICAgICAgICAgICAgICAgICAgICAgKiByb2xlIHN3
-aXRjaCwgdGhlIGRlZmFsdCByb2xlIGlzIGdhZGdldCwgYW5kIHRoZQ0KPiA+ID4gPiA+ID4gPiA+
-IC0gICAgICAgICAgICAgICAgICAgICAgICAqIHVzZXIgY2FuIHN3aXRjaCBpdCB0aHJvdWdoIGRl
-YnVnZnMuDQo+ID4gPiA+ID4gPiA+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICovDQo+ID4g
-PiA+ID4gPiA+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgY2ktPnJvbGUgPSBVU0JfUk9MRV9E
-RVZJQ0U7DQo+ID4gPiA+ID4gPiA+ID4gLSAgICAgICAgICAgICAgIH0NCj4gPiA+ID4gPiA+ID4g
-PiAtICAgICAgIH0gZWxzZSB7DQo+ID4gPiA+ID4gPiA+ID4gLSAgICAgICAgICAgICAgIGNpLT5y
-b2xlID0gY2ktPnJvbGVzW1VTQl9ST0xFX0hPU1RdDQo+ID4gPiA+ID4gPiA+ID4gLSAgICAgICAg
-ICAgICAgICAgICAgICAgPyBVU0JfUk9MRV9IT1NUDQo+ID4gPiA+ID4gPiA+ID4gLSAgICAgICAg
-ICAgICAgICAgICAgICAgOiBVU0JfUk9MRV9ERVZJQ0U7DQo+ID4gPiA+ID4gPiA+ID4gLSAgICAg
-ICB9DQo+ID4gPiA+ID4gPiA+ID4gLQ0KPiA+ID4gPiA+ID4gPiA+IC0gICAgICAgaWYgKCFjaV9v
-dGdfaXNfZnNtX21vZGUoY2kpKSB7DQo+ID4gPiA+ID4gPiA+ID4gLSAgICAgICAgICAgICAgIC8q
-IG9ubHkgdXBkYXRlIHZidXMgc3RhdHVzIGZvciBwZXJpcGhlcmFsICovDQo+ID4gPiA+ID4gPiA+
-ID4gLSAgICAgICAgICAgICAgIGlmIChjaS0+cm9sZSA9PSBVU0JfUk9MRV9ERVZJQ0UpDQo+ID4g
-PiA+ID4gPiA+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgY2lfaGFuZGxlX3ZidXNfY2hhbmdl
-KGNpKTsNCj4gPiA+ID4gPiA+ID4gPiAtDQo+ID4gPiA+ID4gPiA+ID4gLSAgICAgICAgICAgICAg
-IHJldCA9IGNpX3JvbGVfc3RhcnQoY2ksIGNpLT5yb2xlKTsNCj4gPiA+ID4gPiA+ID4gPiAtICAg
-ICAgICAgICAgICAgaWYgKHJldCkgew0KPiA+ID4gPiA+ID4gPiA+IC0gICAgICAgICAgICAgICAg
-ICAgICAgIGRldl9lcnIoZGV2LCAiY2FuJ3Qgc3RhcnQgJXMgcm9sZVxuIiwNCj4gPiA+ID4gPiA+
-ID4gPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaV9y
-b2xlKGNpKS0+bmFtZSk7DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICBpZiAoIWNpX3JvbGVfc3dp
-dGNoLmZ3bm9kZSkgew0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICByZXQgPSBjaV9z
-dGFydF9pbml0aWFsX3JvbGUoY2kpOw0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICBp
-ZiAocmV0KQ0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIGdvdG8gc3Rv
-cDsNCj4gPiA+ID4gPiA+ID4gPiAtICAgICAgICAgICAgICAgfQ0KPiA+ID4gPiA+ID4gPiA+ICAg
-ICAgICAgfQ0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gICAgICAgICByZXQgPSBk
-ZXZtX3JlcXVlc3RfaXJxKGRldiwgY2ktPmlycSwgY2lfaXJxLA0KPiA+ID4gPiA+ID4gPiA+IElS
-UUZfU0hBUkVELCBAQA0KPiA+ID4gPiA+ID4gPiA+IC0xMDkyLDYgKzExNDcsMTUgQEAgc3RhdGlj
-IGludCBjaV9oZHJjX3Byb2JlKHN0cnVjdA0KPiA+ID4gPiA+ID4gPiA+IHBsYXRmb3JtX2Rldmlj
-ZQ0KPiA+ID4gPiAqcGRldikNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIGlmIChyZXQpDQo+ID4g
-PiA+ID4gPiA+ID4gICAgICAgICAgICAgICAgIGdvdG8gc3RvcDsNCj4gPiA+ID4gPiA+ID4gPg0K
-PiA+ID4gPiA+ID4gPiA+ICsgICAgICAgaWYgKGNpX3JvbGVfc3dpdGNoLmZ3bm9kZSkgew0KPiA+
-ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICBjaS0+cm9sZV9zd2l0Y2ggPSB1c2Jfcm9sZV9z
-d2l0Y2hfcmVnaXN0ZXIoZGV2LA0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAmY2lfcm9sZV9zd2l0Y2gpOw0KPiA+ID4gPiA+ID4gPiA+ICsg
-ICAgICAgICAgICAgICBpZiAoSVNfRVJSKGNpLT5yb2xlX3N3aXRjaCkpIHsNCj4gPiA+ID4gPiA+
-ID4gPiArICAgICAgICAgICAgICAgICAgICAgICByZXQgPSBQVFJfRVJSKGNpLT5yb2xlX3N3aXRj
-aCk7DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgZ290byBzdG9wOw0K
-PiA+ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAg
-ICB9DQo+ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgaWYgKGNpLT5z
-dXBwb3J0c19ydW50aW1lX3BtKSB7DQo+ID4gPiA+ID4gPiA+ID4gICAgICAgICAgICAgICAgIHBt
-X3J1bnRpbWVfc2V0X2FjdGl2ZSgmcGRldi0+ZGV2KTsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAg
-ICAgICAgICAgcG1fcnVudGltZV9lbmFibGUoJnBkZXYtPmRldik7IEBAIC0xMTMzLDYNCj4gPiA+
-ID4gPiA+ID4gPiArMTE5Nyw5IEBAIHN0YXRpYyBpbnQgY2lfaGRyY19yZW1vdmUoc3RydWN0DQo+
-ID4gPiA+ID4gPiA+ID4gK3BsYXRmb3JtX2RldmljZQ0KPiA+ID4gPiA+ID4gPiA+ICsqcGRldikg
-IHsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIHN0cnVjdCBjaV9oZHJjICpjaSA9IHBsYXRmb3Jt
-X2dldF9kcnZkYXRhKHBkZXYpOw0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gKyAg
-ICAgICBpZiAoY2ktPnJvbGVfc3dpdGNoKQ0KPiA+ID4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+
-ID4gPiArIHVzYl9yb2xlX3N3aXRjaF91bnJlZ2lzdGVyKGNpLT5yb2xlX3N3aXRjaCk7DQo+ID4g
-PiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgaWYgKGNpLT5zdXBwb3J0c19y
-dW50aW1lX3BtKSB7DQo+ID4gPiA+ID4gPiA+ID4gICAgICAgICAgICAgICAgIHBtX3J1bnRpbWVf
-Z2V0X3N5bmMoJnBkZXYtPmRldik7DQo+ID4gPiA+ID4gPiA+ID4gICAgICAgICAgICAgICAgIHBt
-X3J1bnRpbWVfZGlzYWJsZSgmcGRldi0+ZGV2KTsgZGlmZiAtLWdpdA0KPiA+ID4gPiA+ID4gPiA+
-IGEvZHJpdmVycy91c2IvY2hpcGlkZWEvb3RnLmMgYi9kcml2ZXJzL3VzYi9jaGlwaWRlYS9vdGcu
-Yw0KPiA+ID4gPiA+ID4gPiA+IGluZGV4DQo+ID4gPiA+ID4gPiA+ID4gNWJkZTBiNS4uMGEyMjg1
-NSAxMDA2NDQNCj4gPiA+ID4gPiA+ID4gPiAtLS0gYS9kcml2ZXJzL3VzYi9jaGlwaWRlYS9vdGcu
-Yw0KPiA+ID4gPiA+ID4gPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2NoaXBpZGVhL290Zy5jDQo+ID4g
-PiA+ID4gPiA+ID4gQEAgLTIxNCw2ICsyMTQsMTkgQEAgc3RhdGljIHZvaWQgY2lfb3RnX3dvcmso
-c3RydWN0DQo+ID4gPiA+ID4gPiA+ID4gd29ya19zdHJ1Y3QNCj4gPiAqd29yaykNCj4gPiA+ID4g
-PiA+ID4gPiAgICAgICAgICAgICAgICAgY2lfaGFuZGxlX3ZidXNfY2hhbmdlKGNpKTsNCj4gPiA+
-ID4gPiA+ID4gPiAgICAgICAgIH0NCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ICsg
-ICAgICAgaWYgKGNpLT5yb2xlX3N3aXRjaF9ldmVudCkgew0KPiA+ID4gPiA+ID4gPiA+ICsgICAg
-ICAgICAgICAgICBjaS0+cm9sZV9zd2l0Y2hfZXZlbnQgPSBmYWxzZTsNCj4gPiA+ID4gPiA+ID4g
-PiArDQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgIGlmIChjaS0+cm9sZSA9PSBVU0Jf
-Uk9MRV9ERVZJQ0UpIHsNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICB1
-c2JfZ2FkZ2V0X3ZidXNfZGlzY29ubmVjdCgmY2ktPmdhZGdldCk7DQo+ID4gPiA+ID4gPiA+ID4g
-KyAgICAgICAgICAgICAgICAgICAgICAgY2lfcm9sZV9zdGFydChjaSwgVVNCX1JPTEVfSE9TVCk7
-DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgIH0gZWxzZSBpZiAoY2ktPnJvbGUgPT0g
-VVNCX1JPTEVfSE9TVCkgew0KPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
-IGNpX3JvbGVfc3RvcChjaSk7DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgdXNiX2dhZGdldF92YnVzX2Nvbm5lY3QoJmNpLT5nYWRnZXQpOw0KPiA+ID4gPiA+ID4gPiA+
-ICsgICAgICAgICAgICAgICAgICAgICAgIGNpLT5yb2xlID0gVVNCX1JPTEVfREVWSUNFOw0KPiA+
-ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICB9
-DQo+ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgcG1fcnVudGltZV9w
-dXRfc3luYyhjaS0+ZGV2KTsNCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ICAgICAg
-ICAgZW5hYmxlX2lycShjaS0+aXJxKTsNCj4gPiA+ID4gPiA+ID4gPiAtLQ0KPiA+ID4gPiA+ID4g
-PiA+IDIuNy40DQo+ID4gPiA+ID4gPiA+ID4NCg==
+The UWB and wusbcore code is long obsolete, so let us just move the code
+out of the real part of the kernel and into the drivers/staging/
+location with plans to remove it entirely in a few releases.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ MAINTAINERS                                   | 15 +++-------
+ drivers/Kconfig                               |  2 --
+ drivers/Makefile                              |  1 -
+ drivers/staging/Kconfig                       |  3 ++
+ drivers/staging/Makefile                      |  2 ++
+ drivers/{ => staging}/uwb/Kconfig             |  0
+ drivers/{ => staging}/uwb/Makefile            |  0
+ drivers/staging/uwb/TODO                      |  8 ++++++
+ drivers/{ => staging}/uwb/address.c           |  0
+ drivers/{ => staging}/uwb/allocator.c         |  2 +-
+ drivers/{ => staging}/uwb/beacon.c            |  0
+ drivers/{ => staging}/uwb/driver.c            |  0
+ drivers/{ => staging}/uwb/drp-avail.c         |  0
+ drivers/{ => staging}/uwb/drp-ie.c            |  2 +-
+ drivers/{ => staging}/uwb/drp.c               |  0
+ drivers/{ => staging}/uwb/est.c               |  0
+ drivers/{ => staging}/uwb/hwa-rc.c            |  6 ++--
+ drivers/{ => staging}/uwb/i1480/Makefile      |  0
+ drivers/{ => staging}/uwb/i1480/dfu/Makefile  |  0
+ drivers/{ => staging}/uwb/i1480/dfu/dfu.c     |  2 +-
+ .../{ => staging}/uwb/i1480/dfu/i1480-dfu.h   |  2 +-
+ drivers/{ => staging}/uwb/i1480/dfu/mac.c     |  2 +-
+ drivers/{ => staging}/uwb/i1480/dfu/phy.c     |  2 +-
+ drivers/{ => staging}/uwb/i1480/dfu/usb.c     |  6 ++--
+ drivers/{ => staging}/uwb/i1480/i1480-est.c   |  2 +-
+ drivers/{ => staging}/uwb/ie-rcv.c            |  0
+ drivers/{ => staging}/uwb/ie.c                |  0
+ .../staging/uwb/include}/debug-cmd.h          |  0
+ .../staging/uwb/include}/spec.h               |  0
+ .../uwb => drivers/staging/uwb/include}/umc.h |  0
+ .../staging/uwb/include}/whci.h               |  0
+ drivers/{ => staging}/uwb/lc-dev.c            |  0
+ drivers/{ => staging}/uwb/lc-rc.c             |  0
+ drivers/{ => staging}/uwb/neh.c               |  0
+ drivers/{ => staging}/uwb/pal.c               |  2 +-
+ drivers/{ => staging}/uwb/radio.c             |  2 +-
+ drivers/{ => staging}/uwb/reset.c             |  0
+ drivers/{ => staging}/uwb/rsv.c               |  2 +-
+ drivers/{ => staging}/uwb/scan.c              |  0
+ drivers/{ => staging}/uwb/umc-bus.c           |  2 +-
+ drivers/{ => staging}/uwb/umc-dev.c           |  2 +-
+ drivers/{ => staging}/uwb/umc-drv.c           |  2 +-
+ drivers/{ => staging}/uwb/uwb-debug.c         |  3 +-
+ drivers/{ => staging}/uwb/uwb-internal.h      |  2 +-
+ {include/linux => drivers/staging/uwb}/uwb.h  |  2 +-
+ drivers/{ => staging}/uwb/uwbd.c              |  0
+ drivers/{ => staging}/uwb/whc-rc.c            |  6 ++--
+ drivers/{ => staging}/uwb/whci.c              |  4 +--
+ .../staging/wusbcore/Documentation}/wusb-cbaf |  0
+ .../Documentation}/wusb-design-overview.rst   |  0
+ drivers/{usb => staging}/wusbcore/Kconfig     |  1 +
+ drivers/{usb => staging}/wusbcore/Makefile    |  2 ++
+ drivers/staging/wusbcore/TODO                 |  8 ++++++
+ drivers/{usb => staging}/wusbcore/cbaf.c      |  6 ++--
+ drivers/{usb => staging}/wusbcore/crypto.c    |  4 +--
+ drivers/{usb => staging}/wusbcore/dev-sysfs.c |  0
+ .../{usb => staging}/wusbcore/devconnect.c    |  0
+ drivers/staging/wusbcore/host/Kconfig         | 28 +++++++++++++++++++
+ drivers/staging/wusbcore/host/Makefile        |  3 ++
+ .../{usb => staging/wusbcore}/host/hwa-hc.c   |  4 +--
+ .../wusbcore}/host/whci/Makefile              |  0
+ .../{usb => staging/wusbcore}/host/whci/asl.c |  4 +--
+ .../wusbcore}/host/whci/debug.c               |  2 +-
+ .../{usb => staging/wusbcore}/host/whci/hcd.c |  4 +--
+ .../{usb => staging/wusbcore}/host/whci/hw.c  |  4 +--
+ .../wusbcore}/host/whci/init.c                |  4 +--
+ .../{usb => staging/wusbcore}/host/whci/int.c |  4 +--
+ .../{usb => staging/wusbcore}/host/whci/pzl.c |  4 +--
+ .../wusbcore}/host/whci/qset.c                |  4 +--
+ .../wusbcore}/host/whci/whcd.h                |  4 +--
+ .../wusbcore}/host/whci/whci-hc.h             |  0
+ .../wusbcore}/host/whci/wusb.c                |  4 +--
+ .../staging/wusbcore/include}/association.h   |  0
+ .../staging/wusbcore/include}/wusb-wa.h       |  0
+ .../staging/wusbcore/include}/wusb.h          |  2 +-
+ drivers/{usb => staging}/wusbcore/mmc.c       |  2 +-
+ drivers/{usb => staging}/wusbcore/pal.c       |  0
+ .../{usb => staging}/wusbcore/reservation.c   |  2 +-
+ drivers/{usb => staging}/wusbcore/rh.c        |  0
+ drivers/{usb => staging}/wusbcore/security.c  |  0
+ drivers/{usb => staging}/wusbcore/wa-hc.c     |  0
+ drivers/{usb => staging}/wusbcore/wa-hc.h     |  6 ++--
+ drivers/{usb => staging}/wusbcore/wa-nep.c    |  0
+ drivers/{usb => staging}/wusbcore/wa-rpipe.c  |  0
+ drivers/{usb => staging}/wusbcore/wa-xfer.c   |  0
+ drivers/{usb => staging}/wusbcore/wusbhc.c    |  0
+ drivers/{usb => staging}/wusbcore/wusbhc.h    |  4 +--
+ drivers/usb/Kconfig                           |  2 --
+ drivers/usb/Makefile                          |  2 --
+ drivers/usb/host/Kconfig                      | 26 -----------------
+ drivers/usb/host/Makefile                     |  3 --
+ 91 files changed, 120 insertions(+), 109 deletions(-)
+ rename drivers/{ => staging}/uwb/Kconfig (100%)
+ rename drivers/{ => staging}/uwb/Makefile (100%)
+ create mode 100644 drivers/staging/uwb/TODO
+ rename drivers/{ => staging}/uwb/address.c (100%)
+ rename drivers/{ => staging}/uwb/allocator.c (99%)
+ rename drivers/{ => staging}/uwb/beacon.c (100%)
+ rename drivers/{ => staging}/uwb/driver.c (100%)
+ rename drivers/{ => staging}/uwb/drp-avail.c (100%)
+ rename drivers/{ => staging}/uwb/drp-ie.c (99%)
+ rename drivers/{ => staging}/uwb/drp.c (100%)
+ rename drivers/{ => staging}/uwb/est.c (100%)
+ rename drivers/{ => staging}/uwb/hwa-rc.c (99%)
+ rename drivers/{ => staging}/uwb/i1480/Makefile (100%)
+ rename drivers/{ => staging}/uwb/i1480/dfu/Makefile (100%)
+ rename drivers/{ => staging}/uwb/i1480/dfu/dfu.c (99%)
+ rename drivers/{ => staging}/uwb/i1480/dfu/i1480-dfu.h (99%)
+ rename drivers/{ => staging}/uwb/i1480/dfu/mac.c (99%)
+ rename drivers/{ => staging}/uwb/i1480/dfu/phy.c (99%)
+ rename drivers/{ => staging}/uwb/i1480/dfu/usb.c (99%)
+ rename drivers/{ => staging}/uwb/i1480/i1480-est.c (99%)
+ rename drivers/{ => staging}/uwb/ie-rcv.c (100%)
+ rename drivers/{ => staging}/uwb/ie.c (100%)
+ rename {include/linux/uwb => drivers/staging/uwb/include}/debug-cmd.h (100%)
+ rename {include/linux/uwb => drivers/staging/uwb/include}/spec.h (100%)
+ rename {include/linux/uwb => drivers/staging/uwb/include}/umc.h (100%)
+ rename {include/linux/uwb => drivers/staging/uwb/include}/whci.h (100%)
+ rename drivers/{ => staging}/uwb/lc-dev.c (100%)
+ rename drivers/{ => staging}/uwb/lc-rc.c (100%)
+ rename drivers/{ => staging}/uwb/neh.c (100%)
+ rename drivers/{ => staging}/uwb/pal.c (99%)
+ rename drivers/{ => staging}/uwb/radio.c (99%)
+ rename drivers/{ => staging}/uwb/reset.c (100%)
+ rename drivers/{ => staging}/uwb/rsv.c (99%)
+ rename drivers/{ => staging}/uwb/scan.c (100%)
+ rename drivers/{ => staging}/uwb/umc-bus.c (99%)
+ rename drivers/{ => staging}/uwb/umc-dev.c (98%)
+ rename drivers/{ => staging}/uwb/umc-drv.c (96%)
+ rename drivers/{ => staging}/uwb/uwb-debug.c (99%)
+ rename drivers/{ => staging}/uwb/uwb-internal.h (99%)
+ rename {include/linux => drivers/staging/uwb}/uwb.h (99%)
+ rename drivers/{ => staging}/uwb/uwbd.c (100%)
+ rename drivers/{ => staging}/uwb/whc-rc.c (99%)
+ rename drivers/{ => staging}/uwb/whci.c (99%)
+ rename {Documentation/usb => drivers/staging/wusbcore/Documentation}/wusb-cbaf (100%)
+ rename {Documentation/usb => drivers/staging/wusbcore/Documentation}/wusb-design-overview.rst (100%)
+ rename drivers/{usb => staging}/wusbcore/Kconfig (95%)
+ rename drivers/{usb => staging}/wusbcore/Makefile (96%)
+ create mode 100644 drivers/staging/wusbcore/TODO
+ rename drivers/{usb => staging}/wusbcore/cbaf.c (99%)
+ rename drivers/{usb => staging}/wusbcore/crypto.c (99%)
+ rename drivers/{usb => staging}/wusbcore/dev-sysfs.c (100%)
+ rename drivers/{usb => staging}/wusbcore/devconnect.c (100%)
+ create mode 100644 drivers/staging/wusbcore/host/Kconfig
+ create mode 100644 drivers/staging/wusbcore/host/Makefile
+ rename drivers/{usb => staging/wusbcore}/host/hwa-hc.c (99%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/Makefile (100%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/asl.c (99%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/debug.c (99%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/hcd.c (99%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/hw.c (97%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/init.c (98%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/int.c (96%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/pzl.c (99%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/qset.c (99%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/whcd.h (98%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/whci-hc.h (100%)
+ rename drivers/{usb => staging/wusbcore}/host/whci/wusb.c (98%)
+ rename {include/linux/usb => drivers/staging/wusbcore/include}/association.h (100%)
+ rename {include/linux/usb => drivers/staging/wusbcore/include}/wusb-wa.h (100%)
+ rename {include/linux/usb => drivers/staging/wusbcore/include}/wusb.h (99%)
+ rename drivers/{usb => staging}/wusbcore/mmc.c (99%)
+ rename drivers/{usb => staging}/wusbcore/pal.c (100%)
+ rename drivers/{usb => staging}/wusbcore/reservation.c (99%)
+ rename drivers/{usb => staging}/wusbcore/rh.c (100%)
+ rename drivers/{usb => staging}/wusbcore/security.c (100%)
+ rename drivers/{usb => staging}/wusbcore/wa-hc.c (100%)
+ rename drivers/{usb => staging}/wusbcore/wa-hc.h (99%)
+ rename drivers/{usb => staging}/wusbcore/wa-nep.c (100%)
+ rename drivers/{usb => staging}/wusbcore/wa-rpipe.c (100%)
+ rename drivers/{usb => staging}/wusbcore/wa-xfer.c (100%)
+ rename drivers/{usb => staging}/wusbcore/wusbhc.c (100%)
+ rename drivers/{usb => staging}/wusbcore/wusbhc.h (99%)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6426db5198f0..f4463fb48249 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3800,14 +3800,9 @@ F:	scripts/sign-file.c
+ F:	scripts/extract-cert.c
+ 
+ CERTIFIED WIRELESS USB (WUSB) SUBSYSTEM:
+-L:	linux-usb@vger.kernel.org
++L:	devel@driverdev.osuosl.org
+ S:	Orphan
+-F:	Documentation/usb/wusb-design-overview.rst
+-F:	Documentation/usb/wusb-cbaf
+-F:	drivers/usb/host/hwa-hc.c
+-F:	drivers/usb/host/whci/
+-F:	drivers/usb/wusbcore/
+-F:	include/linux/usb/wusb*
++F:	drivers/staging/wbusbcore/
+ 
+ CFAG12864B LCD DRIVER
+ M:	Miguel Ojeda Sandonis <miguel.ojeda.sandonis@gmail.com>
+@@ -16447,11 +16442,9 @@ F:	drivers/usb/common/ulpi.c
+ F:	include/linux/ulpi/
+ 
+ ULTRA-WIDEBAND (UWB) SUBSYSTEM:
+-L:	linux-usb@vger.kernel.org
++L:	devel@driverdev.osuosl.org
+ S:	Orphan
+-F:	drivers/uwb/
+-F:	include/linux/uwb.h
+-F:	include/linux/uwb/
++F:	drivers/staging/uwb/
+ 
+ UNICODE SUBSYSTEM:
+ M:	Gabriel Krisman Bertazi <krisman@collabora.com>
+diff --git a/drivers/Kconfig b/drivers/Kconfig
+index 61cf4ea2c229..e8852c09184b 100644
+--- a/drivers/Kconfig
++++ b/drivers/Kconfig
+@@ -108,8 +108,6 @@ source "drivers/hid/Kconfig"
+ 
+ source "drivers/usb/Kconfig"
+ 
+-source "drivers/uwb/Kconfig"
+-
+ source "drivers/mmc/Kconfig"
+ 
+ source "drivers/memstick/Kconfig"
+diff --git a/drivers/Makefile b/drivers/Makefile
+index 6d37564e783c..cf046e9bd88c 100644
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -100,7 +100,6 @@ obj-$(CONFIG_ZORRO)		+= zorro/
+ obj-$(CONFIG_ATA_OVER_ETH)	+= block/aoe/
+ obj-$(CONFIG_PARIDE) 		+= block/paride/
+ obj-$(CONFIG_TC)		+= tc/
+-obj-$(CONFIG_UWB)		+= uwb/
+ obj-$(CONFIG_USB_PHY)		+= usb/
+ obj-$(CONFIG_USB)		+= usb/
+ obj-$(CONFIG_USB_SUPPORT)	+= usb/
+diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
+index 7c96a01eef6c..cf419d9c942d 100644
+--- a/drivers/staging/Kconfig
++++ b/drivers/staging/Kconfig
+@@ -120,4 +120,7 @@ source "drivers/staging/kpc2000/Kconfig"
+ 
+ source "drivers/staging/isdn/Kconfig"
+ 
++source "drivers/staging/wusbcore/Kconfig"
++source "drivers/staging/uwb/Kconfig"
++
+ endif # STAGING
+diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
+index fcaac9693b83..38179bc842a8 100644
+--- a/drivers/staging/Makefile
++++ b/drivers/staging/Makefile
+@@ -50,3 +50,5 @@ obj-$(CONFIG_EROFS_FS)		+= erofs/
+ obj-$(CONFIG_FIELDBUS_DEV)     += fieldbus/
+ obj-$(CONFIG_KPC2000)		+= kpc2000/
+ obj-$(CONFIG_ISDN_CAPI)		+= isdn/
++obj-$(CONFIG_UWB)		+= uwb/
++obj-$(CONFIG_USB_WUSB)		+= wusbcore/
+diff --git a/drivers/uwb/Kconfig b/drivers/staging/uwb/Kconfig
+similarity index 100%
+rename from drivers/uwb/Kconfig
+rename to drivers/staging/uwb/Kconfig
+diff --git a/drivers/uwb/Makefile b/drivers/staging/uwb/Makefile
+similarity index 100%
+rename from drivers/uwb/Makefile
+rename to drivers/staging/uwb/Makefile
+diff --git a/drivers/staging/uwb/TODO b/drivers/staging/uwb/TODO
+new file mode 100644
+index 000000000000..abae57000534
+--- /dev/null
++++ b/drivers/staging/uwb/TODO
+@@ -0,0 +1,8 @@
++TODO: Remove in late 2019 unless there are users
++
++There seems to not be any real wireless USB devices anywhere in the wild
++anymore.  It turned out to be a failed technology :(
++
++This will be removed from the tree if no one objects.
++
++Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+diff --git a/drivers/uwb/address.c b/drivers/staging/uwb/address.c
+similarity index 100%
+rename from drivers/uwb/address.c
+rename to drivers/staging/uwb/address.c
+diff --git a/drivers/uwb/allocator.c b/drivers/staging/uwb/allocator.c
+similarity index 99%
+rename from drivers/uwb/allocator.c
+rename to drivers/staging/uwb/allocator.c
+index 2e1590124d5f..1f429fba20b7 100644
+--- a/drivers/uwb/allocator.c
++++ b/drivers/staging/uwb/allocator.c
+@@ -6,7 +6,7 @@
+  */
+ #include <linux/kernel.h>
+ #include <linux/slab.h>
+-#include <linux/uwb.h>
++#include "uwb.h"
+ 
+ #include "uwb-internal.h"
+ 
+diff --git a/drivers/uwb/beacon.c b/drivers/staging/uwb/beacon.c
+similarity index 100%
+rename from drivers/uwb/beacon.c
+rename to drivers/staging/uwb/beacon.c
+diff --git a/drivers/uwb/driver.c b/drivers/staging/uwb/driver.c
+similarity index 100%
+rename from drivers/uwb/driver.c
+rename to drivers/staging/uwb/driver.c
+diff --git a/drivers/uwb/drp-avail.c b/drivers/staging/uwb/drp-avail.c
+similarity index 100%
+rename from drivers/uwb/drp-avail.c
+rename to drivers/staging/uwb/drp-avail.c
+diff --git a/drivers/uwb/drp-ie.c b/drivers/staging/uwb/drp-ie.c
+similarity index 99%
+rename from drivers/uwb/drp-ie.c
+rename to drivers/staging/uwb/drp-ie.c
+index 4b545b41161c..b2a862cf76de 100644
+--- a/drivers/uwb/drp-ie.c
++++ b/drivers/staging/uwb/drp-ie.c
+@@ -8,8 +8,8 @@
+ #include <linux/kernel.h>
+ #include <linux/random.h>
+ #include <linux/slab.h>
+-#include <linux/uwb.h>
+ 
++#include "uwb.h"
+ #include "uwb-internal.h"
+ 
+ 
+diff --git a/drivers/uwb/drp.c b/drivers/staging/uwb/drp.c
+similarity index 100%
+rename from drivers/uwb/drp.c
+rename to drivers/staging/uwb/drp.c
+diff --git a/drivers/uwb/est.c b/drivers/staging/uwb/est.c
+similarity index 100%
+rename from drivers/uwb/est.c
+rename to drivers/staging/uwb/est.c
+diff --git a/drivers/uwb/hwa-rc.c b/drivers/staging/uwb/hwa-rc.c
+similarity index 99%
+rename from drivers/uwb/hwa-rc.c
+rename to drivers/staging/uwb/hwa-rc.c
+index cd03b7f827c1..b6effad749d7 100644
+--- a/drivers/uwb/hwa-rc.c
++++ b/drivers/staging/uwb/hwa-rc.c
+@@ -38,9 +38,9 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/usb.h>
+-#include <linux/usb/wusb.h>
+-#include <linux/usb/wusb-wa.h>
+-#include <linux/uwb.h>
++#include "../wusbcore/include/wusb.h"
++#include "../wusbcore/include/wusb-wa.h"
++#include "uwb.h"
+ 
+ #include "uwb-internal.h"
+ 
+diff --git a/drivers/uwb/i1480/Makefile b/drivers/staging/uwb/i1480/Makefile
+similarity index 100%
+rename from drivers/uwb/i1480/Makefile
+rename to drivers/staging/uwb/i1480/Makefile
+diff --git a/drivers/uwb/i1480/dfu/Makefile b/drivers/staging/uwb/i1480/dfu/Makefile
+similarity index 100%
+rename from drivers/uwb/i1480/dfu/Makefile
+rename to drivers/staging/uwb/i1480/dfu/Makefile
+diff --git a/drivers/uwb/i1480/dfu/dfu.c b/drivers/staging/uwb/i1480/dfu/dfu.c
+similarity index 99%
+rename from drivers/uwb/i1480/dfu/dfu.c
+rename to drivers/staging/uwb/i1480/dfu/dfu.c
+index ec1af858ead9..9d51ce8faad1 100644
+--- a/drivers/uwb/i1480/dfu/dfu.c
++++ b/drivers/staging/uwb/i1480/dfu/dfu.c
+@@ -17,9 +17,9 @@
+ #include <linux/delay.h>
+ #include <linux/pci.h>
+ #include <linux/device.h>
+-#include <linux/uwb.h>
+ #include <linux/random.h>
+ #include <linux/export.h>
++#include "../../uwb.h"
+ 
+ /*
+  * i1480_rceb_check - Check RCEB for expected field values
+diff --git a/drivers/uwb/i1480/dfu/i1480-dfu.h b/drivers/staging/uwb/i1480/dfu/i1480-dfu.h
+similarity index 99%
+rename from drivers/uwb/i1480/dfu/i1480-dfu.h
+rename to drivers/staging/uwb/i1480/dfu/i1480-dfu.h
+index 9dd567d174b3..b21d058ecc23 100644
+--- a/drivers/uwb/i1480/dfu/i1480-dfu.h
++++ b/drivers/staging/uwb/i1480/dfu/i1480-dfu.h
+@@ -50,9 +50,9 @@
+ #ifndef __i1480_DFU_H__
+ #define __i1480_DFU_H__
+ 
+-#include <linux/uwb/spec.h>
+ #include <linux/types.h>
+ #include <linux/completion.h>
++#include "../../include/spec.h"
+ 
+ #define i1480_FW_UPLOAD_MODE_MASK (cpu_to_le32(0x00000018))
+ 
+diff --git a/drivers/uwb/i1480/dfu/mac.c b/drivers/staging/uwb/i1480/dfu/mac.c
+similarity index 99%
+rename from drivers/uwb/i1480/dfu/mac.c
+rename to drivers/staging/uwb/i1480/dfu/mac.c
+index ddc224f01a7f..6e4d6c9cecf5 100644
+--- a/drivers/uwb/i1480/dfu/mac.c
++++ b/drivers/staging/uwb/i1480/dfu/mac.c
+@@ -15,7 +15,7 @@
+ #include <linux/delay.h>
+ #include <linux/firmware.h>
+ #include <linux/slab.h>
+-#include <linux/uwb.h>
++#include "../../uwb.h"
+ #include "i1480-dfu.h"
+ 
+ /*
+diff --git a/drivers/uwb/i1480/dfu/phy.c b/drivers/staging/uwb/i1480/dfu/phy.c
+similarity index 99%
+rename from drivers/uwb/i1480/dfu/phy.c
+rename to drivers/staging/uwb/i1480/dfu/phy.c
+index 50da4527c113..13512c7dda0b 100644
+--- a/drivers/uwb/i1480/dfu/phy.c
++++ b/drivers/staging/uwb/i1480/dfu/phy.c
+@@ -15,7 +15,7 @@
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/firmware.h>
+-#include <linux/usb/wusb.h>
++#include "../../../wusbcore/include/wusb.h"
+ #include "i1480-dfu.h"
+ 
+ 
+diff --git a/drivers/uwb/i1480/dfu/usb.c b/drivers/staging/uwb/i1480/dfu/usb.c
+similarity index 99%
+rename from drivers/uwb/i1480/dfu/usb.c
+rename to drivers/staging/uwb/i1480/dfu/usb.c
+index 6129a8f4b5f2..d41086bdd783 100644
+--- a/drivers/uwb/i1480/dfu/usb.c
++++ b/drivers/staging/uwb/i1480/dfu/usb.c
+@@ -25,9 +25,9 @@
+ #include <linux/interrupt.h>
+ #include <linux/slab.h>
+ #include <linux/delay.h>
+-#include <linux/uwb.h>
+-#include <linux/usb/wusb.h>
+-#include <linux/usb/wusb-wa.h>
++#include "../../uwb.h"
++#include "../../../wusbcore/include/wusb.h"
++#include "../../../wusbcore/include/wusb-wa.h"
+ #include "i1480-dfu.h"
+ 
+ struct i1480_usb {
+diff --git a/drivers/uwb/i1480/i1480-est.c b/drivers/staging/uwb/i1480/i1480-est.c
+similarity index 99%
+rename from drivers/uwb/i1480/i1480-est.c
+rename to drivers/staging/uwb/i1480/i1480-est.c
+index 1346c409d10e..106e0a44b138 100644
+--- a/drivers/uwb/i1480/i1480-est.c
++++ b/drivers/staging/uwb/i1480/i1480-est.c
+@@ -12,7 +12,7 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/usb.h>
+-#include <linux/uwb.h>
++#include "../uwb.h"
+ #include "dfu/i1480-dfu.h"
+ 
+ 
+diff --git a/drivers/uwb/ie-rcv.c b/drivers/staging/uwb/ie-rcv.c
+similarity index 100%
+rename from drivers/uwb/ie-rcv.c
+rename to drivers/staging/uwb/ie-rcv.c
+diff --git a/drivers/uwb/ie.c b/drivers/staging/uwb/ie.c
+similarity index 100%
+rename from drivers/uwb/ie.c
+rename to drivers/staging/uwb/ie.c
+diff --git a/include/linux/uwb/debug-cmd.h b/drivers/staging/uwb/include/debug-cmd.h
+similarity index 100%
+rename from include/linux/uwb/debug-cmd.h
+rename to drivers/staging/uwb/include/debug-cmd.h
+diff --git a/include/linux/uwb/spec.h b/drivers/staging/uwb/include/spec.h
+similarity index 100%
+rename from include/linux/uwb/spec.h
+rename to drivers/staging/uwb/include/spec.h
+diff --git a/include/linux/uwb/umc.h b/drivers/staging/uwb/include/umc.h
+similarity index 100%
+rename from include/linux/uwb/umc.h
+rename to drivers/staging/uwb/include/umc.h
+diff --git a/include/linux/uwb/whci.h b/drivers/staging/uwb/include/whci.h
+similarity index 100%
+rename from include/linux/uwb/whci.h
+rename to drivers/staging/uwb/include/whci.h
+diff --git a/drivers/uwb/lc-dev.c b/drivers/staging/uwb/lc-dev.c
+similarity index 100%
+rename from drivers/uwb/lc-dev.c
+rename to drivers/staging/uwb/lc-dev.c
+diff --git a/drivers/uwb/lc-rc.c b/drivers/staging/uwb/lc-rc.c
+similarity index 100%
+rename from drivers/uwb/lc-rc.c
+rename to drivers/staging/uwb/lc-rc.c
+diff --git a/drivers/uwb/neh.c b/drivers/staging/uwb/neh.c
+similarity index 100%
+rename from drivers/uwb/neh.c
+rename to drivers/staging/uwb/neh.c
+diff --git a/drivers/uwb/pal.c b/drivers/staging/uwb/pal.c
+similarity index 99%
+rename from drivers/uwb/pal.c
+rename to drivers/staging/uwb/pal.c
+index 765fd426dbd1..a541e646a603 100644
+--- a/drivers/uwb/pal.c
++++ b/drivers/staging/uwb/pal.c
+@@ -6,9 +6,9 @@
+  */
+ #include <linux/kernel.h>
+ #include <linux/debugfs.h>
+-#include <linux/uwb.h>
+ #include <linux/export.h>
+ 
++#include "uwb.h"
+ #include "uwb-internal.h"
+ 
+ /**
+diff --git a/drivers/uwb/radio.c b/drivers/staging/uwb/radio.c
+similarity index 99%
+rename from drivers/uwb/radio.c
+rename to drivers/staging/uwb/radio.c
+index 240dd755927e..6afb75ce1b5f 100644
+--- a/drivers/uwb/radio.c
++++ b/drivers/staging/uwb/radio.c
+@@ -5,9 +5,9 @@
+  * Copyright (C) 2008 Cambridge Silicon Radio Ltd.
+  */
+ #include <linux/kernel.h>
+-#include <linux/uwb.h>
+ #include <linux/export.h>
+ 
++#include "uwb.h"
+ #include "uwb-internal.h"
+ 
+ 
+diff --git a/drivers/uwb/reset.c b/drivers/staging/uwb/reset.c
+similarity index 100%
+rename from drivers/uwb/reset.c
+rename to drivers/staging/uwb/reset.c
+diff --git a/drivers/uwb/rsv.c b/drivers/staging/uwb/rsv.c
+similarity index 99%
+rename from drivers/uwb/rsv.c
+rename to drivers/staging/uwb/rsv.c
+index ec924deb0a32..f45a04ff7275 100644
+--- a/drivers/uwb/rsv.c
++++ b/drivers/staging/uwb/rsv.c
+@@ -5,11 +5,11 @@
+  * Copyright (C) 2008 Cambridge Silicon Radio Ltd.
+  */
+ #include <linux/kernel.h>
+-#include <linux/uwb.h>
+ #include <linux/slab.h>
+ #include <linux/random.h>
+ #include <linux/export.h>
+ 
++#include "uwb.h"
+ #include "uwb-internal.h"
+ 
+ static void uwb_rsv_timer(struct timer_list *t);
+diff --git a/drivers/uwb/scan.c b/drivers/staging/uwb/scan.c
+similarity index 100%
+rename from drivers/uwb/scan.c
+rename to drivers/staging/uwb/scan.c
+diff --git a/drivers/uwb/umc-bus.c b/drivers/staging/uwb/umc-bus.c
+similarity index 99%
+rename from drivers/uwb/umc-bus.c
+rename to drivers/staging/uwb/umc-bus.c
+index 0fdc38078eee..8b931f66a720 100644
+--- a/drivers/uwb/umc-bus.c
++++ b/drivers/staging/uwb/umc-bus.c
+@@ -8,8 +8,8 @@
+ #include <linux/sysfs.h>
+ #include <linux/workqueue.h>
+ #include <linux/module.h>
+-#include <linux/uwb/umc.h>
+ #include <linux/pci.h>
++#include "include/umc.h"
+ 
+ static int umc_bus_pre_reset_helper(struct device *dev, void *data)
+ {
+diff --git a/drivers/uwb/umc-dev.c b/drivers/staging/uwb/umc-dev.c
+similarity index 98%
+rename from drivers/uwb/umc-dev.c
+rename to drivers/staging/uwb/umc-dev.c
+index c845ca414bb2..0c71caae00be 100644
+--- a/drivers/uwb/umc-dev.c
++++ b/drivers/staging/uwb/umc-dev.c
+@@ -7,7 +7,7 @@
+ #include <linux/kernel.h>
+ #include <linux/export.h>
+ #include <linux/slab.h>
+-#include <linux/uwb/umc.h>
++#include "include/umc.h"
+ 
+ static void umc_device_release(struct device *dev)
+ {
+diff --git a/drivers/uwb/umc-drv.c b/drivers/staging/uwb/umc-drv.c
+similarity index 96%
+rename from drivers/uwb/umc-drv.c
+rename to drivers/staging/uwb/umc-drv.c
+index b141d520efbf..ed3bd220e8c2 100644
+--- a/drivers/uwb/umc-drv.c
++++ b/drivers/staging/uwb/umc-drv.c
+@@ -6,7 +6,7 @@
+  */
+ #include <linux/kernel.h>
+ #include <linux/export.h>
+-#include <linux/uwb/umc.h>
++#include "include/umc.h"
+ 
+ int __umc_driver_register(struct umc_driver *umc_drv, struct module *module,
+ 			  const char *mod_name)
+diff --git a/drivers/uwb/uwb-debug.c b/drivers/staging/uwb/uwb-debug.c
+similarity index 99%
+rename from drivers/uwb/uwb-debug.c
+rename to drivers/staging/uwb/uwb-debug.c
+index 5457b6d42387..dd14df219ef8 100644
+--- a/drivers/uwb/uwb-debug.c
++++ b/drivers/staging/uwb/uwb-debug.c
+@@ -19,8 +19,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/seq_file.h>
+ 
+-#include <linux/uwb/debug-cmd.h>
+-
++#include "include/debug-cmd.h"
+ #include "uwb-internal.h"
+ 
+ /*
+diff --git a/drivers/uwb/uwb-internal.h b/drivers/staging/uwb/uwb-internal.h
+similarity index 99%
+rename from drivers/uwb/uwb-internal.h
+rename to drivers/staging/uwb/uwb-internal.h
+index 00de0a5333d2..4c2fdac7f610 100644
+--- a/drivers/uwb/uwb-internal.h
++++ b/drivers/staging/uwb/uwb-internal.h
+@@ -17,8 +17,8 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/device.h>
+-#include <linux/uwb.h>
+ #include <linux/mutex.h>
++#include "uwb.h"
+ 
+ struct uwb_beca_e;
+ 
+diff --git a/include/linux/uwb.h b/drivers/staging/uwb/uwb.h
+similarity index 99%
+rename from include/linux/uwb.h
+rename to drivers/staging/uwb/uwb.h
+index 6918a61e1ac1..6a59706ba3a0 100644
+--- a/include/linux/uwb.h
++++ b/drivers/staging/uwb/uwb.h
+@@ -18,8 +18,8 @@
+ #include <linux/timer.h>
+ #include <linux/wait.h>
+ #include <linux/workqueue.h>
+-#include <linux/uwb/spec.h>
+ #include <asm/page.h>
++#include "include/spec.h"
+ 
+ struct uwb_dev;
+ struct uwb_beca_e;
+diff --git a/drivers/uwb/uwbd.c b/drivers/staging/uwb/uwbd.c
+similarity index 100%
+rename from drivers/uwb/uwbd.c
+rename to drivers/staging/uwb/uwbd.c
+diff --git a/drivers/uwb/whc-rc.c b/drivers/staging/uwb/whc-rc.c
+similarity index 99%
+rename from drivers/uwb/whc-rc.c
+rename to drivers/staging/uwb/whc-rc.c
+index 22397f70dee2..34020ed351ab 100644
+--- a/drivers/uwb/whc-rc.c
++++ b/drivers/staging/uwb/whc-rc.c
+@@ -33,9 +33,9 @@
+ #include <linux/interrupt.h>
+ #include <linux/slab.h>
+ #include <linux/workqueue.h>
+-#include <linux/uwb.h>
+-#include <linux/uwb/whci.h>
+-#include <linux/uwb/umc.h>
++#include "uwb.h"
++#include "include/whci.h"
++#include "include/umc.h"
+ 
+ #include "uwb-internal.h"
+ 
+diff --git a/drivers/uwb/whci.c b/drivers/staging/uwb/whci.c
+similarity index 99%
+rename from drivers/uwb/whci.c
+rename to drivers/staging/uwb/whci.c
+index be8a8b8e857b..a8832f64d708 100644
+--- a/drivers/uwb/whci.c
++++ b/drivers/staging/uwb/whci.c
+@@ -10,8 +10,8 @@
+ #include <linux/pci.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/slab.h>
+-#include <linux/uwb/whci.h>
+-#include <linux/uwb/umc.h>
++#include "include/whci.h"
++#include "include/umc.h"
+ 
+ struct whci_card {
+ 	struct pci_dev *pci;
+diff --git a/Documentation/usb/wusb-cbaf b/drivers/staging/wusbcore/Documentation/wusb-cbaf
+similarity index 100%
+rename from Documentation/usb/wusb-cbaf
+rename to drivers/staging/wusbcore/Documentation/wusb-cbaf
+diff --git a/Documentation/usb/wusb-design-overview.rst b/drivers/staging/wusbcore/Documentation/wusb-design-overview.rst
+similarity index 100%
+rename from Documentation/usb/wusb-design-overview.rst
+rename to drivers/staging/wusbcore/Documentation/wusb-design-overview.rst
+diff --git a/drivers/usb/wusbcore/Kconfig b/drivers/staging/wusbcore/Kconfig
+similarity index 95%
+rename from drivers/usb/wusbcore/Kconfig
+rename to drivers/staging/wusbcore/Kconfig
+index abc0f361021f..056c60b4d57f 100644
+--- a/drivers/usb/wusbcore/Kconfig
++++ b/drivers/staging/wusbcore/Kconfig
+@@ -36,3 +36,4 @@ config USB_WUSB_CBAF_DEBUG
+ 	  to the system log. Select this if you are having a problem with
+ 	  CBA support and want to see more of what is going on.
+ 
++source "drivers/staging/wusbcore/host/Kconfig"
+diff --git a/drivers/usb/wusbcore/Makefile b/drivers/staging/wusbcore/Makefile
+similarity index 96%
+rename from drivers/usb/wusbcore/Makefile
+rename to drivers/staging/wusbcore/Makefile
+index d604ccdd916f..b47b874268ac 100644
+--- a/drivers/usb/wusbcore/Makefile
++++ b/drivers/staging/wusbcore/Makefile
+@@ -24,3 +24,5 @@ wusb-wa-y :=		\
+ 	wa-nep.o	\
+ 	wa-rpipe.o	\
+ 	wa-xfer.o
++
++obj-y	+= host/
+diff --git a/drivers/staging/wusbcore/TODO b/drivers/staging/wusbcore/TODO
+new file mode 100644
+index 000000000000..abae57000534
+--- /dev/null
++++ b/drivers/staging/wusbcore/TODO
+@@ -0,0 +1,8 @@
++TODO: Remove in late 2019 unless there are users
++
++There seems to not be any real wireless USB devices anywhere in the wild
++anymore.  It turned out to be a failed technology :(
++
++This will be removed from the tree if no one objects.
++
++Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+diff --git a/drivers/usb/wusbcore/cbaf.c b/drivers/staging/wusbcore/cbaf.c
+similarity index 99%
+rename from drivers/usb/wusbcore/cbaf.c
+rename to drivers/staging/wusbcore/cbaf.c
+index af77064c7456..57062eaf7558 100644
+--- a/drivers/usb/wusbcore/cbaf.c
++++ b/drivers/staging/wusbcore/cbaf.c
+@@ -80,9 +80,9 @@
+ #include <linux/random.h>
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+-#include <linux/uwb.h>
+-#include <linux/usb/wusb.h>
+-#include <linux/usb/association.h>
++#include "../uwb/uwb.h"
++#include "include/wusb.h"
++#include "include/association.h"
+ 
+ #define CBA_NAME_LEN 0x40 /* [WUSB-AM] table 4-7 */
+ 
+diff --git a/drivers/usb/wusbcore/crypto.c b/drivers/staging/wusbcore/crypto.c
+similarity index 99%
+rename from drivers/usb/wusbcore/crypto.c
+rename to drivers/staging/wusbcore/crypto.c
+index 9ee66483ee54..d7d55ed19a98 100644
+--- a/drivers/usb/wusbcore/crypto.c
++++ b/drivers/staging/wusbcore/crypto.c
+@@ -38,10 +38,10 @@
+ #include <linux/crypto.h>
+ #include <linux/module.h>
+ #include <linux/err.h>
+-#include <linux/uwb.h>
+ #include <linux/slab.h>
+-#include <linux/usb/wusb.h>
+ #include <linux/scatterlist.h>
++#include "../uwb/uwb.h"
++#include "include/wusb.h"
+ 
+ static int debug_crypto_verify;
+ 
+diff --git a/drivers/usb/wusbcore/dev-sysfs.c b/drivers/staging/wusbcore/dev-sysfs.c
+similarity index 100%
+rename from drivers/usb/wusbcore/dev-sysfs.c
+rename to drivers/staging/wusbcore/dev-sysfs.c
+diff --git a/drivers/usb/wusbcore/devconnect.c b/drivers/staging/wusbcore/devconnect.c
+similarity index 100%
+rename from drivers/usb/wusbcore/devconnect.c
+rename to drivers/staging/wusbcore/devconnect.c
+diff --git a/drivers/staging/wusbcore/host/Kconfig b/drivers/staging/wusbcore/host/Kconfig
+new file mode 100644
+index 000000000000..9a73f9360a08
+--- /dev/null
++++ b/drivers/staging/wusbcore/host/Kconfig
+@@ -0,0 +1,28 @@
++# SPDX-License-Identifier: GPL-2.0
++
++config USB_WHCI_HCD
++	tristate "Wireless USB Host Controller Interface (WHCI) driver"
++	depends on USB_PCI && USB && UWB
++	select USB_WUSB
++	select UWB_WHCI
++	help
++	  A driver for PCI-based Wireless USB Host Controllers that are
++	  compliant with the WHCI specification.
++
++	  To compile this driver a module, choose M here: the module
++	  will be called "whci-hcd".
++
++config USB_HWA_HCD
++	tristate "Host Wire Adapter (HWA) driver"
++	depends on USB && UWB
++	select USB_WUSB
++	select UWB_HWA
++	help
++	  This driver enables you to connect Wireless USB devices to
++	  your system using a Host Wire Adaptor USB dongle. This is an
++	  UWB Radio Controller and WUSB Host Controller connected to
++	  your machine via USB (specified in WUSB1.0).
++
++	  To compile this driver a module, choose M here: the module
++	  will be called "hwa-hc".
++
+diff --git a/drivers/staging/wusbcore/host/Makefile b/drivers/staging/wusbcore/host/Makefile
+new file mode 100644
+index 000000000000..d65ee8a73e21
+--- /dev/null
++++ b/drivers/staging/wusbcore/host/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_USB_WHCI_HCD)	+= whci/
++obj-$(CONFIG_USB_HWA_HCD)	+= hwa-hc.o
+diff --git a/drivers/usb/host/hwa-hc.c b/drivers/staging/wusbcore/host/hwa-hc.c
+similarity index 99%
+rename from drivers/usb/host/hwa-hc.c
+rename to drivers/staging/wusbcore/host/hwa-hc.c
+index 6968b9f2b76b..8d959e91fe27 100644
+--- a/drivers/usb/host/hwa-hc.c
++++ b/drivers/staging/wusbcore/host/hwa-hc.c
+@@ -45,8 +45,8 @@
+ #include <linux/workqueue.h>
+ #include <linux/wait.h>
+ #include <linux/completion.h>
+-#include "../wusbcore/wa-hc.h"
+-#include "../wusbcore/wusbhc.h"
++#include "../wa-hc.h"
++#include "../wusbhc.h"
+ 
+ struct hwahc {
+ 	struct wusbhc wusbhc;	/* has to be 1st */
+diff --git a/drivers/usb/host/whci/Makefile b/drivers/staging/wusbcore/host/whci/Makefile
+similarity index 100%
+rename from drivers/usb/host/whci/Makefile
+rename to drivers/staging/wusbcore/host/whci/Makefile
+diff --git a/drivers/usb/host/whci/asl.c b/drivers/staging/wusbcore/host/whci/asl.c
+similarity index 99%
+rename from drivers/usb/host/whci/asl.c
+rename to drivers/staging/wusbcore/host/whci/asl.c
+index 276fb34c8efd..a2b9a50cfb80 100644
+--- a/drivers/usb/host/whci/asl.c
++++ b/drivers/staging/wusbcore/host/whci/asl.c
+@@ -7,10 +7,10 @@
+ #include <linux/kernel.h>
+ #include <linux/gfp.h>
+ #include <linux/dma-mapping.h>
+-#include <linux/uwb/umc.h>
+ #include <linux/usb.h>
+ 
+-#include "../../wusbcore/wusbhc.h"
++#include "../../../uwb/include/umc.h"
++#include "../../wusbhc.h"
+ 
+ #include "whcd.h"
+ 
+diff --git a/drivers/usb/host/whci/debug.c b/drivers/staging/wusbcore/host/whci/debug.c
+similarity index 99%
+rename from drivers/usb/host/whci/debug.c
+rename to drivers/staging/wusbcore/host/whci/debug.c
+index 8ddfe3f1f693..443da6719147 100644
+--- a/drivers/usb/host/whci/debug.c
++++ b/drivers/staging/wusbcore/host/whci/debug.c
+@@ -10,7 +10,7 @@
+ #include <linux/seq_file.h>
+ #include <linux/export.h>
+ 
+-#include "../../wusbcore/wusbhc.h"
++#include "../../wusbhc.h"
+ 
+ #include "whcd.h"
+ 
+diff --git a/drivers/usb/host/whci/hcd.c b/drivers/staging/wusbcore/host/whci/hcd.c
+similarity index 99%
+rename from drivers/usb/host/whci/hcd.c
+rename to drivers/staging/wusbcore/host/whci/hcd.c
+index 8af9dcfea127..bee1ff2d35be 100644
+--- a/drivers/usb/host/whci/hcd.c
++++ b/drivers/staging/wusbcore/host/whci/hcd.c
+@@ -7,9 +7,9 @@
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
+-#include <linux/uwb/umc.h>
+ 
+-#include "../../wusbcore/wusbhc.h"
++#include "../../../uwb/include/umc.h"
++#include "../../wusbhc.h"
+ 
+ #include "whcd.h"
+ 
+diff --git a/drivers/usb/host/whci/hw.c b/drivers/staging/wusbcore/host/whci/hw.c
+similarity index 97%
+rename from drivers/usb/host/whci/hw.c
+rename to drivers/staging/wusbcore/host/whci/hw.c
+index 22b3b7f7419d..e4e8914abf42 100644
+--- a/drivers/usb/host/whci/hw.c
++++ b/drivers/staging/wusbcore/host/whci/hw.c
+@@ -6,9 +6,9 @@
+  */
+ #include <linux/kernel.h>
+ #include <linux/dma-mapping.h>
+-#include <linux/uwb/umc.h>
+ 
+-#include "../../wusbcore/wusbhc.h"
++#include "../../../uwb/include/umc.h"
++#include "../../wusbhc.h"
+ 
+ #include "whcd.h"
+ 
+diff --git a/drivers/usb/host/whci/init.c b/drivers/staging/wusbcore/host/whci/init.c
+similarity index 98%
+rename from drivers/usb/host/whci/init.c
+rename to drivers/staging/wusbcore/host/whci/init.c
+index 82416973f773..55fd458a8f30 100644
+--- a/drivers/usb/host/whci/init.c
++++ b/drivers/staging/wusbcore/host/whci/init.c
+@@ -7,9 +7,9 @@
+ #include <linux/kernel.h>
+ #include <linux/gfp.h>
+ #include <linux/dma-mapping.h>
+-#include <linux/uwb/umc.h>
+ 
+-#include "../../wusbcore/wusbhc.h"
++#include "../../../uwb/include/umc.h"
++#include "../../wusbhc.h"
+ 
+ #include "whcd.h"
+ 
+diff --git a/drivers/usb/host/whci/int.c b/drivers/staging/wusbcore/host/whci/int.c
+similarity index 96%
+rename from drivers/usb/host/whci/int.c
+rename to drivers/staging/wusbcore/host/whci/int.c
+index 7e4ad1b8f3e3..bdbe35e9366f 100644
+--- a/drivers/usb/host/whci/int.c
++++ b/drivers/staging/wusbcore/host/whci/int.c
+@@ -5,9 +5,9 @@
+  * Copyright (C) 2007 Cambridge Silicon Radio Ltd.
+  */
+ #include <linux/kernel.h>
+-#include <linux/uwb/umc.h>
+ 
+-#include "../../wusbcore/wusbhc.h"
++#include "../../../uwb/include/umc.h"
++#include "../../wusbhc.h"
+ 
+ #include "whcd.h"
+ 
+diff --git a/drivers/usb/host/whci/pzl.c b/drivers/staging/wusbcore/host/whci/pzl.c
+similarity index 99%
+rename from drivers/usb/host/whci/pzl.c
+rename to drivers/staging/wusbcore/host/whci/pzl.c
+index ef52aeb02fde..6dfc075f5798 100644
+--- a/drivers/usb/host/whci/pzl.c
++++ b/drivers/staging/wusbcore/host/whci/pzl.c
+@@ -7,10 +7,10 @@
+ #include <linux/kernel.h>
+ #include <linux/gfp.h>
+ #include <linux/dma-mapping.h>
+-#include <linux/uwb/umc.h>
+ #include <linux/usb.h>
+ 
+-#include "../../wusbcore/wusbhc.h"
++#include "../../../uwb/include/umc.h"
++#include "../../wusbhc.h"
+ 
+ #include "whcd.h"
+ 
+diff --git a/drivers/usb/host/whci/qset.c b/drivers/staging/wusbcore/host/whci/qset.c
+similarity index 99%
+rename from drivers/usb/host/whci/qset.c
+rename to drivers/staging/wusbcore/host/whci/qset.c
+index 925166a207aa..66459b77dc77 100644
+--- a/drivers/usb/host/whci/qset.c
++++ b/drivers/staging/wusbcore/host/whci/qset.c
+@@ -7,10 +7,10 @@
+ #include <linux/kernel.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/slab.h>
+-#include <linux/uwb/umc.h>
+ #include <linux/usb.h>
+ 
+-#include "../../wusbcore/wusbhc.h"
++#include "../../../uwb/include/umc.h"
++#include "../../wusbhc.h"
+ 
+ #include "whcd.h"
+ 
+diff --git a/drivers/usb/host/whci/whcd.h b/drivers/staging/wusbcore/host/whci/whcd.h
+similarity index 98%
+rename from drivers/usb/host/whci/whcd.h
+rename to drivers/staging/wusbcore/host/whci/whcd.h
+index 139476997e7c..a442a2589e83 100644
+--- a/drivers/usb/host/whci/whcd.h
++++ b/drivers/staging/wusbcore/host/whci/whcd.h
+@@ -7,10 +7,10 @@
+ #ifndef __WHCD_H
+ #define __WHCD_H
+ 
+-#include <linux/uwb/whci.h>
+-#include <linux/uwb/umc.h>
+ #include <linux/workqueue.h>
+ 
++#include "../../../uwb/include/whci.h"
++#include "../../../uwb/include/umc.h"
+ #include "whci-hc.h"
+ 
+ /* Generic command timeout. */
+diff --git a/drivers/usb/host/whci/whci-hc.h b/drivers/staging/wusbcore/host/whci/whci-hc.h
+similarity index 100%
+rename from drivers/usb/host/whci/whci-hc.h
+rename to drivers/staging/wusbcore/host/whci/whci-hc.h
+diff --git a/drivers/usb/host/whci/wusb.c b/drivers/staging/wusbcore/host/whci/wusb.c
+similarity index 98%
+rename from drivers/usb/host/whci/wusb.c
+rename to drivers/staging/wusbcore/host/whci/wusb.c
+index 8a4d805ff63a..6d0068ab35e4 100644
+--- a/drivers/usb/host/whci/wusb.c
++++ b/drivers/staging/wusbcore/host/whci/wusb.c
+@@ -5,9 +5,9 @@
+  * Copyright (C) 2007 Cambridge Silicon Radio Ltd.
+  */
+ #include <linux/kernel.h>
+-#include <linux/uwb/umc.h>
+ 
+-#include "../../wusbcore/wusbhc.h"
++#include "../../../uwb/include/umc.h"
++#include "../../wusbhc.h"
+ 
+ #include "whcd.h"
+ 
+diff --git a/include/linux/usb/association.h b/drivers/staging/wusbcore/include/association.h
+similarity index 100%
+rename from include/linux/usb/association.h
+rename to drivers/staging/wusbcore/include/association.h
+diff --git a/include/linux/usb/wusb-wa.h b/drivers/staging/wusbcore/include/wusb-wa.h
+similarity index 100%
+rename from include/linux/usb/wusb-wa.h
+rename to drivers/staging/wusbcore/include/wusb-wa.h
+diff --git a/include/linux/usb/wusb.h b/drivers/staging/wusbcore/include/wusb.h
+similarity index 99%
+rename from include/linux/usb/wusb.h
+rename to drivers/staging/wusbcore/include/wusb.h
+index 65adee629106..09771d1da7bc 100644
+--- a/include/linux/usb/wusb.h
++++ b/drivers/staging/wusbcore/include/wusb.h
+@@ -33,9 +33,9 @@
+ 
+ #include <linux/types.h>
+ #include <linux/kernel.h>
+-#include <linux/uwb/spec.h>
+ #include <linux/usb/ch9.h>
+ #include <linux/param.h>
++#include "../../uwb/include/spec.h"
+ 
+ /**
+  * WUSB Information Element header
+diff --git a/drivers/usb/wusbcore/mmc.c b/drivers/staging/wusbcore/mmc.c
+similarity index 99%
+rename from drivers/usb/wusbcore/mmc.c
+rename to drivers/staging/wusbcore/mmc.c
+index acce0d551eb2..881e1f20d718 100644
+--- a/drivers/usb/wusbcore/mmc.c
++++ b/drivers/staging/wusbcore/mmc.c
+@@ -22,9 +22,9 @@
+  * FIXME:
+  *  - add timers that autoremove intervalled IEs?
+  */
+-#include <linux/usb/wusb.h>
+ #include <linux/slab.h>
+ #include <linux/export.h>
++#include "include/wusb.h"
+ #include "wusbhc.h"
+ 
+ /* Initialize the MMCIEs handling mechanism */
+diff --git a/drivers/usb/wusbcore/pal.c b/drivers/staging/wusbcore/pal.c
+similarity index 100%
+rename from drivers/usb/wusbcore/pal.c
+rename to drivers/staging/wusbcore/pal.c
+diff --git a/drivers/usb/wusbcore/reservation.c b/drivers/staging/wusbcore/reservation.c
+similarity index 99%
+rename from drivers/usb/wusbcore/reservation.c
+rename to drivers/staging/wusbcore/reservation.c
+index 6dcfc6825f55..b921faac698b 100644
+--- a/drivers/usb/wusbcore/reservation.c
++++ b/drivers/staging/wusbcore/reservation.c
+@@ -5,8 +5,8 @@
+  * Copyright (C) 2007 Cambridge Silicon Radio Ltd.
+  */
+ #include <linux/kernel.h>
+-#include <linux/uwb.h>
+ 
++#include "../uwb/uwb.h"
+ #include "wusbhc.h"
+ 
+ /*
+diff --git a/drivers/usb/wusbcore/rh.c b/drivers/staging/wusbcore/rh.c
+similarity index 100%
+rename from drivers/usb/wusbcore/rh.c
+rename to drivers/staging/wusbcore/rh.c
+diff --git a/drivers/usb/wusbcore/security.c b/drivers/staging/wusbcore/security.c
+similarity index 100%
+rename from drivers/usb/wusbcore/security.c
+rename to drivers/staging/wusbcore/security.c
+diff --git a/drivers/usb/wusbcore/wa-hc.c b/drivers/staging/wusbcore/wa-hc.c
+similarity index 100%
+rename from drivers/usb/wusbcore/wa-hc.c
+rename to drivers/staging/wusbcore/wa-hc.c
+diff --git a/drivers/usb/wusbcore/wa-hc.h b/drivers/staging/wusbcore/wa-hc.h
+similarity index 99%
+rename from drivers/usb/wusbcore/wa-hc.h
+rename to drivers/staging/wusbcore/wa-hc.h
+index ec90fff21deb..5a38465724c2 100644
+--- a/drivers/usb/wusbcore/wa-hc.h
++++ b/drivers/staging/wusbcore/wa-hc.h
+@@ -70,9 +70,9 @@
+ #include <linux/usb.h>
+ #include <linux/mutex.h>
+ #include <linux/spinlock.h>
+-#include <linux/uwb.h>
+-#include <linux/usb/wusb.h>
+-#include <linux/usb/wusb-wa.h>
++#include "../uwb/uwb.h"
++#include "include/wusb.h"
++#include "include/wusb-wa.h"
+ 
+ struct wusbhc;
+ struct wahc;
+diff --git a/drivers/usb/wusbcore/wa-nep.c b/drivers/staging/wusbcore/wa-nep.c
+similarity index 100%
+rename from drivers/usb/wusbcore/wa-nep.c
+rename to drivers/staging/wusbcore/wa-nep.c
+diff --git a/drivers/usb/wusbcore/wa-rpipe.c b/drivers/staging/wusbcore/wa-rpipe.c
+similarity index 100%
+rename from drivers/usb/wusbcore/wa-rpipe.c
+rename to drivers/staging/wusbcore/wa-rpipe.c
+diff --git a/drivers/usb/wusbcore/wa-xfer.c b/drivers/staging/wusbcore/wa-xfer.c
+similarity index 100%
+rename from drivers/usb/wusbcore/wa-xfer.c
+rename to drivers/staging/wusbcore/wa-xfer.c
+diff --git a/drivers/usb/wusbcore/wusbhc.c b/drivers/staging/wusbcore/wusbhc.c
+similarity index 100%
+rename from drivers/usb/wusbcore/wusbhc.c
+rename to drivers/staging/wusbcore/wusbhc.c
+diff --git a/drivers/usb/wusbcore/wusbhc.h b/drivers/staging/wusbcore/wusbhc.h
+similarity index 99%
+rename from drivers/usb/wusbcore/wusbhc.h
+rename to drivers/staging/wusbcore/wusbhc.h
+index 7681d796ca5b..716244a2ec44 100644
+--- a/drivers/usb/wusbcore/wusbhc.h
++++ b/drivers/staging/wusbcore/wusbhc.h
+@@ -45,8 +45,8 @@
+ #include <linux/kref.h>
+ #include <linux/workqueue.h>
+ #include <linux/usb/hcd.h>
+-#include <linux/uwb.h>
+-#include <linux/usb/wusb.h>
++#include "../uwb/uwb.h"
++#include "include/wusb.h"
+ 
+ /*
+  * Time from a WUSB channel stop request to the last transmitted MMC.
+diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
+index 6e59d370ef81..9987c399819f 100644
+--- a/drivers/usb/Kconfig
++++ b/drivers/usb/Kconfig
+@@ -98,8 +98,6 @@ source "drivers/usb/core/Kconfig"
+ 
+ source "drivers/usb/mon/Kconfig"
+ 
+-source "drivers/usb/wusbcore/Kconfig"
+-
+ source "drivers/usb/host/Kconfig"
+ 
+ source "drivers/usb/renesas_usbhs/Kconfig"
+diff --git a/drivers/usb/Makefile b/drivers/usb/Makefile
+index ecc2de1ffaae..db064dd59e08 100644
+--- a/drivers/usb/Makefile
++++ b/drivers/usb/Makefile
+@@ -35,8 +35,6 @@ obj-$(CONFIG_USB_MAX3421_HCD)	+= host/
+ 
+ obj-$(CONFIG_USB_C67X00_HCD)	+= c67x00/
+ 
+-obj-$(CONFIG_USB_WUSB)		+= wusbcore/
+-
+ obj-$(CONFIG_USB_ACM)		+= class/
+ obj-$(CONFIG_USB_PRINTER)	+= class/
+ obj-$(CONFIG_USB_WDM)		+= class/
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 40b5de597112..d040408f5baa 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -717,32 +717,6 @@ config USB_RENESAS_USBHS_HCD
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called renesas-usbhs.
+ 
+-config USB_WHCI_HCD
+-	tristate "Wireless USB Host Controller Interface (WHCI) driver"
+-	depends on USB_PCI && USB && UWB
+-	select USB_WUSB
+-	select UWB_WHCI
+-	help
+-	  A driver for PCI-based Wireless USB Host Controllers that are
+-	  compliant with the WHCI specification.
+-
+-	  To compile this driver a module, choose M here: the module
+-	  will be called "whci-hcd".
+-
+-config USB_HWA_HCD
+-	tristate "Host Wire Adapter (HWA) driver"
+-	depends on USB && UWB
+-	select USB_WUSB
+-	select UWB_HWA
+-	help
+-	  This driver enables you to connect Wireless USB devices to
+-	  your system using a Host Wire Adaptor USB dongle. This is an
+-	  UWB Radio Controller and WUSB Host Controller connected to
+-	  your machine via USB (specified in WUSB1.0).
+-
+-	  To compile this driver a module, choose M here: the module
+-	  will be called "hwa-hc".
+-
+ config USB_IMX21_HCD
+        tristate "i.MX21 HCD support"
+        depends on ARM && ARCH_MXC
+diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+index 84514f71ae44..59b39e6b350b 100644
+--- a/drivers/usb/host/Makefile
++++ b/drivers/usb/host/Makefile
+@@ -35,8 +35,6 @@ ifneq ($(CONFIG_DEBUG_FS),)
+ 	xhci-hcd-y		+= xhci-debugfs.o
+ endif
+ 
+-obj-$(CONFIG_USB_WHCI_HCD)	+= whci/
+-
+ obj-$(CONFIG_USB_PCI)	+= pci-quirks.o
+ 
+ obj-$(CONFIG_USB_EHCI_HCD)	+= ehci-hcd.o
+@@ -82,7 +80,6 @@ obj-$(CONFIG_USB_SL811_HCD)	+= sl811-hcd.o
+ obj-$(CONFIG_USB_SL811_CS)	+= sl811_cs.o
+ obj-$(CONFIG_USB_U132_HCD)	+= u132-hcd.o
+ obj-$(CONFIG_USB_R8A66597_HCD)	+= r8a66597-hcd.o
+-obj-$(CONFIG_USB_HWA_HCD)	+= hwa-hc.o
+ obj-$(CONFIG_USB_IMX21_HCD)	+= imx21-hcd.o
+ obj-$(CONFIG_USB_FSL_USB2)	+= fsl-mph-dr-of.o
+ obj-$(CONFIG_USB_EHCI_FSL)	+= fsl-mph-dr-of.o
+-- 
+2.22.0
+
