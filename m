@@ -2,333 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 847BE84EC3
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 16:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F0884ED2
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 16:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729968AbfHGO3v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 10:29:51 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:42602 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729808AbfHGO3v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 10:29:51 -0400
-Received: (qmail 18834 invoked by uid 2102); 7 Aug 2019 10:29:50 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 7 Aug 2019 10:29:50 -0400
-Date:   Wed, 7 Aug 2019 10:29:50 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Greg KH <greg@kroah.com>
-cc:     Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: [PATCH v2] usbfs: Add ioctls for runtime power management
-In-Reply-To: <1565163465.8136.36.camel@suse.com>
-Message-ID: <Pine.LNX.4.44L0.1908071013220.1514-100000@iolanthe.rowland.org>
+        id S2388017AbfHGOem (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 10:34:42 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:45202 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729960AbfHGOem (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 10:34:42 -0400
+Received: by mail-pl1-f195.google.com with SMTP id y8so41131171plr.12
+        for <linux-usb@vger.kernel.org>; Wed, 07 Aug 2019 07:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lHwvH2IenI5I6BOpKEASSOSagsSSWPckINnb/r9Om0s=;
+        b=sdsD+XG/A62SVCrfeJ+B5ABp3mNeNNw+iPeD4Z8U5zgghaSEmlrouqOw3k4+sm5yuS
+         8fFQGgOH9HgiUauowsu1sHasF4j1K9RDOvUX+80x3BlGrp204ug3UieT2V5ATUM/1P31
+         LitFv435Co8Sw1F0PLaskW8JQStoJFuvimG3E0OKdw5pSWQuxB9G2S743r/VcnIFu+3g
+         s+O1d109GWMqh7CCMQWQVrFRcfJGns9pNxmIYtjjdP8vi25SqbRgZARFQ7XfUgp7vYtI
+         g4W0/+z9UG55JCx68K0ON1IZXuhdg0DOSTh1LThJrL7g4eEXMPwjPwh5xZa3KSSUKsMb
+         DtxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lHwvH2IenI5I6BOpKEASSOSagsSSWPckINnb/r9Om0s=;
+        b=t7vvyaPlpN5oWlYsPazME7m8AqQq98uvpzdc/KJZhgK/aSxkzPfivpoGizgoDwmOKn
+         2rG3juN0ot9TejCniYK92Ow2Fcaesfl5nvVAXQk6rIiFiF/KxkkEAYZgvAvM9+nerMqD
+         DJHwxjqPY2Ha1UWdJHBsfRP6i6XwDjH8v7BwBEL8NlQyP2YGUXHyQJdb8nOjRua9Jlql
+         fXKa938NamOwH62vrlU6HW22UD8YfDBUamLVuaO0ImXhgdsQ9A2ENqRqBL/aBmt/8g1c
+         792dC/VElLdxzPoAT/765pknpgbanP8JBI9hTv0HG30VRhV5fV8B3CCOiPOs2SKAVVya
+         BHUw==
+X-Gm-Message-State: APjAAAWgLxfHtFPYCjdtF/xMRSlaOMNqSPAqALMEWz1SCjF9mGyJcGMZ
+        +MFCKgIbCf/HPMLNjo7kEKEolLUhuM0mtDmZVC2iXg==
+X-Google-Smtp-Source: APXvYqy5B07ywMWJX2Uml9bcmJ7I45WeRc12CCI8A9D4FmFbKsVYlV2+jjkpWWNkmEsxnuS7+xCsBs1+fZYql6Ton/c=
+X-Received: by 2002:a63:c442:: with SMTP id m2mr8183379pgg.286.1565188481270;
+ Wed, 07 Aug 2019 07:34:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <CAAeHK+zLrYaE+Kt6AULPjKhBNknxPBWncfkTDmm3eFoLSpsffw@mail.gmail.com>
+ <Pine.LNX.4.44L0.1908071000560.1514-100000@iolanthe.rowland.org> <CAAeHK+yAY_ov4yH7n-R8ppnxc1ux33A-SEdxx18ywU1SyLGwug@mail.gmail.com>
+In-Reply-To: <CAAeHK+yAY_ov4yH7n-R8ppnxc1ux33A-SEdxx18ywU1SyLGwug@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 7 Aug 2019 16:34:30 +0200
+Message-ID: <CAAeHK+xV3SgXvu7RsGLVtPH7scV9GZ0uwPzTu8N2bw1kt9i7aw@mail.gmail.com>
+Subject: Re: possible deadlock in open_rio
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Cesar Miquel <miquel@df.uba.ar>,
+        rio500-users@lists.sourceforge.net,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It has been requested that usbfs should implement runtime power
-management, instead of forcing the device to remain at full power as
-long as the device file is open.  This patch introduces that new
-feature.
+On Wed, Aug 7, 2019 at 4:24 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+>
+> On Wed, Aug 7, 2019 at 4:01 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Wed, 7 Aug 2019, Andrey Konovalov wrote:
+> >
+> > > On Tue, Aug 6, 2019 at 9:13 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > >
+> > > > On Thu, 1 Aug 2019, syzbot wrote:
+> > > >
+> > > > > Hello,
+> > > > >
+> > > > > syzbot found the following crash on:
+> > > > >
+> > > > > HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
+> > > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=136b6aec600000
+> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=7bbcbe9c9ff0cd49592a
+> > > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > > >
+> > > > > Unfortunately, I don't have any reproducer for this crash yet.
+> > > > >
+> > > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > > > Reported-by: syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com
+> > > > >
+> > > > > ======================================================
+> > > > > WARNING: possible circular locking dependency detected
+> > > > > 5.3.0-rc2+ #23 Not tainted
+> > > > > ------------------------------------------------------
+> > > >
+> > > > Andrey:
+> > > >
+> > > > This should be completely reproducible, since it's a simple ABBA
+> > > > locking violation.  Maybe just introducing a time delay (to avoid races
+> > > > and give the open() call time to run) between the gadget creation and
+> > > > gadget removal would be enough to do it.
+> > >
+> > > I've tried some simple approaches to reproducing this, but failed.
+> > > Should this require two rio500 devices to trigger?
+> >
+> > No, one device should be enough.  Just plug it in and then try to open
+> > the character device file.
+>
+> OK, I've reproduced it, so I can test a patch manually. The reason
+> syzbot couldn't do that, is because it doesn't open character devices.
+> Right now the USB fuzzing instance only opens /dev/input*,
+> /dev/hidraw* and /dev/usb/hiddev* (only the devices that are created
+> by USB HID devices as I've been working on adding USB HID targeted
+> fuzzing support lately).
+>
+> I guess we should open /dev/chr/* as well. The problem is that there
+> 300+ devices there even without connecting USB devices and opening
+> them blindly probably won't work. Is there a way to know which
+> character devices are created by USB devices? Maybe they are exposed
+> over /sys/bus/usb or via some other way?
 
-It does so by adding three new usbfs ioctls:
+Ah, OK, I see that it's also exposed as /dev/rio500 for this
+particular driver. This doesn't really help, as these names will
+differ for different drivers, and this will require custom syzkaller
+descriptions for each driver. I'm planning to add them for some
+widely-used (i.e. enabled on Android) drivers at some point, but it's
+too much work to do it for all the drivers enabled on e.g. Ubuntu.
 
-	USBDEVFS_FORBID_SUSPEND: Prevents the device from going into
-	runtime suspend (and causes a resume if the device is already
-	suspended).
-
-	USBDEVFS_ALLOW_SUSPEND: Allows the device to go into runtime
-	suspend.  Some time may elapse before the device actually is
-	suspended, depending on things like the autosuspend delay.
-
-	USBDEVFS_WAIT_FOR_RESUME: Blocks until the call is interrupted
-	by a signal or at least one runtime resume has occurred since
-	the most recent ALLOW_SUSPEND ioctl call (which may mean
-	immediately, even if the device is currently suspended).  In
-	the latter case, the device is prevented from suspending again
-	just as if FORBID_SUSPEND was called before the ioctl returns.
-
-For backward compatibility, when the device file is first opened
-runtime suspends are forbidden.  The userspace program can then allow
-suspends whenever it wants, and either resume the device directly (by
-forbidding suspends again) or wait for a resume from some other source
-(such as a remote wakeup).  URBs submitted to a suspended device will
-fail or will complete with an appropriate error code.
-
-This combination of ioctls is sufficient for user programs to have
-nearly the same degree of control over a device's runtime power
-behavior as kernel drivers do.
-
-Still lacking is documentation for the new ioctls.  I intend to add it
-later, after the existing documentation for the usbfs userspace API is
-straightened out into a reasonable form.
-
-Suggested-by: Mayuresh Kulkarni <mkulkarni@opensource.cirrus.com>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-
----
-
-v2: Return -EINTR instead of -ERESTARTSYS when proc_wait_for_resume()
-is interrupted by a signal.
-
-
-[as1905b]
-
-
- drivers/usb/core/devio.c          |   96 ++++++++++++++++++++++++++++++++++++--
- drivers/usb/core/generic.c        |    5 +
- drivers/usb/core/usb.h            |    3 +
- include/uapi/linux/usbdevice_fs.h |    3 +
- 4 files changed, 102 insertions(+), 5 deletions(-)
-
-Index: usb-devel/drivers/usb/core/devio.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/devio.c
-+++ usb-devel/drivers/usb/core/devio.c
-@@ -48,6 +48,9 @@
- #define USB_DEVICE_MAX			(USB_MAXBUS * 128)
- #define USB_SG_SIZE			16384 /* split-size for large txs */
- 
-+/* Mutual exclusion for ps->list in resume vs. release and remove */
-+static DEFINE_MUTEX(usbfs_mutex);
-+
- struct usb_dev_state {
- 	struct list_head list;      /* state list */
- 	struct usb_device *dev;
-@@ -57,14 +60,17 @@ struct usb_dev_state {
- 	struct list_head async_completed;
- 	struct list_head memory_list;
- 	wait_queue_head_t wait;     /* wake up if a request completed */
-+	wait_queue_head_t wait_for_resume;   /* wake up upon runtime resume */
- 	unsigned int discsignr;
- 	struct pid *disc_pid;
- 	const struct cred *cred;
- 	sigval_t disccontext;
- 	unsigned long ifclaimed;
- 	u32 disabled_bulk_eps;
--	bool privileges_dropped;
- 	unsigned long interface_allowed_mask;
-+	int not_yet_resumed;
-+	bool suspend_allowed;
-+	bool privileges_dropped;
- };
- 
- struct usb_memory {
-@@ -694,9 +700,7 @@ static void driver_disconnect(struct usb
- 	destroy_async_on_interface(ps, ifnum);
- }
- 
--/* The following routines are merely placeholders.  There is no way
-- * to inform a user task about suspend or resumes.
-- */
-+/* We don't care about suspend/resume of claimed interfaces */
- static int driver_suspend(struct usb_interface *intf, pm_message_t msg)
- {
- 	return 0;
-@@ -707,12 +711,32 @@ static int driver_resume(struct usb_inte
- 	return 0;
- }
- 
-+/* The following routines apply to the entire device, not interfaces */
-+void usbfs_notify_suspend(struct usb_device *udev)
-+{
-+	/* We don't need to handle this */
-+}
-+
-+void usbfs_notify_resume(struct usb_device *udev)
-+{
-+	struct usb_dev_state *ps;
-+
-+	/* Protect against simultaneous remove or release */
-+	mutex_lock(&usbfs_mutex);
-+	list_for_each_entry(ps, &udev->filelist, list) {
-+		WRITE_ONCE(ps->not_yet_resumed, 0);
-+		wake_up_all(&ps->wait_for_resume);
-+	}
-+	mutex_unlock(&usbfs_mutex);
-+}
-+
- struct usb_driver usbfs_driver = {
- 	.name =		"usbfs",
- 	.probe =	driver_probe,
- 	.disconnect =	driver_disconnect,
- 	.suspend =	driver_suspend,
- 	.resume =	driver_resume,
-+	.supports_autosuspend = 1,
- };
- 
- static int claimintf(struct usb_dev_state *ps, unsigned int ifnum)
-@@ -997,9 +1021,12 @@ static int usbdev_open(struct inode *ino
- 	INIT_LIST_HEAD(&ps->async_completed);
- 	INIT_LIST_HEAD(&ps->memory_list);
- 	init_waitqueue_head(&ps->wait);
-+	init_waitqueue_head(&ps->wait_for_resume);
- 	ps->disc_pid = get_pid(task_pid(current));
- 	ps->cred = get_current_cred();
- 	smp_wmb();
-+
-+	/* Can't race with resume; the device is already active */
- 	list_add_tail(&ps->list, &dev->filelist);
- 	file->private_data = ps;
- 	usb_unlock_device(dev);
-@@ -1025,7 +1052,10 @@ static int usbdev_release(struct inode *
- 	usb_lock_device(dev);
- 	usb_hub_release_all_ports(dev, ps);
- 
-+	/* Protect against simultaneous resume */
-+	mutex_lock(&usbfs_mutex);
- 	list_del_init(&ps->list);
-+	mutex_unlock(&usbfs_mutex);
- 
- 	for (ifnum = 0; ps->ifclaimed && ifnum < 8*sizeof(ps->ifclaimed);
- 			ifnum++) {
-@@ -1033,7 +1063,8 @@ static int usbdev_release(struct inode *
- 			releaseintf(ps, ifnum);
- 	}
- 	destroy_all_async(ps);
--	usb_autosuspend_device(dev);
-+	if (!ps->suspend_allowed)
-+		usb_autosuspend_device(dev);
- 	usb_unlock_device(dev);
- 	usb_put_dev(dev);
- 	put_pid(ps->disc_pid);
-@@ -2384,6 +2415,47 @@ static int proc_drop_privileges(struct u
- 	return 0;
- }
- 
-+static int proc_forbid_suspend(struct usb_dev_state *ps)
-+{
-+	int ret = 0;
-+
-+	if (ps->suspend_allowed) {
-+		ret = usb_autoresume_device(ps->dev);
-+		if (ret == 0)
-+			ps->suspend_allowed = false;
-+		else if (ret != -ENODEV)
-+			ret = -EIO;
-+	}
-+	return ret;
-+}
-+
-+static int proc_allow_suspend(struct usb_dev_state *ps)
-+{
-+	if (!connected(ps))
-+		return -ENODEV;
-+
-+	WRITE_ONCE(ps->not_yet_resumed, 1);
-+	if (!ps->suspend_allowed) {
-+		usb_autosuspend_device(ps->dev);
-+		ps->suspend_allowed = true;
-+	}
-+	return 0;
-+}
-+
-+static int proc_wait_for_resume(struct usb_dev_state *ps)
-+{
-+	int ret;
-+
-+	usb_unlock_device(ps->dev);
-+	ret = wait_event_interruptible(ps->wait_for_resume,
-+			READ_ONCE(ps->not_yet_resumed) == 0);
-+	usb_lock_device(ps->dev);
-+
-+	if (ret != 0)
-+		return -EINTR;
-+	return proc_forbid_suspend(ps);
-+}
-+
- /*
-  * NOTE:  All requests here that have interface numbers as parameters
-  * are assuming that somehow the configuration has been prevented from
-@@ -2578,6 +2650,15 @@ static long usbdev_do_ioctl(struct file
- 	case USBDEVFS_GET_SPEED:
- 		ret = ps->dev->speed;
- 		break;
-+	case USBDEVFS_FORBID_SUSPEND:
-+		ret = proc_forbid_suspend(ps);
-+		break;
-+	case USBDEVFS_ALLOW_SUSPEND:
-+		ret = proc_allow_suspend(ps);
-+		break;
-+	case USBDEVFS_WAIT_FOR_RESUME:
-+		ret = proc_wait_for_resume(ps);
-+		break;
- 	}
- 
- 	/* Handle variable-length commands */
-@@ -2651,15 +2732,20 @@ static void usbdev_remove(struct usb_dev
- {
- 	struct usb_dev_state *ps;
- 
-+	/* Protect against simultaneous resume */
-+	mutex_lock(&usbfs_mutex);
- 	while (!list_empty(&udev->filelist)) {
- 		ps = list_entry(udev->filelist.next, struct usb_dev_state, list);
- 		destroy_all_async(ps);
- 		wake_up_all(&ps->wait);
-+		WRITE_ONCE(ps->not_yet_resumed, 0);
-+		wake_up_all(&ps->wait_for_resume);
- 		list_del_init(&ps->list);
- 		if (ps->discsignr)
- 			kill_pid_usb_asyncio(ps->discsignr, EPIPE, ps->disccontext,
- 					     ps->disc_pid, ps->cred);
- 	}
-+	mutex_unlock(&usbfs_mutex);
- }
- 
- static int usbdev_notify(struct notifier_block *self,
-Index: usb-devel/drivers/usb/core/generic.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/generic.c
-+++ usb-devel/drivers/usb/core/generic.c
-@@ -257,6 +257,8 @@ static int generic_suspend(struct usb_de
- 	else
- 		rc = usb_port_suspend(udev, msg);
- 
-+	if (rc == 0)
-+		usbfs_notify_suspend(udev);
- 	return rc;
- }
- 
-@@ -273,6 +275,9 @@ static int generic_resume(struct usb_dev
- 		rc = hcd_bus_resume(udev, msg);
- 	else
- 		rc = usb_port_resume(udev, msg);
-+
-+	if (rc == 0)
-+		usbfs_notify_resume(udev);
- 	return rc;
- }
- 
-Index: usb-devel/drivers/usb/core/usb.h
-===================================================================
---- usb-devel.orig/drivers/usb/core/usb.h
-+++ usb-devel/drivers/usb/core/usb.h
-@@ -95,6 +95,9 @@ extern int usb_runtime_idle(struct devic
- extern int usb_enable_usb2_hardware_lpm(struct usb_device *udev);
- extern int usb_disable_usb2_hardware_lpm(struct usb_device *udev);
- 
-+extern void usbfs_notify_suspend(struct usb_device *udev);
-+extern void usbfs_notify_resume(struct usb_device *udev);
-+
- #else
- 
- static inline int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
-Index: usb-devel/include/uapi/linux/usbdevice_fs.h
-===================================================================
---- usb-devel.orig/include/uapi/linux/usbdevice_fs.h
-+++ usb-devel/include/uapi/linux/usbdevice_fs.h
-@@ -223,5 +223,8 @@ struct usbdevfs_streams {
-  * extending size of the data returned.
-  */
- #define USBDEVFS_CONNINFO_EX(len)  _IOC(_IOC_READ, 'U', 32, len)
-+#define USBDEVFS_FORBID_SUSPEND    _IO('U', 33)
-+#define USBDEVFS_ALLOW_SUSPEND     _IO('U', 34)
-+#define USBDEVFS_WAIT_FOR_RESUME   _IO('U', 35)
- 
- #endif /* _UAPI_LINUX_USBDEVICE_FS_H */
-
+>
+> >
+> > Alan Stern
+> >
+> > > > Is there any way you can test this?
+> > >
+> > > Not yet.
+> > >
+> > > >
+> > > > Alan Stern
+> >
