@@ -2,117 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7E6852A6
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 20:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EA3852E2
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 20:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389046AbfHGSFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 14:05:43 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:42964 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2388692AbfHGSFn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 14:05:43 -0400
-Received: (qmail 22349 invoked by uid 2102); 7 Aug 2019 14:05:42 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 7 Aug 2019 14:05:42 -0400
-Date:   Wed, 7 Aug 2019 14:05:42 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <oneukum@suse.com>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-In-Reply-To: <00000000000085d6b4058f8a957a@google.com>
-Message-ID: <Pine.LNX.4.44L0.1908071402160.1514-100000@iolanthe.rowland.org>
+        id S2389275AbfHGSWI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 14:22:08 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:40518 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387999AbfHGSWI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 14:22:08 -0400
+Received: by mail-qk1-f196.google.com with SMTP id s145so66594265qke.7
+        for <linux-usb@vger.kernel.org>; Wed, 07 Aug 2019 11:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=8YCZW1nCWkhUCnbT+gGC+VgekshYKuG5HsTIw4CfnXs=;
+        b=CYNek6kNuhPECMxVcoFZkR4x+/i7TpMbbHYGRxCkTuhhbSELP9iE+d5GfCQM80n727
+         C73sseXo7dWNu5DIvicVUTlvIU7LiUCj5R2c79YbsyOXgszrzYwtL8NtIm4a19EjmQic
+         LQVaz6tYhl+anExo46prvpwWceTbh8d6mTlFViZ/52u1xVXviXlrIrKaiquiW0cnYupt
+         RUZJrQvP7EyfIxNQlyQL5xIKi0fDBRRD5GTh3J/F2W8netpVFrI+oorXMCFEvKroQIeK
+         GAeNcq5aFCTFy3+b8pJLifT0vcPc2CL1ZoSiRVRm9IuA481w8f5O4fPumcJpugnQXGwQ
+         0XDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=8YCZW1nCWkhUCnbT+gGC+VgekshYKuG5HsTIw4CfnXs=;
+        b=sNkerdDihkZcVSWYWosQtLrI3GAvxrAClw/5hwSgbqypZGNCu6cy+qQTpAu5v33vS7
+         eh39BYJtJ37TMwvTrPLhCMoZDpgjnH7eOCGvRdRRHTx0qFql+BXDD7PWqEqKuL6HiPJ5
+         x82RT7gp+7fdO5YVly+QE7GGGqT8SqUBpNrtru+B/RufwdRstnQkJLAC+R0fRjRU3IRC
+         QUWJGQTSAzcHN8y9J555FinK3eP2uMjo8Z8O4hE6IWJB33YTwOSehBVh2WYSGbzYRD4A
+         N1CSxPMbfbzlNbki0snEIza2QXFj5uQQgo76p2Km5oJMGai9ZhbnFo2qfg4kZmBoS/vu
+         uB5g==
+X-Gm-Message-State: APjAAAUndMz7MWyt1oawjQWseo4gIcLVlSNk2mooMUkcPbBaGwi9EK7u
+        u9Cc/fVQOPm8IOuHKoYbNi2lrw==
+X-Google-Smtp-Source: APXvYqxLiJEoHXaO+qTFTbHn7VKcosbwrx21LONY6cRI/1DSZz1QuXvP+o5kbhMO0a7CEvXtfuUmbQ==
+X-Received: by 2002:a37:6dc3:: with SMTP id i186mr121541qkc.376.1565202127476;
+        Wed, 07 Aug 2019 11:22:07 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id t76sm40871746qke.79.2019.08.07.11.22.06
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 07 Aug 2019 11:22:07 -0700 (PDT)
+Date:   Wed, 7 Aug 2019 11:21:39 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH net-next 2/5] r8152: replace array with linking list for
+ rx information
+Message-ID: <20190807112139.3eb53313@cakuba.netronome.com>
+In-Reply-To: <0835B3720019904CB8F7AA43166CEEB2F18D04FA@RTITMBSVM03.realtek.com.tw>
+References: <1394712342-15778-289-albertk@realtek.com>
+        <1394712342-15778-291-albertk@realtek.com>
+        <20190806125342.4620a94f@cakuba.netronome.com>
+        <0835B3720019904CB8F7AA43166CEEB2F18D04FA@RTITMBSVM03.realtek.com.tw>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 7 Aug 2019, syzbot wrote:
-
-> Hello,
+On Wed, 7 Aug 2019 04:34:24 +0000, Hayes Wang wrote:
+> Jakub Kicinski [mailto:jakub.kicinski@netronome.com]
+> > >  static int rtl_stop_rx(struct r8152 *tp)
+> > >  {
+> > > -	int i;
+> > > +	struct list_head *cursor, *next, tmp_list;
+> > > +	unsigned long flags;
+> > > +
+> > > +	INIT_LIST_HEAD(&tmp_list);
+> > >
+> > > -	for (i = 0; i < RTL8152_MAX_RX; i++)
+> > > -		usb_kill_urb(tp->rx_info[i].urb);
+> > > +	/* The usb_kill_urb() couldn't be used in atomic.
+> > > +	 * Therefore, move the list of rx_info to a tmp one.
+> > > +	 * Then, list_for_each_safe could be used without
+> > > +	 * spin lock.
+> > > +	 */  
+> > 
+> > Would you mind explaining in a little more detail why taking the
+> > entries from the list for a brief period of time is safe?  
 > 
-> syzbot has tested the proposed patch but the reproducer still triggered  
-> crash:
-> KASAN: use-after-free Read in device_release_driver_internal
-
-> Tested on:
+> Usually, it needs the spin lock before accessing the entry
+> of the list "tp->rx_info". However, for some reasons,
+> if we want to access the entry without spin lock, we
+> cloud move all entries to a local list temporally. Then,
+> we could make sure no other one could access the entries
+> included in the temporal local list.
 > 
-> commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git
-> console output: https://syzkaller.appspot.com/x/log.txt?x=142eec8c600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=15d95bf6600000
+> For this case, when I move all entries to a temporal 
+> local list, no other one could access them. Therefore,
+> I could access the entries included in the temporal local
+> list without spin lock.
 
-The kernel log is pretty definite here:
-
-[   40.270346][   T89] cdc_acm 5-1:0.234: Refcount before probe: 3
-[   40.284514][   T89] cdc_acm 5-1:0.234: invalid descriptor buffer length
-[   40.284523][   T89] cdc_acm 5-1:0.234: No union descriptor, testing for castrated device
-[   40.285322][   T89] cdc_acm 5-1:0.234: Refcount after probe: 2
-
-2 < 3.  So let's combine the diagnostic patch with Oliver's proposed 
-solution.
-
-Alan Stern
-
-#syz test: https://github.com/google/kasan.git 6a3599ce
-
-Index: usb-devel/drivers/usb/core/driver.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/driver.c
-+++ usb-devel/drivers/usb/core/driver.c
-@@ -358,7 +358,11 @@ static int usb_probe_interface(struct de
- 		intf->needs_altsetting0 = 0;
- 	}
- 
-+	dev_info(&intf->dev, "Refcount before probe: %d\n",
-+			refcount_read(&intf->dev.kobj.kref.refcount));
- 	error = driver->probe(intf, id);
-+	dev_info(&intf->dev, "Refcount after probe: %d\n",
-+			refcount_read(&intf->dev.kobj.kref.refcount));
- 	if (error)
- 		goto err;
- 
-Index: usb-devel/drivers/usb/class/cdc-acm.c
-===================================================================
---- usb-devel.orig/drivers/usb/class/cdc-acm.c
-+++ usb-devel/drivers/usb/class/cdc-acm.c
-@@ -1301,10 +1301,6 @@ made_compressed_probe:
- 	tty_port_init(&acm->port);
- 	acm->port.ops = &acm_port_ops;
- 
--	minor = acm_alloc_minor(acm);
--	if (minor < 0)
--		goto alloc_fail1;
--
- 	ctrlsize = usb_endpoint_maxp(epctrl);
- 	readsize = usb_endpoint_maxp(epread) *
- 				(quirks == SINGLE_RX_URB ? 1 : 2);
-@@ -1312,6 +1308,13 @@ made_compressed_probe:
- 	acm->writesize = usb_endpoint_maxp(epwrite) * 20;
- 	acm->control = control_interface;
- 	acm->data = data_interface;
-+
-+	usb_get_intf(acm->control); /* undone in destroy() */
-+
-+	minor = acm_alloc_minor(acm);
-+	if (minor < 0)
-+		goto alloc_fail1;
-+
- 	acm->minor = minor;
- 	acm->dev = usb_dev;
- 	if (h.usb_cdc_acm_descriptor)
-@@ -1458,7 +1461,6 @@ skip_countries:
- 	usb_driver_claim_interface(&acm_driver, data_interface, acm);
- 	usb_set_intfdata(data_interface, acm);
- 
--	usb_get_intf(control_interface);
- 	tty_dev = tty_port_register_device(&acm->port, acm_tty_driver, minor,
- 			&control_interface->dev);
- 	if (IS_ERR(tty_dev)) {
-
+I see, thanks for the explanation.
