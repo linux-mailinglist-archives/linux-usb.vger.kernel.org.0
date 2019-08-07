@@ -2,334 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E44B849AA
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 12:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2649B84A4F
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 13:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726922AbfHGKeu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 06:34:50 -0400
-Received: from mga05.intel.com ([192.55.52.43]:11198 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726788AbfHGKeu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 7 Aug 2019 06:34:50 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 03:34:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,357,1559545200"; 
-   d="scan'208";a="203139598"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Aug 2019 03:34:45 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Pawel Laszczak <pawell@cadence.com>,
-        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>
-Cc:     "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "hdegoede\@redhat.com" <hdegoede@redhat.com>,
-        "heikki.krogerus\@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "robh+dt\@kernel.org" <robh+dt@kernel.org>,
-        "rogerq\@ti.com" <rogerq@ti.com>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel\@ti.com" <jbergsagel@ti.com>,
-        "nsekhar\@ti.com" <nsekhar@ti.com>, "nm\@ti.com" <nm@ti.com>,
+        id S1727171AbfHGLFb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 07:05:31 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:39142 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726418AbfHGLFa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 07:05:30 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x77B5LtZ028565;
+        Wed, 7 Aug 2019 06:05:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1565175921;
+        bh=nIyjRqOCV+fa1wLbVQ5oPPsgl+jCvyZgKCB0XcNKbgg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=cxQpOi2upgbFMxfhgV/yXDjyMTgt2bQVI906VDgUS8FtjAqFhOxsr65b9nX3fBC4/
+         xgWpOCTxcejRAS7V10Quw2K9kUrrV6tifR3K+gZUPXWyye44o80px7gqYWDmQ1HfD6
+         nsrcgsqPmiP+WC5qkB/CI7CXriIYUJkCCxe49R8Q=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x77B5LTn029362
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 7 Aug 2019 06:05:21 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 7 Aug
+ 2019 06:05:21 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 7 Aug 2019 06:05:20 -0500
+Received: from [137.167.41.248] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x77B5IRL002412;
+        Wed, 7 Aug 2019 06:05:18 -0500
+Subject: Re: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
+To:     Pawel Laszczak <pawell@cadence.com>, Pavel Machek <pavel@denx.de>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jbergsagel@ti.com" <jbergsagel@ti.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
         Suresh Punnoose <sureshp@cadence.com>,
-        "peter.chen\@nxp.com" <peter.chen@nxp.com>,
         Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>
-Subject: RE: [PATCH v9 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
-In-Reply-To: <BYAPR07MB4709152CB29B6B027ABEB688DDCF0@BYAPR07MB4709.namprd07.prod.outlook.com>
-References: <1562324238-16655-1-git-send-email-pawell@cadence.com> <1562324238-16655-6-git-send-email-pawell@cadence.com> <877e8tm25r.fsf@linux.intel.com> <BYAPR07MB4709152CB29B6B027ABEB688DDCF0@BYAPR07MB4709.namprd07.prod.outlook.com>
-Date:   Wed, 07 Aug 2019 13:34:45 +0300
-Message-ID: <8736idnu0q.fsf@gmail.com>
+        Rahul Kumar <kurahul@cadence.com>,
+        Anil Joy Varughese <aniljoy@cadence.com>
+References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
+ <20190721190335.GA19831@xo-6d-61-c0.localdomain>
+ <BYAPR07MB470904ACCD1ED91B10BB6BEFDDC40@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <20190722114839.GA10515@kroah.com> <20190722115644.GA12069@amd>
+ <20190722210021.GA25235@amd>
+ <BYAPR07MB470966850323EE3003B3097ADDC70@BYAPR07MB4709.namprd07.prod.outlook.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <93b4a702-227b-0410-a414-76873088ad72@ti.com>
+Date:   Wed, 7 Aug 2019 14:05:19 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <BYAPR07MB470966850323EE3003B3097ADDC70@BYAPR07MB4709.namprd07.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Pawel,
 
-Hi,
-
-Pawel Laszczak <pawell@cadence.com> writes:
->>> +static int cdns3_gadget_start(struct cdns3 *cdns)
->>> +{
->>> +	struct cdns3_device *priv_dev;
->>> +	u32 max_speed;
->>> +	int ret;
->>> +
->>> +	priv_dev = kzalloc(sizeof(*priv_dev), GFP_KERNEL);
->>> +	if (!priv_dev)
->>> +		return -ENOMEM;
->>> +
->>> +	cdns->gadget_dev = priv_dev;
->>> +	priv_dev->sysdev = cdns->dev;
->>> +	priv_dev->dev = cdns->dev;
->>> +	priv_dev->regs = cdns->dev_regs;
->>> +
->>> +	device_property_read_u16(priv_dev->dev, "cdns,on-chip-buff-size",
->>> +				 &priv_dev->onchip_buffers);
->>> +
->>> +	if (priv_dev->onchip_buffers <=  0) {
->>> +		u32 reg = readl(&priv_dev->regs->usb_cap2);
->>> +
->>> +		priv_dev->onchip_buffers = USB_CAP2_ACTUAL_MEM_SIZE(reg);
->>> +	}
->>> +
->>> +	if (!priv_dev->onchip_buffers)
->>> +		priv_dev->onchip_buffers = 256;
->>> +
->>> +	max_speed = usb_get_maximum_speed(cdns->dev);
->>> +
->>> +	/* Check the maximum_speed parameter */
->>> +	switch (max_speed) {
->>> +	case USB_SPEED_FULL:
->>> +	case USB_SPEED_HIGH:
->>> +	case USB_SPEED_SUPER:
->>> +		break;
->>> +	default:
->>> +		dev_err(cdns->dev, "invalid maximum_speed parameter %d\n",
->>> +			max_speed);
->>> +		/* fall through */
->>> +	case USB_SPEED_UNKNOWN:
->>> +		/* default to superspeed */
->>> +		max_speed = USB_SPEED_SUPER;
->>> +		break;
->>> +	}
->>> +
->>> +	/* fill gadget fields */
->>> +	priv_dev->gadget.max_speed = max_speed;
->>> +	priv_dev->gadget.speed = USB_SPEED_UNKNOWN;
->>> +	priv_dev->gadget.ops = &cdns3_gadget_ops;
->>> +	priv_dev->gadget.name = "usb-ss-gadget";
->>> +	priv_dev->gadget.sg_supported = 1;
->>> +
->>> +	spin_lock_init(&priv_dev->lock);
->>> +	INIT_WORK(&priv_dev->pending_status_wq,
->>> +		  cdns3_pending_setup_status_handler);
->>> +
->>> +	/* initialize endpoint container */
->>> +	INIT_LIST_HEAD(&priv_dev->gadget.ep_list);
->>> +	INIT_LIST_HEAD(&priv_dev->aligned_buf_list);
->>> +
->>> +	ret = cdns3_init_eps(priv_dev);
->>> +	if (ret) {
->>> +		dev_err(priv_dev->dev, "Failed to create endpoints\n");
->>> +		goto err1;
->>> +	}
->>> +
->>> +	/* allocate memory for setup packet buffer */
->>> +	priv_dev->setup_buf = dma_alloc_coherent(priv_dev->sysdev, 8,
->>> +						 &priv_dev->setup_dma, GFP_DMA);
->>> +	if (!priv_dev->setup_buf) {
->>> +		ret = -ENOMEM;
->>> +		goto err2;
->>> +	}
->>> +
->>> +	priv_dev->dev_ver = readl(&priv_dev->regs->usb_cap6);
->>> +
->>> +	dev_dbg(priv_dev->dev, "Device Controller version: %08x\n",
->>> +		readl(&priv_dev->regs->usb_cap6));
->>> +	dev_dbg(priv_dev->dev, "USB Capabilities:: %08x\n",
->>> +		readl(&priv_dev->regs->usb_cap1));
->>> +	dev_dbg(priv_dev->dev, "On-Chip memory cnfiguration: %08x\n",
->>> +		readl(&priv_dev->regs->usb_cap2));
->>> +
->>> +	priv_dev->dev_ver = GET_DEV_BASE_VERSION(priv_dev->dev_ver);
->>> +
->>> +	priv_dev->zlp_buf = kzalloc(CDNS3_EP_ZLP_BUF_SIZE, GFP_KERNEL);
->>> +	if (!priv_dev->zlp_buf) {
->>> +		ret = -ENOMEM;
->>> +		goto err3;
->>> +	}
->>> +
->>> +	/* add USB gadget device */
->>> +	ret = usb_add_gadget_udc(priv_dev->dev, &priv_dev->gadget);
->>> +	if (ret < 0) {
->>> +		dev_err(priv_dev->dev,
->>> +			"Failed to register USB device controller\n");
->>> +		goto err4;
->>> +	}
->>> +
->>> +	return 0;
->>> +err4:
->>> +	kfree(priv_dev->zlp_buf);
->>> +err3:
->>> +	dma_free_coherent(priv_dev->sysdev, 8, priv_dev->setup_buf,
->>> +			  priv_dev->setup_dma);
->>> +err2:
->>> +	cdns3_free_all_eps(priv_dev);
->>> +err1:
->>> +	cdns->gadget_dev = NULL;
->>> +	return ret;
->>> +}
->>> +
->>> +static int __cdns3_gadget_init(struct cdns3 *cdns)
->>> +{
->>> +	struct cdns3_device *priv_dev;
->>> +	int ret = 0;
->>> +
->>> +	cdns3_drd_switch_gadget(cdns, 1);
->>> +	pm_runtime_get_sync(cdns->dev);
->>> +
->>> +	ret = cdns3_gadget_start(cdns);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	priv_dev = cdns->gadget_dev;
->>> +	ret = devm_request_threaded_irq(cdns->dev, cdns->dev_irq,
->>> +					cdns3_device_irq_handler,
->>> +					cdns3_device_thread_irq_handler,
->>> +					IRQF_SHARED, dev_name(cdns->dev), cdns);
+On 23/07/2019 07:32, Pawel Laszczak wrote:
+> Hi, 
+> 
+>> On Mon 2019-07-22 13:56:44, Pavel Machek wrote:
+>>> Hi!
+>>>
+>>>>>>> This patch introduce new Cadence USBSS DRD driver to linux kernel.
+>>>>>>>
+>>>>>>> The Cadence USBSS DRD Controller is a highly configurable IP Core which
+>>>>>>> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
+>>>>>>> Host Only (XHCI)configurations.
+>>>>>>
+>>>>>> I see you are using debugfs to select between DRD, peripheral-onlyh and XHCI...
+>>>>>>
+>>>>>> Is that good idea?
+>>>>>
+>>>>> Yes driver allows selecting dr_mode by debugfs. Controller also support such functionality
+>>>>> so I don't understand why would it not be a good idea.
+>>>>>
+>>>>> I personally use this for testing but it can be used to limit controller functionality without
+>>>>> recompiling kernel.
+>>>>
+>>>> debugfs is ONLY for debugging, never rely on it being enabled, or
+>>>> mounted, on a system in order to have any normal operation happen.
+>>>>
+>>>> So for testing, yes, this is fine.  If this is going to be the normal
+>>>> api/interface for how to control this driver, no, that is not acceptable
+>>>> at all.
+>>>
+>>> It makes a lot of sense for end-user to toggle this... for example
+>>> when he is lacking right cable for proper otg detection. As it is
+>>> third driver offering this functionality, I believe we should stop
+>>> treating it as debugging.
 >>
->>copied handlers here for commenting. Note that you don't have
->>IRQF_ONESHOT:
->
-> I know, I can't use  IRQF_ ONESHOT flag in this case. I have implemented 
-> some code for masking/unmasking interrupts in cdns3_device_irq_handler.
->
-> Some priority interrupts should be handled ASAP so I can't blocked interrupt 
-> Line. 
-
-You're completely missing my comment. Your top half should be as short
-as possile. It should only check if current device generated
-interrupts. If it did, then you should wake the thread handler.
-
-This is to improve realtime behavior but not keeping preemption disabled
-for longer than necessary.
-
->>> +static irqreturn_t cdns3_device_irq_handler(int irq, void *data)
->>> +{
->>> +	struct cdns3_device *priv_dev;
->>> +	struct cdns3 *cdns = data;
->>> +	irqreturn_t ret = IRQ_NONE;
->>> +	unsigned long flags;
->>> +	u32 reg;
->>> +
->>> +	priv_dev = cdns->gadget_dev;
->>> +	spin_lock_irqsave(&priv_dev->lock, flags);
+>> At least renesas usb controller seems to have variables in sysfs:
+>> drivers/phy/renesas/phy-rcar-gen3-usb2.c : functions role_show and
+>> role_store. See also
+>> Documentation/ABI/testing/sysfs-platform-phy-rcar-gen3-usb2 .
 >>
->>the top half handler runs in hardirq context. You don't need any locks
->>here. Also IRQs are *already* disabled, you don't need to disable them again.
->
-> I will remove spin_lock_irqsave but I need to disable only some of the interrupts. 
-> I disable interrupts associated with USB endpoints. Handling of them can be 
-> deferred to thread handled.
-
-you should defer all of them to thread. Endpoints or otherwise.
-
->>> +
->>> +	/* check USB device interrupt */
->>> +	reg = readl(&priv_dev->regs->usb_ists);
->>> +
->>> +	if (reg) {
->>> +		writel(reg, &priv_dev->regs->usb_ists);
->>> +		cdns3_check_usb_interrupt_proceed(priv_dev, reg);
->>> +		ret = IRQ_HANDLED;
+>> I believe this driver should do same.
 >>
->>now, because you _don't_ mask this interrupt, you're gonna have
->>issues. Say we actually get both device and endpoint interrupts while
->>the thread is already running with previous endpoint interrupts. Now
->>we're gonna reenter the top half, because device interrupts are *not*
->>masked, which will read usb_ists and handle it here.
->
-> Endpoint interrupts are masked in cdns3_device_irq_handler and stay masked
-> until they are not handled in threaded handler. 
+> 
+> CDNS3 driver use the role framework and also has such variable defined 
+> in role switch framework.
+> 
+> https://elixir.bootlin.com/linux/latest/source/drivers/usb/roles/class.c
 
-Quick question, then: these ISTS registers, are they masked interrupt
-status or raw interrupt status?
+Can we get rid of the debugfs interface for user initiated role change and just
+rely on role switch framework via sysfs?
 
-> Of course, not all endpoint interrupts are masked, but only reported in ep_ists.
-> USB interrupt will be handled immediately. 
->
-> Also, I can get next endpoint interrupt from not masked endpoint and driver also again wake 
-> the thread. I saw such situation, but threaded interrupt handler has been working correct
-> in such situations.
->
-> In thread handler driver checks again which endpoint should be handled in ep_ists. 
->
-> I think that such situation should also occurs during our LPM enter/exit test. 
-> So, driver has  been tested for such case. During this test driver during 
-> transferring data generate a huge number of LPM interrupts which 
-> are usb interrupts.
->
-> I can't block usb interrupts interrupts because:
-> /*
->  * WORKAROUND: CDNS3 controller has issue with hardware resuming
->  * from L1. To fix it, if any DMA transfer is pending driver
->  * must starts driving resume signal immediately.
->  */
-
-I can't see why this would prevent you from defering handling to thread
-handler.
-
->>> +	if (priv_dev->run_garbage_colector) {
->>
->>wait, what?
->
-> DMA require data buffer aligned to 8 bytes. So, if buffer data is not aligned 
-> driver allocate aligned buffer for data and copy it from unaligned to 
-> Aligned.  
->
->>
->>ps: correct spelling is "collector" ;-)
->
-> Ok, thanks. 
->>
->>> +		struct cdns3_aligned_buf *buf, *tmp;
->>> +
->>> +		list_for_each_entry_safe(buf, tmp, &priv_dev->aligned_buf_list,
->>> +					 list) {
->>> +			if (!buf->in_use) {
->>> +				list_del(&buf->list);
->>> +
->>> +				spin_unlock_irqrestore(&priv_dev->lock, flags);
->>
->>creates the possibility of a race condition
-> Why? In this place the buf can't be used. 
-
-but you're reenabling interrupts, right?
-
->>> +				dma_free_coherent(priv_dev->sysdev, buf->size,
->>> +						  buf->buf,
->>> +						  buf->dma);
->>> +				spin_lock_irqsave(&priv_dev->lock, flags);
->>> +
->>> +				kfree(buf);
->>
->>why do you even need this "garbage collector"?
->
-> I need to free not used memory. The once allocated buffer will be associated with
-> request, but if request.length will be increased in usb_request then driver will  
-> must allocate the  bigger buffer. As I remember I couldn't call dma_free_coherent
-> in interrupt context so I had to move it to thread handled. This flag was used to avoid
-> going through whole  aligned_buf_list  every time. 
-> In most cases this part will never called int this place 
-
-Did you try, btw, setting the quirk flag which tells gadget drivers to
-always allocate buffers aligned to MaxPacketSize? Wouldn't that be enough?
-
->>> +	TP_printk("%s: req: %p, req buff %p, length: %u/%u %s%s%s, status: %d,"
->>> +		cd   " trb: [start:%d, end:%d: virt addr %pa], flags:%x ",
->>> +		__get_str(name), __entry->req, __entry->buf, __entry->actual,
->>> +		__entry->length,
->>> +		__entry->zero ? "zero | " : "",
->>> +		__entry->short_not_ok ? "short | " : "",
->>> +		__entry->no_interrupt ? "no int" : "",
->>
->>I guess you didn't really think the formatting through. Think about what
->>happens if you get a request with only zero flag or only short flag. How
->>will this log look like?
->
-> Like this:
-> cdns3_gadget_giveback: ep0: req: 0000000071a6a5f5, req buff 000000008d40c4db, length: 60/60 zero | , status: 0, trb: [start:0, end:0: virt addr (null)], flags:0
->
-> Is it something wrong with this?. Maybe one extra sign |.
-
-yes, the extra | :-)
-
-This is one reason why I switched to character flags where a lower case
-character means flag is cleared while uppercase means it's set.
+We do need user initiated role changes in production systems. So we can't
+rely on debugfs for this.
 
 -- 
-balbi
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
