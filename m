@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B80B185443
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 22:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E673E85466
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 22:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388371AbfHGUHP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 16:07:15 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:45554 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388210AbfHGUHP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 16:07:15 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x77K7BuX031211;
-        Wed, 7 Aug 2019 15:07:11 -0500
+        id S2389361AbfHGUQM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 16:16:12 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:33166 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387969AbfHGUQM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 16:16:12 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x77KG9Yb080819;
+        Wed, 7 Aug 2019 15:16:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1565208431;
-        bh=v1xJ4QW2CbPvsjZynDNpO5ZE1SyBCjZArxFkQkhNH5A=;
+        s=ti-com-17Q1; t=1565208969;
+        bh=Gg3//kSYxZ3hfasGJ09OzX75vf31+tbuVhHl8sgo9LM=;
         h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=SZ4V3wNSGHM5Ndp0peDd5pSEHfUpepv/G1zVezW4p5fyJR/1tYdrDGRy3HmgpHYNm
-         tpcK6FRDi7Wks1/ikO6ozijRfxE48Set2+2N2zDgWdl2FtFPhWFyhIvezaC2ieRiAh
-         Hi3NXyQnt0v63AyhOCGfdNW9I51csIwRIe70VWaY=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x77K7BSW035753
+        b=MkjcNjs3K4sFjoAq2DXmIu7gOyxrc9EAzIb/RvRJbvGnqeER5J7DPS+a3D7j1X6b9
+         ThT+nJ5vC0E3KVAKpIpHF3VRLRA9Bia61YX/EFUtXJqtqyA/R+BmfvsrkOONbCTAYh
+         +okTFSCKFZZytuJfqZEybd097/YJmUwDJeEU2UXY=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x77KG90h047223
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 7 Aug 2019 15:07:11 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 7 Aug 2019 15:16:09 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 7 Aug
- 2019 15:07:11 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 15:16:09 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 7 Aug 2019 15:07:11 -0500
+ Frontend Transport; Wed, 7 Aug 2019 15:16:09 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x77K7ADP024682;
-        Wed, 7 Aug 2019 15:07:10 -0500
-Date:   Wed, 7 Aug 2019 15:07:10 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x77KG9Ia025291;
+        Wed, 7 Aug 2019 15:16:09 -0500
+Date:   Wed, 7 Aug 2019 15:16:09 -0500
 From:   Bin Liu <b-liu@ti.com>
-To:     Saurav Girepunje <saurav.girepunje@gmail.com>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
 CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <saurav.girepunje@hotmail.com>
-Subject: Re: [PATCH] usb: musb: musb_core.c: Update the function description
-Message-ID: <20190807200710.GC14027@uda0271908>
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: musb: Fix a possible null-pointer dereference in
+ musb_handle_intr_connect()
+Message-ID: <20190807201609.GD14027@uda0271908>
 Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>;,
-        gregkh@linuxfoundation.org;, linux-usb@vger.kernel.org;,
-        linux-kernel@vger.kernel.org, saurav.girepunje@hotmail.com
-References: <20190805181318.GA8930@saurav>
+        Jia-Ju Bai <baijiaju1990@gmail.com>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190729090428.29508-1-baijiaju1990@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20190805181318.GA8930@saurav>
+In-Reply-To: <20190729090428.29508-1-baijiaju1990@gmail.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
@@ -59,19 +59,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 05, 2019 at 11:43:21PM +0530, Saurav Girepunje wrote:
-> Update the function description of musb_stage0_irq in musb_core.c
-
-I modified this to:
-
-usb: musb: core: Update the function description
-
-Update the function description of musb_stage0_irq() to remove unused
-parameter.
-
-and applied to my tree. Thanks.
-
+On Mon, Jul 29, 2019 at 05:04:28PM +0800, Jia-Ju Bai wrote:
+> In musb_handle_intr_connect(), there is an if statement on line 783 to
+> check whether musb->hcd is NULL:
+>     if (musb->hcd)
 > 
-> Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
+> When musb->hcd is NULL, it is used on line 797:
+>     musb_host_poke_root_hub(musb);
+>         if (musb->hcd->status_urb)
+> 
+> Thus, a possible null-pointer dereference may occur.
+> 
+> To fix this bug, musb->hcd is checked before calling
+> musb_host_poke_root_hub().
+> 
+> This bug is found by a static analysis tool STCheck written by us.
+> 
+> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+
+Applied. Thanks.
 
 -Bin.
+
