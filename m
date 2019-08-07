@@ -2,125 +2,458 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B30768457B
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 09:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092F78460B
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 09:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727414AbfHGHP0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 03:15:26 -0400
-Received: from mail-eopbgr150057.outbound.protection.outlook.com ([40.107.15.57]:28901
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727179AbfHGHPZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 7 Aug 2019 03:15:25 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YGMG1vH3CCEjFvBOylN4r/3ncev5xqRW1WJlW9L+dLLCULnCxByM2JF+LuBuve3Znhm52vWsRGgstJnHQzBIm8MB0BqGCd3Ak7IQ2YSJsvFdKg0y5VEcOL4RNX7JP43mGdECUcOACiEfPAQGFLo2AYIHtvm8aVzI+SAQchmQKiygXZ5mGmwWKloi/eeSzKIGlpCFZbdvLwl5kwep6KQqiO+yvEHdCOYxyiJ8EcEzkpto+Wt8enHsFH5vP4fHXQLjziH781DU1q+ivdbzrYf3AERqYccAnzRfUer8MvHSAAADpcSpcwi9EVmikxCJ3UPgIsVfZTGufDn8CWmvRTKP+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J3wbTadqHRKGFRJMipbuDTUKKXAUXSFIJCJmWOrwQM4=;
- b=BSrDR8DfTTJ4s1nwO602M2BueBqHbN2fUdk6WCe62k6FZ0kl31opERHs7gqohfaQKOw8ygg5t+bYtnkv6DiBWNTzTtiu8ehNxH0jGSaQP3ivaahod0Nt3Vs1W3CRKBQDp+m04Vs5v4qMi/KfaNp8o1v3tIYm+QglWg1gDk9mibNvktFFeMA6GLBIEVz1ndW5dImgMo/NVUMUkOhz2HB2GWp73KuB+ZsnqU6ZBswaXBF1qvoZIkXCItFz0gMJHIcl9UeDK7OTqoizfRxvDpFn9rkjHii1fo2K26pmFTAyCc0C+YjLT33sFg6Zoyk/HGB0yE6a3RArItHlOfgE2tv9uw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
- header.d=nxp.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J3wbTadqHRKGFRJMipbuDTUKKXAUXSFIJCJmWOrwQM4=;
- b=TYlkrjCJGB7/TRs/c//U+AXv1o/9NVYDcmCkNnuN2GD4PUziowdxej5ZDW0xuUf66PzmckVa1GSpPuVNmy61xbIg0bMewT7qSn6SkAEGJ4ou6ekq1HMVLit36w24auBjJMVj6py6Dakbf9LxCN+XJzTcO1qyjJYb3/GEJqBBjz4=
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (20.179.233.225) by
- VE1PR04MB6480.eurprd04.prod.outlook.com (20.179.233.81) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2136.15; Wed, 7 Aug 2019 07:15:20 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::6025:6518:3420:7317]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::6025:6518:3420:7317%7]) with mapi id 15.20.2115.005; Wed, 7 Aug 2019
- 07:15:20 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Peter Chen <peter.chen@nxp.com>, Peter Chen <hzpeterchen@gmail.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH 2/5] usb: chipidea: add role switch class support
-Thread-Topic: [PATCH 2/5] usb: chipidea: add role switch class support
-Thread-Index: AQHVMXEBpzW67j5jnEyJURF9gaNQo6bnyc4AgAQsJ/CAAB8lAIAAGnMQgAACBICAAAQTsIABvxEAgAACXrCAATkeAIAAS5Fw
-Date:   Wed, 7 Aug 2019 07:15:20 +0000
-Message-ID: <VE1PR04MB6528F61D886C8375D506594189D40@VE1PR04MB6528.eurprd04.prod.outlook.com>
-References: <20190703071953.38082-1-jun.li@nxp.com>
- <20190703071953.38082-2-jun.li@nxp.com>
- <CAL411-oHEbC6Lkr-X=GBKbHhRfuoQsfMVnUKtUjC1c8wrf-k+Q@mail.gmail.com>
- <VE1PR04MB6528DEA1B84E9B85A8594E5089DA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <CAL411-o8pO=HQwRrgibpRsrfCBD0bqWaCM5imxtCVKTCdwa=ew@mail.gmail.com>
- <VE1PR04MB652883E67829A33509B02E0E89DA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <VI1PR04MB53278DE4140B5B9FA7BDB2D08BDA0@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <VE1PR04MB65283BA3C45143002905E6FD89DA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <VI1PR04MB532730BFF128E0A4F9868A9F8BD50@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <VE1PR04MB652857AAEA39148AF5C5D6BF89D50@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <VI1PR04MB532767330394C22161200D0B8BD40@VI1PR04MB5327.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB532767330394C22161200D0B8BD40@VI1PR04MB5327.eurprd04.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c6d4569e-0e16-457c-c7fd-08d71b07020d
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VE1PR04MB6480;
-x-ms-traffictypediagnostic: VE1PR04MB6480:
-x-microsoft-antispam-prvs: <VE1PR04MB6480311529887A329A68795B89D40@VE1PR04MB6480.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 01221E3973
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(136003)(376002)(396003)(366004)(189003)(199004)(13464003)(68736007)(81156014)(81166006)(8676002)(8936002)(99286004)(110136005)(3846002)(14454004)(71190400001)(71200400001)(54906003)(7696005)(52536014)(256004)(316002)(5660300002)(2906002)(6116002)(74316002)(305945005)(14444005)(102836004)(53546011)(6506007)(33656002)(76116006)(66946007)(66446008)(66476007)(66556008)(76176011)(64756008)(4326008)(478600001)(86362001)(476003)(486006)(11346002)(55016002)(26005)(44832011)(186003)(7736002)(53936002)(9686003)(6246003)(25786009)(66066001)(229853002)(446003)(6436002);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6480;H:VE1PR04MB6528.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 8CIqi+5OXHyONGJLCMqRYSPB+gtacahWZL/AG271lbyB4uRACKELN7f+wNl2fE0VoOUSzZuVdJfwl4U9jgi0JDbWKbTpphPL8881qSlQYdDIZh8KAjQZutu5EyGrmokTtT3SkPSRVU1pLU6yzOUSWxjs7s8+2OhFDf0eVnwJc5aNnhyPHADtuA7tqY8l9BB7rai8JLNSuefv62vEswqjFC4xsAGM+iu4aNXqO9UfewPAGd/tiVVIzXQAjZrzTEzHyuCo/scRbBS03+1Qbp+aVwRh7b2BC+irWzfoSpQ127OPc1jtLv+BH5yzo2Yk9U4uAyceoj56H6jBmr08yXs3HDgkr7y/LHUJdGwZRmsQWA+8jASeOyxrXeZzI0RC1/Fr4HEj2oJCTBmRmRtY1vepR5Q0beWy9P+a+bxlRbwzj70=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6d4569e-0e16-457c-c7fd-08d71b07020d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2019 07:15:20.7424
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jun.li@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6480
+        id S2387397AbfHGHdX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 03:33:23 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:48336 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727344AbfHGHdX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 7 Aug 2019 03:33:23 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 5D0102001AF;
+        Wed,  7 Aug 2019 09:33:19 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id DA047200268;
+        Wed,  7 Aug 2019 09:33:15 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id B3472402FF;
+        Wed,  7 Aug 2019 15:33:11 +0800 (SGT)
+From:   jun.li@nxp.com
+To:     Peter.Chen@nxp.com
+Cc:     gregkh@linuxfoundation.org, jun.li@nxp.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2 1/2] usb: chipidea: replace ci_role with usb_role
+Date:   Wed,  7 Aug 2019 15:23:41 +0800
+Message-Id: <20190807072342.9700-1-jun.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUGV0ZXIgQ2hlbg0KPiBT
-ZW50OiAyMDE55bm0OOaciDfml6UgMTA6NDENCj4gVG86IEp1biBMaSA8anVuLmxpQG54cC5jb20+
-OyBQZXRlciBDaGVuIDxoenBldGVyY2hlbkBnbWFpbC5jb20+DQo+IENjOiBHcmVnIEtyb2FoLUhh
-cnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPjsgZGwtbGludXgtaW14DQo+IDxsaW51
-eC1pbXhAbnhwLmNvbT47IFVTQiBsaXN0IDxsaW51eC11c2JAdmdlci5rZXJuZWwub3JnPg0KPiBT
-dWJqZWN0OiBSRTogW1BBVENIIDIvNV0gdXNiOiBjaGlwaWRlYTogYWRkIHJvbGUgc3dpdGNoIGNs
-YXNzIHN1cHBvcnQNCj4gDQo+IA0KPiANCj4gPiA+DQo+ID4gPg0KPiA+ID4gPiA+DQo+ID4gPiA+
-ID4gWW91IG1heSB1c2UgY29ubmVjdCBiaXQgYXQgcG9ydHNjIHNpbmNlIFZCVVMgbWF5IG5vdCBj
-b25uZWN0IHRvIFNvQy4NCj4gPiA+ID4NCj4gPiA+ID4gQnkgdGhpcyB3YXksIGRpc2Nvbm5lY3Qg
-Y2FuIGJlIGRlY2lkZWQgYnV0IGNvbm5lY3QgaXMgYSBwcm9ibGVtIGluDQo+ID4gPiA+IGN1cnJl
-bnQgZHJpdmVyLCBhcyBjb250cm9sbGVyIHdhcyBzdG9wcGVkIGluIGxvdyBwb3dlciBtb2RlIHNv
-DQo+ID4gPiA+IGNhbid0IGRldGVjdCBjb25uZWN0aW9uIGZyb20gaG9zdCwgdW5sZXNzIHdlIGFs
-c28gdXBkYXRlIHRoaXMgYmVoYXZpb3IgdG9vLg0KPiA+ID4gPg0KPiA+ID4NCj4gPiA+IEZvciBj
-b25uZWN0aW9uLCBpZiBjdXJyZW50IHJvbGUgaXMgVVNCX1JPTEVfTk9ORSwgeW91IG1heSBzdGFy
-dCBkZXZpY2UgbW9kZS4NCj4gPg0KPiA+IFRoaXMgaXMgYXNzdW1pbmcgc2V0IHJvbGUgb25seSBj
-YW4gYmUgY2FsbGVkIG9uZSB0aW1lIGJldHdlZW4NCj4gPiBkaXNjb25uZWN0IGFuZCBjb25uZWN0
-IHRvIGhvc3QsIHRoaXMgbWF5IG5vdCBhbHdheXMgdHJ1ZSwgYnV0IHRoaXMgY2FuDQo+ID4gYmUg
-cmVzb2x2ZWQsIEkgdGhpbmsgd2UgbmVlZCBoYW5kbGUgdGhlIGNhc2UgZGV2aWNlIG1vZGUgaXMg
-c3RhcnRlZA0KPiA+IGJ1dCBjb25uZWN0aW9uIGRvZXMgbm90IGhhcHBlbiwgc28gdGhlIGdhZGdl
-dCBuZWVkIGJlIHN0b3BwZWQgYW5kDQo+ID4gZW50ZXIgbG93IHBvd2VyIG1vZGUgYWdhaW4sIGlm
-IHRoaXMgYXBwcm9hY2ggaXMgT0sgdG8geW91LCBJIHdpbGwgZ28gaW4gdGhpcyBkaXJlY3Rpb24g
-Zm9yIG15DQo+IHYyLg0KPiA+DQo+IA0KPiBBZnRlciB0aGlua2luZyBtb3JlLCBJIHRoaW5rIFR5
-cGUtQyB0Y3BtIGNvZGUgc2hvdWxkIHNldCB1c2Jfcm9sZSBjb3JyZWN0bHksIGl0IGtub3dzDQo+
-IHBoeXNpY2FsIGNvbm5lY3Rpb24gc3RhdHVzIHdlbGwsICBhbmQgdGhlcmUgYXJlIGFscmVhZHkg
-VVNCX1JPTEVfTk9ORSByZWZlcmVuY2VzIGF0DQo+IHRjcG0gbm93LiBEZXBlbmRpbmcgb24gVVNC
-IGRldmljZSBkcml2ZXIgd29ya2Fyb3VuZCB0byBrbm93IFVTQl9ST0xFX05PTkUgaXMNCj4gbm90
-IGEgZ29vZCBzb2x1dGlvbi4gTG9vayBhdCBhbm90aGVyIFVTQiByb2xlIGRyaXZlciwgaW50ZWwt
-eGhjaS11c2Itcm9sZS1zd2l0Y2guYywgaXQgY291bGQNCj4gYWxzbyBnZXQgVVNCX1JPTEVfTk9O
-RSBzdGF0ZS4NCg0KU29ycnksIEkgcmUtY2hlY2tlZCB0aGUgbGF0ZXN0IHRjcG0gY29kZSBmb3Vu
-ZCB0aGVyZSBpcyBhbHJlYWR5DQpVU0JfUk9MRV9OT05FIHNldHRpbmcgZm9yIG5vdCBkaXNjb25u
-ZWN0LCBzbyB3ZSBhcmUgZmluZSB0bw0KaGFuZGxlIGl0IGluIHVzYiBjb250cm9sbGVyIGRyaXZl
-ciwgd2lsbCBwb3N0IHYyIGZvciB0aGlzIHNvb24uDQoNCkxpIEp1bg0KPiANCj4gUGV0ZXINCg==
+From: Li Jun <jun.li@nxp.com>
+
+Since there is usb_role which has similar definition like ci_role,
+switch to use usb_role, then we can directly compare usb role
+with a common definition, this can benifit on usb role switch
+class support.
+
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+v1 -> v2
+No change for this patch.
+
+ drivers/usb/chipidea/ci.h      | 28 ++++++++++++----------------
+ drivers/usb/chipidea/core.c    | 34 +++++++++++++++++-----------------
+ drivers/usb/chipidea/debug.c   | 12 ++++++------
+ drivers/usb/chipidea/host.c    |  6 +++---
+ drivers/usb/chipidea/otg.c     | 14 +++++++-------
+ drivers/usb/chipidea/otg.h     |  2 +-
+ drivers/usb/chipidea/otg_fsm.c |  4 ++--
+ drivers/usb/chipidea/udc.c     |  6 +++---
+ 8 files changed, 51 insertions(+), 55 deletions(-)
+
+diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+index 6a2cc5c..82b86cd 100644
+--- a/drivers/usb/chipidea/ci.h
++++ b/drivers/usb/chipidea/ci.h
+@@ -16,6 +16,7 @@
+ #include <linux/usb/gadget.h>
+ #include <linux/usb/otg-fsm.h>
+ #include <linux/usb/otg.h>
++#include <linux/usb/role.h>
+ #include <linux/ulpi/interface.h>
+ 
+ /******************************************************************************
+@@ -102,12 +103,6 @@ struct ci_hw_ep {
+ 	struct td_node				*pending_td;
+ };
+ 
+-enum ci_role {
+-	CI_ROLE_HOST = 0,
+-	CI_ROLE_GADGET,
+-	CI_ROLE_END,
+-};
+-
+ enum ci_revision {
+ 	CI_REVISION_1X = 10,	/* Revision 1.x */
+ 	CI_REVISION_20 = 20, /* Revision 2.0 */
+@@ -208,8 +203,8 @@ struct ci_hdrc {
+ 	spinlock_t			lock;
+ 	struct hw_bank			hw_bank;
+ 	int				irq;
+-	struct ci_role_driver		*roles[CI_ROLE_END];
+-	enum ci_role			role;
++	struct ci_role_driver		*roles[USB_ROLE_DEVICE + 1];
++	enum usb_role			role;
+ 	bool				is_otg;
+ 	struct usb_otg			otg;
+ 	struct otg_fsm			fsm;
+@@ -258,15 +253,16 @@ struct ci_hdrc {
+ 
+ static inline struct ci_role_driver *ci_role(struct ci_hdrc *ci)
+ {
+-	BUG_ON(ci->role >= CI_ROLE_END || !ci->roles[ci->role]);
++	WARN_ON((ci->role != USB_ROLE_HOST && ci->role != USB_ROLE_DEVICE) ||
++	       !ci->roles[ci->role]);
+ 	return ci->roles[ci->role];
+ }
+ 
+-static inline int ci_role_start(struct ci_hdrc *ci, enum ci_role role)
++static inline int ci_role_start(struct ci_hdrc *ci, enum usb_role role)
+ {
+ 	int ret;
+ 
+-	if (role >= CI_ROLE_END)
++	if (role != USB_ROLE_HOST && role != USB_ROLE_DEVICE)
+ 		return -EINVAL;
+ 
+ 	if (!ci->roles[role])
+@@ -280,12 +276,12 @@ static inline int ci_role_start(struct ci_hdrc *ci, enum ci_role role)
+ 
+ static inline void ci_role_stop(struct ci_hdrc *ci)
+ {
+-	enum ci_role role = ci->role;
++	enum usb_role role = ci->role;
+ 
+-	if (role == CI_ROLE_END)
++	if (role == USB_ROLE_NONE)
+ 		return;
+ 
+-	ci->role = CI_ROLE_END;
++	ci->role = USB_ROLE_NONE;
+ 
+ 	ci->roles[role]->stop(ci);
+ }
+@@ -416,8 +412,8 @@ static inline bool ci_otg_is_fsm_mode(struct ci_hdrc *ci)
+ #ifdef CONFIG_USB_OTG_FSM
+ 	struct usb_otg_caps *otg_caps = &ci->platdata->ci_otg_caps;
+ 
+-	return ci->is_otg && ci->roles[CI_ROLE_HOST] &&
+-		ci->roles[CI_ROLE_GADGET] && (otg_caps->srp_support ||
++	return ci->is_otg && ci->roles[USB_ROLE_HOST] &&
++		ci->roles[USB_ROLE_DEVICE] && (otg_caps->srp_support ||
+ 		otg_caps->hnp_support || otg_caps->adp_support);
+ #else
+ 	return false;
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 26062d6..bc24c5b 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -581,7 +581,7 @@ static irqreturn_t ci_irq(int irq, void *data)
+ 	}
+ 
+ 	/* Handle device/host interrupt */
+-	if (ci->role != CI_ROLE_END)
++	if (ci->role != USB_ROLE_NONE)
+ 		ret = ci_role(ci)->irq(ci);
+ 
+ 	return ret;
+@@ -835,7 +835,7 @@ static inline void ci_role_destroy(struct ci_hdrc *ci)
+ {
+ 	ci_hdrc_gadget_destroy(ci);
+ 	ci_hdrc_host_destroy(ci);
+-	if (ci->is_otg && ci->roles[CI_ROLE_GADGET])
++	if (ci->is_otg && ci->roles[USB_ROLE_DEVICE])
+ 		ci_hdrc_otg_destroy(ci);
+ }
+ 
+@@ -860,7 +860,7 @@ static ssize_t role_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	struct ci_hdrc *ci = dev_get_drvdata(dev);
+ 
+-	if (ci->role != CI_ROLE_END)
++	if (ci->role != USB_ROLE_NONE)
+ 		return sprintf(buf, "%s\n", ci_role(ci)->name);
+ 
+ 	return 0;
+@@ -870,27 +870,27 @@ static ssize_t role_store(struct device *dev,
+ 		struct device_attribute *attr, const char *buf, size_t n)
+ {
+ 	struct ci_hdrc *ci = dev_get_drvdata(dev);
+-	enum ci_role role;
++	enum usb_role role;
+ 	int ret;
+ 
+-	if (!(ci->roles[CI_ROLE_HOST] && ci->roles[CI_ROLE_GADGET])) {
++	if (!(ci->roles[USB_ROLE_HOST] && ci->roles[USB_ROLE_DEVICE])) {
+ 		dev_warn(dev, "Current configuration is not dual-role, quit\n");
+ 		return -EPERM;
+ 	}
+ 
+-	for (role = CI_ROLE_HOST; role < CI_ROLE_END; role++)
++	for (role = USB_ROLE_DEVICE; role > USB_ROLE_NONE; role--)
+ 		if (!strncmp(buf, ci->roles[role]->name,
+ 			     strlen(ci->roles[role]->name)))
+ 			break;
+ 
+-	if (role == CI_ROLE_END || role == ci->role)
++	if (role == USB_ROLE_NONE || role == ci->role)
+ 		return -EINVAL;
+ 
+ 	pm_runtime_get_sync(dev);
+ 	disable_irq(ci->irq);
+ 	ci_role_stop(ci);
+ 	ret = ci_role_start(ci, role);
+-	if (!ret && ci->role == CI_ROLE_GADGET)
++	if (!ret && ci->role == USB_ROLE_DEVICE)
+ 		ci_handle_vbus_change(ci);
+ 	enable_irq(ci->irq);
+ 	pm_runtime_put_sync(dev);
+@@ -1037,13 +1037,13 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	if (!ci->roles[CI_ROLE_HOST] && !ci->roles[CI_ROLE_GADGET]) {
++	if (!ci->roles[USB_ROLE_HOST] && !ci->roles[USB_ROLE_DEVICE]) {
+ 		dev_err(dev, "no supported roles\n");
+ 		ret = -ENODEV;
+ 		goto deinit_gadget;
+ 	}
+ 
+-	if (ci->is_otg && ci->roles[CI_ROLE_GADGET]) {
++	if (ci->is_otg && ci->roles[USB_ROLE_DEVICE]) {
+ 		ret = ci_hdrc_otg_init(ci);
+ 		if (ret) {
+ 			dev_err(dev, "init otg fails, ret = %d\n", ret);
+@@ -1051,7 +1051,7 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	if (ci->roles[CI_ROLE_HOST] && ci->roles[CI_ROLE_GADGET]) {
++	if (ci->roles[USB_ROLE_HOST] && ci->roles[USB_ROLE_DEVICE]) {
+ 		if (ci->is_otg) {
+ 			ci->role = ci_otg_role(ci);
+ 			/* Enable ID change irq */
+@@ -1062,17 +1062,17 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 			 * role switch, the defalt role is gadget, and the
+ 			 * user can switch it through debugfs.
+ 			 */
+-			ci->role = CI_ROLE_GADGET;
++			ci->role = USB_ROLE_DEVICE;
+ 		}
+ 	} else {
+-		ci->role = ci->roles[CI_ROLE_HOST]
+-			? CI_ROLE_HOST
+-			: CI_ROLE_GADGET;
++		ci->role = ci->roles[USB_ROLE_HOST]
++			? USB_ROLE_HOST
++			: USB_ROLE_DEVICE;
+ 	}
+ 
+ 	if (!ci_otg_is_fsm_mode(ci)) {
+ 		/* only update vbus status for peripheral */
+-		if (ci->role == CI_ROLE_GADGET)
++		if (ci->role == USB_ROLE_DEVICE)
+ 			ci_handle_vbus_change(ci);
+ 
+ 		ret = ci_role_start(ci, ci->role);
+@@ -1115,7 +1115,7 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ remove_debug:
+ 	dbg_remove_files(ci);
+ stop:
+-	if (ci->is_otg && ci->roles[CI_ROLE_GADGET])
++	if (ci->is_otg && ci->roles[USB_ROLE_DEVICE])
+ 		ci_hdrc_otg_destroy(ci);
+ deinit_gadget:
+ 	ci_hdrc_gadget_destroy(ci);
+diff --git a/drivers/usb/chipidea/debug.c b/drivers/usb/chipidea/debug.c
+index fcc91a3..a3c022e 100644
+--- a/drivers/usb/chipidea/debug.c
++++ b/drivers/usb/chipidea/debug.c
+@@ -124,7 +124,7 @@ static int ci_qheads_show(struct seq_file *s, void *data)
+ 	unsigned long flags;
+ 	unsigned i, j;
+ 
+-	if (ci->role != CI_ROLE_GADGET) {
++	if (ci->role != USB_ROLE_DEVICE) {
+ 		seq_printf(s, "not in gadget mode\n");
+ 		return 0;
+ 	}
+@@ -158,7 +158,7 @@ static int ci_requests_show(struct seq_file *s, void *data)
+ 	struct td_node *node, *tmpnode;
+ 	unsigned i, j, qsize = sizeof(struct ci_hw_td)/sizeof(u32);
+ 
+-	if (ci->role != CI_ROLE_GADGET) {
++	if (ci->role != USB_ROLE_DEVICE) {
+ 		seq_printf(s, "not in gadget mode\n");
+ 		return 0;
+ 	}
+@@ -251,7 +251,7 @@ static int ci_role_show(struct seq_file *s, void *data)
+ {
+ 	struct ci_hdrc *ci = s->private;
+ 
+-	if (ci->role != CI_ROLE_END)
++	if (ci->role != USB_ROLE_NONE)
+ 		seq_printf(s, "%s\n", ci_role(ci)->name);
+ 
+ 	return 0;
+@@ -262,20 +262,20 @@ static ssize_t ci_role_write(struct file *file, const char __user *ubuf,
+ {
+ 	struct seq_file *s = file->private_data;
+ 	struct ci_hdrc *ci = s->private;
+-	enum ci_role role;
++	enum usb_role role;
+ 	char buf[8];
+ 	int ret;
+ 
+ 	if (copy_from_user(buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+ 		return -EFAULT;
+ 
+-	for (role = CI_ROLE_HOST; role < CI_ROLE_END; role++)
++	for (role = USB_ROLE_DEVICE; role > USB_ROLE_NONE; role--)
+ 		if (ci->roles[role] &&
+ 		    !strncmp(buf, ci->roles[role]->name,
+ 			     strlen(ci->roles[role]->name)))
+ 			break;
+ 
+-	if (role == CI_ROLE_END || role == ci->role)
++	if (role == USB_ROLE_NONE || role == ci->role)
+ 		return -EINVAL;
+ 
+ 	pm_runtime_get_sync(ci->dev);
+diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
+index b45ceb9..dcce43d 100644
+--- a/drivers/usb/chipidea/host.c
++++ b/drivers/usb/chipidea/host.c
+@@ -198,7 +198,7 @@ static void host_stop(struct ci_hdrc *ci)
+ 			ci->platdata->notify_event(ci,
+ 				CI_HDRC_CONTROLLER_STOPPED_EVENT);
+ 		usb_remove_hcd(hcd);
+-		ci->role = CI_ROLE_END;
++		ci->role = USB_ROLE_NONE;
+ 		synchronize_irq(ci->irq);
+ 		usb_put_hcd(hcd);
+ 		if (ci->platdata->reg_vbus && !ci_otg_is_fsm_mode(ci) &&
+@@ -216,7 +216,7 @@ static void host_stop(struct ci_hdrc *ci)
+ 
+ void ci_hdrc_host_destroy(struct ci_hdrc *ci)
+ {
+-	if (ci->role == CI_ROLE_HOST && ci->hcd)
++	if (ci->role == USB_ROLE_HOST && ci->hcd)
+ 		host_stop(ci);
+ }
+ 
+@@ -362,7 +362,7 @@ int ci_hdrc_host_init(struct ci_hdrc *ci)
+ 	rdrv->stop	= host_stop;
+ 	rdrv->irq	= host_irq;
+ 	rdrv->name	= "host";
+-	ci->roles[CI_ROLE_HOST] = rdrv;
++	ci->roles[USB_ROLE_HOST] = rdrv;
+ 
+ 	return 0;
+ }
+diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
+index f25d482..5bde0b5 100644
+--- a/drivers/usb/chipidea/otg.c
++++ b/drivers/usb/chipidea/otg.c
+@@ -117,11 +117,11 @@ void hw_write_otgsc(struct ci_hdrc *ci, u32 mask, u32 data)
+  * ci_otg_role - pick role based on ID pin state
+  * @ci: the controller
+  */
+-enum ci_role ci_otg_role(struct ci_hdrc *ci)
++enum usb_role ci_otg_role(struct ci_hdrc *ci)
+ {
+-	enum ci_role role = hw_read_otgsc(ci, OTGSC_ID)
+-		? CI_ROLE_GADGET
+-		: CI_ROLE_HOST;
++	enum usb_role role = hw_read_otgsc(ci, OTGSC_ID)
++		? USB_ROLE_DEVICE
++		: USB_ROLE_HOST;
+ 
+ 	return role;
+ }
+@@ -164,7 +164,7 @@ static int hw_wait_vbus_lower_bsv(struct ci_hdrc *ci)
+ 
+ static void ci_handle_id_switch(struct ci_hdrc *ci)
+ {
+-	enum ci_role role = ci_otg_role(ci);
++	enum usb_role role = ci_otg_role(ci);
+ 
+ 	if (role != ci->role) {
+ 		dev_dbg(ci->dev, "switching from %s to %s\n",
+@@ -172,7 +172,7 @@ static void ci_handle_id_switch(struct ci_hdrc *ci)
+ 
+ 		ci_role_stop(ci);
+ 
+-		if (role == CI_ROLE_GADGET &&
++		if (role == USB_ROLE_DEVICE &&
+ 				IS_ERR(ci->platdata->vbus_extcon.edev))
+ 			/*
+ 			 * Wait vbus lower than OTGSC_BSV before connecting
+@@ -185,7 +185,7 @@ static void ci_handle_id_switch(struct ci_hdrc *ci)
+ 
+ 		ci_role_start(ci, role);
+ 		/* vbus change may have already occurred */
+-		if (role == CI_ROLE_GADGET)
++		if (role == USB_ROLE_DEVICE)
+ 			ci_handle_vbus_change(ci);
+ 	}
+ }
+diff --git a/drivers/usb/chipidea/otg.h b/drivers/usb/chipidea/otg.h
+index 4f8b817..f64bfc6 100644
+--- a/drivers/usb/chipidea/otg.h
++++ b/drivers/usb/chipidea/otg.h
+@@ -12,7 +12,7 @@ u32 hw_read_otgsc(struct ci_hdrc *ci, u32 mask);
+ void hw_write_otgsc(struct ci_hdrc *ci, u32 mask, u32 data);
+ int ci_hdrc_otg_init(struct ci_hdrc *ci);
+ void ci_hdrc_otg_destroy(struct ci_hdrc *ci);
+-enum ci_role ci_otg_role(struct ci_hdrc *ci);
++enum usb_role ci_otg_role(struct ci_hdrc *ci);
+ void ci_handle_vbus_change(struct ci_hdrc *ci);
+ static inline void ci_otg_queue_work(struct ci_hdrc *ci)
+ {
+diff --git a/drivers/usb/chipidea/otg_fsm.c b/drivers/usb/chipidea/otg_fsm.c
+index 6ed4b00..78c96a1 100644
+--- a/drivers/usb/chipidea/otg_fsm.c
++++ b/drivers/usb/chipidea/otg_fsm.c
+@@ -547,10 +547,10 @@ static int ci_otg_start_host(struct otg_fsm *fsm, int on)
+ 
+ 	if (on) {
+ 		ci_role_stop(ci);
+-		ci_role_start(ci, CI_ROLE_HOST);
++		ci_role_start(ci, USB_ROLE_HOST);
+ 	} else {
+ 		ci_role_stop(ci);
+-		ci_role_start(ci, CI_ROLE_GADGET);
++		ci_role_start(ci, USB_ROLE_DEVICE);
+ 	}
+ 	return 0;
+ }
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index 6a5ee8e..e1d745f7 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -1606,7 +1606,7 @@ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
+ 	 * Data+ pullup controlled by OTG state machine in OTG fsm mode;
+ 	 * and don't touch Data+ in host mode for dual role config.
+ 	 */
+-	if (ci_otg_is_fsm_mode(ci) || ci->role == CI_ROLE_HOST)
++	if (ci_otg_is_fsm_mode(ci) || ci->role == USB_ROLE_DEVICE)
+ 		return 0;
+ 
+ 	pm_runtime_get_sync(&ci->gadget.dev);
+@@ -1973,7 +1973,7 @@ static int udc_start(struct ci_hdrc *ci)
+  */
+ void ci_hdrc_gadget_destroy(struct ci_hdrc *ci)
+ {
+-	if (!ci->roles[CI_ROLE_GADGET])
++	if (!ci->roles[USB_ROLE_DEVICE])
+ 		return;
+ 
+ 	usb_del_gadget_udc(&ci->gadget);
+@@ -2039,7 +2039,7 @@ int ci_hdrc_gadget_init(struct ci_hdrc *ci)
+ 
+ 	ret = udc_start(ci);
+ 	if (!ret)
+-		ci->roles[CI_ROLE_GADGET] = rdrv;
++		ci->roles[USB_ROLE_DEVICE] = rdrv;
+ 
+ 	return ret;
+ }
+-- 
+2.7.4
+
