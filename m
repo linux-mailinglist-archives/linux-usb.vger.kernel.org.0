@@ -2,165 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD60C84BB3
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 14:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BA184BE6
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 14:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729625AbfHGMd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 08:33:56 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:40748 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727171AbfHGMd4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 08:33:56 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 3B12F8036C; Wed,  7 Aug 2019 14:33:40 +0200 (CEST)
-Date:   Wed, 7 Aug 2019 14:33:51 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Paolo Valente <paolo.valente@linaro.org>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: slab corruption in 5.3-rc3 while inserting an usb key
-Message-ID: <20190807123351.GA14012@amd>
-References: <20190807101031.GA18652@amd>
- <2B3F60AA-6851-46D0-A6E0-049BD54D5256@linaro.org>
+        id S2387809AbfHGMoC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 08:44:02 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:36238 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387777AbfHGMoB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 08:44:01 -0400
+Received: by mail-pl1-f194.google.com with SMTP id k8so40680949plt.3;
+        Wed, 07 Aug 2019 05:44:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qXLu3bh5aH4CnTaB9M6wXZJXk1SqGmlbkLW4YNgY6oY=;
+        b=uO63s1LgDEohVzd+s+Ls6Xzl9O4U1I29sT0C6XcSN8JV8xKV1TU5fq//mMMqfTRZVr
+         JGwKFyy5l2+I36IwKGzdYAtsBIBjxNzkqwHPl9lHCiQDx3vJSEDSJQFEcFAvduDyWzEn
+         TLb7Nw00zH/aGchFkEqu9RMRzd6MWH0hMVKHQF9ghBmL9HTaF3KhVPtNWUPYBBlcw+T9
+         BEOkq3W7/NxDInxBc5jCzd49OXRRaegnNg20vGbAxVy6c/gCFT9KWzXLDyIs1Ht5PLm6
+         Im5dJrQF/QT+qH3HHLi7Em/S/5aM1gesaCbRF7PBk/ZT0sjcWoIQLqgO8Mmj/diOL0or
+         tqFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qXLu3bh5aH4CnTaB9M6wXZJXk1SqGmlbkLW4YNgY6oY=;
+        b=UxSphfAFkxgwEeV4/Zkl5stNi/7/8eBTM2l/FZ1P+Tse55SpJyxz+IhoEuyMtrVsgZ
+         Px0RQvpatxzOh/o6inzu+wqAVrdl66Hsxu4ZC78KLf2uCJ8nqy40YQmH31+uodX8pNuF
+         mPlfjLs1oJWCaDHiGXrfvK6VpD+XItM2UwdMSLMsNjajeLTQ2ufWCzxS0/RfdwBqzagc
+         YhTXblXDxKbUzaApwraHn3XE4CGNveH+cnzYZ8AK0MXQAH2d8w6POTN5FYJoAYDnz8fK
+         NBwijO5BlbSVktac6c+YcezT+1OPGnoAOM7iao/Ucz3/f4mbxXN2Zru4cylG9dFEnFVI
+         l25Q==
+X-Gm-Message-State: APjAAAV3EqVNCE5mbkeokJE5sz+kxJrEMvxBe9LoyecUA84KIso/c/ij
+        uYHG1JvF0cSV78tTdHDlyEM=
+X-Google-Smtp-Source: APXvYqyMnVyQfkuz1/W7XkEFYZ1LgYgL+nfI12mHOHEEipu9E/uVDA0CzpYgULPkjh0rjOwuHcjBZw==
+X-Received: by 2002:a17:90a:ae12:: with SMTP id t18mr8440698pjq.32.1565181841043;
+        Wed, 07 Aug 2019 05:44:01 -0700 (PDT)
+Received: from localhost (fmdmzpr04-ext.fm.intel.com. [192.55.54.39])
+        by smtp.gmail.com with ESMTPSA id f14sm90917824pfn.53.2019.08.07.05.43.59
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 07 Aug 2019 05:44:00 -0700 (PDT)
+Date:   Wed, 7 Aug 2019 14:43:46 +0200
+From:   Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH net-next 5/5] r8152: change rx_frag_head_sz and
+ rx_max_agg_num dynamically
+Message-ID: <20190807144346.00005d2b@gmail.com>
+In-Reply-To: <0835B3720019904CB8F7AA43166CEEB2F18D06C5@RTITMBSVM03.realtek.com.tw>
+References: <1394712342-15778-289-albertk@realtek.com>
+        <1394712342-15778-294-albertk@realtek.com>
+        <20190806151007.75a8dd2c@cakuba.netronome.com>
+        <0835B3720019904CB8F7AA43166CEEB2F18D06C5@RTITMBSVM03.realtek.com.tw>
+X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.32; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="VS++wcV0S1rZb1Fb"
-Content-Disposition: inline
-In-Reply-To: <2B3F60AA-6851-46D0-A6E0-049BD54D5256@linaro.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, 7 Aug 2019 07:12:32 +0000
+Hayes Wang <hayeswang@realtek.com> wrote:
 
---VS++wcV0S1rZb1Fb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Jakub Kicinski [mailto:jakub.kicinski@netronome.com]
+> > Sent: Wednesday, August 07, 2019 6:10 AM  
+> [...]
+> > Please don't expose those via sysfs. Ethtool's copybreak and descriptor
+> > count should be applicable here, I think.  
+> 
+> Excuse me.
+> I find struct ethtool_tunable for ETHTOOL_RX_COPYBREAK.
+> How about the descriptor count?
 
-Hi!
+Look how drivers implement ethtool's set_ringparam ops.
 
-> I hope this has to do with the failure reported by Doug.  I'm
-> finalizing my fix.  I'd appreciate if you could retry with my fix
-> applied.
+Thanks,
+Maciej
 
-Ok, just cc me with the fix ;-).
+> 
+> 
+> Best Regards,
+> Hayes
+> 
+> 
 
-This happened once so far, but I have other crash (when closing
-chromium) that happens a bit too often, might be related.
-
-Best regards,
-									Pavel
-
-
-> > Machine is thinkpad x220. BFQ related?
-> >=20
-> > =09
-> >=20
-> > [ 8224.904413] usb 2-1.1.4: Product: Intenso Twister Line
-> > [ 8224.904421] usb 2-1.1.4: Manufacturer: Alcor Tech
-> > [ 8224.904428] usb 2-1.1.4: SerialNumber: 12102500210755
-> > [ 8224.905778] usb-storage 2-1.1.4:1.0: USB Mass Storage device
-> > detected
-> > [ 8224.906519] scsi host6: usb-storage 2-1.1.4:1.0
-> > [ 8225.938476] scsi 6:0:0:0: Direct-Access     Intenso  Twister Line
-> > 8.07 PQ: 0 ANSI: 4
-> > [ 8225.941857] sd 6:0:0:0: Attached scsi generic sg2 type 0
-> > [ 8225.944342] sd 6:0:0:0: [sdc] 15257600 512-byte logical blocks:
-> > (7.81 GB/7.28 GiB)
-> > [ 8225.945541] sd 6:0:0:0: [sdc] Write Protect is off
-> > [ 8225.945551] sd 6:0:0:0: [sdc] Mode Sense: 23 00 00 00
-> > [ 8225.946669] sd 6:0:0:0: [sdc] Write cache: disabled, read cache:
-> > enabled, doesn't support DPO or FUA
-> > [ 8225.961509]  sdc: sdc1
-> > [ 8225.966286] sd 6:0:0:0: [sdc] Attached SCSI removable disk
-> > [ 8226.351785] FAT-fs (sdc1): Volume was not properly unmounted. Some
-> > data may be corrupt. Please run fsck.
-> > [ 8685.026976] perf: interrupt took too long (3142 > 3141), lowering
-> > kernel.perf_event_max_sample_rate to 63500
-> > [ 8710.270064] Slab corruption (Not tainted): bfq_queue
-> > start=3Dffff8880befb0cd8, len=3D512
-> > [ 8710.270073] Redzone: 0x9f911029d74e35b/0x9f911029d74e35b
-> > [ 8710.270081] Last user: (bfq_put_queue+0xb0/0xe0)
-> > [ 8710.270085] 1f0: 18 e5 44 93 81 88 ff ff 6b 6b 6b 6b 6b 6b 6b a5
-> > ..D.....kkkkkkk.
-> > [ 8710.270092] Prev obj: start=3Dffff8880befb0ac0, len=3D512
-> > [ 8710.270097] Redzone: 0xd84156c5635688c0/0xd84156c5635688c0
-> > [ 8710.270102] Last user: (bfq_get_queue+0x13a/0x290)
-> > [ 8710.270105] 000: 02 00 00 00 00 00 00 00 00 38 a6 95 81 88 ff ff
-> > .........8......
-> > [ 8710.270110] 010: 07 00 03 00 07 00 03 00 00 00 00 00 00 00 00 00
-> > ................
-> > [ 8711.077572] Slab corruption (Not tainted): bfq_queue
-> > start=3Dffff8880c20b7710, len=3D512
-> > [ 8711.077577] Redzone: 0x9f911029d74e35b/0x9f911029d74e35b
-> > [ 8711.077584] Last user: (bfq_put_queue+0xb0/0xe0)
-> > [ 8711.077586] 1f0: 6b 6b 6b 6b 6b 6b 6b 6b 00 00 00 00 00 00 00 00
-> > kkkkkkkk........
-> > [ 8711.077591] Prev obj: start=3Dffff8880c20b74f8, len=3D512
-> > [ 8711.077593] Redzone: 0x9f911029d74e35b/0x9f911029d74e35b
-> > [ 8711.077596] Last user: (bfq_put_queue+0xb0/0xe0)
-> > [ 8711.077598] 000: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b
-> > kkkkkkkkkkkkkkkk
-> > [ 8711.077601] 010: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b
-> > kkkkkkkkkkkkkkkk
-> > [ 8711.077604] Next obj: start=3Dffff8880c20b7928, len=3D512
-> > [ 8711.077606] Redzone: 0x9f911029d74e35b/0x9f911029d74e35b
-> > [ 8711.077609] Last user: (bfq_put_queue+0xb0/0xe0)
-> > [ 8711.077611] 000: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b
-> > kkkkkkkkkkkkkkkk
-> > [ 8711.077614] 010: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b
-> > kkkkkkkkkkkkkkkk
-> > [ 8764.014525] Slab corruption (Not tainted): bfq_queue
-> > start=3Dffff888049b0c108, len=3D512
-> > [ 8764.014534] Redzone: 0x9f911029d74e35b/0x9f911029d74e35b
-> > [ 8764.014542] Last user: (bfq_put_queue+0xb0/0xe0)
-> > [ 8764.014546] 1f0: 6b 6b 6b 6b 6b 6b 6b 6b 00 00 00 00 00 00 00 00
-> > kkkkkkkk........
-> > [ 8764.014553] Next obj: start=3Dffff888049b0c320, len=3D512
-> > [ 8764.014558] Redzone: 0xd84156c5635688c0/0xd84156c5635688c0
-> > [ 8764.014562] Last user: (bfq_get_queue+0x13a/0x290)
-> > [ 8764.014566] 000: 01 00 00 00 00 00 00 00 00 50 df 96 81 88 ff ff
-> > .........P......
-> > [ 8764.014571] 010: 04 00 02 00 04 00 02 00 00 00 00 00 00 00 00 00
-> > ................
-> > [10593.478355] perf: interrupt took too long (3936 > 3927), lowering
-> > kernel.perf_event_max_sample_rate to 50750
-> > [10745.055650] Slab corruption (Not tainted): bfq_queue
-> > start=3Dffff88818f6a9088, len=3D512
-> > [10745.055660] Redzone: 0x9f911029d74e35b/0x9f911029d74e35b
-> > [10745.055670] Last user: (bfq_put_queue+0xb0/0xe0)
-> > [10745.055675] 1f0: a0 f6 71 d4 80 88 ff ff 6b 6b 6b 6b 6b 6b 6b a5
-> > ..q.....kkkkkkk.
-> > [10745.055683] Next obj: start=3Dffff88818f6a92a0, len=3D512
-> > [10745.055688] Redzone: 0xd84156c5635688c0/0xd84156c5635688c0
-> > [10745.055693] Last user: (bfq_get_queue+0x13a/0x290)
-> > [10745.055698] 000: 01 00 00 00 00 00 00 00 00 38 a6 95 81 88 ff ff
-> > .........8......
-> > [10745.055704] 010: 04 00 02 00 04 00 02 00 00 00 00 00 00 00 00 00
-> > ................
-> > [12141.101100] usb 2-1.1.4: USB disconnect, device number 8
-> > pavel@duo:/data/l/linux-olpc$
-
-
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---VS++wcV0S1rZb1Fb
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEUEARECAAYFAl1KxS8ACgkQMOfwapXb+vJ9NACYwqeTt7xgZPJPX09UhDpJpNBG
-8QCfZi+YDOoVeQA9d1QPUvUqvcvQy1s=
-=Kccd
------END PGP SIGNATURE-----
-
---VS++wcV0S1rZb1Fb--
