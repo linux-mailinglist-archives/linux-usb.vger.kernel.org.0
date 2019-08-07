@@ -2,172 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B7B84E03
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 15:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9798B84E1A
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 16:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387843AbfHGN4B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 09:56:01 -0400
-Received: from mail-ot1-f70.google.com ([209.85.210.70]:45428 "EHLO
-        mail-ot1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387476AbfHGN4B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 09:56:01 -0400
-Received: by mail-ot1-f70.google.com with SMTP id b25so54818089otp.12
-        for <linux-usb@vger.kernel.org>; Wed, 07 Aug 2019 06:56:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Bk+2r34Stl2rUBhRx5Gcygsy2Z7wB8nfPpt4MphB9xU=;
-        b=EDOAAfN9aHkbJXb5WRsNIyLvSXzq2RRp4W2/DJsvpdAHDVq6uplYlOAvNXS+VSss8P
-         N/UWymUrddAAapZD46sbA7EuQLnJrwtbUY0uNWzYEWBMRxASzMy0FG2Ropw06M56YmYz
-         bXmqgQwdkgc2hl9sIpP9/Ng+vv8cN7HYZeH8awcqx1biViVd05SaybTs6RLHkTeFaE8p
-         ZdfNeOJFvRleomoAEAva07BpOti1m6ciyRe5pST3MB3qYVBhV7nnZ68MhblFNfBgiSwA
-         9bk5QEeY/VgyKztME9T77pWbLaNhep4E1RuqHJ77KvrfXILB+VLgRWDZE4oJZW+djQJk
-         gIxQ==
-X-Gm-Message-State: APjAAAUb1ulwQhxj7T11xmKFujQyoQIdrXbsUFQKJ5z3oVentKUx/V/R
-        hhhhyc9Y6BLj+2qC1puos2yeTx/Tja13RVlK0rnX6GT1PzY+
-X-Google-Smtp-Source: APXvYqz9nLua2ezFhBEBS/7mQaa0WuGqbxesIHCg0yzqzhVCeqS0n/CSMvTS+LmlmuK/6ZRJZNEbJm6WQPnpQIDiuEk1W+eOhdu0
+        id S2387804AbfHGOB5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 10:01:57 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:42410 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2387713AbfHGOB4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 10:01:56 -0400
+Received: (qmail 2128 invoked by uid 2102); 7 Aug 2019 10:01:55 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 7 Aug 2019 10:01:55 -0400
+Date:   Wed, 7 Aug 2019 10:01:55 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     syzbot <syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Cesar Miquel <miquel@df.uba.ar>,
+        <rio500-users@lists.sourceforge.net>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: possible deadlock in open_rio
+In-Reply-To: <CAAeHK+zLrYaE+Kt6AULPjKhBNknxPBWncfkTDmm3eFoLSpsffw@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1908071000560.1514-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:3b03:: with SMTP id i3mr9381073ioa.302.1565186160323;
- Wed, 07 Aug 2019 06:56:00 -0700 (PDT)
-Date:   Wed, 07 Aug 2019 06:56:00 -0700
-In-Reply-To: <CAAeHK+zDVmxgjkZ6dR-sk1=99-Aj=Z4wwxaRCaOXeuYYG3-bUw@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000017f30b058f874dc2@google.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-From:   syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, oneukum@suse.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, 7 Aug 2019, Andrey Konovalov wrote:
 
-syzbot has tested the proposed patch but the reproducer still triggered  
-crash:
-KASAN: use-after-free Read in device_release_driver_internal
+> On Tue, Aug 6, 2019 at 9:13 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, 1 Aug 2019, syzbot wrote:
+> >
+> > > Hello,
+> > >
+> > > syzbot found the following crash on:
+> > >
+> > > HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
+> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=136b6aec600000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=7bbcbe9c9ff0cd49592a
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > >
+> > > Unfortunately, I don't have any reproducer for this crash yet.
+> > >
+> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > Reported-by: syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com
+> > >
+> > > ======================================================
+> > > WARNING: possible circular locking dependency detected
+> > > 5.3.0-rc2+ #23 Not tainted
+> > > ------------------------------------------------------
+> >
+> > Andrey:
+> >
+> > This should be completely reproducible, since it's a simple ABBA
+> > locking violation.  Maybe just introducing a time delay (to avoid races
+> > and give the open() call time to run) between the gadget creation and
+> > gadget removal would be enough to do it.
+> 
+> I've tried some simple approaches to reproducing this, but failed.
+> Should this require two rio500 devices to trigger?
 
-usb 4-1: USB disconnect, device number 2
-==================================================================
-BUG: KASAN: use-after-free in __lock_acquire+0x3a5d/0x5340  
-kernel/locking/lockdep.c:3665
-Read of size 8 at addr ffff8881d4a54510 by task kworker/0:3/2876
+No, one device should be enough.  Just plug it in and then try to open 
+the character device file.
 
-CPU: 0 PID: 2876 Comm: kworker/0:3 Not tainted 5.2.0-rc6+ #1
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description+0x67/0x231 mm/kasan/report.c:188
-  __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
-  kasan_report+0xe/0x20 mm/kasan/common.c:614
-  __lock_acquire+0x3a5d/0x5340 kernel/locking/lockdep.c:3665
-  lock_acquire+0x100/0x2b0 kernel/locking/lockdep.c:4303
-  __mutex_lock_common kernel/locking/mutex.c:926 [inline]
-  __mutex_lock+0xf9/0x12b0 kernel/locking/mutex.c:1073
-  device_release_driver_internal+0x23/0x4c0 drivers/base/dd.c:1109
-  bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
-  device_del+0x460/0xb80 drivers/base/core.c:2274
-  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
-  usb_disconnect+0x284/0x830 drivers/usb/core/hub.c:2199
-  hub_port_connect drivers/usb/core/hub.c:4949 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x13bd/0x3550 drivers/usb/core/hub.c:5441
-  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x30b/0x410 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Alan Stern
 
-Allocated by task 22:
-  save_stack+0x1b/0x80 mm/kasan/common.c:71
-  set_track mm/kasan/common.c:79 [inline]
-  __kasan_kmalloc mm/kasan/common.c:489 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:462
-  kmalloc include/linux/slab.h:547 [inline]
-  kzalloc include/linux/slab.h:742 [inline]
-  usb_set_configuration+0x2c4/0x1670 drivers/usb/core/message.c:1846
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  usb_new_device.cold+0x6a4/0xe61 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1abd/0x3550 drivers/usb/core/hub.c:5441
-  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x30b/0x410 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 2876:
-  save_stack+0x1b/0x80 mm/kasan/common.c:71
-  set_track mm/kasan/common.c:79 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:451
-  slab_free_hook mm/slub.c:1421 [inline]
-  slab_free_freelist_hook mm/slub.c:1448 [inline]
-  slab_free mm/slub.c:2994 [inline]
-  kfree+0xd7/0x280 mm/slub.c:3949
-  device_release+0x71/0x200 drivers/base/core.c:1064
-  kobject_cleanup lib/kobject.c:691 [inline]
-  kobject_release lib/kobject.c:720 [inline]
-  kref_put include/linux/kref.h:65 [inline]
-  kobject_put+0x171/0x280 lib/kobject.c:737
-  put_device+0x1b/0x30 drivers/base/core.c:2210
-  klist_put+0xce/0x170 lib/klist.c:221
-  bus_remove_device+0x3a4/0x4a0 drivers/base/bus.c:552
-  device_del+0x460/0xb80 drivers/base/core.c:2274
-  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
-  usb_disconnect+0x284/0x830 drivers/usb/core/hub.c:2199
-  hub_port_connect drivers/usb/core/hub.c:4949 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x13bd/0x3550 drivers/usb/core/hub.c:5441
-  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x30b/0x410 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8881d4a54400
-  which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 272 bytes inside of
-  2048-byte region [ffff8881d4a54400, ffff8881d4a54c00)
-The buggy address belongs to the page:
-page:ffffea0007529400 refcount:1 mapcount:0 mapping:ffff8881dac02800  
-index:0x0 compound_mapcount: 0
-flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 ffffea000753da00 0000000500000005 ffff8881dac02800
-raw: 0000000000000000 00000000000f000f 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8881d4a54400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d4a54480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff8881d4a54500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                          ^
-  ffff8881d4a54580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d4a54600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
-Tested on:
-
-commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=132aca2c600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > Is there any way you can test this?
+> 
+> Not yet.
+> 
+> >
+> > Alan Stern
 
