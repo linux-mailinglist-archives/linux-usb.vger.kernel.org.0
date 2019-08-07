@@ -2,85 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A790384DD5
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 15:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D63084DFA
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 15:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388348AbfHGNqx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 09:46:53 -0400
-Received: from mail-pl1-f180.google.com ([209.85.214.180]:33689 "EHLO
-        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388333AbfHGNqw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 09:46:52 -0400
-Received: by mail-pl1-f180.google.com with SMTP id c14so40828221plo.0
-        for <linux-usb@vger.kernel.org>; Wed, 07 Aug 2019 06:46:52 -0700 (PDT)
+        id S2387998AbfHGNyE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 09:54:04 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:44044 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387945AbfHGNyD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 09:54:03 -0400
+Received: by mail-pl1-f194.google.com with SMTP id t14so40909531plr.11
+        for <linux-usb@vger.kernel.org>; Wed, 07 Aug 2019 06:54:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ySKqQSG2Sdtb6NR7X5LBOcrvnI79dZs/JcxGOAF7z8s=;
-        b=CBNtQWhZ4fSsR34rE64Wm2VTpkIt5MmcmcO/RsPUtQY6k/6KjqInWnu0lk3clDPf7E
-         bHESMJKisHtEChM7g3O7jPk+cyzVRc/MBuNvQKDysVLAV1Qm6o71U2LXB2PN5zter2BQ
-         pvUyB4WFpXx2e+dDFbcv2cMR3Cz7gtY4hdqYP5NGn9viFBzkSTxIe/+eZov9xSj74/rj
-         w7blLMQZGVOVq7HNM7ubADXYuT1UDy6uXmRacZ1VF5sJyp7PQnz0mMsPnWhSYH+x5mOJ
-         TdNVFYWGpGZ4/Qa+QeeHoVSmnJnLUsnDeuLRlrYUUWfZr0bnih/B/QUzhdAgRs2gq1Y6
-         67bQ==
+        bh=RoWuMVNmRfMP6twJoSi1+gPLSwhvWNnJuHSrIbb4GeQ=;
+        b=eyUcy5z6yfw7W/XYFZBrztR051qXApfEiFeV/KKMElwaltRh01FBH4xOMriqmhXp0S
+         n/v5K2gv8DkzWqmgi3OPIu/uZeatsk/e4eUzGdC/tnfmx7B5olD03Ys6HOFk0rzfIFkk
+         oA/DgVgpEyMOza2fUdSzLIot4e5OEk2/nTGtVCQ2ueoFhiMdtb2PXRsIn7WBf++sEABC
+         Yi2PICeym++vGALaVMd2XCJIW5JRrrpqhh+wohmHf72c1gY2dgUH/Ba6AsPkvF3kqNnc
+         T57wge3JXy4SGLqEQyZQTkK0m1+nxgiYoRdzni+bWhDOBzPPRY7SqyxSbC2ICet8Abbo
+         9JdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ySKqQSG2Sdtb6NR7X5LBOcrvnI79dZs/JcxGOAF7z8s=;
-        b=r76HoZK0/rsb/rpw3f0KwQH/CSH3IdiotfOi/SaB7v8KYQFX4Yyxw9wPoXp0aRVVKw
-         mUc2Ukzu0/nhBbLFe++2S6RnbsavD1qSnSp7IO6k6IfQzpRAj8j/pnjX6FrrehjC4FfU
-         b/riu/4PoLvZfKm3QP5VnB3lsWmL9fksc+xxseCorMeCxC7DMI5vs9jhUv0hUDwKaZI7
-         UeqZ+sL9yNU/KsJZBqrElQSQoOtebJNy+dyq60EWfQsmVvZxzwvPZaOx4TEMSILDZ9vE
-         1tBgNpgfEZVej/O9yBDDWp/JDj/NssGz370hTN5Ho4Hq1jdlPWXcEehUEGiUue37fjSN
-         2okA==
-X-Gm-Message-State: APjAAAUxsRfLXSj5xK33UJfnXscMVHSeQJlzoKOWlbMZpASQy+POBCJT
-        gp7kuZmuxoCnBg0v/D5NwRBnhcv7FXzrYkhJ2A6IsobhyKk=
-X-Google-Smtp-Source: APXvYqwuJwIi1+8bhY+iSZWSE7B73AMVMzCQHsoMCu3BHZ260yvxNMQ9E/NW99umFwPd3dN4BLTvVPw5fH0LbL1UhJk=
-X-Received: by 2002:a63:3006:: with SMTP id w6mr7898479pgw.440.1565185611746;
- Wed, 07 Aug 2019 06:46:51 -0700 (PDT)
+        bh=RoWuMVNmRfMP6twJoSi1+gPLSwhvWNnJuHSrIbb4GeQ=;
+        b=PlcElI1S2HAnGK1tEaDIsXEnOpFV75ExgjwLtNB4ZnffSpU2nQ0EDcC/nF3LvwShsY
+         vu7ZpMPOHQtQX/89HQHHdmjc5EPV8C0EJFdFLIydoxwaZS6qijCfMVWI3hDHwnnP4Ok2
+         rSHDjKE3qr6oPzvEVK+8oh9pFNeoaxeGfLwVpKypY3XuLq6wdfKA4b6e2V9cH2xarB8K
+         KpVvq03PHgpQn3fVlGJbTHtLB326AqPRD0l713qFRmgFEHPMQGlCBC0Swue5tMmo7Cwo
+         CMl1AkZKxd+xnPnC3YwNen/lKvjdNrYQzImxsH6R74MmpzjmUbrZXCP7/F8QIYbhljDX
+         acRQ==
+X-Gm-Message-State: APjAAAXwu/yrMdL4KWc+LtYyeBGVuSqe79xtlbcDwq3KbBYyyajcix2D
+        qj+d1RfaScIlrFDP1uqP39sJxOcn4TYEJbsvoRDdJA==
+X-Google-Smtp-Source: APXvYqyvTTzfZlxz9lgLLA6e7+UPFvYSd1PebuD8n5S/aCiPLUwVFCoM3CmHUJckUsWy/8R2gqFgH/Uhfolr9hDtZBQ=
+X-Received: by 2002:a63:c442:: with SMTP id m2mr8020736pgg.286.1565186041896;
+ Wed, 07 Aug 2019 06:54:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <Pine.LNX.4.44L0.1908061009450.1571-100000@iolanthe.rowland.org> <1565105624.8136.32.camel@suse.com>
-In-Reply-To: <1565105624.8136.32.camel@suse.com>
+References: <00000000000088af91058f0fe377@google.com> <Pine.LNX.4.44L0.1908061509040.1571-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1908061509040.1571-100000@iolanthe.rowland.org>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 7 Aug 2019 15:46:40 +0200
-Message-ID: <CAAeHK+wJ_26rFeeQkfELO5nXn57-1Wo4iodLJNY=9iTeaduHyA@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>,
+Date:   Wed, 7 Aug 2019 15:53:50 +0200
+Message-ID: <CAAeHK+zLrYaE+Kt6AULPjKhBNknxPBWncfkTDmm3eFoLSpsffw@mail.gmail.com>
+Subject: Re: possible deadlock in open_rio
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
+        USB list <linux-usb@vger.kernel.org>,
+        Cesar Miquel <miquel@df.uba.ar>,
+        rio500-users@lists.sourceforge.net,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 6, 2019 at 5:34 PM Oliver Neukum <oneukum@suse.com> wrote:
+On Tue, Aug 6, 2019 at 9:13 PM Alan Stern <stern@rowland.harvard.edu> wrote:
 >
-> Am Dienstag, den 06.08.2019, 10:19 -0400 schrieb Alan Stern:
-> > In any case, I don't know if this missing "get" would cause the
-> > problem, but it might well.
+> On Thu, 1 Aug 2019, syzbot wrote:
 >
-> Hi,
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=136b6aec600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=7bbcbe9c9ff0cd49592a
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> >
+> > Unfortunately, I don't have any reproducer for this crash yet.
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com
+> >
+> > ======================================================
+> > WARNING: possible circular locking dependency detected
+> > 5.3.0-rc2+ #23 Not tainted
+> > ------------------------------------------------------
 >
-> upon further thought, this should be automated. Checking for
-> refcount leaks is KASAN's job. In particular, refcounts
-> should not
+> Andrey:
 >
-> * decrease in probe()
-> * increase in disconnect()
-> * change in case probe() fails
+> This should be completely reproducible, since it's a simple ABBA
+> locking violation.  Maybe just introducing a time delay (to avoid races
+> and give the open() call time to run) between the gadget creation and
+> gadget removal would be enough to do it.
 
-It's probably a job for some other refcount debugging tool, but yes,
-it would be nice to have a detector for this kind of stuff. It will
-probably require some annotations in each place we want this kind of
-checks to be performed.
+I've tried some simple approaches to reproducing this, but failed.
+Should this require two rio500 devices to trigger?
 
 >
->         Regards
->                 Oliver
+> Is there any way you can test this?
+
+Not yet.
+
+>
+> Alan Stern
 >
