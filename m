@@ -2,186 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CBB84A5A
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 13:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542DE84B02
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 13:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727045AbfHGLJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 07:09:13 -0400
-Received: from mga04.intel.com ([192.55.52.120]:40492 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726734AbfHGLJN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 7 Aug 2019 07:09:13 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 04:09:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,357,1559545200"; 
-   d="scan'208";a="325932240"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by orsmga004.jf.intel.com with ESMTP; 07 Aug 2019 04:09:10 -0700
-Subject: Re: EHSET USB testing
-To:     Rob Weber <rob@gnarbox.com>, Peter Chen <hzpeterchen@gmail.com>
-Cc:     Evan Gates <evan@gnarbox.com>, linux-usb@vger.kernel.org
-References: <20190802200325.22897-1-evan@gnarbox.com>
- <CAL411-q1Hxkh+i3WRcAPM7QZ_yC-96jBfAx-t4PRJH7Cs1fvjA@mail.gmail.com>
- <20190807042500.GA10249@coops>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <e0b29b09-e4d7-80c9-dc27-6088a8e92bc0@linux.intel.com>
-Date:   Wed, 7 Aug 2019 14:11:03 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1729550AbfHGLsG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 07:48:06 -0400
+Received: from mail-ot1-f69.google.com ([209.85.210.69]:34154 "EHLO
+        mail-ot1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726773AbfHGLsG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 07:48:06 -0400
+Received: by mail-ot1-f69.google.com with SMTP id 20so10758544oty.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 Aug 2019 04:48:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=GoZRE87G5nmPn2K8yJgOw8W+FOPUWswgfdnrBbwx8HE=;
+        b=Z7B6TLY5ObjMC755Ala/HptTEoxn1E8Epc6JOn5tSFruIVl25TXjpH9A4LmEuJ0xRl
+         ktBgJIIxUzIdglolgO8e6apoFVrXIGfS09koztbvlWQyLsbT83wtaFd2SaNpaviz2eI8
+         SfFtVX7lJgBqqZZJjn59vylBrdX3zKnB7xaGg/3LtdIEgLFSC23gzz//NTbe2m8q3/Vs
+         2k6/3KCSrPVLgkXl6HpbyBZGrU/PZHjjc3k035yFiWZcmO/a8T4m2uC2P4hdxxE6HHtk
+         JIGOB7e+TMUL+9/uuovL5vNLcsam2Z9bGqBEGMuK5gUA5QD6Wa2hUJo1UOHLLSQ6DfKQ
+         3Mkw==
+X-Gm-Message-State: APjAAAXgBS0k31Y4e42Sq1gEeBvkpFIsImVpRZvDseFKtzJd90K2/nna
+        EJ+b/EoChos6dU+QzyTmVP8zHgLCjw99VrbPBVQrg+/15z+s
+X-Google-Smtp-Source: APXvYqxNxE4YTZ+L2Gw7fd493v4JQnlEXMFWmmOWo0R8nRsooRqqZBNEK5vZN+wNttdNxrhC10CHlgomhtLGMzk/HML3NnGXpeMK
 MIME-Version: 1.0
-In-Reply-To: <20190807042500.GA10249@coops>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a6b:6d08:: with SMTP id a8mr8669980iod.191.1565178485118;
+ Wed, 07 Aug 2019 04:48:05 -0700 (PDT)
+Date:   Wed, 07 Aug 2019 04:48:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009d9e43058f85838c@google.com>
+Subject: KMSAN: uninit-value in smsc75xx_wait_eeprom
+From:   syzbot <syzbot+532222e4d7ddadadd1c8@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, steve.glendinning@shawell.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7.8.2019 7.25, Rob Weber wrote:
-> Hi Everyone,
-> 
-> (Pinging Mathias regarding xHCI support of the USB 2.0 test modes)
-> 
-> On Mon, Aug 05, 2019 at 02:07:23PM +0800, Peter Chen wrote:
->> On Sun, Aug 4, 2019 at 10:45 AM Evan Gates <evan@gnarbox.com> wrote:
->>>
->>> I'm trying to get my device to pass the EHSET tests.  I found the thread
->>> "Using EHSET module" from March.  I'm having similar issues.
->>>
->>> I don't have access to the PID VID board that the lab uses.  Instead I'm
->>> using another computer setup as a mass storage gadget but set the VID:PID
->>> to 1a0a:0102 (TEST_J).  If that sounds like a problem or there is another,
->>> better way to do this please let me know.
->>>
->>>> The usb-storage driver bound to your device first.  Try building a
->>>> kernel without that driver and then it shoudl bind to the other driver.
->>>>
->>>> Or manually bind the ehset driver to your device through sysfs.  Read up
->>>> on the documentation for the "new_id" and "bind" and "unbind" sysfs
->>>> files for how to do that.
->>>
->>> I did this.  I was able to unbind from usb-storage but binding to
->>> usb_ehset_test failed with error -32 (AFAICT EPIPE).  I tried both the
->>> usb_ehset_test/bind and usb_ehset_test/new_id methods.  In both cases
->>> I got the same error.
->>>
->>> I did another build without usb-storage.  Now I don't have to go through
->>> the unbind step but I still get the same error while probing.
->>>
->>>          [  296.089877] usb 1-1: new high-speed USB device number 2 using xhci_hcd
->>>          [  296.271081] usb_ehset_test: probe of 1-1:1.0 failed with error -32
->>>
->>> I notice that it says "using xhci_hcd."  Is that a problem?  Does it
->>> need to be ehci?  I tried a build without xhci but that caused other
->>> problems for me.
->>>
->>> 1) Can I use a computer in device mode to present a VID:PID to get into
->>> EHSET mode?  If so how should I do that?
->>>
->>
->> Afaik, you can't. No Host computer will act as USB device. You may try
->> to configure your box as USB device mode, for gadget driver, you could
->> using legacy g_zero module, or source_sink function using configfs.
->>
->>> 2) What else do I need to do in order to get my box into EHSET mode?
->> Only thing is your box need to be at host mode. For testing USB2 for xHCI,
->> the mainline code should not support TEST_SINGLE_STEP_SET_FEATURE
->> at my last access.
-> 
-> Today I was able to get access to a PID/VID test fixture that is used in
-> USB 2.0 EHSET testing. Some of the major findings include:
-> 
-> 1. The only test mode that works properly is
->     TEST_HS_HOST_PORT_SUSPEND_RESUME. All other probes of the ehset module
->     fail with errno -32 as shown above. This test mode is likely the only
->     one to work because it does not set the PORT_FEAT_TEST feature for the
->     appropriate port, but rather sets and clears the PORT_FEAT_SUSPEND feature.
-> 
-> 2. The same issue was observed on not only our custom hardware, but also
->     a Dell XPS 13 running Ubuntu 18.04 with kernel version 4.15. I've
->     attached the dmesg logs with xhci_hcd dynamic debug enabled for both
->     hosts. The logs were captured while testing the TEST_PACKET test
->     mode, but the logs looked similar for every other rest mode besides
->     HS_HOST_PORT_SUSPEND_RESUME.
-> 
-> 
-> Mathias, I would appreciate your feedback on the attached dmesg logs
-> with xhci_hcd dynamic debug enabled. If you have a moment, could you
-> please take a look at the logs and let me know if there are any clues as
-> to why the test mode is not working with xhci_hcd? I've also attached
-> the lsusb output for this particular EHSET test fixture made by Allion.
-> 
-> I've been digging into the xHCI specification to see what details it
-> might contain about the USB 2.0 test modes we are trying to use.
-> Section 4.19.6 describes the proper sequence for enabling the USB 2.0
-> port test modes. This requires setting the appropriate bits in the USB
-> 2.0 PORTPMSC register, which is described in full detail in section
-> 5.4.9.2. It's clear that xHCI should support the EHSET test modes,
-> but we're not able to set the appropriate port features for some reason.
-> 
-> My next thought is to double-check the logic of the ehset driver as it
-> relates to xhci_hcd. I would like to make sure that we are enabling the
-> USB 2.0 test modes according to the xHCI spec. I'm concerned that we
-> might be experiencing an error because we aren't setting the test mode
-> acording to section 4.19.6 of the xHCI specification.
-> 
-> Thanks in advance for reviewing the logs, Mathias! I appreciate any time
-> and feedback you may be able to provide. Let me know if you have any
-> further questions or need more information from me. I look forward to
-> hearing from you soon!
-> 
+Hello,
 
-In the XPS case there might be a hub between the roothub and your device,
-It's possible the SetPortFeature(PORT_TEST) request is sent to ep0 of that
-hub instead of the xhci roothub, causing a stall and return -EPIPE:  (-32)
+syzbot found the following crash on:
 
-Log shows device is usb 1-1.1, and endpoint0 is stalling:
+HEAD commit:    ae0c578a kmsan: include gfp.h from kmsan.h
+git tree:       kmsan
+console output: https://syzkaller.appspot.com/x/log.txt?x=10e4f474600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=27abc558ecb16a3b
+dashboard link: https://syzkaller.appspot.com/bug?extid=532222e4d7ddadadd1c8
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
 
-[110706.362119] usb 1-1.1: Product: USB-VPID
-...
-[110706.363205] xhci_hcd 0000:00:14.0: Stalled endpoint for slot 2 ep 0
-[110706.363214] xhci_hcd 0000:00:14.0: Cleaning up stalled endpoint ring
-[110706.363264] xhci_hcd 0000:00:14.0: Giveback URB 00000000c9facae3, len = 0, expected = 0, status = -32
-[110706.363282] xhci_hcd 0000:00:14.0: Successful Set TR Deq Ptr cmd, deq = @268c83930
-[110706.363306] usb_ehset_test: probe of 1-1.1:1.0 failed with error -32
+Unfortunately, I don't have any reproducer for this crash yet.
 
-For the other case the SetPortFeature(PORT_TEST) request should be handled in xhci-hub.c
-xhci_hub_control()
-...
-     case USB_PORT_FEAT_TEST:
-         /* 4.19.6 Port Test Modes (USB2 Test Mode) */
-         if (hcd->speed != HCD_USB2)
-             goto error;
-         if (test_mode > TEST_FORCE_EN || test_mode < TEST_J)
-             goto error;
-         retval = xhci_enter_test_mode(xhci, test_mode, wIndex, &flags);
-             break;
-...
-error:
-     retval = -EPIPE;
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+532222e4d7ddadadd1c8@syzkaller.appspotmail.com
 
-The first thing xhci_enter_test_mode() does is print a
-"Disable all slots" debug message, it's missing from your logs, so I think
-we never got that far.
+usb 2-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 2-1: config 0 descriptor??
+smsc75xx v1.0.0
+==================================================================
+BUG: KMSAN: uninit-value in smsc75xx_wait_eeprom+0x1fb/0x3d0  
+drivers/net/usb/smsc75xx.c:307
+CPU: 1 PID: 10983 Comm: kworker/1:5 Not tainted 5.3.0-rc3+ #16
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x162/0x2d0 mm/kmsan/kmsan_report.c:109
+  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:294
+  smsc75xx_wait_eeprom+0x1fb/0x3d0 drivers/net/usb/smsc75xx.c:307
+  smsc75xx_read_eeprom+0x3c2/0x920 drivers/net/usb/smsc75xx.c:364
+  smsc75xx_init_mac_address drivers/net/usb/smsc75xx.c:771 [inline]
+  smsc75xx_bind+0x675/0x12d0 drivers/net/usb/smsc75xx.c:1489
+  usbnet_probe+0x10ae/0x3960 drivers/net/usb/usbnet.c:1722
+  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:882
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2114
+  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
+  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:882
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2114
+  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
+  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
+  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
+  kthread+0x4b5/0x4f0 kernel/kthread.c:256
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
 
-You could add a quick hack to show if xhci roothub gets the SetPortFeat(PORT_TEST) request:
+Local variable description: ----buf.i.i@smsc75xx_wait_eeprom
+Variable was created at:
+  __smsc75xx_read_reg drivers/net/usb/smsc75xx.c:83 [inline]
+  smsc75xx_read_reg drivers/net/usb/smsc75xx.c:147 [inline]
+  smsc75xx_wait_eeprom+0xb6/0x3d0 drivers/net/usb/smsc75xx.c:301
+  smsc75xx_read_eeprom+0x3c2/0x920 drivers/net/usb/smsc75xx.c:364
+==================================================================
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 3abe70f..b3f8392 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1357,6 +1357,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
-                         break;
-                 case USB_PORT_FEAT_TEST:
-                         /* 4.19.6 Port Test Modes (USB2 Test Mode) */
-+                       xhci_err(xhci, "SetPortFeat(PORT_TEST) wIndex %d, test_mode %d, hcd->speed 0x%x\n",
-+                                wIndex, test_mode, hcd->speed);
-                         if (hcd->speed != HCD_USB2)
-                                 goto error;
-                         if (test_mode > TEST_FORCE_EN || test_mode < TEST_J)
 
--Mathias
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
