@@ -2,198 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D50B48502A
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 17:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555268523B
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 19:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388718AbfHGPn2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 11:43:28 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33263 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387827AbfHGPn2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 11:43:28 -0400
-Received: by mail-pl1-f195.google.com with SMTP id c14so41317927plo.0
-        for <linux-usb@vger.kernel.org>; Wed, 07 Aug 2019 08:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gnarbox-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=YFpZ1xJ3CCvwEnjbFNrzZmz97JQpXTK6CjQOf7s5uLY=;
-        b=CEMLf2LHfdxC2EGvm2GuvOUGD7yFhC5pxv7x0HFJqO4QPmMEGK/NZ02YSoLmEM82f4
-         0bA8FL2AGwSlPftXpqjbM1z8Y+ETfAB/urRgL7xdrv6GclODacDLT26mph0cAHw2fpOA
-         +kSlx1sYRx44+NYGNiToXjA9A/zUwQFIIPLxeUix76+PBA6K2LjBTUGVwTprggXZrjMg
-         zNf1jZgOKMomP6CxYt1x8eXxqzYt3Ch/F1x4jyC1CtPu7VnN8hdN+4C50g5c+zaLFKCs
-         3Yv2cGCk7oxLuIxxObPtC6bhXnnEqxJ04ATzvj13A5kvFgWlMCCtqoq+KiEigRveddg8
-         Qw2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YFpZ1xJ3CCvwEnjbFNrzZmz97JQpXTK6CjQOf7s5uLY=;
-        b=YR/+Rg35jhOmgnAfmHn2bf9+vYoEwxEfMvdUjx8sc5iA29YdHfVoKj7v/2KfUU776y
-         Gs1+5vUK61zw3Yt+G+UOr/TJIAlIDRVnhBCYhO4yGXo45zmKsPYbZnJbWiTNu4/TWBSG
-         tVUdpB5O0d0KNnyxp0VTnusy3ZDaFSOGh7XkEpFBwQhO3AuJi4KymbJWRqnNc99pI/bt
-         ZsHdPuUiUilDExLTgQIndVUhG1xMcEA4WdEXAElbbZOvZU5xvQ477e24D35y3ed6z/LA
-         RTfgoh8NQFQuzxkrcAVHMQugvXrPriWd7Lw4caliPbOK/uJxxLqzshZsqOJ4q51wrekI
-         crOg==
-X-Gm-Message-State: APjAAAUPBNPAo7Xg8QybaEy7o/O6AV5PBADCzl4Icy/9WTmCh+IYwBs1
-        ZfxtgalBxDYB42HIfGQy+tLywQ==
-X-Google-Smtp-Source: APXvYqxsW7iCD6C5OjroTW4FCpk/hP9AAHPCYq+g+XLA/r2rZQZI/8XO1TghT3YOAhJR0OioFlMK2w==
-X-Received: by 2002:a63:7c0d:: with SMTP id x13mr8185872pgc.360.1565192607401;
-        Wed, 07 Aug 2019 08:43:27 -0700 (PDT)
-Received: from coops (cpe-104-173-199-40.socal.res.rr.com. [104.173.199.40])
-        by smtp.gmail.com with ESMTPSA id j1sm125700779pgl.12.2019.08.07.08.43.26
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 07 Aug 2019 08:43:26 -0700 (PDT)
-Date:   Wed, 7 Aug 2019 08:43:24 -0700
-From:   Rob Weber <rob@gnarbox.com>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        Peter Chen <hzpeterchen@gmail.com>,
-        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
-        Evan Gates <evan@gnarbox.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: EHSET USB testing
-Message-ID: <20190807154324.GB14395@coops>
-References: <20190802200325.22897-1-evan@gnarbox.com>
- <CAL411-q1Hxkh+i3WRcAPM7QZ_yC-96jBfAx-t4PRJH7Cs1fvjA@mail.gmail.com>
- <20190807042500.GA10249@coops>
- <VI1PR04MB5327B131A958695EDD251B8A8BD40@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <87v9v9l8m2.fsf@gmail.com>
+        id S2388616AbfHGRkK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 13:40:10 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:42924 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2388612AbfHGRkK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 13:40:10 -0400
+Received: (qmail 21767 invoked by uid 2102); 7 Aug 2019 13:40:09 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 7 Aug 2019 13:40:09 -0400
+Date:   Wed, 7 Aug 2019 13:40:09 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <oneukum@suse.com>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
+In-Reply-To: <00000000000017f30b058f874dc2@google.com>
+Message-ID: <Pine.LNX.4.44L0.1908071336460.1514-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v9v9l8m2.fsf@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe and Peter,
+On Wed, 7 Aug 2019, syzbot wrote:
 
-On Wed, Aug 07, 2019 at 10:47:49AM +0300, Felipe Balbi wrote:
-> Peter Chen <peter.chen@nxp.com> writes:
-> >> (Pinging Mathias regarding xHCI support of the USB 2.0 test modes)
-> >> 
-> >> On Mon, Aug 05, 2019 at 02:07:23PM +0800, Peter Chen wrote:
-> >> > On Sun, Aug 4, 2019 at 10:45 AM Evan Gates <evan@gnarbox.com> wrote:
-> >> > >
-> >> > > I'm trying to get my device to pass the EHSET tests.  I found the
-> >> > > thread "Using EHSET module" from March.  I'm having similar issues.
-> >> > >
-> >> > > I don't have access to the PID VID board that the lab uses.  Instead
-> >> > > I'm using another computer setup as a mass storage gadget but set
-> >> > > the VID:PID to 1a0a:0102 (TEST_J).  If that sounds like a problem or
-> >> > > there is another, better way to do this please let me know.
-> >> > >
-> >> > > > The usb-storage driver bound to your device first.  Try building a
-> >> > > > kernel without that driver and then it shoudl bind to the other driver.
-> >> > > >
-> >> > > > Or manually bind the ehset driver to your device through sysfs.
-> >> > > > Read up on the documentation for the "new_id" and "bind" and
-> >> > > > "unbind" sysfs files for how to do that.
-> >> > >
-> >> > > I did this.  I was able to unbind from usb-storage but binding to
-> >> > > usb_ehset_test failed with error -32 (AFAICT EPIPE).  I tried both
-> >> > > the usb_ehset_test/bind and usb_ehset_test/new_id methods.  In both
-> >> > > cases I got the same error.
-> >> > >
-> >> > > I did another build without usb-storage.  Now I don't have to go
-> >> > > through the unbind step but I still get the same error while probing.
-> >> > >
-> >> > >         [  296.089877] usb 1-1: new high-speed USB device number 2 using
-> >> xhci_hcd
-> >> > >         [  296.271081] usb_ehset_test: probe of 1-1:1.0 failed with
-> >> > > error -32
-> >> > >
-> >> > > I notice that it says "using xhci_hcd."  Is that a problem?  Does it
-> >> > > need to be ehci?  I tried a build without xhci but that caused other
-> >> > > problems for me.
-> >> > >
-> >> > > 1) Can I use a computer in device mode to present a VID:PID to get
-> >> > > into EHSET mode?  If so how should I do that?
-> >> > >
-> >> >
-> >> > Afaik, you can't. No Host computer will act as USB device. You may try
-> >> > to configure your box as USB device mode, for gadget driver, you could
-> >> > using legacy g_zero module, or source_sink function using configfs.
-> >> >
-> >> > > 2) What else do I need to do in order to get my box into EHSET mode?
-> >> > Only thing is your box need to be at host mode. For testing USB2 for
-> >> > xHCI, the mainline code should not support
-> >> > TEST_SINGLE_STEP_SET_FEATURE at my last access.
-> >> 
-> >> Today I was able to get access to a PID/VID test fixture that is used in USB 2.0
-> >> EHSET testing. Some of the major findings include:
-> >> 
-> >> 1. The only test mode that works properly is
-> >>    TEST_HS_HOST_PORT_SUSPEND_RESUME. All other probes of the ehset
-> >> module
-> >>    fail with errno -32 as shown above. This test mode is likely the only
-> >>    one to work because it does not set the PORT_FEAT_TEST feature for the
-> >>    appropriate port, but rather sets and clears the PORT_FEAT_SUSPEND feature.
-> >> 
-> >> 2. The same issue was observed on not only our custom hardware, but also
-> >>    a Dell XPS 13 running Ubuntu 18.04 with kernel version 4.15. I've
-> >>    attached the dmesg logs with xhci_hcd dynamic debug enabled for both
-> >>    hosts. The logs were captured while testing the TEST_PACKET test
-> >>    mode, but the logs looked similar for every other rest mode besides
-> >>    HS_HOST_PORT_SUSPEND_RESUME.
-> >> 
-> >> 
-> >> Mathias, I would appreciate your feedback on the attached dmesg logs with
-> >> xhci_hcd dynamic debug enabled. If you have a moment, could you please take a
-> >> look at the logs and let me know if there are any clues as to why the test mode is
-> >> not working with xhci_hcd? I've also attached the lsusb output for this particular
-> >> EHSET test fixture made by Allion.
-> >> 
-> >> I've been digging into the xHCI specification to see what details it might contain
-> >> about the USB 2.0 test modes we are trying to use.
-> >> Section 4.19.6 describes the proper sequence for enabling the USB 2.0 port test
-> >> modes. This requires setting the appropriate bits in the USB
-> >> 2.0 PORTPMSC register, which is described in full detail in section 5.4.9.2. It's clear
-> >> that xHCI should support the EHSET test modes, but we're not able to set the
-> >> appropriate port features for some reason.
-> >> 
-> >> My next thought is to double-check the logic of the ehset driver as it relates to
-> >> xhci_hcd. I would like to make sure that we are enabling the USB 2.0 test modes
-> >> according to the xHCI spec. I'm concerned that we might be experiencing an error
-> >> because we aren't setting the test mode acording to section 4.19.6 of the xHCI
-> >> specification.
-> >> 
-> >> Thanks in advance for reviewing the logs, Mathias! I appreciate any time and
-> >> feedback you may be able to provide. Let me know if you have any further
-> >> questions or need more information from me. I look forward to hearing from you
-> >> soon!
-> >> 
-> >  
-> > You may not enter test mode at all.
-> >
-> > Check flow: xhci_hub_control->xhci_enter_test_mode.
+> Hello,
 > 
-> The thing is that we need to enable certification test as well,
-> otherwise we will never have a chance of getting linux products with a
-> USB-IF logo out of vanilla mainline tree.
-
-Absolutely. USB-IF testing is important to us and our customers, so we
-would definitely like to continue working towards a solution.
-
-Peter - you are saying that it is not possible to enter test mode, but
-your explanation is unclear to me. Could you please elaborate as to why
-you think this is not possible? The only issue I can see is that I'm
-missing a patch that enables SetPortFeature(TEST_MODE) (see below, and
-Mathias's response to this thread), but I would like to know if there
-are other issues that I am not yet aware of.
-
-> Seems to me that the only thing missing is a way to enter a particular
-> test mode based on VID/PID pair.
+> syzbot has tested the proposed patch but the reproducer still triggered  
+> crash:
+> KASAN: use-after-free Read in device_release_driver_internal
 > 
-> All the functionality is already in place, just this little extra hook
-> is missing.
+> usb 4-1: USB disconnect, device number 2
+> ==================================================================
+> BUG: KASAN: use-after-free in __lock_acquire+0x3a5d/0x5340  
+> kernel/locking/lockdep.c:3665
+> Read of size 8 at addr ffff8881d4a54510 by task kworker/0:3/2876
+> 
+> CPU: 0 PID: 2876 Comm: kworker/0:3 Not tainted 5.2.0-rc6+ #1
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+> Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   print_address_description+0x67/0x231 mm/kasan/report.c:188
+>   __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
+>   kasan_report+0xe/0x20 mm/kasan/common.c:614
+>   __lock_acquire+0x3a5d/0x5340 kernel/locking/lockdep.c:3665
+>   lock_acquire+0x100/0x2b0 kernel/locking/lockdep.c:4303
+>   __mutex_lock_common kernel/locking/mutex.c:926 [inline]
+>   __mutex_lock+0xf9/0x12b0 kernel/locking/mutex.c:1073
+>   device_release_driver_internal+0x23/0x4c0 drivers/base/dd.c:1109
+>   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+>   device_del+0x460/0xb80 drivers/base/core.c:2274
+>   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+>   usb_disconnect+0x284/0x830 drivers/usb/core/hub.c:2199
+>   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+>   port_event drivers/usb/core/hub.c:5359 [inline]
+>   hub_event+0x13bd/0x3550 drivers/usb/core/hub.c:5441
+>   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+>   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+>   kthread+0x30b/0x410 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> 
+> Allocated by task 22:
+>   save_stack+0x1b/0x80 mm/kasan/common.c:71
+>   set_track mm/kasan/common.c:79 [inline]
+>   __kasan_kmalloc mm/kasan/common.c:489 [inline]
+>   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:462
+>   kmalloc include/linux/slab.h:547 [inline]
+>   kzalloc include/linux/slab.h:742 [inline]
+>   usb_set_configuration+0x2c4/0x1670 drivers/usb/core/message.c:1846
+>   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+>   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+>   really_probe+0x281/0x660 drivers/base/dd.c:509
+>   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+>   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+>   __device_attach+0x217/0x360 drivers/base/dd.c:843
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+>   device_add+0xae6/0x16f0 drivers/base/core.c:2111
+>   usb_new_device.cold+0x6a4/0xe61 drivers/usb/core/hub.c:2536
+>   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+>   port_event drivers/usb/core/hub.c:5359 [inline]
+>   hub_event+0x1abd/0x3550 drivers/usb/core/hub.c:5441
+>   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+>   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+>   kthread+0x30b/0x410 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> 
+> Freed by task 2876:
+>   save_stack+0x1b/0x80 mm/kasan/common.c:71
+>   set_track mm/kasan/common.c:79 [inline]
+>   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:451
+>   slab_free_hook mm/slub.c:1421 [inline]
+>   slab_free_freelist_hook mm/slub.c:1448 [inline]
+>   slab_free mm/slub.c:2994 [inline]
+>   kfree+0xd7/0x280 mm/slub.c:3949
+>   device_release+0x71/0x200 drivers/base/core.c:1064
+>   kobject_cleanup lib/kobject.c:691 [inline]
+>   kobject_release lib/kobject.c:720 [inline]
+>   kref_put include/linux/kref.h:65 [inline]
+>   kobject_put+0x171/0x280 lib/kobject.c:737
+>   put_device+0x1b/0x30 drivers/base/core.c:2210
+>   klist_put+0xce/0x170 lib/klist.c:221
+>   bus_remove_device+0x3a4/0x4a0 drivers/base/bus.c:552
+>   device_del+0x460/0xb80 drivers/base/core.c:2274
+>   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+>   usb_disconnect+0x284/0x830 drivers/usb/core/hub.c:2199
+>   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+>   port_event drivers/usb/core/hub.c:5359 [inline]
+>   hub_event+0x13bd/0x3550 drivers/usb/core/hub.c:5441
+>   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+>   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+>   kthread+0x30b/0x410 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> 
+> The buggy address belongs to the object at ffff8881d4a54400
+>   which belongs to the cache kmalloc-2k of size 2048
+> The buggy address is located 272 bytes inside of
+>   2048-byte region [ffff8881d4a54400, ffff8881d4a54c00)
+> The buggy address belongs to the page:
+> page:ffffea0007529400 refcount:1 mapcount:0 mapping:ffff8881dac02800  
+> index:0x0 compound_mapcount: 0
+> flags: 0x200000000010200(slab|head)
+> raw: 0200000000010200 ffffea000753da00 0000000500000005 ffff8881dac02800
+> raw: 0000000000000000 00000000000f000f 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> 
+> Memory state around the buggy address:
+>   ffff8881d4a54400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881d4a54480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > ffff8881d4a54500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>                           ^
+>   ffff8881d4a54580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881d4a54600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ==================================================================
+> 
+> 
+> Tested on:
+> 
+> commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git
+> console output: https://syzkaller.appspot.com/x/log.txt?x=132aca2c600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-Yup! Mathias posted a nice walkthrough of the xhci_hub_control logic
-that should respont to SetPortFeature(TEST_MODE), but the kernel I am
-using, 4.9.115, is missing a patch.
+Maybe this will help pinpoint where the problem occurs.  The kernel log 
+should indicate the before and after refcount values for the interface.
 
-Cheers,
-Rob Weber
+Alan Stern
+
+#syz test: https://github.com/google/kasan.git 6a3599ce
+
+
+Index: usb-devel/drivers/usb/core/driver.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/driver.c
++++ usb-devel/drivers/usb/core/driver.c
+@@ -358,7 +358,11 @@ static int usb_probe_interface(struct de
+ 		intf->needs_altsetting0 = 0;
+ 	}
+ 
++	dev_info(&intf->dev, "Refcount before probe: %d\n",
++			refcount_read(&intf->dev.kobj.kref.refcount));
+ 	error = driver->probe(intf, id);
++	dev_info(&intf->dev, "Refcount after probe: %d\n",
++			refcount_read(&intf->dev.kobj.kref.refcount));
+ 	if (error)
+ 		goto err;
+ 
+
