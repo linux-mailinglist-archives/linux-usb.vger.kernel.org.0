@@ -2,64 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9157F852E6
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 20:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6904852EF
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 20:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389313AbfHGSXB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 14:23:01 -0400
-Received: from mail-ot1-f71.google.com ([209.85.210.71]:35935 "EHLO
-        mail-ot1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389232AbfHGSXA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 14:23:00 -0400
-Received: by mail-ot1-f71.google.com with SMTP id f11so56468875otq.3
-        for <linux-usb@vger.kernel.org>; Wed, 07 Aug 2019 11:23:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=BKZrN8UHWqfJl9RbVEGYooh5RMS//IjsbU72N8zChOk=;
-        b=fQa3I5y3etinofJeujeJ34lr2JVBCJXYZGu4xq/M3/dxlhGVDrZRenkiBklyN6AauB
-         8tkF9/uQGCDU9FAnaBYerUghU9uBVimHXHsH5wcXqusKWSiszeG4fw+jt9qb+cZ9Z+bm
-         xc7LlkRIZpKULLKzwzBx9lbJvye/zdgK+EVORC9yUScF1jcz7aDIX2Ix7CwvyBglfOPm
-         w0NYNgfnibkWIfLet7set/FpK4cP1Nf4+hjECAq8IJZivqBjZmzrIXT1r6vexI/IozbY
-         zQdyqBedEmv1pl6dglPG0ROkEeiPAo3N/XeuaRWw7hwXyRBurZwKj3iqztyvtjnBd1iU
-         OkjQ==
-X-Gm-Message-State: APjAAAUkWPn1YhZbFlFkuP49A22ceKtv1WFF3V4AQ3ryc2uyXqPrfLqk
-        jbu6QSFS8AWxG6Ahb38ir/uYC859lEWdPV00qu1rZg6av6td
-X-Google-Smtp-Source: APXvYqzlO/1fjO7fAy/i44rUl8mH1jIN27N+7wScaoD71Pg9Q4qvka+DRr471Gcojl3BUxTa+jpNIACS3U3IJuzDdu5WJcZppu/t
+        id S2389347AbfHGSZu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 14:25:50 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:54978 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388428AbfHGSZs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 14:25:48 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x77IPlwn022850;
+        Wed, 7 Aug 2019 13:25:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1565202347;
+        bh=8Jhwy3BOP0+eGalOwDgEJKgcGnfjb7C0XY/2GwrJ9z0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=wfpnDrpMf4ctDVeha4S31vODzSEV59FbyM+3Wty/Gejsb0lLtvvwwVOckZnonoKWk
+         /w6uWmO/4fEdKQob6EUAahZPE/lfXG9zxhCHrmcW/zpDv58CPQGwqc1C8PW9CsrBi5
+         r+gC6EPAYDayXE1ExRcE9ieCs6gC9tRzhfbbP8F4=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x77IPllA071343
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 7 Aug 2019 13:25:47 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 7 Aug
+ 2019 13:25:47 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 7 Aug 2019 13:25:47 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x77IPlSM116274;
+        Wed, 7 Aug 2019 13:25:47 -0500
+Date:   Wed, 7 Aug 2019 13:25:47 -0500
+From:   Bin Liu <b-liu@ti.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] USB: musb: convert platform driver to use dev_groups
+Message-ID: <20190807182547.GC2724@uda0271908>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+References: <20190806144502.17792-1-gregkh@linuxfoundation.org>
+ <20190805193636.25560-2-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:9004:: with SMTP id w4mr11668135jaf.111.1565202180169;
- Wed, 07 Aug 2019 11:23:00 -0700 (PDT)
-Date:   Wed, 07 Aug 2019 11:23:00 -0700
-In-Reply-To: <Pine.LNX.4.44L0.1908071402160.1514-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f365b6058f8b07ca@google.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-From:   syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, oneukum@suse.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190805193636.25560-2-gregkh@linuxfoundation.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Aug 05, 2019 at 09:36:32PM +0200, Greg Kroah-Hartman wrote:
+> Platform drivers now have the option to have the platform core create
+> and remove any needed sysfs attribute files.  So take advantage of that
+> and do not register "by hand" any sysfs files.
+> 
+> Cc: Bin Liu <b-liu@ti.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+Acked-by: Bin Liu <b-liu@ti.com>
 
-Reported-and-tested-by:  
-syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=132eec8c600000
-
-Note: testing is done by a robot and is best-effort only.
+-Bin.
