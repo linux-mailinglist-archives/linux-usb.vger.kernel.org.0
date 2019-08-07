@@ -2,81 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E666884E3A
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 16:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422D184E53
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Aug 2019 16:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387670AbfHGOHR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Aug 2019 10:07:17 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:42468 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729968AbfHGOHR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 10:07:17 -0400
-Received: (qmail 2698 invoked by uid 2102); 7 Aug 2019 10:07:16 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 7 Aug 2019 10:07:16 -0400
-Date:   Wed, 7 Aug 2019 10:07:16 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Oliver Neukum <oneukum@suse.com>
-cc:     syzbot <syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com>,
-        <miquel@df.uba.ar>, <andreyknvl@google.com>,
-        <syzkaller-bugs@googlegroups.com>, <gregkh@linuxfoundation.org>,
-        <rio500-users@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: Re: possible deadlock in open_rio
-In-Reply-To: <1565185044.15973.0.camel@suse.com>
-Message-ID: <Pine.LNX.4.44L0.1908071002310.1514-100000@iolanthe.rowland.org>
+        id S1729745AbfHGONB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Aug 2019 10:13:01 -0400
+Received: from mail-ot1-f69.google.com ([209.85.210.69]:34208 "EHLO
+        mail-ot1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729238AbfHGONB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Aug 2019 10:13:01 -0400
+Received: by mail-ot1-f69.google.com with SMTP id 20so11533210oty.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 Aug 2019 07:13:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=+rvcyyJPT124CBjh50veSjwzTuKPjdB1gn6DdCRD4GQ=;
+        b=UUQqkIck1/W485WYsTZgpcRhItzvrOi0tDo8E6R1iLDEWxYgY2RBkqrwCKnNY0DqLN
+         01PLyBAzP69M2rz118sdWvkuulPFqnq4PxKIQ3DOwDl3PpLWCRcMllMmvON5ceFPS/wK
+         Den7Mjz/a26xr1w4nAvWxQpdZ4w3dusySV5t4V/jmBTlQRRcB5AcZ5LTjQ1eKbNt8+Fa
+         693tiASHwSUS7+G0nC56D0gGRN/lUFFxy7SHPDxHxTuiq4l8HTWQ9IvfQVtXQrwDp2Rp
+         B07SaQRQOv3fPBCswdvMfggs0yNuSdihCIEWILQsoeXQBBEzOYxmnPy8ha2Ua5TjFeEH
+         98gg==
+X-Gm-Message-State: APjAAAUFRKKzOuIg5Uh3vNADKWdjSDzLYkvY49Cqi64RftuU1TyjKl9V
+        KqxF9J7GuwJmbryMzIAFMl+ZUDdaqyGSxqi+pu0WHouZ699l
+X-Google-Smtp-Source: APXvYqydE+glsz2eL+FR6jE4ph1gTugBhAbEDDTDWgMZ8T6Wk5OyXx0b7GUWhjNN5KDpAYSMImNZ4sWO1khxy6jFYxnVm6NB2sNM
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a6b:621a:: with SMTP id f26mr8317090iog.127.1565187180660;
+ Wed, 07 Aug 2019 07:13:00 -0700 (PDT)
+Date:   Wed, 07 Aug 2019 07:13:00 -0700
+In-Reply-To: <CAAeHK+wV_w6f=zG4XSJkDRhR6b0aNPH0UTkBF3hmRQ6wxy9p2w@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e90d40058f8789e1@google.com>
+Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
+From:   syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, oneukum@suse.com,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 7 Aug 2019, Oliver Neukum wrote:
+Hello,
 
-> Am Dienstag, den 06.08.2019, 15:13 -0400 schrieb Alan Stern:
-> > On Thu, 1 Aug 2019, syzbot wrote:
-> > 
-> > > Hello,
-> > > 
-> > > syzbot found the following crash on:
-> > > 
-> > > HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
-> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=136b6aec600000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=7bbcbe9c9ff0cd49592a
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > 
-> > > Unfortunately, I don't have any reproducer for this crash yet.
-> > > 
-> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > Reported-by: syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com
-> > > 
-> > > ======================================================
-> > > WARNING: possible circular locking dependency detected
-> > > 5.3.0-rc2+ #23 Not tainted
-> > > ------------------------------------------------------
-> > 
-> > Andrey:
-> > 
-> > This should be completely reproducible, since it's a simple ABBA
-> > locking violation.  Maybe just introducing a time delay (to avoid races
-> > and give the open() call time to run) between the gadget creation and
-> > gadget removal would be enough to do it.
-> 
-> Hi,
-> 
-> technically yes. However in practical terms the straight revert I sent
-> out yesterday should fix it.
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-I didn't see the revert, and it doesn't appear to have reached the 
-mailing list archive.  Can you post it again?
+Reported-and-tested-by:  
+syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com
 
-Alan Stern
+Tested on:
 
-PS: syzbot reported a similar lock inversion problem (involving two
-mutexes rather than just one) in drivers/usb/misc/iowarrior.c.  
-Probably the two drivers need similar fixes.
+commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1245683c600000
 
+Note: testing is done by a robot and is best-effort only.
