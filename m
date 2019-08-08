@@ -2,159 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E298604A
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 12:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00ED7860AC
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 13:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732057AbfHHKng (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Aug 2019 06:43:36 -0400
-Received: from foss.arm.com ([217.140.110.172]:59970 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728289AbfHHKng (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Aug 2019 06:43:36 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7850F28;
-        Thu,  8 Aug 2019 03:43:35 -0700 (PDT)
-Received: from [192.168.1.123] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 87D133F694;
-        Thu,  8 Aug 2019 03:43:34 -0700 (PDT)
-Subject: Re: usb zero copy dma handling
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     yvahkhfo.1df7f8c2@hashmail.org, security@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20190808084636.GB15080@priv-mua.localdomain>
- <20190808085811.GA1265@kroah.com>
- <10bcb28b-e87b-7b16-97e3-88e727e76d25@arm.com>
- <20190808100726.GB23844@kroah.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <24eaa4d6-0c14-4277-b481-521c278f2da4@arm.com>
-Date:   Thu, 8 Aug 2019 11:43:34 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1731122AbfHHLPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 07:15:48 -0400
+Received: from smtprelay0013.hostedemail.com ([216.40.44.13]:48563 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730678AbfHHLPr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 07:15:47 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 417878368EF7;
+        Thu,  8 Aug 2019 11:15:46 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3870:3872:3873:3874:4321:4605:5007:8531:9010:10004:10400:10848:11232:11658:11914:12043:12296:12297:12555:12740:12760:12895:13069:13311:13357:13439:14096:14097:14181:14659:14721:21080:21451:21627:30046:30054:30056:30070:30090:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.14.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:26,LUA_SUMMARY:none
+X-HE-Tag: death23_8991f6175b80f
+X-Filterd-Recvd-Size: 2184
+Received: from XPS-9350 (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf10.hostedemail.com (Postfix) with ESMTPA;
+        Thu,  8 Aug 2019 11:15:45 +0000 (UTC)
+Message-ID: <92ed89b0346a54fb06d3e08585a8d0b4175842f0.camel@perches.com>
+Subject: Re: [PATCH] MAINTAINERS: mark wusbcore and UWB as obsolete
+From:   Joe Perches <joe@perches.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Date:   Thu, 08 Aug 2019 04:15:44 -0700
+In-Reply-To: <20190808094158.GA22635@kroah.com>
+References: <20190806101509.GA11280@kroah.com>
+         <b73f09c944625a40b2589e9bac7f8bd22a711ed3.camel@perches.com>
+         <20190806113501.GA18443@kroah.com> <20190808092509.GA20173@kroah.com>
+         <20190808094158.GA22635@kroah.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
 MIME-Version: 1.0
-In-Reply-To: <20190808100726.GB23844@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2019-08-08 11:07 am, Greg KH wrote:
-> On Thu, Aug 08, 2019 at 10:46:24AM +0100, Robin Murphy wrote:
->> On 2019-08-08 9:58 am, Greg KH wrote:
->>> On Thu, Aug 08, 2019 at 10:46:36AM +0200, yvahkhfo.1df7f8c2@hashmail.org wrote:
->>>> Hello linux-usb and linux-arm.
->>>>
->>>> Ccing security@ because "the kernel dma code is mapping randomish
->>>> kernel/user mem to a user process" seems to have security implications
->>>> even though i didnt research that aspect past "its a 100% reliable way
->>>> to crash a raspi from userspace".
->>>>
->>>> tried submitting this through linux-arm-kernel ~2 weeks ago but
->>>> the only "response" i got was phishing-spam.
->>>> tried to follow up through raspi-internals chat, they suggested
->>>> i try linux-usb instead, but otoh the original reporter was
->>>> deflected from -usb to "try some other mls, they might care".
->>>> https://www.spinics.net/lists/linux-usb/msg173277.html
->>>>
->>>> if i am not following some arcane ritual or indenting convention required
->>>> by regular users of these lists i apologize in advance, but i am not a
->>>> kernel developer, i am just here as a user with a bug and a patch.
->>>> (and the vger FAQ link 404s...)
->>>
->>> The "arcane ritual" should be really well documented by now, it's in
->>> Documentation/SubmittingPatches in your kernel tree, and you can read it
->>> online at:
->>> 	https://www.kernel.org/doc/html/latest/process/submitting-patches.html
->>>
->>>
->>>> i rediffed against HEAD even though the two weeks old patch still applied
->>>> cleanly with +2 offset.
->>>>
->>>> # stepping off soap box # actual technical content starts here #
->>>>
->>>> this is a followup to that thread from 2018-11:
->>>> https://www.spinics.net/lists/arm-kernel/msg685598.html
->>>>
->>>> the issue was discussed in more detail than i can claim
->>>> to fully understand back then, but no fix ever merged.
->>>> but i would really like to use rtl_433 on a raspi without
->>>> having to build a custom-patched kernel first.
->>>>
->>>> the attached patch is my stripdown/cleanup of a devel-diff
->>>> provided to me by the original reporter Steve Markgraf.
->>>> credits to him for the good parts, blame to me for the bad parts.
->>>>
->>>> this does not cover the additional case of "PIO-based usb controllers"
->>>> mainly because i dont understand what that means (or how to handle it)
->>>> and if its broken right now (as the thread indicates) it might
->>>> as well stay broken until someone who understands cares enough.
->>>>
->>>> could you please get this on track for merging?
->>>
->>>
->>>>
->>>> regards,
->>>>     x23
->>>>
->>>>
->>>>
->>>
->>>> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
->>>> index b265ab5405f9..69594c2169ea 100644
->>>> --- a/drivers/usb/core/devio.c
->>>> +++ b/drivers/usb/core/devio.c
->>>> @@ -238,9 +238,14 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
->>>>    	usbm->vma_use_count = 1;
->>>>    	INIT_LIST_HEAD(&usbm->memlist);
->>>> +#ifdef CONFIG_X86
->>>>    	if (remap_pfn_range(vma, vma->vm_start,
->>>>    			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
->>>>    			size, vma->vm_page_prot) < 0) {
->>>> +#else /* !CONFIG_X86 */
->>>> +	if (dma_mmap_coherent(ps->dev->bus->sysdev,
->>>> +			vma, mem, dma_handle, size) < 0) {
->>>> +#endif /* !CONFIG_X86 */
->>>>    		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
->>>>    		return -EAGAIN;
->>>>    	}
->>>
->>> First off, we need this in a format we could apply it in (hint, read the
->>> above links).
->>>
->>> But the main issue here is what exactly is this "fixing"?  What is wrong
->>> with the existing code that non-x86 systems have such a problem with?
->>> Shouldn't all of these dma issues be handled by the platform with the
->>> remap_pfn_range() call itself?
->>
->> If usbm->mem is (or ever can be) a CPU address returned by
->> dma_alloc_coherent(), then doing virt_to_phys() on it is bogus and may yield
->> a nonsense 'PFN' to begin with. However, it it can can ever come from a
->> regular page allocation/kmalloc/vmalloc then unconditionally passing it to
->> dma_mmap_coherent wouldn't be right either.
+On Thu, 2019-08-08 at 11:41 +0200, Greg Kroah-Hartman wrote:
+> On Thu, Aug 08, 2019 at 11:25:09AM +0200, Greg Kroah-Hartman wrote:
+> > Joe rightly points out that we should be using the "Obsolete" status for
+> > these two subsystems.
 > 
-> usbm->mem comes from a call to usb_alloc_coherent() which calls
-> hcd_buffer_alloc() which tries to allocate memory in the best possible
-> way for that specific host controller.  If the host controller has a
-> pool of memory, it uses that, if the host controller has PIO it uses
-> kmalloc(), if there are some "pools" of host controller memory it uses
-> dma_pool_alloc() and as a total last resort, calls dma_alloc_coherent().
-> 
-> So yes, this could happen.
-> 
-> So how to fix this properly?  What host controller driver is being used
-> here that ends up defaulting to dma_alloc_coherent()?  Shouldn't that be
-> fixed up no matter what?
-> 
-> And then, if what you say is correct then a real fix for devio.c could
-> be made, but that is NOT going to just depend on the arch the system is
-> running on, as all of this depends on the host controller being accessed
-> at that moment for that device.
+> Even with that change, I don't see get_maintainers.pl tell me I
+> shouldn't be sending a patch in for this area:
 
-Right, in that case we'd probably want some kind of usb_mmap_coherent() 
-helper to encapsulate equivalent logic to usb_{alloc,free}_coherent() to 
-figure out which remap operation is appropriate. It's absolutely not an 
-arch-specific thing.
+Nor should you.  It's checkpatch that should warn.
 
-Robin.
+> 
+> 
+> $ cat x.patch
+> diff --git a/drivers/staging/uwb/Kconfig b/drivers/staging/uwb/Kconfig
+> index 259e053e1e09..d9658c46686e 100644
+> --- a/drivers/staging/uwb/Kconfig
+> +++ b/drivers/staging/uwb/Kconfig
+> @@ -3,6 +3,8 @@
+>  # UWB device configuration
+>  #
+> 
+> +
+> +
+>  menuconfig UWB
+>         tristate "Ultra Wideband devices"
+>         default n
+> $ ./scripts/get_maintainer.pl x.patch
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:STAGING SUBSYSTEM,commit_signer:2/2=100%,authored:1/2=50%)
+> Thomas Gleixner <tglx@linutronix.de> (commit_signer:1/2=50%,authored:1/2=50%)
+> devel@driverdev.osuosl.org (open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:)
+> linux-kernel@vger.kernel.org (open list)
+> 
+> 
+> Am I missing something?
+
+
