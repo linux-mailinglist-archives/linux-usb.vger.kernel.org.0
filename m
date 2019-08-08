@@ -2,98 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB61B86840
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 19:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A46C8685C
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 19:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732708AbfHHRnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Aug 2019 13:43:37 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:58142 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727096AbfHHRnh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 13:43:37 -0400
-Received: (qmail 3145 invoked by uid 2102); 8 Aug 2019 13:43:36 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 8 Aug 2019 13:43:36 -0400
-Date:   Thu, 8 Aug 2019 13:43:36 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Oliver Neukum <oliver@neukum.org>
-cc:     andreyknvl@google.com, <syzkaller-bugs@googlegroups.com>,
-        <gregkh@linuxfoundation.org>,
-        syzbot <syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com>,
+        id S1729780AbfHHR7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 13:59:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50352 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725785AbfHHR7C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Aug 2019 13:59:02 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22FCC2171F;
+        Thu,  8 Aug 2019 17:59:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565287141;
+        bh=/UtSNoD9DrzI26ploZhS+chpexm5CiI/ortEWYKqJNU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I/gaRd3Zfi0oDlvWcIqEHSxAiHZf68hfWct+r5vfBp4hHQhXXL4rAmjFUq6qY5Pr9
+         GOh5RtSfQGVLp/54Um38TTaXoe8bYSs9vu5SzyD7ovZIxUgYKYZ1QONb1ygkHs5o/i
+         kWM5kUpYzvpVGMx9e6JjF42h67hu74YUBD7qjf5U=
+Date:   Thu, 8 Aug 2019 19:58:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
         USB list <linux-usb@vger.kernel.org>
-Subject: Re: possible deadlock in iowarrior
-In-Reply-To: <1565187142.15973.3.camel@neukum.org>
-Message-ID: <Pine.LNX.4.44L0.1908081334580.1319-100000@iolanthe.rowland.org>
+Subject: Re: [PATCH] USB: rio500: Fix lockdep violation
+Message-ID: <20190808175859.GA16092@kroah.com>
+References: <CAAeHK+z7a3R+Lvo_0VeeMYZZqjWXgcX0qBmi0-Gcx=rDQsBPNA@mail.gmail.com>
+ <Pine.LNX.4.44L0.1908081329240.1319-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1908081329240.1319-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 7 Aug 2019, Oliver Neukum wrote:
-
-> > PS: syzbot reported a similar lock inversion problem (involving two
-> > mutexes rather than just one) in drivers/usb/misc/iowarrior.c.  
-> > Probably the two drivers need similar fixes.
+On Thu, Aug 08, 2019 at 01:34:08PM -0400, Alan Stern wrote:
+> The syzbot fuzzer found a lockdep violation in the rio500 driver:
 > 
-> No, but I got a fix.
+> 	======================================================
+> 	WARNING: possible circular locking dependency detected
+> 	5.3.0-rc2+ #23 Not tainted
+> 	------------------------------------------------------
+> 	syz-executor.2/20386 is trying to acquire lock:
+> 	00000000772249c6 (rio500_mutex){+.+.}, at: open_rio+0x16/0xc0  
+> 	drivers/usb/misc/rio500.c:64
 > 
-> 	Regards
-> 		Oliver
+> 	but task is already holding lock:
+> 	00000000d3e8f4b9 (minor_rwsem){++++}, at: usb_open+0x23/0x270  
+> 	drivers/usb/core/file.c:39
 > 
-> From 973e82b3f583113e4d7fe5cd2f918a16022c4e38 Mon Sep 17 00:00:00 2001
-> From: Oliver Neukum <oneukum@suse.com>
-> Date: Tue, 6 Aug 2019 16:17:54 +0200
-> Subject: [PATCH] usb: iowarrior: fix deadlock on disconnect
+> 	which lock already depends on the new lock.
 > 
-> We have to drop the mutex before we close() upon disconnect()
-> as close() needs the lock. This is safe to do by dropping the
-> mutex as intfdata is already set to NULL, so open() will fail.
+> The problem is that the driver's open_rio() routine is called while
+> the usbcore's minor_rwsem is locked for reading, and it acquires the
+> rio500_mutex; whereas conversely, probe_rio() and disconnect_rio()
+> first acquire the rio500_mutex and then call usb_register_dev() or
+> usb_deregister_dev(), which lock minor_rwsem for writing.
 > 
-> Fixes: 03f36e885fc26 ("USB: open disconnect race in iowarrior")
-> Reported-by: syzbot+a64a382964bf6c71a9c0@syzkaller.appspotmail.com
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> The correct ordering of acquisition should be: minor_rwsem first, then
+> rio500_mutex (since the locking in open_rio() cannot be changed).
+> Thus, the probe and disconnect routines should avoid holding
+> rio500_mutex while doing their registration and deregistration.
+> 
+> This patch adjusts the code in those two routines to do just that.  It
+> also relies on the fact that the probe and disconnect routines are
+> protected by the device mutex, so the initial test of rio->present
+> needs no extra locking.
+> 
+> Reported-by: syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Fixes: d710734b0677 ("USB: rio500: simplify locking")
+> CC: Oliver Neukum <oneukum@suse.com>
+> CC: <stable@vger.kernel.org>
+> 
 > ---
->  drivers/usb/misc/iowarrior.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-> index ba05dd80a020..f5bed9f29e56 100644
-> --- a/drivers/usb/misc/iowarrior.c
-> +++ b/drivers/usb/misc/iowarrior.c
-> @@ -866,19 +866,20 @@ static void iowarrior_disconnect(struct usb_interface *interface)
->  	dev = usb_get_intfdata(interface);
->  	mutex_lock(&iowarrior_open_disc_lock);
->  	usb_set_intfdata(interface, NULL);
-> +	/* prevent device read, write and ioctl */
-> +	dev->present = 0;
->  
->  	minor = dev->minor;
-> +	mutex_unlock(&iowarrior_open_disc_lock);
-> +	/* give back our minor - this will call close() locks need to be dropped at this point*/
+> This patch is different from the one I posted earlier.  I realized that 
+> we don't want to register the device's char file until after the 
+> buffers have been allocated.
 
-Ungrammatical and untrue: usb_deregister_dev() does not call close().
+Should I revert Oliver's patch?
 
->  
-> -	/* give back our minor */
->  	usb_deregister_dev(interface, &iowarrior_class);
->  
->  	mutex_lock(&dev->mutex);
->  
->  	/* prevent device read, write and ioctl */
-> -	dev->present = 0;
->  
->  	mutex_unlock(&dev->mutex);
-> -	mutex_unlock(&iowarrior_open_disc_lock);
+confused,
 
-That part looks weird.  The critical section is empty, except for a 
-comment.  Maybe you meant to lock dev->mutex around the assignment to 
-dev->present above?
-
-In any case, this driver still seems to have at least one unnecessary 
-mutex.  Look at the locking mess in iowarrior_open().
-
-Alan Stern
-
+greg k-h
