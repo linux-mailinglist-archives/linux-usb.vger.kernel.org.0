@@ -2,74 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D5D86178
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 14:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1A48619C
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 14:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728825AbfHHMRD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 8 Aug 2019 08:17:03 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:42709 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727242AbfHHMRD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 08:17:03 -0400
-Authenticated-By: 
-X-SpamFilter-By: BOX Solutions SpamTrap 5.62 with qID x78CGwi7006268, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (RTITCASV02.realtek.com.tw[172.21.6.19])
-        by rtits2.realtek.com.tw (8.15.2/2.57/5.78) with ESMTPS id x78CGwi7006268
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Thu, 8 Aug 2019 20:16:58 +0800
-Received: from RTITMBSVM03.realtek.com.tw ([fe80::e1fe:b2c1:57ec:f8e1]) by
- RTITCASV02.realtek.com.tw ([::1]) with mapi id 14.03.0468.000; Thu, 8 Aug
- 2019 20:16:52 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
-CC:     Jakub Kicinski <jakub.kicinski@netronome.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH net-next 5/5] r8152: change rx_frag_head_sz and rx_max_agg_num dynamically
-Thread-Topic: [PATCH net-next 5/5] r8152: change rx_frag_head_sz and
- rx_max_agg_num dynamically
-Thread-Index: AQHVTEjAduvqUw50CkySh6Q/0oky4abuKLuAgALKe5D//6zrgIAAi5Rw
-Date:   Thu, 8 Aug 2019 12:16:50 +0000
-Message-ID: <0835B3720019904CB8F7AA43166CEEB2F18D0F3F@RTITMBSVM03.realtek.com.tw>
-References: <1394712342-15778-289-albertk@realtek.com>
-        <1394712342-15778-294-albertk@realtek.com>
-        <20190806151007.75a8dd2c@cakuba.netronome.com>
-        <0835B3720019904CB8F7AA43166CEEB2F18D0D8E@RTITMBSVM03.realtek.com.tw>
- <20190808134959.00006a58@gmail.com>
-In-Reply-To: <20190808134959.00006a58@gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.214]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1732372AbfHHM2G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 08:28:06 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46122 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732361AbfHHM2G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 08:28:06 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w3so6789179pgt.13
+        for <linux-usb@vger.kernel.org>; Thu, 08 Aug 2019 05:28:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i/W3w/wF9Y9te3JMoVhcMehzwVrt1opOlejjt4rI4AE=;
+        b=JmSzOXhD6xc1Qb7v1wEp0V2tWsNPh5fGFF88h2zu1ElMyG3KgLjylsdyOnqWGZcItc
+         tP4YvMgsCHqHZw69kNyc6Rx5xdexwEjo/lVa3NrHAjIz+jGBsC7JjYHIXPlqH00+U9Rj
+         vo4g0Iy6lZlXwSvj1LG4dxvGz4gc/mh0fkZaFnckVQDHcmWHPqGX2C9hM5/PiFpv+9tp
+         uqJiPobqcNkiB2JdQ5mmWLwuAideQaaIl7SelOD5YfUny7fvj7TURoAR9qIxlNXNxy5x
+         HT8InMsW/bOjtbJ9dH1E+229QEILOJtHjCeDt0Xh5O0NaoD+C/jOboe4sQj6NhekP3zc
+         yxqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i/W3w/wF9Y9te3JMoVhcMehzwVrt1opOlejjt4rI4AE=;
+        b=WEfY8fkeAkqKBwUTbMWYHDV5hT2fqJyHH02U0CAyHE9vmFfvYPvlCgRCQPWc4wu4Rc
+         aR7teRtwCQpGw0P6z8sQsGlm0JT+uO+sgYBCW9O5SPKoiOpqA5Qkmx1HeDijwHYVRm1p
+         fkjv7bVcULOJyBicM6405XcvNV7RHYDTuKkc3xOD5a7HqAXZ9GkiqC7zOvTW3LenvCbY
+         +UO74E5k0R9O9gLn8zSeyyjBFg5tozFk+ouODfNDpeShWm+MALgnpHfj8xGFf38216wL
+         HL1Iq6HF8s8UNP/9KM2t7INE4LvPS57CmFHB2+k1EkIEh/eW/d7/BajXx/lJod88itIR
+         52iA==
+X-Gm-Message-State: APjAAAUelovq9STbT/YrYJSqJ3YbDnumZKnbKZ3UgTwlU4LwCWi/RF9L
+        fHSJsFsDgZIlWiFrJ3ViIpq/g/O8aeqKV88LRKgMQg==
+X-Google-Smtp-Source: APXvYqwBefv4nXxVQmf02Ua1Yjn/KM4I7FhvNpXklH3IAgqyIJc+slSG3DgWRSLRO89JnCmOD5IciFA0UJhEIpUeIl8=
+X-Received: by 2002:aa7:9e9a:: with SMTP id p26mr15547168pfq.25.1565267285478;
+ Thu, 08 Aug 2019 05:28:05 -0700 (PDT)
 MIME-Version: 1.0
+References: <000000000000f365b6058f8b07ca@google.com> <Pine.LNX.4.44L0.1908071431050.1514-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1908071431050.1514-100000@iolanthe.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 8 Aug 2019 14:27:53 +0200
+Message-ID: <CAAeHK+xh6h=HBEpwPB7g2=a07+zZ9zS5Cuk0Tpo_+70Bf5j9Tw@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Maciej Fijalkowski [mailto:maciejromanfijalkowski@gmail.com]
-> Sent: Thursday, August 08, 2019 7:50 PM
-[...]
-> > Excuse me again.
-> > I find the kernel supports the copybreak of Ethtool.
-> > However, I couldn't find a command of Ethtool to use it.
-> 
-> Ummm there's set_tunable ops. Amazon's ena driver is making use of it from
-> what
-> I see. Look at ena_set_tunable() in
-> drivers/net/ethernet/amazon/ena/ena_ethtool.c.
+On Wed, Aug 7, 2019 at 8:31 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Wed, 7 Aug 2019, syzbot wrote:
+>
+> > Hello,
+> >
+> > syzbot has tested the proposed patch and the reproducer did not trigger
+> > crash:
+> >
+> > Reported-and-tested-by:
+> > syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com
+> >
+> > Tested on:
+> >
+> > commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > patch:          https://syzkaller.appspot.com/x/patch.diff?x=132eec8c600000
+> >
+> > Note: testing is done by a robot and is best-effort only.
+>
+> Andrey, is there any way to get the console output from this test?
 
-The kernel could support it. And I has finished it.
-However, when I want to test it by ethtool, I couldn't find suitable command.
-I couldn't find relative feature in the source code of ethtool, either.
+Dmitry, would it be possible to link console log for successful tests as well?
 
-
-Best Regards,
-Hayes
-
-
+>
+> Alan Stern
+>
