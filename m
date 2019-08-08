@@ -2,161 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5980A85CC3
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 10:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBB785D61
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 10:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732035AbfHHI1X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Aug 2019 04:27:23 -0400
-Received: from mail-qt1-f178.google.com ([209.85.160.178]:39849 "EHLO
-        mail-qt1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731592AbfHHI1W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 04:27:22 -0400
-Received: by mail-qt1-f178.google.com with SMTP id l9so91219301qtu.6
-        for <linux-usb@vger.kernel.org>; Thu, 08 Aug 2019 01:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lucidpixels.com; s=google;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=E2W6U01vJdQF7ZRePehD0DnY3YLES58EmGuikRJVlMk=;
-        b=nYQAY+aNEqyyPkPM1xvcVcJXkcQYvdFc+xLMQp/4s6VaEY+M/kXhrUSmzRdqhqjtt9
-         s7a6UZkccQVpRSNHFsijTaHIcCvIzaBmF+XiLYosS7UmQeYK0C4tvKvH70c8R/8mdN7g
-         i/hmaAuhV2CfAKLVMo5di2+JJD2qv7VOm9B6A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=E2W6U01vJdQF7ZRePehD0DnY3YLES58EmGuikRJVlMk=;
-        b=ZeFcv/YMjWRAZ/Na6ZpnI10lrfdnZfw5WSFMTQRHtHW/0MmwcsXuR5vITuZVXzTFMK
-         1Xm50Ok9wYKb4nUcbgucDLMZCrb7K8Jh2aB1T30545avVjdVix8W0QQNCeK+beGUZtpf
-         vOpLKw+JLG8bxXkntKB6dhgyjvL3QFs4BeAeTS5DJW1qj3OOVqBjE1pcmlUKl3RKJ37X
-         qwNTdOyQ3uLC7NGQ4qiAb1L8WvhosOmiR6HPjtshMlRQMnst2wET6ZVGjv6gUUdwV2KZ
-         UH35k71+wWYpUIlJIGz3Utqs31YH2XkwEIWbHOASDoWUlsg6PZWKui3voUFXVSvSv2di
-         NVQg==
-X-Gm-Message-State: APjAAAXBdNyE8SS5+BWRE/T4Z4NYq7bJiUbFucIyWXkszeRcSvMfwyG1
-        NXiBEkbz0I15BJdgTgdWCCn/sQ==
-X-Google-Smtp-Source: APXvYqyP2WcpCVJBMfYL9+YcGdqldHxOkOHqH8EkajfPXBNkapg8v35ShMNLrxV2q5qKoKmDshAfJg==
-X-Received: by 2002:a0c:d11c:: with SMTP id a28mr12125099qvh.180.1565252840992;
-        Thu, 08 Aug 2019 01:27:20 -0700 (PDT)
-Received: from WARPC (pool-173-72-201-135.clppva.fios.verizon.net. [173.72.201.135])
-        by smtp.gmail.com with ESMTPSA id q6sm2560608qtr.23.2019.08.08.01.27.19
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 08 Aug 2019 01:27:20 -0700 (PDT)
-From:   "Justin Piszcz" <jpiszcz@lucidpixels.com>
-To:     "'Martin K. Petersen'" <martin.petersen@oracle.com>
-Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-scsi@vger.kernel.org>
-References: <006d01d549db$54e42140$feac63c0$@lucidpixels.com> <yq1ftmcct1j.fsf@oracle.com>
-In-Reply-To: <yq1ftmcct1j.fsf@oracle.com>
-Subject: RE: 5.2.x kernel: WD 8TB USB Drives: Unaligned partial completion (resid=78, sector_sz=512)
-Date:   Thu, 8 Aug 2019 04:27:18 -0400
-Message-ID: <002d01d54dc3$17c278c0$47476a40$@lucidpixels.com>
+        id S1731364AbfHHIw4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 04:52:56 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:16878 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725817AbfHHIw4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 04:52:56 -0400
+X-Greylist: delayed 363 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Aug 2019 04:52:54 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1565254374;
+        s=strato-dkim-0002; d=hashmail.org;
+        h=Message-ID:Subject:Cc:To:From:Date:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=2zgjnksGmQ/ZAqwgmVBQpCI5NujcSeTtpImhQoYcKR0=;
+        b=dLNM7VVf6xk1bS7UKiMaIlYdpR2Fhaq6lZhD+Vq/2HA9qe8zYEb0Z+lPrnVqovL2d2
+        tKkxlVRcFySQolv6qvwMfvB2it/M5D05vbRDaJi3gnkNI1JKMnrtQt0qcuKOlyFf86iW
+        dzMDA7Eb0ChkUtQkfCdt/1f12OpDbOKeTnbro8jropClwn3u8kE9AnrfAso+QlzaxEqn
+        2zpIa+6D05ePSsLBFWppUulGgPRsQinXAirPRhwxBYaryb3yPTr6CLPiDtGVPfL2C3k6
+        VhRBcTKCORku1co2r1wpoyxerFQoOPavEQhF0R1+PKHsmeojEJK2LuOdfzrDxIF6Uebp
+        HCfQ==
+X-RZG-AUTH: ":O2kGeEG7b/pS1F+/SC3i33Z09cEcHcRBAtqtGgRBDGeSaUqOsX4glAsBpQEeWZN4DOM7"
+X-RZG-CLASS-ID: mo00
+Received: from localhost
+        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
+        with ESMTPSA id f0aa24v788kcir9
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Thu, 8 Aug 2019 10:46:38 +0200 (CEST)
+Date:   Thu, 8 Aug 2019 10:46:36 +0200
+From:   yvahkhfo.1df7f8c2@hashmail.org
+To:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     security@kernel.org
+Subject: usb zero copy dma handling
+Message-ID: <20190808084636.GB15080@priv-mua.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 14.0
-Thread-Index: AQIwp6+4+wiF5pA5Z1zpgf2isBdFKwHnSzfypir7r0A=
-Content-Language: en-us
+Content-Type: multipart/mixed; boundary="ZPt4rx8FFjLCG7dd"
+Content-Disposition: inline
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
+--ZPt4rx8FFjLCG7dd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
------Original Message-----
-From: Martin K. Petersen [mailto:martin.petersen@oracle.com]=20
-Sent: Wednesday, August 7, 2019 10:04 PM
-To: Justin Piszcz
-Cc: 'LKML'; linux-usb@vger.kernel.org; linux-scsi@vger.kernel.org
-Subject: Re: 5.2.x kernel: WD 8TB USB Drives: Unaligned partial =
-completion (resid=3D78, sector_sz=3D512)
+Hello linux-usb and linux-arm.
 
+Ccing security@ because "the kernel dma code is mapping randomish
+kernel/user mem to a user process" seems to have security implications
+even though i didnt research that aspect past "its a 100% reliable way
+to crash a raspi from userspace". 
 
-Justin,
+tried submitting this through linux-arm-kernel ~2 weeks ago but
+the only "response" i got was phishing-spam.
+tried to follow up through raspi-internals chat, they suggested
+i try linux-usb instead, but otoh the original reporter was
+deflected from -usb to "try some other mls, they might care".
+https://www.spinics.net/lists/linux-usb/msg173277.html
 
-> Attached 2 x brand new Western Digital 8TB USB 3.0 drives awhile back =
-and
-> ran some file copy tests and was getting these warnings-- is there any =
-way
-> to avoid these warnings?  I did confirm with parted that the partition =
-was
-> aligned but this appears to be something related to the firmware on =
-the
-> device according to [1] and [2]?
+if i am not following some arcane ritual or indenting convention required 
+by regular users of these lists i apologize in advance, but i am not a 
+kernel developer, i am just here as a user with a bug and a patch. 
+(and the vger FAQ link 404s...) 
 
-Please send us the output of:
+i rediffed against HEAD even though the two weeks old patch still applied
+cleanly with +2 offset.
 
-# sg_vpd -p bl /dev/sdN
-# sg_vpd -p bdc /dev/sdN
-# sg_readcap -l /dev/sdN
+# stepping off soap box # actual technical content starts here #
 
-[ .. ]
+this is a followup to that thread from 2018-11:
+https://www.spinics.net/lists/arm-kernel/msg685598.html
 
-Disk type:
----
-Disk /dev/sdf: 7.3 TiB, 8001562869760 bytes, 15628052480 sectors
-Disk model: My Book 25EE
+the issue was discussed in more detail than i can claim
+to fully understand back then, but no fix ever merged.
+but i would really like to use rtl_433 on a raspi without
+having to build a custom-patched kernel first.
 
-# sg_vpd -p bl /dev/sdf > /tmp/sg_vpd_bl.txt
-# sg_vpd -p bdc /dev/sdf > /tmp/sg_vpd_bdc.txt
-# sg_readcap -l /dev/sdf > /tmp/sg_readcap.txt
-#  ls -l /tmp/sg_vpd_bl.txt /tmp/sg_vpd_bdc.txt /tmp/sg_readcap.txt
--rw-r--r-- 1 root root 421 Aug  8 04:26 /tmp/sg_readcap.txt
--rw-r--r-- 1 root root 244 Aug  8 04:25 /tmp/sg_vpd_bdc.txt
--rw-r--r-- 1 root root 972 Aug  8 04:25 /tmp/sg_vpd_bl.txt
+the attached patch is my stripdown/cleanup of a devel-diff
+provided to me by the original reporter Steve Markgraf.
+credits to him for the good parts, blame to me for the bad parts.
 
-Output:
+this does not cover the additional case of "PIO-based usb controllers"
+mainly because i dont understand what that means (or how to handle it)
+and if its broken right now (as the thread indicates) it might
+as well stay broken until someone who understands cares enough.
 
-sg_readcap.txt
-Read Capacity results:
-   Protection: prot_en=3D0, p_type=3D0, p_i_exponent=3D0
-   Logical block provisioning: lbpme=3D0, lbprz=3D0
-   Last LBA=3D15628052479 (0x3a38127ff), Number of logical =
-blocks=3D15628052480
-   Logical block length=3D512 bytes
-   Logical blocks per physical block exponent=3D3 [so physical block =
-length=3D4096 bytes]
-   Lowest aligned LBA=3D0
-Hence:
-   Device size: 8001562869760 bytes, 7630885.0 MiB, 8001.56 GB, 8.00 TB
+could you please get this on track for merging?
 
-sg_vpd_bdc.txt
-Block device characteristics VPD page (SBC):
-  Nominal rotation rate: 5400 rpm
-  Product type: Not specified
-  WABEREQ=3D0
-  WACEREQ=3D0
-  Nominal form factor: 3.5 inch
-  ZONED=3D0
-  RBWZ=3D0
-  BOCS=3D0
-  FUAB=3D0
-  VBULS=3D0
-  DEPOPULATION_TIME=3D0 (seconds)
-
-sg_vpd_bl.txt
-Block limits VPD page (SBC):
-  Write same non-zero (WSNZ): 0
-  Maximum compare and write length: 0 blocks [Command not implemented]
-  Optimal transfer length granularity: 8 blocks
-  Maximum transfer length: 65535 blocks
-  Optimal transfer length: 65535 blocks
-  Maximum prefetch transfer length: 65535 blocks
-  Maximum unmap LBA count: 0 [Unmap command not implemented]
-  Maximum unmap block descriptor count: 0 [Unmap command not =
-implemented]
-  Optimal unmap granularity: 0 blocks [not reported]
-  Unmap granularity alignment valid: false
-  Unmap granularity alignment: 0 [invalid]
-  Maximum write same length: 0 blocks [not reported]
-  Maximum atomic transfer length: 0 blocks [not reported]
-  Atomic alignment: 0 [unaligned atomic writes permitted]
-  Atomic transfer length granularity: 0 [no granularity requirement
-  Maximum atomic transfer length with atomic boundary: 0 blocks [not =
-reported]
-  Maximum atomic boundary size: 0 blocks [can only write atomic 1 block]
+regards,
+  x23
 
 
+
+
+--ZPt4rx8FFjLCG7dd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="arm-usb-dma-v2.diff"
+
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index b265ab5405f9..69594c2169ea 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -238,9 +238,14 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+ 	usbm->vma_use_count = 1;
+ 	INIT_LIST_HEAD(&usbm->memlist);
+ 
++#ifdef CONFIG_X86
+ 	if (remap_pfn_range(vma, vma->vm_start,
+ 			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
+ 			size, vma->vm_page_prot) < 0) {
++#else /* !CONFIG_X86 */
++	if (dma_mmap_coherent(ps->dev->bus->sysdev, 
++			vma, mem, dma_handle, size) < 0) {
++#endif /* !CONFIG_X86 */
+ 		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
+ 		return -EAGAIN;
+ 	}
+
+--ZPt4rx8FFjLCG7dd--
