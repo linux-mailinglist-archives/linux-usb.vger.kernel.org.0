@@ -2,153 +2,372 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D53586BC7
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 22:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEA786C4B
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 23:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390348AbfHHUmC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Aug 2019 16:42:02 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35793 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725785AbfHHUmC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 16:42:02 -0400
-Received: by mail-pg1-f196.google.com with SMTP id n4so2925823pgv.2
-        for <linux-usb@vger.kernel.org>; Thu, 08 Aug 2019 13:42:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nS7CPtzCVp0ONgQlGgkx7OXPZavZodPDNiD74pSN4ok=;
-        b=TsthMIhqXtbXp4xH+Z2wSZTAZqhudiQe7esQYSq3NqIJCExnewze/88rqQMCne0v0d
-         FN5dRFOqevBvVNOO8AUZEPv3dAUQomTJ83wd9Wr7Y+kJNgX0HKAZzjJBQBi18lQPhP3w
-         ASwqJ7VwHaeLqfgYDU479i5gbC/Pz/daiarWM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nS7CPtzCVp0ONgQlGgkx7OXPZavZodPDNiD74pSN4ok=;
-        b=WS33kSUg89FPAGjH8uVvw/3sMzqIRjlPjf6ylYf2JdHKIuilBfopVzcG1GsNU42ySB
-         m40471KaG2te95FZEKVIm/D9nWtJ7qVR9tbqrqHKH4BsAHzHVzlzzXfJyBRhkkd4DYaJ
-         8D47yox87SBXMPpIZTVxc6Rqo4p+3RBzpamOwcu1nlO2nLzxHpv2T88k4+jSusAiEdjj
-         KsbSoTx71tZu38G6BMCL33jaQT/9OumMt1wCjt4w9IbVj2X5YDMcFVWOAUyn/chjmlaz
-         MLenBKW+S2Q1mZm86Jiwwh25DDC23KpjT6SvajJgGhsKNm8EThXD6pGjYUvl3eryOv1k
-         o1pg==
-X-Gm-Message-State: APjAAAV6SYT4D8lpHoMKkJmw7dvIx/NNPgaCDF63qM1GaVB1v85ncV2y
-        VpEHrjynFIbkr9N7bInqjrlbFw==
-X-Google-Smtp-Source: APXvYqzXHxnpRFvH9kCf1Uy9J4cWLZwuOKZTZDqgdkWhjibPvjL0xvjuHKfltUtrW/23JO7iytrk3Q==
-X-Received: by 2002:a63:60d1:: with SMTP id u200mr14395334pgb.439.1565296921533;
-        Thu, 08 Aug 2019 13:42:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s22sm103042884pfh.107.2019.08.08.13.42.00
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 08 Aug 2019 13:42:00 -0700 (PDT)
-Date:   Thu, 8 Aug 2019 13:41:59 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        syzbot <syzbot+3de312463756f656b47d@syzkaller.appspotmail.com>,
-        allison@lohutok.net, andreyknvl@google.com, cai@lca.pw,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: Re: BUG: bad usercopy in hidraw_ioctl
-Message-ID: <201908081330.98485D9@keescook>
-References: <000000000000ce6527058f8bf0d0@google.com>
- <20190807195821.GD5482@bombadil.infradead.org>
- <20190808014925.GL1131@ZenIV.linux.org.uk>
+        id S2403831AbfHHVZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 17:25:24 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:52775 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732327AbfHHVZY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 17:25:24 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MFb38-1i6JUE4714-00HBDf; Thu, 08 Aug 2019 23:25:05 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Tony Lindgren <tony@atomide.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH 03/22] ARM: omap1: move omap15xx local bus handling to usb.c
+Date:   Thu,  8 Aug 2019 23:22:12 +0200
+Message-Id: <20190808212234.2213262-4-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190808212234.2213262-1-arnd@arndb.de>
+References: <20190808212234.2213262-1-arnd@arndb.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190808014925.GL1131@ZenIV.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:rmObN8c4em3z6MADtDn1dH5ygzXHXH23QHeCylcVTnOlhY+ZPCt
+ 9JTDbQhYBjlZCOji0YTVOOiNozPUOmVyu5bSGp5FjvGiqwdn2EjM1DB7Lvl9z8kzYoi0GIi
+ sAsiPqAf3BGfCbkvHO6Xq9hcge9WjUUn9Wt6WXok8Z/6R6Ij7XkWeZ7NqDBuuQY0FACvFTq
+ mg1JUQO8HGF+l4UgCpwXA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mbk8i9bIm40=:m8WNxBYOf+mHNwotPmsJTT
+ bVT0EiIA51AJzcxHr109cLxi1Hz3cezAl8cww4l+fLfdIxu0AJbeUwvkcsyMSRLV+7u0DxlT0
+ WIM+cSIqflSXl2MdNK5ga13JeFyevwSJdBTJhZzgtRnZoFco5BVGrDZ2+XU/IJcyjP9IG1AW6
+ Gq7FRGvHhl5EezehOB1IwI1flNqBP1EJPQpfG0/xt4XhWm/t47YhuqA7Rw+PnPPWvsDHUtBH9
+ dW5xi+BdytYUnjMVpM/N5SqgWZH23xzUVLM7OuQwHp2vjgR9yMSSDDqGfHwCs28yUQiSLF2BA
+ KXcneZ5opCMNRhjEA+ix48uERHEvH2AZb8OarN6qcej78qRNV5i+U+NoALIRntHrhdA0ShLbR
+ CXYJv4g1K+WQlC9YjRgYT7+QlqokNLPoDwsvVEC1d9214PTZ2Bdau5CpdoXL6M4E63mIxC8R0
+ yenYakopWppiLWGUqPkx7zUQl/JvEMFYnNZuEMDTG9e+0zkCmVu47yyGJadhMhqSWKUbujafH
+ ZrhlTJAfXtkDhNOmE3aa3ZnmPBfrDzp8/5+yVa2ZKR1mbpZ7OC9Gs5ZKSgPwyQ3XLuuV9aW9h
+ Yvp6kZKzYG5aXKHwoPyBCwPArFNnSjStculNF2U0V1OSSIgY5ESRZzIcdYVnjSbtXxFF6FY1l
+ NQUXU2k7WC1F1Or6Ld7HspeYxGz4i7VUKdyNSbtqKPgE1JwsHijsg2tidql05vVd/mR/kXV2O
+ fkdq1gvHPb21UOw6JDQwRGwEp6o2qIckoxnloQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 02:49:25AM +0100, Al Viro wrote:
-> On Wed, Aug 07, 2019 at 12:58:21PM -0700, Matthew Wilcox wrote:
-> > On Wed, Aug 07, 2019 at 12:28:06PM -0700, syzbot wrote:
-> > > usercopy: Kernel memory exposure attempt detected from wrapped address
-> > > (offset 0, size 0)!
-> > > ------------[ cut here ]------------
-> > > kernel BUG at mm/usercopy.c:98!
-> > 
-> > This report is confusing because the arguments to usercopy_abort() are wrong.
-> > 
-> >         /* Reject if object wraps past end of memory. */
-> >         if (ptr + n < ptr)
-> >                 usercopy_abort("wrapped address", NULL, to_user, 0, ptr + n);
+The mach/memory.h file only exists to implement a dma offset for "Local
+Bus" devices, and that consists of the OHCI USB controller for practical
+purposes.
 
-(Just to reiterate for this branch of the thread: this is an off-by-one
-false positive already fixed in -mm for -next. However, see below...)
+The generic dma-mapping interface has gained this exact feature some
+years ago and can do it much more efficiently, so replace the complex
+__arch_virt_to_dma/__arch_dma_to_pfn/... logic with a much simpler boot
+time initialization.
 
-> > 
-> > ptr + n is not 'size', it's what wrapped.  I don't know what 'offset'
-> > should be set to, but 'size' should be 'n'.  Presumably we don't want to
-> > report 'ptr' because it'll leak a kernel address ... reporting 'n' will
-> > leak a range for a kernel address, but I think that's OK?  Admittedly an
-> > attacker can pass in various values for 'n', but it'll be quite noisy
-> > and leave a trace in the kernel logs for forensics to find afterwards.
-> > 
-> > > Call Trace:
-> > >  check_bogus_address mm/usercopy.c:151 [inline]
-> > >  __check_object_size mm/usercopy.c:260 [inline]
-> > >  __check_object_size.cold+0xb2/0xba mm/usercopy.c:250
-> > >  check_object_size include/linux/thread_info.h:119 [inline]
-> > >  check_copy_size include/linux/thread_info.h:150 [inline]
-> > >  copy_to_user include/linux/uaccess.h:151 [inline]
-> > >  hidraw_ioctl+0x38c/0xae0 drivers/hid/hidraw.c:392
-> > 
-> > The root problem would appear to be:
-> > 
-> >                                 else if (copy_to_user(user_arg + offsetof(
-> >                                         struct hidraw_report_descriptor,
-> >                                         value[0]),
-> >                                         dev->hid->rdesc,
-> >                                         min(dev->hid->rsize, len)))
-> > 
-> > That 'min' should surely be a 'max'?
-> 
-> Surely not.  ->rsize is the amount of data available to copy out; len
-> is the size of buffer supplied by userland to copy into.
+This should also make any code that performs dma mapping calls at
+runtime much more efficient, by eliminating the strcmp() along with
+the computation.
 
-include/uapi/linux/hid.h:#define HID_MAX_DESCRIPTOR_SIZE 4096
+Similar, a portion of the ohci-omap driver is just there for configuring
+the memory translation, this too can get moved into usb.c
 
-drivers/hid/hidraw.c:
-                        if (get_user(len, (int __user *)arg))
-                                ret = -EFAULT;
-                        else if (len > HID_MAX_DESCRIPTOR_SIZE - 1)
-                                ret = -EINVAL;
-                        else if (copy_to_user(user_arg + offsetof(
-                                struct hidraw_report_descriptor,
-                                value[0]),
-                                dev->hid->rdesc,
-                                min(dev->hid->rsize, len)))
-                                ret = -EFAULT;
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/arm/mach-omap1/include/mach/memory.h   | 43 -----------
+ arch/arm/mach-omap1/include/mach/omap1510.h |  1 -
+ arch/arm/mach-omap1/usb.c                   | 79 +++++++++++++++++++++
+ drivers/usb/host/ohci-omap.c                | 72 +------------------
+ include/linux/platform_data/usb-omap1.h     |  2 +
+ 5 files changed, 83 insertions(+), 114 deletions(-)
 
-The copy size must be less than 4096, which means dev->hid->rdesc is
-allocated at the highest page of memory. That whole space collides with
-the ERR_PTR region which has two bad potential side-effects:
-
-1) something that checks for ERR_PTRs combined with a high allocation
-will think it failed and leak the allocation.
-
-2) something that doesn't check ERR_PTRs might try to stomp on an actual
-allocation in that area.
-
-How/why is there memory allocated there, I thought it was intentionally
-left unused specifically for ERR_PTR:
-
-Documentation/x86/x86_64/mm.rst:
-
-     Start addr    | Offset |     End addr     | Size  | VM area description
-  ==========================================================================
-  ...
-  ffffffffffe00000 | -2  MB | ffffffffffffffff |  2 MB | ...unused hole
-
-
-or is this still a real bug with an invalid dev->hid->rdesc which was
-about to fault but usercopy got in the way first?
-
+diff --git a/arch/arm/mach-omap1/include/mach/memory.h b/arch/arm/mach-omap1/include/mach/memory.h
+index 1142560e0078..ba3a350479c8 100644
+--- a/arch/arm/mach-omap1/include/mach/memory.h
++++ b/arch/arm/mach-omap1/include/mach/memory.h
+@@ -9,47 +9,4 @@
+ /* REVISIT: omap1 legacy drivers still rely on this */
+ #include <mach/soc.h>
+ 
+-/*
+- * Bus address is physical address, except for OMAP-1510 Local Bus.
+- * OMAP-1510 bus address is translated into a Local Bus address if the
+- * OMAP bus type is lbus. We do the address translation based on the
+- * device overriding the defaults used in the dma-mapping API.
+- * Note that the is_lbus_device() test is not very efficient on 1510
+- * because of the strncmp().
+- */
+-#if defined(CONFIG_ARCH_OMAP15XX) && !defined(__ASSEMBLER__)
+-
+-/*
+- * OMAP-1510 Local Bus address offset
+- */
+-#define OMAP1510_LB_OFFSET	UL(0x30000000)
+-
+-#define virt_to_lbus(x)		((x) - PAGE_OFFSET + OMAP1510_LB_OFFSET)
+-#define lbus_to_virt(x)		((x) - OMAP1510_LB_OFFSET + PAGE_OFFSET)
+-#define is_lbus_device(dev)	(cpu_is_omap15xx() && dev && (strncmp(dev_name(dev), "ohci", 4) == 0))
+-
+-#define __arch_pfn_to_dma(dev, pfn)	\
+-	({ dma_addr_t __dma = __pfn_to_phys(pfn); \
+-	   if (is_lbus_device(dev)) \
+-		__dma = __dma - PHYS_OFFSET + OMAP1510_LB_OFFSET; \
+-	   __dma; })
+-
+-#define __arch_dma_to_pfn(dev, addr)	\
+-	({ dma_addr_t __dma = addr;				\
+-	   if (is_lbus_device(dev))				\
+-		__dma += PHYS_OFFSET - OMAP1510_LB_OFFSET;	\
+-	   __phys_to_pfn(__dma);				\
+-	})
+-
+-#define __arch_dma_to_virt(dev, addr)	({ (void *) (is_lbus_device(dev) ? \
+-						lbus_to_virt(addr) : \
+-						__phys_to_virt(addr)); })
+-
+-#define __arch_virt_to_dma(dev, addr)	({ unsigned long __addr = (unsigned long)(addr); \
+-					   (dma_addr_t) (is_lbus_device(dev) ? \
+-						virt_to_lbus(__addr) : \
+-						__virt_to_phys(__addr)); })
+-
+-#endif	/* CONFIG_ARCH_OMAP15XX */
+-
+ #endif
+diff --git a/arch/arm/mach-omap1/include/mach/omap1510.h b/arch/arm/mach-omap1/include/mach/omap1510.h
+index 3d235244bf5c..7af9c0c7c5ab 100644
+--- a/arch/arm/mach-omap1/include/mach/omap1510.h
++++ b/arch/arm/mach-omap1/include/mach/omap1510.h
+@@ -159,4 +159,3 @@
+ #define OMAP1510_INT_FPGA23		(OMAP_FPGA_IRQ_BASE + 23)
+ 
+ #endif /*  __ASM_ARCH_OMAP15XX_H */
+-
+diff --git a/arch/arm/mach-omap1/usb.c b/arch/arm/mach-omap1/usb.c
+index d8e9bbda8f7b..740c876ae46b 100644
+--- a/arch/arm/mach-omap1/usb.c
++++ b/arch/arm/mach-omap1/usb.c
+@@ -10,6 +10,7 @@
+ #include <linux/init.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
++#include <linux/delay.h>
+ 
+ #include <asm/irq.h>
+ 
+@@ -127,6 +128,7 @@ omap_otg_init(struct omap_usb_config *config)
+ 
+ 		syscon &= ~HST_IDLE_EN;
+ 		ohci_device->dev.platform_data = config;
++
+ 		status = platform_device_register(ohci_device);
+ 		if (status)
+ 			pr_debug("can't register OHCI device, %d\n", status);
+@@ -533,6 +535,80 @@ static u32 __init omap1_usb2_init(unsigned nwires, unsigned alt_pingroup)
+ }
+ 
+ #ifdef	CONFIG_ARCH_OMAP15XX
++/* OMAP-1510 OHCI has its own MMU for DMA */
++#define OMAP1510_LB_MEMSIZE	32	/* Should be same as SDRAM size */
++#define OMAP1510_LB_CLOCK_DIV	0xfffec10c
++#define OMAP1510_LB_MMU_CTL	0xfffec208
++#define OMAP1510_LB_MMU_LCK	0xfffec224
++#define OMAP1510_LB_MMU_LD_TLB	0xfffec228
++#define OMAP1510_LB_MMU_CAM_H	0xfffec22c
++#define OMAP1510_LB_MMU_CAM_L	0xfffec230
++#define OMAP1510_LB_MMU_RAM_H	0xfffec234
++#define OMAP1510_LB_MMU_RAM_L	0xfffec238
++
++/*
++ * Bus address is physical address, except for OMAP-1510 Local Bus.
++ * OMAP-1510 bus address is translated into a Local Bus address if the
++ * OMAP bus type is lbus.
++ */
++#define OMAP1510_LB_OFFSET	   UL(0x30000000)
++#define OMAP1510_LB_DMA_PFN_OFFSET ((OMAP1510_LB_OFFSET - PAGE_OFFSET) >> PAGE_SHIFT)
++
++/*
++ * OMAP-1510 specific Local Bus clock on/off
++ */
++static int omap_1510_local_bus_power(int on)
++{
++	if (on) {
++		omap_writel((1 << 1) | (1 << 0), OMAP1510_LB_MMU_CTL);
++		udelay(200);
++	} else {
++		omap_writel(0, OMAP1510_LB_MMU_CTL);
++	}
++
++	return 0;
++}
++
++/*
++ * OMAP-1510 specific Local Bus initialization
++ * NOTE: This assumes 32MB memory size in OMAP1510LB_MEMSIZE.
++ *       See also arch/mach-omap/memory.h for __virt_to_dma() and
++ *       __dma_to_virt() which need to match with the physical
++ *       Local Bus address below.
++ */
++static int omap_1510_local_bus_init(void)
++{
++	unsigned int tlb;
++	unsigned long lbaddr, physaddr;
++
++	omap_writel((omap_readl(OMAP1510_LB_CLOCK_DIV) & 0xfffffff8) | 0x4,
++	       OMAP1510_LB_CLOCK_DIV);
++
++	/* Configure the Local Bus MMU table */
++	for (tlb = 0; tlb < OMAP1510_LB_MEMSIZE; tlb++) {
++		lbaddr = tlb * 0x00100000 + OMAP1510_LB_OFFSET;
++		physaddr = tlb * 0x00100000 + PHYS_OFFSET;
++		omap_writel((lbaddr & 0x0fffffff) >> 22, OMAP1510_LB_MMU_CAM_H);
++		omap_writel(((lbaddr & 0x003ffc00) >> 6) | 0xc,
++		       OMAP1510_LB_MMU_CAM_L);
++		omap_writel(physaddr >> 16, OMAP1510_LB_MMU_RAM_H);
++		omap_writel((physaddr & 0x0000fc00) | 0x300, OMAP1510_LB_MMU_RAM_L);
++		omap_writel(tlb << 4, OMAP1510_LB_MMU_LCK);
++		omap_writel(0x1, OMAP1510_LB_MMU_LD_TLB);
++	}
++
++	/* Enable the walking table */
++	omap_writel(omap_readl(OMAP1510_LB_MMU_CTL) | (1 << 3), OMAP1510_LB_MMU_CTL);
++	udelay(200);
++
++	return 0;
++}
++
++static void omap_1510_local_bus_reset(void)
++{
++	omap_1510_local_bus_power(1);
++	omap_1510_local_bus_init();
++}
+ 
+ /* ULPD_DPLL_CTRL */
+ #define DPLL_IOB		(1 << 13)
+@@ -601,11 +677,14 @@ static void __init omap_1510_usb_init(struct omap_usb_config *config)
+ 		int status;
+ 
+ 		ohci_device.dev.platform_data = config;
++		ohci_device.dev.dma_pfn_offset = OMAP1510_LB_DMA_PFN_OFFSET;
+ 		status = platform_device_register(&ohci_device);
+ 		if (status)
+ 			pr_debug("can't register OHCI device, %d\n", status);
+ 		/* hcd explicitly gates 48MHz */
+ 	}
++
++	config->lb_reset = omap_1510_local_bus_reset;
+ #endif
+ }
+ 
+diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
+index d8d35d456456..f7efe65f01c5 100644
+--- a/drivers/usb/host/ohci-omap.c
++++ b/drivers/usb/host/ohci-omap.c
+@@ -40,17 +40,6 @@
+ #include <mach/usb.h>
+ 
+ 
+-/* OMAP-1510 OHCI has its own MMU for DMA */
+-#define OMAP1510_LB_MEMSIZE	32	/* Should be same as SDRAM size */
+-#define OMAP1510_LB_CLOCK_DIV	0xfffec10c
+-#define OMAP1510_LB_MMU_CTL	0xfffec208
+-#define OMAP1510_LB_MMU_LCK	0xfffec224
+-#define OMAP1510_LB_MMU_LD_TLB	0xfffec228
+-#define OMAP1510_LB_MMU_CAM_H	0xfffec22c
+-#define OMAP1510_LB_MMU_CAM_L	0xfffec230
+-#define OMAP1510_LB_MMU_RAM_H	0xfffec234
+-#define OMAP1510_LB_MMU_RAM_L	0xfffec238
+-
+ #define DRIVER_DESC "OHCI OMAP driver"
+ 
+ #ifdef CONFIG_TPS65010
+@@ -113,61 +102,6 @@ static int omap_ohci_transceiver_power(int on)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_ARCH_OMAP15XX
+-/*
+- * OMAP-1510 specific Local Bus clock on/off
+- */
+-static int omap_1510_local_bus_power(int on)
+-{
+-	if (on) {
+-		omap_writel((1 << 1) | (1 << 0), OMAP1510_LB_MMU_CTL);
+-		udelay(200);
+-	} else {
+-		omap_writel(0, OMAP1510_LB_MMU_CTL);
+-	}
+-
+-	return 0;
+-}
+-
+-/*
+- * OMAP-1510 specific Local Bus initialization
+- * NOTE: This assumes 32MB memory size in OMAP1510LB_MEMSIZE.
+- *       See also arch/mach-omap/memory.h for __virt_to_dma() and
+- *       __dma_to_virt() which need to match with the physical
+- *       Local Bus address below.
+- */
+-static int omap_1510_local_bus_init(void)
+-{
+-	unsigned int tlb;
+-	unsigned long lbaddr, physaddr;
+-
+-	omap_writel((omap_readl(OMAP1510_LB_CLOCK_DIV) & 0xfffffff8) | 0x4,
+-	       OMAP1510_LB_CLOCK_DIV);
+-
+-	/* Configure the Local Bus MMU table */
+-	for (tlb = 0; tlb < OMAP1510_LB_MEMSIZE; tlb++) {
+-		lbaddr = tlb * 0x00100000 + OMAP1510_LB_OFFSET;
+-		physaddr = tlb * 0x00100000 + PHYS_OFFSET;
+-		omap_writel((lbaddr & 0x0fffffff) >> 22, OMAP1510_LB_MMU_CAM_H);
+-		omap_writel(((lbaddr & 0x003ffc00) >> 6) | 0xc,
+-		       OMAP1510_LB_MMU_CAM_L);
+-		omap_writel(physaddr >> 16, OMAP1510_LB_MMU_RAM_H);
+-		omap_writel((physaddr & 0x0000fc00) | 0x300, OMAP1510_LB_MMU_RAM_L);
+-		omap_writel(tlb << 4, OMAP1510_LB_MMU_LCK);
+-		omap_writel(0x1, OMAP1510_LB_MMU_LD_TLB);
+-	}
+-
+-	/* Enable the walking table */
+-	omap_writel(omap_readl(OMAP1510_LB_MMU_CTL) | (1 << 3), OMAP1510_LB_MMU_CTL);
+-	udelay(200);
+-
+-	return 0;
+-}
+-#else
+-#define omap_1510_local_bus_power(x)	{}
+-#define omap_1510_local_bus_init()	{}
+-#endif
+-
+ #ifdef	CONFIG_USB_OTG
+ 
+ static void start_hnp(struct ohci_hcd *ohci)
+@@ -237,10 +171,8 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
+ 
+ 	omap_ohci_clock_power(1);
+ 
+-	if (cpu_is_omap15xx()) {
+-		omap_1510_local_bus_power(1);
+-		omap_1510_local_bus_init();
+-	}
++	if (config->lb_reset)
++		config->lb_reset();
+ 
+ 	ret = ohci_setup(hcd);
+ 	if (ret < 0)
+diff --git a/include/linux/platform_data/usb-omap1.h b/include/linux/platform_data/usb-omap1.h
+index 43b5ce139c37..878e572a78bf 100644
+--- a/include/linux/platform_data/usb-omap1.h
++++ b/include/linux/platform_data/usb-omap1.h
+@@ -48,6 +48,8 @@ struct omap_usb_config {
+ 	u32 (*usb2_init)(unsigned nwires, unsigned alt_pingroup);
+ 
+ 	int (*ocpi_enable)(void);
++
++	void (*lb_reset)(void);
+ };
+ 
+ #endif /* __LINUX_USB_OMAP1_H */
 -- 
-Kees Cook
+2.20.0
+
