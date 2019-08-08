@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 095BF86460
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 16:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F82086461
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 16:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732596AbfHHOd0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Aug 2019 10:33:26 -0400
-Received: from mail-ot1-f71.google.com ([209.85.210.71]:57251 "EHLO
-        mail-ot1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732477AbfHHOdZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 10:33:25 -0400
-Received: by mail-ot1-f71.google.com with SMTP id q22so62086705otl.23
+        id S1732487AbfHHOd1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 10:33:27 -0400
+Received: from mail-ot1-f70.google.com ([209.85.210.70]:41191 "EHLO
+        mail-ot1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730993AbfHHOd0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 10:33:26 -0400
+Received: by mail-ot1-f70.google.com with SMTP id a8so62062129oti.8
         for <linux-usb@vger.kernel.org>; Thu, 08 Aug 2019 07:33:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
          :from:to:cc;
         bh=jZyCbcw3RWENZUjZ8q6u6MdFhvaB3V5am3DAxqvxROk=;
-        b=qoqnhXv7sbUOsxIIIxkibCRxh3xNgs7DmEgHAYV8sF/nMHCFYmiG2o23fowg5xLMbz
-         SD9EmkZ77Q/xrkMQuW3DFKBeWNcQ88FX2QXMoaVOORy/klUhArOQm1D5C872fxrh3rag
-         Q4CXaXYyf7dgE8MCS3aTbf4jcvxy40hBs/QsoalybOElmQMkPcGBDO4Z/BjAdMcANLxe
-         0+xaTCAd/S+POCXpWg7eewJtOE7qtDh1nivgpME/FfiFHalk+mbMVxeiKdgt1aTxa235
-         h3qCQyjNTMIOlOKEItrhKuqgexUQKvX3lOBbTT3tZUNcmP4pDvYAOFiE20XF0GwqeaWn
-         BAcg==
-X-Gm-Message-State: APjAAAXnI1F5cmERw/hVuzFXRF05FrrYDODid84vu2gEiAMFSVirlEGu
-        QHdN+Hkj9TE7Q0Aa7pSwrjU0B4wikYU1l8neGNZbd9NBQgwD
-X-Google-Smtp-Source: APXvYqyHOp2lVA12vv+ST29W9GrxgWuLhJZZhoi+joOmROWgcCD7PxanPpA2bipURq2utrM6+0wONAARKSHheq6iGCjCQwVOjSra
+        b=mT3jOcjLJttk3ZL6oFBVAergT1OyKegkHUFn6B1DMIz5FFhQ5Y4ZbCgOOU22Vjl31F
+         InbAdRs1xmVicY/rlfpsJWP9IMDeMRSx1blDaXNSVCUtdsQQpPuefZP4sJG7toCYSNUo
+         HZtNtM915KzXmdkZ+OS9kfKJj/XYpe0eNZ6hrecyWE2vBumixFcKjbnw+Pq1Lyjji70Y
+         sOy8GVdboEgOqt1f3MFFNVA+WjdYilUiwima/Fd8pMFQfSB4S4HzV7UKtinzIdD3aYBF
+         /qpJCZeajBUl6bG20fI5fXGtyRJCQfG4y1NarDTUa0O2/HXPDFV5opBAjnrfGc4GJFhf
+         kL8w==
+X-Gm-Message-State: APjAAAUy0NpkpSRUnqgDS9CQbGs/CV9kGGwsa/PmBSJL1792v/eJKUst
+        wEbRoCSx94fd9E0GPQx/3zcIqqOfOMWC4/CxLjnv9ifqn8Fl
+X-Google-Smtp-Source: APXvYqwLopKdzK6bl1Lg2PQ4S1kOQeFL7QoxNpjxwh3yVGIW3f6KnGwgVb1fz6n4pSt7APKNlW2nZpGXg09wteGep3RrNzKvUdB+
 MIME-Version: 1.0
-X-Received: by 2002:a02:ad15:: with SMTP id s21mr17427026jan.47.1565274804827;
- Thu, 08 Aug 2019 07:33:24 -0700 (PDT)
-Date:   Thu, 08 Aug 2019 07:33:24 -0700
+X-Received: by 2002:a5e:9b05:: with SMTP id j5mr15605328iok.75.1565274805299;
+ Thu, 08 Aug 2019 07:33:25 -0700 (PDT)
+Date:   Thu, 08 Aug 2019 07:33:25 -0700
 In-Reply-To: <Pine.LNX.4.44L0.1908081027560.1652-100000@iolanthe.rowland.org>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b7c096058f9bf071@google.com>
+Message-ID: <000000000000bef340058f9bf02b@google.com>
 Subject: Re: Re: possible deadlock in open_rio
 From:   syzbot <syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
