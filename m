@@ -2,133 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D18758628F
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 15:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB56086295
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 15:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732815AbfHHNEF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Aug 2019 09:04:05 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:43168 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732404AbfHHNEE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 09:04:04 -0400
-Received: by mail-pg1-f196.google.com with SMTP id r26so8093528pgl.10
-        for <linux-usb@vger.kernel.org>; Thu, 08 Aug 2019 06:04:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5JZUTLmHdma6tGN31r/68Q00SumRXcOKJcsJJ56qTLo=;
-        b=d8fYu5+zH0QvJ6tdHCtn9wmhJ6iOadbV/6PoPlxHA7ETmmqHZBlhVdiVKtuBMH8/y3
-         zrcs0zHXM3VahG+f354L1rr9cdXhg7S1t9YZccEDK83hhwl0doOsEZBNGheFiZKED8h4
-         fyGEOwmVJMJ89HcYlst1pBnHbzLH46Y52INVLIzvR3FNHulcrQHKsQF1tJM/7FIn2VUY
-         N1dVufFV9jKoYcaNVwCXohWhfKgf2QVvzXLcINGFNQ4lOPm7/VetoZP04Y74zT3DyWAw
-         5meCQ7qeb6dSeRx4X+KzadjB3xd73FFfLs9pdrR/SnKqYceO5KzPA7oZjsHIORc/VUEn
-         JggQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5JZUTLmHdma6tGN31r/68Q00SumRXcOKJcsJJ56qTLo=;
-        b=icIcHiy6qwPmlGx7OUcw7WIS/Wgp+iRp3Mi4njN/XYINhIxXczJ3TjDqIM2RoYIdmo
-         RDYMHrYPrVq9COviN4KOCkpP1/toJM7mINRMZkGS3G5r+lNZLW2FCd4ksQ0mfRNE6e9B
-         QyKcRNBSCZBi43GNwXQwab11LE0KflWeCheULRh+8NWzhrwooXc+baYOaMboNj8k8hQS
-         jhd1kjxUyVTj27tPsHR2UiGpAiX6VtCfMthXyZVf7rYzaShOVEc4oPRyYWaHzuiQE8U3
-         VThF+7lPKXswZYlCsV44OguSub84go6LpJ21kVXjsI1sn0iUizJ3kRyy9vhxaqMR3tRR
-         T6RA==
-X-Gm-Message-State: APjAAAUcz1CmOtwm0ehbQ2QbPUKKRqyzGTnL6ZbOijdI/Qt5p3wR8SGo
-        K0k+d6GtSUrh1sZWumw6jt/4U+ExsgmNOK/p21Yexw==
-X-Google-Smtp-Source: APXvYqze1tdh4/k1fLy0z5pw573eZyhbGcFIKEVhtKivn9GtZHPjML4I21AoZyCfxE2lM/5u+0CWE2mAD5k4AZKL47o=
-X-Received: by 2002:a17:90a:2488:: with SMTP id i8mr3894140pje.123.1565269443502;
- Thu, 08 Aug 2019 06:04:03 -0700 (PDT)
+        id S1732935AbfHHNFb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 09:05:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55424 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732836AbfHHNF3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Aug 2019 09:05:29 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC5772171F;
+        Thu,  8 Aug 2019 13:05:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565269528;
+        bh=r3Z5T+QVkdlTcqHZjGzDvph2nY+qT+ThI9PNNH4bnTU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sv7ua+CxnH4xl1J1IjZ4Q7jgVJb+PPElfZvzAsBNQ07YIHlG+uNLPT/sSoREMITc0
+         VpYeoLODKkw4x74JJz0bjREEdESbRSBpDQGQKNTpND9muZFan0O6qStPHezRRNYFuG
+         fFQqWbfVP0ioqth8Xw5+UntJX+vqnM19c/d6e7f8=
+Date:   Thu, 8 Aug 2019 15:05:25 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     yvahkhfo.1df7f8c2@hashmail.org, security@kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: usb zero copy dma handling
+Message-ID: <20190808130525.GA1756@kroah.com>
+References: <20190808084636.GB15080@priv-mua.localdomain>
+ <20190808085811.GA1265@kroah.com>
+ <10bcb28b-e87b-7b16-97e3-88e727e76d25@arm.com>
+ <20190808100726.GB23844@kroah.com>
 MIME-Version: 1.0
-References: <000000000000f365b6058f8b07ca@google.com> <Pine.LNX.4.44L0.1908071431050.1514-100000@iolanthe.rowland.org>
- <CAAeHK+xh6h=HBEpwPB7g2=a07+zZ9zS5Cuk0Tpo_+70Bf5j9Tw@mail.gmail.com> <CACT4Y+ZD=YYvLER5jDAvCbw3kBKcNkQJEJN5yFc7O6aLaFORDg@mail.gmail.com>
-In-Reply-To: <CACT4Y+ZD=YYvLER5jDAvCbw3kBKcNkQJEJN5yFc7O6aLaFORDg@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 8 Aug 2019 15:03:51 +0200
-Message-ID: <CAAeHK+yPJR2kZ5Mkry+bGFVuedF9F76=5GdKkF1eLkr9FWyvqA@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-To:     Dmitry Vyukov <dvyukov@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190808100726.GB23844@kroah.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 8, 2019 at 2:44 PM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Thu, Aug 8, 2019 at 2:28 PM Andrey Konovalov <andreyknvl@google.com> wrote:
-> >
-> > On Wed, Aug 7, 2019 at 8:31 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Wed, 7 Aug 2019, syzbot wrote:
-> > >
-> > > > Hello,
-> > > >
-> > > > syzbot has tested the proposed patch and the reproducer did not trigger
-> > > > crash:
-> > > >
-> > > > Reported-and-tested-by:
-> > > > syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com
-> > > >
-> > > > Tested on:
-> > > >
-> > > > commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-> > > > git tree:       https://github.com/google/kasan.git
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > > patch:          https://syzkaller.appspot.com/x/patch.diff?x=132eec8c600000
-> > > >
-> > > > Note: testing is done by a robot and is best-effort only.
-> > >
-> > > Andrey, is there any way to get the console output from this test?
-> >
-> > Dmitry, would it be possible to link console log for successful tests as well?
->
-> Yes. Start by filing a feature request at
-> https://github.com/google/syzkaller/issues
+On Thu, Aug 08, 2019 at 12:07:26PM +0200, Greg KH wrote:
+> On Thu, Aug 08, 2019 at 10:46:24AM +0100, Robin Murphy wrote:
+> > On 2019-08-08 9:58 am, Greg KH wrote:
+> > > On Thu, Aug 08, 2019 at 10:46:36AM +0200, yvahkhfo.1df7f8c2@hashmail.org wrote:
+> > > > Hello linux-usb and linux-arm.
+> > > > 
+> > > > Ccing security@ because "the kernel dma code is mapping randomish
+> > > > kernel/user mem to a user process" seems to have security implications
+> > > > even though i didnt research that aspect past "its a 100% reliable way
+> > > > to crash a raspi from userspace".
+> > > > 
+> > > > tried submitting this through linux-arm-kernel ~2 weeks ago but
+> > > > the only "response" i got was phishing-spam.
+> > > > tried to follow up through raspi-internals chat, they suggested
+> > > > i try linux-usb instead, but otoh the original reporter was
+> > > > deflected from -usb to "try some other mls, they might care".
+> > > > https://www.spinics.net/lists/linux-usb/msg173277.html
+> > > > 
+> > > > if i am not following some arcane ritual or indenting convention required
+> > > > by regular users of these lists i apologize in advance, but i am not a
+> > > > kernel developer, i am just here as a user with a bug and a patch.
+> > > > (and the vger FAQ link 404s...)
+> > > 
+> > > The "arcane ritual" should be really well documented by now, it's in
+> > > Documentation/SubmittingPatches in your kernel tree, and you can read it
+> > > online at:
+> > > 	https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+> > > 
+> > > 
+> > > > i rediffed against HEAD even though the two weeks old patch still applied
+> > > > cleanly with +2 offset.
+> > > > 
+> > > > # stepping off soap box # actual technical content starts here #
+> > > > 
+> > > > this is a followup to that thread from 2018-11:
+> > > > https://www.spinics.net/lists/arm-kernel/msg685598.html
+> > > > 
+> > > > the issue was discussed in more detail than i can claim
+> > > > to fully understand back then, but no fix ever merged.
+> > > > but i would really like to use rtl_433 on a raspi without
+> > > > having to build a custom-patched kernel first.
+> > > > 
+> > > > the attached patch is my stripdown/cleanup of a devel-diff
+> > > > provided to me by the original reporter Steve Markgraf.
+> > > > credits to him for the good parts, blame to me for the bad parts.
+> > > > 
+> > > > this does not cover the additional case of "PIO-based usb controllers"
+> > > > mainly because i dont understand what that means (or how to handle it)
+> > > > and if its broken right now (as the thread indicates) it might
+> > > > as well stay broken until someone who understands cares enough.
+> > > > 
+> > > > could you please get this on track for merging?
+> > > 
+> > > 
+> > > > 
+> > > > regards,
+> > > >    x23
+> > > > 
+> > > > 
+> > > > 
+> > > 
+> > > > diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> > > > index b265ab5405f9..69594c2169ea 100644
+> > > > --- a/drivers/usb/core/devio.c
+> > > > +++ b/drivers/usb/core/devio.c
+> > > > @@ -238,9 +238,14 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+> > > >   	usbm->vma_use_count = 1;
+> > > >   	INIT_LIST_HEAD(&usbm->memlist);
+> > > > +#ifdef CONFIG_X86
+> > > >   	if (remap_pfn_range(vma, vma->vm_start,
+> > > >   			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
+> > > >   			size, vma->vm_page_prot) < 0) {
+> > > > +#else /* !CONFIG_X86 */
+> > > > +	if (dma_mmap_coherent(ps->dev->bus->sysdev,
+> > > > +			vma, mem, dma_handle, size) < 0) {
+> > > > +#endif /* !CONFIG_X86 */
+> > > >   		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
+> > > >   		return -EAGAIN;
+> > > >   	}
+> > > 
+> > > First off, we need this in a format we could apply it in (hint, read the
+> > > above links).
+> > > 
+> > > But the main issue here is what exactly is this "fixing"?  What is wrong
+> > > with the existing code that non-x86 systems have such a problem with?
+> > > Shouldn't all of these dma issues be handled by the platform with the
+> > > remap_pfn_range() call itself?
+> > 
+> > If usbm->mem is (or ever can be) a CPU address returned by
+> > dma_alloc_coherent(), then doing virt_to_phys() on it is bogus and may yield
+> > a nonsense 'PFN' to begin with. However, it it can can ever come from a
+> > regular page allocation/kmalloc/vmalloc then unconditionally passing it to
+> > dma_mmap_coherent wouldn't be right either.
+> 
+> usbm->mem comes from a call to usb_alloc_coherent() which calls
+> hcd_buffer_alloc() which tries to allocate memory in the best possible
+> way for that specific host controller.  If the host controller has a
+> pool of memory, it uses that, if the host controller has PIO it uses
+> kmalloc(), if there are some "pools" of host controller memory it uses
+> dma_pool_alloc() and as a total last resort, calls dma_alloc_coherent().
+> 
+> So yes, this could happen.
+> 
+> So how to fix this properly?  What host controller driver is being used
+> here that ends up defaulting to dma_alloc_coherent()?  Shouldn't that be
+> fixed up no matter what?
+> 
+> And then, if what you say is correct then a real fix for devio.c could
+> be made, but that is NOT going to just depend on the arch the system is
+> running on, as all of this depends on the host controller being accessed
+> at that moment for that device.
 
-Filed https://github.com/google/syzkaller/issues/1322
+Also see this thread:
+	https://lore.kernel.org/linux-usb/20190801220134.3295-1-gavinli@thegavinli.com/
 
-Alan, for now I've applied your patch and run the reproducer manually:
+where this just came up and how the proposed patch here would cause
+warnings to occur in the kernel log of users for no good reason.  That
+issue is supposed to be fixed "soon"...
 
-[   90.844643][   T74] usb 1-1: new high-speed USB device number 2
-using dummy_hcd
-[   91.085789][   T74] usb 1-1: Using ep0 maxpacket: 16
-[   91.204698][   T74] usb 1-1: config 0 has an invalid interface
-number: 234 but max is 0
-[   91.209137][   T74] usb 1-1: config 0 has no interface number 0
-[   91.211599][   T74] usb 1-1: config 0 interface 234 altsetting 0
-endpoint 0x8D has an inva1
-[   91.216162][   T74] usb 1-1: config 0 interface 234 altsetting 0
-endpoint 0x7 has invalid 4
-[   91.218211][   T74] usb 1-1: config 0 interface 234 altsetting 0
-bulk endpoint 0x7 has inv4
-[   91.220131][   T74] usb 1-1: config 0 interface 234 altsetting 0
-bulk endpoint 0x8F has in0
-[   91.222052][   T74] usb 1-1: New USB device found, idVendor=0421,
-idProduct=0486, bcdDevic7
-[   91.223851][   T74] usb 1-1: New USB device strings: Mfr=0,
-Product=0, SerialNumber=0
-[   91.233180][   T74] usb 1-1: config 0 descriptor??
-[   91.270222][   T74] rndis_wlan 1-1:0.234: Refcount before probe: 3
-[   91.275464][   T74] rndis_wlan 1-1:0.234: invalid descriptor buffer length
-[   91.277558][   T74] usb 1-1: bad CDC descriptors
-[   91.279716][   T74] rndis_wlan 1-1:0.234: Refcount after probe: 3
-[   91.281378][   T74] rndis_host 1-1:0.234: Refcount before probe: 3
-[   91.283303][   T74] rndis_host 1-1:0.234: invalid descriptor buffer length
-[   91.284724][   T74] usb 1-1: bad CDC descriptors
-[   91.286004][   T74] rndis_host 1-1:0.234: Refcount after probe: 3
-[   91.287318][   T74] cdc_acm 1-1:0.234: Refcount before probe: 3
-[   91.288513][   T74] cdc_acm 1-1:0.234: invalid descriptor buffer length
-[   91.289835][   T74] cdc_acm 1-1:0.234: No union descriptor, testing
-for castrated device
-[   91.291555][   T74] cdc_acm 1-1:0.234: Refcount after probe: 3
-[   91.292766][   T74] cdc_acm: probe of 1-1:0.234 failed with error -12
-[   92.001549][   T96] usb 1-1: USB disconnect, device number 2
+thanks,
+
+greg k-h
