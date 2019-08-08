@@ -2,147 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F31F785EEF
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 11:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030C485F08
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 11:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389783AbfHHJq0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Aug 2019 05:46:26 -0400
-Received: from foss.arm.com ([217.140.110.172]:59052 "EHLO foss.arm.com"
+        id S1731532AbfHHJv2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 05:51:28 -0400
+Received: from mga04.intel.com ([192.55.52.120]:12452 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389774AbfHHJqZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Aug 2019 05:46:25 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D15D01596;
-        Thu,  8 Aug 2019 02:46:24 -0700 (PDT)
-Received: from [10.37.12.237] (unknown [10.37.12.237])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA9583F706;
-        Thu,  8 Aug 2019 02:46:23 -0700 (PDT)
-Subject: Re: usb zero copy dma handling
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        yvahkhfo.1df7f8c2@hashmail.org
-Cc:     security@kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20190808084636.GB15080@priv-mua.localdomain>
- <20190808085811.GA1265@kroah.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <10bcb28b-e87b-7b16-97e3-88e727e76d25@arm.com>
-Date:   Thu, 8 Aug 2019 10:46:24 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1730678AbfHHJv2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Aug 2019 05:51:28 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 02:51:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,360,1559545200"; 
+   d="asc'?scan'208";a="182547457"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Aug 2019 02:51:24 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jochen Sprickerhof <jochen@sprickerhof.de>,
+        Anand Moon <linux.amoon@gmail.com>
+Subject: Re: [PATCH v2 2/2 RESEND] usb: dwc3: remove generic PHY calibrate() calls
+In-Reply-To: <20190808094128.27213-3-m.szyprowski@samsung.com>
+References: <20190808094128.27213-1-m.szyprowski@samsung.com> <CGME20190808094146eucas1p27c673846a5a9be0c55f1f87c89af4adf@eucas1p2.samsung.com> <20190808094128.27213-3-m.szyprowski@samsung.com>
+Date:   Thu, 08 Aug 2019 12:51:20 +0300
+Message-ID: <875zn8t27b.fsf@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190808085811.GA1265@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2019-08-08 9:58 am, Greg KH wrote:
-> On Thu, Aug 08, 2019 at 10:46:36AM +0200, yvahkhfo.1df7f8c2@hashmail.org wrote:
->> Hello linux-usb and linux-arm.
->>
->> Ccing security@ because "the kernel dma code is mapping randomish
->> kernel/user mem to a user process" seems to have security implications
->> even though i didnt research that aspect past "its a 100% reliable way
->> to crash a raspi from userspace".
->>
->> tried submitting this through linux-arm-kernel ~2 weeks ago but
->> the only "response" i got was phishing-spam.
->> tried to follow up through raspi-internals chat, they suggested
->> i try linux-usb instead, but otoh the original reporter was
->> deflected from -usb to "try some other mls, they might care".
->> https://www.spinics.net/lists/linux-usb/msg173277.html
->>
->> if i am not following some arcane ritual or indenting convention required
->> by regular users of these lists i apologize in advance, but i am not a
->> kernel developer, i am just here as a user with a bug and a patch.
->> (and the vger FAQ link 404s...)
-> 
-> The "arcane ritual" should be really well documented by now, it's in
-> Documentation/SubmittingPatches in your kernel tree, and you can read it
-> online at:
-> 	https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-> 
-> 
->> i rediffed against HEAD even though the two weeks old patch still applied
->> cleanly with +2 offset.
->>
->> # stepping off soap box # actual technical content starts here #
->>
->> this is a followup to that thread from 2018-11:
->> https://www.spinics.net/lists/arm-kernel/msg685598.html
->>
->> the issue was discussed in more detail than i can claim
->> to fully understand back then, but no fix ever merged.
->> but i would really like to use rtl_433 on a raspi without
->> having to build a custom-patched kernel first.
->>
->> the attached patch is my stripdown/cleanup of a devel-diff
->> provided to me by the original reporter Steve Markgraf.
->> credits to him for the good parts, blame to me for the bad parts.
->>
->> this does not cover the additional case of "PIO-based usb controllers"
->> mainly because i dont understand what that means (or how to handle it)
->> and if its broken right now (as the thread indicates) it might
->> as well stay broken until someone who understands cares enough.
->>
->> could you please get this on track for merging?
-> 
-> 
->>
->> regards,
->>    x23
->>
->>
->>
-> 
->> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
->> index b265ab5405f9..69594c2169ea 100644
->> --- a/drivers/usb/core/devio.c
->> +++ b/drivers/usb/core/devio.c
->> @@ -238,9 +238,14 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
->>   	usbm->vma_use_count = 1;
->>   	INIT_LIST_HEAD(&usbm->memlist);
->>   
->> +#ifdef CONFIG_X86
->>   	if (remap_pfn_range(vma, vma->vm_start,
->>   			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
->>   			size, vma->vm_page_prot) < 0) {
->> +#else /* !CONFIG_X86 */
->> +	if (dma_mmap_coherent(ps->dev->bus->sysdev,
->> +			vma, mem, dma_handle, size) < 0) {
->> +#endif /* !CONFIG_X86 */
->>   		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
->>   		return -EAGAIN;
->>   	}
-> 
-> First off, we need this in a format we could apply it in (hint, read the
-> above links).
-> 
-> But the main issue here is what exactly is this "fixing"?  What is wrong
-> with the existing code that non-x86 systems have such a problem with?
-> Shouldn't all of these dma issues be handled by the platform with the
-> remap_pfn_range() call itself?
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-If usbm->mem is (or ever can be) a CPU address returned by 
-dma_alloc_coherent(), then doing virt_to_phys() on it is bogus and may 
-yield a nonsense 'PFN' to begin with. However, it it can can ever come 
-from a regular page allocation/kmalloc/vmalloc then unconditionally 
-passing it to dma_mmap_coherent wouldn't be right either.
 
-Robin.
+Hi,
 
-> 
-> What is the problem that you are having?
-> 
-> thanks,
-> 
-> greg k-h
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+Marek Szyprowski <m.szyprowski@samsung.com> writes:
+
+> Calls to USB2 generic PHY calibrate() method has been moved to HCD core,
+> which now successfully handles generic PHYs and their calibration after
+> every HCD reset. This fixes all the timing issues related to PHY
+> calibration done directly from DWC3 driver: incorrect operation after
+> system suspend/resume or USB3.0 detection failure when XHCI-plat driver
+> compiled as separate module.
+>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Tested-by: Anand Moon <linux.amoon@gmail.com>
+> Tested-by: Jochen Sprickerhof <jochen@sprickerhof.de>
+> ---
+>  drivers/usb/dwc3/core.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index c9bb93a2c81e..7dd6d419254d 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -168,7 +168,6 @@ static void __dwc3_set_mode(struct work_struct *work)
+>  				otg_set_vbus(dwc->usb2_phy->otg, true);
+>  			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+>  			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+> -			phy_calibrate(dwc->usb2_generic_phy);
+
+are you sure you're the only one using phy_calibrate()? I don't want any
+regressions because of this :-p
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1L8JgACgkQzL64meEa
+mQZ7thAAwR1OAvfMJAot8JikjKsEFvKPVpdjj/HSpjbWs/0OwTfFHHSVY7Hm3ljp
+vuTrSexoEo/zL4oqsqcyFHdELmeVjBVVvOCLGD1cW1XrvHj5zGqMXvcSq7NAq2UD
+MhzmFZgfiMmQ0QCW8RmY4QRXmVDxYrsNDC43lCkQbtOze7j/w9ND9AA15duSdgnb
+5zha4wVp9f2p6m3xEucHMsfI3AMyEfqiy6Q+hFnF+WQDgkIsKk5oaVuTo9cD9NzP
+rACEXoWr9k8qhoasg0nuUvE1Zosen4x/WWZ0T7XzoiuPi6o7XJ+yXVEF6TuNU9Hr
+5vj6WlEqobwoysqvHJxyN8WvdJhZGBhpfx7mmXCbTYrgZeCSck7E1+9gUTIgPZS0
+nk/Cbrk4PiYYMoSZ5Q6nYx8/zfS7XTSwedT2+TkMaiqap4PAvOhD4xUuLURQLrOo
+KNUOGcFGh5/3w5rf/gqJflnUQosNfo7EdqeuJTjo2IPe3a8oc18HKzjD3CLBhJgp
+orkX2jKiDxJXUC62Bg0CjZn9IQJ3l/W0N80KHBI/dK++iGiNPPPGKvwCM1urWRjO
+ijbZ4c2ApVGhcQVnprF8NtadLSr2DvK8MRLP1/EtmL05wVkCDazQ1gc/wI9D1iss
+mWp/l63sykyltWn4whn+Hd+dnQwy/FuaFESWt/H/kkMtUDBBYGA=
+=9rzr
+-----END PGP SIGNATURE-----
+--=-=-=--
