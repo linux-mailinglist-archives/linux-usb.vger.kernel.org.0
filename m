@@ -2,352 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F343D85E4A
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 11:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7729285EB7
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 11:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732214AbfHHJbK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Aug 2019 05:31:10 -0400
-Received: from mail-eopbgr80059.outbound.protection.outlook.com ([40.107.8.59]:15168
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731122AbfHHJbK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Aug 2019 05:31:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jyD14vaQYCIjri4Tx8/giGuMJVuXCKhlhOO9n9O03ykvvc4AB4oJc9uQIYSpLAIqXgsaDMpSLGyX6tecLW4zjdkJVBECDR1rsUQqxWZWHswrx5IK8BlFFnhXMvHi+karoFbo3kDFqzFPXV7K5ii/K+Jb43tBkHMKp/sRvKhklGliyjZlGBgXmL+GNv8Nihk0CJZAOfBV3lXIU6xAn69LSlrhbGeB2njOY30ZtJqfR8pTpZuBWiMx1cHFcZd6RAOVXHJsepwTo5h52C0joYQqMxZHEyvK1awpj23K0pjOW+Y6wtqRzr1VWenLFC+A2nD29HhA+MYnD+2iVo2e48Uwwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M7vRk8h0FYZqMpDQlhz9A9YHM+WF6tCOPJNVsXYtzF0=;
- b=mpdfAd1WSJsApiST/0zibnu4a7KZuVaWE9INrPKlX8T7tcDLfQoAgWji6r56UItYFZHbLZdODbLctFrueKsNnA/Zn9KMlZQb3X6Kkrz1KLYGDVAyJHkq0Y7HXfOuKO+u/grdQ/prMBX6YbJXcSGdyeDwX/9ryAORl1itqNzQTWb3Hg0okywY+LjTCf077sqFpziEU7yW2tr2Y/58txl5l86n7aPir96cjZ6d10Ey28SlruxzEmr4WlOCOdDA4b8iViPT4oNNCjn0OxYuWnRa236wwcZxIqyDckDMtgpSyw67C3mLTEbh3fqoVAE7oGu7atRxWYsT8n3wOR9xrtYUxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M7vRk8h0FYZqMpDQlhz9A9YHM+WF6tCOPJNVsXYtzF0=;
- b=Hb3MupkvYDkuelb4QGBw6K4TZw1SQBR1blUPpPs+7Y4mULj/O4S6k2C3h6tcZ6yCFUPrff88dOWzuRJBS7x5b4WGC1rN9VFyrhhQad8mOjiKpTe/1cbZgpkCX1FvfG9h4UFxtIHEVnEti+OnI/0VDFn3ua7kRRYsfLR67+Brob0=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB4558.eurprd04.prod.outlook.com (20.177.55.216) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.14; Thu, 8 Aug 2019 09:30:57 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::81ec:c8ec:54d9:5dc5]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::81ec:c8ec:54d9:5dc5%2]) with mapi id 15.20.2136.018; Thu, 8 Aug 2019
- 09:30:57 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Jun Li <jun.li@nxp.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>, dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] usb: chipidea: add role switch class support
-Thread-Topic: [PATCH v2 2/2] usb: chipidea: add role switch class support
-Thread-Index: AQHVTPJjXqP2r2y4kUylXokWc1V0wqbw8aPw
-Date:   Thu, 8 Aug 2019 09:30:57 +0000
-Message-ID: <VI1PR04MB5327D34EE7561F16C4FE168D8BD70@VI1PR04MB5327.eurprd04.prod.outlook.com>
-References: <20190807072342.9700-1-jun.li@nxp.com>
- <20190807072342.9700-2-jun.li@nxp.com>
-In-Reply-To: <20190807072342.9700-2-jun.li@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 09b6d5fd-b3e3-4eac-6869-08d71be31e6d
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4558;
-x-ms-traffictypediagnostic: VI1PR04MB4558:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4558A43B976EC49C442D4B628BD70@VI1PR04MB4558.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2331;
-x-forefront-prvs: 012349AD1C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(396003)(346002)(376002)(136003)(199004)(189003)(6116002)(6862004)(81166006)(486006)(66946007)(81156014)(6246003)(476003)(3846002)(11346002)(446003)(229853002)(305945005)(7736002)(8936002)(55016002)(66446008)(53936002)(66476007)(9686003)(64756008)(66556008)(14444005)(256004)(52536014)(4326008)(76116006)(6636002)(8676002)(25786009)(5660300002)(44832011)(2906002)(54906003)(316002)(66066001)(6436002)(86362001)(71200400001)(71190400001)(478600001)(74316002)(14454004)(7696005)(33656002)(99286004)(6506007)(102836004)(76176011)(26005)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4558;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: KVP5nextHuPD9TjSgyBQCM4TQcE+sdPLQ7DnYBWVXlV4cH/IlKeeusj4cbgIucpq0o1RRMnPXWAROLTKO0SLAClcDgfZAyse+dYk2xTflqsGUkh9XANWWZPye+kzCSgSnQH/tNPhztEwOYp1dCtgm/6sf3w2r9YNOr0cj1TVb/SIaKP21qrQE07bpK6Ul07+5p9c1PZNmhdPBqpIkabT29WA0tkLC+Kc2t755raA9PbMIDA/73TGQvXyLXEOkJoI3oX3DXgIopC09YUqnf/Ge31ItGIoHchfdtXTbx0S4XCHjeRgMNh513eds9hbRteMMvWJHLxSu37GYsN7pjPZn41EfIbHDWpj7ICc4RhGJCbf4sHt2X3OgHeEecoZHijHTbmY+/HRcJl6UxgjXdqNmATb2UlxvOSPPQU/mzgoUk8=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1732620AbfHHJiM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 05:38:12 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:12512 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732589AbfHHJiL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Aug 2019 05:38:11 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d4bed83000b>; Thu, 08 Aug 2019 02:38:11 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 08 Aug 2019 02:38:10 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 08 Aug 2019 02:38:10 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 8 Aug
+ 2019 09:38:09 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 8 Aug 2019 09:38:09 +0000
+Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.65.118]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d4bed7f0001>; Thu, 08 Aug 2019 02:38:09 -0700
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+Subject: [Patch V6 0/8] Tegra XUSB gadget driver support
+Date:   Thu, 8 Aug 2019 15:07:18 +0530
+Message-ID: <1565257046-9890-1-git-send-email-nkristam@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09b6d5fd-b3e3-4eac-6869-08d71be31e6d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2019 09:30:57.6018
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: peter.chen@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4558
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1565257091; bh=qdUb8V4wtxiO/oXWfuEwtivWCMJqc18gOwIUaAnNx1o=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=YM3QoPyIiJk6IFDzDkBbWEgMAoBNoIs/Qw4aQkhO388OXtewLCYi764FvP3uabTB8
+         I6pK3fSMIksE+Hf9VurWZykRo1gmlcW9oCb0X4E13whU+XOghQMci7CzoMP41H383s
+         DAJbSRtuZRilKLfCfcROoT1GcU3hzk2wyaxI13kxKCPAeplW0jjqtZTfdPNmD8atpe
+         0U+X/OenjYeRBtvcFK9wcDdFoUSd+Ofh7r2idKHETFskPWg5r6fhaMkEMQ5Bx7wTMW
+         74WPraMu/pl/1fkLIX0VzQVJ8s9+z7CDS1yfPBf6ub3chsB8gHJj5C9AJppyXsyVqV
+         AvXC86pxjeXmA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> USB role is fully controlled by usb role switch consumer(e.g. typec), usb=
- port can be
-> at host mode(USB_ROLE_HOST), device mode connected to
-> host(USB_ROLE_DEVICE), or not connecting any parter(USB_ROLE_NONE).
->=20
+This is the sixth version of series "Tegra XUSB gadget driver support"
 
-%s/parter/partner ?
+Patches 1-3 are phy driver changes to add support for device
+mode.
+Patches 4-7 are changes related to XUSB device mode
+controller driver.
+Patch 8 is to enable XUDC driver in defconfig
 
-Are there any ways you could get external cable status from usb-switch or t=
-ype-c like external
-connector? If there are, you could update otgsc value for otgsc_read, or ch=
-ange cable status,
-and avoid changing common handling, like ci_hdrc_probe and  ci_otg_work. An=
-d it could
-benefit for other use cases, like booting with cable connected and switch r=
-ole through /sys.
+Test Steps(USB 2.0):
+- Enable "USB Gadget precomposed configurations" in defconfig
+- Build, flash and boot Jetson TX1
+- Connect Jetson TX1 and Ubuntu device using USB A to Micro B
+  cable
+- After boot on Jetson TX1 terminal usb0 network device should be
+  enumerated
+- Assign static ip to usb0 on Jetson TX1 and corresponding net
+  device on ubuntu
+- Run ping test and transfer test(used scp) to check data transfer
+  communication
 
-Peter
+SS mode is verified by enabling Type A port as peripheral
 
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
->=20
-> Change for v2:
-> - Support USB_ROLE_NONE, which for usb port not connecting any
->   device or host, and will be in low power mode.
->=20
->  drivers/usb/chipidea/ci.h   |   3 ++
->  drivers/usb/chipidea/core.c | 120 +++++++++++++++++++++++++++++++++-----=
---
-> ----
->  drivers/usb/chipidea/otg.c  |  20 ++++++++
->  3 files changed, 114 insertions(+), 29 deletions(-)
->=20
-> diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h index
-> 82b86cd..f0aec1d 100644
-> --- a/drivers/usb/chipidea/ci.h
-> +++ b/drivers/usb/chipidea/ci.h
-> @@ -205,6 +205,7 @@ struct ci_hdrc {
->  	int				irq;
->  	struct ci_role_driver		*roles[USB_ROLE_DEVICE + 1];
->  	enum usb_role			role;
-> +	enum usb_role			target_role;
->  	bool				is_otg;
->  	struct usb_otg			otg;
->  	struct otg_fsm			fsm;
-> @@ -212,6 +213,7 @@ struct ci_hdrc {
->  	ktime_t
-> 	hr_timeouts[NUM_OTG_FSM_TIMERS];
->  	unsigned			enabled_otg_timer_bits;
->  	enum otg_fsm_timer		next_otg_timer;
-> +	struct usb_role_switch		*role_switch;
->  	struct work_struct		work;
->  	struct workqueue_struct		*wq;
->=20
-> @@ -244,6 +246,7 @@ struct ci_hdrc {
->  	struct dentry			*debugfs;
->  	bool				id_event;
->  	bool				b_sess_valid_event;
-> +	bool				role_switch_event;
->  	bool				imx28_write_fix;
->  	bool				supports_runtime_pm;
->  	bool				in_lpm;
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c in=
-dex
-> bc24c5b..965ce17 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -587,6 +587,42 @@ static irqreturn_t ci_irq(int irq, void *data)
->  	return ret;
->  }
->=20
-> +static int ci_usb_role_switch_set(struct device *dev, enum usb_role
-> +role) {
-> +	struct ci_hdrc *ci =3D dev_get_drvdata(dev);
-> +	unsigned long flags;
-> +
-> +	if (ci->role =3D=3D role)
-> +		return 0;
-> +
-> +	spin_lock_irqsave(&ci->lock, flags);
-> +	ci->role_switch_event =3D true;
-> +	ci->target_role =3D role;
-> +	spin_unlock_irqrestore(&ci->lock, flags);
-> +
-> +	ci_otg_queue_work(ci);
-> +
-> +	return 0;
-> +}
-> +
-> +static enum usb_role ci_usb_role_switch_get(struct device *dev) {
-> +	struct ci_hdrc *ci =3D dev_get_drvdata(dev);
-> +	unsigned long flags;
-> +	enum usb_role role;
-> +
-> +	spin_lock_irqsave(&ci->lock, flags);
-> +	role =3D ci->role;
-> +	spin_unlock_irqrestore(&ci->lock, flags);
-> +
-> +	return role;
-> +}
-> +
-> +static struct usb_role_switch_desc ci_role_switch =3D {
-> +	.set =3D ci_usb_role_switch_set,
-> +	.get =3D ci_usb_role_switch_get,
-> +};
-> +
->  static int ci_cable_notifier(struct notifier_block *nb, unsigned long ev=
-ent,
->  			     void *ptr)
->  {
-> @@ -689,6 +725,9 @@ static int ci_get_platdata(struct device *dev,
->  	if (of_find_property(dev->of_node, "non-zero-ttctrl-ttha", NULL))
->  		platdata->flags |=3D CI_HDRC_SET_NON_ZERO_TTHA;
->=20
-> +	if (device_property_read_bool(dev, "usb-role-switch"))
-> +		ci_role_switch.fwnode =3D dev->fwnode;
-> +
->  	ext_id =3D ERR_PTR(-ENODEV);
->  	ext_vbus =3D ERR_PTR(-ENODEV);
->  	if (of_property_read_bool(dev->of_node, "extcon")) { @@ -908,6 +947,43
-> @@ static const struct attribute_group ci_attr_group =3D {
->  	.attrs =3D ci_attrs,
->  };
->=20
-> +static int ci_start_initial_role(struct ci_hdrc *ci) {
-> +	int ret =3D 0;
-> +
-> +	if (ci->roles[USB_ROLE_HOST] && ci->roles[USB_ROLE_DEVICE]) {
-> +		if (ci->is_otg) {
-> +			ci->role =3D ci_otg_role(ci);
-> +			/* Enable ID change irq */
-> +			hw_write_otgsc(ci, OTGSC_IDIE, OTGSC_IDIE);
-> +		} else {
-> +			/*
-> +			 * If the controller is not OTG capable, but support
-> +			 * role switch, the defalt role is gadget, and the
-> +			 * user can switch it through debugfs.
-> +			 */
-> +			ci->role =3D USB_ROLE_DEVICE;
-> +		}
-> +	} else {
-> +		ci->role =3D ci->roles[USB_ROLE_HOST]
-> +			? USB_ROLE_HOST
-> +			: USB_ROLE_DEVICE;
-> +	}
-> +
-> +	if (!ci_otg_is_fsm_mode(ci)) {
-> +		/* only update vbus status for peripheral */
-> +		if (ci->role =3D=3D USB_ROLE_DEVICE)
-> +			ci_handle_vbus_change(ci);
-> +
-> +		ret =3D ci_role_start(ci, ci->role);
-> +		if (ret)
-> +			dev_err(ci->dev, "can't start %s role\n",
-> +						ci_role(ci)->name);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  static int ci_hdrc_probe(struct platform_device *pdev)  {
->  	struct device	*dev =3D &pdev->dev;
-> @@ -1051,36 +1127,10 @@ static int ci_hdrc_probe(struct platform_device *=
-pdev)
->  		}
->  	}
->=20
-> -	if (ci->roles[USB_ROLE_HOST] && ci->roles[USB_ROLE_DEVICE]) {
-> -		if (ci->is_otg) {
-> -			ci->role =3D ci_otg_role(ci);
-> -			/* Enable ID change irq */
-> -			hw_write_otgsc(ci, OTGSC_IDIE, OTGSC_IDIE);
-> -		} else {
-> -			/*
-> -			 * If the controller is not OTG capable, but support
-> -			 * role switch, the defalt role is gadget, and the
-> -			 * user can switch it through debugfs.
-> -			 */
-> -			ci->role =3D USB_ROLE_DEVICE;
-> -		}
-> -	} else {
-> -		ci->role =3D ci->roles[USB_ROLE_HOST]
-> -			? USB_ROLE_HOST
-> -			: USB_ROLE_DEVICE;
-> -	}
-> -
-> -	if (!ci_otg_is_fsm_mode(ci)) {
-> -		/* only update vbus status for peripheral */
-> -		if (ci->role =3D=3D USB_ROLE_DEVICE)
-> -			ci_handle_vbus_change(ci);
-> -
-> -		ret =3D ci_role_start(ci, ci->role);
-> -		if (ret) {
-> -			dev_err(dev, "can't start %s role\n",
-> -						ci_role(ci)->name);
-> +	if (!ci_role_switch.fwnode) {
-> +		ret =3D ci_start_initial_role(ci);
-> +		if (ret)
->  			goto stop;
-> -		}
->  	}
->=20
->  	ret =3D devm_request_irq(dev, ci->irq, ci_irq, IRQF_SHARED, @@ -1092,6
-> +1142,15 @@ static int ci_hdrc_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto stop;
->=20
-> +	if (ci_role_switch.fwnode) {
-> +		ci->role_switch =3D usb_role_switch_register(dev,
-> +					&ci_role_switch);
-> +		if (IS_ERR(ci->role_switch)) {
-> +			ret =3D PTR_ERR(ci->role_switch);
-> +			goto stop;
-> +		}
-> +	}
-> +
->  	if (ci->supports_runtime_pm) {
->  		pm_runtime_set_active(&pdev->dev);
->  		pm_runtime_enable(&pdev->dev);
-> @@ -1133,6 +1192,9 @@ static int ci_hdrc_remove(struct platform_device *p=
-dev)
-> {
->  	struct ci_hdrc *ci =3D platform_get_drvdata(pdev);
->=20
-> +	if (ci->role_switch)
-> +		usb_role_switch_unregister(ci->role_switch);
-> +
->  	if (ci->supports_runtime_pm) {
->  		pm_runtime_get_sync(&pdev->dev);
->  		pm_runtime_disable(&pdev->dev);
-> diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c inde=
-x
-> 5bde0b5..03675b6 100644
-> --- a/drivers/usb/chipidea/otg.c
-> +++ b/drivers/usb/chipidea/otg.c
-> @@ -214,6 +214,26 @@ static void ci_otg_work(struct work_struct *work)
->  		ci_handle_vbus_change(ci);
->  	}
->=20
-> +	if (ci->role_switch_event) {
-> +		ci->role_switch_event =3D false;
-> +
-> +		/* Stop current role */
-> +		if (ci->role =3D=3D USB_ROLE_DEVICE) {
-> +			usb_gadget_vbus_disconnect(&ci->gadget);
-> +			ci->role =3D USB_ROLE_NONE;
-> +		} else if (ci->role =3D=3D USB_ROLE_HOST) {
-> +			ci_role_stop(ci);
-> +		}
-> +
-> +		/* Start target role */
-> +		if (ci->target_role =3D=3D USB_ROLE_DEVICE) {
-> +			usb_gadget_vbus_connect(&ci->gadget);
-> +			ci->role =3D USB_ROLE_DEVICE;
-> +		} else if (ci->target_role =3D=3D USB_ROLE_HOST) {
-> +			ci_role_start(ci, USB_ROLE_HOST);
-> +		}
-> +	}
-> +
->  	pm_runtime_put_sync(ci->dev);
->=20
->  	enable_irq(ci->irq);
-> --
-> 2.7.4
+This patch series is dependent[1] on
+https://patchwork.kernel.org/cover/11056429/
+
+[1] Dependent series doesnot compile on Master branch due to removal of
+    switch_fwnode_match() in file drivers/usb/roles/class.c.
+    Hence verified current series changes on 5.3-RC3 branch.
+---
+v6:
+* Patches 1,2,3,7,8 - No changes
+* Patch 4,5,6 - Comments from Rob addressed, updated usb connector driver
+  compatibility string.
+---
+v5:
+* Patches 1-3 - Commit subject updated as per inputs from Thierry
+* Patch 4 - Added reg-names used on Tegra210 in the bindings doc
+* Enabled xudc driver as module instead of part of kernel in patch 8
+* Patched 5-8 - No changes
+---
+v4:
+* patch 1 - no changes
+* corrected companion device search based on inputs from Thierry in patch 2
+* removed unneeded dev variable and corrected value read in
+  tegra210_utmi_port_reset function in patch 3
+* dt binding doc and dtb files are corrected for alignments.
+  Replaced extcon-usb-gpio with usb role switch.
+* Added support for USB role switch instead of extcon-usb-gpio and other minor
+  comments as suggested by Chunfeng.
+* Enabled xudc driver as module instead of part of kernel in patch 8
+---
+V3:
+* Rebased patch 1 to top of tree.
+* Fixed bug in patch 2, where xudc interrupts dont get generated if USB host
+  mode fails to probe. Moved fake port detection logic to generic xusb.c. fake
+  usb port data is updated based on soc flag need_fake_usb3_port.
+* Added extra lines whereever necessary to make code more readable in patch 3
+  and 7.
+* dt binding doc is corrected for typos and extcon references. Also added
+  details for clocks and removed xusb_ references to clock and power-domain
+  names and accordingly patch 5 is updated.
+* removed avdd-pll-utmip-supply in patch 6, as its now part of padctl driver.
+* Patch 8 has no changes.
+---
+V2:
+* Patches 1-3 are new patches in this series, which splits unified features
+  patch to speprated features and removes need of port-fake entry in DT.
+* Patch 4 is re-arragend dt-bindings patch which incorporates previous
+  patch comments to sort DT entries alphabetically, addresses name changes
+  and PM domain details added.
+* Patch 5-6 are re-arranged DT patches with major changes - sort entries
+  alphabetically, and adds clock names.
+* Patch 7 is UDC driver tegra XUSB device mode controller with major
+  changes - remove un-used module params, lockinng for device_mode flag,
+  moving un-needed info logs to debug level, making changes feature flag
+  dependent rather than SOC based macros and other error handling in probe.
+* Patch 8 has no changes.
+
+Nagarjuna Kristam (8):
+  phy: tegra: xusb: Add XUSB dual mode support on Tegra210
+  phy: tegra: xusb: Add usb3 port fake support on Tegra210
+  phy: tegra: xusb: Add vbus override support on Tegra210
+  dt-bindings: usb: Add NVIDIA Tegra XUSB device mode controller binding
+  arm64: tegra: Add xudc node for Tegra210
+  arm64: tegra: Enable xudc on Jetson TX1
+  usb: gadget: Add UDC driver for tegra XUSB device mode controller
+  arm64: defconfig: Enable tegra XUDC driver
+
+ .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  |  110 +
+ arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |   31 +-
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   19 +
+ arch/arm64/configs/defconfig                       |    1 +
+ drivers/phy/tegra/xusb-tegra210.c                  |  133 +-
+ drivers/phy/tegra/xusb.c                           |   87 +
+ drivers/phy/tegra/xusb.h                           |    4 +
+ drivers/usb/gadget/udc/Kconfig                     |   11 +
+ drivers/usb/gadget/udc/Makefile                    |    1 +
+ drivers/usb/gadget/udc/tegra_xudc.c                | 3808 ++++++++++++++++++++
+ include/linux/phy/tegra/xusb.h                     |    4 +-
+ 11 files changed, 4205 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+ create mode 100644 drivers/usb/gadget/udc/tegra_xudc.c
+
+-- 
+2.7.4
 
