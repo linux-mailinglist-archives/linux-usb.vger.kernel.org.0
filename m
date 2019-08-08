@@ -2,74 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D80786229
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 14:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD9286233
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Aug 2019 14:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732475AbfHHMq5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Aug 2019 08:46:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50750 "EHLO mail.kernel.org"
+        id S1732372AbfHHMsD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Aug 2019 08:48:03 -0400
+Received: from mga04.intel.com ([192.55.52.120]:25787 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732239AbfHHMq5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Aug 2019 08:46:57 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA5FA2171F;
-        Thu,  8 Aug 2019 12:46:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565268416;
-        bh=K4KvFbUOjG4sKLOZlXNsxRufBtA9Jpgu03DPyml6ddU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DHc3hfWr4bSGlQa/A+RlbktFUpzSLW9GPuQTZz+6DFTeL0IPl6c3JKu4pGx2SI7Kg
-         sf/8g3CF0hFbFXstDKmpYfiw8U2q1QD71McN3tHjxydMbjjGjNXwUZ1SBOy9BMhNAy
-         Zn6q81aHbBGVhGcalPXQPTnpnUYNokYiD7ymf3K8=
-Date:   Thu, 8 Aug 2019 14:46:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     syzbot <syzbot+45b2f40f0778cfa7634e@syzkaller.appspotmail.com>,
-        Michael Hund <mhund@ld-didactic.de>
-Cc:     akpm@linux-foundation.org, andreyknvl@google.com, cai@lca.pw,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Subject: Re: BUG: bad usercopy in ld_usb_read
-Message-ID: <20190808124654.GB32144@kroah.com>
-References: <0000000000005c056c058f9a5437@google.com>
+        id S1727522AbfHHMsD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Aug 2019 08:48:03 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 05:48:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,361,1559545200"; 
+   d="asc'?scan'208";a="326299253"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga004.jf.intel.com with ESMTP; 08 Aug 2019 05:47:58 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Roger Quadros <rogerq@ti.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] usb: dwc3: remove generic PHYs forwarding for XHCI device
+In-Reply-To: <20190719093037.16181-1-m.szyprowski@samsung.com>
+References: <CGME20190719093045eucas1p1a1c6f26ae4103e9ed283fff2396beaef@eucas1p1.samsung.com> <20190719093037.16181-1-m.szyprowski@samsung.com>
+Date:   Thu, 08 Aug 2019 15:47:54 +0300
+Message-ID: <87h86rn7r9.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000005c056c058f9a5437@google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 05:38:06AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13aeaece600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=45b2f40f0778cfa7634e
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> 
-> Unfortunately, I don't have any reproducer for this crash yet.
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+45b2f40f0778cfa7634e@syzkaller.appspotmail.com
-> 
-> ldusb 6-1:0.124: Read buffer overflow, -131383996186150 bytes dropped
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-That's a funny number :)
 
-Nice overflow found, I see you are now starting to fuzz the char device
-nodes of usb drivers...
+Hi,
 
-Michael, care to fix this up?
+Marek Szyprowski <m.szyprowski@samsung.com> writes:
 
-thanks,
+> Commit 08f871a3aca2 ("usb: dwc3: host: convey the PHYs to xhci") added
+> forwarding of the generic PHYs from DWC3 core to the instantiated XHCI-pl=
+at
+> device. However XHCI(-plat) driver never gained support for generic PHYs,
+> thus the lookup added by that commit is never used. In meantime the commit
+> d64ff406e51e ("usb: dwc3: use bus->sysdev for DMA configuration")
+> incorrectly changed the device used for creating lookup, making the lookup
+> useless and generic PHYs inaccessible from XHCI device.
+>
+> However since commit 178a0bce05cb ("usb: core: hcd: integrate the PHY
+> wrapper into the HCD core") USB HCD already handles generic PHYs acquired
+> from the HCD's 'sysdev', which in this case is DWC3 core device. This mea=
+ns
+> that creating any custom lookup entries for XHCI driver is no longer need=
+ed
+> and can be simply removed.
+>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+>  drivers/usb/dwc3/host.c | 22 ++++------------------
+>  1 file changed, 4 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index f55947294f7c..8deea8c91e03 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -85,7 +85,7 @@ int dwc3_host_init(struct dwc3 *dwc)
+>  						DWC3_XHCI_RESOURCES_NUM);
+>  	if (ret) {
+>  		dev_err(dwc->dev, "couldn't add resources to xHCI device\n");
+> -		goto err1;
+> +		goto err;
+>  	}
+>=20=20
+>  	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
+> @@ -112,37 +112,23 @@ int dwc3_host_init(struct dwc3 *dwc)
+>  		ret =3D platform_device_add_properties(xhci, props);
+>  		if (ret) {
+>  			dev_err(dwc->dev, "failed to add properties to xHCI\n");
+> -			goto err1;
+> +			goto err;
+>  		}
+>  	}
+>=20=20
+> -	phy_create_lookup(dwc->usb2_generic_phy, "usb2-phy",
+> -			  dev_name(dwc->dev));
+> -	phy_create_lookup(dwc->usb3_generic_phy, "usb3-phy",
+> -			  dev_name(dwc->dev));
+> -
+>  	ret =3D platform_device_add(xhci);
+>  	if (ret) {
+>  		dev_err(dwc->dev, "failed to register xHCI device\n");
+> -		goto err2;
+> +		goto err;
+>  	}
+>=20=20
+>  	return 0;
+> -err2:
+> -	phy_remove_lookup(dwc->usb2_generic_phy, "usb2-phy",
+> -			  dev_name(dwc->dev));
+> -	phy_remove_lookup(dwc->usb3_generic_phy, "usb3-phy",
+> -			  dev_name(dwc->dev));
+> -err1:
+> +err:
+>  	platform_device_put(xhci);
+>  	return ret;
+>  }
+>=20=20
+>  void dwc3_host_exit(struct dwc3 *dwc)
+>  {
+> -	phy_remove_lookup(dwc->usb2_generic_phy, "usb2-phy",
+> -			  dev_name(dwc->dev));
+> -	phy_remove_lookup(dwc->usb3_generic_phy, "usb3-phy",
+> -			  dev_name(dwc->dev));
+>  	platform_device_unregister(dwc->xhci);
+>  }
 
-greg k-h
+Roger, could you verify that this doesn't regress any of your platforms?
+
+Thanks
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1MGfoACgkQzL64meEa
+mQbikg//UH6PkjeKc14UABfn3WYRRhkmGCSIj4Jo8Fb+0VGwwnCwh6gynHnd/tF9
+e92UjtzJvJaGadq+j9LPLvu1aL7P1RgAVSenk6e5FeDgfKg8AjH16y1Ds7YcG57K
+rZYXp2EHn1JsdX9F2qb6h6aQIhU/QG2w6uZhuaC5ZSRHHbMPk3lUC9l2eEDtZIT7
+VEtvx3yV5YatkOB3pVNIpYMsUncucQzQ9YWH7+GaAKuxek0lUBcSigsw8FWlpZUl
+lEyNmjaY1WHGEtxc/ufFsQLKVRx9hdqQBiBU6ppVSLSYFHI3JrP1tyz3lWOd2pQL
+7fKGqQxKxkTeniltiGfXzua30Qea/qNHN8OPA6MI7BESYrmzRvaX39ubb292NDvG
+sY2riya0yZkJKZVPGTEU8E2yhJio7v0SdK+AT0UrQ6If3s+VD9HNKogqeshk6QPc
++ukerIHGlZHgohDg8Cn9/mk4rPASfgwf0x7MYBR/4FgcETusEOD5evAQjWydpWeY
+TJ9YgW7bDjZf5SqgcZKzA1UkRZD+g1SY6rvoVMwdLiHaXF89NJn9o/zYSTZF9McS
+p3EDSPpH159AyobnkQF2OSKKbqbrlf3wsGSKcQn3SDgjVt82owJ2Ch1a38GwI1Ki
+0tuJigtq8gGexw6EbAj/U4iydtjYNG4tg+/g7oCmURXWTRGyxjg=
+=Wqee
+-----END PGP SIGNATURE-----
+--=-=-=--
