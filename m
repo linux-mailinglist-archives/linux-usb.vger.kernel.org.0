@@ -2,178 +2,229 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC7F883CF
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 22:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4474D883F0
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 22:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbfHIUYG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 16:24:06 -0400
-Received: from mail-ot1-f72.google.com ([209.85.210.72]:55024 "EHLO
-        mail-ot1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbfHIUYF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 16:24:05 -0400
-Received: by mail-ot1-f72.google.com with SMTP id h26so71195917otr.21
-        for <linux-usb@vger.kernel.org>; Fri, 09 Aug 2019 13:24:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=ijJNAYL2B9/moqfTrx5qGTYven5FKSOBWif269XCy0Y=;
-        b=WNV4Ln1bG6746IrOx9JZF7sV9mvQb1o2CrogoNv2B/qxwNEH+OLLS3b7NCrXoXPKG9
-         BehOVaWrnre+HD8GIrbwnvmIieLai3YW4P4EhwrknoWKIO5t73I4mMSiz6qy6ycmGA+q
-         /Pd6xtiB/2f3V79M23ivONlpC3f0GmVJ7Oy02bko3Gl4VaFecXFy13k89vXKbj/qPF5M
-         85i9cwEFwPQ5V9yqh+l3ik0tAd0p4HQMwQnhPdsGK/1w6A2uAJMav5n8lHHoEb8QvVf4
-         AboBFDt0cKcjp8P58lnyyustw1lIFpMgeWZbyL3gNo2Crb7WvJZpGMBmlO6xYiqwWZa7
-         1NNQ==
-X-Gm-Message-State: APjAAAWQ9ARhjyGZ1NvQgK96nTR5F7Jan/Qx19XntQwgdpbgAgA6/SY5
-        ZXI2qOOiCIqW77D/itnEEa9qfufRTIECaRIZp5XzH1DL221n
-X-Google-Smtp-Source: APXvYqyq/olg/jR4hswRZZ4D2uVrL27yY30UtSdFBuBs3PP+AvRTrGiXf6MzdBUoHcxKoDFjxG+fOsIK2F1/ByYexg6QDQrk5fCU
+        id S1729293AbfHIU3N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Aug 2019 16:29:13 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:39109 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728985AbfHIU3N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 16:29:13 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MuluN-1iDqgZ18F9-00rrQN; Fri, 09 Aug 2019 22:29:08 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     soc@kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH 15/16] usb: remove ehci-w90x900 driver
+Date:   Fri,  9 Aug 2019 22:27:43 +0200
+Message-Id: <20190809202749.742267-16-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190809202749.742267-1-arnd@arndb.de>
+References: <20190809202749.742267-1-arnd@arndb.de>
 MIME-Version: 1.0
-X-Received: by 2002:a02:710f:: with SMTP id n15mr24302559jac.119.1565382244638;
- Fri, 09 Aug 2019 13:24:04 -0700 (PDT)
-Date:   Fri, 09 Aug 2019 13:24:04 -0700
-In-Reply-To: <000000000000d12d24058f5d6b65@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a12822058fb4f408@google.com>
-Subject: Re: KASAN: use-after-free Read in adu_disconnect
-From:   syzbot <syzbot+0243cb250a51eeefb8cc@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, dmg@turingmachine.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:wPb76nKdF5ukUOXyjS8AZRENduOC7LpgNPFvMuock5ZAhYRqQao
+ gvKLPV1umWtIhcVdiLRa0DoIQV/OCyejR4JycbIVVOZHIjlNDDyMW9SvIPThUT9kg9EZ/KS
+ sz1mPeOFO52p033XspngdYSQSIKfCFpDqhzxuG4VGoq0IQw7eh5HIEXCtDtSNZeKVZW1Rpc
+ eif2zt/I1wUHaS+eVsdag==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:krqIrxD/H+I=:F0XIUeNMJNSMKpdBEraPd+
+ wszOmk23slJ2+EFaf9xDGvXs57+uug+Uyr7YOcF3PNTX5tqBgn7APWopxEH+8J9jQBE3Rhp1t
+ UG0BNlUNayakZ4x1JGMqAAjXTtnpahPPQoLiDNZidHFcFc8aZdMkq0TL7JhR5HOw0ImnJi/ni
+ Xh6oRwgnKwlmvvzHLUiEaGZbtXHzqPArI33vUB3wL/Iq9sppHdDFSxFTjrFjXVF3dkxr80Vqv
+ OxeSWBikJpauDwvpJ10v7/NBP9pejfOLlWS6WZEarELZsIkOQpoporUE21dpD4mG3ny90amFO
+ O8oSeWGL1jdnbI9VEXaeJkB+qj6wX98bRFv2xE2m/3h3cX97RtV400NDMonaXl5Aig5Z28AJX
+ ZBH4Es7pvN+xwpivDxi4IFPqsL63OZvcd5Qq1MFVpJXzacsQ0jRa3vq8rvPXqqZ+KSRaUuTFw
+ DMDC7ec8gQODBg7wJRM5i70y9+5dPVtcse7JkfVbJjjUZZCFL/+3Z9oMjY2QY8w96ug7a+Rhg
+ fT3w7OpFnSP7zxbQhVcyXj2uBlue4r7RpWloUni61z9cgFUrCywgvNUzLSWImzU1SdExHLF3e
+ +d6reW7nUJJX42K96EQ1vbfjtIkZ+D2u2z17itfY5PwP02JvjFrG93xPGS+hrDmDLiFxwWdVN
+ wuW5q+zgLDwFiO9p61bkj/4T1fzDed83ty6e8lAYJh6dL3SiYnsKVTD2Af6bggiPd4lw5glnH
+ ugqB7yHhWupiqsW2gfCNIj1BZOlQcLZGPyxpbQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+The ARM w90x900 platform is getting removed, so this driver is obsolete.
 
-HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=13871a4a600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-dashboard link: https://syzkaller.appspot.com/bug?extid=0243cb250a51eeefb8cc
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11c4c8e2600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11d80d2c600000
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/host/Kconfig        |   6 --
+ drivers/usb/host/Makefile       |   1 -
+ drivers/usb/host/ehci-w90x900.c | 130 --------------------------------
+ 3 files changed, 137 deletions(-)
+ delete mode 100644 drivers/usb/host/ehci-w90x900.c
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+0243cb250a51eeefb8cc@syzkaller.appspotmail.com
-
-usb 1-1: USB disconnect, device number 4
-==================================================================
-BUG: KASAN: use-after-free in atomic64_read  
-include/asm-generic/atomic-instrumented.h:836 [inline]
-BUG: KASAN: use-after-free in atomic_long_read  
-include/asm-generic/atomic-long.h:28 [inline]
-BUG: KASAN: use-after-free in __mutex_unlock_slowpath+0x96/0x670  
-kernel/locking/mutex.c:1211
-Read of size 8 at addr ffff8881d1d0aa00 by task kworker/0:1/12
-
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc2+ #25
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description+0x6a/0x32c mm/kasan/report.c:351
-  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-  kasan_report+0xe/0x12 mm/kasan/common.c:612
-  check_memory_region_inline mm/kasan/generic.c:185 [inline]
-  check_memory_region+0x128/0x190 mm/kasan/generic.c:192
-  atomic64_read include/asm-generic/atomic-instrumented.h:836 [inline]
-  atomic_long_read include/asm-generic/atomic-long.h:28 [inline]
-  __mutex_unlock_slowpath+0x96/0x670 kernel/locking/mutex.c:1211
-  adu_disconnect+0x83/0x150 drivers/usb/misc/adutux.c:768
-  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
-  __device_release_driver drivers/base/dd.c:1120 [inline]
-  device_release_driver_internal+0x404/0x4c0 drivers/base/dd.c:1151
-  bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
-  device_del+0x420/0xb10 drivers/base/core.c:2288
-  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
-  usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
-  hub_port_connect drivers/usb/core/hub.c:4949 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Allocated by task 22:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_kmalloc mm/kasan/common.c:487 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:460
-  kmalloc include/linux/slab.h:552 [inline]
-  kzalloc include/linux/slab.h:748 [inline]
-  adu_probe+0x7d/0x6e0 drivers/usb/misc/adutux.c:660
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 1733:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
-  slab_free_hook mm/slub.c:1423 [inline]
-  slab_free_freelist_hook mm/slub.c:1470 [inline]
-  slab_free mm/slub.c:3012 [inline]
-  kfree+0xe4/0x2f0 mm/slub.c:3953
-  adu_release+0x3cc/0x590 drivers/usb/misc/adutux.c:332
-  __fput+0x2d7/0x840 fs/file_table.c:280
-  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
-  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-  exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
-  prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
-  do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:299
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-The buggy address belongs to the object at ffff8881d1d0aa00
-  which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 0 bytes inside of
-  512-byte region [ffff8881d1d0aa00, ffff8881d1d0ac00)
-The buggy address belongs to the page:
-page:ffffea0007474280 refcount:1 mapcount:0 mapping:ffff8881da002500  
-index:0x0 compound_mapcount: 0
-flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 ffffea000748c280 0000000500000005 ffff8881da002500
-raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8881d1d0a900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d1d0a980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ffff8881d1d0aa00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                    ^
-  ffff8881d1d0aa80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d1d0ab00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 40b5de597112..782ead054a90 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -287,12 +287,6 @@ config USB_EHCI_MV
+ 	  Dova, Armada 370 and Armada XP. See "Support for Marvell EBU
+ 	  on-chip EHCI USB controller" for those.
+ 
+-config USB_W90X900_EHCI
+-	tristate "W90X900(W90P910) EHCI support"
+-	depends on ARCH_W90X900
+-	---help---
+-		Enables support for the W90X900 USB controller
+-
+ config USB_CNS3XXX_EHCI
+ 	bool "Cavium CNS3XXX EHCI Module (DEPRECATED)"
+ 	depends on ARCH_CNS3XXX
+diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+index 84514f71ae44..0bba93de7654 100644
+--- a/drivers/usb/host/Makefile
++++ b/drivers/usb/host/Makefile
+@@ -51,7 +51,6 @@ obj-$(CONFIG_USB_EHCI_HCD_STI)	+= ehci-st.o
+ obj-$(CONFIG_USB_EHCI_EXYNOS)	+= ehci-exynos.o
+ obj-$(CONFIG_USB_EHCI_HCD_AT91) += ehci-atmel.o
+ obj-$(CONFIG_USB_EHCI_TEGRA)	+= ehci-tegra.o
+-obj-$(CONFIG_USB_W90X900_EHCI)	+= ehci-w90x900.o
+ 
+ obj-$(CONFIG_USB_OXU210HP_HCD)	+= oxu210hp-hcd.o
+ obj-$(CONFIG_USB_ISP116X_HCD)	+= isp116x-hcd.o
+diff --git a/drivers/usb/host/ehci-w90x900.c b/drivers/usb/host/ehci-w90x900.c
+deleted file mode 100644
+index 6d77ace1697b..000000000000
+--- a/drivers/usb/host/ehci-w90x900.c
++++ /dev/null
+@@ -1,130 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * linux/driver/usb/host/ehci-w90x900.c
+- *
+- * Copyright (c) 2008 Nuvoton technology corporation.
+- *
+- * Wan ZongShun <mcuos.com@gmail.com>
+- */
+-
+-#include <linux/dma-mapping.h>
+-#include <linux/io.h>
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/of.h>
+-#include <linux/platform_device.h>
+-#include <linux/usb.h>
+-#include <linux/usb/hcd.h>
+-
+-#include "ehci.h"
+-
+-/* enable phy0 and phy1 for w90p910 */
+-#define	ENPHY		(0x01<<8)
+-#define PHY0_CTR	(0xA4)
+-#define PHY1_CTR	(0xA8)
+-
+-#define DRIVER_DESC "EHCI w90x900 driver"
+-
+-static const char hcd_name[] = "ehci-w90x900 ";
+-
+-static struct hc_driver __read_mostly ehci_w90x900_hc_driver;
+-
+-static int ehci_w90x900_probe(struct platform_device *pdev)
+-{
+-	struct usb_hcd *hcd;
+-	struct ehci_hcd *ehci;
+-	struct resource *res;
+-	int retval = 0, irq;
+-	unsigned long val;
+-
+-	hcd = usb_create_hcd(&ehci_w90x900_hc_driver,
+-			&pdev->dev, "w90x900 EHCI");
+-	if (!hcd) {
+-		retval = -ENOMEM;
+-		goto err1;
+-	}
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	hcd->regs = devm_ioremap_resource(&pdev->dev, res);
+-	if (IS_ERR(hcd->regs)) {
+-		retval = PTR_ERR(hcd->regs);
+-		goto err2;
+-	}
+-	hcd->rsrc_start = res->start;
+-	hcd->rsrc_len = resource_size(res);
+-
+-	ehci = hcd_to_ehci(hcd);
+-	ehci->caps = hcd->regs;
+-	ehci->regs = hcd->regs +
+-		HC_LENGTH(ehci, ehci_readl(ehci, &ehci->caps->hc_capbase));
+-
+-	/* enable PHY 0,1,the regs only apply to w90p910
+-	 *  0xA4,0xA8 were offsets of PHY0 and PHY1 controller of
+-	 *  w90p910 IC relative to ehci->regs.
+-	 */
+-	val = __raw_readl(ehci->regs+PHY0_CTR);
+-	val |= ENPHY;
+-	__raw_writel(val, ehci->regs+PHY0_CTR);
+-
+-	val = __raw_readl(ehci->regs+PHY1_CTR);
+-	val |= ENPHY;
+-	__raw_writel(val, ehci->regs+PHY1_CTR);
+-
+-	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		retval = irq;
+-		goto err2;
+-	}
+-
+-	retval = usb_add_hcd(hcd, irq, IRQF_SHARED);
+-	if (retval != 0)
+-		goto err2;
+-
+-	device_wakeup_enable(hcd->self.controller);
+-	return retval;
+-err2:
+-	usb_put_hcd(hcd);
+-err1:
+-	return retval;
+-}
+-
+-static int ehci_w90x900_remove(struct platform_device *pdev)
+-{
+-	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+-
+-	usb_remove_hcd(hcd);
+-	usb_put_hcd(hcd);
+-
+-	return 0;
+-}
+-
+-static struct platform_driver ehci_hcd_w90x900_driver = {
+-	.probe  = ehci_w90x900_probe,
+-	.remove = ehci_w90x900_remove,
+-	.driver = {
+-		.name = "w90x900-ehci",
+-	},
+-};
+-
+-static int __init ehci_w90X900_init(void)
+-{
+-	if (usb_disabled())
+-		return -ENODEV;
+-
+-	pr_info("%s: " DRIVER_DESC "\n", hcd_name);
+-
+-	ehci_init_driver(&ehci_w90x900_hc_driver, NULL);
+-	return platform_driver_register(&ehci_hcd_w90x900_driver);
+-}
+-module_init(ehci_w90X900_init);
+-
+-static void __exit ehci_w90X900_cleanup(void)
+-{
+-	platform_driver_unregister(&ehci_hcd_w90x900_driver);
+-}
+-module_exit(ehci_w90X900_cleanup);
+-
+-MODULE_DESCRIPTION(DRIVER_DESC);
+-MODULE_AUTHOR("Wan ZongShun <mcuos.com@gmail.com>");
+-MODULE_ALIAS("platform:w90p910-ehci");
+-MODULE_LICENSE("GPL v2");
+-- 
+2.20.0
 
