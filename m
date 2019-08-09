@@ -2,57 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF92873E7
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 10:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B030F8748E
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 10:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405871AbfHIIUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 04:20:18 -0400
-Received: from gate.crashing.org ([63.228.1.57]:40927 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726054AbfHIIUS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Aug 2019 04:20:18 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x798K8xV014987;
-        Fri, 9 Aug 2019 03:20:09 -0500
-Message-ID: <146d724c5df6b6e9a98f9d1d69a85be23eed0311.camel@kernel.crashing.org>
-Subject: Re: [PATCH] [RFC] usb: gadget: hid: Add "single_ep" option
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
-Date:   Fri, 09 Aug 2019 18:20:08 +1000
-In-Reply-To: <87zhki69sa.fsf@gmail.com>
-References: <5db94157b9b3b89b2874a4f91505e4b860903ac6.camel@kernel.crashing.org>
-         <8736iagb11.fsf@gmail.com>
-         <e326f0a27c04a5f23cee5ef36f38e3ddf11bbf5d.camel@kernel.crashing.org>
-         <87zhki69sa.fsf@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S2405999AbfHIIsH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Aug 2019 04:48:07 -0400
+Received: from mail-ot1-f72.google.com ([209.85.210.72]:43775 "EHLO
+        mail-ot1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405932AbfHIIsH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 04:48:07 -0400
+Received: by mail-ot1-f72.google.com with SMTP id r2so67488604oti.10
+        for <linux-usb@vger.kernel.org>; Fri, 09 Aug 2019 01:48:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=RE8A2YvlWxvXHPUb5cpPDBeHEbJXVJXdXz/K9INznBw=;
+        b=iRfkz2UxswU1lukMuhOhTp1jjaROM1ylidljkjm6ATOtSAt7uvbjHBSAsqcO+qQBl2
+         m0PVHlhmO7HgTNHosEla72+7YQYLlpyod0ozDMuVi6Ee9jFvocpmhmazHI/p4/GOhtKv
+         3Q4e+A+TbTCrgfuJEV8Q2+nZFiQjJsdnVveyI15w+hjL+HBMcb/3LXUoWw+p2coDthnv
+         Z5z8YBsOEf3jveyQiQAPjdBxpu9kgeYOarbK87xAuYe/HMDmA2chl+rkfxYDytbswRFB
+         5bywRcfE++ZCq9cqaXMTRxA9H57zufC8oDE7FjMPQCKh0QndFGQlcdY9HPKbXZCQeLH1
+         6jMw==
+X-Gm-Message-State: APjAAAWYQpCN1qrlGmhjNJxUWCr4FvM8wUoeGke03S9otnObKwNDvPIz
+        Q2LYpC1+mzXqLYpxEGTJ2qJh8RUMT/NLyf7utSGahfnKv8y4
+X-Google-Smtp-Source: APXvYqzval70mnAgWNiLZL2ZWVjPp0Ex13XwcQQM2QIhkxYlbuR4801kNczIBTyu3+jH55i4+T11rjJyd7JbxzZi1tOCTlO3hEuj
+MIME-Version: 1.0
+X-Received: by 2002:a05:6602:259a:: with SMTP id p26mr219550ioo.154.1565340486024;
+ Fri, 09 Aug 2019 01:48:06 -0700 (PDT)
+Date:   Fri, 09 Aug 2019 01:48:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009f4316058fab3bd7@google.com>
+Subject: KMSAN: uninit-value in smsc75xx_bind
+From:   syzbot <syzbot+6966546b78d050bb0b5d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, steve.glendinning@shawell.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2019-08-09 at 11:08 +0300, Felipe Balbi wrote:
-> 
-> that works too. Another option would to introduce two options,
-> has_input_report and has_output_report and have them true by default.
-> 
-> Then user can even produce an output-only HID device, like these odd
-> USB-controlled relays.
+Hello,
 
-Ideally we could just parse the descriptor :-) But that's a bit
-trickier.
+syzbot found the following crash on:
 
-One thing I've been meaning to look at is a way to properly handle
-keyboards (and other "on/off" buttons) by having the kernel latch the
-state so it can properly respond to things like get report, or resend
-all the "down" keys after a reset (so that things like "keep some key
-pressed during boot for magic to happen") actually works...
+HEAD commit:    beaab8a3 fix KASAN build
+git tree:       kmsan
+console output: https://syzkaller.appspot.com/x/log.txt?x=13d7b65c600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4db781fe35a84ef5
+dashboard link: https://syzkaller.appspot.com/bug?extid=6966546b78d050bb0b5d
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ab9ef0600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11be2b34600000
 
-But one thing at a time :-)
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+6966546b78d050bb0b5d@syzkaller.appspotmail.com
 
-Cheers,
-Ben.
+==================================================================
+BUG: KMSAN: uninit-value in smsc75xx_wait_ready  
+drivers/net/usb/smsc75xx.c:976 [inline]
+BUG: KMSAN: uninit-value in smsc75xx_bind+0x541/0x12d0  
+drivers/net/usb/smsc75xx.c:1483
+CPU: 0 PID: 2892 Comm: kworker/0:2 Not tainted 5.2.0+ #15
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x162/0x2d0 mm/kmsan/kmsan_report.c:109
+  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:294
+  smsc75xx_wait_ready drivers/net/usb/smsc75xx.c:976 [inline]
+  smsc75xx_bind+0x541/0x12d0 drivers/net/usb/smsc75xx.c:1483
+  usbnet_probe+0x10d3/0x3950 drivers/net/usb/usbnet.c:1722
+  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+  really_probe+0x1344/0x1d90 drivers/base/dd.c:513
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:843
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2111
+  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
+  really_probe+0x1344/0x1d90 drivers/base/dd.c:513
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:843
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2111
+  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x5853/0x7320 drivers/usb/core/hub.c:5432
+  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x189c/0x2460 kernel/workqueue.c:2417
+  kthread+0x4b5/0x4f0 kernel/kthread.c:256
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+
+Local variable description: ----buf.i93@smsc75xx_bind
+Variable was created at:
+  __smsc75xx_read_reg drivers/net/usb/smsc75xx.c:83 [inline]
+  smsc75xx_wait_ready drivers/net/usb/smsc75xx.c:969 [inline]
+  smsc75xx_bind+0x44c/0x12d0 drivers/net/usb/smsc75xx.c:1483
+  usbnet_probe+0x10d3/0x3950 drivers/net/usb/usbnet.c:1722
+==================================================================
 
 
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
