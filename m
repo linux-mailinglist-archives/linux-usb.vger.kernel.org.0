@@ -2,34 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2A687172
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 07:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB4587179
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 07:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405424AbfHIF1z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 01:27:55 -0400
-Received: from mga04.intel.com ([192.55.52.120]:12546 "EHLO mga04.intel.com"
+        id S1726212AbfHIFbZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Aug 2019 01:31:25 -0400
+Received: from mga18.intel.com ([134.134.136.126]:24328 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405388AbfHIF1z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Aug 2019 01:27:55 -0400
+        id S1725920AbfHIFbZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Aug 2019 01:31:25 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 22:27:55 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 22:31:24 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,364,1559545200"; 
-   d="scan'208";a="177537261"
+   d="scan'208";a="193315187"
 Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga003.jf.intel.com with ESMTP; 08 Aug 2019 22:27:52 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     kbuild test robot <lkp@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@01.org, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: Re: [balbi-usb:testing/next 2/13] drivers/usb/phy/phy-tahvo.c:434:4: error: 'struct device_driver' has no member named 'dev_groups'; did you mean 'groups'?
-In-Reply-To: <201908082335.aajJntgU%lkp@intel.com>
-References: <201908082335.aajJntgU%lkp@intel.com>
-Date:   Fri, 09 Aug 2019 08:27:52 +0300
-Message-ID: <875zn6gb6v.fsf@gmail.com>
+  by fmsmga001.fm.intel.com with ESMTP; 08 Aug 2019 22:31:22 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] [RFC] usb: gadget: hid: Add "single_ep" option
+In-Reply-To: <5db94157b9b3b89b2874a4f91505e4b860903ac6.camel@kernel.crashing.org>
+References: <5db94157b9b3b89b2874a4f91505e4b860903ac6.camel@kernel.crashing.org>
+Date:   Fri, 09 Aug 2019 08:31:22 +0300
+Message-ID: <8736iagb11.fsf@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
@@ -40,37 +38,26 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-kbuild test robot <lkp@intel.com> writes:
+Benjamin Herrenschmidt <benh@kernel.crashing.org> writes:
 
-> tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/balbi/usb.git testing/next
-> head:   d06a2c3f683a591efce9d02b2b60ef346df5ae02
-> commit: 2a714ea6d90d9d1b510ba424652a2e3dfd547267 [2/13] USB: phy: tahvo: convert platform driver to use dev_groups
-> config: sh-allmodconfig (attached as .config)
-> compiler: sh4-linux-gcc (GCC) 7.4.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         git checkout 2a714ea6d90d9d1b510ba424652a2e3dfd547267
->         # save the attached .config to linux build tree
->         GCC_VERSION=7.4.0 make.cross ARCH=sh 
+> Some host drivers really do not like keyboards having an OUT endpoint.
 >
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
+> For example, most UEFI forked from EDK2 before 2006 (or was it 2008 ?)
+> have a bug, they'll try to use the *last* interrupt EP in the
+> descriptor list and just assume it's an IN endpoint. Newer UEFIs
+> use the *first* interrupt endpoint instead. None of them checks the
+> direction :-(
 >
-> All errors (new ones prefixed by >>):
+> This adds a "single_ep" option to f_hid which allows to specify that
+> only the IN path should be created. This should be used for keyboards
+> if they are ever to be used with such systems as host.
 >
->>> drivers/usb/phy/phy-tahvo.c:434:4: error: 'struct device_driver' has no member named 'dev_groups'; did you mean 'groups'?
->       .dev_groups = tahvo_groups,
->        ^~~~~~~~~~
+> Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 
+Could you come up with a slightly more descriptive name? single_ep
+doesn't give me any hint of which endpoint will be left around.
 
-looks like these patches depend on something else that's not upstream
-yet. I'll drop the patches from my queue. Greg,if you'd like to add my
-ack:
-
-Acked-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-
-cheers
+Perhaps call it 'disable_output_report'?
 
 -- 
 balbi
