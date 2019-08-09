@@ -2,154 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B98F78832C
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 21:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FC78833C
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 21:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726212AbfHITP6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 15:15:58 -0400
-Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:54580 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725904AbfHITP6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 15:15:58 -0400
-Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 1F3D0C013B;
-        Fri,  9 Aug 2019 19:15:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1565378158; bh=jY/hgOKRrtfCIWk9FBedyAmxwIbQQKVK12qMWTiDOo8=;
-        h=Date:From:Subject:To:CC:From;
-        b=KYyts+lbtuGX4yy2v1+wotoLNpqN6MfXzXx7y3sfG5LWIfinIemfZXgrRlZrKNGGq
-         Qq2fmCnGaqSwTRekiDTEAbWNU/K+OKc6KPZQjnTiSCPonEwAs/ZmxtKnGa+kWXNJtU
-         BbxnOTo2L3VNoRdTJchEiEI4KVbyYzMASxADXcWW8Pja3nQxk6G4jV6QI4zXPEY8oc
-         MHk6Y0XURMlt1+0JC9XTQx5Gkgod8F2FFjhpXx+RQ3UEXDs0y7sAX2EgPHmdIpp227
-         zNlbk9AolP2iTeJlFQCXJKR7K87byZZZBcpyKhbzxyvYiehdXA0EVJc7qv0JuTsIga
-         kGFrM0cGr/5/g==
-Received: from US01WXQAHTC1.internal.synopsys.com (us01wxqahtc1.internal.synopsys.com [10.12.238.230])
-        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id DB67BA0095;
-        Fri,  9 Aug 2019 19:15:57 +0000 (UTC)
-Received: from US01WEHTC3.internal.synopsys.com (10.15.84.232) by
- US01WXQAHTC1.internal.synopsys.com (10.12.238.230) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Fri, 9 Aug 2019 12:15:57 -0700
-Received: from te-lab16 (10.13.184.19) by US01WEHTC3.internal.synopsys.com
- (10.15.84.231) with Microsoft SMTP Server (TLS) id 14.3.408.0; Fri, 9 Aug
- 2019 12:15:52 -0700
-Received: by te-lab16 (sSMTP sendmail emulation); Fri, 09 Aug 2019 12:15:52
- -0700
-Date:   Fri, 9 Aug 2019 12:15:52 -0700
-Message-ID: <0bbcd64543ca9841fd37f7c959ac21a223f83f1e.1565377780.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: Disable phy suspend after power-on reset
-To:     Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>
-CC:     John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+        id S1726168AbfHIT0L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Aug 2019 15:26:11 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:55426 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725825AbfHIT0L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 15:26:11 -0400
+Received: (qmail 5219 invoked by uid 2102); 9 Aug 2019 15:26:10 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 Aug 2019 15:26:10 -0400
+Date:   Fri, 9 Aug 2019 15:26:10 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+22ae4e3b9fcc8a5c153a@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <gustavo@embeddedor.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: use-after-free Read in usb_kill_urb
+In-Reply-To: <000000000000e3e6d7058fb2c624@google.com>
+Message-ID: <Pine.LNX.4.44L0.1908091524250.1630-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.13.184.19]
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For DRD controllers, the programming guide recommended that
-GUSB3PIPECTL.SUSPENDABLE and GUSB2PHYCFG.SUSPHY to be cleared after
-power-on reset and only set after the controller initialization is
-completed. This can be done after device soft-reset in dwc3_core_init().
-This patch makes sure to clear GUSB3PIPECTL.SUSPENDABLE and
-GUSB2PHYCFG.SUSPHY before core initialization and only set them after
-the device soft-reset is completed.
+On Fri, 9 Aug 2019, syzbot wrote:
 
-Reference: DWC_usb3 3.30a and DWC_usb31 1.90a programming guide section
-1.2.49 and 1.2.45
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1799392c600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=22ae4e3b9fcc8a5c153a
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1134c802600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13278c4a600000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+22ae4e3b9fcc8a5c153a@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in atomic_read  
+> include/asm-generic/atomic-instrumented.h:26 [inline]
+> BUG: KASAN: use-after-free in usb_kill_urb drivers/usb/core/urb.c:695  
+> [inline]
+> BUG: KASAN: use-after-free in usb_kill_urb+0x24b/0x2c0  
+> drivers/usb/core/urb.c:687
+> Read of size 4 at addr ffff8881d635b110 by task syz-executor672/1999
+> 
+> CPU: 1 PID: 1999 Comm: syz-executor672 Not tainted 5.3.0-rc2+ #25
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+> Google 01/01/2011
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   print_address_description+0x6a/0x32c mm/kasan/report.c:351
+>   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+>   kasan_report+0xe/0x12 mm/kasan/common.c:612
+>   check_memory_region_inline mm/kasan/generic.c:185 [inline]
+>   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
+>   atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
+>   usb_kill_urb drivers/usb/core/urb.c:695 [inline]
+>   usb_kill_urb+0x24b/0x2c0 drivers/usb/core/urb.c:687
+>   ld_usb_abort_transfers+0xb7/0x1d0 drivers/usb/misc/ldusb.c:196
+>   ld_usb_release+0x19f/0x400 drivers/usb/misc/ldusb.c:406
 
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- drivers/usb/dwc3/core.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+Since this also involves ldusb.c, maybe it will be fixed by the same 
+patch as the other bug.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 252c397860ef..edbc3709f28e 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -568,8 +568,11 @@ static int dwc3_core_ulpi_init(struct dwc3 *dwc)
-  */
- static int dwc3_phy_setup(struct dwc3 *dwc)
- {
-+	unsigned int hw_mode;
- 	u32 reg;
- 
-+	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-+
- 	reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
- 
- 	/*
-@@ -587,6 +590,14 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
- 	if (dwc->revision > DWC3_REVISION_194A)
- 		reg |= DWC3_GUSB3PIPECTL_SUSPHY;
- 
-+	/*
-+	 * For DRD controllers, GUSB3PIPECTL.SUSPENDENABLE must be cleared after
-+	 * power-on reset, and it can be set after core initialization, which is
-+	 * after device soft-reset during initialization.
-+	 */
-+	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
-+		reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
-+
- 	if (dwc->u2ss_inp3_quirk)
- 		reg |= DWC3_GUSB3PIPECTL_U2SSINP3OK;
- 
-@@ -670,6 +681,14 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
- 	if (dwc->revision > DWC3_REVISION_194A)
- 		reg |= DWC3_GUSB2PHYCFG_SUSPHY;
- 
-+	/*
-+	 * For DRD controllers, GUSB2PHYCFG.SUSPHY must be cleared after
-+	 * power-on reset, and it can be set after core initialization, which is
-+	 * after device soft-reset during initialization.
-+	 */
-+	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
-+		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
-+
- 	if (dwc->dis_u2_susphy_quirk)
- 		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
- 
-@@ -905,9 +924,12 @@ static void dwc3_set_incr_burst_type(struct dwc3 *dwc)
-  */
- static int dwc3_core_init(struct dwc3 *dwc)
- {
-+	unsigned int		hw_mode;
- 	u32			reg;
- 	int			ret;
- 
-+	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-+
- 	/*
- 	 * Write Linux Version Code to our GUID register so it's easy to figure
- 	 * out which kernel version a bug was found.
-@@ -943,6 +965,21 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 	if (ret)
- 		goto err0a;
- 
-+	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD &&
-+	    dwc->revision > DWC3_REVISION_194A) {
-+		if (!dwc->dis_u3_susphy_quirk) {
-+			reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
-+			reg |= DWC3_GUSB3PIPECTL_SUSPHY;
-+			dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
-+		}
-+
-+		if (!dwc->dis_u2_susphy_quirk) {
-+			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-+			reg |= DWC3_GUSB2PHYCFG_SUSPHY;
-+			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
-+		}
+Alan Stern
+
+
+#syz test: https://github.com/google/kasan.git e96407b4
+
+Index: usb-devel/drivers/usb/core/file.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/file.c
++++ usb-devel/drivers/usb/core/file.c
+@@ -193,9 +193,10 @@ int usb_register_dev(struct usb_interfac
+ 		intf->minor = minor;
+ 		break;
+ 	}
+-	up_write(&minor_rwsem);
+-	if (intf->minor < 0)
++	if (intf->minor < 0) {
++		up_write(&minor_rwsem);
+ 		return -EXFULL;
 +	}
-+
- 	dwc3_core_setup_global_control(dwc);
- 	dwc3_core_num_eps(dwc);
  
--- 
-2.11.0
+ 	/* create a usb class device for this usb interface */
+ 	snprintf(name, sizeof(name), class_driver->name, minor - minor_base);
+@@ -203,12 +204,11 @@ int usb_register_dev(struct usb_interfac
+ 				      MKDEV(USB_MAJOR, minor), class_driver,
+ 				      "%s", kbasename(name));
+ 	if (IS_ERR(intf->usb_dev)) {
+-		down_write(&minor_rwsem);
+ 		usb_minors[minor] = NULL;
+ 		intf->minor = -1;
+-		up_write(&minor_rwsem);
+ 		retval = PTR_ERR(intf->usb_dev);
+ 	}
++	up_write(&minor_rwsem);
+ 	return retval;
+ }
+ EXPORT_SYMBOL_GPL(usb_register_dev);
+@@ -234,12 +234,12 @@ void usb_deregister_dev(struct usb_inter
+ 		return;
+ 
+ 	dev_dbg(&intf->dev, "removing %d minor\n", intf->minor);
++	device_destroy(usb_class->class, MKDEV(USB_MAJOR, intf->minor));
+ 
+ 	down_write(&minor_rwsem);
+ 	usb_minors[intf->minor] = NULL;
+ 	up_write(&minor_rwsem);
+ 
+-	device_destroy(usb_class->class, MKDEV(USB_MAJOR, intf->minor));
+ 	intf->usb_dev = NULL;
+ 	intf->minor = -1;
+ 	destroy_usb_class();
 
