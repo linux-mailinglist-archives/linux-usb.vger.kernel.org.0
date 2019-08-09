@@ -2,55 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9109087119
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 06:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2A687172
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 07:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405295AbfHIEvh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 00:51:37 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:55818 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726212AbfHIEvh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 00:51:37 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 9708214051854;
-        Thu,  8 Aug 2019 21:51:36 -0700 (PDT)
-Date:   Thu, 08 Aug 2019 21:51:33 -0700 (PDT)
-Message-Id: <20190808.215133.2134703818400431096.davem@davemloft.net>
-To:     hayeswang@realtek.com
-Cc:     jakub.kicinski@netronome.com, maciejromanfijalkowski@gmail.com,
-        netdev@vger.kernel.org, nic_swsd@realtek.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH net-next 5/5] r8152: change rx_frag_head_sz and
- rx_max_agg_num dynamically
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <0835B3720019904CB8F7AA43166CEEB2F18D0FFE@RTITMBSVM03.realtek.com.tw>
-References: <0835B3720019904CB8F7AA43166CEEB2F18D0F3F@RTITMBSVM03.realtek.com.tw>
-        <20190808114325.5c346d3a@cakuba.netronome.com>
-        <0835B3720019904CB8F7AA43166CEEB2F18D0FFE@RTITMBSVM03.realtek.com.tw>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=utf-8
-Content-Transfer-Encoding: base64
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 08 Aug 2019 21:51:36 -0700 (PDT)
+        id S2405424AbfHIF1z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Aug 2019 01:27:55 -0400
+Received: from mga04.intel.com ([192.55.52.120]:12546 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405388AbfHIF1z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Aug 2019 01:27:55 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 22:27:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,364,1559545200"; 
+   d="scan'208";a="177537261"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga003.jf.intel.com with ESMTP; 08 Aug 2019 22:27:52 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     kbuild test robot <lkp@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@01.org, linux-usb@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: Re: [balbi-usb:testing/next 2/13] drivers/usb/phy/phy-tahvo.c:434:4: error: 'struct device_driver' has no member named 'dev_groups'; did you mean 'groups'?
+In-Reply-To: <201908082335.aajJntgU%lkp@intel.com>
+References: <201908082335.aajJntgU%lkp@intel.com>
+Date:   Fri, 09 Aug 2019 08:27:52 +0300
+Message-ID: <875zn6gb6v.fsf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogSGF5ZXMgV2FuZyA8aGF5ZXN3YW5nQHJlYWx0ZWsuY29tPg0KRGF0ZTogRnJpLCA5IEF1
-ZyAyMDE5IDAzOjM4OjUzICswMDAwDQoNCj4gSmFrdWIgS2ljaW5za2kgW2pha3ViLmtpY2luc2tp
-QG5ldHJvbm9tZS5jb21dDQo+IFsuLl0+IFRoZSBrZXJuZWwgY291bGQgc3VwcG9ydCBpdC4gQW5k
-IEkgaGFzIGZpbmlzaGVkIGl0Lg0KPj4gPiBIb3dldmVyLCB3aGVuIEkgd2FudCB0byB0ZXN0IGl0
-IGJ5IGV0aHRvb2wsIEkgY291bGRuJ3QgZmluZCBzdWl0YWJsZSBjb21tYW5kLg0KPj4gPiBJIGNv
-dWxkbid0IGZpbmQgcmVsYXRpdmUgZmVhdHVyZSBpbiB0aGUgc291cmNlIGNvZGUgb2YgZXRodG9v
-bCwgZWl0aGVyLg0KPiANCj4+IEl0J3MgcG9zc2libGUgaXQncyBub3QgaW1wbGVtZW50ZWQgaW4g
-dGhlIHVzZXIgc3BhY2UgdG9vbCDwn6SUDQo+Pg0KPj4gTG9va3MgbGlrZSBpdCBnb3QgcG9zdGVk
-IGhlcmU6DQo+Pg0KPj4gaHR0cHM6Ly93d3cuc3Bpbmljcy5uZXQvbGlzdHMvbmV0ZGV2L21zZzI5
-OTg3Ny5odG1sDQo+Pg0KPj4gQnV0IHBlcmhhcHMgbmV2ZXIgZmluaXNoZWQ/DQo+IA0KPiBNYXkg
-SSBpbXBsZW1lbnQgYm90aCBzeXNmcyBhbmQgc2V0X3R1bmFsYmUgZm9yIGNvcHlicmVhayBmaXJz
-dA0KPiBiZWZvcmUgdGhlIHVzZXIgc3BhY2UgdG9vbCBpcyByZWFkeT8gT3RoZXJ3aXNlLCB0aGUg
-dXNlciBjb3VsZG4ndA0KPiBjaGFuZ2UgdGhlIGNvcHlicmVhayBub3cuDQoNCk5vLCBmaXggdGhl
-IHRvb2wgcGxlYXNlLg0K
+
+Hi,
+
+kbuild test robot <lkp@intel.com> writes:
+
+> tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/balbi/usb.git testing/next
+> head:   d06a2c3f683a591efce9d02b2b60ef346df5ae02
+> commit: 2a714ea6d90d9d1b510ba424652a2e3dfd547267 [2/13] USB: phy: tahvo: convert platform driver to use dev_groups
+> config: sh-allmodconfig (attached as .config)
+> compiler: sh4-linux-gcc (GCC) 7.4.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git checkout 2a714ea6d90d9d1b510ba424652a2e3dfd547267
+>         # save the attached .config to linux build tree
+>         GCC_VERSION=7.4.0 make.cross ARCH=sh 
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>>> drivers/usb/phy/phy-tahvo.c:434:4: error: 'struct device_driver' has no member named 'dev_groups'; did you mean 'groups'?
+>       .dev_groups = tahvo_groups,
+>        ^~~~~~~~~~
+
+
+looks like these patches depend on something else that's not upstream
+yet. I'll drop the patches from my queue. Greg,if you'd like to add my
+ack:
+
+Acked-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+
+cheers
+
+-- 
+balbi
