@@ -2,102 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7C9877F3
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 12:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6C9877DC
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 12:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406394AbfHIKzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 06:55:04 -0400
-Received: from esa2.mentor.iphmx.com ([68.232.141.98]:57981 "EHLO
-        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfHIKzE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 06:55:04 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Fri, 09 Aug 2019 06:55:03 EDT
-IronPort-SDR: yOOwguE8ZmYCWuZIsbfNIBZ28APf9NMNKbSP4WObXO6/19wGItype7qGMx+JS2fC7vA2O7AM7b
- esXwvRaSHOHbNvYuiVACesJjXy3Xkzq7KXPq+K1rhtMmr5JEFteQd1gKL6WjUsaEbCUxhE/PGs
- d0DEuk73yw8zRRODI6APSJBnE5YJy2fiJnvmmbTEC9Yodmie7OEPDqljHELt4lUg3r/AEN39MV
- Mqg6XWXmTHE1AXhDIamUGvDTrIMoB9NuTOOa85YQaG1NeLIYoTID2gycvmUToDgas+m0/QnI3K
- O/s=
-X-IronPort-AV: E=Sophos;i="5.64,364,1559548800"; 
-   d="scan'208";a="40302433"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa2.mentor.iphmx.com with ESMTP; 09 Aug 2019 02:47:56 -0800
-IronPort-SDR: qkFtwpnuQvwYfjYSAeADy3uFMZqRnpKirSjVwuYtODmEHF3G+jLO9+I7nDz9R8zl6wzegieRHt
- gknB11EGOzfP00cpAlpfiEI/6IxTE1oxz7yeVeOEq5u3hJHZ3UQqV3hq7AYo8G1+htJ2nbH3Oz
- 8prdR9uK/VlKtypHMR7fw7exQjKM9EyAAZhItkcU02JlnyItBNWyHtNNZ35Hv9PX/xxYkKVbGh
- kRpBdQsnWEaX94fFx0EkKBuKiSBfXC6z4GLCwNm+arASST67jlawPe/Q/ehOvhKNQue6WlOZRH
- gi4=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
+        id S1726420AbfHIKxy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Aug 2019 06:53:54 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:35224 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726152AbfHIKxx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 06:53:53 -0400
+Received: by mail-ed1-f67.google.com with SMTP id w20so94525630edd.2
+        for <linux-usb@vger.kernel.org>; Fri, 09 Aug 2019 03:53:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qSg0S5CzZ+H+WW7DJJuVtjhf+EZ/w5pnJtfmd19+bYU=;
+        b=Mw40vXreDeYqCdVp+D/6Eok/ja7MOj2zmUwG34HVeZWeR8unt4l/AhfcuNe/Sn8H7o
+         FmaxzCqD1uO8yCNdd5topR7GJzOKUMTS3D1TQzD5eOnhcMUWUSpC5jd+pomPtW3HOIAm
+         lD24TUZarZIEoUWzuSKbwdKQfAeQvZj2hP+qpM3JkUaNvdQg2BXbLjwJupqF62FcmZr8
+         A7htGW00ujMd+717bu8FqJm7eGdm7P6NMtPGLt2YonDZwFXQX82BjRufhws+GozPvwrW
+         3Chwki/4lgnFTFKPmCZtuA6u5TJuvXttAgMqtP7n7DI2v4+C67EJi82ml/K/hsmj1fFG
+         p1iQ==
+X-Gm-Message-State: APjAAAUFFMzAkASgUzBkiqvDZ/46Z1N3AkD67HJ1O1xO6k8mPmNX/WnA
+        b2Wj4PqN6rXoPctqrvNk41yp3w==
+X-Google-Smtp-Source: APXvYqwLSFJZAidtKazLCGAQEI7WAdkZiCrIuWV3jgPSDsUzaGkWMHF8IAUm3KFSF5tZZzq4e8laBQ==
+X-Received: by 2002:a50:87d0:: with SMTP id 16mr20906218edz.133.1565348032439;
+        Fri, 09 Aug 2019 03:53:52 -0700 (PDT)
+Received: from localhost.localdomain ([62.140.137.140])
+        by smtp.gmail.com with ESMTPSA id p3sm22286545eda.43.2019.08.09.03.53.51
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 09 Aug 2019 03:53:51 -0700 (PDT)
+Subject: Re: AW: AW: KASAN: use-after-free Read in usbhid_power
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
         Greg KH <gregkh@linuxfoundation.org>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Andrey Konovalov <andreyknvl@google.com>,
         Oliver Neukum <oneukum@suse.com>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
         syzbot <syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com>,
         USB list <linux-usb@vger.kernel.org>,
         Hillf Danton <hdanton@sina.com>
-Subject: AW: AW: KASAN: use-after-free Read in usbhid_power
-Thread-Topic: AW: KASAN: use-after-free Read in usbhid_power
-Thread-Index: AQHVQVT8kp3cH3z0AEy3rfqKg0QMQKbaMLqAgAAB/4CAANH5gIAAXcMAgBY/mwCAAAvuAIAA2G/Q///144CAAChbQP///+iAgAATm0A=
-Date:   Fri, 9 Aug 2019 10:47:50 +0000
-Message-ID: <86ef050c477841a6951fd984b38c9f04@SVR-IES-MBX-03.mgc.mentorg.com>
 References: <CAAeHK+wb8=Z65_1CGcj0ShT6+NiQSDKhEkBVx+8vPe3kJF8+6g@mail.gmail.com>
  <Pine.LNX.4.44L0.1908081522290.1319-100000@iolanthe.rowland.org>
  <caf422aebd314ab8a5dd96ac2d9bb198@SVR-IES-MBX-03.mgc.mentorg.com>
  <20190809075555.GA20409@kroah.com>
  <8e43085507b849e49e858e5388f3e13c@SVR-IES-MBX-03.mgc.mentorg.com>
  <d7f1f3dc-03b3-34b8-657b-13c7b91ee361@redhat.com>
-In-Reply-To: <d7f1f3dc-03b3-34b8-657b-13c7b91ee361@redhat.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <86ef050c477841a6951fd984b38c9f04@SVR-IES-MBX-03.mgc.mentorg.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <9c955960-8b50-30dd-732a-92c62e5761cc@redhat.com>
+Date:   Fri, 9 Aug 2019 12:53:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <86ef050c477841a6951fd984b38c9f04@SVR-IES-MBX-03.mgc.mentorg.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiANCj4gV2UgYXJlIHRhbGtpbmcgbWVtb3J5LW1hcHBlZCBpbyBoZXJlLCBzbyBpdCBjYW5ub3Qg
-anVzdCBiZSAicmUtdXNlZCIsIGl0DQo+IGlzIHdhdCBpdCBpcy4gSSBndWVzcyB0aGUgUENJIEJB
-UiBjb3VsZCBiZSByZWxlYXNlZCBhbmQgdGhlbiB0aGUgcGh5c2ljYWwNCj4gYWRkcmVzcyB0aGUg
-cmVzb3VyY2Ugd2FzIGF0IGNvdWxkIGJlIHJlLXVzZWQgZm9yIGFub3RoZXIgcGllY2Ugb2YgTU1J
-bywNCj4gYnV0IEFGQUlLIG91dHNpZGUgb2YgUEk9Q0kgaG90cGx1ZyB3ZSBuZXZlciByZWxlYXNl
-IEJBUnMuDQo+IA0KPiBNYXliZSB3ZSBuZWVkIHRvIHJlZi1jb3VudCByZXNvdXJjZXMgYW5kIGhh
-dmUgdGhlIGFwcmVudCBmcmVlIG9ubHkgYmUNCj4gYSBkZXJlZiBhbmQgbm90IHJlbGVhc2UgdGhl
-IHJlc291cmNlIHVudGlsIHRoZSBjaGlsZCByZXNvdXJjZSBhbHNvDQo+IGlzIGZyZWUtZWQgZG9p
-bmcgYW5vdGhlciBkZXJlZj8NCj4gDQo+IEkgbXVzdCBzYXkgdGhhdCB0byBtZSBpdCBzb21ldGlt
-ZXMganVzdCBzZWVtcyBsaWtlIGFsd2F5cyBhbGxvd2luZyB1bmJpbmQNCj4gaXMgYSBiYWQgaWRl
-YS4gQW5vdGhlciBleGFtcGxlIG9mIHRoaXMgaXMgdGhpbmdzIGxpa2UgdmlydGlvLCB3aGVyZQ0K
-PiB3ZSBjYW4gaGF2ZSBhIGZpbGVzeXN0ZW0gYmFzZWQgb24gdmlydGlvLWJsb2NrLCBidXQgdGhl
-IHZpcnRpbyBpbnRlcmZhY2UNCj4gYmV0d2VlbiB0aGUgaHlwZXJ2aXNvciBhbmQgdGhlIGd1ZXN0
-LWtlcm5lbCBpcyBhIFBDSS1kZXZpY2UgYW5kIGluIHRoZW9yeQ0KPiB0aGUgdXNlciBjb3VsZCB1
-bmJpbmQgdGhlIHZpcnRpbyBkcml2ZXIgZnJvbSB0aGF0IFBDSS1kZXZpY2UsIGFmdGVyIHdoaWNo
-DQo+IHRoZSB3aG9sZSBob3VzZSBjb21lcyBjcmFzaGluZyBkb3duLg0KPiANCj4gSSBhbHNvIGtu
-b3cgdGhhdCB0aGUgZXh0Y29uIGZyYW1ld29yayBpbiBpdHMgY3VycmVudCBpbmNhcm5hdG9uDQo+
-IGRvZXMgbm90IGRlYWwgd2l0aCB1bmJpbmQgcHJvcGVybHkuLi4NCj4gDQo+IE1heWJlIGl0IGlz
-IHRpbWUgdGhhdCB3ZSBhbGxvdyBkcml2ZXJzIHRvIGJsb2NrIHVuYmluZCBpbnN0ZWFkIG9mDQo+
-IHRyeWluZyB0byBzdXBwb3J0IHVuYmluZCBpbiByZWFsbHkgY29tcGxleCBzaXR1YXRpb25zIHdo
-ZXJlIG5vcm1hbA0KPiB1c2UtY2FzZXMgd2lsbCBuZXZlciBuZWVkIGl0ID8NCj4gDQo+IEkgZG8g
-cmVhbGl6ZSB1bmJpbmQgaXMgdmVyeSB1c2VmdWwgZm9yIGRyaXZlciBkZXZlbG9wZW50IHdpdGhv
-dXQNCj4gcmVib290aW5nLg0KPiANCg0KSGV5LCBpIGRpZCBub3Qgd2FudCB0byB0cmlnZ2VyIGFu
-IGVhcnRxdWFrZSBpbiB0aGUgYmFzZW1lbnQgb2YgdGhlIGtlcm5lbCA7LSkNCk15IGludGVudGlv
-biB3YXMgdG8gcHJldmVudCBzb21lIGNyYXNoZXMsIGFuZCBoZWxwIGRldmVsb3BlcnMgdG8gZmlu
-ZCB0aGVpciBidWdzLg0KSSB0aGluayBteSBwYXRjaCBleGFjdGx5IGRvZXMgdGhpcy4NCiANCj4g
-MSkgbWFrZSByZXNvdXJjZXMgcmVmY291bnRlZCwgaGF2ZSBjaGlsZCByZXNvdXJjZXMgdGFrZSBh
-IHJlZiBvbiB0aGUgcGFyZW50DQo+IDIpIERpc2FsbG93IHVuYmluZCBvbiBkZXZpY2VzIHdpdGgg
-Ym91bmQgY2hpbGQtZGV2aWNlcz8NCj4gDQoNCkV4YWN0bHkgd2hhdCBpIHdhcyB0aGlua2luZyBv
-ZiBpbiBmaXJzdCBhdHRlbXB0cy4NCkJ1dCBpIGZlYXIgdGhhdCB3b3VsZCBicmVhayBldmVuIG1v
-cmUgdXNlIGNhc2VzLg0KDQpIYW5zLCBkaXJlY3RseSByZWdhcmRpbmcgdGhlIGRyaXZlcjoNClRo
-ZSBwcm9ibGVtIGkgc2VlIGlzIHRoYXQgdGhlIHhoY2lfaW50ZWxfdW5yZWdpc3Rlcl9wZGV2IHdo
-aWNoIGlzIGFkZGVkDQphcyBhbiBhY3Rpb24gd2l0aCBkZXZtX2FkZF9hY3Rpb25fb3JfcmVzZXQo
-KSBpcyBjYWxsZWQgbGF0ZSBieSB0aGUgZnJhbWV3b3JrLA0KbGF0ZXIgdGhhbiB0aGUgdXNiX2hj
-ZF9wY2lfcmVtb3ZlKCkgaW4geGhjaV9wY2lfcmVtb3ZlLg0KSXMgdGhlcmUgYW55IGNoYW5jZSB0
-byB0cmlnZ2VyIHRoaXMgYmVmb3JlPw0KVGhpcyBpcyB3aGF0IEdyZWcgbWVhbnQgd2l0aCAicmln
-aHQgb3JkZXIiLg0KDQpBbnl3YXksIGkgcmVhbGx5IGFwcHJlY2lhdGUgdGhlc2UgZGlzY3Vzc2lv
-bnMsIHRoYW5rcyBmb3IgYWxsDQp5b3VyIHBhdGllbmNlLg0KDQpCZXN0IFJlZ2FyZHMNCkNhcnN0
-ZW4NCg0K
+Hi,
+
+On 8/9/19 12:47 PM, Schmid, Carsten wrote:
+>>
+>> We are talking memory-mapped io here, so it cannot just be "re-used", it
+>> is wat it is. I guess the PCI BAR could be released and then the physical
+>> address the resource was at could be re-used for another piece of MMIo,
+>> but AFAIK outside of PI=CI hotplug we never release BARs.
+>>
+>> Maybe we need to ref-count resources and have the aprent free only be
+>> a deref and not release the resource until the child resource also
+>> is free-ed doing another deref?
+>>
+>> I must say that to me it sometimes just seems like always allowing unbind
+>> is a bad idea. Another example of this is things like virtio, where
+>> we can have a filesystem based on virtio-block, but the virtio interface
+>> between the hypervisor and the guest-kernel is a PCI-device and in theory
+>> the user could unbind the virtio driver from that PCI-device, after which
+>> the whole house comes crashing down.
+>>
+>> I also know that the extcon framework in its current incarnaton
+>> does not deal with unbind properly...
+>>
+>> Maybe it is time that we allow drivers to block unbind instead of
+>> trying to support unbind in really complex situations where normal
+>> use-cases will never need it ?
+>>
+>> I do realize unbind is very useful for driver developent without
+>> rebooting.
+>>
+> 
+> Hey, i did not want to trigger an eartquake in the basement of the kernel ;-)
+> My intention was to prevent some crashes, and help developers to find their bugs.
+> I think my patch exactly does this.
+
+Hehe, actually drivers not being able to block unbind has been bugging me for
+a while now, because there are cases where this would be really helpful.
+>> 1) make resources refcounted, have child resources take a ref on the parent
+>> 2) Disallow unbind on devices with bound child-devices?
+>>
+> 
+> Exactly what i was thinking of in first attempts.
+> But i fear that would break even more use cases.
+> 
+> Hans, directly regarding the driver:
+> The problem i see is that the xhci_intel_unregister_pdev which is added
+> as an action with devm_add_action_or_reset() is called late by the framework,
+> later than the usb_hcd_pci_remove() in xhci_pci_remove.
+> Is there any chance to trigger this before?
+> This is what Greg meant with "right order".
+
+Ah, I missed that part, sure that should be easy, just stop using
+devm_add_action_or_reset() and do the xhci_intel_unregister_pdev()
+manually at the right time. The downside of this is that you also
+need to make sure it happens at the right time from probe error-paths
+but given the bug you are hitting, I guess that is probably
+already a problem.
+
+Regards,
+
+Hans
+
