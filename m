@@ -2,249 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F445872F6
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 09:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E3D8734F
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 09:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405749AbfHIHaC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 03:30:02 -0400
-Received: from mail-eopbgr70053.outbound.protection.outlook.com ([40.107.7.53]:9446
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2405617AbfHIHaC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Aug 2019 03:30:02 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EpQEZErrNxc5HuwKB+TOueHjt0S28simo5LsIEVdG1fsfD87uO6Um0mXGg8RMTdaruQMI86ZUwFzCFhzL0X/402rGuEjYCF/nlx8wJxxMVwMYGtD8d0FHEPk97SRkrcHFMsXRFwCh/BzxK7ZEKim/1Zrf/byvCjvVDf9F1v7rZ9FB4GfVusawMHqQcnemRbpCsK9nQ34wI6QAWrFg3SvH4jxdvgPtPJl1s2JHcP3t/7gsc7hUSvbw9YsmJbgPx0uSZ7ef54/+8+BMDi1ckLbbn/te1VxED6hXgQgLGM14Ofbhb20w9mxL5VtbFIZwf2jej48f2IxBXKhuGJ1Xc38cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vzAypXrToq/jdRrGLU6FQpEq950DJjjMh+vmubQ6LGc=;
- b=mimXbej6k7qeu3kD6S4cwwHH7TQuAdDUZqxnKr1FlwWy0ttxBrzb+8mXS9xCYaFR6V668OS2jxRQeu9MyApGoIXlwiVK/hiYEmeiMtOwRo1hQvdfVHuodKTHVXfEPRuxt0n42GP+mGEeyQtvSb6kWzdF7rtLe0RGk/FwxwQulVuLFqSVlvF63OQBYUOINNUijYOhQzvNJ5R9PEYnRz8qb9qxhqUCQARYy/FzLSQSOVkNtWkZfNdJnZVDqQejf7aoP75enYFx1h8tcH29cgzmNLohAQRQyYLndPiAAvtj79TncB2zNyz7QgdAtEamw4JG7cZAi7luKjxyiFDYJXyDsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
- header.d=nxp.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vzAypXrToq/jdRrGLU6FQpEq950DJjjMh+vmubQ6LGc=;
- b=O2yBTCdju2LD7MQuuDtgZYO+fFU8KibjyhFvfUUf4tUZv3eC9VZl6CQ8dqCSlzhfrLxnYpOdGe9dFfDoH3g667RoVRF8f3K3n8gn6demkt0qn4JUoH6tXQkQsqVXVmmTQ9Gb3PnQkltJbyabEgSnYM4exQTcY84+2tRAElwcl8o=
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (20.179.233.225) by
- VE1PR04MB6381.eurprd04.prod.outlook.com (20.179.232.12) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2136.16; Fri, 9 Aug 2019 07:29:57 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::6025:6518:3420:7317]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::6025:6518:3420:7317%7]) with mapi id 15.20.2115.005; Fri, 9 Aug 2019
- 07:29:57 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Peter Chen <peter.chen@nxp.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] usb: chipidea: add role switch class support
-Thread-Topic: [PATCH v2 2/2] usb: chipidea: add role switch class support
-Thread-Index: AQHVTPJjKv4mmBgFt0yR3YS7OWGrKKbw/hKAgAFjtkA=
-Date:   Fri, 9 Aug 2019 07:29:57 +0000
-Message-ID: <VE1PR04MB65283C481B16F8AA45C2D53D89D60@VE1PR04MB6528.eurprd04.prod.outlook.com>
-References: <20190807072342.9700-1-jun.li@nxp.com>
- <20190807072342.9700-2-jun.li@nxp.com>
- <VI1PR04MB5327D34EE7561F16C4FE168D8BD70@VI1PR04MB5327.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB5327D34EE7561F16C4FE168D8BD70@VI1PR04MB5327.eurprd04.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
+        id S2405842AbfHIHmq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 9 Aug 2019 03:42:46 -0400
+Received: from esa3.mentor.iphmx.com ([68.232.137.180]:49041 "EHLO
+        esa3.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405800AbfHIHmq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 03:42:46 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Fri, 09 Aug 2019 03:42:45 EDT
+IronPort-SDR: Ht+FDyGTeS9JIGocTyR6KcuGfJd0YMywcC3GZ1/gVu63ezIbBRM/y4/2R3Lo+PXF6WC8fNd3oi
+ qBxlCHcFWanaWSvdW/Z2SCOs2yIzLILEV7ebGaC254PJ+O/uJY5ONtt2BGuuPFEc3V6I+MYOs9
+ 7feGTcjWiwMzx/U2weHAu0p2K/dXf2jLkjsK15i7QE6re3AZLsk3NEWgibmUmlLh97n+kY41KL
+ yS1bE0DDGFhAeXznYurHewl4m+OX9wmgIMBVWJJZxXr0D6+7DHS2HUx9gd61c66Jmtxr2liGwH
+ prY=
+X-IronPort-AV: E=Sophos;i="5.64,364,1559548800"; 
+   d="scan'208";a="40317323"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa3.mentor.iphmx.com with ESMTP; 08 Aug 2019 23:35:38 -0800
+IronPort-SDR: nFsss0wk9pPaOySz08B3CzMEQy3x13/RKZQnDxzOXLXXW3rK56YwD3akyGpZF+BNkl7S0P+Tmo
+ B6jNcsaZv7mWwIlZl9GpHHgGcyj3zGkeB7hMBoqCsiM1hmnwCGbdWwRflAfJWs8UlgbM4Kojrt
+ q1MA3UYUKUf1LVmFBF62VfaY/PTUz/+10bHYym3a+50tooyxzvZgDC7t13TUWYDtTQYfuGE2b/
+ Y4zhMftlC8TxZYRoTUDvPjEJtMDJZANz8HlXijDGjoZLeSp+NweiMLhDR79IKoSA05qf4OM4ME
+ Ui0=
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrey Konovalov <andreyknvl@google.com>
+CC:     Oliver Neukum <oneukum@suse.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        syzbot <syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: AW: KASAN: use-after-free Read in usbhid_power
+Thread-Topic: KASAN: use-after-free Read in usbhid_power
+Thread-Index: AQHVQVT8kp3cH3z0AEy3rfqKg0QMQKbaMLqAgAAB/4CAANH5gIAAXcMAgBY/mwCAAAvuAIAA2G/Q
+Date:   Fri, 9 Aug 2019 07:35:32 +0000
+Message-ID: <caf422aebd314ab8a5dd96ac2d9bb198@SVR-IES-MBX-03.mgc.mentorg.com>
+References: <CAAeHK+wb8=Z65_1CGcj0ShT6+NiQSDKhEkBVx+8vPe3kJF8+6g@mail.gmail.com>
+ <Pine.LNX.4.44L0.1908081522290.1319-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1908081522290.1319-100000@iolanthe.rowland.org>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: de-DE
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 94d3258c-f170-49ed-e3ea-08d71c9b6152
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VE1PR04MB6381;
-x-ms-traffictypediagnostic: VE1PR04MB6381:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <VE1PR04MB63813589DEC8C6E46096290A89D60@VE1PR04MB6381.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4125;
-x-forefront-prvs: 01244308DF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(39860400002)(136003)(366004)(396003)(13464003)(199004)(189003)(81166006)(66476007)(7696005)(6506007)(305945005)(966005)(256004)(25786009)(9686003)(74316002)(6306002)(14444005)(55016002)(64756008)(14454004)(8936002)(66946007)(81156014)(76176011)(76116006)(66556008)(66446008)(2906002)(99286004)(186003)(33656002)(3846002)(53546011)(102836004)(6436002)(8676002)(6246003)(71190400001)(26005)(446003)(229853002)(54906003)(478600001)(486006)(4326008)(6116002)(6636002)(53936002)(316002)(7736002)(66066001)(86362001)(44832011)(71200400001)(52536014)(5660300002)(11346002)(476003)(6862004);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6381;H:VE1PR04MB6528.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: mVfJtKcj7DdRdtr38S0EapFVaNlq/2XlMKxh9V7MMnGILjg1bVSh/11INZT60Wp1dp8y160Sm3qliEoBbt/Dl4T8t7aLeivDFvwxRYzif/jRBiZgezVNz0ibiVeEOQNdLDcvFUfo/nPUTAeJnHufyiOgnu+gK5NZedQlMz6xCG+7PTS91HeJ5lKTI8pFcuBU9E1o2dLu5nZpxGbAzaGxC+tZYx7B6MrkwQuOn9cGRTbhv7oeE9L+93gscz5cgjdxAhtciHVKvUZ8IacvSgy9jpPEifGdr4MXppkF5V6/FHc7PRxRzL+eAwC5VnTDpREdy9g0gheb9X1N9frpOxCfYkcXe3QuaxsdNehfKPm8N5P1JxKDOccV236JhGRv/P3B6AkaHaubmiFZzr9idYU26pnG30vVc26n8vYDGlHNV10=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94d3258c-f170-49ed-e3ea-08d71c9b6152
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Aug 2019 07:29:57.2806
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jun.li@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6381
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFBldGVyIENoZW4NCj4gU2Vu
-dDogMjAxOcTqONTCOMjVIDE3OjMxDQo+IFRvOiBKdW4gTGkgPGp1bi5saUBueHAuY29tPg0KPiBD
-YzogZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IEp1biBMaSA8anVuLmxpQG54cC5jb20+OyBk
-bC1saW51eC1pbXgNCj4gPGxpbnV4LWlteEBueHAuY29tPjsgbGludXgtdXNiQHZnZXIua2VybmVs
-Lm9yZw0KPiBTdWJqZWN0OiBSRTogW1BBVENIIHYyIDIvMl0gdXNiOiBjaGlwaWRlYTogYWRkIHJv
-bGUgc3dpdGNoIGNsYXNzIHN1cHBvcnQNCj4gDQo+IA0KPiA+IFVTQiByb2xlIGlzIGZ1bGx5IGNv
-bnRyb2xsZWQgYnkgdXNiIHJvbGUgc3dpdGNoIGNvbnN1bWVyKGUuZy4gdHlwZWMpLA0KPiA+IHVz
-YiBwb3J0IGNhbiBiZSBhdCBob3N0IG1vZGUoVVNCX1JPTEVfSE9TVCksIGRldmljZSBtb2RlIGNv
-bm5lY3RlZCB0bw0KPiA+IGhvc3QoVVNCX1JPTEVfREVWSUNFKSwgb3Igbm90IGNvbm5lY3Rpbmcg
-YW55IHBhcnRlcihVU0JfUk9MRV9OT05FKS4NCj4gPg0KPiANCj4gJXMvcGFydGVyL3BhcnRuZXIg
-Pw0KDQpZZXMsIEkgd2lsbCB1cGRhdGUuDQoNCj4gDQo+IEFyZSB0aGVyZSBhbnkgd2F5cyB5b3Ug
-Y291bGQgZ2V0IGV4dGVybmFsIGNhYmxlIHN0YXR1cyBmcm9tIHVzYi1zd2l0Y2ggb3IgdHlwZS1j
-IGxpa2UNCj4gZXh0ZXJuYWwgY29ubmVjdG9yPyBJZiB0aGVyZSBhcmUsIHlvdSBjb3VsZCB1cGRh
-dGUgb3Rnc2MgdmFsdWUgZm9yIG90Z3NjX3JlYWQsIG9yIGNoYW5nZQ0KPiBjYWJsZSBzdGF0dXMs
-IGFuZCBhdm9pZCBjaGFuZ2luZyBjb21tb24gaGFuZGxpbmcsIGxpa2UgY2lfaGRyY19wcm9iZSBh
-bmQgIGNpX290Z193b3JrLg0KPiBBbmQgaXQgY291bGQgYmVuZWZpdCBmb3Igb3RoZXIgdXNlIGNh
-c2VzLCBsaWtlIGJvb3Rpbmcgd2l0aCBjYWJsZSBjb25uZWN0ZWQgYW5kIHN3aXRjaCByb2xlDQo+
-IHRocm91Z2ggL3N5cy4NCg0KVGhlIG5ldyByb2xlIHN3aXRjaCBjbGFzcyBoYXMgbm90aGluZyB0
-byBkbyB3aXRoIGV4dGNvbiwgaXQncyB1c2luZyBncmFwaCBiaW5kaW5ncw0KdG8gbGluayB0aGUg
-Y29ubmVjdGlvbiwgc28gdGhlcmUgaXMgbm8gZXh0Y29uX2RldiwgY2hhbmdlIGZvciBjaV9oZHJj
-X3Byb2JlKCkgaXMNCnJlcXVpcmVkIGFzIHByb3BlcnR5IHVzYi1yb2xlLXN3aXRjaCBoYXMgdG8g
-YmUgc3BlY2lmaWVkLCB0aGVyZSBtYXkgYmUgc29tZSBjb2RlDQpyZXVzZSBpZiBzdGlsbCB0b3Vj
-aCB0aGUgZXh0ZXJuYWwgY2FibGUgZXZlbiBubyBleHRjb24gZGV2LCBidXQgdGhhdCB3aWxsIG1h
-a2UgZXhpc3RpbmcNCmV4dGVybmFsIGNhYmxlIGNvbXBsaWNhdGVkIGFuZCBub3QgY2xlYW4uDQoN
-Ck9uIHRoZSBvdGhlciBoYW5kLCBhIG5ldyBHUElPIGJhc2VkIHJvbGUgc3dpdGNoIGRyaXZlciBp
-cyBvbiByZXZpZXc6DQpodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMDU2Mzc5
-Lw0KU2VlbXMgdGhpcyBpcyB0aGUgZGlyZWN0aW9uIHRvIG1vdmUgb3V0IGZyb20gZXh0Y29uLg0K
-DQpMaSBKdW4NCj4gDQo+IFBldGVyDQo+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IExpIEp1biA8anVu
-LmxpQG54cC5jb20+DQo+ID4gLS0tDQo+ID4NCj4gPiBDaGFuZ2UgZm9yIHYyOg0KPiA+IC0gU3Vw
-cG9ydCBVU0JfUk9MRV9OT05FLCB3aGljaCBmb3IgdXNiIHBvcnQgbm90IGNvbm5lY3RpbmcgYW55
-DQo+ID4gICBkZXZpY2Ugb3IgaG9zdCwgYW5kIHdpbGwgYmUgaW4gbG93IHBvd2VyIG1vZGUuDQo+
-ID4NCj4gPiAgZHJpdmVycy91c2IvY2hpcGlkZWEvY2kuaCAgIHwgICAzICsrDQo+ID4gIGRyaXZl
-cnMvdXNiL2NoaXBpZGVhL2NvcmUuYyB8IDEyMA0KPiA+ICsrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKy0tLS0tLS0NCj4gPiAtLS0tDQo+ID4gIGRyaXZlcnMvdXNiL2NoaXBpZGVhL290
-Zy5jICB8ICAyMCArKysrKysrKw0KPiA+ICAzIGZpbGVzIGNoYW5nZWQsIDExNCBpbnNlcnRpb25z
-KCspLCAyOSBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9j
-aGlwaWRlYS9jaS5oIGIvZHJpdmVycy91c2IvY2hpcGlkZWEvY2kuaA0KPiA+IGluZGV4IDgyYjg2
-Y2QuLmYwYWVjMWQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvY2hpcGlkZWEvY2kuaA0K
-PiA+ICsrKyBiL2RyaXZlcnMvdXNiL2NoaXBpZGVhL2NpLmgNCj4gPiBAQCAtMjA1LDYgKzIwNSw3
-IEBAIHN0cnVjdCBjaV9oZHJjIHsNCj4gPiAgCWludAkJCQlpcnE7DQo+ID4gIAlzdHJ1Y3QgY2lf
-cm9sZV9kcml2ZXIJCSpyb2xlc1tVU0JfUk9MRV9ERVZJQ0UgKyAxXTsNCj4gPiAgCWVudW0gdXNi
-X3JvbGUJCQlyb2xlOw0KPiA+ICsJZW51bSB1c2Jfcm9sZQkJCXRhcmdldF9yb2xlOw0KPiA+ICAJ
-Ym9vbAkJCQlpc19vdGc7DQo+ID4gIAlzdHJ1Y3QgdXNiX290ZwkJCW90ZzsNCj4gPiAgCXN0cnVj
-dCBvdGdfZnNtCQkJZnNtOw0KPiA+IEBAIC0yMTIsNiArMjEzLDcgQEAgc3RydWN0IGNpX2hkcmMg
-ew0KPiA+ICAJa3RpbWVfdA0KPiA+IAlocl90aW1lb3V0c1tOVU1fT1RHX0ZTTV9USU1FUlNdOw0K
-PiA+ICAJdW5zaWduZWQJCQllbmFibGVkX290Z190aW1lcl9iaXRzOw0KPiA+ICAJZW51bSBvdGdf
-ZnNtX3RpbWVyCQluZXh0X290Z190aW1lcjsNCj4gPiArCXN0cnVjdCB1c2Jfcm9sZV9zd2l0Y2gJ
-CSpyb2xlX3N3aXRjaDsNCj4gPiAgCXN0cnVjdCB3b3JrX3N0cnVjdAkJd29yazsNCj4gPiAgCXN0
-cnVjdCB3b3JrcXVldWVfc3RydWN0CQkqd3E7DQo+ID4NCj4gPiBAQCAtMjQ0LDYgKzI0Niw3IEBA
-IHN0cnVjdCBjaV9oZHJjIHsNCj4gPiAgCXN0cnVjdCBkZW50cnkJCQkqZGVidWdmczsNCj4gPiAg
-CWJvb2wJCQkJaWRfZXZlbnQ7DQo+ID4gIAlib29sCQkJCWJfc2Vzc192YWxpZF9ldmVudDsNCj4g
-PiArCWJvb2wJCQkJcm9sZV9zd2l0Y2hfZXZlbnQ7DQo+ID4gIAlib29sCQkJCWlteDI4X3dyaXRl
-X2ZpeDsNCj4gPiAgCWJvb2wJCQkJc3VwcG9ydHNfcnVudGltZV9wbTsNCj4gPiAgCWJvb2wJCQkJ
-aW5fbHBtOw0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jaGlwaWRlYS9jb3JlLmMgYi9k
-cml2ZXJzL3VzYi9jaGlwaWRlYS9jb3JlLmMNCj4gPiBpbmRleA0KPiA+IGJjMjRjNWIuLjk2NWNl
-MTcgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvY2hpcGlkZWEvY29yZS5jDQo+ID4gKysr
-IGIvZHJpdmVycy91c2IvY2hpcGlkZWEvY29yZS5jDQo+ID4gQEAgLTU4Nyw2ICs1ODcsNDIgQEAg
-c3RhdGljIGlycXJldHVybl90IGNpX2lycShpbnQgaXJxLCB2b2lkICpkYXRhKQ0KPiA+ICAJcmV0
-dXJuIHJldDsNCj4gPiAgfQ0KPiA+DQo+ID4gK3N0YXRpYyBpbnQgY2lfdXNiX3JvbGVfc3dpdGNo
-X3NldChzdHJ1Y3QgZGV2aWNlICpkZXYsIGVudW0gdXNiX3JvbGUNCj4gPiArcm9sZSkgew0KPiA+
-ICsJc3RydWN0IGNpX2hkcmMgKmNpID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ID4gKwl1bnNp
-Z25lZCBsb25nIGZsYWdzOw0KPiA+ICsNCj4gPiArCWlmIChjaS0+cm9sZSA9PSByb2xlKQ0KPiA+
-ICsJCXJldHVybiAwOw0KPiA+ICsNCj4gPiArCXNwaW5fbG9ja19pcnFzYXZlKCZjaS0+bG9jaywg
-ZmxhZ3MpOw0KPiA+ICsJY2ktPnJvbGVfc3dpdGNoX2V2ZW50ID0gdHJ1ZTsNCj4gPiArCWNpLT50
-YXJnZXRfcm9sZSA9IHJvbGU7DQo+ID4gKwlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZjaS0+bG9j
-aywgZmxhZ3MpOw0KPiA+ICsNCj4gPiArCWNpX290Z19xdWV1ZV93b3JrKGNpKTsNCj4gPiArDQo+
-ID4gKwlyZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGVudW0gdXNiX3JvbGUg
-Y2lfdXNiX3JvbGVfc3dpdGNoX2dldChzdHJ1Y3QgZGV2aWNlICpkZXYpIHsNCj4gPiArCXN0cnVj
-dCBjaV9oZHJjICpjaSA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPiA+ICsJdW5zaWduZWQgbG9u
-ZyBmbGFnczsNCj4gPiArCWVudW0gdXNiX3JvbGUgcm9sZTsNCj4gPiArDQo+ID4gKwlzcGluX2xv
-Y2tfaXJxc2F2ZSgmY2ktPmxvY2ssIGZsYWdzKTsNCj4gPiArCXJvbGUgPSBjaS0+cm9sZTsNCj4g
-PiArCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmNpLT5sb2NrLCBmbGFncyk7DQo+ID4gKw0KPiA+
-ICsJcmV0dXJuIHJvbGU7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBzdHJ1Y3QgdXNiX3Jv
-bGVfc3dpdGNoX2Rlc2MgY2lfcm9sZV9zd2l0Y2ggPSB7DQo+ID4gKwkuc2V0ID0gY2lfdXNiX3Jv
-bGVfc3dpdGNoX3NldCwNCj4gPiArCS5nZXQgPSBjaV91c2Jfcm9sZV9zd2l0Y2hfZ2V0LA0KPiA+
-ICt9Ow0KPiA+ICsNCj4gPiAgc3RhdGljIGludCBjaV9jYWJsZV9ub3RpZmllcihzdHJ1Y3Qgbm90
-aWZpZXJfYmxvY2sgKm5iLCB1bnNpZ25lZCBsb25nIGV2ZW50LA0KPiA+ICAJCQkgICAgIHZvaWQg
-KnB0cikNCj4gPiAgew0KPiA+IEBAIC02ODksNiArNzI1LDkgQEAgc3RhdGljIGludCBjaV9nZXRf
-cGxhdGRhdGEoc3RydWN0IGRldmljZSAqZGV2LA0KPiA+ICAJaWYgKG9mX2ZpbmRfcHJvcGVydHko
-ZGV2LT5vZl9ub2RlLCAibm9uLXplcm8tdHRjdHJsLXR0aGEiLCBOVUxMKSkNCj4gPiAgCQlwbGF0
-ZGF0YS0+ZmxhZ3MgfD0gQ0lfSERSQ19TRVRfTk9OX1pFUk9fVFRIQTsNCj4gPg0KPiA+ICsJaWYg
-KGRldmljZV9wcm9wZXJ0eV9yZWFkX2Jvb2woZGV2LCAidXNiLXJvbGUtc3dpdGNoIikpDQo+ID4g
-KwkJY2lfcm9sZV9zd2l0Y2guZndub2RlID0gZGV2LT5md25vZGU7DQo+ID4gKw0KPiA+ICAJZXh0
-X2lkID0gRVJSX1BUUigtRU5PREVWKTsNCj4gPiAgCWV4dF92YnVzID0gRVJSX1BUUigtRU5PREVW
-KTsNCj4gPiAgCWlmIChvZl9wcm9wZXJ0eV9yZWFkX2Jvb2woZGV2LT5vZl9ub2RlLCAiZXh0Y29u
-IikpIHsgQEAgLTkwOCw2DQo+ID4gKzk0Nyw0MyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGF0dHJp
-YnV0ZV9ncm91cCBjaV9hdHRyX2dyb3VwID0gew0KPiA+ICAJLmF0dHJzID0gY2lfYXR0cnMsDQo+
-ID4gIH07DQo+ID4NCj4gPiArc3RhdGljIGludCBjaV9zdGFydF9pbml0aWFsX3JvbGUoc3RydWN0
-IGNpX2hkcmMgKmNpKSB7DQo+ID4gKwlpbnQgcmV0ID0gMDsNCj4gPiArDQo+ID4gKwlpZiAoY2kt
-PnJvbGVzW1VTQl9ST0xFX0hPU1RdICYmIGNpLT5yb2xlc1tVU0JfUk9MRV9ERVZJQ0VdKSB7DQo+
-ID4gKwkJaWYgKGNpLT5pc19vdGcpIHsNCj4gPiArCQkJY2ktPnJvbGUgPSBjaV9vdGdfcm9sZShj
-aSk7DQo+ID4gKwkJCS8qIEVuYWJsZSBJRCBjaGFuZ2UgaXJxICovDQo+ID4gKwkJCWh3X3dyaXRl
-X290Z3NjKGNpLCBPVEdTQ19JRElFLCBPVEdTQ19JRElFKTsNCj4gPiArCQl9IGVsc2Ugew0KPiA+
-ICsJCQkvKg0KPiA+ICsJCQkgKiBJZiB0aGUgY29udHJvbGxlciBpcyBub3QgT1RHIGNhcGFibGUs
-IGJ1dCBzdXBwb3J0DQo+ID4gKwkJCSAqIHJvbGUgc3dpdGNoLCB0aGUgZGVmYWx0IHJvbGUgaXMg
-Z2FkZ2V0LCBhbmQgdGhlDQo+ID4gKwkJCSAqIHVzZXIgY2FuIHN3aXRjaCBpdCB0aHJvdWdoIGRl
-YnVnZnMuDQo+ID4gKwkJCSAqLw0KPiA+ICsJCQljaS0+cm9sZSA9IFVTQl9ST0xFX0RFVklDRTsN
-Cj4gPiArCQl9DQo+ID4gKwl9IGVsc2Ugew0KPiA+ICsJCWNpLT5yb2xlID0gY2ktPnJvbGVzW1VT
-Ql9ST0xFX0hPU1RdDQo+ID4gKwkJCT8gVVNCX1JPTEVfSE9TVA0KPiA+ICsJCQk6IFVTQl9ST0xF
-X0RFVklDRTsNCj4gPiArCX0NCj4gPiArDQo+ID4gKwlpZiAoIWNpX290Z19pc19mc21fbW9kZShj
-aSkpIHsNCj4gPiArCQkvKiBvbmx5IHVwZGF0ZSB2YnVzIHN0YXR1cyBmb3IgcGVyaXBoZXJhbCAq
-Lw0KPiA+ICsJCWlmIChjaS0+cm9sZSA9PSBVU0JfUk9MRV9ERVZJQ0UpDQo+ID4gKwkJCWNpX2hh
-bmRsZV92YnVzX2NoYW5nZShjaSk7DQo+ID4gKw0KPiA+ICsJCXJldCA9IGNpX3JvbGVfc3RhcnQo
-Y2ksIGNpLT5yb2xlKTsNCj4gPiArCQlpZiAocmV0KQ0KPiA+ICsJCQlkZXZfZXJyKGNpLT5kZXYs
-ICJjYW4ndCBzdGFydCAlcyByb2xlXG4iLA0KPiA+ICsJCQkJCQljaV9yb2xlKGNpKS0+bmFtZSk7
-DQo+ID4gKwl9DQo+ID4gKw0KPiA+ICsJcmV0dXJuIHJldDsNCj4gPiArfQ0KPiA+ICsNCj4gPiAg
-c3RhdGljIGludCBjaV9oZHJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpICB7
-DQo+ID4gIAlzdHJ1Y3QgZGV2aWNlCSpkZXYgPSAmcGRldi0+ZGV2Ow0KPiA+IEBAIC0xMDUxLDM2
-ICsxMTI3LDEwIEBAIHN0YXRpYyBpbnQgY2lfaGRyY19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2
-aWNlICpwZGV2KQ0KPiA+ICAJCX0NCj4gPiAgCX0NCj4gPg0KPiA+IC0JaWYgKGNpLT5yb2xlc1tV
-U0JfUk9MRV9IT1NUXSAmJiBjaS0+cm9sZXNbVVNCX1JPTEVfREVWSUNFXSkgew0KPiA+IC0JCWlm
-IChjaS0+aXNfb3RnKSB7DQo+ID4gLQkJCWNpLT5yb2xlID0gY2lfb3RnX3JvbGUoY2kpOw0KPiA+
-IC0JCQkvKiBFbmFibGUgSUQgY2hhbmdlIGlycSAqLw0KPiA+IC0JCQlod193cml0ZV9vdGdzYyhj
-aSwgT1RHU0NfSURJRSwgT1RHU0NfSURJRSk7DQo+ID4gLQkJfSBlbHNlIHsNCj4gPiAtCQkJLyoN
-Cj4gPiAtCQkJICogSWYgdGhlIGNvbnRyb2xsZXIgaXMgbm90IE9URyBjYXBhYmxlLCBidXQgc3Vw
-cG9ydA0KPiA+IC0JCQkgKiByb2xlIHN3aXRjaCwgdGhlIGRlZmFsdCByb2xlIGlzIGdhZGdldCwg
-YW5kIHRoZQ0KPiA+IC0JCQkgKiB1c2VyIGNhbiBzd2l0Y2ggaXQgdGhyb3VnaCBkZWJ1Z2ZzLg0K
-PiA+IC0JCQkgKi8NCj4gPiAtCQkJY2ktPnJvbGUgPSBVU0JfUk9MRV9ERVZJQ0U7DQo+ID4gLQkJ
-fQ0KPiA+IC0JfSBlbHNlIHsNCj4gPiAtCQljaS0+cm9sZSA9IGNpLT5yb2xlc1tVU0JfUk9MRV9I
-T1NUXQ0KPiA+IC0JCQk/IFVTQl9ST0xFX0hPU1QNCj4gPiAtCQkJOiBVU0JfUk9MRV9ERVZJQ0U7
-DQo+ID4gLQl9DQo+ID4gLQ0KPiA+IC0JaWYgKCFjaV9vdGdfaXNfZnNtX21vZGUoY2kpKSB7DQo+
-ID4gLQkJLyogb25seSB1cGRhdGUgdmJ1cyBzdGF0dXMgZm9yIHBlcmlwaGVyYWwgKi8NCj4gPiAt
-CQlpZiAoY2ktPnJvbGUgPT0gVVNCX1JPTEVfREVWSUNFKQ0KPiA+IC0JCQljaV9oYW5kbGVfdmJ1
-c19jaGFuZ2UoY2kpOw0KPiA+IC0NCj4gPiAtCQlyZXQgPSBjaV9yb2xlX3N0YXJ0KGNpLCBjaS0+
-cm9sZSk7DQo+ID4gLQkJaWYgKHJldCkgew0KPiA+IC0JCQlkZXZfZXJyKGRldiwgImNhbid0IHN0
-YXJ0ICVzIHJvbGVcbiIsDQo+ID4gLQkJCQkJCWNpX3JvbGUoY2kpLT5uYW1lKTsNCj4gPiArCWlm
-ICghY2lfcm9sZV9zd2l0Y2guZndub2RlKSB7DQo+ID4gKwkJcmV0ID0gY2lfc3RhcnRfaW5pdGlh
-bF9yb2xlKGNpKTsNCj4gPiArCQlpZiAocmV0KQ0KPiA+ICAJCQlnb3RvIHN0b3A7DQo+ID4gLQkJ
-fQ0KPiA+ICAJfQ0KPiA+DQo+ID4gIAlyZXQgPSBkZXZtX3JlcXVlc3RfaXJxKGRldiwgY2ktPmly
-cSwgY2lfaXJxLCBJUlFGX1NIQVJFRCwgQEAgLTEwOTIsNg0KPiA+ICsxMTQyLDE1IEBAIHN0YXRp
-YyBpbnQgY2lfaGRyY19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiA+ICAJ
-aWYgKHJldCkNCj4gPiAgCQlnb3RvIHN0b3A7DQo+ID4NCj4gPiArCWlmIChjaV9yb2xlX3N3aXRj
-aC5md25vZGUpIHsNCj4gPiArCQljaS0+cm9sZV9zd2l0Y2ggPSB1c2Jfcm9sZV9zd2l0Y2hfcmVn
-aXN0ZXIoZGV2LA0KPiA+ICsJCQkJCSZjaV9yb2xlX3N3aXRjaCk7DQo+ID4gKwkJaWYgKElTX0VS
-UihjaS0+cm9sZV9zd2l0Y2gpKSB7DQo+ID4gKwkJCXJldCA9IFBUUl9FUlIoY2ktPnJvbGVfc3dp
-dGNoKTsNCj4gPiArCQkJZ290byBzdG9wOw0KPiA+ICsJCX0NCj4gPiArCX0NCj4gPiArDQo+ID4g
-IAlpZiAoY2ktPnN1cHBvcnRzX3J1bnRpbWVfcG0pIHsNCj4gPiAgCQlwbV9ydW50aW1lX3NldF9h
-Y3RpdmUoJnBkZXYtPmRldik7DQo+ID4gIAkJcG1fcnVudGltZV9lbmFibGUoJnBkZXYtPmRldik7
-DQo+ID4gQEAgLTExMzMsNiArMTE5Miw5IEBAIHN0YXRpYyBpbnQgY2lfaGRyY19yZW1vdmUoc3Ry
-dWN0IHBsYXRmb3JtX2RldmljZQ0KPiA+ICpwZGV2KSB7DQo+ID4gIAlzdHJ1Y3QgY2lfaGRyYyAq
-Y2kgPSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0YShwZGV2KTsNCj4gPg0KPiA+ICsJaWYgKGNpLT5yb2xl
-X3N3aXRjaCkNCj4gPiArCQl1c2Jfcm9sZV9zd2l0Y2hfdW5yZWdpc3RlcihjaS0+cm9sZV9zd2l0
-Y2gpOw0KPiA+ICsNCj4gPiAgCWlmIChjaS0+c3VwcG9ydHNfcnVudGltZV9wbSkgew0KPiA+ICAJ
-CXBtX3J1bnRpbWVfZ2V0X3N5bmMoJnBkZXYtPmRldik7DQo+ID4gIAkJcG1fcnVudGltZV9kaXNh
-YmxlKCZwZGV2LT5kZXYpOw0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jaGlwaWRlYS9v
-dGcuYyBiL2RyaXZlcnMvdXNiL2NoaXBpZGVhL290Zy5jDQo+ID4gaW5kZXgNCj4gPiA1YmRlMGI1
-Li4wMzY3NWI2IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2NoaXBpZGVhL290Zy5jDQo+
-ID4gKysrIGIvZHJpdmVycy91c2IvY2hpcGlkZWEvb3RnLmMNCj4gPiBAQCAtMjE0LDYgKzIxNCwy
-NiBAQCBzdGF0aWMgdm9pZCBjaV9vdGdfd29yayhzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspDQo+
-ID4gIAkJY2lfaGFuZGxlX3ZidXNfY2hhbmdlKGNpKTsNCj4gPiAgCX0NCj4gPg0KPiA+ICsJaWYg
-KGNpLT5yb2xlX3N3aXRjaF9ldmVudCkgew0KPiA+ICsJCWNpLT5yb2xlX3N3aXRjaF9ldmVudCA9
-IGZhbHNlOw0KPiA+ICsNCj4gPiArCQkvKiBTdG9wIGN1cnJlbnQgcm9sZSAqLw0KPiA+ICsJCWlm
-IChjaS0+cm9sZSA9PSBVU0JfUk9MRV9ERVZJQ0UpIHsNCj4gPiArCQkJdXNiX2dhZGdldF92YnVz
-X2Rpc2Nvbm5lY3QoJmNpLT5nYWRnZXQpOw0KPiA+ICsJCQljaS0+cm9sZSA9IFVTQl9ST0xFX05P
-TkU7DQo+ID4gKwkJfSBlbHNlIGlmIChjaS0+cm9sZSA9PSBVU0JfUk9MRV9IT1NUKSB7DQo+ID4g
-KwkJCWNpX3JvbGVfc3RvcChjaSk7DQo+ID4gKwkJfQ0KPiA+ICsNCj4gPiArCQkvKiBTdGFydCB0
-YXJnZXQgcm9sZSAqLw0KPiA+ICsJCWlmIChjaS0+dGFyZ2V0X3JvbGUgPT0gVVNCX1JPTEVfREVW
-SUNFKSB7DQo+ID4gKwkJCXVzYl9nYWRnZXRfdmJ1c19jb25uZWN0KCZjaS0+Z2FkZ2V0KTsNCj4g
-PiArCQkJY2ktPnJvbGUgPSBVU0JfUk9MRV9ERVZJQ0U7DQo+ID4gKwkJfSBlbHNlIGlmIChjaS0+
-dGFyZ2V0X3JvbGUgPT0gVVNCX1JPTEVfSE9TVCkgew0KPiA+ICsJCQljaV9yb2xlX3N0YXJ0KGNp
-LCBVU0JfUk9MRV9IT1NUKTsNCj4gPiArCQl9DQo+ID4gKwl9DQo+ID4gKw0KPiA+ICAJcG1fcnVu
-dGltZV9wdXRfc3luYyhjaS0+ZGV2KTsNCj4gPg0KPiA+ICAJZW5hYmxlX2lycShjaS0+aXJxKTsN
-Cj4gPiAtLQ0KPiA+IDIuNy40DQoNCg==
+Hi all having use-after-free issues in USB shutdowns:
+I hunted for a similar case in the intel_xhci_usb_sw driver.
+What i have found and proposed is (from yesterday):
+---
+[PATCH] kernel/resource.c: invalidate parent when freed resource has childs
+
+When a resource is freed and has children, the childrens are
+left without any hint that their parent is no more valid.
+This caused at least one use-after-free in the xhci-hcd using
+ext-caps driver when platform code released platform devices.
+
+Fix this by setting child's parent to zero and warn.
+
+Signed-off-by: Carsten Schmid <carsten_schmid@mentor.com>
+---
+Rationale:
+When hunting for the root cause of a crash on a 4.14.86 kernel, i
+have found the root cause and checked it being still present
+upstream. Our case:
+Having xhci-hcd and intel_xhci_usb_sw active we can see in
+/proc/meminfo: (exceirpt)
+  b3c00000-b3c0ffff : 0000:00:15.0
+    b3c00000-b3c0ffff : xhci-hcd
+      b3c08070-b3c0846f : intel_xhci_usb_sw
+intel_xhci_usb_sw being a child of xhci-hcd.
+
+Doing an unbind command
+echo 0000:00:15.0 > /sys/bus/pci/drivers/xhci_hcd/unbind
+leads to xhci-hcd being freed in __release_region.
+The intel_xhci_usb_sw resource is accessed in platform code
+in platform_device_del with
+                for (i = 0; i < pdev->num_resources; i++) {
+                        struct resource *r = &pdev->resource[i];
+                        if (r->parent)
+                                release_resource(r);
+                }
+as the resource's parent has not been updated, the release_resource
+uses the parent:
+        p = &old->parent->child;
+which is now invalid.
+Fix this by marking the parent invalid in the child and give a warning
+in dmesg.
+---
+ kernel/resource.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/kernel/resource.c b/kernel/resource.c
+index 158f04ec1d4f..95340cb0b1c2 100644
+--- a/kernel/resource.c
++++ b/kernel/resource.c
+@@ -1200,6 +1200,15 @@ void __release_region(struct resource *parent, resource_size_t start,
+                        write_unlock(&resource_lock);
+                        if (res->flags & IORESOURCE_MUXED)
+                                wake_up(&muxed_resource_wait);
++
++                       write_lock(&resource_lock);
++                       if (res->child) {
++                               printk(KERN_WARNING "__release_region: %s has child %s,"
++                                               "invalidating childs parent\n",
++                                               res->name, res->child->name);
++                               res->child->parent = NULL;
++                       }
++                       write_unlock(&resource_lock);
+                        free_resource(res);
+                        return;
+                }
+--
+2.17.1
+
+> -----Ursprüngliche Nachricht-----
+> Von: linux-usb-owner@vger.kernel.org [mailto:linux-usb-
+> owner@vger.kernel.org] Im Auftrag von Alan Stern
+> Gesendet: Donnerstag, 8. August 2019 21:37
+> An: Andrey Konovalov <andreyknvl@google.com>
+> Cc: Oliver Neukum <oneukum@suse.com>; syzkaller-bugs <syzkaller-
+> bugs@googlegroups.com>; syzbot
+> <syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com>; USB list
+> <linux-usb@vger.kernel.org>; Hillf Danton <hdanton@sina.com>
+> Betreff: Re: KASAN: use-after-free Read in usbhid_power
+> 
+> On Thu, 8 Aug 2019, Andrey Konovalov wrote:
+> 
+> > On Thu, Jul 25, 2019 at 5:09 PM Alan Stern <stern@rowland.harvard.edu>
+> wrote:
+> > >
+> > > On Thu, 25 Jul 2019, Oliver Neukum wrote:
+> > >
+> > > > Am Mittwoch, den 24.07.2019, 17:02 -0400 schrieb Alan Stern:
+> > > > > On Wed, 24 Jul 2019, Oliver Neukum wrote:
+> > > > >
+> > > > > >  drivers/hid/usbhid/hid-core.c | 13 +++++++++++++
+> > > > > >  1 file changed, 13 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-
+> core.c
+> > > > > > index c7bc9db5b192..98b996ecf4d3 100644
+> > > > > > --- a/drivers/hid/usbhid/hid-core.c
+> > > > > > +++ b/drivers/hid/usbhid/hid-core.c
+> > > > > > @@ -1229,6 +1229,17 @@ static int usbhid_power(struct hid_device
+> *hid, int lvl)
+> > > > > >   struct usbhid_device *usbhid = hid->driver_data;
+> > > > > >   int r = 0;
+> > > > > >
+> > > > > > + spin_lock_irq(&usbhid->lock);
+> > > > > > + if (test_bit(HID_DISCONNECTED, &usbhid->iofl)) {
+> > > > > > +         r = -ENODEV;
+> > > > > > +         spin_unlock_irq(&usbhid->lock);
+> > > > > > +         goto bail_out;
+> > > > > > + } else {
+> > > > > > +         /* protect against disconnect */
+> > > > > > +         usb_get_dev(interface_to_usbdev(usbhid->intf));
+> > > > > > +         spin_unlock_irq(&usbhid->lock);
+> > > > > > + }
+> > > > > > +
+> > > > > >   switch (lvl) {
+> > > > > >   case PM_HINT_FULLON:
+> > > > > >           r = usb_autopm_get_interface(usbhid->intf);
+> > > > > > @@ -1238,7 +1249,9 @@ static int usbhid_power(struct hid_device
+> *hid, int lvl)
+> > > > > >           usb_autopm_put_interface(usbhid->intf);
+> > > > > >           break;
+> > > > > >   }
+> > > > > > + usb_put_dev(interface_to_usbdev(usbhid->intf));
+> > > > > >
+> > > > > > +bail_out:
+> > > > > >   return r;
+> > > > > >  }
+> 
+> > This report looks like very similar to these two:
+> >
+> > https://syzkaller.appspot.com/bug?extid=b156665cf4d1b5e00c76
+> > https://syzkaller.appspot.com/bug?extid=3cbe5cd105d2ad56a1df
+> 
+> It also seems to resemble extids a7a6b9c609b9457c62c6,
+> 62a1e04fd3ec2abf099e, and 75e6910bf03e266a277f, although this may be an
+> illusion.
+> 
+> > Maybe we should mark those two as duplicates.
+> >
+> > Hillf suggested a fix on one of them, but it looks different from what
+> > you propose:
+> >
+> > https://groups.google.com/d/msg/syzkaller-
+> bugs/xW7LvKfpyn0/SpKbs5ZLEAAJ
+> 
+> Go ahead and try it out on all of them.  I don't have a clear feeling
+> about it, not having worked on usbhid in quite a while.
+> 
+> Alan Stern
+
