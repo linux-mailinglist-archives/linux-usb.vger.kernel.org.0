@@ -2,105 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE3E87CEA
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 16:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CC087DC8
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 17:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436479AbfHIOlt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 10:41:49 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:54285 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbfHIOls (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 10:41:48 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1Mvbr4-1iD4VT2f4w-00saWn; Fri, 09 Aug 2019 16:41:37 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     soc@kernel.org
-Cc:     Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v2 02/13] usb: udc: lpc32xx: allow compile-testing
-Date:   Fri,  9 Aug 2019 16:40:28 +0200
-Message-Id: <20190809144043.476786-3-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20190809144043.476786-1-arnd@arndb.de>
-References: <20190809144043.476786-1-arnd@arndb.de>
+        id S2407244AbfHIPNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Aug 2019 11:13:01 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:54880 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726342AbfHIPNB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 11:13:01 -0400
+Received: (qmail 1813 invoked by uid 2102); 9 Aug 2019 11:13:00 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 Aug 2019 11:13:00 -0400
+Date:   Fri, 9 Aug 2019 11:13:00 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     Kees Cook <keescook@chromium.org>,
+        syzbot <syzbot+45b2f40f0778cfa7634e@syzkaller.appspotmail.com>,
+        Michael Hund <mhund@ld-didactic.de>,
+        <akpm@linux-foundation.org>, <andreyknvl@google.com>, <cai@lca.pw>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>,
+        <tglx@linutronix.de>
+Subject: Re: BUG: bad usercopy in ld_usb_read
+In-Reply-To: <20190809085545.GB21320@kroah.com>
+Message-ID: <Pine.LNX.4.44L0.1908091100580.1630-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:imKF8CYOdXNLcMsBRk3mkfe2XaXiYZ/dpgIAJ8vRCoyxvlRyj33
- AVF5BJ04yO+4T850DaBd0tsnYRR8Kr57cnSNT3OeGpKfcEBIX8M9GQMwT1IUYdprcSqX4vO
- EeKrYORhADLbzjwUhXrKNiu9yK1kPe1XBmNsZb+rNlS3zJR9ml4+W8sWjKbu1DGbmJqJCp8
- TP+LwRSu/+D+dPieDgwZw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:o+P30devlyk=:ZOux45NQXABh307CDaffwC
- eRRPJf8wFJnTFHt8ABbfXpKy4+2KstsbFkVk7tp+8vg4RTNo+M0qNZuHja9WiuljDwDeeHKcR
- JxyOvwefJYugKbJYpqRg2PBrMHB/XvtsyuqQMKg6MW0mGJk+wUbEB88paGrIS/Z4GIMor3210
- qI/jAwzxrydt6db2oU8rWGakd4MF7/PQKoleMWB6eEL683yBW0UqbgyGETizPP/DAsE3BgaaY
- n1GFH9keXNXLp8Xhf+ZE5mBYr2ExNpKkbKCk5RA9MJQF4T0neuwFC91NWpUMkC4fvpBKNYttN
- DlXWhYa5RA59/nEeBjcnTVwhV0UVR+x1laNjs+CvutXhcstOZLZ4DLnirepeO2IjaKjkTB68E
- WPSCJLJS70sOdynJzhit1m7j49KEN77V/Yk0bExKwvI9+6INzhs/cKpqGC8EkE87qhzOfx1Jw
- VxkvqpnmJjGiEUJVi/fVAv4Izr3dwKSZ+Ahn9ePU0N9HLxPwbFcZoAKs3Ec+3zA5lIuQCzta0
- at21vUSECg93O+CzFZY7g0meK28uC1IVZxzI0gQm8lkt0rXQuLIbK+fJekVelMDCWZF8IwghO
- cu0S6TwolJqo0s/Ne+Zpn138n5DzWwUfAxLpaeBExS5sdoIpkvdiiNDMLIql1FUOR+ONQbviM
- ICGimsocRL3e9CqZnT7W2tc+ve+MFAKwCFQ00cgCy+DbaPUGMxRxv4WBMRhZ2IJCB8oDAdLQX
- VyxbDTMn3knDPVcYN44yMWdFlMgOC1wRYKle3g==
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The only thing that prevents building this driver on other
-platforms is the mach/hardware.h include, which is not actually
-used here at all, so remove the line and allow CONFIG_COMPILE_TEST.
+On Fri, 9 Aug 2019, Greg KH wrote:
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/usb/gadget/udc/Kconfig       | 3 ++-
- drivers/usb/gadget/udc/lpc32xx_udc.c | 3 +--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> On Thu, Aug 08, 2019 at 04:06:32PM -0700, Kees Cook wrote:
+> > On Thu, Aug 08, 2019 at 02:46:54PM +0200, Greg KH wrote:
+> > > On Thu, Aug 08, 2019 at 05:38:06AM -0700, syzbot wrote:
+> > > > Hello,
+> > > > 
+> > > > syzbot found the following crash on:
+> > > > 
+> > > > HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=13aeaece600000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=45b2f40f0778cfa7634e
+> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > > 
+> > > > Unfortunately, I don't have any reproducer for this crash yet.
+> > > > 
+> > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > > Reported-by: syzbot+45b2f40f0778cfa7634e@syzkaller.appspotmail.com
+> > > > 
+> > > > ldusb 6-1:0.124: Read buffer overflow, -131383996186150 bytes dropped
+> > > 
+> > > That's a funny number :)
+> > > 
+> > > Nice overflow found, I see you are now starting to fuzz the char device
+> > > nodes of usb drivers...
+> > > 
+> > > Michael, care to fix this up?
+> > 
+> > This looks like the length in the read-from-device buffer is unchecked:
+> > 
+> >         /* actual_buffer contains actual_length + interrupt_in_buffer */
+> >         actual_buffer = (size_t *)(dev->ring_buffer + dev->ring_tail * (sizeof(size_t)+dev->interrupt_in_endpoint_size));
+> >         bytes_to_read = min(count, *actual_buffer);
+> >         if (bytes_to_read < *actual_buffer)
+> >                 dev_warn(&dev->intf->dev, "Read buffer overflow, %zd bytes dropped\n",
+> >                          *actual_buffer-bytes_to_read);
+> > 
+> >         /* copy one interrupt_in_buffer from ring_buffer into userspace */
+> >         if (copy_to_user(buffer, actual_buffer+1, bytes_to_read)) {
+> >                 retval = -EFAULT;
+> >                 goto unlock_exit;
+> >         }
+> > 
+> > I assume what's stored at actual_buffer is bogus and needs validation
+> > somewhere before it's actually used. (If not here, maybe where ever the
+> > write into the buffer originally happens?)
+> 
+> I think it should be verified here, as that's when it is parsed.  The
+> data is written to the buffer in ld_usb_interrupt_in_callback() but it
+> does not "know" how to parse it at that location.
 
-diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index ef0259a950ba..d354036ff6c8 100644
---- a/drivers/usb/gadget/udc/Kconfig
-+++ b/drivers/usb/gadget/udc/Kconfig
-@@ -45,7 +45,8 @@ config USB_AT91
- 
- config USB_LPC32XX
- 	tristate "LPC32XX USB Peripheral Controller"
--	depends on ARCH_LPC32XX && I2C
-+	depends on ARCH_LPC32XX || COMPILE_TEST
-+	depends on I2C
- 	select USB_ISP1301
- 	help
- 	   This option selects the USB device controller in the LPC32xx SoC.
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-index 5f1b14f3e5a0..defe04d52e6d 100644
---- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -24,6 +24,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/prefetch.h>
- #include <linux/proc_fs.h>
- #include <linux/slab.h>
- #include <linux/usb/ch9.h>
-@@ -35,8 +36,6 @@
- #include <linux/seq_file.h>
- #endif
- 
--#include <mach/hardware.h>
--
- /*
-  * USB device configuration structure
-  */
--- 
-2.20.0
+I looked at this bug report, and it is very puzzling.
+
+Yes, the value stored in *actual_buffer is written in
+ld_usb_interrupt_in_callback(), but the value is simply
+urb->actual_length and therefore does not need any validation.  The 
+URB's transfer_buffer_length is taken from 
+dev->interrupt_in_endpoint_size, which comes from usb_endpoint_maxp() 
+and therefore cannot be larger than 2048.
+
+(On the other hand, actual_buffer might not be aligned on a 32-bit 
+address.  For x86, of course, this doesn't matter, but it can affect 
+other architectures.)
+
+Furthermore, the computation leading to the dev_warn() involves only
+size_t types and therefore is carried out entirely using unsigned
+arithmetic.  The warning's format string uses %zd instead of %zu;  
+that's why the number showed up as negative but doesn't explain why it
+looks so funny.
+
+In fact, I don't see why any of the computations here should overflow
+or wrap around, or even give rise to a negative value.  If syzbot had a
+reproducer we could get more debugging output -- but it doesn't.
+
+Alan Stern
 
