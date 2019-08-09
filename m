@@ -2,239 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B40E5882D1
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 20:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA4C88302
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 20:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406412AbfHISoW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 14:44:22 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:37452 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726168AbfHISoV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 14:44:21 -0400
-Received: by mail-qt1-f193.google.com with SMTP id y26so96801283qto.4
-        for <linux-usb@vger.kernel.org>; Fri, 09 Aug 2019 11:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vEuL2EbGOVGMLn0kU1w+hsZbPb98Gl+S1kfZ1qfhHFA=;
-        b=Xp6CIOgIk3oDjKzavwAl88b8bezmjuL6Genksw2JvgrEM8Z2cf2+0wHWBvZdyvc4OL
-         9UUGuhUOBtJVBTWPPzwp5b9vdRV0qUlUW5YfH109IfVaaSbfsSM/76YeBCGflRe8lcTZ
-         VmfX20SGtnC0CvSfpzGXdh/3aLHp4w5B0N81o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vEuL2EbGOVGMLn0kU1w+hsZbPb98Gl+S1kfZ1qfhHFA=;
-        b=SpOhxFoohkiDVdZp7gY6dHpBRPLG6TY/zfDP3ry6qQXpX6Rd4WpCjCjH49OUMYBfSz
-         AbBNQK7b9ftRzxvC1qAAUhusUZebUQ9OLsNOt9MbLeYP70zovCQUsY0Frm2pCQ6uAN24
-         L6scYIVf6e2z1vw7xb7v8PtIgA88sOTtO2miBbpZmZg89y5seWaYJCFiN4LDbA8PyMce
-         GlXZPZdRR+MeVK8DRGz6kstWyiMoAcMsBqNAjTVsFPCU6hDTlma7giSzRZvO5MJnQ0r6
-         zgTZKasyn3fvi+sdxSIIt1hngZcJJW8KAd/zg4uDZgXJrZH0lqK3f26Yn/5fkian94hd
-         q51w==
-X-Gm-Message-State: APjAAAV7+F6LY1EFOF/68JWJqHKXxiM4W1y8wdqvQYLawxRw9gN4ysvc
-        qweslR8XPRyr9zJWwFqOnJP8ksl3w+dP+DGJVysdfQ==
-X-Google-Smtp-Source: APXvYqxaQ/rW76Rpp5DfBAiCzkWHmV5FzYB1SRSbWqo08gJ62yizkR/UqId4EXjNeD5gLNa2lhDCNxH6197a8vbXJUY=
-X-Received: by 2002:ac8:768b:: with SMTP id g11mr19907262qtr.182.1565376260532;
- Fri, 09 Aug 2019 11:44:20 -0700 (PDT)
+        id S1726467AbfHISxU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 9 Aug 2019 14:53:20 -0400
+Received: from mga01.intel.com ([192.55.52.88]:45178 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726168AbfHISxU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Aug 2019 14:53:20 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Aug 2019 11:53:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,366,1559545200"; 
+   d="scan'208";a="169394150"
+Received: from orsmsx102.amr.corp.intel.com ([10.22.225.129])
+  by orsmga008.jf.intel.com with ESMTP; 09 Aug 2019 11:53:19 -0700
+Received: from orsmsx113.amr.corp.intel.com (10.22.240.9) by
+ ORSMSX102.amr.corp.intel.com (10.22.225.129) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Fri, 9 Aug 2019 11:53:18 -0700
+Received: from orsmsx102.amr.corp.intel.com ([169.254.3.11]) by
+ ORSMSX113.amr.corp.intel.com ([169.254.9.128]) with mapi id 14.03.0439.000;
+ Fri, 9 Aug 2019 11:53:18 -0700
+From:   "Yang, Fei" <fei.yang@intel.com>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "john.stultz@linaro.org" <john.stultz@linaro.org>,
+        "andrzej.p@collabora.com" <andrzej.p@collabora.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Subject: RE: [PATCH V2] usb: dwc3: gadget: trb_dequeue is not updated
+ properly
+Thread-Topic: [PATCH V2] usb: dwc3: gadget: trb_dequeue is not updated
+ properly
+Thread-Index: AQHVPUaDMYdk5Cgjz0WPgMvoOhlVmqbQnM5QgAFk9oCAAG1EwIAe6UYAgAHrMJA=
+Date:   Fri, 9 Aug 2019 18:53:18 +0000
+Message-ID: <02E7334B1630744CBDC55DA8586225837F905DB9@ORSMSX102.amr.corp.intel.com>
+References: <1563396788-126034-1-git-send-email-fei.yang@intel.com>
+ <87o91riux9.fsf@linux.intel.com>
+ <02E7334B1630744CBDC55DA8586225837F8DD883@ORSMSX102.amr.corp.intel.com>
+ <87muhascua.fsf@linux.intel.com>
+ <02E7334B1630744CBDC55DA8586225837F8DE348@ORSMSX102.amr.corp.intel.com>
+ <8736icnqk7.fsf@gmail.com>
+In-Reply-To: <8736icnqk7.fsf@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ctpclassification: CTP_NT
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiZDYxYTJmZGYtMTI1Ny00NmM5LTgwMmQtMjA1OGI0NWVkZDkzIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiSDRtVFVkakNDd21DUjN2QXI5cGd5WUtUWVwvVllGazlaSU5cL2hNYkVTb1BUOUp3V2pBWE9lMUpuaGwyQmZSVGhOIn0=
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.22.254.139]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <000000000000e3e6d7058fb2c624@google.com>
-In-Reply-To: <000000000000e3e6d7058fb2c624@google.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Fri, 9 Aug 2019 11:44:09 -0700
-Message-ID: <CACeCKafa5OkV=Mj0sBvr_oQeT5HBe9CRcT1g7BKqzECXv7ODvg@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in usb_kill_urb
-To:     syzbot <syzbot+22ae4e3b9fcc8a5c153a@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-(Sorry for the resend, I was in HTML mode earlier :S)
-Hi,
+>>> I need tracepoints to see what's going on, please collect tracepoints.
+>>
+>> See attached. Search for "length 16384/16384" to the USB request using 
+>> sg list. And the transfer stalls at a request with "length 512/512".
+>
+> which gadget driver is this btw? Let's look at what happened leading up to this problem:
+I'm using the upstream kernel with some Android patches from Google. Comparing to pure upstream, there is no change in drivers/usb/dwc3/.
+There are a few Android patches on top of drivers/usb/gadget, but those don't seem to have anything to do with this case as the patches are
+changing things like f_accessory/f_audio/f_midi.
 
-I'm trying to get up to speed on USB kernel code. Sounds like
-dev->intf should have been set to NULL for the error path in
-ld_usb_probe() ?
+>>        <...>-3107  [001] d..1   164.184431: dwc3_alloc_request: ep1out: req 0000000066963d3c length 0/0 zsI ==> 0
+>
+> Allocated a new request
+>
+>>        <...>-3107  [001] d..2   164.184432: dwc3_ep_queue: ep1out: req 0000000066963d3c length 0/16384 zsI ==> -115
+>
+> queued it for a 16kiB transfer (split into 3 sglist entries)
+>
+>>        <...>-3107  [001] d..2   164.184433: dwc3_prepare_trb: ep1out: trb 0000000011fb30b4 buf 0000000077caf000 size 4096 ctrl 0000001d (HlCS:sc:normal)
+>
+> first one, 4kiB. Note the capital 'C', this one is chained.
+>
+>>        <...>-3107  [001] d..2   164.184433: dwc3_prepare_trb: ep1out: trb 00000000bc197bc2 buf 0000000077cb0000 size 8192 ctrl 0000001d (HlCS:sc:normal)
+>
+>second one, 8kiB. Also chained.
+>
+>>        <...>-3107  [001] d..2   164.184433: dwc3_prepare_trb: ep1out: trb 00000000ae5c00ad buf 0000000077cb2000 size 4096 ctrl 00000819 (HlcS:sC:normal)
+>
+> last one, 4kiB. NOT CHAINED!
+>
+>>        <...>-3107  [001] d..2   164.184438: dwc3_gadget_ep_cmd: ep1out: cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status: Successful
+>
+> issue update transfer
+>
+>>        <...>-3107  [001] d..1   164.184444: dwc3_alloc_request: ep1out: req 00000000fe2c6e9d length 0/0 zsI ==> 0
+>
+> now gadget driver allocates a NEW request
+>
+>>        <...>-3107  [001] d..2   164.184444: dwc3_ep_queue: ep1out: req 00000000fe2c6e9d length 0/512 zsI ==> -115
+>
+> ... and queues it for zero bytes. Why? Why didn't gadget driver set the ZERO flag in the original request?
+I don't see any difference between this request and the one above for 16Kbyte (except the length). Why are you expecting "Z" to be set?
+The 0 is request.actual, which is correct at this point of time.
 
-https://elixir.bootlin.com/linux/latest/source/drivers/usb/misc/ldusb.c#L666
+>>        <...>-3107  [001] d..2   164.184445: dwc3_prepare_trb: ep1out: trb 0000000055827a46 buf 0000000077cb3000 size 512 ctrl 00000819 (HlcS:sC:normal)
+>
+> a single TRB is prepared correctly.
+> 
+>>        <...>-3107  [001] d..2   164.184449: dwc3_gadget_ep_cmd: ep1out: cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status: Successful
+>
+> Update transfer is issued.
+>
+>>        <...>-3165  [001] d..1   164.192315: dwc3_event: event (00004084): ep1out: Transfer In Progress [0] (sIm)
+>>        <...>-3165  [001] d..1   164.192316: dwc3_complete_trb: ep1out: trb 0000000017050f80 buf 0000000077c63000 size 0 ctrl 0000001c (hlCS:sc:normal)
+>>        <...>-3165  [001] d..1   164.192325: dwc3_gadget_giveback: ep1out: req 00000000af8aa80e length 16384/16384 zsI ==> 0
+>> kworker/u8:5-1165  [001] ....   164.192353: dwc3_free_request: ep1out: req 00000000af8aa80e length 16384/16384 zsI ==> 0
+>>        <...>-3165  [001] d..1   164.192849: dwc3_event: event (00004084): ep1out: Transfer In Progress [0] (sIm)
+>>        <...>-3165  [001] d..1   164.192851: dwc3_complete_trb: ep1out: trb 00000000c1f0fd23 buf 0000000077c64000 size 0 ctrl 0000001c (hlCS:sc:normal)
+>>        <...>-3165  [001] d..1   164.192860: dwc3_gadget_giveback: ep1out: req 0000000066963d3c length 16384/16384 zsI ==> 0
+>
+> here we giveback the request to the gadget driver. Note that the TRB addresses that were completed do NOT match the TRB addresses of the prepared TRBs.
+> Again, which gadget driver is this? Where is the source code for this gadget driver? Also note that we requested for event upon completion of the final TRB only
+> but we get events for each and every TRB.
+
+I don't know how to interpret this trace log, but it didn't help me find the problem until I added my own log in the prepare_trb() and completed_trb()
+[   86.817218] ffs_epfile_io:READ:SG: buf=00000000fcc78b10 sg=00000000952c5428 length=16384 num_sgs=4
+[   86.827242]  __dwc3_prepare_one_trb: size=4096 bp=000000007780d000 ctrl=0000001d enq=b3
+[   86.836172]  __dwc3_prepare_one_trb: size=4096 bp=000000007780e000 ctrl=0000001d enq=b4
+[   86.845100]  __dwc3_prepare_one_trb: size=4096 bp=000000007780f000 ctrl=0000001d enq=b5
+[   86.854028]  __dwc3_prepare_one_trb: size=4096 bp=0000000077810000 ctrl=00000819 enq=b6
+[   86.862959] __dwc3_gadget_kick_transfer: updating buf=00000000be7c4a4c sg=00000000952c5428 length=16384 pending_sgs=4 remaining=0
+[   86.876146] ffs_epfile_io:READ:SG: buf=000000008b573d0c sg=00000000d7992341 length=16384 num_sgs=4
+[   86.886159]  __dwc3_prepare_one_trb: size=4096 bp=0000000077811000 ctrl=0000001d enq=b7
+[   86.895091]  __dwc3_prepare_one_trb: size=4096 bp=0000000077812000 ctrl=0000001d enq=b8
+[   86.904023]  __dwc3_prepare_one_trb: size=4096 bp=0000000077813000 ctrl=0000001d enq=b9
+[   86.912955]  __dwc3_prepare_one_trb: size=4096 bp=0000000077814000 ctrl=00000819 enq=ba
+[   86.921890] __dwc3_gadget_kick_transfer: updating buf=00000000be7c4a4c sg=00000000952c5428 length=16384 pending_sgs=4 remaining=0
+[   86.934979] dwc3_gadget_ep_reclaim_completed_trb(1): buf=00000000be7c4a4c sg=00000000952c5428 status=0 ctrl=0000001c length=16384 pending_sgs=3 trb_size=0 evstatus=00000004
+[   86.936025] ffs_epfile_io:READ:SG: buf=000000006cee33d6 sg=00000000244e9645 length=16384 num_sgs=4
+[   86.952253] dwc3_gadget_ep_reclaim_completed_trb(1): buf=00000000be7c4a4c sg=00000000d7992341 status=0 ctrl=0000001c length=16384 pending_sgs=3 trb_size=0 evstatus=00000004
+
+From this log, you can clearly see each sg list gets only one reclaim_completed_trb() call, and the trb reclaimed is not the last one (ctrl=0000001c, the last one should have ctrl=00000818).
+The trb addresses is continuous as indicated by bp=000000007780d000 to bp=0000000077814000 with 4K increment in between.
+Also you can see that event->status has IOC bit set (evstatus=00000004), so the for-loop to reclaim all trb in the sg list breaks out right after the first trb is reclaimed.
 
 
-On Fri, Aug 9, 2019 at 10:48 AM syzbot
-<syzbot+22ae4e3b9fcc8a5c153a@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1799392c600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=22ae4e3b9fcc8a5c153a
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1134c802600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13278c4a600000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+22ae4e3b9fcc8a5c153a@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KASAN: use-after-free in atomic_read
-> include/asm-generic/atomic-instrumented.h:26 [inline]
-> BUG: KASAN: use-after-free in usb_kill_urb drivers/usb/core/urb.c:695
-> [inline]
-> BUG: KASAN: use-after-free in usb_kill_urb+0x24b/0x2c0
-> drivers/usb/core/urb.c:687
-> Read of size 4 at addr ffff8881d635b110 by task syz-executor672/1999
->
-> CPU: 1 PID: 1999 Comm: syz-executor672 Not tainted 5.3.0-rc2+ #25
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x6a/0x32c mm/kasan/report.c:351
->   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
->   kasan_report+0xe/0x12 mm/kasan/common.c:612
->   check_memory_region_inline mm/kasan/generic.c:185 [inline]
->   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
->   atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
->   usb_kill_urb drivers/usb/core/urb.c:695 [inline]
->   usb_kill_urb+0x24b/0x2c0 drivers/usb/core/urb.c:687
->   ld_usb_abort_transfers+0xb7/0x1d0 drivers/usb/misc/ldusb.c:196
->   ld_usb_release+0x19f/0x400 drivers/usb/misc/ldusb.c:406
->   __fput+0x2d7/0x840 fs/file_table.c:280
->   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
->   exit_task_work include/linux/task_work.h:22 [inline]
->   do_exit+0x8ef/0x2c50 kernel/exit.c:878
->   do_group_exit+0x125/0x340 kernel/exit.c:982
->   __do_sys_exit_group kernel/exit.c:993 [inline]
->   __se_sys_exit_group kernel/exit.c:991 [inline]
->   __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:991
->   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x440418
-> Code: 00 00 be 3c 00 00 00 eb 19 66 0f 1f 84 00 00 00 00 00 48 89 d7 89 f0
-> 0f 05 48 3d 00 f0 ff ff 77 21 f4 48 89 d7 44 89 c0 0f 05 <48> 3d 00 f0 ff
-> ff 76 e0 f7 d8 64 41 89 01 eb d8 0f 1f 84 00 00 00
-> RSP: 002b:00007ffe884abf88 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000440418
-> RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
-> RBP: 00000000004bff50 R08: 00000000000000e7 R09: ffffffffffffffd0
-> R10: 0000000000000064 R11: 0000000000000246 R12: 0000000000000001
-> R13: 00000000006d2180 R14: 0000000000000000 R15: 0000000000000000
->
-> Allocated by task 22:
->   save_stack+0x1b/0x80 mm/kasan/common.c:69
->   set_track mm/kasan/common.c:77 [inline]
->   __kasan_kmalloc mm/kasan/common.c:487 [inline]
->   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:460
->   kmalloc include/linux/slab.h:557 [inline]
->   usb_alloc_urb+0x65/0xb0 drivers/usb/core/urb.c:73
->   ld_usb_probe+0x3e1/0xa65 drivers/usb/misc/ldusb.c:708
->   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x281/0x650 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:882
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2114
->   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
->   really_probe+0x281/0x650 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:882
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2114
->   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
->   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
->   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> Freed by task 22:
->   save_stack+0x1b/0x80 mm/kasan/common.c:69
->   set_track mm/kasan/common.c:77 [inline]
->   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
->   slab_free_hook mm/slub.c:1423 [inline]
->   slab_free_freelist_hook mm/slub.c:1470 [inline]
->   slab_free mm/slub.c:3012 [inline]
->   kfree+0xe4/0x2f0 mm/slub.c:3953
->   urb_destroy drivers/usb/core/urb.c:26 [inline]
->   kref_put include/linux/kref.h:65 [inline]
->   usb_free_urb.part.0+0x7a/0xc0 drivers/usb/core/urb.c:95
->   usb_free_urb+0x1b/0x30 drivers/usb/core/urb.c:94
->   ld_usb_delete+0x3f/0x130 drivers/usb/misc/ldusb.c:211
->   ld_usb_probe+0x728/0xa65 drivers/usb/misc/ldusb.c:744
->   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x281/0x650 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:882
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2114
->   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
->   really_probe+0x281/0x650 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:882
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2114
->   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
->   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
->   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> The buggy address belongs to the object at ffff8881d635b100
->   which belongs to the cache kmalloc-192 of size 192
-> The buggy address is located 16 bytes inside of
->   192-byte region [ffff8881d635b100, ffff8881d635b1c0)
-> The buggy address belongs to the page:
-> page:ffffea000758d6c0 refcount:1 mapcount:0 mapping:ffff8881da002a00
-> index:0x0
-> flags: 0x200000000000200(slab)
-> raw: 0200000000000200 dead000000000100 dead000000000122 ffff8881da002a00
-> raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->   ffff8881d635b000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881d635b080: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-> > ffff8881d635b100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                           ^
->   ffff8881d635b180: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->   ffff8881d635b200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
