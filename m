@@ -2,74 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEE588351
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 21:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EC688373
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 21:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726377AbfHITcw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 15:32:52 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:55462 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726263AbfHITcw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 15:32:52 -0400
-Received: (qmail 5254 invoked by uid 2102); 9 Aug 2019 15:32:51 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 9 Aug 2019 15:32:51 -0400
-Date:   Fri, 9 Aug 2019 15:32:51 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+a64a382964bf6c71a9c0@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <oneukum@suse.de>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: possible deadlock in usb_deregister_dev
-In-Reply-To: <00000000000026d72f058fb33242@google.com>
-Message-ID: <Pine.LNX.4.44L0.1908091531590.1630-100000@iolanthe.rowland.org>
+        id S1726219AbfHITqB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Aug 2019 15:46:01 -0400
+Received: from mail-ot1-f71.google.com ([209.85.210.71]:56952 "EHLO
+        mail-ot1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726125AbfHITqB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 15:46:01 -0400
+Received: by mail-ot1-f71.google.com with SMTP id q22so70826204otl.23
+        for <linux-usb@vger.kernel.org>; Fri, 09 Aug 2019 12:46:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=QaIRxMgZLoHZ+y2N+TmUy7bCggB90Z3nYkENvxZIHn8=;
+        b=Bnvg6MZsqmGTLrow3wvKuOqbYOJ5X+UeD92FsiwVHwmYCQJVy2GzS5//v90AhPzidT
+         akCjPzqR+8q73l+DZKUD2F6TpFpQBTE34Kc9zAnhwvUxhACnGyNjReYZ5u0NPB3sDqKE
+         bBCresZdspZ//gJmnv9NMTk3XPs0W6VxzlhoX5aDIBg8zrPyKbp/CmNPtDgxuE+fhJVm
+         TvTmtRVfWKv9sFY31+6eqQWUjmutV2lw1KVJLJPfpiWyW0PYq6q6tji4CicSQue74KVA
+         NR4kAIP1YXSEnniVz1aw3GoL2q7RW59t1/P6uuvW5+F9VXA5i/5Jc+I7x0y3Rn8wcg+f
+         BKVQ==
+X-Gm-Message-State: APjAAAX/26CpSAGTkV3Nbb7BIP+ywNDjgvwFM6GZE2ApJXJD0b4y/QKr
+        wsH4kHn+jMPkhRcMWtGnxkhV2H3SkGb9vg0DKmkDWKgHv/Qs
+X-Google-Smtp-Source: APXvYqyDp70SxxbdCfTkLBNTtqKAlmRBVV/PIX9YPmml1idmPRr9G9uVWwRcJmVMjSyEyQvuSlFbDAZU3eIBOCSXgDKa2yenBlmz
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a5e:9314:: with SMTP id k20mr23444780iom.235.1565379960645;
+ Fri, 09 Aug 2019 12:46:00 -0700 (PDT)
+Date:   Fri, 09 Aug 2019 12:46:00 -0700
+In-Reply-To: <Pine.LNX.4.44L0.1908091524250.1630-100000@iolanthe.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007e2e84058fb46c49@google.com>
+Subject: Re: KASAN: use-after-free Read in usb_kill_urb
+From:   syzbot <syzbot+22ae4e3b9fcc8a5c153a@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 9 Aug 2019, syzbot wrote:
+Hello,
 
-> syzbot has found a reproducer for the following crash on:
-> 
-> HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15bf780e600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a64a382964bf6c71a9c0
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16787574600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=136cc4d2600000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+a64a382964bf6c71a9c0@syzkaller.appspotmail.com
-> 
-> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 1-1: config 0 descriptor??
-> iowarrior 1-1:0.236: IOWarrior product=0x1501, serial= interface=236 now  
-> attached to iowarrior0
-> usb 1-1: USB disconnect, device number 2
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 5.3.0-rc2+ #25 Not tainted
-> ------------------------------------------------------
-> kworker/0:1/12 is trying to acquire lock:
-> 00000000cd63e8f1 (minor_rwsem){++++}, at: usb_deregister_dev  
-> drivers/usb/core/file.c:238 [inline]
-> 00000000cd63e8f1 (minor_rwsem){++++}, at: usb_deregister_dev+0x61/0x270  
-> drivers/usb/core/file.c:230
-> 
-> but task is already holding lock:
-> 000000001d1989ef (iowarrior_open_disc_lock){+.+.}, at:  
-> iowarrior_disconnect+0x45/0x2c0 drivers/usb/misc/iowarrior.c:867
-> 
-> which lock already depends on the new lock.
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-https://syzkaller.appspot.com/bug?extid=ca52394faa436d8131df is 
-undoubtedly a duplicate of this.
+Reported-and-tested-by:  
+syzbot+22ae4e3b9fcc8a5c153a@syzkaller.appspotmail.com
 
-Alan Stern
+Tested on:
 
+commit:         e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=173f2d2c600000
+
+Note: testing is done by a robot and is best-effort only.
