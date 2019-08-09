@@ -2,84 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B899C87B7F
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 15:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3644D87C7D
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 16:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405723AbfHINiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 09:38:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60360 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726152AbfHINiG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Aug 2019 09:38:06 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D9B1220B7C;
-        Fri,  9 Aug 2019 13:38:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565357885;
-        bh=oHkoObse4PQEGR12IpcCPE1ydfTXKlPEBV2f08iF//I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QM7rjc/kZoUFj9bV7re0KYqX2IZAjqeEu7DSoUkwcun1g8f3l3mF0AzK9fNy0K9eG
-         ll7MzUmw46se9ALqJcoCUjvEkxv2xOXrAwTY4RKNQMDsWB2opEkQRhulbOZpsw5AKi
-         9Wjp7rp4632bARe9SljbMViDwQtvMwtQ5/W8FI1w=
-Date:   Fri, 9 Aug 2019 15:38:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: AW: AW: KASAN: use-after-free Read in usbhid_power
-Message-ID: <20190809133803.GD30876@kroah.com>
-References: <Pine.LNX.4.44L0.1908081522290.1319-100000@iolanthe.rowland.org>
- <caf422aebd314ab8a5dd96ac2d9bb198@SVR-IES-MBX-03.mgc.mentorg.com>
- <20190809075555.GA20409@kroah.com>
- <8e43085507b849e49e858e5388f3e13c@SVR-IES-MBX-03.mgc.mentorg.com>
- <d7f1f3dc-03b3-34b8-657b-13c7b91ee361@redhat.com>
- <86ef050c477841a6951fd984b38c9f04@SVR-IES-MBX-03.mgc.mentorg.com>
- <9c955960-8b50-30dd-732a-92c62e5761cc@redhat.com>
- <932dbc769a80416eb736e6397c126ce9@SVR-IES-MBX-03.mgc.mentorg.com>
- <20190809125458.GA2230@kroah.com>
- <1565355625471.54150@mentor.com>
+        id S2407075AbfHIOTC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 9 Aug 2019 10:19:02 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:41937 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726342AbfHIOTB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 10:19:01 -0400
+Received: by mail-qk1-f194.google.com with SMTP id g17so1058726qkk.8;
+        Fri, 09 Aug 2019 07:19:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TEfOzDxFX7gDpnqMzrlBGrH3Syt9gXqMdj4yqEybIZo=;
+        b=QXHfe+5F2OOhd2CElNQM4DMdlNJ4IJl8fINRHiW3jKlocffCMbvetrzZAqZj73zlmj
+         KWvFoVIYkOHvDj1DaYKbfsuCvroIUYFb3KL+M9mkFDlElbx/WQrXDrEmoD9TEU4aBY4V
+         KOYSTDW4jBYl1Q1ouhbunaHKhuxt1uFwhly4aynTDR3/pFoatrZAGcllqAX3imwjf7rg
+         Zvptpq+bditHfN3KQpZl7biqacUzCNzWVHXcWNc47zgDNuTW5Ddvc7FolbuGOSKoYWHe
+         U95f/JthiUb4jQ8Awib8m4ByohBD8ZbF9S/ymEA2OIxhbWwKX69SfaGeAtETxlf7AIPX
+         4bTg==
+X-Gm-Message-State: APjAAAULwbc9OKX1TGlOPd/2K493GXivn5Vz3PzAouoEWlMHdClUpahm
+        1/NNzHwi7xx3joyV/qXpaBZpTVA/KRvGrriqZOs=
+X-Google-Smtp-Source: APXvYqwdOIIhs7aYJbryOrEuz/1xQSAZBUfsTj7jxd0qGAmaTDwXDUSNUG1kGVNfZ5fjxOBFSW0skDDZmykp0YbSLSg=
+X-Received: by 2002:a37:984:: with SMTP id 126mr12380366qkj.3.1565360340175;
+ Fri, 09 Aug 2019 07:19:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1565355625471.54150@mentor.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20190731195713.3150463-1-arnd@arndb.de> <20190731195713.3150463-6-arnd@arndb.de>
+ <CAMpxmJWFfT_vrDas2fzW5tnxskk9kmgHQpGnGQ-_C20UaS_jhA@mail.gmail.com>
+ <CAK8P3a3KpKvRKXY72toE_5eAp4ER_Mre0GX3guwGeQgsY2HX+g@mail.gmail.com> <CAMpxmJUdSnp0QNwWB0rJ1opFrYs9R2KSVS64Tz8X5GDYAJYLpg@mail.gmail.com>
+In-Reply-To: <CAMpxmJUdSnp0QNwWB0rJ1opFrYs9R2KSVS64Tz8X5GDYAJYLpg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 9 Aug 2019 16:18:43 +0200
+Message-ID: <CAK8P3a1NT_yoP39y52oJTMsFCb96-bRyuMm=+5HPPsxyq0fJDA@mail.gmail.com>
+Subject: Re: [PATCH 05/14] gpio: lpc32xx: allow building on non-lpc32xx targets
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     soc@kernel.org, arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, linux-serial@vger.kernel.org,
+        USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 09, 2019 at 01:00:25PM +0000, Schmid, Carsten wrote:
-> >>
-> >> @Greg:
-> >> I am still confident that my patch in __release_region should be taken in.
+On Mon, Aug 5, 2019 at 10:28 AM Bartosz Golaszewski
+<bgolaszewski@baylibre.com> wrote:
+>
+> pt., 2 sie 2019 o 13:20 Arnd Bergmann <arnd@arndb.de> napisał(a):
 > >
-> > Ok, submit it in a "real" way and we can consider it :)
+> > On Fri, Aug 2, 2019 at 9:10 AM Bartosz Golaszewski
+> > <bgolaszewski@baylibre.com> wrote:
+> > > > -#include <mach/hardware.h>
+> > > > -#include <mach/platform.h>
+> > > > +#define _GPREG(x)                              (x)
+> > >
+> > > What purpose does this macro serve?
+> > >
+> > > >
+> > > >  #define LPC32XX_GPIO_P3_INP_STATE              _GPREG(0x000)
+> > > >  #define LPC32XX_GPIO_P3_OUTP_SET               _GPREG(0x004)
 > >
-> > thanks,
+> > In the existing code base, this macro converts a register offset to
+> > an __iomem pointer for a gpio register. I changed the definition of the
+> > macro here to keep the number of changes down, but I it's just
+> > as easy to remove it if you prefer.
+>
+> Could you just add a comment so that it's clear at first glance?
+
+I ended up removing the macro. With the change to keep the reg_base as
+a struct member, this ends up being a relatively small change, and it's
+more straightforward that way.
+
+> > > > @@ -167,14 +166,26 @@ struct lpc32xx_gpio_chip {
+> > > >         struct gpio_regs        *gpio_grp;
+> > > >  };
+> > > >
+> > > > +void __iomem *gpio_reg_base;
+> > >
+> > > Any reason why this can't be made part of struct lpc32xx_gpio_chip?
 > >
-> > greg k-h
-> 
-> Already done, linux-kernel@vger.kernel.org, see
-> https://www.spinics.net/lists/kernel/msg3218180.html
+> > It could be, but it's the same for each instance, and not known until
+> > probe() time, so the same pointer would need to be copied into each
+> > instance that is otherwise read-only.
+> >
+> > Let me know if you'd prefer me to rework these two things or leave
+> > them as they are.
+>
+> I would prefer not to have global state in the driver, let's just
+> store the pointer in the data passed to gpiochip_add_data().
 
-You didn't cc: any developer, that's a sure way to get a patch ignored
-:(
+Ok, done.
 
-Try resending it with at least the people who get_maintainer.pl says has
-touched that file last in it.
-
-Also, Linus is the unofficial resource.c maintainer.  I think he has a
-set of userspace testing scripts for changes somewhere, so you should
- cc: him too.  And might as well add me :)
-
- thanks,
-
- greg k-h
+       Arnd
