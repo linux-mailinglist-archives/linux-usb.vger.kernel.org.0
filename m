@@ -2,40 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EE487A9B
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 14:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D530087ABE
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 15:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406802AbfHIMzB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 08:55:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41846 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726505AbfHIMzB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Aug 2019 08:55:01 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1B3020B7C;
-        Fri,  9 Aug 2019 12:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565355300;
-        bh=wVSbwdE+QsZ0ywu7/8DSOEeXkcgMi1ZNqvYyvYvUp+k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LYSNhUqbWasx46Kx6lvS5JL7Ayu3tg/3bjgtvvGdTrPshtMjmnmXkdY4xve9E48Is
-         2q3B6MsLvZOAVNVxJS6vjyGs2pjJWbfdL5x/l7tx71A4TaI6cPAbpXdFtF7deFXBh+
-         8+oEK7e1aFFGcgmBX9wmv7z11cM8tJuM6124OBo4=
-Date:   Fri, 9 Aug 2019 14:54:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
+        id S2406982AbfHINAb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 9 Aug 2019 09:00:31 -0400
+Received: from esa2.mentor.iphmx.com ([68.232.141.98]:13942 "EHLO
+        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726157AbfHINAb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 09:00:31 -0400
+IronPort-SDR: BXFJjNSuMAfxs3BgCfSIw+hMS2H8o27J6LNyCGjgJmbMkzEM1NgAhWKHKQCNHYIBu8n1EGD45b
+ fyke9kdg4AoA4XBz/gTYlwoRnZG61ES5gnPaKG1Cj9FzjkpJcZoA25c3PC9PXKa/0Ggr/vsuJq
+ G3KOEa3ROLmGjo4GEajldhf/bW7GtkUKKcOyctq9Kf++8jsk8qZtnRNvasi46Ncp4Kektgm8R7
+ ykE+BX8BN/sIr1+KtZ8xEU+v0gI2W1pGFG9Rp7BYklGYYivlKauPS7aVTxjdC3GZKvxpDG1X4X
+ ktc=
+X-IronPort-AV: E=Sophos;i="5.64,364,1559548800"; 
+   d="scan'208";a="40305218"
+Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
+  by esa2.mentor.iphmx.com with ESMTP; 09 Aug 2019 05:00:30 -0800
+IronPort-SDR: p88PXKN0b8DCEXlNYcdFY16N8px8trPxQPiUC1K5a3bIsnddtGBxgM+U5Ju8xnHjERYUceIJwq
+ hwDQ15o41CnGuiCtOuqhZJO6d8CcgBimh6bO5XiZEdldhBh7SHXJfOhgUgz2BrHQ/XBzfyLhGe
+ 2ERqMN6nWx/WDOxq3BmLfVdaxy3ZTG66lXmPhdoPRciPSlJzUyGBeZJXymQ0Df2zD357M4aTAG
+ 3ugbyiK1IJ991ZRiiBIx26DcfkXfrnkXUq62IUGJdFUfgvMHSgGmzBW29mJQ+aIXmQ6zJpP0dw
+ +f8=
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Hans de Goede <hdegoede@redhat.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         Andrey Konovalov <andreyknvl@google.com>,
-        Oliver Neukum <oneukum@suse.com>,
+        "Oliver Neukum" <oneukum@suse.com>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
         syzbot <syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com>,
         USB list <linux-usb@vger.kernel.org>,
         Hillf Danton <hdanton@sina.com>
-Subject: Re: AW: AW: KASAN: use-after-free Read in usbhid_power
-Message-ID: <20190809125458.GA2230@kroah.com>
+Subject: AW: AW: AW: KASAN: use-after-free Read in usbhid_power
+Thread-Topic: AW: AW: KASAN: use-after-free Read in usbhid_power
+Thread-Index: AQHVQVT8kp3cH3z0AEy3rfqKg0QMQKbaMLqAgAAB/4CAANH5gIAAXcMAgBY/mwCAAAvuAIAA2G/Q///144CAAChbQP///+iAgAATm0D///XXgAAFC+Zw///5egCAABGghw==
+Date:   Fri, 9 Aug 2019 13:00:25 +0000
+Message-ID: <1565355625471.54150@mentor.com>
 References: <CAAeHK+wb8=Z65_1CGcj0ShT6+NiQSDKhEkBVx+8vPe3kJF8+6g@mail.gmail.com>
  <Pine.LNX.4.44L0.1908081522290.1319-100000@iolanthe.rowland.org>
  <caf422aebd314ab8a5dd96ac2d9bb198@SVR-IES-MBX-03.mgc.mentorg.com>
@@ -44,57 +48,37 @@ References: <CAAeHK+wb8=Z65_1CGcj0ShT6+NiQSDKhEkBVx+8vPe3kJF8+6g@mail.gmail.com>
  <d7f1f3dc-03b3-34b8-657b-13c7b91ee361@redhat.com>
  <86ef050c477841a6951fd984b38c9f04@SVR-IES-MBX-03.mgc.mentorg.com>
  <9c955960-8b50-30dd-732a-92c62e5761cc@redhat.com>
- <932dbc769a80416eb736e6397c126ce9@SVR-IES-MBX-03.mgc.mentorg.com>
+ <932dbc769a80416eb736e6397c126ce9@SVR-IES-MBX-03.mgc.mentorg.com>,<20190809125458.GA2230@kroah.com>
+In-Reply-To: <20190809125458.GA2230@kroah.com>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <932dbc769a80416eb736e6397c126ce9@SVR-IES-MBX-03.mgc.mentorg.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 09, 2019 at 12:38:35PM +0000, Schmid, Carsten wrote:
-> Hi again,
-> 
-> >>
-> >> Hey, i did not want to trigger an eartquake in the basement of the kernel ;-)
-> >> My intention was to prevent some crashes, and help developers to find their bugs.
-> >> I think my patch exactly does this.
-> > 
-> > Hehe, actually drivers not being able to block unbind has been bugging me
-> > for
-> > a while now, because there are cases where this would be really helpful.
-> >>> 1) make resources refcounted, have child resources take a ref on the parent
-> >>> 2) Disallow unbind on devices with bound child-devices?
-> >>>
-> >> Exactly what i was thinking of in first attempts.
-> >> But i fear that would break even more use cases.
-> >>
-> >> Hans, directly regarding the driver:
-> >> The problem i see is that the xhci_intel_unregister_pdev which is added
-> >> as an action with devm_add_action_or_reset() is called late by the framework,
-> >> later than the usb_hcd_pci_remove() in xhci_pci_remove.
-> >> Is there any chance to trigger this before?
-> >> This is what Greg meant with "right order".
-> > 
-> > Ah, I missed that part, sure that should be easy, just stop using
-> > devm_add_action_or_reset() and do the xhci_intel_unregister_pdev()
-> > manually at the right time. The downside of this is that you also
-> > need to make sure it happens at the right time from probe error-paths
-> > but given the bug you are hitting, I guess that is probably
-> > already a problem.
-> > 
-> @Hans:
-> Sure, will have a look at this. I think i have found where to do that,
-> but need to check how to get the pdev pointer there ....
-> 
-> @Greg:
-> I am still confident that my patch in __release_region should be taken in.
+>>
+>> @Greg:
+>> I am still confident that my patch in __release_region should be taken in.
+>
+> Ok, submit it in a "real" way and we can consider it :)
+>
+> thanks,
+>
+> greg k-h
 
-Ok, submit it in a "real" way and we can consider it :)
+Already done, linux-kernel@vger.kernel.org, see
+https://www.spinics.net/lists/kernel/msg3218180.html
 
-thanks,
+Thanks, and have a nice weekend.
 
-greg k-h
+Best regards
+Carsten
