@@ -2,42 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DA287AF4
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 15:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E71A87AFB
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Aug 2019 15:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407004AbfHINSI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Aug 2019 09:18:08 -0400
-Received: from mail-ot1-f70.google.com ([209.85.210.70]:42378 "EHLO
-        mail-ot1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406273AbfHINSI (ORCPT
+        id S2436476AbfHINSa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Aug 2019 09:18:30 -0400
+Received: from mail-ot1-f71.google.com ([209.85.210.71]:49355 "EHLO
+        mail-ot1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406938AbfHINSI (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Aug 2019 09:18:08 -0400
-Received: by mail-ot1-f70.google.com with SMTP id x18so68752241otp.9
-        for <linux-usb@vger.kernel.org>; Fri, 09 Aug 2019 06:18:07 -0700 (PDT)
+Received: by mail-ot1-f71.google.com with SMTP id l7so68842368otj.16
+        for <linux-usb@vger.kernel.org>; Fri, 09 Aug 2019 06:18:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=VXzutlNhDah6arTUyAYrVcxlR7yZHCjN1bYgiV3eUos=;
-        b=b999BWZ3C/3iBkS3C75TLs2Az4r06avF6UJEZphzZtWT6KDjH2bmXXdrWT1gnh+IdL
-         1k+9DFp3ReUVmZIKkIS89aD9S/wQSdyoRG+gN6ZXwRjc80D1IGggDlhBLPNFrOoqRCOb
-         y4KsAAs/4585ZOOoNCqAttkYWPfxN7njRGjztsjvxGPiETsenY6C5uSvIVBHTi8OmMKe
-         +nUTc0+j9IVyXDOJ9fQWrqiMIE20KMI1ny9gvrSFVPD/HAr8UvQWZ5ArIc+FFJ5XUusz
-         rgeNm8sEijBbD0Bcn6IYIDHbOw7DewzR+shQAEDxKuOT2GXRqzSn3IehVatvQxhLbtD/
-         9tww==
-X-Gm-Message-State: APjAAAVZ8oxOqzN0s0I3CGHw/iwa8SBPgZrjvlXHfhw1ozsYsvSRsth0
-        qDuzHgSLTPPgx4Xu1FvYsPE5MyQPQ1TKJpoWSLyqXw0qGMe1
-X-Google-Smtp-Source: APXvYqw7xOGcwZAOmlCHadLqenE0yz5Y2uP/Qs3apYDikEK1TrXBlpoOUWv9W5d1Sm72DxkpYEyRKD7SW0/LI/OqOvotczfIChx9
+        bh=Kvv51GsZ8BLyp4CiiiYwop4a0Hzx8ieVcMFPRG1pYMA=;
+        b=aquleRIw1FSrJHRpMMaiCVFpWvZrdf4e1MuoAC3XAn3EUVXb2WaUGmjDnJUciJx6yc
+         rF6NBZDpQKGSmgOmehC1Rld3tZAauc00b/d8XQ24oi/TFwp0hn5PFTeS3bSo30Sb5RiP
+         0cuS4ZFdeWA+zV+Ap+0Hgk3kw+yq92oCd1S/sA66a1UAxf32cW0dH5SQoXchU38T6rfr
+         XAZmi4UyMghSaMW1Wrtvk2d+5reNj8z3PCxTy/35h5412NpnXUlgVoMY4WPwFY8WLcqm
+         j9eqghu7qaVtBEeJgb9RTdlI7ZZQOsYkaz+ZICcVfJnQqmFdC7ykFvjSI09uevyOL1wI
+         Pxvg==
+X-Gm-Message-State: APjAAAUDQWv6goGlUTnAD3gaEgrgdc5O8/0p+tCTNWkHs+garvkkAPPh
+        4mxQ+zCv60aZvT/SRmGgVUi/r3emEhk0BUffpXVSIUufPOHS
+X-Google-Smtp-Source: APXvYqzWbwc1QZIZxwLs/zp7o1Dkn8P3FmJxHSQmOJ77vx3/BPpTj6o3+BHv6HDea9AUA9LWrwH/e5VHVPE6/ROau0SKGPvc4VJX
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:348:: with SMTP id x8mr14322147jap.31.1565356686812;
- Fri, 09 Aug 2019 06:18:06 -0700 (PDT)
-Date:   Fri, 09 Aug 2019 06:18:06 -0700
+X-Received: by 2002:a02:5a02:: with SMTP id v2mr21783557jaa.124.1565356687627;
+ Fri, 09 Aug 2019 06:18:07 -0700 (PDT)
+Date:   Fri, 09 Aug 2019 06:18:07 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000043b599058faf0145@google.com>
-Subject: possible deadlock in display_open
-From:   syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, sean@mess.org, syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000502536058faf0113@google.com>
+Subject: KASAN: use-after-free Read in prepare_to_wait_event
+From:   syzbot <syzbot+332cbcbd8be3e03c62eb@syzkaller.appspotmail.com>
+To:     alexandre.belloni@bootlin.com, andreyknvl@google.com,
+        enric.balletbo@collabora.com, gregkh@linuxfoundation.org,
+        kirr@nexedi.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@roeck-us.net, logang@deltatee.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -50,172 +52,145 @@ syzbot found the following crash on:
 
 HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
 git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=13b29b26600000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10fbde8c600000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-dashboard link: https://syzkaller.appspot.com/bug?extid=c558267ad910fc494497
+dashboard link: https://syzkaller.appspot.com/bug?extid=332cbcbd8be3e03c62eb
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15427002600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=111cb61c600000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=127dd636600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=171de9ce600000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+c558267ad910fc494497@syzkaller.appspotmail.com
+Reported-by: syzbot+332cbcbd8be3e03c62eb@syzkaller.appspotmail.com
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.3.0-rc2+ #25 Not tainted
-------------------------------------------------------
-syz-executor626/1723 is trying to acquire lock:
-000000001a0d74d7 (driver_lock#2){+.+.}, at: display_open+0x1f/0x1d0  
-drivers/media/rc/imon.c:475
+==================================================================
+BUG: KASAN: use-after-free in __lock_acquire+0x302a/0x3b50  
+kernel/locking/lockdep.c:3753
+Read of size 8 at addr ffff8881d2a83238 by task syz-executor771/2979
 
-but task is already holding lock:
-00000000076a0058 (minor_rwsem){++++}, at: usb_open+0x23/0x270  
-drivers/usb/core/file.c:39
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (minor_rwsem){++++}:
-        down_write+0x92/0x150 kernel/locking/rwsem.c:1500
-        usb_register_dev drivers/usb/core/file.c:187 [inline]
-        usb_register_dev+0x131/0x6a0 drivers/usb/core/file.c:156
-        imon_init_display drivers/media/rc/imon.c:2343 [inline]
-        imon_probe+0x244d/0x2af0 drivers/media/rc/imon.c:2426
-        usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-        really_probe+0x281/0x650 drivers/base/dd.c:548
-        driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-        __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-        bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-        __device_attach+0x217/0x360 drivers/base/dd.c:882
-        bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-        device_add+0xae6/0x16f0 drivers/base/core.c:2114
-        usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-        generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-        usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-        really_probe+0x281/0x650 drivers/base/dd.c:548
-        driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-        __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-        bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-        __device_attach+0x217/0x360 drivers/base/dd.c:882
-        bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-        device_add+0xae6/0x16f0 drivers/base/core.c:2114
-        usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-        hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-        hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-        port_event drivers/usb/core/hub.c:5359 [inline]
-        hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-        process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-        worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-        kthread+0x318/0x420 kernel/kthread.c:255
-        ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
--> #1 (&ictx->lock){+.+.}:
-        __mutex_lock_common kernel/locking/mutex.c:930 [inline]
-        __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
-        imon_init_intf0 drivers/media/rc/imon.c:2188 [inline]
-        imon_probe+0xf0c/0x2af0 drivers/media/rc/imon.c:2387
-        usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-        really_probe+0x281/0x650 drivers/base/dd.c:548
-        driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-        __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-        bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-        __device_attach+0x217/0x360 drivers/base/dd.c:882
-        bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-        device_add+0xae6/0x16f0 drivers/base/core.c:2114
-        usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-        generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-        usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-        really_probe+0x281/0x650 drivers/base/dd.c:548
-        driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-        __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-        bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-        __device_attach+0x217/0x360 drivers/base/dd.c:882
-        bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-        device_add+0xae6/0x16f0 drivers/base/core.c:2114
-        usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-        hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-        hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-        port_event drivers/usb/core/hub.c:5359 [inline]
-        hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-        process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-        worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-        kthread+0x318/0x420 kernel/kthread.c:255
-        ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
--> #0 (driver_lock#2){+.+.}:
-        check_prev_add kernel/locking/lockdep.c:2405 [inline]
-        check_prevs_add kernel/locking/lockdep.c:2507 [inline]
-        validate_chain kernel/locking/lockdep.c:2897 [inline]
-        __lock_acquire+0x1f7c/0x3b50 kernel/locking/lockdep.c:3880
-        lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
-        __mutex_lock_common kernel/locking/mutex.c:930 [inline]
-        __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
-        display_open+0x1f/0x1d0 drivers/media/rc/imon.c:475
-        usb_open+0x1df/0x270 drivers/usb/core/file.c:48
-        chrdev_open+0x219/0x5c0 fs/char_dev.c:414
-        do_dentry_open+0x494/0x1120 fs/open.c:797
-        do_last fs/namei.c:3416 [inline]
-        path_openat+0x1430/0x3f50 fs/namei.c:3533
-        do_filp_open+0x1a1/0x280 fs/namei.c:3563
-        do_sys_open+0x3c0/0x580 fs/open.c:1089
-        do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-        entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-other info that might help us debug this:
-
-Chain exists of:
-   driver_lock#2 --> &ictx->lock --> minor_rwsem
-
-  Possible unsafe locking scenario:
-
-        CPU0                    CPU1
-        ----                    ----
-   lock(minor_rwsem);
-                                lock(&ictx->lock);
-                                lock(minor_rwsem);
-   lock(driver_lock#2);
-
-  *** DEADLOCK ***
-
-1 lock held by syz-executor626/1723:
-  #0: 00000000076a0058 (minor_rwsem){++++}, at: usb_open+0x23/0x270  
-drivers/usb/core/file.c:39
-
-stack backtrace:
-CPU: 1 PID: 1723 Comm: syz-executor626 Not tainted 5.3.0-rc2+ #25
+CPU: 0 PID: 2979 Comm: syz-executor771 Not tainted 5.3.0-rc2+ #25
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
 Call Trace:
   __dump_stack lib/dump_stack.c:77 [inline]
   dump_stack+0xca/0x13e lib/dump_stack.c:113
-  check_noncircular+0x345/0x3e0 kernel/locking/lockdep.c:1741
-  check_prev_add kernel/locking/lockdep.c:2405 [inline]
-  check_prevs_add kernel/locking/lockdep.c:2507 [inline]
-  validate_chain kernel/locking/lockdep.c:2897 [inline]
-  __lock_acquire+0x1f7c/0x3b50 kernel/locking/lockdep.c:3880
+  print_address_description+0x6a/0x32c mm/kasan/report.c:351
+  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+  kasan_report+0xe/0x12 mm/kasan/common.c:612
+  __lock_acquire+0x302a/0x3b50 kernel/locking/lockdep.c:3753
   lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
-  __mutex_lock_common kernel/locking/mutex.c:930 [inline]
-  __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
-  display_open+0x1f/0x1d0 drivers/media/rc/imon.c:475
-  usb_open+0x1df/0x270 drivers/usb/core/file.c:48
-  chrdev_open+0x219/0x5c0 fs/char_dev.c:414
-  do_dentry_open+0x494/0x1120 fs/open.c:797
-  do_last fs/namei.c:3416 [inline]
-  path_openat+0x1430/0x3f50 fs/namei.c:3533
-  do_filp_open+0x1a1/0x280 fs/namei.c:3563
-  do_sys_open+0x3c0/0x580 fs/open.c:1089
+  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+  _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
+  prepare_to_wait_event+0x5b/0x650 kernel/sched/wait.c:263
+  ld_usb_read+0x619/0x780 drivers/usb/misc/ldusb.c:480
+  __vfs_read+0x76/0x100 fs/read_write.c:425
+  vfs_read+0x1ea/0x430 fs/read_write.c:461
+  ksys_read+0x1e8/0x250 fs/read_write.c:587
   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x401300
-Code: 01 f0 ff ff 0f 83 00 0b 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f  
-44 00 00 83 3d 8d 0a 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 d4 0a 00 00 c3 48 83 ec 08 e8 3a 00 00 00
-RSP: 002b:00007ffc59dcdec8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 0000000000401300
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: 00007ffc59dcdee0
-RBP: 00000
+RIP: 0033:0x448859
+Code: e8 ac e7 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 4b 06 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f9b31740ce8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 00000000006dec48 RCX: 0000000000448859
+RDX: 0000000000000049 RSI: 0000000020000080 RDI: 0000000000000004
+RBP: 00000000006dec40 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006dec4c
+R13: 00007ffd58e161df R14: 00007f9b317419c0 R15: 00000000006dec4c
+
+Allocated by task 2705:
+  save_stack+0x1b/0x80 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc mm/kasan/common.c:487 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:460
+  kmalloc include/linux/slab.h:552 [inline]
+  kzalloc include/linux/slab.h:748 [inline]
+  ld_usb_probe+0x6e/0xa65 drivers/usb/misc/ldusb.c:661
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 2705:
+  save_stack+0x1b/0x80 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
+  slab_free_hook mm/slub.c:1423 [inline]
+  slab_free_freelist_hook mm/slub.c:1470 [inline]
+  slab_free mm/slub.c:3012 [inline]
+  kfree+0xe4/0x2f0 mm/slub.c:3953
+  ld_usb_probe+0x728/0xa65 drivers/usb/misc/ldusb.c:744
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x650 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:882
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2114
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the object at ffff8881d2a83180
+  which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 184 bytes inside of
+  512-byte region [ffff8881d2a83180, ffff8881d2a83380)
+The buggy address belongs to the page:
+page:ffffea00074aa080 refcount:1 mapcount:0 mapping:ffff8881da002500  
+index:0x0 compound_mapcount: 0
+flags: 0x200000000010200(slab|head)
+raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da002500
+raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8881d2a83100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  ffff8881d2a83180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff8881d2a83200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                         ^
+  ffff8881d2a83280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881d2a83300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
 ---
