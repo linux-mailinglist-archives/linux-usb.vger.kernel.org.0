@@ -2,116 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE1E88B1D
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2019 13:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D247688BD7
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2019 17:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbfHJLv7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Aug 2019 07:51:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47638 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726066AbfHJLv6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 10 Aug 2019 07:51:58 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 55BB421743;
-        Sat, 10 Aug 2019 11:51:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565437917;
-        bh=4YROqdvrywxnjFklnTwQaN4gMQkKYxLAhH+wie1vDwA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PlyOqBUoFfq+rb1fi+XKKQNEbJUxrjMBdon65nf5pQ5c1wcmpPQxJwhe0VQ4A7ps0
-         1NEOsa6mdSjLIS1eKhZM7JDSmAFUDx2q3c48Wn3AFLYDFjr0S3XvAqpy6Wrojh5vFp
-         0x9S7mYB0ajpL0Z0NJ39GC769FjPxMV0WSYoTWHY=
-Date:   Sat, 10 Aug 2019 13:51:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.3-rc4
-Message-ID: <20190810115155.GA5792@kroah.com>
+        id S1726145AbfHJPFD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Aug 2019 11:05:03 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:41590 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbfHJPFD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Aug 2019 11:05:03 -0400
+Received: by mail-lf1-f65.google.com with SMTP id 62so66684009lfa.8
+        for <linux-usb@vger.kernel.org>; Sat, 10 Aug 2019 08:05:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X0SVgB3hTGST7nqpvoFejGqz86qw1oYwy3TMBUWpuKY=;
+        b=CHoezcXaZHmx0amETbz2IKzpx0Jua9qfQ1bl6EsE7BvZYiL05gmhLlXIpoqrB5aIp3
+         XKVsVzDxWI1LXJkt03ZLAwZ6WtY18SbYkPDKVfHMf64HXB4r6PrNY4mpSSy5k/xjX+Xt
+         mGpDHGlX8eS54CwlXdyNZrcdK7rw8uVMFCvVOgW12UkwDRuQsZ+oAK/+NE8Jgv6roM0u
+         WsYCuieU4qO7IGCwVpSKYDSvfcRPXELS0ZUOoqrk65T8zQobllsgwb13ueikWWYf/2MS
+         mKpB/Xn7fmRAxBYSE0Pp6+/bFEnnbxGFqolpt4bR4Uy0lq0UvzU+F9srTpc0ViPRBHod
+         w+Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X0SVgB3hTGST7nqpvoFejGqz86qw1oYwy3TMBUWpuKY=;
+        b=mYLNrjm+AWTpvt4fjZgfqb5QZgBK2QZEttkE4Wi+yWqKudgfnxGLUNICu+c7QRkbnO
+         /aUHxTpnt1flTrr2e5UKBZHr0J7A6T7OuX3FoRf8sqx0G95D8KxgbvsGl0+kXCJJH7JJ
+         HZDh3JaGQTdUcUvQ5sJIrbUnFipZHTX3QqbAZUu5ygtjnxY+wO4Itoq1m8z267zYIMMo
+         8RrV4vLpsRKVGnUsYsUxYkVWoUIVfENGfqQ3Uw0jRrFwWcubxRspQkWKdW2LE7GpG4zO
+         nVtMtdUyrCDEFQPGp7WSCBlZYsC6RwWXPARLDiEO+ILtPf/BfXFKL/9JlHS5pBazBWsy
+         R3Tw==
+X-Gm-Message-State: APjAAAXNyxJ7cQKI9/VAjUF70iChECIo+h3I6DoPSpNG/i0yPjbdWXjF
+        I2z+J6plOkDMp2TXpXyclGIJ8+aA5sypPQ==
+X-Google-Smtp-Source: APXvYqxRe6PWxT/qawjxk/T30aZXyL/829yZBohZJcCZNLcoC3KI5/o2A06fk9qPVetDsMJFMZQJ8g==
+X-Received: by 2002:a19:8586:: with SMTP id h128mr16169179lfd.62.1565449501563;
+        Sat, 10 Aug 2019 08:05:01 -0700 (PDT)
+Received: from localhost.bredbandsbolaget (c-2ccd225c.014-348-6c756e10.bbcust.telenor.se. [92.34.205.44])
+        by smtp.gmail.com with ESMTPSA id k27sm19822161lfm.90.2019.08.10.08.04.59
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sat, 10 Aug 2019 08:05:00 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] usb: host: fotg2: restart hcd after port reset
+Date:   Sat, 10 Aug 2019 17:04:58 +0200
+Message-Id: <20190810150458.817-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 609488bc979f99f805f34e9a32c1e3b71179d10b:
+From: Hans Ulli Kroll <ulli.kroll@googlemail.com>
 
-  Linux 5.3-rc2 (2019-07-28 12:47:02 -0700)
+On the Gemini SoC the FOTG2 stalls after port reset
+so restart the HCD after each port reset.
 
-are available in the Git repository at:
+Signed-off-by: Hans Ulli Kroll <ulli.kroll@googlemail.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/usb/host/fotg210-hcd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.3-rc4
+diff --git a/drivers/usb/host/fotg210-hcd.c b/drivers/usb/host/fotg210-hcd.c
+index 35f69bce40d9..8ee28f5b7957 100644
+--- a/drivers/usb/host/fotg210-hcd.c
++++ b/drivers/usb/host/fotg210-hcd.c
+@@ -1633,6 +1633,10 @@ static int fotg210_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			/* see what we found out */
+ 			temp = check_reset_complete(fotg210, wIndex, status_reg,
+ 					fotg210_readl(fotg210, status_reg));
++
++			/* restart schedule */
++			fotg210->command |= CMD_RUN;
++			fotg210_writel(fotg210, fotg210->command, &fotg210->regs->command);
+ 		}
+ 
+ 		if (!(temp & (PORT_RESUME|PORT_RESET))) {
+-- 
+2.21.0
 
-for you to fetch changes up to 27709ae4e2fe6cf7da2ae45e718e190c5433342b:
-
-  usb: setup authorized_default attributes using usb_bus_notify (2019-08-08 16:07:34 +0200)
-
-----------------------------------------------------------------
-USB fixes for 5.3-rc4
-
-Here are some small USB fixes for 5.3-rc4.
-
-The "biggest" one here is moving code from one file to another in order
-to fix a long-standing race condition with the creation of sysfs files
-for USB devices.  Turns out that there are now userspace tools out there
-that are hitting this long-known bug, so it's time to fix them.
-Thankfully the tool-maker in this case fixed the issue :)
-
-The other patches in here are all fixes for reported issues.  Now that
-syzbot knows how to fuzz USB drivers better, and is starting to now fuzz
-the userspace facing side of them at the same time, there will be more
-and more small fixes like these coming, which is a good thing.
-
-All of these have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Gavin Li (1):
-      usb: usbfs: fix double-free of usb memory upon submiturb error
-
-Guenter Roeck (2):
-      usb: typec: tcpm: Add NULL check before dereferencing config
-      usb: typec: tcpm: Ignore unsupported/unknown alternate mode requests
-
-Heikki Krogerus (1):
-      usb: typec: ucsi: ccg: Fix uninitilized symbol error
-
-Li Jun (2):
-      usb: typec: tcpm: free log buf memory when remove debug file
-      usb: typec: tcpm: remove tcpm dir if no children
-
-Mathias Nyman (1):
-      xhci: Fix NULL pointer dereference at endpoint zero reset.
-
-Oliver Neukum (2):
-      Revert "USB: rio500: simplify locking"
-      usb: iowarrior: fix deadlock on disconnect
-
-Suzuki K Poulose (1):
-      usb: yurex: Fix use-after-free in yurex_delete
-
-Thiébaud Weksteen (1):
-      usb: setup authorized_default attributes using usb_bus_notify
-
-Yoshihiro Shimoda (1):
-      usb: host: xhci-rcar: Fix timeout in xhci_suspend()
-
- drivers/usb/core/devio.c          |   2 -
- drivers/usb/core/hcd.c            | 123 --------------------------------------
- drivers/usb/core/sysfs.c          | 121 +++++++++++++++++++++++++++++++++++++
- drivers/usb/core/usb.h            |   5 ++
- drivers/usb/host/xhci-rcar.c      |   9 ++-
- drivers/usb/host/xhci.c           |  10 ++++
- drivers/usb/misc/iowarrior.c      |   7 ++-
- drivers/usb/misc/rio500.c         |  43 ++++++++-----
- drivers/usb/misc/yurex.c          |   2 +-
- drivers/usb/typec/tcpm/tcpm.c     |  58 ++++++++++++------
- drivers/usb/typec/ucsi/ucsi_ccg.c |   2 +-
- 11 files changed, 217 insertions(+), 165 deletions(-)
