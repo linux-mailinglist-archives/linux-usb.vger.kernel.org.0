@@ -2,91 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D247688BD7
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2019 17:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7C288BD9
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2019 17:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726145AbfHJPFD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Aug 2019 11:05:03 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41590 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbfHJPFD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Aug 2019 11:05:03 -0400
-Received: by mail-lf1-f65.google.com with SMTP id 62so66684009lfa.8
-        for <linux-usb@vger.kernel.org>; Sat, 10 Aug 2019 08:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X0SVgB3hTGST7nqpvoFejGqz86qw1oYwy3TMBUWpuKY=;
-        b=CHoezcXaZHmx0amETbz2IKzpx0Jua9qfQ1bl6EsE7BvZYiL05gmhLlXIpoqrB5aIp3
-         XKVsVzDxWI1LXJkt03ZLAwZ6WtY18SbYkPDKVfHMf64HXB4r6PrNY4mpSSy5k/xjX+Xt
-         mGpDHGlX8eS54CwlXdyNZrcdK7rw8uVMFCvVOgW12UkwDRuQsZ+oAK/+NE8Jgv6roM0u
-         WsYCuieU4qO7IGCwVpSKYDSvfcRPXELS0ZUOoqrk65T8zQobllsgwb13ueikWWYf/2MS
-         mKpB/Xn7fmRAxBYSE0Pp6+/bFEnnbxGFqolpt4bR4Uy0lq0UvzU+F9srTpc0ViPRBHod
-         w+Cw==
+        id S1726066AbfHJPIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Aug 2019 11:08:05 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38250 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbfHJPIF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Aug 2019 11:08:05 -0400
+Received: by mail-wm1-f67.google.com with SMTP id m125so4042272wmm.3;
+        Sat, 10 Aug 2019 08:08:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=X0SVgB3hTGST7nqpvoFejGqz86qw1oYwy3TMBUWpuKY=;
-        b=mYLNrjm+AWTpvt4fjZgfqb5QZgBK2QZEttkE4Wi+yWqKudgfnxGLUNICu+c7QRkbnO
-         /aUHxTpnt1flTrr2e5UKBZHr0J7A6T7OuX3FoRf8sqx0G95D8KxgbvsGl0+kXCJJH7JJ
-         HZDh3JaGQTdUcUvQ5sJIrbUnFipZHTX3QqbAZUu5ygtjnxY+wO4Itoq1m8z267zYIMMo
-         8RrV4vLpsRKVGnUsYsUxYkVWoUIVfENGfqQ3Uw0jRrFwWcubxRspQkWKdW2LE7GpG4zO
-         nVtMtdUyrCDEFQPGp7WSCBlZYsC6RwWXPARLDiEO+ILtPf/BfXFKL/9JlHS5pBazBWsy
-         R3Tw==
-X-Gm-Message-State: APjAAAXNyxJ7cQKI9/VAjUF70iChECIo+h3I6DoPSpNG/i0yPjbdWXjF
-        I2z+J6plOkDMp2TXpXyclGIJ8+aA5sypPQ==
-X-Google-Smtp-Source: APXvYqxRe6PWxT/qawjxk/T30aZXyL/829yZBohZJcCZNLcoC3KI5/o2A06fk9qPVetDsMJFMZQJ8g==
-X-Received: by 2002:a19:8586:: with SMTP id h128mr16169179lfd.62.1565449501563;
-        Sat, 10 Aug 2019 08:05:01 -0700 (PDT)
-Received: from localhost.bredbandsbolaget (c-2ccd225c.014-348-6c756e10.bbcust.telenor.se. [92.34.205.44])
-        by smtp.gmail.com with ESMTPSA id k27sm19822161lfm.90.2019.08.10.08.04.59
+        bh=k5FuAEa/+JcIY/rb6iT7TuVrIwpqbJ/cO+D/RVzkADA=;
+        b=gjukDnkcmsvp/riz6IYaHtzSQJ08fxv59evWFuiVhqXi4RtnjBmVYVvwcxBorpCqxf
+         ajdzgrnqcSTSJtIememErsAksM3kg/+XqfBnPSKl1qQ4sJEjuVm7nqzee3azD6lYwHZN
+         YhMWiXe8c/lVmG1ejOdte2kmzfwe3RTQ1DvoLYXSHOsAmvqme4pl01hfWw7rXlbXmic7
+         FM9CicgxyDW75LPj6CrIFZbGwiMWCqWqetdgKj9I1YHR5eDd4TfhzHhaOOs62AuCoVll
+         u1ZNieGnMyHT6TwejrORL4lWdZ38V91EEYyBLgJYbzwq08sQ//4hlsdnkMngfBL5sDAd
+         PtTg==
+X-Gm-Message-State: APjAAAUAFDeIfQwL/7dfvfhtbyM/2eCiuIPfF+I30b7AQGL42HkPv/uQ
+        fc7XDu10Br/LLB8DeKrUosnEUgawBEltDg==
+X-Google-Smtp-Source: APXvYqw8+WIEI4m3zt6VNd6M5s7nlQZFALBmHc8YMIvn7vhz1B1EDEd3aTXPpriGJ8eGpgLGM59C6A==
+X-Received: by 2002:a1c:2314:: with SMTP id j20mr17404042wmj.152.1565449681830;
+        Sat, 10 Aug 2019 08:08:01 -0700 (PDT)
+Received: from tfsielt31850.garage.tyco.com ([79.97.20.138])
+        by smtp.gmail.com with ESMTPSA id z18sm5876784wml.10.2019.08.10.08.08.00
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sat, 10 Aug 2019 08:05:00 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] usb: host: fotg2: restart hcd after port reset
-Date:   Sat, 10 Aug 2019 17:04:58 +0200
-Message-Id: <20190810150458.817-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        Sat, 10 Aug 2019 08:08:01 -0700 (PDT)
+From:   =?UTF-8?q?Andr=C3=A9=20Draszik?= <git@andred.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Andr=C3=A9=20Draszik?= <git@andred.net>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] usb: chipidea: imx: fix EPROBE_DEFER support during driver probe
+Date:   Sat, 10 Aug 2019 16:07:58 +0100
+Message-Id: <20190810150758.17694-1-git@andred.net>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Hans Ulli Kroll <ulli.kroll@googlemail.com>
+If driver probe needs to be deferred, e.g. because ci_hdrc_add_device()
+isn't ready yet, this driver currently misbehaves badly:
+    a) success is still reported to the driver core (meaning a 2nd
+       probe attempt will never be done), leaving the driver in
+       a dysfunctional state and the hardware unusable
 
-On the Gemini SoC the FOTG2 stalls after port reset
-so restart the HCD after each port reset.
+    b) driver remove / shutdown OOPSes:
+    [  206.786916] Unable to handle kernel paging request at virtual address fffffdff
+    [  206.794148] pgd = 880b9f82
+    [  206.796890] [fffffdff] *pgd=abf5e861, *pte=00000000, *ppte=00000000
+    [  206.803179] Internal error: Oops: 37 [#1] PREEMPT SMP ARM
+    [  206.808581] Modules linked in: wl18xx evbug
+    [  206.813308] CPU: 1 PID: 1 Comm: systemd-shutdow Not tainted 4.19.35+gf345c93b4195 #1
+    [  206.821053] Hardware name: Freescale i.MX7 Dual (Device Tree)
+    [  206.826813] PC is at ci_hdrc_remove_device+0x4/0x20
+    [  206.831699] LR is at ci_hdrc_imx_remove+0x20/0xe8
+    [  206.836407] pc : [<805cd4b0>]    lr : [<805d62cc>]    psr: 20000013
+    [  206.842678] sp : a806be40  ip : 00000001  fp : 80adbd3c
+    [  206.847906] r10: 80b1b794  r9 : 80d5dfe0  r8 : a8192c44
+    [  206.853136] r7 : 80db93a0  r6 : a8192c10  r5 : a8192c00  r4 : a93a4a00
+    [  206.859668] r3 : 00000000  r2 : a8192ce4  r1 : ffffffff  r0 : fffffdfb
+    [  206.866201] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+    [  206.873341] Control: 10c5387d  Table: a9e0c06a  DAC: 00000051
+    [  206.879092] Process systemd-shutdow (pid: 1, stack limit = 0xb271353c)
+    [  206.885624] Stack: (0xa806be40 to 0xa806c000)
+    [  206.889992] be40: a93a4a00 805d62cc a8192c1c a8170e10 a8192c10 8049a490 80d04d08 00000000
+    [  206.898179] be60: 00000000 80d0da2c fee1dead 00000000 a806a000 00000058 00000000 80148b08
+    [  206.906366] be80: 01234567 80148d8c a9858600 00000000 00000000 00000000 00000000 80d04d08
+    [  206.914553] bea0: 00000000 00000000 a82741e0 a9858600 00000024 00000002 a9858608 00000005
+    [  206.922740] bec0: 0000001e 8022c058 00000000 00000000 a806bf14 a9858600 00000000 a806befc
+    [  206.930927] bee0: a806bf78 00000000 7ee12c30 8022c18c a806bef8 a806befc 00000000 00000001
+    [  206.939115] bf00: 00000000 00000024 a806bf14 00000005 7ee13b34 7ee12c68 00000004 7ee13f20
+    [  206.947302] bf20: 00000010 7ee12c7c 00000005 7ee12d04 0000000a 76e7dc00 00000001 80d0f140
+    [  206.955490] bf40: ab637880 a974de40 60000013 80d0f140 ab6378a0 80d04d08 a8080470 a9858600
+    [  206.963677] bf60: a9858600 00000000 00000000 8022c24c 00000000 80144310 00000000 00000000
+    [  206.971864] bf80: 80101204 80d04d08 00000000 80d04d08 00000000 00000000 00000003 00000058
+    [  206.980051] bfa0: 80101204 80101000 00000000 00000000 fee1dead 28121969 01234567 00000000
+    [  206.988237] bfc0: 00000000 00000000 00000003 00000058 00000000 00000000 00000000 00000000
+    [  206.996425] bfe0: 0049ffb0 7ee13d58 0048a84b 76f245a6 60000030 fee1dead 00000000 00000000
+    [  207.004622] [<805cd4b0>] (ci_hdrc_remove_device) from [<805d62cc>] (ci_hdrc_imx_remove+0x20/0xe8)
+    [  207.013509] [<805d62cc>] (ci_hdrc_imx_remove) from [<8049a490>] (device_shutdown+0x16c/0x218)
+    [  207.022050] [<8049a490>] (device_shutdown) from [<80148b08>] (kernel_restart+0xc/0x50)
+    [  207.029980] [<80148b08>] (kernel_restart) from [<80148d8c>] (sys_reboot+0xf4/0x1f0)
+    [  207.037648] [<80148d8c>] (sys_reboot) from [<80101000>] (ret_fast_syscall+0x0/0x54)
+    [  207.045308] Exception stack(0xa806bfa8 to 0xa806bff0)
+    [  207.050368] bfa0:                   00000000 00000000 fee1dead 28121969 01234567 00000000
+    [  207.058554] bfc0: 00000000 00000000 00000003 00000058 00000000 00000000 00000000 00000000
+    [  207.066737] bfe0: 0049ffb0 7ee13d58 0048a84b 76f245a6
+    [  207.071799] Code: ebffffa8 e3a00000 e8bd8010 e92d4010 (e5904004)
+    [  207.078021] ---[ end trace be47424e3fd46e9f ]---
+    [  207.082647] Kernel panic - not syncing: Fatal exception
+    [  207.087894] ---[ end Kernel panic - not syncing: Fatal exception ]---
 
-Signed-off-by: Hans Ulli Kroll <ulli.kroll@googlemail.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+    c) the error path in combination with driver removal causes
+       imbalanced calls to the clk_*() and pm_()* APIs
+
+a) happens because the original intended return value is
+   overwritten (with 0) by the return code of
+   regulator_disable() in ci_hdrc_imx_probe()'s error path
+b) happens because ci_pdev is -EPROBE_DEFER, which causes
+   ci_hdrc_remove_device() to OOPS
+
+Fix a) by being more careful in ci_hdrc_imx_probe()'s error
+path and not overwriting the real error code
+
+Fix b) by calling the respective cleanup functions during
+remove only when needed (when ci_pdev != NULL, i.e. when
+everything was initialised correctly). This also has the
+side effect of not causing imbalanced clk_*() and pm_*()
+API calls as part of the error code path.
+
+Fixes: 7c8e8909417e: ("usb: chipidea: imx: add HSIC support")
+Signed-off-by: André Draszik <git@andred.net>
+CC: Peter Chen <Peter.Chen@nxp.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Shawn Guo <shawnguo@kernel.org>
+CC: Sascha Hauer <s.hauer@pengutronix.de>
+CC: Pengutronix Kernel Team <kernel@pengutronix.de>
+CC: Fabio Estevam <festevam@gmail.com>
+CC: NXP Linux Team <linux-imx@nxp.com>
+CC: linux-usb@vger.kernel.org
+CC: linux-arm-kernel@lists.infradead.org
+CC: linux-kernel@vger.kernel.org
 ---
- drivers/usb/host/fotg210-hcd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/chipidea/ci_hdrc_imx.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/host/fotg210-hcd.c b/drivers/usb/host/fotg210-hcd.c
-index 35f69bce40d9..8ee28f5b7957 100644
---- a/drivers/usb/host/fotg210-hcd.c
-+++ b/drivers/usb/host/fotg210-hcd.c
-@@ -1633,6 +1633,10 @@ static int fotg210_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			/* see what we found out */
- 			temp = check_reset_complete(fotg210, wIndex, status_reg,
- 					fotg210_readl(fotg210, status_reg));
-+
-+			/* restart schedule */
-+			fotg210->command |= CMD_RUN;
-+			fotg210_writel(fotg210, fotg210->command, &fotg210->regs->command);
- 		}
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index b5abfe89190c..df8812c30640 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -454,9 +454,11 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+ 	imx_disable_unprepare_clks(dev);
+ disable_hsic_regulator:
+ 	if (data->hsic_pad_regulator)
+-		ret = regulator_disable(data->hsic_pad_regulator);
++		/* don't overwrite original ret (cf. EPROBE_DEFER) */
++		regulator_disable(data->hsic_pad_regulator);
+ 	if (pdata.flags & CI_HDRC_PMQOS)
+ 		pm_qos_remove_request(&data->pm_qos_req);
++	data->ci_pdev = NULL;
+ 	return ret;
+ }
  
- 		if (!(temp & (PORT_RESUME|PORT_RESET))) {
+@@ -469,14 +471,17 @@ static int ci_hdrc_imx_remove(struct platform_device *pdev)
+ 		pm_runtime_disable(&pdev->dev);
+ 		pm_runtime_put_noidle(&pdev->dev);
+ 	}
+-	ci_hdrc_remove_device(data->ci_pdev);
++	if (data->ci_pdev)
++		ci_hdrc_remove_device(data->ci_pdev);
+ 	if (data->override_phy_control)
+ 		usb_phy_shutdown(data->phy);
+-	imx_disable_unprepare_clks(&pdev->dev);
+-	if (data->plat_data->flags & CI_HDRC_PMQOS)
+-		pm_qos_remove_request(&data->pm_qos_req);
+-	if (data->hsic_pad_regulator)
+-		regulator_disable(data->hsic_pad_regulator);
++	if (data->ci_pdev) {
++		imx_disable_unprepare_clks(&pdev->dev);
++		if (data->plat_data->flags & CI_HDRC_PMQOS)
++			pm_qos_remove_request(&data->pm_qos_req);
++		if (data->hsic_pad_regulator)
++			regulator_disable(data->hsic_pad_regulator);
++	}
+ 
+ 	return 0;
+ }
 -- 
-2.21.0
+2.20.1
 
