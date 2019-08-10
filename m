@@ -2,160 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BC388AC5
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2019 12:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6280D88AF4
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Aug 2019 13:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725927AbfHJK20 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Aug 2019 06:28:26 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57488 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725845AbfHJK20 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Aug 2019 06:28:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=KlWmJ/XZlWJnVQ3DuZFsqlb7tqR57nj8nY1TzMTzeEM=; b=nPLGPNawWzHcQsB51+cwTAmSS
-        7bkh38dfmYxojbWyaH8qidZdKJ2NKuXJILM2kRfEirMXVr0JP0rLj2ZzVgPdHhelWnYSiBme1DFs4
-        GnH29JnYdE5I2r/VPybHKjnjCe0r21JY/OW1dQG8CykvZSksrvPFfQdKDgKONZNHYtM1/UtZX9q88
-        dinPcPx0X30dwBipYzIoaLt1azYQLIkeK5Tkr/n2BTv7e7qUo7EgLuY2XEKn7OIN0EFsHT7QIL0U+
-        6wd19ZnlbbpFvqCSn/394XFEEnYfLFVGaCiqrvy3RBBXsjQ6wj10O7nOqNmGtyWbU7OiR5fhUo3qx
-        gEyVVMZBg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hwObc-0008Cz-I6; Sat, 10 Aug 2019 10:28:12 +0000
-Date:   Sat, 10 Aug 2019 03:28:12 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-usb@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 03/22] ARM: omap1: move omap15xx local bus handling to
- usb.c
-Message-ID: <20190810102812.GA25939@infradead.org>
-References: <20190808212234.2213262-1-arnd@arndb.de>
- <20190808212234.2213262-4-arnd@arndb.de>
+        id S1726119AbfHJLMx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Aug 2019 07:12:53 -0400
+Received: from mail-ed1-f54.google.com ([209.85.208.54]:39117 "EHLO
+        mail-ed1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725858AbfHJLMx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Aug 2019 07:12:53 -0400
+Received: by mail-ed1-f54.google.com with SMTP id e16so5073100edv.6
+        for <linux-usb@vger.kernel.org>; Sat, 10 Aug 2019 04:12:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=K7YFSWgRz1mwAybrRgXiky4TtUREGJr6R7xIcORRy0U=;
+        b=JXleIPdyZTNMBiBQc8Ka10qsPwX5hnXEFNaZrllfPWVsdCJreCHis8c6dpXJOAHvnC
+         77o6d9UC08cm5vY9EAqKfSF4Z4mDQ+tOE2zMcob4aER3RvxLdUu9SvvPNhYWorSMKarZ
+         /fdFP2Zrt9F8DQq4wB/JWXL6lO+vcmdFc78iEnxuyYLFt6gG+N1HLHUK2Z0VvlQSlkxo
+         qVUtV91psNJxRCYGRSJzFGxSdwmG9rOc/f9DnNd7y5EP/DtKkvzcw6TqCDCM/TAQuHst
+         1e9eJCfZcoTiVkTvgELca9OdliINjHhbwhp1yg7i2gkRv+TkmQ+ZtBi0mcIyjZa3nYBO
+         eDAw==
+X-Gm-Message-State: APjAAAXxNV2S0Umr0Vr37ewcEw4nyXqXsOKz3pm5znO3npRahNiURgMV
+        H5pBIUQU4nxPhu7ocxZ89Eog4w==
+X-Google-Smtp-Source: APXvYqzs4JGZVgiE4EAblKDR0ucqYsXjw6NUq2s/o2YpS1vv3GNfP3YwplIsIZ6L2Y+3EddEGGGddQ==
+X-Received: by 2002:a50:bb23:: with SMTP id y32mr8669514ede.145.1565435571610;
+        Sat, 10 Aug 2019 04:12:51 -0700 (PDT)
+Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
+        by smtp.gmail.com with ESMTPSA id f6sm300202edn.63.2019.08.10.04.12.50
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Sat, 10 Aug 2019 04:12:50 -0700 (PDT)
+Subject: Re: AW: AW: AW: KASAN: use-after-free Read in usbhid_power
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        syzbot <syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+References: <CAAeHK+wb8=Z65_1CGcj0ShT6+NiQSDKhEkBVx+8vPe3kJF8+6g@mail.gmail.com>
+ <Pine.LNX.4.44L0.1908081522290.1319-100000@iolanthe.rowland.org>
+ <caf422aebd314ab8a5dd96ac2d9bb198@SVR-IES-MBX-03.mgc.mentorg.com>
+ <20190809075555.GA20409@kroah.com>
+ <8e43085507b849e49e858e5388f3e13c@SVR-IES-MBX-03.mgc.mentorg.com>
+ <d7f1f3dc-03b3-34b8-657b-13c7b91ee361@redhat.com>
+ <86ef050c477841a6951fd984b38c9f04@SVR-IES-MBX-03.mgc.mentorg.com>
+ <9c955960-8b50-30dd-732a-92c62e5761cc@redhat.com>
+ <932dbc769a80416eb736e6397c126ce9@SVR-IES-MBX-03.mgc.mentorg.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <95148f7e-1883-0129-091f-802136596bf6@redhat.com>
+Date:   Sat, 10 Aug 2019 13:12:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190808212234.2213262-4-arnd@arndb.de>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <932dbc769a80416eb736e6397c126ce9@SVR-IES-MBX-03.mgc.mentorg.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks for doing this!  The odd platforms have always been very
-confusing.
+Hi,
 
-> diff --git a/arch/arm/mach-omap1/include/mach/omap1510.h b/arch/arm/mach-omap1/include/mach/omap1510.h
-> index 3d235244bf5c..7af9c0c7c5ab 100644
-> --- a/arch/arm/mach-omap1/include/mach/omap1510.h
-> +++ b/arch/arm/mach-omap1/include/mach/omap1510.h
-> @@ -159,4 +159,3 @@
->  #define OMAP1510_INT_FPGA23		(OMAP_FPGA_IRQ_BASE + 23)
->  
->  #endif /*  __ASM_ARCH_OMAP15XX_H */
-> -
+On 09-08-19 14:38, Schmid, Carsten wrote:
+> Hi again,
+> 
+>>>
+>>> Hey, i did not want to trigger an eartquake in the basement of the kernel ;-)
+>>> My intention was to prevent some crashes, and help developers to find their bugs.
+>>> I think my patch exactly does this.
+>>
+>> Hehe, actually drivers not being able to block unbind has been bugging me
+>> for
+>> a while now, because there are cases where this would be really helpful.
+>>>> 1) make resources refcounted, have child resources take a ref on the parent
+>>>> 2) Disallow unbind on devices with bound child-devices?
+>>>>
+>>> Exactly what i was thinking of in first attempts.
+>>> But i fear that would break even more use cases.
+>>>
+>>> Hans, directly regarding the driver:
+>>> The problem i see is that the xhci_intel_unregister_pdev which is added
+>>> as an action with devm_add_action_or_reset() is called late by the framework,
+>>> later than the usb_hcd_pci_remove() in xhci_pci_remove.
+>>> Is there any chance to trigger this before?
+>>> This is what Greg meant with "right order".
+>>
+>> Ah, I missed that part, sure that should be easy, just stop using
+>> devm_add_action_or_reset() and do the xhci_intel_unregister_pdev()
+>> manually at the right time. The downside of this is that you also
+>> need to make sure it happens at the right time from probe error-paths
+>> but given the bug you are hitting, I guess that is probably
+>> already a problem.
+>>
+> @Hans:
+> Sure, will have a look at this. I think i have found where to do that,
+> but need to check how to get the pdev pointer there ....
 
-Spurious whitespace change?
+You probably need to store the pdev pointer in one of the xhci driver's
+private data structs.
 
-> diff --git a/arch/arm/mach-omap1/usb.c b/arch/arm/mach-omap1/usb.c
-> index d8e9bbda8f7b..740c876ae46b 100644
-> --- a/arch/arm/mach-omap1/usb.c
-> +++ b/arch/arm/mach-omap1/usb.c
-> @@ -10,6 +10,7 @@
->  #include <linux/init.h>
->  #include <linux/platform_device.h>
->  #include <linux/io.h>
-> +#include <linux/delay.h>
->  
->  #include <asm/irq.h>
->  
-> @@ -127,6 +128,7 @@ omap_otg_init(struct omap_usb_config *config)
->  
->  		syscon &= ~HST_IDLE_EN;
->  		ohci_device->dev.platform_data = config;
-> +
->  		status = platform_device_register(ohci_device);
+Regards,
 
-Same here.
-
-> +#define OMAP1510_LB_OFFSET	   UL(0x30000000)
-> +#define OMAP1510_LB_DMA_PFN_OFFSET ((OMAP1510_LB_OFFSET - PAGE_OFFSET) >> PAGE_SHIFT)
-
-Overly long line.
-
-> +/*
-> + * OMAP-1510 specific Local Bus clock on/off
-> + */
-> +static int omap_1510_local_bus_power(int on)
-> +{
-> +	if (on) {
-> +		omap_writel((1 << 1) | (1 << 0), OMAP1510_LB_MMU_CTL);
-> +		udelay(200);
-> +	} else {
-> +		omap_writel(0, OMAP1510_LB_MMU_CTL);
-> +	}
-> +
-> +	return 0;
-> +}
-
-The caller never checks the const return value, and on is always true as
-well.  In fact it seems like omap_1510_local_bus_power and
-omap_1510_local_bus_init could probably just be merged into the caller.
-
-> +
-> +/*
-> + * OMAP-1510 specific Local Bus initialization
-> + * NOTE: This assumes 32MB memory size in OMAP1510LB_MEMSIZE.
-> + *       See also arch/mach-omap/memory.h for __virt_to_dma() and
-> + *       __dma_to_virt() which need to match with the physical
-> + *       Local Bus address below.
-
-I think that NOTE is out of date, as __virt_to_dma and __dma_to_virt
-don't exist anymore.
-
-> +static int omap_1510_local_bus_init(void)
-> +{
-> +	unsigned int tlb;
-> +	unsigned long lbaddr, physaddr;
-> +
-> +	omap_writel((omap_readl(OMAP1510_LB_CLOCK_DIV) & 0xfffffff8) | 0x4,
-> +	       OMAP1510_LB_CLOCK_DIV);
-> +
-> +	/* Configure the Local Bus MMU table */
-> +	for (tlb = 0; tlb < OMAP1510_LB_MEMSIZE; tlb++) {
-> +		lbaddr = tlb * 0x00100000 + OMAP1510_LB_OFFSET;
-> +		physaddr = tlb * 0x00100000 + PHYS_OFFSET;
-> +		omap_writel((lbaddr & 0x0fffffff) >> 22, OMAP1510_LB_MMU_CAM_H);
-> +		omap_writel(((lbaddr & 0x003ffc00) >> 6) | 0xc,
-> +		       OMAP1510_LB_MMU_CAM_L);
-> +		omap_writel(physaddr >> 16, OMAP1510_LB_MMU_RAM_H);
-> +		omap_writel((physaddr & 0x0000fc00) | 0x300, OMAP1510_LB_MMU_RAM_L);
-
-Another > 80 chars line.
-
-> +		omap_writel(tlb << 4, OMAP1510_LB_MMU_LCK);
-> +		omap_writel(0x1, OMAP1510_LB_MMU_LD_TLB);
-> +	}
-> +
-> +	/* Enable the walking table */
-> +	omap_writel(omap_readl(OMAP1510_LB_MMU_CTL) | (1 << 3), OMAP1510_LB_MMU_CTL);
-
-One more.
-
-> +	udelay(200);
-> +
-> +	return 0;
-
-The return value is ignored.
+Hans
