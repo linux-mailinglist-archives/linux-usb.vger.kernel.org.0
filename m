@@ -2,220 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF16189DB5
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 14:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5515F89DC0
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 14:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727613AbfHLMKj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Aug 2019 08:10:39 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35107 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726714AbfHLMKj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 08:10:39 -0400
-Received: by mail-pl1-f194.google.com with SMTP id w24so47786241plp.2
-        for <linux-usb@vger.kernel.org>; Mon, 12 Aug 2019 05:10:38 -0700 (PDT)
+        id S1728293AbfHLMMH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Aug 2019 08:12:07 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:39156 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727249AbfHLMMH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 08:12:07 -0400
+Received: by mail-pl1-f195.google.com with SMTP id z3so970553pln.6
+        for <linux-usb@vger.kernel.org>; Mon, 12 Aug 2019 05:12:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2VS36lQDVuoh01KbDC8ttXBFs8syHpT/aYwIJZ1HZLQ=;
-        b=nK05U2g7oCb99Un/Ia1UOAJPSWQiPtfUd4Ppc9hbyhdl6TSkJEoztkkTHw8JR/MPHV
-         6Y5t2vs/TKQMg3AuXoaZosRbzpGEV1tMpf4VwFoWbFpHr4RkwUOqwEqlTOwLVOQZMxxq
-         qEeD2CuBaSLWVXszpj9PI1LmDv2Y77YQZPI4ng7lQzKi6Vyr9YZOEh3pfWxRrS+oSy2l
-         ROh1HaudOgvIaHKTpUlVeCBvt8rbyeQrJGbAAgC02Ww+CKk3e7I4x7es6Z8seJmrmI9H
-         9C0FkVgkozGoO/E8Q3t5LlYXGMYS35LVTJm5cEdKYPMgpR5HOpGqstKPIGkceuLfNz3W
-         8FOQ==
+        bh=HSImECa5el0iQbQ9v8bXoLa86qat1X+sRH4ZYbDNvcE=;
+        b=KAP64pq5qCqCvaIszyzRRyauR6jhBPus5MK8qUsQBBP1On5KDWpz06maD9E/Yju7zv
+         mNMYGxq1N+LAI/FibuyCLrDED3l0h2wD0oXwCCSsOxzstoU3+8IQAh6C+Mjmr3iDx0kX
+         8WzUkSCz3lyh4+yaKs+BZcAgBWbDjEMY1Suo27tEwS9wJYZHJVeAlE4SUOTWeCm39mVi
+         ZD+L3egcC1P1BdPMX0+IJPBCfuteHOgMe+thbFe+Air7cfiRZRVMwfS8DvTh6SwO0cRx
+         klZoZ4MNSuSMi9jaDgK2VjbX7wryXxXNUYQVdDgaeMCAcdlhNOG9W636tM2AUX5byfEw
+         RgjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2VS36lQDVuoh01KbDC8ttXBFs8syHpT/aYwIJZ1HZLQ=;
-        b=T3S9lFeRoRub2hCrCxxbrHfVFNylz4/d5bgo3zxjUIIZ5xtDyAafF7+mRE8MViPplz
-         8GtgxJyVgO3TorHfNy0H9m1HH2zE+oX0vlAkfgeCUaJ4oUv4SRC+vYxHiqy13+qkSxdV
-         dZlS3KEYVPSOXuCuCUENXWCgUNvIBOR/7DJEpt3NUDlpz/LRtF4XnEMleVlAw6Tymetn
-         aDls6idqrzS6YlMxgVzvHE0sPyL9of0ABqnQ5y6Kqnhu+0Pe0jnV6xxKR+ZaTbtmekA9
-         397Fymdjcvj/ZOohKZQxLIxgS1eZxvRi+kBVDnQgh6ugVpTNw3EroR0uofXByxs1gIC8
-         pSyA==
-X-Gm-Message-State: APjAAAV/lGw/rg54O8BnQI+hRyL7YNEQJXFmenUrXX5pZE7AWoBKR51l
-        f41AhWsEI5cv7bHZeN0YAZWnB7yTSUaS9s04mpZGYQ==
-X-Google-Smtp-Source: APXvYqzXpVx1GnlMZCK9i2uTvxd6I3ezcrTPwByoqAZm56CiLwdssmRD+Uskk/Lle2EnY3QExUU6DQ0yl96yyET/BuY=
-X-Received: by 2002:a17:902:8649:: with SMTP id y9mr5365815plt.252.1565611837583;
- Mon, 12 Aug 2019 05:10:37 -0700 (PDT)
+        bh=HSImECa5el0iQbQ9v8bXoLa86qat1X+sRH4ZYbDNvcE=;
+        b=iiJbHZA4EmrHfScrmfI3AIsmWLNLTjunn7591hgKfDD9ReWExLu+9SV7s3VX13eQji
+         O54M+TO2Pyp/U1WeIrnzSuebrMBfVWJNoBbyj3dpm2qAI/atFw55HxffMK720ayKJbD0
+         FTEctDC8LHf6nWQptr9Bw+MhZfHZ3W/v2FA4+vIxf6DcI4hvWKPaFpHNQ4O2P5pgH99k
+         u5/j03UU74Qie74+0klhzVSBhbBwitp2pXrilEYWpsHGQ7RJp4l20EYnYuNLPGa690Dy
+         bfMFejgqmzQ6iJlWand4dSHjIlNb46PVi67f+PDOktHbDl7PzZ2t9xIV0LSgcW6sIavl
+         4E8w==
+X-Gm-Message-State: APjAAAX3c/R9i32w8SQXWX7V/gNTqC1BLixX2WbbWQx6X+JD+TTsb3mj
+        xDh3vc9/QYreXZCEyCfrXy7v9cj2nWz8pc9lv9FdHw==
+X-Google-Smtp-Source: APXvYqxT78Eo6LHh7YWK9fpnAEDU+y7R03K+i1gZRxfwsCXbIXdflLz5Rx06U6cq5esb85O5oAOyONX0Rlt9jGponck=
+X-Received: by 2002:a17:902:bb94:: with SMTP id m20mr250579pls.336.1565611926530;
+ Mon, 12 Aug 2019 05:12:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000008360bb058f0fe39d@google.com>
-In-Reply-To: <0000000000008360bb058f0fe39d@google.com>
+References: <00000000000026d72f058fb33242@google.com> <Pine.LNX.4.44L0.1908091531590.1630-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1908091531590.1630-100000@iolanthe.rowland.org>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 12 Aug 2019 14:10:26 +0200
-Message-ID: <CAAeHK+ys+7Ng+15JC7kqbHOCckVBRWJat3OR2+HCWNZR8Z4ijA@mail.gmail.com>
-Subject: Re: possible deadlock in iowarrior_open
-To:     syzbot <syzbot+ca52394faa436d8131df@syzkaller.appspotmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>,
+Date:   Mon, 12 Aug 2019 14:11:54 +0200
+Message-ID: <CAAeHK+wh=oQo4rorPuKR6dKGbwx4pNL8Of8mDUqbpV-G0kt6_w@mail.gmail.com>
+Subject: Re: possible deadlock in usb_deregister_dev
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+a64a382964bf6c71a9c0@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, oneukum@suse.de,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; boundary="000000000000bd1494058fea6eae"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 1, 2019 at 5:28 PM syzbot
-<syzbot+ca52394faa436d8131df@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17ab6aec600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ca52394faa436d8131df
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->
-> Unfortunately, I don't have any reproducer for this crash yet.
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+ca52394faa436d8131df@syzkaller.appspotmail.com
->
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 5.3.0-rc2+ #23 Not tainted
-> ------------------------------------------------------
-> syz-executor.0/10062 is trying to acquire lock:
-> 00000000527cb8c7 (iowarrior_open_disc_lock){+.+.}, at:
-> iowarrior_open+0x8a/0x2a0 drivers/usb/misc/iowarrior.c:600
->
-> but task is already holding lock:
-> 0000000061445bc7 (iowarrior_mutex){+.+.}, at: iowarrior_open+0x23/0x2a0
-> drivers/usb/misc/iowarrior.c:589
->
-> which lock already depends on the new lock.
->
->
-> the existing dependency chain (in reverse order) is:
->
-> -> #2 (iowarrior_mutex){+.+.}:
->         __mutex_lock_common kernel/locking/mutex.c:930 [inline]
->         __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
->         iowarrior_open+0x23/0x2a0 drivers/usb/misc/iowarrior.c:589
->         usb_open+0x1df/0x270 drivers/usb/core/file.c:48
->         chrdev_open+0x219/0x5c0 fs/char_dev.c:414
->         do_dentry_open+0x494/0x1120 fs/open.c:797
->         do_last fs/namei.c:3416 [inline]
->         path_openat+0x1430/0x3f50 fs/namei.c:3533
->         do_filp_open+0x1a1/0x280 fs/namei.c:3563
->         do_sys_open+0x3c0/0x580 fs/open.c:1089
->         do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
->         entry_SYSCALL_64_after_hwframe+0x49/0xbe
->
-> -> #1 (minor_rwsem#2){++++}:
->         down_write+0x92/0x150 kernel/locking/rwsem.c:1500
->         usb_deregister_dev drivers/usb/core/file.c:238 [inline]
->         usb_deregister_dev+0x61/0x270 drivers/usb/core/file.c:230
->         iowarrior_disconnect+0xa8/0x2c0 drivers/usb/misc/iowarrior.c:873
->         usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
->         __device_release_driver drivers/base/dd.c:1120 [inline]
->         device_release_driver_internal+0x404/0x4c0 drivers/base/dd.c:1151
->         bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
->         device_del+0x420/0xb10 drivers/base/core.c:2288
->         usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
->         usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
->         hub_port_connect drivers/usb/core/hub.c:4949 [inline]
->         hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->         port_event drivers/usb/core/hub.c:5359 [inline]
->         hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
->         process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->         worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->         kthread+0x318/0x420 kernel/kthread.c:255
->         ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> -> #0 (iowarrior_open_disc_lock){+.+.}:
->         check_prev_add kernel/locking/lockdep.c:2405 [inline]
->         check_prevs_add kernel/locking/lockdep.c:2507 [inline]
->         validate_chain kernel/locking/lockdep.c:2897 [inline]
->         __lock_acquire+0x1f7c/0x3b50 kernel/locking/lockdep.c:3880
->         lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
->         __mutex_lock_common kernel/locking/mutex.c:930 [inline]
->         __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
->         iowarrior_open+0x8a/0x2a0 drivers/usb/misc/iowarrior.c:600
->         usb_open+0x1df/0x270 drivers/usb/core/file.c:48
->         chrdev_open+0x219/0x5c0 fs/char_dev.c:414
->         do_dentry_open+0x494/0x1120 fs/open.c:797
->         do_last fs/namei.c:3416 [inline]
->         path_openat+0x1430/0x3f50 fs/namei.c:3533
->         do_filp_open+0x1a1/0x280 fs/namei.c:3563
->         do_sys_open+0x3c0/0x580 fs/open.c:1089
->         do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
->         entry_SYSCALL_64_after_hwframe+0x49/0xbe
->
-> other info that might help us debug this:
->
-> Chain exists of:
->    iowarrior_open_disc_lock --> minor_rwsem#2 --> iowarrior_mutex
->
->   Possible unsafe locking scenario:
->
->         CPU0                    CPU1
->         ----                    ----
->    lock(iowarrior_mutex);
->                                 lock(minor_rwsem#2);
->                                 lock(iowarrior_mutex);
->    lock(iowarrior_open_disc_lock);
->
->   *** DEADLOCK ***
->
-> 2 locks held by syz-executor.0/10062:
->   #0: 000000000fd8903d (minor_rwsem#2){++++}, at: usb_open+0x23/0x270
-> drivers/usb/core/file.c:39
->   #1: 0000000061445bc7 (iowarrior_mutex){+.+.}, at:
-> iowarrior_open+0x23/0x2a0 drivers/usb/misc/iowarrior.c:589
->
-> stack backtrace:
-> CPU: 0 PID: 10062 Comm: syz-executor.0 Not tainted 5.3.0-rc2+ #23
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   check_noncircular+0x345/0x3e0 kernel/locking/lockdep.c:1741
->   check_prev_add kernel/locking/lockdep.c:2405 [inline]
->   check_prevs_add kernel/locking/lockdep.c:2507 [inline]
->   validate_chain kernel/locking/lockdep.c:2897 [inline]
->   __lock_acquire+0x1f7c/0x3b50 kernel/locking/lockdep.c:3880
->   lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
->   __mutex_lock_common kernel/locking/mutex.c:930 [inline]
->   __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
->   iowarrior_open+0x8a/0x2a0 drivers/usb/misc/iowarrior.c:600
->   usb_open+0x1df/0x270 drivers/usb/core/file.c:48
->   chrdev_open+0x219/0x5c0 fs/char_dev.c:414
->   do_dentry_open+0x494/0x1120 fs/open.c:797
->   do_last fs/namei.c:3416 [inline]
->   path_openat+0x1430/0x3f50 fs/namei.c:3533
->   do_filp_open+0x1a1/0x280 fs/namei.c:3563
->   do_sys_open+0x3c0/0x580 fs/open.c:1089
->   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x413711
-> Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48
-> 83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48
-> 89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
-> RSP: 002b:00007fbd98b927a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
-> RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 0000000000413711
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fbd98b92850
-> RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000293 R12: 00007fbd98b936d4
-> R13: 00000000004c8bee R14: 00000000004dfa68 R15: 00000000ffffffff
+--000000000000bd1494058fea6eae
+Content-Type: text/plain; charset="UTF-8"
 
-#syz dup: possible deadlock in usb_deregister_dev
+On Fri, Aug 9, 2019 at 9:32 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Fri, 9 Aug 2019, syzbot wrote:
+>
+> > syzbot has found a reproducer for the following crash on:
+> >
+> > HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=15bf780e600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=a64a382964bf6c71a9c0
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16787574600000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=136cc4d2600000
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+a64a382964bf6c71a9c0@syzkaller.appspotmail.com
+> >
+> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> > usb 1-1: config 0 descriptor??
+> > iowarrior 1-1:0.236: IOWarrior product=0x1501, serial= interface=236 now
+> > attached to iowarrior0
+> > usb 1-1: USB disconnect, device number 2
+> > ======================================================
+> > WARNING: possible circular locking dependency detected
+> > 5.3.0-rc2+ #25 Not tainted
+> > ------------------------------------------------------
+> > kworker/0:1/12 is trying to acquire lock:
+> > 00000000cd63e8f1 (minor_rwsem){++++}, at: usb_deregister_dev
+> > drivers/usb/core/file.c:238 [inline]
+> > 00000000cd63e8f1 (minor_rwsem){++++}, at: usb_deregister_dev+0x61/0x270
+> > drivers/usb/core/file.c:230
+> >
+> > but task is already holding lock:
+> > 000000001d1989ef (iowarrior_open_disc_lock){+.+.}, at:
+> > iowarrior_disconnect+0x45/0x2c0 drivers/usb/misc/iowarrior.c:867
+> >
+> > which lock already depends on the new lock.
+>
+> https://syzkaller.appspot.com/bug?extid=ca52394faa436d8131df is
+> undoubtedly a duplicate of this.
 
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I've marked it as one, thanks!
+
+Now that we have a reproducer, let's retry Oliver's fix:
+
+#syz test: https://github.com/google/kasan.git e96407b4
+
+--000000000000bd1494058fea6eae
+Content-Type: text/x-patch; charset="US-ASCII"; name="iowarrior.patch"
+Content-Disposition: attachment; filename="iowarrior.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_jz8cwrb50>
+X-Attachment-Id: f_jz8cwrb50
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL21pc2MvaW93YXJyaW9yLmMgYi9kcml2ZXJzL3VzYi9t
+aXNjL2lvd2Fycmlvci5jCmluZGV4IGJhMDVkZDgwYTAyMC4uZjViZWQ5ZjI5ZTU2IDEwMDY0NAot
+LS0gYS9kcml2ZXJzL3VzYi9taXNjL2lvd2Fycmlvci5jCisrKyBiL2RyaXZlcnMvdXNiL21pc2Mv
+aW93YXJyaW9yLmMKQEAgLTg2NiwxOSArODY2LDIwIEBAIHN0YXRpYyB2b2lkIGlvd2Fycmlvcl9k
+aXNjb25uZWN0KHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRlcmZhY2UpCiAJZGV2ID0gdXNiX2dl
+dF9pbnRmZGF0YShpbnRlcmZhY2UpOwogCW11dGV4X2xvY2soJmlvd2Fycmlvcl9vcGVuX2Rpc2Nf
+bG9jayk7CiAJdXNiX3NldF9pbnRmZGF0YShpbnRlcmZhY2UsIE5VTEwpOworCS8qIHByZXZlbnQg
+ZGV2aWNlIHJlYWQsIHdyaXRlIGFuZCBpb2N0bCAqLworCWRldi0+cHJlc2VudCA9IDA7CiAKIAlt
+aW5vciA9IGRldi0+bWlub3I7CisJbXV0ZXhfdW5sb2NrKCZpb3dhcnJpb3Jfb3Blbl9kaXNjX2xv
+Y2spOworCS8qIGdpdmUgYmFjayBvdXIgbWlub3IgLSB0aGlzIHdpbGwgY2FsbCBjbG9zZSgpIGxv
+Y2tzIG5lZWQgdG8gYmUgZHJvcHBlZCBhdCB0aGlzIHBvaW50Ki8KIAotCS8qIGdpdmUgYmFjayBv
+dXIgbWlub3IgKi8KIAl1c2JfZGVyZWdpc3Rlcl9kZXYoaW50ZXJmYWNlLCAmaW93YXJyaW9yX2Ns
+YXNzKTsKIAogCW11dGV4X2xvY2soJmRldi0+bXV0ZXgpOwogCiAJLyogcHJldmVudCBkZXZpY2Ug
+cmVhZCwgd3JpdGUgYW5kIGlvY3RsICovCi0JZGV2LT5wcmVzZW50ID0gMDsKIAogCW11dGV4X3Vu
+bG9jaygmZGV2LT5tdXRleCk7Ci0JbXV0ZXhfdW5sb2NrKCZpb3dhcnJpb3Jfb3Blbl9kaXNjX2xv
+Y2spOwogCiAJaWYgKGRldi0+b3BlbmVkKSB7CiAJCS8qIFRoZXJlIGlzIGEgcHJvY2VzcyB0aGF0
+IGhvbGRzIGEgZmlsZWRlc2NyaXB0b3IgdG8gdGhlIGRldmljZSAsCg==
+--000000000000bd1494058fea6eae--
