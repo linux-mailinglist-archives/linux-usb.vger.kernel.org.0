@@ -2,94 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B8B8A116
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 16:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082A68A11D
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 16:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726585AbfHLO3Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Aug 2019 10:29:24 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:36185 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726480AbfHLO3Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 10:29:24 -0400
-Received: by mail-pg1-f196.google.com with SMTP id l21so49572062pgm.3
-        for <linux-usb@vger.kernel.org>; Mon, 12 Aug 2019 07:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kgc+ufQa/zKT6FeOOI3s2h5y3JF0OeR98gHwBxUUxjA=;
-        b=nMeaQV50kw90waitZt4DI4UbgHi0Uw62SALf7HVWPvK98JkbJpLn1gzs4mfkboMrXi
-         7KE9Nbd4mWoAldp31j++yJ09anZKlos50PIb35FR9ie9bBeDpiR6OqTd9iZfpV9iGRIp
-         swGiYSyyqzWH6q7kuJ0/WS8O5we1olYkCzCoBTwZaObfzeY3oDviimkyOO3qMdubo/ke
-         v1A7+PyNqzauV1louLqxTgsMUtDF4n9aR66rPD+rjAK2uwPaiPwRYu39XClr1Ww3wr3+
-         wgw9950xp338RugEz5vX3X/QZa5jH2OJuL1l0JygId5aOa4SqvtlceDtRLLzEGB4ZnR9
-         w38g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kgc+ufQa/zKT6FeOOI3s2h5y3JF0OeR98gHwBxUUxjA=;
-        b=r6o7FtEeaRtoruMEGfCkIshHl8bFNw4kAcr580c/LAO7y9lXfGK17N8xh9zBKyqDTP
-         ZaleTOdLvzD0p1a+kLrEZAD9dkzU6nehcAzJJCOXeyTAEXFwvj75dYc8jsgDwInEOnjd
-         44K/eMbHbyB2fRtQN6T3mOFgDnsJwc/FtUZ+IAnFlPaZBSlnufSlNe3UFtm21s38XKKK
-         BV98LXwbrPENt3KxTU14xRYkzYHen+zunRSpy6o3Jq1RexKtMlBbkO17OioR1btzFXnm
-         YSzoLHqhGjw2MlYwNRBjxapRoN635+SrHYUe6JGmZMBbKwVbDMTtUBk+cSbUGqB/Pqv+
-         VO2g==
-X-Gm-Message-State: APjAAAVaTSgp40JXeaK0F8vXOVEb8LyOcVnMbT9IeBbw9vKiQjX0In5o
-        86y+hb1/8latNz06AjIqIWQ0BM0VnrI2NolYcvFRJg+l19ngdw==
-X-Google-Smtp-Source: APXvYqw59HxhNslXOeCVJM1UuWIHtAtaIQHLyAZOmayA1aEom4L64qlboFBVN0z10ymtkOfMMCFzBzLibppH2aO5edk=
-X-Received: by 2002:aa7:86c6:: with SMTP id h6mr36388002pfo.51.1565620163764;
- Mon, 12 Aug 2019 07:29:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAAeHK+yWhR2bwknCA9pTjy8qFE3-xCcEEZ5Skm5=sYCuypvo_A@mail.gmail.com>
- <0000000000004de4e2058fb31c2b@google.com>
-In-Reply-To: <0000000000004de4e2058fb31c2b@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 12 Aug 2019 16:29:12 +0200
-Message-ID: <CAAeHK+y43XsSpg++xXW2yTHHHgTsatPFunn4_R4yP5=ZnXoHoQ@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in usbhid_power
-To:     syzbot <syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com>
-Cc:     Hillf Danton <hdanton@sina.com>,
+        id S1726515AbfHLObX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Aug 2019 10:31:23 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:60245 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726296AbfHLObW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 10:31:22 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 1CE9910D1;
+        Mon, 12 Aug 2019 10:31:21 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 12 Aug 2019 10:31:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=MaKylIMiNZvNJngSL+I7JUFSGoK
+        LzwNMJz4BsUiEcH0=; b=OgV1SYEikA9Hmho0eEZ2lhtqRFoju56jz7dSAjNRtzI
+        o2wBAxOuxN2+5eQvy4cqA9iUZSj8JeekWl5/Q4YX1E+wG9UXNW7vTCHFnBBSO3z+
+        e8OzqnozaUNNgkqxrR3QDHmK4VhD5bhp5Q/oxxHB2X0HPanwWrBLIAtuUMYbmTO3
+        tB5VIin5FYAw0dAiGZ0MoX9HmccJt2Ch13r3ZKqLfCvoW7oE+Apq7w5GEpTM3i+T
+        i/UTDuTWFNGwrexFamLFT7QNZbnvFt8PhSCh/wDNKZRwy42ECeSTwTaHJC0eoezp
+        I5tsl2MnMZQz0osvCJNIwPnkliWOYeQu1P4AOfWp6JA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=MaKylI
+        MiNZvNJngSL+I7JUFSGoKLzwNMJz4BsUiEcH0=; b=Y9FroYBWR7kIN3BsulRVJI
+        nR+ym8C6pBPdepllthzrfuQmPfcNB54BMxdfOPNtoXCY2Hp/BjOL0bzOh2FIEPyk
+        A1Fzvg7dZ1KUzvl9Lps0pSbJnrGxzVVpSGv1bIGHmFfMEzZSvzQDJoV0ve/PdSW6
+        C+ZO8aVNTTqcIKs6Zl6rSjxWRZf5a3zIv7NH0K6jS/osnZztNg3n/I0lK+qMFPye
+        zaRJNhnY/RP84b22LpgbJ/TfN2y28iiHngNtXcAcAlhDbO8NWsO/bomwrBSSotrM
+        xUItScGRx3bSeKn2Y5L/DjvLdFojDQjl1KVlAd9g5SNnB0a7jw2V7f4JMJuxm3Og
+        ==
+X-ME-Sender: <xms:N3hRXTAMXND5auInpcj70N7FBKo6qV_nPXc4huTMtKEETDZvNNMVNA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddruddvgedgjeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
+    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
+    vehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:N3hRXQMioMizuty-1KS6JsibI1GRCKY3E7a73f9drSPB_i4aMJME2w>
+    <xmx:N3hRXTCCLyHXwm2K58euEsPj7bGuEmAzEe0bS_0L0Ar13QNRaP9Vbw>
+    <xmx:N3hRXT_dsaewNhv68LWDWNA9-Zn6u26F7ofyExk6vsME8Lu6hgZP9g>
+    <xmx:OHhRXe2oTS_J6BgsjD3jbgyByz7GtyRq3CyayyXAJ61K3CLMFBpIRQ>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id CCCAC380076;
+        Mon, 12 Aug 2019 10:31:18 -0400 (EDT)
+Date:   Mon, 12 Aug 2019 16:31:16 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        syzbot <syzbot+30cf45ebfe0b0c4847a1@syzkaller.appspotmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, kirr@nexedi.com,
+        Kernel development list <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>, lkundrak@v3.sk,
+        logang@deltatee.com,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: KASAN: use-after-free Read in ld_usb_release
+Message-ID: <20190812143116.GA14068@kroah.com>
+References: <CAAeHK+xZgjD+gP=pCkk0uKVkuPG+XZ26mgNQCGzw2ea5mqFTJg@mail.gmail.com>
+ <Pine.LNX.4.44L0.1908121020180.1659-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1908121020180.1659-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 9, 2019 at 8:12 PM syzbot
-<syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot has tested the proposed patch and the reproducer did not trigger
-> crash:
->
-> Reported-and-tested-by:
-> syzbot+ef5de9c4f99c4edb4e49@syzkaller.appspotmail.com
+On Mon, Aug 12, 2019 at 10:21:14AM -0400, Alan Stern wrote:
+> On Mon, 12 Aug 2019, Andrey Konovalov wrote:
+> 
+> > Alan, could you submit this patch (if you haven't already)? Looks like
+> > it fixes this bug (and might fix some others).
+> 
+> I will.  I was waiting to see if Greg KH had any comments.
 
-OK, I'm duping this BUG to the similar one that Hillf fixed:
+Give me a few hours, it's in my queue to review...
 
-#syz dup: general protection fault in __pm_runtime_resume
-
-If there are more issues with PM counters, syzbot will rereport them
-once the fix is in its tree.
-
->
-> Tested on:
->
-> commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=17fcd52c600000
->
-> Note: testing is done by a robot and is best-effort only.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000004de4e2058fb31c2b%40google.com.
