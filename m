@@ -2,87 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 082A68A11D
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 16:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9928A12C
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 16:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbfHLObX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Aug 2019 10:31:23 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:60245 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726296AbfHLObW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 10:31:22 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1CE9910D1;
-        Mon, 12 Aug 2019 10:31:21 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 12 Aug 2019 10:31:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=MaKylIMiNZvNJngSL+I7JUFSGoK
-        LzwNMJz4BsUiEcH0=; b=OgV1SYEikA9Hmho0eEZ2lhtqRFoju56jz7dSAjNRtzI
-        o2wBAxOuxN2+5eQvy4cqA9iUZSj8JeekWl5/Q4YX1E+wG9UXNW7vTCHFnBBSO3z+
-        e8OzqnozaUNNgkqxrR3QDHmK4VhD5bhp5Q/oxxHB2X0HPanwWrBLIAtuUMYbmTO3
-        tB5VIin5FYAw0dAiGZ0MoX9HmccJt2Ch13r3ZKqLfCvoW7oE+Apq7w5GEpTM3i+T
-        i/UTDuTWFNGwrexFamLFT7QNZbnvFt8PhSCh/wDNKZRwy42ECeSTwTaHJC0eoezp
-        I5tsl2MnMZQz0osvCJNIwPnkliWOYeQu1P4AOfWp6JA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=MaKylI
-        MiNZvNJngSL+I7JUFSGoKLzwNMJz4BsUiEcH0=; b=Y9FroYBWR7kIN3BsulRVJI
-        nR+ym8C6pBPdepllthzrfuQmPfcNB54BMxdfOPNtoXCY2Hp/BjOL0bzOh2FIEPyk
-        A1Fzvg7dZ1KUzvl9Lps0pSbJnrGxzVVpSGv1bIGHmFfMEzZSvzQDJoV0ve/PdSW6
-        C+ZO8aVNTTqcIKs6Zl6rSjxWRZf5a3zIv7NH0K6jS/osnZztNg3n/I0lK+qMFPye
-        zaRJNhnY/RP84b22LpgbJ/TfN2y28iiHngNtXcAcAlhDbO8NWsO/bomwrBSSotrM
-        xUItScGRx3bSeKn2Y5L/DjvLdFojDQjl1KVlAd9g5SNnB0a7jw2V7f4JMJuxm3Og
-        ==
-X-ME-Sender: <xms:N3hRXTAMXND5auInpcj70N7FBKo6qV_nPXc4huTMtKEETDZvNNMVNA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddruddvgedgjeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
-    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
-    vehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:N3hRXQMioMizuty-1KS6JsibI1GRCKY3E7a73f9drSPB_i4aMJME2w>
-    <xmx:N3hRXTCCLyHXwm2K58euEsPj7bGuEmAzEe0bS_0L0Ar13QNRaP9Vbw>
-    <xmx:N3hRXT_dsaewNhv68LWDWNA9-Zn6u26F7ofyExk6vsME8Lu6hgZP9g>
-    <xmx:OHhRXe2oTS_J6BgsjD3jbgyByz7GtyRq3CyayyXAJ61K3CLMFBpIRQ>
+        id S1726696AbfHLOc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Aug 2019 10:32:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50268 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726296AbfHLOc6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Aug 2019 10:32:58 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id CCCAC380076;
-        Mon, 12 Aug 2019 10:31:18 -0400 (EDT)
-Date:   Mon, 12 Aug 2019 16:31:16 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        syzbot <syzbot+30cf45ebfe0b0c4847a1@syzkaller.appspotmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, kirr@nexedi.com,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>, lkundrak@v3.sk,
-        logang@deltatee.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: KASAN: use-after-free Read in ld_usb_release
-Message-ID: <20190812143116.GA14068@kroah.com>
-References: <CAAeHK+xZgjD+gP=pCkk0uKVkuPG+XZ26mgNQCGzw2ea5mqFTJg@mail.gmail.com>
- <Pine.LNX.4.44L0.1908121020180.1659-100000@iolanthe.rowland.org>
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 88A4220665;
+        Mon, 12 Aug 2019 14:32:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565620378;
+        bh=Hycm/KwszMWzrheW2Jizs90ebCWNGMl1H4MMjCizZ88=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tSRz/sn3Mjwi+0DeiSBg/AfHFGAgIWWY6/U+wIAbWkbhH+ty97E0s2peNrd55ph4H
+         BHUegbzHtUWT8LsBBbsZFi5jMukSH3piH6Qe8HvBp4pfnIUQoQgCCw/VImEygBUOrS
+         qY/1PFv0/4ZQeU1oOk0lcBL5bBH0ENO1ANlHoJfA=
+Date:   Mon, 12 Aug 2019 16:32:55 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB fixes for v5.3-rc
+Message-ID: <20190812143255.GC14068@kroah.com>
+References: <87a7ceu2j4.fsf@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1908121020180.1659-100000@iolanthe.rowland.org>
+In-Reply-To: <87a7ceu2j4.fsf@gmail.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 10:21:14AM -0400, Alan Stern wrote:
-> On Mon, 12 Aug 2019, Andrey Konovalov wrote:
+On Mon, Aug 12, 2019 at 01:00:15PM +0300, Felipe Balbi wrote:
 > 
-> > Alan, could you submit this patch (if you haven't already)? Looks like
-> > it fixes this bug (and might fix some others).
+> Hi Greg,
 > 
-> I will.  I was waiting to see if Greg KH had any comments.
+> here's a pull request for some fixes that I collected from linux-usb
+> mailing list.
+> 
+> Let me know if you want anything to be changed.
+> 
+> Cheers
+> 
+> The following changes since commit d45331b00ddb179e291766617259261c112db872:
+> 
+>   Linux 5.3-rc4 (2019-08-11 13:26:41 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/fixes-for-v5.3-rc4
 
-Give me a few hours, it's in my queue to review...
+Pulled and pushed out, thanks.
 
+greg k-h
