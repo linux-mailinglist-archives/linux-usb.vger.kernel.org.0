@@ -2,191 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEA889A68
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 11:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E028789AB3
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 12:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727614AbfHLJuC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Aug 2019 05:50:02 -0400
-Received: from mail-ot1-f71.google.com ([209.85.210.71]:33835 "EHLO
-        mail-ot1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727471AbfHLJuC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 05:50:02 -0400
-Received: by mail-ot1-f71.google.com with SMTP id a26so9298534otl.1
-        for <linux-usb@vger.kernel.org>; Mon, 12 Aug 2019 02:50:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=+gJ6vT0eRzHl6Kefc3x6OXPPp9+GyuRZ/8pQ2kcNNpE=;
-        b=Pb+EBni4oW5VvkbgZ0JfOXV+x1J78UGuohVP1/u4lnIK2x2ckwIxlSecaljyCX1CFL
-         tty8/xZvLpM3EYhBCFG+8Q1NEvgDdZEjBELzTrFH7CtOvGxCeN9RRyem9YPvNNBE7Emp
-         0yJxHt97xqLFOlka0JMvL/QoVJPsEVKF2+5AJOJ0HQQRxMwB4i62bcXqE42aFdxG8iM5
-         4oT2u3EvKiYQxEsk8ziMb+B3DjpJ3a2FJ9hw+B5s4/ei577wzFcJiydM4rbUdX/CI7wn
-         z8PssxeCq2ZaDvnIty8MS6bss8x3wbHfVahILStXx/ctqr9LciSBto9MCil4kSubY5NF
-         bPMw==
-X-Gm-Message-State: APjAAAVqiOt4qdX+oRcZeL79LO7tGirTYh8O83jkAkwDDw+0eCZFIEIP
-        X5aqJd81YnY1Utnywkp7rQlnrJeAOvxxUil3tDEA+Yhlxncz
-X-Google-Smtp-Source: APXvYqzmCcPpAOBdNuD9Ev1pqPdV19MSSMdBj0L/pBv6PPj9f2Tfbbyx1IkifM/VxR8c/6dmTyzBT3m7EUYjHqo6Wft5+wVWKH76
+        id S1727552AbfHLKAq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Aug 2019 06:00:46 -0400
+Received: from mga06.intel.com ([134.134.136.31]:54562 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727423AbfHLKAq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Aug 2019 06:00:46 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Aug 2019 03:00:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,377,1559545200"; 
+   d="asc'?scan'208";a="183510825"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Aug 2019 03:00:19 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for v5.3-rc
+Date:   Mon, 12 Aug 2019 13:00:15 +0300
+Message-ID: <87a7ceu2j4.fsf@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:a1c7:: with SMTP id o7mr37620966jah.26.1565603401135;
- Mon, 12 Aug 2019 02:50:01 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 02:50:01 -0700
-In-Reply-To: <1565602332.14671.5.camel@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009587b8058fe87274@google.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in hidraw_ioctl
-From:   syzbot <syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-usb@vger.kernel.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot has tested the proposed patch but the reproducer still triggered  
-crash:
-KASAN: slab-out-of-bounds Read in hidraw_ioctl
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in strnlen+0x75/0x80 lib/string.c:542
-Read of size 1 at addr ffff8881d6a51f38 by task syz-executor.2/2785
-
-CPU: 1 PID: 2785 Comm: syz-executor.2 Not tainted 5.3.0-rc2+ #1
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description+0x6a/0x32c mm/kasan/report.c:351
-  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-  kasan_report+0xe/0x12 mm/kasan/common.c:612
-  strnlen+0x75/0x80 lib/string.c:542
-  strnlen include/linux/string.h:292 [inline]
-  hidraw_ioctl+0x247/0xaa0 drivers/hid/hidraw.c:446
-  vfs_ioctl fs/ioctl.c:46 [inline]
-  file_ioctl fs/ioctl.c:509 [inline]
-  do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
-  ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
-  __do_sys_ioctl fs/ioctl.c:720 [inline]
-  __se_sys_ioctl fs/ioctl.c:718 [inline]
-  __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
-  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x459829
-Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fc7df1d0c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459829
-RDX: 0000000000000000 RSI: 0000000080404805 RDI: 0000000000000004
-RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc7df1d16d4
-R13: 00000000004c21de R14: 00000000004d5620 R15: 00000000ffffffff
-
-Allocated by task 2868:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_kmalloc mm/kasan/common.c:487 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:460
-  slab_post_alloc_hook mm/slab.h:520 [inline]
-  slab_alloc_node mm/slub.c:2766 [inline]
-  __kmalloc_node_track_caller+0xd0/0x230 mm/slub.c:4361
-  __kmalloc_reserve.isra.0+0x39/0xe0 net/core/skbuff.c:141
-  __alloc_skb+0xef/0x5a0 net/core/skbuff.c:209
-  alloc_skb include/linux/skbuff.h:1055 [inline]
-  alloc_uevent_skb+0x7b/0x210 lib/kobject_uevent.c:289
-  uevent_net_broadcast_untagged lib/kobject_uevent.c:325 [inline]
-  kobject_uevent_net_broadcast lib/kobject_uevent.c:408 [inline]
-  kobject_uevent_env+0x8ee/0x1160 lib/kobject_uevent.c:592
-  device_add+0xade/0x16f0 drivers/base/core.c:2113
-  hid_add_device+0x33c/0x990 drivers/hid/hid-core.c:2365
-  usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x650 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:882
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2114
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 238:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
-  slab_free_hook mm/slub.c:1423 [inline]
-  slab_free_freelist_hook mm/slub.c:1470 [inline]
-  slab_free mm/slub.c:3012 [inline]
-  kfree+0xe4/0x2f0 mm/slub.c:3953
-  skb_free_head+0x8b/0xa0 net/core/skbuff.c:591
-  skb_release_data+0x41f/0x7c0 net/core/skbuff.c:611
-  skb_release_all+0x46/0x60 net/core/skbuff.c:665
-  __kfree_skb net/core/skbuff.c:679 [inline]
-  consume_skb net/core/skbuff.c:838 [inline]
-  consume_skb+0xd9/0x320 net/core/skbuff.c:832
-  skb_free_datagram+0x16/0xf0 net/core/datagram.c:328
-  netlink_recvmsg+0x65e/0xee0 net/netlink/af_netlink.c:1996
-  sock_recvmsg_nosec net/socket.c:871 [inline]
-  sock_recvmsg net/socket.c:889 [inline]
-  sock_recvmsg+0xca/0x110 net/socket.c:885
-  ___sys_recvmsg+0x271/0x5a0 net/socket.c:2480
-  __sys_recvmsg+0xe9/0x1b0 net/socket.c:2537
-  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-The buggy address belongs to the object at ffff8881d6a51b00
-  which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 56 bytes to the right of
-  1024-byte region [ffff8881d6a51b00, ffff8881d6a51f00)
-The buggy address belongs to the page:
-page:ffffea00075a9400 refcount:1 mapcount:0 mapping:ffff8881da002280  
-index:0x0 compound_mapcount: 0
-flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da002280
-raw: 0000000000000000 00000000000e000e 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8881d6a51e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d6a51e80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff8881d6a51f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                                         ^
-  ffff8881d6a51f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d6a52000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
-Tested on:
+Hi Greg,
 
-commit:         e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1183deee600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1603c7c2600000
+here's a pull request for some fixes that I collected from linux-usb
+mailing list.
 
+Let me know if you want anything to be changed.
+
+Cheers
+
+The following changes since commit d45331b00ddb179e291766617259261c112db872:
+
+  Linux 5.3-rc4 (2019-08-11 13:26:41 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/fixes-fo=
+r-v5.3-rc4
+
+for you to fetch changes up to 4a56a478a525d6427be90753451c40e1327caa1a:
+
+  usb: gadget: mass_storage: Fix races between fsg_disable and fsg_set_alt =
+(2019-08-12 08:55:24 +0300)
+
+=2D---------------------------------------------------------------
+USB: fixes for v5.3-rc4
+
+Just a three fixes this time around.
+
+A race condition on mass storage gadget between disable() and
+set_alt()
+
+Clear a flag that was left set upon reset or disconnect
+
+A fix for renesas_usb3 UDC's sysfs interface
+
+=2D---------------------------------------------------------------
+Benjamin Herrenschmidt (2):
+      usb: gadget: composite: Clear "suspended" on reset/disconnect
+      usb: gadget: mass_storage: Fix races between fsg_disable and fsg_set_=
+alt
+
+Yoshihiro Shimoda (1):
+      usb: gadget: udc: renesas_usb3: Fix sysfs interface of "role"
+
+ drivers/usb/gadget/composite.c               |  1 +
+ drivers/usb/gadget/function/f_mass_storage.c | 28 ++++++++++++++++++------=
+----
+ drivers/usb/gadget/udc/renesas_usb3.c        |  5 +++--
+ 3 files changed, 22 insertions(+), 12 deletions(-)
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1ROK8ACgkQzL64meEa
+mQY+Xw//bTPzmz/jyAPF+I75rYqWIa/8uXRNzvWf0dA2QlV2EtS6LdXIRazy9EWU
+Vtivfy5S2RDAUYBZYNuyhKHzF8fZTg37jWierxQySgrDxzZPu+woDVO8CHpdE3za
+szj/pRHDVyLR/wiYbUyjegX4+AeDzSNzNKzXbV8H7iYCR/BITwdbE6qD/kN/VzOr
+nLh2e53/gjL+KQ5qKJyJaHO1kFLgKY9Hvf2AM9mQkonQqrkuv+yoH+cEOkMzX4Mi
+wDkgiu8UKM96N4965+JDR7vPQyFH+ZOu1T9lNFF01/QJ2DwEIyy1K52GY90upLjZ
+p2wflsCbDbyDrx4wbWclawrfBMhiHipeixPysAGijQHbjm4EuU2m0ou/MOp2JjEj
+PAepmgjWuBbN4am0vzuAtEQ8IuM17z+dsOHmJnBAByAsJJjzcfqLIJt0ztjHlBU4
+4sarbuT4UVGfw/SYyM7jRc9jBwO49I+A3mE+yWWGcfd0gAPt6gSaLhng+YtWweIB
+K6Dia3C+w8C/+qCOhrLh6b1fEmsID593KSuoY9Qf6QXFJuMNTfSb3nrJuEM6kvwT
+GogBZz4+VNPKDtcHw0iXVosqm39xW6LFrBs0Vrw/YKZ9ZSk0rHypLFSdOckLR9C8
+np/LbIVo8uFwkEe/bsLLCOzMMluZIEKT+igAGVCv9qI5FHd/N2U=
+=bSpz
+-----END PGP SIGNATURE-----
+--=-=-=--
