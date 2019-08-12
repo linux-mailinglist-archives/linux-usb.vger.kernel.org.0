@@ -2,357 +2,286 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F1989AC3
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 12:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD2889B73
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 12:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727515AbfHLKFu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Aug 2019 06:05:50 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:53996 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727409AbfHLKFu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 06:05:50 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7CA5inM117333;
-        Mon, 12 Aug 2019 05:05:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1565604344;
-        bh=2squYM050JBpZFBL7wu2/TiVqNRBbePM/Vxhi0sruKY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=dCzkjnfsNb9WFqvjmKkh7Bm+8Q+/VSmHnRbPAN1JBtSh40qAG+6SzhxhxR0axNVBC
-         v3o02LJLeFYW7JlepFQ8KRvyimrCHNHLGXf1kj95amfCuCyy0x3ipAozM2pzzakk/S
-         mGeNKJOzfLotwzvV1EaqUlHE6vyr3ACW/ibFU/F0=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7CA5i66122540
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 12 Aug 2019 05:05:44 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 12
- Aug 2019 05:05:43 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 12 Aug 2019 05:05:43 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7CA5e8I029957;
-        Mon, 12 Aug 2019 05:05:41 -0500
-Subject: Re: [PATCH v10 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
-To:     Pawel Laszczak <pawell@cadence.com>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>
+        id S1727762AbfHLK1D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Aug 2019 06:27:03 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:18854 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727678AbfHLK1D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 06:27:03 -0400
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7CAM72L030010;
+        Mon, 12 Aug 2019 03:26:53 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=rAaqBJw3QtHyTYAXsn/aIsUwBCktT6oFG0kU7VejlY8=;
+ b=OheWp6brGQYirShwElly4iVfQOhALTn0BB2wmSCJ+sY7qCfKp3dD+dEQ7Jv3QN9zP9MZ
+ tAeMmyR6sKTaFQ5EWpOzgPjwVinPYQzGdGIRgHQ7eQOcX9U00UFd8hDVP/zaG/uVcgBP
+ WoQJWNxa8CmE4C3DrqUSkmla5SVFU0DYI0tZiM8iMqwIxU+bFb5maYR2ojsp6zlDH46r
+ pVorRjzjI6qPh0Vk1rX9m2RO1+IWOEYFF1fEUJP/U6yShWe8dyptymkjrScFXyIumTE+
+ jIF87oHGNM9MFJOXKvKRki9au/32NPpYYtbfvX9HU3cIpLRUqFdlff+/Vj+Ei3bE/aBd RQ== 
+Authentication-Results: cadence.com;
+        spf=pass smtp.mailfrom=pawell@cadence.com
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2051.outbound.protection.outlook.com [104.47.36.51])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 2u9tfs5akk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 12 Aug 2019 03:26:52 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NEq28/v18nsJuZRvzvn7YdkR+gZQxARxttg+ha4h+rTGJG91VBdhKZ2iTIyux6ciVHEcFgSPW4OzyLQpeuG6+hycyU7ZWcdVwwJuVRB3Nifg58sACQoSINaggqb6mAQnsH9LXqU1DstAw887eWEs4eWmKPROF8TgFVIlF4noFS2Hoatj558aojgAeoxKfSrFJ2qpSXqvXFuAfc8y/HEz1P5Y+haRvRbaeVTCCbvfVXjsaKueFsM+Oo3S2UvMvYSvZKCzSZ0rmuqZPbapwOfSg4qI6e4ondG7u721w3mSK+j8fMf+F4RxWFtSx4UbtcuTj2aeBdFe+Gksz5tajJiftg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rAaqBJw3QtHyTYAXsn/aIsUwBCktT6oFG0kU7VejlY8=;
+ b=BOsc0ZbmFqaYTsah02ug7f4kahlGyQ7+2xMTIioVNha1DLOJT8A2o4A1IiR2BEKlVC3el1TyV2vGa92yA31vJAdxLYzHarI3oR3ycAbtZnmG6utqfdHAyXrALXtOc2OcgH7m4TuWaPRzoNHIJfgeTIa934JG6iadhy3cGsSzs/2YY+L3vN+pLBGC/yC7eL7sTB8Bbc5gCOCXT/ncy7imE0C0y2yiP6uJli09NuyTRwrS0MLzewqyfqkiGmmklP5m8wvQScjWihTvBHwIZj9nNMDnoHKnCdZ69NruQYba2pGBNxcOpA1sddOrEf30dX1zcy5tTZFTUK0fnFbghDS7GA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rAaqBJw3QtHyTYAXsn/aIsUwBCktT6oFG0kU7VejlY8=;
+ b=BbwTQftlXCsZezC7JE0ea6EW9v447j3oz5SOR/bfqRSPX6stLgbyAdtrqYRJIjn3yM7d53xyt4dZsUxT+8okrIXcwbxdF0IEc+gpZBs5zEnd0blKqm1JTiQP1NOxmsiYY0FxEmdAWFSV9W8uv8V8sWWZeN50nldMHK66v+RNFcA=
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
+ BYAPR07MB4998.namprd07.prod.outlook.com (52.135.238.215) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2157.14; Mon, 12 Aug 2019 10:26:49 +0000
+Received: from BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::98f2:1592:6dff:63e]) by BYAPR07MB4709.namprd07.prod.outlook.com
+ ([fe80::98f2:1592:6dff:63e%7]) with mapi id 15.20.2136.022; Mon, 12 Aug 2019
+ 10:26:49 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "jbergsagel@ti.com" <jbergsagel@ti.com>,
         "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
         Suresh Punnoose <sureshp@cadence.com>,
+        "peter.chen@nxp.com" <peter.chen@nxp.com>,
         Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Anil Joy Varughese <aniljoy@cadence.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
-References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
- <1563733939-21214-6-git-send-email-pawell@cadence.com>
- <88742d5b-ee10-cf4e-6724-58e7bdd19cb9@ti.com>
- <BYAPR07MB47090BCA728600F0C2F4E129DDD00@BYAPR07MB4709.namprd07.prod.outlook.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <c5c52dae-21c8-340a-cbca-5f269dabb890@ti.com>
-Date:   Mon, 12 Aug 2019 13:05:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <BYAPR07MB47090BCA728600F0C2F4E129DDD00@BYAPR07MB4709.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
+        Rahul Kumar <kurahul@cadence.com>
+Subject: RE: [PATCH v9 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
+Thread-Topic: [PATCH v9 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
+Thread-Index: AQHVMyCBLRb+XoB9zUqxphM8AIPBC6bAUmQAgAroVsCAJHZ6gIAFRjxwgAI+roCAAAREAIAALKOAgAAG8gCAABEiAIAABvIA
+Date:   Mon, 12 Aug 2019 10:26:49 +0000
+Message-ID: <BYAPR07MB470931F8C699784CC88E21CBDDD30@BYAPR07MB4709.namprd07.prod.outlook.com>
+References: <1562324238-16655-1-git-send-email-pawell@cadence.com>
+ <1562324238-16655-6-git-send-email-pawell@cadence.com>
+ <877e8tm25r.fsf@linux.intel.com>
+ <BYAPR07MB4709152CB29B6B027ABEB688DDCF0@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <8736idnu0q.fsf@gmail.com>
+ <BYAPR07MB4709B0A4FADFB76183D651DCDDD10@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <87k1bjvtvi.fsf@gmail.com>
+ <BYAPR07MB470926DA6241B54FC5AF3C2ADDD30@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <87imr2u77c.fsf@gmail.com>
+ <BYAPR07MB4709C07ED94C952886858F14DDD30@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <87d0hau37p.fsf@gmail.com>
+In-Reply-To: <87d0hau37p.fsf@gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-tag-bcast: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctOGExMTQ0MjAtYmNlYi0xMWU5LTg3NDUtMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDhhMTE0NDIxLWJjZWItMTFlOS04NzQ1LTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iNTYyMiIgdD0iMTMyMTAwNzkxNDQxODQ1MDAwIiBoPSJSa2UrckFNMzVmYzhvWEN0SHBMRng5VEdPVTg9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-paste: 
+x-dg-rorf: 
+x-originating-ip: [158.140.1.28]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7588da68-400b-4c07-3e76-08d71f0f95b6
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR07MB4998;
+x-ms-traffictypediagnostic: BYAPR07MB4998:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR07MB4998FF275C2F23D71FF59EE4DDD30@BYAPR07MB4998.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 012792EC17
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(39860400002)(366004)(136003)(396003)(189003)(199004)(36092001)(51444003)(305945005)(71190400001)(71200400001)(76176011)(7696005)(74316002)(6506007)(25786009)(478600001)(7416002)(7736002)(64756008)(45080400002)(66446008)(66946007)(76116006)(66476007)(66556008)(229853002)(6436002)(99286004)(54906003)(110136005)(316002)(3846002)(52536014)(107886003)(6116002)(8936002)(86362001)(81166006)(26005)(81156014)(53936002)(9686003)(2501003)(66066001)(33656002)(186003)(14444005)(256004)(6246003)(5660300002)(2906002)(55016002)(446003)(8676002)(11346002)(476003)(4326008)(102836004)(486006)(14454004);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB4998;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: cadence.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: zqJQo/SLlyM88qWfrHho6VujtVrsChYGGzjMOHiqgSp4Wsx5lT3Q/9lTyPxej6tfUzi4Nk+mk60rR9++xJKZzwE85dmMet4mlKMK82aHyBFyTXV9wefkYdyo1IIKj1i0mYi4+xAhnM+kBF6oihjRHODoE8z1CXpf4FI8uBi0NS3Bmhw/OSI5pSGjdv5hM+2E3Iy1XfJmvoem7f4mvX15C248SdbuMibJV5laVdZ2MKkMV7idhLKyAh9pKqGmBSnaQnlS8i36Qp08bifHBeqLW5vrIJB5uCE0PB5bj5yxCoUtLQy6a0HLpNhO7kqUFqCeR7b4veoXKenfRWQWOkkGydQE/oSZOadiHogTeTjOeztbwbHTpJ3DXDd2Uno0WeVsiG9SLa8wrPT1QmDJ+dxTtRX5qfsaOKcb41+HsSCsNeY=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7588da68-400b-4c07-3e76-08d71f0f95b6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2019 10:26:49.1254
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pawell@global.cadence.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB4998
+X-Proofpoint-SPF-Result: pass
+X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
+ include:mktomail.com include:spf-0014ca01.pphosted.com
+ include:spf.protection.outlook.com include:auth.msgapp.com
+ include:spf.mandrillapp.com ~all
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-12_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
+ spamscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=987 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908120116
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 11/08/2019 14:59, Pawel Laszczak wrote:
-> Hi,
-> 
->>
->> On 21/07/2019 21:32, Pawel Laszczak wrote:
->>> This patch introduce new Cadence USBSS DRD driver to Linux kernel.
+>
+>Hi,
+>
+>Pawel Laszczak <pawell@cadence.com> writes:
+>>>>>>>Quick question, then: these ISTS registers, are they masked interrup=
+t
+>>>>>>>status or raw interrupt status?
+>>>>>>
+>>>>>> Yes it's masked, but after masking them the new interrupts will not =
+be reported
+>>>>>> In ISTS registers. Form this reason I can mask only reported interru=
+pt.
+>>>>>
+>>>>>and what happens when you unmask the registers? Do they get reported?
+>>>>
+>>>> No they are not reported in case of USB_ISTS register.
+>>>> They should be reported in case EP_ISTS, but I need to test it.
 >>>
->>> The Cadence USBSS DRD Controller is a highly configurable IP Core which
->>> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
->>> Host Only (XHCI)configurations.
+>>>okay, please _do_ test and verify the behavior. The description above
+>>>sounds really surprising to me. Does it really mean that if you mask all
+>>>USB_ISTS and then disconnect the cable while interrupt is masked, you
+>>>won't know cable was disconnected?
+>>
+>> Yes, exactly.
+>>
+>> Initially I've tested it and it's work correct.
+>> I can even simply write 0 to EP_IEN in hard irq and ~0 in thread handler=
+.
+>> It's simplest and sufficient way.
+>
+>okay. Just to be sure I understand correctly. If you mask USB_IEN, then
+>we would miss a cable disconnect event. Right?
+>
+>>>>>>>>>> +		struct cdns3_aligned_buf *buf, *tmp;
+>>>>>>>>>> +
+>>>>>>>>>> +		list_for_each_entry_safe(buf, tmp, &priv_dev->aligned_buf_lis=
+t,
+>>>>>>>>>> +					 list) {
+>>>>>>>>>> +			if (!buf->in_use) {
+>>>>>>>>>> +				list_del(&buf->list);
+>>>>>>>>>> +
+>>>>>>>>>> +				spin_unlock_irqrestore(&priv_dev->lock, flags);
+>>>>>>>>>
+>>>>>>>>>creates the possibility of a race condition
+>>>>>>>> Why? In this place the buf can't be used.
+>>>>>>>
+>>>>>>>but you're reenabling interrupts, right?
+>>>>>>
+>>>>>> Yes, driver frees not used buffers here.
+>>>>>> I think that it's the safest place for this purpose.
+>>>>>
+>>>>>I guess you missed the point a little. Since you reenable interrupts
+>>>>>just to free the buffer, you end up creating the possibility for a rac=
+e
+>>>>>condition. Specially since you don't mask all interrupt events. The
+>>>>>moment you reenable interrupts, one of your not-unmasked interrupt
+>>>>>sources could trigger, then top-half gets scheduled which tries to wak=
+e
+>>>>>up the IRQ thread again and things go boom.
+>>>>
+>>>> Ok, I think I understand.  So I have 3 options:
+>>>> 1. Mask the USB_IEN and EP_IEN interrupts, but then I can lost some US=
+B_ISTS
+>>>> events. It's dangerous options.
 >>>
->>> The current driver has been validated with FPGA platform. We have
->>> support for PCIe bus, which is used on FPGA prototyping.
+>>>sure sounds dangerous, but also sounds quite "peculiar" :-)
 >>>
->>> The host side of USBSS-DRD controller is compliant with XHCI
->>> specification, so it works with standard XHCI Linux driver.
+>>>> 2. Remove implementation of handling unaligned buffers and assume that
+>>>>     upper layer will worry about this. What with vendor specific drive=
+rs that
+>>>>     can be used by companies and not upstreamed  ?
+>>>>     It could be good to have such safety mechanism even if it is not c=
+urrently used.
 >>>
->>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->>> ---
->>>  drivers/usb/Kconfig                |    2 +
->>>  drivers/usb/Makefile               |    2 +
->>>  drivers/usb/cdns3/Kconfig          |   46 +
->>>  drivers/usb/cdns3/Makefile         |   17 +
->>>  drivers/usb/cdns3/cdns3-pci-wrap.c |  203 +++
->>>  drivers/usb/cdns3/core.c           |  554 +++++++
->>>  drivers/usb/cdns3/core.h           |  109 ++
->>>  drivers/usb/cdns3/debug.h          |  171 ++
->>>  drivers/usb/cdns3/debugfs.c        |   87 ++
->>>  drivers/usb/cdns3/drd.c            |  390 +++++
->>>  drivers/usb/cdns3/drd.h            |  166 ++
->>>  drivers/usb/cdns3/ep0.c            |  914 +++++++++++
->>>  drivers/usb/cdns3/gadget-export.h  |   28 +
->>>  drivers/usb/cdns3/gadget.c         | 2338 ++++++++++++++++++++++++++++
->>>  drivers/usb/cdns3/gadget.h         | 1321 ++++++++++++++++
->>>  drivers/usb/cdns3/host-export.h    |   28 +
->>>  drivers/usb/cdns3/host.c           |   71 +
->>>  drivers/usb/cdns3/trace.c          |   11 +
->>>  drivers/usb/cdns3/trace.h          |  493 ++++++
->>>  19 files changed, 6951 insertions(+)
->>>  create mode 100644 drivers/usb/cdns3/Kconfig
->>>  create mode 100644 drivers/usb/cdns3/Makefile
->>>  create mode 100644 drivers/usb/cdns3/cdns3-pci-wrap.c
->>>  create mode 100644 drivers/usb/cdns3/core.c
->>>  create mode 100644 drivers/usb/cdns3/core.h
->>>  create mode 100644 drivers/usb/cdns3/debug.h
->>>  create mode 100644 drivers/usb/cdns3/debugfs.c
->>>  create mode 100644 drivers/usb/cdns3/drd.c
->>>  create mode 100644 drivers/usb/cdns3/drd.h
->>>  create mode 100644 drivers/usb/cdns3/ep0.c
->>>  create mode 100644 drivers/usb/cdns3/gadget-export.h
->>>  create mode 100644 drivers/usb/cdns3/gadget.c
->>>  create mode 100644 drivers/usb/cdns3/gadget.h
->>>  create mode 100644 drivers/usb/cdns3/host-export.h
->>>  create mode 100644 drivers/usb/cdns3/host.c
->>>  create mode 100644 drivers/usb/cdns3/trace.c
->>>  create mode 100644 drivers/usb/cdns3/trace.h
+>>>dunno. It may become dead code that's NEVER used :-)
 >>>
+>>>> 3. Delegate this part of code for instance to separate thread that wil=
+l be called
+>>>>    In free time.
+>>>
+>>>Yet another thread? Can't you just run this right before giving back the
+>>>USB request? So, don't do it from IRQ handler, but from giveback path?
+>>
+>> Do you mean in:
+>> 	if (request->complete) {
+>> 		spin_unlock(&priv_dev->lock);
+>> 		if (priv_dev->run_garbage_collector) {
+>> 			....
+>> 		}
+>> 		usb_gadget_giveback_request(&priv_ep->endpoint,
+>> 					    request);
+>> 		spin_lock(&priv_dev->lock);
+>> 	}
+>> ??
+>
+>right, you can do it right before giving back the request. Or right
+>after.
+>
+>> I ask because this is finally also called from IRQ handler:
+>>
+>> cdns3_device_thread_irq_handler
+>>     -> cdns3_check_ep_interrupt_proceed
+>>         -> cdns3_transfer_completed
+>>             -> cdns3_gadget_giveback
+>>                 -> usb_gadget_giveback_request
+>
+>Did you notice that it doesn't reenable interrupts, though?
 
-<snip>
+I noticed that there is a lack of reenabling interrupts :)
 
->>
->>> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
->>> new file mode 100644
->>> index 000000000000..291f08be56fe
->>> --- /dev/null
->>> +++ b/drivers/usb/cdns3/gadget.c
->>> @@ -0,0 +1,2338 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * Cadence USBSS DRD Driver - gadget side.
->>> + *
->>> + * Copyright (C) 2018-2019 Cadence Design Systems.
->>> + * Copyright (C) 2017-2018 NXP
->>> + *
->>> + * Authors: Pawel Jez <pjez@cadence.com>,
->>> + *          Pawel Laszczak <pawell@cadence.com>
->>> + *          Peter Chen <peter.chen@nxp.com>
->>> + */
->>> +
->>
->> <snip>
->>
->>> +/**
->>> + * cdns3_device_irq_handler- interrupt handler for device part of controller
->>> + *
->>> + * @irq: irq number for cdns3 core device
->>> + * @data: structure of cdns3
->>> + *
->>> + * Returns IRQ_HANDLED or IRQ_NONE
->>> + */
->>> +static irqreturn_t cdns3_device_irq_handler(int irq, void *data)
->>> +{
->>> +	struct cdns3_device *priv_dev;
->>> +	struct cdns3 *cdns = data;
->>> +	irqreturn_t ret = IRQ_NONE;
->>> +	unsigned long flags;
->>> +	u32 reg;
->>> +
->>> +	priv_dev = cdns->gadget_dev;
->>> +	spin_lock_irqsave(&priv_dev->lock, flags);
->>> +
->>> +	/* check USB device interrupt */
->>> +	reg = readl(&priv_dev->regs->usb_ists);
->>> +
->>> +	if (reg) {
->>> +		writel(reg, &priv_dev->regs->usb_ists);
->>
->> Do we need to mask device interrupts till thread handler has done processing
->> current set of events?
-> 
-> Yes, we need do this to avoid raising the next the same interrupts. 
-> If we return back from hard irq handler without clearing reported interrupts,
-> then system report them again. The solution for this is to use IRQF_ONESHOT
-> flag during registering interrupt, but I can't use this flag 
-> because I have shared interrupt line with other component. 
-> 
-> In this version these (usb_ists) interrupts are handled in hard irq, but in next version
-> will be moved to thread handler. 
-> 
->>> +		cdns3_check_usb_interrupt_proceed(priv_dev, reg);
->>> +		ret = IRQ_HANDLED;
->>> +	}
->>> +
->>> +	/* check endpoint interrupt */
->>> +	reg = readl(&priv_dev->regs->ep_ists);
->>> +
->>> +	if (reg) {
->>> +		priv_dev->shadow_ep_en |= reg;
->>> +		reg = ~reg & readl(&priv_dev->regs->ep_ien);
->>> +		/* mask deferred interrupt. */
->>> +		writel(reg, &priv_dev->regs->ep_ien);
->>> +		ret = IRQ_WAKE_THREAD;
->>> +	}
->>> +
->>> +	spin_unlock_irqrestore(&priv_dev->lock, flags);
->>> +	return ret;
->>> +}
->>> +
->>
->> <snip>
->>
->>> +
->>> +static int cdns3_gadget_start(struct cdns3 *cdns)
->>> +{
->>> +	struct cdns3_device *priv_dev;
->>> +	u32 max_speed;
->>> +	int ret;
->>> +
->>> +	priv_dev = kzalloc(sizeof(*priv_dev), GFP_KERNEL);
->>> +	if (!priv_dev)
->>> +		return -ENOMEM;
->>> +
->>> +	cdns->gadget_dev = priv_dev;
->>> +	priv_dev->sysdev = cdns->dev;
->>> +	priv_dev->dev = cdns->dev;
->>> +	priv_dev->regs = cdns->dev_regs;
->>> +
->>> +	device_property_read_u16(priv_dev->dev, "cdns,on-chip-buff-size",
->>> +				 &priv_dev->onchip_buffers);
->>> +
->>> +	if (priv_dev->onchip_buffers <=  0) {
->>> +		u32 reg = readl(&priv_dev->regs->usb_cap2);
->>> +
->>> +		priv_dev->onchip_buffers = USB_CAP2_ACTUAL_MEM_SIZE(reg);
->>> +	}
->>> +
->>> +	if (!priv_dev->onchip_buffers)
->>> +		priv_dev->onchip_buffers = 256;
->>> +
->>> +	max_speed = usb_get_maximum_speed(cdns->dev);
->>> +
->>> +	/* Check the maximum_speed parameter */
->>> +	switch (max_speed) {
->>> +	case USB_SPEED_FULL:
->>
->> In this case we need to limit controller max speed to full-speed as system
->> integrator would expect that. e.g. in DT node, maximum-speed = "full-speed";
->>
->> I suppose we need to set the force Full-speed bit here?
->>
->>> +	case USB_SPEED_HIGH:
->>
->> Here we need to restrict device controller max-speed to high-speed.
->>
-> 
-> Why system integrator would limit the speed of controller? 
+The problem is that If I have disabled interrupt the kernel complains
+for using dma_free_coherent function in such place.=20
 
-To save cost? For many use cases, high-speed is more then sufficient.
+Here you have a fragment of complaints:=20
+[ 7420.502863] WARNING: CPU: 0 PID: 10260 at kernel/dma/mapping.c:281 dma_f=
+ree_attrs+0xa0/0xd0
+[ 7420.502866] Modules linked in: usb_f_mass_storage cdns3(OE) cdns3_pci_wr=
+ap(OE) libcomposite
+		...
+[ 7420.502965]  cdns3_gadget_giveback+0x159/0x2a0 [cdns3]
+[ 7420.502975]  cdns3_transfer_completed+0xc5/0x3c0 [cdns3]
+[ 7420.502986]  cdns3_device_thread_irq_handler+0x1b1/0xab0 [cdns3]
+[ 7420.502991]  ? __schedule+0x333/0x7e0
+[ 7420.503001]  irq_thread_fn+0x26/0x60
+[ 7420.503006]  ? irq_thread+0xa8/0x1b0
+[ 7420.503011]  irq_thread+0x10e/0x1b0
+[ 7420.503015]  ? irq_forced_thread_fn+0x80/0x80
+[ 7420.503021]  ? wake_threads_waitq+0x30/0x30
+[ 7420.503029]  kthread+0x12c/0x150
+[ 7420.503034]  ? irq_thread_check_affinity+0xe0/0xe0
+[ 7420.503038]  ? kthread_park+0x90/0x90
+[ 7420.503045]  ret_from_fork+0x3a/0x50
+[ 7420.503061] irq event stamp: 2962
+[ 7420.503065] hardirqs last  enabled at (2961): [<ffffffffb252672c>] _raw_=
+spin_unlock_irq+0x2c/0x40
+[ 7420.503070] hardirqs last disabled at (2962): [<ffffffffb25268f5>] _raw_=
+spin_lock_irqsave+0x25/0x60
+[ 7420.503074] softirqs last  enabled at (2918): [<ffffffffb2800340>] __do_=
+softirq+0x340/0x451
+[ 7420.503079] softirqs last disabled at (2657): [<ffffffffb1aa02b6>] irq_e=
+xit+0xc6/0xd0
+[ 7420.503082] ---[ end trace d02652af11011c3b ]---
 
-> For debugging purpose it's  ok, but in production system it's better 
-> to use higher speed.
-> Do we relay need such functionality ?
+Maybe it's a bug in implementation of this function.  I allocate memory wit=
+h flag GFP_ATOMIC with=20
+disabled interrupt, but I can't free such memory.=20
 
-Mostly for testing purpose. I can just change the DT node's speed property
-to the lower speed to limit the controller to that speed.
-
-If we can achieve that with a few lines of code, why not support it?
-
-> 
->>> +	case USB_SPEED_SUPER:
->>> +		break;
->>> +	default:
->>> +		dev_err(cdns->dev, "invalid maximum_speed parameter %d\n",
->>> +			max_speed);
->>> +		/* fall through */
->>> +	case USB_SPEED_UNKNOWN:
->>> +		/* default to superspeed */
->>> +		max_speed = USB_SPEED_SUPER;
->>> +		break;
->>> +	}
->>> +
->>> +	/* fill gadget fields */
->>> +	priv_dev->gadget.max_speed = max_speed;
->>> +	priv_dev->gadget.speed = USB_SPEED_UNKNOWN;
->>> +	priv_dev->gadget.ops = &cdns3_gadget_ops;
->>> +	priv_dev->gadget.name = "usb-ss-gadget";
->>> +	priv_dev->gadget.sg_supported = 1;
->>> +
->>> +	spin_lock_init(&priv_dev->lock);
->>> +	INIT_WORK(&priv_dev->pending_status_wq,
->>> +		  cdns3_pending_setup_status_handler);
->>> +
->>> +	/* initialize endpoint container */
->>> +	INIT_LIST_HEAD(&priv_dev->gadget.ep_list);
->>> +	INIT_LIST_HEAD(&priv_dev->aligned_buf_list);
->>> +
->>> +	ret = cdns3_init_eps(priv_dev);
->>> +	if (ret) {
->>> +		dev_err(priv_dev->dev, "Failed to create endpoints\n");
->>> +		goto err1;
->>> +	}
->>> +
->>> +	/* allocate memory for setup packet buffer */
->>> +	priv_dev->setup_buf = dma_alloc_coherent(priv_dev->sysdev, 8,
->>> +						 &priv_dev->setup_dma, GFP_DMA);
->>> +	if (!priv_dev->setup_buf) {
->>> +		ret = -ENOMEM;
->>> +		goto err2;
->>> +	}
->>> +
->>> +	priv_dev->dev_ver = readl(&priv_dev->regs->usb_cap6);
->>> +
->>> +	dev_dbg(priv_dev->dev, "Device Controller version: %08x\n",
->>> +		readl(&priv_dev->regs->usb_cap6));
->>> +	dev_dbg(priv_dev->dev, "USB Capabilities:: %08x\n",
->>> +		readl(&priv_dev->regs->usb_cap1));
->>> +	dev_dbg(priv_dev->dev, "On-Chip memory cnfiguration: %08x\n",
->>> +		readl(&priv_dev->regs->usb_cap2));
->>> +
->>> +	priv_dev->dev_ver = GET_DEV_BASE_VERSION(priv_dev->dev_ver);
->>> +
->>> +	priv_dev->zlp_buf = kzalloc(CDNS3_EP_ZLP_BUF_SIZE, GFP_KERNEL);
->>> +	if (!priv_dev->zlp_buf) {
->>> +		ret = -ENOMEM;
->>> +		goto err3;
->>> +	}
->>> +
->>> +	/* add USB gadget device */
->>> +	ret = usb_add_gadget_udc(priv_dev->dev, &priv_dev->gadget);
->>> +	if (ret < 0) {
->>> +		dev_err(priv_dev->dev,
->>> +			"Failed to register USB device controller\n");
->>> +		goto err4;
->>> +	}
->>> +
->>> +	return 0;
->>> +err4:
->>> +	kfree(priv_dev->zlp_buf);
->>> +err3:
->>> +	dma_free_coherent(priv_dev->sysdev, 8, priv_dev->setup_buf,
->>> +			  priv_dev->setup_dma);
->>> +err2:
->>> +	cdns3_free_all_eps(priv_dev);
->>> +err1:
->>> +	cdns->gadget_dev = NULL;
->>> +	return ret;
->>> +}
->>> +
->>
-
-cheers,
--roger
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+--
+pawell
