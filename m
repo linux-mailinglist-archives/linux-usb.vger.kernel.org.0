@@ -2,74 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2A78B8D4
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 14:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E240C8B8E2
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 14:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728394AbfHMMnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 08:43:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728327AbfHMMnC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Aug 2019 08:43:02 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A0B2120578;
-        Tue, 13 Aug 2019 12:43:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565700181;
-        bh=VXKk41Wt478iNXMKBAO+rPvFh8uyaEaq4alpvMMP20o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IyOUegnCHWbh8RCFC75gcic4L8wPxpBirABdegJnRLEJX4C7tQucNYndyztZSP724
-         UYModhg9f7I2RkRlKcvd6mchu86mbMqfnhNWx9TxSBwCt8vQbxL9deEgwDLR+2RsNq
-         0wVXO+RVmE+jrghw9+cu0r+0pIKiccAiCRhkzOCc=
-Date:   Tue, 13 Aug 2019 14:42:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, maco@android.com,
-        kernel-team@android.com, arnd@arndb.de, geert@linux-m68k.org,
-        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@google.com, michal.lkml@markovi.net, mingo@redhat.com,
-        oneukum@suse.com, pombredanne@nexb.com, sam@ravnborg.org,
-        sboyd@codeaurora.org, sspatil@google.com,
-        stern@rowland.harvard.edu, tglx@linutronix.de,
-        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
-        yamada.masahiro@socionext.com
-Subject: Re: [PATCH v2 09/10] usb-storage: remove single-use define for
- debugging
-Message-ID: <20190813124259.GC14284@kroah.com>
-References: <20180716122125.175792-1-maco@android.com>
- <20190813121733.52480-1-maennich@google.com>
- <20190813121733.52480-10-maennich@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190813121733.52480-10-maennich@google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1728670AbfHMMnp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 08:43:45 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38764 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726903AbfHMMno (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 08:43:44 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 22B2CACD8;
+        Tue, 13 Aug 2019 12:43:43 +0000 (UTC)
+Message-ID: <1565700220.7043.8.camel@suse.com>
+Subject: Re: KMSAN: uninit-value in smsc75xx_bind
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+6966546b78d050bb0b5d@syzkaller.appspotmail.com>,
+        davem@davemloft.net, glider@google.com,
+        syzkaller-bugs@googlegroups.com, steve.glendinning@shawell.net,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Date:   Tue, 13 Aug 2019 14:43:40 +0200
+In-Reply-To: <0000000000009f4316058fab3bd7@google.com>
+References: <0000000000009f4316058fab3bd7@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 01:17:06PM +0100, Matthias Maennich wrote:
-> USB_STORAGE was defined as "usb-storage: " and used in a single location
-> as argument to printk. In order to be able to use the name
-> 'USB_STORAGE', drop the definition and use the string directly for the
-> printk call.
+Am Freitag, den 09.08.2019, 01:48 -0700 schrieb syzbot:
+> Hello,
 > 
-> Signed-off-by: Matthias Maennich <maennich@google.com>
-> ---
->  drivers/usb/storage/debug.h    | 2 --
->  drivers/usb/storage/scsiglue.c | 2 +-
->  2 files changed, 1 insertion(+), 3 deletions(-)
+> syzbot found the following crash on:
+> 
+> HEAD commit:    beaab8a3 fix KASAN build
+> git tree:       kmsan
 
-I'll go take this today.  The module really should just be using
-dev_err() there.  It needs to be cleaned up :(
+[..]
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+>   kmsan_report+0x162/0x2d0 mm/kmsan/kmsan_report.c:109
+>   __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:294
+>   smsc75xx_wait_ready drivers/net/usb/smsc75xx.c:976 [inline]
+>   smsc75xx_bind+0x541/0x12d0 drivers/net/usb/smsc75xx.c:1483
 
-thanks,
+> 
+> Local variable description: ----buf.i93@smsc75xx_bind
+> Variable was created at:
+>   __smsc75xx_read_reg drivers/net/usb/smsc75xx.c:83 [inline]
+>   smsc75xx_wait_ready drivers/net/usb/smsc75xx.c:969 [inline]
+>   smsc75xx_bind+0x44c/0x12d0 drivers/net/usb/smsc75xx.c:1483
+>   usbnet_probe+0x10d3/0x3950 drivers/net/usb/usbnet.c:1722
 
-greg k-h
+Hi,
+
+this looks like a false positive to me.
+The offending code is likely this:
+
+        if (size) {
+                buf = kmalloc(size, GFP_KERNEL);
+                if (!buf)
+                        goto out;
+        }
+
+        err = usb_control_msg(dev->udev, usb_rcvctrlpipe(dev->udev, 0),
+                              cmd, reqtype, value, index, buf, size,
+                              USB_CTRL_GET_TIMEOUT);
+
+which uses 'buf' uninitialized. But it is used for input.
+What is happening here?
+
+	Regards
+		Oliver
+
+
+
