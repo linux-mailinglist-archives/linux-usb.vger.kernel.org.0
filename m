@@ -2,93 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4320A8BAF3
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 15:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2998BAF8
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 15:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729326AbfHMN6o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 09:58:44 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:52166 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727407AbfHMN6o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 09:58:44 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 7880F608FF; Tue, 13 Aug 2019 13:58:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1565704723;
-        bh=M8oAe1f6maG+IxzSwYrxoIVVdKazq93Sv32mx1kHDTk=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=UnYXjBsohipGcIhOiU7MbVsbLEx9berNqc16y6AT7dc/+7gM6zxDlknkaGartFwBs
-         wTmVznRdzrY7vbtfaxJW34Ni3lRNUiHaW/8eEfkCugzi5yqEM6ZWHdysjhRjB3oQgt
-         VkLtVzoHaMUKupIMsrs2eneH48+uRPOHZlasrHwI=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id AA5A560734;
-        Tue, 13 Aug 2019 13:58:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1565704722;
-        bh=M8oAe1f6maG+IxzSwYrxoIVVdKazq93Sv32mx1kHDTk=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=IaI8Q6n2wPeQJAHwk4P9fPwbfo0nHJdPoiRlNZit9WBgBvAj3zU2/5X/WCuv732RX
-         vZFSpNsdsZs39QlwnnytW2C2fIDI61aQ+3GkJUV7EJzbTGFvac0y/PwRTQQFfQ5+Jl
-         a0EinvMjNaLJuO2Kne/S5kgkz5Rrrf8sqfsWTFiY=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org AA5A560734
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Ganapathi Bhat <gbhat@marvell.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+dc4127f950da51639216@syzkaller.appspotmail.com>,
-        "amitkarwar\@gmail.com" <amitkarwar@gmail.com>,
-        "davem\@davemloft.net" <davem@davemloft.net>,
-        "huxinming820\@gmail.com" <huxinming820@gmail.com>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        "nishants\@marvell.com" <nishants@marvell.com>,
-        "syzkaller-bugs\@googlegroups.com" <syzkaller-bugs@googlegroups.com>
-Subject: Re: [EXT] INFO: trying to register non-static key in del_timer_sync (2)
-References: <000000000000927a7b0586561537@google.com>
-        <MN2PR18MB263783F52CAD4A335FD8BB34A01A0@MN2PR18MB2637.namprd18.prod.outlook.com>
-        <CACT4Y+aQzBkAq86Hx4jNFnAUzjXnq8cS2NZKfeCaFrZa__g-cg@mail.gmail.com>
-        <MN2PR18MB26372D98386D79736A7947EEA0140@MN2PR18MB2637.namprd18.prod.outlook.com>
-        <MN2PR18MB263710E8F1F8FFA06B2EDB3CA0EC0@MN2PR18MB2637.namprd18.prod.outlook.com>
-        <CAAeHK+z8MBNikw_x50Crf8ZhOhcF=uvPHakvBx44K77xHRUNfg@mail.gmail.com>
-Date:   Tue, 13 Aug 2019 16:58:36 +0300
-In-Reply-To: <CAAeHK+z8MBNikw_x50Crf8ZhOhcF=uvPHakvBx44K77xHRUNfg@mail.gmail.com>
-        (Andrey Konovalov's message of "Tue, 13 Aug 2019 15:36:33 +0200")
-Message-ID: <87k1bhb20j.fsf@kamboji.qca.qualcomm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+        id S1728989AbfHMN7v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 09:59:51 -0400
+Received: from mail-pl1-f171.google.com ([209.85.214.171]:42306 "EHLO
+        mail-pl1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727768AbfHMN7u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 09:59:50 -0400
+Received: by mail-pl1-f171.google.com with SMTP id ay6so49380114plb.9
+        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 06:59:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ftBFYEynUrG71VYjZU1HexLV5i8GQkTYaQFk1n/5Tno=;
+        b=mJDQrkSUMldAyUvXs55XlGqmDLCH0aQpx7ChM9DX7T0b4BiZ6SrfNoA+Lx4nAfZ5ig
+         Om614mrZQMK4EtryDxkjvS+etMcGQVgnqSJRY9Tl1JVksKV1jAZ2ruA+Q9P2KrSClOsf
+         tOitY9VIpO4hVU9KLbd87AVOTw7gU76RSNTcfT+HGxFannGCeW4/7HD9oXkg9abMxPBp
+         9+82LRdnnlyPHo4sGk1FiUjvxTLFRX5cI+99QAr5gMehrDjNzZCz9wrechG4MmXVGIrm
+         EcbufeJ4F+WFBdiB6Sob6yXdlp4c8KnPZGeQNY3qpUHzCZcUo7NXAILbmistl2UHjXtB
+         UfPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ftBFYEynUrG71VYjZU1HexLV5i8GQkTYaQFk1n/5Tno=;
+        b=FFDEyOInvE31xJuaMhaxWLDgLlVdl5LgdUYtqnIe8zPt7B7fWubtb1elgvQ10Kr6jP
+         KEOmm3u10wKqFN6XoqO5ypFDqQ4toXhn+0ln8aN4TwQHyjyjFXl0JYrILACE5bf34ljx
+         MRV+X6XJ2BVzgyxL1/iDTBTwf7kFrHcytgnvMFPZoY4myf65Hu4DnBaXBtnNrZngYjuw
+         djcR2msPokEn/mA8kO1MQcjXoBbtj9sW588PyXCdCFFT/B42hI2hiZz2XeLHUFeC3WLr
+         6qCu5Y46WgKAh1GZQXVXOOkHN6vB+rPClh2EYRmYUS2Hq3yUS44nzSjnrWicMZrOFC3J
+         cuaA==
+X-Gm-Message-State: APjAAAVsqa7uJqGkfYMbW3k8XyCrN1jTYBrmZgur/hTaINCUQSMtUWBQ
+        CiWtQP3kvlUX0M4SnL/c/uuWER2NN0qw2Qb6gEh3/Q==
+X-Google-Smtp-Source: APXvYqxacBUqIGtFxch6ifNtADcD9dOQvnPPX60v7ti4FSuS2LNlScGOQeLdEmsyCKT842NHY+4T1jFzR0DdpSu6bV4=
+X-Received: by 2002:a17:902:ab96:: with SMTP id f22mr31893761plr.147.1565704789671;
+ Tue, 13 Aug 2019 06:59:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <Pine.LNX.4.44L0.1908011359580.1305-100000@iolanthe.rowland.org>
+ <1565095011.8136.20.camel@suse.com> <CAAeHK+wyvJbi08ruuOn1qF0O1Jubz_BhZz5wXdNg4Vy5XeyQmw@mail.gmail.com>
+ <1565185131.15973.1.camel@suse.com> <CAAeHK+yv-oy_GqMYch7WoVXKOkzpWUmrY9mVY0_FU_0FXjS4nA@mail.gmail.com>
+ <CAAeHK+zDVmxgjkZ6dR-sk1=99-Aj=Z4wwxaRCaOXeuYYG3-bUw@mail.gmail.com>
+In-Reply-To: <CAAeHK+zDVmxgjkZ6dR-sk1=99-Aj=Z4wwxaRCaOXeuYYG3-bUw@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 13 Aug 2019 15:59:38 +0200
+Message-ID: <CAAeHK+zsA=O0bgSHij5Opx-RhknnQEhj+2VoCCjLcVRc5Q-=Zg@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
+To:     syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>
+Cc:     syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Andrey Konovalov <andreyknvl@google.com> writes:
-
-> On Wed, Jun 12, 2019 at 6:03 PM Ganapathi Bhat <gbhat@marvell.com> wrote:
->>
->> Hi Dmitry,
->>
->> We have a patch to fix this: https://patchwork.kernel.org/patch/10990275/
+On Wed, Aug 7, 2019 at 3:44 PM Andrey Konovalov <andreyknvl@google.com> wrote:
 >
-> Hi Ganapathi,
+> On Wed, Aug 7, 2019 at 3:44 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> >
+> > On Wed, Aug 7, 2019 at 3:38 PM Oliver Neukum <oneukum@suse.com> wrote:
+> > >
+> > > Am Dienstag, den 06.08.2019, 14:50 +0200 schrieb Andrey Konovalov:
+> > > > On Tue, Aug 6, 2019 at 2:36 PM Oliver Neukum <oneukum@suse.com> wrote:
+> > > > >
+> > > > > Am Donnerstag, den 01.08.2019, 14:47 -0400 schrieb Alan Stern:
+> > > > > >
+> > > > > > I think this must be caused by an unbalanced refcount.  That is,
+> > > > > > something must drop one more reference to the device than it takes.
+> > > > > > That would explain why the invalid access occurs inside a single
+> > > > > > bus_remove_device() call, between the klist_del() and
+> > > > > > device_release_driver().
+> > > > > >
+> > > > > > The kernel log indicates that the device was probed by rndis_wlan,
+> > > > > > rndis_host, and cdc_acm, all of which got errors because of the
+> > > > > > device's bogus descriptors.  Probably one of them is messing up the
+> > > > > > refcount.
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > you made me look at cdc-acm. I suspect
+> > > > >
+> > > > > cae2bc768d176bfbdad7035bbcc3cdc973eb7984 ("usb: cdc-acm: Decrement tty port's refcount if probe() fail")
+> > > > >
+> > > > > is buggy decrementing the refcount on the interface in destroy()
+> > > > > even before the refcount is increased.
+> > > > >
+> > > > > Unfortunately I cannot tell from the bug report how many and which
+> > > > > interfaces the emulated test device has. Hence it is unclear to me,
+> > > > > when exactly probe() would fail cdc-acm.
+> > > > >
+> > > > > If you agree. I am attaching a putative fix.
+> > > >
+> > > > Let's see if it fixes the issue.
+> > > >
+> > > > #syz fix: https://github.com/google/kasan.git 6a3599ce
+> > >
+> > > Hi,
+> > >
+> > > did this ever produce a result? I saw none.
+> >
+> > Hm, that's weird, maybe that's caused by putting the bot into CC. Let
+> > me try that again.
+> >
+> > #syz fix: https://github.com/google/kasan.git 6a3599ce
+
+Let's fix the wrong title displayed on dashboard:
+
+#syz fix: usb: cdc-acm: make sure a refcount is taken early enough
+
 >
-> Has this patch been accepted anywhere? This bug is still open on syzbot.
-
-The patch is in "Changes Requested" state which means that the author is
-supposed to send a new version based on the review comments.
-
--- 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> Oh, wait, it should be syz test =)
+>
+> #syz test: https://github.com/google/kasan.git 6a3599ce
+>
+> >
+> > >
+> > >         Regards
+> > >                 Oliver
+> > >
+> > > --
+> > > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> > > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> > > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/1565185131.15973.1.camel%40suse.com.
