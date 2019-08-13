@@ -2,94 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D868B8C8
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 14:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EFB8B8D0
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 14:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728363AbfHMMlj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 08:41:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50318 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727715AbfHMMlh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Aug 2019 08:41:37 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E676720578;
-        Tue, 13 Aug 2019 12:41:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565700096;
-        bh=Jq/IQ6CWnFkPICRfKWG1UKe/f3JsG+a8LmqFboRXXbE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KXhgZMi0JXG3TruF3XZXJoQIHKKAUDX/coWvIPS7cALEvShPoCPOwZlIBmVcjMvOR
-         YmmGks/LTYMmuOGO2LjjFBmvix1ub2opzf0WNnO14eryX0zxKllnqPVeVEtirq9N03
-         dfO5vqGWOlLSm7jhT8ePDH10A0kl1klQELhsnqVc=
-Date:   Tue, 13 Aug 2019 14:41:34 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, maco@android.com,
-        kernel-team@android.com, arnd@arndb.de, geert@linux-m68k.org,
-        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@google.com, michal.lkml@markovi.net, mingo@redhat.com,
-        oneukum@suse.com, pombredanne@nexb.com, sam@ravnborg.org,
-        sboyd@codeaurora.org, sspatil@google.com,
-        stern@rowland.harvard.edu, tglx@linutronix.de,
-        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
-        yamada.masahiro@socionext.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Subject: Re: [PATCH v2 02/10] export: explicitly align struct kernel_symbol
-Message-ID: <20190813124134.GB14284@kroah.com>
-References: <20180716122125.175792-1-maco@android.com>
- <20190813121733.52480-1-maennich@google.com>
- <20190813121733.52480-3-maennich@google.com>
+        id S1728293AbfHMMmy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 08:42:54 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:32966 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728288AbfHMMmy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 08:42:54 -0400
+Received: by mail-pg1-f196.google.com with SMTP id n190so10396191pgn.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 05:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iO0r/Q2PTTwanUo9MrAAWEPPhwUQzV3Z9Y9H9xAeP7k=;
+        b=b9T8E9jVho/EQNCmNV8iS9GfM6aXWy0Hj/VX+6h0ie8h6BvidP8lRLw40xn3qrXGvd
+         apTKLJFia8aGPXmsFDWR4qrpJ0QxBns/zkoG3fbkwH+uriyuKuCCPNbVM/GN9CSHPV38
+         yw7bgqUBvApPBwwf1Uk6JZq9OtZ/Yr2I07QL3IPHvy67cItD9dAX93jbw4XT2ajNgc1T
+         TlBv7R9p3+n2dkCKqh68vqyYQZS0jimoaQJ+SPjbA9gbUaUkl0eVxhy/WFe7SiuxqTAF
+         pRTpcpyLusAjdbEqyK5QdOKJOrD0az8wlWBdcV1Mr09IpaH7hOylx8GmLmGFc6cY0WPo
+         NtrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iO0r/Q2PTTwanUo9MrAAWEPPhwUQzV3Z9Y9H9xAeP7k=;
+        b=JuYQXWEAdn4Z2/Lq31gaazzdrZsA17tV2NUsDyvz+LjEz7NCIV/eqBTRNaahR+sCxw
+         NTVEHHHyGcpD9iL5VgSsHRg5n2p7MaQr3YGmv7vXMJ9N02SAWrn+NQ+Wsqwk9gAp4/r9
+         Zo9jeDB5MjWeZblFNXZIvJ6zJO4Ny/Ui9AMyq+qz802DuRnV4Rgg6qgLA4UGwLsS0nys
+         aau4vofUbUDrvOgqVbdWlIdqkXYcCTfQpmt5hDA3TtSLP6xmtVbLyAmDVgbNDUtwRFls
+         Q+uFvajbMnIz50H25binx4oIlo2npdhujvDhF8vu1p10XG/uwI1RUAUaP5GVT6sUpH32
+         5Y7A==
+X-Gm-Message-State: APjAAAWbh5pRdmXiXPM0bSu2pxG8PLLxllk4xBrEB551UUavKuS6EcdA
+        4lSBLlsCSZUC3W1SxjEt1CKqp48YY8vxU8v5WUZl1Q==
+X-Google-Smtp-Source: APXvYqxa3byCY4w2HG9zH/Hbxmm5K9jdz8LpPEd7hGPB9p5lN4woqcQivgp6jZJcyFjAqpWDcM/eQ7QZE5NbYFr8WFo=
+X-Received: by 2002:a63:3006:: with SMTP id w6mr34717214pgw.440.1565700173316;
+ Tue, 13 Aug 2019 05:42:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190813121733.52480-3-maennich@google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <CAAeHK+yPJR2kZ5Mkry+bGFVuedF9F76=5GdKkF1eLkr9FWyvqA@mail.gmail.com>
+ <Pine.LNX.4.44L0.1908080958380.1652-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1908080958380.1652-100000@iolanthe.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 13 Aug 2019 14:42:42 +0200
+Message-ID: <CAAeHK+xVKZ-pnGcijYJPpWQ_haWbuVSpD81TJhtRosOZsg-Rwg@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 01:16:59PM +0100, Matthias Maennich wrote:
-> This change allows growing struct kernel_symbol without wasting bytes to
-> alignment. It also concretized the alignment of ksymtab entries if
-> relative references are used for ksymtab entries.
-> 
-> struct kernel_symbol was already implicitly being aligned to the word
-> size, except on x86_64 and m68k, where it is aligned to 16 and 2 bytes,
-> respectively.
-> 
-> As far as I can tell there is no requirement for aligning struct
-> kernel_symbol to 16 bytes on x86_64, but gcc aligns structs to their
-> size, and the linker aligns the custom __ksymtab sections to the largest
-> data type contained within, so setting KSYM_ALIGN to 16 was necessary to
-> stay consistent with the code generated for non-ASM EXPORT_SYMBOL(). Now
-> that non-ASM EXPORT_SYMBOL() explicitly aligns to word size (8),
-> KSYM_ALIGN is no longer necessary.
-> 
-> In case of relative references, the alignment has been changed
-> accordingly to not waste space when adding new struct members.
-> 
-> As for m68k, struct kernel_symbol is aligned to 2 bytes even though the
-> structure itself is 8 bytes; using a 4-byte alignment shouldn't hurt.
-> 
-> I manually verified the output of the __ksymtab sections didn't change
-> on x86, x86_64, arm, arm64 and m68k. As expected, the section contents
-> didn't change, and the ELF section alignment only changed on x86_64 and
-> m68k. Feedback from other archs more than welcome.
-> 
-> Co-developed-by: Martijn Coenen <maco@android.com>
-> Signed-off-by: Martijn Coenen <maco@android.com>
-> Signed-off-by: Matthias Maennich <maennich@google.com>
+On Thu, Aug 8, 2019 at 4:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Thu, 8 Aug 2019, Andrey Konovalov wrote:
+>
+> > On Thu, Aug 8, 2019 at 2:44 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+> > >
+> > > On Thu, Aug 8, 2019 at 2:28 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> > > >
+> > > > On Wed, Aug 7, 2019 at 8:31 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > > >
+> > > > > On Wed, 7 Aug 2019, syzbot wrote:
+> > > > >
+> > > > > > Hello,
+> > > > > >
+> > > > > > syzbot has tested the proposed patch and the reproducer did not trigger
+> > > > > > crash:
+> > > > > >
+> > > > > > Reported-and-tested-by:
+> > > > > > syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com
+> > > > > >
+> > > > > > Tested on:
+> > > > > >
+> > > > > > commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+> > > > > > git tree:       https://github.com/google/kasan.git
+> > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+> > > > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > > > > patch:          https://syzkaller.appspot.com/x/patch.diff?x=132eec8c600000
+> > > > > >
+> > > > > > Note: testing is done by a robot and is best-effort only.
+> > > > >
+> > > > > Andrey, is there any way to get the console output from this test?
+> > > >
+> > > > Dmitry, would it be possible to link console log for successful tests as well?
+> > >
+> > > Yes. Start by filing a feature request at
+> > > https://github.com/google/syzkaller/issues
+> >
+> > Filed https://github.com/google/syzkaller/issues/1322
+> >
+> > Alan, for now I've applied your patch and run the reproducer manually:
+> >
+> > [   90.844643][   T74] usb 1-1: new high-speed USB device number 2
+> > using dummy_hcd
+> > [   91.085789][   T74] usb 1-1: Using ep0 maxpacket: 16
+> > [   91.204698][   T74] usb 1-1: config 0 has an invalid interface
+> > number: 234 but max is 0
+> > [   91.209137][   T74] usb 1-1: config 0 has no interface number 0
+> > [   91.211599][   T74] usb 1-1: config 0 interface 234 altsetting 0
+> > endpoint 0x8D has an inva1
+> > [   91.216162][   T74] usb 1-1: config 0 interface 234 altsetting 0
+> > endpoint 0x7 has invalid 4
+> > [   91.218211][   T74] usb 1-1: config 0 interface 234 altsetting 0
+> > bulk endpoint 0x7 has inv4
+> > [   91.220131][   T74] usb 1-1: config 0 interface 234 altsetting 0
+> > bulk endpoint 0x8F has in0
+> > [   91.222052][   T74] usb 1-1: New USB device found, idVendor=0421,
+> > idProduct=0486, bcdDevic7
+> > [   91.223851][   T74] usb 1-1: New USB device strings: Mfr=0,
+> > Product=0, SerialNumber=0
+> > [   91.233180][   T74] usb 1-1: config 0 descriptor??
+> > [   91.270222][   T74] rndis_wlan 1-1:0.234: Refcount before probe: 3
+> > [   91.275464][   T74] rndis_wlan 1-1:0.234: invalid descriptor buffer length
+> > [   91.277558][   T74] usb 1-1: bad CDC descriptors
+> > [   91.279716][   T74] rndis_wlan 1-1:0.234: Refcount after probe: 3
+> > [   91.281378][   T74] rndis_host 1-1:0.234: Refcount before probe: 3
+> > [   91.283303][   T74] rndis_host 1-1:0.234: invalid descriptor buffer length
+> > [   91.284724][   T74] usb 1-1: bad CDC descriptors
+> > [   91.286004][   T74] rndis_host 1-1:0.234: Refcount after probe: 3
+> > [   91.287318][   T74] cdc_acm 1-1:0.234: Refcount before probe: 3
+> > [   91.288513][   T74] cdc_acm 1-1:0.234: invalid descriptor buffer length
+> > [   91.289835][   T74] cdc_acm 1-1:0.234: No union descriptor, testing
+> > for castrated device
+> > [   91.291555][   T74] cdc_acm 1-1:0.234: Refcount after probe: 3
+> > [   91.292766][   T74] cdc_acm: probe of 1-1:0.234 failed with error -12
+> > [   92.001549][   T96] usb 1-1: USB disconnect, device number 2
+>
+> Ah, that looks right, thank you.  The patch worked correctly -- good
+> work Oliver!
 
-Ick, messy, nice fix.
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Great! Just a reminder to submit the fix :)
