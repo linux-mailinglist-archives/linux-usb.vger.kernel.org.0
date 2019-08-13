@@ -2,52 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ACD8B411
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 11:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8453B8B444
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 11:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbfHMJ1U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 05:27:20 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34782 "EHLO mx1.suse.de"
+        id S1727954AbfHMJfv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 05:35:51 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37108 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726282AbfHMJ1T (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Aug 2019 05:27:19 -0400
+        id S1727936AbfHMJfv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 05:35:51 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E1C2BAE34;
-        Tue, 13 Aug 2019 09:27:17 +0000 (UTC)
-Message-ID: <1565688434.7043.4.camel@suse.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in usbnet_generic_cdc_bind
+        by mx1.suse.de (Postfix) with ESMTP id 36892AE5C;
+        Tue, 13 Aug 2019 09:35:50 +0000 (UTC)
 From:   Oliver Neukum <oneukum@suse.com>
-To:     Andrey Konovalov <andreyknvl@google.com>,
-        syzbot <syzbot+45a53506b65321c1fe91@syzkaller.appspotmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Date:   Tue, 13 Aug 2019 11:27:14 +0200
-In-Reply-To: <CAAeHK+wELVfuQPJaOeG7KggR2BDTOuzCYLC+dzqbhrRRPNf9cA@mail.gmail.com>
-References: <000000000000487b44058fea845c@google.com>
-         <CAAeHK+wELVfuQPJaOeG7KggR2BDTOuzCYLC+dzqbhrRRPNf9cA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] USB: CDC: fix sanity checks in CDC union parser
+Date:   Tue, 13 Aug 2019 11:35:41 +0200
+Message-Id: <20190813093541.18889-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 12.08.2019, 14:27 +0200 schrieb Andrey Konovalov:
-> On
-> This one is funny, we do sizeof(struct usb_cdc_mdlm_desc *) instead of
-> sizeof(struct usb_cdc_mdlm_desc) and the same for
-> usb_cdc_mdlm_detail_desc in cdc_parse_cdc_header().
+A few checks checked for the size of the pointer to a structure
+instead of the structure itself. Copy & paste issue presumably.
 
-You are right. Old copy & paste error presumably.
-Patch is on the way.
+Fixes: e4c6fb7794982 ("usbnet: move the CDC parser into USB core")
+Reported-by: syzbot+45a53506b65321c1fe91@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/core/message.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-	Regards
-		Oliver
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index e844bb7b5676..5adf489428aa 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -2218,14 +2218,14 @@ int cdc_parse_cdc_header(struct usb_cdc_parsed_header *hdr,
+ 				(struct usb_cdc_dmm_desc *)buffer;
+ 			break;
+ 		case USB_CDC_MDLM_TYPE:
+-			if (elength < sizeof(struct usb_cdc_mdlm_desc *))
++			if (elength < sizeof(struct usb_cdc_mdlm_desc))
+ 				goto next_desc;
+ 			if (desc)
+ 				return -EINVAL;
+ 			desc = (struct usb_cdc_mdlm_desc *)buffer;
+ 			break;
+ 		case USB_CDC_MDLM_DETAIL_TYPE:
+-			if (elength < sizeof(struct usb_cdc_mdlm_detail_desc *))
++			if (elength < sizeof(struct usb_cdc_mdlm_detail_desc))
+ 				goto next_desc;
+ 			if (detail)
+ 				return -EINVAL;
+-- 
+2.16.4
 
