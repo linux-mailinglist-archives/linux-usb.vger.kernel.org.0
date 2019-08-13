@@ -2,63 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3878B8A2
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 14:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B1A8B8BF
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 14:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbfHMMgK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 08:36:10 -0400
-Received: from mga01.intel.com ([192.55.52.88]:54703 "EHLO mga01.intel.com"
+        id S1728329AbfHMMlB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 08:41:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49960 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726993AbfHMMgK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Aug 2019 08:36:10 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Aug 2019 05:36:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,381,1559545200"; 
-   d="scan'208";a="167040835"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga007.jf.intel.com with ESMTP; 13 Aug 2019 05:36:07 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Rick Tseng <rtseng@nvidia.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        "mathias.nyman\@intel.com" <mathias.nyman@intel.com>,
-        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH] xhci: wait CNR when doing xhci resume
-In-Reply-To: <MN2PR12MB3215AA4B411231FC2D67E81FB1D20@MN2PR12MB3215.namprd12.prod.outlook.com>
-References: <1565594692-23683-1-git-send-email-rtseng@nvidia.com> <1565597989.14671.3.camel@suse.com> <47f0e5d6-145c-4542-362f-dbb4cccb514d@linux.intel.com> <MN2PR12MB3215AA4B411231FC2D67E81FB1D20@MN2PR12MB3215.namprd12.prod.outlook.com>
-Date:   Tue, 13 Aug 2019 15:36:06 +0300
-Message-ID: <87ef1pz1hl.fsf@gmail.com>
+        id S1726974AbfHMMlB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 08:41:01 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7C82A20578;
+        Tue, 13 Aug 2019 12:40:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565700060;
+        bh=4k7N09FoQBbpkYUEeWsjRJWSOm77Guc4jfbrqH/pxHQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o8LZIj8Av9JLAkSr1LW6vj56zCTVtSzC3Z6bjx9Lb+ozorlC7bPGyHFqNzVQ0xj+m
+         IKzAZax6AqqhPECqlrUlXgkCeruOmr09VeAxx6zuVvD8dChLo8HxzX8YYTbh/rdLRx
+         KzfV77fMgsAapcsqGoNWtO9i1ObkQxvV/LleGZQE=
+Date:   Tue, 13 Aug 2019 14:40:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, maco@android.com,
+        kernel-team@android.com, arnd@arndb.de, geert@linux-m68k.org,
+        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@google.com, michal.lkml@markovi.net, mingo@redhat.com,
+        oneukum@suse.com, pombredanne@nexb.com, sam@ravnborg.org,
+        sboyd@codeaurora.org, sspatil@google.com,
+        stern@rowland.harvard.edu, tglx@linutronix.de,
+        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
+        yamada.masahiro@socionext.com
+Subject: Re: [PATCH v2 01/10] module: support reading multiple values per
+ modinfo tag
+Message-ID: <20190813124057.GA14284@kroah.com>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190813121733.52480-1-maennich@google.com>
+ <20190813121733.52480-2-maennich@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190813121733.52480-2-maennich@google.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Aug 13, 2019 at 01:16:58PM +0100, Matthias Maennich wrote:
+> Similar to modpost's get_next_modinfo(), introduce get_next_modinfo() in
+> kernel/module.c to acquire any further values associated with the same
+> modinfo tag name. That is useful for any tags that have multiple
+> occurrences (such as 'alias'), but is in particular introduced here as
+> part of the symbol namespaces patch series to read the (potentially)
+> multiple namespaces a module is importing.
+> 
+> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Reviewed-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Matthias Maennich <maennich@google.com>
 
-(no top-posting, please)
-
-Hi,
-
-Rick Tseng <rtseng@nvidia.com> writes:
-
-> Hi Mathias,
->
-> Thanks for suggestion.
-> The reason I do not use xhci_handshake() is we get build fail when configuring below as module:
-> USB_XHCI_HCD = m
-> USB_XHCI_PCI = m
->
-> Fail message as below:
-> ERROR: "xhci_handshake" [drivers/usb/host/xhci-pci.ko] undefined!
->
-> So I write my own function to check CNR.
-
-yeah, move that code to xhci_suspend(). It's valid for any XHCI host.
-
--- 
-balbi
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
