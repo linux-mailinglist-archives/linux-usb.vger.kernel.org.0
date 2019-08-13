@@ -2,81 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B63F8C080
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 20:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54DD8C0AA
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 20:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728670AbfHMSVz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 14:21:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33146 "EHLO mail.kernel.org"
+        id S1726186AbfHMSe6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 14:34:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35222 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728284AbfHMSVz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Aug 2019 14:21:55 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725923AbfHMSe6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 14:34:58 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 18D1620578;
-        Tue, 13 Aug 2019 18:21:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F29120665;
+        Tue, 13 Aug 2019 18:34:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565720513;
-        bh=Dl34f7AwP7olgqWclvkI5Nt8ce/2dgPR8Fqz5ci/QjM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MgmMjKHQ5IxNR5ueegGGB4JR79SBhElL0fzwmVq83V92rDggRVL6Krswzw6GlYtgW
-         Y8ChjTRBhadSgEAdb2Pz8sDDyz1AfLe04PIF/F3ccWIhoCdQlbHwrI3fswdXPPMSom
-         1XmlYPAW73VsWZ8kEw7P5FfFyuTeAfuSu5/MYRio=
-Date:   Tue, 13 Aug 2019 20:21:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, maco@android.com,
-        kernel-team@android.com, arnd@arndb.de, geert@linux-m68k.org,
-        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@google.com, michal.lkml@markovi.net, mingo@redhat.com,
-        oneukum@suse.com, pombredanne@nexb.com, sam@ravnborg.org,
-        sboyd@codeaurora.org, sspatil@google.com,
-        stern@rowland.harvard.edu, tglx@linutronix.de,
-        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
-        yamada.masahiro@socionext.com
-Subject: Re: [PATCH v2 07/10] modpost: add support for generating namespace
- dependencies
-Message-ID: <20190813182151.GF2378@kroah.com>
-References: <20180716122125.175792-1-maco@android.com>
- <20190813121733.52480-1-maennich@google.com>
- <20190813121733.52480-8-maennich@google.com>
+        s=default; t=1565721297;
+        bh=tHst/Kq9eYMCjaozC3wCdlJ+OCyQ524uuDHDBVOvfdQ=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=dJvR0hQCSDUCA4sNDK3nnDtfPfv7lzgE8feZLkhRWZXXPh2BTAS/F7b9S4eUmKgyC
+         JZ++bCJO2Y6an4J/+O/bFPk7OciaEgwAsbVBP+zeL0n3zGbh4opAnlXofW6YbqgyP4
+         uWktzSTv/YVEo9RKzbp3pI40e2DOtAR/thntScoU=
+Subject: Re: [PATCH v5 1/2] usbip: Skip DMA mapping and unmapping for urb at
+ vhci
+To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190808155435.10050-1-suwan.kim027@gmail.com>
+ <20190808155435.10050-2-suwan.kim027@gmail.com>
+ <d9359f3c-ca4c-6eab-5238-0013f8bb4dbb@kernel.org>
+From:   shuah <shuah@kernel.org>
+Message-ID: <a20e5721-d1ff-ab17-d4bb-ceae5829e647@kernel.org>
+Date:   Tue, 13 Aug 2019 12:34:55 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190813121733.52480-8-maennich@google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <d9359f3c-ca4c-6eab-5238-0013f8bb4dbb@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 01:17:04PM +0100, Matthias Maennich wrote:
-> This patch adds an option to modpost to generate a <module>.ns_deps file
-> per module, containing the namespace dependencies for that module.
+On 8/8/19 10:18 AM, shuah wrote:
+> On 8/8/19 9:54 AM, Suwan Kim wrote:
+>> vhci doesn’t do DMA for remote device. Actually, the real DMA
+>> operation is done by network card driver. vhci just passes virtual
+>> address of the buffer to the network stack, so vhci doesn’t use and
+>> need dma address of the buffer of the URB.
+>>
+>> But HCD provides DMA mapping and unmapping function by default.
+>> Moreover, it causes unnecessary DMA mapping and unmapping which
+>> will be done again at the NIC driver and it wastes CPU cycles.
+>> So, implement map_urb_for_dma and unmap_urb_for_dma function for
+>> vhci in order to skip the DMA mapping and unmapping procedure.
+>>
+>> When it comes to supporting SG for vhci, it is useful to use native
+>> SG list (urb->num_sgs) instead of mapped SG list because DMA mapping
+>> fnuction can adjust the number of SG list (urb->num_mapped_sgs).
+>> And vhci_map_urb_for_dma() prevents isoc pipe from using SG as
+>> hcd_map_urb_for_dma() does.
+>>
+>> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+>> ---
+>> v4 - v5
+>> - Replace pr_err() with dev_err() in the error path.
+>>
+>> v3 - v4
+>> - Replace WARN_ON() with pr_err() in the error path.
+>>
+>> v2 - v3
+>> - Move setting URB_DMA_MAP_SG flag to the patch 2.
+>> - Prevent isoc pipe from using SG buffer.
+>>
+>> v1 - v2
+>> - Add setting URB_DMA_MAP_SG flag in urb->transfer_flags to tell
+>> stub driver to use SG buffer.
+>> ---
+>>   drivers/usb/usbip/vhci_hcd.c | 19 +++++++++++++++++++
+>>   1 file changed, 19 insertions(+)
+>>
+>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+>> index 000ab7225717..ea82b932a2f9 100644
+>> --- a/drivers/usb/usbip/vhci_hcd.c
+>> +++ b/drivers/usb/usbip/vhci_hcd.c
+>> @@ -1288,6 +1288,22 @@ static int vhci_free_streams(struct usb_hcd 
+>> *hcd, struct usb_device *udev,
+>>       return 0;
+>>   }
+>> +static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+>> +                gfp_t mem_flags)
+>> +{
+>> +    if (usb_endpoint_xfer_isoc(&urb->ep->desc) && urb->num_sgs) {
+>> +        dev_err(&urb->dev->dev, "SG is not supported for isochronous 
+>> transfer\n");
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void vhci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
+>> +{
+>> +    dev_dbg(hcd->self.controller, "vhci does not unmap urb for dma\n");
+>> +}
+>> +
+>>   static const struct hc_driver vhci_hc_driver = {
+>>       .description    = driver_name,
+>>       .product_desc    = driver_desc,
+>> @@ -1304,6 +1320,9 @@ static const struct hc_driver vhci_hc_driver = {
+>>       .get_frame_number = vhci_get_frame_number,
+>> +    .map_urb_for_dma = vhci_map_urb_for_dma,
+>> +    .unmap_urb_for_dma = vhci_unmap_urb_for_dma,
+>> +
+>>       .hub_status_data = vhci_hub_status,
+>>       .hub_control    = vhci_hub_control,
+>>       .bus_suspend    = vhci_bus_suspend,
+>>
 > 
-> E.g. if the linked module my-module.ko would depend on the symbol
-> myfunc.MY_NS in the namespace MY_NS, the my-module.ns_deps file created
-> by modpost would contain the entry MY_NS to express the namespace
-> dependency of my-module imposed by using the symbol myfunc.
+> Looks good to me.
 > 
-> These files can subsequently be used by static analysis tools (like
-> coccinelle scripts) to address issues with missing namespace imports. A
-> later patch of this series will introduce such a script 'nsdeps' and a
-> corresponding make target to automatically add missing
-> MODULE_IMPORT_NS() definitions to the module's sources. For that it uses
-> the information provided in the generated .ns_deps files.
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 > 
-> Co-developed-by: Martijn Coenen <maco@android.com>
-> Signed-off-by: Martijn Coenen <maco@android.com>
-> Signed-off-by: Matthias Maennich <maennich@google.com>
-> ---
->  scripts/mod/modpost.c | 61 +++++++++++++++++++++++++++++++++++++++----
->  scripts/mod/modpost.h |  2 ++
->  2 files changed, 58 insertions(+), 5 deletions(-)
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Greg!
+
+Please pick this one up.
+
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
+
