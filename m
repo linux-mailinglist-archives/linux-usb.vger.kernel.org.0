@@ -2,95 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFC08BCDA
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 17:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35198BD01
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 17:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729799AbfHMPQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 11:16:24 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:59963 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729580AbfHMPQU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 11:16:20 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id C1231382;
-        Tue, 13 Aug 2019 11:16:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 13 Aug 2019 11:16:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=LoPtfOvpID0cBh959hJGYZTagbN
-        C7q7HI3D4nCn4Ro8=; b=DTo3Wr/7MFn4YQfsvCVvrMONul5Ctrvh6pDHiiWr1UW
-        V1qYogfpfgk3OXesy7G8XeToLcLAaKduPxIHQVfgMToQ/ACy2p5dIOx2TUKcnOdg
-        t4quq+JqMRZ6lz6WtHPt3n8aWckoGwY4HA/6wZAm9v9YfAbFWUnCPW6tlwDd2kBF
-        Dm2UlANDsZyF/URtAO0t5xJKcoR86s6FA1Ls5rwWoI0e+MUl8ivXBlvpNTqz+ozg
-        uvDJyF4gDbBuy+yheFH4dGE8BkVok289UYfIsFqHwp+NzPFiGCaFgua97xpyEpqj
-        XrMdObcOdT5dAfFFxA+NI6tlgaNy0bIQxAI+vnASGcg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=LoPtfO
-        vpID0cBh959hJGYZTagbNC7q7HI3D4nCn4Ro8=; b=ftryb2waOqajbNoCsu+n3L
-        RyOCIGlrFelT6yuI9kfhlgCGUQR1yh6RY0G6p09w0SWhrr7ow9SfELfyypBbHeom
-        MwHbadK+2fiNtfnVnukmJUX13j2eWdB2A13YBB2ARaGnNpNvqyC7vXyS+c5WWpgC
-        s23Rweox42Ni5QkEIqm7MNjrc7HPr7jFOSdaEj0V86Rz5FW/mivJmo3Wn5XFsjW9
-        uHgXa9cgekr4h6hFkJzvo//rPXDaM0ROwvwU3BAntnCUWbwDP4ynw76YOYuLEmWE
-        sz/3gQesXC1AAO6vEAjAUBjmFIt1H+zB7bE6Lr/R5MqPopQeCfUT6OKtJWOqzeuw
-        ==
-X-ME-Sender: <xms:QdRSXSFEMxTt4fxUavu-gOsjUV8_na4XWfhd80pCdOjH66PtMYnWZg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddruddviedgkeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuffhomhgrihhnpehkvghrnhgvlh
-    drohhrghenucfkphepkeefrdekiedrkeelrddutdejnecurfgrrhgrmhepmhgrihhlfhhr
-    ohhmpehgrhgvgheskhhrohgrhhdrtghomhenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:QdRSXcixJmUyHALdpS7NOXwMBePZdJNi7bQQ0SVwcnsdKFclNS3iug>
-    <xmx:QdRSXWRDQSd_hBbyWbyHJ83C2yL7wkBLDC52Bay6ibHstQBsfYVn7A>
-    <xmx:QdRSXc_cqG4tddw3tMtT4HaIBMuKGHUxpjtgWSxUaejRt3dSmPbYYw>
-    <xmx:QtRSXQ3F13B5Cy8FEpwRp4oZD92CrKT7IZ9aqdYZAcEVmw_yRj4RVg>
+        id S1727582AbfHMP02 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 11:26:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38008 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726705AbfHMP01 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 11:26:27 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0521980059;
-        Tue, 13 Aug 2019 11:16:16 -0400 (EDT)
-Date:   Tue, 13 Aug 2019 17:16:15 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+1b2449b7b5dc240d107a@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: KASAN: use-after-free Read in device_release_driver_internal
-Message-ID: <20190813151615.GA25094@kroah.com>
-References: <CAAeHK+yPJR2kZ5Mkry+bGFVuedF9F76=5GdKkF1eLkr9FWyvqA@mail.gmail.com>
- <Pine.LNX.4.44L0.1908080958380.1652-100000@iolanthe.rowland.org>
- <CAAeHK+xVKZ-pnGcijYJPpWQ_haWbuVSpD81TJhtRosOZsg-Rwg@mail.gmail.com>
- <1565702535.7043.9.camel@suse.com>
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D402420663;
+        Tue, 13 Aug 2019 15:26:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565709986;
+        bh=CrAz1yCfo6+iN/BmxOQbHCwrHnLhxx45xOC9Q0XW81k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gi/sr8eKHUIdY0KORo3OqENJ9nHWlSzy+hIt2NL7mc1mwejIYNU+9CxxhxGs3XzBy
+         zrLxEXbf1MLrCEinxCSs8WDmf42Dd0q2H5jvauxI+/7SCsVSCuEd9Pks3bBg4eg1Ji
+         lHSGNIcWrEoerh5cgMx/WeA5auWMaoaaYuuy9qR8=
+Date:   Tue, 13 Aug 2019 17:26:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, maco@android.com,
+        kernel-team@android.com, arnd@arndb.de, geert@linux-m68k.org,
+        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@google.com, michal.lkml@markovi.net, mingo@redhat.com,
+        oneukum@suse.com, pombredanne@nexb.com, sam@ravnborg.org,
+        sboyd@codeaurora.org, sspatil@google.com,
+        stern@rowland.harvard.edu, tglx@linutronix.de,
+        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
+        yamada.masahiro@socionext.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Subject: Re: [PATCH v2 03/10] module: add support for symbol namespaces.
+Message-ID: <20190813152624.GB26138@kroah.com>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190813121733.52480-1-maennich@google.com>
+ <20190813121733.52480-4-maennich@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1565702535.7043.9.camel@suse.com>
+In-Reply-To: <20190813121733.52480-4-maennich@google.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 03:22:15PM +0200, Oliver Neukum wrote:
-> Am Dienstag, den 13.08.2019, 14:42 +0200 schrieb Andrey Konovalov:
-> > > 
+On Tue, Aug 13, 2019 at 01:17:00PM +0100, Matthias Maennich wrote:
+> The EXPORT_SYMBOL_NS() and EXPORT_SYMBOL_NS_GPL() macros can be used to
+> export a symbol to a specific namespace.  There are no _GPL_FUTURE and
+> _UNUSED variants because these are currently unused, and I'm not sure
+> they are necessary.
 > 
+> I didn't add EXPORT_SYMBOL_NS() for ASM exports; this patch sets the
+> namespace of ASM exports to NULL by default. In case of relative
+> references, it will be relocatable to NULL. If there's a need, this
+> should be pretty easy to add.
 > 
-> [..]
+> A module that wants to use a symbol exported to a namespace must add a
+> MODULE_IMPORT_NS() statement to their module code; otherwise, modpost
+> will complain when building the module, and the kernel module loader
+> will emit an error and fail when loading the module.
 > 
-> > On Thu, Aug 8, 2019 at 4:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > Ah, that looks right, thank you.  The patch worked correctly -- good
-> > > work Oliver!
-> > 
-> > Great! Just a reminder to submit the fix :)
+> MODULE_IMPORT_NS() adds a modinfo tag 'import_ns' to the module. That
+> tag can be observed by the modinfo command, modpost and kernel/module.c
+> at the time of loading the module.
 > 
-> I did last week:
-> https://patchwork.kernel.org/patch/11084261/
+> The ELF symbols are renamed to include the namespace with an asm label;
+> for example, symbol 'usb_stor_suspend' in namespace USB_STORAGE becomes
+> 'usb_stor_suspend.USB_STORAGE'.  This allows modpost to do namespace
+> checking, without having to go through all the effort of parsing ELF and
+> relocation records just to get to the struct kernel_symbols.
+> 
+> On x86_64 I saw no difference in binary size (compression), but at
+> runtime this will require a word of memory per export to hold the
+> namespace. An alternative could be to store namespaced symbols in their
+> own section and use a separate 'struct namespaced_kernel_symbol' for
+> that section, at the cost of making the module loader more complex.
+> 
+> Co-developed-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Matthias Maennich <maennich@google.com>
 
-Give me a chance to catch up :)
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
