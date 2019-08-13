@@ -2,33 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 833728C1AF
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 21:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7628C1F5
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 22:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbfHMTwI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 15:52:08 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:42446 "HELO
+        id S1726688AbfHMUNt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 16:13:49 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:42650 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726604AbfHMTwI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 15:52:08 -0400
-Received: (qmail 2597 invoked by uid 2102); 13 Aug 2019 15:52:07 -0400
+        with SMTP id S1726231AbfHMUNt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 16:13:49 -0400
+Received: (qmail 3672 invoked by uid 2102); 13 Aug 2019 16:13:48 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 13 Aug 2019 15:52:07 -0400
-Date:   Tue, 13 Aug 2019 15:52:07 -0400 (EDT)
+  by localhost with SMTP; 13 Aug 2019 16:13:48 -0400
+Date:   Tue, 13 Aug 2019 16:13:48 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrea Vai <andrea.vai@unipv.it>
-cc:     Johannes Thumshirn <jthumshirn@suse.de>,
-        Jens Axboe <axboe@kernel.dk>, <linux-usb@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-In-Reply-To: <e3f87757f7a0fdf551e911ad32fc8122eebe04c7.camel@unipv.it>
-Message-ID: <Pine.LNX.4.44L0.1908131541170.1941-100000@iolanthe.rowland.org>
+To:     syzbot <syzbot+a7a6b9c609b9457c62c6@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <gustavo@embeddedor.com>, <hdanton@sina.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <oneukum@suse.com>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb
+In-Reply-To: <000000000000d195cc058feb2498@google.com>
+Message-ID: <Pine.LNX.4.44L0.1908121115390.1659-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -36,89 +32,65 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 9 Aug 2019, Andrea Vai wrote:
+On Mon, 12 Aug 2019, syzbot wrote:
 
-> Il giorno lun, 08/07/2019 alle 11.38 -0400, Alan Stern ha scritto:
-> > 
-> > [...]
-> >  Andrea, another thing you could try is to collect a usbmon trace
-> > under 
-> > > > one of the "slow" kernels.  Follow the instructions in 
-> > > > Documentation/usb/usbmon.txt.  I think you could kill the file-
-> > copy 
-> > > > operation after just a couple of seconds; that should provide
-> > enough 
-> > > > trace information to help see what causes the slowdown.
-> > > > 
-> > > > (If you want, do the same test with a "fast" kernel and then
-> > we'll 
-> > > > compare the results.)
-> > > > 
-> > > > Alan Stern
-> > > > 
-> > > 
-> > > Thanks Alan,
-> > >   so I attach two ouputs, one for a "good" and one for a "bad"
-> > kernel.
-> > 
-> > [...]
-> > I don't know what the results mean, but I _can_ tell you what's
-> > happening.  Every so often (at intervals of about a second) the pen
-> > drive completely stops communicating with the "bad" kernel for about
-> > one second and then starts up again.
-> > 
-> > Here's a short example from the "bad" trace:
-> > 
-> > ffff9169f0d399c0 513072808 S Bo:6:008:2 -115 122880 = 00000000
-> > 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> > ffff9169f0d399c0 514262176 C Bo:6:008:2 0 122880 >
-> > 
-> > The second column is a timestamp (in microseconds).  This little
-> > extract shows a 120-KB write starting at time 513.072 and ending at
-> > 514.262, more than a second later.  Normally such a write would
-> > complete in about 0.06 s.
-> > 
-> > The cumulative effect of all these delays is to slow the transfer 
-> > drastically.  The "good" kernel trace shows a few delays like this,
-> > but 
-> > only one or two.
-> > 
-> > I have no idea how commit f664a3cc17b7, getting rid of the legacy
-> > IO 
-> > path, could have caused these delays.  It seems more likely that
-> > the 
-> > pen drive itself is the cause, perhaps because it is flushing
-> > buffers 
-> > more often under the "bad" kernel.
-> > 
-> > I'd like you to try doing another pair of usbmon tests.  This time,
-> > start collecting the usbmon trace _before_ you plug in the pen
-> > drive,
-> > and stop the trace shortly after the pen drive has been mounted.  
-> > Don't try to transfer any data.  Perhaps the two kernels are
-> > initializing the pen drive with different settings and that accounts
-> > for the different behaviors.
+> Hello,
 > 
-> Thanks Alan, sorry for the delay (I haven't had physical access to the
-> device for a while). I attach the two new usbmon logs.
+> syzbot has tested the proposed patch but the reproducer still triggered  
+> crash:
+> KASAN: invalid-free in hcd_buffer_free
+
+This bug report shows that Hillf's fix isn't exactly right.
+
+> usb 5-1: USB disconnect, device number 2
+> ==================================================================
+> BUG: KASAN: double-free or invalid-free in hcd_buffer_free+0x199/0x260  
+> drivers/usb/core/buffer.c:165
 > 
-> Meanwhile, I can try with other pendrives, although I already tried
-> two more and both behave "bad" (but one is identical to the first, and
-> the other one is similar).
+> CPU: 0 PID: 1745 Comm: kworker/0:2 Not tainted 5.3.0-rc2+ #1
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+> Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   print_address_description+0x6a/0x32c mm/kasan/report.c:351
+>   kasan_report_invalid_free+0x61/0xa0 mm/kasan/report.c:444
+>   __kasan_slab_free+0x162/0x180 mm/kasan/common.c:428
+>   slab_free_hook mm/slub.c:1423 [inline]
+>   slab_free_freelist_hook mm/slub.c:1470 [inline]
+>   slab_free mm/slub.c:3012 [inline]
+>   kfree+0xe4/0x2f0 mm/slub.c:3953
+>   hcd_buffer_free+0x199/0x260 drivers/usb/core/buffer.c:165
+>   usb_free_coherent+0x67/0x80 drivers/usb/core/usb.c:932
+>   hid_free_buffers.isra.0+0x94/0x290 drivers/hid/usbhid/hid-core.c:964
+>   usbhid_stop+0x308/0x450 drivers/hid/usbhid/hid-core.c:1224
+>   logi_dj_remove+0x107/0x210 drivers/hid/hid-logitech-dj.c:1797
 
-I looked through your two traces.  Unfortunately they don't help --
-they are essentially identical.  Exactly the same sequence of commands
-was sent to the device in both traces, except for a couple of
-inconsequential TEST UNIT READY commands.
+Here the double-free occurred when logi_dj_remove() called 
+hd_hw_stop()...
 
-There are some timing differences, but they occur in between commands,
-not during a command.  They probably are the times you spent typing
-stuff into the terminal.
+>   hid_device_remove+0xed/0x240 drivers/hid/hid-core.c:2242
+>   __device_release_driver drivers/base/dd.c:1118 [inline]
+>   device_release_driver_internal+0x206/0x4c0 drivers/base/dd.c:1151
+>   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+>   device_del+0x420/0xb10 drivers/base/core.c:2288
+>   hid_remove_device drivers/hid/hid-core.c:2413 [inline]
+>   hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2432
+>   usbhid_disconnect+0xad/0xd0 drivers/hid/usbhid/hid-core.c:1414
 
-Can you run another test?  Similar to the last one, but this time start
-collecting the usbmon trace at least 10 seconds after the drive is
-plugged in.  Then mount the drive, copy a small file (say less than 500
-bytes) to it, unmount it, and then stop the trace.
+which occurred inside usbhid_disconnect()'s call to
+hid_destroy_device().
+
+But just above the call to hid_destroy_device(), Hillf's patch adds a 
+direct call to hid_hw_stop(), which is what did the original free.
+
+So it looks like the problem here is that some paths in the original
+unpatched code end up calling hid_hw_stop() by way of the hid_device's
+driver, and other paths do not.
+
+I haven't had time to track down this difference.  Maybe somebody 
+on the mailing list already knows why it occurs.
 
 Alan Stern
 
