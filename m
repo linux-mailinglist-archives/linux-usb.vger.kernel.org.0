@@ -2,81 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4C08BA75
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 15:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A176D8BA9B
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 15:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729162AbfHMNgp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 09:36:45 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35850 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729078AbfHMNgp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 09:36:45 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l21so51272490pgm.3
-        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 06:36:44 -0700 (PDT)
+        id S1728694AbfHMNnK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 09:43:10 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33421 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728933AbfHMNnJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 09:43:09 -0400
+Received: by mail-pf1-f193.google.com with SMTP id g2so51648059pfq.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 06:43:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+IvNSSv0dZm7axcgPut/ZuBnpzRxpjWFBA2DB52xh9c=;
-        b=QrxepzLmOBoZK0Vp3cJ2nU93pw3j3fVwLPP8sYLTjyx0IrRfZhfNrpYzbxSV6rTCll
-         EmiUYGYTX/d16aMLmSc8zxA6nrlusrfk7a54k3X3x+0w5bKqsCAvGcutC+y5oY1vxqrC
-         HB3wcWK9ul5YcGkECANGcKImB6LFLDHw+ivDJsmvT2lE/K6e4KJPGs+wEHMOnl/ab009
-         3PmktF3ayV9N06px7vQqpGNxi6fgpDwjJ5x37k7Nn3ZP67mX2GuBdkk4QB7b37w4vSUL
-         44PAQ/6IXK21Y77LShwQS5tFQQoUs9mVJXc1EFAJPROnHsBtgVSix1r9eu9T2+wwIVHY
-         OeeA==
+        bh=hbroNosbT3jj3xT50Om4hklhf3qmqa0/vsPm2jM2OfA=;
+        b=O4nqKWlZKZZ1e2LApPIoUKMRygbZDfvL7IojIg58Hvn6qF28yOQF8heQgsjZuYcyhd
+         3jEyzNMv797LrLXq8SYPXsml5JBroCY+w56I2TUHkINPfTUUekQ1aFldgBiKLi7LTIPe
+         02g6MCKcDznDloANBtkUBovWtBB3xDdHacz3wUAsnoYuH/ViOrtJQVmUWXw7zsRWtsNh
+         thFQ2rW2sTwvJIWzvY6UZGEMsckWo3PFl2ecpAbhr9UvXobvCtMD8+CRAvekCdLK570F
+         K9mWBIru76bQ5Ds+ruqLXDGvQ0avhvhVMyAxMpbtGFPLK7NZNTAxstZ22k0IPER8+JB5
+         J/YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+IvNSSv0dZm7axcgPut/ZuBnpzRxpjWFBA2DB52xh9c=;
-        b=UIy3LVXvdlsBc3NOWFa/ae0/Ba+rim9z4JeZ72S2iXxh6VIbtvQrpWTINDf1NtdY/v
-         JWjek+dGO8MD4EZWbqz5TGFKlWG1TNeVIFeol4LGxuKdyNNqpZBdIR1e6wh/xGIzcDFj
-         GdmwZIa91z0/NUBFMsn24RnwtZZn67W2rxNll/I/bmsUG+WZoEpYqWNepadnOcoZALCK
-         wb+Sb2ZHTrEqthP2fTPUSDNHAaaHzgHV4xW3cS8pahHHm3bv490o3ydodSoSY6eHQJgN
-         EZCmH/ERMY5rjU49HdlaFu0k+Ngrq3c2kzH0yOyzEX220W1qxPNaiuCbYiik5pW9HZ6y
-         osng==
-X-Gm-Message-State: APjAAAVhXX5Z05Yp3aQyFdG20YKC6C20hdoJy+ZrzB0rpSyrVIU/7cWJ
-        pTh5Q338Ao48yploRhVBUh9cy5H79dcZenAHILuhQA==
-X-Google-Smtp-Source: APXvYqwzus8Mtw0RHdzJEsBAud/s5NcacwuOmBPpD3609fcLHhegjTsTUDGvYfNxqz6BY5e0KvIMty/JsLsr6xzPyEE=
-X-Received: by 2002:a17:90a:c20f:: with SMTP id e15mr2243028pjt.123.1565703404043;
- Tue, 13 Aug 2019 06:36:44 -0700 (PDT)
+        bh=hbroNosbT3jj3xT50Om4hklhf3qmqa0/vsPm2jM2OfA=;
+        b=LCGB+YKjcBQyictScJnPoKIOoWJ8VPA1FfGq9RkZDUgNi8WudoSXe0CnjjJL9rGPcE
+         pi/GRqi78AzyC6OB8Wf5gyZJxAP0PK+ginEm7RABTYdYB9rWOBPsQx20NadetDPq9gNa
+         NmpTekH6Oo16QeGdiJIwYKyk2vEDnLYFwVtyJk0yrEeAc5puYCoEBRWD0ukY6EpeR8mj
+         HU5QrLhgu2OkpPrEM1Dm2ZnO5+etNVUBwCcOxP5y9Vi+ikT6d1XAg3yddmbFcm8CvLiu
+         GqiTYRAdod+pdIxREW2LzNtvmCd1dBfpvFk7zkaKkJgEpXFFkNsXY9KSxeTyIUDBY7t9
+         NCGw==
+X-Gm-Message-State: APjAAAW6jfL85JwDA7OJ52vOeZJwJJeRXa69Vpc04B+YfzVad9L+4Zro
+        0PRtPSk8Vw4TT5yFHOUjcXGuZD07uv0kjhN8VHKJYQ==
+X-Google-Smtp-Source: APXvYqzEYicmEDBmYjcPR3bO5l0ihkY1ZO+rSWVZpQ9MlCT7RJwv+miC3Wni9hQ+HVHsK5m/N/ZMZ4J1DybPmYBKjUA=
+X-Received: by 2002:aa7:9790:: with SMTP id o16mr3937688pfp.51.1565703788822;
+ Tue, 13 Aug 2019 06:43:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000927a7b0586561537@google.com> <MN2PR18MB263783F52CAD4A335FD8BB34A01A0@MN2PR18MB2637.namprd18.prod.outlook.com>
- <CACT4Y+aQzBkAq86Hx4jNFnAUzjXnq8cS2NZKfeCaFrZa__g-cg@mail.gmail.com>
- <MN2PR18MB26372D98386D79736A7947EEA0140@MN2PR18MB2637.namprd18.prod.outlook.com>
- <MN2PR18MB263710E8F1F8FFA06B2EDB3CA0EC0@MN2PR18MB2637.namprd18.prod.outlook.com>
-In-Reply-To: <MN2PR18MB263710E8F1F8FFA06B2EDB3CA0EC0@MN2PR18MB2637.namprd18.prod.outlook.com>
+References: <0000000000000de921058ee524e1@google.com>
+In-Reply-To: <0000000000000de921058ee524e1@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 13 Aug 2019 15:36:33 +0200
-Message-ID: <CAAeHK+z8MBNikw_x50Crf8ZhOhcF=uvPHakvBx44K77xHRUNfg@mail.gmail.com>
-Subject: Re: [EXT] INFO: trying to register non-static key in del_timer_sync (2)
-To:     Ganapathi Bhat <gbhat@marvell.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+dc4127f950da51639216@syzkaller.appspotmail.com>,
-        "amitkarwar@gmail.com" <amitkarwar@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "huxinming820@gmail.com" <huxinming820@gmail.com>,
-        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "nishants@marvell.com" <nishants@marvell.com>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>
+Date:   Tue, 13 Aug 2019 15:42:57 +0200
+Message-ID: <CAAeHK+x9pZec1rJ=rpGvX-O9wmCic27zqd_8xKXgviSymy=ajQ@mail.gmail.com>
+Subject: Re: KASAN: user-memory-access Read in hidraw_ioctl
+To:     syzbot <syzbot+5a8c44432a51154ff6d5@syzkaller.appspotmail.com>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 6:03 PM Ganapathi Bhat <gbhat@marvell.com> wrote:
+On Tue, Jul 30, 2019 at 2:28 PM syzbot
+<syzbot+5a8c44432a51154ff6d5@syzkaller.appspotmail.com> wrote:
 >
-> Hi Dmitry,
+> Hello,
 >
-> We have a patch to fix this: https://patchwork.kernel.org/patch/10990275/
+> syzbot found the following crash on:
+>
+> HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13c21ab4600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5a8c44432a51154ff6d5
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>
+> Unfortunately, I don't have any reproducer for this crash yet.
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+5a8c44432a51154ff6d5@syzkaller.appspotmail.com
+>
+> ==================================================================
+> BUG: KASAN: user-memory-access in _copy_to_user+0x124/0x150
+> lib/usercopy.c:27
+> Read of size 148 at addr 0000100000000000 by task syz-executor.2/19576
+>
+> CPU: 1 PID: 19576 Comm: syz-executor.2 Not tainted 5.3.0-rc2+ #23
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   __kasan_report.cold+0x5/0x33 mm/kasan/report.c:486
+>   kasan_report+0xe/0x12 mm/kasan/common.c:612
+>   check_memory_region_inline mm/kasan/generic.c:185 [inline]
+>   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
+>   _copy_to_user+0x124/0x150 lib/usercopy.c:27
+>   copy_to_user include/linux/uaccess.h:152 [inline]
+>   hidraw_ioctl+0x39c/0xae0 drivers/hid/hidraw.c:392
+>   vfs_ioctl fs/ioctl.c:46 [inline]
+>   file_ioctl fs/ioctl.c:509 [inline]
+>   do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
+>   ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
+>   __do_sys_ioctl fs/ioctl.c:720 [inline]
+>   __se_sys_ioctl fs/ioctl.c:718 [inline]
+>   __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
+>   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x459829
+> Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7
+> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
+> ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+> RSP: 002b:00007f6587cfbc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459829
+> RDX: 0000000020005640 RSI: 0000000090044802 RDI: 0000000000000004
+> RBP: 000000000075c070 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6587cfc6d4
+> R13: 00000000004c21db R14: 00000000004d5540 R15: 00000000ffffffff
+> ==================================================================
 
-Hi Ganapathi,
+#syz dup: BUG: bad usercopy in hidraw_ioctl
 
-Has this patch been accepted anywhere? This bug is still open on syzbot.
-
-Thanks!
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
