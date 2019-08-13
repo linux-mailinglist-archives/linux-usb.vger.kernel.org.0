@@ -2,262 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD97D8B6A8
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 13:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE1C8B825
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 14:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727632AbfHML1v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 07:27:51 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:22871 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727582AbfHML1u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 07:27:50 -0400
-X-UUID: b14ffb0e84e44058a6ea3d827c563e34-20190813
-X-UUID: b14ffb0e84e44058a6ea3d827c563e34-20190813
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 773372573; Tue, 13 Aug 2019 19:27:44 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 13 Aug 2019 19:27:38 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 13 Aug 2019 19:27:41 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das@bp.renesas.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [PATCH next v9 11/11] usb: mtu3: register a USB Role Switch for dual role mode
-Date:   Tue, 13 Aug 2019 19:27:14 +0800
-Message-ID: <1565695634-9711-12-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1565695634-9711-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1565695634-9711-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S1727144AbfHMMNv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 08:13:51 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:34839 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726600AbfHMMNv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 08:13:51 -0400
+Received: by mail-wm1-f66.google.com with SMTP id l2so1256006wmg.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 05:13:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Y0vfxQIzHBN9/H8MH+w55vyAnQYOVUSLg7VW2CSCSQI=;
+        b=gBR8lEhke/jNvz3P1WvjKavtomt5NU4Chd8gj7veT8jn/AWlR3HVBAMnUkxBnkK8ol
+         P0DqUBIEJqahNEQAgqC5m8ZJxnoTR2UZgGkZiOSZ3R1T2KM8bXMHQVFmGUR7YMOSN82T
+         UA+zBOwlJF5MdTc203RvlTn7XklonYagrD40b9jeWMYKk67bs5wiDueRQUhkPnYjge4L
+         4q9KBEBoNyuZTbSwUkxmuyP3jmL0fkta1GmpOcOdyLNl/k9xhaTcqeXzPa+NIn8ZzrdE
+         zQSlvXSDqrvQf6iVSwos7J62hSwyapK25g0bFZSeUcTSW9bP+S3qbeq9h4UeriNU8ujj
+         Bodg==
+X-Gm-Message-State: APjAAAVFk1OLXAnAepyR4tsrLuSGvTFQ8N7NgNfFIJodLywdqDOycAr7
+        t4Xue/mDq88p+NG+40dcFYaYE5SGUBM=
+X-Google-Smtp-Source: APXvYqzljE5kZRzDyrl63RmmXs9cjPpjSWQMFkW0OF00rvU1uz+mbB/BhzYNrairbKprfayBxnWh8A==
+X-Received: by 2002:a1c:a909:: with SMTP id s9mr2834274wme.20.1565698427091;
+        Tue, 13 Aug 2019 05:13:47 -0700 (PDT)
+Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
+        by smtp.gmail.com with ESMTPSA id f23sm1006043wmj.37.2019.08.13.05.13.46
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Aug 2019 05:13:46 -0700 (PDT)
+Subject: Re: [PATCH] usb: typec: fusb302: Call fusb302_debugfs_init earlier
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org
+References: <20190813101524.80673-1-hdegoede@redhat.com>
+ <20190813105216.GD4691@kuha.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <18993917-794a-dbd7-db6f-eec2f02f3ab1@redhat.com>
+Date:   Tue, 13 Aug 2019 14:13:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: C5CC4587325D6A5B81E86289BA0E5C4742A903809814E4220486C44FD595D5332000:8
-X-MTK:  N
+In-Reply-To: <20190813105216.GD4691@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Because extcon is not allowed for new bindings, and the
-dual role switch is supported by USB Role Switch,
-especially for Type-C drivers, so register a USB Role
-Switch to support the new way
-
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v5~v9 no changes
-
-v4 changes:
-  1. assign fwnode member of usb_role_switch struct suggested by Heikki
-
-v3 changes:
-  1. select USB_ROLE_SWITCH in Kconfig suggested by Heikki
-  2. rename ssusb_mode_manual_switch() to ssusb_mode_switch()
-
-v2 no changes
----
- drivers/usb/mtu3/Kconfig        |  1 +
- drivers/usb/mtu3/mtu3.h         |  5 ++++
- drivers/usb/mtu3/mtu3_debugfs.c |  4 +--
- drivers/usb/mtu3/mtu3_dr.c      | 48 ++++++++++++++++++++++++++++++++-
- drivers/usb/mtu3/mtu3_dr.h      |  6 ++---
- drivers/usb/mtu3/mtu3_plat.c    |  3 ++-
- 6 files changed, 60 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/mtu3/Kconfig b/drivers/usb/mtu3/Kconfig
-index 928c2cd6fc00..bf98fd36341d 100644
---- a/drivers/usb/mtu3/Kconfig
-+++ b/drivers/usb/mtu3/Kconfig
-@@ -44,6 +44,7 @@ config USB_MTU3_DUAL_ROLE
- 	bool "Dual Role mode"
- 	depends on ((USB=y || USB=USB_MTU3) && (USB_GADGET=y || USB_GADGET=USB_MTU3))
- 	depends on (EXTCON=y || EXTCON=USB_MTU3)
-+	select USB_ROLE_SWITCH
- 	help
- 	  This is the default mode of working of MTU3 controller where
- 	  both host and gadget features are enabled.
-diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
-index 76ecf12fdf62..6087be236a35 100644
---- a/drivers/usb/mtu3/mtu3.h
-+++ b/drivers/usb/mtu3/mtu3.h
-@@ -199,6 +199,9 @@ struct mtu3_gpd_ring {
- * @id_nb : notifier for iddig(idpin) detection
- * @id_work : work of iddig detection notifier
- * @id_event : event of iddig detecion notifier
-+* @role_sw : use USB Role Switch to support dual-role switch, can't use
-+*		extcon at the same time, and extcon is deprecated.
-+* @role_sw_used : true when the USB Role Switch is used.
- * @is_u3_drd: whether port0 supports usb3.0 dual-role device or not
- * @manual_drd_enabled: it's true when supports dual-role device by debugfs
- *		to switch host/device modes depending on user input.
-@@ -212,6 +215,8 @@ struct otg_switch_mtk {
- 	struct notifier_block id_nb;
- 	struct work_struct id_work;
- 	unsigned long id_event;
-+	struct usb_role_switch *role_sw;
-+	bool role_sw_used;
- 	bool is_u3_drd;
- 	bool manual_drd_enabled;
- };
-diff --git a/drivers/usb/mtu3/mtu3_debugfs.c b/drivers/usb/mtu3/mtu3_debugfs.c
-index 62c57ddc554e..c96e5dab0a48 100644
---- a/drivers/usb/mtu3/mtu3_debugfs.c
-+++ b/drivers/usb/mtu3/mtu3_debugfs.c
-@@ -453,9 +453,9 @@ static ssize_t ssusb_mode_write(struct file *file, const char __user *ubuf,
- 		return -EFAULT;
- 
- 	if (!strncmp(buf, "host", 4) && !ssusb->is_host) {
--		ssusb_mode_manual_switch(ssusb, 1);
-+		ssusb_mode_switch(ssusb, 1);
- 	} else if (!strncmp(buf, "device", 6) && ssusb->is_host) {
--		ssusb_mode_manual_switch(ssusb, 0);
-+		ssusb_mode_switch(ssusb, 0);
- 	} else {
- 		dev_err(ssusb->dev, "wrong or duplicated setting\n");
- 		return -EINVAL;
-diff --git a/drivers/usb/mtu3/mtu3_dr.c b/drivers/usb/mtu3/mtu3_dr.c
-index 5fcb71af875a..08e18448e8b8 100644
---- a/drivers/usb/mtu3/mtu3_dr.c
-+++ b/drivers/usb/mtu3/mtu3_dr.c
-@@ -7,6 +7,8 @@
-  * Author: Chunfeng Yun <chunfeng.yun@mediatek.com>
-  */
- 
-+#include <linux/usb/role.h>
-+
- #include "mtu3.h"
- #include "mtu3_dr.h"
- #include "mtu3_debug.h"
-@@ -280,7 +282,7 @@ static int ssusb_extcon_register(struct otg_switch_mtk *otg_sx)
-  * This is useful in special cases, such as uses TYPE-A receptacle but also
-  * wants to support dual-role mode.
-  */
--void ssusb_mode_manual_switch(struct ssusb_mtk *ssusb, int to_host)
-+void ssusb_mode_switch(struct ssusb_mtk *ssusb, int to_host)
- {
- 	struct otg_switch_mtk *otg_sx = &ssusb->otg_switch;
- 
-@@ -318,6 +320,47 @@ void ssusb_set_force_mode(struct ssusb_mtk *ssusb,
- 	mtu3_writel(ssusb->ippc_base, SSUSB_U2_CTRL(0), value);
- }
- 
-+static int ssusb_role_sw_set(struct device *dev, enum usb_role role)
-+{
-+	struct ssusb_mtk *ssusb = dev_get_drvdata(dev);
-+	bool to_host = false;
-+
-+	if (role == USB_ROLE_HOST)
-+		to_host = true;
-+
-+	if (to_host ^ ssusb->is_host)
-+		ssusb_mode_switch(ssusb, to_host);
-+
-+	return 0;
-+}
-+
-+static enum usb_role ssusb_role_sw_get(struct device *dev)
-+{
-+	struct ssusb_mtk *ssusb = dev_get_drvdata(dev);
-+	enum usb_role role;
-+
-+	role = ssusb->is_host ? USB_ROLE_HOST : USB_ROLE_DEVICE;
-+
-+	return role;
-+}
-+
-+static int ssusb_role_sw_register(struct otg_switch_mtk *otg_sx)
-+{
-+	struct usb_role_switch_desc role_sx_desc = { 0 };
-+	struct ssusb_mtk *ssusb =
-+		container_of(otg_sx, struct ssusb_mtk, otg_switch);
-+
-+	if (!otg_sx->role_sw_used)
-+		return 0;
-+
-+	role_sx_desc.set = ssusb_role_sw_set;
-+	role_sx_desc.get = ssusb_role_sw_get;
-+	role_sx_desc.fwnode = dev_fwnode(ssusb->dev);
-+	otg_sx->role_sw = usb_role_switch_register(ssusb->dev, &role_sx_desc);
-+
-+	return PTR_ERR_OR_ZERO(otg_sx->role_sw);
-+}
-+
- int ssusb_otg_switch_init(struct ssusb_mtk *ssusb)
- {
- 	struct otg_switch_mtk *otg_sx = &ssusb->otg_switch;
-@@ -328,6 +371,8 @@ int ssusb_otg_switch_init(struct ssusb_mtk *ssusb)
- 
- 	if (otg_sx->manual_drd_enabled)
- 		ssusb_dr_debugfs_init(ssusb);
-+	else if (otg_sx->role_sw_used)
-+		ret = ssusb_role_sw_register(otg_sx);
- 	else
- 		ret = ssusb_extcon_register(otg_sx);
- 
-@@ -340,4 +385,5 @@ void ssusb_otg_switch_exit(struct ssusb_mtk *ssusb)
- 
- 	cancel_work_sync(&otg_sx->id_work);
- 	cancel_work_sync(&otg_sx->vbus_work);
-+	usb_role_switch_unregister(otg_sx->role_sw);
- }
-diff --git a/drivers/usb/mtu3/mtu3_dr.h b/drivers/usb/mtu3/mtu3_dr.h
-index ba6fe357ce29..5e58c4dbd54a 100644
---- a/drivers/usb/mtu3/mtu3_dr.h
-+++ b/drivers/usb/mtu3/mtu3_dr.h
-@@ -71,7 +71,7 @@ static inline void ssusb_gadget_exit(struct ssusb_mtk *ssusb)
- #if IS_ENABLED(CONFIG_USB_MTU3_DUAL_ROLE)
- int ssusb_otg_switch_init(struct ssusb_mtk *ssusb);
- void ssusb_otg_switch_exit(struct ssusb_mtk *ssusb);
--void ssusb_mode_manual_switch(struct ssusb_mtk *ssusb, int to_host);
-+void ssusb_mode_switch(struct ssusb_mtk *ssusb, int to_host);
- int ssusb_set_vbus(struct otg_switch_mtk *otg_sx, int is_on);
- void ssusb_set_force_mode(struct ssusb_mtk *ssusb,
- 			  enum mtu3_dr_force_mode mode);
-@@ -86,8 +86,8 @@ static inline int ssusb_otg_switch_init(struct ssusb_mtk *ssusb)
- static inline void ssusb_otg_switch_exit(struct ssusb_mtk *ssusb)
- {}
- 
--static inline void
--ssusb_mode_manual_switch(struct ssusb_mtk *ssusb, int to_host) {}
-+static inline void ssusb_mode_switch(struct ssusb_mtk *ssusb, int to_host)
-+{}
- 
- static inline int ssusb_set_vbus(struct otg_switch_mtk *otg_sx, int is_on)
- {
-diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
-index fd0f6c5dfbc1..9c256ea3cdf5 100644
---- a/drivers/usb/mtu3/mtu3_plat.c
-+++ b/drivers/usb/mtu3/mtu3_plat.c
-@@ -299,8 +299,9 @@ static int get_ssusb_rscs(struct platform_device *pdev, struct ssusb_mtk *ssusb)
- 	otg_sx->is_u3_drd = of_property_read_bool(node, "mediatek,usb3-drd");
- 	otg_sx->manual_drd_enabled =
- 		of_property_read_bool(node, "enable-manual-drd");
-+	otg_sx->role_sw_used = of_property_read_bool(node, "usb-role-switch");
- 
--	if (of_property_read_bool(node, "extcon")) {
-+	if (!otg_sx->role_sw_used && of_property_read_bool(node, "extcon")) {
- 		otg_sx->edev = extcon_get_edev_by_phandle(ssusb->dev, 0);
- 		if (IS_ERR(otg_sx->edev)) {
- 			dev_err(ssusb->dev, "couldn't get extcon device\n");
--- 
-2.22.0
-
+SGkgSGVpa2tpLA0KDQpPbiAxMy0wOC0xOSAxMjo1MiwgSGVpa2tpIEtyb2dlcnVzIHdyb3Rl
+Og0KPiBIaSBIYW5zLA0KPiANCj4gT24gVHVlLCBBdWcgMTMsIDIwMTkgYXQgMTI6MTU6MjRQ
+TSArMDIwMCwgSGFucyBkZSBHb2VkZSB3cm90ZToNCj4+IHRjcG1fcmVnaXN0ZXJfcG9ydCgp
+IHdpbGwgY2FsbCBzb21lIG9mIHRoZSBmdXNiMzAyIGNvZGUncyBjYWxsYmFja3MNCj4+IHdp
+Y2ggaW4gdHVybiB3aWxsIGNhbGwgZnVzYjMwMl9sb2coKS4gU28gd2UgbmVlZCB0byBjYWxs
+DQo+PiBmdXNiMzAyX2RlYnVnZnNfaW5pdCgpIGJlZm9yZSB3ZSBjYWxsIHRjcG1fcmVnaXN0
+ZXJfcG9ydCgpLg0KPj4NCj4+IFRoaXMgZml4ZXMgdGhlIGZvbGxvd2luZyB3YXJuaW5nLCB3
+aGljaCB3YXMgY2F1c2VkIGJ5IHRoZSBsb2didWZmZXJfbG9jaw0KPj4gbm90IHlldCBiZWlu
+ZyBpbml0aWFsaXplZCAod2hpY2ggaXMgZG9uZSBieSBmdXNiMzAyX2RlYnVnZnNfaW5pdCk6
+DQo+Pg0KPj4gICBERUJVR19MT0NLU19XQVJOX09OKGxvY2stPm1hZ2ljICE9IGxvY2spDQo+
+PiAgIFdBUk5JTkc6IENQVTogMCBQSUQ6IDEzMDYgYXQga2VybmVsL2xvY2tpbmcvbXV0ZXgu
+Yzo5MTIgX19tdXRleF9sb2NrKzB4OTc4LzB4OWEwDQo+PiAgIE1vZHVsZXMgbGlua2VkIGlu
+OiBmdXNiMzAyKCspIHRjcG0gcGkzdXNiMzA1MzIgdHlwZWMgYnEyNDE5MF9jaGFyZ2VyIHNu
+ZF9zb2Nfc3N0X2NodF9ic3dfcnQ1NjQ1IG1laV9oZGNwIGR3YzMgaW50ZWxfcmFwbF9tc3Ig
+dWRjX2NvcmUgdWxwaSBncGlvX2tleXMgaW50ZWxfcG93ZXJjbGFtcCBjb3JldGVtcCBrdm1f
+aW50ZWwgYnJjbWZtYWMga3ZtIGJyY211dGlsIGpveWRldiBjZmc4MDIxMSB3ZGF0X3dkdCBp
+cnFieXBhc3MgcGNzcGtyIGludGVsX2NzdGF0ZSBleHRjb25faW50ZWxfY2h0X3djIGkyY19j
+aHRfd2MoRSkgc25kX2ludGVsX3NzdF9hY3BpIHNuZF9pbnRlbF9zc3RfY29yZSBzbmRfc29j
+X3J0NTY0NSBzbmRfc29jX3NzdF9hdG9tX2hpZmkyX3BsYXRmb3JtIHNuZF9zb2NfYWNwaV9p
+bnRlbF9tYXRjaCBzbmRfc29jX3JsNjIzMSBzbmRfc29jX2FjcGkgaW50ZWxfeGhjaV91c2Jf
+cm9sZV9zd2l0Y2ggcm9sZXMgaGNpX3VhcnQgc25kX3NvY19jb3JlIGJ0cWNhIG1laV90eGUg
+YnRydGwgcHJvY2Vzc29yX3RoZXJtYWxfZGV2aWNlIG1laSBzbmRfaGRtaV9scGVfYXVkaW8g
+bHBjX2ljaCBzbmRfY29tcHJlc3MgYnRiY20gaW50ZWxfcmFwbF9jb21tb24gYWM5N19idXMg
+ZHdjM19wY2kgc25kX3BjbV9kbWFlbmdpbmUgaW50ZWxfc29jX2R0c19pb3NmIGJ0aW50ZWwg
+c25kX3NlcSBibHVldG9vdGggc25kX3NlcV9kZXZpY2Ugc25kX3BjbSBpbnRlbF9jaHRfaW50
+MzNmZV9tdXNiIHNuZF90aW1lciBpbnRlbF9jaHRfaW50MzNmZV90eXBlYyBpbnRlbF9oaWQg
+aW50ZWxfY2h0X2ludDMzZmVfY29tbW9uIHNwYXJzZV9rZXltYXAgc25kIGVjZGhfZ2VuZXJp
+YyBnb29kaXggcmZraWxsIHNvdW5kY29yZSBlY2Mgc3BpX3B4YTJ4eF9wbGF0Zm9ybSBtYXgx
+NzA0Ml9iYXR0ZXJ5IGR3X2RtYWMgaW50MzQwNl90aGVybWFsIGRwdGZfcG93ZXIgYWNwaV9w
+YWQgc29jX2J1dHRvbl9hcnJheSBpbnQzNDAwX3RoZXJtYWwgaW50MzQwM190aGVybWFsDQo+
+PiAgICBncGRfcG9ja2V0X2ZhbiBpbnRlbF9pbnQwMDAyX3ZncGlvIGludDM0MHhfdGhlcm1h
+bF96b25lIGFjcGlfdGhlcm1hbF9yZWwgZG1fY3J5cHQgbW1jX2Jsb2NrIGk5MTUgY3JjdDEw
+ZGlmX3BjbG11bCBjcmMzMl9wY2xtdWwgY3JjMzJjX2ludGVsIGdoYXNoX2NsbXVsbmlfaW50
+ZWwgaTJjX2FsZ29fYml0IGRybV9rbXNfaGVscGVyIGRybSB2aWRlbyBzZGhjaV9hY3BpIHNk
+aGNpIG1tY19jb3JlIHB3bV9scHNzX3BsYXRmb3JtIHB3bV9scHNzIGkyY19kZXYNCj4+ICAg
+Q1BVOiAwIFBJRDogMTMwNiBDb21tOiBzeXN0ZW1kLXVkZXZkIFRhaW50ZWQ6IEcgICAgICAg
+ICAgICBFICAgICA1LjMuMC1yYzQrICM4Mw0KPj4gICBIYXJkd2FyZSBuYW1lOiBEZWZhdWx0
+IHN0cmluZyBEZWZhdWx0IHN0cmluZy9EZWZhdWx0IHN0cmluZywgQklPUyA1LjExIDA2LzI4
+LzIwMTcNCj4+ICAgUklQOiAwMDEwOl9fbXV0ZXhfbG9jaysweDk3OC8weDlhMA0KPj4gICBD
+b2RlOiBjMCAwZiA4NCAyNiBmNyBmZiBmZiA0NCA4YiAwNSAyNCAyNSBjOCAwMCA0NSA4NSBj
+MCAwZiA4NSAxNiBmNyBmZiBmZiA0OCBjNyBjNiBkYSA1NSAyZiBhZSA0OCBjNyBjNyA5OCA4
+YyAyZCBhZSBlOCBhMCBmOSA1YyBmZiA8MGY+IDBiIGU5IGZjIGY2IGZmIGZmIDRjIDg5IGYw
+IDRkIDg5IGZlIDQ5IDg5IGM3IGU5IGNmIGZhIGZmIGZmIGU4DQo+PiAgIFJTUDogMDAxODpm
+ZmZmYjdhOGMwNTIzODAwIEVGTEFHUzogMDAwMTAyODYNCj4+ICAgUkFYOiAwMDAwMDAwMDAw
+MDAwMDAwIFJCWDogMDAwMDAwMDAwMDAwMDAwMCBSQ1g6IDAwMDAwMDAwMDAwMDAwMDANCj4+
+ICAgUkRYOiAwMDAwMDAwMDAwMDAwMDAyIFJTSTogMDAwMDAwMDAwMDAwMDAwMSBSREk6IDAw
+MDAwMDAwMDAwMDAyNDYNCj4+ICAgUkJQOiBmZmZmYjdhOGMwNTIzOGMwIFIwODogMDAwMDAw
+MDAwMDAwMDAwMCBSMDk6IDAwMDAwMDAwMDAwMDAwMDANCj4+ICAgUjEwOiBmZmZmYjdhOGMw
+NTIzNjQ4IFIxMTogMDAwMDAwMDAwMDAwMDAzMCBSMTI6IDAwMDAwMDAwMDAwMDAwMDANCj4+
+ICAgUjEzOiBmZmZmYjdhOGMwNTIzOTkwIFIxNDogZmZmZjliZjIyZjcwYzAyOCBSMTU6IGZm
+ZmY5YmYyMmY3MGMzNjANCj4+ICAgRlM6ICAwMDAwN2YzOWNhMjM0OTQwKDAwMDApIEdTOmZm
+ZmY5YmYyMzc0MDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMA0KPj4gICBDUzog
+IDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzDQo+PiAgIENS
+MjogMDAwMDdmMWYxMDg0ODFhMCBDUjM6IDAwMDAwMDAyNzFmMjgwMDAgQ1I0OiAwMDAwMDAw
+MDAwMTAwNmYwDQo+PiAgIENhbGwgVHJhY2U6DQo+PiAgICA/IGZpbmRfaGVsZF9sb2NrKzB4
+MzkvMHg5MA0KPj4gICAgPyBfZnVzYjMwMl9sb2crMHg4MS8weDFkMCBbZnVzYjMwMl0NCj4+
+ICAgID8gdnNucHJpbnRmKzB4M2FhLzB4NGYwDQo+PiAgICA/IF9mdXNiMzAyX2xvZysweDgx
+LzB4MWQwIFtmdXNiMzAyXQ0KPj4gICAgX2Z1c2IzMDJfbG9nKzB4ODEvMHgxZDAgW2Z1c2Iz
+MDJdDQo+PiAgIC4uLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEhhbnMgZGUgR29lZGUgPGhk
+ZWdvZWRlQHJlZGhhdC5jb20+DQo+PiAtLS0NCj4+ICAgZHJpdmVycy91c2IvdHlwZWMvdGNw
+bS9mdXNiMzAyLmMgfCAzICsrLQ0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25z
+KCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3R5
+cGVjL3RjcG0vZnVzYjMwMi5jIGIvZHJpdmVycy91c2IvdHlwZWMvdGNwbS9mdXNiMzAyLmMN
+Cj4+IGluZGV4IGNjZmM3ZTkxZTdhMy4uMDRjNzZiOWQwMDY1IDEwMDY0NA0KPj4gLS0tIGEv
+ZHJpdmVycy91c2IvdHlwZWMvdGNwbS9mdXNiMzAyLmMNCj4+ICsrKyBiL2RyaXZlcnMvdXNi
+L3R5cGVjL3RjcG0vZnVzYjMwMi5jDQo+PiBAQCAtMTc1OSw2ICsxNzU5LDcgQEAgc3RhdGlj
+IGludCBmdXNiMzAyX3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQsDQo+PiAgIAlJ
+TklUX1dPUksoJmNoaXAtPmlycV93b3JrLCBmdXNiMzAyX2lycV93b3JrKTsNCj4+ICAgCUlO
+SVRfREVMQVlFRF9XT1JLKCZjaGlwLT5iY19sdmxfaGFuZGxlciwgZnVzYjMwMl9iY19sdmxf
+aGFuZGxlcl93b3JrKTsNCj4+ICAgCWluaXRfdGNwY19kZXYoJmNoaXAtPnRjcGNfZGV2KTsN
+Cj4+ICsJZnVzYjMwMl9kZWJ1Z2ZzX2luaXQoY2hpcCk7DQo+PiAgIA0KPj4gICAJaWYgKGNs
+aWVudC0+aXJxKSB7DQo+PiAgIAkJY2hpcC0+Z3Bpb19pbnRfbl9pcnEgPSBjbGllbnQtPmly
+cTsNCj4+IEBAIC0xNzg0LDcgKzE3ODUsNiBAQCBzdGF0aWMgaW50IGZ1c2IzMDJfcHJvYmUo
+c3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwNCj4+ICAgCQlnb3RvIHRjcG1fdW5yZWdpc3Rl
+cl9wb3J0Ow0KPj4gICAJfQ0KPj4gICAJZW5hYmxlX2lycV93YWtlKGNoaXAtPmdwaW9faW50
+X25faXJxKTsNCj4+IC0JZnVzYjMwMl9kZWJ1Z2ZzX2luaXQoY2hpcCk7DQo+PiAgIAlpMmNf
+c2V0X2NsaWVudGRhdGEoY2xpZW50LCBjaGlwKTsNCj4gDQo+IFRoYXQgbGVhdmVzIHRoZSBy
+b290ZGlyIHZhcmlhYmxlIHBvaW50aW5nIHRvIHNvbWV0aGluZyBhZ2FpbiBmb3INCj4gZXhh
+bXBsZSBpZiBhIGZhaWx1cmUgaGFwcGVucyAobGlrZSAtRVBST0JFX0FHQUlOKSBkdXJpbmcg
+cHJvYmUgKHRoZQ0KPiAiZnVzYjMwMiIgZGlyZWN0b3J5IGlzIHJlbW92ZWQsIGJ1dCB0aGUg
+cm9vdGRpciBzdGF0aWMgdmFyaWFibGUgc3RpbGwNCj4gcG9pbnRzIHRvIHNvbWV0aGluZyku
+DQo+IA0KPiBMZXQncyBqdXN0IGNyZWF0ZSB0aGF0IHJvb3RkaXIgZGlyZWN0b3J5IGR1cmlu
+ZyBkcml2ZXIgaW5pdC4gSSBkb24ndA0KPiByZWFsbHkgdW5kZXJzdGFuZCB3aHkgc2hvdWxk
+IHdlIG9ubHkgY3JlYXRlIGl0IHdoZW4vaWYgdGhlIGZpcnN0DQo+IGluc3RhbmNlIG9mIGZ1
+c2IzMDIgaXMgcmVnaXN0ZXJlZC4gSSB0aGluayBzb21ldGhpbmcgbGlrZSB0aGlzIHdvdWxk
+DQo+IHdvcms6DQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvdHlwZWMvdGNwbS9m
+dXNiMzAyLmMgYi9kcml2ZXJzL3VzYi90eXBlYy90Y3BtL2Z1c2IzMDIuYw0KPiBpbmRleCBj
+NTI0MDg4MjQ2ZWUuLjdhOTUwYTZlNWYwZCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2Iv
+dHlwZWMvdGNwbS9mdXNiMzAyLmMNCj4gKysrIGIvZHJpdmVycy91c2IvdHlwZWMvdGNwbS9m
+dXNiMzAyLmMNCj4gQEAgLTIxMiw5ICsyMTIsNiBAQCBzdGF0aWMgc3RydWN0IGRlbnRyeSAq
+cm9vdGRpcjsNCj4gICBzdGF0aWMgdm9pZCBmdXNiMzAyX2RlYnVnZnNfaW5pdChzdHJ1Y3Qg
+ZnVzYjMwMl9jaGlwICpjaGlwKQ0KPiAgIHsNCj4gICAgICAgICAgbXV0ZXhfaW5pdCgmY2hp
+cC0+bG9nYnVmZmVyX2xvY2spOw0KPiAtICAgICAgIGlmICghcm9vdGRpcikNCj4gLSAgICAg
+ICAgICAgICAgIHJvb3RkaXIgPSBkZWJ1Z2ZzX2NyZWF0ZV9kaXIoImZ1c2IzMDIiLCBOVUxM
+KTsNCj4gLQ0KPiAgICAgICAgICBjaGlwLT5kZW50cnkgPSBkZWJ1Z2ZzX2NyZWF0ZV9maWxl
+KGRldl9uYW1lKGNoaXAtPmRldiksDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgU19JRlJFRyB8IDA0NDQsIHJvb3RkaXIsDQo+ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2hpcCwgJmZ1c2IzMDJfZGVidWdf
+Zm9wcyk7DQo+IEBAIC0yMjMsNyArMjIwLDYgQEAgc3RhdGljIHZvaWQgZnVzYjMwMl9kZWJ1
+Z2ZzX2luaXQoc3RydWN0IGZ1c2IzMDJfY2hpcCAqY2hpcCkNCj4gICBzdGF0aWMgdm9pZCBm
+dXNiMzAyX2RlYnVnZnNfZXhpdChzdHJ1Y3QgZnVzYjMwMl9jaGlwICpjaGlwKQ0KPiAgIHsN
+Cj4gICAgICAgICAgZGVidWdmc19yZW1vdmUoY2hpcC0+ZGVudHJ5KTsNCj4gLSAgICAgICBk
+ZWJ1Z2ZzX3JlbW92ZShyb290ZGlyKTsNCj4gICB9DQo+ICAgDQo+ICAgI2Vsc2UNCj4gQEAg
+LTE4NjMsNyArMTg1OSwyNCBAQCBzdGF0aWMgc3RydWN0IGkyY19kcml2ZXIgZnVzYjMwMl9k
+cml2ZXIgPSB7DQo+ICAgICAgICAgIC5yZW1vdmUgPSBmdXNiMzAyX3JlbW92ZSwNCj4gICAg
+ICAgICAgLmlkX3RhYmxlID0gZnVzYjMwMl9pMmNfZGV2aWNlX2lkLA0KPiAgIH07DQo+IC1t
+b2R1bGVfaTJjX2RyaXZlcihmdXNiMzAyX2RyaXZlcik7DQo+ICsNCj4gK3N0YXRpYyBpbnQg
+X19pbml0IGZ1c2IzMDJfaW5pdCh2b2lkKQ0KPiArew0KPiArICAgICAgIHJvb3RkaXIgPSBk
+ZWJ1Z2ZzX2NyZWF0ZV9kaXIoImZ1c2IzMDIiLCBOVUxMKTsNCj4gKyAgICAgICBpZiAoSVNf
+RVJSKHJvb3RkaXIpKQ0KPiArICAgICAgICAgICAgICAgcmV0dXJuIFBUUl9FUlIocm9vdGRp
+cik7DQo+ICsNCj4gKyAgICAgICByZXR1cm4gaTJjX2FkZF9kcml2ZXIoJmZ1c2IzMDJfZHJp
+dmVyKTsNCj4gK30NCj4gKw0KPiArc3RhdGljIHZvaWQgX19leGl0IGZ1c2IzMDJfZXhpdCh2
+b2lkKQ0KPiArew0KPiArICAgICAgIGkyY19kZWxfZHJpdmVyKCZmdXNiMzAyX2RyaXZlcik7
+DQo+ICsgICAgICAgZGVidWdmc19yZW1vdmUocm9vdGRpcik7DQo+ICt9DQo+ICsNCj4gK21v
+ZHVsZV9pbml0KGZ1c2IzMDJfaW5pdCk7DQo+ICttb2R1bGVfZXhpdChmdXNiMzAyX2V4aXQp
+Ow0KPiAgIA0KPiAgIE1PRFVMRV9BVVRIT1IoIll1ZXlhbyBaaHUgPHl1ZXlhby56aHVAZ21h
+aWwuY29tPiIpOw0KPiAgIE1PRFVMRV9ERVNDUklQVElPTigiRmFpcmNoaWxkIEZVU0IzMDIg
+VHlwZS1DIENoaXAgRHJpdmVyIik7DQo+IA0KPiANCj4gSWYgaXQncyBPSywgY291bGQgeW91
+IGluY2x1ZGUgdGhhdCBpbnRvIHRoaXMgcGF0Y2g/DQoNCkkgYWdyZWUgdGhhdCB3ZSBzaG91
+bGQgZG8gc29tZXRoaW5nIGFib3V0IHRoZSByb290ZGlyIGxlYWthZ2UNCm9uIHJtbW9kOyBh
+bmQgeW91ciBwYXRjaCBzZWVtcyBsaWtlIGEgZ29vZCBzb2x1dGlvbjsgYW5kIEkgY2FuDQp0
+ZXN0IHlvdXIgcGF0Y2ggaWYgeW91IHdhbnQuDQoNCkJ1dCB0aGUgcm9vdGRpciBsZWFrYWdl
+IGlzIGEgcHJlLWV4aXN0aW5nIHByb2JsZW0sIGV2ZW4gd2l0aG91dA0KbXkgcGF0Y2ggdG8g
+Y2FsbCBmdXNiMzAyX2RlYnVnZnNfaW5pdCBlYXJsaWVyLCB3ZSB3b3VsZCBzdGlsbCBsZWFr
+DQppdCBhZnRlciBhIHJtbW9kLCBhc3N1bWluZyBwcm9iZSgpIGhhcyBzdWNjZWVkZWQgYXQg
+bGVhc3Qgb25jZS4NCg0KQXMgZm9yIC1FUFJPQkVfREVGRVIsIHRoZW4gZXZlbnR1YWxseSBw
+cm9iZSBzaG91bGQgc3VjY2VlZCBhbmQNCnRoZSAiaWYgKCFyb290ZGlyKSIgaW46DQoNCiAg
+ICAgICAgaWYgKCFyb290ZGlyKQ0KICAgICAgICAgICAgICAgIHJvb3RkaXIgPSBkZWJ1Z2Zz
+X2NyZWF0ZV9kaXIoImZ1c2IzMDIiLCBOVUxMKTsNCg0KRW5zdXJlcyB0aGF0IHdlIG9ubHkg
+ZG8gaXQgb25jZSwgc28gdGhlIG9ubHkgY2hhbmdlIHRvIHRoZSByb290ZGlyDQpsZWFrIG15
+IHBhdGNoIG1ha2VzIGlzIHRoYXQgaXQgZ2V0cyBsZWFrZWQgb24gcm1tb2QgZXZlbiBpZg0K
+cHJvYmUoKSBuZXZlciBzdWNjZWVkZWQuDQoNCkFzIHNhaWQgSSBhZ3JlZSB0aGF0IHdlIHNo
+b3VsZCBkbyBzb21ldGhpbmcgYWJvdXQgaXQ7IGFuZCB5b3VyDQpzdWdnZXN0aW9uIHNlZW1z
+IGxpa2UgYSBnb29kIHNvbHV0aW9uLCBidXQgaXQgc2VlbXMgbGlrZSBhbg0KYWxtb3N0IG9y
+dGhvZ29uYWwgcHJvYmxlbSwgc28gSU1ITyB0aGlzIHNob3VsZCBiZSBmaXhlZCBpbiBhDQpz
+ZXBhcmF0ZSBwYXRjaCwgbm90IHNxdWFzaGVkIGludG8gdGhlDQoiQ2FsbCBmdXNiMzAyX2Rl
+YnVnZnNfaW5pdCBlYXJsaWVyIiBwYXRjaC4NCg0KRG8geW91IHdhbnQgbWUgdG8gdHVybiB5
+b3VyIFBPQyBjb2RlIGludG8gYSBwcm9wZXIgcGF0Y2ggd2l0aA0KeW91IGFzIGF1dGhvciBh
+bmQgeW91ciBTLW8tYiBhZGRlZCAod2l0aCB5b3VyIHBlcm1pc3Npb24pIGFuZA0KdGhhdCBJ
+IHRoZW4gdGVzdCBpdCBhbmQgYWRkIG15IFRlc3RlZC1ieT8NCg0KUmVnYXJkcywNCg0KSGFu
+cw0K
