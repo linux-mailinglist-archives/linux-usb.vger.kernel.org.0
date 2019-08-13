@@ -2,180 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B28378B44F
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 11:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6198B532
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 12:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727625AbfHMJhP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 05:37:15 -0400
-Received: from mail-lj1-f181.google.com ([209.85.208.181]:33504 "EHLO
-        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726890AbfHMJhP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 05:37:15 -0400
-Received: by mail-lj1-f181.google.com with SMTP id z17so12486541ljz.0
-        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 02:37:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=g6HLb35o24mMleNDjSOk8KjoZ9bdc+BeV4VAa1quYrg=;
-        b=r3co6UQJ1UHKoZfg6AtAK4DtVk5Rqm5kYex4k4txaooDbMJv4Y1VXw0cf9t1Y3JDTe
-         r++xxBYYgxPUvsEGO96JnWi1abaPGl1MDEpXClRhyOYSZketwmPDWDuhfHRqAZMHjiyn
-         pTTgZ8h4HUSO7F06yb2lx0HuuTp11s8FjJv+UXHCizyGuo655G6KG5+9f5cdkyMq+4Hk
-         RGt1H055LnFpVUZMnefhEDk6QhsWoKnhdaKoXYzbVkxzLKMkyoIQtlrf00FmQd/0fUJw
-         MuFcOBrq2sQaHZJCjCsBdafYJ/Y5iARGYFRlhhig001abEiCOclqXI5IeGbY9JVIkWs3
-         gD6w==
-X-Gm-Message-State: APjAAAUQgeKRQojJ/ukNK2Pv/9SA6uZxZsVbLH783fux+MjPlKRKUmQG
-        yjTKeVoSWRl+ojMrbMY87EU=
-X-Google-Smtp-Source: APXvYqyaNg7s9OUjNPjhQ+kPzoEAwGkOrIZrUJl0CK1JeAI42haQtGnCdlrVAeSUOpmf4b9H9Vh7sA==
-X-Received: by 2002:a2e:978e:: with SMTP id y14mr6774696lji.10.1565689032453;
-        Tue, 13 Aug 2019 02:37:12 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id t137sm19494318lff.78.2019.08.13.02.37.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Aug 2019 02:37:11 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1hxTEp-0003DU-O6; Tue, 13 Aug 2019 11:37:07 +0200
-Date:   Tue, 13 Aug 2019 11:37:07 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Markus Breunig <Markus.L.Breunig@gmx.net>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Subject: Re: Fwd: Re: New USB Device
-Message-ID: <20190813093707.GD15556@localhost>
-References: <5D1D1376.7070202@gmx.net>
- <5D1E65F3.6090307@gmx.net>
- <20190705052121.GD15821@kroah.com>
- <5D224A18.2070907@gmx.net>
- <20190716092305.GC3522@localhost>
- <4e9b3ecf-ca45-51a5-d582-d3d067ecc723@gmx.net>
+        id S1728484AbfHMKP1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 06:15:27 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:54462 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727297AbfHMKP1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 06:15:27 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id D3F4630EA182;
+        Tue, 13 Aug 2019 10:15:26 +0000 (UTC)
+Received: from shalem.localdomain.com (ovpn-116-178.ams2.redhat.com [10.36.116.178])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B6F6A7EEC5;
+        Tue, 13 Aug 2019 10:15:25 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: fusb302: Call fusb302_debugfs_init earlier
+Date:   Tue, 13 Aug 2019 12:15:24 +0200
+Message-Id: <20190813101524.80673-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e9b3ecf-ca45-51a5-d582-d3d067ecc723@gmx.net>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Tue, 13 Aug 2019 10:15:26 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 07:32:29PM +0200, Markus Breunig wrote:
-> 
-> 
-> Am 16.07.2019 um 11:23 schrieb Johan Hovold:
-> > [ Pleas avoid top posting. ]
-> >
-> > On Sun, Jul 07, 2019 at 09:38:00PM +0200, Markus Breunig wrote:
-> >> Hi Greg,
-> >>
-> >> also the company GNS has a fragmented homepage, the handbook ist
-> >> available here:
-> >> http://www.servicedocs.com/ARTIKELEN/7200284490001.pdf
-> >> habe a look to page 10 "Remarks to Linux"
-> >>
-> >> This is the log of "lsusb -v" (full scan result attached):
-> >>
-> >> Bus 001 Device 004: ID 04d8:f8e8 Microchip Technology, Inc. Harmony
-> >> 300/350 Remote
-> >
-> > Are you sure this is the right device? This looks like a remote control,
-> > and one that should be using the cdc-acm driver.
-> >
-> 
-> The output of lsusb before plugging the GNS5890 device into the USB-port:
-> 
-> Bus 001 Device 005: ID 046d:c05a Logitech, Inc. M90/M100 Optical Mouse
-> Bus 001 Device 004: ID 046a:0001 Cherry GmbH Keyboard
-> Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp.
-> SMSC9512/9514 Fast Ethernet Adapter
-> Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. SMC9514 Hub
-> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
-> and the result of the lsusb after plugging the GNS5890 device into the
-> USB-port:
-> 
-> Bus 001 Device 005: ID 046d:c05a Logitech, Inc. M90/M100 Optical Mouse
-> Bus 001 Device 004: ID 046a:0001 Cherry GmbH Keyboard
-> Bus 001 Device 006: ID 04d8:f8e8 Microchip Technology, Inc. Harmony
-> 300/350 Remote
-> Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp.
-> SMSC9512/9514 Fast Ethernet Adapter
-> Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. SMC9514 Hub
-> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+tcpm_register_port() will call some of the fusb302 code's callbacks
+wich in turn will call fusb302_log(). So we need to call
+fusb302_debugfs_init() before we call tcpm_register_port().
 
-Ok, thanks for confirming. 
+This fixes the following warning, which was caused by the logbuffer_lock
+not yet being initialized (which is done by fusb302_debugfs_init):
 
-Based on the below descriptors, this device should be handled by the
-cdc-acm driver and show up as a /dev/ttyACMn.
+ DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+ WARNING: CPU: 0 PID: 1306 at kernel/locking/mutex.c:912 __mutex_lock+0x978/0x9a0
+ Modules linked in: fusb302(+) tcpm pi3usb30532 typec bq24190_charger snd_soc_sst_cht_bsw_rt5645 mei_hdcp dwc3 intel_rapl_msr udc_core ulpi gpio_keys intel_powerclamp coretemp kvm_intel brcmfmac kvm brcmutil joydev cfg80211 wdat_wdt irqbypass pcspkr intel_cstate extcon_intel_cht_wc i2c_cht_wc(E) snd_intel_sst_acpi snd_intel_sst_core snd_soc_rt5645 snd_soc_sst_atom_hifi2_platform snd_soc_acpi_intel_match snd_soc_rl6231 snd_soc_acpi intel_xhci_usb_role_switch roles hci_uart snd_soc_core btqca mei_txe btrtl processor_thermal_device mei snd_hdmi_lpe_audio lpc_ich snd_compress btbcm intel_rapl_common ac97_bus dwc3_pci snd_pcm_dmaengine intel_soc_dts_iosf btintel snd_seq bluetooth snd_seq_device snd_pcm intel_cht_int33fe_musb snd_timer intel_cht_int33fe_typec intel_hid intel_cht_int33fe_common sparse_keymap snd ecdh_generic goodix rfkill soundcore ecc spi_pxa2xx_platform max17042_battery dw_dmac int3406_thermal dptf_power acpi_pad soc_button_array int3400_thermal int3403_thermal
+  gpd_pocket_fan intel_int0002_vgpio int340x_thermal_zone acpi_thermal_rel dm_crypt mmc_block i915 crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel i2c_algo_bit drm_kms_helper drm video sdhci_acpi sdhci mmc_core pwm_lpss_platform pwm_lpss i2c_dev
+ CPU: 0 PID: 1306 Comm: systemd-udevd Tainted: G            E     5.3.0-rc4+ #83
+ Hardware name: Default string Default string/Default string, BIOS 5.11 06/28/2017
+ RIP: 0010:__mutex_lock+0x978/0x9a0
+ Code: c0 0f 84 26 f7 ff ff 44 8b 05 24 25 c8 00 45 85 c0 0f 85 16 f7 ff ff 48 c7 c6 da 55 2f ae 48 c7 c7 98 8c 2d ae e8 a0 f9 5c ff <0f> 0b e9 fc f6 ff ff 4c 89 f0 4d 89 fe 49 89 c7 e9 cf fa ff ff e8
+ RSP: 0018:ffffb7a8c0523800 EFLAGS: 00010286
+ RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+ RDX: 0000000000000002 RSI: 0000000000000001 RDI: 0000000000000246
+ RBP: ffffb7a8c05238c0 R08: 0000000000000000 R09: 0000000000000000
+ R10: ffffb7a8c0523648 R11: 0000000000000030 R12: 0000000000000000
+ R13: ffffb7a8c0523990 R14: ffff9bf22f70c028 R15: ffff9bf22f70c360
+ FS:  00007f39ca234940(0000) GS:ffff9bf237400000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 00007f1f108481a0 CR3: 0000000271f28000 CR4: 00000000001006f0
+ Call Trace:
+  ? find_held_lock+0x39/0x90
+  ? _fusb302_log+0x81/0x1d0 [fusb302]
+  ? vsnprintf+0x3aa/0x4f0
+  ? _fusb302_log+0x81/0x1d0 [fusb302]
+  _fusb302_log+0x81/0x1d0 [fusb302]
+ ...
 
-Do you have that driver enabled? Can you enable debugging in that driver
-and post the syslog from when plugging the device in if it still doesn't
-work?
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/usb/typec/tcpm/fusb302.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-You can enable debugging using
+diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+index ccfc7e91e7a3..04c76b9d0065 100644
+--- a/drivers/usb/typec/tcpm/fusb302.c
++++ b/drivers/usb/typec/tcpm/fusb302.c
+@@ -1759,6 +1759,7 @@ static int fusb302_probe(struct i2c_client *client,
+ 	INIT_WORK(&chip->irq_work, fusb302_irq_work);
+ 	INIT_DELAYED_WORK(&chip->bc_lvl_handler, fusb302_bc_lvl_handler_work);
+ 	init_tcpc_dev(&chip->tcpc_dev);
++	fusb302_debugfs_init(chip);
+ 
+ 	if (client->irq) {
+ 		chip->gpio_int_n_irq = client->irq;
+@@ -1784,7 +1785,6 @@ static int fusb302_probe(struct i2c_client *client,
+ 		goto tcpm_unregister_port;
+ 	}
+ 	enable_irq_wake(chip->gpio_int_n_irq);
+-	fusb302_debugfs_init(chip);
+ 	i2c_set_clientdata(client, chip);
+ 
+ 	return ret;
+@@ -1792,6 +1792,7 @@ static int fusb302_probe(struct i2c_client *client,
+ tcpm_unregister_port:
+ 	tcpm_unregister_port(chip->tcpm_port);
+ destroy_workqueue:
++	fusb302_debugfs_exit(chip);
+ 	destroy_workqueue(chip->wq);
+ 
+ 	return ret;
+-- 
+2.23.0.rc1
 
-	modprobe cdc-acm dyndbg==p
-
-or through sysfs, see
-
-	Documentation/admin-guide/dynamic-debug-howto.rst
-
-> >> Device Descriptor:
-> >>     bLength                18
-> >>     bDescriptorType         1
-> >>     bcdUSB               2.00
-> >>     bDeviceClass          255 Vendor Specific Class
-> >>     bDeviceSubClass         0
-> >>     bDeviceProtocol         0
-> >>     bMaxPacketSize0         8
-> >>     idVendor           0x04d8 Microchip Technology, Inc.
-> >>     idProduct          0xf8e8 Harmony 300/350 Remote
-> >>     bcdDevice           48.12
-> >>     iManufacturer           1
-> >>     iProduct                2
-> >>     iSerial                 3
-> >>     bNumConfigurations      1
-> >>     Configuration Descriptor:
-> >>       bLength                 9
-> >>       bDescriptorType         2
-> >>       wTotalLength           67
-> >>       bNumInterfaces          2
-> >>       bConfigurationValue     1
-> >>       iConfiguration          0
-> >>       bmAttributes         0xc0
-> >>         Self Powered
-> >>       MaxPower              100mA
-> >>       Interface Descriptor:
-> >>         bLength                 9
-> >>         bDescriptorType         4
-> >>         bInterfaceNumber        0
-> >>         bAlternateSetting       0
-> >>         bNumEndpoints           1
-> >>         bInterfaceClass         2 Communications
-> >>         bInterfaceSubClass      2 Abstract (modem)
-> >>         bInterfaceProtocol      1 AT-commands (v.25ter)
-> >>         iInterface              0
-> >>         CDC Header:
-> >>           bcdCDC               1.10
-> >>         CDC ACM:
-> >>           bmCapabilities       0x02
-> >>             line coding and serial state
-> >>         CDC Union:
-> >>           bMasterInterface        0
-> >>           bSlaveInterface         1
-> >>         CDC Call Management:
-> >>           bmCapabilities       0x00
-> >>           bDataInterface          1
-> >>         Endpoint Descriptor:
-> >>           bLength                 7
-> >>           bDescriptorType         5
-> >>           bEndpointAddress     0x82  EP 2 IN
-> >>           bmAttributes            3
-> >>             Transfer Type            Interrupt
-> >>             Synch Type               None
-> >>             Usage Type               Data
-> >>           wMaxPacketSize     0x0008  1x 8 bytes
-> >>           bInterval               2
-> >>       Interface Descriptor:
-
-Johan
