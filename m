@@ -2,202 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9D98B969
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 15:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC728B97B
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 15:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728887AbfHMNDV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 09:03:21 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41927 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728300AbfHMNDU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 09:03:20 -0400
-Received: by mail-pl1-f195.google.com with SMTP id m9so49091617pls.8
-        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 06:03:19 -0700 (PDT)
+        id S1728911AbfHMNG6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 09:06:58 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:33635 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728359AbfHMNG6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 09:06:58 -0400
+Received: by mail-pl1-f194.google.com with SMTP id c14so49174779plo.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 06:06:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0YYrt8fX8NBe3Ix0ZR8N7yG5IdU706M3lTlC7xsDXZg=;
-        b=nkYZnagQ/N+uvwC9Ff9zhOFqbOrUlnQYXOHbaXVlcf1nr0dsS69AaKbg1Sdb4bHqsS
-         Rw0nONPYNHH+ZI1uW9Pl/qa6ZrBVPgrdhUJDjDb31Umw9OmTNIk12NcZOYodMhVYSAlG
-         23CPdOXA+MqHPsRg0w23i+m4zmC12TNmy+XXKAbb9MQiARYNFSUlJSQZnQpMnxwVsbOO
-         HRmYifIH193V8+HqAAajmwf/NH2chEnFGsi6FGS+rrAVoqfKdD+toWpZ1HaLEBO6YkeS
-         cSIGOPhQUTmJT/u3a3EgJI8cGav7YQtcz2AbqF1+PcBStArN4hpDMUQRk1Y1j+UKWLw/
-         mfCQ==
+        bh=jyY3MfJl8FHWs87KVz6Gcck19Yc4xnJRrDvM7iLe1po=;
+        b=V2wIOoMzfdbOSzVvFJalHPeuLCmUN/1WJOQJCH3X3O3NOn4w27ghE/XQSIL7vNAqg9
+         ADhKgFzgFPcD7ZNEswCJsfuxrhJuMgYzZpCnRcTzE6tR4VheltNQ0WM/+GAboscXbDYS
+         Nxdx+Y/YegeOtkZ8V6JAiJyj4+x3aIYkRpukZcZ1Ta7bggn5or3m1UutZHDG0k0zfKbQ
+         j1exN7RIm3YU+NgaG+6NVr0cJHBLrgYNCtnEO01uRTEchi3oHdLiHAVhT99mwWCNSaXK
+         PLWykxkN4W4G0xclKG3bWOC7+EtIx3n6ygsd+GQFWBDfLLo04pymoHg/uB2rUkBgtYHC
+         Jqwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0YYrt8fX8NBe3Ix0ZR8N7yG5IdU706M3lTlC7xsDXZg=;
-        b=dh9cpb5UCJaau0Y/ohJcHq1FW/9U3bvyRcWcZROWSdPJSKHLPzMLAB2cHQ8Qp3LZxs
-         N4tp+EeDqzcId283OGDe8rrbt21SnAiJzzlAff7z0jRkOsOpI0bY7y+s9AhZaRp4249r
-         i+Q/KAZ/vT40Q092DAWEp6z4GwKP00SUMWYP2N2OvDTvbE95WjnN0PR4VPWDjLvdhtJM
-         8H7c6FGXzOkAovLJf/usWGdHGu7/gOudeOIlxgEWZ82VwLRazMMrxX1bsLVj0BMvX8As
-         wZLaNxW5AyQc/RmRWEiRbFTW8wfd/9GTlKaQDG3dmsQnr9ClOokkFWtrLI9YnEwlWQH7
-         RZJA==
-X-Gm-Message-State: APjAAAUcIwTBIOnbgJZqgi+rvRbLKEy/kwDVGWP+jDQeUxoLaKyaiJ1I
-        ycENyYkSOlVSKahRh3laBzZGS8sWX/Gh5eOogH41EQ==
-X-Google-Smtp-Source: APXvYqx5QN3Xu0FjLh/BJUrsZv+FEng8X5z4EG0iHTMxlFgLEZUcutUE5Zys4DzTpckKpqeQwJEkajNChyety2rhw38=
-X-Received: by 2002:a17:902:bb94:: with SMTP id m20mr5225493pls.336.1565701398386;
- Tue, 13 Aug 2019 06:03:18 -0700 (PDT)
+        bh=jyY3MfJl8FHWs87KVz6Gcck19Yc4xnJRrDvM7iLe1po=;
+        b=JRoFt/BN/17hwKgJo95OgCnq8Tx6+ZO6grMUkITslLJlSCPrrZ54QSVDluvOw5GI7q
+         2Yf7GqQRl3GQBcApFPslT0feT16097ZJEHEqof3QoTioQrZZgoyYXsVfZacFJ1i/BTMk
+         AJTHhLlnoALBfBpQRhIZYe857PWpaES5/rHPPql+PeGcX4d21O9comOD7xwkGFOIRoZB
+         osyrNbxsCHfbwp99WPIqYKT4uPJTngXSHKYDA7gorugyj5Ec27zBqls02K9JmEhRSIRw
+         D5xqzQnX2O8swewbIFllqUCtF1ZCo1p+YD0+OllmCwzgTjHM8YCEKO6mCBDp7BM8QEdC
+         Kl/Q==
+X-Gm-Message-State: APjAAAUXf6h8I65iViKGo8Lu7I6eUUC6V+MchX/O7fzAGLwawdbkpidX
+        YsENN081chbH7+uJ2HAJpIKISuyh9srzRbUKdMDYkQ==
+X-Google-Smtp-Source: APXvYqzJPRYFUEADcX0YPrr5LS3CQWg7dYO4UK6MhWXEACXOIyLN0soXqapveapKklJhrzL29FgWFONs96RO8RN5S0Y=
+X-Received: by 2002:a17:902:ab96:: with SMTP id f22mr31678443plr.147.1565701617350;
+ Tue, 13 Aug 2019 06:06:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000532b860589f0669a@google.com>
-In-Reply-To: <000000000000532b860589f0669a@google.com>
+References: <CAAeHK+z+d=Gh4j1VSsEtLuYUpd7-T3Cu1ww0-5otSE5kDTgMGA@mail.gmail.com>
+In-Reply-To: <CAAeHK+z+d=Gh4j1VSsEtLuYUpd7-T3Cu1ww0-5otSE5kDTgMGA@mail.gmail.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 13 Aug 2019 15:03:07 +0200
-Message-ID: <CAAeHK+waUUNpGp1b2WqXQHkbBcQT_MonG62-bK-aEj2dvYr-gA@mail.gmail.com>
-Subject: Re: general protection fault in cdev_del
-To:     syzbot <syzbot+67b2bd0e34f952d0321e@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+Date:   Tue, 13 Aug 2019 15:06:46 +0200
+Message-ID: <CAAeHK+zFrEhbAXzv=pwyMwMk1ABJR7Kdmz8Wb8-COvR6ocgSBA@mail.gmail.com>
+Subject: Re: USB fuzzing with syzbot
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Hillf Danton <hdanton@sina.com>
+Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Oliver Neukum <oneukum@suse.com>
-Content-Type: multipart/mixed; boundary="000000000000ad7835058fff43df"
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000ad7835058fff43df
-Content-Type: text/plain; charset="UTF-8"
+On Wed, Apr 17, 2019 at 6:33 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+>
+> Hi,
+>
+> As you might have noticed, syzbot has started reporting bugs in the
+> USB subsystem that can be triggered externally by a malicious USB
+> device. Right now the fuzzing is done via a GadgetFS-like interface to
+> emulate USB devices through the USB Gadget subsystem and the Dummy
+> HCD/UDC module to "loopback" connect those devices to the running
+> kernel. There are more details in my OffensiveCon talk [1], [2].
+>
+> A few questions/comments:
+>
+> 1. Which tree should we use for testing?
+>
+> Right now we're targeting the upstream tree, but we can switch to some
+> USB development tree, where the fixes are likely to end up earlier.
+>
+> 2. Is there an easy way to figure out which config options enable
+> drivers reachable over USB?
+>
+> Right now our kernel config is based on one of the Debian kernel
+> configs, that supposedly enables enough relevant USB drivers. At the
+> same time it enables a lot of other unnecessary stuff, which makes the
+> kernel big and long to compile. Ideally, we would to have a way to
+> auto-generate a kernel config that enables all the relevant (enabled
+> by at least one of the distros) USB drivers. I've looked at whether
+> it's possible to figure out which particular options in some kernel
+> config are related to USB, but it seems that neither the option names,
+> nor the way they are grouped in the config file, are representative
+> enough.
+>
+> 3. Regarding that GadgetFS-like interface.
+>
+> Initially I was using GadgetFS (together with the Dummy HCD/UDC
+> module) to perform emulation of USB devices for fuzzing, but later
+> switched to a custom written interface. This interface is essentially
+> implemented in the following patch [3]. An example that emulates a USB
+> keyboard through this interface can be found here [4]. And the
+> syzkaller parts responsible for USB fuzzing are here [5], [6]. The
+> incentive to implement a different interface was to provide a somewhat
+> raw and direct access to the USB Gadget layer for the userspace, where
+> every USB request is passed to the userspace to get a response.
+>
+> The main differences between this interface (referred to as usb-fuzzer
+> for now) and GadgetFS are:
+>
+> 1) GadgetFS does some sanity checks on the provided USB descriptors,
+> which is something we don't want for fuzzing. We want the descriptors
+> to be as corrupted as they can.
+>
+> 2) GadgetFS handles some of the USB requests internally based on the
+> provided device descriptor, which is also something we don't want. For
+> example we may want to be able to provide differently corrupted
+> responses to the same request.
+>
+> 3) usb-fuzzer has ioctl-based interface instead of a filesystem-based
+> one. I wouldn't say it's that big of a deal, but it makes it somewhat
+> easier to incorporate into a fuzzer.
+>
+> 4) Somewhat related to the previous point: usb-fuzzer uses predictable
+> endpoint names across different UDCs.
+>
+> Right now each UDC driver defines endpoint names via EP_INFO() as it
+> pleases. And GadgetFS uses those names to create file entries for each
+> of the endpoints. As a result, endpoint names for different UDCs will
+> be different and it requires more work to write a portable userspace
+> gadget. The usb-fuzzer interface auto selects and assigns an endpoint
+> based on the required features like the transfer type.
+>
+> 5) GadgetFS binds to the first available UDC, usb-fuzzer provides a
+> way to select a UDC to bind to.
+>
+> Since the fuzzing happens in multiple processes each of which has its
+> own Dummy UDC assigned, we want to have control over which UDC we bind
+> to. This part is a bit confusing, but what I found out is that a UDC
+> is selected based on two different identifying names. I call the first
+> one "udc_device_name" and the second one "udc_driver_name".
+> "udc_device_name" has to be assigned to usb_gadget_driver->udc_name
+> when usb_gadget_probe_driver() is called, and "udc_driver_name" is
+> what we have to compare usb_gadget->name with inside of the
+> usb_gadget_driver->bind() callback. For example, Dummy UDC has
+> "dummy_udc" as its "udc_driver_name" and "dummy_udc.N" as its
+> "udc_device_name". At the same time the dwc2 driver that is used on
+> Raspberry Pi Zero, has "20980000.usb" as both "udc_driver_name" and
+> "udc_device_name".
+>
+> Overall, the usb-fuzzer interface implementation has a similar
+> structure to that of GadgetFS, but looks way simpler (although that
+> might be because I've missed to implement some functionality :).
+>
+> We'd like to get this upstreamed, but I'm not sure whether this should
+> be a separate interface (which we can rebrand as a raw usb gadget
+> interface or something like that) or we should try to make it a
+> special mode of GadgetFS. I like the former approach more, as GadgetFS
+> looks quite complicated from my point of view and making fundamental
+> changes to it doesn't seem like an easy task. This is where we'd like
+> to get your input.
+>
+> If you have any other questions or comments, please let us know.
+>
+> Alan, thanks a lot for answering to lots of my USB related questions
+> while I was working on this, that helped tremendously!
+>
+> Thanks!
+>
+> [1] https://docs.google.com/presentation/d/1z-giB9kom17Lk21YEjmceiNUVYeI6yIaG5_gZ3vKC-M/edit#slide=id.g1925acbbf3_0_0
+>
+> [2] https://www.youtube.com/watch?v=1MD5JV6LfxA
+>
+> [3] https://github.com/google/kasan/commit/9a33b36996cb6138a806eab931ba43c63a836708
+>
+> [4] https://github.com/google/syzkaller/blob/usb-fuzzer/tools/usb/keyboard.c
+>
+> [5] https://github.com/google/syzkaller/blob/master/sys/linux/vusb.txt
+>
+> [6] https://github.com/google/syzkaller/blob/master/executor/common_usb.h
 
-On Tue, May 28, 2019 at 12:48 PM syzbot
-<syzbot+67b2bd0e34f952d0321e@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    69bbe8c7 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=178e4526a00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c309d28e15db39c5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=67b2bd0e34f952d0321e
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10dc5d54a00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cae526a00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+67b2bd0e34f952d0321e@syzkaller.appspotmail.com
->
-> kasan: CONFIG_KASAN_INLINE enabled
-> kasan: GPF could be caused by NULL-ptr deref or user memory access
-> general protection fault: 0000 [#1] SMP KASAN PTI
-> CPU: 1 PID: 2486 Comm: kworker/1:2 Not tainted 5.2.0-rc1+ #9
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:cdev_del+0x22/0x90 fs/char_dev.c:592
-> Code: cf 0f 1f 80 00 00 00 00 55 48 89 fd 48 83 ec 08 e8 93 a5 d5 ff 48 8d
-> 7d 64 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48
-> 89 f8 83 e0 07 83 c0 03 38 d0 7c 04 84 d2 75 4f 48
-> RSP: 0018:ffff8881d18e7218 EFLAGS: 00010207
-> RAX: dffffc0000000000 RBX: ffff8881d249a100 RCX: ffffffff820d879e
-> RDX: 000000000000000c RSI: ffffffff8167705d RDI: 0000000000000064
-> RBP: 0000000000000000 R08: ffff8881d18d1800 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> R13: ffff8881d25c9100 R14: 0000000000000000 R15: ffff8881cc2a8070
-> FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f35af318000 CR3: 00000001cc182000 CR4: 00000000001406e0
-> Call Trace:
->   tty_unregister_device drivers/tty/tty_io.c:3192 [inline]
->   tty_unregister_device+0x10d/0x1a0 drivers/tty/tty_io.c:3187
->   hso_serial_tty_unregister drivers/net/usb/hso.c:2245 [inline]
->   hso_create_bulk_serial_device drivers/net/usb/hso.c:2682 [inline]
->   hso_probe.cold+0xc8/0x120 drivers/net/usb/hso.c:2948
->   usb_probe_interface+0x30b/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x287/0x660 drivers/base/dd.c:509
->   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
->   __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:777
->   bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:843
->   bus_probe_device+0x1e6/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x1700 drivers/base/core.c:2111
->   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0xa2/0x100 drivers/usb/core/driver.c:266
->   really_probe+0x287/0x660 drivers/base/dd.c:509
->   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
->   __device_attach_driver+0x1c4/0x230 drivers/base/dd.c:777
->   bus_for_each_drv+0x15e/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:843
->   bus_probe_device+0x1e6/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x1700 drivers/base/core.c:2111
->   usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
->   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
->   port_event drivers/usb/core/hub.c:5350 [inline]
->   hub_event+0x1adc/0x35a0 drivers/usb/core/hub.c:5432
->   process_one_work+0x90a/0x1580 kernel/workqueue.c:2268
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2414
->   kthread+0x30e/0x420 kernel/kthread.c:254
->   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-> Modules linked in:
-> ---[ end trace 3b56fa5a205cba42 ]---
-> RIP: 0010:cdev_del+0x22/0x90 fs/char_dev.c:592
-> Code: cf 0f 1f 80 00 00 00 00 55 48 89 fd 48 83 ec 08 e8 93 a5 d5 ff 48 8d
-> 7d 64 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48
-> 89 f8 83 e0 07 83 c0 03 38 d0 7c 04 84 d2 75 4f 48
-> RSP: 0018:ffff8881d18e7218 EFLAGS: 00010207
-> RAX: dffffc0000000000 RBX: ffff8881d249a100 RCX: ffffffff820d879e
-> RDX: 000000000000000c RSI: ffffffff8167705d RDI: 0000000000000064
-> RBP: 0000000000000000 R08: ffff8881d18d1800 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> R13: ffff8881d25c9100 R14: 0000000000000000 R15: ffff8881cc2a8070
-> FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f35af318000 CR3: 00000001cc182000 CR4: 00000000001406e0
+A small update: all bugs found on the USB fuzzing syzbot instance can
+now be viewed here:
 
-Trying Oliver's fix from [1]:
-
-#syz test: https://github.com/google/kasan.git 69bbe8c7
-
-[1] https://groups.google.com/forum/#!msg/syzkaller-bugs/5qVDUDTxXYQ/OlN_ZX6LBwAJ
-
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
-
---000000000000ad7835058fff43df
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-usb-hso-initialize-so-that-we-can-tear-down-in-the-e.patch"
-Content-Disposition: attachment; 
-	filename="0001-usb-hso-initialize-so-that-we-can-tear-down-in-the-e.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jz9u5b6z0>
-X-Attachment-Id: f_jz9u5b6z0
-
-RnJvbSA2ODY3YWJjMTcwMWYxODg5MmQzMmU4YWVhZjY0NDkwMWU5YmNiZjgyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBXZWQsIDUgSnVuIDIwMTkgMTM6NDk6MjEgKzAyMDAKU3ViamVjdDogW1BBVENIXSB1c2I6IGhz
-bzogaW5pdGlhbGl6ZSBzbyB0aGF0IHdlIGNhbiB0ZWFyIGRvd24gaW4gdGhlIGVycm9yCiBjYXNl
-CgpJbml0dWFsaXphdGlvbiBtdXN0IGZvbGxvdyB0aGUgc2VxdWVuY2Ugc3R1ZmYgaXMgdW5kb25l
-IGluIGNhc2UKd2UgYmFpbCBvdXQuIFRodXMgdGhlIHBhcmVudCBwb2ludGVyIG11c3QgYmUgc2V0
-IGVhcmxpZXIuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
-PgotLS0KIGRyaXZlcnMvbmV0L3VzYi9oc28uYyB8IDYgKysrLS0tCiAxIGZpbGUgY2hhbmdlZCwg
-MyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0
-L3VzYi9oc28uYyBiL2RyaXZlcnMvbmV0L3VzYi9oc28uYwppbmRleCA2YTBlY2RkZmYzMTAuLjRk
-OTEwMGZiOWY2ZSAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNiL2hzby5jCisrKyBiL2RyaXZl
-cnMvbmV0L3VzYi9oc28uYwpAQCAtMjY1Myw2ICsyNjUzLDkgQEAgc3RhdGljIHN0cnVjdCBoc29f
-ZGV2aWNlICpoc29fY3JlYXRlX2J1bGtfc2VyaWFsX2RldmljZSgKIAkJCQkgICAgIEJVTEtfVVJC
-X1RYX1NJWkUpKQogCQlnb3RvIGV4aXQ7CiAKKwkvKiBhbmQgcmVjb3JkIHRoaXMgc2VyaWFsICov
-CisJc2V0X3NlcmlhbF9ieV9pbmRleChzZXJpYWwtPm1pbm9yLCBzZXJpYWwpOworCiAJc2VyaWFs
-LT5pbl9lbmRwID0gaHNvX2dldF9lcChpbnRlcmZhY2UsIFVTQl9FTkRQT0lOVF9YRkVSX0JVTEss
-CiAJCQkJICAgICBVU0JfRElSX0lOKTsKIAlpZiAoIXNlcmlhbC0+aW5fZW5kcCkgewpAQCAtMjY2
-OSw5ICsyNjcyLDYgQEAgc3RhdGljIHN0cnVjdCBoc29fZGV2aWNlICpoc29fY3JlYXRlX2J1bGtf
-c2VyaWFsX2RldmljZSgKIAogCXNlcmlhbC0+d3JpdGVfZGF0YSA9IGhzb19zdGRfc2VyaWFsX3dy
-aXRlX2RhdGE7CiAKLQkvKiBhbmQgcmVjb3JkIHRoaXMgc2VyaWFsICovCi0Jc2V0X3NlcmlhbF9i
-eV9pbmRleChzZXJpYWwtPm1pbm9yLCBzZXJpYWwpOwotCiAJLyogc2V0dXAgdGhlIHByb2MgZGly
-cyBhbmQgZmlsZXMgaWYgbmVlZGVkICovCiAJaHNvX2xvZ19wb3J0KGhzb19kZXYpOwogCi0tIAoy
-LjE2LjQKCg==
---000000000000ad7835058fff43df--
+https://syzkaller.appspot.com/upstream?manager=ci2-upstream-usb
