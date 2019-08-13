@@ -2,106 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E33A88B124
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 09:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F7C8B130
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 09:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727537AbfHMHas (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 03:30:48 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:55542 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726789AbfHMHas (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 03:30:48 -0400
-X-UUID: 2f2b0143cd3e40c9bcb0e0e98dbafa8a-20190813
-X-UUID: 2f2b0143cd3e40c9bcb0e0e98dbafa8a-20190813
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 972925513; Tue, 13 Aug 2019 15:30:34 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 13 Aug
- 2019 15:30:32 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 13 Aug 2019 15:30:31 +0800
-Message-ID: <1565681434.23705.66.camel@mhfsdcap03>
-Subject: Re: [PATCH v10 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Roger Quadros <rogerq@ti.com>
-CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        "Rahul Kumar" <kurahul@cadence.com>,
-        Anil Joy Varughese <aniljoy@cadence.com>
-Date:   Tue, 13 Aug 2019 15:30:34 +0800
-In-Reply-To: <679b82bc-9f33-91ad-4acf-bf6a29e51bc1@ti.com>
-References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
-         <1563733939-21214-6-git-send-email-pawell@cadence.com>
-         <88742d5b-ee10-cf4e-6724-58e7bdd19cb9@ti.com>
-         <BYAPR07MB47090BCA728600F0C2F4E129DDD00@BYAPR07MB4709.namprd07.prod.outlook.com>
-         <1e557bcf-2d50-f600-0e81-1f9fba5499a1@ti.com>
-         <BYAPR07MB4709F306EC472B7AABEB7D4CDDD30@BYAPR07MB4709.namprd07.prod.outlook.com>
-         <20190812103147.GA4691@kuha.fi.intel.com>
-         <d3bba104-9a85-df8d-c62d-6acb8913c3fe@ti.com> <874l2mtuu6.fsf@gmail.com>
-         <679b82bc-9f33-91ad-4acf-bf6a29e51bc1@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726986AbfHMHf4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 03:35:56 -0400
+Received: from gofer.mess.org ([88.97.38.141]:50005 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725820AbfHMHf4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 03:35:56 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id CD874603E8; Tue, 13 Aug 2019 08:35:52 +0100 (BST)
+Date:   Tue, 13 Aug 2019 08:35:52 +0100
+From:   Sean Young <sean@mess.org>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     syzbot <syzbot+b7f57261c521087d89bb@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] media: em28xx: modules workqueue not inited for 2nd
+ device
+Message-ID: <20190813073552.ygvwvjibhha5k76b@gofer.mess.org>
+References: <0000000000004bcc0d058faf01c4@google.com>
+ <20190811051110.hsdwmjrbvqgrmssc@gofer.mess.org>
+ <614221186ed37383778d8890d39e829a0e924796.camel@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: 233011D5CB765319D937F8AAFF09E4447CF6C202C05D790FC71AAF3EC6A173412000:8
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <614221186ed37383778d8890d39e829a0e924796.camel@collabora.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2019-08-12 at 16:04 +0300, Roger Quadros wrote:
+On Mon, Aug 12, 2019 at 10:21:39AM -0300, Ezequiel Garcia wrote:
+> On Sun, 2019-08-11 at 06:11 +0100, Sean Young wrote:
+> > syzbot reports an error on flush_request_modules() for the second device.
+> > This workqueue was never initialised so simply remove the offending line.
+> > 
+> > usb 1-1: USB disconnect, device number 2
+> > em28xx 1-1:1.153: Disconnecting em28xx #1
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 0 PID: 12 at kernel/workqueue.c:3031
+> > __flush_work.cold+0x2c/0x36 kernel/workqueue.c:3031
+> > Kernel panic - not syncing: panic_on_warn set ...
+> > CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc2+ #25
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > Google 01/01/2011
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >   __dump_stack lib/dump_stack.c:77 [inline]
+> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
+> >   panic+0x2a3/0x6da kernel/panic.c:219
+> >   __warn.cold+0x20/0x4a kernel/panic.c:576
+> >   report_bug+0x262/0x2a0 lib/bug.c:186
+> >   fixup_bug arch/x86/kernel/traps.c:179 [inline]
+> >   fixup_bug arch/x86/kernel/traps.c:174 [inline]
+> >   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+> >   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+> >   invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1026
+> > RIP: 0010:__flush_work.cold+0x2c/0x36 kernel/workqueue.c:3031
+> > Code: 9a 22 00 48 c7 c7 20 e4 c5 85 e8 d9 3a 0d 00 0f 0b 45 31 e4 e9 98 86
+> > ff ff e8 51 9a 22 00 48 c7 c7 20 e4 c5 85 e8 be 3a 0d 00 <0f> 0b 45 31 e4
+> > e9 7d 86 ff ff e8 36 9a 22 00 48 c7 c7 20 e4 c5 85
+> > RSP: 0018:ffff8881da20f720 EFLAGS: 00010286
+> > RAX: 0000000000000024 RBX: dffffc0000000000 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: ffffffff8128a0fd RDI: ffffed103b441ed6
+> > RBP: ffff8881da20f888 R08: 0000000000000024 R09: fffffbfff11acd9a
+> > R10: fffffbfff11acd99 R11: ffffffff88d66ccf R12: 0000000000000000
+> > R13: 0000000000000001 R14: ffff8881c6685df8 R15: ffff8881d2a85b78
+> >   flush_request_modules drivers/media/usb/em28xx/em28xx-cards.c:3325 [inline]
+> >   em28xx_usb_disconnect.cold+0x280/0x2a6
+> > drivers/media/usb/em28xx/em28xx-cards.c:4023
+> >   usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+> >   __device_release_driver drivers/base/dd.c:1120 [inline]
+> >   device_release_driver_internal+0x404/0x4c0 drivers/base/dd.c:1151
+> >   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+> >   device_del+0x420/0xb10 drivers/base/core.c:2288
+> >   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+> >   usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
+> >   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+> >   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+> >   port_event drivers/usb/core/hub.c:5359 [inline]
+> >   hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
+> >   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+> >   process_scheduled_works kernel/workqueue.c:2331 [inline]
+> >   worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+> >   kthread+0x318/0x420 kernel/kthread.c:255
+> >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> > Kernel Offset: disabled
+> > Rebooting in 86400 seconds..
+> > 
+> > Reported-by: syzbot+b7f57261c521087d89bb@syzkaller.appspotmail.com
+> > Signed-off-by: Sean Young <sean@mess.org>
 > 
-> On 12/08/2019 15:46, Felipe Balbi wrote:
-> > 
-> > Hi,
-> > 
-> > Roger Quadros <rogerq@ti.com> writes:
-> >>> The sysfs file we expose from the class for the role switches is
-> >>> primarily meant for supporting proprietary protocols that require us
-> >>> to basically override the connector USB data role. The default role
-> >>> should always be selected in the drivers.
-> >>
-> >> OK. Let's take this example
-> >> - Port is dual-role port micro AB.
-> >> - microAB to type-A adapter is connected which pulls ID low. port transitions
-> >> to "host" role by the controller driver.
-> >> - proprietary protocol want to switch role to device role so writes "device" to
-> >> mode switch sysfs. port transitions to "device" role.
-> >>
-> >> Now, how does controller driver know to fall back to HW based role switching?
-> > 
-> > Use a 'disconnect' or 'suspend' event to go reset it? But that should,
-> > probably, be done at kernel space, no?
-> > 
+> I reviewed the syzbot report, but was left head-scratching and
+> failing to see how the module-loading worker was supposed to be used :-)
 > 
-> Yes that could be one option.
-> So after a disconnect, sysfs role should reflect actual hardware role. correct?
-
-Maybe it's difficult to support both HW based role switch and SW based
-role switch by sysfs at the same if the HW's FSM rely on, such as, the
-state of Vbus pin or ID pin. Likes the upper example, when user writes
-"device" to mode switch sysfs, the driver should skip the HW state of ID
-pin, due to it's state is Low, or force it as High.
-
-Another option way is that introduces a property in DTS to indicate the
-way the driver want to use (HW based or SW based, usb_role_switch
-doesn't provide this information for the controller driver), but is not
-flexible enough.
- 
+> Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 > 
-> cheers,
-> -roger
+> Also, this seems a bug, so how about this tag?
+> 
+> Fixes: be7fd3c3a8c5e ("media: em28xx: Hauppauge DualHD second tuner functionality)
 
+Thank you for the review and yes it does need that tag.
 
+Thanks
+sean
+
+> 
+> > ---
+> >  drivers/media/usb/em28xx/em28xx-cards.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+> > index 6e33782c3ca6..5983e72a0622 100644
+> > --- a/drivers/media/usb/em28xx/em28xx-cards.c
+> > +++ b/drivers/media/usb/em28xx/em28xx-cards.c
+> > @@ -4019,7 +4019,6 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
+> >  		dev->dev_next->disconnected = 1;
+> >  		dev_info(&dev->intf->dev, "Disconnecting %s\n",
+> >  			 dev->dev_next->name);
+> > -		flush_request_modules(dev->dev_next);
+> >  	}
+> >  
+> >  	dev->disconnected = 1;
+> 
