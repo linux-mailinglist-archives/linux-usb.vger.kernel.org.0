@@ -2,1005 +2,243 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 671868C0AB
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 20:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926058C10B
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 20:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726126AbfHMSg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 14:36:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35350 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725923AbfHMSg0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Aug 2019 14:36:26 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        id S1728257AbfHMSso (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 14:48:44 -0400
+Received: from egyptian.birch.relay.mailchannels.net ([23.83.209.56]:62353
+        "EHLO egyptian.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727721AbfHMSso (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 14:48:44 -0400
+X-Sender-Id: dreamhost|x-authsender|brad@b-rad.cc
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 1D7D634328C;
+        Tue, 13 Aug 2019 18:48:41 +0000 (UTC)
+Received: from pdx1-sub0-mail-a47.g.dreamhost.com (100-96-148-111.trex.outbound.svc.cluster.local [100.96.148.111])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 4A92E343272;
+        Tue, 13 Aug 2019 18:48:40 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|brad@b-rad.cc
+Received: from pdx1-sub0-mail-a47.g.dreamhost.com ([TEMPUNAVAIL].
+ [64.90.62.162])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
+        by 0.0.0.0:2500 (trex/5.17.5);
+        Tue, 13 Aug 2019 18:48:41 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|brad@b-rad.cc
+X-MailChannels-Auth-Id: dreamhost
+X-Attack-Coil: 7f79ffc2625a2aee_1565722120875_1259897381
+X-MC-Loop-Signature: 1565722120874:2696070897
+X-MC-Ingress-Time: 1565722120874
+Received: from pdx1-sub0-mail-a47.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a47.g.dreamhost.com (Postfix) with ESMTP id 0B5867F152;
+        Tue, 13 Aug 2019 11:48:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=
+        nextdimension.cc; bh=VaBStVepHcZHe2FemoOuMBmbBa0=; b=guSIC+Nn+zq
+        9RBxzpe6yNT93HOa8I0OEFwxVCFKRg5RvNce6hSxKfyKKD816y39mAs8FuG1++d+
+        DpTnmxxtCCWeFcN0tNGBJ1G2rM4184tkc+dDsZwWNvsOtQhpN5nMYvT26XXprIzl
+        WvD0aSYpHBBKqjofkFM0z4TfTOzTbG8c=
+Received: from [192.168.0.21] (67-198-57-188.static.grandenetworks.net [67.198.57.188])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0486920665;
-        Tue, 13 Aug 2019 18:36:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565721383;
-        bh=jXp7b/8WyjvPuSDrBSEneK5i8Tmb0ls53vTDkLrcOgw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=SwJbXRRma78IQI5NPS4/pt2yqYeyJdwxQq7ZD2n4rO+gOujugFw450dSGVGDpvcAT
-         YUtitHmTTMAAnBCGqm8j9HuHbAweMY6SBITK11s1EtZlKmbSSe1unU/tiOr4Yjt/p2
-         K6jR4REVblk341fXtQlCe9ctte/qIx9q+jjELvuA=
-Subject: Re: [PATCH v5 2/2] usbip: Implement SG support to vhci-hcd and stub
- driver
-To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <20190808155435.10050-1-suwan.kim027@gmail.com>
- <20190808155435.10050-3-suwan.kim027@gmail.com>
- <d7377b4f-b5c7-13e4-2107-c9170f312ddf@kernel.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <c4beef01-f321-fed1-f56c-b484c67a1056@kernel.org>
-Date:   Tue, 13 Aug 2019 12:36:22 -0600
+        (Authenticated sender: brad@b-rad.cc)
+        by pdx1-sub0-mail-a47.g.dreamhost.com (Postfix) with ESMTPSA id 0D4527F14D;
+        Tue, 13 Aug 2019 11:48:35 -0700 (PDT)
+Subject: Re: [PATCH] media: em28xx: modules workqueue not inited for 2nd
+ device
+To:     Sean Young <sean@mess.org>, Brad Love <brad@nextdimension.cc>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        syzbot <syzbot+b7f57261c521087d89bb@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+References: <0000000000004bcc0d058faf01c4@google.com>
+ <20190811051110.hsdwmjrbvqgrmssc@gofer.mess.org>
+ <614221186ed37383778d8890d39e829a0e924796.camel@collabora.com>
+ <20190813091059.6ec46psv67y7msef@gofer.mess.org>
+X-DH-BACKEND: pdx1-sub0-mail-a47
+From:   Brad Love <brad@nextdimension.cc>
+Openpgp: preference=signencrypt
+Autocrypt: addr=brad@nextdimension.cc; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <2a716666-ed08-3c64-1c16-1c34afed6de4@nextdimension.cc>
+Date:   Tue, 13 Aug 2019 13:48:34 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <d7377b4f-b5c7-13e4-2107-c9170f312ddf@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190813091059.6ec46psv67y7msef@gofer.mess.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-GB
+X-VR-OUT-STATUS: OK
+X-VR-OUT-SCORE: -90
+X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduvddruddviedguddvgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucggtfgfnhhsuhgsshgtrhhisggvpdfftffgtefojffquffvnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfghrlhcuvffnffculddutddmnecujfgurhepuffvfhfhkffffgggjggtgfesthhqredttdefjeenucfhrhhomhepuehrrgguucfnohhvvgcuoegsrhgrugesnhgvgihtughimhgvnhhsihhonhdrtggtqeenucfkphepieejrdduleekrdehjedrudekkeenucfrrghrrghmpehmohguvgepshhmthhppdhhvghloheplgduledvrdduieekrddtrddvudgnpdhinhgvthepieejrdduleekrdehjedrudekkedprhgvthhurhhnqdhprghthhepuehrrgguucfnohhvvgcuoegsrhgrugesnhgvgihtughimhgvnhhsihhonhdrtggtqedpmhgrihhlfhhrohhmpegsrhgrugesnhgvgihtughimhgvnhhsihhonhdrtggtpdhnrhgtphhtthhopehsvggrnhesmhgvshhsrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/8/19 10:21 AM, shuah wrote:
-> On 8/8/19 9:54 AM, Suwan Kim wrote:
->> There are bugs on vhci with usb 3.0 storage device. In USB, each SG
->> list entry buffer should be divisible by the bulk max packet size.
->> But with native SG support, this problem doesn't matter because the
->> SG buffer is treated as contiguous buffer. But without native SG
->> support, USB storage driver breaks SG list into several URBs and the
->> error occurs because of a buffer size of URB that cannot be divided
->> by the bulk max packet size. The error situation is as follows.
->>
->> When USB Storage driver requests 31.5 KB data and has SG list which
->> has 3584 bytes buffer followed by 7 4096 bytes buffer for some
->> reason. USB Storage driver splits this SG list into several URBs
->> because VHCI doesn't support SG and sends them separately. So the
->> first URB buffer size is 3584 bytes. When receiving data from device,
->> USB 3.0 device sends data packet of 1024 bytes size because the max
->> packet size of BULK pipe is 1024 bytes. So device sends 4096 bytes.
->> But the first URB buffer has only 3584 bytes buffer size. So host
->> controller terminates the transfer even though there is more data to
->> receive. So, vhci needs to support SG transfer to prevent this error.
->>
->> In this patch, vhci supports SG regardless of whether the server's
->> host controller supports SG or not, because stub driver splits SG
->> list into several URBs if the server's host controller doesn't
->> support SG.
->>
->> To support SG, vhci_map_urb_for_dma() sets URB_DMA_MAP_SG flag in
->> urb->transfer_flags if URB has SG list and this flag will tell stub
->> driver to use SG list.
->>
->> vhci sends each SG list entry to stub driver. Then, stub driver sees
->> the total length of the buffer and allocates SG table and pages
->> according to the total buffer length calling sgl_alloc(). After stub
->> driver receives completed URB, it again sends each SG list entry to
->> vhci.
->>
->> If the server's host controller doesn't support SG, stub driver
->> breaks a single SG request into several URBs and submits them to
->> the server's host controller. When all the split URBs are completed,
->> stub driver reassembles the URBs into a single return command and
->> sends it to vhci.
->>
->> Moreover, in the situation where vhci supports SG, but stub driver
->> does not, or vice versa, usbip works normally. Because there is no
->> protocol modification, there is no problem in communication between
->> server and client even if the one has a kernel without SG support.
->>
->> In the case of vhci supports SG and stub driver doesn't, because
->> vhci sends only the total length of the buffer to stub driver as
->> it did before the patch applied, stub driver only needs to allocate
->> the required length of buffers using only kmalloc() regardless of
->> whether vhci supports SG or not. But stub driver has to allocate
->> buffer with kmalloc() as much as the total length of SG buffer which
->> is quite huge when vhci sends SG request, so it has overhead in
->> buffer allocation in this situation.
->>
->> If stub driver needs to send data buffer to vhci because of IN pipe,
->> stub driver also sends only total length of buffer as metadata and
->> then sends real data as vhci does. Then vhci receive data from stub
->> driver and store it to the corresponding buffer of SG list entry.
->>
->> And for the case of stub driver supports SG and vhci doesn't, since
->> the USB storage driver checks that vhci doesn't support SG and sends
->> the request to stub driver by splitting the SG list into multiple
->> URBs, stub driver allocates a buffer for each URB with kmalloc() as
->> it did before this patch.
->>
->> * Test environment
->>
->> Test uses two difference machines and two different kernel version
->> to make mismatch situation between the client and the server where
->> vhci supports SG, but stub driver does not, or vice versa. All tests
->> are conducted in both full SG support that both vhci and stub support
->> SG and half SG support that is the mismatch situation.
->>
->>   - Test kernel version
->>      - 5.2-rc6 with SG support
->>      - 5.1.20-200.fc29.x86_64 without SG support
->>
->> * SG support test
->>
->>   - Test devices
->>      - Super-speed storage device - SanDisk Ultra USB 3.0
->>      - High-speed storage device - SMI corporation USB 2.0 flash drive
->>
->>   - Test description
->>
->> Test read and write operation of mass storage device that uses the
->> BULK transfer. In test, the client reads and writes files whose size
->> is over 1G and it works normally.
->>
->> * Regression test
->>
->>   - Test devices
->>      - Super-speed device - Logitech Brio webcam
->>      - High-speed device - Logitech C920 HD Pro webcam
->>      - Full-speed device - Logitech bluetooth mouse
->>                          - Britz BR-Orion speaker
->>      - Low-speed device - Logitech wired mouse
->>
->>   - Test description
->>
->> Moving and click test for mouse. To test the webcam, use gnome-cheese.
->> To test the speaker, play music and video on the client. All works
->> normally.
->>
->> * VUDC compatibility test
->>
->> VUDC also works well with this patch. Tests are done with two USB
->> gadget created by CONFIGFS USB gadget. Both use the BULK pipe.
->>
->>          1. Serial gadget
->>          2. Mass storage gadget
->>
->>   - Serial gadget test
->>
->> Serial gadget on the host sends and receives data using cat command
->> on the /dev/ttyGS<N>. The client uses minicom to communicate with
->> the serial gadget.
->>
->>   - Mass storage gadget test
->>
->> After connecting the gadget with vhci, use "dd" to test read and
->> write operation on the client side.
->>
->> Read  - dd if=/dev/sd<N> iflag=direct of=/dev/null bs=1G count=1
->> Write - dd if=<my file path> iflag=direct of=/dev/sd<N> bs=1G count=1
->>
-> 
-> Thanks for including the detailed test description.
-> 
->> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
->> ---
->> v4 - v5
->> - Add the test description about SG support test and regression test
->>    for other USB devices which have various speed.
->> - Fix list_del() error in stub_device_cleanup_urbs()
->>    - when stub_device_cleanup_urbs() calls stub_pirv_pop() to get a
->>    stub_priv, stub_priv_pop() uses list_del_init() instead of
->>    list_del(). After getting the stub_priv, stub_device_cleanup_urbs()
->>    calls stub_free_priv_and_urb() and it checks if list of the
->>    stub_priv is empty. Because stub_priv_pop() calls list_del_init(),
->>    stub_free_priv_and_urb() doesn't call list_del()
->>
->> v3 - v4
->> - Rewrite the description about the vhci bug with USB 3.0 storage
->>    device.
->> - Add the description about the test with VUDC.
->> - Fix the error message in stub_recv_cmd_unlink().
->>
->> v2 - v3
->> - Rewrite the commit log to make it more clear.
->> - Add the description about the mismatch situation in commit log.
->> - Run chechpatch.pl and fix errors with coding style and typos.
->> - Fix the error path of usbip_recv_xbuff() to stop receiving data
->>    after TCP error occurs.
->> - Consolidate the duplicated error path in usbip_recv_xbuff() and
->>    vhci_send_cmd_submit().
->> - Undo the unnecessary changes
->>    * Undo the deletion of empty line in stub_send_ret_submit()
->>    * Move memset() lines in stub_send_ret_submit() to the original
->>      position.
->>
->> v1 - v2
->> - Add the logic that splits single SG request into several URBs in
->>    stub driver if server’s HC doesn’t support SG.
->> ---
->>   drivers/usb/usbip/stub.h         |   7 +-
->>   drivers/usb/usbip/stub_main.c    |  57 ++++++---
->>   drivers/usb/usbip/stub_rx.c      | 204 ++++++++++++++++++++++---------
->>   drivers/usb/usbip/stub_tx.c      |  99 +++++++++++----
->>   drivers/usb/usbip/usbip_common.c |  59 ++++++---
->>   drivers/usb/usbip/vhci_hcd.c     |  15 ++-
->>   drivers/usb/usbip/vhci_tx.c      |  63 ++++++++--
->>   7 files changed, 377 insertions(+), 127 deletions(-)
->>
->> diff --git a/drivers/usb/usbip/stub.h b/drivers/usb/usbip/stub.h
->> index 35618ceb2791..d11270560c24 100644
->> --- a/drivers/usb/usbip/stub.h
->> +++ b/drivers/usb/usbip/stub.h
->> @@ -52,7 +52,11 @@ struct stub_priv {
->>       unsigned long seqnum;
->>       struct list_head list;
->>       struct stub_device *sdev;
->> -    struct urb *urb;
->> +    struct urb **urbs;
->> +    struct scatterlist *sgl;
->> +    int num_urbs;
->> +    int completed_urbs;
->> +    int urb_status;
->>       int unlinking;
->>   };
->> @@ -86,6 +90,7 @@ extern struct usb_device_driver stub_driver;
->>   struct bus_id_priv *get_busid_priv(const char *busid);
->>   void put_busid_priv(struct bus_id_priv *bid);
->>   int del_match_busid(char *busid);
->> +void stub_free_priv_and_urb(struct stub_priv *priv);
->>   void stub_device_cleanup_urbs(struct stub_device *sdev);
->>   /* stub_rx.c */
->> diff --git a/drivers/usb/usbip/stub_main.c 
->> b/drivers/usb/usbip/stub_main.c
->> index 2e4bfccd4bfc..c1c0bbc9f8b1 100644
->> --- a/drivers/usb/usbip/stub_main.c
->> +++ b/drivers/usb/usbip/stub_main.c
->> @@ -6,6 +6,7 @@
->>   #include <linux/string.h>
->>   #include <linux/module.h>
->>   #include <linux/device.h>
->> +#include <linux/scatterlist.h>
->>   #include "usbip_common.h"
->>   #include "stub.h"
->> @@ -281,13 +282,49 @@ static struct stub_priv 
->> *stub_priv_pop_from_listhead(struct list_head *listhead)
->>       struct stub_priv *priv, *tmp;
->>       list_for_each_entry_safe(priv, tmp, listhead, list) {
->> -        list_del(&priv->list);
->> +        list_del_init(&priv->list);
->>           return priv;
->>       }
->>       return NULL;
->>   }
->> +void stub_free_priv_and_urb(struct stub_priv *priv)
->> +{
->> +    struct urb *urb;
->> +    int i;
->> +
->> +    for (i = 0; i < priv->num_urbs; i++) {
->> +        urb = priv->urbs[i];
->> +
->> +        if (!urb)
->> +            return;
->> +
->> +        kfree(urb->setup_packet);
->> +        urb->setup_packet = NULL;
->> +
->> +
->> +        if (urb->transfer_buffer && !priv->sgl) {
->> +            kfree(urb->transfer_buffer);
->> +            urb->transfer_buffer = NULL;
->> +        }
->> +
->> +        if (urb->num_sgs) {
->> +            sgl_free(urb->sg);
->> +            urb->sg = NULL;
->> +            urb->num_sgs = 0;
->> +        }
->> +
->> +        usb_free_urb(urb);
->> +    }
->> +    if (!list_empty(&priv->list))
->> +        list_del(&priv->list);
->> +    if (priv->sgl)
->> +        sgl_free(priv->sgl);
->> +    kfree(priv->urbs);
->> +    kmem_cache_free(stub_priv_cache, priv);
->> +}
->> +
->>   static struct stub_priv *stub_priv_pop(struct stub_device *sdev)
->>   {
->>       unsigned long flags;
->> @@ -314,25 +351,15 @@ static struct stub_priv *stub_priv_pop(struct 
->> stub_device *sdev)
->>   void stub_device_cleanup_urbs(struct stub_device *sdev)
->>   {
->>       struct stub_priv *priv;
->> -    struct urb *urb;
->> +    int i;
->>       dev_dbg(&sdev->udev->dev, "Stub device cleaning up urbs\n");
->>       while ((priv = stub_priv_pop(sdev))) {
->> -        urb = priv->urb;
->> -        dev_dbg(&sdev->udev->dev, "free urb seqnum %lu\n",
->> -            priv->seqnum);
->> -        usb_kill_urb(urb);
->> -
->> -        kmem_cache_free(stub_priv_cache, priv);
->> +        for (i = 0; i < priv->num_urbs; i++)
->> +            usb_kill_urb(priv->urbs[i]);
->> -        kfree(urb->transfer_buffer);
->> -        urb->transfer_buffer = NULL;
->> -
->> -        kfree(urb->setup_packet);
->> -        urb->setup_packet = NULL;
->> -
->> -        usb_free_urb(urb);
->> +        stub_free_priv_and_urb(priv);
->>       }
->>   }
->> diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
->> index b0a855acafa3..66edfeea68fe 100644
->> --- a/drivers/usb/usbip/stub_rx.c
->> +++ b/drivers/usb/usbip/stub_rx.c
->> @@ -7,6 +7,7 @@
->>   #include <linux/kthread.h>
->>   #include <linux/usb.h>
->>   #include <linux/usb/hcd.h>
->> +#include <linux/scatterlist.h>
->>   #include "usbip_common.h"
->>   #include "stub.h"
->> @@ -201,7 +202,7 @@ static void tweak_special_requests(struct urb *urb)
->>   static int stub_recv_cmd_unlink(struct stub_device *sdev,
->>                   struct usbip_header *pdu)
->>   {
->> -    int ret;
->> +    int ret, i;
->>       unsigned long flags;
->>       struct stub_priv *priv;
->> @@ -246,12 +247,14 @@ static int stub_recv_cmd_unlink(struct 
->> stub_device *sdev,
->>            * so a driver in a client host will know the failure
->>            * of the unlink request ?
->>            */
->> -        ret = usb_unlink_urb(priv->urb);
->> -        if (ret != -EINPROGRESS)
->> -            dev_err(&priv->urb->dev->dev,
->> -                "failed to unlink a urb # %lu, ret %d\n",
->> -                priv->seqnum, ret);
->> -
->> +        for (i = priv->completed_urbs; i < priv->num_urbs; i++) {
->> +            ret = usb_unlink_urb(priv->urbs[i]);
->> +            if (ret != -EINPROGRESS)
->> +                dev_err(&priv->urbs[i]->dev->dev,
->> +                    "failed to unlink %d/%d urb of seqnum %lu, ret 
->> %d\n",
->> +                    i + 1, priv->num_urbs,
->> +                    priv->seqnum, ret);
->> +        }
->>           return 0;
->>       }
->> @@ -433,14 +436,36 @@ static void masking_bogus_flags(struct urb *urb)
->>       urb->transfer_flags &= allowed;
->>   }
->> +static int stub_recv_xbuff(struct usbip_device *ud, struct stub_priv 
->> *priv)
->> +{
->> +    int ret;
->> +    int i;
->> +
->> +    for (i = 0; i < priv->num_urbs; i++) {
->> +        ret = usbip_recv_xbuff(ud, priv->urbs[i]);
->> +        if (ret < 0)
->> +            break;
->> +    }
->> +
->> +    return ret;
->> +}
->> +
->>   static void stub_recv_cmd_submit(struct stub_device *sdev,
->>                    struct usbip_header *pdu)
->>   {
->> -    int ret;
->>       struct stub_priv *priv;
->>       struct usbip_device *ud = &sdev->ud;
->>       struct usb_device *udev = sdev->udev;
->> +    struct scatterlist *sgl = NULL, *sg;
->> +    void *buffer = NULL;
->> +    unsigned long long buf_len;
->> +    int nents;
->> +    int num_urbs = 1;
->>       int pipe = get_pipe(sdev, pdu);
->> +    int use_sg = pdu->u.cmd_submit.transfer_flags & URB_DMA_MAP_SG;
->> +    int support_sg = 1;
->> +    int np = 0;
->> +    int ret, i;
->>       if (pipe == -1)
->>           return;
->> @@ -449,76 +474,139 @@ static void stub_recv_cmd_submit(struct 
->> stub_device *sdev,
->>       if (!priv)
->>           return;
->> -    /* setup a urb */
->> -    if (usb_pipeisoc(pipe))
->> -        priv->urb = usb_alloc_urb(pdu->u.cmd_submit.number_of_packets,
->> -                      GFP_KERNEL);
->> -    else
->> -        priv->urb = usb_alloc_urb(0, GFP_KERNEL);
->> +    buf_len = (unsigned long 
->> long)pdu->u.cmd_submit.transfer_buffer_length;
->> -    if (!priv->urb) {
->> -        usbip_event_add(ud, SDEV_EVENT_ERROR_MALLOC);
->> -        return;
->> +    /* allocate urb transfer buffer, if needed */
->> +    if (buf_len) {
->> +        if (use_sg) {
->> +            sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
->> +            if (!sgl)
->> +                goto err_malloc;
->> +        } else {
->> +            buffer = kzalloc(buf_len, GFP_KERNEL);
->> +            if (!buffer)
->> +                goto err_malloc;
->> +        }
->>       }
->> -    /* allocate urb transfer buffer, if needed */
->> -    if (pdu->u.cmd_submit.transfer_buffer_length > 0) {
->> -        priv->urb->transfer_buffer =
->> -            kzalloc(pdu->u.cmd_submit.transfer_buffer_length,
->> -                GFP_KERNEL);
->> -        if (!priv->urb->transfer_buffer) {
->> +    /* Check if the server's HCD supports SG */
->> +    if (use_sg && !udev->bus->sg_tablesize) {
->> +        /*
->> +         * If the server's HCD doesn't support SG, break a single SG
->> +         * request into several URBs and map each SG list entry to
->> +         * corresponding URB buffer. The previously allocated SG
->> +         * list is stored in priv->sgl (If the server's HCD support SG,
->> +         * SG list is stored only in urb->sg) and it is used as an
->> +         * indicator that the server split single SG request into
->> +         * several URBs. Later, priv->sgl is used by stub_complete() and
->> +         * stub_send_ret_submit() to reassemble the divied URBs.
->> +         */
->> +        support_sg = 0;
->> +        num_urbs = nents;
->> +        priv->completed_urbs = 0;
->> +        pdu->u.cmd_submit.transfer_flags &= ~URB_DMA_MAP_SG;
->> +    }
->> +
->> +    /* allocate urb array */
->> +    priv->num_urbs = num_urbs;
->> +    priv->urbs = kmalloc_array(num_urbs, sizeof(*priv->urbs), 
->> GFP_KERNEL);
->> +    if (!priv->urbs)
->> +        goto err_urbs;
->> +
->> +    /* setup a urb */
->> +    if (support_sg) {
->> +        if (usb_pipeisoc(pipe))
->> +            np = pdu->u.cmd_submit.number_of_packets;
->> +
->> +        priv->urbs[0] = usb_alloc_urb(np, GFP_KERNEL);
->> +        if (!priv->urbs[0])
->> +            goto err_urb;
->> +
->> +        if (buf_len) {
->> +            if (use_sg) {
->> +                priv->urbs[0]->sg = sgl;
->> +                priv->urbs[0]->num_sgs = nents;
->> +                priv->urbs[0]->transfer_buffer = NULL;
->> +            } else {
->> +                priv->urbs[0]->transfer_buffer = buffer;
->> +            }
->> +        }
->> +
->> +        /* copy urb setup packet */
->> +        priv->urbs[0]->setup_packet = kmemdup(&pdu->u.cmd_submit.setup,
->> +                    8, GFP_KERNEL);
->> +        if (!priv->urbs[0]->setup_packet) {
->>               usbip_event_add(ud, SDEV_EVENT_ERROR_MALLOC);
->>               return;
->>           }
->> -    }
->> -    /* copy urb setup packet */
->> -    priv->urb->setup_packet = kmemdup(&pdu->u.cmd_submit.setup, 8,
->> -                      GFP_KERNEL);
->> -    if (!priv->urb->setup_packet) {
->> -        dev_err(&udev->dev, "allocate setup_packet\n");
->> -        usbip_event_add(ud, SDEV_EVENT_ERROR_MALLOC);
->> -        return;
->> +        usbip_pack_pdu(pdu, priv->urbs[0], USBIP_CMD_SUBMIT, 0);
->> +    } else {
->> +        for_each_sg(sgl, sg, nents, i) {
->> +            priv->urbs[i] = usb_alloc_urb(0, GFP_KERNEL);
->> +            /* The URBs which is previously allocated will be freed
->> +             * in stub_device_cleanup_urbs() if error occurs.
->> +             */
->> +            if (!priv->urbs[i])
->> +                goto err_urb;
->> +
->> +            usbip_pack_pdu(pdu, priv->urbs[i], USBIP_CMD_SUBMIT, 0);
->> +            priv->urbs[i]->transfer_buffer = sg_virt(sg);
->> +            priv->urbs[i]->transfer_buffer_length = sg->length;
->> +        }
->> +        priv->sgl = sgl;
->>       }
->> -    /* set other members from the base header of pdu */
->> -    priv->urb->context                = (void *) priv;
->> -    priv->urb->dev                    = udev;
->> -    priv->urb->pipe                   = pipe;
->> -    priv->urb->complete               = stub_complete;
->> +    for (i = 0; i < num_urbs; i++) {
->> +        /* set other members from the base header of pdu */
->> +        priv->urbs[i]->context = (void *) priv;
->> +        priv->urbs[i]->dev = udev;
->> +        priv->urbs[i]->pipe = pipe;
->> +        priv->urbs[i]->complete = stub_complete;
->> -    usbip_pack_pdu(pdu, priv->urb, USBIP_CMD_SUBMIT, 0);
->> +        /* no need to submit an intercepted request, but harmless? */
->> +        tweak_special_requests(priv->urbs[i]);
->> +        masking_bogus_flags(priv->urbs[i]);
->> +    }
->> -    if (usbip_recv_xbuff(ud, priv->urb) < 0)
->> +    if (stub_recv_xbuff(ud, priv) < 0)
->>           return;
->> -    if (usbip_recv_iso(ud, priv->urb) < 0)
->> +    if (usbip_recv_iso(ud, priv->urbs[0]) < 0)
->>           return;
->> -    /* no need to submit an intercepted request, but harmless? */
->> -    tweak_special_requests(priv->urb);
->> -
->> -    masking_bogus_flags(priv->urb);
->>       /* urb is now ready to submit */
->> -    ret = usb_submit_urb(priv->urb, GFP_KERNEL);
->> -
->> -    if (ret == 0)
->> -        usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
->> -                  pdu->base.seqnum);
->> -    else {
->> -        dev_err(&udev->dev, "submit_urb error, %d\n", ret);
->> -        usbip_dump_header(pdu);
->> -        usbip_dump_urb(priv->urb);
->> -
->> -        /*
->> -         * Pessimistic.
->> -         * This connection will be discarded.
->> -         */
->> -        usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
->> +    for (i = 0; i < priv->num_urbs; i++) {
->> +        ret = usb_submit_urb(priv->urbs[i], GFP_KERNEL);
->> +
->> +        if (ret == 0)
->> +            usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
->> +                    pdu->base.seqnum);
->> +        else {
->> +            dev_err(&udev->dev, "submit_urb error, %d\n", ret);
->> +            usbip_dump_header(pdu);
->> +            usbip_dump_urb(priv->urbs[i]);
->> +
->> +            /*
->> +             * Pessimistic.
->> +             * This connection will be discarded.
->> +             */
->> +            usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
->> +            break;
->> +        }
->>       }
->>       usbip_dbg_stub_rx("Leave\n");
->> +    return;
->> +
->> +err_urb:
->> +    kfree(priv->urbs);
->> +err_urbs:
->> +    kfree(buffer);
->> +    sgl_free(sgl);
->> +err_malloc:
->> +    usbip_event_add(ud, SDEV_EVENT_ERROR_MALLOC);
->>   }
->>   /* recv a pdu */
->> diff --git a/drivers/usb/usbip/stub_tx.c b/drivers/usb/usbip/stub_tx.c
->> index f0ec41a50cbc..36010a82b359 100644
->> --- a/drivers/usb/usbip/stub_tx.c
->> +++ b/drivers/usb/usbip/stub_tx.c
->> @@ -5,25 +5,11 @@
->>   #include <linux/kthread.h>
->>   #include <linux/socket.h>
->> +#include <linux/scatterlist.h>
->>   #include "usbip_common.h"
->>   #include "stub.h"
->> -static void stub_free_priv_and_urb(struct stub_priv *priv)
->> -{
->> -    struct urb *urb = priv->urb;
->> -
->> -    kfree(urb->setup_packet);
->> -    urb->setup_packet = NULL;
->> -
->> -    kfree(urb->transfer_buffer);
->> -    urb->transfer_buffer = NULL;
->> -
->> -    list_del(&priv->list);
->> -    kmem_cache_free(stub_priv_cache, priv);
->> -    usb_free_urb(urb);
->> -}
->> -
->>   /* be in spin_lock_irqsave(&sdev->priv_lock, flags) */
->>   void stub_enqueue_ret_unlink(struct stub_device *sdev, __u32 seqnum,
->>                    __u32 status)
->> @@ -85,6 +71,22 @@ void stub_complete(struct urb *urb)
->>           break;
->>       }
->> +    /*
->> +     * If the server breaks single SG request into the several URBs, the
->> +     * URBs must be reassembled before sending completed URB to the 
->> vhci.
->> +     * Don't wake up the tx thread until all the URBs are completed.
->> +     */
->> +    if (priv->sgl) {
->> +        priv->completed_urbs++;
->> +
->> +        /* Only save the first error status */
->> +        if (urb->status && !priv->urb_status)
->> +            priv->urb_status = urb->status;
->> +
->> +        if (priv->completed_urbs < priv->num_urbs)
->> +            return;
->> +    }
->> +
->>       /* link a urb to the queue of tx. */
->>       spin_lock_irqsave(&sdev->priv_lock, flags);
->>       if (sdev->ud.tcp_socket == NULL) {
->> @@ -156,18 +158,22 @@ static int stub_send_ret_submit(struct 
->> stub_device *sdev)
->>       size_t total_size = 0;
->>       while ((priv = dequeue_from_priv_tx(sdev)) != NULL) {
->> -        int ret;
->> -        struct urb *urb = priv->urb;
->> +        struct urb *urb = priv->urbs[0];
->>           struct usbip_header pdu_header;
->>           struct usbip_iso_packet_descriptor *iso_buffer = NULL;
->>           struct kvec *iov = NULL;
->> +        struct scatterlist *sg;
->> +        u32 actual_length = 0;
->>           int iovnum = 0;
->> +        int ret;
->> +        int i;
->>           txsize = 0;
->>           memset(&pdu_header, 0, sizeof(pdu_header));
->>           memset(&msg, 0, sizeof(msg));
->> -        if (urb->actual_length > 0 && !urb->transfer_buffer) {
->> +        if (urb->actual_length > 0 && !urb->transfer_buffer &&
->> +           !urb->num_sgs) {
->>               dev_err(&sdev->udev->dev,
->>                   "urb: actual_length %d transfer_buffer null\n",
->>                   urb->actual_length);
->> @@ -176,6 +182,11 @@ static int stub_send_ret_submit(struct 
->> stub_device *sdev)
->>           if (usb_pipetype(urb->pipe) == PIPE_ISOCHRONOUS)
->>               iovnum = 2 + urb->number_of_packets;
->> +        else if (usb_pipein(urb->pipe) && urb->actual_length > 0 &&
->> +            urb->num_sgs)
->> +            iovnum = 1 + urb->num_sgs;
->> +        else if (usb_pipein(urb->pipe) && priv->sgl)
->> +            iovnum = 1 + priv->num_urbs;
->>           else
->>               iovnum = 2;
->> @@ -192,6 +203,15 @@ static int stub_send_ret_submit(struct 
->> stub_device *sdev)
->>           setup_ret_submit_pdu(&pdu_header, urb);
->>           usbip_dbg_stub_tx("setup txdata seqnum: %d\n",
->>                     pdu_header.base.seqnum);
->> +
->> +        if (priv->sgl) {
->> +            for (i = 0; i < priv->num_urbs; i++)
->> +                actual_length += priv->urbs[i]->actual_length;
->> +
->> +            pdu_header.u.ret_submit.status = priv->urb_status;
->> +            pdu_header.u.ret_submit.actual_length = actual_length;
->> +        }
->> +
->>           usbip_header_correct_endian(&pdu_header, 1);
->>           iov[iovnum].iov_base = &pdu_header;
->> @@ -200,12 +220,47 @@ static int stub_send_ret_submit(struct 
->> stub_device *sdev)
->>           txsize += sizeof(pdu_header);
->>           /* 2. setup transfer buffer */
->> -        if (usb_pipein(urb->pipe) &&
->> +        if (usb_pipein(urb->pipe) && priv->sgl) {
->> +            /* If the server split a single SG request into several
->> +             * URBs because the server's HCD doesn't support SG,
->> +             * reassemble the split URB buffers into a single
->> +             * return command.
->> +             */
->> +            for (i = 0; i < priv->num_urbs; i++) {
->> +                iov[iovnum].iov_base =
->> +                    priv->urbs[i]->transfer_buffer;
->> +                iov[iovnum].iov_len =
->> +                    priv->urbs[i]->actual_length;
->> +                iovnum++;
->> +            }
->> +            txsize += actual_length;
->> +        } else if (usb_pipein(urb->pipe) &&
->>               usb_pipetype(urb->pipe) != PIPE_ISOCHRONOUS &&
->>               urb->actual_length > 0) {
->> -            iov[iovnum].iov_base = urb->transfer_buffer;
->> -            iov[iovnum].iov_len  = urb->actual_length;
->> -            iovnum++;
->> +            if (urb->num_sgs) {
->> +                unsigned int copy = urb->actual_length;
->> +                int size;
->> +
->> +                for_each_sg(urb->sg, sg, urb->num_sgs, i) {
->> +                    if (copy == 0)
->> +                        break;
->> +
->> +                    if (copy < sg->length)
->> +                        size = copy;
->> +                    else
->> +                        size = sg->length;
->> +
->> +                    iov[iovnum].iov_base = sg_virt(sg);
->> +                    iov[iovnum].iov_len = size;
->> +
->> +                    iovnum++;
->> +                    copy -= size;
->> +                }
->> +            } else {
->> +                iov[iovnum].iov_base = urb->transfer_buffer;
->> +                iov[iovnum].iov_len  = urb->actual_length;
->> +                iovnum++;
->> +            }
->>               txsize += urb->actual_length;
->>           } else if (usb_pipein(urb->pipe) &&
->>                  usb_pipetype(urb->pipe) == PIPE_ISOCHRONOUS) {
->> diff --git a/drivers/usb/usbip/usbip_common.c 
->> b/drivers/usb/usbip/usbip_common.c
->> index 45da3e01c7b0..6532d68e8808 100644
->> --- a/drivers/usb/usbip/usbip_common.c
->> +++ b/drivers/usb/usbip/usbip_common.c
->> @@ -680,8 +680,12 @@ EXPORT_SYMBOL_GPL(usbip_pad_iso);
->>   /* some members of urb must be substituted before. */
->>   int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
->>   {
->> -    int ret;
->> +    struct scatterlist *sg;
->> +    int ret = 0;
->> +    int recv;
->>       int size;
->> +    int copy;
->> +    int i;
->>       if (ud->side == USBIP_STUB || ud->side == USBIP_VUDC) {
->>           /* the direction of urb must be OUT. */
->> @@ -701,29 +705,48 @@ int usbip_recv_xbuff(struct usbip_device *ud, 
->> struct urb *urb)
->>       if (!(size > 0))
->>           return 0;
->> -    if (size > urb->transfer_buffer_length) {
->> +    if (size > urb->transfer_buffer_length)
->>           /* should not happen, probably malicious packet */
->> -        if (ud->side == USBIP_STUB) {
->> -            usbip_event_add(ud, SDEV_EVENT_ERROR_TCP);
->> -            return 0;
->> -        } else {
->> -            usbip_event_add(ud, VDEV_EVENT_ERROR_TCP);
->> -            return -EPIPE;
->> -        }
->> -    }
->> +        goto error;
->> -    ret = usbip_recv(ud->tcp_socket, urb->transfer_buffer, size);
->> -    if (ret != size) {
->> -        dev_err(&urb->dev->dev, "recv xbuf, %d\n", ret);
->> -        if (ud->side == USBIP_STUB || ud->side == USBIP_VUDC) {
->> -            usbip_event_add(ud, SDEV_EVENT_ERROR_TCP);
->> -        } else {
->> -            usbip_event_add(ud, VDEV_EVENT_ERROR_TCP);
->> -            return -EPIPE;
->> +    if (urb->num_sgs) {
->> +        copy = size;
->> +        for_each_sg(urb->sg, sg, urb->num_sgs, i) {
->> +            int recv_size;
->> +
->> +            if (copy < sg->length)
->> +                recv_size = copy;
->> +            else
->> +                recv_size = sg->length;
->> +
->> +            recv = usbip_recv(ud->tcp_socket, sg_virt(sg),
->> +                        recv_size);
->> +
->> +            if (recv != recv_size)
->> +                goto error;
->> +
->> +            copy -= recv;
->> +            ret += recv;
->>           }
->> +
->> +        if (ret != size)
->> +            goto error;
->> +    } else {
->> +        ret = usbip_recv(ud->tcp_socket, urb->transfer_buffer, size);
->> +        if (ret != size)
->> +            goto error;
->>       }
->>       return ret;
->> +
->> +error:
->> +    dev_err(&urb->dev->dev, "recv xbuf, %d\n", ret);
->> +    if (ud->side == USBIP_STUB || ud->side == USBIP_VUDC)
->> +        usbip_event_add(ud, SDEV_EVENT_ERROR_TCP);
->> +    else
->> +        usbip_event_add(ud, VDEV_EVENT_ERROR_TCP);
->> +
->> +    return -EPIPE;
->>   }
->>   EXPORT_SYMBOL_GPL(usbip_recv_xbuff);
->> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
->> index ea82b932a2f9..e64ab50cbe2b 100644
->> --- a/drivers/usb/usbip/vhci_hcd.c
->> +++ b/drivers/usb/usbip/vhci_hcd.c
->> @@ -697,7 +697,8 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, 
->> struct urb *urb, gfp_t mem_flag
->>       }
->>       vdev = &vhci_hcd->vdev[portnum-1];
->> -    if (!urb->transfer_buffer && urb->transfer_buffer_length) {
->> +    if (!urb->transfer_buffer && !urb->num_sgs &&
->> +         urb->transfer_buffer_length) {
->>           dev_dbg(dev, "Null URB transfer buffer\n");
->>           return -EINVAL;
->>       }
->> @@ -1143,6 +1144,15 @@ static int vhci_setup(struct usb_hcd *hcd)
->>           hcd->speed = HCD_USB3;
->>           hcd->self.root_hub->speed = USB_SPEED_SUPER;
->>       }
->> +
->> +    /*
->> +     * Support SG.
->> +     * sg_tablesize is an arbitrary value to alleviate memory pressure
->> +     * on the host.
->> +     */
->> +    hcd->self.sg_tablesize = 32;
->> +    hcd->self.no_sg_constraint = 1;
->> +
->>       return 0;
->>   }
->> @@ -1296,6 +1306,9 @@ static int vhci_map_urb_for_dma(struct usb_hcd 
->> *hcd, struct urb *urb,
->>           return -EINVAL;
->>       }
->> +    if (urb->num_sgs)
->> +        urb->transfer_flags |= URB_DMA_MAP_SG;
->> +
->>       return 0;
->>   }
->> diff --git a/drivers/usb/usbip/vhci_tx.c b/drivers/usb/usbip/vhci_tx.c
->> index 2fa26d0578d7..865eb1276b6c 100644
->> --- a/drivers/usb/usbip/vhci_tx.c
->> +++ b/drivers/usb/usbip/vhci_tx.c
->> @@ -5,6 +5,7 @@
->>   #include <linux/kthread.h>
->>   #include <linux/slab.h>
->> +#include <linux/scatterlist.h>
->>   #include "usbip_common.h"
->>   #include "vhci.h"
->> @@ -50,19 +51,23 @@ static struct vhci_priv 
->> *dequeue_from_priv_tx(struct vhci_device *vdev)
->>   static int vhci_send_cmd_submit(struct vhci_device *vdev)
->>   {
->> +    struct usbip_iso_packet_descriptor *iso_buffer = NULL;
->>       struct vhci_priv *priv = NULL;
->> +    struct scatterlist *sg;
->>       struct msghdr msg;
->> -    struct kvec iov[3];
->> +    struct kvec *iov;
->>       size_t txsize;
->>       size_t total_size = 0;
->> +    int iovnum;
->> +    int err = -ENOMEM;
->> +    int i;
->>       while ((priv = dequeue_from_priv_tx(vdev)) != NULL) {
->>           int ret;
->>           struct urb *urb = priv->urb;
->>           struct usbip_header pdu_header;
->> -        struct usbip_iso_packet_descriptor *iso_buffer = NULL;
->>           txsize = 0;
->>           memset(&pdu_header, 0, sizeof(pdu_header));
->> @@ -72,18 +77,42 @@ static int vhci_send_cmd_submit(struct vhci_device 
->> *vdev)
->>           usbip_dbg_vhci_tx("setup txdata urb seqnum %lu\n",
->>                     priv->seqnum);
->> +        if (urb->num_sgs && usb_pipeout(urb->pipe))
->> +            iovnum = 2 + urb->num_sgs;
->> +        else
->> +            iovnum = 3;
->> +
->> +        iov = kcalloc(iovnum, sizeof(*iov), GFP_KERNEL);
->> +        if (!iov) {
->> +            usbip_event_add(&vdev->ud, SDEV_EVENT_ERROR_MALLOC);
->> +            return -ENOMEM;
->> +        }
->> +
->>           /* 1. setup usbip_header */
->>           setup_cmd_submit_pdu(&pdu_header, urb);
->>           usbip_header_correct_endian(&pdu_header, 1);
->> +        iovnum = 0;
->> -        iov[0].iov_base = &pdu_header;
->> -        iov[0].iov_len  = sizeof(pdu_header);
->> +        iov[iovnum].iov_base = &pdu_header;
->> +        iov[iovnum].iov_len  = sizeof(pdu_header);
->>           txsize += sizeof(pdu_header);
->> +        iovnum++;
->>           /* 2. setup transfer buffer */
->>           if (!usb_pipein(urb->pipe) && urb->transfer_buffer_length > 
->> 0) {
->> -            iov[1].iov_base = urb->transfer_buffer;
->> -            iov[1].iov_len  = urb->transfer_buffer_length;
->> +            if (urb->num_sgs &&
->> +                      !usb_endpoint_xfer_isoc(&urb->ep->desc)) {
->> +                for_each_sg(urb->sg, sg, urb->num_sgs, i) {
->> +                    iov[iovnum].iov_base = sg_virt(sg);
->> +                    iov[iovnum].iov_len = sg->length;
->> +                    iovnum++;
->> +                }
->> +            } else {
->> +                iov[iovnum].iov_base = urb->transfer_buffer;
->> +                iov[iovnum].iov_len  =
->> +                        urb->transfer_buffer_length;
->> +                iovnum++;
->> +            }
->>               txsize += urb->transfer_buffer_length;
->>           }
->> @@ -95,23 +124,26 @@ static int vhci_send_cmd_submit(struct 
->> vhci_device *vdev)
->>               if (!iso_buffer) {
->>                   usbip_event_add(&vdev->ud,
->>                           SDEV_EVENT_ERROR_MALLOC);
->> -                return -1;
->> +                goto err_iso_buffer;
->>               }
->> -            iov[2].iov_base = iso_buffer;
->> -            iov[2].iov_len  = len;
->> +            iov[iovnum].iov_base = iso_buffer;
->> +            iov[iovnum].iov_len  = len;
->> +            iovnum++;
->>               txsize += len;
->>           }
->> -        ret = kernel_sendmsg(vdev->ud.tcp_socket, &msg, iov, 3, txsize);
->> +        ret = kernel_sendmsg(vdev->ud.tcp_socket, &msg, iov, iovnum,
->> +                     txsize);
->>           if (ret != txsize) {
->>               pr_err("sendmsg failed!, ret=%d for %zd\n", ret,
->>                      txsize);
->> -            kfree(iso_buffer);
->>               usbip_event_add(&vdev->ud, VDEV_EVENT_ERROR_TCP);
->> -            return -1;
->> +            err = -EPIPE;
->> +            goto err_tx;
->>           }
->> +        kfree(iov);
->>           kfree(iso_buffer);
->>           usbip_dbg_vhci_tx("send txdata\n");
->> @@ -119,6 +151,13 @@ static int vhci_send_cmd_submit(struct 
->> vhci_device *vdev)
->>       }
->>       return total_size;
->> +
->> +err_tx:
->> +    kfree(iso_buffer);
->> +err_iso_buffer:
->> +    kfree(iov);
->> +
->> +    return err;
->>   }
->>   static struct vhci_unlink *dequeue_from_unlink_tx(struct vhci_device 
->> *vdev)
->>
-> 
-> Thanks for doing this work.
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
+Hey Sean,
 
-Greg!
 
-Please pick this up as well. This is good from usbip
-perspective.
+On 13/08/2019 04.10, Sean Young wrote:
+> Hi Brad,
+>
+> On Mon, Aug 12, 2019 at 10:21:39AM -0300, Ezequiel Garcia wrote:
+>> On Sun, 2019-08-11 at 06:11 +0100, Sean Young wrote:
+>>> syzbot reports an error on flush_request_modules() for the second dev=
+ice.
+>>> This workqueue was never initialised so simply remove the offending l=
+ine.
+>>>
+>>> usb 1-1: USB disconnect, device number 2
+>>> em28xx 1-1:1.153: Disconnecting em28xx #1
+>>> ------------[ cut here ]------------
+>>> WARNING: CPU: 0 PID: 12 at kernel/workqueue.c:3031
+>>> __flush_work.cold+0x2c/0x36 kernel/workqueue.c:3031
+>>> Kernel panic - not syncing: panic_on_warn set ...
+>>> CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc2+ #25
+>>> Hardware name: Google Google Compute Engine/Google Compute Engine, BI=
+OS
+>>> Google 01/01/2011
+>>> Workqueue: usb_hub_wq hub_event
+>>> Call Trace:
+>>>   __dump_stack lib/dump_stack.c:77 [inline]
+>>>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>>>   panic+0x2a3/0x6da kernel/panic.c:219
+>>>   __warn.cold+0x20/0x4a kernel/panic.c:576
+>>>   report_bug+0x262/0x2a0 lib/bug.c:186
+>>>   fixup_bug arch/x86/kernel/traps.c:179 [inline]
+>>>   fixup_bug arch/x86/kernel/traps.c:174 [inline]
+>>>   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+>>>   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+>>>   invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1026
+>>> RIP: 0010:__flush_work.cold+0x2c/0x36 kernel/workqueue.c:3031
+>>> Code: 9a 22 00 48 c7 c7 20 e4 c5 85 e8 d9 3a 0d 00 0f 0b 45 31 e4 e9 =
+98 86
+>>> ff ff e8 51 9a 22 00 48 c7 c7 20 e4 c5 85 e8 be 3a 0d 00 <0f> 0b 45 3=
+1 e4
+>>> e9 7d 86 ff ff e8 36 9a 22 00 48 c7 c7 20 e4 c5 85
+>>> RSP: 0018:ffff8881da20f720 EFLAGS: 00010286
+>>> RAX: 0000000000000024 RBX: dffffc0000000000 RCX: 0000000000000000
+>>> RDX: 0000000000000000 RSI: ffffffff8128a0fd RDI: ffffed103b441ed6
+>>> RBP: ffff8881da20f888 R08: 0000000000000024 R09: fffffbfff11acd9a
+>>> R10: fffffbfff11acd99 R11: ffffffff88d66ccf R12: 0000000000000000
+>>> R13: 0000000000000001 R14: ffff8881c6685df8 R15: ffff8881d2a85b78
+>>>   flush_request_modules drivers/media/usb/em28xx/em28xx-cards.c:3325 =
+[inline]
+>>>   em28xx_usb_disconnect.cold+0x280/0x2a6
+>>> drivers/media/usb/em28xx/em28xx-cards.c:4023
+>>>   usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+>>>   __device_release_driver drivers/base/dd.c:1120 [inline]
+>>>   device_release_driver_internal+0x404/0x4c0 drivers/base/dd.c:1151
+>>>   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+>>>   device_del+0x420/0xb10 drivers/base/core.c:2288
+>>>   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+>>>   usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
+>>>   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+>>>   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+>>>   port_event drivers/usb/core/hub.c:5359 [inline]
+>>>   hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
+>>>   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+>>>   process_scheduled_works kernel/workqueue.c:2331 [inline]
+>>>   worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+>>>   kthread+0x318/0x420 kernel/kthread.c:255
+>>>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>>> Kernel Offset: disabled
+>>> Rebooting in 86400 seconds..
+>>>
+>>> Reported-by: syzbot+b7f57261c521087d89bb@syzkaller.appspotmail.com
+>>> Signed-off-by: Sean Young <sean@mess.org>
+>> I reviewed the syzbot report, but was left head-scratching and
+>> failing to see how the module-loading worker was supposed to be used :=
+-)
+>>
+>> Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+>>
+>> Also, this seems a bug, so how about this tag?
+>>
+>> Fixes: be7fd3c3a8c5e ("media: em28xx: Hauppauge DualHD second tuner fu=
+nctionality)
+> Would you mind reviewing this change please Brad? You added the dual_ts=
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> feature to the driver so it would be good to have your view on this.
+>
+> Thanks
+> Sean
 
-thanks,
--- Shuah
+
+Hmmm. I've never encountered this oops, nor had it reported to me. Looks
+like the second device indeed never calls request_modules, and when I
+did the cleanup I just duplicated all the teardown. Since everything
+works without the second workqueue already, I don't think the second
+device needs to initialize it's own. So, I think your solution is proper.=
+
+
+
+Reviewed-by: Brad Love <brad@nextdimension.cc>
+
+
+
+>>> ---
+>>>  drivers/media/usb/em28xx/em28xx-cards.c | 1 -
+>>>  1 file changed, 1 deletion(-)
+>>>
+>>> diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/=
+usb/em28xx/em28xx-cards.c
+>>> index 6e33782c3ca6..5983e72a0622 100644
+>>> --- a/drivers/media/usb/em28xx/em28xx-cards.c
+>>> +++ b/drivers/media/usb/em28xx/em28xx-cards.c
+>>> @@ -4019,7 +4019,6 @@ static void em28xx_usb_disconnect(struct usb_in=
+terface *intf)
+>>>  		dev->dev_next->disconnected =3D 1;
+>>>  		dev_info(&dev->intf->dev, "Disconnecting %s\n",
+>>>  			 dev->dev_next->name);
+>>> -		flush_request_modules(dev->dev_next);
+>>>  	}
+>>> =20
+>>>  	dev->disconnected =3D 1;
 
