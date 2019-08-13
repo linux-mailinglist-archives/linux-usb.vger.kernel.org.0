@@ -2,149 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C94458B5E5
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 12:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131318B5EE
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 12:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728203AbfHMKsp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 06:48:45 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:62468 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726287AbfHMKsp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 06:48:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1565693325; x=1597229325;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=tFcrDIfCnl/LRHUQGHVYS0HSJ0mIT3UIg4cj200OLCA=;
-  b=k4ODSlknPQzoVRid9wI2FMsV6EggOygDI3FUc4Dga+GyMrnW/yGSACSh
-   YcM3fyJdqpVlKgz89iXy9HPpUaOXVhnwf5o/MYG29UcgLM4Ku36ywcy0I
-   qm+W6CacdRt1v/6Gjjw0pTpCg4u3bbiUCTIYyMEA0lUHSofMBAufIi1oD
-   3fpqHDgho5bI+c/ZTfyoq9VhpAMlGGhlYreHsPXbovQo2cR82ggs+tdG0
-   lVWOz8NWFKt0R1ot55E5EtLM/k9JXxRMcgiIQlqVHxKVjuFQD6tYhazvy
-   TlgHau10AfuTCkKTUt8B3pfMxGoSbgBhBw6RZudYkBUkoOTBQW7JUjzv2
-   A==;
-IronPort-SDR: gfzHqU+uNocj1Gs1ih1vnphaLRRlOCOmd6t7J7ROIwBdXTNdfFZZfUjMJrvGkKWJCpGiDLPeyr
- Zrf4lZDSxpNxc6RT7WtsunufDr1DeCJ1DCzwAn/iEblNn92ezywTMn6ExA4SdfGEffYnYwEtC+
- hCpLWTmjLobB1T/uohxkHxXs3knclKTJbjqUIRcJbm5qqPvDwmqNGq1iyhSggfZwjxbKDlTUKI
- 4nor/OUJ/f/Zf8ZTw8AkUr4RzBl6Dz4XQSjcLdCcB0w4hwh4XLndhpdg1ZAkUBOcuWAtIewO0r
- aEk=
-X-IronPort-AV: E=Sophos;i="5.64,381,1559491200"; 
-   d="scan'208";a="116668737"
-Received: from mail-sn1nam02lp2058.outbound.protection.outlook.com (HELO NAM02-SN1-obe.outbound.protection.outlook.com) ([104.47.36.58])
-  by ob1.hgst.iphmx.com with ESMTP; 13 Aug 2019 18:48:44 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HdiNK4hjHnD2QurqPaPiJO8nwxFjGYErdZAdsy+VIe3PtvXPnZ9PS45QKroiCga8/H8BGSr8TQyIVT17F/uZWCAkJEoOU4o15+LxRYtjhTubIxg8bjabDAKEMd6cyr6Q3fDMecwA9lhEgYOhfvR/rV9Zy0RCehABCbAIN6oqRsQq06XsuF2StGHNUkxlJqg9py5qrvcXFIRd947b/FYctr/C97TA9agXyhRJsXcQldpbhEtx0GxSLM4gikIgAeWhsyAWmWZUa589RKCLf0J3l6lhAphRZZddL7j7P/8atZ4G3i22rGLTQ9F7oaJzZU1emV3v8LrVInXS1LJ22Y9O2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jIssqGaJpLkzxwxjuHDkdFP0WtsmkC6Soq7bQ1FxEnA=;
- b=G/Pfbs28zNOkEKGVmNLiLjAtLcJi+v0JzHk01JwPiB1nXCHNiCSUbcBdON/KbVNbpskP+5+mIla4gmfC0TX9aavnRM4NPhfBI9r+vBCKabdKs4M8QeNMs4e/q0KEXI+kdWcK6gbOrVV8F5DgM1GmbmGESeNQ2F37sA03iqLm1dawuMiLXQIawg+jjGdxm3PeMvoAc4nb0lKNup+JQNYluRS4kpaljwuLTuUCZgwEig6ZRI/Q+0K2x9ju2T5eJvInodPaS+pgG9hTL2LnggIA+DTtBGgeU9kwJPLiYHcPYTNf/WRjWfpUaPwHTph+gSEXXw4NPvcY4bflj4SCtjEuWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jIssqGaJpLkzxwxjuHDkdFP0WtsmkC6Soq7bQ1FxEnA=;
- b=JAiaYXuqJXS4C4mXLsV4/yvaElMZUPsqg8mLrWuFizybYkF/HAtLIYbOLoJecE2LUuTzMHSNtzqYMmnKLUsqb6YTuPipyqq9dFr860tt/Et5Ku5ErTwmqXK454yT/l7DqwKqWJWi00Oa/4Ux1zxCLZn5xS6b3pSKQ1GgWxemq3U=
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.58.207) by
- BYAPR04MB5733.namprd04.prod.outlook.com (20.179.57.221) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.20; Tue, 13 Aug 2019 10:48:43 +0000
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::a538:afd0:d62a:55bc]) by BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::a538:afd0:d62a:55bc%7]) with mapi id 15.20.2157.020; Tue, 13 Aug 2019
- 10:48:43 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Justin Piszcz <jpiszcz@lucidpixels.com>
-CC:     'LKML' <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: Re: 5.2.x kernel: WD 8TB USB Drives: Unaligned partial completion
- (resid=78, sector_sz=512)
-Thread-Topic: 5.2.x kernel: WD 8TB USB Drives: Unaligned partial completion
- (resid=78, sector_sz=512)
-Thread-Index: AdVJ2z/+9mq0jIkOQpG4zabX2Rwi3A==
-Date:   Tue, 13 Aug 2019 10:48:43 +0000
-Message-ID: <BYAPR04MB58166DE7AFE1081CEDF674BDE7D20@BYAPR04MB5816.namprd04.prod.outlook.com>
-References: <006d01d549db$54e42140$feac63c0$@lucidpixels.com>
- <yq1ftmcct1j.fsf@oracle.com>
- <002d01d54dc3$17c278c0$47476a40$@lucidpixels.com>
- <yq1r25p7qzp.fsf@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Damien.LeMoal@wdc.com; 
-x-originating-ip: [12.169.102.154]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2d12531a-df83-4c98-a30b-08d71fdbcf3c
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB5733;
-x-ms-traffictypediagnostic: BYAPR04MB5733:
-x-microsoft-antispam-prvs: <BYAPR04MB5733934E533798BF8EB82428E7D20@BYAPR04MB5733.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 01283822F8
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(346002)(396003)(376002)(366004)(39860400002)(199004)(189003)(256004)(478600001)(2906002)(8936002)(305945005)(3846002)(54906003)(446003)(74316002)(86362001)(110136005)(99286004)(486006)(476003)(33656002)(6116002)(316002)(66066001)(66476007)(66946007)(102836004)(7696005)(7736002)(64756008)(76116006)(66556008)(8676002)(81156014)(66446008)(55016002)(81166006)(71190400001)(6436002)(6506007)(53546011)(229853002)(76176011)(25786009)(71200400001)(5024004)(6246003)(5660300002)(9686003)(4326008)(186003)(52536014)(14454004)(53936002)(14444005)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB5733;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: r0kmdnmkMsRLgezggxVtrvGq5j7w9A1WrzM5uvW24zU9eAsNJ8g0+2Bgm8g6n6hPuEZ8WxFaIIZbMkwl9UXjTrR4SlmZM9r5kasz7fgQTBlKNTbcu8NTjSRg1TaOKMx+KjF3BL1ZhPprUIxlMGlCqVxJPKdNll03HmNKLuEMxf4KpQFMnhH/7yURTz2rIUgrsOQ1J43v4uedlAzDv2dNsWfSS12OSyFEBmdeS5UeYgA/EqDbnK/QnuirWFEa4pW0NBrCq9ZVaOo30SFgafK/oCGVeEl7To9Zuk8IOeA/IeWBZaGjhOwXcRpHlG0MaPvbl9nSvUfajiv8P4cFW/wy0N66Ml9+Xe1AaCxxn8Qm4TtU7sMCq4vZezVvkkKEYOjI/act6Y6WXRybSkPmvQ8zd/JUN0kl/eEy+sVM98N71J4=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727775AbfHMKwU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 06:52:20 -0400
+Received: from mga12.intel.com ([192.55.52.136]:23305 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726298AbfHMKwU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 06:52:20 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Aug 2019 03:52:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,381,1559545200"; 
+   d="scan'208";a="194169863"
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 13 Aug 2019 03:52:17 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 13 Aug 2019 13:52:16 +0300
+Date:   Tue, 13 Aug 2019 13:52:16 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: fusb302: Call fusb302_debugfs_init earlier
+Message-ID: <20190813105216.GD4691@kuha.fi.intel.com>
+References: <20190813101524.80673-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d12531a-df83-4c98-a30b-08d71fdbcf3c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2019 10:48:43.0441
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rV6eXT98U26DT1zyxWrzYqbb4gY8pP8YAKNN9caYDy8tpKhuwruqQ6nhDpfMmcMFc8pz7gxbNP1h1jAwbwbVMw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB5733
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190813101524.80673-1-hdegoede@redhat.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2019/08/12 19:12, Martin K. Petersen wrote:=0A=
-> =0A=
-> Justin,=0A=
-> =0A=
->>> Attached 2 x brand new Western Digital 8TB USB 3.0 drives awhile back=
-=0A=
->>> and ran some file copy tests and was getting these warnings-- is=0A=
->>> there any way to avoid these warnings?  I did confirm with parted=0A=
->>> that the partition was aligned but this appears to be something=0A=
->>> related to the firmware on the device according to [1] and [2]?=0A=
-> =0A=
->> sg_vpd_bdc.txt=0A=
->> Block device characteristics VPD page (SBC):=0A=
->>   Nominal rotation rate: 5400 rpm=0A=
->>   Product type: Not specified=0A=
->>   WABEREQ=3D0=0A=
->>   WACEREQ=3D0=0A=
->>   Nominal form factor: 3.5 inch=0A=
->>   ZONED=3D0=0A=
-> =0A=
-> Damien: What can we do to limit the messages in cases like this? Would=0A=
-> it make sense to make the residual warning conditional on sd_is_zoned()?=
-=0A=
-> =0A=
-=0A=
-Justin,=0A=
-=0A=
-Can you send the output of "lsscsi" for these drives ? I need the exact dis=
-k=0A=
-model ref name and FW version to see if there is an update for this problem=
-, if=0A=
-it is a known one. If it is not, I will signal it and get a fix started.=0A=
-=0A=
-Best regards.=0A=
-=0A=
--- =0A=
-Damien Le Moal=0A=
-Western Digital Research=0A=
+Hi Hans,
+
+On Tue, Aug 13, 2019 at 12:15:24PM +0200, Hans de Goede wrote:
+> tcpm_register_port() will call some of the fusb302 code's callbacks
+> wich in turn will call fusb302_log(). So we need to call
+> fusb302_debugfs_init() before we call tcpm_register_port().
+> 
+> This fixes the following warning, which was caused by the logbuffer_lock
+> not yet being initialized (which is done by fusb302_debugfs_init):
+> 
+>  DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+>  WARNING: CPU: 0 PID: 1306 at kernel/locking/mutex.c:912 __mutex_lock+0x978/0x9a0
+>  Modules linked in: fusb302(+) tcpm pi3usb30532 typec bq24190_charger snd_soc_sst_cht_bsw_rt5645 mei_hdcp dwc3 intel_rapl_msr udc_core ulpi gpio_keys intel_powerclamp coretemp kvm_intel brcmfmac kvm brcmutil joydev cfg80211 wdat_wdt irqbypass pcspkr intel_cstate extcon_intel_cht_wc i2c_cht_wc(E) snd_intel_sst_acpi snd_intel_sst_core snd_soc_rt5645 snd_soc_sst_atom_hifi2_platform snd_soc_acpi_intel_match snd_soc_rl6231 snd_soc_acpi intel_xhci_usb_role_switch roles hci_uart snd_soc_core btqca mei_txe btrtl processor_thermal_device mei snd_hdmi_lpe_audio lpc_ich snd_compress btbcm intel_rapl_common ac97_bus dwc3_pci snd_pcm_dmaengine intel_soc_dts_iosf btintel snd_seq bluetooth snd_seq_device snd_pcm intel_cht_int33fe_musb snd_timer intel_cht_int33fe_typec intel_hid intel_cht_int33fe_common sparse_keymap snd ecdh_generic goodix rfkill soundcore ecc spi_pxa2xx_platform max17042_battery dw_dmac int3406_thermal dptf_power acpi_pad soc_button_array int3400_thermal int3403_thermal
+>   gpd_pocket_fan intel_int0002_vgpio int340x_thermal_zone acpi_thermal_rel dm_crypt mmc_block i915 crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel i2c_algo_bit drm_kms_helper drm video sdhci_acpi sdhci mmc_core pwm_lpss_platform pwm_lpss i2c_dev
+>  CPU: 0 PID: 1306 Comm: systemd-udevd Tainted: G            E     5.3.0-rc4+ #83
+>  Hardware name: Default string Default string/Default string, BIOS 5.11 06/28/2017
+>  RIP: 0010:__mutex_lock+0x978/0x9a0
+>  Code: c0 0f 84 26 f7 ff ff 44 8b 05 24 25 c8 00 45 85 c0 0f 85 16 f7 ff ff 48 c7 c6 da 55 2f ae 48 c7 c7 98 8c 2d ae e8 a0 f9 5c ff <0f> 0b e9 fc f6 ff ff 4c 89 f0 4d 89 fe 49 89 c7 e9 cf fa ff ff e8
+>  RSP: 0018:ffffb7a8c0523800 EFLAGS: 00010286
+>  RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+>  RDX: 0000000000000002 RSI: 0000000000000001 RDI: 0000000000000246
+>  RBP: ffffb7a8c05238c0 R08: 0000000000000000 R09: 0000000000000000
+>  R10: ffffb7a8c0523648 R11: 0000000000000030 R12: 0000000000000000
+>  R13: ffffb7a8c0523990 R14: ffff9bf22f70c028 R15: ffff9bf22f70c360
+>  FS:  00007f39ca234940(0000) GS:ffff9bf237400000(0000) knlGS:0000000000000000
+>  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>  CR2: 00007f1f108481a0 CR3: 0000000271f28000 CR4: 00000000001006f0
+>  Call Trace:
+>   ? find_held_lock+0x39/0x90
+>   ? _fusb302_log+0x81/0x1d0 [fusb302]
+>   ? vsnprintf+0x3aa/0x4f0
+>   ? _fusb302_log+0x81/0x1d0 [fusb302]
+>   _fusb302_log+0x81/0x1d0 [fusb302]
+>  ...
+> 
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/usb/typec/tcpm/fusb302.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index ccfc7e91e7a3..04c76b9d0065 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -1759,6 +1759,7 @@ static int fusb302_probe(struct i2c_client *client,
+>  	INIT_WORK(&chip->irq_work, fusb302_irq_work);
+>  	INIT_DELAYED_WORK(&chip->bc_lvl_handler, fusb302_bc_lvl_handler_work);
+>  	init_tcpc_dev(&chip->tcpc_dev);
+> +	fusb302_debugfs_init(chip);
+>  
+>  	if (client->irq) {
+>  		chip->gpio_int_n_irq = client->irq;
+> @@ -1784,7 +1785,6 @@ static int fusb302_probe(struct i2c_client *client,
+>  		goto tcpm_unregister_port;
+>  	}
+>  	enable_irq_wake(chip->gpio_int_n_irq);
+> -	fusb302_debugfs_init(chip);
+>  	i2c_set_clientdata(client, chip);
+
+That leaves the rootdir variable pointing to something again for
+example if a failure happens (like -EPROBE_AGAIN) during probe (the
+"fusb302" directory is removed, but the rootdir static variable still
+points to something).
+
+Let's just create that rootdir directory during driver init. I don't
+really understand why should we only create it when/if the first
+instance of fusb302 is registered. I think something like this would
+work:
+
+diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+index c524088246ee..7a950a6e5f0d 100644
+--- a/drivers/usb/typec/tcpm/fusb302.c
++++ b/drivers/usb/typec/tcpm/fusb302.c
+@@ -212,9 +212,6 @@ static struct dentry *rootdir;
+ static void fusb302_debugfs_init(struct fusb302_chip *chip)
+ {
+        mutex_init(&chip->logbuffer_lock);
+-       if (!rootdir)
+-               rootdir = debugfs_create_dir("fusb302", NULL);
+-
+        chip->dentry = debugfs_create_file(dev_name(chip->dev),
+                                           S_IFREG | 0444, rootdir,
+                                           chip, &fusb302_debug_fops);
+@@ -223,7 +220,6 @@ static void fusb302_debugfs_init(struct fusb302_chip *chip)
+ static void fusb302_debugfs_exit(struct fusb302_chip *chip)
+ {
+        debugfs_remove(chip->dentry);
+-       debugfs_remove(rootdir);
+ }
+ 
+ #else
+@@ -1863,7 +1859,24 @@ static struct i2c_driver fusb302_driver = {
+        .remove = fusb302_remove,
+        .id_table = fusb302_i2c_device_id,
+ };
+-module_i2c_driver(fusb302_driver);
++
++static int __init fusb302_init(void)
++{
++       rootdir = debugfs_create_dir("fusb302", NULL);
++       if (IS_ERR(rootdir))
++               return PTR_ERR(rootdir);
++
++       return i2c_add_driver(&fusb302_driver);
++}
++
++static void __exit fusb302_exit(void)
++{
++       i2c_del_driver(&fusb302_driver);
++       debugfs_remove(rootdir);
++}
++
++module_init(fusb302_init);
++module_exit(fusb302_exit);
+ 
+ MODULE_AUTHOR("Yueyao Zhu <yueyao.zhu@gmail.com>");
+ MODULE_DESCRIPTION("Fairchild FUSB302 Type-C Chip Driver");
+
+
+If it's OK, could you include that into this patch?
+
+thanks,
+
+-- 
+heikki
