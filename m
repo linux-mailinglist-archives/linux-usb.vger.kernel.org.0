@@ -2,113 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAC18A8A8
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Aug 2019 22:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2288AC94
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 04:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbfHLUwM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Aug 2019 16:52:12 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:48139 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726707AbfHLUwM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 16:52:12 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0D68621C24;
-        Mon, 12 Aug 2019 16:52:11 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 12 Aug 2019 16:52:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=oUvvoBRuQndmCXcg4PLkeOXQwgs
-        GaxiCNpGM6pvY34Q=; b=CizSUJ+KVuJ9P/ujZ+81B4AqKudZsGGdlGVZAnWMAEe
-        kHg9fJA4w2vs+ExQj+Tm4i0dl1bLfWrouxXCjw/YhHtm4k1ZaBoGe3C5n+26hQ2d
-        Ox/4ddib+c41D3/AtNP+v+atvHY8rQA/2+S5EFdALwf8+76VwxIfYe0V5Myb7O8T
-        ENBLQwVCVkXtNVmCH2C2DqvI1ZVDF6/CC8KI6waAYuHoWvk698Zftv8/NqajkbMO
-        UNb3iUTy2AeBP8nXOiAoMoyImwRZW2VI9gKnfZf16u7hbrfHfEl5zamlkYLgHBia
-        tSy+Q2ikmHGdgOcB7b7fUi5ClmRYZr828RmWkOy6iYA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=oUvvoB
-        RuQndmCXcg4PLkeOXQwgsGaxiCNpGM6pvY34Q=; b=UxtQXuMVtlNqof/Sghqepf
-        r4T3H4S+nIyTDwhYi3ckWdsJeUTo1zo/rLglqrejIZuBIwqRNrZ0khtpqLixTQIU
-        MBnYnwfa3CO8P8ikzJqFkyTMwoqDScs5txShfW4f50UQ+uzlRAObKaa+pnvqVyAD
-        MhITIKhdzPsCi9yWQvNUppmHdFJmRmjB/3s+7rfgOs4BmmeojZEAr9N6C8j0RewV
-        s+U4OpW8kMw4sm/B8SjXj0Qb2Un2qVKxpBjtM73ddYGW+3iiSqasWFKTIGt3Dofy
-        IMDL8KE92rTbwoz940KxtNVpdFyvY8S3FWZRjcX3q4PD+oBgEgcMKU0uBpSGdJtg
-        ==
-X-ME-Sender: <xms:etFRXQj-bgQ93hOzZI6arg251uNcXHi43C_arLeszq3Aum5i5yXxoA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddruddvgedgudehhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrd
-    dutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhen
-    ucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:etFRXVc-S-3lDcr158c1kUzY9z_kEELj-EO7wdB11kTT0OBbVqwfLA>
-    <xmx:etFRXW96oHAkY31ORyo8gFlOXdn7SkcygNH2z9yB7RqG34Lr1oHQUA>
-    <xmx:etFRXXbn7yfGK2_azHPzQxozMgOSjlL0QmShmnFzOfcLRvXQO7QEkw>
-    <xmx:e9FRXfp9XLkL09Cumt0A_38IwK26w0btHiSSCYLkTZXB0NQOrCEyPg>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 9CC2E80061;
-        Mon, 12 Aug 2019 16:52:09 -0400 (EDT)
-Date:   Mon, 12 Aug 2019 22:52:08 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB list <linux-usb@vger.kernel.org>, andreyknvl@google.com,
-        bhelgaas@google.com, kirr@nexedi.com, linux@roeck-us.net,
-        lkundrak@v3.sk, logang@deltatee.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] USB: core: Fix races in character device registration
- and deregistraion
-Message-ID: <20190812205208.GA12789@kroah.com>
-References: <Pine.LNX.4.44L0.1908091229540.1630-100000@iolanthe.rowland.org>
- <Pine.LNX.4.44L0.1908121607590.1659-100000@iolanthe.rowland.org>
+        id S1726516AbfHMCMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Aug 2019 22:12:49 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:34536 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726488AbfHMCMt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Aug 2019 22:12:49 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D29Ud2034089;
+        Tue, 13 Aug 2019 02:12:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=ep/5s03WYKZmNZQZLZc9SLB3YvDlCS12ax1hJySZBAw=;
+ b=UfXc3FW2kQ5xAzsVHGWqtYIoWab9W5OvMHXNTBqB4r5MF9ESY3nEsktzGGc/XAM0W1Ya
+ Uq8uudTcPKXz3Oswc3JT4YUXvdZAiWsMEtz+UhOtJaXplowaMksxPTcLJ6p5/J3k5Wq7
+ 6O+TlEwbdec0XOTXHl1wk11DRpTQIFXpWZsuQi/rEjQBuS5QmHVgvzE9wpA68K3m4JPl
+ KNsJBa+6s0FkIRWCoGvn8pjDLdVKHiCm3zYZ4n9W1Bh5wYK+8yc2Tm8KmfwrNQzVDDYa
+ cnc80XfjqnZF2HKRHx0E0NtxKKlstJ13rPNlvTI+rpYAVrGgPEIyJ5dzAY4B3HJl9ztz qg== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=ep/5s03WYKZmNZQZLZc9SLB3YvDlCS12ax1hJySZBAw=;
+ b=gfPesdM80xaZA1f9yjM96QAscRnGAxDdQZ2vgktBVu3M8vjWsJDaS/qe8Fk0NPWP7AAU
+ NzWHRrt1IZorXl53N9V52j0u8411SR9NDRlZ/3Rnz9O/kxXM6vT3jUgdz/EaQlKukmPA
+ aofegeHA/Hyy4c0PMe59DynjhNy11v3Oc3oTO7hRgHMBslVCxej+Cpu0dAFl5cXATq01
+ A1JMubjAzbybkPFUni52vKXUDXyvVY+MaUG4NRZ1kfSdCowS7tIkzYxXALuATuuraOQj
+ uvWtScYC3jmc7wp+KtvC7KlTHMvquTDN7lCOApIsApU1JYwpvObtgLrAYoyNkMid/rro bg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2u9pjqb17j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Aug 2019 02:12:46 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D28nvC131833;
+        Tue, 13 Aug 2019 02:12:46 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2u9n9hk4hg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Aug 2019 02:12:46 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7D2CiSw019898;
+        Tue, 13 Aug 2019 02:12:45 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 12 Aug 2019 19:12:44 -0700
+To:     "Justin Piszcz" <jpiszcz@lucidpixels.com>
+Cc:     "'Martin K. Petersen'" <martin.petersen@oracle.com>,
+        "'LKML'" <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>
+Subject: Re: 5.2.x kernel: WD 8TB USB Drives: Unaligned partial completion (resid=78, sector_sz=512)
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <006d01d549db$54e42140$feac63c0$@lucidpixels.com>
+        <yq1ftmcct1j.fsf@oracle.com>
+        <002d01d54dc3$17c278c0$47476a40$@lucidpixels.com>
+Date:   Mon, 12 Aug 2019 22:12:42 -0400
+In-Reply-To: <002d01d54dc3$17c278c0$47476a40$@lucidpixels.com> (Justin
+        Piszcz's message of "Thu, 8 Aug 2019 04:27:18 -0400")
+Message-ID: <yq1r25p7qzp.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1908121607590.1659-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=942
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908130021
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=992 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908130021
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 04:11:07PM -0400, Alan Stern wrote:
-> The syzbot fuzzer has found two (!) races in the USB character device
-> registration and deregistration routines.  This patch fixes the races.
-> 
-> The first race results from the fact that usb_deregister_dev() sets
-> usb_minors[intf->minor] to NULL before calling device_destroy() on the
-> class device.  This leaves a window during which another thread can
-> allocate the same minor number but will encounter a duplicate name
-> error when it tries to register its own class device.  A typical error
-> message in the system log would look like:
-> 
->     sysfs: cannot create duplicate filename '/class/usbmisc/ldusb0'
-> 
-> The patch fixes this race by destroying the class device first.
-> 
-> The second race is in usb_register_dev().  When that routine runs, it
-> first allocates a minor number, then drops minor_rwsem, and then
-> creates the class device.  If the device creation fails, the minor
-> number is deallocated and the whole routine returns an error.  But
-> during the time while minor_rwsem was dropped, there is a window in
-> which the minor number is allocated and so another thread can
-> successfully open the device file.  Typically this results in
-> use-after-free errors or invalid accesses when the other thread closes
-> its open file reference, because the kernel then tries to release
-> resources that were already deallocated when usb_register_dev()
-> failed.  The patch fixes this race by keeping minor_rwsem locked
-> throughout the entire routine.
-> 
-> Reported-and-tested-by: syzbot+30cf45ebfe0b0c4847a1@syzkaller.appspotmail.com
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> CC: <stable@vger.kernel.org>
-> 
-> ---
-> 
-> [as1907]
 
-Thanks for this, now queued up.
+Justin,
 
-greg k-h
+>> Attached 2 x brand new Western Digital 8TB USB 3.0 drives awhile back
+>> and ran some file copy tests and was getting these warnings-- is
+>> there any way to avoid these warnings?  I did confirm with parted
+>> that the partition was aligned but this appears to be something
+>> related to the firmware on the device according to [1] and [2]?
+
+> sg_vpd_bdc.txt
+> Block device characteristics VPD page (SBC):
+>   Nominal rotation rate: 5400 rpm
+>   Product type: Not specified
+>   WABEREQ=0
+>   WACEREQ=0
+>   Nominal form factor: 3.5 inch
+>   ZONED=0
+
+Damien: What can we do to limit the messages in cases like this? Would
+it make sense to make the residual warning conditional on sd_is_zoned()?
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
