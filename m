@@ -2,71 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C23198B33D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 11:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29D68B36A
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 11:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727500AbfHMJC2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 05:02:28 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:39027 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbfHMJC1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 05:02:27 -0400
-Received: by mail-lj1-f193.google.com with SMTP id x4so8708674ljj.6;
-        Tue, 13 Aug 2019 02:02:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wTepSsVHXSW1eYjUwZ1pH3F/70zTR4Vl8GGiERGTF58=;
-        b=BJ553ZpMJar1x18XVn344g4dDsvDk+TE6Ifi4t/meZqWMR/HLmX1E0cba7nAS2XQo5
-         HGg5Oqj9kO+xOhqPihS1cUGNZh/UllmgQrrIp8RsYGqm8GVTB9InuF5dHqAlH0ulKmHV
-         q9XSam4sn8Srk9EjZYEDYwPIxVrHmxn1eRsuRwEIF8BjlFofc/c0AL8MsSXpny/odCDO
-         TEv/jWPje6JARQ/8GZ31efMy/HsBzsxXCwjh76Cpk+Vv+eh4ZXU4z+yzzUF7DK2sNItT
-         6K1vyEv6uG/hw0V3MG8nreu9oXHdtuJ0Eifvh/Nz9gLaBXBJBDgJDrb+G9MeNU3Hfdoj
-         1ajg==
-X-Gm-Message-State: APjAAAXMCSqBI2dtCyQscqw7Hq/FBpZDT5OeZeeD+77S3DAA0YG90B69
-        6z3wzatvKg2KfMUHt7bp7cs=
-X-Google-Smtp-Source: APXvYqyQDKfZciI/rmUWmSfMPVbOpC9DONeUAS0NpBb7V9bk9PSuAZCXunVTpeF0Jjfinv37w8/Kbw==
-X-Received: by 2002:a2e:7001:: with SMTP id l1mr8898124ljc.48.1565686944801;
-        Tue, 13 Aug 2019 02:02:24 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id a15sm5244210lfo.2.2019.08.13.02.02.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Aug 2019 02:02:24 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1hxShA-0002zA-7R; Tue, 13 Aug 2019 11:02:20 +0200
-Date:   Tue, 13 Aug 2019 11:02:20 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Matthew Michilot <mmichilot@gateworks.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthew Michilot <matthew.michilot@gmail.com>
-Subject: Re: [PATCH] USB: serial: ftdi_sio: add support for FT232H CBUS gpios
-Message-ID: <20190813090220.GC15556@localhost>
-References: <20190808222348.4428-1-matthew.michilot@gmail.com>
+        id S1727038AbfHMJLC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 05:11:02 -0400
+Received: from gofer.mess.org ([88.97.38.141]:49753 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726298AbfHMJLC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 05:11:02 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id CCABA603E8; Tue, 13 Aug 2019 10:10:59 +0100 (BST)
+Date:   Tue, 13 Aug 2019 10:10:59 +0100
+From:   Sean Young <sean@mess.org>
+To:     Brad Love <brad@nextdimension.cc>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        syzbot <syzbot+b7f57261c521087d89bb@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] media: em28xx: modules workqueue not inited for 2nd
+ device
+Message-ID: <20190813091059.6ec46psv67y7msef@gofer.mess.org>
+References: <0000000000004bcc0d058faf01c4@google.com>
+ <20190811051110.hsdwmjrbvqgrmssc@gofer.mess.org>
+ <614221186ed37383778d8890d39e829a0e924796.camel@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190808222348.4428-1-matthew.michilot@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <614221186ed37383778d8890d39e829a0e924796.camel@collabora.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 10:23:48PM +0000, Matthew Michilot wrote:
-> Enable support for cbus gpios on FT232H. The cbus configuration is
-> stored in one word in the EEPROM at byte-offset 0x1a with the mux
-> config for ACBUS5, ACBUS6, ACBUS8 and ACBUS9 (only pins that can be
-> configured as I/O mode).
-> 
-> Tested using FT232H by configuring one ACBUS pin at a time.
-> 
-> Review-by: Tim Harvey <tharvey@gateworks.com>
-> Signed-off-by: Matthew Michilot <matthew.michilot@gmail.com>
+Hi Brad,
 
-Also make sure your SoB matches the From line.
+On Mon, Aug 12, 2019 at 10:21:39AM -0300, Ezequiel Garcia wrote:
+> On Sun, 2019-08-11 at 06:11 +0100, Sean Young wrote:
+> > syzbot reports an error on flush_request_modules() for the second device.
+> > This workqueue was never initialised so simply remove the offending line.
+> > 
+> > usb 1-1: USB disconnect, device number 2
+> > em28xx 1-1:1.153: Disconnecting em28xx #1
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 0 PID: 12 at kernel/workqueue.c:3031
+> > __flush_work.cold+0x2c/0x36 kernel/workqueue.c:3031
+> > Kernel panic - not syncing: panic_on_warn set ...
+> > CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc2+ #25
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > Google 01/01/2011
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >   __dump_stack lib/dump_stack.c:77 [inline]
+> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
+> >   panic+0x2a3/0x6da kernel/panic.c:219
+> >   __warn.cold+0x20/0x4a kernel/panic.c:576
+> >   report_bug+0x262/0x2a0 lib/bug.c:186
+> >   fixup_bug arch/x86/kernel/traps.c:179 [inline]
+> >   fixup_bug arch/x86/kernel/traps.c:174 [inline]
+> >   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+> >   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+> >   invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1026
+> > RIP: 0010:__flush_work.cold+0x2c/0x36 kernel/workqueue.c:3031
+> > Code: 9a 22 00 48 c7 c7 20 e4 c5 85 e8 d9 3a 0d 00 0f 0b 45 31 e4 e9 98 86
+> > ff ff e8 51 9a 22 00 48 c7 c7 20 e4 c5 85 e8 be 3a 0d 00 <0f> 0b 45 31 e4
+> > e9 7d 86 ff ff e8 36 9a 22 00 48 c7 c7 20 e4 c5 85
+> > RSP: 0018:ffff8881da20f720 EFLAGS: 00010286
+> > RAX: 0000000000000024 RBX: dffffc0000000000 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: ffffffff8128a0fd RDI: ffffed103b441ed6
+> > RBP: ffff8881da20f888 R08: 0000000000000024 R09: fffffbfff11acd9a
+> > R10: fffffbfff11acd99 R11: ffffffff88d66ccf R12: 0000000000000000
+> > R13: 0000000000000001 R14: ffff8881c6685df8 R15: ffff8881d2a85b78
+> >   flush_request_modules drivers/media/usb/em28xx/em28xx-cards.c:3325 [inline]
+> >   em28xx_usb_disconnect.cold+0x280/0x2a6
+> > drivers/media/usb/em28xx/em28xx-cards.c:4023
+> >   usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+> >   __device_release_driver drivers/base/dd.c:1120 [inline]
+> >   device_release_driver_internal+0x404/0x4c0 drivers/base/dd.c:1151
+> >   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+> >   device_del+0x420/0xb10 drivers/base/core.c:2288
+> >   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+> >   usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
+> >   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+> >   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+> >   port_event drivers/usb/core/hub.c:5359 [inline]
+> >   hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
+> >   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+> >   process_scheduled_works kernel/workqueue.c:2331 [inline]
+> >   worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+> >   kthread+0x318/0x420 kernel/kthread.c:255
+> >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> > Kernel Offset: disabled
+> > Rebooting in 86400 seconds..
+> > 
+> > Reported-by: syzbot+b7f57261c521087d89bb@syzkaller.appspotmail.com
+> > Signed-off-by: Sean Young <sean@mess.org>
+> 
+> I reviewed the syzbot report, but was left head-scratching and
+> failing to see how the module-loading worker was supposed to be used :-)
+> 
+> Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+> 
+> Also, this seems a bug, so how about this tag?
+> 
+> Fixes: be7fd3c3a8c5e ("media: em28xx: Hauppauge DualHD second tuner functionality)
 
-Johan
+Would you mind reviewing this change please Brad? You added the dual_ts
+feature to the driver so it would be good to have your view on this.
+
+Thanks
+Sean
+
+> 
+> > ---
+> >  drivers/media/usb/em28xx/em28xx-cards.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+> > index 6e33782c3ca6..5983e72a0622 100644
+> > --- a/drivers/media/usb/em28xx/em28xx-cards.c
+> > +++ b/drivers/media/usb/em28xx/em28xx-cards.c
+> > @@ -4019,7 +4019,6 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
+> >  		dev->dev_next->disconnected = 1;
+> >  		dev_info(&dev->intf->dev, "Disconnecting %s\n",
+> >  			 dev->dev_next->name);
+> > -		flush_request_modules(dev->dev_next);
+> >  	}
+> >  
+> >  	dev->disconnected = 1;
+> 
