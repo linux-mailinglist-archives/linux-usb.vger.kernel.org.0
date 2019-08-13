@@ -2,246 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C468BB28
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 16:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A511B8BC5D
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 17:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729548AbfHMOGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 10:06:23 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:36179 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729330AbfHMOGX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 10:06:23 -0400
-Received: by mail-pl1-f193.google.com with SMTP id g4so2852490plo.3
-        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 07:06:22 -0700 (PDT)
+        id S1729871AbfHMPC3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 11:02:29 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:44865 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729586AbfHMPC3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 11:02:29 -0400
+Received: by mail-wr1-f65.google.com with SMTP id p17so108046785wrf.11
+        for <linux-usb@vger.kernel.org>; Tue, 13 Aug 2019 08:02:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WcMMuNL0IbwZtyJOzqvN7iMxS8nquyWjim6mx/7C2TA=;
-        b=OAi1I98SDOwIurQLZ6SfOe7Zwk+bZpuC/RH4OgKPfcCjAWCiVzaZ1N8Bmb5CE8j3fB
-         39bPzs1f5hS6JNNoR3JiLEDqA1FpV/jIh8EwXJKHI+6AoTOBpei2ANNVYmRwrwg5Vamk
-         PY6ou6mwMJSM15DHYfD7JXbMYnY4GD/l6R5yzUA4oSVRoOc0Oq2eqKZK1Tsdywff68g8
-         RCPre7UIhgG/1F3WxzjxaSUqFh6QsUZrSM8uCmcTV43aNfq83gxThzzVBSlCLvwmAzuJ
-         ltLDEFwB+h3N0Av36HsiEfBOItsdPqbGbteIRssO0PtD1ZXyOSnfOQLD3oeo1bklFD7/
-         rYlg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Z7Dmwu3NvM4EVDKo63p/xdtZ+TtWJUXj2RkugIVOSr4=;
+        b=t2CeC6mtNnAdAq/OptzTNdCWbbeZeKOfLFYM6RAyQrZ+0HjWV7exL8BKTMrkb0IRDM
+         w1Li2BGhGTUgB9ErTS9tgo1Yz6QM8ou/fnQvFN6GD0Mq7HXZ87yNGkmCJUWLXt6rKs6k
+         PvKCClFv1ahlbnQuGeqpjbwvAm2MCWcT62/V8Td+35/tG+7ESPRSxLHC2rzBwxnuGt+N
+         JimGsJMRY0GhBQWRwIO0JxQxJdHd67iGC8UwP5rCsyfQz/WRr5Bsj314c7Az6UMjqbaN
+         eTmFEZ3FqInxcxhQiSqHVgIkIWsh+eMXoow+ZwoSg2w2a+BAHbQJr2ibqD7HnpeGDhzo
+         kvPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WcMMuNL0IbwZtyJOzqvN7iMxS8nquyWjim6mx/7C2TA=;
-        b=nYUZU+kkq6iqqkv447WwdH4xs3vuXWZXQBGsoXRZ365DT7I6yYMceY/DRFbJLn1gpz
-         EXHZfzonHXxPuXKAu1LGM3vImvxRnitXRnkXc8hiqb/5YVu/wKElrxW0l3/rcwuohABQ
-         H3E69Svjm7q/DEFhvOn5bzV4v/HU9POWbYQCOtVf4Mx1YdX1QcN+0cOIbt50r3pXVzCD
-         ZPdPcqABwwNQZHjZeIgaW1exNhFX9fmylDHdYmYJbrI5WcMA5NP+03Qhrk17/vEotogi
-         BiCAMWrsfZLqLmRdB5h1LAoDSSfPncOmFAmztUzW6cibWcid2MlWIi1ZTf7bvjQiGDHw
-         SQgw==
-X-Gm-Message-State: APjAAAUFepTi7F1HCkALQgIvj9IhqjsNG48RSKW4OAeAa0MtwfxGohTJ
-        0dIrw6w7lpVWC2hCnMLdP0Bmv7Xd+AxYaP1DRwpjTA==
-X-Google-Smtp-Source: APXvYqxBlJbIkfzEsNgul2rJjXC8K9icJy6FUueAMXZyeAb3IxuaN6p+2/4lywSa2OxqvfWxlrzWDN+3mzm7iHDUeGY=
-X-Received: by 2002:a17:902:bb94:: with SMTP id m20mr5483970pls.336.1565705181970;
- Tue, 13 Aug 2019 07:06:21 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Z7Dmwu3NvM4EVDKo63p/xdtZ+TtWJUXj2RkugIVOSr4=;
+        b=COoa6RCATfMaMsDGGKEiRlg6lvy8iHSM27LM1gqxAIZL8kHy5VQjocVxDQc9fsrHqB
+         eknwUpYRA5H5K/34XIRLu7DD6sCgaoDFD/fD9bmTBmxzLX/pHFt+Xzsal9QFJR+DdEz/
+         TjqI6VfSpEQxi+pKQBnFJ2dkzUWUHr/Oz0EJBKxmvSlYfvyNkvMDrMWTMfEdxJpSyCPI
+         n/EhB9OuNIHQ0n9mNEo5oY7i8scJVrtr82bGnZOdIet4OzS/sPEiVMveUpcySLn2ZAkf
+         rz3QhFsU0+HXVUH/9szy94RlIUpwoHov9e1mIPN4V3+9iPKns+ZX9BW6JPA6o9abk2Fz
+         molA==
+X-Gm-Message-State: APjAAAUoAf9R0l/N4uYfoEZ5q02aeu7x69X8hk+MEQFYHP8V/HtsJ/Bx
+        mY6WMIkCHJvYbMkLwpxkIg1R1g==
+X-Google-Smtp-Source: APXvYqzczT++Iinfypzj8ZDHy/UBigh5SKekIk8qmEwWyiX/x1k1vy+Nz2A/tkdRk+Iew06bsxv+eA==
+X-Received: by 2002:a5d:670d:: with SMTP id o13mr36840270wru.289.1565708546723;
+        Tue, 13 Aug 2019 08:02:26 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
+        by smtp.gmail.com with ESMTPSA id p13sm42846847wrw.90.2019.08.13.08.02.25
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 13 Aug 2019 08:02:26 -0700 (PDT)
+Date:   Tue, 13 Aug 2019 16:02:21 +0100
+From:   Matthias Maennich <maennich@google.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, maco@android.com,
+        kernel-team@android.com, arnd@arndb.de, geert@linux-m68k.org,
+        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@google.com, michal.lkml@markovi.net, mingo@redhat.com,
+        oneukum@suse.com, pombredanne@nexb.com, sam@ravnborg.org,
+        sboyd@codeaurora.org, sspatil@google.com,
+        stern@rowland.harvard.edu, tglx@linutronix.de,
+        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
+        yamada.masahiro@socionext.com
+Subject: Re: [PATCH v2 10/10] RFC: usb-storage: export symbols in USB_STORAGE
+ namespace
+Message-ID: <20190813150221.GA107461@google.com>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190813121733.52480-1-maennich@google.com>
+ <20190813121733.52480-11-maennich@google.com>
+ <20190813124708.GC12475@kroah.com>
 MIME-Version: 1.0
-References: <00000000000003799c05868311b9@google.com> <CAAeHK+yYunegtGoLs4TzrWEQ8U-CWQR7NnAz6NK1j_Vm=ZRTBw@mail.gmail.com>
-In-Reply-To: <CAAeHK+yYunegtGoLs4TzrWEQ8U-CWQR7NnAz6NK1j_Vm=ZRTBw@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 13 Aug 2019 16:06:10 +0200
-Message-ID: <CAAeHK+zWKom2PihVSdAjD_GF8Uxa5VX80S8suAZrtuaqqtXHOg@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in v4l2_ioctl
-To:     syzbot <syzbot+d587871cd33a9bc7c086@syzkaller.appspotmail.com>
-Cc:     ezequiel@collabora.com, Hans Verkuil <hans.verkuil@cisco.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Sakari Ailus <sakari.ailus@linux.intel.com>, sque@chromium.org,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        tfiga@chromium.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20190813124708.GC12475@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 2:28 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+On Tue, Aug 13, 2019 at 02:47:08PM +0200, Greg KH wrote:
+>On Tue, Aug 13, 2019 at 01:17:07PM +0100, Matthias Maennich wrote:
+>> Modules using these symbols are required to explicitly import the
+>> namespace. This patch was generated with the following steps and serves
+>> as a reference to use the symbol namespace feature:
+>>
+>>  1) Define DDEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
+>>  2) make  (see warnings during modpost about missing imports)
+>>  3) make nsdeps
+>>
+>> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
+>> variants can be used to explicitly specify the namespace. The advantage
+>> of the method used here is that newly added symbols are automatically
+>> exported and existing ones are exported without touching their
+>> respective EXPORT_SYMBOL macro expansion.
 >
-> On Sun, Apr 14, 2019 at 10:06 PM syzbot
-> <syzbot+d587871cd33a9bc7c086@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=137d8a2d200000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=d587871cd33a9bc7c086
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e878f3200000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=102432e3200000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+d587871cd33a9bc7c086@syzkaller.appspotmail.com
-> >
-> > usb 6-1: USB disconnect, device number 19
-> > radio-raremono 6-1:0.210: Thanko's Raremono disconnected
-> > radio-si470x 2-1:0.210: could not find interrupt in endpoint
-> > radio-si470x 3-1:0.210: could not find interrupt in endpoint
-> > ==================================================================
-> > BUG: KASAN: use-after-free in v4l2_ioctl+0x187/0x1a0
-> > drivers/media/v4l2-core/v4l2-dev.c:362
-> > Read of size 8 at addr ffff88809b3645e0 by task v4l_id/5799
-> > radio-si470x 4-1:0.210: could not find interrupt in endpoint
-> >
-> > CPU: 0 PID: 5799 Comm: v4l_id Not tainted 5.1.0-rc4-319354-g9a33b36 #3
-> > radio-si470x: probe of 4-1:0.210 failed with error -5
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 01/01/2011
-> > Call Trace:
-> >   __dump_stack lib/dump_stack.c:77 [inline]
-> >   dump_stack+0xe8/0x16e lib/dump_stack.c:113
-> >   print_address_description+0x6c/0x236 mm/kasan/report.c:187
-> > radio-si470x: probe of 2-1:0.210 failed with error -5
-> >   kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
-> >   v4l2_ioctl+0x187/0x1a0 drivers/media/v4l2-core/v4l2-dev.c:362
-> >   vfs_ioctl fs/ioctl.c:46 [inline]
+>Ok, I can't read text, this answers my previous question.
 >
-> #syz fix: media: radio-raremono: change devm_k*alloc to k*alloc
+>But, as an example, shouldn't we also have some code here that uses the
+>EXPORT_SYMBOL_NS() macro to ensure that it actually works?
+>
+I will create another patch for a different subsystem where the use of
+the macros is more appropriate. Then we have both use cases covered.
 
-#syz dup: KASAN: use-after-free Read in v4l2_release
+Cheers,
+Matthias
 
->
-> >   file_ioctl fs/ioctl.c:509 [inline]
-> >   do_vfs_ioctl+0xced/0x12f0 fs/ioctl.c:696
-> > usb 5-1: new high-speed USB device number 19 using dummy_hcd
-> > radio-si470x: probe of 3-1:0.210 failed with error -5
-> >   ksys_ioctl+0xa0/0xc0 fs/ioctl.c:713
-> >   __do_sys_ioctl fs/ioctl.c:720 [inline]
-> >   __se_sys_ioctl fs/ioctl.c:718 [inline]
-> >   __x64_sys_ioctl+0x74/0xb0 fs/ioctl.c:718
-> >   do_syscall_64+0xcf/0x4f0 arch/x86/entry/common.c:290
-> >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > RIP: 0033:0x7f435c835347
-> > Code: 90 90 90 48 8b 05 f1 fa 2a 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff
-> > ff c3 90 90 90 90 90 90 90 90 90 90 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff
-> > ff 73 01 c3 48 8b 0d c1 fa 2a 00 31 d2 48 29 c2 64
-> > radio-raremono 2-1:0.210: Thanko's Raremono connected: (10C4:818A)
-> > RSP: 002b:00007ffeca71fda8 EFLAGS: 00000202 ORIG_RAX: 0000000000000010
-> > RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f435c835347
-> > RDX: 00007ffeca71fdb0 RSI: 0000000080685600 RDI: 0000000000000003
-> > RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000400884
-> > R13: 00007ffeca71ff00 R14: 0000000000000000 R15: 0000000000000000
-> >
-> > Allocated by task 12:
-> >   set_track mm/kasan/common.c:87 [inline]
-> >   __kasan_kmalloc mm/kasan/common.c:497 [inline]
-> >   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:470
-> >   slab_post_alloc_hook mm/slab.h:437 [inline]
-> >   slab_alloc_node mm/slub.c:2756 [inline]
-> >   __kmalloc_node_track_caller+0xf3/0x320 mm/slub.c:4372
-> >   alloc_dr drivers/base/devres.c:103 [inline]
-> >   devm_kmalloc+0x8c/0x190 drivers/base/devres.c:793
-> >   devm_kzalloc include/linux/device.h:679 [inline]
-> >   usb_raremono_probe+0x34/0x235 drivers/media/radio/radio-raremono.c:298
-> > radio-raremono 3-1:0.210: Thanko's Raremono connected: (10C4:818A)
-> >   usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
-> >   really_probe+0x2da/0xb10 drivers/base/dd.c:509
-> > radio-raremono 4-1:0.210: Thanko's Raremono connected: (10C4:818A)
-> >   driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-> >   __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-> >   bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-> >   __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-> > usb 1-1: new high-speed USB device number 19 using dummy_hcd
-> >   bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-> >   device_add+0xad2/0x16e0 drivers/base/core.c:2106
-> >   usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2021
-> >   generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
-> >   usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
-> >   really_probe+0x2da/0xb10 drivers/base/dd.c:509
-> >   driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-> >   __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-> >   bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-> >   __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-> >   bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-> > usb 5-1: Using ep0 maxpacket: 8
-> >   device_add+0xad2/0x16e0 drivers/base/core.c:2106
-> >   usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
-> >   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-> >   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-> >   port_event drivers/usb/core/hub.c:5350 [inline]
-> >   hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
-> >   process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-> > radio-raremono 2-1:0.210: raremono_cmd_main failed (-71)
-> >   process_scheduled_works kernel/workqueue.c:2331 [inline]
-> >   worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
-> > radio-raremono 4-1:0.210: raremono_cmd_main failed (-71)
-> >   kthread+0x313/0x420 kernel/kthread.c:253
-> >   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-> >
-> > Freed by task 12:
-> > radio-raremono 2-1:0.210: V4L2 device registered as radio33
-> >   set_track mm/kasan/common.c:87 [inline]
-> >   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:459
-> > radio-raremono 4-1:0.210: V4L2 device registered as radio34
-> >   slab_free_hook mm/slub.c:1429 [inline]
-> >   slab_free_freelist_hook+0x5e/0x140 mm/slub.c:1456
-> >   slab_free mm/slub.c:3003 [inline]
-> >   kfree+0xce/0x290 mm/slub.c:3958
-> >   release_nodes+0x4ac/0x920 drivers/base/devres.c:508
-> >   devres_release_all+0x79/0xc8 drivers/base/devres.c:529
-> >   __device_release_driver drivers/base/dd.c:1086 [inline]
-> >   device_release_driver_internal+0x23a/0x4f0 drivers/base/dd.c:1113
-> >   bus_remove_device+0x302/0x5c0 drivers/base/bus.c:556
-> >   device_del+0x467/0xb90 drivers/base/core.c:2269
-> >   usb_disable_device+0x242/0x790 drivers/usb/core/message.c:1235
-> >   usb_disconnect+0x298/0x870 drivers/usb/core/hub.c:2197
-> >   hub_port_connect drivers/usb/core/hub.c:4940 [inline]
-> >   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-> >   port_event drivers/usb/core/hub.c:5350 [inline]
-> >   hub_event+0xcd2/0x3b00 drivers/usb/core/hub.c:5432
-> >   process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-> >   process_scheduled_works kernel/workqueue.c:2331 [inline]
-> >   worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
-> >   kthread+0x313/0x420 kernel/kthread.c:253
-> >   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-> >
-> > The buggy address belongs to the object at ffff88809b364400
-> >   which belongs to the cache kmalloc-4k of size 4096
-> > The buggy address is located 480 bytes inside of
-> >   4096-byte region [ffff88809b364400, ffff88809b365400)
-> > The buggy address belongs to the page:
-> > page:ffffea00026cd800 count:1 mapcount:0 mapping:ffff88812c3f4600 index:0x0
-> > compound_mapcount: 0
-> > flags: 0xfff00000010200(slab|head)
-> > raw: 00fff00000010200 dead000000000100 dead000000000200 ffff88812c3f4600
-> > radio-raremono 3-1:0.210: raremono_cmd_main failed (-71)
-> > raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
-> > radio-raremono 3-1:0.210: V4L2 device registered as radio35
-> > page dumped because: kasan: bad access detected
-> >
-> > Memory state around the buggy address:
-> >   ffff88809b364480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >   ffff88809b364500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > > ffff88809b364580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >                                                         ^
-> >   ffff88809b364600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >   ffff88809b364680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > ==================================================================
-> >
-> >
-> > ---
-> > This bug is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this bug report. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this bug, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
-> >
-> > --
-> > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000003799c05868311b9%40google.com.
-> > For more options, visit https://groups.google.com/d/optout.
