@@ -2,76 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 613D58AEA1
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 07:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F748AF1B
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Aug 2019 08:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726143AbfHMFPh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 01:15:37 -0400
-Received: from mga07.intel.com ([134.134.136.100]:17191 "EHLO mga07.intel.com"
+        id S1727035AbfHMGCx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 02:02:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43802 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725867AbfHMFPh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Aug 2019 01:15:37 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Aug 2019 22:15:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,380,1559545200"; 
-   d="scan'208";a="166950923"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga007.jf.intel.com with ESMTP; 12 Aug 2019 22:15:33 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Roger Quadros <rogerq@ti.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Pawel Laszczak <pawell@cadence.com>
-Cc:     "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel\@ti.com" <jbergsagel@ti.com>,
-        "nsekhar\@ti.com" <nsekhar@ti.com>, "nm\@ti.com" <nm@ti.com>,
-        Suresh Punnoose <sureshp@cadence.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Anil Joy Varughese <aniljoy@cadence.com>
-Subject: Re: [PATCH v10 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
-In-Reply-To: <679b82bc-9f33-91ad-4acf-bf6a29e51bc1@ti.com>
-References: <1563733939-21214-1-git-send-email-pawell@cadence.com> <1563733939-21214-6-git-send-email-pawell@cadence.com> <88742d5b-ee10-cf4e-6724-58e7bdd19cb9@ti.com> <BYAPR07MB47090BCA728600F0C2F4E129DDD00@BYAPR07MB4709.namprd07.prod.outlook.com> <1e557bcf-2d50-f600-0e81-1f9fba5499a1@ti.com> <BYAPR07MB4709F306EC472B7AABEB7D4CDDD30@BYAPR07MB4709.namprd07.prod.outlook.com> <20190812103147.GA4691@kuha.fi.intel.com> <d3bba104-9a85-df8d-c62d-6acb8913c3fe@ti.com> <874l2mtuu6.fsf@gmail.com> <679b82bc-9f33-91ad-4acf-bf6a29e51bc1@ti.com>
-Date:   Tue, 13 Aug 2019 08:15:32 +0300
-Message-ID: <87v9v1bq8b.fsf@gmail.com>
+        id S1725815AbfHMGCx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Aug 2019 02:02:53 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BEA88206C2;
+        Tue, 13 Aug 2019 06:02:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565676172;
+        bh=kJ96xqBqis4xHI+c7truTxjduXzoYlD8qHcJ3Kt4MEk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tQ5wZNjfM8txaVcLCJbol8woF3MjTlo5c7ZHjHbSyw9UphFSueGRsroKDQ1MrJA2+
+         9g7Ctv7dt9LT0CxrtRwRZ+YxWvwiAE9qGtfM20EG8MjhTubDKDD9e/7QMacFnGhKCN
+         oIA/kAkyV4yK9AcNtdYuOTIBX8jzYj/zbIInUGto=
+Date:   Tue, 13 Aug 2019 08:02:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nick Crews <ncrews@chromium.org>
+Cc:     linux-usb@vger.kernel.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Daniel Kurtz <djkurtz@google.com>
+Subject: Re: Policy to keep USB ports powered in low-power states
+Message-ID: <20190813060249.GD6670@kroah.com>
+References: <CAHX4x86QCrkrnPEfrup8k96wyqg=QR_vgetYLqP1AEa02fx1vw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHX4x86QCrkrnPEfrup8k96wyqg=QR_vgetYLqP1AEa02fx1vw@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Aug 12, 2019 at 06:08:43PM -0600, Nick Crews wrote:
+> Hi Greg!
 
-Hi,
+Hi!
 
-Roger Quadros <rogerq@ti.com> writes:
->> Roger Quadros <rogerq@ti.com> writes:
->>>> The sysfs file we expose from the class for the role switches is
->>>> primarily meant for supporting proprietary protocols that require us
->>>> to basically override the connector USB data role. The default role
->>>> should always be selected in the drivers.
->>>
->>> OK. Let's take this example
->>> - Port is dual-role port micro AB.
->>> - microAB to type-A adapter is connected which pulls ID low. port transitions
->>> to "host" role by the controller driver.
->>> - proprietary protocol want to switch role to device role so writes "device" to
->>> mode switch sysfs. port transitions to "device" role.
->>>
->>> Now, how does controller driver know to fall back to HW based role switching?
->> 
->> Use a 'disconnect' or 'suspend' event to go reset it? But that should,
->> probably, be done at kernel space, no?
->> 
->
-> Yes that could be one option.
-> So after a disconnect, sysfs role should reflect actual hardware role. correct?
+First off, please fix your email client to not send html so that vger
+does not reject your messages :)
 
-that would be my expectation
+> I am working on a Chrome OS device that supports a policy called "USB Power
+> Share," which allows users to turn the laptop into a charge pack for their
+> phone. When the policy is enabled, power will be supplied to the USB ports
+> even when the system is in low power states such as S3 and S5. When
+> disabled, then no power will be supplied in S3 and S5. I wrote a driver
+> <https://lore.kernel.org/patchwork/patch/1062995/> for this already as part
+> of drivers/platform/chrome/, but Enric Balletbo i Serra, the maintainer,
+> had the reasonable suggestion of trying to move this into the USB subsystem.
 
--- 
-balbi
+Correct suggestion.
+
+> Has anything like this been done before? Do you have any preliminary
+> thoughts on this before I start writing code? A few things that I haven't
+> figured out yet:
+> - How to make this feature only available on certain devices. Using device
+> tree? Kconfig? Making a separate driver just for this device that plugs
+> into the USB core?
+> - The feature is only supported on some USB ports, so we need a way of
+> filtering on a per-port basis.
+
+Look at the drivers/usb/typec/ code, I think that should do everything
+you need here as this is a typec standard functionality, right?
+
+thanks,
+
+greg k-h
