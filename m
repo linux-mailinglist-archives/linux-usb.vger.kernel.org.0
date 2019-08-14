@@ -2,127 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA518D24E
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 13:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA68C8D260
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 13:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727157AbfHNLiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 07:38:06 -0400
-Received: from mail-ot1-f72.google.com ([209.85.210.72]:56427 "EHLO
-        mail-ot1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727010AbfHNLiG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 07:38:06 -0400
-Received: by mail-ot1-f72.google.com with SMTP id q22so94845485otl.23
-        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 04:38:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=YWQkpPFDkZrCtHRJpBrQhhdaTaxg9rth8B7pR83gTLY=;
-        b=IWLc+aX6RLz3/DBtixOOkkbbenSRbjFj/3bKrUyNbopMTGbDCmt3mOoZL4/vsGBFn2
-         zeJPVVzU8NSqlJAQdbQirxdvd6jRS8rQPs8mA6OU4IShgm9X2tNUDlMtDJ+zJFbh152k
-         0Q8Tt3fopodb7vIvFWG8Jq/HOfMzpcVv6Mbdh0S7ZFYNaBm3CqKNkW4Jr16OzIIJnu2D
-         vl0PdHHAzVIftaX9cCKqezV0tI55ZsVMEjOweXXm9E05OxIg+cb7h4nez0m/VlLTrOrx
-         rbFUkC+Uo80v2nzdrjr0+sk4ORiM5qO6Bphdrf3PuXV7LLlkId8/d86qiefEws1PMjhu
-         r4Gw==
-X-Gm-Message-State: APjAAAWCUIqAfleoUphXzUEqFy3msdpXmrz9Dxtx3ckyZnC0Il7oENM3
-        yzz0Uu+I8+X/mvDqoeaOowszaV2WPaaHxGzCDjj1u8BW+hel
-X-Google-Smtp-Source: APXvYqzn1jlyElPyeuZyrEOQDiA7iCHtsdE5gE/FFFK+D7+LHT+5Gzd46ohTJEhcvLbd7I10L8kQRQINURwT6Zh1zJDYSGji9CjP
+        id S1727304AbfHNLjs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 14 Aug 2019 07:39:48 -0400
+Received: from esa4.mentor.iphmx.com ([68.232.137.252]:1925 "EHLO
+        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726865AbfHNLjr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 07:39:47 -0400
+IronPort-SDR: oy9sF8ZShLMsG66RYhvMLKDdtoV0TWmRr9RRJ1B+2emNbzD8vdz1qvGZaW8HfcSPLJe5c2m8Ui
+ +k60b3sVjibSSClIaDo5O1B7E43wMjT7Vx2cgKfTNfo38sAQaNs9cqOSYQTFHSXN2QbCDLQ6n9
+ wElcFuanxhImlBYIiJALx49lk1wbkQ9c55p+OUaHuLM6tBKEP8zhWLY8sxFH7kW+qQ0drdeacz
+ 5DpDQLsSNfuiwVHNVqceCtEbNL3a/rba7Qc5afZC6lKLcmB2SnCV9cADo9UInwTM1QiWIhi67R
+ zjc=
+X-IronPort-AV: E=Sophos;i="5.64,385,1559548800"; 
+   d="scan'208";a="40454989"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa4.mentor.iphmx.com with ESMTP; 14 Aug 2019 03:39:47 -0800
+IronPort-SDR: Aoeb+lm75XWbI7uH8v6v17c8kZdqfZs0aTRMRUksJQ0xXff1sjbZgy7ImoFVeVB/eUbpd7Xiqq
+ L7+uyFqwat4KZqnnixTJD+O6ta5iOIiUXHwRdZ0STugmqPQ8fl2j4ezQBt2bxj5M2lXtviBunn
+ nxiTDkVxRfStU00D/ABLfzEBC3kY3Gweuh/XmvZs9EJfuGiGHPPvNBxMNWHW5QjBf1snLQ9H4g
+ +ZA4O3yWmZUQ5wrCR2XflTH8mq91Qwv+AjgoyPQf08c6EUnfbZBS7q4ilA6twMCMg+wH40PknM
+ eEE=
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: [PATCH] usb: xhci-pci: reorder removal to avoid use-after-free
+Thread-Topic: [PATCH] usb: xhci-pci: reorder removal to avoid use-after-free
+Thread-Index: AQHVUpSXBvBKq97fNkaS50QUUgX/8g==
+Date:   Wed, 14 Aug 2019 11:39:41 +0000
+Message-ID: <1565782781938.37795@mentor.com>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-Received: by 2002:a6b:ed01:: with SMTP id n1mr22583424iog.255.1565782685518;
- Wed, 14 Aug 2019 04:38:05 -0700 (PDT)
-Date:   Wed, 14 Aug 2019 04:38:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c4157e0590123002@google.com>
-Subject: divide error in usbtmc_generic_read
-From:   syzbot <syzbot+55b0304b360654a7537b@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        guido.kiener@rohde-schwarz.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, steve_bayless@keysight.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On driver removal, the platform_device_unregister call
+attached through devm_add_action_or_reset was executed
+after usb_hcd_pci_remove.
+This lead to a use-after-free for the iomem resorce of
+the xhci-ext-caps driver in the platform removal
+because the parent of the resource was freed earlier.
 
-syzbot found the following crash on:
+Fix this by reordering of the removal sequence.
 
-HEAD commit:    d0847550 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=16295d4a600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
-dashboard link: https://syzkaller.appspot.com/bug?extid=55b0304b360654a7537b
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1288a31c600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15282e86600000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+55b0304b360654a7537b@syzkaller.appspotmail.com
-
-divide error: 0000 [#1] SMP KASAN
-CPU: 1 PID: 1761 Comm: syz-executor063 Not tainted 5.3.0-rc4+ #26
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-RIP: 0010:usbtmc_generic_read+0x135/0x1190 drivers/usb/class/usbtmc.c:816
-Code: 48 c1 ea 03 0f b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2  
-0f 85 50 08 00 00 41 0f b7 6e 34 31 d2 31 ff 8b 44 24 28 <f7> f5 89 d6 41  
-89 d4 e8 2f 54 c9 fd 44 8b 6c 24 28 45 85 e4 44 89
-RSP: 0018:ffff8881d2b77a58 EFLAGS: 00010246
-RAX: 0000000000000002 RBX: 000000004f894bad RCX: ffffffff837487cd
-RDX: 0000000000000000 RSI: ffffffff837487da RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffff8881d20a0000 R09: ffffed103a56ef90
-R10: ffffed103a56ef8f R11: 0000000000000003 R12: ffff8881d08e7180
-R13: 0000000020000000 R14: ffff8881d0404c80 R15: ffff8881d08e7180
-FS:  0000555555b74880(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000006cc090 CR3: 00000001d615e000 CR4: 00000000001406e0
-Call Trace:
-  usbtmc_ioctl_generic_read drivers/usb/class/usbtmc.c:1029 [inline]
-  usbtmc_ioctl+0x27d/0x2ab0 drivers/usb/class/usbtmc.c:2089
-  vfs_ioctl fs/ioctl.c:46 [inline]
-  file_ioctl fs/ioctl.c:509 [inline]
-  do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
-  ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
-  __do_sys_ioctl fs/ioctl.c:720 [inline]
-  __se_sys_ioctl fs/ioctl.c:718 [inline]
-  __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
-  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x4419a9
-Code: e8 8c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 cb 08 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007ffd0abd6738 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00000000004419a9
-RDX: 0000000020000000 RSI: 00000000c0145b0e RDI: 0000000000000004
-RBP: 000000000000a984 R08: 000000000000000f R09: 00000000004002c8
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402700
-R13: 0000000000402790 R14: 0000000000000000 R15: 0000000000000000
-Modules linked in:
----[ end trace a91d281a4d83213c ]---
-RIP: 0010:usbtmc_generic_read+0x135/0x1190 drivers/usb/class/usbtmc.c:816
-Code: 48 c1 ea 03 0f b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2  
-0f 85 50 08 00 00 41 0f b7 6e 34 31 d2 31 ff 8b 44 24 28 <f7> f5 89 d6 41  
-89 d4 e8 2f 54 c9 fd 44 8b 6c 24 28 45 85 e4 44 89
-RSP: 0018:ffff8881d2b77a58 EFLAGS: 00010246
-RAX: 0000000000000002 RBX: 000000004f894bad RCX: ffffffff837487cd
-RDX: 0000000000000000 RSI: ffffffff837487da RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffff8881d20a0000 R09: ffffed103a56ef90
-R10: ffffed103a56ef8f R11: 0000000000000003 R12: ffff8881d08e7180
-R13: 0000000020000000 R14: ffff8881d0404c80 R15: ffff8881d08e7180
-FS:  0000555555b74880(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000006cc090 CR3: 00000001d615e000 CR4: 00000000001406e0
-
-
+Signed-off-by: Carsten Schmid <carsten_schmid@mentor.com>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/host/xhci-ext-caps.c | 22 ++++++++++++----------
+ drivers/usb/host/xhci-pci.c      |  4 ++++
+ drivers/usb/host/xhci-pci.h      | 19 +++++++++++++++++++
+ drivers/usb/host/xhci.h          |  1 +
+ 4 files changed, 36 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/usb/host/xhci-pci.h
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/usb/host/xhci-ext-caps.c b/drivers/usb/host/xhci-ext-caps.c
+index 399113f9fc5c..d2ab1e2a39c0 100644
+--- a/drivers/usb/host/xhci-ext-caps.c
++++ b/drivers/usb/host/xhci-ext-caps.c
+@@ -7,21 +7,19 @@
+ 
+ #include <linux/platform_device.h>
+ #include "xhci.h"
++#include "xhci-pci.h"
+ 
+ #define USB_SW_DRV_NAME		"intel_xhci_usb_sw"
+ #define USB_SW_RESOURCE_SIZE	0x400
+ 
+-static void xhci_intel_unregister_pdev(void *arg)
+-{
+-	platform_device_unregister(arg);
+-}
+-
+ static int xhci_create_intel_xhci_sw_pdev(struct xhci_hcd *xhci, u32 cap_offset)
+ {
+ 	struct usb_hcd *hcd = xhci_to_hcd(xhci);
+ 	struct device *dev = hcd->self.controller;
+ 	struct platform_device *pdev;
+ 	struct resource	res = { 0, };
++	struct xhci_pci_priv *priv = (struct xhci_pci_priv *)xhci->priv;
++
+ 	int ret;
+ 
+ 	pdev = platform_device_alloc(USB_SW_DRV_NAME, PLATFORM_DEVID_NONE);
+@@ -52,11 +50,7 @@ static int xhci_create_intel_xhci_sw_pdev(struct xhci_hcd *xhci, u32 cap_offset)
+ 		return ret;
+ 	}
+ 
+-	ret = devm_add_action_or_reset(dev, xhci_intel_unregister_pdev, pdev);
+-	if (ret) {
+-		dev_err(dev, "couldn't add unregister action for intel_xhci_usb_sw pdev\n");
+-		return ret;
+-	}
++	priv->pdev = pdev;
+ 
+ 	return 0;
+ }
+@@ -88,3 +82,11 @@ int xhci_ext_cap_init(struct xhci_hcd *xhci)
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(xhci_ext_cap_init);
++
++void xhci_ext_cap_remove(struct xhci_hcd *xhci)
++{
++	struct xhci_pci_priv *priv = (struct xhci_pci_priv *)xhci->priv;
++	if (priv->pdev)
++		platform_device_unregister(priv->pdev);
++}
++EXPORT_SYMBOL_GPL(xhci_ext_cap_remove);
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index c2fe218e051f..a4d094df56f7 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -14,6 +14,7 @@
+ #include <linux/acpi.h>
+ 
+ #include "xhci.h"
++#include "xhci-pci.h"
+ #include "xhci-trace.h"
+ 
+ #define SSIC_PORT_NUM		2
+@@ -62,6 +63,7 @@ static struct hc_driver __read_mostly xhci_pci_hc_driver;
+ static int xhci_pci_setup(struct usb_hcd *hcd);
+ 
+ static const struct xhci_driver_overrides xhci_pci_overrides __initconst = {
++	.extra_priv_size = sizeof(struct xhci_pci_priv),
+ 	.reset = xhci_pci_setup,
+ };
+ 
+@@ -393,6 +395,8 @@ static void xhci_pci_remove(struct pci_dev *dev)
+ 		xhci->shared_hcd = NULL;
+ 	}
+ 
++	xhci_ext_cap_remove(xhci);
++
+ 	/* Workaround for spurious wakeups at shutdown with HSW */
+ 	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+ 		pci_set_power_state(dev, PCI_D3hot);
+diff --git a/drivers/usb/host/xhci-pci.h b/drivers/usb/host/xhci-pci.h
+new file mode 100644
+index 000000000000..ead9618d7368
+--- /dev/null
++++ b/drivers/usb/host/xhci-pci.h
+@@ -0,0 +1,19 @@
++/*
++ * xhci-pci.h - xHCI extended capability handling platform Glue.
++ *
++ * Copyright (C) 2019 Mentor Graphics (Deutschland) GmbH
++ * Derived from xhci-plat.h
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * version 2 as published by the Free Software Foundation.
++ */
++
++#ifndef _XHCI_PCI_H
++#define _XHCI_PCI_H
++
++struct xhci_pci_priv {
++	struct platform_device *pdev;
++};
++
++#endif	/* _XHCI_PCI_H */
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index fabbce1c542a..847d2021fc2c 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2052,6 +2052,7 @@ void xhci_init_driver(struct hc_driver *drv,
+ 		      const struct xhci_driver_overrides *over);
+ int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id);
+ int xhci_ext_cap_init(struct xhci_hcd *xhci);
++void xhci_ext_cap_remove(struct xhci_hcd *xhci);
+ 
+ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup);
+ int xhci_resume(struct xhci_hcd *xhci, bool hibernated);
+-- 
+2.17.1
