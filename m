@@ -2,77 +2,255 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3798D0A7
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 12:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6BA8D25E
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 13:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726121AbfHNKW5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 06:22:57 -0400
-Received: from esa3.mentor.iphmx.com ([68.232.137.180]:42520 "EHLO
-        esa3.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725888AbfHNKW5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 06:22:57 -0400
-IronPort-SDR: J2a6EK0ZYl4l+ZhpfwrGpvTj/A+EmlTtLyzoJqDUE2x3gAhMm4Gt+sZ1bEryQC/P4XeS/g0/r4
- FeK4pbtD4LKqoJQzpIDWWKLD7yGpNDiGyDNOo4TOBAUwU31AaoWPq+wc3W1QN0+vjVo2c6RE7Z
- sGdgsPnvhxoDmznutyYhLvpYZAHJuxzmxIalLZIyrSvM3BKtfaIoRdKt5P97mBbzks6wYmMpqa
- ElER3jWsUZwsYs+aMSn6aZB2dmT/3SbXIixTaQZOZ6E1nTLRm2ZDkrmztXc0PhFAL2SCPIsv6B
- 8OU=
-X-IronPort-AV: E=Sophos;i="5.64,384,1559548800"; 
-   d="scan'208";a="40442356"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa3.mentor.iphmx.com with ESMTP; 14 Aug 2019 02:22:56 -0800
-IronPort-SDR: taJKW8HxyzgydnFxVtFT9vZvRBs9kRYDY88SjlKFExN1WUMEqCzh7rkcaLmzxPLoWuOAXWVvwW
- 8lDDH8zAqIy3vwZccJGLBqSjSrK8AkGcZ3svL4lEAT+jMCc2vGQGsEaIoa3VF3WlX5j2IPQwVv
- usfk0SscJ+WdGnS4rWoufTPI0Zwa4x+FA0Et1kD5BgVb3u13Olm7UEY4Tmt3HLmNncdliNYDun
- wcGuyH0ZP3Ep5BDvxO8zX90941OQxQ+JTxWJapDGQeek3jjD6mmMBvVkt9kzD+eqTcE5IG98JL
- 0Xo=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: AW: Strange behaviour of D-Link DUB-1312 USB 3.0 Adapters
-Thread-Topic: Strange behaviour of D-Link DUB-1312 USB 3.0 Adapters
-Thread-Index: AdVSeH/taFnFr9I1T4OXjPctlrQ3Ev//86kA///uBTD//8ARIA==
-Date:   Wed, 14 Aug 2019 10:22:51 +0000
-Message-ID: <b3b7161ab7f34301aedfd5e5ba3d41a7@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <db0e8930ea94408ca7a38192ddfd203f@SVR-IES-MBX-03.mgc.mentorg.com>
- <1565771508.25764.3.camel@suse.com>
- <f5e22fea4e1c4baeb2fc98d324ad9060@SVR-IES-MBX-03.mgc.mentorg.com>
-In-Reply-To: <f5e22fea4e1c4baeb2fc98d324ad9060@SVR-IES-MBX-03.mgc.mentorg.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+        id S1727461AbfHNLj3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 07:39:29 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:42674 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727744AbfHNLj3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Aug 2019 07:39:29 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 73B93200365;
+        Wed, 14 Aug 2019 13:39:26 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 91152200184;
+        Wed, 14 Aug 2019 13:39:23 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E7F19402EC;
+        Wed, 14 Aug 2019 19:39:19 +0800 (SGT)
+From:   jun.li@nxp.com
+To:     Peter.Chen@nxp.com
+Cc:     gregkh@linuxfoundation.org, jun.li@nxp.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v3] usb: chipidea: add role switch class support
+Date:   Wed, 14 Aug 2019 19:29:42 +0800
+Message-Id: <20190814112942.33142-1-jun.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pj4+IFBsdWdnaW5nIHRoZW0gaW50byB0aGUgc2FtZSBwb3J0ICghKSBvbiBteSBkZXZpY2Ugb25l
-IG9mIHRoZW0gaXMNCj4+PiByZWNvZ25pemVkIGFzIFN1cGVyU3BlZWQsIHRoZSBvdGhlciBhcyBo
-aWdoIHNwZWVkID8/Pw0KPj4+ICh3b3JraW5nIG9uIDQuMTQuMTI5IExUUykNCj4+Pg0KPj4+IEZy
-b20gZG1lc2csIHRoZSAiZmF1bHR5IiBvbmU6DQo+Pj4gWyAgNTMwLjU4NTg3MV0gdXNiIDEtMjog
-bmV3IGhpZ2gtc3BlZWQgVVNCIGRldmljZSBudW1iZXIgNCB1c2luZw0KPj4+IHhoY2lfaGNkICAg
-PDw8PDw8PDw8IEhVSCA/Pz8/DQo+Pj4NCj4+IFhIQ0kgaXMgbm90IGxpa2UgRUhDSS4gSXQgbmVl
-ZHMgbm8gY29tcGFuaW9uIGNvbnRyb2xsZXIsIGFzIGl0IHNlcnZlcw0KPj4gYWxsIHNwZWVkcy4N
-Cj4+DQo+PiBUaGlzIGlzIG9uIGEgbG93ZXIgbGF5ZXIgdGhhbiBheDg4MTc5LiBUaGlzIGNvbWVz
-IGZyb20geGhjaV9oY2QuDQo+PiBJcyB0aGlzIGEgcmVncmVzc2lvbj8NCj4+DQo+IEkgZG9uJ3Qg
-dGhpbmsgaXRzIGEgcmVncmVzc2lvbi4NCj4NCkkgY2FuIHNlZSB0aGUgc2FtZSBvbiBhIDQuMTQu
-MTAyLg0KDQpOZXh0IG9ic2VydmF0aW9uOg0KQWZ0ZXIgc29tZSAtIGxvbmcgLSB0aW1lICg+IDE1
-IG1pbnV0ZXMpIGEgaGFuZ2luZyBwaW5nDQpzYXlzOg0KcGluZzogc2VuZHRvOiBOZXR3b3JrIGlz
-IHVucmVhY2hhYmxlDQoNCkFmdGVyIHRoaXMsIHdpdGhvdXQgZG9pbmcgYW55dGhpbmcsIGkgY2Fu
-IHN0YXJ0IHBpbmcgYWdhaW4NCmFuZCBpdCB3b3JrczoNCg0KJDp+IyBwaW5nIDEzNC44Ni41Ni44
-MA0KUElORyAxMzQuODYuNTYuODAgKDEzNC44Ni41Ni44MCk6IDU2IGRhdGEgYnl0ZXMNCnBpbmc6
-IHNlbmR0bzogTmV0d29yayBpcyB1bnJlYWNoYWJsZQ0KJDp+IyBwaW5nIDEzNC44Ni41Ni44MA0K
-UElORyAxMzQuODYuNTYuODAgKDEzNC44Ni41Ni44MCk6IDU2IGRhdGEgYnl0ZXMNCjY0IGJ5dGVz
-IGZyb20gMTM0Ljg2LjU2LjgwOiBzZXE9MCB0dGw9NjMgdGltZT0zLjIwNiBtcw0KNjQgYnl0ZXMg
-ZnJvbSAxMzQuODYuNTYuODA6IHNlcT0xIHR0bD02MyB0aW1lPTAuNjYyIG1zDQoNCkxvb2tzIGxp
-a2UgYSBoaWdoZXIgcmF0ZSBvZiB0cmFuc2ZlcnMgY2F1c2VzIGEgc3RhbGwgb3IgcmV0cmllcw0K
-b3Igd2hhdGV2ZXIgLSBidXQgd2l0aG91dCBhbnkgbWVzc2FnZSBpJ20gbG9zdC4NCkkgY2FuIHJl
-cHJvZHVjZSB0aGlzIDEwMCUuDQoNClNvbWVvbmUgdGhlcmUgd2hvIGhhcyBhbnkgYWR2aWNlIHdo
-YXQgaSBjYW4gZG8gdG8NCnRyYWNrIHRoaXMgZG93bj8NCg0KQmVzdCByZWdhcmRzDQpDYXJzdGVu
-DQo=
+From: Li Jun <jun.li@nxp.com>
+
+USB role is fully controlled by usb role switch consumer(e.g. typec),
+usb port can be at host mode(USB_ROLE_HOST), device mode connected to
+host(USB_ROLE_DEVICE), or not connecting any partner(USB_ROLE_NONE).
+
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+
+Changes for v3:
+- Remove the patch usb: chipidea: replace ci_role with usb_role
+  as the existing ci->role usage can't map to usb_role.
+- Use the suggested ci_hdrc_cable for reuse current role change
+  handling.
+- Fix build robot warning by add usb_role head file.
+
+Change for v2:
+- Support USB_ROLE_NONE, which for usb port not connecting any
+  device or host, and will be in low power mode.
+
+ drivers/usb/chipidea/ci.h   | 12 +++++++
+ drivers/usb/chipidea/core.c | 76 +++++++++++++++++++++++++++++++++++++++++++++
+ drivers/usb/chipidea/otg.c  |  8 ++---
+ 3 files changed, 92 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+index 6a2cc5c..6911aef 100644
+--- a/drivers/usb/chipidea/ci.h
++++ b/drivers/usb/chipidea/ci.h
+@@ -16,6 +16,7 @@
+ #include <linux/usb/gadget.h>
+ #include <linux/usb/otg-fsm.h>
+ #include <linux/usb/otg.h>
++#include <linux/usb/role.h>
+ #include <linux/ulpi/interface.h>
+ 
+ /******************************************************************************
+@@ -217,6 +218,7 @@ struct ci_hdrc {
+ 	ktime_t				hr_timeouts[NUM_OTG_FSM_TIMERS];
+ 	unsigned			enabled_otg_timer_bits;
+ 	enum otg_fsm_timer		next_otg_timer;
++	struct usb_role_switch		*role_switch;
+ 	struct work_struct		work;
+ 	struct workqueue_struct		*wq;
+ 
+@@ -290,6 +292,16 @@ static inline void ci_role_stop(struct ci_hdrc *ci)
+ 	ci->roles[role]->stop(ci);
+ }
+ 
++static inline enum usb_role ci_role_to_usb_role(struct ci_hdrc *ci)
++{
++	if (ci->role == CI_ROLE_HOST)
++		return USB_ROLE_HOST;
++	else if (ci->role == CI_ROLE_GADGET && ci->vbus_active)
++		return USB_ROLE_DEVICE;
++	else
++		return USB_ROLE_NONE;
++}
++
+ /**
+  * hw_read_id_reg: reads from a identification register
+  * @ci: the controller
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 26062d6..c3300a1 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -600,6 +600,64 @@ static int ci_cable_notifier(struct notifier_block *nb, unsigned long event,
+ 	return NOTIFY_DONE;
+ }
+ 
++static enum usb_role ci_usb_role_switch_get(struct device *dev)
++{
++	struct ci_hdrc *ci = dev_get_drvdata(dev);
++	enum usb_role role;
++	unsigned long flags;
++
++	spin_lock_irqsave(&ci->lock, flags);
++	role = ci_role_to_usb_role(ci);
++	spin_unlock_irqrestore(&ci->lock, flags);
++
++	return role;
++}
++
++static int ci_usb_role_switch_set(struct device *dev, enum usb_role role)
++{
++	struct ci_hdrc *ci = dev_get_drvdata(dev);
++	struct ci_hdrc_cable *cable = NULL;
++	enum usb_role current_role = ci_role_to_usb_role(ci);
++
++	if (current_role == role)
++		return 0;
++
++	/* Stop current role */
++	if (current_role == USB_ROLE_DEVICE)
++		cable = &ci->platdata->vbus_extcon;
++	else if (current_role == USB_ROLE_HOST)
++		cable = &ci->platdata->id_extcon;
++
++	if (cable) {
++		cable->changed = true;
++		cable->connected = false;
++		ci_irq(ci->irq, ci);
++	}
++
++	cable = NULL;
++
++	/* Start target role */
++	if (role == USB_ROLE_DEVICE)
++		cable = &ci->platdata->vbus_extcon;
++	else if (role == USB_ROLE_HOST)
++		cable = &ci->platdata->id_extcon;
++
++	if (cable) {
++		if (ci->wq)
++			flush_workqueue(ci->wq);
++		cable->changed = true;
++		cable->connected = true;
++		ci_irq(ci->irq, ci);
++	}
++
++	return 0;
++}
++
++static struct usb_role_switch_desc ci_role_switch = {
++	.set = ci_usb_role_switch_set,
++	.get = ci_usb_role_switch_get,
++};
++
+ static int ci_get_platdata(struct device *dev,
+ 		struct ci_hdrc_platform_data *platdata)
+ {
+@@ -726,6 +784,9 @@ static int ci_get_platdata(struct device *dev,
+ 			cable->connected = false;
+ 	}
+ 
++	if (device_property_read_bool(dev, "usb-role-switch"))
++		ci_role_switch.fwnode = dev->fwnode;
++
+ 	platdata->pctl = devm_pinctrl_get(dev);
+ 	if (!IS_ERR(platdata->pctl)) {
+ 		struct pinctrl_state *p;
+@@ -1051,6 +1112,15 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	if (ci_role_switch.fwnode) {
++		ci->role_switch = usb_role_switch_register(dev,
++					&ci_role_switch);
++		if (IS_ERR(ci->role_switch)) {
++			ret = PTR_ERR(ci->role_switch);
++			goto deinit_otg;
++		}
++	}
++
+ 	if (ci->roles[CI_ROLE_HOST] && ci->roles[CI_ROLE_GADGET]) {
+ 		if (ci->is_otg) {
+ 			ci->role = ci_otg_role(ci);
+@@ -1115,6 +1185,9 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ remove_debug:
+ 	dbg_remove_files(ci);
+ stop:
++	if (ci->role_switch)
++		usb_role_switch_unregister(ci->role_switch);
++deinit_otg:
+ 	if (ci->is_otg && ci->roles[CI_ROLE_GADGET])
+ 		ci_hdrc_otg_destroy(ci);
+ deinit_gadget:
+@@ -1133,6 +1206,9 @@ static int ci_hdrc_remove(struct platform_device *pdev)
+ {
+ 	struct ci_hdrc *ci = platform_get_drvdata(pdev);
+ 
++	if (ci->role_switch)
++		usb_role_switch_unregister(ci->role_switch);
++
+ 	if (ci->supports_runtime_pm) {
+ 		pm_runtime_get_sync(&pdev->dev);
+ 		pm_runtime_disable(&pdev->dev);
+diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
+index f25d482..fbfb02e 100644
+--- a/drivers/usb/chipidea/otg.c
++++ b/drivers/usb/chipidea/otg.c
+@@ -35,7 +35,7 @@ u32 hw_read_otgsc(struct ci_hdrc *ci, u32 mask)
+ 	 * detection overwrite OTGSC register value
+ 	 */
+ 	cable = &ci->platdata->vbus_extcon;
+-	if (!IS_ERR(cable->edev)) {
++	if (!IS_ERR(cable->edev) || ci->role_switch) {
+ 		if (cable->changed)
+ 			val |= OTGSC_BSVIS;
+ 		else
+@@ -53,7 +53,7 @@ u32 hw_read_otgsc(struct ci_hdrc *ci, u32 mask)
+ 	}
+ 
+ 	cable = &ci->platdata->id_extcon;
+-	if (!IS_ERR(cable->edev)) {
++	if (!IS_ERR(cable->edev) || ci->role_switch) {
+ 		if (cable->changed)
+ 			val |= OTGSC_IDIS;
+ 		else
+@@ -83,7 +83,7 @@ void hw_write_otgsc(struct ci_hdrc *ci, u32 mask, u32 data)
+ 	struct ci_hdrc_cable *cable;
+ 
+ 	cable = &ci->platdata->vbus_extcon;
+-	if (!IS_ERR(cable->edev)) {
++	if (!IS_ERR(cable->edev) || ci->role_switch) {
+ 		if (data & mask & OTGSC_BSVIS)
+ 			cable->changed = false;
+ 
+@@ -97,7 +97,7 @@ void hw_write_otgsc(struct ci_hdrc *ci, u32 mask, u32 data)
+ 	}
+ 
+ 	cable = &ci->platdata->id_extcon;
+-	if (!IS_ERR(cable->edev)) {
++	if (!IS_ERR(cable->edev) || ci->role_switch) {
+ 		if (data & mask & OTGSC_IDIS)
+ 			cable->changed = false;
+ 
+-- 
+2.7.4
+
