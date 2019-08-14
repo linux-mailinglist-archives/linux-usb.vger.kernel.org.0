@@ -2,74 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC938C6CA
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 04:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73948C75E
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 04:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729571AbfHNCS5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Aug 2019 22:18:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49864 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728223AbfHNCS4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:18:56 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C46B720989;
-        Wed, 14 Aug 2019 02:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565749135;
-        bh=AEjXffRP2oqYBHAC9qGZMUmbHl7ghS8Y5aOyZkcqu5w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nhCMhKoz0XpOrk4/lpxl1TiY8CUcAo95OIuruXdSEoQYxBlUl/5SIMxmhXN14rwms
-         EWNnGnsRpcC3zaqey/twzcwJbXxFhgwSPkAGqcPNye9ZT37b2tdlh28Hj5RhYtLT8x
-         OJV9F7GAPF16cFs8ENYVbuhhNUDhdYZHxroL9gCg=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bob Ham <bob.ham@puri.sm>, Angus Ainslie <angus@akkea.ca>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 13/44] net: usb: qmi_wwan: Add the BroadMobi BM818 card
-Date:   Tue, 13 Aug 2019 22:18:02 -0400
-Message-Id: <20190814021834.16662-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190814021834.16662-1-sashal@kernel.org>
-References: <20190814021834.16662-1-sashal@kernel.org>
+        id S1729071AbfHNCXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Aug 2019 22:23:10 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:49010 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729402AbfHNCR2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Aug 2019 22:17:28 -0400
+X-UUID: 7e9b24d5eba7454fb16cf7e62e168035-20190814
+X-UUID: 7e9b24d5eba7454fb16cf7e62e168035-20190814
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1520065974; Wed, 14 Aug 2019 10:17:17 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 14 Aug
+ 2019 10:17:16 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 14 Aug 2019 10:17:15 +0800
+Message-ID: <1565749034.7317.6.camel@mhfsdcap03>
+Subject: Re: [PATCH] usb: typec: fusb302: Call fusb302_debugfs_init earlier
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, <linux-usb@vger.kernel.org>
+Date:   Wed, 14 Aug 2019 10:17:14 +0800
+In-Reply-To: <20190813105216.GD4691@kuha.fi.intel.com>
+References: <20190813101524.80673-1-hdegoede@redhat.com>
+         <20190813105216.GD4691@kuha.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: C0FF6637EE612D25A2E6319B23D1D5B7CAEC3F6C1561D584136B6593BD3ADAD42000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bob Ham <bob.ham@puri.sm>
+On Tue, 2019-08-13 at 13:52 +0300, Heikki Krogerus wrote:
+> Hi Hans,
+> 
+> On Tue, Aug 13, 2019 at 12:15:24PM +0200, Hans de Goede wrote:
+> > tcpm_register_port() will call some of the fusb302 code's callbacks
+> > wich in turn will call fusb302_log(). So we need to call
+> > fusb302_debugfs_init() before we call tcpm_register_port().
+<...>
+> > 
+> > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> > ---
+> >  drivers/usb/typec/tcpm/fusb302.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> > index ccfc7e91e7a3..04c76b9d0065 100644
+> > --- a/drivers/usb/typec/tcpm/fusb302.c
+> > +++ b/drivers/usb/typec/tcpm/fusb302.c
+> > @@ -1759,6 +1759,7 @@ static int fusb302_probe(struct i2c_client *client,
+> >  	INIT_WORK(&chip->irq_work, fusb302_irq_work);
+> >  	INIT_DELAYED_WORK(&chip->bc_lvl_handler, fusb302_bc_lvl_handler_work);
+> >  	init_tcpc_dev(&chip->tcpc_dev);
+> > +	fusb302_debugfs_init(chip);
+> >  
+> >  	if (client->irq) {
+> >  		chip->gpio_int_n_irq = client->irq;
+> > @@ -1784,7 +1785,6 @@ static int fusb302_probe(struct i2c_client *client,
+> >  		goto tcpm_unregister_port;
+> >  	}
+> >  	enable_irq_wake(chip->gpio_int_n_irq);
+> > -	fusb302_debugfs_init(chip);
+> >  	i2c_set_clientdata(client, chip);
+> 
+> That leaves the rootdir variable pointing to something again for
+> example if a failure happens (like -EPROBE_AGAIN) during probe (the
+> "fusb302" directory is removed, but the rootdir static variable still
+> points to something).
+> 
+> Let's just create that rootdir directory during driver init. I don't
+> really understand why should we only create it when/if the first
+> instance of fusb302 is registered. I think something like this would
+> work:
+> 
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index c524088246ee..7a950a6e5f0d 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -212,9 +212,6 @@ static struct dentry *rootdir;
+>  static void fusb302_debugfs_init(struct fusb302_chip *chip)
+>  {
+>         mutex_init(&chip->logbuffer_lock);
+> -       if (!rootdir)
+> -               rootdir = debugfs_create_dir("fusb302", NULL);
+> -
+>         chip->dentry = debugfs_create_file(dev_name(chip->dev),
+>                                            S_IFREG | 0444, rootdir,
+>                                            chip, &fusb302_debug_fops);
+> @@ -223,7 +220,6 @@ static void fusb302_debugfs_init(struct fusb302_chip *chip)
+>  static void fusb302_debugfs_exit(struct fusb302_chip *chip)
+>  {
+>         debugfs_remove(chip->dentry);
+> -       debugfs_remove(rootdir);
+>  }
+>  
+>  #else
+> @@ -1863,7 +1859,24 @@ static struct i2c_driver fusb302_driver = {
+>         .remove = fusb302_remove,
+>         .id_table = fusb302_i2c_device_id,
+>  };
+> -module_i2c_driver(fusb302_driver);
+> +
+> +static int __init fusb302_init(void)
+> +{
+> +       rootdir = debugfs_create_dir("fusb302", NULL);
+> +       if (IS_ERR(rootdir))
+> +               return PTR_ERR(rootdir);
+This doesn't support multi-instance?
 
-[ Upstream commit 9a07406b00cdc6ec689dc142540739575c717f3c ]
+> +
+> +       return i2c_add_driver(&fusb302_driver);
+> +}
+> +
+> +static void __exit fusb302_exit(void)
+> +{
+> +       i2c_del_driver(&fusb302_driver);
+> +       debugfs_remove(rootdir);
+> +}
+> +
+> +module_init(fusb302_init);
+> +module_exit(fusb302_exit);
+>  
+>  MODULE_AUTHOR("Yueyao Zhu <yueyao.zhu@gmail.com>");
+>  MODULE_DESCRIPTION("Fairchild FUSB302 Type-C Chip Driver");
+> 
+> 
+> If it's OK, could you include that into this patch?
+> 
+> thanks,
+> 
 
-The BroadMobi BM818 M.2 card uses the QMI protocol
-
-Signed-off-by: Bob Ham <bob.ham@puri.sm>
-Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 4b0144b2a2523..e2050afaab7a8 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1220,6 +1220,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x2001, 0x7e35, 4)},	/* D-Link DWM-222 */
- 	{QMI_FIXED_INTF(0x2020, 0x2031, 4)},	/* Olicard 600 */
- 	{QMI_FIXED_INTF(0x2020, 0x2033, 4)},	/* BroadMobi BM806U */
-+	{QMI_FIXED_INTF(0x2020, 0x2060, 4)},	/* BroadMobi BM818 */
- 	{QMI_FIXED_INTF(0x0f3d, 0x68a2, 8)},    /* Sierra Wireless MC7700 */
- 	{QMI_FIXED_INTF(0x114f, 0x68a2, 8)},    /* Sierra Wireless MC7750 */
- 	{QMI_FIXED_INTF(0x1199, 0x68a2, 8)},	/* Sierra Wireless MC7710 in QMI mode */
--- 
-2.20.1
 
