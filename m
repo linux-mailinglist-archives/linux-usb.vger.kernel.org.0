@@ -2,131 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 449958CBF8
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 08:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2108CD06
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 09:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727424AbfHNGgb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 02:36:31 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33540 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726940AbfHNGga (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 02:36:30 -0400
-Received: by mail-pg1-f194.google.com with SMTP id n190so11760227pgn.0;
-        Tue, 13 Aug 2019 23:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=V2ZJmMM7eBUrb1Y12nRIIaugrWodscFeaE9AP4JG/Zg=;
-        b=Gr/yUIA7h/3eBDYc9/YH3PmK0TnssS6CO/9hFNunLAWWczG3OiVHN4WIIgL3E9ZCpt
-         lxw0s7tI4ERoXSIwh3JMsdgc8zNzPjnA6BXgqeWAmqEyh+LbCMXm65+O4nT6k1c31e4G
-         72a+RzjyGS+EkSW5x52rptXOtidXTsKAuxWhyJ3b6xCpOT6ucihhvpEg52ywhW82gF/O
-         HmWN/pIGHF5t5B5reCnO/nsCfzeJAwUmX5rfj3UfluGG3M6/UTPt0Rx+R75a3hwPVGGS
-         CEB7dg3ncNyljnIstqsOyQ3HSCSlywswvj4u3icgmk4pUqxyXQc3S7rYfldNhw5/Vge5
-         lm7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=V2ZJmMM7eBUrb1Y12nRIIaugrWodscFeaE9AP4JG/Zg=;
-        b=VfatWZi2jk7Da/3tWd0auYKCJzuJ73Eomf0Rg677KQTiokULd0hOD1t1WPIULL7+Ur
-         lDUCIJBzyKz0R1pex0yauixfhb42Bawzo8Iw98YK2Uu+TcAWn5/kr+7/oHTEZ1vixfHC
-         CzMQf0d4r0xBuuCKc5bAsgNiEr9sYqC9Fj5xKyTO8oNyII2y0fgD8PAzO5Y18BR6rQej
-         otuuqy5J2anmqabhuhamJqThvBZIFjZSHu95nLHmNqK8P+MCbpTNC5GNfvrN03dqPOle
-         nuLxSSz+22KYDAi9rvwNqe7sEOmzv59aBjnBSUH5fbisihdM7FIaOUfSGzmzvdxsbacF
-         yVKA==
-X-Gm-Message-State: APjAAAWC77hMiweIYiz8Dz6e1XlrzLJTIFlC62+4O6kJMAFj5mHIW1VO
-        TZ/MeaJIAlK7ag24t4NnmqA=
-X-Google-Smtp-Source: APXvYqw/2y0dZHWefWOjTwta+m4FUhziJYRwexQISdGldO7ge/xr1KdLXo0S4VRw57w8u++ZXvSuxA==
-X-Received: by 2002:a63:89c2:: with SMTP id v185mr37393202pgd.241.1565764588977;
-        Tue, 13 Aug 2019 23:36:28 -0700 (PDT)
-Received: from himanshu-Vostro-3559 ([103.77.43.147])
-        by smtp.gmail.com with ESMTPSA id j15sm109471223pfr.146.2019.08.13.23.36.15
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 13 Aug 2019 23:36:27 -0700 (PDT)
-Date:   Wed, 14 Aug 2019 12:06:11 +0530
-From:   Himanshu Jha <himanshujha199640@gmail.com>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, maco@android.com,
-        kstewart@linuxfoundation.org, linux-m68k@vger.kernel.org,
-        oneukum@suse.com,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        usb-storage@lists.one-eyed-alien.net, hpa@zytor.com,
-        joel@joelfernandes.org, sam@ravnborg.org, cocci@systeme.lip6.fr,
-        linux-arch@vger.kernel.org, linux-scsi@vger.kernel.org,
-        x86@kernel.org, lucas.de.marchi@gmail.com, mingo@redhat.com,
-        geert@linux-m68k.org, stern@rowland.harvard.edu,
-        kernel-team@android.com, sspatil@google.com, arnd@arndb.de,
-        linux-kbuild@vger.kernel.org,
-        Nicolas Palix <nicolas.palix@imag.fr>, jeyu@kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        tglx@linutronix.de, michal.lkml@markovi.net,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        sboyd@codeaurora.org, Nicolas Ferre <nicolas.ferre@microchip.com>,
-        maco@google.com, pombredanne@nexb.com,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-modules@vger.kernel.org
-Subject: Re: [Cocci] [PATCH v2 08/10] scripts: Coccinelle script for
- namespace dependencies.
-Message-ID: <20190814063611.GA22387@himanshu-Vostro-3559>
-References: <20180716122125.175792-1-maco@android.com>
- <20190813121733.52480-1-maennich@google.com>
- <20190813121733.52480-9-maennich@google.com>
+        id S1727229AbfHNHhf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 03:37:35 -0400
+Received: from mga07.intel.com ([134.134.136.100]:8951 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726373AbfHNHhf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Aug 2019 03:37:35 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Aug 2019 00:37:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,384,1559545200"; 
+   d="scan'208";a="194442084"
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 14 Aug 2019 00:37:31 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 Aug 2019 10:37:30 +0300
+Date:   Wed, 14 Aug 2019 10:37:30 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: fusb302: Call fusb302_debugfs_init earlier
+Message-ID: <20190814073730.GA4140@kuha.fi.intel.com>
+References: <20190813101524.80673-1-hdegoede@redhat.com>
+ <20190813105216.GD4691@kuha.fi.intel.com>
+ <1565749034.7317.6.camel@mhfsdcap03>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190813121733.52480-9-maennich@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <1565749034.7317.6.camel@mhfsdcap03>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 01:17:05PM +0100, Matthias Maennich wrote:
-> A script that uses the '<module>.ns_deps' file generated by modpost to
-> automatically add the required symbol namespace dependencies to each
-> module.
-> 
-> Usage:
-> 1) Move some symbols to a namespace with EXPORT_SYMBOL_NS() or define
->    DEFAULT_SYMBOL_NAMESPACE
-> 2) Run 'make' (or 'make modules') and get warnings about modules not
->    importing that namespace.
-> 3) Run 'make nsdeps' to automatically add required import statements
->    to said modules.
-> 
-> This makes it easer for subsystem maintainers to introduce and maintain
-> symbol namespaces into their codebase.
-> 
-> Co-developed-by: Martijn Coenen <maco@android.com>
-> Signed-off-by: Martijn Coenen <maco@android.com>
-> Signed-off-by: Matthias Maennich <maennich@google.com>
-> ---
+On Wed, Aug 14, 2019 at 10:17:14AM +0800, Chunfeng Yun wrote:
+> On Tue, 2019-08-13 at 13:52 +0300, Heikki Krogerus wrote:
+> > Hi Hans,
+> > 
+> > On Tue, Aug 13, 2019 at 12:15:24PM +0200, Hans de Goede wrote:
+> > > tcpm_register_port() will call some of the fusb302 code's callbacks
+> > > wich in turn will call fusb302_log(). So we need to call
+> > > fusb302_debugfs_init() before we call tcpm_register_port().
+> <...>
+> > > 
+> > > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> > > ---
+> > >  drivers/usb/typec/tcpm/fusb302.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> > > index ccfc7e91e7a3..04c76b9d0065 100644
+> > > --- a/drivers/usb/typec/tcpm/fusb302.c
+> > > +++ b/drivers/usb/typec/tcpm/fusb302.c
+> > > @@ -1759,6 +1759,7 @@ static int fusb302_probe(struct i2c_client *client,
+> > >  	INIT_WORK(&chip->irq_work, fusb302_irq_work);
+> > >  	INIT_DELAYED_WORK(&chip->bc_lvl_handler, fusb302_bc_lvl_handler_work);
+> > >  	init_tcpc_dev(&chip->tcpc_dev);
+> > > +	fusb302_debugfs_init(chip);
+> > >  
+> > >  	if (client->irq) {
+> > >  		chip->gpio_int_n_irq = client->irq;
+> > > @@ -1784,7 +1785,6 @@ static int fusb302_probe(struct i2c_client *client,
+> > >  		goto tcpm_unregister_port;
+> > >  	}
+> > >  	enable_irq_wake(chip->gpio_int_n_irq);
+> > > -	fusb302_debugfs_init(chip);
+> > >  	i2c_set_clientdata(client, chip);
+> > 
+> > That leaves the rootdir variable pointing to something again for
+> > example if a failure happens (like -EPROBE_AGAIN) during probe (the
+> > "fusb302" directory is removed, but the rootdir static variable still
+> > points to something).
+> > 
+> > Let's just create that rootdir directory during driver init. I don't
+> > really understand why should we only create it when/if the first
+> > instance of fusb302 is registered. I think something like this would
+> > work:
+> > 
+> > diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> > index c524088246ee..7a950a6e5f0d 100644
+> > --- a/drivers/usb/typec/tcpm/fusb302.c
+> > +++ b/drivers/usb/typec/tcpm/fusb302.c
+> > @@ -212,9 +212,6 @@ static struct dentry *rootdir;
+> >  static void fusb302_debugfs_init(struct fusb302_chip *chip)
+> >  {
+> >         mutex_init(&chip->logbuffer_lock);
+> > -       if (!rootdir)
+> > -               rootdir = debugfs_create_dir("fusb302", NULL);
+> > -
+> >         chip->dentry = debugfs_create_file(dev_name(chip->dev),
+> >                                            S_IFREG | 0444, rootdir,
+> >                                            chip, &fusb302_debug_fops);
+> > @@ -223,7 +220,6 @@ static void fusb302_debugfs_init(struct fusb302_chip *chip)
+> >  static void fusb302_debugfs_exit(struct fusb302_chip *chip)
+> >  {
+> >         debugfs_remove(chip->dentry);
+> > -       debugfs_remove(rootdir);
+> >  }
+> >  
+> >  #else
+> > @@ -1863,7 +1859,24 @@ static struct i2c_driver fusb302_driver = {
+> >         .remove = fusb302_remove,
+> >         .id_table = fusb302_i2c_device_id,
+> >  };
+> > -module_i2c_driver(fusb302_driver);
+> > +
+> > +static int __init fusb302_init(void)
+> > +{
+> > +       rootdir = debugfs_create_dir("fusb302", NULL);
+> > +       if (IS_ERR(rootdir))
+> > +               return PTR_ERR(rootdir);
+> This doesn't support multi-instance?
 
-[]
+Yes it does. That only creates the root directory "fusb302". For every
+instance of fusb302 on the system that is registered and probed by the
+driver, you will still have a separate file added to that directory,
+just like before.
 
->  MAINTAINERS                                 |  5 ++
->  Makefile                                    | 12 +++++
->  scripts/Makefile.modpost                    |  4 +-
->  scripts/coccinelle/misc/add_namespace.cocci | 23 +++++++++
->  scripts/nsdeps                              | 54 +++++++++++++++++++++
->  5 files changed, 97 insertions(+), 1 deletion(-)
->  create mode 100644 scripts/coccinelle/misc/add_namespace.cocci
->  create mode 100644 scripts/nsdeps
+The only difference is that now we don't wait for the first instance
+of fusb302 to be registered before we create that "fusb302" directory.
+Instead, the directory is simply created the moment the driver is
+loaded. On a system that does not have fusb302 controllers, the
+directory will now stay empty, but that is not a problem.
 
-[]
 
-> +if [ "$SPATCH_VERSION_NUM" -lt "$SPATCH_REQ_VERSION_NUM" ] ; then
-> +    echo 'spatch needs to be version 1.06 or higher'
-
-Nitpick: 1.0.6
-
-> +    exit 1
-> +fi
-
+thanks,
 
 -- 
-Himanshu Jha
-Undergraduate Student
-Department of Electronics & Communication
-Guru Tegh Bahadur Institute of Technology
+heikki
