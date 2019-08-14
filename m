@@ -2,104 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D39038DFAF
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 23:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2FC8DFCA
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 23:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728378AbfHNVUQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 17:20:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44786 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728014AbfHNVUQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Aug 2019 17:20:16 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AEF2A2133F;
-        Wed, 14 Aug 2019 21:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565817615;
-        bh=2E2JMCEsGfJgUZSIcsEX9gpK1QWJbGLg/k/y//c7LnY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pgLKdYEea1VQuEuz1Gv3VbFrCYN2PEZ4jEbCkHoJwkSePk2JWz6kFI/uZ+uK+7dMF
-         b0JQUzgonM4/XQ+1OafG24te3op3Ut/QA4FsqW9o6Qw+mMQu+ERyz3OqmgUD4GFDH3
-         KpH/YdphbCyf+VobkIuFmnck9Dpp+wIQGoT3wL5U=
-Date:   Wed, 14 Aug 2019 23:20:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nick Crews <ncrews@chromium.org>
-Cc:     linux-usb@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Daniel Kurtz <djkurtz@google.com>
-Subject: Re: Policy to keep USB ports powered in low-power states
-Message-ID: <20190814212012.GB22618@kroah.com>
-References: <CAHX4x86QCrkrnPEfrup8k96wyqg=QR_vgetYLqP1AEa02fx1vw@mail.gmail.com>
- <20190813060249.GD6670@kroah.com>
- <CAHX4x87DbJ4cKuwVO3OS=UzwtwSucFCV073W8bYHOPHW8NiA=A@mail.gmail.com>
+        id S1729457AbfHNV3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 17:29:33 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:38506 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726585AbfHNV3c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 17:29:32 -0400
+Received: by mail-pg1-f194.google.com with SMTP id e11so242473pga.5
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 14:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=thegavinli.com; s=google;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MMm/ExH9rvgx4TnsyL2M9+UyYSLrKGK1rytt1mCW+D4=;
+        b=C13o7xx1THEHMIQr0YB8fXhJNXXrH3BQaxa4AOjGFVmHlxtUxMwwFRuELNxZPCjg9J
+         okbJSJv7z8Km2J85QkuqFpqUpeijZfW1baB/GpQmQEWx7wLhMBbXnf+boSmtDBZZUQvl
+         omMGvNmnRO9xXfFdCZJ2sp6de5gj41EsEbWQM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=MMm/ExH9rvgx4TnsyL2M9+UyYSLrKGK1rytt1mCW+D4=;
+        b=nQB8mHxink75xQK8WhVHvSg8PVDM0glhnzROFF2iJTLFx3XGhbTW9cYyFYCTMcaVCc
+         qFQUGLDMwzGm1i2T4Vdq44xWEeZXfH2BEnrx4afRfmUtNhv++aUXu11xZDNfrdCHLp+M
+         1GvqN4AqmAjb1TtesPdkwlAbJuEnC9pwIK5lxqLwl27qXfaPDQbQ5vrAfQRKfWLjBI49
+         2cKX0rGquuxGHvyzQ1Slw2NxiVV7z45NQbFezbqbdptLZ0vFUCZmAiqZmTBuvXrT6rPY
+         cxgtLSWSRqWGpuAOOaz0KWGTF59jlvz/+Usyt3OCOTynZWPHuaOIZWr90dOrQ6k+X2ne
+         uJCQ==
+X-Gm-Message-State: APjAAAXb38DXlHN0Ts9OIKpafpWCLPaSyNpohTSUm7HSOzbLDcNUAa25
+        exH4AFy7MtqGM3WFw5ZEA9zFxrcY4DA=
+X-Google-Smtp-Source: APXvYqzKBhjLfxonv4rgLvtSTQGrQsSbm4qCBfoJKzUlTcyggAHWc+nyxqTrl8nV+EqYxb4HEZZyKw==
+X-Received: by 2002:a63:6c46:: with SMTP id h67mr1016699pgc.248.1565818171724;
+        Wed, 14 Aug 2019 14:29:31 -0700 (PDT)
+Received: from mtgav.corp.matician.com ([2601:647:5a01:84c0::a53])
+        by smtp.gmail.com with ESMTPSA id t23sm834402pfl.154.2019.08.14.14.29.29
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 14 Aug 2019 14:29:30 -0700 (PDT)
+From:   gavinli@thegavinli.com
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     Gavin Li <git@thegavinli.com>
+Subject: [PATCH] usb: usbfs: only account once for mmap()'ed usb memory usage
+Date:   Wed, 14 Aug 2019 14:29:24 -0700
+Message-Id: <20190814212924.10381-1-gavinli@thegavinli.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHX4x87DbJ4cKuwVO3OS=UzwtwSucFCV073W8bYHOPHW8NiA=A@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 02:12:07PM -0600, Nick Crews wrote:
-> Thanks for the fast response!
-> 
-> On Tue, Aug 13, 2019 at 12:02 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Aug 12, 2019 at 06:08:43PM -0600, Nick Crews wrote:
-> > > Hi Greg!
-> >
-> > Hi!
-> >
-> > First off, please fix your email client to not send html so that vger
-> > does not reject your messages :)
-> 
-> Thanks, should be good now.
-> 
-> >
-> > > I am working on a Chrome OS device that supports a policy called "USB Power
-> > > Share," which allows users to turn the laptop into a charge pack for their
-> > > phone. When the policy is enabled, power will be supplied to the USB ports
-> > > even when the system is in low power states such as S3 and S5. When
-> > > disabled, then no power will be supplied in S3 and S5. I wrote a driver
-> > > <https://lore.kernel.org/patchwork/patch/1062995/> for this already as part
-> > > of drivers/platform/chrome/, but Enric Balletbo i Serra, the maintainer,
-> > > had the reasonable suggestion of trying to move this into the USB subsystem.
-> >
-> > Correct suggestion.
-> >
-> > > Has anything like this been done before? Do you have any preliminary
-> > > thoughts on this before I start writing code? A few things that I haven't
-> > > figured out yet:
-> > > - How to make this feature only available on certain devices. Using device
-> > > tree? Kconfig? Making a separate driver just for this device that plugs
-> > > into the USB core?
-> > > - The feature is only supported on some USB ports, so we need a way of
-> > > filtering on a per-port basis.
-> >
-> > Look at the drivers/usb/typec/ code, I think that should do everything
-> > you need here as this is a typec standard functionality, right?
-> 
-> Unfortunately this is for USB 2.0 ports, so it's not type-C.
-> Is the type-C code still worth looking at?
+From: Gavin Li <git@thegavinli.com>
 
-If this is for USB 2, does it use the "non-standard" hub commands to
-turn on and off power?  If so, why not just use the usbreset userspace
-program for that?
+Memory usage for USB memory allocated via mmap() is already accounted
+for at mmap() time; no need to account for it again at submiturb time.
 
-And how are you turning a USB 2 port into a power source?  That feels
-really odd given the spec.  Is this part of the standard somewhere or
-just a firmware/hardware hack that you are adding to a device?
+Signed-off-by: Gavin Li <git@thegavinli.com>
+---
+ drivers/usb/core/devio.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Is there some port information in the firmware that describes this
-functionality?  If so, can you expose it through sysfs to the port that
-way?
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index bbe9c2edd3e7..9681dd55473b 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -1603,7 +1603,8 @@ static int proc_do_submiturb(struct usb_dev_state *ps, struct usbdevfs_urb *uurb
+ 	if (as->usbm)
+ 		num_sgs = 0;
+ 
+-	u += sizeof(struct async) + sizeof(struct urb) + uurb->buffer_length +
++	u += sizeof(struct async) + sizeof(struct urb) +
++	     (as->usbm ? 0 : uurb->buffer_length) +
+ 	     num_sgs * sizeof(struct scatterlist);
+ 	ret = usbfs_increase_memory_usage(u);
+ 	if (ret)
+-- 
+2.22.0
 
-thanks,
-
-greg k-h
