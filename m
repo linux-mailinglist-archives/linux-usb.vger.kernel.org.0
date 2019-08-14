@@ -2,145 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 525C28DBF5
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 19:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F6A8DC16
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 19:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728488AbfHNRfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 13:35:22 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:36346 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728219AbfHNRfV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 13:35:21 -0400
-Received: by mail-ot1-f65.google.com with SMTP id k18so52178634otr.3
-        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 10:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fOFmALBZr12NwAFqPH4bz0Snzh0MYv/4Oy/ALTRaZDA=;
-        b=J/RX89SfeoHR3tNRvGakoeZptZJRFt1aGCoCGLanpgjt6kzr4VpQHXuOeq/XIub7h3
-         dtaz/Elri9LmCCrz1cJasmWNTs/t3B2DIMrEzFtcDd5S3T5Z7qW0x6VQtzyPUT8xX0Dr
-         tpBoGVGOFhjt5t/gsPYut79dUKJV/zOUYBE0KuVDsrJAB63xmL9rkN5sW1B/mX17RfT8
-         s7uhch2pStQ0Q6kOmXjpTKpW17nIDOPnBvNsIuNp6/qFxNyKoezYoApT9paR+P+AAJP+
-         1YlKwUJfVlXI0OJvPm/r92hOejmHZfRewJNJIhMYRbj46Pt2aVShyKZOOJ23qQt+gnU7
-         ycMQ==
+        id S1728581AbfHNRls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 13:41:48 -0400
+Received: from mail-yw1-f67.google.com ([209.85.161.67]:42884 "EHLO
+        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726951AbfHNRls (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 13:41:48 -0400
+Received: by mail-yw1-f67.google.com with SMTP id z63so41231722ywz.9;
+        Wed, 14 Aug 2019 10:41:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fOFmALBZr12NwAFqPH4bz0Snzh0MYv/4Oy/ALTRaZDA=;
-        b=WRcHt3PCYMcCeMQEb682CREpn0TjpLLhvX+DF9mtIOZT7UXvefgg9lAtGJttyFQizm
-         jU6HkB7GwSelWE7B6aECMUEfWD+nHN6nIYTY7E87MBvX28O6xHVgi/agylQ2d3Er0ih3
-         mqarunYGpg8JehumqE1MyPDWiWr/rza2KspLWUhSzNypa++1G+TdfhdeOsVlN/knW6Ge
-         mr1emWhhwDeakTVsmOEomZ2v5W6P+ToPEDDOk5J2QUKOnScYzW5LSqA/zXHu9YmfSAwq
-         MguHjH/2SrVLNWAzs1l1LpjY2dCq7dhguj0Qq0pDrpxX8WUn81nxFP2CF9s/h9T+XJ5I
-         A06w==
-X-Gm-Message-State: APjAAAXqFFlVvFUW1d4Z8fQSVlyjhyvrtmdQyTSkXmWCFoX90UHf7WRS
-        IrJ8i2dJsFoZmWforGCXLAi0wxwWx9nkaBk4CUsyYA==
-X-Google-Smtp-Source: APXvYqyjolYUGNDko/RtbeKAldUB4mXc2vz0kBg/ilppWohKo/GY5H6usCosoBEpZ0JF43wMzvRMaDIYk6L2L/batEg=
-X-Received: by 2002:a05:6830:1e0f:: with SMTP id s15mr177324otr.231.1565804120275;
- Wed, 14 Aug 2019 10:35:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20180716122125.175792-1-maco@android.com> <20190813121733.52480-1-maennich@google.com>
- <20190813121733.52480-6-maennich@google.com> <CAGETcx_LQDdnaU+3JVGw+6=DJ8tRoQ00+3rD2gOiHHkWomt8jg@mail.gmail.com>
- <20190814125427.GA72826@google.com>
-In-Reply-To: <20190814125427.GA72826@google.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 14 Aug 2019 10:34:43 -0700
-Message-ID: <CAGETcx99Xx7aRPS-2Pw8h7O5D_+3T+1hbqja=p-gLN2wXApaEQ@mail.gmail.com>
-Subject: Re: [PATCH v2 05/10] module: add config option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-To:     Matthias Maennich <maennich@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, maco@android.com,
-        Android Kernel Team <kernel-team@android.com>, arnd@arndb.de,
-        geert@linux-m68k.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, hpa@zytor.com,
-        jeyu@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        lucas.de.marchi@gmail.com, Martijn Coenen <maco@google.com>,
-        michal.lkml@markovi.net, mingo@redhat.com, oneukum@suse.com,
-        Philippe Ombredanne <pombredanne@nexb.com>, sam@ravnborg.org,
-        Sandeep Patil <sspatil@google.com>, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Patrick Bellasi <patrick.bellasi@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Adrian Reber <adrian@lisas.de>,
-        Richard Guy Briggs <rgb@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sHuMccop5UgrrMj0/XyByQ81In/IvXzzxsdeKT5qeXY=;
+        b=jdld6SlHNDZmGx5M3pz405dLCUtfNHUjnXWEnLfagn1Zs0CiYAFaJpiv/OUfTUqbD1
+         BqK2rGZX6O4W9or6Pi14cpxZsPPcUX4oxIvfGcgCI4MM1jHm2MDBYqNxyW6lX/AbLPDV
+         5zEtnvGeckFaIo3PAKw08h4xjtUA3wijSsvnc81ug4eOBmwXSf97wTyogWTKmCBZ/jiQ
+         3MGHiS+CjoY4OarSbG3xlmqqQ5ivNtT7ecdkytuXMlFd7mL2fQ7q1cLH9gx7SKdKryvB
+         gAoeNDe7HFtU4Sag7LeWtVigiXvWR2RLxNGJPv6h+WpAUmORDjHO7mC0SzrxiwEFPGoA
+         0vFg==
+X-Gm-Message-State: APjAAAXEjuOW/N8+n6IXdf6HdCtZ8PLC4UpsN8eTes13c7jL5MzLrNpr
+        roxFCT3e7mPbCdVy2zmZWfB/sF8Ncbs=
+X-Google-Smtp-Source: APXvYqzpOodDIOzylD9sAsHwz6A1p4UQi0peD2Q4IDhPLW3fYKkvbnyyL0Au0Uw7CLG/07aow+hvgQ==
+X-Received: by 2002:a81:5c87:: with SMTP id q129mr266407ywb.403.1565804507497;
+        Wed, 14 Aug 2019 10:41:47 -0700 (PDT)
+Received: from localhost.localdomain (24-158-240-219.dhcp.smyr.ga.charter.com. [24.158.240.219])
+        by smtp.gmail.com with ESMTPSA id q65sm115032ywc.11.2019.08.14.10.41.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 14 Aug 2019 10:41:46 -0700 (PDT)
+From:   Wenwen Wang <wenwen@cs.uga.edu>
+To:     Wenwen Wang <wenwen@cs.uga.edu>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        netdev@vger.kernel.org (open list:USB "USBNET" DRIVER FRAMEWORK),
+        linux-usb@vger.kernel.org (open list:USB NETWORKING DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] net: usbnet: fix a memory leak bug
+Date:   Wed, 14 Aug 2019 12:41:33 -0500
+Message-Id: <1565804493-7758-1-git-send-email-wenwen@cs.uga.edu>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 5:54 AM 'Matthias Maennich' via kernel-team
-<kernel-team@android.com> wrote:
->
-> On Tue, Aug 13, 2019 at 01:15:44PM -0700, Saravana Kannan wrote:
-> >On Tue, Aug 13, 2019 at 5:19 AM 'Matthias Maennich' via kernel-team
-> ><kernel-team@android.com> wrote:
-> >>
-> >> If MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is enabled (default=n), the
-> >> requirement for modules to import all namespaces that are used by
-> >> the module is relaxed.
-> >>
-> >> Enabling this option effectively allows (invalid) modules to be loaded
-> >> while only a warning is emitted.
-> >>
-> >> Disabling this option keeps the enforcement at module loading time and
-> >> loading is denied if the module's imports are not satisfactory.
-> >>
-> >> Reviewed-by: Martijn Coenen <maco@android.com>
-> >> Signed-off-by: Matthias Maennich <maennich@google.com>
-> >> ---
-> >>  init/Kconfig    | 14 ++++++++++++++
-> >>  kernel/module.c | 11 +++++++++--
-> >>  2 files changed, 23 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/init/Kconfig b/init/Kconfig
-> >> index bd7d650d4a99..b3373334cdf1 100644
-> >> --- a/init/Kconfig
-> >> +++ b/init/Kconfig
-> >> @@ -2119,6 +2119,20 @@ config MODULE_COMPRESS_XZ
-> >>
-> >>  endchoice
-> >>
-> >> +config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-> >> +       bool "Allow loading of modules with missing namespace imports"
-> >> +       default n
-> >> +       help
-> >> +         Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
-> >> +         a namespace. A module that makes use of a symbol exported with such a
-> >> +         namespace is required to import the namespace via MODULE_IMPORT_NS().
-> >> +         This option relaxes this requirement when loading a module.
-> >
-> >> While
-> >> +         technically there is no reason to enforce correct namespace imports,
-> >> +         it creates consistency between symbols defining namespaces and users
-> >> +         importing namespaces they make use of.
-> >
-> >I'm confused by this sentence. It sounds like it's the opposite of
-> >what the config is doing? Can you please reword it for clarify?
->
-> How about:
->
->   Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
->   a namespace. A module that makes use of a symbol exported with such a
->   namespace is required to import the namespace via MODULE_IMPORT_NS().
->   There is no technical reason to enforce correct namespace imports,
->   but it creates consistency between symbols defining namespaces and
->   users importing namespaces they make use of. This option relaxes this
->   requirement and lifts the enforcement when loading a module.
+In usbnet_start_xmit(), 'urb->sg' is allocated through kmalloc_array() by
+invoking build_dma_sg(). Later on, if 'CONFIG_PM' is defined and the if
+branch is taken, the execution will go to the label 'deferred'. However,
+'urb->sg' is not deallocated on this execution path, leading to a memory
+leak bug.
 
-That's a lot better. Especially moving the "This option relaxes..." to
-the bottom. Thanks.
+Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
+---
+ drivers/net/usb/usbnet.c | 1 +
+ 1 file changed, 1 insertion(+)
 
--Saravana
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 72514c4..f17fafa 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1433,6 +1433,7 @@ netdev_tx_t usbnet_start_xmit (struct sk_buff *skb,
+ 		usb_anchor_urb(urb, &dev->deferred);
+ 		/* no use to process more packets */
+ 		netif_stop_queue(net);
++		kfree(urb->sg);
+ 		usb_put_urb(urb);
+ 		spin_unlock_irqrestore(&dev->txq.lock, flags);
+ 		netdev_dbg(dev->net, "Delaying transmission for resumption\n");
+-- 
+2.7.4
+
