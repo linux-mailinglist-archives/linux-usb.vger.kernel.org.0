@@ -2,221 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 150768D3E8
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 14:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C22F8D433
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 15:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728080AbfHNMyf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 08:54:35 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:33265 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbfHNMye (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 08:54:34 -0400
-Received: by mail-ed1-f65.google.com with SMTP id s15so4877889edx.0
-        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 05:54:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VhOtcUs6qecW9A5Ku6t6s7+WyBSfMvyZ0VSLJHIcnmU=;
-        b=BbE8Cqz5c8FbKcFZsBV7ymaUNduZg6oD8dBbe7EPlHBWEahZakUAtZB00mHf4vcxcK
-         3jONp9v3xk+6j+ClIKixo++2BdsUbzyTPaBoxDQpUzo02pzglRr6qHg7DmmN6KVSNVTK
-         Ah53N4OstxEA7FpfmmRVSwWh0nDw5tKGd8ph9GVy8v/R8EVNT8NbCMY7ikVojXMJZs1v
-         ZQDH1SKWm58HMsQKQngtqJcRhm5BrSlmr2jd6kTpd18QynM/RfSCjD8HUpZQxGHeeCR/
-         0AFtrTEdbe8CExCSnNskuUGIrwLt+mKSWjZDKwudwSuCamKsATu8jAAcWTe00KkbiBxH
-         c5gw==
-X-Gm-Message-State: APjAAAWgP5FDYfpIklif9UCSqoh8PV7yvOgDsghNXR0SAho2agAX842W
-        5eG9T8rJYvMI4yPIN+3s7oyHQp8S5Go=
-X-Google-Smtp-Source: APXvYqwHMa7CKohDcZxGXolr6aOboQawDOqzt7xdmk0Fs4g+/LFuohCkiGITZ0UNicDhSJh1b747Vw==
-X-Received: by 2002:a50:fb82:: with SMTP id e2mr2969241edq.15.1565787272521;
-        Wed, 14 Aug 2019 05:54:32 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id ng6sm10794969ejb.13.2019.08.14.05.54.31
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Aug 2019 05:54:31 -0700 (PDT)
-Subject: Re: [PATCH] usb: xhci-pci: reorder removal to avoid use-after-free
-To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-References: <1565782781938.37795@mentor.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <15aa45c7-6e45-d03f-9336-4291f8b2dc66@redhat.com>
-Date:   Wed, 14 Aug 2019 14:54:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727111AbfHNNG2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 09:06:28 -0400
+Received: from mga03.intel.com ([134.134.136.65]:1678 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726934AbfHNNG2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Aug 2019 09:06:28 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Aug 2019 06:06:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,385,1559545200"; 
+   d="asc'?scan'208";a="328044176"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga004.jf.intel.com with ESMTP; 14 Aug 2019 06:06:08 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Vicente Bergas <vicencb@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Will Deacon <will.deacon@arm.com>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: kexec on rk3399
+In-Reply-To: <c6993a1e-6fc2-44ab-b59e-152142e2ff4d@gmail.com>
+References: <ebcb52be-2063-4e2c-9a09-fdcacb94f855@gmail.com> <c6993a1e-6fc2-44ab-b59e-152142e2ff4d@gmail.com>
+Date:   Wed, 14 Aug 2019 16:06:04 +0300
+Message-ID: <87v9uzaocj.fsf@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1565782781938.37795@mentor.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
 Hi,
 
-On 14-08-19 13:39, Schmid, Carsten wrote:
-> On driver removal, the platform_device_unregister call
-> attached through devm_add_action_or_reset was executed
-> after usb_hcd_pci_remove.
-> This lead to a use-after-free for the iomem resorce of
-> the xhci-ext-caps driver in the platform removal
-> because the parent of the resource was freed earlier.
-> 
-> Fix this by reordering of the removal sequence.
-> 
-> Signed-off-by: Carsten Schmid <carsten_schmid@mentor.com>
-
-Assuming this has been tested, overal this looks good to me.
-
-But there are 2 things to fix:
-
-1) Maybe pick a more descriptive struct member name then pdev.
-    pdev with pci-devices often points to a pci_device ...
-    How about: role_switch_pdev ?
-
-2) xhci_ext_cap_init() is not the last call which can fail in
-    xhci_pci_probe(), since you now no longer use devm_add_action_or_reset
-    for auto-cleanup, you must now manually cleanup by calling
-    xhci_ext_cap_remove() when later steps of xhci_pci_probe() fail.
-    it looks like you will need a new ext_cap_remove error-exit label
-    for this put above the put_usb3_hcd label and goto this new label
-    instead of to put_usb3_hcd in all error paths after a successful call
-    to xhci_ext_cap_init()
-
-Regards,
-
-Hans
-
-
-> ---
->   drivers/usb/host/xhci-ext-caps.c | 22 ++++++++++++----------
->   drivers/usb/host/xhci-pci.c      |  4 ++++
->   drivers/usb/host/xhci-pci.h      | 19 +++++++++++++++++++
->   drivers/usb/host/xhci.h          |  1 +
->   4 files changed, 36 insertions(+), 10 deletions(-)
->   create mode 100644 drivers/usb/host/xhci-pci.h
-> 
-> diff --git a/drivers/usb/host/xhci-ext-caps.c b/drivers/usb/host/xhci-ext-caps.c
-> index 399113f9fc5c..d2ab1e2a39c0 100644
-> --- a/drivers/usb/host/xhci-ext-caps.c
-> +++ b/drivers/usb/host/xhci-ext-caps.c
-> @@ -7,21 +7,19 @@
->   
->   #include <linux/platform_device.h>
->   #include "xhci.h"
-> +#include "xhci-pci.h"
->   
->   #define USB_SW_DRV_NAME		"intel_xhci_usb_sw"
->   #define USB_SW_RESOURCE_SIZE	0x400
->   
-> -static void xhci_intel_unregister_pdev(void *arg)
-> -{
-> -	platform_device_unregister(arg);
-> -}
-> -
->   static int xhci_create_intel_xhci_sw_pdev(struct xhci_hcd *xhci, u32 cap_offset)
->   {
->   	struct usb_hcd *hcd = xhci_to_hcd(xhci);
->   	struct device *dev = hcd->self.controller;
->   	struct platform_device *pdev;
->   	struct resource	res = { 0, };
-> +	struct xhci_pci_priv *priv = (struct xhci_pci_priv *)xhci->priv;
-> +
->   	int ret;
->   
->   	pdev = platform_device_alloc(USB_SW_DRV_NAME, PLATFORM_DEVID_NONE);
-> @@ -52,11 +50,7 @@ static int xhci_create_intel_xhci_sw_pdev(struct xhci_hcd *xhci, u32 cap_offset)
->   		return ret;
->   	}
->   
-> -	ret = devm_add_action_or_reset(dev, xhci_intel_unregister_pdev, pdev);
-> -	if (ret) {
-> -		dev_err(dev, "couldn't add unregister action for intel_xhci_usb_sw pdev\n");
-> -		return ret;
-> -	}
-> +	priv->pdev = pdev;
->   
->   	return 0;
->   }
-> @@ -88,3 +82,11 @@ int xhci_ext_cap_init(struct xhci_hcd *xhci)
->   	return 0;
->   }
->   EXPORT_SYMBOL_GPL(xhci_ext_cap_init);
-> +
-> +void xhci_ext_cap_remove(struct xhci_hcd *xhci)
+Vicente Bergas <vicencb@gmail.com> writes:
+> On Monday, July 22, 2019 4:31:27 PM CEST, Vicente Bergas wrote:
+>> Hi, i have been running linux on rk3399 booted with kexec fine until 5.2
+>> From 5.2 onwards, there are memory corruption issues as reported here:
+>> http://lkml.iu.edu/hypermail/linux/kernel/1906.2/07211.html
+>> kexec has been identified as the principal reason for the issues.
+>>
+>> It turns out that kexec has never worked reliably on this platform,
+>> i was just lucky until recently.
+>>
+>> Please, can you provide some directions on how to debug the issue?
+>
+> Thank you all for your suggestions on where the issue could be.
+>
+> It seems that it was the USB driver.
+> Now using v5.2.8 booted with kexec from v5.2.8 with a workaround and
+> so far so good. It is being tested on the Sapphire board.
+>
+> The workaround is:
+> --- a/drivers/usb/dwc3/dwc3-of-simple.c
+> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
+> @@ -133,6 +133,13 @@
+>  	return 0;
+>  }
+>=20=20
+> +static void dwc3_of_simple_shutdown(struct platform_device *pdev)
 > +{
-> +	struct xhci_pci_priv *priv = (struct xhci_pci_priv *)xhci->priv;
-> +	if (priv->pdev)
-> +		platform_device_unregister(priv->pdev);
+> +	struct dwc3_of_simple *simple =3D platform_get_drvdata(pdev);
+> +
+> +	reset_control_assert(simple->resets);
 > +}
-> +EXPORT_SYMBOL_GPL(xhci_ext_cap_remove);
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index c2fe218e051f..a4d094df56f7 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -14,6 +14,7 @@
->   #include <linux/acpi.h>
->   
->   #include "xhci.h"
-> +#include "xhci-pci.h"
->   #include "xhci-trace.h"
->   
->   #define SSIC_PORT_NUM		2
-> @@ -62,6 +63,7 @@ static struct hc_driver __read_mostly xhci_pci_hc_driver;
->   static int xhci_pci_setup(struct usb_hcd *hcd);
->   
->   static const struct xhci_driver_overrides xhci_pci_overrides __initconst = {
-> +	.extra_priv_size = sizeof(struct xhci_pci_priv),
->   	.reset = xhci_pci_setup,
->   };
->   
-> @@ -393,6 +395,8 @@ static void xhci_pci_remove(struct pci_dev *dev)
->   		xhci->shared_hcd = NULL;
->   	}
->   
-> +	xhci_ext_cap_remove(xhci);
 > +
->   	/* Workaround for spurious wakeups at shutdown with HSW */
->   	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
->   		pci_set_power_state(dev, PCI_D3hot);
-> diff --git a/drivers/usb/host/xhci-pci.h b/drivers/usb/host/xhci-pci.h
-> new file mode 100644
-> index 000000000000..ead9618d7368
-> --- /dev/null
-> +++ b/drivers/usb/host/xhci-pci.h
-> @@ -0,0 +1,19 @@
-> +/*
-> + * xhci-pci.h - xHCI extended capability handling platform Glue.
-> + *
-> + * Copyright (C) 2019 Mentor Graphics (Deutschland) GmbH
-> + * Derived from xhci-plat.h
-> + *
-> + * This program is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU General Public License
-> + * version 2 as published by the Free Software Foundation.
-> + */
-> +
-> +#ifndef _XHCI_PCI_H
-> +#define _XHCI_PCI_H
-> +
-> +struct xhci_pci_priv {
-> +	struct platform_device *pdev;
-> +};
-> +
-> +#endif	/* _XHCI_PCI_H */
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index fabbce1c542a..847d2021fc2c 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -2052,6 +2052,7 @@ void xhci_init_driver(struct hc_driver *drv,
->   		      const struct xhci_driver_overrides *over);
->   int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id);
->   int xhci_ext_cap_init(struct xhci_hcd *xhci);
-> +void xhci_ext_cap_remove(struct xhci_hcd *xhci);
->   
->   int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup);
->   int xhci_resume(struct xhci_hcd *xhci, bool hibernated);
-> 
+>  static int __maybe_unused dwc3_of_simple_runtime_suspend(struct device=20
+> *dev)
+>  {
+>  	struct dwc3_of_simple	*simple =3D dev_get_drvdata(dev);
+> @@ -190,6 +197,7 @@
+>  static struct platform_driver dwc3_of_simple_driver =3D {
+>  	.probe		=3D dwc3_of_simple_probe,
+>  	.remove		=3D dwc3_of_simple_remove,
+> +	.shutdown	=3D dwc3_of_simple_shutdown,
+>  	.driver		=3D {
+>  		.name	=3D "dwc3-of-simple",
+>  		.of_match_table =3D of_dwc3_simple_match,
+>
+> If this patch is OK after review i can resubmit it as a pull request.
+
+not a pull request, just send a patch using git send-email
+
+> Should a similar change be applied to drivers/usb/dwc3/core.c ?
+
+Is it necessary? We haven't had any bug reports regarding that. Also, if
+we have reset control support in the core driver, why do we need it in
+of_simple? Seems like of_simple could just rely on what core does.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1UBzwACgkQzL64meEa
+mQYOVQ//eKd2UVl0Lk/iBF9be4Qe4UnhUTXChWgQRk4zD9Xvjfgx16lvKHRd202Y
+tDKEYXDrOeSfQZTopKUfO8d3vjPkxfqYMeLyiiXTA983oXVwc6ZeaE6+VA3AO9m1
+nWdQthWGnpSiBaXhceBgMmAaKkvuFe/dDua9OhGkLz/aOYFQ5iLEVT/Ffkj8sr5g
+u9oXIq/Vs49XFoymk8s+9qGip9l3ZbQNEkUkJbL4+hw83IiFR5SWtGG7kf/Uv/bI
+sA6JUkcTDvOXkqI/9cSk9ZeCePbOQpu5lk9C5B78//hdDNpkopJ8OeIW6YOBh5HF
+HIOZzyBgWjXu6fRM1XiqoRjWZvfpv/76CGml0zNKdDs5bvN4tbcUoJtf655JWdav
+S+0cEGfvLMsh5UiFcsBTT63S7+/Gh/d8Z/m3JsgSw9i0TBZLhbGQ36SYX+RpNSrr
+LNZsCbl67wc12ftHZOJaUTsdHy6MU4O5nf5vlSFTJCkRJtNKV65hODulCRMiTdkh
+kgyjs98yUegt2siGNHbVg8LC14GjWQaAxRLB7BN4pCx4243vmpapRRWjHG63f2Jh
+VZvYCB8hj5MBy+2BZ5S94siSoMS6+qaZ8DQ2L065EwdrlKLly4Rofh0FNhtbL5I5
+F5P6V1xEnd0TN75wevzsI57lsNB2Cov8WoSeFQ0D7OSrS6eN38s=
+=9b3X
+-----END PGP SIGNATURE-----
+--=-=-=--
