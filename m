@@ -2,196 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2915E8D4E1
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 15:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020508D4E5
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 15:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbfHNNiC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 09:38:02 -0400
-Received: from mail-ot1-f70.google.com ([209.85.210.70]:41108 "EHLO
-        mail-ot1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbfHNNiC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 09:38:02 -0400
-Received: by mail-ot1-f70.google.com with SMTP id x1so1885927oto.8
-        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 06:38:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=5KFSpTNEnWIsYjCsFvEkxZBXKFK565cP3qQxOf2je1Q=;
-        b=rknxRSw4LnrmMvXoRPnQh9zVahfz+n6euFFVVXR9DC4rPO0ahmxkicG+pxuapZoYSn
-         ykkAYMNg+nX8UnkHSVk3b2hRdexnJsjVe/TcJOxAiTJzIyAnHTL81nbyFC9JmfXXRLVN
-         OzsAVhp4XDGQNXphS8a7H3uSKi+865578OXgrzOk7uX+c8grPFtyM1Kyd5ItWlv/cQZg
-         sDDMwLTLVJPDi7pxLRe3pu+d1YAcHtbZn8+CWNCezDyf2Jysyggf7E8b67W+zgyZEvL5
-         pBDE65FgdilmZsaW+E0E3JJa6qMC1KKLGprTEveih+gv7ykMnQ/KBfwM21vT2GFs6uWd
-         Kp9g==
-X-Gm-Message-State: APjAAAXQj5uxY7LUFvLcgs51ZKmPiPXfnnUPlQ7SrUdfM1pNAivjg0bJ
-        6A6U1dE/CoIinfXtRbQRw5fDVk0o5w9XTXWoyDFTl/bvAI8p
-X-Google-Smtp-Source: APXvYqyIAk0DIeooLvbGS9BdYlgSqGLOOJF7D83nPgiYfieZmmNVIAxKMDNWI7N9ltRZ7Lyi2xGf4Nio07TAqdPHpeivwXq8qXoR
+        id S1727558AbfHNNi3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 09:38:29 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:47112 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726263AbfHNNi3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 09:38:29 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7EDcKTR075923;
+        Wed, 14 Aug 2019 08:38:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1565789900;
+        bh=aThyHL8ApwvdhvY3BnDVs0kFkolqrKiAquo0tskXkcg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=IdYwQLhGto2moxtF4RXiQKJEPdAyT1FbAHYmlU/u5t+GnknGuqF2ookzKY2qbPLJI
+         bvcjQQv6PzOzK+0lxODlqcqlpgf5W1WHQIUp/7wTpK3pWTpx4UGv1jDZ+l9DI6KbHo
+         OzPdWRE3N7IZnctJF06lL1Rti/bm2x1L9Q2f1OXk=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7EDcKi0130999
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 14 Aug 2019 08:38:20 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 14
+ Aug 2019 08:38:20 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 14 Aug 2019 08:38:20 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7EDcHrH100252;
+        Wed, 14 Aug 2019 08:38:17 -0500
+Subject: Re: [PATCH v10 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
+To:     Pawel Laszczak <pawell@cadence.com>, <felipe.balbi@linux.intel.com>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jbergsagel@ti.com>,
+        <nsekhar@ti.com>, <nm@ti.com>, <sureshp@cadence.com>,
+        <jpawar@cadence.com>, <kurahul@cadence.com>, <aniljoy@cadence.com>
+References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
+ <1563733939-21214-6-git-send-email-pawell@cadence.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <2c5ed505-6fee-1816-e5bb-59a9ed96fb70@ti.com>
+Date:   Wed, 14 Aug 2019 16:38:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:35a:: with SMTP id x26mr3569970jap.104.1565789880944;
- Wed, 14 Aug 2019 06:38:00 -0700 (PDT)
-Date:   Wed, 14 Aug 2019 06:38:00 -0700
-In-Reply-To: <1565789116.5780.1.camel@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a59094059013dd63@google.com>
-Subject: Re: divide error in usbtmc_generic_read
-From:   syzbot <syzbot+55b0304b360654a7537b@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        guido.kiener@rohde-schwarz.com, linux-usb@vger.kernel.org,
-        oneukum@suse.com, steve_bayless@keysight.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <1563733939-21214-6-git-send-email-pawell@cadence.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot has tested the proposed patch but the reproducer still triggered  
-crash:
-KASAN: use-after-free Read in usbtmc_disconnect
-
-usb 5-1: USB disconnect, device number 2
-==================================================================
-BUG: KASAN: use-after-free in __mutex_lock_common  
-kernel/locking/mutex.c:912 [inline]
-BUG: KASAN: use-after-free in __mutex_lock+0xf23/0x1360  
-kernel/locking/mutex.c:1077
-Read of size 8 at addr ffff8881d63299c8 by task kworker/1:0/17
-
-CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.3.0-rc4+ #1
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description+0x6a/0x32c mm/kasan/report.c:351
-  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-  kasan_report+0xe/0x12 mm/kasan/common.c:612
-  __mutex_lock_common kernel/locking/mutex.c:912 [inline]
-  __mutex_lock+0xf23/0x1360 kernel/locking/mutex.c:1077
-  usbtmc_disconnect+0x58/0x180 drivers/usb/class/usbtmc.c:2443
-  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
-  __device_release_driver drivers/base/dd.c:1134 [inline]
-  device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
-  bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
-  device_del+0x420/0xb10 drivers/base/core.c:2339
-  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
-  usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
-  hub_port_connect drivers/usb/core/hub.c:4949 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Allocated by task 1737:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_kmalloc mm/kasan/common.c:487 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:460
-  kmalloc include/linux/slab.h:552 [inline]
-  kzalloc include/linux/slab.h:748 [inline]
-  usbtmc_probe+0xad/0x1360 drivers/usb/class/usbtmc.c:2328
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2165
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2165
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 1737:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
-  slab_free_hook mm/slub.c:1423 [inline]
-  slab_free_freelist_hook mm/slub.c:1474 [inline]
-  slab_free mm/slub.c:3016 [inline]
-  kfree+0xe4/0x2f0 mm/slub.c:3957
-  kref_put include/linux/kref.h:65 [inline]
-  usbtmc_probe+0x55c/0x1360 drivers/usb/class/usbtmc.c:2433
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2165
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2165
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8881d6329900
-  which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 200 bytes inside of
-  512-byte region [ffff8881d6329900, ffff8881d6329b00)
-The buggy address belongs to the page:
-page:ffffea000758ca00 refcount:1 mapcount:0 mapping:ffff8881da002500  
-index:0x0 compound_mapcount: 0
-flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 ffffea0007585680 0000000700000007 ffff8881da002500
-raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8881d6329880: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff8881d6329900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff8881d6329980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                               ^
-  ffff8881d6329a00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d6329a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
 
 
-Tested on:
+On 21/07/2019 21:32, Pawel Laszczak wrote:
+> This patch introduce new Cadence USBSS DRD driver to Linux kernel.
+> 
+> The Cadence USBSS DRD Controller is a highly configurable IP Core which
+> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
+> Host Only (XHCI)configurations.
+> 
+> The current driver has been validated with FPGA platform. We have
+> support for PCIe bus, which is used on FPGA prototyping.
+> 
+> The host side of USBSS-DRD controller is compliant with XHCI
+> specification, so it works with standard XHCI Linux driver.
+> 
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/Kconfig                |    2 +
+>  drivers/usb/Makefile               |    2 +
+>  drivers/usb/cdns3/Kconfig          |   46 +
+>  drivers/usb/cdns3/Makefile         |   17 +
+>  drivers/usb/cdns3/cdns3-pci-wrap.c |  203 +++
+>  drivers/usb/cdns3/core.c           |  554 +++++++
+>  drivers/usb/cdns3/core.h           |  109 ++
+>  drivers/usb/cdns3/debug.h          |  171 ++
+>  drivers/usb/cdns3/debugfs.c        |   87 ++
+>  drivers/usb/cdns3/drd.c            |  390 +++++
+>  drivers/usb/cdns3/drd.h            |  166 ++
+>  drivers/usb/cdns3/ep0.c            |  914 +++++++++++
+>  drivers/usb/cdns3/gadget-export.h  |   28 +
+>  drivers/usb/cdns3/gadget.c         | 2338 ++++++++++++++++++++++++++++
+>  drivers/usb/cdns3/gadget.h         | 1321 ++++++++++++++++
+>  drivers/usb/cdns3/host-export.h    |   28 +
+>  drivers/usb/cdns3/host.c           |   71 +
+>  drivers/usb/cdns3/trace.c          |   11 +
+>  drivers/usb/cdns3/trace.h          |  493 ++++++
+>  19 files changed, 6951 insertions(+)
+>  create mode 100644 drivers/usb/cdns3/Kconfig
+>  create mode 100644 drivers/usb/cdns3/Makefile
+>  create mode 100644 drivers/usb/cdns3/cdns3-pci-wrap.c
+>  create mode 100644 drivers/usb/cdns3/core.c
+>  create mode 100644 drivers/usb/cdns3/core.h
+>  create mode 100644 drivers/usb/cdns3/debug.h
+>  create mode 100644 drivers/usb/cdns3/debugfs.c
+>  create mode 100644 drivers/usb/cdns3/drd.c
+>  create mode 100644 drivers/usb/cdns3/drd.h
+>  create mode 100644 drivers/usb/cdns3/ep0.c
+>  create mode 100644 drivers/usb/cdns3/gadget-export.h
+>  create mode 100644 drivers/usb/cdns3/gadget.c
+>  create mode 100644 drivers/usb/cdns3/gadget.h
+>  create mode 100644 drivers/usb/cdns3/host-export.h
+>  create mode 100644 drivers/usb/cdns3/host.c
+>  create mode 100644 drivers/usb/cdns3/trace.c
+>  create mode 100644 drivers/usb/cdns3/trace.h
+> 
 
-commit:         d0847550 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=10ac29ee600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11f3b2e2600000
+<snip>
 
+> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+> new file mode 100644
+> index 000000000000..291f08be56fe
+> --- /dev/null
+> +++ b/drivers/usb/cdns3/gadget.c
+> @@ -0,0 +1,2338 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Cadence USBSS DRD Driver - gadget side.
+> + *
+> + * Copyright (C) 2018-2019 Cadence Design Systems.
+> + * Copyright (C) 2017-2018 NXP
+> + *
+> + * Authors: Pawel Jez <pjez@cadence.com>,
+> + *          Pawel Laszczak <pawell@cadence.com>
+> + *          Peter Chen <peter.chen@nxp.com>
+> + */
+> +
+
+<snip>
+
+> +
+> +static void cdns3_gadget_config(struct cdns3_device *priv_dev)
+> +{
+> +	struct cdns3_usb_regs __iomem *regs = priv_dev->regs;
+> +	u32 reg;
+> +
+> +	cdns3_ep0_config(priv_dev);
+> +
+> +	/* enable interrupts for endpoint 0 (in and out) */
+> +	writel(EP_IEN_EP_OUT0 | EP_IEN_EP_IN0, &regs->ep_ien);
+> +
+> +	/*
+> +	 * Driver needs to modify LFPS minimal U1 Exit time for DEV_VER_TI_V1
+> +	 * revision of controller.
+> +	 */
+> +	if (priv_dev->dev_ver == DEV_VER_TI_V1) {
+> +		reg = readl(&regs->dbg_link1);
+> +
+> +		reg &= ~DBG_LINK1_LFPS_MIN_GEN_U1_EXIT_MASK;
+> +		reg |= DBG_LINK1_LFPS_MIN_GEN_U1_EXIT(0x55) |
+> +		       DBG_LINK1_LFPS_MIN_GEN_U1_EXIT_SET;
+> +		writel(reg, &regs->dbg_link1);
+> +	}
+> +
+> +	/*
+> +	 * By default some platforms has set protected access to memory.
+> +	 * This cause problem with cache, so driver restore non-secure
+> +	 * access to memory.
+> +	 */
+> +	reg = readl(&regs->dma_axi_ctrl);
+
+Why read the reg at all if you are just overwriting it below?
+
+> +	reg = DMA_AXI_CTRL_MARPROT(DMA_AXI_CTRL_NON_SECURE) |
+> +	      DMA_AXI_CTRL_MAWPROT(DMA_AXI_CTRL_NON_SECURE);
+
+
+Otherwise you need to read modify only necessary bits and then write.
+i.e.
+	#define DMA_AXI_CTRL_MAPROT_MASK 0x3
+	reg &= ~(DMA_AXI_CTRL_MARPROT(DMA_AXI_CTRL_MAPROT_MASK) |
+		 DMA_AXI_CTRL_MARPROT(DMA_AXI_CTRL_MAPROT_MASK))
+	reg |= DMA_AXI_CTRL_MARPROT(DMA_AXI_CTRL_NON_SECURE) |
+	       DMA_AXI_CTRL_MAWPROT(DMA_AXI_CTRL_NON_SECURE);
+
+> +	writel(reg, &regs->dma_axi_ctrl);
+> +
+> +	/* enable generic interrupt*/
+> +	writel(USB_IEN_INIT, &regs->usb_ien);
+> +	writel(USB_CONF_CLK2OFFDS | USB_CONF_L1DS, &regs->usb_conf);
+> +
+> +	cdns3_configure_dmult(priv_dev, NULL);
+> +
+> +	cdns3_gadget_pullup(&priv_dev->gadget, 1);
+> +}
+> +
+
+<snip>
+
+cheers,
+-roger
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
