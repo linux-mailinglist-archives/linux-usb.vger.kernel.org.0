@@ -2,94 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FEE8D7FE
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 18:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525C28DBF5
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 19:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728425AbfHNQXT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 12:23:19 -0400
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:34127 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728327AbfHNQXT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 12:23:19 -0400
-Received: by mail-yw1-f68.google.com with SMTP id n126so3670815ywf.1;
-        Wed, 14 Aug 2019 09:23:18 -0700 (PDT)
+        id S1728488AbfHNRfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 13:35:22 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36346 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728219AbfHNRfV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 13:35:21 -0400
+Received: by mail-ot1-f65.google.com with SMTP id k18so52178634otr.3
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 10:35:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fOFmALBZr12NwAFqPH4bz0Snzh0MYv/4Oy/ALTRaZDA=;
+        b=J/RX89SfeoHR3tNRvGakoeZptZJRFt1aGCoCGLanpgjt6kzr4VpQHXuOeq/XIub7h3
+         dtaz/Elri9LmCCrz1cJasmWNTs/t3B2DIMrEzFtcDd5S3T5Z7qW0x6VQtzyPUT8xX0Dr
+         tpBoGVGOFhjt5t/gsPYut79dUKJV/zOUYBE0KuVDsrJAB63xmL9rkN5sW1B/mX17RfT8
+         s7uhch2pStQ0Q6kOmXjpTKpW17nIDOPnBvNsIuNp6/qFxNyKoezYoApT9paR+P+AAJP+
+         1YlKwUJfVlXI0OJvPm/r92hOejmHZfRewJNJIhMYRbj46Pt2aVShyKZOOJ23qQt+gnU7
+         ycMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=0ou2VxvAp7i/GQYsd8swwwCLKBJVkWjDqEHUyfXhbz8=;
-        b=EW9EfHx7Rq1EW//SuoGcI7HYLMjC4Ia+j92Tw0Ih+ZDELev/vjZxI37Eg4wYwGcXUI
-         US5TEZCR+uSbVdxXIJaeWwlZpwOORwmWeczpUaVXQ9S0G7nfwYTc/Id59O+E6wb1wKcN
-         D7WS7HPQF0e32oDIxvioUkQMY7L+tSREQCuk4iK/zmcy9XAq1Onmqx92UNOT3mc4TMEL
-         NXgzypOqrAARDnxNloEaVQqwWfSQoNbHXbaV78+OuYrwnUVYIa+WK2qgQP6ADNyvlqoB
-         Tki6g8VqlFf+Adwwd0rdSwMX77xCWjRIB2tvLSspO/zCvbbRZnSKxNoE+vmFqB4GGMXD
-         WJ1Q==
-X-Gm-Message-State: APjAAAWxvzXRzHmwsoeLhyjjdi+rITY13/54MGMza0iUzGqzPfFP/6hr
-        +HIO8l+78O4lD+B70frydwk=
-X-Google-Smtp-Source: APXvYqyokExhM7ajSieOAYtdyJnQLxyrcKuwHEvgdnbA8f+tMLLXAihm/Btc6NJd4GYOHCX3CpMvGw==
-X-Received: by 2002:a0d:fc44:: with SMTP id m65mr46165ywf.109.1565799798387;
-        Wed, 14 Aug 2019 09:23:18 -0700 (PDT)
-Received: from localhost.localdomain (24-158-240-219.dhcp.smyr.ga.charter.com. [24.158.240.219])
-        by smtp.gmail.com with ESMTPSA id g68sm63128ywb.87.2019.08.14.09.23.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 14 Aug 2019 09:23:17 -0700 (PDT)
-From:   Wenwen Wang <wenwen@cs.uga.edu>
-To:     Wenwen Wang <wenwen@cs.uga.edu>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        netdev@vger.kernel.org (open list:USB LAN78XX ETHERNET DRIVER),
-        linux-usb@vger.kernel.org (open list:USB NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] lan78xx: Fix memory leaks
-Date:   Wed, 14 Aug 2019 11:23:13 -0500
-Message-Id: <1565799793-7446-1-git-send-email-wenwen@cs.uga.edu>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fOFmALBZr12NwAFqPH4bz0Snzh0MYv/4Oy/ALTRaZDA=;
+        b=WRcHt3PCYMcCeMQEb682CREpn0TjpLLhvX+DF9mtIOZT7UXvefgg9lAtGJttyFQizm
+         jU6HkB7GwSelWE7B6aECMUEfWD+nHN6nIYTY7E87MBvX28O6xHVgi/agylQ2d3Er0ih3
+         mqarunYGpg8JehumqE1MyPDWiWr/rza2KspLWUhSzNypa++1G+TdfhdeOsVlN/knW6Ge
+         mr1emWhhwDeakTVsmOEomZ2v5W6P+ToPEDDOk5J2QUKOnScYzW5LSqA/zXHu9YmfSAwq
+         MguHjH/2SrVLNWAzs1l1LpjY2dCq7dhguj0Qq0pDrpxX8WUn81nxFP2CF9s/h9T+XJ5I
+         A06w==
+X-Gm-Message-State: APjAAAXqFFlVvFUW1d4Z8fQSVlyjhyvrtmdQyTSkXmWCFoX90UHf7WRS
+        IrJ8i2dJsFoZmWforGCXLAi0wxwWx9nkaBk4CUsyYA==
+X-Google-Smtp-Source: APXvYqyjolYUGNDko/RtbeKAldUB4mXc2vz0kBg/ilppWohKo/GY5H6usCosoBEpZ0JF43wMzvRMaDIYk6L2L/batEg=
+X-Received: by 2002:a05:6830:1e0f:: with SMTP id s15mr177324otr.231.1565804120275;
+ Wed, 14 Aug 2019 10:35:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20180716122125.175792-1-maco@android.com> <20190813121733.52480-1-maennich@google.com>
+ <20190813121733.52480-6-maennich@google.com> <CAGETcx_LQDdnaU+3JVGw+6=DJ8tRoQ00+3rD2gOiHHkWomt8jg@mail.gmail.com>
+ <20190814125427.GA72826@google.com>
+In-Reply-To: <20190814125427.GA72826@google.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 14 Aug 2019 10:34:43 -0700
+Message-ID: <CAGETcx99Xx7aRPS-2Pw8h7O5D_+3T+1hbqja=p-gLN2wXApaEQ@mail.gmail.com>
+Subject: Re: [PATCH v2 05/10] module: add config option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+To:     Matthias Maennich <maennich@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, maco@android.com,
+        Android Kernel Team <kernel-team@android.com>, arnd@arndb.de,
+        geert@linux-m68k.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, hpa@zytor.com,
+        jeyu@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        lucas.de.marchi@gmail.com, Martijn Coenen <maco@google.com>,
+        michal.lkml@markovi.net, mingo@redhat.com, oneukum@suse.com,
+        Philippe Ombredanne <pombredanne@nexb.com>, sam@ravnborg.org,
+        Sandeep Patil <sspatil@google.com>, stern@rowland.harvard.edu,
+        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
+        x86@kernel.org, yamada.masahiro@socionext.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Patrick Bellasi <patrick.bellasi@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Adrian Reber <adrian@lisas.de>,
+        Richard Guy Briggs <rgb@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In lan78xx_probe(), a new urb is allocated through usb_alloc_urb() and
-saved to 'dev->urb_intr'. However, in the following execution, if an error
-occurs, 'dev->urb_intr' is not deallocated, leading to memory leaks. To fix
-this issue, invoke usb_free_urb() to free the allocated urb before
-returning from the function.
+On Wed, Aug 14, 2019 at 5:54 AM 'Matthias Maennich' via kernel-team
+<kernel-team@android.com> wrote:
+>
+> On Tue, Aug 13, 2019 at 01:15:44PM -0700, Saravana Kannan wrote:
+> >On Tue, Aug 13, 2019 at 5:19 AM 'Matthias Maennich' via kernel-team
+> ><kernel-team@android.com> wrote:
+> >>
+> >> If MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is enabled (default=n), the
+> >> requirement for modules to import all namespaces that are used by
+> >> the module is relaxed.
+> >>
+> >> Enabling this option effectively allows (invalid) modules to be loaded
+> >> while only a warning is emitted.
+> >>
+> >> Disabling this option keeps the enforcement at module loading time and
+> >> loading is denied if the module's imports are not satisfactory.
+> >>
+> >> Reviewed-by: Martijn Coenen <maco@android.com>
+> >> Signed-off-by: Matthias Maennich <maennich@google.com>
+> >> ---
+> >>  init/Kconfig    | 14 ++++++++++++++
+> >>  kernel/module.c | 11 +++++++++--
+> >>  2 files changed, 23 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/init/Kconfig b/init/Kconfig
+> >> index bd7d650d4a99..b3373334cdf1 100644
+> >> --- a/init/Kconfig
+> >> +++ b/init/Kconfig
+> >> @@ -2119,6 +2119,20 @@ config MODULE_COMPRESS_XZ
+> >>
+> >>  endchoice
+> >>
+> >> +config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+> >> +       bool "Allow loading of modules with missing namespace imports"
+> >> +       default n
+> >> +       help
+> >> +         Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
+> >> +         a namespace. A module that makes use of a symbol exported with such a
+> >> +         namespace is required to import the namespace via MODULE_IMPORT_NS().
+> >> +         This option relaxes this requirement when loading a module.
+> >
+> >> While
+> >> +         technically there is no reason to enforce correct namespace imports,
+> >> +         it creates consistency between symbols defining namespaces and users
+> >> +         importing namespaces they make use of.
+> >
+> >I'm confused by this sentence. It sounds like it's the opposite of
+> >what the config is doing? Can you please reword it for clarify?
+>
+> How about:
+>
+>   Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
+>   a namespace. A module that makes use of a symbol exported with such a
+>   namespace is required to import the namespace via MODULE_IMPORT_NS().
+>   There is no technical reason to enforce correct namespace imports,
+>   but it creates consistency between symbols defining namespaces and
+>   users importing namespaces they make use of. This option relaxes this
+>   requirement and lifts the enforcement when loading a module.
 
-Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
----
- drivers/net/usb/lan78xx.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+That's a lot better. Especially moving the "This option relaxes..." to
+the bottom. Thanks.
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 3d92ea6..f033fee 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -3792,7 +3792,7 @@ static int lan78xx_probe(struct usb_interface *intf,
- 	ret = register_netdev(netdev);
- 	if (ret != 0) {
- 		netif_err(dev, probe, netdev, "couldn't register the device\n");
--		goto out3;
-+		goto out4;
- 	}
- 
- 	usb_set_intfdata(intf, dev);
-@@ -3807,12 +3807,14 @@ static int lan78xx_probe(struct usb_interface *intf,
- 
- 	ret = lan78xx_phy_init(dev);
- 	if (ret < 0)
--		goto out4;
-+		goto out5;
- 
- 	return 0;
- 
--out4:
-+out5:
- 	unregister_netdev(netdev);
-+out4:
-+	usb_free_urb(dev->urb_intr);
- out3:
- 	lan78xx_unbind(dev, intf);
- out2:
--- 
-2.7.4
-
+-Saravana
