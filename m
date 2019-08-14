@@ -2,69 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C9F8D673
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 16:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297CB8D6D9
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 17:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbfHNOqF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 10:46:05 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:52078 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726230AbfHNOqF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 10:46:05 -0400
-Received: (qmail 3248 invoked by uid 2102); 14 Aug 2019 10:46:04 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 14 Aug 2019 10:46:04 -0400
-Date:   Wed, 14 Aug 2019 10:46:04 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH] usb: host: ohci-pxa27x: Fix and & vs | typo
-In-Reply-To: <20190814140414.GU1974@kadam>
-Message-ID: <Pine.LNX.4.44L0.1908141045070.1771-100000@iolanthe.rowland.org>
+        id S1726551AbfHNPH2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 11:07:28 -0400
+Received: from mga02.intel.com ([134.134.136.20]:31274 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726166AbfHNPH1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Aug 2019 11:07:27 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Aug 2019 08:07:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,385,1559545200"; 
+   d="scan'208";a="194560064"
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 14 Aug 2019 08:07:23 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 Aug 2019 18:07:22 +0300
+Date:   Wed, 14 Aug 2019 18:07:22 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] usb: typec: fusb302: Small changes
+Message-ID: <20190814150722.GA24772@kuha.fi.intel.com>
+References: <20190814132419.39759-1-heikki.krogerus@linux.intel.com>
+ <a826c351-4e9d-8a33-ad0f-764d13aeb1ed@redhat.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a826c351-4e9d-8a33-ad0f-764d13aeb1ed@redhat.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 14 Aug 2019, Dan Carpenter wrote:
-
-> I was looking at this code again today and I'm still convinced this
-> patch is correct.  Should I resend?
+On Wed, Aug 14, 2019 at 03:42:46PM +0200, Hans de Goede wrote:
+> Hi,
 > 
-> regards,
-> dan carpenter
+> On 14-08-19 15:24, Heikki Krogerus wrote:
+> > Hi,
+> > 
+> > This series removes the deprecated fusb302 specific properties, and
+> > stops using struct tcpc_config in the driver.
 > 
-> On Fri, Feb 23, 2018 at 03:33:00PM +0300, Dan Carpenter wrote:
-> > The code is supposed to clear the RH_A_NPS and RH_A_PSM bits, but it's
-> > a no-op because of the & vs | typo.  This bug predates git and it was
-> > only discovered using static analysis so it must not affect too many
-> > people in real life.
-> > 
-> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > ---
-> > Not tested.
-> > 
-> > diff --git a/drivers/usb/host/ohci-pxa27x.c b/drivers/usb/host/ohci-pxa27x.c
-> > index 3e2474959735..7679fb583e41 100644
-> > --- a/drivers/usb/host/ohci-pxa27x.c
-> > +++ b/drivers/usb/host/ohci-pxa27x.c
-> > @@ -148,7 +148,7 @@ static int pxa27x_ohci_select_pmm(struct pxa27x_ohci *pxa_ohci, int mode)
-> >  		uhcrhda |= RH_A_NPS;
-> >  		break;
-> >  	case PMM_GLOBAL_MODE:
-> > -		uhcrhda &= ~(RH_A_NPS & RH_A_PSM);
-> > +		uhcrhda &= ~(RH_A_NPS | RH_A_PSM);
-> >  		break;
-> >  	case PMM_PERPORT_MODE:
-> >  		uhcrhda &= ~(RH_A_NPS);
+> Series looks good to me:
+> 
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> 
+> This has a small conflict with my
+> "[PATCH] usb: typec: fusb302: Call fusb302_debugfs_init earlier"
+> patch.
 
-The patch sure looks right to me.  FWIW:
+Oh, damn it. Sorry.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Since we've agreed to do the rootdir leak fix as a separate patch
+> (which I will write when I find some time probably tomorrow), I
+> was wondering if we can merge my patch first. I would like to see
+> a "Cc: stable@vger.kernel.org" added to my patch and then it would
+> be good to have it merged first.
+> 
+> Regardless we should probable prepare one series with all patches
+> for Greg to make this easy to merge for him.
+> 
+> Shall I combine this series + my fix + my to be written fix into
+> 1 series, test that on actual hardware and then post that?
 
-Alan Stern
+That works for me.
 
+thanks,
+
+-- 
+heikki
