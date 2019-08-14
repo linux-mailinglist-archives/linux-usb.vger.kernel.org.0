@@ -2,53 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CD88D477
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 15:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC458D492
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 15:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727736AbfHNNTz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 09:19:55 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57266 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbfHNNTz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 09:19:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=C1/PeEnTGIHIIc521BXcKxFh9gVf1brG0rZVLhGsiyk=; b=dHFllC+VPxH91LQuraoRwpLbJ
-        DpB7zsbbitXyf2qQUXalO92zwx+TeIEgm4cNdi6RkeeLussboOngBaGVlClUcOesqkNhgEHf/4e7C
-        3bTtHOLS4pbzOe0HqpJ/3ZdSA/fc1sh7133fyfFvWfMs6nxlHt/YM0Ek8zkJSsl990Wmw3y+uScRV
-        sanKFBsNZ38uvWGHh1sA/SKGp5kkIxcC9JGb+5/J0X2Il7EfxJ5pxaRp9JaQN5DBcaoj7574b+ROR
-        JRJpyEU51WtDA2gELy2RyMJKN38Dt0KR5s4VZJwOpTY1r56XbEfc7bfmrij6iMGdW0ps+L0rDpVIN
-        7z915J7cA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hxtBv-0000yF-Me; Wed, 14 Aug 2019 13:19:51 +0000
-Date:   Wed, 14 Aug 2019 06:19:51 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Suwan Kim <suwan.kim027@gmail.com>
-Cc:     shuah@kernel.org, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        id S1727453AbfHNNYX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 09:24:23 -0400
+Received: from mga14.intel.com ([192.55.52.115]:15870 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726263AbfHNNYX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Aug 2019 09:24:23 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Aug 2019 06:24:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,385,1559545200"; 
+   d="scan'208";a="194533755"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Aug 2019 06:24:20 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/2] usbip: Implement SG support
-Message-ID: <20190814131951.GA1437@infradead.org>
-References: <20190808155435.10050-1-suwan.kim027@gmail.com>
+Subject: [PATCH 0/3] usb: typec: fusb302: Small changes
+Date:   Wed, 14 Aug 2019 16:24:16 +0300
+Message-Id: <20190814132419.39759-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190808155435.10050-1-suwan.kim027@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-FYI, I think my
+Hi,
 
-   "usb: add a HCD_DMA flag instead of guestimating DMA capabilities"
+This series removes the deprecated fusb302 specific properties, and
+stops using struct tcpc_config in the driver.
 
-is the proper core fix for what your patch 1 works around, as the USB
-core should not assume DMA capabilities based on the presence of a DMA
-mask.
+thanks,
+
+Heikki Krogerus (3):
+  usb: typec: fusb302: Remove unused properties
+  dt-bindings: usb: fusb302: Remove deprecated properties
+  usb: typec: fusb302: Always provide fwnode for the port
+
+ .../devicetree/bindings/usb/fcs,fusb302.txt   |  7 --
+ drivers/usb/typec/tcpm/fusb302.c              | 85 ++++++++-----------
+ 2 files changed, 36 insertions(+), 56 deletions(-)
+
+-- 
+2.20.1
+
