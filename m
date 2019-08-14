@@ -2,81 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B94128CA68
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 06:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449958CBF8
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 08:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727138AbfHNEdr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 00:33:47 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:18920 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726631AbfHNEdr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 00:33:47 -0400
-X-UUID: 42e09e84ee194658924509e3bbc81dc4-20190814
-X-UUID: 42e09e84ee194658924509e3bbc81dc4-20190814
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1746995198; Wed, 14 Aug 2019 12:33:38 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 14 Aug
- 2019 12:33:36 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 14 Aug 2019 12:33:36 +0800
-Message-ID: <1565757215.7317.15.camel@mhfsdcap03>
-Subject: Re: [PATCH next v9 07/11] usb: roles: Add
- fwnode_usb_role_switch_get() function
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Date:   Wed, 14 Aug 2019 12:33:35 +0800
-In-Reply-To: <20190813130110.GE4691@kuha.fi.intel.com>
-References: <1565695634-9711-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1565695634-9711-8-git-send-email-chunfeng.yun@mediatek.com>
-         <20190813130110.GE4691@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1727424AbfHNGgb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 02:36:31 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33540 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726940AbfHNGga (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 02:36:30 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n190so11760227pgn.0;
+        Tue, 13 Aug 2019 23:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=V2ZJmMM7eBUrb1Y12nRIIaugrWodscFeaE9AP4JG/Zg=;
+        b=Gr/yUIA7h/3eBDYc9/YH3PmK0TnssS6CO/9hFNunLAWWczG3OiVHN4WIIgL3E9ZCpt
+         lxw0s7tI4ERoXSIwh3JMsdgc8zNzPjnA6BXgqeWAmqEyh+LbCMXm65+O4nT6k1c31e4G
+         72a+RzjyGS+EkSW5x52rptXOtidXTsKAuxWhyJ3b6xCpOT6ucihhvpEg52ywhW82gF/O
+         HmWN/pIGHF5t5B5reCnO/nsCfzeJAwUmX5rfj3UfluGG3M6/UTPt0Rx+R75a3hwPVGGS
+         CEB7dg3ncNyljnIstqsOyQ3HSCSlywswvj4u3icgmk4pUqxyXQc3S7rYfldNhw5/Vge5
+         lm7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=V2ZJmMM7eBUrb1Y12nRIIaugrWodscFeaE9AP4JG/Zg=;
+        b=VfatWZi2jk7Da/3tWd0auYKCJzuJ73Eomf0Rg677KQTiokULd0hOD1t1WPIULL7+Ur
+         lDUCIJBzyKz0R1pex0yauixfhb42Bawzo8Iw98YK2Uu+TcAWn5/kr+7/oHTEZ1vixfHC
+         CzMQf0d4r0xBuuCKc5bAsgNiEr9sYqC9Fj5xKyTO8oNyII2y0fgD8PAzO5Y18BR6rQej
+         otuuqy5J2anmqabhuhamJqThvBZIFjZSHu95nLHmNqK8P+MCbpTNC5GNfvrN03dqPOle
+         nuLxSSz+22KYDAi9rvwNqe7sEOmzv59aBjnBSUH5fbisihdM7FIaOUfSGzmzvdxsbacF
+         yVKA==
+X-Gm-Message-State: APjAAAWC77hMiweIYiz8Dz6e1XlrzLJTIFlC62+4O6kJMAFj5mHIW1VO
+        TZ/MeaJIAlK7ag24t4NnmqA=
+X-Google-Smtp-Source: APXvYqw/2y0dZHWefWOjTwta+m4FUhziJYRwexQISdGldO7ge/xr1KdLXo0S4VRw57w8u++ZXvSuxA==
+X-Received: by 2002:a63:89c2:: with SMTP id v185mr37393202pgd.241.1565764588977;
+        Tue, 13 Aug 2019 23:36:28 -0700 (PDT)
+Received: from himanshu-Vostro-3559 ([103.77.43.147])
+        by smtp.gmail.com with ESMTPSA id j15sm109471223pfr.146.2019.08.13.23.36.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 13 Aug 2019 23:36:27 -0700 (PDT)
+Date:   Wed, 14 Aug 2019 12:06:11 +0530
+From:   Himanshu Jha <himanshujha199640@gmail.com>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, maco@android.com,
+        kstewart@linuxfoundation.org, linux-m68k@vger.kernel.org,
+        oneukum@suse.com,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        usb-storage@lists.one-eyed-alien.net, hpa@zytor.com,
+        joel@joelfernandes.org, sam@ravnborg.org, cocci@systeme.lip6.fr,
+        linux-arch@vger.kernel.org, linux-scsi@vger.kernel.org,
+        x86@kernel.org, lucas.de.marchi@gmail.com, mingo@redhat.com,
+        geert@linux-m68k.org, stern@rowland.harvard.edu,
+        kernel-team@android.com, sspatil@google.com, arnd@arndb.de,
+        linux-kbuild@vger.kernel.org,
+        Nicolas Palix <nicolas.palix@imag.fr>, jeyu@kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        tglx@linutronix.de, michal.lkml@markovi.net,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        sboyd@codeaurora.org, Nicolas Ferre <nicolas.ferre@microchip.com>,
+        maco@google.com, pombredanne@nexb.com,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-modules@vger.kernel.org
+Subject: Re: [Cocci] [PATCH v2 08/10] scripts: Coccinelle script for
+ namespace dependencies.
+Message-ID: <20190814063611.GA22387@himanshu-Vostro-3559>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190813121733.52480-1-maennich@google.com>
+ <20190813121733.52480-9-maennich@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: 4CA480A775488A034C17FADD4441FFF8772F99EADAA5F19D81249A977504955E2000:8
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190813121733.52480-9-maennich@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-08-13 at 16:01 +0300, Heikki Krogerus wrote:
-> On Tue, Aug 13, 2019 at 07:27:10PM +0800, Chunfeng Yun wrote:
-> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > 
-> > The fwnode_usb_role_switch_get() function is exactly the
-> > same as usb_role_switch_get(), except that it takes struct
-> > fwnode_handle as parameter instead of struct device.
-> > 
-> > Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On Tue, Aug 13, 2019 at 01:17:05PM +0100, Matthias Maennich wrote:
+> A script that uses the '<module>.ns_deps' file generated by modpost to
+> automatically add the required symbol namespace dependencies to each
+> module.
 > 
-> Why is my SoB replaced with Suggested-by tag in this patch?
-Sorry, my mistake, I misunderstand what you mean, you suggest use
-Suggested-by in [v8 08/11], but I replaced it all for [06, 07, 08], 
-will abandon the changes of [06,07] in next version.
-
+> Usage:
+> 1) Move some symbols to a namespace with EXPORT_SYMBOL_NS() or define
+>    DEFAULT_SYMBOL_NAMESPACE
+> 2) Run 'make' (or 'make modules') and get warnings about modules not
+>    importing that namespace.
+> 3) Run 'make nsdeps' to automatically add required import statements
+>    to said modules.
 > 
-> thanks,
+> This makes it easer for subsystem maintainers to introduce and maintain
+> symbol namespaces into their codebase.
 > 
+> Co-developed-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Matthias Maennich <maennich@google.com>
+> ---
+
+[]
+
+>  MAINTAINERS                                 |  5 ++
+>  Makefile                                    | 12 +++++
+>  scripts/Makefile.modpost                    |  4 +-
+>  scripts/coccinelle/misc/add_namespace.cocci | 23 +++++++++
+>  scripts/nsdeps                              | 54 +++++++++++++++++++++
+>  5 files changed, 97 insertions(+), 1 deletion(-)
+>  create mode 100644 scripts/coccinelle/misc/add_namespace.cocci
+>  create mode 100644 scripts/nsdeps
+
+[]
+
+> +if [ "$SPATCH_VERSION_NUM" -lt "$SPATCH_REQ_VERSION_NUM" ] ; then
+> +    echo 'spatch needs to be version 1.06 or higher'
+
+Nitpick: 1.0.6
+
+> +    exit 1
+> +fi
 
 
+-- 
+Himanshu Jha
+Undergraduate Student
+Department of Electronics & Communication
+Guru Tegh Bahadur Institute of Technology
