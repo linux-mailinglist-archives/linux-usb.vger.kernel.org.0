@@ -2,88 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAC38DD96
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 20:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9958DE71
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 22:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728262AbfHNS4x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 14:56:53 -0400
-Received: from mail-yw1-f66.google.com ([209.85.161.66]:40245 "EHLO
-        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727975AbfHNS4w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 14:56:52 -0400
-Received: by mail-yw1-f66.google.com with SMTP id z64so844183ywe.7;
-        Wed, 14 Aug 2019 11:56:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=qThyM3uosTzdaiq3sOMT9s9AE6tgP51TOvbLYoMxBkY=;
-        b=TbZv6Ye+WPWkIAB76pfDf7yBFn1yByBxmyo5pglaXHidIntg+uYoXbjD0JyYJe0Od+
-         8LijEeQQs04Vr7oaxaBsknB9vSJLl/0hQkduUD+7/jwEZfes0hfhgfZGl6iCEgKK/rAc
-         4Qqdo44SJNcbFMpVLJokU1n/Zms3KpD5L7uPVc+9EGXCoC4oGMbCs1wWF2JBdxeqEjvQ
-         0CaDv2OZcyJ2ygkY0JWsDMocddmf66WVrpEsgRf8uedgZBheEUkt7V7od6KDgBCxwq5z
-         2DdkLNyYRkr2MokF0Ppki1MEEXTnYGRNNl4nwblqOhsZdtulBsKyjgArgx9a6gfcHj7M
-         3ybg==
-X-Gm-Message-State: APjAAAWo/lN8WwMbCz0vggeK6VrT+Yh/EmGfQPbzR2Ja+vNXgQmRNl+p
-        XFhpJm3PVjnWQFG6DeGVp/I=
-X-Google-Smtp-Source: APXvYqy6iF4tzSFsfEjnjvIojvYZv6hAuiEgy4pi2UVVJ0ghBS6yudgAnVal845gs4IB/CyVH87R2Q==
-X-Received: by 2002:a81:9b49:: with SMTP id s70mr511290ywg.51.1565809011860;
-        Wed, 14 Aug 2019 11:56:51 -0700 (PDT)
-Received: from localhost.localdomain (24-158-240-219.dhcp.smyr.ga.charter.com. [24.158.240.219])
-        by smtp.gmail.com with ESMTPSA id c123sm155732ywf.25.2019.08.14.11.56.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 14 Aug 2019 11:56:50 -0700 (PDT)
-From:   Wenwen Wang <wenwen@cs.uga.edu>
-To:     Wenwen Wang <wenwen@cs.uga.edu>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-usb@vger.kernel.org (open list:USB NETWORKING DRIVERS),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] net: kalmia: fix memory leaks
-Date:   Wed, 14 Aug 2019 13:56:43 -0500
-Message-Id: <1565809005-8437-1-git-send-email-wenwen@cs.uga.edu>
-X-Mailer: git-send-email 2.7.4
+        id S1728537AbfHNUJE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 16:09:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51676 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726522AbfHNUJE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Aug 2019 16:09:04 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 197AC21721;
+        Wed, 14 Aug 2019 20:09:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565813343;
+        bh=vFG+K1ZClIihp2/SF+gdJjx4X84tolyBn2ejaosehs4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UH02A4eDOuBxt3rSUjS6bznE8wCeZiphCa0NarsvWbmTZUurPglLtQZOQVqooF+FD
+         pzMnJzdQN5i4UwfstuxvhfRvfJF+5SwchYa43Peo8LAFETyLJeOI9kQKO1T9hvLgTX
+         OuEMoT3kdE+lF7WYtdyxkiqk9UOJoVgREsU4/mys=
+Date:   Wed, 14 Aug 2019 22:09:01 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Francisco Ferreiro <franco.ferreiro@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: TL-MR3420 with OpenWRT with a huawei E353 usb dongle
+Message-ID: <20190814200901.GC16728@kroah.com>
+References: <CAE82-Hvq=Cj0WRZyJXw5mFuCYfL97DYjMGAKuLuKcjAqeXCPxw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE82-Hvq=Cj0WRZyJXw5mFuCYfL97DYjMGAKuLuKcjAqeXCPxw@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In kalmia_init_and_get_ethernet_addr(), 'usb_buf' is allocated through
-kmalloc(). In the following execution, if the 'status' returned by
-kalmia_send_init_packet() is not 0, 'usb_buf' is not deallocated, leading
-to memory leaks. To fix this issue, add the 'out' label to free 'usb_buf'.
+On Wed, Aug 14, 2019 at 11:42:53AM -0300, Francisco Ferreiro wrote:
+> Hi guys, this is me trying to setup a tp-link TL-MR3420 with OpenWRT
+> with a huawei E353 usb dongle
+> 
+> hopefully I will try to setup a multiwan  along with this two more
+> sources to get redundant access to internet
+>   - a cell phone (either tethering or if possible via USB (*))
+>   - a fiber based dsl service accesible via ethernet.
+> 
+> after flashing the OpenWRT and setting up a little bit I made the
+> dongle work manually (via ttyUSB0) (log below) but cant get it to
+> automatically start connected from boot up
+> 
+> help with this dongle and maybe with this (*) one too, would be highly
+> appreciated
+> have some logs below
+> and let me know if you need something else
+> 
+> thanks in advance for your help
+> best
+> Franco
+> 
+> [   25.113754] usb 1-1: new high-speed USB device number 3 using ehci-platform
+> [   25.327869] usbserial_generic 1-1:1.0: The "generic" usb-serial
+> driver is only for testing and one-off prototypes.
+> [   25.338456] usbserial_generic 1-1:1.0: Tell
+> linux-usb@vger.kernel.org to add your device to a proper driver.
 
-Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
----
- drivers/net/usb/kalmia.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
-index d62b670..fc5895f 100644
---- a/drivers/net/usb/kalmia.c
-+++ b/drivers/net/usb/kalmia.c
-@@ -113,16 +113,16 @@ kalmia_init_and_get_ethernet_addr(struct usbnet *dev, u8 *ethernet_addr)
- 	status = kalmia_send_init_packet(dev, usb_buf, ARRAY_SIZE(init_msg_1),
- 					 usb_buf, 24);
- 	if (status != 0)
--		return status;
-+		goto out;
- 
- 	memcpy(usb_buf, init_msg_2, 12);
- 	status = kalmia_send_init_packet(dev, usb_buf, ARRAY_SIZE(init_msg_2),
- 					 usb_buf, 28);
- 	if (status != 0)
--		return status;
-+		goto out;
- 
- 	memcpy(ethernet_addr, usb_buf + 10, ETH_ALEN);
--
-+out:
- 	kfree(usb_buf);
- 	return status;
- }
--- 
-2.7.4
+This really is not the proper driver for this device.  Why are you
+forcing it to use the generic one and not a "real" driver?
 
+> [   25.348448] usbserial_generic 1-1:1.0: generic converter detected
+> [   25.354938] usb 1-1: generic converter now attached to ttyUSB0
+> [   25.361410] usbserial_generic 1-1:1.1: The "generic" usb-serial
+> driver is only for testing and one-off prototypes.
+> [   25.371975] usbserial_generic 1-1:1.1: Tell
+> linux-usb@vger.kernel.org to add your device to a proper driver.
+> [   25.381965] usbserial_generic 1-1:1.1: device has no bulk endpoints
+> [   25.388921] usbserial_generic 1-1:1.2: The "generic" usb-serial
+> driver is only for testing and one-off prototypes.
+> [   25.399477] usbserial_generic 1-1:1.2: Tell
+> linux-usb@vger.kernel.org to add your device to a proper driver.
+> [   25.409453] usbserial_generic 1-1:1.2: generic converter detected
+> [   25.415898] usb 1-1: generic converter now attached to ttyUSB1
+> [   25.422331] usbserial_generic 1-1:1.3: The "generic" usb-serial
+> driver is only for testing and one-off prototypes.
+> [   25.432887] usbserial_generic 1-1:1.3: Tell
+> linux-usb@vger.kernel.org to add your device to a proper driver.
+> [   25.442869] usbserial_generic 1-1:1.3: generic converter detected
+> [   25.449323] usb 1-1: generic converter now attached to ttyUSB2
+> [   25.455865] usb-storage 1-1:1.4: USB Mass Storage device detected
+> [   25.923729] scsi host0: usb-storage 1-1:1.4
+> [   25.928826] usb-storage 1-1:1.5: USB Mass Storage device detected
+> [   25.983950] scsi host1: usb-storage 1-1:1.5
+> [   26.986403] scsi 0:0:0:0: CD-ROM            HUAWEI   Mass Storage
+>   2.31 PQ: 0 ANSI: 2
+> [   27.074885] scsi 1:0:0:0: Direct-Access     HUAWEI   SD Storage
+>   2.31 PQ: 0 ANSI: 2
+> [   27.089310] sd 1:0:0:0: [sda] Attached SCSI removable disk
+
+Did you run the usb-switch program (or whatever that thing is called
+that toggles devices out of mass-storage mode back into modem mode), on
+this device?  That should solve this issue, right?
+
+thanks,
+
+greg k-h
