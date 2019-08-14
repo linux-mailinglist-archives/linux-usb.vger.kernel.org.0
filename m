@@ -2,65 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F13DE8D438
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 15:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AA78D44A
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 15:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727971AbfHNNIA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 09:08:00 -0400
-Received: from mx2.suse.de ([195.135.220.15]:38716 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726365AbfHNNH6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Aug 2019 09:07:58 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id CA611AFE1;
-        Wed, 14 Aug 2019 13:07:57 +0000 (UTC)
-Message-ID: <1565788073.25764.8.camel@suse.com>
-Subject: Re: AW: Strange behaviour of D-Link DUB-1312 USB 3.0 Adapters
-From:   Oliver Neukum <oneukum@suse.com>
-To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Date:   Wed, 14 Aug 2019 15:07:53 +0200
-In-Reply-To: <f5e22fea4e1c4baeb2fc98d324ad9060@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <db0e8930ea94408ca7a38192ddfd203f@SVR-IES-MBX-03.mgc.mentorg.com>
-         <1565771508.25764.3.camel@suse.com>
-         <f5e22fea4e1c4baeb2fc98d324ad9060@SVR-IES-MBX-03.mgc.mentorg.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727654AbfHNNMa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 09:12:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:54390 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726263AbfHNNM3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Aug 2019 09:12:29 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55C9028;
+        Wed, 14 Aug 2019 06:12:29 -0700 (PDT)
+Received: from [10.1.197.57] (e110467-lin.cambridge.arm.com [10.1.197.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D950B3F706;
+        Wed, 14 Aug 2019 06:12:27 -0700 (PDT)
+Subject: Re: kexec on rk3399
+To:     Vicente Bergas <vicencb@gmail.com>, Felipe Balbi <balbi@kernel.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Will Deacon <will.deacon@arm.com>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <ebcb52be-2063-4e2c-9a09-fdcacb94f855@gmail.com>
+ <c6993a1e-6fc2-44ab-b59e-152142e2ff4d@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <0408cb6c-1b16-eacb-d47e-17f4ff89e2b8@arm.com>
+Date:   Wed, 14 Aug 2019 14:12:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <c6993a1e-6fc2-44ab-b59e-152142e2ff4d@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 14.08.2019, 08:56 +0000 schrieb  Schmid, Carsten :
-
-> > This is on a lower layer than ax88179. This comes from xhci_hcd.
-> > Is this a regression?
-> > 
+On 14/08/2019 13:53, Vicente Bergas wrote:
+> On Monday, July 22, 2019 4:31:27 PM CEST, Vicente Bergas wrote:
+>> Hi, i have been running linux on rk3399 booted with kexec fine until 5.2
+>> From 5.2 onwards, there are memory corruption issues as reported here:
+>> http://lkml.iu.edu/hypermail/linux/kernel/1906.2/07211.html
+>> kexec has been identified as the principal reason for the issues.
+>>
+>> It turns out that kexec has never worked reliably on this platform,
+>> i was just lucky until recently.
+>>
+>> Please, can you provide some directions on how to debug the issue?
 > 
-> I don't think its a regression.
+> Thank you all for your suggestions on where the issue could be.
+> 
+> It seems that it was the USB driver.
+> Now using v5.2.8 booted with kexec from v5.2.8 with a workaround and
+> so far so good. It is being tested on the Sapphire board.
+> 
+> The workaround is:
+> --- a/drivers/usb/dwc3/dwc3-of-simple.c
+> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
+> @@ -133,6 +133,13 @@
+>      return 0;
+> }
+> 
+> +static void dwc3_of_simple_shutdown(struct platform_device *pdev)
+> +{
+> +    struct dwc3_of_simple *simple = platform_get_drvdata(pdev);
+> +
+> +    reset_control_assert(simple->resets);
+> +}
+> +
+> static int __maybe_unused dwc3_of_simple_runtime_suspend(struct device 
+> *dev)
+> {
+>      struct dwc3_of_simple    *simple = dev_get_drvdata(dev);
+> @@ -190,6 +197,7 @@
+> static struct platform_driver dwc3_of_simple_driver = {
+>      .probe        = dwc3_of_simple_probe,
+>      .remove        = dwc3_of_simple_remove,
+> +    .shutdown    = dwc3_of_simple_shutdown,
+>      .driver        = {
+>          .name    = "dwc3-of-simple",
+>          .of_match_table = of_dwc3_simple_match,
+> 
+> If this patch is OK after review i can resubmit it as a pull request.
+> Should a similar change be applied to drivers/usb/dwc3/core.c ?
 
-It would be better to know than to assume.
+This particular change looks like it's implicitly specific to RK3399, 
+which wouldn't be ideal. Presumably if the core dwc3 driver implemented 
+shutdown correctly (echoing parts of dwc3_remove(), I guess) then the 
+glue layers shouldn't need anything special anyway.
 
-> Is there something i can do to force an error message to be seen
-> when the ETH2USB adapter stalls?
-
-You can activate dynamic debugging for the xhci_hcd module
-Remember that no data to transfer is not an error as such.
-
-> My current assumption is that the signal quality of the USB port is at a
-> corner case, and therefore some "better" Adapters work, some "bad ones"
-> don't. But as there is no error message seen in the dmesg, i am somehow lost.
-
-Two things you can do:
-
-1. Generate a usbmon trace (it will be gigantic though)
-2. Activate dynamic debugging for the xhci_hcd module
-
-
-	Regards
-		Oliver
-
+Robin.
