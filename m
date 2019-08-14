@@ -2,103 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1884B8D232
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 13:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA518D24E
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 13:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727058AbfHNLcf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 07:32:35 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:38796 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726722AbfHNLce (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 07:32:34 -0400
-Received: by mail-pf1-f193.google.com with SMTP id o70so8070725pfg.5
-        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 04:32:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MF7jMNepz1wdVPgQ1SCooo7k7btOrltx/wKQg+y/GsA=;
-        b=cUSmaBFdYOwqXrkSpi2SHCWiWNzTtlXihjcmXOVqkDl+X3n5d6peoCGvuYwgX64MqL
-         3w2UzzDyfZu0hfAU0lFABuw+Jx2QQySxZ8wFRwIlGIY7OxsvXkuM24aClrgd5BDVkt3S
-         WZWQjzicuFTY2WaLJVE4TowEXGrnoyST9NVe8UpN5Hq+5g9Y7NTDxGNJ9pj82Xev2xou
-         ImULti9r2uMXMeGwdPlBd119/jITjOHMHvdG6iACS1VVifw2mwiInWCMfp4BhMf/hxoH
-         fysDbWyizAW+Mp9h1asFijLvf66MdVAAiwQXyIBRQB6ViWm+rix8TlfWqFOBiu6f24pG
-         vriw==
+        id S1727157AbfHNLiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 07:38:06 -0400
+Received: from mail-ot1-f72.google.com ([209.85.210.72]:56427 "EHLO
+        mail-ot1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727010AbfHNLiG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 07:38:06 -0400
+Received: by mail-ot1-f72.google.com with SMTP id q22so94845485otl.23
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 04:38:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MF7jMNepz1wdVPgQ1SCooo7k7btOrltx/wKQg+y/GsA=;
-        b=B12tsPrYSeomge560EFDaIe3C/STLCLJRSjBwFsnbQMGXXmxR0Dmj8damIq8VCaJ5M
-         aQah06DzhPZSRscRTQAEyXtPQD6hbWw8zX6+/QVM1+55+p6lKXrcPFU+miRpnk0jOhTx
-         /GD0xNTuJpPAZMDib9PTzysh2e82h6bTL7yi0fjLpeigadnd64An03m2rHhQNk5rlk8Z
-         sKGcNoOGQXfmubERksfcKZBipYQmI2BXxk6SCMlugNs/xg/vossDJz+ozot0GKcTXARx
-         t821hG4lW1tHtfMt1i1MZiqQJEENAppfhjYJKf+Z8qgUo+0xr7jFnclfOjbdecCTOIun
-         RHFQ==
-X-Gm-Message-State: APjAAAUfGV95zgi362LfpGw7aKtoJqroTUrwpUtOPjvKHrp78GQqftpX
-        JYdcQ5hv3u28Xp+aeFx5EeMqHvpJI/EYmWwIzjS/MA==
-X-Google-Smtp-Source: APXvYqxa1i+/yJ7X44W26il0CSBQveyXOF7jDDdUxdID5l1/hjOMDzF9/5eHbAzZ0E9FEdefJrW5A8OnVzmLhKHHRo4=
-X-Received: by 2002:a17:90a:858c:: with SMTP id m12mr6772187pjn.129.1565782353721;
- Wed, 14 Aug 2019 04:32:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=YWQkpPFDkZrCtHRJpBrQhhdaTaxg9rth8B7pR83gTLY=;
+        b=IWLc+aX6RLz3/DBtixOOkkbbenSRbjFj/3bKrUyNbopMTGbDCmt3mOoZL4/vsGBFn2
+         zeJPVVzU8NSqlJAQdbQirxdvd6jRS8rQPs8mA6OU4IShgm9X2tNUDlMtDJ+zJFbh152k
+         0Q8Tt3fopodb7vIvFWG8Jq/HOfMzpcVv6Mbdh0S7ZFYNaBm3CqKNkW4Jr16OzIIJnu2D
+         vl0PdHHAzVIftaX9cCKqezV0tI55ZsVMEjOweXXm9E05OxIg+cb7h4nez0m/VlLTrOrx
+         rbFUkC+Uo80v2nzdrjr0+sk4ORiM5qO6Bphdrf3PuXV7LLlkId8/d86qiefEws1PMjhu
+         r4Gw==
+X-Gm-Message-State: APjAAAWCUIqAfleoUphXzUEqFy3msdpXmrz9Dxtx3ckyZnC0Il7oENM3
+        yzz0Uu+I8+X/mvDqoeaOowszaV2WPaaHxGzCDjj1u8BW+hel
+X-Google-Smtp-Source: APXvYqzn1jlyElPyeuZyrEOQDiA7iCHtsdE5gE/FFFK+D7+LHT+5Gzd46ohTJEhcvLbd7I10L8kQRQINURwT6Zh1zJDYSGji9CjP
 MIME-Version: 1.0
-References: <CAAeHK+zPDgvDr_Bao9dz_7hGEg+Ud6-tj7pZaihKeYHJ8M386Q@mail.gmail.com>
- <00000000000054f8bd058ddfa341@google.com> <CAAeHK+xZRH9-ue0QyEdiWmbFJF6P3RXMud+tE6t3x6Orcxnbkg@mail.gmail.com>
- <20190813205104.pnyan3kafz26wsse@gofer.mess.org>
-In-Reply-To: <20190813205104.pnyan3kafz26wsse@gofer.mess.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 14 Aug 2019 13:32:22 +0200
-Message-ID: <CAAeHK+y3MHoeAgOtAW0pTaTBFeVzXmNpCnazsYT0wJMqhmzd0w@mail.gmail.com>
-Subject: Re: KASAN: global-out-of-bounds Read in dvb_pll_attach
-To:     Sean Young <sean@mess.org>
-Cc:     syzbot <syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com>,
-        bnvandana@gmail.com, allison@lohutok.net, hverkuil-cisco@xs4all.nl,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        rfontana@redhat.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>, tskd08@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a6b:ed01:: with SMTP id n1mr22583424iog.255.1565782685518;
+ Wed, 14 Aug 2019 04:38:05 -0700 (PDT)
+Date:   Wed, 14 Aug 2019 04:38:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c4157e0590123002@google.com>
+Subject: divide error in usbtmc_generic_read
+From:   syzbot <syzbot+55b0304b360654a7537b@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        guido.kiener@rohde-schwarz.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, steve_bayless@keysight.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 10:51 PM Sean Young <sean@mess.org> wrote:
->
-> On Tue, Aug 13, 2019 at 03:22:49PM +0200, Andrey Konovalov wrote:
-> > On Wed, Jul 17, 2019 at 2:29 PM syzbot
-> > <syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot has tested the proposed patch and the reproducer did not trigger
-> > > crash:
-> > >
-> > > Reported-and-tested-by:
-> > > syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com
-> > >
-> > > Tested on:
-> > >
-> > > commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=d90745bdf884fc0a
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > patch:          https://syzkaller.appspot.com/x/patch.diff?x=1454f4d0600000
-> > >
-> > > Note: testing is done by a robot and is best-effort only.
-> >
-> > Hi bnvandana,
-> >
-> > Could you submit this patch? Syzbot testing shows that is fixes the issue.
->
-> The patch had issues (see discussion in the thread). I created this patch
-> but I see now I did not include the correct Reported-by: tag.
->
-> https://www.mail-archive.com/linux-media@vger.kernel.org/msg148889.html
+Hello,
 
-No problem, we can mark the fix manually:
+syzbot found the following crash on:
 
-#syz fix: media: dvb-frontends: use ida for pll number
+HEAD commit:    d0847550 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=16295d4a600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
+dashboard link: https://syzkaller.appspot.com/bug?extid=55b0304b360654a7537b
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1288a31c600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15282e86600000
 
-Thanks!
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+55b0304b360654a7537b@syzkaller.appspotmail.com
+
+divide error: 0000 [#1] SMP KASAN
+CPU: 1 PID: 1761 Comm: syz-executor063 Not tainted 5.3.0-rc4+ #26
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:usbtmc_generic_read+0x135/0x1190 drivers/usb/class/usbtmc.c:816
+Code: 48 c1 ea 03 0f b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2  
+0f 85 50 08 00 00 41 0f b7 6e 34 31 d2 31 ff 8b 44 24 28 <f7> f5 89 d6 41  
+89 d4 e8 2f 54 c9 fd 44 8b 6c 24 28 45 85 e4 44 89
+RSP: 0018:ffff8881d2b77a58 EFLAGS: 00010246
+RAX: 0000000000000002 RBX: 000000004f894bad RCX: ffffffff837487cd
+RDX: 0000000000000000 RSI: ffffffff837487da RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffff8881d20a0000 R09: ffffed103a56ef90
+R10: ffffed103a56ef8f R11: 0000000000000003 R12: ffff8881d08e7180
+R13: 0000000020000000 R14: ffff8881d0404c80 R15: ffff8881d08e7180
+FS:  0000555555b74880(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000006cc090 CR3: 00000001d615e000 CR4: 00000000001406e0
+Call Trace:
+  usbtmc_ioctl_generic_read drivers/usb/class/usbtmc.c:1029 [inline]
+  usbtmc_ioctl+0x27d/0x2ab0 drivers/usb/class/usbtmc.c:2089
+  vfs_ioctl fs/ioctl.c:46 [inline]
+  file_ioctl fs/ioctl.c:509 [inline]
+  do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
+  ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
+  __do_sys_ioctl fs/ioctl.c:720 [inline]
+  __se_sys_ioctl fs/ioctl.c:718 [inline]
+  __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4419a9
+Code: e8 8c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 cb 08 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffd0abd6738 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00000000004419a9
+RDX: 0000000020000000 RSI: 00000000c0145b0e RDI: 0000000000000004
+RBP: 000000000000a984 R08: 000000000000000f R09: 00000000004002c8
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402700
+R13: 0000000000402790 R14: 0000000000000000 R15: 0000000000000000
+Modules linked in:
+---[ end trace a91d281a4d83213c ]---
+RIP: 0010:usbtmc_generic_read+0x135/0x1190 drivers/usb/class/usbtmc.c:816
+Code: 48 c1 ea 03 0f b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2  
+0f 85 50 08 00 00 41 0f b7 6e 34 31 d2 31 ff 8b 44 24 28 <f7> f5 89 d6 41  
+89 d4 e8 2f 54 c9 fd 44 8b 6c 24 28 45 85 e4 44 89
+RSP: 0018:ffff8881d2b77a58 EFLAGS: 00010246
+RAX: 0000000000000002 RBX: 000000004f894bad RCX: ffffffff837487cd
+RDX: 0000000000000000 RSI: ffffffff837487da RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffff8881d20a0000 R09: ffffed103a56ef90
+R10: ffffed103a56ef8f R11: 0000000000000003 R12: ffff8881d08e7180
+R13: 0000000020000000 R14: ffff8881d0404c80 R15: ffff8881d08e7180
+FS:  0000555555b74880(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000006cc090 CR3: 00000001d615e000 CR4: 00000000001406e0
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
