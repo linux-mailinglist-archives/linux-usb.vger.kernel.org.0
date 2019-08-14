@@ -2,204 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 020508D4E5
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 15:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD938D52F
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 15:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbfHNNi3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 09:38:29 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:47112 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbfHNNi3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 09:38:29 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7EDcKTR075923;
-        Wed, 14 Aug 2019 08:38:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1565789900;
-        bh=aThyHL8ApwvdhvY3BnDVs0kFkolqrKiAquo0tskXkcg=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=IdYwQLhGto2moxtF4RXiQKJEPdAyT1FbAHYmlU/u5t+GnknGuqF2ookzKY2qbPLJI
-         bvcjQQv6PzOzK+0lxODlqcqlpgf5W1WHQIUp/7wTpK3pWTpx4UGv1jDZ+l9DI6KbHo
-         OzPdWRE3N7IZnctJF06lL1Rti/bm2x1L9Q2f1OXk=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7EDcKi0130999
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 14 Aug 2019 08:38:20 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 14
- Aug 2019 08:38:20 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 14 Aug 2019 08:38:20 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7EDcHrH100252;
-        Wed, 14 Aug 2019 08:38:17 -0500
-Subject: Re: [PATCH v10 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
-To:     Pawel Laszczak <pawell@cadence.com>, <felipe.balbi@linux.intel.com>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <jbergsagel@ti.com>,
-        <nsekhar@ti.com>, <nm@ti.com>, <sureshp@cadence.com>,
-        <jpawar@cadence.com>, <kurahul@cadence.com>, <aniljoy@cadence.com>
-References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
- <1563733939-21214-6-git-send-email-pawell@cadence.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <2c5ed505-6fee-1816-e5bb-59a9ed96fb70@ti.com>
-Date:   Wed, 14 Aug 2019 16:38:17 +0300
+        id S1727975AbfHNNmu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 09:42:50 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:37828 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727958AbfHNNmu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 09:42:50 -0400
+Received: by mail-ed1-f68.google.com with SMTP id f22so7119807edt.4
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 06:42:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0HsquNrNKiMbr5FDDummx4kovw9WYQfo6fm7gr2n+lo=;
+        b=OIgvi78myB7p0tJHpE1rOR1xt5ncnz4IK9xF3HE/aB8SWpRzwqLd8LFdkM9W6lTiTg
+         V+Lby0sTSesMRULn2uU/K8xq45kSY/J9PpahFTC5EQkcmtrMKLrIh6UTtQRaiUNf+h0+
+         t1A+Bar42/XfZhzTLbhsinNFHLpDZ2RrS8EZmtGiUpi+M38op8lqsIBnfRRPXWLLVvzz
+         UZpW99NBqmsEoXxDlCBsD6BxBQEj5djjoYevT0X+ADH6CFIhHCnA8X/BmAs6NZMS8/Ra
+         MX5ovEAEo1pgJf1CiCXmtrRmRT9BV/AH3Omx7OOy2CPx1B8pXhGx37mLVqgqLAOHfqwu
+         Sijg==
+X-Gm-Message-State: APjAAAUuV/xZPBDpNWAdhKf5BQOkpzaZIDXx+KLtlbblYPx1s8qNzBxh
+        jhgZHKnRnk1lC426THUzZKT+IQ==
+X-Google-Smtp-Source: APXvYqzgD7tzSUMCupou4DFUUVf0PmPBWuMVp7BchUmB9yHfjojZwOpuIr/o4daHA3x/qYTDpeyDuw==
+X-Received: by 2002:a50:b3cb:: with SMTP id t11mr27650559edd.203.1565790168489;
+        Wed, 14 Aug 2019 06:42:48 -0700 (PDT)
+Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
+        by smtp.gmail.com with ESMTPSA id b40sm4231311edc.53.2019.08.14.06.42.47
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Wed, 14 Aug 2019 06:42:47 -0700 (PDT)
+Subject: Re: [PATCH 0/3] usb: typec: fusb302: Small changes
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190814132419.39759-1-heikki.krogerus@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <a826c351-4e9d-8a33-ad0f-764d13aeb1ed@redhat.com>
+Date:   Wed, 14 Aug 2019 15:42:46 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1563733939-21214-6-git-send-email-pawell@cadence.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20190814132419.39759-1-heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
-
-On 21/07/2019 21:32, Pawel Laszczak wrote:
-> This patch introduce new Cadence USBSS DRD driver to Linux kernel.
+On 14-08-19 15:24, Heikki Krogerus wrote:
+> Hi,
 > 
-> The Cadence USBSS DRD Controller is a highly configurable IP Core which
-> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
-> Host Only (XHCI)configurations.
-> 
-> The current driver has been validated with FPGA platform. We have
-> support for PCIe bus, which is used on FPGA prototyping.
-> 
-> The host side of USBSS-DRD controller is compliant with XHCI
-> specification, so it works with standard XHCI Linux driver.
-> 
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->  drivers/usb/Kconfig                |    2 +
->  drivers/usb/Makefile               |    2 +
->  drivers/usb/cdns3/Kconfig          |   46 +
->  drivers/usb/cdns3/Makefile         |   17 +
->  drivers/usb/cdns3/cdns3-pci-wrap.c |  203 +++
->  drivers/usb/cdns3/core.c           |  554 +++++++
->  drivers/usb/cdns3/core.h           |  109 ++
->  drivers/usb/cdns3/debug.h          |  171 ++
->  drivers/usb/cdns3/debugfs.c        |   87 ++
->  drivers/usb/cdns3/drd.c            |  390 +++++
->  drivers/usb/cdns3/drd.h            |  166 ++
->  drivers/usb/cdns3/ep0.c            |  914 +++++++++++
->  drivers/usb/cdns3/gadget-export.h  |   28 +
->  drivers/usb/cdns3/gadget.c         | 2338 ++++++++++++++++++++++++++++
->  drivers/usb/cdns3/gadget.h         | 1321 ++++++++++++++++
->  drivers/usb/cdns3/host-export.h    |   28 +
->  drivers/usb/cdns3/host.c           |   71 +
->  drivers/usb/cdns3/trace.c          |   11 +
->  drivers/usb/cdns3/trace.h          |  493 ++++++
->  19 files changed, 6951 insertions(+)
->  create mode 100644 drivers/usb/cdns3/Kconfig
->  create mode 100644 drivers/usb/cdns3/Makefile
->  create mode 100644 drivers/usb/cdns3/cdns3-pci-wrap.c
->  create mode 100644 drivers/usb/cdns3/core.c
->  create mode 100644 drivers/usb/cdns3/core.h
->  create mode 100644 drivers/usb/cdns3/debug.h
->  create mode 100644 drivers/usb/cdns3/debugfs.c
->  create mode 100644 drivers/usb/cdns3/drd.c
->  create mode 100644 drivers/usb/cdns3/drd.h
->  create mode 100644 drivers/usb/cdns3/ep0.c
->  create mode 100644 drivers/usb/cdns3/gadget-export.h
->  create mode 100644 drivers/usb/cdns3/gadget.c
->  create mode 100644 drivers/usb/cdns3/gadget.h
->  create mode 100644 drivers/usb/cdns3/host-export.h
->  create mode 100644 drivers/usb/cdns3/host.c
->  create mode 100644 drivers/usb/cdns3/trace.c
->  create mode 100644 drivers/usb/cdns3/trace.h
-> 
+> This series removes the deprecated fusb302 specific properties, and
+> stops using struct tcpc_config in the driver.
 
-<snip>
+Series looks good to me:
 
-> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-> new file mode 100644
-> index 000000000000..291f08be56fe
-> --- /dev/null
-> +++ b/drivers/usb/cdns3/gadget.c
-> @@ -0,0 +1,2338 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Cadence USBSS DRD Driver - gadget side.
-> + *
-> + * Copyright (C) 2018-2019 Cadence Design Systems.
-> + * Copyright (C) 2017-2018 NXP
-> + *
-> + * Authors: Pawel Jez <pjez@cadence.com>,
-> + *          Pawel Laszczak <pawell@cadence.com>
-> + *          Peter Chen <peter.chen@nxp.com>
-> + */
-> +
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-<snip>
+This has a small conflict with my
+"[PATCH] usb: typec: fusb302: Call fusb302_debugfs_init earlier"
+patch.
 
-> +
-> +static void cdns3_gadget_config(struct cdns3_device *priv_dev)
-> +{
-> +	struct cdns3_usb_regs __iomem *regs = priv_dev->regs;
-> +	u32 reg;
-> +
-> +	cdns3_ep0_config(priv_dev);
-> +
-> +	/* enable interrupts for endpoint 0 (in and out) */
-> +	writel(EP_IEN_EP_OUT0 | EP_IEN_EP_IN0, &regs->ep_ien);
-> +
-> +	/*
-> +	 * Driver needs to modify LFPS minimal U1 Exit time for DEV_VER_TI_V1
-> +	 * revision of controller.
-> +	 */
-> +	if (priv_dev->dev_ver == DEV_VER_TI_V1) {
-> +		reg = readl(&regs->dbg_link1);
-> +
-> +		reg &= ~DBG_LINK1_LFPS_MIN_GEN_U1_EXIT_MASK;
-> +		reg |= DBG_LINK1_LFPS_MIN_GEN_U1_EXIT(0x55) |
-> +		       DBG_LINK1_LFPS_MIN_GEN_U1_EXIT_SET;
-> +		writel(reg, &regs->dbg_link1);
-> +	}
-> +
-> +	/*
-> +	 * By default some platforms has set protected access to memory.
-> +	 * This cause problem with cache, so driver restore non-secure
-> +	 * access to memory.
-> +	 */
-> +	reg = readl(&regs->dma_axi_ctrl);
+Since we've agreed to do the rootdir leak fix as a separate patch
+(which I will write when I find some time probably tomorrow), I
+was wondering if we can merge my patch first. I would like to see
+a "Cc: stable@vger.kernel.org" added to my patch and then it would
+be good to have it merged first.
 
-Why read the reg at all if you are just overwriting it below?
+Regardless we should probable prepare one series with all patches
+for Greg to make this easy to merge for him.
 
-> +	reg = DMA_AXI_CTRL_MARPROT(DMA_AXI_CTRL_NON_SECURE) |
-> +	      DMA_AXI_CTRL_MAWPROT(DMA_AXI_CTRL_NON_SECURE);
+Shall I combine this series + my fix + my to be written fix into
+1 series, test that on actual hardware and then post that?
 
+Regards,
 
-Otherwise you need to read modify only necessary bits and then write.
-i.e.
-	#define DMA_AXI_CTRL_MAPROT_MASK 0x3
-	reg &= ~(DMA_AXI_CTRL_MARPROT(DMA_AXI_CTRL_MAPROT_MASK) |
-		 DMA_AXI_CTRL_MARPROT(DMA_AXI_CTRL_MAPROT_MASK))
-	reg |= DMA_AXI_CTRL_MARPROT(DMA_AXI_CTRL_NON_SECURE) |
-	       DMA_AXI_CTRL_MAWPROT(DMA_AXI_CTRL_NON_SECURE);
-
-> +	writel(reg, &regs->dma_axi_ctrl);
-> +
-> +	/* enable generic interrupt*/
-> +	writel(USB_IEN_INIT, &regs->usb_ien);
-> +	writel(USB_CONF_CLK2OFFDS | USB_CONF_L1DS, &regs->usb_conf);
-> +
-> +	cdns3_configure_dmult(priv_dev, NULL);
-> +
-> +	cdns3_gadget_pullup(&priv_dev->gadget, 1);
-> +}
-> +
-
-<snip>
-
-cheers,
--roger
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Hans
