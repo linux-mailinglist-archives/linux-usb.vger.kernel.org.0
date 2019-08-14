@@ -2,99 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A035E8DFF6
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 23:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9688E075
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 00:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729195AbfHNVcO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 17:32:14 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:49532 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728188AbfHNVcO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 17:32:14 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 0D07E6086B; Wed, 14 Aug 2019 21:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1565818333;
-        bh=V1w5/Cl6FN+mlyKiklwwibF13l54ZK0EiCg73ykYHa8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lpqyJ6l8//MaOYD1/ISranQPfz0kHDc/qXDvcWEgdIjW887ERNvSQH+I5631iH4sy
-         gk5p5s4dkc/d8sbJ7qU/bVYIabMyAN8VSlBSf/bl2kJVLA51G0q5/lKh1j5faRHtPM
-         skocUykH6h7OOJPmeVHaAaW2M8jxI4GxuRtwwimE=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A8C5960128;
-        Wed, 14 Aug 2019 21:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1565818329;
-        bh=V1w5/Cl6FN+mlyKiklwwibF13l54ZK0EiCg73ykYHa8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EYWlmCrkJrEF7O2x1Rz6kqEVeeO5zBhgMZrB/wHGbMHSiA3c2UvantKou9Ic3O4tH
-         ii+XHWhpEukCsABe9g1Y8Nt4fcmJ2+jnx4jfNYgHk0w7xfNqZd7tCDsHMjsb3twTB5
-         uqY0ogKNcSLy6iEnnQE15J9Sj2p5102BxLzGolUM=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A8C5960128
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-Date:   Wed, 14 Aug 2019 14:32:03 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Wenwen Wang <wenwen@cs.uga.edu>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:USB \"USBNET\" DRIVER FRAMEWORK" <netdev@vger.kernel.org>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: usbnet: fix a memory leak bug
-Message-ID: <20190814213203.GA9754@jackp-linux.qualcomm.com>
-References: <1565804493-7758-1-git-send-email-wenwen@cs.uga.edu>
+        id S1729948AbfHNWOY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 18:14:24 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:46991 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729890AbfHNWOV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 18:14:21 -0400
+Received: by mail-qt1-f193.google.com with SMTP id j15so320624qtl.13
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 15:14:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
+        b=l5PC+4msT+R1VOq1FIInu61dIh2STHPN9aSBt/Y5M3n644FfA169IT6wzP+sfbruwG
+         5vHd8QNfmmF7FOlV1OW4+1ls9+argQAW0MZ9696kjqRFjMtNiRxkPVvom8CpuMz6+P3J
+         lvnykAE+N5ClLjt8+21Oenlj55mmWn47h6bOufTUj3iAyACG+cL0ImoQgj5m6u3w1/lr
+         fVPm9fs++0X3Li7mpOQ13No26+jYpH9OobXYps5GGnrfpp0Xq6qTsPtsJRMHzlRsuSi2
+         Q5RuPSHMeFGhG1MzboDTj+tp2IBpQDy9TN5wUYjWC528WeGARQxpLHz2F9meUvIkEvkQ
+         sSPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
+        b=AitKhFiAfIKjR/CriPtaD6cKk8cH1JxI47lkdmqreAo268fUzAqBF4uKQD9o6ABzA9
+         /Iq7wKoQQj5IcM6JeBC1eiCTtIOqIc3D4SUeo3r1oqBhFuVUBfpsB68bVK2bEZ14FT4W
+         bL2NU3eEpUh3IZPXehDKfdD4JZDxdzSAyQxgvKL9vy18OwJdxUpiVZ8T8iibbIspSQsd
+         uajWh822j8d9Pe06HEXjJS5PmzufdNPwfsDUdUfEyqF2SaAG7Zj4ZyTRaL2++M8tm/5B
+         UhqGHRgcTmhLjNvoVF/Xa5FOm674tzHGdmYzqEEpbpNsKanP4Gm22Yk6YXtCxz12YcXY
+         qtXw==
+X-Gm-Message-State: APjAAAXbgOTZF6l30xLFHYIdzbXMrAWas2EGBYljimrd6ke6k7ghH3Tk
+        AWkZCuJRjJG3wKtjhdQI/E6CtoSvIWAGWJ3ixRI=
+X-Google-Smtp-Source: APXvYqwvEwq36YC/YcFdGthiFQqEswOUmu8y33AXL4ty34gsygcaTEjmhvj04/dFUfa1vFoE719aJcDSjuFoUwkSVes=
+X-Received: by 2002:aed:3826:: with SMTP id j35mr1333309qte.54.1565820860049;
+ Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1565804493-7758-1-git-send-email-wenwen@cs.uga.edu>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Wed, 14 Aug 2019 15:14:19
+ -0700 (PDT)
+Reply-To: Katerinejones19@gmail.com
+From:   "MS. MARYANNA B. THOMASON" <westernunion.benin982@gmail.com>
+Date:   Wed, 14 Aug 2019 23:14:19 +0100
+Message-ID: <CAP=nHB+U+By16HzeUHiDfPT5KNtemGam6gniZhL2s7_itZ3F8w@mail.gmail.com>
+Subject: TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
+ THIS ATM CARD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 12:41:33PM -0500, Wenwen Wang wrote:
-> In usbnet_start_xmit(), 'urb->sg' is allocated through kmalloc_array() by
-> invoking build_dma_sg(). Later on, if 'CONFIG_PM' is defined and the if
-> branch is taken, the execution will go to the label 'deferred'. However,
-> 'urb->sg' is not deallocated on this execution path, leading to a memory
-> leak bug.
-> 
-> Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
-> ---
->  drivers/net/usb/usbnet.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> index 72514c4..f17fafa 100644
-> --- a/drivers/net/usb/usbnet.c
-> +++ b/drivers/net/usb/usbnet.c
-> @@ -1433,6 +1433,7 @@ netdev_tx_t usbnet_start_xmit (struct sk_buff *skb,
->  		usb_anchor_urb(urb, &dev->deferred);
->  		/* no use to process more packets */
->  		netif_stop_queue(net);
-> +		kfree(urb->sg);
->  		usb_put_urb(urb);
+ATTN DEAR PARCEL BENEFICIARY.
 
-The URB itself is not getting freed here; it is merely added to the
-anchor list and will be submitted later upon usbnet_resume(). Therefore
-freeing the SG list is premature and incorrect, as it will get freed in
-either the tx_complete/tx_done path or upon URB submission failure.
+I AM CATHY JONES,DIPLOMATIC AGENT ASIGNED ON THE DELIVERY OF YOUR ATM
+CARD THROUGH MS. MARYANNA B. THOMASON, DHL MANAGEMENT DIRECTOR NEW
+YORK.
+TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
+THIS ATM CARD, So before i deliver I want you to send me.
+official diplomatic agent delivery fee sum of $150.00 us
+ only. I am here at JFK Airport,Florida. USA
 
->  		spin_unlock_irqrestore(&dev->txq.lock, flags);
->  		netdev_dbg(dev->net, "Delaying transmission for resumption\n");
+SEND THIS FEE BY WESTERN UNION OR MONEY WITH RECEIVER'S NAME AND ADDRESS BELOW.
 
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+RECEIVER'S NAME-----------------ERROL PRINGLE
+ADDRESS----------------3500 OLD DENTON RD APT 208; CARROLLTON, TEXAS 75007
+COUNTRY----------------USA
+AMOUNT--------------------$150.00 ONLY
+TEST QUESTION----------------WHO IS THE CREATOR
+ANSWER------------------GOD
+ meanwhile this $150.00 is required by the Custom Service,USA Homeland
+Security,for protection of your delivery, it will make the ATM CARD
+and funds worth $15.8MILLION US DOLLARS secure, Beleiev me, this is my
+word, remark my word,you will receive your delivery from me, Mrs.
+Cathy Jones once you send this only $150.00 today.
+I WAIT ON YOUR PAYMENT CONFIRMATION, ONCE I GOT YOUR PAYMENT, I WILL
+FINALLY ARRIVE TO YOUR NEAREST ADDRESS. today
+THANKS AND MAY GOD BLESS  YOU
+CATHY JONES,DIPLOMATIC AGENT
+EMAIL; katerinejones19@gmail.com
+CALL OR TEXT ME, DIPLOMATIC AGENT MS. CATHY JONES
+Phone Number; (408) 650-6103,
