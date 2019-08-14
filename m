@@ -2,145 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EF38D769
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 17:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8968D78D
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Aug 2019 17:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726585AbfHNPtT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Aug 2019 11:49:19 -0400
-Received: from foss.arm.com ([217.140.110.172]:56360 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726166AbfHNPtT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Aug 2019 11:49:19 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E0B2328;
-        Wed, 14 Aug 2019 08:49:17 -0700 (PDT)
-Received: from [10.1.197.57] (e110467-lin.cambridge.arm.com [10.1.197.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A26C3F694;
-        Wed, 14 Aug 2019 08:49:14 -0700 (PDT)
-Subject: Re: [PATCH 6/6] driver core: initialize a default DMA mask for
- platform device
-To:     Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     linux-arch@vger.kernel.org, Olav Kongas <ok@artecdesign.ee>,
-        Gavin Li <git@thegavinli.com>, linuxppc-dev@lists.ozlabs.org,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Geoff Levand <geoff@infradead.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-usb@vger.kernel.org, Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, Tony Prisk <linux@prisktech.co.nz>,
-        iommu@lists.linux-foundation.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Shawn Guo <shawnguo@kernel.org>, Bin Liu <b-liu@ti.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20190811080520.21712-1-hch@lst.de>
- <20190811080520.21712-7-hch@lst.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <fbea6e6d-7721-b51d-0501-582e8446e9c9@arm.com>
-Date:   Wed, 14 Aug 2019 16:49:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726525AbfHNP7y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Aug 2019 11:59:54 -0400
+Received: from mx07-00252a01.pphosted.com ([62.209.51.214]:1122 "EHLO
+        mx07-00252a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725828AbfHNP7y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Aug 2019 11:59:54 -0400
+Received: from pps.filterd (m0102628.ppops.net [127.0.0.1])
+        by mx07-00252a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7EFws7x014621
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 16:59:51 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=raspberrypi.org; h=mime-version :
+ from : date : message-id : subject : to : cc : content-type; s=pp;
+ bh=kAAlN0ErpO5xe7Xwc59QIKhEuf6yRMoCBWz21cXpwgs=;
+ b=PTmmdnQz3k6j934w37m5UoHbSeWgSUNXmYc831LYxjvHgEta+Dxlc+geHT0cZVWowICC
+ PudHR9iqy74i095pPYmU0FMZrnVzg2RY7NulUdoGI889XwsixZr6WQ7lcusb1DnseF9K
+ J2XZTWBhdZYhpkVoc+ExDivuDhrPTiUPgCM+zu2cBzVl4pGl16Yi4aO05rng8+GS7xq+
+ lvlFneNOzjTUYIG4g3s3qyn/1foGtYJ95Gz80Ex3Hq9ITITbUS13MIDwqGtgrJpBnt6z
+ tNzlK7z/2igXq6Tnb428Cy8SlleyG/GdeFWx5Yn3YmviFdd51RW5l7fPEUMQih7etYk9 Jg== 
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+        by mx07-00252a01.pphosted.com with ESMTP id 2ubfbbrw39-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK)
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 16:59:51 +0100
+Received: by mail-oi1-f198.google.com with SMTP id i132so39008777oif.2
+        for <linux-usb@vger.kernel.org>; Wed, 14 Aug 2019 08:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=kAAlN0ErpO5xe7Xwc59QIKhEuf6yRMoCBWz21cXpwgs=;
+        b=WUu0MfCafVoy1DqonprdkfhflT92RYD29lPcZRE65upeI3pEpUEoCeU7maiDtMBWcb
+         BxJqLh9JIABBifNyxxofKVu/Od9ds8qacLz4AQpz6Im2BAG/livmS2T1eThxw8xeRjEI
+         e83ziC9/+WrNs+qX1m3SLJRsm+EcVH2wJEiq+sJyby/jPU4MAz5BWZU0JjM9DgCnpard
+         dCY1yghlBCkQ4zJUu3K0RW+kwcCLlWSkq1OplDBxiDPEmMbAUNMmsq4/Z0IYpw2WZfza
+         r8K4mGK+gBjEEds6Ffoun/KXu+FC1iFeWeCdNi9W1dIjnBEhTX55fkWSyDdru2g+z9pd
+         d+yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=kAAlN0ErpO5xe7Xwc59QIKhEuf6yRMoCBWz21cXpwgs=;
+        b=LKyMxc7N2UmGd9U8YPD+JQ5bb3R8MwOsw0IRNkeOQM1DE73lW/RjcJfQOoOGAPXRmp
+         P/XcyxEzk+PzBVylkb/twGMOxozMWzzuiopznS/1jI1eBmDLjWrPH1e1kM9xUuBeaEe1
+         oOE6+rzVYOyIhsyd+DrbKUX5bdeRlfSYcyEbkQBrjYeCfDc5Fb8CJDoxQ+nM/4yiO+Gm
+         6oY8CgcxhGbt6grRpJ8lZrWwXSj1nJQZxybSEfPRY4chx3AhFVBSDB81V00CQUCyd5lQ
+         ixfHY1Qw5KrW9tr5Whz7g77CvW7MzfO8fuiZp/6/SSeDuPULBZzZunrw/wh08ZUoEYcX
+         SVzw==
+X-Gm-Message-State: APjAAAWOiF/sXCBvk21IBezYw5VaDayQCQ8VZRU/fYWeqZG6+/PXPrE9
+        t+nyZNA6DDDpFR6lvsXNOBaxXtdlVvl0Mk2dO7R/6QFGDb6ggZPHCAuAcK6g6hNvpA2vCfNWsOt
+        W/sZmOURo3xua+xgwrtBnMBqGCMD8hHYwjf4D
+X-Received: by 2002:a6b:ea02:: with SMTP id m2mr608530ioc.155.1565798389481;
+        Wed, 14 Aug 2019 08:59:49 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyNDUY4w+C3ICcg/nNXYIwACl12eaOQuRlcLNVJmZOy0WsMbJM/FGNQ3IroaV5RrjNLkI2WKMGzzpG3DbSWHJc=
+X-Received: by 2002:a6b:ea02:: with SMTP id m2mr608521ioc.155.1565798389318;
+ Wed, 14 Aug 2019 08:59:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190811080520.21712-7-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+From:   Jonathan Bell <jonathan@raspberrypi.org>
+Date:   Wed, 14 Aug 2019 16:59:36 +0100
+Message-ID: <CAPHs_J+G0jR5dMg1gVD0z60Zf4oZBikx6P9+B99-TA6m29DWGA@mail.gmail.com>
+Subject: dwc2 / Raspberry Pi - hardware bug for small transfers results in
+ memory corruption
+To:     linux-usb@vger.kernel.org
+Cc:     Minas Harutyunyan <hminas@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:5.22.84,1.0.8
+ definitions=2019-08-14_06:2019-08-14,2019-08-14 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/08/2019 09:05, Christoph Hellwig wrote:
-> We still treat devices without a DMA mask as defaulting to 32-bits for
-> both mask, but a few releases ago we've started warning about such
-> cases, as they require special cases to work around this sloppyness.
-> Add a dma_mask field to struct platform_object so that we can initialize
+As reported by one of our users here:
+https://github.com/raspberrypi/linux/issues/3148
 
-s/object/device/
+There is a bug when the dwc2 core receives USB data packets that are
+between 1 and 4 bytes in length - 4 bytes are always written to memory
+where the non-packet bytes are garbage.
 
-> the dma_mask pointer in struct device and initialize both masks to
-> 32-bits by default.  Architectures can still override this in
-> arch_setup_pdev_archdata if needed.
-> 
-> Note that the code looks a little odd with the various conditionals
-> because we have to support platform_device structures that are
-> statically allocated.
+This is easily reproducible by
+- Plugging a UVC-compliant webcam into a Raspberry Pi gen 1, 2 or 3 product
+- Running "v4l2-ctl -d 0 --all"
 
-This would be a good point to also get rid of the long-standing bodge in 
-platform_device_register_full().
+The camera's control ranges (brightness/contrast etc) are all queried
+by 1- or 2-byte control IN transfers. As 4 bytes get written to the
+URB's buffer, this results in the uvcvideo data struct containing the
+control information getting corrupted like so:
 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->   drivers/base/platform.c         | 15 +++++++++++++--
->   include/linux/platform_device.h |  1 +
->   2 files changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-> index ec974ba9c0c4..b216fcb0a8af 100644
-> --- a/drivers/base/platform.c
-> +++ b/drivers/base/platform.c
-> @@ -264,6 +264,17 @@ struct platform_object {
->   	char name[];
->   };
->   
-> +static void setup_pdev_archdata(struct platform_device *pdev)
+contrast 0x00980901 (int)    : min=0 max=64 step=1 default=57343 value=32
+saturation 0x00980902 (int)    : min=0 max=128 step=1 default=57343 value=105
+hue 0x00980903 (int)    : min=-40 max=40 step=1 default=-8193 value=0
+white_balance_temperature_auto 0x0098090c (bool)   : default=1 value=1
+gamma 0x00980910 (int)    : min=72 max=500 step=1 default=57343 value=100
+[etc]
 
-Bikeshed: painting the generic DMA API properties as "archdata" feels a 
-bit off-target :/
+We've implemented a downstream fix for dwc_otg[1] that just forces use
+of the dword alignment buffer mechanism (aka DMA bounce buffer), but
+dwc2 only uses a bounce buffer for split-IN transfers.
 
-> +{
-> +	if (!pdev->dev.coherent_dma_mask)
-> +		pdev->dev.coherent_dma_mask = DMA_BIT_MASK(32);
-> +	if (!pdev->dma_mask)
-> +		pdev->dma_mask = DMA_BIT_MASK(32);
-> +	if (!pdev->dev.dma_mask)
-> +		pdev->dev.dma_mask = &pdev->dma_mask;
-> +	arch_setup_pdev_archdata(pdev);
+I have two questions:
+1) Does this bug occur on non-Pi hardware?
+2) What's the easiest way to patch this for dwc2?
 
-AFAICS m68k's implementation of that arch hook becomes entirely 
-redundant after this change, so may as well go. That would just leave 
-powerpc's actual archdata, which at a glance looks like it could 
-probably be cleaned up with not *too* much trouble.
-
-Robin.
-
-> +};
-> +
->   /**
->    * platform_device_put - destroy a platform device
->    * @pdev: platform device to free
-> @@ -310,7 +321,7 @@ struct platform_device *platform_device_alloc(const char *name, int id)
->   		pa->pdev.id = id;
->   		device_initialize(&pa->pdev.dev);
->   		pa->pdev.dev.release = platform_device_release;
-> -		arch_setup_pdev_archdata(&pa->pdev);
-> +		setup_pdev_archdata(&pa->pdev);
->   	}
->   
->   	return pa ? &pa->pdev : NULL;
-> @@ -512,7 +523,7 @@ EXPORT_SYMBOL_GPL(platform_device_del);
->   int platform_device_register(struct platform_device *pdev)
->   {
->   	device_initialize(&pdev->dev);
-> -	arch_setup_pdev_archdata(pdev);
-> +	setup_pdev_archdata(pdev);
->   	return platform_device_add(pdev);
->   }
->   EXPORT_SYMBOL_GPL(platform_device_register);
-> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-> index 9bc36b589827..a2abde2aef25 100644
-> --- a/include/linux/platform_device.h
-> +++ b/include/linux/platform_device.h
-> @@ -24,6 +24,7 @@ struct platform_device {
->   	int		id;
->   	bool		id_auto;
->   	struct device	dev;
-> +	u64		dma_mask;
->   	u32		num_resources;
->   	struct resource	*resource;
->   
-> 
+[1] https://github.com/raspberrypi/linux/commit/c0e4ca17457d6669a263e86a88f0036875fc019e
