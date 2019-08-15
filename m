@@ -2,79 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F29BB8EF42
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 17:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BA48EF47
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 17:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729084AbfHOPYQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Aug 2019 11:24:16 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:33731 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728808AbfHOPYQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 11:24:16 -0400
-Received: by mail-wr1-f65.google.com with SMTP id u16so2588009wrr.0
-        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 08:24:14 -0700 (PDT)
+        id S1729378AbfHOPZw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Aug 2019 11:25:52 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:44664 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729151AbfHOPZv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 11:25:51 -0400
+Received: by mail-pl1-f196.google.com with SMTP id t14so1175800plr.11;
+        Thu, 15 Aug 2019 08:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=AkYthp7LCueG9x2IINcBzpO2jlClSAIZLBrJ2UUQFGE=;
+        b=Ft2ZIUgZ5Tm+zKB8GUWHYDJlgKa9TJgKcw7PqXTlwXzTWYw1tAluAzGxaWLoa3B6nE
+         sY5iL51DIF2tSJ7ldSn9rAvZ/2/FR6G6wV5hhrgLxQMyBiQdGGy4u3AKEyLlMLjSmMJB
+         z9dMsq8xify2qHYL8bbQWWGqqa37K1n+Ve/paDyLaMsRIpgBDeWPXntdc8Sf8zVUqJhi
+         OLnlkRQcFTFFF8jin7n2cjjbNz0gQ6ig8u+dF4evbd0KK/xM3u84SuvTebV34P49CBXq
+         AEY6K3ijY0Q+cr3PLmu+YAcHg1V5SHy//sx5cWTeVz5n8RqL1VhQdpctfNV4V6k16I2m
+         IHHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xqt902kFy5EO/uMlrR6SNiQ2dmhca8k0x+SK6RbTtjQ=;
-        b=nrchQlelwm2d9BGiVUca8Rp2X7H8ZjQeGUcgwCcowHxPovN7YP0FGd/jJckQtwvnFH
-         sImYS4FCLmWugGkvxWJoWCZQjC1RzG2cbCx1sK1IhRTBaT7WKLeNuehTZ5NFYKziidrC
-         W8cub8Cw5majmWMAPTjXDCKhUIw3Es9Y7fHBVBqQSgmpTP5TTlumfffiWROaUN/qftEC
-         9qGLAwxpP0maOr7wuXgv7FrSamvquFQ0N+64GmbJfDl57prDQ+Y79YRgf9JqUa4Q+TLD
-         v5kssvORJix70a+iRrIpi4Jl1nqUQkxzavk4NAXKTJTP7Gx8vkzJTsctsFVApg/gPXts
-         QhRQ==
-X-Gm-Message-State: APjAAAX3NYaNCX8Ms0WWEWDH8WaAT+BZRyA89bDKw35+R8oyF28AWwMV
-        yn01aXVzaZ2R+PMzPsc8Yumw+/c3qXE=
-X-Google-Smtp-Source: APXvYqyQJti6G2hbIVPIVgTGBGysD3A2+zSrznQlwMSiugY+WhYiNHRsGiM595Jsfbq5uZwfPeKsSg==
-X-Received: by 2002:adf:b60c:: with SMTP id f12mr6182449wre.231.1565882653654;
-        Thu, 15 Aug 2019 08:24:13 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id 16sm3259070wmx.45.2019.08.15.08.24.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Aug 2019 08:24:13 -0700 (PDT)
-Subject: Re: [PATCH] usb: typec: fusb302: Call fusb302_debugfs_init earlier
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-References: <20190813101524.80673-1-hdegoede@redhat.com>
- <20190813105216.GD4691@kuha.fi.intel.com> <20190815125441.GB24270@kroah.com>
- <20190815133159.GB24772@kuha.fi.intel.com>
- <20190815152004.GD23562@roeck-us.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <8ef6a72e-6ffa-e099-fc21-02fbb522b43a@redhat.com>
-Date:   Thu, 15 Aug 2019 17:24:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=AkYthp7LCueG9x2IINcBzpO2jlClSAIZLBrJ2UUQFGE=;
+        b=NAkqMc2EqrAi7hxtpLKdGrvTY59RV6ydkv1lEolYpi87yvgRGy9RLVI3UT5DCVTR19
+         B4wOjkd3TFbE4P6PPqGtyUHUUeiTojstjSCXQUOf7voU08WXu34kZro+lyhVrRIYuNRz
+         galgucO5sMSlSTrrDAgTa4u4fE02G0Po9FpRU8YYaCi5qu7/5KhJ98VzVjpEMiQUe0Es
+         gstmxyjZBz3V7n5xmX7sOa03eAt/7CBiMY+P62s+3KgGUVDAh6L+evDf34ouipvFHOj2
+         kZW/bz0JwxRCuk3rfUvhxRhY+RA4a10CSw19lTCBqeQMwEXVaf+npzb8OAD7XgbEYBhI
+         db3Q==
+X-Gm-Message-State: APjAAAVlRDAGgUj1sjB+iiLy0OiGVIKbVwwIWhg4e+oJrgWXuVo4Hzln
+        fFZnhtUC0Lgc0z/BERVh/rU=
+X-Google-Smtp-Source: APXvYqy5xv1v79GwuL1+TFWhMNCNXA0yRttfL5Zr+vUkNMu3x3jxt8Ltekrpv45iYEGRHZ1Ac9qvMg==
+X-Received: by 2002:a17:902:2ac7:: with SMTP id j65mr4888600plb.242.1565882751110;
+        Thu, 15 Aug 2019 08:25:51 -0700 (PDT)
+Received: from localhost.localdomain ([125.142.23.13])
+        by smtp.gmail.com with ESMTPSA id h70sm2588166pgc.36.2019.08.15.08.25.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Aug 2019 08:25:50 -0700 (PDT)
+Date:   Fri, 16 Aug 2019 00:25:44 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah <shuah@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     valentina.manea.m@gmail.com, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/2] usbip: Implement SG support
+Message-ID: <20190815152544.GA4533@localhost.localdomain>
+References: <20190808155435.10050-1-suwan.kim027@gmail.com>
+ <20190814131951.GA1437@infradead.org>
+ <20190815132356.GB27208@kroah.com>
+ <0cf92881-53c7-09d4-18ac-593034a1a56c@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190815152004.GD23562@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0cf92881-53c7-09d4-18ac-593034a1a56c@kernel.org>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Thu, Aug 15, 2019 at 08:10:49AM -0600, shuah wrote:
+> On 8/15/19 7:23 AM, Greg KH wrote:
+> > On Wed, Aug 14, 2019 at 06:19:51AM -0700, Christoph Hellwig wrote:
+> > > FYI, I think my
+> > > 
+> > >     "usb: add a HCD_DMA flag instead of guestimating DMA capabilities"
+> > > 
+> > > is the proper core fix for what your patch 1 works around, as the USB
+> > > core should not assume DMA capabilities based on the presence of a DMA
+> > > mask.
+> > 
+> > I agree.  Let's wait for Christoph's series to be applied before taking
+> > this one.
+> > 
+> 
+> Great. Thanks you both looking at these. Makes sense.
 
-On 15-08-19 17:20, Guenter Roeck wrote:
-> On Thu, Aug 15, 2019 at 04:31:59PM +0300, Heikki Krogerus wrote:
->>>
->>> As Guenter points out, don't check this, just call it anb move on.
->>>
->>> But are you _SURE_ you want this to be the name, at the root of debugfs?
->>> Why not put it under the usb debugfs directory?
->>
->> That's a good point. Let's move it there while at it.
->>
-> Maybe we should move the tcpm root as well ?
+Ok. Then I will drop the patch 1 and leave vhci flags without
+including the HCD_DMA flag to skip dma mapping.
 
-Ack, I'm preparing a patch series that does both.
+BTW, in my patch 2, I set URB_DMA_MAP_SG flag in
+vhci_map_urb_for_dma() of patch 1 to tell the server to use SG.
+I will fix it by setting URB_DMA_MAP_SG flag in other place and
+resend v6. Is it ok?
 
-Regards,
-
-Hans
-
+Regards
+Suwan Kim
