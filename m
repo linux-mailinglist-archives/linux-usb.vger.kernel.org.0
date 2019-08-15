@@ -2,214 +2,397 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 287768EAF4
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 14:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD918EB39
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 14:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730764AbfHOMCO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 15 Aug 2019 08:02:14 -0400
-Received: from esa1.mentor.iphmx.com ([68.232.129.153]:25440 "EHLO
-        esa1.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730621AbfHOMCO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 08:02:14 -0400
-IronPort-SDR: 6vxp7tz3voSVm8fkFzJ9nEGGB/IyanbmAbEVl0F7ki/uMC8BWszGtXANp4k8n1egIEBaBgpa+P
- 2ojY9hL7FFeuF7+q3RkDJ+A4Bd7JWbGkJZyOHTS/BCnM+e+L5w8uESZ0jlwWqwuFbrdx6eyb0w
- XXY3QaSBOzBMRM1WKT3KW+RmBsCY71PexhRFzqOlxJEjztljc7vEDlB/tcGk2n47nmzXHdf4HB
- GWTDYpA7SldNyBs4Tw5dX+/FnhtWY2ozxB2UE1XK6wDP1unN6YXHunhpuKnb9uu3941F5AZpCc
- bi0=
-X-IronPort-AV: E=Sophos;i="5.64,389,1559548800"; 
-   d="scan'208";a="42281585"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa1.mentor.iphmx.com with ESMTP; 15 Aug 2019 04:02:10 -0800
-IronPort-SDR: ZfCK+ypoYsjXdtBZlZJCz8qeBBdDjILDMDkZgvht/wnL3m9MXVTeZxIEr0FzBe+kmx03EMKdkj
- o9oIld3GYsi64taoMK2tqZA0glBPThKneKi/o1rUzzPe9qT2SqXE0ead7MbSg6bgArIjgCo1dg
- J2nJ9tjG8OT0hfY9/w2dy28nkt7+GA74pJ0wNHSs2XNY5CPu/cY3d4VK8PcpU50YJqLp0pmefs
- bxy/Ny6eYFzXJJ24tjikDJlcmxKJx1MP4pR8BYIMjq5ce1thlUgFsz54Ky0FpwKkL56mnAb2DH
- L5I=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: AW: AW: Strange behaviour of D-Link DUB-1312 USB 3.0 Adapters
-Thread-Topic: AW: Strange behaviour of D-Link DUB-1312 USB 3.0 Adapters
-Thread-Index: AdVSeH/taFnFr9I1T4OXjPctlrQ3Ev//86kA///uBTCAAF8egIABinwc
-Date:   Thu, 15 Aug 2019 12:02:05 +0000
-Message-ID: <1565870525382.10504@mentor.com>
-References: <db0e8930ea94408ca7a38192ddfd203f@SVR-IES-MBX-03.mgc.mentorg.com>
-         <1565771508.25764.3.camel@suse.com>
-         <f5e22fea4e1c4baeb2fc98d324ad9060@SVR-IES-MBX-03.mgc.mentorg.com>,<1565788073.25764.8.camel@suse.com>
-In-Reply-To: <1565788073.25764.8.camel@suse.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S1731131AbfHOMMi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Aug 2019 08:12:38 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:56192 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726098AbfHOMMh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 08:12:37 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7FCCJWA089522;
+        Thu, 15 Aug 2019 07:12:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1565871139;
+        bh=4gpKC7yemuUvaitWirj0vyOMRvFCwHnsQPxxXWDVljs=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=nL3/dHiw3s9VQUI5J5LNYNiClw9EHuv5HLwNezULHtWpqzreeShkoE2i9GSq2xUTb
+         dlIifJLA9TkjOgXrUWbz76RSN04NsMG99Z0uvnroJlLQmPRkPGflWNLiLZC90C5WJ1
+         2mRNrYc+RfP5sydPmj8kw6vzCORxZi3pPjjj46bs=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7FCCJvu108273
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Aug 2019 07:12:19 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 15
+ Aug 2019 07:12:12 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 15 Aug 2019 07:12:12 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7FCC9Fk031062;
+        Thu, 15 Aug 2019 07:12:09 -0500
+Subject: Re: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
+To:     Pawel Laszczak <pawell@cadence.com>,
+        <felipe.balbi@linux.intel.com>, <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jbergsagel@ti.com>,
+        <nsekhar@ti.com>, <nm@ti.com>, <sureshp@cadence.com>,
+        <jpawar@cadence.com>, <kurahul@cadence.com>, <aniljoy@cadence.com>
+References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <9f54d3d5-da99-327b-631e-fad1329dcde4@ti.com>
+Date:   Thu, 15 Aug 2019 15:12:08 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <1563733939-21214-1-git-send-email-pawell@cadence.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->> I don't think its a regression.
->
-> It would be better to know than to assume.
->
-Happens with kernel 4.14.102 also, not only with 4.14.129.
-Looks more HW related.
+Felipe & Alan,
 
->
->> Is there something i can do to force an error message to be seen
->> when the ETH2USB adapter stalls?
->
-> You can activate dynamic debugging for the xhci_hcd module
-> Remember that no data to transfer is not an error as such.
->
->> My current assumption is that the signal quality of the USB port is at a
->> corner case, and therefore some "better" Adapters work, some "bad ones"
->> don't. But as there is no error message seen in the dmesg, i am somehow lost.
->
-> Two things you can do:
->
-> 1. Generate a usbmon trace (it will be gigantic though)
-> 2. Activate dynamic debugging for the xhci_hcd module
-I did:
-echo -n 'module xhci_hcd =p' > /sys/kernel/debug/dynamic_debug/control
-echo -n 'usbcore =p' > /sys/kernel/debug/dynamic_debug/control
-echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-(used this when hunting for another USB issue in the past also)
+On 21/07/2019 21:32, Pawel Laszczak wrote:
+> This patch introduce new Cadence USBSS DRD driver to linux kernel.
+> 
+> The Cadence USBSS DRD Controller is a highly configurable IP Core which
+> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
+> Host Only (XHCI)configurations.
+> 
+> The current driver has been validated with FPGA burned. We have support
+> for PCIe bus, which is used on FPGA prototyping.
+> 
+> The host side of USBSS-DRD controller is compliance with XHCI
+> specification, so it works with standard XHCI Linux driver.
 
-From traces/logs:
-########################################
-I can see in dmesg at a certain point, i assume this is where trouble starts:
-[87800.393785] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.393869] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.393956] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.394045] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.394145] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.394216] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.394302] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.394385] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 15904 bytes untransferred
-[87800.394587] xhci_hcd 0000:00:15.0: Transfer error for slot 3 ep 5 on endpoint
-[87800.394596] xhci_hcd 0000:00:15.0: Cleaning up stalled endpoint ring
-[87800.394600] xhci_hcd 0000:00:15.0: Finding endpoint context
-[87800.394603] xhci_hcd 0000:00:15.0: Cycle state = 0x1
-[87800.394606] xhci_hcd 0000:00:15.0: New dequeue segment = ffff8d9330b29900 (virtual)
-[87800.394608] xhci_hcd 0000:00:15.0: New dequeue pointer = 0x174213400 (DMA)
-[87800.394610] xhci_hcd 0000:00:15.0: Queueing new dequeue state
-[87800.394613] xhci_hcd 0000:00:15.0: Set TR Deq Ptr cmd, new deq seg = ffff8d9330b29900 (0x174213000 dma), new deq ptr = ffff8d92b4213400 (0x174213400 dma), new cycle = 1
-[87800.394618] xhci_hcd 0000:00:15.0: // Ding dong!
-[87800.394622] xhci_hcd 0000:00:15.0: Giveback URB ffff8d931d65b600, len = 0, expected = 74, status = -71
-[87800.394629] xhci_hcd 0000:00:15.0: Ignoring reset ep completion code of 1
-[87800.394636] xhci_hcd 0000:00:15.0: Successful Set TR Deq Ptr cmd, deq = @174213400
-[87800.394836] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.394916] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395005] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395090] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395178] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395263] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395350] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395436] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395525] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395613] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395710] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395785] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
-[87800.395868] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 11328 bytes untransferred
-[87800.398155] xhci_hcd 0000:00:15.0: Transfer error for slot 3 ep 5 on endpoint
-[87800.398172] xhci_hcd 0000:00:15.0: Cleaning up stalled endpoint ring
-[87800.398175] xhci_hcd 0000:00:15.0: Finding endpoint context
-[87800.398179] xhci_hcd 0000:00:15.0: Cycle state = 0x1
-[87800.398181] xhci_hcd 0000:00:15.0: New dequeue segment = ffff8d9330b29900 (virtual)
-[87800.398184] xhci_hcd 0000:00:15.0: New dequeue pointer = 0x174213410 (DMA)
-[87800.398186] xhci_hcd 0000:00:15.0: Queueing new dequeue state
-[87800.398189] xhci_hcd 0000:00:15.0: Set TR Deq Ptr cmd, new deq seg = ffff8d9330b29900 (0x174213000 dma), new deq ptr = ffff8d92b4213410 (0x174213410 dma), new cycle = 1
-[87800.398192] xhci_hcd 0000:00:15.0: // Ding dong!
-[87800.398197] xhci_hcd 0000:00:15.0: Giveback URB ffff8d92b4374c00, len = 0, expected = 74, status = -71
-[87800.398209] xhci_hcd 0000:00:15.0: Ignoring reset ep completion code of 1
-[87800.398217] xhci_hcd 0000:00:15.0: Successful Set TR Deq Ptr cmd, deq = @174213410
-[87800.401654] xhci_hcd 0000:00:15.0: Transfer error for slot 3 ep 5 on endpoint
+While testing this driver I encountered the following issue if I do the following.
 
-These Transfer errors continue to happen, i think this is a massive slowdown then.
+1) USB port is "otg" and nothing connected so it is in IDLE mode to begin with.
+   i.e. HCD & UDC not registered.
 
-########################################
-Trace shows around this timeframe:
-          <idle>-0     [000] d.h2 87800.014500: xhci_queue_trb: CMD: Reset Endpoint Command: ctx 0000000000000000 slot 3 ep 6 flags C
-          <idle>-0     [000] d.h2 87800.014502: xhci_inc_enq: CMD ffff8d92b40f3e00: enq 0x0000000174342c60(0x0000000174342000) deq 0x0000000174342c50(0x0000000174342000) segs 1 stream 0 free_trbs 253 bounce 0 cycle 1
-          <idle>-0     [000] d.h2 87800.014510: xhci_dbg_reset_ep: Cleaning up stalled endpoint ring
-          <idle>-0     [000] d.h2 87800.014517: xhci_dbg_cancel_urb: Finding endpoint context
-          <idle>-0     [000] d.h2 87800.014522: xhci_dbg_cancel_urb: Cycle state = 0x1
-          <idle>-0     [000] d.h2 87800.014531: xhci_dbg_cancel_urb: New dequeue segment = ffff8d9330b29900 (virtual)
-          <idle>-0     [000] d.h2 87800.014537: xhci_dbg_cancel_urb: New dequeue pointer = 0x1742138c0 (DMA)
-          <idle>-0     [000] d.h2 87800.014543: xhci_dbg_reset_ep: Queueing new dequeue state
-          <idle>-0     [000] d.h2 87800.014550: xhci_dbg_cancel_urb: Set TR Deq Ptr cmd, new deq seg = ffff8d9330b29900 (0x174213000 dma), new deq ptr = ffff8d92b42138c0 (0x1742138c0 dma), new cycle = 1
-          <idle>-0     [000] d.h2 87800.014554: xhci_queue_trb: CMD: Set TR Dequeue Pointer Command: deq 00000001742138c1 stream 0 slot 3 ep 6 flags C
-          <idle>-0     [000] d.h2 87800.014555: xhci_inc_enq: CMD ffff8d92b40f3e00: enq 0x0000000174342c70(0x0000000174342000) deq 0x0000000174342c50(0x0000000174342000) segs 1 stream 0 free_trbs 252 bounce 0 cycle 1
-          <idle>-0     [000] d.h1 87800.014572: xhci_urb_giveback: ep3out-bulk: urb ffff8d92b4374180 pipe 3221324544 slot 3 length 0/470 sgs 0/0 stream 0 flags 00010000
-          <idle>-0     [000] d.h2 87800.014583: xhci_handle_event: EVENT: TRB 0000000174342c50 status 'Success' len 0 slot 3 ep 0 type 'Command Completion Event' flags e:c
-          <idle>-0     [000] d.h2 87800.014584: xhci_handle_command: CMD: Reset Endpoint Command: ctx 0000000000000000 slot 3 ep 6 flags C
-          <idle>-0     [000] d.h2 87800.014587: xhci_handle_cmd_reset_ep: State stopped mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk OUT burst 15 maxp 1024 deq 00000001742138c1 avg trb len 0
-          <idle>-0     [000] d.h2 87800.014594: xhci_dbg_reset_ep: Ignoring reset ep completion code of 1
-          <idle>-0     [000] d.h2 87800.014597: xhci_inc_deq: CMD ffff8d92b40f3e00: enq 0x0000000174342c70(0x0000000174342000) deq 0x0000000174342c60(0x0000000174342000) segs 1 stream 0 free_trbs 253 bounce 0 cycle 1
-          <idle>-0     [000] d.h2 87800.014598: xhci_handle_event: EVENT: TRB 0000000174342c60 status 'Success' len 0 slot 3 ep 0 type 'Command Completion Event' flags e:c
-          <idle>-0     [000] d.h2 87800.014599: xhci_handle_command: CMD: Set TR Dequeue Pointer Command: deq 00000001742138c1 stream 0 slot 3 ep 6 flags C
-          <idle>-0     [000] d.h2 87800.014601: xhci_handle_cmd_set_deq: RS 00000 super-speed Ctx Entries 6 MEL 512 us Port# 10/0 [TT Slot 0 Port# 0 TTT 0 Intr 0] Addr 3 State configured
-          <idle>-0     [000] d.h2 87800.014602: xhci_handle_cmd_set_deq_ep: State stopped mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk OUT burst 15 maxp 1024 deq 00000001742138c1 avg trb len 0
-          <idle>-0     [000] d.h2 87800.014608: xhci_dbg_cancel_urb: Successful Set TR Deq Ptr cmd, deq = @1742138c0
-          <idle>-0     [000] d.h2 87800.014610: xhci_inc_deq: CMD ffff8d92b40f3e00: enq 0x0000000174342c70(0x0000000174342000) deq 0x0000000174342c70(0x0000000174342000) segs 1 stream 0 free_trbs 254 bounce 0 cycle 1
-          <idle>-0     [000] dNh2 87800.139476: xhci_handle_event: EVENT: TRB 00000001cfa5a0f0 status 'Success' len 0 slot 3 ep 3 type 'Transfer Event' flags e:c
-          <idle>-0     [000] dNh2 87800.139486: xhci_handle_transfer: INTR: Buffer 00000001dfadbaa8 length 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
-          <idle>-0     [000] dNh2 87800.139490: xhci_inc_deq: INTR ffff8d92b0edf380: enq 0x00000001cfa5a100(0x00000001cfa5a000) deq 0x00000001cfa5a100(0x00000001cfa5a000) segs 2 stream 0 free_trbs 509 bounce 8 cycle 1
-          <idle>-0     [000] dNh1 87800.139496: xhci_urb_giveback: ep1in-intr: urb ffff8d931fb43840 pipe 1073775488 slot 3 length 8/8 sgs 0/0 stream 0 flags 00010300
-          <idle>-0     [000] dNh1 87800.139512: xhci_urb_enqueue: ep1in-intr: urb ffff8d931fb43840 pipe 1073775488 slot 3 length 0/8 sgs 0/0 stream 0 flags 00010300
-          <idle>-0     [000] dNh2 87800.139518: xhci_queue_trb: INTR: Buffer 00000001dfadbaa8 length 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
-          <idle>-0     [000] dNh2 87800.139519: xhci_inc_enq: INTR ffff8d92b0edf380: enq 0x00000001cfa5a110(0x00000001cfa5a000) deq 0x00000001cfa5a100(0x00000001cfa5a000) segs 2 stream 0 free_trbs 508 bounce 8 cycle 1
-     AvbTxWrklow-271   [000] d.h1 87800.267463: xhci_handle_event: EVENT: TRB 00000001cfa5a100 status 'Success' len 0 slot 3 ep 3 type 'Transfer Event' flags e:c
-     AvbTxWrklow-271   [000] d.h1 87800.267471: xhci_handle_transfer: INTR: Buffer 00000001dfadbaa8 length 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
-     AvbTxWrklow-271   [000] d.h1 87800.267476: xhci_inc_deq: INTR ffff8d92b0edf380: enq 0x00000001cfa5a110(0x00000001cfa5a000) deq 0x00000001cfa5a110(0x00000001cfa5a000) segs 2 stream 0 free_trbs 509 bounce 8 cycle 1
-     AvbTxWrklow-271   [000] d.h. 87800.267480: xhci_urb_giveback: ep1in-intr: urb ffff8d931fb43840 pipe 1073775488 slot 3 length 8/8 sgs 0/0 stream 0 flags 00010300
-     AvbTxWrklow-271   [000] d.h. 87800.267494: xhci_urb_enqueue: ep1in-intr: urb ffff8d931fb43840 pipe 1073775488 slot 3 length 0/8 sgs 0/0 stream 0 flags 00010300
-     AvbTxWrklow-271   [000] d.h1 87800.267499: xhci_queue_trb: INTR: Buffer 00000001dfadbaa8 length 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
-     AvbTxWrklow-271   [000] d.h1 87800.267500: xhci_inc_enq: INTR ffff8d92b0edf380: enq 0x00000001cfa5a120(0x00000001cfa5a000) deq 0x00000001cfa5a110(0x00000001cfa5a000) segs 2 stream 0 free_trbs 508 bounce 8 cycle 1
-          <idle>-0     [000] d.h2 87800.395533: xhci_handle_event: EVENT: TRB 00000001cfa5a110 status 'Success' len 0 slot 3 ep 3 type 'Transfer Event' flags e:c
-          <idle>-0     [000] d.h2 87800.395543: xhci_handle_transfer: INTR: Buffer 00000001dfadbaa8 length 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
-          <idle>-0     [000] d.h2 87800.395548: xhci_inc_deq: INTR ffff8d92b0edf380: enq 0x00000001cfa5a120(0x00000001cfa5a000) deq 0x00000001cfa5a120(0x00000001cfa5a000) segs 2 stream 0 free_trbs 509 bounce 8 cycle 1
-          <idle>-0     [000] d.h1 87800.395554: xhci_urb_giveback: ep1in-intr: urb ffff8d931fb43840 pipe 1073775488 slot 3 length 8/8 sgs 0/0 stream 0 flags 00010300
-          <idle>-0     [000] d.h1 87800.395570: xhci_urb_enqueue: ep1in-intr: urb ffff8d931fb43840 pipe 1073775488 slot 3 length 0/8 sgs 0/0 stream 0 flags 00010300
-          <idle>-0     [000] d.h2 87800.395575: xhci_queue_trb: INTR: Buffer 00000001dfadbaa8 length 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
-          <idle>-0     [000] d.h2 87800.395576: xhci_inc_enq: INTR ffff8d92b0edf380: enq 0x00000001cfa5a130(0x00000001cfa5a000) deq 0x00000001cfa5a120(0x00000001cfa5a000) segs 2 stream 0 free_trbs 508 bounce 8 cycle 1
-          <idle>-0     [000] d.h2 87800.523536: xhci_handle_event: EVENT: TRB 00000001cfa5a120 status 'Success' len 0 slot 3 ep 3 type 'Transfer Event' flags e:c
-          <idle>-0     [000] d.h2 87800.523546: xhci_handle_transfer: INTR: Buffer 00000001dfadbaa8 length 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
-          <idle>-0     [000] d.h2 87800.523550: xhci_inc_deq: INTR ffff8d92b0edf380: enq 0x00000001cfa5a130(0x00000001cfa5a000) deq 0x00000001cfa5a130(0x00000001cfa5a000) segs 2 stream 0 free_trbs 509 bounce 8 cycle 1
-          <idle>-0     [000] d.h1 87800.523556: xhci_urb_giveback: ep1in-intr: urb ffff8d931fb43840 pipe 1073775488 slot 3 length 8/8 sgs 0/0 stream 0 flags 00010300
-          <idle>-0     [000] d.h1 87800.523571: xhci_urb_enqueue: ep1in-intr: urb ffff8d931fb43840 pipe 1073775488 slot 3 length 0/8 sgs 0/0 stream 0 flags 00010300
-          <idle>-0     [000] d.h2 87800.523576: xhci_queue_trb: INTR: Buffer 00000001dfadbaa8 length 8 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
-          <idle>-0     [000] d.h2 87800.523577: xhci_inc_enq: INTR ffff8d92b0edf380: enq 0x00000001cfa5a140(0x00000001cfa5a000) deq 0x00000001cfa5a130(0x00000001cfa5a000) segs 2 stream 0 free_trbs 508 bounce 8 cycle 1
-....
-     ksoftirqd/0-7     [000] d.s3 87801.459142: xhci_urb_enqueue: ep3out-bulk: urb ffff8d92965cd180 pipe 3221324544 slot 3 length 0/86 sgs 0/0 stream 0 flags 00010000
-     ksoftirqd/0-7     [000] d.s4 87801.459146: xhci_queue_trb: BULK: Buffer 00000001565b18ba length 86 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:c
-     ksoftirqd/0-7     [000] d.s4 87801.459147: xhci_inc_enq: BULK ffff8d92b0edf680: enq 0x00000001742138d0(0x0000000174213000) deq 0x00000001742138c0(0x0000000174213000) segs 2 stream 0 free_trbs 508 bounce 1024 cycle 1
-          <idle>-0     [000] d.h2 87801.462490: xhci_handle_event: EVENT: TRB 00000001742138c0 status 'USB Transaction Error' len 86 slot 3 ep 6 type 'Transfer Event' flags e:c
-          <idle>-0     [000] d.h2 87801.462518: xhci_handle_transfer: BULK: Buffer 00000001565b18ba length 86 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:i:e:C
-          <idle>-0     [000] d.h2 87801.462534: xhci_queue_trb: CMD: Reset Endpoint Command: ctx 0000000000000000 slot 3 ep 6 flags C
-          <idle>-0     [000] d.h2 87801.462536: xhci_inc_enq: CMD ffff8d92b40f3e00: enq 0x0000000174342c80(0x0000000174342000) deq 0x0000000174342c70(0x0000000174342000) segs 1 stream 0 free_trbs 253 bounce 0 cycle 1
-          <idle>-0     [000] d.h2 87801.462545: xhci_dbg_reset_ep: Cleaning up stalled endpoint ring
-          <idle>-0     [000] d.h2 87801.462551: xhci_dbg_cancel_urb: Finding endpoint context
-          <idle>-0     [000] d.h2 87801.462556: xhci_dbg_cancel_urb: Cycle state = 0x1
-          <idle>-0     [000] d.h2 87801.462562: xhci_dbg_cancel_urb: New dequeue segment = ffff8d9330b29900 (virtual)
-          <idle>-0     [000] d.h2 87801.462567: xhci_dbg_cancel_urb: New dequeue pointer = 0x1742138d0 (DMA)
-          <idle>-0     [000] d.h2 87801.462574: xhci_dbg_reset_ep: Queueing new dequeue state
-          <idle>-0     [000] d.h2 87801.462581: xhci_dbg_cancel_urb: Set TR Deq Ptr cmd, new deq seg = ffff8d9330b29900 (0x174213000 dma), new deq ptr = ffff8d92b42138d0 (0x1742138d0 dma), new cycle = 1
+2) Load mass storage gadget with backing medium.
+   > modprobe g_mass_storage file=lun stall=0
 
+[   28.172142] udc-core: couldn't find an available UDC - added [g_mass_storage] to list of pending drivers
 
-Really looks like this is a scenario where we have a device working with errors that can be recovered.
-But because many errors are happening, it leads to a massive slowdown and finally a failure.
-However, this takes a very long time, sometimes > 10 minutes.
-And, because retries mostly work, we can't see errors in upper layers.
+3) Connect port to PC host
 
-I'm not a USB expert, but maybe you can confirm this assumption?
+[   30.564767] cdns-usb3 6000000.usb: Initialized  ep0 support:  
+[   30.570591] cdns-usb3 6000000.usb: Initialized  ep1out support: BULK, INT ISO
+[   30.577713] cdns-usb3 6000000.usb: Initialized  ep2out support: BULK, INT ISO
+[   30.584835] cdns-usb3 6000000.usb: Initialized  ep3out support: BULK, INT ISO
+[   30.591957] cdns-usb3 6000000.usb: Initialized  ep4out support: BULK, INT ISO
+[   30.599078] cdns-usb3 6000000.usb: Initialized  ep5out support: BULK, INT ISO
+[   30.606199] cdns-usb3 6000000.usb: Initialized  ep6out support: BULK, INT ISO
+[   30.613320] cdns-usb3 6000000.usb: Initialized  ep7out support: BULK, INT ISO
+[   30.620441] cdns-usb3 6000000.usb: Initialized  ep8out support: BULK, INT ISO
+[   30.627562] cdns-usb3 6000000.usb: Initialized  ep9out support: BULK, INT ISO
+[   30.634684] cdns-usb3 6000000.usb: Initialized  ep10out support: BULK, INT ISO
+[   30.641893] cdns-usb3 6000000.usb: Initialized  ep11out support: BULK, INT ISO
+[   30.649100] cdns-usb3 6000000.usb: Initialized  ep12out support: BULK, INT ISO
+[   30.656309] cdns-usb3 6000000.usb: Initialized  ep13out support: BULK, INT ISO
+[   30.663516] cdns-usb3 6000000.usb: Initialized  ep14out support: BULK, INT ISO
+[   30.670724] cdns-usb3 6000000.usb: Initialized  ep15out support: BULK, INT ISO
+[   30.677935] cdns-usb3 6000000.usb: Initialized  ep1in support: BULK, INT ISO
+[   30.684979] cdns-usb3 6000000.usb: Initialized  ep2in support: BULK, INT ISO
+[   30.692020] cdns-usb3 6000000.usb: Initialized  ep3in support: BULK, INT ISO
+[   30.699057] cdns-usb3 6000000.usb: Initialized  ep4in support: BULK, INT ISO
+[   30.706097] cdns-usb3 6000000.usb: Initialized  ep5in support: BULK, INT ISO
+[   30.713135] cdns-usb3 6000000.usb: Initialized  ep6in support: BULK, INT ISO
+[   30.720175] cdns-usb3 6000000.usb: Initialized  ep7in support: BULK, INT ISO
+[   30.727213] cdns-usb3 6000000.usb: Initialized  ep8in support: BULK, INT ISO
+[   30.734252] cdns-usb3 6000000.usb: Initialized  ep9in support: BULK, INT ISO
+[   30.741289] cdns-usb3 6000000.usb: Initialized  ep10in support: BULK, INT ISO
+[   30.748414] cdns-usb3 6000000.usb: Initialized  ep11in support: BULK, INT ISO
+[   30.755536] cdns-usb3 6000000.usb: Initialized  ep12in support: BULK, INT ISO
+[   30.762661] cdns-usb3 6000000.usb: Initialized  ep13in support: BULK, INT ISO
+[   30.769785] cdns-usb3 6000000.usb: Initialized  ep14in support: BULK, INT ISO
+[   30.776910] cdns-usb3 6000000.usb: Initialized  ep15in support: BULK, INT ISO
+[   30.786313] Mass Storage Function, version: 2009/09/11
+[   30.791455] LUN: removable file: (no medium)
+[   31.039497] lun0: unable to open backing file: 500M.bin
+[   31.158689] g_mass_storage 6000000.usb: failed to start g_mass_storage: -2
+[   31.165606] cdns-usb3 6000000.usb: Failed to register USB device controller
+[   31.172585] cdns-usb3 6000000.usb: set 2 has failed, back to 0
 
-Best regards
-Carsten
+Now, -2 is ENOENT i.e.	/* No such file or directory */
+The file is present so that's not the real issue.
+
+The call trace to fsg_lun_open is below
+
+[   30.952877]  fsg_lun_open+0x24/0x42c [usb_f_mass_storage]
+[   30.958259]  fsg_common_create_lun+0xc8/0x2b8 [usb_f_mass_storage]
+[   30.964422]  fsg_common_create_luns+0xa4/0x104 [usb_f_mass_storage]
+[   30.970670]  msg_bind+0xd8/0x1e0 [g_mass_storage]
+[   30.975360]  composite_bind+0x7c/0x180 [libcomposite]
+[   30.980396]  udc_bind_to_driver+0x68/0x110 [udc_core]
+[   30.985432]  check_pending_gadget_drivers+0x74/0xd8 [udc_core]
+[   30.991247]  usb_add_gadget_udc_release+0x180/0x1e8 [udc_core]
+[   30.997062]  usb_add_gadget_udc+0x10/0x18 [udc_core]
+[   31.002010]  __cdns3_gadget_init+0x3a0/0x628 [cdns3]
+[   31.006959]  cdns3_role_start+0x6c/0xd0 [cdns3]
+[   31.011473]  cdns3_hw_role_switch+0x80/0xe8 [cdns3]
+[   31.016336]  cdns3_drd_thread_irq+0x10/0x20 [cdns3]
+[   31.021197]  irq_thread_fn+0x28/0x78
+[   31.024757]  irq_thread+0x124/0x1b8
+[   31.028233]  kthread+0x124/0x128
+[   31.031447]  ret_from_fork+0x10/0x18
+
+Is opening the backing file from irq_thread_fn the issue here?
+If yes, how to resolve this?
+
+cheers,
+-roger
+
+> 
+> Change since v9:
+> - Removed duplicated cdns3_mode array. The same array is defined in 
+>   drivers/usb/common/common.c. It required some change in common API.
+>   the appropirate patch was posted separately.
+> - Replaced generic cdns3_dbg with serparate trace events.
+> - Replaced cdns3_handshake with readl_poll_timeout_atomic function
+> - Added threaded irq handler for handling DRD/OTG irq instead workqueue.
+> - Removed support for debug_disable. It's no longer neeeded. 
+> - Moved mode attribute under usb root.
+> - Changed DRD switching role implementation. This version of the driver uses
+>   common roles interface.
+> - removed not implemented cdns3_idle_role_start and cdns3_exit_role_start.
+> - Added support for DRD/OTG irq for Cadence platform.
+> - Fixed bug in cdns3_mode_show/cdns3_mode_write with changing mode. There was a problem with switching mode. 
+> - Added support for PM suspend/resume.
+> - Simplified cdns3/Makefile file.
+> 
+> Change since v8:
+> - Fixed compilation error by moving drivers/usb/gadget/debug.c back to
+>   drivers/usb/common/debug.c. The previous version caused compilation
+>   error when dwc3 or cdns3 driver was built-in kernel and libcomposite
+>   was built as module.
+>  
+> Change since v7:
+> - Updated dt-binding.
+> - Simplified debugfs file as suggested by Heikki Krogerus.
+> - Changed some dev_info to dev_dbg.
+> - Added support for additional PHY. Now driver can use both USB2 PHY
+>   and USB3 PHY.
+> - Fixed issue in algorithm checking the number of allocated on-chip buffers.
+> - Moved common code form drivers/usb/common/debug.c to
+>   drivers/usb/gadget/debug.c.
+> - Removed warning generated by sh4-linux-gcc compiler for trace.h file.
+> - L1 issue: moved resuming after setting DRDY. It should protect against 
+>   potential racing.
+> - LPM packet acknowledge has been disabled during control transfer.
+> - Aded setting AXI Non-Secure mode in DMA_AXI_CTRL register. 
+> 
+> Change since v6:
+> - Fixed issue with L1 support. Controller has issue with hardware 
+>   resuming from L1 state. It was fixed in software. 
+> - Fixed issues related with Transfer Ring Size equal 2. 
+> - Fixed issue with removing cdns3.ko module. Issue appeared on the latest 
+>   version of kernel.
+> - Added separate interrupt resources for host, device and otg. It was 
+>   added mainly for compatibility with TI J721e platforms. 
+> - Added enabling ISO OUT just before arming endpoint. It's recommended by 
+>   controller specification.
+> - Added support for 0x0002450d controller version. This version allows to set 
+>   DMULT mode per endpoint. It also fixes WA1 issue.
+> - Added support for separate interrupt line for Device and OTG/DRD.
+> - Removed drd_update_mode from drd_init, 'desired_dr_mode' is not yet correctly
+>   set based on enabled drivers and dr_mode in DT.
+> - Added phy power on/off.
+> - Added setting dma and coherent mask to 32-bits, because controller can do
+>   only 32-bit access.
+> - Added Idle state for Type-C for platform TI J721e as suggested by Roger. 
+> - Improved the flow according with Figure 24 from Software OTG Control user
+>   guide as sugested by Roger.
+> 
+> Change since v5:
+> - Fixed controller issue with handling SETUP that has occurred on 0x0002450C
+>   controller version. In some case EP_STS_SETUP is reported but SETUP
+>   packet has not been copied yet to system memory. This bug caused that
+>   driver started handling the previous SETUP packet.
+> - Added handling ZLP for EP0.
+> - Removed unused cdns3_gadget_ep0_giveback function.
+> - Fixed issue with disabling endpoint. Added waiting for clearing EP_STS_DBUSY
+>   bit between disabling endpoint and calling EP_CMD_EPRST command.
+>   EP_CMD_EPRST command can be called only when DMA is stopped.
+> - Fixed issue: EP_CFG_TDL_CHK is currently supported only for OUT direction,
+>   It was enabled for both IN/OUT direction.
+> - Improved resetting of interrupt in cdns3_device_irq_handler.
+> - Fixed issue with ISOC IN transfer in cdns3_ep_run_transfer function. In some
+>   cases driver set incorrect Cycle Bit in TRBs.
+> - Fixed issue in function cdns3_ep_onchip_buffer_reserve. Driver assigned 
+>   incorrect value to priv_dev->out_mem_is_allocated field.
+> 
+> Change since v5:
+> - fixed compilation error.
+> 
+> Changes since v4:
+> - fixed issue: with choosing incorrect dr_mode in cdns3_core_init_role.
+> - speed up DRD timings by adding an appropriate entry to OTGSIMULATE
+>   register in cdns3_drd_init function.
+> - added detecting transition to DEV_IDLE/H_IDLE state instead using
+>   usleep_range in cdns3_drd_switch_gadget and cdns3_drd_switch_host functions.
+> - fixed issue with setting incorrect burst and mult field during endpoint
+>   configuration. 
+> - fixed issue in WA1 algorithm. The previous one could not work correct with
+>   slow CPU or in case the access to AXI bus would be blocked for some time.
+> - fixed issue with compilation driver occurred when driver was configured
+>   as build in. This fix required to move cdns3_handshake function from
+>   gadget.c to core.c file.
+> - added missing pci_disable_device in cdns3-pci-wrap.c file.
+> - fixed issue with pm_runtime_get_sync in cdns3_role_switch function.
+> - fixed incorrect condition in cdns3_decode_usb_irq function.
+> - removed cdns3_data_flush function - is no longer used.
+> - fixed issue in cdns3_descmissing_packet function - fixed incorrect condition
+> - added missed callback informing upper layer about reset event.
+> - added resetting endpoint in cdns3_gadget_ep_disable function.
+> - fixed issue: added statement removing request from descmiss_req_list in
+>   cdns3_gadget_ep_disable function.
+> - fixed issue in cdns3_ep_onchip_buffer_reserve.
+> - fixed issue with incorrect calculation the number of required on-chip buffer 
+>   for OUT endpoints cdns3_ep_onchip_buffer_reserve.
+> - fixed issue in __cdns3_gadget_init function: pm_runtime_get_sync was in
+>   incorrect place in.
+> - removed some typos and improved comments as suggested by reviewers.
+> - made some other minor changes as suggested by revivers.
+> 
+> Changes since v3:
+> - updated dt-binding as suggested by Rob Herring
+> - updated patch 002, 003 and 004 according with patch:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git/commit/
+>   ?h=next&id=7790b3556fccc555ae422f1576e97bf34c8ab8b6 posted by Felipe Balbi.
+> - fixed issues related to isochronous transfers.
+> - improved algorithm calculating number of on-chip buffers required
+>   by endpoints.
+> - fixed incorrect macro EP_CFG_MULT in gadget.h file.
+> - fixed potential issue with incorrect order of instruction - added wmb().
+> - made some minor changes suggested by reviewers.
+> 
+> *Changes since v2:
+> - made some text correction in Kconfig file as suggested by Randy Dunlap.
+> - simplified Makefile as suggested by Peter Chan.
+> - removed phy-names from dt-binding as suggested Rob Herring.
+> - changed cdns3-usb.txt to cdns3-usb3.txt as suggested by Rob Herring.
+> - added checking error code in some function in drd.c file 
+>   as suggested by Peter Chan.
+> - added reg-names to dt-binding documentation as suggested by Chunfeng Yun.
+> - replaced platform_get_resource with platform_get_resource_byname.
+> - made other changes suggested by Chunfeng Yun.
+> - fixed bug in cdns3_get_id. Now function return id instead 1.
+> - added trace_cdns3_log trace event.
+> - simplify cdns3_disable_write function.
+> - create separate patch for work around related with blocking endpoint 
+>   issue.
+> - Fixed issue related with stale data address in TRB. 
+>   Issue: At some situations, the controller may get stale data address
+>   in TRB at below sequences:
+>   1. Controller read TRB includes data address.
+>   2. Software updates TRBs includes data address and Cycle bit.
+>   3. Controller read TRB which includes Cycle bit.
+>   4. DMA run with stale data address.
+> - Fixed issue without transfer. In some cases not all interrupts
+>   disabled in Hard IRQ was enabled in Soft Irq.
+> - Modified LFPS minimal U1 Exit time for controller revision 0x00024505.
+> - Fixed issue - in some case selected endpoint was unexpectedly changed.
+> - Fixed issue - after clearing halted endpoint transfer was not started.
+> - Fixed issue - in some case driver send ACK instead STALL in status phase.
+> - Fixed issues related to dequeue request.
+> - Fixed incorrect operator in cdns3_ep_run_transfer function.
+> 
+> Changes since v1:
+>  - Removed not implemented Suspend/Resume functions.
+>  - Fixed some issues in debugging related functions.
+>  - Added trace_cdns3_request_handled marker.
+>  - Added support for Isochronous transfer. 
+>  - Added some additional descriptions.
+>  - Fixed compilation error in cdns3_gadget_ep_disable.
+>  - Added detection of device controller version at runtime.
+>  - Upgraded dt-binding documentation.
+>  - Deleted ENOSYS from phy initialization section. It should be also removed
+>    from generic PHY driver.
+>  - added ep0_stage flag used during enumeration process.
+>  - Fixed issue with TEST MODE.
+>  - Added one common function for finish control transfer.
+>  - Separated some decoding function from dwc3 driver to common library file,
+>    and removed equivalents function from debug.h file as suggested  by Felipe.
+>  - replaced function name cdns3_gadget_unconfig with cdns3_hw_reset_eps_config.
+>  - Improved algorithm fixing hardware issue related to blocking endpoints.
+>    This issue is related to on-chip shared FIFO buffers for OUT packets. 
+>    Problem was reported by Peter Chan.
+>  - Changed organization of endpoint array in cdns3_device object.  
+>       - added ep0 to common eps array
+>       - removed cdns3_free_trb_pool and cdns3_ep_addr_to_bit_pos macros.
+>       - removed ep0_trb_dma, ep0_trb fields from cdns3_device.
+>  - Removed ep0_request and ep_nums fields from cdns3_device.
+>  - Other minor changes according with Felipe suggestion.
+> 
+> ---
+> 
+> Pawel Laszczak (6):
+>   dt-bindings: add binding for USBSS-DRD controller.
+>   usb:common Separated decoding functions from dwc3 driver.
+>   usb:common Patch simplify usb_decode_set_clear_feature function.
+>   usb:common Simplify usb_decode_get_set_descriptor function.
+>   usb:cdns3 Add Cadence USB3 DRD Driver
+>   usb:cdns3 Fix for stuck packets in on-chip OUT buffer.
+> 
+>  .../devicetree/bindings/usb/cdns-usb3.txt     |   45 +
+>  drivers/usb/Kconfig                           |    2 +
+>  drivers/usb/Makefile                          |    2 +
+>  drivers/usb/cdns3/Kconfig                     |   46 +
+>  drivers/usb/cdns3/Makefile                    |   17 +
+>  drivers/usb/cdns3/cdns3-pci-wrap.c            |  203 ++
+>  drivers/usb/cdns3/core.c                      |  554 ++++
+>  drivers/usb/cdns3/core.h                      |  109 +
+>  drivers/usb/cdns3/debug.h                     |  171 ++
+>  drivers/usb/cdns3/debugfs.c                   |   87 +
+>  drivers/usb/cdns3/drd.c                       |  390 +++
+>  drivers/usb/cdns3/drd.h                       |  166 +
+>  drivers/usb/cdns3/ep0.c                       |  914 ++++++
+>  drivers/usb/cdns3/gadget-export.h             |   28 +
+>  drivers/usb/cdns3/gadget.c                    | 2672 +++++++++++++++++
+>  drivers/usb/cdns3/gadget.h                    | 1334 ++++++++
+>  drivers/usb/cdns3/host-export.h               |   28 +
+>  drivers/usb/cdns3/host.c                      |   71 +
+>  drivers/usb/cdns3/trace.c                     |   11 +
+>  drivers/usb/cdns3/trace.h                     |  493 +++
+>  drivers/usb/common/Makefile                   |    1 +
+>  drivers/usb/common/debug.c                    |  268 ++
+>  drivers/usb/dwc3/debug.h                      |  252 --
+>  drivers/usb/dwc3/trace.h                      |    2 +-
+>  include/linux/usb/ch9.h                       |   27 +
+>  25 files changed, 7640 insertions(+), 253 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/cdns-usb3.txt
+>  create mode 100644 drivers/usb/cdns3/Kconfig
+>  create mode 100644 drivers/usb/cdns3/Makefile
+>  create mode 100644 drivers/usb/cdns3/cdns3-pci-wrap.c
+>  create mode 100644 drivers/usb/cdns3/core.c
+>  create mode 100644 drivers/usb/cdns3/core.h
+>  create mode 100644 drivers/usb/cdns3/debug.h
+>  create mode 100644 drivers/usb/cdns3/debugfs.c
+>  create mode 100644 drivers/usb/cdns3/drd.c
+>  create mode 100644 drivers/usb/cdns3/drd.h
+>  create mode 100644 drivers/usb/cdns3/ep0.c
+>  create mode 100644 drivers/usb/cdns3/gadget-export.h
+>  create mode 100644 drivers/usb/cdns3/gadget.c
+>  create mode 100644 drivers/usb/cdns3/gadget.h
+>  create mode 100644 drivers/usb/cdns3/host-export.h
+>  create mode 100644 drivers/usb/cdns3/host.c
+>  create mode 100644 drivers/usb/cdns3/trace.c
+>  create mode 100644 drivers/usb/cdns3/trace.h
+>  create mode 100644 drivers/usb/common/debug.c
+> 
+
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
