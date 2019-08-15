@@ -2,108 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A83D38E4CF
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 08:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA8A8E538
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 09:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730291AbfHOGKY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Aug 2019 02:10:24 -0400
-Received: from mga05.intel.com ([192.55.52.43]:38956 "EHLO mga05.intel.com"
+        id S1730553AbfHOHIy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Aug 2019 03:08:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44044 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730126AbfHOGKY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Aug 2019 02:10:24 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Aug 2019 23:10:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,388,1559545200"; 
-   d="scan'208";a="260733295"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga001.jf.intel.com with ESMTP; 14 Aug 2019 23:10:20 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Roger Quadros <rogerq@ti.com>, Pawel Laszczak <pawell@cadence.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jbergsagel@ti.com, nsekhar@ti.com,
-        nm@ti.com, sureshp@cadence.com, jpawar@cadence.com,
-        kurahul@cadence.com, aniljoy@cadence.com
-Subject: Re: [PATCH v10 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
-In-Reply-To: <8eb0194a-ee7d-3880-81a7-482ed6e3f759@ti.com>
-References: <1563733939-21214-1-git-send-email-pawell@cadence.com> <1563733939-21214-6-git-send-email-pawell@cadence.com> <8eb0194a-ee7d-3880-81a7-482ed6e3f759@ti.com>
-Date:   Thu, 15 Aug 2019 09:10:19 +0300
-Message-ID: <87lfvvt0vo.fsf@gmail.com>
+        id S1726366AbfHOHIx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Aug 2019 03:08:53 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 97FEC20656;
+        Thu, 15 Aug 2019 07:08:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565852933;
+        bh=yyfNAajZQ03NyCiArPb1FNKdE1FxCutrW6DAEOf/7o4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Do3AAM4euj9weNs+x5WmmiDrQ5Ul8s6AtHT9P69KrGhlnUwRFQPWe09Nd4Ssq7x1j
+         PkUi1RKEQmJyprkISIGhGcq2tnhss1U8OcBCQ/dbWlPamFYbJJGtPZm9nugnBfc10b
+         TT8PGlOcXUyWBJfC+2EMLA1kgweUltlIba9PoG1M=
+Date:   Thu, 15 Aug 2019 09:08:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        cy_huang <cy_huang@richtek.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gene_chen@richtek.com,
+        shufan_lee@richtek.com
+Subject: Re: [PATCH] From: cy_huang <cy_huang@richtek.com> Subject: usb: add
+ more vendor defined ops in tcpci
+Message-ID: <20190815070849.GA24779@kroah.com>
+References: <1565842753-14245-1-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1565842753-14245-1-git-send-email-u0084500@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Aug 15, 2019 at 12:19:13PM +0800, cy_huang wrote:
+> From: cy_huang <cy_huang@richtek.com>
 
-Hi,
+Your subject line is a bit odd :)
 
-Roger Quadros <rogerq@ti.com> writes:
+Also, we need a "real" name here, and in the signed-off-by line, not an
+email prefix.
 
-> On 21/07/2019 21:32, Pawel Laszczak wrote:
->> This patch introduce new Cadence USBSS DRD driver to Linux kernel.
->> 
->> The Cadence USBSS DRD Controller is a highly configurable IP Core which
->> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
->> Host Only (XHCI)configurations.
->> 
->> The current driver has been validated with FPGA platform. We have
->> support for PCIe bus, which is used on FPGA prototyping.
->> 
->> The host side of USBSS-DRD controller is compliant with XHCI
->> specification, so it works with standard XHCI Linux driver.
->> 
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> ---
->>  drivers/usb/Kconfig                |    2 +
->>  drivers/usb/Makefile               |    2 +
->>  drivers/usb/cdns3/Kconfig          |   46 +
->>  drivers/usb/cdns3/Makefile         |   17 +
->>  drivers/usb/cdns3/cdns3-pci-wrap.c |  203 +++
->>  drivers/usb/cdns3/core.c           |  554 +++++++
->>  drivers/usb/cdns3/core.h           |  109 ++
->>  drivers/usb/cdns3/debug.h          |  171 ++
->>  drivers/usb/cdns3/debugfs.c        |   87 ++
->>  drivers/usb/cdns3/drd.c            |  390 +++++
->>  drivers/usb/cdns3/drd.h            |  166 ++
->>  drivers/usb/cdns3/ep0.c            |  914 +++++++++++
->>  drivers/usb/cdns3/gadget-export.h  |   28 +
->>  drivers/usb/cdns3/gadget.c         | 2338 ++++++++++++++++++++++++++++
->>  drivers/usb/cdns3/gadget.h         | 1321 ++++++++++++++++
->>  drivers/usb/cdns3/host-export.h    |   28 +
->>  drivers/usb/cdns3/host.c           |   71 +
->>  drivers/usb/cdns3/trace.c          |   11 +
->>  drivers/usb/cdns3/trace.h          |  493 ++++++
->>  19 files changed, 6951 insertions(+)
->>  create mode 100644 drivers/usb/cdns3/Kconfig
->>  create mode 100644 drivers/usb/cdns3/Makefile
->>  create mode 100644 drivers/usb/cdns3/cdns3-pci-wrap.c
->>  create mode 100644 drivers/usb/cdns3/core.c
->>  create mode 100644 drivers/usb/cdns3/core.h
->>  create mode 100644 drivers/usb/cdns3/debug.h
->>  create mode 100644 drivers/usb/cdns3/debugfs.c
->>  create mode 100644 drivers/usb/cdns3/drd.c
->>  create mode 100644 drivers/usb/cdns3/drd.h
->>  create mode 100644 drivers/usb/cdns3/ep0.c
->>  create mode 100644 drivers/usb/cdns3/gadget-export.h
->>  create mode 100644 drivers/usb/cdns3/gadget.c
->>  create mode 100644 drivers/usb/cdns3/gadget.h
->>  create mode 100644 drivers/usb/cdns3/host-export.h
->>  create mode 100644 drivers/usb/cdns3/host.c
->>  create mode 100644 drivers/usb/cdns3/trace.c
->>  create mode 100644 drivers/usb/cdns3/trace.h
->> 
->
-> <snip>
->
-> It is getting really hard to review this patch as it is so large.
-> I would still suggest to split host/gadget/drd if possible.
-> Felipe, any objections?
+Please fix up and resend.
 
-Maybe you guys can do a few rounds off-list then?
+thanks,
 
--- 
-balbi
+greg k-h
