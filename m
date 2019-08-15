@@ -2,155 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0556E8F283
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 19:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9238F371
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 20:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732551AbfHORnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Aug 2019 13:43:37 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:38122 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1732548AbfHORnh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 13:43:37 -0400
-Received: (qmail 5345 invoked by uid 2102); 15 Aug 2019 13:43:36 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 15 Aug 2019 13:43:36 -0400
-Date:   Thu, 15 Aug 2019 13:43:36 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com>,
-        Jiri Kosina <jikos@kernel.org>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <gustavo@embeddedor.com>, <hdanton@sina.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        <syzkaller-bugs@googlegroups.com>, <linux-input@vger.kernel.org>
-Subject: Re: general protection fault in __pm_runtime_resume
-In-Reply-To: <000000000000b1729e058fecdcee@google.com>
-Message-ID: <Pine.LNX.4.44L0.1908151333220.1343-100000@iolanthe.rowland.org>
+        id S1732167AbfHOScU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Aug 2019 14:32:20 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:39759 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729204AbfHOScT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 14:32:19 -0400
+Received: by mail-oi1-f195.google.com with SMTP id 16so2950593oiq.6;
+        Thu, 15 Aug 2019 11:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zr7m4pwTZtuvjpeiIC/jYJKmr4TJLJV4XhMln9ZPv+4=;
+        b=QhoIDVYdejOyWyiUAfCz1XWolONEWbCa4OOpGFtUQnKIGhnLyEC0/WGR5DefUSe1mR
+         i3zN3r2Q/fvJSZDwrKzaRdvzv43fsSPU0X21BNHiS2Yqh+NKiqKBv6Ii+RH2I3llRllE
+         byC/IWheGYP6LEWHOEThfHTWTKIJJf+uR547l94H3w3AmvHSXHgGTk25MdOCZrvH2vOm
+         xHVEnRuf1yAPoEGvBmZTWcabaDcqGkwohIXbc60Uis39tG3aq01SVHfE16g3nGRTQp5j
+         fFt/E1AjMR0bRMXf2g86K2ujhMJd+JgLRDunGS64polTLVj9Z+V7jNNFV0rN5tUK+OI4
+         jJgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zr7m4pwTZtuvjpeiIC/jYJKmr4TJLJV4XhMln9ZPv+4=;
+        b=mRk2Py5RXG0x+J5XW4uglBrbSbg6w7YZi9/0oskyu+QClR6NckM6uY+xh2RN9tNWJ4
+         DaHoU2lYVR26VuTzaL3knj6gqIip/Xh0/rpMTlLomiNGSAbRQrdl0GndLZrfb/7UJvjt
+         6Cy3GdAJnMlFfikMepXq8IQFDANqXU2nL2r/sE5OW/bHhBLLZmRvcfLq/Q1hd//5y9Fy
+         0T98Y2UP4Fah1loE5P+WsmiTQzjfrJq8IPrZNP3N4tmWg3IHTaW3gQFlLXEqvBIPnr6n
+         jXfeSnyPNYa/VGlxxC/2wzZbQ2V86zsROBQaS4TnCvqq7b/DkVq5UkPGy6iAaKYqAt8Y
+         MPVg==
+X-Gm-Message-State: APjAAAWM64D/q3FyD9DFamwKmlbXeV5/T+islOhyNL3i9ObIGMKzjwhz
+        LQKUOHVK54i4UoyKlXNPT+Jvu0NiI5Q=
+X-Google-Smtp-Source: APXvYqyUNRL91dzBCJhtveiCufmLdZI/X5yNhmzj2dzOWTVqlPUlee32crL4pNFIQyUM9g4pdq2Yow==
+X-Received: by 2002:a05:6808:49a:: with SMTP id z26mr2630733oid.177.1565893938759;
+        Thu, 15 Aug 2019 11:32:18 -0700 (PDT)
+Received: from [10.15.211.16] ([74.51.240.241])
+        by smtp.gmail.com with ESMTPSA id t81sm686205oie.48.2019.08.15.11.32.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Aug 2019 11:32:18 -0700 (PDT)
+Subject: Re: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+References: <20190731195713.3150463-1-arnd@arndb.de>
+ <20190731225303.GC1330@shell.armlinux.org.uk>
+ <CAK8P3a1Lgbz9RwVaOgNq=--gwvEG70tUi67XwsswjgnXAX6EhA@mail.gmail.com>
+ <CAK8P3a0=GrjM_HOBgqy5V3pOsA6w1EDOtEQO9dZG2Cw+-2niaw@mail.gmail.com>
+From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
+Message-ID: <b43c3d60-b675-442c-c549-25530cfbffe3@gmail.com>
+Date:   Thu, 15 Aug 2019 14:32:15 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <CAK8P3a0=GrjM_HOBgqy5V3pOsA6w1EDOtEQO9dZG2Cw+-2niaw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 12 Aug 2019, syzbot wrote:
+Hi Arnd,
 
-> Hello,
+On 8/15/19 9:11 AM, Arnd Bergmann wrote:
+> On Thu, Aug 1, 2019 at 9:33 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> On Thu, Aug 1, 2019 at 12:53 AM Russell King - ARM Linux admin
+>> <linux@armlinux.org.uk> wrote:
+>>>
+>>> On Wed, Jul 31, 2019 at 09:56:42PM +0200, Arnd Bergmann wrote:
+>>>> For dove, the patches are basically what I had proposed back in
+>>>> 2015 when all other ARMv6/ARMv7 machines became part of a single
+>>>> kernel build. I don't know what the state is mach-dove support is,
+>>>> compared to the DT based support in mach-mvebu for the same
+>>>> hardware. If they are functionally the same, we could also just
+>>>> remove mach-dove rather than applying my patches.
+>>>
+>>> Well, the good news is that I'm down to a small board support file
+>>> for the Dove Cubox now - but the bad news is, that there's still a
+>>> board support file necessary to support everything the Dove SoC has
+>>> to offer.
+>>>
+>>> Even for a DT based Dove Cubox, I'm still using mach-dove, but it
+>>> may be possible to drop most of mach-dove now.  Without spending a
+>>> lot of time digging through it, it's impossible to really know.
+>>
+>> Ok, so we won't remove it then, but I'd like to merge my patches to
+>> at least get away from the special case of requiring a separate kernel
+>> image for it.
+>>
+>> Can you try if applying patches 12 and 14 from my series causes
+>> problems for you? (it may be easier to apply the entire set
+>> or pull from [1] to avoid rebase conflicts).
 > 
-> syzbot has tested the proposed patch and the reproducer did not trigger  
-> crash:
+> I applied patches 12 and 13 into the soc tree now. There are some
+> other pending multiplatform conversions (iop32x, ep93xx, lpc32xx,
+> omap1), but it looks like none of those will be complete for 5.4.
+
+I think the patchset (v2) for the LPC32xx is ready for 5.4
+([PATCH v2 00/13] v2: ARM: move lpc32xx to multiplatform)
+ >
+> I now expect that we can get most of the preparation into 5.4,
+> and maybe move them all over together in 5.5 after some more
+> testing. If someone finds a problem with the one of the
+> preparation steps, that we can revert the individual patches
+> more easily.
 > 
-> Reported-and-tested-by:  
-> syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
+>        Arnd
 > 
-> Tested on:
-> 
-> commit:         7f7867ff usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=177252d2600000
-> 
-> Note: testing is done by a robot and is best-effort only.
-
-That was the result from testing Hillf's patch:
-
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -1410,6 +1410,7 @@ static void usbhid_disconnect(struct usb
-        spin_lock_irq(&usbhid->lock);   /* Sync with error and led handlers */
-        set_bit(HID_DISCONNECTED, &usbhid->iofl);
-        spin_unlock_irq(&usbhid->lock);
-+       hid_hw_stop(hid);
-        hid_destroy_device(hid);
-        kfree(usbhid);
- }
-
-There is very good reason to believe this patch is not the correct
-solution to the problem.  For one thing, in some circumstances the
-patch ends up calling hid_hw_stop() twice (not shown here, but we have 
-seen this in other bug reports from syzbot).
-
-For another, I have just tested a different patch and found that it 
-also prevents this particular crash:
-
-> Hello,
->
-> syzbot has tested the proposed patch and the reproducer did not trigger
-> crash:
->
-> Reported-and-tested-by:
-> syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
->
-> Tested on:
->
-> commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=170b66a6600000
->
-> Note: testing is done by a robot and is best-effort only.
-
-My patch:
-
-Index: usb-devel/drivers/hid/hid-lg.c
-===================================================================
---- usb-devel.orig/drivers/hid/hid-lg.c
-+++ usb-devel/drivers/hid/hid-lg.c
-@@ -818,7 +818,7 @@ static int lg_probe(struct hid_device *h
- 
- 		if (!buf) {
- 			ret = -ENOMEM;
--			goto err_free;
-+			goto err_stop;
- 		}
- 
- 		ret = hid_hw_raw_request(hdev, buf[0], buf, sizeof(cbuf),
-@@ -850,9 +850,12 @@ static int lg_probe(struct hid_device *h
- 		ret = lg4ff_init(hdev);
- 
- 	if (ret)
--		goto err_free;
-+		goto err_stop;
- 
- 	return 0;
-+
-+err_stop:
-+	hid_hw_stop(hdev);
- err_free:
- 	kfree(drv_data);
- 	return ret;
-@@ -863,8 +866,7 @@ static void lg_remove(struct hid_device
- 	struct lg_drv_data *drv_data = hid_get_drvdata(hdev);
- 	if (drv_data->quirks & LG_FF4)
- 		lg4ff_deinit(hdev);
--	else
--		hid_hw_stop(hdev);
-+	hid_hw_stop(hdev);
- 	kfree(drv_data);
- }
- 
-Index: usb-devel/drivers/hid/hid-lg4ff.c
-===================================================================
---- usb-devel.orig/drivers/hid/hid-lg4ff.c
-+++ usb-devel/drivers/hid/hid-lg4ff.c
-@@ -1477,7 +1477,6 @@ int lg4ff_deinit(struct hid_device *hid)
- 		}
- 	}
- #endif
--	hid_hw_stop(hid);
- 	drv_data->device_props = NULL;
- 
- 	kfree(entry);
-
-This fixes a fairly obvious bug in the hid-lg driver: It does not 
-always call hid_hw_stop() in all pathways after calling hid_hw_start().
-
-Presumably the same is true for the other related bugs found by syzbot.  
-I'm doing some more testing and we will see...
-
-Alan Stern
-
+Sylvain
