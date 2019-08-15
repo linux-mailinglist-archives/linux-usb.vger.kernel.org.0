@@ -2,76 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D56288F4D4
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 21:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4C58F509
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 21:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732960AbfHOTjE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Aug 2019 15:39:04 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:44148 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731211AbfHOTjD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 15:39:03 -0400
-Received: by mail-qt1-f196.google.com with SMTP id 44so3547879qtg.11;
-        Thu, 15 Aug 2019 12:39:03 -0700 (PDT)
+        id S1733170AbfHOTqg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Aug 2019 15:46:36 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:43236 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729779AbfHOTqf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 15:46:35 -0400
+Received: by mail-pl1-f194.google.com with SMTP id 4so1439279pld.10
+        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 12:46:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=OSQEhR1pkVaKJxBDfxnh2KojMNBlcr+bEDFpUQewXbs=;
+        b=b4mcvCWNp6jjfsHufTvEa3SNtbYruxqUT6hUfWpXhugLntFIZTXb1Jilci2sbHRD2D
+         gcSWA55vsQ8QlKIIwWY5AykQAViRMSVucltUGsrZNaKFQBXD5bwiNi3RbithKngsedEJ
+         ssMp/PMaCP7thcRCU3dUahswe3fkL7koaVGFU1MMWhSNg33Vy2ObNgjYyXtWcA9c42lV
+         odP4DUCMr4BS4jPB8sIDsT4c0szTTtw5xyM09cR09K01Jeyp7Qfh6PCGdUX23MCxij79
+         hdtVXSIMfwzk8PtBxHniMmFfVr/YCmtrRKAXBMJvFTLqn5WoC61BUfi4vJQcA9ROojti
+         mkqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E1uPy8KdAoiEgff6O2fYBXQ3Fn6UlM0L6zfIpxvfPBI=;
-        b=WxI5DxIJVTUdx4BwaWNEVdTI3ReLWi0O3QnQ/xWqnWlLB/yW8fPQmxO+IL7K2gqgNU
-         UsTKIKzDby0KalTlUJfv60UTvLgScfIYGeroKTEmxNG9dmhuvqmftOMAsUoDhMyu4atk
-         g8pS44ImAJNN1WyNJHdq9D2BbSZg0yoNiUD6UWtzHN0+G7G5ML2JJwIs/4Xz7EmfU9ru
-         35uprNN/J1Om8fdV+ooe1b4BGyFYAEDyXjfm0hq6zSfTTw4Csl29aGfnJir2Xn+s1CXx
-         98aKJ2Dqmi/zYcXE1EcsT9G++Zp+lVrjmIc5UNrglrfkk2qXreQBPZF6jlfXMuVcOnLe
-         +VBQ==
-X-Gm-Message-State: APjAAAUQY62CuNCwFdZbK8/mQzJxFI8NY2DsjxpgUylCloqHZdU4xsNf
-        d0h1L7L57XEphjGsDIMA80mDdRhkgnM527DYA+A=
-X-Google-Smtp-Source: APXvYqxqTY8ftYo1EUWFqO+wE8ZQTXXaXX7aeplKk/nDWAyNr8WQSB0twRkA82A5Gyv2tMBQ6tV5GMhK78egWxkdSCU=
-X-Received: by 2002:ac8:f99:: with SMTP id b25mr5374344qtk.142.1565897942632;
- Thu, 15 Aug 2019 12:39:02 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OSQEhR1pkVaKJxBDfxnh2KojMNBlcr+bEDFpUQewXbs=;
+        b=PXtvmEp1AjlDJQVvyyKpuLmMLPrLw7ecEZLQm5JpbxlfZoG1uhwSdN+xszTriiGOWz
+         UEXdY+dZLHyPofqWRoqAx6KEpT3S5RRn0wUw/+ZXPH2lQKvlIErTlmfKZSyFAMftRhjx
+         3RvId0BvHnXGHB64KVD1lOIeMB7CO74gPB7rkQ2LzItuSU7oFpPXLyZKP9k5d+o66Pt9
+         8+shiE8ak9krQhzyHYobHaPShyjrCYUyej5+UHf89IOp5EtMeNK9nCQHBwHh+5VHpZZf
+         sXlvhtDXfVxidU+M0Z9fXDo0WS+xw2JVt8itTF6rIEPobr01DDVyfUIMpEY6yflAmkLe
+         cd6A==
+X-Gm-Message-State: APjAAAUQsA1Ykn/ww33rKgbyebF8qO9ZdXRtLcC3xv8vmMNPqxruGoXb
+        yIA7It9QPusc90CKUFDXeXqeqNHD
+X-Google-Smtp-Source: APXvYqzSH7K8LPuMlAlTL4dcm89YCVapm8x5S8tKbG4kHBxxzJ5E3ErvjH7Zy0Y3vaDB2BKM60ILRg==
+X-Received: by 2002:a17:902:3081:: with SMTP id v1mr5887235plb.169.1565898395378;
+        Thu, 15 Aug 2019 12:46:35 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e9sm3437844pge.39.2019.08.15.12.46.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Aug 2019 12:46:34 -0700 (PDT)
+Date:   Thu, 15 Aug 2019 12:46:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: typec: tcpm: Use usb_debug_root as root for our
+ debugfs entry
+Message-ID: <20190815194633.GA12421@roeck-us.net>
+References: <20190815191815.755606-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-References: <20190731195713.3150463-1-arnd@arndb.de> <20190731225303.GC1330@shell.armlinux.org.uk>
- <CAK8P3a1Lgbz9RwVaOgNq=--gwvEG70tUi67XwsswjgnXAX6EhA@mail.gmail.com>
- <CAK8P3a0=GrjM_HOBgqy5V3pOsA6w1EDOtEQO9dZG2Cw+-2niaw@mail.gmail.com> <b43c3d60-b675-442c-c549-25530cfbffe3@gmail.com>
-In-Reply-To: <b43c3d60-b675-442c-c549-25530cfbffe3@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 15 Aug 2019 21:38:46 +0200
-Message-ID: <CAK8P3a3ry0S-yhE75hZx1SawYuVzY=NgnNBei101F6+HxBfE3g@mail.gmail.com>
-Subject: Re: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
-To:     Sylvain Lemieux <slemieux.tyco@gmail.com>
-Cc:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190815191815.755606-1-hdegoede@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 8:32 PM Sylvain Lemieux <slemieux.tyco@gmail.com> wrote:
-> On 8/15/19 9:11 AM, Arnd Bergmann wrote:
-> > On Thu, Aug 1, 2019 at 9:33 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > I applied patches 12 and 13 into the soc tree now. There are some
-> > other pending multiplatform conversions (iop32x, ep93xx, lpc32xx,
-> > omap1), but it looks like none of those will be complete for 5.4.
->
-> I think the patchset (v2) for the LPC32xx is ready for 5.4
-> ([PATCH v2 00/13] v2: ARM: move lpc32xx to multiplatform)
+On Thu, Aug 15, 2019 at 09:18:13PM +0200, Hans de Goede wrote:
+> Use usb_debug_root as root for our debugfs entry instead of creating our
+> own subdirectory under the debugfs root.
+> 
+> Another patch in this series will make the same change to the fusb302
+> driver, which also uses dev_name() (on the same device) for the debugfs
+> entry name. So we also prefix dev_name() with "tcpm-" here to avoid a
+> name conflict.
+> 
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Good point. I've merged these into the arm/soc branch now.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-     Arnd
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 17 +++++------------
+>  1 file changed, 5 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 15abe1d9958f..5241d17c3399 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/seq_file.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/usb.h>
+>  #include <linux/usb/pd.h>
+>  #include <linux/usb/pd_ado.h>
+>  #include <linux/usb/pd_bdo.h>
+> @@ -571,17 +572,13 @@ static int tcpm_debug_show(struct seq_file *s, void *v)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(tcpm_debug);
+>  
+> -static struct dentry *rootdir;
+> -
+>  static void tcpm_debugfs_init(struct tcpm_port *port)
+>  {
+> -	mutex_init(&port->logbuffer_lock);
+> -	/* /sys/kernel/debug/tcpm/usbcX */
+> -	if (!rootdir)
+> -		rootdir = debugfs_create_dir("tcpm", NULL);
+> +	char name[NAME_MAX];
+>  
+> -	port->dentry = debugfs_create_file(dev_name(port->dev),
+> -					   S_IFREG | 0444, rootdir,
+> +	mutex_init(&port->logbuffer_lock);
+> +	snprintf(name, NAME_MAX, "tcpm-%s", dev_name(port->dev));
+> +	port->dentry = debugfs_create_file(name, S_IFREG | 0444, usb_debug_root,
+>  					   port, &tcpm_debug_fops);
+>  }
+>  
+> @@ -597,10 +594,6 @@ static void tcpm_debugfs_exit(struct tcpm_port *port)
+>  	mutex_unlock(&port->logbuffer_lock);
+>  
+>  	debugfs_remove(port->dentry);
+> -	if (list_empty(&rootdir->d_subdirs)) {
+> -		debugfs_remove(rootdir);
+> -		rootdir = NULL;
+> -	}
+>  }
+>  
+>  #else
+> -- 
+> 2.23.0.rc2
+> 
