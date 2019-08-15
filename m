@@ -2,97 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 262D08EA80
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 13:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE28B8EAA8
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 13:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730988AbfHOLli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Aug 2019 07:41:38 -0400
-Received: from mx08-00252a01.pphosted.com ([91.207.212.211]:37722 "EHLO
-        mx08-00252a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730874AbfHOLlh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 07:41:37 -0400
-Received: from pps.filterd (m0102629.ppops.net [127.0.0.1])
-        by mx08-00252a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7FBcUJc026633
-        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 12:41:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=raspberrypi.org; h=mime-version :
- references : in-reply-to : from : date : message-id : subject : to : cc :
- content-type; s=pp; bh=+Lq/N7f3tvYKWgHHrhuPl7saj7sbCh4IeegT+7rIvaI=;
- b=QR9t9XnzAyJHX+cEp08rQQYazY2OBigGC3WqWqdpY/H44JfA6df/Fr6Uo6R/T0wKr5DA
- 0JdAp9cn6aNt7/Y8GpMhlJwk380BI6gfqemlYwaIKfEJi81RAgndyaIlOtXq28Kc4zUX
- iYjL9m+Gn/aXI/ThVguVhoyKcBbHMb0L13HLcQwOScEV2z7o1tcwWMi57f3/USivjNZI
- 1UVPErS5hFZh/fYgOI25JxS5gGZBERfJreRR7GOVo5rKRQjXbSdD6ZZQyQLnUhKyGGht
- qZDlUXNAb1YwjZuk4Cp9WahXvjG3IQvHHpJiFhXFrhYccAXFaOyQ48cMBD9j9GfWoElT 8Q== 
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-        by mx08-00252a01.pphosted.com with ESMTP id 2ubfbf99by-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK)
-        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 12:41:35 +0100
-Received: by mail-oi1-f200.google.com with SMTP id k4so1034729oif.20
-        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 04:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+Lq/N7f3tvYKWgHHrhuPl7saj7sbCh4IeegT+7rIvaI=;
-        b=aPF1VHIezdBZNmlnnbIZeNF9AqAOz7k3xUdpDpyOI+/YIZQfLkftItmHpEdeKfVgie
-         K6cFa5Qi5auutTbbCSuttLmgn3Zdf3OIN4kd9vgCXQa/yaWsGxLFjxy2LxHyLXAyy9Ot
-         kYSk7v0DXDCRWpujfge5E/DbS/2aJ3xf+9As10LT040hyi9fH1rYIZwbgBMeSXNk0DsD
-         A8ehvSlT2kdjqgogX0nWpRaON9G875mmqbgYKtVDDLl5luTFIFxsBeagPaxalR5dq5xs
-         CMVk/xHIKjwd2grjANgUbyHPHTrl8GKKyPSE40/oMaMuhe+9O5wJJ24bXUjSZl232jDm
-         EocQ==
+        id S1730833AbfHOLtm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Aug 2019 07:49:42 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:36179 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726120AbfHOLtm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 07:49:42 -0400
+Received: by mail-lf1-f66.google.com with SMTP id j17so1466623lfp.3;
+        Thu, 15 Aug 2019 04:49:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+Lq/N7f3tvYKWgHHrhuPl7saj7sbCh4IeegT+7rIvaI=;
-        b=hy+y6RxGJnPg0HahDZYDtlrWXpjx21ZIo6qFc8hmFwDMAzGmDug7NVFvcDCEmj/wda
-         trSOrQxCD4sz/vx+SxmGTHpe/QzGqWjAGMOe/EW8ODyPB0XObcF8Fw1yQWauhWhQ8/iy
-         hwlIgzRF9zWeWYl4PR1Nk0eVTRGOXv053vUt+yGX+eASg2Hqj8Wo2emHS4Du2JIoBkqR
-         9NGrrrIVTR8jQvyqRazwMNbAQdrZa/E6Xo8vwrcmyUht4f+iufvGHFY2eoNdxc2WEVPb
-         djGnSCKSGcoTCtYIYHjFhuuoyLw72Kkxo05nDUBOFd6PMp3UTRT/NRKmhR/G4dlEF63J
-         PztA==
-X-Gm-Message-State: APjAAAV1Lv67i2FWXEQjurOVz//C5V3QW+wjWVGo0fk9z+DRRvOzF0gm
-        CAQMq9wYm8MX4ELTc+wNptvjn/XZu2+pqKUmQwES9t2o3xhGNgZIsynzCul6zlcCZtTkihAP5J7
-        98XzHr7gvJ5lHNeVOR9N/KEvAlDk5CpkEXwnR
-X-Received: by 2002:a6b:b886:: with SMTP id i128mr4843086iof.90.1565869293388;
-        Thu, 15 Aug 2019 04:41:33 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqzJksW2HGzVerRzGm5cIXM40SniDcNWZZjj0Js5+5FPo7iqjdW7V7WmAVYuo05q1pFlxeG7CPsHHqGhhim87Vo=
-X-Received: by 2002:a6b:b886:: with SMTP id i128mr4843075iof.90.1565869293201;
- Thu, 15 Aug 2019 04:41:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=da+ygSzukrNTt7CGugFq0tsNtlCIMnjE6GGsWB9xJ48=;
+        b=ULWFQbqb1jbpzVx+1aLPerK7pAznx9oux6NqXOgUTj05CMUhf8UL09aHq9SUcWDH/7
+         fyCQ66Retm6BKIWATv00gcnUqdxgOleDl/caNdRtpM8RzM3OAugjZqZ2AT2UZFikpEOZ
+         FfMICKSudqW8XxfCzNRiokJv2XTqFKmjJQV5ahj623DbEE+qOdWUfj9Ss01DYwVPqHHB
+         w8rQFgGO7PNV+j4Hg3iXGjFAfqVd8LlIAY9RfW2i7fWU3djm7ML9135c2G4Sr+swCDY5
+         YA7BiGmlSTYKvThf2p1orKZaTVbZ5G5eE3/uY9YJ9E6Umhf8TF1QvSmsDrA79GjuUy6O
+         ycsQ==
+X-Gm-Message-State: APjAAAXN7GRptNQy4CCeuZlogHCPZDwGZC3i++/iSquLxY4VvfE8raF3
+        CXAghbZgL5boHQLNmc5JB9iOEVgY+4A=
+X-Google-Smtp-Source: APXvYqwVRvo82H3BRDmNsGrNxpyaMFmyB/UEZpBGmA5KjqUAE8xtXTFBPIRocM+Bmgd6DVngJfyaJg==
+X-Received: by 2002:ac2:484e:: with SMTP id 14mr2182257lfy.50.1565869780030;
+        Thu, 15 Aug 2019 04:49:40 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id f1sm442019ljf.53.2019.08.15.04.49.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Aug 2019 04:49:38 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92)
+        (envelope-from <johan@kernel.org>)
+        id 1hyEGD-0003qP-7m; Thu, 15 Aug 2019 13:49:41 +0200
+Date:   Thu, 15 Aug 2019 13:49:41 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bob Ham <bob.ham@puri.sm>
+Cc:     Johan Hovold <johan@kernel.org>,
+        "Angus Ainslie (Purism)" <angus@akkea.ca>, kernel@puri.sm,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: serial: option: Add the BroadMobi BM818 card
+Message-ID: <20190815114941.GE32300@localhost>
+References: <20190724145227.27169-1-angus@akkea.ca>
+ <20190724145227.27169-2-angus@akkea.ca>
+ <20190805114711.GF3574@localhost>
+ <5fb96703-b174-eef1-5ad1-693e2bbce32f@puri.sm>
 MIME-Version: 1.0
-References: <CAPHs_J+G0jR5dMg1gVD0z60Zf4oZBikx6P9+B99-TA6m29DWGA@mail.gmail.com>
- <1565866530.5780.4.camel@suse.com>
-In-Reply-To: <1565866530.5780.4.camel@suse.com>
-From:   Jonathan Bell <jonathan@raspberrypi.org>
-Date:   Thu, 15 Aug 2019 12:41:19 +0100
-Message-ID: <CAPHs_JLkWmgvWJPyBdugFPfgPMpyeQL1bQe3VLru4BTf9L+iag@mail.gmail.com>
-Subject: Re: dwc2 / Raspberry Pi - hardware bug for small transfers results in
- memory corruption
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org, Minas Harutyunyan <hminas@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:5.22.84,1.0.8
- definitions=2019-08-15_04:2019-08-14,2019-08-15 signatures=0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="SLDf9lqlvOQaIe6s"
+Content-Disposition: inline
+In-Reply-To: <5fb96703-b174-eef1-5ad1-693e2bbce32f@puri.sm>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 11:55 AM Oliver Neukum <oneukum@suse.com> wrote:
->
-> Am Mittwoch, den 14.08.2019, 16:59 +0100 schrieb Jonathan Bell:
-> > As reported by one of our users here:
-> > https://github.com/raspberrypi/linux/issues/3148
-> >
-> > There is a bug when the dwc2 core receives USB data packets that are
-> > between 1 and 4 bytes in length - 4 bytes are always written to memory
-> > where the non-packet bytes are garbage.
->
-> Hi,
->
-> in which function does that happen? If your buffer cannot handle 4
-> bytes I cannot see how it copes with teh DMA rules.
->
-In drivers/media/usb/uvc/uvc_ctrl.c:uvc_ctrl_populate_cache() and friends.
 
-The UVC driver passes in offsets into a struct uvc_control as the
-"buffer" that usb_control_msg() fills.
+--SLDf9lqlvOQaIe6s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Aug 05, 2019 at 03:44:30PM +0100, Bob Ham wrote:
+> On 05/08/2019 12:47, Johan Hovold wrote:
+> > On Wed, Jul 24, 2019 at 07:52:26AM -0700, Angus Ainslie (Purism) wrote:
+> >> From: Bob Ham <bob.ham@puri.sm>
+> >>
+> >> Add a VID:PID for the BroadModi BM818 M.2 card
+> >=20
+> > Would you mind posting the output of usb-devices (or lsusb -v) for this
+> > device?
+>=20
+> T:  Bus=3D01 Lev=3D03 Prnt=3D40 Port=3D03 Cnt=3D01 Dev#=3D 44 Spd=3D480 M=
+xCh=3D 0
+> D:  Ver=3D 2.00 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
+> P:  Vendor=3D2020 ProdID=3D2060 Rev=3D00.00
+> S:  Manufacturer=3DQualcomm, Incorporated
+> S:  Product=3DQualcomm CDMA Technologies MSM
+> C:  #Ifs=3D 5 Cfg#=3D 1 Atr=3De0 MxPwr=3D500mA
+> I:  If#=3D0x0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Drive=
+r=3D(none)
+> I:  If#=3D0x1 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Drive=
+r=3D(none)
+> I:  If#=3D0x2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Drive=
+r=3D(none)
+> I:  If#=3D0x3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dfe Prot=3Dff Drive=
+r=3D(none)
+> I:  If#=3D0x4 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Drive=
+r=3D(none)
+
+I amended the commit message with the above, switched to
+USB_DEVICE_INTERFACE_CLASS(), fixed the comment and moved the entry
+to the other 0x2020 entries before applying.
+
+Johan
+
+--SLDf9lqlvOQaIe6s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCXVVGxwAKCRALxc3C7H1l
+CKpnAQC3uoOsq0K+HH2WaIfb4ig3RUodqYlqy2HQxZE7oJQGSgD8DeS8+HJ5TqIG
+LVM+pr2Voun/2PPKZJrh+e9HoeiGZAo=
+=nOST
+-----END PGP SIGNATURE-----
+
+--SLDf9lqlvOQaIe6s--
