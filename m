@@ -2,92 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A49B8EC06
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 14:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8E78EC10
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Aug 2019 14:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731027AbfHOMzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Aug 2019 08:55:09 -0400
-Received: from mx07-00252a01.pphosted.com ([62.209.51.214]:11944 "EHLO
-        mx07-00252a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729918AbfHOMzJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Aug 2019 08:55:09 -0400
-Received: from pps.filterd (m0102628.ppops.net [127.0.0.1])
-        by mx07-00252a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7FCsZNf002301
-        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 13:55:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=raspberrypi.org; h=mime-version :
- references : in-reply-to : from : date : message-id : subject : to : cc :
- content-type; s=pp; bh=gbN2amsLMfVwAula5SUBsvIFJlbpbU/3PCRkaEjwK4Q=;
- b=lFm4SqoqyPyuAyUsE23MALL+nrCi8KWelEoEeNIq73X7m30O8PpWy0dO2FvVeTnkNzdW
- U+lRwWIGXNSiEFPimClALU3IZWGNhP1U1jQTj+/djqFNE2wvmxn3nUjDCa94fljWqgbI
- WVt/l/l9mtrv3jqeQibDE8SKhhytYrsbS1q8UpIIlDNwzpfkp9FeobfKCKjo1KF1TOJz
- j7A5vNFsbCLE8/Yp2qwDqdagchVtNvjOUDhkO4/Aap4abk0QKPjNRSDdOhknDsfegDoD
- opVopzC5/WWvUX+yxSbQL5/KfKIMickldvnJvZd9bfVPUrmAbdbEbAVILv3TIDh8Y4pD /w== 
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
-        by mx07-00252a01.pphosted.com with ESMTP id 2ubfbbsas6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK)
-        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 13:55:06 +0100
-Received: by mail-oi1-f197.google.com with SMTP id t22so1192385oij.17
-        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 05:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gbN2amsLMfVwAula5SUBsvIFJlbpbU/3PCRkaEjwK4Q=;
-        b=Cw87sPbR9y/x0+8lJnPWUkw/v1YfXucrtAmTsdxWhKxtk8NdQB73tklCoHky24C/ZM
-         EUBhMOula5ACsD88tIQ+EZsZzKgg1GsmpLVICbEDeizBhhSYdAZFT5IJk3xnGl5b4PZc
-         hn6O3vCOWNfT2Ow2C0WfCKzeAm5b9xgnfDXxlk+5+avIYgoW6HZHWKiYztgS+z0u06sy
-         aDnJZEFEfvLlJGICYl0rzbsWBawr6HrYYHlFwxvw/ziMs8rZwrnYmvk9hZDBf05i3RhS
-         X4jiXb74rdIaWDTzQzCRL4lUHprnMU774vTb2/PvSqR6Q+B4JNfeYnCKNSlEHkSlkewn
-         H7hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gbN2amsLMfVwAula5SUBsvIFJlbpbU/3PCRkaEjwK4Q=;
-        b=X2WnityftkYXX3s/Jc/3kI9LXeObNCCr7p3dLc6I9n4YBivzUPwqDEE8Ji97xjIJ0H
-         P0SQoLHGARYFaDDPM7ws/j0lcNgTnRDzi+jnkGnhbZrfDzl8qkiGSSVveRfl9p7v0XXz
-         7hxrWRapK5SLm6xa6ylUz0QpbntU+UEHUxrPolO7d4EI5WDTAnAcq19Fskdr2RcY0VFv
-         AIwTgqkB9bnsxiCHDGohbsnrCZK+mABB3Wq9HENkr71FcCHZb70Gh2lX6KKvLOq3rVi+
-         wywb/7xDoy8nbvFRvfzwWSmOBmQc6HAPyGJL46dkODabYgsHBpxcxEBNnpYvex2Dlowm
-         oPTg==
-X-Gm-Message-State: APjAAAVsZjgz2lCSoZCddpd5JXV3sLrQ+ZwFe++iHws9Dydle73LUhi6
-        f1bQM5buwfYtnxEsB/ArAvYw5YVuRXDmuMaojjefOr7fc64eKo4Uaj/j4Q4qjgWTldETvoInKm1
-        tgQP6odBVXQHreOfiGHJ/ET5EQg/Hu1B/FN0L
-X-Received: by 2002:a6b:ea02:: with SMTP id m2mr500213ioc.155.1565873704296;
-        Thu, 15 Aug 2019 05:55:04 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqzmDTjS9byiRnG+C5Kn+U6mZU+WUIJlDZLJTtgUGS1HOpadqSdAhatshuIzlSzjFOyHtRKvpmCz/4MDvqt2aog=
-X-Received: by 2002:a6b:ea02:: with SMTP id m2mr500205ioc.155.1565873704120;
- Thu, 15 Aug 2019 05:55:04 -0700 (PDT)
+        id S1731954AbfHOMzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Aug 2019 08:55:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41054 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729649AbfHOMzr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Aug 2019 08:55:47 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DDD90206C1;
+        Thu, 15 Aug 2019 12:55:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565873746;
+        bh=VmCloNb/xfgJz/sV6/R5lq6ky6sKNBaakUCXudqB6O8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uvZmENs8shu2/OfyxxMlBOBL5JxvyyE9B56vfjosRx24B7xvhR/VckU4OIUxSX7V/
+         KsG6ON77b9gnqbrC9MjLX3ucDx4C9q8vLOetCS5n4U4pGXFkJiBXEEn8seLTTx6BGy
+         0kNuh+6OfbMlwX+baBR+ZqZqquIYsB5l/7p52DKs=
+Date:   Thu, 15 Aug 2019 14:55:44 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] usb: typec: fusb302: Small changes
+Message-ID: <20190815125544.GC24270@kroah.com>
+References: <20190814132419.39759-1-heikki.krogerus@linux.intel.com>
+ <a826c351-4e9d-8a33-ad0f-764d13aeb1ed@redhat.com>
 MIME-Version: 1.0
-References: <CAPHs_J+G0jR5dMg1gVD0z60Zf4oZBikx6P9+B99-TA6m29DWGA@mail.gmail.com>
- <0f259f36-4737-8a23-d39f-3a3b054aa753@gmail.com>
-In-Reply-To: <0f259f36-4737-8a23-d39f-3a3b054aa753@gmail.com>
-From:   Jonathan Bell <jonathan@raspberrypi.org>
-Date:   Thu, 15 Aug 2019 13:54:50 +0100
-Message-ID: <CAPHs_JK-XrTij4stQELuypAjohr+5Kg4MW=fhOJk5t_r12j0cA@mail.gmail.com>
-Subject: Re: dwc2 / Raspberry Pi - hardware bug for small transfers results in
- memory corruption
-To:     Lars Melin <larsm17@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Minas Harutyunyan <hminas@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:5.22.84,1.0.8
- definitions=2019-08-15_05:2019-08-14,2019-08-15 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a826c351-4e9d-8a33-ad0f-764d13aeb1ed@redhat.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 1:51 PM Lars Melin <larsm17@gmail.com> wrote:
->
-> On 8/14/2019 22:59, Jonathan Bell wrote:
-> > There is a bug when the dwc2 core receives USB data packets that are
-> > between 1 and 4 bytes in length - 4 bytes are always written to memory
-> > where the non-packet bytes are garbage.
->
-> Which host controller driver, dwc2 or the out-of-tree dwc_otg driver?
->
-> Thanks
-> Lars
+On Wed, Aug 14, 2019 at 03:42:46PM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 14-08-19 15:24, Heikki Krogerus wrote:
+> > Hi,
+> > 
+> > This series removes the deprecated fusb302 specific properties, and
+> > stops using struct tcpc_config in the driver.
+> 
+> Series looks good to me:
+> 
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> 
+> This has a small conflict with my
+> "[PATCH] usb: typec: fusb302: Call fusb302_debugfs_init earlier"
+> patch.
+> 
+> Since we've agreed to do the rootdir leak fix as a separate patch
+> (which I will write when I find some time probably tomorrow), I
+> was wondering if we can merge my patch first. I would like to see
+> a "Cc: stable@vger.kernel.org" added to my patch and then it would
+> be good to have it merged first.
+> 
+> Regardless we should probable prepare one series with all patches
+> for Greg to make this easy to merge for him.
 
-The bug was present when using either the out-of-tree dwc_otg or
-upstream dwc2 driver on Raspberry Pi.
+I'll take this series now, and you can redo your patch based on my
+usb-next branch with them in it.
+
+thanks,
+
+greg k-h
