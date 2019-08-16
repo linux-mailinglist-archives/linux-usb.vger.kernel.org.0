@@ -2,65 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEF0900FD
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 13:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF1490660
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 19:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727081AbfHPL4n convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 16 Aug 2019 07:56:43 -0400
-Received: from esa4.mentor.iphmx.com ([68.232.137.252]:47224 "EHLO
-        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727022AbfHPL4n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Aug 2019 07:56:43 -0400
-IronPort-SDR: pGcdOqT4di5Phl2vKoipHlpXGd1Y9edmv0M5fT7etkE8cQOBb8dGnlYJ/cRF9YiWMoNtUzaIwc
- YkpcKD3AsJMUWLx4CEwW4TvlgIuZ7dVgYO25JaTrU7IJO6urOpr0napGm9atUjCskAwNbergvV
- /vwQZ3Bv4BgKQvkhQoGuCE3iZfVVIAkS7fEFriMVO6cUW++IKp1aM2kRbJvMFHPpU0VQ1CwSd2
- 0by9hFO2ZztMF7LgFVy6mURyMWcDXNVUXI1kNgTtBJoBrccghvoMm0oa+QhCqh+5qDGfaWGNev
- ilw=
-X-IronPort-AV: E=Sophos;i="5.64,393,1559548800"; 
-   d="scan'208";a="40522794"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa4.mentor.iphmx.com with ESMTP; 16 Aug 2019 03:56:35 -0800
-IronPort-SDR: Q3BFy3H5NzfEyw4gXqTyujjxqI0hD5bEqY/DSGpVq/FMiFp/G4/IKcjPV0RD2vnI9psecBmGYw
- /j9x6RgHQ5rrKkarpxCGyu2Pscp05Lsec6Bum+EjzBwf7Adl5qSIg0Z2l5aYFd/BEJsexC1KBy
- YvlxqCNdr44FT/GFh2FwfNm4SAo91T6c0ALpo95q6bG7jCA2dQEoX16b80QxDTelmaMing/HlQ
- LlXjpRQbT6BeUTMbNM7pBIFIrh95/I91KwV36PLl/A/oVJdBuYo6ESI7G7to/UGRMhkkqokfYx
- r5Y=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: AW: AW: Strange behaviour of D-Link DUB-1312 USB 3.0 Adapters
-Thread-Topic: AW: Strange behaviour of D-Link DUB-1312 USB 3.0 Adapters
-Thread-Index: AdVSeH/taFnFr9I1T4OXjPctlrQ3Ev//86kA///uBTCAAF8egIABinwc//5pRmA=
-Date:   Fri, 16 Aug 2019 11:56:30 +0000
-Message-ID: <93de327cbfda4cbb930a83aa58274125@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <db0e8930ea94408ca7a38192ddfd203f@SVR-IES-MBX-03.mgc.mentorg.com>
-         <1565771508.25764.3.camel@suse.com>
-         <f5e22fea4e1c4baeb2fc98d324ad9060@SVR-IES-MBX-03.mgc.mentorg.com>,<1565788073.25764.8.camel@suse.com>
- <1565870525382.10504@mentor.com>
-In-Reply-To: <1565870525382.10504@mentor.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1726557AbfHPRCz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Aug 2019 13:02:55 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:41200 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726097AbfHPRCy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Aug 2019 13:02:54 -0400
+Received: by mail-vs1-f66.google.com with SMTP id 2so4141330vso.8
+        for <linux-usb@vger.kernel.org>; Fri, 16 Aug 2019 10:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WegIUfbHftQUTQTU11Go6S83AdqoYFM2efQvHBSuJlE=;
+        b=SHIQJ9VxHiAm2dgkil0wkRQaprwozH+wzFD1o5G4b7Cl24oXtsC3DNbNh/lUCoHVtN
+         gLHY3tT+L/xc942YRpoVU9mm7Oyx7YildvyNSX2m/U7sKAuOPyAylMSe4YZqdXeYKVeS
+         oVNN0pPTzxbZp5nitkuz3DWL157kzOiVPqbDy8nJWLw7ABkvrmnwtDPOPcpTLmXExsN6
+         vDotBGZCJnC7M0ouu2Nfer2SqLx5ktEfKsROFDkMvMn5Os0vOOWFw4fdhR/bqg52fOoE
+         sQ2Uu20lL3sXRVB+JJQsErl/wR4EGEkGoLjrGqY5TyQthVEyEqJhIspELb4pMQAcx2FL
+         546g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WegIUfbHftQUTQTU11Go6S83AdqoYFM2efQvHBSuJlE=;
+        b=d4yxpHZMdScVOAQZhSSGYnfa41TrURL3RZ285+eK7DfYVsnvDfnMrq+eqxseYA8E1i
+         jnlsTBAyoSi70LQXCpP6Rk3LBh4M7p59efA88qb7I9KJENxwhIRGDlYtXwP5YqkLNUnb
+         5he+F2vt2Est1+dFBCAsUnkKDbZfLRktmHSgW8iozidtkTODDZIwWpBKKw+j+SY3bgop
+         quoQMaDkgUFbAzuN5V0+qcjLjW/ITMgXP13bCVffpikoYVmBjhNb/g7KeqFzsUkrDNmF
+         jkM81SjRTYefwH1kdXgU+JpHzVxIE32JjiBAnPmlPDMfBqo2k0xi6LiRicuc9xAgQ6jM
+         Ua7Q==
+X-Gm-Message-State: APjAAAUrgsmEWNWidZWu+IGdeSAdgjIc6ePaN8Jo76iCukjuMmG2Rw6E
+        Wh0HMWNGBmklneocLEEEc9p/3WKs9yGCNGB/K1+arg==
+X-Google-Smtp-Source: APXvYqw46WJasW8kC/SWyhVHDui0erCq/jSmYoxOV9zJ7XFhgWzwdvP8c/T+20+JqkeFGhD8m07/RiyC36578bKcWNc=
+X-Received: by 2002:a67:1687:: with SMTP id 129mr6725448vsw.232.1565974972708;
+ Fri, 16 Aug 2019 10:02:52 -0700 (PDT)
 MIME-Version: 1.0
+References: <CAHX4x86QCrkrnPEfrup8k96wyqg=QR_vgetYLqP1AEa02fx1vw@mail.gmail.com>
+ <20190813060249.GD6670@kroah.com> <CAHX4x87DbJ4cKuwVO3OS=UzwtwSucFCV073W8bYHOPHW8NiA=A@mail.gmail.com>
+ <20190814212012.GB22618@kroah.com> <CAHX4x84YM0PcoQw17FxMz=6=NPq2+HUUw2GWZarAKzZxr+ax=A@mail.gmail.com>
+ <CADv6+07pYd-kg1i0TJXOPnEO6NUp6D5+BQBkqUO0MDAE+cquow@mail.gmail.com> <20190816091243.GB15703@kroah.com>
+In-Reply-To: <20190816091243.GB15703@kroah.com>
+From:   Duncan Laurie <dlaurie@google.com>
+Date:   Fri, 16 Aug 2019 10:02:36 -0700
+Message-ID: <CADv6+047cZFRS9HG+OpsXw2+yZU4ROUf8v3eSh9p9GpJHy0mQw@mail.gmail.com>
+Subject: Re: Policy to keep USB ports powered in low-power states
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nick Crews <ncrews@chromium.org>, linux-usb@vger.kernel.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Daniel Kurtz <djkurtz@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> >> I don't think its a regression.
+On Fri, Aug 16, 2019 at 2:12 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Aug 15, 2019 at 05:42:05PM -0600, Duncan Laurie wrote:
+> > On Wed, Aug 14, 2019 at 6:08 PM Nick Crews <ncrews@chromium.org> wrote:
+> > >
+> > > Adding Duncan Laurie who I think has some more intimate knowledge
+> > > of how this is implemented in HW. Duncan, could you correct or elaborate
+> > > on my answers below as you see fit? Also, sorry if I make some beginner
+> > > mistakes here, I'm just getting familiar with the USB subsystem, and thanks for
+> > > your patience.
+> > >
+> > > On Wed, Aug 14, 2019 at 3:20 PM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Wed, Aug 14, 2019 at 02:12:07PM -0600, Nick Crews wrote:
+> > > > > Thanks for the fast response!
+> > > > >
+> > > > > On Tue, Aug 13, 2019 at 12:02 AM Greg Kroah-Hartman
+> > > > > <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Mon, Aug 12, 2019 at 06:08:43PM -0600, Nick Crews wrote:
+> > > > > > > Hi Greg!
+> > > > > >
+> > > > > > Hi!
+> > > > > >
+> > > > > > First off, please fix your email client to not send html so that vger
+> > > > > > does not reject your messages :)
+> > > > >
+> > > > > Thanks, should be good now.
+> > > > >
+> > > > > >
+> > > > > > > I am working on a Chrome OS device that supports a policy called "USB Power
+> > > > > > > Share," which allows users to turn the laptop into a charge pack for their
+> > > > > > > phone. When the policy is enabled, power will be supplied to the USB ports
+> > > > > > > even when the system is in low power states such as S3 and S5. When
+> > > > > > > disabled, then no power will be supplied in S3 and S5. I wrote a driver
+> > > > > > > <https://lore.kernel.org/patchwork/patch/1062995/> for this already as part
+> > > > > > > of drivers/platform/chrome/, but Enric Balletbo i Serra, the maintainer,
+> > > > > > > had the reasonable suggestion of trying to move this into the USB subsystem.
+> > > > > >
+> > > > > > Correct suggestion.
+> > > > > >
+> > > > > > > Has anything like this been done before? Do you have any preliminary
+> > > > > > > thoughts on this before I start writing code? A few things that I haven't
+> > > > > > > figured out yet:
+> > > > > > > - How to make this feature only available on certain devices. Using device
+> > > > > > > tree? Kconfig? Making a separate driver just for this device that plugs
+> > > > > > > into the USB core?
+> > > > > > > - The feature is only supported on some USB ports, so we need a way of
+> > > > > > > filtering on a per-port basis.
+> > > > > >
+> > > > > > Look at the drivers/usb/typec/ code, I think that should do everything
+> > > > > > you need here as this is a typec standard functionality, right?
+> > > > >
+> > > > > Unfortunately this is for USB 2.0 ports, so it's not type-C.
+> > > > > Is the type-C code still worth looking at?
+> > > >
+> > > > If this is for USB 2, does it use the "non-standard" hub commands to
+> > > > turn on and off power?  If so, why not just use the usbreset userspace
+> > > > program for that?
+> > >
+> > > It does not use the standard hub commands. The USB ports are controlled
+> > > by an Embedded Controller (EC), so to control this policy we send a command
+> > > to the EC. Since the command to send to the EC is very specific, this would need
+> > > to go into a "hub driver" unique for these Wilco devices. We would make it so
+> > > that the normal hub registration is intercepted by something that sees this is a
+> > > Wilco device, and instead register the hub as a "wilco-hub", which has its own
+> > > special "power_share" sysfs attribute, but still is treated as a normal USB hub
+> > > otherwise?
+> > >
 > >
-> > It would be better to know than to assume.
 > >
-> Happens with kernel 4.14.102 also, not only with 4.14.129.
-> Looks more HW related.
-> 
-Confirmed: HW issue.
+> > I would say it is somewhat similar to the USB port power control which
+> > eventually calls into usb_acpi_set_power_state() but in this case it only
+> > affects the behavior when the system is NOT running.
+>
+> Ok, if this is when the system is not running, why does Linux need to be
+> involved at all?
+>
+> And if Linux is running, why not just follow the USB spec and not create
+> your own craziness?
+>
+> > This design has a standalone USB charge power controller on the board
+> > that passes through the USB2 D+/D- pins from one port and is able to do
+> > BC1.2 negotiation when the host controller is not powered, assuming
+> > the chip has been enabled by the Embedded Controller.
+>
+> So it does follow the spec?  Or does not?  I can't determine here.
+>
 
-Best regards
-Carsten
+
+I didn't realize the part had a public datasheet:
+https://www.dialog-semiconductor.com/sites/default/files/xslgc55544cr105_09292017.pdf
+
+It is really only concerned with following the BC1.2 spec and not
+interfering with the USB protocol part.
+
+
+> If the EC is in charge of all of this, why does Linux need to get
+> involved?
+>
+
+Only because we are looking to expose a policy to control the behavior
+of this chip at the OS level.
+
+Most systems would put this in as an option in the BIOS but we do
+not have setup menus on Chrome OS and we want to have the policy
+controlled directly, preferably without resorting to an opaque interface
+to a userspace utility.
+
+To that end we have added a number of different EC controls and are
+looking to fit them into the appropriate subsystems wherever possible.
+As you can see they don't always fit naturally..
+
+
+> > > > And how are you turning a USB 2 port into a power source?  That feels
+> > > > really odd given the spec.  Is this part of the standard somewhere or
+> > > > just a firmware/hardware hack that you are adding to a device?
+> > >
+> > > The EC twiddles something in the port' HW so that the port turns into a
+> > > DCP (Dedicated Charging Port) and only supplies power, not data. So I
+> > > think yes, this is a bit of a hack that does not conform to the spec.
+> > >
+> > > >
+> > > > Is there some port information in the firmware that describes this
+> > > > functionality?  If so, can you expose it through sysfs to the port that
+> > > > way?
+> > >
+> > > [I'm not sure I'm answering your question, but] I believe that we could
+> > > make the BIOS firmware describe the USB ports' capabilities, and the
+> > > kernel's behavior would be gated upon what the firmware reports. I see
+> > > that struct usb_port already contains a "quirks" field, should we add a
+> > > POWER_SHARE quirk to include/linux/usb/quirks.h? I would guess that
+> > > should that should be reserved for quirks shared between many USB
+> > > devices/hubs?
+> >
+> > We could add a Device Property to the affected USB port in ACPI and
+> > describe it that way, similar to other properties like 'vcc-supply', 'clocks',
+> > 'vbus-detect', etc and hook it into the phy-generic driver.
+> >
+> > However I'm not clear on whether the phy driver binding works with XHCI
+> > when using ACPI, so this may not be an appropriate place either.
+>
+> Why would you have DT involved if you are using acpi?  :)
+>
+
+This would come in via the _DSD method of passing parameters to
+specific ACPI devices.
+
+
+-duncan
