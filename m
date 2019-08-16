@@ -2,105 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D54138FC84
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 09:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D9A8FCC0
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 09:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726820AbfHPHjP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Aug 2019 03:39:15 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:36561 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726425AbfHPHjP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Aug 2019 03:39:15 -0400
-Received: by mail-ot1-f67.google.com with SMTP id k18so8886054otr.3;
-        Fri, 16 Aug 2019 00:39:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rNgiwRT8IqruHTtyg4qTM81WOjWWtlc2s7dRDLMNYXA=;
-        b=on2SQVhJOHdWQEc2H0aF4Jqh7WDKMaXEPJG0U44YSRI2ocAwWxoXKuH2/IozeNBHrn
-         RRsomVVULDyN4ka0XyJ3p0LL06HWLk4zps+lQyUsuN8bGL5vDSfV3ZJtTv8y29oqQ25I
-         ayiVC4RDsQiNyNyXqS9ncR36jlfkDPI7eOIRX9RdqNsKEB67cqfpi5SEPEq/PhLVVEHT
-         kWo7XRXgls6Ie27GjuPtsA4kr7DqdpQsXZHlNGBbonWzZsluRfad9zMN/tbC2dxLNbOa
-         9wjJ4ueGJ6XdT6lo+dZOkjbcsPjeVVSFgZ4k+agXVPLlJMvzL+5vCFslH8BJJOrdnaky
-         UPoA==
-X-Gm-Message-State: APjAAAUTYusEKAqYIKMSacN1O2sFRtHtSqJVLJnBfLEuwXrRO3Ii+QQW
-        9U4jvzNBC757WAlWPqcnfnt7irBVh++8Jx6y98kC7voz
-X-Google-Smtp-Source: APXvYqz193ixgGnhQHDM0sA58o87yH16orCv5VbCTsKEDkS808wZnFykFKzgKwDR213pxnj04zPYszKH8AWAfSfEEwQ=
-X-Received: by 2002:a9d:68c5:: with SMTP id i5mr6603053oto.250.1565941154237;
- Fri, 16 Aug 2019 00:39:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190816062435.881-1-hch@lst.de> <20190816062435.881-7-hch@lst.de>
-In-Reply-To: <20190816062435.881-7-hch@lst.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 16 Aug 2019 09:39:03 +0200
-Message-ID: <CAMuHMdVj+4Kh6pRGrz32w4zgwGHH4-r+-iHX1CSAXU6t4sprJw@mail.gmail.com>
-Subject: Re: [PATCH 6/6] driver core: initialize a default DMA mask for
- platform device
-To:     Christoph Hellwig <hch@lst.de>
+        id S1726770AbfHPHvM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Aug 2019 03:51:12 -0400
+Received: from mga04.intel.com ([192.55.52.120]:13153 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726728AbfHPHvM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 16 Aug 2019 03:51:12 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Aug 2019 00:51:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,391,1559545200"; 
+   d="scan'208";a="194944115"
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 16 Aug 2019 00:51:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 16 Aug 2019 10:51:09 +0300
+Date:   Fri, 16 Aug 2019 10:51:09 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Gavin Li <git@thegavinli.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Geoff Levand <geoff@infradead.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Bin Liu <b-liu@ti.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: fusb: Use usb_debug_root as root for our
+ debugfs entry
+Message-ID: <20190816075109.GF24772@kuha.fi.intel.com>
+References: <20190815191815.755606-1-hdegoede@redhat.com>
+ <20190815191815.755606-2-hdegoede@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190815191815.755606-2-hdegoede@redhat.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Christoph,
+On Thu, Aug 15, 2019 at 09:18:14PM +0200, Hans de Goede wrote:
+> Use usb_debug_root as root for our debugfs entry instead of creating our
+> own subdirectory under the debugfs root.
+> 
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-On Fri, Aug 16, 2019 at 8:30 AM Christoph Hellwig <hch@lst.de> wrote:
-> We still treat devices without a DMA mask as defaulting to 32-bits for
-> both mask, but a few releases ago we've started warning about such
-> cases, as they require special cases to work around this sloppyness.
-> Add a dma_mask field to struct platform_device so that we can initialize
-> the dma_mask pointer in struct device and initialize both masks to
-> 32-bits by default, replacing similar functionality in m68k and
-> powerpc.  The arch_setup_pdev_archdata hooks is now unused and removed.
->
-> Note that the code looks a little odd with the various conditionals
-> because we have to support platform_device structures that are
-> statically allocated.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+I have one question below. Otherwise:
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  arch/m68k/kernel/dma.c               |  9 -------
+>  drivers/usb/typec/tcpm/fusb302.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index 93244d6c4bff..69a2afaf8f68 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/string.h>
+>  #include <linux/types.h>
+> +#include <linux/usb.h>
+>  #include <linux/usb/typec.h>
+>  #include <linux/usb/tcpm.h>
+>  #include <linux/usb/pd.h>
+> @@ -206,23 +207,17 @@ static int fusb302_debug_show(struct seq_file *s, void *v)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(fusb302_debug);
+>  
+> -static struct dentry *rootdir;
+> -
+>  static void fusb302_debugfs_init(struct fusb302_chip *chip)
+>  {
+>  	mutex_init(&chip->logbuffer_lock);
+> -	if (!rootdir)
+> -		rootdir = debugfs_create_dir("fusb302", NULL);
+> -
+>  	chip->dentry = debugfs_create_file(dev_name(chip->dev),
+> -					   S_IFREG | 0444, rootdir,
+> +					   S_IFREG | 0444, usb_debug_root,
+>  					   chip, &fusb302_debug_fops);
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+In tcpm.c you named the entries "tcpm-%s", dev_name(...
 
->  arch/sh/boards/mach-ecovec24/setup.c |  2 --
->  arch/sh/boards/mach-migor/setup.c    |  1 -
+Shouldn't we do something similar with these as well? I mean,
+even though this is just debugfs, shouldn't we give some hint for the
+user how to identify these entries?
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
-given "[PATCH 0/2] Remove calls to empty arch_setup_pdev_archdata()"
-https://lore.kernel.org/linux-renesas-soc/1526641611-2769-1-git-send-email-geert+renesas@glider.be/
+How about if we still continue grouping the entries under the
+"fusb302" directory, but just place that under usb_debug_root?
 
-Gr{oetje,eeting}s,
 
-                        Geert
+thanks,
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+heikki
