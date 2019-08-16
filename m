@@ -2,208 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B10798F939
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 04:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D470D8FA7E
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 07:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbfHPCsv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Aug 2019 22:48:51 -0400
-Received: from mail-eopbgr50066.outbound.protection.outlook.com ([40.107.5.66]:28646
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726279AbfHPCsv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Aug 2019 22:48:51 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y1hXOwY0P3tMwMivXTNMP6MYSyZ0E07bv2/qYM7Ya1qtLOLUIMCv2p1I+HYd/7H0XS5QryLWJUCseLI0mpbCJsyhtowKcpSEXvOmXxE1PN1kEKtqqwh05L79Jle25rHqqxd9BUR/JrgXryElgLxOrA/zkT1RpXWxS446VSmK2t9225Pp5M/+zAwh/jyoBWX4VCMcOf+e7Kg4lBYR6KucplqNV+iu8a4m6a4famIW5wg3wdkYo9qXECQjLUyytkfWIsG/4osHC5V5FNNBzmj19B2ZJsTkYJUrvtMCl1+QrIO8C5j96fBjXr743PMQNxuZJS9EgaZAe75CfJEE+AB9ug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UYQFmKTx8joysNmnY+lm+fXBmKyRuQ4Bg2DaH1c4pSM=;
- b=TI2ns7EBLQUsYZPEJwDLNwB7E15Gew9IyEghaOM/d6wJBJdKxv7FZ7SUpZ3U6uj0s04pojZM0S02OVlULG+OptBCo8bF476jUumU+MFQCCBcdJsy0GBzSMhBXhMyJaVHVoZKUV0U+Jczv7/FE8/7Kc7h3X8+1qeZ5U0UjOvDWPs6mEZV9tQcoKQwoS+oKM7BJlFfF5Gjtr12YO6p2+c8ZMgQHWiZcsLWAIfbolhO2UZbwEykuw+3NX0tI/8TbyOW2+jp87wjpAtf6sfQYBcoRBeKWmlcthYPTByeC5g5m36/SzA/QvT/4thOgq7+xVy49W1tbGTxMsDkVKqR+GqfOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UYQFmKTx8joysNmnY+lm+fXBmKyRuQ4Bg2DaH1c4pSM=;
- b=LayS7lz2akKrkD1o31q9p3JMxmU4SbNV52LJauMzKG2hRzBJfAd3vVWrBsh1KH6iSujODEmrQMpe0T+94HjQFblTiqMB9skp0rVIHNGnH9VT8y3dKyWm4jMyo6T3qrQQCSKqj4dmkWst3FdDX2EwkHF6kZCkgcxup8tcqQ4JAfs=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB5710.eurprd04.prod.outlook.com (20.178.126.218) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2178.16; Fri, 16 Aug 2019 02:48:46 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::81ec:c8ec:54d9:5dc5]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::81ec:c8ec:54d9:5dc5%2]) with mapi id 15.20.2157.022; Fri, 16 Aug 2019
- 02:48:46 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>, Peter Chen <peter.chen@nxp.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH 1/1] usb: chipidea: udc: don't do hardware access if gadget
- has stopped
-Thread-Topic: [PATCH 1/1] usb: chipidea: udc: don't do hardware access if
- gadget has stopped
-Thread-Index: AQHVU90f+G/ECz0Bo0ykpcSubYzQSQ==
-Date:   Fri, 16 Aug 2019 02:48:46 +0000
-Message-ID: <20190816024553.8754-1-peter.chen@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.17.1
-x-clientproxiedby: HK0PR03CA0047.apcprd03.prod.outlook.com
- (2603:1096:203:2f::35) To VI1PR04MB5327.eurprd04.prod.outlook.com
- (2603:10a6:803:60::16)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 560a128f-8ea8-47bf-a04b-08d721f441f3
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5710;
-x-ms-traffictypediagnostic: VI1PR04MB5710:
-x-ms-exchange-purlcount: 1
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB571099EBBE5E4177E2AEF67B8BAF0@VI1PR04MB5710.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0131D22242
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(39860400002)(136003)(376002)(346002)(209900001)(189003)(199004)(316002)(6916009)(53936002)(102836004)(450100002)(966005)(4326008)(186003)(25786009)(26005)(53376002)(14444005)(476003)(256004)(52116002)(486006)(8936002)(50226002)(99286004)(8676002)(81156014)(81166006)(3846002)(6116002)(54906003)(478600001)(7736002)(6506007)(386003)(305945005)(2351001)(44832011)(2906002)(2616005)(6306002)(86362001)(6436002)(5660300002)(5640700003)(66446008)(36756003)(1076003)(6486002)(64756008)(66556008)(66476007)(66946007)(2501003)(71190400001)(14454004)(66066001)(71200400001)(6512007)(6606295002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5710;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: h3yYzvS+Dt5FXI+N3VJtZLBsqzKpfUwV7t19Qj3wZFp7gDw+D4xlhaamuNgfAGqvlgkUJf9tNUwJ8KnoBpoKYrBvvcT2zYLtiR0NLAr7Z60wCQLUTdZAijc9drJUprTU3eN57urq4rxfNflZTgL/qiwk59WlnP9SU5NLpR8bzAWZEPUVlF6GA/itTIKHBlKD2lVM3af8pSbh6aZ5w+jqbvhAvqOOqhVzROWP5up59IdiJNNYbJnTgFkXrSfelqRgL0QNi154LDJ2/uKHW+JAcWjiL7z6KrMbGq8Ul3CoG9+qECfmAKw1Qh4YZvCwZ0F+SVhmmT+80tVeuwmG5vODJSWDktTEmU+lV7z715IGyWg48TMccC2SN/Tdspe+LTUNKf1twfOPwq8ItLarMVr/V+5YxDNjhUSKdNmlo0K6++g=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1726565AbfHPFwJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Aug 2019 01:52:09 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:44545 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726371AbfHPFwJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Aug 2019 01:52:09 -0400
+Received: by mail-ed1-f65.google.com with SMTP id a21so4122675edt.11
+        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 22:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=thegavinli.com; s=google;
+        h=sender:mime-version:references:in-reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=VK1O0SmaDaa73e4B9F4jAJsqBGQQuXkVt/6JtPL7I8o=;
+        b=BcHz1CHN/m+fu/Tyn8vXXD7vVRb5h66GmnKYkrtVzdkC+QnRwL11eaqQt1IVD+Vnd2
+         BpMk0RMKI62zLDN5NsiJJKxHArzlNM6HS7kEgsoA6GSQmQ3jp8SYIgeNlcmRerJXJm1t
+         0+c2aeOoSxfen7OciX4B/DbcAoYgnKwbR+Lyg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:mime-version:references:in-reply-to:from
+         :date:message-id:subject:to:cc;
+        bh=VK1O0SmaDaa73e4B9F4jAJsqBGQQuXkVt/6JtPL7I8o=;
+        b=F7+FapptMG0eHq9WlOvu1P2yI5fFSLfQqmhMj0aEWyzz7wl5wUsFzfXf0tzzuI7xRt
+         GZ7AEIY3EH4nRT59EijlvppvYLM3Qkh0KL7wLz0NXzfRUKT8Kiouv+ToGuzg1nxbrQlT
+         LyEJCZEMT/wgbCuSsuVJ2nOmchdDD395zzYZ235XXPq9CAaJeaX/bD4nhEllSvDO+t1U
+         7ebwGcTS8iTQ7CyRihDWoTlCnLHJ5HxzUCLQF4OfWwiQzL6OP7tE8XNgVi2/gHlErRLh
+         6YeBDMMId0APlJcoNyk8bYviz7zZ4pXRHf/CVpMlHebEWLwpEMUD3dA9FreFBfLTGwGp
+         WVOQ==
+X-Gm-Message-State: APjAAAWSnLGxOxkPn+NQ86VCnYkrT2ucCcf0Z/i8Y/gI/tcs1dbyo133
+        6DchgHH6YRohWMxLOYijve12e45gPzI=
+X-Google-Smtp-Source: APXvYqyILFvey5G1rT2eBavoEEQ61JohXeV9lRVvtsJKflWQ3sQgEIoXX/YNzMbkOy/uOm1yVvAcvQ==
+X-Received: by 2002:a17:906:11d6:: with SMTP id o22mr7827388eja.60.1565934727645;
+        Thu, 15 Aug 2019 22:52:07 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id r3sm917347edm.6.2019.08.15.22.52.06
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Aug 2019 22:52:06 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id f22so4159441edt.4
+        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 22:52:06 -0700 (PDT)
+X-Received: by 2002:a17:906:fc06:: with SMTP id ov6mr7619647ejb.226.1565934725966;
+ Thu, 15 Aug 2019 22:52:05 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 560a128f-8ea8-47bf-a04b-08d721f441f3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2019 02:48:46.1464
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cieqOdR3B8r58u8W6giEMqB/uOEKJ9L1fqwRAR25z+Lm0SBPJAnQi8cy40tps50Sm2I7n0BVpAV6btE8fynVKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5710
+References: <20190814212924.10381-1-gavinli@thegavinli.com> <20190815125314.GA24270@kroah.com>
+In-Reply-To: <20190815125314.GA24270@kroah.com>
+From:   Gavin Li <gavinli@thegavinli.com>
+Date:   Thu, 15 Aug 2019 22:51:54 -0700
+X-Gmail-Original-Message-ID: <CA+GxvY5+uyDrNM=XcfyhBXYvREf52YTfVb7FfcZa82jh_v08Dw@mail.gmail.com>
+Message-ID: <CA+GxvY5+uyDrNM=XcfyhBXYvREf52YTfVb7FfcZa82jh_v08Dw@mail.gmail.com>
+Subject: Re: [PATCH] usb: usbfs: only account once for mmap()'ed usb memory usage
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Gavin Li <git@thegavinli.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-After _gadget_stop_activity is executed, we can consider the hardware
-operation for gadget has finished, and the udc can be stopped and enter
-low power mode. So, any later hardware operations (from usb_ep_ops APIs
-or usb_gadget_ops APIs) should be considered invalid, any deinitializatons
-has been covered at _gadget_stop_activity.
+It is done in usbdev_mmap(); it calls usbfs_increase_memory_usage() to
+account for the buffer it allocates. No additional memory (other than
+for the control structures) is needed when actually submitting the
+URB.
 
-I meet this problem when I plug out usb cable from PC using mass_storage
-gadget, my callstack like: vbus interrupt->.vbus_session->
-composite_disconnect ->pm_runtime_put_sync(&_gadget->dev),
-the composite_disconnect will call fsg_disable, but fsg_disable calls
-usb_ep_disable using async way, there are register accesses for
-usb_ep_disable. So sometimes, I get system hang due to visit register
-without clock, sometimes not.
-
-The Linux Kernel USB maintainer Alan Stern suggests this kinds of solution.
-See: http://marc.info/?l=3Dlinux-usb&m=3D138541769810983&w=3D2.
-
-Cc: <stable@vger.kernel.org> #v4.9+
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
-This patch is at NXP internal tree long time, and no issues have found.
-Submit to mainline kenrel.
-
- drivers/usb/chipidea/udc.c | 32 ++++++++++++++++++++++++--------
- 1 file changed, 24 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 053432d79bf7..8f18e7b6cadf 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -709,12 +709,6 @@ static int _gadget_stop_activity(struct usb_gadget *ga=
-dget)
- 	struct ci_hdrc    *ci =3D container_of(gadget, struct ci_hdrc, gadget);
- 	unsigned long flags;
-=20
--	spin_lock_irqsave(&ci->lock, flags);
--	ci->gadget.speed =3D USB_SPEED_UNKNOWN;
--	ci->remote_wakeup =3D 0;
--	ci->suspended =3D 0;
--	spin_unlock_irqrestore(&ci->lock, flags);
--
- 	/* flush all endpoints */
- 	gadget_for_each_ep(ep, gadget) {
- 		usb_ep_fifo_flush(ep);
-@@ -732,6 +726,12 @@ static int _gadget_stop_activity(struct usb_gadget *ga=
-dget)
- 		ci->status =3D NULL;
- 	}
-=20
-+	spin_lock_irqsave(&ci->lock, flags);
-+	ci->gadget.speed =3D USB_SPEED_UNKNOWN;
-+	ci->remote_wakeup =3D 0;
-+	ci->suspended =3D 0;
-+	spin_unlock_irqrestore(&ci->lock, flags);
-+
- 	return 0;
- }
-=20
-@@ -1303,6 +1303,10 @@ static int ep_disable(struct usb_ep *ep)
- 		return -EBUSY;
-=20
- 	spin_lock_irqsave(hwep->lock, flags);
-+	if (hwep->ci->gadget.speed =3D=3D USB_SPEED_UNKNOWN) {
-+		spin_unlock_irqrestore(hwep->lock, flags);
-+		return 0;
-+	}
-=20
- 	/* only internal SW should disable ctrl endpts */
-=20
-@@ -1392,6 +1396,10 @@ static int ep_queue(struct usb_ep *ep, struct usb_re=
-quest *req,
- 		return -EINVAL;
-=20
- 	spin_lock_irqsave(hwep->lock, flags);
-+	if (hwep->ci->gadget.speed =3D=3D USB_SPEED_UNKNOWN) {
-+		spin_unlock_irqrestore(hwep->lock, flags);
-+		return 0;
-+	}
- 	retval =3D _ep_queue(ep, req, gfp_flags);
- 	spin_unlock_irqrestore(hwep->lock, flags);
- 	return retval;
-@@ -1415,8 +1423,8 @@ static int ep_dequeue(struct usb_ep *ep, struct usb_r=
-equest *req)
- 		return -EINVAL;
-=20
- 	spin_lock_irqsave(hwep->lock, flags);
--
--	hw_ep_flush(hwep->ci, hwep->num, hwep->dir);
-+	if (hwep->ci->gadget.speed !=3D USB_SPEED_UNKNOWN)
-+		hw_ep_flush(hwep->ci, hwep->num, hwep->dir);
-=20
- 	list_for_each_entry_safe(node, tmpnode, &hwreq->tds, td) {
- 		dma_pool_free(hwep->td_pool, node->ptr, node->dma);
-@@ -1487,6 +1495,10 @@ static void ep_fifo_flush(struct usb_ep *ep)
- 	}
-=20
- 	spin_lock_irqsave(hwep->lock, flags);
-+	if (hwep->ci->gadget.speed =3D=3D USB_SPEED_UNKNOWN) {
-+		spin_unlock_irqrestore(hwep->lock, flags);
-+		return;
-+	}
-=20
- 	hw_ep_flush(hwep->ci, hwep->num, hwep->dir);
-=20
-@@ -1559,6 +1571,10 @@ static int ci_udc_wakeup(struct usb_gadget *_gadget)
- 	int ret =3D 0;
-=20
- 	spin_lock_irqsave(&ci->lock, flags);
-+	if (ci->gadget.speed =3D=3D USB_SPEED_UNKNOWN) {
-+		spin_unlock_irqrestore(&ci->lock, flags);
-+		return 0;
-+	}
- 	if (!ci->remote_wakeup) {
- 		ret =3D -EOPNOTSUPP;
- 		goto out;
---=20
-2.17.1
-
+On Thu, Aug 15, 2019 at 5:53 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Aug 14, 2019 at 02:29:24PM -0700, gavinli@thegavinli.com wrote:
+> > From: Gavin Li <git@thegavinli.com>
+> >
+> > Memory usage for USB memory allocated via mmap() is already accounted
+> > for at mmap() time; no need to account for it again at submiturb time.
+> >
+> > Signed-off-by: Gavin Li <git@thegavinli.com>
+> > ---
+> >  drivers/usb/core/devio.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> What commit does this fix?  What issue does this fix, is it something
+> that is user-visable?
+>
+> >
+> > diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> > index bbe9c2edd3e7..9681dd55473b 100644
+> > --- a/drivers/usb/core/devio.c
+> > +++ b/drivers/usb/core/devio.c
+> > @@ -1603,7 +1603,8 @@ static int proc_do_submiturb(struct usb_dev_state *ps, struct usbdevfs_urb *uurb
+> >       if (as->usbm)
+> >               num_sgs = 0;
+> >
+> > -     u += sizeof(struct async) + sizeof(struct urb) + uurb->buffer_length +
+> > +     u += sizeof(struct async) + sizeof(struct urb) +
+> > +          (as->usbm ? 0 : uurb->buffer_length) +
+> >            num_sgs * sizeof(struct scatterlist);
+>
+> Are you sure?  Where is the buffer_length being added to the size here?
+> What am I missing?
+>
+> thanks,
+>
+> greg k-h
