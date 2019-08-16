@@ -2,78 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0818FA8E
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 07:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D605E8FAEA
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 08:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbfHPF6i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Aug 2019 01:58:38 -0400
-Received: from mga06.intel.com ([134.134.136.31]:53270 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726571AbfHPF6i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 16 Aug 2019 01:58:38 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Aug 2019 22:58:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,391,1559545200"; 
-   d="asc'?scan'208";a="188717814"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga002.jf.intel.com with ESMTP; 15 Aug 2019 22:58:12 -0700
-From:   Felipe Balbi <balbi@kernel.org>
+        id S1726783AbfHPG1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Aug 2019 02:27:07 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:38344 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726519AbfHPG1H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Aug 2019 02:27:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=uBlDv/1G+IgsUhlm43y/mFkJBkzGrCkwGGW4KRg1WIM=; b=Wmcwc0aj6CAeJvPoN6pBK5R6b
+        i5YXqMFaEGami53EUAEYW5H9LP5RV2vw6BQ2GKNw4UVGF7Pwjge5MdyR82FT+o0xH6mc3+JoPhptL
+        +tYQkTLvihOeG5Q1/uvFbymhEmW5tGt1hxdQ3AfdLRPHhf/t6XmTEoxxoyUliePoCJ7oYf5k8pNMq
+        GEYj2QQzOjp49Cld+WmpqDus7lpxzFfO1b60p1QXD19DFumJMRiDYLdByA1yvWDGJ928Xf3gFMSKm
+        TmzZ3hL9ygmIeis9H93XDRrqRmRUsN43ePZB8ghFZRniMK1PL78+NnUbbjavFiwzeazT92ZwSh6u2
+        xE2vRzB6w==;
+Received: from 089144199030.atnat0008.highway.a1.net ([89.144.199.30] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hyVhG-0005Ro-J6; Fri, 16 Aug 2019 06:26:47 +0000
+From:   Christoph Hellwig <hch@lst.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] USB: phy: fsl-usb: convert platform driver to use dev_groups
-In-Reply-To: <20190815125903.GA17065@kroah.com>
-References: <20190806073235.25140-2-gregkh@linuxfoundation.org> <20190815125903.GA17065@kroah.com>
-Date:   Fri, 16 Aug 2019 08:57:55 +0300
-Message-ID: <87sgq1abz0.fsf@gmail.com>
+        Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Gavin Li <git@thegavinli.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Geoff Levand <geoff@infradead.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Bin Liu <b-liu@ti.com>, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-m68k@lists.linux-m68k.org, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: next take at setting up a dma mask by default for platform devices v2
+Date:   Fri, 16 Aug 2019 08:24:29 +0200
+Message-Id: <20190816062435.881-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi all,
 
+this is another attempt to make sure the dma_mask pointer is always
+initialized for platform devices.  Not doing so lead to lots of
+boilerplate code, and makes platform devices different from all our
+major busses like PCI where we always set up a dma_mask.  In the long
+run this should also help to eventually make dma_mask a scalar value
+instead of a pointer and remove even more cruft.
 
-Hi,
+The bigger blocker for this last time was the fact that the usb
+subsystem uses the presence or lack of a dma_mask to check if the core
+should do dma mapping for the driver, which is highly unusual.  So we
+fix this first.  Note that this has some overlap with the pending
+desire to use the proper dma_mmap_coherent helper for mapping usb
+buffers.  The first two patches have already been queued up by Greg
+and are only included for completeness.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-> Platform drivers now have the option to have the platform core create
-> and remove any needed sysfs attribute files.  So take advantage of that
-> and do not register "by hand" any sysfs files.
->
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Acked-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1WReUACgkQzL64meEa
-mQaiVg/+PLz7Wut/m5FKe5khZqYZxwPPavDXRSRtsCB48Wa2F1NF7SjANtiuNYfN
-3e6cVykBRdhSyptPsWIcYZnhhArHcwKO+ezWcrzrcNLxU26ILPRpvscdoBI0vzSH
-I5BFEn46RRUulOj2tt0l/Try2c6TT7Oa27KuSoD4Kf4d3rA0lNf4+DeDDHyygcom
-FBmNndygXs1VIrfkXNBsUp0zqYO2BaBem7zVcrFurMHOryXCiYfOEUz/l9x5upHl
-IOWAPuBXy7RDqvd974Z0VjO0dAURAWXmuZ5jAE6gk30Rmfa6+SEks017etJex97N
-K5Z3gYCs1sB1Yrc6g9rPLCzY3JJsLGBVKDX3B8/FAx2bwWKQfUOcX2mAC6obuY0A
-o/gT6lvRK+5XWbYGY5W2RgfG7tUL1tqHUHddquSSdoSZDA+PW8EUT1xPwREtGzsY
-JMGZvKZgUMdxcsW5Mupa141dUu0roFvuffQMayQVXdJvYlxYdBBOEdn3yCZrYpYc
-5mFSWrrZwfSvzSoqRUG1hdybfVQHXO6JhcKsgrfSzEbxBlw+XoJ7ifPCGQts1B6B
-uWRIOTEFP8lWHZUe8efSWipHRZ+ENxtvC2vrBuMlMxCliZZT4HtwHjc+HPLLtE27
-3orSQx+4vcUM70xJ2XfyKl1JxJ+8dQdDhe8Sr6nCGJElD3vmlHI=
-=U4ex
------END PGP SIGNATURE-----
---=-=-=--
+Changes since v1:
+ - fix a compile error in the ppc of ohci driver
+ - revamp the last patch to get rid of the archdata callout entirely.
