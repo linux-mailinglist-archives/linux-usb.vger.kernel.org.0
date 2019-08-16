@@ -2,104 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D470D8FA7E
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 07:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0818FA8E
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 07:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbfHPFwJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Aug 2019 01:52:09 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:44545 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfHPFwJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Aug 2019 01:52:09 -0400
-Received: by mail-ed1-f65.google.com with SMTP id a21so4122675edt.11
-        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 22:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thegavinli.com; s=google;
-        h=sender:mime-version:references:in-reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=VK1O0SmaDaa73e4B9F4jAJsqBGQQuXkVt/6JtPL7I8o=;
-        b=BcHz1CHN/m+fu/Tyn8vXXD7vVRb5h66GmnKYkrtVzdkC+QnRwL11eaqQt1IVD+Vnd2
-         BpMk0RMKI62zLDN5NsiJJKxHArzlNM6HS7kEgsoA6GSQmQ3jp8SYIgeNlcmRerJXJm1t
-         0+c2aeOoSxfen7OciX4B/DbcAoYgnKwbR+Lyg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:mime-version:references:in-reply-to:from
-         :date:message-id:subject:to:cc;
-        bh=VK1O0SmaDaa73e4B9F4jAJsqBGQQuXkVt/6JtPL7I8o=;
-        b=F7+FapptMG0eHq9WlOvu1P2yI5fFSLfQqmhMj0aEWyzz7wl5wUsFzfXf0tzzuI7xRt
-         GZ7AEIY3EH4nRT59EijlvppvYLM3Qkh0KL7wLz0NXzfRUKT8Kiouv+ToGuzg1nxbrQlT
-         LyEJCZEMT/wgbCuSsuVJ2nOmchdDD395zzYZ235XXPq9CAaJeaX/bD4nhEllSvDO+t1U
-         7ebwGcTS8iTQ7CyRihDWoTlCnLHJ5HxzUCLQF4OfWwiQzL6OP7tE8XNgVi2/gHlErRLh
-         6YeBDMMId0APlJcoNyk8bYviz7zZ4pXRHf/CVpMlHebEWLwpEMUD3dA9FreFBfLTGwGp
-         WVOQ==
-X-Gm-Message-State: APjAAAWSnLGxOxkPn+NQ86VCnYkrT2ucCcf0Z/i8Y/gI/tcs1dbyo133
-        6DchgHH6YRohWMxLOYijve12e45gPzI=
-X-Google-Smtp-Source: APXvYqyILFvey5G1rT2eBavoEEQ61JohXeV9lRVvtsJKflWQ3sQgEIoXX/YNzMbkOy/uOm1yVvAcvQ==
-X-Received: by 2002:a17:906:11d6:: with SMTP id o22mr7827388eja.60.1565934727645;
-        Thu, 15 Aug 2019 22:52:07 -0700 (PDT)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id r3sm917347edm.6.2019.08.15.22.52.06
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Aug 2019 22:52:06 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id f22so4159441edt.4
-        for <linux-usb@vger.kernel.org>; Thu, 15 Aug 2019 22:52:06 -0700 (PDT)
-X-Received: by 2002:a17:906:fc06:: with SMTP id ov6mr7619647ejb.226.1565934725966;
- Thu, 15 Aug 2019 22:52:05 -0700 (PDT)
+        id S1726635AbfHPF6i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Aug 2019 01:58:38 -0400
+Received: from mga06.intel.com ([134.134.136.31]:53270 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726571AbfHPF6i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 16 Aug 2019 01:58:38 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Aug 2019 22:58:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,391,1559545200"; 
+   d="asc'?scan'208";a="188717814"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga002.jf.intel.com with ESMTP; 15 Aug 2019 22:58:12 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] USB: phy: fsl-usb: convert platform driver to use dev_groups
+In-Reply-To: <20190815125903.GA17065@kroah.com>
+References: <20190806073235.25140-2-gregkh@linuxfoundation.org> <20190815125903.GA17065@kroah.com>
+Date:   Fri, 16 Aug 2019 08:57:55 +0300
+Message-ID: <87sgq1abz0.fsf@gmail.com>
 MIME-Version: 1.0
-References: <20190814212924.10381-1-gavinli@thegavinli.com> <20190815125314.GA24270@kroah.com>
-In-Reply-To: <20190815125314.GA24270@kroah.com>
-From:   Gavin Li <gavinli@thegavinli.com>
-Date:   Thu, 15 Aug 2019 22:51:54 -0700
-X-Gmail-Original-Message-ID: <CA+GxvY5+uyDrNM=XcfyhBXYvREf52YTfVb7FfcZa82jh_v08Dw@mail.gmail.com>
-Message-ID: <CA+GxvY5+uyDrNM=XcfyhBXYvREf52YTfVb7FfcZa82jh_v08Dw@mail.gmail.com>
-Subject: Re: [PATCH] usb: usbfs: only account once for mmap()'ed usb memory usage
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Gavin Li <git@thegavinli.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It is done in usbdev_mmap(); it calls usbfs_increase_memory_usage() to
-account for the buffer it allocates. No additional memory (other than
-for the control structures) is needed when actually submitting the
-URB.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 15, 2019 at 5:53 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+
+Hi,
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> Platform drivers now have the option to have the platform core create
+> and remove any needed sysfs attribute files.  So take advantage of that
+> and do not register "by hand" any sysfs files.
 >
-> On Wed, Aug 14, 2019 at 02:29:24PM -0700, gavinli@thegavinli.com wrote:
-> > From: Gavin Li <git@thegavinli.com>
-> >
-> > Memory usage for USB memory allocated via mmap() is already accounted
-> > for at mmap() time; no need to account for it again at submiturb time.
-> >
-> > Signed-off-by: Gavin Li <git@thegavinli.com>
-> > ---
-> >  drivers/usb/core/devio.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> What commit does this fix?  What issue does this fix, is it something
-> that is user-visable?
->
-> >
-> > diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> > index bbe9c2edd3e7..9681dd55473b 100644
-> > --- a/drivers/usb/core/devio.c
-> > +++ b/drivers/usb/core/devio.c
-> > @@ -1603,7 +1603,8 @@ static int proc_do_submiturb(struct usb_dev_state *ps, struct usbdevfs_urb *uurb
-> >       if (as->usbm)
-> >               num_sgs = 0;
-> >
-> > -     u += sizeof(struct async) + sizeof(struct urb) + uurb->buffer_length +
-> > +     u += sizeof(struct async) + sizeof(struct urb) +
-> > +          (as->usbm ? 0 : uurb->buffer_length) +
-> >            num_sgs * sizeof(struct scatterlist);
->
-> Are you sure?  Where is the buffer_length being added to the size here?
-> What am I missing?
->
-> thanks,
->
-> greg k-h
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Acked-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1WReUACgkQzL64meEa
+mQaiVg/+PLz7Wut/m5FKe5khZqYZxwPPavDXRSRtsCB48Wa2F1NF7SjANtiuNYfN
+3e6cVykBRdhSyptPsWIcYZnhhArHcwKO+ezWcrzrcNLxU26ILPRpvscdoBI0vzSH
+I5BFEn46RRUulOj2tt0l/Try2c6TT7Oa27KuSoD4Kf4d3rA0lNf4+DeDDHyygcom
+FBmNndygXs1VIrfkXNBsUp0zqYO2BaBem7zVcrFurMHOryXCiYfOEUz/l9x5upHl
+IOWAPuBXy7RDqvd974Z0VjO0dAURAWXmuZ5jAE6gk30Rmfa6+SEks017etJex97N
+K5Z3gYCs1sB1Yrc6g9rPLCzY3JJsLGBVKDX3B8/FAx2bwWKQfUOcX2mAC6obuY0A
+o/gT6lvRK+5XWbYGY5W2RgfG7tUL1tqHUHddquSSdoSZDA+PW8EUT1xPwREtGzsY
+JMGZvKZgUMdxcsW5Mupa141dUu0roFvuffQMayQVXdJvYlxYdBBOEdn3yCZrYpYc
+5mFSWrrZwfSvzSoqRUG1hdybfVQHXO6JhcKsgrfSzEbxBlw+XoJ7ifPCGQts1B6B
+uWRIOTEFP8lWHZUe8efSWipHRZ+ENxtvC2vrBuMlMxCliZZT4HtwHjc+HPLLtE27
+3orSQx+4vcUM70xJ2XfyKl1JxJ+8dQdDhe8Sr6nCGJElD3vmlHI=
+=U4ex
+-----END PGP SIGNATURE-----
+--=-=-=--
