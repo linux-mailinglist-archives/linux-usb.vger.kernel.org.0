@@ -2,39 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1294B8FDF7
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 10:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F7B8FEA3
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Aug 2019 11:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbfHPIg5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 16 Aug 2019 04:36:57 -0400
-Received: from esa1.mentor.iphmx.com ([68.232.129.153]:53808 "EHLO
+        id S1726839AbfHPJD0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 16 Aug 2019 05:03:26 -0400
+Received: from esa1.mentor.iphmx.com ([68.232.129.153]:60159 "EHLO
         esa1.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726810AbfHPIg5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Aug 2019 04:36:57 -0400
-IronPort-SDR: TRyk/VF6jvmqzP9E/nx4luuXoDWuJxfLgDgjqHBUa/oJvjQz+Zs0JFl2q5zkRN01r+z56IHMCe
- DCXfo1RKopNeH+8Yf/+OYnky6bL2ZJZcdxVL+tWavE4zDQ/zdcIy+EBO2SwIGjVMUDFuRp31m8
- uPvHIa1BCP0MYvyyd9k2kMHLoPCX5Gy61md7DJr21fdyxgoIvl9+CMykUg9EBwueLeVttVSGP7
- sk3vdUHtz6/fLsqbUXnQMC8We8Pja+tqNcOg7KLQq+qsFF+rsulW/NwpqshAu8RuyNuQWstd+W
- WxU=
+        with ESMTP id S1726753AbfHPJDZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Aug 2019 05:03:25 -0400
+IronPort-SDR: lEX4SljHR4Y2gshZ04laPJYAlE/+HImznHOEodsmothxMWEQ0e56TN8YdHL+MABMqNinJPU8F3
+ uVMEf/Lvpm4cjQE69nX/QPQ886wNCpcTI0BCu1UJ427G7Rv3tn5s83kQNYp3ds37s6dx8vQVl8
+ 6a9F94znHek/mb2WvVzmeum2cdBtD5qvgTBWAhWVdW7unkS4V78TaCF6vx37+JWZM1pDd7zOOX
+ bRVdcf6PldmLnGClRs5aocPuL/STvnelfeKw9zd6G/jIgupr+z0ArKyDhsMXGPhN7IU5MAsyQC
+ n0s=
 X-IronPort-AV: E=Sophos;i="5.64,391,1559548800"; 
-   d="scan'208";a="42311325"
+   d="scan'208";a="42311864"
 Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa1.mentor.iphmx.com with ESMTP; 16 Aug 2019 00:36:56 -0800
-IronPort-SDR: 4Hbe1dKx3w5LEQDoF+Fk6znAM7hhzZ6P1riknYvshPIEj8jTrODkBybPG6po1lbqGPVB74ww4U
- 33QceHDi0FJyxfNKF0QzBEKgRM7pkvPQQ8kI9UkBmhmK8PAbmg3sqMcxMP89uJSGPJ9BgAma6E
- DoU3OyIrC3PH6ji8Yb7lJGAPeohta5l9ljXJZ5aCCrjCRE4YLkWXdlBxr1AkKkMCZNc71aoaye
- K75u5Si5CXMYTJbhOPwzlE8AtQB/FwV8lbw9Oxjtv+pW/CEl5A46r0G1yFvSZj90BwwZ+UQVDt
- 2DE=
+  by esa1.mentor.iphmx.com with ESMTP; 16 Aug 2019 01:03:24 -0800
+IronPort-SDR: 5b3L4FnAoJkCX7XCnrU86s5Ceehnh8wOmKrRts4o70cFF2XSpxMCkU32o3iJzN1nNplDbxCT/e
+ XhkrlxcGKC6b4c8g7GncBCTQHd8od0H8ZrQY9yFz/xI1Qe57QzQ198/2/P2TvOBwQ0S6i+LBvF
+ DdGoB1SPnqtlA/23ZhY3AmvCtMDtANSGVuV6/89DQx5e0LgE/bfsUYLp6iofvPjlV5IWZfyjLp
+ A7JPgUZZs9Rk59A4Ittlbpxp4hnwBy+S/O/7Ai2V7t3X09bmO6Gex8xEQ1XOMcw2nF2nbGyZNG
+ i5k=
 From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
 To:     Mathias Nyman <mathias.nyman@linux.intel.com>
 CC:     Hans de Goede <hdegoede@redhat.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: [PATCH v3] usb: xhci-pci: reorder removal to avoid use-after-free
-Thread-Topic: [PATCH v3] usb: xhci-pci: reorder removal to avoid
+Subject: [Resend] [PATCH v3] usb: xhci-pci: reorder removal to avoid
  use-after-free
-Thread-Index: AQHVVA0wFGLzc3brcEWCOIA9H/QeDQ==
-Date:   Fri, 16 Aug 2019 08:36:51 +0000
-Message-ID: <1565944612083.89953@mentor.com>
+Thread-Topic: [Resend] [PATCH v3] usb: xhci-pci: reorder removal to avoid
+ use-after-free
+Thread-Index: AQHVVBFK/kSUZLgzxkCv/bugLpBg2A==
+Date:   Fri, 16 Aug 2019 09:03:20 +0000
+Message-ID: <1565946200239.8897@mentor.com>
 Accept-Language: de-DE, en-IE, en-US
 Content-Language: de-DE
 X-MS-Has-Attach: 
@@ -63,16 +64,6 @@ Signed-off-by: Carsten Schmid <carsten_schmid@mentor.com>
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Tested-by: Carsten Schmid <carsten_schmid@mentor.com>
 ---
-Rationale:
-Use-after-free was reproduced on 4.14.102 and 4.14.129 kernel
-using unbind mechanism.
-echo 0000:00:15.0 > /sys/bus/pci/drivers/xhci_hcd/unbind
-
-Upstream version of driver is identical in the affected code.
-Fix was tested successfully on 4.14.102 and 4.14.129.
-Provided patch applies and compiles on v5.2.7 stable.
-As this is a bugfix, please consider it to go to stable trees too.
----
 v2:
    - more speaking name for private data element
    - consider failure in driver init sequence
@@ -80,6 +71,8 @@ v2:
 v3:
    - corrected typo: resorce -> resource
    - added Reviewed by and Tested-by
+Resend v3:
+   - made a mistake when copying patch content to mail in v3
 ---
  drivers/usb/host/xhci-ext-caps.c | 25 +++++++++++++++----------
  drivers/usb/host/xhci-pci.c      |  8 +++++++-
@@ -232,4 +225,3 @@ index fabbce1c542a..847d2021fc2c 100644
  int xhci_resume(struct xhci_hcd *xhci, bool hibernated);
 -- 
 2.17.1
-
