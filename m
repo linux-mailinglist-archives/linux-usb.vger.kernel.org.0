@@ -2,50 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0989A90AE9
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2019 00:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BF490D8C
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2019 08:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727858AbfHPWZZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Aug 2019 18:25:25 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:41230 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727762AbfHPWZY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Aug 2019 18:25:24 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 044D6140B09F5;
-        Fri, 16 Aug 2019 15:25:23 -0700 (PDT)
-Date:   Fri, 16 Aug 2019 15:24:54 -0700 (PDT)
-Message-Id: <20190816.152454.820414129398569362.davem@davemloft.net>
-To:     wenwen@cs.uga.edu
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] lan78xx: Fix memory leaks
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <1565799793-7446-1-git-send-email-wenwen@cs.uga.edu>
-References: <1565799793-7446-1-git-send-email-wenwen@cs.uga.edu>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 16 Aug 2019 15:25:24 -0700 (PDT)
+        id S1725945AbfHQGzP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 17 Aug 2019 02:55:15 -0400
+Received: from muru.com ([72.249.23.125]:58042 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725832AbfHQGzP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 17 Aug 2019 02:55:15 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id B8811812D;
+        Sat, 17 Aug 2019 06:55:41 +0000 (UTC)
+Date:   Fri, 16 Aug 2019 23:55:10 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Lars Melin <larsm17@gmail.com>,
+        Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCHv2] USB: serial: option: Add Motorola modem UARTs
+Message-ID: <20190817065510.GH52127@atomide.com>
+References: <20190815082602.51765-1-tony@atomide.com>
+ <20190815112737.GD32300@localhost>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190815112737.GD32300@localhost>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wenwen Wang <wenwen@cs.uga.edu>
-Date: Wed, 14 Aug 2019 11:23:13 -0500
-
-> In lan78xx_probe(), a new urb is allocated through usb_alloc_urb() and
-> saved to 'dev->urb_intr'. However, in the following execution, if an error
-> occurs, 'dev->urb_intr' is not deallocated, leading to memory leaks. To fix
-> this issue, invoke usb_free_urb() to free the allocated urb before
-> returning from the function.
+* Johan Hovold <johan@kernel.org> [190815 11:28]:
+> On Thu, Aug 15, 2019 at 01:26:02AM -0700, Tony Lindgren wrote:
+> > Tested-by: Pavel Machek <pavel@ucw.cz>
+> > Signed-off-by: Tony Lingren <tony@atomide.com>
 > 
-> Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
+> I fixed up the typo in your name here, which checkpatch caught.
 
-Applied.
+Oopsie :)
+
+> > Changes since v1:
+> > - Leave out defines as suggested by Lars
+> 
+> Thanks, Tony. Now applied.
+
+Thanks,
+
+Tony
