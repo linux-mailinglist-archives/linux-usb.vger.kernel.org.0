@@ -2,109 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F2A91260
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Aug 2019 20:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAB89136E
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Aug 2019 00:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726501AbfHQSnq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Aug 2019 14:43:46 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:44508 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726329AbfHQSnq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 17 Aug 2019 14:43:46 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 5BE523082138;
-        Sat, 17 Aug 2019 18:43:46 +0000 (UTC)
-Received: from shalem.localdomain.com (ovpn-116-31.ams2.redhat.com [10.36.116.31])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3839A179CC;
-        Sat, 17 Aug 2019 18:43:45 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
-Subject: [PATCH v2 3/3] usb: typec: fusb302: Call fusb302_debugfs_init earlier
-Date:   Sat, 17 Aug 2019 20:43:40 +0200
-Message-Id: <20190817184340.64086-3-hdegoede@redhat.com>
-In-Reply-To: <20190817184340.64086-1-hdegoede@redhat.com>
-References: <20190817184340.64086-1-hdegoede@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Sat, 17 Aug 2019 18:43:46 +0000 (UTC)
+        id S1726397AbfHQWK1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 17 Aug 2019 18:10:27 -0400
+Received: from dsl092-148-226.wdc2.dsl.speakeasy.net ([66.92.148.226]:34848
+        "EHLO nathanst.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbfHQWK1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Aug 2019 18:10:27 -0400
+X-Greylist: delayed 520 seconds by postgrey-1.27 at vger.kernel.org; Sat, 17 Aug 2019 18:10:26 EDT
+Received: from holmes.nathanst.com (nathanst@localhost [127.0.0.1])
+        by nathanst.com (8.13.4/8.13.4/Debian-3sarge3) with ESMTP id x7HM1jwj025649
+        for <linux-usb@vger.kernel.org>; Sat, 17 Aug 2019 18:01:45 -0400
+Received: (from nathanst@localhost)
+        by holmes.nathanst.com (8.13.4/8.13.4/Submit) id x7HM1joK025647
+        for linux-usb@vger.kernel.org; Sat, 17 Aug 2019 18:01:45 -0400
+Date:   Sat, 17 Aug 2019 18:01:45 -0400
+From:   Nathan Stratton Treadway <vgerlists@nathanst.com>
+To:     linux-usb@vger.kernel.org
+Subject: Adding "UAS" protocol line to usb.ids file?
+Message-ID: <20190817220145.GJ1403@nathanst.com>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="IiVenqGWf+H9Y6IX"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.9i
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tcpm_register_port() will call some of the fusb302 code's callbacks
-wich in turn will call fusb302_log(). So we need to call
-fusb302_debugfs_init() before we call tcpm_register_port().
 
-This fixes the following warning, which was caused by the logbuffer_lock
-not yet being initialized (which is done by fusb302_debugfs_init):
+--IiVenqGWf+H9Y6IX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
- DEBUG_LOCKS_WARN_ON(lock->magic != lock)
- WARNING: CPU: 0 PID: 1306 at kernel/locking/mutex.c:912 __mutex_lock+0x978/0x9a0
- Modules linked in: fusb302(+) tcpm pi3usb30532 typec bq24190_charger snd_soc_sst_cht_bsw_rt5645 mei_hdcp dwc3 intel_rapl_msr udc_core ulpi gpio_keys intel_powerclamp coretemp kvm_intel brcmfmac kvm brcmutil joydev cfg80211 wdat_wdt irqbypass pcspkr intel_cstate extcon_intel_cht_wc i2c_cht_wc(E) snd_intel_sst_acpi snd_intel_sst_core snd_soc_rt5645 snd_soc_sst_atom_hifi2_platform snd_soc_acpi_intel_match snd_soc_rl6231 snd_soc_acpi intel_xhci_usb_role_switch roles hci_uart snd_soc_core btqca mei_txe btrtl processor_thermal_device mei snd_hdmi_lpe_audio lpc_ich snd_compress btbcm intel_rapl_common ac97_bus dwc3_pci snd_pcm_dmaengine intel_soc_dts_iosf btintel snd_seq bluetooth snd_seq_device snd_pcm intel_cht_int33fe_musb snd_timer intel_cht_int33fe_typec intel_hid intel_cht_int33fe_common sparse_keymap snd ecdh_generic goodix rfkill soundcore ecc spi_pxa2xx_platform max17042_battery dw_dmac int3406_thermal dptf_power acpi_pad soc_button_array int3400_thermal int3403_thermal
-  gpd_pocket_fan intel_int0002_vgpio int340x_thermal_zone acpi_thermal_rel dm_crypt mmc_block i915 crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel i2c_algo_bit drm_kms_helper drm video sdhci_acpi sdhci mmc_core pwm_lpss_platform pwm_lpss i2c_dev
- CPU: 0 PID: 1306 Comm: systemd-udevd Tainted: G            E     5.3.0-rc4+ #83
- Hardware name: Default string Default string/Default string, BIOS 5.11 06/28/2017
- RIP: 0010:__mutex_lock+0x978/0x9a0
- Code: c0 0f 84 26 f7 ff ff 44 8b 05 24 25 c8 00 45 85 c0 0f 85 16 f7 ff ff 48 c7 c6 da 55 2f ae 48 c7 c7 98 8c 2d ae e8 a0 f9 5c ff <0f> 0b e9 fc f6 ff ff 4c 89 f0 4d 89 fe 49 89 c7 e9 cf fa ff ff e8
- RSP: 0018:ffffb7a8c0523800 EFLAGS: 00010286
- RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
- RDX: 0000000000000002 RSI: 0000000000000001 RDI: 0000000000000246
- RBP: ffffb7a8c05238c0 R08: 0000000000000000 R09: 0000000000000000
- R10: ffffb7a8c0523648 R11: 0000000000000030 R12: 0000000000000000
- R13: ffffb7a8c0523990 R14: ffff9bf22f70c028 R15: ffff9bf22f70c360
- FS:  00007f39ca234940(0000) GS:ffff9bf237400000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 00007f1f108481a0 CR3: 0000000271f28000 CR4: 00000000001006f0
- Call Trace:
-  ? find_held_lock+0x39/0x90
-  ? _fusb302_log+0x81/0x1d0 [fusb302]
-  ? vsnprintf+0x3aa/0x4f0
-  ? _fusb302_log+0x81/0x1d0 [fusb302]
-  _fusb302_log+0x81/0x1d0 [fusb302]
- ...
+I noticed that when I use "lsusb -v" on a UAS-enabled drive enclosure,
+the bInterfaceProtocol line for #80/0x50 has a "protocol name" label but the
+one for #98/0x62 does not:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/usb/typec/tcpm/fusb302.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 603ab87b466e..ed8655c6af8c 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1728,6 +1728,7 @@ static int fusb302_probe(struct i2c_client *client,
- 	INIT_WORK(&chip->irq_work, fusb302_irq_work);
- 	INIT_DELAYED_WORK(&chip->bc_lvl_handler, fusb302_bc_lvl_handler_work);
- 	init_tcpc_dev(&chip->tcpc_dev);
-+	fusb302_debugfs_init(chip);
- 
- 	if (client->irq) {
- 		chip->gpio_int_n_irq = client->irq;
-@@ -1760,7 +1761,6 @@ static int fusb302_probe(struct i2c_client *client,
- 		goto tcpm_unregister_port;
- 	}
- 	enable_irq_wake(chip->gpio_int_n_irq);
--	fusb302_debugfs_init(chip);
- 	i2c_set_clientdata(client, chip);
- 
- 	return ret;
-@@ -1769,6 +1769,7 @@ static int fusb302_probe(struct i2c_client *client,
- 	tcpm_unregister_port(chip->tcpm_port);
- 	fwnode_handle_put(chip->tcpc_dev.fwnode);
- destroy_workqueue:
-+	fusb302_debugfs_exit(chip);
- 	destroy_workqueue(chip->wq);
- 
- 	return ret;
--- 
-2.23.0.rc2
+========
+# lsusb -v -s2:15 | grep Interface
+  bDeviceClass            0 (Defined at Interface level)
+    bNumInterfaces          1
+    Interface Descriptor:
+      bInterfaceNumber        0
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     80 Bulk-Only
+      iInterface              0
+    Interface Descriptor:
+      bInterfaceNumber        0
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     98
+      iInterface              0
+========
 
+
+
+So...I was wondering if there was any particular reason that protocol
+98 isn't included in the usb.ids file?
+
+
+As a proof of concept I added the SCSI-subclass version of the line to
+the usb.ids file (see attached patch) and lsusb successfully showed a
+description for the #98 line as well:
+
+========
+# lsusb -v -s2:15 | grep Interface
+  bDeviceClass            0 (Defined at Interface level)
+    bNumInterfaces          1
+    Interface Descriptor:
+      bInterfaceNumber        0
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     80 Bulk-Only
+      iInterface              0
+    Interface Descriptor:
+      bInterfaceNumber        0
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     98 UAS
+      iInterface              0
+========
+
+(This experiment was on an Ubuntu Bionic system.)
+
+I searched the list archives (and web in general) for previous
+discussion on this topic, but didn't succeed in finding this specific
+issue.
+
+(I see that 62 is in fact included in the protocol list found on
+  https://usb-ids.gowdy.us/read/UC/08/06
+, but it has an empty "name" column in that table -- and it's missing
+completely from the current file at
+  https://usb-ids.gowdy.us/usb.ids 
+.)
+
+Thanks.
+
+
+							Nathan
+
+p.s. If in fact it makes sense to add UAS to the file: I assume the UAS
+protocol doesn't apply to the UFI subclass, but I don't know off hand if
+it applies to the RBC subclass as well as SCSI...
+
+
+--IiVenqGWf+H9Y6IX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="usb.ids_add_uas.patch"
+
+--- usb.ids_orig	2017-04-21 16:59:17.000000000 -0400
++++ usb.ids	2019-08-17 00:05:51.688459268 -0400
+@@ -18012,6 +18012,7 @@
+ 		00  Control/Bulk/Interrupt
+ 		01  Control/Bulk
+ 		50  Bulk-Only
++		62  UAS
+ C 09  Hub
+ 	00  Unused
+ 		00  Full speed (or root) hub
+
+--IiVenqGWf+H9Y6IX--
