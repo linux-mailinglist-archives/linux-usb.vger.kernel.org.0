@@ -2,128 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DAB89136E
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Aug 2019 00:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1AD915A6
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Aug 2019 10:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbfHQWK1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Aug 2019 18:10:27 -0400
-Received: from dsl092-148-226.wdc2.dsl.speakeasy.net ([66.92.148.226]:34848
-        "EHLO nathanst.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbfHQWK1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Aug 2019 18:10:27 -0400
-X-Greylist: delayed 520 seconds by postgrey-1.27 at vger.kernel.org; Sat, 17 Aug 2019 18:10:26 EDT
-Received: from holmes.nathanst.com (nathanst@localhost [127.0.0.1])
-        by nathanst.com (8.13.4/8.13.4/Debian-3sarge3) with ESMTP id x7HM1jwj025649
-        for <linux-usb@vger.kernel.org>; Sat, 17 Aug 2019 18:01:45 -0400
-Received: (from nathanst@localhost)
-        by holmes.nathanst.com (8.13.4/8.13.4/Submit) id x7HM1joK025647
-        for linux-usb@vger.kernel.org; Sat, 17 Aug 2019 18:01:45 -0400
-Date:   Sat, 17 Aug 2019 18:01:45 -0400
-From:   Nathan Stratton Treadway <vgerlists@nathanst.com>
-To:     linux-usb@vger.kernel.org
-Subject: Adding "UAS" protocol line to usb.ids file?
-Message-ID: <20190817220145.GJ1403@nathanst.com>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="IiVenqGWf+H9Y6IX"
+        id S1726261AbfHRI42 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 18 Aug 2019 04:56:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55052 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726175AbfHRI42 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 18 Aug 2019 04:56:28 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4001A2086C;
+        Sun, 18 Aug 2019 08:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566118586;
+        bh=YPy61RhFWh/qNEnakfb0FEU4mMBXMcqoky7A4GSYIFw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Frphb+0fLqoC89eQXQgMpzg0rGbByDkzvAhtt7LxVCj10yJn5SRD+1VvMOnoBtDDH
+         b/kCu6BnZ+d8/B8EfNAIIvWimuyXvm+CkYGb0TFIN40A+3V1cEGobIvkBXsvGsIOGO
+         UMaTdL/1LLiy8Lk6VwU2IWGuK8c0C8FnV6VDRTfU=
+Date:   Sun, 18 Aug 2019 10:56:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.3-rc5
+Message-ID: <20190818085624.GA28589@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.5.9i
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The following changes since commit d45331b00ddb179e291766617259261c112db872:
 
---IiVenqGWf+H9Y6IX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  Linux 5.3-rc4 (2019-08-11 13:26:41 -0700)
 
-I noticed that when I use "lsusb -v" on a UAS-enabled drive enclosure,
-the bInterfaceProtocol line for #80/0x50 has a "protocol name" label but the
-one for #98/0x62 does not:
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.3-rc5
 
-========
-# lsusb -v -s2:15 | grep Interface
-  bDeviceClass            0 (Defined at Interface level)
-    bNumInterfaces          1
-    Interface Descriptor:
-      bInterfaceNumber        0
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     80 Bulk-Only
-      iInterface              0
-    Interface Descriptor:
-      bInterfaceNumber        0
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     98
-      iInterface              0
-========
+for you to fetch changes up to 6a5f43d1d8bd3779e428178438caf33f60427124:
 
+  Merge tag 'usb-serial-5.3-rc5' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2019-08-17 17:09:33 +0200)
 
+----------------------------------------------------------------
+USB fixes for 5.3-rc5
 
-So...I was wondering if there was any particular reason that protocol
-98 isn't included in the usb.ids file?
+Here are number of small USB fixes for 5.3-rc5.
 
+Syzbot has been on a tear recently now that it has some good USB
+debugging hooks integrated, so there's a number of fixes in here found
+by those tools for some _very_ old bugs.  Also a handful of gadget
+driver fixes for reported issues, some hopefully-final dma fixes for
+host controller drivers, and some new USB serial gadget driver ids.
 
-As a proof of concept I added the SCSI-subclass version of the line to
-the usb.ids file (see attached patch) and lsusb successfully showed a
-description for the #98 line as well:
+All of these have been in linux-next this week with no reported issues
+(the usb-serial ones were in linux-next in its own branch, but merged
+into mine on Friday.)
 
-========
-# lsusb -v -s2:15 | grep Interface
-  bDeviceClass            0 (Defined at Interface level)
-    bNumInterfaces          1
-    Interface Descriptor:
-      bInterfaceNumber        0
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     80 Bulk-Only
-      iInterface              0
-    Interface Descriptor:
-      bInterfaceNumber        0
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     98 UAS
-      iInterface              0
-========
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-(This experiment was on an Ubuntu Bionic system.)
+----------------------------------------------------------------
+Alan Stern (1):
+      USB: core: Fix races in character device registration and deregistraion
 
-I searched the list archives (and web in general) for previous
-discussion on this topic, but didn't succeed in finding this specific
-issue.
+André Draszik (1):
+      usb: chipidea: imx: fix EPROBE_DEFER support during driver probe
 
-(I see that 62 is in fact included in the protocol list found on
-  https://usb-ids.gowdy.us/read/UC/08/06
-, but it has an empty "name" column in that table -- and it's missing
-completely from the current file at
-  https://usb-ids.gowdy.us/usb.ids 
-.)
+Benjamin Herrenschmidt (2):
+      usb: gadget: composite: Clear "suspended" on reset/disconnect
+      usb: gadget: mass_storage: Fix races between fsg_disable and fsg_set_alt
 
-Thanks.
+Bob Ham (1):
+      USB: serial: option: add the BroadMobi BM818 card
 
+Christoph Hellwig (2):
+      usb: don't create dma pools for HCDs with a localmem_pool
+      usb: add a hcd_uses_dma helper
 
-							Nathan
+Greg Kroah-Hartman (2):
+      Merge tag 'fixes-for-v5.3-rc4' of git://git.kernel.org/.../balbi/usb into usb-linus
+      Merge tag 'usb-serial-5.3-rc5' of https://git.kernel.org/.../johan/usb-serial into usb-linus
 
-p.s. If in fact it makes sense to add UAS to the file: I assume the UAS
-protocol doesn't apply to the UFI subclass, but I don't know off hand if
-it applies to the RBC subclass as well as SCSI...
+Hans Ulli Kroll (1):
+      usb: host: fotg2: restart hcd after port reset
 
+Oliver Neukum (2):
+      usb: cdc-acm: make sure a refcount is taken early enough
+      USB: CDC: fix sanity checks in CDC union parser
 
---IiVenqGWf+H9Y6IX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="usb.ids_add_uas.patch"
+Rogan Dawes (1):
+      USB: serial: option: add D-Link DWM-222 device ID
 
---- usb.ids_orig	2017-04-21 16:59:17.000000000 -0400
-+++ usb.ids	2019-08-17 00:05:51.688459268 -0400
-@@ -18012,6 +18012,7 @@
- 		00  Control/Bulk/Interrupt
- 		01  Control/Bulk
- 		50  Bulk-Only
-+		62  UAS
- C 09  Hub
- 	00  Unused
- 		00  Full speed (or root) hub
+Tony Lindgren (1):
+      USB: serial: option: Add Motorola modem UARTs
 
---IiVenqGWf+H9Y6IX--
+Yoshiaki Okamoto (1):
+      USB: serial: option: Add support for ZTE MF871A
+
+Yoshihiro Shimoda (1):
+      usb: gadget: udc: renesas_usb3: Fix sysfs interface of "role"
+
+ drivers/usb/chipidea/ci_hdrc_imx.c           | 19 ++++++++++++-------
+ drivers/usb/class/cdc-acm.c                  | 12 +++++++-----
+ drivers/usb/core/buffer.c                    | 10 +++-------
+ drivers/usb/core/file.c                      | 10 +++++-----
+ drivers/usb/core/hcd.c                       |  4 ++--
+ drivers/usb/core/message.c                   |  4 ++--
+ drivers/usb/dwc2/hcd.c                       |  2 +-
+ drivers/usb/gadget/composite.c               |  1 +
+ drivers/usb/gadget/function/f_mass_storage.c | 28 ++++++++++++++++++----------
+ drivers/usb/gadget/udc/renesas_usb3.c        |  5 +++--
+ drivers/usb/host/fotg210-hcd.c               |  4 ++++
+ drivers/usb/serial/option.c                  | 10 ++++++++++
+ include/linux/usb.h                          |  2 +-
+ include/linux/usb/hcd.h                      |  3 +++
+ 14 files changed, 72 insertions(+), 42 deletions(-)
