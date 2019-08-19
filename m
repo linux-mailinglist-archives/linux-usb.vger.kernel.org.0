@@ -2,65 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D1C92384
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 14:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2801F92398
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 14:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727377AbfHSMdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Aug 2019 08:33:04 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:38918 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbfHSMdE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Aug 2019 08:33:04 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id B6C9225B820;
-        Mon, 19 Aug 2019 22:33:01 +1000 (AEST)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id 906D69406ED; Mon, 19 Aug 2019 14:32:59 +0200 (CEST)
-Date:   Mon, 19 Aug 2019 14:32:59 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: usb: renesas_gen3: Rename bindings
- documentation file to reflect IP block
-Message-ID: <20190819123259.vnwxc2fxmasfbqq7@verge.net.au>
-References: <20190809213710.31783-1-horms+renesas@verge.net.au>
- <CAMuHMdUHK7Fq3m4y1rjVFxnSXH3tZyTjOzFMfVMtRtPcdKjNCw@mail.gmail.com>
- <20190810111455.GA30455@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190810111455.GA30455@kroah.com>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+        id S1726852AbfHSMhw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Aug 2019 08:37:52 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38034 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726594AbfHSMhw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Aug 2019 08:37:52 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id C6021AB9B;
+        Mon, 19 Aug 2019 12:37:50 +0000 (UTC)
+Message-ID: <1566218263.5663.22.camel@suse.com>
+Subject: Re: divide error in usbtmc_generic_read
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        steve_bayless@keysight.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        guido.kiener@rohde-schwarz.com,
+        syzbot <syzbot+55b0304b360654a7537b@syzkaller.appspotmail.com>,
+        USB list <linux-usb@vger.kernel.org>
+Date:   Mon, 19 Aug 2019 14:37:43 +0200
+In-Reply-To: <CAAeHK+zd9P2hLXuXynbZfhVpSE1Sak2GihX6sDCPWfD+kPaEGg@mail.gmail.com>
+References: <000000000000a59094059013dd63@google.com>
+         <1565875886.5780.7.camel@suse.com>
+         <CAAeHK+zd9P2hLXuXynbZfhVpSE1Sak2GihX6sDCPWfD+kPaEGg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 10, 2019 at 01:14:55PM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Aug 10, 2019 at 08:40:15AM +0200, Geert Uytterhoeven wrote:
-> > Hi Simon,
+Am Montag, den 19.08.2019, 14:17 +0200 schrieb Andrey Konovalov:
+> On Thu, Aug 15, 2019 at 3:31 PM Oliver Neukum <oneukum@suse.com> wrote:
 > > 
-> > On Fri, Aug 9, 2019 at 11:37 PM Simon Horman <horms+renesas@verge.net.au> wrote:
-> > > For consistency with the naming of (most) other documentation files for DT
-> > > bindings for Renesas IP blocks rename the Renesas USB3.0 peripheral
-> > > documentation file from renesas,usb3.txt to renesas,usb3-peri.txt
-> > >
-> > > This refines a recent rename from renesas_usb3.txt to renesas-usb3.txt.
+> > Am Mittwoch, den 14.08.2019, 06:38 -0700 schrieb syzbot:
+> > > syzbot has tested the proposed patch but the reproducer still triggered
+> > > crash:
+> > > KASAN: use-after-free Read in usbtmc_disconnect
 > > 
-> > s/renesas-usb3.txt/renesas,usb3.txt/
+> > I am afraid that is a difficiency in KASAN that should be fixed.
+> > Is the class of the error compared if I leave in more of the
+> > original bug report? Actually the ID is still there, so it really
+> > should return an inconclusive in these cases.
 > 
-> I'll fix it up now, no need for a resend...
+> I don't get this, what kind of deficiency do you mean?
 
-Thanks, much appreciated.
+The original error was a divide by zero. The first fix fixed that
+but still another error showed up. If I propose a fix there are
+other possibilities besides it working.
+
+I could have no effect on the original bug or my fix breaks
+something else and KASAN is making no difference between
+those cases.
+
+	Regards
+		Oliver
+
