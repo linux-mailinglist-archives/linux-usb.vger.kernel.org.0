@@ -2,174 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C1692318
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 14:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B211A92325
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 14:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727375AbfHSMJE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Aug 2019 08:09:04 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:51750 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726987AbfHSMJE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Aug 2019 08:09:04 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7JC8s3n023197;
-        Mon, 19 Aug 2019 07:08:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1566216534;
-        bh=KFdSQOsdjhK41C1HepacSpv9P02yCCkQhKBtTM2IF48=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=PJTy7S5j7V4i2lzbXHVxmVQmQb0lp2eV86qreaKsIM2kz9WSUIBo7BRTnpNRpFvqi
-         71TCxpJm5vzVMUk4qGvpaKCl1/Dw9beBsLwCzcberat7XzjfE2ZKA8ZLDvnzEWuZwf
-         /M648WcEhbaWSQqOoaSat+WJidGIf9HrAqukWN0s=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7JC8sdZ072063
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 19 Aug 2019 07:08:54 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 19
- Aug 2019 07:08:54 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 19 Aug 2019 07:08:53 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7JC8pDp049587;
-        Mon, 19 Aug 2019 07:08:51 -0500
-Subject: Re: [PATCH v10 0/6] Introduced new Cadence USBSS DRD Driver.
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Pawel Laszczak <pawell@cadence.com>,
-        <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jbergsagel@ti.com>, <nsekhar@ti.com>, <nm@ti.com>,
-        <sureshp@cadence.com>, <jpawar@cadence.com>, <kurahul@cadence.com>,
-        <aniljoy@cadence.com>
-References: <Pine.LNX.4.44L0.1908151037120.1664-100000@iolanthe.rowland.org>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <ede5f5b6-12c9-9120-7378-48e7cd42de57@ti.com>
-Date:   Mon, 19 Aug 2019 15:08:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.1908151037120.1664-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+        id S1727516AbfHSMLX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Aug 2019 08:11:23 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56620 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726491AbfHSMLX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Aug 2019 08:11:23 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 16E26AF1E;
+        Mon, 19 Aug 2019 12:11:21 +0000 (UTC)
+Message-ID: <1566216675.5663.19.camel@suse.com>
+Subject: Re: AW: AW: Strange behaviour of D-Link DUB-1312 USB 3.0 Adapters
+From:   Oliver Neukum <oneukum@suse.com>
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Date:   Mon, 19 Aug 2019 14:11:15 +0200
+In-Reply-To: <1565870525382.10504@mentor.com>
+References: <db0e8930ea94408ca7a38192ddfd203f@SVR-IES-MBX-03.mgc.mentorg.com>
+         <1565771508.25764.3.camel@suse.com>
+         <f5e22fea4e1c4baeb2fc98d324ad9060@SVR-IES-MBX-03.mgc.mentorg.com>
+        ,<1565788073.25764.8.camel@suse.com> <1565870525382.10504@mentor.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 15/08/2019 17:39, Alan Stern wrote:
-> On Thu, 15 Aug 2019, Roger Quadros wrote:
+Am Donnerstag, den 15.08.2019, 12:02 +0000 schrieb  Schmid, Carsten :
+> > > I don't think its a regression.
+> > 
+> > It would be better to know than to assume.
+> > 
 > 
->> Felipe & Alan,
->>
->> On 21/07/2019 21:32, Pawel Laszczak wrote:
->>> This patch introduce new Cadence USBSS DRD driver to linux kernel.
->>>
->>> The Cadence USBSS DRD Controller is a highly configurable IP Core which
->>> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
->>> Host Only (XHCI)configurations.
->>>
->>> The current driver has been validated with FPGA burned. We have support
->>> for PCIe bus, which is used on FPGA prototyping.
->>>
->>> The host side of USBSS-DRD controller is compliance with XHCI
->>> specification, so it works with standard XHCI Linux driver.
->>
->> While testing this driver I encountered the following issue if I do the following.
->>
->> 1) USB port is "otg" and nothing connected so it is in IDLE mode to begin with.
->>    i.e. HCD & UDC not registered.
->>
->> 2) Load mass storage gadget with backing medium.
->>    > modprobe g_mass_storage file=lun stall=0
->>
->> [   28.172142] udc-core: couldn't find an available UDC - added [g_mass_storage] to list of pending drivers
->>
->> 3) Connect port to PC host
->>
->> [   30.564767] cdns-usb3 6000000.usb: Initialized  ep0 support:  
->> [   30.570591] cdns-usb3 6000000.usb: Initialized  ep1out support: BULK, INT ISO
->> [   30.577713] cdns-usb3 6000000.usb: Initialized  ep2out support: BULK, INT ISO
->> [   30.584835] cdns-usb3 6000000.usb: Initialized  ep3out support: BULK, INT ISO
->> [   30.591957] cdns-usb3 6000000.usb: Initialized  ep4out support: BULK, INT ISO
->> [   30.599078] cdns-usb3 6000000.usb: Initialized  ep5out support: BULK, INT ISO
->> [   30.606199] cdns-usb3 6000000.usb: Initialized  ep6out support: BULK, INT ISO
->> [   30.613320] cdns-usb3 6000000.usb: Initialized  ep7out support: BULK, INT ISO
->> [   30.620441] cdns-usb3 6000000.usb: Initialized  ep8out support: BULK, INT ISO
->> [   30.627562] cdns-usb3 6000000.usb: Initialized  ep9out support: BULK, INT ISO
->> [   30.634684] cdns-usb3 6000000.usb: Initialized  ep10out support: BULK, INT ISO
->> [   30.641893] cdns-usb3 6000000.usb: Initialized  ep11out support: BULK, INT ISO
->> [   30.649100] cdns-usb3 6000000.usb: Initialized  ep12out support: BULK, INT ISO
->> [   30.656309] cdns-usb3 6000000.usb: Initialized  ep13out support: BULK, INT ISO
->> [   30.663516] cdns-usb3 6000000.usb: Initialized  ep14out support: BULK, INT ISO
->> [   30.670724] cdns-usb3 6000000.usb: Initialized  ep15out support: BULK, INT ISO
->> [   30.677935] cdns-usb3 6000000.usb: Initialized  ep1in support: BULK, INT ISO
->> [   30.684979] cdns-usb3 6000000.usb: Initialized  ep2in support: BULK, INT ISO
->> [   30.692020] cdns-usb3 6000000.usb: Initialized  ep3in support: BULK, INT ISO
->> [   30.699057] cdns-usb3 6000000.usb: Initialized  ep4in support: BULK, INT ISO
->> [   30.706097] cdns-usb3 6000000.usb: Initialized  ep5in support: BULK, INT ISO
->> [   30.713135] cdns-usb3 6000000.usb: Initialized  ep6in support: BULK, INT ISO
->> [   30.720175] cdns-usb3 6000000.usb: Initialized  ep7in support: BULK, INT ISO
->> [   30.727213] cdns-usb3 6000000.usb: Initialized  ep8in support: BULK, INT ISO
->> [   30.734252] cdns-usb3 6000000.usb: Initialized  ep9in support: BULK, INT ISO
->> [   30.741289] cdns-usb3 6000000.usb: Initialized  ep10in support: BULK, INT ISO
->> [   30.748414] cdns-usb3 6000000.usb: Initialized  ep11in support: BULK, INT ISO
->> [   30.755536] cdns-usb3 6000000.usb: Initialized  ep12in support: BULK, INT ISO
->> [   30.762661] cdns-usb3 6000000.usb: Initialized  ep13in support: BULK, INT ISO
->> [   30.769785] cdns-usb3 6000000.usb: Initialized  ep14in support: BULK, INT ISO
->> [   30.776910] cdns-usb3 6000000.usb: Initialized  ep15in support: BULK, INT ISO
->> [   30.786313] Mass Storage Function, version: 2009/09/11
->> [   30.791455] LUN: removable file: (no medium)
->> [   31.039497] lun0: unable to open backing file: 500M.bin
->> [   31.158689] g_mass_storage 6000000.usb: failed to start g_mass_storage: -2
->> [   31.165606] cdns-usb3 6000000.usb: Failed to register USB device controller
->> [   31.172585] cdns-usb3 6000000.usb: set 2 has failed, back to 0
->>
->> Now, -2 is ENOENT i.e.	/* No such file or directory */
->> The file is present so that's not the real issue.
->>
->> The call trace to fsg_lun_open is below
->>
->> [   30.952877]  fsg_lun_open+0x24/0x42c [usb_f_mass_storage]
->> [   30.958259]  fsg_common_create_lun+0xc8/0x2b8 [usb_f_mass_storage]
->> [   30.964422]  fsg_common_create_luns+0xa4/0x104 [usb_f_mass_storage]
->> [   30.970670]  msg_bind+0xd8/0x1e0 [g_mass_storage]
->> [   30.975360]  composite_bind+0x7c/0x180 [libcomposite]
->> [   30.980396]  udc_bind_to_driver+0x68/0x110 [udc_core]
->> [   30.985432]  check_pending_gadget_drivers+0x74/0xd8 [udc_core]
->> [   30.991247]  usb_add_gadget_udc_release+0x180/0x1e8 [udc_core]
->> [   30.997062]  usb_add_gadget_udc+0x10/0x18 [udc_core]
->> [   31.002010]  __cdns3_gadget_init+0x3a0/0x628 [cdns3]
->> [   31.006959]  cdns3_role_start+0x6c/0xd0 [cdns3]
->> [   31.011473]  cdns3_hw_role_switch+0x80/0xe8 [cdns3]
->> [   31.016336]  cdns3_drd_thread_irq+0x10/0x20 [cdns3]
->> [   31.021197]  irq_thread_fn+0x28/0x78
->> [   31.024757]  irq_thread+0x124/0x1b8
->> [   31.028233]  kthread+0x124/0x128
->> [   31.031447]  ret_from_fork+0x10/0x18
->>
->> Is opening the backing file from irq_thread_fn the issue here?
->> If yes, how to resolve this?
+> Happens with kernel 4.14.102 also, not only with 4.14.129.
+> Looks more HW related.
 > 
-> I would guess that it probably is related to that.
+> > 
+> > > Is there something i can do to force an error message to be seen
+> > > when the ETH2USB adapter stalls?
+> > 
+> > You can activate dynamic debugging for the xhci_hcd module
+> > Remember that no data to transfer is not an error as such.
+> > 
+> > > My current assumption is that the signal quality of the USB port is at a
+> > > corner case, and therefore some "better" Adapters work, some "bad ones"
+> > > don't. But as there is no error message seen in the dmesg, i am somehow lost.
+> > 
+> > Two things you can do:
+> > 
+> > 1. Generate a usbmon trace (it will be gigantic though)
+> > 2. Activate dynamic debugging for the xhci_hcd module
 > 
-> In any case, the backing filename should be an explicit complete path.  
-> Who knows what the current directory will be when the actual open call
-> takes place?
+> I did:
+> echo -n 'module xhci_hcd =p' > /sys/kernel/debug/dynamic_debug/control
+> echo -n 'usbcore =p' > /sys/kernel/debug/dynamic_debug/control
+> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+> (used this when hunting for another USB issue in the past also)
+> 
+> From traces/logs:
+> ########################################
+> I can see in dmesg at a certain point, i assume this is where trouble starts:
+> [87800.393785] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.393869] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.393956] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.394045] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.394145] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.394216] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.394302] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.394385] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 15904 bytes untransferred
+> [87800.394587] xhci_hcd 0000:00:15.0: Transfer error for slot 3 ep 5 on endpoint
+> [87800.394596] xhci_hcd 0000:00:15.0: Cleaning up stalled endpoint ring
+> [87800.394600] xhci_hcd 0000:00:15.0: Finding endpoint context
+> [87800.394603] xhci_hcd 0000:00:15.0: Cycle state = 0x1
+> [87800.394606] xhci_hcd 0000:00:15.0: New dequeue segment = ffff8d9330b29900 (virtual)
+> [87800.394608] xhci_hcd 0000:00:15.0: New dequeue pointer = 0x174213400 (DMA)
+> [87800.394610] xhci_hcd 0000:00:15.0: Queueing new dequeue state
+> [87800.394613] xhci_hcd 0000:00:15.0: Set TR Deq Ptr cmd, new deq seg = ffff8d9330b29900 (0x174213000 dma), new deq ptr = ffff8d92b4213400 (0x174213400 dma), new cycle = 1
+> [87800.394618] xhci_hcd 0000:00:15.0: // Ding dong!
+> [87800.394622] xhci_hcd 0000:00:15.0: Giveback URB ffff8d931d65b600, len = 0, expected = 74, status = -71
+> [87800.394629] xhci_hcd 0000:00:15.0: Ignoring reset ep completion code of 1
+> [87800.394636] xhci_hcd 0000:00:15.0: Successful Set TR Deq Ptr cmd, deq = @174213400
+> [87800.394836] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.394916] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395005] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395090] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395178] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395263] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395350] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395436] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395525] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395613] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395710] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395785] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 9808 bytes untransferred
+> [87800.395868] xhci_hcd 0000:00:15.0: ep 0x82 - asked for 20480 bytes, 11328 bytes untransferred
+> [87800.398155] xhci_hcd 0000:00:15.0: Transfer error for slot 3 ep 5 on endpoint
+> [87800.398172] xhci_hcd 0000:00:15.0: Cleaning up stalled endpoint ring
+> [87800.398175] xhci_hcd 0000:00:15.0: Finding endpoint context
+> [87800.398179] xhci_hcd 0000:00:15.0: Cycle state = 0x1
+> [87800.398181] xhci_hcd 0000:00:15.0: New dequeue segment = ffff8d9330b29900 (virtual)
+> [87800.398184] xhci_hcd 0000:00:15.0: New dequeue pointer = 0x174213410 (DMA)
+> [87800.398186] xhci_hcd 0000:00:15.0: Queueing new dequeue state
+> [87800.398189] xhci_hcd 0000:00:15.0: Set TR Deq Ptr cmd, new deq seg = ffff8d9330b29900 (0x174213000 dma), new deq ptr = ffff8d92b4213410 (0x174213410 dma), new cycle = 1
+> [87800.398192] xhci_hcd 0000:00:15.0: // Ding dong!
+> [87800.398197] xhci_hcd 0000:00:15.0: Giveback URB ffff8d92b4374c00, len = 0, expected = 74, status = -71
+> [87800.398209] xhci_hcd 0000:00:15.0: Ignoring reset ep completion code of 1
+> [87800.398217] xhci_hcd 0000:00:15.0: Successful Set TR Deq Ptr cmd, deq = @174213410
+> [87800.401654] xhci_hcd 0000:00:15.0: Transfer error for slot 3 ep 5 on endpoint
 
-This seems to be the case. It works fine with complete path.
+This points at a low level XHCI thing. Time to get Mathias involved.
 
-Do we need to care about this in the mass storage gadget or just
-rely on the user to provide the full path?
+	Regards
+		Oliver
 
-cheers,
--roger
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
