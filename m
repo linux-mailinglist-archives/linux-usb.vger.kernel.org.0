@@ -2,57 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9E491DBC
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 09:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A428091DBD
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 09:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbfHSHYu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Aug 2019 03:24:50 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38030 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbfHSHYt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Aug 2019 03:24:49 -0400
-Received: by mail-pg1-f195.google.com with SMTP id e11so680244pga.5
-        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2019 00:24:49 -0700 (PDT)
+        id S1726810AbfHSHYw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Aug 2019 03:24:52 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:36121 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725768AbfHSHYw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Aug 2019 03:24:52 -0400
+Received: by mail-pl1-f196.google.com with SMTP id f19so139123plr.3
+        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2019 00:24:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8sEiIl57BH1UnpigrfcmtcS/+u7ss59hzQTNXNLQX8k=;
-        b=ebNrBQTm89VrGyszHKb0JXq4atLLs2dVkzh284BbuHTOS6x539wBM0oFTauKN80T5K
-         6Dvd22LJ9BaGdROHkLWhXwgsVl/gZXL+4F/869QVCdSnng7W0WAXktMDUQlmCT+TPUx7
-         IO/4QNdZe8PJslVc3xCy/DNY9dLCZz9AIBI6s6lelsAmuLC9yeDt8KShhkvI6Qic0Q4h
-         TnotgpExho7SKRtl2cflg9LXG/IE31mrSQQXMmWfbfPyRp9vymiuoT9C/at/F40qPTrB
-         QRzeQRA0D12TjSobRVRuw6EXbXJdF/Fk1fI33vRxJX0bciQ/0iv43UfcUz3/PAXeLq0M
-         hPFg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=n7dhYlMl//z73eacQGweSKumEFWSfBEWN+KSfFfbHHI=;
+        b=VhH0eiPmWx5SbrmRmNTyZ+Byd8qqhGRd/QLUrNsVw6eRyDNWa+PPfBCxG5EhP/0ynJ
+         06rckRpaLN+OBrdr17FJqWlf74d3miggbogYkxalARhmPPAnLNiPN8BSwL6xkYEepv7g
+         GpNCZ6z+XA2EOtXNefssS04Z6XGDZtd3ttD8uEoHa361laIzlxvH/5QOkCdmFZ+r7jfT
+         BiyEvst69I+yNbVOsUjpdckeQuirWzcAn+Jlz6p0dZQbTPEHCDOjedc3JL80sBRApbf4
+         o7AfVwMw1MWqnC4w4hoqimp6G+htJPqhk9uPzn0+XEHx7LZW20thLbmV7uWAGsQmjGzt
+         KvVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8sEiIl57BH1UnpigrfcmtcS/+u7ss59hzQTNXNLQX8k=;
-        b=LfLxzN+SmExxaRJyQMmAHhrw5SAl5Tc6vaS0KH5WrRPcclPDNzwpWNGfJ7q/gleH8v
-         PP84tXQvYoC669Onlluj5mA76XRo+bQiIKkMzr7YDRmvIhskDg9w0c8T7+VXGL2L8gni
-         Zf2FEQ5dp1Q32NRhWkbKHWX20e1lmIRCitkoCDtFq1TD0J55XSB1TAbrmJH5j/Rvu+mT
-         LLYeJyp5WldSyBkkuc8hTFAIzlxMUbpyXa8b0Bnnf6Z0H12Y8e6PQPsnklYwjqkscOvc
-         5Ue4dXSTZqd0cyTNBErs1fDomJWGkRW54n01VlnI/7uNG8vXbXoMsOyv+elHLoFGflOe
-         agMw==
-X-Gm-Message-State: APjAAAWi9PyM0Kng63gSJGmAgazlL8pmhZM8Z5G6dDwqRdiEgQH4BuBe
-        yzntXJdShRtQr8Usli4geOA=
-X-Google-Smtp-Source: APXvYqwdNNKfTGcPy3tFR86j9Kv69o3x6r+CjS+JP9c9oRwhwoUTd+0ke6YkZ7cfR8UGQOQ+gm/94Q==
-X-Received: by 2002:a62:db86:: with SMTP id f128mr22257886pfg.159.1566199488833;
-        Mon, 19 Aug 2019 00:24:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=n7dhYlMl//z73eacQGweSKumEFWSfBEWN+KSfFfbHHI=;
+        b=N1F6dVepAKZuDM1YjHa7oSZP+nb9/zlUEq4KXRpx5slgwh4cxrfMVgaiw09GAJ2Cj+
+         WeDBunfox/gPdUl/tVGdCmdjPs+HXjTYLioVRzO6/8ZHMPtP+3ymmeviLiClpauUaoCl
+         IY1zyJIdx3XdZIhIsZmn2h/SVsdW3lcXriwQxk4mKqCuFPMEjae28nkK4FCoe8be20cE
+         xQVXsceygV9nIgOkvaeEuiht9sZeXUYTf29Sob/MVYEZFSTz7K+CyIuE6l/Op2aJ0+NU
+         whEQ6pRn9rFVIq99Js1nv1cXy9ImtvLw6jFDDb9mStQnDs4FuJchF4S/J+32gwGaKnyX
+         VkeQ==
+X-Gm-Message-State: APjAAAUsYjqow5AtNbZ794H8n9fecV/XT1V0esz6qWrn0zaCNiUo7yG1
+        VD91kQAe2G6Mu1XD5PUgDPg=
+X-Google-Smtp-Source: APXvYqyoWxQlwcpntJ672OeWe7rLF7xYFp0iacILMOmsGwKthmm0U3ynEBTnbdeuQjHC50gFN+IIrw==
+X-Received: by 2002:a17:902:29eb:: with SMTP id h98mr21709529plb.128.1566199491894;
+        Mon, 19 Aug 2019 00:24:51 -0700 (PDT)
 Received: from localhost.localdomain ([110.225.16.165])
-        by smtp.gmail.com with ESMTPSA id u3sm11064496pjn.5.2019.08.19.00.24.46
+        by smtp.gmail.com with ESMTPSA id u3sm11064496pjn.5.2019.08.19.00.24.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2019 00:24:48 -0700 (PDT)
+        Mon, 19 Aug 2019 00:24:51 -0700 (PDT)
 From:   Nishka Dasgupta <nishkadg.linux@gmail.com>
 To:     patrice.chotard@st.com, balbi@kernel.org,
         gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
         linux-usb@vger.kernel.org
 Cc:     Nishka Dasgupta <nishkadg.linux@gmail.com>
-Subject: [PATCH 1/2] usb: dwc3: st: Add of_node_put() before return in probe function
-Date:   Mon, 19 Aug 2019 12:54:35 +0530
-Message-Id: <20190819072436.31402-1-nishkadg.linux@gmail.com>
+Subject: [PATCH 2/2] usb: dwc3: st: Add of_dev_put() in probe function
+Date:   Mon, 19 Aug 2019 12:54:36 +0530
+Message-Id: <20190819072436.31402-2-nishkadg.linux@gmail.com>
 X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190819072436.31402-1-nishkadg.linux@gmail.com>
+References: <20190819072436.31402-1-nishkadg.linux@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -60,64 +62,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The local variable child in the function st_dwc3_probe takes the return
-value of of_get_child_by_name, which gets a node and does not put it. If
-the function returns without releasing child, this could cause a memory
-error. Hence put child as soon as there is no more use for it. Also
-create a new label, err_node_put, just before label undo_softreset; so
-that err_node_put puts child. In between initialisation of child and its
-first put, modify all statements that go to undo_softreset to now go to
-err_node_put instead, from where they can fall through to
-undo_softreset.
+In function st_dwc3_probe, variable child_pdev takes the value returned
+by of_find_device_by_node, which gets a device pointer but does not put
+it. If child_pdev is not put before the probe function returns, it may
+cause a reference leak. Hence put child_pdev after its last usage.
 Issue found with Coccinelle.
 
 Signed-off-by: Nishka Dasgupta <nishkadg.linux@gmail.com>
 ---
- drivers/usb/dwc3/dwc3-st.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/usb/dwc3/dwc3-st.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
-index 16081383c401..6f52c749cd58 100644
+index 6f52c749cd58..c682420f25ca 100644
 --- a/drivers/usb/dwc3/dwc3-st.c
 +++ b/drivers/usb/dwc3/dwc3-st.c
-@@ -255,24 +255,25 @@ static int st_dwc3_probe(struct platform_device *pdev)
- 	if (!child) {
- 		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
- 		ret = -ENODEV;
--		goto undo_softreset;
-+		goto err_node_put;
- 	}
- 
- 	/* Allocate and initialize the core */
- 	ret = of_platform_populate(node, NULL, NULL, dev);
- 	if (ret) {
- 		dev_err(dev, "failed to add dwc3 core\n");
--		goto undo_softreset;
-+		goto err_node_put;
- 	}
- 
- 	child_pdev = of_find_device_by_node(child);
- 	if (!child_pdev) {
- 		dev_err(dev, "failed to find dwc3 core device\n");
- 		ret = -ENODEV;
--		goto undo_softreset;
-+		goto err_node_put;
- 	}
+@@ -274,6 +274,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
  
  	dwc3_data->dr_mode = usb_get_dr_mode(&child_pdev->dev);
-+	of_node_put(child);
+ 	of_node_put(child);
++	of_dev_put(child_pdev);
  
  	/*
  	 * Configure the USB port as device or host according to the static
-@@ -292,6 +293,8 @@ static int st_dwc3_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, dwc3_data);
- 	return 0;
- 
-+err_node_put:
-+	of_node_put(child);
- undo_softreset:
- 	reset_control_assert(dwc3_data->rstc_rst);
- undo_powerdown:
 -- 
 2.19.1
 
