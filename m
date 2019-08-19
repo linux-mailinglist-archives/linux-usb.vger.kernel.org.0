@@ -2,58 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4C492188
+	by mail.lfdr.de (Postfix) with ESMTP id 7957192189
 	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 12:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbfHSKlJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Aug 2019 06:41:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41314 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726550AbfHSKlJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 19 Aug 2019 06:41:09 -0400
-Received: from localhost (unknown [89.205.137.79])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 38AF520578;
-        Mon, 19 Aug 2019 10:41:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566211268;
-        bh=JbhdIu6KJjHyR/YSqfufSsfhK7qchZaWTxjc1sA/Log=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YLypHQXwI018PgcsxgqlysA7ujxQBSQO8sNdQsEsXNt2UHtQGm+lWqKWXwSgEZwef
-         nGYxlP1Ra81gk96E3qTGpWmSve56EDy82s5zUx5ZFzrUFwKgwlQQ3Psf6dZAB9S4c5
-         cjhORzowPOxb5l14Ty51c83heSOiYp8jOH5wzf/w=
-Date:   Mon, 19 Aug 2019 12:41:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Richard Leitner <richard.leitner@skidata.com>,
-        linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] usb: usb251xb: drop some unused defines
-Message-ID: <20190819104104.GA6530@kroah.com>
-References: <20190819100211.26791-1-u.kleine-koenig@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190819100211.26791-1-u.kleine-koenig@pengutronix.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1726820AbfHSKlM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Aug 2019 06:41:12 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55380 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726550AbfHSKlM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Aug 2019 06:41:12 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 61C1FAE4B;
+        Mon, 19 Aug 2019 10:41:11 +0000 (UTC)
+Message-ID: <1566211268.5663.9.camel@suse.com>
+Subject: Re: Duplicated code in hiddev_open()
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Jiri Kosina <jikos@kernel.org>
+Cc:     USB list <linux-usb@vger.kernel.org>
+Date:   Mon, 19 Aug 2019 12:41:08 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1908161228310.1525-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1908161228310.1525-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 12:02:11PM +0200, Uwe Kleine-König wrote:
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/usb/misc/usb251xb.c | 5 -----
->  1 file changed, 5 deletions(-)
+Am Freitag, den 16.08.2019, 13:10 -0400 schrieb Alan Stern:
+> Oliver and Jiri:
+> 
+> Why is there duplicated code in
+> drivers/hid/usbhid/hiddev.c:hiddev_open()?
+> 
+> Line 267:
+> 	/*
+> 	 * no need for locking because the USB major number
+> 	 * is shared which usbcore guards against disconnect
+> 	 */
+> 	if (list->hiddev->exist) {
+> 		if (!list->hiddev->open++) {
+> 			res = hid_hw_open(hiddev->hid);
+> 			if (res < 0)
+> 				goto bail;
+> 		}
+> 	} else {
+> 		res = -ENODEV;
+> 		goto bail;
+> 	}
+> 
+> Line 286:
+> 	mutex_lock(&hiddev->existancelock);
+> 	if (!list->hiddev->open++)
+> 		if (list->hiddev->exist) {
+> 			struct hid_device *hid = hiddev->hid;
+> 			res = hid_hw_power(hid, PM_HINT_FULLON);
+> 			if (res < 0)
+> 				goto bail_unlock;
+> 			res = hid_hw_open(hid);
+> 			if (res < 0)
+> 				goto bail_normal_power;
+> 		}
+> 	mutex_unlock(&hiddev->existancelock);
+> 
+> The second part can never execute, because the first part ensures that 
+> list->hiddev->open > 0 by the time the second part runs.
+> 
+> Even more disturbing, why is one of these code sections protected by a 
+> mutex and the other not?
 
-I can't take a patch without any changelog text.
+I suppose the comment I made back then:
 
-And you forgot to cc: the usb maintainer, so there's no way this was
-going to get merged :)
+079034073faf9 drivers/hid/usbhid/hiddev.c (Oliver Neukum               2008-12-16 10:55:15 +0100 268)    * no need for locking because the USB major number
+079034073faf9 drivers/hid/usbhid/hiddev.c (Oliver Neukum               2008-12-16 10:55:15 +0100 269)    * is shared which usbcore guards against disconnect
 
-thanks,
+has ceased to be true, but the section was not removed, as the check
+for existance was duplicated.
 
-greg k-h
+> Note: The second section was added in commit 0361a28d3f9a ("HID: 
+> autosuspend support for USB HID") over ten years ago!
+
+Yes and I remember how frustrating keyboards were in testing, but
+no further details.
+
+	Regards
+		Oliver
+
