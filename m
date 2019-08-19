@@ -2,111 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A328A948A7
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 17:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E29E94947
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 17:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726728AbfHSPkv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Aug 2019 11:40:51 -0400
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:46625 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726373AbfHSPkv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Aug 2019 11:40:51 -0400
-Received: by mail-pf1-f180.google.com with SMTP id q139so1368694pfc.13
-        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2019 08:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JRnvLVgz0tVWK1fEuL6UHqzHZr0onyPvx/owe0XN7Lc=;
-        b=kClkyqkUanIBe2cYihTfwUMRuxPrDcaJkb+HKURIbeEWtpTlHpP351abhiboY6kUAy
-         IPMHYxKBk+pIhT3bQt9l/H2gp+nBD/RiXAXxqCZlGUMczBzEZTuLQDvLW0PyRN/o8i61
-         EhZJ5a0e+RjKzYszANM5MvRsoDVE+/zoySVnmn6CdTsj0KqJS4H014IJs2xmwrmqUUCo
-         Ul+LE9eT2lUIPXoeB3jTksXdmI9VMuSHuJc002/AG0Prx4U9IkuQYeBA6Iv2R1j+tad6
-         Y0SZ4t8jVw9oPAUJb4j38CoJSsSQXWOE0QaSbR/rViz+3z/cnDveRVzpRj5iG2ioY5KH
-         9/ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JRnvLVgz0tVWK1fEuL6UHqzHZr0onyPvx/owe0XN7Lc=;
-        b=MyPXsdMb+8GlMiiRX7fBkGXhJ8tB5RM7C2XpPRgzOlELjyAIlplWaARvOMHjndemZJ
-         alPeKJJfTtWeP2w34+jnDVWqqlaoexj3zkNZvNqDzVUmNiBs4ECLV/YbWO398hhvG0nW
-         FQV/9gfAFPJhin4MXVcQL45Tb9Cod98/DFFZfe1/WiLY0w2MidodVry6FGRvKU1mWygI
-         FK9qkWx9mt2HtzzEaeM4UfhIJlRUGBnRFHGbRJswRfMYXf0YIeGyNq2xJx2e9cTNL9Ha
-         Q4CoPJBFmaBDG8eyhsFLN2dc6ROeO0EFCJsK7wc49r/yKH4hiGNPsM2piMzLHQUWAOcw
-         I7vA==
-X-Gm-Message-State: APjAAAVq+N6SgOXEU2a8NGrdTnp/P7YgCEblcKDgbOVRbQXkXrcTMkxD
-        TXozBo5mAuyGFl1n8w0QSY8M0aFATYh7JSxrdm+nBw==
-X-Google-Smtp-Source: APXvYqzfY3x6ejquybkOcW8bRi3yx3xL/t12AImg8nmcOIFp379vLkLMbJyYVc4gHFk+exKZrfqfmfprkynWxI7QNe8=
-X-Received: by 2002:a17:90a:858c:: with SMTP id m12mr21507252pjn.129.1566229250039;
- Mon, 19 Aug 2019 08:40:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000a59094059013dd63@google.com> <1565875886.5780.7.camel@suse.com>
- <CAAeHK+zd9P2hLXuXynbZfhVpSE1Sak2GihX6sDCPWfD+kPaEGg@mail.gmail.com>
- <1566218263.5663.22.camel@suse.com> <CAAeHK+xX3vk_JoJ=2tHF__LECxNmPXuPMkxWz6u+K6L-MdN=9g@mail.gmail.com>
- <1566220164.5663.25.camel@suse.com> <CAAeHK+wGzWGvW0AVSr6qA+AcpLr7A3Xi8wR7f-rBQJmMmQgU2A@mail.gmail.com>
- <1566222541.5663.27.camel@suse.com>
-In-Reply-To: <1566222541.5663.27.camel@suse.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 19 Aug 2019 17:40:38 +0200
-Message-ID: <CAAeHK+xum44QNGCgnFc-W69AfA4Rt1hEiRc4SrSWhFfqhhuf0A@mail.gmail.com>
-Subject: Re: divide error in usbtmc_generic_read
-To:     Oliver Neukum <oneukum@suse.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        steve_bayless@keysight.com,
+        id S1727620AbfHSP50 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Aug 2019 11:57:26 -0400
+Received: from conuserg-08.nifty.com ([210.131.2.75]:26890 "EHLO
+        conuserg-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726390AbfHSP50 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Aug 2019 11:57:26 -0400
+Received: from grover.flets-west.jp (softbank126125143222.bbtec.net [126.125.143.222]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id x7JFu5LM008800;
+        Tue, 20 Aug 2019 00:56:05 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com x7JFu5LM008800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1566230165;
+        bh=4GK43BeKnZv5WyQmgfpb1RfuIr9VmwksRI1v6Lo8THA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Xh0II7dN9ng2FE6abhAYGvXbe2CwYqlCE054fL0AeQ2SLcgkjj+zDnPUC3ID4Nuv/
+         cpCjIQUzgImo547Tj9TxCySIaXDAUIcoaWA12Zu8Yg2/tFIP+SkoYD74KhRz3MTf8d
+         +XkA4f1QHfPHnbP6cH6IE09aYXLsP/xyLSRpnFgJulQ0agIPz043z+Jy3afwB/j46M
+         xZcL4JZ1Dby9JysSD1xo9yoZvb80EQ4F7GQtJs5sj5ytrKr2K5lHD29mZv3DT3PBNN
+         zGLeb0iB5kZC1i/fyzihUCu9R7JOr79qK53Me8uxIOlaKnSWhAJysY7RjB0NExavs7
+         gAxVJmWBXP1Qg==
+X-Nifty-SrcIP: [126.125.143.222]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        guido.kiener@rohde-schwarz.com,
-        syzbot <syzbot+55b0304b360654a7537b@syzkaller.appspotmail.com>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] ARM: s3c64xx: squash samsung_usb_phy.h into setup-usb-phy.c
+Date:   Tue, 20 Aug 2019 00:56:02 +0900
+Message-Id: <20190819155602.20843-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 3:49 PM Oliver Neukum <oneukum@suse.com> wrote:
->
-> Am Montag, den 19.08.2019, 15:18 +0200 schrieb Andrey Konovalov:
-> > On Mon, Aug 19, 2019 at 3:09 PM Oliver Neukum <oneukum@suse.com> wrote:
-> > >
-> > > Am Montag, den 19.08.2019, 14:43 +0200 schrieb Andrey Konovalov:
-> > > > On Mon, Aug 19, 2019 at 2:37 PM Oliver Neukum <oneukum@suse.com> wrote:
-> > > > > The original error was a divide by zero. The first fix fixed that
-> > > > > but still another error showed up. If I propose a fix there are
-> > > > > other possibilities besides it working.
-> > > > >
-> > > > > I could have no effect on the original bug or my fix breaks
-> > > > > something else and KASAN is making no difference between
-> > > > > those cases.
-> > > >
-> > > > I think you mean syzbot here and not KASAN. Do I understand correctly,
-> > > > that you're saying that the original report was
-> > >
-> > > Yes, sorry syzbot.
-> > >
-> > > > divide-by-zero, but
-> > > > when you requested to test the patch the reproducer triggered a
-> > > > use-after-free, and syzbot didn't treat the patch you provided as a
-> > > > correct fix?
-> > >
-> > > No, obviously there is still a bug. What I would like syzbot to have
-> > > would be a third category: inconclusive.
-> > > Seeing another bug instead may also mean the first bug struck
-> > > before the second could ever happen. We just lack data to tell.
-> >
-> > OK, I see. The exact words that syzbot uses in this case are "syzbot
-> > has tested the proposed patch but the reproducer still triggered
-> > crash". What would you like to see instead?
-> >
->
-> "syzbot has tested the proposed patch but the reproducer triggered
-> another crash" would make it clearer.
+This is only used by arch/arm/mach-s3c64xx/setup-usb-phy.c
 
-This implies that we can differentiate between different crashes. We
-can differentiate between different manifestations of crashes, but
-those can be caused by the same bug. I think we can remove the word
-"still" though, so the words will be: "syzbot has tested the proposed
-patch, but the reproducer triggered a crash".
+$ git grep samsung_usb_phy_type
+include/linux/usb/samsung_usb_phy.h:enum samsung_usb_phy_type {
+$ git grep USB_PHY_TYPE_DEVICE
+arch/arm/mach-s3c64xx/setup-usb-phy.c:  if (type == USB_PHY_TYPE_DEVICE)
+arch/arm/mach-s3c64xx/setup-usb-phy.c:  if (type == USB_PHY_TYPE_DEVICE)
+include/linux/usb/samsung_usb_phy.h:    USB_PHY_TYPE_DEVICE,
+$ git grep USB_PHY_TYPE_HOST
+include/linux/usb/samsung_usb_phy.h:    USB_PHY_TYPE_HOST,
 
-Dmitry, WDYT?
+Actually, 'enum samsung_usb_phy_type' is unused; the 'type' parameter
+has 'int' type. Anyway, there is no need to declare this enum in the
+globally visible header. Squash the header.
+
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
+
+ arch/arm/mach-s3c64xx/setup-usb-phy.c        |  5 +++++
+ arch/arm/plat-samsung/include/plat/usb-phy.h |  2 --
+ include/linux/usb/samsung_usb_phy.h          | 17 -----------------
+ 3 files changed, 5 insertions(+), 19 deletions(-)
+ delete mode 100644 include/linux/usb/samsung_usb_phy.h
+
+diff --git a/arch/arm/mach-s3c64xx/setup-usb-phy.c b/arch/arm/mach-s3c64xx/setup-usb-phy.c
+index 46a9e955607f..6aaaa1d8e8b9 100644
+--- a/arch/arm/mach-s3c64xx/setup-usb-phy.c
++++ b/arch/arm/mach-s3c64xx/setup-usb-phy.c
+@@ -15,6 +15,11 @@
+ #include "regs-sys.h"
+ #include "regs-usb-hsotg-phy.h"
+ 
++enum samsung_usb_phy_type {
++	USB_PHY_TYPE_DEVICE,
++	USB_PHY_TYPE_HOST,
++};
++
+ static int s3c_usb_otgphy_init(struct platform_device *pdev)
+ {
+ 	struct clk *xusbxti;
+diff --git a/arch/arm/plat-samsung/include/plat/usb-phy.h b/arch/arm/plat-samsung/include/plat/usb-phy.h
+index 6d0c788beb9d..94da89ecbd3b 100644
+--- a/arch/arm/plat-samsung/include/plat/usb-phy.h
++++ b/arch/arm/plat-samsung/include/plat/usb-phy.h
+@@ -7,8 +7,6 @@
+ #ifndef __PLAT_SAMSUNG_USB_PHY_H
+ #define __PLAT_SAMSUNG_USB_PHY_H __FILE__
+ 
+-#include <linux/usb/samsung_usb_phy.h>
+-
+ extern int s5p_usb_phy_init(struct platform_device *pdev, int type);
+ extern int s5p_usb_phy_exit(struct platform_device *pdev, int type);
+ 
+diff --git a/include/linux/usb/samsung_usb_phy.h b/include/linux/usb/samsung_usb_phy.h
+deleted file mode 100644
+index dc0071741695..000000000000
+--- a/include/linux/usb/samsung_usb_phy.h
++++ /dev/null
+@@ -1,17 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-/*
+- * Copyright (C) 2012 Samsung Electronics Co.Ltd
+- *		http://www.samsung.com/
+- *
+- * Defines phy types for samsung usb phy controllers - HOST or DEIVCE.
+- *
+- * This program is free software; you can redistribute  it and/or modify it
+- * under  the terms of  the GNU General  Public License as published by the
+- * Free Software Foundation;  either version 2 of the  License, or (at your
+- * option) any later version.
+- */
+-
+-enum samsung_usb_phy_type {
+-	USB_PHY_TYPE_DEVICE,
+-	USB_PHY_TYPE_HOST,
+-};
+-- 
+2.17.1
+
