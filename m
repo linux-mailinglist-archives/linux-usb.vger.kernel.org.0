@@ -2,188 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F27C94EA3
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 22:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4E794ECE
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Aug 2019 22:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728252AbfHSUBL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Aug 2019 16:01:11 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:43884 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728193AbfHSUBL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Aug 2019 16:01:11 -0400
-Received: (qmail 7191 invoked by uid 2102); 19 Aug 2019 16:01:10 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 19 Aug 2019 16:01:10 -0400
-Date:   Mon, 19 Aug 2019 16:01:10 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     syzbot <syzbot+0e7b6b6001ca8ed655f6@syzkaller.appspotmail.com>,
-        Felipe Balbi <balbi@kernel.org>, <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in kmem_cache_alloc_trace
-In-Reply-To: <CAAeHK+zOQLEcHesUzKHT2U59DpHtR3PnZXdTMv=1PNLD-evqtA@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1908191558310.1506-100000@iolanthe.rowland.org>
+        id S1728325AbfHSUUC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Aug 2019 16:20:02 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:48498 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727988AbfHSUUB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Aug 2019 16:20:01 -0400
+Received: by mail-io1-f69.google.com with SMTP id 67so5283674iob.15
+        for <linux-usb@vger.kernel.org>; Mon, 19 Aug 2019 13:20:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=wevSZW5UX5fk5gUt0Ilf2YFephyvO23N5oYUGBnvx0A=;
+        b=kiPrAnHpf8IiPEx0HJngzxo0b8I42w31XBZz8IIp+Ym7hkQF/NRinv0dLPfwYJmc6D
+         IkAmvMCJeXABMQfpOAJPrfw8JrDexU9nQh/y5a2k6hIQnsQ8k28aqEgTisCnHqhNLXv7
+         lDvGEZltaNHy+klKnLWxMKAnG2TPcPtbPGKNpBYZNwRIfMleO8fKTAYuueoDgItGDoJt
+         ovyoao7pFrT/Y+pyiSh7pgKDbCLZY9HUYtau7Gf3iq4w8Vq2L+8Zc/Bnhox5Lf33cW7s
+         J/Nvk+3gI12NBUflTzF+Iex78XEbo8YrRuE2qm2+MFcUJQ7DdzrIYI8u1j/zqx2+W9rV
+         oPpw==
+X-Gm-Message-State: APjAAAXRGpWdTbO5wx4LbKKD2uAZRIAU3jn4unc4gdvyPByf3LlQ1BUD
+        BcYqnvmsTYGa2UoJUlOru308mQwvC/bvkrGLkKqcFnaxx+mQ
+X-Google-Smtp-Source: APXvYqwc0eT4VdhPWVT4tXLH/zoDNl26v0l4pZFemeGq8mucabfD4FpNIGy4mLlo8Qe3+n3cM0QiuUBDNz5JRtAzLB0wxkOTPtPi
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a6b:620f:: with SMTP id f15mr17938248iog.190.1566246000720;
+ Mon, 19 Aug 2019 13:20:00 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 13:20:00 -0700
+In-Reply-To: <Pine.LNX.4.44L0.1908191558310.1506-100000@iolanthe.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000081081805907e10c8@google.com>
+Subject: Re: WARNING in kmem_cache_alloc_trace
+From:   syzbot <syzbot+0e7b6b6001ca8ed655f6@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, balbi@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 19 Aug 2019, Andrey Konovalov wrote:
+Hello,
 
-> On Mon, Aug 19, 2019 at 6:18 PM syzbot
-> <syzbot+0e7b6b6001ca8ed655f6@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    d0847550 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=16947fce600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=0e7b6b6001ca8ed655f6
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1141c5ba600000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ed91d2600000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+0e7b6b6001ca8ed655f6@syzkaller.appspotmail.com
-> >
-> > ------------[ cut here ]------------
-> > do not call blocking ops when !TASK_RUNNING; state=1 set at
-> > [<000000000453b57c>] prepare_to_wait+0xb1/0x2b0 kernel/sched/wait.c:230
-> > WARNING: CPU: 0 PID: 1720 at kernel/sched/core.c:6551
-> > __might_sleep+0x135/0x190 kernel/sched/core.c:6551
-> > Kernel panic - not syncing: panic_on_warn set ...
-> > CPU: 0 PID: 1720 Comm: syz-executor552 Not tainted 5.3.0-rc4+ #26
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 01/01/2011
-> > Call Trace:
-> >   __dump_stack lib/dump_stack.c:77 [inline]
-> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
-> >   panic+0x2a3/0x6da kernel/panic.c:219
-> >   __warn.cold+0x20/0x4a kernel/panic.c:576
-> >   report_bug+0x262/0x2a0 lib/bug.c:186
-> >   fixup_bug arch/x86/kernel/traps.c:179 [inline]
-> >   fixup_bug arch/x86/kernel/traps.c:174 [inline]
-> >   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-> >   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-> >   invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
-> > RIP: 0010:__might_sleep+0x135/0x190 kernel/sched/core.c:6551
-> > Code: 65 48 8b 1c 25 00 ef 01 00 48 8d 7b 10 48 89 fe 48 c1 ee 03 80 3c 06
-> > 00 75 2b 48 8b 73 10 48 c7 c7 e0 55 c6 85 e8 30 21 f6 ff <0f> 0b e9 46 ff
-> > ff ff e8 ef ee 46 00 e9 29 ff ff ff e8 e5 ee 46 00
-> > RSP: 0018:ffff8881c7df7a30 EFLAGS: 00010282
-> > RAX: 0000000000000000 RBX: ffff8881d4a49800 RCX: 0000000000000000
-> > RDX: 0000000000000000 RSI: ffffffff81288cfd RDI: ffffed1038fbef38
-> > RBP: ffffffff86a6a5d1 R08: ffff8881d4a49800 R09: fffffbfff11ad3a1
-> > R10: fffffbfff11ad3a0 R11: ffffffff88d69d07 R12: 00000000000001f5
-> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000cc0
-> >   slab_pre_alloc_hook mm/slab.h:501 [inline]
-> >   slab_alloc_node mm/slub.c:2690 [inline]
-> >   slab_alloc mm/slub.c:2778 [inline]
-> >   kmem_cache_alloc_trace+0x233/0x2f0 mm/slub.c:2795
-> >   kmalloc include/linux/slab.h:552 [inline]
-> >   dummy_urb_enqueue+0x7c/0x890 drivers/usb/gadget/udc/dummy_hcd.c:1249
-> >   usb_hcd_submit_urb+0x2aa/0x1ee0 drivers/usb/core/hcd.c:1555
-> >   usb_submit_urb+0x6e5/0x13b0 drivers/usb/core/urb.c:569
-> >   yurex_write+0x3b2/0x710 drivers/usb/misc/yurex.c:491
-> >   __vfs_write+0x76/0x100 fs/read_write.c:494
-> >   vfs_write+0x262/0x5c0 fs/read_write.c:558
+syzbot has tested the proposed patch but the reproducer still triggered  
+crash:
+WARNING in yurex_write/usb_submit_urb
 
-> Looks like an issue in the yurex driver, despite a generic report title.
+------------[ cut here ]------------
+URB 00000000c866c77d submitted while active
+WARNING: CPU: 1 PID: 2816 at drivers/usb/core/urb.c:362  
+usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:362
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 2816 Comm: syz-executor.4 Not tainted 5.3.0-rc4+ #1
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x2a3/0x6da kernel/panic.c:219
+  __warn.cold+0x20/0x4a kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
+RIP: 0010:usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:362
+Code: 89 de e8 62 b7 ef fd 84 db 0f 85 42 f6 ff ff e8 25 b6 ef fd 4c 89 fe  
+48 c7 c7 c0 67 18 86 c6 05 07 29 3a 04 01 e8 14 9b c5 fd <0f> 0b e9 20 f6  
+ff ff c7 44 24 14 01 00 00 00 e9 d7 f6 ff ff 41 bd
+RSP: 0018:ffff8881c6f3fc48 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff81288cfd RDI: ffffed1038de7f7b
+RBP: ffff8881d1210000 R08: ffff8881c726c800 R09: fffffbfff11ad3a4
+R10: fffffbfff11ad3a3 R11: ffffffff88d69d1f R12: 1ffff11038de7f9f
+R13: 00000000fffffff0 R14: 0000000000000000 R15: ffff8881d63eff00
+  yurex_write+0x369/0x8f0 drivers/usb/misc/yurex.c:493
+  __vfs_write+0x76/0x100 fs/read_write.c:494
+  vfs_write+0x262/0x5c0 fs/read_write.c:558
+  ksys_write+0x127/0x250 fs/read_write.c:611
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x459829
+Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f5fe5e65c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459829
+RDX: 000000000000008d RSI: 0000000020000040 RDI: 0000000000000004
+RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f5fe5e666d4
+R13: 00000000004c99b9 R14: 00000000004e1038 R15: 00000000ffffffff
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-Indeed.  The code for waiting on the completion of an URB is very out 
-of date.
 
-Alan Stern
+Tested on:
 
-#syz test: https://github.com/google/kasan.git d0847550
-
-Index: usb-devel/drivers/usb/misc/yurex.c
-===================================================================
---- usb-devel.orig/drivers/usb/misc/yurex.c
-+++ usb-devel/drivers/usb/misc/yurex.c
-@@ -62,6 +62,7 @@ struct usb_yurex {
- 	struct mutex		io_mutex;
- 	struct fasync_struct	*async_queue;
- 	wait_queue_head_t	waitq;
-+	int			command_finished;
- 
- 	spinlock_t		lock;
- 	__s64			bbu;		/* BBU from device */
-@@ -80,6 +81,7 @@ static void yurex_control_callback(struc
- 	if (status) {
- 		dev_err(&urb->dev->dev, "%s - control failed: %d\n",
- 			__func__, status);
-+		dev->command_finished = 1;
- 		wake_up_interruptible(&dev->waitq);
- 		return;
- 	}
-@@ -173,6 +175,7 @@ static void yurex_interrupt(struct urb *
- 	case CMD_ACK:
- 		dev_dbg(&dev->interface->dev, "%s ack: %c\n",
- 			__func__, buf[1]);
-+		dev->command_finished = 1;
- 		wake_up_interruptible(&dev->waitq);
- 		break;
- 	}
-@@ -321,6 +324,7 @@ static void yurex_disconnect(struct usb_
- 
- 	/* wakeup waiters */
- 	kill_fasync(&dev->async_queue, SIGIO, POLL_IN);
-+	dev->command_finished = 1;
- 	wake_up_interruptible(&dev->waitq);
- 
- 	/* decrement our usage count */
-@@ -428,8 +432,7 @@ static ssize_t yurex_write(struct file *
- 	char buffer[16 + 1];
- 	char *data = buffer;
- 	unsigned long long c, c2 = 0;
--	signed long timeout = 0;
--	DEFINE_WAIT(wait);
-+	signed long time_remaining = 0;
- 
- 	count = min(sizeof(buffer) - 1, count);
- 	dev = file->private_data;
-@@ -485,14 +488,16 @@ static ssize_t yurex_write(struct file *
- 	}
- 
- 	/* send the data as the control msg */
--	prepare_to_wait(&dev->waitq, &wait, TASK_INTERRUPTIBLE);
- 	dev_dbg(&dev->interface->dev, "%s - submit %c\n", __func__,
- 		dev->cntl_buffer[0]);
- 	retval = usb_submit_urb(dev->cntl_urb, GFP_KERNEL);
--	if (retval >= 0)
--		timeout = schedule_timeout(YUREX_WRITE_TIMEOUT);
--	finish_wait(&dev->waitq, &wait);
--
-+	if (retval >= 0) {
-+		dev->command_finished = 0;
-+		time_remaining = wait_event_interruptible_timeout(dev->waitq,
-+				dev->command_finished, YUREX_WRITE_TIMEOUT);
-+		if (time_remaining < 0)
-+			retval = -EINTR;
-+	}
- 	mutex_unlock(&dev->io_mutex);
- 
- 	if (retval < 0) {
-@@ -501,9 +506,9 @@ static ssize_t yurex_write(struct file *
- 			__func__, retval);
- 		goto error;
- 	}
--	if (set && timeout)
-+	if (set && time_remaining)
- 		dev->bbu = c2;
--	return timeout ? count : -EIO;
-+	return time_remaining ? count : -EIO;
- 
- error:
- 	return retval;
+commit:         d0847550 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=16026986600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14fe315a600000
 
