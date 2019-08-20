@@ -2,69 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2129605E
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 15:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F12596133
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 15:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730068AbfHTNkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 09:40:24 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34896 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728248AbfHTNkX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Aug 2019 09:40:23 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 9D012AE74;
-        Tue, 20 Aug 2019 13:40:22 +0000 (UTC)
-Message-ID: <1566308421.11678.18.camel@suse.com>
-Subject: Re: WARNING in wdm_write/usb_submit_urb
-From:   Oliver Neukum <oneukum@suse.com>
-To:     =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     gustavo@embeddedor.com, andreyknvl@google.com,
-        syzkaller-bugs@googlegroups.com, gregkh@linuxfoundation.org,
-        syzbot <syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com>,
-        linux-usb@vger.kernel.org
-Date:   Tue, 20 Aug 2019 15:40:21 +0200
-In-Reply-To: <87imqs56ae.fsf@miraculix.mork.no>
-References: <000000000000719222059081d6f2@google.com>
-         <1566304128.11678.14.camel@suse.com><1566304128.11678.14.camel@suse.com>
-         (Oliver Neukum's message of "Tue, 20 Aug 2019 14:28:48 +0200") <87imqs56ae.fsf@miraculix.mork.no>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1730058AbfHTNmJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 09:42:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37380 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729933AbfHTNmJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Aug 2019 09:42:09 -0400
+Received: from sasha-vm.mshome.net (unknown [12.236.144.82])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AD204230F2;
+        Tue, 20 Aug 2019 13:42:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566308528;
+        bh=NB+QHM3crjpHKc0QvEUtHJMg06lP6N83tZq44VWFx3s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RK6LTclWig1m7tMeiFPp8KBe6dmCxDb9i+poPCnFdU44v+Iue0BU06P0SnrkB7/1q
+         c7QvMNY+AKu0KgZb+efUWJS/F3YfLr55MIOd930GV6KiBzQwRkAe9MKLiDkAsDK8bR
+         wA47M5MEjfo2sbJcL6s7zBMpV04x44IlG/69Lzms=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 42/44] usb: host: fotg2: restart hcd after port reset
+Date:   Tue, 20 Aug 2019 09:40:26 -0400
+Message-Id: <20190820134028.10829-42-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190820134028.10829-1-sashal@kernel.org>
+References: <20190820134028.10829-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 20.08.2019, 15:13 +0200 schrieb Bjørn Mork :
-> Oliver Neukum <oneukum@suse.com> writes:
-> 
-> > +	wait_event(desc->wait,
-> > +			/*
-> > +			 * needs both flags. We cannot do with one
-> > +			 * because resetting it would cause a race
-> > +			 * with write() yet we need to signal
-> > +			 * a disconnect
-> > +			 */
-> > +			!test_bit(WDM_IN_USE, &desc->flags) &&
-> > +			test_bit(WDM_DISCONNECTING, &desc->flags));
-> 
-> I'm confused now...  Won't this condition always be false?
-> Should be
-> 
->   wait_event(desc->wait,
->              !test_bit(WDM_IN_USE, &desc->flags) ||
->              test_bit(WDM_DISCONNECTING, &desc->flags));
-> 
-> 
-> instead, or?
+From: Hans Ulli Kroll <ulli.kroll@googlemail.com>
 
+[ Upstream commit 777758888ffe59ef754cc39ab2f275dc277732f4 ]
 
-<censored> <censored> ...
+On the Gemini SoC the FOTG2 stalls after port reset
+so restart the HCD after each port reset.
 
-You are right.
+Signed-off-by: Hans Ulli Kroll <ulli.kroll@googlemail.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20190810150458.817-1-linus.walleij@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/host/fotg210-hcd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-	Regards
-		Oliver
+diff --git a/drivers/usb/host/fotg210-hcd.c b/drivers/usb/host/fotg210-hcd.c
+index 0da68df259c86..7bf621d40c5ae 100644
+--- a/drivers/usb/host/fotg210-hcd.c
++++ b/drivers/usb/host/fotg210-hcd.c
+@@ -1628,6 +1628,10 @@ static int fotg210_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			/* see what we found out */
+ 			temp = check_reset_complete(fotg210, wIndex, status_reg,
+ 					fotg210_readl(fotg210, status_reg));
++
++			/* restart schedule */
++			fotg210->command |= CMD_RUN;
++			fotg210_writel(fotg210, fotg210->command, &fotg210->regs->command);
+ 		}
  
+ 		if (!(temp & (PORT_RESUME|PORT_RESET))) {
+-- 
+2.20.1
+
