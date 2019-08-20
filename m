@@ -2,28 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF7F96287
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 16:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B7696291
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 16:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730395AbfHTOe1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 10:34:27 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51790 "EHLO mx1.suse.de"
+        id S1729842AbfHTOii (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 10:38:38 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53000 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730390AbfHTOe1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Aug 2019 10:34:27 -0400
+        id S1728248AbfHTOii (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Aug 2019 10:38:38 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 2EC87AE84;
-        Tue, 20 Aug 2019 14:34:26 +0000 (UTC)
-Message-ID: <1566311665.11678.22.camel@suse.com>
-Subject: Re: Duplicated code in hiddev_open()
+        by mx1.suse.de (Postfix) with ESMTP id 4B72DAE87;
+        Tue, 20 Aug 2019 14:38:37 +0000 (UTC)
+Message-ID: <1566311916.11678.26.camel@suse.com>
+Subject: Re: KASAN: use-after-free Read in iowarrior_disconnect
 From:   Oliver Neukum <oneukum@suse.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Date:   Tue, 20 Aug 2019 16:34:25 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1908191014440.1506-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1908191014440.1506-100000@iolanthe.rowland.org>
+Cc:     keescook@chromium.org, gustavo@embeddedor.com,
+        andreyknvl@google.com, syzkaller-bugs@googlegroups.com,
+        gregkh@linuxfoundation.org,
+        syzbot <syzbot+cfe6d93e0abab9a0de05@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Tue, 20 Aug 2019 16:38:36 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1908201005340.1573-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1908201005340.1573-100000@iolanthe.rowland.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
@@ -33,77 +36,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 19.08.2019, 10:17 -0400 schrieb Alan Stern:
+Am Dienstag, den 20.08.2019, 10:18 -0400 schrieb Alan Stern:
 > On Mon, 19 Aug 2019, Oliver Neukum wrote:
 > 
-> > Am Freitag, den 16.08.2019, 13:10 -0400 schrieb Alan Stern:
-> > > Oliver and Jiri:
+> > Am Montag, den 19.08.2019, 07:48 -0700 schrieb syzbot:
+> > > Hello,
 > > > 
-> > > Why is there duplicated code in
-> > > drivers/hid/usbhid/hiddev.c:hiddev_open()?
+> > > syzbot found the following crash on:
 > > > 
-> > > Line 267:
-> > > 	/*
-> > > 	 * no need for locking because the USB major number
-> > > 	 * is shared which usbcore guards against disconnect
-> > > 	 */
-> > > 	if (list->hiddev->exist) {
-> > > 		if (!list->hiddev->open++) {
-> > > 			res = hid_hw_open(hiddev->hid);
-> > > 			if (res < 0)
-> > > 				goto bail;
-> > > 		}
-> > > 	} else {
-> > > 		res = -ENODEV;
-> > > 		goto bail;
-> > > 	}
+> > > HEAD commit:    d0847550 usb-fuzzer: main usb gadget fuzzer driver
+> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=139be302600000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=cfe6d93e0abab9a0de05
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12fe6b02600000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1548189c600000
 > > > 
-> > > Line 286:
-> > > 	mutex_lock(&hiddev->existancelock);
-> > > 	if (!list->hiddev->open++)
-> > > 		if (list->hiddev->exist) {
-> > > 			struct hid_device *hid = hiddev->hid;
-> > > 			res = hid_hw_power(hid, PM_HINT_FULLON);
-> > > 			if (res < 0)
-> > > 				goto bail_unlock;
-> > > 			res = hid_hw_open(hid);
-> > > 			if (res < 0)
-> > > 				goto bail_normal_power;
-> > > 		}
-> > > 	mutex_unlock(&hiddev->existancelock);
+> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > Reported-by: syzbot+cfe6d93e0abab9a0de05@syzkaller.appspotmail.com
 > > > 
-> > > The second part can never execute, because the first part ensures that 
-> > > list->hiddev->open > 0 by the time the second part runs.
-> > > 
-> > > Even more disturbing, why is one of these code sections protected by a 
-> > > mutex and the other not?
 > > 
-> > I suppose the comment I made back then:
-> > 
-> > 079034073faf9 drivers/hid/usbhid/hiddev.c (Oliver Neukum               2008-12-16 10:55:15 +0100 268)    * no need for locking because the USB major number
-> > 079034073faf9 drivers/hid/usbhid/hiddev.c (Oliver Neukum               2008-12-16 10:55:15 +0100 269)    * is shared which usbcore guards against disconnect
-> > 
-> > has ceased to be true, but the section was not removed, as the check
-> > for existance was duplicated.
-> > 
-> > > Note: The second section was added in commit 0361a28d3f9a ("HID: 
-> > > autosuspend support for USB HID") over ten years ago!
-> > 
-> > Yes and I remember how frustrating keyboards were in testing, but
-> > no further details.
+> > #syz test: https://github.com/google/kasan.git d0847550
 > 
-> Indeed.  But more importantly for now, how should this be fixed?  This
-> may be the culprit in some of the syzbot bug reports (those involving 
-> hiddev).
+> There's no need for us to work at cross purposes on this.  We can go 
+> with your approach.
+> 
+> However, the code is more complicated than your patch accounts for.  
+> The wait can finish in several different ways:
+> 
+> (1)	The control URB succeeds and the interrupt URB gets an 
+> 	acknowledgment.
+> 
+> (2)	The control URB completes with an error.
+> 
+> (3)	The wait times out.
+> 
+> (4)	A disconnect occurs.
 
+I absolutely agree. There is something quite wrong in this driver.
+Unfortunately this is likely exploitable by a malicious gadget,
+so just ignoring this is a bad option. I will need to go through the
+logic. Or do you want to have a shot at it?
 
-I doubt it. This looks like it would cause a resource leak, not the
-other way round. But I'd say all operations need to be done under lock.
+The patch was really only for testing. I wanted to know whether
+I was hitting this very issue. This driver will need more surgery.
 
 	Regards
-		
-
-
-
-oliver
+		Oliver
 
