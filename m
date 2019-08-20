@@ -2,166 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7D096158
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 15:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D707696125
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 15:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730369AbfHTNqp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 09:46:45 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35560 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730470AbfHTNlu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Aug 2019 09:41:50 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 9931CAF19;
-        Tue, 20 Aug 2019 13:41:48 +0000 (UTC)
-Message-ID: <1566308508.11678.19.camel@suse.com>
-Subject: Re: WARNING in wdm_write/usb_submit_urb
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com>,
-        gustavo@embeddedor.com, andreyknvl@google.com,
-        syzkaller-bugs@googlegroups.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Date:   Tue, 20 Aug 2019 15:41:48 +0200
-In-Reply-To: <000000000000719222059081d6f2@google.com>
-References: <000000000000719222059081d6f2@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1730677AbfHTNmg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 09:42:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37976 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730667AbfHTNmf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Aug 2019 09:42:35 -0400
+Received: from sasha-vm.mshome.net (unknown [12.236.144.82])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3670122DA9;
+        Tue, 20 Aug 2019 13:42:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566308554;
+        bh=kXSeYWt+bD1ow5Uhihen5Xi5cjzvPtkAfZ/Go6Tj6Bg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KqWdsLrO+S0+LOOHyMrit/i7vRXH6MCg14TdxCiWMeE3q0xWXpN2NVINLLk5MDVoa
+         mzxdxu+oBZYtZggOO0Xis8JITBLDcCg6KK/6E59O4rtTIr+aj4QaPxn5KmwtQ9C5hc
+         Pv7ylpMLtQUgH2ArYTL68qlmyME2FsOmqBoMipvw=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 18/27] usb: gadget: composite: Clear "suspended" on reset/disconnect
+Date:   Tue, 20 Aug 2019 09:42:04 -0400
+Message-Id: <20190820134213.11279-18-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190820134213.11279-1-sashal@kernel.org>
+References: <20190820134213.11279-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 19.08.2019, 17:50 -0700 schrieb syzbot:
-> syzbot has found a reproducer for the following crash on:
+From: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 
-Hi Bjørn,
+[ Upstream commit 602fda17c7356bb7ae98467d93549057481d11dd ]
 
-taking you into CC as you are affected.
-V4: <argh>
+In some cases, one can get out of suspend with a reset or
+a disconnect followed by a reconnect. Previously we would
+leave a stale suspended flag set.
 
-> HEAD commit:    e06ce4da usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14a8c0b6600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d0c62209eedfd54e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=d232cca6ec42c2edb3fc
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b6dfba600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15f63a4c600000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> URB 000000005fab893a submitted while active
-> WARNING: CPU: 1 PID: 1788 at drivers/usb/core/urb.c:362  
-> usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:362
-> Kernel panic - not syncing: panic_on_warn set ...
-> CPU: 1 PID: 1788 Comm: syz-executor522 Not tainted 5.3.0-rc5+ #27
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   panic+0x2a3/0x6da kernel/panic.c:219
->   __warn.cold+0x20/0x4a kernel/panic.c:576
->   report_bug+0x262/0x2a0 lib/bug.c:186
->   fixup_bug arch/x86/kernel/traps.c:179 [inline]
->   fixup_bug arch/x86/kernel/traps.c:174 [inline]
->   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
->   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
->   invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
-> RIP: 0010:usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:362
-> Code: 89 de e8 82 bc ef fd 84 db 0f 85 42 f6 ff ff e8 45 bb ef fd 4c 89 fe  
-> 48 c7 c7 80 68 18 86 c6 05 27 30 3a 04 01 e8 34 a1 c5 fd <0f> 0b e9 20 f6  
-> ff ff c7 44 24 14 01 00 00 00 e9 d7 f6 ff ff 41 bd
-> RSP: 0018:ffff8881d036fc98 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff81288cfd RDI: ffffed103a06df85
-> RBP: ffff8881cfce56a0 R08: ffff8881d1ce4800 R09: ffffed103b663ee7
-> R10: ffffed103b663ee6 R11: ffff8881db31f737 R12: 1ffff1103a06dfa7
-> R13: 00000000fffffff0 R14: ffff8881cfce5688 R15: ffff8881d8106d00
->   wdm_write+0x828/0xd87 drivers/usb/class/cdc-wdm.c:423
->   __vfs_write+0x76/0x100 fs/read_write.c:494
->   vfs_write+0x262/0x5c0 fs/read_write.c:558
->   ksys_write+0x127/0x250 fs/read_write.c:611
->   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x447029
-> Code: e8 ec e7 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
-> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-> ff 0f 83 3b 07 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-> RSP: 002b:00007f1e9e0a4da8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> RAX: ffffffffffffffda RBX: 00000000006dcc28 RCX: 0000000000447029
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-> RBP: 00000000006dcc20 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006dcc2c
-> R13: 0000000020000000 R14: 00000000004af170 R15: 00000000000003e8
-
-#syz test: https://github.com/google/kasan.git e06ce4da
-
-From 8973b1216f931f4c7b82b02186caee9dcae16d24 Mon Sep 17 00:00:00 2001
-From: Oliver Neukum <oneukum@suse.com>
-Date: Tue, 20 Aug 2019 12:08:19 +0200
-Subject: [PATCH] USB: cdc-wdm: fix race between write and disconnect due to
- flag abuse
-
-In case of a disconnect an ongoing flush() has to be made fail.
-Nevertheless we cannot be sure that any pending URB has already
-finished, so although they will never succeed, they still must
-not be touched.
-The clean solution for this is to check for WDM_IN_USE
-and WDM_DISCONNECTED in flush(). There is no point in ever
-clearing WDM_IN_USE, as no further writes make sense.
-
-The issue is as old as the driver.
-
-Fixes: afba937e540c9 ("USB: CDC WDM driver")
-Reported-by: syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/class/cdc-wdm.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/usb/gadget/composite.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 1656f5155ab8..f9f7c8a5e091 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -588,10 +588,20 @@ static int wdm_flush(struct file *file, fl_owner_t id)
- {
- 	struct wdm_device *desc = file->private_data;
- 
--	wait_event(desc->wait, !test_bit(WDM_IN_USE, &desc->flags));
-+	wait_event(desc->wait,
-+			/*
-+			 * needs both flags. We cannot do with one
-+			 * because resetting it would cause a race
-+			 * with write() yet we need to signal
-+			 * a disconnect
-+			 */
-+			!test_bit(WDM_IN_USE, &desc->flags) ||
-+			test_bit(WDM_DISCONNECTING, &desc->flags));
- 
- 	/* cannot dereference desc->intf if WDM_DISCONNECTING */
--	if (desc->werr < 0 && !test_bit(WDM_DISCONNECTING, &desc->flags))
-+	if (test_bit(WDM_DISCONNECTING, &desc->flags))
-+		return -ENODEV;
-+	if (desc->werr < 0)
- 		dev_err(&desc->intf->dev, "Error in flush path: %d\n",
- 			desc->werr);
- 
-@@ -975,8 +985,6 @@ static void wdm_disconnect(struct usb_interface *intf)
- 	spin_lock_irqsave(&desc->iuspin, flags);
- 	set_bit(WDM_DISCONNECTING, &desc->flags);
- 	set_bit(WDM_READ, &desc->flags);
--	/* to terminate pending flushes */
--	clear_bit(WDM_IN_USE, &desc->flags);
- 	spin_unlock_irqrestore(&desc->iuspin, flags);
- 	wake_up_all(&desc->wait);
- 	mutex_lock(&desc->rlock);
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index b8a15840b4ffd..dfcabadeed01b 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1976,6 +1976,7 @@ void composite_disconnect(struct usb_gadget *gadget)
+ 	 * disconnect callbacks?
+ 	 */
+ 	spin_lock_irqsave(&cdev->lock, flags);
++	cdev->suspended = 0;
+ 	if (cdev->config)
+ 		reset_config(cdev);
+ 	if (cdev->driver->disconnect)
 -- 
-2.16.4
+2.20.1
 
