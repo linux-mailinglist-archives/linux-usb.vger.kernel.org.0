@@ -2,64 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF8E95D13
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 13:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFB395E6B
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 14:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729194AbfHTLSB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 07:18:01 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:55529 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728283AbfHTLSB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 07:18:01 -0400
-Received: by mail-io1-f71.google.com with SMTP id g23so7451204ioh.22
-        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2019 04:18:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=2P3eWmgcJZzJWYjQksaViVhGQ2vXzoZ+I9j1B+avBU4=;
-        b=ml5WUIKPQO+EXMgLIKluOckwgemJWbvD2zNV+ESU5Zztn1yxefGDi05icnMqVvkYHb
-         S37PMLHratCEej9lr0grZWL3EMAD0Ysda3OrggHbRDMCxtBa9aKCnPHa1P90ir82E0su
-         oo9BRMhkm7HK0ymyZlvKNnu1CoBwI8rgs/+VumeXYk2TTB6/45hb6IwNetxSoWGqgE5o
-         A7p0X4xdqp1bKBHwkm8PxVzAKiip5NpiDMfUexpqZOVfl1+u397tClO199x2L5rPnXt6
-         UKCs83wrwRnYv8Iez+SJMh3+FEs/h+WClyztbAMSWdqyW3540s6Mz7YNFzrDETUlwyIX
-         iZaQ==
-X-Gm-Message-State: APjAAAVMVlctQEAALOO6Hc5L3Qc62X1uYbSTxVldBV8Y3XC2o5OyMuzM
-        BqlhEsg6yHGSPR7gNSWPI7NITsfmP0xyJQW6uMI3tY63GaX+
-X-Google-Smtp-Source: APXvYqz2zf8f3QlelUWR+tVfZ8UhnsjpsGUHLhxp/VNEqXckOoQI1Az+GUNsPHnDO7GvyZlWmTmz0MmmxYtHRFvT6hsPIEvHcS5m
-MIME-Version: 1.0
-X-Received: by 2002:a02:7a5c:: with SMTP id z28mr3118814jad.40.1566299880917;
- Tue, 20 Aug 2019 04:18:00 -0700 (PDT)
-Date:   Tue, 20 Aug 2019 04:18:00 -0700
-In-Reply-To: <1566298789.11678.12.camel@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000039f6d05908a9c23@google.com>
+        id S1729072AbfHTM1D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 08:27:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38036 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728366AbfHTM1D (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Aug 2019 08:27:03 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 6278FAEBF;
+        Tue, 20 Aug 2019 12:27:02 +0000 (UTC)
+Message-ID: <1566304021.11678.13.camel@suse.com>
 Subject: Re: WARNING in wdm_write/usb_submit_urb
-From:   syzbot <syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, bjorn@mork.no, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-usb@vger.kernel.org,
-        oneukum@suse.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+From:   Oliver Neukum <oneukum@suse.com>
+To:     =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     gustavo@embeddedor.com, andreyknvl@google.com,
+        syzkaller-bugs@googlegroups.com, gregkh@linuxfoundation.org,
+        syzbot <syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com>,
+        linux-usb@vger.kernel.org
+Date:   Tue, 20 Aug 2019 14:27:01 +0200
+In-Reply-To: <87sgpw5d6j.fsf@miraculix.mork.no>
+References: <000000000000719222059081d6f2@google.com>
+         <1566297095.11678.11.camel@suse.com><1566297095.11678.11.camel@suse.com>
+         (Oliver Neukum's message of "Tue, 20 Aug 2019 12:31:35 +0200") <87sgpw5d6j.fsf@miraculix.mork.no>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Am Dienstag, den 20.08.2019, 12:44 +0200 schrieb Bjørn Mork :
+> Oliver Neukum <oneukum@suse.com> writes:
+> 
+> > diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+> > index 1656f5155ab8..a341081a5f47 100644
+> > --- a/drivers/usb/class/cdc-wdm.c
+> > +++ b/drivers/usb/class/cdc-wdm.c
+> > @@ -588,14 +588,24 @@ static int wdm_flush(struct file *file, fl_owner_t id)
+> >  {
+> >  	struct wdm_device *desc = file->private_data;
+> >  
+> > -	wait_event(desc->wait, !test_bit(WDM_IN_USE, &desc->flags));
+> > +	wait_event(desc->wait,
+> > +			/*
+> > +			 * needs both flags. We cannot do with one
+> > +			 * because resetting it would cause a race
+> > +			 * with write() yet we need to signal
+> > +			 * a disconnect
+> > +			 */
+> > +			!test_bit(WDM_IN_USE, &desc->flags) &&
+> > +			!test_bit(WDM_DISCONNECTING, &desc->flags));
+> 
+> 
+> Makes sense.  But isn't the WDM_DISCONNECTING test inverted?
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+You are right. I am making V3.
 
-Reported-and-tested-by:  
-syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com
+> >  	/* cannot dereference desc->intf if WDM_DISCONNECTING */
+> >  	if (desc->werr < 0 && !test_bit(WDM_DISCONNECTING, &desc->flags))
+> >  		dev_err(&desc->intf->dev, "Error in flush path: %d\n",
+> >  			desc->werr);
+> >  
+> > -	return usb_translate_errors(desc->werr);
+> > +	return test_bit(WDM_DISCONNECTING, &desc->flags) ? 
+> > +			-ENODEV : 
+> > +			usb_translate_errors(desc->werr);
+> >  }
+> 
+> Minor detail, but there's an awful lot of test_bit(WDM_DISCONNECTING)
+> here.  How about
+> 
+>   if (test_bit(WDM_DISCONNECTING, &desc->flags))
+>     return -ENODEV;
+>   if (desc->werr < 0)
+>     dev_err(&desc->intf->dev, "Error in flush path: %d\n", desc->werr);
+>   return usb_translate_errors(desc->werr);
 
-Tested on:
+Much better.
 
-commit:         e06ce4da usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d0c62209eedfd54e
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11893186600000
+	Regards
+		Oliver
 
-Note: testing is done by a robot and is best-effort only.
