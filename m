@@ -2,79 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4E7960D1
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 15:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C6F961CC
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 16:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730879AbfHTNnc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 09:43:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39308 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730871AbfHTNnb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Aug 2019 09:43:31 -0400
-Received: from sasha-vm.mshome.net (unknown [12.236.144.82])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2E8DE22DA7;
-        Tue, 20 Aug 2019 13:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566308610;
-        bh=XUoIc2KHqVMThX9S+sl+WxBiHhZcXkyJqYSy2y8+sYE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nR6yUhKShAS8LAe5KMiXk8OpMq4oonNEctw1JxixqkcT/J0XrbtfuuYLtpAktCYCl
-         JTN0GgMSA41Spah62eU3nYM0AtmO/O+jtZbhCLMGLekrkNNSlFgD5Iivve6ETpQZju
-         lLFWxL4CeYBDh9XwG9KEDDKwpERbRAVEaC46Sa2I=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 3/4] usb: host: fotg2: restart hcd after port reset
-Date:   Tue, 20 Aug 2019 09:43:24 -0400
-Message-Id: <20190820134325.11825-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190820134325.11825-1-sashal@kernel.org>
-References: <20190820134325.11825-1-sashal@kernel.org>
+        id S1730206AbfHTOAB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 10:00:01 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:48224 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729992AbfHTOAB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 10:00:01 -0400
+Received: by mail-io1-f71.google.com with SMTP id 67so8004833iob.15
+        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2019 07:00:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=ASDXW2E7KXMpMKDYt2/KtjplUC1Y+GtjxBVSliflfMc=;
+        b=fdrf2iWuHPEn7xlWnzp4vHdHh1/tSmLQZ+6lLOtMo/Q6ERdy7OZKiuIN3sC5lFbj77
+         0x+dgFnLDdOO4ZeddhKpg3VIa7s8+QDpZm2JFXnn6Qyvz+QixWcWfNeqhZS/MP3FRur2
+         O06Ww4cTw9lIKUMMyzOD4Bz/oCbqEPOWrl60ADBkKNc0HEuhpBrrcilnqUjdn3J63X5I
+         vtCGTOk/dkqJIBW1sHhoy0k/Wb3HLt42bfnOHzefzHwrnaeVlMWyuLmHASlvqblXe577
+         qsAG8EEy8f2dg7pGT+0sUJ8wjn1giWFLngDgwOoHifhQ9BPoQ8nr5uGbGyn829WrJtv/
+         SW/A==
+X-Gm-Message-State: APjAAAVkbd8a+BxXC1UD1ZaitfiS182gA6/N1tyWNPEFJC/Q5AspMc9n
+        viDKh2sPKOFMciGTICsTh9g5P0iC5EMXdOZL81yzXl2WFDTL
+X-Google-Smtp-Source: APXvYqzCAomdF+cu9howSNeP4SWjf9rPBRLWb1WQl9Waj1HmLgBZk6aILrJFdwE+y/tSODYhJiCoDMsV5/EYsHupSKFw+7tYvNkV
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a5d:9c12:: with SMTP id 18mr32292118ioe.48.1566309600404;
+ Tue, 20 Aug 2019 07:00:00 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 07:00:00 -0700
+In-Reply-To: <1566308508.11678.19.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000572f4505908cdff6@google.com>
+Subject: Re: WARNING in wdm_write/usb_submit_urb
+From:   syzbot <syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, bjorn@mork.no, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-usb@vger.kernel.org,
+        oneukum@suse.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Hans Ulli Kroll <ulli.kroll@googlemail.com>
+Hello,
 
-[ Upstream commit 777758888ffe59ef754cc39ab2f275dc277732f4 ]
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-On the Gemini SoC the FOTG2 stalls after port reset
-so restart the HCD after each port reset.
+Reported-and-tested-by:  
+syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com
 
-Signed-off-by: Hans Ulli Kroll <ulli.kroll@googlemail.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20190810150458.817-1-linus.walleij@linaro.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/host/fotg210-hcd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Tested on:
 
-diff --git a/drivers/usb/host/fotg210-hcd.c b/drivers/usb/host/fotg210-hcd.c
-index 2341af4f34909..11b3a8c57eabc 100644
---- a/drivers/usb/host/fotg210-hcd.c
-+++ b/drivers/usb/host/fotg210-hcd.c
-@@ -1653,6 +1653,10 @@ static int fotg210_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			/* see what we found out */
- 			temp = check_reset_complete(fotg210, wIndex, status_reg,
- 					fotg210_readl(fotg210, status_reg));
-+
-+			/* restart schedule */
-+			fotg210->command |= CMD_RUN;
-+			fotg210_writel(fotg210, fotg210->command, &fotg210->regs->command);
- 		}
- 
- 		if (!(temp & (PORT_RESUME|PORT_RESET))) {
--- 
-2.20.1
+commit:         e06ce4da usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d0c62209eedfd54e
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=142198bc600000
 
+Note: testing is done by a robot and is best-effort only.
