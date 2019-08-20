@@ -2,42 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FEE962A9
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 16:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632ED963E7
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 17:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730177AbfHTOmL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 10:42:11 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54122 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729836AbfHTOmL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Aug 2019 10:42:11 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 55734AF3B;
-        Tue, 20 Aug 2019 14:42:10 +0000 (UTC)
-Message-ID: <1566312129.11678.27.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in iowarrior_disconnect
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     keescook@chromium.org, gustavo@embeddedor.com,
-        andreyknvl@google.com, syzkaller-bugs@googlegroups.com,
-        gregkh@linuxfoundation.org,
+        id S1729084AbfHTPOZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 11:14:25 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:36290 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726879AbfHTPOZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 11:14:25 -0400
+Received: (qmail 4357 invoked by uid 2102); 20 Aug 2019 11:14:24 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 20 Aug 2019 11:14:24 -0400
+Date:   Tue, 20 Aug 2019 11:14:24 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Oliver Neukum <oneukum@suse.com>
+cc:     keescook@chromium.org, <gustavo@embeddedor.com>,
+        <andreyknvl@google.com>, <syzkaller-bugs@googlegroups.com>,
+        <gregkh@linuxfoundation.org>,
         syzbot <syzbot+cfe6d93e0abab9a0de05@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Date:   Tue, 20 Aug 2019 16:42:09 +0200
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: Re: KASAN: use-after-free Read in iowarrior_disconnect
 In-Reply-To: <1566311916.11678.26.camel@suse.com>
-References: <Pine.LNX.4.44L0.1908201005340.1573-100000@iolanthe.rowland.org>
-         <1566311916.11678.26.camel@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-ID: <Pine.LNX.4.44L0.1908201110510.1573-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 20.08.2019, 16:38 +0200 schrieb Oliver Neukum:
+On Tue, 20 Aug 2019, Oliver Neukum wrote:
+
 > Am Dienstag, den 20.08.2019, 10:18 -0400 schrieb Alan Stern:
 > > On Mon, 19 Aug 2019, Oliver Neukum wrote:
 > > 
@@ -84,8 +81,7 @@ Am Dienstag, den 20.08.2019, 16:38 +0200 schrieb Oliver Neukum:
 > The patch was really only for testing. I wanted to know whether
 > I was hitting this very issue. This driver will need more surgery.
 
-PS: Referring to yurex
+If you would like to work on it, that's fine with me.
 
-	Regards
-		Oliver
+Alan Stern
 
