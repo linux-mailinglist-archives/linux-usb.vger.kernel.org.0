@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7DE9537B
+	by mail.lfdr.de (Postfix) with ESMTP id 8B59F9537C
 	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 03:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728809AbfHTBhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1728830AbfHTBhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Mon, 19 Aug 2019 21:37:08 -0400
-Received: from dc2-smtprelay2.synopsys.com ([198.182.61.142]:51746 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728741AbfHTBhI (ORCPT
+Received: from smtprelay-out1.synopsys.com ([198.182.61.142]:51752 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728627AbfHTBhI (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Aug 2019 21:37:08 -0400
 Received: from mailhost.synopsys.com (dc8-mailhost1.synopsys.com [10.13.135.209])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id BD0EDC03B2;
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id C1DC2C03C4;
         Tue, 20 Aug 2019 01:37:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1566265027; bh=m0XsAmBepkxRRCI3gsasvFaDh9h6o2+8FioCDynUx18=;
+        t=1566265027; bh=VlZDTO/BRBEHD15Vt263ZxdlPukJfCSaXmqQS6GIOgc=;
         h=Date:In-Reply-To:References:From:Subject:To:CC:From;
-        b=TOMmR1u8u9PM7VYrTWXp6XN80Iuz1eOVOPtcNJkhzJJP9l57a5MrC6DEJV/D8azUi
-         QcWmM3SP9lAFxgMZ8UxXgVRyYR7hzLYVuy2kRqEgZwckW+fk/iwEKyWaCx2y5l63cN
-         brLKs0mmweS5m2LNdJFS0lUEpF20F1kqWPqNh7BGcKhqoV3Fj7iG2u+N3yYfdm5Pl6
-         wl5aJpOgHc4XHF2vFzDxj2cRIqdbLvFpAfz25LKENquDAYDJBBXxRSeauhgP3wOJ89
-         /pdY7/QTBqo8w5cbJiHjnm80lrifMYgxzNfCxk9uqh1MSsZ15n+CzD+L7S03ZSvCxW
-         thFBiaQKQiw9g==
+        b=kplzLE5N4y56OePkOfqoFlAjBjXqiTE91boOTu3NUiBmRwjMQjPRTY9C3dUwJnxPb
+         robRalIV3yixyV2pkLZDXYG4y0cCTq3x3BkqZtFrxON+oeeF26JanZHqmNEx+bjRcK
+         bbogUgIepya4Gqf0MxxP7z/uLeaR8biqik7DsKN9krodmdkQ8pPeqJEJFuuz2URwkH
+         cU+1Dype2dbvTBQbk15sNFcnhJeReDKZjPiySXoC4+Fx7qMrnMVs8Mm/uPkY2hPBoh
+         Q3iwVOKWRMCg28YSCOpPy4+GVGFV4zk9d8tCns4cYpS6SOVIbqMOBYt6IviYWgOfTo
+         TV1I0JW0UjpIg==
 Received: from US01WXQAHTC1.internal.synopsys.com (us01wxqahtc1.internal.synopsys.com [10.12.238.230])
         (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id ADEE8A023B;
+        by mailhost.synopsys.com (Postfix) with ESMTPS id AFA8FA023C;
         Tue, 20 Aug 2019 01:37:07 +0000 (UTC)
 Received: from US01WEHTC3.internal.synopsys.com (10.15.84.232) by
  US01WXQAHTC1.internal.synopsys.com (10.12.238.230) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Mon, 19 Aug 2019 18:36:06 -0700
+ (TLS) id 14.3.408.0; Mon, 19 Aug 2019 18:36:13 -0700
 Received: from te-lab16 (10.13.184.19) by US01WEHTC3.internal.synopsys.com
  (10.15.84.231) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 19 Aug
- 2019 18:36:06 -0700
-Received: by te-lab16 (sSMTP sendmail emulation); Mon, 19 Aug 2019 18:36:06
+ 2019 18:36:12 -0700
+Received: by te-lab16 (sSMTP sendmail emulation); Mon, 19 Aug 2019 18:36:12
  -0700
-Date:   Mon, 19 Aug 2019 18:36:06 -0700
-Message-ID: <f86b17f0e801e758586f445f2e0a10b97c507454.1566263914.git.thinhn@synopsys.com>
+Date:   Mon, 19 Aug 2019 18:36:12 -0700
+Message-ID: <9e58a83fe6dab6778c48f40e77d03dc25e14f396.1566263914.git.thinhn@synopsys.com>
 In-Reply-To: <cover.1566263914.git.thinhn@synopsys.com>
 References: <cover.1566263914.git.thinhn@synopsys.com>
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 3/4] usb: dwc3: gadget: Set BESL config parameter
+Subject: [PATCH 4/4] usb: gadget: composite: Set recommended BESL values
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -57,41 +57,100 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When operating with LPM signals, the controller asserts the deep
-low-power signal (utmi_l1_suspend_n) to the phy when the BESL value of
-the LPM token is equal to or greater than DCTL.HIRD_Thres[3:0] (and
-with DCTL.HIRD_Thres[4] set). Otherwise, the shallow low-power signal
-(utmi_sleep_n) is asserted. Set the recommended deep BESL equal to the
-controller's DCTL.HIRD_Thres[3:0] setting, and set the baseline BESL
-to 0 for the shallow low-power signal. This maximizes the opportunity
-for L1 residency and optimizes power savings.
+Set the recommended BESL deep and baseline values based on the gadget's
+configuration parameters to the extended BOS descriptor. This feature
+helps to optimize power savings by maximizing the opportunity for longer
+L1 residency time.
 
 Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 ---
- drivers/usb/dwc3/gadget.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/usb/gadget/composite.c | 38 ++++++++++++++++++++++++++------------
+ include/uapi/linux/usb/ch9.h   |  2 ++
+ 2 files changed, 28 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index afc2ddb080ae..8ac024c5147a 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2078,6 +2078,16 @@ static void dwc3_gadget_config_params(struct usb_gadget *g,
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 9118b42c70b6..7ed009dc0f92 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -612,6 +612,7 @@ static int bos_desc(struct usb_composite_dev *cdev)
+ 	struct usb_ext_cap_descriptor	*usb_ext;
+ 	struct usb_dcd_config_params	dcd_config_params;
+ 	struct usb_bos_descriptor	*bos = cdev->req->buf;
++	unsigned int			besl = 0;
  
-+	params->besl_baseline = USB_DEFAULT_BESL_UNSPECIFIED;
-+	params->besl_deep = USB_DEFAULT_BESL_UNSPECIFIED;
-+
-+	/* Recommended BESL */
-+	if (!dwc->dis_enblslpm_quirk) {
-+		params->besl_baseline = 0;
-+		if (dwc->is_utmi_l1_suspend)
-+			params->besl_deep = min_t(u8, dwc->hird_threshold, 15);
+ 	bos->bLength = USB_DT_BOS_SIZE;
+ 	bos->bDescriptorType = USB_DT_BOS;
+@@ -619,6 +620,29 @@ static int bos_desc(struct usb_composite_dev *cdev)
+ 	bos->wTotalLength = cpu_to_le16(USB_DT_BOS_SIZE);
+ 	bos->bNumDeviceCaps = 0;
+ 
++	/* Get Controller configuration */
++	if (cdev->gadget->ops->get_config_params) {
++		cdev->gadget->ops->get_config_params(cdev->gadget,
++						     &dcd_config_params);
++	} else {
++		dcd_config_params.besl_baseline =
++			USB_DEFAULT_BESL_UNSPECIFIED;
++		dcd_config_params.besl_deep =
++			USB_DEFAULT_BESL_UNSPECIFIED;
++		dcd_config_params.bU1devExitLat =
++			USB_DEFAULT_U1_DEV_EXIT_LAT;
++		dcd_config_params.bU2DevExitLat =
++			cpu_to_le16(USB_DEFAULT_U2_DEV_EXIT_LAT);
 +	}
 +
- 	/* U1 Device exit Latency */
- 	if (dwc->dis_u1_entry_quirk)
- 		params->bU1devExitLat = 0;
++	if (dcd_config_params.besl_baseline != USB_DEFAULT_BESL_UNSPECIFIED)
++		besl = USB_BESL_BASELINE_VALID |
++			USB_SET_BESL_BASELINE(dcd_config_params.besl_baseline);
++
++	if (dcd_config_params.besl_deep != USB_DEFAULT_BESL_UNSPECIFIED)
++		besl |= USB_BESL_DEEP_VALID |
++			USB_SET_BESL_DEEP(dcd_config_params.besl_deep);
++
+ 	/*
+ 	 * A SuperSpeed device shall include the USB2.0 extension descriptor
+ 	 * and shall support LPM when operating in USB2.0 HS mode.
+@@ -629,7 +653,8 @@ static int bos_desc(struct usb_composite_dev *cdev)
+ 	usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
+ 	usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+ 	usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
+-	usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT | USB_BESL_SUPPORT);
++	usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
++					    USB_BESL_SUPPORT | besl);
+ 
+ 	/*
+ 	 * The Superspeed USB Capability descriptor shall be implemented by all
+@@ -650,17 +675,6 @@ static int bos_desc(struct usb_composite_dev *cdev)
+ 						      USB_HIGH_SPEED_OPERATION |
+ 						      USB_5GBPS_OPERATION);
+ 		ss_cap->bFunctionalitySupport = USB_LOW_SPEED_OPERATION;
+-
+-		/* Get Controller configuration */
+-		if (cdev->gadget->ops->get_config_params) {
+-			cdev->gadget->ops->get_config_params(cdev->gadget,
+-				&dcd_config_params);
+-		} else {
+-			dcd_config_params.bU1devExitLat =
+-				USB_DEFAULT_U1_DEV_EXIT_LAT;
+-			dcd_config_params.bU2DevExitLat =
+-				cpu_to_le16(USB_DEFAULT_U2_DEV_EXIT_LAT);
+-		}
+ 		ss_cap->bU1devExitLat = dcd_config_params.bU1devExitLat;
+ 		ss_cap->bU2DevExitLat = dcd_config_params.bU2DevExitLat;
+ 	}
+diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+index d5a5caec8fbc..2b623f36af6b 100644
+--- a/include/uapi/linux/usb/ch9.h
++++ b/include/uapi/linux/usb/ch9.h
+@@ -894,6 +894,8 @@ struct usb_ext_cap_descriptor {		/* Link Power Management */
+ #define USB_BESL_SUPPORT		(1 << 2)	/* supports BESL */
+ #define USB_BESL_BASELINE_VALID		(1 << 3)	/* Baseline BESL valid*/
+ #define USB_BESL_DEEP_VALID		(1 << 4)	/* Deep BESL valid */
++#define USB_SET_BESL_BASELINE(p)	(((p) & 0xf) << 8)
++#define USB_SET_BESL_DEEP(p)		(((p) & 0xf) << 12)
+ #define USB_GET_BESL_BASELINE(p)	(((p) & (0xf << 8)) >> 8)
+ #define USB_GET_BESL_DEEP(p)		(((p) & (0xf << 12)) >> 12)
+ } __attribute__((packed));
 -- 
 2.11.0
 
