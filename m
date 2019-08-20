@@ -2,84 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F9696B37
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 23:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A37496C0A
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 00:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730823AbfHTVNx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 17:13:53 -0400
-Received: from mail-pg1-f182.google.com ([209.85.215.182]:35392 "EHLO
-        mail-pg1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730618AbfHTVNx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 17:13:53 -0400
-Received: by mail-pg1-f182.google.com with SMTP id n4so31309pgv.2
-        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2019 14:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=COQZdiCjrrFEcVsjX6I0ZXViUiK8K/UbiYsifMm0lpQ=;
-        b=hC0JAsdkBmeIWNFNGmEqP7K6ub18gh9k8irPi0ipsaSpo2Njrhbu2TNSS6iz9xkoUx
-         8+vfxlezmNEJ/P1DmD1AjBrRH6Nu1r6GOxw3cV/qUT5DneI5Sq7G9JdwYlZxed6+DKS2
-         ETvxGt6zDFQmPAp2B5rM8dRzOe6MJBnSX4h+BKjmk/v6rdC0mF3UCcK45nalrCpbjhiF
-         gtIn8xIcRf4hi+z7kA4MNTge1cfpoxotHHMvU3oXcegbfYkAKS+npWOIA7PjNtwbuMVe
-         qLKlU1DLGnbmD0ZSQphipIJKc4IN+qbHzaG7cWXQ7gXFW6siwxqVW6p2KJ8hVgG8TNrg
-         v5vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=COQZdiCjrrFEcVsjX6I0ZXViUiK8K/UbiYsifMm0lpQ=;
-        b=iGDn6JO2kAMJU6Mf4Z+RP9FTIhRwQkRBAQTW1wFASpampgTui5VHymp9I7lNtbxJk/
-         he0rgV4ccvP09YnlhyYaXLoTiLJGSGrXVzTHg4Z/WGu57R+6gWJd6iEiD363ALoUsIGK
-         07BLrTX7G823gb0TDDnOo77yIgGiizduylaNWuOBoLZYX5OXSxq2Ilyzq1Sy4X/JVKl9
-         OvBuGkAYAJLF5VgaXgKb5m6Ny88/qr9aNiQ49H4QoKlKcr2PIkVlLZ2mMScPd5CXo2EW
-         u3sQeUPI7kk5qC5DlN5VKzHefrGimPcn7Z10b9+Z1Bb0hnh7MBG7MJTJI8xpPUMfvPnu
-         SQNQ==
-X-Gm-Message-State: APjAAAV78finrkSVX4kyyUllZwx/d25aYfiIlqiuC+PniS9rQ/6uCUUd
-        JQEzlrJRPox9DF9bVTThUhJ7kVhkxoLq8g==
-X-Google-Smtp-Source: APXvYqxN2pWdjLTCMpSWcz4etD41MHjyNMwBGq8Bot7/an/+ofeqXS2Yajq0JcfiwaEbFq09SwbeWQ==
-X-Received: by 2002:aa7:9197:: with SMTP id x23mr31790435pfa.95.1566335632670;
-        Tue, 20 Aug 2019 14:13:52 -0700 (PDT)
-Received: from nebulus.mtv.corp.google.com ([2620:15c:211:200:5404:91ba:59dc:9400])
-        by smtp.googlemail.com with ESMTPSA id a6sm22890774pfa.162.2019.08.20.14.13.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Aug 2019 14:13:52 -0700 (PDT)
-Subject: Re: USB: gadget: f_midi: fixing a possible double-free in f_midi
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        "Yavuz, Tuba" <tuba@ece.ufl.edu>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        stable <stable@vger.kernel.org>, Felipe Balbi <balbi@ti.com>,
-        linux-usb@vger.kernel.org
-References: <20190820174516.255420-1-salyzyn@android.com>
- <20190820201515.GA20068@kroah.com>
-From:   Mark Salyzyn <salyzyn@android.com>
-Message-ID: <c96a0121-eb12-9449-44eb-0d2e09ccef92@android.com>
-Date:   Tue, 20 Aug 2019 14:13:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1730782AbfHTWPf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 18:15:35 -0400
+Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:28410 "EHLO
+        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727358AbfHTWPe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 18:15:34 -0400
+Received: from pps.filterd (m0170394.ppops.net [127.0.0.1])
+        by mx0b-00154904.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7KMF59Y004387;
+        Tue, 20 Aug 2019 18:15:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dellteam.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=smtpout1; bh=k4N0uNoKfvboVHjPxqEV3uL80ZQHKYo+/ZDhxJ+cxRw=;
+ b=MPZViomJzEQI51s2kvIU2dgYlG+8xFw80bOLJmMym3OVzqhVRbUcbHcT1h1cLYQwJ1x3
+ LfLa4hJywbZrW5mpLFCf9iR3AW6uhiHELafot5zT7PSl76GUnMcYE9WygnmjTK500YUn
+ wUFZG+KigHJgTKixnLmeKk16tedJH3LYK+tgeVty4HIHLMs4GJUBb4sZAMjcoaXLK57K
+ EMcjT3r7+Js920nTmi+DtFWQqDdbW6lzYkA4nhXV4qismeVmFWfpbwK6vx1ZejUPbXeH
+ 8PFX2HRYbRaEIykBmNFsR7dDcBVfQuOUAHO0s5JlPYr3fm1twuoMCZ/PK2hNIw3D780A cg== 
+Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0b-00154904.pphosted.com with ESMTP id 2ugh3g2gs6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Aug 2019 18:15:33 -0400
+Received: from pps.filterd (m0142693.ppops.net [127.0.0.1])
+        by mx0a-00154901.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7KMD0Dd090304;
+        Tue, 20 Aug 2019 18:15:32 -0400
+Received: from ausxippc106.us.dell.com (AUSXIPPC106.us.dell.com [143.166.85.156])
+        by mx0a-00154901.pphosted.com with ESMTP id 2ugp98tr04-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Aug 2019 18:15:32 -0400
+X-LoopCount0: from 10.166.132.129
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="450247478"
+From:   <Charles.Hyde@dellteam.com>
+To:     <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <Mario.Limonciello@dell.com>,
+        <oliver@neukum.org>, <netdev@vger.kernel.org>,
+        <nic_swsd@realtek.com>
+Subject: [RFC 0/4] Add support into cdc_ncm for MAC address pass through
+Thread-Topic: [RFC 0/4] Add support into cdc_ncm for MAC address pass through
+Thread-Index: AQHVV6TGV+GduTX4ZESeohSN/8VROg==
+Date:   Tue, 20 Aug 2019 22:15:29 +0000
+Message-ID: <89a5f8ea30b240babd8750d236ca9ef4@AUSX13MPS303.AMER.DELL.COM>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.177.90.69]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20190820201515.GA20068@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-20_10:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=472 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908200204
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=570 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908200204
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/20/19 1:15 PM, Greg Kroah-Hartman wrote:
-> No signed-off-by from you?
->
-> Anyway, this is already in the 4.4.y queue and will be in the next
-> release.
->
-> thanks,
->
-> greg k-h
-
-Ok, thanks! I will stand down.
-
--- Mark
-
+In recent testing of a Dell Universal Dock D6000, I found that MAC address =
+pass through is not supported in the Linux drivers.  However, this same dev=
+ice is supported in Windows 10 (Pro) on my personal computer, in as much as=
+ I was able to tell Windows to assign a new MAC address of my choosing, and=
+ I saw through wireshark the new MAC address was pushed out to the device. =
+ Afterward, Windows reported a new IP address and I was able to view web pa=
+ges.=0A=
+=0A=
+This series of patches give support to USB based Ethernet controllers for p=
+rogramming a MAC address to the device, and also to retrieve the device's M=
+AC address using the existing USB protocol for these two functions.  This p=
+atch series further adds ACPI MAC address pass through support specifically=
+ for the cdc_ncm driver, and generally for any other driver that may need o=
+r want it, in furtherance of Dell's enterprise IT policy efforts.  It was t=
+his latter that I initially found lacking when testing a D6000 with a Dell =
+laptop, and then I found ifconfig was unable to set a MAC address into the =
+device.  These patches bring a similar level of functionality to cdc_ncm dr=
+iver as is available with the Realtek r8152 driver, and is available with W=
+indows.=0A=
+=0A=
+Charles Hyde (4):=0A=
+  Add usb_get_address and usb_set_address support=0A=
+  Allow cdc_ncm to set MAC address in hardware=0A=
+  Move ACPI functionality out of r8152 driver=0A=
+  net: cdc_ncm: Add ACPI MAC address pass through functionality=0A=
+=0A=
+ drivers/net/usb/cdc_ncm.c  | 28 +++++++++++++++++-=0A=
+ drivers/net/usb/r8152.c    | 44 +++-------------------------=0A=
+ drivers/net/usb/usbnet.c   | 37 ++++++++++++++++++------=0A=
+ drivers/usb/core/message.c | 59 ++++++++++++++++++++++++++++++++++++++=0A=
+ include/linux/usb.h        |  3 ++=0A=
+ include/linux/usb/usbnet.h |  1 +=0A=
+ lib/Makefile               |  3 +-=0A=
+ 7 files changed, 124 insertions(+), 51 deletions(-)=0A=
+=0A=
+-- =0A=
+2.20.1=0A=
