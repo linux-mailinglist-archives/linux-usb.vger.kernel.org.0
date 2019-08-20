@@ -2,64 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C6F961CC
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 16:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC6096241
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 16:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730206AbfHTOAB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 10:00:01 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:48224 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729992AbfHTOAB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 10:00:01 -0400
-Received: by mail-io1-f71.google.com with SMTP id 67so8004833iob.15
-        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2019 07:00:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=ASDXW2E7KXMpMKDYt2/KtjplUC1Y+GtjxBVSliflfMc=;
-        b=fdrf2iWuHPEn7xlWnzp4vHdHh1/tSmLQZ+6lLOtMo/Q6ERdy7OZKiuIN3sC5lFbj77
-         0x+dgFnLDdOO4ZeddhKpg3VIa7s8+QDpZm2JFXnn6Qyvz+QixWcWfNeqhZS/MP3FRur2
-         O06Ww4cTw9lIKUMMyzOD4Bz/oCbqEPOWrl60ADBkKNc0HEuhpBrrcilnqUjdn3J63X5I
-         vtCGTOk/dkqJIBW1sHhoy0k/Wb3HLt42bfnOHzefzHwrnaeVlMWyuLmHASlvqblXe577
-         qsAG8EEy8f2dg7pGT+0sUJ8wjn1giWFLngDgwOoHifhQ9BPoQ8nr5uGbGyn829WrJtv/
-         SW/A==
-X-Gm-Message-State: APjAAAVkbd8a+BxXC1UD1ZaitfiS182gA6/N1tyWNPEFJC/Q5AspMc9n
-        viDKh2sPKOFMciGTICsTh9g5P0iC5EMXdOZL81yzXl2WFDTL
-X-Google-Smtp-Source: APXvYqzCAomdF+cu9howSNeP4SWjf9rPBRLWb1WQl9Waj1HmLgBZk6aILrJFdwE+y/tSODYhJiCoDMsV5/EYsHupSKFw+7tYvNkV
+        id S1730024AbfHTOSF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 10:18:05 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:35992 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729912AbfHTOSF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 10:18:05 -0400
+Received: (qmail 2300 invoked by uid 2102); 20 Aug 2019 10:18:04 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 20 Aug 2019 10:18:04 -0400
+Date:   Tue, 20 Aug 2019 10:18:04 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Oliver Neukum <oneukum@suse.com>
+cc:     syzbot <syzbot+cfe6d93e0abab9a0de05@syzkaller.appspotmail.com>,
+        <keescook@chromium.org>, <gustavo@embeddedor.com>,
+        <andreyknvl@google.com>, <syzkaller-bugs@googlegroups.com>,
+        <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: KASAN: use-after-free Read in iowarrior_disconnect
+In-Reply-To: <1566228274.5663.29.camel@suse.com>
+Message-ID: <Pine.LNX.4.44L0.1908201005340.1573-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9c12:: with SMTP id 18mr32292118ioe.48.1566309600404;
- Tue, 20 Aug 2019 07:00:00 -0700 (PDT)
-Date:   Tue, 20 Aug 2019 07:00:00 -0700
-In-Reply-To: <1566308508.11678.19.camel@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000572f4505908cdff6@google.com>
-Subject: Re: WARNING in wdm_write/usb_submit_urb
-From:   syzbot <syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, bjorn@mork.no, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-usb@vger.kernel.org,
-        oneukum@suse.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, 19 Aug 2019, Oliver Neukum wrote:
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+> Am Montag, den 19.08.2019, 07:48 -0700 schrieb syzbot:
+> > Hello,
+> > 
+> > syzbot found the following crash on:
+> > 
+> > HEAD commit:    d0847550 usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=139be302600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=cfe6d93e0abab9a0de05
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12fe6b02600000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1548189c600000
+> > 
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+cfe6d93e0abab9a0de05@syzkaller.appspotmail.com
+> > 
+> 
+> #syz test: https://github.com/google/kasan.git d0847550
 
-Reported-and-tested-by:  
-syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com
+There's no need for us to work at cross purposes on this.  We can go 
+with your approach.
 
-Tested on:
+However, the code is more complicated than your patch accounts for.  
+The wait can finish in several different ways:
 
-commit:         e06ce4da usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d0c62209eedfd54e
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=142198bc600000
+(1)	The control URB succeeds and the interrupt URB gets an 
+	acknowledgment.
 
-Note: testing is done by a robot and is best-effort only.
+(2)	The control URB completes with an error.
+
+(3)	The wait times out.
+
+(4)	A disconnect occurs.
+
+Your patch doesn't handle cases (1) and (3).  (And it doesn't get rid 
+of the dev->waitq field, which is no longer used.)
+
+In fact, (1) is a little ambiguous.  When the interrupt URB gets a 
+command acknowledgment, there's no way (as far as I can tell) to know 
+which command was acknowledged -- particularly if a prior command URB 
+had to be cancelled because it timed out.
+
+And as it turns out, the driver neglects to kill the command URB in
+case (3).  Furthermore, the driver doesn't have mutual exclusion for 
+writes.  So there's nothing to prevent the command URB from being 
+submitted while it is still active (syzbot's new crash).
+
+I have to wonder if anybody's actually using this driver.  It seems to
+be pretty broken.  Maybe we should just mark it as such and forget
+about fixing it.
+
+Alan Stern
+
