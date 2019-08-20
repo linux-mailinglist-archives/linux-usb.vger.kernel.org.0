@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFB496122
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 15:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2038096112
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 15:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730690AbfHTNmj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 09:42:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38046 "EHLO mail.kernel.org"
+        id S1730713AbfHTNmy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 09:42:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38318 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730682AbfHTNmi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Aug 2019 09:42:38 -0400
+        id S1730727AbfHTNmv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Aug 2019 09:42:51 -0400
 Received: from sasha-vm.mshome.net (unknown [12.236.144.82])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C3E7223400;
-        Tue, 20 Aug 2019 13:42:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DFA3B230F2;
+        Tue, 20 Aug 2019 13:42:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566308557;
-        bh=QB1kNfJQy5UTLHL2UMlrZiHGKTiQT1cuyJ+74TG9hmQ=;
+        s=default; t=1566308570;
+        bh=ulRPVpC51EIlYNNWB04+S5hUpRcM2WZPoeyteRh01bI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lmTN6LeURHsGBSTrx/a8JZGpzTTT+tAIsxhEdDoCziqr9a0NZQuhI4o1yqtNoi9AK
-         rVgJ07+j+ihD1ohCxsiV987dMmk7NZBkjTBA4HiuSXXQbIKMOMM+6SjdK2YRdZoG5c
-         hv7aZE0B0QAO01uCMjIxsWybfu4flCGA/bPfFXhM=
+        b=A8fl75Fl6360Wh6NPpKoeGjpmo1P+YTt6TJiEpKIYhkroez3aVEw5ekcAaHiZdUL5
+         p1voq1J9hUQXv81Bss3faSFe+x7SvVS5T28/U2+cmMHR1YlOLqA3k1GDqXyjsk13PQ
+         /6S8Vem7cyDvGc/AXD9Md99IA5lidgWeR5Kwnmks=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
+Cc:     Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 19/27] usb: gadget: mass_storage: Fix races between fsg_disable and fsg_set_alt
-Date:   Tue, 20 Aug 2019 09:42:05 -0400
-Message-Id: <20190820134213.11279-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 25/27] usb: host: fotg2: restart hcd after port reset
+Date:   Tue, 20 Aug 2019 09:42:11 -0400
+Message-Id: <20190820134213.11279-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190820134213.11279-1-sashal@kernel.org>
 References: <20190820134213.11279-1-sashal@kernel.org>
@@ -44,167 +44,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+From: Hans Ulli Kroll <ulli.kroll@googlemail.com>
 
-[ Upstream commit 4a56a478a525d6427be90753451c40e1327caa1a ]
+[ Upstream commit 777758888ffe59ef754cc39ab2f275dc277732f4 ]
 
-If fsg_disable() and fsg_set_alt() are called too closely to each
-other (for example due to a quick reset/reconnect), what can happen
-is that fsg_set_alt sets common->new_fsg from an interrupt while
-handle_exception is trying to process the config change caused by
-fsg_disable():
+On the Gemini SoC the FOTG2 stalls after port reset
+so restart the HCD after each port reset.
 
-	fsg_disable()
-	...
-	handle_exception()
-		sets state back to FSG_STATE_NORMAL
-		hasn't yet called do_set_interface()
-		or is inside it.
-
- ---> interrupt
-	fsg_set_alt
-		sets common->new_fsg
-		queues a new FSG_STATE_CONFIG_CHANGE
- <---
-
-Now, the first handle_exception can "see" the updated
-new_fsg, treats it as if it was a fsg_set_alt() response,
-call usb_composite_setup_continue() etc...
-
-But then, the thread sees the second FSG_STATE_CONFIG_CHANGE,
-and goes back down the same path, wipes and reattaches a now
-active fsg, and .. calls usb_composite_setup_continue() which
-at this point is wrong.
-
-Not only we get a backtrace, but I suspect the second set_interface
-wrecks some state causing the host to get upset in my case.
-
-This fixes it by replacing "new_fsg" by a "state argument" (same
-principle) which is set in the same lock section as the state
-update, and retrieved similarly.
-
-That way, there is never any discrepancy between the dequeued
-state and the observed value of it. We keep the ability to have
-the latest reconfig operation take precedence, but we guarantee
-that once "dequeued" the argument (new_fsg) will not be clobbered
-by any new event.
-
-Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Signed-off-by: Hans Ulli Kroll <ulli.kroll@googlemail.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20190810150458.817-1-linus.walleij@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/f_mass_storage.c | 28 +++++++++++++-------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+ drivers/usb/host/fotg210-hcd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 1074cb82ec172..0b7b4d09785b6 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -261,7 +261,7 @@ struct fsg_common;
- struct fsg_common {
- 	struct usb_gadget	*gadget;
- 	struct usb_composite_dev *cdev;
--	struct fsg_dev		*fsg, *new_fsg;
-+	struct fsg_dev		*fsg;
- 	wait_queue_head_t	io_wait;
- 	wait_queue_head_t	fsg_wait;
- 
-@@ -290,6 +290,7 @@ struct fsg_common {
- 	unsigned int		bulk_out_maxpacket;
- 	enum fsg_state		state;		/* For exception handling */
- 	unsigned int		exception_req_tag;
-+	void			*exception_arg;
- 
- 	enum data_direction	data_dir;
- 	u32			data_size;
-@@ -391,7 +392,8 @@ static int fsg_set_halt(struct fsg_dev *fsg, struct usb_ep *ep)
- 
- /* These routines may be called in process context or in_irq */
- 
--static void raise_exception(struct fsg_common *common, enum fsg_state new_state)
-+static void __raise_exception(struct fsg_common *common, enum fsg_state new_state,
-+			      void *arg)
- {
- 	unsigned long		flags;
- 
-@@ -404,6 +406,7 @@ static void raise_exception(struct fsg_common *common, enum fsg_state new_state)
- 	if (common->state <= new_state) {
- 		common->exception_req_tag = common->ep0_req_tag;
- 		common->state = new_state;
-+		common->exception_arg = arg;
- 		if (common->thread_task)
- 			send_sig_info(SIGUSR1, SEND_SIG_FORCED,
- 				      common->thread_task);
-@@ -411,6 +414,10 @@ static void raise_exception(struct fsg_common *common, enum fsg_state new_state)
- 	spin_unlock_irqrestore(&common->lock, flags);
- }
- 
-+static void raise_exception(struct fsg_common *common, enum fsg_state new_state)
-+{
-+	__raise_exception(common, new_state, NULL);
-+}
- 
- /*-------------------------------------------------------------------------*/
- 
-@@ -2285,16 +2292,16 @@ static int do_set_interface(struct fsg_common *common, struct fsg_dev *new_fsg)
- static int fsg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- {
- 	struct fsg_dev *fsg = fsg_from_func(f);
--	fsg->common->new_fsg = fsg;
--	raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
+diff --git a/drivers/usb/host/fotg210-hcd.c b/drivers/usb/host/fotg210-hcd.c
+index e64eb47770c8b..2d5a72c15069e 100644
+--- a/drivers/usb/host/fotg210-hcd.c
++++ b/drivers/usb/host/fotg210-hcd.c
+@@ -1627,6 +1627,10 @@ static int fotg210_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			/* see what we found out */
+ 			temp = check_reset_complete(fotg210, wIndex, status_reg,
+ 					fotg210_readl(fotg210, status_reg));
 +
-+	__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, fsg);
- 	return USB_GADGET_DELAYED_STATUS;
- }
++			/* restart schedule */
++			fotg210->command |= CMD_RUN;
++			fotg210_writel(fotg210, fotg210->command, &fotg210->regs->command);
+ 		}
  
- static void fsg_disable(struct usb_function *f)
- {
- 	struct fsg_dev *fsg = fsg_from_func(f);
--	fsg->common->new_fsg = NULL;
--	raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
-+
-+	__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
- }
- 
- 
-@@ -2307,6 +2314,7 @@ static void handle_exception(struct fsg_common *common)
- 	enum fsg_state		old_state;
- 	struct fsg_lun		*curlun;
- 	unsigned int		exception_req_tag;
-+	struct fsg_dev		*new_fsg;
- 
- 	/*
- 	 * Clear the existing signals.  Anything but SIGUSR1 is converted
-@@ -2360,6 +2368,7 @@ static void handle_exception(struct fsg_common *common)
- 	common->next_buffhd_to_fill = &common->buffhds[0];
- 	common->next_buffhd_to_drain = &common->buffhds[0];
- 	exception_req_tag = common->exception_req_tag;
-+	new_fsg = common->exception_arg;
- 	old_state = common->state;
- 	common->state = FSG_STATE_NORMAL;
- 
-@@ -2413,8 +2422,8 @@ static void handle_exception(struct fsg_common *common)
- 		break;
- 
- 	case FSG_STATE_CONFIG_CHANGE:
--		do_set_interface(common, common->new_fsg);
--		if (common->new_fsg)
-+		do_set_interface(common, new_fsg);
-+		if (new_fsg)
- 			usb_composite_setup_continue(common->cdev);
- 		break;
- 
-@@ -2989,8 +2998,7 @@ static void fsg_unbind(struct usb_configuration *c, struct usb_function *f)
- 
- 	DBG(fsg, "unbind\n");
- 	if (fsg->common->fsg == fsg) {
--		fsg->common->new_fsg = NULL;
--		raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE);
-+		__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
- 		/* FIXME: make interruptible or killable somehow? */
- 		wait_event(common->fsg_wait, common->fsg != fsg);
- 	}
+ 		if (!(temp & (PORT_RESUME|PORT_RESET))) {
 -- 
 2.20.1
 
