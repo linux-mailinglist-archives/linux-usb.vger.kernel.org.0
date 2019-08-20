@@ -2,80 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AB996685
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 18:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0089672D
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 19:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730121AbfHTQhk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 12:37:40 -0400
-Received: from vsmx011.vodafonemail.xion.oxcs.net ([153.92.174.89]:18486 "EHLO
-        vsmx011.vodafonemail.xion.oxcs.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725983AbfHTQhk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 12:37:40 -0400
-Received: from vsmx003.vodafonemail.xion.oxcs.net (unknown [192.168.75.197])
-        by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTP id 5115C3E23EE;
-        Tue, 20 Aug 2019 16:37:38 +0000 (UTC)
-Received: from lazy.lzy (unknown [87.157.113.162])
-        by mta-7-out.mta.xion.oxcs.net (Postfix) with ESMTPA id BC027300A9C;
-        Tue, 20 Aug 2019 16:37:23 +0000 (UTC)
-Received: from lazy.lzy (localhost [127.0.0.1])
-        by lazy.lzy (8.15.2/8.14.5) with ESMTPS id x7KGbMNN003176
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Tue, 20 Aug 2019 18:37:22 +0200
-Received: (from red@localhost)
-        by lazy.lzy (8.15.2/8.15.2/Submit) id x7KGbMvI003175;
-        Tue, 20 Aug 2019 18:37:22 +0200
-Date:   Tue, 20 Aug 2019 18:37:22 +0200
-From:   Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>,
-        Jens Axboe <axboe@kernel.dk>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-block@vger.kernel.org,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: reeze while write on external usb 3.0 hard disk [Bug 204095]
-Message-ID: <20190820163722.GA2991@lazy.lzy>
-References: <20190817095422.GA4200@lazy.lzy>
- <Pine.LNX.4.44L0.1908191009490.1506-100000@iolanthe.rowland.org>
- <20190820072326.GD28968@lst.de>
+        id S1729810AbfHTRNc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 13:13:32 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:36510 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726717AbfHTRNb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 13:13:31 -0400
+Received: (qmail 5200 invoked by uid 2102); 20 Aug 2019 13:13:30 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 20 Aug 2019 13:13:30 -0400
+Date:   Tue, 20 Aug 2019 13:13:30 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrea Vai <andrea.vai@unipv.it>
+cc:     Johannes Thumshirn <jthumshirn@suse.de>,
+        Jens Axboe <axboe@kernel.dk>, <linux-usb@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+In-Reply-To: <307581a490b610c3025ee80f79a465a89d68ed19.camel@unipv.it>
+Message-ID: <Pine.LNX.4.44L0.1908201307540.1573-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190820072326.GD28968@lst.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-VADE-STATUS: LEGIT
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 20, 2019 at 09:23:26AM +0200, Christoph Hellwig wrote:
-> On Mon, Aug 19, 2019 at 10:14:25AM -0400, Alan Stern wrote:
-> > Let's bring this to the attention of some more people.
-> > 
-> > It looks like the bug that was supposed to be fixed by commit
-> > d74ffae8b8dd ("usb-storage: Add a limitation for
-> > blk_queue_max_hw_sectors()"), which is part of 5.2.5, but apparently
-> > the bug still occurs.
+On Mon, 19 Aug 2019, Andrea Vai wrote:
+
+> Hi Alan,
+>   I attach the two traces, collected as follows:
 > 
-> Piergiorgio,
-> 
-> can you dump the content of max_hw_sectors_kb file for your USB storage
-> device and send that to this thread?
+> - start the trace;
+> - wait 10 seconds;
+> - plug the drive;
+> - wait 5 seconds;
+> - mount the drive;
+> - wait 5 seconds;
+> - copy a 500 byte file;
+> - wait 5 seconds;
+> - unmount the drive;
+> - wait 5 seconds;
+> - stop the trace.
 
-Hi all,
+Still no noticeable differences between the two traces.  They both 
+include a 1.2 second delay shortly after the writing starts, and the 
+initialization sequences are the same.
 
-for both kernels, 5.1.20 (working) and 5.2.8 (not working),
-the content of /sys/dev/x:y/queue/max_hw_sectors_kb is 512
-for USB storage devices (2.0 and 3.0).
+I really don't know where to look for this.  The only thing I can think
+of at this point is to repeat this test, but using a file large enough
+for the difference in writing speed to show up plainly.
 
-This is for the PC showing the issue.
+By the way, it would be best to run the tests with the smallest
+possible number of other USB devices plugged in.  None at all, if you
+can arrange it.
 
-In an other PC, which does not show the issus at the moment,
-the values are 120, for USB2.0, and 256, for USB3.0.
+Alan Stern
 
-bye,
-
--- 
-
-piergiorgio
