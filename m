@@ -2,133 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B21F7967F1
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 19:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2171B969E9
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Aug 2019 22:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729803AbfHTRp0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 13:45:26 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41282 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728360AbfHTRp0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 13:45:26 -0400
-Received: by mail-pf1-f195.google.com with SMTP id 196so3808503pfz.8
-        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2019 10:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1mI/fsnxr7SJRcgo+NbhPuqvEtthADzWDuenEYEuutw=;
-        b=WYO56BcRaUfZzl1gOuDdMFCvIgKrBAM14lmqr6BUMqMPpMsNtPVYwjuPwb+2Cdc3vc
-         lIdsyCEWC5QfSDVo8KFK+qUx/hOgdgm2aBIXcru6VOops555F1ZEolkzSS/iVCPRaUm1
-         otmI2omSG0IUJxQI7pIlV04OIbKPqUYyaReWQ1obwyutYxSjTHVYPwIaHhgX57kQZxo7
-         aBV/a1hvrQWC8d54OaMKs1NL+ZurhX8CqUDzb5yux6tUGQokxPb1vkqLxuWfvdCkCP0x
-         JHW5E6PQK0fNc/9etfFq/U12O7j+ueDIq+tmPYEt0sirVCgFSzaiqd9w2bcp3nB3Owq9
-         N2lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1mI/fsnxr7SJRcgo+NbhPuqvEtthADzWDuenEYEuutw=;
-        b=mt2GUE9ubeeDf3gkkftteLCiMajsjqz4lf9inAepC37caU2/uSq3lRfYIomr2PoteU
-         lYeLZfIVZI6w70po4JopGgII7oNeMxqJ+8q+JJyKRnLH3MPWXy0o5C/FIeOHLIMHpZJv
-         /Uo2efhOHBojxnYdJYc5+3Mt/mnUO7dvwuYCreUzhhlW4ElN3RsLJOqlqK8HCquEoKBX
-         e2B5PMQEkUdIysTvTq0aTWvtlnoaUebrhr4nox+2Voy9MthlJBSCt1w132J1BB5kknLP
-         qXN5emdb7a/d8CgjBG4O1ghFobR3rmGi60JqDH7vLGhfZJMH/QDsxKa2V7Mj7At0oQzn
-         Wl7A==
-X-Gm-Message-State: APjAAAUEcPbQr+VlXiCatwi5IVzEV3bymKpJw7/MOTXgduoEYNwL1XIo
-        6XIQlgFO27ifzxhWR2AkA2ef5Q==
-X-Google-Smtp-Source: APXvYqy7oTAAl5zE65n3kn58l9U02ciVMZiLy4QXiS3K+51wT2cNIbXx1DyGZYRHcSlxaWgucITIoA==
-X-Received: by 2002:a63:f304:: with SMTP id l4mr18303453pgh.66.1566323124945;
-        Tue, 20 Aug 2019 10:45:24 -0700 (PDT)
-Received: from nebulus.mtv.corp.google.com ([2620:15c:211:200:5404:91ba:59dc:9400])
-        by smtp.gmail.com with ESMTPSA id y188sm23403339pfb.115.2019.08.20.10.45.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 10:45:24 -0700 (PDT)
-From:   Mark Salyzyn <salyzyn@android.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, "Yavuz, Tuba" <tuba@ece.ufl.edu>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        stable <stable@vger.kernel.org>, Felipe Balbi <balbi@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: USB: gadget: f_midi: fixing a possible double-free in f_midi
-Date:   Tue, 20 Aug 2019 10:45:13 -0700
-Message-Id: <20190820174516.255420-1-salyzyn@android.com>
-X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
+        id S1730843AbfHTUAW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 16:00:22 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:37080 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730839AbfHTUAW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 16:00:22 -0400
+Received: (qmail 8410 invoked by uid 2102); 20 Aug 2019 16:00:21 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 20 Aug 2019 16:00:21 -0400
+Date:   Tue, 20 Aug 2019 16:00:21 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Jiri Kosina <jikos@kernel.org>
+cc:     andreyknvl@google.com, <gustavo@embeddedor.com>,
+        <hdanton@sina.com>, <syzkaller-bugs@googlegroups.com>,
+        <linux-input@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>
+Subject: [PATCH] HID: USB: Fix general protection fault caused by Logitech
+ driver
+In-Reply-To: <Pine.LNX.4.44L0.1908151333220.1343-100000@iolanthe.rowland.org>
+Message-ID: <Pine.LNX.4.44L0.1908201557220.1573-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Yavuz, Tuba" <tuba@ece.ufl.edu>
+The syzbot fuzzer found a general protection fault in the HID subsystem:
 
-cherry pick from commit 7fafcfdf6377b18b2a726ea554d6e593ba44349f
-("USB: gadget: f_midi: fixing a possible double-free in f_midi")
-Removing 'return err;' from conflict.
+kasan: CONFIG_KASAN_INLINE enabled
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] SMP KASAN
+CPU: 0 PID: 3715 Comm: syz-executor.3 Not tainted 5.2.0-rc6+ #15
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
+Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
+00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
+89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
+RSP: 0018:ffff8881d99d78e0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffc90003f3f000
+RDX: 0000000416d8686d RSI: ffffffff82676841 RDI: 00000020b6c3436a
+RBP: 00000020b6c340a9 R08: ffff8881c6d64800 R09: fffffbfff0e84c25
+R10: ffff8881d99d7940 R11: ffffffff87426127 R12: 0000000000000004
+R13: 0000000000000000 R14: ffff8881d9b94000 R15: ffffffff897f9048
+FS:  00007f047f542700(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30f21000 CR3: 00000001ca032000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
+  usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1707
+  usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
+  hid_hw_power include/linux/hid.h:1038 [inline]
+  hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
+  chrdev_open+0x219/0x5c0 fs/char_dev.c:413
+  do_dentry_open+0x497/0x1040 fs/open.c:778
+  do_last fs/namei.c:3416 [inline]
+  path_openat+0x1430/0x3ff0 fs/namei.c:3533
+  do_filp_open+0x1a1/0x280 fs/namei.c:3563
+  do_sys_open+0x3c0/0x580 fs/open.c:1070
+  do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-It looks like there is a possibility of a double-free vulnerability on an
-error path of the f_midi_set_alt function in the f_midi driver. If the
-path is feasible then free_ep_req gets called twice:
+It turns out the fault was caused by a bug in the HID Logitech driver,
+which violates the requirement that every pathway calling
+hid_hw_start() must also call hid_hw_stop().  This patch fixes the bug
+by making sure the requirement is met.
 
-         req->complete = f_midi_complete;
-         err = usb_ep_queue(midi->out_ep, req, GFP_ATOMIC);
-            => ...
-             usb_gadget_giveback_request
-               =>
-                 f_midi_complete (CALLBACK)
-                   (inside f_midi_complete, for various cases of status)
-                   free_ep_req(ep, req); // first kfree
-         if (err) {
-                 ERROR(midi, "%s: couldn't enqueue request: %d\n",
-                             midi->out_ep->name, err);
-                 free_ep_req(midi->out_ep, req); // second kfree
-                 return err;
-         }
+Reported-and-tested-by: syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: <stable@vger.kernel.org>
 
-The double-free possibility was introduced with commit ad0d1a058eac
-("usb: gadget: f_midi: fix leak on failed to enqueue out requests").
-
-Found by MOXCAFE tool.
-
-Signed-off-by: Tuba Yavuz <tuba@ece.ufl.edu>
-Fixes: ad0d1a058eac ("usb: gadget: f_midi: fix leak on failed to enqueue out requests")
-Acked-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc: stable <stable@vger.kernel.org> # 4.4.y
 ---
- drivers/usb/gadget/function/f_midi.c | 3 ++-
- drivers/usb/gadget/u_f.h             | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-index 5ead414586a1..e5c4a907e5d4 100644
---- a/drivers/usb/gadget/function/f_midi.c
-+++ b/drivers/usb/gadget/function/f_midi.c
-@@ -366,7 +366,8 @@ static int f_midi_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- 		if (err) {
- 			ERROR(midi, "%s queue req: %d\n",
- 				    midi->out_ep->name, err);
--			free_ep_req(midi->out_ep, req);
-+			if (req->buf != NULL)
-+				free_ep_req(midi->out_ep, req);
- 		}
- 	}
+[as1909]
+
+
+ drivers/hid/hid-lg.c    |   10 ++++++----
+ drivers/hid/hid-lg4ff.c |    1 -
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+Index: usb-devel/drivers/hid/hid-lg.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-lg.c
++++ usb-devel/drivers/hid/hid-lg.c
+@@ -818,7 +818,7 @@ static int lg_probe(struct hid_device *h
  
-diff --git a/drivers/usb/gadget/u_f.h b/drivers/usb/gadget/u_f.h
-index 69a1d10df04f..3ee365fbc2e2 100644
---- a/drivers/usb/gadget/u_f.h
-+++ b/drivers/usb/gadget/u_f.h
-@@ -65,7 +65,9 @@ struct usb_request *alloc_ep_req(struct usb_ep *ep, size_t len, int default_len)
- /* Frees a usb_request previously allocated by alloc_ep_req() */
- static inline void free_ep_req(struct usb_ep *ep, struct usb_request *req)
- {
-+	WARN_ON(req->buf == NULL);
- 	kfree(req->buf);
-+	req->buf = NULL;
- 	usb_ep_free_request(ep, req);
+ 		if (!buf) {
+ 			ret = -ENOMEM;
+-			goto err_free;
++			goto err_stop;
+ 		}
+ 
+ 		ret = hid_hw_raw_request(hdev, buf[0], buf, sizeof(cbuf),
+@@ -850,9 +850,12 @@ static int lg_probe(struct hid_device *h
+ 		ret = lg4ff_init(hdev);
+ 
+ 	if (ret)
+-		goto err_free;
++		goto err_stop;
+ 
+ 	return 0;
++
++err_stop:
++	hid_hw_stop(hdev);
+ err_free:
+ 	kfree(drv_data);
+ 	return ret;
+@@ -863,8 +866,7 @@ static void lg_remove(struct hid_device
+ 	struct lg_drv_data *drv_data = hid_get_drvdata(hdev);
+ 	if (drv_data->quirks & LG_FF4)
+ 		lg4ff_deinit(hdev);
+-	else
+-		hid_hw_stop(hdev);
++	hid_hw_stop(hdev);
+ 	kfree(drv_data);
  }
  
--- 
-2.23.0.rc1.153.gdeed80330f-goog
+Index: usb-devel/drivers/hid/hid-lg4ff.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-lg4ff.c
++++ usb-devel/drivers/hid/hid-lg4ff.c
+@@ -1477,7 +1477,6 @@ int lg4ff_deinit(struct hid_device *hid)
+ 		}
+ 	}
+ #endif
+-	hid_hw_stop(hid);
+ 	drv_data->device_props = NULL;
+ 
+ 	kfree(entry);
 
