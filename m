@@ -2,97 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E15198006
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 18:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7541498048
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 18:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728419AbfHUQ0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 12:26:45 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35647 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727617AbfHUQ0p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 12:26:45 -0400
-Received: by mail-pl1-f194.google.com with SMTP id gn20so1603905plb.2
-        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2019 09:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/lziEAnWIs7T/IMh7pvLAYKgxF1M/6L6xhkZk+PTzZo=;
-        b=AF+IIIeHIq+dPK6gk+aCsHN2vKnAjqwvZuihG7Jet3NEoV5OgjEnchuWOGClLLH3iq
-         Y4Jnmi7hlWG/Dn3ztrc+tWsOnALWnOX5vVTc1NtSiBX9F+jscmLYIJAQKZ5aQuAVYUG4
-         0pRL70xnZAqBDUxRuuiTOIoV5mxKFMBLMtgYBwhHD/J2P/q3YXL66kEZXDdcTTLVlCf3
-         HD4U4ZX4KkNuDt4YoJUbWJjJUOjBsfecG7bJFG/0BfxboCKOMO8unm3Y0oMLn27x/LOK
-         BJgmeln/fKlN1V1JE43IY+76dixpXtcEDvQb7zOeu7A6BMVZ8Ayzq3Q9hyDlGxGu8Y04
-         dffg==
+        id S1729065AbfHUQiB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 12:38:01 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:45322 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727480AbfHUQiB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 12:38:01 -0400
+Received: by mail-io1-f70.google.com with SMTP id e20so3152814ioe.12
+        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2019 09:38:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/lziEAnWIs7T/IMh7pvLAYKgxF1M/6L6xhkZk+PTzZo=;
-        b=BklESm0XViobJYvmZmg5TBGyvRWPjPj+ckdfp+RjfrLSITW60YFMG/h2mwdzQmyNU+
-         jAQXNUO4WrpgzJ+qYY6kx8La9YyShhtYN+Thg/lI/KRL5jyVgYqWu8zc3kt7oTiDQaxi
-         aeBXmnizTzsLJO1Gpazzq3Ptn+4i7sLrLRmaJQTW0Vj34WCByZ18yQGk5+xiArauRoIB
-         4fz2oVpXbW7+Fk2sDmO3MJnJHmvpsVG/IJNgsc74QAcnDTGrBd90datTb5w9uiPRqLq6
-         /+xj6ORgoCigl2XEaY72mwgel6Zp5FpskKvdjW1ZmMott9xTvBbzC/0V0jvL8akqVDad
-         IsDQ==
-X-Gm-Message-State: APjAAAWBGEeYpodUCseWoxfzZ/CvJbPyeDL6VOdM4IRFNanWrw/Qeg2o
-        7feZIr29FKwfgqIddmVXkjMhWlbo8ltLFFuBkhHmng==
-X-Google-Smtp-Source: APXvYqyWzm3ttwJ/qs5oATy4yQcZ4ErWYetxTfgsGlousGVCvxLNjVvJ3uxvSFrniw99IHUPTyRiot8PZ7LI3jrN8T0=
-X-Received: by 2002:a17:902:bb94:: with SMTP id m20mr34062684pls.336.1566404804399;
- Wed, 21 Aug 2019 09:26:44 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=hpnPsiFxnX4XDyKKrij/XCBcvslRJvlSawvX44PAZjY=;
+        b=levyYCMzrNhPzcXa6lNUHg+glFEgE6ig494ShrK/QVqyiNIAusP9vTtW9iLb8LFrlU
+         KG4EonwBGqhEVyj8Sp7SG0pTu6jcoh0t/w/5W6xlttF0y/kWZoHVZTzomJcJNtEJcn8u
+         g5tZP43u6RFjOW/AXCr1CxFqpVfFk9Uv3XrkDPMVxsPk8+jWGBBPbnYHBNaOrDuNHSdb
+         U94+yewvlw/0GFxnrfWwj4hojr/Lm/ySe9MIh7iAiamUWTNYfNDMBq3ykmDZVmZTrjjs
+         6DP0eqNV52LL8QRCyOG1PaC5Ndd6TIrnbAjmvW43pmmRy5vyx1JKrMWzVKGWvSTR0r50
+         kZmQ==
+X-Gm-Message-State: APjAAAWaZZ/Ifob+fnVS+KMDMaANwRiUAdhkHW41I7o5/B64ZtK5tveT
+        fjHugdt9NrT3EDLVAQZLRAEh/suSuuJegZnwRfyXT6HwT9Mb
+X-Google-Smtp-Source: APXvYqx76j7sCJ+5CJnRmQmxnncU7QrnrzyIHW9UZT25BmB9EFhFr67Nf77WFBvMwT2ZLgcFjF7Y00vDWQM4n7IxPoUjPsKnIg/l
 MIME-Version: 1.0
-References: <CAAeHK+xQc5Ce6TwtERTmQ+6qSbuAmGikxCU5SNTdcDAynDEiig@mail.gmail.com>
- <Pine.LNX.4.44L0.1908211223070.1816-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1908211223070.1816-100000@iolanthe.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 21 Aug 2019 18:26:33 +0200
-Message-ID: <CAAeHK+z-o9naQXZoxwTXRh2WWQzFiRU9XruabNTTm31_1AbjAw@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in hidraw_ioctl
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a5e:9515:: with SMTP id r21mr14546609ioj.257.1566405480740;
+ Wed, 21 Aug 2019 09:38:00 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 09:38:00 -0700
+In-Reply-To: <Pine.LNX.4.44L0.1908211218550.1816-100000@iolanthe.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000040fec90590a33230@google.com>
+Subject: Re: KASAN: use-after-free Read in hidraw_ioctl
+From:   syzbot <syzbot+ded1794a717e3b235226@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 6:24 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Wed, 21 Aug 2019, Andrey Konovalov wrote:
->
-> > On Wed, Aug 21, 2019 at 3:37 PM syzbot
-> > <syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot has tested the proposed patch but the reproducer still triggered
-> > > crash:
-> > > KASAN: slab-out-of-bounds Read in hidraw_ioctl
-> >
-> > Same here, a different bug.
->
-> It looks like I've got the fix for both these bugs.  Testing now...
+Hello,
 
-Great! Do you think "BUG: bad usercopy in hidraw_ioctl" can also be
-fixed by one of those fixes?
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
->
-> > > Tested on:
-> > >
-> > > commit:         e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-> > > git tree:       https://github.com/google/kasan.git
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=14f14a1e600000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > patch:          https://syzkaller.appspot.com/x/patch.diff?x=171cd95a600000
->
-> Why don't these patch-test reports include the dashboard link?  It sure
-> would be handy to have a copy of it here.
->
-> Alan Stern
->
+Reported-and-tested-by:  
+syzbot+ded1794a717e3b235226@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=126b9da6600000
+
+Note: testing is done by a robot and is best-effort only.
