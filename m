@@ -2,114 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B57F1975F7
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 11:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BDF97640
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 11:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726543AbfHUJXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 05:23:04 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35050 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726448AbfHUJXE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Aug 2019 05:23:04 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 18942AD22;
-        Wed, 21 Aug 2019 09:23:02 +0000 (UTC)
-Message-ID: <1566378498.8347.6.camel@suse.com>
-Subject: Re: [RFC 1/4] Add usb_get_address and usb_set_address support
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Charles.Hyde@dellteam.com, linux-acpi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     Mario.Limonciello@dell.com, gregkh@linuxfoundation.org,
-        nic_swsd@realtek.com, netdev@vger.kernel.org
-Date:   Wed, 21 Aug 2019 11:08:18 +0200
-In-Reply-To: <1566339522507.45056@Dellteam.com>
-References: <1566339522507.45056@Dellteam.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726730AbfHUJcV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 05:32:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37152 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726353AbfHUJcU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Aug 2019 05:32:20 -0400
+Received: from localhost (unknown [12.166.174.13])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B6A4A22D6D;
+        Wed, 21 Aug 2019 09:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566379939;
+        bh=0woE7KH9qH87RbaubAR04Ak4yDzR/nxmHFuwDbo3cf0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oRGCb3cLAStHY4MBdHaRh1/sWNhi0ENJBPihYDW/gnRJHaFzeYRkI6gBkQq1bBtvc
+         akSm0qTU3RNxqg92RqFdFB1gS62gN3X+wnBHmylRG6/iheS6DAA+R3CwyNJBfdsyST
+         6JaH2hK93VeJ3CDu6/KlNT/8eWf7cht+C7eJSEQs=
+Date:   Wed, 21 Aug 2019 02:32:19 -0700
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: f_mass_storage vs drivers/target
+Message-ID: <20190821093219.GA24207@kroah.com>
+References: <8b5d460e023284a803d5f448655d5c20de711f12.camel@kernel.crashing.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b5d460e023284a803d5f448655d5c20de711f12.camel@kernel.crashing.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 20.08.2019, 22:18 +0000 schrieb
-Charles.Hyde@dellteam.com:
-> The core USB driver message.c is missing get/set address functionality
-
-This should go into usbnet. The CDC parser is where it is because
-it is needed for serial and network devices. As serial devices
-do not have a MAC, this can go into usbnet.
-
-> that stops ifconfig from being able to push MAC addresses out to USB
-> based ethernet devices.  Without this functionality, some USB devices
-> stop responding to ethernet packets when using ifconfig to change MAC
-> addresses.  This has been tested with a Dell Universal Dock D6000.
+On Wed, Aug 21, 2019 at 01:38:49PM +1000, Benjamin Herrenschmidt wrote:
+> Hi folks !
 > 
-> Signed-off-by: Charles Hyde <charles.hyde@dellteam.com>
-> Cc: Mario Limonciello <mario.limonciello@dell.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> ---
->  drivers/usb/core/message.c | 59 ++++++++++++++++++++++++++++++++++++++
->  include/linux/usb.h        |  3 ++
->  2 files changed, 62 insertions(+)
-> 
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 5adf489428aa..eea775234b09 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -1085,6 +1085,65 @@ int usb_clear_halt(struct usb_device *dev, int pipe)
->  }
->  EXPORT_SYMBOL_GPL(usb_clear_halt);
->  
-> +/**
-> + * usb_get_address - 
-> + * @dev: device whose endpoint is halted
+> It seems that f_mass_storage duplicates (well maybe predates too..) a
+> lot of what's in drivers/target.
 
-Which endpoint?
+It predates it by a long time.
 
-> + * @mac: buffer for containing 
-> + * Context: !in_interrupt ()
-> + *
-> + * This will attempt to get the six byte MAC address from a USB device's
-> + * ethernet controller using GET_NET_ADDRESS command.
-> + *
-> + * This call is synchronous, and may not be used in an interrupt context.
-> + *
-> + * Return: Zero on success, or else the status code returned by the
+> Anybody working on implementing a new version of f_mass_storage that
+> is layered upon drivers/target instead ? That would bring quite a lot
+> of additional functionality.
 
-Well, I am afraid it will return 6 on success.
+Why is that needed?  What functionality is missing that it will provide?
+Will it make the code simpler?
 
-> + * underlying usb_control_msg() call.
-> + */
-> +int usb_get_address(struct usb_device *dev, unsigned char * mac)
-> +{
-> +	int ret = -ENOMEM;
+> If not, I might look into it.
 
-Initialization is unnecessary here.
+Hey, we don't refuse patches, for cleaning stuff up, you know that :)
 
-> +	unsigned char *tbuf = kmalloc(256, GFP_NOIO);
+thanks,
 
-If you intentionally picked a safety margin of 42 times, this
-is cool. Otherwise it is a litttle much.
-
-> +
-> +	if (!tbuf)
-> +		return -ENOMEM;
-> +
-> +	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
-> +			USB_CDC_GET_NET_ADDRESS,
-> +			USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
-> +			0, USB_REQ_SET_ADDRESS, tbuf, 256,
-> +			USB_CTRL_GET_TIMEOUT);
-> +	if (ret == 6)
-> +		memcpy(mac, tbuf, 6);
-
-You cannot ignore the case of devices sending more or less than 6
-bytes.
-
-	Regards
-		Oliver
-
+greg k-h
