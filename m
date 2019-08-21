@@ -2,75 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9EB97A93
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 15:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C708F97A98
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 15:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728327AbfHUNUg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 09:20:36 -0400
-Received: from esa3.mentor.iphmx.com ([68.232.137.180]:17484 "EHLO
-        esa3.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfHUNUg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 09:20:36 -0400
-IronPort-SDR: Fx5zxELvVFpGjTXnHdYYDXffKSaePwqOcmV6+DQpCTsRb2i/vMq3eCmU5AapnZ0JaVfzoUeAYm
- cYeVOM787lOItZdMWK5RKnYFy1CGcn5UUJh0mbAUBuRW3vdbEGAcBC8HArdewU8YBO0cRL+fcf
- TyZZUFJI8Q6H3otYEN7MTlOKA/xgtPhBIAo09vSxh/KBAwEsl3REm8nXGRXjBKKlbmLQ5MAjwZ
- vw8e6uAS+jqvHRLAvEtKAK53AWR3dN0pdp88clnrC2mG0U0VSaC93Lke0Iy8deYS+s9ioosyNR
- o94=
-X-IronPort-AV: E=Sophos;i="5.64,412,1559548800"; 
-   d="scan'208";a="40637004"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa3.mentor.iphmx.com with ESMTP; 21 Aug 2019 05:20:35 -0800
-IronPort-SDR: +QjuvnqxHen/rXxd9kbDlz4oWvxNjeVyQQp2x5nAr2SA33cKdV66fJ5Ac1G737K/EA4Ub/0ULI
- HgW4rpXrKLXg2jGvxAa29uf1AsXuhUIcfGce2YGioCkXtUXvDUiuG1AAlCl9rJNQw0H2M5wQw/
- RlBmw4YF6L/eZminLI3xhpbCM5Wo2fIp7TL6gmXSsHhy84SmsHZwXQT7Wvh+9sRJVThLYVC4zp
- W1rkFwJWqJ/odnruAo5+vrVynT3KmUdRa6xe3YtoFOBg1WEhDT6HdIabyxL36K2Tkuy4c027p9
- jNM=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     "wharms@bfs.de" <wharms@bfs.de>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: AW: problems with Edgeport/416
-Thread-Topic: problems with Edgeport/416
-Thread-Index: AQHVWCECNX3xNGRgBkW3E536acORx6cFk8iw
-Date:   Wed, 21 Aug 2019 13:20:30 +0000
-Message-ID: <eb4392d938654d99a3f37820b279c839@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <5D5D1C8C.9080000@bfs.de> <20190821112009.GA5228@kroah.com>
- <5D5D2F9E.7050805@bfs.de> <20190821122028.GA19107@kroah.com>
- <5D5D4170.4070001@bfs.de>
-In-Reply-To: <5D5D4170.4070001@bfs.de>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1728862AbfHUNVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 09:21:32 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:55678 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728474AbfHUNVc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 09:21:32 -0400
+Received: from p5de0b6c5.dip0.t-ipconnect.de ([93.224.182.197] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1i0QYG-0004pb-4X; Wed, 21 Aug 2019 15:21:24 +0200
+Date:   Wed, 21 Aug 2019 15:21:22 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Matthias Maennich <maennich@google.com>
+cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
+        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@android.com, maco@google.com, michal.lkml@markovi.net,
+        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
+        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
+        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
+        yamada.masahiro@socionext.com
+Subject: Re: [PATCH v3 09/11] usb-storage: remove single-use define for
+ debugging
+In-Reply-To: <20190821114955.12788-10-maennich@google.com>
+Message-ID: <alpine.DEB.2.21.1908211520360.2223@nanos.tec.linutronix.de>
+References: <20190813121733.52480-1-maennich@google.com> <20190821114955.12788-1-maennich@google.com> <20190821114955.12788-10-maennich@google.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiANCj4gRGlmZmVyZW50IGNvbXB1dGVyIGJ1dCBzYW1lIGNhYmxlcyBpIGd1ZXNzIHRoZSBkZXZp
-Y2UgaXMgb2suDQo+IA0KQnV0IG1heWJlIHRoZSBVU0IgIHBvcnQgb2YgdGhlIGNvbXB1dGVyIGlz
-IGJyb2tlbi4NCg0KPiBOVEwgSSBmb3VuZCB0aGF0IGxpdHRsZSBnZW06DQo+IGh0dHBzOi8vd3d3
-LmZjbG9zZS5jb20vbGludXgta2VybmVscy81OTQ2NzcvdXNiLWlvX3RpLWFkZC1oZWFydGJlYXQt
-dG8tDQo+IGtlZXAtaWRsZS1lcC00MTYtcG9ydHMtZnJvbS1kaXNjb25uZWN0aW5nLWxpbnV4LTQt
-My8NCj4gDQo+IFRoZSBiZWhhdmlvciB3b3VsZCBmaXQgKGFueSB3YXkgdG8gY2hlY2sgdGhhdCB0
-aGUgaGVhcnRiZWF0IGlzIGFjdGl2ZSA/KS4NCj4gDQpXaGljaCBrZXJuZWwgYXJlIHlvdSBydW5u
-aW5nIG9uPw0KdXNlICJ1bmFtZSAtYSIgdG8gZ2V0IGl0Lg0KVGhpcyBwYXRjaCB3YXMgaW50cm9k
-dWNlZCBpbiA0LjMga2VybmVsLCBub3QgcmVhbGx5IGhvdCAuLi4NCkFuZCwgeWVzLCBsb29rcyBs
-aWtlIHdoYXQgeW91IGV4cGVyaWVuY2UuDQoNCj4gQ2FzdGVuIFNjaG1pZHQgYXNrIG1lIHRvIGxv
-b2sgaW50bw0KPiAvc3lzL2tlcm5lbC9kZWJ1Zy9keW5hbWljX2RlYnVnL2NvbnRyb2wgYmVmb3Jl
-IGkgc3RhcnQgdG8NCj4gZGVidWcgdGhlIHdob2xlIHVzYiBwYXJ0LCBpcyB0aGF0IGJlbG93IGV4
-cGVjdGVkIGJlaGF2aW9yID8gKGkgdHJpZWQgdG8gZmluZA0KPiB3aGF0IHZlcnNpb24gb2YgZWRn
-ZXBvcnQgdGhlIGRyaXZlciBzdXNwZWN0cykuDQo+IA0KPiBkcml2ZXJzL3VzYi9zZXJpYWwvaW9f
-dGkuYzoxNTA3IFtpb190aV1kb19ib290X21vZGUgPV8gIiVzIC0gU1RBWUlORyBJTiBCT09UIE1P
-REVcMDEyIg0KLi4uDQo+IGRyaXZlcnMvdXNiL3NlcmlhbC9pb190aS5jOjg4NCBbaW9fdGldaTJj
-X3R5cGVfYm9vdG1vZGUgPV8gIiVzIC0gcmVhZCAyIHN0YXR1cyBlcnJvciA9ICVkXDAxMiINCj4g
-DQpUaGF0IHNheXMgdGhhdCB3ZSBoYXZlIGR5bmFtaWMgZGVidWcgbWVzc2FnZXMgYXZhaWxhYmxl
-IGZvciB0aGUgZHJpdmVyLg0KSWYgeW91IGVuYWJsZSB0aG9zZSBieSBkb2luZw0KZWNobyAtbiAn
-bW9kdWxlIGlvX3RpID1wJyA+IC9zeXMva2VybmVsL2RlYnVnL2R5bmFtaWNfZGVidWcvY29udHJv
-bA0KDQpUaGVuIHlvdSBzaG91bGQgc2VlIGF0IGxlYXN0IHNvbWUgb2YgdGhvc2UgbWVzc2FnZXMg
-YXBwZWFyIGluIGRtZXNnIChrZXJuZWwgbG9nKS4NCg0KQmVzdCByZWdhcmRzDQpDYXJzdGVuDQo=
+On Wed, 21 Aug 2019, Matthias Maennich wrote:
+
+> USB_STORAGE was defined as "usb-storage: " and used in a single location
+> as argument to printk. In order to be able to use the name
+> 'USB_STORAGE', drop the definition and use the string directly for the
+> printk call.
+> 
+> Signed-off-by: Matthias Maennich <maennich@google.com>
+> ---
+>  drivers/usb/storage/debug.h    | 2 --
+>  drivers/usb/storage/scsiglue.c | 2 +-
+>  2 files changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/storage/debug.h b/drivers/usb/storage/debug.h
+> index 6d64f342f587..16ce06039a4d 100644
+> --- a/drivers/usb/storage/debug.h
+> +++ b/drivers/usb/storage/debug.h
+> @@ -29,8 +29,6 @@
+>  
+>  #include <linux/kernel.h>
+>  
+> -#define USB_STORAGE "usb-storage: "
+> -
+>  #ifdef CONFIG_USB_STORAGE_DEBUG
+>  void usb_stor_show_command(const struct us_data *us, struct scsi_cmnd *srb);
+>  void usb_stor_show_sense(const struct us_data *us, unsigned char key,
+> diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
+> index 05b80211290d..df4de8323eff 100644
+> --- a/drivers/usb/storage/scsiglue.c
+> +++ b/drivers/usb/storage/scsiglue.c
+> @@ -379,7 +379,7 @@ static int queuecommand_lck(struct scsi_cmnd *srb,
+>  
+>  	/* check for state-transition errors */
+>  	if (us->srb != NULL) {
+> -		printk(KERN_ERR USB_STORAGE "Error in %s: us->srb = %p\n",
+> +		printk(KERN_ERR "usb-storage: Error in %s: us->srb = %p\n",
+>  			__func__, us->srb);
+
+The proper fix for this is to use pr_fmt and convert the printk to pr_err().
+
+Thanks,
+
+	tglx
