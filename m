@@ -2,103 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 081EF98139
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 19:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02893981DF
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 19:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727929AbfHUR1N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 13:27:13 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:53882 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727237AbfHUR1N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 13:27:13 -0400
-Received: (qmail 6192 invoked by uid 2102); 21 Aug 2019 13:27:12 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 21 Aug 2019 13:27:12 -0400
-Date:   Wed, 21 Aug 2019 13:27:12 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Jiri Kosina <jikos@kernel.org>
-cc:     andreyknvl@google.com, <benjamin.tissoires@redhat.com>,
-        <linux-input@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: [PATCH] HID: hidraw: Fix invalid read in hidraw_ioctl
-In-Reply-To: <000000000000d45a4c0590a2d8bd@google.com>
-Message-ID: <Pine.LNX.4.44L0.1908211323030.1816-100000@iolanthe.rowland.org>
+        id S1729318AbfHUR4O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 13:56:14 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:36883 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726330AbfHUR4O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 13:56:14 -0400
+Received: by mail-wr1-f67.google.com with SMTP id z11so2891680wrt.4;
+        Wed, 21 Aug 2019 10:56:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3QMcAbdO89j9hbCFCxKjPRn72B52n9H62i2qWyUrTKc=;
+        b=snzrhD7EB4z6LYL/mp6+EUIR3cu1H/A2q7j+xjU2NXvQ36a15qGXC7vgV5VqppSn5/
+         QJtApAFI86b3KbrAWO7c/U83+TGdisXtXTR2qo3EoBsMpQAJ9iQv4dzIh61vI1PyPg+r
+         GrOJbatLNUJ74duYlFTaT1XVE8CcEDfudAO1Jj3Fnq4lq4uCf0zhSl0zSkY+IjOrJQ3D
+         AefDg6teIbi094gV4UJ0l3jamRHluoj5yGcz/EYZpDV3dS7Hkonb6CaLCsy/j9JPl+n2
+         G4tzRc2rVnrYVJc0fRhXOPDWMX7W9HeaRkSmq/otsMNxUHWyFgrPsse9IlhLhay1BCne
+         6ziw==
+X-Gm-Message-State: APjAAAVYYJ4k7rl5SLWt+o+aP9xAWtuLy6ffEqtqxbj3YPZ6yB93poFX
+        ysvSNlGNizm5XdKA1g/RzVg=
+X-Google-Smtp-Source: APXvYqyXIbUhXlGcLLVFLun1i20quC+8O/1XUZRT3UwzRWmduyZeM2r2J5aRsbF9VA1AfHqIAQiZ8g==
+X-Received: by 2002:adf:f1cc:: with SMTP id z12mr4554250wro.125.1566410171806;
+        Wed, 21 Aug 2019 10:56:11 -0700 (PDT)
+Received: from kozik-lap ([194.230.147.11])
+        by smtp.googlemail.com with ESMTPSA id g12sm25434578wrv.9.2019.08.21.10.56.10
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 21 Aug 2019 10:56:11 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 19:56:09 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Kukjin Kim <kgene@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] ARM: s3c64xx: squash samsung_usb_phy.h into
+ setup-usb-phy.c
+Message-ID: <20190821175609.GA6768@kozik-lap>
+References: <20190819155602.20843-1-yamada.masahiro@socionext.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190819155602.20843-1-yamada.masahiro@socionext.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The syzbot fuzzer has reported a pair of problems in the
-hidraw_ioctl() function: slab-out-of-bounds read and use-after-free
-read.  An example of the first:
+On Tue, Aug 20, 2019 at 12:56:02AM +0900, Masahiro Yamada wrote:
+> This is only used by arch/arm/mach-s3c64xx/setup-usb-phy.c
+> 
+> $ git grep samsung_usb_phy_type
+> include/linux/usb/samsung_usb_phy.h:enum samsung_usb_phy_type {
+> $ git grep USB_PHY_TYPE_DEVICE
+> arch/arm/mach-s3c64xx/setup-usb-phy.c:  if (type == USB_PHY_TYPE_DEVICE)
+> arch/arm/mach-s3c64xx/setup-usb-phy.c:  if (type == USB_PHY_TYPE_DEVICE)
+> include/linux/usb/samsung_usb_phy.h:    USB_PHY_TYPE_DEVICE,
+> $ git grep USB_PHY_TYPE_HOST
+> include/linux/usb/samsung_usb_phy.h:    USB_PHY_TYPE_HOST,
+> 
+> Actually, 'enum samsung_usb_phy_type' is unused; the 'type' parameter
+> has 'int' type. Anyway, there is no need to declare this enum in the
+> globally visible header. Squash the header.
+> 
+> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> ---
+> 
+>  arch/arm/mach-s3c64xx/setup-usb-phy.c        |  5 +++++
+>  arch/arm/plat-samsung/include/plat/usb-phy.h |  2 --
+>  include/linux/usb/samsung_usb_phy.h          | 17 -----------------
+>  3 files changed, 5 insertions(+), 19 deletions(-)
 
-BUG: KASAN: slab-out-of-bounds in strlen+0x79/0x90 lib/string.c:525
-Read of size 1 at addr ffff8881c8035f38 by task syz-executor.4/2833
+Thanks, applied.
 
-CPU: 1 PID: 2833 Comm: syz-executor.4 Not tainted 5.3.0-rc2+ #1
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description+0x6a/0x32c mm/kasan/report.c:351
-  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-  kasan_report+0xe/0x12 mm/kasan/common.c:612
-  strlen+0x79/0x90 lib/string.c:525
-  strlen include/linux/string.h:281 [inline]
-  hidraw_ioctl+0x245/0xae0 drivers/hid/hidraw.c:446
-  vfs_ioctl fs/ioctl.c:46 [inline]
-  file_ioctl fs/ioctl.c:509 [inline]
-  do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
-  ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
-  __do_sys_ioctl fs/ioctl.c:720 [inline]
-  __se_sys_ioctl fs/ioctl.c:718 [inline]
-  __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
-  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x459829
-Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f7a68f6dc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459829
-RDX: 0000000000000000 RSI: 0000000080404805 RDI: 0000000000000004
-RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f7a68f6e6d4
-R13: 00000000004c21de R14: 00000000004d5620 R15: 00000000ffffffff
-
-The two problems have the same cause: hidraw_ioctl() fails to test
-whether the device has been removed.  This patch adds the missing test.
-
-Reported-and-tested-by: syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-CC: <stable@vger.kernel.org>
-
----
-
-
-[as1910.hidraw-ioctl-fix]
-
-
- drivers/hid/hidraw.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: usb-devel/drivers/hid/hidraw.c
-===================================================================
---- usb-devel.orig/drivers/hid/hidraw.c
-+++ usb-devel/drivers/hid/hidraw.c
-@@ -370,7 +370,7 @@ static long hidraw_ioctl(struct file *fi
- 
- 	mutex_lock(&minors_lock);
- 	dev = hidraw_table[minor];
--	if (!dev) {
-+	if (!dev || !dev->exist) {
- 		ret = -ENODEV;
- 		goto out;
- 	}
+Best regards,
+Krzysztof
 
