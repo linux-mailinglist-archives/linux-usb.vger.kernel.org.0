@@ -2,185 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B3D97A1E
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 14:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5ED497A4B
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 15:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728749AbfHUM6a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 08:58:30 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44650 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728744AbfHUM6a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 08:58:30 -0400
-Received: by mail-pg1-f193.google.com with SMTP id i18so1267240pgl.11
-        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2019 05:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zzjVSD5kF7kKUBdGApC/vg4IsR41um/NQSI7oP/0cpg=;
-        b=VLAOmTam/QeWUx9Y2O4P3MGy+lhUyF10ri0jLbWhRS5OcXMa/fxG3SXrcRdmG3mQOK
-         LPU6RaU32rKff0fGIwL+K6XKwmjvhRSA3FQDU+gCmG/eXvhRhBVPAPBkokmjDIyFlMzE
-         XALLbTb8JMvptvN9SL0GqgeZaV1qDiKbr8LXfp2EvZou3iGfSNSTNOcuyfA2f40yL0ig
-         ubiIpq4UHcAve5GIPdEZ7dvS7JK9BHAtCoqHCu+OMhSaweuekkInLmm1xIq6G+ZZ/U5y
-         jdq0TS3EG6K1M7BrV6CRnAnHNQUi+ykTtJqi+WNvUvoar1n6CmJMr1esEiF1U64RAN0A
-         Ww4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zzjVSD5kF7kKUBdGApC/vg4IsR41um/NQSI7oP/0cpg=;
-        b=eaN0+O5g2jQlrgxD1VPoaX8Mgufrt/kfb4sl6xJiPgDP3vaGIeljeHQ3F1Dr3tj9g7
-         /m4mUERh+AP9yDuqjxeutK0ut82WpmFvaYl9XRqnE89g/XQbRlXlOB+XdmrmQTzm1B4D
-         uLQWm5+msOEuqIVJUCdCBSyHlp9A6hfA+RKvF56guGQbyLeqY20fhZrnNrR5FAIx7e1u
-         tFfUTyPJ9+Imn/0dPC/mdsjLMYqgMSBqUdrzM0uoP711TnkNCZbAhgU+QT8nIj8WQGfe
-         L8gt1FAfYoblvTKeCoSXO6I3R77s6F7k7QNwjALKFPG4i7GlDTXnhU1EUDuA362VHsno
-         29Gw==
-X-Gm-Message-State: APjAAAWRYV127l1fKAGloB2E2lQzRRQao0neTIs0JWPolk9iZE7EflOL
-        HLmArAax2alRNuhifa8VqM31/rubo3/sZiJjmQ79iw==
-X-Google-Smtp-Source: APXvYqw9qC4gxMoUNmG1B/GGAAmzF+VEa9Qciwt2S99kQ6jWdnqMdcuLFenkRIVSYvmYqFhlcoA5LHtBKuFho5tuSaE=
-X-Received: by 2002:a63:c442:: with SMTP id m2mr8736864pgg.286.1566392307855;
- Wed, 21 Aug 2019 05:58:27 -0700 (PDT)
+        id S1728633AbfHUNE4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 09:04:56 -0400
+Received: from mx01-fr.bfs.de ([193.174.231.67]:64696 "EHLO mx01-fr.bfs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728509AbfHUNE4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Aug 2019 09:04:56 -0400
+Received: from mail-fr.bfs.de (mail-fr.bfs.de [10.177.18.200])
+        by mx01-fr.bfs.de (Postfix) with ESMTPS id 3820D202E6;
+        Wed, 21 Aug 2019 15:04:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bfs.de; s=dkim201901;
+        t=1566392689; h=from:from:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IZg4dxJniRKHI4Sl8AW0R5FTbQC3UH3XoGhLbsdEDCM=;
+        b=QjmzPvD+fuLr9RErqEbvHBdwpRtF9F0SrnzwWHTfM/bvQoP2RyzlsHTGCTCTgSRIuCjlHE
+        INLxuU4uOUeNY0bExpeC6seHCJUzBuZezL98AX12PIUteFhojT+QOJXc8LPU87ldhrDMVW
+        lSMkg18mFdoMuzqqHyfnjkVcprGTA3gMjeZalW4uMgBdycW55+DBl/PsSrOi8193xqZ1/R
+        14AH5mmi1Be2exd10CAI3azJVOOJM378IrCsyP2TNXRyV5fp2IdenDOBV45b2EklPmSE4F
+        RxSGypUf9FJSptycBXQWMIP9Fm/FlDZBPWLKR28w8qMUDxF7X+o74meAph1EJg==
+Received: from [134.92.181.33] (unknown [134.92.181.33])
+        by mail-fr.bfs.de (Postfix) with ESMTPS id 10501BEEBD;
+        Wed, 21 Aug 2019 15:04:49 +0200 (CEST)
+Message-ID: <5D5D4170.4070001@bfs.de>
+Date:   Wed, 21 Aug 2019 15:04:48 +0200
+From:   walter harms <wharms@bfs.de>
+Reply-To: wharms@bfs.de
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.1.16) Gecko/20101125 SUSE/3.0.11 Thunderbird/3.0.11
 MIME-Version: 1.0
-References: <00000000000008b8c6058ee52407@google.com> <00000000000016c09c058fdd7faa@google.com>
- <CAAeHK+zeN+bLTix2yaWDo-iu_G4D8T1KELjds=KVTtywiPpc4g@mail.gmail.com>
-In-Reply-To: <CAAeHK+zeN+bLTix2yaWDo-iu_G4D8T1KELjds=KVTtywiPpc4g@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 21 Aug 2019 14:58:16 +0200
-Message-ID: <CAAeHK+x-q8u_-qyc6=5QjuLAtQafOftdmK_JEFVrvzjmowf2Ow@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in hidraw_ioctl
-To:     syzbot <syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: multipart/mixed; boundary="0000000000001875f50590a021fd"
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+Subject: Re: problems with Edgeport/416
+References: <5D5D1C8C.9080000@bfs.de> <20190821112009.GA5228@kroah.com> <5D5D2F9E.7050805@bfs.de> <20190821122028.GA19107@kroah.com>
+In-Reply-To: <20190821122028.GA19107@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.10
+Authentication-Results: mx01-fr.bfs.de
+X-Spamd-Result: default: False [-3.10 / 7.00];
+         ARC_NA(0.00)[];
+         TO_DN_EQ_ADDR_SOME(0.00)[];
+         HAS_REPLYTO(0.00)[wharms@bfs.de];
+         FROM_HAS_DN(0.00)[];
+         RCPT_COUNT_THREE(0.00)[3];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         REPLYTO_ADDR_EQ_FROM(0.00)[];
+         BAYES_HAM(-3.00)[100.00%];
+         DKIM_SIGNED(0.00)[];
+         NEURAL_HAM(-0.00)[-0.998,0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         RCVD_COUNT_TWO(0.00)[2];
+         MID_RHS_MATCH_FROM(0.00)[];
+         RCVD_TLS_ALL(0.00)[]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---0000000000001875f50590a021fd
-Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Aug 21, 2019 at 2:57 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> On Sun, Aug 11, 2019 at 10:46 PM syzbot
-> <syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com> wrote:
-> >
-> > syzbot has found a reproducer for the following crash on:
-> >
-> > HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=150426ba600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=5a6c4ec678a0c6ee84ba
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12725c02600000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=162163c2600000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com
-> >
-> > ==================================================================
-> > BUG: KASAN: slab-out-of-bounds in strlen+0x79/0x90 lib/string.c:525
-> > Read of size 1 at addr ffff8881d29bdf38 by task syz-executor201/1726
-> >
-> > CPU: 1 PID: 1726 Comm: syz-executor201 Not tainted 5.3.0-rc2+ #25
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 01/01/2011
-> > Call Trace:
-> >   __dump_stack lib/dump_stack.c:77 [inline]
-> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
-> >   print_address_description+0x6a/0x32c mm/kasan/report.c:351
-> >   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-> >   kasan_report+0xe/0x12 mm/kasan/common.c:612
-> >   strlen+0x79/0x90 lib/string.c:525
-> >   strlen include/linux/string.h:281 [inline]
-> >   hidraw_ioctl+0x245/0xae0 drivers/hid/hidraw.c:446
-> >   vfs_ioctl fs/ioctl.c:46 [inline]
-> >   file_ioctl fs/ioctl.c:509 [inline]
-> >   do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
-> >   ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
-> >   __do_sys_ioctl fs/ioctl.c:720 [inline]
-> >   __se_sys_ioctl fs/ioctl.c:718 [inline]
-> >   __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
-> >   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-> >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > RIP: 0033:0x445679
-> > Code: e8 5c ad 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7
-> > 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
-> > ff 0f 83 9b cd fb ff c3 66 2e 0f 1f 84 00 00 00 00
-> > RSP: 002b:00007ffc8514f3a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000445679
-> > RDX: 0000000000000000 RSI: 0000000080404805 RDI: 0000000000000004
-> > RBP: 00000000006d0018 R08: 000000000000000b R09: 00000000004002e0
-> > R10: 000000000000000f R11: 0000000000000246 R12: 00000000004028a0
-> > R13: 0000000000402930 R14: 0000000000000000 R15: 0000000000000000
-> >
-> > Allocated by task 0:
-> > (stack is not available)
-> >
-> > Freed by task 0:
-> > (stack is not available)
-> >
-> > The buggy address belongs to the object at ffff8881d29bde60
-> >   which belongs to the cache shmem_inode_cache of size 1168
-> > The buggy address is located 216 bytes inside of
-> >   1168-byte region [ffff8881d29bde60, ffff8881d29be2f0)
-> > The buggy address belongs to the page:
-> > page:ffffea00074a6f00 refcount:1 mapcount:0 mapping:ffff8881da115180
-> > index:0x0 compound_mapcount: 0
-> > flags: 0x200000000010200(slab|head)
-> > raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da115180
-> > raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
-> > page dumped because: kasan: bad access detected
-> >
-> > Memory state around the buggy address:
-> >   ffff8881d29bde00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >   ffff8881d29bde80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > > ffff8881d29bdf00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >                                          ^
-> >   ffff8881d29bdf80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >   ffff8881d29be000: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > ==================================================================
-> >
->
-> Trying Alan's fix from another thread here:
->
-> #syz test: https://github.com/google/kasan.git usb-fuzzer e96407b4
 
-><
+Am 21.08.2019 14:20, schrieb Greg KH:
+> On Wed, Aug 21, 2019 at 01:48:46PM +0200, walter harms wrote:
+>>
+>>
+>> Am 21.08.2019 13:20, schrieb Greg KH:
+>>> On Wed, Aug 21, 2019 at 12:27:24PM +0200, walter harms wrote:
+>>>> Hello List,
+>>>> does some use linux with an Edgeport/416 ?
+>>>>
+>>>> I have a strange problem. the device is resetting soon
+>>>> after i started using it (but not immediately).
+>>>> I do not see a kernel OOPS but a common pattern is:
+>>>>
+>>>> 2019-08-20T15:19:39.825812+00:00 omnfrmo10 kernel: [683270.658623] usb 7-1.1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>>>> 2019-08-20T15:19:39.825818+00:00 omnfrmo10 kernel: [683270.658626] usb 7-1.1.2: Product: Edgeport/416
+>>>> 2019-08-20T15:19:39.825821+00:00 omnfrmo10 kernel: [683270.658628] usb 7-1.1.2: Manufacturer: Digi International
+>>>> 2019-08-20T15:19:39.825823+00:00 omnfrmo10 kernel: [683270.658630] usb 7-1.1.2: SerialNumber: E63966100-1
+>>>> 2019-08-20T15:19:39.985571+00:00 omnfrmo10 kernel: [683270.817909] usb 7-1.1.2: Edgeport TI 2 port adapter converter now attached to ttyUSB4
+>>>> 2019-08-20T15:19:39.985594+00:00 omnfrmo10 kernel: [683270.818132] usb 7-1.1.2: Edgeport TI 2 port adapter converter now attached to ttyUSB5
+>>>> 2019-08-20T15:19:40.007943+00:00 omnfrmo10 mtp-probe: checking bus 7, device 88: "/sys/devices/pci0000:00/0000:00:1d.1/usb7/7-1/7-1.1/7-1.1.2"
+>>>> 2019-08-20T15:19:40.053750+00:00 omnfrmo10 kernel: [683270.885626] usb 7-1.2.2: New USB device found, idVendor=1608, idProduct=0247
+>>>> 2019-08-20T15:19:40.053791+00:00 omnfrmo10 kernel: [683270.885630] usb 7-1.2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>>>> 2019-08-20T15:19:40.053797+00:00 omnfrmo10 kernel: [683270.885633] usb 7-1.2.2: Product: Edgeport/416
+>>>> 2019-08-20T15:19:40.053800+00:00 omnfrmo10 kernel: [683270.885635] usb 7-1.2.2: Manufacturer: Digi International
+>>>> 2019-08-20T15:19:40.053803+00:00 omnfrmo10 kernel: [683270.885637] usb 7-1.2.2: SerialNumber: E63966100-5
+>>>> 2019-08-20T15:19:40.065569+00:00 omnfrmo10 kernel: [683270.897406] usb 7-1.1.3: new full-speed USB device number 90 using uhci_hcd
+>>>> 2019-08-20T15:19:40.213569+00:00 omnfrmo10 kernel: [683271.046316] usb 7-1.2.2: Edgeport TI 2 port adapter converter now attached to ttyUSB6
+>>>> 2019-08-20T15:19:40.213594+00:00 omnfrmo10 kernel: [683271.046782] usb 7-1.2.2: Edgeport TI 2 port adapter converter now attached to ttyUSB7
+>>>> 2019-08-20T15:19:40.242034+00:00 omnfrmo10 mtp-probe: checking bus 7, device 89: "/sys/devices/pci0000:00/0000:00:1d.1/usb7/7-1/7-1.2/7-1.2.2"
+>>>> 2019-08-20T15:19:40.301578+00:00 omnfrmo10 kernel: [683271.133380] usb 7-1.2.3: new full-speed USB device number 91 using uhci_hcd
+>>>> 2019-08-20T15:19:40.357559+00:00 omnfrmo10 kernel: [683271.192815] usb 7-1.1.3: New USB device found, idVendor=1608, idProduct=0247
+>>>> 2019-08-20T15:19:40.357584+00:00 omnfrmo10 kernel: [683271.192820] usb 7-1.1.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>>>> 2019-08-20T15:19:40.357588+00:00 omnfrmo10 kernel: [683271.192822] usb 7-1.1.3: Product: Edgeport/416
+>>>> 2019-08-20T15:19:40.357591+00:00 omnfrmo10 kernel: [683271.192825] usb 7-1.1.3: Manufacturer: Digi International
+>>>> 2019-08-20T15:19:40.357593+00:00 omnfrmo10 kernel: [683271.192827] usb 7-1.1.3: SerialNumber: E63966100-2
+>>>> 2019-08-20T15:19:40.513702+00:00 omnfrmo10 kernel: [683271.349103] usb 7-1.1.3: Edgeport TI 2 port adapter converter now attached to ttyUSB8
+>>>> 2019-08-20T15:19:40.513725+00:00 omnfrmo10 kernel: [683271.349311] usb 7-1.1.3: Edgeport TI 2 port adapter converter now attached to ttyUSB9
+>>>> 2019-08-20T15:19:40.537138+00:00 omnfrmo10 mtp-probe: checking bus 7, device 90: "/sys/devices/pci0000:00/0000:00:1d.1/usb7/7-1/7-1.1/7-1.1.3"
+>>>> 2019-08-20T15:19:40.601754+00:00 omnfrmo10 kernel: [683271.433389] usb 7-1.1.4: new full-speed USB device number 92 using uhci_hcd
+>>>> 2019-08-20T15:19:40.601794+00:00 omnfrmo10 kernel: [683271.433631] usb 7-1.2.3: New USB device found, idVendor=1608, idProduct=0247
+>>>> 2019-08-20T15:19:40.601798+00:00 omnfrmo10 kernel: [683271.433634] usb 7-1.2.3: New USB device strings: Mfr=1, Produc
+>>>
+>>> I don't see any errors there.  What is the problem with the device?
+>>>
+>> You use it, it resets (ports gone etc) and appears again.
+>> I suspected that the device is broken but i test today with windows
+>> (and a different computer) showed it works fine.
+> 
+> Different computer?  Did you try windows on the same exact machine with
+> same exact cable?  This sounds like a hardware program, if the device
+> disconnects,there's nothing the software can do about that, it's a
+> hardware / electrical thing.
+> 
 
-#syz test: https://github.com/google/kasan.git e96407b4
+Different computer but same cables i guess the device is ok.
 
---0000000000001875f50590a021fd
-Content-Type: text/x-patch; charset="US-ASCII"; name="logitech.patch"
-Content-Disposition: attachment; filename="logitech.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jzl9j2ej0>
-X-Attachment-Id: f_jzl9j2ej0
+NTL I found that little gem:
+https://www.fclose.com/linux-kernels/594677/usb-io_ti-add-heartbeat-to-keep-idle-ep-416-ports-from-disconnecting-linux-4-3/
 
-SW5kZXg6IHVzYi1kZXZlbC9kcml2ZXJzL2hpZC9oaWQtbGcuYwo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci0tLSB1c2It
-ZGV2ZWwub3JpZy9kcml2ZXJzL2hpZC9oaWQtbGcuYworKysgdXNiLWRldmVsL2RyaXZlcnMvaGlk
-L2hpZC1sZy5jCkBAIC04MTgsNyArODE4LDcgQEAgc3RhdGljIGludCBsZ19wcm9iZShzdHJ1Y3Qg
-aGlkX2RldmljZSAqaAogCiAJCWlmICghYnVmKSB7CiAJCQlyZXQgPSAtRU5PTUVNOwotCQkJZ290
-byBlcnJfZnJlZTsKKwkJCWdvdG8gZXJyX3N0b3A7CiAJCX0KIAogCQlyZXQgPSBoaWRfaHdfcmF3
-X3JlcXVlc3QoaGRldiwgYnVmWzBdLCBidWYsIHNpemVvZihjYnVmKSwKQEAgLTg1MCw5ICs4NTAs
-MTIgQEAgc3RhdGljIGludCBsZ19wcm9iZShzdHJ1Y3QgaGlkX2RldmljZSAqaAogCQlyZXQgPSBs
-ZzRmZl9pbml0KGhkZXYpOwogCiAJaWYgKHJldCkKLQkJZ290byBlcnJfZnJlZTsKKwkJZ290byBl
-cnJfc3RvcDsKIAogCXJldHVybiAwOworCitlcnJfc3RvcDoKKwloaWRfaHdfc3RvcChoZGV2KTsK
-IGVycl9mcmVlOgogCWtmcmVlKGRydl9kYXRhKTsKIAlyZXR1cm4gcmV0OwpAQCAtODYzLDggKzg2
-Niw3IEBAIHN0YXRpYyB2b2lkIGxnX3JlbW92ZShzdHJ1Y3QgaGlkX2RldmljZQogCXN0cnVjdCBs
-Z19kcnZfZGF0YSAqZHJ2X2RhdGEgPSBoaWRfZ2V0X2RydmRhdGEoaGRldik7CiAJaWYgKGRydl9k
-YXRhLT5xdWlya3MgJiBMR19GRjQpCiAJCWxnNGZmX2RlaW5pdChoZGV2KTsKLQllbHNlCi0JCWhp
-ZF9od19zdG9wKGhkZXYpOworCWhpZF9od19zdG9wKGhkZXYpOwogCWtmcmVlKGRydl9kYXRhKTsK
-IH0KIApJbmRleDogdXNiLWRldmVsL2RyaXZlcnMvaGlkL2hpZC1sZzRmZi5jCj09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K
-LS0tIHVzYi1kZXZlbC5vcmlnL2RyaXZlcnMvaGlkL2hpZC1sZzRmZi5jCisrKyB1c2ItZGV2ZWwv
-ZHJpdmVycy9oaWQvaGlkLWxnNGZmLmMKQEAgLTE0NzcsNyArMTQ3Nyw2IEBAIGludCBsZzRmZl9k
-ZWluaXQoc3RydWN0IGhpZF9kZXZpY2UgKmhpZCkKIAkJfQogCX0KICNlbmRpZgotCWhpZF9od19z
-dG9wKGhpZCk7CiAJZHJ2X2RhdGEtPmRldmljZV9wcm9wcyA9IE5VTEw7CiAKIAlrZnJlZShlbnRy
-eSk7Cgo=
---0000000000001875f50590a021fd--
+The behavior would fit (any way to check that the heartbeat is active ?).
+
+Casten Schmidt ask me to look into /sys/kernel/debug/dynamic_debug/control before i start to
+debug the whole usb part, is that below expected behavior ? (i tried to find what version of edgeport the driver suspects).
+
+drivers/usb/serial/io_ti.c:1507 [io_ti]do_boot_mode =_ "%s - STAYING IN BOOT MODE\012"
+drivers/usb/serial/io_ti.c:1500 [io_ti]do_boot_mode =_ "%s - Download successful -- Device rebooting...\012"
+drivers/usb/serial/io_ti.c:1493 [io_ti]do_boot_mode =_ "%s - Error downloading operational code image\012"
+drivers/usb/serial/io_ti.c:1487 [io_ti]do_boot_mode =_ "%s - Downloading operational code image version %d.%d (TI UMP)\012"
+drivers/usb/serial/io_ti.c:1440 [io_ti]do_boot_mode =_ "%s - Wrong CPU Rev %d (Must be 2)\012"
+drivers/usb/serial/io_ti.c:1403 [io_ti]do_boot_mode =_ "%s - VID = 0x%x\012"
+drivers/usb/serial/io_ti.c:1393 [io_ti]do_boot_mode =_ "%s - RUNNING IN BOOT MODE\012"
+drivers/usb/serial/io_ti.c:1367 [io_ti]do_download_mode =_ "%s - Update complete 0x%x\012"
+drivers/usb/serial/io_ti.c:1358 [io_ti]do_download_mode =_ "%s - Start firmware update\012"
+drivers/usb/serial/io_ti.c:1347 [io_ti]do_download_mode =_ "%s - write download record failed\012"
+drivers/usb/serial/io_ti.c:1338 [io_ti]do_download_mode =_ "%s - can't read header back\012"
+drivers/usb/serial/io_ti.c:1291 [io_ti]do_download_mode =_ "%s - Found Type BLANK FIRMWARE (Type F2) record\012"
+drivers/usb/serial/io_ti.c:1252 [io_ti]do_download_mode =_ "%s - HARDWARE RESET return %d\012"
+drivers/usb/serial/io_ti.c:1243 [io_ti]do_download_mode =_ "%s - HARDWARE RESET\012"
+drivers/usb/serial/io_ti.c:1178 [io_ti]do_download_mode =_ "%s - Update I2C dld from %d.%d to %d.%d\012"
+drivers/usb/serial/io_ti.c:1166 [io_ti]do_download_mode =_ "%s - >> FW Versions Device %d.%d  Driver %d.%d\012"
+drivers/usb/serial/io_ti.c:1129 [io_ti]do_download_mode =_ "%s - Found Type FIRMWARE (Type 2) record\012"
+drivers/usb/serial/io_ti.c:1110 [io_ti]do_download_mode =_ "%s - Wrong CPU Rev %d (Must be 2)\012"
+drivers/usb/serial/io_ti.c:1089 [io_ti]do_download_mode =_ "%s - DOWNLOAD MODE -- BAD I2C\012"
+drivers/usb/serial/io_ti.c:1085 [io_ti]do_download_mode =_ "%s - RUNNING IN DOWNLOAD MODE\012"
+drivers/usb/serial/io_ti.c:906 [io_ti]i2c_type_bootmode =_ "%s - Unknown\012"
+drivers/usb/serial/io_ti.c:901 [io_ti]i2c_type_bootmode =_ "%s - ROM_TYPE_III\012"
+drivers/usb/serial/io_ti.c:899 [io_ti]i2c_type_bootmode =_ "%s - read 2 data = 0x%x\012"
+drivers/usb/serial/io_ti.c:897 [io_ti]i2c_type_bootmode =_ "%s - read 3 status error = %d\012"
+drivers/usb/serial/io_ti.c:888 [io_ti]i2c_type_bootmode =_ "%s - ROM_TYPE_II\012"
+drivers/usb/serial/io_ti.c:886 [io_ti]i2c_type_bootmode =_ "%s - read 2 data = 0x%x\012"
+drivers/usb/serial/io_ti.c:884 [io_ti]i2c_type_bootmode =_ "%s - read 2 status error = %d\012"
+
+re,
+ wh
