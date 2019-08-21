@@ -2,134 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C31B976C0
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 12:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6CA977CC
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 13:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727253AbfHUKMJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 06:12:09 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:33088 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726217AbfHUKMJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 06:12:09 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7LAC6hW037490;
-        Wed, 21 Aug 2019 05:12:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1566382326;
-        bh=WNO04hK4EhcDleF0FXAgtkk2jCq84VoSQz9dZLs15O0=;
-        h=From:To:CC:Subject:Date;
-        b=E29dEd83zaZhDw5xBCNJzTwnO1xluZUhiiTMmv1bg4nVlJw48r4D5HBGR5igMseg2
-         CZpfnngfNnissZYmVKrf9SuMs4jlWJ5ZsMzs+qCb1d0La7hWHTimnpZhGOSdbKNNE/
-         wXZ+YCeZOPx/oTpKJ0S0cHfs8vOHAma+QUeN0bQI=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7LAC6Lt003432
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 21 Aug 2019 05:12:06 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 21
- Aug 2019 05:12:05 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 21 Aug 2019 05:12:05 -0500
-Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7LAC3o8085916;
-        Wed, 21 Aug 2019 05:12:04 -0500
-From:   Roger Quadros <rogerq@ti.com>
-To:     <balbi@kernel.org>, <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Roger Quadros <rogerq@ti.com>
-Subject: [PATCH] usb: gadget: udc: core: Fix error case while binding pending gadget drivers
-Date:   Wed, 21 Aug 2019 13:12:01 +0300
-Message-ID: <20190821101201.5377-1-rogerq@ti.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726389AbfHULR4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 07:17:56 -0400
+Received: from mx01-fr.bfs.de ([193.174.231.67]:6525 "EHLO mx01-fr.bfs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726330AbfHULR4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Aug 2019 07:17:56 -0400
+Received: from mail-fr.bfs.de (mail-fr.bfs.de [10.177.18.200])
+        by mx01-fr.bfs.de (Postfix) with ESMTPS id A20B2201EB;
+        Wed, 21 Aug 2019 13:17:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bfs.de; s=dkim201901;
+        t=1566386269; h=from:from:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=mHNZwwUmUVZ6ozjEQnWjk83PbyOTW6YV1i3PzN9PvJg=;
+        b=psecbGapDJpLj89rVd9qMyJy3AhDJJ+SaMfzQ+a6W1cl5vNR4kW98u3JWJSNK8PW8x34eh
+        ZiYojBQmKzmoTHd3Vg5nerB8paTUNDdHkgB+Czls22xN5ZVDT5jH+kuSDQggd3Bk4Xmnou
+        qwFB0Cl1b7ZwdAihJ++FG6d389X5qpiQPoSAKpVV+wtZzH78q43Ew39JX1OJgBllKNfNv5
+        Ux8UlqBeQ758EC2k09wNqMNk7x6bukmtRqcLTwxGFzVCGTqhDdFlErCIQdIoJzaipLm+Xx
+        iHuaSmS90IxEbO7szsV9ayAuiBRC6QQ9VPiIGJPo7bAEapV7No/IOLIBWegqPw==
+Received: from [134.92.181.33] (unknown [134.92.181.33])
+        by mail-fr.bfs.de (Postfix) with ESMTPS id 8276ABEEBD;
+        Wed, 21 Aug 2019 13:17:49 +0200 (CEST)
+Message-ID: <5D5D285D.3080908@bfs.de>
+Date:   Wed, 21 Aug 2019 13:17:49 +0200
+From:   walter harms <wharms@bfs.de>
+Reply-To: wharms@bfs.de
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.1.16) Gecko/20101125 SUSE/3.0.11 Thunderbird/3.0.11
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     linux-usb@vger.kernel.org
+CC:     greg@kroah.com
+Subject: problems with Edgeport/416
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.10
+Authentication-Results: mx01-fr.bfs.de
+X-Spamd-Result: default: False [-3.10 / 7.00];
+         ARC_NA(0.00)[];
+         HAS_REPLYTO(0.00)[wharms@bfs.de];
+         BAYES_HAM(-3.00)[100.00%];
+         FROM_HAS_DN(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         TO_DN_NONE(0.00)[];
+         REPLYTO_ADDR_EQ_FROM(0.00)[];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_TWO(0.00)[2];
+         NEURAL_HAM(-0.00)[-0.999,0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         RCVD_COUNT_TWO(0.00)[2];
+         MID_RHS_MATCH_FROM(0.00)[];
+         RCVD_TLS_ALL(0.00)[]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If binding a pending gadget driver fails we should not
-remove it from the pending driver list, otherwise it
-will cause a segmentation fault later when the gadget driver is
-unloaded.
+Hello List,
+does some use linux with an Edgeport/416 ?
 
-Test case:
+I have a strange problem. the device is resetting soon
+after i started using it (but not immediately).
+I do not see a kernel OOPS but a common pattern is:
 
-- Make sure no UDC is available
-- modprobe g_mass_storage file=wrongfile
-- Load UDC driver so it becomes available
-	lun0: unable to open backing file: wrongfile
-- modprobe -r g_mass_storage
+2019-08-20T15:19:39.825812+00:00 omnfrmo10 kernel: [683270.658623] usb 7-1.1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+2019-08-20T15:19:39.825818+00:00 omnfrmo10 kernel: [683270.658626] usb 7-1.1.2: Product: Edgeport/416
+2019-08-20T15:19:39.825821+00:00 omnfrmo10 kernel: [683270.658628] usb 7-1.1.2: Manufacturer: Digi International
+2019-08-20T15:19:39.825823+00:00 omnfrmo10 kernel: [683270.658630] usb 7-1.1.2: SerialNumber: E63966100-1
+2019-08-20T15:19:39.985571+00:00 omnfrmo10 kernel: [683270.817909] usb 7-1.1.2: Edgeport TI 2 port adapter converter now attached to ttyUSB4
+2019-08-20T15:19:39.985594+00:00 omnfrmo10 kernel: [683270.818132] usb 7-1.1.2: Edgeport TI 2 port adapter converter now attached to ttyUSB5
+2019-08-20T15:19:40.007943+00:00 omnfrmo10 mtp-probe: checking bus 7, device 88: "/sys/devices/pci0000:00/0000:00:1d.1/usb7/7-1/7-1.1/7-1.1.2"
+2019-08-20T15:19:40.053750+00:00 omnfrmo10 kernel: [683270.885626] usb 7-1.2.2: New USB device found, idVendor=1608, idProduct=0247
+2019-08-20T15:19:40.053791+00:00 omnfrmo10 kernel: [683270.885630] usb 7-1.2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+2019-08-20T15:19:40.053797+00:00 omnfrmo10 kernel: [683270.885633] usb 7-1.2.2: Product: Edgeport/416
+2019-08-20T15:19:40.053800+00:00 omnfrmo10 kernel: [683270.885635] usb 7-1.2.2: Manufacturer: Digi International
+2019-08-20T15:19:40.053803+00:00 omnfrmo10 kernel: [683270.885637] usb 7-1.2.2: SerialNumber: E63966100-5
+2019-08-20T15:19:40.065569+00:00 omnfrmo10 kernel: [683270.897406] usb 7-1.1.3: new full-speed USB device number 90 using uhci_hcd
+2019-08-20T15:19:40.213569+00:00 omnfrmo10 kernel: [683271.046316] usb 7-1.2.2: Edgeport TI 2 port adapter converter now attached to ttyUSB6
+2019-08-20T15:19:40.213594+00:00 omnfrmo10 kernel: [683271.046782] usb 7-1.2.2: Edgeport TI 2 port adapter converter now attached to ttyUSB7
+2019-08-20T15:19:40.242034+00:00 omnfrmo10 mtp-probe: checking bus 7, device 89: "/sys/devices/pci0000:00/0000:00:1d.1/usb7/7-1/7-1.2/7-1.2.2"
+2019-08-20T15:19:40.301578+00:00 omnfrmo10 kernel: [683271.133380] usb 7-1.2.3: new full-speed USB device number 91 using uhci_hcd
+2019-08-20T15:19:40.357559+00:00 omnfrmo10 kernel: [683271.192815] usb 7-1.1.3: New USB device found, idVendor=1608, idProduct=0247
+2019-08-20T15:19:40.357584+00:00 omnfrmo10 kernel: [683271.192820] usb 7-1.1.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+2019-08-20T15:19:40.357588+00:00 omnfrmo10 kernel: [683271.192822] usb 7-1.1.3: Product: Edgeport/416
+2019-08-20T15:19:40.357591+00:00 omnfrmo10 kernel: [683271.192825] usb 7-1.1.3: Manufacturer: Digi International
+2019-08-20T15:19:40.357593+00:00 omnfrmo10 kernel: [683271.192827] usb 7-1.1.3: SerialNumber: E63966100-2
+2019-08-20T15:19:40.513702+00:00 omnfrmo10 kernel: [683271.349103] usb 7-1.1.3: Edgeport TI 2 port adapter converter now attached to ttyUSB8
+2019-08-20T15:19:40.513725+00:00 omnfrmo10 kernel: [683271.349311] usb 7-1.1.3: Edgeport TI 2 port adapter converter now attached to ttyUSB9
+2019-08-20T15:19:40.537138+00:00 omnfrmo10 mtp-probe: checking bus 7, device 90: "/sys/devices/pci0000:00/0000:00:1d.1/usb7/7-1/7-1.1/7-1.1.3"
+2019-08-20T15:19:40.601754+00:00 omnfrmo10 kernel: [683271.433389] usb 7-1.1.4: new full-speed USB device number 92 using uhci_hcd
+2019-08-20T15:19:40.601794+00:00 omnfrmo10 kernel: [683271.433631] usb 7-1.2.3: New USB device found, idVendor=1608, idProduct=0247
+2019-08-20T15:19:40.601798+00:00 omnfrmo10 kernel: [683271.433634] usb 7-1.2.3: New USB device strings: Mfr=1, Produc
 
-[   60.900431] Unable to handle kernel paging request at virtual address dead000000000108
-[   60.908346] Mem abort info:
-[   60.911145]   ESR = 0x96000044
-[   60.914227]   Exception class = DABT (current EL), IL = 32 bits
-[   60.920162]   SET = 0, FnV = 0
-[   60.923217]   EA = 0, S1PTW = 0
-[   60.926354] Data abort info:
-[   60.929228]   ISV = 0, ISS = 0x00000044
-[   60.933058]   CM = 0, WnR = 1
-[   60.936011] [dead000000000108] address between user and kernel address ranges
-[   60.943136] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-[   60.948691] Modules linked in: g_mass_storage(-) usb_f_mass_storage libcomposite xhci_plat_hcd xhci_hcd usbcore ti_am335x_adc kfifo_buf omap_rng cdns3 rng_core udc_core crc32_ce xfrm_user crct10dif_ce snd_so6
-[   60.993995] Process modprobe (pid: 834, stack limit = 0x00000000c2aebc69)
-[   61.000765] CPU: 0 PID: 834 Comm: modprobe Not tainted 4.19.59-01963-g065f42a60499 #92
-[   61.008658] Hardware name: Texas Instruments SoC (DT)
-[   61.014472] pstate: 60000005 (nZCv daif -PAN -UAO)
-[   61.019253] pc : usb_gadget_unregister_driver+0x7c/0x108 [udc_core]
-[   61.025503] lr : usb_gadget_unregister_driver+0x30/0x108 [udc_core]
-[   61.031750] sp : ffff00001338fda0
-[   61.035049] x29: ffff00001338fda0 x28: ffff800846d40000
-[   61.040346] x27: 0000000000000000 x26: 0000000000000000
-[   61.045642] x25: 0000000056000000 x24: 0000000000000800
-[   61.050938] x23: ffff000008d7b0d0 x22: ffff0000088b07c8
-[   61.056234] x21: ffff000001100000 x20: ffff000002020260
-[   61.061530] x19: ffff0000010ffd28 x18: 0000000000000000
-[   61.066825] x17: 0000000000000000 x16: 0000000000000000
-[   61.072121] x15: 0000000000000000 x14: 0000000000000000
-[   61.077417] x13: ffff000000000000 x12: ffffffffffffffff
-[   61.082712] x11: 0000000000000030 x10: 7f7f7f7f7f7f7f7f
-[   61.088008] x9 : fefefefefefefeff x8 : 0000000000000000
-[   61.093304] x7 : ffffffffffffffff x6 : 000000000000ffff
-[   61.098599] x5 : 8080000000000000 x4 : 0000000000000000
-[   61.103895] x3 : ffff000001100020 x2 : ffff800846d40000
-[   61.109190] x1 : dead000000000100 x0 : dead000000000200
-[   61.114486] Call trace:
-[   61.116922]  usb_gadget_unregister_driver+0x7c/0x108 [udc_core]
-[   61.122828]  usb_composite_unregister+0x10/0x18 [libcomposite]
-[   61.128643]  msg_cleanup+0x18/0xfce0 [g_mass_storage]
-[   61.133682]  __arm64_sys_delete_module+0x17c/0x1f0
-[   61.138458]  el0_svc_common+0x90/0x158
-[   61.142192]  el0_svc_handler+0x2c/0x80
-[   61.145926]  el0_svc+0x8/0xc
-[   61.148794] Code: eb03003f d10be033 54ffff21 a94d0281 (f9000420)
-[   61.154869] ---[ end trace afb22e9b637bd9a7 ]---
-Segmentation fault
 
-Signed-off-by: Roger Quadros <rogerq@ti.com>
----
- drivers/usb/gadget/udc/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I did some experiments (changing cables etc) but always the same. But when tested with a windows system it worked all fine.
+later i used a single port USB->Serial and all worked as expected.
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 7cf34beb50df..c272c8014772 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1142,7 +1142,7 @@ static int check_pending_gadget_drivers(struct usb_udc *udc)
- 		if (!driver->udc_name || strcmp(driver->udc_name,
- 						dev_name(&udc->dev)) == 0) {
- 			ret = udc_bind_to_driver(udc, driver);
--			if (ret != -EPROBE_DEFER)
-+			if (!ret)
- 				list_del(&driver->pending);
- 			break;
- 		}
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+I tested with: Opensuse 15.1 on a DELL latitude E5400
+
+uname -a
+Linux omnfrmo10 4.12.14-lp151.28.10-vanilla #1 SMP Sat Jul 13 17:59:31 UTC 2019 (0ab03b7) x86_64 x86_64 x86_64 GNU/Linux
+
+I would like to improve the situation, does anyone has that device ? any hints what to look at ?
+
+please reply direct, i am not member of this list.
+
+re,
+ wh
+
+
+
+
+
+
+
 
