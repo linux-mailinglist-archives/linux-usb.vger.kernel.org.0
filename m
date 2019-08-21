@@ -2,104 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C3097AEC
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 15:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5A097AF4
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 15:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728989AbfHUNcr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 09:32:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58088 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728921AbfHUNcr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Aug 2019 09:32:47 -0400
-Received: from localhost (unknown [12.166.174.13])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 474082339F;
-        Wed, 21 Aug 2019 13:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566394366;
-        bh=gS9+Zgp02i/oPq20iw9CL1Rdtek7gUjyf68nwL7gH7U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JcNleWB00iIOV0x4il3pTwc83WqdjKhl3vUhDb/khQodLyep/4Ec2/W/N11QBlAqA
-         jjqkPfioDTq0OzxRGn2QY7pEHvx0RuDmff8U9ERR/YmAA740FrTraYC7UAbLOKgx85
-         oBtCuXpBL3hieVc5uvQNFHKKxm1Mv2VtYOKU2Rk4=
-Date:   Wed, 21 Aug 2019 06:32:45 -0700
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Matthias Maennich <maennich@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, hpa@zytor.com,
-        jeyu@kernel.org, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
-        yamada.masahiro@socionext.com
-Subject: Re: [PATCH v3 09/11] usb-storage: remove single-use define for
- debugging
-Message-ID: <20190821133245.GA4624@kroah.com>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-10-maennich@google.com>
- <alpine.DEB.2.21.1908211520360.2223@nanos.tec.linutronix.de>
+        id S1728764AbfHUNfX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 09:35:23 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:40110 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726371AbfHUNfX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 09:35:23 -0400
+Received: by mail-wm1-f65.google.com with SMTP id c5so1967462wmb.5
+        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2019 06:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0t4aa0Nv5R8QXQNa/4oL6xU4iyivDyRHdq6FaUcWExA=;
+        b=MugviQXwXIBfUUUyWP6IHkNeW27sYjjEDQvAu4Kqob99Oy6JHdWu/IdUGUPeGCGfzg
+         WFe8n/8fdU5BNw46pZoFnqoh17GFEAWHNYYMB5ey8cmfJyChzzPTerVgUwihnNtzfhsy
+         7oabi4p6oa09XswN7VE1sWLIwcfHKwBY3kxU36yVKXTtwqrYIsrKSf3YNHAAECz3jrKp
+         HCVNvRt/TRFJX6uK9kuKspP8m1jpIkq5AuZO4qt/oyLDdcgtuYSMq3DbN3nQGmCJxEZC
+         E1IwJhAeHhQ7mJ2e3Wx94g3emNxDJKAZ7M2SxHXeXgLDWGP3z7NPXU/m+tUvtVPkA/CB
+         EU5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0t4aa0Nv5R8QXQNa/4oL6xU4iyivDyRHdq6FaUcWExA=;
+        b=VqDR2lUANpuqmmz/n06FH6mF2HUMlYTHule5RTNjH+UmFbPpf4V2yWbozTjlgoBlxD
+         c7GQBubpDYF8YhVfonuhwkgk2Wa/PS9jJVqALKQVdV1ftL+V4lO/NnedBfUGIkdyu0wp
+         aJR4InATk1VohkDScMP5p/0byqF6FbVcqd4DljN6W2rbn8C2+zeJ08CBZ+KWtZcC3XCm
+         QMZgrkp0QdJXJOCoTmgtI76YaYJJyiuwLXrKIRC9HFIM2m2/om08dddVa1Kf/2/Uh8nw
+         XPF2IQNmV1kIDUQtcH8N86infdDyHrbo48Q4Vkb8SDgtZPqQRRKMwNm1oI4aMfJ8oEtO
+         njhw==
+X-Gm-Message-State: APjAAAVfI5m903Dzcj2GYOXyx4ON7MG85FjR0beU+mD+nRHCnzer8KJw
+        1araFLqIGcHKR/XCLnYAQ7EYsg==
+X-Google-Smtp-Source: APXvYqxyYX1ZXPcqBjaYYNfe+ZtSEDIc5N6dN5EPLYh8OWSHD3tWa0RpsBLVponQYB8w7c0bqO089Q==
+X-Received: by 2002:a1c:20c3:: with SMTP id g186mr33178wmg.15.1566394521017;
+        Wed, 21 Aug 2019 06:35:21 -0700 (PDT)
+Received: from bender.baylibre.local (wal59-h01-176-150-251-154.dsl.sta.abo.bbox.fr. [176.150.251.154])
+        by smtp.gmail.com with ESMTPSA id g2sm38941908wru.27.2019.08.21.06.35.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2019 06:35:20 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     balbi@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>
+Subject: [PATCH] usb: dwc3: meson-g12a: fix suspend resume regulator unbalanced disables
+Date:   Wed, 21 Aug 2019 15:35:18 +0200
+Message-Id: <20190821133518.9671-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.1908211520360.2223@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 03:21:22PM +0200, Thomas Gleixner wrote:
-> On Wed, 21 Aug 2019, Matthias Maennich wrote:
-> 
-> > USB_STORAGE was defined as "usb-storage: " and used in a single location
-> > as argument to printk. In order to be able to use the name
-> > 'USB_STORAGE', drop the definition and use the string directly for the
-> > printk call.
-> > 
-> > Signed-off-by: Matthias Maennich <maennich@google.com>
-> > ---
-> >  drivers/usb/storage/debug.h    | 2 --
-> >  drivers/usb/storage/scsiglue.c | 2 +-
-> >  2 files changed, 1 insertion(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/usb/storage/debug.h b/drivers/usb/storage/debug.h
-> > index 6d64f342f587..16ce06039a4d 100644
-> > --- a/drivers/usb/storage/debug.h
-> > +++ b/drivers/usb/storage/debug.h
-> > @@ -29,8 +29,6 @@
-> >  
-> >  #include <linux/kernel.h>
-> >  
-> > -#define USB_STORAGE "usb-storage: "
-> > -
-> >  #ifdef CONFIG_USB_STORAGE_DEBUG
-> >  void usb_stor_show_command(const struct us_data *us, struct scsi_cmnd *srb);
-> >  void usb_stor_show_sense(const struct us_data *us, unsigned char key,
-> > diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-> > index 05b80211290d..df4de8323eff 100644
-> > --- a/drivers/usb/storage/scsiglue.c
-> > +++ b/drivers/usb/storage/scsiglue.c
-> > @@ -379,7 +379,7 @@ static int queuecommand_lck(struct scsi_cmnd *srb,
-> >  
-> >  	/* check for state-transition errors */
-> >  	if (us->srb != NULL) {
-> > -		printk(KERN_ERR USB_STORAGE "Error in %s: us->srb = %p\n",
-> > +		printk(KERN_ERR "usb-storage: Error in %s: us->srb = %p\n",
-> >  			__func__, us->srb);
-> 
-> The proper fix for this is to use pr_fmt and convert the printk to pr_err().
+When going in suspend, in Device mode, then resuming back leads
+to the following:
 
-Yeah, that's the correct long-term fix, I think someone already sent
-that in for the usb tree, where I have taken this patch already.
+unbalanced disables for USB_PWR_EN
+WARNING: CPU: 0 PID: 163 at ../drivers/regulator/core.c:2590 _regulator_disable+0x104/0x180
+Hardware name: Amlogic Meson G12A U200 Development Board (DT)
+[...]
+pc : _regulator_disable+0x104/0x180
+lr : _regulator_disable+0x104/0x180
+[...]
+Call trace:
+ _regulator_disable+0x104/0x180
+ regulator_disable+0x40/0x78
+ dwc3_meson_g12a_otg_mode_set+0x84/0xb0
+ dwc3_meson_g12a_irq_thread+0x58/0xb8
+ irq_thread_fn+0x28/0x80
+ irq_thread+0x118/0x1b8
+ kthread+0xf4/0x120
+ ret_from_fork+0x10/0x18
 
-thanks,
+This disables the regulator if enabled on suspend, and the reverse on
+resume.
 
-greg k-h
+Fixes: c99993376f72 ("usb: dwc3: Add Amlogic G12A DWC3 glue")
+Reported-by: Kevin Hilman <khilman@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/usb/dwc3/dwc3-meson-g12a.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+index bca7e92a10e9..12dda04b004d 100644
+--- a/drivers/usb/dwc3/dwc3-meson-g12a.c
++++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+@@ -564,7 +564,13 @@ static int __maybe_unused dwc3_meson_g12a_runtime_resume(struct device *dev)
+ static int __maybe_unused dwc3_meson_g12a_suspend(struct device *dev)
+ {
+ 	struct dwc3_meson_g12a *priv = dev_get_drvdata(dev);
+-	int i;
++	int i, ret;
++
++	if (priv->vbus && priv->otg_phy_mode == PHY_MODE_USB_HOST) {
++		ret = regulator_disable(priv->vbus);
++		if (ret)
++			return ret;
++	}
+ 
+ 	for (i = 0 ; i < PHY_COUNT ; ++i) {
+ 		phy_power_off(priv->phys[i]);
+@@ -599,6 +605,12 @@ static int __maybe_unused dwc3_meson_g12a_resume(struct device *dev)
+ 			return ret;
+ 	}
+ 
++       if (priv->vbus && priv->otg_phy_mode == PHY_MODE_USB_HOST) {
++               ret = regulator_enable(priv->vbus);
++		if (ret)
++			return ret;
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.22.0
+
