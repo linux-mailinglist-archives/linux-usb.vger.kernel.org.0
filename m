@@ -2,66 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 554C296EEC
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 03:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E4A96F4C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 04:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726996AbfHUBal (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Aug 2019 21:30:41 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:46982 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726351AbfHUBal (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Aug 2019 21:30:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        id S1726672AbfHUCQc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Aug 2019 22:16:32 -0400
+Received: from gateway34.websitewelcome.com ([192.185.149.62]:25133 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726512AbfHUCQb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Aug 2019 22:16:31 -0400
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id EAE483070B
+        for <linux-usb@vger.kernel.org>; Tue, 20 Aug 2019 21:16:30 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 0GAoiQDkviQer0GAoil8ZD; Tue, 20 Aug 2019 21:16:30 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=n9NfRrNjW9ZmPNGYlS0pnekVjreVKm7SkH9+1Fb6KgY=; b=RTLAS8/vzzJ4TlTtwyLt5dcpzK
-        P6eP+u76mLoL9zNoLZOyDs8/FiNMksxWcbLOwH2bKf2NdJu6eqbjUpbyO6nptuDi1Q+ORcybIYRig
-        gxlRebC74hbgKzStpmS7DcN64y0gZYdVCB21mqertqNHhfHXFa20W5ri6PBHXo69wCbU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1i0FSO-0001jY-CG; Wed, 21 Aug 2019 03:30:36 +0200
-Date:   Wed, 21 Aug 2019 03:30:36 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Charles.Hyde@dellteam.com
-Cc:     linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org,
-        gregkh@linuxfoundation.org, Mario.Limonciello@dell.com,
-        oliver@neukum.org, netdev@vger.kernel.org, nic_swsd@realtek.com
-Subject: Re: [RFC 3/4] Move ACPI functionality out of r8152 driver
-Message-ID: <20190821013036.GC4285@lunn.ch>
-References: <1566339738195.2913@Dellteam.com>
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0+iQb8olkCCmveYCwGlywQYawyBRRIxSwndogIaqQ6w=; b=bolcoLQXm633fxCXN8Eio23eEC
+        vMRn+bUr57rvQjBO+vW+4MDADvf6Vtbs0oJsayU6/GKalI+UthEDpUA6+3YDs2//IOIJqFXtP0Nex
+        MzWHCtKAzAv6vypR8dw1ivprC3VY3MsTARtSBeLCPJPYjQwgUSXISEGXmhzZpulvDBVGrKKXGC/aH
+        S/qcBA7iWs1hsDssQN7QwXHedaFlIGAJ0muKOv59tE3yucp06E5bKmwnu9YPluMpNAGexzuHvTCGW
+        3y4WTwrk8gTmXLloBIZrJ3RdVg+Kd0dOLZX1vVByjCDUt/VMejgKcqoE5WLQaRd52HzzXYg5XGVaf
+        3Tmgr3/A==;
+Received: from [187.192.11.120] (port=52370 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1i0GAn-001KA5-4q; Tue, 20 Aug 2019 21:16:29 -0500
+Date:   Tue, 20 Aug 2019 21:16:27 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] usb: udc: lpc32xx: silence fall-through warning
+Message-ID: <20190821021627.GA2679@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1566339738195.2913@Dellteam.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.192.11.120
+X-Source-L: No
+X-Exim-ID: 1i0GAn-001KA5-4q
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [187.192.11.120]:52370
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 5
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 20, 2019 at 10:22:18PM +0000, Charles.Hyde@dellteam.com wrote:
-> This change moves ACPI functionality out of the Realtek r8152 driver to
-> its own source and header file, making it available to other drivers as
-> needed now and into the future.  At the time this ACPI snippet was
-> introduced in 2016, only the Realtek driver made use of it in support of
-> Dell's enterprise IT policy efforts.  There comes now a need for this
-> same support in a different driver, also in support of Dell's enterprise
-> IT policy efforts.
-> 
-> Signed-off-by: Charles Hyde <charles.hyde@dellteam.com>
-> Cc: Mario Limonciello <mario.limonciello@dell.com>
-> Cc: Realtek linux nic maintainers <nic_swsd@realtek.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-acpi@vger.kernel.org
-> ---
->  drivers/net/usb/r8152.c | 44 ++++-------------------------------------
->  lib/Makefile            |  3 ++-
+Silence the following fall-through warning by adding a break statement:
 
-Hi Charles
+drivers/usb/gadget/udc/lpc32xx_udc.c:2230:3: warning: this statement may
+fall through [-Wimplicit-fallthrough=]
 
-I think your forgot to add the new files?
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/usb/gadget/udc/lpc32xx_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Andrew
+diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
+index e3f67023d935..606c8bc52db5 100644
+--- a/drivers/usb/gadget/udc/lpc32xx_udc.c
++++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+@@ -2264,7 +2264,7 @@ static void udc_handle_ep0_setup(struct lpc32xx_udc *udc)
+ 		default:
+ 			break;
+ 		}
+-
++		break;
+ 
+ 	case USB_REQ_SET_ADDRESS:
+ 		if (reqtype == (USB_TYPE_STANDARD | USB_RECIP_DEVICE)) {
+-- 
+2.23.0
+
