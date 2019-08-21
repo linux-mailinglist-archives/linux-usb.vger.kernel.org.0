@@ -2,295 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD898978A3
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 13:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC76978C4
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 14:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728216AbfHULzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 07:55:04 -0400
-Received: from mail-vs1-f73.google.com ([209.85.217.73]:50899 "EHLO
-        mail-vs1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728194AbfHULzD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 07:55:03 -0400
-Received: by mail-vs1-f73.google.com with SMTP id w12so621446vsl.17
-        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2019 04:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=ALxGfvRXdmbGtlmXxys2ao74GC6bY40UmqO1RMzwV3c=;
-        b=BB+B1cynrJTIjRUmdwFTrf471xENpbMGYMHqBQtaW3NPyeEHxaY8A4Iafcf1TF/mZn
-         OXIQ4TWMabQFcspFJLwPwl15L31HK4OKG0stYx6y4zWPKZ/++HVLWQtxM9EBUu/RKrd6
-         dmT0RRyYs/kHMvcdbgS56d4g7mbh4CyLgDvHATC1cPmY/Q/nMT3tepGglRKyA/6kjNs8
-         ChilfULl/9ygU0aUvyRAkEnhEh8yqkuE1vJaOZloaUklpW2AfQEwLeBG5+pcbE51S/bH
-         Y2WV2tp5rrGGJRzU1DlYSmHzWrn50n4eUxYbdkZP/FN19p2Lw+TdKX7b2N2q3UAMS9uw
-         Aprw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=ALxGfvRXdmbGtlmXxys2ao74GC6bY40UmqO1RMzwV3c=;
-        b=j+MXY13P4El9RZZZMSmrrFAtQmLh/+BXkKkttPTwjRuMDWQW5XTtewPb9az53+qR/S
-         NJzgs4yAU8q3cofSNKQs00S4kUyTgK7QHoL8J1V/fhIAPUHvbhBKpj9zx8cE4Pm0sIC8
-         G7TCECf65afOq/DyX2Kmos6yd4U3CV0K540w4+8Fe2v/BpBFqkwCxhJwh3aMCBbZXweE
-         PkqRs86o7RbZH/wKAFkorUoQai3enHJiyIG/M0NB75k1F1qDZP3sYg7qdX2ndr6DT9y1
-         WF62YHSsSrFUh7T7ZSCkBCzsk+Gszjs4JWHijx7ZwzFf+QcVSapEMMSy4WbgprY3oUIu
-         7ISw==
-X-Gm-Message-State: APjAAAWc1tK9BvQL0aqpoTDLZxm6N7qzFlAT2/KONyCmzcofCEp/UJ9q
-        /i3pKu2bXUnyBoD/kg2RXk9z+qjVMdYtnw==
-X-Google-Smtp-Source: APXvYqyQ7AQRoAeQP+Ypa9ZViPo4fE1LYnY2Q8MWSM1uPSggydYnV/3xKKjgSpT4NFAFCXwbS+whv2bLLCyZOw==
-X-Received: by 2002:a67:e906:: with SMTP id c6mr20280699vso.82.1566388501903;
- Wed, 21 Aug 2019 04:55:01 -0700 (PDT)
-Date:   Wed, 21 Aug 2019 12:49:25 +0100
-In-Reply-To: <20190821114955.12788-1-maennich@google.com>
-Message-Id: <20190821114955.12788-11-maennich@google.com>
-Mime-Version: 1.0
-References: <20190813121733.52480-1-maennich@google.com> <20190821114955.12788-1-maennich@google.com>
-X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH v3 10/11] RFC: usb-storage: export symbols in USB_STORAGE namespace
-From:   Matthias Maennich <maennich@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
-        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
-        jeyu@kernel.org, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1726527AbfHUMEB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 08:04:01 -0400
+Received: from mx01-fr.bfs.de ([193.174.231.67]:10816 "EHLO mx01-fr.bfs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726353AbfHUMEB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Aug 2019 08:04:01 -0400
+Received: from mail-fr.bfs.de (mail-fr.bfs.de [10.177.18.200])
+        by mx01-fr.bfs.de (Postfix) with ESMTPS id 82109202D0;
+        Wed, 21 Aug 2019 14:03:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bfs.de; s=dkim201901;
+        t=1566389034; h=from:from:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yAI9WyRyq741kntfMdBwNyhTQQK2NpeiQ77x2zhq+BQ=;
+        b=aVeWyu6USPDyvXYfB5miF1XBugepg3cnr9U6IUyJXjCJMFIWhDCaTK5ijnqze6jdVRDtEt
+        KwQBX5JwC8VVkII9lR+yvLVuQoNTJlI/T7Q4OMAoaP8oXLl0VUqXTeiftGy8spQ5aAtLeJ
+        RU2CCfB/Erl7eMkeRUsDcoPJHU6Xfs4mWHa4PSbJCz1v5POh4C3cKCwcokvRDIYnW+79+6
+        VzJnpdTOasUer2yYWkkCpVxkd8hOy4Q/RwaQozMTElRbth6h2t3Yz4hq2d0b1XeL1auz6s
+        e8x0/bDIphQaLjwWEACZ+201iljooPzxT8XRCglLBVLPGkNC+BCjgA61+A1Lgg==
+Received: from [134.92.181.33] (unknown [134.92.181.33])
+        by mail-fr.bfs.de (Postfix) with ESMTPS id 56F0FBEEBD;
+        Wed, 21 Aug 2019 14:03:54 +0200 (CEST)
+Message-ID: <5D5D332A.3010504@bfs.de>
+Date:   Wed, 21 Aug 2019 14:03:54 +0200
+From:   walter harms <wharms@bfs.de>
+Reply-To: wharms@bfs.de
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.1.16) Gecko/20101125 SUSE/3.0.11 Thunderbird/3.0.11
+MIME-Version: 1.0
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "greg@kroah.com" <greg@kroah.com>
+Subject: Re: problems with Edgeport/416
+References: <5D5D285D.3080908@bfs.de> <741cf63f72e443ba9158c9c123fcccc7@SVR-IES-MBX-03.mgc.mentorg.com>
+In-Reply-To: <741cf63f72e443ba9158c9c123fcccc7@SVR-IES-MBX-03.mgc.mentorg.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.10
+Authentication-Results: mx01-fr.bfs.de
+X-Spamd-Result: default: False [-3.10 / 7.00];
+         ARC_NA(0.00)[];
+         TO_DN_EQ_ADDR_SOME(0.00)[];
+         HAS_REPLYTO(0.00)[wharms@bfs.de];
+         FROM_HAS_DN(0.00)[];
+         RCPT_COUNT_THREE(0.00)[3];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         REPLYTO_ADDR_EQ_FROM(0.00)[];
+         BAYES_HAM(-3.00)[100.00%];
+         DKIM_SIGNED(0.00)[];
+         NEURAL_HAM(-0.00)[-0.998,0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         RCVD_COUNT_TWO(0.00)[2];
+         MID_RHS_MATCH_FROM(0.00)[];
+         RCVD_TLS_ALL(0.00)[]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Modules using these symbols are required to explicitly import the
-namespace. This patch was generated with the following steps and serves
-as a reference to use the symbol namespace feature:
 
- 1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
- 2) make  (see warnings during modpost about missing imports)
- 3) make nsdeps
 
-Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
-variants can be used to explicitly specify the namespace. The advantage
-of the method used here is that newly added symbols are automatically
-exported and existing ones are exported without touching their
-respective EXPORT_SYMBOL macro expansion.
+Am 21.08.2019 13:43, schrieb Schmid, Carsten:
+> Hi Walter,
+> 
+> i had a similar issue with a different device.
+> Please check, if you have dynamic debug enabled in your kernel
+> (/sys/kernel/debug/dynamic_debug/control exists)
+> 
 
-Signed-off-by: Matthias Maennich <maennich@google.com>
----
- drivers/usb/storage/Makefile        | 2 ++
- drivers/usb/storage/alauda.c        | 1 +
- drivers/usb/storage/cypress_atacb.c | 1 +
- drivers/usb/storage/datafab.c       | 1 +
- drivers/usb/storage/ene_ub6250.c    | 1 +
- drivers/usb/storage/freecom.c       | 1 +
- drivers/usb/storage/isd200.c        | 1 +
- drivers/usb/storage/jumpshot.c      | 1 +
- drivers/usb/storage/karma.c         | 1 +
- drivers/usb/storage/onetouch.c      | 1 +
- drivers/usb/storage/realtek_cr.c    | 1 +
- drivers/usb/storage/sddr09.c        | 1 +
- drivers/usb/storage/sddr55.c        | 1 +
- drivers/usb/storage/shuttle_usbat.c | 1 +
- drivers/usb/storage/uas.c           | 1 +
- 15 files changed, 16 insertions(+)
 
-diff --git a/drivers/usb/storage/Makefile b/drivers/usb/storage/Makefile
-index a67ddcbb4e24..46635fa4a340 100644
---- a/drivers/usb/storage/Makefile
-+++ b/drivers/usb/storage/Makefile
-@@ -8,6 +8,8 @@
-=20
- ccflags-y :=3D -I $(srctree)/drivers/scsi
-=20
-+ccflags-y +=3D -DDEFAULT_SYMBOL_NAMESPACE=3DUSB_STORAGE
-+
- obj-$(CONFIG_USB_UAS)		+=3D uas.o
- obj-$(CONFIG_USB_STORAGE)	+=3D usb-storage.o
-=20
-diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
-index 6b8edf6178df..ddab2cd3d2e7 100644
---- a/drivers/usb/storage/alauda.c
-+++ b/drivers/usb/storage/alauda.c
-@@ -36,6 +36,7 @@
- MODULE_DESCRIPTION("Driver for Alauda-based card readers");
- MODULE_AUTHOR("Daniel Drake <dsd@gentoo.org>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /*
-  * Status bytes
-diff --git a/drivers/usb/storage/cypress_atacb.c b/drivers/usb/storage/cypr=
-ess_atacb.c
-index 4825902377eb..a6f3267bbef6 100644
---- a/drivers/usb/storage/cypress_atacb.c
-+++ b/drivers/usb/storage/cypress_atacb.c
-@@ -22,6 +22,7 @@
- MODULE_DESCRIPTION("SAT support for Cypress USB/ATA bridges with ATACB");
- MODULE_AUTHOR("Matthieu Castet <castet.matthieu@free.fr>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /*
-  * The table of devices
-diff --git a/drivers/usb/storage/datafab.c b/drivers/usb/storage/datafab.c
-index 09353be199be..588818483f4b 100644
---- a/drivers/usb/storage/datafab.c
-+++ b/drivers/usb/storage/datafab.c
-@@ -54,6 +54,7 @@
- MODULE_DESCRIPTION("Driver for Datafab USB Compact Flash reader");
- MODULE_AUTHOR("Jimmie Mayfield <mayfield+datafab@sackheads.org>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- struct datafab_info {
- 	unsigned long   sectors;	/* total sector count */
-diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6=
-250.c
-index c26129d5b943..8b1b73065421 100644
---- a/drivers/usb/storage/ene_ub6250.c
-+++ b/drivers/usb/storage/ene_ub6250.c
-@@ -26,6 +26,7 @@
-=20
- MODULE_DESCRIPTION("Driver for ENE UB6250 reader");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
- MODULE_FIRMWARE(SD_INIT1_FIRMWARE);
- MODULE_FIRMWARE(SD_INIT2_FIRMWARE);
- MODULE_FIRMWARE(SD_RW_FIRMWARE);
-diff --git a/drivers/usb/storage/freecom.c b/drivers/usb/storage/freecom.c
-index 4f542df37a44..34e7eaff1174 100644
---- a/drivers/usb/storage/freecom.c
-+++ b/drivers/usb/storage/freecom.c
-@@ -29,6 +29,7 @@
- MODULE_DESCRIPTION("Driver for Freecom USB/IDE adaptor");
- MODULE_AUTHOR("David Brown <usb-storage@davidb.org>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- #ifdef CONFIG_USB_STORAGE_DEBUG
- static void pdump(struct us_data *us, void *ibuffer, int length);
-diff --git a/drivers/usb/storage/isd200.c b/drivers/usb/storage/isd200.c
-index 2b474d60b4db..c4da3fd6eff9 100644
---- a/drivers/usb/storage/isd200.c
-+++ b/drivers/usb/storage/isd200.c
-@@ -53,6 +53,7 @@
- MODULE_DESCRIPTION("Driver for In-System Design, Inc. ISD200 ASIC");
- MODULE_AUTHOR("Bj=C3=B6rn Stenberg <bjorn@haxx.se>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- static int isd200_Initialization(struct us_data *us);
-=20
-diff --git a/drivers/usb/storage/jumpshot.c b/drivers/usb/storage/jumpshot.=
-c
-index 917f170c4124..229bf0c1afc9 100644
---- a/drivers/usb/storage/jumpshot.c
-+++ b/drivers/usb/storage/jumpshot.c
-@@ -51,6 +51,7 @@
- MODULE_DESCRIPTION("Driver for Lexar \"Jumpshot\" Compact Flash reader");
- MODULE_AUTHOR("Jimmie Mayfield <mayfield+usb@sackheads.org>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /*
-  * The table of devices
-diff --git a/drivers/usb/storage/karma.c b/drivers/usb/storage/karma.c
-index 395cf8fb5870..05cec81dcd3f 100644
---- a/drivers/usb/storage/karma.c
-+++ b/drivers/usb/storage/karma.c
-@@ -23,6 +23,7 @@
- MODULE_DESCRIPTION("Driver for Rio Karma");
- MODULE_AUTHOR("Bob Copeland <me@bobcopeland.com>, Keith Bennett <keith@mcs=
-.st-and.ac.uk>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- #define RIO_PREFIX "RIOP\x00"
- #define RIO_PREFIX_LEN 5
-diff --git a/drivers/usb/storage/onetouch.c b/drivers/usb/storage/onetouch.=
-c
-index 39a5009a41a6..a989fe930e21 100644
---- a/drivers/usb/storage/onetouch.c
-+++ b/drivers/usb/storage/onetouch.c
-@@ -25,6 +25,7 @@
- MODULE_DESCRIPTION("Maxtor USB OneTouch hard drive button driver");
- MODULE_AUTHOR("Nick Sillik <n.sillik@temple.edu>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- #define ONETOUCH_PKT_LEN        0x02
- #define ONETOUCH_BUTTON         KEY_PROG1
-diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek=
-_cr.c
-index cc794e25a0b6..edbe419053d6 100644
---- a/drivers/usb/storage/realtek_cr.c
-+++ b/drivers/usb/storage/realtek_cr.c
-@@ -35,6 +35,7 @@
- MODULE_DESCRIPTION("Driver for Realtek USB Card Reader");
- MODULE_AUTHOR("wwang <wei_wang@realsil.com.cn>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- static int auto_delink_en =3D 1;
- module_param(auto_delink_en, int, S_IRUGO | S_IWUSR);
-diff --git a/drivers/usb/storage/sddr09.c b/drivers/usb/storage/sddr09.c
-index bc9da736bdfc..51bcd4a43690 100644
---- a/drivers/usb/storage/sddr09.c
-+++ b/drivers/usb/storage/sddr09.c
-@@ -47,6 +47,7 @@
- MODULE_DESCRIPTION("Driver for SanDisk SDDR-09 SmartMedia reader");
- MODULE_AUTHOR("Andries Brouwer <aeb@cwi.nl>, Robert Baruch <autophile@star=
-band.net>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- static int usb_stor_sddr09_dpcm_init(struct us_data *us);
- static int sddr09_transport(struct scsi_cmnd *srb, struct us_data *us);
-diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
-index b8527c55335b..ba955d65eb0e 100644
---- a/drivers/usb/storage/sddr55.c
-+++ b/drivers/usb/storage/sddr55.c
-@@ -29,6 +29,7 @@
- MODULE_DESCRIPTION("Driver for SanDisk SDDR-55 SmartMedia reader");
- MODULE_AUTHOR("Simon Munton");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /*
-  * The table of devices
-diff --git a/drivers/usb/storage/shuttle_usbat.c b/drivers/usb/storage/shut=
-tle_usbat.c
-index 854498e1012c..54aa1392c9ca 100644
---- a/drivers/usb/storage/shuttle_usbat.c
-+++ b/drivers/usb/storage/shuttle_usbat.c
-@@ -48,6 +48,7 @@
- MODULE_DESCRIPTION("Driver for SCM Microsystems (a.k.a. Shuttle) USB-ATAPI=
- cable");
- MODULE_AUTHOR("Daniel Drake <dsd@gentoo.org>, Robert Baruch <autophile@sta=
-rband.net>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /* Supported device types */
- #define USBAT_DEV_HP8200	0x01
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 047c5922618f..bf80d6f81f58 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -1219,5 +1219,6 @@ static struct usb_driver uas_driver =3D {
- module_usb_driver(uas_driver);
-=20
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
- MODULE_AUTHOR(
- 	"Hans de Goede <hdegoede@redhat.com>, Matthew Wilcox and Sarah Sharp");
---=20
-2.23.0.rc1.153.gdeed80330f-goog
+ll /sys/kernel/debug/dynamic_debug/control
+-rw-r--r-- 1 root root 0 Aug 12 16:15 /sys/kernel/debug/dynamic_debug/control
 
+
+> Then you can enable additional kernel messages using
+> echo -n 'module xhci_hcd =p' > /sys/kernel/debug/dynamic_debug/control
+> echo -n 'module usbcore =p' > /sys/kernel/debug/dynamic_debug/control
+> 
+
+
+> Check which usb related messages you can enable through the dynamic_debug.
+> (doing a "cat /sys/kernel/debug/dynamic_debug/control | grep usb" helps much)
+> 
+I see a bunch of messages. what do you expect me to do ? I have 412 lines, should
+i send them ?
+
+
+
+> Finally, a fine resource is
+> https://www.kernel.org/doc/html/v4.11/admin-guide/dynamic-debug-howto.html
+> 
+I did not know about dynamic-debug, fortunately linux drivers simply work these days :)
+
+re,
+ wh
+
+
+> Best regards
+> Carsten
+> 
+>> -----Ursprüngliche Nachricht-----
+>> Von: linux-usb-owner@vger.kernel.org [mailto:linux-usb-
+>> owner@vger.kernel.org] Im Auftrag von walter harms
+>> Gesendet: Mittwoch, 21. August 2019 13:18
+>> An: linux-usb@vger.kernel.org
+>> Cc: greg@kroah.com
+>> Betreff: problems with Edgeport/416
+>>
+>> Hello List,
+>> does some use linux with an Edgeport/416 ?
+>>
+>> I have a strange problem. the device is resetting soon
+>> after i started using it (but not immediately).
+>> I do not see a kernel OOPS but a common pattern is:
+>>
+>> 2019-08-20T15:19:39.825812+00:00 omnfrmo10 kernel: [683270.658623] usb
+>> 7-1.1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>> 2019-08-20T15:19:39.825818+00:00 omnfrmo10 kernel: [683270.658626] usb
+>> 7-1.1.2: Product: Edgeport/416
+>> 2019-08-20T15:19:39.825821+00:00 omnfrmo10 kernel: [683270.658628] usb
+>> 7-1.1.2: Manufacturer: Digi International
+>> 2019-08-20T15:19:39.825823+00:00 omnfrmo10 kernel: [683270.658630] usb
+>> 7-1.1.2: SerialNumber: E63966100-1
+>> 2019-08-20T15:19:39.985571+00:00 omnfrmo10 kernel: [683270.817909] usb
+>> 7-1.1.2: Edgeport TI 2 port adapter converter now attached to ttyUSB4
+>> 2019-08-20T15:19:39.985594+00:00 omnfrmo10 kernel: [683270.818132] usb
+>> 7-1.1.2: Edgeport TI 2 port adapter converter now attached to ttyUSB5
+>> 2019-08-20T15:19:40.007943+00:00 omnfrmo10 mtp-probe: checking bus 7,
+>> device 88: "/sys/devices/pci0000:00/0000:00:1d.1/usb7/7-1/7-1.1/7-1.1.2"
+>> 2019-08-20T15:19:40.053750+00:00 omnfrmo10 kernel: [683270.885626] usb
+>> 7-1.2.2: New USB device found, idVendor=1608, idProduct=0247
+>> 2019-08-20T15:19:40.053791+00:00 omnfrmo10 kernel: [683270.885630] usb
+>> 7-1.2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>> 2019-08-20T15:19:40.053797+00:00 omnfrmo10 kernel: [683270.885633] usb
+>> 7-1.2.2: Product: Edgeport/416
+>> 2019-08-20T15:19:40.053800+00:00 omnfrmo10 kernel: [683270.885635] usb
+>> 7-1.2.2: Manufacturer: Digi International
+>> 2019-08-20T15:19:40.053803+00:00 omnfrmo10 kernel: [683270.885637] usb
+>> 7-1.2.2: SerialNumber: E63966100-5
+>> 2019-08-20T15:19:40.065569+00:00 omnfrmo10 kernel: [683270.897406] usb
+>> 7-1.1.3: new full-speed USB device number 90 using uhci_hcd
+>> 2019-08-20T15:19:40.213569+00:00 omnfrmo10 kernel: [683271.046316] usb
+>> 7-1.2.2: Edgeport TI 2 port adapter converter now attached to ttyUSB6
+>> 2019-08-20T15:19:40.213594+00:00 omnfrmo10 kernel: [683271.046782] usb
+>> 7-1.2.2: Edgeport TI 2 port adapter converter now attached to ttyUSB7
+>> 2019-08-20T15:19:40.242034+00:00 omnfrmo10 mtp-probe: checking bus 7,
+>> device 89: "/sys/devices/pci0000:00/0000:00:1d.1/usb7/7-1/7-1.2/7-1.2.2"
+>> 2019-08-20T15:19:40.301578+00:00 omnfrmo10 kernel: [683271.133380] usb
+>> 7-1.2.3: new full-speed USB device number 91 using uhci_hcd
+>> 2019-08-20T15:19:40.357559+00:00 omnfrmo10 kernel: [683271.192815] usb
+>> 7-1.1.3: New USB device found, idVendor=1608, idProduct=0247
+>> 2019-08-20T15:19:40.357584+00:00 omnfrmo10 kernel: [683271.192820] usb
+>> 7-1.1.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>> 2019-08-20T15:19:40.357588+00:00 omnfrmo10 kernel: [683271.192822] usb
+>> 7-1.1.3: Product: Edgeport/416
+>> 2019-08-20T15:19:40.357591+00:00 omnfrmo10 kernel: [683271.192825] usb
+>> 7-1.1.3: Manufacturer: Digi International
+>> 2019-08-20T15:19:40.357593+00:00 omnfrmo10 kernel: [683271.192827] usb
+>> 7-1.1.3: SerialNumber: E63966100-2
+>> 2019-08-20T15:19:40.513702+00:00 omnfrmo10 kernel: [683271.349103] usb
+>> 7-1.1.3: Edgeport TI 2 port adapter converter now attached to ttyUSB8
+>> 2019-08-20T15:19:40.513725+00:00 omnfrmo10 kernel: [683271.349311] usb
+>> 7-1.1.3: Edgeport TI 2 port adapter converter now attached to ttyUSB9
+>> 2019-08-20T15:19:40.537138+00:00 omnfrmo10 mtp-probe: checking bus 7,
+>> device 90: "/sys/devices/pci0000:00/0000:00:1d.1/usb7/7-1/7-1.1/7-1.1.3"
+>> 2019-08-20T15:19:40.601754+00:00 omnfrmo10 kernel: [683271.433389] usb
+>> 7-1.1.4: new full-speed USB device number 92 using uhci_hcd
+>> 2019-08-20T15:19:40.601794+00:00 omnfrmo10 kernel: [683271.433631] usb
+>> 7-1.2.3: New USB device found, idVendor=1608, idProduct=0247
+>> 2019-08-20T15:19:40.601798+00:00 omnfrmo10 kernel: [683271.433634] usb
+>> 7-1.2.3: New USB device strings: Mfr=1, Produc
+>>
+>>
+>> I did some experiments (changing cables etc) but always the same. But when
+>> tested with a windows system it worked all fine.
+>> later i used a single port USB->Serial and all worked as expected.
+>>
+>> I tested with: Opensuse 15.1 on a DELL latitude E5400
+>>
+>> uname -a
+>> Linux omnfrmo10 4.12.14-lp151.28.10-vanilla #1 SMP Sat Jul 13 17:59:31 UTC
+>> 2019 (0ab03b7) x86_64 x86_64 x86_64 GNU/Linux
+>>
+>> I would like to improve the situation, does anyone has that device ? any hints
+>> what to look at ?
+>>
+>> please reply direct, i am not member of this list.
+>>
+>> re,
+>>  wh
+>>
+>>
+>>
+>>
+>>
+>>
+>>
+> 
