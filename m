@@ -2,64 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BDF97640
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 11:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF659766F
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 11:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbfHUJcV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 05:32:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37152 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726353AbfHUJcU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Aug 2019 05:32:20 -0400
-Received: from localhost (unknown [12.166.174.13])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6A4A22D6D;
-        Wed, 21 Aug 2019 09:32:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566379939;
-        bh=0woE7KH9qH87RbaubAR04Ak4yDzR/nxmHFuwDbo3cf0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oRGCb3cLAStHY4MBdHaRh1/sWNhi0ENJBPihYDW/gnRJHaFzeYRkI6gBkQq1bBtvc
-         akSm0qTU3RNxqg92RqFdFB1gS62gN3X+wnBHmylRG6/iheS6DAA+R3CwyNJBfdsyST
-         6JaH2hK93VeJ3CDu6/KlNT/8eWf7cht+C7eJSEQs=
-Date:   Wed, 21 Aug 2019 02:32:19 -0700
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: f_mass_storage vs drivers/target
-Message-ID: <20190821093219.GA24207@kroah.com>
-References: <8b5d460e023284a803d5f448655d5c20de711f12.camel@kernel.crashing.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b5d460e023284a803d5f448655d5c20de711f12.camel@kernel.crashing.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1727487AbfHUJyV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 05:54:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44022 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725268AbfHUJyV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Aug 2019 05:54:21 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 192C4ADBB;
+        Wed, 21 Aug 2019 09:54:19 +0000 (UTC)
+Message-ID: <1566380375.8347.11.camel@suse.com>
+Subject: Re: [RFC 2/4] Allow cdc_ncm to set MAC address in hardware
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Charles.Hyde@dellteam.com, linux-acpi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     Mario.Limonciello@dell.com, gregkh@linuxfoundation.org,
+        nic_swsd@realtek.com, netdev@vger.kernel.org
+Date:   Wed, 21 Aug 2019 11:39:35 +0200
+In-Reply-To: <1566339663476.54366@Dellteam.com>
+References: <1566339663476.54366@Dellteam.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 01:38:49PM +1000, Benjamin Herrenschmidt wrote:
-> Hi folks !
+Am Dienstag, den 20.08.2019, 22:21 +0000 schrieb
+Charles.Hyde@dellteam.com:
+> This patch adds support for pushing a MAC address out to USB based
+> ethernet controllers driven by cdc_ncm.  With this change, ifconfig can
+> now set the device's MAC address.  For example, the Dell Universal Dock
+> D6000 is driven by cdc_ncm.  The D6000 can now have its MAC address set
+> by ifconfig, as it can be done in Windows.  This was tested with a D6000
+> using ifconfig.
+
+On a design note, it looks like you broke S4 with the driver.
+Suspend To Disk will cut power and hence reset the MAC to default.
+You need to reset it to the user's setting in reset_resume().
+Please add that to usbnet.
+
 > 
-> It seems that f_mass_storage duplicates (well maybe predates too..) a
-> lot of what's in drivers/target.
+> Signed-off-by: Charles Hyde <charles.hyde@dellteam.com>
+> Cc: Mario Limonciello <mario.limonciello@dell.com>
+> Cc: Oliver Neukum <oliver@neukum.org>
+> Cc: netdev@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  drivers/net/usb/cdc_ncm.c  | 20 +++++++++++++++++++-
+>  drivers/net/usb/usbnet.c   | 37 ++++++++++++++++++++++++++++---------
+>  include/linux/usb/usbnet.h |  1 +
+>  3 files changed, 48 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index 50c05d0f44cb..f77c8672f972 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -750,6 +750,24 @@ int cdc_ncm_change_mtu(struct net_device *net, int new_mtu)
+>  }
+>  EXPORT_SYMBOL_GPL(cdc_ncm_change_mtu);
+>  
+> +/* Provide method to push MAC address to the USB device's ethernet controller.
+> + */
+> +int cdc_ncm_set_mac_addr(struct net_device *net, void *p)
+> +{
+> +	struct usbnet *dev = netdev_priv(net);
+> +	struct sockaddr *addr = p;
+> +
+> +	memcpy(dev->net->dev_addr, addr->sa_data, ETH_ALEN);
+> +	/*
+> +	 * Try to push the MAC address out to the device.  Ignore any errors,
+> +	 * to be compatible with prior versions of this source.
+> +	 */
+> +	usbnet_set_ethernet_addr(dev);
+> +
+> +	return eth_mac_addr(net, p);
+> +}
+> +EXPORT_SYMBOL_GPL(cdc_ncm_set_mac_addr);
+> +
+>  static const struct net_device_ops cdc_ncm_netdev_ops = {
+>  	.ndo_open	     = usbnet_open,
+>  	.ndo_stop	     = usbnet_stop,
+> @@ -757,7 +775,7 @@ static const struct net_device_ops cdc_ncm_netdev_ops = {
+>  	.ndo_tx_timeout	     = usbnet_tx_timeout,
+>  	.ndo_get_stats64     = usbnet_get_stats64,
+>  	.ndo_change_mtu	     = cdc_ncm_change_mtu,
+> -	.ndo_set_mac_address = eth_mac_addr,
+> +	.ndo_set_mac_address = cdc_ncm_set_mac_addr,
 
-It predates it by a long time.
+Why can't this fully go into usbnet?
 
-> Anybody working on implementing a new version of f_mass_storage that
-> is layered upon drivers/target instead ? That would bring quite a lot
-> of additional functionality.
+>  	.ndo_validate_addr   = eth_validate_addr,
+>  };
+>  
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index 72514c46b478..72bdac34b0ee 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -149,20 +149,39 @@ int usbnet_get_ethernet_addr(struct usbnet *dev, int iMACAddress)
+>  	int 		tmp = -1, ret;
+>  	unsigned char	buf [13];
+>  
+> -	ret = usb_string(dev->udev, iMACAddress, buf, sizeof buf);
+> -	if (ret == 12)
+> -		tmp = hex2bin(dev->net->dev_addr, buf, 6);
+> -	if (tmp < 0) {
+> -		dev_dbg(&dev->udev->dev,
+> -			"bad MAC string %d fetch, %d\n", iMACAddress, tmp);
+> -		if (ret >= 0)
+> -			ret = -EINVAL;
+> -		return ret;
+> +	ret = usb_get_address(dev->udev, buf);
+> +	if (ret == 6)
 
-Why is that needed?  What functionality is missing that it will provide?
-Will it make the code simpler?
+If you mean ETH_ALEN, you should use it.
 
-> If not, I might look into it.
+> +		memcpy(dev->net->dev_addr, buf, 6);
+> +	else if (ret < 0) {
+> +		ret = usb_string(dev->udev, iMACAddress, buf, sizeof buf);
+> +		if (ret == 12)
+> +			tmp = hex2bin(dev->net->dev_addr, buf, 6);
+> +		if (tmp < 0) {
+> +			dev_dbg(&dev->udev->dev,
+> +				"bad MAC string %d fetch, %d\n", iMACAddress,
+> +				tmp);
+> +			if (ret >= 0)
+> +				ret = -EINVAL;
+> +			return ret;
 
-Hey, we don't refuse patches, for cleaning stuff up, you know that :)
+Again, you cannot ignore the possibility of getting fewer or more than
+6 bytes.
 
-thanks,
+> +		}
+>  	}
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(usbnet_get_ethernet_addr);
+>  
+> +int usbnet_set_ethernet_addr(struct usbnet *dev)
+> +{
+> +	int ret;
+> +
+> +	ret = usb_set_address(dev->udev, dev->net->dev_addr);
+> +	if (ret < 0) {
+> +		dev_dbg(&dev->udev->dev,
+> +			"bad MAC address put, %d\n", ret);
+> +	}
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(usbnet_set_ethernet_addr);
 
-greg k-h
+What is the purpose of this wrapper?
+
+	Regards
+		Oliver
+
