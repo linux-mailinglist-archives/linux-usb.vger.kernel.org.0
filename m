@@ -2,97 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C6197F73
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 17:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464CF97FC2
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 18:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728030AbfHUPxw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 11:53:52 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:53666 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726371AbfHUPxw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 11:53:52 -0400
-Received: (qmail 5312 invoked by uid 2102); 21 Aug 2019 11:53:51 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 21 Aug 2019 11:53:51 -0400
-Date:   Wed, 21 Aug 2019 11:53:51 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <benjamin.tissoires@redhat.com>,
-        <jikos@kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in hidraw_ioctl
-In-Reply-To: <000000000000940ec30590a1b35e@google.com>
-Message-ID: <Pine.LNX.4.44L0.1908211152230.1816-100000@iolanthe.rowland.org>
+        id S1729019AbfHUQNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 12:13:01 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:55440 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728485AbfHUQNB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 12:13:01 -0400
+Received: by mail-io1-f71.google.com with SMTP id g23so3056114ioh.22
+        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2019 09:13:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Yd53F92BJf3zn8wGZ0U/s186p5/9JYi4U18PT1EI33k=;
+        b=iBmN5Q7+bll7UEldWGvqq+gy0eLVJBYUmnOgbGM9WL5R/i+ADIDjU2ssf3nGOKQCwQ
+         qcnb22Ax8LNs8YM35csAMsEjhp11KOfwVmo9WU1hkj0LAobMN2DDfiV6i7bbFLQ/rQFd
+         Iy6VvNHIDXB+Mg+DghTr+L6Mvl/0pC+IY65QVsVt2Nr8xvH4Iqg0zaL/i9tJMTt1jHjt
+         SSO5g26ent+LrH5N/tnCQ0u6u6CAw6elEdpz999eGvsWDr/KqOmygz0MO97rADRYLv7H
+         OsXbeEbQb2SLk0zs2WAj1sPACBLFHMCX73Al0q5Ap/0JrfZ5FWtKcJT1Uik1HXaLZhCf
+         EQRA==
+X-Gm-Message-State: APjAAAW46i8Zs8hc22jaLkF6EbtvJezNs1lUql9FkpIOlfS174ESVd1T
+        o51yOjl4ZPtELw+/9CSmZMdtFGqP7Mdqp9T1eGta90tdEXax
+X-Google-Smtp-Source: APXvYqxcWw4L/Vqh6e7csZoUh1Wfmtb8A9sqnIV6jLU54MAVbBAkuO9AjSyCECyy2tXi/H0bOGqXzMrcgTX9GXvsiDZcYJ+jvrY/
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a5d:9681:: with SMTP id m1mr6432416ion.291.1566403980448;
+ Wed, 21 Aug 2019 09:13:00 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 09:13:00 -0700
+In-Reply-To: <Pine.LNX.4.44L0.1908211152230.1816-100000@iolanthe.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d45a4c0590a2d8bd@google.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in hidraw_ioctl
+From:   syzbot <syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 21 Aug 2019, syzbot wrote:
+Hello,
 
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer still triggered  
-> crash:
-> KASAN: slab-out-of-bounds Read in hidraw_ioctl
-> 
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in strlen+0x79/0x90 lib/string.c:525
-> Read of size 1 at addr ffff8881d619df38 by task syz-executor.5/2984
-> 
-> CPU: 0 PID: 2984 Comm: syz-executor.5 Not tainted 5.3.0-rc2+ #1
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x6a/0x32c mm/kasan/report.c:351
->   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
->   kasan_report+0xe/0x12 mm/kasan/common.c:612
->   strlen+0x79/0x90 lib/string.c:525
->   strlen include/linux/string.h:281 [inline]
->   hidraw_ioctl+0x245/0xae0 drivers/hid/hidraw.c:446
->   vfs_ioctl fs/ioctl.c:46 [inline]
->   file_ioctl fs/ioctl.c:509 [inline]
->   do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
->   ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
->   __do_sys_ioctl fs/ioctl.c:720 [inline]
->   __se_sys_ioctl fs/ioctl.c:718 [inline]
->   __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
->   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x459829
-> Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
-> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-> ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-> RSP: 002b:00007f19881acc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459829
-> RDX: 0000000000000000 RSI: 0000000080404805 RDI: 0000000000000004
-> RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f19881ad6d4
-> R13: 00000000004c21de R14: 00000000004d5620 R15: 00000000ffffffff
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-Looks like a test is missing in hidraw_ioctl.
+Reported-and-tested-by:  
+syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com
 
-Alan Stern
+Tested on:
 
-#syz test: https://github.com/google/kasan.git e96407b4
+commit:         e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13dca42e600000
 
-Index: usb-devel/drivers/hid/hidraw.c
-===================================================================
---- usb-devel.orig/drivers/hid/hidraw.c
-+++ usb-devel/drivers/hid/hidraw.c
-@@ -370,7 +370,7 @@ static long hidraw_ioctl(struct file *fi
- 
- 	mutex_lock(&minors_lock);
- 	dev = hidraw_table[minor];
--	if (!dev) {
-+	if (!dev || !dev->exist) {
- 		ret = -ENODEV;
- 		goto out;
- 	}
-
+Note: testing is done by a robot and is best-effort only.
