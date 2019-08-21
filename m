@@ -2,76 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20042987AF
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 01:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93069987F1
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 01:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731342AbfHUXNg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 19:13:36 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:54474 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729763AbfHUXNf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 19:13:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=WM7SZ88kyqemBkIYTm2NML5mscgb3zmbfZeZ+GXNIXY=; b=LGr1j52GyKOw/HBHTEYaEj8Hb
-        uA7xSFH9W6skRCtnvb26k+BfEDOTMOQLZ5pwCWM8HwOXugtz2pCIoK6rLI6lixhEVzv4Z8m5yNnJz
-        Qx8xlXi5+HXyevRlwQE5FIV8mAWh+oXFTCQc8E8E9WmokfjsL7VKctjLPqGdsHTxW8ITHyfc3YTe8
-        b7Ai//7E3J9wDTuVpUe6vP3AQdrCPGkrkWfEIMECAmG0AVR4ecNuJUlt8XcUiFs9LkTVxX3TcFJ+I
-        p6RKEpo3+dmRQwHaD5q0tvwK50Ysnd7WrYD3oAvjPpTw9FoeKaVXP9N4ol7y0xXLVVwIDzISdxKDJ
-        wcG1XLSsg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1i0ZnF-00059G-IV; Wed, 21 Aug 2019 23:13:29 +0000
-Date:   Wed, 21 Aug 2019 16:13:29 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com
-Subject: Re: [PATCH v3 10/11] RFC: usb-storage: export symbols in USB_STORAGE
- namespace
-Message-ID: <20190821231329.GA369@infradead.org>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-11-maennich@google.com>
+        id S1729913AbfHUXfM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 19:35:12 -0400
+Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:57510 "EHLO
+        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727401AbfHUXfL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 19:35:11 -0400
+Received: from pps.filterd (m0170398.ppops.net [127.0.0.1])
+        by mx0b-00154904.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7LNZ4aP025860;
+        Wed, 21 Aug 2019 19:35:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dellteam.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=smtpout1;
+ bh=q4aCXQK8l7fOP39/+RDgOcLee9mLAu3DsxxDmf9VKE0=;
+ b=t5aQ4g8wAunVH5pWWy2Nv/K1+dP82rMeRNowXAt4iQDrzVnWEj9cmRJB8Em4QoVKEog6
+ KUQQgQyEACgPMUNtA7ie9soGruCZJwjuQwroa+cPQ1RKg0v2OXYcm9yCvm8x0ygWaKQy
+ vxk2/R8iKUaF9QjbUmHkdxJfQUBK731uegeJMr5Uuq6c0EI+tetO9GL0buQtGQfpcDG8
+ axba1sZFp5RKhVZnmkFNoL0FlyxNeArV+adkIJ2VLlOVo82jqJvfH6o+1sRZ7JzMZGw9
+ QrNkoSfXjO6C1mSw1B3sJYN6nw5B79hmApJNTv6BspWsDIls1gseLQbGM6wxxZUJAeIF 1A== 
+Received: from mx0b-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0b-00154904.pphosted.com with ESMTP id 2ugn6kq2se-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Aug 2019 19:35:09 -0400
+Received: from pps.filterd (m0090350.ppops.net [127.0.0.1])
+        by mx0b-00154901.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7LNYhLx078661;
+        Wed, 21 Aug 2019 19:35:08 -0400
+Received: from ausxipps306.us.dell.com (AUSXIPPS306.us.dell.com [143.166.148.156])
+        by mx0b-00154901.pphosted.com with ESMTP id 2uh9vbmx1t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Aug 2019 19:35:08 -0400
+X-LoopCount0: from 10.166.132.134
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="363526694"
+From:   <Charles.Hyde@dellteam.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <Mario.Limonciello@dell.com>, <oliver@neukum.org>,
+        <netdev@vger.kernel.org>, <nic_swsd@realtek.com>
+Subject: Re: [RFC 1/4] Add usb_get_address and usb_set_address support
+Thread-Topic: [RFC 1/4] Add usb_get_address and usb_set_address support
+Thread-Index: AQHVV6TlN6JhPmp8+EufEIlfFi8+LKcE8QcAgAFHO1A=
+Date:   Wed, 21 Aug 2019 23:35:06 +0000
+Message-ID: <1566430506442.20925@Dellteam.com>
+References: <1566339522507.45056@Dellteam.com>,<20190820222602.GC8120@kroah.com>
+In-Reply-To: <20190820222602.GC8120@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.177.90.69]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190821114955.12788-11-maennich@google.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-21_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=747 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908210231
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=847 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908210232
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 12:49:25PM +0100, Matthias Maennich wrote:
-> Modules using these symbols are required to explicitly import the
-> namespace. This patch was generated with the following steps and serves
-> as a reference to use the symbol namespace feature:
-> 
->  1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
->  2) make  (see warnings during modpost about missing imports)
->  3) make nsdeps
-> 
-> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
-> variants can be used to explicitly specify the namespace. The advantage
-> of the method used here is that newly added symbols are automatically
-> exported and existing ones are exported without touching their
-> respective EXPORT_SYMBOL macro expansion.
-
-So what is USB_STORAGE here?  It isn't a C string, so where does it
-come from?  To me using a C string would seem like the nicer interface
-vs a random cpp symbol that gets injected somewhere.
+<snipped>=0A=
+>=0A=
+> This is a VERY cdc-net-specific function.  It is not a "generic" USB=0A=
+> function at all.  Why does it belong in the USB core?  Shouldn't it live=
+=0A=
+> in the code that handles the other cdc-net-specific logic?=0A=
+>=0A=
+> thanks,=0A=
+>=0A=
+> greg k-h=0A=
+=0A=
+=0A=
+Thank you for this feedback, Greg.  I was not sure about adding this to mes=
+sage.c, because of the USB_CDC_GET_NET_ADDRESS.  I had found references to =
+SET_ADDRESS in the USB protocol at https://wiki.osdev.org/Universal_Serial_=
+Bus#USB_Protocol.  If one wanted a generic USB function for SET_ADDRESS, to=
+ be used for both sending a MAC address and receiving one, how would you su=
+ggest this be implemented?  This is a legit question because I am curious.=
+=0A=
+=0A=
+Your feedback led to moving the functionality into cdc_ncm.c for today's te=
+sting, and removing all changes from messages.c, usb.h, usbnet.c, and usbne=
+t.h.  This may be where I end up long term, but I would like to learn if th=
+ere is a possible solution that could live in message.c and be callable fro=
+m other USB-to-Ethernet aware drivers.=0A=
+=0A=
+Thank you again,=0A=
+Charles Hyde=0A=
+=0A=
