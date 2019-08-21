@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E511697A0F
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 14:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C447797A11
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 14:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728663AbfHUM5j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1728652AbfHUM5j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Wed, 21 Aug 2019 08:57:39 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:34616 "EHLO
+Received: from mail-io1-f70.google.com ([209.85.166.70]:56954 "EHLO
         mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728645AbfHUM5h (ORCPT
+        with ESMTP id S1728455AbfHUM5h (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 08:57:37 -0400
-Received: by mail-io1-f70.google.com with SMTP id u84so2561409iod.1
+Received: by mail-io1-f70.google.com with SMTP id m13so2476808ioj.23
         for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2019 05:57:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
          :from:to:cc;
-        bh=QjkSwzJGqruLUor0WrhXtS14xNGl+DA69ls17YPrtvQ=;
-        b=eMkReGhge4vkUzVOkKImsOf1QGUipLN3nSnthFf7nH80MaPWPWL1GKElAlxDBf+6L9
-         +V6j54de8meqQVvAk5/sUQ5fnckTBQy4d78zl4qihbe5yOrYhyaMutcizZyjIIp4lfwL
-         UYZMYjTk7bNTpdGglk53BB4tpBVdDB3CLQDuM18XemloOR1lMaOxBmH+u990h+2i/4J4
-         LTqTx/w/xRdVwvaWIBsoCOSxVwaTYVEuG/BrzLLxeMnFdlU51BldV2V406ShsW0CICIM
-         20r5AQtgE7S2pGpwDbAIdFZ2yPGHp82DUUZMtAcxhTk6OflfbFdjupYDh/9NvwbxX000
-         4P7Q==
-X-Gm-Message-State: APjAAAUroJd6anr80YPG2+gXtvoMwHjwQ8V8jx2Ag7L5oDS+L6xrt97C
-        sB1sZq1tnNS1StIZuIbcpZArubCltnxUK4FSQHBvjUVe17AJ
-X-Google-Smtp-Source: APXvYqxYnOy2Ml4FXIS5PIdr76pUUL5lwpWpuAJFlnEGyvbEip9TSwDHmd6rHMQNRq1CDA4yW1gaJkf0EcQ02n5bFWst9uKa2Osl
+        bh=VF3uCJoR9wA3sTx4IaRIl15rml5SufmjnMgjqKV8elw=;
+        b=m9kqQsR0o25MrI1tXUxGxZfcI2U6mzcmEZ8Hwakps0gMimepuGRZ79Ae38I10AFrZX
+         CAB2hctSvw5JwrrcoApduuWEn4ONP6+r0Z6R/j8MxfkjB2cMh+s9hWfmtFBxjzGEDlBB
+         C5q7G6lseYmcA81hntl3Agzpo6rt1LX9tsdJ413rDTicK/Y5MCiIDJEiER6xnzT8enSW
+         wNbisLQSfnmQlGMHcaj8RfQyVJbh52EFlopF6B8u0WybvUjwSqVGuxFyCDFHqdLVQIfo
+         hPLIH6P8G6NamUaWOv30G6OVbIDO3Wy7pXd1Sk1ENYGDn1hXCEm+1x60cBIrpH3tNwM1
+         vc6w==
+X-Gm-Message-State: APjAAAVHDJrsx/KLQwOYADLaFNI2lyvXOaU2GuQ6kXpZj4O92s0B6gQr
+        4l67D4xwJbmdLo2XTNOPLdSW9X+2xH++dZyoYgeG1N50KJb0
+X-Google-Smtp-Source: APXvYqwMEGXY3SvKofisC1Eo8CETERB0p4Ih/LAoX1evch3UpONZ1QSlKqBTVUrO8FWc8phNsntqAaOV+RBFEfb4mMDh20H6KKSR
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c802:: with SMTP id y2mr6255924iol.134.1566392256853;
+X-Received: by 2002:a05:6638:348:: with SMTP id x8mr9826036jap.31.1566392256648;
  Wed, 21 Aug 2019 05:57:36 -0700 (PDT)
 Date:   Wed, 21 Aug 2019 05:57:36 -0700
 In-Reply-To: <CAAeHK+zeN+bLTix2yaWDo-iu_G4D8T1KELjds=KVTtywiPpc4g@mail.gmail.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000c820c0590a01e9a@google.com>
+Message-ID: <000000000000095ae90590a01e9a@google.com>
 Subject: Re: Re: KASAN: slab-out-of-bounds Read in hidraw_ioctl
 From:   syzbot <syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com>
-To:     "'Andrey Konovalov' via syzkaller-bugs" 
-        <syzkaller-bugs@googlegroups.com>
-Cc:     benjamin.tissoires@redhat.com, jikos@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -140,11 +140,3 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 want 2 args (repo, branch), got 3
 
-
-> --
-> You received this message because you are subscribed to the Google  
-> Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an  
-> email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit  
-> https://groups.google.com/d/msgid/syzkaller-bugs/CAAeHK%2BzeN%2BbLTix2yaWDo-iu_G4D8T1KELjds%3DKVTtywiPpc4g%40mail.gmail.com.
