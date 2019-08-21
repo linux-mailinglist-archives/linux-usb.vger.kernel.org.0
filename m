@@ -2,92 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5376F9823C
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 20:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54709982A6
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Aug 2019 20:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728036AbfHUSCP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 14:02:15 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33801 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728008AbfHUSCP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 14:02:15 -0400
-Received: by mail-pg1-f196.google.com with SMTP id n9so1764789pgc.1
-        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2019 11:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=ubzr14D/m7NN4Gig+J49yEfObSCnRlFHpZMQCxBRrVE=;
-        b=Rv35xrv1gcfayU9R+qpmA5rQGMwtfLgnRrLjmQlH51d9QkX0YDczI+50P0E1BoCsNr
-         HXcgtPIvxKBSh9TZjiFurL+mwdWWx6RUI/yCQOaPlsFZ4yMkzqpaoRVEQcMeZk+qlGgI
-         hRYTF+OmFOX22XlupG67mIr/N5Orwjlc3P5piwe45L2/wNqoXyFFu257j8F/TtFUm1EV
-         qMKbbxF0xBV39nThclx3/qg+0roqn8ekes/qhsJMELrev+j0UtLh+Xu3tgMRwyk8ewle
-         I+hr4KQ6nWsyHa5+3d4j9zi2TSDc8DN/sG0HkR3u0Kp3jZL10YcL3s5QRdgao2SZpWN8
-         GDVg==
+        id S1728781AbfHUSVW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 14:21:22 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:36539 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728026AbfHUSVV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 14:21:21 -0400
+Received: by mail-oi1-f196.google.com with SMTP id n1so2343705oic.3;
+        Wed, 21 Aug 2019 11:21:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=ubzr14D/m7NN4Gig+J49yEfObSCnRlFHpZMQCxBRrVE=;
-        b=bfW5WRxJnlvX29xvbsKYy0PrnveANVkM9Kc1ChEuT11lSk31iU5IiIrt41E7DwZj/u
-         EbirSv55oWaFa21oQcF/juy8Pqyd5c3JaVOe9XyBJNEOWn+cZgDG7rdn/Z3b1upcMvdb
-         3e/Fg/JQHbNxIiLrVsl73O87CQ4G8B0yIfvSnm/0fhsvsU1MJMx1LLXg/aNgaYgaVnyN
-         qk1FmgkAenMJyOWmMnporX8pA7hKYDw4ort3J2zGMyYuNo6CIKCnFkanHEJh6/YL10Dk
-         0BI1Dz40BjqxI1kplJH41IQILhdoWsF+IbSzYTM3Sx4V/7AeKXEalFTY6g0wSUdAz59y
-         DvEA==
-X-Gm-Message-State: APjAAAXOnz5s8dmWgjWOg5dkKCnpIaBmQrrbC9VGmgGa/iRdKdVyTvBi
-        /uaVTm3NCWl2Gn5j/3VSKwmPMQ==
-X-Google-Smtp-Source: APXvYqzlmjNDEJBXLF4y15j0jF5pl7SHAfLJmB9j2o+pnjNpIbZCoiTyxhWaFefXMOPZ/JAxPpq7qQ==
-X-Received: by 2002:aa7:8c57:: with SMTP id e23mr26690422pfd.48.1566410534247;
-        Wed, 21 Aug 2019 11:02:14 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id y16sm35101574pfc.36.2019.08.21.11.02.13
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 21 Aug 2019 11:02:13 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>, balbi@kernel.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: meson-g12a: fix suspend resume regulator unbalanced disables
-In-Reply-To: <20190821133518.9671-1-narmstrong@baylibre.com>
-References: <20190821133518.9671-1-narmstrong@baylibre.com>
-Date:   Wed, 21 Aug 2019 11:02:12 -0700
-Message-ID: <7h7e76bdnf.fsf@baylibre.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=EPCVlMcnobgA0fbJbdjCw5LDxpNEEaKqZxggEUsbNFc=;
+        b=Omd99dWbcGAsZOSVYnwaQAP0W9p09UZpNm3+4XY+XOqBsuXFOgIX2kDB4N1/0YywQp
+         UVsTHDQLW5okE6BSkOOxUzdVZhxXLN1FVyAEDCYgQ9erxFT1I1tvhyOdTH0opLuJvAsf
+         Od/d2UkkikIQEvrhU93XZs1xniuCyvfvCsUVE7tkc3CNCdwNS+0stq540xppcWXctMX9
+         Q3pwsC0X+XfAPwRJTg6wYDPNd/0nVXpxtBEmAxDVFwzoJet1hOQAbg6SmyPdlAF0gP+b
+         abVMwRow8R21M6WiZanPZqIGu+oyD7dGeMFFAQt4ueZYNktLriY/LIFKA61JaY6RkAxQ
+         BIrw==
+X-Gm-Message-State: APjAAAUgWYIHOgxvS9S2iFyxVaULNdkCR3cDtrfEFYCZdJX9+PyhRBto
+        IhqSaB97f+lbQwWnIXaknw==
+X-Google-Smtp-Source: APXvYqzljOsuL5vh4NhYw0Xh6f/8GopaO3UKaFqvaqCcd3CQe18BV/CQbDvf73/PexmBq1PqNTxRCw==
+X-Received: by 2002:aca:1313:: with SMTP id e19mr1019955oii.5.1566411680554;
+        Wed, 21 Aug 2019 11:21:20 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l16sm7673045otq.42.2019.08.21.11.21.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2019 11:21:20 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 13:21:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Srinath Mannam <srinath.mannam@broadcom.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com
+Subject: Re: [PATCH v2 2/5] dt-bindings: phy: Modify Stingray USB PHY
+ #phy-cells
+Message-ID: <20190821182119.GA27408@bogus>
+References: <1564568395-9980-1-git-send-email-srinath.mannam@broadcom.com>
+ <1564568395-9980-3-git-send-email-srinath.mannam@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1564568395-9980-3-git-send-email-srinath.mannam@broadcom.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Neil Armstrong <narmstrong@baylibre.com> writes:
+On Wed, Jul 31, 2019 at 03:49:52PM +0530, Srinath Mannam wrote:
+> Increase #phy-cells from 1 to 2 to have bitmask of PHY enabled ports.
 
-> When going in suspend, in Device mode, then resuming back leads
-> to the following:
->
-> unbalanced disables for USB_PWR_EN
-> WARNING: CPU: 0 PID: 163 at ../drivers/regulator/core.c:2590 _regulator_disable+0x104/0x180
-> Hardware name: Amlogic Meson G12A U200 Development Board (DT)
-> [...]
-> pc : _regulator_disable+0x104/0x180
-> lr : _regulator_disable+0x104/0x180
-> [...]
-> Call trace:
->  _regulator_disable+0x104/0x180
->  regulator_disable+0x40/0x78
->  dwc3_meson_g12a_otg_mode_set+0x84/0xb0
->  dwc3_meson_g12a_irq_thread+0x58/0xb8
->  irq_thread_fn+0x28/0x80
->  irq_thread+0x118/0x1b8
->  kthread+0xf4/0x120
->  ret_from_fork+0x10/0x18
->
-> This disables the regulator if enabled on suspend, and the reverse on
-> resume.
->
-> Fixes: c99993376f72 ("usb: dwc3: Add Amlogic G12A DWC3 glue")
-> Reported-by: Kevin Hilman <khilman@baylibre.com>
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+And from 0 to 1...
 
-Tested-by: Kevin Hilman <khilman@baylibre.com>
+Are you going to update all the dts files so when we convert this to 
+schema we don't get a bunch of warnings? (Feel free to convert this 
+to schema too).
+
+> 
+> Signed-off-by: Srinath Mannam <srinath.mannam@broadcom.com>
+> ---
+>  .../devicetree/bindings/phy/brcm,stingray-usb-phy.txt      | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/brcm,stingray-usb-phy.txt b/Documentation/devicetree/bindings/phy/brcm,stingray-usb-phy.txt
+> index 4ba2989..aeb0568 100644
+> --- a/Documentation/devicetree/bindings/phy/brcm,stingray-usb-phy.txt
+> +++ b/Documentation/devicetree/bindings/phy/brcm,stingray-usb-phy.txt
+> @@ -6,9 +6,11 @@ Required properties:
+>  	- "brcm,sr-usb-hs-phy" is a single HS PHY.
+>   - reg: offset and length of the PHY blocks registers
+>   - #phy-cells:
+> -   - Must be 1 for brcm,sr-usb-combo-phy as it expects one argument to indicate
+> -     the PHY number of two PHYs. 0 for HS PHY and 1 for SS PHY.
+> -   - Must be 0 for brcm,sr-usb-hs-phy.
+> +   - Must be 2 for brcm,sr-usb-combo-phy.
+> +     - Cell 1 - PHY Number, 0 for HS PHY and 1 for SS PHY.
+> +     - Cell 2 - Bitmask of enabled ports connected to USB Host controller.
+> +   - Must be 1 for brcm,sr-usb-hs-phy to indicate Bit mask of ports connected
+> +     to USB Host controller.
+>  
+>  Refer to phy/phy-bindings.txt for the generic PHY binding properties
+>  
+> @@ -16,17 +18,17 @@ Example:
+>  	usbphy0: usb-phy@0 {
+>  		compatible = "brcm,sr-usb-combo-phy";
+>  		reg = <0x00000000 0x100>;
+> -		#phy-cells = <1>;
+> +		#phy-cells = <2>;
+>  	};
+>  
+>  	usbphy1: usb-phy@10000 {
+>  		compatible = "brcm,sr-usb-combo-phy";
+>  		reg = <0x00010000 0x100>,
+> -		#phy-cells = <1>;
+> +		#phy-cells = <2>;
+>  	};
+>  
+>  	usbphy2: usb-phy@20000 {
+>  		compatible = "brcm,sr-usb-hs-phy";
+>  		reg = <0x00020000 0x100>,
+> -		#phy-cells = <0>;
+> +		#phy-cells = <1>;
+>  	};
+> -- 
+> 2.7.4
+> 
