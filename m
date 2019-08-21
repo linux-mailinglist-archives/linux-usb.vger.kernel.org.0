@@ -2,106 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93069987F1
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 01:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22A9987F5
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 01:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729913AbfHUXfM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 19:35:12 -0400
-Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:57510 "EHLO
-        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727401AbfHUXfL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 19:35:11 -0400
-Received: from pps.filterd (m0170398.ppops.net [127.0.0.1])
-        by mx0b-00154904.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7LNZ4aP025860;
-        Wed, 21 Aug 2019 19:35:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dellteam.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=q4aCXQK8l7fOP39/+RDgOcLee9mLAu3DsxxDmf9VKE0=;
- b=t5aQ4g8wAunVH5pWWy2Nv/K1+dP82rMeRNowXAt4iQDrzVnWEj9cmRJB8Em4QoVKEog6
- KUQQgQyEACgPMUNtA7ie9soGruCZJwjuQwroa+cPQ1RKg0v2OXYcm9yCvm8x0ygWaKQy
- vxk2/R8iKUaF9QjbUmHkdxJfQUBK731uegeJMr5Uuq6c0EI+tetO9GL0buQtGQfpcDG8
- axba1sZFp5RKhVZnmkFNoL0FlyxNeArV+adkIJ2VLlOVo82jqJvfH6o+1sRZ7JzMZGw9
- QrNkoSfXjO6C1mSw1B3sJYN6nw5B79hmApJNTv6BspWsDIls1gseLQbGM6wxxZUJAeIF 1A== 
-Received: from mx0b-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
-        by mx0b-00154904.pphosted.com with ESMTP id 2ugn6kq2se-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Aug 2019 19:35:09 -0400
-Received: from pps.filterd (m0090350.ppops.net [127.0.0.1])
-        by mx0b-00154901.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7LNYhLx078661;
-        Wed, 21 Aug 2019 19:35:08 -0400
-Received: from ausxipps306.us.dell.com (AUSXIPPS306.us.dell.com [143.166.148.156])
-        by mx0b-00154901.pphosted.com with ESMTP id 2uh9vbmx1t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 21 Aug 2019 19:35:08 -0400
-X-LoopCount0: from 10.166.132.134
-X-PREM-Routing: D-Outbound
-X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
-   d="scan'208";a="363526694"
-From:   <Charles.Hyde@dellteam.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <Mario.Limonciello@dell.com>, <oliver@neukum.org>,
-        <netdev@vger.kernel.org>, <nic_swsd@realtek.com>
-Subject: Re: [RFC 1/4] Add usb_get_address and usb_set_address support
-Thread-Topic: [RFC 1/4] Add usb_get_address and usb_set_address support
-Thread-Index: AQHVV6TlN6JhPmp8+EufEIlfFi8+LKcE8QcAgAFHO1A=
-Date:   Wed, 21 Aug 2019 23:35:06 +0000
-Message-ID: <1566430506442.20925@Dellteam.com>
-References: <1566339522507.45056@Dellteam.com>,<20190820222602.GC8120@kroah.com>
-In-Reply-To: <20190820222602.GC8120@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.177.90.69]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1728849AbfHUXiQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 19:38:16 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40270 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727401AbfHUXiQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 19:38:16 -0400
+Received: by mail-pf1-f193.google.com with SMTP id w16so2515796pfn.7
+        for <linux-usb@vger.kernel.org>; Wed, 21 Aug 2019 16:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8Ed/y/emZGSZF5km37/z89Ry407jB+L5UcRsFI/paoA=;
+        b=gYmBNd9T5K/R/1oat0Aeuypqm0J/PbkHD4CifiFDCi+RQ6d229g/b8EhbMk7msuu63
+         QJtBEVe0N81ndsTt4abdGi1dpee8Wq3fJyuAPwtQ4z/8uRjHB+VJaq9+le69LXoED8oy
+         0uHo/R/wcXK3+APJ0gDTO+EA5IA7vofnzoM69RHO7F9WBvlPM6keAvmvcfoRrvak5mVT
+         4LM8Uh50Fp8YvOM+9EjLEB/CouJaOtg7+Y3xqsTS/U7Kc8kSA1loMMxOaMawp/g8ACQD
+         SL4go1+JKss3CJbzZde1VnAYSc4UBeC6ZXou2AwSBmC0VsMFE7EYWbTwEdN6lmRv8+rZ
+         ggIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Ed/y/emZGSZF5km37/z89Ry407jB+L5UcRsFI/paoA=;
+        b=KICuVhNSyKHM5uy14uHLoRUBC+o1xGMu7BbfiyCTeHMGrgyVSnR3m+IEJTbruX7Tvg
+         7Eb9cwoCjq9knRXn2MlWPH6Q9mz6hXqA+og7ztFWuVOp9kVQrhI9BZa2iZcWZk/mkESs
+         myuSpqyhDKE6W2Zj4dlaI7GY89fG9NWPaqePVzJYfvZkqowc3FzXOBKH0si01WzDNaAr
+         PUfSUl536p/dltooDTk00GcI/rNTvXI1hR/wzKHmdfALa1oSGyA98fg5PDuiUsiB8O2g
+         mf4ZDVnrFya/5IeIhzRECRLQ0QkIYGXKJfKyJ6OEbmc8rJGQWPD7LHYZHlapvQdgM0br
+         V0aA==
+X-Gm-Message-State: APjAAAW3cdD84mHwR3slbaw/hUzmbUEXgk8c8ts45FFgrC55bbfc1oM3
+        9uVAAFEfZq3DTXe+MyIpSZujQj5zghaub5x8O51agqGCVreoEw==
+X-Google-Smtp-Source: APXvYqy5xABFa+NpZkB60jucf8WiyzK28DP162BTS7ZMU571bHVUYTyKNnSALTVWuGr6FdgEnCpaE6Tt6nsFMpAjEVc=
+X-Received: by 2002:aa7:9e0a:: with SMTP id y10mr37938375pfq.93.1566430695426;
+ Wed, 21 Aug 2019 16:38:15 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-21_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=747 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908210231
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=847 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908210232
+References: <0000000000003728c00590a83aa5@google.com>
+In-Reply-To: <0000000000003728c00590a83aa5@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 22 Aug 2019 01:38:04 +0200
+Message-ID: <CAAeHK+yom=jre4KwxmUtm=6_5ksLQvj1vF+Tn5udZMKe4g5GCA@mail.gmail.com>
+Subject: Re: WARNING: bad usercopy in hidraw_ioctl
+To:     syzbot <syzbot+fc7106c3bcd1cb7b165c@syzkaller.appspotmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, Qian Cai <cai@lca.pw>,
+        isaacm@codeaurora.org, Kees Cook <keescook@chromium.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        USB list <linux-usb@vger.kernel.org>, psodagud@codeaurora.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-<snipped>=0A=
->=0A=
-> This is a VERY cdc-net-specific function.  It is not a "generic" USB=0A=
-> function at all.  Why does it belong in the USB core?  Shouldn't it live=
-=0A=
-> in the code that handles the other cdc-net-specific logic?=0A=
->=0A=
-> thanks,=0A=
->=0A=
-> greg k-h=0A=
-=0A=
-=0A=
-Thank you for this feedback, Greg.  I was not sure about adding this to mes=
-sage.c, because of the USB_CDC_GET_NET_ADDRESS.  I had found references to =
-SET_ADDRESS in the USB protocol at https://wiki.osdev.org/Universal_Serial_=
-Bus#USB_Protocol.  If one wanted a generic USB function for SET_ADDRESS, to=
- be used for both sending a MAC address and receiving one, how would you su=
-ggest this be implemented?  This is a legit question because I am curious.=
-=0A=
-=0A=
-Your feedback led to moving the functionality into cdc_ncm.c for today's te=
-sting, and removing all changes from messages.c, usb.h, usbnet.c, and usbne=
-t.h.  This may be where I end up long term, but I would like to learn if th=
-ere is a possible solution that could live in message.c and be callable fro=
-m other USB-to-Ethernet aware drivers.=0A=
-=0A=
-Thank you again,=0A=
-Charles Hyde=0A=
-=0A=
+On Thu, Aug 22, 2019 at 12:38 AM syzbot
+<syzbot+fc7106c3bcd1cb7b165c@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    eea39f24 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=128c664c600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d0c62209eedfd54e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=fc7106c3bcd1cb7b165c
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>
+> Unfortunately, I don't have any reproducer for this crash yet.
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+fc7106c3bcd1cb7b165c@syzkaller.appspotmail.com
+>
+> ------------[ cut here ]------------
+> Bad or missing usercopy whitelist? Kernel memory exposure attempt detected
+> from SLUB object 'shmem_inode_cache' (offset 88, size 33)!
+> WARNING: CPU: 0 PID: 3101 at mm/usercopy.c:74 usercopy_warn+0xe8/0x110
+> mm/usercopy.c:74
+> Kernel panic - not syncing: panic_on_warn set ...
+> CPU: 0 PID: 3101 Comm: syz-executor.0 Not tainted 5.3.0-rc5+ #28
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   panic+0x2a3/0x6da kernel/panic.c:219
+>   __warn.cold+0x20/0x4a kernel/panic.c:576
+>   report_bug+0x262/0x2a0 lib/bug.c:186
+>   fixup_bug arch/x86/kernel/traps.c:179 [inline]
+>   fixup_bug arch/x86/kernel/traps.c:174 [inline]
+>   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+>   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+>   invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
+> RIP: 0010:usercopy_warn+0xe8/0x110 mm/usercopy.c:74
+> Code: e8 bd f8 d6 ff 49 89 e9 4c 89 e1 48 89 de 41 57 48 c7 c7 40 f5 cd 85
+> 41 55 41 56 4c 8b 44 24 20 48 8b 54 24 18 e8 9d de ac ff <0f> 0b 48 83 c4
+> 18 e9 45 ff ff ff 48 c7 c5 40 f3 cd 85 49 89 ee 49
+> RSP: 0018:ffff8881c5d07be8 EFLAGS: 00010282
+> RAX: 0000000000000000 RBX: ffffffff85cdf500 RCX: 0000000000000000
+> RDX: 0000000000008303 RSI: ffffffff81288cfd RDI: ffffed1038ba0f6f
+> RBP: ffffffff85cc2ca0 R08: ffff8881c79b0000 R09: ffffed103b645d58
+> R10: ffffed103b645d57 R11: ffff8881db22eabf R12: ffffffff86a6b0c8
+> R13: 0000000000000058 R14: ffffffff85cdf380 R15: 0000000000000021
+>   check_heap_object mm/usercopy.c:234 [inline]
+>   __check_object_size mm/usercopy.c:280 [inline]
+>   __check_object_size+0x327/0x39a mm/usercopy.c:250
+>   check_object_size include/linux/thread_info.h:119 [inline]
+>   check_copy_size include/linux/thread_info.h:150 [inline]
+>   copy_to_user include/linux/uaccess.h:151 [inline]
+>   hidraw_ioctl+0x65f/0xae0 drivers/hid/hidraw.c:440
+>   vfs_ioctl fs/ioctl.c:46 [inline]
+>   file_ioctl fs/ioctl.c:509 [inline]
+>   do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
+>   ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
+>   __do_sys_ioctl fs/ioctl.c:720 [inline]
+>   __se_sys_ioctl fs/ioctl.c:718 [inline]
+>   __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
+>   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x459829
+> Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7
+> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
+> ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+> RSP: 002b:00007f75e27c6c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459829
+> RDX: 00000000200000c0 RSI: 0000000080404804 RDI: 0000000000000003
+> RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f75e27c76d4
+> R13: 00000000004c21c9 R14: 00000000004d5628 R15: 00000000ffffffff
+> Kernel Offset: disabled
+> Rebooting in 86400 seconds..
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+#syz dup: BUG: bad usercopy in hidraw_ioctl
