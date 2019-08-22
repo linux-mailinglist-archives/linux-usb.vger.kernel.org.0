@@ -2,129 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5947098DC2
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 10:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09A998EA2
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 11:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731122AbfHVIcc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 04:32:32 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:39560 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731114AbfHVIcb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 04:32:31 -0400
-Received: by mail-wr1-f66.google.com with SMTP id t16so4556227wra.6
-        for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2019 01:32:30 -0700 (PDT)
+        id S1732888AbfHVJEL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 05:04:11 -0400
+Received: from mail-wm1-f43.google.com ([209.85.128.43]:37258 "EHLO
+        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725710AbfHVJEL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 05:04:11 -0400
+Received: by mail-wm1-f43.google.com with SMTP id d16so4936455wme.2;
+        Thu, 22 Aug 2019 02:04:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=4b70yh01yux8LseDePSC/DiDISC+4IVFYV73p/rz2+o=;
-        b=E8c1BVe7EBu6yhtFK7db335Fb1S6eHZXaT/G0r9s6o7yCfITCEzNdfIuD0wirYp7vb
-         MjBwnsVUgiHDSiSTUkyjG1wIB9iwROJpD58qta21td0tKHQDUmwhpZdduxFB2zp6sebi
-         jvUrA8A2D58nA2kFTgHoHam8Ya25z0Z5isgC5uLEVljRxOWdTmXYFCNu7V4jDwDYcxXO
-         Tn/AhSkcu56p/oJC8gZNa9b0VNYEfc0WGmMiTJsmx6lTnUJ/u4ugOnZ+1Lqv9VyOuAkr
-         NNngborlwcNM9CtXvqO9XoNQpVYvf7o4NuBeerxAGsY42aYL3eOxwqRmbKc320uBtg6u
-         wCNA==
+        bh=dA3XSoMwrPMI58Q8a+wkerU/2zSaJdVuyPcETRQOfjQ=;
+        b=ZiHwmnB3149BndQOngAo91os5FUQN3KLMgdM+6ShFFRlg6CbQk31VLo1Wyn3TpxEO1
+         UVubY6tjKeYO6ux60ulQrRv7DXkC0xWJ94V2xpWjIV2lKhzmF2jJrIWEKGEaHDcdD/z2
+         MPspvEzHnOKE/6zFFB6XUhXf/qVmpn+9wusHBjyAkVmRFw4ITaee4disQT9Ryvm41nv/
+         LYlW5ynT7L9XKaCsFHWHOIUNG9aZ4Js5BEmqbiL1Wg+wAgQJt9rEIN2irEbGzpAaEIJB
+         xrXGcBobxefRYwCFvoArka/ubnCY2PMhuUmReZsUfuLzTxw/4EPmqKinRf1p/G8YPl2P
+         CFGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4b70yh01yux8LseDePSC/DiDISC+4IVFYV73p/rz2+o=;
-        b=OmlqT6g7cWM8lz6MDRqlR7rEXsH/jE0D9YplYfu26/RvP/hJ6F0ru+2iPW0JM54BOP
-         rEndy/driiOwYcBRTB+a3UGBXiqOXR8O8+v5dCUp/zKGULFPqilrCwQRKxmZAS5owwK/
-         2uLQqIOUJmierwq4VHRRDen5bMvxxBVV1ERwaNCeiecTvv8Ll3mpqIi/sWDqmZediCa/
-         tVp/7bTZrcuouvYtMFjd2FxIIGl60mxN/+NepdEdvcTlyPW4r1a7BksA33xnPstIaDWz
-         OFB4BX2zqHixfvZGp5Z4EQppwJp2p626FJD61ZcczjpPDQl9Nz2OXF2RgjVHwUduO2PJ
-         TL4g==
-X-Gm-Message-State: APjAAAXutESxrsNqUMGLbtRyc10qOOpwe2636VSpjbGxflpBDo8gR2kw
-        +XqockJvbLtE+Mjkjr8kyyicng==
-X-Google-Smtp-Source: APXvYqzhncQ2sLyFAXkyHMIdbyY5WIElP1PH9XUf0yABxgLd2l6QYEsJKT4aB0mYksaQ3+iKPSinPA==
-X-Received: by 2002:a5d:4ec6:: with SMTP id s6mr7356600wrv.327.1566462748883;
-        Thu, 22 Aug 2019 01:32:28 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id p4sm22917436wrs.6.2019.08.22.01.32.26
+        bh=dA3XSoMwrPMI58Q8a+wkerU/2zSaJdVuyPcETRQOfjQ=;
+        b=OGS6UG9/VpsqxvAufmiX+VGN/BRuk4+IzJvw7vRveyBHurQ8IDNJ1AqyL7GkaNXeP0
+         9HF+0DN3WUx6uwNqwOhI29eIMNHxNqPWXfwmrc/mH+pgmC+FKYI2Oz7gG5rLiObRdSVL
+         u/IaDg31juAYALJ9ZJzb8E2oy6muWaF4QqnpDKV9RdrtPPB/jxJz9oSigfcFb6+mMPKU
+         XfBpzgwbWNnBLk2oqk+BQG8zhYA0meXG+riK+fGozrKGi2JEQL8xbpI39GrtQ4aMMjLd
+         IhvUasPLz9Ztg489J27Wyvw/clXCGOQHRDZiTvhUDz6Db7PbHeS3jNuaR+HgrXpdYC6w
+         CYSQ==
+X-Gm-Message-State: APjAAAWtqMY95zgYQ7Ar1fmQHFUdpEiwbWwqKvo3zz3rXumUtm+w1mRh
+        MFi76jq9rJOpRo3inFWSSUc=
+X-Google-Smtp-Source: APXvYqyM1JgKMZ+vZKE2OMqsVkFJVFHCE5zfpkgNBjuL/GR+titmH87d584tGaTOFAwQoyObtshHcg==
+X-Received: by 2002:a7b:c0d4:: with SMTP id s20mr4701246wmh.122.1566464648768;
+        Thu, 22 Aug 2019 02:04:08 -0700 (PDT)
+Received: from localhost (pD9E51890.dip0.t-ipconnect.de. [217.229.24.144])
+        by smtp.gmail.com with ESMTPSA id i5sm26916945wrn.48.2019.08.22.02.04.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 01:32:27 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 09:32:23 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com
-Subject: Re: [PATCH v3 10/11] RFC: usb-storage: export symbols in USB_STORAGE
- namespace
-Message-ID: <20190822083223.GA15709@google.com>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-11-maennich@google.com>
- <20190821231329.GA369@infradead.org>
+        Thu, 22 Aug 2019 02:04:07 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 11:04:05 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [Patch V6 3/8] phy: tegra: xusb: Add vbus override support on
+ Tegra210
+Message-ID: <20190822090405.GA23873@ulmo>
+References: <1565257046-9890-1-git-send-email-nkristam@nvidia.com>
+ <1565257046-9890-4-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3V7upXqbjpZ4EhLz"
 Content-Disposition: inline
-In-Reply-To: <20190821231329.GA369@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1565257046-9890-4-git-send-email-nkristam@nvidia.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 04:13:29PM -0700, Christoph Hellwig wrote:
->On Wed, Aug 21, 2019 at 12:49:25PM +0100, Matthias Maennich wrote:
->> Modules using these symbols are required to explicitly import the
->> namespace. This patch was generated with the following steps and serves
->> as a reference to use the symbol namespace feature:
->>
->>  1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
->>  2) make  (see warnings during modpost about missing imports)
->>  3) make nsdeps
->>
->> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
->> variants can be used to explicitly specify the namespace. The advantage
->> of the method used here is that newly added symbols are automatically
->> exported and existing ones are exported without touching their
->> respective EXPORT_SYMBOL macro expansion.
->
->So what is USB_STORAGE here?  It isn't a C string, so where does it
->come from?  To me using a C string would seem like the nicer interface
->vs a random cpp symbol that gets injected somewhere.
 
-To be honest, I would also prefer an interface that uses C strings or
-literals for the new EXPORT_SYMBOLS* macros:
+--3V7upXqbjpZ4EhLz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  EXPORT_SYMBOL_NS(mysym, "USB_STORAGE");
+On Thu, Aug 08, 2019 at 03:07:21PM +0530, Nagarjuna Kristam wrote:
+> Tegra XUSB device control driver needs to control vbus override
+> during its operations, add API for the support.
+>=20
+> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+> ---
+>  drivers/phy/tegra/xusb-tegra210.c | 57 +++++++++++++++++++++++++++++++++=
+++++++
+>  drivers/phy/tegra/xusb.c          | 22 +++++++++++++++
+>  drivers/phy/tegra/xusb.h          |  2 ++
+>  include/linux/phy/tegra/xusb.h    |  4 ++-
+>  4 files changed, 84 insertions(+), 1 deletion(-)
 
-  or
+Looks good to me now:
 
-  const char USB_STORAGE_NS[] = "USB_STORAGE";
-  EXPORT_SYMBOL_NS(mysym, USB_STORAGE_NS);
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-The DEFAULT_SYMBOL_NAMESPACE define within Makefiles would get a bit
-more verbose in that case to express the literal:
-  ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE="\"USB_STORAGE\""
+--3V7upXqbjpZ4EhLz
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-The main reason against that, is, that in the expansion of
-EXPORT_SYMBOL_NS, we define the ksymtab entry, which name is
-constructed partly by the name of the namespace:
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1eWmsACgkQ3SOs138+
+s6GMXA//Skz6gnJmtE8Ur8PyRUzhgnGTgTmOxKB2Eqph9x640DbHwX3XjzU0DbR7
+1gpiy1bwIoeqsfelBbpAXOV6Tuvj6xv83MRJcrTvp8yeg870jhVvF4XuUVs54d7X
+ptM/hOpLapZg0AQ9YwKN77j7F1/8JzXymtpAHfUyB78CCM5RjXg3tQXxBjGGQ+z1
+niHWBdGHp9xD7yBU/AWrgu4SKPuN1yQrpYImDq2bkY8aAjf2m/yD8gsEPTzrLi21
+K4/KwUnrabUs5hFrNx0k+mXQhazvmWo1g/+/6akL5Rk1Weaoll9ArW0UKiOluqDq
+JsVVnv0+KUHZamAET9u9zQwKPRIHcC+6q0GvGWp43Ffbr+3zuxbAPT3hxWOfxD9P
+c3yHB6FqchaCyDDH3CufuxB6c7yemd95JpSFvMtafFn3szFzt89RYLKLWo6divwD
+CrOPfPDC2O8rj/ZYAy/mEYMw7qaFxpDBdkRAYyj95tZmAFBKcbdc9/v1XD4XUYjN
+FHSthiL9Q68WBwb3fHh6NMfr/ewCuRKI6bRWP84S3Mwo/hEwDhlmOwrs/23bhStJ
+Ll7fhBhV6Ur/FpPRmyhcp+IyxwAJiQfz4zmG0ekcNjthsl/BAnw/j/U74dhpO1D/
+kMtQLvtCzWB/NAUMfWD+PVsV2e72IoQ238cEpo6HotLdUeuAvM4=
+=IEah
+-----END PGP SIGNATURE-----
 
-   static const struct kernel_symbol __ksymtab_##sym##__##ns  ...
-                                                        ^^^^
-
-For that we depend on a cpp symbol to construct the name. I am not sure
-there is a reasonable way of getting rid of that without ending up
-constructing the ksymtab entries completely in asm as it is already done
-in case of PREL32_RELOCATIONS. But I am happy to be corrected.
-
-For reference that is done in patch 03/11 of this series:
-https://lore.kernel.org/lkml/20190821114955.12788-4-maennich@google.com/
-
-Cheers,
-Matthias
+--3V7upXqbjpZ4EhLz--
