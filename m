@@ -2,103 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D08F995B0
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 15:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA4F995D6
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 16:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732101AbfHVN7T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 09:59:19 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:38693 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732074AbfHVN7T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 09:59:19 -0400
-Received: by mail-pl1-f194.google.com with SMTP id w11so3058180plp.5;
-        Thu, 22 Aug 2019 06:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=gQMErqPW+Y+kyijobMVXbQaJgQ9U/p2mbhMShsZvhmY=;
-        b=tbdGs/7b5IYevDXx+SAWNGYEyip3VRS9QZ3yImh2nJ/Z9tgTGX+k8kX0/XTlhuOy4J
-         Ey6C8iymNu46T8xiFw7oZ3/cXx9FBg58J6g1a3vxrPBRMQ1aPQ+otf4a/i4wUdwWxpnN
-         kvJ3HshSmOkDIHTQrghV10SdhQG1W/4jCcQbehZLz4pulKIkHAtVtmA06vtRm05p+tVH
-         ZCSOIX5+2dawJP9Cgn4y6ci+z9O4rPHgzU63kMx7A5qS7PUEInbo3yxz6mt/Uh6HMk/+
-         zVzxEosK3Q7lM9hJBHo+aqg58hsgvlZiaBLbFasi5VnDrKTQiiRDvVbRbs5DJRkppGu1
-         q/Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gQMErqPW+Y+kyijobMVXbQaJgQ9U/p2mbhMShsZvhmY=;
-        b=Ltszalk+Jdagi9CWkRpvifL6EVBR52tCHaA/CbaBJw7gIM1Xk2qPOVysnKqtT9slMd
-         qP/b9a4ARANnNyLKBUvIRldGxptZGIS9buHF2IEUjijkKPAsoYhVocpdrL2Aoexov68s
-         VbY/7sWg/emPX2hC3wBUoATqNNYHeFmUqMnguCl3EwDJCs3PcSe8H9hywO4ihBlY408+
-         nTiJ2/oRkuVwaDptQ07pq1z+/bSsH/xckYNM+B9nq5e7avjl01/uBKXdQJ4bN/kL6rLl
-         mDe9EhPLBRsQiDRtfF9PGF4OXWcJrV/+0fKfDSu8E3lhmUcN2m5DUrJcvEhgqq+B+yfx
-         cnBg==
-X-Gm-Message-State: APjAAAVUjN3ssVXziJ+Dp/3rCZKURO+4sxUqLLngDodoGdp1vwz0/mu2
-        Gx/i3rG9HkyYH9mBmvWj83k=
-X-Google-Smtp-Source: APXvYqxxFMSue8E1e+xVFW8I5bTOFVzjtqZ4z3kHW7Zq9wWlq6SPsozB8axnGLvnvTwawGipkiE2bA==
-X-Received: by 2002:a17:902:1a4:: with SMTP id b33mr38545181plb.141.1566482358390;
-        Thu, 22 Aug 2019 06:59:18 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p10sm29038551pff.132.2019.08.22.06.59.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 22 Aug 2019 06:59:17 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 06:59:16 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Badhri Jagan Sridharan <badhri@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        id S1732703AbfHVOG2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 10:06:28 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43766 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732658AbfHVOG1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Aug 2019 10:06:27 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id AB216AC47;
+        Thu, 22 Aug 2019 14:06:25 +0000 (UTC)
+Message-ID: <1566482782.8347.51.camel@suse.com>
+Subject: Re: WARNING in rollback_registered_many (2)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        syzbot <syzbot+40918e4d826fb2ff9b96@syzkaller.appspotmail.com>,
+        USB list <linux-usb@vger.kernel.org>
+Cc:     Kai Heng Feng <kai.heng.feng@canonical.com>, tyhicks@canonical.com,
+        "David S. Miller" <davem@davemloft.net>,
+        devel@driverdev.osuosl.org, straube.linux@gmail.com,
+        Eric Dumazet <edumazet@google.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        florian.c.schilhabel@googlemail.com,
+        Matthew Wilcox <willy@infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] typec: tcpm: fix a typo in the comparison of
- pdo_max_voltage
-Message-ID: <20190822135916.GC8144@roeck-us.net>
-References: <20190822135212.10195-1-colin.king@canonical.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190822135212.10195-1-colin.king@canonical.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, avagin@virtuozzo.com,
+        ktkhai@virtuozzo.com, "Eric W . Biederman" <ebiederm@xmission.com>
+Date:   Thu, 22 Aug 2019 16:06:22 +0200
+In-Reply-To: <CAAeHK+w+asSQ3axWymToQ+uzPfEAYS2QimVBL85GuJRBtxkjDA@mail.gmail.com>
+References: <000000000000d9f094057a17b97b@google.com>
+         <000000000000b439370586498dff@google.com>
+         <CAAeHK+zUHJswwHfVUCV0qTgvFVFZpT0hJqioLyYgbA0yQC0H8Q@mail.gmail.com>
+         <CAAeHK+w+asSQ3axWymToQ+uzPfEAYS2QimVBL85GuJRBtxkjDA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 02:52:12PM +0100, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> There appears to be a typo in the comparison of pdo_max_voltage[i]
-> with the previous value, currently it is checking against the
-> array pdo_min_voltage rather than pdo_max_voltage. I believe this
-> is a typo. Fix this.
-> 
-> Addresses-Coverity: ("Copy-paste error")
-> Fixes: 5007e1b5db73 ("typec: tcpm: Validate source and sink caps")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Am Mittwoch, den 07.08.2019, 16:03 +0200 schrieb Andrey Konovalov:
 
-I think you are correct.
+I may offer a preliminary analysis.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+	Regards
+		Oliver
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 166b28562395..96562744101c 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1439,7 +1439,7 @@ static enum pdo_err tcpm_caps_err(struct tcpm_port *port, const u32 *pdo,
->  				else if ((pdo_min_voltage(pdo[i]) ==
->  					  pdo_min_voltage(pdo[i - 1])) &&
->  					 (pdo_max_voltage(pdo[i]) ==
-> -					  pdo_min_voltage(pdo[i - 1])))
-> +					  pdo_max_voltage(pdo[i - 1])))
->  					return PDO_ERR_DUPE_PDO;
->  				break;
->  			/*
-> -- 
-> 2.20.1
-> 
+> On Fri, Apr 12, 2019 at 1:32 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> > 
+> > On Fri, Apr 12, 2019 at 1:29 AM syzbot
+> > <syzbot+40918e4d826fb2ff9b96@syzkaller.appspotmail.com> wrote:
+> > > 
+> > > syzbot has found a reproducer for the following crash on:
+> > > 
+> > > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+> > > git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10d552b7200000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=40918e4d826fb2ff9b96
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a4c1af200000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=121b274b200000
+> > > 
+> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > Reported-by: syzbot+40918e4d826fb2ff9b96@syzkaller.appspotmail.com
+> > > 
+> > > usb 1-1: r8712u: MAC Address from efuse = 00:e0:4c:87:00:00
+> > > usb 1-1: r8712u: Loading firmware from "rtlwifi/rtl8712u.bin"
+> > > usb 1-1: USB disconnect, device number 2
+
+Disconnect will run which leads to
+
+static void r871xu_dev_remove(struct usb_interface *pusb_intf)
+{
+        struct net_device *pnetdev = usb_get_intfdata(pusb_intf);
+        struct usb_device *udev = interface_to_usbdev(pusb_intf);
+
+        if (pnetdev) {
+
+^^^ This is supposed to save us
+
+                struct _adapter *padapter = netdev_priv(pnetdev);
+
+                usb_set_intfdata(pusb_intf, NULL);
+                release_firmware(padapter->fw);
+                /* never exit with a firmware callback pending */
+                wait_for_completion(&padapter->rtl8712_fw_ready);
+                if (drvpriv.drv_registered)
+                        padapter->surprise_removed = true;
+                unregister_netdev(pnetdev); /* will call netdev_close() */
+
+So we will call unregister_netdev()
+
+
+> > > usb 1-1: Direct firmware load for rtlwifi/rtl8712u.bin failed with error -2
+> > > usb 1-1: r8712u: Firmware request failed
+
+So we ran into the error handling of:
+
+
+static void rtl871x_load_fw_cb(const struct firmware *firmware, void *context)
+{
+        struct _adapter *adapter = context;
+
+
+        complete(&adapter->rtl8712_fw_ready);
+        if (!firmware) {
+                struct usb_device *udev = adapter->dvobjpriv.pusbdev;
+                struct usb_interface *usb_intf = adapter->pusb_intf;
+
+
+                dev_err(&udev->dev, "r8712u: Firmware request failed\n");
+                usb_put_dev(udev);
+                usb_set_intfdata(usb_intf, NULL);
+
+^^^ This is supposed to save us from deregistering an unregistered device
+	but it comes too late. We have already called complete.
+
+                return;
+        }
+        adapter->fw = firmware;
+        /* firmware available - start netdev */
+        register_netdev(adapter->pnetdev);
+
+register_netdev() is not called.
+> > > Kernel panic - not syncing: panic_on_warn set ...
+> > > CPU: 0 PID: 575 Comm: kworker/0:4 Not tainted 5.1.0-rc4-319354-g9a33b36 #3
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > > Google 01/01/2011
+> > > Workqueue: usb_hub_wq hub_event
+> > > Call Trace:
+> > >   __dump_stack lib/dump_stack.c:77 [inline]
+> > >   dump_stack+0xe8/0x16e lib/dump_stack.c:113
+> > >   panic+0x29d/0x5f2 kernel/panic.c:214
+> > >   __warn.cold+0x20/0x48 kernel/panic.c:571
+> > >   report_bug+0x262/0x2a0 lib/bug.c:186
+> > >   fixup_bug arch/x86/kernel/traps.c:179 [inline]
+> > >   fixup_bug arch/x86/kernel/traps.c:174 [inline]
+> > >   do_error_trap+0x130/0x1f0 arch/x86/kernel/traps.c:272
+> > >   do_invalid_op+0x37/0x40 arch/x86/kernel/traps.c:291
+> > >   invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:973
+
+This kills us.
+
+> > > RIP: 0010:rollback_registered_many+0x1f3/0xe70 net/core/dev.c:8152
+> > > Code: 05 00 00 31 ff 44 89 fe e8 5a 15 f3 f4 45 84 ff 0f 85 49 ff ff ff e8
+> > > 1c 14 f3 f4 0f 1f 44 00 00 e8 12 14 f3 f4 e8 0d 14 f3 f4 <0f> 0b 4c 89 e7
+> > > e8 33 72 f2 f6 31 ff 41 89 c4 89 c6 e8 27 15 f3 f4
+> > > RSP: 0018:ffff88809d087698 EFLAGS: 00010293
+> > > RAX: ffff88809d058000 RBX: ffff888096240000 RCX: ffffffff8c7eb146
+> > > RDX: 0000000000000000 RSI: ffffffff8c7eb163 RDI: 0000000000000001
+> > > RBP: ffff88809d0877c8 R08: ffff88809d058000 R09: fffffbfff2708111
+> > > R10: fffffbfff2708110 R11: ffffffff93840887 R12: ffff888096240070
+> > > R13: dffffc0000000000 R14: ffff88809d087758 R15: 0000000000000000
+> > >   rollback_registered+0xf7/0x1c0 net/core/dev.c:8228
+> > >   unregister_netdevice_queue net/core/dev.c:9275 [inline]
+> > >   unregister_netdevice_queue+0x1dc/0x2b0 net/core/dev.c:9268
+> > >   unregister_netdevice include/linux/netdevice.h:2655 [inline]
+> > >   unregister_netdev+0x1d/0x30 net/core/dev.c:9316
+> > >   r871xu_dev_remove+0xe7/0x223 drivers/staging/rtl8712/usb_intf.c:604
+
+We end up here:
+
+static void rollback_registered_many(struct list_head *head)
+{
+        struct net_device *dev, *tmp;
+        LIST_HEAD(close_head);
+
+
+        BUG_ON(dev_boot_phase);
+        ASSERT_RTNL();
+
+
+        list_for_each_entry_safe(dev, tmp, head, unreg_list) {
+                /* Some devices call without registering
+                 * for initialization unwind. Remove those
+                 * devices and proceed with the remaining.
+                 */
+                if (dev->reg_state == NETREG_UNINITIALIZED) {
+                        pr_debug("unregister_netdevice: device %s/%p never was registered\n",
+                                 dev->name, dev);
+
+
+                        WARN_ON(1);
+
+
