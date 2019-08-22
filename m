@@ -2,137 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4845598F22
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 11:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D593398FA2
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 11:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733160AbfHVJTH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 05:19:07 -0400
-Received: from mail-wr1-f41.google.com ([209.85.221.41]:39503 "EHLO
-        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733151AbfHVJTF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 05:19:05 -0400
-Received: by mail-wr1-f41.google.com with SMTP id t16so4691264wra.6
-        for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2019 02:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=8fMTG6N2j/TMUB2P1ujx2DtHjddT/TmmdRfnCuZ9XY0=;
-        b=T2pMI6y+G8IKrsK8J/v9Hw6Ze7VNU1QAegTQBtAa7YoAqIMV7jl4rsOxqLr2uKv+7E
-         qU8OpzWDLx9aa2GeALCMNY10DH8xUmpEvSQpL0ayo6EJseiHy6wUP019c/nCCacrOqhB
-         QB+3d2H2f0vEl7LtOw9XPlAwhFizRTqjD3JcaH9+n+VKUvYDS9r4fRpDwq0+iXaszL13
-         J3sknRZdTSR9IJXI8txUWEFdl9+uB5tH3eqzTb0H6t3MUJTXPo1J+pZxj4+FMYBI1PHv
-         B9TvUD/P3C3CaL5RpMtkMMjLBIWW2hdg5F7iwFp/hNbtITgX9r32GojgJ+PW0XbAEkM3
-         Pdcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=8fMTG6N2j/TMUB2P1ujx2DtHjddT/TmmdRfnCuZ9XY0=;
-        b=kR4CkgYU+ImhpoQEHknJUSIC5eZTzUZ5/YddGg0373IJRMaswpZ5a/zUruix0u+FBo
-         xOhUp8/tZ1/ANpvyKO+ZMaTH61mMOhU9sBjzzdqlIJ7bjifesxXNPy9OOy+p/Hq6fPqv
-         DKVSXbBgFo4EjPg3VRYM/oCZdarFnNeLNUvdFuFBx5h/uFhraP+ONMHhLvIIfZIunW6M
-         p4zzrz+5vZSS6QedhYICJayVbyrms6eQ70YqFS5tVAI4tTSLYrqGBcnU/vVSzqiVxdQV
-         yTP8+1jpXmqSFSBHf98vvDzJ8ic35SxkM9MYqIK4n8YHxp0wQVaPDDPOXruHenvRBumA
-         Rs6g==
-X-Gm-Message-State: APjAAAV5I/xqweBU8tgrGfRQaBOiGQuZryXYNZXnRTWt18L9quQXryey
-        Wc63l1h0PgRD7wOiYQdqQSqaGw==
-X-Google-Smtp-Source: APXvYqzPaTB9as2RdUevNC/gvIlaqvXJBR28ZGeYWGl/cnFEEuvQi+58LrWHZHhwnpFu/CiJ7AkAEg==
-X-Received: by 2002:a5d:4101:: with SMTP id l1mr4986587wrp.202.1566465543440;
-        Thu, 22 Aug 2019 02:19:03 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id 4sm46118162wro.78.2019.08.22.02.19.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 02:19:02 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 10:18:58 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Julia Lawall <Julia.Lawall@lip6.fr>,
-        Martijn Coenen <maco@android.com>, cocci@systeme.lip6.fr,
-        kernel-janitors@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        kernel-team@android.com, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Gilles Muller <Gilles.Muller@lip6.fr>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Martijn Coenen <maco@google.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Oliver Neukum <oneukum@suse.com>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sandeep Patil <sspatil@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [v2 08/10] scripts: Coccinelle script for namespace dependencies
-Message-ID: <20190822091858.GA60652@google.com>
-References: <20190813121733.52480-9-maennich@google.com>
- <1c4420f4-361c-7358-49d9-87d8a51f7920@web.de>
+        id S1731731AbfHVJeK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 05:34:10 -0400
+Received: from esa4.mentor.iphmx.com ([68.232.137.252]:6849 "EHLO
+        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731209AbfHVJeJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 05:34:09 -0400
+IronPort-SDR: 8mf43iBkllaNghz36lCCfRuX6X21cdXD5xZYk59ImiPdhIYJ5ghRtxfr3CfJd79TskO1WCBEH3
+ nqQ6TWMkDPUSXQlq8liAY2j2uBZHpLUd2f3hVjcsqlyf+Lyx5ka82P1+31dTJb8tKnU8WXq143
+ hGE3ujyFvGt36RsxZJsc8jM0EAnohY4DwS+GKP/8QhiwuP707mLXGYvdY/4ZHLKGTCP+dUZtdG
+ mlRx2QCGUR2eeHJGSQzZuYLbl/37+TNH6mF6d/WzMrj70oRuO1OmWPxa1rRhLYjcml0afc3c1B
+ DOU=
+X-IronPort-AV: E=Sophos;i="5.64,416,1559548800"; 
+   d="scan'208";a="40677369"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa4.mentor.iphmx.com with ESMTP; 22 Aug 2019 01:34:08 -0800
+IronPort-SDR: vBF9ZHGzfp0f4QtCTZPNuCgbEvfKi2VvOYN55r64v+pWw47TADneOuvXY1LYI7whMm0QQ6q+w1
+ USg1S1Q9VVMvPrzS3fZsnROemikNbE7ULTJ7Ub28R8mzrU674EVWO3EFZOD4Gjs0vCMR/zCe/7
+ sooYxpwC0qS0Pm8ocF+DHOFM6+gZecDeN5/YoZ/enHTTwZmEjlSj9PAw8t8fed1iU8l/xxOS9W
+ xQ4CoDTvHxWawLtWFJ1CpeWS8wJ1JYcDol4BAhBx6bK6Tt9lHn6HUEkgzUl0nGycrwnAhUhjSu
+ AKs=
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     Fawad Lateef <fawadlateef@gmail.com>
+CC:     Bjorn Helgaas <helgaas@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: AW: Unhandled fault: imprecise external abort (0x1406) when loading
+ xhci_pci.ko - uPD720202, PEX8605, iMX6Q and linux-4.19.25
+Thread-Topic: Unhandled fault: imprecise external abort (0x1406) when loading
+ xhci_pci.ko - uPD720202, PEX8605, iMX6Q and linux-4.19.25
+Thread-Index: AQHVSEHAMPaxqF08hEykKiPIRN/jH6bmeLKAgAEMruCAABtagIAfUy8AgAAUnVA=
+Date:   Thu, 22 Aug 2019 09:34:02 +0000
+Message-ID: <5c4bae3d066e4f1084c7eeb394b8a7d7@SVR-IES-MBX-03.mgc.mentorg.com>
+References: <CAGgoGu5FfLFzCf0QiAd8UcMrZ7gtLyapgT3TZ-Hx0dknWy4LMQ@mail.gmail.com>
+ <CAGgoGu4zP_7QpKHiXSkLfkb=zHEezBzstVfjQMQ4CO60+YubCw@mail.gmail.com>
+ <CAGgoGu7rot61LSgu2syOMq9Onx26_u3PEtS7pf_QNQRxOaifhg@mail.gmail.com>
+ <20190801171725.GD151852@google.com>
+ <743ef7fab5144df69bfc8673fff7f0f7@SVR-IES-MBX-03.mgc.mentorg.com>
+ <CAGgoGu4ZZR3ZVD5mx_oJN_8gwNM4fa=of=erwM+P8P7zzaMDrQ@mail.gmail.com>
+ <CAGgoGu5WP1qQUf4HS8xWGXUuP0L9vM6HGz1OZoGBBh1B67ZYSg@mail.gmail.com>
+In-Reply-To: <CAGgoGu5WP1qQUf4HS8xWGXUuP0L9vM6HGz1OZoGBBh1B67ZYSg@mail.gmail.com>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1c4420f4-361c-7358-49d9-87d8a51f7920@web.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 03:50:38PM +0200, Markus Elfring wrote:
->> +generate_deps_for_ns() {
->> +    $SPATCH --very-quiet --in-place --sp-file \
->> +	    $srctree/scripts/coccinelle/misc/add_namespace.cocci -D ns=$1 $2
->> +}
->
->* Where will the variable “srctree” be set for the file “scripts/nsdeps”?
->
-
-$srctree is defined by kbuild in the toplevel Makefile.
-
->* Would you like to support a separate build directory for desired adjustments?
->
-
-No, as the purpose of this script is to directly patch the kernel
-sources where applicable.
-
->* How do you think about to check error handling around such commands?
->
->
-
-spatch emits a descriptive message on error. I will add a 'set
--e' to the script so that it aborts on errors.
-
->> +generate_deps() {
->…
->> +        for source_file in $mod_source_files; do
->> +            sed '/MODULE_IMPORT_NS/Q' $source_file > ${source_file}.tmp
->…
->
->I suggest to assign the name for the temporary file to a variable
->which should be used by subsequent commands.
-
-I somehow don't agree that this is an improvement to the code as the
-variable would likely be something like ${source_file_tmp}. Sticking to
-${source_file}.tmp does express the intent of a temporary file next to
-the original source file and the reader of the code does not need to
-reason about the value of ${source_file_tmp}.
-
-Cheers,
-Matthias
+PiANCj4gSGF2ZSBhIHF1ZXN0aW9uIHRoYXQ6IENhbiBJIGRpc2FibGUgUENJZSBwb3dlciBtYW5h
+Z2VtZW50IGNvbXBsZXRlbHkNCj4gdXNpbmcgc29tZSBrZXJuZWwgQ09ORklHIG9wdGlvbiBPUiBi
+b290IHBhcmFtZXRlcj8gSWYgeWVzIHRoZW4gaG93Pw0KPiANCj4gVGhhbmtzDQo+IA0KU2VlIENP
+TkZJR19QTSBhbmQgd2hhdCBpdCBkZXBlbmRzIG9uLg0KDQpCUg0KQ2Fyc3Rlbg0K
